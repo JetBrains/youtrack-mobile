@@ -6,7 +6,7 @@
     "start": "node_modules/react-native/packager/packager.sh"
   },
   "dependencies": {
-    "react-native": "^0.6.0",
+    "react-native": "0.7.0-rc.2",
     "react-native-keyboardevents": "^0.4.4",
     "react-native-refreshable-listview": "^1.3.0",
     "shitty-qs": "^1.0.1"
