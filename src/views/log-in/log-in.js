@@ -13,19 +13,6 @@ class YouTrackMobile extends React.Component {
         this.state = {};
     }
 
-    componentDidMount() {
-        var auth = new Auth();
-        auth.readStoredAuthPromise.then((authParams) => {
-            if (!authParams) {
-                this.openLogIn();
-            }
-        })
-    }
-
-    openLogIn() {
-
-    }
-
     logInViaHub() {
         var auth = new Auth();
         auth.authorizeAndStoreToken().then((res) => {

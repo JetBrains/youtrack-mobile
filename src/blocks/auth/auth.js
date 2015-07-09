@@ -8,9 +8,6 @@ class Auth {
 
         this.readStoredAuthPromise = this.readAuth()
             .then((authParams) => this.verifyToken(authParams))
-            .then((authParams) => {
-                return authParams ? authParams : this.authorizeAndStoreToken();
-            })
             .then((authParams) => this.authParams = authParams);
     }
 

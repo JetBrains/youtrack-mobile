@@ -3,7 +3,7 @@ var Auth = require('../auth/auth');
 var LogIn = require('../../views/log-in/log-in');
 var IssueList = require('../../views/issue-list/issue-list');
 
-var {View, Navigator, Text, TouchableOpacity} = React;
+var {View, Navigator, Text, TouchableOpacity, StyleSheet} = React;
 
 class YouTrackMobile extends React.Component {
 
@@ -39,9 +39,13 @@ class YouTrackMobile extends React.Component {
         return <Navigator ref="navigator"
             initialRoute={{title: 'RootRoute'}}
             renderScene={(route, navigator) => (
-                <View>{route.component}</View>
+                <View style={styles.container}>{route.component}</View>
             )}/>;
     }
 }
+
+var styles = StyleSheet.create({
+    container: {flex: 1}
+});
 
 module.exports = YouTrackMobile;
