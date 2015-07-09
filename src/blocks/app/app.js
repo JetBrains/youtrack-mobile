@@ -13,7 +13,6 @@ class YouTrackMobile extends React.Component {
     }
 
     componentDidMount() {
-        this.checkAuthorization();
     }
 
     checkAuthorization() {
@@ -47,6 +46,11 @@ class YouTrackMobile extends React.Component {
     render() {
         return <Navigator ref="navigator"
             initialRoute={{title: 'RootRoute'}}
+            onDidFocus={(route) => {
+                if (route.title === 'RootRoute') {
+                    this.checkAuthorization();
+                }
+            }}
             renderScene={(route, navigator) => (
                 <View style={styles.container}>{route.component}</View>
             )}/>;
