@@ -5,10 +5,6 @@ const STORAGE_KEY = 'yt_mobile_auth';
 class Auth {
     constructor() {
         this.authParams = null;
-
-        this.readStoredAuthPromise = this.readAuth()
-            .then((authParams) => this.verifyToken(authParams))
-            .then((authParams) => this.authParams = authParams);
     }
 
     authorize() {
@@ -18,6 +14,12 @@ class Auth {
     authorizeAndStoreToken() {
         return this.authorize()
             .then(this.storeAuth.bind(this));
+    }
+
+    loadStoredAuthParams() {
+        return this.readAuth()
+            .then((authParams) => this.verifyToken(authParams))
+            .then((authParams) => this.authParams = authParams);
     }
 
     logOut() {

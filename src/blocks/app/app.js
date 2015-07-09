@@ -13,26 +13,35 @@ class YouTrackMobile extends React.Component {
     }
 
     componentDidMount() {
-        this.auth.readStoredAuthPromise.then((authParams) => {
+        this.checkAuthorization();
+    }
+
+    checkAuthorization() {
+        return this.auth.loadStoredAuthParams().then((authParams) => {
             if (!authParams) {
                 return this.goToLogIn();
             }
             return this.goToIssues();
-        })
+        });
+    }
+
+    goToRootAndCheckAuth() {
+        this.refs.navigator.pop();
+        return this.checkAuthorization();
     }
 
     goToIssues() {
         this.refs.navigator.push({
-            component: <IssueList auth={this.auth} navigator={this.refs.navigator}></IssueList>,
+            component: <IssueList auth={this.auth} onBack={this.goToRootAndCheckAuth.bind(this)}></IssueList>,
             title: 'Issues'
-        })
+        });
     }
 
     goToLogIn() {
         this.refs.navigator.push({
-            component: <LogIn auth={this.auth} navigator={this.refs.navigator}></LogIn>,
+            component: <LogIn auth={this.auth} onBack={this.goToRootAndCheckAuth.bind(this)}></LogIn>,
             title: 'Log In'
-        })
+        });
     }
 
     render() {

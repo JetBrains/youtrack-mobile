@@ -7,18 +7,10 @@ var {
     TouchableHighlight
     } = React;
 
-class YouTrackMobile extends React.Component {
-    constructor() {
-        super();
-        this.state = {};
-    }
-
+class LogIn extends React.Component {
     logInViaHub() {
-        var auth = new Auth();
-        auth.authorizeAndStoreToken().then((res) => {
-            let accessToken = res.access_token;
-            this.setState({accessToken});
-        });
+        this.props.auth.authorizeAndStoreToken()
+            .then((res) => this.props.onBack());
     }
 
     render() {
@@ -30,7 +22,7 @@ class YouTrackMobile extends React.Component {
 
                 <TouchableHighlight
                     style={{borderWidth: 1}}
-                    onPress={this.logInViaHub}>
+                    onPress={this.logInViaHub.bind(this)}>
                     <Text style={styles.welcome}>Log In</Text>
                 </TouchableHighlight>
             </View>
@@ -52,4 +44,4 @@ var styles = StyleSheet.create({
     }
 });
 
-module.exports = YouTrackMobile;
+module.exports = LogIn;

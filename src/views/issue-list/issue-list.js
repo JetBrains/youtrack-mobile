@@ -4,8 +4,8 @@ var {View, Text, TouchableHighlight} = React;
 class YouTrackMobile extends React.Component {
 
     logOut() {
-        this.props.auth.logOut();
-        this.props.navigator.pop();
+        this.props.auth.logOut()
+            .then(() => this.props.onBack());
     }
 
     render() {
