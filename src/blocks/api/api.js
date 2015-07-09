@@ -1,4 +1,4 @@
-const YouTrackIssuesUrl = 'http://hackathon15.labs.intellij.net:8080/youtrack/rest/issue';
+const YouTrackIssuesUrl = 'http://hackathon15.labs.intellij.net:8080/youtrack/rest/issue?max=100&useImplicitSort=true&with=summary&with=resolved&with=priority';
 
 class Api {
     constructor(auth) {
@@ -19,8 +19,9 @@ class Api {
             });
     }
 
-    getIssues() {
-        return this.makeAuthorizedRequest(YouTrackIssuesUrl)
+    getIssues(filter = '') {
+        var url = YouTrackIssuesUrl + '&filter=' + filter;
+        return this.makeAuthorizedRequest(url)
             .then(res => res.issue)
     }
 }
