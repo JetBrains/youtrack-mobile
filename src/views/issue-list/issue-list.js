@@ -56,8 +56,8 @@ class IssueList extends React.Component {
                 this.setState({dataSource: ds.cloneWithRows(issues)});
                 console.log('Issues', issues);
             })
-            .catch(() => {
-                debugger;
+            .catch((res) => {
+                console.error(res);
             });
     }
 
@@ -67,6 +67,18 @@ class IssueList extends React.Component {
 
     onRowClick(issue) {
         console.log('Issue clicked', issue);
+    }
+
+    _renderHeader() {
+        return (
+            <View>
+                <TouchableHighlight
+                    style={{marginTop: 16}}
+                    onPress={this.logOut.bind(this)}>
+                    <Text>Log Out</Text>
+                </TouchableHighlight>
+            </View>
+        )
     }
 
     _renderRow(issue) {
@@ -110,13 +122,7 @@ class IssueList extends React.Component {
 
     render() {
         return (<View style={styles.listContainer}>
-            <View>
-                <TouchableHighlight
-                    style={{borderWidth: 1, marginTop: 16}}
-                    onPress={this.logOut.bind(this)}>
-                    <Text>Log Out</Text>
-                </TouchableHighlight>
-            </View>
+            {this._renderHeader()}
 
             <RefreshableListView
                 dataSource={this.state.dataSource}
@@ -124,6 +130,7 @@ class IssueList extends React.Component {
                 renderRow={this._renderRow.bind(this)}
                 refreshDescription="Refreshing issues"
                 />
+
             {this._renderFooter()}
 
             <View style={{height: this.state.keyboardSpace}}></View>

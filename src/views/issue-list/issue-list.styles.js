@@ -20,7 +20,9 @@ module.exports = StyleSheet.create({
         fontSize: 12
     },
     summary: {
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        flexWrap: 'nowrap'
+        //width: '100%'
     },
     inputWrapper: {
       backgroundColor: BLUE

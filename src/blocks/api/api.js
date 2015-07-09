@@ -15,6 +15,9 @@ class Api {
             }
         })
             .then(function (res) {
+                if (res.status > 400) {
+                    throw JSON.parse(res._bodyText);
+                }
                 return res.json();
             });
     }
