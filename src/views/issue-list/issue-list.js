@@ -36,6 +36,25 @@ class IssueList extends React.Component {
             });
     }
 
+    onRowClick(issue) {
+        console.log('Issue clicked', issue);
+    }
+
+    _renderRow(issue) {
+        return (
+            <TouchableHighlight onPress={() => this.onRowClick(issue)}>
+                <View>
+                    <View style={styles.row}>
+                        <Text style={styles.text}>
+                            {issue.id}
+                        </Text>
+                    </View>
+                    <View style={styles.separator}/>
+                </View>
+            </TouchableHighlight>
+        );
+    }
+
     render() {
         return (<View>
             <Text>Test Issues List</Text>
@@ -48,7 +67,7 @@ class IssueList extends React.Component {
             <RefreshableListView
                 dataSource={this.state.dataSource}
                 loadData={this.loadIssues.bind(this)}
-                renderRow={(rowData) => <Text>{rowData.id}</Text>}
+                renderRow={this._renderRow.bind(this)}
                 refreshDescription="Refreshing issues"
                 />
 
@@ -57,9 +76,18 @@ class IssueList extends React.Component {
 }
 
 var styles = StyleSheet.create({
-    scrollView: {
-        backgroundColor: '#6A85B1',
-        height: 300
+    row: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        padding: 10,
+        backgroundColor: '#F6F6F6'
+    },
+    separator: {
+        height: 1,
+        backgroundColor: '#CCCCCC'
+    },
+    text: {
+        flex: 1
     }
 });
 
