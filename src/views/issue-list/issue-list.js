@@ -7,7 +7,7 @@ var Api = require('../../blocks/api/api');
 var ApiHelper = require('../../blocks/api/api__helper');
 var RefreshableListView = require('react-native-refreshable-listview');
 
-var {View, Text, TouchableHighlight, ListView, TextInput, LayoutAnimation} = React;
+var {View, Text, TouchableHighlight, ListView, TextInput, LayoutAnimation, Image} = React;
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -71,12 +71,18 @@ class IssueList extends React.Component {
 
     _renderHeader() {
         return (
-            <View>
+            <View style={styles.headerContainer}>
                 <TouchableHighlight
-                    style={{marginTop: 16}}
+                    underlayColor="#FFF" //TODO: not working(
+                    style={styles.logOut}
                     onPress={this.logOut.bind(this)}>
-                    <Text>Log Out</Text>
+                    <Text style={styles.logOut__text}>Log Out</Text>
                 </TouchableHighlight>
+
+                <Image
+                    style={styles.logo}
+                    source={require('image!youtrack-logo')}
+                    />
             </View>
         )
     }
