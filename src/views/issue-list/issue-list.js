@@ -1,9 +1,9 @@
 var React = require('react-native');
 var Api = require('../../blocks/api/api');
 var ApiHelper = require('../../blocks/api/api__helper');
-var RefreshableListView = require('react-native-refreshable-listview')
+var RefreshableListView = require('react-native-refreshable-listview');
 
-var {View, Text, TouchableHighlight, ListView, StyleSheet} = React;
+var {View, Text, TouchableHighlight, ListView, StyleSheet, TextInput} = React;
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -26,8 +26,8 @@ class IssueList extends React.Component {
             .then(() => this.props.onBack());
     }
 
-    loadIssues() {
-        return this.api.getIssues()
+    loadIssues(text) {
+        return this.api.getIssues(text)
             .then(ApiHelper.fillFieldHash)
             .then((issues) => {
                 this.setState({dataSource: ds.cloneWithRows(issues)});
@@ -62,13 +62,22 @@ class IssueList extends React.Component {
 
     render() {
         return (<View>
-            <Text>Test Issues List</Text>
-
             <TouchableHighlight
-                style={{borderWidth: 1}}
+                style={{borderWidth: 1, marginTop: 16}}
                 onPress={this.logOut.bind(this)}>
                 <Text>Log Out</Text>
             </TouchableHighlight>
+
+            <View>
+                <TextInput
+                    placeholder="Enter query"
+                    clearButtonMode="always"
+                    onSubmitEditing={(e) => this.loadIssues(e.nativeEvent.text)}
+                    style={{height: 24, borderColor: 'gray', borderWidth: 1}}
+                    onChangeText={(text) => this.setState({input: text})}
+                    />
+            </View>
+
             <RefreshableListView
                 dataSource={this.state.dataSource}
                 loadData={this.loadIssues.bind(this)}
