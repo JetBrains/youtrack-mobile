@@ -1,5 +1,6 @@
 var React = require('react-native');
 var Api = require('../../blocks/api/api');
+var ApiHelper = require('../../blocks/api/api__helper');
 var RefreshableListView = require('react-native-refreshable-listview')
 
 var {View, Text, TouchableHighlight, ListView, StyleSheet} = React;
@@ -27,6 +28,7 @@ class IssueList extends React.Component {
 
     loadIssues() {
         return this.api.getIssues()
+            .then(ApiHelper.fillFieldHash)
             .then((issues) => {
                 this.setState({dataSource: ds.cloneWithRows(issues)});
                 console.log('Issues', issues);
@@ -45,8 +47,11 @@ class IssueList extends React.Component {
             <TouchableHighlight onPress={() => this.onRowClick(issue)}>
                 <View>
                     <View style={styles.row}>
-                        <Text style={styles.text}>
+                        <Text style={styles.id}>
                             {issue.id}
+                        </Text>
+                        <Text style={styles.description}>
+                            {issue.fieldHash.summary}
                         </Text>
                     </View>
                     <View style={styles.separator}/>
@@ -78,7 +83,7 @@ class IssueList extends React.Component {
 var styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         padding: 10,
         backgroundColor: '#F6F6F6'
     },
@@ -86,8 +91,11 @@ var styles = StyleSheet.create({
         height: 1,
         backgroundColor: '#CCCCCC'
     },
-    text: {
-        flex: 1
+    id: {
+        width: 48
+    },
+    description: {
+        marginLeft: 16
     }
 });
 
