@@ -2,6 +2,8 @@ var oauth = require('./auth__oauth');
 var AsyncStorage = require('react-native').AsyncStorage;
 const STORAGE_KEY = 'yt_mobile_auth';
 
+const CHECK_TOKEN_URL = 'http://hackathon15.labs.intellij.net:8080/hub/api/rest/users/me?fields=id';
+
 class Auth {
     constructor() {
         this.authParams = null;
@@ -27,8 +29,27 @@ class Auth {
     }
 
     verifyToken(authParams) {
-        //TODO: verify token in Hub
-        return authParams;
+        if (!authParams || !authParams.access_token) {
+            return this.authorizeAndStoreToken();
+        }
+
+        return fetch(CHECK_TOKEN_URL, {
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Authorization': `${authParams.token_type} ${authParams.access_token}`
+            }
+        }).then((res) => {
+            if (res.status > 400) {
+                console.warn('Check token error', res);
+                throw res;
+            }
+            return authParams;
+        })
+            .catch((res) => {
+                if (res.status === 401) {
+                    return this.authorizeAndStoreToken();
+                }
+            });
     }
 
     storeAuth(authParams) {

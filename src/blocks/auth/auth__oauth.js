@@ -7,7 +7,7 @@ function openAuthPage() {
         `${config.auth.serverUri}/auth/login`,
         '?response_type=token',
         `&client_id=${config.auth.clientId}`,
-        `&scope=${config.auth.scope}`,
+        `&scope=${config.auth.scopes}`,
         `&redirect_uri=${config.auth.landingUrl}`
     ].join(''));
 }
