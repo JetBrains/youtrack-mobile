@@ -19,5 +19,18 @@ module.exports = StyleSheet.create({
     },
     description: {
         marginLeft: 16
+    },
+    inputWrapper: {
+      backgroundColor: '#66A'
+    },
+    searchInput: {
+        height: 24,
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 6,
+        textAlign: 'center',
+        backgroundColor: '#EEE',
+        margin: 8,
+        padding: 6
     }
 });

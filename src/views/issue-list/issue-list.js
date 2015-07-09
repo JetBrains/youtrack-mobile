@@ -89,14 +89,14 @@ class IssueList extends React.Component {
 
     _renderFooter() {
         return (
-            <View>
+            <View style={styles.inputWrapper}>
                 <TextInput
                     placeholder="Enter query"
                     clearButtonMode="always"
                     returnKeyType="search"
                     autoCorrect={false}
                     onEndEditing={(e) => this.loadIssues(e.nativeEvent.text)}
-                    style={{height: 24, borderColor: 'gray', borderWidth: 1}}
+                    style={styles.searchInput}
                     onChangeText={(text) => this.setState({input: text})}
                     />
             </View>
