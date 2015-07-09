@@ -1,4 +1,4 @@
-const YouTrackIssuesUrl = 'http://hackathon15.labs.intellij.net:8080/youtrack/rest/issue?max=100&useImplicitSort=true&with=summary&with=resolved&with=priority';
+const YouTrackIssuesUrl = 'http://hackathon15.labs.intellij.net:8080/youtrack/rest/issue?max=100&useImplicitSort=true&with=summary&with=resolved&with=priority&with=author&with=assignee';
 
 class Api {
     constructor(auth) {

@@ -14,11 +14,11 @@ module.exports = StyleSheet.create({
         height: 1,
         backgroundColor: '#CCCCCC'
     },
-    id: {
-        width: 48
+    subtext: {
+        fontSize: 12
     },
-    description: {
-        marginLeft: 16
+    summary: {
+        fontWeight: 'bold'
     },
     inputWrapper: {
       backgroundColor: '#66A'

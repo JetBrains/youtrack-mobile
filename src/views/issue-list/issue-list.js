@@ -74,12 +74,17 @@ class IssueList extends React.Component {
             <TouchableHighlight onPress={() => this.onRowClick(issue)}>
                 <View>
                     <View style={styles.row}>
-                        <Text style={styles.id}>
-                            {issue.id}
-                        </Text>
-                        <Text style={styles.description}>
-                            {issue.fieldHash.summary}
-                        </Text>
+                        <View>
+
+                        </View>
+                        <View>
+                            <Text style={styles.summary}>
+                                {issue.fieldHash.summary}
+                            </Text>
+                            <Text style={styles.subtext}>
+                                {issue.id} by {issue.author} for {issue.fieldHash.assignee && issue.fieldHash.assignee[0].fullName}
+                            </Text>
+                        </View>
                     </View>
                     <View style={styles.separator}/>
                 </View>
