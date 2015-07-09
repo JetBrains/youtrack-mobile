@@ -1,6 +1,9 @@
 var React = require('react-native');
 var Api = require('../../blocks/api/api');
+var RefreshableListView = require('react-native-refreshable-listview')
+
 var {View, Text, TouchableHighlight, ListView, StyleSheet} = React;
+
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 class IssueList extends React.Component {
@@ -14,15 +17,7 @@ class IssueList extends React.Component {
 
     componentDidMount() {
         this.api = new Api(this.props.auth);
-
-        this.getIssues()
-            .then((issues) => {
-                this.setState({dataSource: ds.cloneWithRows(issues)})
-                console.log('Issues', issues);
-            })
-            .catch(() => {
-                debugger;
-            });
+        this.loadIssues();
     }
 
     logOut() {
@@ -30,14 +25,15 @@ class IssueList extends React.Component {
             .then(() => this.props.onBack());
     }
 
-    getIssues() {
+    loadIssues() {
         return this.api.getIssues()
-    }
-
-    issuesDataSource() {
-        var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        this.getIssues();
-        return ds.cloneWithRows(['row 1', 'row 2'])
+            .then((issues) => {
+                this.setState({dataSource: ds.cloneWithRows(issues)});
+                console.log('Issues', issues);
+            })
+            .catch(() => {
+                debugger;
+            });
     }
 
     render() {
@@ -49,9 +45,11 @@ class IssueList extends React.Component {
                 onPress={this.logOut.bind(this)}>
                 <Text>Log Out</Text>
             </TouchableHighlight>
-            <ListView
+            <RefreshableListView
                 dataSource={this.state.dataSource}
+                loadData={this.loadIssues.bind(this)}
                 renderRow={(rowData) => <Text>{rowData.id}</Text>}
+                refreshDescription="Refreshing issues"
                 />
 
         </View>);
