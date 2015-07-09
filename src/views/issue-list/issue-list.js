@@ -1,9 +1,13 @@
 var React = require('react-native');
+var KeyboardEvents = require('react-native-keyboardevents');
+var KeyboardEventEmitter = KeyboardEvents.Emitter;
+
+var styles = require('./issue-list.styles');
 var Api = require('../../blocks/api/api');
 var ApiHelper = require('../../blocks/api/api__helper');
 var RefreshableListView = require('react-native-refreshable-listview');
 
-var {View, Text, TouchableHighlight, ListView, StyleSheet, TextInput} = React;
+var {View, Text, TouchableHighlight, ListView, TextInput, LayoutAnimation} = React;
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -12,13 +16,32 @@ class IssueList extends React.Component {
     constructor() {
         super();
         this.state = {
-            dataSource: ds.cloneWithRows([])
+            dataSource: ds.cloneWithRows([]),
+            keyboardSpace: 0
         };
     }
 
     componentDidMount() {
         this.api = new Api(this.props.auth);
         this.loadIssues();
+
+        KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillShowEvent, this._updateKeyboardSpace.bind(this));
+        KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, this._resetKeyboardSpace.bind(this));
+    }
+
+    componentWillUnmount() {
+        KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillShowEvent, this._updateKeyboardSpace.bind(this));
+        KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillHideEvent, this._resetKeyboardSpace.bind(this));
+    }
+
+    _updateKeyboardSpace(frames) {
+        LayoutAnimation.configureNext(animations.layout.spring);
+        this.setState({keyboardSpace: frames.end.height});
+    }
+
+    _resetKeyboardSpace() {
+        LayoutAnimation.configureNext(animations.layout.spring);
+        this.setState({keyboardSpace: 0});
     }
 
     logOut() {
@@ -70,7 +93,9 @@ class IssueList extends React.Component {
                 <TextInput
                     placeholder="Enter query"
                     clearButtonMode="always"
-                    onSubmitEditing={(e) => this.loadIssues(e.nativeEvent.text)}
+                    returnKeyType="search"
+                    autoCorrect={false}
+                    onEndEditing={(e) => this.loadIssues(e.nativeEvent.text)}
                     style={{height: 24, borderColor: 'gray', borderWidth: 1}}
                     onChangeText={(text) => this.setState({input: text})}
                     />
@@ -95,30 +120,27 @@ class IssueList extends React.Component {
                 refreshDescription="Refreshing issues"
                 />
             {this._renderFooter()}
+
+            <View style={{height: this.state.keyboardSpace}}></View>
         </View>);
     }
 }
 
-var styles = StyleSheet.create({
-    listContainer: {
-        flex: 1,
-        backgroundColor: '#F6F6F6'
-    },
-    row: {
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        padding: 10,
-    },
-    separator: {
-        height: 1,
-        backgroundColor: '#CCCCCC'
-    },
-    id: {
-        width: 48
-    },
-    description: {
-        marginLeft: 16
+var animations = {
+    layout: {
+        spring: {
+            duration: 400,
+            create: {
+                duration: 300,
+                type: LayoutAnimation.Types.easeInEaseOut,
+                property: LayoutAnimation.Properties.opacity,
+            },
+            update: {
+                type: LayoutAnimation.Types.spring,
+                springDamping: 400,
+            }
+        }
     }
-});
+};
 
 module.exports = IssueList;
