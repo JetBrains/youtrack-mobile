@@ -79,21 +79,13 @@ class IssueList extends React.Component {
     }
 
     render() {
-        return (<View>
-            <TouchableHighlight
-                style={{borderWidth: 1, marginTop: 16}}
-                onPress={this.logOut.bind(this)}>
-                <Text>Log Out</Text>
-            </TouchableHighlight>
-
+        return (<View style={styles.listContainer}>
             <View>
-                <TextInput
-                    placeholder="Enter query"
-                    clearButtonMode="always"
-                    onSubmitEditing={(e) => this.loadIssues(e.nativeEvent.text)}
-                    style={{height: 24, borderColor: 'gray', borderWidth: 1}}
-                    onChangeText={(text) => this.setState({input: text})}
-                    />
+                <TouchableHighlight
+                    style={{borderWidth: 1, marginTop: 16}}
+                    onPress={this.logOut.bind(this)}>
+                    <Text>Log Out</Text>
+                </TouchableHighlight>
             </View>
 
             <RefreshableListView
@@ -102,20 +94,20 @@ class IssueList extends React.Component {
                 renderRow={this._renderRow.bind(this)}
                 refreshDescription="Refreshing issues"
                 />
-
+            {this._renderFooter()}
         </View>);
     }
 }
 
 var styles = StyleSheet.create({
-    refreshableList: {
-        //height: 100
+    listContainer: {
+        flex: 1,
+        backgroundColor: '#F6F6F6'
     },
     row: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
         padding: 10,
-        backgroundColor: '#F6F6F6'
     },
     separator: {
         height: 1,
