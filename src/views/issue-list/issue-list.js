@@ -38,6 +38,10 @@ class IssueList extends React.Component {
             });
     }
 
+    updateIssues() {
+        return this.loadIssues(this.state.input);
+    }
+
     onRowClick(issue) {
         console.log('Issue clicked', issue);
     }
@@ -57,6 +61,20 @@ class IssueList extends React.Component {
                     <View style={styles.separator}/>
                 </View>
             </TouchableHighlight>
+        );
+    }
+
+    _renderFooter() {
+        return (
+            <View>
+                <TextInput
+                    placeholder="Enter query"
+                    clearButtonMode="always"
+                    onSubmitEditing={(e) => this.loadIssues(e.nativeEvent.text)}
+                    style={{height: 24, borderColor: 'gray', borderWidth: 1}}
+                    onChangeText={(text) => this.setState({input: text})}
+                    />
+            </View>
         );
     }
 
@@ -80,7 +98,7 @@ class IssueList extends React.Component {
 
             <RefreshableListView
                 dataSource={this.state.dataSource}
-                loadData={this.loadIssues.bind(this)}
+                loadData={this.updateIssues.bind(this)}
                 renderRow={this._renderRow.bind(this)}
                 refreshDescription="Refreshing issues"
                 />
@@ -90,6 +108,9 @@ class IssueList extends React.Component {
 }
 
 var styles = StyleSheet.create({
+    refreshableList: {
+        //height: 100
+    },
     row: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
