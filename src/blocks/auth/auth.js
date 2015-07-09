@@ -23,14 +23,16 @@ class Auth {
             .then(this.storeAuth.bind(this));
     }
 
+    logOut() {
+        return AsyncStorage.removeItem(STORAGE_KEY).then(() => delete this.authParams);
+    }
+
     verifyToken(authParams) {
         //TODO: verify token in Hub
         return authParams;
     }
 
     storeAuth(authParams) {
-        this.token = authParams.access_token;
-
         return AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(authParams))
             .then(() => authParams);
     }
