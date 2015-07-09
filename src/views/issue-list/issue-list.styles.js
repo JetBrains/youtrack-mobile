@@ -1,5 +1,7 @@
 var StyleSheet = require('react-native').StyleSheet;
 
+let BLUE = '#1B9FD6';
+
 module.exports = StyleSheet.create({
     listContainer: {
         flex: 1,
@@ -21,12 +23,10 @@ module.exports = StyleSheet.create({
         fontWeight: 'bold'
     },
     inputWrapper: {
-      backgroundColor: '#66A'
+      backgroundColor: BLUE
     },
     searchInput: {
         height: 24,
-        borderColor: 'gray',
-        borderWidth: 1,
         borderRadius: 6,
         textAlign: 'center',
         backgroundColor: '#EEE',

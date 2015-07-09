@@ -6,7 +6,7 @@ module.exports = {
             var fieldHash = {};
 
             (issue.field || []).forEach((field) => {
-                var fieldName = field.name.toLowerCase();
+                var fieldName = field.name;
                 fieldHash[fieldName] = field.value;
                 for (var item in field) {
                     if (item !== 'value' && item !== 'name') {

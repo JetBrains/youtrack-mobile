@@ -82,7 +82,7 @@ class IssueList extends React.Component {
                                 {issue.fieldHash.summary}
                             </Text>
                             <Text style={styles.subtext}>
-                                {issue.id} by {issue.author} for {issue.fieldHash.assignee && issue.fieldHash.assignee[0].fullName}
+                                {issue.id} by {issue.fieldHash.reporterFullName} for {issue.fieldHash.Assignee && issue.fieldHash.Assignee[0].fullName}
                             </Text>
                         </View>
                     </View>
