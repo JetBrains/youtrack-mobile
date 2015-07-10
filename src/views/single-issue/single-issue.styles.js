@@ -51,7 +51,8 @@ var styles = StyleSheet.create({
         borderRadius: UNIT * 2
     },
     comment: {
-      marginLeft: UNIT * 2
+        marginTop: UNIT/2,
+        marginLeft: UNIT
     },
     commentText: {
         marginTop: UNIT

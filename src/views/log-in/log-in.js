@@ -8,6 +8,12 @@ var {
     } = React;
 
 class LogIn extends React.Component {
+
+    componentDidMount() {
+        //Always log in for a while
+        this.logInViaHub();
+    }
+
     logInViaHub() {
         this.props.auth.authorizeAndStoreToken()
             .then((res) => this.props.onBack());

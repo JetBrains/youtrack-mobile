@@ -23,7 +23,7 @@ class SingleIssueComments extends React.Component {
         let textNodes = comment.text.split(ImageRegExp);
 
         let commentView = [];
-        (imageNames || []).forEach(function(imageName, index) {
+        (imageNames || []).forEach(function (imageName, index) {
             let attach = attachments.filter(a => `!${a.value}!` === imageName)[0];
             if (!attach) {
                 return commentView.push(<Text key={index}>{textNodes[index]}</Text>);
@@ -32,7 +32,7 @@ class SingleIssueComments extends React.Component {
             let imgSrc = attach.url.replace('https://hackathon15.labs.intellij.net', HTTP_BASE_URL);
 
             commentView.push(<Text key={index}>{textNodes[index]}</Text>);
-            commentView.push(<Image key={attach.id} style={styles.commentImage} source={{uri: imgSrc}} />);
+            commentView.push(<Image key={attach.id} style={styles.commentImage} source={{uri: imgSrc}}/>);
         });
 
         return commentView
@@ -51,13 +51,18 @@ class SingleIssueComments extends React.Component {
 
     _renderCommentsList(comments, attachments) {
         return comments.map((comment) => {
-            return (<View key={comment.id} style={styles.commentWrapper}>
-                <Avatar style={styles.avatar} api={this.props.api} authorName={comment.authorFullName}/>
-                <View style={styles.comment}>
-                    <Text>{comment.authorFullName} at {new Date(comment.created).toLocaleDateString()}</Text>
-                    <View style={styles.commentText}>{this._renderComment(comment, attachments)}</View>
+            return (
+                <View key={comment.id} style={styles.commentWrapper}>
+                    <Avatar style={styles.avatar} api={this.props.api} authorName={comment.authorFullName}/>
+                    <View style={styles.comment}>
+                        <Text>
+                            <Text style={{color: '#1CAFE4'}}>{comment.authorFullName}</Text>
+                            <Text style={{color: '#888'}}> at {new Date(comment.created).toLocaleDateString()}</Text>
+                        </Text>
+                        <View style={styles.commentText}>{this._renderComment(comment, attachments)}</View>
+                    </View>
                 </View>
-            </View>);
+            );
         });
     }
 
