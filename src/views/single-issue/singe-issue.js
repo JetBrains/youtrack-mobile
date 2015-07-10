@@ -109,7 +109,7 @@ class SingeIssueView extends React.Component {
                 let imgSrc = attach.url.replace('https://hackathon15.labs.intellij.net', 'http://hackathon15.labs.intellij.net:8080');
 
                 commentView.push(<Text key={index}>{textNodes[index]}</Text>);
-                commentView.push(<Image key={attach.id} style={styles.attachment} source={{uri: imgSrc}} />);
+                commentView.push(<Image key={attach.id} style={styles.commentImage} source={{uri: imgSrc}} />);
             });
             return commentView
         };
