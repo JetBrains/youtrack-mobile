@@ -11,12 +11,16 @@ class SearchListView extends React.Component {
     }
 
     componentDidMount() {
+        let folderList = this.refs.foldersList;
         this.props.getIssuesFolder()
             .then((issueFolders) => {
                 this.setState({
                     dataSource: ds.cloneWithRows(issueFolders)
                 });
-            });
+            })
+            .then(() => {
+                //TODO: scroll to bottom
+            })
     }
 
     _renderRow(issueFolder) {
@@ -32,6 +36,7 @@ class SearchListView extends React.Component {
     render() {
         return (
             <ListView
+                ref="foldersList"
                 dataSource={this.state.dataSource}
                 renderRow={(issueFolder) => this._renderRow(issueFolder)}
                 refreshDescription="Refreshing issues"
@@ -43,12 +48,12 @@ class SearchListView extends React.Component {
 let styles = StyleSheet.create({
     searchRow: {
         flex: 1,
-        justifyContent: 'center',
-        height: 40
+        padding: 16
     },
     searchText: {
         flex: 1,
-        fontSize: 20
+        fontSize: 20,
+        textAlign: 'center'
     }
 });
 
