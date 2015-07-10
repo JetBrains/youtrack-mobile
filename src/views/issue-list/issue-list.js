@@ -140,11 +140,11 @@ var animations = {
             create: {
                 duration: 300,
                 type: LayoutAnimation.Types.easeInEaseOut,
-                property: LayoutAnimation.Properties.opacity,
+                property: LayoutAnimation.Properties.opacity
             },
             update: {
                 type: LayoutAnimation.Types.spring,
-                springDamping: 400,
+                springDamping: 400
             }
         }
     }
