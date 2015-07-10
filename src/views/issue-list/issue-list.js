@@ -74,7 +74,7 @@ class IssueList extends React.Component {
         return (
             <View style={styles.headerContainer}>
                 <TouchableHighlight
-                    underlayColor="#FFF" //TODO: not working(
+                    underlayColor="#FFF"
                     style={styles.logOut}
                     onPress={this.logOut.bind(this)}>
                     <Text style={styles.logOut__text}>Log Out</Text>
@@ -102,7 +102,7 @@ class IssueList extends React.Component {
 
     _renderRow(issue) {
         return (
-            <TouchableHighlight onPress={() => this.onRowClick(issue)}>
+            <TouchableHighlight underlayColor='#FFF' onPress={() => this.onRowClick(issue)}>
                 <View>
                     <View style={styles.row}>
                         <View>
