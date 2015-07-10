@@ -32,6 +32,9 @@ module.exports = StyleSheet.create({
         justifyContent: 'flex-start',
         padding: 10
     },
+    rowText: {
+      marginLeft: 10
+    },
     separator: {
         height: 1,
         backgroundColor: '#CCCCCC'

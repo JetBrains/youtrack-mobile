@@ -6,6 +6,7 @@ var styles = require('./issue-list.styles');
 var Api = require('../../blocks/api/api');
 var ApiHelper = require('../../blocks/api/api__helper');
 var RefreshableListView = require('react-native-refreshable-listview');
+var ColorField = require('../../blocks/color-field/color-field');
 
 var {View, Text, TouchableHighlight, ListView, TextInput, LayoutAnimation, Image} = React;
 
@@ -93,9 +94,9 @@ class IssueList extends React.Component {
                 <View>
                     <View style={styles.row}>
                         <View>
-
+                            <ColorField field={issue.fieldHash.Priority}></ColorField>
                         </View>
-                        <View>
+                        <View style={styles.rowText}>
                             <Text style={styles.summary}>
                                 {issue.fieldHash.summary}
                             </Text>
