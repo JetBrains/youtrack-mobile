@@ -69,7 +69,7 @@ class SingleIssueComments extends React.Component {
 
     render() {
         let issue = this.props.issue;
-        let comments = (issue.comment || []) //reverse to get designed order of comments
+        let comments = (issue.comment || []).reduceRight((val, item) => val.concat([item]), []); //reverse to get designed order of comments
 
         let NoComments = <Text style={{textAlign: 'center'}}>No comments yet</Text>;
 
