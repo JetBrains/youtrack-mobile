@@ -3,12 +3,15 @@ var {
     StyleSheet,
     Text,
     View,
-    TouchableHighlight
+    Image,
+    TouchableHighlight,
+    ScrollView
     } = React;
 
 var Api = require('../../blocks/api/api');
 var ApiHelper = require('../../blocks/api/api__helper');
 let issueListStyles = require('../issue-list/issue-list.styles');
+let styles = require('./issue-list.styles');
 
 class SingeIssueView extends React.Component {
     componentDidMount() {
@@ -30,6 +33,16 @@ class SingeIssueView extends React.Component {
             });
     }
 
+    getAuthorForText(issue) {
+        var forText = () => {
+            if (issue.fieldHash.Assignee) {
+                return 'for ' + issue.fieldHash.Assignee[0].fullName;
+            }
+            return '    Unassigned'
+        };
+        return `${issue.fieldHash.reporterFullName} ${forText()}`
+    }
+
     _renderHeader() {
         return (
             <View style={issueListStyles.headerContainer}>
@@ -45,27 +58,45 @@ class SingeIssueView extends React.Component {
         )
     }
 
+    _renderAttachments(attachments) {
+
+        return (attachments || {}).map((attach) => {
+            //TODO: hacking https certificate error. REMOVE IT!
+            let imgSrc = attach.url.replace('https://hackathon15.labs.intellij.net', 'http://hackathon15.labs.intellij.net:8080');
+            return <Image
+                key={attach.id}
+                style={styles.attachment}
+                capInsets={{top: 0}}
+                source={{uri: imgSrc}}/>;
+        });
+    }
+
+    _renderIssueView(issue) {
+        return (
+            <View style={styles.issueViewContainer}>
+                <Text style={styles.authorForText}>{this.getAuthorForText(issue)}</Text>
+                <Text style={styles.summary}>{issue.fieldHash.summary}</Text>
+                <Text style={styles.description}>{issue.fieldHash.description}</Text>
+
+                <ScrollView  style={styles.attachesContainer} horizontal={true}>
+                    {this._renderAttachments(issue.fieldHash.attachments)}
+                </ScrollView>
+            </View>
+        );
+    }
+
     render() {
+        let issueView;
+        if (this.state && this.state.issue) {
+            issueView = this._renderIssueView(this.state.issue);
+        }
         return (
             <View style={styles.container}>
                 {this._renderHeader()}
-                <Text>
-                    {this.state && this.state.issue}
-                </Text>
+                {issueView}
             </View>
         );
     }
 }
-
-var styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#F5FCFF'
-    },
-    headerText: {
-        top: 11,
-        left: 145
-    }
-});
 
 module.exports = SingeIssueView;
