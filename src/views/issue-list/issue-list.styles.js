@@ -54,9 +54,13 @@ module.exports = StyleSheet.create({
         fontSize: 12
     },
     inputWrapper: {
-        backgroundColor: BLUE
+        backgroundColor: BLUE,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     searchInput: {
+        flex: 1,
         height: UNIT * 4,
         borderRadius: 6,
         textAlign: 'center',
@@ -64,5 +68,13 @@ module.exports = StyleSheet.create({
         color: '#7E7E84',
         margin: UNIT,
         padding: 6
+    },
+    cancelSearch: {
+        paddingRight: UNIT*2,
+        padding: UNIT
+    },
+    cancelText: {
+        fontSize: 16,
+        color: '#FFF'
     }
 });
