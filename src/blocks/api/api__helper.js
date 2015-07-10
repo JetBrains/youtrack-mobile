@@ -19,5 +19,23 @@ module.exports = {
         });
 
         return issues;
+    },
+
+    orderIssueFolders: (folders) => {
+        var filters = {
+            isSavedSearch: function (folder) {
+                return folder.fqFolderId.indexOf('$s$') === 0;
+            },
+            isTag: function (folder) {
+                return folder.fqFolderId.indexOf('$t$') === 0;
+            },
+            isProject: function (folder) {
+                return !filters.isSavedSearch(folder) && !filters.isTag(folder);
+            }
+        };
+
+        return (folders || {}).sort((folder) => {
+            //TODO
+        });
     }
 };

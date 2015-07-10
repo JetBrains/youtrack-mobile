@@ -88,7 +88,7 @@ class IssueList extends React.Component {
         this.refs.searchInput.blur();
     }
 
-    getIssuesFolder() {
+    getIssueFolders() {
         return this.api.getIssueFolders()
             .then((res) => {
                 console.log('IssueFolders', res);
@@ -96,8 +96,10 @@ class IssueList extends React.Component {
             })
     }
 
-    addToQuery(query) {
+    setQuery(query) {
         this.setState({input: ' ' + query});
+        this.loadIssues(query);
+        this.cancelSearch();
     }
 
     _renderHeader() {
@@ -137,7 +139,7 @@ class IssueList extends React.Component {
                     clearButtonMode="always"
                     returnKeyType="search"
                     autoCorrect={false}
-                    onEndEditing={(e) => this.loadIssues(e.nativeEvent.text)}
+                    onSubmitEditing={(e) => this.setQuery(e.nativeEvent.text)}
                     style={[styles.searchInput]}
                     value={this.state.input}
                     onChangeText={(text) => this.setState({input: text})}
@@ -151,7 +153,7 @@ class IssueList extends React.Component {
         let searchContainer;
         if (this.state.searchListHeight) {
             searchContainer = <View ref="searchContainer" style={{height: this.state.searchListHeight}}>
-                <SearchesList getIssuesFolder={this.getIssuesFolder.bind(this)} onAddQuery={this.addToQuery.bind(this)}></SearchesList>
+                <SearchesList getIssuesFolder={this.getIssueFolders.bind(this)} onAddQuery={this.setQuery.bind(this)}></SearchesList>
             </View>
         }
 
