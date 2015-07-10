@@ -47,7 +47,7 @@ class SingeIssueView extends React.Component {
         return (
             <View style={issueListStyles.headerContainer}>
                 <TouchableHighlight
-                    underlayColor="#FFF"
+                    underlayColor="#F8F8F8"
                     style={issueListStyles.logOut}
                     onPress={() => this.props.onBack()}>
                     <Text style={issueListStyles.logOut__text}>List</Text>
@@ -59,7 +59,7 @@ class SingeIssueView extends React.Component {
     }
 
     _renderAttachments(attachments) {
-        return (attachments || {}).map((attach) => {
+        return (attachments || []).map((attach) => {
             //TODO: hacking https certificate error. REMOVE IT!
             let imgSrc = attach.url.replace('https://hackathon15.labs.intellij.net', 'http://hackathon15.labs.intellij.net:8080');
             return <Image
@@ -85,15 +85,17 @@ class SingeIssueView extends React.Component {
     }
 
     _renderCommentsView(issue) {
-        let commentsList = (issue.comment || {}).map((comment) => {
+        let commentsList = (issue.comment || []).map((comment) => {
             return (<View key={comment.id} style={styles.commentWrapper}>
                 <Text>{comment.authorFullName} at {new Date(comment.created).toLocaleDateString()}</Text>
                 <Text style={styles.commentText}>{comment.text}</Text>
             </View>);
         });
 
+        let NoComments = <Text style={{textAlign: 'center'}}>No comments yet</Text>;
+
         return (<View style={styles.commentsContainer}>
-            {commentsList}
+            {commentsList.length ? commentsList : NoComments}
         </View>);
     }
 

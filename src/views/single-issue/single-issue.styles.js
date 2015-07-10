@@ -7,14 +7,15 @@ let UNIT = 8;
 var styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFF'
+        backgroundColor: LIGHT_GRAY
     },
     headerText: {
         top: 11,
         left: 145
     },
     issueViewContainer: {
-        padding: UNIT * 2
+        padding: UNIT * 2,
+        backgroundColor: '#FFF'
     },
     authorForText: {
         color: '#666'
@@ -38,8 +39,7 @@ var styles = StyleSheet.create({
         resizeMode: 'cover'
     },
     commentsContainer: {
-        padding: UNIT * 2,
-        backgroundColor: '#F8F8F8'
+        padding: UNIT * 2
     },
     commentWrapper: {
         marginBottom: UNIT*2
