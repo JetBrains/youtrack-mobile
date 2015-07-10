@@ -1,4 +1,6 @@
 var React = require('react-native');
+var {View, Text, TouchableHighlight, ListView, TextInput, LayoutAnimation, Image} = React;
+
 var KeyboardEvents = require('react-native-keyboardevents');
 var KeyboardEventEmitter = KeyboardEvents.Emitter;
 
@@ -8,8 +10,8 @@ var ApiHelper = require('../../blocks/api/api__helper');
 var RefreshableListView = require('react-native-refreshable-listview');
 var ColorField = require('../../blocks/color-field/color-field');
 var IssueRow = require('./issue-list__row');
+var SearchesList = require('./issue-list__search-list');
 
-var {View, Text, TouchableHighlight, ListView, TextInput, LayoutAnimation, Image} = React;
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -86,6 +88,18 @@ class IssueList extends React.Component {
         this.refs.searchInput.blur();
     }
 
+    getIssuesFolder() {
+        return this.api.getIssueFolders()
+            .then((res) => {
+                console.log('IssueFolders', res);
+                return res;
+            })
+    }
+
+    addToQuery(query) {
+        this.setState({input: query});
+    }
+
     _renderHeader() {
         return (
             <View style={styles.headerContainer}>
@@ -110,7 +124,7 @@ class IssueList extends React.Component {
             cancelButton = <TouchableHighlight
                 style={styles.cancelSearch}
                 onPress={this.cancelSearch.bind(this)}
-                underlayColor="#FFF">
+                underlayColor="#2CB8E6">
                 <Text style={styles.cancelText}>Cancel</Text>
             </TouchableHighlight>;
         }
@@ -125,6 +139,7 @@ class IssueList extends React.Component {
                     autoCorrect={false}
                     onEndEditing={(e) => this.loadIssues(e.nativeEvent.text)}
                     style={[styles.searchInput]}
+                    value={this.state.input}
                     onChangeText={(text) => this.setState({input: text})}
                     />
                 {cancelButton}
@@ -133,12 +148,17 @@ class IssueList extends React.Component {
     }
 
     render() {
+        let searchContainer;
+        if (this.state.searchListHeight) {
+            searchContainer = <View ref="searchContainer" style={{height: this.state.searchListHeight}}>
+                <SearchesList getIssuesFolder={this.getIssuesFolder.bind(this)} applyIssueFolder={this.addToQuery.bind(this)}></SearchesList>
+            </View>
+        }
+
         return (<View style={styles.listContainer}>
             {this._renderHeader()}
 
-            <View ref="searchContainer" style={{height: this.state.searchListHeight}}>
-                <Text style={styles.subtext}>fooo</Text>
-            </View>
+            {searchContainer}
 
             <RefreshableListView
                 dataSource={this.state.dataSource}
