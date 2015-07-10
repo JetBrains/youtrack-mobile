@@ -1,7 +1,7 @@
 var StyleSheet = require('react-native').StyleSheet;
 
 let PINK = '#FE0082';
-let LIGHT_GRAY = '#EFEFEF';
+let LIGHT_GRAY = '#F8F8F8';
 let UNIT = 8;
 
 module.exports = StyleSheet.create({

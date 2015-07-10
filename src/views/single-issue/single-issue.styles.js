@@ -1,7 +1,7 @@
 var StyleSheet = require('react-native').StyleSheet;
 
 let PINK = '#FE0082';
-let LIGHT_GRAY = '#EFEFEF';
+let LIGHT_GRAY = '#F8F8F8';
 let UNIT = 8;
 
 var styles = StyleSheet.create({
@@ -34,7 +34,18 @@ var styles = StyleSheet.create({
         marginRight: UNIT*2,
         width: 150,
         height: 100,
+        borderRadius: 4,
         resizeMode: 'cover'
+    },
+    commentsContainer: {
+        padding: UNIT * 2,
+        backgroundColor: '#F8F8F8'
+    },
+    commentWrapper: {
+        marginBottom: UNIT*2
+    },
+    commentText: {
+        marginTop: UNIT
     }
 });
 

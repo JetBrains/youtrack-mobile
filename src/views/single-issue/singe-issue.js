@@ -11,7 +11,7 @@ var {
 var Api = require('../../blocks/api/api');
 var ApiHelper = require('../../blocks/api/api__helper');
 let issueListStyles = require('../issue-list/issue-list.styles');
-let styles = require('./issue-list.styles');
+let styles = require('./single-issue.styles');
 
 class SingeIssueView extends React.Component {
     componentDidMount() {
@@ -59,14 +59,13 @@ class SingeIssueView extends React.Component {
     }
 
     _renderAttachments(attachments) {
-
         return (attachments || {}).map((attach) => {
             //TODO: hacking https certificate error. REMOVE IT!
             let imgSrc = attach.url.replace('https://hackathon15.labs.intellij.net', 'http://hackathon15.labs.intellij.net:8080');
             return <Image
                 key={attach.id}
                 style={styles.attachment}
-                capInsets={{top: 0}}
+                capInsets={{left: 15, right: 15, bottom: 15, top: 15}}
                 source={{uri: imgSrc}}/>;
         });
     }
@@ -78,22 +77,40 @@ class SingeIssueView extends React.Component {
                 <Text style={styles.summary}>{issue.fieldHash.summary}</Text>
                 <Text style={styles.description}>{issue.fieldHash.description}</Text>
 
-                <ScrollView  style={styles.attachesContainer} horizontal={true}>
+                <ScrollView style={styles.attachesContainer} horizontal={true}>
                     {this._renderAttachments(issue.fieldHash.attachments)}
                 </ScrollView>
             </View>
         );
     }
 
+    _renderCommentsView(issue) {
+        let commentsList = (issue.comment || {}).map((comment) => {
+            return (<View key={comment.id} style={styles.commentWrapper}>
+                <Text>{comment.authorFullName} at {new Date(comment.created).toLocaleDateString()}</Text>
+                <Text style={styles.commentText}>{comment.text}</Text>
+            </View>);
+        });
+
+        return (<View style={styles.commentsContainer}>
+            {commentsList}
+        </View>);
+    }
+
     render() {
         let issueView;
+        let commentsView;
         if (this.state && this.state.issue) {
             issueView = this._renderIssueView(this.state.issue);
+            commentsView = this._renderCommentsView(this.state.issue);
         }
         return (
             <View style={styles.container}>
                 {this._renderHeader()}
-                {issueView}
+                <ScrollView>
+                    {issueView}
+                    {commentsView}
+                </ScrollView>
             </View>
         );
     }
