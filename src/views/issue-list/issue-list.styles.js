@@ -1,7 +1,6 @@
 var StyleSheet = require('react-native').StyleSheet;
 
-let BLUE = '#2CB8E6';
-let PINK = '#C90162';
+let PINK = '#FE0082';
 let LIGHT_GRAY = '#EFEFEF';
 let UNIT = 8;
 
@@ -52,7 +51,7 @@ module.exports = StyleSheet.create({
         fontSize: 12
     },
     inputWrapper: {
-        backgroundColor: BLUE,
+        backgroundColor: PINK,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center'

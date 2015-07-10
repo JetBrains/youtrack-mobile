@@ -63,7 +63,7 @@ class IssueList extends React.Component {
     goToIssue(issue) {
         this.props.navigator.push({
             title: 'Issue',
-            component: <SingleIssue issueId={issue.id} onBack={() => this.props.navigator.pop()}></SingleIssue>
+            component: <SingleIssue issueId={issue.id} api={this.api} onBack={() => this.props.navigator.pop()}></SingleIssue>
         })
     }
 
@@ -74,7 +74,7 @@ class IssueList extends React.Component {
 
     loadIssues(text) {
         return this.api.getIssues(text)
-            .then(ApiHelper.fillFieldHash)
+            .then(ApiHelper.fillIssuesFieldHash)
             .then((issues) => {
                 this.setState({dataSource: ds.cloneWithRows(issues)});
                 console.log('Issues', issues);

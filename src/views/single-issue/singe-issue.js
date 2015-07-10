@@ -6,9 +6,29 @@ var {
     TouchableHighlight
     } = React;
 
+var Api = require('../../blocks/api/api');
+var ApiHelper = require('../../blocks/api/api__helper');
 let issueListStyles = require('../issue-list/issue-list.styles');
 
 class SingeIssueView extends React.Component {
+    componentDidMount() {
+        this.api = this.props.api;
+        this.state = {issue: {}};
+
+        this.loadIssue(this.props.issueId);
+    }
+
+    loadIssue(id) {
+        return this.api.getIssue(id)
+            .then((issue) => ApiHelper.fillFieldHash(issue))
+            .then((issue) => {
+                console.log('Issue', issue);
+                this.setState({issue});
+            })
+            .catch((res) => {
+                console.error(res);
+            });
+    }
 
     _renderHeader() {
         return (
@@ -30,7 +50,7 @@ class SingeIssueView extends React.Component {
             <View style={styles.container}>
                 {this._renderHeader()}
                 <Text>
-                    {this.props.issueId}
+                    {this.state && this.state.issue}
                 </Text>
             </View>
         );

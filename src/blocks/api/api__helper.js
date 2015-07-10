@@ -1,23 +1,24 @@
+let API = {
+    fillFieldHash: (issue) => {
+        let fieldHash = {};
 
-module.exports = {
-    fillFieldHash: (issues = []) => {
-
-        issues.forEach((issue) => {
-            var fieldHash = {};
-
-            (issue.field || []).forEach((field) => {
-                var fieldName = field.name;
-                fieldHash[fieldName] = field.value;
-                for (var item in field) {
-                    if (item !== 'value' && item !== 'name') {
-                        fieldHash[fieldName][item] = field[item];
-                    }
+        (issue.field || []).forEach((field) => {
+            var fieldName = field.name;
+            fieldHash[fieldName] = field.value;
+            for (var item in field) {
+                if (item !== 'value' && item !== 'name') {
+                    fieldHash[fieldName][item] = field[item];
                 }
-            });
-
-            issue.fieldHash = fieldHash;
+            }
         });
 
+        issue.fieldHash = fieldHash;
+
+        return issue;
+    },
+
+    fillIssuesFieldHash: (issues = []) => {
+        issues.forEach(issue => API.fillFieldHash(issue));
         return issues;
     },
 
@@ -39,3 +40,5 @@ module.exports = {
         });
     }
 };
+
+module.exports = API;

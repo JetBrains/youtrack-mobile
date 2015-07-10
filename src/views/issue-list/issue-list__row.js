@@ -6,7 +6,7 @@ var ColorField = require('../../blocks/color-field/color-field');
 var {View, Text, TouchableHighlight} = React;
 
 class IssueRow extends React.Component {
-    _getSubText(issue) {
+    static _getSubText(issue) {
 
         var forText = () => {
             if (issue.fieldHash.Assignee) {
@@ -31,7 +31,7 @@ class IssueRow extends React.Component {
                             <Text style={styles.summary}>
                                 {issue.fieldHash.summary}
                             </Text>
-                            <Text style={styles.subtext}>{this._getSubText(issue)}</Text>
+                            <Text style={styles.subtext}>{IssueRow._getSubText(issue)}</Text>
                         </View>
                     </View>
                     <View style={styles.separator}/>
