@@ -3,11 +3,12 @@ var StyleSheet = require('react-native').StyleSheet;
 let BLUE = '#2CB8E6';
 let PINK = '#C90162';
 let LIGHT_GRAY = '#EFEFEF';
+let UNIT = 8;
 
 module.exports = StyleSheet.create({
     headerContainer: {
         height: 56,
-        paddingLeft: 16,
+        paddingLeft: UNIT*2,
         backgroundColor: LIGHT_GRAY
     },
     logOut: {
@@ -30,33 +31,37 @@ module.exports = StyleSheet.create({
     row: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
-        padding: 16
+        paddingLeft: UNIT*2,
+        paddingRight: UNIT*2,
+        paddingTop: UNIT,
+        paddingBottom: UNIT
     },
     rowText: {
-      marginLeft: 16
+      marginLeft: UNIT*2
     },
     separator: {
         height: 0.5,
         marginLeft: 48,
         backgroundColor: '#CDCDDD'
     },
-    subtext: {
-        fontSize: 12
-    },
     summary: {
         fontWeight: 'bold',
         flexWrap: 'nowrap'
+    },
+    subtext: {
+        paddingTop: UNIT,
+        fontSize: 12
     },
     inputWrapper: {
       backgroundColor: BLUE
     },
     searchInput: {
-        height: 32,
+        height: UNIT*4,
         borderRadius: 6,
         textAlign: 'center',
         backgroundColor: '#FFF',
         color: '#7E7E84',
-        margin: 8,
+        margin: UNIT,
         padding: 6
     }
 });
