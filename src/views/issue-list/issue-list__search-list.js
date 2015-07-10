@@ -23,12 +23,18 @@ class SearchListView extends React.Component {
             })
     }
 
+    applyIssueFolder(issueFolderName) {
+        let hasSpaces = issueFolderName.indexOf(' ') >= 0;
+        let query = '#' + (hasSpaces ? '{' : '') + issueFolderName + (hasSpaces ? '}' : '');
+        this.props.onAddQuery(query);
+    }
+
     _renderRow(issueFolder) {
         return (
             <TouchableHighlight
                 style={styles.searchRow}
                 underlayColor='#FFF'
-                onPress={() => this.props.applyIssueFolder(issue)}>
+                onPress={() => this.applyIssueFolder(issueFolder.name)}>
                 <Text style={styles.searchText}>{issueFolder.name}</Text>
             </TouchableHighlight>);
     }
@@ -39,6 +45,7 @@ class SearchListView extends React.Component {
                 ref="foldersList"
                 dataSource={this.state.dataSource}
                 renderRow={(issueFolder) => this._renderRow(issueFolder)}
+                keyboardShouldPersistTaps={true}
                 refreshDescription="Refreshing issues"
                 />
         );

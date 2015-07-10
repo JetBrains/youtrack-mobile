@@ -97,7 +97,7 @@ class IssueList extends React.Component {
     }
 
     addToQuery(query) {
-        this.setState({input: query});
+        this.setState({input: ' ' + query});
     }
 
     _renderHeader() {
@@ -151,7 +151,7 @@ class IssueList extends React.Component {
         let searchContainer;
         if (this.state.searchListHeight) {
             searchContainer = <View ref="searchContainer" style={{height: this.state.searchListHeight}}>
-                <SearchesList getIssuesFolder={this.getIssuesFolder.bind(this)} applyIssueFolder={this.addToQuery.bind(this)}></SearchesList>
+                <SearchesList getIssuesFolder={this.getIssuesFolder.bind(this)} onAddQuery={this.addToQuery.bind(this)}></SearchesList>
             </View>
         }
 
