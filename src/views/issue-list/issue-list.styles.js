@@ -35,7 +35,7 @@ module.exports = StyleSheet.create({
     },
     rowText: {
         marginLeft: UNIT * 2,
-        width: 310
+        flex: 1
     },
     separator: {
         height: 0.5,

@@ -52,7 +52,8 @@ var styles = StyleSheet.create({
     },
     comment: {
         marginTop: UNIT/2,
-        marginLeft: UNIT
+        marginLeft: UNIT,
+        flex: 1
     },
     commentText: {
         marginTop: UNIT
