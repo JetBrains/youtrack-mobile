@@ -18,6 +18,14 @@ class IssueRow extends React.Component {
         return `${issue.id} by ${issue.fieldHash.reporterFullName} ${forText()}`
     }
 
+    getSummaryStyle(issue) {
+        if (issue.fieldHash.resolved) {
+            return {
+                color: '#888'
+            };
+        }
+    }
+
     render() {
         let issue = this.props.issue;
         return (
@@ -28,7 +36,7 @@ class IssueRow extends React.Component {
                             <ColorField field={issue.fieldHash.Priority}></ColorField>
                         </View>
                         <View style={styles.rowText}>
-                            <Text style={styles.summary}>
+                            <Text style={[styles.summary, this.getSummaryStyle(issue)]}>
                                 {issue.fieldHash.summary}
                             </Text>
                             <Text style={styles.subtext}>{IssueRow._getSubText(issue)}</Text>
