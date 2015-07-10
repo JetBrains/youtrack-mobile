@@ -32,7 +32,7 @@ class Api {
     }
 
     getIssues(filter = '') {
-        var url = YouTrackIssuesUrl + '&filter=' + filter;
+        var url = YouTrackIssuesUrl + '&filter=' + encodeURIComponent(filter);
         return this.makeAuthorizedRequest(url)
             .then(res => res.issue)
     }
