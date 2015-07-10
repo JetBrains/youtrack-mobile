@@ -14,10 +14,12 @@ var CustomField = require('../../blocks/custom-field/custom-field');
 let issueListStyles = require('../issue-list/issue-list.styles');
 let styles = require('./single-issue.styles');
 
+const defaultFooterHeight = 56;
+
 class SingeIssueView extends React.Component {
     constructor() {
         super();
-        this.state = {issue: null};
+        this.state = {issue: null, footerHeight: defaultFooterHeight};
     }
     componentDidMount() {
         this.api = this.props.api;
@@ -45,6 +47,10 @@ class SingeIssueView extends React.Component {
             return '    Unassigned'
         };
         return `${issue.fieldHash.reporterFullName} ${forText()}`
+    }
+
+    _popCustomFields() {
+        this.setState({footerHeight: 500})
     }
 
     _renderHeader() {
@@ -106,8 +112,13 @@ class SingeIssueView extends React.Component {
     _renderFooter(issue) {
         let fieldsToDisplay = (issue.field || []).filter(field => field.name[0] === field.name[0].toUpperCase());
 
-        return (<View style={styles.footer}>
+        return (<View style={[styles.footer, {height: this.state.footerHeight}]}>
+            {false && <TouchableHighlight underlayColor="#F8F8F8" style={styles.iconButton} onPress={() => this._popCustomFields()}>
+                <Image style={styles.footerIcon} source={require('image!arrow')}/>
+            </TouchableHighlight>}
+
             <CustomField key="Project" field={{name: 'Project', value: issue.fieldHash.projectShortName}}/>
+
             {fieldsToDisplay.map((field) => {
                 return (<CustomField key={field.name} field={field}/>);
             })}

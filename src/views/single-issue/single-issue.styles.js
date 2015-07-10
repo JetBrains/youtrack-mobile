@@ -51,6 +51,14 @@ var styles = StyleSheet.create({
         flexDirection: 'row',
         backgroundColor: '#FFF',
         height: 56
+    },
+    footerIcon: {
+        width: 24,
+        height: 24
+    },
+    iconButton: {
+        justifyContent: 'center',
+        padding: 8
     }
 });
 
