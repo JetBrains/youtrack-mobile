@@ -11,6 +11,7 @@ var {
 var Api = require('../../blocks/api/api');
 var ApiHelper = require('../../blocks/api/api__helper');
 var CustomField = require('../../blocks/custom-field/custom-field');
+let SingleIssueComments = require('./single-issue__comments');
 let issueListStyles = require('../issue-list/issue-list.styles');
 let styles = require('./single-issue.styles');
 
@@ -94,40 +95,6 @@ class SingeIssueView extends React.Component {
         );
     }
 
-    _renderCommentsView(issue) {
-        let ImageRegExp = /\![a-zA-Z0-9\s-]+?\.[a-zA-Z]+?\!/;
-        let replaceImageInComment = (comment) => {
-            let imageNames = comment.text.match(ImageRegExp);
-            if (!imageNames || !imageNames.length) {
-                return <Text>{comment.text}</Text>;
-            }
-            let textNodes = comment.text.split(ImageRegExp);
-
-            let commentView = [];
-            (imageNames || []).forEach(function(imageName, index) {
-                let attach = issue.fieldHash.attachments.filter(a => `!${a.value}!` === imageName)[0];
-                let imgSrc = attach.url.replace('https://hackathon15.labs.intellij.net', 'http://hackathon15.labs.intellij.net:8080');
-
-                commentView.push(<Text key={index}>{textNodes[index]}</Text>);
-                commentView.push(<Image key={attach.id} style={styles.commentImage} source={{uri: imgSrc}} />);
-            });
-            return commentView
-        };
-
-        let commentsList = (issue.comment || []).map((comment) => {
-            return (<View key={comment.id} style={styles.commentWrapper}>
-                <Text>{comment.authorFullName} at {new Date(comment.created).toLocaleDateString()}</Text>
-                <View style={styles.commentText}>{replaceImageInComment(comment)}</View>
-            </View>);
-        });
-
-        let NoComments = <Text style={{textAlign: 'center'}}>No comments yet</Text>;
-
-        return (<View style={styles.commentsContainer}>
-            {commentsList.length ? commentsList : NoComments}
-        </View>);
-    }
-
     _renderFooter(issue) {
         let fieldsToDisplay = (issue.field || []).filter(field => field.name[0] === field.name[0].toUpperCase());
 
@@ -150,7 +117,7 @@ class SingeIssueView extends React.Component {
                 {this._renderHeader()}
                 {this.state.issue && <ScrollView>
                     {this._renderIssueView(this.state.issue)}
-                    {this._renderCommentsView(this.state.issue)}
+                    <SingleIssueComments issue={this.state.issue}/>
                 </ScrollView>}
                 {this.state.issue && this._renderFooter(this.state.issue)}
             </View>
