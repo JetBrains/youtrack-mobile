@@ -64,6 +64,7 @@ var styles = StyleSheet.create({
         resizeMode: 'contain'
     },
     footer: {
+        paddingLeft: UNIT,
         flexDirection: 'row',
         backgroundColor: '#FFF',
         height: 56
