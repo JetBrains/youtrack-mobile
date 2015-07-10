@@ -10,13 +10,17 @@ var {
 
 var Api = require('../../blocks/api/api');
 var ApiHelper = require('../../blocks/api/api__helper');
+var CustomField = require('../../blocks/custom-field/custom-field');
 let issueListStyles = require('../issue-list/issue-list.styles');
 let styles = require('./single-issue.styles');
 
 class SingeIssueView extends React.Component {
+    constructor() {
+        super();
+        this.state = {issue: null};
+    }
     componentDidMount() {
         this.api = this.props.api;
-        this.state = {issue: {}};
 
         this.loadIssue(this.props.issueId);
     }
@@ -99,10 +103,25 @@ class SingeIssueView extends React.Component {
         </View>);
     }
 
+    _renderFooter(issue) {
+        if (!issue) {
+            return;
+        }
+        let fieldsToDisplay = (issue.field || []).filter(field => field.name[0] === field.name[0].toUpperCase());
+
+        let customFields = fieldsToDisplay.map((field) => {
+            return (<CustomField key={field.name} field={field} style={styles.commentWrapper}/>);
+        });
+
+        return (<View style={styles.footer}>
+            {customFields}
+        </View>);
+    }
+
     render() {
         let issueView;
         let commentsView;
-        if (this.state && this.state.issue) {
+        if (this.state.issue) {
             issueView = this._renderIssueView(this.state.issue);
             commentsView = this._renderCommentsView(this.state.issue);
         }
@@ -113,6 +132,7 @@ class SingeIssueView extends React.Component {
                     {issueView}
                     {commentsView}
                 </ScrollView>
+                {this._renderFooter(this.state.issue)}
             </View>
         );
     }

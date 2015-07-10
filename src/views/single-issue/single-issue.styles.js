@@ -46,6 +46,11 @@ var styles = StyleSheet.create({
     },
     commentText: {
         marginTop: UNIT
+    },
+    footer: {
+        flexDirection: 'row',
+        backgroundColor: '#FFF',
+        height: 56
     }
 });
 
