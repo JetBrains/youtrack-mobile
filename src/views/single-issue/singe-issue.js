@@ -4,6 +4,7 @@ var {
     Text,
     View,
     Image,
+    TextInput,
     TouchableHighlight,
     ScrollView
     } = React;
@@ -21,6 +22,7 @@ class SingeIssueView extends React.Component {
         super();
         this.state = {issue: null, footerHeight: defaultFooterHeight};
     }
+
     componentDidMount() {
         this.loadIssue(this.props.issueId);
     }
@@ -35,6 +37,11 @@ class SingeIssueView extends React.Component {
             .catch((res) => {
                 console.error(res);
             });
+    }
+
+    addComment(issue, comment) {
+        return this.props.api.addComment(issue.id, comment)
+            .then(() => this.loadIssue(this.props.issueId));
     }
 
     getAuthorForText(issue) {
@@ -96,7 +103,8 @@ class SingeIssueView extends React.Component {
         let fieldsToDisplay = (issue.field || []).filter(field => field.name[0] === field.name[0].toUpperCase());
 
         return (<View style={[styles.footer, {height: this.state.footerHeight}]}>
-            {false && <TouchableHighlight underlayColor="#F8F8F8" style={styles.iconButton} onPress={() => this._popCustomFields()}>
+            {false && <TouchableHighlight underlayColor="#F8F8F8" style={styles.iconButton}
+                                          onPress={() => this._popCustomFields()}>
                 <Image style={styles.footerIcon} source={require('image!arrow')}/>
             </TouchableHighlight>}
 
@@ -114,6 +122,13 @@ class SingeIssueView extends React.Component {
                 {this._renderHeader()}
                 {this.state.issue && <ScrollView>
                     {this._renderIssueView(this.state.issue)}
+                    <View style={styles.commentInputWrapper}>
+                        <TextInput placeholder="Comment"
+                                   returnKeyType="send"
+                                   value={this.state.commentText}
+                                   onSubmitEditing={(e) => this.addComment(this.state.issue, e.nativeEvent.text) && this.setState({commentText: null})}
+                                   style={styles.commentInput}/>
+                    </View>
                     <SingleIssueComments issue={this.state.issue} api={this.props.api}/>
                 </ScrollView>}
                 {this.state.issue && this._renderFooter(this.state.issue)}

@@ -38,6 +38,22 @@ var styles = StyleSheet.create({
         borderRadius: 4,
         resizeMode: 'cover'
     },
+    commentInputWrapper: {
+        backgroundColor: '#EBEBEB',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    commentInput: {
+        flex: 1,
+        height: UNIT * 4,
+        borderRadius: 6,
+        textAlign: 'center',
+        backgroundColor: '#FFF',
+        color: '#7E7E84',
+        margin: UNIT,
+        padding: 6
+    },
     commentsContainer: {
         padding: UNIT * 2
     },

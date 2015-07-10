@@ -11,7 +11,7 @@ class Api {
     makeAuthorizedRequest(url, method = 'GET') {
         let authParams = this.auth.authParams;
         return fetch(url, {
-            credentials: 'cors',
+            method,
             headers: {
                 'Accept': 'application/json, text/plain, */*',
                 'Authorization': `${authParams.token_type} ${authParams.access_token}`
@@ -39,6 +39,11 @@ class Api {
 
     getIssueFolders() {
         return this.makeAuthorizedRequest(YouTrackIssuesFolderUrl);
+    }
+
+    addComment(issueId, comment) {
+        let url = YouTrackIssueUrl + issueId + '/execute?comment=' + encodeURIComponent(comment);
+        return this.makeAuthorizedRequest(url, 'POST');
     }
 
     getUser(hubUrl, name) {
