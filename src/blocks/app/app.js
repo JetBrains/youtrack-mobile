@@ -3,7 +3,7 @@ var Auth = require('../auth/auth');
 var LogIn = require('../../views/log-in/log-in');
 var IssueList = require('../../views/issue-list/issue-list');
 
-var {View, Navigator, Text, TouchableOpacity, StyleSheet} = React;
+var {View, Image, Navigator, Text, TouchableOpacity, StyleSheet} = React;
 
 class YouTrackMobile extends React.Component {
 
@@ -58,7 +58,10 @@ class YouTrackMobile extends React.Component {
 }
 
 var styles = StyleSheet.create({
-    container: {flex: 1}
+    container: {
+        flex: 1
+    }
 });
+
 
 module.exports = YouTrackMobile;

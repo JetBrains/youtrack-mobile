@@ -8,7 +8,7 @@ let UNIT = 8;
 module.exports = StyleSheet.create({
     headerContainer: {
         height: 56,
-        paddingLeft: UNIT*2,
+        paddingLeft: UNIT * 2,
         backgroundColor: LIGHT_GRAY
     },
     logOut: {
@@ -31,13 +31,14 @@ module.exports = StyleSheet.create({
     row: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
-        paddingLeft: UNIT*2,
-        paddingRight: UNIT*2,
+        paddingLeft: UNIT * 2,
+        paddingRight: UNIT * 2,
         paddingTop: UNIT,
         paddingBottom: UNIT
     },
     rowText: {
-      marginLeft: UNIT*2
+        marginLeft: UNIT * 2,
+        width: 310
     },
     separator: {
         height: 0.5,
@@ -53,10 +54,10 @@ module.exports = StyleSheet.create({
         fontSize: 12
     },
     inputWrapper: {
-      backgroundColor: BLUE
+        backgroundColor: BLUE
     },
     searchInput: {
-        height: UNIT*4,
+        height: UNIT * 4,
         borderRadius: 6,
         textAlign: 'center',
         backgroundColor: '#FFF',

@@ -88,6 +88,18 @@ class IssueList extends React.Component {
         )
     }
 
+    _getSubText(issue) {
+
+        var forText = () => {
+            if (issue.fieldHash.Assignee) {
+                return 'for ' + issue.fieldHash.Assignee[0].fullName;
+            }
+            return '    Unassigned'
+        };
+
+        return `${issue.id} by ${issue.fieldHash.reporterFullName} ${forText()}`
+    }
+
     _renderRow(issue) {
         return (
             <TouchableHighlight onPress={() => this.onRowClick(issue)}>
@@ -100,9 +112,7 @@ class IssueList extends React.Component {
                             <Text style={styles.summary}>
                                 {issue.fieldHash.summary}
                             </Text>
-                            <Text style={styles.subtext}>
-                                {issue.id} by {issue.fieldHash.reporterFullName} for {issue.fieldHash.Assignee && issue.fieldHash.Assignee[0].fullName}
-                            </Text>
+                            <Text style={styles.subtext}>{this._getSubText(issue)}</Text>
                         </View>
                     </View>
                     <View style={styles.separator}/>
