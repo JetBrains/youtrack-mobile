@@ -95,7 +95,7 @@ class SingeIssueView extends React.Component {
     }
 
     _renderCommentsView(issue) {
-        let ImageRegExp = /\!\S+\.\S+\!/;
+        let ImageRegExp = /\![a-zA-Z0-9\s-]+?\.[a-zA-Z]+?\!/;
         let replaceImageInComment = (comment) => {
             let imageNames = comment.text.match(ImageRegExp);
             if (!imageNames || !imageNames.length) {
@@ -113,8 +113,6 @@ class SingeIssueView extends React.Component {
             });
             return commentView
         };
-
-        //replaceImageInComment(issue.comment[0]);
 
         let commentsList = (issue.comment || []).map((comment) => {
             return (<View key={comment.id} style={styles.commentWrapper}>
