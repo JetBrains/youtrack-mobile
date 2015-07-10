@@ -95,10 +95,31 @@ class SingeIssueView extends React.Component {
     }
 
     _renderCommentsView(issue) {
+        let ImageRegExp = /\!\S+\.\S+\!/;
+        let replaceImageInComment = (comment) => {
+            let imageNames = comment.text.match(ImageRegExp);
+            if (!imageNames || !imageNames.length) {
+                return <Text>{comment.text}</Text>;
+            }
+            let textNodes = comment.text.split(ImageRegExp);
+
+            let commentView = [];
+            (imageNames || []).forEach(function(imageName, index) {
+                let attach = issue.fieldHash.attachments.filter(a => `!${a.value}!` === imageName)[0];
+                let imgSrc = attach.url.replace('https://hackathon15.labs.intellij.net', 'http://hackathon15.labs.intellij.net:8080');
+
+                commentView.push(<Text key={index}>{textNodes[index]}</Text>);
+                commentView.push(<Image key={attach.id} style={styles.attachment} source={{uri: imgSrc}} />);
+            });
+            return commentView
+        };
+
+        //replaceImageInComment(issue.comment[0]);
+
         let commentsList = (issue.comment || []).map((comment) => {
             return (<View key={comment.id} style={styles.commentWrapper}>
                 <Text>{comment.authorFullName} at {new Date(comment.created).toLocaleDateString()}</Text>
-                <Text style={styles.commentText}>{comment.text}</Text>
+                <View style={styles.commentText}>{replaceImageInComment(comment)}</View>
             </View>);
         });
 
