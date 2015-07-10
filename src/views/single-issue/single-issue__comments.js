@@ -2,6 +2,7 @@ var React = require('react-native');
 
 var styles = require('./single-issue.styles');
 let Avatar = require('../../blocks/avatar/avatar');
+let relativeDate = require('relative-date');
 
 var {View, Text, Image} = React;
 const ImageRegExp = /\![a-zA-Z0-9\s-]+?\.[a-zA-Z]+?\!/;
@@ -57,7 +58,7 @@ class SingleIssueComments extends React.Component {
                     <View style={styles.comment}>
                         <Text>
                             <Text style={{color: '#1CAFE4'}}>{comment.authorFullName}</Text>
-                            <Text style={{color: '#888'}}> on {new Date(comment.created).toLocaleDateString()}</Text>
+                            <Text style={{color: '#888'}}> {relativeDate(comment.created)}</Text>
                         </Text>
                         <View style={styles.commentText}>{this._renderComment(comment, attachments)}</View>
                     </View>
