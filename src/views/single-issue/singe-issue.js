@@ -79,11 +79,11 @@ class SingeIssueView extends React.Component {
             <View style={styles.issueViewContainer}>
                 <Text style={styles.authorForText}>{this.getAuthorForText(issue)}</Text>
                 <Text style={styles.summary}>{issue.fieldHash.summary}</Text>
-                <Text style={styles.description}>{issue.fieldHash.description}</Text>
+                {issue.fieldHash.description && <Text style={styles.description}>{issue.fieldHash.description}</Text>}
 
-                <ScrollView style={styles.attachesContainer} horizontal={true}>
+                {issue.fieldHash.attachments && <ScrollView style={styles.attachesContainer} horizontal={true}>
                     {this._renderAttachments(issue.fieldHash.attachments)}
-                </ScrollView>
+                </ScrollView>}
             </View>
         );
     }
@@ -119,20 +119,14 @@ class SingeIssueView extends React.Component {
     }
 
     render() {
-        let issueView;
-        let commentsView;
-        if (this.state.issue) {
-            issueView = this._renderIssueView(this.state.issue);
-            commentsView = this._renderCommentsView(this.state.issue);
-        }
         return (
             <View style={styles.container}>
                 {this._renderHeader()}
-                <ScrollView>
-                    {issueView}
-                    {commentsView}
-                </ScrollView>
-                {this._renderFooter(this.state.issue)}
+                {this.state.issue && <ScrollView>
+                    {this._renderIssueView(this.state.issue)}
+                    {this._renderCommentsView(this.state.issue)}
+                </ScrollView>}
+                {this.state.issue && this._renderFooter(this.state.issue)}
             </View>
         );
     }
