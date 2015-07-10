@@ -104,17 +104,12 @@ class SingeIssueView extends React.Component {
     }
 
     _renderFooter(issue) {
-        if (!issue) {
-            return;
-        }
         let fieldsToDisplay = (issue.field || []).filter(field => field.name[0] === field.name[0].toUpperCase());
 
-        let customFields = fieldsToDisplay.map((field) => {
-            return (<CustomField key={field.name} field={field} style={styles.commentWrapper}/>);
-        });
-
         return (<View style={styles.footer}>
-            {customFields}
+            {fieldsToDisplay.map((field) => {
+                return (<CustomField key={field.name} field={field} style={styles.commentWrapper}/>);
+            })}
         </View>);
     }
 
