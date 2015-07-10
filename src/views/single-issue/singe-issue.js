@@ -107,8 +107,9 @@ class SingeIssueView extends React.Component {
         let fieldsToDisplay = (issue.field || []).filter(field => field.name[0] === field.name[0].toUpperCase());
 
         return (<View style={styles.footer}>
+            <CustomField key="Project" field={{name: 'Project', value: issue.fieldHash.projectShortName}}/>
             {fieldsToDisplay.map((field) => {
-                return (<CustomField key={field.name} field={field} style={styles.commentWrapper}/>);
+                return (<CustomField key={field.name} field={field}/>);
             })}
         </View>);
     }

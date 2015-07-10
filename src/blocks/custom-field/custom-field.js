@@ -29,7 +29,10 @@ class ColorField extends React.Component {
     render() {
         return (
             <View style={styles.wrapper}>
-                <Text style={[styles.valueText, {color: this.getTextColor()}]}>{this._getValue()}</Text>
+                <Text style={[styles.valueText, {
+                color: this.getTextColor(),
+                backgroundColor: this.props.color && field.color.bg
+                }]}>{this._getValue()}</Text>
                 <Text style={styles.keyText}>{this._getKey()}</Text>
             </View>
         );
