@@ -40,6 +40,10 @@ class Api {
     getIssueFolders() {
         return this.makeAuthorizedRequest(YouTrackIssuesFolderUrl);
     }
+
+    getUser(hubUrl, name) {
+        return this.makeAuthorizedRequest(hubUrl + '/api/rest/users/byname/' + encodeURIComponent(name)  + '?fields=avatar%2Furl');
+    }
 }
 
 module.exports = Api;

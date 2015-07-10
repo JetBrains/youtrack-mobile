@@ -8,7 +8,6 @@ var {
     ScrollView
     } = React;
 
-var Api = require('../../blocks/api/api');
 var ApiHelper = require('../../blocks/api/api__helper');
 var CustomField = require('../../blocks/custom-field/custom-field');
 let SingleIssueComments = require('./single-issue__comments');
@@ -23,13 +22,11 @@ class SingeIssueView extends React.Component {
         this.state = {issue: null, footerHeight: defaultFooterHeight};
     }
     componentDidMount() {
-        this.api = this.props.api;
-
         this.loadIssue(this.props.issueId);
     }
 
     loadIssue(id) {
-        return this.api.getIssue(id)
+        return this.props.api.getIssue(id)
             .then((issue) => ApiHelper.fillFieldHash(issue))
             .then((issue) => {
                 console.log('Issue', issue);
@@ -117,7 +114,7 @@ class SingeIssueView extends React.Component {
                 {this._renderHeader()}
                 {this.state.issue && <ScrollView>
                     {this._renderIssueView(this.state.issue)}
-                    <SingleIssueComments issue={this.state.issue}/>
+                    <SingleIssueComments issue={this.state.issue} api={this.props.api}/>
                 </ScrollView>}
                 {this.state.issue && this._renderFooter(this.state.issue)}
             </View>

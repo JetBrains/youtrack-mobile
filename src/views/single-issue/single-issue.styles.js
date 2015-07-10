@@ -29,10 +29,10 @@ var styles = StyleSheet.create({
         paddingTop: UNIT * 2
     },
     attachesContainer: {
-        marginTop: UNIT*2
+        marginTop: UNIT * 2
     },
     attachment: {
-        marginRight: UNIT*2,
+        marginRight: UNIT * 2,
         width: 150,
         height: 100,
         borderRadius: 4,
@@ -42,7 +42,16 @@ var styles = StyleSheet.create({
         padding: UNIT * 2
     },
     commentWrapper: {
-        marginBottom: UNIT*2
+        flexDirection: 'row',
+        marginBottom: UNIT * 2
+    },
+    avatar: {
+        width: UNIT * 4,
+        height: UNIT * 4,
+        borderRadius: UNIT * 2
+    },
+    comment: {
+      marginLeft: UNIT * 2
     },
     commentText: {
         marginTop: UNIT

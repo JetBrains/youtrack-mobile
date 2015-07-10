@@ -1,13 +1,21 @@
 var React = require('react-native');
 
 var styles = require('./single-issue.styles');
+let Avatar = require('../../blocks/avatar/avatar');
 
 var {View, Text, Image} = React;
 const ImageRegExp = /\![a-zA-Z0-9\s-]+?\.[a-zA-Z]+?\!/;
+const HTTP_BASE_URL = 'http://hackathon15.labs.intellij.net:8080';
 
 class SingleIssueComments extends React.Component {
 
-    processCommentImages(comment, attachments) {
+    /**
+     * Hackish code to replace !ImageName.png! syntax with image nodes, and other text with text nodes
+     * @param comment - issue comment
+     * @param attachments - issue attachments field
+     * @returns {View} - list of comment text and image nodes
+     */
+    _renderComment(comment, attachments) {
         let imageNames = comment.text.match(ImageRegExp);
         if (!imageNames || !imageNames.length) {
             return <Text key={comment.id}>{comment.text}</Text>;
@@ -21,7 +29,7 @@ class SingleIssueComments extends React.Component {
                 return commentView.push(<Text key={index}>{textNodes[index]}</Text>);
             }
             //TODO: hack urls again
-            let imgSrc = attach.url.replace('https://hackathon15.labs.intellij.net', 'http://hackathon15.labs.intellij.net:8080');
+            let imgSrc = attach.url.replace('https://hackathon15.labs.intellij.net', HTTP_BASE_URL);
 
             commentView.push(<Text key={index}>{textNodes[index]}</Text>);
             commentView.push(<Image key={attach.id} style={styles.commentImage} source={{uri: imgSrc}} />);
@@ -30,12 +38,25 @@ class SingleIssueComments extends React.Component {
         return commentView
     }
 
+    _getAvatarUri(authorName) {
+        this.props.api.getUser(HTTP_BASE_URL + '/hub', authorName)
+            .then((user) => {
+                debugger;
+            })
+            .catch(() => {
+                debugger;
+            });
+        return 'http://facebook.github.io/react/img/logo_og.png';
+    }
+
     _renderCommentsList(comments, attachments) {
         return comments.map((comment) => {
             return (<View key={comment.id} style={styles.commentWrapper}>
-                <Text>{comment.authorFullName} at {new Date(comment.created).toLocaleDateString()}</Text>
-                <View
-                    style={styles.commentText}>{this.processCommentImages(comment, attachments)}</View>
+                <Avatar style={styles.avatar} api={this.props.api} authorName={comment.authorFullName}/>
+                <View style={styles.comment}>
+                    <Text>{comment.authorFullName} at {new Date(comment.created).toLocaleDateString()}</Text>
+                    <View style={styles.commentText}>{this._renderComment(comment, attachments)}</View>
+                </View>
             </View>);
         });
     }
