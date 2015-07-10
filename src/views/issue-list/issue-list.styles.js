@@ -42,7 +42,7 @@ module.exports = StyleSheet.create({
     },
     separator: {
         height: 0.5,
-        marginLeft: 48,
+        marginLeft: 52,
         backgroundColor: '#CDCDDD'
     },
     summary: {
