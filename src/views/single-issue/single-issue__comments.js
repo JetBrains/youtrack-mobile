@@ -57,7 +57,7 @@ class SingleIssueComments extends React.Component {
                     <View style={styles.comment}>
                         <Text>
                             <Text style={{color: '#1CAFE4'}}>{comment.authorFullName}</Text>
-                            <Text style={{color: '#888'}}> at {new Date(comment.created).toLocaleDateString()}</Text>
+                            <Text style={{color: '#888'}}> on {new Date(comment.created).toLocaleDateString()}</Text>
                         </Text>
                         <View style={styles.commentText}>{this._renderComment(comment, attachments)}</View>
                     </View>
