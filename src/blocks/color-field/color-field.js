@@ -35,6 +35,7 @@ var styles = StyleSheet.create({
         justifyContent: 'center'
     },
     text: {
+        fontSize: 12,
         textAlign: 'center'
     }
 });
