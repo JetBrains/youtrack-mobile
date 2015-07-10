@@ -7,6 +7,7 @@ var Api = require('../../blocks/api/api');
 var ApiHelper = require('../../blocks/api/api__helper');
 var RefreshableListView = require('react-native-refreshable-listview');
 var ColorField = require('../../blocks/color-field/color-field');
+var IssueRow = require('./issue-list__row');
 
 var {View, Text, TouchableHighlight, ListView, TextInput, LayoutAnimation, Image} = React;
 
@@ -88,37 +89,12 @@ class IssueList extends React.Component {
         )
     }
 
-    _getSubText(issue) {
+    displaySearchInterface() {
 
-        var forText = () => {
-            if (issue.fieldHash.Assignee) {
-                return 'for ' + issue.fieldHash.Assignee[0].fullName;
-            }
-            return '    Unassigned'
-        };
-
-        return `${issue.id} by ${issue.fieldHash.reporterFullName} ${forText()}`
     }
 
-    _renderRow(issue) {
-        return (
-            <TouchableHighlight underlayColor='#FFF' onPress={() => this.onRowClick(issue)}>
-                <View>
-                    <View style={styles.row}>
-                        <View>
-                            <ColorField field={issue.fieldHash.Priority}></ColorField>
-                        </View>
-                        <View style={styles.rowText}>
-                            <Text style={styles.summary}>
-                                {issue.fieldHash.summary}
-                            </Text>
-                            <Text style={styles.subtext}>{this._getSubText(issue)}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.separator}/>
-                </View>
-            </TouchableHighlight>
-        );
+    hideSearchInterface() {
+
     }
 
     _renderFooter() {
@@ -129,6 +105,8 @@ class IssueList extends React.Component {
                     clearButtonMode="always"
                     returnKeyType="search"
                     autoCorrect={false}
+                    onFocus={this.displaySearchInterface.bind(this)}
+                    onBlur={this.hideSearchInterface.bind(this)}
                     onEndEditing={(e) => this.loadIssues(e.nativeEvent.text)}
                     style={styles.searchInput}
                     onChangeText={(text) => this.setState({input: text})}
@@ -144,7 +122,7 @@ class IssueList extends React.Component {
             <RefreshableListView
                 dataSource={this.state.dataSource}
                 loadData={this.updateIssues.bind(this)}
-                renderRow={this._renderRow.bind(this)}
+                renderRow={(issue) => <IssueRow issue={issue} onClick={this.onRowClick.bind(this)}></IssueRow>}
                 refreshDescription="Refreshing issues"
                 />
 
