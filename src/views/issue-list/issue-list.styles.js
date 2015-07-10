@@ -1,6 +1,6 @@
 var StyleSheet = require('react-native').StyleSheet;
 
-let BLUE = '#1B9FD6';
+let BLUE = '#2CB8E6';
 let PINK = '#C90162';
 let LIGHT_GRAY = '#EFEFEF';
 
@@ -30,14 +30,15 @@ module.exports = StyleSheet.create({
     row: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
-        padding: 10
+        padding: 16
     },
     rowText: {
-      marginLeft: 10
+      marginLeft: 16
     },
     separator: {
-        height: 1,
-        backgroundColor: '#CCCCCC'
+        height: 0.5,
+        marginLeft: 48,
+        backgroundColor: '#CDCDDD'
     },
     subtext: {
         fontSize: 12
@@ -53,7 +54,8 @@ module.exports = StyleSheet.create({
         height: 32,
         borderRadius: 6,
         textAlign: 'center',
-        backgroundColor: '#EEE',
+        backgroundColor: '#FFF',
+        color: '#7E7E84',
         margin: 8,
         padding: 6
     }
