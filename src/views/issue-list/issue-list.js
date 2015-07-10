@@ -22,6 +22,7 @@ class IssueList extends React.Component {
         super();
         this.state = {
             displayCancelSearch: false,
+            isuesCount: 0,
             dataSource: ds.cloneWithRows([]),
             keyboardSpace: 0,
             searchListHeight: 0
@@ -76,7 +77,10 @@ class IssueList extends React.Component {
         return this.api.getIssues(text)
             .then(ApiHelper.fillIssuesFieldHash)
             .then((issues) => {
-                this.setState({dataSource: ds.cloneWithRows(issues)});
+                this.setState({
+                    dataSource: ds.cloneWithRows(issues),
+                    isuesCount: issues.length
+                });
                 console.log('Issues', issues);
             })
             .catch((res) => {
