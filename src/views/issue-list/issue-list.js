@@ -11,6 +11,7 @@ var RefreshableListView = require('react-native-refreshable-listview');
 var ColorField = require('../../blocks/color-field/color-field');
 var IssueRow = require('./issue-list__row');
 var SearchesList = require('./issue-list__search-list');
+var SingleIssue = require('../single-issue/singe-issue');
 
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -59,6 +60,13 @@ class IssueList extends React.Component {
         });
     }
 
+    goToIssue(issue) {
+        this.props.navigator.push({
+            title: 'Issue',
+            component: <SingleIssue issueId={issue.id} onBack={() => this.props.navigator.pop()}></SingleIssue>
+        })
+    }
+
     logOut() {
         this.props.auth.logOut()
             .then(() => this.props.onBack());
@@ -78,10 +86,6 @@ class IssueList extends React.Component {
 
     updateIssues() {
         return this.loadIssues(this.state.input);
-    }
-
-    onRowClick(issue) {
-        console.log('Issue clicked', issue);
     }
 
     cancelSearch() {
@@ -162,7 +166,7 @@ class IssueList extends React.Component {
             <RefreshableListView
                 dataSource={this.state.dataSource}
                 loadData={this.updateIssues.bind(this)}
-                renderRow={(issue) => <IssueRow issue={issue} onClick={this.onRowClick.bind(this)}></IssueRow>}
+                renderRow={(issue) => <IssueRow issue={issue} onClick={this.goToIssue.bind(this)}></IssueRow>}
                 refreshDescription="Refreshing issues"
                 />
 

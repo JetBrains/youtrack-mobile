@@ -11,7 +11,7 @@ class SingeIssueView extends React.Component {
         return (
             <View style={styles.container}>
                 <Text>
-                    {this.props.issue}
+                    {this.props.issueId}
                 </Text>
             </View>
         );
@@ -20,6 +20,7 @@ class SingeIssueView extends React.Component {
 
 var styles = StyleSheet.create({
     container: {
+        paddingTop: 20,
         flex: 1,
         backgroundColor: '#F5FCFF'
     }

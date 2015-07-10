@@ -31,7 +31,7 @@ class YouTrackMobile extends React.Component {
 
     goToIssues() {
         this.refs.navigator.push({
-            component: <IssueList auth={this.auth} onBack={this.goToRootAndCheckAuth.bind(this)}></IssueList>,
+            component: <IssueList auth={this.auth} onBack={this.goToRootAndCheckAuth.bind(this)} navigator={this.refs.navigator}></IssueList>,
             title: 'Issues'
         });
     }
