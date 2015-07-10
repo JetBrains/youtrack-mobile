@@ -47,7 +47,7 @@ module.exports = StyleSheet.create({
       backgroundColor: BLUE
     },
     searchInput: {
-        height: 24,
+        height: 32,
         borderRadius: 6,
         textAlign: 'center',
         backgroundColor: '#EEE',
