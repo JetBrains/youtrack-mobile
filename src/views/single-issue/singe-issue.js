@@ -131,6 +131,7 @@ class SingeIssueView extends React.Component {
                     <View style={styles.commentInputWrapper}>
                         <TextInput placeholder="Comment"
                                    returnKeyType="send"
+                                   autoCorrect={false}
                                    value={this.state.commentText}
                                    onSubmitEditing={(e) => this.addComment(this.state.issue, e.nativeEvent.text) && this.setState({commentText: null})}
                                    style={styles.commentInput}/>
