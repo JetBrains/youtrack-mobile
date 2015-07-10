@@ -19,20 +19,27 @@ class ColorField extends React.Component {
         return this.props.field.name;
     }
 
-    getTextColor() {
+    getValueStyle() {
         let field = this.props.field;
-        if (field.color) {
-            return field.color.fg;
+        if (!field.color) {
+            return;
+        }
+        let fg = field.color.fg;
+        let bg = null;
+        if (fg === 'white' || fg === '#FFF') {
+            bg = field.color.bg;
+        }
+
+        return {
+            color: fg,
+            backgroundColor: bg
         }
     }
 
     render() {
         return (
             <View style={styles.wrapper}>
-                <Text style={[styles.valueText, {
-                color: this.getTextColor(),
-                backgroundColor: this.props.color && field.color.bg
-                }]}>{this._getValue()}</Text>
+                <Text style={[styles.valueText, this.getValueStyle()]}>{this._getValue()}</Text>
                 <Text style={styles.keyText}>{this._getKey()}</Text>
             </View>
         );
