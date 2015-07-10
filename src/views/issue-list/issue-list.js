@@ -97,7 +97,7 @@ class IssueList extends React.Component {
     }
 
     setQuery(query) {
-        this.setState({input: ' ' + query});
+        this.setState({input: query});
         this.loadIssues(query);
         this.cancelSearch();
     }
@@ -112,10 +112,7 @@ class IssueList extends React.Component {
                     <Text style={styles.logOut__text}>Log Out</Text>
                 </TouchableHighlight>
 
-                <Image
-                    style={styles.logo}
-                    source={require('image!youtrack-logo')}
-                    />
+                <Text style={styles.sortBy}>Sort by: Updated</Text>
             </View>
         )
     }

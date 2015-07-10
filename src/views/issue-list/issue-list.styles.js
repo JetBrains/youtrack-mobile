@@ -18,11 +18,9 @@ module.exports = StyleSheet.create({
     logOut__text: {
         color: PINK
     },
-    logo: {
-        top: 4,
-        left: 160,
-        width: 28,
-        height: 28
+    sortBy: {
+        top: 11,
+        left: 120
     },
     listContainer: {
         flex: 1,
