@@ -20,12 +20,11 @@ function hubOAuth() {
             let code = shittyQs(query_string).code;
 
             fetch([
-                `http://hackathon15.labs.intellij.net:8080/hub/auth/token`,
+                `http://hackathon15.labs.intellij.net:8080/hub/api/rest/oauth2/token`,
                 '?grant_type=authorization_code',
+                `&code=${code}`,
                 `&client_id=${config.auth.clientId}`,
                 `&client_secret=${config.auth.clientSecret}`,
-                `&scope=${config.auth.scopes}`,
-                `&code=${code}`,
                 `&redirect_uri=${config.auth.landingUrl}`
             ].join(''), {
                 method: 'POST'
@@ -34,6 +33,7 @@ function hubOAuth() {
             }).catch(err => {
                 debugger;
             });
+
             //resolve(shittyQs(query_string));
         });
 
