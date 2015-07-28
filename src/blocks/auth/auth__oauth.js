@@ -23,11 +23,12 @@ function hubOAuth() {
                 `http://hackathon15.labs.intellij.net:8080/hub/auth/token`,
                 '?grant_type=authorization_code',
                 `&client_id=${config.auth.clientId}`,
+                `&client_secret=${config.auth.clientSecret}`,
                 `&scope=${config.auth.scopes}`,
                 `&code=${code}`,
                 `&redirect_uri=${config.auth.landingUrl}`
             ].join(''), {
-                //method: 'POST'
+                method: 'POST'
             }).then(res => {
                 debugger;
             }).catch(err => {
