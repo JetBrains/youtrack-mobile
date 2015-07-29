@@ -38,15 +38,14 @@ function hubOAuth() {
             ].join(''), {
                 method: 'POST',
                 headers: {
+                    'Accept': 'application/json, text/plain, */*',
                     'Authorization': `Basic ${btoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`
                 }
             }).then(res => {
-                debugger;
+                resolve(res.json());
             }).catch(err => {
-                debugger;
+                throw err;
             });
-
-            //resolve(shittyQs(query_string));
         });
 
         openAuthPage();
