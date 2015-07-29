@@ -1,7 +1,7 @@
 var config = require('../app/app__config');
 var LinkingIOS = require('react-native').LinkingIOS;
 var shittyQs = require('shitty-qs');
-var base64 = require('base64');
+var base64 = require('base64-js');
 
 function openAuthPage() {
     LinkingIOS.openURL([
@@ -13,6 +13,14 @@ function openAuthPage() {
     ].join(''));
 }
 
+function btoa(str) {
+    let byteArray = [];
+    for (var i = 0; i < str.length; i++) {
+        byteArray.push(str.charCodeAt(i));
+    }
+    return base64.fromByteArray(byteArray);
+}
+
 function hubOAuth() {
     return new Promise(function (resolve, reject) {
 
@@ -20,8 +28,6 @@ function hubOAuth() {
             var [, query_string] = event.url.match(/\?(.*)/);
             let code = shittyQs(query_string).code;
 
-
-            let base64encoded = base64.encode(`${config.auth.clientId}:${config.auth.clientSecret}`);
             fetch([
                 `http://hackathon15.labs.intellij.net:8080/hub/api/rest/oauth2/token`,
                 '?grant_type=authorization_code',
@@ -32,7 +38,7 @@ function hubOAuth() {
             ].join(''), {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Basic ${base64encoded}`
+                    'Authorization': `Basic ${btoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`
                 }
             }).then(res => {
                 debugger;
