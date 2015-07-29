@@ -13,16 +13,22 @@ class Avatar extends React.Component {
     }
 
     componentDidMount() {
-        this.loadAvatarUrl(this.props.authorName);
+        this.loadAvatarUrl(this.props.authorLogin);
     }
 
-    loadAvatarUrl(authorName) {
-        this.props.api.getUser(HTTP_HUB_URL, authorName)
+    loadAvatarUrl(authorLogin) {
+        this.props.api.getUser(authorLogin)
             .then((user) => {
-                this.setState({avatarUrl: user.avatar.url});
+                if (user.avatarUrl) {
+                    return user.avatarUrl;
+                } else {
+                    return this.props.api.getUserFromHub(HTTP_HUB_URL, user.ringId)
+                        .then(user => user.avatar.url);
+                }
             })
+            .then(avatarUrl => this.setState({avatarUrl}))
             .catch(() => {
-                console.warn('Cant load user', authorName);
+                console.warn('Cant load user', authorLogin);
             });
     }
 

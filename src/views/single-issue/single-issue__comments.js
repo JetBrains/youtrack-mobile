@@ -54,7 +54,7 @@ class SingleIssueComments extends React.Component {
         return comments.map((comment) => {
             return (
                 <View key={comment.id} style={styles.commentWrapper}>
-                    <Avatar style={styles.avatar} api={this.props.api} authorName={comment.authorFullName}/>
+                    <Avatar style={styles.avatar} api={this.props.api} authorLogin={comment.author}/>
                     <View style={styles.comment}>
                         <Text>
                             <Text style={{color: '#1CAFE4'}}>{comment.authorFullName}</Text>
