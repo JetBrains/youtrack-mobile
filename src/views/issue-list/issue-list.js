@@ -168,6 +168,8 @@ class IssueList extends React.Component {
             {searchContainer}
 
             <RefreshableListView
+                contentInset={{top:0}}
+                automaticallyAdjustContentInsets={false}
                 dataSource={this.state.dataSource}
                 loadData={this.updateIssues.bind(this)}
                 renderRow={(issue) => <IssueRow issue={issue} onClick={this.goToIssue.bind(this)}></IssueRow>}
