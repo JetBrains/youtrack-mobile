@@ -29,7 +29,8 @@ function hubOAuth() {
             let code = shittyQs(query_string).code;
 
             fetch([
-                `http://hackathon15.labs.intellij.net:8080/hub/api/rest/oauth2/token`,
+                config.auth.serverUri,
+                `/api/rest/oauth2/token`,
                 '?grant_type=authorization_code',
                 `&code=${code}`,
                 `&client_id=${config.auth.clientId}`,

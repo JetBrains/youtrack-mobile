@@ -4,7 +4,7 @@ var {
     } = React;
 
 const SIZE = 20;
-const HTTP_HUB_URL = 'http://hackathon15.labs.intellij.net:8080/hub';
+const HTTP_HUB_URL = require('../app/app__config').auth.serverUri;
 
 class Avatar extends React.Component {
     constructor() {

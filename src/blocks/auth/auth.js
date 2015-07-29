@@ -2,7 +2,7 @@ var oauth = require('./auth__oauth');
 var AsyncStorage = require('react-native').AsyncStorage;
 const STORAGE_KEY = 'yt_mobile_auth';
 
-const CHECK_TOKEN_URL = 'http://hackathon15.labs.intellij.net:8080/hub/api/rest/users/me?fields=id';
+const CHECK_TOKEN_URL = require('../app/app__config').auth.serverUri + '/api/rest/users/me?fields=id';
 
 class Auth {
     constructor() {
