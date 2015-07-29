@@ -1,6 +1,7 @@
 var config = require('../app/app__config');
 var LinkingIOS = require('react-native').LinkingIOS;
 var shittyQs = require('shitty-qs');
+var btoa = require('btoa');
 
 function openAuthPage() {
     LinkingIOS.openURL([
@@ -27,7 +28,10 @@ function hubOAuth() {
                 `&client_secret=${config.auth.clientSecret}`,
                 `&redirect_uri=${config.auth.landingUrl}`
             ].join(''), {
-                method: 'POST'
+                method: 'POST',
+                headers: {
+                    'Authorization': `Basic ${btoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`
+                }
             }).then(res => {
                 debugger;
             }).catch(err => {

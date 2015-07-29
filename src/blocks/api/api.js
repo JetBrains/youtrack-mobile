@@ -27,7 +27,7 @@ class Api {
 
     getIssue(id) {
         var url = YouTrackIssueUrl + id;
-        return this.makeAuthorizedRequest(url)
+        return this.makeAuthorizedRequest(url);
             //.then(res => res.issue)
     }
 
