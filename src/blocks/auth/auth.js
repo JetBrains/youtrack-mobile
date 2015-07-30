@@ -40,16 +40,22 @@ class Auth {
                 ].join(''), {
                     method: 'POST',
                     headers: {
-                        'Accept': 'application/json, text/plain, */*'
+                        'Accept': 'application/json, text/plain, */*',
+                        'Authorization': `Basic ${btoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`
                     }
                 })
             })
             .then(res => res.json())
-            .catch(err => {throw err})
             .then((authParams) => {
-                console.info('Token has been refreshed', authParams);
+                if (!authParams.error_code) {
+                    console.info('Token has been refreshed', authParams);
+                } else {
+                    console.warn('Token refreshing failed', authParams);
+                    throw authParams;
+                }
                 return authParams;
             })
+            .catch(err => {throw err})
             .then((authParams) => this.verifyToken(authParams))
             .then(this.storeAuth.bind(this))
             .then((authParams) => this.authParams = authParams);
@@ -76,7 +82,7 @@ class Auth {
             return authParams;
         })
             .catch((res) => {
-                if (res.status === 401) {
+                if (res.status === 403) {
                     return this.refreshToken();
                 }
             });

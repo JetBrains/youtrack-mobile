@@ -20,7 +20,7 @@ class Api {
         })
             //Handle access_token expiring: refresh it in that case
             .then(res => {
-                if (res.status === 401) {
+                if (res.status === 401 || res._bodyText.indexOf('Token expired') !== -1) {
                     //TODO: may freeze here
                     return this.auth.refreshToken()
                         .then(() => this.makeAuthorizedRequest(url, method));
