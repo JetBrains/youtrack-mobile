@@ -19,12 +19,8 @@ class Avatar extends React.Component {
     loadAvatarUrl(authorLogin) {
         this.props.api.getUser(authorLogin)
             .then((user) => {
-                if (user.avatarUrl) {
-                    return user.avatarUrl;
-                } else {
-                    return this.props.api.getUserFromHub(HTTP_HUB_URL, user.ringId)
-                        .then(user => user.avatar.url);
-                }
+                return this.props.api.getUserFromHub(HTTP_HUB_URL, user.ringId)
+                    .then(user => user.avatar.url);
             })
             .then(avatarUrl => this.setState({avatarUrl}))
             .catch(() => {
