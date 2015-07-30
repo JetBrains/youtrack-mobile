@@ -1,5 +1,5 @@
 var React = require('react-native');
-var {View, Text, TouchableHighlight, ListView, TextInput, LayoutAnimation, Image} = React;
+var {AsyncStorage, View, Text, TouchableHighlight, ListView, TextInput, LayoutAnimation, Image} = React;
 
 var KeyboardEvents = require('react-native-keyboardevents');
 var KeyboardEventEmitter = KeyboardEvents.Emitter;
@@ -12,6 +12,7 @@ var IssueRow = require('./issue-list__row');
 var SearchesList = require('./issue-list__search-list');
 var SingleIssue = require('../single-issue/singe-issue');
 
+const QUERY_STORAGE_KEY = 'YT_QUERY_STORAGE';
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -30,7 +31,7 @@ class IssueList extends React.Component {
 
     componentDidMount() {
         this.api = new Api(this.props.auth);
-        this.loadIssues();
+        this.loadStoredQuery().then(query => this.setQuery(query));
 
         KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillShowEvent, this._updateKeyboardSpace.bind(this));
         KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, this._resetKeyboardSpace.bind(this));
@@ -58,6 +59,14 @@ class IssueList extends React.Component {
             searchListHeight: 0,
             displayCancelSearch: false
         });
+    }
+
+    storeQuery(query) {
+        return AsyncStorage.setItem(QUERY_STORAGE_KEY, query);
+    }
+
+    loadStoredQuery() {
+        return AsyncStorage.getItem(QUERY_STORAGE_KEY);
     }
 
     goToIssue(issue) {
@@ -106,6 +115,11 @@ class IssueList extends React.Component {
     setQuery(query) {
         this.setState({input: query});
         this.loadIssues(query);
+    }
+
+    onQueryUpdated(query) {
+        this.storeQuery(query);
+        this.setQuery(query);
         this.cancelSearch();
     }
 
@@ -143,7 +157,7 @@ class IssueList extends React.Component {
                     clearButtonMode="always"
                     returnKeyType="search"
                     autoCorrect={false}
-                    onSubmitEditing={(e) => this.setQuery(e.nativeEvent.text)}
+                    onSubmitEditing={(e) => this.onQueryUpdated(e.nativeEvent.text)}
                     style={[styles.searchInput]}
                     value={this.state.input}
                     onChangeText={(text) => this.setState({input: text})}
@@ -157,7 +171,7 @@ class IssueList extends React.Component {
         let searchContainer;
         if (this.state.searchListHeight) {
             searchContainer = <View ref="searchContainer" style={{height: this.state.searchListHeight}}>
-                <SearchesList getIssuesFolder={this.getIssueFolders.bind(this)} onAddQuery={this.setQuery.bind(this)}></SearchesList>
+                <SearchesList getIssuesFolder={this.getIssueFolders.bind(this)} onAddQuery={this.onQueryUpdated.bind(this)}></SearchesList>
             </View>
         }
 
