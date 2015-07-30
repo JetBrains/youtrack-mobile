@@ -11,7 +11,7 @@ class Auth {
     }
 
     authorize() {
-        return oauth();
+        return oauth().then(code => this.obtainToken(code));
     }
 
     authorizeAndStoreToken() {
@@ -27,6 +27,27 @@ class Auth {
 
     logOut() {
         return AsyncStorage.removeItem(STORAGE_KEY).then(() => delete this.authParams);
+    }
+
+    obtainToken(code) {
+        return fetch([
+            config.auth.serverUri,
+            `/api/rest/oauth2/token`,
+            '?grant_type=authorization_code',
+            `&code=${code}`,
+            `&client_id=${config.auth.clientId}`,
+            `&client_secret=${config.auth.clientSecret}`,
+            `&redirect_uri=${config.auth.landingUrl}`
+        ].join(''), {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Authorization': `Basic ${btoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`
+            }
+        }).then(res => res.json())
+            .catch(err => {
+                throw err;
+            });
     }
 
     refreshToken() {

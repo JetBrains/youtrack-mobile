@@ -28,25 +28,7 @@ function hubOAuth() {
         LinkingIOS.addEventListener('url', function (event) {
             var [, query_string] = event.url.match(/\?(.*)/);
             let code = shittyQs(query_string).code;
-
-            fetch([
-                config.auth.serverUri,
-                `/api/rest/oauth2/token`,
-                '?grant_type=authorization_code',
-                `&code=${code}`,
-                `&client_id=${config.auth.clientId}`,
-                `&client_secret=${config.auth.clientSecret}`,
-                `&redirect_uri=${config.auth.landingUrl}`
-            ].join(''), {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json, text/plain, */*',
-                    'Authorization': `Basic ${btoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`
-                }
-            }).then(res => resolve(res.json()))
-                .catch(err => {
-                    throw err;
-                });
+            resolve(code);
         });
 
         openAuthPage();
