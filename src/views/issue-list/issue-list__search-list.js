@@ -42,12 +42,12 @@ class SearchListView extends React.Component {
     render() {
         return (
             <ListView
+                contentInset={{top:0}}
+                automaticallyAdjustContentInsets={false}
                 ref="foldersList"
                 dataSource={this.state.dataSource}
                 renderRow={(issueFolder) => this._renderRow(issueFolder)}
-                keyboardShouldPersistTaps={true}
-                refreshDescription="Refreshing issues"
-                />
+                keyboardShouldPersistTaps={true}/>
         );
     }
 }
