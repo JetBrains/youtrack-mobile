@@ -22,7 +22,7 @@ function btoa(str) {
     return base64.fromByteArray(byteArray);
 }
 
-function hubOAuth() {
+function hubOAuth2() {
     return new Promise(function (resolve, reject) {
 
         LinkingIOS.addEventListener('url', function (event) {
@@ -35,4 +35,4 @@ function hubOAuth() {
     });
 }
 
-module.exports = hubOAuth;
+module.exports = hubOAuth2;

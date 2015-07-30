@@ -1,4 +1,4 @@
-var oauth = require('./auth__oauth');
+var hubOAuth2 = require('./auth__oauth');
 var config = require('../app/app__config');
 var AsyncStorage = require('react-native').AsyncStorage;
 const STORAGE_KEY = 'yt_mobile_auth';
@@ -11,7 +11,7 @@ class Auth {
     }
 
     authorize() {
-        return oauth().then(code => this.obtainToken(code));
+        return hubOAuth2().then(code => this.obtainToken(code));
     }
 
     authorizeAndStoreToken() {
