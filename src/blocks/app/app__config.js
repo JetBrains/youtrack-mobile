@@ -1,8 +1,8 @@
 module.exports = {
     auth: {
-        serverUri: 'http://hackathon15.labs.intellij.net:8080/hub',
-        clientId: 'ea7967ce-7f38-4626-af53-9e7ba0f3f280',
-        clientSecret: 'abc123',
+        serverUri: 'https://sso.jetbrains.com',
+        clientId: '567ae9c4-3064-4d82-9370-425d0a6e5ad4',
+        clientSecret: 'UFPqCa7VqHK3',
         scopes: 'Hub YouTrack',
         landingUrl: 'ytoauth://landing.url'
     }

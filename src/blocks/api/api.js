@@ -1,4 +1,4 @@
-const YouTrackUrl = 'http://hackathon15.labs.intellij.net:8080/youtrack';
+const YouTrackUrl = 'https://youtrack.jetbrains.com';
 const YouTrackIssueUrl = YouTrackUrl + '/rest/issue/';
 const YouTrackIssuesUrl = YouTrackUrl + '/rest/issue?max=100&useImplicitSort=true&with=summary&with=resolved&with=priority&with=reporterFullName&with=assignee';
 const YouTrackIssuesFolderUrl = YouTrackUrl + '/rest/issuesFolder';
