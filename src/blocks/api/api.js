@@ -18,8 +18,17 @@ class Api {
                 'Authorization': `${authParams.token_type} ${authParams.access_token}`
             }
         })
-            .then(function (res) {
-                if (res.status > 400) {
+            //Handle access_token expiring: refresh it in that case
+            .then(res => {
+                if (res.status === 401) {
+                    //TODO: may freeze here
+                    return this.auth.refreshToken()
+                        .then(() => this.makeAuthorizedRequest(url, method));
+                }
+                return res;
+            })
+            .then(res => {
+                if (res.status > 401) {
                     throw JSON.parse(res._bodyText);
                 }
                 return res.json();

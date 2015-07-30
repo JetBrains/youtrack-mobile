@@ -1,8 +1,9 @@
 var oauth = require('./auth__oauth');
+var config = require('../app/app__config');
 var AsyncStorage = require('react-native').AsyncStorage;
 const STORAGE_KEY = 'yt_mobile_auth';
 
-const CHECK_TOKEN_URL = require('../app/app__config').auth.serverUri + '/api/rest/users/me?fields=id';
+const CHECK_TOKEN_URL = config.auth.serverUri + '/api/rest/users/me?fields=id';
 
 class Auth {
     constructor() {
@@ -28,6 +29,35 @@ class Auth {
         return AsyncStorage.removeItem(STORAGE_KEY).then(() => delete this.authParams);
     }
 
+    refreshToken() {
+        return this.readAuth()
+            .then(authParams => {
+                return fetch([
+                    config.auth.serverUri,
+                    `/api/rest/oauth2/token`,
+                    '?grant_type=refresh_token',
+                    `&refresh_token=${authParams.refresh_token}`
+                ].join(''), {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*'
+                    }
+                })
+            })
+            .then(res => res.json())
+            .catch(err => {throw err})
+            .then((authParams) => {
+                console.info('Token has been refreshed', authParams);
+                return authParams;
+            })
+            .then((authParams) => this.verifyToken(authParams))
+            .then(this.storeAuth.bind(this))
+            .then((authParams) => this.authParams = authParams);
+    }
+
+    /**
+     * Not sure that check is still required.
+    */
     verifyToken(authParams) {
         if (!authParams || !authParams.access_token) {
             return this.authorizeAndStoreToken();
@@ -47,7 +77,7 @@ class Auth {
         })
             .catch((res) => {
                 if (res.status === 401) {
-                    return this.authorizeAndStoreToken();
+                    return this.refreshToken();
                 }
             });
     }

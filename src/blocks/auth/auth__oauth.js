@@ -43,11 +43,10 @@ function hubOAuth() {
                     'Accept': 'application/json, text/plain, */*',
                     'Authorization': `Basic ${btoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`
                 }
-            }).then(res => {
-                resolve(res.json());
-            }).catch(err => {
-                throw err;
-            });
+            }).then(res => resolve(res.json()))
+                .catch(err => {
+                    throw err;
+                });
         });
 
         openAuthPage();
