@@ -7,6 +7,7 @@ function openAuthPage() {
     LinkingIOS.openURL([
         `${config.auth.serverUri}/auth/login`,
         '?response_type=code',
+        '&access_type=offline',
         `&client_id=${config.auth.clientId}`,
         `&scope=${config.auth.scopes}`,
         `&redirect_uri=${config.auth.landingUrl}`
