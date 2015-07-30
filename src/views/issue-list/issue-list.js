@@ -8,7 +8,6 @@ var styles = require('./issue-list.styles');
 var Api = require('../../blocks/api/api');
 var ApiHelper = require('../../blocks/api/api__helper');
 var RefreshableListView = require('react-native-refreshable-listview');
-var ColorField = require('../../blocks/color-field/color-field');
 var IssueRow = require('./issue-list__row');
 var SearchesList = require('./issue-list__search-list');
 var SingleIssue = require('../single-issue/singe-issue');

@@ -98,7 +98,9 @@ class SingeIssueView extends React.Component {
                 <Text style={styles.summary}>{issue.fieldHash.summary}</Text>
                 {issue.fieldHash.description && <Text style={styles.description}>{issue.fieldHash.description}</Text>}
 
-                {issue.fieldHash.attachments && <ScrollView style={styles.attachesContainer} horizontal={true}>
+                {issue.fieldHash.attachments && <ScrollView contentInset={{top:0}}
+                                                            automaticallyAdjustContentInsets={false}
+                                                            style={styles.attachesContainer} horizontal={true}>
                     {this._renderAttachments(issue.fieldHash.attachments)}
                 </ScrollView>}
             </View>
@@ -126,7 +128,7 @@ class SingeIssueView extends React.Component {
         return (
             <View style={styles.container}>
                 {this._renderHeader()}
-                {this.state.issue && <ScrollView>
+                {this.state.issue && <ScrollView contentInset={{top:0}} automaticallyAdjustContentInsets={false}>
                     {this._renderIssueView(this.state.issue)}
                     <View style={styles.commentInputWrapper}>
                         <TextInput placeholder="Comment"
