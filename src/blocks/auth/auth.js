@@ -1,9 +1,18 @@
 var hubOAuth2 = require('./auth__oauth');
 var config = require('../app/app__config');
 var AsyncStorage = require('react-native').AsyncStorage;
+var base64 = require('base64-js');
 const STORAGE_KEY = 'yt_mobile_auth';
 
 const CHECK_TOKEN_URL = config.auth.serverUri + '/api/rest/users/me?fields=id';
+
+function makeBtoa(str) {
+    let byteArray = [];
+    for (var i = 0; i < str.length; i++) {
+        byteArray.push(str.charCodeAt(i));
+    }
+    return base64.fromByteArray(byteArray);
+}
 
 class Auth {
     constructor() {
@@ -42,7 +51,7 @@ class Auth {
             method: 'POST',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
-                'Authorization': `Basic ${btoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`
+                'Authorization': `Basic ${makeBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`
             }
         }).then(res => res.json())
             .catch(err => {

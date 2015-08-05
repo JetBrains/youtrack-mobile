@@ -1,7 +1,6 @@
 var config = require('../app/app__config');
 var LinkingIOS = require('react-native').LinkingIOS;
 var shittyQs = require('shitty-qs');
-var base64 = require('base64-js');
 
 function openAuthPage() {
     LinkingIOS.openURL([
@@ -12,14 +11,6 @@ function openAuthPage() {
         `&scope=${config.auth.scopes}`,
         `&redirect_uri=${config.auth.landingUrl}`
     ].join(''));
-}
-
-function btoa(str) {
-    let byteArray = [];
-    for (var i = 0; i < str.length; i++) {
-        byteArray.push(str.charCodeAt(i));
-    }
-    return base64.fromByteArray(byteArray);
 }
 
 function hubOAuth2() {
