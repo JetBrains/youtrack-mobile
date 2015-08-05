@@ -12,16 +12,8 @@ class YouTrackMobile extends React.Component {
         this.auth = new Auth();
     }
 
-    componentDidMount() {
-    }
-
     checkAuthorization() {
-        return this.auth.loadStoredAuthParams().then((authParams) => {
-            if (!authParams) {
-                return this.goToLogIn();
-            }
-            return this.goToIssues();
-        });
+        return this.auth.loadStoredAuthParams().then((authParams) => this.goToIssues())
     }
 
     goToRootAndCheckAuth() {
@@ -36,11 +28,8 @@ class YouTrackMobile extends React.Component {
         });
     }
 
-    goToLogIn() {
-        this.refs.navigator.push({
-            component: <LogIn auth={this.auth} onBack={this.goToRootAndCheckAuth.bind(this)}></LogIn>,
-            title: 'Log In'
-        });
+    getLoginView() {
+        return <LogIn></LogIn>;
     }
 
     render() {
@@ -52,7 +41,7 @@ class YouTrackMobile extends React.Component {
                 }
             }}
             renderScene={(route, navigator) => (
-                <View style={styles.container}>{route.component}</View>
+                <View style={styles.container}>{route.component || this.getLoginView()}</View>
             )}/>;
     }
 }
