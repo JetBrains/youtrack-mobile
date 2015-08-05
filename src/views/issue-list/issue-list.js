@@ -134,6 +134,8 @@ class IssueList extends React.Component {
                 </TouchableHighlight>
 
                 <Text style={styles.sortBy}>Sort by: Updated</Text>
+
+                <View style={styles.logOut}></View>
             </View>
         )
     }

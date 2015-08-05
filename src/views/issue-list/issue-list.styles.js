@@ -6,20 +6,22 @@ let UNIT = 8;
 
 module.exports = StyleSheet.create({
     headerContainer: {
-        height: 56,
-        paddingLeft: UNIT * 2,
+        paddingTop:30,
+        paddingBottom:10,
+        flexDirection:'row',
+
         backgroundColor: LIGHT_GRAY
     },
     logOut: {
-        width: 58,
-        top: 28
+        width: 70,
+        paddingLeft: 8
     },
     logOut__text: {
         color: PINK
     },
     sortBy: {
-        top: 11,
-        left: 120
+        flex: 1,
+        textAlign:'center'
     },
     listContainer: {
         flex: 1,
