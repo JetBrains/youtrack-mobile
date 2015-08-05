@@ -75,6 +75,8 @@ class SingeIssueView extends React.Component {
                 </TouchableHighlight>
 
                 <Text style={styles.headerText}>{this.props.issueId}</Text>
+
+                <View style={issueListStyles.logOut}></View>
             </View>
         )
     }

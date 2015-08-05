@@ -10,8 +10,8 @@ var styles = StyleSheet.create({
         backgroundColor: LIGHT_GRAY
     },
     headerText: {
-        top: 11,
-        left: 145
+        flex: 1,
+        textAlign:'center'
     },
     issueViewContainer: {
         padding: UNIT * 2,
