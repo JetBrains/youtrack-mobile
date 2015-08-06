@@ -121,7 +121,7 @@ class Auth {
         })
             .catch((res) => {
                 if (res.status === 403) {
-                    return this.refreshToken()//.catch(err => this.authorizeAndStoreToken());
+                    return this.refreshToken().catch(err => this.authorizeAndStoreToken());
                 }
                 throw res;
             })
