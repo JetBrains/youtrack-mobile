@@ -61,8 +61,12 @@ class Auth {
     }
 
     refreshToken() {
+        let refreshToken;
         return this.readAuth()
             .then(authParams => {
+                //store old refresh token
+                refreshToken = authParams.refresh_token;
+
                 return fetch([
                     config.auth.serverUri,
                     `/api/rest/oauth2/token`,
@@ -80,6 +84,8 @@ class Auth {
             .then((authParams) => {
                 if (!authParams.error_code) {
                     console.info('Token has been refreshed', authParams);
+                    //restore old refresh token
+                    authParams.refresh_token = authParams.refresh_token || refreshToken;
                 } else {
                     console.warn('Token refreshing failed', authParams);
                     throw authParams;
@@ -115,7 +121,7 @@ class Auth {
         })
             .catch((res) => {
                 if (res.status === 403) {
-                    return this.refreshToken().catch(err => this.authorizeAndStoreToken());
+                    return this.refreshToken()//.catch(err => this.authorizeAndStoreToken());
                 }
                 throw res;
             })
