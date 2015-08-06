@@ -6,9 +6,9 @@ let UNIT = 8;
 
 module.exports = StyleSheet.create({
     headerContainer: {
-        paddingTop:20,
-        paddingBottom:10,
-        flexDirection:'row',
+        paddingTop: 25,
+        paddingBottom: 10,
+        flexDirection: 'row',
 
         backgroundColor: LIGHT_GRAY
     },

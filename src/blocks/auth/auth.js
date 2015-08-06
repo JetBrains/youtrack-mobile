@@ -113,9 +113,14 @@ class Auth {
         })
             .catch((res) => {
                 if (res.status === 403) {
-                    return this.refreshToken();
+                    return this.refreshToken().catch(err => this.authorizeAndStoreToken());
                 }
-            });
+                throw res;
+            })
+            .catch((err) => {
+                console.warn('Error during validation token, reauthorization activated', res);
+                return this.authorizeAndStoreToken();
+            })
     }
 
     storeAuth(authParams) {
