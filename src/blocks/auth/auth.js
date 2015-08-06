@@ -39,6 +39,7 @@ class Auth {
     }
 
     obtainToken(code) {
+        console.info('Obtaining token for code', code);
         return fetch([
             config.auth.serverUri,
             `/api/rest/oauth2/token`,
@@ -96,6 +97,7 @@ class Auth {
     */
     verifyToken(authParams) {
         if (!authParams || !authParams.access_token) {
+            console.info('No stored auth found, authorizing');
             return this.authorizeAndStoreToken();
         }
 
