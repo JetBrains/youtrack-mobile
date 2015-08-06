@@ -71,7 +71,7 @@ class Auth {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
-                        'Authorization': `Basic ${btoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`
+                        'Authorization': `Basic ${makeBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`
                     }
                 })
             })
