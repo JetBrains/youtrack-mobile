@@ -13,6 +13,7 @@ class LogIn extends React.Component {
                 <Text style={styles.welcome}>
                     Logging in YouTrack Mobile...
                 </Text>
+                <Text style={styles.message}>{this.props.message}</Text>
             </View>
         );
     }
@@ -27,6 +28,11 @@ var styles = StyleSheet.create({
     },
     welcome: {
         fontSize: 20,
+        textAlign: 'center',
+        margin: 10
+    },
+    message: {
+        color: 'red',
         textAlign: 'center',
         margin: 10
     }

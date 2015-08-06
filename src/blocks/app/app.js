@@ -10,10 +10,13 @@ class YouTrackMobile extends React.Component {
     constructor() {
         super();
         this.auth = new Auth();
+        this.state = {};
     }
 
     checkAuthorization() {
-        return this.auth.loadStoredAuthParams().then((authParams) => this.goToIssues())
+        return this.auth.loadStoredAuthParams()
+            .then((authParams) => this.goToIssues())
+            .catch((err) => this.setState({loginMessage: err}));
     }
 
     goToRootAndCheckAuth() {
@@ -29,7 +32,7 @@ class YouTrackMobile extends React.Component {
     }
 
     getLoginView() {
-        return <LogIn></LogIn>;
+        return <LogIn message={this.state.loginMessage}></LogIn>;
     }
 
     render() {
