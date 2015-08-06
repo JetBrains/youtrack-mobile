@@ -6,7 +6,7 @@ let UNIT = 8;
 
 module.exports = StyleSheet.create({
     headerContainer: {
-        paddingTop:30,
+        paddingTop:20,
         paddingBottom:10,
         flexDirection:'row',
 
@@ -14,12 +14,15 @@ module.exports = StyleSheet.create({
     },
     logOut: {
         width: 70,
-        paddingLeft: 8
+        padding: 4,
+        paddingLeft: 8,
+        paddingRight: 8
     },
     logOut__text: {
         color: PINK
     },
     sortBy: {
+        padding: 4,
         flex: 1,
         textAlign:'center'
     },
