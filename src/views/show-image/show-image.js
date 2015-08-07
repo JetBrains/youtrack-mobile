@@ -4,8 +4,12 @@ var {
     Image,
     View,
     TouchableHighlight,
-    Text
+    Text,
+    ScrollView
     } = React;
+
+var Dimensions = require('Dimensions');
+var windowSize = Dimensions.get('window');
 
 let headerStyles = require('../../blocks/header/header.styles');
 
@@ -21,7 +25,11 @@ class ShowImage extends React.Component {
                         <Text style={headerStyles.headerButtonText}>Back</Text>
                     </TouchableHighlight>
                 </View>
-                <Image style={styles.image} source={{uri: this.props.imageUrl}}/>
+                <ScrollView maximumZoomScale={20} contentInset={{top:0}} automaticallyAdjustContentInsets={false}>
+                    <View style={{flex: 1}}>
+                        <Image style={styles.image} source={{uri: this.props.imageUrl}}/>
+                    </View>
+                </ScrollView>
             </View>
         );
     }
@@ -33,8 +41,9 @@ var styles = StyleSheet.create({
         backgroundColor: '#FFF'
     },
     image: {
-        flex: 1,
-        resizeMode: 'contain'
+        resizeMode: 'contain',
+        width: windowSize.width,
+        height: windowSize.height - 60
     }
 });
 
