@@ -25,7 +25,7 @@ class ShowImage extends React.Component {
                         <Text style={headerStyles.headerButtonText}>Back</Text>
                     </TouchableHighlight>
                 </View>
-                <ScrollView maximumZoomScale={20} contentInset={{top:0}} automaticallyAdjustContentInsets={false}>
+                <ScrollView contentContainerStyle={styles.scrollView} maximumZoomScale={20} contentInset={{top:0}} automaticallyAdjustContentInsets={false}>
                     <View style={{flex: 1}}>
                         <Image style={styles.image} source={{uri: this.props.imageUrl}}/>
                     </View>
@@ -40,10 +40,12 @@ var styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#FFF'
     },
+    scrollView: {
+        flex: 1
+    },
     image: {
         resizeMode: 'contain',
-        width: windowSize.width,
-        height: windowSize.height - 60
+        flex: 1
     }
 });
 
