@@ -93,8 +93,8 @@ class IssueList extends React.Component {
                 });
                 console.log('Issues', issues);
             })
-            .catch((res) => {
-                console.error(res);
+            .catch((err) => {
+                console.error('Failed to fetch issues', err);
             });
     }
 

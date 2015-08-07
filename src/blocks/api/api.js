@@ -32,7 +32,8 @@ class Api {
                 if (res.status > 401) {
                     throw JSON.parse(res._bodyText);
                 }
-                return res.json();
+                //Workaround about strange bug with refreshing token
+                return res.json ? res.json() : res;
             });
     }
 
