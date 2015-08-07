@@ -3,37 +3,15 @@ var React = require('react-native');
 var styles = require('./single-issue.styles');
 let Avatar = require('../../blocks/avatar/avatar');
 let relativeDate = require('relative-date');
+let TextWithImages = require('../../blocks/text-with-images/text-with-images');
 
 var {View, Text, Image} = React;
 const ImageRegExp = /\![a-zA-Z0-9\s-]+?\.[a-zA-Z]+?\!/;
 
 class SingleIssueComments extends React.Component {
 
-    /**
-     * Hackish code to replace !ImageName.png! syntax with image nodes, and other text with text nodes
-     * @param comment - issue comment
-     * @param attachments - issue attachments field
-     * @returns {View} - list of comment text and image nodes
-     */
     _renderComment(comment, attachments) {
-        let imageNames = comment.text.match(ImageRegExp);
-        if (!imageNames || !imageNames.length) {
-            return <Text key={comment.id}>{comment.text}</Text>;
-        }
-        let textNodes = comment.text.split(ImageRegExp);
-
-        let commentView = [];
-        (imageNames || []).forEach(function (imageName, index) {
-            let attach = attachments.filter(a => `!${a.value}!` === imageName)[0];
-            if (!attach) {
-                return commentView.push(<Text key={index}>{textNodes[index]}</Text>);
-            }
-
-            commentView.push(<Text key={index}>{textNodes[index]}</Text>);
-            commentView.push(<Image key={attach.id} style={styles.commentImage} source={{uri: attach.url}}/>);
-        });
-
-        return commentView
+        return TextWithImages.renderView(comment.text, attachments);
     }
 
     _renderCommentsList(comments, attachments) {

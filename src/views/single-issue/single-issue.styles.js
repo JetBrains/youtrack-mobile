@@ -73,11 +73,6 @@ var styles = StyleSheet.create({
     commentText: {
         marginTop: UNIT
     },
-    commentImage: {
-        width: 150,
-        height: 150,
-        resizeMode: 'contain'
-    },
     footer: {
         paddingLeft: UNIT,
         flexDirection: 'row',
