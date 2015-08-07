@@ -1,5 +1,5 @@
 let React = require('react-native');
-let {AsyncStorage, View, Text, TouchableHighlight, ListView, TextInput, LayoutAnimation, Image} = React;
+let {AsyncStorage, View, Text, TouchableHighlight, ListView, TextInput, LayoutAnimation, Image, StatusBarIOS} = React;
 
 let KeyboardEvents = require('react-native-keyboardevents');
 let KeyboardEventEmitter = KeyboardEvents.Emitter;
@@ -84,6 +84,8 @@ class IssueList extends React.Component {
     }
 
     loadIssues(text) {
+        StatusBarIOS.setNetworkActivityIndicatorVisible(true);
+
         return this.api.getIssues(text)
             .then(ApiHelper.fillIssuesFieldHash)
             .then((issues) => {
@@ -92,6 +94,7 @@ class IssueList extends React.Component {
                     isuesCount: issues.length
                 });
                 console.log('Issues', issues);
+                StatusBarIOS.setNetworkActivityIndicatorVisible(false);
             })
             .catch((err) => {
                 console.error('Failed to fetch issues', err);

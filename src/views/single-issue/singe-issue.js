@@ -6,7 +6,8 @@ var {
     Image,
     TextInput,
     TouchableHighlight,
-    ScrollView
+    ScrollView,
+    StatusBarIOS
     } = React;
 
 var ApiHelper = require('../../blocks/api/api__helper');
@@ -32,11 +33,14 @@ class SingeIssueView extends React.Component {
     }
 
     loadIssue(id) {
+        StatusBarIOS.setNetworkActivityIndicatorVisible(true);
+
         return this.props.api.getIssue(id)
             .then((issue) => ApiHelper.fillFieldHash(issue))
             .then((issue) => {
                 console.log('Issue', issue);
                 this.setState({issue});
+                StatusBarIOS.setNetworkActivityIndicatorVisible(false);
             })
             .catch((res) => {
                 console.error(res);
