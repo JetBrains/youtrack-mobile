@@ -11,6 +11,7 @@ var {
 
 var ApiHelper = require('../../blocks/api/api__helper');
 var CustomField = require('../../blocks/custom-field/custom-field');
+let TextWithImages = require('../../blocks/text-with-images/text-with-images');
 let SingleIssueComments = require('./single-issue__comments');
 let issueListStyles = require('../issue-list/issue-list.styles');
 let styles = require('./single-issue.styles');
@@ -96,7 +97,9 @@ class SingeIssueView extends React.Component {
             <View style={styles.issueViewContainer}>
                 <Text style={styles.authorForText}>{this.getAuthorForText(issue)}</Text>
                 <Text style={styles.summary}>{issue.fieldHash.summary}</Text>
-                {issue.fieldHash.description && <Text style={styles.description}>{issue.fieldHash.description}</Text>}
+                {issue.fieldHash.description && <View style={styles.description}>
+                    {TextWithImages.renderView(issue.fieldHash.description, issue.fieldHash.attachments)}
+                </View>}
 
                 {issue.fieldHash.attachments && <ScrollView contentInset={{top:0}}
                                                             automaticallyAdjustContentInsets={false}
