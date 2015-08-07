@@ -7,18 +7,18 @@ var {
     Text
     } = React;
 
-let issueListStyles = require('../issue-list/issue-list.styles');
+let headerStyles = require('../../blocks/header/header.styles');
 
 class ShowImage extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={issueListStyles.headerContainer}>
+                <View style={headerStyles.header}>
                     <TouchableHighlight
                         underlayColor="#FFF"
-                        style={issueListStyles.logOut}
+                        style={headerStyles.headerButton}
                         onPress={this.props.onBack.bind(this)}>
-                        <Text style={issueListStyles.logOut__text}>Back</Text>
+                        <Text style={headerStyles.headerButtonText}>Back</Text>
                     </TouchableHighlight>
                 </View>
                 <Image style={styles.image} source={{uri: this.props.imageUrl}}/>

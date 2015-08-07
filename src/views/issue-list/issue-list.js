@@ -1,16 +1,18 @@
-var React = require('react-native');
-var {AsyncStorage, View, Text, TouchableHighlight, ListView, TextInput, LayoutAnimation, Image} = React;
+let React = require('react-native');
+let {AsyncStorage, View, Text, TouchableHighlight, ListView, TextInput, LayoutAnimation, Image} = React;
 
-var KeyboardEvents = require('react-native-keyboardevents');
-var KeyboardEventEmitter = KeyboardEvents.Emitter;
+let KeyboardEvents = require('react-native-keyboardevents');
+let KeyboardEventEmitter = KeyboardEvents.Emitter;
 
-var styles = require('./issue-list.styles');
-var Api = require('../../blocks/api/api');
-var ApiHelper = require('../../blocks/api/api__helper');
-var RefreshableListView = require('react-native-refreshable-listview');
-var IssueRow = require('./issue-list__row');
-var SearchesList = require('./issue-list__search-list');
-var SingleIssue = require('../single-issue/singe-issue');
+let styles = require('./issue-list.styles');
+let headerStyles = require('../../blocks/header/header.styles');
+
+let Api = require('../../blocks/api/api');
+let ApiHelper = require('../../blocks/api/api__helper');
+let RefreshableListView = require('react-native-refreshable-listview');
+let IssueRow = require('./issue-list__row');
+let SearchesList = require('./issue-list__search-list');
+let SingleIssue = require('../single-issue/singe-issue');
 
 const QUERY_STORAGE_KEY = 'YT_QUERY_STORAGE';
 
@@ -125,17 +127,17 @@ class IssueList extends React.Component {
 
     _renderHeader() {
         return (
-            <View style={styles.headerContainer}>
+            <View style={headerStyles.header}>
                 <TouchableHighlight
                     underlayColor="#FFF"
-                    style={styles.logOut}
+                    style={headerStyles.headerButton}
                     onPress={this.logOut.bind(this)}>
-                    <Text style={styles.logOut__text}>Log Out</Text>
+                    <Text style={headerStyles.headerButtonText}>Log Out</Text>
                 </TouchableHighlight>
 
-                <Text style={styles.sortBy}>Sort by: Updated</Text>
+                <Text style={headerStyles.headerCenter}>Sort by: Updated</Text>
 
-                <View style={styles.logOut}></View>
+                <View style={headerStyles.headerButton}></View>
             </View>
         )
     }

@@ -16,6 +16,7 @@ let SingleIssueComments = require('./single-issue__comments');
 let ShowImage = require('../show-image/show-image');
 
 let issueListStyles = require('../issue-list/issue-list.styles');
+let headerStyles = require('../../blocks/header/header.styles');
 let styles = require('./single-issue.styles');
 
 const defaultFooterHeight = 56;
@@ -76,17 +77,17 @@ class SingeIssueView extends React.Component {
 
     _renderHeader() {
         return (
-            <View style={issueListStyles.headerContainer}>
+            <View style={headerStyles.header}>
                 <TouchableHighlight
                     underlayColor="#F8F8F8"
-                    style={issueListStyles.logOut}
+                    style={headerStyles.headerButton}
                     onPress={() => this.props.onBack()}>
-                    <Text style={issueListStyles.logOut__text}>List</Text>
+                    <Text style={headerStyles.headerButtonText}>List</Text>
                 </TouchableHighlight>
 
-                <Text style={styles.headerText}>{this.props.issueId}</Text>
+                <Text style={headerStyles.headerCenter}>{this.props.issueId}</Text>
 
-                <View style={issueListStyles.logOut}></View>
+                <View style={headerStyles.headerButton}></View>
             </View>
         )
     }

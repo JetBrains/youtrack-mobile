@@ -1,31 +1,9 @@
 var StyleSheet = require('react-native').StyleSheet;
 
 let PINK = '#FE0082';
-let LIGHT_GRAY = '#F8F8F8';
 let UNIT = 8;
 
 module.exports = StyleSheet.create({
-    headerContainer: {
-        paddingTop: 25,
-        paddingBottom: 10,
-        flexDirection: 'row',
-
-        backgroundColor: LIGHT_GRAY
-    },
-    logOut: {
-        width: 70,
-        padding: 4,
-        paddingLeft: 8,
-        paddingRight: 8
-    },
-    logOut__text: {
-        color: PINK
-    },
-    sortBy: {
-        padding: 4,
-        flex: 1,
-        textAlign:'center'
-    },
     listContainer: {
         flex: 1,
         backgroundColor: '#FFF'
