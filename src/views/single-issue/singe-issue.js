@@ -13,6 +13,8 @@ var ApiHelper = require('../../blocks/api/api__helper');
 var CustomField = require('../../blocks/custom-field/custom-field');
 let TextWithImages = require('../../blocks/text-with-images/text-with-images');
 let SingleIssueComments = require('./single-issue__comments');
+let ShowImage = require('../show-image/show-image');
+
 let issueListStyles = require('../issue-list/issue-list.styles');
 let styles = require('./single-issue.styles');
 
@@ -51,6 +53,13 @@ class SingeIssueView extends React.Component {
             })
     }
 
+    goToImage(imageUrl) {
+        this.props.navigator.push({
+            title: 'Image',
+            component: <ShowImage imageUrl={imageUrl} onBack={() => this.props.navigator.pop()}></ShowImage>
+        });
+    }
+
     getAuthorForText(issue) {
         var forText = () => {
             if (issue.fieldHash.Assignee) {
@@ -84,11 +93,11 @@ class SingeIssueView extends React.Component {
 
     _renderAttachments(attachments) {
         return (attachments || []).map((attach) => {
-            return <Image
-                key={attach.id}
-                style={styles.attachment}
-                capInsets={{left: 15, right: 15, bottom: 15, top: 15}}
-                source={{uri: attach.url}}/>;
+            return <TouchableHighlight underlayColor="#F8F8F8" onPress={() => this.goToImage(attach.url)} key={attach.id}>
+                <Image style={styles.attachment}
+                    capInsets={{left: 15, right: 15, bottom: 15, top: 15}}
+                    source={{uri: attach.url}}/>
+            </TouchableHighlight>
         });
     }
 

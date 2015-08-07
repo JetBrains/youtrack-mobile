@@ -72,7 +72,7 @@ class IssueList extends React.Component {
     goToIssue(issue) {
         this.props.navigator.push({
             title: 'Issue',
-            component: <SingleIssue issueId={issue.id} api={this.api} onBack={() => this.props.navigator.pop()}></SingleIssue>
+            component: <SingleIssue issueId={issue.id} api={this.api} onBack={() => this.props.navigator.pop()} navigator={this.props.navigator}></SingleIssue>
         })
     }
 
