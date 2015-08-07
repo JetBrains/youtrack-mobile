@@ -11,20 +11,24 @@ class Api {
 
     makeAuthorizedRequest(url, method = 'GET') {
         let authParams = this.auth.authParams;
-        return fetch(url, {
-            method,
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Authorization': `${authParams.token_type} ${authParams.access_token}`
-            }
-        })
-            //Handle access_token expiring: refresh it in that case
+
+        let sendRequest = () => {
+            return fetch(url, {
+                method,
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Authorization': `${authParams.token_type} ${authParams.access_token}`
+                }
+            });
+        };
+
+        return sendRequest()
+            //Handle access_token expiring: refresh it in that case and resend request
             .then(res => {
                 if (res.status === 401 || res._bodyText.indexOf('Token expired') !== -1) {
                     console.info('Looks like the token is expired, will try to refresh', res);
-                    //TODO: may freeze here
                     return this.auth.refreshToken()
-                        .then(() => this.makeAuthorizedRequest(url, method));
+                        .then(sendRequest);
                 }
                 return res;
             })
@@ -32,8 +36,7 @@ class Api {
                 if (res.status > 401) {
                     throw JSON.parse(res._bodyText);
                 }
-                //Workaround about strange bug with refreshing token
-                return res.json ? res.json() : res;
+                return res.json();
             });
     }
 
