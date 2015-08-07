@@ -64,6 +64,7 @@ class Auth {
         let refreshToken;
         return this.readAuth()
             .then(authParams => {
+                console.info('Begining token refresh', authParams);
                 //store old refresh token
                 refreshToken = authParams.refresh_token;
 
