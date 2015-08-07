@@ -65,7 +65,6 @@ module.exports = StyleSheet.create({
         flex: 1,
         height: UNIT * 4,
         borderRadius: 6,
-        textAlign: 'center',
         backgroundColor: '#FFF',
         color: '#7E7E84',
         margin: UNIT,
