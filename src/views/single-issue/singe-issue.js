@@ -83,13 +83,11 @@ class SingeIssueView extends React.Component {
 
     _renderAttachments(attachments) {
         return (attachments || []).map((attach) => {
-            //TODO: hacking https certificate error. REMOVE IT!
-            let imgSrc = attach.url.replace('https://hackathon15.labs.intellij.net', 'http://hackathon15.labs.intellij.net:8080');
             return <Image
                 key={attach.id}
                 style={styles.attachment}
                 capInsets={{left: 15, right: 15, bottom: 15, top: 15}}
-                source={{uri: imgSrc}}/>;
+                source={{uri: attach.url}}/>;
         });
     }
 

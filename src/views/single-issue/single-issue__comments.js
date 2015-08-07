@@ -6,7 +6,6 @@ let relativeDate = require('relative-date');
 
 var {View, Text, Image} = React;
 const ImageRegExp = /\![a-zA-Z0-9\s-]+?\.[a-zA-Z]+?\!/;
-const HTTP_BASE_URL = 'http://hackathon15.labs.intellij.net:8080';
 
 class SingleIssueComments extends React.Component {
 
@@ -29,25 +28,12 @@ class SingleIssueComments extends React.Component {
             if (!attach) {
                 return commentView.push(<Text key={index}>{textNodes[index]}</Text>);
             }
-            //TODO: hack urls again
-            let imgSrc = attach.url.replace('https://hackathon15.labs.intellij.net', HTTP_BASE_URL);
 
             commentView.push(<Text key={index}>{textNodes[index]}</Text>);
-            commentView.push(<Image key={attach.id} style={styles.commentImage} source={{uri: imgSrc}}/>);
+            commentView.push(<Image key={attach.id} style={styles.commentImage} source={{uri: attach.url}}/>);
         });
 
         return commentView
-    }
-
-    _getAvatarUri(authorName) {
-        this.props.api.getUser(HTTP_BASE_URL + '/hub', authorName)
-            .then((user) => {
-                debugger;
-            })
-            .catch(() => {
-                debugger;
-            });
-        return 'http://facebook.github.io/react/img/logo_og.png';
     }
 
     _renderCommentsList(comments, attachments) {
