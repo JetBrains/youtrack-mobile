@@ -10,9 +10,10 @@ class Api {
     }
 
     makeAuthorizedRequest(url, method = 'GET') {
-        let authParams = this.auth.authParams;
 
         let sendRequest = () => {
+            let authParams = this.auth.authParams;
+
             return fetch(url, {
                 method,
                 headers: {
