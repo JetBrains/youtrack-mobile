@@ -23,13 +23,12 @@
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "youtrack-logo_120.png",
+      "filename" : "Icon.png",
       "scale" : "2x"
     },
     {
-      "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "youtrack-logo_180.png",
+      "size" : "60x60",
       "scale" : "3x"
     },
     {
