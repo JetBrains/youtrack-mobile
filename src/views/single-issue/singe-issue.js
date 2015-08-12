@@ -33,14 +33,14 @@ class SingeIssueView extends React.Component {
     }
 
     loadIssue(id) {
-        StatusBarIOS.setNetworkActivityIndicatorVisible(true);
+        //StatusBarIOS.setNetworkActivityIndicatorVisible(true);
 
         return this.props.api.getIssue(id)
             .then((issue) => ApiHelper.fillFieldHash(issue))
             .then((issue) => {
                 console.log('Issue', issue);
                 this.setState({issue});
-                StatusBarIOS.setNetworkActivityIndicatorVisible(false);
+                //StatusBarIOS.setNetworkActivityIndicatorVisible(false);
             })
             .catch((res) => {
                 console.error(res);

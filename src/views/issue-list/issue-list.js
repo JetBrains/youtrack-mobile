@@ -84,7 +84,7 @@ class IssueList extends React.Component {
     }
 
     loadIssues(text) {
-        StatusBarIOS.setNetworkActivityIndicatorVisible(true);
+        //StatusBarIOS.setNetworkActivityIndicatorVisible(true);
 
         return this.api.getIssues(text)
             .then(ApiHelper.fillIssuesFieldHash)
@@ -94,7 +94,7 @@ class IssueList extends React.Component {
                     isuesCount: issues.length
                 });
                 console.log('Issues', issues);
-                StatusBarIOS.setNetworkActivityIndicatorVisible(false);
+                //StatusBarIOS.setNetworkActivityIndicatorVisible(false);
             })
             .catch((err) => {
                 console.error('Failed to fetch issues', err);
