@@ -61,12 +61,12 @@ class Auth {
     }
 
     refreshToken() {
-        let refreshToken;
+        let token;
         return this.readAuth()
             .then(authParams => {
                 console.info('Begining token refresh', authParams);
                 //store old refresh token
-                refreshToken = authParams.refresh_token;
+                token = authParams.refresh_token;
 
                 return fetch([
                     config.auth.serverUri,
@@ -86,7 +86,7 @@ class Auth {
                 if (!authParams.error_code) {
                     console.info('Token has been refreshed', authParams);
                     //restore old refresh token
-                    authParams.refresh_token = authParams.refresh_token || refreshToken;
+                    authParams.refresh_token = authParams.refresh_token || token;
                 } else {
                     console.warn('Token refreshing failed', authParams);
                     throw authParams;
