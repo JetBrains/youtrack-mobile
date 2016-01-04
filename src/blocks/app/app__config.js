@@ -1,8 +1,8 @@
 module.exports = {
     auth: {
-        serverUri: 'https://hub.jetbrains.com',
-        clientId: '567ae9c4-3064-4d82-9370-425d0a6e5ad4',
-        clientSecret: 'UFPqCa7VqHK3',
+        serverUri: 'http://ring-demo-dev.labs.intellij.net/hub',
+        clientId: '69d0af0d-afa5-4e4d-a77f-c1523db0d073',
+        clientSecret: 'wKQriy4XMgdR',
         scopes: 'Hub YouTrack',
         landingUrl: 'ytoauth://landing.url'
     }
