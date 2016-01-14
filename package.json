@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "./node_modules/react-native-cli/index.js start",
+    "test": "jest",
     "ios-build": "xcodebuild  -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile -sdk iphonesimulator -destination platform='iOS Simulator',name='iPhone 6 Plus' -derivedDataPath ios/build",
     "ios-launch-sim": "xcrun instruments -w 'iPhone 6 Plus (9.2)'",
     "ios-install-app": "xcrun simctl install booted ios/build/Build/Products/Debug-iphonesimulator/YouTrackMobile.app",
@@ -14,6 +15,21 @@
     "android-emulator-create": "android create avd -n YouTrackMobile -t 1 -b x86 --skin 1080x1920 --device 'Nexus 5'",
     "android-emulator-delete": "android delete avd -n YouTrackMobile"
   },
+  "jest": {
+    "scriptPreprocessor": "node_modules/react-native/jestSupport/preprocessor.js",
+    "setupEnvScriptFile": "node_modules/react-native/jestSupport/env.js",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "packager/react-packager/src/Activity/"
+    ],
+    "testFileExtensions": [
+      "js"
+    ],
+    "unmockedModulePathPatterns": [
+      "promise",
+      "source-map"
+    ]
+  },
   "dependencies": {
     "base64-js": "0.0.8",
     "react-native": "0.17.0",
@@ -22,6 +38,7 @@
     "shitty-qs": "^1.0.1"
   },
   "devDependencies": {
+    "jest-cli": "0.8.2",
     "react-native-cli": "0.1.7"
   }
 }
