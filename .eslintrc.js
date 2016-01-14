@@ -46,6 +46,8 @@ module.exports = {
         'no-dupe-class-members': 2,
         'no-this-before-super': 2,
         //React
+        "react/jsx-uses-react": 2,
+        "react/jsx-uses-vars": 2,
         'react-native/no-unused-styles': 2,
         'react-native/split-platform-components': 2
     },
