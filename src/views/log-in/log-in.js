@@ -1,10 +1,4 @@
-var React = require('react-native');
-var {
-    StyleSheet,
-    Text,
-    View,
-    TouchableHighlight
-    } = React;
+import React, {StyleSheet, Text, View} from 'react-native';
 
 class LogIn extends React.Component {
     render() {

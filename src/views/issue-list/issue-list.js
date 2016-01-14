@@ -1,4 +1,4 @@
-import React, {AsyncStorage, View, Text, TouchableHighlight, ListView, TextInput, LayoutAnimation, Image, StatusBarIOS, DeviceEventEmitter} from 'react-native'
+import React, {AsyncStorage, View, Text, TouchableHighlight, ListView, TextInput, LayoutAnimation, DeviceEventEmitter} from 'react-native'
 
 import styles from './issue-list.styles';
 import headerStyles from '../../blocks/header/header.styles';

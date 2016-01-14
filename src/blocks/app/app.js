@@ -2,7 +2,7 @@ import Auth from '../auth/auth';
 import LogIn from '../../views/log-in/log-in';
 import IssueList from '../../views/issue-list/issue-list';
 
-import React, {View, Image, Navigator, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import React, {View, Navigator, StyleSheet} from 'react-native';
 
 class YouTrackMobile extends React.Component {
 

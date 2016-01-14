@@ -1,9 +1,6 @@
 import React, {StyleSheet, Image, View, TouchableHighlight, Text, ScrollView} from 'react-native';
 
-var Dimensions = require('Dimensions');
-var windowSize = Dimensions.get('window');
-
-let headerStyles = require('../../blocks/header/header.styles');
+import headerStyles from '../../blocks/header/header.styles';
 
 class ShowImage extends React.Component {
     render() {

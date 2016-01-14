@@ -151,7 +151,7 @@ class Auth {
                 throw res;
             })
             .catch((err) => {
-                console.warn('Error during validation token, reauthorization activated', res);
+                console.warn('Error during validation token, reauthorization activated', err);
                 return this.authorizeAndStoreToken();
             })
     }

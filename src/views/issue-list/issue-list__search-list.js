@@ -1,4 +1,4 @@
-import React, {View, ListView, Text, TouchableHighlight, StyleSheet} from 'react-native';
+import React, {ListView, Text, TouchableHighlight, StyleSheet} from 'react-native';
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -9,7 +9,6 @@ class SearchListView extends React.Component {
     }
 
     componentDidMount() {
-        let folderList = this.refs.foldersList;
         this.props.getIssuesFolder()
             .then((issueFolders) => {
                 this.setState({

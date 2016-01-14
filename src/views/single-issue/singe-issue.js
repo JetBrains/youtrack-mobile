@@ -1,13 +1,4 @@
-import React, {
-    StyleSheet,
-    Text,
-    View,
-    Image,
-    TextInput,
-    TouchableHighlight,
-    ScrollView,
-    StatusBarIOS
-    } from 'react-native';
+import React, {Text, View, Image, TextInput, TouchableHighlight, ScrollView} from 'react-native';
 
 import ApiHelper from '../../blocks/api/api__helper';
 import CustomField from '../../blocks/custom-field/custom-field';

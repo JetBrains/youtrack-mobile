@@ -1,4 +1,5 @@
-import React, {View, Text, Image, StyleSheet} from 'react-native';
+import React from 'react-native'; //eslint-disable-line no-unused-vars
+import {Text, Image, StyleSheet} from 'react-native';
 
 const ImageRegExp = /\![a-zA-Z0-9\s-]+?\.[a-zA-Z]+?\!/;
 
