@@ -60,6 +60,30 @@ class Auth {
             });
     }
 
+    obtainTokenByCredentials(login, password) {
+        console.info('Obtaining token by credentials for user', login);
+        return fetch([
+            config.auth.serverUri,
+            `/api/rest/oauth2/token`,
+            '?grant_type=password',
+            `&username=${login}`,
+            `&password=${password}`,
+            `&scope=${config.auth.scopes}`
+        ].join(''), {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Authorization': `Basic ${makeBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`
+            }
+        }).then(res => res.json())
+            .then(res => {
+                if (res.error) {
+                    throw res;
+                }
+                return res;
+            });
+    }
+
     refreshToken() {
         let token;
         return this.readAuth()
