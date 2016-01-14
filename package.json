@@ -8,7 +8,12 @@
     "ios-launch-sim": "xcrun instruments -w 'iPhone 6 Plus (9.2)'",
     "ios-install-app": "xcrun simctl install booted ios/build/Build/Products/Debug-iphonesimulator/YouTrackMobile.app",
     "ios-launch-installed": "xcrun simctl launch booted org.jetbrains.YouTrackMobile",
-    "ios": "npm run ios-build && npm run ios-launch-sim || npm run ios-install-app && npm run ios-launch-installed"
+    "ios": "npm run ios-build && npm run ios-launch-sim || npm run ios-install-app && npm run ios-launch-installed",
+    "android": "./node_modules/react-native-cli/index.js run-android",
+    "develop-android": "./node_modules/react-native-cli/index.js run-android && npm run emulator-android",
+    "emulator-android": "emulator -avd YouTrackMobile -scale 0.4 -gpu on -memory 2048",
+    "emulator-create-android": "android create avd -n YouTrackMobile -t 1 -b x86 --skin 1080x1920 --device 'Nexus 5'",
+    "emulator-delete-android": "android delete avd -n YouTrackMobile"
   },
   "dependencies": {
     "base64-js": "0.0.8",
