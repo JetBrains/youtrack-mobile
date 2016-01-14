@@ -4,18 +4,15 @@
   "private": true,
   "scripts": {
     "start": "./node_modules/react-native-cli/index.js start",
-    
     "ios-build": "xcodebuild  -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile -sdk iphonesimulator -destination platform='iOS Simulator',name='iPhone 6 Plus' -derivedDataPath ios/build",
     "ios-launch-sim": "xcrun instruments -w 'iPhone 6 Plus (9.2)'",
     "ios-install-app": "xcrun simctl install booted ios/build/Build/Products/Debug-iphonesimulator/YouTrackMobile.app",
     "ios-launch-installed": "xcrun simctl launch booted org.jetbrains.YouTrackMobile",
-    
     "ios": "npm run ios-build && npm run ios-launch-sim || npm run ios-install-app && npm run ios-launch-installed"
   },
   "dependencies": {
     "base64-js": "0.0.8",
     "react-native": "0.17.0",
-    "react-native-keyboardevents": "0.4.5",
     "react-native-refreshable-listview": "1.3.0",
     "relative-date": "^1.1.2",
     "shitty-qs": "^1.0.1"

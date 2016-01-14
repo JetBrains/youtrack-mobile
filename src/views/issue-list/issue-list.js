@@ -1,8 +1,4 @@
-let React = require('react-native');
-let {AsyncStorage, View, Text, TouchableHighlight, ListView, TextInput, LayoutAnimation, Image, StatusBarIOS} = React;
-
-let KeyboardEvents = require('react-native-keyboardevents');
-let KeyboardEventEmitter = KeyboardEvents.Emitter;
+import React, {AsyncStorage, View, Text, TouchableHighlight, ListView, TextInput, LayoutAnimation, Image, StatusBarIOS, DeviceEventEmitter} from 'react-native'
 
 let styles = require('./issue-list.styles');
 let headerStyles = require('../../blocks/header/header.styles');
@@ -35,21 +31,16 @@ class IssueList extends React.Component {
         this.api = new Api(this.props.auth);
         this.loadStoredQuery().then(query => this.setQuery(query));
 
-        KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillShowEvent, this._updateKeyboardSpace.bind(this));
-        KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, this._resetKeyboardSpace.bind(this));
+        DeviceEventEmitter.addListener('keyboardWillShow', this._updateKeyboardSpace.bind(this))
+        DeviceEventEmitter.addListener('keyboardWillHide', this._resetKeyboardSpace.bind(this))
     }
 
-    componentWillUnmount() {
-        KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillShowEvent, this._updateKeyboardSpace.bind(this));
-        KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillHideEvent, this._resetKeyboardSpace.bind(this));
-    }
-
-    _updateKeyboardSpace(frames) {
+    _updateKeyboardSpace(e) {
         var spacing = 110; //TODO: calculate it in runtime
         LayoutAnimation.configureNext(animations.layout.spring);
         this.setState({
-            keyboardSpace: frames.end.height,
-            searchListHeight: frames.end.y - spacing,
+            keyboardSpace: e.endCoordinates.height,
+            searchListHeight: e.endCoordinates.screenY - spacing,
             displayCancelSearch: true
         });
     }
