@@ -6,9 +6,9 @@ import React, {View, Text, TouchableHighlight} from 'react-native';
 class IssueRow extends React.Component {
     static _getSubText(issue) {
 
-        var forText = () => {
+        let forText = () => {
             if (issue.fieldHash.Assignee) {
-                return 'for ' + issue.fieldHash.Assignee[0].fullName;
+                return `for ${issue.fieldHash.Assignee[0].fullName}`;
             }
             return '    Unassigned'
         };

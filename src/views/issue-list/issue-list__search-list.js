@@ -1,6 +1,6 @@
 import React, {ListView, Text, TouchableHighlight, StyleSheet} from 'react-native';
 
-var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 class SearchListView extends React.Component {
     constructor() {
@@ -22,7 +22,7 @@ class SearchListView extends React.Component {
 
     applyIssueFolder(issueFolderName) {
         let hasSpaces = issueFolderName.indexOf(' ') >= 0;
-        let query = '#' + (hasSpaces ? '{' : '') + issueFolderName + (hasSpaces ? '}' : '');
+        let query = '#' + (hasSpaces ? '{' : '') + issueFolderName + (hasSpaces ? '}' : ''); //eslint-disable-line prefer-template
         this.props.onAddQuery(query);
     }
 

@@ -12,7 +12,7 @@ import SingleIssue from '../single-issue/singe-issue';
 
 const QUERY_STORAGE_KEY = 'YT_QUERY_STORAGE';
 
-var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 class IssueList extends React.Component {
 
@@ -36,7 +36,7 @@ class IssueList extends React.Component {
     }
 
     _updateKeyboardSpace(e) {
-        var spacing = 110; //TODO: calculate it in runtime
+        const spacing = 110; //TODO: calculate it in runtime
         LayoutAnimation.configureNext(animations.layout.spring);
         this.setState({
             keyboardSpace: e.endCoordinates.height,
@@ -194,7 +194,7 @@ class IssueList extends React.Component {
     }
 }
 
-var animations = {
+const animations = {
     layout: {
         spring: {
             duration: 400,

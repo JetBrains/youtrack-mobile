@@ -21,7 +21,7 @@ class ColorField extends React.Component {
     }
 }
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
     wrapper: {
         width: SIZE,
         height: SIZE,

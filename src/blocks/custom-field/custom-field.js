@@ -39,7 +39,7 @@ class ColorField extends React.Component {
     }
 }
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
     wrapper: {
         padding: 8
     },

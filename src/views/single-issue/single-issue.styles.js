@@ -3,7 +3,7 @@ import {StyleSheet} from 'react-native';
 let LIGHT_GRAY = '#F8F8F8';
 let UNIT = 8;
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: LIGHT_GRAY

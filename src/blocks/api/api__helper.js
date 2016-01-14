@@ -3,9 +3,9 @@ let API = {
         let fieldHash = {};
 
         (issue.field || []).forEach((field) => {
-            var fieldName = field.name;
+            const fieldName = field.name;
             fieldHash[fieldName] = field.value;
-            for (var item in field) {
+            for (const item in field) {
                 if (item !== 'value' && item !== 'name') {
                     fieldHash[fieldName][item] = field[item];
                 }
@@ -23,7 +23,7 @@ let API = {
     },
 
     orderIssueFolders: (folders) => {
-        var filters = {
+        const filters = {
             isSavedSearch: function (folder) {
                 return folder.fqFolderId.indexOf('$s$') === 0;
             },

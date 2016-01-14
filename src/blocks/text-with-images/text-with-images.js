@@ -32,7 +32,7 @@ class TextWithImages {
     }
 }
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
     commentImage: {
         width: 150,
         height: 150,

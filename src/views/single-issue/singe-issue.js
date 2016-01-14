@@ -55,9 +55,9 @@ class SingeIssueView extends React.Component {
     }
 
     getAuthorForText(issue) {
-        var forText = () => {
+        let forText = () => {
             if (issue.fieldHash.Assignee) {
-                return 'for ' + issue.fieldHash.Assignee[0].fullName;
+                return `for ${issue.fieldHash.Assignee[0].fullName}`;
             }
             return '    Unassigned'
         };
