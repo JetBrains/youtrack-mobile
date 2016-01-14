@@ -9,10 +9,10 @@ const SIZE = 20;
 
 class ColorField extends React.Component {
     _getBackgroundColor() {
-        return this.props.field.color.bg;
+        return this.props.field.color && this.props.field.color.bg;
     }
     _getForegroundColor() {
-        return this.props.field.color.fg;
+        return this.props.field.color && this.props.field.color.fg;
     }
     _getFieldLetter() {
         return this.props.field[0].substr(0, 1);
