@@ -1,9 +1,8 @@
-var React = require('react-native');
-var Auth = require('../auth/auth');
-var LogIn = require('../../views/log-in/log-in');
-var IssueList = require('../../views/issue-list/issue-list');
+import Auth from '../auth/auth';
+import LogIn from '../../views/log-in/log-in';
+import IssueList from '../../views/issue-list/issue-list';
 
-var {View, Image, Navigator, Text, TouchableOpacity, StyleSheet} = React;
+import React, {View, Image, Navigator, Text, TouchableOpacity, StyleSheet} from 'react-native';
 
 class YouTrackMobile extends React.Component {
 

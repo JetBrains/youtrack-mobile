@@ -1,6 +1,5 @@
-var React = require('react-native');
+import React, {View, Text, Image, StyleSheet} from 'react-native';
 
-var {View, Text, Image, StyleSheet} = React;
 const ImageRegExp = /\![a-zA-Z0-9\s-]+?\.[a-zA-Z]+?\!/;
 
 class TextWithImages {

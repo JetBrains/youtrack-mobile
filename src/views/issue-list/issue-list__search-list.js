@@ -1,6 +1,4 @@
-var React = require('react-native');
-
-var {View, ListView, Text, TouchableHighlight, StyleSheet} = React;
+import React, {View, ListView, Text, TouchableHighlight, StyleSheet} from 'react-native';
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 

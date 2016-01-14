@@ -1,5 +1,4 @@
-var React = require('react-native');
-var {
+import React, {
     StyleSheet,
     Text,
     View,
@@ -8,17 +7,16 @@ var {
     TouchableHighlight,
     ScrollView,
     StatusBarIOS
-    } = React;
+    } from 'react-native';
 
-var ApiHelper = require('../../blocks/api/api__helper');
-var CustomField = require('../../blocks/custom-field/custom-field');
-let TextWithImages = require('../../blocks/text-with-images/text-with-images');
-let SingleIssueComments = require('./single-issue__comments');
-let ShowImage = require('../show-image/show-image');
+import ApiHelper from '../../blocks/api/api__helper';
+import CustomField from '../../blocks/custom-field/custom-field';
+import TextWithImages from '../../blocks/text-with-images/text-with-images';
+import SingleIssueComments from './single-issue__comments';
+import ShowImage from '../show-image/show-image';
 
-let issueListStyles = require('../issue-list/issue-list.styles');
-let headerStyles = require('../../blocks/header/header.styles');
-let styles = require('./single-issue.styles');
+import headerStyles from '../../blocks/header/header.styles';
+import styles from './single-issue.styles';
 
 const defaultFooterHeight = 56;
 

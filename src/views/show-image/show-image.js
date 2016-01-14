@@ -1,12 +1,4 @@
-var React = require('react-native');
-var {
-    StyleSheet,
-    Image,
-    View,
-    TouchableHighlight,
-    Text,
-    ScrollView
-    } = React;
+import React, {StyleSheet, Image, View, TouchableHighlight, Text, ScrollView} from 'react-native';
 
 var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');

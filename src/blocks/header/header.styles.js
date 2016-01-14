@@ -1,4 +1,5 @@
-var StyleSheet = require('react-native').StyleSheet;
+import {StyleSheet} from 'react-native';
+
 let UNIT = 8;
 let PINK = '#FE0082';
 let LIGHT_GRAY = '#F8F8F8';

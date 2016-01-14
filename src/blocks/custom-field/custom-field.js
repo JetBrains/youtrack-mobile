@@ -1,11 +1,4 @@
-var React = require('react-native');
-var {
-    View,
-    Text,
-    StyleSheet
-    } = React;
-
-const SIZE = 20;
+import React, {View, Text, StyleSheet} from 'react-native';
 
 class ColorField extends React.Component {
     _getValue() {

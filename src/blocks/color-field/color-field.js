@@ -1,9 +1,4 @@
-var React = require('react-native');
-var {
-    View,
-    Text,
-    StyleSheet
-    } = React;
+import React, {View, Text, StyleSheet} from 'react-native';
 
 const SIZE = 20;
 

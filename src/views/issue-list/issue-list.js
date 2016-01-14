@@ -1,14 +1,14 @@
 import React, {AsyncStorage, View, Text, TouchableHighlight, ListView, TextInput, LayoutAnimation, Image, StatusBarIOS, DeviceEventEmitter} from 'react-native'
 
-let styles = require('./issue-list.styles');
-let headerStyles = require('../../blocks/header/header.styles');
+import styles from './issue-list.styles';
+import headerStyles from '../../blocks/header/header.styles';
 
-let Api = require('../../blocks/api/api');
-let ApiHelper = require('../../blocks/api/api__helper');
-let RefreshableListView = require('react-native-refreshable-listview');
-let IssueRow = require('./issue-list__row');
-let SearchesList = require('./issue-list__search-list');
-let SingleIssue = require('../single-issue/singe-issue');
+import Api from '../../blocks/api/api';
+import ApiHelper from '../../blocks/api/api__helper';
+import RefreshableListView from 'react-native-refreshable-listview';
+import IssueRow from './issue-list__row';
+import SearchesList from './issue-list__search-list';
+import SingleIssue from '../single-issue/singe-issue';
 
 const QUERY_STORAGE_KEY = 'YT_QUERY_STORAGE';
 

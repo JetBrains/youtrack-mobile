@@ -1,12 +1,10 @@
-var React = require('react-native');
 
-var styles = require('./single-issue.styles');
-let Avatar = require('../../blocks/avatar/avatar');
-let relativeDate = require('relative-date');
-let TextWithImages = require('../../blocks/text-with-images/text-with-images');
+import styles from './single-issue.styles';
+import Avatar from '../../blocks/avatar/avatar';
+import relativeDate from 'relative-date';
+import TextWithImages from '../../blocks/text-with-images/text-with-images';
 
-var {View, Text, Image} = React;
-const ImageRegExp = /\![a-zA-Z0-9\s-]+?\.[a-zA-Z]+?\!/;
+import React, {View, Text} from 'react-native';
 
 class SingleIssueComments extends React.Component {
 
@@ -18,7 +16,7 @@ class SingleIssueComments extends React.Component {
         return comments.map((comment) => {
             return (
                 <View key={comment.id} style={styles.commentWrapper}>
-                    <Avatar style={styles.avatar} api={this.props.api} authorLogin={comment.author}/>
+                    <Avatar style={styles.avatar} api={this.props.api} userLogin={comment.author}/>
                     <View style={styles.comment}>
                         <Text>
                             <Text style={{color: '#1CAFE4'}}>{comment.authorFullName}</Text>

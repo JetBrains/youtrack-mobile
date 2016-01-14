@@ -1,7 +1,7 @@
-var StyleSheet = require('react-native').StyleSheet;
+import {StyleSheet} from 'react-native';
 
-let PINK = '#FE0082';
-let UNIT = 8;
+const PINK = '#FE0082';
+const UNIT = 8;
 
 module.exports = StyleSheet.create({
     listContainer: {

@@ -1,9 +1,7 @@
-var React = require('react-native');
+import styles from './issue-list.styles';
+import ColorField from '../../blocks/color-field/color-field';
 
-var styles = require('./issue-list.styles');
-var ColorField = require('../../blocks/color-field/color-field');
-
-var {View, Text, TouchableHighlight} = React;
+import React, {View, Text, TouchableHighlight} from 'react-native';
 
 class IssueRow extends React.Component {
     static _getSubText(issue) {

@@ -1,7 +1,4 @@
-var React = require('react-native');
-var {
-    Image
-    } = React;
+import React, {Image} from 'react-native';
 
 const SIZE = 20;
 const HTTP_HUB_URL = require('../app/app__config').auth.serverUri;
@@ -13,7 +10,7 @@ class Avatar extends React.Component {
     }
 
     componentDidMount() {
-        this.loadAvatarUrl(this.props.authorLogin);
+        this.loadAvatarUrl(this.props.userLogin);
     }
 
     loadAvatarUrl(authorLogin) {
