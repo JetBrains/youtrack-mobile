@@ -1,6 +1,6 @@
-var config = require('../app/app__config');
-var LinkingIOS = require('react-native').LinkingIOS;
-var shittyQs = require('shitty-qs');
+import config from '../app/app__config';
+import {LinkingIOS} from 'react-native';
+import shittyQs from 'shitty-qs';
 
 function openAuthPage() {
     LinkingIOS.openURL([
@@ -17,7 +17,7 @@ function hubOAuth2() {
     return new Promise(function (resolve, reject) {
 
         LinkingIOS.addEventListener('url', function (event) {
-            var [, query_string] = event.url.match(/\?(.*)/);
+            let [, query_string] = event.url.match(/\?(.*)/);
             let code = shittyQs(query_string).code;
             resolve(code);
         });

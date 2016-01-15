@@ -1,14 +1,15 @@
-var hubOAuth2 = require('./auth__oauth');
-var config = require('../app/app__config');
-var AsyncStorage = require('react-native').AsyncStorage;
-var base64 = require('base64-js');
+import hubOAuth2 from './auth__oauth';
+import config from '../app/app__config';
+import {AsyncStorage} from 'react-native';
+import base64 from 'base64-js';
+
 const STORAGE_KEY = 'yt_mobile_auth';
 
-const CHECK_TOKEN_URL = config.auth.serverUri + '/api/rest/users/me?fields=id';
+const CHECK_TOKEN_URL = `${config.auth.serverUri}/api/rest/users/me?fields=id`;
 
 function makeBtoa(str) {
     let byteArray = [];
-    for (var i = 0; i < str.length; i++) {
+    for (let i = 0; i < str.length; i++) {
         byteArray.push(str.charCodeAt(i));
     }
     return base64.fromByteArray(byteArray);
