@@ -17,14 +17,14 @@
     "android-emulator-delete": "android delete avd -n YouTrackMobile"
   },
   "jest": {
-    "scriptPreprocessor": "node_modules/react-native/jestSupport/preprocessor.js",
+    "scriptPreprocessor": "__tests__/jestSupport/preprocessor.js",
     "setupEnvScriptFile": "node_modules/react-native/jestSupport/env.js",
     "testPathIgnorePatterns": [
       "/node_modules/",
       "packager/react-packager/src/Activity/"
     ],
     "testFileExtensions": [
-      "js"
+      "test.js"
     ],
     "unmockedModulePathPatterns": [
       "promise",
