@@ -5,6 +5,7 @@
   "scripts": {
     "start": "./node_modules/react-native-cli/index.js start",
     "test": "jest",
+    "test:watch": "nodemon -w __tests__ -w ./src -e js,jsx -x npm test",
     "lint": "eslint src",
     "ios-build": "xcodebuild  -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile -sdk iphonesimulator -destination platform='iOS Simulator',name='iPhone 6 Plus' -derivedDataPath ios/build",
     "ios-launch-sim": "xcrun instruments -w 'iPhone 6 Plus (9.2)'",
@@ -44,6 +45,7 @@
     "eslint-plugin-react": "^3.15.0",
     "eslint-plugin-react-native": "^0.5.0",
     "jest-cli": "0.8.2",
+    "nodemon": "1.8.1",
     "react-native-cli": "0.1.7"
   }
 }
