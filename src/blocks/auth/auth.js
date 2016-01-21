@@ -39,6 +39,8 @@ class Auth {
         return AsyncStorage.removeItem(STORAGE_KEY).then(() => delete this.authParams);
     }
 
+    // TODO(maksimrv): Remove duplication
+    // in obtainToken and obtainTokenByCredentials
     obtainToken(code) {
         console.info('Obtaining token for code', code);
         return fetch([

@@ -41,6 +41,8 @@ const LoginForm = React.createClass({
     },
 
     onPress: function() {
+
+        // TODO(maksimrv): Handle auth error on login form
         this.props.auth.obtainTokenByCredentials(this.state.username, this.state.password).then((response) => {
             this.props.auth.storeAuth(response)
                 .then(this.props.auth.loadStoredAuthParams.bind(this.props.auth))
