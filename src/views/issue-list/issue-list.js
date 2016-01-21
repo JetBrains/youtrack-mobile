@@ -8,7 +8,7 @@ import ApiHelper from '../../blocks/api/api__helper';
 import RefreshableListView from 'react-native-refreshable-listview';
 import IssueRow from './issue-list__row';
 import SearchesList from './issue-list__search-list';
-import SingleIssue from '../single-issue/singe-issue';
+import {Actions} from 'react-native-router-flux';
 
 const QUERY_STORAGE_KEY = 'YT_QUERY_STORAGE';
 
@@ -63,15 +63,15 @@ class IssueList extends React.Component {
     }
 
     goToIssue(issue) {
-        this.props.navigator.push({
-            title: 'Issue',
-            component: <SingleIssue issueId={issue.id} api={this.api} onBack={() => this.props.navigator.pop()} navigator={this.props.navigator}></SingleIssue>
-        })
+        Actions.SingleIssue({
+            issueId: issue.id,
+            api: this.api
+        });
     }
 
     logOut() {
         this.props.auth.logOut()
-            .then(() => this.props.onBack());
+            .then(() => this.props.onLogOut());
     }
 
     loadIssues(text) {

@@ -4,7 +4,7 @@ import ApiHelper from '../../blocks/api/api__helper';
 import CustomField from '../../blocks/custom-field/custom-field';
 import TextWithImages from '../../blocks/text-with-images/text-with-images';
 import SingleIssueComments from './single-issue__comments';
-import ShowImage from '../show-image/show-image';
+import {Actions} from 'react-native-router-flux';
 
 import headerStyles from '../../blocks/header/header.styles';
 import styles from './single-issue.styles';
@@ -47,13 +47,6 @@ class SingeIssueView extends React.Component {
             })
     }
 
-    goToImage(imageUrl) {
-        this.props.navigator.push({
-            title: 'Image',
-            component: <ShowImage imageUrl={imageUrl} onBack={() => this.props.navigator.pop()}></ShowImage>
-        });
-    }
-
     getAuthorForText(issue) {
         let forText = () => {
             if (issue.fieldHash.Assignee) {
@@ -74,7 +67,7 @@ class SingeIssueView extends React.Component {
                 <TouchableHighlight
                     underlayColor="#F8F8F8"
                     style={headerStyles.headerButton}
-                    onPress={() => this.props.onBack()}>
+                    onPress={Actions.pop}>
                     <Text style={headerStyles.headerButtonText}>List</Text>
                 </TouchableHighlight>
 
@@ -87,7 +80,7 @@ class SingeIssueView extends React.Component {
 
     _renderAttachments(attachments) {
         return (attachments || []).map((attach) => {
-            return <TouchableHighlight underlayColor="#F8F8F8" onPress={() => this.goToImage(attach.url)} key={attach.id}>
+            return <TouchableHighlight underlayColor="#F8F8F8" onPress={() => Actions.ShowImage({imageUrl: attach.url})} key={attach.id}>
                 <Image style={styles.attachment}
                     capInsets={{left: 15, right: 15, bottom: 15, top: 15}}
                     source={{uri: attach.url}}/>

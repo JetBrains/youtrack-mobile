@@ -1,58 +1,42 @@
 import Auth from '../auth/auth';
 import LogIn from '../../views/log-in/log-in';
 import IssueList from '../../views/issue-list/issue-list';
+import SingleIssue from '../../views/single-issue/singe-issue';
+import ShowImage from '../../views/show-image/show-image';
 
-import React, {View, Navigator, StyleSheet} from 'react-native';
+import {Router, Route, Schema, Actions} from 'react-native-router-flux'
 
-class YouTrackMobile extends React.Component {
+import React, {Navigator} from 'react-native';
 
+export default class YouTrackMobile extends React.Component {
     constructor() {
         super();
         this.auth = new Auth();
         this.state = {};
+
+        this.checkAuthorization();
     }
 
     checkAuthorization() {
         return this.auth.loadStoredAuthParams()
-            .then((authParams) => this.goToIssues())
+            .then((authParams) => Actions.IssueList({auth: this.auth, onLogOut: this.checkAuthorization.bind(this)}))
             .catch((err) => this.setState({loginMessage: err}));
     }
 
-    goToRootAndCheckAuth() {
-        this.refs.navigator.pop();
-        return this.checkAuthorization();
-    }
-
-    goToIssues() {
-        this.refs.navigator.push({
-            component: <IssueList auth={this.auth} onBack={this.goToRootAndCheckAuth.bind(this)} navigator={this.refs.navigator}></IssueList>,
-            title: 'Issues'
-        });
-    }
-
-    getLoginView() {
-        return <LogIn message={this.state.loginMessage}></LogIn>;
-    }
-
     render() {
-        return <Navigator ref="navigator"
-            initialRoute={{title: 'RootRoute'}}
-            onDidFocus={(route) => {
-                if (route.title === 'RootRoute') {
-                    this.checkAuthorization();
-                }
-            }}
-            renderScene={(route, navigator) => (
-                <View style={styles.container}>{route.component || this.getLoginView()}</View>
-            )}/>;
+        return (
+            <Router hideNavBar={true} >
+                <Schema name="modal" sceneConfig={Navigator.SceneConfigs.FloatFromBottom}/>
+                <Schema name="default" sceneConfig={Navigator.SceneConfigs.FloatFromRight}/>
+
+                <Route name="LogIn" schema="modal" component={() => <LogIn message={this.state.loginMessage}/>} initial={true}/>
+                <Route name="IssueList" title="Issues" component={IssueList}/>
+                <Route name="ShowImage" title="Image" component={ShowImage}/>
+                <Route name="SingleIssue" title="Issue" component={SingleIssue}/>
+            </Router>
+        );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1
-    }
-});
 
 
 module.exports = YouTrackMobile;
