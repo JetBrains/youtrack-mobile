@@ -33,7 +33,9 @@ const LoginForm = React.createClass({
                 </View>
 
                 <View style={styles.signin}>
-                    <Text onPress={this.onPress}>Sign In</Text>
+                    <Text
+                        style={styles.signinText}
+                        onPress={this.onPress}>Sign In</Text>
                 </View>
 
             </View>
@@ -65,9 +67,13 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent'
     },
     signin: {
-        backgroundColor: '#FF3366',
         padding: 20,
+        backgroundColor: '#FF3366',
         alignItems: 'center'
+    },
+    signinText: {
+        alignSelf: 'stretch',
+        textAlign: 'center'
     },
     inputs: {
         marginTop: 10,
