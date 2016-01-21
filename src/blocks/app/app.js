@@ -1,5 +1,5 @@
 import Auth from '../auth/auth';
-import LogIn from '../../views/log-in/log-in';
+import LoginForm from '../../views/log-in/login-form';
 import IssueList from '../../views/issue-list/issue-list';
 import SingleIssue from '../../views/single-issue/singe-issue';
 import ShowImage from '../../views/show-image/show-image';
@@ -14,7 +14,7 @@ export default class YouTrackMobile extends React.Component {
         this.auth = new Auth();
         this.state = {};
 
-        this.checkAuthorization();
+        //this.checkAuthorization();
     }
 
     checkAuthorization() {
@@ -29,7 +29,7 @@ export default class YouTrackMobile extends React.Component {
                 <Schema name="modal" sceneConfig={Navigator.SceneConfigs.FloatFromBottom}/>
                 <Schema name="default" sceneConfig={Navigator.SceneConfigs.FloatFromRight}/>
 
-                <Route name="LogIn" schema="modal" component={() => <LogIn message={this.state.loginMessage}/>} initial={true}/>
+                <Route name="LogIn" schema="modal" component={() => <LoginForm auth={this.auth}/>} initial={true}/>
                 <Route name="IssueList" title="Issues" component={IssueList}/>
                 <Route name="ShowImage" title="Image" component={ShowImage}/>
                 <Route name="SingleIssue" title="Issue" component={SingleIssue}/>

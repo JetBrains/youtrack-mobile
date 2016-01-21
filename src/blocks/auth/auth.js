@@ -63,19 +63,23 @@ class Auth {
 
     obtainTokenByCredentials(login, password) {
         console.info('Obtaining token by credentials for user', login);
+
         return fetch([
             config.auth.serverUri,
-            `/api/rest/oauth2/token`,
-            '?grant_type=password',
-            `&username=${login}`,
-            `&password=${password}`,
-            `&scope=${config.auth.scopes}`
+            `/api/rest/oauth2/token`
         ].join(''), {
             method: 'POST',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
-                'Authorization': `Basic ${makeBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`
-            }
+                'Authorization': `Basic ${makeBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: [
+                'grant_type=password',
+                `&username=${login}`,
+                `&password=${password}`,
+                `&scope=${config.auth.scopes}`
+            ].join('')
         }).then(res => res.json())
             .then(res => {
                 if (res.error) {
@@ -118,7 +122,9 @@ class Auth {
                 }
                 return authParams;
             })
-            .catch(err => {throw err})
+            .catch(err => {
+                throw err
+            })
             .then((authParams) => this.verifyToken(authParams))
             .then(this.storeAuth.bind(this))
             .then((authParams) => this.authParams = authParams);
@@ -126,7 +132,7 @@ class Auth {
 
     /**
      * Not sure that check is still required.
-    */
+     */
     verifyToken(authParams) {
         if (!authParams || !authParams.access_token) {
             console.info('No stored auth found, authorizing');
@@ -139,12 +145,12 @@ class Auth {
                 'Authorization': `${authParams.token_type} ${authParams.access_token}`
             }
         }).then((res) => {
-            if (res.status > 400) {
-                console.warn('Check token error', res);
-                throw res;
-            }
-            return authParams;
-        })
+                if (res.status > 400) {
+                    console.warn('Check token error', res);
+                    throw res;
+                }
+                return authParams;
+            })
             .catch((res) => {
                 if (res.status === 403) {
                     return this.refreshToken().catch(err => this.authorizeAndStoreToken());
