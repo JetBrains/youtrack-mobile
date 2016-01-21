@@ -54,3 +54,5 @@ npm run android
 
 Official [documentation](https://facebook.github.io/react-native/docs/debugging.html)
 F2 open debug menu for android emulator
+
+Debug on real device. Install `android-tools` (aka adb) then setup device for development http://developer.android.com/intl/ru/tools/device.html#setting-up
