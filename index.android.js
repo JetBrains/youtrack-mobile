@@ -1,4 +1,4 @@
-const YouTrackMobileApp = require('./src/components/app/app.js');
-const React = require('react-native');
+import YouTrackMobileApp from './src/components/app/app';
+import React from 'react-native';
 
 React.AppRegistry.registerComponent('YouTrackMobile', () => YouTrackMobileApp);
