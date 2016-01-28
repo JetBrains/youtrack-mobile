@@ -28,9 +28,9 @@ class YouTrackMobile extends React.Component {
                 <Schema name="modal" sceneConfig={Navigator.SceneConfigs.FloatFromBottom}/>
                 <Schema name="default" sceneConfig={Navigator.SceneConfigs.FloatFromRight}/>
 
-                <Route name="LogIn" schema="modal" component={() => <LoginForm auth={this.auth} onLogIn={this.checkAuthorization.bind(this)} initial={true}/>}/>
+                <Route name="LogIn" schema="modal" type="reset" component={() => <LoginForm auth={this.auth} onLogIn={this.checkAuthorization.bind(this)} initial={true}/>}/>
                 <Route name="IssueList" title="Issues" component={IssueList}/>
-                <Route name="ShowImage" title="Image" component={ShowImage}/>
+                <Route name="ShowImage" title="Image" schema="modal" component={ShowImage}/>
                 <Route name="SingleIssue" title="Issue" component={SingleIssue}/>
             </Router>
         );

@@ -27,13 +27,20 @@ export default class LoginForm extends React.Component {
 
                 <View style={styles.inputsContainer}>
                     <TextInput
+                        autoCapitalize="none"
+                        autoCorrect={false}
                         autoFocus={true}
                         style={styles.input}
                         placeholder="Username"
+                        returnKeyType="next"
+                        onSubmitEditing={() => this.focusOnPassword()}
                         onChangeText={(username) => this.setState({username})}/>
                     <TextInput
+                        ref="passInput"
                         style={styles.input}
                         placeholder="Password"
+                        returnKeyType="done"
+                        onSubmitEditing={() => this.logInViaCredentials()}
                         password={true} onChangeText={(password) => this.setState({password})}/>
                 </View>
 
@@ -66,6 +73,10 @@ export default class LoginForm extends React.Component {
 
             </View>
         );
+    }
+
+    focusOnPassword() {
+        this.refs.passInput.focus();
     }
 
     logInViaCredentials() {
