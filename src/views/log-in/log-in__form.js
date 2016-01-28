@@ -32,6 +32,7 @@ export default class LoginForm extends React.Component {
 
                 <View style={styles.inputsContainer}>
                     <TextInput
+                        autoFocus={true}
                         style={styles.input}
                         placeholder="Username"
                         onChangeText={(username) => this.setState({username})}/>
