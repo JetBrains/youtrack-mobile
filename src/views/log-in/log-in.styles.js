@@ -1,6 +1,8 @@
 import {StyleSheet} from 'react-native';
 import {UNIT, COLOR_PINK, COLOR_FONT_GRAY} from '../../components/variables/variables';
 
+const FONT_SIZE = 18;
+
 export default StyleSheet.create({
     container: {
         flexDirection: 'column',
@@ -17,52 +19,51 @@ export default StyleSheet.create({
         textAlign: 'center'
     },
     linkContainer: {
-        padding: 20,
+        padding: 10,
         alignItems: 'center'
     },
     signin: {
-        padding: 20,
+        padding: 10,
         borderRadius: 6,
         backgroundColor: COLOR_PINK,
         alignItems: 'center'
     },
     signinText: {
-        fontSize: 22,
+        fontSize: FONT_SIZE,
         color: '#FFF',
         alignSelf: 'stretch',
         textAlign: 'center'
     },
     linkLike: {
-        fontSize: 22,
+        fontSize: FONT_SIZE,
         color: COLOR_PINK
     },
     input: {
-        height: UNIT*4,
+        minHeight: UNIT*4,
         marginTop: UNIT,
         marginBottom: UNIT,
         backgroundColor: '#FFF',
         color: '#7E7E84',
-        fontSize: 22,
+        fontSize: FONT_SIZE,
         borderBottomColor: COLOR_PINK,
         borderBottomWidth: 1
     },
     inputsContainer: {
-        height: 100,
-        padding: UNIT,
+        height: 120,
         alignItems: 'center'
     },
     actionsContainer: {
     },
     logoContainer: {
-        marginTop: UNIT*5,
         alignItems: 'center'
     },
     logoImage: {
-        width: UNIT*16,
-        height: UNIT*16
+        flex: 1,
+        height: UNIT*10,
+        resizeMode: 'contain'
     },
     descriptionText: {
-        fontSize: 16,
+        fontSize: 12,
         color: COLOR_FONT_GRAY,
         textAlign: 'center'
     }

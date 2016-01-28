@@ -1,4 +1,4 @@
-import React, {Image, View, Text, TextInput, TouchableOpacity} from 'react-native'
+import React, {Image, ScrollView, View, Text, TextInput, TouchableOpacity} from 'react-native'
 import {logo} from '../../components/icon/icon';
 import openUrl from '../../components/open-url/open-url.ios';
 import appConfig from '../../components/app/app__config';
@@ -16,7 +16,7 @@ export default class LoginForm extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <ScrollView contentContainerStyle={styles.container}>
                 <View style={styles.logoContainer}>
                     <Image style={styles.logoImage} source={logo}/>
                 </View>
@@ -71,7 +71,7 @@ export default class LoginForm extends React.Component {
                         Active Directory (Domain) Labs or Attlassian Jira</Text>
                 </View>
 
-            </View>
+            </ScrollView>
         );
     }
 
