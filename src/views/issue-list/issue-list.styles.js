@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 
-import {UNIT, COLOR_PINK} from '../../components/variables/variables';
+import {UNIT, COLOR_PINK, COLOR_FONT_GRAY} from '../../components/variables/variables';
 
 module.exports = StyleSheet.create({
     listContainer: {
@@ -22,7 +22,7 @@ module.exports = StyleSheet.create({
     separator: {
         height: 0.5,
         marginLeft: 52,
-        backgroundColor: '#CDCDDD'
+        backgroundColor: '#C8C7CC'
     },
     summary: {
         fontWeight: 'bold',
@@ -30,7 +30,8 @@ module.exports = StyleSheet.create({
     },
     subtext: {
         paddingTop: UNIT,
-        fontSize: 12
+        fontSize: 12,
+        color: COLOR_FONT_GRAY
     },
     inputWrapper: {
         backgroundColor: COLOR_PINK,
@@ -43,7 +44,6 @@ module.exports = StyleSheet.create({
         height: UNIT * 4,
         borderRadius: 6,
         backgroundColor: '#FFF',
-        color: '#7E7E84',
         margin: UNIT,
         padding: 6
     },
