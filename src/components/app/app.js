@@ -14,13 +14,15 @@ export default class YouTrackMobile extends React.Component {
         this.auth = new Auth();
         this.state = {};
 
-        //this.checkAuthorization();
+        this.checkAuthorization();
     }
 
     checkAuthorization() {
+        console.log('check auth')
         return this.auth.loadStoredAuthParams()
             .then((authParams) => Actions.IssueList({auth: this.auth, onLogOut: this.checkAuthorization.bind(this)}))
-            .catch((err) => this.setState({loginMessage: err}));
+            .then(() => console.log('succ'))
+            .catch(err => console.log('failed', err));
     }
 
     render() {
@@ -29,7 +31,7 @@ export default class YouTrackMobile extends React.Component {
                 <Schema name="modal" sceneConfig={Navigator.SceneConfigs.FloatFromBottom}/>
                 <Schema name="default" sceneConfig={Navigator.SceneConfigs.FloatFromRight}/>
 
-                <Route name="LogIn" schema="modal" component={() => <LoginForm auth={this.auth}/>} initial={true}/>
+                <Route name="LogIn" schema="modal" component={() => <LoginForm auth={this.auth} onLogIn={this.checkAuthorization.bind(this)} initial={true}/>}/>
                 <Route name="IssueList" title="Issues" component={IssueList}/>
                 <Route name="ShowImage" title="Image" component={ShowImage}/>
                 <Route name="SingleIssue" title="Issue" component={SingleIssue}/>

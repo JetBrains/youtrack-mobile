@@ -20,12 +20,14 @@ class Auth {
         this.authParams = null;
     }
 
-    authorize() {
-        return hubOAuth2().then(code => this.obtainToken(code));
+    authorizeOAuth() {
+        return hubOAuth2()
+            .then(code => this.obtainToken(code))
+            .then(this.storeAuth.bind(this));
     }
 
-    authorizeAndStoreToken() {
-        return this.authorize()
+    authorizeCredentials(login, pass) {
+        return this.obtainTokenByCredentials(login, pass)
             .then(this.storeAuth.bind(this));
     }
 
@@ -119,7 +121,7 @@ class Auth {
                     //restore old refresh token
                     authParams.refresh_token = authParams.refresh_token || token;
                 } else {
-                    console.warn('Token refreshing failed', authParams);
+                    console.log('Token refreshing failed', authParams);
                     throw authParams;
                 }
                 return authParams;
@@ -136,10 +138,7 @@ class Auth {
      * Not sure that check is still required.
      */
     verifyToken(authParams) {
-        if (!authParams || !authParams.access_token) {
-            console.info('No stored auth found, authorizing');
-            return this.authorizeAndStoreToken();
-        }
+        console.info('No stored auth found, authorizing');
 
         return fetch(CHECK_TOKEN_URL, {
             headers: {
@@ -148,21 +147,22 @@ class Auth {
             }
         }).then((res) => {
                 if (res.status > 400) {
-                    console.warn('Check token error', res);
+                    console.log('Check token error', res);
                     throw res;
                 }
                 return authParams;
             })
             .catch((res) => {
                 if (res.status === 403) {
-                    return this.refreshToken().catch(err => this.authorizeAndStoreToken());
+                    console.log('Trying to refresh token', err);
+                    return this.refreshToken();
                 }
                 throw res;
             })
             .catch((err) => {
-                console.warn('Error during validation token, reauthorization activated', err);
-                return this.authorizeAndStoreToken();
-            })
+                console.log('Error during token validation', err);
+                throw res;
+            });
     }
 
     storeAuth(authParams) {

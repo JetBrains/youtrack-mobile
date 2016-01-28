@@ -71,6 +71,7 @@ class IssueList extends React.Component {
 
     logOut() {
         this.props.auth.logOut()
+            .then(() => Actions.pop())
             .then(() => this.props.onLogOut());
     }
 
