@@ -1,7 +1,6 @@
 import {StyleSheet} from 'react-native';
 
-const PINK = '#FE0082';
-const UNIT = 8;
+import {UNIT, COLOR_PINK} from '../../components/variables/variables';
 
 module.exports = StyleSheet.create({
     listContainer: {
@@ -34,7 +33,7 @@ module.exports = StyleSheet.create({
         fontSize: 12
     },
     inputWrapper: {
-        backgroundColor: PINK,
+        backgroundColor: COLOR_PINK,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center'

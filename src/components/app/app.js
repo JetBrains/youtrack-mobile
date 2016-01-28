@@ -1,5 +1,5 @@
 import Auth from '../auth/auth';
-import LoginForm from '../../views/log-in/login-form';
+import LoginForm from '../../views/log-in/log-in__form';
 import IssueList from '../../views/issue-list/issue-list';
 import SingleIssue from '../../views/single-issue/singe-issue';
 import ShowImage from '../../views/show-image/show-image';
@@ -18,11 +18,8 @@ class YouTrackMobile extends React.Component {
     }
 
     checkAuthorization() {
-        console.log('check auth')
         return this.auth.loadStoredAuthParams()
-            .then((authParams) => Actions.IssueList({auth: this.auth, onLogOut: this.checkAuthorization.bind(this)}))
-            .then(() => console.log('succ'))
-            .catch(err => console.log('failed', err));
+            .then((authParams) => Actions.IssueList({auth: this.auth, onLogOut: this.checkAuthorization.bind(this)}));
     }
 
     render() {

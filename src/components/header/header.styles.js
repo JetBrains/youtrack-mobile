@@ -1,8 +1,5 @@
 import {StyleSheet} from 'react-native';
-
-let UNIT = 8;
-let PINK = '#FE0082';
-let LIGHT_GRAY = '#F8F8F8';
+import {UNIT, COLOR_PINK, COLOR_LIGHT_GRAY} from '../../components/variables/variables';
 
 module.exports = StyleSheet.create({
     header: {
@@ -10,7 +7,7 @@ module.exports = StyleSheet.create({
         paddingBottom: 10,
         flexDirection: 'row',
 
-        backgroundColor: LIGHT_GRAY
+        backgroundColor: COLOR_LIGHT_GRAY
     },
     headerButton: {
         width: UNIT*9,
@@ -19,7 +16,7 @@ module.exports = StyleSheet.create({
         paddingRight: UNIT
     },
     headerButtonText: {
-        color: PINK
+        color: COLOR_PINK
     },
     headerCenter: {
         padding: UNIT/2,

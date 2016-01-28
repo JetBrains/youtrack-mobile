@@ -18,6 +18,10 @@ module.exports = {
                     cacheDirectory: true,
                     presets: ['es2015', 'stage-1', 'react']
                 }
+            },
+            {
+                test: /\.png$/,
+                loader: 'url'
             }
         ]
     }
