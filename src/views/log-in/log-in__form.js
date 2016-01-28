@@ -1,5 +1,7 @@
-import React, {Image, View, Text, TextInput} from 'react-native'
+import React, {Image, View, Text, TextInput, TouchableOpacity} from 'react-native'
 import {logo} from '../../components/icon/icon';
+import openUrl from '../../components/open-url/open-url.ios';
+import appConfig from '../../components/app/app__config';
 
 import styles from './log-in.styles';
 
@@ -36,26 +38,25 @@ export default class LoginForm extends React.Component {
                 </View>
 
                 <View style={styles.actionsContainer}>
-                    <View style={styles.signin}>
+                    <TouchableOpacity style={styles.signin} onPress={this.logInViaCredentials.bind(this)}>
                         <Text
-                            style={styles.signinText}
-                            onPress={this.logInViaCredentials.bind(this)}>Log in</Text>
-                    </View>
+                            style={styles.signinText}>Log in</Text>
+                    </TouchableOpacity>
 
-                    <View style={styles.linkContainer}>
-                        <Text style={styles.linkLike} onPress={this.logInViaCredentials.bind(this)}>
+                    <TouchableOpacity style={styles.linkContainer} onPress={this.logInViaHub.bind(this)}>
+                        <Text style={styles.linkLike}>
                             Log in via Browser</Text>
-                    </View>
+                    </TouchableOpacity>
 
-                    <View style={styles.linkContainer}>
-                        <Text style={styles.linkLike} onPress={this.logInViaCredentials.bind(this)}>
+                    <TouchableOpacity style={styles.linkContainer} onPress={this.signUp.bind(this)}>
+                        <Text style={styles.linkLike}>
                             Sign up</Text>
-                    </View>
+                    </TouchableOpacity>
 
-                    <View style={styles.linkContainer}>
-                        <Text style={styles.linkLike} onPress={this.logInViaCredentials.bind(this)}>
+                    <TouchableOpacity style={styles.linkContainer} onPress={this.loginAsGuest.bind(this)}>
+                        <Text style={styles.linkLike}>
                             Log in as guest</Text>
-                    </View>
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.description}>
@@ -75,5 +76,13 @@ export default class LoginForm extends React.Component {
     logInViaHub() {
         this.props.auth.authorizeOAuth()
             .then(() => this.props.onLogIn());
+    }
+
+    signUp() {
+        openUrl(`${appConfig.auth.serverUri}/auth/register`);
+    }
+
+    loginAsGuest() {
+        console.log('TODO: Not implemented');
     }
 }

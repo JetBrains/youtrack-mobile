@@ -27,10 +27,13 @@ export default StyleSheet.create({
         alignItems: 'center'
     },
     signinText: {
+        fontSize: 22,
+        color: '#FFF',
         alignSelf: 'stretch',
         textAlign: 'center'
     },
     linkLike: {
+        fontSize: 22,
         color: COLOR_PINK
     },
     input: {
