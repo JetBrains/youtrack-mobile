@@ -8,7 +8,7 @@ import {Router, Route, Schema, Actions} from 'react-native-router-flux'
 
 import React, {Navigator} from 'react-native';
 
-export default class YouTrackMobile extends React.Component {
+class YouTrackMobile extends React.Component {
     constructor() {
         super();
         this.auth = new Auth();

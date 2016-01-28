@@ -1,5 +1,4 @@
 const React = require('react-native');
-import {Actions} from 'react-native-router-flux'
 
 const {
     StyleSheet,
