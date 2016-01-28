@@ -1,5 +1,5 @@
 import styles from './issue-list.styles';
-import ColorField from '../../blocks/color-field/color-field';
+import ColorField from '../../components/color-field/color-field';
 
 import React, {View, Text, TouchableHighlight} from 'react-native';
 

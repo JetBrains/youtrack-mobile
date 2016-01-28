@@ -4,7 +4,7 @@
  */
 'use strict';
 
-var YouTrackMobileApp = require('./src/blocks/app/app.js');
+var YouTrackMobileApp = require('./src/components/app/app.js');
 
 var React = require('react-native');
 

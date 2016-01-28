@@ -1,8 +1,8 @@
 
 import styles from './single-issue.styles';
-import Avatar from '../../blocks/avatar/avatar';
+import Avatar from '../../components/avatar/avatar';
 import relativeDate from 'relative-date';
-import TextWithImages from '../../blocks/text-with-images/text-with-images';
+import TextWithImages from '../../components/text-with-images/text-with-images';
 
 import React, {View, Text} from 'react-native';
 

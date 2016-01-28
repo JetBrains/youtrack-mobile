@@ -1,12 +1,12 @@
 import React, {Text, View, Image, TextInput, TouchableHighlight, ScrollView} from 'react-native';
 
-import ApiHelper from '../../blocks/api/api__helper';
-import CustomField from '../../blocks/custom-field/custom-field';
-import TextWithImages from '../../blocks/text-with-images/text-with-images';
+import ApiHelper from '../../components/api/api__helper';
+import CustomField from '../../components/custom-field/custom-field';
+import TextWithImages from '../../components/text-with-images/text-with-images';
 import SingleIssueComments from './single-issue__comments';
 import {Actions} from 'react-native-router-flux';
 
-import headerStyles from '../../blocks/header/header.styles';
+import headerStyles from '../../components/header/header.styles';
 import styles from './single-issue.styles';
 
 const defaultFooterHeight = 56;

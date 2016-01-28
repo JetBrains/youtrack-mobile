@@ -1,7 +1,7 @@
 import React, {StyleSheet, Image, View, TouchableHighlight, Text, ScrollView} from 'react-native';
 import {Actions} from 'react-native-router-flux';
 
-import headerStyles from '../../blocks/header/header.styles';
+import headerStyles from '../../components/header/header.styles';
 
 class ShowImage extends React.Component {
     render() {

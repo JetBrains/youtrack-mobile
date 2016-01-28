@@ -1,10 +1,10 @@
 import React, {AsyncStorage, View, Text, TouchableHighlight, ListView, TextInput, LayoutAnimation, DeviceEventEmitter} from 'react-native'
 
 import styles from './issue-list.styles';
-import headerStyles from '../../blocks/header/header.styles';
+import headerStyles from '../../components/header/header.styles';
 
-import Api from '../../blocks/api/api';
-import ApiHelper from '../../blocks/api/api__helper';
+import Api from '../../components/api/api';
+import ApiHelper from '../../components/api/api__helper';
 import RefreshableListView from 'react-native-refreshable-listview';
 import IssueRow from './issue-list__row';
 import SearchesList from './issue-list__search-list';

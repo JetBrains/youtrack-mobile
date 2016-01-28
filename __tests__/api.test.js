@@ -1,4 +1,4 @@
-var ApiHelper = require('../src/blocks/api/api__helper');
+var ApiHelper = require('../src/components/api/api__helper');
 
 describe('ApiHelper', function() {
     it('should import ApiHelper', function() {
