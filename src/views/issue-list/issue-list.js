@@ -1,4 +1,4 @@
-import React, {AsyncStorage, View, Text, TouchableHighlight, ListView, TextInput, LayoutAnimation, DeviceEventEmitter} from 'react-native'
+import React, {AsyncStorage, View, Text, TouchableOpacity, ListView, TextInput, LayoutAnimation, DeviceEventEmitter} from 'react-native'
 
 import styles from './issue-list.styles';
 import headerStyles from '../../components/header/header.styles';
@@ -123,12 +123,12 @@ class IssueList extends React.Component {
     _renderHeader() {
         return (
             <View style={headerStyles.header}>
-                <TouchableHighlight
+                <TouchableOpacity
                     underlayColor="#FFF"
                     style={headerStyles.headerButton}
                     onPress={this.logOut.bind(this)}>
                     <Text style={headerStyles.headerButtonText}>Log Out</Text>
-                </TouchableHighlight>
+                </TouchableOpacity>
 
                 <Text style={headerStyles.headerCenter}>Sort by: Updated</Text>
 
@@ -140,12 +140,12 @@ class IssueList extends React.Component {
     _renderFooter() {
         let cancelButton = null;
         if (this.state.displayCancelSearch) {
-            cancelButton = <TouchableHighlight
+            cancelButton = <TouchableOpacity
                 style={styles.cancelSearch}
                 onPress={this.cancelSearch.bind(this)}
                 underlayColor="#2CB8E6">
                 <Text style={styles.cancelText}>Cancel</Text>
-            </TouchableHighlight>;
+            </TouchableOpacity>;
         }
 
         return (

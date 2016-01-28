@@ -1,4 +1,4 @@
-import React, {ListView, Text, TouchableHighlight, StyleSheet} from 'react-native';
+import React, {ListView, Text, TouchableOpacity, StyleSheet} from 'react-native';
 
 let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -28,12 +28,12 @@ class SearchListView extends React.Component {
 
     _renderRow(issueFolder) {
         return (
-            <TouchableHighlight
+            <TouchableOpacity
                 style={styles.searchRow}
                 underlayColor='#FFF'
                 onPress={() => this.applyIssueFolder(issueFolder.name)}>
                 <Text style={styles.searchText}>{issueFolder.name}</Text>
-            </TouchableHighlight>);
+            </TouchableOpacity>);
     }
 
     render() {

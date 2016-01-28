@@ -1,11 +1,11 @@
-import React, {Text, View, Image, TextInput, TouchableHighlight, ScrollView} from 'react-native';
+import React, {Text, View, Image, TextInput, TouchableOpacity, ScrollView} from 'react-native';
 
 import ApiHelper from '../../components/api/api__helper';
 import CustomField from '../../components/custom-field/custom-field';
 import TextWithImages from '../../components/text-with-images/text-with-images';
 import SingleIssueComments from './single-issue__comments';
 import {Actions} from 'react-native-router-flux';
-
+import {arrow} from '../../components/icon/icon';
 import headerStyles from '../../components/header/header.styles';
 import styles from './single-issue.styles';
 
@@ -64,12 +64,12 @@ class SingeIssueView extends React.Component {
     _renderHeader() {
         return (
             <View style={headerStyles.header}>
-                <TouchableHighlight
+                <TouchableOpacity
                     underlayColor="#F8F8F8"
                     style={headerStyles.headerButton}
                     onPress={Actions.pop}>
                     <Text style={headerStyles.headerButtonText}>List</Text>
-                </TouchableHighlight>
+                </TouchableOpacity>
 
                 <Text style={headerStyles.headerCenter}>{this.props.issueId}</Text>
 
@@ -80,11 +80,11 @@ class SingeIssueView extends React.Component {
 
     _renderAttachments(attachments) {
         return (attachments || []).map((attach) => {
-            return <TouchableHighlight underlayColor="#F8F8F8" onPress={() => Actions.ShowImage({imageUrl: attach.url})} key={attach.id}>
+            return <TouchableOpacity underlayColor="#F8F8F8" onPress={() => Actions.ShowImage({imageUrl: attach.url})} key={attach.id}>
                 <Image style={styles.attachment}
                     capInsets={{left: 15, right: 15, bottom: 15, top: 15}}
                     source={{uri: attach.url}}/>
-            </TouchableHighlight>
+            </TouchableOpacity>
         });
     }
 
@@ -114,10 +114,10 @@ class SingeIssueView extends React.Component {
                         automaticallyAdjustContentInsets={false}
                         horizontal={true}
                         style={[styles.footer, {height: this.state.footerHeight}]}>
-                {false && <TouchableHighlight underlayColor="#F8F8F8" style={styles.iconButton}
+                {<TouchableOpacity underlayColor="#F8F8F8" style={styles.iconButton}
                                               onPress={() => this._popCustomFields()}>
-                    <Image style={styles.footerIcon} source={require('image!arrow')}/>
-                </TouchableHighlight>}
+                    <Image style={styles.footerIcon} source={arrow}/>
+                </TouchableOpacity>}
 
                 <CustomField key="Project" field={{name: 'Project', value: issue.fieldHash.projectShortName}}/>
 
