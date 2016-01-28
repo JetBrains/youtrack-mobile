@@ -1,11 +1,4 @@
-import React, {
-    Image,
-    StyleSheet,
-    View,
-    Text,
-    TextInput,
-    TouchableHighlight
-} from 'react-native'
+import React, {Image, View, Text, TextInput} from 'react-native'
 import {logo} from '../../components/icon/icon';
 
 import styles from './log-in.styles';

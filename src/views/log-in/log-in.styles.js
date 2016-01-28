@@ -1,4 +1,4 @@
-import React, {StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {UNIT, COLOR_PINK, COLOR_FONT_GRAY} from '../../components/variables/variables';
 
 export default StyleSheet.create({
@@ -14,7 +14,7 @@ export default StyleSheet.create({
     },
     welcome: {
         fontSize: 26,
-        textAlign: 'center',
+        textAlign: 'center'
     },
     linkContainer: {
         padding: 20,
@@ -41,7 +41,7 @@ export default StyleSheet.create({
         color: '#7E7E84',
         fontSize: 22,
         borderBottomColor: COLOR_PINK,
-        borderBottomWidth: 1,
+        borderBottomWidth: 1
     },
     inputsContainer: {
         height: 100,
@@ -61,6 +61,6 @@ export default StyleSheet.create({
     descriptionText: {
         fontSize: 16,
         color: COLOR_FONT_GRAY,
-        textAlign: 'center',
+        textAlign: 'center'
     }
 });

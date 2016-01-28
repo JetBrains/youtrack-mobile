@@ -154,14 +154,14 @@ class Auth {
             })
             .catch((res) => {
                 if (res.status === 403) {
-                    console.log('Trying to refresh token', err);
+                    console.log('Trying to refresh token', res);
                     return this.refreshToken();
                 }
                 throw res;
             })
             .catch((err) => {
                 console.log('Error during token validation', err);
-                throw res;
+                throw err;
             });
     }
 
