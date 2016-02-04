@@ -123,6 +123,10 @@ class IssueList extends React.Component {
         this.cancelSearch();
     }
 
+    onScroll(e) {
+        //console.log('scroll', e)
+    }
+
     _renderHeader() {
         return <Header leftButton={<Text>Log Out</Text>} onBack={this.logOut.bind(this)}>
             <Text>Sort by: Updated</Text>
@@ -180,13 +184,14 @@ class IssueList extends React.Component {
 
             {searchContainer}
 
-            <ScrollView refreshControl={this._renderRefreshControl()}>
                 <ListView
                     dataSource={this.state.dataSource}
                     renderRow={(issue) => <IssueRow issue={issue} onClick={(issue) => this.goToIssue(issue)}></IssueRow>}
                     renderSeparator={(sectionID, rowID) => <View style={styles.separator} key={rowID}/>}
+                    onEndReached={() => { alert('onEnd!'); }}
+                    onEndReachedThreshold={10}
+                    renderScrollComponent={(props) => <ScrollView {...props} refreshControl={this._renderRefreshControl()}/>}
                     refreshDescription="Refreshing issues"/>
-            </ScrollView>
 
             {this._renderFooter()}
 

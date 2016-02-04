@@ -138,7 +138,7 @@ class Auth {
      * Not sure that check is still required.
      */
     verifyToken(authParams) {
-        console.info('No stored auth found, authorizing');
+        console.info('Verifying token...');
 
         return fetch(CHECK_TOKEN_URL, {
             headers: {
@@ -150,6 +150,7 @@ class Auth {
                     console.log('Check token error', res);
                     throw res;
                 }
+                console.info('Token has been verified');
                 return authParams;
             })
             .catch((res) => {
