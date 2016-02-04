@@ -33,7 +33,7 @@ class YouTrackMobile extends React.Component {
                 <Route name="Home" title="Home" component={Home} initial={true}/>
 
                 <Route name="LogIn" schema="modal" type="reset" component={() => <LoginForm auth={this.auth} onLogIn={this.checkAuthorization.bind(this)}/>}/>
-                <Route name="IssueList" title="Issues" component={IssueList}/>
+                <Route name="IssueList" title="Issues" type="reset" component={IssueList}/>
                 <Route name="ShowImage" title="Image" schema="modal" component={ShowImage}/>
                 <Route name="SingleIssue" title="Issue" component={SingleIssue}/>
             </Router>
