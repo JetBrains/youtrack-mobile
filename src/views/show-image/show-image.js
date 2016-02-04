@@ -1,5 +1,4 @@
 import React, {StyleSheet, Image, View, Text, ScrollView} from 'react-native';
-import {Actions} from 'react-native-router-flux';
 
 import Header from '../../components/header/header';
 
