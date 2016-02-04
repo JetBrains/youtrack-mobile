@@ -184,6 +184,7 @@ class IssueList extends React.Component {
                 <ListView
                     dataSource={this.state.dataSource}
                     renderRow={(issue) => <IssueRow issue={issue} onClick={(issue) => this.goToIssue(issue)}></IssueRow>}
+                    renderSeparator={(sectionID, rowID) => <View style={styles.separator} key={rowID}/>}
                     refreshDescription="Refreshing issues"/>
             </ScrollView>
 

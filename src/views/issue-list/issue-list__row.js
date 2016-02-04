@@ -43,7 +43,6 @@ class IssueRow extends React.Component {
                             <Text style={styles.subtext}>{IssueRow._getSubText(issue)}</Text>
                         </View>
                     </View>
-                    <View style={styles.separator}/>
                 </View>
             </TouchableHighlight>
         );
