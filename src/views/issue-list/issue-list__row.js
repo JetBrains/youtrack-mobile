@@ -1,7 +1,7 @@
 import styles from './issue-list.styles';
 import ColorField from '../../components/color-field/color-field';
-
-import React, {View, Text, TouchableHighlight} from 'react-native';
+import {next} from '../../components/icon/icon';
+import React, {View, Text, TouchableHighlight, Image} from 'react-native';
 
 class IssueRow extends React.Component {
     static _getSubText(issue) {
@@ -34,9 +34,12 @@ class IssueRow extends React.Component {
                             {issue.fieldHash.Priority ? <ColorField field={issue.fieldHash.Priority}></ColorField> : <View/>}
                         </View>
                         <View style={styles.rowText}>
-                            <Text style={[styles.summary, this.getSummaryStyle(issue)]}>
-                                {issue.fieldHash.summary}
-                            </Text>
+                            <View style={styles.rowTopLine}>
+                                <Text style={[styles.summary, this.getSummaryStyle(issue)]}>
+                                    {issue.fieldHash.summary}
+                                </Text>
+                                <Image style={styles.arrowImage} source={next}></Image>
+                            </View>
                             <Text style={styles.subtext}>{IssueRow._getSubText(issue)}</Text>
                         </View>
                     </View>

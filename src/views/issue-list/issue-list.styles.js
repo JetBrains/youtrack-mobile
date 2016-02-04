@@ -19,6 +19,14 @@ module.exports = StyleSheet.create({
         marginLeft: UNIT * 2,
         flex: 1
     },
+    rowTopLine: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    arrowImage: {
+        height: 14,
+        resizeMode: 'contain'
+    },
     separator: {
         height: 0.5,
         marginLeft: 52,
