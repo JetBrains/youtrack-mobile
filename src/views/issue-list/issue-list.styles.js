@@ -33,7 +33,6 @@ module.exports = StyleSheet.create({
         backgroundColor: '#C8C7CC'
     },
     summary: {
-        fontWeight: 'bold',
         flexWrap: 'nowrap'
     },
     subtext: {
