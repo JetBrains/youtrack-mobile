@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF'
     },
     logoImage: {
-        height: UNIT * 10,
+        height: UNIT * 20,
         resizeMode: 'contain'
     }
 });
