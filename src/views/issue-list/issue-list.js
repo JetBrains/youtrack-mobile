@@ -1,7 +1,7 @@
 import React, {AsyncStorage, View, Text, TouchableOpacity, ListView, ScrollView, TextInput, LayoutAnimation, DeviceEventEmitter, RefreshControl} from 'react-native'
 
 import styles from './issue-list.styles';
-import headerStyles from '../../components/header/header.styles';
+import Header from '../../components/header/header';
 import {COLOR_PINK} from '../../components/variables/variables';
 
 import Api from '../../components/api/api';
@@ -124,20 +124,9 @@ class IssueList extends React.Component {
     }
 
     _renderHeader() {
-        return (
-            <View style={headerStyles.header}>
-                <TouchableOpacity
-                    underlayColor="#FFF"
-                    style={headerStyles.headerButton}
-                    onPress={this.logOut.bind(this)}>
-                    <Text style={headerStyles.headerButtonText}>Log Out</Text>
-                </TouchableOpacity>
-
-                <Text style={headerStyles.headerCenter}>Sort by: Updated</Text>
-
-                <View style={headerStyles.headerButton}></View>
-            </View>
-        )
+        return <Header leftButton={<Text>Log Out</Text>} onBack={this.logOut.bind(this)}>
+            <Text>Sort by: Updated</Text>
+        </Header>
     }
 
     _renderFooter() {
