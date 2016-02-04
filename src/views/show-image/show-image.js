@@ -1,21 +1,16 @@
-import React, {StyleSheet, Image, View, TouchableOpacity, Text, ScrollView} from 'react-native';
+import React, {StyleSheet, Image, View, Text, ScrollView} from 'react-native';
 import {Actions} from 'react-native-router-flux';
 
-import headerStyles from '../../components/header/header.styles';
+import Header from '../../components/header/header';
 
 class ShowImage extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={headerStyles.header}>
-                    <TouchableOpacity
-                        underlayColor="#FFF"
-                        style={headerStyles.headerButton}
-                        onPress={Actions.pop}>
-                        <Text style={headerStyles.headerButtonText}>Back</Text>
-                    </TouchableOpacity>
-                </View>
-                <ScrollView contentContainerStyle={styles.scrollView} maximumZoomScale={20} contentInset={{top:0}} automaticallyAdjustContentInsets={false}>
+                <Header leftButton={<Text>Close</Text>}>
+                    <Text>{this.props.imageName}</Text>
+                </Header>
+                <ScrollView contentContainerStyle={styles.scrollView} maximumZoomScale={20}>
                     <View style={{flex: 1}}>
                         <Image style={styles.image} source={{uri: this.props.imageUrl}}/>
                     </View>

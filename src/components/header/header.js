@@ -14,10 +14,10 @@ export default class Header extends React.Component {
             <TouchableOpacity
                 style={styles.headerButton}
                 onPress={() => this.onBack()}>
-                {this.props.leftButton}
+                <Text style={styles.headerButtonText}>{this.props.leftButton}</Text>
             </TouchableOpacity>
 
-            <Text style={styles.headerCenter}>{this.props.title}</Text>
+            <Text style={styles.headerCenter}>{this.props.children}</Text>
 
             <View style={styles.headerButton}>{this.props.rightButton}</View>
         </View>);

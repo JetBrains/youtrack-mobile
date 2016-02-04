@@ -6,7 +6,7 @@ import TextWithImages from '../../components/text-with-images/text-with-images';
 import SingleIssueComments from './single-issue__comments';
 import {Actions} from 'react-native-router-flux';
 import {arrow} from '../../components/icon/icon';
-import headerStyles from '../../components/header/header.styles';
+import Header from '../../components/header/header';
 import styles from './single-issue.styles';
 
 const defaultFooterHeight = 56;
@@ -61,26 +61,11 @@ class SingeIssueView extends React.Component {
         this.setState({footerHeight: 500})
     }
 
-    _renderHeader() {
-        return (
-            <View style={headerStyles.header}>
-                <TouchableOpacity
-                    underlayColor="#F8F8F8"
-                    style={headerStyles.headerButton}
-                    onPress={Actions.pop}>
-                    <Text style={headerStyles.headerButtonText}>List</Text>
-                </TouchableOpacity>
-
-                <Text style={headerStyles.headerCenter}>{this.props.issueId}</Text>
-
-                <View style={headerStyles.headerButton}></View>
-            </View>
-        )
-    }
-
     _renderAttachments(attachments) {
         return (attachments || []).map((attach) => {
-            return <TouchableOpacity underlayColor="#F8F8F8" onPress={() => Actions.ShowImage({imageUrl: attach.url})} key={attach.id}>
+            return <TouchableOpacity underlayColor="#F8F8F8" onPress={() => {
+                return Actions.ShowImage({imageUrl: attach.url, imageName: attach.value});
+            }} key={attach.id}>
                 <Image style={styles.attachment}
                     capInsets={{left: 15, right: 15, bottom: 15, top: 15}}
                     source={{uri: attach.url}}/>
@@ -131,7 +116,9 @@ class SingeIssueView extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                {this._renderHeader()}
+                <Header leftButton={<Text>List</Text>}>
+                    <Text>{this.props.issueId}</Text>
+                </Header>
                 {this.state.issue && <ScrollView contentInset={{top:0}} automaticallyAdjustContentInsets={false}>
                     {this._renderIssueView(this.state.issue)}
                     <View style={styles.commentInputWrapper}>
