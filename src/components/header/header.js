@@ -10,18 +10,16 @@ export default class Header extends React.Component {
         return Actions.pop();
     }
     render() {
-        console.log('>>>>>>', this)
         return (<View style={styles.header}>
             <TouchableOpacity
-                underlayColor="#FFF"
                 style={styles.headerButton}
                 onPress={() => this.onBack()}>
-                <Text style={styles.headerButtonText}>Log Out</Text>
+                {this.props.leftButton}
             </TouchableOpacity>
 
-            <Text style={styles.headerCenter}>Sort by: Updated</Text>
+            <Text style={styles.headerCenter}>{this.props.title}</Text>
 
-            <View style={styles.headerButton}></View>
+            <View style={styles.headerButton}>{this.props.rightButton}</View>
         </View>);
     }
 }
