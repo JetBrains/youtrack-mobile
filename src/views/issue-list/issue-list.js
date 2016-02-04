@@ -11,6 +11,7 @@ import SearchesList from './issue-list__search-list';
 import {Actions} from 'react-native-router-flux';
 
 const QUERY_STORAGE_KEY = 'YT_QUERY_STORAGE';
+const PAGE_SIZE = 10;
 
 let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -19,8 +20,12 @@ class IssueList extends React.Component {
     constructor() {
         super();
         this.state = {
+            issues: [],
             dataSource: ds.cloneWithRows([]),
+            skip: 0,
+            isLoadingMore: false,
 
+            isRefreshing: false,
             displayCancelSearch: false,
             keyboardSpace: 0,
             searchListHeight: 0
@@ -81,11 +86,11 @@ class IssueList extends React.Component {
     loadIssues(text, skip) {
         this.setState({isRefreshing: true});
 
-        return this.api.getIssues(text, skip)
+        return this.api.getIssues(text, PAGE_SIZE, skip)
             .then(ApiHelper.fillIssuesFieldHash)
             .then((issues) => {
-                this.state.dataSource.cloneWithRows(issues)
                 this.setState({
+                    issues: issues,
                     dataSource: this.state.dataSource.cloneWithRows(issues),
                     isRefreshing: false
                 });
@@ -98,6 +103,33 @@ class IssueList extends React.Component {
 
     updateIssues() {
         return this.loadIssues(this.state.input);
+    }
+
+    loadMore() {
+        if (this.state.isLoadingMore) {
+            return;
+        }
+
+        this.setState({isLoadingMore: true});
+        const newSkip = this.state.skip + PAGE_SIZE;
+
+        return this.api.getIssues(this.state.input, PAGE_SIZE, newSkip)
+            .then(ApiHelper.fillIssuesFieldHash)
+            .then((newIssues) => {
+                if (!newIssues.length) {
+                    console.info('Issues list end reached');
+                    return;
+                }
+                const updatedIssues = this.state.issues.concat(newIssues);
+                this.setState({
+                    issues: updatedIssues,
+                    dataSource: this.state.dataSource.cloneWithRows(updatedIssues),
+                    skip: newSkip
+                });
+                console.log('More issues loaded', newIssues);
+            })
+            .then(() => this.setState({isLoadingMore: false}))
+            .catch(() => this.setState({isLoadingMore: false}))
     }
 
     cancelSearch() {
@@ -121,10 +153,6 @@ class IssueList extends React.Component {
         this.storeQuery(query);
         this.setQuery(query);
         this.cancelSearch();
-    }
-
-    onScroll(e) {
-        //console.log('scroll', e)
     }
 
     _renderHeader() {
@@ -188,7 +216,7 @@ class IssueList extends React.Component {
                     dataSource={this.state.dataSource}
                     renderRow={(issue) => <IssueRow issue={issue} onClick={(issue) => this.goToIssue(issue)}></IssueRow>}
                     renderSeparator={(sectionID, rowID) => <View style={styles.separator} key={rowID}/>}
-                    onEndReached={() => { alert('onEnd!'); }}
+                    onEndReached={this.loadMore.bind(this)}
                     onEndReachedThreshold={10}
                     renderScrollComponent={(props) => <ScrollView {...props} refreshControl={this._renderRefreshControl()}/>}
                     refreshDescription="Refreshing issues"/>

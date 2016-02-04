@@ -47,9 +47,8 @@ class Api {
             //.then(res => res.issue)
     }
 
-    getIssues(filter = '', skip = 0) {
-        const ISSUES_PAGE = 50;
-        const url = `${YouTrackIssuesUrl}&max=${ISSUES_PAGE}&after=${skip}&filter=${encodeURIComponent(filter || '')}`;
+    getIssues(filter = '', count, skip = 0) {
+        const url = `${YouTrackIssuesUrl}&max=${count}&after=${skip}&filter=${encodeURIComponent(filter || '')}`;
         return this.makeAuthorizedRequest(url)
             .then(res => res.issue)
     }
