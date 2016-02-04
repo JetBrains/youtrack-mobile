@@ -19,9 +19,9 @@ class IssueList extends React.Component {
     constructor() {
         super();
         this.state = {
-            displayCancelSearch: false,
-            isuesCount: 0,
             dataSource: ds.cloneWithRows([]),
+
+            displayCancelSearch: false,
             keyboardSpace: 0,
             searchListHeight: 0
         };
@@ -78,15 +78,15 @@ class IssueList extends React.Component {
             .then(() => Actions.LogIn());
     }
 
-    loadIssues(text) {
+    loadIssues(text, skip) {
         this.setState({isRefreshing: true});
 
-        return this.api.getIssues(text)
+        return this.api.getIssues(text, skip)
             .then(ApiHelper.fillIssuesFieldHash)
             .then((issues) => {
+                this.state.dataSource.cloneWithRows(issues)
                 this.setState({
-                    dataSource: ds.cloneWithRows(issues),
-                    isuesCount: issues.length,
+                    dataSource: this.state.dataSource.cloneWithRows(issues),
                     isRefreshing: false
                 });
                 console.log('Issues', issues);

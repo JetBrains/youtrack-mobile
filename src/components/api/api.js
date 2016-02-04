@@ -1,6 +1,6 @@
 const YouTrackUrl = 'http://ring-demo-dev.labs.intellij.net/youtrack';
 const YouTrackIssueUrl = `${YouTrackUrl}/rest/issue/`;
-const YouTrackIssuesUrl = `${YouTrackUrl}/rest/issue?max=100&useImplicitSort=true&with=summary&with=resolved&with=priority&with=reporterFullName&with=assignee`;
+const YouTrackIssuesUrl = `${YouTrackUrl}/rest/issue?useImplicitSort=true&with=summary&with=resolved&with=priority&with=reporterFullName&with=assignee`;
 const YouTrackIssuesFolderUrl = `${YouTrackUrl}/rest/issuesFolder`;
 const YouTrackUserUrl = `${YouTrackUrl}/rest/admin/user/`;
 
@@ -47,8 +47,9 @@ class Api {
             //.then(res => res.issue)
     }
 
-    getIssues(filter = '') {
-        const url = `${YouTrackIssuesUrl}&filter=${encodeURIComponent(filter || '')}`;
+    getIssues(filter = '', skip = 0) {
+        const ISSUES_PAGE = 50;
+        const url = `${YouTrackIssuesUrl}&max=${ISSUES_PAGE}&after=${skip}&filter=${encodeURIComponent(filter || '')}`;
         return this.makeAuthorizedRequest(url)
             .then(res => res.issue)
     }
