@@ -3,7 +3,7 @@ import LoginForm from '../../views/log-in/log-in__form';
 import IssueList from '../../views/issue-list/issue-list';
 import SingleIssue from '../../views/single-issue/singe-issue';
 import ShowImage from '../../views/show-image/show-image';
-
+import Header from '../header/header';
 import {Router, Route, Schema, Actions} from 'react-native-router-flux'
 
 import React, {Navigator} from 'react-native';

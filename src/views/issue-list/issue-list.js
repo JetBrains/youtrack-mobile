@@ -191,7 +191,7 @@ class IssueList extends React.Component {
             <ScrollView refreshControl={this._renderRefreshControl()}>
                 <ListView
                     dataSource={this.state.dataSource}
-                    renderRow={(issue) => <IssueRow issue={issue} onClick={() => this.goToIssue()}></IssueRow>}
+                    renderRow={(issue) => <IssueRow issue={issue} onClick={(issue) => this.goToIssue(issue)}></IssueRow>}
                     refreshDescription="Refreshing issues"/>
             </ScrollView>
 

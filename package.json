@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "rnws start",
+    "start": "./node_modules/react-native-cli/index.js start",
+    "start-webpack": "rnws start",
     "bundle": "rnws bundle",
     "test": "jest",
     "test:watch": "nodemon -w __tests__ -w ./src -e js,jsx -x npm test",

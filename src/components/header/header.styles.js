@@ -1,17 +1,19 @@
 import {StyleSheet} from 'react-native';
 import {UNIT, COLOR_PINK, COLOR_LIGHT_GRAY} from '../../components/variables/variables';
+import TOP_PADDING from './header__top-padding';
 
 module.exports = StyleSheet.create({
     header: {
-        paddingTop: UNIT*3,
+        paddingTop: TOP_PADDING,
         paddingBottom: 10,
         flexDirection: 'row',
+        justifyContent: 'space-between',
 
         backgroundColor: COLOR_LIGHT_GRAY
     },
     headerButton: {
         width: UNIT*9,
-        padding: UNIT/2,
+        padding: 0,
         paddingLeft: UNIT,
         paddingRight: UNIT
     },
@@ -19,8 +21,7 @@ module.exports = StyleSheet.create({
         color: COLOR_PINK
     },
     headerCenter: {
-        padding: UNIT/2,
-        flex: 1,
+        padding: 0,
         textAlign: 'center'
     }
 });
