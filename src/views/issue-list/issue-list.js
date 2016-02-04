@@ -30,9 +30,13 @@ class IssueList extends React.Component {
     componentDidMount() {
         this.api = new Api(this.props.auth);
         this.loadStoredQuery().then(query => this.setQuery(query));
+        this._unsubscribeKeyShow = DeviceEventEmitter.addListener('keyboardWillShow', this._updateKeyboardSpace.bind(this))
+        this._unsubscribeKeyHide = DeviceEventEmitter.addListener('keyboardWillHide', this._resetKeyboardSpace.bind(this))
+    }
 
-        DeviceEventEmitter.addListener('keyboardWillShow', this._updateKeyboardSpace.bind(this))
-        DeviceEventEmitter.addListener('keyboardWillHide', this._resetKeyboardSpace.bind(this))
+    componentWillUnmount() {
+        this._unsubscribeKeyShow.remove();
+        this._unsubscribeKeyHide.remove();
     }
 
     _updateKeyboardSpace(e) {
@@ -71,6 +75,7 @@ class IssueList extends React.Component {
 
     logOut() {
         this.props.auth.logOut()
+            .then(() => Actions.pop())
             .then(() => Actions.LogIn());
     }
 
