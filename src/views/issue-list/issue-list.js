@@ -1,11 +1,11 @@
-import React, {AsyncStorage, View, Text, TouchableOpacity, ListView, TextInput, LayoutAnimation, DeviceEventEmitter} from 'react-native'
+import React, {AsyncStorage, View, Text, TouchableOpacity, ListView, ScrollView, TextInput, LayoutAnimation, DeviceEventEmitter, RefreshControl} from 'react-native'
 
 import styles from './issue-list.styles';
 import headerStyles from '../../components/header/header.styles';
+import {COLOR_PINK} from '../../components/variables/variables';
 
 import Api from '../../components/api/api';
 import ApiHelper from '../../components/api/api__helper';
-import RefreshableListView from 'react-native-refreshable-listview';
 import IssueRow from './issue-list__row';
 import SearchesList from './issue-list__search-list';
 import {Actions} from 'react-native-router-flux';
@@ -76,17 +76,17 @@ class IssueList extends React.Component {
     }
 
     loadIssues(text) {
-        //StatusBarIOS.setNetworkActivityIndicatorVisible(true);
+        this.setState({isRefreshing: true});
 
         return this.api.getIssues(text)
             .then(ApiHelper.fillIssuesFieldHash)
             .then((issues) => {
                 this.setState({
                     dataSource: ds.cloneWithRows(issues),
-                    isuesCount: issues.length
+                    isuesCount: issues.length,
+                    isRefreshing: false
                 });
                 console.log('Issues', issues);
-                //StatusBarIOS.setNetworkActivityIndicatorVisible(false);
             })
             .catch((err) => {
                 console.error('Failed to fetch issues', err);
@@ -166,6 +166,15 @@ class IssueList extends React.Component {
         );
     }
 
+    _renderRefreshControl() {
+        return <RefreshControl
+            refreshing={this.state.isRefreshing}
+            onRefresh={this.updateIssues.bind(this)}
+            tintColor={COLOR_PINK}
+            colors={[COLOR_PINK]}
+        />;
+    }
+
     render() {
         let searchContainer;
         if (this.state.searchListHeight) {
@@ -179,14 +188,12 @@ class IssueList extends React.Component {
 
             {searchContainer}
 
-            <RefreshableListView
-                contentInset={{top:0}}
-                automaticallyAdjustContentInsets={false}
-                dataSource={this.state.dataSource}
-                loadData={this.updateIssues.bind(this)}
-                renderRow={(issue) => <IssueRow issue={issue} onClick={this.goToIssue.bind(this)}></IssueRow>}
-                refreshDescription="Refreshing issues"
-                />
+            <ScrollView refreshControl={this._renderRefreshControl()}>
+                <ListView
+                    dataSource={this.state.dataSource}
+                    renderRow={(issue) => <IssueRow issue={issue} onClick={() => this.goToIssue()}></IssueRow>}
+                    refreshDescription="Refreshing issues"/>
+            </ScrollView>
 
             {this._renderFooter()}
 
