@@ -202,7 +202,6 @@ class IssueList extends React.Component {
             refreshing={this.state.isRefreshing}
             onRefresh={this.updateIssues.bind(this)}
             tintColor={COLOR_PINK}
-            colors={[COLOR_PINK]}
         />;
     }
 
