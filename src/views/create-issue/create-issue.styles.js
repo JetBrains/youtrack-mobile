@@ -28,12 +28,16 @@ export default StyleSheet.create({
     },
     attachesContainer: {
         margin: UNIT,
-        flex: 1,
+        marginLeft: UNIT*2,
+        marginRight: UNIT*2
+    },
+    attachButtonsContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
     attachButton: {
-        padding: UNIT
+        paddingTop: UNIT,
+        paddingBottom: UNIT
     },
     attachButtonText: {
         color: COLOR_PINK
