@@ -1,6 +1,6 @@
 import React, {Image} from 'react-native';
 
-const HTTP_HUB_URL = require('../app/app__config').auth.serverUri;
+const HTTP_HUB_URL = require('../../app__config').auth.serverUri;
 
 class Avatar extends React.Component {
     constructor() {

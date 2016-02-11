@@ -1,7 +1,7 @@
 import React, {Image, ScrollView, View, Text, TextInput, TouchableOpacity} from 'react-native'
 import {logo} from '../../components/icon/icon';
 import openUrl from '../../components/open-url/open-url.ios';
-import appConfig from '../../components/app/app__config';
+import appConfig from '../../app__config';
 
 import styles from './log-in.styles';
 

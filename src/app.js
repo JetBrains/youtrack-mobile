@@ -1,11 +1,11 @@
-import Auth from '../auth/auth';
+import Auth from './components/auth/auth';
 
-import Home from '../../views/home/home';
-import LoginForm from '../../views/log-in/log-in__form';
-import IssueList from '../../views/issue-list/issue-list';
-import SingleIssue from '../../views/single-issue/singe-issue';
-import CreateIssue from '../../views/create-issue/create-issue';
-import ShowImage from '../../views/show-image/show-image';
+import Home from './views/home/home';
+import LoginForm from './views/log-in/log-in__form';
+import IssueList from './views/issue-list/issue-list';
+import SingleIssue from './views/single-issue/singe-issue';
+import CreateIssue from './views/create-issue/create-issue';
+import ShowImage from './views/show-image/show-image';
 import {Router, Route, Schema, Actions} from 'react-native-router-flux'
 
 import React, {Navigator} from 'react-native';

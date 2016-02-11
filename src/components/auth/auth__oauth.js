@@ -1,4 +1,4 @@
-import config from '../app/app__config';
+import config from '../../app__config';
 import {LinkingIOS} from 'react-native';
 import openUrl from '../open-url/open-url.ios';
 

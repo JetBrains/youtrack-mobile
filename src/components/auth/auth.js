@@ -1,5 +1,5 @@
 import hubOAuth2 from './auth__oauth';
-import config from '../app/app__config';
+import config from '../../app__config';
 import {AsyncStorage} from 'react-native';
 import base64 from 'base64-js';
 
