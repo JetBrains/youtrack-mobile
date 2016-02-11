@@ -1,6 +1,8 @@
 import React, {Image, ScrollView, View, Text, TextInput, TouchableOpacity, Linking} from 'react-native'
 import {logo} from '../../components/icon/icon';
 import appConfig from '../../app__config';
+import Keystore from '../../components/keystore/keystore';
+import AppConfig from '../../app__config';
 
 import styles from './log-in.styles';
 
@@ -11,6 +13,9 @@ export default class LoginForm extends React.Component {
             username: '',
             password: ''
         };
+
+        Keystore.getInternetCredentials(AppConfig.auth.serverUri)
+            .then(({username, password}) => this.setState({username, password}), () => {});
     }
 
     render() {
@@ -33,12 +38,14 @@ export default class LoginForm extends React.Component {
                         placeholder="Username"
                         returnKeyType="next"
                         onSubmitEditing={() => this.focusOnPassword()}
+                        value={this.state.username}
                         onChangeText={(username) => this.setState({username})}/>
                     <TextInput
                         ref="passInput"
                         style={styles.input}
                         placeholder="Password"
                         returnKeyType="done"
+                        value={this.state.password}
                         onSubmitEditing={() => this.logInViaCredentials()}
                         password={true} onChangeText={(password) => this.setState({password})}/>
                 </View>
@@ -80,6 +87,10 @@ export default class LoginForm extends React.Component {
 
     logInViaCredentials() {
         this.props.auth.authorizeCredentials(this.state.username, this.state.password)
+            .then(() => {
+                return Keystore.setInternetCredentials(AppConfig.auth.serverUri, this.state.username, this.state.password, () => {})
+                    .catch(() => {});
+            })
             .then(() => this.props.onLogIn());
     }
 
