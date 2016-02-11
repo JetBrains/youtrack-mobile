@@ -1,6 +1,6 @@
-import React, {View, Text, StyleSheet} from 'react-native';
+import React, {View, Text, StyleSheet, PropTypes} from 'react-native';
 
-class ColorField extends React.Component {
+export default class CustomField extends React.Component {
     _getValue() {
         let field = this.props.field;
         if (field.name === 'Assignee') {
@@ -52,4 +52,6 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = ColorField;
+CustomField.propTypes = {
+    field: PropTypes.object.isRequired
+};

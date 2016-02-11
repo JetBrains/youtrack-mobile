@@ -1,4 +1,4 @@
-import React, {Text, View, TouchableOpacity} from 'react-native';
+import React, {Text, View, TouchableOpacity, PropTypes} from 'react-native';
 import styles from './header.styles';
 import {Actions} from 'react-native-router-flux';
 
@@ -34,3 +34,10 @@ export default class Header extends React.Component {
         </View>);
     }
 }
+
+Header.propTypes = {
+    onBack: PropTypes.func,
+    onRightButtonClick: PropTypes.func,
+    leftButton: PropTypes.element,
+    rightButton: PropTypes.element
+};

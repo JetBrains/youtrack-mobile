@@ -1,8 +1,8 @@
-import React, {View, Text, StyleSheet} from 'react-native';
+import React, {View, Text, StyleSheet, PropTypes} from 'react-native';
 
 const SIZE = 20;
 
-class ColorField extends React.Component {
+export default class ColorField extends React.Component {
     _getBackgroundColor() {
         return this.props.field.color && this.props.field.color.bg;
     }
@@ -21,6 +21,10 @@ class ColorField extends React.Component {
     }
 }
 
+ColorField.propTypes = {
+    field: PropTypes.array.isRequired
+};
+
 const styles = StyleSheet.create({
     wrapper: {
         width: SIZE,
@@ -34,5 +38,3 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     }
 });
-
-module.exports = ColorField;
