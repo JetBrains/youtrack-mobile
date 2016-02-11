@@ -1,4 +1,3 @@
-import Platform from 'Platform';
 import NativeKeychain from 'react-native-keychain';
 
 export default {
