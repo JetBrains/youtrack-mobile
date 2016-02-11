@@ -16,6 +16,12 @@
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
+          <intent-filter android:label="handle_oauth">
+              <action android:name="android.intent.action.VIEW"/>
+              <category android:name="android.intent.category.DEFAULT"/>
+              <category android:name="android.intent.category.BROWSABLE"/>
+              <data android:scheme="ytoauth" android:host="landing.url"/>
+          </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
     </application>
