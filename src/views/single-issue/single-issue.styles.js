@@ -32,8 +32,8 @@ const styles = StyleSheet.create({
     },
     attachment: {
         marginRight: UNIT * 2,
-        width: 150,
-        height: 100,
+        width: 120,
+        height: 60,
         borderRadius: 4,
         resizeMode: 'cover'
     },
