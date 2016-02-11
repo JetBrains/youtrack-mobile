@@ -10,10 +10,10 @@ export default StyleSheet.create({
         padding: UNIT,
         color: '#7E7E84',
         fontSize: 18,
-        height: UNIT*5
+        height: UNIT * 5
     },
     descriptionInput: {
-        height: UNIT*10,
+        height: UNIT * 10,
         margin: UNIT,
         padding: UNIT,
         flex: 1,
@@ -28,8 +28,8 @@ export default StyleSheet.create({
     },
     attachesContainer: {
         margin: UNIT,
-        marginLeft: UNIT*2,
-        marginRight: UNIT*2
+        marginLeft: UNIT * 2,
+        marginRight: UNIT * 2
     },
     attachButtonsContainer: {
         flexDirection: 'row',
@@ -37,9 +37,16 @@ export default StyleSheet.create({
     },
     attachButton: {
         paddingTop: UNIT,
-        paddingBottom: UNIT
+        paddingBottom: UNIT,
+        flexDirection: 'row'
+    },
+    attachIcon: {
+        marginRight: UNIT/2,
+        width: 14,
+        height: 14
     },
     attachButtonText: {
-        color: COLOR_PINK
+        color: COLOR_PINK,
+        fontWeight: '200'
     }
 });

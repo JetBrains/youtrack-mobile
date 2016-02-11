@@ -4,6 +4,7 @@ import issueStyles from '../single-issue/single-issue.styles';
 import Header from '../../components/header/header';
 import {UIImagePickerManager} from 'NativeModules';
 import {Actions} from 'react-native-router-flux';
+import {attach} from '../../components/icon/icon';
 
 export default class CreateIssue extends React.Component {
     constructor() {
@@ -31,23 +32,16 @@ export default class CreateIssue extends React.Component {
                 console.warn('Cannot create issue', err);
             })
     }
+    
+    attachPhoto(takeFromLibrary = true) {
+        const method = takeFromLibrary ? 'launchImageLibrary' : 'launchCamera';
 
-    attachFileFromLibrary() {
-        UIImagePickerManager.launchImageLibrary({
-            title: 'Select attachement'
-        }, (res) => {
-            console.log('Selected photo to attach', res);
+        UIImagePickerManager[method]({}, (res) => {
+            if (res.didCancel) {
+                return;
+            }
             this.state.attachments.push(res);
-            this.setState({attachements: this.state.attachments});
-        });
-    }
-
-    takePhoto() {
-        UIImagePickerManager.launchCamera({
-            title: 'Select attachement'
-        }, (res) => {
-            console.log('Selected photo to attach', res);
-            this.setState({attachements: [res]});
+            this.forceUpdate();
         });
     }
 
@@ -101,13 +95,14 @@ export default class CreateIssue extends React.Component {
                         <View style={styles.attachButtonsContainer}>
                             <TouchableOpacity
                                 style={styles.attachButton}
-                                onPress={this.attachFileFromLibrary.bind(this)}>
+                                onPress={() => this.attachPhoto(true)}>
+                                <Image style={styles.attachIcon} source={attach}/>
                                 <Text style={styles.attachButtonText}>Attach file from library...</Text>
                             </TouchableOpacity>
     
                             <TouchableOpacity
                                 style={styles.attachButton}
-                                onPress={this.takePhoto.bind(this)}>
+                                onPress={() => this.attachPhoto(false)}>
                                 <Text style={styles.attachButtonText}>Take a picture...</Text>
                             </TouchableOpacity>
                         </View>
