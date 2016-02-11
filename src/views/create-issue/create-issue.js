@@ -3,8 +3,22 @@ import styles from './create-issue.styles';
 import Header from '../../components/header/header';
 
 export default class CreateIssue extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            summary: null,
+            description: null,
+            project: 'SND' //TODO> project selection
+        }
+    }
     createIssue() {
-
+        this.props.api.createIssue(this.state)
+            .then(res => {
+                console.info('Issue created', res);
+            })
+            .catch(err => {
+                console.warn('Cannot create issue', err);
+            })
     }
 
     _focusOnSummary() {

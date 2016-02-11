@@ -37,6 +37,15 @@ class Api {
                 if (res.status > 401) {
                     throw JSON.parse(res._bodyText);
                 }
+
+                if (res.status === 201 && !res._bodyText) {
+                    return 'Created';
+                }
+
+                if (res.status === 200 && res.url.indexOf('execute') !== -1 && res.ok === true) {
+                    return 'Command executed';
+                }
+
                 return res.json();
             });
     }
@@ -55,6 +64,12 @@ class Api {
 
     getIssueFolders() {
         return this.makeAuthorizedRequest(YouTrackIssuesFolderUrl);
+    }
+
+    createIssue(issue) {
+        const url = `${YouTrackIssueUrl}?project=${issue.project}&summary=${issue.summary}&description=${issue.description}`;
+
+        return this.makeAuthorizedRequest(url, 'PUT');
     }
 
     addComment(issueId, comment) {

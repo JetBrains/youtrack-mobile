@@ -161,7 +161,7 @@ class IssueList extends React.Component {
                 leftButton={<Text>Log Out</Text>}
                 rightButton={<Text>Create</Text>}
                 onBack={this.logOut.bind(this)}
-                onRightButtonClick={Actions.CreateIssue}
+                onRightButtonClick={() => Actions.CreateIssue({api: this.api})}
             >
                 <Text>Sort by: Updated</Text>
             </Header>

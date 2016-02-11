@@ -38,13 +38,10 @@ class SingeIssueView extends React.Component {
 
     addComment(issue, comment) {
         return this.props.api.addComment(issue.id, comment)
-            .then(() => {
+            .then((res) => {
+                console.info('Comment created', res);
                 this.loadIssue(this.props.issueId)
-            })
-            .catch(() => {
-                //TODO: HACK! add comment response is not JSON, so just always reload
-                this.loadIssue(this.props.issueId)
-            })
+            });
     }
 
     getAuthorForText(issue) {
