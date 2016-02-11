@@ -1,6 +1,5 @@
-import React, {Image, ScrollView, View, Text, TextInput, TouchableOpacity} from 'react-native'
+import React, {Image, ScrollView, View, Text, TextInput, TouchableOpacity, Linking} from 'react-native'
 import {logo} from '../../components/icon/icon';
-import openUrl from '../../components/open-url/open-url.ios';
 import appConfig from '../../app__config';
 
 import styles from './log-in.styles';
@@ -90,7 +89,7 @@ export default class LoginForm extends React.Component {
     }
 
     signUp() {
-        openUrl(`${appConfig.auth.serverUri}/auth/register`);
+        Linking.openURL(`${appConfig.auth.serverUri}/auth/register`);
     }
 
     loginAsGuest() {

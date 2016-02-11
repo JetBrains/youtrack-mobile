@@ -1,11 +1,10 @@
 import config from '../../app__config';
-import {LinkingIOS} from 'react-native';
-import openUrl from '../open-url/open-url.ios';
+import {Linking} from 'react-native';
 
 import shittyQs from 'shitty-qs';
 
 function openAuthPage() {
-    openUrl([
+    Linking.openURL([
         `${config.auth.serverUri}/auth/login`,
         '?response_type=code',
         '&access_type=offline',
@@ -18,11 +17,15 @@ function openAuthPage() {
 function hubOAuth2() {
     return new Promise(function (resolve, reject) {
 
-        LinkingIOS.addEventListener('url', function (event) {
+        function onOpenWithUrl(event) {
+            Linking.removeEventListener('url', onOpenWithUrl);
+
             let [, query_string] = event.url.match(/\?(.*)/);
             let code = shittyQs(query_string).code;
             resolve(code);
-        });
+        }
+
+        Linking.addEventListener('url', onOpenWithUrl);
 
         openAuthPage();
     });

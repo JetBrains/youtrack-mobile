@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "base64-js": "0.0.8",
-    "react-native": "0.19.0",
+    "react-native": "0.20.0-rc1",
     "react-native-router-flux": "2.0.9",
     "relative-date": "^1.1.2",
     "shitty-qs": "^1.0.1"

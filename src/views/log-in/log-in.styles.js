@@ -39,7 +39,7 @@ export default StyleSheet.create({
         color: COLOR_PINK
     },
     input: {
-        minHeight: UNIT*4,
+        height: UNIT*4,
         marginTop: UNIT,
         marginBottom: UNIT,
         backgroundColor: '#FFF',

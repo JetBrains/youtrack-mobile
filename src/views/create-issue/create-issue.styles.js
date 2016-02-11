@@ -6,14 +6,13 @@ export default StyleSheet.create({
         flex: 1
     },
     summaryInput: {
-        minHeight: UNIT*6,
         margin: UNIT,
         padding: UNIT,
         color: '#7E7E84',
         fontSize: 18
     },
     descriptionInput: {
-        minHeight: UNIT*6,
+        height: UNIT*6,
         margin: UNIT,
         padding: UNIT,
         flex: 1,
