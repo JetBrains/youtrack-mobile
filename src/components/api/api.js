@@ -1,8 +1,8 @@
 const YouTrackUrl = 'http://ring-demo-dev.labs.intellij.net/youtrack';
 const YouTrackIssueUrl = `${YouTrackUrl}/rest/issue/`;
-const YouTrackIssuesUrl = `${YouTrackUrl}/rest/issue?useImplicitSort=true&with=summary&with=resolved&with=priority&with=reporterFullName&with=assignee`;
 const YouTrackIssuesFolderUrl = `${YouTrackUrl}/rest/issuesFolder`;
 const YouTrackUserUrl = `${YouTrackUrl}/rest/admin/user/`;
+import qs from 'qs';
 
 class Api {
     constructor(auth) {
@@ -51,14 +51,21 @@ class Api {
     }
 
     getIssue(id) {
-        const url = YouTrackIssueUrl + id;
-        return this.makeAuthorizedRequest(url);
+        return this.makeAuthorizedRequest(YouTrackIssueUrl + id);
             //.then(res => res.issue)
     }
 
     getIssues(filter = '', count, skip = 0) {
-        const url = `${YouTrackIssuesUrl}&max=${count}&after=${skip}&filter=${encodeURIComponent(filter || '')}`;
-        return this.makeAuthorizedRequest(url)
+        const queryString = qs.stringify({
+            useImplicitSort: true,
+            with: ['summary', 'resolved', 'priority', 'reporterFullName', 'assignee'],
+
+            max: count,
+            after: skip,
+            filter: filter
+        }, {indices: false});
+
+        return this.makeAuthorizedRequest(`${YouTrackIssueUrl}?${queryString}`)
             .then(res => res.issue)
     }
 
@@ -67,13 +74,20 @@ class Api {
     }
 
     createIssue(issue) {
-        const url = `${YouTrackIssueUrl}?project=${issue.project}&summary=${issue.summary}&description=${issue.description}`;
+        const queryString = qs.stringify({
+            project: issue.project,
+            summary: issue.summary,
+            description: issue.description
+        });
+
+        const url = `${YouTrackIssueUrl}?${queryString}`;
 
         return this.makeAuthorizedRequest(url, 'PUT');
     }
 
     addComment(issueId, comment) {
-        let url = `${YouTrackIssueUrl}${issueId}/execute?comment=${encodeURIComponent(comment)}`;
+        const queryString = qs.stringify({comment});
+        const url = `${YouTrackIssueUrl}${issueId}/execute?${queryString}`;
         return this.makeAuthorizedRequest(url, 'POST');
     }
 
@@ -82,7 +96,9 @@ class Api {
     }
 
     getUserFromHub(hubUrl, id) {
-        return this.makeAuthorizedRequest(`${hubUrl}/api/rest/users/${id}?fields=avatar%2Furl`);
+        const queryString = qs.stringify({fields: 'avatar/url'});
+
+        return this.makeAuthorizedRequest(`${hubUrl}/api/rest/users/${id}?${queryString}`);
     }
 }
 
