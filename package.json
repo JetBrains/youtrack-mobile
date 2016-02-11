@@ -9,7 +9,7 @@
     "test": "jest",
     "test:watch": "nodemon -w __tests__ -w ./src -e js,jsx -x npm test",
     "lint": "eslint src",
-    "ios-build": "xcodebuild  -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile -sdk iphonesimulator -destination platform='iOS Simulator',name='iPhone 6 Plus' -derivedDataPath ios/build",
+    "ios-build": "xcodebuild  -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile -sdk iphonesimulator -destination platform='iOS Simulator',name='iPhone 5s' -derivedDataPath ios/build",
     "ios-launch-sim": "xcrun instruments -w 'iPhone 5s (9.2)'",
     "ios-install-app": "xcrun simctl install booted ios/build/Build/Products/Debug-iphonesimulator/YouTrackMobile.app",
     "ios-launch-installed": "xcrun simctl launch booted org.jetbrains.YouTrackMobile",
