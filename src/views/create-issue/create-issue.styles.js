@@ -9,10 +9,11 @@ export default StyleSheet.create({
         margin: UNIT,
         padding: UNIT,
         color: '#7E7E84',
-        fontSize: 18
+        fontSize: 18,
+        height: UNIT*5
     },
     descriptionInput: {
-        height: UNIT*6,
+        height: UNIT*10,
         margin: UNIT,
         padding: UNIT,
         flex: 1,
