@@ -1,8 +1,9 @@
-const YouTrackUrl = 'http://ring-demo-dev.labs.intellij.net/youtrack';
+import qs from 'qs';
+import AppConfig from '../../app__config';
+const YouTrackUrl = AppConfig.backendUrl;
 const YouTrackIssueUrl = `${YouTrackUrl}/rest/issue/`;
 const YouTrackIssuesFolderUrl = `${YouTrackUrl}/rest/issuesFolder`;
 const YouTrackUserUrl = `${YouTrackUrl}/rest/admin/user/`;
-import qs from 'qs';
 
 class Api {
     constructor(auth) {
