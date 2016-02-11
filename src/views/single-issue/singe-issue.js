@@ -7,14 +7,14 @@ import SingleIssueComments from './single-issue__comments';
 import {Actions} from 'react-native-router-flux';
 import {arrow} from '../../components/icon/icon';
 import Header from '../../components/header/header';
+import UserSelect from '../../components/user-select/user-select';
 import styles from './single-issue.styles';
 
-const defaultFooterHeight = 56;
 
 class SingeIssueView extends React.Component {
     constructor() {
         super();
-        this.state = {issue: null, footerHeight: defaultFooterHeight};
+        this.state = {issue: null};
     }
 
     componentDidMount() {
@@ -54,8 +54,8 @@ class SingeIssueView extends React.Component {
         return `${issue.fieldHash.reporterFullName} ${forText()}`
     }
 
-    _popCustomFields() {
-        this.setState({footerHeight: 500})
+    _selectUser() {
+        this.setState({displayUserSelect: !this.state.displayUserSelect});
     }
 
     _renderAttachments(attachments) {
@@ -95,9 +95,9 @@ class SingeIssueView extends React.Component {
             <ScrollView contentInset={{top:0}}
                         automaticallyAdjustContentInsets={false}
                         horizontal={true}
-                        style={[styles.footer, {height: this.state.footerHeight}]}>
+                        style={styles.footer}>
                 {<TouchableOpacity underlayColor="#F8F8F8" style={styles.iconButton}
-                                              onPress={() => this._popCustomFields()}>
+                                              onPress={() => this._selectUser()}>
                     <Image style={styles.footerIcon} source={arrow}/>
                 </TouchableOpacity>}
 
@@ -129,6 +129,8 @@ class SingeIssueView extends React.Component {
                     <SingleIssueComments issue={this.state.issue} api={this.props.api}/>
                 </ScrollView>}
                 {this.state.issue && this._renderFooter(this.state.issue)}
+
+                {this.state.displayUserSelect && <UserSelect title={`${this.props.issueId} ${this.state.issue.fieldHash.summary}`}></UserSelect>}
             </View>
         );
     }

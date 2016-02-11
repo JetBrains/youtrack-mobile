@@ -24,7 +24,7 @@ export default class Header extends React.Component {
                 <Text style={styles.headerButtonText}>{this.props.leftButton}</Text>
             </TouchableOpacity>
 
-            <Text style={styles.headerCenter}>{this.props.children}</Text>
+            <View style={styles.headerCenter}>{this.props.children}</View>
 
             <TouchableOpacity
                 style={styles.headerButton}

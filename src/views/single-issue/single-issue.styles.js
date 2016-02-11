@@ -1,7 +1,7 @@
 import {StyleSheet} from 'react-native';
+import {UNIT, COLOR_LIGHT_GRAY, FOOTER_HEIGHT} from '../../components/variables/variables';
 
 let LIGHT_GRAY = '#F8F8F8';
-let UNIT = 8;
 
 const styles = StyleSheet.create({
     container: {
@@ -76,15 +76,15 @@ const styles = StyleSheet.create({
         paddingLeft: UNIT,
         flexDirection: 'row',
         backgroundColor: '#FFF',
-        height: 56
+        height: FOOTER_HEIGHT
     },
     footerIcon: {
-        width: 24,
-        height: 24
+        width: UNIT*3,
+        height: UNIT*3
     },
     iconButton: {
         justifyContent: 'center',
-        padding: 8
+        padding: UNIT
     }
 });
 

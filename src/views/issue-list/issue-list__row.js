@@ -28,20 +28,18 @@ class IssueRow extends React.Component {
         let issue = this.props.issue;
         return (
             <TouchableHighlight underlayColor='#FFF' onPress={() => this.props.onClick(issue)}>
-                <View>
-                    <View style={styles.row}>
-                        <View>
-                            {issue.fieldHash.Priority ? <ColorField field={issue.fieldHash.Priority}></ColorField> : <View/>}
+                <View style={styles.row}>
+                    <View>
+                        {issue.fieldHash.Priority ? <ColorField field={issue.fieldHash.Priority}></ColorField> : <View/>}
+                    </View>
+                    <View style={styles.rowText}>
+                        <View style={styles.rowTopLine}>
+                            <Text style={[styles.summary, this.getSummaryStyle(issue)]}>
+                                {issue.fieldHash.summary}
+                            </Text>
+                            <Image style={styles.arrowImage} source={next}></Image>
                         </View>
-                        <View style={styles.rowText}>
-                            <View style={styles.rowTopLine}>
-                                <Text style={[styles.summary, this.getSummaryStyle(issue)]}>
-                                    {issue.fieldHash.summary}
-                                </Text>
-                                <Image style={styles.arrowImage} source={next}></Image>
-                            </View>
-                            <Text style={styles.subtext}>{IssueRow._getSubText(issue)}</Text>
-                        </View>
+                        <Text style={styles.subtext}>{IssueRow._getSubText(issue)}</Text>
                     </View>
                 </View>
             </TouchableHighlight>

@@ -21,7 +21,6 @@ module.exports = StyleSheet.create({
         color: COLOR_PINK
     },
     headerCenter: {
-        padding: 0,
-        textAlign: 'center'
+        padding: 0
     }
 });
