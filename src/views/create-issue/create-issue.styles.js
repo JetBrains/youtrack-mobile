@@ -24,5 +24,17 @@ export default StyleSheet.create({
     separator: {
         height: 0.5,
         backgroundColor: '#C8C7CC'
+    },
+    attachesContainer: {
+        margin: UNIT,
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    attachButton: {
+        padding: UNIT
+    },
+    attachButtonText: {
+        color: COLOR_PINK
     }
 });

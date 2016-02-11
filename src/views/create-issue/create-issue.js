@@ -1,4 +1,4 @@
-import React, {View, Text, TextInput} from 'react-native'
+import React, {View, Text, TextInput, TouchableOpacity} from 'react-native'
 import styles from './create-issue.styles';
 import Header from '../../components/header/header';
 
@@ -21,8 +21,8 @@ export default class CreateIssue extends React.Component {
             })
     }
 
-    _focusOnSummary() {
-        
+    attachFileFromLibrary() {
+
     }
 
     render() {
@@ -40,17 +40,30 @@ export default class CreateIssue extends React.Component {
                             style={styles.summaryInput}
                             placeholder="Summary"
                             returnKeyType="next"
-                            onSubmitEditing={() => this._focusOnSummary()}
+                            onSubmitEditing={() => this.refs.description.focus()}
                             onChangeText={(summary) => this.setState({summary})}/>
                     </View>
                     <View style={styles.separator}/>
                     <View>
                         <TextInput
-                            autoFocus={true}
+                            ref="description"
                             style={styles.descriptionInput}
                             multiline={true}
                             placeholder="Description"
                             onChangeText={(description) => this.setState({description})}/>
+                    </View>
+                    <View style={styles.attachesContainer}>
+                        <TouchableOpacity
+                            style={styles.attachButton}
+                            onPress={this.attachFileFromLibrary.bind(this)}>
+                            <Text style={styles.attachButtonText}>Attach file from library...</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={styles.attachButton}
+                            onPress={this.attachFileFromLibrary.bind(this)}>
+                            <Text style={styles.attachButtonText}>Take a picture...</Text>
+                        </TouchableOpacity>
                     </View>
                     <View style={styles.separator}/>
                 </View>
