@@ -8,13 +8,15 @@ import CreateIssue from './views/create-issue/create-issue';
 import ShowImage from './views/show-image/show-image';
 import {Router, Route, Schema, Actions} from 'react-native-router-flux'
 
-import React, {Navigator} from 'react-native';
+import React, {Navigator, BackAndroid} from 'react-native';
 
 class YouTrackMobile extends React.Component {
     constructor() {
         super();
         this.auth = new Auth();
         this.state = {};
+
+        this.addAndroidBackButtonSupport();
 
         this.checkAuthorization();
     }
@@ -23,6 +25,17 @@ class YouTrackMobile extends React.Component {
         return this.auth.loadStoredAuthParams()
             .then((authParams) => Actions.IssueList({auth: this.auth}))
             .catch(() => Actions.LogIn());
+    }
+
+    addAndroidBackButtonSupport() {
+        BackAndroid.addEventListener('hardwareBackPress', function() {
+            try {
+                Actions.pop();
+                return true;
+            } catch (e) {
+                return false;
+            }
+        });
     }
 
     render() {
