@@ -9,7 +9,7 @@ Before doing anything install dependencies via `npm install`
 
 ### Pepare
 
-1. Install (XCode)[https://developer.apple.com/xcode/download/] (recommended) or XCode command line tools by `xcode-select --install`
+1. Install [XCode](https://developer.apple.com/xcode/download/) (recommended) or XCode command line tools by `xcode-select --install`
 2. Into XCode settings, go to "Downloads" tab and download iOS 9.2 emulator
 
 ### Develop
