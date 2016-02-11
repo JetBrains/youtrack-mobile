@@ -156,9 +156,16 @@ class IssueList extends React.Component {
     }
 
     _renderHeader() {
-        return <Header leftButton={<Text>Log Out</Text>} onBack={this.logOut.bind(this)}>
-            <Text>Sort by: Updated</Text>
-        </Header>
+        return (
+            <Header
+                leftButton={<Text>Log Out</Text>}
+                rightButton={<Text>Create</Text>}
+                onBack={this.logOut.bind(this)}
+                onRightButtonClick={Actions.CreateIssue}
+            >
+                <Text>Sort by: Updated</Text>
+            </Header>
+        );
     }
 
     _renderFooter() {

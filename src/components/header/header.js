@@ -9,6 +9,13 @@ export default class Header extends React.Component {
         }
         return Actions.pop();
     }
+
+    onRightButtonClick() {
+        if (this.props.onRightButtonClick) {
+            return this.props.onRightButtonClick();
+        }
+    }
+
     render() {
         return (<View style={styles.header}>
             <TouchableOpacity
@@ -19,7 +26,11 @@ export default class Header extends React.Component {
 
             <Text style={styles.headerCenter}>{this.props.children}</Text>
 
-            <View style={styles.headerButton}>{this.props.rightButton}</View>
+            <TouchableOpacity
+                style={styles.headerButton}
+                onPress={this.onRightButtonClick.bind(this)}>
+                <Text style={styles.headerButtonText}>{this.props.rightButton}</Text>
+            </TouchableOpacity>
         </View>);
     }
 }

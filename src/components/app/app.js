@@ -4,6 +4,7 @@ import Home from '../../views/home/home';
 import LoginForm from '../../views/log-in/log-in__form';
 import IssueList from '../../views/issue-list/issue-list';
 import SingleIssue from '../../views/single-issue/singe-issue';
+import CreateIssue from '../../views/create-issue/create-issue';
 import ShowImage from '../../views/show-image/show-image';
 import {Router, Route, Schema, Actions} from 'react-native-router-flux'
 
@@ -36,6 +37,7 @@ class YouTrackMobile extends React.Component {
                 <Route name="IssueList" title="Issues" type="reset" component={IssueList}/>
                 <Route name="ShowImage" title="Image" schema="modal" component={ShowImage}/>
                 <Route name="SingleIssue" title="Issue" component={SingleIssue}/>
+                <Route name="CreateIssue" title="Create Issue" component={CreateIssue}/>
             </Router>
         );
     }
