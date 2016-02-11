@@ -1,7 +1,7 @@
 import config from '../../app__config';
 import {Linking} from 'react-native';
 
-import shittyQs from 'shitty-qs';
+import qs from 'qs';
 
 function openAuthPage() {
     Linking.openURL([
@@ -21,7 +21,7 @@ function hubOAuth2() {
             Linking.removeEventListener('url', onOpenWithUrl);
 
             let [, query_string] = event.url.match(/\?(.*)/);
-            let code = shittyQs(query_string).code;
+            const code = qs.parse(query_string).code;
             resolve(code);
         }
 

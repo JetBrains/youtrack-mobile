@@ -36,12 +36,12 @@
   },
   "dependencies": {
     "base64-js": "0.0.8",
+    "qs": "6.1.0",
     "react-native": "0.20.0-rc1",
     "react-native-image-picker": "0.13.5",
     "react-native-keychain": "0.2.7",
     "react-native-router-flux": "2.0.9",
-    "relative-date": "^1.1.2",
-    "shitty-qs": "^1.0.1"
+    "relative-date": "^1.1.2"
   },
   "devDependencies": {
     "babel-core": "^6.3.17",
