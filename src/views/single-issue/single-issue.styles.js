@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_LIGHT_GRAY, FOOTER_HEIGHT} from '../../components/variables/variables';
+import {UNIT, FOOTER_HEIGHT} from '../../components/variables/variables';
 
 let LIGHT_GRAY = '#F8F8F8';
 
