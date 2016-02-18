@@ -73,7 +73,7 @@ def enableSeparateBuildPerCPUArchitecture = false
 /**
  * Run Proguard to shrink the Java bytecode in release builds.
  */
- # TODO: enable this
+// TODO: enable this
 def enableProguardInReleaseBuilds = false
 
 android {
