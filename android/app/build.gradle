@@ -73,7 +73,8 @@ def enableSeparateBuildPerCPUArchitecture = false
 /**
  * Run Proguard to shrink the Java bytecode in release builds.
  */
-def enableProguardInReleaseBuilds = true
+ # TODO: enable this
+def enableProguardInReleaseBuilds = false
 
 android {
     compileSdkVersion 23
