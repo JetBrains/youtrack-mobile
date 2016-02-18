@@ -76,7 +76,7 @@ gradle.projectsEvaluated {
                     commandLine "cmd", "/c", "react-native", "bundle", "--platform", "android", "--dev", "${devEnabled}",
                             "--entry-file", entryFile, "--bundle-output", jsBundleFile, "--assets-dest", resourcesDir
                 } else {
-                    commandLine "react-native", "bundle", "--platform", "android", "--dev", "${devEnabled}",
+                    commandLine "node_modules/react-native-cli/index.js", "bundle", "--platform", "android", "--dev", "${devEnabled}",
                             "--entry-file", entryFile, "--bundle-output", jsBundleFile, "--assets-dest", resourcesDir
                 }
 
