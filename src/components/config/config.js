@@ -1,4 +1,4 @@
-var productionConfig = {
+const productionConfig = {
   backendUrl: 'http://ring-demo-dev.labs.intellij.net/youtrack',
   auth: {
     serverUri: 'http://ring-demo-dev.labs.intellij.net/hub',
