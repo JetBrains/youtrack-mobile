@@ -111,7 +111,8 @@ export default class LoginForm extends React.Component {
   }
 
   logInViaHub() {
-    return OAuth.authorizeInHub()
+    const config = this.props.auth.config;
+    return OAuth.authorizeInHub(config)
       .then(code => this.props.auth.authorizeOAuth(code))
       .then(() => this.props.onLogIn());
   }

@@ -1,9 +1,8 @@
-import config from '../config/config';
 import {Linking} from 'react-native';
 
 import qs from 'qs';
 
-function openAuthPage() {
+function openAuthPage(config) {
   Linking.openURL([
     `${config.auth.serverUri}/auth/login`,
     '?response_type=code',
