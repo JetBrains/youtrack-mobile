@@ -1,4 +1,4 @@
-module.exports = {
+var productionConfig = {
     backendUrl: 'http://ring-demo-dev.labs.intellij.net/youtrack',
     auth: {
         serverUri: 'http://ring-demo-dev.labs.intellij.net/hub',
@@ -8,3 +8,5 @@ module.exports = {
         landingUrl: 'ytoauth://landing.url'
     }
 };
+
+module.exports = productionConfig;

@@ -1,5 +1,5 @@
 import qs from 'qs';
-import AppConfig from '../../app__config';
+import AppConfig from '../config/config';
 const YouTrackUrl = AppConfig.backendUrl;
 const YouTrackIssueUrl = `${YouTrackUrl}/rest/issue/`;
 const YouTrackIssuesFolderUrl = `${YouTrackUrl}/rest/issuesFolder`;

@@ -1,4 +1,4 @@
-import config from '../../app__config';
+import config from '../config/config';
 import {Linking} from 'react-native';
 
 import qs from 'qs';

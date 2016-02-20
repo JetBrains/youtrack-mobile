@@ -1,8 +1,8 @@
 import React, {Image, ScrollView, View, Text, TextInput, TouchableOpacity, Linking} from 'react-native'
 import {logo} from '../../components/icon/icon';
-import appConfig from '../../app__config';
+import appConfig from '../../components/config/config';
 import Keystore from '../../components/keystore/keystore';
-import AppConfig from '../../app__config';
+import AppConfig from '../../components/config/config';
 import OAuth from '../../components/auth/auth__oauth';
 
 import styles from './log-in.styles';
