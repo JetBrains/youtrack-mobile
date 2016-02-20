@@ -4,10 +4,14 @@ import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 
+import com.imagepicker.ImagePickerPackage;
+import android.content.Intent;
+
 import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends ReactActivity {
+    private ImagePickerPackage mImagePicker;
 
     /**
      * Returns the name of the main component registered from JavaScript.
@@ -27,14 +31,24 @@ public class MainActivity extends ReactActivity {
         return BuildConfig.DEBUG;
     }
 
-   /**
-   * A list of packages used by the app. If the app uses additional views
-   * or modules besides the default ones, add more packages here.
-   */
+    /**
+     * A list of packages used by the app. If the app uses additional views
+     * or modules besides the default ones, add more packages here.
+     */
     @Override
     protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(
-        new MainReactPackage()
-      );
+        mImagePicker = new ImagePickerPackage(this);
+
+        return Arrays.<ReactPackage>asList(
+                new MainReactPackage(),
+                mImagePicker);
     }
+
+    // handle onActivityResult
+    @Override
+    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mImagePicker.handleActivityResult(requestCode, resultCode, data);
+    }
+
 }
