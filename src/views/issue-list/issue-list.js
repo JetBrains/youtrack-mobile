@@ -3,6 +3,7 @@ import React, {AsyncStorage, View, Text, TouchableOpacity, ListView, ScrollView,
 import styles from './issue-list.styles';
 import Header from '../../components/header/header';
 import {COLOR_PINK} from '../../components/variables/variables';
+import Cache from '../../components/cache/cache';
 
 import Api from '../../components/api/api';
 import ApiHelper from '../../components/api/api__helper';
@@ -12,6 +13,7 @@ import {Actions} from 'react-native-router-flux';
 
 const QUERY_STORAGE_KEY = 'YT_QUERY_STORAGE';
 const PAGE_SIZE = 10;
+const ISSUES_CACHE_KEY = 'yt_mobile_issues_cache';
 
 let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -19,6 +21,8 @@ class IssueList extends React.Component {
 
     constructor() {
         super();
+        this.cache = new Cache(ISSUES_CACHE_KEY);
+
         this.state = {
             issues: [],
             dataSource: ds.cloneWithRows([]),
@@ -30,6 +34,13 @@ class IssueList extends React.Component {
             keyboardSpace: 0,
             searchListHeight: 0
         };
+
+        this.cache.read().then(issues => {
+            this.setState({
+                issues: issues,
+                dataSource: this.state.dataSource.cloneWithRows(issues)
+            });
+        });
     }
 
     componentDidMount() {
@@ -94,6 +105,7 @@ class IssueList extends React.Component {
                     dataSource: this.state.dataSource.cloneWithRows(issues),
                     isRefreshing: false
                 });
+                this.cache.store(issues);
                 console.log('Issues', issues);
             })
             .catch((err) => {
@@ -126,6 +138,7 @@ class IssueList extends React.Component {
                     dataSource: this.state.dataSource.cloneWithRows(updatedIssues),
                     skip: newSkip
                 });
+                this.cache.store(updatedIssues);
                 console.log('More issues loaded', newIssues);
             })
             .then(() => this.setState({isLoadingMore: false}))
