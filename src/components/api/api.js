@@ -1,13 +1,14 @@
 import qs from 'qs';
-import AppConfig from '../config/config';
-const YouTrackUrl = AppConfig.backendUrl;
-const YouTrackIssueUrl = `${YouTrackUrl}/rest/issue/`;
-const YouTrackIssuesFolderUrl = `${YouTrackUrl}/rest/issuesFolder`;
-const YouTrackUserUrl = `${YouTrackUrl}/rest/admin/user/`;
 
 class Api {
   constructor(auth) {
     this.auth = auth;
+    this.config = auth.config;
+
+    this.youTrackUrl = this.config.backendUrl;
+    this.youTrackIssueUrl = `${this.youTrackUrl}/rest/issue/`;
+    this.youTrackIssuesFolderUrl = `${this.youTrackUrl}/rest/issuesFolder`;
+    this.youTrackUserUrl = `${this.youTrackUrl}/rest/admin/user/`;
   }
 
   makeAuthorizedRequest(url, method = 'GET') {
@@ -52,7 +53,7 @@ class Api {
   }
 
   getIssue(id) {
-    return this.makeAuthorizedRequest(YouTrackIssueUrl + id);
+    return this.makeAuthorizedRequest(this.youTrackIssueUrl + id);
     //.then(res => res.issue)
   }
 
@@ -66,12 +67,12 @@ class Api {
       filter: filter
     }, {indices: false});
 
-    return this.makeAuthorizedRequest(`${YouTrackIssueUrl}?${queryString}`)
+    return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`)
       .then(res => res.issue)
   }
 
   getIssueFolders() {
-    return this.makeAuthorizedRequest(YouTrackIssuesFolderUrl);
+    return this.makeAuthorizedRequest(this.youTrackIssuesFolderUrl);
   }
 
   createIssue(issue) {
@@ -81,19 +82,19 @@ class Api {
       description: issue.description
     });
 
-    const url = `${YouTrackIssueUrl}?${queryString}`;
+    const url = `${this.youTrackIssueUrl}?${queryString}`;
 
     return this.makeAuthorizedRequest(url, 'PUT');
   }
 
   addComment(issueId, comment) {
     const queryString = qs.stringify({comment});
-    const url = `${YouTrackIssueUrl}${issueId}/execute?${queryString}`;
+    const url = `${this.youTrackIssueUrl}${issueId}/execute?${queryString}`;
     return this.makeAuthorizedRequest(url, 'POST');
   }
 
   getUser(login) {
-    return this.makeAuthorizedRequest(YouTrackUserUrl + encodeURIComponent(login));
+    return this.makeAuthorizedRequest(this.youTrackUserUrl + encodeURIComponent(login));
   }
 
   getUserFromHub(hubUrl, id) {
