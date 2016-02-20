@@ -7,20 +7,26 @@ import OAuth from '../../components/auth/auth__oauth';
 
 import styles from './log-in.styles';
 
+const noop = () => {};
+
 export default class LoginForm extends React.Component {
   constructor() {
     super();
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      errorMessage: ''
     };
 
 
     //This promise resolves on android only because it has different oauth model
     OAuth.checkIfBeingAuthorizing()
       .then(code => {
-
         return this.props.auth.authorizeOAuth(code)
+          .catch(err => {
+            this.setState({errorMessage: err.error_description});
+            throw err;
+          });
       })
       .then(() => {
         this.props.onLogIn()
@@ -28,8 +34,7 @@ export default class LoginForm extends React.Component {
       .catch((err) => console.log(err));
 
     Keystore.getInternetCredentials(AppConfig.auth.serverUri)
-      .then(({username, password}) => this.setState({username, password}), () => {
-      });
+      .then(({username, password}) => this.setState({username, password}), noop);
   }
 
   render() {
@@ -62,6 +67,7 @@ export default class LoginForm extends React.Component {
             value={this.state.password}
             onSubmitEditing={() => this.logInViaCredentials()}
             password={true} onChangeText={(password) => this.setState({password})}/>
+          {this.state.errorMessage ? <View><Text style={styles.error}>{this.state.errorMessage}</Text></View> : null}
         </View>
 
         <View style={styles.actionsContainer}>
@@ -102,19 +108,19 @@ export default class LoginForm extends React.Component {
   logInViaCredentials() {
     this.props.auth.authorizeCredentials(this.state.username, this.state.password)
       .then(() => {
-        return Keystore.setInternetCredentials(AppConfig.auth.serverUri, this.state.username, this.state.password, () => {
-          })
-          .catch(() => {
-          });
+        return Keystore.setInternetCredentials(AppConfig.auth.serverUri, this.state.username, this.state.password)
+          .catch(noop);
       })
-      .then(() => this.props.onLogIn());
+      .then(() => this.props.onLogIn())
+      .catch(err => this.setState({errorMessage: err.error_description}))
   }
 
   logInViaHub() {
     const config = this.props.auth.config;
     return OAuth.authorizeInHub(config)
       .then(code => this.props.auth.authorizeOAuth(code))
-      .then(() => this.props.onLogIn());
+      .then(() => this.props.onLogIn())
+      .catch(err => this.setState({errorMessage: err.error_description}))
   }
 
   signUp() {

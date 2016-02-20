@@ -65,5 +65,8 @@ export default StyleSheet.create({
     fontSize: 12,
     color: COLOR_FONT_GRAY,
     textAlign: 'center'
+  },
+  error: {
+    color: 'red'
   }
 });
