@@ -5,7 +5,7 @@ import TextWithImages from '../../components/text-with-images/text-with-images';
 
 import React, {View, Text} from 'react-native';
 
-class SingleIssueComments extends React.Component {
+export default class SingleIssueComments extends React.Component {
 
   _renderComment(comment, attachments) {
     return TextWithImages.renderView(comment.text, attachments);
@@ -39,5 +39,3 @@ class SingleIssueComments extends React.Component {
     </View>);
   }
 }
-
-module.exports = SingleIssueComments;

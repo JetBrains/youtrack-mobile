@@ -11,7 +11,7 @@ import UserSelect from '../../components/user-select/user-select';
 import styles from './single-issue.styles';
 
 
-class SingeIssueView extends React.Component {
+export default class SingeIssueView extends React.Component {
   constructor() {
     super();
     this.state = {issue: null};
@@ -136,5 +136,3 @@ class SingeIssueView extends React.Component {
     );
   }
 }
-
-module.exports = SingeIssueView;
