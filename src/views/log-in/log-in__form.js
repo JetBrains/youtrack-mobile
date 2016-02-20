@@ -1,8 +1,6 @@
 import React, {Image, ScrollView, View, Text, TextInput, TouchableOpacity, Linking} from 'react-native'
 import {logo} from '../../components/icon/icon';
-import appConfig from '../../components/config/config';
 import Keystore from '../../components/keystore/keystore';
-import AppConfig from '../../components/config/config';
 import OAuth from '../../components/auth/auth__oauth';
 
 import styles from './log-in.styles';
@@ -10,7 +8,7 @@ import styles from './log-in.styles';
 const noop = () => {};
 
 export default class LoginForm extends React.Component {
-  constructor() {
+  constructor(props) {
     super();
     this.state = {
       username: '',
@@ -33,7 +31,9 @@ export default class LoginForm extends React.Component {
       })
       .catch((err) => console.log(err));
 
-    Keystore.getInternetCredentials(AppConfig.auth.serverUri)
+
+    const config = props.auth.config;
+    Keystore.getInternetCredentials(config.auth.serverUri)
       .then(({username, password}) => this.setState({username, password}), noop);
   }
 
@@ -106,9 +106,11 @@ export default class LoginForm extends React.Component {
   }
 
   logInViaCredentials() {
+    const config = this.props.auth.config;
+
     this.props.auth.authorizeCredentials(this.state.username, this.state.password)
       .then(() => {
-        return Keystore.setInternetCredentials(AppConfig.auth.serverUri, this.state.username, this.state.password)
+        return Keystore.setInternetCredentials(config.auth.serverUri, this.state.username, this.state.password)
           .catch(noop);
       })
       .then(() => this.props.onLogIn())
@@ -124,7 +126,8 @@ export default class LoginForm extends React.Component {
   }
 
   signUp() {
-    Linking.openURL(`${appConfig.auth.serverUri}/auth/register`);
+    const config = this.props.auth.config;
+    Linking.openURL(`${config.auth.serverUri}/auth/register`);
   }
 
   loginAsGuest() {
