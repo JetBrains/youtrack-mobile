@@ -61,5 +61,13 @@ module.exports = StyleSheet.create({
   cancelText: {
     fontSize: 16,
     color: '#FFF'
+  },
+  searchSuggestions: {
+    position: 'absolute',
+    top: 50,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: '#FFFFFFF4'
   }
 });

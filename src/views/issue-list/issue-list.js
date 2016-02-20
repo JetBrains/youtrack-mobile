@@ -211,6 +211,7 @@ class IssueList extends React.Component {
           clearButtonMode="always"
           returnKeyType="search"
           autoCorrect={false}
+          autoCapitalize="none"
           onSubmitEditing={(e) => this.onQueryUpdated(e.nativeEvent.text)}
           style={[styles.searchInput]}
           value={this.state.input}
@@ -232,7 +233,7 @@ class IssueList extends React.Component {
   render() {
     let searchContainer;
     if (this.state.searchListHeight) {
-      searchContainer = <View ref="searchContainer" style={{height: this.state.searchListHeight}}>
+      searchContainer = <View ref="searchContainer" style={[styles.searchSuggestions, {bottom: this.state.keyboardSpace}]}>
         <SearchesList getIssuesFolder={this.getIssueFolders.bind(this)}
                       onAddQuery={this.onQueryUpdated.bind(this)}></SearchesList>
       </View>
@@ -240,9 +241,6 @@ class IssueList extends React.Component {
 
     return (<View style={styles.listContainer}>
       {this._renderHeader()}
-
-      {searchContainer}
-
       <ListView
         dataSource={this.state.dataSource}
         renderRow={(issue) => <IssueRow issue={issue} onClick={(issue) => this.goToIssue(issue)}></IssueRow>}
@@ -251,6 +249,8 @@ class IssueList extends React.Component {
         onEndReachedThreshold={10}
         renderScrollComponent={(props) => <ScrollView {...props} refreshControl={this._renderRefreshControl()}/>}
         refreshDescription="Refreshing issues"/>
+
+      {searchContainer}
 
       {this._renderFooter()}
 
