@@ -7,13 +7,14 @@ import SingleIssue from './views/single-issue/singe-issue';
 import CreateIssue from './views/create-issue/create-issue';
 import ShowImage from './views/show-image/show-image';
 import {Router, Route, Schema, Actions} from 'react-native-router-flux'
+import config from './components/config/config';
 
 import React, {Navigator, BackAndroid} from 'react-native';
 
 class YouTrackMobile extends React.Component {
   constructor() {
     super();
-    this.auth = new Auth();
+    this.auth = new Auth(config);
     this.state = {};
 
     this.addAndroidBackButtonSupport();

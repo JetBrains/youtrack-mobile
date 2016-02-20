@@ -1,10 +1,7 @@
-import config from '../config/config';
 import {AsyncStorage} from 'react-native';
 import base64 from 'base64-js';
 
 const STORAGE_KEY = 'yt_mobile_auth';
-
-const CHECK_TOKEN_URL = `${config.auth.serverUri}/api/rest/users/me?fields=id`;
 
 function makeBtoa(str) {
   let byteArray = [];
@@ -14,9 +11,11 @@ function makeBtoa(str) {
   return base64.fromByteArray(byteArray);
 }
 
-class Auth {
-  constructor() {
+export default class Auth {
+  constructor(config) {
     this.authParams = null;
+    this.config = config;
+    this.CHECK_TOKEN_URL = `${this.config.auth.serverUri}/api/rest/users/me?fields=id`;
   }
 
   authorizeOAuth(code) {
@@ -43,6 +42,9 @@ class Auth {
   // in obtainToken and obtainTokenByCredentials
   obtainToken(code) {
     console.info('Obtaining token for code', code);
+
+    const config = this.config;
+
     return fetch([
       config.auth.serverUri,
       `/api/rest/oauth2/token`,
@@ -68,6 +70,8 @@ class Auth {
 
   obtainTokenByCredentials(login, password) {
     console.info('Obtaining token by credentials for user', login);
+
+    const config = this.config;
 
     return fetch([
       config.auth.serverUri,
@@ -99,6 +103,9 @@ class Auth {
     return this.readAuth()
       .then(authParams => {
         console.info('Begining token refresh', authParams);
+
+        const config = config;
+
         //store old refresh token
         token = authParams.refresh_token;
 
@@ -141,7 +148,7 @@ class Auth {
   verifyToken(authParams) {
     console.info('Verifying token...');
 
-    return fetch(CHECK_TOKEN_URL, {
+    return fetch(this.CHECK_TOKEN_URL, {
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Authorization': `${authParams.token_type} ${authParams.access_token}`
@@ -177,5 +184,3 @@ class Auth {
       .then((authParamsString) => JSON.parse(authParamsString));
   }
 }
-
-module.exports = Auth;
