@@ -4,7 +4,7 @@ import issueStyles from '../single-issue/single-issue.styles';
 import Header from '../../components/header/header';
 import {UIImagePickerManager} from 'NativeModules';
 import {Actions} from 'react-native-router-flux';
-import {attach} from '../../components/icon/icon';
+import {attach, tag, next} from '../../components/icon/icon';
 
 export default class CreateIssue extends React.Component {
   constructor() {
@@ -108,6 +108,13 @@ export default class CreateIssue extends React.Component {
             </View>
           </View>
           <View style={styles.separator}/>
+          <View style={styles.actionContainer}>
+            <Image style={styles.actionIcon} source={tag}/>
+            <View style={styles.actionContent}>
+              <Text>Add tag</Text>
+              <Image style={styles.arrowImage} source={next}></Image>
+            </View>
+          </View>
         </View>
       </ScrollView>
     );

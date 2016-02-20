@@ -41,12 +41,27 @@ export default StyleSheet.create({
     flexDirection: 'row'
   },
   attachIcon: {
-    marginRight: UNIT / 2,
-    width: 14,
-    height: 14
+    marginRight: UNIT,
+    width: 16,
+    height: 16
   },
   attachButtonText: {
     color: COLOR_PINK,
     fontWeight: '200'
+  },
+  actionContainer: {
+    flexDirection: 'row',
+    margin: UNIT,
+    marginLeft: UNIT * 2,
+    marginRight: UNIT * 2
+  },
+  actionContent: {
+    marginLeft: UNIT * 2,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  actionIcon: {
+    width: 16,
+    height: 16
   }
 });
