@@ -1,11 +1,11 @@
 import NativeKeychain from 'react-native-keychain';
 
 export default {
-    getInternetCredentials(server) {
-        return NativeKeychain.getInternetCredentials(server);
-    },
+  getInternetCredentials(server) {
+    return NativeKeychain.getInternetCredentials(server);
+  },
 
-    setInternetCredentials(server, username, password) {
-        return NativeKeychain.setInternetCredentials(server, username, password);
-    }
+  setInternetCredentials(server, username, password) {
+    return NativeKeychain.setInternetCredentials(server, username, password);
+  }
 }

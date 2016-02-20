@@ -4,47 +4,47 @@ import {next} from '../../components/icon/icon';
 import React, {View, Text, TouchableHighlight, Image} from 'react-native';
 
 class IssueRow extends React.Component {
-    static _getSubText(issue) {
+  static _getSubText(issue) {
 
-        let forText = () => {
-            if (issue.fieldHash.Assignee) {
-                return `for ${issue.fieldHash.Assignee[0].fullName}`;
-            }
-            return '    Unassigned'
-        };
+    let forText = () => {
+      if (issue.fieldHash.Assignee) {
+        return `for ${issue.fieldHash.Assignee[0].fullName}`;
+      }
+      return '    Unassigned'
+    };
 
-        return `${issue.id} by ${issue.fieldHash.reporterFullName} ${forText()}`
+    return `${issue.id} by ${issue.fieldHash.reporterFullName} ${forText()}`
+  }
+
+  getSummaryStyle(issue) {
+    if (issue.fieldHash.resolved) {
+      return {
+        color: '#888'
+      };
     }
+  }
 
-    getSummaryStyle(issue) {
-        if (issue.fieldHash.resolved) {
-            return {
-                color: '#888'
-            };
-        }
-    }
-
-    render() {
-        let issue = this.props.issue;
-        return (
-            <TouchableHighlight underlayColor='#FFF' onPress={() => this.props.onClick(issue)}>
-                <View style={styles.row}>
-                    <View>
-                        {issue.fieldHash.Priority ? <ColorField field={issue.fieldHash.Priority}></ColorField> : <View/>}
-                    </View>
-                    <View style={styles.rowText}>
-                        <View style={styles.rowTopLine}>
-                            <Text style={[styles.summary, this.getSummaryStyle(issue)]}>
-                                {issue.fieldHash.summary}
-                            </Text>
-                            <Image style={styles.arrowImage} source={next}></Image>
-                        </View>
-                        <Text style={styles.subtext}>{IssueRow._getSubText(issue)}</Text>
-                    </View>
-                </View>
-            </TouchableHighlight>
-        );
-    }
+  render() {
+    let issue = this.props.issue;
+    return (
+      <TouchableHighlight underlayColor='#FFF' onPress={() => this.props.onClick(issue)}>
+        <View style={styles.row}>
+          <View>
+            {issue.fieldHash.Priority ? <ColorField field={issue.fieldHash.Priority}></ColorField> : <View/>}
+          </View>
+          <View style={styles.rowText}>
+            <View style={styles.rowTopLine}>
+              <Text style={[styles.summary, this.getSummaryStyle(issue)]}>
+                {issue.fieldHash.summary}
+              </Text>
+              <Image style={styles.arrowImage} source={next}></Image>
+            </View>
+            <Text style={styles.subtext}>{IssueRow._getSubText(issue)}</Text>
+          </View>
+        </View>
+      </TouchableHighlight>
+    );
+  }
 }
 
 module.exports = IssueRow;

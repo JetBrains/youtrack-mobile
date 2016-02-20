@@ -4,88 +4,88 @@ import {UNIT, FOOTER_HEIGHT} from '../../components/variables/variables';
 let LIGHT_GRAY = '#F8F8F8';
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: LIGHT_GRAY
-    },
-    headerText: {
-        flex: 1,
-        textAlign:'center'
-    },
-    issueViewContainer: {
-        padding: UNIT * 2,
-        backgroundColor: '#FFF'
-    },
-    authorForText: {
-        color: '#666'
-    },
-    summary: {
-        paddingTop: UNIT * 2,
-        fontSize: 18,
-        fontWeight: 'bold'
-    },
-    description: {
-        paddingTop: UNIT * 2
-    },
-    attachesContainer: {
-        marginTop: UNIT * 2
-    },
-    attachment: {
-        marginRight: UNIT * 2,
-        width: 120,
-        height: 60,
-        borderRadius: 4,
-        resizeMode: 'cover'
-    },
-    commentInputWrapper: {
-        backgroundColor: '#EBEBEB',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    commentInput: {
-        flex: 1,
-        height: UNIT * 4,
-        borderRadius: 6,
-        backgroundColor: '#FFF',
-        color: '#7E7E84',
-        margin: UNIT,
-        padding: 6
-    },
-    commentsContainer: {
-        padding: UNIT * 2
-    },
-    commentWrapper: {
-        flexDirection: 'row',
-        marginBottom: UNIT * 2
-    },
-    avatar: {
-        width: UNIT * 4,
-        height: UNIT * 4,
-        borderRadius: UNIT * 2
-    },
-    comment: {
-        marginTop: UNIT/2,
-        marginLeft: UNIT,
-        flex: 1
-    },
-    commentText: {
-        marginTop: UNIT
-    },
-    footer: {
-        paddingLeft: UNIT,
-        flexDirection: 'row',
-        backgroundColor: '#FFF',
-        height: FOOTER_HEIGHT
-    },
-    footerIcon: {
-        width: UNIT*3,
-        height: UNIT*3
-    },
-    iconButton: {
-        justifyContent: 'center',
-        padding: UNIT
-    }
+  container: {
+    flex: 1,
+    backgroundColor: LIGHT_GRAY
+  },
+  headerText: {
+    flex: 1,
+    textAlign: 'center'
+  },
+  issueViewContainer: {
+    padding: UNIT * 2,
+    backgroundColor: '#FFF'
+  },
+  authorForText: {
+    color: '#666'
+  },
+  summary: {
+    paddingTop: UNIT * 2,
+    fontSize: 18,
+    fontWeight: 'bold'
+  },
+  description: {
+    paddingTop: UNIT * 2
+  },
+  attachesContainer: {
+    marginTop: UNIT * 2
+  },
+  attachment: {
+    marginRight: UNIT * 2,
+    width: 120,
+    height: 60,
+    borderRadius: 4,
+    resizeMode: 'cover'
+  },
+  commentInputWrapper: {
+    backgroundColor: '#EBEBEB',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  commentInput: {
+    flex: 1,
+    height: UNIT * 4,
+    borderRadius: 6,
+    backgroundColor: '#FFF',
+    color: '#7E7E84',
+    margin: UNIT,
+    padding: 6
+  },
+  commentsContainer: {
+    padding: UNIT * 2
+  },
+  commentWrapper: {
+    flexDirection: 'row',
+    marginBottom: UNIT * 2
+  },
+  avatar: {
+    width: UNIT * 4,
+    height: UNIT * 4,
+    borderRadius: UNIT * 2
+  },
+  comment: {
+    marginTop: UNIT / 2,
+    marginLeft: UNIT,
+    flex: 1
+  },
+  commentText: {
+    marginTop: UNIT
+  },
+  footer: {
+    paddingLeft: UNIT,
+    flexDirection: 'row',
+    backgroundColor: '#FFF',
+    height: FOOTER_HEIGHT
+  },
+  footerIcon: {
+    width: UNIT * 3,
+    height: UNIT * 3
+  },
+  iconButton: {
+    justifyContent: 'center',
+    padding: UNIT
+  }
 });
 
 module.exports = styles;
