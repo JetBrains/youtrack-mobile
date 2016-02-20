@@ -20,9 +20,8 @@ class Auth {
         this.authParams = null;
     }
 
-    authorizeOAuth() {
-        return hubOAuth2()
-            .then(code => this.obtainToken(code))
+    authorizeOAuth(code) {
+        return this.obtainToken(code)
             .then(this.storeAuth.bind(this));
     }
 
@@ -60,8 +59,11 @@ class Auth {
                 'Authorization': `Basic ${makeBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`
             }
         }).then(res => res.json())
-            .catch(err => {
-                throw err;
+            .then(res => {
+                if (res.error) {
+                    throw res;
+                }
+                return res;
             });
     }
 

@@ -31,4 +31,9 @@ function hubOAuth2() {
     });
 }
 
-module.exports = hubOAuth2;
+module.exports = {
+    checkIfBeingAuthorizing: () => {
+        return Promise.reject(new Error('INFO: Initial URL authorization doesn\'t used in ios'));
+    },
+    authorizeInHub: hubOAuth2
+};

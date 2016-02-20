@@ -3,6 +3,7 @@ import {logo} from '../../components/icon/icon';
 import appConfig from '../../app__config';
 import Keystore from '../../components/keystore/keystore';
 import AppConfig from '../../app__config';
+import OAuth from '../../components/auth/auth__oauth';
 
 import styles from './log-in.styles';
 
@@ -13,6 +14,18 @@ export default class LoginForm extends React.Component {
             username: '',
             password: ''
         };
+
+
+        //This promise resolves on android only because it has different oauth model
+        OAuth.checkIfBeingAuthorizing()
+            .then(code => {
+
+                return this.props.auth.authorizeOAuth(code)
+            })
+            .then(() => {
+                this.props.onLogIn()
+            })
+            .catch((err) => console.log(err));
 
         Keystore.getInternetCredentials(AppConfig.auth.serverUri)
             .then(({username, password}) => this.setState({username, password}), () => {});
@@ -95,7 +108,8 @@ export default class LoginForm extends React.Component {
     }
 
     logInViaHub() {
-        this.props.auth.authorizeOAuth()
+        return OAuth.authorizeInHub()
+            .then(code => this.props.auth.authorizeOAuth(code))
             .then(() => this.props.onLogIn());
     }
 
