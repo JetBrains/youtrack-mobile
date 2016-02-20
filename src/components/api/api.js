@@ -97,10 +97,10 @@ class Api {
     return this.makeAuthorizedRequest(this.youTrackUserUrl + encodeURIComponent(login));
   }
 
-  getUserFromHub(hubUrl, id) {
+  getUserFromHub(id) {
     const queryString = qs.stringify({fields: 'avatar/url'});
 
-    return this.makeAuthorizedRequest(`${hubUrl}/api/rest/users/${id}?${queryString}`);
+    return this.makeAuthorizedRequest(`${this.config.auth.serverUri}/api/rest/users/${id}?${queryString}`);
   }
 }
 

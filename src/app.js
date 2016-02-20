@@ -29,7 +29,7 @@ class YouTrackMobile extends React.Component {
   }
 
   addAndroidBackButtonSupport() {
-    BackAndroid.addEventListener('hardwareBackPress', function () {
+    BackAndroid.addEventListener('hardwareBackPress', function() {
       try {
         Actions.pop();
         return true;
@@ -42,17 +42,39 @@ class YouTrackMobile extends React.Component {
   render() {
     return (
       <Router hideNavBar={true}>
-        <Schema name="modal" sceneConfig={Navigator.SceneConfigs.FloatFromBottom}/>
-        <Schema name="default" sceneConfig={Navigator.SceneConfigs.FloatFromRight}/>
 
-        <Route name="Home" title="Home" component={Home} initial={true}/>
+        <Schema name="modal"
+                sceneConfig={Navigator.SceneConfigs.FloatFromBottom}/>
+        <Schema name="default"
+                sceneConfig={Navigator.SceneConfigs.FloatFromRight}/>
 
-        <Route name="LogIn" schema="modal" type="reset"
+        <Route name="Home"
+               title="Home"
+               component={Home}
+               initial={true}/>
+
+        <Route name="LogIn"
+               schema="modal"
+               type="reset"
                component={() => <LoginForm auth={this.auth} onLogIn={this.checkAuthorization.bind(this)}/>}/>
-        <Route name="IssueList" title="Issues" type="reset" component={IssueList}/>
-        <Route name="ShowImage" title="Image" schema="modal" component={ShowImage}/>
-        <Route name="SingleIssue" title="Issue" component={SingleIssue}/>
-        <Route name="CreateIssue" title="Create Issue" component={CreateIssue}/>
+
+        <Route name="IssueList"
+               title="Issues"
+               type="reset"
+               component={IssueList}/>
+
+        <Route name="ShowImage"
+               title="Image"
+               schema="modal"
+               component={ShowImage}/>
+
+        <Route name="SingleIssue"
+               title="Issue"
+               component={SingleIssue}/>
+
+        <Route name="CreateIssue"
+               title="Create Issue"
+               component={CreateIssue}/>
       </Router>
     );
   }
