@@ -19,28 +19,27 @@ describe('<ColorField/>', () => {
   it('should init', () => {
     let wrapper = shallow(<ColorField field={fakeField}/>);
 
-    expect(wrapper).to.be.defined;
+    wrapper.should.be.defined;
   });
 
   it('should render first letter of color field', () => {
     let wrapper = shallow(<ColorField field={fakeField}/>);
-    let LetterItems = wrapper.findWhere((component) => component.props().children === 'T');
 
-    expect(LetterItems.length).to.equal(1);
+    wrapper.find('Text').children().should.have.text('T');
   });
 
   it('should set background color', () => {
     const container = shallow(<ColorField field={fakeField}/>).find('View');
     const backgroundColor = container.props().style[1].backgroundColor;
 
-    expect(backgroundColor).to.equal(fakeField.color.bg);
+    backgroundColor.should.equal(fakeField.color.bg);
   });
 
   it('should set foreground color', () => {
     const container = shallow(<ColorField field={fakeField}/>).find('Text');
     const backgroundColor = container.props().style[1].color;
 
-    expect(backgroundColor).to.equal(fakeField.color.fg);
+    backgroundColor.should.equal(fakeField.color.fg);
   });
 
 });

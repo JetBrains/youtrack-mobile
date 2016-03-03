@@ -33,6 +33,7 @@
     "babel-preset-react": "^6.3.13",
     "babel-preset-stage-1": "^6.3.13",
     "chai": "3.5.0",
+    "chai-enzyme": "^0.4.1",
     "enzyme": "2.0.0",
     "eslint": "^1.10.3",
     "eslint-config-defaults": "^8.0.2",
