@@ -29,4 +29,18 @@ describe('<ColorField/>', () => {
     expect(LetterItems.length).to.equal(1);
   });
 
+  it('should set background color', () => {
+    const container = shallow(<ColorField field={fakeField}/>).find('View');
+    const backgroundColor = container.props().style[1].backgroundColor;
+
+    expect(backgroundColor).to.equal(fakeField.color.bg);
+  });
+
+  it('should set foreground color', () => {
+    const container = shallow(<ColorField field={fakeField}/>).find('Text');
+    const backgroundColor = container.props().style[1].color;
+
+    expect(backgroundColor).to.equal(fakeField.color.fg);
+  });
+
 });

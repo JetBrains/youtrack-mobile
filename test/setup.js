@@ -1,5 +1,3 @@
-"use strict";
+import {expect} from 'chai';
 
-var chai = require("chai");
-
-global.expect = chai.expect;
+global.expect = expect;
