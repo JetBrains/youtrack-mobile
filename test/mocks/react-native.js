@@ -1,11 +1,11 @@
 
 import React from 'react';
 
-const RN = React;
+const ReactNative = React;
 
 export const PropTypes = React.PropTypes;
 
-RN.StyleSheet = {
+const StyleSheet = {
   create: (style) => style
 };
 
@@ -21,11 +21,10 @@ const createComponent = (type) => {
   });
 };
 
-RN.View = createComponent('View');
-RN.Text = createComponent('Text');
-RN.ActivityIndicatorIOS = createComponent('ActivityIndicatorIOS');
-RN.Image = createComponent('Image');
-RN.TouchableHighlight = createComponent('TouchableHighlight');
-RN.ScrollView = createComponent('ScrollView');
+const View = createComponent('View');
+const Text = createComponent('Text');
+const Image = createComponent('Image');
 
-export default RN;
+export {StyleSheet, View, Text, Image};
+
+export default ReactNative;
