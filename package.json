@@ -7,7 +7,7 @@
     "start-webpack": "rnws start",
     "bundle": "rnws bundle",
     "test": "mocha --opts test/mocha.opts src/**/*.test.js",
-    "test:watch": "nodemon -w __tests__ -w ./src -e js,jsx -x npm test",
+    "test:watch": "npm test -- --watch",
     "lint": "eslint src",
     "ios": "./node_modules/react-native-cli/index.js run-ios",
     "android": "./node_modules/react-native-cli/index.js run-android",
@@ -15,21 +15,6 @@
     "android-emulator": "emulator -avd YouTrackMobile -scale 0.4 -gpu on -memory 2048",
     "android-emulator-create": "android create avd -n YouTrackMobile -t 1 -b x86 --skin 1080x1920 --device 'Nexus 5'",
     "android-emulator-delete": "android delete avd -n YouTrackMobile"
-  },
-  "jest": {
-    "scriptPreprocessor": "__tests__/jestSupport/preprocessor.js",
-    "setupEnvScriptFile": "node_modules/react-native/jestSupport/env.js",
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "packager/react-packager/src/Activity/"
-    ],
-    "testFileExtensions": [
-      "test.js"
-    ],
-    "unmockedModulePathPatterns": [
-      "promise",
-      "source-map"
-    ]
   },
   "dependencies": {
     "base64-js": "0.0.8",
@@ -53,7 +38,6 @@
     "eslint-plugin-react": "^3.15.0",
     "eslint-plugin-react-native": "^0.5.0",
     "file-loader": "0.8.5",
-    "jest-cli": "0.8.2",
     "mocha": "2.4.5",
     "nodemon": "1.8.1",
     "react": "0.14.7",

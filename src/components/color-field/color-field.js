@@ -27,7 +27,7 @@ export default class ColorField extends React.Component {
 ColorField.propTypes = {
   field: PropTypes.array.isRequired
 };
-console.log('>>>', StyleSheet)
+
 const styles = StyleSheet.create({
   wrapper: {
     width: SIZE,

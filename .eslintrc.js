@@ -54,11 +54,12 @@ module.exports = {
     'env': {
         'es6': true,
         'commonjs': true,
-        'jest': true,
+        'mocha': true,
         'node': true
     },
     'globals': {
         'fetch': true,
-        'console': true
+        'console': true,
+        'expect': true
     }
 };
