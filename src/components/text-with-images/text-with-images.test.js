@@ -10,4 +10,12 @@ describe('<TextWithImages/>', () => {
 
     image.props().source.uri.should.equal('foo.ru');
   });
+
+  it('should replace split text to text and image nodes', () => {
+    const template = TextWithImages.renderView('foo !img.png! bar', [{id: 'test', url: 'foo.ru', value: 'img.png'}]);
+    const container = shallow(<View>{template}</View>);
+
+    container.children().length.should.equal(3);
+    container.find('Text').length.should.equal(2);
+  });
 });

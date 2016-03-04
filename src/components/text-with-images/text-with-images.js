@@ -28,6 +28,11 @@ class TextWithImages {
       resultView.push(<Image key={attach.id} style={styles.commentImage} source={{uri: attach.url}}/>);
     });
 
+    const lastIndex = (imageNames || []).length;
+    if (textNodes[lastIndex]) {
+      resultView.push(<Text key={lastIndex}>{textNodes[lastIndex]}</Text>);
+    }
+
     return resultView;
   }
 }
