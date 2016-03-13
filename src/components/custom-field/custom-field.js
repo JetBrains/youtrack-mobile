@@ -33,8 +33,8 @@ export default class CustomField extends React.Component {
   render() {
     return (
       <View style={styles.wrapper}>
-        <Text style={[styles.valueText, this.getValueStyle()]}>{this._getValue()}</Text>
-        <Text style={styles.keyText}>{this._getKey()}</Text>
+        <Text style={[styles.valueText, this.getValueStyle()]} testID="value">{this._getValue()}</Text>
+        <Text style={styles.keyText} testID="name">{this._getKey()}</Text>
       </View>
     );
   }
