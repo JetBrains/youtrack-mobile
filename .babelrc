@@ -1,6 +1,3 @@
 {
-  "presets": [
-    'es2015',
-    'react-native'
-  ]
+    "extends": "react-native/packager/react-packager/rn-babelrc.json"
 }
