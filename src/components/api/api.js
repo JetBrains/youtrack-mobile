@@ -28,7 +28,7 @@ class Api {
     return sendRequest()
     //Handle access_token expiring: refresh it in that case and resend request
       .then(res => {
-        if (res.status === 401 || res._bodyText.indexOf('Token expired') !== -1) {
+        if (res.status === 401 || (res._bodyText && res._bodyText.indexOf('Token expired') !== -1)) {
           console.info('Looks like the token is expired, will try to refresh', res);
           return this.auth.refreshToken()
             .then(sendRequest);
