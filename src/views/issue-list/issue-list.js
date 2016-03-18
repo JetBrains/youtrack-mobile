@@ -105,8 +105,10 @@ class IssueList extends React.Component {
       .then(() => Actions.LogIn());
   }
 
-  loadIssues(text, skip) {
-    this.setState({isRefreshing: true});
+  loadIssues(text, skip, showLoader = true) {
+    if (showLoader) {
+      this.setState({isRefreshing: true});
+    }
 
     return this.api.getIssues(text, PAGE_SIZE, skip)
       .then(ApiHelper.fillIssuesFieldHash)
@@ -171,7 +173,7 @@ class IssueList extends React.Component {
 
   setQuery(query) {
     this.setState({input: query});
-    this.loadIssues(query);
+    this.loadIssues(query, null, false);
   }
 
   onQueryUpdated(query) {
