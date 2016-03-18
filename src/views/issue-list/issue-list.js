@@ -120,6 +120,7 @@ class IssueList extends React.Component {
         console.log('Issues', issues);
       })
       .catch((err) => {
+        this.setState({isRefreshing: false});
         console.error('Failed to fetch issues', err);
       });
   }

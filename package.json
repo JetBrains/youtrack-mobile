@@ -20,10 +20,10 @@
   "dependencies": {
     "base64-js": "0.0.8",
     "qs": "6.1.0",
-    "react-native": "0.22.0-rc",
+    "react-native": "0.22.0-rc4",
     "react-native-image-picker": "0.14.3",
     "react-native-keychain": "0.2.7",
-    "react-native-router-flux": "2.0.9",
+    "react-native-router-flux": "2.3.12",
     "relative-date": "^1.1.2"
   },
   "devDependencies": {
