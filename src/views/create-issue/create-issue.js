@@ -13,7 +13,9 @@ export default class CreateIssue extends React.Component {
       summary: null,
       description: null,
       attachments: [],
-      project: 'SND' //TODO> project selection
+      project: {
+        id: '77-0'
+      } //TODO> project selection
     }
   }
 
