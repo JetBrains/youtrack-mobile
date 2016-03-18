@@ -17,7 +17,6 @@ import {COLOR_PINK} from '../../components/variables/variables';
 import Cache from '../../components/cache/cache';
 
 import Api from '../../components/api/api';
-import ApiHelper from '../../components/api/api__helper';
 import IssueRow from './issue-list__row';
 import SearchesList from './issue-list__search-list';
 import {Actions} from 'react-native-router-flux';
@@ -111,7 +110,6 @@ class IssueList extends React.Component {
     }
 
     return this.api.getIssues(text, PAGE_SIZE, skip)
-      .then(ApiHelper.fillIssuesFieldHash)
       .then((issues) => {
         this.setState({
           issues: issues,
@@ -140,7 +138,6 @@ class IssueList extends React.Component {
     const newSkip = this.state.skip + PAGE_SIZE;
 
     return this.api.getIssues(this.state.input, PAGE_SIZE, newSkip)
-      .then(ApiHelper.fillIssuesFieldHash)
       .then((newIssues) => {
         if (!newIssues.length) {
           console.info('Issues list end reached');

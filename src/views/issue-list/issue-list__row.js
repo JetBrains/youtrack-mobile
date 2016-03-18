@@ -7,17 +7,17 @@ class IssueRow extends React.Component {
   static _getSubText(issue) {
 
     let forText = () => {
-      if (issue.fieldHash.Assignee) {
-        return `for ${issue.fieldHash.Assignee[0].fullName}`;
+      if (issue.Assignee) {
+        return `for ${issue.Assignee[0].fullName}`;
       }
       return '    Unassigned'
     };
 
-    return `${issue.id} by ${issue.fieldHash.reporterFullName} ${forText()}`
+    return `${issue.project.shortName}-${issue.numberInProject} by ${issue.reporter.name || issue.reporter.login} ${forText()}`
   }
 
   getSummaryStyle(issue) {
-    if (issue.fieldHash.resolved) {
+    if (issue.resolved) {
       return {
         color: '#888'
       };
@@ -26,16 +26,17 @@ class IssueRow extends React.Component {
 
   render() {
     let issue = this.props.issue;
+
     return (
       <TouchableHighlight underlayColor='#FFF' onPress={() => this.props.onClick(issue)}>
         <View style={styles.row}>
           <View>
-            {issue.fieldHash.Priority ? <ColorField field={issue.fieldHash.Priority}></ColorField> : <View/>}
+            {issue.priority ? <ColorField field={issue.priority}></ColorField> : <View/>}
           </View>
           <View style={styles.rowText}>
             <View style={styles.rowTopLine}>
               <Text style={[styles.summary, this.getSummaryStyle(issue)]}>
-                {issue.fieldHash.summary}
+                {issue.summary}
               </Text>
               <Image style={styles.arrowImage} source={next}></Image>
             </View>

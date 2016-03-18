@@ -6,7 +6,8 @@ class Api {
     this.config = auth.config;
 
     this.youTrackUrl = this.config.backendUrl;
-    this.youTrackIssueUrl = `${this.youTrackUrl}/rest/issue/`;
+    this.youTrackIssueUrl = `${this.youTrackUrl}/api/issues`;
+    this.youTrackOldIssueUrl = `${this.youTrackUrl}/rest/issue/`;
     this.youTrackIssuesFolderUrl = `${this.youTrackUrl}/rest/issuesFolder`;
     this.youTrackUserUrl = `${this.youTrackUrl}/rest/admin/user/`;
   }
@@ -85,21 +86,35 @@ class Api {
   }
 
   getIssue(id) {
-    return this.makeAuthorizedRequestOldRest(this.youTrackIssueUrl + id);
+    return this.makeAuthorizedRequestOldRest(this.youTrackOldIssueUrl + id);
   }
 
-  getIssues(filter = '', count, skip = 0) {
+  getIssues(query = '', $top, $skip = 0) {
     const queryString = qs.stringify({
-      useImplicitSort: true,
-      with: ['summary', 'resolved', 'priority', 'reporterFullName', 'assignee'],
+      query, $top, $skip,
+      fields: 'id,summary,resolved,reporter(id,name,login),project(id,shortName),numberInProject'
+    });
 
-      max: count,
-      after: skip,
-      filter: filter
-    }, {indices: false});
+    return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`)
+      .then(res => {
+        console.log('NEW REST>>>', res);
+        return res;
+      })
 
-    return this.makeAuthorizedRequestOldRest(`${this.youTrackIssueUrl}?${queryString}`)
-      .then(res => res.issue)
+    // const queryOldString = qs.stringify({
+    //   useImplicitSort: true,
+    //   with: ['summary', 'resolved', 'priority', 'reporterFullName', 'assignee'],
+    //
+    //   max: $top,
+    //   after: $skip,
+    //   filter: query
+    // }, {indices: false});
+    //
+    // return this.makeAuthorizedRequestOldRest(`${this.youTrackOldIssueUrl}?${queryOldString}`)
+    //   .then(res => {
+    //     console.log('OLD REST>>>', res.issue)
+    //     return res.issue;
+    //   });
   }
 
   getIssueFolders() {
@@ -107,14 +122,12 @@ class Api {
   }
 
   createIssue(issue) {
-    const url = `${this.youTrackUrl}/api/issues`;
-    return this.makeAuthorizedRequest(url, 'POST', issue);
+    return this.makeAuthorizedRequest(this.youTrackIssueUrl, 'POST', issue);
   }
 
   addComment(issueId, comment) {
-    const queryString = qs.stringify({comment});
-    const url = `${this.youTrackIssueUrl}${issueId}/execute?${queryString}`;
-    return this.makeAuthorizedRequestOldRest(url, 'POST');
+    const url = `${this.youTrackIssueUrl}/${issueId}/comments`;
+    return this.makeAuthorizedRequest(url, 'POST', {text: comment});
   }
 
   getUser(login) {
