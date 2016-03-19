@@ -1,32 +1,47 @@
 import React, {View, Text, StyleSheet, PropTypes} from 'react-native';
+import getColorById from '../color-field/color-field__colors';
 
 export default class CustomField extends React.Component {
   _getValue() {
-    let field = this.props.field;
-    if (field.name === 'Assignee') {
-      return field.value[0].fullName
+    const field = this.props.field;
+    const emptyValue = field.projectCustomField.emptyFieldText;
+
+    if (field.value) {
+      const value = field.value;
+      if (Array.isArray(value)) {
+        if (value.length === 0) {
+          return emptyValue;
+        }
+        return value.map(it => it.name || value.login).join(', ');
+      }
+      return value.name || value.login;
     }
-    return field.value;
+
+    return emptyValue;
   }
 
   _getKey() {
-    return this.props.field.name;
+    let field = this.props.field;
+    return field.projectCustomField.field.name;
   }
 
   getValueStyle() {
-    let field = this.props.field;
-    if (!field.color) {
+    const field = this.props.field;
+
+    if (!field.value || !field.value.color) {
       return;
     }
-    let fg = field.color.fg;
-    let bg = null;
-    if (fg === 'white' || fg === '#FFF') {
-      bg = field.color.bg;
+    const colorId = field.value.color.id;
+
+    let color = getColorById(colorId).color;
+    let backgroundColor = null;
+    if (color === 'white' || color === '#FFF') {
+      backgroundColor = getColorById(colorId).backgroundColor;
     }
 
     return {
-      color: fg,
-      backgroundColor: bg
+      color: color,
+      backgroundColor: backgroundColor
     }
   }
 

@@ -11,6 +11,7 @@ class TextWithImages {
    * @returns {View} - view of text and image nodes
    */
   static renderView(text, attachments) {
+    attachments = attachments || [];
     let imageNames = text.match(ImageRegExp);
     if (!imageNames || !imageNames.length) {
       return <Text key={text}>{text}</Text>;

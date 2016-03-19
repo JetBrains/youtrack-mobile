@@ -25,7 +25,10 @@ export default class SingeIssueView extends React.Component {
     //StatusBarIOS.setNetworkActivityIndicatorVisible(true);
 
     return this.props.api.getIssue(id)
-      .then((issue) => ApiHelper.fillFieldHashOldRest(issue))
+      .then((issue) => {
+        issue.fieldHash = ApiHelper.makeFieldHash(issue);
+        return issue;
+      })
       .then((issue) => {
         console.log('Issue', issue);
         this.setState({issue});
@@ -45,13 +48,14 @@ export default class SingeIssueView extends React.Component {
   }
 
   getAuthorForText(issue) {
+
     let forText = () => {
       if (issue.fieldHash.Assignee) {
-        return `for ${issue.fieldHash.Assignee[0].fullName}`;
+        return `for ${issue.fieldHash.Assignee.login || issue.fieldHash.Assignee.name}`;
       }
       return '    Unassigned'
     };
-    return `${issue.fieldHash.reporterFullName} ${forText()}`
+    return `${issue.reporter.name || issue.reporter.login} ${forText()}`
   }
 
   _selectUser() {
@@ -74,23 +78,21 @@ export default class SingeIssueView extends React.Component {
     return (
       <View style={styles.issueViewContainer}>
         <Text style={styles.authorForText}>{this.getAuthorForText(issue)}</Text>
-        <Text style={styles.summary}>{issue.fieldHash.summary}</Text>
-        {issue.fieldHash.description && <View style={styles.description}>
-          {TextWithImages.renderView(issue.fieldHash.description, issue.fieldHash.attachments)}
+        <Text style={styles.summary}>{issue.summary}</Text>
+        {issue.description && <View style={styles.description}>
+          {TextWithImages.renderView(issue.description, issue.attachments)}
         </View>}
 
-        {issue.fieldHash.attachments && <ScrollView contentInset={{top:0}}
+        {issue.attachments && <ScrollView contentInset={{top:0}}
                                                     automaticallyAdjustContentInsets={false}
                                                     style={styles.attachesContainer} horizontal={true}>
-          {this._renderAttachments(issue.fieldHash.attachments)}
+          {this._renderAttachments(issue.attachments)}
         </ScrollView>}
       </View>
     );
   }
 
   _renderFooter(issue) {
-    let fieldsToDisplay = (issue.field || []).filter(field => field.name[0] === field.name[0].toUpperCase());
-
     return (<View>
       <ScrollView contentInset={{top:0}}
                   automaticallyAdjustContentInsets={false}
@@ -101,10 +103,10 @@ export default class SingeIssueView extends React.Component {
           <Image style={styles.footerIcon} source={arrow}/>
         </TouchableOpacity>}
 
-        <CustomField key="Project" field={{name: 'Project', value: issue.fieldHash.projectShortName}}/>
+        <CustomField key="Project" field={{projectCustomField: {field: {name: 'Project'}}, value: {name: issue.project.shortName}}}/>
 
-        {fieldsToDisplay.map((field) => {
-          return (<CustomField key={field.name} field={field}/>);
+        {issue.fields.map((field) => {
+          return (<CustomField key={field.id} field={field}/>);
         })}
       </ScrollView>
     </View>);
@@ -114,7 +116,7 @@ export default class SingeIssueView extends React.Component {
     return (
       <View style={styles.container}>
         <Header leftButton={<Text>List</Text>}>
-          <Text>{this.props.issueId}</Text>
+          <Text>{this.state.issue && (`${this.state.issue.project.shortName}-${this.state.issue.numberInProject}`)}</Text>
         </Header>
         {this.state.issue && <ScrollView contentInset={{top:0}} automaticallyAdjustContentInsets={false}>
           {this._renderIssueView(this.state.issue)}
@@ -126,12 +128,12 @@ export default class SingeIssueView extends React.Component {
                        onSubmitEditing={(e) => this.addComment(this.state.issue, e.nativeEvent.text) && this.setState({commentText: null})}
                        style={styles.commentInput}/>
           </View>
-          <SingleIssueComments issue={this.state.issue} api={this.props.api}/>
+          <SingleIssueComments comments={this.state.issue.comments} attachments={this.state.issue.attachments} api={this.props.api}/>
         </ScrollView>}
         {this.state.issue && this._renderFooter(this.state.issue)}
 
         {this.state.displayUserSelect &&
-        <UserSelect title={`${this.props.issueId} ${this.state.issue.fieldHash.summary}`}></UserSelect>}
+        <UserSelect title={`${this.props.issueId} ${this.state.issue.summary}`}></UserSelect>}
       </View>
     );
   }

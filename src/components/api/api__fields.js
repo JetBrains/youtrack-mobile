@@ -11,6 +11,7 @@ const ISSUE_USER_FIELDS = toField([
   '$type',
   'login',
   'id',
+  'ringId',
   'name'
 ]);
 
@@ -79,6 +80,17 @@ const ISSUE_FIELD_FIELDS = toField([
   }
 ]);
 
+const ISSUE_ATTACHMENTS_FIELDS = toField([
+  '$type',
+  'id'
+]);
+
+const ISSUE_COMMENTS_FIELDS = toField([
+  'id',
+  'text',
+  {author: ISSUE_USER_FIELDS}
+]);
+
 export default {
   issuesOnList: toField([
     'id',
@@ -88,5 +100,16 @@ export default {
     'numberInProject',
     {reporter: ISSUE_USER_FIELDS},
     {fields: ISSUE_FIELD_FIELDS}
+  ]),
+  singleIssue: toField([
+    'id',
+    'summary',
+    'resolved',
+    {project: ISSUE_PROJECT_FIELDS},
+    'numberInProject',
+    {reporter: ISSUE_USER_FIELDS},
+    {fields: ISSUE_FIELD_FIELDS},
+    {attachments: ISSUE_ATTACHMENTS_FIELDS},
+    {comments: ISSUE_COMMENTS_FIELDS}
   ])
 }

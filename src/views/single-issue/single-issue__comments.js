@@ -15,11 +15,11 @@ export default class SingleIssueComments extends React.Component {
     return comments.map((comment) => {
       return (
         <View key={comment.id} style={styles.commentWrapper}>
-          <Avatar style={styles.avatar} api={this.props.api} userLogin={comment.author}/>
+          <Avatar style={styles.avatar} api={this.props.api} userRingId={comment.author.ringId}/>
           <View style={styles.comment}>
             <Text>
-              <Text style={{color: '#1CAFE4'}}>{comment.authorFullName}</Text>
-              <Text style={{color: '#888'}}> {relativeDate(comment.created)}</Text>
+              <Text style={{color: '#1CAFE4'}}>{comment.author.name || comment.author.login}</Text>
+              <Text style={{color: '#888'}}> {relativeDate(comment.created)} [todo] No date in comment</Text>
             </Text>
             <View style={styles.commentText}>{this._renderComment(comment, attachments)}</View>
           </View>
@@ -29,13 +29,13 @@ export default class SingleIssueComments extends React.Component {
   }
 
   render() {
-    let issue = this.props.issue;
-    let comments = (issue.comment || []).reduceRight((val, item) => val.concat([item]), []); //reverse to get designed order of comments
+    let comments = this.props.comments;
+    comments = comments.reduceRight((val, item) => val.concat([item]), []); //reverse to get designed order of comments
 
     let NoComments = <Text style={{textAlign: 'center'}}>No comments yet</Text>;
 
     return (<View style={styles.commentsContainer}>
-      {comments.length ? this._renderCommentsList(comments, issue.fieldHash.attachments) : NoComments}
+      {comments.length ? this._renderCommentsList(comments, this.props.attachments) : NoComments}
     </View>);
   }
 }

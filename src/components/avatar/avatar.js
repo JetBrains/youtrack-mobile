@@ -7,18 +7,15 @@ export default class Avatar extends React.Component {
   }
 
   componentDidMount() {
-    this.loadAvatarUrl(this.props.userLogin);
+    this.loadAvatarUrl(this.props.userRingId);
   }
 
-  loadAvatarUrl(authorLogin) {
-    this.props.api.getUser(authorLogin)
-      .then((user) => {
-        return this.props.api.getUserFromHub(user.ringId)
-          .then(user => user.avatar.url);
-      })
+  loadAvatarUrl(userRingId) {
+    this.props.api.getUserFromHub(userRingId)
+      .then(user => user.avatar.url)
       .then(avatarUrl => this.setState({avatarUrl}))
       .catch(() => {
-        console.warn('Cant load user', authorLogin);
+        console.warn('Cant load user', userRingId);
       });
   }
 
@@ -28,5 +25,5 @@ export default class Avatar extends React.Component {
 }
 
 Avatar.propTypes = {
-  userLogin: PropTypes.string.isRequired
+  userRingId: PropTypes.string.isRequired
 };
