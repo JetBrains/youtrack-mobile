@@ -38,6 +38,51 @@ let API = {
     return (folders || {}).sort((folder) => {
       //TODO
     });
+  },
+  //Ported from youtrack frontend
+  toField: function toFieldConstructor(fields) {
+    const toArray = function(object) {
+      if (Array.isArray(object)) {
+        return object;
+      }
+
+      return [object];
+    };
+    
+    const toFieldString = function(fields) {
+      return toArray(fields).map(function(field) {
+        if (typeof field === 'string') {
+          return field;
+        }
+
+        if (field.constructor === toFieldConstructor) {
+          return field.toString();
+        }
+
+        if (Array.isArray(field)) {
+          return toFieldString(field);
+        }
+
+        return Object.keys(field).map(function(key) {
+          var value = field[key];
+
+          if (value) {
+            return `${key}(${toFieldString(value)})`;
+          }
+
+          return key;
+        });
+      }).join(',');
+    };
+
+    const fieldsString = toFieldString(fields);
+
+    return {
+      constructor: toFieldConstructor,
+      toString: function() {
+        return fieldsString;
+      }
+    };
   }
 };
 
