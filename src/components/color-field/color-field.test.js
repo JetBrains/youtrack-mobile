@@ -29,14 +29,14 @@ describe('<ColorField/>', () => {
     const container = shallow(<ColorField field={fakeField}/>).find('View');
     const backgroundColor = container.props().style[1].backgroundColor;
 
-    backgroundColor.should.equal('#FFF');
+    backgroundColor.should.equal('#0066cc');
   });
 
   it('should set foreground color', () => {
     const container = shallow(<ColorField field={fakeField}/>).find('Text');
     const backgroundColor = container.props().style[1].color;
 
-    backgroundColor.should.equal('#0066cc');
+    backgroundColor.should.equal('#FFF');
   });
 
 });

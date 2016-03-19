@@ -1,6 +1,6 @@
 import React, {View, Text, StyleSheet, PropTypes} from 'react-native';
 
-const SIZE = 20;
+const SIZE = 22;
 
 const COLORS = [
   {color: '#000',     backgroundColor: 'transparent', borderColor: 'transparent'},
@@ -28,14 +28,19 @@ const COLORS = [
 
 export default class ColorField extends React.Component {
   _getColorById(id) {
+    console.log('COLOR>>, id = ', id, COLORS[id]);
     return COLORS[id];
   }
   _getBackgroundColor() {
-    return this.props.field.color && this._getColorById(this.props.field.color.id).color;
+    return this.props.field.color && this._getColorById(this.props.field.color.id).backgroundColor;
   }
 
   _getForegroundColor() {
-    return this.props.field.color && this._getColorById(this.props.field.color.id).backgroundColor;
+    return this.props.field.color && this._getColorById(this.props.field.color.id).color;
+  }
+
+  _getBorderColor() {
+    return this.props.field.color && this._getColorById(this.props.field.color.id).borderColor;
   }
 
   _getFieldLetter() {
@@ -44,7 +49,7 @@ export default class ColorField extends React.Component {
 
   render() {
     return (
-      <View style={[styles.wrapper, {backgroundColor: this._getBackgroundColor()}]}>
+      <View style={[styles.wrapper, {backgroundColor: this._getBackgroundColor(), borderColor: this._getBorderColor()}]}>
         <Text style={[styles.text, {color: this._getForegroundColor()}]}>{this._getFieldLetter()}</Text>
       </View>
     );
@@ -61,6 +66,7 @@ const styles = StyleSheet.create({
     height: SIZE,
     borderRadius: 4,
     flex: 1,
+    borderWidth: 1,
     justifyContent: 'center'
   },
   text: {

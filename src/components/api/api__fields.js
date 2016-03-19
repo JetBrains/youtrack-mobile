@@ -29,7 +29,7 @@ const ISSUE_FIELD_VALUE = toField(
 
       {
         'color': [
-          'id',
+          'id'
         ]
       }
 

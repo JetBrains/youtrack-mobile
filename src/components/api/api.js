@@ -96,26 +96,26 @@ class Api {
       fields: fields.issuesOnList.toString()
     });
 
+    const queryOldString = qs.stringify({
+      useImplicitSort: true,
+      with: ['summary', 'resolved', 'priority', 'reporterFullName', 'assignee'],
+
+      max: $top,
+      after: $skip,
+      filter: query
+    }, {indices: false});
+
+    this.makeAuthorizedRequestOldRest(`${this.youTrackOldIssueUrl}?${queryOldString}`)
+      .then(res => {
+        console.log('OLD REST>>>', res.issue)
+        return res.issue;
+      });
+
     return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`)
       .then(res => {
         console.log('NEW REST>>>', res);
         return res;
       })
-
-    // const queryOldString = qs.stringify({
-    //   useImplicitSort: true,
-    //   with: ['summary', 'resolved', 'priority', 'reporterFullName', 'assignee'],
-    //
-    //   max: $top,
-    //   after: $skip,
-    //   filter: query
-    // }, {indices: false});
-    //
-    // return this.makeAuthorizedRequestOldRest(`${this.youTrackOldIssueUrl}?${queryOldString}`)
-    //   .then(res => {
-    //     console.log('OLD REST>>>', res.issue)
-    //     return res.issue;
-    //   });
   }
 
   getIssueFolders() {
