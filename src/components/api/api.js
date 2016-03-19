@@ -1,4 +1,5 @@
 import qs from 'qs';
+import fields from './api__fields';
 
 class Api {
   constructor(auth) {
@@ -92,7 +93,7 @@ class Api {
   getIssues(query = '', $top, $skip = 0) {
     const queryString = qs.stringify({
       query, $top, $skip,
-      fields: 'id,summary,resolved,reporter(id,name,login),project(id,shortName),numberInProject'
+      fields: fields.issuesOnList.toString()
     });
 
     return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`)

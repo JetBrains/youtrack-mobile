@@ -1,5 +1,5 @@
 let API = {
-  fillFieldHash: (issue) => {
+  fillFieldHashOldRest: (issue) => {
     let fieldHash = {};
 
     (issue.field || []).forEach((field) => {
@@ -17,8 +17,17 @@ let API = {
     return issue;
   },
 
+  makeFieldHash: (issue) => {
+    let fieldHash = {};
+    (issue.fields || []).forEach(field => {
+      const fieldName = field.projectCustomField.field.name;
+      fieldHash[fieldName] = field.value;
+    });
+    return fieldHash;
+  },
+
   fillIssuesFieldHash: (issues = []) => {
-    issues.forEach(issue => API.fillFieldHash(issue));
+    issues.forEach(issue => issue.fieldHash = API.makeFieldHash(issue));
     return issues;
   },
 
@@ -48,7 +57,7 @@ let API = {
 
       return [object];
     };
-    
+
     const toFieldString = function(fields) {
       return toArray(fields).map(function(field) {
         if (typeof field === 'string') {
@@ -64,7 +73,7 @@ let API = {
         }
 
         return Object.keys(field).map(function(key) {
-          var value = field[key];
+          const value = field[key];
 
           if (value) {
             return `${key}(${toFieldString(value)})`;

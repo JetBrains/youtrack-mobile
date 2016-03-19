@@ -7,8 +7,8 @@ class IssueRow extends React.Component {
   static _getSubText(issue) {
 
     let forText = () => {
-      if (issue.Assignee) {
-        return `for ${issue.Assignee[0].fullName}`;
+      if (issue.fieldHash.Assignee) {
+        return `for ${issue.fieldHash.Assignee.login || issue.fieldHash.Assignee.name}`;
       }
       return '    Unassigned'
     };
@@ -31,7 +31,7 @@ class IssueRow extends React.Component {
       <TouchableHighlight underlayColor='#FFF' onPress={() => this.props.onClick(issue)}>
         <View style={styles.row}>
           <View>
-            {issue.priority ? <ColorField field={issue.priority}></ColorField> : <View/>}
+            {issue.fieldHash.Priority ? <ColorField field={issue.fieldHash.Priority}></ColorField> : <View/>}
           </View>
           <View style={styles.rowText}>
             <View style={styles.rowTopLine}>

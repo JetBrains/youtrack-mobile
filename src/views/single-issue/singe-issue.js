@@ -25,7 +25,7 @@ export default class SingeIssueView extends React.Component {
     //StatusBarIOS.setNetworkActivityIndicatorVisible(true);
 
     return this.props.api.getIssue(id)
-      .then((issue) => ApiHelper.fillFieldHash(issue))
+      .then((issue) => ApiHelper.fillFieldHashOldRest(issue))
       .then((issue) => {
         console.log('Issue', issue);
         this.setState({issue});
