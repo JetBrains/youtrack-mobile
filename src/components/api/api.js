@@ -9,7 +9,7 @@ class Api {
     this.youTrackUrl = this.config.backendUrl;
     this.youTrackIssueUrl = `${this.youTrackUrl}/api/issues`;
     this.youTrackOldIssueUrl = `${this.youTrackUrl}/rest/issue/`;
-    this.youTrackIssuesFolderUrl = `${this.youTrackUrl}/rest/issuesFolder`;
+    this.youTrackIssuesFolderUrl = `${this.youTrackUrl}/api/issueFolders`;
     this.youTrackUserUrl = `${this.youTrackUrl}/rest/admin/user/`;
   }
 
@@ -119,7 +119,7 @@ class Api {
   }
 
   getIssueFolders() {
-    return this.makeAuthorizedRequestOldRest(this.youTrackIssuesFolderUrl);
+    return this.makeAuthorizedRequest(`${this.youTrackIssuesFolderUrl}?fields=name,query`);
   }
 
   createIssue(issue) {

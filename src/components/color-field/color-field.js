@@ -28,7 +28,6 @@ const COLORS = [
 
 export default class ColorField extends React.Component {
   _getColorById(id) {
-    console.log('COLOR>>, id = ', id, COLORS[id]);
     return COLORS[id];
   }
   _getBackgroundColor() {

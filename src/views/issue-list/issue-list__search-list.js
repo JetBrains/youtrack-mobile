@@ -20,9 +20,7 @@ class SearchListView extends React.Component {
       })
   }
 
-  applyIssueFolder(issueFolderName) {
-    let hasSpaces = issueFolderName.indexOf(' ') >= 0;
-    let query = '#' + (hasSpaces ? '{' : '') + issueFolderName + (hasSpaces ? '}' : ''); //eslint-disable-line prefer-template
+  applyIssueFolder(query) {
     this.props.onAddQuery(query);
   }
 
@@ -31,7 +29,7 @@ class SearchListView extends React.Component {
       <TouchableOpacity
         style={styles.searchRow}
         underlayColor='#FFF'
-        onPress={() => this.applyIssueFolder(issueFolder.name)}>
+        onPress={() => this.applyIssueFolder(issueFolder.query)}>
         <Text style={styles.searchText}>{issueFolder.name}</Text>
       </TouchableOpacity>);
   }
