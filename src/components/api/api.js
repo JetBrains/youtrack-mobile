@@ -96,21 +96,6 @@ class Api {
       fields: fields.issuesOnList.toString()
     });
 
-    const queryOldString = qs.stringify({
-      useImplicitSort: true,
-      with: ['summary', 'resolved', 'priority', 'reporterFullName', 'assignee'],
-
-      max: $top,
-      after: $skip,
-      filter: query
-    }, {indices: false});
-
-    this.makeAuthorizedRequestOldRest(`${this.youTrackOldIssueUrl}?${queryOldString}`)
-      .then(res => {
-        console.log('OLD REST>>>', res.issue)
-        return res.issue;
-      });
-
     return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`)
       .then(res => {
         console.log('NEW REST>>>', res);
@@ -138,7 +123,7 @@ class Api {
   getUserFromHub(id) {
     const queryString = qs.stringify({fields: 'avatar/url'});
 
-    return this.makeAuthorizedRequestOldRest(`${this.config.auth.serverUri}/api/rest/users/${id}?${queryString}`);
+    return this.makeAuthorizedRequest(`${this.config.auth.serverUri}/api/rest/users/${id}?${queryString}`);
   }
 }
 
