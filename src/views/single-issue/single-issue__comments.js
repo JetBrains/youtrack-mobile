@@ -19,7 +19,7 @@ export default class SingleIssueComments extends React.Component {
           <View style={styles.comment}>
             <Text>
               <Text style={{color: '#1CAFE4'}}>{comment.author.name || comment.author.login}</Text>
-              <Text style={{color: '#888'}}> {relativeDate(comment.created)} [todo] No date in comment</Text>
+              <Text style={{color: '#888'}}> {relativeDate(comment.created)}</Text>
             </Text>
             <View style={styles.commentText}>{this._renderComment(comment, attachments)}</View>
           </View>
