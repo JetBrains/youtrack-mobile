@@ -18,7 +18,7 @@ export default class CreateIssue extends React.Component {
       fields: [],
       project: {
         id: null,
-        name: 'not selected'
+        name: 'Not selected'
       },
 
       select: {
@@ -35,10 +35,14 @@ export default class CreateIssue extends React.Component {
     this.props.api.createIssue({
         summary: this.state.summary,
         description: this.state.description,
-        project: this.state.project
+        project: {
+          id: this.state.project.id
+        },
+        fields: this.state.fields
       })
       .then(res => {
         console.info('Issue created', res);
+        Actions.pop();
       })
       .catch(err => {
         console.warn('Cannot create issue', err);
@@ -61,10 +65,11 @@ export default class CreateIssue extends React.Component {
     this.setState({
       select: {
         show: true,
-        dataSource: () => this.props.api.getProjects(),
+        dataSource: this.props.api.getProjects.bind(this.props.api),
         titleField: 'name',
         onSelect: (project) => {
-          this.setState({project, select: {show: false}});
+          const fields = project.fields.map(it => ({projectCustomField: it}));
+          this.setState({project, fields: fields, select: {show: false}});
         }
       }
     });
@@ -96,8 +101,8 @@ export default class CreateIssue extends React.Component {
           field={{projectCustomField: {field: {name: 'Project'}}, value: this.state.project}}
           onPress={this.selectProject.bind(this)}/>
 
-        {issue.fields.map((field) => {
-          return (<CustomField key={field.id} field={field}/>);
+        {this.state.fields.map((field) => {
+          return (<CustomField key={field.projectCustomField.id} field={field}/>);
         })}
       </ScrollView>
     </View>);

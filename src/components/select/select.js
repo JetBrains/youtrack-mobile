@@ -51,9 +51,9 @@ export default class UserSelect extends React.Component {
             style={styles.searchInput}/>
         </View>
         <View style={styles.separator}/>
-        <ScrollView>
-          {this.state.items && this.state.items.map(item => this._renderRow(item))}
-        </ScrollView>
+        {this.state.items && <ScrollView>
+          {this.state.items.map(item => this._renderRow(item))}
+        </ScrollView>}
       </View>
     );
   }

@@ -79,9 +79,10 @@ class Api {
     return this.makeAuthorizedRequest(`${this.config.auth.serverUri}/api/rest/users/${id}?${queryString}`);
   }
 
-  getProjects() {
+  getProjects(query) {
     const queryString = qs.stringify({
-      fields: fields.project.toString()
+      fields: fields.project.toString(),
+      query: query
     });
     return this.makeAuthorizedRequest(`${this.youTrackProjectUrl}?${queryString}`);
   }

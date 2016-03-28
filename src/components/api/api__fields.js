@@ -38,6 +38,37 @@ const ISSUE_FIELD_VALUE = toField(
   }
 );
 
+const PROJECT_CUSTOM_FIELD_FIELDS = toField([
+  '$type',
+  'id',
+  'ordinal',
+  'canBeEmpty',
+  'emptyFieldText',
+  {
+    'bundle': [
+      'id',
+      'isUpdateable'
+    ]
+  },
+
+  {
+    'field': [
+      'id',
+      'name',
+      'ordinal',
+      'localizedName',
+      'isPublic',
+
+      {
+        'fieldType': [
+          'valueType',
+          'isMultiValue'
+        ]
+      }
+    ]
+  }
+]);
+
 const ISSUE_FIELD_FIELDS = toField([
   '$type',
   'id',
@@ -47,36 +78,7 @@ const ISSUE_FIELD_FIELDS = toField([
   ISSUE_FIELD_VALUE,
 
   {
-    'projectCustomField': [
-      '$type',
-      'id',
-      'ordinal',
-      'canBeEmpty',
-      'emptyFieldText',
-      {
-        'bundle': [
-          'id',
-          'isUpdateable'
-        ]
-      },
-
-      {
-        'field': [
-          'id',
-          'name',
-          'ordinal',
-          'localizedName',
-          'isPublic',
-
-          {
-            'fieldType': [
-              'valueType',
-              'isMultiValue'
-            ]
-          }
-        ]
-      }
-    ]
+    'projectCustomField': PROJECT_CUSTOM_FIELD_FIELDS
   }
 ]);
 
@@ -119,6 +121,7 @@ export default {
     'description',
     {leader: ISSUE_USER_FIELDS},
     {createdBy: ISSUE_USER_FIELDS},
-    'ringId'
+    'ringId',
+    {fields: PROJECT_CUSTOM_FIELD_FIELDS}
   ])
 }
