@@ -75,4 +75,11 @@ describe('Api helper', () => {
       hash.testField.should.deep.equal({foo: 'bar'});
     });
   });
+
+  describe('field types', () => {
+    it('should convert project field type to field type', () => {
+      const fieldType = ApiHelper.projectFieldTypeToFieldType('jetbrains.charisma.customfields.complex.ownedField.OwnedProjectCustomField');
+      fieldType.should.equal('jetbrains.charisma.customfields.complex.ownedField.SingleOwnedIssueCustomField');
+    });
+  });
 });

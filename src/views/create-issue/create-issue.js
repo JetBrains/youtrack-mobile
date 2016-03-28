@@ -7,6 +7,7 @@ import {Actions} from 'react-native-router-flux';
 import {attach, tag, next} from '../../components/icon/icon';
 import CustomField from '../../components/custom-field/custom-field';
 import Select from '../../components/select/select';
+import ApiHelper from '../../components/api/api__helper';
 
 const PROJECT_ID_STORAGE_KEY = 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE';
 
@@ -33,19 +34,20 @@ export default class CreateIssue extends React.Component {
     AsyncStorage.getItem(PROJECT_ID_STORAGE_KEY)
       .then(projectId => {
         if (projectId) {
-          return this.props.api.getProject(projectId)
-            .then(project => {
-              const fields = project.fields.map(it => {
-                return {projectCustomField: it, value: it.defaultValues && it.defaultValues[0]}
-              });
-              this.setState({project, fields: fields});
-            });
+          return this.loadProjectFields(projectId)
         }
       });
   }
 
   createIssue() {
     //TODO: convert attachements to multipart/form-data format properly
+    function prepareFieldValue(value) {
+      if (Array.isArray(value)) {
+        return value.map(prepareFieldValue);
+      }
+
+      return {id: value.id};
+    }
 
     this.props.api.createIssue({
         summary: this.state.summary,
@@ -53,7 +55,13 @@ export default class CreateIssue extends React.Component {
         project: {
           id: this.state.project.id
         },
-        fields: this.state.fields
+        fields: this.state.fields.filter(f => f.value).map(f => {
+          return {
+            $type: ApiHelper.projectFieldTypeToFieldType(f.projectCustomField.$type, f.projectCustomField.field.fieldType.isMultiValue),
+            id: f.id,
+            value: prepareFieldValue(f.value)
+          };
+        })
       })
       .then(res => {
         console.info('Issue created', res);
@@ -76,18 +84,49 @@ export default class CreateIssue extends React.Component {
     });
   }
 
+  loadProjectFields(projectId) {
+    return this.props.api.getProject(projectId)
+      .then(project => {
+        const fields = project.fields.map(it => {
+          return {id: it.id, projectCustomField: it, value: it.defaultValues && it.defaultValues[0]}
+        });
+        this.setState({project, fields: fields});
+      });
+  }
+
   selectProject() {
     this.setState({
       select: {
         show: true,
         dataSource: this.props.api.getProjects.bind(this.props.api),
-        titleField: 'name',
         onSelect: (project) => {
-          const fields = project.fields.map(it => {
-            return {projectCustomField: it, value: it.defaultValues && it.defaultValues[0]}
-          });
-          this.setState({project, fields: fields, select: {show: false}});
+          this.loadProjectFields(project.id);
           return AsyncStorage.setItem(PROJECT_ID_STORAGE_KEY, project.id);
+        }
+      }
+    });
+  }
+
+  editField(field) {
+    this.setState({
+      select: {
+        show: true,
+        dataSource: (query) => {
+          const users = field.projectCustomField.bundle.aggregatedUsers;
+          const values = field.projectCustomField.bundle.values;
+          return Promise.resolve(users || values);
+        },
+        onSelect: (val) => {
+          const updatedFields = this.state.fields.slice().map(f => {
+            if (f === field) {
+              f.value = val;
+            }
+            return f;
+          })
+          this.setState({
+            select: {show: false},
+            fields: updatedFields
+          });
         }
       }
     });
@@ -120,7 +159,7 @@ export default class CreateIssue extends React.Component {
           onPress={this.selectProject.bind(this)}/>
 
         {this.state.fields.map((field) => {
-          return (<CustomField key={field.projectCustomField.id} field={field}/>);
+          return (<CustomField key={field.id} field={field} onPress={() => this.editField(field)}/>);
         })}
       </ScrollView>
     </View>);
@@ -133,7 +172,7 @@ export default class CreateIssue extends React.Component {
         title={`Select project`}
         dataSource={config.dataSource}
         onSelect={config.onSelect}
-        titleField={config.titleField}
+        getTitle={(item) => item.name || item.login}
       />;
     }
   }

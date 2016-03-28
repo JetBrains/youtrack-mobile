@@ -65,6 +65,7 @@ class Api {
   }
 
   createIssue(issue) {
+    console.info('ISSUE TO CREATE>>>', issue)
     return this.makeAuthorizedRequest(this.youTrackIssueUrl, 'POST', issue);
   }
 
@@ -81,7 +82,7 @@ class Api {
 
   getProjects(query) {
     const queryString = qs.stringify({
-      fields: fields.project.toString(),
+      fields: fields.projectOnList.toString(),
       query: query
     });
     return this.makeAuthorizedRequest(`${this.youTrackProjectUrl}?${queryString}`);

@@ -27,7 +27,7 @@ export default class UserSelect extends React.Component {
           style={styles.itemIcon}
           source={{uri: 'http://lorempixel.com/64/64/'}}
         />}
-        <Text style={styles.itemTitle}>{item[this.props.titleField]}</Text>
+        <Text style={styles.itemTitle}>{this.props.getTitle(item)}</Text>
       </TouchableOpacity>
     )
   }

@@ -69,7 +69,9 @@ const PROJECT_CUSTOM_FIELD_FIELDS = toField([
   {
     'bundle': [
       'id',
-      'isUpdateable'
+      'isUpdateable',
+      {values: BUNDLE_VALUE},
+      {aggregatedUsers: ISSUE_USER_FIELDS}
     ]
   },
 
@@ -137,6 +139,12 @@ export default {
     {fields: ISSUE_FIELD_FIELDS},
     {attachments: ISSUE_ATTACHMENTS_FIELDS},
     {comments: ISSUE_COMMENTS_FIELDS}
+  ]),
+  projectOnList: toField([
+    'id',
+    'name',
+    'shortName',
+    'description'
   ]),
   project: toField([
     'id',
