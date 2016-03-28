@@ -43,7 +43,7 @@ export default class UserSelect extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header>
+        <Header leftButton={<Text>Cancel</Text>} onBack={this.props.onCancel.bind(this)}>
           <Text>{this.props.title}</Text>
         </Header>
         <View style={styles.inputWrapper}>
