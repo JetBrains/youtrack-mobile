@@ -69,7 +69,7 @@ export default class CreateIssue extends React.Component {
       })
       .catch(err => {
         console.warn('Cannot create issue', err);
-      })
+      });
   }
 
   attachPhoto(takeFromLibrary = true) {
@@ -169,7 +169,7 @@ export default class CreateIssue extends React.Component {
     const config = this.state.select;
     if (config.show) {
       return <Select
-        title={`Select project`}
+        title={`Select item`}
         dataSource={config.dataSource}
         onSelect={config.onSelect}
         onCancel={() => this.setState({select: {show: false}})}

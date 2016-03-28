@@ -14,7 +14,15 @@ import styles from './single-issue.styles';
 export default class SingeIssueView extends React.Component {
   constructor() {
     super();
-    this.state = {issue: null};
+    this.state = {
+      issue: null,
+
+      select: {
+        show: false,
+        dataSource: null,
+        onSelect: null
+      }
+    };
   }
 
   componentDidMount() {
@@ -58,10 +66,33 @@ export default class SingeIssueView extends React.Component {
     return `${issue.reporter.name || issue.reporter.login} ${forText()}`
   }
 
-  _selectUser() {
-    this.setState({displayUserSelect: !this.state.displayUserSelect});
+  _renderSelect() {
+    const config = this.state.select;
+    if (config.show) {
+      return <Select
+        title={`Select item`}
+        dataSource={config.dataSource}
+        onSelect={config.onSelect}
+        onCancel={() => this.setState({select: {show: false}})}
+        getTitle={(item) => item.name || item.login}
+      />;
+    }
   }
 
+  editField(field) {
+    this.setState({
+      select: {
+        show: true,
+        dataSource: (query) => {
+          return Promise.resolve([]);
+        },
+        onSelect: (val) => {
+         
+        }
+      }
+    });
+  }
+  
   _renderAttachments(attachments) {
     return (attachments || []).map((attach) => {
       return <TouchableOpacity underlayColor="#F8F8F8" onPress={() => {
@@ -95,15 +126,10 @@ export default class SingeIssueView extends React.Component {
   _renderFooter(issue) {
     return (<View>
       <ScrollView horizontal={true} style={styles.footer}>
-        {<TouchableOpacity underlayColor="#F8F8F8" style={styles.iconButton}
-                           onPress={() => this._selectUser()}>
-          <Image style={styles.footerIcon} source={arrow}/>
-        </TouchableOpacity>}
-
         <CustomField key="Project" field={{projectCustomField: {field: {name: 'Project'}}, value: {name: issue.project.shortName}}}/>
 
         {issue.fields.map((field) => {
-          return (<CustomField key={field.id} field={field}/>);
+          return (<CustomField key={field.id} field={field} onPress={() => this.editField(field)}/>);
         })}
       </ScrollView>
     </View>);
@@ -129,8 +155,7 @@ export default class SingeIssueView extends React.Component {
         </ScrollView>}
         {this.state.issue && this._renderFooter(this.state.issue)}
 
-        {this.state.displayUserSelect &&
-        <Select title={`${this.props.issueId} ${this.state.issue.summary}`}></Select>}
+        {this._renderSelect()}
       </View>
     );
   }
