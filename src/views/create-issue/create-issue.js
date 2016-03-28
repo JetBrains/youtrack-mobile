@@ -186,13 +186,13 @@ export default class CreateIssue extends React.Component {
               </View>
             </View>
             <View style={styles.separator}/>
-            <View style={styles.actionContainer}>
+            {false && <View style={styles.actionContainer}>
               <Image style={styles.actionIcon} source={tag}/>
               <View style={styles.actionContent}>
                 <Text>Add tag</Text>
                 <Image style={styles.arrowImage} source={next}></Image>
               </View>
-            </View>
+            </View>}
           </View>
         </ScrollView>
         {this._renderFooter(this.state)}
