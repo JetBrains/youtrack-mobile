@@ -23,7 +23,7 @@
     "react-native": "0.22.2",
     "react-native-image-picker": "0.14.3",
     "react-native-keychain": "0.2.7",
-    "react-native-router-flux": "2.3.12",
+    "react-native-router-flux": "3.2.3",
     "relative-date": "^1.1.2"
   },
   "devDependencies": {
