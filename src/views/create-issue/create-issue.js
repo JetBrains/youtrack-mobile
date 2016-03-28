@@ -83,7 +83,9 @@ export default class CreateIssue extends React.Component {
         dataSource: this.props.api.getProjects.bind(this.props.api),
         titleField: 'name',
         onSelect: (project) => {
-          const fields = project.fields.map(it => ({projectCustomField: it}));
+          const fields = project.fields.map(it => {
+            return {projectCustomField: it, value: it.defaultValues && it.defaultValues[0]}
+          });
           this.setState({project, fields: fields, select: {show: false}});
           return AsyncStorage.setItem(PROJECT_ID_STORAGE_KEY, project.id);
         }
