@@ -48,7 +48,7 @@ class YouTrackMobile extends React.Component {
                  initial={true}/>
 
           <Scene key="LogIn"
-                 type="replace"
+                 duration={1}
                  component={() => <LoginForm auth={this.auth} onLogIn={this.checkAuthorization.bind(this)}/>}/>
 
           <Scene key="IssueList"
