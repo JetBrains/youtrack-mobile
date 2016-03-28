@@ -1,4 +1,4 @@
-import React, {ScrollView, View, Text, TextInput, TouchableOpacity, Image} from 'react-native'
+import React, {ScrollView, View, Text, TextInput, TouchableOpacity, Image, AsyncStorage} from 'react-native'
 import styles from './create-issue.styles';
 import issueStyles from '../single-issue/single-issue.styles';
 import Header from '../../components/header/header';
@@ -7,6 +7,8 @@ import {Actions} from 'react-native-router-flux';
 import {attach, tag, next} from '../../components/icon/icon';
 import CustomField from '../../components/custom-field/custom-field';
 import Select from '../../components/select/select';
+
+const PROJECT_ID_STORAGE_KEY = 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE';
 
 export default class CreateIssue extends React.Component {
   constructor() {
@@ -27,6 +29,19 @@ export default class CreateIssue extends React.Component {
         onSelect: null
       }
     }
+
+    AsyncStorage.getItem(PROJECT_ID_STORAGE_KEY)
+      .then(projectId => {
+        if (projectId) {
+          return this.props.api.getProject(projectId)
+            .then(project => {
+              const fields = project.fields.map(it => {
+                return {projectCustomField: it, value: it.defaultValues && it.defaultValues[0]}
+              });
+              this.setState({project, fields: fields});
+            });
+        }
+      });
   }
 
   createIssue() {
@@ -70,6 +85,7 @@ export default class CreateIssue extends React.Component {
         onSelect: (project) => {
           const fields = project.fields.map(it => ({projectCustomField: it}));
           this.setState({project, fields: fields, select: {show: false}});
+          return AsyncStorage.setItem(PROJECT_ID_STORAGE_KEY, project.id);
         }
       }
     });

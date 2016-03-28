@@ -15,6 +15,28 @@ const ISSUE_USER_FIELDS = toField([
   'name'
 ]);
 
+const BUNDLE_VALUE = toField([
+  '$type',
+  'id',
+  'name',
+  'localizedName',
+  'description',
+  'assembleDate',
+  'ordinal',
+  'ringId', // for user bundle elements
+  'login', // for user bundle elements
+  'released',
+  'archived',
+  'releaseDate',
+  'hasRunningJob',
+  'isResolved',
+  'usersCount', // for groups
+
+  {owner: ['ringId', 'login']},
+
+  {color: ['id']}
+])
+
 const ISSUE_FIELD_VALUE = toField(
   {
     'value': [
@@ -66,7 +88,9 @@ const PROJECT_CUSTOM_FIELD_FIELDS = toField([
         ]
       }
     ]
-  }
+  },
+
+  {'defaultValues': BUNDLE_VALUE}
 ]);
 
 const ISSUE_FIELD_FIELDS = toField([

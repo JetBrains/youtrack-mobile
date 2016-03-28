@@ -86,6 +86,13 @@ class Api {
     });
     return this.makeAuthorizedRequest(`${this.youTrackProjectUrl}?${queryString}`);
   }
+
+  getProject(projectId) {
+    const queryString = qs.stringify({
+      fields: fields.project.toString()
+    });
+    return this.makeAuthorizedRequest(`${this.youTrackProjectUrl}/${projectId}?${queryString}`);
+  }
 }
 
 module.exports = Api;

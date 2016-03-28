@@ -15,7 +15,6 @@ export default class UserSelect extends React.Component {
     this._onSearch(this.state.query);
   }
 
-
   _onSearch(query) {
     this.props.dataSource(query)
       .then(items => this.setState({items}));
