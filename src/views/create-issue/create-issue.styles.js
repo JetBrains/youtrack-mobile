@@ -3,7 +3,8 @@ import {UNIT, COLOR_PINK} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '#FFF'
   },
   summaryInput: {
     margin: UNIT,

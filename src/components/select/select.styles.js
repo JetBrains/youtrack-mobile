@@ -34,12 +34,12 @@ export default StyleSheet.create({
     alignItems: 'center',
     padding: UNIT
   },
-  avatar: {
+  itemIcon: {
     width: UNIT * 4,
     height: UNIT * 4,
     borderRadius: UNIT * 2
   },
-  userName: {
+  itemTitle: {
     marginLeft: UNIT * 2,
     fontSize: 18,
     color: COLOR_PINK

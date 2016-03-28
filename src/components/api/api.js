@@ -8,6 +8,7 @@ class Api {
 
     this.youTrackUrl = this.config.backendUrl;
     this.youTrackIssueUrl = `${this.youTrackUrl}/api/issues`;
+    this.youTrackProjectUrl =`${this.youTrackUrl}/api/admin/projects`;
     this.youTrackIssuesFolderUrl = `${this.youTrackUrl}/api/issueFolders`;
   }
 
@@ -76,6 +77,13 @@ class Api {
     const queryString = qs.stringify({fields: 'avatar/url'});
 
     return this.makeAuthorizedRequest(`${this.config.auth.serverUri}/api/rest/users/${id}?${queryString}`);
+  }
+
+  getProjects() {
+    const queryString = qs.stringify({
+      fields: fields.project.toString()
+    });
+    return this.makeAuthorizedRequest(`${this.youTrackProjectUrl}?${queryString}`);
   }
 }
 

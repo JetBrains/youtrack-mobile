@@ -111,5 +111,14 @@ export default {
     {fields: ISSUE_FIELD_FIELDS},
     {attachments: ISSUE_ATTACHMENTS_FIELDS},
     {comments: ISSUE_COMMENTS_FIELDS}
+  ]),
+  project: toField([
+    'id',
+    'name',
+    'shortName',
+    'description',
+    {leader: ISSUE_USER_FIELDS},
+    {createdBy: ISSUE_USER_FIELDS},
+    'ringId'
   ])
 }

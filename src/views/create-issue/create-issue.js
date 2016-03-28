@@ -5,6 +5,8 @@ import Header from '../../components/header/header';
 import {UIImagePickerManager} from 'NativeModules';
 import {Actions} from 'react-native-router-flux';
 import {attach, tag, next} from '../../components/icon/icon';
+import CustomField from '../../components/custom-field/custom-field';
+import Select from '../../components/select/select';
 
 export default class CreateIssue extends React.Component {
   constructor() {
@@ -13,9 +15,17 @@ export default class CreateIssue extends React.Component {
       summary: null,
       description: null,
       attachments: [],
+      fields: [],
       project: {
-        id: '77-0'
-      } //TODO> project selection
+        id: null,
+        name: 'not selected'
+      },
+
+      select: {
+        show: false,
+        dataSource: null,
+        onSelect: null
+      }
     }
   }
 
@@ -47,6 +57,19 @@ export default class CreateIssue extends React.Component {
     });
   }
 
+  selectProject() {
+    this.setState({
+      select: {
+        show: true,
+        dataSource: () => this.props.api.getProjects(),
+        titleField: 'name',
+        onSelect: (project) => {
+          this.setState({project, select: {show: false}});
+        }
+      }
+    });
+  }
+
   _renderAttahes() {
     return this.state.attachments.map(img => {
       return (
@@ -59,6 +82,37 @@ export default class CreateIssue extends React.Component {
         </TouchableOpacity>
       );
     });
+  }
+
+  _renderFooter(issue) {
+    return (<View>
+      <ScrollView contentInset={{top:0}}
+                  automaticallyAdjustContentInsets={false}
+                  horizontal={true}
+                  style={issueStyles.footer}>
+
+        <CustomField
+          key="Project"
+          field={{projectCustomField: {field: {name: 'Project'}}, value: this.state.project}}
+          onPress={this.selectProject.bind(this)}/>
+
+        {issue.fields.map((field) => {
+          return (<CustomField key={field.id} field={field}/>);
+        })}
+      </ScrollView>
+    </View>);
+  }
+
+  _renderSelect() {
+    const config = this.state.select;
+    if (config.show) {
+      return <Select
+        title={`Select project`}
+        dataSource={config.dataSource}
+        onSelect={config.onSelect}
+        titleField={config.titleField}
+      />;
+    }
   }
 
   render() {
@@ -118,6 +172,10 @@ export default class CreateIssue extends React.Component {
             </View>
           </View>
         </View>
+
+        {this._renderFooter(this.state)}
+
+        {this._renderSelect()}
       </ScrollView>
     );
   }

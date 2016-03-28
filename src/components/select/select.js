@@ -1,5 +1,5 @@
 import React, {Text, ScrollView, View, TouchableOpacity, TextInput, Image, PropTypes} from 'react-native';
-import styles from './user-select.styles';
+import styles from './select.styles';
 import Header from '../header/header';
 
 export default class UserSelect extends React.Component {
@@ -7,23 +7,28 @@ export default class UserSelect extends React.Component {
     super();
     this.state = {
       query: '',
-      users: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+      items: null
     };
   }
 
-  _onSearch(query) {
-    this.props.dataSource(query)
-      .then(users => this.setState({users}));
+  componentDidMount() {
+    this._onSearch(this.state.query);
   }
 
-  _renderRow(user) {
+
+  _onSearch(query) {
+    this.props.dataSource(query)
+      .then(items => this.setState({items}));
+  }
+
+  _renderRow(item) {
     return (
-      <TouchableOpacity key={user} style={styles.row} onPress={() => this.props.onSelect(user)}>
-        <Image
-          style={styles.avatar}
+      <TouchableOpacity key={item.id} style={styles.row} onPress={() => this.props.onSelect(item)}>
+        {item.icon && <Image
+          style={styles.itemIcon}
           source={{uri: 'http://lorempixel.com/64/64/'}}
-        />
-        <Text style={styles.userName}>Some User</Text>
+        />}
+        <Text style={styles.itemTitle}>{item[this.props.titleField]}</Text>
       </TouchableOpacity>
     )
   }
@@ -37,7 +42,7 @@ export default class UserSelect extends React.Component {
         <View style={styles.inputWrapper}>
           <TextInput
             autoFocus={true}
-            placeholder="Search user"
+            placeholder="Search item"
             returnKeyType="search"
             autoCorrect={false}
             onSubmitEditing={(e) => this._onSearch(e.nativeEvent.text)}
@@ -47,7 +52,7 @@ export default class UserSelect extends React.Component {
         </View>
         <View style={styles.separator}/>
         <ScrollView>
-          {this.state.users.map(user => this._renderRow(user))}
+          {this.state.items && this.state.items.map(item => this._renderRow(item))}
         </ScrollView>
       </View>
     );

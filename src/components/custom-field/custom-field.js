@@ -1,4 +1,4 @@
-import React, {View, Text, StyleSheet, PropTypes} from 'react-native';
+import React, {TouchableOpacity, Text, StyleSheet, PropTypes} from 'react-native';
 import getColorById from '../color-field/color-field__colors';
 
 export default class CustomField extends React.Component {
@@ -47,10 +47,10 @@ export default class CustomField extends React.Component {
 
   render() {
     return (
-      <View style={styles.wrapper}>
+      <TouchableOpacity style={styles.wrapper} onPress={this.props.onPress}>
         <Text style={[styles.valueText, this.getValueStyle()]} testID="value">{this._getValue()}</Text>
         <Text style={styles.keyText} testID="name">{this._getKey()}</Text>
-      </View>
+      </TouchableOpacity>
     );
   }
 }
@@ -69,5 +69,6 @@ const styles = StyleSheet.create({
 });
 
 CustomField.propTypes = {
-  field: PropTypes.object.isRequired
+  field: PropTypes.object.isRequired,
+  onPress: PropTypes.func
 };

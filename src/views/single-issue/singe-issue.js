@@ -7,7 +7,7 @@ import SingleIssueComments from './single-issue__comments';
 import {Actions} from 'react-native-router-flux';
 import {arrow} from '../../components/icon/icon';
 import Header from '../../components/header/header';
-import UserSelect from '../../components/user-select/user-select';
+import Select from '../../components/select/select';
 import styles from './single-issue.styles';
 
 
@@ -133,7 +133,7 @@ export default class SingeIssueView extends React.Component {
         {this.state.issue && this._renderFooter(this.state.issue)}
 
         {this.state.displayUserSelect &&
-        <UserSelect title={`${this.props.issueId} ${this.state.issue.summary}`}></UserSelect>}
+        <Select title={`${this.props.issueId} ${this.state.issue.summary}`}></Select>}
       </View>
     );
   }
