@@ -17,7 +17,7 @@ export default class ColorField extends React.Component {
   }
 
   _getFieldLetter() {
-    return this.props.field.name.substr(0, 1);
+    return this.props.fullText ? this.props.field.name : this.props.field.name.substr(0, 1);
   }
 
   render() {

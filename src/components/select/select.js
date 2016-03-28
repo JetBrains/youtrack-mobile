@@ -1,6 +1,7 @@
 import React, {Text, ScrollView, View, TouchableOpacity, TextInput, Image, PropTypes} from 'react-native';
 import styles from './select.styles';
 import Header from '../header/header';
+import ColorField from '../color-field/color-field';
 
 export default class UserSelect extends React.Component {
   constructor() {
@@ -20,14 +21,21 @@ export default class UserSelect extends React.Component {
       .then(items => this.setState({items}));
   }
 
+  _renderTitle(item) {
+    if (item.color) {
+      return <ColorField field={{name: this.props.getTitle(item), color: item.color}} fullText={true}/>
+    }
+    return <Text style={styles.itemTitle}>{this.props.getTitle(item)}</Text>
+  }
+
   _renderRow(item) {
     return (
       <TouchableOpacity key={item.id} style={styles.row} onPress={() => this.props.onSelect(item)}>
         {item.icon && <Image
           style={styles.itemIcon}
-          source={{uri: 'http://lorempixel.com/64/64/'}}
+          source={{uri: item.icon}}
         />}
-        <Text style={styles.itemTitle}>{this.props.getTitle(item)}</Text>
+        {this._renderTitle(item)}
       </TouchableOpacity>
     )
   }
