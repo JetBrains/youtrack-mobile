@@ -3,6 +3,7 @@ import {UNIT, COLOR_LIGHT_GRAY, COLOR_PINK, FOOTER_HEIGHT} from '../../component
 
 export default StyleSheet.create({
   container: {
+    flex: 1,
     position: 'absolute',
     top: 0,
     left: 0,

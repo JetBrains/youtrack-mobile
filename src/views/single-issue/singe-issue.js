@@ -94,10 +94,7 @@ export default class SingeIssueView extends React.Component {
 
   _renderFooter(issue) {
     return (<View>
-      <ScrollView contentInset={{top:0}}
-                  automaticallyAdjustContentInsets={false}
-                  horizontal={true}
-                  style={styles.footer}>
+      <ScrollView horizontal={true} style={styles.footer}>
         {<TouchableOpacity underlayColor="#F8F8F8" style={styles.iconButton}
                            onPress={() => this._selectUser()}>
           <Image style={styles.footerIcon} source={arrow}/>
@@ -118,7 +115,7 @@ export default class SingeIssueView extends React.Component {
         <Header leftButton={<Text>List</Text>}>
           <Text>{this.state.issue && (`${this.state.issue.project.shortName}-${this.state.issue.numberInProject}`)}</Text>
         </Header>
-        {this.state.issue && <ScrollView contentInset={{top:0}} automaticallyAdjustContentInsets={false}>
+        {this.state.issue && <ScrollView>
           {this._renderIssueView(this.state.issue)}
           <View style={styles.commentInputWrapper}>
             <TextInput placeholder="Comment"
