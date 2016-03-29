@@ -91,11 +91,7 @@ export default class SingeIssueView extends React.Component {
         onSelect: (val) => {
           this.setState({select: {show: false}});
 
-          return this.props.api.updateIssueFieldValue(this.props.issueId, {
-            $type: field.$type,
-            id: field.id,
-            value: val
-          })
+          return this.props.api.updateIssueFieldValue(this.props.issueId, field.id, val)
             .then(() => this.loadIssue(this.props.issueId));
         }
       }

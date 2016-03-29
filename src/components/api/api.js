@@ -104,9 +104,10 @@ class Api {
     return this.makeAuthorizedRequest(`${this.youtTrackFieldBundleUrl}/${fieldType}/${bundleId}?${queryString}`);
   }
 
-  updateIssueFieldValue(issueId, field) {
+  updateIssueFieldValue(issueId, fieldId, value) {
     const queryString = qs.stringify({fields: 'id,ringId,value'});
-    return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/fields/${field.id}?${queryString}`, 'POST', field);
+    const body = {id: fieldId, value};
+    return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/fields/${fieldId}?${queryString}`, 'POST', body);
   }
 }
 
