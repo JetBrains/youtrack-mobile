@@ -20,6 +20,7 @@
   "dependencies": {
     "base64-js": "0.0.8",
     "qs": "6.1.0",
+    "react": "0.14.7",
     "react-native": "0.22.2",
     "react-native-image-picker": "0.14.3",
     "react-native-keychain": "0.2.7",
@@ -44,7 +45,6 @@
     "mocha": "2.4.5",
     "mocha-teamcity-reporter": "^1.0.0",
     "nodemon": "1.8.1",
-    "react": "0.14.7",
     "react-addons-test-utils": "0.14.7",
     "react-dom": "0.14.7",
     "react-native-cli": "0.1.7",
