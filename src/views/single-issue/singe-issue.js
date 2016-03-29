@@ -79,6 +79,8 @@ export default class SingeIssueView extends React.Component {
   }
 
   editField(field) {
+    this.setState({select: {show: false}});
+
     this.setState({
       select: {
         show: true,
@@ -87,7 +89,14 @@ export default class SingeIssueView extends React.Component {
             .then(res => res.aggregatedUsers || res.values);
         },
         onSelect: (val) => {
+          this.setState({select: {show: false}});
 
+          return this.props.api.updateIssueFieldValue(this.props.issueId, {
+            $type: field.$type,
+            id: field.id,
+            value: val
+          })
+            .then(() => this.loadIssue(this.props.issueId));
         }
       }
     });
