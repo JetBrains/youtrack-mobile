@@ -39,7 +39,7 @@ export default class LoginForm extends React.Component {
 
   render() {
     return (
-      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps={true}>
+      <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.logoContainer}>
           <Image style={styles.logoImage} source={logo}/>
         </View>

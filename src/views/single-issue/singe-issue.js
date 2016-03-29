@@ -130,7 +130,7 @@ export default class SingeIssueView extends React.Component {
 
   _renderFooter(issue) {
     return (<View>
-      <ScrollView horizontal={true} style={styles.footer} keyboardShouldPersistTaps={true}>
+      <ScrollView horizontal={true} style={styles.footer}>
         <CustomField key="Project" field={{projectCustomField: {field: {name: 'Project'}}, value: {name: issue.project.shortName}}}/>
 
         {issue.fields.map((field) => {
@@ -146,7 +146,7 @@ export default class SingeIssueView extends React.Component {
         <Header leftButton={<Text>List</Text>}>
           <Text>{this.state.issue && (`${this.state.issue.project.shortName}-${this.state.issue.numberInProject}`)}</Text>
         </Header>
-        {this.state.issue && <ScrollView keyboardShouldPersistTaps={true}>
+        {this.state.issue && <ScrollView>
           {this._renderIssueView(this.state.issue)}
           <View style={styles.commentInputWrapper}>
             <TextInput placeholder="Comment"
