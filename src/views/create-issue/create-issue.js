@@ -150,8 +150,7 @@ export default class CreateIssue extends React.Component {
 
   _renderFooter(issue) {
     return (<View>
-      <ScrollView contentInset={{top:0}}
-                  automaticallyAdjustContentInsets={false}
+      <ScrollView keyboardShouldPersistTaps={true}
                   horizontal={true}
                   style={issueStyles.footer}>
 
@@ -184,7 +183,7 @@ export default class CreateIssue extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps={true}>
           <Header leftButton={<Text>Cancel</Text>}
                   rightButton={<Text>Create</Text>}
                   onRightButtonClick={this.createIssue.bind(this)}>
