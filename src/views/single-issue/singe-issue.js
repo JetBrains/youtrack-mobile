@@ -5,7 +5,6 @@ import CustomField from '../../components/custom-field/custom-field';
 import TextWithImages from '../../components/text-with-images/text-with-images';
 import SingleIssueComments from './single-issue__comments';
 import {Actions} from 'react-native-router-flux';
-import {arrow} from '../../components/icon/icon';
 import Header from '../../components/header/header';
 import Select from '../../components/select/select';
 import styles from './single-issue.styles';
@@ -87,12 +86,12 @@ export default class SingeIssueView extends React.Component {
           return Promise.resolve([]);
         },
         onSelect: (val) => {
-         
+
         }
       }
     });
   }
-  
+
   _renderAttachments(attachments) {
     return (attachments || []).map((attach) => {
       return <TouchableOpacity underlayColor="#F8F8F8" onPress={() => {
