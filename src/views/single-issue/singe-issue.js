@@ -29,8 +29,6 @@ export default class SingeIssueView extends React.Component {
   }
 
   loadIssue(id) {
-    //StatusBarIOS.setNetworkActivityIndicatorVisible(true);
-
     return this.props.api.getIssue(id)
       .then((issue) => {
         issue.fieldHash = ApiHelper.makeFieldHash(issue);
@@ -39,7 +37,7 @@ export default class SingeIssueView extends React.Component {
       .then((issue) => {
         console.log('Issue', issue);
         this.setState({issue});
-        //StatusBarIOS.setNetworkActivityIndicatorVisible(false);
+        return issue;
       })
       .catch((res) => {
         console.error(res);
@@ -93,7 +91,8 @@ export default class SingeIssueView extends React.Component {
           this.setState({select: {show: false}});
 
           return this.props.api.updateIssueFieldValue(this.props.issueId, field.id, val)
-            .then(() => this.loadIssue(this.props.issueId));
+            .then(() => this.loadIssue(this.props.issueId))
+            .then((res) => this.props.onUpdate(res))
         }
       }
     });

@@ -96,7 +96,8 @@ class IssueList extends React.Component {
   goToIssue(issue) {
     Actions.SingleIssue({
       issueId: issue.id,
-      api: this.api
+      api: this.api,
+      onUpdate: () => this.loadIssues(null, null, false)
     });
   }
 
@@ -188,7 +189,7 @@ class IssueList extends React.Component {
         leftButton={<Text>Log Out</Text>}
         rightButton={<Text>Create</Text>}
         onBack={this.logOut.bind(this)}
-        onRightButtonClick={() => Actions.CreateIssue({api: this.api})}
+        onRightButtonClick={() => Actions.CreateIssue({api: this.api, onCreate: () => this.loadIssues(null, null, false)})}
       >
         <Text>Sort by: Updated</Text>
       </Header>

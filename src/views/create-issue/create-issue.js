@@ -65,6 +65,7 @@ export default class CreateIssue extends React.Component {
       })
       .then(res => {
         console.info('Issue created', res);
+        this.props.onCreate(res);
         Actions.pop();
       })
       .catch(err => {
