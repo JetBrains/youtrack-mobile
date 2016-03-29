@@ -90,7 +90,7 @@ export default class CreateIssue extends React.Component {
         const fields = project.fields.map(it => {
           return {id: it.id, projectCustomField: it, value: it.defaultValues && it.defaultValues[0]}
         });
-        this.setState({project, fields: fields});
+        this.setState({project, fields: fields, select: {show: false}});
       });
   }
 
@@ -108,13 +108,14 @@ export default class CreateIssue extends React.Component {
   }
 
   editField(field) {
+    this.setState({select: {show: false}});
+
     this.setState({
       select: {
         show: true,
         dataSource: (query) => {
-          const users = field.projectCustomField.bundle.aggregatedUsers;
-          const values = field.projectCustomField.bundle.values;
-          return Promise.resolve(users || values);
+          return this.props.api.getCustomFieldValues(field.projectCustomField.bundle.id, field.projectCustomField.field.fieldType.valueType)
+            .then(res => res.aggregatedUsers || res.values);
         },
         onSelect: (val) => {
           const updatedFields = this.state.fields.slice().map(f => {

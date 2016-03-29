@@ -10,6 +10,8 @@ class Api {
     this.youTrackIssueUrl = `${this.youTrackUrl}/api/issues`;
     this.youTrackProjectUrl =`${this.youTrackUrl}/api/admin/projects`;
     this.youTrackIssuesFolderUrl = `${this.youTrackUrl}/api/issueFolders`;
+
+    this.youtTrackFieldBundleUrl = `${this.youTrackUrl}/api/admin/customFieldSettings/bundles`;
   }
 
   makeAuthorizedRequest(url, method, body) {
@@ -93,6 +95,13 @@ class Api {
       fields: fields.project.toString()
     });
     return this.makeAuthorizedRequest(`${this.youTrackProjectUrl}/${projectId}?${queryString}`);
+  }
+
+  getCustomFieldValues(bundleId, fieldType) {
+    const queryString = qs.stringify({
+      fields: fields.bundle.toString()
+    });
+    return this.makeAuthorizedRequest(`${this.youtTrackFieldBundleUrl}/${fieldType}/${bundleId}?${queryString}`);
   }
 }
 

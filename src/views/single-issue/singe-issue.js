@@ -83,7 +83,8 @@ export default class SingeIssueView extends React.Component {
       select: {
         show: true,
         dataSource: (query) => {
-          return Promise.resolve([]);
+          return this.props.api.getCustomFieldValues(field.projectCustomField.bundle.id, field.projectCustomField.field.fieldType.valueType)
+            .then(res => res.aggregatedUsers || res.values);
         },
         onSelect: (val) => {
 

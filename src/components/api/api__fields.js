@@ -69,9 +69,7 @@ const PROJECT_CUSTOM_FIELD_FIELDS = toField([
   {
     'bundle': [
       'id',
-      'isUpdateable',
-      {values: BUNDLE_VALUE},
-      {aggregatedUsers: ISSUE_USER_FIELDS}
+      'isUpdateable'
     ]
   },
 
@@ -155,5 +153,11 @@ export default {
     {createdBy: ISSUE_USER_FIELDS},
     'ringId',
     {fields: PROJECT_CUSTOM_FIELD_FIELDS}
+  ]),
+  bundle: toField([
+    'id',
+    'isUpdateable',
+    {values: BUNDLE_VALUE},
+    {aggregatedUsers: ISSUE_USER_FIELDS}
   ])
 }
