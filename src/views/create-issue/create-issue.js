@@ -171,6 +171,7 @@ export default class CreateIssue extends React.Component {
     if (config.show) {
       return <Select
         title={`Select item`}
+        api={this.props.api}
         dataSource={config.dataSource}
         onSelect={config.onSelect}
         onCancel={() => this.setState({select: {show: false}})}

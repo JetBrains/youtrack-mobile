@@ -25,5 +25,6 @@ export default class Avatar extends React.Component {
 }
 
 Avatar.propTypes = {
+  api: PropTypes.object.isRequired,
   userRingId: PropTypes.string.isRequired
 };
