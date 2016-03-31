@@ -114,6 +114,7 @@ const ISSUE_ATTACHMENTS_FIELDS = toField([
 const ISSUE_COMMENTS_FIELDS = toField([
   'id',
   'text',
+  'created',
   {author: ISSUE_USER_FIELDS}
 ]);
 
