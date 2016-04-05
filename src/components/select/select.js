@@ -24,7 +24,7 @@ export default class UserSelect extends React.Component {
 
   _renderTitle(item) {
     if (item.color) {
-      return <ColorField field={{name: this.props.getTitle(item), color: item.color}} fullText={true}/>
+      return <ColorField text={this.props.getTitle(item)} color={item.color} fullText={true}/>
     }
     return <Text style={styles.itemTitle}>{this.props.getTitle(item)}</Text>
   }

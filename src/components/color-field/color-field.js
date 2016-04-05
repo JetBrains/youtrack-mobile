@@ -5,19 +5,19 @@ const SIZE = 22;
 
 export default class ColorField extends React.Component {
   _getBackgroundColor() {
-    return this.props.field.color && getColorById(this.props.field.color.id).backgroundColor;
+    return this.props.color && getColorById(this.props.color.id).backgroundColor;
   }
 
   _getForegroundColor() {
-    return this.props.field.color && getColorById(this.props.field.color.id).color;
+    return this.props.color && getColorById(this.props.color.id).color;
   }
 
   _getBorderColor() {
-    return this.props.field.color && getColorById(this.props.field.color.id).borderColor;
+    return this.props.color && getColorById(this.props.color.id).borderColor;
   }
 
   _getFieldLetter() {
-    return this.props.fullText ? this.props.field.name : this.props.field.name.substr(0, 1);
+    return this.props.fullText ? this.props.text : this.props.text.substr(0, 1);
   }
 
   render() {
@@ -30,7 +30,9 @@ export default class ColorField extends React.Component {
 }
 
 ColorField.propTypes = {
-  field: PropTypes.object.isRequired
+  text: PropTypes.string.isRequired,
+  color: PropTypes.object.isRequired,
+  fullText: PropTypes.bool
 };
 
 const styles = StyleSheet.create({

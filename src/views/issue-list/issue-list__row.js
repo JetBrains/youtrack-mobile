@@ -31,7 +31,7 @@ class IssueRow extends React.Component {
       <TouchableHighlight underlayColor='#FFF' onPress={() => this.props.onClick(issue)}>
         <View style={styles.row}>
           <View>
-            {issue.fieldHash.Priority ? <ColorField field={issue.fieldHash.Priority}></ColorField> : <View/>}
+            {issue.fieldHash.Priority ? <ColorField text={issue.fieldHash.Priority.name} color={issue.fieldHash.Priority.color}></ColorField> : <View/>}
           </View>
           <View style={styles.rowText}>
             <View style={styles.rowTopLine}>
