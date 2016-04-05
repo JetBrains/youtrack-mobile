@@ -57,7 +57,7 @@
     "react-native-cli": "0.1.7",
     "react-native-mock": "0.0.7",
     "react-native-webpack-server": "^0.8.3",
-    "sinon": "1.17.3",
+    "sinon": "^1.17.3",
     "url-loader": "0.5.7",
     "webpack": "^1.12.9",
     "webpack-dev-server": "^1.14.0"
