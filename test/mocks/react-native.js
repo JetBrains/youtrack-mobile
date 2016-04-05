@@ -5,7 +5,7 @@ import ReactNativeMocks from 'react-native-mock/build/react-native';
 function makeRenderable(componentClass) {
   return class extends componentClass {
     render() {
-      return <div {...this.props}>{this.props.children}</div>;
+      return <div>{this.props.children}</div>;
     }
   };
 }
