@@ -1,9 +1,9 @@
 const productionConfig = {
-  backendUrl: 'http://ring-demo-dev.labs.intellij.net/youtrack',
+  backendUrl: process.env.npm_package_config_backend_uri,
   auth: {
-    serverUri: 'http://ring-demo-dev.labs.intellij.net/hub',
-    clientId: '65ec59d0-8e71-40fd-bcb4-727555eafe07',
-    clientSecret: 'AhKqGkZtQpbW',
+    serverUri: process.env.npm_package_config_hub_server_uri,
+    clientId: process.env.npm_package_config_client_id,
+    clientSecret: process.env.npm_package_config_client_secret,
     scopes: 'Hub YouTrack',
     landingUrl: 'ytoauth://landing.url'
   }

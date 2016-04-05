@@ -2,6 +2,12 @@
   "name": "YouTrackMobile",
   "version": "0.0.1",
   "private": true,
+  "config": {
+    "backend-uri": "http://ring-demo-dev.labs.intellij.net/youtrack",
+    "hub-server-uri": "http://ring-demo-dev.labs.intellij.net/hub",
+    "client-id": "65ec59d0-8e71-40fd-bcb4-727555eafe07",
+    "client-secret": "AhKqGkZtQpbW"
+  },
   "scripts": {
     "start": "./node_modules/react-native-cli/index.js start",
     "start-webpack": "rnws start",
@@ -30,6 +36,7 @@
   "devDependencies": {
     "babel-core": "6.7.2",
     "babel-loader": "^6.2.0",
+    "babel-plugin-transform-inline-environment-variables": "6.5.0",
     "babel-preset-es2015": "6.6.0",
     "babel-preset-react": "6.5.0",
     "babel-preset-stage-1": "6.5.0",
