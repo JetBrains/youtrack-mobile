@@ -1,30 +1,31 @@
 
 import React from 'react';
+import ReactNativeMocks from 'react-native-mock/build/react-native';
 
-const ReactNative = React;
+function commonRender(props) {
+  return <div {...props}>{props.children}</div>;
+}
 
-export const PropTypes = React.PropTypes;
+class View extends ReactNativeMocks.View {
+  render() {
+    return commonRender(this.props);
+  }
+}
 
-const StyleSheet = {
-  create: (style) => style
-};
+class Text extends ReactNativeMocks.Text {
+  render() {
+    return commonRender(this.props);
+  }
+}
 
-const createComponent = (type) => {
-  return React.createClass({
-    displayName: type,
-    propTypes: {
-      children: React.PropTypes.node
-    },
-    render() {
-      return <div {...this.props}>{this.props.children}</div>;
-    }
-  });
-};
+class Image extends ReactNativeMocks.Image {
+  render() {
+    return commonRender(this.props);
+  }
+}
 
-const View = createComponent('View');
-const Text = createComponent('Text');
-const Image = createComponent('Image');
+ReactNativeMocks.View = View;
+ReactNativeMocks.Text = Text;
+ReactNativeMocks.Image = Image;
 
-export {StyleSheet, View, Text, Image};
-
-export default ReactNative;
+module.exports = ReactNativeMocks;
