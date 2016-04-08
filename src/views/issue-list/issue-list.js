@@ -247,10 +247,11 @@ class IssueList extends React.Component {
       {this._renderHeader()}
       <ListView
         dataSource={this.state.dataSource}
+        enableEmptySections={true}
         renderRow={(issue) => <IssueRow issue={issue} onClick={(issue) => this.goToIssue(issue)}></IssueRow>}
         renderSeparator={(sectionID, rowID) => <View style={styles.separator} key={rowID}/>}
         onEndReached={this.loadMore.bind(this)}
-        onEndReachedThreshold={10}
+        onEndReachedThreshold={30}
         renderScrollComponent={(props) => <ScrollView {...props} refreshControl={this._renderRefreshControl()}/>}
         refreshDescription="Refreshing issues"/>
 
