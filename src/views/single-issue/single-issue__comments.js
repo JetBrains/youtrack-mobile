@@ -1,9 +1,8 @@
 import styles from './single-issue.styles';
-import Avatar from '../../components/avatar/avatar';
 import relativeDate from 'relative-date';
 import TextWithImages from '../../components/text-with-images/text-with-images';
 
-import React, {View, Text} from 'react-native';
+import React, {View, Text, Image} from 'react-native';
 
 export default class SingleIssueComments extends React.Component {
 
@@ -15,10 +14,10 @@ export default class SingleIssueComments extends React.Component {
     return comments.map((comment) => {
       return (
         <View key={comment.id} style={styles.commentWrapper}>
-          <Avatar style={styles.avatar} api={this.props.api} userRingId={comment.author.ringId}/>
+          <Image style={styles.avatar} source={{uri: comment.author.avatarUrl}}/>
           <View style={styles.comment}>
             <Text>
-              <Text style={{color: '#1CAFE4'}}>{comment.author.name || comment.author.login}</Text>
+              <Text style={{color: '#1CAFE4'}}>{comment.author.fullName || comment.author.login}</Text>
               <Text style={{color: '#888'}}> {relativeDate(comment.created)}</Text>
             </Text>
             <View style={styles.commentText}>{this._renderComment(comment, attachments)}</View>

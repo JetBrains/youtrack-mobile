@@ -1,7 +1,6 @@
-import React, {Text, ScrollView, View, TouchableOpacity, TextInput, PropTypes} from 'react-native';
+import React, {Text, Image, ScrollView, View, TouchableOpacity, TextInput, PropTypes} from 'react-native';
 import styles from './select.styles';
 import Header from '../header/header';
-import Avatar from '../avatar/avatar';
 import ColorField from '../color-field/color-field';
 
 export default class UserSelect extends React.Component {
@@ -32,7 +31,7 @@ export default class UserSelect extends React.Component {
   _renderRow(item) {
     return (
       <TouchableOpacity key={item.id} style={styles.row} onPress={() => this.props.onSelect(item)}>
-        {item.ringId && <Avatar style={styles.itemIcon} userRingId={item.ringId} api={this.props.api}/>}
+        {item.avatarUrl && <Image style={styles.itemIcon} source={{uri: item.avatarUrl}}/>}
         {this._renderTitle(item)}
       </TouchableOpacity>
     )

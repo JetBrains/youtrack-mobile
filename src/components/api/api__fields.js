@@ -12,7 +12,8 @@ const ISSUE_USER_FIELDS = toField([
   'login',
   'id',
   'ringId',
-  'name'
+  'avatarUrl',
+  'fullName'
 ]);
 
 const BUNDLE_VALUE = toField([
@@ -45,6 +46,8 @@ const ISSUE_FIELD_VALUE = toField(
       'name',
       'localizedName',
       'ringId',
+      'fulLName',
+      'avatarUrl',
       'login',
       'minutes',
       'presentation',
