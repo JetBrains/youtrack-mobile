@@ -1,12 +1,15 @@
-import React, {View, StyleSheet, Image} from 'react-native';
+import React, {View, StyleSheet, Image, Text} from 'react-native';
 import {logo} from '../../components/icon/icon';
 import {UNIT} from '../../components/variables/variables';
+import config from '../../components/config/config';
 
 export default class Home extends React.Component {
   render() {
     return (
       <View style={styles.container}>
         <Image style={styles.logoImage} source={logo}/>
+        <Text style={styles.message}>Connecting to</Text>
+        <Text>{config.backendUrl}</Text>
       </View>
     );
   }
@@ -22,5 +25,8 @@ const styles = StyleSheet.create({
   logoImage: {
     height: UNIT * 20,
     resizeMode: 'contain'
+  },
+  message: {
+    marginTop: UNIT * 2
   }
 });
