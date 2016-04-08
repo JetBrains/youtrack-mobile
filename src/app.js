@@ -7,7 +7,7 @@ import IssueList from './views/issue-list/issue-list';
 import SingleIssue from './views/single-issue/singe-issue';
 import CreateIssue from './views/create-issue/create-issue';
 import ShowImage from './views/show-image/show-image';
-import config, {loadConfig} from './components/config/config';
+import {loadConfig} from './components/config/config';
 
 import React, {BackAndroid, Navigator} from 'react-native';
 
