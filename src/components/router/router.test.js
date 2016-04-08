@@ -26,10 +26,12 @@ describe('Router', () => {
     Router.registerRoute({
       name: 'foo',
       component: {barr: 'bar'},
-      animation: 'fake-animation'
+      animation: 'fake-animation',
+      props: {some: 'prop'}
     });
     Router.routes.foo.component.barr.should.equal('bar');
     Router.routes.foo.animation.should.equal('fake-animation');
+    Router.routes.foo.props.some.should.equal('prop');
   });
 
   it('should allow to call route right on Router', () => {

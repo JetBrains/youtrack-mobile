@@ -12,10 +12,11 @@ class Router {
     this._navigator = navigator;
   }
 
-  registerRoute({name, component, type, animation}) {
+  registerRoute({name, component, props, type, animation}) {
     this.routes[name] = {
       component,
       type,
+      props,
       animation
     };
 
