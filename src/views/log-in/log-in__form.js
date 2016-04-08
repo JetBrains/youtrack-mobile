@@ -54,7 +54,6 @@ export default class LoginForm extends React.Component {
           <TextInput
             autoCapitalize="none"
             autoCorrect={false}
-            autoFocus={true}
             style={styles.input}
             placeholder="Username"
             returnKeyType="next"

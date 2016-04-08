@@ -193,7 +193,6 @@ export default class CreateIssue extends React.Component {
           <View>
             <View>
               <TextInput
-                autoFocus={true}
                 style={styles.summaryInput}
                 placeholder="Summary"
                 returnKeyType="next"

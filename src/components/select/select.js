@@ -45,7 +45,6 @@ export default class UserSelect extends React.Component {
         </Header>
         <View style={styles.inputWrapper}>
           <TextInput
-            autoFocus={true}
             placeholder="Search item"
             returnKeyType="search"
             autoCorrect={false}
