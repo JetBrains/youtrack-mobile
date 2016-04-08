@@ -1,7 +1,7 @@
 import styles from './issue-list.styles';
 import ColorField from '../../components/color-field/color-field';
 import {next} from '../../components/icon/icon';
-import React, {View, Text, TouchableHighlight, Image} from 'react-native';
+import React, {View, Text, TouchableOpacity, Image} from 'react-native';
 
 class IssueRow extends React.Component {
   static _getSubText(issue) {
@@ -28,7 +28,7 @@ class IssueRow extends React.Component {
     let issue = this.props.issue;
 
     return (
-      <TouchableHighlight underlayColor='#FFF' onPress={() => this.props.onClick(issue)}>
+      <TouchableOpacity onPress={() => this.props.onClick(issue)}>
         <View style={styles.row}>
           <View>
             <View>
@@ -47,7 +47,7 @@ class IssueRow extends React.Component {
             <Text style={styles.subtext}>{IssueRow._getSubText(issue)}</Text>
           </View>
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   }
 }
