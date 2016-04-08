@@ -1,13 +1,13 @@
 import React, {Text, View, TouchableOpacity, PropTypes} from 'react-native';
 import styles from './header.styles';
-import {Actions} from 'react-native-router-flux';
+import Router from '../router/router';
 
 export default class Header extends React.Component {
   onBack() {
     if (this.props.onBack) {
       return this.props.onBack();
     }
-    return Actions.pop();
+    return Router.pop();
   }
 
   onRightButtonClick() {

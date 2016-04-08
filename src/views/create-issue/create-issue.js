@@ -3,7 +3,7 @@ import styles from './create-issue.styles';
 import issueStyles from '../single-issue/single-issue.styles';
 import Header from '../../components/header/header';
 import {UIImagePickerManager} from 'NativeModules';
-import {Actions} from 'react-native-router-flux';
+import Router from '../../components/router/router';
 import {attach, tag, next} from '../../components/icon/icon';
 import CustomField from '../../components/custom-field/custom-field';
 import Select from '../../components/select/select';
@@ -66,7 +66,7 @@ export default class CreateIssue extends React.Component {
       .then(res => {
         console.info('Issue created', res);
         this.props.onCreate(res);
-        Actions.pop();
+        Router.pop();
       })
       .catch(err => {
         console.warn('Cannot create issue', err);
@@ -139,7 +139,7 @@ export default class CreateIssue extends React.Component {
       return (
         <TouchableOpacity
           key={img.uri}
-          onPress={() => Actions.ShowImage({imageUrl: img.uri, imageName: img.path})}
+          onPress={() => Router.ShowImage({imageUrl: img.uri, imageName: img.path})}
         >
           <Image style={issueStyles.attachment}
                  source={{uri: img.uri}}/>

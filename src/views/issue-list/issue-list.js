@@ -20,7 +20,7 @@ import Api from '../../components/api/api';
 import ApiHelper from '../../components/api/api__helper';
 import IssueRow from './issue-list__row';
 import SearchesList from './issue-list__search-list';
-import {Actions} from 'react-native-router-flux';
+import Router from '../../components/router/router';
 
 const QUERY_STORAGE_KEY = 'YT_QUERY_STORAGE';
 const PAGE_SIZE = 10;
@@ -94,7 +94,7 @@ class IssueList extends React.Component {
   }
 
   goToIssue(issue) {
-    Actions.SingleIssue({
+    Router.SingleIssue({
       issueId: issue.id,
       api: this.api,
       onUpdate: () => this.loadIssues(null, null, false)
@@ -103,7 +103,7 @@ class IssueList extends React.Component {
 
   logOut() {
     this.props.auth.logOut()
-      .then(() => Actions.LogIn());
+      .then(() => Router.LogIn());
   }
 
   loadIssues(text, skip, showLoader = true) {
@@ -189,7 +189,7 @@ class IssueList extends React.Component {
         leftButton={<Text>Log Out</Text>}
         rightButton={<Text>Create</Text>}
         onBack={this.logOut.bind(this)}
-        onRightButtonClick={() => Actions.CreateIssue({api: this.api, onCreate: () => this.loadIssues(null, null, false)})}
+        onRightButtonClick={() => Router.CreateIssue({api: this.api, onCreate: () => this.loadIssues(null, null, false)})}
       >
         <Text>Sort by: Updated</Text>
       </Header>

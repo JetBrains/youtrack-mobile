@@ -4,7 +4,7 @@ import ApiHelper from '../../components/api/api__helper';
 import CustomField from '../../components/custom-field/custom-field';
 import TextWithImages from '../../components/text-with-images/text-with-images';
 import SingleIssueComments from './single-issue__comments';
-import {Actions} from 'react-native-router-flux';
+import Router from '../../components/router/router';
 import Header from '../../components/header/header';
 import Select from '../../components/select/select';
 import styles from './single-issue.styles';
@@ -101,7 +101,7 @@ export default class SingeIssueView extends React.Component {
   _renderAttachments(attachments) {
     return (attachments || []).map((attach) => {
       return <TouchableOpacity underlayColor="#F8F8F8" onPress={() => {
-                return Actions.ShowImage({imageUrl: attach.url, imageName: attach.value});
+                return Router.ShowImage({imageUrl: attach.url, imageName: attach.value});
             }} key={attach.id}>
         <Image style={styles.attachment}
                capInsets={{left: 15, right: 15, bottom: 15, top: 15}}
