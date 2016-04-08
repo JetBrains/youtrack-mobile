@@ -110,8 +110,9 @@ const ISSUE_FIELD_FIELDS = toField([
 ]);
 
 const ISSUE_ATTACHMENTS_FIELDS = toField([
-  '$type',
-  'id'
+  'id',
+  'name',
+  'url'
 ]);
 
 const ISSUE_COMMENTS_FIELDS = toField([
