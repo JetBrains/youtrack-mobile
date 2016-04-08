@@ -13,6 +13,7 @@ module.exports = StyleSheet.create({
   },
   headerButton: {
     width: UNIT * 9,
+    height: UNIT * 3,
     padding: 0,
     paddingLeft: UNIT,
     paddingRight: UNIT
