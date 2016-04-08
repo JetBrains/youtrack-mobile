@@ -48,7 +48,7 @@ describe('Router', () => {
 
   it('should navigate', () => {
     Router.registerRoute({
-      name: 'foo',
+      name: 'foo'
     });
 
     Router.navigate('foo');
