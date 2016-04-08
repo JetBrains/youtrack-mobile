@@ -3,10 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "config": {
-    "backend-uri": "https://youtrack.jetbrains.com",
-    "hub-server-uri": "https://hub.jetbrains.com",
-    "client-id": "1d7b44fa-4c08-4711-8bf7-9daa32558e70",
-    "client-secret": "c663c8d8-e883-46d6-b355-7a0b4ebb9619"
+    "backend-uri": "https://youtrack.jetbrains.com"
   },
   "scripts": {
     "start": "./node_modules/react-native-cli/index.js start",

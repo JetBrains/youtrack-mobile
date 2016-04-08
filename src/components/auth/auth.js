@@ -41,7 +41,7 @@ export default class Auth {
   // TODO(maksimrv): Remove duplication
   // in obtainToken and obtainTokenByCredentials
   obtainToken(code) {
-    console.info('Obtaining token for code', code);
+    console.info('Obtaining token for code', code, this.config.auth.serverUri);
 
     const config = this.config;
 

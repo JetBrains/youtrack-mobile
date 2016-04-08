@@ -1,14 +1,28 @@
-const productionConfig = {
+const config = {
   backendUrl: process.env.npm_package_config_backend_uri,
   auth: {
-    serverUri: process.env.npm_package_config_hub_server_uri,
-    clientId: process.env.npm_package_config_client_id,
-    clientSecret: process.env.npm_package_config_client_secret,
+    serverUri: null,
+    clientId: null,
+    clientSecret: null,
     scopes: 'Hub YouTrack',
     landingUrl: 'ytoauth://landing.url'
   }
 };
 
-console.log('config', productionConfig)
+function loadConfig(ytUrl = config.backendUrl) {
+  return fetch(`${ytUrl}/api/config?fields=ring(url),mobile(serviceSecret,serviceId)`)
+    .then(res => res.json())
+    .then(res => {
+      Object.assign(config.auth, {
+        serverUri: res.ring.url,
+        clientId: res.mobile.serviceId,
+        clientSecret: res.mobile.serviceSecret
+      });
 
-module.exports = productionConfig;
+      return config;
+    });
+}
+
+export {loadConfig};
+
+export default config;
