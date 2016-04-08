@@ -9,4 +9,6 @@ const productionConfig = {
   }
 };
 
+console.log('config', productionConfig)
+
 module.exports = productionConfig;
