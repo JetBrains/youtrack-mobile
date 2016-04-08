@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_PINK, COLOR_FONT_GRAY} from '../../components/variables/variables';
+import {UNIT, COLOR_PINK, COLOR_FONT_GRAY, COLOR_LIGHT_GRAY} from '../../components/variables/variables';
 
 const FONT_SIZE = 18;
 
@@ -27,6 +27,9 @@ export default StyleSheet.create({
     borderRadius: 6,
     backgroundColor: COLOR_PINK,
     alignItems: 'center'
+  },
+  signinDisabled: {
+    backgroundColor: COLOR_LIGHT_GRAY 
   },
   signinText: {
     fontSize: FONT_SIZE,

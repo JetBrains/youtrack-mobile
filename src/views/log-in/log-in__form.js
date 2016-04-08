@@ -13,16 +13,18 @@ export default class LoginForm extends React.Component {
     this.state = {
       username: '',
       password: '',
-      errorMessage: ''
+      errorMessage: '',
+      loggingIn: false
     };
 
 
     //This promise resolves on android only because it has different oauth model
     OAuth.checkIfBeingAuthorizing()
       .then(code => {
+        this.setState({loggingIn: true});
         return this.props.auth.authorizeOAuth(code)
           .catch(err => {
-            this.setState({errorMessage: err.error_description});
+            this.setState({errorMessage: err.error_description, loggingIn: false});
             throw err;
           });
       })
@@ -71,7 +73,9 @@ export default class LoginForm extends React.Component {
         </View>
 
         <View style={styles.actionsContainer}>
-          <TouchableOpacity style={styles.signin} onPress={this.logInViaCredentials.bind(this)}>
+          <TouchableOpacity style={[styles.signin, this.state.loggingIn ? styles.signinDisabled : {}]}
+                            disabled={this.state.loggingIn}
+                            onPress={this.logInViaCredentials.bind(this)}>
             <Text
               style={styles.signinText}>Log in</Text>
           </TouchableOpacity>
@@ -107,6 +111,7 @@ export default class LoginForm extends React.Component {
 
   logInViaCredentials() {
     const config = this.props.auth.config;
+    this.setState({loggingIn: true});
 
     this.props.auth.authorizeCredentials(this.state.username, this.state.password)
       .then(() => {
@@ -114,15 +119,17 @@ export default class LoginForm extends React.Component {
           .catch(noop);
       })
       .then(() => this.props.onLogIn())
-      .catch(err => this.setState({errorMessage: err.error_description}))
+      .catch(err => this.setState({errorMessage: err.error_description, loggingIn: false}));
   }
 
   logInViaHub() {
     const config = this.props.auth.config;
+    this.setState({loggingIn: true});
+
     return OAuth.authorizeInHub(config)
       .then(code => this.props.auth.authorizeOAuth(code))
       .then(() => this.props.onLogIn())
-      .catch(err => this.setState({errorMessage: err.error_description}))
+      .catch(err => this.setState({errorMessage: err.error_description, loggingIn: false}))
   }
 
   signUp() {
