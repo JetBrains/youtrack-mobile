@@ -7,7 +7,7 @@ import IssueList from './views/issue-list/issue-list';
 import SingleIssue from './views/single-issue/singe-issue';
 import CreateIssue from './views/create-issue/create-issue';
 import ShowImage from './views/show-image/show-image';
-import {loadConfig, DEFAULT_BACKEND} from './components/config/config';
+import {loadConfig, getStoredBackendURL} from './components/config/config';
 
 import React, {BackAndroid, Navigator} from 'react-native';
 
@@ -21,15 +21,15 @@ class YouTrackMobile extends React.Component {
       component: Home,
       type: 'reset',
       props: {
-        message: `Connecting to YouTrack...`,
-        backendUrl: DEFAULT_BACKEND,
+        message: `Loading configuration...`,
         onChangeBackendUrl: this.initialize.bind(this)
       }
     });
 
     this.addAndroidBackButtonSupport();
 
-    this.initialize(DEFAULT_BACKEND);
+    getStoredBackendURL()
+      .then((backendUrl) => this.initialize(backendUrl));
   }
 
   checkAuthorization() {
@@ -50,7 +50,10 @@ class YouTrackMobile extends React.Component {
   }
 
   initialize(youtrackUrl) {
-    Router._getNavigator() && Router.Home({backendUrl: youtrackUrl});
+    Router._getNavigator() && Router.Home({
+      backendUrl: youtrackUrl,
+      message: 'Connecting to YouTrack...'
+    });
 
     loadConfig(youtrackUrl)
       .then(config => {

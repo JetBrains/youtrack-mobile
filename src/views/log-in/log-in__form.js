@@ -26,7 +26,7 @@ export default class LoginForm extends React.Component {
         this.setState({loggingIn: true});
         return this.props.auth.authorizeOAuth(code)
           .catch(err => {
-            this.setState({errorMessage: err.error_description, loggingIn: false});
+            this.setState({errorMessage: err.error_description || err.message, loggingIn: false});
             throw err;
           });
       })
@@ -131,7 +131,7 @@ export default class LoginForm extends React.Component {
           .catch(noop);
       })
       .then(() => this.props.onLogIn())
-      .catch(err => this.setState({errorMessage: err.error_description, loggingIn: false}));
+      .catch(err => this.setState({errorMessage: err.error_description || err.message, loggingIn: false}));
   }
 
   openYouTrackUrlPrompt() {
@@ -149,7 +149,7 @@ export default class LoginForm extends React.Component {
     return OAuth.authorizeInHub(config)
       .then(code => this.props.auth.authorizeOAuth(code))
       .then(() => this.props.onLogIn())
-      .catch(err => this.setState({errorMessage: err.error_description, loggingIn: false}))
+      .catch(err => this.setState({errorMessage: err.error_description || err.message, loggingIn: false}))
   }
 
   signUp() {

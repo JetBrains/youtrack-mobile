@@ -2,9 +2,6 @@
   "name": "YouTrackMobile",
   "version": "0.0.1",
   "private": true,
-  "config": {
-    "backend-uri": "https://youtrack.jetbrains.com"
-  },
   "scripts": {
     "start": "./node_modules/react-native-cli/index.js start",
     "start-webpack": "rnws start",

@@ -23,7 +23,10 @@ export default class Home extends React.Component {
   }
 
   _renderUrl() {
-    return <TouchableOpacity onPress={this.openYouTrackUrlPrompt.bind(this)}>
+    if (!this.props.backendUrl) {
+      return;
+    }
+    return <TouchableOpacity onPress={this.openYouTrackUrlPrompt.bind(this)} style={styles.urlButton}>
       <Text style={styles.url}>{this.props.backendUrl}    Change...</Text>
     </TouchableOpacity>;
   }
@@ -70,7 +73,13 @@ const styles = StyleSheet.create({
     padding: UNIT * 2,
     textAlign: 'center'
   },
+  urlButton: {
+    position: 'absolute',
+    left: 0,
+    right: 0
+  },
   url: {
+    textAlign: 'center',
     marginTop: UNIT * 2,
     color: COLOR_FONT_GRAY
   }
