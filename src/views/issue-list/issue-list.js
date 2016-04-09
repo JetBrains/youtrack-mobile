@@ -236,12 +236,12 @@ class IssueList extends React.Component {
 
   render() {
     let searchContainer;
-    if (this.state.searchListHeight) {
-      searchContainer = <View ref="searchContainer" style={[styles.searchSuggestions, {bottom: this.state.keyboardSpace}]}>
-        <SearchesList getIssuesFolder={this.getIssueFolders.bind(this)}
-                      onAddQuery={this.onQueryUpdated.bind(this)}></SearchesList>
-      </View>
-    }
+    // if (this.state.searchListHeight) {
+    //   searchContainer = <View ref="searchContainer" style={[styles.searchSuggestions, {bottom: this.state.keyboardSpace}]}>
+    //     <SearchesList getIssuesFolder={this.getIssueFolders.bind(this)}
+    //                   onAddQuery={this.onQueryUpdated.bind(this)}></SearchesList>
+    //   </View>
+    // }
 
     return (<View style={styles.listContainer}>
       {this._renderHeader()}
