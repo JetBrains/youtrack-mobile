@@ -35,7 +35,7 @@ class Router {
     }
 
     const newRoute = this.routes[routeName];
-    newRoute.props = newRoute.props || props;
+    newRoute.props = Object.assign({}, newRoute.props, props);
 
     if (newRoute.type === 'replace') {
       return this._navigator.replace(newRoute);

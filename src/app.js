@@ -7,7 +7,7 @@ import IssueList from './views/issue-list/issue-list';
 import SingleIssue from './views/single-issue/singe-issue';
 import CreateIssue from './views/create-issue/create-issue';
 import ShowImage from './views/show-image/show-image';
-import {loadConfig} from './components/config/config';
+import {loadConfig, DEFAULT_BACKEND} from './components/config/config';
 
 import React, {BackAndroid, Navigator} from 'react-native';
 
@@ -16,17 +16,20 @@ class YouTrackMobile extends React.Component {
     super();
     this.state = {};
 
-    Router.registerRoute({name: 'Home', component: Home, type: 'reset'});
+    Router.registerRoute({
+      name: 'Home',
+      component: Home,
+      type: 'reset',
+      props: {
+        message: `Connecting to YouTrack...`,
+        backendUrl: DEFAULT_BACKEND,
+        onChangeBackendUrl: this.initialize.bind(this)
+      }
+    });
 
     this.addAndroidBackButtonSupport();
 
-    loadConfig()
-      .then(config => {
-        this.auth = new Auth(config);
-      })
-      .then(() => this.registerRoutes())
-      .then(() => this.checkAuthorization())
-      .catch(err => Router.Home({message: err.message}));
+    this.initialize(DEFAULT_BACKEND);
   }
 
   checkAuthorization() {
@@ -46,11 +49,23 @@ class YouTrackMobile extends React.Component {
     });
   }
 
+  initialize(youtrackUrl) {
+    Router._getNavigator() && Router.Home({backendUrl: youtrackUrl});
+
+    loadConfig(youtrackUrl)
+      .then(config => {
+        this.auth = new Auth(config);
+      })
+      .then(() => this.registerRoutes())
+      .then(() => this.checkAuthorization())
+      .catch(err => Router.Home({error: err}));
+  }
+
   registerRoutes() {
     Router.registerRoute({
       name: 'LogIn',
       component: LoginForm,
-      props: {auth: this.auth, onLogIn: this.checkAuthorization.bind(this)},
+      props: {auth: this.auth, onLogIn: this.checkAuthorization.bind(this), onChangeBackendUrl: this.initialize.bind(this)},
       type: 'reset'
     });
 

@@ -1,7 +1,8 @@
-import React, {Image, ScrollView, View, Text, TextInput, TouchableOpacity, Linking} from 'react-native'
+import React, {Image, ScrollView, View, Text, TextInput, TouchableOpacity, Linking, Modal} from 'react-native'
 import {logo} from '../../components/icon/icon';
 import Keystore from '../../components/keystore/keystore';
 import OAuth from '../../components/auth/auth__oauth';
+import Prompt from 'react-native-prompt';
 
 import styles from './log-in.styles';
 
@@ -14,7 +15,8 @@ export default class LoginForm extends React.Component {
       username: '',
       password: '',
       errorMessage: '',
-      loggingIn: false
+      loggingIn: false,
+      promptVisible: false
     };
 
 
@@ -46,9 +48,12 @@ export default class LoginForm extends React.Component {
           <Image style={styles.logoImage} source={logo}/>
         </View>
 
-        <Text style={styles.welcome}>
-          Login to YouTrack
-        </Text>
+        <TouchableOpacity onPress={this.openYouTrackUrlPrompt.bind(this)}>
+          <View>
+            <Text style={styles.welcome}>Login to YouTrack</Text>
+            <Text style={[styles.descriptionText, {marginTop: 8}]}>{this.props.auth.config.backendUrl}     Change...</Text>
+          </View>
+        </TouchableOpacity>
 
         <View style={styles.inputsContainer}>
           <TextInput
@@ -100,6 +105,14 @@ export default class LoginForm extends React.Component {
             Active Directory (Domain) Labs or Attlassian Jira</Text>
         </View>
 
+        <Prompt
+          title="Enter another YouTrack URL"
+          placeholder="https://youtrack.example.com"
+          defaultValue={this.props.auth.config.backendUrl}
+          visible={this.state.promptVisible}
+          onCancel={() => this.setState({promptVisible: false})}
+          onSubmit={this.changeYouTrackUrl.bind(this)}/>
+
       </ScrollView>
     );
   }
@@ -119,6 +132,14 @@ export default class LoginForm extends React.Component {
       })
       .then(() => this.props.onLogIn())
       .catch(err => this.setState({errorMessage: err.error_description, loggingIn: false}));
+  }
+
+  openYouTrackUrlPrompt() {
+    this.setState({promptVisible: true});
+  }
+
+  changeYouTrackUrl(newUrl) {
+    this.props.onChangeBackendUrl(newUrl);
   }
 
   logInViaHub() {
