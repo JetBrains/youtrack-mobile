@@ -51,7 +51,7 @@ export default class LoginForm extends React.Component {
         <TouchableOpacity onPress={this.openYouTrackUrlPrompt.bind(this)}>
           <View>
             <Text style={styles.welcome}>Login to YouTrack</Text>
-            <Text style={[styles.descriptionText, {marginTop: 8}]}>{this.props.auth.config.backendUrl}     Change...</Text>
+            <Text style={[styles.descriptionText, {marginTop: 8}]}>{this.props.auth.config.backendUrl}</Text>
           </View>
         </TouchableOpacity>
 

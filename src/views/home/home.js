@@ -27,7 +27,7 @@ export default class Home extends React.Component {
       return;
     }
     return <TouchableOpacity onPress={this.openYouTrackUrlPrompt.bind(this)} style={styles.urlButton}>
-      <Text style={styles.url}>{this.props.backendUrl}    Change...</Text>
+      <Text style={styles.url}>{this.props.backendUrl}</Text>
     </TouchableOpacity>;
   }
 
