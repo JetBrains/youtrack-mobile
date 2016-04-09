@@ -1,4 +1,3 @@
 {
-    "extends": "react-native/packager/react-packager/rn-babelrc.json",
-    "plugins": ["transform-inline-environment-variables"]
+    "extends": "react-native/packager/react-packager/rn-babelrc.json"
 }
