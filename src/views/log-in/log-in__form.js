@@ -5,7 +5,7 @@ import OAuth from '../../components/auth/auth__oauth';
 import Prompt from 'react-native-prompt';
 
 import styles from './log-in.styles';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
+import SmartScrollView from 'react-native-smart-scroll-view';
 
 const noop = () => {};
 
@@ -44,7 +44,7 @@ export default class LoginForm extends React.Component {
 
   render() {
     return (
-      <ScrollView contentContainerStyle={styles.container}>
+      <SmartScrollView contentContainerStyle={styles.container}>
         <View style={styles.logoContainer}>
           <Image style={styles.logoImage} source={logo}/>
         </View>
@@ -95,10 +95,10 @@ export default class LoginForm extends React.Component {
               Sign up</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.linkContainer} onPress={this.loginAsGuest.bind(this)}>
+          {/*<TouchableOpacity style={styles.linkContainer} onPress={this.loginAsGuest.bind(this)}>
             <Text style={styles.linkLike}>
               Log in as guest</Text>
-          </TouchableOpacity>
+          </TouchableOpacity>*/}
         </View>
 
         <View style={styles.description}>
@@ -114,8 +114,7 @@ export default class LoginForm extends React.Component {
           onCancel={() => this.setState({promptVisible: false})}
           onSubmit={this.changeYouTrackUrl.bind(this)}/>
 
-        <KeyboardSpacer/>
-      </ScrollView>
+      </SmartScrollView>
     );
   }
 
