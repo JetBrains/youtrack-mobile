@@ -52,6 +52,7 @@ class YouTrackMobile extends React.Component {
   initialize(youtrackUrl) {
     Router._getNavigator() && Router.Home({
       backendUrl: youtrackUrl,
+      error: null,
       message: 'Connecting to YouTrack...'
     });
 
