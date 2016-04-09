@@ -1,5 +1,7 @@
+const DEFAULT_BACKEND = process.env.npm_package_config_backend_uri;
+
 const config = {
-  backendUrl: process.env.npm_package_config_backend_uri,
+  backendUrl: DEFAULT_BACKEND,
   auth: {
     serverUri: null,
     clientId: null,
@@ -26,6 +28,4 @@ function loadConfig(ytUrl = config.backendUrl) {
     });
 }
 
-export {loadConfig};
-
-export default config;
+export {loadConfig, DEFAULT_BACKEND};

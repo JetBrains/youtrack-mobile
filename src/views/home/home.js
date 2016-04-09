@@ -1,7 +1,7 @@
 import React, {View, StyleSheet, Image, Text} from 'react-native';
 import {logo} from '../../components/icon/icon';
 import {UNIT} from '../../components/variables/variables';
-import config from '../../components/config/config';
+import {DEFAULT_BACKEND} from '../../components/config/config';
 
 export default class Home extends React.Component {
   render() {
@@ -9,7 +9,7 @@ export default class Home extends React.Component {
       <View style={styles.container}>
         <Image style={styles.logoImage} source={logo}/>
         <Text style={styles.message}>Connecting to</Text>
-        <Text>{config.backendUrl}</Text>
+        <Text>{DEFAULT_BACKEND}</Text>
       </View>
     );
   }
