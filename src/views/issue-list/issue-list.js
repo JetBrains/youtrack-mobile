@@ -19,7 +19,7 @@ import Cache from '../../components/cache/cache';
 import Api from '../../components/api/api';
 import ApiHelper from '../../components/api/api__helper';
 import IssueRow from './issue-list__row';
-import SearchesList from './issue-list__search-list';
+// import SearchesList from './issue-list__search-list';
 import Router from '../../components/router/router';
 
 const QUERY_STORAGE_KEY = 'YT_QUERY_STORAGE';
@@ -95,6 +95,7 @@ class IssueList extends React.Component {
 
   goToIssue(issue) {
     Router.SingleIssue({
+      issuePlaceholder: issue,
       issueId: issue.id,
       api: this.api,
       onUpdate: () => this.loadIssues(null, null, false)

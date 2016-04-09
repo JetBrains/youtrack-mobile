@@ -1,12 +1,10 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, FOOTER_HEIGHT} from '../../components/variables/variables';
-
-let LIGHT_GRAY = '#F8F8F8';
+import {UNIT, FOOTER_HEIGHT, COLOR_LIGHT_GRAY, COLOR_FONT_GRAY} from '../../components/variables/variables';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: LIGHT_GRAY
+    backgroundColor: COLOR_LIGHT_GRAY
   },
   headerText: {
     flex: 1,
@@ -42,6 +40,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  loading: {
+    textAlign: 'center',
+    marginTop: UNIT * 2,
+    color: COLOR_FONT_GRAY
   },
   commentInput: {
     flex: 1,

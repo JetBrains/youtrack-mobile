@@ -15,6 +15,7 @@ export default class SingeIssueView extends React.Component {
     super();
     this.state = {
       issue: null,
+      fullyLoaded: false,
 
       select: {
         show: false,
@@ -25,6 +26,7 @@ export default class SingeIssueView extends React.Component {
   }
 
   componentDidMount() {
+    this.setState({issue: this.props.issuePlaceholder});
     this.loadIssue(this.props.issueId);
   }
 
@@ -36,7 +38,7 @@ export default class SingeIssueView extends React.Component {
       })
       .then((issue) => {
         console.log('Issue', issue);
-        this.setState({issue});
+        this.setState({issue, fullyLoaded: true});
         return issue;
       })
       .catch((res) => {
@@ -148,15 +150,18 @@ export default class SingeIssueView extends React.Component {
         </Header>
         {this.state.issue && <ScrollView>
           {this._renderIssueView(this.state.issue)}
-          <View style={styles.commentInputWrapper}>
+          {!this.state.fullyLoaded && <View><Text style={styles.loading}>Loading...</Text></View>}
+
+          {this.state.fullyLoaded && <View style={styles.commentInputWrapper}>
             <TextInput placeholder="Comment"
                        returnKeyType="send"
                        autoCorrect={false}
                        value={this.state.commentText}
-                       onSubmitEditing={(e) => this.addComment(this.state.issue, e.nativeEvent.text) && this.setState({commentText: null})}
+                       onSubmitEditing={(e) => this.addComment(this.state.issue, e.nativeEvent.text) && this.setState({commentText: ''})}
                        style={styles.commentInput}/>
-          </View>
-          <SingleIssueComments comments={this.state.issue.comments} attachments={this.state.issue.attachments} api={this.props.api}/>
+          </View>}
+
+          {this.state.fullyLoaded && <SingleIssueComments comments={this.state.issue.comments} attachments={this.state.issue.attachments} api={this.props.api}/>}
         </ScrollView>}
         {this.state.issue && this._renderFooter(this.state.issue)}
 
