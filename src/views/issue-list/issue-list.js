@@ -39,6 +39,7 @@ class IssueList extends React.Component {
       dataSource: ds.cloneWithRows([]),
       skip: 0,
       isLoadingMore: false,
+      listEndReached: false,
 
       isRefreshing: false,
       displayCancelSearch: false,
@@ -112,6 +113,8 @@ class IssueList extends React.Component {
       this.setState({isRefreshing: true});
     }
 
+    this.setState({listEndReached: false});
+
     return this.api.getIssues(text, PAGE_SIZE, skip)
       .then(ApiHelper.fillIssuesFieldHash)
       .then((issues) => {
@@ -146,6 +149,7 @@ class IssueList extends React.Component {
       .then((newIssues) => {
         if (!newIssues.length) {
           console.info('Issues list end reached');
+          this.setState({listEndReached: true});
           return;
         }
         const updatedIssues = this.state.issues.concat(newIssues);
@@ -235,6 +239,13 @@ class IssueList extends React.Component {
     />;
   }
 
+  _renderLoadMoreMessage() {
+    if (!this.state.isLoadingMore || this.state.listEndReached) {
+      return;
+    }
+    return <Text style={styles.loadingMore}>Loading more issues...</Text>
+  }
+
   render() {
     let searchContainer;
     // if (this.state.searchListHeight) {
@@ -254,6 +265,7 @@ class IssueList extends React.Component {
         onEndReached={this.loadMore.bind(this)}
         onEndReachedThreshold={30}
         renderScrollComponent={(props) => <ScrollView {...props} refreshControl={this._renderRefreshControl()}/>}
+        renderFooter={() => this._renderLoadMoreMessage()}
         refreshDescription="Refreshing issues"/>
 
       {searchContainer}

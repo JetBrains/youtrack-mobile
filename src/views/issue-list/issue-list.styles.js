@@ -69,5 +69,9 @@ module.exports = StyleSheet.create({
     right: 0,
     bottom: 0,
     backgroundColor: '#FFFFFFF4'
+  },
+  loadingMore: {
+    textAlign: 'center',
+    padding: UNIT * 2
   }
 });
