@@ -1,3 +1,5 @@
+import React, {Navigator} from 'react-native';
+
 /**
  * Route singleton
  */
@@ -53,6 +55,22 @@ class Router {
 
   _getNavigator() {
     return this._navigator;
+  }
+  
+  renderNavigatorView({initialRoute}) {
+    return <Navigator
+      initialRoute={initialRoute}
+      configureScene={(route) => {
+          return route.animation || Navigator.SceneConfigs.FloatFromRight;
+        }
+      }
+      renderScene={(route, navigator) => {
+          this.setNavigator(navigator);
+
+          return React.createElement(route.component, route.props);
+        }
+      }
+    />
   }
 }
 

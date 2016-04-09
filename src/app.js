@@ -87,19 +87,7 @@ class YouTrackMobile extends React.Component {
   }
 
   render() {
-    return <Navigator
-      initialRoute={Router.routes.Home}
-      configureScene={(route) => {
-          return route.animation || Navigator.SceneConfigs.FloatFromRight;
-        }
-      }
-      renderScene={(route, navigator) => {
-          Router.setNavigator(navigator);
-
-          return React.createElement(route.component, route.props);
-        }
-      }
-    />
+    return Router.renderNavigatorView({initialRoute: Router.routes.Home});
   }
 }
 
