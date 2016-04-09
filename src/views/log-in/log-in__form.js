@@ -5,6 +5,7 @@ import OAuth from '../../components/auth/auth__oauth';
 import Prompt from 'react-native-prompt';
 
 import styles from './log-in.styles';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 const noop = () => {};
 
@@ -113,6 +114,7 @@ export default class LoginForm extends React.Component {
           onCancel={() => this.setState({promptVisible: false})}
           onSubmit={this.changeYouTrackUrl.bind(this)}/>
 
+        <KeyboardSpacer/>
       </ScrollView>
     );
   }

@@ -6,8 +6,6 @@ import React, {
   ListView,
   ScrollView,
   TextInput,
-  LayoutAnimation,
-  DeviceEventEmitter,
   RefreshControl
 } from 'react-native'
 
@@ -21,6 +19,7 @@ import ApiHelper from '../../components/api/api__helper';
 import IssueRow from './issue-list__row';
 // import SearchesList from './issue-list__search-list';
 import Router from '../../components/router/router';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 const QUERY_STORAGE_KEY = 'YT_QUERY_STORAGE';
 const PAGE_SIZE = 10;
@@ -43,7 +42,6 @@ class IssueList extends React.Component {
 
       isRefreshing: false,
       displayCancelSearch: false,
-      keyboardSpace: 0,
       searchListHeight: 0
     };
 
@@ -58,32 +56,6 @@ class IssueList extends React.Component {
   componentDidMount() {
     this.api = new Api(this.props.auth);
     this.loadStoredQuery().then(query => this.setQuery(query));
-    this._unsubscribeKeyShow = DeviceEventEmitter.addListener('keyboardWillShow', this._updateKeyboardSpace.bind(this))
-    this._unsubscribeKeyHide = DeviceEventEmitter.addListener('keyboardWillHide', this._resetKeyboardSpace.bind(this))
-  }
-
-  componentWillUnmount() {
-    this._unsubscribeKeyShow.remove();
-    this._unsubscribeKeyHide.remove();
-  }
-
-  _updateKeyboardSpace(e) {
-    const spacing = 110; //TODO: calculate it in runtime
-    LayoutAnimation.configureNext(animations.layout.spring);
-    this.setState({
-      keyboardSpace: e.endCoordinates.height,
-      searchListHeight: e.endCoordinates.screenY - spacing,
-      displayCancelSearch: true
-    });
-  }
-
-  _resetKeyboardSpace() {
-    LayoutAnimation.configureNext(animations.layout.spring);
-    this.setState({
-      keyboardSpace: 0,
-      searchListHeight: 0,
-      displayCancelSearch: false
-    });
   }
 
   storeQuery(query) {
@@ -247,7 +219,7 @@ class IssueList extends React.Component {
   }
 
   render() {
-    let searchContainer;
+    // let searchContainer;
     // if (this.state.searchListHeight) {
     //   searchContainer = <View ref="searchContainer" style={[styles.searchSuggestions, {bottom: this.state.keyboardSpace}]}>
     //     <SearchesList getIssuesFolder={this.getIssueFolders.bind(this)}
@@ -268,30 +240,13 @@ class IssueList extends React.Component {
         renderFooter={() => this._renderLoadMoreMessage()}
         refreshDescription="Refreshing issues"/>
 
-      {searchContainer}
+      {/*searchContainer*/}
 
       {this._renderFooter()}
 
-      <View style={{height: this.state.keyboardSpace}}></View>
+      <KeyboardSpacer onToggle={(opened) => this.setState({displayCancelSearch: opened})}/>
     </View>);
   }
 }
 
-const animations = {
-  layout: {
-    spring: {
-      duration: 400,
-      create: {
-        duration: 300,
-        type: LayoutAnimation.Types.easeInEaseOut,
-        property: LayoutAnimation.Properties.opacity
-      },
-      update: {
-        type: LayoutAnimation.Types.spring,
-        springDamping: 400
-      }
-    }
-  }
-};
-
-module.exports = IssueList;
+export default IssueList;

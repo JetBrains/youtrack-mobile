@@ -8,6 +8,7 @@ import {attach, tag, next} from '../../components/icon/icon';
 import CustomField from '../../components/custom-field/custom-field';
 import Select from '../../components/select/select';
 import ApiHelper from '../../components/api/api__helper';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 const PROJECT_ID_STORAGE_KEY = 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE';
 
@@ -242,6 +243,8 @@ export default class CreateIssue extends React.Component {
         {this._renderFooter(this.state)}
 
         {this._renderSelect()}
+
+        <KeyboardSpacer/>
       </View>
     );
   }

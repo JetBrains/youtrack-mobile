@@ -8,6 +8,7 @@ import Router from '../../components/router/router';
 import Header from '../../components/header/header';
 import Select from '../../components/select/select';
 import styles from './single-issue.styles';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 
 export default class SingeIssueView extends React.Component {
@@ -166,6 +167,8 @@ export default class SingeIssueView extends React.Component {
         {this.state.issue && this._renderFooter(this.state.issue)}
 
         {this._renderSelect()}
+
+        <KeyboardSpacer/>
       </View>
     );
   }
