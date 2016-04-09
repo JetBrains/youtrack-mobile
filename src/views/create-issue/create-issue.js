@@ -176,7 +176,7 @@ export default class CreateIssue extends React.Component {
         dataSource={config.dataSource}
         onSelect={config.onSelect}
         onCancel={() => this.setState({select: {show: false}})}
-        getTitle={(item) => item.name || item.login}
+        getTitle={(item) => item.fullName || item.name || item.login}
       />;
     }
   }

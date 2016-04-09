@@ -46,7 +46,7 @@ const ISSUE_FIELD_VALUE = toField(
       'name',
       'localizedName',
       'ringId',
-      'fulLName',
+      'fullName',
       'avatarUrl',
       'login',
       'minutes',

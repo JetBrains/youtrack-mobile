@@ -8,12 +8,12 @@ class IssueRow extends React.Component {
 
     let forText = () => {
       if (issue.fieldHash.Assignee) {
-        return `for ${issue.fieldHash.Assignee.login || issue.fieldHash.Assignee.name}`;
+        return `for ${issue.fieldHash.Assignee.fullName || issue.fieldHash.Assignee.login}`;
       }
       return '    Unassigned'
     };
 
-    return `${issue.project.shortName}-${issue.numberInProject} by ${issue.reporter.name || issue.reporter.login} ${forText()}`
+    return `${issue.project.shortName}-${issue.numberInProject} by ${issue.reporter.fullName || issue.reporter.login} ${forText()}`
   }
 
   getSummaryStyle(issue) {

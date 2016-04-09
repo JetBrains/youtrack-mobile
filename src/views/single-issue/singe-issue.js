@@ -56,11 +56,11 @@ export default class SingeIssueView extends React.Component {
 
     let forText = () => {
       if (issue.fieldHash.Assignee) {
-        return `for ${issue.fieldHash.Assignee.login || issue.fieldHash.Assignee.name}`;
+        return `for ${issue.fieldHash.Assignee.fullName || issue.fieldHash.Assignee.login}`;
       }
       return '    Unassigned'
     };
-    return `${issue.reporter.name || issue.reporter.login} ${forText()}`
+    return `${issue.reporter.fullName || issue.reporter.login} ${forText()}`
   }
 
   _renderSelect() {
@@ -72,7 +72,7 @@ export default class SingeIssueView extends React.Component {
         dataSource={config.dataSource}
         onSelect={config.onSelect}
         onCancel={() => this.setState({select: {show: false}})}
-        getTitle={(item) => item.name || item.login}
+        getTitle={(item) => item.fullName || item.name || item.login}
       />;
     }
   }

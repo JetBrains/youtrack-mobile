@@ -12,9 +12,9 @@ export default class CustomField extends React.Component {
         if (value.length === 0) {
           return emptyValue;
         }
-        return value.map(it => it.name || value.login).join(', ');
+        return value.map(it => it.name || value.fullName || value.login).join(', ');
       }
-      return value.name || value.login;
+      return value.name || value.fullName || value.login;
     }
 
     return emptyValue;
