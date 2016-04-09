@@ -29,7 +29,7 @@ export default class CreateIssue extends React.Component {
         dataSource: null,
         onSelect: null
       }
-    }
+    };
 
     AsyncStorage.getItem(PROJECT_ID_STORAGE_KEY)
       .then(projectId => {
@@ -124,7 +124,7 @@ export default class CreateIssue extends React.Component {
               f.value = val;
             }
             return f;
-          })
+          });
           this.setState({
             select: {show: false},
             fields: updatedFields

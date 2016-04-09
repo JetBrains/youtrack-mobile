@@ -8,17 +8,29 @@ export default class UserSelect extends React.Component {
     super();
     this.state = {
       query: '',
-      items: null
+      items: null,
+      filteredItems: []
     };
   }
 
   componentDidMount() {
-    this._onSearch(this.state.query);
+    this._loadItems(this.state.query);
+  }
+
+
+  _loadItems(query) {
+    this.props.dataSource(query)
+      .then(items => this.setState({items}))
+      .then(() => this._onSearch(query));
   }
 
   _onSearch(query) {
-    this.props.dataSource(query)
-      .then(items => this.setState({items}));
+    query = query || '';
+    const filteredItems = (this.state.items || []).filter(item => {
+      const label = this.props.getTitle(item) || '';
+      return label.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+    });
+    this.setState({filteredItems});
   }
 
   _renderTitle(item) {
@@ -48,14 +60,17 @@ export default class UserSelect extends React.Component {
             placeholder="Search item"
             returnKeyType="search"
             autoCorrect={false}
-            onSubmitEditing={(e) => this._onSearch(e.nativeEvent.text)}
+            onSubmitEditing={(e) => this._onSearch(this.state.query)}
             value={this.state.query}
-            onChangeText={(text) => this.setState({query: text})}
+            onChangeText={(text) => {
+              this.setState({query: text});
+              this._onSearch(text);
+            }}
             style={styles.searchInput}/>
         </View>
         <View style={styles.separator}/>
-        {this.state.items && <ScrollView>
-          {this.state.items.map(item => this._renderRow(item))}
+        {this.state.filteredItems && <ScrollView>
+          {this.state.filteredItems.map(item => this._renderRow(item))}
         </ScrollView>}
       </View>
     );
