@@ -16,6 +16,8 @@ class YouTrackMobile extends React.Component {
     super();
     this.state = {};
 
+    Router.registerRoute({name: 'Home', component: Home, type: 'reset'});
+
     this.addAndroidBackButtonSupport();
 
     loadConfig()
@@ -23,7 +25,8 @@ class YouTrackMobile extends React.Component {
         this.auth = new Auth(config);
       })
       .then(() => this.registerRoutes())
-      .then(() => this.checkAuthorization());
+      .then(() => this.checkAuthorization())
+      .catch(err => Router.Home({message: err.message}));
   }
 
   checkAuthorization() {
@@ -66,7 +69,7 @@ class YouTrackMobile extends React.Component {
 
   render() {
     return <Navigator
-      initialRoute={{component: Home, type: 'reset'}}
+      initialRoute={Router.routes.Home}
       configureScene={(route) => {
           return route.animation || Navigator.SceneConfigs.FloatFromRight;
         }
