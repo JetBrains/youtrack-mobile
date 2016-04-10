@@ -24,6 +24,10 @@ function getStoredBackendURL() {
     .then(res => res || DEFAULT_BACKEND);
 }
 
+function handleEmbeddedHubUrl(hubUrl, ytUrl) {
+  return hubUrl[0] === '/' ? ytUrl + hubUrl : hubUrl;
+}
+
 function loadConfig(ytUrl = config.backendUrl) {
   return fetch(`${ytUrl}/api/config?fields=ring(url),mobile(serviceSecret,serviceId)`)
     .then(res => res.json())
@@ -37,7 +41,7 @@ function loadConfig(ytUrl = config.backendUrl) {
       config.backendUrl = ytUrl;
 
       Object.assign(config.auth, {
-        serverUri: res.ring.url,
+        serverUri: handleEmbeddedHubUrl(res.ring.url, ytUrl),
         clientId: res.mobile.serviceId,
         clientSecret: res.mobile.serviceSecret
       });

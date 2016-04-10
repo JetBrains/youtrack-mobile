@@ -35,6 +35,11 @@ export default class Home extends React.Component {
     this.setState({promptVisible: true});
   }
 
+  onChangeBackendUrl(newUrl) {
+    this.setState({promptVisible: false});
+    this.props.onChangeBackendUrl(newUrl);
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -48,7 +53,7 @@ export default class Home extends React.Component {
           defaultValue={this.props.backendUrl}
           visible={this.state.promptVisible}
           onCancel={() => this.setState({promptVisible: false})}
-          onSubmit={this.props.onChangeBackendUrl.bind(this)}/>
+          onSubmit={this.onChangeBackendUrl.bind(this)}/>
       </View>
     );
   }

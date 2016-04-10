@@ -69,14 +69,12 @@ export default class Auth {
   }
 
   obtainTokenByCredentials(login, password) {
-    console.info('Obtaining token by credentials for user', login);
-
     const config = this.config;
+    const hubUrl = `${config.auth.serverUri}/api/rest/oauth2/token`;
 
-    return fetch([
-      config.auth.serverUri,
-      `/api/rest/oauth2/token`
-    ].join(''), {
+    console.info(`Obtaining token by credentials on ${hubUrl} for "${login}"`);
+
+    return fetch(hubUrl, {
       method: 'POST',
       headers: {
         'Accept': 'application/json, text/plain, */*',
