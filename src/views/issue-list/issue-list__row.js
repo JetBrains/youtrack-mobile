@@ -19,9 +19,8 @@ class IssueRow extends React.Component {
 
   getSummaryStyle(issue) {
     if (issue.resolved) {
-      return {color: COLOR_FONT_GRAY};
+      return {color: COLOR_FONT_GRAY, fontWeight: '200'};
     }
-    return {fontWeight: '500'};
   }
 
   render() {
