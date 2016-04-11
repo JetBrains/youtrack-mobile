@@ -104,7 +104,6 @@ class IssueList extends React.Component {
           isRefreshing: false
         });
         this.cache.store(issues);
-        console.log('Issues', issues);
       })
       .catch((err) => {
         this.setState({isRefreshing: false});
@@ -139,7 +138,6 @@ class IssueList extends React.Component {
           skip: newSkip
         });
         this.cache.store(updatedIssues);
-        console.log('More issues loaded', newIssues);
       })
       .then(() => this.setState({isLoadingMore: false}))
       .catch(() => this.setState({isLoadingMore: false}))
@@ -150,11 +148,7 @@ class IssueList extends React.Component {
   }
 
   getIssueFolders() {
-    return this.api.getIssueFolders()
-      .then((res) => {
-        console.log('IssueFolders', res);
-        return res;
-      })
+    return this.api.getIssueFolders();
   }
 
   setQuery(query) {
