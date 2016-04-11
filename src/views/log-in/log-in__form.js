@@ -1,11 +1,11 @@
-import React, {Image, View, Text, TextInput, TouchableOpacity, Linking} from 'react-native'
+import React, {Image, View, Text, TextInput, TouchableOpacity, Linking, ScrollView} from 'react-native'
 import {logo} from '../../components/icon/icon';
 import Keystore from '../../components/keystore/keystore';
 import OAuth from '../../components/auth/auth__oauth';
 import Prompt from 'react-native-prompt';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 import styles from './log-in.styles';
-import SmartScrollView from 'react-native-smart-scroll-view';
 
 const noop = () => {};
 
@@ -42,9 +42,54 @@ export default class LoginForm extends React.Component {
       .then(({username, password}) => this.setState({username, password}), noop);
   }
 
+  focusOnPassword() {
+    this.refs.passInput.focus();
+  }
+
+  logInViaCredentials() {
+    const config = this.props.auth.config;
+    this.setState({loggingIn: true});
+
+    this.props.auth.authorizeCredentials(this.state.username, this.state.password)
+      .then(() => {
+        return Keystore.setInternetCredentials(config.auth.serverUri, this.state.username, this.state.password)
+          .catch(noop);
+      })
+      .then(() => this.props.onLogIn())
+      .catch(err => this.setState({errorMessage: err.error_description || err.message, loggingIn: false}));
+  }
+
+  openYouTrackUrlPrompt() {
+    this.setState({promptVisible: true});
+  }
+
+  changeYouTrackUrl(newUrl) {
+    this.props.onChangeBackendUrl(newUrl);
+  }
+
+  logInViaHub() {
+    const config = this.props.auth.config;
+    this.setState({loggingIn: true});
+
+    return OAuth.authorizeInHub(config)
+      .then(code => this.props.auth.authorizeOAuth(code))
+      .then(() => this.props.onLogIn())
+      .catch(err => this.setState({errorMessage: err.error_description || err.message, loggingIn: false}))
+  }
+
+  signUp() {
+    const config = this.props.auth.config;
+    Linking.openURL(`${config.auth.serverUri}/auth/register`);
+  }
+
+  loginAsGuest() {
+    console.log('TODO: Not implemented');
+  }
+
+
   render() {
     return (
-      <SmartScrollView contentContainerStyle={styles.container}>
+      <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.logoContainer}>
           <Image style={styles.logoImage} source={logo}/>
         </View>
@@ -96,9 +141,9 @@ export default class LoginForm extends React.Component {
           </TouchableOpacity>
 
           {/*<TouchableOpacity style={styles.linkContainer} onPress={this.loginAsGuest.bind(this)}>
-            <Text style={styles.linkLike}>
-              Log in as guest</Text>
-          </TouchableOpacity>*/}
+           <Text style={styles.linkLike}>
+           Log in as guest</Text>
+           </TouchableOpacity>*/}
         </View>
 
         <View style={styles.description}>
@@ -114,51 +159,8 @@ export default class LoginForm extends React.Component {
           onCancel={() => this.setState({promptVisible: false})}
           onSubmit={this.changeYouTrackUrl.bind(this)}/>
 
-      </SmartScrollView>
+        <KeyboardSpacer/>
+      </ScrollView>
     );
-  }
-
-  focusOnPassword() {
-    this.refs.passInput.focus();
-  }
-
-  logInViaCredentials() {
-    const config = this.props.auth.config;
-    this.setState({loggingIn: true});
-
-    this.props.auth.authorizeCredentials(this.state.username, this.state.password)
-      .then(() => {
-        return Keystore.setInternetCredentials(config.auth.serverUri, this.state.username, this.state.password)
-          .catch(noop);
-      })
-      .then(() => this.props.onLogIn())
-      .catch(err => this.setState({errorMessage: err.error_description || err.message, loggingIn: false}));
-  }
-
-  openYouTrackUrlPrompt() {
-    this.setState({promptVisible: true});
-  }
-
-  changeYouTrackUrl(newUrl) {
-    this.props.onChangeBackendUrl(newUrl);
-  }
-
-  logInViaHub() {
-    const config = this.props.auth.config;
-    this.setState({loggingIn: true});
-
-    return OAuth.authorizeInHub(config)
-      .then(code => this.props.auth.authorizeOAuth(code))
-      .then(() => this.props.onLogIn())
-      .catch(err => this.setState({errorMessage: err.error_description || err.message, loggingIn: false}))
-  }
-
-  signUp() {
-    const config = this.props.auth.config;
-    Linking.openURL(`${config.auth.serverUri}/auth/register`);
-  }
-
-  loginAsGuest() {
-    console.log('TODO: Not implemented');
   }
 }

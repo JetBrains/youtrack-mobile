@@ -6,7 +6,8 @@ import React, {
   ListView,
   ScrollView,
   TextInput,
-  RefreshControl
+  RefreshControl,
+  Platform
 } from 'react-native'
 
 import styles from './issue-list.styles';
@@ -244,7 +245,7 @@ class IssueList extends React.Component {
 
       {this._renderFooter()}
 
-      <KeyboardSpacer onToggle={(opened) => this.setState({displayCancelSearch: opened})}/>
+      {Platform.OS == 'ios' && <KeyboardSpacer onToggle={(opened) => this.setState({displayCancelSearch: opened})}/>}
     </View>);
   }
 }
