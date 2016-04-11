@@ -83,6 +83,7 @@ export default class Auth {
       },
       body: [
         'grant_type=password',
+        '&access_type=offline',
         `&username=${login}`,
         `&password=${password}`,
         `&scope=${config.auth.scopes}`
