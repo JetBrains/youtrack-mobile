@@ -31,6 +31,10 @@ export default class SingeIssueView extends React.Component {
     this.loadIssue(this.props.issueId);
   }
 
+  componentWillUnmount() {
+    this.isUnmounted = true;
+  }
+
   loadIssue(id) {
     return this.props.api.getIssue(id)
       .then((issue) => {
@@ -39,6 +43,9 @@ export default class SingeIssueView extends React.Component {
       })
       .then((issue) => {
         console.log('Issue', issue);
+        if (this.isUnmounted) {
+          return;
+        }
         this.setState({issue, fullyLoaded: true});
         return issue;
       })
