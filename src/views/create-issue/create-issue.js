@@ -41,7 +41,6 @@ export default class CreateIssue extends React.Component {
   }
 
   createIssue() {
-    //TODO: convert attachements to multipart/form-data format properly
     function prepareFieldValue(value) {
       if (Array.isArray(value)) {
         return value.map(prepareFieldValue);
@@ -50,27 +49,29 @@ export default class CreateIssue extends React.Component {
       return {id: value.id};
     }
 
-    this.props.api.createIssue({
-        summary: this.state.summary,
-        description: this.state.description,
-        project: {
-          id: this.state.project.id
-        },
-        fields: this.state.fields.filter(f => f.value).map(f => {
-          return {
-            $type: ApiHelper.projectFieldTypeToFieldType(f.projectCustomField.$type, f.projectCustomField.field.fieldType.isMultiValue),
-            id: f.id,
-            value: prepareFieldValue(f.value)
-          };
-        })
+    const issueToCreate = {
+      summary: this.state.summary,
+      description: this.state.description,
+      project: {
+        id: this.state.project.id
+      },
+      fields: this.state.fields.filter(f => f.value).map(f => {
+        return {
+          $type: ApiHelper.projectFieldTypeToFieldType(f.projectCustomField.$type, f.projectCustomField.field.fieldType.isMultiValue),
+          id: f.id,
+          value: prepareFieldValue(f.value)
+        };
       })
+    };
+
+    this.props.api.createIssue(issueToCreate)
       .then(res => {
         console.info('Issue created', res);
         this.props.onCreate(res);
         Router.pop();
       })
       .catch(err => {
-        console.warn('Cannot create issue', err);
+        console.warn('Cannot create issue', issueToCreate, 'server response:', err);
       });
   }
 
@@ -90,7 +91,9 @@ export default class CreateIssue extends React.Component {
     return this.props.api.getProject(projectId)
       .then(project => {
         const fields = project.fields.map(it => {
-          return {id: it.id, projectCustomField: it, value: it.defaultValues && it.defaultValues[0]}
+          const isMultivalue = it.field.fieldType.isMultiValue;
+          const firstDefaultValue = it.defaultValues && it.defaultValues[0];
+          return {id: it.id, projectCustomField: it, value: isMultivalue ? it.defaultValues : firstDefaultValue};
         });
         this.setState({project, fields: fields, select: {show: false}});
       });
