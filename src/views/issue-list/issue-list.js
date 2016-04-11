@@ -10,6 +10,7 @@ import React, {
   Platform
 } from 'react-native'
 
+import openUrlHandler from '../../components/open-url-handler/open-url-handler';
 import styles from './issue-list.styles';
 import Header from '../../components/header/header';
 import {COLOR_PINK} from '../../components/variables/variables';
@@ -56,6 +57,12 @@ class IssueList extends React.Component {
 
   componentDidMount() {
     this.api = new Api(this.props.auth);
+    openUrlHandler(issueId => Router.SingleIssue({
+      issueId: issueId,
+      api: this.api,
+      onUpdate: () => this.loadIssues(null, null, false)
+    }));
+
     this.loadStoredQuery().then(query => this.setQuery(query));
   }
 
