@@ -1,6 +1,7 @@
 import styles from './issue-list.styles';
 import ColorField from '../../components/color-field/color-field';
 import {next} from '../../components/icon/icon';
+import {COLOR_FONT_GRAY} from '../../components/variables/variables';
 import React, {View, Text, TouchableOpacity, Image} from 'react-native';
 
 class IssueRow extends React.Component {
@@ -18,10 +19,9 @@ class IssueRow extends React.Component {
 
   getSummaryStyle(issue) {
     if (issue.resolved) {
-      return {
-        color: '#888'
-      };
+      return {color: COLOR_FONT_GRAY};
     }
+    return {fontWeight: '500'};
   }
 
   render() {
