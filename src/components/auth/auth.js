@@ -103,7 +103,7 @@ export default class Auth {
       .then(authParams => {
         console.info('Begining token refresh', authParams);
 
-        const config = config;
+        const config = this.config;
 
         //store old refresh token
         token = authParams.refresh_token;
@@ -128,13 +128,10 @@ export default class Auth {
           //restore old refresh token
           authParams.refresh_token = authParams.refresh_token || token;
         } else {
-          console.log('Token refreshing failed', authParams);
+          console.warn('Token refreshing failed', authParams);
           throw authParams;
         }
         return authParams;
-      })
-      .catch(err => {
-        throw err
       })
       .then((authParams) => this.verifyToken(authParams))
       .then(this.storeAuth.bind(this))
@@ -161,7 +158,7 @@ export default class Auth {
         return authParams;
       })
       .catch((res) => {
-        if (res.status === 403) {
+        if (res.status === 401 && authParams.refresh_token) {
           console.log('Trying to refresh token', res);
           return this.refreshToken();
         }
