@@ -45,6 +45,16 @@ class Api {
         return res.json();
       });
   }
+  
+  hackishGetIssueByIssueReadableId(query) {
+    const queryString = qs.stringify({
+      query,
+      $top: 1,
+      fields: fields.singleIssue.toString()
+    });
+    return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`)
+      .then(issues => issues[0]);
+  }
 
   getIssue(id) {
     const queryString = qs.stringify({

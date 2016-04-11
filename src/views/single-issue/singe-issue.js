@@ -36,6 +36,23 @@ export default class SingeIssueView extends React.Component {
   }
 
   loadIssue(id) {
+    //HACK about issue load by readable ID
+    if (/[A-Z]/.test(id)) {
+      return this.props.api.hackishGetIssueByIssueReadableId(id)
+        .then((issue) => {
+          issue.fieldHash = ApiHelper.makeFieldHash(issue);
+          return issue;
+        })
+        .then((issue) => {
+          console.log('Issue (by readable id)', issue);
+          if (this.isUnmounted) {
+            return;
+          }
+          this.setState({issue, fullyLoaded: true});
+          return issue;
+        })
+    }
+
     return this.props.api.getIssue(id)
       .then((issue) => {
         issue.fieldHash = ApiHelper.makeFieldHash(issue);
