@@ -42,6 +42,7 @@ class IssueList extends React.Component {
       isLoadingMore: false,
       listEndReached: false,
 
+      input: '',
       isRefreshing: false,
       displayCancelSearch: false,
       searchListHeight: 0
@@ -79,7 +80,7 @@ class IssueList extends React.Component {
       issuePlaceholder: issue,
       issueId: issue.id,
       api: this.api,
-      onUpdate: () => this.loadIssues(null, null, false)
+      onUpdate: () => this.loadIssues(this.state.input, null, false)
     });
   }
 
@@ -168,7 +169,7 @@ class IssueList extends React.Component {
         leftButton={<Text>Log Out</Text>}
         rightButton={<Text>Create</Text>}
         onBack={this.logOut.bind(this)}
-        onRightButtonClick={() => Router.CreateIssue({api: this.api, onCreate: () => this.loadIssues(null, null, false)})}
+        onRightButtonClick={() => Router.CreateIssue({api: this.api, onCreate: () => this.loadIssues(this.state.input, null, false)})}
       >
         <Text>Sort by: Updated</Text>
       </Header>
