@@ -31,7 +31,7 @@ class Api {
 
     return sendRequest()
       .then(res => {
-        if (res.status === 401 || (res._bodyText && res._bodyText.indexOf('Token expired') !== -1)) {
+        if (res.status === 401) {
           console.info('Looks like the token is expired, will try to refresh', res);
           return this.auth.refreshToken()
             .then(sendRequest);
@@ -45,7 +45,7 @@ class Api {
         return res.json();
       });
   }
-  
+
   hackishGetIssueByIssueReadableId(query) {
     const queryString = qs.stringify({
       query,
