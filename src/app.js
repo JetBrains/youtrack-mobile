@@ -40,12 +40,9 @@ class YouTrackMobile extends React.Component {
 
   addAndroidBackButtonSupport() {
     BackAndroid.addEventListener('hardwareBackPress', function() {
-      try {
-        Router.pop();
-        return true;
-      } catch (e) {
-        return false;
-      }
+      const populated = Router.pop();
+      const preventCloseApp = populated;
+      return preventCloseApp;
     });
   }
 

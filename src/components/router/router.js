@@ -50,13 +50,17 @@ class Router {
   }
 
   pop() {
-    return this._navigator.pop();
+    if (this._navigator.state.presentedIndex < 1) {
+      return false;
+    }
+    this._navigator.pop();
+    return true;
   }
 
   _getNavigator() {
     return this._navigator;
   }
-  
+
   renderNavigatorView({initialRoute}) {
     return <Navigator
       initialRoute={initialRoute}
