@@ -126,6 +126,7 @@ export default {
   issuesOnList: toField([
     'id',
     'summary',
+    'description',
     'resolved',
     {project: ISSUE_PROJECT_FIELDS},
     'numberInProject',
@@ -135,6 +136,7 @@ export default {
   singleIssue: toField([
     'id',
     'summary',
+    'description',
     'resolved',
     {project: ISSUE_PROJECT_FIELDS},
     'numberInProject',
