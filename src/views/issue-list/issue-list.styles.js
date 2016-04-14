@@ -68,7 +68,7 @@ module.exports = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: Platform.OS == 'ios' ? 265 : 48,
-    backgroundColor: '#FFFFFFF4'
+    backgroundColor: 'white'
   },
   loadingMore: {
     textAlign: 'center',

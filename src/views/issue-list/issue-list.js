@@ -231,16 +231,6 @@ class IssueList extends React.Component {
   }
 
   render() {
-    let queryAssist;
-    if (this.state.showQueryAssist) {
-      queryAssist = <View style={[styles.searchSuggestions]}>
-        <SearchesList getSuggestions={this.getSuggestions.bind(this)}
-                      caret={this.state.caret}
-                      query={this.state.input}
-                      onApplySuggestion={query => this.setState({input: query})}></SearchesList>
-      </View>
-    }
-
     return (<View style={styles.listContainer}>
       {this._renderHeader()}
       <ListView
@@ -254,7 +244,12 @@ class IssueList extends React.Component {
         renderFooter={() => this._renderLoadMoreMessage()}
         refreshDescription="Refreshing issues"/>
 
-      {queryAssist}
+      {this.state.showQueryAssist && <View style={styles.searchSuggestions}>
+        <SearchesList getSuggestions={this.getSuggestions.bind(this)}
+                      caret={this.state.caret}
+                      query={this.state.input}
+                      onApplySuggestion={query => this.setState({input: query})}></SearchesList>
+      </View>}
 
       {this._renderFooter()}
 
