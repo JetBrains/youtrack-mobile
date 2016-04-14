@@ -1,19 +1,22 @@
-import React, {StyleSheet, Image, View, Text, ScrollView} from 'react-native';
-
-import Header from '../../components/header/header';
+import React, {StyleSheet, Image, View, Text, ScrollView, TouchableOpacity} from 'react-native';
+const TOUCH_PADDING = 12;
+import Router from '../../components/router/router';
 
 class ShowImage extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header leftButton={<Text>Close</Text>}>
-          <Text>{this.props.imageName}</Text>
-        </Header>
         <ScrollView contentContainerStyle={styles.scrollView} maximumZoomScale={20}>
           <View style={{flex: 1}}>
             <Image style={styles.image} source={{uri: this.props.imageUrl}}/>
           </View>
         </ScrollView>
+
+        <TouchableOpacity style={styles.closeButton}
+                          onPress={() => Router.pop()}
+                          hitSlop={{top: TOUCH_PADDING, left: TOUCH_PADDING, bottom: TOUCH_PADDING, right: TOUCH_PADDING}}>
+          <Text>Close</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -30,6 +33,14 @@ const styles = StyleSheet.create({
   image: {
     resizeMode: 'contain',
     flex: 1
+  },
+  closeButton: {
+    position: 'absolute',
+    backgroundColor: '#FFF',
+    borderRadius: 4,
+    opacity: 0.8,
+    padding: 8,
+    top: 16
   }
 });
 
