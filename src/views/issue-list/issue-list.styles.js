@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 
 import {UNIT, COLOR_PINK, COLOR_FONT_GRAY} from '../../components/variables/variables';
 
@@ -67,7 +67,7 @@ module.exports = StyleSheet.create({
     top: 60,
     left: 0,
     right: 0,
-    bottom: 265,
+    bottom: Platform.OS == 'ios' ? 265 : 48,
     backgroundColor: '#FFFFFFF4'
   },
   loadingMore: {
