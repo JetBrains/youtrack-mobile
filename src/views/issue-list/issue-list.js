@@ -149,7 +149,8 @@ class IssueList extends React.Component {
   }
 
   getIssueFolders() {
-    return this.api.getIssueFolders();
+    return this.api.getIssueFolders()
+      .then(folders => folders.filter(f => f.$type.indexOf('SavedQuery') !== -1))
   }
 
   setQuery(query) {

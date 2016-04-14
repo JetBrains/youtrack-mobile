@@ -12,13 +12,16 @@ class SearchListView extends React.Component {
   componentDidMount() {
     this.props.getIssuesFolder()
       .then((issueFolders) => {
-        this.setState({
-          dataSource: ds.cloneWithRows(issueFolders)
-        });
-      })
-      .then(() => {
-        //TODO: scroll to bottom
-      })
+        if (!this.isUnmounted) {
+          this.setState({
+            dataSource: ds.cloneWithRows(issueFolders)
+          });
+        }
+      });
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true;
   }
 
   applyIssueFolder(query) {

@@ -73,7 +73,7 @@ class Api {
   }
 
   getIssueFolders() {
-    return this.makeAuthorizedRequest(`${this.youTrackIssuesFolderUrl}?fields=name,query`);
+    return this.makeAuthorizedRequest(`${this.youTrackIssuesFolderUrl}?fields=$type,name,query`);
   }
 
   createIssue(issue) {
