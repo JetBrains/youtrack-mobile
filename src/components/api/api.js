@@ -119,6 +119,12 @@ class Api {
     const body = {id: fieldId, value};
     return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/fields/${fieldId}?${queryString}`, 'POST', body);
   }
+
+  //TODO: this is old API usage
+  getQueryAssistSuggestions(query, caret) {
+    const queryString = qs.stringify({query, caret});
+    return this.makeAuthorizedRequest(`${this.youTrackUrl}/rest/search/underlineAndSuggest?${queryString}`);
+  }
 }
 
 module.exports = Api;

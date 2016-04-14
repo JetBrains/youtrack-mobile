@@ -43,6 +43,7 @@ class IssueList extends React.Component {
       listEndReached: false,
 
       input: '',
+      caret: '',
       isRefreshing: false,
       displayCancelSearch: false,
       searchListHeight: 0
@@ -148,9 +149,11 @@ class IssueList extends React.Component {
     this.refs.searchInput.blur();
   }
 
-  getIssueFolders() {
-    return this.api.getIssueFolders()
-      .then(folders => folders.filter(f => f.$type.indexOf('SavedQuery') !== -1))
+  getSuggestions(query, caret) {
+    return this.api.getQueryAssistSuggestions(query, caret)
+      .then(res => {
+        return res.suggest.items;
+      });
   }
 
   setQuery(query) {
@@ -161,7 +164,6 @@ class IssueList extends React.Component {
   onQueryUpdated(query) {
     this.storeQuery(query);
     this.setQuery(query);
-    this.cancelSearch();
   }
 
   _renderHeader() {
@@ -201,6 +203,10 @@ class IssueList extends React.Component {
           style={[styles.searchInput]}
           value={this.state.input}
           onChangeText={(text) => this.setState({input: text})}
+          onSelectionChange = {(event) => {
+            const caret = event.nativeEvent.selection.start;
+            this.setState({caret});
+          }}
         />
         {cancelButton}
       </View>
@@ -226,8 +232,10 @@ class IssueList extends React.Component {
     let searchContainer;
     if (this.state.displayCancelSearch) {
       searchContainer = <View style={[styles.searchSuggestions]}>
-        <SearchesList getIssuesFolder={this.getIssueFolders.bind(this)}
-                      onAddQuery={this.onQueryUpdated.bind(this)}></SearchesList>
+        <SearchesList getSuggestions={this.getSuggestions.bind(this)}
+                      caret={this.state.caret}
+                      query={this.state.input}
+                      onApplySuggestion={this.onQueryUpdated.bind(this)}></SearchesList>
       </View>
     }
 

@@ -3,38 +3,66 @@ import InvertibleScrollView from 'react-native-invertible-scroll-view';
 
 let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
+function transformSuggestions(suggest) {
+  let result = [];
+  for (let i = 0, length = suggest.length; i < length; i++) {
+    result.push({
+      prefix: suggest[i].pre || '',
+      option: suggest[i].o || '',
+      suffix: suggest[i].suf || '',
+      description: suggest[i].hd || suggest[i].d || '',
+      matchingStart: suggest[i].ms,
+      matchingEnd: suggest[i].me,
+      caret: suggest[i].cp,
+      completionStart: suggest[i].cs,
+      completionEnd: suggest[i].ce
+    });
+  }
+  return result;
+}
+
 class SearchListView extends React.Component {
   constructor() {
     super();
     this.state = {dataSource: ds.cloneWithRows([])};
   }
 
-  componentDidMount() {
-    this.props.getIssuesFolder()
-      .then((issueFolders) => {
+  loadSuggestions(query, caret) {
+    this.props.getSuggestions(query, caret)
+      .then((suggestions) => {
+        suggestions = transformSuggestions(suggestions);
         if (!this.isUnmounted) {
           this.setState({
-            dataSource: ds.cloneWithRows(issueFolders)
+            dataSource: ds.cloneWithRows(suggestions)
           });
         }
       });
+  }
+
+  componentDidMount() {
+    this.loadSuggestions(this.props.query, this.props.caret)
   }
 
   componentWillUnmount() {
     this.isUnmounted = true;
   }
 
-  applyIssueFolder(query) {
-    this.props.onAddQuery(query);
+  componentWillReceiveProps(newProps) {
+    if (this.props.query !== newProps.query || this.props.caret !== newProps.caret) {
+      this.loadSuggestions(newProps.query, newProps.caret);
+    }
   }
 
-  _renderRow(issueFolder) {
+  onApplySuggestion(suggestion) {
+    const suggestionText = `${suggestion.prefix}${suggestion.option}${suggestion.suffix}`;
+    const newQuery = this.props.query.substring(0, suggestion.completionStart) + suggestionText + this.props.query.substring(suggestion.completionEnd);
+    return this.props.onApplySuggestion(newQuery);
+  }
+
+  _renderRow(suggestion) {
     return (
-      <TouchableOpacity
-        style={styles.searchRow}
-        underlayColor='#FFF'
-        onPress={() => this.applyIssueFolder(issueFolder.query)}>
-        <Text style={styles.searchText}>{issueFolder.name}</Text>
+      <TouchableOpacity style={styles.searchRow} onPress={() => this.onApplySuggestion(suggestion)}>
+        <Text style={styles.searchText}>{suggestion.option}</Text>
       </TouchableOpacity>);
   }
 
@@ -42,7 +70,8 @@ class SearchListView extends React.Component {
     return (
       <ListView
         dataSource={this.state.dataSource}
-        renderRow={(issueFolder) => this._renderRow(issueFolder)}
+        enableEmptySections={true}
+        renderRow={(suggestion) => this._renderRow(suggestion)}
         renderScrollComponent={props => <InvertibleScrollView {...props} inverted />}
         keyboardShouldPersistTaps={true}/>
     );
