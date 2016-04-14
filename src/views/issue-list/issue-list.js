@@ -185,8 +185,7 @@ class IssueList extends React.Component {
     if (this.state.displayCancelSearch) {
       cancelButton = <TouchableOpacity
         style={styles.cancelSearch}
-        onPress={this.cancelSearch.bind(this)}
-        underlayColor="#2CB8E6">
+        onPress={this.cancelSearch.bind(this)}>
         <Text style={styles.cancelText}>Cancel</Text>
       </TouchableOpacity>;
     }
@@ -238,7 +237,7 @@ class IssueList extends React.Component {
         <SearchesList getSuggestions={this.getSuggestions.bind(this)}
                       caret={this.state.caret}
                       query={this.state.input}
-                      onApplySuggestion={this.onQueryUpdated.bind(this)}></SearchesList>
+                      onApplySuggestion={query => this.setState({input: query})}></SearchesList>
       </View>
     }
 
