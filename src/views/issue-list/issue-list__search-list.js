@@ -27,7 +27,7 @@ class SearchListView extends React.Component {
     super();
     this.state = {dataSource: ds.cloneWithRows([])};
 
-    this.debouncedLoadSuggestions = debounce((query, caret) => this.loadSuggestions(query, caret), 50);
+    this.debouncedLoadSuggestions = debounce((query, caret) => this.loadSuggestions(query, caret), 100, true);
   }
 
   loadSuggestions(query, caret) {
