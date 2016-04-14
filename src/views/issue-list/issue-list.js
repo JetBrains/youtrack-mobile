@@ -164,6 +164,7 @@ class IssueList extends React.Component {
   onQueryUpdated(query) {
     this.storeQuery(query);
     this.setQuery(query);
+    this.cancelSearch();
   }
 
   _renderHeader() {
