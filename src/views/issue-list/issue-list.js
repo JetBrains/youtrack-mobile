@@ -44,9 +44,9 @@ class IssueList extends React.Component {
 
       input: '',
       caret: '',
+      showQueryAssist: false,
       isRefreshing: false,
-      displayCancelSearch: false,
-      searchListHeight: 0
+      displayCancelSearch: false
     };
 
     this.cache.read().then(issues => {
@@ -199,6 +199,8 @@ class IssueList extends React.Component {
           returnKeyType="search"
           autoCorrect={false}
           autoCapitalize="none"
+          onFocus={() => this.setState({showQueryAssist: true})}
+          onBlur={() => this.setState({showQueryAssist: false})}
           onSubmitEditing={(e) => this.onQueryUpdated(e.nativeEvent.text)}
           style={[styles.searchInput]}
           value={this.state.input}
@@ -229,9 +231,9 @@ class IssueList extends React.Component {
   }
 
   render() {
-    let searchContainer;
-    if (this.state.displayCancelSearch) {
-      searchContainer = <View style={[styles.searchSuggestions]}>
+    let queryAssist;
+    if (this.state.showQueryAssist) {
+      queryAssist = <View style={[styles.searchSuggestions]}>
         <SearchesList getSuggestions={this.getSuggestions.bind(this)}
                       caret={this.state.caret}
                       query={this.state.input}
@@ -252,7 +254,7 @@ class IssueList extends React.Component {
         renderFooter={() => this._renderLoadMoreMessage()}
         refreshDescription="Refreshing issues"/>
 
-      {searchContainer}
+      {queryAssist}
 
       {this._renderFooter()}
 
