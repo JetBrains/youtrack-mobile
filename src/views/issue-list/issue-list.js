@@ -19,7 +19,7 @@ import Cache from '../../components/cache/cache';
 import Api from '../../components/api/api';
 import ApiHelper from '../../components/api/api__helper';
 import IssueRow from './issue-list__row';
-// import SearchesList from './issue-list__search-list';
+import SearchesList from './issue-list__search-list';
 import Router from '../../components/router/router';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 
@@ -222,13 +222,13 @@ class IssueList extends React.Component {
   }
 
   render() {
-    // let searchContainer;
-    // if (this.state.searchListHeight) {
-    //   searchContainer = <View ref="searchContainer" style={[styles.searchSuggestions, {bottom: this.state.keyboardSpace}]}>
-    //     <SearchesList getIssuesFolder={this.getIssueFolders.bind(this)}
-    //                   onAddQuery={this.onQueryUpdated.bind(this)}></SearchesList>
-    //   </View>
-    // }
+    let searchContainer;
+    if (this.state.displayCancelSearch) {
+      searchContainer = <View style={[styles.searchSuggestions]}>
+        <SearchesList getIssuesFolder={this.getIssueFolders.bind(this)}
+                      onAddQuery={this.onQueryUpdated.bind(this)}></SearchesList>
+      </View>
+    }
 
     return (<View style={styles.listContainer}>
       {this._renderHeader()}
@@ -243,7 +243,7 @@ class IssueList extends React.Component {
         renderFooter={() => this._renderLoadMoreMessage()}
         refreshDescription="Refreshing issues"/>
 
-      {/*searchContainer*/}
+      {searchContainer}
 
       {this._renderFooter()}
 

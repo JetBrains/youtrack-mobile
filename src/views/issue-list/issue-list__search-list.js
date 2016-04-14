@@ -1,4 +1,5 @@
 import React, {ListView, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import InvertibleScrollView from 'react-native-invertible-scroll-view';
 
 let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -37,11 +38,9 @@ class SearchListView extends React.Component {
   render() {
     return (
       <ListView
-        contentInset={{top:0}}
-        automaticallyAdjustContentInsets={false}
-        ref="foldersList"
         dataSource={this.state.dataSource}
         renderRow={(issueFolder) => this._renderRow(issueFolder)}
+        renderScrollComponent={props => <InvertibleScrollView {...props} inverted />}
         keyboardShouldPersistTaps={true}/>
     );
   }

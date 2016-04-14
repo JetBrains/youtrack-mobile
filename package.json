@@ -23,6 +23,7 @@
     "react": "0.14.7",
     "react-native": "0.24.0-rc3",
     "react-native-image-picker": "0.14.3",
+    "react-native-invertible-scroll-view": "0.2.0",
     "react-native-keyboard-spacer": "^0.1.6",
     "react-native-keychain": "0.2.7",
     "react-native-prompt": "^0.18.3",
