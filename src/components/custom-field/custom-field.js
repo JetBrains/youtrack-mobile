@@ -47,7 +47,7 @@ export default class CustomField extends React.Component {
 
   render() {
     return (
-      <TouchableOpacity style={styles.wrapper} onPress={this.props.onPress}>
+      <TouchableOpacity style={styles.wrapper} onPress={this.props.onPress} disabled={this.props.disabled}>
         <Text style={[styles.valueText, this.getValueStyle()]} testID="value">{this._getValue()}</Text>
         <Text style={styles.keyText} testID="name">{this._getKey()}</Text>
       </TouchableOpacity>
