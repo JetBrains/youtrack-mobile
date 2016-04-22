@@ -1,6 +1,5 @@
 import React, {ListView, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import InvertibleScrollView from 'react-native-invertible-scroll-view';
-import debounce from 'debounce';
 
 let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -26,8 +25,6 @@ class SearchListView extends React.Component {
   constructor() {
     super();
     this.state = {dataSource: ds.cloneWithRows([])};
-
-    this.debouncedLoadSuggestions = debounce((query, caret) => this.loadSuggestions(query, caret), 100, true);
   }
 
   loadSuggestions(query, caret) {
@@ -52,7 +49,7 @@ class SearchListView extends React.Component {
 
   componentWillReceiveProps(newProps) {
     if (this.props.query !== newProps.query || this.props.caret !== newProps.caret) {
-      this.debouncedLoadSuggestions(newProps.query, newProps.caret);
+      this.loadSuggestions(newProps.query, newProps.caret);
     }
   }
 

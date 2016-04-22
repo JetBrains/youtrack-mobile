@@ -19,7 +19,6 @@
   },
   "dependencies": {
     "base64-js": "0.0.8",
-    "debounce": "1.0.0",
     "qs": "6.1.0",
     "react": "0.14.7",
     "react-native": "0.24.1",
