@@ -224,11 +224,14 @@ class IssueList extends React.Component {
     />;
   }
 
-  _renderLoadMoreMessage() {
-    if (!this.state.isLoadingMore || this.state.listEndReached) {
-      return;
+  _renderListMessage() {
+    if (!this.state.isRefreshing && !this.state.isLoadingMore && this.state.issues.length === 0) {
+      return <Text style={styles.loadingMore}>No issues found</Text>
     }
-    return <Text style={styles.loadingMore}>Loading more issues...</Text>
+
+    if (this.state.isLoadingMore && !this.state.listEndReached) {
+      return <Text style={styles.loadingMore}>Loading more issues...</Text>
+    }
   }
 
   render() {
@@ -242,7 +245,7 @@ class IssueList extends React.Component {
         onEndReached={this.loadMore.bind(this)}
         onEndReachedThreshold={30}
         renderScrollComponent={(props) => <ScrollView {...props} refreshControl={this._renderRefreshControl()}/>}
-        renderFooter={() => this._renderLoadMoreMessage()}
+        renderFooter={() => this._renderListMessage()}
         refreshDescription="Refreshing issues"/>
 
       {this.state.showQueryAssist && <View style={styles.searchSuggestions}>
