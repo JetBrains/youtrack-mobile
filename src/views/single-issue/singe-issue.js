@@ -159,7 +159,9 @@ export default class SingeIssueView extends React.Component {
   _renderFooter(issue) {
     return (<View>
       <ScrollView horizontal={true} style={styles.footer}>
-        <CustomField key="Project" field={{projectCustomField: {field: {name: 'Project'}}, value: {name: issue.project.shortName}}}/>
+        <CustomField key="Project" 
+                     disabled={true}
+                     field={{projectCustomField: {field: {name: 'Project'}}, value: {name: issue.project.shortName}}}/>
 
         {issue.fields.map((field) => {
           return (<CustomField key={field.id} field={field} onPress={() => this.editField(field)}/>);
