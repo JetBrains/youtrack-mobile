@@ -86,7 +86,8 @@ class IssueList extends React.Component {
   }
 
   logOut() {
-    this.props.auth.logOut()
+    return this.props.auth.logOut()
+      .then(() => this.cache.store([]))
       .then(() => Router.LogIn());
   }
 
