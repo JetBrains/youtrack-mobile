@@ -166,10 +166,11 @@ export default class CreateIssue extends React.Component {
           key="Project"
           field={{projectCustomField: {field: {name: 'Project'}}, value: this.state.project}}
           onPress={this.selectProject.bind(this)}/>
-
-        {this.state.fields.map((field) => {
-          return (<CustomField key={field.id} field={field} onPress={() => this.editField(field)}/>);
-        })}
+        {this.state.fields
+          .sort((fieldA, fieldB) => fieldB.projectCustomField.field.ordinal - fieldA.projectCustomField.field.ordinal)
+          .map((field) => {
+            return (<CustomField key={field.id} field={field} onPress={() => this.editField(field)}/>);
+          })}
       </ScrollView>
     </View>);
   }
