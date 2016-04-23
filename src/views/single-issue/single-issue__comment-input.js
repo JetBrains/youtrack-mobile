@@ -16,11 +16,18 @@ export default class IssueListCommentInput extends React.Component {
     this.setState({commentText: ''});
   }
 
+  onChange(e) {
+    this.setState({
+      commentText: e.nativeEvent.text,
+      commentInputHeight: e.nativeEvent.contentSize.height}
+    );
+  }
+
   render() {
     return <View style={styles.commentInputWrapper}>
       <TextInput placeholder="Comment"
                  multiline={true}
-                 onChange={(event) => this.setState({commentText: event.nativeEvent.text, commentInputHeight: event.nativeEvent.contentSize.height})}
+                 onChange={(e) => this.onChange(e)}
                  autoCorrect={false}
                  value={this.state.commentText}
                  style={[styles.commentInput, {height: this.state.commentInputHeight}]}/>
