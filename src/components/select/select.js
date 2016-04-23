@@ -15,7 +15,7 @@ export default class UserSelect extends React.Component {
   }
 
   componentDidMount() {
-    const selectedItems = this.props.selectedItems ? this.props.selectedItems.splice(0) : [];
+    const selectedItems = this.props.selectedItems ? this.props.selectedItems : [];
     this.setState({selectedItems});
     this._loadItems(this.state.query);
   }
