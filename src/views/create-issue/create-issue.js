@@ -112,6 +112,8 @@ export default class CreateIssue extends React.Component {
   }
 
   editField(field) {
+    const isMultiValue = field.projectCustomField.field.fieldType.isMultiValue;
+
     this.setState({select: {show: false}});
 
     this.setState({
@@ -132,7 +134,9 @@ export default class CreateIssue extends React.Component {
             select: {show: false},
             fields: updatedFields
           });
-        }
+        },
+        multi: isMultiValue,
+        selectedItems: isMultiValue ? field.value : [field.value]
       }
     });
   }
@@ -177,6 +181,8 @@ export default class CreateIssue extends React.Component {
         title={`Select item`}
         api={this.props.api}
         dataSource={config.dataSource}
+        multi={config.multi}
+        selectedItems={config.selectedItems}
         onSelect={config.onSelect}
         onCancel={() => this.setState({select: {show: false}})}
         getTitle={(item) => item.fullName || item.name || item.login}

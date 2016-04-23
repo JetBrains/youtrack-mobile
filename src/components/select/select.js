@@ -3,7 +3,7 @@ import styles from './select.styles';
 import Header from '../header/header';
 import ColorField from '../color-field/color-field';
 
-export default class UserSelect extends React.Component {
+export default class Select extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -107,11 +107,11 @@ export default class UserSelect extends React.Component {
   }
 }
 
-UserSelect.propTypes = {
+Select.propTypes = {
   dataSource: PropTypes.func.isRequired,
   onSelect: PropTypes.func.isRequired,
   selectedItems: PropTypes.array,
   title: PropTypes.string,
-  multi: PropTypes.bool.isRequired,
+  multi: PropTypes.bool,
   api: PropTypes.object
 };
