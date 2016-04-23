@@ -7,6 +7,7 @@ import SingleIssueComments from './single-issue__comments';
 import Router from '../../components/router/router';
 import Header from '../../components/header/header';
 import Select from '../../components/select/select';
+import SingleIssueCommentInput from './single-issue__comment-input';
 import styles from './single-issue.styles';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 
@@ -17,6 +18,7 @@ export default class SingeIssueView extends React.Component {
     this.state = {
       issue: null,
       fullyLoaded: false,
+      commentInputHeight: 36,
 
       select: {
         show: false,
@@ -195,21 +197,16 @@ export default class SingeIssueView extends React.Component {
         <Header leftButton={<Text>Issues</Text>}>
           <Text>{this.state.issue && (`${this.state.issue.project.shortName}-${this.state.issue.numberInProject}`)}</Text>
         </Header>
+
         {this.state.issue && <ScrollView>
           {this._renderIssueView(this.state.issue)}
           {!this.state.fullyLoaded && <View><Text style={styles.loading}>Loading...</Text></View>}
 
-          {this.state.fullyLoaded && <View style={styles.commentInputWrapper}>
-            <TextInput placeholder="Comment"
-                       returnKeyType="send"
-                       autoCorrect={false}
-                       value={this.state.commentText}
-                       onSubmitEditing={(e) => this.addComment(this.state.issue, e.nativeEvent.text) && this.setState({commentText: ''})}
-                       style={styles.commentInput}/>
-          </View>}
+          {this.state.fullyLoaded && <SingleIssueCommentInput onAddComment={(comment) => this.addComment(this.state.issue, comment)}/>}
 
           {this.state.fullyLoaded && <SingleIssueComments comments={this.state.issue.comments} attachments={this.state.issue.attachments} api={this.props.api}/>}
         </ScrollView>}
+        
         {this.state.issue && this._renderFooter(this.state.issue)}
 
         {this._renderSelect()}
