@@ -114,9 +114,20 @@ class Api {
     return this.makeAuthorizedRequest(`${this.youtTrackFieldBundleUrl}/${fieldType}/${bundleId}?${queryString}`);
   }
 
+  getStateMachineEvents(issueId, fieldId) {
+    const url = `${this.youTrackIssueUrl}/${issueId}/fields/${fieldId}/possibleEvents?fields=id,presentation`;
+    return this.makeAuthorizedRequest(url);
+  }
+
   updateIssueFieldValue(issueId, fieldId, value) {
     const queryString = qs.stringify({fields: 'id,ringId,value'});
     const body = {id: fieldId, value};
+    return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/fields/${fieldId}?${queryString}`, 'POST', body);
+  }
+
+  updateIssueFieldEvent(issueId, fieldId, event) {
+    const queryString = qs.stringify({fields: 'id,ringId,value'});
+    const body = {id: fieldId, event};
     return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/fields/${fieldId}?${queryString}`, 'POST', body);
   }
 

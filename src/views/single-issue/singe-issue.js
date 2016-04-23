@@ -120,15 +120,23 @@ export default class SingeIssueView extends React.Component {
       select: {
         show: true,
         dataSource: (query) => {
+          if (field.hasStateMachine) {
+            return this.props.api.getStateMachineEvents(this.props.issueId, field.id)
+              .then(items => items.map(it => Object.assign(it, {name: `${it.id} (${it.presentation})`})))
+          }
           return this.props.api.getCustomFieldValues(field.projectCustomField.bundle.id, field.projectCustomField.field.fieldType.valueType)
             .then(res => res.aggregatedUsers || res.values);
         },
         onSelect: (val) => {
           this.setState({select: {show: false}});
 
-          return this.props.api.updateIssueFieldValue(this.props.issueId, field.id, val)
+          const updateMethod = field.hasStateMachine ?
+            this.props.api.updateIssueFieldEvent.bind(this.props.api) :
+            this.props.api.updateIssueFieldValue.bind(this.props.api);
+
+          return updateMethod(this.props.issueId, field.id, val)
             .then(() => this.loadIssue(this.props.issueId))
-            .then((res) => this.props.onUpdate(res))
+            .then((res) => this.props.onUpdate(res));
         },
         multi: isMultiValue,
         selectedItems: selectedItems,
