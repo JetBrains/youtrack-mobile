@@ -68,7 +68,7 @@ export default class Select extends React.Component {
       <TouchableOpacity key={item.id} style={styles.row} onPress={() => this._onTouchItem(item)}>
         {item.avatarUrl && <Image style={styles.itemIcon} source={{uri: item.avatarUrl}}/>}
 
-        {this._isSelected(item) && <Text>✓</Text>}
+        {this._isSelected(item) && <View style={styles.selectedMark}></View>}
 
         {this._renderTitle(item)}
       </TouchableOpacity>

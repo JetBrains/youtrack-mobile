@@ -30,6 +30,7 @@ export default StyleSheet.create({
     backgroundColor: '#C8C7CC'
   },
   row: {
+    position: 'relative',
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -44,5 +45,13 @@ export default StyleSheet.create({
     marginLeft: UNIT * 2,
     fontSize: 18,
     color: COLOR_PINK
+  },
+  selectedMark: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    width: UNIT / 2,
+    backgroundColor: COLOR_PINK
   }
 });
