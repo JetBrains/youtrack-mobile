@@ -103,6 +103,7 @@ export default class SingeIssueView extends React.Component {
         onSelect={config.onSelect}
         multi={config.multi}
         selectedItems={config.selectedItems}
+        emptyValue={config.emptyValue}
         onCancel={() => this.setState({select: {show: false}})}
         getTitle={(item) => item.fullName || item.name || item.login}
       />;
@@ -112,6 +113,8 @@ export default class SingeIssueView extends React.Component {
   editField(field) {
     this.setState({select: {show: false}});
     const isMultiValue = field.projectCustomField.field.fieldType.isMultiValue;
+    let selectedItems = isMultiValue ? field.value : [field.value];
+    selectedItems = selectedItems.filter(it => it !== null);
 
     this.setState({
       select: {
@@ -128,7 +131,8 @@ export default class SingeIssueView extends React.Component {
             .then((res) => this.props.onUpdate(res))
         },
         multi: isMultiValue,
-        selectedItems: isMultiValue ? field.value : [field.value]
+        selectedItems: selectedItems,
+        emptyValue: field.projectCustomField.canBeEmpty ? field.projectCustomField.emptyFieldText : null
       }
     });
   }

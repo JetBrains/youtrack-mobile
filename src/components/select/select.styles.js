@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_LIGHT_GRAY, COLOR_PINK, FOOTER_HEIGHT} from '../../components/variables/variables';
+import {UNIT, COLOR_LIGHT_GRAY, COLOR_FONT, COLOR_PINK, FOOTER_HEIGHT} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   container: {
@@ -34,7 +34,9 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    padding: UNIT
+    padding: UNIT,
+    paddingLeft: UNIT * 2,
+    paddingRight: UNIT * 2
   },
   itemIcon: {
     width: UNIT * 4,
@@ -44,7 +46,7 @@ export default StyleSheet.create({
   itemTitle: {
     marginLeft: UNIT * 2,
     fontSize: 18,
-    color: COLOR_PINK
+    color: COLOR_FONT
   },
   selectedMark: {
     position: 'absolute',

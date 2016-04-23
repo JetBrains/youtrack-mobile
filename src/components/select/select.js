@@ -27,6 +27,19 @@ export default class Select extends React.Component {
       .then(() => this._onSearch(query));
   }
 
+  _renderEmptyValueItem() {
+    if (!this.props.emptyValue) {
+      return;
+    }
+    return (
+      <TouchableOpacity key={this.props.emptyValue} style={styles.row} onPress={() => this._onClearValue()}>
+        {this.state.selectedItems.length === 0 && <View style={styles.selectedMark}></View>}
+
+        <Text style={[styles.itemTitle, {marginLeft: 0}]}>{this.props.emptyValue}</Text>
+      </TouchableOpacity>
+    );
+  }
+
   _onSearch(query) {
     query = query || '';
     const filteredItems = (this.state.items || []).filter(item => {
@@ -57,6 +70,11 @@ export default class Select extends React.Component {
     } else {
       this.setState({selectedItems: this.state.selectedItems.concat(item)})
     }
+  }
+
+  _onClearValue() {
+    const emptyValue = this.props.multi ? [] : null;
+    return this.props.onSelect(emptyValue);
   }
 
   _onSave() {
@@ -99,6 +117,8 @@ export default class Select extends React.Component {
             style={styles.searchInput}/>
         </View>
         <View style={styles.separator}/>
+        {this._renderEmptyValueItem()}
+
         {this.state.filteredItems && <ScrollView>
           {this.state.filteredItems.map(item => this._renderRow(item))}
         </ScrollView>}
@@ -113,5 +133,6 @@ Select.propTypes = {
   selectedItems: PropTypes.array,
   title: PropTypes.string,
   multi: PropTypes.bool,
-  api: PropTypes.object
+  api: PropTypes.object,
+  emptyValue: PropTypes.oneOfType([PropTypes.string, PropTypes.null])
 };
