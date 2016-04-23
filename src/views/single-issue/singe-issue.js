@@ -9,7 +9,6 @@ import Header from '../../components/header/header';
 import Select from '../../components/select/select';
 import SingleIssueCommentInput from './single-issue__comment-input';
 import styles from './single-issue.styles';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 
 export default class SingeIssueView extends React.Component {
@@ -206,12 +205,10 @@ export default class SingeIssueView extends React.Component {
 
           {this.state.fullyLoaded && <SingleIssueComments comments={this.state.issue.comments} attachments={this.state.issue.attachments} api={this.props.api}/>}
         </ScrollView>}
-        
+
         {this.state.issue && this._renderFooter(this.state.issue)}
 
         {this._renderSelect()}
-
-        {Platform.OS == 'ios' && <KeyboardSpacer/>}
       </View>
     );
   }
