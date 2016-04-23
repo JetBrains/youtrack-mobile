@@ -17,7 +17,6 @@ export default class SingeIssueView extends React.Component {
     this.state = {
       issue: null,
       fullyLoaded: false,
-      commentInputHeight: 36,
 
       select: {
         show: false,
