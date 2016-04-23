@@ -60,11 +60,4 @@ describe('<CustomField/>', () => {
     const value = wrapper.findWhere(component => component.props().testID === 'value');
     value.children().should.have.text(fakeField.projectCustomField.emptyFieldText);
   });
-
-  it('should render array values joined', () => {
-    fakeField.value = [{name: 'first'}, {name: 'second'}];
-    let wrapper = shallow(<CustomField field={fakeField}/>);
-    const value = wrapper.findWhere(component => component.props().testID === 'value');
-    value.children().should.have.text('first, second');
-  });
 });

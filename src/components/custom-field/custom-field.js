@@ -1,19 +1,12 @@
-import React, {TouchableOpacity, Text, StyleSheet, PropTypes} from 'react-native';
+import React, {TouchableOpacity, View, Text, StyleSheet, PropTypes} from 'react-native';
 import getColorById from '../color-field/color-field__colors';
 
 export default class CustomField extends React.Component {
-  _getValue() {
+  _getValue(value) {
     const field = this.props.field;
     const emptyValue = field.projectCustomField.emptyFieldText;
 
-    if (field.value) {
-      const value = field.value;
-      if (Array.isArray(value)) {
-        if (value.length === 0) {
-          return emptyValue;
-        }
-        return value.map(it => it.name || value.fullName || value.login).join(', ');
-      }
+    if (value) {
       return value.name || value.fullName || value.login;
     }
 
@@ -25,13 +18,11 @@ export default class CustomField extends React.Component {
     return field.projectCustomField.field.name;
   }
 
-  getValueStyle() {
-    const field = this.props.field;
-
-    if (!field.value || !field.value.color) {
+  getValueStyle(value) {
+    if (!value || !value.color) {
       return;
     }
-    const colorId = field.value.color.id;
+    const colorId = value.color.id;
 
     let color = getColorById(colorId).color;
     let backgroundColor = null;
@@ -45,10 +36,27 @@ export default class CustomField extends React.Component {
     }
   }
 
+  _renderValue(value) {
+    if (Array.isArray(value)) {
+      if (!value.length) {
+        return this._renderValue(null);
+      }
+      return value.map((val, ind) => {
+        return [
+          <Text key={val.id} style={[styles.valueText, this.getValueStyle(val)]}
+                testID="value">{this._getValue(val)}</Text>,
+          ind === value.length - 1 ? <Text> </Text> : <Text>, </Text>
+        ];
+      });
+    }
+
+    return <Text style={[styles.valueText, this.getValueStyle(value)]} testID="value">{this._getValue(value)}</Text>;
+  }
+
   render() {
     return (
       <TouchableOpacity style={styles.wrapper} onPress={this.props.onPress} disabled={this.props.disabled}>
-        <Text style={[styles.valueText, this.getValueStyle()]} testID="value">{this._getValue()}</Text>
+        <View style={styles.valuesWrapper}>{this._renderValue(this.props.field.value)}</View>
         <Text style={styles.keyText} testID="name">{this._getKey()}</Text>
       </TouchableOpacity>
     );
@@ -58,6 +66,10 @@ export default class CustomField extends React.Component {
 const styles = StyleSheet.create({
   wrapper: {
     padding: 8
+  },
+  valuesWrapper: {
+    flexDirection: 'row',
+    flexWrap: 'nowrap'
   },
   keyText: {
     paddingTop: 4,
