@@ -2,10 +2,8 @@ import React, {
   AsyncStorage,
   View,
   Text,
-  TouchableOpacity,
   ListView,
   ScrollView,
-  TextInput,
   RefreshControl,
   Platform
 } from 'react-native'
@@ -13,13 +11,13 @@ import React, {
 import openUrlHandler from '../../components/open-url-handler/open-url-handler';
 import styles from './issue-list.styles';
 import Header from '../../components/header/header';
+import QueryAssist from '../../components/query-assist/query-assist';
 import {COLOR_PINK} from '../../components/variables/variables';
 import Cache from '../../components/cache/cache';
 
 import Api from '../../components/api/api';
 import ApiHelper from '../../components/api/api__helper';
 import IssueRow from './issue-list__row';
-import SearchesList from './issue-list__search-list';
 import Router from '../../components/router/router';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 
@@ -42,11 +40,8 @@ class IssueList extends React.Component {
       isLoadingMore: false,
       listEndReached: false,
 
-      input: '',
-      caret: '',
-      showQueryAssist: false,
-      isRefreshing: false,
-      displayCancelSearch: false
+      queryAssistValue: '',
+      isRefreshing: false
     };
 
     this.cache.read().then(issues => {
@@ -81,7 +76,7 @@ class IssueList extends React.Component {
       issuePlaceholder: issue,
       issueId: issue.id,
       api: this.api,
-      onUpdate: () => this.loadIssues(this.state.input, null, false)
+      onUpdate: () => this.loadIssues(this.state.queryAssistValue, null, false)
     });
   }
 
@@ -115,7 +110,7 @@ class IssueList extends React.Component {
   }
 
   updateIssues() {
-    return this.loadIssues(this.state.input);
+    return this.loadIssues(this.state.queryAssistValue);
   }
 
   loadMore() {
@@ -126,7 +121,7 @@ class IssueList extends React.Component {
     this.setState({isLoadingMore: true});
     const newSkip = this.state.skip + PAGE_SIZE;
 
-    return this.api.getIssues(this.state.input, PAGE_SIZE, newSkip)
+    return this.api.getIssues(this.state.queryAssistValue, PAGE_SIZE, newSkip)
       .then(ApiHelper.fillIssuesFieldHash)
       .then((newIssues) => {
         if (!newIssues.length) {
@@ -146,10 +141,6 @@ class IssueList extends React.Component {
       .catch(() => this.setState({isLoadingMore: false}))
   }
 
-  cancelSearch() {
-    this.refs.searchInput.blur();
-  }
-
   getSuggestions(query, caret) {
     return this.api.getQueryAssistSuggestions(query, caret)
       .then(res => {
@@ -158,14 +149,13 @@ class IssueList extends React.Component {
   }
 
   setQuery(query) {
-    this.setState({input: query});
+    this.setState({queryAssistValue: query});
     this.loadIssues(query, null, false);
   }
 
   onQueryUpdated(query) {
     this.storeQuery(query);
     this.setQuery(query);
-    this.cancelSearch();
   }
 
   _renderHeader() {
@@ -174,45 +164,10 @@ class IssueList extends React.Component {
         leftButton={<Text>Log Out</Text>}
         rightButton={<Text>Create</Text>}
         onBack={this.logOut.bind(this)}
-        onRightButtonClick={() => Router.CreateIssue({api: this.api, onCreate: () => this.loadIssues(this.state.input, null, false)})}
+        onRightButtonClick={() => Router.CreateIssue({api: this.api, onCreate: () => this.loadIssues(this.state.queryAssistValue, null, false)})}
       >
         <Text>Sort by: Updated</Text>
       </Header>
-    );
-  }
-
-  _renderFooter() {
-    let cancelButton = null;
-    if (this.state.displayCancelSearch) {
-      cancelButton = <TouchableOpacity
-        style={styles.cancelSearch}
-        onPress={this.cancelSearch.bind(this)}>
-        <Text style={styles.cancelText}>Cancel</Text>
-      </TouchableOpacity>;
-    }
-
-    return (
-      <View style={styles.inputWrapper}>
-        <TextInput
-          ref="searchInput"
-          placeholder="Enter query"
-          clearButtonMode="always"
-          returnKeyType="search"
-          autoCorrect={false}
-          autoCapitalize="none"
-          onFocus={() => this.setState({showQueryAssist: true})}
-          onBlur={() => this.setState({showQueryAssist: false})}
-          onSubmitEditing={(e) => this.onQueryUpdated(e.nativeEvent.text)}
-          style={[styles.searchInput]}
-          value={this.state.input}
-          onChangeText={(text) => this.setState({input: text})}
-          onSelectionChange = {(event) => {
-            const caret = event.nativeEvent.selection.start;
-            this.setState({caret});
-          }}
-        />
-        {cancelButton}
-      </View>
     );
   }
 
@@ -248,16 +203,12 @@ class IssueList extends React.Component {
         renderFooter={() => this._renderListMessage()}
         refreshDescription="Refreshing issues"/>
 
-      {this.state.showQueryAssist && <View style={styles.searchSuggestions}>
-        <SearchesList getSuggestions={this.getSuggestions.bind(this)}
-                      caret={this.state.caret}
-                      query={this.state.input}
-                      onApplySuggestion={query => this.setState({input: query})}></SearchesList>
-      </View>}
+      <QueryAssist
+        initialQuery={this.state.queryAssistValue}
+        dataSource={this.getSuggestions.bind(this)}
+        onQueryUpdate={newQuery => this.onQueryUpdated(newQuery)}/>
 
-      {this._renderFooter()}
-
-      {Platform.OS == 'ios' && <KeyboardSpacer onToggle={(opened) => this.setState({displayCancelSearch: opened})}/>}
+      {Platform.OS == 'ios' && <KeyboardSpacer/>}
     </View>);
   }
 }

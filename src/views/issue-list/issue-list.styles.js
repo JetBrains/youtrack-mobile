@@ -40,36 +40,6 @@ module.exports = StyleSheet.create({
     fontSize: 12,
     color: COLOR_FONT_GRAY
   },
-  inputWrapper: {
-    backgroundColor: COLOR_PINK,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  searchInput: {
-    flex: 1,
-    height: UNIT * 4,
-    borderRadius: 6,
-    backgroundColor: '#FFF',
-    margin: UNIT,
-    padding: 6
-  },
-  cancelSearch: {
-    paddingRight: UNIT * 2,
-    padding: UNIT
-  },
-  cancelText: {
-    fontSize: 16,
-    color: '#FFF'
-  },
-  searchSuggestions: {
-    position: 'absolute',
-    top: 60,
-    left: 0,
-    right: 0,
-    bottom: Platform.OS == 'ios' ? 265 : 48,
-    backgroundColor: 'white'
-  },
   loadingMore: {
     textAlign: 'center',
     padding: UNIT * 2

@@ -3,25 +3,7 @@ import InvertibleScrollView from 'react-native-invertible-scroll-view';
 
 let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-function transformSuggestions(suggest) {
-  let result = [];
-  for (let i = 0, length = suggest.length; i < length; i++) {
-    result.push({
-      prefix: suggest[i].pre || '',
-      option: suggest[i].o || '',
-      suffix: suggest[i].suf || '',
-      description: suggest[i].hd || suggest[i].d || '',
-      matchingStart: suggest[i].ms,
-      matchingEnd: suggest[i].me,
-      caret: suggest[i].cp,
-      completionStart: suggest[i].cs,
-      completionEnd: suggest[i].ce
-    });
-  }
-  return result;
-}
-
-class SearchListView extends React.Component {
+export default class QueryAssistSuggestionsList extends React.Component {
   constructor() {
     super();
     this.state = {dataSource: ds.cloneWithRows([])};
@@ -90,4 +72,20 @@ let styles = StyleSheet.create({
   }
 });
 
-module.exports = SearchListView;
+function transformSuggestions(suggest) {
+  let result = [];
+  for (let i = 0, length = suggest.length; i < length; i++) {
+    result.push({
+      prefix: suggest[i].pre || '',
+      option: suggest[i].o || '',
+      suffix: suggest[i].suf || '',
+      description: suggest[i].hd || suggest[i].d || '',
+      matchingStart: suggest[i].ms,
+      matchingEnd: suggest[i].me,
+      caret: suggest[i].cp,
+      completionStart: suggest[i].cs,
+      completionEnd: suggest[i].ce
+    });
+  }
+  return result;
+}
