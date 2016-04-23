@@ -9,11 +9,14 @@ export default class UserSelect extends React.Component {
     this.state = {
       query: '',
       items: null,
-      filteredItems: []
+      filteredItems: [],
+      selectedItems: []
     };
   }
 
   componentDidMount() {
+    const selectedItems = this.props.selectedItems ? this.props.selectedItems.splice(0) : [];
+    this.setState({selectedItems});
     this._loadItems(this.state.query);
   }
 
@@ -40,10 +43,33 @@ export default class UserSelect extends React.Component {
     return <Text style={styles.itemTitle}>{this.props.getTitle(item)}</Text>
   }
 
+  _isSelected(item) {
+    return this.state.selectedItems.some(selectedItem => item.id === selectedItem.id);
+  }
+
+  _onTouchItem(item) {
+    if (!this.props.multi) {
+      return this.props.onSelect(item);
+    }
+
+    if (this._isSelected(item)) {
+      this.setState({selectedItems: this.state.selectedItems.filter(it => it.id !== item.id)})
+    } else {
+      this.setState({selectedItems: this.state.selectedItems.concat(item)})
+    }
+  }
+
+  _onSave() {
+    return this.props.onSelect(this.state.selectedItems);
+  }
+
   _renderRow(item) {
     return (
-      <TouchableOpacity key={item.id} style={styles.row} onPress={() => this.props.onSelect(item)}>
+      <TouchableOpacity key={item.id} style={styles.row} onPress={() => this._onTouchItem(item)}>
         {item.avatarUrl && <Image style={styles.itemIcon} source={{uri: item.avatarUrl}}/>}
+
+        {this._isSelected(item) && <Text>✓</Text>}
+
         {this._renderTitle(item)}
       </TouchableOpacity>
     )
@@ -52,7 +78,11 @@ export default class UserSelect extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header leftButton={<Text>Cancel</Text>} onBack={this.props.onCancel.bind(this)}>
+        <Header
+          leftButton={<Text>Cancel</Text>}
+          onBack={this.props.onCancel.bind(this)}
+          rightButton={this.props.multi ? <Text>Apply</Text> : null}
+          onRightButtonClick={this._onSave.bind(this)}>
           <Text>{this.props.title}</Text>
         </Header>
         <View style={styles.inputWrapper}>
@@ -80,6 +110,8 @@ export default class UserSelect extends React.Component {
 UserSelect.propTypes = {
   dataSource: PropTypes.func.isRequired,
   onSelect: PropTypes.func.isRequired,
+  selectedItems: PropTypes.array,
   title: PropTypes.string,
+  multi: PropTypes.bool.isRequired,
   api: PropTypes.object
 };
