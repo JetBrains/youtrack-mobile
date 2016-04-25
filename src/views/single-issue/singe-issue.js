@@ -152,31 +152,41 @@ export default class SingeIssueView extends React.Component {
   }
 
   _renderAttachments(attachments) {
-    return (attachments || []).map((attach) => {
-      return <TouchableOpacity underlayColor="#F8F8F8" onPress={() => {
-                return Router.ShowImage({imageUrl: attach.url, imageName: attach.value});
-            }} key={attach.id}>
-        <Image style={styles.attachment}
-               capInsets={{left: 15, right: 15, bottom: 15, top: 15}}
-               source={{uri: attach.url}}/>
-      </TouchableOpacity>
-    });
+    if (!attachments) {
+      return;
+    }
+
+    return <ScrollView style={styles.attachesContainer} horizontal={true}>
+      {(attachments || []).map((attach) => {
+        return <TouchableOpacity onPress={() => Router.ShowImage({imageUrl: attach.url, imageName: attach.value})} key={attach.id}>
+          <Image style={styles.attachment}
+                 capInsets={{left: 15, right: 15, bottom: 15, top: 15}}
+                 source={{uri: attach.url}}/>
+        </TouchableOpacity>
+      })}
+    </ScrollView>;
   }
 
   _renderIssueView(issue) {
     return (
       <View style={styles.issueViewContainer}>
         <Text style={styles.authorForText}>{this.getAuthorForText(issue)}</Text>
-        {this.state.editMode ? <MultilineInput value={issue.summary}/> : <Text style={styles.summary}>{issue.summary}</Text>}
-        {issue.description && <View style={styles.description}>
-          {TextWithImages.renderView(issue.description, issue.attachments)}
+
+        {this.state.editMode && <View>
+          <MultilineInput value={issue.summary}/>
+
+          <MultilineInput value={issue.description}/>
         </View>}
 
-        {issue.attachments && <ScrollView contentInset={{top:0}}
-                                                    automaticallyAdjustContentInsets={false}
-                                                    style={styles.attachesContainer} horizontal={true}>
-          {this._renderAttachments(issue.attachments)}
-        </ScrollView>}
+        {!this.state.editMode && <View>
+          <Text style={styles.summary}>{issue.summary}</Text>
+
+          {issue.description && <View style={styles.description}>
+            {TextWithImages.renderView(issue.description, issue.attachments)}
+          </View>}
+        </View>}
+
+        {this._renderAttachments(issue.attachments)}
       </View>
     );
   }
