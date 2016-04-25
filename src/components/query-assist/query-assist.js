@@ -1,4 +1,4 @@
-import React, {View, Text, TouchableOpacity, TextInput, Modal} from 'react-native';
+import React, {View, Text, TouchableOpacity, TextInput} from 'react-native';
 import styles from './query-assist.styles';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
 
@@ -48,6 +48,7 @@ export default class QueryAssist extends React.Component {
           autoCorrect={false}
           autofocus={true}
           autoCapitalize="none"
+          onFocus={() => this.setState({showQueryAssist: true, displayCancelSearch: true})}
           onBlur={() => this.setState({showQueryAssist: false, displayCancelSearch: false})}
           onSubmitEditing={(e) => this.props.onQueryUpdate(e.nativeEvent.text)}
           value={this.state.input}
@@ -63,35 +64,18 @@ export default class QueryAssist extends React.Component {
   }
 
   _renderSuggestions() {
-    return <View style={styles.searchSuggestions}>
-      <QueryAssistSuggestionsList getSuggestions={this.getSuggestions.bind(this)}
-                                  caret={this.state.caret}
-                                  query={this.state.input}
-                                  onApplySuggestion={query => this.setState({input: query})}/>
-    </View>
+    return <QueryAssistSuggestionsList style={styles.searchSuggestions}
+                                       getSuggestions={this.getSuggestions.bind(this)}
+                                       caret={this.state.caret}
+                                       query={this.state.input}
+                                       onApplySuggestion={query => this.setState({input: query})}/>
   }
 
   render() {
     return <View>
+      {this.state.showQueryAssist && this._renderSuggestions()}
 
-      <Modal visible={this.state.showQueryAssist} transparent={true} animated={true}>
-        {this._renderSuggestions()}
-        <View style={{position: 'absolute', bottom: 216, left: 0, right: 0}}>
-          {this._renderInput()}
-        </View>
-      </Modal>
-
-      {!this.state.showQueryAssist && <View style={styles.inputWrapper}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Enter query"
-          onFocus={() => {
-            this.setState({showQueryAssist: true, displayCancelSearch: true});
-            setTimeout(() => this.refs.searchInput.focus(), 100);
-          }}
-          value={this.state.input}
-        />
-      </View>}
+      {this._renderInput()}
     </View>
   }
 }

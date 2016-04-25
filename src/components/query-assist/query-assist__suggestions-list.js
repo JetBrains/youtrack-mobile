@@ -51,6 +51,7 @@ export default class QueryAssistSuggestionsList extends React.Component {
   render() {
     return (
       <ListView
+        style={this.props.style}
         dataSource={this.state.dataSource}
         enableEmptySections={true}
         renderRow={(suggestion) => this._renderRow(suggestion)}

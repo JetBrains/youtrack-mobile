@@ -27,10 +27,10 @@ export default StyleSheet.create({
   },
   searchSuggestions: {
     position: 'absolute',
-    top: 60,
     left: 0,
     right: 0,
-    bottom: Platform.OS == 'ios' ? 264 : 48,
-    backgroundColor: 'white'
+    bottom: 48,
+    top: -1000,
+    backgroundColor: '#FFFE'
   }
 });
