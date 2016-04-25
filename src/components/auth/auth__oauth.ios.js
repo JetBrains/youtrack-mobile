@@ -4,7 +4,7 @@ import qs from 'qs';
 
 function openAuthPage(config) {
   Linking.openURL([
-    `${config.auth.serverUri}/auth/login`,
+    `${config.auth.serverUri}/api/rest/oauth2/auth`,
     '?response_type=code',
     '&access_type=offline',
     `&client_id=${config.auth.clientId}`,
