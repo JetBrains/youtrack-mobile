@@ -59,7 +59,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     color: COLOR_FONT,
     margin: UNIT,
-    fontSize: 16,
     padding: 6,
     paddingTop: 2
   },

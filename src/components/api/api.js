@@ -119,6 +119,13 @@ class Api {
     return this.makeAuthorizedRequest(url);
   }
 
+  updateIssueSummaryDescription(issue) {
+    const queryString = qs.stringify({fields: 'id,value'});
+    const body = {summary: issue.summary, description: issue.description};
+
+    return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issue.id}?${queryString}`, 'POST', body);
+  }
+
   updateIssueFieldValue(issueId, fieldId, value) {
     const queryString = qs.stringify({fields: 'id,ringId,value'});
     const body = {id: fieldId, value};

@@ -8,6 +8,7 @@ import Router from '../../components/router/router';
 import Header from '../../components/header/header';
 import Select from '../../components/select/select';
 import SingleIssueCommentInput from './single-issue__comment-input';
+import MultilineInput from '../../components/multiline-input/multiline-input';
 import styles from './single-issue.styles';
 
 
@@ -17,6 +18,7 @@ export default class SingeIssueView extends React.Component {
     this.state = {
       issue: null,
       fullyLoaded: false,
+      editMode: false,
 
       select: {
         show: false,
@@ -145,6 +147,10 @@ export default class SingeIssueView extends React.Component {
     });
   }
 
+  onSaveChanges() {
+    return this.props.api.updateIssueSummaryDescription(this.state.issue);
+  }
+
   _renderAttachments(attachments) {
     return (attachments || []).map((attach) => {
       return <TouchableOpacity underlayColor="#F8F8F8" onPress={() => {
@@ -161,7 +167,7 @@ export default class SingeIssueView extends React.Component {
     return (
       <View style={styles.issueViewContainer}>
         <Text style={styles.authorForText}>{this.getAuthorForText(issue)}</Text>
-        <Text style={styles.summary}>{issue.summary}</Text>
+        {this.state.editMode ? <MultilineInput value={issue.summary}/> : <Text style={styles.summary}>{issue.summary}</Text>}
         {issue.description && <View style={styles.description}>
           {TextWithImages.renderView(issue.description, issue.attachments)}
         </View>}
@@ -192,17 +198,21 @@ export default class SingeIssueView extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header leftButton={<Text>Issues</Text>}>
+        <Header leftButton={<Text>Issues</Text>}
+                rightButton={this.state.editMode ? <Text>Save</Text> : <Text>Edit</Text>}
+                onRightButtonClick={() => this.state.editMode ? this.onSaveChanges() : this.setState({editMode: true})}>
           <Text>{this.state.issue && (`${this.state.issue.project.shortName}-${this.state.issue.numberInProject}`)}</Text>
         </Header>
 
         {this.state.issue && <ScrollView>
           {this._renderIssueView(this.state.issue)}
+
           {!this.state.fullyLoaded && <View><Text style={styles.loading}>Loading...</Text></View>}
 
-          {this.state.fullyLoaded && <SingleIssueCommentInput onAddComment={(comment) => this.addComment(this.state.issue, comment)}/>}
-
-          {this.state.fullyLoaded && <SingleIssueComments comments={this.state.issue.comments} attachments={this.state.issue.attachments} api={this.props.api}/>}
+          {this.state.fullyLoaded && <View>
+            <SingleIssueCommentInput onAddComment={(comment) => this.addComment(this.state.issue, comment)}/>
+            <SingleIssueComments comments={this.state.issue.comments} attachments={this.state.issue.attachments} api={this.props.api}/>
+          </View>}
         </ScrollView>}
 
         {this.state.issue && this._renderFooter(this.state.issue)}
