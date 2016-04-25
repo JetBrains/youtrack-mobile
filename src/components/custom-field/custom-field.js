@@ -72,11 +72,14 @@ const styles = StyleSheet.create({
     flexWrap: 'nowrap'
   },
   keyText: {
+    marginTop: 2,
     paddingTop: 4,
     fontSize: 12
   },
   valueText: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    margin: -2,
+    padding: 2
   }
 });
 
