@@ -37,7 +37,8 @@ export default class QueryAssistSuggestionsList extends React.Component {
 
   onApplySuggestion(suggestion) {
     const suggestionText = `${suggestion.prefix}${suggestion.option}${suggestion.suffix}`;
-    const newQuery = this.props.query.substring(0, suggestion.completionStart) + suggestionText + this.props.query.substring(suggestion.completionEnd);
+    const oldQuery = this.props.query || '';
+    const newQuery = oldQuery.substring(0, suggestion.completionStart) + suggestionText + oldQuery.substring(suggestion.completionEnd);
     return this.props.onApplySuggestion(newQuery);
   }
 
