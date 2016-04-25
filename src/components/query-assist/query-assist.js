@@ -50,7 +50,7 @@ export default class QueryAssist extends React.Component {
           autoCapitalize="none"
           onFocus={() => this.setState({showQueryAssist: true, displayCancelSearch: true})}
           onBlur={() => this.setState({showQueryAssist: false, displayCancelSearch: false})}
-          onSubmitEditing={(e) => this.props.onQueryUpdate(e.nativeEvent.text)}
+          onSubmitEditing={(e) => this.cancelSearch() && this.props.onQueryUpdate(e.nativeEvent.text)}
           value={this.state.input}
           onChangeText={(text) => this.setState({input: text})}
           onSelectionChange = {(event) => {
