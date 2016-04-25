@@ -60,7 +60,8 @@ const styles = StyleSheet.create({
     color: COLOR_FONT,
     margin: UNIT,
     fontSize: 16,
-    padding: 6
+    padding: 6,
+    paddingTop: 2
   },
   commentSendButton: {
     paddingRight: UNIT * 2,
