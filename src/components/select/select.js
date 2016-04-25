@@ -117,11 +117,10 @@ export default class Select extends React.Component {
             style={styles.searchInput}/>
         </View>
         <View style={styles.separator}/>
-        {this._renderEmptyValueItem()}
-
-        {this.state.filteredItems && <ScrollView>
-          {this.state.filteredItems.map(item => this._renderRow(item))}
-        </ScrollView>}
+        <ScrollView>
+          {this._renderEmptyValueItem()}
+          {this.state.filteredItems && this.state.filteredItems.map(item => this._renderRow(item))}
+        </ScrollView>
       </View>
     );
   }
