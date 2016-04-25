@@ -1,4 +1,4 @@
-import {StyleSheet, Platform} from 'react-native';
+import {StyleSheet} from 'react-native';
 
 import {UNIT, COLOR_PINK} from '../../components/variables/variables';
 

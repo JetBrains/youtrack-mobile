@@ -2,18 +2,20 @@ import React, {View, Text, TextInput, TouchableOpacity} from 'react-native';
 
 import styles from './single-issue.styles';
 
+const INITIAL_INPUT_HEIGHT = 36;
+
 export default class IssueListCommentInput extends React.Component {
   constructor() {
     super();
     this.state = {
-      commentInputHeight: 36,
+      commentInputHeight: INITIAL_INPUT_HEIGHT,
       commentText: ''
     };
   }
 
   addComment() {
     this.props.onAddComment(this.state.commentText);
-    this.setState({commentText: ''});
+    this.setState({commentText: '', commentInputHeight: INITIAL_INPUT_HEIGHT});
   }
 
   onChange(e) {

@@ -1,6 +1,6 @@
-import {StyleSheet, Platform} from 'react-native';
+import {StyleSheet} from 'react-native';
 
-import {UNIT, COLOR_PINK, COLOR_FONT_GRAY} from '../../components/variables/variables';
+import {UNIT, COLOR_FONT_GRAY} from '../../components/variables/variables';
 
 module.exports = StyleSheet.create({
   listContainer: {
