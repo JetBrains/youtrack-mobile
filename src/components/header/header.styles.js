@@ -12,11 +12,10 @@ module.exports = StyleSheet.create({
     backgroundColor: COLOR_LIGHT_GRAY
   },
   headerButton: {
-    width: UNIT * 9,
     height: UNIT * 3,
     padding: 0,
-    paddingLeft: UNIT,
-    paddingRight: UNIT
+    paddingLeft: UNIT*2,
+    paddingRight: UNIT*2
   },
   headerButtonText: {
     color: COLOR_PINK
