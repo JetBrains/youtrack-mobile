@@ -1,4 +1,4 @@
-import React, {View, Text, TextInput, TouchableOpacity} from 'react-native';
+import React, {View, Text, TouchableOpacity} from 'react-native';
 import MultilineInput from '../../components/multiline-input/multiline-input';
 
 import styles from './single-issue.styles';
