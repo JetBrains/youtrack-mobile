@@ -1,7 +1,10 @@
 import {AsyncStorage} from 'react-native';
+import Permissions from './auth__permissions';
 import base64 from 'base64-js';
 
 const STORAGE_KEY = 'yt_mobile_auth';
+
+const ACCEPT_HEADER = 'application/json, text/plain, */*';
 
 function makeBtoa(str) {
   let byteArray = [];
@@ -16,6 +19,7 @@ export default class Auth {
     this.authParams = null;
     this.config = config;
     this.CHECK_TOKEN_URL = `${this.config.auth.serverUri}/api/rest/users/me?fields=id`;
+    this.PERMISSIONS_CACHE_URL = `${this.config.auth.serverUri}/api/rest/permissions/cache?fields=permission%2Fkey%2Cglobal%2Cprojects(id)`;
   }
 
   authorizeOAuth(code) {
@@ -31,6 +35,7 @@ export default class Auth {
   loadStoredAuthParams() {
     return this.readAuth()
       .then((authParams) => this.verifyToken(authParams))
+      .then((authParams) => this.loadPermissions(authParams))
       .then((authParams) => this.authParams = authParams);
   }
 
@@ -56,7 +61,7 @@ export default class Auth {
     ].join(''), {
       method: 'POST',
       headers: {
-        'Accept': 'application/json, text/plain, */*',
+        'Accept': ACCEPT_HEADER,
         'Authorization': `Basic ${makeBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`
       }
     }).then(res => res.json())
@@ -77,7 +82,7 @@ export default class Auth {
     return fetch(hubUrl, {
       method: 'POST',
       headers: {
-        'Accept': 'application/json, text/plain, */*',
+        'Accept': ACCEPT_HEADER,
         'Authorization': `Basic ${makeBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`,
         'Content-Type': 'application/x-www-form-urlencoded'
       },
@@ -116,7 +121,7 @@ export default class Auth {
         ].join(''), {
           method: 'POST',
           headers: {
-            'Accept': 'application/json, text/plain, */*',
+            'Accept': ACCEPT_HEADER,
             'Authorization': `Basic ${makeBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`
           }
         })
@@ -134,6 +139,7 @@ export default class Auth {
         return authParams;
       })
       .then((authParams) => this.verifyToken(authParams))
+      .then((authParams) => this.loadPermissions(authParams))
       .then(this.storeAuth.bind(this))
       .then((authParams) => this.authParams = authParams);
   }
@@ -146,7 +152,7 @@ export default class Auth {
 
     return fetch(this.CHECK_TOKEN_URL, {
       headers: {
-        'Accept': 'application/json, text/plain, */*',
+        'Accept': ACCEPT_HEADER,
         'Authorization': `${authParams.token_type} ${authParams.access_token}`
       }
     }).then((res) => {
@@ -166,6 +172,24 @@ export default class Auth {
       })
       .catch((err) => {
         console.log('Error during token validation', err);
+        throw err;
+      });
+  }
+
+  loadPermissions(authParams) {
+    return fetch(this.PERMISSIONS_CACHE_URL, {
+      headers: {
+        'Accept': ACCEPT_HEADER,
+        'Authorization': `${authParams.token_type} ${authParams.access_token}`
+      }
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        this.permissions = new Permissions(res);
+        return authParams;
+      })
+      .catch(err => {
+        console.log('Cant load permissions', err);
         throw err;
       });
   }
