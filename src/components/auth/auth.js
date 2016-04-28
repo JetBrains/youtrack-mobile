@@ -161,6 +161,10 @@ export default class Auth {
           throw res;
         }
         console.info('Token has been verified');
+      return res.json();
+      })
+      .then(currentUser => {
+        this.currentUser = currentUser;
         return authParams;
       })
       .catch((res) => {
