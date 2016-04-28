@@ -1,5 +1,6 @@
 import React, {TouchableOpacity, View, Text, StyleSheet, PropTypes} from 'react-native';
 import getColorById from '../color-field/color-field__colors';
+import {COLOR_FONT_GRAY} from '../variables/variables';
 
 export default class CustomField extends React.Component {
   _getValue(value) {
@@ -55,9 +56,12 @@ export default class CustomField extends React.Component {
 
   render() {
     return (
-      <TouchableOpacity style={styles.wrapper} onPress={this.props.onPress} disabled={this.props.disabled}>
+      <TouchableOpacity
+        style={styles.wrapper}
+        onPress={this.props.onPress}
+        disabled={this.props.disabled}>
         <View style={styles.valuesWrapper}>{this._renderValue(this.props.field.value)}</View>
-        <Text style={styles.keyText} testID="name">{this._getKey()}</Text>
+        <Text style={[styles.keyText, this.props.disabled ? styles.valueTextDisabled : null]} testID="name">{this._getKey()}</Text>
       </TouchableOpacity>
     );
   }
@@ -80,10 +84,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     margin: -2,
     padding: 2
+  },
+  valueTextDisabled: {
+    color: COLOR_FONT_GRAY
   }
 });
 
 CustomField.propTypes = {
   field: PropTypes.object.isRequired,
-  onPress: PropTypes.func
+  onPress: PropTypes.func,
+  disabled: PropTypes.bool
 };

@@ -202,7 +202,11 @@ export default class SingeIssueView extends React.Component {
                      field={{projectCustomField: {field: {name: 'Project'}}, value: {name: issue.project.shortName}}}/>
 
         {issue.fields.map((field) => {
-          return (<CustomField key={field.id} field={field} onPress={() => this.editField(field)}/>);
+          return (<CustomField
+            key={field.id}
+            field={field}
+            onPress={() => this.editField(field)}
+            disabled={!this.issuePermissions.canUpdateField(issue, field)}/>);
         })}
       </ScrollView>
     </View>);
