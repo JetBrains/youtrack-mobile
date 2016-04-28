@@ -21,6 +21,11 @@ export default class QueryAssist extends React.Component {
     this.refs.searchInput.blur();
   }
 
+  onSubmitEditing() {
+    this.cancelSearch();
+    this.props.onQueryUpdate(this.state.input);
+  }
+
   componentWillReceiveProps(newProps, oldProps) {
     if (newProps.initialQuery !== oldProps.initialQuery) {
       this.setState({input: this.props.initialQuery});
@@ -50,7 +55,7 @@ export default class QueryAssist extends React.Component {
           autoCapitalize="none"
           onFocus={() => this.setState({showQueryAssist: true, displayCancelSearch: true})}
           onBlur={() => this.setState({showQueryAssist: false, displayCancelSearch: false})}
-          onSubmitEditing={(e) => this.cancelSearch() && this.props.onQueryUpdate(e.nativeEvent.text)}
+          onSubmitEditing={() => this.onSubmitEditing()}
           value={this.state.input}
           onChangeText={(text) => this.setState({input: text})}
           onSelectionChange = {(event) => {
