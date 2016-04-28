@@ -231,7 +231,8 @@ export default class SingeIssueView extends React.Component {
           {!this.state.fullyLoaded && <View><Text style={styles.loading}>Loading...</Text></View>}
 
           {this.state.fullyLoaded && <View>
-            <SingleIssueCommentInput onAddComment={(comment) => this.addComment(this.state.issue, comment)}/>
+            {this.issuePermissions.canCommentOn(this.state.issue) && <SingleIssueCommentInput
+              onAddComment={(comment) => this.addComment(this.state.issue, comment)}/>}
             <SingleIssueComments comments={this.state.issue.comments} attachments={this.state.issue.attachments} api={this.props.api}/>
           </View>}
         </ScrollView>}
