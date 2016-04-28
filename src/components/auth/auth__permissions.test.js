@@ -16,11 +16,11 @@ describe('Permissions', () => {
         }
       }, {
         permission: {
-          key: 'per-project-permission',
-          projects: [
-            {id: 'permitted-project'}
-          ]
-        }
+          key: 'per-project-permission'
+        },
+        projects: [
+          {id: 'permitted-project'}
+        ]
       }
     ];
 

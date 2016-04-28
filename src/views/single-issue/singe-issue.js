@@ -7,14 +7,17 @@ import SingleIssueComments from './single-issue__comments';
 import Router from '../../components/router/router';
 import Header from '../../components/header/header';
 import Select from '../../components/select/select';
+import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import SingleIssueCommentInput from './single-issue__comment-input';
 import MultilineInput from '../../components/multiline-input/multiline-input';
 import styles from './single-issue.styles';
 
 
 export default class SingeIssueView extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    this.issuePermissions = new IssuePermissions(this.props.api.auth.permissions, this.props.api.auth.currentUser);
+
     this.state = {
       issue: null,
       fullyLoaded: false,
@@ -206,10 +209,14 @@ export default class SingeIssueView extends React.Component {
   }
 
   render() {
+
+    let rightButton = this.state.editMode ? <Text>Save</Text> : <Text>Edit</Text>;
+    rightButton = this.state.issue && this.issuePermissions.canUpdateGeneralInfo(this.state.issue) ? rightButton : null;
+
     return (
       <View style={styles.container}>
         <Header leftButton={<Text>Issues</Text>}
-                rightButton={this.state.editMode ? <Text>Save</Text> : <Text>Edit</Text>}
+                rightButton={rightButton}
                 onRightButtonClick={() => this.state.editMode ? this.onSaveChanges() : this.setState({editMode: true})}>
           <Text>{this.state.issue && (`${this.state.issue.project.shortName}-${this.state.issue.numberInProject}`)}</Text>
         </Header>

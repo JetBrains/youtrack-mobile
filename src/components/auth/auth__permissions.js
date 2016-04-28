@@ -2,7 +2,7 @@
 class Permissions {
   constructor(permissionsCache) {
     const convertedPermissions = permissionsCache.map(cacheItem => {
-      cacheItem.projects = (cacheItem.permission.projects || []).map(project => project.id);
+      cacheItem.projects = (cacheItem.projects || []).map(project => project.id);
       return cacheItem;
     });
 

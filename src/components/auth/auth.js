@@ -1,6 +1,7 @@
 import {AsyncStorage} from 'react-native';
 import Permissions from './auth__permissions';
 import base64 from 'base64-js';
+import qs from 'qs';
 
 const STORAGE_KEY = 'yt_mobile_auth';
 
@@ -19,7 +20,12 @@ export default class Auth {
     this.authParams = null;
     this.config = config;
     this.CHECK_TOKEN_URL = `${this.config.auth.serverUri}/api/rest/users/me?fields=id`;
-    this.PERMISSIONS_CACHE_URL = `${this.config.auth.serverUri}/api/rest/permissions/cache?fields=permission%2Fkey%2Cglobal%2Cprojects(id)`;
+
+    const permissionsQueryString = qs.stringify({
+      query: `service:{0-0-0-0-0} or service:{${config.auth.youtrackServiceId}}`,
+      fields: 'permission/key,global,projects(id)'
+    });
+    this.PERMISSIONS_CACHE_URL = `${this.config.auth.serverUri}/api/rest/permissions/cache?${permissionsQueryString}`;
   }
 
   authorizeOAuth(code) {

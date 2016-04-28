@@ -29,7 +29,7 @@ function handleEmbeddedHubUrl(hubUrl, ytUrl) {
 }
 
 function loadConfig(ytUrl = config.backendUrl) {
-  return fetch(`${ytUrl}/api/config?fields=ring(url),mobile(serviceSecret,serviceId)`)
+  return fetch(`${ytUrl}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId)`)
     .then(res => res.json())
     .then(res => {
       if (!res.mobile.serviceId) {
@@ -42,6 +42,7 @@ function loadConfig(ytUrl = config.backendUrl) {
 
       Object.assign(config.auth, {
         serverUri: handleEmbeddedHubUrl(res.ring.url, ytUrl),
+        youtrackServiceId: res.ring.serviceId,
         clientId: res.mobile.serviceId,
         clientSecret: res.mobile.serviceSecret
       });
