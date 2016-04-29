@@ -51,7 +51,6 @@ export default class QueryAssist extends React.Component {
           clearButtonMode="always"
           returnKeyType="search"
           autoCorrect={false}
-          autofocus={true}
           autoCapitalize="none"
           onFocus={() => this.setState({showQueryAssist: true, displayCancelSearch: true})}
           onBlur={() => this.setState({showQueryAssist: false, displayCancelSearch: false})}

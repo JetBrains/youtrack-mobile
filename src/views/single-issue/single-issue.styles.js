@@ -1,7 +1,7 @@
 import {StyleSheet} from 'react-native';
 import {UNIT, FOOTER_HEIGHT, COLOR_LIGHT_GRAY, COLOR_FONT_GRAY, COLOR_FONT} from '../../components/variables/variables';
 
-const styles = StyleSheet.create({
+export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLOR_LIGHT_GRAY
@@ -22,8 +22,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold'
   },
+  summaryInput: {
+    color: COLOR_FONT,
+    fontSize: 18,
+    marginBottom: UNIT
+  },
   description: {
     paddingTop: UNIT * 2
+  },
+  descriptionInput: {
+    color: COLOR_FONT,
+    marginBottom: UNIT
   },
   attachesContainer: {
     marginTop: UNIT * 2
@@ -99,7 +108,11 @@ const styles = StyleSheet.create({
   iconButton: {
     justifyContent: 'center',
     padding: UNIT
+  },
+  separator: {
+    height: 0.5,
+    marginLeft: - UNIT*2,
+    marginRight: - UNIT*2,
+    backgroundColor: '#C8C7CC'
   }
 });
-
-module.exports = styles;

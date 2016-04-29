@@ -21,7 +21,10 @@ export default class SingeIssueView extends React.Component {
     this.state = {
       issue: null,
       fullyLoaded: false,
+
       editMode: false,
+      summaryCopy: null,
+      descriptionCopy: null,
 
       select: {
         show: false,
@@ -151,6 +154,10 @@ export default class SingeIssueView extends React.Component {
   }
 
   onSaveChanges() {
+    this.state.issue.summary = this.state.summaryCopy;
+    this.state.issue.description = this.state.descriptionCopy;
+    this.setState({editMode: false});
+
     return this.props.api.updateIssueSummaryDescription(this.state.issue);
   }
 
@@ -162,7 +169,13 @@ export default class SingeIssueView extends React.Component {
 
       return <Header leftButton={<Text>Issues</Text>}
                      rightButton={rightButton}
-                     onRightButtonClick={() => this.setState({editMode: true})}>
+                     onRightButtonClick={() => {
+                      this.setState({
+                        editMode: true,
+                        summaryCopy: this.state.issue.summary,
+                        descriptionCopy: this.state.issue.description
+                      });
+                     }}>
         {title}
       </Header>
 
@@ -200,9 +213,16 @@ export default class SingeIssueView extends React.Component {
         <Text style={styles.authorForText}>{this.getAuthorForText(issue)}</Text>
 
         {this.state.editMode && <View>
-          <MultilineInput value={issue.summary}/>
+          <MultilineInput value={this.state.summaryCopy}
+                          style={styles.summaryInput}
+                          autoFocus={true}
+                          onChangeText={text => this.setState({summaryCopy: text})}/>
 
-          <MultilineInput value={issue.description}/>
+          <View style={styles.separator}/>
+
+          <MultilineInput value={this.state.descriptionCopy}
+                          style={styles.descriptionInput}
+                          onChangeText={text => this.setState({descriptionCopy: text})}/>
         </View>}
 
         {!this.state.editMode && <View>
