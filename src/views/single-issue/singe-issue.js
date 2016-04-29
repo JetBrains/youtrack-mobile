@@ -154,6 +154,30 @@ export default class SingeIssueView extends React.Component {
     return this.props.api.updateIssueSummaryDescription(this.state.issue);
   }
 
+  _renderHeader() {
+    const title = <Text>{this.state.issue && (`${this.state.issue.project.shortName}-${this.state.issue.numberInProject}`)}</Text>;
+
+    if (!this.state.editMode) {
+      const rightButton = this.state.issue && this.issuePermissions.canUpdateGeneralInfo(this.state.issue) ? <Text>Edit</Text> : null;
+
+      return <Header leftButton={<Text>Issues</Text>}
+                     rightButton={rightButton}
+                     onRightButtonClick={() => this.setState({editMode: true})}>
+        {title}
+      </Header>
+
+    } else {
+
+      return <Header leftButton={<Text>Cancel</Text>}
+                     onBack={() => this.setState({editMode: false})}
+                     rightButton={<Text>Save</Text>}
+                     onRightButtonClick={() => this.onSaveChanges()}>
+        {title}
+      </Header>
+
+    }
+  }
+
   _renderAttachments(attachments) {
     if (!attachments) {
       return;
@@ -213,17 +237,9 @@ export default class SingeIssueView extends React.Component {
   }
 
   render() {
-
-    let rightButton = this.state.editMode ? <Text>Save</Text> : <Text>Edit</Text>;
-    rightButton = this.state.issue && this.issuePermissions.canUpdateGeneralInfo(this.state.issue) ? rightButton : null;
-
     return (
       <View style={styles.container}>
-        <Header leftButton={<Text>Issues</Text>}
-                rightButton={rightButton}
-                onRightButtonClick={() => this.state.editMode ? this.onSaveChanges() : this.setState({editMode: true})}>
-          <Text>{this.state.issue && (`${this.state.issue.project.shortName}-${this.state.issue.numberInProject}`)}</Text>
-        </Header>
+        {this._renderHeader()}
 
         {this.state.issue && <ScrollView>
           {this._renderIssueView(this.state.issue)}
