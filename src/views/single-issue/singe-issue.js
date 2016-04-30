@@ -211,8 +211,16 @@ export default class SingeIssueView extends React.Component {
     return (
       <View style={styles.issueViewContainer}>
 
-        <Wiki>fooo foo *barrrr* test</Wiki>
-        
+        <Wiki>
+          =TITle= {'\n'}
+          fooo +foo+ *barrrr* test {'\n'}
+
+          --deleted-- {'\n'}
+
+          ''italic''
+
+        </Wiki>
+
         <Text style={styles.authorForText}>{this.getAuthorForText(issue)}</Text>
 
         {this.state.editMode && <View>

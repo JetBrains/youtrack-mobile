@@ -17,6 +17,6 @@ describe('<Wiki/>', () => {
   it('should render bold text', () => {
     let wrapper = shallow(<Wiki>*foo*</Wiki>);
     const boldTextNode = wrapper.findWhere(component => component.props().style && component.props().style.fontWeight === 'bold');
-    boldTextNode.should.be.defined;
+    boldTextNode.length.should.equal(1);
   });
 });
