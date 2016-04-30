@@ -88,7 +88,7 @@ export default function (styles) {
       },
 
       react: (node, output, state) => {
-        return <Image key={state.key} source={{uri: node.url}} style={styles.image}/>
+        return <Image key={state.key} source={{uri: node.url, width: 150, height: 150}} style={styles.image}/>
       }
     })
   }
