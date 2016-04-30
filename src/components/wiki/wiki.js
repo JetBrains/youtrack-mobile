@@ -1,4 +1,4 @@
-import React, {Text} from 'react-native';
+import React, {View} from 'react-native';
 import SimpleMarkdown from 'simple-markdown';
 import rules from './wiki__rules';
 
@@ -13,7 +13,7 @@ export default class Wiki extends React.Component {
   }
 
   parse(source) {
-    const blockSource = `${source}\n`;
+    const blockSource = `${source}\n\n`;
     return this.parser(blockSource, {inline: false});
   }
 
@@ -22,6 +22,6 @@ export default class Wiki extends React.Component {
 
     const tree = this.parse(child);
 
-    return <Text style={[this.props.style]}>{this.renderer(tree)}</Text>;
+    return <View style={[this.props.style]}>{this.renderer(tree)}</View>;
   }
 }
