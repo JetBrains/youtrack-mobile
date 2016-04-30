@@ -20,7 +20,7 @@ class TextWithImages {
 
     let resultView = [];
     (imageNames || []).forEach(function (imageName, index) {
-      let attach = attachments.filter(a => `!${a.value}!` === imageName)[0];
+      let attach = attachments.filter(a => `!${a.name}!` === imageName)[0];
       if (!attach) {
         return resultView.push(<Text key={index}>{textNodes[index]}</Text>);
       }
