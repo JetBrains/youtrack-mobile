@@ -13,7 +13,7 @@ export default class Wiki extends React.Component {
   }
 
   parse(source) {
-    const blockSource = `${source}\n\n`;
+    const blockSource = `${source}\n`;
     return this.parser(blockSource, {inline: false});
   }
 
