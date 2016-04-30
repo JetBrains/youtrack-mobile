@@ -19,4 +19,10 @@ describe('<Wiki/>', () => {
     const boldTextNode = wrapper.findWhere(component => component.props().style && component.props().style.fontWeight === 'bold');
     boldTextNode.length.should.equal(1);
   });
+
+  it('should render image', () => {
+    let wrapper = shallow(<Wiki>!http://example.com/foo.png!</Wiki>);
+    const imageNode = wrapper.findWhere(component => component.props().source);
+    imageNode.length.should.equal(1);
+  });
 });

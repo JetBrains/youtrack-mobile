@@ -13,6 +13,19 @@ export default class Wiki extends React.Component {
     this.renderer = SimpleMarkdown.reactFor(SimpleMarkdown.ruleOutput(rules, 'react'));
   }
 
+
+  static replaceImageNamesWithUrls(source, attachments) {
+    const ImageRegExp = /\![a-zA-Z0-9\s-]+?\.[a-zA-Z]+?\!/;
+
+    return source.replace(ImageRegExp, (imageName) => {
+      let attach = attachments.filter(a => `!${a.name}!` === imageName)[0];
+      if (attach) {
+        return `!${attach.url}!`;
+      }
+      return imageName;
+    });
+  }
+
   parse(source) {
     const blockSource = `${source}\n\n`;
     return this.parser(blockSource, {inline: false});

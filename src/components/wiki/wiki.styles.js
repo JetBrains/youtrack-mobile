@@ -15,5 +15,10 @@ export default StyleSheet.create({
   },
   italic: {
     fontStyle: 'italic'
+  },
+  image: {
+    width: 150,
+    height: 150,
+    resizeMode: 'contain'
   }
 });

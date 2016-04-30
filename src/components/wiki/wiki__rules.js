@@ -1,4 +1,4 @@
-import React, {Text, View} from 'react-native';
+import React, {Text, View, Image} from 'react-native';
 import SimpleMarkdown from 'simple-markdown';
 
 export default function (styles) {
@@ -74,6 +74,21 @@ export default function (styles) {
 
       react: (node, output, state) => {
         return <Text key={state.key} style={styles.italic}>{output(node.content)}</Text>
+      }
+    }),
+
+    /**
+     * NOTE: YT's wiki contains image names, not urls. Names should be first replaced with urls
+     */
+    image: Object.assign({}, SimpleMarkdown.defaultRules.image, {
+      match: source => /^!([\s\S]+?)!(?!!)/.exec(source),
+
+      parse: function(capture) {
+        return {url: capture[1]};
+      },
+
+      react: (node, output, state) => {
+        return <Image key={state.key} source={{uri: node.url}} style={styles.image}/>
       }
     })
   }
