@@ -11,6 +11,7 @@
     "test:watch": "npm test -- --watch",
     "lint": "eslint src",
     "ios": "./node_modules/react-native-cli/index.js run-ios",
+    "ios-build": "xcodebuild  -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile -sdk iphonesimulator -destination platform='iOS Simulator',name='iPhone 5s' -derivedDataPath ios/build",
     "android": "./node_modules/react-native-cli/index.js run-android",
     "android-release": "android/gradlew -p android/ assembleRelease",
     "android-emulator": "emulator -avd YouTrackMobile -scale 0.4 -gpu on -memory 2048",
