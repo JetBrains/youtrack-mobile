@@ -36,11 +36,11 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute',
-    backgroundColor: '#FFF',
+    backgroundColor: '#FFF7',
     borderRadius: 4,
-    opacity: 0.8,
     padding: 16,
-    bottom: 16
+    bottom: 16,
+    left: 16
   }
 });
 
