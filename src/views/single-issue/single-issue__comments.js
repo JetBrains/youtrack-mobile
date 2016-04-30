@@ -1,13 +1,14 @@
 import styles from './single-issue.styles';
 import relativeDate from 'relative-date';
-import TextWithImages from '../../components/text-with-images/text-with-images';
+import Wiki, {replaceImageNamesWithUrls} from '../../components/wiki/wiki';
+import {COLOR_FONT_GRAY} from '../../components/variables/variables';
 
 import React, {View, Text, Image} from 'react-native';
 
 export default class SingleIssueComments extends React.Component {
 
   _renderComment(comment, attachments) {
-    return TextWithImages.renderView(comment.text, attachments);
+    return <Wiki>{replaceImageNamesWithUrls(comment.text, attachments)}</Wiki>;
   }
 
   _renderCommentsList(comments, attachments) {
@@ -18,7 +19,7 @@ export default class SingleIssueComments extends React.Component {
           <View style={styles.comment}>
             <Text>
               <Text style={{color: '#1CAFE4'}}>{comment.author.fullName || comment.author.login}</Text>
-              <Text style={{color: '#888'}}> {relativeDate(comment.created)}</Text>
+              <Text style={{color: COLOR_FONT_GRAY}}> {relativeDate(comment.created)}</Text>
             </Text>
             <View style={styles.commentText}>{this._renderComment(comment, attachments)}</View>
           </View>

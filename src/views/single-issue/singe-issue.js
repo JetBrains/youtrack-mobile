@@ -2,12 +2,11 @@ import React, {Text, View, Image, TouchableOpacity, ScrollView, TextInput} from 
 
 import ApiHelper from '../../components/api/api__helper';
 import CustomField from '../../components/custom-field/custom-field';
-import TextWithImages from '../../components/text-with-images/text-with-images';
 import SingleIssueComments from './single-issue__comments';
 import Router from '../../components/router/router';
 import Header from '../../components/header/header';
 import Select from '../../components/select/select';
-import Wiki from '../../components/wiki/wiki';
+import Wiki, {replaceImageNamesWithUrls} from '../../components/wiki/wiki';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import SingleIssueCommentInput from './single-issue__comment-input';
 import styles from './single-issue.styles';
@@ -210,19 +209,6 @@ export default class SingeIssueView extends React.Component {
   _renderIssueView(issue) {
     return (
       <View style={styles.issueViewContainer}>
-
-        <Wiki>
-          =TITle= {'\n'}
-          fooo +foo+ *barrrr* test {'\n'}
-
-          --deleted-- {'\n'}
-
-          ''italic'' {'\n'}
-          
-          !https://pixabay.com/static/uploads/photo/2015/10/01/21/39/background-image-967820_960_720.jpg!
-
-        </Wiki>
-
         <Text style={styles.authorForText}>{this.getAuthorForText(issue)}</Text>
 
         {this.state.editMode && <View>
@@ -246,9 +232,9 @@ export default class SingeIssueView extends React.Component {
         {!this.state.editMode && <View>
           <Text style={styles.summary}>{issue.summary}</Text>
 
-          {issue.description && <View style={styles.description}>
-            {TextWithImages.renderView(issue.description, issue.attachments)}
-          </View>}
+          {issue.description && <Wiki style={styles.description}>
+            {replaceImageNamesWithUrls(issue.description, issue.attachments)}
+          </Wiki>}
         </View>}
 
         {this._renderAttachments(issue.attachments)}
