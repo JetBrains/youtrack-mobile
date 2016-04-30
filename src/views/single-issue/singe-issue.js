@@ -1,4 +1,4 @@
-import React, {Text, View, Image, TouchableOpacity, ScrollView} from 'react-native';
+import React, {Text, View, Image, TouchableOpacity, ScrollView, TextInput} from 'react-native';
 
 import ApiHelper from '../../components/api/api__helper';
 import CustomField from '../../components/custom-field/custom-field';
@@ -9,7 +9,6 @@ import Header from '../../components/header/header';
 import Select from '../../components/select/select';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import SingleIssueCommentInput from './single-issue__comment-input';
-import MultilineInput from '../../components/multiline-input/multiline-input';
 import styles from './single-issue.styles';
 
 
@@ -213,16 +212,21 @@ export default class SingeIssueView extends React.Component {
         <Text style={styles.authorForText}>{this.getAuthorForText(issue)}</Text>
 
         {this.state.editMode && <View>
-          <MultilineInput value={this.state.summaryCopy}
-                          style={styles.summaryInput}
-                          autoFocus={true}
-                          onChangeText={text => this.setState({summaryCopy: text})}/>
-
+          <TextInput
+            style={styles.summaryInput}
+            placeholder="Summary"
+            autoFocus={true}
+            value={this.state.summaryCopy}
+            onSubmitEditing={() => this.refs.description.focus()}
+            onChangeText={text => this.setState({summaryCopy: text})}/>
           <View style={styles.separator}/>
-
-          <MultilineInput value={this.state.descriptionCopy}
-                          style={styles.descriptionInput}
-                          onChangeText={text => this.setState({descriptionCopy: text})}/>
+          <TextInput
+            ref="description"
+            style={styles.descriptionInput}
+            value={this.state.descriptionCopy}
+            multiline={true}
+            placeholder="Description"
+            onChangeText={text => this.setState({descriptionCopy: text})}/>
         </View>}
 
         {!this.state.editMode && <View>

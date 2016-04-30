@@ -22,17 +22,22 @@ export default StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold'
   },
-  summaryInput: {
-    color: COLOR_FONT,
-    fontSize: 18,
-    marginBottom: UNIT
-  },
   description: {
     paddingTop: UNIT * 2
   },
-  descriptionInput: {
+  summaryInput: {
+    marginTop: UNIT,
+    marginBottom: UNIT,
     color: COLOR_FONT,
-    marginBottom: UNIT
+    fontSize: 18,
+    height: UNIT * 5
+  },
+  descriptionInput: {
+    marginTop: UNIT,
+    marginBottom: UNIT,
+    height: UNIT * 10,
+    color: COLOR_FONT,
+    fontSize: 14
   },
   attachesContainer: {
     marginTop: UNIT * 2
