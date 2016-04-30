@@ -7,6 +7,7 @@ import SingleIssueComments from './single-issue__comments';
 import Router from '../../components/router/router';
 import Header from '../../components/header/header';
 import Select from '../../components/select/select';
+import Wiki from '../../components/wiki/wiki';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import SingleIssueCommentInput from './single-issue__comment-input';
 import styles from './single-issue.styles';
@@ -209,6 +210,9 @@ export default class SingeIssueView extends React.Component {
   _renderIssueView(issue) {
     return (
       <View style={styles.issueViewContainer}>
+
+        <Wiki>fooo foo *barrrr* test</Wiki>
+        
         <Text style={styles.authorForText}>{this.getAuthorForText(issue)}</Text>
 
         {this.state.editMode && <View>
