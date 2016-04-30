@@ -7,18 +7,23 @@ export default class QueryAssistSuggestionsList extends React.Component {
   constructor() {
     super();
     this.state = {dataSource: ds.cloneWithRows([])};
+
+    this.storedPromise = null;
   }
 
   loadSuggestions(query, caret) {
-    this.props.getSuggestions(query, caret)
+    const promise = this.props.getSuggestions(query, caret)
       .then((suggestions) => {
-        suggestions = transformSuggestions(suggestions);
-        if (!this.isUnmounted) {
-          this.setState({
-            dataSource: ds.cloneWithRows(suggestions)
-          });
+        if (promise !== this.storedPromise || this.isUnmounted) {
+          return;
         }
+
+        suggestions = transformSuggestions(suggestions);
+        this.setState({dataSource: ds.cloneWithRows(suggestions)});
       });
+
+    this.storedPromise = promise;
+    return promise;
   }
 
   componentDidMount() {
