@@ -21,9 +21,9 @@ export default StyleSheet.create({
     height: UNIT * 4,
     borderRadius: 6,
     backgroundColor: '#FFF',
-    color: '#7E7E84',
     margin: UNIT,
-    padding: 6
+    paddingLeft: UNIT,
+    color: COLOR_FONT
   },
   separator: {
     height: 0.5,
