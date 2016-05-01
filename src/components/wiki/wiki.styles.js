@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import {COLOR_LIGHT_GRAY} from '../variables/variables';
 
 export default StyleSheet.create({
   heading: {
@@ -24,5 +25,12 @@ export default StyleSheet.create({
   link: {
     color: 'blue',
     textDecorationLine: 'underline'
+  },
+  codeBlock: {
+    backgroundColor: COLOR_LIGHT_GRAY,
+    fontFamily: 'Courier'
+  },
+  inlineCode: {
+    fontFamily: 'Courier'
   }
 });

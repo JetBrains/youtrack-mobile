@@ -91,7 +91,7 @@ export default function (styles) {
         return <Image key={state.key} source={{uri: node.url, width: 150, height: 150}} style={styles.image}/>
       }
     }),
-    
+
     link: Object.assign({}, SimpleMarkdown.defaultRules.link, {
       match: source => /^https?:\/\/\S*/.exec(source),
 
@@ -103,6 +103,26 @@ export default function (styles) {
 
       react: (node, output, state) => {
         return <Text key={state.key} style={styles.link}>{node.url}</Text>
+      }
+    }),
+
+    codeBlock: Object.assign({}, SimpleMarkdown.defaultRules.codeBlock, {
+      match: source => /^```([\s\S]+?)```(?!```)/.exec(source),
+
+      parse: function(capture) {
+        return {
+          content: capture[1].replace(/^\n+/, '')
+        };
+      },
+
+      react: (node, output, state) => {
+        return <Text key={state.key} style={styles.codeBlock}>{node.content}</Text>
+      }
+    }),
+
+    inlineCode: Object.assign({}, SimpleMarkdown.defaultRules.inlineCode, {
+      react: (node, output, state) => {
+        return <Text key={state.key} style={styles.inlineCode}>{node.content}</Text>
       }
     })
   }
