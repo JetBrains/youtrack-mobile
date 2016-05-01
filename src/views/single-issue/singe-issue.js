@@ -92,6 +92,8 @@ export default class SingeIssueView extends React.Component {
   }
 
   onIssueFieldValueUpdate(field, value) {
+    field.value = value;
+    this.forceUpdate();
     const updateMethod = field.hasStateMachine ?
       this.props.api.updateIssueFieldEvent.bind(this.props.api) :
       this.props.api.updateIssueFieldValue.bind(this.props.api);
