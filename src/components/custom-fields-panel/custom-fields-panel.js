@@ -84,7 +84,7 @@ export default class CustomFieldsPanel extends React.Component {
         emptyValue: field.projectCustomField.canBeEmpty ? field.projectCustomField.emptyFieldText : null,
         dataSource: (query) => {
           if (field.hasStateMachine) {
-            return this.props.api.getStateMachineEvents(this.props.issueId, field.id)
+            return this.props.api.getStateMachineEvents(this.props.issue.id, field.id)
               .then(items => items.map(it => Object.assign(it, {name: `${it.id} (${it.presentation})`})))
           }
           return this.props.api.getCustomFieldValues(field.projectCustomField.bundle.id, field.projectCustomField.field.fieldType.valueType)
@@ -138,7 +138,7 @@ export default class CustomFieldsPanel extends React.Component {
           <TouchableOpacity onPress={() => this.state.datePicker.onSelect(null)}>
             <Text style={styles.clearDate}>{this.state.datePicker.emptyValueName} (Clear value)</Text>
           </TouchableOpacity>}
-          
+
           <CalendarPicker
             selectedDate={this.state.datePicker.value}
             startFromMonday={true}
