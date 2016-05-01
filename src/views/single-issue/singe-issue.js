@@ -1,11 +1,10 @@
 import React, {Text, View, Image, TouchableOpacity, ScrollView, TextInput} from 'react-native';
 
 import ApiHelper from '../../components/api/api__helper';
-import CustomField from '../../components/custom-field/custom-field';
+import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import SingleIssueComments from './single-issue__comments';
 import Router from '../../components/router/router';
 import Header from '../../components/header/header';
-import Select from '../../components/select/select';
 import Wiki, {replaceImageNamesWithUrls} from '../../components/wiki/wiki';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import SingleIssueCommentInput from './single-issue__comment-input';
@@ -23,15 +22,7 @@ export default class SingeIssueView extends React.Component {
 
       editMode: false,
       summaryCopy: null,
-      descriptionCopy: null,
-
-      select: {
-        show: false,
-        dataSource: null,
-        onSelect: null,
-        multi: false,
-        selectedItems: []
-      }
+      descriptionCopy: null
     };
   }
 
@@ -100,56 +91,14 @@ export default class SingeIssueView extends React.Component {
     return `${issue.reporter.fullName || issue.reporter.login} ${forText()}`
   }
 
-  _renderSelect() {
-    const config = this.state.select;
-    if (config.show) {
-      return <Select
-        title={`Select item`}
-        api={this.props.api}
-        dataSource={config.dataSource}
-        onSelect={config.onSelect}
-        multi={config.multi}
-        selectedItems={config.selectedItems}
-        emptyValue={config.emptyValue}
-        onCancel={() => this.setState({select: {show: false}})}
-        getTitle={(item) => item.fullName || item.name || item.login}
-      />;
-    }
-  }
+  onIssueFieldValueUpdate(field, value) {
+    const updateMethod = field.hasStateMachine ?
+      this.props.api.updateIssueFieldEvent.bind(this.props.api) :
+      this.props.api.updateIssueFieldValue.bind(this.props.api);
 
-  editField(field) {
-    this.setState({select: {show: false}});
-    const isMultiValue = field.projectCustomField.field.fieldType.isMultiValue;
-    let selectedItems = isMultiValue ? field.value : [field.value];
-    selectedItems = selectedItems.filter(it => it !== null);
-
-    this.setState({
-      select: {
-        show: true,
-        dataSource: (query) => {
-          if (field.hasStateMachine) {
-            return this.props.api.getStateMachineEvents(this.props.issueId, field.id)
-              .then(items => items.map(it => Object.assign(it, {name: `${it.id} (${it.presentation})`})))
-          }
-          return this.props.api.getCustomFieldValues(field.projectCustomField.bundle.id, field.projectCustomField.field.fieldType.valueType)
-            .then(res => res.aggregatedUsers || res.values);
-        },
-        onSelect: (val) => {
-          this.setState({select: {show: false}});
-
-          const updateMethod = field.hasStateMachine ?
-            this.props.api.updateIssueFieldEvent.bind(this.props.api) :
-            this.props.api.updateIssueFieldValue.bind(this.props.api);
-
-          return updateMethod(this.props.issueId, field.id, val)
-            .then(() => this.loadIssue(this.props.issueId))
-            .then((res) => this.props.onUpdate(res));
-        },
-        multi: isMultiValue,
-        selectedItems: selectedItems,
-        emptyValue: field.projectCustomField.canBeEmpty ? field.projectCustomField.emptyFieldText : null
-      }
-    });
+    return updateMethod(this.props.issueId, field.id, value)
+      .then(() => this.loadIssue(this.props.issueId))
+      .then((res) => this.props.onUpdate(res));
   }
 
   onSaveChanges() {
@@ -242,24 +191,6 @@ export default class SingeIssueView extends React.Component {
     );
   }
 
-  _renderFooter(issue) {
-    return (<View>
-      <ScrollView horizontal={true} style={styles.footer}>
-        <CustomField key="Project"
-                     disabled={true}
-                     field={{projectCustomField: {field: {name: 'Project'}}, value: {name: issue.project.shortName}}}/>
-
-        {issue.fields.map((field) => {
-          return (<CustomField
-            key={field.id}
-            field={field}
-            onPress={() => this.editField(field)}
-            disabled={!this.issuePermissions.canUpdateField(issue, field)}/>);
-        })}
-      </ScrollView>
-    </View>);
-  }
-
   render() {
     return (
       <View style={styles.container}>
@@ -277,9 +208,11 @@ export default class SingeIssueView extends React.Component {
           </View>}
         </ScrollView>}
 
-        {this.state.issue && this._renderFooter(this.state.issue)}
-
-        {this._renderSelect()}
+        {this.state.issue && <CustomFieldsPanel
+          api={this.props.api}
+          issue={this.state.issue}
+          issuePermissions={this.issuePermissions}
+          onUpdate={this.onIssueFieldValueUpdate.bind(this)}/>}
       </View>
     );
   }

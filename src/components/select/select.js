@@ -94,8 +94,10 @@ export default class Select extends React.Component {
   }
 
   render() {
+    console.log('h', this.props.height)
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, this.props.style]}>
+        <View style={{height: this.props.height}}>
         <Header
           leftButton={<Text>Cancel</Text>}
           onBack={this.props.onCancel.bind(this)}
@@ -116,11 +118,11 @@ export default class Select extends React.Component {
             }}
             style={styles.searchInput}/>
         </View>
-        <View style={styles.separator}/>
         <ScrollView>
           {this._renderEmptyValueItem()}
           {this.state.filteredItems && this.state.filteredItems.map(item => this._renderRow(item))}
         </ScrollView>
+        </View>
       </View>
     );
   }

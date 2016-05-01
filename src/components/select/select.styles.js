@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_LIGHT_GRAY, COLOR_FONT, COLOR_PINK, FOOTER_HEIGHT} from '../../components/variables/variables';
+import {UNIT, COLOR_LIGHT_GRAY, COLOR_FONT, COLOR_PINK} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   container: {
@@ -8,7 +8,7 @@ export default StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    bottom: FOOTER_HEIGHT,
+    bottom: 0,
     backgroundColor: '#FFFFFFF4'
   },
   inputWrapper: {
@@ -24,10 +24,6 @@ export default StyleSheet.create({
     margin: UNIT,
     paddingLeft: UNIT,
     color: COLOR_FONT
-  },
-  separator: {
-    height: 0.5,
-    backgroundColor: '#C8C7CC'
   },
   row: {
     position: 'relative',
