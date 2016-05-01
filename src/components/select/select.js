@@ -10,7 +10,8 @@ export default class Select extends React.Component {
       query: '',
       items: null,
       filteredItems: [],
-      selectedItems: []
+      selectedItems: [],
+      loaded: false
     };
   }
 
@@ -24,7 +25,8 @@ export default class Select extends React.Component {
   _loadItems(query) {
     this.props.dataSource(query)
       .then(items => this.setState({items}))
-      .then(() => this._onSearch(query));
+      .then(() => this._onSearch(query))
+      .then(() => this.setState({loaded: true}));
   }
 
   _renderEmptyValueItem() {
@@ -120,6 +122,10 @@ export default class Select extends React.Component {
         <ScrollView>
           {this._renderEmptyValueItem()}
           {this.state.filteredItems && this.state.filteredItems.map(item => this._renderRow(item))}
+
+          {!this.state.loaded && <View style={styles.row}>
+            <Text>Loading values...</Text>
+          </View>}
         </ScrollView>
         </View>
       </View>
