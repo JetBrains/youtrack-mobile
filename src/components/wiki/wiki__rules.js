@@ -2,6 +2,9 @@ import React, {Text, View, Image} from 'react-native';
 import SimpleMarkdown from 'simple-markdown';
 import styles from './wiki.styles';
 
+const CONTENT_WITH_MARKERS = 0;
+const CONTENT_WITHIN_MARKERS = 1;
+
 export default function (actions) {
   return {
     /**
@@ -45,7 +48,7 @@ export default function (actions) {
 
       parse: (capture, parse, state) => {
         return {
-          content: parse(capture[1], state)
+          content: parse(capture[CONTENT_WITHIN_MARKERS], state)
         };
       },
 
@@ -85,7 +88,7 @@ export default function (actions) {
       match: source => /^!([\s\S]+?)!(?!!)/.exec(source),
 
       parse: function(capture) {
-        return {url: capture[1]};
+        return {url: capture[CONTENT_WITHIN_MARKERS]};
       },
 
       react: (node, output, state) => {
@@ -100,7 +103,7 @@ export default function (actions) {
 
       parse: (capture, parse, state) => {
         return {
-          url: capture[0]
+          url: capture[CONTENT_WITH_MARKERS]
         };
       },
 
@@ -114,7 +117,7 @@ export default function (actions) {
 
       parse: function(capture) {
         return {
-          content: capture[1].replace(/^\n+/, '')
+          content: capture[CONTENT_WITHIN_MARKERS].replace(/^\n+/, '')
         };
       },
 

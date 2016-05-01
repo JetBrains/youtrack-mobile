@@ -1,5 +1,6 @@
 import React from 'react';
 import {shallow} from 'enzyme';
+import {COLOR_LIGHT_GRAY} from '../variables/variables';
 
 import Wiki from './wiki';
 
@@ -29,6 +30,18 @@ describe('<Wiki/>', () => {
   it('should parse url', () => {
     let wrapper = shallow(<Wiki>foo bar http://some.url test test</Wiki>);
     const imageNode = wrapper.findWhere(component => component.text() === 'http://some.url');
+    imageNode.length.should.equal(1);
+  });
+
+  it('should parse inline code', () => {
+    let wrapper = shallow(<Wiki>`some code`</Wiki>);
+    const imageNode = wrapper.findWhere(component => component.props().style && component.props().style.fontFamily === 'Courier');
+    imageNode.length.should.equal(1);
+  });
+
+  it('should parse code block', () => {
+    let wrapper = shallow(<Wiki>```{'\n'}some code{'\n'}```</Wiki>);
+    const imageNode = wrapper.findWhere(component => component.props().style && component.props().style.backgroundColor === COLOR_LIGHT_GRAY);
     imageNode.length.should.equal(1);
   });
 });
