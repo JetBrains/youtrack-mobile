@@ -90,6 +90,20 @@ export default function (styles) {
       react: (node, output, state) => {
         return <Image key={state.key} source={{uri: node.url, width: 150, height: 150}} style={styles.image}/>
       }
+    }),
+    
+    link: Object.assign({}, SimpleMarkdown.defaultRules.link, {
+      match: source => /^https?:\/\/\S*/.exec(source),
+
+      parse: (capture, parse, state) => {
+        return {
+          url: capture[0]
+        };
+      },
+
+      react: (node, output, state) => {
+        return <Text key={state.key} style={styles.link}>{node.url}</Text>
+      }
     })
   }
 }

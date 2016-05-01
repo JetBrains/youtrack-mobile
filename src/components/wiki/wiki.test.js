@@ -25,4 +25,10 @@ describe('<Wiki/>', () => {
     const imageNode = wrapper.findWhere(component => component.props().source);
     imageNode.length.should.equal(1);
   });
+
+  it('should parse url', () => {
+    let wrapper = shallow(<Wiki>foo bar http://some.url test test</Wiki>);
+    const imageNode = wrapper.findWhere(component => component.text() === 'http://some.url');
+    imageNode.length.should.equal(1);
+  });
 });
