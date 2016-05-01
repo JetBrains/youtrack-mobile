@@ -40,7 +40,11 @@ describe('<Wiki/>', () => {
   });
 
   it('should parse code block', () => {
-    let wrapper = shallow(<Wiki>```{'\n'}some code{'\n'}```</Wiki>);
+    let wrapper = shallow(<Wiki>
+      ```{'\n'}
+      some code{'\n'}
+      ```
+    </Wiki>);
     const imageNode = wrapper.findWhere(component => component.props().style && component.props().style.backgroundColor === COLOR_LIGHT_GRAY);
     imageNode.length.should.equal(1);
   });
