@@ -127,7 +127,7 @@ export default class Select extends React.Component {
           {this.state.filteredItems && this.state.filteredItems.map(item => this._renderRow(item))}
 
           {!this.state.loaded && <View style={styles.row}>
-            <Text>Loading values...</Text>
+            <Text style={styles.loadingMessage}>Loading values...</Text>
           </View>}
         </ScrollView>
         </View>

@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_LIGHT_GRAY, COLOR_FONT, COLOR_PINK} from '../../components/variables/variables';
+import {UNIT, COLOR_LIGHT_GRAY, COLOR_FONT, COLOR_PINK, COLOR_FONT_GRAY} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   container: {
@@ -43,6 +43,9 @@ export default StyleSheet.create({
     marginLeft: UNIT * 2,
     fontSize: 18,
     color: COLOR_FONT
+  },
+  loadingMessage: {
+    color: COLOR_FONT_GRAY
   },
   selectedMark: {
     position: 'absolute',
