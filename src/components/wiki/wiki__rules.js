@@ -1,7 +1,8 @@
 import React, {Text, View, Image} from 'react-native';
 import SimpleMarkdown from 'simple-markdown';
+import styles from './wiki.styles';
 
-export default function (styles) {
+export default function (actions) {
   return {
     /**
      * Basic rules
@@ -88,7 +89,9 @@ export default function (styles) {
       },
 
       react: (node, output, state) => {
-        return <Image key={state.key} source={{uri: node.url, width: 150, height: 150}} style={styles.image}/>
+        return <Text onPress={() => actions.onImagePress(node.url)} key={state.key}>
+          <Image source={{uri: node.url, width: 150, height: 150}} style={styles.image}/>
+        </Text>;
       }
     }),
 
@@ -102,7 +105,7 @@ export default function (styles) {
       },
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.link}>{node.url}</Text>
+        return <Text key={state.key} style={styles.link} onPress={() => actions.onLinkPress(node.url)}>{node.url}</Text>
       }
     }),
 

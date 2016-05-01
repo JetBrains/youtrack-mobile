@@ -1,12 +1,19 @@
-import React, {View} from 'react-native';
+import React, {View, Linking} from 'react-native';
 import SimpleMarkdown from 'simple-markdown';
-import styles from './wiki.styles';
+import Router from '../router/router';
 import wikiRules from './wiki__rules';
 
 export default class Wiki extends React.Component {
   constructor() {
     super();
-    const rules = wikiRules(styles);
+    const rules = wikiRules({
+      onLinkPress: (url) => {
+        return Linking.openURL(url);
+      },
+      onImagePress: (url) => {
+        return Router.ShowImage({imageUrl: url, imageName: ''})
+      }
+    });
 
     this.parser = SimpleMarkdown.parserFor(rules);
 
