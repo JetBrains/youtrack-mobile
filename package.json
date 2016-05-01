@@ -23,6 +23,7 @@
     "qs": "6.1.0",
     "react": "0.14.7",
     "react-native": "0.24.1",
+    "react-native-calendar-picker": "joshuapinter/CalendarPicker#50f3f98",
     "react-native-image-picker": "0.14.3",
     "react-native-invertible-scroll-view": "0.2.0",
     "react-native-keyboard-spacer": "^0.1.6",

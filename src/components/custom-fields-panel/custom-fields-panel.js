@@ -1,6 +1,9 @@
-import React, {View, ScrollView, PropTypes} from 'react-native';
+import React, {View, ScrollView, PropTypes, Text, TouchableOpacity} from 'react-native';
+import CalendarPicker from 'react-native-calendar-picker/CalendarPicker/CalendarPicker';
 import CustomField from '../custom-field/custom-field';
 import Select from '../select/select';
+import Header from '../header/header';
+import {COLOR_PINK} from '../../components/variables/variables';
 
 import styles from './custom-fields-panel.styles';
 
@@ -18,13 +21,20 @@ export default class CustomFieldsPanel extends React.Component {
         onSelect: null,
         multi: false,
         selectedItems: []
+      },
+
+      datePicker: {
+        show: false,
+        title: null,
+        value: null,
+        onSelect: () => {}
       }
     };
   }
 
   componentDidMount() {
     setTimeout(() => {
-      this.refs.panel.measure( (fx, fy, width, height, px, py) => {
+      this.refs.panel.measure((fx, fy, width, height, px, py) => {
         this.setState({topCoord: py, height: height});
       });
     }, 0);
@@ -44,7 +54,24 @@ export default class CustomFieldsPanel extends React.Component {
   }
 
   onEditField(field) {
-    this.setState({select: {show: false}});
+    this.setState({select: {show: false}, datePicker: {show: false}});
+
+    if (field.projectCustomField.field.fieldType.valueType === 'date') {
+      this.setState({
+        datePicker: {
+          show: true,
+          title: field.projectCustomField.field.name,
+          value: field.value ? new Date(field.value) : new Date(),
+          emptyValueName: field.projectCustomField.canBeEmpty ? field.projectCustomField.emptyFieldText : null,
+          onSelect: (date) => {
+            this.setState({datePicker: {show: false}});
+            return this.props.onUpdate(field, date ? date.getTime() : null);
+          }
+        }
+      });
+      return;
+    }
+
     const isMultiValue = field.projectCustomField.field.fieldType.isMultiValue;
     let selectedItems = isMultiValue ? field.value : [field.value];
     selectedItems = selectedItems.filter(it => it !== null);
@@ -72,25 +99,61 @@ export default class CustomFieldsPanel extends React.Component {
   }
 
   _renderSelect() {
-    const config = this.state.select;
-    if (config.show) {
-      return <Select
-        style={{
+    if (!this.state.select.show) {
+      return;
+    }
+
+    return <Select
+      {...this.state.select}
+      style={{
           top: -this.state.topCoord,
           bottom: this.state.height
         }}
-        height={this.state.topCoord}
-        title="Select item"
-        api={this.props.api}
-        dataSource={config.dataSource}
-        onSelect={config.onSelect}
-        multi={config.multi}
-        selectedItems={config.selectedItems}
-        emptyValue={config.emptyValue}
-        onCancel={() => this.setState({select: {show: false}})}
-        getTitle={(item) => item.fullName || item.name || item.login}
-      />;
+      height={this.state.topCoord}
+      title="Select item"
+      api={this.props.api}
+      onCancel={() => this.setState({select: {show: false}})}
+      getTitle={(item) => item.fullName || item.name || item.login}
+    />;
+  }
+
+  _renderDatePicker() {
+    if (!this.state.datePicker.show) {
+      return;
     }
+
+    return (
+      <View style={[styles.datepickerViewContainer, {
+          top: -this.state.topCoord,
+          bottom: this.state.height
+      }]}>
+        <Header
+          leftButton={<Text>Cancel</Text>}
+          rightButton={<Text></Text>}
+          onBack={() => this.setState({datePicker: {show: false}})}>
+          <Text>{this.state.datePicker.title}</Text>
+        </Header>
+        <View style={styles.calendar}>
+          {this.state.datePicker.emptyValueName &&
+          <TouchableOpacity onPress={() => this.state.datePicker.onSelect(null)}>
+            <Text style={styles.clearDate}>{this.state.datePicker.emptyValueName} (Clear value)</Text>
+          </TouchableOpacity>}
+          
+          <CalendarPicker
+            selectedDate={this.state.datePicker.value}
+            startFromMonday={true}
+            onDateChange={date => {
+              if (this.state.datePicker.value.getMonth() !== date.getMonth()) {
+                this.state.datePicker.value = date;
+                return this.setState({datePicker: this.state.datePicker});
+              }
+              return this.state.datePicker.onSelect(date);
+            }}
+            selectedDayColor={COLOR_PINK}
+            selectedDayTextColor="#FFF"/>
+        </View>
+      </View>
+    );
   }
 
   render() {
@@ -99,6 +162,8 @@ export default class CustomFieldsPanel extends React.Component {
     return (
       <View ref="panel">
         {this._renderSelect()}
+
+        {this._renderDatePicker()}
 
         <ScrollView horizontal={true} style={styles.customFieldsPanel}>
           <CustomField key="Project"

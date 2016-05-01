@@ -8,6 +8,9 @@ export default class CustomField extends React.Component {
     const emptyValue = field.projectCustomField.emptyFieldText;
 
     if (value) {
+      if (Number.isInteger(value)) {
+        return new Date(value).toLocaleDateString();
+      }
       return value.name || value.fullName || value.login;
     }
 

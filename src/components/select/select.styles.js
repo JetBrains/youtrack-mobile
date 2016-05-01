@@ -9,7 +9,7 @@ export default StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: '#FFFFFFF4'
+    backgroundColor: '#FFFFFFF0'
   },
   inputWrapper: {
     backgroundColor: COLOR_LIGHT_GRAY,
