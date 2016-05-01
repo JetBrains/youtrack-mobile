@@ -51,5 +51,9 @@ export default StyleSheet.create({
     bottom: 0,
     width: UNIT / 2,
     backgroundColor: COLOR_PINK
+  },
+  colorFieldItemWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   }
 });
