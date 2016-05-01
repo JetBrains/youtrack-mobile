@@ -30,6 +30,19 @@ export default class CustomFieldsPanel extends React.Component {
     }, 0);
   }
 
+  onSelectProject() {
+    this.setState({
+      select: {
+        show: true,
+        dataSource: this.props.api.getProjects.bind(this.props.api),
+        onSelect: project => {
+          this.setState({select: {show: false}});
+          return this.props.onUpdateProject(project);
+        }
+      }
+    });
+  }
+
   onEditField(field) {
     this.setState({select: {show: false}});
     const isMultiValue = field.projectCustomField.field.fieldType.isMultiValue;
@@ -89,7 +102,8 @@ export default class CustomFieldsPanel extends React.Component {
 
         <ScrollView horizontal={true} style={styles.customFieldsPanel}>
           <CustomField key="Project"
-                       disabled={true}
+                       disabled={!this.props.canEditProject}
+                       onPress={() => this.onSelectProject()}
                        field={{projectCustomField: {field: {name: 'Project'}}, value: {name: issue.project.shortName}}}/>
 
           {issue.fields.map((field) => <CustomField
@@ -106,5 +120,8 @@ export default class CustomFieldsPanel extends React.Component {
 CustomFieldsPanel.propTypes = {
   api: PropTypes.object.isRequired,
   issue: PropTypes.object.isRequired,
-  issuePermissions: PropTypes.object.isRequired
+  issuePermissions: PropTypes.object.isRequired,
+  onUpdate: PropTypes.func.isRequired,
+  onUpdateProject: PropTypes.func,
+  canEditProject: PropTypes.bool
 };

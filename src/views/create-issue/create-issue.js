@@ -5,8 +5,7 @@ import Header from '../../components/header/header';
 import {UIImagePickerManager} from 'NativeModules';
 import Router from '../../components/router/router';
 import {attach, tag, next} from '../../components/icon/icon';
-import CustomField from '../../components/custom-field/custom-field';
-import Select from '../../components/select/select';
+import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import ApiHelper from '../../components/api/api__helper';
 
 const PROJECT_ID_STORAGE_KEY = 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE';
@@ -21,13 +20,7 @@ export default class CreateIssue extends React.Component {
       fields: [],
       project: {
         id: null,
-        name: 'Not selected'
-      },
-
-      select: {
-        show: false,
-        dataSource: null,
-        onSelect: null
+        shortName: 'Not selected'
       }
     };
 
@@ -93,55 +86,27 @@ export default class CreateIssue extends React.Component {
           const isMultivalue = it.field.fieldType.isMultiValue;
           const firstDefaultValue = it.defaultValues && it.defaultValues[0];
           return {id: it.id, projectCustomField: it, value: isMultivalue ? it.defaultValues : firstDefaultValue};
-        });
+        })
+          .sort((fieldA, fieldB) => fieldA.projectCustomField.field.ordinal - fieldB.projectCustomField.field.ordinal);
+
         this.setState({project, fields: fields, select: {show: false}});
       });
   }
 
-  selectProject() {
-    this.setState({
-      select: {
-        show: true,
-        dataSource: this.props.api.getProjects.bind(this.props.api),
-        onSelect: (project) => {
-          this.loadProjectFields(project.id);
-          return AsyncStorage.setItem(PROJECT_ID_STORAGE_KEY, project.id);
-        }
-      }
-    });
+  onUpdateProject(project) {
+    this.setState({project});
+    AsyncStorage.setItem(PROJECT_ID_STORAGE_KEY, project.id);
+    return this.loadProjectFields(project.id);
   }
 
-  editField(field) {
-    const isMultiValue = field.projectCustomField.field.fieldType.isMultiValue;
-    let selectedItems = isMultiValue ? field.value : [field.value];
-    selectedItems = selectedItems.filter(it => it !== null);
-
-    this.setState({select: {show: false}});
-
-    this.setState({
-      select: {
-        show: true,
-        dataSource: (query) => {
-          return this.props.api.getCustomFieldValues(field.projectCustomField.bundle.id, field.projectCustomField.field.fieldType.valueType)
-            .then(res => res.aggregatedUsers || res.values);
-        },
-        onSelect: (val) => {
-          const updatedFields = this.state.fields.slice().map(f => {
-            if (f === field) {
-              f.value = val;
-            }
-            return f;
-          });
-          this.setState({
-            select: {show: false},
-            fields: updatedFields
-          });
-        },
-        multi: isMultiValue,
-        selectedItems: selectedItems,
-        emptyValue: field.projectCustomField.canBeEmpty ? field.projectCustomField.emptyFieldText : null
+  onSetFieldValue(field, value) {
+    const updatedFields = this.state.fields.slice().map(f => {
+      if (f === field) {
+        f.value = value;
       }
+      return f;
     });
+    this.setState({fields: updatedFields});
   }
 
   _renderAttahes() {
@@ -156,43 +121,6 @@ export default class CreateIssue extends React.Component {
         </TouchableOpacity>
       );
     });
-  }
-
-  _renderFooter(issue) {
-    return (<View>
-      <ScrollView contentInset={{top:0}}
-                  automaticallyAdjustContentInsets={false}
-                  horizontal={true}
-                  style={issueStyles.footer}>
-
-        <CustomField
-          key="Project"
-          field={{projectCustomField: {field: {name: 'Project'}}, value: this.state.project}}
-          onPress={this.selectProject.bind(this)}/>
-        {this.state.fields
-          .sort((fieldA, fieldB) => fieldB.projectCustomField.field.ordinal - fieldA.projectCustomField.field.ordinal)
-          .map((field) => {
-            return (<CustomField key={field.id} field={field} onPress={() => this.editField(field)}/>);
-          })}
-      </ScrollView>
-    </View>);
-  }
-
-  _renderSelect() {
-    const config = this.state.select;
-    if (config.show) {
-      return <Select
-        title={`Select item`}
-        api={this.props.api}
-        dataSource={config.dataSource}
-        multi={config.multi}
-        selectedItems={config.selectedItems}
-        emptyValue={config.emptyValue}
-        onSelect={config.onSelect}
-        onCancel={() => this.setState({select: {show: false}})}
-        getTitle={(item) => item.fullName || item.name || item.login}
-      />;
-    }
   }
 
   render() {
@@ -253,9 +181,14 @@ export default class CreateIssue extends React.Component {
             </View>}
           </View>
         </ScrollView>
-        {this._renderFooter(this.state)}
 
-        {this._renderSelect()}
+        <CustomFieldsPanel
+          api={this.props.api}
+          issue={this.state}
+          canEditProject={true}
+          issuePermissions={{canUpdateField: () => true}}
+          onUpdate={this.onSetFieldValue.bind(this)}
+          onUpdateProject={this.onUpdateProject.bind(this)}/>
       </View>
     );
   }

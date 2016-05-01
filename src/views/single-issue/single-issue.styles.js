@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, FOOTER_HEIGHT, COLOR_LIGHT_GRAY, COLOR_FONT_GRAY, COLOR_FONT} from '../../components/variables/variables';
+import {UNIT, COLOR_LIGHT_GRAY, COLOR_FONT_GRAY, COLOR_FONT} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   container: {
@@ -99,20 +99,6 @@ export default StyleSheet.create({
   },
   commentText: {
     marginTop: UNIT
-  },
-  footer: {
-    paddingLeft: UNIT,
-    flexDirection: 'row',
-    backgroundColor: '#FFF',
-    height: FOOTER_HEIGHT
-  },
-  footerIcon: {
-    width: UNIT * 3,
-    height: UNIT * 3
-  },
-  iconButton: {
-    justifyContent: 'center',
-    padding: UNIT
   },
   separator: {
     height: 0.5,
