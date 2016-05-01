@@ -19,6 +19,15 @@ export default class QueryAssist extends React.Component {
 
   cancelSearch() {
     this.refs.searchInput.blur();
+    this.setState({input: this.state.queryCopy});
+  }
+
+  beginEditing() {
+    this.setState({
+      showQueryAssist: true,
+      displayCancelSearch: true,
+      queryCopy: this.state.input
+    });
   }
 
   onSubmitEditing() {
@@ -52,7 +61,7 @@ export default class QueryAssist extends React.Component {
           returnKeyType="search"
           autoCorrect={false}
           autoCapitalize="none"
-          onFocus={() => this.setState({showQueryAssist: true, displayCancelSearch: true})}
+          onFocus={() => this.beginEditing()}
           onBlur={() => this.setState({showQueryAssist: false, displayCancelSearch: false})}
           onSubmitEditing={() => this.onSubmitEditing()}
           value={this.state.input}
