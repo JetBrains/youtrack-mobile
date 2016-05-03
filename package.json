@@ -1,6 +1,6 @@
 {
   "name": "YouTrackMobile",
-  "version": "0.5.0",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "start": "./node_modules/react-native-cli/index.js start",
