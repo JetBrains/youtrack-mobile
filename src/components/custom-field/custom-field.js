@@ -84,13 +84,13 @@ const styles = StyleSheet.create({
     flexWrap: 'nowrap'
   },
   keyText: {
-    marginTop: 2,
     paddingTop: 4,
     fontSize: 12
   },
   valueText: {
     fontWeight: 'bold',
-    margin: -2,
+    marginLeft: -2,
+    marginRight: 0,
     padding: 2
   },
   valueTextDisabled: {
