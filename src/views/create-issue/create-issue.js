@@ -124,12 +124,14 @@ export default class CreateIssue extends React.Component {
   }
 
   render() {
+    const canCreateIssue = this.state.summary && this.state.project.id;
+
     return (
       <View style={styles.container}>
         <ScrollView>
           <Header leftButton={<Text>Cancel</Text>}
-                  rightButton={<Text>Create</Text>}
-                  onRightButtonClick={this.createIssue.bind(this)}>
+                  rightButton={<Text style={canCreateIssue ? null : styles.disabledCreateButton}>Create</Text>}
+                  onRightButtonClick={() => canCreateIssue && this.createIssue()}>
             <Text>New Issue</Text>
           </Header>
           <View>

@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_LIGHT_GRAY, COLOR_FONT_GRAY, COLOR_FONT} from '../../components/variables/variables';
+import {UNIT, COLOR_LIGHT_GRAY, COLOR_FONT_GRAY, COLOR_FONT, COLOR_GRAY} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   container: {
@@ -104,6 +104,6 @@ export default StyleSheet.create({
     height: 0.5,
     marginLeft: - UNIT*2,
     marginRight: - UNIT*2,
-    backgroundColor: '#C8C7CC'
+    backgroundColor: COLOR_GRAY
   }
 });

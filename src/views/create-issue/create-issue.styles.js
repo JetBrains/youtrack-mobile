@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_PINK} from '../../components/variables/variables';
+import {UNIT, COLOR_PINK, COLOR_FONT_GRAY, COLOR_FONT, COLOR_GRAY} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   container: {
@@ -9,7 +9,7 @@ export default StyleSheet.create({
   summaryInput: {
     margin: UNIT,
     padding: UNIT,
-    color: '#7E7E84',
+    color: COLOR_FONT,
     fontSize: 18,
     height: UNIT * 5
   },
@@ -19,13 +19,16 @@ export default StyleSheet.create({
     padding: UNIT,
     flex: 1,
     backgroundColor: '#FFF',
-    color: '#7E7E84',
+    color: COLOR_FONT,
     borderColor: 'black',
     fontSize: 14
   },
+  disabledCreateButton: {
+    color: COLOR_FONT_GRAY
+  },
   separator: {
     height: 0.5,
-    backgroundColor: '#C8C7CC'
+    backgroundColor: COLOR_GRAY
   },
   attachesContainer: {
     margin: UNIT,
