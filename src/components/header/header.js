@@ -33,7 +33,7 @@ export default class Header extends React.Component {
         hitSlop={{top: TOUCH_PADDING, left: TOUCH_PADDING, bottom: TOUCH_PADDING, right: TOUCH_PADDING}}
         style={styles.headerButton}
         onPress={this.onRightButtonClick.bind(this)}>
-        <Text style={styles.headerButtonText}>{this.props.rightButton}</Text>
+        <Text style={[styles.headerButtonText, styles.headerButtonTextRight]}>{this.props.rightButton}</Text>
       </TouchableOpacity>
     </View>);
   }

@@ -18,7 +18,11 @@ module.exports = StyleSheet.create({
     paddingRight: UNIT*2
   },
   headerButtonText: {
-    color: COLOR_PINK
+    color: COLOR_PINK,
+    width: 60
+  },
+  headerButtonTextRight: {
+    textAlign: 'right'
   },
   headerCenter: {
     padding: 0
