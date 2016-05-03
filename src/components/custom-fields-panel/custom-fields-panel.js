@@ -1,4 +1,4 @@
-import React, {View, ScrollView, PropTypes, Text, TouchableOpacity} from 'react-native';
+import React, {View, ScrollView, PropTypes, Text, TouchableOpacity, TextInput} from 'react-native';
 import CalendarPicker from 'react-native-calendar-picker/CalendarPicker/CalendarPicker';
 import CustomField from '../custom-field/custom-field';
 import Select from '../select/select';
@@ -31,6 +31,12 @@ export default class CustomFieldsPanel extends React.Component {
         value: null,
         onSelect: () => {
         }
+      },
+
+      period: {
+        show: false,
+        value: null,
+        onApply: () => {}
       }
     };
   }
@@ -67,39 +73,45 @@ export default class CustomFieldsPanel extends React.Component {
       editingField: null,
       isEditingProject: false,
       datePicker: {show: false},
-      select: {show: false}
+      select: {show: false},
+      period: {show: false}
     });
   }
 
-  onEditField(field) {
-    if (field === this.state.editingField) {
-      return this.closeEditor();
-    }
-
-    this.closeEditor();
-    this.setState({editingField: field});
-
-    if (field.projectCustomField.field.fieldType.valueType === 'date') {
-      this.setState({
-        datePicker: {
-          show: true,
-          title: field.projectCustomField.field.name,
-          value: field.value ? new Date(field.value) : new Date(),
-          emptyValueName: field.projectCustomField.canBeEmpty ? field.projectCustomField.emptyFieldText : null,
-          onSelect: (date) => {
-            this.closeEditor();
-            return this.props.onUpdate(field, date ? date.getTime() : null);
-          }
+  editDateField(field) {
+    return this.setState({
+      datePicker: {
+        show: true,
+        title: field.projectCustomField.field.name,
+        value: field.value ? new Date(field.value) : new Date(),
+        emptyValueName: field.projectCustomField.canBeEmpty ? field.projectCustomField.emptyFieldText : null,
+        onSelect: (date) => {
+          this.closeEditor();
+          return this.props.onUpdate(field, date ? date.getTime() : null);
         }
-      });
-      return;
-    }
+      }
+    });
+  }
 
+  editPeriodField(field) {
+    return this.setState({
+      period: {
+        show: true,
+        value: field.value ? field.value.presentation : null,
+        onApply: (value) => {
+          this.closeEditor();
+          return this.props.onUpdate(field, {presentation: value});
+        }
+      }
+    });
+  }
+
+  editCustomField(field) {
     const isMultiValue = field.projectCustomField.field.fieldType.isMultiValue;
     let selectedItems = isMultiValue ? field.value : [field.value];
     selectedItems = selectedItems.filter(it => it !== null);
 
-    this.setState({
+    return this.setState({
       select: {
         show: true,
         multi: isMultiValue,
@@ -119,6 +131,25 @@ export default class CustomFieldsPanel extends React.Component {
         }
       }
     });
+  }
+
+  onEditField(field) {
+    if (field === this.state.editingField) {
+      return this.closeEditor();
+    }
+
+    this.closeEditor();
+    this.setState({editingField: field});
+
+    if (field.projectCustomField.field.fieldType.valueType === 'date') {
+      return this.editDateField(field);
+    }
+
+    if (field.projectCustomField.field.fieldType.valueType === 'period') {
+      return this.editPeriodField(field);
+    }
+
+    return this.editCustomField(field);
   }
 
   _renderSelect() {
@@ -146,7 +177,7 @@ export default class CustomFieldsPanel extends React.Component {
     }
 
     return (
-      <View style={[styles.datepickerViewContainer, {
+      <View style={[styles.editorViewContainer, {
           top: -this.state.topCoord,
           bottom: this.state.height
       }]}>
@@ -179,6 +210,41 @@ export default class CustomFieldsPanel extends React.Component {
     );
   }
 
+  _renderPeriodInput() {
+    if (!this.state.period.show) {
+      return;
+    }
+
+    return (
+      <View style={[styles.editorViewContainer, {
+          top: -this.state.topCoord,
+          bottom: this.state.height
+      }]}>
+        <Header
+          leftButton={<Text>Cancel</Text>}
+          onBack={() => this.closeEditor()}>
+          <Text>{this.state.editingField.projectCustomField.field.name}</Text>
+        </Header>
+        <View>
+          <TextInput
+            style={styles.periodInput}
+            placeholder="1w 1d 1h 1m"
+            clearButtonMode="always"
+            returnKeyType="done"
+            autoCorrect={false}
+            autoFocus={true}
+            autoCapitalize="none"
+            onChangeText={(text) => {
+              this.state.period.value = text;
+              this.forceUpdate();
+            }}
+            onSubmitEditing={() => this.state.period.onApply(this.state.period.value)}
+            value={this.state.period.value}/>
+        </View>
+      </View>
+    );
+  }
+
   render() {
     const issue = this.props.issue;
 
@@ -187,6 +253,8 @@ export default class CustomFieldsPanel extends React.Component {
         {this._renderSelect()}
 
         {this._renderDatePicker()}
+
+        {this._renderPeriodInput()}
 
         <ScrollView horizontal={true} style={styles.customFieldsPanel}>
           <CustomField key="Project"

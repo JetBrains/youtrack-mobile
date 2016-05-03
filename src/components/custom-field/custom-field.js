@@ -11,7 +11,7 @@ export default class CustomField extends React.Component {
       if (Number.isInteger(value)) {
         return new Date(value).toLocaleDateString();
       }
-      return value.name || value.fullName || value.login;
+      return value.name || value.fullName || value.login || value.presentation;
     }
 
     return emptyValue;

@@ -100,7 +100,11 @@ export default class SingeIssueView extends React.Component {
 
     return updateMethod(this.props.issueId, field.id, value)
       .then(() => this.loadIssue(this.props.issueId))
-      .then((res) => this.props.onUpdate(res));
+      .then((res) => this.props.onUpdate(res))
+      .catch((err) => {
+        console.warn('failed to update issue field', err);
+        return this.loadIssue(this.props.issueId);
+      });
   }
 
   onSaveChanges() {
@@ -131,7 +135,7 @@ export default class SingeIssueView extends React.Component {
 
     } else {
       const canSave = Boolean(this.state.summaryCopy);
-      
+
       return <Header leftButton={<Text>Cancel</Text>}
                      onBack={() => this.setState({editMode: false})}
                      rightButton={<Text style={canSave ? null : styles.disabledSaveButton}>Save</Text>}
