@@ -54,7 +54,7 @@ export default class Select extends React.Component {
   _renderTitle(item) {
     if (item.color) {
       return <View style={styles.colorFieldItemWrapper}>
-        <ColorField text={this.props.getTitle(item)} color={item.color}/>
+        <ColorField text={this.props.getTitle(item)} color={item.color} style={styles.colorField}/>
         <Text style={styles.itemTitle}>{this.props.getTitle(item)}</Text>
       </View>;
     }

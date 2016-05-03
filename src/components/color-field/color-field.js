@@ -22,7 +22,7 @@ export default class ColorField extends React.Component {
 
   render() {
     return (
-      <View style={[styles.wrapper, {backgroundColor: this._getBackgroundColor(), borderColor: this._getBorderColor()}]}>
+      <View style={[styles.wrapper, {backgroundColor: this._getBackgroundColor(), borderColor: this._getBorderColor()}, this.props.style]}>
         <Text style={[styles.text, {color: this._getForegroundColor()}]}>{this._getFieldLetter()}</Text>
       </View>
     );

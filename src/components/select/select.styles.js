@@ -40,7 +40,6 @@ export default StyleSheet.create({
     borderRadius: UNIT * 2
   },
   itemTitle: {
-    marginLeft: UNIT * 2,
     fontSize: 18,
     color: COLOR_FONT
   },
@@ -58,5 +57,8 @@ export default StyleSheet.create({
   colorFieldItemWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between'
+  },
+  colorField: {
+    marginRight: UNIT * 2
   }
 });
