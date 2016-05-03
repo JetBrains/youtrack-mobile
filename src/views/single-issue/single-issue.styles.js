@@ -105,5 +105,8 @@ export default StyleSheet.create({
     marginLeft: - UNIT*2,
     marginRight: - UNIT*2,
     backgroundColor: COLOR_GRAY
+  },
+  disabledSaveButton: {
+    color: COLOR_FONT_GRAY
   }
 });
