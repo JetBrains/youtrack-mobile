@@ -18,6 +18,11 @@
   NSURL *jsCodeLocation;
 
   /**
+   Choose "YouTrackMobile" scheme (product=>scheme) for debug and "YouTrackMobile[Release]" for release.
+  */
+  
+#ifdef DEBUG
+  /**
    * Loading JavaScript code - uncomment the one you want.
    *
    * OPTION 1
@@ -32,7 +37,9 @@
    */
 
   jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios&dev=true"];
-
+#endif
+  
+#ifndef DEBUG
   /**
    * OPTION 2
    * Load from pre-bundled file on disk. The static bundle is automatically
@@ -40,9 +47,9 @@
    * running the project on an actual device or running the project on the
    * simulator in the "Release" build configuration.
    */
-
-//   jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
-
+  jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+#endif
+  
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"YouTrackMobile"
                                                initialProperties:nil
