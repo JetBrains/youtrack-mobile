@@ -4,7 +4,7 @@
 <dict>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)org.jetbrains.youtrack.YouTrackMobile</string>
+		<string>org.jetbrains.youtrack.YouTrackMobile</string>
 	</array>
 </dict>
 </plist>
