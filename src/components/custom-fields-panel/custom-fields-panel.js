@@ -15,6 +15,7 @@ export default class CustomFieldsPanel extends React.Component {
       topCoord: 0,
       height: 0,
       editingField: null,
+      isEditingProject: false,
 
       select: {
         show: false,
@@ -43,7 +44,13 @@ export default class CustomFieldsPanel extends React.Component {
   }
 
   onSelectProject() {
+    if (this.state.isEditingProject) {
+      return this.closeEditor();
+    }
+
+    this.closeEditor();
     this.setState({
+      isEditingProject: true,
       select: {
         show: true,
         dataSource: this.props.api.getProjects.bind(this.props.api),
@@ -56,7 +63,12 @@ export default class CustomFieldsPanel extends React.Component {
   }
 
   closeEditor() {
-    return this.setState({editingField: null, datePicker: {show: false}, select: {show: false}});
+    return this.setState({
+      editingField: null,
+      isEditingProject: false,
+      datePicker: {show: false},
+      select: {show: false}
+    });
   }
 
   onEditField(field) {
@@ -180,6 +192,7 @@ export default class CustomFieldsPanel extends React.Component {
           <CustomField key="Project"
                        disabled={!this.props.canEditProject}
                        onPress={() => this.onSelectProject()}
+                       active={this.state.isEditingProject}
                        field={{projectCustomField: {field: {name: 'Project'}}, value: {name: issue.project.shortName}}}/>
 
           {issue.fields.map((field) => <CustomField
