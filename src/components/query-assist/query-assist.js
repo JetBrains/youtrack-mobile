@@ -17,8 +17,12 @@ export default class QueryAssist extends React.Component {
     return this.props.dataSource(...args);
   }
 
-  cancelSearch() {
+  blurInput() {
     this.refs.searchInput.blur();
+  }
+
+  cancelSearch() {
+    this.blurInput();
     this.setState({input: this.state.queryCopy});
   }
 
@@ -31,7 +35,7 @@ export default class QueryAssist extends React.Component {
   }
 
   onSubmitEditing() {
-    this.cancelSearch();
+    this.blurInput();
     this.props.onQueryUpdate(this.state.input);
   }
 
