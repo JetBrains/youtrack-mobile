@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {COLOR_LIGHT_GRAY} from '../variables/variables';
+import {COLOR_LIGHT_GRAY, COLOR_LINK} from '../variables/variables';
 
 export default StyleSheet.create({
   heading: {
@@ -23,7 +23,7 @@ export default StyleSheet.create({
     resizeMode: 'contain'
   },
   link: {
-    color: 'blue',
+    color: COLOR_LINK,
     textDecorationLine: 'underline'
   },
   codeBlock: {
