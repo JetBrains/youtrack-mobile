@@ -152,7 +152,7 @@ export default class CreateIssue extends React.Component {
                 placeholder="Description"
                 onChangeText={(description) => this.setState({description})}/>
             </View>
-            <View style={styles.attachesContainer}>
+            {false/*TODO: turn on when attachments could work*/ && <View style={styles.attachesContainer}>
               <View>
                 {this.state.attachments.length > 0 && <ScrollView style={issueStyles.attachesContainer} horizontal={true}>
                   {this._renderAttahes(this.state.attachments)}
@@ -172,7 +172,7 @@ export default class CreateIssue extends React.Component {
                   <Text style={styles.attachButtonText}>Take a picture...</Text>
                 </TouchableOpacity>
               </View>
-            </View>
+            </View>}
             <View style={styles.separator}/>
             {false && <View style={styles.actionContainer}>
               <Image style={styles.actionIcon} source={tag}/>
