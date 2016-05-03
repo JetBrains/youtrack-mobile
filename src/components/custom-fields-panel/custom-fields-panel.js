@@ -14,6 +14,7 @@ export default class CustomFieldsPanel extends React.Component {
     this.state = {
       topCoord: 0,
       height: 0,
+      editingField: null,
 
       select: {
         show: false,
@@ -27,7 +28,8 @@ export default class CustomFieldsPanel extends React.Component {
         show: false,
         title: null,
         value: null,
-        onSelect: () => {}
+        onSelect: () => {
+        }
       }
     };
   }
@@ -46,15 +48,24 @@ export default class CustomFieldsPanel extends React.Component {
         show: true,
         dataSource: this.props.api.getProjects.bind(this.props.api),
         onSelect: project => {
-          this.setState({select: {show: false}});
+          this.closeEditor();
           return this.props.onUpdateProject(project);
         }
       }
     });
   }
 
+  closeEditor() {
+    return this.setState({editingField: null, datePicker: {show: false}, select: {show: false}});
+  }
+
   onEditField(field) {
-    this.setState({select: {show: false}, datePicker: {show: false}});
+    if (field === this.state.editingField) {
+      return this.closeEditor();
+    }
+
+    this.closeEditor();
+    this.setState({editingField: field});
 
     if (field.projectCustomField.field.fieldType.valueType === 'date') {
       this.setState({
@@ -64,7 +75,7 @@ export default class CustomFieldsPanel extends React.Component {
           value: field.value ? new Date(field.value) : new Date(),
           emptyValueName: field.projectCustomField.canBeEmpty ? field.projectCustomField.emptyFieldText : null,
           onSelect: (date) => {
-            this.setState({datePicker: {show: false}});
+            this.closeEditor();
             return this.props.onUpdate(field, date ? date.getTime() : null);
           }
         }
@@ -91,7 +102,7 @@ export default class CustomFieldsPanel extends React.Component {
             .then(res => res.aggregatedUsers || res.values);
         },
         onSelect: (value) => {
-          this.setState({select: {show: false}});
+          this.closeEditor();
           return this.props.onUpdate(field, value);
         }
       }
@@ -112,7 +123,7 @@ export default class CustomFieldsPanel extends React.Component {
       height={this.state.topCoord}
       title="Select item"
       api={this.props.api}
-      onCancel={() => this.setState({select: {show: false}})}
+      onCancel={() => this.closeEditor()}
       getTitle={(item) => item.fullName || item.name || item.login}
     />;
   }
@@ -130,7 +141,7 @@ export default class CustomFieldsPanel extends React.Component {
         <Header
           leftButton={<Text>Cancel</Text>}
           rightButton={<Text></Text>}
-          onBack={() => this.setState({datePicker: {show: false}})}>
+          onBack={() => this.closeEditor()}>
           <Text>{this.state.datePicker.title}</Text>
         </Header>
         <View style={styles.calendar}>
@@ -175,6 +186,7 @@ export default class CustomFieldsPanel extends React.Component {
             key={field.id}
             field={field}
             onPress={() => this.onEditField(field)}
+            active={this.state.editingField === field}
             disabled={!this.props.issuePermissions.canUpdateField(issue, field)}/>)}
         </ScrollView>
       </View>
