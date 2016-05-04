@@ -41,14 +41,6 @@ export default class CustomFieldsPanel extends React.Component {
     };
   }
 
-  componentDidMount() {
-    setTimeout(() => {
-      this.refs.panel.measure((fx, fy, width, height, px, py) => {
-        this.setState({topCoord: py, height: height});
-      });
-    }, 0);
-  }
-
   onSelectProject() {
     if (this.state.isEditingProject) {
       return this.closeEditor();
@@ -245,11 +237,17 @@ export default class CustomFieldsPanel extends React.Component {
     );
   }
 
+  measureView(event) {
+    const layout = event.nativeEvent.layout;
+    console.log('layout h = ', layout.height, ' y =', layout.y);
+    return this.setState({topCoord: layout.y, height: layout.height});
+  }
+
   render() {
     const issue = this.props.issue;
 
     return (
-      <View ref="panel">
+      <View onLayout={(event) => this.measureView(event)} >
         {this._renderSelect()}
 
         {this._renderDatePicker()}
