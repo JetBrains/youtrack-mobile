@@ -1,4 +1,5 @@
 import React, {Navigator} from 'react-native';
+import {createElement} from 'react';
 
 /**
  * Route singleton
@@ -71,7 +72,7 @@ class Router {
       renderScene={(route, navigator) => {
           this.setNavigator(navigator);
 
-          return React.createElement(route.component, route.props);
+          return createElement(route.component, route.props);
         }
       }
     />
