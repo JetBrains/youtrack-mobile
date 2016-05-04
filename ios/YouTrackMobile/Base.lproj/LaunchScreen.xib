@@ -11,14 +11,18 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="482"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" misplaced="YES" image="launch-image" translatesAutoresizingMaskIntoConstraints="NO" id="vfc-rY-lfj">
+                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" image="launch-image" translatesAutoresizingMaskIntoConstraints="NO" id="vfc-rY-lfj">
                     <rect key="frame" x="80" y="161" width="160" height="160"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="160" id="xcg-K5-dRw"/>
+                        <constraint firstAttribute="height" constant="160" id="zFX-Rt-ub9"/>
+                    </constraints>
                 </imageView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstAttribute="centerY" secondItem="vfc-rY-lfj" secondAttribute="centerY" id="QsH-sL-XjV"/>
-                <constraint firstAttribute="centerX" secondItem="vfc-rY-lfj" secondAttribute="centerX" id="wqT-pN-xCj"/>
+                <constraint firstItem="vfc-rY-lfj" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="muz-MM-O6q"/>
+                <constraint firstItem="vfc-rY-lfj" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="x7V-9X-fUp"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
