@@ -41,6 +41,21 @@ export default class CustomFieldsPanel extends React.Component {
     };
   }
 
+  componentDidMount() {
+    setTimeout(() => {
+      /**
+       * TODO https://github.com/facebook/react-native/issues/4753
+       * This container requires because just measure always returns 0 for android
+       */
+      const container = this.props.containerViewGetter();
+      this.refs.panel.measureLayout(React.findNodeHandle(container),
+        (x, y, width, height, pageX, pageY) => {
+          this.setState({topCoord: y, height: height});
+        }
+      );
+    }, 0);
+  }
+
   onSelectProject() {
     if (this.state.isEditingProject) {
       return this.closeEditor();
@@ -237,17 +252,11 @@ export default class CustomFieldsPanel extends React.Component {
     );
   }
 
-  measureView(event) {
-    const layout = event.nativeEvent.layout;
-    console.log('layout h = ', layout.height, ' y =', layout.y);
-    return this.setState({topCoord: layout.y, height: layout.height});
-  }
-
   render() {
     const issue = this.props.issue;
 
     return (
-      <View onLayout={(event) => this.measureView(event)} >
+      <View ref="panel">
         {this._renderSelect()}
 
         {this._renderDatePicker()}
@@ -279,5 +288,6 @@ CustomFieldsPanel.propTypes = {
   issuePermissions: PropTypes.object.isRequired,
   onUpdate: PropTypes.func.isRequired,
   onUpdateProject: PropTypes.func,
+  containerViewGetter: PropTypes.func.isRequired,
   canEditProject: PropTypes.bool
 };

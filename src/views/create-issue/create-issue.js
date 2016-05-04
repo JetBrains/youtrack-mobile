@@ -127,7 +127,7 @@ export default class CreateIssue extends React.Component {
     const canCreateIssue = this.state.summary && this.state.project.id;
 
     return (
-      <View style={styles.container}>
+      <View style={styles.container} ref="container">
         <ScrollView>
           <Header leftButton={<Text>Cancel</Text>}
                   rightButton={<Text style={canCreateIssue ? null : styles.disabledCreateButton}>Create</Text>}
@@ -187,6 +187,7 @@ export default class CreateIssue extends React.Component {
         <CustomFieldsPanel
           api={this.props.api}
           issue={this.state}
+          containerViewGetter={() => this.refs.container}
           canEditProject={true}
           issuePermissions={{canUpdateField: () => true}}
           onUpdate={this.onSetFieldValue.bind(this)}

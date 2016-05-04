@@ -200,7 +200,7 @@ export default class SingeIssueView extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={styles.container} ref="container">
         {this._renderHeader()}
 
         {this.state.issue && <ScrollView>
@@ -216,6 +216,7 @@ export default class SingeIssueView extends React.Component {
         </ScrollView>}
 
         {this.state.issue && <CustomFieldsPanel
+          containerViewGetter={() => this.refs.container}
           api={this.props.api}
           issue={this.state.issue}
           issuePermissions={this.issuePermissions}
