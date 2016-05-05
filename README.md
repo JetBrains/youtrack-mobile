@@ -114,8 +114,7 @@ Debug on real device. Install `android-tools` (aka adb) then setup device for de
 #### iOS [To be automated]
 Working on developer machine only for a while.
 
-1. Run assembling IPA file:
-`BUILD_NUMBER=4 npm run ios-build-release`
-Where BUILD_NUMBER is mantained manually for a while
+1. Wait while build is finished in TeamCity.
+2. Run `npm run ios-release` to download latest built archive and export it as signed ipa file
 2. Use "Application Loader" utility to upload ios/build/YouTrackMobile.ipa to AppStore.
 
