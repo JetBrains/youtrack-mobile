@@ -21,8 +21,7 @@
     "ios-build-release": "npm run ios-set-version && npm run ios-archive && npm run ios-build-ipa",
     "ios-build": "xcodebuild  -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile -sdk iphonesimulator -destination platform='iOS Simulator',name='iPhone 5s' -derivedDataPath ios/build",
     "android": "./node_modules/react-native-cli/index.js run-android",
-    "print": "YT_MOBILE_VERSION=$npm_package_version-$npm_package_config_build && echo $YT_MOBILE_VERSION",
-    "android-release": "YT_MOBILE_VERSION=$npm_package_version android/gradlew -p android/ assembleRelease",
+    "android-release": "YT_MOBILE_VERSION=$npm_package_version-$npm_package_config_build android/gradlew -p android/ assembleRelease",
     "android-emulator": "emulator -avd YouTrackMobile -scale 0.4 -gpu on -memory 2048",
     "android-emulator-create": "android create avd -n YouTrackMobile -t 1 -b x86 --skin 1080x1920 --device 'Nexus 5'",
     "android-emulator-delete": "android delete avd -n YouTrackMobile"
