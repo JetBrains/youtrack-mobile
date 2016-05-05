@@ -101,3 +101,21 @@ Official [documentation](https://facebook.github.io/react-native/docs/debugging.
 F2 open debug menu for android emulator
 
 Debug on real device. Install `android-tools` (aka adb) then setup device for development http://developer.android.com/intl/ru/tools/device.html#setting-up
+
+### Release
+
+#### Android [To be automated]
+
+1. Go to teamcity and get latest APK file.
+2. Go to play developer console https://play.google.com/apps/ and upload new apk
+3. Publish
+
+
+#### iOS [To be automated]
+Working on developer machine only for a while.
+
+1. Run assembling IPA file:
+`BUILD_NUMBER=4 npm run ios-build-release`
+Where BUILD_NUMBER is mantained manually for a while
+2. Use "Application Loader" utility to upload ios/build/YouTrackMobile.ipa to AppStore.
+
