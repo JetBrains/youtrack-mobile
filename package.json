@@ -34,6 +34,7 @@
     "react-native-keyboard-spacer": "^0.1.6",
     "react-native-keychain": "0.2.7",
     "react-native-prompt": "^0.18.3",
+    "react-native-side-menu": "0.18.1",
     "relative-date": "^1.1.2",
     "simple-markdown": "0.0.9"
   },

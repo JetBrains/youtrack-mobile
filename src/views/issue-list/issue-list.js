@@ -18,8 +18,10 @@ import Cache from '../../components/cache/cache';
 import Api from '../../components/api/api';
 import ApiHelper from '../../components/api/api__helper';
 import IssueRow from './issue-list__row';
+import IssueListMenu from './issue-list__menu';
 import Router from '../../components/router/router';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+import SideMenu from 'react-native-side-menu';
 
 const QUERY_STORAGE_KEY = 'YT_QUERY_STORAGE';
 const PAGE_SIZE = 10;
@@ -40,6 +42,7 @@ class IssueList extends React.Component {
       isLoadingMore: false,
       listEndReached: false,
 
+      showMenu: false,
       queryAssistValue: '',
       isRefreshing: false
     };
@@ -161,9 +164,9 @@ class IssueList extends React.Component {
   _renderHeader() {
     return (
       <Header
-        leftButton={<Text>Log Out</Text>}
+        leftButton={<Text>Menu</Text>}
         rightButton={<Text>Create</Text>}
-        onBack={this.logOut.bind(this)}
+        onBack={() => this.setState({showMenu: true})}
         onRightButtonClick={() => Router.CreateIssue({api: this.api, onCreate: () => this.loadIssues(this.state.queryAssistValue, null, false)})}
       >
         <Text>Sort by: Updated</Text>
@@ -190,26 +193,28 @@ class IssueList extends React.Component {
   }
 
   render() {
-    return (<View style={styles.listContainer}>
-      {this._renderHeader()}
-      <ListView
-        dataSource={this.state.dataSource}
-        enableEmptySections={true}
-        renderRow={(issue) => <IssueRow issue={issue} onClick={(issue) => this.goToIssue(issue)}></IssueRow>}
-        renderSeparator={(sectionID, rowID) => <View style={styles.separator} key={rowID}/>}
-        onEndReached={this.loadMore.bind(this)}
-        onEndReachedThreshold={30}
-        renderScrollComponent={(props) => <ScrollView {...props} refreshControl={this._renderRefreshControl()}/>}
-        renderFooter={() => this._renderListMessage()}
-        refreshDescription="Refreshing issues"/>
+    return (<SideMenu menu={<IssueListMenu onLogOut={this.logOut.bind(this)}/>} isOpen={this.state.showMenu}>
+      <View style={styles.listContainer}>
+        {this._renderHeader()}
+        <ListView
+          dataSource={this.state.dataSource}
+          enableEmptySections={true}
+          renderRow={(issue) => <IssueRow issue={issue} onClick={(issue) => this.goToIssue(issue)}></IssueRow>}
+          renderSeparator={(sectionID, rowID) => <View style={styles.separator} key={rowID}/>}
+          onEndReached={this.loadMore.bind(this)}
+          onEndReachedThreshold={30}
+          renderScrollComponent={(props) => <ScrollView {...props} refreshControl={this._renderRefreshControl()}/>}
+          renderFooter={() => this._renderListMessage()}
+          refreshDescription="Refreshing issues"/>
 
-      <QueryAssist
-        initialQuery={this.state.queryAssistValue}
-        dataSource={this.getSuggestions.bind(this)}
-        onQueryUpdate={newQuery => this.onQueryUpdated(newQuery)}/>
+        <QueryAssist
+          initialQuery={this.state.queryAssistValue}
+          dataSource={this.getSuggestions.bind(this)}
+          onQueryUpdate={newQuery => this.onQueryUpdated(newQuery)}/>
 
-      {Platform.OS == 'ios' && <KeyboardSpacer/>}
-    </View>);
+        {Platform.OS == 'ios' && <KeyboardSpacer/>}
+      </View>
+    </SideMenu>);
   }
 }
 
