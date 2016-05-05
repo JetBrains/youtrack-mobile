@@ -8,7 +8,8 @@ module.exports = StyleSheet.create({
     flex: 1
   },
   logOutButton: {
-    alignItems: 'center'
+    alignItems: 'center',
+    height: UNIT * 4
   },
   logOutText: {
     color: COLOR_PINK
