@@ -11,9 +11,9 @@ export default class IssueListMenu extends React.Component {
       </TouchableOpacity>
 
       <View style={styles.menuFooter}>
-        <Text>YouTrack Mobile</Text>
-        <Text>© 2000—{CURRENT_YEAR} JetBrains</Text>
-        <Text>All rights reserved</Text>
+        <Text style={styles.footerText}>YouTrack Mobile</Text>
+        <Text style={styles.footerText}>© 2000—{CURRENT_YEAR} JetBrains</Text>
+        <Text style={styles.footerText}>All rights reserved</Text>
       </View>
     </View>
   }
