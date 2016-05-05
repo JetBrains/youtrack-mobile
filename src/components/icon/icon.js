@@ -1,4 +1,4 @@
-export const logo = require('./youtrack-logo.png');
+export const logo = require('./youtrack-logo-512.png');
 export const arrow = require('./arrow.png');
 export const add = require('./add.png');
 export const attach = require('./attach.png');
