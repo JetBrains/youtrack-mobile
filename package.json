@@ -1,6 +1,6 @@
 {
   "name": "YouTrackMobile",
-  "version": "0.1.0",
+  "version": "0.1.3",
   "private": true,
   "scripts": {
     "start": "./node_modules/react-native-cli/index.js start",
@@ -11,13 +11,14 @@
     "test:watch": "npm test -- --watch",
     "lint": "eslint src",
     "ios": "./node_modules/react-native-cli/index.js run-ios",
+    "ios-set-version": "cd ios && agvtool new-version -all $npm_package_version && cd ..",
     "ios-clean": "xcodebuild clean -project ios/YouTrackMobile.xcodeproj -configuration Release -alltargets",
     "ios-archive": "rm -rf ios/build/YouTrackMobile[Release].xcarchive && xcodebuild archive -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile[Release] -archivePath ios/build/YouTrackMobile[Release].xcarchive",
     "ios-build-ipa": "rm -rf ios/build/YouTrackMobile.ipa && xcodebuild -exportArchive -archivePath ios/build/YouTrackMobile[Release].xcarchive -exportPath ios/build/YouTrackMobile -exportFormat ipa -exportProvisioningProfile 'YouTrackMobile'",
-    "ios-build-release": "npm run ios-clean && npm run ios-archive && npm run ios-build-ipa",
+    "ios-build-release": "npm run ios-set-version && npm run ios-archive && npm run ios-build-ipa",
     "ios-build": "xcodebuild  -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile -sdk iphonesimulator -destination platform='iOS Simulator',name='iPhone 5s' -derivedDataPath ios/build",
     "android": "./node_modules/react-native-cli/index.js run-android",
-    "android-release": "android/gradlew -p android/ assembleRelease",
+    "android-release": "YT_MOBILE_VERSION=$npm_package_version android/gradlew -p android/ assembleRelease",
     "android-emulator": "emulator -avd YouTrackMobile -scale 0.4 -gpu on -memory 2048",
     "android-emulator-create": "android create avd -n YouTrackMobile -t 1 -b x86 --skin 1080x1920 --device 'Nexus 5'",
     "android-emulator-delete": "android delete avd -n YouTrackMobile"
