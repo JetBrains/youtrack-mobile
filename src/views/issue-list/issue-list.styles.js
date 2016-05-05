@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
 
 import {UNIT, COLOR_FONT_GRAY} from '../../components/variables/variables';
+import {SIZE as COLOR_FIELD_SIZE} from '../../components/color-field/color-field';
 
 module.exports = StyleSheet.create({
   listContainer: {
@@ -18,6 +19,10 @@ module.exports = StyleSheet.create({
   rowText: {
     marginLeft: UNIT * 2,
     flex: 1
+  },
+  priorityPlaceholder: {
+    width: COLOR_FIELD_SIZE,
+    height: COLOR_FIELD_SIZE
   },
   rowTopLine: {
     flexDirection: 'row',

@@ -33,7 +33,7 @@ class IssueRow extends React.Component {
             <View>
               {issue.fieldHash.Priority ?
                   <ColorField text={issue.fieldHash.Priority.name} color={issue.fieldHash.Priority.color}></ColorField> :
-                  <View/>}
+                  <View style={styles.priorityPlaceholder}/>}
             </View>
           </View>
           <View style={styles.rowText}>
