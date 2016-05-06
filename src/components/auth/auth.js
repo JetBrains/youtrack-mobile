@@ -19,7 +19,7 @@ export default class Auth {
   constructor(config) {
     this.authParams = null;
     this.config = config;
-    this.CHECK_TOKEN_URL = `${this.config.auth.serverUri}/api/rest/users/me?fields=id`;
+    this.CHECK_TOKEN_URL = `${this.config.auth.serverUri}/api/rest/users/me?fields=id,guest,name,profile/avatar/url`;
 
     const permissionsQueryString = qs.stringify({
       query: `service:{0-0-0-0-0} or service:{${config.auth.youtrackServiceId}}`,

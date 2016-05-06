@@ -194,7 +194,7 @@ class IssueList extends React.Component {
 
   render() {
     return (<SideMenu
-      menu={<IssueListMenu onLogOut={this.logOut.bind(this)}/>}
+      menu={<IssueListMenu onLogOut={this.logOut.bind(this)} user={this.props.auth.currentUser}/>}
       isOpen={this.state.showMenu}
       onChange={isOpen => this.setState({showMenu: isOpen})}>
       <View style={styles.listContainer}>
