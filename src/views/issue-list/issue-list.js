@@ -193,7 +193,10 @@ class IssueList extends React.Component {
   }
 
   render() {
-    return (<SideMenu menu={<IssueListMenu onLogOut={this.logOut.bind(this)}/>} isOpen={this.state.showMenu}>
+    return (<SideMenu
+      menu={<IssueListMenu onLogOut={this.logOut.bind(this)}/>}
+      isOpen={this.state.showMenu}
+      onChange={isOpen => this.setState({showMenu: isOpen})}>
       <View style={styles.listContainer}>
         {this._renderHeader()}
         <ListView

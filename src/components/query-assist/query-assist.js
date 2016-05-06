@@ -36,7 +36,7 @@ export default class QueryAssist extends React.Component {
 
   onSubmitEditing() {
     this.blurInput();
-    this.props.onQueryUpdate(this.state.input);
+    this.props.onQueryUpdate(this.state.input || '');
   }
 
   componentWillReceiveProps(newProps, oldProps) {
