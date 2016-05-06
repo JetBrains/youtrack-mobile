@@ -21,6 +21,7 @@ export default StyleSheet.create({
     backgroundColor: '#FFF',
     color: COLOR_FONT,
     borderColor: 'black',
+    textAlignVertical: 'top',
     fontSize: 14
   },
   disabledCreateButton: {

@@ -37,7 +37,8 @@ export default StyleSheet.create({
     marginBottom: UNIT,
     height: UNIT * 10,
     color: COLOR_FONT,
-    fontSize: 14
+    fontSize: 14,
+    textAlignVertical: 'top'
   },
   attachesContainer: {
     marginTop: UNIT * 2
@@ -74,7 +75,8 @@ export default StyleSheet.create({
     color: COLOR_FONT,
     margin: UNIT,
     padding: 6,
-    paddingTop: 2
+    paddingTop: 2,
+    paddingBottom: 2
   },
   commentSendButton: {
     paddingRight: UNIT * 2,

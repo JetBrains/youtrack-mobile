@@ -16,6 +16,7 @@ export default StyleSheet.create({
     backgroundColor: '#FFF',
     margin: UNIT,
     paddingTop: 2,
+    paddingBottom: 2,
     paddingLeft: UNIT,
     color: COLOR_FONT
   },
