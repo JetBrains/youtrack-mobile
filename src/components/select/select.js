@@ -1,4 +1,5 @@
-import React, {Text, Image, ScrollView, View, TouchableOpacity, TextInput, PropTypes} from 'react-native';
+import {Text, Image, ScrollView, View, TouchableOpacity, TextInput} from 'react-native';
+import React, {PropTypes} from 'react';
 import styles from './select.styles';
 import Header from '../header/header';
 import ColorField from '../color-field/color-field';

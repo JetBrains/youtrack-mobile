@@ -1,4 +1,5 @@
-import React, {Text, View, TouchableOpacity, PropTypes} from 'react-native';
+import {Text, View, TouchableOpacity} from 'react-native';
+import React, {PropTypes} from 'react';
 import styles from './header.styles';
 import Router from '../router/router';
 

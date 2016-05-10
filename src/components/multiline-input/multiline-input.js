@@ -1,4 +1,5 @@
-import React, {TextInput} from 'react-native';
+import {TextInput} from 'react-native';
+import React from 'react';
 
 const INITIAL_INPUT_HEIGHT = 36;
 const DEFAULT_FONT_SIZE = 16;

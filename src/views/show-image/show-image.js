@@ -1,4 +1,5 @@
-import React, {StyleSheet, Image, View, Text, ScrollView, TouchableOpacity} from 'react-native';
+import {StyleSheet, Image, View, Text, ScrollView, TouchableOpacity} from 'react-native';
+import React from 'react';
 const TOUCH_PADDING = 12;
 import Router from '../../components/router/router';
 

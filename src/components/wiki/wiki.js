@@ -1,4 +1,5 @@
-import React, {View, Linking} from 'react-native';
+import {View, Linking} from 'react-native';
+import React from 'react';
 import SimpleMarkdown from 'simple-markdown';
 import Router from '../router/router';
 import wikiRules from './wiki__rules';

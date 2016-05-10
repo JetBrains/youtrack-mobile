@@ -1,5 +1,5 @@
-import React, {Navigator} from 'react-native';
-import {createElement} from 'react';
+import {Navigator} from 'react-native';
+import React, {createElement} from 'react';
 
 /**
  * Route singleton

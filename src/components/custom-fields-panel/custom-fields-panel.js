@@ -1,4 +1,5 @@
-import React, {View, ScrollView, PropTypes, Text, TouchableOpacity, TextInput} from 'react-native';
+import {View, ScrollView, Text, TouchableOpacity, TextInput, findNodeHandle} from 'react-native';
+import React, {PropTypes} from 'react';
 import CalendarPicker from 'react-native-calendar-picker/CalendarPicker/CalendarPicker';
 import CustomField from '../custom-field/custom-field';
 import Select from '../select/select';
@@ -48,7 +49,7 @@ export default class CustomFieldsPanel extends React.Component {
        * This container requires because just measure always returns 0 for android
        */
       const container = this.props.containerViewGetter();
-      this.refs.panel.measureLayout(React.findNodeHandle(container),
+      this.refs.panel.measureLayout(findNodeHandle(container),
         (x, y, width, height, pageX, pageY) => {
           this.setState({topCoord: y, height: height});
         }

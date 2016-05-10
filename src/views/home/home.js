@@ -1,4 +1,5 @@
-import React, {View, StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
+import React from 'react';
 import {logo} from '../../components/icon/icon';
 import {UNIT, COLOR_FONT_GRAY} from '../../components/variables/variables';
 import Prompt from 'react-native-prompt';

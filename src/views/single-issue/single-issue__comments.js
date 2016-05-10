@@ -3,7 +3,8 @@ import relativeDate from 'relative-date';
 import Wiki, {replaceImageNamesWithUrls} from '../../components/wiki/wiki';
 import {COLOR_FONT_GRAY} from '../../components/variables/variables';
 
-import React, {View, Text, Image} from 'react-native';
+import {View, Text, Image} from 'react-native';
+import React from 'react';
 
 export default class SingleIssueComments extends React.Component {
 

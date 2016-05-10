@@ -1,4 +1,5 @@
-import React, {TouchableOpacity, View, Text, StyleSheet, PropTypes} from 'react-native';
+import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
+import React, {PropTypes} from 'react';
 import getColorById from '../color-field/color-field__colors';
 import {COLOR_FONT_GRAY, COLOR_PINK} from '../variables/variables';
 

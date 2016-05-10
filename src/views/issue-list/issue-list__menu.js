@@ -1,4 +1,5 @@
-import React, {View, Text, TouchableOpacity, Image} from 'react-native';
+import {View, Text, TouchableOpacity, Image} from 'react-native';
+import React from 'react';
 import styles from './issue-list__menu.styles';
 
 const CURRENT_YEAR = (new Date()).getFullYear();

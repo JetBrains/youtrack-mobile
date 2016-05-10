@@ -1,4 +1,5 @@
-import React, {ListView, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {ListView, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import React from 'react';
 import InvertibleScrollView from 'react-native-invertible-scroll-view';
 
 let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});

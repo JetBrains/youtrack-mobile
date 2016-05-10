@@ -1,4 +1,4 @@
-import React, {
+import {
   AsyncStorage,
   View,
   Text,
@@ -7,6 +7,7 @@ import React, {
   RefreshControl,
   Platform
 } from 'react-native'
+import React from 'react';
 
 import openUrlHandler from '../../components/open-url-handler/open-url-handler';
 import styles from './issue-list.styles';

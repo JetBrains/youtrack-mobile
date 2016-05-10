@@ -1,4 +1,5 @@
-import React, {Text, View, Image, TouchableOpacity, ScrollView, TextInput} from 'react-native';
+import {Text, View, Image, TouchableOpacity, ScrollView, TextInput} from 'react-native';
+import React from 'react';
 
 import ApiHelper from '../../components/api/api__helper';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';

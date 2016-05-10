@@ -2,7 +2,8 @@ import styles from './issue-list.styles';
 import ColorField from '../../components/color-field/color-field';
 import {next} from '../../components/icon/icon';
 import {COLOR_FONT_GRAY} from '../../components/variables/variables';
-import React, {View, Text, TouchableOpacity, Image} from 'react-native';
+import {View, Text, TouchableOpacity, Image} from 'react-native';
+import React from 'react';
 
 class IssueRow extends React.Component {
   static _getSubText(issue) {

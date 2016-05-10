@@ -9,7 +9,8 @@ import CreateIssue from './views/create-issue/create-issue';
 import ShowImage from './views/show-image/show-image';
 import {loadConfig, getStoredBackendURL} from './components/config/config';
 
-import React, {BackAndroid, Navigator} from 'react-native';
+import {BackAndroid, Navigator} from 'react-native';
+import React from 'react';
 
 class YouTrackMobile extends React.Component {
   constructor() {

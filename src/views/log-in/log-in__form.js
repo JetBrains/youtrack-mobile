@@ -1,4 +1,5 @@
-import React, {Image, View, Text, TextInput, TouchableOpacity, Linking, ScrollView} from 'react-native'
+import {Image, View, Text, TextInput, TouchableOpacity, Linking, ScrollView} from 'react-native'
+import React from 'react';
 import {logo} from '../../components/icon/icon';
 import Keystore from '../../components/keystore/keystore';
 import OAuth from '../../components/auth/auth__oauth';

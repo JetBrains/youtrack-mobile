@@ -1,4 +1,5 @@
-import React, {View, Text, StyleSheet, PropTypes} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
+import React, {PropTypes} from 'react';
 import getColorById from './color-field__colors';
 
 export const SIZE = 22;
