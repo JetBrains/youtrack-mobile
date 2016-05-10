@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "config": {
-    "buildnumber": "dev"
+    "buildnumber": "1"
   },
   "scripts": {
     "start": "./node_modules/react-native-cli/index.js start",

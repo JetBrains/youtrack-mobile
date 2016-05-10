@@ -1,4 +1,5 @@
 apply plugin: "com.android.application"
+apply from: 'versioning.gradle'
 
 import com.android.build.OutputFile
 
@@ -84,7 +85,7 @@ android {
         applicationId "com.jetbrains.youtrack.mobile"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 1
+        versionCode buildVersionCode(System.getenv('YT_MOBILE_VERSION'))
         versionName System.getenv('YT_MOBILE_VERSION')
         ndk {
             abiFilters "armeabi-v7a", "x86"
