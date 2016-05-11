@@ -114,7 +114,7 @@ export default function (actions) {
     }),
 
     codeBlock: Object.assign({}, SimpleMarkdown.defaultRules.codeBlock, {
-      match: source => /^```([\s\S]+?)```(?!```)/.exec(source),
+      match: source => /^```([\s\S]+?)```(?!```)/.exec(source) || /^\{code.*\}([\s\S]+?)\{code\}(?!\{code\})/.exec(source),
 
       parse: function(capture) {
         return {
