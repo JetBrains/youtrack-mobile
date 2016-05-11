@@ -45,7 +45,7 @@ export default function (actions) {
     heading: {
       order: SimpleMarkdown.defaultRules.strong.order,
 
-      match: source => /^=([\s\S]+?)=(?!=)/.exec(source),
+      match: source => /^=([\s\S]+?)=(?!=)\n/.exec(source),
 
       parse: (capture, parse, state) => {
         return {
@@ -54,7 +54,7 @@ export default function (actions) {
       },
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.heading}>{output(node.content)}</Text>;
+        return <Text key={state.key} style={styles.heading}>{output(node.content)}{'\n'}</Text>;
       }
     },
 
