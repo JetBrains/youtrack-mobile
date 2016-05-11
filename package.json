@@ -22,7 +22,7 @@
     "ios-download-archive": "bash ./tools/download-latest-built-archive.sh",
     "ios-release": "npm run ios-download-archive && npm run ios-export-ipa",
     "ios-build": "xcodebuild  -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile -sdk iphonesimulator -destination platform='iOS Simulator',name='iPhone 5s' -derivedDataPath ios/build",
-    "android": "./node_modules/react-native-cli/index.js run-android",
+    "android": "YT_MOBILE_VERSION=$npm_package_version-$npm_package_config_buildnumber ./node_modules/react-native-cli/index.js run-android",
     "android-release": "YT_MOBILE_VERSION=$npm_package_version-$npm_package_config_buildnumber android/gradlew -p android/ assembleRelease",
     "android-align-after-sign": "$ANDROID_HOME/build-tools/23.0.1/zipalign -v 4 android/app/build/outputs/apk/app-release-unsigned.apk android/app/build/outputs/apk/app-release.apk",
     "android-emulator": "emulator -avd YouTrackMobile -scale 0.4 -gpu on -memory 2048",
