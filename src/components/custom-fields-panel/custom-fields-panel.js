@@ -118,9 +118,9 @@ export default class CustomFieldsPanel extends React.Component {
     const isMultiValue = field.projectCustomField.field.fieldType.isMultiValue;
     let selectedItems;
     if (isMultiValue) {
-      selectedItems = field.value ? [field.value] : [];
-    } else {
       selectedItems = field.value;
+    } else {
+      selectedItems = field.value ? [field.value] : [];
     }
 
     return this.setState({
