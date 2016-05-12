@@ -16,7 +16,7 @@ export default class IssuePermissions {
 
   canUpdateGeneralInfo(issue) {
     const projectId = issue.project.ringId;
-    const isReporter = issue.reporter.id === this.currentUser.id;
+    const isReporter = issue.reporter.ringId === this.currentUser.id;
     const canCreateIssue = this.permissions.has(CREATE_ISSUE, projectId);
 
     if (isReporter && canCreateIssue) {
@@ -28,7 +28,7 @@ export default class IssuePermissions {
 
   _canUpdatePublicField(issue, field) {
     const projectId = issue.project.ringId;
-    const isReporter = issue.reporter.id === this.currentUser.id;
+    const isReporter = issue.reporter.ringId === this.currentUser.id;
     const canCreateIssue = this.permissions.has(CREATE_ISSUE, projectId);
 
     return (isReporter && canCreateIssue) || this.permissions.has(PRIVATE_UPDATE_ISSUE, projectId);

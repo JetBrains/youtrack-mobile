@@ -12,7 +12,7 @@ describe('IssuePermissions', () => {
     };
 
     this.issueMock = {
-      reporter: {id: USER_ID},
+      reporter: {ringId: USER_ID},
       project: {
         ringId: PROJECT_ID
       }
