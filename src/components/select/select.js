@@ -4,6 +4,8 @@ import styles from './select.styles';
 import Header from '../header/header';
 import ColorField from '../color-field/color-field';
 
+const MAX_VISIBLE_ITEMS = 100;
+
 export default class Select extends React.Component {
   constructor() {
     super();
@@ -48,7 +50,9 @@ export default class Select extends React.Component {
     const filteredItems = (this.state.items || []).filter(item => {
       const label = this.props.getTitle(item) || '';
       return label.toLowerCase().indexOf(query.toLowerCase()) !== -1;
-    });
+    })
+      .slice(0, MAX_VISIBLE_ITEMS);
+
     this.setState({filteredItems});
   }
 
