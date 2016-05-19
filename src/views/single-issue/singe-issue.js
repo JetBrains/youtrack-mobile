@@ -153,7 +153,9 @@ export default class SingeIssueView extends React.Component {
     }
 
     return <ScrollView style={styles.attachesContainer} horizontal={true}>
-      {(attachments || []).map((attach) => {
+      {(attachments || [])
+        .filter(attach => attach.mimeType.includes('image'))
+        .map((attach) => {
         return <TouchableOpacity onPress={() => Router.ShowImage({imageUrl: attach.url, imageName: attach.value})} key={attach.id}>
           <Image style={styles.attachment}
                  capInsets={{left: 15, right: 15, bottom: 15, top: 15}}
