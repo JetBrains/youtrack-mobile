@@ -2,7 +2,6 @@ import {View, StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {logo} from '../../components/icon/icon';
 import {UNIT, COLOR_FONT_GRAY} from '../../components/variables/variables';
-import Prompt from 'react-native-prompt';
 
 export default class Home extends React.Component {
   constructor() {
@@ -48,13 +47,6 @@ export default class Home extends React.Component {
         {this._renderUrl()}
         {this._renderMessage()}
 
-        <Prompt
-          title="Enter another YouTrack URL"
-          placeholder="https://youtrack.example.com"
-          defaultValue={this.props.backendUrl}
-          visible={this.state.promptVisible}
-          onCancel={() => this.setState({promptVisible: false})}
-          onSubmit={this.onChangeBackendUrl.bind(this)}/>
       </View>
     );
   }
