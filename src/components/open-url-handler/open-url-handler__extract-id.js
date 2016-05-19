@@ -4,5 +4,6 @@ export default function(issueUrl) {
   if (!issueUrl) {
     return null;
   }
-  return issueUrl.match(issueIdReg)[1];
+  const match = issueUrl.match(issueIdReg);
+  return match && match[1];
 }
