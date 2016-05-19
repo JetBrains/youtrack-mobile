@@ -1,10 +1,10 @@
-import {Linking, BackAndroid} from 'react-native';
+import {Linking} from 'react-native';
 
 import qs from 'qs';
 
+let cachedAuthorizationCode;
+
 function openAuthPage(config) {
-  //Exit the app before open link to kill this intent - the new one will be created
-  BackAndroid.exitApp();
 
   Linking.openURL([
     `${config.auth.serverUri}/api/rest/oauth2/auth`,
@@ -30,6 +30,11 @@ module.exports = {
           if (!code) {
             throw new Error(`Cannot extract code from url ${url}`);
           }
+          if (code === cachedAuthorizationCode) {
+            return Promise.reject('This code is already used');
+          }
+
+          cachedAuthorizationCode = code;
           return code;
         } else {
           return Promise.reject('Initial url doesn\'t found');
