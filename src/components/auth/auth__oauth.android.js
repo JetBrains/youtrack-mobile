@@ -1,8 +1,11 @@
-import {Linking} from 'react-native';
+import {Linking, BackAndroid} from 'react-native';
 
 import qs from 'qs';
 
 function openAuthPage(config) {
+  //Exit the app before open link to kill this intent - the new one will be created
+  BackAndroid.exitApp();
+
   Linking.openURL([
     `${config.auth.serverUri}/api/rest/oauth2/auth`,
     '?response_type=code',
