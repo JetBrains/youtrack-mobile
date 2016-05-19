@@ -20,7 +20,6 @@ export default class IssueListCommentInput extends React.Component {
   render() {
     return <View style={styles.commentInputWrapper}>
       <MultilineInput placeholder="Comment"
-                      autoCorrect={false}
                       value={this.state.commentText}
                       onChangeText={(text) => this.setState({commentText: text})}
                       style={styles.commentInput}/>
