@@ -68,8 +68,11 @@ export default class SingeIssueView extends React.Component {
         return issue;
       })
       .catch((result) => {
-        return result.json()
-          .then(res => global.alert(res.error_description || res));
+        if (result.json) {
+          return result.json()
+            .then(res => global.alert(res.error_description || res));
+        }
+        console.warn('failed to load issue', result);
       });
   }
 

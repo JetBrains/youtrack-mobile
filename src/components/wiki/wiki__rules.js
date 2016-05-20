@@ -100,6 +100,23 @@ export default function (actions) {
     }),
 
     link: Object.assign({}, SimpleMarkdown.defaultRules.link, {
+      match: source => /^\[(https?:\/\/\S*)\s?(.*?)\]/.exec(source) || /^<(https?:\/\/\S*)>/.exec(source),
+
+      parse: function(capture, parse, state) {
+        const res = {
+            url: capture[CONTENT_WITHIN_MARKERS],
+            content: capture[2] || capture[CONTENT_WITHIN_MARKERS]
+        };
+        console.log(res);
+        return res;
+      },
+
+      react: (node, output, state) => {
+        return <Text key={state.key} style={styles.link} onPress={() => actions.onLinkPress(node.url)}>{node.content}</Text>
+      }
+    }),
+
+    url: Object.assign({}, SimpleMarkdown.defaultRules.url, {
       match: source => /^https?:\/\/\S*/.exec(source),
 
       parse: (capture, parse, state) => {
