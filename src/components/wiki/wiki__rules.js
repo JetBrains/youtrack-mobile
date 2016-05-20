@@ -42,6 +42,16 @@ export default function (actions) {
       }
     }),
 
+    monospace: Object.assign({}, SimpleMarkdown.defaultRules.strong, {
+      match: source => {
+        return /^{{([\s\S]+?)}}(?!}})/.exec(source) || /^{monospace}([\s\S]+?){monospace}(?!{monospace})/.exec(source)
+      },
+
+      react: (node, output, state) => {
+        return <Text key={state.key} style={styles.monospace}>{output(node.content)}</Text>
+      }
+    }),
+
     heading: {
       order: SimpleMarkdown.defaultRules.strong.order,
 
