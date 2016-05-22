@@ -61,7 +61,7 @@
     "react-addons-test-utils": "15.0.2",
     "react-dom": "15.0.2",
     "react-native-cli": "0.2.0",
-    "react-native-mock": "0.1.0",
+    "react-native-mock": "^0.2.0",
     "rnpm-plugin-upgrade": "0.26.0",
     "sinon": "^1.17.3"
   }
