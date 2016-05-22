@@ -117,7 +117,6 @@ export default function (actions) {
             url: capture[CONTENT_WITHIN_MARKERS],
             content: capture[2] || capture[CONTENT_WITHIN_MARKERS]
         };
-        console.log(res);
         return res;
       },
 

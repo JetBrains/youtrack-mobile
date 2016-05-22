@@ -29,14 +29,41 @@ describe('<Wiki/>', () => {
 
   it('should parse url', () => {
     let wrapper = shallow(<Wiki>foo bar http://some.url test test</Wiki>);
-    const imageNode = wrapper.findWhere(component => component.text() === 'http://some.url');
-    imageNode.length.should.equal(1);
+    const node = wrapper.findWhere(component => component.text() === 'http://some.url');
+    node.length.should.equal(1);
+  });
+
+  it('should parse [link]', () => {
+    let wrapper = shallow(<Wiki>foo bar [http://some.url]</Wiki>);
+    const node = wrapper.findWhere(component => component.text() === 'http://some.url');
+    node.length.should.equal(1);
+    wrapper.html().should.not.contain('[http');
+  });
+
+  it('should parse [http://link title]', () => {
+    let wrapper = shallow(<Wiki>foo bar [http://some.url title]</Wiki>);
+    const node = wrapper.findWhere(component => component.text() === 'title');
+    node.length.should.equal(1);
+    wrapper.html().should.not.contain('[http');
+  });
+
+  it('should parse <link>', () => {
+    let wrapper = shallow(<Wiki>{'foo bar <http://some.url>'}</Wiki>);
+    const node = wrapper.findWhere(component => component.text() === 'http://some.url');
+    node.length.should.equal(1);
+    wrapper.html().should.not.contain('<http');
+  });
+
+  it('should parse {{monospace}}', () => {
+    let wrapper = shallow(<Wiki>{'foo {{monospace}} bar'}</Wiki>);
+    const node = wrapper.findWhere(component => component.props().style && component.props().style.fontFamily === 'Courier New');
+    node.length.should.equal(1);
   });
 
   it('should parse inline code', () => {
     let wrapper = shallow(<Wiki>`some code`</Wiki>);
-    const imageNode = wrapper.findWhere(component => component.props().style && component.props().style.fontFamily === 'Courier');
-    imageNode.length.should.equal(1);
+    const node = wrapper.findWhere(component => component.props().style && component.props().style.fontFamily === 'Courier');
+    node.length.should.equal(1);
   });
 
   it('should parse code block', () => {
@@ -45,7 +72,7 @@ describe('<Wiki/>', () => {
       some code{'\n'}
       ```
     </Wiki>);
-    const imageNode = wrapper.findWhere(component => component.props().style && component.props().style.backgroundColor === COLOR_LIGHT_GRAY);
-    imageNode.length.should.equal(1);
+    const node = wrapper.findWhere(component => component.props().style && component.props().style.backgroundColor === COLOR_LIGHT_GRAY);
+    node.length.should.equal(1);
   });
 });
