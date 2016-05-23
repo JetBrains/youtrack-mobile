@@ -61,7 +61,7 @@ class IssueList extends React.Component {
     openUrlHandler(issueId => Router.SingleIssue({
       issueId: issueId,
       api: this.api,
-      onUpdate: () => this.loadIssues(null, null, false)
+      onUpdate: () => this.loadIssues(null, null)
     }));
 
     this.loadStoredQuery().then(query => this.setQuery(query));
@@ -80,7 +80,7 @@ class IssueList extends React.Component {
       issuePlaceholder: issue,
       issueId: issue.id,
       api: this.api,
-      onUpdate: () => this.loadIssues(this.state.queryAssistValue, null, false)
+      onUpdate: () => this.loadIssues(this.state.queryAssistValue, null)
     });
   }
 
@@ -154,7 +154,7 @@ class IssueList extends React.Component {
 
   setQuery(query) {
     this.setState({queryAssistValue: query});
-    this.loadIssues(query, null, false);
+    this.loadIssues(query, null);
   }
 
   onQueryUpdated(query) {
@@ -168,7 +168,7 @@ class IssueList extends React.Component {
         leftButton={<Text>Menu</Text>}
         rightButton={<Text>Create</Text>}
         onBack={() => this.setState({showMenu: true})}
-        onRightButtonClick={() => Router.CreateIssue({api: this.api, onCreate: () => this.loadIssues(this.state.queryAssistValue, null, false)})}
+        onRightButtonClick={() => Router.CreateIssue({api: this.api, onCreate: () => this.loadIssues(this.state.queryAssistValue, null)})}
       >
         <Text>Sort by: Updated</Text>
       </Header>

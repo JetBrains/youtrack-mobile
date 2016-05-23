@@ -68,8 +68,11 @@ export default class SingeIssueView extends React.Component {
         return issue;
       })
       .catch((result) => {
-        return result.json()
-          .then(res => global.alert(res.error_description || res));
+        if (result.json) {
+          return result.json()
+            .then(res => global.alert(res.error_description || res));
+        }
+        console.warn('failed to load issue', result);
       });
   }
 
@@ -153,7 +156,9 @@ export default class SingeIssueView extends React.Component {
     }
 
     return <ScrollView style={styles.attachesContainer} horizontal={true}>
-      {(attachments || []).map((attach) => {
+      {(attachments || [])
+        .filter(attach => attach.mimeType.includes('image'))
+        .map((attach) => {
         return <TouchableOpacity onPress={() => Router.ShowImage({imageUrl: attach.url, imageName: attach.value})} key={attach.id}>
           <Image style={styles.attachment}
                  capInsets={{left: 15, right: 15, bottom: 15, top: 15}}

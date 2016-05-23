@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 import {COLOR_LIGHT_GRAY, COLOR_LINK} from '../variables/variables';
 
 export default StyleSheet.create({
@@ -7,6 +7,16 @@ export default StyleSheet.create({
   },
   strong: {
     fontWeight: 'bold'
+  },
+  monospace: {
+    ...Platform.select({
+      ios: {
+        fontFamily: 'Courier New'
+      },
+      android: {
+        fontFamily: 'Droid Sans Mono'
+      }
+    })
   },
   underline: {
     textDecorationLine: 'underline'

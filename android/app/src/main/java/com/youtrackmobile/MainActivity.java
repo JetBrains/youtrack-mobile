@@ -1,4 +1,4 @@
-package com.youtrackmobile;
+package com.jetbrains.youtrack.mobile.app;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactPackage;

@@ -13,5 +13,6 @@ function makeRenderable(componentClass) {
 
 ReactNativeMocks.View = makeRenderable(ReactNativeMocks.View);
 ReactNativeMocks.Text = makeRenderable(ReactNativeMocks.Text);
+ReactNativeMocks.Platform.select = (obj) => obj.ios;
 
 module.exports = ReactNativeMocks;

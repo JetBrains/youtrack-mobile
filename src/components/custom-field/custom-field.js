@@ -1,7 +1,7 @@
 import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
 import React, {PropTypes} from 'react';
 import getColorById from '../color-field/color-field__colors';
-import {COLOR_FONT_GRAY, COLOR_PINK} from '../variables/variables';
+import {COLOR_FONT_GRAY, COLOR_PINK, COLOR_FONT} from '../variables/variables';
 
 export default class CustomField extends React.Component {
   _getValue(value) {
@@ -85,10 +85,12 @@ const styles = StyleSheet.create({
     flexWrap: 'nowrap'
   },
   keyText: {
+    color: COLOR_FONT,
     paddingTop: 4,
     fontSize: 12
   },
   valueText: {
+    color: COLOR_FONT,
     fontWeight: 'bold',
     marginLeft: -2,
     marginRight: 0,

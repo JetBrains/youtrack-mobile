@@ -20,7 +20,7 @@
   /**
    Choose "YouTrackMobile" scheme (product=>scheme) for debug and "YouTrackMobile[Release]" for release.
   */
-  
+
 #ifdef DEBUG
   /**
    * Loading JavaScript code - uncomment the one you want.
@@ -38,7 +38,7 @@
 
   jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios&dev=true"];
 #endif
-  
+
 #ifndef DEBUG
   /**
    * OPTION 2
@@ -49,7 +49,7 @@
    */
   jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
-  
+
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"YouTrackMobile"
                                                initialProperties:nil
@@ -68,5 +68,8 @@
   return [RCTLinkingManager application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
 }
 
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler {
+  return [RCTLinkingManager application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
+}
 
 @end

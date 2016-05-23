@@ -2,7 +2,10 @@ import {Linking} from 'react-native';
 
 import qs from 'qs';
 
+let cachedAuthorizationCode;
+
 function openAuthPage(config) {
+
   Linking.openURL([
     `${config.auth.serverUri}/api/rest/oauth2/auth`,
     '?response_type=code',
@@ -27,6 +30,11 @@ module.exports = {
           if (!code) {
             throw new Error(`Cannot extract code from url ${url}`);
           }
+          if (code === cachedAuthorizationCode) {
+            return Promise.reject('This code is already used');
+          }
+
+          cachedAuthorizationCode = code;
           return code;
         } else {
           return Promise.reject('Initial url doesn\'t found');

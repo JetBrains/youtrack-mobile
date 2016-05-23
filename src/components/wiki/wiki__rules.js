@@ -42,10 +42,20 @@ export default function (actions) {
       }
     }),
 
+    monospace: Object.assign({}, SimpleMarkdown.defaultRules.strong, {
+      match: source => {
+        return /^{{([\s\S]+?)}}(?!}})/.exec(source) || /^{monospace}([\s\S]+?){monospace}(?!{monospace})/.exec(source)
+      },
+
+      react: (node, output, state) => {
+        return <Text key={state.key} style={styles.monospace}>{output(node.content)}</Text>
+      }
+    }),
+
     heading: {
       order: SimpleMarkdown.defaultRules.strong.order,
 
-      match: source => /^=([\s\S]+?)=(?!=)/.exec(source),
+      match: source => /^=([\s\S]+?)=(?!=)\n/.exec(source),
 
       parse: (capture, parse, state) => {
         return {
@@ -54,7 +64,7 @@ export default function (actions) {
       },
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.heading}>{output(node.content)}</Text>;
+        return <Text key={state.key} style={styles.heading}>{output(node.content)}{'\n'}</Text>;
       }
     },
 
@@ -100,6 +110,22 @@ export default function (actions) {
     }),
 
     link: Object.assign({}, SimpleMarkdown.defaultRules.link, {
+      match: source => /^\[(https?:\/\/\S*)\s?(.*?)\]/.exec(source) || /^<(https?:\/\/\S*)>/.exec(source),
+
+      parse: function(capture, parse, state) {
+        const res = {
+            url: capture[CONTENT_WITHIN_MARKERS],
+            content: capture[2] || capture[CONTENT_WITHIN_MARKERS]
+        };
+        return res;
+      },
+
+      react: (node, output, state) => {
+        return <Text key={state.key} style={styles.link} onPress={() => actions.onLinkPress(node.url)}>{node.content}</Text>
+      }
+    }),
+
+    url: Object.assign({}, SimpleMarkdown.defaultRules.url, {
       match: source => /^https?:\/\/\S*/.exec(source),
 
       parse: (capture, parse, state) => {
@@ -114,7 +140,7 @@ export default function (actions) {
     }),
 
     codeBlock: Object.assign({}, SimpleMarkdown.defaultRules.codeBlock, {
-      match: source => /^```([\s\S]+?)```(?!```)/.exec(source),
+      match: source => /^```([\s\S]+?)```(?!```)/.exec(source) || /^\{code.*\}([\s\S]+?)\{code\}(?!\{code\})/.exec(source),
 
       parse: function(capture) {
         return {

@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 
-import {UNIT, COLOR_FONT_GRAY} from '../../components/variables/variables';
+import {UNIT, COLOR_FONT_GRAY, COLOR_FONT} from '../../components/variables/variables';
 import {SIZE as COLOR_FIELD_SIZE} from '../../components/color-field/color-field';
 
 module.exports = StyleSheet.create({
@@ -38,7 +38,8 @@ module.exports = StyleSheet.create({
     backgroundColor: '#C8C7CC'
   },
   summary: {
-    flexWrap: 'nowrap'
+    flexWrap: 'nowrap',
+    color: COLOR_FONT
   },
   subtext: {
     paddingTop: UNIT,

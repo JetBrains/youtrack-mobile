@@ -3,7 +3,6 @@ import React from 'react';
 import {logo} from '../../components/icon/icon';
 import Keystore from '../../components/keystore/keystore';
 import OAuth from '../../components/auth/auth__oauth';
-import Prompt from 'react-native-prompt';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 import styles from './log-in.styles';
@@ -70,12 +69,11 @@ export default class LoginForm extends React.Component {
 
   logInViaHub() {
     const config = this.props.auth.config;
-    this.setState({loggingIn: true});
 
     return OAuth.authorizeInHub(config)
       .then(code => this.props.auth.authorizeOAuth(code))
       .then(() => this.props.onLogIn())
-      .catch(err => this.setState({errorMessage: err.error_description || err.message, loggingIn: false}))
+      .catch(err => this.setState({errorMessage: err.error_description || err.message}))
   }
 
   signUp() {
@@ -151,14 +149,6 @@ export default class LoginForm extends React.Component {
           <Text style={styles.descriptionText}>You can log in with your credentials for JetBrains Account,
             Active Directory (Domain) Labs or Attlassian Jira</Text>
         </View>
-
-        <Prompt
-          title="Enter another YouTrack URL"
-          placeholder="https://youtrack.example.com"
-          defaultValue={this.props.auth.config.backendUrl}
-          visible={this.state.promptVisible}
-          onCancel={() => this.setState({promptVisible: false})}
-          onSubmit={this.changeYouTrackUrl.bind(this)}/>
 
         <KeyboardSpacer/>
       </ScrollView>

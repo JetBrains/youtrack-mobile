@@ -112,7 +112,8 @@ const ISSUE_FIELD_FIELDS = toField([
 const ISSUE_ATTACHMENTS_FIELDS = toField([
   'id',
   'name',
-  'url'
+  'url',
+  'mimeType'
 ]);
 
 const ISSUE_COMMENTS_FIELDS = toField([

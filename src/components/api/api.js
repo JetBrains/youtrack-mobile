@@ -76,9 +76,24 @@ class Api {
     return this.makeAuthorizedRequest(`${this.youTrackIssuesFolderUrl}?fields=$type,name,query`);
   }
 
-  createIssue(issue) {
-    console.info('ISSUE TO CREATE>>>', issue)
-    return this.makeAuthorizedRequest(this.youTrackIssueUrl, 'POST', issue);
+  createIssue(issueDraft) {
+    console.info('Issue draft to create:', issueDraft)
+    const queryString = qs.stringify({draftId: issueDraft.id});
+    return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`, 'POST', {});
+  }
+
+  /**
+   * Creates (if issue has no id) or updates issue draft
+   * @param issue
+   * @returns {Promise}
+     */
+  updateIssueDraft(issue) {
+    const queryString = qs.stringify({
+      fields: fields.singleIssue.toString(),
+      tmp: true
+    });
+
+    return this.makeAuthorizedRequest(`${this.youTrackUrl}/api/admin/users/me/drafts/${issue.id || ''}?${queryString}`, 'POST', issue);
   }
 
   addComment(issueId, comment) {
