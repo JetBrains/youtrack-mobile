@@ -1,0 +1,11 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "2ZEFAR8TH3.org.jetbrains.youtrack.YouTrackMobile",
+        "paths": ["/issue/*"]
+      }
+    ]
+  }
+}
