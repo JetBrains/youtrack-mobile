@@ -11,13 +11,14 @@ const noop = () => {};
 
 export default class LoginForm extends React.Component {
   constructor(props) {
-    super();
+    super(props);
     this.state = {
       username: '',
       password: '',
       errorMessage: '',
       loggingIn: false,
-      promptVisible: false
+      changingYouTrackUrl: false,
+      youTrackBackendUrl: props.auth.config.backendUrl
     };
 
 
@@ -60,7 +61,7 @@ export default class LoginForm extends React.Component {
   }
 
   openYouTrackUrlPrompt() {
-    this.setState({promptVisible: true});
+    this.setState({changingYouTrackUrl: true});
   }
 
   changeYouTrackUrl(newUrl) {
@@ -93,12 +94,24 @@ export default class LoginForm extends React.Component {
           <Image style={styles.logoImage} source={logo}/>
         </View>
 
-        <TouchableOpacity onPress={this.openYouTrackUrlPrompt.bind(this)}>
+        {!this.state.changingYouTrackUrl && <TouchableOpacity onPress={this.openYouTrackUrlPrompt.bind(this)}>
           <View>
             <Text style={styles.welcome}>Login to YouTrack</Text>
             <Text style={[styles.descriptionText, {marginTop: 8}]}>{this.props.auth.config.backendUrl}</Text>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity>}
+
+        {this.state.changingYouTrackUrl && <View>
+          <TextInput
+            autoCapitalize="none"
+            autoCorrect={false}
+            autoFocus={true}
+            style={styles.input}
+            placeholder="https://youtrack.example.com"
+            onSubmitEditing={() => this.changeYouTrackUrl(this.state.youTrackBackendUrl)}
+            value={this.state.youTrackBackendUrl}
+            onChangeText={(youTrackBackendUrl) => this.setState({youTrackBackendUrl})}/>
+        </View>}
 
         <View style={styles.inputsContainer}>
           <TextInput
