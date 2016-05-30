@@ -29,7 +29,7 @@ export default StyleSheet.create({
     alignItems: 'center'
   },
   signinDisabled: {
-    backgroundColor: COLOR_LIGHT_GRAY 
+    backgroundColor: COLOR_LIGHT_GRAY
   },
   signinText: {
     fontSize: FONT_SIZE,

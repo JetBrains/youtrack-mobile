@@ -5,6 +5,7 @@ import CustomField from '../custom-field/custom-field';
 import Select from '../select/select';
 import Header from '../header/header';
 import {COLOR_PINK} from '../../components/variables/variables';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 import styles from './custom-fields-panel.styles';
 
@@ -42,19 +43,21 @@ export default class CustomFieldsPanel extends React.Component {
     };
   }
 
+  measureSelect() {
+    /**
+     * TODO https://github.com/facebook/react-native/issues/4753
+     * This container requires because just measure always returns 0 for android
+     */
+    const container = this.props.containerViewGetter();
+    this.refs.panel.measureLayout(findNodeHandle(container),
+      (x, y, width, height, pageX, pageY) => {
+        this.setState({topCoord: y, height: height});
+      }
+    );
+  }
+
   componentDidMount() {
-    setTimeout(() => {
-      /**
-       * TODO https://github.com/facebook/react-native/issues/4753
-       * This container requires because just measure always returns 0 for android
-       */
-      const container = this.props.containerViewGetter();
-      this.refs.panel.measureLayout(findNodeHandle(container),
-        (x, y, width, height, pageX, pageY) => {
-          this.setState({topCoord: y, height: height});
-        }
-      );
-    }, 0);
+    setTimeout(this.measureSelect.bind(this), 0);
   }
 
   onSelectProject() {
@@ -282,6 +285,9 @@ export default class CustomFieldsPanel extends React.Component {
             active={this.state.editingField === field}
             disabled={!this.props.issuePermissions.canUpdateField(issue, field)}/>)}
         </ScrollView>
+        <View style={{position: 'absolute', height: 0, width: 0, opacity: 0}}>
+          <KeyboardSpacer onToggle={() => this.measureSelect()}/>
+        </View>
       </View>
     );
   }
