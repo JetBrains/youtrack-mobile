@@ -111,6 +111,22 @@ export default class SingeIssueView extends React.Component {
       });
   }
 
+  onUpdateProject(project) {
+    this.state.issue.project = project;
+    this.forceUpdate();
+
+    return this.props.api.updateProject(this.state.issue, project)
+      .catch((err) => {
+        if (err.json) {
+          return err.json()
+            .then(res => console.warn('failed to update issue project', res));
+        } else {
+          console.warn('failed to update issue project', err);
+        }
+      })
+      .then(() => this.loadIssue(this.props.issueId))
+  }
+
   onSaveChanges() {
     this.state.issue.summary = this.state.summaryCopy;
     this.state.issue.description = this.state.descriptionCopy;
@@ -224,9 +240,11 @@ export default class SingeIssueView extends React.Component {
         {this.state.issue && <CustomFieldsPanel
           containerViewGetter={() => this.refs.container}
           api={this.props.api}
+          canEditProject={this.issuePermissions.canUpdateGeneralInfo(this.state.issue)}
           issue={this.state.issue}
           issuePermissions={this.issuePermissions}
-          onUpdate={this.onIssueFieldValueUpdate.bind(this)}/>}
+          onUpdate={this.onIssueFieldValueUpdate.bind(this)}
+          onUpdateProject={this.onUpdateProject.bind(this)}/>}
       </View>
     );
   }

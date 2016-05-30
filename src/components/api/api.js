@@ -122,6 +122,14 @@ class Api {
     return this.makeAuthorizedRequest(`${this.youTrackProjectUrl}/${projectId}?${queryString}`);
   }
 
+  updateProject(issue, project) {
+    const body = {
+      id: issue.id,
+      project: project
+    }
+    return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issue.id}`, 'POST', body);
+  }
+
   getCustomFieldValues(bundleId, fieldType) {
     const queryString = qs.stringify({
       fields: fields.bundle.toString()
