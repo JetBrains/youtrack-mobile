@@ -27,6 +27,7 @@ export default class IssueListMenu extends React.Component {
 
       <View style={styles.menuFooter}>
         <Text style={styles.footerText}>YouTrack Mobile {VERSION_STRING}</Text>
+        <Text style={styles.footerText}>{this.props.backendUrl}</Text>
         <Text style={styles.footerText}>© 2000—{CURRENT_YEAR} JetBrains</Text>
         <Text style={styles.footerText}>All rights reserved</Text>
       </View>
