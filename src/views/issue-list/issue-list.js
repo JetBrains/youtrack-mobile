@@ -58,13 +58,17 @@ class IssueList extends React.Component {
 
   componentDidMount() {
     this.api = new Api(this.props.auth);
-    openUrlHandler(issueId => Router.SingleIssue({
+    this.unsubscribeFromOpeningWithIssueUrl = openUrlHandler(issueId => Router.SingleIssue({
       issueId: issueId,
       api: this.api,
       onUpdate: () => this.loadIssues(null, null)
     }));
 
     this.loadStoredQuery().then(query => this.setQuery(query));
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeFromOpeningWithIssueUrl();
   }
 
   storeQuery(query) {
