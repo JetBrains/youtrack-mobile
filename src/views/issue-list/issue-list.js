@@ -199,11 +199,13 @@ class IssueList extends React.Component {
 
   render() {
     return (<SideMenu
-      menu={<IssueListMenu onLogOut={this.logOut.bind(this)}
-        user={this.props.auth.currentUser}
-        backendUrl={this.props.auth.config.backendUrl}/>}
-      isOpen={this.state.showMenu}
-      onChange={isOpen => this.setState({showMenu: isOpen})}>
+              menu={<IssueListMenu onLogOut={this.logOut.bind(this)}
+                user={this.props.auth.currentUser}
+                backendUrl={this.props.auth.config.backendUrl}
+              />}
+              isOpen={this.state.showMenu}
+              openMenuOffset={260}
+              onChange={isOpen => this.setState({showMenu: isOpen})}>
       <View style={styles.listContainer}>
         {this._renderHeader()}
         <ListView
