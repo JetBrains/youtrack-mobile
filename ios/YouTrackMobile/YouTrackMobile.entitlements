@@ -5,8 +5,7 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>applinks:youtrack.jetbrains.com</string>
-		<string>applinks:andreyskl.labs.intellij.net:9090</string>
-		<string>applinks:andreyskl.labs.intellij.net:8088</string>
+		<string>applinks:ee9f7df1.ngrok.io</string>
 	</array>
 	<key>keychain-access-groups</key>
 	<array>
