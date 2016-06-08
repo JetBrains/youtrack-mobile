@@ -1,6 +1,6 @@
-import {decorateIssueLinks} from './wiki__raw-text-decorator';
+import {decorateIssueLinks, replaceImageNamesWithUrls} from './wiki__raw-text-decorator';
 
-describe('IssueLinksDecorator', function () {
+describe('decorateIssueLinks', function () {
   const rawTextWithIds = 'foo barr YTM-14 bar foo'
   const wikifiedText = `foo barr <a href="/issue/YTM-14" class="issue-resolved" target="_self" title="Fake issue summary">YTM-14</a> bar foo`;
 
@@ -24,5 +24,22 @@ describe('IssueLinksDecorator', function () {
 
 
     result.should.equal('foo barr [ytmissue]Y-15|Fake issue summary[ytmissue] bar [ytmissue]JT-123|Another summary[ytmissue]')
+  });
+});
+
+
+describe('replaceImageNamesWithUrls', function () {
+  const rawTextWithIds = 'foo bar !attach123.png! tes';
+  const attachments = [
+    {
+      name: 'attach123.png',
+      url: 'http://foo.bar/attach.png'
+    }
+  ];
+
+  it('should replace images with it\'s URL using urls from attaches', () => {
+    const result = replaceImageNamesWithUrls(rawTextWithIds, attachments);
+
+    result.should.equal('foo bar !http://foo.bar/attach.png! tes');
   });
 });

@@ -3,7 +3,7 @@ import React from 'react';
 import SimpleMarkdown from 'simple-markdown';
 import Router from '../router/router';
 import wikiRules from './wiki__rules';
-import {decorateIssueLinks} from './wiki__raw-text-decorator';
+import {decorateIssueLinks, replaceImageNamesWithUrls} from './wiki__raw-text-decorator';
 
 export default class Wiki extends React.Component {
   constructor() {
@@ -39,22 +39,10 @@ export default class Wiki extends React.Component {
   }
 }
 
-const replaceImageNamesWithUrls = (source, attachments) => {
-  const ImageRegExp = /\![a-zA-Z0-9\s-]+?\.[a-zA-Z]+?\!/;
-
-  return source.replace(ImageRegExp, (imageName) => {
-    let attach = attachments.filter(a => `!${a.name}!` === imageName)[0];
-    if (attach) {
-      return `!${attach.url}!`;
-    }
-    return imageName;
-  });
-};
-
 const decorateRawText = (source, wikifiedOnServer, attachments) => {
   let result = replaceImageNamesWithUrls(source, attachments);
   result = decorateIssueLinks(result, wikifiedOnServer);
   return result;
 };
 
-export {replaceImageNamesWithUrls, decorateRawText};
+export {decorateRawText};

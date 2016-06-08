@@ -19,3 +19,15 @@ export function decorateIssueLinks(rawText, wikifiedText) {
 
   return rawText;
 }
+
+export function replaceImageNamesWithUrls(source, attachments) {
+  const ImageRegExp = /\![a-zA-Z0-9\s-]+?\.[a-zA-Z]+?\!/;
+
+  return source.replace(ImageRegExp, (imageName) => {
+    let attach = attachments.filter(a => `!${a.name}!` === imageName)[0];
+    if (attach) {
+      return `!${attach.url}!`;
+    }
+    return imageName;
+  });
+}
