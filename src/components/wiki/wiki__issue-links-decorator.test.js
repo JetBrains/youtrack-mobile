@@ -7,8 +7,13 @@ describe('IssueLinksDecorator', function () {
   it('should replace single issue ID with special syntax', () => {
     const result = decorateIssueLinks(rawTextWithIds, wikifiedText);
 
-
     result.should.equal('foo barr [ytmissue]YTM-14|Fake issue summary[ytmissue] bar foo')
+  });
+
+  it('should not touch ID if no link found', () => {
+    const result = decorateIssueLinks(rawTextWithIds, '');
+
+    result.should.equal(rawTextWithIds)
   });
 
   it('should decorate multiple issue IDs', () => {
