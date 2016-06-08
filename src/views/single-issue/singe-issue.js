@@ -164,7 +164,7 @@ export default class SingeIssueView extends React.Component {
     if (!this.state.editMode) {
       const rightButton = this.state.issue && this.issuePermissions.canUpdateGeneralInfo(this.state.issue) ? <Text>Edit</Text> : null;
 
-      return <Header leftButton={<Text>Issues</Text>}
+      return <Header leftButton={<Text>Back</Text>}
                      rightButton={rightButton}
                      onRightButtonClick={() => {
                       this.setState({
