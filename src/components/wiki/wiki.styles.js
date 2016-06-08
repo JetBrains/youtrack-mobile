@@ -3,7 +3,7 @@ import {COLOR_LIGHT_GRAY, COLOR_LINK, COLOR_FONT} from '../variables/variables';
 
 export default StyleSheet.create({
   text: {
-    color: COLOR_FONT,
+    color: COLOR_FONT
   },
   heading: {
     color: COLOR_FONT,
