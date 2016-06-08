@@ -21,7 +21,7 @@ export function decorateIssueLinks(rawText, wikifiedText) {
 }
 
 export function replaceImageNamesWithUrls(source, attachments) {
-  const ImageRegExp = /\![a-zA-Z0-9\s-]+?\.[a-zA-Z]+?\!/;
+  const ImageRegExp = /![a-zа-я\d.,\s-]+?\.[a-zA-Z]+?!/ig;
 
   return source.replace(ImageRegExp, (imageName) => {
     let attach = attachments.filter(a => `!${a.name}!` === imageName)[0];

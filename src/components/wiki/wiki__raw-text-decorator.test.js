@@ -29,11 +29,20 @@ describe('decorateIssueLinks', function () {
 
 
 describe('replaceImageNamesWithUrls', function () {
-  const rawTextWithIds = 'foo bar !attach123.png! tes';
+  const rawTextWithIds = 'foo bar !atTach123.png! tes';
   const attachments = [
     {
-      name: 'attach123.png',
+      name: 'atTach123.png',
       url: 'http://foo.bar/attach.png'
+    }, {
+      name: 'with spaces .png',
+      url: 'http://url.png'
+    }, {
+      name: 'with Русские symbols.png',
+      url: 'http://russian-image.png'
+    }, {
+      name: 'foo 123.123,123.png',
+      url: 'http://dot-image.png'
     }
   ];
 
@@ -41,5 +50,23 @@ describe('replaceImageNamesWithUrls', function () {
     const result = replaceImageNamesWithUrls(rawTextWithIds, attachments);
 
     result.should.equal('foo bar !http://foo.bar/attach.png! tes');
+  });
+
+  it('should support images with spaces in name', () => {
+    const result = replaceImageNamesWithUrls('foo bar !with spaces .png! tes', attachments);
+
+    result.should.equal('foo bar !http://url.png! tes');
+  });
+
+  it('should support images with spaces in name', () => {
+    const result = replaceImageNamesWithUrls('foo bar !with Русские symbols.png! tes', attachments);
+
+    result.should.equal('foo bar !http://russian-image.png! tes');
+  });
+
+  it('should support images with dots and commas in name', () => {
+    const result = replaceImageNamesWithUrls('foo bar !foo 123.123,123.png! tes', attachments);
+
+    result.should.equal('foo bar !http://dot-image.png! tes');
   });
 });
