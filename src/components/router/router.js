@@ -37,7 +37,7 @@ class Router {
       throw `no such route ${routeName}`;
     }
 
-    const newRoute = this.routes[routeName];
+    const newRoute = Object.assign({}, this.routes[routeName]);
     newRoute.props = Object.assign({}, newRoute.props, props);
 
     if (newRoute.type === 'replace') {

@@ -15,7 +15,8 @@ export default class LinkedIssues extends Component {
   _renderLinkedIssue(issue) {
     const issueTextStyle = issue.resolved ? {color: COLOR_FONT_GRAY, textDecorationLine: 'line-through'}: null;
 
-    return <TouchableOpacity onPress={() => this.props.onIssueTap && this.props.onIssueTap(issue)}
+    return <TouchableOpacity key={issue.id}
+                             onPress={() => this.props.onIssueTap && this.props.onIssueTap(issue)}
                              style={styles.linkedIssueContainer}>
       <Text style={[styles.linkedIssueText, issueTextStyle]}>
         {issue.project.shortName}-{issue.numberInProject}

@@ -106,7 +106,7 @@ export default class SingeIssueView extends React.Component {
 
     return updateMethod(this.props.issueId, field.id, value)
       .then(() => this.loadIssue(this.props.issueId))
-      .then((res) => this.props.onUpdate(res))
+      .then((res) => this.props.onUpdate && this.props.onUpdate(res))
       .catch((err) => {
         console.warn('failed to update issue field', err);
         return this.loadIssue(this.props.issueId);
@@ -135,6 +135,16 @@ export default class SingeIssueView extends React.Component {
     this.setState({editMode: false});
 
     return this.props.api.updateIssueSummaryDescription(this.state.issue);
+  }
+
+  goToIssue(issue) {
+    issue.fieldHash = ApiHelper.makeFieldHash(issue);
+
+    Router.SingleIssue({
+      issuePlaceholder: issue,
+      issueId: issue.id,
+      api: this.props.api
+    });
   }
 
   _renderHeader() {
@@ -228,7 +238,7 @@ export default class SingeIssueView extends React.Component {
         {!this.state.editMode && <View>
           <Text style={styles.summary}>{issue.summary}</Text>
 
-          {issue.links && <LinkedIssues links={issue.links}/>}
+          {issue.links && <LinkedIssues links={issue.links} onIssueTap={issue => this.goToIssue(issue)}/>}
 
           {issue.description && <Wiki style={styles.description}>
             {replaceImageNamesWithUrls(issue.description, issue.attachments)}
