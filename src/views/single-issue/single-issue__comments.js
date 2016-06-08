@@ -1,6 +1,6 @@
 import styles from './single-issue.styles';
 import relativeDate from 'relative-date';
-import Wiki, {replaceImageNamesWithUrls} from '../../components/wiki/wiki';
+import Wiki, {decorateRawText} from '../../components/wiki/wiki';
 import {COLOR_FONT_GRAY} from '../../components/variables/variables';
 
 import {View, Text, Image} from 'react-native';
@@ -9,7 +9,9 @@ import React from 'react';
 export default class SingleIssueComments extends React.Component {
 
   _renderComment(comment, attachments) {
-    return <Wiki>{replaceImageNamesWithUrls(comment.text, attachments)}</Wiki>;
+    return <Wiki onIssueIdTap={issueId => this.props.onIssueIdTap && this.props.onIssueIdTap(issueId)}>
+      {decorateRawText(comment.text, comment.textPreview, attachments)}
+      </Wiki>;
   }
 
   _renderCommentsList(comments, attachments) {

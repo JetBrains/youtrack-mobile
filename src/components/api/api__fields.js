@@ -109,6 +109,15 @@ const ISSUE_FIELD_FIELDS = toField([
   }
 ]);
 
+const ISSUE_TAGS_FIELDS = toField([
+  'name',
+  'id',
+  'query',
+  {
+    color: ['id']
+  }
+]);
+
 const ISSUE_ATTACHMENTS_FIELDS = toField([
   'id',
   'name',
@@ -120,30 +129,53 @@ const ISSUE_COMMENTS_FIELDS = toField([
   'id',
   'text',
   'created',
+  'textPreview',
   {author: ISSUE_USER_FIELDS}
 ]);
 
+const ISSUE_SHORT_FIELDS = toField([
+  'id',
+  'summary',
+  'resolved',
+  {project: ISSUE_PROJECT_FIELDS},
+  'numberInProject',
+  {reporter: ISSUE_USER_FIELDS},
+  {fields: ISSUE_FIELD_FIELDS}
+]);
+
+const ISSUE_LINKS_FIELDS = toField([
+  'id',
+  'direction',
+  {
+    linkType: [
+      'uid',
+      'name',
+      'localizedName',
+      'sourceToTarget',
+      'localizedSourceToTarget',
+      'targetToSource',
+      'localizedTargetToSource'
+    ],
+    trimmedIssues: ISSUE_SHORT_FIELDS
+  }
+]);
+
 export default {
-  issuesOnList: toField([
-    'id',
-    'summary',
-    'resolved',
-    {project: ISSUE_PROJECT_FIELDS},
-    'numberInProject',
-    {reporter: ISSUE_USER_FIELDS},
-    {fields: ISSUE_FIELD_FIELDS}
-  ]),
+  issuesOnList: ISSUE_SHORT_FIELDS,
   singleIssue: toField([
     'id',
     'summary',
     'description',
     'resolved',
-    {project: ISSUE_PROJECT_FIELDS},
     'numberInProject',
+    'wikifiedDescription',
+    {project: ISSUE_PROJECT_FIELDS},
     {reporter: ISSUE_USER_FIELDS},
     {fields: ISSUE_FIELD_FIELDS},
+    {tags: ISSUE_TAGS_FIELDS},
     {attachments: ISSUE_ATTACHMENTS_FIELDS},
-    {comments: ISSUE_COMMENTS_FIELDS}
+    {comments: ISSUE_COMMENTS_FIELDS},
+    {links: ISSUE_LINKS_FIELDS}
   ]),
   projectOnList: toField([
     'id',

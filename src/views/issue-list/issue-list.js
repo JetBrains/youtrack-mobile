@@ -58,13 +58,21 @@ class IssueList extends React.Component {
 
   componentDidMount() {
     this.api = new Api(this.props.auth);
-    openUrlHandler(issueId => Router.SingleIssue({
+    this.unsubscribeFromOpeningWithIssueUrl = openUrlHandler(issueId => Router.SingleIssue({
       issueId: issueId,
       api: this.api,
       onUpdate: () => this.loadIssues(null, null)
     }));
 
-    this.loadStoredQuery().then(query => this.setQuery(query));
+    if (this.props.query) {
+      this.setQuery(this.props.query)
+    } else {
+      this.loadStoredQuery().then(query => this.setQuery(query));
+    }
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeFromOpeningWithIssueUrl();
   }
 
   storeQuery(query) {
@@ -195,9 +203,13 @@ class IssueList extends React.Component {
 
   render() {
     return (<SideMenu
-      menu={<IssueListMenu onLogOut={this.logOut.bind(this)} user={this.props.auth.currentUser}/>}
-      isOpen={this.state.showMenu}
-      onChange={isOpen => this.setState({showMenu: isOpen})}>
+              menu={<IssueListMenu onLogOut={this.logOut.bind(this)}
+                user={this.props.auth.currentUser}
+                backendUrl={this.props.auth.config.backendUrl}
+              />}
+              isOpen={this.state.showMenu}
+              openMenuOffset={260}
+              onChange={isOpen => this.setState({showMenu: isOpen})}>
       <View style={styles.listContainer}>
         {this._renderHeader()}
         <ListView

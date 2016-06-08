@@ -6,7 +6,9 @@ import CustomFieldsPanel from '../../components/custom-fields-panel/custom-field
 import SingleIssueComments from './single-issue__comments';
 import Router from '../../components/router/router';
 import Header from '../../components/header/header';
-import Wiki, {replaceImageNamesWithUrls} from '../../components/wiki/wiki';
+import ColorField from '../../components/color-field/color-field';
+import LinkedIssues from '../../components/linked-issues/linked-issues';
+import Wiki, {decorateRawText} from '../../components/wiki/wiki';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import SingleIssueCommentInput from './single-issue__comment-input';
 import styles from './single-issue.styles';
@@ -72,7 +74,7 @@ export default class SingeIssueView extends React.Component {
           return result.json()
             .then(res => global.alert(res.error_description || res));
         }
-        console.warn('failed to load issue', result);
+        console.warn('failed to load issue', result, result.message);
       });
   }
 
@@ -104,7 +106,7 @@ export default class SingeIssueView extends React.Component {
 
     return updateMethod(this.props.issueId, field.id, value)
       .then(() => this.loadIssue(this.props.issueId))
-      .then((res) => this.props.onUpdate(res))
+      .then((res) => this.props.onUpdate && this.props.onUpdate(res))
       .catch((err) => {
         console.warn('failed to update issue field', err);
         return this.loadIssue(this.props.issueId);
@@ -135,13 +137,34 @@ export default class SingeIssueView extends React.Component {
     return this.props.api.updateIssueSummaryDescription(this.state.issue);
   }
 
+  goToIssue(issue) {
+    issue.fieldHash = ApiHelper.makeFieldHash(issue);
+
+    Router.SingleIssue({
+      issuePlaceholder: issue,
+      issueId: issue.id,
+      api: this.props.api
+    });
+  }
+
+  goToIssueById(issueId) {
+    Router.SingleIssue({
+      issueId: issueId,
+      api: this.props.api
+    });
+  }
+
+  openIssueListWithSearch(query) {
+    Router.IssueList({auth: this.props.api.auth, query: query});
+  }
+
   _renderHeader() {
     const title = <Text>{this.state.issue && (`${this.state.issue.project.shortName}-${this.state.issue.numberInProject}`)}</Text>;
 
     if (!this.state.editMode) {
       const rightButton = this.state.issue && this.issuePermissions.canUpdateGeneralInfo(this.state.issue) ? <Text>Edit</Text> : null;
 
-      return <Header leftButton={<Text>Issues</Text>}
+      return <Header leftButton={<Text>Back</Text>}
                      rightButton={rightButton}
                      onRightButtonClick={() => {
                       this.setState({
@@ -184,9 +207,25 @@ export default class SingeIssueView extends React.Component {
     </ScrollView>;
   }
 
+  _renderTags(tags) {
+    if (!tags || !tags.length) {
+      return;
+    }
+
+    return <View style={styles.tagsContainer}>
+      {tags.map(tag => {
+        return <TouchableOpacity onPress={() => this.openIssueListWithSearch(tag.query)} key={tag.id} style={styles.tagButton}>
+          <ColorField text={tag.name} color={tag.color} fullText={true} style={styles.tagColorField}/>
+        </TouchableOpacity>
+      })}
+    </View>
+  }
+
   _renderIssueView(issue) {
     return (
       <View style={styles.issueViewContainer}>
+        {this._renderTags(issue.tags)}
+
         <Text style={styles.authorForText}>{this.getAuthorForText(issue)}</Text>
 
         {this.state.editMode && <View>
@@ -210,8 +249,10 @@ export default class SingeIssueView extends React.Component {
         {!this.state.editMode && <View>
           <Text style={styles.summary}>{issue.summary}</Text>
 
-          {issue.description && <Wiki style={styles.description}>
-            {replaceImageNamesWithUrls(issue.description, issue.attachments)}
+          {issue.links && <LinkedIssues links={issue.links} onIssueTap={issue => this.goToIssue(issue)}/>}
+
+          {issue.description && <Wiki style={styles.description} onIssueIdTap={issueId => this.goToIssueById(issueId)}>
+            {decorateRawText(issue.description, issue.wikifiedDescription, issue.attachments)}
           </Wiki>}
         </View>}
 
@@ -233,7 +274,11 @@ export default class SingeIssueView extends React.Component {
           {this.state.fullyLoaded && <View>
             {this.issuePermissions.canCommentOn(this.state.issue) && <SingleIssueCommentInput
               onAddComment={(comment) => this.addComment(this.state.issue, comment)}/>}
-            <SingleIssueComments comments={this.state.issue.comments} attachments={this.state.issue.attachments} api={this.props.api}/>
+            <SingleIssueComments
+              comments={this.state.issue.comments}
+              attachments={this.state.issue.attachments}
+              api={this.props.api}
+              onIssueIdTap={issueId => this.goToIssueById(issueId)}/>
           </View>}
         </ScrollView>}
 
