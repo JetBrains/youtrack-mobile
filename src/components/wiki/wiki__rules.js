@@ -25,7 +25,7 @@ export default function (actions) {
     }),
     text: Object.assign({}, SimpleMarkdown.defaultRules.text, {
       react: (node, output, state) => {
-        return <Text key={state.key}>{node.content}</Text>;
+        return <Text key={state.key} style={styles.text}>{node.content}</Text>;
       }
     }),
 
