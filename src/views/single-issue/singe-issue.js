@@ -147,6 +147,10 @@ export default class SingeIssueView extends React.Component {
     });
   }
 
+  openIssueListWithSearch(query) {
+    Router.IssueList({auth: this.props.api.auth, query: query});
+  }
+
   _renderHeader() {
     const title = <Text>{this.state.issue && (`${this.state.issue.project.shortName}-${this.state.issue.numberInProject}`)}</Text>;
 
@@ -203,7 +207,7 @@ export default class SingeIssueView extends React.Component {
 
     return <View style={styles.tagsContainer}>
       {tags.map(tag => {
-        return <TouchableOpacity disabled={true} key={tag.id} style={styles.tagButton}>
+        return <TouchableOpacity onPress={() => this.openIssueListWithSearch(tag.query)} key={tag.id} style={styles.tagButton}>
           <ColorField text={tag.name} color={tag.color} fullText={true} style={styles.tagColorField}/>
         </TouchableOpacity>
       })}

@@ -64,7 +64,11 @@ class IssueList extends React.Component {
       onUpdate: () => this.loadIssues(null, null)
     }));
 
-    this.loadStoredQuery().then(query => this.setQuery(query));
+    if (this.props.query) {
+      this.setQuery(this.props.query)
+    } else {
+      this.loadStoredQuery().then(query => this.setQuery(query));
+    }
   }
 
   componentWillUnmount() {
