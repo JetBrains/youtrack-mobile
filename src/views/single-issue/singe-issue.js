@@ -7,6 +7,7 @@ import SingleIssueComments from './single-issue__comments';
 import Router from '../../components/router/router';
 import Header from '../../components/header/header';
 import ColorField from '../../components/color-field/color-field';
+import LinkedIssues from '../../components/linked-issues/linked-issues';
 import Wiki, {replaceImageNamesWithUrls} from '../../components/wiki/wiki';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import SingleIssueCommentInput from './single-issue__comment-input';
@@ -226,6 +227,8 @@ export default class SingeIssueView extends React.Component {
 
         {!this.state.editMode && <View>
           <Text style={styles.summary}>{issue.summary}</Text>
+
+          {issue.links && <LinkedIssues links={issue.links}/>}
 
           {issue.description && <Wiki style={styles.description}>
             {replaceImageNamesWithUrls(issue.description, issue.attachments)}
