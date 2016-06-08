@@ -109,6 +109,15 @@ const ISSUE_FIELD_FIELDS = toField([
   }
 ]);
 
+const ISSUE_TAGS_FIELDS = toField([
+  'name',
+  'id',
+  'query',
+  {
+    color: ['id']
+  }
+]);
+
 const ISSUE_ATTACHMENTS_FIELDS = toField([
   'id',
   'name',
@@ -142,6 +151,7 @@ export default {
     'numberInProject',
     {reporter: ISSUE_USER_FIELDS},
     {fields: ISSUE_FIELD_FIELDS},
+    {tags: ISSUE_TAGS_FIELDS},
     {attachments: ISSUE_ATTACHMENTS_FIELDS},
     {comments: ISSUE_COMMENTS_FIELDS}
   ]),

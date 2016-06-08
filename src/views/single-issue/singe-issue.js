@@ -6,6 +6,7 @@ import CustomFieldsPanel from '../../components/custom-fields-panel/custom-field
 import SingleIssueComments from './single-issue__comments';
 import Router from '../../components/router/router';
 import Header from '../../components/header/header';
+import ColorField from '../../components/color-field/color-field';
 import Wiki, {replaceImageNamesWithUrls} from '../../components/wiki/wiki';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import SingleIssueCommentInput from './single-issue__comment-input';
@@ -184,9 +185,25 @@ export default class SingeIssueView extends React.Component {
     </ScrollView>;
   }
 
+  _renderTags(tags) {
+    if (!tags || !tags.length) {
+      return;
+    }
+
+    return <View style={styles.tagsContainer}>
+      {tags.map(tag => {
+        return <TouchableOpacity disabled={true} key={tag.id} style={styles.tagButton}>
+          <ColorField text={tag.name} color={tag.color} fullText={true} style={styles.tagColorField}/>
+        </TouchableOpacity>
+      })}
+    </View>
+  }
+
   _renderIssueView(issue) {
     return (
       <View style={styles.issueViewContainer}>
+        {this._renderTags(issue.tags)}
+
         <Text style={styles.authorForText}>{this.getAuthorForText(issue)}</Text>
 
         {this.state.editMode && <View>
