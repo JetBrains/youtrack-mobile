@@ -141,6 +141,21 @@ export default function (actions) {
       }
     }),
 
+    userLogin: Object.assign({}, SimpleMarkdown.defaultRules.link, {
+      match: source => /^\[ytmuser]([\s\S]+?)\|([\s\S]+?)\[ytmuser](?!\[ytmuser])/.exec(source),
+      parse: function(capture, parse, state) {
+        const res = {
+          login: capture[CONTENT_WITHIN_MARKERS],
+          username: capture[2]
+        };
+        return res;
+      },
+
+      react: (node, output, state) => {
+        return <Text key={state.key} style={[styles.link, {textDecorationLine: null}]}>{node.username}</Text>;
+      }
+    }),
+
     url: Object.assign({}, SimpleMarkdown.defaultRules.url, {
       match: source => /^https?:\/\/\S*/.exec(source),
 
