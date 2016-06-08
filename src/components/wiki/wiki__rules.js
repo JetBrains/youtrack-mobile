@@ -136,7 +136,8 @@ export default function (actions) {
       },
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.link} onPress={() => actions.onIssueIdPress(node.issueId)}>{node.issueId}</Text>
+        return <Text key={state.key} style={[styles.link, {textDecorationLine: null}]}
+                     onPress={() => actions.onIssueIdPress(node.issueId)}>{node.issueId}</Text>;
       }
     }),
 
