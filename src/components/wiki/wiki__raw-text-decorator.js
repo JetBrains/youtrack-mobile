@@ -1,10 +1,11 @@
-const issueLinkRegExp = /<a href="\/issue.*?title="(.*?)".*?>(.*?)<\/a>/ig;
 
-function decorateIssue(issueId, issueSummary) {
+function decorateIssueLink(issueId, issueSummary) {
   return `[ytmissue]${issueId}|${issueSummary}[ytmissue]`;
 }
 
-export default function decorateIssueLinks(rawText, wikifiedText) {
+export function decorateIssueLinks(rawText, wikifiedText) {
+  const issueLinkRegExp = /<a href="\/issue.*?title="(.*?)".*?>(.*?)<\/a>/ig;
+
   const issuesMap = new Map();
 
   function onIssueIdDetected(linkTag, issueSummary, issueId) {
@@ -13,7 +14,7 @@ export default function decorateIssueLinks(rawText, wikifiedText) {
   wikifiedText.replace(issueLinkRegExp, onIssueIdDetected);
 
   issuesMap.forEach((issueSummary, issueId) => {
-    rawText = rawText.replace(new RegExp(issueId), decorateIssue(issueId, issuesMap.get(issueId)));
+    rawText = rawText.replace(new RegExp(issueId), decorateIssueLink(issueId, issuesMap.get(issueId)));
   })
 
   return rawText;

@@ -1,4 +1,4 @@
-import decorateIssueLinks from './wiki__issue-links-decorator';
+import {decorateIssueLinks} from './wiki__raw-text-decorator';
 
 describe('IssueLinksDecorator', function () {
   const rawTextWithIds = 'foo barr YTM-14 bar foo'

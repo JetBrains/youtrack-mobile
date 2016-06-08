@@ -125,6 +125,21 @@ export default function (actions) {
       }
     }),
 
+    issueIdLink: Object.assign({}, SimpleMarkdown.defaultRules.link, {
+      match: source => /^\[ytmissue]([\s\S]+?)\|([\s\S]+?)\[ytmissue](?!\[ytmissue])/.exec(source),
+      parse: function(capture, parse, state) {
+        const res = {
+          issueId: capture[CONTENT_WITHIN_MARKERS],
+          issueSummary: capture[2]
+        };
+        return res;
+      },
+
+      react: (node, output, state) => {
+        return <Text key={state.key} style={styles.link} onPress={() => actions.onIssueIdPress(node.issueId)}>{node.issueId}</Text>
+      }
+    }),
+
     url: Object.assign({}, SimpleMarkdown.defaultRules.url, {
       match: source => /^https?:\/\/\S*/.exec(source),
 

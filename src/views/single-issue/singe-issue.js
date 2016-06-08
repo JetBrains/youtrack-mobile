@@ -8,7 +8,7 @@ import Router from '../../components/router/router';
 import Header from '../../components/header/header';
 import ColorField from '../../components/color-field/color-field';
 import LinkedIssues from '../../components/linked-issues/linked-issues';
-import Wiki, {replaceImageNamesWithUrls} from '../../components/wiki/wiki';
+import Wiki, {decorateRawText} from '../../components/wiki/wiki';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import SingleIssueCommentInput from './single-issue__comment-input';
 import styles from './single-issue.styles';
@@ -147,6 +147,13 @@ export default class SingeIssueView extends React.Component {
     });
   }
 
+  goToIssueById(issueId) {
+    Router.SingleIssue({
+      issueId: issueId,
+      api: this.props.api
+    });
+  }
+
   openIssueListWithSearch(query) {
     Router.IssueList({auth: this.props.api.auth, query: query});
   }
@@ -244,8 +251,8 @@ export default class SingeIssueView extends React.Component {
 
           {issue.links && <LinkedIssues links={issue.links} onIssueTap={issue => this.goToIssue(issue)}/>}
 
-          {issue.description && <Wiki style={styles.description}>
-            {replaceImageNamesWithUrls(issue.description, issue.attachments)}
+          {issue.description && <Wiki style={styles.description} onIssueIdTap={issueId => this.goToIssueById(issueId)}>
+            {decorateRawText(issue.description, issue.wikifiedDescription, issue.attachments)}
           </Wiki>}
         </View>}
 

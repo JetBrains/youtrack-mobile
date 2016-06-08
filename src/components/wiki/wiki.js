@@ -3,6 +3,7 @@ import React from 'react';
 import SimpleMarkdown from 'simple-markdown';
 import Router from '../router/router';
 import wikiRules from './wiki__rules';
+import {decorateIssueLinks} from './wiki__raw-text-decorator';
 
 export default class Wiki extends React.Component {
   constructor() {
@@ -13,6 +14,9 @@ export default class Wiki extends React.Component {
       },
       onImagePress: (url) => {
         return Router.ShowImage({imageUrl: url, imageName: ''})
+      },
+      onIssueIdPress: (issueId) => {
+        this.props.onIssueIdTap && this.props.onIssueIdTap(issueId);
       }
     });
 
@@ -47,4 +51,10 @@ const replaceImageNamesWithUrls = (source, attachments) => {
   });
 };
 
-export {replaceImageNamesWithUrls};
+const decorateRawText = (source, wikifiedOnServer, attachments) => {
+  let result = replaceImageNamesWithUrls(source, attachments);
+  result = decorateIssueLinks(result, wikifiedOnServer);
+  return result;
+};
+
+export {replaceImageNamesWithUrls, decorateRawText};

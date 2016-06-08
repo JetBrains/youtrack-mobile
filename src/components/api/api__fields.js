@@ -129,6 +129,7 @@ const ISSUE_COMMENTS_FIELDS = toField([
   'id',
   'text',
   'created',
+  'textPreview',
   {author: ISSUE_USER_FIELDS}
 ]);
 
@@ -167,6 +168,7 @@ export default {
     'description',
     'resolved',
     'numberInProject',
+    'wikifiedDescription',
     {project: ISSUE_PROJECT_FIELDS},
     {reporter: ISSUE_USER_FIELDS},
     {fields: ISSUE_FIELD_FIELDS},

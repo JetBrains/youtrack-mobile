@@ -46,9 +46,9 @@ class Api {
       });
   }
 
-  hackishGetIssueByIssueReadableId(query) {
+  hackishGetIssueByIssueReadableId(issueId) {
     const queryString = qs.stringify({
-      query,
+      query: `issue id: ${issueId}`,
       $top: 1,
       fields: fields.singleIssue.toString()
     });
