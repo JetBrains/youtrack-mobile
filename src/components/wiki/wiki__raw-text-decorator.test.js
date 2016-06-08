@@ -1,6 +1,6 @@
-import {decorateIssueLinks, replaceImageNamesWithUrls} from './wiki__raw-text-decorator';
+import {decorateIssueLinks, replaceImageNamesWithUrls, decorateUserNames} from './wiki__raw-text-decorator';
 
-describe('decorateIssueLinks', function () {
+describe('decorateIssueLinks', () => {
   const rawTextWithIds = 'foo barr YTM-14 bar foo'
   const wikifiedText = `foo barr <a href="/issue/YTM-14" class="issue-resolved" target="_self" title="Fake issue summary">YTM-14</a> bar foo`;
 
@@ -28,7 +28,7 @@ describe('decorateIssueLinks', function () {
 });
 
 
-describe('replaceImageNamesWithUrls', function () {
+describe('replaceImageNamesWithUrls', () => {
   const rawTextWithIds = 'foo bar !atTach123.png! tes';
   const attachments = [
     {
@@ -68,5 +68,16 @@ describe('replaceImageNamesWithUrls', function () {
     const result = replaceImageNamesWithUrls('foo bar !foo 123.123,123.png! tes', attachments);
 
     result.should.equal('foo bar !http://dot-image.png! tes');
+  });
+});
+
+describe('decorateUserNames', () => {
+  const rawTextWithIds = 'foo barr @userlogin bar foo'
+  const wikifiedText = `foo barr <a href="/user/userlogin" title="userlogin">Mr. User Userson</a> bar foo`;
+
+  it('should replace single issue ID with special syntax', () => {
+    const result = decorateUserNames(rawTextWithIds, wikifiedText);
+
+    result.should.equal('foo barr [ytmuser]userlogin|Mr. User Userson[ytmuser] bar foo');
   });
 });
