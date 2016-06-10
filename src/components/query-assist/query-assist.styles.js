@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 
-import {UNIT, COLOR_PINK, COLOR_FONT} from '../../components/variables/variables';
+import {UNIT, COLOR_PINK} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   inputWrapper: {
@@ -13,12 +13,12 @@ export default StyleSheet.create({
     flex: 1,
     height: UNIT * 4,
     borderRadius: 6,
-    backgroundColor: '#FFF',
+    backgroundColor: `rgb(251, 86, 167)`,
     margin: UNIT,
     paddingTop: 2,
     paddingBottom: 2,
     paddingLeft: UNIT,
-    color: COLOR_FONT
+    color: '#FFF'
   },
   cancelSearch: {
     paddingRight: UNIT * 2,
