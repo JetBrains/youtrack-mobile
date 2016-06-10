@@ -61,6 +61,7 @@ export default class QueryAssist extends React.Component {
         <TextInput
           ref="searchInput"
           style={styles.searchInput}
+          placeholderTextColor="#FFF"
           placeholder="Enter query"
           clearButtonMode="always"
           returnKeyType="search"
