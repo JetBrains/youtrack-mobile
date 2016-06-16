@@ -21,6 +21,7 @@ export default class IssueListCommentInput extends React.Component {
     return <View style={styles.commentInputWrapper}>
       <MultilineInput placeholder="Comment"
                       value={this.state.commentText}
+                      {...this.props}
                       onChangeText={(text) => this.setState({commentText: text})}
                       style={styles.commentInput}/>
 
