@@ -4,6 +4,7 @@ import React from 'react';
 import styles from './create-issue.styles';
 import issueStyles from '../single-issue/single-issue.styles';
 import Header from '../../components/header/header';
+import {notifyError} from '../../components/notification/notification';
 import {UIImagePickerManager} from 'NativeModules';
 import Router from '../../components/router/router';
 import {attach, tag, next} from '../../components/icon/icon';
@@ -49,10 +50,7 @@ export default class CreateIssue extends React.Component {
         this.state.issue = issue;
         this.forceUpdate();
       })
-      .catch(err => {
-        err.json()
-          .then(errorContent => console.warn('err json', err, errorContent))
-      });
+      .catch(err => notifyError('Cannot create issue', err));
   }
 
   createIssue() {
@@ -67,8 +65,7 @@ export default class CreateIssue extends React.Component {
       })
       .catch(err => {
         this.setState({processing: false});
-        err.json()
-          .then(errorContent => console.warn('Cannot create issue', this.state.issue, 'server response:', err, errorContent));
+        return notifyError('Cannot create issue', err);
       });
   }
 

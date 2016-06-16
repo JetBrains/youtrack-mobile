@@ -15,6 +15,7 @@ import Header from '../../components/header/header';
 import QueryAssist from '../../components/query-assist/query-assist';
 import {COLOR_PINK} from '../../components/variables/variables';
 import Cache from '../../components/cache/cache';
+import {notifyError} from '../../components/notification/notification';
 
 import Api from '../../components/api/api';
 import ApiHelper from '../../components/api/api__helper';
@@ -117,7 +118,7 @@ class IssueList extends React.Component {
       })
       .catch((err) => {
         this.setState({isRefreshing: false});
-        console.error('Failed to fetch issues', err);
+        return notifyError('Failed to fetch issues', err);
       });
   }
 
@@ -150,14 +151,18 @@ class IssueList extends React.Component {
         this.cache.store(updatedIssues);
       })
       .then(() => this.setState({isLoadingMore: false}))
-      .catch(() => this.setState({isLoadingMore: false}))
+      .catch((err) => {
+        this.setState({isLoadingMore: false});
+        return notifyError('Failed to fetch issues', err);
+      })
   }
 
   getSuggestions(query, caret) {
     return this.api.getQueryAssistSuggestions(query, caret)
       .then(res => {
         return res.suggest.items;
-      });
+      })
+      .catch(err => notifyError('Failed to fetch query assist suggestions', err));
   }
 
   setQuery(query) {
