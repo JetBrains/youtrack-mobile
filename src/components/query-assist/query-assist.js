@@ -2,7 +2,7 @@ import {View, Text, TouchableOpacity, TextInput} from 'react-native';
 import React from 'react';
 import styles from './query-assist.styles';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
-import {COLOR_PINK} from '../../components/variables/variables';
+import {COLOR_PINK, COLOR_FONT_GRAY} from '../../components/variables/variables';
 
 export default class QueryAssist extends React.Component {
   constructor() {
@@ -72,7 +72,7 @@ export default class QueryAssist extends React.Component {
         <TextInput
           ref="searchInput"
           style={[styles.searchInput, this.state.showQueryAssist ? styles.searchInputActive : null]}
-          placeholderTextColor={COLOR_PINK}
+          placeholderTextColor={this.state.showQueryAssist ? COLOR_FONT_GRAY : COLOR_PINK}
           placeholder="Enter query"
           clearButtonMode="while-editing"
           returnKeyType="search"
