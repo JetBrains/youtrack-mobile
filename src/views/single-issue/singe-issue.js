@@ -1,4 +1,4 @@
-import {Text, View, Image, TouchableOpacity, ScrollView, TextInput} from 'react-native';
+import {Text, View, Image, TouchableOpacity, ScrollView, TextInput, Clipboard} from 'react-native';
 import React, {PropTypes} from 'react';
 
 import ApiHelper from '../../components/api/api__helper';
@@ -170,10 +170,11 @@ export default class SingeIssueView extends React.Component {
             descriptionCopy: this.state.issue.description
           });
         }
-      },
-      {
+      }, {
         title: 'Copy issue web link',
         execute: () => {
+          const {numberInProject, project} = this.state.issue;
+          Clipboard.setString(`${this.props.api.config.backendUrl}/issue/${project.shortName}-${numberInProject}`)
         }
       },
       {title: 'Cancel'}
