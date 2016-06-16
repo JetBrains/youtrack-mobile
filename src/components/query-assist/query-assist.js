@@ -9,6 +9,7 @@ export default class QueryAssist extends React.Component {
     this.state = {
       displayCancelSearch: false,
       showQueryAssist: false,
+      queryAssistStyle: {},
       input: '',
       caret: ''
     };
@@ -35,6 +36,13 @@ export default class QueryAssist extends React.Component {
     });
   }
 
+  stopEditing() {
+    this.setState({
+      showQueryAssist: false,
+      displayCancelSearch: false
+    });
+  }
+
   onSubmitEditing() {
     this.blurInput();
     this.props.onQueryUpdate(this.state.input || '');
@@ -52,15 +60,17 @@ export default class QueryAssist extends React.Component {
       cancelButton = <TouchableOpacity
         style={styles.cancelSearch}
         onPress={this.cancelSearch.bind(this)}>
-        <Text style={styles.cancelText}>Cancel</Text>
+        <Text style={[styles.cancelText, this.state.showQueryAssist ? styles.cancelTextActive : null]}>
+          Cancel
+        </Text>
       </TouchableOpacity>;
     }
 
     return (
-      <View style={styles.inputWrapper}>
+      <View style={[styles.inputWrapper, this.state.showQueryAssist ? styles.inputWrapperActive : null]}>
         <TextInput
           ref="searchInput"
-          style={styles.searchInput}
+          style={[styles.searchInput, this.state.showQueryAssist ? styles.searchInputActive : null]}
           placeholderTextColor="#FFF"
           placeholder="Enter query"
           clearButtonMode="always"
@@ -68,7 +78,7 @@ export default class QueryAssist extends React.Component {
           autoCorrect={false}
           autoCapitalize="none"
           onFocus={() => this.beginEditing()}
-          onBlur={() => this.setState({showQueryAssist: false, displayCancelSearch: false})}
+          onBlur={() => this.stopEditing()}
           onSubmitEditing={() => this.onSubmitEditing()}
           value={this.state.input}
           onChangeText={(text) => this.setState({input: text})}
