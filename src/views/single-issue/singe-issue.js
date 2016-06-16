@@ -8,6 +8,7 @@ import Router from '../../components/router/router';
 import Header from '../../components/header/header';
 import ColorField from '../../components/color-field/color-field';
 import LinkedIssues from '../../components/linked-issues/linked-issues';
+import {showActions} from '../../components/action-sheet/action-sheet';
 import Wiki, {decorateRawText} from '../../components/wiki/wiki';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import {notifyError} from '../../components/notification/notification';
@@ -154,21 +155,39 @@ export default class SingeIssueView extends React.Component {
     Router.IssueList({auth: this.props.api.auth, query: query});
   }
 
+  _showActions() {
+    const actions = [
+      {
+        title: 'Edit issue',
+        execute: () => {
+          this.setState({
+            editMode: true,
+            summaryCopy: this.state.issue.summary,
+            descriptionCopy: this.state.issue.description
+          });
+        }
+      },
+      {
+        title: 'Copy issue web link',
+        execute: () => {
+        }
+      },
+      {title: 'Cancel'}
+    ];
+
+    return showActions(actions)
+      .then(action => action.execute());
+  }
+
   _renderHeader() {
     const title = <Text>{this.state.issue && (`${this.state.issue.project.shortName}-${this.state.issue.numberInProject}`)}</Text>;
 
     if (!this.state.editMode) {
-      const rightButton = this.state.issue && this.issuePermissions.canUpdateGeneralInfo(this.state.issue) ? <Text>Edit</Text> : null;
+      const rightButton = this.state.issue && this.issuePermissions.canUpdateGeneralInfo(this.state.issue) ? <Text>Actions</Text> : null;
 
       return <Header leftButton={<Text>Back</Text>}
                      rightButton={rightButton}
-                     onRightButtonClick={() => {
-                      this.setState({
-                        editMode: true,
-                        summaryCopy: this.state.issue.summary,
-                        descriptionCopy: this.state.issue.description
-                      });
-                     }}>
+                     onRightButtonClick={() => this._showActions()}>
         {title}
       </Header>
 
