@@ -5,7 +5,8 @@ import {
   ListView,
   ScrollView,
   RefreshControl,
-  Platform
+  Platform,
+  AppState
 } from 'react-native'
 import React from 'react';
 
@@ -55,6 +56,14 @@ class IssueList extends React.Component {
         dataSource: this.state.dataSource.cloneWithRows(issues)
       });
     });
+
+    this._handleAppStateChange = this._handleAppStateChange.bind(this);
+  }
+
+  _handleAppStateChange(newState) {
+    if (newState === 'active') {
+      this.loadIssues(this.state.queryAssistValue, null);
+    }
   }
 
   componentDidMount() {
@@ -70,10 +79,13 @@ class IssueList extends React.Component {
     } else {
       this.loadStoredQuery().then(query => this.setQuery(query));
     }
+
+    AppState.addEventListener('change', this._handleAppStateChange);
   }
 
   componentWillUnmount() {
     this.unsubscribeFromOpeningWithIssueUrl();
+    AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
   storeQuery(query) {
