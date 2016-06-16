@@ -10,9 +10,14 @@ import ShowImage from './views/show-image/show-image';
 import {loadConfig, getStoredBackendURL} from './components/config/config';
 
 import {BackAndroid, Navigator} from 'react-native';
-import React from 'react';
+import React, {PropTypes} from 'react';
+import ActionSheet from '@exponent/react-native-action-sheet';
 
 class YouTrackMobile extends React.Component {
+  static childContextTypes = {
+    actionSheet: PropTypes.func
+  };
+
   constructor() {
     super();
     this.state = {};
@@ -31,6 +36,12 @@ class YouTrackMobile extends React.Component {
 
     getStoredBackendURL()
       .then((backendUrl) => this.initialize(backendUrl));
+  }
+
+  getChildContext() {
+    return {
+      actionSheet: () => this._actionSheetRef,
+    };
   }
 
   checkAuthorization() {
@@ -85,7 +96,9 @@ class YouTrackMobile extends React.Component {
   }
 
   render() {
-    return Router.renderNavigatorView({initialRoute: Router.routes.Home});
+    return <ActionSheet ref={component => this._actionSheetRef = component}>
+      {Router.renderNavigatorView({initialRoute: Router.routes.Home})}
+    </ActionSheet>
   }
 }
 

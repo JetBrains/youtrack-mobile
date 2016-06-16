@@ -1,13 +1,10 @@
-import {ActionSheetIOS} from 'react-native';
 
-export default ActionSheetIOS;
-
-export function showActions(actions) {
+export function showActions(actions, actionSheetInstance) {
   const cancelIndex = actions.length - 1;
 
   return new Promise((resolve, reject) => {
 
-    ActionSheetIOS.showActionSheetWithOptions({
+    actionSheetInstance.showActionSheetWithOptions({
       options: actions.map(action => action.title),
       cancelButtonIndex: actions.length - 1
     }, (actionIndex) => {

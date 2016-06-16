@@ -1,5 +1,5 @@
 import {Text, View, Image, TouchableOpacity, ScrollView, TextInput} from 'react-native';
-import React from 'react';
+import React, {PropTypes} from 'react';
 
 import ApiHelper from '../../components/api/api__helper';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
@@ -17,6 +17,10 @@ import styles from './single-issue.styles';
 
 
 export default class SingeIssueView extends React.Component {
+  static contextTypes = {
+    actionSheet: PropTypes.func
+  };
+
   constructor(props) {
     super(props);
     this.issuePermissions = new IssuePermissions(this.props.api.auth.permissions, this.props.api.auth.currentUser);
@@ -175,8 +179,9 @@ export default class SingeIssueView extends React.Component {
       {title: 'Cancel'}
     ];
 
-    return showActions(actions)
-      .then(action => action.execute());
+    return showActions(actions, this.context.actionSheet())
+      .then(action => action.execute())
+      .catch(err => {});
   }
 
   _renderHeader() {
