@@ -34,7 +34,8 @@ export default StyleSheet.create({
   summary: {
     paddingTop: UNIT * 2,
     fontSize: 18,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: COLOR_FONT
   },
   description: {
     paddingTop: UNIT * 2

@@ -2,6 +2,7 @@ import {View, Text, TouchableOpacity, TextInput} from 'react-native';
 import React from 'react';
 import styles from './query-assist.styles';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
+import {COLOR_PINK} from '../../components/variables/variables';
 
 export default class QueryAssist extends React.Component {
   constructor() {
@@ -9,6 +10,7 @@ export default class QueryAssist extends React.Component {
     this.state = {
       displayCancelSearch: false,
       showQueryAssist: false,
+      queryAssistStyle: {},
       input: '',
       caret: ''
     };
@@ -35,6 +37,13 @@ export default class QueryAssist extends React.Component {
     });
   }
 
+  stopEditing() {
+    this.setState({
+      showQueryAssist: false,
+      displayCancelSearch: false
+    });
+  }
+
   onSubmitEditing() {
     this.blurInput();
     this.props.onQueryUpdate(this.state.input || '');
@@ -52,7 +61,9 @@ export default class QueryAssist extends React.Component {
       cancelButton = <TouchableOpacity
         style={styles.cancelSearch}
         onPress={this.cancelSearch.bind(this)}>
-        <Text style={styles.cancelText}>Cancel</Text>
+        <Text style={styles.cancelText}>
+          Cancel
+        </Text>
       </TouchableOpacity>;
     }
 
@@ -60,14 +71,15 @@ export default class QueryAssist extends React.Component {
       <View style={styles.inputWrapper}>
         <TextInput
           ref="searchInput"
-          style={styles.searchInput}
+          style={[styles.searchInput, this.state.showQueryAssist ? styles.searchInputActive : null]}
+          placeholderTextColor={COLOR_PINK}
           placeholder="Enter query"
-          clearButtonMode="always"
+          clearButtonMode="while-editing"
           returnKeyType="search"
           autoCorrect={false}
           autoCapitalize="none"
           onFocus={() => this.beginEditing()}
-          onBlur={() => this.setState({showQueryAssist: false, displayCancelSearch: false})}
+          onBlur={() => this.stopEditing()}
           onSubmitEditing={() => this.onSubmitEditing()}
           value={this.state.input}
           onChangeText={(text) => this.setState({input: text})}

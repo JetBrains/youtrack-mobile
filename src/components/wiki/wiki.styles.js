@@ -1,11 +1,16 @@
 import {StyleSheet, Platform} from 'react-native';
-import {COLOR_LIGHT_GRAY, COLOR_LINK} from '../variables/variables';
+import {COLOR_LIGHT_GRAY, COLOR_LINK, COLOR_FONT} from '../variables/variables';
 
 export default StyleSheet.create({
+  text: {
+    color: COLOR_FONT
+  },
   heading: {
+    color: COLOR_FONT,
     fontSize: 24
   },
   strong: {
+    color: COLOR_FONT,
     fontWeight: 'bold'
   },
   monospace: {
@@ -19,12 +24,15 @@ export default StyleSheet.create({
     })
   },
   underline: {
+    color: COLOR_FONT,
     textDecorationLine: 'underline'
   },
   del: {
+    color: COLOR_FONT,
     textDecorationLine: 'line-through'
   },
   italic: {
+    color: COLOR_FONT,
     fontStyle: 'italic'
   },
   image: {
@@ -37,10 +45,12 @@ export default StyleSheet.create({
     textDecorationLine: 'underline'
   },
   codeBlock: {
+    color: COLOR_FONT,
     backgroundColor: COLOR_LIGHT_GRAY,
     fontFamily: 'Courier'
   },
   inlineCode: {
+    color: COLOR_FONT,
     fontFamily: 'Courier'
   }
 });
