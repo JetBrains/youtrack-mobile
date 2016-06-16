@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 
-import {UNIT, COLOR_PINK} from '../../components/variables/variables';
+import {UNIT, COLOR_PINK, COLOR_LIGHT_GRAY, COLOR_FONT, COLOR_GRAY} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   inputWrapper: {
@@ -9,16 +9,25 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  inputWrapperActive: {
+    backgroundColor: COLOR_LIGHT_GRAY
+  },
   searchInput: {
     flex: 1,
     height: UNIT * 4,
     borderRadius: 6,
-    backgroundColor: `rgb(251, 86, 167)`,
+    backgroundColor: '#FFFFFF55',
     margin: UNIT,
     paddingTop: 2,
     paddingBottom: 2,
     paddingLeft: UNIT,
     color: '#FFF'
+  },
+  searchInputActive: {
+    backgroundColor: '#FFF',
+    borderWidth: 1,
+    borderColor: COLOR_GRAY,
+    color: COLOR_FONT
   },
   cancelSearch: {
     paddingRight: UNIT * 2,
@@ -27,6 +36,9 @@ export default StyleSheet.create({
   cancelText: {
     fontSize: 16,
     color: '#FFF'
+  },
+  cancelTextActive: {
+    color: COLOR_PINK
   },
   searchSuggestions: {
     position: 'absolute',
