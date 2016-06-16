@@ -22,6 +22,9 @@ module.exports = {
         'no-this-before-super': 2,
         //React
         'react/jsx-uses-react': 2,
+        'react/jsx-key': 2,
+        'react/no-deprecated': 2,
+        'react/jsx-max-props-per-line': [2, {maximum: 4}],
         'react/jsx-uses-vars': 2,
         'react-native/no-unused-styles': 2,
         'react-native/split-platform-components': 2
