@@ -10,7 +10,7 @@ module.exports = StyleSheet.create({
     justifyContent: 'space-between',
 
     backgroundColor: COLOR_LIGHT_GRAY,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
     borderColor: COLOR_GRAY
   },
   headerButton: {

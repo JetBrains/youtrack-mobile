@@ -98,6 +98,8 @@ export default StyleSheet.create({
     padding: UNIT
   },
   commentsContainer: {
+    borderTopWidth: 0.5,
+    borderColor: COLOR_GRAY,
     padding: UNIT * 2
   },
   commentWrapper: {
