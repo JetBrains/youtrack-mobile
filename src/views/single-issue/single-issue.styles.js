@@ -128,14 +128,22 @@ export default StyleSheet.create({
   },
   addCommentButton: {
     position: 'absolute',
-    backgroundColor: '#FFF',
-    opacity: 0.5,
-    borderRadius: UNIT * 2,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    backgroundColor: '#FFFFFFEE',
+    borderRadius: UNIT * 4,
 
     right: UNIT * 2,
     bottom: UNIT * 9,
 
     width: UNIT * 8,
     height: UNIT * 8
+  },
+  addCommentIcon: {
+    opacity: 0.8,
+    width: UNIT * 4,
+    height: UNIT * 4
   }
 });

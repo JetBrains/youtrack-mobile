@@ -2,6 +2,7 @@ import {Text, View, Image, TouchableOpacity, ScrollView, TextInput, Clipboard} f
 import React, {PropTypes} from 'react';
 
 import ApiHelper from '../../components/api/api__helper';
+import {attach} from '../../components/icon/icon';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import SingleIssueComments from './single-issue__comments';
 import Router from '../../components/router/router';
@@ -304,7 +305,7 @@ export default class SingeIssueView extends React.Component {
         </ScrollView>}
 
         <TouchableOpacity style={styles.addCommentButton}>
-          <Text>Add comment</Text>
+          <Image source={attach} style={styles.addCommentIcon}/>
         </TouchableOpacity>
 
         {this.state.issue && <CustomFieldsPanel
