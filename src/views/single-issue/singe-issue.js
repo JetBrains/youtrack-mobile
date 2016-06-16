@@ -10,6 +10,7 @@ import ColorField from '../../components/color-field/color-field';
 import LinkedIssues from '../../components/linked-issues/linked-issues';
 import Wiki, {decorateRawText} from '../../components/wiki/wiki';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
+import {notifyError} from '../../components/notification/notification';
 import SingleIssueCommentInput from './single-issue__comment-input';
 import styles from './single-issue.styles';
 
@@ -83,7 +84,8 @@ export default class SingeIssueView extends React.Component {
       .then((res) => {
         console.info('Comment created', res);
         this.loadIssue(this.props.issueId)
-      });
+      })
+      .catch(err => notifyError('Cannot post comment', err));
   }
 
   getAuthorForText(issue) {
@@ -108,7 +110,7 @@ export default class SingeIssueView extends React.Component {
       .then(() => this.loadIssue(this.props.issueId))
       .then((res) => this.props.onUpdate && this.props.onUpdate(res))
       .catch((err) => {
-        console.warn('failed to update issue field', err);
+        notifyError('failed to update issue field', err);
         return this.loadIssue(this.props.issueId);
       });
   }
@@ -118,14 +120,7 @@ export default class SingeIssueView extends React.Component {
     this.forceUpdate();
 
     return this.props.api.updateProject(this.state.issue, project)
-      .catch((err) => {
-        if (err.json) {
-          return err.json()
-            .then(res => console.warn('failed to update issue project', res));
-        } else {
-          console.warn('failed to update issue project', err);
-        }
-      })
+      .catch((err) => notifyError('Failed to update issue project', err))
       .then(() => this.loadIssue(this.props.issueId))
   }
 
@@ -134,7 +129,8 @@ export default class SingeIssueView extends React.Component {
     this.state.issue.description = this.state.descriptionCopy;
     this.setState({editMode: false});
 
-    return this.props.api.updateIssueSummaryDescription(this.state.issue);
+    return this.props.api.updateIssueSummaryDescription(this.state.issue)
+      .catch((err) => notifyError('Failed to update issue project', err));
   }
 
   goToIssue(issue) {

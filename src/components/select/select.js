@@ -3,6 +3,7 @@ import React, {PropTypes} from 'react';
 import styles from './select.styles';
 import Header from '../header/header';
 import ColorField from '../color-field/color-field';
+import {notifyError} from '../notification/notification';
 
 const MAX_VISIBLE_ITEMS = 100;
 
@@ -29,7 +30,8 @@ export default class Select extends React.Component {
     this.props.dataSource(query)
       .then(items => this.setState({items}))
       .then(() => this._onSearch(query))
-      .then(() => this.setState({loaded: true}));
+      .then(() => this.setState({loaded: true}))
+      .catch(err => notifyError('Failed to load values', err));
   }
 
   _renderEmptyValueItem() {
