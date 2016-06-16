@@ -40,7 +40,7 @@ class YouTrackMobile extends React.Component {
 
   getChildContext() {
     return {
-      actionSheet: () => this._actionSheetRef,
+      actionSheet: () => this._actionSheetRef
     };
   }
 
