@@ -10,7 +10,7 @@ module.exports = {
     'rules': {
         'no-unused-vars': [2, {'vars': 'local', 'args': 'none'}],
         'no-console': 0,
-        'quotes': [2, 'single'],
+        'quotes': [2, 'single', {'allowTemplateLiterals': true}],
         //ES6
         'constructor-super': 2,
         'arrow-spacing': 2,
