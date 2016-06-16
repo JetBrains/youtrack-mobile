@@ -4,29 +4,26 @@ import {UNIT, COLOR_PINK, COLOR_LIGHT_GRAY, COLOR_FONT, COLOR_GRAY} from '../../
 
 export default StyleSheet.create({
   inputWrapper: {
-    backgroundColor: COLOR_PINK,
+    backgroundColor: COLOR_LIGHT_GRAY,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
-  },
-  inputWrapperActive: {
-    backgroundColor: COLOR_LIGHT_GRAY
+    justifyContent: 'center',
+    borderTopWidth: 1,
+    borderColor: COLOR_GRAY
   },
   searchInput: {
     flex: 1,
-    height: UNIT * 4,
+    height: UNIT * 3.5,
     borderRadius: 6,
-    backgroundColor: '#FFFFFF55',
+    backgroundColor: '#FFF',
     margin: UNIT,
     paddingTop: 2,
     paddingBottom: 2,
     paddingLeft: UNIT,
-    color: '#FFF'
+    color: COLOR_PINK,
+    fontSize: 15
   },
   searchInputActive: {
-    backgroundColor: '#FFF',
-    borderWidth: 1,
-    borderColor: COLOR_GRAY,
     color: COLOR_FONT
   },
   cancelSearch: {
@@ -35,9 +32,6 @@ export default StyleSheet.create({
   },
   cancelText: {
     fontSize: 16,
-    color: '#FFF'
-  },
-  cancelTextActive: {
     color: COLOR_PINK
   },
   searchSuggestions: {

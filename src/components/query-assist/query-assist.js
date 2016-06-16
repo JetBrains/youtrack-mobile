@@ -2,6 +2,7 @@ import {View, Text, TouchableOpacity, TextInput} from 'react-native';
 import React from 'react';
 import styles from './query-assist.styles';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
+import {COLOR_PINK} from '../../components/variables/variables';
 
 export default class QueryAssist extends React.Component {
   constructor() {
@@ -60,20 +61,20 @@ export default class QueryAssist extends React.Component {
       cancelButton = <TouchableOpacity
         style={styles.cancelSearch}
         onPress={this.cancelSearch.bind(this)}>
-        <Text style={[styles.cancelText, this.state.showQueryAssist ? styles.cancelTextActive : null]}>
+        <Text style={styles.cancelText}>
           Cancel
         </Text>
       </TouchableOpacity>;
     }
 
     return (
-      <View style={[styles.inputWrapper, this.state.showQueryAssist ? styles.inputWrapperActive : null]}>
+      <View style={styles.inputWrapper}>
         <TextInput
           ref="searchInput"
           style={[styles.searchInput, this.state.showQueryAssist ? styles.searchInputActive : null]}
-          placeholderTextColor="#FFF"
+          placeholderTextColor={COLOR_PINK}
           placeholder="Enter query"
-          clearButtonMode="always"
+          clearButtonMode="while-editing"
           returnKeyType="search"
           autoCorrect={false}
           autoCapitalize="none"
