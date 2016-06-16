@@ -303,6 +303,10 @@ export default class SingeIssueView extends React.Component {
           </View>}
         </ScrollView>}
 
+        <TouchableOpacity style={styles.addCommentButton}>
+          <Text>Add comment</Text>
+        </TouchableOpacity>
+
         {this.state.issue && <CustomFieldsPanel
           containerViewGetter={() => this.refs.container}
           api={this.props.api}

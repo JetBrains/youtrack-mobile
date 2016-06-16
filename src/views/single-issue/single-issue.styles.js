@@ -125,5 +125,17 @@ export default StyleSheet.create({
   },
   disabledSaveButton: {
     color: COLOR_FONT_GRAY
+  },
+  addCommentButton: {
+    position: 'absolute',
+    backgroundColor: '#FFF',
+    opacity: 0.5,
+    borderRadius: UNIT * 2,
+
+    right: UNIT * 2,
+    bottom: UNIT * 9,
+
+    width: UNIT * 8,
+    height: UNIT * 8
   }
 });
