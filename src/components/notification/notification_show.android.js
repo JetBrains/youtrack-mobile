@@ -1,6 +1,5 @@
 import {ToastAndroid} from 'react-native';
 
-export default function showNotification (message, ...args) {
-  console.warn(message, ...args);
-  return ToastAndroid.show(message,  ToastAndroid.LONG)
+export default function showNotification (message, errorMessage) {
+  return ToastAndroid.show(`${message}: ${errorMessage}`, ToastAndroid.LONG)
 }
