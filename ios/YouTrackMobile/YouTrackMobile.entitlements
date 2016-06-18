@@ -5,7 +5,7 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>applinks:youtrack.jetbrains.com</string>
-		<string>applinks:eed86f64.ngrok.io</string>
+		<string>applinks:0b2cbfa8.ngrok.io</string>
 	</array>
 	<key>keychain-access-groups</key>
 	<array>
