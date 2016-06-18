@@ -72,4 +72,8 @@
   return [RCTLinkingManager application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
 }
 
+- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSURL *)url {
+  return YES;
+}
+
 @end
