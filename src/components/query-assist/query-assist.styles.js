@@ -38,7 +38,7 @@ export default StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: 48,
+    bottom: 44,
     top: -1000,
     backgroundColor: '#FFFE'
   }
