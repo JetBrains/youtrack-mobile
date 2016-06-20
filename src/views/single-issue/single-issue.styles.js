@@ -102,6 +102,9 @@ export default StyleSheet.create({
     fontSize: 16,
     color: COLOR_PINK
   },
+  sendCommentDisabled: {
+    color: COLOR_FONT_GRAY
+  },
   commentsContainer: {
     borderTopWidth: 0.5,
     borderColor: COLOR_GRAY,

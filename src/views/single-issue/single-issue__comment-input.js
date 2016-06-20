@@ -28,7 +28,7 @@ export default class IssueListCommentInput extends React.Component {
       <TouchableOpacity style={styles.commentSendButton}
                         disabled={!this.state.commentText}
                         onPress={() => this.addComment()}>
-        <Text style={styles.sendComment}>Send</Text>
+        <Text style={[styles.sendComment, this.state.commentText ? null : styles.sendCommentDisabled]}>Send</Text>
       </TouchableOpacity>
     </View>;
   }
