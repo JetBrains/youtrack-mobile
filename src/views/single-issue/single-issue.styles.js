@@ -133,17 +133,20 @@ export default StyleSheet.create({
   disabledSaveButton: {
     color: COLOR_FONT_GRAY
   },
-  addCommentButton: {
+  addCommentContainer: {
+    opacity: 0.7,
     position: 'absolute',
+
+    right: UNIT * 2,
+    bottom: UNIT * 9
+  },
+  addCommentButton: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
 
-    backgroundColor: '#FFFFFFDD',
+    backgroundColor: '#FFFFFF',
     borderRadius: UNIT * 4,
-
-    right: UNIT * 2,
-    bottom: UNIT * 9,
 
     width: UNIT * 8,
     height: UNIT * 8,

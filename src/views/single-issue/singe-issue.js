@@ -321,10 +321,12 @@ export default class SingeIssueView extends React.Component {
           {Platform.OS == 'ios' && <KeyboardSpacer topSpacing={-FOOTER_HEIGHT}/>}
         </View>}
 
-        {this._canAddComment() && <TouchableOpacity style={styles.addCommentButton}
+        {this._canAddComment() && <View style={styles.addCommentContainer}>
+          <TouchableOpacity style={styles.addCommentButton}
                                                     onPress={() => this.setState({addCommentMode: true})}>
-          <Image source={comment} style={styles.addCommentIcon}/>
-        </TouchableOpacity>}
+            <Image source={comment} style={styles.addCommentIcon}/>
+          </TouchableOpacity>
+        </View>}
 
 
         {this.state.issue && <CustomFieldsPanel
