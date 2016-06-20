@@ -19,7 +19,7 @@ export default class IssueListCommentInput extends React.Component {
 
   render() {
     return <View style={styles.commentInputWrapper}>
-      <MultilineInput placeholder="Comment"
+      <MultilineInput placeholder="Type your comment here"
                       value={this.state.commentText}
                       {...this.props}
                       onChangeText={(text) => this.setState({commentText: text})}
@@ -28,7 +28,7 @@ export default class IssueListCommentInput extends React.Component {
       <TouchableOpacity style={styles.commentSendButton}
                         disabled={!this.state.commentText}
                         onPress={() => this.addComment()}>
-        <Text>Send</Text>
+        <Text style={styles.sendComment}>Send</Text>
       </TouchableOpacity>
     </View>;
   }

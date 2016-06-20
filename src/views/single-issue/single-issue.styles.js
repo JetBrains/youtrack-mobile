@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_LIGHT_GRAY, COLOR_FONT_GRAY, COLOR_FONT, COLOR_GRAY} from '../../components/variables/variables';
+import {UNIT, COLOR_LIGHT_GRAY, COLOR_FONT_GRAY, COLOR_FONT, COLOR_GRAY, COLOR_PINK} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   container: {
@@ -84,18 +84,23 @@ export default StyleSheet.create({
   },
   commentInput: {
     flex: 1,
-    height: UNIT * 4,
+    height: UNIT * 3.5,
     borderRadius: 6,
     backgroundColor: '#FFF',
-    color: COLOR_FONT,
     margin: UNIT,
-    padding: 6,
     paddingTop: 2,
-    paddingBottom: 2
+    paddingBottom: 2,
+    paddingLeft: UNIT,
+    color: COLOR_FONT,
+    fontSize: 15
   },
   commentSendButton: {
     paddingRight: UNIT * 2,
     padding: UNIT
+  },
+  sendComment: {
+    fontSize: 16,
+    color: COLOR_PINK
   },
   commentsContainer: {
     borderTopWidth: 0.5,
