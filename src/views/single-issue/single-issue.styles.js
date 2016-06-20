@@ -134,18 +134,27 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
 
-    backgroundColor: '#FFFFFFEE',
+    backgroundColor: '#FFFFFFDD',
     borderRadius: UNIT * 4,
 
     right: UNIT * 2,
     bottom: UNIT * 9,
 
     width: UNIT * 8,
-    height: UNIT * 8
+    height: UNIT * 8,
+
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    shadowOffset: {
+      height: 2,
+      width: 0
+    }
   },
   addCommentIcon: {
     opacity: 0.8,
-    width: UNIT * 4,
-    height: UNIT * 4
+    marginTop: 4,
+    width: UNIT * 3.5,
+    height: UNIT * 3.5
   }
 });

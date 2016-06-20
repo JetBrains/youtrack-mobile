@@ -2,7 +2,7 @@ import {Text, View, Image, TouchableOpacity, ScrollView, TextInput, Clipboard, P
 import React, {PropTypes} from 'react';
 
 import ApiHelper from '../../components/api/api__helper';
-import {attach} from '../../components/icon/icon';
+import {comment} from '../../components/icon/icon';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import SingleIssueComments from './single-issue__comments';
@@ -323,7 +323,7 @@ export default class SingeIssueView extends React.Component {
 
         {this._canAddComment() && <TouchableOpacity style={styles.addCommentButton}
                                                     onPress={() => this.setState({addCommentMode: true})}>
-          <Image source={attach} style={styles.addCommentIcon}/>
+          <Image source={comment} style={styles.addCommentIcon}/>
         </TouchableOpacity>}
 
 
