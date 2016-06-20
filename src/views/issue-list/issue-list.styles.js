@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 
-import {UNIT, COLOR_FONT_GRAY, COLOR_FONT} from '../../components/variables/variables';
+import {UNIT, COLOR_FONT_GRAY, COLOR_FONT, COLOR_GRAY} from '../../components/variables/variables';
 import {SIZE as COLOR_FIELD_SIZE} from '../../components/color-field/color-field';
 
 module.exports = StyleSheet.create({
@@ -35,7 +35,7 @@ module.exports = StyleSheet.create({
   separator: {
     height: 0.5,
     marginLeft: 52,
-    backgroundColor: '#C8C7CC'
+    backgroundColor: COLOR_GRAY
   },
   summary: {
     flexWrap: 'nowrap',

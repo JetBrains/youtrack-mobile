@@ -8,7 +8,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    borderTopWidth: 1,
+    borderTopWidth: 0.5,
     borderColor: COLOR_GRAY
   },
   searchInput: {
