@@ -16,7 +16,7 @@
     "ios-clean": "xcodebuild clean -project ios/YouTrackMobile.xcodeproj -configuration Release -alltargets",
     "ios-archive": "rm -rf ios/build/YouTrackMobile[Release].xcarchive && xcodebuild archive -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile[Release] -archivePath ios/build/YouTrackMobile[Release].xcarchive",
     "ios-archive-no-sign": "npm run ios-archive -- CODE_SIGN_IDENTITY='' CODE_SIGNING_REQUIRED=NO",
-    "ios-export-ipa": "rm -rf ios/build/YouTrackMobile.ipa && xcodebuild -exportArchive -archivePath ios/build/YouTrackMobile[Release].xcarchive -exportPath ios/build/YouTrackMobile -exportFormat ipa -exportProvisioningProfile 'YouTrackMobile'",
+    "ios-export-ipa": "rm -rf ios/build/YouTrackMobile.ipa && xcodebuild -exportArchive -archivePath ios/build/YouTrackMobile[Release].xcarchive -exportPath ios/build/YouTrackMobile -exportFormat ipa -exportProvisioningProfile 'XC: org.jetbrains.youtrack.YouTrackMobile'",
     "ios-download-archive": "bash ./tools/download-latest-built-archive.sh",
     "ios-release": "npm run ios-download-archive && npm run ios-export-ipa",
     "android": "YT_MOBILE_VERSION=$npm_package_version-$npm_package_config_buildnumber ./node_modules/react-native-cli/index.js run-android",
