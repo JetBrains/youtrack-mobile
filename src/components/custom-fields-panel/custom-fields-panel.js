@@ -1,4 +1,4 @@
-import {View, ScrollView, Text, TouchableOpacity, TextInput, findNodeHandle} from 'react-native';
+import {View, ScrollView, Text, TouchableOpacity, TextInput, findNodeHandle, ActivityIndicator} from 'react-native';
 import React, {PropTypes} from 'react';
 import CalendarPicker from 'react-native-calendar-picker/CalendarPicker/CalendarPicker';
 import CustomField from '../custom-field/custom-field';
@@ -17,6 +17,7 @@ export default class CustomFieldsPanel extends React.Component {
       topCoord: 0,
       height: 0,
       editingField: null,
+      savingField: null,
       isEditingProject: false,
 
       select: {
@@ -60,6 +61,17 @@ export default class CustomFieldsPanel extends React.Component {
     setTimeout(this.measureSelect.bind(this), 0);
   }
 
+  saveUpdatedField(field, value) {
+    this.closeEditor();
+    this.setState({savingField: field});
+
+    return this.props.onUpdate(field, value)
+      .then(res => {
+        this.setState({savingField: null});
+        return res;
+      })
+  }
+
   onSelectProject() {
     if (this.state.isEditingProject) {
       return this.closeEditor();
@@ -96,10 +108,7 @@ export default class CustomFieldsPanel extends React.Component {
         title: field.projectCustomField.field.name,
         value: field.value ? new Date(field.value) : new Date(),
         emptyValueName: field.projectCustomField.canBeEmpty ? field.projectCustomField.emptyFieldText : null,
-        onSelect: (date) => {
-          this.closeEditor();
-          return this.props.onUpdate(field, date ? date.getTime() : null);
-        }
+        onSelect: (date) => this.saveUpdatedField(field, date ? date.getTime() : null)
       }
     });
   }
@@ -109,10 +118,7 @@ export default class CustomFieldsPanel extends React.Component {
       period: {
         show: true,
         value: field.value ? field.value.presentation : null,
-        onApply: (value) => {
-          this.closeEditor();
-          return this.props.onUpdate(field, {presentation: value});
-        }
+        onApply: (value) => this.saveUpdatedField(field, {presentation: value})
       }
     });
   }
@@ -140,10 +146,7 @@ export default class CustomFieldsPanel extends React.Component {
           return this.props.api.getCustomFieldValues(field.projectCustomField.bundle.id, field.projectCustomField.field.fieldType.valueType)
             .then(res => res.aggregatedUsers || res.values);
         },
-        onSelect: (value) => {
-          this.closeEditor();
-          return this.props.onUpdate(field, value);
-        }
+        onSelect: (value) => this.saveUpdatedField(field, value)
       }
     });
   }
@@ -278,12 +281,18 @@ export default class CustomFieldsPanel extends React.Component {
                        active={this.state.isEditingProject}
                        field={{projectCustomField: {field: {name: 'Project'}}, value: {name: issue.project.shortName}}}/>
 
-          {issue.fields.map((field) => <CustomField
-            key={field.id}
-            field={field}
-            onPress={() => this.onEditField(field)}
-            active={this.state.editingField === field}
-            disabled={!this.props.issuePermissions.canUpdateField(issue, field)}/>)}
+          {issue.fields.map((field) => {
+            return <View key={field.id}>
+
+              <CustomField
+                field={field}
+                onPress={() => this.onEditField(field)}
+                active={this.state.editingField === field}
+                disabled={!this.props.issuePermissions.canUpdateField(issue, field)}/>
+
+              {this.state.savingField === field && <ActivityIndicator style={styles.savingFieldIndicator}/>}
+            </View>
+          })}
         </ScrollView>
         <View style={{position: 'absolute', height: 0, width: 0, opacity: 0}}>
           <KeyboardSpacer onToggle={() => this.measureSelect()}/>

@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {UNIT, FOOTER_HEIGHT, COLOR_PINK, COLOR_FONT, COLOR_GRAY} from '../../components/variables/variables';
+const SAVING_ALPHA = '70';
 
 export default StyleSheet.create({
   customFieldsPanel: {
@@ -33,5 +34,13 @@ export default StyleSheet.create({
     margin: UNIT,
     paddingLeft: UNIT,
     color: COLOR_FONT
+  },
+  savingFieldIndicator: {
+    backgroundColor: `#CCCCCC${SAVING_ALPHA}`,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0
   }
 });
