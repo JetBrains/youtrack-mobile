@@ -52,8 +52,7 @@ export default StyleSheet.create({
     borderBottomWidth: 1
   },
   inputsContainer: {
-    height: 120,
-    // alignItems: 'center'
+    height: 120
   },
   actionsContainer: {},
   logoContainer: {
