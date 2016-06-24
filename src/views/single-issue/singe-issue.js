@@ -303,7 +303,7 @@ export default class SingeIssueView extends React.Component {
 
           {!this.state.fullyLoaded && <View><Text style={styles.loading}>Loading...</Text></View>}
 
-          {this.state.fullyLoaded && <View>
+          {this.state.fullyLoaded && <View style={styles.commentsListContainer}>
             <SingleIssueComments
               comments={this.state.issue.comments}
               attachments={this.state.issue.attachments}

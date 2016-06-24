@@ -65,6 +65,9 @@ export default StyleSheet.create({
     borderRadius: 4,
     resizeMode: 'cover'
   },
+  commentsListContainer: {
+    paddingBottom: UNIT * 6
+  },
   commentInputWrapper: {
     backgroundColor: '#EBEBEB',
     flexDirection: 'row',
