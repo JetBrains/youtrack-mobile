@@ -1,4 +1,4 @@
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, ActivityIndicator} from 'react-native';
 import React from 'react';
 import MultilineInput from '../../components/multiline-input/multiline-input';
 
@@ -8,19 +8,32 @@ export default class IssueListCommentInput extends React.Component {
   constructor() {
     super();
     this.state = {
+      isSaving: false,
       commentText: ''
     };
   }
 
+  componentWillUnmount() {
+    this.isUnmounted = true;
+  }
+
   addComment() {
-    this.props.onAddComment(this.state.commentText);
-    this.setState({commentText: ''});
+    this.setState({isSaving: true});
+    this.props.onAddComment(this.state.commentText)
+      .then(() => {
+        if (this.isUnmounted) {
+          return;
+        }
+        this.setState({isSaving: false, commentText: ''})
+      })
+      .catch(() => this.setState({isSaving: false}));
   }
 
   render() {
     return <View style={styles.commentInputWrapper}>
       <MultilineInput placeholder="Type your comment here"
                       value={this.state.commentText}
+                      disabled={this.state.isSaving}
                       {...this.props}
                       onChangeText={(text) => this.setState({commentText: text})}
                       style={styles.commentInput}/>
@@ -28,7 +41,11 @@ export default class IssueListCommentInput extends React.Component {
       <TouchableOpacity style={styles.commentSendButton}
                         disabled={!this.state.commentText}
                         onPress={() => this.addComment()}>
-        <Text style={[styles.sendComment, this.state.commentText ? null : styles.sendCommentDisabled]}>Send</Text>
+
+        {!this.state.isSaving ?
+          <Text style={[styles.sendComment, this.state.commentText ? null : styles.sendCommentDisabled]}>Send</Text> :
+          <ActivityIndicator/>
+        }
       </TouchableOpacity>
     </View>;
   }

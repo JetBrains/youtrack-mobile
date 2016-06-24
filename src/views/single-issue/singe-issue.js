@@ -88,11 +88,11 @@ export default class SingeIssueView extends React.Component {
   }
 
   addComment(issue, comment) {
-    this.setState({addCommentMode: false});
 
     return this.props.api.addComment(issue.id, comment)
       .then((res) => {
         console.info('Comment created', res);
+        this.setState({addCommentMode: false});
         this.loadIssue(this.props.issueId)
       })
       .catch(err => notifyError('Cannot post comment', err));
