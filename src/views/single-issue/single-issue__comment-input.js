@@ -33,7 +33,7 @@ export default class IssueListCommentInput extends React.Component {
     return <View style={styles.commentInputWrapper}>
       <MultilineInput placeholder="Type your comment here"
                       value={this.state.commentText}
-                      disabled={this.state.isSaving}
+                      editable={!this.state.isSaving}
                       {...this.props}
                       onChangeText={(text) => this.setState({commentText: text})}
                       style={styles.commentInput}/>

@@ -270,6 +270,7 @@ export default class SingeIssueView extends React.Component {
           <TextInput
             style={styles.summaryInput}
             placeholder="Summary"
+            editable={!this.state.isSavingEditedIssue}
             autoFocus={true}
             value={this.state.summaryCopy}
             onSubmitEditing={() => this.refs.description.focus()}
@@ -278,6 +279,7 @@ export default class SingeIssueView extends React.Component {
           <TextInput
             ref="description"
             style={styles.descriptionInput}
+            editable={!this.state.isSavingEditedIssue}
             value={this.state.descriptionCopy}
             multiline={true}
             placeholder="Description"

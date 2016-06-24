@@ -133,6 +133,7 @@ export default class CreateIssue extends React.Component {
             <View>
               <TextInput
                 style={styles.summaryInput}
+                editable={!this.state.processing}
                 placeholder="Summary"
                 returnKeyType="next"
                 onSubmitEditing={() => this.refs.description.focus()}
@@ -145,6 +146,7 @@ export default class CreateIssue extends React.Component {
             <View>
               <TextInput
                 ref="description"
+                editable={!this.state.processing}                
                 style={styles.descriptionInput}
                 multiline={true}
                 placeholder="Description"
