@@ -1,4 +1,4 @@
-import {ScrollView, View, Text, TextInput, TouchableOpacity, Image, AsyncStorage} from 'react-native';
+import {ScrollView, View, Text, TextInput, TouchableOpacity, Image, AsyncStorage, ActivityIndicator} from 'react-native';
 import React from 'react';
 
 import styles from './create-issue.styles';
@@ -118,11 +118,13 @@ export default class CreateIssue extends React.Component {
   render() {
     const canCreateIssue = this.state.issue.summary && this.state.issue.project.id && !this.state.processing;
 
+    const createButton = <Text style={canCreateIssue ? null : styles.disabledCreateButton}>Create</Text>;
+
     return (
       <View style={styles.container} ref="container">
         <ScrollView>
           <Header leftButton={<Text>Cancel</Text>}
-                  rightButton={<Text style={canCreateIssue ? null : styles.disabledCreateButton}>Create</Text>}
+                  rightButton={this.state.processing ? <ActivityIndicator style={styles.creatingIndicator}/> : createButton}
                   onRightButtonClick={() => canCreateIssue && this.createIssue()}>
             <Text>New Issue</Text>
           </Header>

@@ -27,6 +27,11 @@ export default StyleSheet.create({
   disabledCreateButton: {
     color: COLOR_FONT_GRAY
   },
+  creatingIndicator: {
+    paddingTop: 4,
+    width: 30,
+    height: 20
+  },
   separator: {
     height: 0.5,
     backgroundColor: COLOR_GRAY
