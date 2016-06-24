@@ -2,6 +2,7 @@ import {TextInput} from 'react-native';
 import React from 'react';
 
 const INITIAL_INPUT_HEIGHT = 36;
+const MAX_INPUT_HEIGHT = 200;
 const DEFAULT_FONT_SIZE = 16;
 const HEIGHT_SHIFT = 9;
 
@@ -20,7 +21,9 @@ export default class MultilineInput extends React.Component {
   }
 
   onChange(e) {
-    this.setState({inputHeight: e.nativeEvent.contentSize.height + HEIGHT_SHIFT});
+    let newHeight = e.nativeEvent.contentSize.height + HEIGHT_SHIFT;
+    newHeight = newHeight > MAX_INPUT_HEIGHT ? MAX_INPUT_HEIGHT : newHeight;
+    this.setState({inputHeight: newHeight});
   }
 
   render() {
