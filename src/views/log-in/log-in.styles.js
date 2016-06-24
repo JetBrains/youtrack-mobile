@@ -53,7 +53,7 @@ export default StyleSheet.create({
   },
   inputsContainer: {
     height: 120,
-    alignItems: 'center'
+    // alignItems: 'center'
   },
   actionsContainer: {},
   logoContainer: {

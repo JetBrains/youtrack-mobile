@@ -13,7 +13,6 @@ export default StyleSheet.create({
   },
   inputWrapper: {
     backgroundColor: COLOR_LIGHT_GRAY,
-    alignItems: 'center',
     justifyContent: 'center'
   },
   searchInput: {
