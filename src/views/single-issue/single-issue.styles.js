@@ -10,6 +10,11 @@ export default StyleSheet.create({
     flex: 1,
     textAlign: 'center'
   },
+  savingIndicator: {
+    paddingTop: 4,
+    width: 30,
+    height: 20
+  },
   issueViewContainer: {
     padding: UNIT * 2,
     backgroundColor: '#FFF'

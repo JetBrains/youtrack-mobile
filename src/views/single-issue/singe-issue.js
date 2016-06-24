@@ -1,4 +1,4 @@
-import {Text, View, Image, TouchableOpacity, ScrollView, TextInput, Clipboard, Platform} from 'react-native';
+import {Text, View, Image, TouchableOpacity, ScrollView, TextInput, Clipboard, Platform, ActivityIndicator} from 'react-native';
 import React, {PropTypes} from 'react';
 
 import ApiHelper from '../../components/api/api__helper';
@@ -32,6 +32,7 @@ export default class SingeIssueView extends React.Component {
       fullyLoaded: false,
 
       editMode: false,
+      isSavingEditedIssue: false,
       addCommentMode: false,
       summaryCopy: null,
       descriptionCopy: null
@@ -137,10 +138,14 @@ export default class SingeIssueView extends React.Component {
   onSaveChanges() {
     this.state.issue.summary = this.state.summaryCopy;
     this.state.issue.description = this.state.descriptionCopy;
-    this.setState({editMode: false});
+    this.setState({isSavingEditedIssue: true});
 
     return this.props.api.updateIssueSummaryDescription(this.state.issue)
-      .catch((err) => notifyError('Failed to update issue project', err));
+      .then(() => this.setState({editMode: false, isSavingEditedIssue: false}))
+      .catch((err) => {
+        this.setState({isSavingEditedIssue: false});
+        notifyError('Failed to update issue project', err);
+      });
   }
 
   goToIssue(issue) {
@@ -210,10 +215,11 @@ export default class SingeIssueView extends React.Component {
 
     } else {
       const canSave = Boolean(this.state.summaryCopy);
+      const saveButton = <Text style={canSave ? null : styles.disabledSaveButton}>Save</Text>;
 
       return <Header leftButton={<Text>Cancel</Text>}
                      onBack={() => this.setState({editMode: false})}
-                     rightButton={<Text style={canSave ? null : styles.disabledSaveButton}>Save</Text>}
+                     rightButton={this.state.isSavingEditedIssue ? <ActivityIndicator style={styles.savingIndicator}/> : saveButton}
                      onRightButtonClick={() => canSave && this.onSaveChanges()}>
         {title}
       </Header>
