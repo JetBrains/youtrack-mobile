@@ -46,6 +46,7 @@ export default StyleSheet.create({
     color: COLOR_FONT
   },
   loadingMessage: {
+    paddingLeft: UNIT*2,
     color: COLOR_FONT_GRAY
   },
   selectedMark: {

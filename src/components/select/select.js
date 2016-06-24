@@ -1,4 +1,4 @@
-import {Text, Image, ScrollView, View, TouchableOpacity, TextInput} from 'react-native';
+import {Text, Image, ScrollView, View, TouchableOpacity, TextInput, ActivityIndicator} from 'react-native';
 import React, {PropTypes} from 'react';
 import styles from './select.styles';
 import Header from '../header/header';
@@ -134,6 +134,7 @@ export default class Select extends React.Component {
           {this.state.filteredItems && this.state.filteredItems.map(item => this._renderRow(item))}
 
           {!this.state.loaded && <View style={styles.row}>
+            <ActivityIndicator/>
             <Text style={styles.loadingMessage}>Loading values...</Text>
           </View>}
         </ScrollView>
