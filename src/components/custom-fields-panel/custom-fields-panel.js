@@ -19,6 +19,7 @@ export default class CustomFieldsPanel extends React.Component {
       editingField: null,
       savingField: null,
       isEditingProject: false,
+      isSavingProject: false,
 
       select: {
         show: false,
@@ -85,7 +86,9 @@ export default class CustomFieldsPanel extends React.Component {
         dataSource: this.props.api.getProjects.bind(this.props.api),
         onSelect: project => {
           this.closeEditor();
-          return this.props.onUpdateProject(project);
+          this.setState({isSavingProject: true});
+          return this.props.onUpdateProject(project)
+            .then(() => this.setState({isSavingProject: null}))
         }
       }
     });
@@ -275,11 +278,13 @@ export default class CustomFieldsPanel extends React.Component {
         {this._renderPeriodInput()}
 
         <ScrollView horizontal={true} style={styles.customFieldsPanel}>
-          <CustomField key="Project"
-                       disabled={!this.props.canEditProject}
-                       onPress={() => this.onSelectProject()}
-                       active={this.state.isEditingProject}
-                       field={{projectCustomField: {field: {name: 'Project'}}, value: {name: issue.project.shortName}}}/>
+          <View key="Project">
+            <CustomField disabled={!this.props.canEditProject}
+                         onPress={() => this.onSelectProject()}
+                         active={this.state.isEditingProject}
+                         field={{projectCustomField: {field: {name: 'Project'}}, value: {name: issue.project.shortName}}}/>
+            {this.state.isSavingProject && <ActivityIndicator style={styles.savingFieldIndicator}/>}
+          </View>
 
           {issue.fields.map((field) => {
             return <View key={field.id}>
