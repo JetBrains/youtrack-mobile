@@ -1,4 +1,4 @@
-import {Image, View, Text, TextInput, TouchableOpacity, Linking, ScrollView} from 'react-native'
+import {Image, View, Text, TextInput, TouchableOpacity, Linking, ScrollView, ActivityIndicator} from 'react-native'
 import React from 'react';
 import {logo} from '../../components/icon/icon';
 import Keystore from '../../components/keystore/keystore';
@@ -140,6 +140,7 @@ export default class LoginForm extends React.Component {
                             onPress={this.logInViaCredentials.bind(this)}>
             <Text
               style={styles.signinText}>Log in</Text>
+            {this.state.loggingIn && <ActivityIndicator style={styles.loggingInIndicator}/>}
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.linkContainer} onPress={this.logInViaHub.bind(this)}>

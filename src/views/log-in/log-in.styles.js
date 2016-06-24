@@ -37,6 +37,11 @@ export default StyleSheet.create({
     alignSelf: 'stretch',
     textAlign: 'center'
   },
+  loggingInIndicator: {
+    position: 'absolute',
+    right: UNIT*2,
+    top: 12
+  },
   linkLike: {
     fontSize: FONT_SIZE,
     color: COLOR_PINK
