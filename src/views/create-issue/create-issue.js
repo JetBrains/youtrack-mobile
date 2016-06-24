@@ -59,6 +59,7 @@ export default class CreateIssue extends React.Component {
     return this.updateIssueDraft()
       .then(() => this.props.api.createIssue(this.state.issue))
       .then(res => {
+        this.setState({processing: false});
         console.info('Issue created', res);
         this.props.onCreate(res);
         Router.pop();

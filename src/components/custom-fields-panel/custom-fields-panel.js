@@ -71,6 +71,7 @@ export default class CustomFieldsPanel extends React.Component {
         this.setState({savingField: null});
         return res;
       })
+      .catch(() => this.setState({savingField: null}));
   }
 
   onSelectProject() {
