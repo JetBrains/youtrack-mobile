@@ -2,7 +2,7 @@ import {Image, View, Text, TextInput, TouchableOpacity, Linking, ScrollView, Act
 import React from 'react';
 import {logo} from '../../components/icon/icon';
 import Keystore from '../../components/keystore/keystore';
-import OAuth from '../../components/auth/auth__oauth';
+import authorizeInHub from '../../components/auth/auth__oauth';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 import styles from './log-in.styles';
@@ -20,23 +20,6 @@ export default class LoginForm extends React.Component {
       changingYouTrackUrl: false,
       youTrackBackendUrl: props.auth.config.backendUrl
     };
-
-
-    //This promise resolves on android only because it has different oauth model
-    OAuth.checkIfBeingAuthorizing()
-      .then(code => {
-        this.setState({loggingIn: true});
-        return this.props.auth.authorizeOAuth(code)
-          .catch(err => {
-            this.setState({errorMessage: err.error_description || err.message, loggingIn: false});
-            throw err;
-          });
-      })
-      .then(() => {
-        this.props.onLogIn()
-      })
-      .catch((err) => console.log(err));
-
 
     const config = props.auth.config;
     Keystore.getInternetCredentials(config.auth.serverUri)
@@ -71,10 +54,15 @@ export default class LoginForm extends React.Component {
   logInViaHub() {
     const config = this.props.auth.config;
 
-    return OAuth.authorizeInHub(config)
-      .then(code => this.props.auth.authorizeOAuth(code))
+    return authorizeInHub(config)
+      .then(code => {
+        this.setState({loggingIn: true});
+        return this.props.auth.authorizeOAuth(code);
+      })
       .then(() => this.props.onLogIn())
-      .catch(err => this.setState({errorMessage: err.error_description || err.message}))
+      .catch(err => {
+        this.setState({loggingIn: false, errorMessage: err.error_description || err.message});
+      });
   }
 
   signUp() {
