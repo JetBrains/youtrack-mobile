@@ -96,12 +96,14 @@ export default class CustomFieldsPanel extends React.Component {
   }
 
   closeEditor() {
-    return this.setState({
-      editingField: null,
-      isEditingProject: false,
-      datePicker: {show: false},
-      select: {show: false},
-      period: {show: false}
+    return new Promise(resolve => {
+      this.setState({
+        editingField: null,
+        isEditingProject: false,
+        datePicker: {show: false},
+        select: {show: false},
+        period: {show: false}
+      }, resolve);
     });
   }
 
@@ -160,18 +162,20 @@ export default class CustomFieldsPanel extends React.Component {
       return this.closeEditor();
     }
 
-    this.closeEditor();
-    this.setState({editingField: field});
+    return this.closeEditor()
+      .then(() => {
+        this.setState({editingField: field});
+        
+        if (field.projectCustomField.field.fieldType.valueType === 'date') {
+          return this.editDateField(field);
+        }
 
-    if (field.projectCustomField.field.fieldType.valueType === 'date') {
-      return this.editDateField(field);
-    }
+        if (field.projectCustomField.field.fieldType.valueType === 'period') {
+          return this.editPeriodField(field);
+        }
 
-    if (field.projectCustomField.field.fieldType.valueType === 'period') {
-      return this.editPeriodField(field);
-    }
-
-    return this.editCustomField(field);
+        return this.editCustomField(field);
+      });
   }
 
   _renderSelect() {
