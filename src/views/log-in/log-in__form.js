@@ -57,12 +57,9 @@ export default class LoginForm extends React.Component {
     return authorizeInHub(config)
       .then(code => {
         this.setState({loggingIn: true});
-        this.props.auth.authorizeOAuth(code);
+        return this.props.auth.authorizeOAuth(code);
       })
-      .then(() => {
-        this.setState({loggingIn: false});
-        this.props.onLogIn();
-      })
+      .then(() => this.props.onLogIn())
       .catch(err => {
         this.setState({loggingIn: false, errorMessage: err.error_description || err.message});
       });
