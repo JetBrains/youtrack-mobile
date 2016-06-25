@@ -61,14 +61,24 @@ export default StyleSheet.create({
     textAlignVertical: 'top'
   },
   attachesContainer: {
-    marginTop: UNIT * 2
+    marginTop: UNIT * 2,
+    marginLeft: -UNIT * 2,
+    paddingLeft: UNIT * 2,
+    marginRight: -UNIT * 2
   },
-  attachment: {
+  attachmentImage: {
     marginRight: UNIT * 2,
     width: 120,
     height: 60,
     borderRadius: 4,
     resizeMode: 'cover'
+  },
+  attachmentFile: {
+    marginRight: UNIT * 2,
+    width: 120,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   commentsListContainer: {
     paddingBottom: UNIT * 6

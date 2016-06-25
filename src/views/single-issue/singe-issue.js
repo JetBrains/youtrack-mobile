@@ -1,4 +1,4 @@
-import {Text, View, Image, TouchableOpacity, ScrollView, TextInput, Clipboard, Platform, ActivityIndicator} from 'react-native';
+import {Text, View, Image, TouchableOpacity, ScrollView, TextInput, Clipboard, Platform, ActivityIndicator, Linking} from 'react-native';
 import React, {PropTypes} from 'react';
 
 import ApiHelper from '../../components/api/api__helper';
@@ -195,6 +195,10 @@ export default class SingeIssueView extends React.Component {
       .catch(err => {});
   }
 
+  openAttachmentUrl(url) {
+    Linking.openURL(url);
+  }
+
   _canAddComment() {
     return this.state.fullyLoaded &&
       !this.state.addCommentMode &&
@@ -234,13 +238,21 @@ export default class SingeIssueView extends React.Component {
 
     return <ScrollView style={styles.attachesContainer} horizontal={true}>
       {(attachments || [])
-        .filter(attach => attach.mimeType.includes('image'))
         .map((attach) => {
-        return <TouchableOpacity onPress={() => Router.ShowImage({imageUrl: attach.url, imageName: attach.value})} key={attach.id}>
-          <Image style={styles.attachment}
-                 capInsets={{left: 15, right: 15, bottom: 15, top: 15}}
-                 source={{uri: attach.url}}/>
-        </TouchableOpacity>
+          const isImage = attach.mimeType.includes('image');
+
+          if (isImage) {
+            return <TouchableOpacity onPress={() => Router.ShowImage({imageUrl: attach.url, imageName: attach.value})}
+                                     key={attach.id}>
+              <Image style={styles.attachmentImage}
+                     capInsets={{left: 15, right: 15, bottom: 15, top: 15}}
+                     source={{uri: attach.url}}/>
+            </TouchableOpacity>;
+          }
+          
+          return <TouchableOpacity onPress={() => this.openAttachmentUrl(attach.url)} key={attach.id}>
+            <View style={styles.attachmentFile}><Text>{attach.name}</Text></View>
+          </TouchableOpacity>;
       })}
     </ScrollView>;
   }
