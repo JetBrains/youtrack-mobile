@@ -16,7 +16,6 @@ import IssuePermissions from '../../components/issue-permissions/issue-permissio
 import {notifyError} from '../../components/notification/notification';
 import SingleIssueCommentInput from './single-issue__comment-input';
 import styles from './single-issue.styles';
-import {FOOTER_HEIGHT} from '../../components/variables/variables';
 
 export default class SingeIssueView extends React.Component {
   static contextTypes = {
@@ -249,7 +248,7 @@ export default class SingeIssueView extends React.Component {
                      source={{uri: attach.url}}/>
             </TouchableOpacity>;
           }
-          
+
           return <TouchableOpacity onPress={() => this.openAttachmentUrl(attach.url)} key={attach.id}>
             <View style={styles.attachmentFile}><Text>{attach.name}</Text></View>
           </TouchableOpacity>;
@@ -338,7 +337,7 @@ export default class SingeIssueView extends React.Component {
           onBlur={() => this.setState({addCommentMode: false})}
           onAddComment={(comment) => this.addComment(this.state.issue, comment)}/>
 
-          {Platform.OS == 'ios' && <KeyboardSpacer topSpacing={-FOOTER_HEIGHT}/>}
+          {Platform.OS == 'ios' && <KeyboardSpacer/>}
         </View>}
 
         {this._canAddComment() && <View style={styles.addCommentContainer}>
@@ -349,7 +348,7 @@ export default class SingeIssueView extends React.Component {
         </View>}
 
 
-        {this.state.issue && <CustomFieldsPanel
+        {this.state.issue && !this.state.addCommentMode && <CustomFieldsPanel
           containerViewGetter={() => this.refs.container}
           api={this.props.api}
           canEditProject={this.issuePermissions.canUpdateGeneralInfo(this.state.issue)}
