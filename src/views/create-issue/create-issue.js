@@ -1,4 +1,4 @@
-import {ScrollView, View, Text, TextInput, TouchableOpacity, Image, AsyncStorage, ActivityIndicator} from 'react-native';
+import {ScrollView, View, Text, TextInput, TouchableOpacity, Image, AsyncStorage, ActivityIndicator, Platform} from 'react-native';
 import React from 'react';
 
 import styles from './create-issue.styles';
@@ -12,6 +12,8 @@ import CustomFieldsPanel from '../../components/custom-fields-panel/custom-field
 
 const PROJECT_ID_STORAGE_KEY = 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE';
 const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
+
+const ARE_ATTACHMENTS_AVAILABLE = Platform.OS === 'ios';
 
 export default class CreateIssue extends React.Component {
   constructor() {
@@ -172,7 +174,7 @@ export default class CreateIssue extends React.Component {
                   this.forceUpdate();
                 }}/>
             </View>
-            <View style={styles.attachesContainer}>
+            {ARE_ATTACHMENTS_AVAILABLE && <View style={styles.attachesContainer}>
               <View>
                 {this.state.issue.attachments.length > 0 && <ScrollView style={issueStyles.attachesContainer} horizontal={true}>
                   {this._renderAttahes(this.state.issue.attachments)}
@@ -194,7 +196,7 @@ export default class CreateIssue extends React.Component {
                   <Text style={styles.attachButtonText}>Take a picture...</Text>
                 </TouchableOpacity>
               </View>
-            </View>
+            </View>}
             <View style={styles.separator}/>
             {false && <View style={styles.actionContainer}>
               <Image style={styles.actionIcon} source={tag}/>
