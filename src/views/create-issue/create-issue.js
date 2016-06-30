@@ -82,14 +82,17 @@ export default class CreateIssue extends React.Component {
       this.state.issue.attachments.push(res);
       this.forceUpdate();
 
-      const fileName = res.uri.match(FILE_NAME_REGEXP)[0];
+      const filePath = res.path || res.uri;
+      const fileName = filePath.match(FILE_NAME_REGEXP)[0];
       const fileUri = res.uri;
 
       this.setState({attachingImage: res});
       this.props.api.attachFile(this.state.issue.id, fileUri, fileName)
         .then(() => this.setState({attachingImage: null}))
         .catch((err) => {
+          this.state.issue.attachments = this.state.issue.attachments.filter(attach => attach !== res);
           this.setState({attachingImage: null});
+
           return notifyError('Cannot attach file', err);
         });
     });
