@@ -142,6 +142,26 @@ class Api {
     return this.makeAuthorizedRequest(url);
   }
 
+  attachFile(issueId, fileUri, fileName) {
+    const authParams = this.auth.authParams;
+
+    const formDataContent = new FormData(); //eslint-disable-line no-undef
+    formDataContent.append('photo', {uri: fileUri, name: fileName});
+
+    return fetch(`${this.youTrackUrl}/rest/issue/${issueId}/attachment`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Authorization': `${authParams.token_type} ${authParams.access_token}`
+      },
+      body: formDataContent
+    })
+      .then(res => {
+        console.log('attach result', res, res.status);
+        return res;
+      });
+  }
+
   updateIssueSummaryDescription(issue) {
     const queryString = qs.stringify({fields: 'id,value'});
     const body = {summary: issue.summary, description: issue.description};

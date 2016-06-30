@@ -1,4 +1,4 @@
-import {ScrollView, View, Text, TextInput, TouchableOpacity, Image, AsyncStorage, ActivityIndicator} from 'react-native';
+import {ScrollView, View, Text, TextInput, TouchableOpacity, Image, AsyncStorage, ActivityIndicator, Platform} from 'react-native';
 import React from 'react';
 
 import styles from './create-issue.styles';
@@ -11,12 +11,16 @@ import {attach, tag, next} from '../../components/icon/icon';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 
 const PROJECT_ID_STORAGE_KEY = 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE';
+const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
+
+const ARE_ATTACHMENTS_AVAILABLE = Platform.OS === 'ios';
 
 export default class CreateIssue extends React.Component {
   constructor() {
     super();
     this.state = {
       processing: false,
+      attachingImage: null,
 
       issue: {
         summary: null,
@@ -79,6 +83,20 @@ export default class CreateIssue extends React.Component {
       }
       this.state.issue.attachments.push(res);
       this.forceUpdate();
+
+      const filePath = res.path || res.uri;
+      const fileName = filePath.match(FILE_NAME_REGEXP)[0];
+      const fileUri = res.uri;
+
+      this.setState({attachingImage: res});
+      this.props.api.attachFile(this.state.issue.id, fileUri, fileName)
+        .then(() => this.setState({attachingImage: null}))
+        .catch((err) => {
+          this.state.issue.attachments = this.state.issue.attachments.filter(attach => attach !== res);
+          this.setState({attachingImage: null});
+
+          return notifyError('Cannot attach file', err);
+        });
     });
   }
 
@@ -107,17 +125,18 @@ export default class CreateIssue extends React.Component {
       return (
         <TouchableOpacity
           key={img.uri}
-          onPress={() => Router.ShowImage({imageUrl: img.uri, imageName: img.path})}
+          onPress={() => Router.ShowImage({imageUrl: img.uri, imageName: img.uri})}
         >
-          <Image style={issueStyles.attachment}
+          <Image style={issueStyles.attachmentImage}
                  source={{uri: img.uri}}/>
+          {this.state.attachingImage === img && <ActivityIndicator size="large" style={styles.imageActivityIndicator}/>}
         </TouchableOpacity>
       );
     });
   }
 
   render() {
-    const canCreateIssue = this.state.issue.summary && this.state.issue.project.id && !this.state.processing;
+    const canCreateIssue = this.state.issue.summary && this.state.issue.project.id && !this.state.processing && !this.state.attachingImage;
 
     const createButton = <Text style={canCreateIssue ? null : styles.disabledCreateButton}>Create</Text>;
 
@@ -146,7 +165,7 @@ export default class CreateIssue extends React.Component {
             <View>
               <TextInput
                 ref="description"
-                editable={!this.state.processing}                
+                editable={!this.state.processing}
                 style={styles.descriptionInput}
                 multiline={true}
                 placeholder="Description"
@@ -155,7 +174,7 @@ export default class CreateIssue extends React.Component {
                   this.forceUpdate();
                 }}/>
             </View>
-            {false/*TODO: turn on when attachments could work*/ && <View style={styles.attachesContainer}>
+            {ARE_ATTACHMENTS_AVAILABLE && <View style={styles.attachesContainer}>
               <View>
                 {this.state.issue.attachments.length > 0 && <ScrollView style={issueStyles.attachesContainer} horizontal={true}>
                   {this._renderAttahes(this.state.issue.attachments)}
@@ -163,6 +182,7 @@ export default class CreateIssue extends React.Component {
               </View>
               <View style={styles.attachButtonsContainer}>
                 <TouchableOpacity
+                  disabled={this.state.attachingImage !== null}
                   style={styles.attachButton}
                   onPress={() => this.attachPhoto(true)}>
                   <Image style={styles.attachIcon} source={attach}/>
@@ -170,6 +190,7 @@ export default class CreateIssue extends React.Component {
                 </TouchableOpacity>
 
                 <TouchableOpacity
+                  disabled={this.state.attachingImage !== null}
                   style={styles.attachButton}
                   onPress={() => this.attachPhoto(false)}>
                   <Text style={styles.attachButtonText}>Take a picture...</Text>

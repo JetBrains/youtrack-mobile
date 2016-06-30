@@ -1,6 +1,8 @@
 import {StyleSheet} from 'react-native';
 import {UNIT, COLOR_PINK, COLOR_FONT_GRAY, COLOR_FONT, COLOR_GRAY} from '../../components/variables/variables';
 
+const ATTACHING_IMAGE_ALPHA = '70';
+
 export default StyleSheet.create({
   container: {
     flex: 1,
@@ -40,6 +42,14 @@ export default StyleSheet.create({
     margin: UNIT,
     marginLeft: UNIT * 2,
     marginRight: UNIT * 2
+  },
+  imageActivityIndicator: {
+    backgroundColor: `#CCCCCC${ATTACHING_IMAGE_ALPHA}`,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: UNIT*2,
+    bottom: 0
   },
   attachButtonsContainer: {
     flexDirection: 'row',
