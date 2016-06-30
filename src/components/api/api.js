@@ -148,9 +148,7 @@ class Api {
     const formDataContent = new FormData(); //eslint-disable-line no-undef
     formDataContent.append('photo', {uri: fileUri, name: fileName});
 
-    const queryString = qs.stringify({authorLogin: 'root'});
-
-    return fetch(`${this.youTrackUrl}/rest/issue/${issueId}/attachment?${queryString}`, {
+    return fetch(`${this.youTrackUrl}/rest/issue/${issueId}/attachment`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json, text/plain, */*',
