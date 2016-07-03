@@ -1,4 +1,4 @@
-import {Text, View, Image, TouchableOpacity, ScrollView, TextInput, Clipboard, Platform, ActivityIndicator, Linking} from 'react-native';
+import {Text, View, Image, TouchableOpacity, ScrollView, TextInput, Clipboard, Platform, ActivityIndicator, Linking, RefreshControl} from 'react-native';
 import React, {PropTypes} from 'react';
 
 import {UIImagePickerManager} from 'NativeModules';
@@ -16,6 +16,7 @@ import Wiki, {decorateRawText} from '../../components/wiki/wiki';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import {notifyError} from '../../components/notification/notification';
 import SingleIssueCommentInput from './single-issue__comment-input';
+import {COLOR_PINK} from '../../components/variables/variables';
 import styles from './single-issue.styles';
 
 const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
@@ -31,6 +32,7 @@ export default class SingeIssueView extends React.Component {
 
     this.state = {
       issue: null,
+      isRefreshing: false,
       fullyLoaded: false,
 
       editMode: false,
@@ -335,12 +337,25 @@ export default class SingeIssueView extends React.Component {
     );
   }
 
+  _renderRefreshControl() {
+    return <RefreshControl
+      refreshing={this.state.isRefreshing}
+      tintColor={COLOR_PINK}
+      onRefresh={() => {
+        this.setState({isRefreshing: true});
+        this.loadIssue(this.state.issue.id)
+          .then(() => this.setState({isRefreshing: false}))
+          .catch(() => this.setState({isRefreshing: false}));
+      }}
+    />;
+  }
+
   render() {
     return (
       <View style={styles.container} ref="container">
         {this._renderHeader()}
 
-        {this.state.issue && <ScrollView>
+        {this.state.issue && <ScrollView refreshControl={this._renderRefreshControl()}>
           {this._renderIssueView(this.state.issue)}
 
           {!this.state.fullyLoaded && <View><Text style={styles.loading}>Loading...</Text></View>}
