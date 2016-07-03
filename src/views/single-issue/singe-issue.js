@@ -93,7 +93,7 @@ export default class SingeIssueView extends React.Component {
       .then((res) => {
         console.info('Comment created', res);
         this.setState({addCommentMode: false});
-        this.loadIssue(this.props.issueId)
+        this.loadIssue(this.state.issue.id)
       })
       .catch(err => notifyError('Cannot post comment', err));
   }
@@ -116,12 +116,12 @@ export default class SingeIssueView extends React.Component {
       this.props.api.updateIssueFieldEvent.bind(this.props.api) :
       this.props.api.updateIssueFieldValue.bind(this.props.api);
 
-    return updateMethod(this.props.issueId, field.id, value)
-      .then(() => this.loadIssue(this.props.issueId))
+    return updateMethod(this.state.issue.id, field.id, value)
+      .then(() => this.loadIssue(this.state.issue.id))
       .then((res) => this.props.onUpdate && this.props.onUpdate(res))
       .catch((err) => {
         notifyError('failed to update issue field', err);
-        return this.loadIssue(this.props.issueId);
+        return this.loadIssue(this.state.issue.id);
       });
   }
 
@@ -131,7 +131,7 @@ export default class SingeIssueView extends React.Component {
 
     return this.props.api.updateProject(this.state.issue, project)
       .catch((err) => notifyError('Failed to update issue project', err))
-      .then(() => this.loadIssue(this.props.issueId))
+      .then(() => this.loadIssue(this.state.issue.id))
   }
 
   onSaveChanges() {
