@@ -90,7 +90,11 @@ export default class SingeIssueView extends React.Component {
   }
 
   attachPhoto() {
-    UIImagePickerManager.showImagePicker({}, (res) => {
+    const options = {
+      takePhotoButtonTitle: 'Take photo',
+      chooseFromLibraryButtonTitle: 'Choose from libary'
+    }
+    UIImagePickerManager.showImagePicker(options, (res) => {
       if (res.didCancel) {
         return;
       }
@@ -205,14 +209,12 @@ export default class SingeIssueView extends React.Component {
           const {numberInProject, project} = this.state.issue;
           Clipboard.setString(`${this.props.api.config.backendUrl}/issue/${project.shortName}-${numberInProject}`)
         }
-      }, Platform.OS == 'ios' ? {
+      }, {
         title: 'Attach image',
         execute: this.attachPhoto.bind(this)
-      } : null,
+      },
       {title: 'Cancel'}
-    ]
-      .filter(it => it !== null);
-
+    ];
     return showActions(actions, this.context.actionSheet())
       .then(action => action.execute())
       .catch(err => {});
@@ -246,7 +248,7 @@ export default class SingeIssueView extends React.Component {
 
       return <Header leftButton={<Text>Cancel</Text>}
                      onBack={() => this.setState({editMode: false})}
-                     rightButton={this.state.isSavingEditedIssue ? <ActivityIndicator style={styles.savingIndicator}/> : saveButton}
+                     rightButton={saveButton}
                      onRightButtonClick={() => canSave && this.onSaveChanges()}>
         {title}
       </Header>

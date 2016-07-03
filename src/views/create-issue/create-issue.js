@@ -13,8 +13,6 @@ import CustomFieldsPanel from '../../components/custom-fields-panel/custom-field
 const PROJECT_ID_STORAGE_KEY = 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE';
 const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
 
-const ARE_ATTACHMENTS_AVAILABLE = Platform.OS === 'ios';
-
 export default class CreateIssue extends React.Component {
   constructor() {
     super();
@@ -147,7 +145,7 @@ export default class CreateIssue extends React.Component {
       <View style={styles.container} ref="container">
         <ScrollView>
           <Header leftButton={<Text>Cancel</Text>}
-                  rightButton={this.state.processing ? <ActivityIndicator style={styles.creatingIndicator}/> : createButton}
+                  rightButton={createButton}
                   onRightButtonClick={() => canCreateIssue && this.createIssue()}>
             <Text>New Issue</Text>
           </Header>
@@ -177,7 +175,7 @@ export default class CreateIssue extends React.Component {
                   this.forceUpdate();
                 }}/>
             </View>
-            {ARE_ATTACHMENTS_AVAILABLE && <View style={styles.attachesContainer}>
+            <View style={styles.attachesContainer}>
               <View>
                 {this.state.issue.attachments.length > 0 && <ScrollView style={issueStyles.attachesContainer} horizontal={true}>
                   {this._renderAttahes(this.state.issue.attachments)}
@@ -199,7 +197,7 @@ export default class CreateIssue extends React.Component {
                   <Text style={styles.attachButtonText}>Take a picture...</Text>
                 </TouchableOpacity>
               </View>
-            </View>}
+            </View>
             <View style={styles.separator}/>
             {false && <View style={styles.actionContainer}>
               <Image style={styles.actionIcon} source={tag}/>

@@ -146,20 +146,24 @@ class Api {
     const authParams = this.auth.authParams;
 
     const formDataContent = new FormData(); //eslint-disable-line no-undef
-    formDataContent.append('photo', {uri: fileUri, name: fileName});
+    formDataContent.append('photo', {uri: fileUri, name: fileName, type: 'image/binary'});
 
-    return fetch(`${this.youTrackUrl}/rest/issue/${issueId}/attachment`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Authorization': `${authParams.token_type} ${authParams.access_token}`
-      },
-      body: formDataContent
-    })
-      .then(res => {
-        console.log('attach result', res, res.status);
-        return res;
-      });
+    return new Promise((resolve, reject) => {
+      let xhr = new XMLHttpRequest();
+      xhr.open('POST', `${this.youTrackUrl}/rest/issue/${issueId}/attachment`);
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState !== 4) {
+          return;
+        }
+        if (xhr.status >= 200 && xhr.status < 400) {
+          console.log('attach result', xhr);
+          return resolve(xhr);
+        }
+        return reject(xhr);
+      };
+      xhr.send(formDataContent);
+    });
   }
 
   updateIssueSummaryDescription(issue) {
