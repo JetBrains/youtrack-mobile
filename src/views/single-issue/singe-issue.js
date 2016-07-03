@@ -1,6 +1,7 @@
 import {Text, View, Image, TouchableOpacity, ScrollView, TextInput, Clipboard, Platform, ActivityIndicator, Linking} from 'react-native';
 import React, {PropTypes} from 'react';
 
+import {UIImagePickerManager} from 'NativeModules';
 import ApiHelper from '../../components/api/api__helper';
 import {comment} from '../../components/icon/icon';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
@@ -17,6 +18,8 @@ import {notifyError} from '../../components/notification/notification';
 import SingleIssueCommentInput from './single-issue__comment-input';
 import styles from './single-issue.styles';
 
+const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
+
 export default class SingeIssueView extends React.Component {
   static contextTypes = {
     actionSheet: PropTypes.func
@@ -32,6 +35,7 @@ export default class SingeIssueView extends React.Component {
 
       editMode: false,
       isSavingEditedIssue: false,
+      attachingImage: null,
       addCommentMode: false,
       summaryCopy: null,
       descriptionCopy: null
@@ -55,7 +59,7 @@ export default class SingeIssueView extends React.Component {
       }
       return this.props.api.getIssue(issueId);
     };
-    
+
     return getIssue(id)
       .then((issue) => {
         issue.fieldHash = ApiHelper.makeFieldHash(issue);
@@ -81,6 +85,35 @@ export default class SingeIssueView extends React.Component {
         this.loadIssue(this.state.issue.id)
       })
       .catch(err => notifyError('Cannot post comment', err));
+  }
+
+  attachPhoto() {
+    UIImagePickerManager.showImagePicker({}, (res) => {
+      if (res.didCancel) {
+        return;
+      }
+      if (res.error) {
+        return notifyError('ImagePicker Error: ', res.error);
+      }
+      res.mimeType = 'image';
+      res.url = res.uri;
+      this.state.issue.attachments.push(res);
+      this.forceUpdate();
+
+      const filePath = res.path || res.uri;
+      const fileName = filePath.match(FILE_NAME_REGEXP)[0];
+      const fileUri = res.uri;
+
+      this.setState({attachingImage: res});
+      this.props.api.attachFile(this.state.issue.id, fileUri, fileName)
+        .then(() => this.setState({attachingImage: null}))
+        .catch((err) => {
+          this.state.issue.attachments = this.state.issue.attachments.filter(attach => attach !== res);
+          this.setState({attachingImage: null});
+
+          return notifyError('Cannot attach file', err);
+        });
+    });
   }
 
   getAuthorForText(issue) {
@@ -165,14 +198,18 @@ export default class SingeIssueView extends React.Component {
           });
         }
       }, {
-        title: 'Copy issue web link',
+        title: 'Copy issue URL',
         execute: () => {
           const {numberInProject, project} = this.state.issue;
           Clipboard.setString(`${this.props.api.config.backendUrl}/issue/${project.shortName}-${numberInProject}`)
         }
-      },
+      }, Platform.OS == 'ios' ? {
+        title: 'Attach image',
+        execute: this.attachPhoto.bind(this)
+      } : null,
       {title: 'Cancel'}
-    ];
+    ]
+      .filter(it => it !== null);
 
     return showActions(actions, this.context.actionSheet())
       .then(action => action.execute())
@@ -231,6 +268,7 @@ export default class SingeIssueView extends React.Component {
               <Image style={styles.attachmentImage}
                      capInsets={{left: 15, right: 15, bottom: 15, top: 15}}
                      source={{uri: attach.url}}/>
+              {this.state.attachingImage === attach && <ActivityIndicator size="large" style={styles.imageActivityIndicator}/>}
             </TouchableOpacity>;
           }
 

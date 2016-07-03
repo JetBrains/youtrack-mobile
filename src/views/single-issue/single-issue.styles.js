@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {UNIT, COLOR_LIGHT_GRAY, COLOR_FONT_GRAY, COLOR_FONT, COLOR_GRAY, COLOR_PINK} from '../../components/variables/variables';
+const ATTACHING_IMAGE_ALPHA = '70';
 
 export default StyleSheet.create({
   container: {
@@ -79,6 +80,14 @@ export default StyleSheet.create({
     height: 60,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  imageActivityIndicator: {
+    backgroundColor: `#CCCCCC${ATTACHING_IMAGE_ALPHA}`,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: UNIT*2,
+    bottom: 0
   },
   commentsListContainer: {
     paddingBottom: UNIT * 6

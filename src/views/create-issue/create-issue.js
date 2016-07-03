@@ -81,6 +81,9 @@ export default class CreateIssue extends React.Component {
       if (res.didCancel) {
         return;
       }
+      if (res.error) {
+        return notifyError('ImagePicker Error: ', res.error);
+      }
       this.state.issue.attachments.push(res);
       this.forceUpdate();
 
