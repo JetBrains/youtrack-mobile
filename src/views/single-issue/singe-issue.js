@@ -78,13 +78,7 @@ export default class SingeIssueView extends React.Component {
         this.setState({issue, fullyLoaded: true});
         return issue;
       })
-      .catch((result) => {
-        if (result.json) {
-          return result.json()
-            .then(res => global.alert(res.error_description || res));
-        }
-        console.warn('failed to load issue', result, result.message);
-      });
+      .catch((err) => notifyError('Failed to load issue', err));
   }
 
   addComment(issue, comment) {
