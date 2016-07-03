@@ -1,4 +1,4 @@
-import {ScrollView, View, Text, TextInput, TouchableOpacity, Image, AsyncStorage, ActivityIndicator, Platform} from 'react-native';
+import {ScrollView, View, Text, TextInput, TouchableOpacity, Image, AsyncStorage, ActivityIndicator} from 'react-native';
 import React from 'react';
 
 import styles from './create-issue.styles';

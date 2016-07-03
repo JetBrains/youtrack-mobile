@@ -143,13 +143,11 @@ class Api {
   }
 
   attachFile(issueId, fileUri, fileName) {
-    const authParams = this.auth.authParams;
-
     const formDataContent = new FormData(); //eslint-disable-line no-undef
     formDataContent.append('photo', {uri: fileUri, name: fileName, type: 'image/binary'});
 
     return new Promise((resolve, reject) => {
-      let xhr = new XMLHttpRequest();
+      let xhr = new XMLHttpRequest(); //eslint-disable-line no-undef
       xhr.open('POST', `${this.youTrackUrl}/rest/issue/${issueId}/attachment`);
 
       xhr.onreadystatechange = function () {
