@@ -35,7 +35,7 @@ describe('<ColorField/>', () => {
     const container = shallow(<ColorField text={fakeField.name} color={fakeField.color}/>).find('View');
     const backgroundColor = container.props().style[1].backgroundColor;
 
-    backgroundColor.should.equal('#0066cc');
+    backgroundColor.should.equal('#0070e4');
   });
 
   it('should set foreground color', () => {
