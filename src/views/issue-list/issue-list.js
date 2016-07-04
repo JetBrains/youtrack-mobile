@@ -193,7 +193,17 @@ class IssueList extends React.Component {
         leftButton={<Text>Menu</Text>}
         rightButton={<Text>Create</Text>}
         onBack={() => this.setState({showMenu: true})}
-        onRightButtonClick={() => Router.CreateIssue({api: this.api, onCreate: () => this.loadIssues(this.state.queryAssistValue, null)})}
+        onRightButtonClick={() => {
+          return Router.CreateIssue({
+            api: this.api,
+            onCreate: (createdIssue) => {
+              const updatedIssues = ApiHelper.fillIssuesFieldHash([createdIssue]).concat(this.state.issues);
+              this.setState({
+                dataSource: this.state.dataSource.cloneWithRows(updatedIssues)
+              });
+            }})
+          }
+        }
       >
         <Text>Sort by: Updated</Text>
       </Header>

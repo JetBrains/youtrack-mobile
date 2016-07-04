@@ -77,8 +77,11 @@ class Api {
   }
 
   createIssue(issueDraft) {
-    console.info('Issue draft to create:', issueDraft)
-    const queryString = qs.stringify({draftId: issueDraft.id});
+    console.info('Issue draft to create:', issueDraft);
+    const queryString = qs.stringify({
+      draftId: issueDraft.id,
+      fields: fields.issuesOnList.toString()
+    });
     return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`, 'POST', {});
   }
 
