@@ -27,17 +27,11 @@ export default class CustomField extends React.Component {
     if (!value || !value.color) {
       return;
     }
-    const colorId = value.color.id;
-
-    let color = getColorById(colorId).color;
-    let backgroundColor = null;
-    if (color === 'white' || color === '#FFF') {
-      backgroundColor = getColorById(colorId).backgroundColor;
-    }
+    const colorFromMap =  getColorById(value.color.id);
 
     return {
-      color: color,
-      backgroundColor: backgroundColor
+      color: colorFromMap.color,
+      backgroundColor: colorFromMap.backgroundColor
     }
   }
 
