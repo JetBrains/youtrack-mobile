@@ -13,17 +13,13 @@ export default class ColorField extends React.Component {
     return this.props.color && getColorById(this.props.color.id).color;
   }
 
-  _getBorderColor() {
-    return this.props.color && getColorById(this.props.color.id).borderColor;
-  }
-
   _getFieldLetter() {
     return this.props.fullText ? this.props.text : this.props.text.substr(0, 1);
   }
 
   render() {
     return (
-      <View style={[styles.wrapper, {backgroundColor: this._getBackgroundColor(), borderColor: this._getBorderColor()}, this.props.style]}>
+      <View style={[styles.wrapper, {backgroundColor: this._getBackgroundColor()}, this.props.style]}>
         <Text style={[styles.text, {color: this._getForegroundColor()}]}>{this._getFieldLetter()}</Text>
       </View>
     );
@@ -42,7 +38,6 @@ const styles = StyleSheet.create({
     height: SIZE,
     borderRadius: 4,
     flex: 1,
-    borderWidth: 1,
     justifyContent: 'center'
   },
   text: {
