@@ -1,21 +1,9 @@
-// @flow
 import {AsyncStorage} from 'react-native';
 
 const DEFAULT_BACKEND = 'https://youtrack.jetbrains.com';
 const BACKEND_URL_STORAGE_KEY = 'yt_mobile_backend_url';
 
-type ConfigAuth = {
-  serverUri: ?string,
-  clientId: ?string,
-  clientSecret: ?string,
-  scopes: string,
-  landingUrl: string,
-  youtrackServiceId: ?string
-};
-
-type AppConfig = {backendUrl: string; auth: ConfigAuth};
-
-const config: AppConfig = {
+const config = {
   backendUrl: DEFAULT_BACKEND,
   auth: {
     serverUri: null,
