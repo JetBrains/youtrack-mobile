@@ -16,7 +16,8 @@ function checkInitialUrlForIssueId(onIssueIdDetected) {
   handleInitialOpenWithUrl(onIssueIdDetected);
 
   function onOpenWithUrl(event) {
-    const id = extractId(event.url);
+    const url = event.url || event;
+    const id = extractId(url);
     if (id) {
       console.info(`Application was restored with issue URL, id ${id}, opening issue...`);
       return onIssueIdDetected(id);
