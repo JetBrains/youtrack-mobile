@@ -9,7 +9,7 @@ describe('<ColorField/>', () => {
   beforeEach(() => {
     fakeField = {
       name: 'Test custom field',
-      color: {id: 4}
+      color: {id: 4, background: '#000', foreground: '#FFF'}
     };
   });
 
@@ -35,14 +35,14 @@ describe('<ColorField/>', () => {
     const container = shallow(<ColorField text={fakeField.name} color={fakeField.color}/>).find('View');
     const backgroundColor = container.props().style[1].backgroundColor;
 
-    backgroundColor.should.equal('#0070e4');
+    backgroundColor.should.equal('#000');
   });
 
   it('should set foreground color', () => {
     const container = shallow(<ColorField text={fakeField.name} color={fakeField.color}/>).find('Text');
-    const backgroundColor = container.props().style[1].color;
+    const foregroundColor = container.props().style[1].color;
 
-    backgroundColor.should.equal('#FFF');
+    foregroundColor.should.equal('#FFF');
   });
 
 });

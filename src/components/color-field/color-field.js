@@ -1,16 +1,15 @@
 import {View, Text, StyleSheet} from 'react-native';
 import React, {PropTypes} from 'react';
-import getColorById from './color-field__colors';
 
 export const SIZE = 22;
 
 export default class ColorField extends React.Component {
   _getBackgroundColor() {
-    return this.props.color && getColorById(this.props.color.id).backgroundColor;
+    return this.props.color.background;
   }
 
   _getForegroundColor() {
-    return this.props.color && getColorById(this.props.color.id).color;
+    return this.props.color.foreground;
   }
 
   _getFieldLetter() {

@@ -35,7 +35,7 @@ const BUNDLE_VALUE = toField([
 
   {owner: ['ringId', 'login']},
 
-  {color: ['id']}
+  {color: ['id', 'background', 'foreground']}
 ])
 
 const ISSUE_FIELD_VALUE = toField(
@@ -54,9 +54,7 @@ const ISSUE_FIELD_VALUE = toField(
       'isResolved',
 
       {
-        'color': [
-          'id'
-        ]
+        'color': ['id', 'background', 'foreground']
       }
 
     ]

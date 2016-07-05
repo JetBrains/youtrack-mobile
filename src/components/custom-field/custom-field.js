@@ -1,6 +1,5 @@
 import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
 import React, {PropTypes} from 'react';
-import getColorById from '../color-field/color-field__colors';
 import {COLOR_FONT_GRAY, COLOR_PINK, COLOR_FONT} from '../variables/variables';
 
 export default class CustomField extends React.Component {
@@ -27,11 +26,9 @@ export default class CustomField extends React.Component {
     if (!value || !value.color) {
       return;
     }
-    const colorFromMap =  getColorById(value.color.id);
-
     return {
-      color: colorFromMap.color,
-      backgroundColor: colorFromMap.backgroundColor
+      color: value.color.foreground,
+      backgroundColor: value.color.background
     }
   }
 
