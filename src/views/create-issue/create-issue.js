@@ -175,7 +175,7 @@ export default class CreateIssue extends React.Component {
                   this.forceUpdate();
                 }}/>
             </View>
-            <View style={styles.attachesContainer}>
+            {this.state.issue.project.id && <View style={styles.attachesContainer}>
               <View>
                 {this.state.issue.attachments.length > 0 && <ScrollView style={issueStyles.attachesContainer} horizontal={true}>
                   {this._renderAttahes(this.state.issue.attachments)}
@@ -197,7 +197,7 @@ export default class CreateIssue extends React.Component {
                   <Text style={styles.attachButtonText}>Take a picture...</Text>
                 </TouchableOpacity>
               </View>
-            </View>
+            </View>}
             <View style={styles.separator}/>
             {false && <View style={styles.actionContainer}>
               <Image style={styles.actionIcon} source={tag}/>
