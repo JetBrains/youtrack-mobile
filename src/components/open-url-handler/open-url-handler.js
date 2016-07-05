@@ -6,7 +6,7 @@ function handleInitialOpenWithUrl(onIssueIdDetected) {
     .then(url => {
       const id = extractId(url);
       if (id) {
-        console.info('Application was opened with issue URL, id ${id}, opening issue...');
+        console.info(`Application was opened with issue URL, id ${id}, opening issue...`);
         return onIssueIdDetected(id);
       }
     });
