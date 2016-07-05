@@ -1,4 +1,4 @@
-import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
+import {TouchableOpacity, View, Text, StyleSheet, Platform} from 'react-native';
 import React, {PropTypes} from 'react';
 import {COLOR_FONT_GRAY, COLOR_PINK, COLOR_FONT} from '../variables/variables';
 
@@ -83,9 +83,16 @@ const styles = StyleSheet.create({
   valueText: {
     color: COLOR_FONT,
     fontWeight: 'bold',
-    marginLeft: -2,
     marginRight: 0,
-    padding: 2
+    padding: 2,
+    ...Platform.select({
+      ios: {
+        marginLeft: -2
+      },
+      android: {
+        paddingRight: -1
+      }
+    })
   },
   valueTextDisabled: {
     color: COLOR_FONT_GRAY
