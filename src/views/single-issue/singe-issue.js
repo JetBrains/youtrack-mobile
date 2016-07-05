@@ -193,17 +193,21 @@ export default class SingeIssueView extends React.Component {
   }
 
   _showActions() {
+    const canEdit = this.issuePermissions.canUpdateGeneralInfo(this.state.issue);
+
+    const editAction = canEdit ? {
+      title: 'Edit issue',
+      execute: () => {
+        this.setState({
+          editMode: true,
+          summaryCopy: this.state.issue.summary,
+          descriptionCopy: this.state.issue.description
+        });
+      }
+    } : null;
+
     const actions = [
-      {
-        title: 'Edit issue',
-        execute: () => {
-          this.setState({
-            editMode: true,
-            summaryCopy: this.state.issue.summary,
-            descriptionCopy: this.state.issue.description
-          });
-        }
-      }, {
+      editAction, {
         title: 'Copy issue URL',
         execute: () => {
           const {numberInProject, project} = this.state.issue;
@@ -214,7 +218,9 @@ export default class SingeIssueView extends React.Component {
         execute: this.attachPhoto.bind(this)
       },
       {title: 'Cancel'}
-    ];
+    ]
+      .filter(item => item !== null);
+
     return showActions(actions, this.context.actionSheet())
       .then(action => action.execute())
       .catch(err => {});
@@ -234,7 +240,7 @@ export default class SingeIssueView extends React.Component {
     const title = <Text>{this.state.issue && (`${this.state.issue.project.shortName}-${this.state.issue.numberInProject}`)}</Text>;
 
     if (!this.state.editMode) {
-      const rightButton = this.state.issue && this.issuePermissions.canUpdateGeneralInfo(this.state.issue) ? <Text>Actions</Text> : null;
+      const rightButton = this.state.issue ? <Text>Actions</Text> : null;
 
       return <Header leftButton={<Text>Back</Text>}
                      rightButton={rightButton}
