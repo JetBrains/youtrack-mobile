@@ -186,7 +186,7 @@ export default class CreateIssue extends React.Component {
                   disabled={this.state.attachingImage !== null}
                   style={styles.attachButton}
                   onPress={() => this.attachPhoto(true)}>
-                  <Image style={styles.attachIcon} source={attach}/>
+                  <Image style={styles.attachIcon} source={attach} resizeMode="contain"/>
                   <Text style={styles.attachButtonText}>Attach file from library...</Text>
                 </TouchableOpacity>
 
