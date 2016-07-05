@@ -193,9 +193,7 @@ export default class SingeIssueView extends React.Component {
   }
 
   _showActions() {
-    const canEdit = this.issuePermissions.canUpdateGeneralInfo(this.state.issue);
-
-    const editAction = canEdit ? {
+    const editAction = this.issuePermissions.canUpdateGeneralInfo(this.state.issue) ? {
       title: 'Edit issue',
       execute: () => {
         this.setState({
@@ -206,17 +204,21 @@ export default class SingeIssueView extends React.Component {
       }
     } : null;
 
+    const addAttachmentAction = this.issuePermissions.canAddAttachmentTo(this.state.issue) ? {
+      title: 'Attach image',
+      execute: this.attachPhoto.bind(this)
+    } : null
+
     const actions = [
-      editAction, {
+      editAction,
+      {
         title: 'Copy issue URL',
         execute: () => {
           const {numberInProject, project} = this.state.issue;
           Clipboard.setString(`${this.props.api.config.backendUrl}/issue/${project.shortName}-${numberInProject}`)
         }
-      }, {
-        title: 'Attach image',
-        execute: this.attachPhoto.bind(this)
       },
+      addAttachmentAction,
       {title: 'Cancel'}
     ]
       .filter(item => item !== null);

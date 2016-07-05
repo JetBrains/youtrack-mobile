@@ -7,6 +7,7 @@ export const READ_ISSUE = 'JetBrains.YouTrack.READ_ISSUE';
 export const UPDATE_ISSUE = 'JetBrains.YouTrack.UPDATE_ISSUE';
 export const PRIVATE_UPDATE_ISSUE = 'JetBrains.YouTrack.PRIVATE_UPDATE_ISSUE';
 export const CAN_CREATE_ISSUE = 'JetBrains.YouTrack.CREATE_COMMENT';
+export const CAN_ADD_ATTACHMENT = 'JetBrains.YouTrack.UPDATE_ATTACHMENT_ISSUE';
 
 export default class IssuePermissions {
   constructor(permissions, currentUser) {
@@ -47,5 +48,9 @@ export default class IssuePermissions {
 
   canCommentOn(issue) {
     return this.permissions.has(CAN_CREATE_ISSUE, issue.project.ringId);
+  }
+
+  canAddAttachmentTo(issue) {
+    return this.permissions.has(CAN_ADD_ATTACHMENT, issue.project.ringId);
   }
 }
