@@ -10,7 +10,7 @@
     "test": "mocha --opts test/mocha.opts src/**/*.test.js",
     "test-ci": "npm run test -- --reporter mocha-teamcity-reporter",
     "test:watch": "npm test -- --watch",
-    "lint": "eslint src",
+    "lint": "eslint src && flow",
     "ios": "./node_modules/react-native-cli/index.js run-ios",
     "ios-set-version": "cd ios && agvtool new-marketing-version $npm_package_version && agvtool new-version -all $npm_package_config_buildnumber && cd ..",
     "ios-clean": "xcodebuild clean -project ios/YouTrackMobile.xcodeproj -configuration Release -alltargets",
@@ -40,7 +40,7 @@
     "react-native-prompt": "0.18.4",
     "react-native-side-menu": "0.19.0",
     "relative-date": "^1.1.2",
-    "simple-markdown": "0.0.9"
+    "simple-markdown": "^0.1.1"
   },
   "devDependencies": {
     "babel-core": "6.9.0",
@@ -57,6 +57,7 @@
     "eslint-config-defaults": "9.0.0",
     "eslint-plugin-react": "5.1.1",
     "eslint-plugin-react-native": "1.1.0-beta",
+    "flow-bin": "0.26.0",
     "mocha": "2.4.5",
     "mocha-teamcity-reporter": "^1.0.0",
     "nodemon": "1.8.1",
