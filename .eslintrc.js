@@ -5,7 +5,8 @@ module.exports = {
   'parser': 'babel-eslint',
   'plugins': [
     'react',
-    'react-native'
+    'react-native',
+    'flow-vars'
   ],
   'rules': {
     'no-unused-vars': [2, {'vars': 'local', 'args': 'none'}],
@@ -27,7 +28,10 @@ module.exports = {
     'react/jsx-max-props-per-line': [2, {maximum: 4}],
     'react/jsx-uses-vars': 2,
     'react-native/no-unused-styles': 2,
-    'react-native/split-platform-components': 2
+    'react-native/split-platform-components': 2,
+
+    'flow-vars/define-flow-type': 1,
+    'flow-vars/use-flow-type': 1
   },
   'env': {
     'es6': true,
