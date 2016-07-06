@@ -205,7 +205,7 @@ export default class SingeIssueView extends React.Component {
     } : null;
 
     const addAttachmentAction = this.issuePermissions.canAddAttachmentTo(this.state.issue) ? {
-      title: 'Attach image',
+      title: 'Attach image...',
       execute: this.attachPhoto.bind(this)
     } : null
 
