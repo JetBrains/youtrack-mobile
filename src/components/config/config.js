@@ -1,9 +1,21 @@
+// @flow
 import {AsyncStorage} from 'react-native';
 
 const DEFAULT_BACKEND = 'https://youtrack.jetbrains.com';
 const BACKEND_URL_STORAGE_KEY = 'yt_mobile_backend_url';
 
-const config = {
+type ConfigAuth = {
+  serverUri: ?string,
+  clientId: ?string,
+  clientSecret: ?string,
+  scopes: string,
+  landingUrl: string,
+  youtrackServiceId: ?string
+};
+
+type AppConfig = {backendUrl: string; auth: ConfigAuth};
+
+const config: AppConfig = {
   backendUrl: DEFAULT_BACKEND,
   auth: {
     serverUri: null,
@@ -15,7 +27,7 @@ const config = {
   }
 };
 
-function storeBackendUrl(url) {
+function storeBackendUrl(url: string) {
   return AsyncStorage.setItem(BACKEND_URL_STORAGE_KEY, url)
     .then(() => url);
 }
@@ -25,7 +37,7 @@ function getStoredBackendURL() {
     .then(res => res || DEFAULT_BACKEND);
 }
 
-function handleEmbeddedHubUrl(hubUrl, ytUrl) {
+function handleEmbeddedHubUrl(hubUrl: string, ytUrl: string) {
   return hubUrl[0] === '/' ? ytUrl + hubUrl : hubUrl;
 }
 
