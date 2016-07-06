@@ -31,23 +31,6 @@ let API = {
     return issues;
   },
 
-  orderIssueFolders: (folders) => {
-    const filters = {
-      isSavedSearch: function (folder) {
-        return folder.fqFolderId.indexOf('$s$') === 0;
-      },
-      isTag: function (folder) {
-        return folder.fqFolderId.indexOf('$t$') === 0;
-      },
-      isProject: function (folder) {
-        return !filters.isSavedSearch(folder) && !filters.isTag(folder);
-      }
-    };
-
-    return (folders || {}).sort((folder) => {
-      //TODO
-    });
-  },
   //Ported from youtrack frontend
   toField: function toFieldConstructor(fields) {
     const toArray = function(object) {
