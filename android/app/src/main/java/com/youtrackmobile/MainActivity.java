@@ -23,15 +23,6 @@ public class MainActivity extends ReactActivity {
     }
 
     /**
-     * Returns whether dev mode should be enabled.
-     * This enables e.g. the dev menu.
-     */
-    @Override
-    protected boolean getUseDeveloperSupport() {
-        return BuildConfig.DEBUG;
-    }
-
-    /**
      * A list of packages used by the app. If the app uses additional views
      * or modules besides the default ones, add more packages here.
      */
