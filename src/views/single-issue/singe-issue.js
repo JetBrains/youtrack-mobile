@@ -1,7 +1,7 @@
 import {Text, View, Image, TouchableOpacity, ScrollView, TextInput, Clipboard, Platform, ActivityIndicator, Linking, RefreshControl} from 'react-native';
 import React, {PropTypes} from 'react';
 
-import {UIImagePickerManager} from 'NativeModules';
+import ImagePicker from 'react-native-image-picker';
 import ApiHelper from '../../components/api/api__helper';
 import {comment} from '../../components/icon/icon';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
@@ -94,7 +94,7 @@ export default class SingeIssueView extends React.Component {
       takePhotoButtonTitle: 'Take photo',
       chooseFromLibraryButtonTitle: 'Choose from libary'
     }
-    UIImagePickerManager.showImagePicker(options, (res) => {
+    ImagePicker.showImagePicker(options, (res) => {
       if (res.didCancel) {
         return;
       }
