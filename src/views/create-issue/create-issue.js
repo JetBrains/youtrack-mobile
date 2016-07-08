@@ -5,7 +5,7 @@ import styles from './create-issue.styles';
 import issueStyles from '../single-issue/single-issue.styles';
 import Header from '../../components/header/header';
 import {notifyError} from '../../components/notification/notification';
-import {UIImagePickerManager} from 'NativeModules';
+import ImagePicker from 'react-native-image-picker';
 import Router from '../../components/router/router';
 import {attach, tag, next} from '../../components/icon/icon';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
@@ -75,7 +75,7 @@ export default class CreateIssue extends React.Component {
   attachPhoto(takeFromLibrary = true) {
     const method = takeFromLibrary ? 'launchImageLibrary' : 'launchCamera';
 
-    UIImagePickerManager[method]({}, (res) => {
+    ImagePicker[method]({}, (res) => {
       if (res.didCancel) {
         return;
       }

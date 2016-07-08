@@ -33,7 +33,7 @@
     "react": "15.1.0",
     "react-native": "0.29.0",
     "react-native-calendar-picker": "huston007/CalendarPicker#83eea4463964d86d5b42d533c76b2ba829a665fb",
-    "react-native-image-picker": "0.14.3",
+    "react-native-image-picker": "0.20.1",
     "react-native-invertible-scroll-view": "1.0.0",
     "react-native-keyboard-spacer": "0.3.0",
     "react-native-keychain": "0.2.7",
