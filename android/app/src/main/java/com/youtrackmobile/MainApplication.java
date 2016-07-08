@@ -1,4 +1,4 @@
-package com.youtrackmobile;
+package com.jetbrains.youtrack.mobile.app;
 
 import android.app.Application;
 import android.util.Log;
