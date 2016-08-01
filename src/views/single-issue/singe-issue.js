@@ -251,7 +251,7 @@ export default class SingeIssueView extends React.Component {
       </Header>
 
     } else {
-      const canSave = Boolean(this.state.summaryCopy);
+      const canSave = Boolean(this.state.summaryCopy) && !this.state.isSavingEditedIssue;
       const saveButton = <Text style={canSave ? null : styles.disabledSaveButton}>Save</Text>;
 
       return <Header leftButton={<Text>Cancel</Text>}
