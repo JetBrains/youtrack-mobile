@@ -6,9 +6,20 @@ import {View, Text} from 'react-native';
 import React from 'react';
 
 export default class SingleIssueComments extends React.Component {
+  static defaultProps = {
+    onReply: () => {
+    },
+    onCopyCommentLink: () => {
+    }
+  };
+
   _renderCommentsList(comments, attachments) {
     return comments.map((comment) => {
-      return <Comment key={comment.id} comment={comment} attachments={attachments}/>;
+      return <Comment key={comment.id}
+                      comment={comment}
+                      attachments={attachments}
+                      onReply={() => this.props.onReply(comment)}
+                      onCopyCommentLink={() => this.props.onCopyCommentLink(comment)}/>;
     });
   }
 

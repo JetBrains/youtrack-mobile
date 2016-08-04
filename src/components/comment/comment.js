@@ -15,20 +15,20 @@ export default class Comment extends React.Component {
     },
     onCopyCommentLink: () => {
     }
-  }
+  };
 
   _getCommentActionButtons() {
     const swipeoutBtns = [
       {
         backgroundColor: COLOR_PINK,
         component: <SwipeButton text="Reply" icon={comment}/>,
-        onPress: this.props.onReply.bind(this)
+        onPress: this.props.onReply
       }, {
         backgroundColor: '#000',
         component: <SwipeButton text="Copy link" icon={next}/>,
-        onPress: this.props.onCopyCommentLink.bind(this)
+        onPress: this.props.onCopyCommentLink
       }
-    ]
+    ];
     return swipeoutBtns;
   }
 

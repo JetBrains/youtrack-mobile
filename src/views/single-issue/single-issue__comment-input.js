@@ -13,6 +13,10 @@ export default class IssueListCommentInput extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.setState({commentText: this.props.initialText});
+  }
+
   componentWillUnmount() {
     this.isUnmounted = true;
   }

@@ -39,6 +39,7 @@ export default class SingeIssueView extends React.Component {
       isSavingEditedIssue: false,
       attachingImage: null,
       addCommentMode: false,
+      initialCommentText: '',
       summaryCopy: null,
       descriptionCopy: null
     };
@@ -375,6 +376,12 @@ export default class SingeIssueView extends React.Component {
               comments={this.state.issue.comments}
               attachments={this.state.issue.attachments}
               api={this.props.api}
+              onReply={(comment) => {
+                this.setState({
+                  addCommentMode: true,
+                  initialCommentText: `@${comment.author.login} `
+                });
+              }}
               onIssueIdTap={issueId => this.goToIssueById(issueId)}/>
           </View>}
         </ScrollView>}
@@ -383,14 +390,16 @@ export default class SingeIssueView extends React.Component {
           <SingleIssueCommentInput
           autoFocus={true}
           onBlur={() => this.setState({addCommentMode: false})}
+          initialText={this.state.initialCommentText}
           onAddComment={(comment) => this.addComment(this.state.issue, comment)}/>
 
           {Platform.OS == 'ios' && <KeyboardSpacer/>}
         </View>}
 
         {this._canAddComment() && <View style={styles.addCommentContainer}>
-          <TouchableOpacity style={styles.addCommentButton}
-                                                    onPress={() => this.setState({addCommentMode: true})}>
+          <TouchableOpacity
+            style={styles.addCommentButton}
+            onPress={() => this.setState({addCommentMode: true, initialText: this.state.initialCommentText})}>
             <Image source={comment} style={styles.addCommentIcon}/>
           </TouchableOpacity>
         </View>}
