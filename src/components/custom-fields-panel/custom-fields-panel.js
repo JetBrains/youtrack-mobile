@@ -46,20 +46,15 @@ export default class CustomFieldsPanel extends React.Component {
   }
 
   measureSelect() {
-    /**
-     * TODO https://github.com/facebook/react-native/issues/4753
-     * This container requires because just measure always returns 0 for android
-     */
-    const container = this.props.containerViewGetter();
-    this.refs.panel.measureLayout(findNodeHandle(container),
-      (x, y, width, height, pageX, pageY) => {
-        this.setState({topCoord: y, height: height});
-      }
-    );
+    setTimeout(() => {
+      this.refs.customFieldsPanelMarker.measure((ox, oy, width, height, px, panelPositionY) => {
+        this.setState({topCoord: panelPositionY, height: height});
+      });
+    });
   }
 
   componentDidMount() {
-    setTimeout(this.measureSelect.bind(this), 0);
+    this.measureSelect();
   }
 
   saveUpdatedField(field, value) {
@@ -165,7 +160,7 @@ export default class CustomFieldsPanel extends React.Component {
     return this.closeEditor()
       .then(() => {
         this.setState({editingField: field});
-        
+
         if (field.projectCustomField.field.fieldType.valueType === 'date') {
           return this.editDateField(field);
         }
@@ -276,6 +271,9 @@ export default class CustomFieldsPanel extends React.Component {
 
     return (
       <View ref="panel">
+        <View style={{height: 0, width: 0, opacity: 0}} ref="customFieldsPanelMarker">
+          <KeyboardSpacer onToggle={() => this.measureSelect()}/>
+        </View>
         {this._renderSelect()}
 
         {this._renderDatePicker()}
@@ -304,9 +302,6 @@ export default class CustomFieldsPanel extends React.Component {
             </View>
           })}
         </ScrollView>
-        <View style={{position: 'absolute', height: 0, width: 0, opacity: 0}}>
-          <KeyboardSpacer onToggle={() => this.measureSelect()}/>
-        </View>
       </View>
     );
   }
@@ -318,6 +313,5 @@ CustomFieldsPanel.propTypes = {
   issuePermissions: PropTypes.object.isRequired,
   onUpdate: PropTypes.func.isRequired,
   onUpdateProject: PropTypes.func,
-  containerViewGetter: PropTypes.func.isRequired,
   canEditProject: PropTypes.bool
 };

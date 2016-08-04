@@ -362,7 +362,7 @@ export default class SingeIssueView extends React.Component {
 
   render() {
     return (
-      <View style={styles.container} ref="container">
+      <View style={styles.container}>
         {this._renderHeader()}
 
         {this.state.issue && <ScrollView refreshControl={this._renderRefreshControl()}>
@@ -397,7 +397,6 @@ export default class SingeIssueView extends React.Component {
 
 
         {this.state.issue && !this.state.addCommentMode && <CustomFieldsPanel
-          containerViewGetter={() => this.refs.container}
           api={this.props.api}
           canEditProject={this.issuePermissions.canUpdateGeneralInfo(this.state.issue)}
           issue={this.state.issue}

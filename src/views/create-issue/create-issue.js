@@ -142,7 +142,7 @@ export default class CreateIssue extends React.Component {
     const createButton = <Text style={canCreateIssue ? null : styles.disabledCreateButton}>Create</Text>;
 
     return (
-      <View style={styles.container} ref="container">
+      <View style={styles.container}>
         <ScrollView>
           <Header leftButton={<Text>Cancel</Text>}
                   rightButton={createButton}
@@ -212,7 +212,6 @@ export default class CreateIssue extends React.Component {
         <CustomFieldsPanel
           api={this.props.api}
           issue={this.state.issue}
-          containerViewGetter={() => this.refs.container}
           canEditProject={true}
           issuePermissions={{canUpdateField: () => true}}
           onUpdate={this.onSetFieldValue.bind(this)}
