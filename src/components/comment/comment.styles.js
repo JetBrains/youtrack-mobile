@@ -24,6 +24,9 @@ export default StyleSheet.create({
     marginTop: UNIT
   },
 
+  swipeButton: {
+    width: UNIT * 8
+  },
   swipeButtonIcon: {
     opacity: 0.8,
     marginTop: 4,

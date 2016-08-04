@@ -11,7 +11,7 @@ export default class Comment extends React.Component {
 
   render() {
     return (
-      <View>
+      <View style={styles.swipeButton}>
         {this._renderIcon()}
         <Text>{this.props.text}</Text>
       </View>
