@@ -49,6 +49,11 @@ export default StyleSheet.create({
     backgroundColor: COLOR_LIGHT_GRAY,
     fontFamily: 'Courier'
   },
+  cutBlock: {
+    color: COLOR_FONT,
+    backgroundColor: COLOR_LIGHT_GRAY,
+    fontFamily: 'Courier'
+  },
   inlineCode: {
     color: COLOR_FONT,
     fontFamily: 'Courier'

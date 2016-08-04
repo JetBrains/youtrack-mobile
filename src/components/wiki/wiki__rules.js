@@ -188,6 +188,26 @@ export default function (actions) {
       react: (node, output, state) => {
         return <Text key={state.key} style={styles.inlineCode}>{node.content}</Text>
       }
+    }),
+
+    cut: Object.assign({}, SimpleMarkdown.defaultRules.em, {
+      match: source => /^\{cut.*?}([\s\S]+?)\{cut}(?!\{cut})/.exec(source),
+
+      parse: (capture, parse, state) => {
+        return {
+          content: capture[CONTENT_WITHIN_MARKERS]
+        };
+      },
+
+      react: (node, output, state) => {
+        const CUT_MAX_LENGTH = 3000;
+
+        let cuttedContent = node.content;
+        if (node.content.length > CUT_MAX_LENGTH) {
+          cuttedContent = `${cuttedContent.substring(0, CUT_MAX_LENGTH)}... \n [content is too long]`;
+        }
+        return <Text key={state.key} style={styles.cutBlock}>{cuttedContent}</Text>;
+      }
     })
   }
 }
