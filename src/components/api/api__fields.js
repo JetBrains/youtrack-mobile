@@ -36,7 +36,7 @@ const BUNDLE_VALUE = toField([
   {owner: ['ringId', 'login']},
 
   {color: ['id', 'background', 'foreground']}
-])
+]);
 
 const ISSUE_FIELD_VALUE = toField(
   {
@@ -197,4 +197,4 @@ export default {
     {values: BUNDLE_VALUE},
     {aggregatedUsers: ISSUE_USER_FIELDS}
   ])
-}
+};

@@ -28,7 +28,7 @@ function checkInitialUrlForIssueId(onIssueIdDetected) {
 
   return function unsubscribe() {
     Linking.removeEventListener('url', onOpenWithUrl);
-  }
+  };
 }
 
 export default checkInitialUrlForIssueId;

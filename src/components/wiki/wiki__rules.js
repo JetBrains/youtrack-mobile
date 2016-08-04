@@ -34,21 +34,21 @@ export default function (actions) {
      */
     strong: Object.assign({}, SimpleMarkdown.defaultRules.strong, {
       match: source => {
-        return /^\*([\s\S]+?)\*(?!\*)/.exec(source) || /^'''([\s\S]+?)'''(?!''')/.exec(source)
+        return /^\*([\s\S]+?)\*(?!\*)/.exec(source) || /^'''([\s\S]+?)'''(?!''')/.exec(source);
       },
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.strong}>{output(node.content)}</Text>
+        return <Text key={state.key} style={styles.strong}>{output(node.content)}</Text>;
       }
     }),
 
     monospace: Object.assign({}, SimpleMarkdown.defaultRules.strong, {
       match: source => {
-        return /^{{([\s\S]+?)}}(?!}})/.exec(source) || /^{monospace}([\s\S]+?){monospace}(?!{monospace})/.exec(source)
+        return /^{{([\s\S]+?)}}(?!}})/.exec(source) || /^{monospace}([\s\S]+?){monospace}(?!{monospace})/.exec(source);
       },
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.monospace}>{output(node.content)}</Text>
+        return <Text key={state.key} style={styles.monospace}>{output(node.content)}</Text>;
       }
     }),
 
@@ -72,7 +72,7 @@ export default function (actions) {
       match: source => /^\+([\s\S]+?)\+(?!\+)/.exec(source),
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.underline}>{output(node.content)}</Text>
+        return <Text key={state.key} style={styles.underline}>{output(node.content)}</Text>;
       }
     }),
 
@@ -80,7 +80,7 @@ export default function (actions) {
       match: source => /^--([\s\S]+?)--(?!--)/.exec(source),
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.del}>{output(node.content)}</Text>
+        return <Text key={state.key} style={styles.del}>{output(node.content)}</Text>;
       }
     }),
 
@@ -88,7 +88,7 @@ export default function (actions) {
       match: source => /^''([\s\S]+?)''(?!'')/.exec(source),
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.italic}>{output(node.content)}</Text>
+        return <Text key={state.key} style={styles.italic}>{output(node.content)}</Text>;
       }
     }),
 
@@ -121,7 +121,7 @@ export default function (actions) {
       },
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.link} onPress={() => actions.onLinkPress(node.url)}>{node.content}</Text>
+        return <Text key={state.key} style={styles.link} onPress={() => actions.onLinkPress(node.url)}>{node.content}</Text>;
       }
     }),
 
@@ -166,7 +166,7 @@ export default function (actions) {
       },
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.link} onPress={() => actions.onLinkPress(node.url)}>{node.url}</Text>
+        return <Text key={state.key} style={styles.link} onPress={() => actions.onLinkPress(node.url)}>{node.url}</Text>;
       }
     }),
 
@@ -180,13 +180,13 @@ export default function (actions) {
       },
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.codeBlock}>{node.content}</Text>
+        return <Text key={state.key} style={styles.codeBlock}>{node.content}</Text>;
       }
     }),
 
     inlineCode: Object.assign({}, SimpleMarkdown.defaultRules.inlineCode, {
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.inlineCode}>{node.content}</Text>
+        return <Text key={state.key} style={styles.inlineCode}>{node.content}</Text>;
       }
     }),
 
@@ -209,5 +209,5 @@ export default function (actions) {
         return <Text key={state.key} style={styles.cutBlock}>{cuttedContent}</Text>;
       }
     })
-  }
+  };
 }

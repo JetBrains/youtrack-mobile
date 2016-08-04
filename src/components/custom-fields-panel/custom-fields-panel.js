@@ -84,7 +84,7 @@ export default class CustomFieldsPanel extends React.Component {
           this.closeEditor();
           this.setState({isSavingProject: true});
           return this.props.onUpdateProject(project)
-            .then(() => this.setState({isSavingProject: null}))
+            .then(() => this.setState({isSavingProject: null}));
         }
       }
     });
@@ -142,7 +142,7 @@ export default class CustomFieldsPanel extends React.Component {
         dataSource: (query) => {
           if (field.hasStateMachine) {
             return this.props.api.getStateMachineEvents(this.props.issue.id, field.id)
-              .then(items => items.map(it => Object.assign(it, {name: `${it.id} (${it.presentation})`})))
+              .then(items => items.map(it => Object.assign(it, {name: `${it.id} (${it.presentation})`})));
           }
           return this.props.api.getCustomFieldValues(field.projectCustomField.bundle.id, field.projectCustomField.field.fieldType.valueType)
             .then(res => res.aggregatedUsers || res.values);
@@ -299,7 +299,7 @@ export default class CustomFieldsPanel extends React.Component {
                 disabled={!this.props.issuePermissions.canUpdateField(issue, field)}/>
 
               {this.state.savingField === field && <ActivityIndicator style={styles.savingFieldIndicator}/>}
-            </View>
+            </View>;
           })}
         </ScrollView>
       </View>

@@ -115,7 +115,7 @@ export default class QueryAssist extends React.Component {
                                        getSuggestions={this.getSuggestions.bind(this)}
                                        caret={this.state.caret}
                                        query={this.state.input}
-                                       onApplySuggestion={query => this.setState({input: query})}/>
+                                       onApplySuggestion={query => this.setState({input: query})}/>;
   }
 
   render() {
@@ -127,6 +127,6 @@ export default class QueryAssist extends React.Component {
       <View style={styles.keyboardSpacerHiddenContaioner}>
         <KeyboardSpacer onToggle={() => this.measureSuggestionsListSpace()}/>
       </View>
-    </View>
+    </View>;
   }
 }

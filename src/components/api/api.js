@@ -129,7 +129,7 @@ class Api {
     const body = {
       id: issue.id,
       project: project
-    }
+    };
     return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issue.id}`, 'POST', body);
   }
 

@@ -130,7 +130,7 @@ export default class Auth {
             'Accept': ACCEPT_HEADER,
             'Authorization': `Basic ${makeBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`
           }
-        })
+        });
       })
       .then(res => res.json())
       .then((authParams) => {

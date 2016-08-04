@@ -24,7 +24,7 @@ export default class IssueListCommentInput extends React.Component {
         if (this.isUnmounted) {
           return;
         }
-        this.setState({isSaving: false, commentText: ''})
+        this.setState({isSaving: false, commentText: ''});
       })
       .catch(() => this.setState({isSaving: false}));
   }

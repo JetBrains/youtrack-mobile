@@ -31,6 +31,6 @@ export default class IssueListMenu extends React.Component {
         <Text style={styles.footerText}>© 2000—{CURRENT_YEAR} JetBrains</Text>
         <Text style={styles.footerText}>All rights reserved</Text>
       </View>
-    </View>
+    </View>;
   }
 }

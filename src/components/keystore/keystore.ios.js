@@ -8,4 +8,4 @@ export default {
   setInternetCredentials(server, username, password) {
     return NativeKeychain.setInternetCredentials(server, username, password);
   }
-}
+};

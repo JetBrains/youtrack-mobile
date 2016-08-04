@@ -75,7 +75,7 @@ class Router {
           return createElement(route.component, route.props);
         }
       }
-    />
+    />;
   }
 }
 
