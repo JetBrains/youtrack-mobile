@@ -118,7 +118,8 @@ export default class LoginForm extends React.Component {
             returnKeyType="done"
             value={this.state.password}
             onSubmitEditing={() => this.logInViaCredentials()}
-            password={true} onChangeText={(password) => this.setState({password})}/>
+            secureTextEntry={true}
+            onChangeText={(password) => this.setState({password})}/>
           {this.state.errorMessage ? <View><Text style={styles.error}>{this.state.errorMessage}</Text></View> : null}
         </View>
 
