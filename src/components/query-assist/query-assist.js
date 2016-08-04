@@ -58,15 +58,18 @@ export default class QueryAssist extends React.Component {
   }
 
   componentDidMount() {
-    setTimeout(this.measureSuggestionsListSpace.bind(this), 0);
+    this.measureSuggestionsListSpace();
   }
 
-  measureSuggestionsListSpace() {
+  measureSuggestionsListSpace(timeout = 0, recheck = true) {
     setTimeout(() => {
       this.refs.queryAssistContainer.measure((ox, oy, width, height, px, assistPositionY) => {
         this.setState({suggestionsListTop: -assistPositionY});
+        if (recheck) {
+          this.measureSuggestionsListSpace(100, false);
+        }
       });
-    });
+    }, timeout);
   }
 
   _renderInput() {
