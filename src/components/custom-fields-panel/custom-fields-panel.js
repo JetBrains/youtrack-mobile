@@ -1,4 +1,4 @@
-import {View, ScrollView, Text, TouchableOpacity, TextInput, findNodeHandle, ActivityIndicator} from 'react-native';
+import {View, ScrollView, Text, TouchableOpacity, TextInput, ActivityIndicator} from 'react-native';
 import React, {PropTypes} from 'react';
 import CalendarPicker from 'react-native-calendar-picker/CalendarPicker/CalendarPicker';
 import CustomField from '../custom-field/custom-field';
