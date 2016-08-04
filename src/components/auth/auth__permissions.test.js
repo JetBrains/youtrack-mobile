@@ -33,7 +33,7 @@ describe('Permissions', () => {
 
   it('should map project ids', () => {
     this.permissions.permissionsMap.get('per-project-permission').projectIds[0].should.equal('permitted-project');
-  })
+  });
 
   it('should return false if user has no such permission at all', () => {
     this.permissions.has('non-exist').should.be.false;
@@ -60,7 +60,7 @@ describe('Permissions', () => {
   });
 
   it('should return false if has not every permission', () => {
-    this.permissions.hasEvery(['global-permission', 'non-exist']).should.be.flse;
+    this.permissions.hasEvery(['global-permission', 'non-exist']).should.be.false;
   });
 
   it('should return true if has some permission', () => {
