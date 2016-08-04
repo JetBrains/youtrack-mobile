@@ -32,7 +32,7 @@ describe('Permissions', () => {
   });
 
   it('should map project ids', () => {
-    this.permissions.permissionsMap.get('per-project-permission').projects[0].should.equal('permitted-project');
+    this.permissions.permissionsMap.get('per-project-permission').projectIds[0].should.equal('permitted-project');
   })
 
   it('should return false if user has no such permission at all', () => {
