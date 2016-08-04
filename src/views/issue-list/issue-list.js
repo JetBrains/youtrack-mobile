@@ -62,7 +62,7 @@ class IssueList extends React.Component {
 
   _handleAppStateChange(newState) {
     if (newState === 'active') {
-      this.loadIssues(this.state.queryAssistValue, null);
+      this.loadIssues(this.state.queryAssistValue);
     }
   }
 
@@ -71,7 +71,7 @@ class IssueList extends React.Component {
     this.unsubscribeFromOpeningWithIssueUrl = openUrlHandler(issueId => Router.SingleIssue({
       issueId: issueId,
       api: this.api,
-      onUpdate: () => this.loadIssues(null, null)
+      onUpdate: () => this.loadIssues(null)
     }));
 
     if (this.props.query) {
@@ -101,7 +101,7 @@ class IssueList extends React.Component {
       issuePlaceholder: issue,
       issueId: issue.id,
       api: this.api,
-      onUpdate: () => this.loadIssues(this.state.queryAssistValue, null)
+      onUpdate: () => this.loadIssues(this.state.queryAssistValue)
     });
   }
 
@@ -111,14 +111,10 @@ class IssueList extends React.Component {
       .then(() => Router.LogIn());
   }
 
-  loadIssues(text, skip, showLoader = true) {
-    if (showLoader) {
-      this.setState({isRefreshing: true});
-    }
+  loadIssues(text) {
+    this.setState({listEndReached: false, isRefreshing: true, skip: 0});
 
-    this.setState({listEndReached: false});
-
-    return this.api.getIssues(text, PAGE_SIZE, skip)
+    return this.api.getIssues(text, PAGE_SIZE)
       .then(ApiHelper.fillIssuesFieldHash)
       .then((issues) => {
         this.setState({
@@ -179,7 +175,7 @@ class IssueList extends React.Component {
 
   setQuery(query) {
     this.setState({queryAssistValue: query});
-    this.loadIssues(query, null);
+    this.loadIssues(query);
   }
 
   onQueryUpdated(query) {
