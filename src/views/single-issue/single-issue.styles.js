@@ -103,12 +103,6 @@ export default StyleSheet.create({
     marginTop: UNIT * 2,
     color: COLOR_FONT_GRAY
   },
-  commendInputWrapper: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
   commentInput: {
     flex: 1,
     height: UNIT * 3.5,
@@ -135,24 +129,7 @@ export default StyleSheet.create({
   commentsContainer: {
     borderTopWidth: 0.5,
     borderColor: COLOR_GRAY,
-    padding: UNIT * 2
-  },
-  commentWrapper: {
-    flexDirection: 'row',
-    marginBottom: UNIT * 2
-  },
-  avatar: {
-    width: UNIT * 4,
-    height: UNIT * 4,
-    borderRadius: UNIT * 2
-  },
-  comment: {
-    marginTop: UNIT / 2,
-    marginLeft: UNIT,
-    flex: 1
-  },
-  commentText: {
-    marginTop: UNIT
+    paddingTop: UNIT
   },
   separator: {
     height: 0.5,

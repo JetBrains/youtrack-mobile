@@ -1,33 +1,14 @@
 import styles from './single-issue.styles';
-import relativeDate from 'relative-date';
-import Wiki, {decorateRawText} from '../../components/wiki/wiki';
-import {COLOR_FONT_GRAY, COLOR_LINK} from '../../components/variables/variables';
+import Comment from '../../components/comment/comment';
 
-import {View, Text, Image} from 'react-native';
+
+import {View, Text} from 'react-native';
 import React from 'react';
 
 export default class SingleIssueComments extends React.Component {
-
-  _renderComment(comment, attachments) {
-    return <Wiki onIssueIdTap={issueId => this.props.onIssueIdTap && this.props.onIssueIdTap(issueId)}>
-      {decorateRawText(comment.text, comment.textPreview, attachments)}
-      </Wiki>;
-  }
-
   _renderCommentsList(comments, attachments) {
     return comments.map((comment) => {
-      return (
-        <View key={comment.id} style={styles.commentWrapper}>
-          <Image style={styles.avatar} source={{uri: comment.author.avatarUrl}}/>
-          <View style={styles.comment}>
-            <Text>
-              <Text style={{color: COLOR_LINK}}>{comment.author.fullName || comment.author.login}</Text>
-              <Text style={{color: COLOR_FONT_GRAY}}> {relativeDate(comment.created)}</Text>
-            </Text>
-            <View style={styles.commentText}>{this._renderComment(comment, attachments)}</View>
-          </View>
-        </View>
-      );
+      return <Comment key={comment.id} comment={comment} attachments={attachments}/>;
     });
   }
 
