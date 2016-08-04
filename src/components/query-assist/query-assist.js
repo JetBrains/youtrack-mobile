@@ -3,6 +3,7 @@ import React from 'react';
 import styles from './query-assist.styles';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
 import {COLOR_PINK, COLOR_FONT_GRAY} from '../../components/variables/variables';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 export default class QueryAssist extends React.Component {
   constructor() {
@@ -33,7 +34,8 @@ export default class QueryAssist extends React.Component {
     this.setState({
       showQueryAssist: true,
       displayCancelSearch: true,
-      queryCopy: this.state.input
+      queryCopy: this.state.input,
+      suggestionsListTop: 0
     });
   }
 
@@ -55,6 +57,18 @@ export default class QueryAssist extends React.Component {
     }
   }
 
+  componentDidMount() {
+    setTimeout(this.measureSuggestionsListSpace.bind(this), 0);
+  }
+
+  measureSuggestionsListSpace() {
+    setTimeout(() => {
+      this.refs.queryAssistContainer.measure((ox, oy, width, height, px, assistPositionY) => {
+        this.setState({suggestionsListTop: -assistPositionY});
+      });
+    });
+  }
+
   _renderInput() {
     let cancelButton = null;
     if (this.state.displayCancelSearch) {
@@ -68,7 +82,7 @@ export default class QueryAssist extends React.Component {
     }
 
     return (
-      <View style={styles.inputWrapper}>
+      <View style={styles.inputWrapper} ref="queryAssistContainer">
         <TextInput
           ref="searchInput"
           style={[styles.searchInput, this.state.showQueryAssist ? styles.searchInputActive : null]}
@@ -94,7 +108,7 @@ export default class QueryAssist extends React.Component {
   }
 
   _renderSuggestions() {
-    return <QueryAssistSuggestionsList style={styles.searchSuggestions}
+    return <QueryAssistSuggestionsList style={[styles.searchSuggestions, {top: this.state.suggestionsListTop}]}
                                        getSuggestions={this.getSuggestions.bind(this)}
                                        caret={this.state.caret}
                                        query={this.state.input}
@@ -106,6 +120,10 @@ export default class QueryAssist extends React.Component {
       {this.state.showQueryAssist && this._renderSuggestions()}
 
       {this._renderInput()}
+
+      <View style={styles.keyboardSpacerHiddenContaioner}>
+        <KeyboardSpacer onToggle={() => this.measureSuggestionsListSpace()}/>
+      </View>
     </View>
   }
 }
