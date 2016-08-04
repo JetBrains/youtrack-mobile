@@ -15,6 +15,6 @@ export default class Comment extends React.Component {
         {this._renderIcon()}
         <Text>{this.props.text}</Text>
       </View>
-    )
+    );
   }
 }

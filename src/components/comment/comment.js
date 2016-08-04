@@ -58,6 +58,6 @@ export default class Comment extends React.Component {
           </View>
         </View>
       </Swipeout>
-    )
+    );
   }
 }
