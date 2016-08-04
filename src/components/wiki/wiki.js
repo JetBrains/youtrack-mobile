@@ -13,7 +13,7 @@ export default class Wiki extends React.Component {
         return Linking.openURL(url);
       },
       onImagePress: (url) => {
-        return Router.ShowImage({imageUrl: url, imageName: ''})
+        return Router.ShowImage({imageUrl: url, imageName: ''});
       },
       onIssueIdPress: (issueId) => {
         this.props.onIssueIdTap && this.props.onIssueIdTap(issueId);

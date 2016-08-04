@@ -23,7 +23,7 @@ const extractErrorMessage = function (err) {
 
 const showErrorMessage = function (message, error) {
   console.warn(message, error);
-  showNotification(message, extractErrorMessage(error))
+  showNotification(message, extractErrorMessage(error));
 };
 
 export function notifyError (message, err) {

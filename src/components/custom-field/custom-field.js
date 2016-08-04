@@ -29,7 +29,7 @@ export default class CustomField extends React.Component {
     return {
       color: value.color.foreground,
       backgroundColor: value.color.background
-    }
+    };
   }
 
   _renderValue(value) {

@@ -28,7 +28,7 @@ export default class QueryAssistSuggestionsList extends React.Component {
   }
 
   componentDidMount() {
-    this.loadSuggestions(this.props.query, this.props.caret)
+    this.loadSuggestions(this.props.query, this.props.caret);
   }
 
   componentWillUnmount() {

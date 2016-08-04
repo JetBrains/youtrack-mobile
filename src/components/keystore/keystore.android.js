@@ -8,4 +8,4 @@ export default {
     //TODO: not implemented
     return Promise.reject();
   }
-}
+};

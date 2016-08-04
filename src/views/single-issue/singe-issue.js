@@ -58,7 +58,7 @@ export default class SingeIssueView extends React.Component {
 
     const getIssue = (issueId) => {
       if (/[A-Z]/.test(issueId)) {
-        return this.props.api.hackishGetIssueByIssueReadableId(issueId)
+        return this.props.api.hackishGetIssueByIssueReadableId(issueId);
       }
       return this.props.api.getIssue(issueId);
     };
@@ -85,7 +85,7 @@ export default class SingeIssueView extends React.Component {
       .then((res) => {
         console.info('Comment created', res);
         this.setState({addCommentMode: false});
-        this.loadIssue(this.state.issue.id)
+        this.loadIssue(this.state.issue.id);
       })
       .catch(err => notifyError('Cannot post comment', err));
   }
@@ -129,9 +129,9 @@ export default class SingeIssueView extends React.Component {
       if (issue.fieldHash.Assignee) {
         return `for ${issue.fieldHash.Assignee.fullName || issue.fieldHash.Assignee.login}`;
       }
-      return '    Unassigned'
+      return '    Unassigned';
     };
-    return `${issue.reporter.fullName || issue.reporter.login} ${forText()}`
+    return `${issue.reporter.fullName || issue.reporter.login} ${forText()}`;
   }
 
   onIssueFieldValueUpdate(field, value) {
@@ -156,7 +156,7 @@ export default class SingeIssueView extends React.Component {
 
     return this.props.api.updateProject(this.state.issue, project)
       .catch((err) => notifyError('Failed to update issue project', err))
-      .then(() => this.loadIssue(this.state.issue.id))
+      .then(() => this.loadIssue(this.state.issue.id));
   }
 
   onSaveChanges() {
@@ -214,7 +214,7 @@ export default class SingeIssueView extends React.Component {
     const addAttachmentAction = this.issuePermissions.canAddAttachmentTo(this.state.issue) ? {
       title: 'Attach image...',
       execute: this.attachPhoto.bind(this)
-    } : null
+    } : null;
 
     const actions = [
       editAction,
@@ -252,7 +252,7 @@ export default class SingeIssueView extends React.Component {
                      rightButton={rightButton}
                      onRightButtonClick={() => this._showActions()}>
         {title}
-      </Header>
+      </Header>;
 
     } else {
       const canSave = Boolean(this.state.summaryCopy) && !this.state.isSavingEditedIssue;
@@ -263,7 +263,7 @@ export default class SingeIssueView extends React.Component {
                      rightButton={saveButton}
                      onRightButtonClick={() => canSave && this.onSaveChanges()}>
         {title}
-      </Header>
+      </Header>;
 
     }
   }
@@ -304,9 +304,9 @@ export default class SingeIssueView extends React.Component {
       {tags.map(tag => {
         return <TouchableOpacity onPress={() => this.openIssueListWithSearch(tag.query)} key={tag.id} style={styles.tagButton}>
           <ColorField text={tag.name} color={tag.color} fullText={true} style={styles.tagColorField}/>
-        </TouchableOpacity>
+        </TouchableOpacity>;
       })}
-    </View>
+    </View>;
   }
 
   _renderIssueView(issue) {

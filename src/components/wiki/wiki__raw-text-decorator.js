@@ -19,7 +19,7 @@ export function decorateIssueLinks(rawText, wikifiedText) {
 
   issuesMap.forEach((issueSummary, issueId) => {
     rawText = rawText.replace(new RegExp(issueId), decorateIssueLink(issueId, issuesMap.get(issueId)));
-  })
+  });
 
   return rawText;
 }
@@ -36,7 +36,7 @@ export function decorateUserNames(rawText, wikifiedText) {
 
   issuesMap.forEach((username, login) => {
     rawText = rawText.replace(new RegExp(`@${login}`), decorateUserName(login, username));
-  })
+  });
 
   return rawText;
 }

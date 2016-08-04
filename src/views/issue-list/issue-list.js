@@ -7,7 +7,7 @@ import {
   RefreshControl,
   Platform,
   AppState
-} from 'react-native'
+} from 'react-native';
 import React from 'react';
 
 import openUrlHandler from '../../components/open-url-handler/open-url-handler';
@@ -75,7 +75,7 @@ class IssueList extends React.Component {
     }));
 
     if (this.props.query) {
-      this.setQuery(this.props.query)
+      this.setQuery(this.props.query);
     } else {
       this.loadStoredQuery().then(query => this.setQuery(query));
     }
@@ -162,7 +162,7 @@ class IssueList extends React.Component {
       .catch((err) => {
         this.setState({isLoadingMore: false});
         return notifyError('Failed to fetch issues', err);
-      })
+      });
   }
 
   getSuggestions(query, caret) {
@@ -197,7 +197,7 @@ class IssueList extends React.Component {
               this.setState({
                 dataSource: this.state.dataSource.cloneWithRows(updatedIssues)
               });
-            }})
+            }});
           }
         }
       >
@@ -216,11 +216,11 @@ class IssueList extends React.Component {
 
   _renderListMessage() {
     if (!this.state.isRefreshing && !this.state.isLoadingMore && this.state.issues.length === 0) {
-      return <Text style={styles.loadingMore}>No issues found</Text>
+      return <Text style={styles.loadingMore}>No issues found</Text>;
     }
 
     if (this.state.isLoadingMore && !this.state.listEndReached) {
-      return <Text style={styles.loadingMore}>Loading more issues...</Text>
+      return <Text style={styles.loadingMore}>Loading more issues...</Text>;
     }
   }
 

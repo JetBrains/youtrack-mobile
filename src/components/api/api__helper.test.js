@@ -8,7 +8,7 @@ describe('Api helper', () => {
 
   describe('toField', () => {
     it('should convert fields array to srting', () => {
-      const fields = ApiHelper.toField(['foo', 'bar'])
+      const fields = ApiHelper.toField(['foo', 'bar']);
       fields.toString().should.equal('foo,bar');
     });
 
@@ -21,7 +21,7 @@ describe('Api helper', () => {
     });
 
     it('should convert fields hash to srting', () => {
-      const fields = ApiHelper.toField([{foo: ['bar']}])
+      const fields = ApiHelper.toField([{foo: ['bar']}]);
       fields.toString().should.equal('foo(bar)');
     });
 
@@ -34,7 +34,7 @@ describe('Api helper', () => {
               foobar: ['test']
             }
           }]
-      }])
+      }]);
       fields.toString().should.equal('foo(first,bar(foobar(test)))');
     });
 
@@ -43,7 +43,7 @@ describe('Api helper', () => {
         foo: {
           bar: ApiHelper.toField(['first', 'second'])
         }
-      }])
+      }]);
       fields.toString().should.equal('foo(bar(first,second))');
     });
   });
@@ -62,7 +62,7 @@ describe('Api helper', () => {
             value: {foo: 'bar'}
           }
         ]
-      }
+      };
     });
 
     it('should convert fields array to field hash object', () => {

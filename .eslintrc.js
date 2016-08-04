@@ -1,3 +1,5 @@
+var ERROR = 2;
+
 module.exports = {
   'extends': [
     'defaults'
@@ -9,26 +11,27 @@ module.exports = {
     'flow-vars'
   ],
   'rules': {
-    'no-unused-vars': [2, {'vars': 'local', 'args': 'none'}],
+    'no-unused-vars': [ERROR, {'vars': 'local', 'args': 'none'}],
     'no-console': 0,
-    'quotes': [2, 'single', {'allowTemplateLiterals': true}],
+    'quotes': [ERROR, 'single', {'allowTemplateLiterals': true}],
+    'semi': ERROR,
     //ES6
-    'constructor-super': 2,
-    'arrow-spacing': 2,
-    'no-const-assign': 2,
-    'no-var': 2,
-    'prefer-spread': 2,
-    'prefer-template': 2,
-    'no-dupe-class-members': 2,
-    'no-this-before-super': 2,
+    'constructor-super': ERROR,
+    'arrow-spacing': ERROR,
+    'no-const-assign': ERROR,
+    'no-var': ERROR,
+    'prefer-spread': ERROR,
+    'prefer-template': ERROR,
+    'no-dupe-class-members': ERROR,
+    'no-this-before-super': ERROR,
     //React
-    'react/jsx-uses-react': 2,
-    'react/jsx-key': 2,
-    'react/no-deprecated': 2,
-    'react/jsx-max-props-per-line': [2, {maximum: 4}],
-    'react/jsx-uses-vars': 2,
-    'react-native/no-unused-styles': 2,
-    'react-native/split-platform-components': 2,
+    'react/jsx-uses-react': ERROR,
+    'react/jsx-key': ERROR,
+    'react/no-deprecated': ERROR,
+    'react/jsx-max-props-per-line': [ERROR, {maximum: 4}],
+    'react/jsx-uses-vars': ERROR,
+    'react-native/no-unused-styles': ERROR,
+    'react-native/split-platform-components': ERROR,
 
     'flow-vars/define-flow-type': 1,
     'flow-vars/use-flow-type': 1

@@ -92,7 +92,7 @@ let API = {
     let fieldType = map[projectType];
 
     if (isMultiple) {
-      fieldType = fieldType.replace('Single', 'Multi')
+      fieldType = fieldType.replace('Single', 'Multi');
     }
     return fieldType;
   }

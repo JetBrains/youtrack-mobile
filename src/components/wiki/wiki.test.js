@@ -12,7 +12,7 @@ describe('<Wiki/>', () => {
 
   it('should render just text', () => {
     let wrapper = shallow(<Wiki>foo bar</Wiki>);
-    wrapper.html().should.contain('foo bar')
+    wrapper.html().should.contain('foo bar');
   });
 
   it('should render bold text', () => {
