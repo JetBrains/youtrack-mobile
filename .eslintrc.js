@@ -31,7 +31,10 @@ module.exports = {
     'react/jsx-max-props-per-line': [ERROR, {maximum: 4}],
     'react/jsx-uses-vars': ERROR,
     'react-native/no-unused-styles': ERROR,
-    'react-native/split-platform-components': ERROR
+    'react-native/split-platform-components': ERROR,
+
+    'flow-vars/define-flow-type': 1,
+    'flow-vars/use-flow-type': 1
   },
   'env': {
     'es6': true,
