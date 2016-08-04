@@ -162,13 +162,13 @@ export default class Auth {
         'Authorization': `${authParams.token_type} ${authParams.access_token}`
       }
     }).then((res) => {
-        if (res.status > 400) {
-          console.log('Check token error', res);
-          throw res;
-        }
-        console.info('Token has been verified');
+      if (res.status > 400) {
+        console.log('Check token error', res);
+        throw res;
+      }
+      console.info('Token has been verified');
       return res.json();
-      })
+    })
       .then(currentUser => {
         this.currentUser = currentUser;
         return authParams;

@@ -23,3 +23,5 @@ declare type IssueFull = {
   //To continue
   fieldHash: any
 };
+
+declare type AnyIssue = IssueOnList | IssueFull;
