@@ -94,7 +94,7 @@ export default class SingeIssueView extends React.Component {
     const options = {
       takePhotoButtonTitle: 'Take photo',
       chooseFromLibraryButtonTitle: 'Choose from libary'
-    }
+    };
     ImagePicker.showImagePicker(options, (res) => {
       if (res.didCancel) {
         return;
@@ -193,6 +193,12 @@ export default class SingeIssueView extends React.Component {
     Router.IssueList({auth: this.props.api.auth, query: query});
   }
 
+  _makeIssueWebUrl(issue, commentId) {
+    const {numberInProject, project} = this.state.issue;
+    const commentHash = commentId ? `#comment=${commentId}` : '';
+    return `${this.props.api.config.backendUrl}/issue/${project.shortName}-${numberInProject}${commentHash}`;
+  }
+
   _showActions() {
     const editAction = this.issuePermissions.canUpdateGeneralInfo(this.state.issue) ? {
       title: 'Edit issue',
@@ -214,10 +220,7 @@ export default class SingeIssueView extends React.Component {
       editAction,
       {
         title: 'Copy issue URL',
-        execute: () => {
-          const {numberInProject, project} = this.state.issue;
-          Clipboard.setString(`${this.props.api.config.backendUrl}/issue/${project.shortName}-${numberInProject}`)
-        }
+        execute: () => Clipboard.setString(this._makeIssueWebUrl(this.state.issue))
       },
       addAttachmentAction,
       {title: 'Cancel'}
@@ -382,6 +385,7 @@ export default class SingeIssueView extends React.Component {
                   initialCommentText: `@${comment.author.login} `
                 });
               }}
+              onCopyCommentLink={(comment) => Clipboard.setString(this._makeIssueWebUrl(this.state.issue, comment.id))}
               onIssueIdTap={issueId => this.goToIssueById(issueId)}/>
           </View>}
         </ScrollView>}
