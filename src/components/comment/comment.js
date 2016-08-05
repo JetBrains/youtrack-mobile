@@ -7,7 +7,7 @@ import {View, Text, Image} from 'react-native';
 import React from 'react';
 import Swipeout from 'react-native-swipeout';
 import SwipeButton from './comment__swipe-button';
-import {comment, next} from '../icon/icon';
+import {reply, share} from '../icon/icon';
 
 export default class Comment extends React.Component {
   static defaultProps = {
@@ -21,11 +21,11 @@ export default class Comment extends React.Component {
     const swipeoutBtns = [
       {
         backgroundColor: COLOR_PINK,
-        component: <SwipeButton text="Reply" icon={comment}/>,
+        component: <SwipeButton text="Reply" icon={reply}/>,
         onPress: this.props.onReply
       }, {
         backgroundColor: '#000',
-        component: <SwipeButton text="Copy link" icon={next}/>,
+        component: <SwipeButton text="Copy link" icon={share}/>,
         onPress: this.props.onCopyCommentLink
       }
     ];

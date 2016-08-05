@@ -4,8 +4,8 @@ import {UNIT} from '../../components/variables/variables';
 export default StyleSheet.create({
   commentWrapper: {
     flexDirection: 'row',
-    marginBottom: UNIT,
-    marginTop: UNIT,
+    marginBottom: 10,
+    marginTop: 10,
     paddingLeft: UNIT * 2,
     paddingRight: UNIT * 2
   },
@@ -25,12 +25,19 @@ export default StyleSheet.create({
   },
 
   swipeButton: {
-    width: UNIT * 8
+    paddingTop: UNIT * 2,
+    flex: 1,
+    alignItems: 'center'
   },
   swipeButtonIcon: {
-    opacity: 0.8,
     marginTop: 4,
-    width: UNIT * 3.5,
-    height: UNIT * 3.5
+    width: UNIT * 2,
+    height: UNIT * 2
+  },
+  swipeButtonText: {
+    color: '#FFF',
+    paddingTop: UNIT,
+    fontSize: 10,
+    fontFamily: 'System'
   }
 });

@@ -13,7 +13,7 @@ export default class Comment extends React.Component {
     return (
       <View style={styles.swipeButton}>
         {this._renderIcon()}
-        <Text>{this.props.text}</Text>
+        <Text style={styles.swipeButtonText}>{this.props.text}</Text>
       </View>
     );
   }
