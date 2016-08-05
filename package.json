@@ -54,6 +54,7 @@
     "chai": "3.5.0",
     "chai-enzyme": "^0.4.1",
     "cheerio": "0.20.0",
+    "core-util-is": "1.0.0",
     "enzyme": "2.3.0",
     "eslint": "3.0.1",
     "eslint-config-defaults": "9.0.0",
