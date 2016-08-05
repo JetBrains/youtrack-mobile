@@ -42,22 +42,24 @@ export default class Comment extends React.Component {
     const {comment, attachments} = this.props;
 
     return (
-      <Swipeout
-        key={comment.id}
-        backgroundColor={COLOR_LIGHT_GRAY}
-        right={this._getCommentActionButtons()}
-        autoClose={true}>
-        <View style={styles.commentWrapper}>
-          <Image style={styles.avatar} source={{uri: comment.author.avatarUrl}}/>
-          <View style={styles.comment}>
-            <Text>
-              <Text style={{color: COLOR_LINK}}>{comment.author.fullName || comment.author.login}</Text>
-              <Text style={{color: COLOR_FONT_GRAY}}> {relativeDate(comment.created)}</Text>
-            </Text>
-            <View style={styles.commentText}>{this._renderComment(comment, attachments)}</View>
+      <View>
+        <Swipeout
+          key={comment.id}
+          backgroundColor={COLOR_LIGHT_GRAY}
+          right={this._getCommentActionButtons()}
+          autoClose={true}>
+          <View style={styles.commentWrapper}>
+            <Image style={styles.avatar} source={{uri: comment.author.avatarUrl}}/>
+            <View style={styles.comment}>
+              <Text>
+                <Text style={{color: COLOR_LINK}}>{comment.author.fullName || comment.author.login}</Text>
+                <Text style={{color: COLOR_FONT_GRAY}}> {relativeDate(comment.created)}</Text>
+              </Text>
+              <View style={styles.commentText}>{this._renderComment(comment, attachments)}</View>
+            </View>
           </View>
-        </View>
-      </Swipeout>
+        </Swipeout>
+      </View>
     );
   }
 }
