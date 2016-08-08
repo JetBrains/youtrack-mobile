@@ -47,6 +47,7 @@ export default class Comment extends React.Component {
           key={comment.id}
           backgroundColor={COLOR_LIGHT_GRAY}
           right={this._getCommentActionButtons()}
+          sensitivity={30}
           autoClose={true}>
           <View style={styles.commentWrapper}>
             <Image style={styles.avatar} source={{uri: comment.author.avatarUrl}}/>
