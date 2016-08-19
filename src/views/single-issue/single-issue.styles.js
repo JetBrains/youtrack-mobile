@@ -17,11 +17,13 @@ export default StyleSheet.create({
   },
   issueViewContainer: {
     padding: UNIT * 2,
+    paddingTop: UNIT,
     backgroundColor: '#FFF'
   },
   authorForText: {
-    marginTop: UNIT,
-    color: '#666'
+    paddingTop: 2,
+    fontSize: 14,
+    color: COLOR_FONT_GRAY
   },
   tagsContainer: {
     flexDirection: 'row',
@@ -37,13 +39,13 @@ export default StyleSheet.create({
     margin: UNIT/4
   },
   summary: {
-    paddingTop: UNIT * 2,
-    fontSize: 18,
+    paddingTop: UNIT,
+    fontSize: 20,
+    lineHeight: 24,
     fontWeight: 'bold',
     color: COLOR_FONT
   },
   description: {
-    paddingTop: UNIT * 2
   },
   summaryInput: {
     marginTop: UNIT,
@@ -62,14 +64,15 @@ export default StyleSheet.create({
   },
   attachesContainer: {
     marginTop: UNIT * 2,
-    marginLeft: -UNIT * 2,
     paddingLeft: UNIT * 2,
+    marginBottom: 2,
+    marginLeft: -UNIT * 2,
     marginRight: -UNIT * 2
   },
   attachmentImage: {
     marginRight: UNIT * 2,
     width: 120,
-    height: 60,
+    height: UNIT * 8,
     borderRadius: 4,
     resizeMode: 'cover'
   },

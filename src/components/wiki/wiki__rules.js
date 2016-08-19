@@ -13,13 +13,13 @@ export default function (actions) {
      */
     newline: Object.assign({}, SimpleMarkdown.defaultRules.newline, {
       react: (node, output, state) => {
-        return <Text key={state.key} selectable={true}>{'\n'}</Text>;
+        return <Text key={state.key} selectable={true} style={styles.commonTextItem}>{'\n'}</Text>;
       }
     }),
     paragraph: Object.assign({}, SimpleMarkdown.defaultRules.paragraph, {
       react: (node, output, state) => {
         return <View key={state.key}>
-          <Text selectable={true}>{output(node.content, state)}</Text>
+          <Text selectable={true} style={styles.commonTextItem}>{output(node.content, state)}</Text>
         </View>;
       }
     }),

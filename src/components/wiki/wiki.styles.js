@@ -1,9 +1,14 @@
 import {StyleSheet, Platform} from 'react-native';
 import {COLOR_LIGHT_GRAY, COLOR_LINK, COLOR_FONT} from '../variables/variables';
+const FONT_SIZE = 16;
 
 export default StyleSheet.create({
+  commonTextItem: {
+    fontSize: FONT_SIZE
+  },
   text: {
-    color: COLOR_FONT
+    color: COLOR_FONT,
+    fontSize: FONT_SIZE
   },
   heading: {
     color: COLOR_FONT,
@@ -11,9 +16,11 @@ export default StyleSheet.create({
   },
   strong: {
     color: COLOR_FONT,
+    fontSize: FONT_SIZE,
     fontWeight: 'bold'
   },
   monospace: {
+    fontSize: FONT_SIZE,
     ...Platform.select({
       ios: {
         fontFamily: 'Courier New'
@@ -25,14 +32,17 @@ export default StyleSheet.create({
   },
   underline: {
     color: COLOR_FONT,
+    fontSize: FONT_SIZE,
     textDecorationLine: 'underline'
   },
   del: {
     color: COLOR_FONT,
+    fontSize: FONT_SIZE,
     textDecorationLine: 'line-through'
   },
   italic: {
     color: COLOR_FONT,
+    fontSize: FONT_SIZE,
     fontStyle: 'italic'
   },
   image: {
@@ -42,20 +52,24 @@ export default StyleSheet.create({
   },
   link: {
     color: COLOR_LINK,
+    fontSize: FONT_SIZE,
     textDecorationLine: 'underline'
   },
   codeBlock: {
     color: COLOR_FONT,
+    fontSize: FONT_SIZE,
     backgroundColor: COLOR_LIGHT_GRAY,
     fontFamily: 'Courier'
   },
   cutBlock: {
+    fontSize: FONT_SIZE,
     color: COLOR_FONT,
     backgroundColor: COLOR_LIGHT_GRAY,
     fontFamily: 'Courier'
   },
   inlineCode: {
     color: COLOR_FONT,
+    fontSize: FONT_SIZE,
     fontFamily: 'Courier'
   }
 });

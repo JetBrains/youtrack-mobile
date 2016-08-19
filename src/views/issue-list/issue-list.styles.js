@@ -32,7 +32,7 @@ module.exports = StyleSheet.create({
     justifyContent: 'space-between'
   },
   arrowImage: {
-    marginTop: 3,
+    marginTop: 4,
     height: 14,
     resizeMode: 'contain'
   },
