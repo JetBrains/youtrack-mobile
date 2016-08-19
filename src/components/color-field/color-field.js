@@ -1,7 +1,7 @@
 import {View, Text, StyleSheet} from 'react-native';
 import React, {PropTypes} from 'react';
 
-export const SIZE = 22;
+export const SIZE = 20;
 
 export default class ColorField extends React.Component {
   _getBackgroundColor() {

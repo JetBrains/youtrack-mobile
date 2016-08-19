@@ -5,7 +5,7 @@ import {COLOR_FONT_GRAY} from '../../components/variables/variables';
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import React from 'react';
 
-class IssueRow extends React.Component {
+export default class IssueRow extends React.Component {
   static _getSubText(issue) {
 
     let forText = () => {
@@ -25,31 +25,28 @@ class IssueRow extends React.Component {
   }
 
   render() {
-    let issue = this.props.issue;
+    const issue = this.props.issue;
+    const prioityBlock =issue.fieldHash.Priority ?
+      <ColorField text={issue.fieldHash.Priority.name} color={issue.fieldHash.Priority.color}></ColorField> :
+      <View style={styles.priorityPlaceholder}/>;
 
     return (
       <TouchableOpacity onPress={() => this.props.onClick(issue)}>
         <View style={styles.row}>
           <View>
-            <View>
-              {issue.fieldHash.Priority ?
-                  <ColorField text={issue.fieldHash.Priority.name} color={issue.fieldHash.Priority.color}></ColorField> :
-                  <View style={styles.priorityPlaceholder}/>}
-            </View>
+            <View>{prioityBlock}</View>
           </View>
           <View style={styles.rowText}>
             <View style={styles.rowTopLine}>
-              <Text style={[styles.summary, this.getSummaryStyle(issue)]}>
+              <Text style={[styles.summary, this.getSummaryStyle(issue)]} numberOfLines={1}>
                 {issue.summary}
               </Text>
               <Image style={styles.arrowImage} source={next}></Image>
             </View>
-            <Text style={styles.subtext}>{IssueRow._getSubText(issue)}</Text>
+            <Text style={styles.subtext} numberOfLines={1}>{IssueRow._getSubText(issue)}</Text>
           </View>
         </View>
       </TouchableOpacity>
     );
   }
 }
-
-module.exports = IssueRow;

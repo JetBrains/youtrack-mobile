@@ -5,7 +5,7 @@ import TOP_PADDING from './header__top-padding';
 module.exports = StyleSheet.create({
   header: {
     paddingTop: TOP_PADDING,
-    paddingBottom: 10,
+    paddingBottom: 9,
     flexDirection: 'row',
     justifyContent: 'space-between',
 

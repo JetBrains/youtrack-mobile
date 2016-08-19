@@ -14,13 +14,13 @@ module.exports = StyleSheet.create({
   row: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    paddingLeft: UNIT * 2,
-    paddingRight: UNIT * 2,
-    paddingTop: UNIT,
-    paddingBottom: UNIT
+    paddingLeft: 10,
+    paddingRight: UNIT * 1.5,
+    paddingTop: 13,
+    paddingBottom: UNIT*2
   },
   rowText: {
-    marginLeft: UNIT * 2,
+    marginLeft: 10,
     flex: 1
   },
   priorityPlaceholder: {
@@ -32,21 +32,23 @@ module.exports = StyleSheet.create({
     justifyContent: 'space-between'
   },
   arrowImage: {
+    marginTop: 3,
     height: 14,
     resizeMode: 'contain'
   },
   separator: {
     height: 0.5,
-    marginLeft: 52,
+    marginLeft: 40,
     backgroundColor: COLOR_GRAY
   },
   summary: {
-    flexWrap: 'nowrap',
-    color: COLOR_FONT
+    color: COLOR_FONT,
+    fontSize: 17,
+    lineHeight: 20
   },
   subtext: {
-    paddingTop: UNIT,
-    fontSize: 12,
+    paddingTop: 6,
+    fontSize: 14,
     color: COLOR_FONT_GRAY
   },
   loadingMore: {
