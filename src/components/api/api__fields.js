@@ -112,7 +112,7 @@ const ISSUE_TAGS_FIELDS = toField([
   'id',
   'query',
   {
-    color: ['id']
+    color: ['id', 'background', 'foreground']
   }
 ]);
 
