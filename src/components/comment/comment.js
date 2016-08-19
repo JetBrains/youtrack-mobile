@@ -1,7 +1,7 @@
 import styles from './comment.styles';
 import relativeDate from 'relative-date';
 import Wiki, {decorateRawText} from '../../components/wiki/wiki';
-import {COLOR_LIGHT_GRAY, COLOR_FONT_GRAY, COLOR_LINK, COLOR_PINK} from '../../components/variables/variables';
+import {COLOR_LIGHT_GRAY, COLOR_FONT_GRAY, COLOR_PINK} from '../../components/variables/variables';
 
 import {View, Text, Image} from 'react-native';
 import React from 'react';
@@ -53,7 +53,7 @@ export default class Comment extends React.Component {
             <Image style={styles.avatar} source={{uri: comment.author.avatarUrl}}/>
             <View style={styles.comment}>
               <Text>
-                <Text style={{color: COLOR_LINK}}>{comment.author.fullName || comment.author.login}</Text>
+                <Text style={styles.authorName}>{comment.author.fullName || comment.author.login}</Text>
                 <Text style={{color: COLOR_FONT_GRAY}}> {relativeDate(comment.created)}</Text>
               </Text>
               <View style={styles.commentText}>{this._renderComment(comment, attachments)}</View>

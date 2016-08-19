@@ -70,7 +70,7 @@ export default StyleSheet.create({
     marginRight: -UNIT * 2
   },
   attachmentImage: {
-    marginRight: UNIT * 2,
+    marginRight: UNIT,
     width: 120,
     height: UNIT * 8,
     borderRadius: 4,
@@ -146,8 +146,8 @@ export default StyleSheet.create({
     opacity: 0.7,
     position: 'absolute',
 
-    right: UNIT * 2,
-    bottom: UNIT * 9
+    right: UNIT,
+    bottom: UNIT * 8
   },
   addCommentButton: {
     flex: 1,

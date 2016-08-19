@@ -1,22 +1,25 @@
 import {StyleSheet} from 'react-native';
-import {UNIT} from '../../components/variables/variables';
+import {UNIT, COLOR_FONT} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   commentWrapper: {
     flexDirection: 'row',
-    marginBottom: 10,
-    marginTop: 10,
-    paddingLeft: UNIT * 2,
-    paddingRight: UNIT * 2
+    marginBottom: UNIT,
+    marginTop: UNIT,
+    paddingLeft: UNIT,
+    paddingRight: UNIT
   },
 
+  authorName: {
+    color: COLOR_FONT,
+    fontWeight: 'bold'
+  },
   avatar: {
-    width: UNIT * 4,
-    height: UNIT * 4,
-    borderRadius: UNIT * 2
+    width: 40,
+    height: 40,
+    borderRadius: 20
   },
   comment: {
-    marginTop: UNIT / 2,
     marginLeft: UNIT,
     flex: 1
   },
