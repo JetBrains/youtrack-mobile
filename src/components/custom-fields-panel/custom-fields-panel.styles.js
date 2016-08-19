@@ -4,7 +4,7 @@ const SAVING_ALPHA = '70';
 
 export default StyleSheet.create({
   customFieldsPanel: {
-    paddingLeft: UNIT,
+    paddingLeft: UNIT * 2,
     flexDirection: 'row',
     backgroundColor: '#FFF',
     height: FOOTER_HEIGHT,

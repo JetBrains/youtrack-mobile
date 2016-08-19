@@ -1,6 +1,6 @@
 import {TouchableOpacity, View, Text, StyleSheet, Platform} from 'react-native';
 import React, {PropTypes} from 'react';
-import {COLOR_FONT_GRAY, COLOR_PINK, COLOR_FONT} from '../variables/variables';
+import {COLOR_FONT_GRAY, COLOR_PINK, COLOR_FONT, UNIT} from '../variables/variables';
 
 export default class CustomField extends React.Component {
   _getValue(value) {
@@ -66,7 +66,9 @@ const SELECTED_ALPHA_HEX = 20;
 
 const styles = StyleSheet.create({
   wrapper: {
-    padding: 8
+    padding: UNIT,
+    paddingLeft: 0,
+    paddingRight: UNIT * 1.5
   },
   wrapperActive: {
     backgroundColor: `${COLOR_PINK}${SELECTED_ALPHA_HEX}`
@@ -77,8 +79,9 @@ const styles = StyleSheet.create({
   },
   keyText: {
     color: COLOR_FONT,
-    paddingTop: 4,
-    fontSize: 12
+    paddingTop: 2,
+    fontSize: 11,
+    fontFamily: 'System'
   },
   valueText: {
     color: COLOR_FONT,
