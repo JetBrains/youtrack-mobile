@@ -30,7 +30,7 @@ const QUERY_STORAGE_KEY = 'YT_QUERY_STORAGE';
 const PAGE_SIZE = 10;
 const ISSUES_CACHE_KEY = 'yt_mobile_issues_cache';
 
-let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 class IssueList extends React.Component {
 

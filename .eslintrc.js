@@ -20,6 +20,7 @@ module.exports = {
     'arrow-spacing': ERROR,
     'no-const-assign': ERROR,
     'no-var': ERROR,
+    'prefer-const': ERROR,
     'prefer-spread': ERROR,
     'prefer-template': ERROR,
     'no-dupe-class-members': ERROR,

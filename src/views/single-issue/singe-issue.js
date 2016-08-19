@@ -125,7 +125,7 @@ export default class SingeIssueView extends React.Component {
 
   getAuthorForText(issue) {
 
-    let forText = () => {
+    const forText = () => {
       if (issue.fieldHash.Assignee) {
         return `for ${issue.fieldHash.Assignee.fullName || issue.fieldHash.Assignee.login}`;
       }

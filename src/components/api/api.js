@@ -15,8 +15,8 @@ class Api {
   }
 
   makeAuthorizedRequest(url, method, body) {
-    let sendRequest = () => {
-      let authParams = this.auth.authParams;
+    const sendRequest = () => {
+      const authParams = this.auth.authParams;
 
       return fetch(url, {
         method,
@@ -150,7 +150,7 @@ class Api {
     formDataContent.append('photo', {uri: fileUri, name: fileName, type: 'image/binary'});
 
     return new Promise((resolve, reject) => {
-      let xhr = new XMLHttpRequest(); //eslint-disable-line no-undef
+      const xhr = new XMLHttpRequest(); //eslint-disable-line no-undef
       xhr.open('POST', `${this.youTrackUrl}/rest/issue/${issueId}/attachment`);
 
       xhr.onreadystatechange = function () {

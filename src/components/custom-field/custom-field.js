@@ -18,7 +18,7 @@ export default class CustomField extends React.Component {
   }
 
   _getKey() {
-    let field = this.props.field;
+    const field = this.props.field;
     return field.projectCustomField.field.name;
   }
 

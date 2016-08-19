@@ -8,7 +8,7 @@ import React from 'react';
 export default class IssueRow extends React.Component {
   static _getSubText(issue) {
 
-    let forText = () => {
+    const forText = () => {
       if (issue.fieldHash.Assignee) {
         return `for ${issue.fieldHash.Assignee.fullName || issue.fieldHash.Assignee.login}`;
       }

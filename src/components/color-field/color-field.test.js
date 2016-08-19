@@ -14,19 +14,19 @@ describe('<ColorField/>', () => {
   });
 
   it('should init', () => {
-    let wrapper = shallow(<ColorField text={fakeField.name} color={fakeField.color}/>);
+    const wrapper = shallow(<ColorField text={fakeField.name} color={fakeField.color}/>);
 
     wrapper.should.be.defined;
   });
 
   it('should render first letter of color field', () => {
-    let wrapper = shallow(<ColorField text={fakeField.name} color={fakeField.color}/>);
+    const wrapper = shallow(<ColorField text={fakeField.name} color={fakeField.color}/>);
 
     wrapper.find('Text').children().should.have.text('T');
   });
 
   it('should render whole text of color field', () => {
-    let wrapper = shallow(<ColorField text={fakeField.name} fullText={true} color={fakeField.color}/>);
+    const wrapper = shallow(<ColorField text={fakeField.name} fullText={true} color={fakeField.color}/>);
 
     wrapper.find('Text').children().should.have.text(fakeField.name);
   });

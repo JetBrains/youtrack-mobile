@@ -3,7 +3,7 @@ import React from 'react';
 import {UNIT} from '../variables/variables';
 import InvertibleScrollView from 'react-native-invertible-scroll-view';
 
-let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 export default class QueryAssistSuggestionsList extends React.Component {
   constructor() {
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
 });
 
 function transformSuggestions(suggest) {
-  let result = [];
+  const result = [];
   for (let i = 0, length = suggest.length; i < length; i++) {
     result.push({
       prefix: suggest[i].pre || '',

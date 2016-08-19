@@ -8,7 +8,7 @@ const STORAGE_KEY = 'yt_mobile_auth';
 const ACCEPT_HEADER = 'application/json, text/plain, */*';
 
 function makeBtoa(str) {
-  let byteArray = [];
+  const byteArray = [];
   for (let i = 0; i < str.length; i++) {
     byteArray.push(str.charCodeAt(i));
   }

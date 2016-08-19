@@ -27,7 +27,7 @@ export default class SingleIssueComments extends React.Component {
     let comments = this.props.comments;
     comments = comments.reduceRight((val, item) => val.concat([item]), []); //reverse to get designed order of comments
 
-    let NoComments = <Text style={{textAlign: 'center'}}>No comments yet</Text>;
+    const NoComments = <Text style={{textAlign: 'center'}}>No comments yet</Text>;
 
     return (<View style={styles.commentsContainer}>
       {comments.length ? this._renderCommentsList(comments, this.props.attachments) : NoComments}

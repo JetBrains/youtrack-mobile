@@ -98,7 +98,7 @@ class YouTrackMobile extends React.Component {
   render() {
     return <ActionSheet ref={component => this._actionSheetRef = component}>
       {Router.renderNavigatorView({initialRoute: Router.routes.Home})}
-    </ActionSheet>
+    </ActionSheet>;
   }
 }
 

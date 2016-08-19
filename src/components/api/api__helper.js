@@ -1,8 +1,8 @@
 /* @flow */
 
-let API = {
+const API = {
   fillFieldHashOldRest: (issue: IssueOnList) => {
-    let fieldHash = {};
+    const fieldHash = {};
 
     (issue.field || []).forEach((field) => {
       const fieldName = field.name;
@@ -20,7 +20,7 @@ let API = {
   },
 
   makeFieldHash: (issue: IssueOnList) => {
-    let fieldHash = {};
+    const fieldHash = {};
     (issue.fields || []).forEach(field => {
       const fieldName = field.projectCustomField.field.name;
       fieldHash[fieldName] = field.value;
