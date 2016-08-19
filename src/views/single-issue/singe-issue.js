@@ -243,7 +243,9 @@ export default class SingeIssueView extends React.Component {
   }
 
   _renderHeader() {
-    const title = <Text style={styles.headerText}>{this.state.issue && (`${this.state.issue.project.shortName}-${this.state.issue.numberInProject}`)}</Text>;
+    const title = <Text style={styles.headerText} selectable={true}>
+      {this.state.issue && (`${this.state.issue.project.shortName}-${this.state.issue.numberInProject}`)}
+    </Text>;
 
     if (!this.state.editMode) {
       const rightButton = this.state.issue ? <Text>Actions</Text> : null;
@@ -314,7 +316,7 @@ export default class SingeIssueView extends React.Component {
       <View style={styles.issueViewContainer}>
         {this._renderTags(issue.tags)}
 
-        <Text style={styles.authorForText}>{this.getAuthorForText(issue)}</Text>
+        <Text style={styles.authorForText} selectable={true}>{this.getAuthorForText(issue)}</Text>
 
         {this.state.editMode && <View>
           <TextInput
@@ -337,7 +339,7 @@ export default class SingeIssueView extends React.Component {
         </View>}
 
         {!this.state.editMode && <View>
-          <Text style={styles.summary}>{issue.summary}</Text>
+          <Text style={styles.summary}  selectable={true}>{issue.summary}</Text>
 
           {issue.links && <LinkedIssues links={issue.links} onIssueTap={issue => this.goToIssue(issue)}/>}
 

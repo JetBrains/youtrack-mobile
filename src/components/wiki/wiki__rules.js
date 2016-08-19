@@ -13,19 +13,19 @@ export default function (actions) {
      */
     newline: Object.assign({}, SimpleMarkdown.defaultRules.newline, {
       react: (node, output, state) => {
-        return <Text key={state.key}>{'\n'}</Text>;
+        return <Text key={state.key} selectable={true}>{'\n'}</Text>;
       }
     }),
     paragraph: Object.assign({}, SimpleMarkdown.defaultRules.paragraph, {
       react: (node, output, state) => {
         return <View key={state.key}>
-          <Text>{output(node.content, state)}</Text>
+          <Text selectable={true}>{output(node.content, state)}</Text>
         </View>;
       }
     }),
     text: Object.assign({}, SimpleMarkdown.defaultRules.text, {
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.text}>{node.content}</Text>;
+        return <Text key={state.key} style={styles.text} selectable={true}>{node.content}</Text>;
       }
     }),
 
@@ -38,7 +38,7 @@ export default function (actions) {
       },
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.strong}>{output(node.content)}</Text>;
+        return <Text key={state.key} style={styles.strong} selectable={true}>{output(node.content)}</Text>;
       }
     }),
 
@@ -48,7 +48,7 @@ export default function (actions) {
       },
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.monospace}>{output(node.content)}</Text>;
+        return <Text key={state.key} style={styles.monospace} selectable={true}>{output(node.content)}</Text>;
       }
     }),
 
@@ -64,7 +64,7 @@ export default function (actions) {
       },
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.heading}>{output(node.content)}{'\n'}</Text>;
+        return <Text key={state.key} style={styles.heading} selectable={true}>{output(node.content)}{'\n'}</Text>;
       }
     },
 
@@ -72,7 +72,7 @@ export default function (actions) {
       match: source => /^\+([\s\S]+?)\+(?!\+)/.exec(source),
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.underline}>{output(node.content)}</Text>;
+        return <Text key={state.key} style={styles.underline} selectable={true}>{output(node.content)}</Text>;
       }
     }),
 
@@ -80,7 +80,7 @@ export default function (actions) {
       match: source => /^--([\s\S]+?)--(?!--)/.exec(source),
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.del}>{output(node.content)}</Text>;
+        return <Text key={state.key} style={styles.del} selectable={true}>{output(node.content)}</Text>;
       }
     }),
 
@@ -88,7 +88,7 @@ export default function (actions) {
       match: source => /^''([\s\S]+?)''(?!'')/.exec(source),
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.italic}>{output(node.content)}</Text>;
+        return <Text key={state.key} style={styles.italic} selectable={true}>{output(node.content)}</Text>;
       }
     }),
 
@@ -121,7 +121,7 @@ export default function (actions) {
       },
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.link} onPress={() => actions.onLinkPress(node.url)}>{node.content}</Text>;
+        return <Text key={state.key} style={styles.link} onPress={() => actions.onLinkPress(node.url)} selectable={true}>{node.content}</Text>;
       }
     }),
 
@@ -136,7 +136,9 @@ export default function (actions) {
       },
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={[styles.link, {textDecorationLine: null}]}
+        return <Text key={state.key}
+                     style={[styles.link, {textDecorationLine: null}]}
+                     selectable={true}
                      onPress={() => actions.onIssueIdPress(node.issueId)}>{node.issueId}</Text>;
       }
     }),
@@ -152,7 +154,7 @@ export default function (actions) {
       },
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={[styles.link, {textDecorationLine: null}]}>{node.username}</Text>;
+        return <Text key={state.key} style={[styles.link, {textDecorationLine: null}]} selectable={true}>{node.username}</Text>;
       }
     }),
 
@@ -166,7 +168,7 @@ export default function (actions) {
       },
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.link} onPress={() => actions.onLinkPress(node.url)}>{node.url}</Text>;
+        return <Text key={state.key} style={styles.link} onPress={() => actions.onLinkPress(node.url)} selectable={true}>{node.url}</Text>;
       }
     }),
 
@@ -180,13 +182,13 @@ export default function (actions) {
       },
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.codeBlock}>{node.content}</Text>;
+        return <Text key={state.key} style={styles.codeBlock} selectable={true}>{node.content}</Text>;
       }
     }),
 
     inlineCode: Object.assign({}, SimpleMarkdown.defaultRules.inlineCode, {
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.inlineCode}>{node.content}</Text>;
+        return <Text key={state.key} style={styles.inlineCode} selectable={true}>{node.content}</Text>;
       }
     }),
 
@@ -206,7 +208,7 @@ export default function (actions) {
         if (node.content.length > CUT_MAX_LENGTH) {
           cuttedContent = `${cuttedContent.substring(0, CUT_MAX_LENGTH)}... \n [content is too long]`;
         }
-        return <Text key={state.key} style={styles.cutBlock}>{cuttedContent}</Text>;
+        return <Text key={state.key} style={styles.cutBlock} selectable={true}>{cuttedContent}</Text>;
       }
     })
   };
