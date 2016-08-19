@@ -43,6 +43,7 @@ module.exports = StyleSheet.create({
   },
   summary: {
     color: COLOR_FONT,
+    flex: 1,
     fontSize: 17,
     lineHeight: 20
   },

@@ -33,17 +33,22 @@ export default class IssueRow extends React.Component {
     return (
       <TouchableOpacity onPress={() => this.props.onClick(issue)}>
         <View style={styles.row}>
+
           <View>
             <View>{prioityBlock}</View>
           </View>
+
           <View style={styles.rowText}>
+
             <View style={styles.rowTopLine}>
               <Text style={[styles.summary, this.getSummaryStyle(issue)]} numberOfLines={1}>
                 {issue.summary}
               </Text>
               <Image style={styles.arrowImage} source={next}></Image>
             </View>
+
             <Text style={styles.subtext} numberOfLines={1}>{IssueRow._getSubText(issue)}</Text>
+
           </View>
         </View>
       </TouchableOpacity>
