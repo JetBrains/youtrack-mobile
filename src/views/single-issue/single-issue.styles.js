@@ -8,8 +8,7 @@ export default StyleSheet.create({
     backgroundColor: COLOR_LIGHT_GRAY
   },
   headerText: {
-    flex: 1,
-    textAlign: 'center'
+    fontSize: 17
   },
   savingIndicator: {
     paddingTop: 4,

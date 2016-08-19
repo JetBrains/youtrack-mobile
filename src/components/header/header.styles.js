@@ -20,6 +20,7 @@ module.exports = StyleSheet.create({
     paddingRight: UNIT*2
   },
   headerButtonText: {
+    fontSize: 17,
     color: COLOR_PINK,
     width: 60
   },

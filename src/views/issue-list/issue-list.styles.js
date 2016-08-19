@@ -8,6 +8,9 @@ module.exports = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF'
   },
+  headerText: {
+    fontSize: 17
+  },
   row: {
     flexDirection: 'row',
     justifyContent: 'flex-start',

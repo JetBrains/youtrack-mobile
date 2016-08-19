@@ -201,7 +201,7 @@ class IssueList extends React.Component {
           }
         }
       >
-        <Text>Sort by: Updated</Text>
+        <Text style={styles.headerText}>Sort by: Updated</Text>
       </Header>
     );
   }

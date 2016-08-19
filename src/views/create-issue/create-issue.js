@@ -147,7 +147,7 @@ export default class CreateIssue extends React.Component {
           <Header leftButton={<Text>Cancel</Text>}
                   rightButton={createButton}
                   onRightButtonClick={() => canCreateIssue && this.createIssue()}>
-            <Text>New Issue</Text>
+            <Text style={issueStyles.headerText}>New Issue</Text>
           </Header>
           <View>
             <View>
