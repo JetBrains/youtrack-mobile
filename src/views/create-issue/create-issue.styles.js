@@ -53,7 +53,8 @@ export default StyleSheet.create({
   },
   attachButtonsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    marginRight: UNIT
   },
   attachButton: {
     paddingTop: UNIT,
@@ -61,12 +62,13 @@ export default StyleSheet.create({
     flexDirection: 'row'
   },
   attachIcon: {
-    marginRight: UNIT,
-    width: 16,
-    height: 16
+    marginRight: UNIT * 1.5,
+    width: 20,
+    height: 20
   },
   attachButtonText: {
     color: COLOR_PINK,
+    fontSize: 16,
     fontWeight: '200'
   },
   actionContainer: {
