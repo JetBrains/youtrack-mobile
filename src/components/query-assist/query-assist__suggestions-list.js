@@ -1,5 +1,6 @@
 import {ListView, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import React from 'react';
+import {UNIT} from '../variables/variables';
 import InvertibleScrollView from 'react-native-invertible-scroll-view';
 
 let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -68,14 +69,17 @@ export default class QueryAssistSuggestionsList extends React.Component {
   }
 }
 
-let styles = StyleSheet.create({
+const styles = StyleSheet.create({
   searchRow: {
     flex: 1,
-    padding: 16
+    padding: UNIT,
+    paddingBottom: 20,
+    paddingTop: 20
   },
   searchText: {
     flex: 1,
-    fontSize: 20,
+    fontSize: 24,
+    fontWeight: '200',
     textAlign: 'center'
   }
 });
