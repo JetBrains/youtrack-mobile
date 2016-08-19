@@ -1,4 +1,4 @@
-var ERROR = 2;
+const ERROR = 'error';
 
 module.exports = {
   'extends': [
