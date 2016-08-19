@@ -24,6 +24,7 @@ export default class Home extends React.Component {
   }
 
   _renderUrl() {
+    console.log('this.props.backendUrl', this.props.backendUrl)
     if (!this.props.backendUrl) {
       return;
     }

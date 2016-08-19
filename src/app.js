@@ -71,7 +71,7 @@ class YouTrackMobile extends React.Component {
       })
       .then(() => this.registerRoutes())
       .then(() => this.checkAuthorization())
-      .catch(err => Router.Home({error: err}));
+      .catch(err => Router.Home({backendUrl: youtrackUrl, error: err}));
   }
 
   registerRoutes() {
