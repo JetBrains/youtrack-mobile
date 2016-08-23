@@ -41,7 +41,7 @@ export default class IssueRow extends React.Component {
           <View style={styles.rowText}>
 
             <View style={styles.rowTopLine}>
-              <Text style={[styles.summary, this.getSummaryStyle(issue)]} numberOfLines={1}>
+              <Text style={[styles.summary, this.getSummaryStyle(issue)]} numberOfLines={2}>
                 {issue.summary}
               </Text>
               <Image style={styles.arrowImage} source={next}></Image>
