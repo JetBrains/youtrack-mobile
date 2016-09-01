@@ -100,6 +100,30 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  commentSuggestionsContainer: {
+    backgroundColor: '#FFF',
+    borderTopWidth: 0.5,
+    borderColor: COLOR_GRAY,
+    position: 'absolute',
+    top: -140,
+    bottom: 52,
+    left: 0,
+    right: 0,
+    flex: 1,
+    paddingTop: UNIT
+  },
+  commentSuggestionButton: {
+    flexDirection: 'row',
+    padding: UNIT,
+    paddingLeft: UNIT * 2,
+    paddingRight: UNIT * 2
+  },
+  commentSuggestionName: {
+    color: COLOR_FONT
+  },
+  commentSuggestionLogin: {
+    color: COLOR_FONT_GRAY
+  },
   loading: {
     textAlign: 'center',
     marginTop: UNIT * 2,

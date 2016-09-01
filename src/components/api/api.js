@@ -186,7 +186,16 @@ class Api {
     return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/fields/${fieldId}?${queryString}`, 'POST', body);
   }
 
-  //TODO: this is old API usage
+  getMentionSuggests(issueIds, query) {
+    const $top = 10;
+    const fields = 'issues(id),users(id,login,fullName,ringId)';
+    const queryString = qs.stringify({$top, fields, query});
+    const body = {issues:  issueIds.map(id => ({id}))};
+
+    return this.makeAuthorizedRequest(`${this.youTrackUrl}/api/mention?${queryString}`, 'POST', body);
+  }
+
+  //TODO: this is old API usage, move to new one
   getQueryAssistSuggestions(query, caret) {
     const queryString = qs.stringify({query, caret});
     return this.makeAuthorizedRequest(`${this.youTrackUrl}/rest/search/underlineAndSuggest?${queryString}`);

@@ -236,6 +236,11 @@ export default class SingeIssueView extends React.Component {
     Linking.openURL(url);
   }
 
+  loadCommentSuggestions(query) {
+    return this.props.api.getMentionSuggests([this.state.issue.id], query)
+      .catch(err => notifyError('Cannot load suggestions', err));
+  }
+
   _canAddComment() {
     return this.state.fullyLoaded &&
       !this.state.addCommentMode &&
@@ -394,10 +399,12 @@ export default class SingeIssueView extends React.Component {
 
         {this.state.addCommentMode && <View>
           <SingleIssueCommentInput
-          autoFocus={true}
-          onBlur={() => this.setState({addCommentMode: false})}
-          initialText={this.state.initialCommentText}
-          onAddComment={(comment) => this.addComment(this.state.issue, comment)}/>
+            autoFocus={true}
+            suggestionsDataSource={query => this.loadCommentSuggestions(query)}
+            onBlur={() => this.setState({addCommentMode: false})}
+            initialText={this.state.initialCommentText}
+            onAddComment={(comment) => this.addComment(this.state.issue, comment)}
+          />
 
           {Platform.OS == 'ios' && <KeyboardSpacer/>}
         </View>}
