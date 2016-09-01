@@ -1,27 +1,47 @@
 import {Linking} from 'react-native';
-import extractId from './open-url-handler__extract-id';
+import qs from 'qs';
 
-function handleInitialOpenWithUrl(onIssueIdDetected) {
-  Linking.getInitialURL()
-    .then(url => {
-      const id = extractId(url);
-      if (id) {
-        console.info(`Application was opened with issue URL, id ${id}, opening issue...`);
-        return onIssueIdDetected(id);
-      }
-    });
+const issueIdReg = /issue\/([\w-\d]+)/;
+
+function extractId(issueUrl) {
+  if (!issueUrl) {
+    return null;
+  }
+  const match = issueUrl.match(issueIdReg);
+  return match && match[1];
 }
 
-function checkInitialUrlForIssueId(onIssueIdDetected) {
-  handleInitialOpenWithUrl(onIssueIdDetected);
+function extractIssuesQuery(issuesUrl) {
+  if (!issuesUrl) {
+    return null;
+  }
+  const [, query_string] = issuesUrl.match(/\?(.*)/);
+  const query = qs.parse(query_string).q;
+  return query;
+}
+
+function parseUrl(url, onIssueIdDetected, onQueryDetected) {
+  const id = extractId(url);
+  if (id) {
+    console.info(`Issue id detected in open URL, id ${id}, opening issue...`);
+    return onIssueIdDetected(id);
+  }
+
+
+  const query = extractIssuesQuery(url);
+  if (query) {
+    console.info(`Issues query detected in open URL: ${query}, opening list...`);
+    return onQueryDetected(query);
+  }
+}
+
+export default function openByUrlDetector(onIssueIdDetected, onQueryDetected) {
+  Linking.getInitialURL()
+    .then(url => parseUrl(url, onIssueIdDetected, onQueryDetected));
 
   function onOpenWithUrl(event) {
     const url = event.url || event;
-    const id = extractId(url);
-    if (id) {
-      console.info(`Application was restored with issue URL, id ${id}, opening issue...`);
-      return onIssueIdDetected(id);
-    }
+    return parseUrl(url, onIssueIdDetected, onQueryDetected);
   }
 
   Linking.addEventListener('url', onOpenWithUrl);
@@ -30,5 +50,3 @@ function checkInitialUrlForIssueId(onIssueIdDetected) {
     Linking.removeEventListener('url', onOpenWithUrl);
   };
 }
-
-export default checkInitialUrlForIssueId;

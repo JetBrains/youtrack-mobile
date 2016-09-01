@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import React from 'react';
 
-import openUrlHandler from '../../components/open-url-handler/open-url-handler';
+import openByUrlDetector from '../../components/open-url-handler/open-url-handler';
 import styles from './issue-list.styles';
 import Header from '../../components/header/header';
 import QueryAssist from '../../components/query-assist/query-assist';
@@ -68,11 +68,15 @@ class IssueList extends React.Component {
 
   componentDidMount() {
     this.api = new Api(this.props.auth);
-    this.unsubscribeFromOpeningWithIssueUrl = openUrlHandler(issueId => Router.SingleIssue({
-      issueId: issueId,
-      api: this.api,
-      onUpdate: () => this.loadIssues(null)
-    }));
+    this.unsubscribeFromOpeningWithIssueUrl = openByUrlDetector(issueId => {
+      Router.SingleIssue({
+        issueId: issueId,
+        api: this.api,
+        onUpdate: () => this.loadIssues(null)
+      });
+    }, issuesQuery => {
+      this.onQueryUpdated(issuesQuery);
+    });
 
     if (this.props.query) {
       this.setQuery(this.props.query);
