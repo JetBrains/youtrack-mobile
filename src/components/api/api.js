@@ -188,7 +188,7 @@ class Api {
 
   getMentionSuggests(issueIds, query) {
     const $top = 10;
-    const fields = 'issues(id),users(id,login,fullName,ringId)';
+    const fields = 'issues(id),users(id,login,fullName,avatarUrl)';
     const queryString = qs.stringify({$top, fields, query});
     const body = {issues:  issueIds.map(id => ({id}))};
 

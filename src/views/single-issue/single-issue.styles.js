@@ -110,19 +110,27 @@ export default StyleSheet.create({
     left: 0,
     right: 0,
     flex: 1,
-    paddingTop: UNIT
+    paddingTop: UNIT/2
   },
   commentSuggestionButton: {
     flexDirection: 'row',
-    padding: UNIT,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    padding: UNIT/2,
     paddingLeft: UNIT * 2,
     paddingRight: UNIT * 2
   },
   commentSuggestionName: {
+    marginLeft: UNIT,
     color: COLOR_FONT
   },
   commentSuggestionLogin: {
     color: COLOR_FONT_GRAY
+  },
+  commentSuggestionAvatar: {
+    width: UNIT * 4,
+    height: UNIT * 4,
+    borderRadius: UNIT * 2
   },
   loading: {
     textAlign: 'center',

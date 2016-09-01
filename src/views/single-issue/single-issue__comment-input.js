@@ -1,4 +1,4 @@
-import {View, Text, TouchableOpacity, ActivityIndicator, ScrollView} from 'react-native';
+import {View, Text, TouchableOpacity, ActivityIndicator, ScrollView, Image} from 'react-native';
 import React from 'react';
 import MultilineInput from '../../components/multiline-input/multiline-input';
 
@@ -96,6 +96,7 @@ export default class IssueListCommentInput extends React.Component {
             <TouchableOpacity key={suggestion.id}
                               style={styles.commentSuggestionButton}
                               onPress={() => this.applySuggestion(suggestion)}>
+              <Image source={{uri: suggestion.avatarUrl}} style={styles.commentSuggestionAvatar}/>
               <Text style={styles.commentSuggestionName}>{suggestion.fullName}</Text>
               <Text style={styles.commentSuggestionLogin}>  @{suggestion.login}</Text>
             </TouchableOpacity>
