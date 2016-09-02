@@ -1,6 +1,8 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 import {UNIT, COLOR_LIGHT_GRAY, COLOR_FONT_GRAY, COLOR_FONT, COLOR_GRAY, COLOR_PINK} from '../../components/variables/variables';
 const ATTACHING_IMAGE_ALPHA = '70';
+
+const SUGGESTION_BOTTOM = Platform.OS === 'ios' ? 52 : 48;
 
 export default StyleSheet.create({
   container: {
@@ -110,7 +112,7 @@ export default StyleSheet.create({
     borderColor: COLOR_GRAY,
     position: 'absolute',
     top: -140,
-    bottom: 52,
+    bottom: SUGGESTION_BOTTOM,
     left: 0,
     right: 0,
     flex: 1,

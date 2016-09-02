@@ -107,33 +107,36 @@ export default class IssueListCommentInput extends React.Component {
   }
 
   render() {
-    return <View style={styles.commentInputWrapper}>
+    return (
+      <View>
+        {this.renderSuggestions()}
 
-      {this.renderSuggestions()}
+        <View style={styles.commentInputWrapper}>
+          <MultilineInput placeholder="Type your comment here"
+                          value={this.state.commentText}
+                          editable={!this.state.isSaving}
+                          {...this.props}
+                          onSelectionChange = {(event) => {
+                            const caret = event.nativeEvent.selection.start;
+                            this.setState({commentCaret: caret});
+                          }}
+                          onChangeText={(text) => {
+                            this.setState({commentText: text});
+                            this.suggestionsNeededDetector(text, this.state.commentCaret);
+                          }}
+                          style={styles.commentInput}/>
 
-      <MultilineInput placeholder="Type your comment here"
-                      value={this.state.commentText}
-                      editable={!this.state.isSaving}
-                      {...this.props}
-                      onSelectionChange = {(event) => {
-                        const caret = event.nativeEvent.selection.start;
-                        this.setState({commentCaret: caret});
-                      }}
-                      onChangeText={(text) => {
-                        this.setState({commentText: text});
-                        this.suggestionsNeededDetector(text, this.state.commentCaret);
-                      }}
-                      style={styles.commentInput}/>
+          <TouchableOpacity style={styles.commentSendButton}
+                            disabled={!this.state.commentText}
+                            onPress={() => this.addComment()}>
 
-      <TouchableOpacity style={styles.commentSendButton}
-                        disabled={!this.state.commentText}
-                        onPress={() => this.addComment()}>
-
-        {!this.state.isSaving ?
-          <Text style={[styles.sendComment, this.state.commentText ? null : styles.sendCommentDisabled]}>Send</Text> :
-          <ActivityIndicator/>
-        }
-      </TouchableOpacity>
-    </View>;
+            {!this.state.isSaving ?
+              <Text style={[styles.sendComment, this.state.commentText ? null : styles.sendCommentDisabled]}>Send</Text> :
+              <ActivityIndicator/>
+            }
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
   }
 }
