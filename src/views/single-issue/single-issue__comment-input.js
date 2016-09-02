@@ -11,6 +11,7 @@ export default class IssueListCommentInput extends React.Component {
       isSaving: false,
       commentText: '',
 
+      isLoadingSuggestions: false,
       showSuggestions: false,
       suggestionsQuery: '',
       suggestions: [],
@@ -39,8 +40,11 @@ export default class IssueListCommentInput extends React.Component {
   }
 
   loadSuggestions(query) {
+    this.setState({isLoadingSuggestions: true});
+
     return this.props.suggestionsDataSource(query)
-      .then(suggestions => this.setState({suggestions: suggestions.users}));
+      .then(suggestions => this.setState({suggestions: suggestions.users, isLoadingSuggestions: false}))
+      .catch(() => this.setState({isLoadingSuggestions: false}));
   }
 
   suggestionsNeededDetector(text, caret) {
@@ -90,6 +94,9 @@ export default class IssueListCommentInput extends React.Component {
 
     return (
       <ScrollView style={styles.commentSuggestionsContainer} keyboardShouldPersistTaps={true}>
+
+        {this.state.isLoadingSuggestions &&
+          <View style={styles.suggestionsLoadingMessage}><Text>Loading suggestions...</Text></View>}
 
         {this.state.suggestions.map(suggestion => {
           return (

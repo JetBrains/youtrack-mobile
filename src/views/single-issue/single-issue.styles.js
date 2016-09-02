@@ -118,6 +118,10 @@ export default StyleSheet.create({
     flex: 1,
     paddingTop: UNIT/2
   },
+  suggestionsLoadingMessage: {
+    alignItems: 'center',
+    margin: UNIT
+  },
   commentSuggestionButton: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
