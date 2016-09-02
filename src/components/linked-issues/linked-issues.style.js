@@ -3,7 +3,8 @@ import {UNIT, COLOR_FONT, COLOR_FONT_GRAY} from '../../components/variables/vari
 
 export default StyleSheet.create({
   linkedIssuesContainer: {
-    marginTop: UNIT
+    marginTop: UNIT,
+    marginBottom: UNIT
   },
   linkedIssuesSection: {
     flexDirection: 'row',
