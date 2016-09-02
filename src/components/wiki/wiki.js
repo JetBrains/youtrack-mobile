@@ -41,8 +41,10 @@ export default class Wiki extends React.Component {
 
 const decorateRawText = (source, wikifiedOnServer, attachments) => {
   let result = replaceImageNamesWithUrls(source, attachments);
-  result = decorateIssueLinks(result, wikifiedOnServer);
-  result = decorateUserNames(result, wikifiedOnServer);
+  if (wikifiedOnServer) {
+    result = decorateIssueLinks(result, wikifiedOnServer);
+    result = decorateUserNames(result, wikifiedOnServer);
+  }
   return result;
 };
 
