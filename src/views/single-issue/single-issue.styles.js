@@ -36,7 +36,11 @@ export default StyleSheet.create({
     width: null, //Removes fixed width of usual color field
     paddingLeft: UNIT/2,
     paddingRight: UNIT/2,
-    margin: UNIT/4
+    margin: UNIT/4,
+    borderWidth: 0.5,
+    borderColor: COLOR_GRAY
+  },
+  tagButton: {
   },
   summary: {
     paddingTop: UNIT,

@@ -19,7 +19,7 @@ export default class ColorField extends React.Component {
   render() {
     return (
       <View style={[styles.wrapper, {backgroundColor: this._getBackgroundColor()}, this.props.style]}>
-        <Text style={[styles.text, {color: this._getForegroundColor()}]}>{this._getFieldLetter()}</Text>
+        <Text style={[styles.text, {color: this._getForegroundColor()}]} numberOfLines={1}>{this._getFieldLetter()}</Text>
       </View>
     );
   }
@@ -36,7 +36,6 @@ const styles = StyleSheet.create({
     width: SIZE,
     height: SIZE,
     borderRadius: 4,
-    flex: 1,
     justifyContent: 'center'
   },
   text: {
