@@ -26,6 +26,9 @@ export default class CustomField extends React.Component {
     if (!value || !value.color) {
       return;
     }
+    if (value.color.background) {
+      value.color.background = null;
+    }
     return {
       color: value.color.foreground,
       backgroundColor: value.color.background
@@ -66,9 +69,7 @@ const SELECTED_ALPHA_HEX = 20;
 
 const styles = StyleSheet.create({
   wrapper: {
-    padding: UNIT,
-    paddingLeft: 0,
-    paddingRight: UNIT * 1.5
+    padding: 8
   },
   wrapperActive: {
     backgroundColor: `${COLOR_PINK}${SELECTED_ALPHA_HEX}`
