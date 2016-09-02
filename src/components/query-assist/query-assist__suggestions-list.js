@@ -73,8 +73,8 @@ const styles = StyleSheet.create({
   searchRow: {
     flex: 1,
     padding: UNIT,
-    paddingBottom: 20,
-    paddingTop: 20
+    paddingBottom: UNIT * 2,
+    paddingTop: UNIT * 2
   },
   searchText: {
     flex: 1,
