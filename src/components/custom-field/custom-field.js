@@ -1,6 +1,6 @@
 import {TouchableOpacity, View, Text, StyleSheet, Platform} from 'react-native';
 import React, {PropTypes} from 'react';
-import {COLOR_FONT_GRAY, COLOR_PINK, COLOR_FONT, UNIT} from '../variables/variables';
+import {COLOR_FONT_GRAY, COLOR_PINK, COLOR_FONT} from '../variables/variables';
 
 export default class CustomField extends React.Component {
   _getValue(value) {
