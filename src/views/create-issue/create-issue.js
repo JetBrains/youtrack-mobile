@@ -156,6 +156,7 @@ export default class CreateIssue extends React.Component {
                 editable={!this.state.processing}
                 placeholder="Summary"
                 returnKeyType="next"
+                autoCapitalize="sentences"
                 onSubmitEditing={() => this.refs.description.focus()}
                 onChangeText={(summary) => {
                   this.state.issue.summary = summary;
@@ -167,6 +168,7 @@ export default class CreateIssue extends React.Component {
               <TextInput
                 ref="description"
                 editable={!this.state.processing}
+                autoCapitalize="sentences"
                 style={styles.descriptionInput}
                 multiline={true}
                 placeholder="Description"
