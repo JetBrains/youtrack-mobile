@@ -33,6 +33,7 @@
           <category android:name="android.intent.category.DEFAULT"/>
           <category android:name="android.intent.category.BROWSABLE"/>
           <data android:scheme="https" android:host="youtrack.jetbrains.com" android:pathPrefix="/issue"/>
+          <data android:scheme="https" android:host="*.myjetbrains.com" android:pathPrefix="/youtrack/issue"/>
         </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
