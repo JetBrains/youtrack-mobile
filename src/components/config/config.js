@@ -16,6 +16,11 @@ const config: AppConfig = {
   }
 };
 
+function getBaseUrl(url: string) {
+  const baseUrlRegExp = /^(.*)\//;
+  return url.match(baseUrlRegExp)[1];
+}
+
 function storeBackendUrl(url: string) {
   return AsyncStorage.setItem(BACKEND_URL_STORAGE_KEY, url)
     .then(() => url);
@@ -27,6 +32,7 @@ function getStoredBackendURL() {
 }
 
 function handleEmbeddedHubUrl(hubUrl: string, ytUrl: string) {
+  ytUrl = getBaseUrl(ytUrl);
   return hubUrl[0] === '/' ? ytUrl + hubUrl : hubUrl;
 }
 
