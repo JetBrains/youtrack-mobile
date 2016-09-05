@@ -3,6 +3,7 @@ import React from 'react';
 import styles from './query-assist.styles';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
 import {COLOR_PINK, COLOR_FONT_GRAY} from '../../components/variables/variables';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 export default class QueryAssist extends React.Component {
   constructor() {
@@ -33,7 +34,8 @@ export default class QueryAssist extends React.Component {
     this.setState({
       showQueryAssist: true,
       displayCancelSearch: true,
-      queryCopy: this.state.input
+      queryCopy: this.state.input,
+      suggestionsListTop: 0
     });
   }
 
@@ -50,9 +52,24 @@ export default class QueryAssist extends React.Component {
   }
 
   componentWillReceiveProps(newProps, oldProps) {
-    if (newProps.initialQuery !== oldProps.initialQuery) {
+    if (newProps.initialQuery !== this.state.input) {
       this.setState({input: this.props.initialQuery});
     }
+  }
+
+  componentDidMount() {
+    this.measureSuggestionsListSpace();
+  }
+
+  measureSuggestionsListSpace(timeout = 0, recheck = true) {
+    setTimeout(() => {
+      this.refs.queryAssistContainer.measure((ox, oy, width, height, px, assistPositionY) => {
+        this.setState({suggestionsListTop: -assistPositionY});
+        if (recheck) {
+          this.measureSuggestionsListSpace(100, false);
+        }
+      });
+    }, timeout);
   }
 
   _renderInput() {
@@ -68,7 +85,7 @@ export default class QueryAssist extends React.Component {
     }
 
     return (
-      <View style={styles.inputWrapper}>
+      <View style={styles.inputWrapper} ref="queryAssistContainer">
         <TextInput
           ref="searchInput"
           style={[styles.searchInput, this.state.showQueryAssist ? styles.searchInputActive : null]}
@@ -94,11 +111,11 @@ export default class QueryAssist extends React.Component {
   }
 
   _renderSuggestions() {
-    return <QueryAssistSuggestionsList style={styles.searchSuggestions}
+    return <QueryAssistSuggestionsList style={[styles.searchSuggestions, {top: this.state.suggestionsListTop}]}
                                        getSuggestions={this.getSuggestions.bind(this)}
                                        caret={this.state.caret}
                                        query={this.state.input}
-                                       onApplySuggestion={query => this.setState({input: query})}/>
+                                       onApplySuggestion={query => this.setState({input: query})}/>;
   }
 
   render() {
@@ -106,6 +123,10 @@ export default class QueryAssist extends React.Component {
       {this.state.showQueryAssist && this._renderSuggestions()}
 
       {this._renderInput()}
-    </View>
+
+      <View style={styles.keyboardSpacerHiddenContaioner}>
+        <KeyboardSpacer onToggle={() => this.measureSuggestionsListSpace()}/>
+      </View>
+    </View>;
   }
 }

@@ -5,11 +5,12 @@ import {
   ListView,
   ScrollView,
   RefreshControl,
-  Platform
-} from 'react-native'
+  Platform,
+  AppState
+} from 'react-native';
 import React from 'react';
 
-import openUrlHandler from '../../components/open-url-handler/open-url-handler';
+import openByUrlDetector from '../../components/open-url-handler/open-url-handler';
 import styles from './issue-list.styles';
 import Header from '../../components/header/header';
 import QueryAssist from '../../components/query-assist/query-assist';
@@ -29,7 +30,7 @@ const QUERY_STORAGE_KEY = 'YT_QUERY_STORAGE';
 const PAGE_SIZE = 10;
 const ISSUES_CACHE_KEY = 'yt_mobile_issues_cache';
 
-let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 class IssueList extends React.Component {
 
@@ -55,25 +56,40 @@ class IssueList extends React.Component {
         dataSource: this.state.dataSource.cloneWithRows(issues)
       });
     });
+
+    this._handleAppStateChange = this._handleAppStateChange.bind(this);
+  }
+
+  _handleAppStateChange(newState) {
+    if (newState === 'active') {
+      this.loadIssues(this.state.queryAssistValue);
+    }
   }
 
   componentDidMount() {
     this.api = new Api(this.props.auth);
-    this.unsubscribeFromOpeningWithIssueUrl = openUrlHandler(issueId => Router.SingleIssue({
-      issueId: issueId,
-      api: this.api,
-      onUpdate: () => this.loadIssues(null, null)
-    }));
+    this.unsubscribeFromOpeningWithIssueUrl = openByUrlDetector(issueId => {
+      Router.SingleIssue({
+        issueId: issueId,
+        api: this.api,
+        onUpdate: () => this.loadIssues(null)
+      });
+    }, issuesQuery => {
+      this.onQueryUpdated(issuesQuery);
+    });
 
     if (this.props.query) {
-      this.setQuery(this.props.query)
+      this.setQuery(this.props.query);
     } else {
       this.loadStoredQuery().then(query => this.setQuery(query));
     }
+
+    AppState.addEventListener('change', this._handleAppStateChange);
   }
 
   componentWillUnmount() {
     this.unsubscribeFromOpeningWithIssueUrl();
+    AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
   storeQuery(query) {
@@ -89,7 +105,7 @@ class IssueList extends React.Component {
       issuePlaceholder: issue,
       issueId: issue.id,
       api: this.api,
-      onUpdate: () => this.loadIssues(this.state.queryAssistValue, null)
+      onUpdate: () => this.loadIssues(this.state.queryAssistValue)
     });
   }
 
@@ -99,14 +115,10 @@ class IssueList extends React.Component {
       .then(() => Router.LogIn());
   }
 
-  loadIssues(text, skip, showLoader = true) {
-    if (showLoader) {
-      this.setState({isRefreshing: true});
-    }
+  loadIssues(text) {
+    this.setState({listEndReached: false, isRefreshing: true, skip: 0});
 
-    this.setState({listEndReached: false});
-
-    return this.api.getIssues(text, PAGE_SIZE, skip)
+    return this.api.getIssues(text, PAGE_SIZE)
       .then(ApiHelper.fillIssuesFieldHash)
       .then((issues) => {
         this.setState({
@@ -154,7 +166,7 @@ class IssueList extends React.Component {
       .catch((err) => {
         this.setState({isLoadingMore: false});
         return notifyError('Failed to fetch issues', err);
-      })
+      });
   }
 
   getSuggestions(query, caret) {
@@ -167,7 +179,7 @@ class IssueList extends React.Component {
 
   setQuery(query) {
     this.setState({queryAssistValue: query});
-    this.loadIssues(query, null);
+    this.loadIssues(query);
   }
 
   onQueryUpdated(query) {
@@ -181,9 +193,19 @@ class IssueList extends React.Component {
         leftButton={<Text>Menu</Text>}
         rightButton={<Text>Create</Text>}
         onBack={() => this.setState({showMenu: true})}
-        onRightButtonClick={() => Router.CreateIssue({api: this.api, onCreate: () => this.loadIssues(this.state.queryAssistValue, null)})}
+        onRightButtonClick={() => {
+          return Router.CreateIssue({
+            api: this.api,
+            onCreate: (createdIssue) => {
+              const updatedIssues = ApiHelper.fillIssuesFieldHash([createdIssue]).concat(this.state.issues);
+              this.setState({
+                dataSource: this.state.dataSource.cloneWithRows(updatedIssues)
+              });
+            }});
+          }
+        }
       >
-        <Text>Sort by: Updated</Text>
+        <Text style={styles.headerText}>Sort by: Updated</Text>
       </Header>
     );
   }
@@ -198,11 +220,11 @@ class IssueList extends React.Component {
 
   _renderListMessage() {
     if (!this.state.isRefreshing && !this.state.isLoadingMore && this.state.issues.length === 0) {
-      return <Text style={styles.loadingMore}>No issues found</Text>
+      return <Text style={styles.loadingMore}>No issues found</Text>;
     }
 
     if (this.state.isLoadingMore && !this.state.listEndReached) {
-      return <Text style={styles.loadingMore}>Loading more issues...</Text>
+      return <Text style={styles.loadingMore}>Loading more issues...</Text>;
     }
   }
 

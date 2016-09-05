@@ -35,8 +35,8 @@ const BUNDLE_VALUE = toField([
 
   {owner: ['ringId', 'login']},
 
-  {color: ['id']}
-])
+  {color: ['id', 'background', 'foreground']}
+]);
 
 const ISSUE_FIELD_VALUE = toField(
   {
@@ -54,9 +54,7 @@ const ISSUE_FIELD_VALUE = toField(
       'isResolved',
 
       {
-        'color': [
-          'id'
-        ]
+        'color': ['id', 'background', 'foreground']
       }
 
     ]
@@ -114,7 +112,7 @@ const ISSUE_TAGS_FIELDS = toField([
   'id',
   'query',
   {
-    color: ['id']
+    color: ['id', 'background', 'foreground']
   }
 ]);
 
@@ -199,4 +197,4 @@ export default {
     {values: BUNDLE_VALUE},
     {aggregatedUsers: ISSUE_USER_FIELDS}
   ])
-}
+};

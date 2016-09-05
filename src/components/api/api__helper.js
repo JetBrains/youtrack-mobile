@@ -1,6 +1,8 @@
-let API = {
-  fillFieldHashOldRest: (issue) => {
-    let fieldHash = {};
+/* @flow */
+
+const API = {
+  fillFieldHashOldRest: (issue: IssueOnList) => {
+    const fieldHash = {};
 
     (issue.field || []).forEach((field) => {
       const fieldName = field.name;
@@ -17,8 +19,8 @@ let API = {
     return issue;
   },
 
-  makeFieldHash: (issue) => {
-    let fieldHash = {};
+  makeFieldHash: (issue: IssueOnList) => {
+    const fieldHash = {};
     (issue.fields || []).forEach(field => {
       const fieldName = field.projectCustomField.field.name;
       fieldHash[fieldName] = field.value;
@@ -26,30 +28,13 @@ let API = {
     return fieldHash;
   },
 
-  fillIssuesFieldHash: (issues = []) => {
+  fillIssuesFieldHash: (issues: Array<IssueOnList> = []) => {
     issues.forEach(issue => issue.fieldHash = API.makeFieldHash(issue));
     return issues;
   },
 
-  orderIssueFolders: (folders) => {
-    const filters = {
-      isSavedSearch: function (folder) {
-        return folder.fqFolderId.indexOf('$s$') === 0;
-      },
-      isTag: function (folder) {
-        return folder.fqFolderId.indexOf('$t$') === 0;
-      },
-      isProject: function (folder) {
-        return !filters.isSavedSearch(folder) && !filters.isTag(folder);
-      }
-    };
-
-    return (folders || {}).sort((folder) => {
-      //TODO
-    });
-  },
   //Ported from youtrack frontend
-  toField: function toFieldConstructor(fields) {
+  toField: function toFieldConstructor(fields: Array<CustomField>) {
     const toArray = function(object) {
       if (Array.isArray(object)) {
         return object;
@@ -58,7 +43,7 @@ let API = {
       return [object];
     };
 
-    const toFieldString = function(fields) {
+    const toFieldString = function(fields: Array<any>) {
       return toArray(fields).map(function(field) {
         if (typeof field === 'string') {
           return field;
@@ -94,7 +79,7 @@ let API = {
     };
   },
 
-  projectFieldTypeToFieldType(projectType, isMultiple) {
+  projectFieldTypeToFieldType(projectType: string, isMultiple: boolean) {
     const map = {
       'jetbrains.charisma.customfields.complex.user.UserProjectCustomField' : 'jetbrains.charisma.customfields.complex.user.SingleUserIssueCustomField',
       'jetbrains.charisma.customfields.complex.version.VersionProjectCustomField' : 'jetbrains.charisma.customfields.complex.version.SingleVersionIssueCustomField',
@@ -107,7 +92,7 @@ let API = {
     let fieldType = map[projectType];
 
     if (isMultiple) {
-      fieldType = fieldType.replace('Single', 'Multi')
+      fieldType = fieldType.replace('Single', 'Multi');
     }
     return fieldType;
   }

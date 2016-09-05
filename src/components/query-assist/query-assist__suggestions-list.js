@@ -1,8 +1,9 @@
 import {ListView, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import React from 'react';
+import {UNIT} from '../variables/variables';
 import InvertibleScrollView from 'react-native-invertible-scroll-view';
 
-let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 export default class QueryAssistSuggestionsList extends React.Component {
   constructor() {
@@ -28,7 +29,7 @@ export default class QueryAssistSuggestionsList extends React.Component {
   }
 
   componentDidMount() {
-    this.loadSuggestions(this.props.query, this.props.caret)
+    this.loadSuggestions(this.props.query, this.props.caret);
   }
 
   componentWillUnmount() {
@@ -68,20 +69,23 @@ export default class QueryAssistSuggestionsList extends React.Component {
   }
 }
 
-let styles = StyleSheet.create({
+const styles = StyleSheet.create({
   searchRow: {
     flex: 1,
-    padding: 16
+    padding: UNIT,
+    paddingBottom: UNIT * 2,
+    paddingTop: UNIT * 2
   },
   searchText: {
     flex: 1,
-    fontSize: 20,
+    fontSize: 24,
+    fontWeight: '200',
     textAlign: 'center'
   }
 });
 
 function transformSuggestions(suggest) {
-  let result = [];
+  const result = [];
   for (let i = 0, length = suggest.length; i < length; i++) {
     result.push({
       prefix: suggest[i].pre || '',

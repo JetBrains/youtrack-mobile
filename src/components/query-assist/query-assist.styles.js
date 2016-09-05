@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
 
 import {UNIT, COLOR_PINK, COLOR_LIGHT_GRAY, COLOR_FONT, COLOR_GRAY} from '../../components/variables/variables';
+const QUERY_ASSIST_HEIGHT = 44;
 
 export default StyleSheet.create({
   inputWrapper: {
@@ -8,7 +9,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    borderTopWidth: 1,
+    borderTopWidth: 0.5,
     borderColor: COLOR_GRAY
   },
   searchInput: {
@@ -38,8 +39,14 @@ export default StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: 48,
+    bottom: QUERY_ASSIST_HEIGHT,
     top: -1000,
     backgroundColor: '#FFFE'
+  },
+  keyboardSpacerHiddenContaioner: {
+    position: 'absolute',
+    height: 0,
+    width: 0,
+    opacity: 0
   }
 });

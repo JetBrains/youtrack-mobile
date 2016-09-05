@@ -8,7 +8,7 @@ const STORAGE_KEY = 'yt_mobile_auth';
 const ACCEPT_HEADER = 'application/json, text/plain, */*';
 
 function makeBtoa(str) {
-  let byteArray = [];
+  const byteArray = [];
   for (let i = 0; i < str.length; i++) {
     byteArray.push(str.charCodeAt(i));
   }
@@ -130,7 +130,7 @@ export default class Auth {
             'Accept': ACCEPT_HEADER,
             'Authorization': `Basic ${makeBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`
           }
-        })
+        });
       })
       .then(res => res.json())
       .then((authParams) => {
@@ -162,13 +162,13 @@ export default class Auth {
         'Authorization': `${authParams.token_type} ${authParams.access_token}`
       }
     }).then((res) => {
-        if (res.status > 400) {
-          console.log('Check token error', res);
-          throw res;
-        }
-        console.info('Token has been verified');
+      if (res.status > 400) {
+        console.log('Check token error', res);
+        throw res;
+      }
+      console.info('Token has been verified');
       return res.json();
-      })
+    })
       .then(currentUser => {
         this.currentUser = currentUser;
         return authParams;

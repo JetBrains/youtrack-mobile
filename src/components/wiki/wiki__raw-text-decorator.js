@@ -18,8 +18,11 @@ export function decorateIssueLinks(rawText, wikifiedText) {
   wikifiedText.replace(issueLinkRegExp, onIssueIdDetected);
 
   issuesMap.forEach((issueSummary, issueId) => {
-    rawText = rawText.replace(new RegExp(issueId), decorateIssueLink(issueId, issuesMap.get(issueId)));
-  })
+    rawText = rawText.replace(new RegExp(`(\\s|^)(${issueId})(\\s|$)`, 'g'), (source, prefix, issueId, postfix) => {
+      const decorated = decorateIssueLink(issueId, issuesMap.get(issueId));
+      return `${prefix || ''}${decorated}${postfix || ''}`;
+    });
+  });
 
   return rawText;
 }
@@ -36,7 +39,7 @@ export function decorateUserNames(rawText, wikifiedText) {
 
   issuesMap.forEach((username, login) => {
     rawText = rawText.replace(new RegExp(`@${login}`), decorateUserName(login, username));
-  })
+  });
 
   return rawText;
 }
@@ -45,7 +48,7 @@ export function replaceImageNamesWithUrls(source, attachments) {
   const ImageRegExp = /![a-zа-я\d.,\s-]+?\.[a-zA-Z]+?!/ig;
 
   return source.replace(ImageRegExp, (imageName) => {
-    let attach = attachments.filter(a => `!${a.name}!` === imageName)[0];
+    const attach = attachments.filter(a => `!${a.name}!` === imageName)[0];
     if (attach) {
       return `!${attach.url}!`;
     }

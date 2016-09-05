@@ -1,6 +1,5 @@
-import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
+import {TouchableOpacity, View, Text, StyleSheet, Platform} from 'react-native';
 import React, {PropTypes} from 'react';
-import getColorById from '../color-field/color-field__colors';
 import {COLOR_FONT_GRAY, COLOR_PINK, COLOR_FONT} from '../variables/variables';
 
 export default class CustomField extends React.Component {
@@ -19,7 +18,7 @@ export default class CustomField extends React.Component {
   }
 
   _getKey() {
-    let field = this.props.field;
+    const field = this.props.field;
     return field.projectCustomField.field.name;
   }
 
@@ -27,18 +26,11 @@ export default class CustomField extends React.Component {
     if (!value || !value.color) {
       return;
     }
-    const colorId = value.color.id;
-
-    let color = getColorById(colorId).color;
-    let backgroundColor = null;
-    if (color === 'white' || color === '#FFF') {
-      backgroundColor = getColorById(colorId).backgroundColor;
-    }
 
     return {
-      color: color,
-      backgroundColor: backgroundColor
-    }
+      color: value.color.foreground,
+      backgroundColor: value.color.background
+    };
   }
 
   _renderValue(value) {
@@ -86,15 +78,23 @@ const styles = StyleSheet.create({
   },
   keyText: {
     color: COLOR_FONT,
-    paddingTop: 4,
-    fontSize: 12
+    paddingTop: 2,
+    fontSize: 11,
+    fontFamily: 'System'
   },
   valueText: {
     color: COLOR_FONT,
     fontWeight: 'bold',
-    marginLeft: -2,
     marginRight: 0,
-    padding: 2
+    padding: 2,
+    ...Platform.select({
+      ios: {
+        marginLeft: -2
+      },
+      android: {
+        paddingRight: -1
+      }
+    })
   },
   valueTextDisabled: {
     color: COLOR_FONT_GRAY

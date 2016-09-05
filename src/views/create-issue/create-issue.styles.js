@@ -1,6 +1,8 @@
 import {StyleSheet} from 'react-native';
 import {UNIT, COLOR_PINK, COLOR_FONT_GRAY, COLOR_FONT, COLOR_GRAY} from '../../components/variables/variables';
 
+const ATTACHING_IMAGE_ALPHA = '70';
+
 export default StyleSheet.create({
   container: {
     flex: 1,
@@ -27,6 +29,11 @@ export default StyleSheet.create({
   disabledCreateButton: {
     color: COLOR_FONT_GRAY
   },
+  creatingIndicator: {
+    paddingTop: 4,
+    width: 30,
+    height: 20
+  },
   separator: {
     height: 0.5,
     backgroundColor: COLOR_GRAY
@@ -36,9 +43,18 @@ export default StyleSheet.create({
     marginLeft: UNIT * 2,
     marginRight: UNIT * 2
   },
+  imageActivityIndicator: {
+    backgroundColor: `#CCCCCC${ATTACHING_IMAGE_ALPHA}`,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: UNIT*2,
+    bottom: 0
+  },
   attachButtonsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    marginRight: UNIT
   },
   attachButton: {
     paddingTop: UNIT,
@@ -46,12 +62,13 @@ export default StyleSheet.create({
     flexDirection: 'row'
   },
   attachIcon: {
-    marginRight: UNIT,
-    width: 16,
-    height: 16
+    marginRight: UNIT * 1.5,
+    width: 20,
+    height: 20
   },
   attachButtonText: {
     color: COLOR_PINK,
+    fontSize: 16,
     fontWeight: '200'
   },
   actionContainer: {

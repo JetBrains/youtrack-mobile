@@ -13,7 +13,7 @@ export default class Wiki extends React.Component {
         return Linking.openURL(url);
       },
       onImagePress: (url) => {
-        return Router.ShowImage({imageUrl: url, imageName: ''})
+        return Router.ShowImage({imageUrl: url, imageName: ''});
       },
       onIssueIdPress: (issueId) => {
         this.props.onIssueIdTap && this.props.onIssueIdTap(issueId);
@@ -41,8 +41,10 @@ export default class Wiki extends React.Component {
 
 const decorateRawText = (source, wikifiedOnServer, attachments) => {
   let result = replaceImageNamesWithUrls(source, attachments);
-  result = decorateIssueLinks(result, wikifiedOnServer);
-  result = decorateUserNames(result, wikifiedOnServer);
+  if (wikifiedOnServer) {
+    result = decorateIssueLinks(result, wikifiedOnServer);
+    result = decorateUserNames(result, wikifiedOnServer);
+  }
   return result;
 };
 

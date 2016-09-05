@@ -8,3 +8,6 @@ export const next = require('./next.png');
 export const search = require('./search.png');
 export const tag = require('./tag.png');
 export const visible = require('./visible.png');
+export const comment = require('./comment.png');
+export const share = require('./permalink.png');
+export const reply = require('./reply.png');

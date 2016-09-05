@@ -1,4 +1,4 @@
-import {View, ScrollView, Text, TouchableOpacity, TextInput, findNodeHandle} from 'react-native';
+import {View, ScrollView, Text, TouchableOpacity, TextInput, ActivityIndicator} from 'react-native';
 import React, {PropTypes} from 'react';
 import CalendarPicker from 'react-native-calendar-picker/CalendarPicker/CalendarPicker';
 import CustomField from '../custom-field/custom-field';
@@ -17,7 +17,9 @@ export default class CustomFieldsPanel extends React.Component {
       topCoord: 0,
       height: 0,
       editingField: null,
+      savingField: null,
       isEditingProject: false,
+      isSavingProject: false,
 
       select: {
         show: false,
@@ -44,20 +46,27 @@ export default class CustomFieldsPanel extends React.Component {
   }
 
   measureSelect() {
-    /**
-     * TODO https://github.com/facebook/react-native/issues/4753
-     * This container requires because just measure always returns 0 for android
-     */
-    const container = this.props.containerViewGetter();
-    this.refs.panel.measureLayout(findNodeHandle(container),
-      (x, y, width, height, pageX, pageY) => {
-        this.setState({topCoord: y, height: height});
-      }
-    );
+    setTimeout(() => {
+      this.refs.customFieldsPanelMarker.measure((ox, oy, width, height, px, panelPositionY) => {
+        this.setState({topCoord: panelPositionY, height: height});
+      });
+    });
   }
 
   componentDidMount() {
-    setTimeout(this.measureSelect.bind(this), 0);
+    this.measureSelect();
+  }
+
+  saveUpdatedField(field, value) {
+    this.closeEditor();
+    this.setState({savingField: field});
+
+    return this.props.onUpdate(field, value)
+      .then(res => {
+        this.setState({savingField: null});
+        return res;
+      })
+      .catch(() => this.setState({savingField: null}));
   }
 
   onSelectProject() {
@@ -73,19 +82,23 @@ export default class CustomFieldsPanel extends React.Component {
         dataSource: this.props.api.getProjects.bind(this.props.api),
         onSelect: project => {
           this.closeEditor();
-          return this.props.onUpdateProject(project);
+          this.setState({isSavingProject: true});
+          return this.props.onUpdateProject(project)
+            .then(() => this.setState({isSavingProject: null}));
         }
       }
     });
   }
 
   closeEditor() {
-    return this.setState({
-      editingField: null,
-      isEditingProject: false,
-      datePicker: {show: false},
-      select: {show: false},
-      period: {show: false}
+    return new Promise(resolve => {
+      this.setState({
+        editingField: null,
+        isEditingProject: false,
+        datePicker: {show: false},
+        select: {show: false},
+        period: {show: false}
+      }, resolve);
     });
   }
 
@@ -96,10 +109,7 @@ export default class CustomFieldsPanel extends React.Component {
         title: field.projectCustomField.field.name,
         value: field.value ? new Date(field.value) : new Date(),
         emptyValueName: field.projectCustomField.canBeEmpty ? field.projectCustomField.emptyFieldText : null,
-        onSelect: (date) => {
-          this.closeEditor();
-          return this.props.onUpdate(field, date ? date.getTime() : null);
-        }
+        onSelect: (date) => this.saveUpdatedField(field, date ? date.getTime() : null)
       }
     });
   }
@@ -109,10 +119,7 @@ export default class CustomFieldsPanel extends React.Component {
       period: {
         show: true,
         value: field.value ? field.value.presentation : null,
-        onApply: (value) => {
-          this.closeEditor();
-          return this.props.onUpdate(field, {presentation: value});
-        }
+        onApply: (value) => this.saveUpdatedField(field, {presentation: value})
       }
     });
   }
@@ -135,15 +142,12 @@ export default class CustomFieldsPanel extends React.Component {
         dataSource: (query) => {
           if (field.hasStateMachine) {
             return this.props.api.getStateMachineEvents(this.props.issue.id, field.id)
-              .then(items => items.map(it => Object.assign(it, {name: `${it.id} (${it.presentation})`})))
+              .then(items => items.map(it => Object.assign(it, {name: `${it.id} (${it.presentation})`})));
           }
           return this.props.api.getCustomFieldValues(field.projectCustomField.bundle.id, field.projectCustomField.field.fieldType.valueType)
             .then(res => res.aggregatedUsers || res.values);
         },
-        onSelect: (value) => {
-          this.closeEditor();
-          return this.props.onUpdate(field, value);
-        }
+        onSelect: (value) => this.saveUpdatedField(field, value)
       }
     });
   }
@@ -153,18 +157,20 @@ export default class CustomFieldsPanel extends React.Component {
       return this.closeEditor();
     }
 
-    this.closeEditor();
-    this.setState({editingField: field});
+    return this.closeEditor()
+      .then(() => {
+        this.setState({editingField: field});
 
-    if (field.projectCustomField.field.fieldType.valueType === 'date') {
-      return this.editDateField(field);
-    }
+        if (field.projectCustomField.field.fieldType.valueType === 'date') {
+          return this.editDateField(field);
+        }
 
-    if (field.projectCustomField.field.fieldType.valueType === 'period') {
-      return this.editPeriodField(field);
-    }
+        if (field.projectCustomField.field.fieldType.valueType === 'period') {
+          return this.editPeriodField(field);
+        }
 
-    return this.editCustomField(field);
+        return this.editCustomField(field);
+      });
   }
 
   _renderSelect() {
@@ -265,6 +271,9 @@ export default class CustomFieldsPanel extends React.Component {
 
     return (
       <View ref="panel">
+        <View style={{height: 0, width: 0, opacity: 0}} ref="customFieldsPanelMarker">
+          <KeyboardSpacer onToggle={() => this.measureSelect()}/>
+        </View>
         {this._renderSelect()}
 
         {this._renderDatePicker()}
@@ -272,22 +281,27 @@ export default class CustomFieldsPanel extends React.Component {
         {this._renderPeriodInput()}
 
         <ScrollView horizontal={true} style={styles.customFieldsPanel}>
-          <CustomField key="Project"
-                       disabled={!this.props.canEditProject}
-                       onPress={() => this.onSelectProject()}
-                       active={this.state.isEditingProject}
-                       field={{projectCustomField: {field: {name: 'Project'}}, value: {name: issue.project.shortName}}}/>
+          <View key="Project">
+            <CustomField disabled={!this.props.canEditProject}
+                         onPress={() => this.onSelectProject()}
+                         active={this.state.isEditingProject}
+                         field={{projectCustomField: {field: {name: 'Project'}}, value: {name: issue.project.shortName}}}/>
+            {this.state.isSavingProject && <ActivityIndicator style={styles.savingFieldIndicator}/>}
+          </View>
 
-          {issue.fields.map((field) => <CustomField
-            key={field.id}
-            field={field}
-            onPress={() => this.onEditField(field)}
-            active={this.state.editingField === field}
-            disabled={!this.props.issuePermissions.canUpdateField(issue, field)}/>)}
+          {issue.fields.map((field) => {
+            return <View key={field.id}>
+
+              <CustomField
+                field={field}
+                onPress={() => this.onEditField(field)}
+                active={this.state.editingField === field}
+                disabled={!this.props.issuePermissions.canUpdateField(issue, field)}/>
+
+              {this.state.savingField === field && <ActivityIndicator style={styles.savingFieldIndicator}/>}
+            </View>;
+          })}
         </ScrollView>
-        <View style={{position: 'absolute', height: 0, width: 0, opacity: 0}}>
-          <KeyboardSpacer onToggle={() => this.measureSelect()}/>
-        </View>
       </View>
     );
   }
@@ -299,6 +313,5 @@ CustomFieldsPanel.propTypes = {
   issuePermissions: PropTypes.object.isRequired,
   onUpdate: PropTypes.func.isRequired,
   onUpdateProject: PropTypes.func,
-  containerViewGetter: PropTypes.func.isRequired,
   canEditProject: PropTypes.bool
 };

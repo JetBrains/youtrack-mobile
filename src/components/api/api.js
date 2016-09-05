@@ -15,8 +15,8 @@ class Api {
   }
 
   makeAuthorizedRequest(url, method, body) {
-    let sendRequest = () => {
-      let authParams = this.auth.authParams;
+    const sendRequest = () => {
+      const authParams = this.auth.authParams;
 
       return fetch(url, {
         method,
@@ -77,8 +77,11 @@ class Api {
   }
 
   createIssue(issueDraft) {
-    console.info('Issue draft to create:', issueDraft)
-    const queryString = qs.stringify({draftId: issueDraft.id});
+    console.info('Issue draft to create:', issueDraft);
+    const queryString = qs.stringify({
+      draftId: issueDraft.id,
+      fields: fields.issuesOnList.toString()
+    });
     return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`, 'POST', {});
   }
 
@@ -126,7 +129,7 @@ class Api {
     const body = {
       id: issue.id,
       project: project
-    }
+    };
     return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issue.id}`, 'POST', body);
   }
 
@@ -140,6 +143,28 @@ class Api {
   getStateMachineEvents(issueId, fieldId) {
     const url = `${this.youTrackIssueUrl}/${issueId}/fields/${fieldId}/possibleEvents?fields=id,presentation`;
     return this.makeAuthorizedRequest(url);
+  }
+
+  attachFile(issueId, fileUri, fileName) {
+    const formDataContent = new FormData(); //eslint-disable-line no-undef
+    formDataContent.append('photo', {uri: fileUri, name: fileName, type: 'image/binary'});
+
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest(); //eslint-disable-line no-undef
+      xhr.open('POST', `${this.youTrackUrl}/rest/issue/${issueId}/attachment`);
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState !== 4) {
+          return;
+        }
+        if (xhr.status >= 200 && xhr.status < 400) {
+          console.log('attach result', xhr);
+          return resolve(xhr);
+        }
+        return reject(xhr);
+      };
+      xhr.send(formDataContent);
+    });
   }
 
   updateIssueSummaryDescription(issue) {
@@ -161,7 +186,16 @@ class Api {
     return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/fields/${fieldId}?${queryString}`, 'POST', body);
   }
 
-  //TODO: this is old API usage
+  getMentionSuggests(issueIds, query) {
+    const $top = 10;
+    const fields = 'issues(id),users(id,login,fullName,avatarUrl)';
+    const queryString = qs.stringify({$top, fields, query});
+    const body = {issues:  issueIds.map(id => ({id}))};
+
+    return this.makeAuthorizedRequest(`${this.youTrackUrl}/api/mention?${queryString}`, 'POST', body);
+  }
+
+  //TODO: this is old API usage, move to new one
   getQueryAssistSuggestions(query, caret) {
     const queryString = qs.stringify({query, caret});
     return this.makeAuthorizedRequest(`${this.youTrackUrl}/rest/search/underlineAndSuggest?${queryString}`);

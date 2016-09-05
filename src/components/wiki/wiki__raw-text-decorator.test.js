@@ -1,19 +1,34 @@
 import {decorateIssueLinks, replaceImageNamesWithUrls, decorateUserNames} from './wiki__raw-text-decorator';
 
 describe('decorateIssueLinks', () => {
-  const rawTextWithIds = 'foo barr YTM-14 bar foo'
+  const rawTextWithIds = 'foo barr YTM-14 bar foo';
   const wikifiedText = `foo barr <a href="/issue/YTM-14" class="issue-resolved" target="_self" title="Fake issue summary">YTM-14</a> bar foo`;
 
   it('should replace single issue ID with special syntax', () => {
     const result = decorateIssueLinks(rawTextWithIds, wikifiedText);
 
-    result.should.equal('foo barr [ytmissue]YTM-14|Fake issue summary[ytmissue] bar foo')
+    result.should.equal('foo barr [ytmissue]YTM-14|Fake issue summary[ytmissue] bar foo');
+  });
+
+
+  it('should replace if message is just issue id', () => {
+    const result = decorateIssueLinks('YTM-14', '<a href="/issue/YTM-14" class="issue-resolved" target="_self" title="Fake issue summary">YTM-14</a>');
+
+    result.should.equal('[ytmissue]YTM-14|Fake issue summary[ytmissue]');
+  });
+
+  it('should replace exactly that issue id ant not before or after', () => {
+    const raw = 'foo barr http://foo/YTM-14 asd YTM-14 bar foo';
+    const wiki = `foo barr http://foo/YTM-14 asd <a href="/issue/YTM-14" class="issue-resolved" target="_self" title="Fake issue summary">YTM-14</a> bar foo`;
+    const result = decorateIssueLinks(raw, wiki);
+
+    result.should.equal('foo barr http://foo/YTM-14 asd [ytmissue]YTM-14|Fake issue summary[ytmissue] bar foo');
   });
 
   it('should not touch ID if no link found', () => {
     const result = decorateIssueLinks(rawTextWithIds, '');
 
-    result.should.equal(rawTextWithIds)
+    result.should.equal(rawTextWithIds);
   });
 
   it('should decorate multiple issue IDs', () => {
@@ -23,7 +38,7 @@ describe('decorateIssueLinks', () => {
         bar <a href="/issue/JT-123" class="issue-resolved" target="_self" title="Another summary">JT-123</a>`);
 
 
-    result.should.equal('foo barr [ytmissue]Y-15|Fake issue summary[ytmissue] bar [ytmissue]JT-123|Another summary[ytmissue]')
+    result.should.equal('foo barr [ytmissue]Y-15|Fake issue summary[ytmissue] bar [ytmissue]JT-123|Another summary[ytmissue]');
   });
 });
 
@@ -72,7 +87,7 @@ describe('replaceImageNamesWithUrls', () => {
 });
 
 describe('decorateUserNames', () => {
-  const rawTextWithIds = 'foo barr @userlogin bar foo'
+  const rawTextWithIds = 'foo barr @userlogin bar foo';
   const wikifiedText = `foo barr <a href="/user/userlogin" title="userlogin">Mr. User Userson</a> bar foo`;
 
   it('should replace single issue ID with special syntax', () => {

@@ -9,24 +9,24 @@ describe('<ColorField/>', () => {
   beforeEach(() => {
     fakeField = {
       name: 'Test custom field',
-      color: {id: 4}
+      color: {id: 4, background: '#000', foreground: '#FFF'}
     };
   });
 
   it('should init', () => {
-    let wrapper = shallow(<ColorField text={fakeField.name} color={fakeField.color}/>);
+    const wrapper = shallow(<ColorField text={fakeField.name} color={fakeField.color}/>);
 
     wrapper.should.be.defined;
   });
 
   it('should render first letter of color field', () => {
-    let wrapper = shallow(<ColorField text={fakeField.name} color={fakeField.color}/>);
+    const wrapper = shallow(<ColorField text={fakeField.name} color={fakeField.color}/>);
 
     wrapper.find('Text').children().should.have.text('T');
   });
 
   it('should render whole text of color field', () => {
-    let wrapper = shallow(<ColorField text={fakeField.name} fullText={true} color={fakeField.color}/>);
+    const wrapper = shallow(<ColorField text={fakeField.name} fullText={true} color={fakeField.color}/>);
 
     wrapper.find('Text').children().should.have.text(fakeField.name);
   });
@@ -35,14 +35,14 @@ describe('<ColorField/>', () => {
     const container = shallow(<ColorField text={fakeField.name} color={fakeField.color}/>).find('View');
     const backgroundColor = container.props().style[1].backgroundColor;
 
-    backgroundColor.should.equal('#0066cc');
+    backgroundColor.should.equal('#000');
   });
 
   it('should set foreground color', () => {
     const container = shallow(<ColorField text={fakeField.name} color={fakeField.color}/>).find('Text');
-    const backgroundColor = container.props().style[1].color;
+    const foregroundColor = container.props().style[1].color;
 
-    backgroundColor.should.equal('#FFF');
+    foregroundColor.should.equal('#FFF');
   });
 
 });

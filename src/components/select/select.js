@@ -1,4 +1,4 @@
-import {Text, Image, ScrollView, View, TouchableOpacity, TextInput} from 'react-native';
+import {Text, Image, ScrollView, View, TouchableOpacity, TextInput, ActivityIndicator} from 'react-native';
 import React, {PropTypes} from 'react';
 import styles from './select.styles';
 import Header from '../header/header';
@@ -65,7 +65,7 @@ export default class Select extends React.Component {
         <Text style={styles.itemTitle}>{this.props.getTitle(item)}</Text>
       </View>;
     }
-    return <Text style={styles.itemTitle}>{this.props.getTitle(item)}</Text>
+    return <Text style={styles.itemTitle}>{this.props.getTitle(item)}</Text>;
   }
 
   _isSelected(item) {
@@ -78,9 +78,9 @@ export default class Select extends React.Component {
     }
 
     if (this._isSelected(item)) {
-      this.setState({selectedItems: this.state.selectedItems.filter(it => it.id !== item.id)})
+      this.setState({selectedItems: this.state.selectedItems.filter(it => it.id !== item.id)});
     } else {
-      this.setState({selectedItems: this.state.selectedItems.concat(item)})
+      this.setState({selectedItems: this.state.selectedItems.concat(item)});
     }
   }
 
@@ -102,7 +102,7 @@ export default class Select extends React.Component {
 
         {this._renderTitle(item)}
       </TouchableOpacity>
-    )
+    );
   }
 
   render() {
@@ -134,6 +134,7 @@ export default class Select extends React.Component {
           {this.state.filteredItems && this.state.filteredItems.map(item => this._renderRow(item))}
 
           {!this.state.loaded && <View style={styles.row}>
+            <ActivityIndicator/>
             <Text style={styles.loadingMessage}>Loading values...</Text>
           </View>}
         </ScrollView>

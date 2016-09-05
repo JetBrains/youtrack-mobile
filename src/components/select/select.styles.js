@@ -13,7 +13,6 @@ export default StyleSheet.create({
   },
   inputWrapper: {
     backgroundColor: COLOR_LIGHT_GRAY,
-    alignItems: 'center',
     justifyContent: 'center'
   },
   searchInput: {
@@ -47,6 +46,7 @@ export default StyleSheet.create({
     color: COLOR_FONT
   },
   loadingMessage: {
+    paddingLeft: UNIT*2,
     color: COLOR_FONT_GRAY
   },
   selectedMark: {

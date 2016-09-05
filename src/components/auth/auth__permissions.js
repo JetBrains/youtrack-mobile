@@ -1,16 +1,28 @@
+/* @flow */
+
+type CacheItemProject = {id: string};
+type Permission = {key: string};
+type PermissionCacheItem = {
+  projects: Array<CacheItemProject>,
+  projectIds: Array<string>,
+  global: Boolean,
+  permission: Permission
+};
 
 class Permissions {
-  constructor(permissionsCache) {
+  permissionsMap: Object;
+
+  constructor(permissionsCache: Array<PermissionCacheItem>) {
     const convertedPermissions = permissionsCache.map(cacheItem => {
-      cacheItem.projects = (cacheItem.projects || []).map(project => project.id);
+      cacheItem.projectIds = (cacheItem.projects || []).map(project => project.id);
       return cacheItem;
     });
 
     this.permissionsMap = new Map(convertedPermissions.map(it => [it.permission.key, it]));
   }
 
-  has(permissionId, projectId) {
-    const permission = this.permissionsMap.get(permissionId);
+  has(permissionId: string, projectId: string) {
+    const permission: PermissionCacheItem = this.permissionsMap.get(permissionId);
     if (!permission) {
       return false;
     }
@@ -18,18 +30,20 @@ class Permissions {
     if (permission.global) {
       return true;
     }
-    const hasProject = permission.projects.indexOf(projectId) !== -1;
+    const hasProject = permission.projectIds.indexOf(projectId) !== -1;
 
     return hasProject;
   }
 
-  hasEvery(permissionIds, projectId) {
+  hasEvery(permissionIds: Array<string>, projectId: string) {
     return (permissionIds || []).every(permissionId => this.has(permissionId, projectId));
   }
 
-  hasSome(permissionIds, projectId) {
+  hasSome(permissionIds: Array<string>, projectId: string) {
     return (permissionIds || []).some(permissionId => this.has(permissionId, projectId));
   }
 }
+
+export type { Permissions };
 
 export default Permissions;

@@ -13,13 +13,14 @@ function openAuthPage(config) {
   ].join(''));
 }
 
-function hubOAuth2(config) {
+function authorizeInHub(config) {
   return new Promise(function (resolve) {
 
     function onOpenWithUrl(event) {
       Linking.removeEventListener('url', onOpenWithUrl);
+      const url = event.url || event;
 
-      let [, query_string] = event.url.match(/\?(.*)/);
+      const [, query_string] = url.match(/\?(.*)/);
       const code = qs.parse(query_string).code;
       resolve(code);
     }
@@ -30,9 +31,4 @@ function hubOAuth2(config) {
   });
 }
 
-module.exports = {
-  checkIfBeingAuthorizing: () => {
-    return Promise.reject(new Error('INFO: Initial URL authorization doesn\'t used in ios'));
-  },
-  authorizeInHub: hubOAuth2
-};
+export default authorizeInHub;

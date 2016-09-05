@@ -10,7 +10,7 @@ describe('Router', () => {
       pop: sinon.spy(),
       replace: sinon.spy(),
       resetTo: sinon.spy()
-    }
+    };
   });
 
   it('should init', () => {

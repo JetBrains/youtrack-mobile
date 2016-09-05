@@ -1,20 +1,15 @@
 import {View, Text, StyleSheet} from 'react-native';
 import React, {PropTypes} from 'react';
-import getColorById from './color-field__colors';
 
-export const SIZE = 22;
+export const SIZE = 20;
 
 export default class ColorField extends React.Component {
   _getBackgroundColor() {
-    return this.props.color && getColorById(this.props.color.id).backgroundColor;
+    return this.props.color.background;
   }
 
   _getForegroundColor() {
-    return this.props.color && getColorById(this.props.color.id).color;
-  }
-
-  _getBorderColor() {
-    return this.props.color && getColorById(this.props.color.id).borderColor;
+    return this.props.color.foreground;
   }
 
   _getFieldLetter() {
@@ -23,8 +18,8 @@ export default class ColorField extends React.Component {
 
   render() {
     return (
-      <View style={[styles.wrapper, {backgroundColor: this._getBackgroundColor(), borderColor: this._getBorderColor()}, this.props.style]}>
-        <Text style={[styles.text, {color: this._getForegroundColor()}]}>{this._getFieldLetter()}</Text>
+      <View style={[styles.wrapper, {backgroundColor: this._getBackgroundColor()}, this.props.style]}>
+        <Text style={[styles.text, {color: this._getForegroundColor()}]} numberOfLines={1}>{this._getFieldLetter()}</Text>
       </View>
     );
   }
@@ -41,8 +36,6 @@ const styles = StyleSheet.create({
     width: SIZE,
     height: SIZE,
     borderRadius: 4,
-    flex: 1,
-    borderWidth: 1,
     justifyContent: 'center'
   },
   text: {
