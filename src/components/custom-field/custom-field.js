@@ -26,9 +26,7 @@ export default class CustomField extends React.Component {
     if (!value || !value.color) {
       return;
     }
-    if (value.color.background) {
-      value.color.background = null;
-    }
+
     return {
       color: value.color.foreground,
       backgroundColor: value.color.background
