@@ -8,17 +8,25 @@ function decorateUserName(login, username) {
 }
 
 export function decorateIssueLinks(rawText, wikifiedText) {
-  const issueLinkRegExp = /<a href=".*?issue.*?title="(.*?)".*?>(.*?)<\/a>/ig;
+  const issueLinkRegExp = /(.)?<a href=".*?issue.*?title="(.*?)".*?>(.*?)<\/a>(.)?/ig;
 
   const issuesMap = new Map();
 
-  function onIssueIdDetected(linkTag, issueSummary, issueId) {
-    issuesMap.set(issueId, issueSummary);
+  function onIssueIdDetected(linkTag, prefix, issueSummary, issueId, postfix) {
+    issuesMap.set(issueId, {prefix, issueSummary, postfix});
   }
   wikifiedText.replace(issueLinkRegExp, onIssueIdDetected);
 
   issuesMap.forEach((issueSummary, issueId) => {
-    rawText = rawText.replace(new RegExp(issueId), decorateIssueLink(issueId, issuesMap.get(issueId)));
+    rawText = rawText.replace(new RegExp(`(\\s)?(${issueId})(\\s)?`, 'g'), (source, prefix, issueId, postfix) => {
+      const issueInfo = issuesMap.get(issueId);
+      if (issueInfo.prefix !== prefix || issueInfo.postfix !== postfix) {
+        return source;
+      }
+
+      const decorated = decorateIssueLink(issueId, issuesMap.get(issueId).issueSummary);
+      return `${prefix || ''}${decorated}${postfix || ''}`;
+    });
   });
 
   return rawText;

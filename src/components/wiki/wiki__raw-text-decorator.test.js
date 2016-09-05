@@ -10,6 +10,14 @@ describe('decorateIssueLinks', () => {
     result.should.equal('foo barr [ytmissue]YTM-14|Fake issue summary[ytmissue] bar foo');
   });
 
+  it('should replace exactly that issue id ant not before or after', () => {
+    const raw = 'foo barr http://foo/YTM-14 asd YTM-14 bar foo';
+    const wiki = `foo barr http://foo/YTM-14 asd <a href="/issue/YTM-14" class="issue-resolved" target="_self" title="Fake issue summary">YTM-14</a> bar foo`;
+    const result = decorateIssueLinks(raw, wiki);
+
+    result.should.equal('foo barr http://foo/YTM-14 asd [ytmissue]YTM-14|Fake issue summary[ytmissue] bar foo');
+  });
+
   it('should not touch ID if no link found', () => {
     const result = decorateIssueLinks(rawTextWithIds, '');
 
