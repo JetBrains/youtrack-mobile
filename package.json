@@ -62,7 +62,7 @@
     "eslint-plugin-flow-vars": "^0.4.0",
     "eslint-plugin-react": "5.2.2",
     "eslint-plugin-react-native": "1.1.0",
-    "flow-bin": "0.27.0",
+    "flow-bin": "0.30.0",
     "mocha": "2.5.3",
     "mocha-teamcity-reporter": "^1.0.0",
     "nodemon": "1.9.2",
