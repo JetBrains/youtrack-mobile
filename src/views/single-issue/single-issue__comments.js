@@ -17,6 +17,7 @@ export default class SingleIssueComments extends React.Component {
     return comments.map((comment) => {
       return <Comment key={comment.id}
                       comment={comment}
+                      onIssueIdTap={this.props.onIssueIdTap}
                       attachments={attachments}
                       onReply={() => this.props.onReply(comment)}
                       onCopyCommentLink={() => this.props.onCopyCommentLink(comment)}/>;
