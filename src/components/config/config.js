@@ -3,6 +3,7 @@ import {AsyncStorage} from 'react-native';
 
 const DEFAULT_BACKEND = 'https://youtrack.jetbrains.com';
 const BACKEND_URL_STORAGE_KEY = 'yt_mobile_backend_url';
+const baseUrlRegExp = /^(.*)\//;
 
 const config: AppConfig = {
   backendUrl: DEFAULT_BACKEND,
@@ -17,8 +18,14 @@ const config: AppConfig = {
 };
 
 function getBaseUrl(url: string) {
-  const baseUrlRegExp = /^(.*)\//;
-  return url.match(baseUrlRegExp)[1];
+  if (!url) {
+    return url;
+  }
+  const match = url.match(baseUrlRegExp);
+  if (!match || !match[1]) {
+    return url;
+  }
+  return match[1];
 }
 
 function storeBackendUrl(url: string) {
