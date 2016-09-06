@@ -186,6 +186,12 @@ export default function (actions) {
       }
     }),
 
+    blockQuote: Object.assign({}, SimpleMarkdown.defaultRules.blockQuote, {
+      react: (node, output, state) => {
+        return <View key={state.key} style={styles.blockQuote}>{output(node.content, state)}</View>;
+      }
+    }),
+
     inlineCode: Object.assign({}, SimpleMarkdown.defaultRules.inlineCode, {
       react: (node, output, state) => {
         return <Text key={state.key} style={styles.inlineCode} selectable={true}>{node.content}</Text>;
