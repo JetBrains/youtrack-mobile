@@ -21,6 +21,13 @@ describe('<Wiki/>', () => {
     boldTextNode.length.should.equal(1);
   });
 
+  it('should render quote', () => {
+    const wrapper = shallow(<Wiki>`
+    > This is quote
+    `</Wiki>);
+    wrapper.should.be.defined;
+  });
+
   it('should render image', () => {
     const wrapper = shallow(<Wiki>!http://example.com/foo.png!</Wiki>);
     const imageNode = wrapper.findWhere(component => component.props().source);
