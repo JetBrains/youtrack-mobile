@@ -90,9 +90,21 @@ describe('decorateUserNames', () => {
   const rawTextWithIds = 'foo barr @userlogin bar foo';
   const wikifiedText = `foo barr <a href="/user/userlogin" title="userlogin">Mr. User Userson</a> bar foo`;
 
-  it('should replace single issue ID with special syntax', () => {
+  it('should replace single username with special syntax', () => {
     const result = decorateUserNames(rawTextWithIds, wikifiedText);
 
     result.should.equal('foo barr [ytmuser]userlogin|Mr. User Userson[ytmuser] bar foo');
+  });
+
+  it('should replace if message is just username', () => {
+    const result = decorateUserNames('@userlogin', '<a href="/user/userlogin" title="userlogin">Mr. User Userson</a>');
+
+    result.should.equal('[ytmuser]userlogin|Mr. User Userson[ytmuser]');
+  });
+
+  it('should not touch ID if no link found', () => {
+    const result = decorateIssueLinks('foo barr @userlogin2 bar foo', wikifiedText);
+
+    result.should.equal('foo barr @userlogin2 bar foo');
   });
 });
