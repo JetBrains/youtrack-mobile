@@ -70,7 +70,6 @@
     "react-dom": "15.3.1",
     "react-native-cli": "^1.0.0",
     "react-native-mock": "^0.2.0",
-    "rnpm-plugin-upgrade": "0.26.0",
     "sinon": "^1.17.3"
   }
 }
