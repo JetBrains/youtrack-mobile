@@ -1,3 +1,4 @@
+/* @flow */
 import {toField} from './api__helper';
 
 const ISSUE_PROJECT_FIELDS = toField([
@@ -38,8 +39,7 @@ const BUNDLE_VALUE = toField([
   {color: ['id', 'background', 'foreground']}
 ]);
 
-const ISSUE_FIELD_VALUE = toField(
-  {
+const ISSUE_FIELD_VALUE = toField([{
     'value': [
       '$type',
       'id',
@@ -58,8 +58,7 @@ const ISSUE_FIELD_VALUE = toField(
       }
 
     ]
-  }
-);
+  }]);
 
 const PROJECT_CUSTOM_FIELD_FIELDS = toField([
   '$type',

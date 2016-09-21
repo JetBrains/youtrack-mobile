@@ -1,10 +1,11 @@
 /* @flow */
 import qs from 'qs';
 import fields from './api__fields';
+import Auth from '../auth/auth';
 
 class Api {
-  auth: Object;
-  config: AppConfig;
+  auth: Auth;
+  config: AppConfigFilled;
   youTrackUrl: string;
   youTrackIssueUrl: string;
   youTrackProjectUrl: string;
@@ -26,6 +27,9 @@ class Api {
   makeAuthorizedRequest(url: string, method: ?string, body: ?Object) {
     const sendRequest = () => {
       const authParams = this.auth.authParams;
+      if (!authParams) {
+        throw new Error('Using API with uninitializard Auth');
+      }
 
       return fetch(url, {
         method,
@@ -115,11 +119,6 @@ class Api {
 
   getUserFromHub(id: string) {
     const queryString = qs.stringify({fields: 'avatar/url'});
-
-    if (!this.config.auth || !this.config.auth.serverUri) {
-      throw new Error('Calling API without authorized auth');
-    }
-
     return this.makeAuthorizedRequest(`${this.config.auth.serverUri}/api/rest/users/${id}?${queryString}`);
   }
 
