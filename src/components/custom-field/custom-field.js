@@ -1,8 +1,15 @@
-import {TouchableOpacity, View, Text, StyleSheet, Platform} from 'react-native';
-import React, {PropTypes} from 'react';
-import {COLOR_FONT_GRAY, COLOR_PINK, COLOR_FONT} from '../variables/variables';
+import {TouchableOpacity, View, Text} from 'react-native';
+import React, {PropTypes, Component} from 'react';
+import styles from './custom-field.styles';
 
-export default class CustomField extends React.Component {
+export default class CustomField extends Component {
+  static propTypes = {
+    field: PropTypes.object.isRequired,
+    onPress: PropTypes.func,
+    disabled: PropTypes.bool,
+    active: PropTypes.bool
+  }
+
   _getValue(value) {
     const field = this.props.field;
     const emptyValue = field.projectCustomField.emptyFieldText;
@@ -62,48 +69,3 @@ export default class CustomField extends React.Component {
     );
   }
 }
-
-const SELECTED_ALPHA_HEX = 20;
-
-const styles = StyleSheet.create({
-  wrapper: {
-    padding: 8
-  },
-  wrapperActive: {
-    backgroundColor: `${COLOR_PINK}${SELECTED_ALPHA_HEX}`
-  },
-  valuesWrapper: {
-    flexDirection: 'row',
-    flexWrap: 'nowrap'
-  },
-  keyText: {
-    color: COLOR_FONT,
-    paddingTop: 2,
-    fontSize: 11,
-    fontFamily: 'System'
-  },
-  valueText: {
-    color: COLOR_FONT,
-    fontWeight: 'bold',
-    marginRight: 0,
-    padding: 2,
-    ...Platform.select({
-      ios: {
-        marginLeft: -2
-      },
-      android: {
-        paddingRight: -1
-      }
-    })
-  },
-  valueTextDisabled: {
-    color: COLOR_FONT_GRAY
-  }
-});
-
-CustomField.propTypes = {
-  field: PropTypes.object.isRequired,
-  onPress: PropTypes.func,
-  disabled: PropTypes.bool,
-  active: PropTypes.bool
-};
