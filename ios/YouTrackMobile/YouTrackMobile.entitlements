@@ -6,6 +6,7 @@
 	<array>
 		<string>applinks:youtrack.jetbrains.com</string>
 		<string>applinks:*.myjetbrains.com</string>
+		<string>applinks:*.ngrok.io</string>
 	</array>
 	<key>keychain-access-groups</key>
 	<array>
