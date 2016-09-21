@@ -1,9 +1,16 @@
+/* @flow */
 import {View, Text, StyleSheet} from 'react-native';
 import React, {PropTypes} from 'react';
 
 export const SIZE = 20;
 
 export default class ColorField extends React.Component {
+  static propTypes = {
+    text: PropTypes.string.isRequired,
+    color: PropTypes.object.isRequired,
+    fullText: PropTypes.bool
+  }
+
   _getBackgroundColor() {
     return this.props.color.background;
   }
@@ -24,12 +31,6 @@ export default class ColorField extends React.Component {
     );
   }
 }
-
-ColorField.propTypes = {
-  text: PropTypes.string.isRequired,
-  color: PropTypes.object.isRequired,
-  fullText: PropTypes.bool
-};
 
 const styles = StyleSheet.create({
   wrapper: {
