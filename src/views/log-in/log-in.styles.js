@@ -52,7 +52,9 @@ export default StyleSheet.create({
     marginBottom: UNIT,
     backgroundColor: '#FFF',
     color: '#7E7E84',
-    fontSize: FONT_SIZE
+    fontSize: FONT_SIZE,
+    borderBottomColor: COLOR_PINK,
+    borderBottomWidth: 1
   },
   inputsContainer: {
     height: 120
