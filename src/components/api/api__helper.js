@@ -1,24 +1,6 @@
 /* @flow */
 
 const API = {
-  fillFieldHashOldRest: (issue: IssueOnList) => {
-    const fieldHash = {};
-
-    (issue.field || []).forEach((field) => {
-      const fieldName = field.name;
-      fieldHash[fieldName] = field.value;
-      for (const item in field) {
-        if (item !== 'value' && item !== 'name') {
-          fieldHash[fieldName][item] = field[item];
-        }
-      }
-    });
-
-    issue.fieldHash = fieldHash;
-
-    return issue;
-  },
-
   makeFieldHash: (issue: IssueOnList) => {
     const fieldHash = {};
     (issue.fields || []).forEach(field => {
