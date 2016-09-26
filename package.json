@@ -33,7 +33,7 @@
     "eslint": "3.2.2",
     "qs": "6.1.0",
     "react": "15.3.1",
-    "react-native": "0.33.0",
+    "react-native": "0.34.0",
     "react-native-calendar-picker": "huston007/CalendarPicker#83eea4463964d86d5b42d533c76b2ba829a665fb",
     "react-native-image-picker": "0.22.1",
     "react-native-invertible-scroll-view": "1.0.0",
