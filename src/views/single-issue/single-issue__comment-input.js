@@ -122,6 +122,7 @@ export default class IssueListCommentInput extends React.Component {
           <MultilineInput placeholder="Type your comment here"
                           value={this.state.commentText}
                           editable={!this.state.isSaving}
+                          underlineColorAndroid="transparent"
                           autoCapitalize="sentences"
                           {...this.props}
                           onSelectionChange = {(event) => {

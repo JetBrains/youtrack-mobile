@@ -95,6 +95,7 @@ export default class LoginForm extends React.Component {
             autoCorrect={false}
             autoFocus={true}
             style={styles.input}
+            underlineColorAndroid="transparent"
             placeholder="https://youtrack.example.com"
             onSubmitEditing={() => this.changeYouTrackUrl(this.state.youTrackBackendUrl)}
             value={this.state.youTrackBackendUrl}
@@ -108,6 +109,7 @@ export default class LoginForm extends React.Component {
             style={styles.input}
             placeholder="Username"
             returnKeyType="next"
+            underlineColorAndroid="transparent"
             onSubmitEditing={() => this.focusOnPassword()}
             value={this.state.username}
             onChangeText={(username) => this.setState({username})}/>
@@ -116,6 +118,7 @@ export default class LoginForm extends React.Component {
             style={styles.input}
             placeholder="Password"
             returnKeyType="done"
+            underlineColorAndroid="transparent"
             value={this.state.password}
             onSubmitEditing={() => this.logInViaCredentials()}
             secureTextEntry={true}

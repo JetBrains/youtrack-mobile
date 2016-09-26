@@ -121,6 +121,7 @@ export default class Select extends React.Component {
             placeholder="Search item"
             returnKeyType="search"
             autoCorrect={false}
+            underlineColorAndroid="transparent"
             onSubmitEditing={(e) => this._onSearch(this.state.query)}
             value={this.state.query}
             onChangeText={(text) => {

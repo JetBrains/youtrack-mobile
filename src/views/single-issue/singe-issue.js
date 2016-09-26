@@ -330,6 +330,7 @@ export default class SingeIssueView extends React.Component {
             editable={!this.state.isSavingEditedIssue}
             autoCapitalize="sentences"
             autoFocus={true}
+            underlineColorAndroid="transparent"
             value={this.state.summaryCopy}
             onSubmitEditing={() => this.refs.description.focus()}
             onChangeText={text => this.setState({summaryCopy: text})}/>
@@ -341,6 +342,7 @@ export default class SingeIssueView extends React.Component {
             editable={!this.state.isSavingEditedIssue}
             value={this.state.descriptionCopy}
             multiline={true}
+            underlineColorAndroid="transparent"
             placeholder="Description"
             onChangeText={text => this.setState({descriptionCopy: text})}/>
         </View>}
