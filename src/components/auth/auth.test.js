@@ -99,7 +99,7 @@ describe('Auth', function () {
       return promise.should.be.rejected;
     });
 
-    it('should fail verification if hub responded with error', () => {
+    it('should refresh token if was expired', () => {
       const promise = auth.verifyToken(fakeAuthParams);
       sinon.stub(auth, 'refreshToken').returns(Promise.resolve({}));
 
