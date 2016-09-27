@@ -1,10 +1,9 @@
-import {Text, View, Image, TouchableOpacity, ScrollView, TextInput, Clipboard, Platform, ActivityIndicator, Linking, RefreshControl} from 'react-native';
+import {Text, View, KeyboardAvoidingView, Image, TouchableOpacity, ScrollView, TextInput, Clipboard, Platform, ActivityIndicator, Linking, RefreshControl} from 'react-native';
 import React, {PropTypes} from 'react';
 
 import ImagePicker from 'react-native-image-picker';
 import ApiHelper from '../../components/api/api__helper';
 import {comment} from '../../components/icon/icon';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import SingleIssueComments from './single-issue__comments';
 import Router from '../../components/router/router';
@@ -377,7 +376,7 @@ export default class SingeIssueView extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior="padding">
         {this._renderHeader()}
 
         {this.state.issue && <ScrollView refreshControl={this._renderRefreshControl()}>
@@ -409,8 +408,6 @@ export default class SingeIssueView extends React.Component {
             initialText={this.state.initialCommentText}
             onAddComment={(comment) => this.addComment(this.state.issue, comment)}
           />
-
-          {Platform.OS == 'ios' && <KeyboardSpacer/>}
         </View>}
 
         {this._canAddComment() && <View style={styles.addCommentContainer}>
@@ -429,7 +426,7 @@ export default class SingeIssueView extends React.Component {
           issuePermissions={this.issuePermissions}
           onUpdate={this.onIssueFieldValueUpdate.bind(this)}
           onUpdateProject={this.onUpdateProject.bind(this)}/>}
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
