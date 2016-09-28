@@ -143,7 +143,7 @@ export default class CreateIssue extends React.Component {
 
     return (
       <View style={styles.container}>
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps={true}>
           <Header leftButton={<Text>Cancel</Text>}
                   rightButton={createButton}
                   onRightButtonClick={() => canCreateIssue && this.createIssue()}>
