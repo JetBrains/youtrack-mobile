@@ -64,6 +64,9 @@
 				<true/>
 			</dict>
 		</dict>
+		<!-- YTM-148 Allow all connections because user could have http-only server -->
+    <key>NSAllowsArbitraryLoads</key>
+    <true/>
 	</dict>
 </dict>
 </plist>
