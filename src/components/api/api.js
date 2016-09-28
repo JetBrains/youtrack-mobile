@@ -98,6 +98,11 @@ class Api {
     return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`, 'POST', {});
   }
 
+  loadIssueDraft(draftId: string) {
+    const queryString = qs.stringify({fields: fields.singleIssue.toString()});
+    return this.makeAuthorizedRequest(`${this.youTrackUrl}/api/admin/users/me/drafts/${draftId}?${queryString}`);
+  }
+
   /**
    * Creates (if issue has no id) or updates issue draft
    * @param issue

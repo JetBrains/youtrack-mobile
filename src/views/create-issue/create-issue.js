@@ -11,6 +11,7 @@ import {attach, tag, next} from '../../components/icon/icon';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 
 const PROJECT_ID_STORAGE_KEY = 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE';
+const DRAFT_ID_STORAGE_KEY = 'DRAFT_ID_STORAGE_KEY';
 const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
 
 export default class CreateIssue extends React.Component {
@@ -32,13 +33,32 @@ export default class CreateIssue extends React.Component {
       }
     };
 
-    AsyncStorage.getItem(PROJECT_ID_STORAGE_KEY)
+    AsyncStorage.getItem(DRAFT_ID_STORAGE_KEY)
+      .then(draftId => {
+        if (draftId) {
+          return this.loadIssueFromDraft(draftId);
+        }
+        return this.loadStoredProject();
+      });
+  }
+
+  loadStoredProject() {
+    return AsyncStorage.getItem(PROJECT_ID_STORAGE_KEY)
       .then(projectId => {
         if (projectId) {
           this.state.issue.project.id = projectId;
-          this.updateIssueDraft();
+          return this.updateIssueDraft();
         }
       });
+  }
+
+  loadIssueFromDraft(draftId) {
+    return this.props.api.loadIssueDraft(draftId)
+      .then(issue => {
+        this.state.issue = issue;
+        this.forceUpdate();
+      })
+      .catch(() => this.loadStoredProject());
   }
 
   updateIssueDraft(projectOnly = false) {
@@ -51,6 +71,7 @@ export default class CreateIssue extends React.Component {
       .then(issue => {
         this.state.issue = issue;
         this.forceUpdate();
+        return AsyncStorage.setItem(DRAFT_ID_STORAGE_KEY, issue.id);
       })
       .catch(err => notifyError('Cannot create issue', err));
   }
@@ -65,6 +86,7 @@ export default class CreateIssue extends React.Component {
         console.info('Issue created', res);
         this.props.onCreate(res);
         Router.pop();
+        return AsyncStorage.removeItem(DRAFT_ID_STORAGE_KEY);
       })
       .catch(err => {
         this.setState({processing: false});
@@ -105,8 +127,9 @@ export default class CreateIssue extends React.Component {
     this.state.issue.project = project;
     this.forceUpdate();
 
-    AsyncStorage.setItem(PROJECT_ID_STORAGE_KEY, project.id);
-    return this.updateIssueDraft(project.id);
+
+    return this.updateIssueDraft(project.id)
+      .then(() => AsyncStorage.setItem(PROJECT_ID_STORAGE_KEY, project.id));
   }
 
   onSetFieldValue(field, value) {
@@ -145,6 +168,10 @@ export default class CreateIssue extends React.Component {
       <View style={styles.container}>
         <ScrollView keyboardShouldPersistTaps={true}>
           <Header leftButton={<Text>Cancel</Text>}
+                  onBack={() => {
+                    this.updateIssueDraft();
+                    Router.pop();
+                  }}
                   rightButton={createButton}
                   onRightButtonClick={() => canCreateIssue && this.createIssue()}>
             <Text style={issueStyles.headerText}>New Issue</Text>
@@ -158,6 +185,7 @@ export default class CreateIssue extends React.Component {
                 underlineColorAndroid="transparent"
                 returnKeyType="next"
                 autoCapitalize="sentences"
+                value={this.state.issue.summary}
                 onSubmitEditing={() => this.refs.description.focus()}
                 onChangeText={(summary) => {
                   this.state.issue.summary = summary;
@@ -174,6 +202,7 @@ export default class CreateIssue extends React.Component {
                 multiline={true}
                 underlineColorAndroid="transparent"
                 placeholder="Description"
+                value={this.state.issue.description}
                 onChangeText={(description) => {
                   this.state.issue.description = description;
                   this.forceUpdate();
