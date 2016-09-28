@@ -159,5 +159,16 @@ describe('Auth', function () {
       request.options.headers.Authorization.should.equal('Basic Y2xpZW50LWlkOmNsaWVudC1zZWNyZXQ=');
       request.options.headers['Content-Type'].should.equal('application/x-www-form-urlencoded');
     });
+
+    it('should authorize oAUTH2 code', () => {
+      auth.obtainToken('fake-code');
+
+      const request = getLastRequest();
+
+      request.options.method.should.equal('POST');
+      const query = '?grant_type=authorization_code&code=fake-code&client_id=client-id&client_secret=client-secret&redirect_uri=ytoauth://landing.url';
+      request.url.should.equal(`${fakeConfig.auth.serverUri}/api/rest/oauth2/token${query}`);
+      request.options.headers.Authorization.should.equal('Basic Y2xpZW50LWlkOmNsaWVudC1zZWNyZXQ=');
+    });
   });
 });
