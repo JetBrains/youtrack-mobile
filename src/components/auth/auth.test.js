@@ -126,11 +126,27 @@ describe('Auth', function () {
         if (options.url.includes('/api/rest/oauth2/token')) {
           return options.resolve({status: 200, json: () => (response)});
         }
-        options.resolve({status: 200, json: () => ({})})
+        options.resolve({status: 200, json: () => ({})});
       };
 
       return promise.should.eventually.equal(response)
         .then(() => auth.authParams.should.equal(response));
+    });
+
+    it('should fail refresh if hub ', () => {
+      const response = {error_code: 500};
+      const promise = auth.refreshToken();
+
+      sinon.stub(auth, 'loadPermissions', (authParams) => authParams);
+
+      global.fetch.onRequest = options => {
+        if (options.url.includes('/api/rest/oauth2/token')) {
+          return options.resolve({status: 200, json: () => (response)});
+        }
+        options.resolve({status: 200, json: () => ({})});
+      };
+
+      return promise.should.be.rejected;
     });
   });
 });
