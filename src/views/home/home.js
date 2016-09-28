@@ -1,6 +1,7 @@
 import {View, StyleSheet, Image, Text, TouchableOpacity, TextInput} from 'react-native';
 import React from 'react';
 import {logo} from '../../components/icon/icon';
+import usage from '../../components/usage/usage';
 import {UNIT, COLOR_FONT_GRAY, COLOR_PINK, FONT_SIZE} from '../../components/variables/variables';
 
 export default class Home extends React.Component {
@@ -10,6 +11,7 @@ export default class Home extends React.Component {
       changingYouTrackUrl: false,
       youTrackBackendUrl: props.backendUrl
     };
+    usage.trackScreenView('Loading screen');
   }
 
   _renderMessage() {
