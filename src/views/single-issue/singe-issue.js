@@ -298,7 +298,7 @@ export default class SingeIssueView extends React.Component {
           return <TouchableOpacity onPress={() => this.openAttachmentUrl(attach.url)} key={attach.id}>
             <View style={styles.attachmentFile}><Text>{attach.name}</Text></View>
           </TouchableOpacity>;
-      })}
+        })}
     </ScrollView>;
   }
 
@@ -330,6 +330,7 @@ export default class SingeIssueView extends React.Component {
             editable={!this.state.isSavingEditedIssue}
             autoCapitalize="sentences"
             autoFocus={true}
+            underlineColorAndroid="transparent"
             value={this.state.summaryCopy}
             onSubmitEditing={() => this.refs.description.focus()}
             onChangeText={text => this.setState({summaryCopy: text})}/>
@@ -341,6 +342,7 @@ export default class SingeIssueView extends React.Component {
             editable={!this.state.isSavingEditedIssue}
             value={this.state.descriptionCopy}
             multiline={true}
+            underlineColorAndroid="transparent"
             placeholder="Description"
             onChangeText={text => this.setState({descriptionCopy: text})}/>
         </View>}
@@ -378,7 +380,7 @@ export default class SingeIssueView extends React.Component {
       <View style={styles.container}>
         {this._renderHeader()}
 
-        {this.state.issue && <ScrollView refreshControl={this._renderRefreshControl()}>
+        {this.state.issue && <ScrollView refreshControl={this._renderRefreshControl()} keyboardShouldPersistTaps={true}>
           {this._renderIssueView(this.state.issue)}
 
           {!this.state.fullyLoaded && <View><Text style={styles.loading}>Loading...</Text></View>}

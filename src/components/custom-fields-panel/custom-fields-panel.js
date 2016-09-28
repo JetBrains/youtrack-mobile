@@ -250,6 +250,7 @@ export default class CustomFieldsPanel extends React.Component {
           <TextInput
             style={styles.periodInput}
             placeholder="1w 1d 1h 1m"
+            underlineColorAndroid="transparent"
             clearButtonMode="always"
             returnKeyType="done"
             autoCorrect={false}

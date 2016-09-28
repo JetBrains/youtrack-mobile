@@ -1,3 +1,4 @@
+/* @flow */
 import {AsyncStorage} from 'react-native';
 import Permissions from './auth__permissions';
 import base64 from 'base64-js';
@@ -7,7 +8,7 @@ const STORAGE_KEY = 'yt_mobile_auth';
 
 const ACCEPT_HEADER = 'application/json, text/plain, */*';
 
-function makeBtoa(str) {
+function makeBtoa(str: string) {
   const byteArray = [];
   for (let i = 0; i < str.length; i++) {
     byteArray.push(str.charCodeAt(i));
@@ -15,8 +16,17 @@ function makeBtoa(str) {
   return base64.fromByteArray(byteArray);
 }
 
+declare type AuthParams = {refresh_token: string; access_token: string, token_type: string};
+
 export default class Auth {
-  constructor(config) {
+  config: AppConfigFilled;
+  authParams: ?AuthParams;
+  permissions: Permissions;
+  currentUser: Object;
+  CHECK_TOKEN_URL: string;
+  PERMISSIONS_CACHE_URL: string;
+
+  constructor(config: AppConfigFilled) {
     this.authParams = null;
     this.config = config;
     this.CHECK_TOKEN_URL = `${this.config.auth.serverUri}/api/rest/users/me?fields=id,guest,name,profile/avatar/url`;
@@ -28,12 +38,12 @@ export default class Auth {
     this.PERMISSIONS_CACHE_URL = `${this.config.auth.serverUri}/api/rest/permissions/cache?${permissionsQueryString}`;
   }
 
-  authorizeOAuth(code) {
+  authorizeOAuth(code: string) {
     return this.obtainToken(code)
       .then(this.storeAuth.bind(this));
   }
 
-  authorizeCredentials(login, pass) {
+  authorizeCredentials(login: string, pass: string) {
     return this.obtainTokenByCredentials(login, pass)
       .then(this.storeAuth.bind(this));
   }
@@ -51,7 +61,7 @@ export default class Auth {
 
   // TODO(maksimrv): Remove duplication
   // in obtainToken and obtainTokenByCredentials
-  obtainToken(code) {
+  obtainToken(code: string) {
     console.info('Obtaining token for code', code, this.config.auth.serverUri);
 
     const config = this.config;
@@ -79,7 +89,7 @@ export default class Auth {
       });
   }
 
-  obtainTokenByCredentials(login, password) {
+  obtainTokenByCredentials(login: string, password: string) {
     const config = this.config;
     const hubUrl = `${config.auth.serverUri}/api/rest/oauth2/token`;
 
@@ -111,7 +121,7 @@ export default class Auth {
   refreshToken() {
     let token;
     return this.readAuth()
-      .then(authParams => {
+      .then((authParams: AuthParams) => {
         console.info('Begining token refresh', authParams);
 
         const config = this.config;
@@ -133,7 +143,7 @@ export default class Auth {
         });
       })
       .then(res => res.json())
-      .then((authParams) => {
+      .then((authParams: AuthParams) => {
         if (!authParams.error_code) {
           console.info('Token has been refreshed', authParams);
           //restore old refresh token
@@ -153,7 +163,7 @@ export default class Auth {
   /**
    * Not sure that check is still required.
    */
-  verifyToken(authParams) {
+  verifyToken(authParams: AuthParams) {
     console.info('Verifying token...');
 
     return fetch(this.CHECK_TOKEN_URL, {
@@ -186,7 +196,7 @@ export default class Auth {
       });
   }
 
-  loadPermissions(authParams) {
+  loadPermissions(authParams: AuthParams) {
     return fetch(this.PERMISSIONS_CACHE_URL, {
       headers: {
         'Accept': ACCEPT_HEADER,
@@ -204,13 +214,13 @@ export default class Auth {
       });
   }
 
-  storeAuth(authParams) {
+  storeAuth(authParams: AuthParams) {
     return AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(authParams))
       .then(() => authParams);
   }
 
   readAuth() {
     return AsyncStorage.getItem(STORAGE_KEY)
-      .then((authParamsString) => JSON.parse(authParamsString));
+      .then((authParamsString: string) => JSON.parse(authParamsString));
   }
 }

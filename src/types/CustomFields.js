@@ -87,6 +87,6 @@ declare type CustomField = {
   id: string,
   name: string,
   hasStateMachine: boolean,
-  value: FieldValue,
+  value: FieldValue|number,
   projectCustomField: ProjectCustomField
 }

@@ -235,7 +235,6 @@ class IssueList extends React.Component {
                 backendUrl={this.props.auth.config.backendUrl}
               />}
               isOpen={this.state.showMenu}
-              openMenuOffset={260}
               onChange={isOpen => this.setState({showMenu: isOpen})}>
       <View style={styles.listContainer}>
         {this._renderHeader()}

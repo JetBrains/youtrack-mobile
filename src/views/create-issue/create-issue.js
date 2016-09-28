@@ -143,7 +143,7 @@ export default class CreateIssue extends React.Component {
 
     return (
       <View style={styles.container}>
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps={true}>
           <Header leftButton={<Text>Cancel</Text>}
                   rightButton={createButton}
                   onRightButtonClick={() => canCreateIssue && this.createIssue()}>
@@ -155,6 +155,7 @@ export default class CreateIssue extends React.Component {
                 style={styles.summaryInput}
                 editable={!this.state.processing}
                 placeholder="Summary"
+                underlineColorAndroid="transparent"
                 returnKeyType="next"
                 autoCapitalize="sentences"
                 onSubmitEditing={() => this.refs.description.focus()}
@@ -171,6 +172,7 @@ export default class CreateIssue extends React.Component {
                 autoCapitalize="sentences"
                 style={styles.descriptionInput}
                 multiline={true}
+                underlineColorAndroid="transparent"
                 placeholder="Description"
                 onChangeText={(description) => {
                   this.state.issue.description = description;
@@ -189,7 +191,7 @@ export default class CreateIssue extends React.Component {
                   style={styles.attachButton}
                   onPress={() => this.attachPhoto(true)}>
                   <Image style={styles.attachIcon} source={attach} resizeMode="contain"/>
-                  <Text style={styles.attachButtonText}>Attach file from library...</Text>
+                  <Text style={styles.attachButtonText}>Choose from library...</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity

@@ -34,6 +34,7 @@ export default class Home extends React.Component {
           autoCapitalize="none"
           autoCorrect={false}
           autoFocus={true}
+          underlineColorAndroid="transparent"
           style={styles.urlInput}
           placeholder="https://youtrack.example.com"
           onSubmitEditing={() => this.onChangeBackendUrl(this.state.youTrackBackendUrl)}

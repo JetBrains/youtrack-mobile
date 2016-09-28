@@ -121,6 +121,7 @@ export default class Select extends React.Component {
             placeholder="Search item"
             returnKeyType="search"
             autoCorrect={false}
+            underlineColorAndroid="transparent"
             onSubmitEditing={(e) => this._onSearch(this.state.query)}
             value={this.state.query}
             onChangeText={(text) => {
@@ -129,7 +130,7 @@ export default class Select extends React.Component {
             }}
             style={styles.searchInput}/>
         </View>
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps={true}>
           {this._renderEmptyValueItem()}
           {this.state.filteredItems && this.state.filteredItems.map(item => this._renderRow(item))}
 

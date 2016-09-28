@@ -1,5 +1,5 @@
 import {StyleSheet, Platform} from 'react-native';
-import {COLOR_LIGHT_GRAY, COLOR_LINK, COLOR_FONT} from '../variables/variables';
+import {COLOR_LIGHT_GRAY, COLOR_GRAY, COLOR_LINK, COLOR_FONT, UNIT} from '../variables/variables';
 const FONT_SIZE = 16;
 
 export default StyleSheet.create({
@@ -71,5 +71,10 @@ export default StyleSheet.create({
     color: COLOR_FONT,
     fontSize: FONT_SIZE,
     fontFamily: 'Courier'
+  },
+  blockQuote: {
+    borderLeftWidth: 2,
+    borderLeftColor: COLOR_GRAY,
+    paddingLeft: UNIT/2
   }
 });

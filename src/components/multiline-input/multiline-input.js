@@ -20,7 +20,7 @@ export default class MultilineInput extends React.Component {
     }
   }
 
-  onChange(e) {
+  onSizeChange(e) {
     let newHeight = e.nativeEvent.contentSize.height + HEIGHT_SHIFT;
     newHeight = newHeight > MAX_INPUT_HEIGHT ? MAX_INPUT_HEIGHT : newHeight;
     this.setState({inputHeight: newHeight});
@@ -31,7 +31,7 @@ export default class MultilineInput extends React.Component {
 
     return <TextInput {...other}
                       multiline={true}
-                      onChange={(e) => this.onChange(e)}
+                      onContentSizeChange={(e) => this.onSizeChange(e)}
                       style={[{fontSize: DEFAULT_FONT_SIZE}, style, {height: this.state.inputHeight}]}/>;
   }
 }

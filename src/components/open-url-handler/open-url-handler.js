@@ -1,14 +1,14 @@
 import {Linking} from 'react-native';
 import qs from 'qs';
 
-const issueIdReg = /issue\/([\w-\d]+)/;
+const issueIdReg = /issue(Mobile)?\/([\w-\d]+)/;
 
 function extractId(issueUrl) {
   if (!issueUrl) {
     return null;
   }
   const match = issueUrl.match(issueIdReg);
-  return match && match[1];
+  return match && match[2];
 }
 
 function extractIssuesQuery(issuesUrl) {

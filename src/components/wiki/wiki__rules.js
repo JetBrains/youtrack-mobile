@@ -1,4 +1,4 @@
-import {Text, View, Image} from 'react-native';
+import {Text, View, Image, Platform} from 'react-native';
 import React from 'react';
 import SimpleMarkdown from 'simple-markdown';
 import styles from './wiki.styles';
@@ -103,8 +103,21 @@ export default function (actions) {
       },
 
       react: (node, output, state) => {
+
+        /**
+         * Hack!!!
+         * Android doesn't load image in wiki first time without this
+         */
+        if (Platform.OS === 'android') {
+          const noop = () => {};
+          Image.getSize(node.url, noop, noop);
+        }
+
+
         return <Text onPress={() => actions.onImagePress(node.url)} key={state.key}>
-          <Image source={{uri: node.url, width: 150, height: 150}} style={styles.image}/>
+          <Image
+            source={{uri: node.url, width: 150, height: 150}}
+            style={styles.image}/>
         </Text>;
       }
     }),
@@ -183,6 +196,12 @@ export default function (actions) {
 
       react: (node, output, state) => {
         return <Text key={state.key} style={styles.codeBlock} selectable={true}>{node.content}</Text>;
+      }
+    }),
+
+    blockQuote: Object.assign({}, SimpleMarkdown.defaultRules.blockQuote, {
+      react: (node, output, state) => {
+        return <View key={state.key} style={styles.blockQuote}>{output(node.content, state)}</View>;
       }
     }),
 

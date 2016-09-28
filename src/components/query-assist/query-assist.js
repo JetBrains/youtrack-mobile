@@ -94,6 +94,7 @@ export default class QueryAssist extends React.Component {
           clearButtonMode="while-editing"
           returnKeyType="search"
           autoCorrect={false}
+          underlineColorAndroid="transparent"
           autoCapitalize="none"
           onFocus={() => this.beginEditing()}
           onBlur={() => this.stopEditing()}

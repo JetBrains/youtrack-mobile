@@ -1,8 +1,18 @@
+/* @flow */
 import qs from 'qs';
 import fields from './api__fields';
+import Auth from '../auth/auth';
 
 class Api {
-  constructor(auth) {
+  auth: Auth;
+  config: AppConfigFilled;
+  youTrackUrl: string;
+  youTrackIssueUrl: string;
+  youTrackProjectUrl: string;
+  youTrackIssuesFolderUrl: string;
+  youtTrackFieldBundleUrl: string;
+
+  constructor(auth: Object) {
     this.auth = auth;
     this.config = auth.config;
 
@@ -14,9 +24,12 @@ class Api {
     this.youtTrackFieldBundleUrl = `${this.youTrackUrl}/api/admin/customFieldSettings/bundles`;
   }
 
-  makeAuthorizedRequest(url, method, body) {
+  makeAuthorizedRequest(url: string, method: ?string, body: ?Object) {
     const sendRequest = () => {
       const authParams = this.auth.authParams;
+      if (!authParams) {
+        throw new Error('Using API with uninitializard Auth');
+      }
 
       return fetch(url, {
         method,
@@ -46,7 +59,7 @@ class Api {
       });
   }
 
-  hackishGetIssueByIssueReadableId(issueId) {
+  hackishGetIssueByIssueReadableId(issueId: string) {
     const queryString = qs.stringify({
       query: `issue id: ${issueId}`,
       $top: 1,
@@ -56,14 +69,14 @@ class Api {
       .then(issues => issues[0]);
   }
 
-  getIssue(id) {
+  getIssue(id: string) {
     const queryString = qs.stringify({
       fields: fields.singleIssue.toString()
     });
     return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${id}?${queryString}`);
   }
 
-  getIssues(query = '', $top, $skip = 0) {
+  getIssues(query: string = '', $top: number, $skip: number = 0) {
     const queryString = qs.stringify({
       query, $top, $skip,
       fields: fields.issuesOnList.toString()
@@ -76,7 +89,7 @@ class Api {
     return this.makeAuthorizedRequest(`${this.youTrackIssuesFolderUrl}?fields=$type,name,query`);
   }
 
-  createIssue(issueDraft) {
+  createIssue(issueDraft: IssueOnList) {
     console.info('Issue draft to create:', issueDraft);
     const queryString = qs.stringify({
       draftId: issueDraft.id,
@@ -90,7 +103,7 @@ class Api {
    * @param issue
    * @returns {Promise}
      */
-  updateIssueDraft(issue) {
+  updateIssueDraft(issue: IssueFull) {
     const queryString = qs.stringify({
       fields: fields.singleIssue.toString(),
       tmp: true
@@ -99,18 +112,17 @@ class Api {
     return this.makeAuthorizedRequest(`${this.youTrackUrl}/api/admin/users/me/drafts/${issue.id || ''}?${queryString}`, 'POST', issue);
   }
 
-  addComment(issueId, comment) {
+  addComment(issueId: string, comment: string) {
     const url = `${this.youTrackIssueUrl}/${issueId}/comments`;
     return this.makeAuthorizedRequest(url, 'POST', {text: comment});
   }
 
-  getUserFromHub(id) {
+  getUserFromHub(id: string) {
     const queryString = qs.stringify({fields: 'avatar/url'});
-
     return this.makeAuthorizedRequest(`${this.config.auth.serverUri}/api/rest/users/${id}?${queryString}`);
   }
 
-  getProjects(query) {
+  getProjects(query: string) {
     const queryString = qs.stringify({
       fields: fields.projectOnList.toString(),
       query: query
@@ -118,14 +130,14 @@ class Api {
     return this.makeAuthorizedRequest(`${this.youTrackProjectUrl}?${queryString}`);
   }
 
-  getProject(projectId) {
+  getProject(projectId: string) {
     const queryString = qs.stringify({
       fields: fields.project.toString()
     });
     return this.makeAuthorizedRequest(`${this.youTrackProjectUrl}/${projectId}?${queryString}`);
   }
 
-  updateProject(issue, project) {
+  updateProject(issue: IssueOnList, project: IssueProject) {
     const body = {
       id: issue.id,
       project: project
@@ -133,19 +145,19 @@ class Api {
     return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issue.id}`, 'POST', body);
   }
 
-  getCustomFieldValues(bundleId, fieldType) {
+  getCustomFieldValues(bundleId: string, fieldValueType: string) {
     const queryString = qs.stringify({
       fields: fields.bundle.toString()
     });
-    return this.makeAuthorizedRequest(`${this.youtTrackFieldBundleUrl}/${fieldType}/${bundleId}?${queryString}`);
+    return this.makeAuthorizedRequest(`${this.youtTrackFieldBundleUrl}/${fieldValueType}/${bundleId}?${queryString}`);
   }
 
-  getStateMachineEvents(issueId, fieldId) {
+  getStateMachineEvents(issueId: string, fieldId: string) {
     const url = `${this.youTrackIssueUrl}/${issueId}/fields/${fieldId}/possibleEvents?fields=id,presentation`;
     return this.makeAuthorizedRequest(url);
   }
 
-  attachFile(issueId, fileUri, fileName) {
+  attachFile(issueId: string, fileUri: string, fileName: string) {
     const formDataContent = new FormData(); //eslint-disable-line no-undef
     formDataContent.append('photo', {uri: fileUri, name: fileName, type: 'image/binary'});
 
@@ -167,26 +179,26 @@ class Api {
     });
   }
 
-  updateIssueSummaryDescription(issue) {
+  updateIssueSummaryDescription(issue: IssueFull) {
     const queryString = qs.stringify({fields: 'id,value'});
     const body = {summary: issue.summary, description: issue.description};
 
     return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issue.id}?${queryString}`, 'POST', body);
   }
 
-  updateIssueFieldValue(issueId, fieldId, value) {
+  updateIssueFieldValue(issueId: string, fieldId: string, value: FieldValue) {
     const queryString = qs.stringify({fields: 'id,ringId,value'});
     const body = {id: fieldId, value};
     return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/fields/${fieldId}?${queryString}`, 'POST', body);
   }
 
-  updateIssueFieldEvent(issueId, fieldId, event) {
+  updateIssueFieldEvent(issueId: string, fieldId: string, event: Object) {
     const queryString = qs.stringify({fields: 'id,ringId,value'});
     const body = {id: fieldId, event};
     return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/fields/${fieldId}?${queryString}`, 'POST', body);
   }
 
-  getMentionSuggests(issueIds, query) {
+  getMentionSuggests(issueIds: Array<string>, query: string) {
     const $top = 10;
     const fields = 'issues(id),users(id,login,fullName,avatarUrl)';
     const queryString = qs.stringify({$top, fields, query});
@@ -196,7 +208,7 @@ class Api {
   }
 
   //TODO: this is old API usage, move to new one
-  getQueryAssistSuggestions(query, caret) {
+  getQueryAssistSuggestions(query: string, caret: number) {
     const queryString = qs.stringify({query, caret});
     return this.makeAuthorizedRequest(`${this.youTrackUrl}/rest/search/underlineAndSuggest?${queryString}`);
   }
