@@ -5,14 +5,17 @@ describe('Auth', function () {
   let fakeConfig;
   let fakeAuthParams;
   let requests;
+  let clock;
 
   const getLastRequest = () => requests[requests.length - 1];
 
-  const mockConfigLoading = auth => sinon.stub(auth, 'readAuth').returns(fakeAuthParams);
-  const mockConfigSaving = auth => sinon.stub(auth, 'storeAuth').returns(fakeAuthParams);
+  const mockConfigLoading = auth => sinon.stub(auth, 'readAuth').returns(Promise.resolve(fakeAuthParams));
+  const mockConfigSaving = auth => sinon.stub(auth, 'storeAuth', (authParams) => authParams);
 
   beforeEach(() => {
     requests = [];
+
+    clock = sinon.useFakeTimers();
 
     fakeConfig = {
       backendUrl: 'http://fake-backend-url.ru',
@@ -34,19 +37,24 @@ describe('Auth', function () {
 
     global.fetch = sinon.spy(function(url, options) {
       return new Promise(function(resolve, reject) {
-        requests.push({
+        const request = {
           url: url,
           options: options,
           requestBody: options.body,
           resolve: resolve,
           reject: reject
-        });
+        };
+        global.fetch.onRequest(request);
+        requests.push(request);
       });
     });
+
+    global.fetch.onRequest = () => {};
   });
 
   afterEach(function () {
     delete global.fetch;
+    clock.restore();
   });
 
   it('should be imported', () => Auth.should.be.defined);
@@ -99,13 +107,30 @@ describe('Auth', function () {
       return promise.should.be.rejected;
     });
 
-    it('should refresh token if was expired', () => {
+    it('should perform token refresh if was expired', () => {
       const promise = auth.verifyToken(fakeAuthParams);
       sinon.stub(auth, 'refreshToken').returns(Promise.resolve({}));
 
       getLastRequest().resolve({status: 401});
 
       return promise.should.be.fulfilled;
+    });
+
+    it('should refresh token from hub', () => {
+      const response = {access_token: 'new-token', refresh_token: 'new-refresh'};
+      const promise = auth.refreshToken();
+
+      sinon.stub(auth, 'loadPermissions', (authParams) => authParams);
+
+      global.fetch.onRequest = options => {
+        if (options.url.includes('/api/rest/oauth2/token')) {
+          return options.resolve({status: 200, json: () => (response)});
+        }
+        options.resolve({status: 200, json: () => ({})})
+      };
+
+      return promise.should.eventually.equal(response)
+        .then(() => auth.authParams.should.equal(response));
     });
   });
 });
