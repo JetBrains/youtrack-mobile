@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 
 import {UNIT, COLOR_FONT_GRAY, COLOR_FONT, COLOR_GRAY} from '../../components/variables/variables';
 import {SIZE as COLOR_FIELD_SIZE} from '../../components/color-field/color-field';
@@ -26,6 +26,13 @@ module.exports = StyleSheet.create({
   priorityPlaceholder: {
     width: COLOR_FIELD_SIZE,
     height: COLOR_FIELD_SIZE
+  },
+  priorityWrapper: {
+    ...Platform.select({
+      android: {
+        marginTop: UNIT/4
+      }
+    })
   },
   rowTopLine: {
     flexDirection: 'row',

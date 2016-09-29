@@ -35,7 +35,7 @@ export default class IssueRow extends React.Component {
         <View style={styles.row}>
 
           <View>
-            <View>{prioityBlock}</View>
+            <View style={styles.priorityWrapper}>{prioityBlock}</View>
           </View>
 
           <View style={styles.rowText}>
