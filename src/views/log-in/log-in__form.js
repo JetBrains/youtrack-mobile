@@ -4,6 +4,7 @@ import {logo} from '../../components/icon/icon';
 import Keystore from '../../components/keystore/keystore';
 import authorizeInHub from '../../components/auth/auth__oauth';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+import usage from '../../components/usage/usage';
 
 import styles from './log-in.styles';
 
@@ -24,6 +25,8 @@ export default class LoginForm extends React.Component {
     const config = props.auth.config;
     Keystore.getInternetCredentials(config.auth.serverUri)
       .then(({username, password}) => this.setState({username, password}), noop);
+
+    usage.trackScreenView('Login form');
   }
 
   focusOnPassword() {

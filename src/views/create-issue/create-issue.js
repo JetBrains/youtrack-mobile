@@ -5,6 +5,7 @@ import styles from './create-issue.styles';
 import issueStyles from '../single-issue/single-issue.styles';
 import Header from '../../components/header/header';
 import {notifyError} from '../../components/notification/notification';
+import usage from '../../components/usage/usage';
 import ImagePicker from 'react-native-image-picker';
 import Router from '../../components/router/router';
 import {attach, tag, next} from '../../components/icon/icon';
@@ -32,6 +33,8 @@ export default class CreateIssue extends React.Component {
         }
       }
     };
+
+    usage.trackScreenView('Create issue');
 
     AsyncStorage.getItem(DRAFT_ID_STORAGE_KEY)
       .then(draftId => {

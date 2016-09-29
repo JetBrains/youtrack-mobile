@@ -11,7 +11,7 @@ export default class Home extends React.Component {
       changingYouTrackUrl: false,
       youTrackBackendUrl: props.backendUrl
     };
-    usage.trackScreenView('Loading screen');
+    usage.trackScreenView('Loading');
   }
 
   _renderMessage() {

@@ -17,6 +17,7 @@ import IssuePermissions from '../../components/issue-permissions/issue-permissio
 import {notifyError} from '../../components/notification/notification';
 import SingleIssueCommentInput from './single-issue__comment-input';
 import {COLOR_PINK} from '../../components/variables/variables';
+import usage from '../../components/usage/usage';
 import styles from './single-issue.styles';
 
 const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
@@ -43,6 +44,8 @@ export default class SingeIssueView extends React.Component {
       summaryCopy: null,
       descriptionCopy: null
     };
+
+    usage.trackScreenView('Issue');
   }
 
   componentDidMount() {
