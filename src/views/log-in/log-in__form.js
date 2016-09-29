@@ -9,8 +9,9 @@ import usage from '../../components/usage/usage';
 import styles from './log-in.styles';
 
 const noop = () => {};
+const CATEGORY_NAME = 'Login form';
 
-export default class LoginForm extends React.Component {
+  export default class LoginForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,8 +43,14 @@ export default class LoginForm extends React.Component {
         return Keystore.setInternetCredentials(config.auth.serverUri, this.state.username, this.state.password)
           .catch(noop);
       })
-      .then(() => this.props.onLogIn())
-      .catch(err => this.setState({errorMessage: err.error_description || err.message, loggingIn: false}));
+      .then(() => {
+        usage.trackEvent(CATEGORY_NAME, 'Login via credentials', 'Success');
+        return this.props.onLogIn();
+      })
+      .catch(err => {
+        usage.trackEvent(CATEGORY_NAME, 'Login via credentials', 'Error');
+        this.setState({errorMessage: err.error_description || err.message, loggingIn: false});
+      });
   }
 
   openYouTrackUrlPrompt() {
@@ -62,8 +69,12 @@ export default class LoginForm extends React.Component {
         this.setState({loggingIn: true});
         return this.props.auth.authorizeOAuth(code);
       })
-      .then(() => this.props.onLogIn())
+      .then(() => {
+        usage.trackEvent(CATEGORY_NAME, 'Login via browser', 'Success');
+        return this.props.onLogIn();
+      })
       .catch(err => {
+        usage.trackEvent(CATEGORY_NAME, 'Login via browser', 'Error');
         this.setState({loggingIn: false, errorMessage: err.error_description || err.message});
       });
   }

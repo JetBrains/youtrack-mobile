@@ -21,6 +21,7 @@ import usage from '../../components/usage/usage';
 import styles from './single-issue.styles';
 
 const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
+const CATEGORY_NAME = 'Issue';
 
 export default class SingeIssueView extends React.Component {
   static contextTypes = {
@@ -45,7 +46,7 @@ export default class SingeIssueView extends React.Component {
       descriptionCopy: null
     };
 
-    usage.trackScreenView('Issue');
+    usage.trackScreenView(CATEGORY_NAME);
   }
 
   componentDidMount() {
@@ -87,6 +88,7 @@ export default class SingeIssueView extends React.Component {
     return this.props.api.addComment(issue.id, comment)
       .then((res) => {
         console.info('Comment created', res);
+        usage.trackEvent(CATEGORY_NAME, 'Add comment', 'Success');
         this.setState({addCommentMode: false});
         this.loadIssue(this.state.issue.id);
       })
@@ -116,7 +118,10 @@ export default class SingeIssueView extends React.Component {
 
       this.setState({attachingImage: res});
       this.props.api.attachFile(this.state.issue.id, fileUri, fileName)
-        .then(() => this.setState({attachingImage: null}))
+        .then(() => {
+          usage.trackEvent(CATEGORY_NAME, 'Attach image', 'Success');
+          return this.setState({attachingImage: null});
+        })
         .catch((err) => {
           this.state.issue.attachments = this.state.issue.attachments.filter(attach => attach !== res);
           this.setState({attachingImage: null});
@@ -140,6 +145,8 @@ export default class SingeIssueView extends React.Component {
   onIssueFieldValueUpdate(field, value) {
     field.value = value;
     this.forceUpdate();
+    usage.trackEvent(CATEGORY_NAME, 'Update field value');
+
     const updateMethod = field.hasStateMachine ?
       this.props.api.updateIssueFieldEvent.bind(this.props.api) :
       this.props.api.updateIssueFieldValue.bind(this.props.api);
@@ -157,6 +164,8 @@ export default class SingeIssueView extends React.Component {
     this.state.issue.project = project;
     this.forceUpdate();
 
+    usage.trackEvent(CATEGORY_NAME, 'Update project');
+
     return this.props.api.updateProject(this.state.issue, project)
       .catch((err) => notifyError('Failed to update issue project', err))
       .then(() => this.loadIssue(this.state.issue.id));
@@ -168,7 +177,10 @@ export default class SingeIssueView extends React.Component {
     this.setState({isSavingEditedIssue: true});
 
     return this.props.api.updateIssueSummaryDescription(this.state.issue)
-      .then(() => this.setState({editMode: false, isSavingEditedIssue: false}))
+      .then(() => {
+        usage.trackEvent(CATEGORY_NAME, 'Update issue', 'Success');
+        return this.setState({editMode: false, isSavingEditedIssue: false});
+      })
       .catch((err) => {
         this.setState({isSavingEditedIssue: false});
         notifyError('Failed to update issue project', err);
@@ -206,6 +218,7 @@ export default class SingeIssueView extends React.Component {
     const editAction = this.issuePermissions.canUpdateGeneralInfo(this.state.issue) ? {
       title: 'Edit issue',
       execute: () => {
+        usage.trackEvent(CATEGORY_NAME, 'Start issue editing');
         this.setState({
           editMode: true,
           summaryCopy: this.state.issue.summary,
@@ -223,7 +236,10 @@ export default class SingeIssueView extends React.Component {
       editAction,
       {
         title: 'Copy issue URL',
-        execute: () => Clipboard.setString(this._makeIssueWebUrl(this.state.issue))
+        execute: () => {
+          usage.trackEvent(CATEGORY_NAME, 'Copy isue URL');
+          return Clipboard.setString(this._makeIssueWebUrl(this.state.issue));
+        }
       },
       addAttachmentAction,
       {title: 'Cancel'}
@@ -236,6 +252,7 @@ export default class SingeIssueView extends React.Component {
   }
 
   openAttachmentUrl(url) {
+    usage.trackEvent(CATEGORY_NAME, 'Open attachment by URL');
     Linking.openURL(url);
   }
 

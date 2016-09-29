@@ -14,6 +14,7 @@ import CustomFieldsPanel from '../../components/custom-fields-panel/custom-field
 const PROJECT_ID_STORAGE_KEY = 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE';
 const DRAFT_ID_STORAGE_KEY = 'DRAFT_ID_STORAGE_KEY';
 const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
+const CATEGORY_NAME = 'Create issue view';
 
 export default class CreateIssue extends React.Component {
   constructor() {
@@ -87,12 +88,14 @@ export default class CreateIssue extends React.Component {
       .then(res => {
         this.setState({processing: false});
         console.info('Issue created', res);
+        usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Success');
         this.props.onCreate(res);
         Router.pop();
         return AsyncStorage.removeItem(DRAFT_ID_STORAGE_KEY);
       })
       .catch(err => {
         this.setState({processing: false});
+        usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Error');
         return notifyError('Cannot create issue', err);
       });
   }
@@ -116,7 +119,10 @@ export default class CreateIssue extends React.Component {
 
       this.setState({attachingImage: res});
       this.props.api.attachFile(this.state.issue.id, fileUri, fileName)
-        .then(() => this.setState({attachingImage: null}))
+        .then(() => {
+          usage.trackEvent(CATEGORY_NAME, 'Attach image', 'Success');
+          return this.setState({attachingImage: null});
+        })
         .catch((err) => {
           this.state.issue.attachments = this.state.issue.attachments.filter(attach => attach !== res);
           this.setState({attachingImage: null});
@@ -130,7 +136,7 @@ export default class CreateIssue extends React.Component {
     this.state.issue.project = project;
     this.forceUpdate();
 
-
+    usage.trackEvent(CATEGORY_NAME, 'Change project');
     return this.updateIssueDraft(project.id)
       .then(() => AsyncStorage.setItem(PROJECT_ID_STORAGE_KEY, project.id));
   }
@@ -144,6 +150,7 @@ export default class CreateIssue extends React.Component {
     });
 
     this.forceUpdate();
+    usage.trackEvent(CATEGORY_NAME, 'Change field value');
     return this.updateIssueDraft();
   }
 
