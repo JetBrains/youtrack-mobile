@@ -1,11 +1,27 @@
-import {View, StyleSheet, Image, Text, TouchableOpacity, TextInput} from 'react-native';
-import React from 'react';
+/* @flow */
+import {View, Image, Text, TouchableOpacity, TextInput} from 'react-native';
+import React, {Component} from 'react';
 import {logo} from '../../components/icon/icon';
 import usage from '../../components/usage/usage';
-import {UNIT, COLOR_FONT_GRAY, COLOR_PINK, FONT_SIZE} from '../../components/variables/variables';
+import styles from './home.styles';
 
-export default class Home extends React.Component {
-  constructor(props) {
+type Props = {
+  backendUrl: string,
+  message: string,
+  error: string | {message: string},
+  onChangeBackendUrl: (newUrl: string) => any
+};
+
+type State = {
+  changingYouTrackUrl: boolean,
+  youTrackBackendUrl: string
+}
+
+export default class Home extends Component {
+  props: Props;
+  state: State;
+
+  constructor(props: Props) {
     super(props);
     this.state = {
       changingYouTrackUrl: false,
@@ -54,7 +70,7 @@ export default class Home extends React.Component {
     this.setState({changingYouTrackUrl: true});
   }
 
-  onChangeBackendUrl(newUrl) {
+  onChangeBackendUrl(newUrl: string) {
     this.setState({changingYouTrackUrl: false});
     this.props.onChangeBackendUrl(newUrl);
   }
@@ -70,42 +86,3 @@ export default class Home extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFF'
-  },
-  logoImage: {
-    height: UNIT * 20,
-    resizeMode: 'contain'
-  },
-  message: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    padding: UNIT * 2,
-    textAlign: 'center'
-  },
-  urlButton: {
-    position: 'absolute',
-    left: 0,
-    right: 0
-  },
-  url: {
-    textAlign: 'center',
-    marginTop: UNIT * 2,
-    color: COLOR_FONT_GRAY
-  },
-  urlInput: {
-    height: UNIT * 5,
-    width: 240,
-    backgroundColor: '#FFF',
-    fontSize: FONT_SIZE,
-    borderBottomColor: COLOR_PINK,
-    borderBottomWidth: 1
-  }
-});
