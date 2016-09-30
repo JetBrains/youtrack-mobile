@@ -7,6 +7,7 @@ import qs from 'qs';
 const STORAGE_KEY = 'yt_mobile_auth';
 
 const ACCEPT_HEADER = 'application/json, text/plain, */*';
+const URL_ENCODED_TYPE = 'application/x-www-form-urlencoded';
 
 function makeBtoa(str: string) {
   const byteArray = [];
@@ -68,7 +69,7 @@ export default class Auth {
       headers: {
         'Accept': ACCEPT_HEADER,
         'Authorization': `Basic ${makeBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`,
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': URL_ENCODED_TYPE
       },
       body: body
     }).then(res => res.json())
@@ -124,7 +125,8 @@ export default class Auth {
           method: 'POST',
           headers: {
             'Accept': ACCEPT_HEADER,
-            'Authorization': `Basic ${makeBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`
+            'Authorization': `Basic ${makeBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`,
+            'Content-Type': URL_ENCODED_TYPE
           }
         });
       })
