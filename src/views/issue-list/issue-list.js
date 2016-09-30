@@ -241,6 +241,7 @@ class IssueList extends React.Component {
       <View style={styles.listContainer}>
         {this._renderHeader()}
         <ListView
+          removeClippedSubviews={false}
           dataSource={this.state.dataSource}
           enableEmptySections={true}
           renderRow={(issue) => <IssueRow issue={issue} onClick={(issue) => this.goToIssue(issue)}></IssueRow>}
