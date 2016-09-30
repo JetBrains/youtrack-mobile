@@ -19,7 +19,6 @@ const CATEGORY_NAME = 'Login form';
       password: '',
       errorMessage: '',
       loggingIn: false,
-      changingYouTrackUrl: false,
       youTrackBackendUrl: props.auth.config.backendUrl
     };
 
@@ -53,12 +52,8 @@ const CATEGORY_NAME = 'Login form';
       });
   }
 
-  openYouTrackUrlPrompt() {
-    this.setState({changingYouTrackUrl: true});
-  }
-
-  changeYouTrackUrl(newUrl) {
-    this.props.onChangeBackendUrl(newUrl);
+  changeYouTrackUrl() {
+    this.props.onChangeServerUrl(this.props.auth.config.backendUr);
   }
 
   logInViaHub() {
@@ -96,25 +91,12 @@ const CATEGORY_NAME = 'Login form';
           <Image style={styles.logoImage} source={logo}/>
         </View>
 
-        {!this.state.changingYouTrackUrl && <TouchableOpacity onPress={this.openYouTrackUrlPrompt.bind(this)}>
+        <TouchableOpacity onPress={this.changeYouTrackUrl.bind(this)}>
           <View>
             <Text style={styles.welcome}>Login to YouTrack</Text>
             <Text style={[styles.descriptionText, {marginTop: 8}]}>{this.props.auth.config.backendUrl}</Text>
           </View>
-        </TouchableOpacity>}
-
-        {this.state.changingYouTrackUrl && <View>
-          <TextInput
-            autoCapitalize="none"
-            autoCorrect={false}
-            autoFocus={true}
-            style={styles.input}
-            underlineColorAndroid="transparent"
-            placeholder="https://youtrack.example.com"
-            onSubmitEditing={() => this.changeYouTrackUrl(this.state.youTrackBackendUrl)}
-            value={this.state.youTrackBackendUrl}
-            onChangeText={(youTrackBackendUrl) => this.setState({youTrackBackendUrl})}/>
-        </View>}
+        </TouchableOpacity>
 
         <View style={styles.inputsContainer}>
           <TextInput

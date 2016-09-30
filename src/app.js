@@ -2,6 +2,7 @@ import Auth from './components/auth/auth';
 
 import Router from './components/router/router';
 import Home from './views/home/home';
+import ChooseServer from './views/choose-server/choose-server';
 import LoginForm from './views/log-in/log-in__form';
 import IssueList from './views/issue-list/issue-list';
 import SingleIssue from './views/single-issue/singe-issue';
@@ -50,6 +51,10 @@ class YouTrackMobile extends React.Component {
       .catch((e) => Router.LogIn());
   }
 
+  changeServerUrl(youtrackUrl) {
+    Router.ChooseServer({serverUrl: youtrackUrl});
+  }
+
   addAndroidBackButtonSupport() {
     BackAndroid.addEventListener('hardwareBackPress', function() {
       const populated = Router.pop();
@@ -76,9 +81,21 @@ class YouTrackMobile extends React.Component {
 
   registerRoutes() {
     Router.registerRoute({
+      name: 'ChooseServer',
+      component: ChooseServer,
+      props: {
+        connectToYoutrack: newUrl => loadConfig(newUrl).then(this.initialize.bind(this))
+      }
+    });
+
+    Router.registerRoute({
       name: 'LogIn',
       component: LoginForm,
-      props: {auth: this.auth, onLogIn: this.checkAuthorization.bind(this), onChangeBackendUrl: this.initialize.bind(this)},
+      props: {
+        auth: this.auth,
+        onLogIn: this.checkAuthorization.bind(this),
+        onChangeServerUrl: this.changeServerUrl.bind(this)
+      },
       type: 'reset'
     });
 
