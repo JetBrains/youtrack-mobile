@@ -1,5 +1,6 @@
 import {StyleSheet, Platform} from 'react-native';
 import {UNIT, COLOR_LIGHT_GRAY, COLOR_FONT_GRAY, COLOR_FONT, COLOR_GRAY, COLOR_PINK} from '../../components/variables/variables';
+
 const ATTACHING_IMAGE_ALPHA = '70';
 
 const SUGGESTION_BOTTOM = Platform.OS === 'ios' ? 52 : 48;

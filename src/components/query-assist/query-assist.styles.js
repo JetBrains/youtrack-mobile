@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
-
 import {UNIT, COLOR_PINK, COLOR_LIGHT_GRAY, COLOR_FONT, COLOR_GRAY} from '../../components/variables/variables';
+
 const QUERY_ASSIST_HEIGHT = 44;
 
 export default StyleSheet.create({

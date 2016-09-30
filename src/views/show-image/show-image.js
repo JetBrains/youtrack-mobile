@@ -1,7 +1,8 @@
 import {StyleSheet, Image, View, Text, ScrollView, TouchableOpacity} from 'react-native';
 import React from 'react';
-const TOUCH_PADDING = 12;
 import Router from '../../components/router/router';
+
+const TOUCH_PADDING = 12;
 
 class ShowImage extends React.Component {
   render() {
@@ -45,4 +46,4 @@ const styles = StyleSheet.create({
   }
 });
 
-module.exports = ShowImage;
+export default ShowImage;

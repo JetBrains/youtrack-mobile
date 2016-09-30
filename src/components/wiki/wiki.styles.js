@@ -1,5 +1,6 @@
 import {StyleSheet, Platform} from 'react-native';
 import {COLOR_LIGHT_GRAY, COLOR_GRAY, COLOR_LINK, COLOR_FONT, UNIT} from '../variables/variables';
+
 const FONT_SIZE = 16;
 
 export default StyleSheet.create({

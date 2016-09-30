@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_FONT_GRAY, COLOR_PINK, FONT_SIZE} from '../../components/variables/variables';
+import {UNIT, COLOR_FONT_GRAY, COLOR_PINK} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   container: {
@@ -34,7 +34,6 @@ export default StyleSheet.create({
     height: UNIT * 5,
     width: 240,
     backgroundColor: '#FFF',
-    fontSize: FONT_SIZE,
     borderBottomColor: COLOR_PINK,
     borderBottomWidth: 1
   }

@@ -4,7 +4,7 @@ import {COLOR_PINK, UNIT, COLOR_FONT_GRAY} from '../../components/variables/vari
 
 const AVATAR_SIZE = UNIT * 8;
 
-module.exports = StyleSheet.create({
+export default StyleSheet.create({
   menuContainer: {
     marginTop: HEADER_TOP_PADDING,
     flex: 1

@@ -8,7 +8,8 @@ module.exports = {
   'plugins': [
     'react',
     'react-native',
-    'flow-vars'
+    'flow-vars',
+    'import'
   ],
   'rules': {
     'no-unused-vars': [ERROR, {'vars': 'local', 'args': 'none'}],
@@ -25,6 +26,14 @@ module.exports = {
     'prefer-template': ERROR,
     'no-dupe-class-members': ERROR,
     'no-this-before-super': ERROR,
+    //Modules
+    'import/no-commonjs': ERROR,
+    'import/first': ERROR,
+    'import/no-duplicates': ERROR,
+    'import/extensions': ERROR,
+    'import/newline-after-import': ERROR,
+    'import/named': ERROR,
+
     //React
     'react/jsx-uses-react': ERROR,
     'react/jsx-key': ERROR,

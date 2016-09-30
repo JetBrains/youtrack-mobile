@@ -3,7 +3,7 @@ import {StyleSheet, Platform} from 'react-native';
 import {UNIT, COLOR_FONT_GRAY, COLOR_FONT, COLOR_GRAY} from '../../components/variables/variables';
 import {SIZE as COLOR_FIELD_SIZE} from '../../components/color-field/color-field';
 
-module.exports = StyleSheet.create({
+export default StyleSheet.create({
   listContainer: {
     flex: 1,
     backgroundColor: '#FFF'

@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {UNIT, FOOTER_HEIGHT, COLOR_PINK, COLOR_FONT, COLOR_GRAY} from '../../components/variables/variables';
+
 const SAVING_ALPHA = '70';
 
 export default StyleSheet.create({
