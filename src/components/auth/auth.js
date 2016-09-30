@@ -39,7 +39,7 @@ export default class Auth {
   }
 
   authorizeOAuth(code: string) {
-    return this.obtainToken(code)
+    return this.obtainTokenByOAuthCode(code)
       .then(this.storeAuth.bind(this));
   }
 
@@ -59,27 +59,18 @@ export default class Auth {
     return AsyncStorage.removeItem(STORAGE_KEY).then(() => delete this.authParams);
   }
 
-  // TODO(maksimrv): Remove duplication
-  // in obtainToken and obtainTokenByCredentials
-  obtainToken(code: string) {
-    console.info('Obtaining token for code', code, this.config.auth.serverUri);
-
+  obtainToken(body: string) {
     const config = this.config;
+    const hubTokenUrl = `${config.auth.serverUri}/api/rest/oauth2/token`;
 
-    return fetch([
-      config.auth.serverUri,
-      `/api/rest/oauth2/token`,
-      '?grant_type=authorization_code',
-      `&code=${code}`,
-      `&client_id=${config.auth.clientId}`,
-      `&client_secret=${config.auth.clientSecret}`,
-      `&redirect_uri=${config.auth.landingUrl}`
-    ].join(''), {
+    return fetch(hubTokenUrl, {
       method: 'POST',
       headers: {
         'Accept': ACCEPT_HEADER,
-        'Authorization': `Basic ${makeBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`
-      }
+        'Authorization': `Basic ${makeBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`,
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: body
     }).then(res => res.json())
       .then(res => {
         if (res.error) {
@@ -89,33 +80,28 @@ export default class Auth {
       });
   }
 
+  obtainTokenByOAuthCode(code: string) {
+    console.info('Obtaining token for code', code, this.config.auth.serverUri);
+
+    return this.obtainToken([
+      'grant_type=authorization_code',
+      `&code=${code}`,
+      `&client_id=${this.config.auth.clientId}`,
+      `&client_secret=${this.config.auth.clientSecret}`,
+      `&redirect_uri=${this.config.auth.landingUrl}`
+    ].join(''));
+  }
+
   obtainTokenByCredentials(login: string, password: string) {
-    const config = this.config;
-    const hubUrl = `${config.auth.serverUri}/api/rest/oauth2/token`;
+    console.info(`Obtaining token by credentials on ${this.config.auth.serverUri} for "${login}"`);
 
-    console.info(`Obtaining token by credentials on ${hubUrl} for "${login}"`);
-
-    return fetch(hubUrl, {
-      method: 'POST',
-      headers: {
-        'Accept': ACCEPT_HEADER,
-        'Authorization': `Basic ${makeBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`,
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: [
-        'grant_type=password',
-        '&access_type=offline',
-        `&username=${login}`,
-        `&password=${password}`,
-        `&scope=${config.auth.scopes}`
-      ].join('')
-    }).then(res => res.json())
-      .then(res => {
-        if (res.error) {
-          throw res;
-        }
-        return res;
-      });
+    return this.obtainToken([
+      'grant_type=password',
+      '&access_type=offline',
+      `&username=${login}`,
+      `&password=${password}`,
+      `&scope=${this.config.auth.scopes}`
+    ].join(''));
   }
 
   refreshToken() {
