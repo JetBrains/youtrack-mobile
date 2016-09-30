@@ -1,10 +1,10 @@
 export default {
-  getInternetCredentials(server) {
+  getInternetCredentials() {
     //TODO: not implemented
     return Promise.reject();
   },
 
-  setInternetCredentials(server, username, password) {
+  setInternetCredentials() {
     //TODO: not implemented
     return Promise.reject();
   }
