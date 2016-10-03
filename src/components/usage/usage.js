@@ -36,10 +36,21 @@ const usage = {
   },
 
   trackError(error: any, additionalMessage: ?string) {
-    return this.trackEvent('exception', {
+    return usage.trackEvent('exception', {
       'exDescription': additionalMessage || JSON.stringify(error)
     }, JSON.stringify(error));
+  },
+
+  onGlobalError(error: any, isFatal: boolean) {
+    return usage.trackError(error, 'Global error happened', `isFatal:${isFatal.toString()}`);
   }
 };
+
+const originalHandler = global.ErrorUtils.getGlobalHandler();
+
+global.ErrorUtils.setGlobalHandler((...params) => {
+  usage.onGlobalError(...params);
+  return originalHandler(...params);
+});
 
 export default usage;

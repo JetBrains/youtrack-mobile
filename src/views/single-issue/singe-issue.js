@@ -18,7 +18,7 @@ import {notifyError} from '../../components/notification/notification';
 import SingleIssueCommentInput from './single-issue__comment-input';
 import {COLOR_PINK} from '../../components/variables/variables';
 import usage from '../../components/usage/usage';
-import log from '../../log/log';
+import log from '../../components/log/log';
 import styles from './single-issue.styles';
 
 const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
