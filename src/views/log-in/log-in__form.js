@@ -1,5 +1,7 @@
+/* @flow */
 import {Image, View, Text, TextInput, TouchableOpacity, Linking, ScrollView, ActivityIndicator} from 'react-native';
 import React from 'react';
+import Auth from '../../components/auth/auth';
 import {logo, back} from '../../components/icon/icon';
 import Keystore from '../../components/keystore/keystore';
 import authorizeInHub from '../../components/auth/auth__oauth';
@@ -11,8 +13,25 @@ import styles from './log-in.styles';
 const noop = () => {};
 const CATEGORY_NAME = 'Login form';
 
-  export default class LoginForm extends React.Component {
-  constructor(props) {
+type Props = {
+  auth: Auth,
+  onLogIn: () => any,
+  onChangeServerUrl: (currentUrl: string) => any
+};
+
+type State = {
+  username: string,
+  password: string,
+  errorMessage: string,
+  loggingIn: boolean,
+  youTrackBackendUrl: string
+};
+
+export default class LoginForm extends React.Component {
+  props: Props;
+  state: State;
+
+  constructor(props: Props) {
     super(props);
     this.state = {
       username: '',
