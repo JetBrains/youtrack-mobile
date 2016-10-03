@@ -41,7 +41,7 @@ function handleEmbeddedHubUrl(hubUrl: string, ytUrl: string) {
   return hubUrl[0] === '/' ? ytUrl + hubUrl : hubUrl;
 }
 
-function loadConfig(ytUrl: string = config.backendUrl) {
+function loadConfig(ytUrl: string) {
   return fetch(`${ytUrl}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId)`)
     .then(res => res.json())
     .then(res => {
