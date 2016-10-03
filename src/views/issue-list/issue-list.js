@@ -114,7 +114,7 @@ class IssueList extends React.Component {
   logOut() {
     return this.props.auth.logOut()
       .then(() => this.cache.store([]))
-      .then(() => Router.LogIn());
+      .then(() => Router.EnterServer({serverUrl: this.props.auth.config.backendUrl}));
   }
 
   loadIssues(text) {
