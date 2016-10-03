@@ -1,13 +1,14 @@
+/* @flow */
 import showNotification from './notification_show';
 import log from '../log/log';
 import usage from '../usage/usage';
 
-export const extractErrorMessage = function (err) {
+export const extractErrorMessage = function (err: Object | string): string {
   if (!err) {
     return 'Unknown error';
   }
 
-  if (err.replace) {
+  if (typeof err === 'string') {
     return err;
   }
 
@@ -24,7 +25,7 @@ export const extractErrorMessage = function (err) {
   return values.join('. ');
 };
 
-export function resolveError (err) {
+export function resolveError (err: Object) {
   if (err.json) {
     try {
       return err.json();
@@ -36,12 +37,12 @@ export function resolveError (err) {
   }
 }
 
-const showErrorMessage = function (message, error) {
+const showErrorMessage = function (message: string, error: Object) {
   log.warn(message, error);
   usage.trackError(error, message);
   showNotification(message, extractErrorMessage(error));
 };
 
-export function notifyError (message, err) {
+export function notifyError (message: string, err: Object) {
   return resolveError(err).then(extracted => showErrorMessage(message, extracted));
 }
