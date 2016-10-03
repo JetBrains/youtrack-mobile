@@ -2,7 +2,7 @@ import showNotification from './notification_show';
 import log from '../log/log';
 import usage from '../usage/usage';
 
-const extractErrorMessage = function (err) {
+export const extractErrorMessage = function (err) {
   if (!err) {
     return 'Unknown error';
   }
@@ -16,12 +16,25 @@ const extractErrorMessage = function (err) {
     err.message,
     err.error_message,
     err.error_description,
+    err.error_children && err.error_children.map(it => it.error),
     err.body,
     err.bodyText
   ].filter(msg => msg);
 
-  return values.join(', ');
+  return values.join('. ');
 };
+
+export function resolveError (err) {
+  if (err.json) {
+    try {
+      return err.json();
+    } catch (e) {
+      return Promise.resolve(err);
+    }
+  } else {
+    return Promise.resolve(err);
+  }
+}
 
 const showErrorMessage = function (message, error) {
   log.warn(message, error);
@@ -30,14 +43,5 @@ const showErrorMessage = function (message, error) {
 };
 
 export function notifyError (message, err) {
-  if (err.json) {
-    try {
-      return err.json()
-        .then(res => showErrorMessage(message, res));
-    } catch (e) {
-      return showErrorMessage(message, err);
-    }
-  } else {
-    return showErrorMessage(message, err);
-  }
+  return resolveError(err).then(extracted => showErrorMessage(message, extracted));
 }

@@ -1,12 +1,34 @@
 import {StyleSheet, Platform} from 'react-native';
 
-import {UNIT, COLOR_FONT_GRAY, COLOR_FONT, COLOR_GRAY} from '../../components/variables/variables';
+import {UNIT, COLOR_FONT_GRAY, COLOR_FONT, COLOR_PINK, COLOR_GRAY} from '../../components/variables/variables';
 import {SIZE as COLOR_FIELD_SIZE} from '../../components/color-field/color-field';
 
 export default StyleSheet.create({
   listContainer: {
     flex: 1,
     backgroundColor: '#FFF'
+  },
+  errorContainer: {
+    flex: 1
+  },
+  errorTitle: {
+    marginTop: UNIT*2,
+    color: 'red',
+    fontSize: 16,
+    textAlign: 'center'
+  },
+  errorContent: {
+    margin: UNIT,
+    fontSize: 14,
+    textAlign: 'center'
+  },
+  tryAgainButton: {
+    alignSelf: 'center',
+    paddingTop: UNIT*2
+  },
+  tryAgainText: {
+    fontSize: 18,
+    color: COLOR_PINK
   },
   headerText: {
     fontSize: 17

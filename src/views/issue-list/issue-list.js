@@ -6,6 +6,7 @@ import {
   ScrollView,
   RefreshControl,
   Platform,
+  TouchableOpacity,
   AppState
 } from 'react-native';
 import React from 'react';
@@ -16,7 +17,7 @@ import Header from '../../components/header/header';
 import QueryAssist from '../../components/query-assist/query-assist';
 import {COLOR_PINK} from '../../components/variables/variables';
 import Cache from '../../components/cache/cache';
-import {notifyError} from '../../components/notification/notification';
+import {notifyError, resolveError, extractErrorMessage} from '../../components/notification/notification';
 import usage from '../../components/usage/usage';
 import log from '../../components/log/log';
 
@@ -48,6 +49,7 @@ class IssueList extends React.Component {
       listEndReached: false,
 
       showMenu: false,
+      loadingError: null,
       queryAssistValue: '',
       isRefreshing: false
     };
@@ -119,7 +121,7 @@ class IssueList extends React.Component {
   }
 
   loadIssues(text) {
-    this.setState({listEndReached: false, isRefreshing: true, skip: 0});
+    this.setState({loadingError: null, listEndReached: false, isRefreshing: true, skip: 0});
 
     return this.api.getIssues(text, PAGE_SIZE)
       .then(ApiHelper.fillIssuesFieldHash)
@@ -132,8 +134,15 @@ class IssueList extends React.Component {
         this.cache.store(issues);
       })
       .catch((err) => {
-        this.setState({isRefreshing: false});
-        return notifyError('Failed to fetch issues', err);
+        return resolveError(err)
+          .then(resolvedErr => {
+            this.setState({
+              isRefreshing: false,
+              listEndReached: true,
+              loadingError: resolvedErr,
+              dataSource: this.state.dataSource.cloneWithRows([])
+            });
+          });
       });
   }
 
@@ -142,7 +151,7 @@ class IssueList extends React.Component {
   }
 
   loadMore() {
-    if (this.state.isLoadingMore) {
+    if (this.state.isLoadingMore || this.state.isRefreshing) {
       return;
     }
 
@@ -170,6 +179,10 @@ class IssueList extends React.Component {
         this.setState({isLoadingMore: false});
         return notifyError('Failed to fetch issues', err);
       });
+  }
+
+  formatErrorMessage(error) {
+    return extractErrorMessage(error);
   }
 
   getSuggestions(query, caret) {
@@ -241,17 +254,26 @@ class IssueList extends React.Component {
               onChange={isOpen => this.setState({showMenu: isOpen})}>
       <View style={styles.listContainer}>
         {this._renderHeader()}
-        <ListView
-          removeClippedSubviews={false}
-          dataSource={this.state.dataSource}
-          enableEmptySections={true}
-          renderRow={(issue) => <IssueRow issue={issue} onClick={(issue) => this.goToIssue(issue)}></IssueRow>}
-          renderSeparator={(sectionID, rowID) => <View style={styles.separator} key={rowID}/>}
-          onEndReached={this.loadMore.bind(this)}
-          onEndReachedThreshold={30}
-          renderScrollComponent={(props) => <ScrollView {...props} refreshControl={this._renderRefreshControl()}/>}
-          renderFooter={() => this._renderListMessage()}
-          refreshDescription="Refreshing issues"/>
+
+        {this.state.loadingError ?
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorTitle}>Cannot load issues</Text>
+            <Text style={styles.errorContent}>{this.formatErrorMessage(this.state.loadingError)}</Text>
+            <TouchableOpacity style={styles.tryAgainButton} onPress={() => this.loadIssues(this.state.queryAssistValue)}>
+              <Text style={styles.tryAgainText} >Try Again</Text>
+            </TouchableOpacity>
+          </View> :
+          <ListView
+            removeClippedSubviews={false}
+            dataSource={this.state.dataSource}
+            enableEmptySections={true}
+            renderRow={(issue) => <IssueRow issue={issue} onClick={(issue) => this.goToIssue(issue)}></IssueRow>}
+            renderSeparator={(sectionID, rowID) => <View style={styles.separator} key={rowID}/>}
+            onEndReached={this.loadMore.bind(this)}
+            onEndReachedThreshold={30}
+            renderScrollComponent={(props) => <ScrollView {...props} refreshControl={this._renderRefreshControl()}/>}
+            renderFooter={() => this._renderListMessage()}
+            refreshDescription="Refreshing issues"/>}
 
         <QueryAssist
           initialQuery={this.state.queryAssistValue}
