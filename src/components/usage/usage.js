@@ -7,13 +7,17 @@ const BUILD_NUMBER = process.env.npm_package_config_buildnumber;
 const VERSTION_STRING = `${VERSION || 'dev'}-${BUILD_NUMBER || 'dev'}`;
 
 const googleAnalyiticsId =  process.env.npm_package_config_analyticsid;
-const isAnalyticsEnabled = googleAnalyiticsId !== null;
+let isAnalyticsEnabled = false;
 
 const clientId = DeviceInfo.getUniqueID();
 
 const ga = new Analytics(googleAnalyiticsId, clientId, 1, DeviceInfo.getUserAgent());
 
 const usage = {
+  init(statisticsEnabled: boolean) {
+    isAnalyticsEnabled = statisticsEnabled;
+  },
+
   trackScreenView(screenName: string) {
     if (!isAnalyticsEnabled) {
       return;
@@ -29,6 +33,12 @@ const usage = {
     }
     const gaEvent = new GAHits.Event(eventName, ...params);
     return ga.send(gaEvent);
+  },
+
+  trackError(error: any, additionalMessage: ?string) {
+    return this.trackEvent('exception', {
+      'exDescription': additionalMessage || JSON.stringify(error)
+    }, JSON.stringify(error));
   }
 };
 

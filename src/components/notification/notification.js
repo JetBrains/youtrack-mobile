@@ -1,4 +1,6 @@
 import showNotification from './notification_show';
+import log from '../log/log';
+import usage from '../usage/usage';
 
 const extractErrorMessage = function (err) {
   if (!err) {
@@ -22,7 +24,8 @@ const extractErrorMessage = function (err) {
 };
 
 const showErrorMessage = function (message, error) {
-  console.warn(message, error);
+  log.warn(message, error);
+  usage.trackError(error, message);
   showNotification(message, extractErrorMessage(error));
 };
 

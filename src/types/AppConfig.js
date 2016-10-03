@@ -16,6 +16,14 @@ declare type ConfigAuthFilled = {
   youtrackServiceId: string
 }
 
-declare type AppConfig = {backendUrl: ?string; auth: ConfigAuth};
+declare type AppConfig = {
+  backendUrl: ?string;
+  auth: ConfigAuth;
+  statisticsEnabled: ?boolean;
+};
 
-declare type AppConfigFilled = {backendUrl: string; auth: ConfigAuthFilled};
+declare type AppConfigFilled = {
+  backendUrl: string;
+  auth: ConfigAuthFilled;
+  statisticsEnabled: boolean;
+};

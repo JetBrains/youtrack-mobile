@@ -6,6 +6,7 @@ const baseUrlRegExp = /^(.*)\//;
 
 const config: AppConfig = {
   backendUrl: null,
+  statisticsEnabled: null,
   auth: {
     serverUri: null,
     clientId: null,
@@ -42,7 +43,7 @@ function handleEmbeddedHubUrl(hubUrl: string, ytUrl: string) {
 }
 
 function loadConfig(ytUrl: string) {
-  return fetch(`${ytUrl}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId)`)
+  return fetch(`${ytUrl}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),statisticsEnabled`)
     .then(res => res.json())
     .then(res => {
       if (!res.mobile.serviceId) {

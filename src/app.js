@@ -4,6 +4,7 @@ import Router from './components/router/router';
 import Home from './views/home/home';
 import EnterServer from './views/enter-server/enter-server';
 import LoginForm from './views/log-in/log-in';
+import usage from './views/usage/usage';
 import IssueList from './views/issue-list/issue-list';
 import SingleIssue from './views/single-issue/singe-issue';
 import CreateIssue from './views/create-issue/create-issue';
@@ -66,6 +67,7 @@ class YouTrackMobile extends React.Component {
     loadConfig(youtrackUrl)
       .then(config => {
         this.auth = new Auth(config);
+        usage.init(config.statisticsEnabled);
       })
       .then(() => this.checkAuthorization())
       .catch(err => Router.Home({backendUrl: youtrackUrl, error: err}));
@@ -90,7 +92,10 @@ class YouTrackMobile extends React.Component {
       props: {
         connectToYoutrack: newUrl => {
           return loadConfig(newUrl)
-            .then(config => this.auth = new Auth(config))
+            .then(config => {
+              this.auth = new Auth(config);
+              usage.init(config.statisticsEnabled);
+            })
             .then(() => this.checkAuthorization());
         }
       }
