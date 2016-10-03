@@ -68,6 +68,10 @@ export default class CreateIssue extends React.Component {
 
   updateIssueDraft(projectOnly = false) {
     let issueToSend = this.state.issue;
+    if (!issueToSend.project || !issueToSend.project.id) {
+      return;
+    }
+
     if (projectOnly) {
       issueToSend = {id: this.state.issue.id, project: this.state.issue.project};
     }
