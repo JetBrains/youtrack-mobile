@@ -27,7 +27,13 @@ class YouTrackMobile extends React.Component {
     this.addAndroidBackButtonSupport();
 
     getStoredBackendURL()
-      .then((backendUrl) => this.initialize(backendUrl));
+      .then((backendUrl) => {
+        if (backendUrl) {
+          this.initialize(backendUrl);
+        } else {
+          Router.EnterServer({serverUrl: null});
+        }
+      });
   }
 
   getChildContext() {
@@ -72,7 +78,7 @@ class YouTrackMobile extends React.Component {
       type: 'reset',
       props: {
         message: `Loading configuration...`,
-        onChangeBackendUrl: () => Router.EnterServer({serverUrl: null})
+        onChangeBackendUrl: (oldUrl) => Router.EnterServer({serverUrl: oldUrl})
       }
     });
 
@@ -80,6 +86,7 @@ class YouTrackMobile extends React.Component {
       name: 'EnterServer',
       component: EnterServer,
       animation: Navigator.SceneConfigs.FloatFromLeft,
+      type: 'replace',
       props: {
         connectToYoutrack: newUrl => {
           return loadConfig(newUrl)

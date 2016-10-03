@@ -68,6 +68,8 @@ export default class EnterServer extends Component {
         <View>
           <TextInput
             autoCapitalize="none"
+            autoFocus={true}
+            selectTextOnFocus={true}
             autoCorrect={false}
             style={styles.input}
             placeholder="http://example.com"
