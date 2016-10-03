@@ -5,7 +5,7 @@ import {logo} from '../../components/icon/icon';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import usage from '../../components/usage/usage';
 
-import styles from './choose-server.styles';
+import styles from './enter-server.styles';
 
 const CATEGORY_NAME = 'Choose server';
 
@@ -21,7 +21,7 @@ type State = {
   error: ?Object
 };
 
-export default class LoginForm extends Component {
+export default class EnterServer extends Component {
   props: Props;
   state: State;
 
@@ -37,10 +37,10 @@ export default class LoginForm extends Component {
   }
 
   onApplyServerUrlChange() {
-    this.setState({connecting: false});
+    this.setState({connecting: true});
 
     return this.props.connectToYoutrack(this.state.serverUrl)
-      .catch(error => this.setState({error: error}));
+      .catch(error => this.setState({error: error, connecting: false}));
   }
 
   getErrorMessage(error: Object) {
@@ -48,6 +48,13 @@ export default class LoginForm extends Component {
   }
 
   render() {
+
+    const error = this.state.error ?
+      <View style={styles.errorContainer}>
+        <Text style={styles.error}>{this.getErrorMessage(this.state.error)}</Text>
+      </View> :
+      null;
+
     return (
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps={true}>
         <View style={styles.logoContainer}>
@@ -70,7 +77,8 @@ export default class LoginForm extends Component {
             onSubmitEditing={() => this.onApplyServerUrlChange()}
             value={this.state.serverUrl}
             onChangeText={(serverUrl) => this.setState({serverUrl})}/>
-          {this.state.error ? <View><Text style={styles.error}>{this.getErrorMessage(this.state.error)}</Text></View> : null}
+
+          {error}
 
           <TouchableOpacity style={[styles.apply, this.state.connecting ? styles.applyDisabled : {}]}
                             disabled={this.state.connecting}

@@ -42,6 +42,23 @@ export default StyleSheet.create({
     right: UNIT*2,
     top: 12
   },
+  urlChangeButton: {
+    marginLeft: -UNIT*2
+  },
+  urlChangeWrapper: {
+    flexDirection: 'row'
+  },
+  urlChangeIcon: {
+    width: UNIT*2,
+    height: UNIT*2,
+    marginTop: UNIT/5,
+    resizeMode: 'contain'
+  },
+  urlChangeText: {
+    paddingLeft: UNIT/2,
+    color: COLOR_PINK,
+    fontSize: 16
+  },
   linkLike: {
     fontSize: FONT_SIZE,
     color: COLOR_PINK

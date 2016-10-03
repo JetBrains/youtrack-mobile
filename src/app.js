@@ -2,7 +2,7 @@ import Auth from './components/auth/auth';
 
 import Router from './components/router/router';
 import Home from './views/home/home';
-import ChooseServer from './views/choose-server/choose-server';
+import EnterServer from './views/enter-server/enter-server';
 import LoginForm from './views/log-in/log-in__form';
 import IssueList from './views/issue-list/issue-list';
 import SingleIssue from './views/single-issue/singe-issue';
@@ -23,16 +23,7 @@ class YouTrackMobile extends React.Component {
     super();
     this.state = {};
 
-    Router.registerRoute({
-      name: 'Home',
-      component: Home,
-      type: 'reset',
-      props: {
-        message: `Loading configuration...`,
-        onChangeBackendUrl: this.initialize.bind(this)
-      }
-    });
-
+    this.registerRoutes();
     this.addAndroidBackButtonSupport();
 
     getStoredBackendURL()
@@ -51,12 +42,8 @@ class YouTrackMobile extends React.Component {
       .catch((e) => Router.LogIn());
   }
 
-  changeServerUrl(youtrackUrl) {
-    Router.ChooseServer({serverUrl: youtrackUrl});
-  }
-
   addAndroidBackButtonSupport() {
-    BackAndroid.addEventListener('hardwareBackPress', function() {
+    BackAndroid.addEventListener('hardwareBackPress', function () {
       const populated = Router.pop();
       const preventCloseApp = populated;
       return preventCloseApp;
@@ -74,27 +61,45 @@ class YouTrackMobile extends React.Component {
       .then(config => {
         this.auth = new Auth(config);
       })
-      .then(() => this.registerRoutes())
       .then(() => this.checkAuthorization())
       .catch(err => Router.Home({backendUrl: youtrackUrl, error: err}));
   }
 
   registerRoutes() {
     Router.registerRoute({
-      name: 'ChooseServer',
-      component: ChooseServer,
+      name: 'Home',
+      component: Home,
+      type: 'reset',
       props: {
-        connectToYoutrack: newUrl => loadConfig(newUrl).then(this.initialize.bind(this))
+        message: `Loading configuration...`,
+        onChangeBackendUrl: () => Router.EnterServer({serverUrl: null})
       }
     });
+
+    Router.registerRoute({
+      name: 'EnterServer',
+      component: EnterServer,
+      animation: Navigator.SceneConfigs.FloatFromLeft,
+      props: {
+        connectToYoutrack: newUrl => {
+          return loadConfig(newUrl)
+            .then(config => this.auth = new Auth(config))
+            .then(() => this.checkAuthorization());
+        }
+      }
+    });
+
+    const getAuth = () => this.auth;
 
     Router.registerRoute({
       name: 'LogIn',
       component: LoginForm,
       props: {
-        auth: this.auth,
+        get auth() {
+          return getAuth();
+        },
         onLogIn: this.checkAuthorization.bind(this),
-        onChangeServerUrl: this.changeServerUrl.bind(this)
+        onChangeServerUrl: youtrackUrl => Router.EnterServer({serverUrl: youtrackUrl})
       },
       type: 'reset'
     });

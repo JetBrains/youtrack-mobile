@@ -54,6 +54,10 @@ export default StyleSheet.create({
     right: UNIT*2,
     top: 12
   },
+  errorContainer: {
+    marginTop: UNIT,
+    marginBottom: UNIT
+  },
   error: {
     color: 'red'
   }

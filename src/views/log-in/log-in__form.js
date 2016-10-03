@@ -1,6 +1,6 @@
 import {Image, View, Text, TextInput, TouchableOpacity, Linking, ScrollView, ActivityIndicator} from 'react-native';
 import React from 'react';
-import {logo} from '../../components/icon/icon';
+import {logo, back} from '../../components/icon/icon';
 import Keystore from '../../components/keystore/keystore';
 import authorizeInHub from '../../components/auth/auth__oauth';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
@@ -53,7 +53,7 @@ const CATEGORY_NAME = 'Login form';
   }
 
   changeYouTrackUrl() {
-    this.props.onChangeServerUrl(this.props.auth.config.backendUr);
+    this.props.onChangeServerUrl(this.props.auth.config.backendUrl);
   }
 
   logInViaHub() {
@@ -87,6 +87,14 @@ const CATEGORY_NAME = 'Login form';
   render() {
     return (
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps={true}>
+
+        <TouchableOpacity onPress={this.changeYouTrackUrl.bind(this)} style={styles.urlChangeButton}>
+          <View style={styles.urlChangeWrapper}>
+            <Image source={back} style={styles.urlChangeIcon}/>
+            <Text style={styles.urlChangeText}>URL</Text>
+          </View>
+        </TouchableOpacity>
+
         <View style={styles.logoContainer}>
           <Image style={styles.logoImage} source={logo}/>
         </View>
