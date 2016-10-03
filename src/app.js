@@ -3,7 +3,7 @@ import Auth from './components/auth/auth';
 import Router from './components/router/router';
 import Home from './views/home/home';
 import EnterServer from './views/enter-server/enter-server';
-import LoginForm from './views/log-in/log-in__form';
+import LoginForm from './views/log-in/log-in';
 import IssueList from './views/issue-list/issue-list';
 import SingleIssue from './views/single-issue/singe-issue';
 import CreateIssue from './views/create-issue/create-issue';
