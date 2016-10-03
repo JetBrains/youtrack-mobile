@@ -13,7 +13,7 @@ module.exports = {
   ],
   'rules': {
     'no-unused-vars': [ERROR, {'vars': 'local', 'args': 'none'}],
-    'no-console': 0,
+    'no-console': ERROR,
     'quotes': [ERROR, 'single', {'allowTemplateLiterals': true}],
     'semi': ERROR,
     //ES6

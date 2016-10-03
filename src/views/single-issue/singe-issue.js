@@ -18,6 +18,7 @@ import {notifyError} from '../../components/notification/notification';
 import SingleIssueCommentInput from './single-issue__comment-input';
 import {COLOR_PINK} from '../../components/variables/variables';
 import usage from '../../components/usage/usage';
+import log from '../../log/log';
 import styles from './single-issue.styles';
 
 const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
@@ -73,7 +74,7 @@ export default class SingeIssueView extends React.Component {
         return issue;
       })
       .then((issue) => {
-        console.log('Issue loaded', issue);
+        log.log('Issue loaded', issue);
         if (this.isUnmounted) {
           return;
         }
@@ -87,7 +88,7 @@ export default class SingeIssueView extends React.Component {
 
     return this.props.api.addComment(issue.id, comment)
       .then((res) => {
-        console.info('Comment created', res);
+        log.info('Comment created', res);
         usage.trackEvent(CATEGORY_NAME, 'Add comment', 'Success');
         this.setState({addCommentMode: false});
         this.loadIssue(this.state.issue.id);

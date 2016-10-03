@@ -7,6 +7,7 @@ import Keystore from '../../components/keystore/keystore';
 import authorizeInHub from '../../components/auth/auth__oauth';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import usage from '../../components/usage/usage';
+import log from '../../components/log/log';
 
 import styles from './log-in.styles';
 
@@ -99,7 +100,7 @@ export default class LoginForm extends React.Component {
   }
 
   loginAsGuest() {
-    console.log('TODO: Not implemented');
+    log.warn('TODO: Not implemented');
   }
 
 

@@ -1,5 +1,6 @@
 import {Linking} from 'react-native';
 import qs from 'qs';
+import log from '../log/log';
 
 const issueIdReg = /issue(Mobile)?\/([\w-\d]+)/;
 
@@ -23,14 +24,14 @@ function extractIssuesQuery(issuesUrl) {
 function parseUrl(url, onIssueIdDetected, onQueryDetected) {
   const id = extractId(url);
   if (id) {
-    console.info(`Issue id detected in open URL, id ${id}, opening issue...`);
+    log.info(`Issue id detected in open URL, id ${id}, opening issue...`);
     return onIssueIdDetected(id);
   }
 
 
   const query = extractIssuesQuery(url);
   if (query) {
-    console.info(`Issues query detected in open URL: ${query}, opening list...`);
+    log.info(`Issues query detected in open URL: ${query}, opening list...`);
     return onQueryDetected(query);
   }
 }

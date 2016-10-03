@@ -8,6 +8,7 @@ import {notifyError} from '../../components/notification/notification';
 import usage from '../../components/usage/usage';
 import ImagePicker from 'react-native-image-picker';
 import Router from '../../components/router/router';
+import log from '../../components/log/log';
 import {attach, tag, next} from '../../components/icon/icon';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 
@@ -87,7 +88,7 @@ export default class CreateIssue extends React.Component {
       .then(() => this.props.api.createIssue(this.state.issue))
       .then(res => {
         this.setState({processing: false});
-        console.info('Issue created', res);
+        log.info('Issue created', res);
         usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Success');
         this.props.onCreate(res);
         Router.pop();

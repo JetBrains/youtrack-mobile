@@ -18,6 +18,7 @@ import {COLOR_PINK} from '../../components/variables/variables';
 import Cache from '../../components/cache/cache';
 import {notifyError} from '../../components/notification/notification';
 import usage from '../../components/usage/usage';
+import log from '../../components/log/log';
 
 import Api from '../../components/api/api';
 import ApiHelper from '../../components/api/api__helper';
@@ -152,7 +153,7 @@ class IssueList extends React.Component {
       .then(ApiHelper.fillIssuesFieldHash)
       .then((newIssues) => {
         if (!newIssues.length) {
-          console.info('Issues list end reached');
+          log.info('Issues list end reached');
           this.setState({listEndReached: true});
           return;
         }

@@ -3,6 +3,7 @@ import {AsyncStorage} from 'react-native';
 import Permissions from './auth__permissions';
 import base64 from 'base64-js';
 import qs from 'qs';
+import log from '../log/log';
 
 const STORAGE_KEY = 'yt_mobile_auth';
 
@@ -82,7 +83,7 @@ export default class Auth {
   }
 
   obtainTokenByOAuthCode(code: string) {
-    console.info('Obtaining token for code', code, this.config.auth.serverUri);
+    log.info('Obtaining token for code', code, this.config.auth.serverUri);
 
     return this.obtainToken([
       'grant_type=authorization_code',
@@ -94,7 +95,7 @@ export default class Auth {
   }
 
   obtainTokenByCredentials(login: string, password: string) {
-    console.info(`Obtaining token by credentials on ${this.config.auth.serverUri} for "${login}"`);
+    log.info(`Obtaining token by credentials on ${this.config.auth.serverUri} for "${login}"`);
 
     return this.obtainToken([
       'grant_type=password',
@@ -109,7 +110,7 @@ export default class Auth {
     let token;
     return this.readAuth()
       .then((authParams: AuthParams) => {
-        console.info('Begining token refresh', authParams);
+        log.info('Begining token refresh', authParams);
 
         const config = this.config;
 
@@ -133,11 +134,11 @@ export default class Auth {
       .then(res => res.json())
       .then((authParams: AuthParams) => {
         if (!authParams.error_code) {
-          console.info('Token has been refreshed', authParams);
+          log.info('Token has been refreshed', authParams);
           //restore old refresh token
           authParams.refresh_token = authParams.refresh_token || token;
         } else {
-          console.warn('Token refreshing failed', authParams);
+          log.warn('Token refreshing failed', authParams);
           throw authParams;
         }
         return authParams;
@@ -152,7 +153,7 @@ export default class Auth {
    * Not sure that check is still required.
    */
   verifyToken(authParams: AuthParams) {
-    console.info('Verifying token...');
+    log.info('Verifying token...');
 
     return fetch(this.CHECK_TOKEN_URL, {
       headers: {
@@ -161,10 +162,10 @@ export default class Auth {
       }
     }).then((res) => {
       if (res.status > 400) {
-        console.log('Check token error', res);
+        log.log('Check token error', res);
         throw res;
       }
-      console.info('Token has been verified');
+      log.info('Token has been verified');
       return res.json();
     })
       .then(currentUser => {
@@ -173,13 +174,13 @@ export default class Auth {
       })
       .catch((res) => {
         if (res.status === 401 && authParams.refresh_token) {
-          console.log('Trying to refresh token', res);
+          log.log('Trying to refresh token', res);
           return this.refreshToken();
         }
         throw res;
       })
       .catch((err) => {
-        console.log('Error during token validation', err);
+        log.log('Error during token validation', err);
         throw err;
       });
   }
@@ -197,7 +198,7 @@ export default class Auth {
         return authParams;
       })
       .catch(err => {
-        console.log('Cant load permissions', err);
+        log.log('Cant load permissions', err);
         throw err;
       });
   }

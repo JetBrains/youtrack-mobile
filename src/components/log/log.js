@@ -1,5 +1,5 @@
 /* @flow */
-
+/*eslint-disable no-console*/
 const logEnabled = true;
 
 export default {

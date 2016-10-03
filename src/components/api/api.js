@@ -2,6 +2,7 @@
 import qs from 'qs';
 import fields from './api__fields';
 import Auth from '../auth/auth';
+import log from '../log/log';
 
 class Api {
   auth: Auth;
@@ -45,7 +46,7 @@ class Api {
     return sendRequest()
       .then(res => {
         if (res.status === 401) {
-          console.info('Looks like the token is expired, will try to refresh', res);
+          log.info('Looks like the token is expired, will try to refresh', res);
           return this.auth.refreshToken()
             .then(sendRequest);
         }
@@ -90,7 +91,7 @@ class Api {
   }
 
   createIssue(issueDraft: IssueOnList) {
-    console.info('Issue draft to create:', issueDraft);
+    log.info('Issue draft to create:', issueDraft);
     const queryString = qs.stringify({
       draftId: issueDraft.id,
       fields: fields.issuesOnList.toString()
@@ -175,7 +176,7 @@ class Api {
           return;
         }
         if (xhr.status >= 200 && xhr.status < 400) {
-          console.log('attach result', xhr);
+          log.log('attach result', xhr);
           return resolve(xhr);
         }
         return reject(xhr);
