@@ -130,6 +130,7 @@ export default class LoginForm extends React.Component {
           <TextInput
             autoCapitalize="none"
             autoCorrect={false}
+            editable={!this.state.loggingIn}
             style={styles.input}
             placeholder="Username"
             returnKeyType="next"
@@ -139,6 +140,7 @@ export default class LoginForm extends React.Component {
             onChangeText={(username) => this.setState({username})}/>
           <TextInput
             ref="passInput"
+            editable={!this.state.loggingIn}
             style={styles.input}
             placeholder="Password"
             returnKeyType="done"
