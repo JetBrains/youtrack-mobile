@@ -71,6 +71,7 @@ export default class EnterServer extends Component {
             autoFocus={true}
             selectTextOnFocus={true}
             autoCorrect={false}
+            editable={!this.state.connecting}
             style={styles.input}
             placeholder="http://example.com"
             returnKeyType="done"
