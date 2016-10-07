@@ -4,6 +4,11 @@ import styles from './linked-issues.style';
 import {COLOR_FONT_GRAY} from '../variables/variables';
 
 export default class LinkedIssues extends Component {
+  static propTypes = {
+    links: PropTypes.array.isRequired,
+    onIssueTap: PropTypes.func,
+    onLinkRemove: PropTypes.func
+  }
 
   _getLinkTitle(link) {
     if (link.direction === 'OUTWARD' || link.direction === 'BOTH') {
@@ -39,9 +44,3 @@ export default class LinkedIssues extends Component {
     </View>;
   }
 }
-
-LinkedIssues.propTypes = {
-  links: PropTypes.array.isRequired,
-  onIssueTap: PropTypes.func,
-  onLinkRemove: PropTypes.func
-};

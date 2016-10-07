@@ -6,6 +6,11 @@ import wikiRules from './wiki__rules';
 import {decorateIssueLinks, replaceImageNamesWithUrls, decorateUserNames} from './wiki__raw-text-decorator';
 
 export default class Wiki extends Component {
+  static propTypes = {
+    onIssueIdTap: PropTypes.func.isRequired,
+    attachments: PropTypes.array.isRequired
+  }
+
   constructor(props) {
     super(props);
     const rules = wikiRules({
@@ -42,11 +47,6 @@ export default class Wiki extends Component {
     return <View style={[this.props.style]}>{this.renderer(tree)}</View>;
   }
 }
-
-Wiki.propTypes = {
-  onIssueIdTap: PropTypes.func.isRequired,
-  attachments: PropTypes.array.isRequired
-};
 
 const decorateRawText = (source, wikifiedOnServer, attachments) => {
   let result = replaceImageNamesWithUrls(source, attachments);

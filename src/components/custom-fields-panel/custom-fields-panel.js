@@ -10,6 +10,15 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 import styles from './custom-fields-panel.styles';
 
 export default class CustomFieldsPanel extends React.Component {
+  static propTypes = {
+    api: PropTypes.object.isRequired,
+    issue: PropTypes.object.isRequired,
+    issuePermissions: PropTypes.object.isRequired,
+    onUpdate: PropTypes.func.isRequired,
+    onUpdateProject: PropTypes.func,
+    canEditProject: PropTypes.bool
+  }
+
   constructor() {
     super();
 
@@ -307,12 +316,3 @@ export default class CustomFieldsPanel extends React.Component {
     );
   }
 }
-
-CustomFieldsPanel.propTypes = {
-  api: PropTypes.object.isRequired,
-  issue: PropTypes.object.isRequired,
-  issuePermissions: PropTypes.object.isRequired,
-  onUpdate: PropTypes.func.isRequired,
-  onUpdateProject: PropTypes.func,
-  canEditProject: PropTypes.bool
-};

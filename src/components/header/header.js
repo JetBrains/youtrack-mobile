@@ -6,6 +6,13 @@ import Router from '../router/router';
 const TOUCH_PADDING = 8;
 
 export default class Header extends React.Component {
+  static propTypes = {
+    onBack: PropTypes.func,
+    onRightButtonClick: PropTypes.func,
+    leftButton: PropTypes.element,
+    rightButton: PropTypes.element
+  }
+
   onBack() {
     if (this.props.onBack) {
       return this.props.onBack();
@@ -39,10 +46,3 @@ export default class Header extends React.Component {
     </View>);
   }
 }
-
-Header.propTypes = {
-  onBack: PropTypes.func,
-  onRightButtonClick: PropTypes.func,
-  leftButton: PropTypes.element,
-  rightButton: PropTypes.element
-};

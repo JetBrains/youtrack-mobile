@@ -8,6 +8,16 @@ import {notifyError} from '../notification/notification';
 const MAX_VISIBLE_ITEMS = 100;
 
 export default class Select extends React.Component {
+  static propTypes = {
+    dataSource: PropTypes.func.isRequired,
+    onSelect: PropTypes.func.isRequired,
+    selectedItems: PropTypes.array,
+    title: PropTypes.string,
+    multi: PropTypes.bool,
+    api: PropTypes.object,
+    emptyValue: PropTypes.oneOfType([PropTypes.string, PropTypes.null])
+  }
+
   constructor() {
     super();
     this.state = {
@@ -144,13 +154,3 @@ export default class Select extends React.Component {
     );
   }
 }
-
-Select.propTypes = {
-  dataSource: PropTypes.func.isRequired,
-  onSelect: PropTypes.func.isRequired,
-  selectedItems: PropTypes.array,
-  title: PropTypes.string,
-  multi: PropTypes.bool,
-  api: PropTypes.object,
-  emptyValue: PropTypes.oneOfType([PropTypes.string, PropTypes.null])
-};
