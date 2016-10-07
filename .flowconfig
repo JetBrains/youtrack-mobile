@@ -9,6 +9,7 @@
 # Ignore malformed json
 .*/node_modules/y18n/test/.*\.json
 .*/node_modules/simple-markdown/.*
+.*/node_modules/react-native-easy-toast/.*
 
 # Ignore the website subdir
 <PROJECT_ROOT>/website/.*

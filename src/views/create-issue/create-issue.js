@@ -159,12 +159,18 @@ export default class CreateIssue extends React.Component {
     return this.updateIssueDraft();
   }
 
+  _showImageAttachment(currentImage, allAttachments) {
+    const allImagesUrls = allAttachments
+      .map(image => image.uri);
+    return Router.ShowImage({currentImage: currentImage.uri, allImagesUrls});
+  }
+
   _renderAttahes() {
     return this.state.issue.attachments.map(img => {
       return (
         <TouchableOpacity
           key={img.uri}
-          onPress={() => Router.ShowImage({imageUrl: img.uri, imageName: img.uri})}
+          onPress={() => this._showImageAttachment(img, this.state.issue.attachments)}
         >
           <Image style={issueStyles.attachmentImage}
                  source={{uri: img.uri}}/>

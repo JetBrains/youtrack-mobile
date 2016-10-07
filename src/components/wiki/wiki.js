@@ -1,19 +1,23 @@
 import {View, Linking} from 'react-native';
-import React from 'react';
+import React, {PropTypes, Component} from 'react';
 import SimpleMarkdown from 'simple-markdown';
 import Router from '../router/router';
 import wikiRules from './wiki__rules';
 import {decorateIssueLinks, replaceImageNamesWithUrls, decorateUserNames} from './wiki__raw-text-decorator';
 
-export default class Wiki extends React.Component {
-  constructor() {
-    super();
+export default class Wiki extends Component {
+  constructor(props) {
+    super(props);
     const rules = wikiRules({
       onLinkPress: (url) => {
         return Linking.openURL(url);
       },
       onImagePress: (url) => {
-        return Router.ShowImage({imageUrl: url, imageName: ''});
+        const allImagesUrls = props.attachments
+          .filter(attach => attach.mimeType.includes('image'))
+          .map(image => image.url);
+
+        return Router.ShowImage({currentImage: url, allImagesUrls});
       },
       onIssueIdPress: (issueId) => {
         this.props.onIssueIdTap && this.props.onIssueIdTap(issueId);
@@ -38,6 +42,11 @@ export default class Wiki extends React.Component {
     return <View style={[this.props.style]}>{this.renderer(tree)}</View>;
   }
 }
+
+Wiki.propTypes = {
+  onIssueIdTap: PropTypes.func.isRequired,
+  attachments: PropTypes.array.isRequired
+};
 
 const decorateRawText = (source, wikifiedOnServer, attachments) => {
   let result = replaceImageNamesWithUrls(source, attachments);

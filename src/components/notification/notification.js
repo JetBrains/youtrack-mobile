@@ -3,7 +3,7 @@ import showNotification from './notification_show';
 import log from '../log/log';
 import usage from '../usage/usage';
 
-let toastComponentRef;
+let toastComponentRef: Object;
 
 export const extractErrorMessage = function (err: Object | string): string {
   if (!err) {
@@ -49,6 +49,6 @@ export function notifyError (message: string, err: Object) {
   return resolveError(err).then(extracted => showErrorMessage(message, extracted));
 }
 
-export function setNotificationComponent (reference) {
+export function setNotificationComponent (reference: Object) {
   toastComponentRef = reference;
 }

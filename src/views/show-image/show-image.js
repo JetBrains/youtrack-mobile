@@ -6,12 +6,15 @@ import Gallery from 'react-native-gallery';
 const TOUCH_PADDING = 12;
 
 export function ShowImage(props) {
+
+  const currentIndex = props.allImagesUrls.indexOf(props.currentImage);
+
   return (
     <View style={styles.container}>
       <Gallery
         style={{flex: 1, backgroundColor: 'black'}}
-        images={[props.imageUrl]}
-        initialPage={0}
+        images={props.allImagesUrls}
+        initialPage={currentIndex}
       />
 
       <TouchableOpacity style={styles.closeButton}

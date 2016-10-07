@@ -296,6 +296,13 @@ export default class SingeIssueView extends React.Component {
     }
   }
 
+  _showImageAttachment(attachment, allAttachments) {
+    const allImagesUrls = allAttachments
+      .filter(attach => attach.mimeType.includes('image'))
+      .map(image => image.url);
+    return Router.ShowImage({currentImage: attachment.url, allImagesUrls});
+  }
+
   _renderAttachments(attachments) {
     if (!attachments) {
       return;
@@ -307,7 +314,7 @@ export default class SingeIssueView extends React.Component {
           const isImage = attach.mimeType.includes('image');
 
           if (isImage) {
-            return <TouchableOpacity onPress={() => Router.ShowImage({imageUrl: attach.url, imageName: attach.value})}
+            return <TouchableOpacity onPress={() => this._showImageAttachment(attach, attachments)}
                                      key={attach.id}>
               <Image style={styles.attachmentImage}
                      capInsets={{left: 15, right: 15, bottom: 15, top: 15}}
@@ -373,7 +380,11 @@ export default class SingeIssueView extends React.Component {
 
           {issue.links && <LinkedIssues links={issue.links} onIssueTap={issue => this.goToIssue(issue)}/>}
 
-          {issue.description && <Wiki style={styles.description} onIssueIdTap={issueId => this.goToIssueById(issueId)}>
+          {issue.description && <Wiki
+            style={styles.description}
+            attachments={issue.attachments}
+            onIssueIdTap={issueId => this.goToIssueById(issueId)}
+          >
             {decorateRawText(issue.description, issue.wikifiedDescription, issue.attachments)}
           </Wiki>}
         </View>}
