@@ -96,7 +96,7 @@ export default function (actions) {
      * NOTE: YT's wiki contains image names, not urls. Names should be first replaced with urls
      */
     image: Object.assign({}, SimpleMarkdown.defaultRules.image, {
-      match: source => /^!([\s\S]+?)!(?!!)/.exec(source),
+      match: source => /^!(\S([\s\S]+?)\S)!(?!!)/.exec(source),
 
       parse: function(capture) {
         return {url: capture[CONTENT_WITHIN_MARKERS]};
