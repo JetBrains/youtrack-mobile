@@ -181,7 +181,7 @@ export default class CreateIssue extends React.Component {
 
     return (
       <View style={styles.container}>
-        <ScrollView keyboardShouldPersistTaps={true}>
+        <ScrollView>
           <Header leftButton={<Text>Cancel</Text>}
                   onBack={() => {
                     this.updateIssueDraft();

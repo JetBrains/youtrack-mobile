@@ -401,7 +401,7 @@ export default class SingeIssueView extends React.Component {
       <View style={styles.container}>
         {this._renderHeader()}
 
-        {this.state.issue && <ScrollView refreshControl={this._renderRefreshControl()} keyboardShouldPersistTaps={true}>
+        {this.state.issue && <ScrollView refreshControl={this._renderRefreshControl()}>
           {this._renderIssueView(this.state.issue)}
 
           {!this.state.fullyLoaded && <View><Text style={styles.loading}>Loading...</Text></View>}

@@ -130,7 +130,7 @@ export default class Select extends React.Component {
             }}
             style={styles.searchInput}/>
         </View>
-        <ScrollView keyboardShouldPersistTaps={true}>
+        <ScrollView>
           {this._renderEmptyValueItem()}
           {this.state.filteredItems && this.state.filteredItems.map(item => this._renderRow(item))}
 
