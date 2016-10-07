@@ -4,10 +4,13 @@ import React, {Component} from 'react';
 import {logo} from '../../components/icon/icon';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import usage from '../../components/usage/usage';
+import log from '../../components/log/log';
+import {resolveError, extractErrorMessage} from '../../components/notification/notification';
 
 import styles from './enter-server.styles';
 
 const CATEGORY_NAME = 'Choose server';
+const protocolRegExp = /^https?:/ig;
 
 type Props = {
   serverUrl: string,
@@ -36,15 +39,44 @@ export default class EnterServer extends Component {
     usage.trackScreenView(CATEGORY_NAME);
   }
 
-  onApplyServerUrlChange() {
-    this.setState({connecting: true});
+  getPossibleUrls(enteredUrl: string) {
+    if (protocolRegExp.test(enteredUrl)) {
+      return [enteredUrl, `${enteredUrl}/youtrack`];
+    }
 
-    return this.props.connectToYoutrack(this.state.serverUrl)
-      .catch(error => this.setState({error: error, connecting: false}));
+    return [
+      `https://${enteredUrl}`,
+      `https://${enteredUrl}/youtrack`,
+      `http://${enteredUrl}`,
+      `http://${enteredUrl}/youtrack`
+    ];
+  }
+
+  async onApplyServerUrlChange() {
+    this.setState({connecting: true});
+    const urlsToTry = this.getPossibleUrls(this.state.serverUrl);
+    log.log(`${this.state.serverUrl} entered, will try that urls: `, urlsToTry);
+
+    let firstError = null;
+
+    for (const url of urlsToTry) {
+      log.log('Trying', url);
+      try {
+        await this.props.connectToYoutrack(url);
+        log.log('Successfully connected to', url);
+        return;
+      } catch (error) {
+        log.log(`Failed to connect to ${url}`, error);
+        firstError = firstError || error;
+      }
+    }
+
+    const error = await resolveError(firstError || {message: 'Unknown error'});
+    this.setState({error, connecting: false});
   }
 
   getErrorMessage(error: Object) {
-    return error.message;
+    return extractErrorMessage(error);
   }
 
   render() {
@@ -73,7 +105,7 @@ export default class EnterServer extends Component {
             autoCorrect={false}
             editable={!this.state.connecting}
             style={styles.input}
-            placeholder="http://example.com"
+            placeholder="youtrack-example.com"
             returnKeyType="done"
             keyboardType="url"
             underlineColorAndroid="transparent"
