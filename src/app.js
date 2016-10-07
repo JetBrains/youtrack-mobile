@@ -46,7 +46,7 @@ class YouTrackMobile extends React.Component {
 
   async checkAuthorization() {
     try {
-      const authParams = await this.auth.loadStoredAuthParams();
+      await this.auth.loadStoredAuthParams();
       return Router.IssueList({auth: this.auth});
     } catch (e) {
       Router.LogIn();
