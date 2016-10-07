@@ -28,12 +28,12 @@ function getBaseUrl(url: string) {
   return match[1];
 }
 
-function storeBackendUrl(url: string) {
+async function storeBackendUrl(url: string) {
   return AsyncStorage.setItem(BACKEND_URL_STORAGE_KEY, url)
     .then(() => url);
 }
 
-function getStoredBackendURL() {
+async function getStoredBackendURL() {
   return AsyncStorage.getItem(BACKEND_URL_STORAGE_KEY);
 }
 
@@ -42,7 +42,7 @@ function handleEmbeddedHubUrl(hubUrl: string, ytUrl: string) {
   return hubUrl[0] === '/' ? ytUrl + hubUrl : hubUrl;
 }
 
-function loadConfig(ytUrl: string) {
+async function loadConfig(ytUrl: string) {
   return fetch(`${ytUrl}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),statisticsEnabled`)
     .then(res => res.json())
     .then(res => {

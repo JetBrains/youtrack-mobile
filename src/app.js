@@ -26,15 +26,16 @@ class YouTrackMobile extends React.Component {
 
     this.registerRoutes();
     this.addAndroidBackButtonSupport();
+    this.getStoredUrlAndProceed();
+  }
 
-    getStoredBackendURL()
-      .then((backendUrl) => {
-        if (backendUrl) {
-          this.initialize(backendUrl);
-        } else {
-          Router.EnterServer({serverUrl: null});
-        }
-      });
+  async getStoredUrlAndProceed() {
+    const backendUrl = await getStoredBackendURL();
+    if (backendUrl) {
+      this.initialize(backendUrl);
+    } else {
+      Router.EnterServer({serverUrl: null});
+    }
   }
 
   getChildContext() {
@@ -43,10 +44,13 @@ class YouTrackMobile extends React.Component {
     };
   }
 
-  checkAuthorization() {
-    return this.auth.loadStoredAuthParams()
-      .then((authParams) => Router.IssueList({auth: this.auth}))
-      .catch((e) => Router.LogIn());
+  async checkAuthorization() {
+    try {
+      const authParams = await this.auth.loadStoredAuthParams();
+      return Router.IssueList({auth: this.auth});
+    } catch (e) {
+      Router.LogIn();
+    }
   }
 
   addAndroidBackButtonSupport() {
@@ -57,20 +61,21 @@ class YouTrackMobile extends React.Component {
     });
   }
 
-  initialize(youtrackUrl) {
+  async initialize(youtrackUrl) {
     Router._getNavigator() && Router.Home({
       backendUrl: youtrackUrl,
       error: null,
       message: 'Connecting to YouTrack...'
     });
 
-    loadConfig(youtrackUrl)
-      .then(config => {
-        this.auth = new Auth(config);
-        usage.init(config.statisticsEnabled);
-      })
-      .then(() => this.checkAuthorization())
-      .catch(err => Router.Home({backendUrl: youtrackUrl, error: err}));
+    try {
+      const config = await loadConfig(youtrackUrl);
+      this.auth = new Auth(config);
+      usage.init(config.statisticsEnabled);
+      await this.checkAuthorization();
+    } catch (error) {
+      Router.Home({backendUrl: youtrackUrl, error})
+    }
   }
 
   registerRoutes() {
