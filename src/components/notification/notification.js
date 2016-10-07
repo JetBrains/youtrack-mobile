@@ -3,6 +3,8 @@ import showNotification from './notification_show';
 import log from '../log/log';
 import usage from '../usage/usage';
 
+let toastComponentRef;
+
 export const extractErrorMessage = function (err: Object | string): string {
   if (!err) {
     return 'Unknown error';
@@ -40,9 +42,13 @@ export function resolveError (err: Object) {
 const showErrorMessage = function (message: string, error: Object) {
   log.warn(message, error);
   usage.trackError(error, message);
-  showNotification(message, extractErrorMessage(error));
+  showNotification(message, extractErrorMessage(error), toastComponentRef);
 };
 
 export function notifyError (message: string, err: Object) {
   return resolveError(err).then(extracted => showErrorMessage(message, extracted));
+}
+
+export function setNotificationComponent (reference) {
+  toastComponentRef = reference;
 }

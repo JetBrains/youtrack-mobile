@@ -5,13 +5,15 @@ import Home from './views/home/home';
 import EnterServer from './views/enter-server/enter-server';
 import LoginForm from './views/log-in/log-in';
 import usage from './components/usage/usage';
+import {setNotificationComponent} from './components/notification/notification';
 import IssueList from './views/issue-list/issue-list';
 import SingleIssue from './views/single-issue/singe-issue';
 import CreateIssue from './views/create-issue/create-issue';
 import ShowImage from './views/show-image/show-image';
 import {loadConfig, getStoredBackendURL} from './components/config/config';
+import Toast from 'react-native-easy-toast';
 
-import {BackAndroid, Navigator} from 'react-native';
+import {BackAndroid, Navigator, View} from 'react-native';
 import React, {PropTypes} from 'react';
 import ActionSheet from '@exponent/react-native-action-sheet';
 
@@ -136,7 +138,10 @@ class YouTrackMobile extends React.Component {
 
   render() {
     return <ActionSheet ref={component => this._actionSheetRef = component}>
-      {Router.renderNavigatorView({initialRoute: Router.routes.Home})}
+      <View style={{flex: 1}}>
+        {Router.renderNavigatorView({initialRoute: Router.routes.Home})}
+        <Toast ref={toast => setNotificationComponent(toast)}/>
+      </View>
     </ActionSheet>;
   }
 }
