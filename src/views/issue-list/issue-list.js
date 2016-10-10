@@ -19,7 +19,6 @@ import {COLOR_PINK} from '../../components/variables/variables';
 import Cache from '../../components/cache/cache';
 import {notifyError, resolveError, extractErrorMessage} from '../../components/notification/notification';
 import usage from '../../components/usage/usage';
-import log from '../../components/log/log';
 
 import Api from '../../components/api/api';
 import ApiHelper from '../../components/api/api__helper';
