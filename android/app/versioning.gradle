@@ -4,7 +4,7 @@ ext {
 
     (major, minor, patch, build) = [major, minor, patch, build].collect{it.toInteger()}
 
-    (major * 100000) + (minor * 10000) + (patch * 1000) + build;
+    (major * 100) + (minor * 10000) + patch;
   }
 
   buildVersionName = { version ->
