@@ -26,7 +26,7 @@ import IssueRow from './issue-list__row';
 import IssueListMenu from './issue-list__menu';
 import Router from '../../components/router/router';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import SideMenu from 'react-native-side-menu';
+import Drawer from 'react-native-drawer';
 
 const QUERY_STORAGE_KEY = 'YT_QUERY_STORAGE';
 const PAGE_SIZE = 10;
@@ -250,27 +250,29 @@ class IssueList extends React.Component {
   }
 
   render() {
-    return (<SideMenu
-              menu={<IssueListMenu onLogOut={this.logOut.bind(this)}
+    return <Drawer
+      type="static"
+      open={this.state.showMenu}
+      content={<IssueListMenu onLogOut={this.logOut.bind(this)}
                 user={this.props.auth.currentUser}
                 backendUrl={this.props.auth.config.backendUrl}
               />}
-              isOpen={this.state.showMenu}
-              onChange={isOpen => this.setState({showMenu: isOpen})}>
+      openDrawerOffset={1/4}
+    >
       <View style={styles.listContainer}>
         {this._renderHeader()}
 
         <ListView
-            removeClippedSubviews={false}
-            dataSource={this.state.dataSource}
-            enableEmptySections={true}
-            renderRow={(issue) => <IssueRow issue={issue} onClick={(issue) => this.goToIssue(issue)}></IssueRow>}
-            renderSeparator={(sectionID, rowID) => <View style={styles.separator} key={rowID}/>}
-            onEndReached={this.loadMore.bind(this)}
-            onEndReachedThreshold={30}
-            renderScrollComponent={(props) => <ScrollView {...props} refreshControl={this._renderRefreshControl()}/>}
-            renderFooter={() => this._renderListMessage()}
-            refreshDescription="Refreshing issues"/>
+          removeClippedSubviews={false}
+          dataSource={this.state.dataSource}
+          enableEmptySections={true}
+          renderRow={(issue) => <IssueRow issue={issue} onClick={(issue) => this.goToIssue(issue)}></IssueRow>}
+          renderSeparator={(sectionID, rowID) => <View style={styles.separator} key={rowID}/>}
+          onEndReached={this.loadMore.bind(this)}
+          onEndReachedThreshold={30}
+          renderScrollComponent={(props) => <ScrollView {...props} refreshControl={this._renderRefreshControl()}/>}
+          renderFooter={() => this._renderListMessage()}
+          refreshDescription="Refreshing issues"/>
 
         <QueryAssist
           initialQuery={this.state.queryAssistValue}
@@ -279,7 +281,7 @@ class IssueList extends React.Component {
 
         {Platform.OS == 'ios' && <KeyboardSpacer/>}
       </View>
-    </SideMenu>);
+    </Drawer>;
   }
 }
 
