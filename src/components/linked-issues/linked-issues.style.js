@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_FONT, COLOR_FONT_GRAY} from '../../components/variables/variables';
+import {UNIT, COLOR_LINK, COLOR_FONT_GRAY} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   linkedIssuesContainer: {
@@ -18,6 +18,6 @@ export default StyleSheet.create({
     marginLeft: UNIT
   },
   linkedIssueText: {
-    color: COLOR_FONT
+    color: COLOR_LINK
   }
 });
