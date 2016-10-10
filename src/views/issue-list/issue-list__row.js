@@ -15,8 +15,12 @@ export default class IssueRow extends React.Component {
       return '    Unassigned';
     };
 
-    return `${issue.project.shortName}-${issue.numberInProject} by ${issue.reporter.fullName || issue.reporter.login} ${forText()}`;
-  }
+    const issueIdStyle = issue.resolved ? {textDecorationLine: 'line-through'} : null;
+
+    return (<Text>
+      <Text style={issueIdStyle}>{issue.project.shortName}-{issue.numberInProject}</Text>
+      <Text> by {issue.reporter.fullName || issue.reporter.login} {forText()}</Text>
+    </Text>);  }
 
   getSummaryStyle(issue) {
     if (issue.resolved) {
