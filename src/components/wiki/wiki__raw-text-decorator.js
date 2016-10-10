@@ -1,3 +1,5 @@
+const punctuationMarks = '[\\s.,#!$%\^&\*;:{}=\-_`~()]';
+
 
 function decorateIssueLink(issueId, issueSummary) {
   return `[ytmissue]${issueId}|${issueSummary}[ytmissue]`;
@@ -18,7 +20,7 @@ export function decorateIssueLinks(rawText, wikifiedText) {
   wikifiedText.replace(issueLinkRegExp, onIssueIdDetected);
 
   issuesMap.forEach((issueSummary, issueId) => {
-    rawText = rawText.replace(new RegExp(`(\\s|^)(${issueId})(\\s|$)`, 'g'), (source, prefix, issueId, postfix) => {
+    rawText = rawText.replace(new RegExp(`(${punctuationMarks}|^)(${issueId})(${punctuationMarks}|$)`, 'g'), (source, prefix, issueId, postfix) => {
       const decorated = decorateIssueLink(issueId, issuesMap.get(issueId));
       return `${prefix || ''}${decorated}${postfix || ''}`;
     });

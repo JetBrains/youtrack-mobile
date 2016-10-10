@@ -10,6 +10,24 @@ describe('decorateIssueLinks', () => {
     result.should.equal('foo barr [ytmissue]YTM-14|Fake issue summary[ytmissue] bar foo');
   });
 
+  it('should replace issue ID if there is dot, comma etc. right after it', () => {
+    const result = decorateIssueLinks(
+      'foo YTM-14.',
+      '<a href="/issue/YTM-14" class="issue-resolved" target="_self" title="Fake issue summary">YTM-14</a>.'
+    );
+
+    result.should.equal('foo [ytmissue]YTM-14|Fake issue summary[ytmissue].');
+  });
+
+  it('should replace issue ID if there is dot, comma etc. right before it', () => {
+    const result = decorateIssueLinks(
+      'foo :YTM-14',
+      '<a href="/issue/YTM-14" class="issue-resolved" target="_self" title="Fake issue summary">YTM-14</a>.'
+    );
+
+    result.should.equal('foo :[ytmissue]YTM-14|Fake issue summary[ytmissue]');
+  });
+
 
   it('should replace if message is just issue id', () => {
     const result = decorateIssueLinks('YTM-14', '<a href="/issue/YTM-14" class="issue-resolved" target="_self" title="Fake issue summary">YTM-14</a>');
