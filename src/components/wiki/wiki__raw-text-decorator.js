@@ -1,8 +1,9 @@
 const punctuationMarks = '[\\s.,#!$%\^&\*;:{}=\-_`~()]';
 
 
-function decorateIssueLink(issueId, issueSummary) {
-  return `[ytmissue]${issueId}|${issueSummary}[ytmissue]`;
+function decorateIssueLink(issueId, issueSummary, resolved) {
+  const resolvedString = resolved ? 'resolved' : 'unresolved';
+  return `[ytmissue]${issueId}|${issueSummary}|${resolvedString}[ytmissue]`;
 }
 
 function decorateUserName(login, username) {
@@ -15,13 +16,14 @@ export function decorateIssueLinks(rawText, wikifiedText) {
   const issuesMap = new Map();
 
   function onIssueIdDetected(linkTag, issueSummary, issueId) {
-    issuesMap.set(issueId, issueSummary);
+    const resolved = linkTag.includes('class="issue-resolved"');
+    issuesMap.set(issueId, {issueSummary, resolved});
   }
   wikifiedText.replace(issueLinkRegExp, onIssueIdDetected);
 
-  issuesMap.forEach((issueSummary, issueId) => {
+  issuesMap.forEach(({issueSummary, resolved}, issueId) => {
     rawText = rawText.replace(new RegExp(`(${punctuationMarks}|^)(${issueId})(${punctuationMarks}|$)`, 'g'), (source, prefix, issueId, postfix) => {
-      const decorated = decorateIssueLink(issueId, issuesMap.get(issueId));
+      const decorated = decorateIssueLink(issueId, issueSummary, resolved);
       return `${prefix || ''}${decorated}${postfix || ''}`;
     });
   });

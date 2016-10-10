@@ -139,18 +139,19 @@ export default function (actions) {
     }),
 
     issueIdLink: Object.assign({}, SimpleMarkdown.defaultRules.link, {
-      match: source => /^\[ytmissue]([\s\S]+?)\|([\s\S]+?)\[ytmissue](?!\[ytmissue])/.exec(source),
+      match: source => /^\[ytmissue]([\s\S]+?)\|([\s\S]+?)\|([\S]+?)\[ytmissue](?!\[ytmissue])/.exec(source),
       parse: function(capture, parse, state) {
         const res = {
           issueId: capture[CONTENT_WITHIN_MARKERS],
-          issueSummary: capture[2]
+          issueSummary: capture[2],
+          isResolved: capture[3] === 'resolved',
         };
         return res;
       },
 
       react: (node, output, state) => {
         return <Text key={state.key}
-                     style={[styles.link, {textDecorationLine: null}]}
+                     style={[styles.link, node.isResolved ? styles.issueLinkResolved : {textDecorationLine: null}]}
                      selectable={true}
                      onPress={() => actions.onIssueIdPress(node.issueId)}>{node.issueId}</Text>;
       }

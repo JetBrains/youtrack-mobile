@@ -1,5 +1,5 @@
 import {StyleSheet, Platform} from 'react-native';
-import {COLOR_LIGHT_GRAY, COLOR_GRAY, COLOR_LINK, COLOR_FONT, UNIT} from '../variables/variables';
+import {COLOR_LIGHT_GRAY, COLOR_GRAY, COLOR_LINK, COLOR_FONT, COLOR_FONT_GRAY, UNIT} from '../variables/variables';
 
 const FONT_SIZE = 16;
 
@@ -55,6 +55,11 @@ export default StyleSheet.create({
     color: COLOR_LINK,
     fontSize: FONT_SIZE,
     textDecorationLine: 'underline'
+  },
+  issueLinkResolved: {
+    color: COLOR_FONT_GRAY,
+    fontSize: FONT_SIZE,
+    textDecorationLine: 'line-through'
   },
   codeBlock: {
     color: COLOR_FONT,

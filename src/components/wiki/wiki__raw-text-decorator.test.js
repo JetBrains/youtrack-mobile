@@ -2,45 +2,53 @@ import {decorateIssueLinks, replaceImageNamesWithUrls, decorateUserNames} from '
 
 describe('decorateIssueLinks', () => {
   const rawTextWithIds = 'foo barr YTM-14 bar foo';
-  const wikifiedText = `foo barr <a href="/issue/YTM-14" class="issue-resolved" target="_self" title="Fake issue summary">YTM-14</a> bar foo`;
+  const wikifiedText = `foo barr <a href="/issue/YTM-14" target="_self" title="Fake issue summary">YTM-14</a> bar foo`;
 
   it('should replace single issue ID with special syntax', () => {
     const result = decorateIssueLinks(rawTextWithIds, wikifiedText);
 
-    result.should.equal('foo barr [ytmissue]YTM-14|Fake issue summary[ytmissue] bar foo');
+    result.should.equal('foo barr [ytmissue]YTM-14|Fake issue summary|unresolved[ytmissue] bar foo');
   });
 
   it('should replace issue ID if there is dot, comma etc. right after it', () => {
     const result = decorateIssueLinks(
       'foo YTM-14.',
-      '<a href="/issue/YTM-14" class="issue-resolved" target="_self" title="Fake issue summary">YTM-14</a>.'
+      '<a href="/issue/YTM-14" target="_self" title="Fake issue summary">YTM-14</a>.'
     );
 
-    result.should.equal('foo [ytmissue]YTM-14|Fake issue summary[ytmissue].');
+    result.should.equal('foo [ytmissue]YTM-14|Fake issue summary|unresolved[ytmissue].');
   });
 
   it('should replace issue ID if there is dot, comma etc. right before it', () => {
     const result = decorateIssueLinks(
       'foo :YTM-14',
+      '<a href="/issue/YTM-14" target="_self" title="Fake issue summary">YTM-14</a>.'
+    );
+
+    result.should.equal('foo :[ytmissue]YTM-14|Fake issue summary|unresolved[ytmissue]');
+  });
+
+  it('should detect is issue is resolved', () => {
+    const result = decorateIssueLinks(
+      'foo :YTM-14',
       '<a href="/issue/YTM-14" class="issue-resolved" target="_self" title="Fake issue summary">YTM-14</a>.'
     );
 
-    result.should.equal('foo :[ytmissue]YTM-14|Fake issue summary[ytmissue]');
+    result.should.equal('foo :[ytmissue]YTM-14|Fake issue summary|resolved[ytmissue]');
   });
 
-
   it('should replace if message is just issue id', () => {
-    const result = decorateIssueLinks('YTM-14', '<a href="/issue/YTM-14" class="issue-resolved" target="_self" title="Fake issue summary">YTM-14</a>');
+    const result = decorateIssueLinks('YTM-14', '<a href="/issue/YTM-14" target="_self" title="Fake issue summary">YTM-14</a>');
 
-    result.should.equal('[ytmissue]YTM-14|Fake issue summary[ytmissue]');
+    result.should.equal('[ytmissue]YTM-14|Fake issue summary|unresolved[ytmissue]');
   });
 
   it('should replace exactly that issue id ant not before or after', () => {
     const raw = 'foo barr http://foo/YTM-14 asd YTM-14 bar foo';
-    const wiki = `foo barr http://foo/YTM-14 asd <a href="/issue/YTM-14" class="issue-resolved" target="_self" title="Fake issue summary">YTM-14</a> bar foo`;
+    const wiki = `foo barr http://foo/YTM-14 asd <a href="/issue/YTM-14" target="_self" title="Fake issue summary">YTM-14</a> bar foo`;
     const result = decorateIssueLinks(raw, wiki);
 
-    result.should.equal('foo barr http://foo/YTM-14 asd [ytmissue]YTM-14|Fake issue summary[ytmissue] bar foo');
+    result.should.equal('foo barr http://foo/YTM-14 asd [ytmissue]YTM-14|Fake issue summary|unresolved[ytmissue] bar foo');
   });
 
   it('should not touch ID if no link found', () => {
@@ -52,11 +60,11 @@ describe('decorateIssueLinks', () => {
   it('should decorate multiple issue IDs', () => {
     const result = decorateIssueLinks(`foo barr Y-15 bar JT-123`,
       `foo barr 
-        <a href="/issue/Y-15" class="issue-resolved" target="_self" title="Fake issue summary">Y-15</a> 
-        bar <a href="/issue/JT-123" class="issue-resolved" target="_self" title="Another summary">JT-123</a>`);
+        <a href="/issue/Y-15" target="_self" title="Fake issue summary">Y-15</a> 
+        bar <a href="/issue/JT-123" target="_self" title="Another summary">JT-123</a>`);
 
 
-    result.should.equal('foo barr [ytmissue]Y-15|Fake issue summary[ytmissue] bar [ytmissue]JT-123|Another summary[ytmissue]');
+    result.should.equal('foo barr [ytmissue]Y-15|Fake issue summary|unresolved[ytmissue] bar [ytmissue]JT-123|Another summary|unresolved[ytmissue]');
   });
 });
 
