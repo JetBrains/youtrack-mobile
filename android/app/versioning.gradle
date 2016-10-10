@@ -6,4 +6,16 @@ ext {
 
     (major * 100000) + (minor * 10000) + (patch * 1000) + build;
   }
+
+  buildVersionName = { version ->
+    def (major, minor, patch, build) = version.toLowerCase().replaceAll('-', '.').tokenize('.')
+
+    if (minor === 0) {
+      minor = ''
+    } else {
+      minor = '.' + minor;
+    }
+
+    return "${major}${minor}"
+  }
 }

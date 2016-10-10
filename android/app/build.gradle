@@ -92,7 +92,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 22
         versionCode buildVersionCode(System.getenv('YT_MOBILE_VERSION'))
-        versionName System.getenv('YT_MOBILE_VERSION')
+        versionName buildVersionName(System.getenv('YT_MOBILE_VERSION'))
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }

@@ -1,9 +1,8 @@
 {
   "name": "YouTrackMobile",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "private": true,
   "config": {
-    "buildnumber": "1",
     "analyticsid": null
   },
   "scripts": {
@@ -13,16 +12,16 @@
     "test:watch": "npm test -- --watch",
     "lint": "eslint src/components src/views && flow check",
     "ios": "./node_modules/react-native-cli/index.js run-ios",
-    "ios-set-version": "cd ios && agvtool new-marketing-version $npm_package_version && agvtool new-version -all $npm_package_config_buildnumber && cd ..",
+    "ios-set-version": "node ./tools/set-ios-version",
     "ios-clean": "xcodebuild clean -project ios/YouTrackMobile.xcodeproj -configuration Release -alltargets",
     "ios-archive": "rm -rf ios/build/YouTrackMobile[Release].xcarchive && xcodebuild archive -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile[Release] -archivePath ios/build/YouTrackMobile[Release].xcarchive",
     "ios-archive-no-sign": "npm run ios-archive -- CODE_SIGN_IDENTITY='' CODE_SIGNING_REQUIRED=NO",
     "ios-export-ipa": "rm -rf ios/build/YouTrackMobile.ipa && xcodebuild -exportArchive -archivePath ios/build/YouTrackMobile[Release].xcarchive -exportPath ios/build/YouTrackMobile -exportFormat ipa -exportProvisioningProfile 'YouTrackMobile'",
     "ios-download-archive": "bash ./tools/download-latest-built-archive.sh",
     "ios-release": "npm run ios-download-archive && npm run ios-export-ipa",
-    "android": "YT_MOBILE_VERSION=$npm_package_version-$npm_package_config_buildnumber ./node_modules/react-native-cli/index.js run-android",
-    "android-clean": "cd ./android && YT_MOBILE_VERSION=$npm_package_version-$npm_package_config_buildnumber ./gradlew clean && cd ..",
-    "android-release": "YT_MOBILE_VERSION=$npm_package_version-$npm_package_config_buildnumber android/gradlew -p android/ assembleRelease",
+    "android": "YT_MOBILE_VERSION=$npm_package_version ./node_modules/react-native-cli/index.js run-android",
+    "android-clean": "cd ./android && YT_MOBILE_VERSION=$npm_package_version ./gradlew clean && cd ..",
+    "android-release": "YT_MOBILE_VERSION=$npm_package_version android/gradlew -p android/ assembleRelease",
     "android-align-after-sign": "$ANDROID_HOME/build-tools/23.0.1/zipalign -v 4 android/app/build/outputs/apk/app-release-unsigned.apk android/app/build/outputs/apk/app-release.apk",
     "android-emulator": "emulator -avd YouTrackMobile -scale 0.4 -gpu on -memory 2048",
     "android-emulator-create": "android create avd -n YouTrackMobile -t 1 -b x86 --skin 1080x1920 --device 'Nexus 5'",
