@@ -144,7 +144,7 @@ export default function (actions) {
         const res = {
           issueId: capture[CONTENT_WITHIN_MARKERS],
           issueSummary: capture[2],
-          isResolved: capture[3] === 'resolved',
+          isResolved: capture[3] === 'resolved'
         };
         return res;
       },
