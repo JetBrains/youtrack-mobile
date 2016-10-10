@@ -31,7 +31,7 @@
   "dependencies": {
     "@exponent/react-native-action-sheet": "0.2.3",
     "base64-js": "0.0.8",
-    "eslint": "3.2.2",
+    "eslint": "3.7.1",
     "qs": "6.1.0",
     "react": "15.3.1",
     "react-native": "0.34.1",
@@ -44,7 +44,6 @@
     "react-native-invertible-scroll-view": "1.0.0",
     "react-native-keyboard-spacer": "0.3.0",
     "react-native-keychain": "0.2.7",
-    "react-native-prompt": "0.18.4",
     "react-native-side-menu": "0.20.1",
     "react-native-swipeout": "q-m/react-native-swipeout#93b67f7c5c2c44a9b2067499746a729010277ae1",
     "relative-date": "^1.1.2",
