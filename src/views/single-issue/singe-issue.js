@@ -315,7 +315,7 @@ export default class SingeIssueView extends React.Component {
 
           if (isImage) {
             return <TouchableOpacity onPress={() => this._showImageAttachment(attach, attachments)}
-                                     key={attach.id}>
+                                     key={attach.id || attach.url}>
               <Image style={styles.attachmentImage}
                      capInsets={{left: 15, right: 15, bottom: 15, top: 15}}
                      source={{uri: attach.url}}/>
