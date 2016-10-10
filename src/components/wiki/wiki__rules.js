@@ -103,17 +103,6 @@ export default function (actions) {
       },
 
       react: (node, output, state) => {
-
-        /**
-         * Hack!!!
-         * Android doesn't load image in wiki first time without this
-         */
-        if (Platform.OS === 'android') {
-          const noop = () => {};
-          Image.getSize(node.url, noop, noop);
-        }
-
-
         return <Text onPress={() => actions.onImagePress(node.url)} key={state.key}>
           <Image
             source={{uri: node.url, width: 150, height: 150}}
