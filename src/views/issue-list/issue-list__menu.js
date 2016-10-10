@@ -1,12 +1,9 @@
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import React from 'react';
 import styles from './issue-list__menu.styles';
+import {VERSION_STRING} from '../../components/usage/usage';
 
 const CURRENT_YEAR = (new Date()).getFullYear();
-
-const VERSION = process.env.npm_package_version;
-const BUILD_NUMBER = process.env.npm_package_config_buildnumber;
-const VERSION_STRING = `${VERSION}-${BUILD_NUMBER}`;
 
 export default class IssueListMenu extends React.Component {
   render() {

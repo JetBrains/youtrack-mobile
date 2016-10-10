@@ -3,8 +3,12 @@ import DeviceInfo from 'react-native-device-info';
 import {Analytics, Hits as GAHits} from 'react-native-google-analytics';
 
 const VERSION = process.env.npm_package_version;
-const BUILD_NUMBER = process.env.npm_package_config_buildnumber;
-const VERSTION_STRING = `${VERSION || 'dev'}-${BUILD_NUMBER || 'dev'}`;
+if (!VERSION) {
+  throw new Error('No version detected');
+}
+const [major, minor, build] = VERSION.split('.');
+const minorVisible = minor === '0' ? '' : `.${minor}`;
+export const VERSION_STRING = `${major}${minorVisible} (build ${build})`;
 
 const googleAnalyiticsId =  process.env.npm_package_config_analyticsid;
 let isAnalyticsEnabled = false;
@@ -23,7 +27,7 @@ const usage = {
       return;
     }
 
-    const screenView = new GAHits.ScreenView('YouTrack Mobile', screenName, VERSTION_STRING);
+    const screenView = new GAHits.ScreenView('YouTrack Mobile', screenName, VERSION_STRING);
     return ga.send(screenView);
   },
 
