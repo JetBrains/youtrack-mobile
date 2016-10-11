@@ -169,7 +169,7 @@ export default class CreateIssue extends React.Component {
     return this.state.issue.attachments.map(img => {
       return (
         <TouchableOpacity
-          key={img.uri}
+          key={img.uri || img.id}
           onPress={() => this._showImageAttachment(img, this.state.issue.attachments)}
         >
           <Image style={issueStyles.attachmentImage}
