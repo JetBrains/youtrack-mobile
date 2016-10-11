@@ -50,7 +50,7 @@ class IssueList extends React.Component {
       showMenu: false,
       loadingError: null,
       queryAssistValue: '',
-      isRefreshing: false
+      isRefreshing: true
     };
 
     this.cache.read().then(issues => {
