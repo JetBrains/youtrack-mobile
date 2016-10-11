@@ -73,6 +73,7 @@ class IssueList extends React.Component {
   componentDidMount() {
     this.api = new Api(this.props.auth);
     this.unsubscribeFromOpeningWithIssueUrl = openByUrlDetector(issueId => {
+      usage.trackEvent('Issue list', 'Open issue in app by URL');
       Router.SingleIssue({
         issueId: issueId,
         api: this.api,
