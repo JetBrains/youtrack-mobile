@@ -7,9 +7,7 @@ const major = versionParts[0];
 const minor = versionParts[1];
 const patch = versionParts[2];
 
-const minorPartOfMarketing = minor === '0' ? '' : `.${minor}`;
-
-const marketingVersion = `${major}${minorPartOfMarketing}`;
+const marketingVersion = `${major}.${minor}`;
 const buildNumber = patch;
 
 function reporter(error, stdout) {

@@ -7,8 +7,7 @@ if (!VERSION) {
   throw new Error('No version detected');
 }
 const [major, minor, build] = VERSION.split('.');
-const minorVisible = minor === '0' ? '' : `.${minor}`;
-export const VERSION_STRING = `${major}${minorVisible} (build ${build})`;
+export const VERSION_STRING = `${major}.${minor} (Build ${build})`;
 
 const googleAnalyiticsId =  process.env.npm_package_config_analyticsid;
 let isAnalyticsEnabled = false;
