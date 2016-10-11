@@ -55,7 +55,9 @@ async function loadConfig(ytUrl: string) {
         throw new Error(`${ytUrl} does not have mobile application feature turned on. Check the documentation.`);
       }
 
-      NativeAppConfigManager.setYouTrackUrl(ytUrl);
+      if (NativeAppConfigManager) {
+        NativeAppConfigManager.setYouTrackUrl(ytUrl);
+      }
       storeBackendUrl(ytUrl);
 
       config.backendUrl = ytUrl;
