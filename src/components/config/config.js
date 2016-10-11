@@ -43,9 +43,13 @@ function handleEmbeddedHubUrl(hubUrl: string, ytUrl: string) {
 }
 
 async function loadConfig(ytUrl: string) {
-  return fetch(`${ytUrl}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),statisticsEnabled`)
+  return fetch(`${ytUrl}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,statisticsEnabled`)
     .then(res => res.json())
     .then(res => {
+      if (parseFloat(res.version) < 7.0) {
+        throw new Error(`YouTrack Mobile requires YouTrack version >= 7.0, but ${ytUrl} has version ${res.version}.`);
+      }
+
       if (!res.mobile.serviceId) {
         throw new Error(`${ytUrl} does not have mobile application feature turned on. Check the documentation.`);
       }
