@@ -2,10 +2,8 @@
 import DeviceInfo from 'react-native-device-info';
 import {Analytics, Hits as GAHits} from 'react-native-google-analytics';
 
-const VERSION = process.env.npm_package_version;
-if (!VERSION) {
-  throw new Error('No version detected');
-}
+const VERSION = process.env.npm_package_version || 'dev.dev.dev';
+
 const [major, minor, build] = VERSION.split('.');
 export const VERSION_STRING = `${major}.${minor} (Build ${build})`;
 
