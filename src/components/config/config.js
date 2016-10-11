@@ -1,6 +1,7 @@
 /* @flow */
-import {AsyncStorage} from 'react-native';
+import {AsyncStorage, NativeModules} from 'react-native';
 
+const NativeAppConfigManager = NativeModules.AppConfigManager;
 const BACKEND_URL_STORAGE_KEY = 'yt_mobile_backend_url';
 const baseUrlRegExp = /^(.*)\//;
 
@@ -54,6 +55,7 @@ async function loadConfig(ytUrl: string) {
         throw new Error(`${ytUrl} does not have mobile application feature turned on. Check the documentation.`);
       }
 
+      NativeAppConfigManager.setYouTrackUrl(ytUrl);
       storeBackendUrl(ytUrl);
 
       config.backendUrl = ytUrl;

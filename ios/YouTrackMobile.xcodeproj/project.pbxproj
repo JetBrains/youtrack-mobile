@@ -23,6 +23,8 @@
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		233C7C26636041E1822BA464 /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B6F8EC7CE7BD4354BAEC3C6A /* libRNDeviceInfo.a */; };
 		557579F01D2FDAE4004EAE6C /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 557579EF1D2FDAA6004EAE6C /* libRNImagePicker.a */; };
+		55A015E31DAD2DE1006C2D50 /* AppConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 55A015E21DAD2DE1006C2D50 /* AppConfig.m */; };
+		55A015E41DAD2DE1006C2D50 /* AppConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 55A015E21DAD2DE1006C2D50 /* AppConfig.m */; };
 		55DCE2B01D01EB6A000DA248 /* YouTrackMobile.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 5507C3E21CF4D63C00039310 /* YouTrackMobile.entitlements */; };
 		55DCE2BC1D01EB80000DA248 /* YouTrackMobile.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 5507C3E21CF4D63C00039310 /* YouTrackMobile.entitlements */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
@@ -153,6 +155,8 @@
 		2E74A9140B5E4F3B97DFD93C /* libRNKeychain.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNKeychain.a; sourceTree = "<group>"; };
 		5507C3E21CF4D63C00039310 /* YouTrackMobile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = YouTrackMobile.entitlements; path = YouTrackMobile/YouTrackMobile.entitlements; sourceTree = "<group>"; };
 		557579EA1D2FDAA6004EAE6C /* RNImagePicker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNImagePicker.xcodeproj; path = "../node_modules/react-native-image-picker/ios/RNImagePicker.xcodeproj"; sourceTree = "<group>"; };
+		55A015E11DAD2DE1006C2D50 /* AppConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppConfig.h; path = YouTrackMobile/AppConfig.h; sourceTree = "<group>"; };
+		55A015E21DAD2DE1006C2D50 /* AppConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppConfig.m; path = YouTrackMobile/AppConfig.m; sourceTree = "<group>"; };
 		5F5A57AF930F4FB2B68371ED /* RNKeychain.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNKeychain.xcodeproj; path = "../node_modules/react-native-keychain/RNKeychain.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
@@ -267,6 +271,8 @@
 		13B07FAE1A68108700A75B9A /* YouTrackMobile */ = {
 			isa = PBXGroup;
 			children = (
+				55A015E11DAD2DE1006C2D50 /* AppConfig.h */,
+				55A015E21DAD2DE1006C2D50 /* AppConfig.m */,
 				5507C3E21CF4D63C00039310 /* YouTrackMobile.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -644,6 +650,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00E356F31AD99517003FC87E /* YouTrackMobileTests.m in Sources */,
+				55A015E41DAD2DE1006C2D50 /* AppConfig.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -653,6 +660,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				55A015E31DAD2DE1006C2D50 /* AppConfig.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
