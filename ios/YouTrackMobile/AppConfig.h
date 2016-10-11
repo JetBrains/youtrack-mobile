@@ -2,4 +2,6 @@
 
 @interface AppConfigManager : NSObject<RCTBridgeModule>
 
++ (NSString *) getYouTrackBackendUrl;
+
 @end

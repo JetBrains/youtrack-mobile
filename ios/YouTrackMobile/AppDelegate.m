@@ -7,10 +7,12 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
+#import "RCTLog.h"
 #import "AppDelegate.h"
 #import "RCTLinkingManager.h"
 #import "RCTBundleURLProvider.h"
 #import "RCTRootView.h"
+#import "AppConfig.h"
 
 @implementation AppDelegate
 
@@ -46,7 +48,17 @@
 }
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler {
-  return [RCTLinkingManager application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
+  NSString *backendUrl = [AppConfigManager getYouTrackBackendUrl];
+  NSString *openingURL = userActivity.webpageURL.absoluteString;
+  RCTLogInfo(@"Handling opening, backendURL: %@, openingURL: %@", backendUrl, openingURL);
+
+  if ([openingURL containsString:backendUrl]) {
+    RCTLogInfo(@"Application will handle restoration");
+    return [RCTLinkingManager application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
+  } else {
+    RCTLogInfo(@"Application will skip restoration (RETURNING NO");
+    return NO;
+  }
 }
 
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSURL *)url {
