@@ -27,8 +27,7 @@ export default StyleSheet.create({
   },
   headerButtonText: {
     fontSize: 17,
-    color: COLOR_PINK,
-    width: 60
+    color: COLOR_PINK
   },
   headerButtonTextRight: {
     textAlign: 'right'
