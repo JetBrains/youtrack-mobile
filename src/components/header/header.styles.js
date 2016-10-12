@@ -16,7 +16,13 @@ export default StyleSheet.create({
   headerButton: {
     height: UNIT * 3,
     padding: 0,
-    paddingLeft: UNIT*2,
+    paddingLeft: UNIT,
+    paddingRight: UNIT
+  },
+  headerButtonLeft: {
+    paddingLeft: UNIT*2
+  },
+  headerButtonRight: {
     paddingRight: UNIT*2
   },
   headerButtonText: {
