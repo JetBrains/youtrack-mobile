@@ -258,6 +258,9 @@ class IssueList extends React.Component {
                 user={this.props.auth.currentUser}
                 backendUrl={this.props.auth.config.backendUrl}
               />}
+      tapToClose={true}
+      onOpen={() => this.setState({showMenu: true})}
+      onClose={() => this.setState({showMenu: false})}
       openDrawerOffset={1/4}
     >
       <View style={styles.listContainer}>
