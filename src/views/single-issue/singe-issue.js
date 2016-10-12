@@ -252,9 +252,13 @@ export default class SingeIssueView extends React.Component {
       .catch(err => {});
   }
 
-  openAttachmentUrl(url) {
+  openAttachmentUrl(name, url) {
     usage.trackEvent(CATEGORY_NAME, 'Open attachment by URL');
-    Linking.openURL(url);
+    if (Platform.OS === 'ios') {
+      Router.AttachmentPreview({url, name});
+    } else {
+      Linking.openURL(url);
+    }
   }
 
   loadCommentSuggestions(query) {
@@ -323,7 +327,7 @@ export default class SingeIssueView extends React.Component {
             </TouchableOpacity>;
           }
 
-          return <TouchableOpacity onPress={() => this.openAttachmentUrl(attach.url)} key={attach.id}>
+          return <TouchableOpacity onPress={() => this.openAttachmentUrl(attach.name, attach.url)} key={attach.id}>
             <View style={styles.attachmentFile}><Text>{attach.name}</Text></View>
           </TouchableOpacity>;
         })}

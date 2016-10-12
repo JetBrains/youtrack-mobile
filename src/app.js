@@ -10,6 +10,7 @@ import IssueList from './views/issue-list/issue-list';
 import SingleIssue from './views/single-issue/singe-issue';
 import CreateIssue from './views/create-issue/create-issue';
 import ShowImage from './views/show-image/show-image';
+import AttachmentPreview from './views/attachment-preview/attachment-preview';
 import {loadConfig, getStoredBackendURL} from './components/config/config';
 import Toast from 'react-native-easy-toast';
 
@@ -132,6 +133,8 @@ class YouTrackMobile extends React.Component {
     Router.registerRoute({name: 'SingleIssue', component: SingleIssue});
 
     Router.registerRoute({name: 'ShowImage', component: ShowImage, animation: Navigator.SceneConfigs.FloatFromBottom});
+
+    Router.registerRoute({name: 'AttachmentPreview', component: AttachmentPreview, animation: Navigator.SceneConfigs.FloatFromBottom});
 
     Router.registerRoute({name: 'CreateIssue', component: CreateIssue});
   }
