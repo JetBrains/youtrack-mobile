@@ -30,7 +30,6 @@
   "dependencies": {
     "@exponent/react-native-action-sheet": "0.2.3",
     "base64-js": "0.0.8",
-    "eslint": "3.7.1",
     "qs": "6.1.0",
     "react": "15.3.1",
     "react-native": "0.34.1",
@@ -61,7 +60,7 @@
     "cheerio": "0.20.0",
     "core-util-is": "1.0.0",
     "enzyme": "2.3.0",
-    "eslint": "3.0.1",
+    "eslint": "3.7.1",
     "eslint-config-defaults": "9.0.0",
     "eslint-plugin-flow-vars": "^0.4.0",
     "eslint-plugin-import": "2.0.0",
