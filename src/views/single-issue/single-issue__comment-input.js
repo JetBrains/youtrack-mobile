@@ -1,10 +1,31 @@
+/* @flow */
 import {View, Text, TouchableOpacity, ActivityIndicator, ScrollView, Image} from 'react-native';
-import React from 'react';
+import React, {Component} from 'react';
 import MultilineInput from '../../components/multiline-input/multiline-input';
 
 import styles from './single-issue.styles';
 
-export default class IssueListCommentInput extends React.Component {
+type Props = {
+  initialText: string,
+  onAddComment: (comment: string) => any,
+  suggestionsDataSource: (query: string) => Promise<{users: Array<IssueUser>}>
+};
+
+type State = {
+  isSaving: boolean,
+  commentText: string,
+  isLoadingSuggestions: boolean,
+  showSuggestions: boolean,
+  suggestionsQuery: string,
+  suggestedUsers: Array<IssueUser>,
+  commentCaret: number
+};
+
+export default class IssueListCommentInput extends Component {
+  props: Props;
+  state: State;
+  isUnmounted: boolean;
+
   constructor() {
     super();
     this.state = {
@@ -14,7 +35,7 @@ export default class IssueListCommentInput extends React.Component {
       isLoadingSuggestions: false,
       showSuggestions: false,
       suggestionsQuery: '',
-      suggestions: [],
+      suggestedUsers: [],
       commentCaret: 0
     };
   }
@@ -39,21 +60,21 @@ export default class IssueListCommentInput extends React.Component {
       .catch(() => this.setState({isSaving: false}));
   }
 
-  loadSuggestions(query) {
+  loadSuggestions(query: string) {
     this.setState({isLoadingSuggestions: true});
 
     return this.props.suggestionsDataSource(query)
-      .then(suggestions => this.setState({suggestions: suggestions.users, isLoadingSuggestions: false}))
+      .then(suggestions => this.setState({suggestedUsers: suggestions.users, isLoadingSuggestions: false}))
       .catch(() => this.setState({isLoadingSuggestions: false}));
   }
 
-  suggestionsNeededDetector(text, caret) {
+  suggestionsNeededDetector(text: string, caret: number) {
     const match = /[\S\@]+$/.exec(text.slice(0, caret));
     let currentWord = match && match[0];
     if (!currentWord) {
       return this.setState({
         showSuggestions: false,
-        suggestions: [],
+        suggestedUsers: [],
         suggestionsQuery: ''
       });
     }
@@ -68,7 +89,7 @@ export default class IssueListCommentInput extends React.Component {
     }
   }
 
-  applySuggestion(suggestion) {
+  applySuggestion(user: IssueUser) {
     function replaceRange(source, start, end, substitute) {
       return source.substring(0, start) + substitute + source.substring(end);
     }
@@ -78,11 +99,11 @@ export default class IssueListCommentInput extends React.Component {
 
     if (currentWord) {
       const startIndex = this.state.commentText.slice(0, this.state.commentCaret).lastIndexOf(currentWord);
-      const newText = replaceRange(this.state.commentText, startIndex, startIndex + currentWord.length, `@${suggestion.login}`);
+      const newText = replaceRange(this.state.commentText, startIndex, startIndex + currentWord.length, `@${user.login}`);
       this.setState({
         commentText: newText,
         showSuggestions: false,
-        suggestions: []
+        suggestedUsers: []
       });
     }
   }
@@ -98,14 +119,14 @@ export default class IssueListCommentInput extends React.Component {
         {this.state.isLoadingSuggestions &&
           <View style={styles.suggestionsLoadingMessage}><Text>Loading suggestions...</Text></View>}
 
-        {this.state.suggestions.map(suggestion => {
+        {this.state.suggestedUsers.map(user => {
           return (
-            <TouchableOpacity key={suggestion.id}
+            <TouchableOpacity key={user.id}
                               style={styles.commentSuggestionButton}
-                              onPress={() => this.applySuggestion(suggestion)}>
-              <Image source={{uri: suggestion.avatarUrl}} style={styles.commentSuggestionAvatar}/>
-              <Text style={styles.commentSuggestionName}>{suggestion.fullName}</Text>
-              <Text style={styles.commentSuggestionLogin}>  @{suggestion.login}</Text>
+                              onPress={() => this.applySuggestion(user)}>
+              <Image source={{uri: user.avatarUrl}} style={styles.commentSuggestionAvatar}/>
+              <Text style={styles.commentSuggestionName}>{user.fullName}</Text>
+              <Text style={styles.commentSuggestionLogin}>  @{user.login}</Text>
             </TouchableOpacity>
           );
         })}
