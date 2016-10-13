@@ -14,7 +14,9 @@ function renderLoading() {
 }
 
 function renderError() {
-  return <View><Text>Failed to load attachment</Text></View>;
+  return <View style={styles.errorContainer}>
+    <Text style={styles.errorText}>Failed to load attachment</Text>
+  </View>;
 }
 
 export function AttachmentPreview(props: Props) {
@@ -42,6 +44,13 @@ const styles = StyleSheet.create({
   },
   loadingIndicator: {
     padding: UNIT * 2
+  },
+  errorContainer: {
+    padding: UNIT * 2
+  },
+  errorText: {
+    textAlign: 'center',
+    color: 'red'
   }
 });
 
