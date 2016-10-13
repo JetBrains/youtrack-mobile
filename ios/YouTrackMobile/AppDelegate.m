@@ -52,13 +52,7 @@
   NSString *openingURL = userActivity.webpageURL.absoluteString;
   RCTLogInfo(@"Handling opening, backendURL: %@, openingURL: %@", backendUrl, openingURL);
 
-  if ([openingURL containsString:backendUrl]) {
-    RCTLogInfo(@"Application will handle restoration");
-    return [RCTLinkingManager application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
-  } else {
-    RCTLogInfo(@"Application will skip restoration (RETURNING NO");
-    return NO;
-  }
+  return [RCTLinkingManager application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
 }
 
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSURL *)url {
