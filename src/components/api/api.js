@@ -110,16 +110,15 @@ class Api {
    * @returns {Promise}
      */
   updateIssueDraft(issue: IssueFull) {
-    const queryString = qs.stringify({
-      fields: fields.singleIssue.toString(),
-      tmp: true
-    });
+    const queryString = qs.stringify({fields: fields.singleIssue.toString()});
 
     return this.makeAuthorizedRequest(`${this.youTrackUrl}/api/admin/users/me/drafts/${issue.id || ''}?${queryString}`, 'POST', issue);
   }
 
   addComment(issueId: string, comment: string) {
-    const url = `${this.youTrackIssueUrl}/${issueId}/comments`;
+    const queryString = qs.stringify({fields: fields.issueComment.toString()});
+    const url = `${this.youTrackIssueUrl}/${issueId}/comments?${queryString}`;
+
     return this.makeAuthorizedRequest(url, 'POST', {text: comment});
   }
 

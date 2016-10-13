@@ -197,5 +197,6 @@ export default {
     'isUpdateable',
     {values: BUNDLE_VALUE},
     {aggregatedUsers: ISSUE_USER_FIELDS}
-  ])
+  ]),
+  issueComment: ISSUE_COMMENTS_FIELDS
 };
