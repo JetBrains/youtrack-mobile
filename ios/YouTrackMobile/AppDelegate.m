@@ -7,12 +7,10 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-#import "RCTLog.h"
 #import "AppDelegate.h"
 #import "RCTLinkingManager.h"
 #import "RCTBundleURLProvider.h"
 #import "RCTRootView.h"
-#import "AppConfig.h"
 
 @implementation AppDelegate
 
@@ -48,10 +46,6 @@
 }
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler {
-  NSString *backendUrl = [AppConfigManager getYouTrackBackendUrl];
-  NSString *openingURL = userActivity.webpageURL.absoluteString;
-  RCTLogInfo(@"Handling opening, backendURL: %@, openingURL: %@", backendUrl, openingURL);
-
   return [RCTLinkingManager application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
 }
 
