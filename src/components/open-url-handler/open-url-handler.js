@@ -1,10 +1,11 @@
+/* @flow */
 import {Linking} from 'react-native';
 import qs from 'qs';
 import log from '../log/log';
 
 const issueIdReg = /issue(Mobile)?\/([\w-\d]+)/;
 
-function extractId(issueUrl) {
+function extractId(issueUrl: ?string) {
   if (!issueUrl) {
     return null;
   }
@@ -12,12 +13,17 @@ function extractId(issueUrl) {
   return match && match[2];
 }
 
-function extractIssuesQuery(issuesUrl) {
+function extractIssuesQuery(issuesUrl: ?string) {
   if (!issuesUrl) {
     return null;
   }
-  const [, query_string] = issuesUrl.match(/\?(.*)/);
-  const query = qs.parse(query_string).q;
+  const match = issuesUrl.match(/\?(.*)/);
+  if (!match || !match[1]) {
+    throw new Error(`Cannot extract query string from ${issuesUrl}`);
+  }
+
+  const queryString: string = match[1];
+  const query = qs.parse(queryString).q;
   return query;
 }
 
@@ -36,7 +42,7 @@ function parseUrl(url, onIssueIdDetected, onQueryDetected) {
   }
 }
 
-export default function openByUrlDetector(onIssueIdDetected, onQueryDetected) {
+export default function openByUrlDetector(serverUrl: string, onIssueIdDetected: (issueId: string) => any, onQueryDetected: (query: string) => any) {
   Linking.getInitialURL()
     .then(url => parseUrl(url, onIssueIdDetected, onQueryDetected));
 
