@@ -73,16 +73,19 @@ class IssueList extends React.Component {
 
   componentDidMount() {
     this.api = new Api(this.props.auth);
-    this.unsubscribeFromOpeningWithIssueUrl = openByUrlDetector(issueId => {
-      usage.trackEvent('Issue list', 'Open issue in app by URL');
-      Router.SingleIssue({
-        issueId: issueId,
-        api: this.api,
-        onUpdate: () => this.loadIssues(null)
+    this.unsubscribeFromOpeningWithIssueUrl = openByUrlDetector(
+      this.props.auth.config.backendUrl,
+      (issueId) => {
+        usage.trackEvent('Issue list', 'Open issue in app by URL');
+        Router.SingleIssue({
+          issueId: issueId,
+          api: this.api,
+          onUpdate: () => this.loadIssues(null)
+        });
+      },
+      (issuesQuery) => {
+        this.onQueryUpdated(issuesQuery);
       });
-    }, issuesQuery => {
-      this.onQueryUpdated(issuesQuery);
-    });
 
     if (this.props.query) {
       this.setQuery(this.props.query);

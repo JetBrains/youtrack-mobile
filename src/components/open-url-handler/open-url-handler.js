@@ -2,8 +2,13 @@
 import {Linking} from 'react-native';
 import qs from 'qs';
 import log from '../log/log';
+import {notifyError} from '../notification/notification';
 
 const issueIdReg = /issue(Mobile)?\/([\w-\d]+)/;
+
+function isSameServer(url: string, serverUrl: string) {
+  return url.indexOf(serverUrl) !== -1;
+}
 
 function extractId(issueUrl: ?string) {
   if (!issueUrl) {
@@ -44,10 +49,25 @@ function parseUrl(url, onIssueIdDetected, onQueryDetected) {
 
 export default function openByUrlDetector(serverUrl: string, onIssueIdDetected: (issueId: string) => any, onQueryDetected: (query: string) => any) {
   Linking.getInitialURL()
-    .then(url => parseUrl(url, onIssueIdDetected, onQueryDetected));
+    .then((url: ?string) => {
+      if (!url) {
+        return;
+      }
+
+      if (!isSameServer(url || '', serverUrl)) {
+        return notifyError('Open URL error', {message: `Cannot handle "${url}" URL because it doesn\'t match the configured server`});
+      }
+
+      return parseUrl(url, onIssueIdDetected, onQueryDetected);
+    });
 
   function onOpenWithUrl(event) {
     const url = event.url || event;
+
+    if (!isSameServer(url || '', serverUrl)) {
+      return notifyError('Open URL error', {message: `Cannot handle "${url}" URL because it doesn\'t match the configured server`});
+    }
+
     return parseUrl(url, onIssueIdDetected, onQueryDetected);
   }
 
