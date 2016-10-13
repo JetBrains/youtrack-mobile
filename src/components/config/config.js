@@ -1,6 +1,7 @@
 /* @flow */
 import {AsyncStorage} from 'react-native';
 
+const MIN_YT_VERSION = 7.0;
 const BACKEND_URL_STORAGE_KEY = 'yt_mobile_backend_url';
 const baseUrlRegExp = /^(.*)\//;
 
@@ -46,7 +47,7 @@ async function loadConfig(ytUrl: string) {
   return fetch(`${ytUrl}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,statisticsEnabled`)
     .then(res => res.json())
     .then(res => {
-      if (parseFloat(res.version) < 7.0) {
+      if (parseFloat(res.version) < MIN_YT_VERSION) {
         throw new Error(`YouTrack Mobile requires YouTrack version >= 7.0, but ${ytUrl} has version ${res.version}.`);
       }
 
