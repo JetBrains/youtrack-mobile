@@ -4,11 +4,10 @@
   <item
     android:drawable="@color/white"/>
 
-  <item android:drawable="@drawable/youtrack_logo"
-        android:adjustViewBounds="true"
-        android:width="160dp"
-        android:height="160dp"
-        android:gravity="center"
-  />
+  <item>
+    <bitmap
+      android:gravity="center"
+      android:src="@mipmap/ic_launcher"/>
+  </item>
 
 </layer-list>
