@@ -50,6 +50,7 @@ class IssueList extends React.Component {
       showMenu: false,
       loadingError: null,
       queryAssistValue: '',
+      isInitialized: false,
       isRefreshing: false
     };
 
@@ -130,6 +131,7 @@ class IssueList extends React.Component {
           issues: issues,
           dataSource: this.state.dataSource.cloneWithRows(issues),
           isRefreshing: false,
+          isInitialized: true,
           listEndReached: issues.length < PAGE_SIZE
         });
         this.cache.store(issues);
@@ -139,6 +141,7 @@ class IssueList extends React.Component {
           .then(resolvedErr => {
             this.setState({
               isRefreshing: false,
+              isInitialized: true,
               listEndReached: true,
               loadingError: resolvedErr,
               dataSource: this.state.dataSource.cloneWithRows([])
@@ -152,7 +155,7 @@ class IssueList extends React.Component {
   }
 
   loadMore() {
-    if (this.state.isLoadingMore || this.state.isRefreshing || this.state.loadingError || this.state.listEndReached) {
+    if (!this.state.isLoadingMore || this.state.isLoadingMore || this.state.isRefreshing || this.state.loadingError || this.state.listEndReached) {
       return;
     }
 
