@@ -278,15 +278,15 @@ export default class SingeIssueView extends React.Component {
 
   _renderHeader() {
     const title = <Text style={styles.headerText} selectable={true}>
-      {this.state.issue && (`${this.state.issue.project.shortName}-${this.state.issue.numberInProject}`)}
+      {this.state.issue ? `${this.state.issue.project.shortName}-${this.state.issue.numberInProject}` : `Loading...`}
     </Text>;
 
     if (!this.state.editMode) {
-      const rightButton = this.state.issue ? <Text>Actions</Text> : null;
+      const actionsAvailable = this.state.issue;
 
       return <Header leftButton={<Text>Back</Text>}
-                     rightButton={rightButton}
-                     onRightButtonClick={() => this._showActions()}>
+                     rightButton={<Text style={actionsAvailable ? null : styles.disabledSaveButton}>Actions</Text>}
+                     onRightButtonClick={() => actionsAvailable && this._showActions()}>
         {title}
       </Header>;
 
