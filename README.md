@@ -1,34 +1,30 @@
 
-# Development
+# YouTrack Mobile
 
-## Common
+With YouTrack Mobile you are free to access your issue from anywhere, create a new issue on the fly, or update an existing one.
+Enjoy a clean, minimalistic view of the issues, along with the search box aided by intelligent query completion. Filter issues in no time.
+Of course, you can check issue details, comments, view attachments and join the conversation.
 
-Before doing anything install dependencies via `npm install`
+![YouTrack logo](https://github.com/JetBrains/youtrack-mobile/blob/master/src/components/icon/youtrack-logo-512.png?raw=true)
 
-## iOS
+## Development
 
-### Pepare
+1. Before doing anything install dependencies via `npm install` or `yarn install`
+2. Read [getting started](https://facebook.github.io/react-native/docs/getting-started.html).
+### iOS
+
+#### Pepare
 
 1. Install [XCode](https://developer.apple.com/xcode/download/) (recommended) or XCode command line tools by `xcode-select --install`
-2. Into XCode settings, go to "Downloads" tab and download iOS 9.2 emulator
+2. Into XCode settings, go to "Downloads" tab and download iOS 10 simulator
 
 ### Develop
 
-* Run development server via
-```sh
-npm start
-```
+* Run development server via `npm start`
 
-* Compile and install app to emulator by `npm run ios`. You can do it only one time and repeat it again on changes in XCode project.
+* Compile and install app to emulator by `npm run ios`. It's enough to perform this once.
 
-* To run project in ios simulator, install xcode, iphone 6 plus simulator and run `npm run ios`
-
-To debug, press CMD+D on running in emulator application.
-
-### Debugging
-
-Official [documentation](https://facebook.github.io/react-native/docs/debugging.html)
-To debug, press CMD+D on running in emulator application.
+To debug, press CMD+D while app is running in the simulator. Here is [documentation](https://facebook.github.io/react-native/docs/debugging.html).
 
 ## Android
 
@@ -43,42 +39,8 @@ brew install android-sdk
 
 Install needed for react-native android sdk packagestor-android
 ```sh
-android update sdk --all --no-ui -t \
-tools,\
-platform-tool,\
-build-tools-23.0.1,\
-android-23,\
-extra-android-support,\
-extra-android-m2repository,\
-sys-img-x86-android-23,\
-sys-img-x86_64-android-23
-
-
-# MackBook OS X only
-android update sdk --all --no-ui -t extra-intel-Hardware_Accelerated_Execution_Manager
-
-# The SDK Manager will download the installer to the "extras" directory, under the main SDK directory.
-# Even though the SDK manager says "Installed" it actually means that the Intel HAXM executable was downloaded.
-# You will still need to run the installer from the "extras" directory to finish installation.
-# Run the installer inside the <sdk folder>/sdk/extras/intel/Hardware_Accelerated_Execution_Manager/ directory and follow the installation instructions for your platform.
-# If you install throught brew then <sdk folder> will be /usr/local/Cellar/android-sdk/
-# @see https://software.intel.com/en-us/android/articles/installation-instructions-for-intel-hardware-accelerated-execution-manager-mac-os-x
-
-sudo /usr/local/Cellar/android-sdk/24.4.1_1/extras/intel/Hardware_Accelerated_Execution_Manager/silent_install.sh
-```
-
-You can look what will be installed without installation simple add flag `--dry-mode`
-```sh
-android update sdk --all --no-ui -t \
-tools,\
-platform-tool,\
-build-tools-23.0.1,\
-android-23,\
-extra-android-support,\
-extra-android-m2repository,\
-sys-img-x86-android-23,\
-sys-img-x86_64-android-23 \
---dry-mode
+android update sdk --all --no-ui -t tools,platform-tools,build-tools-23.0.1,android-23\
+,extra-google-google_play_services,extra-android-m2repository,extra-google-m2repository,extra-android-support
 ```
 
 ```sh
@@ -97,24 +59,4 @@ npm run android
 
 ### Debugging
 
-Official [documentation](https://facebook.github.io/react-native/docs/debugging.html)
-F2 open debug menu for android emulator
-
-Debug on real device. Install `android-tools` (aka adb) then setup device for development http://developer.android.com/intl/ru/tools/device.html#setting-up
-
-### Release
-
-#### Android [To be automated]
-
-1. Go to teamcity and get latest APK file.
-2. Go to play developer console https://play.google.com/apps/ and upload new apk
-3. Publish
-
-
-#### iOS [To be automated]
-Working on developer machine only for a while.
-
-1. Wait while build is finished in TeamCity.
-2. Run `npm run ios-release` to download latest built archive and export it as signed ipa file
-2. Use "Application Loader" utility to upload ios/build/YouTrackMobile.ipa to AppStore.
-
+Official [documentation](https://facebook.github.io/react-native/docs/debugging.html). CMD+M opens debug menu for android emulator
