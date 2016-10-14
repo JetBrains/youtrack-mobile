@@ -7,10 +7,11 @@ Of course, you can check issue details, comments, view attachments and join the 
 
 ![YouTrack logo](https://github.com/JetBrains/youtrack-mobile/blob/master/src/components/icon/youtrack-logo-512.png?raw=true)
 
-## Development
+### Development
 
 1. Before doing anything install dependencies via `npm install` or `yarn install`
 2. Read [getting started](https://facebook.github.io/react-native/docs/getting-started.html).
+
 ### iOS
 
 #### Pepare
