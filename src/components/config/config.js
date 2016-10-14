@@ -38,7 +38,7 @@ async function storeConfig(config: AppConfigFilled): Promise<AppConfigFilled> {
   return AsyncStorage.setItem(BACKEND_CONFIG_STORAGE_KEY, JSON.stringify(config))
     .then(() => config);}
 
-async function getStoredConfig(): Promise<AppConfigFilled> {
+async function getStoredConfig(): Promise<?AppConfigFilled> {
   const rawConfig: string = await AsyncStorage.getItem(BACKEND_CONFIG_STORAGE_KEY);
   const config = JSON.parse(rawConfig);
 
@@ -86,8 +86,9 @@ async function loadConfig(ytUrl: string) {
         clientSecret: res.mobile.serviceSecret
       });
 
-      return storeConfig(config);
-    });
+      return config;
+    })
+    .then(storeConfig);
 }
 
 export {loadConfig, getStoredConfig};
