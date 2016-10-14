@@ -9,6 +9,7 @@ const baseUrlRegExp = /^(.*)\//;
 const config: AppConfig = {
   backendUrl: null,
   statisticsEnabled: null,
+  version: null,
   auth: {
     serverUri: null,
     clientId: null,
@@ -78,6 +79,8 @@ async function loadConfig(ytUrl: string) {
       }
 
       config.backendUrl = ytUrl;
+      config.statisticsEnabled = res.statisticsEnabled;
+      config.version = res.version;
 
       Object.assign(config.auth, {
         serverUri: handleEmbeddedHubUrl(res.ring.url, ytUrl),

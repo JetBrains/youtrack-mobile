@@ -20,10 +20,12 @@ declare type AppConfig = {
   backendUrl: ?string;
   auth: ConfigAuth;
   statisticsEnabled: ?boolean;
+  version: ?string;
 };
 
 declare type AppConfigFilled = {
   backendUrl: string;
   auth: ConfigAuthFilled;
   statisticsEnabled: boolean;
+  version: string;
 };
