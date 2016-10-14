@@ -1,17 +1,30 @@
+/* @flow */
 import {View, Linking} from 'react-native';
 import React, {PropTypes, Component} from 'react';
+// $FlowFixMe: cannot typecheck simple-markdown module because of mistakes there
 import SimpleMarkdown from 'simple-markdown';
 import Router from '../router/router';
 import wikiRules from './wiki__rules';
 import {decorateIssueLinks, replaceImageNamesWithUrls, decorateUserNames} from './wiki__raw-text-decorator';
 
+type Props = {
+  style: any,
+  children: any,
+  attachments: Array<Object>,
+  onIssueIdTap: (issueId: string) => any
+};
+
 export default class Wiki extends Component {
+  props: Props;
+  parser: (rawWiki: string) => Object;
+  renderer: (tree: Object) => Object;
+
   static propTypes = {
     onIssueIdTap: PropTypes.func.isRequired,
     attachments: PropTypes.array.isRequired
   }
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     const rules = wikiRules({
       onLinkPress: (url) => {
@@ -34,7 +47,7 @@ export default class Wiki extends Component {
     this.renderer = SimpleMarkdown.reactFor(SimpleMarkdown.ruleOutput(rules, 'react'));
   }
 
-  parse(source) {
+  parse(source: string) {
     const blockSource = `${source}\n\n`;
     return this.parser(blockSource, {inline: false});
   }
@@ -48,7 +61,7 @@ export default class Wiki extends Component {
   }
 }
 
-const decorateRawText = (source, wikifiedOnServer, attachments) => {
+const decorateRawText = (source: string, wikifiedOnServer: string, attachments: Array<Object>) => {
   let result = replaceImageNamesWithUrls(source, attachments);
   if (wikifiedOnServer) {
     result = decorateIssueLinks(result, wikifiedOnServer);
