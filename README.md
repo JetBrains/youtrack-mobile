@@ -5,7 +5,9 @@ With YouTrack Mobile you are free to access your issue from anywhere, create a n
 Enjoy a clean, minimalistic view of the issues, along with the search box aided by intelligent query completion. Filter issues in no time.
 Of course, you can check issue details, comments, view attachments and join the conversation.
 
-![YouTrack logo](https://github.com/JetBrains/youtrack-mobile/blob/master/src/components/icon/youtrack-logo-512.png?raw=true)
+If you've found an issue, please report it [here](https://youtrack.jetbrains.com/newissue?project=DSH&clearDraft=true).
+
+![YouTrack Mobile screenshot](https://drive.google.com/uc?export=&id=0B6BBCd1L_wXacS1aUEk3RlFEMTg)
 
 ### Development
 
