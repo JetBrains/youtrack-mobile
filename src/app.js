@@ -11,7 +11,7 @@ import SingleIssue from './views/single-issue/singe-issue';
 import CreateIssue from './views/create-issue/create-issue';
 import ShowImage from './views/show-image/show-image';
 import AttachmentPreview from './views/attachment-preview/attachment-preview';
-import {loadConfig, getStoredBackendURL} from './components/config/config';
+import {loadConfig, getStoredConfig} from './components/config/config';
 import Toast from 'react-native-easy-toast';
 
 import {BackAndroid, Navigator, View} from 'react-native';
@@ -33,12 +33,11 @@ class YouTrackMobile extends React.Component {
   }
 
   async getStoredUrlAndProceed() {
-    const backendUrl = await getStoredBackendURL();
-    if (backendUrl) {
-      this.initialize(backendUrl);
-    } else {
-      Router.EnterServer({serverUrl: null});
+    const storedConfig = await getStoredConfig();
+    if (storedConfig) {
+      return this.initialize(storedConfig);
     }
+    Router.EnterServer({serverUrl: null});
   }
 
   getChildContext() {
@@ -64,20 +63,29 @@ class YouTrackMobile extends React.Component {
     });
   }
 
-  async initialize(youtrackUrl) {
+  async initializeAuth(config) {
+    this.auth = new Auth(config);
+    usage.init(config.statisticsEnabled);
+    return await this.checkAuthorization();
+  }
+
+  async initialize(config) {
     Router._getNavigator() && Router.Home({
-      backendUrl: youtrackUrl,
+      backendUrl: config.backendUrl,
       error: null,
       message: 'Connecting to YouTrack...'
     });
 
     try {
-      const config = await loadConfig(youtrackUrl);
-      this.auth = new Auth(config);
-      usage.init(config.statisticsEnabled);
-      await this.checkAuthorization();
+      return this.initializeAuth(config);
     } catch (error) {
-      Router.Home({backendUrl: youtrackUrl, error})
+      let reloadedConfig;
+      try {
+        reloadedConfig = await loadConfig(config.backendUrl);
+        return this.initializeAuth(reloadedConfig);
+      } catch (error) {
+        Router.Home({backendUrl: config.backendUrl, error});
+      }
     }
   }
 
@@ -100,11 +108,7 @@ class YouTrackMobile extends React.Component {
       props: {
         connectToYoutrack: newUrl => {
           return loadConfig(newUrl)
-            .then(config => {
-              this.auth = new Auth(config);
-              usage.init(config.statisticsEnabled);
-            })
-            .then(() => this.checkAuthorization());
+            .then(config => this.initializeAuth(config));
         }
       }
     });

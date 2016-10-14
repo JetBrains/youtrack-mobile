@@ -10,7 +10,7 @@ import {resolveError, extractErrorMessage} from '../../components/notification/n
 import styles from './enter-server.styles';
 
 const CATEGORY_NAME = 'Choose server';
-const protocolRegExp = /^https?:/ig;
+const protocolRegExp = /^https?:/i;
 
 type Props = {
   serverUrl: string,

@@ -3,6 +3,7 @@ import {AsyncStorage} from 'react-native';
 
 const MIN_YT_VERSION = 7.0;
 const BACKEND_URL_STORAGE_KEY = 'yt_mobile_backend_url';
+const BACKEND_CONFIG_STORAGE_KEY = 'BACKEND_CONFIG_STORAGE_KEY';
 const baseUrlRegExp = /^(.*)\//;
 
 const config: AppConfig = {
@@ -29,13 +30,34 @@ function getBaseUrl(url: string) {
   return match[1];
 }
 
-async function storeBackendUrl(url: string) {
-  return AsyncStorage.setItem(BACKEND_URL_STORAGE_KEY, url)
-    .then(() => url);
-}
-
 async function getStoredBackendURL() {
   return AsyncStorage.getItem(BACKEND_URL_STORAGE_KEY);
+}
+
+async function storeConfig(config: AppConfigFilled): Promise<AppConfigFilled> {
+  return AsyncStorage.setItem(BACKEND_CONFIG_STORAGE_KEY, JSON.stringify(config))
+    .then(() => config);}
+
+async function getStoredConfig(): Promise<AppConfigFilled> {
+  const rawConfig: string = await AsyncStorage.getItem(BACKEND_CONFIG_STORAGE_KEY);
+  const config = JSON.parse(rawConfig);
+
+  if (config) {
+    return config;
+  }
+
+  //TODO: code below is fallback for previous installs have backend URL only. Should be removed after a while.
+  const fallbackServerURL = await getStoredBackendURL();
+
+  if (fallbackServerURL) {
+    return loadConfig(fallbackServerURL)
+      .then(config => {
+        AsyncStorage.removeItem(BACKEND_URL_STORAGE_KEY);
+        return config;
+      });
+  }
+
+  return null;
 }
 
 function handleEmbeddedHubUrl(hubUrl: string, ytUrl: string) {
@@ -55,8 +77,6 @@ async function loadConfig(ytUrl: string) {
         throw new Error(`${ytUrl} does not have mobile application feature turned on. Check the documentation.`);
       }
 
-      storeBackendUrl(ytUrl);
-
       config.backendUrl = ytUrl;
 
       Object.assign(config.auth, {
@@ -66,8 +86,8 @@ async function loadConfig(ytUrl: string) {
         clientSecret: res.mobile.serviceSecret
       });
 
-      return config;
+      return storeConfig(config);
     });
 }
 
-export {loadConfig, getStoredBackendURL};
+export {loadConfig, getStoredConfig};
