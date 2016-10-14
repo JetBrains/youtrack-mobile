@@ -1,3 +1,4 @@
+/* @flow */
 import Auth from './components/auth/auth';
 
 import Router from './components/router/router';
@@ -12,20 +13,25 @@ import CreateIssue from './views/create-issue/create-issue';
 import ShowImage from './views/show-image/show-image';
 import AttachmentPreview from './views/attachment-preview/attachment-preview';
 import {loadConfig, getStoredConfig} from './components/config/config';
+// $FlowFixMe: cannot typecheck easy-toast module because of mistakes there
 import Toast from 'react-native-easy-toast';
 
 import {BackAndroid, Navigator, View} from 'react-native';
-import React, {PropTypes} from 'react';
+import React, {PropTypes, Component} from 'react';
 import ActionSheet from '@exponent/react-native-action-sheet';
 
-class YouTrackMobile extends React.Component {
+
+class YouTrackMobile extends Component {
+  state: Object;
+  auth: Auth;
+  _actionSheetRef: Object;
+
   static childContextTypes = {
     actionSheet: PropTypes.func
   };
 
   constructor() {
     super();
-    this.state = {};
 
     this.registerRoutes();
     this.addAndroidBackButtonSupport();
@@ -63,13 +69,13 @@ class YouTrackMobile extends React.Component {
     });
   }
 
-  async initializeAuth(config) {
+  async initializeAuth(config: AppConfigFilled) {
     this.auth = new Auth(config);
     usage.init(config.statisticsEnabled);
     return await this.checkAuthorization();
   }
 
-  async initialize(config) {
+  async initialize(config: AppConfigFilled) {
     Router._getNavigator() && Router.Home({
       backendUrl: config.backendUrl,
       error: null,
