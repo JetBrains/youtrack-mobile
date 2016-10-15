@@ -11,8 +11,9 @@ If you've found an issue, please report it [here](https://youtrack.jetbrains.com
 
 ### Development
 
-1. Before doing anything install dependencies via `npm install` or `yarn install`
+1. Before doing anything install dependencies via `npm install` or `yarn install`.
 2. Read [getting started](https://facebook.github.io/react-native/docs/getting-started.html).
+3. Check code quality and type safety with `npm run lint`, run tests with `npm test`.
 
 ### iOS
 
