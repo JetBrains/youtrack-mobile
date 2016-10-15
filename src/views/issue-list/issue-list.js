@@ -158,7 +158,7 @@ class IssueList extends React.Component {
   }
 
   loadMore() {
-    if (!this.state.isLoadingMore || this.state.isLoadingMore || this.state.isRefreshing || this.state.loadingError || this.state.listEndReached) {
+    if (!this.state.isInitialized || this.state.isLoadingMore || this.state.isRefreshing || this.state.loadingError || this.state.listEndReached) {
       return;
     }
 
