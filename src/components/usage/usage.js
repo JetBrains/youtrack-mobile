@@ -7,7 +7,7 @@ const VERSION = process.env.npm_package_version || 'dev.dev.dev';
 const [major, minor, build] = VERSION.split('.');
 export const VERSION_STRING = `${major}.${minor} (build ${build})`;
 
-const googleAnalyiticsId = process.env.npm_package_config_analyticsid;
+const googleAnalyiticsId = process.env.ANALYTICS_ID;
 let isAnalyticsEnabled = false;
 
 const clientId = DeviceInfo.getUniqueID();
