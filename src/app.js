@@ -53,12 +53,8 @@ class YouTrackMobile extends Component {
   }
 
   async checkAuthorization() {
-    try {
-      await this.auth.loadStoredAuthParams();
-      return Router.IssueList({auth: this.auth});
-    } catch (e) {
-      Router.LogIn();
-    }
+    await this.auth.loadStoredAuthParams();
+    return Router.IssueList({auth: this.auth});
   }
 
   addAndroidBackButtonSupport() {
@@ -83,15 +79,17 @@ class YouTrackMobile extends Component {
     });
 
     try {
-      return this.initializeAuth(config);
+      await this.initializeAuth(config);
     } catch (error) {
       let reloadedConfig;
       try {
         reloadedConfig = await loadConfig(config.backendUrl);
-        return this.initializeAuth(reloadedConfig);
       } catch (error) {
-        Router.Home({backendUrl: config.backendUrl, error});
+        return Router.Home({backendUrl: config.backendUrl, error});
       }
+
+      await this.initializeAuth(reloadedConfig);
+      return Router.LogIn();
     }
   }
 
