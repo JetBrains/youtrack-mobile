@@ -7,7 +7,7 @@ Of course, you can check issue details, comments, view attachments and join the 
 
 If you've found an issue, please report it [here](https://youtrack.jetbrains.com/newissue?project=DSH&clearDraft=true).
 
-![YouTrack Mobile screenshot](https://drive.google.com/uc?export=&id=0B6BBCd1L_wXacS1aUEk3RlFEMTg)
+<img src="https://drive.google.com/uc?export=&id=0B6BBCd1L_wXacS1aUEk3RlFEMTg" alt="YouTrack Mobile screenshot" width="200">
 
 ### Development
 
