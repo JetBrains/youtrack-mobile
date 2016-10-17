@@ -12,7 +12,7 @@ echo ">>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<"
 echo Build number = $BuildNumber
 echo ">>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<"
 
-wget $1/guestAuth/repository/download/YouTrack_YouTrackMobile_70_Ios/.lastSuccessful/YouTrackMobile[Release].zip -O artifacts.zip
+wget $1/guestAuth/repository/download/YouTrack_YouTrackMobile_70_Ios/$BuildNumber/YouTrackMobile[Release].zip -O artifacts.zip
 
 unzip -o artifacts.zip -d ../ios/build/YouTrackMobile[Release].xcarchive
 
