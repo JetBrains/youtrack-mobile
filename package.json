@@ -2,9 +2,6 @@
   "name": "YouTrackMobile",
   "version": "0.1.0",
   "private": true,
-  "config": {
-    "analyticsid": null
-  },
   "scripts": {
     "start": "./node_modules/react-native-cli/index.js start",
     "test": "mocha --opts test/mocha.opts src/**/*.test.js",
