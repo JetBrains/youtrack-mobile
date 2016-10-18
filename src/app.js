@@ -88,8 +88,11 @@ class YouTrackMobile extends Component {
         return Router.Home({backendUrl: config.backendUrl, error});
       }
 
-      await this.initializeAuth(reloadedConfig);
-      return Router.LogIn();
+      try {
+        await this.initializeAuth(reloadedConfig);
+      } catch (e) {
+        return Router.LogIn();
+      }
     }
   }
 
@@ -112,7 +115,11 @@ class YouTrackMobile extends Component {
       props: {
         connectToYoutrack: newUrl => {
           return loadConfig(newUrl)
-            .then(config => this.initializeAuth(config));
+            .then(config => {
+              this.auth = new Auth(config);
+              usage.init(config.statisticsEnabled);
+              Router.LogIn();
+            });
         }
       }
     });
