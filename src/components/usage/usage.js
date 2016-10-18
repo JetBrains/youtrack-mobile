@@ -24,7 +24,7 @@ const usage = {
       return;
     }
 
-    const screenView = new GAHits.ScreenView('YouTrack Mobile', screenName, VERSION_STRING);
+    const screenView = new GAHits.ScreenView('YouTrack Mobile', screenName, VERSION);
     return ga.send(screenView);
   },
 
