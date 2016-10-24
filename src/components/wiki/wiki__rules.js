@@ -210,6 +210,20 @@ export default function (actions) {
       }
     }),
 
+    html: Object.assign({}, SimpleMarkdown.defaultRules.inlineCode, {
+      match: source => /^\{html.*?}([\s\S]+?)\{html}(?!\{html})/.exec(source),
+
+      parse: (capture, parse, state) => {
+        return {
+          content: capture[CONTENT_WITHIN_MARKERS]
+        };
+      },
+
+      react: (node, output, state) => {
+        return <Text key={state.key} style={styles.inlineCode} selectable={true}>{node.content}</Text>;
+      }
+    }),
+
     cut: Object.assign({}, SimpleMarkdown.defaultRules.em, {
       match: source => /^\{cut.*?}([\s\S]+?)\{cut}(?!\{cut})/.exec(source),
 
