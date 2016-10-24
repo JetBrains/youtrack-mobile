@@ -5,6 +5,10 @@ With YouTrack Mobile you are free to access your issue from anywhere, create a n
 Enjoy a clean, minimalistic view of the issues, along with the search box aided by intelligent query completion. Filter issues in no time.
 Of course, you can check issue details, comments, view attachments and join the conversation.
 
+You could download it by links below:
+* [Google Play](https://play.google.com/store/apps/details?id=com.jetbrains.youtrack.mobile.app)
+* [Apple AppStore [TODO: add link]]()
+
 If you've found an issue, please report it [here](https://youtrack.jetbrains.com/newissue?project=DSH&clearDraft=true).
 
 <img src="https://drive.google.com/uc?export=&id=0B6BBCd1L_wXacS1aUEk3RlFEMTg" alt="YouTrack Mobile screenshot" width="200">
