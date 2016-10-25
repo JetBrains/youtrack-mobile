@@ -17,3 +17,7 @@ wget $1/guestAuth/repository/download/YouTrack_YouTrackMobile_70_Ios/$BuildNumbe
 unzip -o artifacts.zip -d ../ios/build/YouTrackMobile[Release].xcarchive
 
 rm -rf artifacts.zip
+
+# Temporary fix for missed archived-expanded-entitlements.xcent file in non-signed archives
+# https://youtrack.jetbrains.com/issue/YTM-189
+cp ../ios/build/YouTrackMobile\[Release\].xcarchive/Products/Applications/YouTrackMobile.app/YouTrackMobile.entitlements ../ios/build/YouTrackMobile\[Release\].xcarchive/Products/Applications/YouTrackMobile.app/archived-expanded-entitlements.xcent
