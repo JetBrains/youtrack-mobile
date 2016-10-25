@@ -9,7 +9,7 @@
 	</array>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)org.jetbrains.youtrack.YouTrackMobile</string>
+		<string>2ZEFAR8TH3.org.jetbrains.youtrack.YouTrackMobile</string>
 	</array>
 </dict>
 </plist>
