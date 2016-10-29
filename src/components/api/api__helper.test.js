@@ -2,10 +2,6 @@ import ApiHelper from './api__helper';
 
 describe('Api helper', () => {
 
-  beforeEach(() => {
-
-  });
-
   describe('toField', () => {
     it('should convert fields array to srting', () => {
       const fields = ApiHelper.toField(['foo', 'bar']);
