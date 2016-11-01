@@ -5,13 +5,16 @@ With YouTrack Mobile you are free to access your issue from anywhere, create a n
 Enjoy a clean, minimalistic view of the issues, along with the search box aided by intelligent query completion. Filter issues in no time.
 Of course, you can check issue details, comments, view attachments and join the conversation.
 
-You could download it by links below:
+You can download it by links below:
 * [Google Play](https://play.google.com/store/apps/details?id=com.jetbrains.youtrack.mobile.app)
-* [Apple AppStore [TODO: add link]]()
+* [Apple AppStore](https://itunes.apple.com/us/app/youtrack/id1028024655?l=ru&ls=1&mt=8)
 
 If you've found an issue, please report it [here](https://youtrack.jetbrains.com/newissue?project=YTM&clearDraft=true).
 
-<img src="https://drive.google.com/uc?export=&id=0B6BBCd1L_wXacS1aUEk3RlFEMTg" alt="YouTrack Mobile screenshot" width="200">
+<img src="https://drive.google.com/uc?export=&id=0B6BBCd1L_wXaZnlSaUphb0t6bVk" alt="YouTrack Mobile list" width="200">
+<img src="https://drive.google.com/uc?export=&id=0B6BBCd1L_wXaZkdpQURabEY1SEk" alt="YouTrack Mobile search" width="200">
+<img src="https://drive.google.com/uc?export=&id=0B6BBCd1L_wXaM3M5MzBXVExRUFU" alt="YouTrack Mobile issue view" width="200">
+<img src="https://drive.google.com/uc?export=&id=0B6BBCd1L_wXadk8zMUVtWXZiWFU" alt="YouTrack Mobile issue creation" width="200">
 
 ### Development
 
