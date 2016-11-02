@@ -1,5 +1,5 @@
 /* @flow */
-import {Image, View, Text, TextInput, TouchableOpacity, Linking, ScrollView, ActivityIndicator} from 'react-native';
+import {Image, View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator} from 'react-native';
 import React from 'react';
 import Auth from '../../components/auth/auth';
 import {logo, back} from '../../components/icon/icon';
