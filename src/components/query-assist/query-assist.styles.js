@@ -9,7 +9,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    borderTopWidth: 0.5,
+    borderTopWidth: 1,
     borderColor: COLOR_GRAY
   },
   searchInput: {

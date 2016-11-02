@@ -109,7 +109,7 @@ export default StyleSheet.create({
   },
   commentSuggestionsContainer: {
     backgroundColor: '#FFF',
-    borderTopWidth: 0.5,
+    borderTopWidth: 1,
     borderColor: COLOR_GRAY,
     position: 'absolute',
     top: -140,
@@ -172,7 +172,7 @@ export default StyleSheet.create({
     color: COLOR_FONT_GRAY
   },
   commentsContainer: {
-    borderTopWidth: 0.5,
+    borderTopWidth: 1,
     borderColor: COLOR_GRAY,
     paddingTop: UNIT
   },
