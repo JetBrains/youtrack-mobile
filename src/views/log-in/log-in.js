@@ -1,5 +1,5 @@
 /* @flow */
-import {Image, View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator} from 'react-native';
+import {Image, View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator, Linking} from 'react-native';
 import React from 'react';
 import Auth from '../../components/auth/auth';
 import {logo, back} from '../../components/icon/icon';
@@ -158,14 +158,19 @@ export default class LoginForm extends React.Component {
             {this.state.loggingIn && <ActivityIndicator style={styles.loggingInIndicator}/>}
           </TouchableOpacity>
 
+          <View style={styles.description}>
+            <Text style={styles.descriptionText}>
+              {'You need to have an account to use the app. By logging in, you agree to the '}
+              <Text style={styles.privacyPolicy} onPress={() => Linking.openURL('https://www.jetbrains.com/company/privacy.html')}>
+                Privacy Policy
+              </Text>.
+            </Text>
+          </View>
+
           <TouchableOpacity style={styles.linkContainer} onPress={this.logInViaHub.bind(this)}>
             <Text style={styles.linkLike}>
               Log in via Browser</Text>
           </TouchableOpacity>
-        </View>
-
-        <View style={styles.description}>
-          <Text style={styles.descriptionText}>You need to have an account to use the app</Text>
         </View>
 
         <KeyboardSpacer/>

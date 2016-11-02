@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import HEADER_TOP_PADDING from '../../components/header/header__top-padding';
-import {COLOR_PINK, UNIT, COLOR_FONT_GRAY} from '../../components/variables/variables';
+import {COLOR_PINK, UNIT, COLOR_FONT_GRAY, COLOR_LINK} from '../../components/variables/variables';
 
 const AVATAR_SIZE = UNIT * 8;
 
@@ -31,13 +31,22 @@ export default StyleSheet.create({
   },
   menuFooter: {
     position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: UNIT*2,
-    alignItems: 'center'
+    left: UNIT*2,
+    right: UNIT*2,
+    bottom: UNIT*2
+  },
+  spacer: {
+    marginTop: UNIT
   },
   footerText: {
     fontSize: 12,
+    lineHeight: UNIT*2,
     color: COLOR_FONT_GRAY
+  },
+  buttonLink: {
+  },
+  linkText: {
+    color: COLOR_LINK,
+    fontSize: 12
   }
 });
