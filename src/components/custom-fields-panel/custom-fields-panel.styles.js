@@ -9,7 +9,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#FFF',
     height: FOOTER_HEIGHT,
-    borderTopWidth: 0.5,
+    borderTopWidth: 1,
     borderColor: COLOR_GRAY
   },
   editorViewContainer: {
