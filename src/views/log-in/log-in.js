@@ -2,6 +2,7 @@
 import {Image, View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator, Linking} from 'react-native';
 import React from 'react';
 import Auth from '../../components/auth/auth';
+import {formatYouTrackURL} from '../../components/config/config';
 import {logo, back} from '../../components/icon/icon';
 import Keystore from '../../components/keystore/keystore';
 import authorizeInHub from '../../components/auth/auth__oauth';
@@ -119,7 +120,7 @@ export default class LoginForm extends React.Component {
         <TouchableOpacity onPress={this.changeYouTrackUrl.bind(this)}>
           <View>
             <Text style={styles.welcome}>Login to YouTrack</Text>
-            <Text style={[styles.descriptionText, {marginTop: 8}]}>{this.props.auth.config.backendUrl}</Text>
+            <Text style={[styles.descriptionText, {marginTop: 8}]}>{formatYouTrackURL(this.props.auth.config.backendUrl)}</Text>
           </View>
         </TouchableOpacity>
 

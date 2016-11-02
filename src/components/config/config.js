@@ -5,6 +5,8 @@ const MIN_YT_VERSION = 7.0;
 const BACKEND_URL_STORAGE_KEY = 'yt_mobile_backend_url';
 const BACKEND_CONFIG_STORAGE_KEY = 'BACKEND_CONFIG_STORAGE_KEY';
 const baseUrlRegExp = /^(.*)\//;
+const PROTOCOL_REGEXP = /^https?:\/\//i;
+const YOUTRACK_CONTEXT_REGEXP = /\/youtrack$/i;
 
 const config: AppConfig = {
   backendUrl: null,
@@ -66,6 +68,10 @@ function handleEmbeddedHubUrl(hubUrl: string, ytUrl: string) {
   return hubUrl[0] === '/' ? ytUrl + hubUrl : hubUrl;
 }
 
+function formatYouTrackURL(url: string) {
+  return url.replace(PROTOCOL_REGEXP, '').replace(YOUTRACK_CONTEXT_REGEXP, '');
+}
+
 async function loadConfig(ytUrl: string) {
   return fetch(`${ytUrl}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,statisticsEnabled`)
     .then(res => res.json())
@@ -94,4 +100,4 @@ async function loadConfig(ytUrl: string) {
     .then(storeConfig);
 }
 
-export {loadConfig, getStoredConfig};
+export {loadConfig, getStoredConfig, formatYouTrackURL};
