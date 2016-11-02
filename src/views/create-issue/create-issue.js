@@ -67,13 +67,14 @@ export default class CreateIssue extends React.Component {
   }
 
   updateIssueDraft(projectOnly = false) {
-    let issueToSend = this.state.issue;
+    const issueToSend = {...this.state.issue};
     if (!issueToSend.project || !issueToSend.project.id) {
       return;
     }
 
+    //If we're changing project, fields shouldn't be passed to avoid "incompatible-issue-custom-field" error
     if (projectOnly) {
-      issueToSend = {id: this.state.issue.id, project: this.state.issue.project};
+      delete issueToSend.fields;
     }
 
     return this.props.api.updateIssueDraft(issueToSend)
