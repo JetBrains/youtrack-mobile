@@ -17,6 +17,13 @@ const DRAFT_ID_STORAGE_KEY = 'DRAFT_ID_STORAGE_KEY';
 const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
 const CATEGORY_NAME = 'Create issue view';
 
+type Attachment = {
+  data: string,
+  uri: string,
+  path: ?string,
+  isVertical: boolean,
+}
+
 export default class CreateIssue extends React.Component {
   constructor() {
     super();
@@ -109,28 +116,34 @@ export default class CreateIssue extends React.Component {
   attachPhoto(takeFromLibrary = true) {
     const method = takeFromLibrary ? 'launchImageLibrary' : 'launchCamera';
 
-    ImagePicker[method]({}, (res) => {
+    ImagePicker[method]({}, (res: Attachment) => {
       if (res.didCancel) {
         return;
       }
       if (res.error) {
         return notifyError('ImagePicker Error: ', res.error);
       }
-      this.state.issue.attachments.push(res);
-      this.forceUpdate();
 
       const filePath = res.path || res.uri;
       const fileName = filePath.match(FILE_NAME_REGEXP)[0];
       const fileUri = res.uri;
 
-      this.setState({attachingImage: res});
+      const normalizedAttach = {
+        url: fileUri,
+        name: fileName
+      };
+
+      this.state.issue.attachments.push(normalizedAttach);
+      this.forceUpdate();
+
+      this.setState({attachingImage: normalizedAttach});
       this.props.api.attachFile(this.state.issue.id, fileUri, fileName)
         .then(() => {
           usage.trackEvent(CATEGORY_NAME, 'Attach image', 'Success');
           return this.setState({attachingImage: null});
         })
         .catch((err) => {
-          this.state.issue.attachments = this.state.issue.attachments.filter(attach => attach !== res);
+          this.state.issue.attachments = this.state.issue.attachments.filter(attach => attach !== normalizedAttach);
           this.setState({attachingImage: null});
 
           return notifyError('Cannot attach file', err);
@@ -162,19 +175,19 @@ export default class CreateIssue extends React.Component {
 
   _showImageAttachment(currentImage, allAttachments) {
     const allImagesUrls = allAttachments
-      .map(image => image.uri);
-    return Router.ShowImage({currentImage: currentImage.uri, allImagesUrls});
+      .map(image => image.url);
+    return Router.ShowImage({currentImage: currentImage.url, allImagesUrls});
   }
 
   _renderAttahes() {
     return this.state.issue.attachments.map(img => {
       return (
         <TouchableOpacity
-          key={img.uri || img.id}
+          key={img.url || img.id}
           onPress={() => this._showImageAttachment(img, this.state.issue.attachments)}
         >
           <Image style={issueStyles.attachmentImage}
-                 source={{uri: img.uri}}/>
+                 source={{uri: img.url}}/>
           {this.state.attachingImage === img && <ActivityIndicator size="large" style={styles.imageActivityIndicator}/>}
         </TouchableOpacity>
       );
