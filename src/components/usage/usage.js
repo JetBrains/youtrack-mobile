@@ -37,9 +37,10 @@ const usage = {
   },
 
   trackError(error: any, additionalMessage: ?string) {
+    //We are not allowed to gather error itself because of Privacy Policy
     return usage.trackEvent('exception', {
-      'exDescription': additionalMessage || JSON.stringify(error)
-    }, JSON.stringify(error));
+      'exDescription': additionalMessage
+    });
   },
 
   onGlobalError(error: any, isFatal: boolean) {
