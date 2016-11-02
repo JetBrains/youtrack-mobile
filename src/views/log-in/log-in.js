@@ -94,11 +94,6 @@ export default class LoginForm extends React.Component {
       });
   }
 
-  signUp() {
-    const config = this.props.auth.config;
-    Linking.openURL(`${config.auth.serverUri}/auth/register`);
-  }
-
   loginAsGuest() {
     log.warn('TODO: Not implemented');
   }
@@ -167,21 +162,10 @@ export default class LoginForm extends React.Component {
             <Text style={styles.linkLike}>
               Log in via Browser</Text>
           </TouchableOpacity>
-
-          <TouchableOpacity style={styles.linkContainer} onPress={this.signUp.bind(this)}>
-            <Text style={styles.linkLike}>
-              Sign up</Text>
-          </TouchableOpacity>
-
-          {/*<TouchableOpacity style={styles.linkContainer} onPress={this.loginAsGuest.bind(this)}>
-           <Text style={styles.linkLike}>
-           Log in as guest</Text>
-           </TouchableOpacity>*/}
         </View>
 
         <View style={styles.description}>
-          <Text style={styles.descriptionText}>You can log in with your credentials for JetBrains Account,
-            Active Directory (Domain) Labs or Attlassian Jira</Text>
+          <Text style={styles.descriptionText}>You need to have an account to use the app</Text>
         </View>
 
         <KeyboardSpacer/>
