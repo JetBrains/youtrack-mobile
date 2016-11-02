@@ -160,7 +160,7 @@ export default class LoginForm extends React.Component {
 
           <View style={styles.description}>
             <Text style={styles.descriptionText}>
-              {'You need to have an account to use the app. By logging in, you agree to the '}
+              {'You need a YouTrack account to use the app.\n By logging in, you agree to the '}
               <Text style={styles.privacyPolicy} onPress={() => Linking.openURL('https://www.jetbrains.com/company/privacy.html')}>
                 Privacy Policy
               </Text>.
