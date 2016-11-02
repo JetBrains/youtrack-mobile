@@ -49,7 +49,7 @@ Install android-sdk on Mac OS X
 brew install android-sdk
 ```
 
-Install packagestor-android required for react-native android sdk. 
+Install all the packages required for react-native android sdk.
 ```sh
 android update sdk --all --no-ui -t tools,platform-tools,build-tools-23.0.1,android-23\
 ,extra-google-google_play_services,extra-android-m2repository,extra-google-m2repository,extra-android-support
