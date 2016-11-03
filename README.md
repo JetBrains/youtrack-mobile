@@ -8,7 +8,7 @@ YouTrack Mobile is a native mobile application available for iOS and Android dev
 
  Download YouTrack Mobile:
 * [Google Play](https://play.google.com/store/apps/details?id=com.jetbrains.youtrack.mobile.app)
-* [Apple AppStore](https://itunes.apple.com/us/app/youtrack/id1028024655?l=ru&ls=1&mt=8)
+* [Apple AppStore](https://itunes.apple.com/us/app/youtrack/id1028024655?ls=1&mt=8)
 
  Report bugs to our [issue tracker](https://youtrack.jetbrains.com/newissue?project=YTM&clearDraft=true).
 
