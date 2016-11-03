@@ -57,7 +57,7 @@ export default class EnterServer extends Component {
     const urlsToTry = this.getPossibleUrls(this.state.serverUrl);
     log.log(`${this.state.serverUrl} entered, will try that urls: `, urlsToTry);
 
-    let firstError = null;
+    let errorToShow = null;
 
     for (const url of urlsToTry) {
       log.log('Trying', url);
@@ -66,12 +66,16 @@ export default class EnterServer extends Component {
         log.log('Successfully connected to', url);
         return;
       } catch (error) {
+        if (error && error.isIncompatibleYouTrackError) {
+          errorToShow = error;
+          break;
+        }
         log.log(`Failed to connect to ${url}`, error);
-        firstError = firstError || error;
+        errorToShow = errorToShow || error;
       }
     }
 
-    const error = await resolveError(firstError || {message: 'Unknown error'});
+    const error = await resolveError(errorToShow || {message: 'Unknown error'});
     this.setState({error, connecting: false});
   }
 

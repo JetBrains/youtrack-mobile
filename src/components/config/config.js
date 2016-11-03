@@ -22,6 +22,10 @@ const config: AppConfig = {
   }
 };
 
+class IncompatibleYouTrackError extends Error {
+  isIncompatibleYouTrackError = true;
+}
+
 function getBaseUrl(url: string) {
   if (!url) {
     return url;
@@ -63,6 +67,26 @@ async function getStoredConfig(): Promise<?AppConfigFilled> {
   return null;
 }
 
+function handleIncompatibleYouTrack(response: Object, ytUrl: string) {
+  //Handle very old (6.5 and below) instances
+  if (response.error === 'Not Found') {
+    throw new IncompatibleYouTrackError(`Could not connect to ${ytUrl} - it seems to have obsolete version. YouTrack Mobile requires YouTrack version >= 7.0.`);
+  }
+
+  //Handle config load error
+  if (response.error_developer_message) {
+    throw new IncompatibleYouTrackError(`Could not get access to this YouTrack instance. Please check that YouTrack version is 7.0 or higher: ${response.error_developer_message}`);
+  }
+
+  if (parseFloat(response.version) < MIN_YT_VERSION) {
+    throw new IncompatibleYouTrackError(`YouTrack Mobile requires YouTrack version >= 7.0, but ${ytUrl} has version ${response.version}.`);
+  }
+
+  if (!response.mobile || !response.mobile.serviceId) {
+    throw new IncompatibleYouTrackError(`${ytUrl} does not have mobile application feature turned on. Check the documentation.`);
+  }
+}
+
 function handleEmbeddedHubUrl(hubUrl: string, ytUrl: string) {
   ytUrl = getBaseUrl(ytUrl);
   return hubUrl[0] === '/' ? ytUrl + hubUrl : hubUrl;
@@ -76,13 +100,7 @@ async function loadConfig(ytUrl: string) {
   return fetch(`${ytUrl}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,statisticsEnabled`)
     .then(res => res.json())
     .then(res => {
-      if (parseFloat(res.version) < MIN_YT_VERSION) {
-        throw new Error(`YouTrack Mobile requires YouTrack version >= 7.0, but ${ytUrl} has version ${res.version}.`);
-      }
-
-      if (!res.mobile.serviceId) {
-        throw new Error(`${ytUrl} does not have mobile application feature turned on. Check the documentation.`);
-      }
+      handleIncompatibleYouTrack(res, ytUrl);
 
       config.backendUrl = ytUrl;
       config.statisticsEnabled = res.statisticsEnabled;

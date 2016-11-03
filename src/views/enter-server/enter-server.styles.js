@@ -56,7 +56,7 @@ export default StyleSheet.create({
   },
   errorContainer: {
     marginTop: UNIT,
-    marginBottom: UNIT
+    marginBottom: UNIT * 2
   },
   error: {
     color: 'red'
