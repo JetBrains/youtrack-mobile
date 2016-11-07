@@ -26,7 +26,7 @@ YouTrack Mobile is a native mobile application available for iOS and Android dev
 
 ### iOS
 
-#### Pepare
+#### Prepare
 
 1. Install [XCode](https://developer.apple.com/xcode/download/) (recommended) or XCode command line tools by `xcode-select --install`.
 2. Open XCode Settings, navigate to Downloads tab and download iOS 10 simulator.
@@ -37,20 +37,20 @@ YouTrack Mobile is a native mobile application available for iOS and Android dev
 
 * Compile and install app to emulator by `npm run ios`. You only need to perform this once.
 
-Press CMD+D to debug while app is running on the simulator. Find more details in the [documentation](https://facebook.github.io/react-native/docs/debugging.html).
+Press CMD+D to debug while the app is running on the simulator. For more details see the [documentation](https://facebook.github.io/react-native/docs/debugging.html).
 
 ## Android
 
 ### Prepare
 [Setup Android environment](https://facebook.github.io/react-native/docs/android-setup.html).
-After setup is complete, you need to install project dependencies and create an Android emulator.
+After setup is complete,  install project dependencies and create an Android emulator.
 
 Install android-sdk on Mac OS X:
 ```sh
 brew install android-sdk
 ```
 
-Install all the packages required for react-native Android SDK:
+Install all packages required for react-native Android SDK:
 ```sh
 android update sdk --all --no-ui -t tools,platform-tools,build-tools-23.0.1,android-23\
 ,extra-google-google_play_services,extra-android-m2repository,extra-google-m2repository,extra-android-support
