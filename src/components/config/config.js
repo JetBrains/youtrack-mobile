@@ -7,6 +7,7 @@ const BACKEND_CONFIG_STORAGE_KEY = 'BACKEND_CONFIG_STORAGE_KEY';
 const baseUrlRegExp = /^(.*)\//;
 const PROTOCOL_REGEXP = /^https?:\/\//i;
 const YOUTRACK_CONTEXT_REGEXP = /\/youtrack$/i;
+const VERSION_DETECT_FALLBACK_URL = '/rest/workflow/version';
 
 const config: AppConfig = {
   backendUrl: null,
@@ -68,6 +69,8 @@ async function getStoredConfig(): Promise<?AppConfigFilled> {
 }
 
 function handleIncompatibleYouTrack(response: Object, ytUrl: string) {
+  ytUrl = ytUrl.replace(VERSION_DETECT_FALLBACK_URL, '');
+
   //Handle very old (6.5 and below) instances
   if (response.error === 'Not Found') {
     throw new IncompatibleYouTrackError(`Cannot connect to ${ytUrl} - this version of YouTrack is not supported. YouTrack Mobile requires version 7.0 or later.`);
@@ -80,11 +83,6 @@ function handleIncompatibleYouTrack(response: Object, ytUrl: string) {
 
   if (parseFloat(response.version) < MIN_YT_VERSION) {
     throw new IncompatibleYouTrackError(`YouTrack Mobile requires YouTrack version 7.0 or later. ${ytUrl} has version ${response.version}.`);
-  }
-
-  // 'serviceId' field exists if youtrack is 6.0 (and below?) with /rest/ring url checked
-  if (response.serviceId) {
-    throw new IncompatibleYouTrackError(`YouTrack Mobile requires YouTrack version 7.0 or later.`);
   }
 
   if (!response.mobile || !response.mobile.serviceId) {
@@ -102,7 +100,11 @@ function formatYouTrackURL(url: string) {
 }
 
 async function loadConfig(ytUrl: string) {
-  return fetch(`${ytUrl}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,statisticsEnabled`, {
+  const url = ytUrl.includes(VERSION_DETECT_FALLBACK_URL) ?
+    ytUrl :
+    `${ytUrl}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,statisticsEnabled`;
+
+  return fetch(url, {
     method: 'GET',
     headers: {
       'Accept': 'application/json, text/plain, */*'
@@ -135,4 +137,4 @@ async function loadConfig(ytUrl: string) {
     });
 }
 
-export {loadConfig, getStoredConfig, formatYouTrackURL};
+export {loadConfig, getStoredConfig, formatYouTrackURL, VERSION_DETECT_FALLBACK_URL};

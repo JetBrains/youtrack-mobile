@@ -4,6 +4,7 @@ import React, {Component} from 'react';
 import {logo} from '../../components/icon/icon';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import usage from '../../components/usage/usage';
+import {VERSION_DETECT_FALLBACK_URL} from '../../components/config/config';
 import log from '../../components/log/log';
 import {resolveError, extractErrorMessage} from '../../components/notification/notification';
 
@@ -41,7 +42,7 @@ export default class EnterServer extends Component {
 
   getPossibleUrls(enteredUrl: string) {
     if (protocolRegExp.test(enteredUrl)) {
-      return [enteredUrl, `${enteredUrl}/youtrack`, `${enteredUrl}/rest/ring?doesntMatter=`];
+      return [enteredUrl, `${enteredUrl}/youtrack`, `${enteredUrl}${VERSION_DETECT_FALLBACK_URL}`];
     }
 
     return [
@@ -49,8 +50,7 @@ export default class EnterServer extends Component {
       `https://${enteredUrl}/youtrack`,
       `http://${enteredUrl}`,
       `http://${enteredUrl}/youtrack`,
-      //Hackish URL to check YouTrack 6.0 and below
-      `http://${enteredUrl}/rest/ring?doesntMatter=`
+      `http://${enteredUrl}${VERSION_DETECT_FALLBACK_URL}`
     ];
   }
 
