@@ -1,10 +1,10 @@
 
 # YouTrack Mobile
 
-YouTrack Mobile helps you to access your issues from anywhere, create a new issue on the fly, or update an existing one.
-Enjoy a clean, minimalistic view of the issues, along with the search box aided by intelligent query completion. Filter issues in no time.
-You can check issue details, comments, view attachments and join the conversation.
-YouTrack Mobile is a native mobile application available for iOS and Android devices. It's written on React Native.
+YouTrack Mobile helps you access your issues from anywhere, create a new issue on the fly, or update an existing one.
+Enjoy a clean, minimalist view of the issues, along with a  search box aided by intelligent query completion. Filter issues in no time.
+You can check issue details, comments, view attachments and join the discussion.
+YouTrack Mobile is a native mobile application available for iOS and Android devices. It's written using React Native.
 
  Download YouTrack Mobile:
 * [Google Play](https://play.google.com/store/apps/details?id=com.jetbrains.youtrack.mobile.app)
@@ -21,7 +21,7 @@ YouTrack Mobile is a native mobile application available for iOS and Android dev
 
 1. Install dependencies via `npm install` or `yarn install`.
 2. Read [getting started](https://facebook.github.io/react-native/docs/getting-started.html).
-3. Check code quality and type safety with `npm run lint`, run tests with `npm test`.
+3. Check code quality and type safety with `npm run lint`; run tests with `npm test`.
 
 ### iOS
 
@@ -36,20 +36,20 @@ YouTrack Mobile is a native mobile application available for iOS and Android dev
 
 * Compile and install app to emulator by `npm run ios`. You only need to perform this once.
 
-Click CMD+D to debug while app is running on the simulator. Find more details in the [documentation](https://facebook.github.io/react-native/docs/debugging.html).
+Press CMD+D to debug while app is running on the simulator. Find more details in the [documentation](https://facebook.github.io/react-native/docs/debugging.html).
 
 ## Android
 
 ### Prepare
 [Setup Android environment](https://facebook.github.io/react-native/docs/android-setup.html).
-When setup is complited you need to install project dependencies and create Android emulator.
+After setup is complete, you need to install project dependencies and create an Android emulator.
 
-Install android-sdk on Mac OS X
+Install android-sdk on Mac OS X:
 ```sh
 brew install android-sdk
 ```
 
-Install all the packages required for react-native android sdk.
+Install all the packages required for react-native Android SDK:
 ```sh
 android update sdk --all --no-ui -t tools,platform-tools,build-tools-23.0.1,android-23\
 ,extra-google-google_play_services,extra-android-m2repository,extra-google-m2repository,extra-android-support
