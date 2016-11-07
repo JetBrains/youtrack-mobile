@@ -37,7 +37,9 @@ YouTrack Mobile is a native mobile application available for iOS and Android dev
 
 * Compile and install app to emulator by `npm run ios`. You only need to perform this once.
 
-Press CMD+D to debug while the app is running on the simulator. For more details see the [documentation](https://facebook.github.io/react-native/docs/debugging.html).
+#### Debug
+
+Press CMD+D to debug while the app is running on the simulator. Refer to the official [documentation](https://facebook.github.io/react-native/docs/debugging.html).
 
 ### Android
 
@@ -72,4 +74,4 @@ npm run android
 
 #### Debug
 
-Refer to the official [documentation](https://facebook.github.io/react-native/docs/debugging.html). Press CMD+M to open the debug menu for Android emulator.
+Press CMD+M to open the debug menu for Android emulator. Refer to the official [documentation](https://facebook.github.io/react-native/docs/debugging.html). 
