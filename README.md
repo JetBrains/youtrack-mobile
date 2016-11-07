@@ -18,7 +18,9 @@ YouTrack Mobile is a native mobile application available for iOS and Android dev
 <img src="https://drive.google.com/uc?export=&id=0B6BBCd1L_wXaM3M5MzBXVExRUFU" alt="YouTrack Mobile issue view" width="200">
 <img src="https://drive.google.com/uc?export=&id=0B6BBCd1L_wXadk8zMUVtWXZiWFU" alt="YouTrack Mobile issue creation" width="200">
 
-## Development
+## Contribute as Developer
+
+We welcome you to help us improve this open-source app.
 
 1. Install dependencies via `npm install` or `yarn install`.
 2. Read [getting started](https://facebook.github.io/react-native/docs/getting-started.html).
