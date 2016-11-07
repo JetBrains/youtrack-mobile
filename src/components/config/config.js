@@ -70,25 +70,25 @@ async function getStoredConfig(): Promise<?AppConfigFilled> {
 function handleIncompatibleYouTrack(response: Object, ytUrl: string) {
   //Handle very old (6.5 and below) instances
   if (response.error === 'Not Found') {
-    throw new IncompatibleYouTrackError(`Could not connect to ${ytUrl} - it seems to have obsolete version. YouTrack Mobile requires YouTrack version >= 7.0.`);
+    throw new IncompatibleYouTrackError(`Cannot connect to ${ytUrl} - this version of YouTrack is not supported. YouTrack Mobile requires version 7.0 or later.`);
   }
 
   //Handle config load error
   if (response.error_developer_message) {
-    throw new IncompatibleYouTrackError(`Could not get access to this YouTrack instance. Please check that YouTrack version is 7.0 or higher: ${response.error_developer_message}`);
+    throw new IncompatibleYouTrackError(`Unable to connect to this YouTrack instance. Check that your YouTrack version is 7.0 or later. ${response.error_developer_message}`);
   }
 
   if (parseFloat(response.version) < MIN_YT_VERSION) {
-    throw new IncompatibleYouTrackError(`YouTrack Mobile requires YouTrack version >= 7.0, but ${ytUrl} has version ${response.version}.`);
+    throw new IncompatibleYouTrackError(`YouTrack Mobile requires YouTrack version 7.0 or later. ${ytUrl} has version ${response.version}.`);
   }
 
   // 'serviceId' field exists if youtrack is 6.0 (and below?) with /rest/ring url checked
   if (response.serviceId) {
-    throw new IncompatibleYouTrackError(`YouTrack Mobile requires YouTrack version 7.0 and above.`);
+    throw new IncompatibleYouTrackError(`YouTrack Mobile requires YouTrack version 7.0 or later.`);
   }
 
   if (!response.mobile || !response.mobile.serviceId) {
-    throw new IncompatibleYouTrackError(`${ytUrl} does not have mobile application feature turned on.`);
+    throw new IncompatibleYouTrackError(`The mobile application feature is not enabled for ${ytUrl}. Please contact support.`);
   }
 }
 
@@ -129,7 +129,7 @@ async function loadConfig(ytUrl: string) {
     .catch(err => {
       // Catches "Unexpected token < in JSON at position 0" error
       if (err instanceof SyntaxError) {
-        throw new Error('Wrong response received. It looks like entered server is not YouTrack or has wrong YouTrack version installed: 7.0 and above are only supported.');
+        throw new Error('Invalid server response. The URL is either an unsupported YouTrack version or is not a YouTrack instance. YouTrack Mobile requires YouTrack version 7.0 or later.');
       }
       return Promise.reject(err);
     });
