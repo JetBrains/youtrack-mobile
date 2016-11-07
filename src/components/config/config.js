@@ -5,6 +5,8 @@ const MIN_YT_VERSION = 7.0;
 const BACKEND_URL_STORAGE_KEY = 'yt_mobile_backend_url';
 const BACKEND_CONFIG_STORAGE_KEY = 'BACKEND_CONFIG_STORAGE_KEY';
 const baseUrlRegExp = /^(.*)\//;
+const PROTOCOL_REGEXP = /^https?:\/\//i;
+const YOUTRACK_CONTEXT_REGEXP = /\/youtrack$/i;
 
 const config: AppConfig = {
   backendUrl: null,
@@ -19,6 +21,10 @@ const config: AppConfig = {
     landingUrl: 'ytoauth://landing.url'
   }
 };
+
+class IncompatibleYouTrackError extends Error {
+  isIncompatibleYouTrackError = true;
+}
 
 function getBaseUrl(url: string) {
   if (!url) {
@@ -61,22 +67,50 @@ async function getStoredConfig(): Promise<?AppConfigFilled> {
   return null;
 }
 
+function handleIncompatibleYouTrack(response: Object, ytUrl: string) {
+  //Handle very old (6.5 and below) instances
+  if (response.error === 'Not Found') {
+    throw new IncompatibleYouTrackError(`Cannot connect to ${ytUrl} - this version of YouTrack is not supported. YouTrack Mobile requires version 7.0 or later.`);
+  }
+
+  //Handle config load error
+  if (response.error_developer_message) {
+    throw new IncompatibleYouTrackError(`Unable to connect to this YouTrack instance. Check that your YouTrack version is 7.0 or later. ${response.error_developer_message}`);
+  }
+
+  if (parseFloat(response.version) < MIN_YT_VERSION) {
+    throw new IncompatibleYouTrackError(`YouTrack Mobile requires YouTrack version 7.0 or later. ${ytUrl} has version ${response.version}.`);
+  }
+
+  // 'serviceId' field exists if youtrack is 6.0 (and below?) with /rest/ring url checked
+  if (response.serviceId) {
+    throw new IncompatibleYouTrackError(`YouTrack Mobile requires YouTrack version 7.0 or later.`);
+  }
+
+  if (!response.mobile || !response.mobile.serviceId) {
+    throw new IncompatibleYouTrackError(`The mobile application feature is not enabled for ${ytUrl}. Please contact support.`);
+  }
+}
+
 function handleEmbeddedHubUrl(hubUrl: string, ytUrl: string) {
   ytUrl = getBaseUrl(ytUrl);
   return hubUrl[0] === '/' ? ytUrl + hubUrl : hubUrl;
 }
 
+function formatYouTrackURL(url: string) {
+  return url.replace(PROTOCOL_REGEXP, '').replace(YOUTRACK_CONTEXT_REGEXP, '');
+}
+
 async function loadConfig(ytUrl: string) {
-  return fetch(`${ytUrl}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,statisticsEnabled`)
+  return fetch(`${ytUrl}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,statisticsEnabled`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json, text/plain, */*'
+    }
+  })
     .then(res => res.json())
     .then(res => {
-      if (parseFloat(res.version) < MIN_YT_VERSION) {
-        throw new Error(`YouTrack Mobile requires YouTrack version >= 7.0, but ${ytUrl} has version ${res.version}.`);
-      }
-
-      if (!res.mobile.serviceId) {
-        throw new Error(`${ytUrl} does not have mobile application feature turned on. Check the documentation.`);
-      }
+      handleIncompatibleYouTrack(res, ytUrl);
 
       config.backendUrl = ytUrl;
       config.statisticsEnabled = res.statisticsEnabled;
@@ -91,7 +125,14 @@ async function loadConfig(ytUrl: string) {
 
       return config;
     })
-    .then(storeConfig);
+    .then(storeConfig)
+    .catch(err => {
+      // Catches "Unexpected token < in JSON at position 0" error
+      if (err instanceof SyntaxError) {
+        throw new Error('Invalid server response. The URL is either an unsupported YouTrack version or is not a YouTrack instance. YouTrack Mobile requires YouTrack version 7.0 or later.');
+      }
+      return Promise.reject(err);
+    });
 }
 
-export {loadConfig, getStoredConfig};
+export {loadConfig, getStoredConfig, formatYouTrackURL};

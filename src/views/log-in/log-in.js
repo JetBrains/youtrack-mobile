@@ -1,7 +1,8 @@
 /* @flow */
-import {Image, View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator} from 'react-native';
+import {Image, View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator, Linking} from 'react-native';
 import React from 'react';
 import Auth from '../../components/auth/auth';
+import {formatYouTrackURL} from '../../components/config/config';
 import {logo, back} from '../../components/icon/icon';
 import Keystore from '../../components/keystore/keystore';
 import authorizeInHub from '../../components/auth/auth__oauth';
@@ -119,7 +120,7 @@ export default class LoginForm extends React.Component {
         <TouchableOpacity onPress={this.changeYouTrackUrl.bind(this)}>
           <View>
             <Text style={styles.welcome}>Login to YouTrack</Text>
-            <Text style={[styles.descriptionText, {marginTop: 8}]}>{this.props.auth.config.backendUrl}</Text>
+            <Text style={[styles.descriptionText, {marginTop: 8}]}>{formatYouTrackURL(this.props.auth.config.backendUrl)}</Text>
           </View>
         </TouchableOpacity>
 
@@ -158,14 +159,19 @@ export default class LoginForm extends React.Component {
             {this.state.loggingIn && <ActivityIndicator style={styles.loggingInIndicator}/>}
           </TouchableOpacity>
 
+          <View style={styles.description}>
+            <Text style={styles.descriptionText}>
+              {'You need a YouTrack account to use the app.\n By logging in, you agree to the '}
+              <Text style={styles.privacyPolicy} onPress={() => Linking.openURL('https://www.jetbrains.com/company/privacy.html')}>
+                Privacy Policy
+              </Text>.
+            </Text>
+          </View>
+
           <TouchableOpacity style={styles.linkContainer} onPress={this.logInViaHub.bind(this)}>
             <Text style={styles.linkLike}>
               Log in via Browser</Text>
           </TouchableOpacity>
-        </View>
-
-        <View style={styles.description}>
-          <Text style={styles.descriptionText}>You need to have an account to use the app</Text>
         </View>
 
         <KeyboardSpacer/>

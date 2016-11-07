@@ -41,14 +41,16 @@ export default class EnterServer extends Component {
 
   getPossibleUrls(enteredUrl: string) {
     if (protocolRegExp.test(enteredUrl)) {
-      return [enteredUrl, `${enteredUrl}/youtrack`];
+      return [enteredUrl, `${enteredUrl}/youtrack`, `${enteredUrl}/rest/ring?doesntMatter=`];
     }
 
     return [
       `https://${enteredUrl}`,
       `https://${enteredUrl}/youtrack`,
       `http://${enteredUrl}`,
-      `http://${enteredUrl}/youtrack`
+      `http://${enteredUrl}/youtrack`,
+      //Hackish URL to check YouTrack 6.0 and below
+      `http://${enteredUrl}/rest/ring?doesntMatter=`
     ];
   }
 
@@ -57,7 +59,7 @@ export default class EnterServer extends Component {
     const urlsToTry = this.getPossibleUrls(this.state.serverUrl);
     log.log(`${this.state.serverUrl} entered, will try that urls: `, urlsToTry);
 
-    let firstError = null;
+    let errorToShow = null;
 
     for (const url of urlsToTry) {
       log.log('Trying', url);
@@ -67,11 +69,15 @@ export default class EnterServer extends Component {
         return;
       } catch (error) {
         log.log(`Failed to connect to ${url}`, error);
-        firstError = firstError || error;
+        if (error && error.isIncompatibleYouTrackError) {
+          errorToShow = error;
+          break;
+        }
+        errorToShow = errorToShow || error;
       }
     }
 
-    const error = await resolveError(firstError || {message: 'Unknown error'});
+    const error = await resolveError(errorToShow || {message: 'Unknown error'});
     this.setState({error, connecting: false});
   }
 
@@ -121,6 +127,12 @@ export default class EnterServer extends Component {
             <Text style={styles.applyText}>Next</Text>
             {this.state.connecting && <ActivityIndicator style={styles.connectingIndicator}/>}
           </TouchableOpacity>
+
+          <View>
+            <Text style={styles.hintText}>
+              Requires YouTrack 7.0 or later
+            </Text>
+          </View>
         </View>
 
         <KeyboardSpacer/>

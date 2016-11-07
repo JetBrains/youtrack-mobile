@@ -3,12 +3,12 @@
 
 YouTrack Mobile helps you to access your issues from anywhere, create a new issue on the fly, or update an existing one.
 Enjoy a clean, minimalistic view of the issues, along with the search box aided by intelligent query completion. Filter issues in no time.
-Of course, you can check issue details, comments, view attachments and join the conversation.
+You can check issue details, comments, view attachments and join the conversation.
 YouTrack Mobile is a native mobile application available for iOS and Android devices. It's written on React Native.
 
  Download YouTrack Mobile:
 * [Google Play](https://play.google.com/store/apps/details?id=com.jetbrains.youtrack.mobile.app)
-* [Apple AppStore](https://itunes.apple.com/us/app/youtrack/id1028024655?l=ru&ls=1&mt=8)
+* [Apple AppStore](https://itunes.apple.com/us/app/youtrack/id1028024655?ls=1&mt=8)
 
  Report bugs to our [issue tracker](https://youtrack.jetbrains.com/newissue?project=YTM&clearDraft=true).
 
@@ -41,15 +41,15 @@ Click CMD+D to debug while app is running on the simulator. Find more details in
 ## Android
 
 ### Prepare
-[Setup Android environment](https://facebook.github.io/react-native/docs/android-setup.html)
+[Setup Android environment](https://facebook.github.io/react-native/docs/android-setup.html).
 When setup is complited you need to install project dependencies and create Android emulator.
 
-Install android-sdk on MackBook OS X
+Install android-sdk on Mac OS X
 ```sh
 brew install android-sdk
 ```
 
-Install needed for react-native android sdk packagestor-android
+Install all the packages required for react-native android sdk.
 ```sh
 android update sdk --all --no-ui -t tools,platform-tools,build-tools-23.0.1,android-23\
 ,extra-google-google_play_services,extra-android-m2repository,extra-google-m2repository,extra-android-support

@@ -1,9 +1,14 @@
-import {View, Text, TouchableOpacity, Image} from 'react-native';
+import {View, Text, TouchableOpacity, Image, Linking} from 'react-native';
 import React from 'react';
 import styles from './issue-list__menu.styles';
 import {VERSION_STRING} from '../../components/usage/usage';
+import {formatYouTrackURL} from '../../components/config/config';
 
 const CURRENT_YEAR = (new Date()).getFullYear();
+
+function openPrivacyPolicy() {
+  Linking.openURL('https://www.jetbrains.com/company/privacy.html');
+}
 
 export default class IssueListMenu extends React.Component {
   render() {
@@ -24,9 +29,16 @@ export default class IssueListMenu extends React.Component {
 
       <View style={styles.menuFooter}>
         <Text style={styles.footerText}>YouTrack Mobile {VERSION_STRING}</Text>
-        <Text style={styles.footerText}>{this.props.backendUrl}</Text>
+        <Text style={styles.footerText}>{formatYouTrackURL(this.props.backendUrl)}</Text>
+
+        <View style={styles.spacer}></View>
         <Text style={styles.footerText}>© 2000—{CURRENT_YEAR} JetBrains</Text>
         <Text style={styles.footerText}>All rights reserved</Text>
+
+        <View style={styles.spacer}></View>
+        <TouchableOpacity style={styles.buttonLink} onPress={openPrivacyPolicy}>
+          <Text style={styles.linkText}>Privacy Policy</Text>
+        </TouchableOpacity>
       </View>
     </View>;
   }

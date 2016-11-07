@@ -1,7 +1,13 @@
 {
   "name": "YouTrackMobile",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.1.0-0",
+  "private": false,
+  "author": "Andrey Skladchikov <andrey.skladchikov@gmail.com>",
+  "bugs": {
+    "url" : "youtrack.jetbrains.com/issues/YTM",
+    "email" : "youtrack-feedback@jetbrains.com"
+  },
+  "license": "Apache-2.0",
   "scripts": {
     "start": "./node_modules/react-native-cli/index.js start",
     "test": "mocha --opts test/mocha.opts src/**/*.test.js",

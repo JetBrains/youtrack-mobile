@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_PINK, COLOR_FONT_GRAY, COLOR_LIGHT_GRAY} from '../../components/variables/variables';
+import {UNIT, COLOR_PINK, COLOR_FONT_GRAY, COLOR_LIGHT_GRAY, COLOR_LINK} from '../../components/variables/variables';
 
 const FONT_SIZE = 18;
 
@@ -86,9 +86,13 @@ export default StyleSheet.create({
   descriptionText: {
     fontSize: 12,
     color: COLOR_FONT_GRAY,
-    textAlign: 'center'
+    textAlign: 'center',
+    marginTop: UNIT
   },
   error: {
     color: 'red'
+  },
+  privacyPolicy: {
+    color: COLOR_LINK
   }
 });
