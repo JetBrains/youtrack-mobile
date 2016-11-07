@@ -41,14 +41,16 @@ export default class EnterServer extends Component {
 
   getPossibleUrls(enteredUrl: string) {
     if (protocolRegExp.test(enteredUrl)) {
-      return [enteredUrl, `${enteredUrl}/youtrack`];
+      return [enteredUrl, `${enteredUrl}/youtrack`, `${enteredUrl}/rest/ring?doesntMatter=`];
     }
 
     return [
       `https://${enteredUrl}`,
       `https://${enteredUrl}/youtrack`,
       `http://${enteredUrl}`,
-      `http://${enteredUrl}/youtrack`
+      `http://${enteredUrl}/youtrack`,
+      //Hackish URL to check YouTrack 6.0 and below
+      `http://${enteredUrl}/rest/ring?doesntMatter=`
     ];
   }
 
@@ -66,11 +68,11 @@ export default class EnterServer extends Component {
         log.log('Successfully connected to', url);
         return;
       } catch (error) {
+        log.log(`Failed to connect to ${url}`, error);
         if (error && error.isIncompatibleYouTrackError) {
           errorToShow = error;
           break;
         }
-        log.log(`Failed to connect to ${url}`, error);
         errorToShow = errorToShow || error;
       }
     }
@@ -125,6 +127,12 @@ export default class EnterServer extends Component {
             <Text style={styles.applyText}>Next</Text>
             {this.state.connecting && <ActivityIndicator style={styles.connectingIndicator}/>}
           </TouchableOpacity>
+
+          <View>
+            <Text style={styles.hintText}>
+              Requires YouTrack 7.0 or later
+            </Text>
+          </View>
         </View>
 
         <KeyboardSpacer/>

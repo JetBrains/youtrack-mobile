@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_LIGHT_GRAY, COLOR_PINK} from '../../components/variables/variables';
+import {UNIT, COLOR_LIGHT_GRAY, COLOR_PINK, COLOR_FONT_GRAY} from '../../components/variables/variables';
 
 const FONT_SIZE = 18;
 
@@ -57,6 +57,12 @@ export default StyleSheet.create({
   errorContainer: {
     marginTop: UNIT,
     marginBottom: UNIT * 2
+  },
+  hintText: {
+    fontSize: 12,
+    color: COLOR_FONT_GRAY,
+    textAlign: 'center',
+    marginTop: UNIT*2
   },
   error: {
     color: 'red'

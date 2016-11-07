@@ -82,8 +82,13 @@ function handleIncompatibleYouTrack(response: Object, ytUrl: string) {
     throw new IncompatibleYouTrackError(`YouTrack Mobile requires YouTrack version >= 7.0, but ${ytUrl} has version ${response.version}.`);
   }
 
+  // 'serviceId' field exists if youtrack is 6.0 (and below?) with /rest/ring url checked
+  if (response.serviceId) {
+    throw new IncompatibleYouTrackError(`YouTrack Mobile requires YouTrack version 7.0 and above.`);
+  }
+
   if (!response.mobile || !response.mobile.serviceId) {
-    throw new IncompatibleYouTrackError(`${ytUrl} does not have mobile application feature turned on. Check the documentation.`);
+    throw new IncompatibleYouTrackError(`${ytUrl} does not have mobile application feature turned on.`);
   }
 }
 
@@ -97,7 +102,12 @@ function formatYouTrackURL(url: string) {
 }
 
 async function loadConfig(ytUrl: string) {
-  return fetch(`${ytUrl}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,statisticsEnabled`)
+  return fetch(`${ytUrl}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,statisticsEnabled`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json, text/plain, */*'
+    }
+  })
     .then(res => res.json())
     .then(res => {
       handleIncompatibleYouTrack(res, ytUrl);
@@ -115,7 +125,14 @@ async function loadConfig(ytUrl: string) {
 
       return config;
     })
-    .then(storeConfig);
+    .then(storeConfig)
+    .catch(err => {
+      // Catches "Unexpected token < in JSON at position 0" error
+      if (err instanceof SyntaxError) {
+        throw new Error('Wrong response received. It looks like entered server is not YouTrack or has wrong YouTrack version installed: 7.0 and above are only supported.');
+      }
+      return Promise.reject(err);
+    });
 }
 
 export {loadConfig, getStoredConfig, formatYouTrackURL};
