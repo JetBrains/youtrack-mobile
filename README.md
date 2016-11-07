@@ -2,15 +2,13 @@
 # YouTrack Mobile
 
 YouTrack Mobile helps you access your issues from anywhere, create a new issue on the fly, or update an existing one.
-Enjoy a clean, minimalist view of the issues, along with a  search box aided by intelligent query completion. Filter issues in no time.
-You can check issue details, comments, view attachments and join the discussion.
-YouTrack Mobile is a native mobile application available for iOS and Android devices. It's written using React Native.
+Enjoy a clean, minimalist view of the issues, along with a  search box aided by intelligent query completion. Filter issues in no time. You can check issue details, comments, view attachments and join the discussion. YouTrack Mobile is a native mobile application available for iOS and Android devices. It's written using React Native.
 
  Download YouTrack Mobile:
 * [Google Play](https://play.google.com/store/apps/details?id=com.jetbrains.youtrack.mobile.app)
 * [Apple AppStore](https://itunes.apple.com/us/app/youtrack/id1028024655?ls=1&mt=8)
 
- Report bugs to our [issue tracker](https://youtrack.jetbrains.com/newissue?project=YTM&clearDraft=true).
+ If you find any bugs in the app, please report them to our [issue tracker](https://youtrack.jetbrains.com/newissue?project=YTM&clearDraft=true).
 
 <img src="https://drive.google.com/uc?export=&id=0B6BBCd1L_wXaZnlSaUphb0t6bVk" alt="YouTrack Mobile list" width="200">
 <img src="https://drive.google.com/uc?export=&id=0B6BBCd1L_wXaZkdpQURabEY1SEk" alt="YouTrack Mobile search" width="200">
