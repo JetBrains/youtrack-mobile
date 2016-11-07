@@ -20,7 +20,7 @@ YouTrack Mobile is a native mobile application available for iOS and Android dev
 
 ## Contribute as Developer
 
-We welcome you to help us improve this open-source app.
+If you are a developer, we invite you to help us improve this open-source app.
 
 1. Install dependencies via `npm install` or `yarn install`.
 2. Read [getting started](https://facebook.github.io/react-native/docs/getting-started.html).
