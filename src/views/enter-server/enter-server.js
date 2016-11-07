@@ -56,7 +56,8 @@ export default class EnterServer extends Component {
 
   async onApplyServerUrlChange() {
     this.setState({connecting: true});
-    const urlsToTry = this.getPossibleUrls(this.state.serverUrl);
+    const trimmedUrl = this.state.serverUrl.trim();
+    const urlsToTry = this.getPossibleUrls(trimmedUrl);
     log.log(`${this.state.serverUrl} entered, will try that urls: `, urlsToTry);
 
     let errorToShow = null;
