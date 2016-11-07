@@ -1,15 +1,15 @@
 ext {
   buildVersionCode = { version ->
-    def (major, minor, build) = version.toLowerCase().tokenize('.')
+    def (major, minor, patch, build) = version.toLowerCase().replaceAll('-', '.').tokenize('.')
 
-    (major, minor, build) = [major, minor, build].collect{it.toInteger()}
+    (major, minor, patch, build) = [major, minor, patch, build].collect{it.toInteger()}
 
-    (major * 100000) + (minor * 10000) + build;
+    (major * 100000) + (minor * 10000) + (patch * 1000) + build;
   }
 
   buildVersionName = { version ->
-    def (major, minor, build) = version.toLowerCase().tokenize('.')
+    def (major, minor, patch) = version.toLowerCase().tokenize('.')
 
-    "${major}.${minor}"
+    "${major}.${minor}.${patch}"
   }
 }

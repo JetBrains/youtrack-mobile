@@ -2,10 +2,12 @@
 import DeviceInfo from 'react-native-device-info';
 import {Analytics, Hits as GAHits} from 'react-native-google-analytics';
 
-const VERSION = process.env.npm_package_version || 'dev.dev.dev';
+const splitRegExp = /[\.-]/i;
+const VERSION = process.env.npm_package_version || 'dev.dev.dev-dev';
 
-const [major, minor, build] = VERSION.split('.');
-export const VERSION_STRING = `${major}.${minor} (build ${build})`;
+const [major, minor, patch, build] = VERSION.split(splitRegExp);
+
+export const VERSION_STRING = `${major}.${minor}.${patch} (build ${build})`;
 
 const googleAnalyiticsId = process.env.ANALYTICS_ID;
 let isAnalyticsEnabled = false;
