@@ -72,4 +72,4 @@ npm run android
 
 ### Debugging
 
-Official [documentation](https://facebook.github.io/react-native/docs/debugging.html). Press CMD+M to open the debug menu for Android emulator.
+Refer to the official [documentation](https://facebook.github.io/react-native/docs/debugging.html). Press CMD+M to open the debug menu for Android emulator.
