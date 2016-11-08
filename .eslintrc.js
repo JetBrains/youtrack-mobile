@@ -1,9 +1,9 @@
 const ERROR = 'error';
+const WARNING = 'warn';
+const OFF = 'off';
 
 module.exports = {
-  'extends': [
-    'defaults'
-  ],
+  'extends': "eslint:recommended",
   'parser': 'babel-eslint',
   'plugins': [
     'react',
@@ -16,6 +16,7 @@ module.exports = {
     'no-console': ERROR,
     'quotes': [ERROR, 'single', {'allowTemplateLiterals': true}],
     'semi': ERROR,
+
     //ES6
     'constructor-super': ERROR,
     'arrow-spacing': ERROR,
@@ -26,6 +27,8 @@ module.exports = {
     'prefer-template': ERROR,
     'no-dupe-class-members': ERROR,
     'no-this-before-super': ERROR,
+    'require-yield': OFF,
+
     //Modules
     'import/no-commonjs': ERROR,
     'import/first': ERROR,
@@ -43,8 +46,8 @@ module.exports = {
     'react-native/no-unused-styles': ERROR,
     'react-native/split-platform-components': ERROR,
 
-    'flow-vars/define-flow-type': 1,
-    'flow-vars/use-flow-type': 1
+    'flow-vars/define-flow-type': WARNING,
+    'flow-vars/use-flow-type': WARNING
   },
   'env': {
     'es6': true,

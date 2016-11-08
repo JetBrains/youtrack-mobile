@@ -3,6 +3,7 @@ import {View, Image, Text, TouchableOpacity} from 'react-native';
 import React, {Component} from 'react';
 import {logo} from '../../components/icon/icon';
 import usage from '../../components/usage/usage';
+import {formatYouTrackURL} from '../../components/config/config';
 import styles from './home.styles';
 
 type Props = {
@@ -45,7 +46,7 @@ export default class Home extends Component {
     }
 
     return <TouchableOpacity onPress={() => this.props.onChangeBackendUrl(this.props.backendUrl)} style={styles.urlButton}>
-      <Text style={styles.url}>{this.props.backendUrl}</Text>
+      <Text style={styles.url}>{formatYouTrackURL(this.props.backendUrl)}</Text>
     </TouchableOpacity>;
   }
 
