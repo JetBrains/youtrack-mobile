@@ -1,5 +1,5 @@
 import {Linking} from 'react-native';
-import SafariView from 'react-native-safari-view';
+import SafariView from '../safari-view/safari-view';
 import qs from 'qs';
 
 async function openAuthPage(config) {
