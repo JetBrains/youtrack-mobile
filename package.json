@@ -47,7 +47,8 @@
     "react-native-keychain": "0.2.7",
     "react-native-swipeout": "q-m/react-native-swipeout#93b67f7c5c2c44a9b2067499746a729010277ae1",
     "relative-date": "^1.1.2",
-    "simple-markdown": "^0.1.1"
+    "simple-markdown": "^0.1.1",
+    "url-parse": "1.1.7"
   },
   "devDependencies": {
     "babel-core": "6.9.0",

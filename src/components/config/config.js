@@ -1,10 +1,10 @@
 /* @flow */
 import {AsyncStorage} from 'react-native';
+import UrlParse from 'url-parse';
 
 const MIN_YT_VERSION = 7.0;
 const BACKEND_URL_STORAGE_KEY = 'yt_mobile_backend_url';
 const BACKEND_CONFIG_STORAGE_KEY = 'BACKEND_CONFIG_STORAGE_KEY';
-const baseUrlRegExp = /^(.*)\//;
 const PROTOCOL_REGEXP = /^https?:\/\//i;
 const YOUTRACK_CONTEXT_REGEXP = /\/youtrack$/i;
 const VERSION_DETECT_FALLBACK_URL = '/rest/workflow/version';
@@ -25,17 +25,6 @@ const config: AppConfig = {
 
 class IncompatibleYouTrackError extends Error {
   isIncompatibleYouTrackError = true;
-}
-
-function getBaseUrl(url: string) {
-  if (!url) {
-    return url;
-  }
-  const match = url.match(baseUrlRegExp);
-  if (!match || !match[1]) {
-    return url;
-  }
-  return match[1];
 }
 
 async function getStoredBackendURL() {
@@ -88,6 +77,13 @@ function handleIncompatibleYouTrack(response: Object, ytUrl: string) {
   if (!response.mobile || !response.mobile.serviceId) {
     throw new IncompatibleYouTrackError(`The mobile application feature is not enabled for ${ytUrl}. Please contact support.`);
   }
+}
+
+function getBaseUrl(url: string) {
+  if (!url) {
+    return url;
+  }
+  return UrlParse(url).origin;
 }
 
 function handleEmbeddedHubUrl(hubUrl: string, ytUrl: string) {
