@@ -1,6 +1,5 @@
 import {Linking} from 'react-native';
-import SafariView from 'react-native-safari-view';
-import {COLOR_PINK as tintColor} from '../variables/variables';
+import SafariView from '../safari-view/safari-view';
 import qs from 'qs';
 
 async function openAuthPage(config) {
@@ -19,7 +18,7 @@ async function openAuthPage(config) {
     Linking.openURL(url);
   }
 
-  SafariView.show({url, tintColor});
+  SafariView.show({url});
 }
 
 function authorizeInHub(config) {
