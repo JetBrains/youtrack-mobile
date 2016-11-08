@@ -1,7 +1,6 @@
 {
   "name": "YouTrackMobile",
   "version": "0.1.0-0",
-  "private": false,
   "author": "Andrey Skladchikov <andrey.skladchikov@gmail.com>",
   "bugs": {
     "url": "youtrack.jetbrains.com/issues/YTM",
