@@ -37,10 +37,9 @@ async function storeConfig(config: AppConfigFilled): Promise<AppConfigFilled> {
 
 async function getStoredConfig(): Promise<?AppConfigFilled> {
   const rawConfig: string = await AsyncStorage.getItem(BACKEND_CONFIG_STORAGE_KEY);
-  const config = JSON.parse(rawConfig);
 
-  if (config) {
-    return config;
+  if (rawConfig) {
+    return JSON.parse(rawConfig);
   }
 
   //TODO: code below is fallback for previous installs have backend URL only. Should be removed after a while.
