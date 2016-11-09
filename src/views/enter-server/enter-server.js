@@ -90,11 +90,11 @@ export default class EnterServer extends Component {
 
     const error = this.state.error ?
       <View style={styles.errorContainer}>
-        <Text style={styles.error} selectable={true}>{this.getErrorMessage(this.state.error)}</Text>
+        <Text style={styles.error} selectable={true} testID="errorMessage">{this.getErrorMessage(this.state.error)}</Text>
       </View> :
       null;
 
-    return (
+      return (
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps={true}>
         <View style={styles.logoContainer}>
           <Image style={styles.logoImage} source={logo}/>

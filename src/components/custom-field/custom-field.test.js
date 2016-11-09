@@ -29,13 +29,13 @@ describe('<CustomField/>', () => {
 
   it('should render field name', () => {
     const wrapper = shallow(<CustomField field={fakeField}/>);
-    const name = wrapper.findWhere(component => component.props().testID === 'name');
+    const name = wrapper.find({testID: 'name'});
     name.children().should.have.text(fakeField.projectCustomField.field.name);
   });
 
   it('should render field value', () => {
     const wrapper = shallow(<CustomField field={fakeField}/>);
-    const value = wrapper.findWhere(component => component.props().testID === 'value');
+    const value = wrapper.find({testID: 'value'});
     value.children().should.have.text(fakeField.value.name);
   });
 
@@ -43,21 +43,21 @@ describe('<CustomField/>', () => {
     fakeField.value.name = null;
     fakeField.value.login = 'testuser';
     const wrapper = shallow(<CustomField field={fakeField}/>);
-    const value = wrapper.findWhere(component => component.props().testID === 'value');
+    const value = wrapper.find({testID: 'value'});
     value.children().should.have.text('testuser');
   });
 
   it('should render empty value if value is empty', () => {
     fakeField.value = null;
     const wrapper = shallow(<CustomField field={fakeField}/>);
-    const value = wrapper.findWhere(component => component.props().testID === 'value');
+    const value = wrapper.find({testID: 'value'});
     value.children().should.have.text(fakeField.projectCustomField.emptyFieldText);
   });
 
   it('should render empty value if value is empty array', () => {
     fakeField.value = [];
     const wrapper = shallow(<CustomField field={fakeField}/>);
-    const value = wrapper.findWhere(component => component.props().testID === 'value');
+    const value = wrapper.find({testID: 'value'});
     value.children().should.have.text(fakeField.projectCustomField.emptyFieldText);
   });
 });
