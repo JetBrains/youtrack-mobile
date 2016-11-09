@@ -75,6 +75,34 @@ describe('Config', () => {
       await loadConfig('http://fake.backend/rest/workflow/version');
       fetch.should.have.been.calledWith('http://fake.backend/rest/workflow/version', sinon.match.object);
     });
+
+    it('should throw IncompatibleYouTrackError if old youtrack entered', (done) => {
+      responseJson.version = '6.5';
+      loadConfig('http://fake.backend')
+        .catch(err => {
+          err.message.should.contain('YouTrack Mobile requires YouTrack version 7.0 or later');
+          done();
+        });
+    });
+
+    it('should throw IncompatibleYouTrackError if broken YouTrack', (done) => {
+      responseJson = {error_developer_message: 'Foo foo'};
+      loadConfig('http://fake.backend')
+        .catch(err => {
+          err.message.should.contain('Unable to connect to this YouTrack');
+          err.message.should.contain('Foo foo');
+          done();
+        });
+    });
+
+    it('should throw IncompatibleYouTrackError if broken YouTrack', (done) => {
+      responseJson = {foo: 'bar'};
+      loadConfig('http://fake.backend')
+        .catch(err => {
+          err.message.should.contain('The mobile application feature is not enabled');
+          done();
+        });
+    });
   });
 
   describe('Loading stored config', () => {
