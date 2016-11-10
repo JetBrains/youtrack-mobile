@@ -79,7 +79,6 @@ export default StyleSheet.create({
     alignItems: 'center'
   },
   logoImage: {
-    flex: 1,
     height: UNIT * 10,
     resizeMode: 'contain'
   },
