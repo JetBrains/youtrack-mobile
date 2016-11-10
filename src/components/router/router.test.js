@@ -11,6 +11,7 @@ describe('Router', () => {
       replace: sinon.spy(),
       resetTo: sinon.spy()
     };
+    Router.setNavigator(fakeNavigator);
   });
 
   it('should init', () => {

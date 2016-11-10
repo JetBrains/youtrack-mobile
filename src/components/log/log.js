@@ -1,6 +1,6 @@
 /* @flow */
 /*eslint-disable no-console*/
-const logEnabled = true;
+let logEnabled = true;
 
 export default {
   log(...params: Array<any>) {
@@ -20,5 +20,14 @@ export default {
       return;
     }
     return console.warn(...params);
+  },
+
+  enableLog() {
+    console.log('Logging has been turned on');
+    logEnabled = true;
+  },
+  disableLog() {
+    console.log('Logging has been turned off');
+    logEnabled = false;
   }
 };

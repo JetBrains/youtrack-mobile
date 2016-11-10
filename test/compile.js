@@ -9,22 +9,31 @@ function checkPrefixedFileExistence(path) {
   try {
     fs.accessSync(path + PREFIX + '.js');
     return true;
-  } catch(e) {
+  } catch (e) {
     return false;
   }
 }
+
+require.extensions['.png'] = function (module, fileName) {
+  return {
+    uri: JSON.stringify(fileName, fileName)
+  };
+};
 
 require.extensions['.js'] = function (module, fileName) {
   if (fileName.indexOf('node_modules/react-native/Libraries/react-native/react-native.js') >= 0) {
     fileName = path.resolve('./test/mocks/react-native.js');
   }
 
-  if (fileName.indexOf('node_modules/') >= 0) {
+  if (fileName.includes('node_modules/') &&
+    !fileName.includes('react-native') &&
+    !fileName.includes('react-native')
+  ) {
     return (origJs || require.extensions['.js'])(module, fileName);
   }
 
   const src = fs.readFileSync(fileName, 'utf8');
-  
+
   const output = babel.transform(src, {
     filename: fileName,
     resolveModuleSource: (source, filename) => {
