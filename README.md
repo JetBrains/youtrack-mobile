@@ -43,6 +43,14 @@ If you are a developer, we invite you to help us improve this open-source app.
 
 Press CMD+D to debug while the app is running on the simulator. Refer to the official [documentation](https://facebook.github.io/react-native/docs/debugging.html).
 
+#### Run and debug in WebStorm 2016.3
+
+* Create a new React Native run/debug configuration and select iOS as a target platform
+
+* *Run* the created configuration to run the app (instead of `npm start` and `npm run ios`)
+
+* To debug the app, add some breakpoints and *Debug* the created configuration. When the simulator is running, press CMD+D and select `Remote JS Debugging`. 
+
 ### Android
 
 #### Prepare
