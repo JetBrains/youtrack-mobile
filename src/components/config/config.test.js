@@ -85,7 +85,7 @@ describe('Config', () => {
         });
     });
 
-    it('should throw IncompatibleYouTrackError if broken YouTrack', (done) => {
+    it('should throw IncompatibleYouTrackError if mobile service does not exist', (done) => {
       responseJson = {error_developer_message: 'Foo foo'};
       loadConfig('http://fake.backend')
         .catch(err => {

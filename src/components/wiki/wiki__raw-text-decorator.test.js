@@ -99,7 +99,7 @@ describe('replaceImageNamesWithUrls', () => {
     result.should.equal('foo bar !http://url.png! tes');
   });
 
-  it('should support images with spaces in name', () => {
+  it('should support images russian letters in name', () => {
     const result = replaceImageNamesWithUrls('foo bar !with Русские symbols.png! tes', attachments);
 
     result.should.equal('foo bar !http://russian-image.png! tes');
@@ -128,7 +128,7 @@ describe('decorateUserNames', () => {
     result.should.equal('[ytmuser]userlogin|Mr. User Userson[ytmuser]');
   });
 
-  it('should not touch ID if no link found', () => {
+  it('should decorate username inside text', () => {
     const result = decorateIssueLinks('foo barr @userlogin2 bar foo', wikifiedText);
 
     result.should.equal('foo barr @userlogin2 bar foo');
