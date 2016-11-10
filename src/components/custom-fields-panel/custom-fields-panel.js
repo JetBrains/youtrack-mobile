@@ -226,6 +226,7 @@ export default class CustomFieldsPanel extends React.Component {
           <CalendarPicker
             selectedDate={this.state.datePicker.value}
             startFromMonday={true}
+            weekdays={['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']}
             onDateChange={date => {
               if (this.state.datePicker.value.getMonth() !== date.getMonth()) {
                 this.state.datePicker.value = date;
