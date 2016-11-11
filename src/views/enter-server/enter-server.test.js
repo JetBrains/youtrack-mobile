@@ -42,6 +42,22 @@ describe('EnterServer', () => {
     connectToYouTrack.should.have.been.calledWith('https://foo.bar');
   });
 
+  it('should trip wrapping spaces', async() => {
+    wrapper.setState({serverUrl: '   foo.bar '});
+    wrapper.find('TouchableOpacity').simulate('press');
+    await waitForNextTick();
+
+    connectToYouTrack.should.have.been.calledWith('https://foo.bar');
+  });
+
+  it('should strip tailing slash', async() => {
+    wrapper.setState({serverUrl: 'http://foo.bar/'});
+    wrapper.find('TouchableOpacity').simulate('press');
+    await waitForNextTick();
+
+    connectToYouTrack.should.have.been.calledWith('http://foo.bar');
+  });
+
   it('should try next URL on failure if protocol is entered', async() => {
     connectPromise = Promise.reject({message: 'test reject'});
     const connectButton = wrapper.find(TouchableOpacity);

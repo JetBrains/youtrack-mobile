@@ -46,9 +46,10 @@ export default class CustomFieldsPanel extends React.Component {
         }
       },
 
-      period: {
+      simpleValue: {
         show: false,
         value: null,
+        placeholder: '',
         onApply: () => {}
       }
     };
@@ -106,7 +107,7 @@ export default class CustomFieldsPanel extends React.Component {
         isEditingProject: false,
         datePicker: {show: false},
         select: {show: false},
-        period: {show: false}
+        simpleValue: {show: false}
       }, resolve);
     });
   }
@@ -123,12 +124,19 @@ export default class CustomFieldsPanel extends React.Component {
     });
   }
 
-  editPeriodField(field) {
+  editSimpleValueField(field, type) {
+    const isInteger = type === 'integer';
+    const placeholder = isInteger ? '-12 or 34' : '1w 1d 1h 1m';
+    const valueFormatter = isInteger ?
+      value => parseInt(value) :
+      value => ({presentation: value});
+
     return this.setState({
-      period: {
+      simpleValue: {
         show: true,
+        placeholder: placeholder,
         value: field.value ? field.value.presentation : null,
-        onApply: (value) => this.saveUpdatedField(field, {presentation: value})
+        onApply: (value) => this.saveUpdatedField(field, valueFormatter(value))
       }
     });
   }
@@ -174,8 +182,8 @@ export default class CustomFieldsPanel extends React.Component {
           return this.editDateField(field);
         }
 
-        if (field.projectCustomField.field.fieldType.valueType === 'period') {
-          return this.editPeriodField(field);
+        if (['period', 'integer'].indexOf(field.projectCustomField.field.fieldType.valueType) !== -1) {
+          return this.editSimpleValueField(field, field.projectCustomField.field.fieldType.valueType);
         }
 
         return this.editCustomField(field);
@@ -226,6 +234,7 @@ export default class CustomFieldsPanel extends React.Component {
           <CalendarPicker
             selectedDate={this.state.datePicker.value}
             startFromMonday={true}
+            weekdays={['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']}
             onDateChange={date => {
               if (this.state.datePicker.value.getMonth() !== date.getMonth()) {
                 this.state.datePicker.value = date;
@@ -240,8 +249,8 @@ export default class CustomFieldsPanel extends React.Component {
     );
   }
 
-  _renderPeriodInput() {
-    if (!this.state.period.show) {
+  _renderSimpleValueInput() {
+    if (!this.state.simpleValue.show) {
       return;
     }
 
@@ -257,8 +266,8 @@ export default class CustomFieldsPanel extends React.Component {
         </Header>
         <View>
           <TextInput
-            style={styles.periodInput}
-            placeholder="1w 1d 1h 1m"
+            style={styles.simpleValueInput}
+            placeholder={this.state.simpleValue.placeholder}
             underlineColorAndroid="transparent"
             clearButtonMode="always"
             returnKeyType="done"
@@ -266,11 +275,11 @@ export default class CustomFieldsPanel extends React.Component {
             autoFocus={true}
             autoCapitalize="none"
             onChangeText={(text) => {
-              this.state.period.value = text;
+              this.state.simpleValue.value = text;
               this.forceUpdate();
             }}
-            onSubmitEditing={() => this.state.period.onApply(this.state.period.value)}
-            value={this.state.period.value}/>
+            onSubmitEditing={() => this.state.simpleValue.onApply(this.state.simpleValue.value)}
+            value={this.state.simpleValue.value}/>
         </View>
       </View>
     );
@@ -288,7 +297,7 @@ export default class CustomFieldsPanel extends React.Component {
 
         {this._renderDatePicker()}
 
-        {this._renderPeriodInput()}
+        {this._renderSimpleValueInput()}
 
         <ScrollView horizontal={true} style={styles.customFieldsPanel}>
           <View key="Project">

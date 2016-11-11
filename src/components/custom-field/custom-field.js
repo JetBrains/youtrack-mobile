@@ -1,6 +1,7 @@
 import {TouchableOpacity, View, Text} from 'react-native';
 import React, {PropTypes, Component} from 'react';
 import styles from './custom-field.styles';
+import NumberPolifyll from 'core-js/es6/number';
 
 export default class CustomField extends Component {
   static propTypes = {
@@ -15,7 +16,7 @@ export default class CustomField extends Component {
     const emptyValue = field.projectCustomField.emptyFieldText;
 
     if (value) {
-      if (Number.isInteger(value)) {
+      if (NumberPolifyll.isInteger(value)) {
         return new Date(value).toLocaleDateString();
       }
       return value.name || value.fullName || value.login || value.presentation;
