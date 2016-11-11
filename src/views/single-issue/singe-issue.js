@@ -160,7 +160,7 @@ export default class SingeIssueView extends React.Component {
       .then(() => this.loadIssue(this.state.issue.id))
       .then((res) => this.props.onUpdate && this.props.onUpdate(res))
       .catch((err) => {
-        notifyError('failed to update issue field', err);
+        notifyError('Failed to update issue field', err);
         return this.loadIssue(this.state.issue.id);
       });
   }

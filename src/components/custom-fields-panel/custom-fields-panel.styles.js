@@ -26,7 +26,7 @@ export default StyleSheet.create({
     paddingBottom: UNIT,
     color: COLOR_PINK
   },
-  periodInput: {
+  simpleValueInput: {
     flex: 1,
     height: UNIT * 4,
     borderRadius: 6,
