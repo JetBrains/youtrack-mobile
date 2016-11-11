@@ -7,6 +7,7 @@ import styles from './single-issue.styles';
 
 type Props = {
   initialText: string,
+  onChangeText: (text: string) => any,
   onAddComment: (comment: string) => any,
   suggestionsDataSource: (query: string) => Promise<{users: Array<IssueUser>}>
 };
@@ -153,6 +154,7 @@ export default class IssueListCommentInput extends Component {
                           onChangeText={(text) => {
                             this.setState({commentText: text});
                             this.suggestionsNeededDetector(text, this.state.commentCaret);
+                            this.props.onChangeText && this.props.onChangeText(text);
                           }}
                           style={styles.commentInput}/>
 
