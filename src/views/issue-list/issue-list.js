@@ -224,7 +224,7 @@ class IssueList extends React.Component {
           }
         }
       >
-        <Text style={styles.headerText}></Text>
+        <Text style={styles.headerText}>Issues</Text>
       </Header>
     );
   }
@@ -240,6 +240,7 @@ class IssueList extends React.Component {
   _renderListMessage() {
     if (this.state.loadingError) {
       return (<View style={styles.errorContainer}>
+        <Text style={styles.listMessageSmile}>{'(>_<)'}</Text>
         <Text style={styles.errorTitle}>Cannot load issues</Text>
         <Text style={styles.errorContent}>{this.formatErrorMessage(this.state.loadingError)}</Text>
         <TouchableOpacity style={styles.tryAgainButton} onPress={() => this.loadIssues(this.state.queryAssistValue)}>
@@ -248,7 +249,12 @@ class IssueList extends React.Component {
       </View>);
     }
     if (!this.state.isRefreshing && !this.state.isLoadingMore && this.state.issues.length === 0) {
-      return <Text style={styles.loadingMore}>No issues found</Text>;
+      return (
+        <View>
+          <Text style={styles.listMessageSmile}>(・_・)</Text>
+          <Text style={styles.listFooterMessage}>No issues found</Text>
+        </View>
+      );
     }
 
     if (this.state.isLoadingMore && !this.state.listEndReached) {

@@ -13,12 +13,13 @@ export default StyleSheet.create({
   },
   errorTitle: {
     marginTop: UNIT*2,
-    color: 'red',
     fontSize: 16,
     textAlign: 'center'
   },
   errorContent: {
     margin: UNIT,
+    marginTop: UNIT/4,
+    color: COLOR_FONT_GRAY,
     fontSize: 14,
     textAlign: 'center'
   },
@@ -81,7 +82,13 @@ export default StyleSheet.create({
     fontSize: 14,
     color: COLOR_FONT_GRAY
   },
-  loadingMore: {
+  listMessageSmile: {
+    paddingTop: UNIT * 6,
+    fontSize: 36,
+    color: COLOR_FONT,
+    textAlign: 'center'
+  },
+  listFooterMessage: {
     textAlign: 'center',
     padding: UNIT * 2
   }
