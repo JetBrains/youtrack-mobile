@@ -78,9 +78,11 @@ export default StyleSheet.create({
   },
   attachmentImage: {
     marginRight: UNIT,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.15)',
+    borderRadius: 3,
     width: 120,
     height: UNIT * 8,
-    borderRadius: 4,
     resizeMode: 'cover'
   },
   attachmentFile: {
