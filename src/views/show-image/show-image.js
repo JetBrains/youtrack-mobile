@@ -1,10 +1,16 @@
 /* @flow */
-import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
+import {closeOpaque} from '../../components/icon/icon';
 import Router from '../../components/router/router';
+import {UNIT} from '../../components/variables/variables';
 import Gallery from 'react-native-gallery';
 
 const TOUCH_PADDING = 12;
+
+const hitSlop = {
+  top: TOUCH_PADDING, left: TOUCH_PADDING, bottom: TOUCH_PADDING, right: TOUCH_PADDING
+};
 
 type Props = {
   allImagesUrls: Array<string>,
@@ -25,8 +31,8 @@ export function ShowImage(props: Props) {
 
       <TouchableOpacity style={styles.closeButton}
                         onPress={() => Router.pop()}
-                        hitSlop={{top: TOUCH_PADDING, left: TOUCH_PADDING, bottom: TOUCH_PADDING, right: TOUCH_PADDING}}>
-        <Text>Close</Text>
+                        hitSlop={hitSlop}>
+        <Image style={styles.closeIcon} source={closeOpaque}></Image>
       </TouchableOpacity>
     </View>
   );
@@ -39,11 +45,13 @@ const styles = StyleSheet.create({
 
   closeButton: {
     position: 'absolute',
-    backgroundColor: '#FFF7',
-    borderRadius: 4,
-    padding: 16,
-    bottom: 16,
-    left: 16
+    bottom: UNIT * 3,
+    left: UNIT * 3
+  },
+
+  closeIcon: {
+    width: 30,
+    height: 30
   }
 });
 
