@@ -16,7 +16,6 @@ export default StyleSheet.create({
     justifyContent: 'center'
   },
   searchInput: {
-    flex: 1,
     height: UNIT * 4,
     borderRadius: 6,
     backgroundColor: '#FFF',
