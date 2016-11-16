@@ -3,6 +3,7 @@ import showNotification from './notification_show';
 import log from '../log/log';
 import usage from '../usage/usage';
 
+const NOTIFY_DURATION = 2000;
 let toastComponentRef: Object;
 
 export const extractErrorMessage = function (err: Object | string): string {
@@ -47,6 +48,10 @@ const showErrorMessage = function (message: string, error: Object) {
 
 export function notifyError (message: string, err: Object) {
   return resolveError(err).then(extracted => showErrorMessage(message, extracted));
+}
+
+export function notify (message: string) {
+  return showNotification(message, null, toastComponentRef, NOTIFY_DURATION);
 }
 
 export function setNotificationComponent (reference: Object) {

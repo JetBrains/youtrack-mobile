@@ -14,7 +14,7 @@ import LinkedIssues from '../../components/linked-issues/linked-issues';
 import {showActions} from '../../components/action-sheet/action-sheet';
 import Wiki, {decorateRawText} from '../../components/wiki/wiki';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
-import {notifyError} from '../../components/notification/notification';
+import {notifyError, notify} from '../../components/notification/notification';
 import SingleIssueCommentInput from './single-issue__comment-input';
 import {COLOR_PINK} from '../../components/variables/variables';
 import usage from '../../components/usage/usage';
@@ -243,7 +243,8 @@ export default class SingeIssueView extends React.Component {
         title: 'Copy issue URL',
         execute: () => {
           usage.trackEvent(CATEGORY_NAME, 'Copy isue URL');
-          return Clipboard.setString(this._makeIssueWebUrl(this.state.issue));
+          Clipboard.setString(this._makeIssueWebUrl(this.state.issue));
+          notify('Issue URL has been copied');
         }
       },
       addAttachmentAction,
@@ -263,6 +264,11 @@ export default class SingeIssueView extends React.Component {
     } else {
       Linking.openURL(url);
     }
+  }
+
+  copyCommentUrl(comment) {
+    Clipboard.setString(this._makeIssueWebUrl(this.state.issue, comment.id))
+    notify('Comment URL has been copied');
   }
 
   loadCommentSuggestions(query) {
@@ -438,7 +444,7 @@ export default class SingeIssueView extends React.Component {
                   commentText: `@${comment.author.login} `
                 });
               }}
-              onCopyCommentLink={(comment) => Clipboard.setString(this._makeIssueWebUrl(this.state.issue, comment.id))}
+              onCopyCommentLink={(comment) => this.copyCommentUrl(comment)}
               onIssueIdTap={issueId => this.goToIssueById(issueId)}/>
           </View>}
         </ScrollView>}
