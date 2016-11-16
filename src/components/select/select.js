@@ -8,9 +8,15 @@ import {notifyError} from '../notification/notification';
 const MAX_VISIBLE_ITEMS = 100;
 
 export default class Select extends React.Component {
+  static defaultProps = {
+    getValue: () => {}
+  };
+
   static propTypes = {
     dataSource: PropTypes.func.isRequired,
     onSelect: PropTypes.func.isRequired,
+    getTitle: PropTypes.func,
+    getValue: PropTypes.func,
     selectedItems: PropTypes.array,
     title: PropTypes.string,
     multi: PropTypes.bool,
@@ -36,12 +42,15 @@ export default class Select extends React.Component {
   }
 
 
-  _loadItems(query) {
-    this.props.dataSource(query)
-      .then(items => this.setState({items}))
-      .then(() => this._onSearch(query))
-      .then(() => this.setState({loaded: true}))
-      .catch(err => notifyError('Failed to load values', err));
+  async _loadItems(query) {
+    try {
+      const items = await this.props.dataSource(query);
+      this.setState({items});
+      this._onSearch(query);
+      this.setState({loaded: true});
+    } catch (err) {
+      notifyError('Failed to load values', err);
+    }
   }
 
   _renderEmptyValueItem() {
@@ -60,7 +69,7 @@ export default class Select extends React.Component {
   _onSearch(query) {
     query = query || '';
     const filteredItems = (this.state.items || []).filter(item => {
-      const label = this.props.getTitle(item) || '';
+      const label = this.props.getValue(item) || this.props.getTitle(item) || '';
       return label.toLowerCase().indexOf(query.toLowerCase()) !== -1;
     })
       .slice(0, MAX_VISIBLE_ITEMS);

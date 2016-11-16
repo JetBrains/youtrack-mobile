@@ -89,6 +89,7 @@ export default class CustomFieldsPanel extends React.Component {
       isEditingProject: true,
       select: {
         show: true,
+        getValue: project => project.name + project.shortName,
         dataSource: this.props.api.getProjects.bind(this.props.api),
         onSelect: project => {
           this.closeEditor();
