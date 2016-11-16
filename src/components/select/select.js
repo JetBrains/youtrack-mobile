@@ -1,28 +1,44 @@
+/* @flow */
 import {Text, Image, ScrollView, View, TouchableOpacity, TextInput, ActivityIndicator} from 'react-native';
-import React, {PropTypes} from 'react';
+import React from 'react';
 import styles from './select.styles';
 import Header from '../header/header';
 import ColorField from '../color-field/color-field';
 import {notifyError} from '../notification/notification';
+import Api from '../api/api';
 
 const MAX_VISIBLE_ITEMS = 100;
 
+type Props = {
+  dataSource: (query: string) => Promise<Array<Object>>,
+  onSelect: (item: ?Object | Array<Object>) => any,
+  onCancel: () => any,
+  getTitle: (item: Object) => string,
+  getValue: (item: Object) => string,
+  selectedItems: Array<Object>,
+  title: string,
+  multi: boolean,
+  api: Api,
+  emptyValue: ?string,
+  height: number,
+  style: any
+};
+
+type State = {
+  query: string,
+  items: ?Array<Object>,
+  filteredItems: Array<Object>,
+  selectedItems: Array<Object>,
+  loaded: boolean
+};
+
 export default class Select extends React.Component {
+  props: Props;
+  state: State;
+
   static defaultProps = {
     getValue: () => {}
   };
-
-  static propTypes = {
-    dataSource: PropTypes.func.isRequired,
-    onSelect: PropTypes.func.isRequired,
-    getTitle: PropTypes.func,
-    getValue: PropTypes.func,
-    selectedItems: PropTypes.array,
-    title: PropTypes.string,
-    multi: PropTypes.bool,
-    api: PropTypes.object,
-    emptyValue: PropTypes.oneOfType([PropTypes.string, PropTypes.null])
-  }
 
   constructor() {
     super();
@@ -152,7 +168,7 @@ export default class Select extends React.Component {
         <ScrollView keyboardShouldPersistTaps={true}
                     keyboardDismissMode="on-drag">
           {this._renderEmptyValueItem()}
-          {this.state.filteredItems && this.state.filteredItems.map(item => this._renderRow(item))}
+          {this.state.filteredItems.map(item => this._renderRow(item))}
 
           {!this.state.loaded && <View style={styles.row}>
             <ActivityIndicator/>
