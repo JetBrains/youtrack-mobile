@@ -267,7 +267,7 @@ export default class SingeIssueView extends React.Component {
   }
 
   copyCommentUrl(comment) {
-    Clipboard.setString(this._makeIssueWebUrl(this.state.issue, comment.id))
+    Clipboard.setString(this._makeIssueWebUrl(this.state.issue, comment.id));
     notify('Comment URL has been copied');
   }
 
