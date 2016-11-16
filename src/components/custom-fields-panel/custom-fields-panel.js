@@ -1,23 +1,87 @@
+/* @flow */
 import {View, ScrollView, Text, TouchableOpacity, TextInput, ActivityIndicator} from 'react-native';
-import React, {PropTypes} from 'react';
+import React, {Component} from 'react';
 import CalendarPicker from 'react-native-calendar-picker/CalendarPicker/CalendarPicker';
 import CustomField from '../custom-field/custom-field';
 import Select from '../select/select';
 import Header from '../header/header';
 import {COLOR_PINK} from '../../components/variables/variables';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-
+import Api from '../api/api';
+import IssuePermissions from '../issue-permissions/issue-permissions';
 import styles from './custom-fields-panel.styles';
 
-export default class CustomFieldsPanel extends React.Component {
-  static propTypes = {
-    api: PropTypes.object.isRequired,
-    issue: PropTypes.object.isRequired,
-    issuePermissions: PropTypes.object.isRequired,
-    onUpdate: PropTypes.func.isRequired,
-    onUpdateProject: PropTypes.func,
-    canEditProject: PropTypes.bool
+type Props = {
+  api: Api,
+  issue: IssueFull,
+  issuePermissions: IssuePermissions,
+  onUpdate: (field: CustomField) => any,
+  onUpdateProject: (project: IssueProject) => Promise<Object>,
+  canEditProject: boolean
+};
+
+type State = {
+  topCoord: number,
+  height: number,
+  editingField: ?CustomField,
+  savingField: ?CustomField,
+  isEditingProject: boolean,
+  isSavingProject: boolean,
+
+  select: {
+    show: boolean,
+    dataSource: (query: string) => Promise<Array<Object>>,
+    onSelect: (item: any) => any,
+    multi: boolean,
+    emptyValue?: ?string,
+    selectedItems: Array<Object>,
+    getValue?: (item: Object) => string,
+    getTitle?: (item: Object) => string
+  },
+
+  datePicker: {
+    show: boolean,
+    title: string,
+    value: Date,
+    onSelect: (selected: any) => any
+  },
+
+  simpleValue: {
+    show: boolean,
+    value: ?string,
+    placeholder: string,
+    onApply: () => any
   }
+}
+
+const initialEditorsState = {
+  select: {
+    show: false,
+    dataSource: () => Promise.resolve([]),
+    onSelect: () => {},
+    multi: false,
+    selectedItems: []
+  },
+
+  datePicker: {
+    show: false,
+    title: '',
+    value: new Date(),
+    onSelect: () => {
+    }
+  },
+
+  simpleValue: {
+    show: false,
+    value: null,
+    placeholder: '',
+    onApply: () => {}
+  }
+};
+
+export default class CustomFieldsPanel extends Component {
+  props: Props;
+  state: State;
 
   constructor() {
     super();
@@ -29,29 +93,7 @@ export default class CustomFieldsPanel extends React.Component {
       savingField: null,
       isEditingProject: false,
       isSavingProject: false,
-
-      select: {
-        show: false,
-        dataSource: null,
-        onSelect: null,
-        multi: false,
-        selectedItems: []
-      },
-
-      datePicker: {
-        show: false,
-        title: null,
-        value: null,
-        onSelect: () => {
-        }
-      },
-
-      simpleValue: {
-        show: false,
-        value: null,
-        placeholder: '',
-        onApply: () => {}
-      }
+      ...initialEditorsState
     };
   }
 
@@ -67,7 +109,7 @@ export default class CustomFieldsPanel extends React.Component {
     this.measureSelect();
   }
 
-  saveUpdatedField(field, value) {
+  saveUpdatedField(field: CustomField, value: null|number|Object) {
     this.closeEditor();
     this.setState({savingField: field});
 
@@ -91,11 +133,13 @@ export default class CustomFieldsPanel extends React.Component {
         show: true,
         getValue: project => project.name + project.shortName,
         dataSource: this.props.api.getProjects.bind(this.props.api),
-        onSelect: project => {
+        multi: false,
+        selectedItems: [],
+        onSelect: (project: IssueProject) => {
           this.closeEditor();
           this.setState({isSavingProject: true});
           return this.props.onUpdateProject(project)
-            .then(() => this.setState({isSavingProject: null}));
+            .then(() => this.setState({isSavingProject: false}));
         }
       }
     });
@@ -106,14 +150,12 @@ export default class CustomFieldsPanel extends React.Component {
       this.setState({
         editingField: null,
         isEditingProject: false,
-        datePicker: {show: false},
-        select: {show: false},
-        simpleValue: {show: false}
+        ...initialEditorsState
       }, resolve);
     });
   }
 
-  editDateField(field) {
+  editDateField(field: CustomField) {
     return this.setState({
       datePicker: {
         show: true,
@@ -125,7 +167,7 @@ export default class CustomFieldsPanel extends React.Component {
     });
   }
 
-  editSimpleValueField(field, type) {
+  editSimpleValueField(field: CustomField, type: string) {
     const isInteger = type === 'integer';
     const placeholder = isInteger ? '-12 or 34' : '1w 1d 1h 1m';
     const valueFormatter = isInteger ?
@@ -142,7 +184,7 @@ export default class CustomFieldsPanel extends React.Component {
     });
   }
 
-  editCustomField(field) {
+  editCustomField(field: CustomField) {
     const isMultiValue = field.projectCustomField.field.fieldType.isMultiValue;
     let selectedItems;
     if (isMultiValue) {
@@ -170,7 +212,7 @@ export default class CustomFieldsPanel extends React.Component {
     });
   }
 
-  onEditField(field) {
+  onEditField(field: CustomField) {
     if (field === this.state.editingField) {
       return this.closeEditor();
     }
@@ -251,7 +293,7 @@ export default class CustomFieldsPanel extends React.Component {
   }
 
   _renderSimpleValueInput() {
-    if (!this.state.simpleValue.show) {
+    if (!this.state.simpleValue.show || !this.state.editingField) {
       return;
     }
 

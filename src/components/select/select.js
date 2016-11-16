@@ -14,7 +14,7 @@ type Props = {
   onSelect: (item: ?Object | Array<Object>) => any,
   onCancel: () => any,
   getTitle: (item: Object) => string,
-  getValue: (item: Object) => string,
+  getValue?: (item: Object) => string,
   selectedItems: Array<Object>,
   title: string,
   multi: boolean,
@@ -35,10 +35,6 @@ type State = {
 export default class Select extends React.Component {
   props: Props;
   state: State;
-
-  static defaultProps = {
-    getValue: () => {}
-  };
 
   constructor() {
     super();
@@ -84,8 +80,10 @@ export default class Select extends React.Component {
 
   _onSearch(query) {
     query = query || '';
+    const {getValue, getTitle} = this.props;
+
     const filteredItems = (this.state.items || []).filter(item => {
-      const label = this.props.getValue(item) || this.props.getTitle(item) || '';
+      const label = (getValue && getValue(item)) || getTitle(item) || '';
       return label.toLowerCase().indexOf(query.toLowerCase()) !== -1;
     })
       .slice(0, MAX_VISIBLE_ITEMS);

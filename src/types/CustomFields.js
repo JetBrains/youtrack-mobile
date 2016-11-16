@@ -10,6 +10,7 @@ declare type IssueUser = {
 declare type IssueProject = {
   $type: string,
   id: string,
+  name: string,
   shortName: string,
   ringId: string
 }
