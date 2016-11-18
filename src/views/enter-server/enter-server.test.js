@@ -42,7 +42,7 @@ describe('EnterServer', () => {
     connectToYouTrack.should.have.been.calledWith('https://foo.bar');
   });
 
-  it('should trip wrapping spaces', async() => {
+  it('should strip wrapping spaces', async() => {
     wrapper.setState({serverUrl: '   foo.bar '});
     wrapper.find('TouchableOpacity').simulate('press');
     await waitForNextTick();
@@ -94,7 +94,7 @@ describe('EnterServer', () => {
     connectToYouTrack.should.have.been.calledWith('http://foo.bar/rest/workflow/version');
   });
 
-  it('should stop and dislpay error if IncompatibleYouTrackError throwed', async() => {
+  it('should stop and display error if IncompatibleYouTrackError throwed', async() => {
     connectPromise = Promise.reject({isIncompatibleYouTrackError: true, message: 'Incompatible youtrack'});
 
     wrapper.find('TouchableOpacity').simulate('press');
