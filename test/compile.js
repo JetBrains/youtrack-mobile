@@ -25,10 +25,7 @@ require.extensions['.js'] = function (module, fileName) {
     fileName = path.resolve('./test/mocks/react-native.js');
   }
 
-  if (fileName.includes('node_modules/') &&
-    !fileName.includes('react-native') &&
-    !fileName.includes('react-native')
-  ) {
+  if (fileName.includes('node_modules/') && !fileName.includes('react-native')) {
     return (origJs || require.extensions['.js'])(module, fileName);
   }
 

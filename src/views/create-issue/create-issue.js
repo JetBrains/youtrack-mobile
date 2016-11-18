@@ -179,7 +179,7 @@ export default class CreateIssue extends React.Component {
     return Router.ShowImage({currentImage: currentImage.url, allImagesUrls});
   }
 
-  _renderAttahes() {
+  _renderAttaches() {
     return this.state.issue.attachments.map(img => {
       return (
         <TouchableOpacity
@@ -246,7 +246,7 @@ export default class CreateIssue extends React.Component {
             {this.state.issue.project.id && <View style={styles.attachesContainer}>
               <View>
                 {this.state.issue.attachments.length > 0 && <ScrollView style={issueStyles.attachesContainer} horizontal={true}>
-                  {this._renderAttahes(this.state.issue.attachments)}
+                  {this._renderAttaches(this.state.issue.attachments)}
                 </ScrollView>}
               </View>
               <View style={styles.attachButtonsContainer}>

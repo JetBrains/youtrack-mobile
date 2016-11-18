@@ -95,11 +95,6 @@ export default class LoginForm extends React.Component {
       });
   }
 
-  loginAsGuest() {
-    log.warn('TODO: Not implemented');
-  }
-
-
   render() {
     return (
       <ScrollView contentContainerStyle={styles.container}
