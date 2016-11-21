@@ -16,7 +16,7 @@ function checkPrefixedFileExistence(path) {
 
 require.extensions['.png'] = function (module, fileName) {
   return {
-    uri: JSON.stringify(fileName, fileName)
+    uri: JSON.stringify(fileName)
   };
 };
 
