@@ -1,6 +1,6 @@
 import {Text, View, Image, Platform} from 'react-native';
 import React from 'react';
-import flattenStyle from 'flattenStyle';
+import flattenStyle from 'react-native/lib/flattenStyle';
 import SimpleMarkdown from 'simple-markdown';
 import styles from './wiki.styles';
 

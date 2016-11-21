@@ -20,7 +20,7 @@ import {COLOR_PINK} from '../../components/variables/variables';
 import usage from '../../components/usage/usage';
 import log from '../../components/log/log';
 import styles from './single-issue.styles';
-import flattenStyle from 'flattenStyle';
+import flattenStyle from 'react-native/lib/flattenStyle';
 
 const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
 const CATEGORY_NAME = 'Issue';
