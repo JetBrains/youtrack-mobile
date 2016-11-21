@@ -20,9 +20,12 @@ import {COLOR_PINK} from '../../components/variables/variables';
 import usage from '../../components/usage/usage';
 import log from '../../components/log/log';
 import styles from './single-issue.styles';
+import flattenStyle from 'flattenStyle';
 
 const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
 const CATEGORY_NAME = 'Issue';
+const imageWidth = flattenStyle(styles.attachmentImage).width * 2;
+const imageHeight = flattenStyle(styles.attachmentImage).height * 2;
 
 export default class SingeIssueView extends React.Component {
   static contextTypes = {
@@ -332,7 +335,7 @@ export default class SingeIssueView extends React.Component {
                                      key={attach.id || attach.url}>
               <Image style={styles.attachmentImage}
                      capInsets={{left: 15, right: 15, bottom: 15, top: 15}}
-                     source={{uri: attach.url}}/>
+                     source={{uri: `${attach.url}&w=${imageWidth}&h=${imageHeight}`}}/>
               {this.state.attachingImage === attach && <ActivityIndicator size="large" style={styles.imageActivityIndicator}/>}
             </TouchableOpacity>;
           }

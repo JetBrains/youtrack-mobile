@@ -1,10 +1,13 @@
 import {Text, View, Image, Platform} from 'react-native';
 import React from 'react';
+import flattenStyle from 'flattenStyle';
 import SimpleMarkdown from 'simple-markdown';
 import styles from './wiki.styles';
 
 const CONTENT_WITH_MARKERS = 0;
 const CONTENT_WITHIN_MARKERS = 1;
+const imageWidth = flattenStyle(styles.image).width * 2;
+const imageHeight = flattenStyle(styles.image).height * 2;
 
 export default function (actions) {
   return {
@@ -114,7 +117,7 @@ export default function (actions) {
 
         return <Text onPress={() => actions.onImagePress(node.url)} key={state.key}>
           <Image
-            source={{uri: node.url, width: 150, height: 150}}
+            source={{uri: `${node.url}&w=${imageWidth}&h=${imageHeight}`, width: 150, height: 150}}
             style={styles.image}/>
         </Text>;
       }
