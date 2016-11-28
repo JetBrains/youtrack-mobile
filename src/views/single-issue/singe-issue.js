@@ -13,6 +13,7 @@ import ColorField from '../../components/color-field/color-field';
 import LinkedIssues from '../../components/linked-issues/linked-issues';
 import {showActions} from '../../components/action-sheet/action-sheet';
 import Wiki, {decorateRawText} from '../../components/wiki/wiki';
+import {getForText} from '../../components/issue-formatter/issue-formatter';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import {notifyError, notify} from '../../components/notification/notification';
 import SingleIssueCommentInput from './single-issue__comment-input';
@@ -140,14 +141,7 @@ export default class SingeIssueView extends React.Component {
   }
 
   getAuthorForText(issue) {
-
-    const forText = () => {
-      if (issue.fieldHash.Assignee) {
-        return `for ${issue.fieldHash.Assignee.fullName || issue.fieldHash.Assignee.login}`;
-      }
-      return '    Unassigned';
-    };
-    return `${issue.reporter.fullName || issue.reporter.login} ${forText()}`;
+    return `${issue.reporter.fullName || issue.reporter.login} ${getForText(issue.fieldHash.Assignee)}`;
   }
 
   onIssueFieldValueUpdate(field, value) {
