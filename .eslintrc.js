@@ -8,7 +8,7 @@ module.exports = {
   'plugins': [
     'react',
     'react-native',
-    'flow-vars',
+    'flowtype',
     'import'
   ],
   'rules': {
@@ -46,8 +46,8 @@ module.exports = {
     'react-native/no-unused-styles': ERROR,
     'react-native/split-platform-components': ERROR,
 
-    'flow-vars/define-flow-type': WARNING,
-    'flow-vars/use-flow-type': WARNING
+    'flowtype/define-flow-type': WARNING,
+    'flowtype/no-weak-types': OFF
   },
   'env': {
     'es6': true,

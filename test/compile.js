@@ -24,6 +24,18 @@ require.extensions['.js'] = function (module, fileName) {
   if (fileName.indexOf('node_modules/react-native/Libraries/react-native/react-native.js') >= 0) {
     fileName = path.resolve('./test/mocks/react-native.js');
   }
+  if (fileName.indexOf('flattenStyle') >= 0) {
+    fileName = path.resolve('./test/mocks/flattenStyle.js');
+  }
+
+  //TODO: drop this when react-native-mock upgrade it's dependencies
+  if (fileName.indexOf('react-addons-perf') >= 0) {
+    fileName = require.resolve('react-addons-perf');
+  }
+  if (fileName.indexOf('react-addons-test-utils') >= 0) {
+    fileName = require.resolve('react-addons-test-utils');
+  }
+
 
   if (fileName.includes('node_modules/') && !fileName.includes('react-native')) {
     return (origJs || require.extensions['.js'])(module, fileName);
