@@ -166,6 +166,8 @@ export default {
     'summary',
     'description',
     'resolved',
+    'created',
+    'updated',
     'numberInProject',
     'wikifiedDescription',
     {project: ISSUE_PROJECT_FIELDS},

@@ -23,9 +23,19 @@ export default StyleSheet.create({
     paddingTop: UNIT,
     backgroundColor: '#FFF'
   },
-  authorForText: {
+  issueTopMessage: {
     paddingTop: 2,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  issueTopText: {
+    flex: 1,
     fontSize: 14,
+    color: COLOR_FONT_GRAY,
+  },
+  issueTopTextRight: {
+    fontSize: 14,
+    marginLeft: UNIT,
     color: COLOR_FONT_GRAY
   },
   tagsContainer: {

@@ -22,6 +22,7 @@ import usage from '../../components/usage/usage';
 import log from '../../components/log/log';
 import styles from './single-issue.styles';
 import flattenStyle from 'react-native/Libraries/StyleSheet/flattenStyle';
+import relativeDate from 'relative-date';
 
 const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
 const CATEGORY_NAME = 'Issue';
@@ -142,6 +143,10 @@ export default class SingeIssueView extends React.Component {
 
   getAuthorForText(issue) {
     return `${issue.reporter.fullName || issue.reporter.login} ${getForText(issue.fieldHash.Assignee)}`;
+  }
+
+  getAuthorText(issue) {
+    return `By ${issue.reporter.fullName || issue.reporter.login} ${relativeDate(issue.created)}`;
   }
 
   onIssueFieldValueUpdate(field, value) {
@@ -360,7 +365,12 @@ export default class SingeIssueView extends React.Component {
       <View style={styles.issueViewContainer}>
         {this._renderTags(issue.tags)}
 
-        <Text style={styles.authorForText} selectable={true}>{this.getAuthorForText(issue)}</Text>
+        <View style={styles.issueTopMessage}>
+          <Text style={styles.issueTopText} selectable={true}>{this.getAuthorText(issue)}</Text>
+          <View>
+            <Text style={styles.issueTopTextRight} selectable={true}>Upd. {relativeDate(issue.updated)}</Text>
+          </View>
+        </View>
 
         {this.state.editMode && <View>
           <TextInput

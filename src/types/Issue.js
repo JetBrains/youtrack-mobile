@@ -15,6 +15,8 @@ declare type IssueFull = {
   summary: string,
   description: string,
   resolved: boolean,
+  created: number,
+  updated: number,
   numberInProject: number,
   wikifiedDescription: string,
   project: IssueProject,
