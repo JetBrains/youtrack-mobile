@@ -1,6 +1,6 @@
 /* @flow */
+import PubSub from 'pubsub-js';
 import Auth from './components/auth/auth';
-
 import Router from './components/router/router';
 import Home from './views/home/home';
 import EnterServer from './views/enter-server/enter-server';
@@ -154,9 +154,15 @@ class YouTrackMobile extends Component {
     Router.registerRoute({name: 'CreateIssue', component: CreateIssue});
   }
 
+  handleOrientationChange = (event: Object) => {
+    const {width, height} = event.nativeEvent.layout;
+    const orientation = (width > height) ? 'LANDSCAPE' : 'PORTRAIT';
+    PubSub.publish('YTM_ORIENTATION_CHANGE', orientation);
+  }
+
   render() {
     return <ActionSheet ref={component => this._actionSheetRef = component}>
-      <View style={{flex: 1}}>
+      <View style={{flex: 1}} onLayout={this.handleOrientationChange}>
         {Router.renderNavigatorView({initialRoute: Router.routes.Home})}
         <Toast ref={toast => setNotificationComponent(toast)}/>
       </View>

@@ -32,6 +32,7 @@
   "dependencies": {
     "@exponent/react-native-action-sheet": "0.3.0",
     "base64-js": "1.2.0",
+    "pubsub-js": "1.5.4",
     "qs": "6.1.0",
     "react": "15.4.1",
     "react-native": "0.38.0",

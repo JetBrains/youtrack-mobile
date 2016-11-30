@@ -4,6 +4,7 @@ import styles from './query-assist.styles';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
 import {COLOR_PINK, COLOR_FONT_GRAY} from '../../components/variables/variables';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+import PubSub from 'pubsub-js';
 
 export default class QueryAssist extends React.Component {
   constructor() {
@@ -15,6 +16,12 @@ export default class QueryAssist extends React.Component {
       input: '',
       caret: ''
     };
+
+    this.pubSubToken = PubSub.subscribe('YTM_ORIENTATION_CHANGE',  () => this.measureSuggestionsListSpace(0, false));
+  }
+
+  componentWillUnmount() {
+    PubSub.unsubscribe(this.pubSubToken);
   }
 
   getSuggestions(...args) {

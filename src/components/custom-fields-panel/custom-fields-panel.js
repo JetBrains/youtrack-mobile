@@ -1,6 +1,7 @@
 /* @flow */
 import {View, ScrollView, Text, TouchableOpacity, TextInput, ActivityIndicator} from 'react-native';
 import React, {Component} from 'react';
+import PubSub from 'pubsub-js';
 import CalendarPicker from 'react-native-calendar-picker/CalendarPicker/CalendarPicker';
 import CustomField from '../custom-field/custom-field';
 import Select from '../select/select';
@@ -82,6 +83,7 @@ const initialEditorsState = {
 export default class CustomFieldsPanel extends Component {
   props: Props;
   state: State;
+  pubSubToken: string;
 
   constructor() {
     super();
@@ -95,6 +97,8 @@ export default class CustomFieldsPanel extends Component {
       isSavingProject: false,
       ...initialEditorsState
     };
+
+    this.pubSubToken = PubSub.subscribe('YTM_ORIENTATION_CHANGE',  () => this.measureSelect());
   }
 
   measureSelect() {
@@ -107,6 +111,10 @@ export default class CustomFieldsPanel extends Component {
 
   componentDidMount() {
     this.measureSelect();
+  }
+
+  componentWillUnmount() {
+    PubSub.unsubscribe(this.pubSubToken);
   }
 
   saveUpdatedField(field: CustomField, value: null|number|Object) {
