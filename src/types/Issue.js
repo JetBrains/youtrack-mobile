@@ -6,6 +6,8 @@ declare type IssueOnList = {
   project: IssueProject,
   numberInProject: number,
   reporter: IssueUser,
+  created: number,
+  updated: number,
   fields: Array<CustomField>,
   fieldHash: any
 }
@@ -21,6 +23,7 @@ declare type IssueFull = {
   wikifiedDescription: string,
   project: IssueProject,
   reporter: IssueUser,
+  updater: IssueUser,
   fields: Array<CustomField>,
   //To continue
   fieldHash: any

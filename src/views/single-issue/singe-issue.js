@@ -13,7 +13,6 @@ import ColorField from '../../components/color-field/color-field';
 import LinkedIssues from '../../components/linked-issues/linked-issues';
 import {showActions} from '../../components/action-sheet/action-sheet';
 import Wiki, {decorateRawText} from '../../components/wiki/wiki';
-import {getForText} from '../../components/issue-formatter/issue-formatter';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import {notifyError, notify} from '../../components/notification/notification';
 import SingleIssueCommentInput from './single-issue__comment-input';
@@ -141,12 +140,8 @@ export default class SingeIssueView extends React.Component {
     });
   }
 
-  getAuthorForText(issue) {
-    return `${issue.reporter.fullName || issue.reporter.login} ${getForText(issue.fieldHash.Assignee)}`;
-  }
-
-  getAuthorText(issue) {
-    return `By ${issue.reporter.fullName || issue.reporter.login} ${relativeDate(issue.created)}`;
+  getUserName(user) {
+    return `${user.fullName || user.login}`;
   }
 
   onIssueFieldValueUpdate(field, value) {
@@ -366,10 +361,14 @@ export default class SingeIssueView extends React.Component {
         {this._renderTags(issue.tags)}
 
         <View style={styles.issueTopMessage}>
-          <Text style={styles.issueTopText} selectable={true}>{this.getAuthorText(issue)}</Text>
-          <View>
-            <Text style={styles.issueTopTextRight} selectable={true}>Upd. {relativeDate(issue.updated)}</Text>
-          </View>
+          <Text style={styles.issueTopText}
+                selectable={true}>
+            Created by {this.getUserName(issue.reporter)} {relativeDate(issue.created)}
+          </Text>
+          {issue.updater ?
+            <Text style={styles.issueTopText} selectable={true}>
+              Updated by {this.getUserName(issue.updater)} {relativeDate(issue.updated)}
+            </Text> : null}
         </View>
 
         {this.state.editMode && <View>

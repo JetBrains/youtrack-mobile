@@ -24,19 +24,12 @@ export default StyleSheet.create({
     backgroundColor: '#FFF'
   },
   issueTopMessage: {
-    paddingTop: 2,
-    flexDirection: 'row',
-    justifyContent: 'space-between'
+    paddingTop: 2
   },
   issueTopText: {
     flex: 1,
     fontSize: 14,
     color: COLOR_FONT_GRAY,
-  },
-  issueTopTextRight: {
-    fontSize: 14,
-    marginLeft: UNIT,
-    color: COLOR_FONT_GRAY
   },
   tagsContainer: {
     flexDirection: 'row',
