@@ -3,6 +3,7 @@ import React from 'react';
 import styles from './issue-list__menu.styles';
 import {VERSION_STRING} from '../../components/usage/usage';
 import {formatYouTrackURL} from '../../components/config/config';
+import getTopPadding from '../../components/header/header__top-padding';
 
 const CURRENT_YEAR = (new Date()).getFullYear();
 
@@ -15,7 +16,7 @@ export default class IssueListMenu extends React.Component {
     const user = this.props.user;
     const avatarUrl = user.profile && user.profile.avatar && user.profile.avatar.url;
 
-    return <View style={styles.menuContainer}>
+    return <View style={[styles.menuContainer, {marginTop: getTopPadding()}]}>
 
       <View style={styles.profileContainer}>
         <Image style={styles.currentUserAvatarImage} source={{uri: avatarUrl}}></Image>

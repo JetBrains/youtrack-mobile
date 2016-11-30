@@ -2,6 +2,7 @@ import {Text, View, TouchableOpacity} from 'react-native';
 import React, {PropTypes} from 'react';
 import styles from './header.styles';
 import Router from '../router/router';
+import getTopPadding, {onHeightChange} from './header__top-padding';
 
 const TOUCH_PADDING = 8;
 
@@ -11,6 +12,10 @@ export default class Header extends React.Component {
     onRightButtonClick: PropTypes.func,
     leftButton: PropTypes.element,
     rightButton: PropTypes.element
+  }
+
+  componentDidMount() {
+    onHeightChange(() => this.forceUpdate());
   }
 
   onBack() {
@@ -27,7 +32,7 @@ export default class Header extends React.Component {
   }
 
   render() {
-    return (<View style={styles.header}>
+    return (<View style={[styles.header, {paddingTop: getTopPadding()}]}>
       <TouchableOpacity
         hitSlop={{top: TOUCH_PADDING, left: TOUCH_PADDING, bottom: TOUCH_PADDING, right: TOUCH_PADDING}}
         style={[styles.headerButton, styles.headerButtonLeft]}
