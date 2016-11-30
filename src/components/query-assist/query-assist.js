@@ -58,9 +58,9 @@ export default class QueryAssist extends React.Component {
     this.props.onQueryUpdate(this.state.input || '');
   }
 
-  componentWillReceiveProps(newProps, oldProps) {
-    if (newProps.initialQuery !== this.state.input) {
-      this.setState({input: this.props.initialQuery});
+  componentWillReceiveProps(newProps) {
+    if (newProps.initialQuery !== this.props.initialQuery) {
+      this.setState({input: newProps.initialQuery});
     }
   }
 
