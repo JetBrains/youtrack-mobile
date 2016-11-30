@@ -4,7 +4,7 @@ import React from 'react';
 import styles from './create-issue.styles';
 import issueStyles from '../single-issue/single-issue.styles';
 import Header from '../../components/header/header';
-import {notifyError} from '../../components/notification/notification';
+import {notifyError, resolveError} from '../../components/notification/notification';
 import usage from '../../components/usage/usage';
 import ImagePicker from 'react-native-image-picker';
 import Router from '../../components/router/router';
@@ -24,6 +24,11 @@ type Attachment = {
   isVertical: boolean,
 }
 
+const notSelectedProject = {
+  id: null,
+  shortName: 'Not selected'
+};
+
 export default class CreateIssue extends React.Component {
   constructor() {
     super();
@@ -36,44 +41,43 @@ export default class CreateIssue extends React.Component {
         description: null,
         attachments: [],
         fields: [],
-        project: {
-          id: null,
-          shortName: 'Not selected'
-        }
+        project: notSelectedProject
       }
     };
 
     usage.trackScreenView('Create issue');
 
-    AsyncStorage.getItem(DRAFT_ID_STORAGE_KEY)
-      .then(draftId => {
-        if (draftId) {
-          return this.loadIssueFromDraft(draftId);
-        }
-        return this.loadStoredProject();
-      });
+    this.initializeWithDraftOrProject();
   }
 
-  loadStoredProject() {
-    return AsyncStorage.getItem(PROJECT_ID_STORAGE_KEY)
-      .then(projectId => {
-        if (projectId) {
-          this.state.issue.project.id = projectId;
-          return this.updateIssueDraft();
-        }
-      });
+  async initializeWithDraftOrProject() {
+    const draftId = await AsyncStorage.getItem(DRAFT_ID_STORAGE_KEY);
+    if (draftId) {
+      await this.loadIssueFromDraft(draftId);
+    }
+    await this.loadStoredProject();
   }
 
-  loadIssueFromDraft(draftId) {
-    return this.props.api.loadIssueDraft(draftId)
-      .then(issue => {
-        this.state.issue = issue;
-        this.forceUpdate();
-      })
-      .catch(() => this.loadStoredProject());
+  async loadStoredProject() {
+    const projectId = await AsyncStorage.getItem(PROJECT_ID_STORAGE_KEY);
+    if (projectId) {
+      this.state.issue.project.id = projectId;
+      return await this.updateIssueDraft();
+    }
   }
 
-  updateIssueDraft(projectOnly = false) {
+  async loadIssueFromDraft(draftId) {
+    try {
+      this.state.issue = await this.props.api.loadIssueDraft(draftId);
+      this.forceUpdate();
+    } catch (err) {
+      AsyncStorage.removeItem(DRAFT_ID_STORAGE_KEY);
+      this.state.issue.id = null;
+      return await this.loadStoredProject();
+    }
+  }
+
+  async updateIssueDraft(projectOnly = false) {
     const issueToSend = {...this.state.issue};
     if (!issueToSend.project || !issueToSend.project.id) {
       return;
@@ -84,33 +88,40 @@ export default class CreateIssue extends React.Component {
       delete issueToSend.fields;
     }
 
-    return this.props.api.updateIssueDraft(issueToSend)
-      .then(issue => {
-        this.state.issue = issue;
-        this.forceUpdate();
-        return AsyncStorage.setItem(DRAFT_ID_STORAGE_KEY, issue.id);
-      })
-      .catch(err => notifyError('Cannot create issue', err));
+    try {
+      const issue = await this.props.api.updateIssueDraft(issueToSend);
+      this.state.issue = issue;
+      this.forceUpdate();
+      return await AsyncStorage.setItem(DRAFT_ID_STORAGE_KEY, issue.id);
+    } catch (err) {
+      const error = await resolveError(err);
+      if (error && error.error_description && error.error_description.indexOf(`Can't find entity with id`) !== -1) {
+        this.state.project = notSelectedProject;
+        return this.forceUpdate();
+      }
+      notifyError('Cannot update issue draft', error);
+    }
   }
 
-  createIssue() {
+  async createIssue() {
     this.setState({processing: true});
 
-    return this.updateIssueDraft()
-      .then(() => this.props.api.createIssue(this.state.issue))
-      .then(res => {
-        this.setState({processing: false});
-        log.info('Issue created', res);
-        usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Success');
-        this.props.onCreate(res);
-        Router.pop();
-        return AsyncStorage.removeItem(DRAFT_ID_STORAGE_KEY);
-      })
-      .catch(err => {
-        this.setState({processing: false});
-        usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Error');
-        return notifyError('Cannot create issue', err);
-      });
+    try {
+      await this.updateIssueDraft();
+      const created = await this.props.api.createIssue(this.state.issue);
+      log.info('Issue created', created);
+
+      usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Success');
+      this.props.onCreate(created);
+      Router.pop();
+      return await AsyncStorage.removeItem(DRAFT_ID_STORAGE_KEY);
+
+    } catch (err) {
+      usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Error');
+      return notifyError('Cannot create issue', err);
+    } finally {
+      this.setState({processing: false});
+    }
   }
 
   attachPhoto(takeFromLibrary = true) {
@@ -151,13 +162,13 @@ export default class CreateIssue extends React.Component {
     });
   }
 
-  onUpdateProject(project) {
+  async onUpdateProject(project) {
     this.state.issue.project = project;
     this.forceUpdate();
 
     usage.trackEvent(CATEGORY_NAME, 'Change project');
-    return this.updateIssueDraft(project.id)
-      .then(() => AsyncStorage.setItem(PROJECT_ID_STORAGE_KEY, project.id));
+    await this.updateIssueDraft(project.id);
+    return await AsyncStorage.setItem(PROJECT_ID_STORAGE_KEY, project.id);
   }
 
   onSetFieldValue(field, value) {
