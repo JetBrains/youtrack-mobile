@@ -31,6 +31,13 @@ export default StyleSheet.create({
     fontSize: 14,
     color: COLOR_FONT_GRAY,
   },
+  showMoreDateButton: {
+    fontSize: 14,
+    color: COLOR_FONT_GRAY
+  },
+  updatedInformation: {
+    marginTop: UNIT
+  },
   tagsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',

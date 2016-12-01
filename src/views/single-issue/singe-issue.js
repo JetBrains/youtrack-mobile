@@ -7,9 +7,9 @@ import {comment} from '../../components/icon/icon';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import SingleIssueComments from './single-issue__comments';
+import SingleIssueTopPanel from './single-issue__top-panel';
 import Router from '../../components/router/router';
 import Header from '../../components/header/header';
-import ColorField from '../../components/color-field/color-field';
 import LinkedIssues from '../../components/linked-issues/linked-issues';
 import {showActions} from '../../components/action-sheet/action-sheet';
 import Wiki, {decorateRawText} from '../../components/wiki/wiki';
@@ -21,7 +21,6 @@ import usage from '../../components/usage/usage';
 import log from '../../components/log/log';
 import styles from './single-issue.styles';
 import flattenStyle from 'react-native/Libraries/StyleSheet/flattenStyle';
-import relativeDate from 'relative-date';
 
 const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
 const CATEGORY_NAME = 'Issue';
@@ -138,10 +137,6 @@ export default class SingeIssueView extends React.Component {
           return notifyError('Cannot attach file', err);
         });
     });
-  }
-
-  getUserName(user) {
-    return `${user.fullName || user.login}`;
   }
 
   onIssueFieldValueUpdate(field, value) {
@@ -341,35 +336,10 @@ export default class SingeIssueView extends React.Component {
     </ScrollView>;
   }
 
-  _renderTags(tags) {
-    if (!tags || !tags.length) {
-      return;
-    }
-
-    return <View style={styles.tagsContainer}>
-      {tags.map(tag => {
-        return <TouchableOpacity onPress={() => this.openIssueListWithSearch(tag.query)} key={tag.id} style={styles.tagButton}>
-          <ColorField text={tag.name} color={tag.color} fullText={true} style={styles.tagColorField}/>
-        </TouchableOpacity>;
-      })}
-    </View>;
-  }
-
   _renderIssueView(issue) {
     return (
       <View style={styles.issueViewContainer}>
-        {this._renderTags(issue.tags)}
-
-        <View style={styles.issueTopMessage}>
-          <Text style={styles.issueTopText}
-                selectable={true}>
-            Created by {this.getUserName(issue.reporter)} {relativeDate(issue.created)}
-          </Text>
-          {issue.updater ?
-            <Text style={styles.issueTopText} selectable={true}>
-              Updated by {this.getUserName(issue.updater)} {relativeDate(issue.updated)}
-            </Text> : null}
-        </View>
+        <SingleIssueTopPanel issue={issue} onTagPress={query => this.openIssueListWithSearch(query)}/>
 
         {this.state.editMode && <View>
           <TextInput

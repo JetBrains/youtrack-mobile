@@ -1,5 +1,4 @@
 import styles from './comment.styles';
-import relativeDate from 'relative-date';
 import Wiki, {decorateRawText} from '../../components/wiki/wiki';
 import {COLOR_LIGHT_GRAY, COLOR_FONT_GRAY, COLOR_PINK} from '../../components/variables/variables';
 
@@ -7,6 +6,7 @@ import {View, Text, Image} from 'react-native';
 import React from 'react';
 import Swipeout from 'react-native-swipeout';
 import SwipeButton from './comment__swipe-button';
+import {relativeDate} from '../issue-formatter/issue-formatter';
 import {reply, share} from '../icon/icon';
 
 export default class Comment extends React.Component {

@@ -25,6 +25,7 @@ declare type IssueFull = {
   reporter: IssueUser,
   updater: IssueUser,
   fields: Array<CustomField>,
+  tags: Array<Tag>,
   //To continue
   fieldHash: any
 };

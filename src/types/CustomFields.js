@@ -21,6 +21,13 @@ declare type ColorField = {
   foreground: string
 }
 
+declare type Tag = {
+  id: string,
+  name: string,
+  query: string,
+  color: ColorField
+}
+
 declare type BundleValue = {
   $type: string,
   id: string,

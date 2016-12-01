@@ -32,6 +32,7 @@
   "dependencies": {
     "@exponent/react-native-action-sheet": "0.3.0",
     "base64-js": "1.2.0",
+    "from-now": "1.0.2",
     "pubsub-js": "1.5.4",
     "qs": "6.1.0",
     "react": "15.4.1",
@@ -47,7 +48,6 @@
     "react-native-keyboard-spacer": "0.3.0",
     "react-native-keychain": "0.2.7",
     "react-native-swipeout": "q-m/react-native-swipeout#93b67f7c5c2c44a9b2067499746a729010277ae1",
-    "relative-date": "^1.1.2",
     "simple-markdown": "0.2.1",
     "url-parse": "1.1.7"
   },
