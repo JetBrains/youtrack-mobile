@@ -258,7 +258,7 @@ class IssueList extends React.Component {
     }
 
     if (this.state.isLoadingMore && !this.state.listEndReached) {
-      return <Text style={styles.loadingMore}>Loading more issues...</Text>;
+      return <Text style={styles.listFooterMessage}>Loading more issues...</Text>;
     }
   }
 
