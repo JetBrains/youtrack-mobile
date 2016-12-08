@@ -320,12 +320,14 @@ export default class SingeIssueView extends React.Component {
         .map((attach) => {
           const isImage = attach.mimeType.includes('image');
 
+          const url = attach.id ? `${attach.url}&w=${imageWidth}&h=${imageHeight}` : attach.url;
+
           if (isImage) {
             return <TouchableOpacity onPress={() => this._showImageAttachment(attach, attachments)}
                                      key={attach.id || attach.url}>
               <Image style={styles.attachmentImage}
                      capInsets={{left: 15, right: 15, bottom: 15, top: 15}}
-                     source={{uri: `${attach.url}&w=${imageWidth}&h=${imageHeight}`}}/>
+                     source={{uri: url}}/>
               {this.state.attachingImage === attach && <ActivityIndicator size="large" style={styles.imageActivityIndicator}/>}
             </TouchableOpacity>;
           }

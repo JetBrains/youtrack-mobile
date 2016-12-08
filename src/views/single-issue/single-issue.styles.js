@@ -107,7 +107,7 @@ export default StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 0,
-    right: UNIT*2,
+    right: UNIT,
     bottom: 0
   },
   commentsListContainer: {

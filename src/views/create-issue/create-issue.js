@@ -1,5 +1,6 @@
 import {ScrollView, View, Text, TextInput, TouchableOpacity, Image, AsyncStorage, ActivityIndicator} from 'react-native';
 import React from 'react';
+import flattenStyle from 'react-native/Libraries/StyleSheet/flattenStyle';
 
 import styles from './create-issue.styles';
 import issueStyles from '../single-issue/single-issue.styles';
@@ -17,6 +18,8 @@ const PROJECT_ID_STORAGE_KEY = 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE';
 const DRAFT_ID_STORAGE_KEY = 'DRAFT_ID_STORAGE_KEY';
 const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
 const CATEGORY_NAME = 'Create issue view';
+const imageWidth = flattenStyle(issueStyles.attachmentImage).width * 2;
+const imageHeight = flattenStyle(issueStyles.attachmentImage).height * 2;
 
 type Attachment = {
   data: string,
@@ -193,13 +196,15 @@ export default class CreateIssue extends React.Component {
 
   _renderAttaches() {
     return this.state.issue.attachments.map(img => {
+      const url = img.id ? `${img.url}&w=${imageWidth}&h=${imageHeight}` : img.url;
+
       return (
         <TouchableOpacity
           key={img.url || img.id}
           onPress={() => this._showImageAttachment(img, this.state.issue.attachments)}
         >
           <Image style={issueStyles.attachmentImage}
-                 source={{uri: img.url}}/>
+                 source={{uri: url}}/>
           {this.state.attachingImage === img && <ActivityIndicator size="large" style={styles.imageActivityIndicator}/>}
         </TouchableOpacity>
       );
