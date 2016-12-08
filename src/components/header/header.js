@@ -1,17 +1,26 @@
+/* @flow */
 import {Text, View, TouchableOpacity} from 'react-native';
-import React, {PropTypes} from 'react';
+import React from 'react';
 import styles from './header.styles';
 import Router from '../router/router';
 import getTopPadding, {onHeightChange} from './header__top-padding';
 
 const TOUCH_PADDING = 8;
 
+type Props = {
+  onBack: () => any,
+  onRightButtonClick?: () => any,
+  leftButton?: ?ReactElement<any>,
+  rightButton?: ?ReactElement<any>,
+  children?: ReactElement<any>
+}
+
 export default class Header extends React.Component {
-  static propTypes = {
-    onBack: PropTypes.func,
-    onRightButtonClick: PropTypes.func,
-    leftButton: PropTypes.element,
-    rightButton: PropTypes.element
+  props: Props;
+
+  static defaultProps: {
+    onBack: () => {},
+    onRightButtonClick: () => {}
   }
 
   componentDidMount() {
@@ -32,21 +41,23 @@ export default class Header extends React.Component {
   }
 
   render() {
+    const {leftButton, children, rightButton} = this.props;
+
     return (<View style={[styles.header, {paddingTop: getTopPadding()}]}>
       <TouchableOpacity
         hitSlop={{top: TOUCH_PADDING, left: TOUCH_PADDING, bottom: TOUCH_PADDING, right: TOUCH_PADDING}}
         style={[styles.headerButton, styles.headerButtonLeft]}
         onPress={() => this.onBack()}>
-        <Text style={styles.headerButtonText}>{this.props.leftButton}</Text>
+        <Text style={styles.headerButtonText}>{leftButton}</Text>
       </TouchableOpacity>
 
-      <View style={styles.headerCenter}>{this.props.children}</View>
+      <View style={styles.headerCenter}>{children}</View>
 
       <TouchableOpacity
         hitSlop={{top: TOUCH_PADDING, left: TOUCH_PADDING, bottom: TOUCH_PADDING, right: TOUCH_PADDING}}
         style={[styles.headerButton, styles.headerButtonRight]}
         onPress={this.onRightButtonClick.bind(this)}>
-        <Text style={[styles.headerButtonText, styles.headerButtonTextRight]}>{this.props.rightButton}</Text>
+        <Text style={[styles.headerButtonText, styles.headerButtonTextRight]}>{rightButton}</Text>
       </TouchableOpacity>
     </View>);
   }
