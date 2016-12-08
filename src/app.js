@@ -8,7 +8,7 @@ import LoginForm from './views/log-in/log-in';
 import usage from './components/usage/usage';
 import {setNotificationComponent} from './components/notification/notification';
 import IssueList from './views/issue-list/issue-list';
-import SingleIssue from './views/single-issue/singe-issue';
+import SingleIssue from './views/single-issue/single-issue';
 import CreateIssue from './views/create-issue/create-issue';
 import ShowImage from './views/show-image/show-image';
 import AttachmentPreview from './views/attachment-preview/attachment-preview';
