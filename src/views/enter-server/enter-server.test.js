@@ -102,4 +102,19 @@ describe('EnterServer', () => {
 
     wrapper.state('error').message.should.equal('Incompatible youtrack');
   });
+
+  it('should not allow empty input', () => {
+    wrapper.setState({serverUrl: ''});
+    wrapper.instance().isValidInput().should.be.false;
+  });
+
+  it('should not allow AT in server input (to not confuse users with email)', () => {
+    wrapper.setState({serverUrl: 'foo@bar.com'});
+    wrapper.instance().isValidInput().should.be.false;
+  });
+
+  it('should allow not empty input', () => {
+    wrapper.setState({serverUrl: 'someserver'});
+    wrapper.instance().isValidInput().should.be.true;
+  });
 });
