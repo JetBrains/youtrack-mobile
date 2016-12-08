@@ -83,7 +83,7 @@ export default class QueryAssistSuggestionsList extends React.Component {
         dataSource={this.state.dataSource}
         enableEmptySections={true}
         renderRow={(suggestion) => this._renderRow(suggestion)}
-        renderScrollComponent={props => <InvertibleScrollView {...props} inverted />}
+        renderScrollComponent={props => <InvertibleScrollView {...props} inverted/>}
         keyboardShouldPersistTaps={true}/>
     );
   }
@@ -97,7 +97,6 @@ const styles = StyleSheet.create({
     paddingTop: UNIT * 2
   },
   searchText: {
-    flex: 1,
     fontSize: 24,
     fontWeight: '200',
     textAlign: 'center'
