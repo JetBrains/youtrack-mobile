@@ -18,6 +18,7 @@ import {notifyError, notify} from '../../components/notification/notification';
 import SingleIssueCommentInput from './single-issue__comment-input';
 import {COLOR_PINK} from '../../components/variables/variables';
 import usage from '../../components/usage/usage';
+import MultilineInput from '../../components/multiline-input/multiline-input';
 import log from '../../components/log/log';
 import styles from './single-issue.styles';
 import flattenStyle from 'react-native/Libraries/StyleSheet/flattenStyle';
@@ -353,8 +354,9 @@ export default class SingeIssueView extends React.Component {
             onSubmitEditing={() => this.refs.description.focus()}
             onChangeText={text => this.setState({summaryCopy: text})}/>
           <View style={styles.separator}/>
-          <TextInput
+          <MultilineInput
             ref="description"
+            maxInputHeight={0}
             style={styles.descriptionInput}
             autoCapitalize="sentences"
             editable={!this.state.isSavingEditedIssue}

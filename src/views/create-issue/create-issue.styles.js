@@ -12,7 +12,7 @@ export default StyleSheet.create({
     margin: UNIT,
     padding: UNIT,
     color: COLOR_FONT,
-    fontSize: 18,
+    fontSize: 20,
     height: UNIT * 5
   },
   descriptionInput: {
@@ -24,7 +24,7 @@ export default StyleSheet.create({
     color: COLOR_FONT,
     borderColor: 'black',
     textAlignVertical: 'top',
-    fontSize: 14
+    fontSize: 16
   },
   disabledCreateButton: {
     color: COLOR_FONT_GRAY
@@ -39,7 +39,8 @@ export default StyleSheet.create({
     backgroundColor: COLOR_GRAY
   },
   attachesContainer: {
-    margin: UNIT,
+    marginTop: 0,
+    marginBottom: UNIT,
     marginLeft: UNIT * 2,
     marginRight: UNIT * 2
   },

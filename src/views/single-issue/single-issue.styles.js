@@ -68,7 +68,7 @@ export default StyleSheet.create({
     marginTop: UNIT,
     marginBottom: UNIT,
     color: COLOR_FONT,
-    fontSize: 18,
+    fontSize: 20,
     height: UNIT * 5
   },
   descriptionInput: {
@@ -76,7 +76,7 @@ export default StyleSheet.create({
     marginBottom: UNIT,
     height: UNIT * 10,
     color: COLOR_FONT,
-    fontSize: 14,
+    fontSize: 16,
     textAlignVertical: 'top'
   },
   attachesContainer: {

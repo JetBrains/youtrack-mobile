@@ -3,12 +3,13 @@ import {TextInput} from 'react-native';
 import React from 'react';
 
 const INITIAL_INPUT_HEIGHT = 36;
-const MAX_INPUT_HEIGHT = 200;
+const MAX_DEFAULT_HEIGHT = 200;
 const DEFAULT_FONT_SIZE = 16;
 const HEIGHT_SHIFT = 9;
 
 type Props = {
   value: string,
+  maxInputHeight: number,
   style: any
 };
 
@@ -19,6 +20,10 @@ type State = {
 export default class MultilineInput extends React.Component {
   props: Props;
   state: State;
+
+  static defaultProps = {
+    maxInputHeight: MAX_DEFAULT_HEIGHT
+  }
 
   constructor(props: Props) {
     super(props);
@@ -34,15 +39,20 @@ export default class MultilineInput extends React.Component {
   }
 
   onSizeChange(e: Object) {
+    const {maxInputHeight} = this.props;
     let newHeight = e.nativeEvent.contentSize.height + HEIGHT_SHIFT;
-    newHeight = newHeight > MAX_INPUT_HEIGHT ? MAX_INPUT_HEIGHT : newHeight;
+
+    if (maxInputHeight > 0) {
+      newHeight = newHeight > maxInputHeight ? maxInputHeight : newHeight;
+    }
+
     this.setState({inputHeight: newHeight});
   }
 
   render() {
-    const {style, ...other} = this.props;
+    const {style, ...rest} = this.props;
 
-    return <TextInput {...other}
+    return <TextInput {...rest}
                       multiline={true}
                       onContentSizeChange={(e) => this.onSizeChange(e)}
                       style={[{fontSize: DEFAULT_FONT_SIZE}, style, {height: this.state.inputHeight}]}/>;

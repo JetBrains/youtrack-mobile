@@ -11,6 +11,7 @@ import Router from '../../components/router/router';
 import log from '../../components/log/log';
 import {attach, tag, next} from '../../components/icon/icon';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
+import MultilineInput from '../../components/multiline-input/multiline-input';
 
 const PROJECT_ID_STORAGE_KEY = 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE';
 const DRAFT_ID_STORAGE_KEY = 'DRAFT_ID_STORAGE_KEY';
@@ -240,8 +241,9 @@ export default class CreateIssue extends React.Component {
             </View>
             <View style={styles.separator}/>
             <View>
-              <TextInput
+              <MultilineInput
                 ref="description"
+                maxInputHeight={0}
                 editable={!this.state.processing}
                 autoCapitalize="sentences"
                 style={styles.descriptionInput}
