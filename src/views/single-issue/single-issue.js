@@ -370,13 +370,13 @@ export default class SingeIssueView extends React.Component {
 
           {issue.links && <LinkedIssues links={issue.links} onIssueTap={issue => this.goToIssue(issue)}/>}
 
-          {issue.description && <Wiki
+          {issue.description ? <Wiki
             style={styles.description}
             attachments={issue.attachments}
             onIssueIdTap={issueId => this.goToIssueById(issueId)}
           >
             {decorateRawText(issue.description, issue.wikifiedDescription, issue.attachments)}
-          </Wiki>}
+          </Wiki> : null}
         </View>}
 
         {this._renderAttachments(issue.attachments)}
