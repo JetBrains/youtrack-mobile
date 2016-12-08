@@ -133,4 +133,13 @@ describe('decorateUserNames', () => {
 
     result.should.equal('foo barr @userlogin2 bar foo');
   });
+
+  it('should parse user names if youtrack is on context', () => {
+    const wiki = `foo barr <a href="/youtrack/user/userlogin" title="userlogin">Mr. User Userson</a> bar foo`;
+    const result = decorateUserNames(rawTextWithIds, wiki);
+
+    result.should.equal('foo barr [ytmuser]userlogin|Mr. User Userson[ytmuser] bar foo');
+  });
 });
+//@Carry.Parker Hello!
+//<div class="wiki text"><a href="/youtrack/user/Carry.Parker" title="Carry.Parker">Carry Parker</a> Hello!</div>↵

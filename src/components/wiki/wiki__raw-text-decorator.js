@@ -32,7 +32,7 @@ export function decorateIssueLinks(rawText, wikifiedText) {
 }
 
 export function decorateUserNames(rawText, wikifiedText) {
-  const userLoginRegexp = /<a href="\/user.*?title="(.*?)">(.*?)<\/a>/ig;
+  const userLoginRegexp = /<a href=".*\/user.*?title="(.*?)">(.*?)<\/a>/ig;
 
   const issuesMap = new Map();
 
