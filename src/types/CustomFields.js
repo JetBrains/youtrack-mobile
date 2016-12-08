@@ -98,3 +98,20 @@ declare type CustomField = {
   value: FieldValue|number,
   projectCustomField: ProjectCustomField
 }
+
+declare type Attachment = {
+  $type: string,
+  id: string,
+  name: string,
+  url: string,
+  mimeType: string
+}
+
+declare type IssueComment = {
+  $type: string,
+  id: string,
+  text: string,
+  created: number,
+  textPreview: string,
+  author: IssueUser
+}

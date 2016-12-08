@@ -8,8 +8,8 @@ import wikiRules from './wiki__rules';
 import {decorateIssueLinks, replaceImageNamesWithUrls, decorateUserNames} from './wiki__raw-text-decorator';
 
 type Props = {
-  style: any,
-  children: any,
+  style?: any,
+  children?: ReactElement<any>,
   attachments: Array<Object>,
   onIssueIdTap: (issueId: string) => any
 };
@@ -53,7 +53,11 @@ export default class Wiki extends Component {
   }
 
   render() {
-    const child = Array.isArray(this.props.children) ? this.props.children.join('') : this.props.children;
+    const {children} = this.props;
+    if (!children) {
+      return null;
+    }
+    const child = Array.isArray(children) ? children.join('') : children.toString();
 
     const tree = this.parse(child);
 

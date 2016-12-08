@@ -1,3 +1,4 @@
+/* @flow */
 import styles from './comment.styles';
 import Wiki, {decorateRawText} from '../../components/wiki/wiki';
 import {COLOR_LIGHT_GRAY, COLOR_FONT_GRAY, COLOR_PINK} from '../../components/variables/variables';
@@ -9,7 +10,17 @@ import SwipeButton from './comment__swipe-button';
 import {relativeDate} from '../issue-formatter/issue-formatter';
 import {reply, share} from '../icon/icon';
 
+type Props = {
+  comment: IssueComment,
+  attachments: Array<Attachment>,
+  onReply: () => any,
+  onCopyCommentLink: () => any,
+  onIssueIdTap: (issueId: string) => any
+};
+
 export default class Comment extends React.Component {
+  props: Props;
+
   static defaultProps = {
     onReply: () => {
     },

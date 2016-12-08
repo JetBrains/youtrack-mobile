@@ -26,7 +26,8 @@ declare type IssueFull = {
   updater: IssueUser,
   fields: Array<CustomField>,
   tags: Array<Tag>,
-  //To continue
+  attachments: Array<Attachment>,
+  comments: Array<IssueComment>,
   fieldHash: any
 };
 

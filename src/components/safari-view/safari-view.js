@@ -1,3 +1,4 @@
+/* @flow */
 import {NativeModules} from 'react-native';
 
 const YTSafariViewController = NativeModules.YTSafariViewController;
@@ -6,8 +7,12 @@ const YTSafariViewController = NativeModules.YTSafariViewController;
  * High-level docs for the SafariViewManager iOS API can be written here.
  */
 
+type Options = {
+  url: string
+}
+
 export default {
-  show(options) {
+  show(options: Options) {
     return new Promise((resolve, reject) => {
       YTSafariViewController.presentSafari(options.url);
     });
