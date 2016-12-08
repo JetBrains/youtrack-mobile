@@ -115,3 +115,21 @@ declare type IssueComment = {
   textPreview: string,
   author: IssueUser
 }
+
+declare type IssueLinkType = {
+  uid: number,
+  name: string,
+  localizedName: ?string,
+  sourceToTarget: string,
+  localizedSourceToTarget: ?string,
+  targetToSource: string,
+  localizedTargetToSource: ?string
+}
+
+declare type IssueLink = {
+  $type: string,
+  id: string,
+  direction: 'string',
+  linkType: IssueLinkType,
+  trimmedIssues: Array<IssueOnList>
+}

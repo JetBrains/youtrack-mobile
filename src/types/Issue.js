@@ -28,6 +28,7 @@ declare type IssueFull = {
   tags: Array<Tag>,
   attachments: Array<Attachment>,
   comments: Array<IssueComment>,
+  links: Array<IssueLink>,
   fieldHash: any
 };
 
