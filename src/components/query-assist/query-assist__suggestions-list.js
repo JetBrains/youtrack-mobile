@@ -1,11 +1,31 @@
+/* @flow */
 import {ListView, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import ListViewDataSource from 'react-native/Libraries/CustomComponents/ListView/ListViewDataSource';
 import React from 'react';
 import {UNIT} from '../variables/variables';
 import InvertibleScrollView from 'react-native-invertible-scroll-view';
+import type {ServersideSuggestion, TransformedSuggestion} from './query-assist__suggestion';
 
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
+type State = {
+  dataSource: ListViewDataSource
+};
+
+type Props = {
+  style?: any,
+  query: string,
+  caret: number,
+  getSuggestions: (query: string, caret: number) => Promise<Array<ServersideSuggestion>>,
+  onApplySuggestion: (newQuery: string) => any
+};
+
 export default class QueryAssistSuggestionsList extends React.Component {
+  props: Props;
+  state: State;
+  storedPromise: ?Promise<Array<TransformedSuggestion>>;
+  isUnmounted: boolean;
+
   constructor() {
     super();
     this.state = {dataSource: ds.cloneWithRows([])};
@@ -13,15 +33,15 @@ export default class QueryAssistSuggestionsList extends React.Component {
     this.storedPromise = null;
   }
 
-  loadSuggestions(query, caret) {
+  loadSuggestions(query: string, caret: number) {
     const promise = this.props.getSuggestions(query, caret)
-      .then((suggestions) => {
+      .then((suggestions: Array<ServersideSuggestion>) => {
         if (promise !== this.storedPromise || this.isUnmounted) {
           return;
         }
 
-        suggestions = transformSuggestions(suggestions);
-        this.setState({dataSource: ds.cloneWithRows(suggestions)});
+        const transformed = transformSuggestions(suggestions);
+        this.setState({dataSource: ds.cloneWithRows(transformed)});
       });
 
     this.storedPromise = promise;
@@ -36,13 +56,13 @@ export default class QueryAssistSuggestionsList extends React.Component {
     this.isUnmounted = true;
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps(newProps: Props) {
     if (this.props.query !== newProps.query || this.props.caret !== newProps.caret) {
       this.loadSuggestions(newProps.query, newProps.caret);
     }
   }
 
-  onApplySuggestion(suggestion) {
+  onApplySuggestion(suggestion: TransformedSuggestion) {
     const suggestionText = `${suggestion.prefix}${suggestion.option}${suggestion.suffix}`;
     const oldQuery = this.props.query || '';
     const newQuery = oldQuery.substring(0, suggestion.completionStart) + suggestionText + oldQuery.substring(suggestion.completionEnd);
@@ -84,20 +104,18 @@ const styles = StyleSheet.create({
   }
 });
 
-function transformSuggestions(suggest) {
-  const result = [];
-  for (let i = 0, length = suggest.length; i < length; i++) {
-    result.push({
-      prefix: suggest[i].pre || '',
-      option: suggest[i].o || '',
-      suffix: suggest[i].suf || '',
-      description: suggest[i].hd || suggest[i].d || '',
-      matchingStart: suggest[i].ms,
-      matchingEnd: suggest[i].me,
-      caret: suggest[i].cp,
-      completionStart: suggest[i].cs,
-      completionEnd: suggest[i].ce
-    });
-  }
-  return result;
+function transformSuggestions(suggestions: Array<ServersideSuggestion>): Array<TransformedSuggestion> {
+  return suggestions.map((suggestion) => {
+    return {
+      prefix: suggestion.pre || '',
+      option: suggestion.o || '',
+      suffix: suggestion.suf || '',
+      description: suggestion.hd || suggestion.d || '',
+      matchingStart: suggestion.ms,
+      matchingEnd: suggestion.me,
+      caret: suggestion.cp,
+      completionStart: suggestion.cs,
+      completionEnd: suggestion.ce
+    };
+  });
 }

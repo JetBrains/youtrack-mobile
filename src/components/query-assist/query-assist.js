@@ -1,20 +1,42 @@
+/* @flow */
 import {View, Text, TouchableOpacity, TextInput} from 'react-native';
 import React from 'react';
 import styles from './query-assist.styles';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
+import type {ServersideSuggestion} from './query-assist__suggestion';
 import {COLOR_PINK, COLOR_FONT_GRAY} from '../../components/variables/variables';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import PubSub from 'pubsub-js';
 
+type Props = {
+  dataSource: (query: string, caret: number) => Promise<Array<ServersideSuggestion>>,
+  onQueryUpdate: (query: string) => any,
+  initialQuery: string
+};
+
+type State = {
+  displayCancelSearch: boolean,
+  showQueryAssist: boolean,
+  input: string,
+  caret: number,
+  queryCopy: string,
+  suggestionsListTop: number
+}
+
 export default class QueryAssist extends React.Component {
+  state: State;
+  props: Props;
+  pubSubToken: string;
+
   constructor() {
     super();
     this.state = {
       displayCancelSearch: false,
       showQueryAssist: false,
-      queryAssistStyle: {},
       input: '',
-      caret: ''
+      caret: 0,
+      queryCopy: '',
+      suggestionsListTop: 0
     };
 
     this.pubSubToken = PubSub.subscribe('YTM_ORIENTATION_CHANGE',  () => this.measureSuggestionsListSpace(0, false));
@@ -24,7 +46,7 @@ export default class QueryAssist extends React.Component {
     PubSub.unsubscribe(this.pubSubToken);
   }
 
-  getSuggestions(...args) {
+  getSuggestions(...args: Array<any>) {
     return this.props.dataSource(...args);
   }
 
@@ -58,7 +80,7 @@ export default class QueryAssist extends React.Component {
     this.props.onQueryUpdate(this.state.input || '');
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps(newProps: Props) {
     if (newProps.initialQuery !== this.props.initialQuery) {
       this.setState({input: newProps.initialQuery});
     }
@@ -68,7 +90,7 @@ export default class QueryAssist extends React.Component {
     this.measureSuggestionsListSpace();
   }
 
-  measureSuggestionsListSpace(timeout = 0, recheck = true) {
+  measureSuggestionsListSpace(timeout: number = 0, recheck: boolean = true) {
     setTimeout(() => {
       this.refs.queryAssistContainer.measure((ox, oy, width, height, px, assistPositionY) => {
         this.setState({suggestionsListTop: -assistPositionY});
