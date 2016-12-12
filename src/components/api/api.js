@@ -48,12 +48,12 @@ class Api {
       });
     };
 
-    const res = await sendRequest();
+    let res = await sendRequest();
 
     if (res.status === STATUS_UNAUTHORIZED) {
       log.info('Looks like the token is expired, will try to refresh', res);
       await this.auth.refreshToken();
-      await sendRequest();
+      res = await sendRequest();
     }
 
     if (res.status < STATUS_OK_IF_MORE_THAN || res.status >= STATUS_BAD_IF_MORE_THATN) {
