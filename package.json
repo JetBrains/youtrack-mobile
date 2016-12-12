@@ -18,6 +18,7 @@
     "ios-clean": "xcodebuild clean -project ios/YouTrackMobile.xcodeproj -configuration Release -alltargets",
     "ios-archive": "rm -rf ios/build/YouTrackMobile[Release].xcarchive && xcodebuild archive -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile[Release] -archivePath ios/build/YouTrackMobile[Release].xcarchive",
     "ios-archive-no-sign": "npm run ios-archive -- CODE_SIGN_IDENTITY='' CODE_SIGNING_REQUIRED=NO",
+    "postios-archive-no-sign": "cp ios/build/YouTrackMobile[Release].xcarchive/Products/Applications/YouTrackMobile.app/YouTrackMobile.entitlements ios/build/YouTrackMobile[Release].xcarchive/Products/Applications/YouTrackMobile.app/archived-expanded-entitlements.xcent",
     "ios-export-ipa": "rm -rf ios/build/YouTrackMobile.ipa && xcodebuild -exportArchive -archivePath ios/build/YouTrackMobile[Release].xcarchive -exportPath ios/build -exportOptionsPlist tools/export.plist",
     "ios-download-archive": "bash ./tools/download-latest-built-archive.sh",
     "ios-release": "npm run ios-download-archive && npm run ios-export-ipa",
