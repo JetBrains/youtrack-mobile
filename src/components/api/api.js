@@ -3,6 +3,7 @@ import qs from 'qs';
 import fields from './api__fields';
 import Auth from '../auth/auth';
 import log from '../log/log';
+import {handleEmbeddedHubUrl} from '../config/config';
 
 class Api {
   auth: Auth;
@@ -70,11 +71,18 @@ class Api {
       .then(issues => issues[0]);
   }
 
-  getIssue(id: string) {
+  async getIssue(id: string) {
     const queryString = qs.stringify({
       fields: fields.singleIssue.toString()
     });
-    return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${id}?${queryString}`);
+
+    const issue = await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${id}?${queryString}`);
+
+    issue.comments.forEach(comment => {
+      comment.author.avatarUrl = handleEmbeddedHubUrl(comment.author.avatarUrl, this.config.backendUrl);
+    });
+
+    return issue;
   }
 
   getIssues(query: string = '', $top: number, $skip: number = 0) {

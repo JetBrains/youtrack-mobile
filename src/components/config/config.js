@@ -132,4 +132,4 @@ async function loadConfig(ytUrl: string) {
     });
 }
 
-export {loadConfig, getStoredConfig, formatYouTrackURL, VERSION_DETECT_FALLBACK_URL};
+export {loadConfig, getStoredConfig, formatYouTrackURL, handleEmbeddedHubUrl, VERSION_DETECT_FALLBACK_URL};
