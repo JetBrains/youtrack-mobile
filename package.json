@@ -36,7 +36,7 @@
     "pubsub-js": "1.5.4",
     "qs": "6.1.0",
     "react": "15.4.1",
-    "react-native": "0.39.1",
+    "react-native": "0.39.2",
     "react-native-calendar-picker": "huston007/CalendarPicker#83eea4463964d86d5b42d533c76b2ba829a665fb",
     "react-native-device-info": "0.9.5",
     "react-native-drawer": "2.3.0",
