@@ -27,7 +27,6 @@ export default StyleSheet.create({
     paddingTop: 2
   },
   issueTopText: {
-    flex: 1,
     fontSize: 14,
     color: COLOR_FONT_GRAY,
   },
