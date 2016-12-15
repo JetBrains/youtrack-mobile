@@ -24,6 +24,18 @@ function getForText(assignee: IssueUser | Array<IssueUser>) {
   return '    Unassigned';
 }
 
+/**
+ * fromNow does not format date if it is not past. But such situation could happen if there are a little time shift on server/client.
+ */
+function makeDatePast(date: Date|number) {
+  const dateObj = new Date(date);
+  if (dateObj.getTime() >= Date.now()) {
+    return Date.now();
+  }
+
+  return date;
+}
+
 function formatDate(date: Date|number) {
   const dateObj = new Date(date);
   return `${dateObj.toLocaleString([], {year: '2-digit', month: 'short', day: '2-digit', hour: '2-digit', minute:'2-digit'})}`;
@@ -34,11 +46,13 @@ function getPostfix(formattedDate: string) {
 }
 
 function relativeDate(date: Date|number) {
+  date = makeDatePast(date);
   const formatted = fromNow(date, {now: 'just now'});
   return `${formatted}${getPostfix(formatted)}`;
 }
 
 function shortRelativeDate(date: Date|number) {
+  date = makeDatePast(date);
   const formatted = fromNow(date, shortRelativeFormat);
   return `${formatted}${getPostfix(formatted)}`;
 }
