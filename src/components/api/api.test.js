@@ -36,7 +36,7 @@ describe('API', () => {
   });
 
   it('should make request', async () => {
-    fetchMock.get('*', {foo: 'bar'});
+    fetchMock.get(serverUrl, {foo: 'bar'});
     const res = await createInstance().makeAuthorizedRequest(serverUrl);
     res.foo.should.equal('bar');
   });
@@ -60,5 +60,55 @@ describe('API', () => {
     res.foo.should.equal('bar');
     fakeAuth.refreshToken.should.have.been.called;
     callSpy.should.have.been.called.twice;
+  });
+
+  it('should load issue', async () => {
+    fetchMock.mock(`^${serverUrl}/api/issues/test-id`, {id: 'issue-id', comments: [{author: {avatarUrl: 'http://foo.bar'}}]});
+    const res = await createInstance().getIssue('test-id');
+
+    res.id.should.equal('issue-id');
+  });
+
+  it('should handle relative avatar url in comments on loading issue', async () => {
+    const relativeUrl = '/hub/users/123';
+    fetchMock.mock(`^${serverUrl}/api/issues/test-id`, {
+      comments: [
+        {
+          id: 'foo', author: {
+            avatarUrl: relativeUrl
+          }
+        }
+      ]
+    });
+
+    const res = await createInstance().getIssue('test-id');
+
+    res.comments[0].author.avatarUrl.should.equal(`${serverUrl}${relativeUrl}`);
+  });
+
+  it('should post comment', async () => {
+    fetchMock.post(`^${serverUrl}/api/issues/test-issue-id/comments`, {
+      id: 'test-comment',
+      author: {
+        avatarUrl: 'http://foo.bar'
+      }
+    });
+    const res = await createInstance().addComment('test-issue-id', 'test comment text');
+
+    res.id.should.equal('test-comment');
+  });
+
+  it('should fix relative URL of author avatar after positng comment', async () => {
+    const relativeUrl = '/hub/users/123';
+
+    fetchMock.post(`^${serverUrl}/api/issues/test-issue-id/comments`, {
+      id: 'test-comment',
+      author: {
+        avatarUrl: relativeUrl
+      }
+    });
+    const res = await createInstance().addComment('test-issue-id', 'test comment text');
+
+    res.author.avatarUrl.should.equal(`${serverUrl}${relativeUrl}`);
   });
 });
