@@ -130,7 +130,10 @@ class Api {
     const queryString = qs.stringify({fields: fields.issueComment.toString()});
     const url = `${this.youTrackIssueUrl}/${issueId}/comments?${queryString}`;
 
-    return await this.makeAuthorizedRequest(url, 'POST', {text: comment});
+    const createdComment =  await this.makeAuthorizedRequest(url, 'POST', {text: comment});
+    createdComment.author.avatarUrl = handleEmbeddedHubUrl(createdComment.author.avatarUrl, this.config.backendUrl);
+
+    return createdComment;
   }
 
   async getUserFromHub(id: string) {
