@@ -56,6 +56,7 @@ export default class MultilineInput extends React.Component {
     return <TextInput {...rest}
                       multiline={true}
                       onChange={(e) => this.onSizeChange(e)}
+                      onContentSizeChange={(e) => this.onSizeChange(e)}
                       style={[{fontSize: DEFAULT_FONT_SIZE}, style, {height: this.state.inputHeight}]}/>;
   }
 }
