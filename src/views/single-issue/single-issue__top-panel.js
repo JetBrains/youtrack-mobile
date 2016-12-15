@@ -53,10 +53,12 @@ export default class TopPanel extends React.Component {
       <View style={styles.issueTopMessage}>
 
         <View>
-          <View style={{flex: 1, flexDirection: 'row'}}>
-            <Text style={styles.issueTopText} selectable={true} numberOfLines={1}>
-              Created by {this._getUserName(issue.reporter)} {shortRelativeDate(issue.created)}
-            </Text>
+          <View style={{flexDirection: 'row'}}>
+            <View style={{flex: 1}}>
+              <Text style={styles.issueTopText} selectable={true} numberOfLines={1}>
+                Created by {this._getUserName(issue.reporter)} {shortRelativeDate(issue.created)}
+              </Text>
+            </View>
             {!this.state.showAdditionalDate &&
             <TouchableOpacity onPress={() => this.setState({showAdditionalDate: true})} hitSlop={moreButtonHitSlop}>
               <Text style={styles.showMoreDateButton}>more</Text>

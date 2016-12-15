@@ -88,20 +88,28 @@ export default class SingeIssueView extends React.Component {
       .catch((err) => notifyError('Failed to load issue', err));
   }
 
-  addComment(issue, comment) {
+  async addComment(issue, comment) {
+    try {
+      const createdComment = await this.props.api.addComment(issue.id, comment);
 
-    return this.props.api.addComment(issue.id, comment)
-      .then((createdComment) => {
-        log.info('Comment created', createdComment);
-        usage.trackEvent(CATEGORY_NAME, 'Add comment', 'Success');
+      log.info('Comment created', createdComment);
+      usage.trackEvent(CATEGORY_NAME, 'Add comment', 'Success');
 
-        this.state.issue.comments.push(createdComment);
-
-        this.setState({addCommentMode: false, commentText: ''});
-
-        return this.loadIssue(this.state.issue.id);
-      })
-      .catch(err => notifyError('Cannot post comment', err));
+      this.setState({
+        addCommentMode: false,
+        commentText: '',
+        issue: {
+          ...this.state.issue,
+          comments: [
+            ...this.state.issue.comments,
+            createdComment
+          ]
+        }
+      });
+      return await this.loadIssue(this.state.issue.id);
+    } catch (err) {
+      notifyError('Cannot post comment', err);
+    }
   }
 
   attachPhoto() {
@@ -407,8 +415,8 @@ export default class SingeIssueView extends React.Component {
         {this._renderHeader()}
 
         {this.state.issue && <ScrollView refreshControl={this._renderRefreshControl()}
-                                         keyboardShouldPersistTaps={true}
-                                         keyboardDismissMode="on-drag">
+                                         keyboardDismissMode="interactive"
+                                         keyboardShouldPersistTaps={true}>
           {this._renderIssueView(this.state.issue)}
 
           {!this.state.fullyLoaded && <View><Text style={styles.loading}>Loading...</Text></View>}
@@ -427,6 +435,8 @@ export default class SingeIssueView extends React.Component {
               onCopyCommentLink={(comment) => this.copyCommentUrl(comment)}
               onIssueIdTap={issueId => this.goToIssueById(issueId)}/>
           </View>}
+
+          {Platform.OS == 'ios' && <KeyboardSpacer/>}
         </ScrollView>}
 
         {this.state.addCommentMode && <View>

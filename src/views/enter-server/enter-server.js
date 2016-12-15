@@ -55,6 +55,9 @@ export default class EnterServer extends Component {
   }
 
   async onApplyServerUrlChange() {
+    if (!this.isValidInput()) {
+      return;
+    }
     this.setState({connecting: true});
     const trimmedUrl = this.state.serverUrl.trim().replace(/\/$/i, '');
 
@@ -115,11 +118,11 @@ export default class EnterServer extends Component {
 
         <View>
           <TextInput
+            testID="server-url"
             autoCapitalize="none"
             autoFocus={true}
             selectTextOnFocus={true}
             autoCorrect={false}
-            editable={!isDisabled}
             style={styles.input}
             placeholder="youtrack-example.com"
             returnKeyType="done"

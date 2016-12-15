@@ -1,0 +1,114 @@
+import Api from './api';
+import fetchMock from 'fetch-mock';
+import sinon from 'sinon';
+
+describe('API', () => {
+  const serverUrl = 'http://foo.bar';
+
+  let fakeAuth;
+  const createInstance = (auth = fakeAuth) => new Api(auth);
+
+  beforeEach(() => {
+    fakeAuth = {
+      refreshToken: sinon.spy(),
+      authParams: {
+        token_type: 'token type',
+        access_token: 'fake token'
+      },
+      config: {
+        backendUrl: serverUrl
+      }
+    };
+  });
+
+  afterEach(() => fetchMock.restore());
+
+  it('should create instance', () => {
+    createInstance().should.be.defined;
+  });
+
+  it('should store config', () => {
+    createInstance().config.should.equal(fakeAuth.config);
+  });
+
+  it('should construct issue URL', () => {
+    createInstance().youTrackIssueUrl.should.equal('http://foo.bar/api/issues');
+  });
+
+  it('should make request', async () => {
+    fetchMock.get(serverUrl, {foo: 'bar'});
+    const res = await createInstance().makeAuthorizedRequest(serverUrl);
+    res.foo.should.equal('bar');
+  });
+
+  it('should refresh token and make request again if outdated', async () => {
+    const callSpy = sinon.spy();
+
+    let isFirst = true;
+    fetchMock.mock(serverUrl, (...args) => {
+      callSpy(...args);
+
+      if (isFirst) {
+        isFirst = false;
+        return 401;
+      }
+      return {foo: 'bar'};
+    });
+
+    const res = await createInstance().makeAuthorizedRequest(serverUrl);
+
+    res.foo.should.equal('bar');
+    fakeAuth.refreshToken.should.have.been.called;
+    callSpy.should.have.been.called.twice;
+  });
+
+  it('should load issue', async () => {
+    fetchMock.mock(`^${serverUrl}/api/issues/test-id`, {id: 'issue-id', comments: [{author: {avatarUrl: 'http://foo.bar'}}]});
+    const res = await createInstance().getIssue('test-id');
+
+    res.id.should.equal('issue-id');
+  });
+
+  it('should handle relative avatar url in comments on loading issue', async () => {
+    const relativeUrl = '/hub/users/123';
+    fetchMock.mock(`^${serverUrl}/api/issues/test-id`, {
+      comments: [
+        {
+          id: 'foo', author: {
+            avatarUrl: relativeUrl
+          }
+        }
+      ]
+    });
+
+    const res = await createInstance().getIssue('test-id');
+
+    res.comments[0].author.avatarUrl.should.equal(`${serverUrl}${relativeUrl}`);
+  });
+
+  it('should post comment', async () => {
+    fetchMock.post(`^${serverUrl}/api/issues/test-issue-id/comments`, {
+      id: 'test-comment',
+      author: {
+        avatarUrl: 'http://foo.bar'
+      }
+    });
+    const res = await createInstance().addComment('test-issue-id', 'test comment text');
+
+    res.id.should.equal('test-comment');
+  });
+
+  it('should fix relative URL of author avatar after positng comment', async () => {
+    const relativeUrl = '/hub/users/123';
+
+    fetchMock.post(`^${serverUrl}/api/issues/test-issue-id/comments`, {
+      id: 'test-comment',
+      author: {
+        avatarUrl: relativeUrl
+      }
+    });
+    const res = await createInstance().addComment('test-issue-id', 'test comment text');
+
+    res.author.avatarUrl.should.equal(`${serverUrl}${relativeUrl}`);
+  });
+});

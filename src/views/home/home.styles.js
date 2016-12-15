@@ -1,6 +1,8 @@
 import {StyleSheet} from 'react-native';
 import {UNIT, COLOR_FONT_GRAY, COLOR_PINK} from '../../components/variables/variables';
 
+const URL_BUTTON_HEIGHT = 36;
+
 export default StyleSheet.create({
   container: {
     flex: 1,
@@ -21,9 +23,8 @@ export default StyleSheet.create({
     textAlign: 'center'
   },
   urlButton: {
-    position: 'absolute',
-    left: 0,
-    right: 0
+    height: URL_BUTTON_HEIGHT,
+    marginBottom: -URL_BUTTON_HEIGHT
   },
   url: {
     textAlign: 'center',
