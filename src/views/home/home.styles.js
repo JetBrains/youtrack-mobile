@@ -1,7 +1,7 @@
 import {StyleSheet} from 'react-native';
 import {UNIT, COLOR_FONT_GRAY, COLOR_PINK} from '../../components/variables/variables';
 
-const URL_BUTTON_HEIGHT = 20;
+const URL_BUTTON_HEIGHT = 36;
 
 export default StyleSheet.create({
   container: {
