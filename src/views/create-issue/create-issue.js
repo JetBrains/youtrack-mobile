@@ -1,4 +1,4 @@
-import {ScrollView, View, Text, TextInput, TouchableOpacity, Image, AsyncStorage, ActivityIndicator} from 'react-native';
+import {ScrollView, View, Text, TextInput, TouchableOpacity, Image, AsyncStorage, ActivityIndicator, Platform} from 'react-native';
 import React from 'react';
 import flattenStyle from 'react-native/Libraries/StyleSheet/flattenStyle';
 
@@ -13,6 +13,7 @@ import log from '../../components/log/log';
 import {attach, tag, next} from '../../components/icon/icon';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import MultilineInput from '../../components/multiline-input/multiline-input';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 const PROJECT_ID_STORAGE_KEY = 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE';
 const DRAFT_ID_STORAGE_KEY = 'DRAFT_ID_STORAGE_KEY';
@@ -218,7 +219,7 @@ export default class CreateIssue extends React.Component {
 
     return (
       <View style={styles.container}>
-        <ScrollView keyboardShouldPersistTaps={true} keyboardDismissMode="on-drag">
+        <ScrollView keyboardShouldPersistTaps={true} keyboardDismissMode="interactive">
           <Header leftButton={<Text>Cancel</Text>}
                   onBack={() => {
                     this.updateIssueDraft();
@@ -292,6 +293,8 @@ export default class CreateIssue extends React.Component {
                 <Image style={styles.arrowImage} source={next}></Image>
               </View>
             </View>}
+
+            {Platform.OS == 'ios' && <KeyboardSpacer/>}
           </View>
         </ScrollView>
 

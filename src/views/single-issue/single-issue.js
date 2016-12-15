@@ -407,8 +407,8 @@ export default class SingeIssueView extends React.Component {
         {this._renderHeader()}
 
         {this.state.issue && <ScrollView refreshControl={this._renderRefreshControl()}
-                                         keyboardShouldPersistTaps={true}
-                                         keyboardDismissMode="on-drag">
+                                         keyboardDismissMode="interactive"
+                                         keyboardShouldPersistTaps={true}>
           {this._renderIssueView(this.state.issue)}
 
           {!this.state.fullyLoaded && <View><Text style={styles.loading}>Loading...</Text></View>}
@@ -427,6 +427,8 @@ export default class SingeIssueView extends React.Component {
               onCopyCommentLink={(comment) => this.copyCommentUrl(comment)}
               onIssueIdTap={issueId => this.goToIssueById(issueId)}/>
           </View>}
+
+          {Platform.OS == 'ios' && <KeyboardSpacer/>}
         </ScrollView>}
 
         {this.state.addCommentMode && <View>
