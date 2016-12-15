@@ -2,7 +2,7 @@
 import fromNow from 'from-now';
 
 const shortRelativeFormat = {
-  'now': 'now',
+  'now': 'just now',
   'seconds': ['sec', 'sec'],
   'minutes': ['min', 'min'],
   'hours': ['hr', 'hr'],
@@ -29,12 +29,18 @@ function formatDate(date: Date|number) {
   return `${dateObj.toLocaleString([], {year: '2-digit', month: 'short', day: '2-digit', hour: '2-digit', minute:'2-digit'})}`;
 }
 
+function getPostfix(formattedDate: string) {
+  return formattedDate === 'just now' ? '' : ' ago';
+}
+
 function relativeDate(date: Date|number) {
-  return `${fromNow(date)} ago`;
+  const formatted = fromNow(date, {now: 'just now'});
+  return `${formatted}${getPostfix(formatted)}`;
 }
 
 function shortRelativeDate(date: Date|number) {
-  return `${fromNow(date, shortRelativeFormat)} ago`;
+  const formatted = fromNow(date, shortRelativeFormat);
+  return `${formatted}${getPostfix(formatted)}`;
 }
 
 export {getForText, formatDate, relativeDate, shortRelativeDate};
