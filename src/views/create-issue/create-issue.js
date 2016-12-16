@@ -50,6 +50,7 @@ export default class CreateIssue extends React.Component {
       }
     };
 
+    this.descriptionInput = null;
     usage.trackScreenView('Create issue');
 
     this.initializeWithDraftOrProject();
@@ -239,7 +240,7 @@ export default class CreateIssue extends React.Component {
                 returnKeyType="next"
                 autoCapitalize="sentences"
                 value={this.state.issue.summary}
-                onSubmitEditing={() => this.refs.description.focus()}
+                onSubmitEditing={() => this.descriptionInput.focus()}
                 onChangeText={(summary) => {
                   this.state.issue.summary = summary;
                   this.forceUpdate();
@@ -248,7 +249,7 @@ export default class CreateIssue extends React.Component {
             <View style={styles.separator}/>
             <View>
               <MultilineInput
-                ref="description"
+                ref={instance => this.descriptionInput = instance}
                 maxInputHeight={0}
                 editable={!this.state.processing}
                 autoCapitalize="sentences"
