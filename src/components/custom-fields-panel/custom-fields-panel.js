@@ -182,11 +182,13 @@ export default class CustomFieldsPanel extends Component {
       value => parseInt(value) :
       value => ({presentation: value});
 
+    const value = field.value ? (field.value.presentation || field.value.toString()) : null;
+
     return this.setState({
       simpleValue: {
         show: true,
-        placeholder: placeholder,
-        value: field.value ? field.value.presentation : null,
+        placeholder,
+        value,
         onApply: (value) => this.saveUpdatedField(field, valueFormatter(value))
       }
     });
