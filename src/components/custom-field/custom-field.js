@@ -1,7 +1,6 @@
 import {TouchableOpacity, View, Text} from 'react-native';
 import React, {PropTypes, Component} from 'react';
 import styles from './custom-field.styles';
-import NumberPolifyll from 'core-js/es6/number';
 
 export default class CustomField extends Component {
   static propTypes = {
@@ -11,13 +10,24 @@ export default class CustomField extends Component {
     active: PropTypes.bool
   }
 
-  _getValue(value) {
+  _getFieldType(field: CustomField) {
+    if (!field.projectCustomField.field.fieldType) {
+      return null;
+    }
+
+    return field.projectCustomField.field.fieldType.valueType;
+  }
+
+  _getValue(value, fieldType) {
     const field = this.props.field;
     const emptyValue = field.projectCustomField.emptyFieldText;
 
     if (value) {
-      if (NumberPolifyll.isInteger(value)) {
+      if (fieldType === 'date') {
         return new Date(value).toLocaleDateString();
+      }
+      if (fieldType === 'integer') {
+        return value;
       }
       return value.name || value.fullName || value.login || value.presentation;
     }
@@ -41,7 +51,7 @@ export default class CustomField extends Component {
     };
   }
 
-  _renderValue(value) {
+  _renderValue(value, fieldType: string) {
     if (Array.isArray(value)) {
       if (!value.length) {
         return this._renderValue(null);
@@ -49,22 +59,23 @@ export default class CustomField extends Component {
       return value.map((val, ind) => {
         return [
           <Text key={val.id} style={[styles.valueText, this.getValueStyle(val)]}
-                testID="value">{this._getValue(val)}</Text>,
+                testID="value">{this._getValue(val, fieldType)}</Text>,
           ind === value.length - 1 ? <Text> </Text> : <Text>, </Text>
         ];
       });
     }
 
-    return <Text style={[styles.valueText, this.getValueStyle(value)]} testID="value">{this._getValue(value)}</Text>;
+    return <Text style={[styles.valueText, this.getValueStyle(value)]} testID="value">{this._getValue(value, fieldType)}</Text>;
   }
 
   render() {
+    const {field} = this.props;
     return (
       <TouchableOpacity
         style={[styles.wrapper, this.props.active ? styles.wrapperActive : null]}
         onPress={this.props.onPress}
         disabled={this.props.disabled}>
-        <View style={styles.valuesWrapper}>{this._renderValue(this.props.field.value)}</View>
+        <View style={styles.valuesWrapper}>{this._renderValue(field.value, this._getFieldType(field))}</View>
         <Text style={[styles.keyText, this.props.disabled ? styles.valueTextDisabled : null]} testID="name">{this._getKey()}</Text>
       </TouchableOpacity>
     );
