@@ -27,7 +27,6 @@ export default StyleSheet.create({
     color: COLOR_PINK
   },
   simpleValueInput: {
-    flex: 1,
     height: UNIT * 4,
     borderRadius: 6,
     borderWidth: 1,
