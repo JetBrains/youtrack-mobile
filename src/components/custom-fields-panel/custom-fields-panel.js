@@ -255,7 +255,6 @@ export default class CustomFieldsPanel extends Component {
         }}
       height={this.state.topCoord}
       title="Select item"
-      api={this.props.api}
       onCancel={() => this.closeEditor()}
       getTitle={(item) => item.fullName || item.name || item.login}
     />;
