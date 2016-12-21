@@ -6,7 +6,6 @@ import issueStyles from '../single-issue/single-issue.styles';
 import Header from '../../components/header/header';
 import {notifyError, resolveError} from '../../components/notification/notification';
 import usage from '../../components/usage/usage';
-import ImagePicker from 'react-native-image-picker';
 import Router from '../../components/router/router';
 import log from '../../components/log/log';
 import {attach, tag, next} from '../../components/icon/icon';
@@ -14,18 +13,11 @@ import CustomFieldsPanel from '../../components/custom-fields-panel/custom-field
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import CreateIssueForm from './create-issue__form';
+import attachFile from '../../components/attach-file/attach-file';
 
 const PROJECT_ID_STORAGE_KEY = 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE';
 const DRAFT_ID_STORAGE_KEY = 'DRAFT_ID_STORAGE_KEY';
-const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
 const CATEGORY_NAME = 'Create issue view';
-
-type Attachment = {
-  data: string,
-  uri: string,
-  path: ?string,
-  isVertical: boolean,
-}
 
 const notSelectedProject = {
   id: null,
@@ -127,46 +119,35 @@ export default class CreateIssue extends React.Component {
     }
   }
 
-  attachPhoto(takeFromLibrary = true) {
-    const method = takeFromLibrary ? 'launchImageLibrary' : 'launchCamera';
-
-    ImagePicker[method]({}, (res: Attachment) => {
-      if (res.didCancel) {
-        return;
-      }
-      if (res.error) {
-        return notifyError('ImagePicker Error: ', res.error);
-      }
-
-      const filePath = res.path || res.uri;
-      const fileName = filePath.match(FILE_NAME_REGEXP)[0];
-      const fileUri = res.uri;
-
-      const normalizedAttach = {
-        url: fileUri,
-        name: fileName
-      };
+  async attachPhoto(takeFromLibrary = true) {
+    try {
+      const attachingImage = await attachFile(takeFromLibrary ? 'launchImageLibrary' : 'launchCamera');
 
       this.setState({
         issue: {
           ...this.state.issue,
-          attachments: [normalizedAttach].concat(this.state.issue.attachments)
-        }
+          attachments: [attachingImage].concat(this.state.issue.attachments)
+        },
+        attachingImage
       });
 
-      this.setState({attachingImage: normalizedAttach});
-      this.props.api.attachFile(this.state.issue.id, fileUri, fileName)
-        .then(() => {
-          usage.trackEvent(CATEGORY_NAME, 'Attach image', 'Success');
-          return this.setState({attachingImage: null});
-        })
-        .catch((err) => {
-          this.state.issue.attachments = this.state.issue.attachments.filter(attach => attach !== normalizedAttach);
-          this.setState({attachingImage: null});
+      try {
+        await this.props.api.attachFile(this.state.issue.id, attachingImage.url, attachingImage.name);
+        usage.trackEvent(CATEGORY_NAME, 'Attach image', 'Success');
 
-          return notifyError('Cannot attach file', err);
+      } catch (err) {
+        notifyError('Cannot attach file', err);
+        this.setState({
+          issue: {
+            ...this.state.issue,
+            attachments: this.state.issue.attachments.filter(attach => attach !== attachingImage)
+          }
         });
-    });
+      }
+      this.setState({attachingImage: null});
+    } catch (err) {
+      notifyError('ImagePicker error', err);
+    }
   }
 
   async onUpdateProject(project) {

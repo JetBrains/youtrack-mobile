@@ -1,7 +1,6 @@
 import {Text, View, Image, TouchableOpacity, ScrollView, TextInput, Clipboard, Platform, RefreshControl} from 'react-native';
 import React, {PropTypes} from 'react';
 
-import ImagePicker from 'react-native-image-picker';
 import ApiHelper from '../../components/api/api__helper';
 import {comment} from '../../components/icon/icon';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
@@ -18,12 +17,12 @@ import {notifyError, notify} from '../../components/notification/notification';
 import SingleIssueCommentInput from './single-issue__comment-input';
 import {COLOR_PINK} from '../../components/variables/variables';
 import usage from '../../components/usage/usage';
+import attachFile from '../../components/attach-file/attach-file';
 import MultilineInput from '../../components/multiline-input/multiline-input';
 import log from '../../components/log/log';
 import styles from './single-issue.styles';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 
-const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
 const CATEGORY_NAME = 'Issue';
 
 export default class SingeIssueView extends React.Component {
@@ -110,45 +109,34 @@ export default class SingeIssueView extends React.Component {
     }
   }
 
-  attachPhoto() {
-    const options = {
-      takePhotoButtonTitle: 'Take photo',
-      chooseFromLibraryButtonTitle: 'Choose from libary'
-    };
-    ImagePicker.showImagePicker(options, (res) => {
-      if (res.didCancel) {
-        return;
-      }
-      if (res.error) {
-        return notifyError('ImagePicker Error: ', res.error);
-      }
-      res.mimeType = 'image';
-      res.url = res.uri;
+  async attachPhoto(takeFromLibrary = true) {
+    try {
+      const attachingImage = await attachFile();
 
       this.setState({
         issue: {
           ...this.state.issue,
-          attachments: [res].concat(this.state.issue.attachments)
-        }
+          attachments: [attachingImage].concat(this.state.issue.attachments)
+        },
+        attachingImage
       });
 
-      const filePath = res.path || res.uri;
-      const fileName = filePath.match(FILE_NAME_REGEXP)[0];
-      const fileUri = res.uri;
-
-      this.setState({attachingImage: res});
-      this.props.api.attachFile(this.state.issue.id, fileUri, fileName)
-        .then(() => {
-          usage.trackEvent(CATEGORY_NAME, 'Attach image', 'Success');
-          return this.setState({attachingImage: null});
-        })
-        .catch((err) => {
-          this.state.issue.attachments = this.state.issue.attachments.filter(attach => attach !== res);
-          this.setState({attachingImage: null});
-
-          return notifyError('Cannot attach file', err);
+      try {
+        await this.props.api.attachFile(this.state.issue.id, attachingImage.url, attachingImage.name);
+        usage.trackEvent(CATEGORY_NAME, 'Attach image', 'Success');
+      } catch (err) {
+        notifyError('Cannot attach file', err);
+        this.setState({
+          issue: {
+            ...this.state.issue,
+            attachments: this.state.issue.attachments.filter(attach => attach !== attachingImage)
+          }
         });
-    });
+      }
+      this.setState({attachingImage: null});
+    } catch (err) {
+      notifyError('ImagePicker error', err);
+    }
   }
 
   onIssueFieldValueUpdate(field, value) {
