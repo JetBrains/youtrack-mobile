@@ -326,9 +326,8 @@ export default class CustomFieldsPanel extends Component {
             autoCorrect={false}
             autoFocus={true}
             autoCapitalize="none"
-            onChangeText={(text) => {
-              this.state.simpleValue.value = text;
-              this.forceUpdate();
+            onChangeText={(value) => {
+              this.setState({simpleValue: {...this.state.simpleValue, value}});
             }}
             onSubmitEditing={() => this.state.simpleValue.onApply(this.state.simpleValue.value)}
             value={this.state.simpleValue.value}/>

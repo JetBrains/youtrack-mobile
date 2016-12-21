@@ -152,9 +152,18 @@ export default class SingeIssueView extends React.Component {
   }
 
   onIssueFieldValueUpdate(field, value) {
-    field.value = value;
-    this.forceUpdate();
     usage.trackEvent(CATEGORY_NAME, 'Update field value');
+    this.setState({
+      issue: {
+        ...this.state.issue,
+        fields: [...this.state.issue.fields].map(f => {
+          if (f === field) {
+            f.value = value;
+          }
+          return f;
+        })
+      }
+    });
 
     const updateMethod = field.hasStateMachine ?
       this.props.api.updateIssueFieldEvent.bind(this.props.api) :
@@ -170,8 +179,9 @@ export default class SingeIssueView extends React.Component {
   }
 
   onUpdateProject(project) {
-    this.state.issue.project = project;
-    this.forceUpdate();
+    this.setState({issue: {
+      ...this.state.issue, project
+    }});
 
     usage.trackEvent(CATEGORY_NAME, 'Update project');
 
