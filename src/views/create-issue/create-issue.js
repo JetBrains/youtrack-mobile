@@ -1,4 +1,4 @@
-import {ScrollView, View, Text, TextInput, TouchableOpacity, Image, AsyncStorage, Platform} from 'react-native';
+import {ScrollView, View, Text, TouchableOpacity, Image, AsyncStorage, Platform} from 'react-native';
 import React from 'react';
 
 import styles from './create-issue.styles';
@@ -11,7 +11,6 @@ import Router from '../../components/router/router';
 import log from '../../components/log/log';
 import {attach, tag, next} from '../../components/icon/icon';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
-import MultilineInput from '../../components/multiline-input/multiline-input';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import CreateIssueForm from './create-issue__form';
