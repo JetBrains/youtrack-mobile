@@ -1,4 +1,4 @@
-import {Text, View, Image, TouchableOpacity, ScrollView, TextInput, Clipboard, Platform, RefreshControl} from 'react-native';
+import {Text, View, Image, TouchableOpacity, ScrollView, Clipboard, Platform, RefreshControl} from 'react-native';
 import React, {PropTypes} from 'react';
 
 import ApiHelper from '../../components/api/api__helper';
@@ -18,7 +18,7 @@ import SingleIssueCommentInput from './single-issue__comment-input';
 import {COLOR_PINK} from '../../components/variables/variables';
 import usage from '../../components/usage/usage';
 import attachFile from '../../components/attach-file/attach-file';
-import MultilineInput from '../../components/multiline-input/multiline-input';
+import IssueSummary from '../../components/issue-summary/issue-summary';
 import log from '../../components/log/log';
 import styles from './single-issue.styles';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
@@ -308,30 +308,13 @@ export default class SingeIssueView extends React.Component {
       <View style={styles.issueViewContainer}>
         <SingleIssueTopPanel issue={issue} onTagPress={query => this.openIssueListWithSearch(query)}/>
 
-        {this.state.editMode && <View>
-          <TextInput
-            style={styles.summaryInput}
-            placeholder="Summary"
-            editable={!this.state.isSavingEditedIssue}
-            autoCapitalize="sentences"
-            autoFocus={true}
-            underlineColorAndroid="transparent"
-            value={this.state.summaryCopy}
-            onSubmitEditing={() => this.refs.description.focus()}
-            onChangeText={text => this.setState({summaryCopy: text})}/>
-          <View style={styles.separator}/>
-          <MultilineInput
-            ref="description"
-            maxInputHeight={0}
-            style={styles.descriptionInput}
-            autoCapitalize="sentences"
-            editable={!this.state.isSavingEditedIssue}
-            value={this.state.descriptionCopy}
-            multiline={true}
-            underlineColorAndroid="transparent"
-            placeholder="Description"
-            onChangeText={text => this.setState({descriptionCopy: text})}/>
-        </View>}
+        {this.state.editMode && <IssueSummary
+              editable={!this.state.isSavingEditedIssue}
+              summary={this.state.summaryCopy}
+              description={this.state.descriptionCopy}
+              onSummaryChange={summaryCopy => this.setState({summaryCopy})}
+              onDescriptionChange={descriptionCopy => this.setState({descriptionCopy})}
+        />}
 
         {!this.state.editMode && <View>
           <Text style={styles.summary}  selectable={true}>{issue.summary}</Text>

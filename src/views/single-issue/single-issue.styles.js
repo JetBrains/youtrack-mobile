@@ -61,21 +61,6 @@ export default StyleSheet.create({
   },
   description: {
   },
-  summaryInput: {
-    marginTop: UNIT,
-    marginBottom: UNIT,
-    color: COLOR_FONT,
-    fontSize: 20,
-    height: UNIT * 5
-  },
-  descriptionInput: {
-    marginTop: UNIT,
-    marginBottom: UNIT,
-    height: UNIT * 10,
-    color: COLOR_FONT,
-    fontSize: 16,
-    textAlignVertical: 'top'
-  },
   commentsListContainer: {
     paddingBottom: UNIT * 6
   },

@@ -12,7 +12,7 @@ import {attach, tag, next} from '../../components/icon/icon';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import CreateIssueForm from './create-issue__form';
+import IssueSummary from '../../components/issue-summary/issue-summary';
 import attachFile from '../../components/attach-file/attach-file';
 
 const PROJECT_ID_STORAGE_KEY = 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE';
@@ -194,9 +194,12 @@ export default class CreateIssue extends React.Component {
             <Text style={issueStyles.headerText}>New Issue</Text>
           </Header>
           <View>
-            <CreateIssueForm
+            <IssueSummary
+              style={styles.issueSummary}
+              showSeparator={true}
               summary={issue.summary}
               description={issue.description}
+              editable={!this.state.processing}
               onSummaryChange={summary => this.setState({issue: {...this.state.issue, summary}})}
               onDescriptionChange={description => this.setState({issue: {...this.state.issue, description}})}
             />
