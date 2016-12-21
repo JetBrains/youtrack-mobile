@@ -14,6 +14,7 @@ import CustomFieldsPanel from '../../components/custom-fields-panel/custom-field
 import MultilineInput from '../../components/multiline-input/multiline-input';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+import CreateIssueForm from './create-issue__form';
 
 const PROJECT_ID_STORAGE_KEY = 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE';
 const DRAFT_ID_STORAGE_KEY = 'DRAFT_ID_STORAGE_KEY';
@@ -195,7 +196,8 @@ export default class CreateIssue extends React.Component {
   }
 
   render() {
-    const canCreateIssue = this.state.issue.summary && this.state.issue.project.id && !this.state.processing && !this.state.attachingImage;
+    const issue = this.state.issue;
+    const canCreateIssue = issue.summary && issue.project.id && !this.state.processing && !this.state.attachingImage;
 
     const createButton = <Text style={canCreateIssue ? null : styles.disabledCreateButton}>Create</Text>;
 
@@ -212,32 +214,13 @@ export default class CreateIssue extends React.Component {
             <Text style={issueStyles.headerText}>New Issue</Text>
           </Header>
           <View>
-            <View>
-              <TextInput
-                style={styles.summaryInput}
-                editable={!this.state.processing}
-                placeholder="Summary"
-                underlineColorAndroid="transparent"
-                returnKeyType="next"
-                autoCapitalize="sentences"
-                value={this.state.issue.summary}
-                onSubmitEditing={() => this.descriptionInput.focus()}
-                onChangeText={summary => this.setState({issue: {...this.state.issue, summary}})}/>
-            </View>
-            <View style={styles.separator}/>
-            <View>
-              <MultilineInput
-                ref={instance => this.descriptionInput = instance}
-                maxInputHeight={0}
-                editable={!this.state.processing}
-                autoCapitalize="sentences"
-                style={styles.descriptionInput}
-                multiline={true}
-                underlineColorAndroid="transparent"
-                placeholder="Description"
-                value={this.state.issue.description}
-                onChangeText={description => this.setState({issue: {...this.state.issue, description}})}/>
-            </View>
+            <CreateIssueForm
+              summary={issue.summary}
+              description={issue.description}
+              onSummaryChange={summary => this.setState({issue: {...this.state.issue, summary}})}
+              onDescriptionChange={description => this.setState({issue: {...this.state.issue, description}})}
+            />
+
             {this.state.issue.project.id && <View style={styles.attachesContainer}>
 
               <AttachmentsRow attachments={this.state.issue.attachments} attachingImage={this.state.attachingImage}/>
