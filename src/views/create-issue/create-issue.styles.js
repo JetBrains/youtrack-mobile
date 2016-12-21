@@ -55,6 +55,7 @@ export default StyleSheet.create({
   attachButtonsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginTop: UNIT,
     marginRight: UNIT
   },
   attachButton: {
