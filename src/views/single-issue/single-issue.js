@@ -1,4 +1,4 @@
-import {Text, View, Image, TouchableOpacity, ScrollView, TextInput, Clipboard, Platform, ActivityIndicator, Linking, RefreshControl} from 'react-native';
+import {Text, View, Image, TouchableOpacity, ScrollView, TextInput, Clipboard, Platform, RefreshControl} from 'react-native';
 import React, {PropTypes} from 'react';
 
 import ImagePicker from 'react-native-image-picker';
@@ -21,12 +21,10 @@ import usage from '../../components/usage/usage';
 import MultilineInput from '../../components/multiline-input/multiline-input';
 import log from '../../components/log/log';
 import styles from './single-issue.styles';
-import flattenStyle from 'react-native/Libraries/StyleSheet/flattenStyle';
+import AttachmentsRow from '../../components/attachments-row/attachments-row';
 
 const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
 const CATEGORY_NAME = 'Issue';
-const imageWidth = flattenStyle(styles.attachmentImage).width * 2;
-const imageHeight = flattenStyle(styles.attachmentImage).height * 2;
 
 export default class SingeIssueView extends React.Component {
   static contextTypes = {
@@ -126,8 +124,13 @@ export default class SingeIssueView extends React.Component {
       }
       res.mimeType = 'image';
       res.url = res.uri;
-      this.state.issue.attachments.push(res);
-      this.forceUpdate();
+
+      this.setState({
+        issue: {
+          ...this.state.issue,
+          attachments: [res].concat(this.state.issue.attachments)
+        }
+      });
 
       const filePath = res.path || res.uri;
       const fileName = filePath.match(FILE_NAME_REGEXP)[0];
@@ -258,15 +261,6 @@ export default class SingeIssueView extends React.Component {
       .catch(err => {});
   }
 
-  openAttachmentUrl(name, url) {
-    usage.trackEvent(CATEGORY_NAME, 'Open attachment by URL');
-    if (Platform.OS === 'ios') {
-      Router.AttachmentPreview({url, name});
-    } else {
-      Linking.openURL(url);
-    }
-  }
-
   copyCommentUrl(comment) {
     Clipboard.setString(this._makeIssueWebUrl(this.state.issue, comment.id));
     notify('Comment URL has been copied');
@@ -309,42 +303,6 @@ export default class SingeIssueView extends React.Component {
       </Header>;
 
     }
-  }
-
-  _showImageAttachment(attachment, allAttachments) {
-    const allImagesUrls = allAttachments
-      .filter(attach => attach.mimeType.includes('image'))
-      .map(image => image.url);
-    return Router.ShowImage({currentImage: attachment.url, allImagesUrls});
-  }
-
-  _renderAttachments(attachments) {
-    if (!attachments) {
-      return;
-    }
-
-    return <ScrollView style={styles.attachesContainer} horizontal={true}>
-      {(attachments || [])
-        .map((attach) => {
-          const isImage = attach.mimeType.includes('image');
-
-          const url = attach.id ? `${attach.url}&w=${imageWidth}&h=${imageHeight}` : attach.url;
-
-          if (isImage) {
-            return <TouchableOpacity onPress={() => this._showImageAttachment(attach, attachments)}
-                                     key={attach.id || attach.url}>
-              <Image style={styles.attachmentImage}
-                     capInsets={{left: 15, right: 15, bottom: 15, top: 15}}
-                     source={{uri: url}}/>
-              {this.state.attachingImage === attach && <ActivityIndicator size="large" style={styles.imageActivityIndicator}/>}
-            </TouchableOpacity>;
-          }
-
-          return <TouchableOpacity onPress={() => this.openAttachmentUrl(attach.name, attach.url)} key={attach.id}>
-            <View style={styles.attachmentFile}><Text>{attach.name}</Text></View>
-          </TouchableOpacity>;
-        })}
-    </ScrollView>;
   }
 
   _renderIssueView(issue) {
@@ -391,7 +349,11 @@ export default class SingeIssueView extends React.Component {
           </Wiki> : null}
         </View>}
 
-        {this._renderAttachments(issue.attachments)}
+        {issue.attachments ? <AttachmentsRow
+          attachments={issue.attachments}
+          attachingImage={this.state.attachingImage}
+          onOpenAttachment={(type, name) => usage.trackEvent(CATEGORY_NAME, type === 'image' ? 'Showing image' : 'Open attachment by URL')}
+        /> : null}
       </View>
     );
   }

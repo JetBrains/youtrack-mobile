@@ -1,6 +1,5 @@
-import {ScrollView, View, Text, TextInput, TouchableOpacity, Image, AsyncStorage, ActivityIndicator, Platform} from 'react-native';
+import {ScrollView, View, Text, TextInput, TouchableOpacity, Image, AsyncStorage, Platform} from 'react-native';
 import React from 'react';
-import flattenStyle from 'react-native/Libraries/StyleSheet/flattenStyle';
 
 import styles from './create-issue.styles';
 import issueStyles from '../single-issue/single-issue.styles';
@@ -13,14 +12,13 @@ import log from '../../components/log/log';
 import {attach, tag, next} from '../../components/icon/icon';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import MultilineInput from '../../components/multiline-input/multiline-input';
+import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 const PROJECT_ID_STORAGE_KEY = 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE';
 const DRAFT_ID_STORAGE_KEY = 'DRAFT_ID_STORAGE_KEY';
 const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
 const CATEGORY_NAME = 'Create issue view';
-const imageWidth = flattenStyle(issueStyles.attachmentImage).width * 2;
-const imageHeight = flattenStyle(issueStyles.attachmentImage).height * 2;
 
 type Attachment = {
   data: string,
@@ -150,8 +148,12 @@ export default class CreateIssue extends React.Component {
         name: fileName
       };
 
-      this.state.issue.attachments.push(normalizedAttach);
-      this.forceUpdate();
+      this.setState({
+        issue: {
+          ...this.state.issue,
+          attachments: [normalizedAttach].concat(this.state.issue.attachments)
+        }
+      });
 
       this.setState({attachingImage: normalizedAttach});
       this.props.api.attachFile(this.state.issue.id, fileUri, fileName)
@@ -188,29 +190,6 @@ export default class CreateIssue extends React.Component {
     this.forceUpdate();
     usage.trackEvent(CATEGORY_NAME, 'Change field value');
     return this.updateIssueDraft();
-  }
-
-  _showImageAttachment(currentImage, allAttachments) {
-    const allImagesUrls = allAttachments
-      .map(image => image.url);
-    return Router.ShowImage({currentImage: currentImage.url, allImagesUrls});
-  }
-
-  _renderAttaches() {
-    return this.state.issue.attachments.map(img => {
-      const url = img.id ? `${img.url}&w=${imageWidth}&h=${imageHeight}` : img.url;
-
-      return (
-        <TouchableOpacity
-          key={img.url || img.id}
-          onPress={() => this._showImageAttachment(img, this.state.issue.attachments)}
-        >
-          <Image style={issueStyles.attachmentImage}
-                 source={{uri: url}}/>
-          {this.state.attachingImage === img && <ActivityIndicator size="large" style={styles.imageActivityIndicator}/>}
-        </TouchableOpacity>
-      );
-    });
   }
 
   render() {
@@ -264,11 +243,9 @@ export default class CreateIssue extends React.Component {
                 }}/>
             </View>
             {this.state.issue.project.id && <View style={styles.attachesContainer}>
-              <View>
-                {this.state.issue.attachments.length > 0 && <ScrollView style={issueStyles.attachesContainer} horizontal={true}>
-                  {this._renderAttaches(this.state.issue.attachments)}
-                </ScrollView>}
-              </View>
+
+              <AttachmentsRow attachments={this.state.issue.attachments} attachingImage={this.state.attachingImage}/>
+
               <View style={styles.attachButtonsContainer}>
                 <TouchableOpacity
                   disabled={this.state.attachingImage !== null}

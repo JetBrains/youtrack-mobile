@@ -1,8 +1,6 @@
 import {StyleSheet, Platform} from 'react-native';
 import {UNIT, COLOR_LIGHT_GRAY, COLOR_FONT_GRAY, COLOR_FONT, COLOR_GRAY, COLOR_PINK} from '../../components/variables/variables';
 
-const ATTACHING_IMAGE_ALPHA = '70';
-
 const SUGGESTION_BOTTOM = Platform.OS === 'ios' ? 52 : 48;
 
 export default StyleSheet.create({
@@ -77,37 +75,6 @@ export default StyleSheet.create({
     color: COLOR_FONT,
     fontSize: 16,
     textAlignVertical: 'top'
-  },
-  attachesContainer: {
-    marginTop: UNIT * 2,
-    paddingLeft: UNIT * 2,
-    marginBottom: 2,
-    marginLeft: -UNIT * 2,
-    marginRight: -UNIT * 2
-  },
-  attachmentImage: {
-    marginRight: UNIT,
-    borderWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.15)',
-    borderRadius: 3,
-    width: 120,
-    height: UNIT * 8,
-    resizeMode: 'cover'
-  },
-  attachmentFile: {
-    marginRight: UNIT * 2,
-    width: 120,
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  imageActivityIndicator: {
-    backgroundColor: `#CCCCCC${ATTACHING_IMAGE_ALPHA}`,
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: UNIT,
-    bottom: 0
   },
   commentsListContainer: {
     paddingBottom: UNIT * 6
