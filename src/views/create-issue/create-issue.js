@@ -72,8 +72,9 @@ export default class CreateIssue extends React.Component {
 
   async loadIssueFromDraft(draftId) {
     try {
-      this.state.issue = await this.props.api.loadIssueDraft(draftId);
-      this.forceUpdate();
+      this.setState({
+        issue: await this.props.api.loadIssueDraft(draftId)
+      });
     } catch (err) {
       AsyncStorage.removeItem(DRAFT_ID_STORAGE_KEY);
       this.state.issue.id = null;
@@ -94,14 +95,12 @@ export default class CreateIssue extends React.Component {
 
     try {
       const issue = await this.props.api.updateIssueDraft(issueToSend);
-      this.state.issue = issue;
-      this.forceUpdate();
+      this.setState({issue});
       return await AsyncStorage.setItem(DRAFT_ID_STORAGE_KEY, issue.id);
     } catch (err) {
       const error = await resolveError(err);
       if (error && error.error_description && error.error_description.indexOf(`Can't find entity with id`) !== -1) {
-        this.state.project = notSelectedProject;
-        return this.forceUpdate();
+        return this.setState({issue: {...this.state.issue, project: notSelectedProject}});
       }
       notifyError('Cannot update issue draft', error);
     }
@@ -171,8 +170,7 @@ export default class CreateIssue extends React.Component {
   }
 
   async onUpdateProject(project) {
-    this.state.issue.project = project;
-    this.forceUpdate();
+    this.setState({issue: {...this.state.issue, project}});
 
     usage.trackEvent(CATEGORY_NAME, 'Change project');
     await this.updateIssueDraft(project.id);
@@ -180,14 +178,18 @@ export default class CreateIssue extends React.Component {
   }
 
   onSetFieldValue(field, value) {
-    this.state.issue.fields = this.state.issue.fields.slice().map(f => {
-      if (f === field) {
-        f.value = value;
+    this.setState({
+      issue: {
+        ...this.state.issue,
+        fields: [...this.state.issue.fields].map(f => {
+          if (f === field) {
+            f.value = value;
+          }
+          return f;
+        })
       }
-      return f;
     });
 
-    this.forceUpdate();
     usage.trackEvent(CATEGORY_NAME, 'Change field value');
     return this.updateIssueDraft();
   }
@@ -220,10 +222,7 @@ export default class CreateIssue extends React.Component {
                 autoCapitalize="sentences"
                 value={this.state.issue.summary}
                 onSubmitEditing={() => this.descriptionInput.focus()}
-                onChangeText={(summary) => {
-                  this.state.issue.summary = summary;
-                  this.forceUpdate();
-                }}/>
+                onChangeText={summary => this.setState({issue: {...this.state.issue, summary}})}/>
             </View>
             <View style={styles.separator}/>
             <View>
@@ -237,10 +236,7 @@ export default class CreateIssue extends React.Component {
                 underlineColorAndroid="transparent"
                 placeholder="Description"
                 value={this.state.issue.description}
-                onChangeText={(description) => {
-                  this.state.issue.description = description;
-                  this.forceUpdate();
-                }}/>
+                onChangeText={description => this.setState({issue: {...this.state.issue, description}})}/>
             </View>
             {this.state.issue.project.id && <View style={styles.attachesContainer}>
 
