@@ -86,6 +86,21 @@ describe('API', () => {
     res.comments[0].author.avatarUrl.should.equal(`${serverUrl}${relativeUrl}`);
   });
 
+  it('should handle relative avatar url in custom field possible values', async () => {
+    const relativeUrl = '/hub/users/123';
+    fetchMock.mock(`^${serverUrl}/api/admin/customFieldSettings/bundles`, {
+      aggregatedUsers: [
+        {
+          avatarUrl: relativeUrl
+        }
+      ]
+    });
+
+    const res = await createInstance().getCustomFieldValues('test-id', 'foo');
+
+    res[0].avatarUrl.should.equal(`${serverUrl}${relativeUrl}`);
+  });
+
   it('should post comment', async () => {
     fetchMock.post(`^${serverUrl}/api/issues/test-issue-id/comments`, {
       id: 'test-comment',

@@ -214,8 +214,7 @@ export default class CustomFieldsPanel extends Component {
             return this.props.api.getStateMachineEvents(this.props.issue.id, field.id)
               .then(items => items.map(it => Object.assign(it, {name: `${it.id} (${it.presentation})`})));
           }
-          return this.props.api.getCustomFieldValues(field.projectCustomField.bundle.id, field.projectCustomField.field.fieldType.valueType)
-            .then(res => res.aggregatedUsers || res.values);
+          return this.props.api.getCustomFieldValues(field.projectCustomField.bundle.id, field.projectCustomField.field.fieldType.valueType);
         },
         onSelect: (value) => this.saveUpdatedField(field, value)
       }
