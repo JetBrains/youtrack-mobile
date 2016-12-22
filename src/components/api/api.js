@@ -168,7 +168,18 @@ class Api {
     const queryString = qs.stringify({
       fields: fields.bundle.toString()
     });
-    return await this.makeAuthorizedRequest(`${this.youtTrackFieldBundleUrl}/${fieldValueType}/${bundleId}?${queryString}`);
+
+    const res = await this.makeAuthorizedRequest(`${this.youtTrackFieldBundleUrl}/${fieldValueType}/${bundleId}?${queryString}`);
+    const values = res.aggregatedUsers || res.values;
+
+    values.forEach(value => {
+      if (!value.avatarUrl) {
+        return;
+      }
+      value.avatarUrl = handleEmbeddedHubUrl(value.avatarUrl, this.config.backendUrl);
+    });
+
+    return values;
   }
 
   async getStateMachineEvents(issueId: string, fieldId: string) {

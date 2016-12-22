@@ -1,7 +1,6 @@
-import {Text, View, Image, TouchableOpacity, ScrollView, TextInput, Clipboard, Platform, ActivityIndicator, Linking, RefreshControl} from 'react-native';
+import {Text, View, Image, TouchableOpacity, ScrollView, Clipboard, Platform, RefreshControl} from 'react-native';
 import React, {PropTypes} from 'react';
 
-import ImagePicker from 'react-native-image-picker';
 import ApiHelper from '../../components/api/api__helper';
 import {comment} from '../../components/icon/icon';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
@@ -18,15 +17,13 @@ import {notifyError, notify} from '../../components/notification/notification';
 import SingleIssueCommentInput from './single-issue__comment-input';
 import {COLOR_PINK} from '../../components/variables/variables';
 import usage from '../../components/usage/usage';
-import MultilineInput from '../../components/multiline-input/multiline-input';
+import attachFile from '../../components/attach-file/attach-file';
+import IssueSummary from '../../components/issue-summary/issue-summary';
 import log from '../../components/log/log';
 import styles from './single-issue.styles';
-import flattenStyle from 'react-native/Libraries/StyleSheet/flattenStyle';
+import AttachmentsRow from '../../components/attachments-row/attachments-row';
 
-const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
 const CATEGORY_NAME = 'Issue';
-const imageWidth = flattenStyle(styles.attachmentImage).width * 2;
-const imageHeight = flattenStyle(styles.attachmentImage).height * 2;
 
 export default class SingeIssueView extends React.Component {
   static contextTypes = {
@@ -112,46 +109,49 @@ export default class SingeIssueView extends React.Component {
     }
   }
 
-  attachPhoto() {
-    const options = {
-      takePhotoButtonTitle: 'Take photo',
-      chooseFromLibraryButtonTitle: 'Choose from libary'
-    };
-    ImagePicker.showImagePicker(options, (res) => {
-      if (res.didCancel) {
-        return;
-      }
-      if (res.error) {
-        return notifyError('ImagePicker Error: ', res.error);
-      }
-      res.mimeType = 'image';
-      res.url = res.uri;
-      this.state.issue.attachments.push(res);
-      this.forceUpdate();
+  async attachPhoto(takeFromLibrary = true) {
+    try {
+      const attachingImage = await attachFile();
 
-      const filePath = res.path || res.uri;
-      const fileName = filePath.match(FILE_NAME_REGEXP)[0];
-      const fileUri = res.uri;
+      this.setState({
+        issue: {
+          ...this.state.issue,
+          attachments: [attachingImage].concat(this.state.issue.attachments)
+        },
+        attachingImage
+      });
 
-      this.setState({attachingImage: res});
-      this.props.api.attachFile(this.state.issue.id, fileUri, fileName)
-        .then(() => {
-          usage.trackEvent(CATEGORY_NAME, 'Attach image', 'Success');
-          return this.setState({attachingImage: null});
-        })
-        .catch((err) => {
-          this.state.issue.attachments = this.state.issue.attachments.filter(attach => attach !== res);
-          this.setState({attachingImage: null});
-
-          return notifyError('Cannot attach file', err);
+      try {
+        await this.props.api.attachFile(this.state.issue.id, attachingImage.url, attachingImage.name);
+        usage.trackEvent(CATEGORY_NAME, 'Attach image', 'Success');
+      } catch (err) {
+        notifyError('Cannot attach file', err);
+        this.setState({
+          issue: {
+            ...this.state.issue,
+            attachments: this.state.issue.attachments.filter(attach => attach !== attachingImage)
+          }
         });
-    });
+      }
+      this.setState({attachingImage: null});
+    } catch (err) {
+      notifyError('ImagePicker error', err);
+    }
   }
 
   onIssueFieldValueUpdate(field, value) {
-    field.value = value;
-    this.forceUpdate();
     usage.trackEvent(CATEGORY_NAME, 'Update field value');
+    this.setState({
+      issue: {
+        ...this.state.issue,
+        fields: [...this.state.issue.fields].map(f => {
+          if (f === field) {
+            f.value = value;
+          }
+          return f;
+        })
+      }
+    });
 
     const updateMethod = field.hasStateMachine ?
       this.props.api.updateIssueFieldEvent.bind(this.props.api) :
@@ -167,8 +167,9 @@ export default class SingeIssueView extends React.Component {
   }
 
   onUpdateProject(project) {
-    this.state.issue.project = project;
-    this.forceUpdate();
+    this.setState({issue: {
+      ...this.state.issue, project
+    }});
 
     usage.trackEvent(CATEGORY_NAME, 'Update project');
 
@@ -258,15 +259,6 @@ export default class SingeIssueView extends React.Component {
       .catch(err => {});
   }
 
-  openAttachmentUrl(name, url) {
-    usage.trackEvent(CATEGORY_NAME, 'Open attachment by URL');
-    if (Platform.OS === 'ios') {
-      Router.AttachmentPreview({url, name});
-    } else {
-      Linking.openURL(url);
-    }
-  }
-
   copyCommentUrl(comment) {
     Clipboard.setString(this._makeIssueWebUrl(this.state.issue, comment.id));
     notify('Comment URL has been copied');
@@ -311,71 +303,18 @@ export default class SingeIssueView extends React.Component {
     }
   }
 
-  _showImageAttachment(attachment, allAttachments) {
-    const allImagesUrls = allAttachments
-      .filter(attach => attach.mimeType.includes('image'))
-      .map(image => image.url);
-    return Router.ShowImage({currentImage: attachment.url, allImagesUrls});
-  }
-
-  _renderAttachments(attachments) {
-    if (!attachments) {
-      return;
-    }
-
-    return <ScrollView style={styles.attachesContainer} horizontal={true}>
-      {(attachments || [])
-        .map((attach) => {
-          const isImage = attach.mimeType.includes('image');
-
-          const url = attach.id ? `${attach.url}&w=${imageWidth}&h=${imageHeight}` : attach.url;
-
-          if (isImage) {
-            return <TouchableOpacity onPress={() => this._showImageAttachment(attach, attachments)}
-                                     key={attach.id || attach.url}>
-              <Image style={styles.attachmentImage}
-                     capInsets={{left: 15, right: 15, bottom: 15, top: 15}}
-                     source={{uri: url}}/>
-              {this.state.attachingImage === attach && <ActivityIndicator size="large" style={styles.imageActivityIndicator}/>}
-            </TouchableOpacity>;
-          }
-
-          return <TouchableOpacity onPress={() => this.openAttachmentUrl(attach.name, attach.url)} key={attach.id}>
-            <View style={styles.attachmentFile}><Text>{attach.name}</Text></View>
-          </TouchableOpacity>;
-        })}
-    </ScrollView>;
-  }
-
   _renderIssueView(issue) {
     return (
       <View style={styles.issueViewContainer}>
         <SingleIssueTopPanel issue={issue} onTagPress={query => this.openIssueListWithSearch(query)}/>
 
-        {this.state.editMode && <View>
-          <TextInput
-            style={styles.summaryInput}
-            placeholder="Summary"
-            editable={!this.state.isSavingEditedIssue}
-            autoCapitalize="sentences"
-            autoFocus={true}
-            underlineColorAndroid="transparent"
-            value={this.state.summaryCopy}
-            onSubmitEditing={() => this.refs.description.focus()}
-            onChangeText={text => this.setState({summaryCopy: text})}/>
-          <View style={styles.separator}/>
-          <MultilineInput
-            ref="description"
-            maxInputHeight={0}
-            style={styles.descriptionInput}
-            autoCapitalize="sentences"
-            editable={!this.state.isSavingEditedIssue}
-            value={this.state.descriptionCopy}
-            multiline={true}
-            underlineColorAndroid="transparent"
-            placeholder="Description"
-            onChangeText={text => this.setState({descriptionCopy: text})}/>
-        </View>}
+        {this.state.editMode && <IssueSummary
+              editable={!this.state.isSavingEditedIssue}
+              summary={this.state.summaryCopy}
+              description={this.state.descriptionCopy}
+              onSummaryChange={summaryCopy => this.setState({summaryCopy})}
+              onDescriptionChange={descriptionCopy => this.setState({descriptionCopy})}
+        />}
 
         {!this.state.editMode && <View>
           <Text style={styles.summary}  selectable={true}>{issue.summary}</Text>
@@ -391,7 +330,11 @@ export default class SingeIssueView extends React.Component {
           </Wiki> : null}
         </View>}
 
-        {this._renderAttachments(issue.attachments)}
+        {issue.attachments ? <AttachmentsRow
+          attachments={issue.attachments}
+          attachingImage={this.state.attachingImage}
+          onOpenAttachment={(type, name) => usage.trackEvent(CATEGORY_NAME, type === 'image' ? 'Showing image' : 'Open attachment by URL')}
+        /> : null}
       </View>
     );
   }

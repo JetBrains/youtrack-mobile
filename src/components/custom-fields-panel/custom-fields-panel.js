@@ -182,11 +182,13 @@ export default class CustomFieldsPanel extends Component {
       value => parseInt(value) :
       value => ({presentation: value});
 
+    const value = field.value ? (field.value.presentation || field.value.toString()) : null;
+
     return this.setState({
       simpleValue: {
         show: true,
-        placeholder: placeholder,
-        value: field.value ? field.value.presentation : null,
+        placeholder,
+        value,
         onApply: (value) => this.saveUpdatedField(field, valueFormatter(value))
       }
     });
@@ -212,8 +214,7 @@ export default class CustomFieldsPanel extends Component {
             return this.props.api.getStateMachineEvents(this.props.issue.id, field.id)
               .then(items => items.map(it => Object.assign(it, {name: `${it.id} (${it.presentation})`})));
           }
-          return this.props.api.getCustomFieldValues(field.projectCustomField.bundle.id, field.projectCustomField.field.fieldType.valueType)
-            .then(res => res.aggregatedUsers || res.values);
+          return this.props.api.getCustomFieldValues(field.projectCustomField.bundle.id, field.projectCustomField.field.fieldType.valueType);
         },
         onSelect: (value) => this.saveUpdatedField(field, value)
       }
@@ -254,7 +255,6 @@ export default class CustomFieldsPanel extends Component {
         }}
       height={this.state.topCoord}
       title="Select item"
-      api={this.props.api}
       onCancel={() => this.closeEditor()}
       getTitle={(item) => item.fullName || item.name || item.login}
     />;
@@ -325,9 +325,8 @@ export default class CustomFieldsPanel extends Component {
             autoCorrect={false}
             autoFocus={true}
             autoCapitalize="none"
-            onChangeText={(text) => {
-              this.state.simpleValue.value = text;
-              this.forceUpdate();
+            onChangeText={(value) => {
+              this.setState({simpleValue: {...this.state.simpleValue, value}});
             }}
             onSubmitEditing={() => this.state.simpleValue.onApply(this.state.simpleValue.value)}
             value={this.state.simpleValue.value}/>

@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_PINK, COLOR_FONT_GRAY, COLOR_FONT, COLOR_GRAY} from '../../components/variables/variables';
+import {UNIT, COLOR_PINK, COLOR_FONT_GRAY, COLOR_GRAY} from '../../components/variables/variables';
 
 const ATTACHING_IMAGE_ALPHA = '70';
 
@@ -8,23 +8,10 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF'
   },
-  summaryInput: {
-    margin: UNIT,
-    padding: UNIT,
-    color: COLOR_FONT,
-    fontSize: 20,
-    height: UNIT * 5
-  },
-  descriptionInput: {
-    height: UNIT * 10,
-    margin: UNIT,
-    padding: UNIT,
-    flex: 1,
-    backgroundColor: '#FFF',
-    color: COLOR_FONT,
-    borderColor: 'black',
-    textAlignVertical: 'top',
-    fontSize: 16
+  issueSummary: {
+    marginTop: UNIT,
+    marginLeft: UNIT * 2,
+    marginRight: UNIT * 2
   },
   disabledCreateButton: {
     color: COLOR_FONT_GRAY
@@ -55,6 +42,7 @@ export default StyleSheet.create({
   attachButtonsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginTop: UNIT,
     marginRight: UNIT
   },
   attachButton: {

@@ -5,7 +5,6 @@ import styles from './select.styles';
 import Header from '../header/header';
 import ColorField from '../color-field/color-field';
 import {notifyError} from '../notification/notification';
-import Api from '../api/api';
 
 const MAX_VISIBLE_ITEMS = 100;
 
@@ -18,7 +17,6 @@ type Props = {
   selectedItems: Array<Object>,
   title: string,
   multi: boolean,
-  api: Api,
   emptyValue: ?string,
   height: number,
   style: any

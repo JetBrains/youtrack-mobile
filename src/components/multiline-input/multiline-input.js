@@ -20,6 +20,7 @@ type State = {
 export default class MultilineInput extends React.Component {
   props: Props;
   state: State;
+  input: TextInput;
 
   static defaultProps = {
     maxInputHeight: MAX_DEFAULT_HEIGHT
@@ -38,6 +39,10 @@ export default class MultilineInput extends React.Component {
     }
   }
 
+  focus() {
+    this.input.focus();
+  }
+
   onSizeChange(e: Object) {
     const {maxInputHeight} = this.props;
 
@@ -54,6 +59,7 @@ export default class MultilineInput extends React.Component {
     const {style, ...rest} = this.props;
 
     return <TextInput {...rest}
+                      ref={instance => this.input = instance}
                       multiline={true}
                       onChange={(e) => this.onSizeChange(e)}
                       onContentSizeChange={(e) => this.onSizeChange(e)}
