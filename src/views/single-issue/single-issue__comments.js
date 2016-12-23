@@ -1,11 +1,22 @@
+/* @flow */
 import styles from './single-issue.styles';
 import Comment from '../../components/comment/comment';
 
 
 import {View, Text} from 'react-native';
-import React from 'react';
+import React, {Component} from 'react';
 
-export default class SingleIssueComments extends React.Component {
+type Props = {
+  comments: Array<IssueComment>,
+  attachments: Array<Attachment>,
+  onReply: () => any,
+  onCopyCommentLink: () => any,
+  onIssueIdTap: () => any
+};
+
+export default class SingleIssueComments extends Component {
+  props: Props;
+
   static defaultProps = {
     onReply: () => {
     },
@@ -25,13 +36,13 @@ export default class SingleIssueComments extends React.Component {
   }
 
   render() {
-    let comments = this.props.comments;
-    comments = comments.reduceRight((val, item) => val.concat([item]), []); //reverse to get designed order of comments
+    const {comments, attachments} = this.props;
+    comments.reverse();//reverse to get designed order of comments
 
     const NoComments = <Text style={{textAlign: 'center'}}>No comments yet</Text>;
 
     return (<View style={styles.commentsContainer}>
-      {comments.length ? this._renderCommentsList(comments, this.props.attachments) : NoComments}
+      {comments.length ? this._renderCommentsList(comments, attachments) : NoComments}
     </View>);
   }
 }
