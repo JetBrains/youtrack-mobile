@@ -144,11 +144,8 @@ export default class SingeIssueView extends React.Component {
     this.setState({
       issue: {
         ...this.state.issue,
-        fields: [...this.state.issue.fields].map(f => {
-          if (f === field) {
-            f.value = value;
-          }
-          return f;
+        fields: [...this.state.issue.fields].map(it => {
+          return it === field ? {...it, value} : it;
         })
       }
     });
