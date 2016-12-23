@@ -1,6 +1,6 @@
 /* @flow */
 import {View, Linking} from 'react-native';
-import React, {PropTypes, Component} from 'react';
+import React, {Component} from 'react';
 // $FlowFixMe: cannot typecheck simple-markdown module because of mistakes there
 import SimpleMarkdown from 'simple-markdown';
 import Router from '../router/router';
@@ -19,10 +19,10 @@ export default class Wiki extends Component {
   parser: (rawWiki: string) => Object;
   renderer: (tree: Object) => Object;
 
-  static propTypes = {
-    onIssueIdTap: PropTypes.func.isRequired,
-    attachments: PropTypes.array.isRequired
-  }
+  static defaultProps = {
+    onIssueIdTap: () => {},
+    attachments: []
+  };
 
   constructor(props: Props) {
     super(props);
