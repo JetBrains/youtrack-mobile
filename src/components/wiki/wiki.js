@@ -19,8 +19,8 @@ export default class Wiki extends Component {
   parser: (rawWiki: string) => Object;
   renderer: (tree: Object) => Object;
 
-  static defaultProps = {
-    onIssueIdTap: () => {},
+  static defaultProps: Props = {
+    onIssueIdTap: (issueId: string) => {},
     attachments: []
   };
 
