@@ -82,4 +82,12 @@ describe('<Wiki/>', () => {
     const node = wrapper.findWhere(component => component.props().style && component.props().style.backgroundColor === COLOR_LIGHT_GRAY);
     node.length.should.equal(1);
   });
+
+  it('should render {noformat}', () => {
+    const wrapper = shallow(<Wiki>
+      {'{noformat}some text with *markup*{noformat}'}
+    </Wiki>);
+
+    wrapper.find({testID: 'noformat'}).children().should.contain.text('some text with *markup*');
+  });
 });

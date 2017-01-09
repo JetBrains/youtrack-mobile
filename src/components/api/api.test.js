@@ -69,6 +69,18 @@ describe('API', () => {
     res.id.should.equal('issue-id');
   });
 
+  it('should convert issue attachments', async () => {
+    fetchMock.mock(`^${serverUrl}/api/issues/test-id`, {id: 'issue-id', comments: [], attachments: [
+      {
+        id: 'foo',
+        url: '/persistent/123'
+      }
+    ]});
+    const res = await createInstance().getIssue('test-id');
+
+    res.attachments[0].url.should.equal(`${serverUrl}/persistent/123`);
+  });
+
   it('should handle relative avatar url in comments on loading issue', async () => {
     const relativeUrl = '/hub/users/123';
     fetchMock.mock(`^${serverUrl}/api/issues/test-id`, {

@@ -203,13 +203,27 @@ export default function (actions) {
 
     blockQuote: Object.assign({}, SimpleMarkdown.defaultRules.blockQuote, {
       react: (node, output, state) => {
-        return <View key={state.key} style={styles.blockQuote}>{output(node.content, state)}</View>;
+        return <View key={state.key} style={styles.blockQuote} testID="quote">{output(node.content, state)}</View>;
       }
     }),
 
     inlineCode: Object.assign({}, SimpleMarkdown.defaultRules.inlineCode, {
       react: (node, output, state) => {
         return <Text key={state.key} style={styles.inlineCode} selectable={true}>{node.content}</Text>;
+      }
+    }),
+
+    noFormat: Object.assign({}, SimpleMarkdown.defaultRules.inlineCode, {
+      match: source => /^\{noformat}([\s\S]+?)\{noformat}(?!\{noformat})/.exec(source),
+
+      parse: (capture, parse, state) => {
+        return {
+          content: capture[CONTENT_WITHIN_MARKERS]
+        };
+      },
+
+      react: (node, output, state) => {
+        return <Text key={state.key} style={styles.inlineCode} selectable={true} testID="noformat">{node.content}</Text>;
       }
     }),
 

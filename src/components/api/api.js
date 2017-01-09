@@ -3,7 +3,8 @@ import qs from 'qs';
 import fields from './api__fields';
 import Auth from '../auth/auth';
 import log from '../log/log';
-import {handleEmbeddedHubUrl} from '../config/config';
+import ApiHelper from './api__helper';
+import {handleRelativeUrl} from '../config/config';
 
 const STATUS_UNAUTHORIZED = 401;
 const STATUS_OK_IF_MORE_THAN = 200;
@@ -82,8 +83,9 @@ class Api {
     const issue = await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${id}?${queryString}`);
 
     issue.comments.forEach(comment => {
-      comment.author.avatarUrl = handleEmbeddedHubUrl(comment.author.avatarUrl, this.config.backendUrl);
+      comment.author.avatarUrl = handleRelativeUrl(comment.author.avatarUrl, this.config.backendUrl);
     });
+    issue.attachments = ApiHelper.convertRelativeUrls(issue.attachments, 'url', this.config.backendUrl);
 
     return issue;
   }
@@ -131,7 +133,7 @@ class Api {
     const url = `${this.youTrackIssueUrl}/${issueId}/comments?${queryString}`;
 
     const createdComment =  await this.makeAuthorizedRequest(url, 'POST', {text: comment});
-    createdComment.author.avatarUrl = handleEmbeddedHubUrl(createdComment.author.avatarUrl, this.config.backendUrl);
+    createdComment.author.avatarUrl = handleRelativeUrl(createdComment.author.avatarUrl, this.config.backendUrl);
 
     return createdComment;
   }
@@ -172,14 +174,7 @@ class Api {
     const res = await this.makeAuthorizedRequest(`${this.youtTrackFieldBundleUrl}/${fieldValueType}/${bundleId}?${queryString}`);
     const values = res.aggregatedUsers || res.values;
 
-    values.forEach(value => {
-      if (!value.avatarUrl) {
-        return;
-      }
-      value.avatarUrl = handleEmbeddedHubUrl(value.avatarUrl, this.config.backendUrl);
-    });
-
-    return values;
+    return ApiHelper.convertRelativeUrls(values, 'avatarUrl', this.config.backendUrl);
   }
 
   async getStateMachineEvents(issueId: string, fieldId: string) {
