@@ -3,7 +3,7 @@ import React from 'react';
 import flattenStyle from 'react-native/Libraries/StyleSheet/flattenStyle';
 import SimpleMarkdown from 'simple-markdown';
 import styles from './wiki.styles';
-import HtmlView from 'react-native-htmlview';
+import FenceHtml from 'react-native-fence-html';
 
 const CONTENT_WITH_MARKERS = 0;
 const CONTENT_WITHIN_MARKERS = 1;
@@ -238,11 +238,20 @@ export default function (actions) {
       },
 
       react: (node, output, state) => {
-        return <HtmlView
-          testID="html"
+        //Drops custom fonts which could be not available on platform
+        const content = node.content.replace(/font-family: .*?;/ig, 'font-family: System;');
+
+        const renderers = {
+          br: (htmlAttribs, children, passProps) => {
+            return <Text>{'\n'}</Text>;
+          }
+        };
+
+        return <FenceHtml
           key={state.key}
-          selectable={true}
-          value={node.content}
+          html={content}
+          renderers={renderers}
+          onLinkPress={(evt, href) => actions.onLinkPress(href)}
         />;
       }
     }),
