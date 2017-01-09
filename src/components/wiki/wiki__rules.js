@@ -3,6 +3,7 @@ import React from 'react';
 import flattenStyle from 'react-native/Libraries/StyleSheet/flattenStyle';
 import SimpleMarkdown from 'simple-markdown';
 import styles from './wiki.styles';
+import HtmlView from 'react-native-htmlview';
 
 const CONTENT_WITH_MARKERS = 0;
 const CONTENT_WITHIN_MARKERS = 1;
@@ -227,7 +228,7 @@ export default function (actions) {
       }
     }),
 
-    html: Object.assign({}, SimpleMarkdown.defaultRules.inlineCode, {
+    html: Object.assign({}, SimpleMarkdown.defaultRules.codeBlock, {
       match: source => /^\{html.*?}([\s\S]+?)\{html}(?!\{html})/.exec(source),
 
       parse: (capture, parse, state) => {
@@ -237,7 +238,12 @@ export default function (actions) {
       },
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.inlineCode} selectable={true}>{node.content}</Text>;
+        return <HtmlView
+          testID="html"
+          key={state.key}
+          selectable={true}
+          value={node.content}
+        />;
       }
     }),
 
