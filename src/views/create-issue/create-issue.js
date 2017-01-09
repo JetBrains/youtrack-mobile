@@ -158,21 +158,20 @@ export default class CreateIssue extends React.Component {
     return await AsyncStorage.setItem(PROJECT_ID_STORAGE_KEY, project.id);
   }
 
-  onSetFieldValue(field, value) {
-    this.setState({
-      issue: {
-        ...this.state.issue,
-        fields: [...this.state.issue.fields].map(f => {
-          if (f === field) {
-            f.value = value;
-          }
-          return f;
-        })
-      }
+  async onSetFieldValue(field, value) {
+    await new Promise(resolve => {
+      this.setState({
+        issue: {
+          ...this.state.issue,
+          fields: [...this.state.issue.fields].map(it => {
+            return it === field ? {...it, value} : it;
+          })
+        }
+      }, resolve);
     });
 
     usage.trackEvent(CATEGORY_NAME, 'Change field value');
-    return this.updateIssueDraft();
+    return await this.updateIssueDraft();
   }
 
   render() {
