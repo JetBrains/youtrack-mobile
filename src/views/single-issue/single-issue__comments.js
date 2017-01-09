@@ -37,12 +37,12 @@ export default class SingleIssueComments extends Component {
 
   render() {
     const {comments, attachments} = this.props;
-    comments.reverse();//reverse to get designed order of comments
+    const reversed = [...comments].reverse();//reverse to get designed order of comments
 
     const NoComments = <Text style={{textAlign: 'center'}}>No comments yet</Text>;
 
     return (<View style={styles.commentsContainer}>
-      {comments.length ? this._renderCommentsList(comments, attachments) : NoComments}
+      {comments.length ? this._renderCommentsList(reversed, attachments) : NoComments}
     </View>);
   }
 }
