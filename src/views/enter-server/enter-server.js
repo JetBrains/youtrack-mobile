@@ -107,7 +107,7 @@ export default class EnterServer extends Component {
       null;
 
       return (
-      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps={true}>
+      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
         <View style={styles.logoContainer}>
           <Image style={styles.logoImage} source={logo}/>
         </View>

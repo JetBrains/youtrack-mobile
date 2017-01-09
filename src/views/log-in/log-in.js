@@ -97,7 +97,7 @@ export default class LoginForm extends React.Component {
   render() {
     return (
       <ScrollView contentContainerStyle={styles.container}
-                  keyboardShouldPersistTaps={true}
+                  keyboardShouldPersistTaps="handled"
                   keyboardDismissMode="on-drag">
 
         <TouchableOpacity onPress={this.changeYouTrackUrl.bind(this)} style={styles.urlChangeButton}>

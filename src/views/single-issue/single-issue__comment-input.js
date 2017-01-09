@@ -115,7 +115,7 @@ export default class IssueListCommentInput extends Component {
     }
 
     return (
-      <ScrollView style={styles.commentSuggestionsContainer} keyboardShouldPersistTaps={true}>
+      <ScrollView style={styles.commentSuggestionsContainer} keyboardShouldPersistTaps="handled">
 
         {this.state.isLoadingSuggestions &&
           <View style={styles.suggestionsLoadingMessage}><Text>Loading suggestions...</Text></View>}

@@ -8,10 +8,10 @@
  */
 
 #import "AppDelegate.h"
-#import "RCTLinkingManager.h"
-#import "RCTBundleURLProvider.h"
-#import "RCTRootView.h"
-#import "RCTLog.h"
+#import <React/RCTLinkingManager.h>
+#import <React/RCTBundleURLProvider.h>
+#import <React/RCTRootView.h>
+#import <React/RCTLog.h>
 
 @implementation AppDelegate
 

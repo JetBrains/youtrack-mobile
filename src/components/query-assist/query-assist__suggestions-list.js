@@ -84,7 +84,7 @@ export default class QueryAssistSuggestionsList extends React.Component {
         enableEmptySections={true}
         renderRow={(suggestion) => this._renderRow(suggestion)}
         renderScrollComponent={props => <InvertibleScrollView {...props} inverted/>}
-        keyboardShouldPersistTaps={true}/>
+        keyboardShouldPersistTaps="handled"/>
     );
   }
 }
