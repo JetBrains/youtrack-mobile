@@ -27,6 +27,9 @@ require.extensions['.js'] = function (module, fileName) {
   if (fileName.indexOf('flattenStyle') >= 0) {
     fileName = path.resolve('./test/mocks/flattenStyle.js');
   }
+  if (fileName.includes('TextStylePropTypes') || fileName.includes('ViewStylePropTypes') || fileName.includes('ImageStylePropTypes')) {
+    fileName = path.resolve('./test/mocks/empty-module.js');
+  }
 
   //TODO: drop this when react-native-mock upgrade it's dependencies
   if (fileName.indexOf('react-addons-perf') >= 0) {
