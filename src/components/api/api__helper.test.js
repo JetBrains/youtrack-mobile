@@ -78,4 +78,28 @@ describe('Api helper', () => {
       fieldType.should.equal('jetbrains.charisma.customfields.complex.ownedField.SingleOwnedIssueCustomField');
     });
   });
+
+  describe('relative urls converter', () => {
+    it('should convert relative urls to absolute', () => {
+      const items = [
+        {
+          url: '/bar'
+        }
+      ];
+      const fixedItems = ApiHelper.convertRelativeUrls(items, 'url', 'http://test.com');
+
+      fixedItems[0].url.should.equal('http://test.com/bar');
+    });
+
+    it('should not touch absolute urls', () => {
+      const items = [
+        {
+          url: 'https://youtrack/bar'
+        }
+      ];
+      const fixedItems = ApiHelper.convertRelativeUrls(items, 'url', 'http://test.com');
+
+      fixedItems[0].url.should.equal('https://youtrack/bar');
+    });
+  });
 });

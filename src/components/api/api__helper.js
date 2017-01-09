@@ -1,4 +1,5 @@
 /* @flow */
+import {handleRelativeUrl} from '../config/config';
 
 const API = {
   makeFieldHash: (issue: IssueOnList) => {
@@ -13,6 +14,18 @@ const API = {
   fillIssuesFieldHash: (issues: Array<IssueOnList> = []) => {
     issues.forEach(issue => issue.fieldHash = API.makeFieldHash(issue));
     return issues;
+  },
+
+  convertRelativeUrls: (items: Array<Object> = [], urlField: string, backendUrl: string) => {
+    return items.map(item => {
+      if (!item[urlField]) {
+        return item;
+      }
+      return {
+        ...item,
+        [urlField]: handleRelativeUrl(item[urlField], backendUrl)
+      };
+    });
   },
 
   //Ported from youtrack frontend
