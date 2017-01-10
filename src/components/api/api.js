@@ -184,6 +184,7 @@ class Api {
 
   attachFile(issueId: string, fileUri: string, fileName: string) {
     const formDataContent = new FormData(); //eslint-disable-line no-undef
+    // $FlowFixMe
     formDataContent.append('photo', {uri: fileUri, name: fileName, type: 'image/binary'});
 
     return new Promise((resolve, reject) => {
