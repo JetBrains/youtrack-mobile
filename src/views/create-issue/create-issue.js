@@ -151,7 +151,9 @@ export default class CreateIssue extends React.Component {
   }
 
   async onUpdateProject(project) {
-    this.setState({issue: {...this.state.issue, project}});
+    await new Promise(resolve => {
+      this.setState({issue: {...this.state.issue, project}}, resolve);
+    });
 
     usage.trackEvent(CATEGORY_NAME, 'Change project');
     await this.updateIssueDraft(project.id);
