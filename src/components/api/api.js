@@ -114,7 +114,9 @@ class Api {
 
   async loadIssueDraft(draftId: string) {
     const queryString = qs.stringify({fields: fields.singleIssue.toString()});
-    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/admin/users/me/drafts/${draftId}?${queryString}`);
+    const issue = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/admin/users/me/drafts/${draftId}?${queryString}`);
+    issue.attachments = ApiHelper.convertRelativeUrls(issue.attachments, 'url', this.config.backendUrl);
+    return issue;
   }
 
   /**
