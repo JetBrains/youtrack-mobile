@@ -1,4 +1,5 @@
-import {Text, View, Image, Platform} from 'react-native';
+import {Text, View, Platform, ActivityIndicator} from 'react-native';
+import ImageProgress from 'react-native-image-progress';
 import React from 'react';
 import flattenStyle from 'react-native/Libraries/StyleSheet/flattenStyle';
 import SimpleMarkdown from 'simple-markdown';
@@ -117,7 +118,8 @@ export default function (actions) {
 
 
         return <Text onPress={() => actions.onImagePress(node.url)} key={state.key}>
-          <Image
+          <ImageProgress
+            renderIndicator={() => <ActivityIndicator/>}
             source={{uri: `${node.url}&w=${imageWidth}&h=${imageHeight}`, width: 150, height: 150}}
             style={styles.image}/>
         </Text>;

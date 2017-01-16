@@ -1,6 +1,7 @@
 /* @flow */
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, Animated, Image, ActivityIndicator, ScrollView, Platform, Linking} from 'react-native';
+import {View, Text, TouchableOpacity, Animated, ActivityIndicator, ScrollView, Platform, Linking} from 'react-native';
+import ImageProgress from 'react-native-image-progress';
 import flattenStyle from 'react-native/Libraries/StyleSheet/flattenStyle';
 import styles from './attachments-row.styles';
 import Router from '../../components/router/router';
@@ -81,8 +82,11 @@ export default class AttachmentsRow extends Component {
                 onPress={() => this._showImageAttachment(attach, attachments)}
                 >
                 <Animated.View style={isAttachingImage ? { transform: [{ scale: this.state.attachingImageAnimation }] } : {}}>
-                  <Image style={styles.attachmentImage}
-                    source={{ uri: url }} />
+                  <ImageProgress
+                    style={styles.attachmentImage}
+                    renderIndicator={() => <ActivityIndicator/>}
+                    source={{uri: url}}
+                  />
                   {isAttachingImage && <ActivityIndicator size="large" style={styles.imageActivityIndicator} />}
                 </Animated.View>
               </TouchableOpacity>
