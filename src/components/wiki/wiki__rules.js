@@ -1,4 +1,4 @@
-import {Text, View, Platform, ActivityIndicator} from 'react-native';
+import {Text, View, Platform, ActivityIndicator, Image} from 'react-native';
 import ImageProgress from 'react-native-image-progress';
 import React from 'react';
 import flattenStyle from 'react-native/Libraries/StyleSheet/flattenStyle';
