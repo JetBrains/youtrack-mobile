@@ -45,6 +45,23 @@ export default function (actions) {
       }
     }),
 
+    color: Object.assign({}, SimpleMarkdown.defaultRules.strong, {
+      match: source => /^{color:(\S*?)}([\s\S]+?){color}(?!{color})/.exec(source),
+
+      parse: (capture, parse, state) => {
+        const [, color, content] = capture;
+        return {color, content: parse(content, state)};
+      },
+
+      react: (node, output, state) => {
+        return <Text
+          key={state.key}
+          style={[styles.text, {color: node.color}]}
+          selectable={true}
+          testID="color-text">{output(node.content)}</Text>;
+      }
+    }),
+
     monospace: Object.assign({}, SimpleMarkdown.defaultRules.strong, {
       match: source => {
         return /^{{([\s\S]+?)}}(?!}})/.exec(source) || /^{monospace}([\s\S]+?){monospace}(?!{monospace})/.exec(source);

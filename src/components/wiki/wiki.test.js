@@ -21,6 +21,14 @@ describe('<Wiki/>', () => {
     boldTextNode.length.should.equal(1);
   });
 
+  it('should render colored text', () => {
+    const wrapper = shallow(<Wiki>{'{color:green}text{color}'}</Wiki>);
+    const colorTextNode = wrapper.find({testID: 'color-text'});
+    const style = colorTextNode.props().style;
+
+    style.should.contain({color: 'green'});
+  });
+
   it('should render quote', () => {
     const wrapper = shallow(<Wiki>`
     > This is quote
