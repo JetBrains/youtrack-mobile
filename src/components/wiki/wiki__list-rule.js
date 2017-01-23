@@ -57,7 +57,6 @@ const rule = {
     const isStartOfLine = LIST_LOOKBEHIND_R.test(prevCapture);
 
     if (isStartOfLine) {
-      console.log('LIST_R.exec(source)', LIST_R.exec(source))
       return LIST_R.exec(source);
     } else {
       return null;

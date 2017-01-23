@@ -4,7 +4,7 @@ import {COLOR_LIGHT_GRAY} from '../variables/variables';
 
 import Wiki from './wiki';
 
-describe.only('<Wiki/>', () => {
+describe('<Wiki/>', () => {
   it('should init', () => {
     const wrapper = shallow(<Wiki></Wiki>);
     wrapper.should.be.defined;
@@ -34,6 +34,26 @@ describe.only('<Wiki/>', () => {
     > This is quote
     `</Wiki>);
     wrapper.should.be.defined;
+  });
+
+  it('should render first level heading', () => {
+    const wrapper = shallow(<Wiki>
+    =Level 1 header=
+    </Wiki>);
+
+    const title = wrapper.find({testID: 'heading'});
+    title.prop('style').should.contain({fontSize: 24});
+    title.should.contain.html('Level 1 header');
+  });
+
+  it('should render second level heading', () => {
+    const wrapper = shallow(<Wiki>
+    ==Level 2 header==
+    </Wiki>);
+
+    const title = wrapper.find({testID: 'heading'});
+    title.prop('style').should.contain({fontSize: 22});
+    title.should.contain.html('Level 2 header');
   });
 
   it('should render image', () => {

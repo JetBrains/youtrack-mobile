@@ -20,14 +20,14 @@ export default function (actions) {
     newline: {
       ...SimpleMarkdown.defaultRules.newline,
       react: (node, output, state) => {
-        return <Text key={state.key} selectable={true} style={styles.commonTextItem}>{'\n'}</Text>;
+        return <Text key={state.key} selectable={true} style={styles.commonTextItem} testID="newline">{'\n'}</Text>;
       }
     },
     paragraph: {
       ...SimpleMarkdown.defaultRules.paragraph,
       react: (node, output, state) => {
         return <View key={state.key}>
-          <Text selectable={true} style={styles.commonTextItem}>{output(node.content, state)}</Text>
+          <Text selectable={true} style={styles.commonTextItem} testID="paragraph">{output(node.content, state)}</Text>
         </View>;
       }
     },
@@ -82,16 +82,30 @@ export default function (actions) {
     heading: {
       order: SimpleMarkdown.defaultRules.strong.order,
 
-      match: source => /^=([\s\S]+?)=(?!=)\n/.exec(source),
+      match: source => {
+        return /^====([\s\S]+?)(====)(?!====)/.exec(source) ||
+          /^===([\s\S]+?)(===)(?!===)/.exec(source) ||
+          /^==([\s\S]+?)(==)(?!==)/.exec(source) ||
+          /^=([\s\S]+?)(=)(?!=)/.exec(source);
+      },
 
       parse: (capture, parse, state) => {
         return {
-          content: parse(capture[CONTENT_WITHIN_MARKERS], state)
+          content: parse(capture[CONTENT_WITHIN_MARKERS], state),
+          level: capture[2].length
         };
       },
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.heading} selectable={true}>{output(node.content)}{'\n'}</Text>;
+        const fontSizes = [24, 22, 20, 18];
+        const fontSize = fontSizes[node.level - 1];
+
+        return <Text
+          key={state.key}
+          testID="heading"
+          style={[styles.heading, { fontSize }]}
+          selectable={true}
+          >{output(node.content)}{'\n'}</Text>;
       }
     },
 
