@@ -30,13 +30,6 @@ describe('<Wiki/>', () => {
     wrapper.find({testID: 'italic'}).prop('style').fontStyle.should.equal('italic');
   });
 
-  it.skip('should render bold and italic text', () => {
-    const wrapper = shallow(<Wiki>{`'''''Bold and italic'''''`}</Wiki>);
-
-    wrapper.find({testID: 'italic'}).prop('style').fontStyle.should.equal('italic');
-    wrapper.find({testID: 'bold'}).prop('style').fontWeight.should.equal('bold');
-  });
-
   it('should render colored text', () => {
     const wrapper = shallow(<Wiki>{'{color:green}text{color}'}</Wiki>);
     const colorTextNode = wrapper.find({testID: 'color-text'});
