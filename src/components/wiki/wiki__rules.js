@@ -5,6 +5,7 @@ import flattenStyle from 'react-native/Libraries/StyleSheet/flattenStyle';
 import SimpleMarkdown from 'simple-markdown';
 import styles from './wiki.styles';
 import FenceHtml from 'react-native-fence-html';
+import listRule from './wiki__list-rule';
 
 const CONTENT_WITH_MARKERS = 0;
 const CONTENT_WITHIN_MARKERS = 1;
@@ -313,6 +314,8 @@ export default function (actions) {
         }
         return <Text key={state.key} style={styles.cutBlock} selectable={true}>{cuttedContent}</Text>;
       }
-    }
+    },
+
+    list: listRule
   };
 }

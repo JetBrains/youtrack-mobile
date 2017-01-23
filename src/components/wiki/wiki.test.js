@@ -4,7 +4,7 @@ import {COLOR_LIGHT_GRAY} from '../variables/variables';
 
 import Wiki from './wiki';
 
-describe('<Wiki/>', () => {
+describe.only('<Wiki/>', () => {
   it('should init', () => {
     const wrapper = shallow(<Wiki></Wiki>);
     wrapper.should.be.defined;
@@ -97,5 +97,52 @@ describe('<Wiki/>', () => {
     </Wiki>);
 
     wrapper.find({testID: 'noformat'}).children().should.contain.text('some text with *markup*');
+  });
+
+  it('should render not numbered list', () => {
+    const wrapper = shallow(<Wiki>{`
+* first
+* second
+* third
+      `}</Wiki>);
+
+      wrapper.find({testID: 'list-container'}).should.have.length(1);
+
+      const items = wrapper.find({testID: 'list-item'});
+      items.should.have.length(3);
+
+      items.first().should.contain.html('• first\n');
+
+  });
+
+      it.skip('should render nested list', () => {
+    const wrapper = shallow(<Wiki>{`
+* top
+*# inline 1
+*# inline 2
+      `}</Wiki>);
+
+      wrapper.find({testID: 'list-container'}).should.have.length(1);
+
+      const items = wrapper.find({testID: 'list-item'});
+      items.should.have.length(3);
+
+      items.at(1).should.contain.html('1 inline 1\n');
+  });
+
+    it.skip('should render two lists near', () => {
+    const wrapper = shallow(<Wiki>{`
+* first
+* second
+
+# first numbered
+# second numbered
+      `}</Wiki>);
+
+      wrapper.find({testID: 'list-container'}).should.have.length(2);
+
+      const items = wrapper.find({testID: 'list-item'});
+      items.should.have.length(4);
+
   });
 });
