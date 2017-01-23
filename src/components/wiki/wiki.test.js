@@ -36,6 +36,12 @@ describe('<Wiki/>', () => {
     wrapper.should.be.defined;
   });
 
+  it('should render HR', () => {
+    const wrapper = shallow(<Wiki>----</Wiki>);
+
+    wrapper.find({testID: 'hr'}).length.should.equal(1);
+  });
+
   it('should render first level heading', () => {
     const wrapper = shallow(<Wiki>
     =Level 1 header=

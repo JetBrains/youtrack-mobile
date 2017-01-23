@@ -82,5 +82,8 @@ export default StyleSheet.create({
     borderLeftWidth: 2,
     borderLeftColor: COLOR_GRAY,
     paddingLeft: UNIT/2
+  },
+  horizontalLine: {
+    color: COLOR_GRAY
   }
 });

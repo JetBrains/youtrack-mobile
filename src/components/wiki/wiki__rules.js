@@ -309,6 +309,14 @@ export default function (actions) {
       }
     },
 
+    hr: {
+        ...SimpleMarkdown.defaultRules.hr,
+        match: source => /^(-{4,})/.exec(source),
+        react: function(node, output, state) {
+            return <Text key={state.key} testID="hr" style={styles.horizontalLine}>______________</Text>;
+        }
+    },
+
     cut: {
       ...SimpleMarkdown.defaultRules.em,
       match: source => /^\{cut.*?}([\s\S]+?)\{cut}(?!\{cut})/.exec(source),
