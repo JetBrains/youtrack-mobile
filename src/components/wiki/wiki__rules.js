@@ -16,26 +16,30 @@ export default function (actions) {
     /**
      * Basic rules
      */
-    newline: Object.assign({}, SimpleMarkdown.defaultRules.newline, {
+    newline: {
+      ...SimpleMarkdown.defaultRules.newline,
       react: (node, output, state) => {
         return <Text key={state.key} selectable={true} style={styles.commonTextItem}>{'\n'}</Text>;
       }
-    }),
-    paragraph: Object.assign({}, SimpleMarkdown.defaultRules.paragraph, {
+    },
+    paragraph: {
+      ...SimpleMarkdown.defaultRules.paragraph,
       react: (node, output, state) => {
         return <View key={state.key}>
           <Text selectable={true} style={styles.commonTextItem}>{output(node.content, state)}</Text>
         </View>;
       }
-    }),
-    text: Object.assign({}, SimpleMarkdown.defaultRules.text, {
+    },
+    text: {
+      ...SimpleMarkdown.defaultRules.text,
       react: (node, output, state) => node.content
-    }),
+    },
 
     /**
      * Custom YT wiki rules
      */
-    strong: Object.assign({}, SimpleMarkdown.defaultRules.strong, {
+    strong: {
+      ...SimpleMarkdown.defaultRules.strong,
       match: source => {
         return /^\*([\s\S]+?)\*(?!\*)/.exec(source) || /^'''([\s\S]+?)'''(?!''')/.exec(source);
       },
@@ -43,9 +47,10 @@ export default function (actions) {
       react: (node, output, state) => {
         return <Text key={state.key} style={styles.strong} selectable={true}>{output(node.content)}</Text>;
       }
-    }),
+    },
 
-    color: Object.assign({}, SimpleMarkdown.defaultRules.strong, {
+    color: {
+      ...SimpleMarkdown.defaultRules.strong,
       match: source => /^{color:(\S*?)}([\s\S]+?){color}(?!{color})/.exec(source),
 
       parse: (capture, parse, state) => {
@@ -60,9 +65,10 @@ export default function (actions) {
           selectable={true}
           testID="color-text">{output(node.content)}</Text>;
       }
-    }),
+    },
 
-    monospace: Object.assign({}, SimpleMarkdown.defaultRules.strong, {
+    monospace: {
+      ...SimpleMarkdown.defaultRules.strong,
       match: source => {
         return /^{{([\s\S]+?)}}(?!}})/.exec(source) || /^{monospace}([\s\S]+?){monospace}(?!{monospace})/.exec(source);
       },
@@ -70,7 +76,7 @@ export default function (actions) {
       react: (node, output, state) => {
         return <Text key={state.key} style={styles.monospace} selectable={true}>{output(node.content)}</Text>;
       }
-    }),
+    },
 
     heading: {
       order: SimpleMarkdown.defaultRules.strong.order,
@@ -88,34 +94,38 @@ export default function (actions) {
       }
     },
 
-    underline: Object.assign({}, SimpleMarkdown.defaultRules.u, {
+    underline: {
+      ...SimpleMarkdown.defaultRules.u,
       match: source => /^\+([\s\S]+?)\+(?!\+)/.exec(source),
 
       react: (node, output, state) => {
         return <Text key={state.key} style={styles.underline} selectable={true}>{output(node.content)}</Text>;
       }
-    }),
+    },
 
-    del: Object.assign({}, SimpleMarkdown.defaultRules.del, {
+    del: {
+      ...SimpleMarkdown.defaultRules.del,
       match: source => /^--([\s\S]+?)--(?!--)/.exec(source),
 
       react: (node, output, state) => {
         return <Text key={state.key} style={styles.del} selectable={true}>{output(node.content)}</Text>;
       }
-    }),
+    },
 
-    italic: Object.assign({}, SimpleMarkdown.defaultRules.em, {
+    italic: {
+      ...SimpleMarkdown.defaultRules.em,
       match: source => /^''([\s\S]+?)''(?!'')/.exec(source),
 
       react: (node, output, state) => {
         return <Text key={state.key} style={styles.italic} selectable={true}>{output(node.content)}</Text>;
       }
-    }),
+    },
 
     /**
      * NOTE: YT's wiki contains image names, not urls. Names should be first replaced with urls
      */
-    image: Object.assign({}, SimpleMarkdown.defaultRules.image, {
+    image: {
+      ...SimpleMarkdown.defaultRules.image,
       match: source => /^!(\S([\s\S]+?)\S)!(?!!)/.exec(source),
 
       parse: function(capture) {
@@ -141,9 +151,10 @@ export default function (actions) {
             style={styles.image}/>
         </Text>;
       }
-    }),
+    },
 
-    link: Object.assign({}, SimpleMarkdown.defaultRules.link, {
+    link: {
+      ...SimpleMarkdown.defaultRules.link,
       match: source => /^\[(https?:\/\/\S*)\s?(.*?)\]/.exec(source) || /^<(https?:\/\/\S*)>/.exec(source),
 
       parse: function(capture, parse, state) {
@@ -157,9 +168,10 @@ export default function (actions) {
       react: (node, output, state) => {
         return <Text key={state.key} style={styles.link} onPress={() => actions.onLinkPress(node.url)} selectable={true}>{node.content}</Text>;
       }
-    }),
+    },
 
-    issueIdLink: Object.assign({}, SimpleMarkdown.defaultRules.link, {
+    issueIdLink: {
+      ...SimpleMarkdown.defaultRules.link,
       match: source => /^\[ytmissue]([\s\S]+?)\|([\s\S]+?)\|([\S]+?)\[ytmissue](?!\[ytmissue])/.exec(source),
       parse: function(capture, parse, state) {
         const res = {
@@ -176,9 +188,10 @@ export default function (actions) {
                      selectable={true}
                      onPress={() => actions.onIssueIdPress(node.issueId)}>{node.issueId}</Text>;
       }
-    }),
+    },
 
-    userLogin: Object.assign({}, SimpleMarkdown.defaultRules.link, {
+    userLogin: {
+      ...SimpleMarkdown.defaultRules.link,
       match: source => /^\[ytmuser]([\s\S]+?)\|([\s\S]+?)\[ytmuser](?!\[ytmuser])/.exec(source),
       parse: function(capture, parse, state) {
         const res = {
@@ -191,9 +204,10 @@ export default function (actions) {
       react: (node, output, state) => {
         return <Text key={state.key} style={[styles.link, {textDecorationLine: null}]} selectable={true}>{node.username}</Text>;
       }
-    }),
+    },
 
-    url: Object.assign({}, SimpleMarkdown.defaultRules.url, {
+    url: {
+      ...SimpleMarkdown.defaultRules.url,
       match: source => /^https?:\/\/\S*/.exec(source),
 
       parse: (capture, parse, state) => {
@@ -205,9 +219,10 @@ export default function (actions) {
       react: (node, output, state) => {
         return <Text key={state.key} style={styles.link} onPress={() => actions.onLinkPress(node.url)} selectable={true}>{node.url}</Text>;
       }
-    }),
+    },
 
-    codeBlock: Object.assign({}, SimpleMarkdown.defaultRules.codeBlock, {
+    codeBlock: {
+      ...SimpleMarkdown.defaultRules.codeBlock,
       match: source => /^```([\s\S]+?)```(?!```)/.exec(source) || /^\{code.*\}([\s\S]+?)\{code\}(?!\{code\})/.exec(source),
 
       parse: function(capture) {
@@ -219,21 +234,24 @@ export default function (actions) {
       react: (node, output, state) => {
         return <Text key={state.key} style={styles.codeBlock} selectable={true}>{node.content}</Text>;
       }
-    }),
+    },
 
-    blockQuote: Object.assign({}, SimpleMarkdown.defaultRules.blockQuote, {
+    blockQuote: {
+      ...SimpleMarkdown.defaultRules.blockQuote,
       react: (node, output, state) => {
         return <View key={state.key} style={styles.blockQuote} testID="quote">{output(node.content, state)}</View>;
       }
-    }),
+    },
 
-    inlineCode: Object.assign({}, SimpleMarkdown.defaultRules.inlineCode, {
+    inlineCode: {
+      ...SimpleMarkdown.defaultRules.inlineCode,
       react: (node, output, state) => {
         return <Text key={state.key} style={styles.inlineCode} selectable={true}>{node.content}</Text>;
       }
-    }),
+    },
 
-    noFormat: Object.assign({}, SimpleMarkdown.defaultRules.inlineCode, {
+    noFormat: {
+      ...SimpleMarkdown.defaultRules.inlineCode,
       match: source => /^\{noformat}([\s\S]+?)\{noformat}(?!\{noformat})/.exec(source),
 
       parse: (capture, parse, state) => {
@@ -245,9 +263,10 @@ export default function (actions) {
       react: (node, output, state) => {
         return <Text key={state.key} style={styles.inlineCode} selectable={true} testID="noformat">{node.content}</Text>;
       }
-    }),
+    },
 
-    html: Object.assign({}, SimpleMarkdown.defaultRules.codeBlock, {
+    html: {
+      ...SimpleMarkdown.defaultRules.codeBlock,
       match: source => /^\{html.*?}([\s\S]+?)\{html}(?!\{html})/.exec(source),
 
       parse: (capture, parse, state) => {
@@ -273,9 +292,10 @@ export default function (actions) {
           onLinkPress={(evt, href) => actions.onLinkPress(href)}
         />;
       }
-    }),
+    },
 
-    cut: Object.assign({}, SimpleMarkdown.defaultRules.em, {
+    cut: {
+      ...SimpleMarkdown.defaultRules.em,
       match: source => /^\{cut.*?}([\s\S]+?)\{cut}(?!\{cut})/.exec(source),
 
       parse: (capture, parse, state) => {
@@ -293,6 +313,6 @@ export default function (actions) {
         }
         return <Text key={state.key} style={styles.cutBlock} selectable={true}>{cuttedContent}</Text>;
       }
-    })
+    }
   };
 }
