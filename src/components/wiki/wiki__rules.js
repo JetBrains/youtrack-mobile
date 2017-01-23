@@ -39,17 +39,6 @@ export default function (actions) {
     /**
      * Custom YT wiki rules
      */
-    strong: {
-      ...SimpleMarkdown.defaultRules.strong,
-      match: source => {
-        return /^\*([\s\S]+?)\*(?!\*)/.exec(source) || /^'''([\s\S]+?)'''(?!''')/.exec(source);
-      },
-
-      react: (node, output, state) => {
-        return <Text key={state.key} style={styles.strong} selectable={true}>{output(node.content)}</Text>;
-      }
-    },
-
     color: {
       ...SimpleMarkdown.defaultRules.strong,
       match: source => /^{color:(\S*?)}([\s\S]+?){color}(?!{color})/.exec(source),
@@ -128,11 +117,21 @@ export default function (actions) {
     },
 
     italic: {
-      ...SimpleMarkdown.defaultRules.em,
-      match: source => /^''([\s\S]+?)''(?!'')/.exec(source),
+      ...SimpleMarkdown.defaultRules.strong,
+      match: source => /^''([^'\n]+?)''(?!'')/.exec(source),
+      react: (node, output, state) => {
+        return <Text key={state.key} style={styles.italic} selectable={true} testID="italic">{output(node.content)}</Text>;
+      }
+    },
+
+    strong: {
+      ...SimpleMarkdown.defaultRules.strong,
+      match: source => {
+        return /^\*([\s\S]+?)\*(?!\*)/.exec(source) || /^'''([\s\S]+?)'''(?!''')/.exec(source);
+      },
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.italic} selectable={true}>{output(node.content)}</Text>;
+        return <Text key={state.key} style={styles.strong} selectable={true} testID="strong">{output(node.content)}</Text>;
       }
     },
 

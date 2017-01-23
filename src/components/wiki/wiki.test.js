@@ -15,10 +15,26 @@ describe('<Wiki/>', () => {
     wrapper.html().should.contain('foo bar');
   });
 
-  it('should render bold text', () => {
-    const wrapper = shallow(<Wiki>*foo*</Wiki>);
-    const boldTextNode = wrapper.findWhere(component => component.props().style && component.props().style.fontWeight === 'bold');
-    boldTextNode.length.should.equal(1);
+  it('should render strong text with stars syntax', () => {
+    const wrapper = shallow(<Wiki>{`*foo text*`}</Wiki>);
+    wrapper.find({testID: 'strong'}).prop('style').fontWeight.should.equal('bold');
+  });
+
+  it('should render strong text with ticks syntax', () => {
+    const wrapper = shallow(<Wiki>{`'''foo text'''`}</Wiki>);
+    wrapper.find({testID: 'strong'}).prop('style').fontWeight.should.equal('bold');
+  });
+
+  it('should render italic text', () => {
+    const wrapper = shallow(<Wiki>{`''foo text''`}</Wiki>);
+    wrapper.find({testID: 'italic'}).prop('style').fontStyle.should.equal('italic');
+  });
+
+  it.skip('should render bold and italic text', () => {
+    const wrapper = shallow(<Wiki>{`'''''Bold and italic'''''`}</Wiki>);
+
+    wrapper.find({testID: 'italic'}).prop('style').fontStyle.should.equal('italic');
+    wrapper.find({testID: 'bold'}).prop('style').fontWeight.should.equal('bold');
   });
 
   it('should render colored text', () => {
