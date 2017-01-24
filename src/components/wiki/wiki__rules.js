@@ -252,8 +252,14 @@ export default function (actions) {
 
     blockQuote: {
       ...SimpleMarkdown.defaultRules.blockQuote,
+      match: SimpleMarkdown.blockRegex(/^>\s+?([\s\S]+?)\n/),
+      parse: (capture, parse, state) => {
+        return {
+          content: capture[CONTENT_WITHIN_MARKERS]
+        };
+      },
       react: (node, output, state) => {
-        return <View key={state.key} style={styles.blockQuote} testID="quote">{output(node.content, state)}</View>;
+        return <View key={state.key} style={styles.blockQuote} testID="quote">{node.content}</View>;
       }
     },
 

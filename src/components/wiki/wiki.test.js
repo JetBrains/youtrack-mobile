@@ -39,10 +39,23 @@ describe('<Wiki/>', () => {
   });
 
   it('should render quote', () => {
-    const wrapper = shallow(<Wiki>`
+    const wrapper = shallow(<Wiki>
     > This is quote
-    `</Wiki>);
-    wrapper.should.be.defined;
+    </Wiki>);
+
+    const quote = wrapper.find({testID: 'quote'});
+    quote.length.should.equal(1);
+    quote.should.contain.html('This is quote');
+  });
+
+  it('should render quote and not capture next text', () => {
+    const wrapper = shallow(<Wiki>
+    > This is quote{'\n'}
+    this is next text
+    </Wiki>);
+
+    const quote = wrapper.find({testID: 'quote'});
+    quote.should.not.contain.html('this is next text');
   });
 
   it('should render HR', () => {
