@@ -31,10 +31,7 @@ export default function (actions) {
         </View>;
       }
     },
-    text: {
-      ...SimpleMarkdown.defaultRules.text,
-      react: (node, output, state) => node.content
-    },
+    text: SimpleMarkdown.defaultRules.text,
 
     /**
      * Custom YT wiki rules
@@ -252,14 +249,17 @@ export default function (actions) {
 
     blockQuote: {
       ...SimpleMarkdown.defaultRules.blockQuote,
-      match: SimpleMarkdown.blockRegex(/^>\s+?([\s\S]+?)\n/),
+      match: SimpleMarkdown.blockRegex(/^>\s*?([\s\S]+?)\n/),
       parse: (capture, parse, state) => {
+        const content = capture[CONTENT_WITHIN_MARKERS];
         return {
-          content: capture[CONTENT_WITHIN_MARKERS]
+          content: SimpleMarkdown.parseInline(parse, content, state)
         };
       },
       react: (node, output, state) => {
-        return <View key={state.key} style={styles.blockQuote} testID="quote">{node.content}</View>;
+        return <View key={state.key} style={styles.blockQuote} testID="quote">
+          <Text style={styles.commonTextBlock} selectable={true}>{output(node.content)}</Text>
+        </View>;
       }
     },
 
