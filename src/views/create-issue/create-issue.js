@@ -176,9 +176,26 @@ export default class CreateIssue extends React.Component {
     return await this.updateIssueDraft();
   }
 
+  renderProjectSelector() {
+    const project = this.state.issue.project;
+    const projectSelected = project !== notSelectedProject;
+    return (
+      <TouchableOpacity
+        disabled={this.state.processing}
+        style={styles.selectProjectButton}
+        onPress={() => this.fieldsPanel.onSelectProject()}
+        >
+        <Text style={styles.selectProjectText}>
+          {projectSelected ? project.shortName : 'Select project'}
+        </Text>
+        <Image style={styles.selectProjectIcon} source={next} resizeMode="contain" />
+      </TouchableOpacity>
+    );
+  }
+
   render() {
-    const issue = this.state.issue;
-    const canCreateIssue = issue.summary && issue.project.id && !this.state.processing && !this.state.attachingImage;
+    const {issue, attachingImage, processing} = this.state;
+    const canCreateIssue = issue.summary && issue.project.id && !processing && !attachingImage;
 
     const createButton = <Text style={canCreateIssue ? null : styles.disabledCreateButton}>Create</Text>;
 
@@ -195,23 +212,27 @@ export default class CreateIssue extends React.Component {
             <Text style={issueStyles.headerText}>New Issue</Text>
           </Header>
           <View>
+            {this.renderProjectSelector()}
+
+            <View style={styles.separator} />
+
             <IssueSummary
               style={styles.issueSummary}
               showSeparator={true}
               summary={issue.summary}
               description={issue.description}
-              editable={!this.state.processing}
-              onSummaryChange={summary => this.setState({issue: {...this.state.issue, summary}})}
-              onDescriptionChange={description => this.setState({issue: {...this.state.issue, description}})}
+              editable={!processing}
+              onSummaryChange={summary => this.setState({issue: {...issue, summary}})}
+              onDescriptionChange={description => this.setState({issue: {...issue, description}})}
             />
 
-            {this.state.issue.project.id && <View style={styles.attachesContainer}>
+              {issue.project.id && <View style={styles.attachesContainer}>
 
-              <AttachmentsRow attachments={this.state.issue.attachments} attachingImage={this.state.attachingImage}/>
+              <AttachmentsRow attachments={issue.attachments} attachingImage={attachingImage}/>
 
               <View style={styles.attachButtonsContainer}>
                 <TouchableOpacity
-                  disabled={this.state.attachingImage !== null}
+                  disabled={attachingImage !== null}
                   style={styles.attachButton}
                   onPress={() => this.attachPhoto(true)}>
                   <Image style={styles.attachIcon} source={attach} resizeMode="contain"/>
@@ -219,7 +240,7 @@ export default class CreateIssue extends React.Component {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  disabled={this.state.attachingImage !== null}
+                  disabled={attachingImage !== null}
                   style={styles.attachButton}
                   onPress={() => this.attachPhoto(false)}>
                   <Text style={styles.attachButtonText}>Take a picture...</Text>
@@ -240,12 +261,14 @@ export default class CreateIssue extends React.Component {
         </ScrollView>
 
         <CustomFieldsPanel
+          ref={node => this.fieldsPanel = node}
           api={this.props.api}
-          issue={this.state.issue}
+          issue={issue}
           canEditProject={true}
           issuePermissions={{canUpdateField: () => true}}
           onUpdate={this.onSetFieldValue.bind(this)}
-          onUpdateProject={this.onUpdateProject.bind(this)}/>
+          onUpdateProject={this.onUpdateProject.bind(this)}
+        />
       </View>
     );
   }

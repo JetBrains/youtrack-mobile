@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_PINK, COLOR_FONT_GRAY, COLOR_GRAY} from '../../components/variables/variables';
+import {UNIT, COLOR_PINK, COLOR_FONT, COLOR_FONT_GRAY, COLOR_GRAY} from '../../components/variables/variables';
 
 const ATTACHING_IMAGE_ALPHA = '70';
 
@@ -74,5 +74,22 @@ export default StyleSheet.create({
   actionIcon: {
     width: 16,
     height: 16
-  }
+  },
+  selectProjectButton: {
+    paddingTop: UNIT*2,
+    paddingBottom: UNIT*2,
+    marginLeft: UNIT*2,
+    marginRight: UNIT*2,
+    justifyContent: 'space-between',
+    flexDirection: 'row'
+  },
+  selectProjectText: {
+    color: COLOR_FONT,
+    fontSize: 16
+  },
+  selectProjectIcon: {
+    alignSelf: 'flex-end',
+    width: 16,
+    height: 16
+  },
 });
