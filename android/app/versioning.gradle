@@ -8,8 +8,10 @@ ext {
   }
 
   buildVersionName = { version ->
-    def (major, minor, patch) = version.toLowerCase().tokenize('.')
+    def (major, minor, patch) = version.toLowerCase().replaceAll('-', '.').tokenize('.')
 
-    "${major}.${minor}.${patch}"
+    def patchPart = patch.toInteger() == 0 ? "" : ".${patch}";
+
+    "${major}.${minor}${patchPart}"
   }
 }

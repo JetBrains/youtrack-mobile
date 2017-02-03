@@ -8,8 +8,9 @@ const major = versionParts[0];
 const minor = versionParts[1];
 const patch = versionParts[2];
 const buildNumber = versionParts[3];
+const patchPart = parseInt(patch) === 0 ? '' : `.${patch}`;
 
-const marketingVersion = `${major}.${minor}.${patch}`;
+const marketingVersion = `${major}.${minor}${patchPart}`;
 
 function reporter(error, stdout) {
   if (error) {
@@ -17,5 +18,7 @@ function reporter(error, stdout) {
   }
   console.log(stdout);
 }
+
+console.log(`Setting iOS version. Marketing = ${marketingVersion}, build number = ${buildNumber}`);
 
 exec(`cd ios && agvtool new-marketing-version ${marketingVersion} && agvtool new-version -all ${buildNumber}`, reporter);

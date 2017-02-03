@@ -6,8 +6,9 @@ const splitRegExp = /[\.-]/i;
 const VERSION = process.env.npm_package_version || 'dev.dev.dev-dev';
 
 const [major, minor, patch, build] = VERSION.split(splitRegExp);
+const patchPart = parseInt(patch) === 0 ? '' : `.${patch}`;
 
-export const VERSION_STRING = `${major}.${minor}.${patch} (build ${build})`;
+export const VERSION_STRING = `${major}.${minor}${patchPart} (build ${build})`;
 
 const googleAnalyiticsId = process.env.ANALYTICS_ID;
 let isAnalyticsEnabled = false;
