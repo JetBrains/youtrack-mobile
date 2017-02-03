@@ -47,8 +47,8 @@ export default StyleSheet.create({
     fontStyle: 'italic'
   },
   image: {
-    width: 150,
-    height: 150,
+    width: 264,
+    height: 264,
     resizeMode: 'contain'
   },
   link: {

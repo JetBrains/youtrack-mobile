@@ -156,10 +156,16 @@ export default function (actions) {
 
 
         return <Text onPress={() => actions.onImagePress(node.url)} key={state.key}>
+          {Platform.OS === 'android' ?
+          <Image
+            source={{uri: `${node.url}&w=${imageWidth}&h=${imageHeight}`}}
+            style={styles.image}/>
+          :
           <ImageProgress
             renderIndicator={() => <ActivityIndicator/>}
-            source={{uri: `${node.url}&w=${imageWidth}&h=${imageHeight}`, width: 150, height: 150}}
+            source={{uri: `${node.url}&w=${imageWidth}&h=${imageHeight}`}}
             style={styles.image}/>
+          }
         </Text>;
       }
     },
