@@ -336,7 +336,8 @@ export default class CustomFieldsPanel extends Component {
   }
 
   render() {
-    const issue = this.props.issue;
+    const {issue, issuePermissions, canEditProject} = this.props;
+    const {savingField, editingField, isEditingProject, isSavingProject} = this.state;
 
     return (
       <View ref="panel">
@@ -351,23 +352,22 @@ export default class CustomFieldsPanel extends Component {
 
         <ScrollView horizontal={true} style={styles.customFieldsPanel}>
           <View key="Project">
-            <CustomField disabled={!this.props.canEditProject}
+            <CustomField disabled={!canEditProject}
                          onPress={() => this.onSelectProject()}
-                         active={this.state.isEditingProject}
+                         active={isEditingProject}
                          field={{projectCustomField: {field: {name: 'Project'}}, value: {name: issue.project.shortName}}}/>
-            {this.state.isSavingProject && <ActivityIndicator style={styles.savingFieldIndicator}/>}
+            {isSavingProject && <ActivityIndicator style={styles.savingFieldIndicator}/>}
           </View>
 
           {issue.fields.map((field) => {
             return <View key={field.id}>
-
               <CustomField
                 field={field}
                 onPress={() => this.onEditField(field)}
-                active={this.state.editingField === field}
-                disabled={!this.props.issuePermissions.canUpdateField(issue, field)}/>
+                active={editingField === field}
+                disabled={!issuePermissions.canUpdateField(issue, field)}/>
 
-              {this.state.savingField === field && <ActivityIndicator style={styles.savingFieldIndicator}/>}
+              {savingField && savingField.id === field.id && <ActivityIndicator style={styles.savingFieldIndicator}/>}
             </View>;
           })}
         </ScrollView>
