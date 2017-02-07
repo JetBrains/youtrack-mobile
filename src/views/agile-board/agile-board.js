@@ -7,6 +7,7 @@ import styles from './agile-board.styles';
 import Menu from '../../components/menu/menu';
 import BoardHeader from './components/board-header';
 import BoardRow from './components/board-row';
+import Router from '../../components/router/router';
 import Auth from '../../components/auth/auth';
 import Api from '../../components/api/api';
 import {COLOR_PINK} from '../../components/variables/variables';
@@ -79,6 +80,14 @@ export default class AgileBoard extends Component {
     />;
   }
 
+  _onTapIssue = (issue: IssueOnList) => {
+    Router.SingleIssue({
+      issuePlaceholder: issue,
+      issueId: issue.id,
+      api: this.api,
+    });
+  }
+
   _renderHeader() {
     const {sprint} = this.state;
     return (
@@ -107,15 +116,15 @@ export default class AgileBoard extends Component {
       <View>
         <BoardHeader columns={columns}/>
 
-        {sprint.agile.orphansAtTheTop && <BoardRow row={board.orphanRow}/>}
+        {sprint.agile.orphansAtTheTop && <BoardRow row={board.orphanRow} onTapIssue={this._onTapIssue}/>}
 
         {board.trimmedSwimlanes.map(swimlane => {
           return (
-            <BoardRow key={swimlane.id} row={swimlane}/>
+            <BoardRow key={swimlane.id} row={swimlane} onTapIssue={this._onTapIssue}/>
           );
         })}
 
-        {!sprint.agile.orphansAtTheTop && <BoardRow row={board.orphanRow}/>}
+        {!sprint.agile.orphansAtTheTop && <BoardRow row={board.orphanRow} onTapIssue={this._onTapIssue}/>}
       </View>
     );
   }

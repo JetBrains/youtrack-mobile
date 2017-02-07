@@ -1,5 +1,5 @@
 /* @flow */
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { UNIT, COLOR_GRAY, COLOR_PINK } from '../../../components/variables/variables';
 import AgileCard from '../../../components/agile-card/agile-card';
@@ -35,17 +35,22 @@ const styles = StyleSheet.create({
 
 type Props = {
   style?: any,
-  row: any
+  row: any,
+  onTapIssue: (issue: IssueOnList) => any
 };
 
-function renderIssue(issue) {
-  return <AgileCard key={issue.id} issue={issue} style={styles.card}/>;
+function renderIssue(issue: IssueOnList, props) {
+  const {onTapIssue = (issue) => {}} = props;
+
+  return <TouchableOpacity key={issue.id} onPress={() => onTapIssue(issue)}>
+    <AgileCard issue={issue} style={styles.card}/>
+  </TouchableOpacity>;
 }
 
-function renderCell(cell) {
+function renderCell(cell, props) {
   return (
     <View key={cell.id} style={styles.column}>
-      {cell.issues.map(renderIssue)}
+      {cell.issues.map(issue => renderIssue(issue, props))}
     </View>
   );
 }
@@ -66,7 +71,7 @@ export default function BoardRow(props: Props) {
       </View>
 
       <View style={styles.row}>
-        {row.cells.map(renderCell)}
+        {row.cells.map(cell => renderCell(cell, props))}
       </View>
 
     </View>
