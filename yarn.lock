@@ -3583,9 +3583,9 @@ react-native-view-transformer@0.0.28:
     react-native-gesture-responder "0.1.1"
     react-native-scroller "0.0.6"
 
-react-native@0.41.0:
-  version "0.41.0"
-  resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.41.0.tgz#09ea967b182885f302724f14587145da3b2d2e22"
+react-native@^0.41.2:
+  version "0.41.2"
+  resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.41.2.tgz#c6f486b8450a9909e6fed2dfd2c2af946563bf4f"
   dependencies:
     absolute-path "^0.0.0"
     art "^0.10.0"
