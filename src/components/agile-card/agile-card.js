@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
-  issue: IssueOnList
+  issue: any
 };
 
 export default function AgileCard(props: Props) {

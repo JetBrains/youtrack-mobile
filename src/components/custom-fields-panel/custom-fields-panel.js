@@ -273,7 +273,9 @@ export default class CustomFieldsPanel extends Component {
         <Header
           leftButton={<Text>Cancel</Text>}
           rightButton={<Text></Text>}
-          onBack={() => this.closeEditor()}>
+          onBack={() => {
+            this.closeEditor();
+          }}>
           <Text>{this.state.datePicker.title}</Text>
         </Header>
         <View style={styles.calendar}>
@@ -312,7 +314,9 @@ export default class CustomFieldsPanel extends Component {
       }]}>
         <Header
           leftButton={<Text>Cancel</Text>}
-          onBack={() => this.closeEditor()}>
+          onBack={() => {
+            this.closeEditor();
+          }}>
           <Text>{this.state.editingField.projectCustomField.field.name}</Text>
         </Header>
         <View>

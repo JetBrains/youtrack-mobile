@@ -7,6 +7,7 @@ import styles from './agile-board.styles';
 import Menu from '../../components/menu/menu';
 import BoardHeader from './components/board-header';
 import BoardRow from './components/board-row';
+import Auth from '../../components/auth/auth';
 
 type Props = {
   auth: Auth
@@ -50,7 +51,7 @@ export default class AgileBoard extends Component {
       <View>
         <BoardHeader columns={['Open', 'In Progress', 'Fixed']}/>
 
-        <BoardRow/>
+        <BoardRow row={{}}/>
       </View>
     );
   }

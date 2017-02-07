@@ -7,6 +7,7 @@ import {formatYouTrackURL} from '../../components/config/config';
 import getTopPadding from '../../components/header/header__top-padding';
 import Drawer from 'react-native-drawer';
 import Router from '../../components/router/router';
+import Auth from '../../components/auth/auth';
 
 const CURRENT_YEAR = (new Date()).getFullYear();
 
@@ -16,6 +17,7 @@ function openPrivacyPolicy() {
 
 
 type Props = {
+  children?: ReactElement<any>,
   show: boolean,
   auth: Auth,
   onLogOut: () => any,
