@@ -7,7 +7,6 @@ import ApiHelper from '../api/api__helper';
 
 const styles = StyleSheet.create({
   card: {
-    flex: 1,
     flexDirection: 'column',
     padding: UNIT
   },
