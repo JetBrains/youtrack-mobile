@@ -14,6 +14,9 @@ const styles = StyleSheet.create({
   issueIdColorField: {
     width: null, //Removes fixed width of usual color field
   },
+  assignees: {
+    flexDirection: 'row'
+  },
   avatar: {
     marginTop: UNIT / 2,
     width: 40,
@@ -28,23 +31,29 @@ type Props = {
 
 
 export default function AgileCard(props: Props) {
-  const {issue} = props;
+  const { issue } = props;
   const fieldHash = ApiHelper.makeFieldHash(issue);
 
-    const issueId = fieldHash.Priority ?
-      <ColorField
+  const issueId = fieldHash.Priority
+    ? <ColorField
         fullText
         style={styles.issueIdColorField}
         text={ApiHelper.getIssueId(issue)}
         color={fieldHash.Priority.color}
-      /> :
-      <Text>{ApiHelper.getIssueId(issue)}</Text>;
+      />
+    : <Text>{ApiHelper.getIssueId(issue)}</Text>;
+
+  const assignees = [fieldHash.Assignee, ...(fieldHash.Assignees || [])].filter(item => item);
 
   return (
     <View style={styles.card}>
       {issueId}
       <Text numberOfLines={3}>{issue.summary}</Text>
-      <Image style={styles.avatar} source={{uri: issue.reporter.avatarUrl}}/>
+      <View style={styles.assignees}>
+        {assignees.map(assignee => {
+          return <Image key={assignee.id} style={styles.avatar} source={{ uri: assignee.avatarUrl }} />;
+        })}
+      </View>
     </View>
   );
 }

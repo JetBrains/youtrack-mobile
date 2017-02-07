@@ -3,7 +3,7 @@ import {handleRelativeUrl} from '../config/config';
 import objectWalk from 'object-walk';
 
 const API = {
-  makeFieldHash: (issue: IssueOnList) => {
+  makeFieldHash: (issue: IssueOnList): Object => {
     const fieldHash = {};
     (issue.fields || []).forEach(field => {
       const fieldName = field.projectCustomField.field.name;
