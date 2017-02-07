@@ -94,7 +94,14 @@ const BOARD = toField([
   {trimmedSwimlanes: BOARD_ROW}
 ]);
 
-const SPRINT_WITH_BOARD = toField([SPRINT, { board: BOARD }]);
+const SPRINT_WITH_BOARD = toField([
+  SPRINT,
+  { board: BOARD },
+  {
+    agile: ['id', 'name', 'orphansAtTheTop']
+  }
+]);
+
 
 export default {
   agileUserProfile: AGILE_PROFILE,

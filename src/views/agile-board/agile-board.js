@@ -106,13 +106,15 @@ export default class AgileBoard extends Component {
       <View>
         <BoardHeader columns={columns}/>
 
-        <BoardRow row={board.orphanRow}/>
+        {sprint.agile.orphansAtTheTop && <BoardRow row={board.orphanRow}/>}
 
         {board.trimmedSwimlanes.map(swimlane => {
           return (
             <BoardRow key={swimlane.id} row={swimlane}/>
           );
         })}
+
+        {!sprint.agile.orphansAtTheTop && <BoardRow row={board.orphanRow}/>}
       </View>
     );
   }
