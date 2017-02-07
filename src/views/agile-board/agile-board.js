@@ -1,5 +1,5 @@
 /* @flow */
-import {ScrollView, View, Text} from 'react-native';
+import {ScrollView, View, Text, RefreshControl} from 'react-native';
 import React, {Component} from 'react';
 import usage from '../../components/usage/usage';
 import Header from '../../components/header/header';
@@ -9,6 +9,7 @@ import BoardHeader from './components/board-header';
 import BoardRow from './components/board-row';
 import Auth from '../../components/auth/auth';
 import Api from '../../components/api/api';
+import {COLOR_PINK} from '../../components/variables/variables';
 import {notifyError} from '../../components/notification/notification';
 
 type Props = {
@@ -17,6 +18,7 @@ type Props = {
 
 type State = {
   showMenu: boolean,
+  isRefreshing: boolean,
   sprint: ?Object,
   profile: ?Object,
 };
@@ -28,6 +30,7 @@ export default class AgileBoard extends Component {
 
   state = {
     showMenu: false,
+    isRefreshing: false,
     sprint: null,
     profile: null
   };
@@ -55,6 +58,24 @@ export default class AgileBoard extends Component {
     } catch (e) {
       notifyError('Could not load sprint', e);
     }
+  }
+
+  _renderRefreshControl() {
+    return <RefreshControl
+      refreshing={this.state.isRefreshing}
+      tintColor={COLOR_PINK}
+      onRefresh={async () => {
+        this.setState({isRefreshing: true});
+
+        try {
+          await this.loadBoard();
+        } catch (e) {
+          notifyError('Could not refresh sprint', e);
+        } finally {
+          this.setState({isRefreshing: false});
+        }
+      }}
+    />;
   }
 
   _renderHeader() {
@@ -109,7 +130,7 @@ export default class AgileBoard extends Component {
       >
         <View style={styles.container}>
           {this._renderHeader()}
-          <ScrollView>
+          <ScrollView refreshControl={this._renderRefreshControl()}>
             <ScrollView horizontal>
               {sprint && this._renderBoard()}
             </ScrollView>
