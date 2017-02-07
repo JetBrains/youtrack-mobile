@@ -1,10 +1,12 @@
 /* @flow */
-import {View, Text} from 'react-native';
+import {ScrollView, View, Text} from 'react-native';
 import React, {Component} from 'react';
 import usage from '../../components/usage/usage';
 import Header from '../../components/header/header';
 import styles from './agile-board.styles';
 import Menu from '../../components/menu/menu';
+import BoardHeader from './components/board-header';
+import BoardRow from './components/board-row';
 
 type Props = {
   auth: Auth
@@ -43,6 +45,16 @@ export default class AgileBoard extends Component {
     );
   }
 
+  _renderBoard() {
+    return (
+      <View>
+        <BoardHeader columns={['Open', 'In Progress', 'Fixed']}/>
+
+        <BoardRow/>
+      </View>
+    );
+  }
+
   render() {
     const {auth} = this.props;
     const {showMenu} = this.state;
@@ -56,7 +68,11 @@ export default class AgileBoard extends Component {
       >
         <View style={styles.container}>
           {this._renderHeader()}
-
+          <ScrollView>
+            <ScrollView horizontal>
+              {this._renderBoard()}
+            </ScrollView>
+          </ScrollView>
         </View>
       </Menu>
     );
