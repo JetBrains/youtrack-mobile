@@ -3,7 +3,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import React from 'react';
 import {UNIT, COLOR_GRAY} from '../../../components/variables/variables';
 
-const COL_WIDTH = 200;
+const COL_WIDTH = 160;
 
 const styles = StyleSheet.create({
   tableHeader: {

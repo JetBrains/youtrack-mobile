@@ -4,7 +4,7 @@ import React from 'react';
 import { UNIT, COLOR_GRAY } from '../../../components/variables/variables';
 import AgileCard from '../../../components/agile-card/agile-card';
 
-const COL_WIDTH = 200;
+const COL_WIDTH = 160;
 
 const styles = StyleSheet.create({
   rowContainer: {},
