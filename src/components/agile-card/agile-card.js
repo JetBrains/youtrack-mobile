@@ -1,14 +1,24 @@
 /* @flow */
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Image, Text, StyleSheet} from 'react-native';
 import React from 'react';
 import {UNIT} from '../variables/variables';
-
+import ColorField from '../color-field/color-field';
+import ApiHelper from '../api/api__helper';
 
 const styles = StyleSheet.create({
   card: {
     flex: 1,
     flexDirection: 'column',
     padding: UNIT
+  },
+  issueIdColorField: {
+    width: null, //Removes fixed width of usual color field
+  },
+  avatar: {
+    marginTop: UNIT / 2,
+    width: 40,
+    height: 40,
+    borderRadius: 20
   }
 });
 
@@ -16,14 +26,25 @@ type Props = {
   issue: any
 };
 
+
 export default function AgileCard(props: Props) {
   const {issue} = props;
+  const fieldHash = ApiHelper.makeFieldHash(issue);
+
+    const issueId = fieldHash.Priority ?
+      <ColorField
+        fullText
+        style={styles.issueIdColorField}
+        text={ApiHelper.getIssueId(issue)}
+        color={fieldHash.Priority.color}
+      /> :
+      <Text>{ApiHelper.getIssueId(issue)}</Text>;
 
   return (
     <View style={styles.card}>
-      <Text>{issue.project.shortName}-{issue.numberInProject}</Text>
+      {issueId}
       <Text numberOfLines={3}>{issue.summary}</Text>
-      <Text>by {issue.reporter.fullName || issue.reporter.login}</Text>
+      <Image style={styles.avatar} source={{uri: issue.reporter.avatarUrl}}/>
     </View>
   );
 }

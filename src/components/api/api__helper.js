@@ -90,6 +90,10 @@ const API = {
       fieldType = fieldType.replace('Single', 'Multi');
     }
     return fieldType;
+  },
+
+  getIssueId(issue: AnyIssue) {
+    return `${issue.project.shortName}-${issue.numberInProject}`;
   }
 };
 
