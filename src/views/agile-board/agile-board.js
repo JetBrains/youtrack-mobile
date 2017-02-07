@@ -53,7 +53,8 @@ export default class AgileBoard extends Component {
     const {api} = this;
     try {
       const profile = await api.getAgileUserProfile();
-      const sprint = await api.getSprint(profile.defaultAgile.id, profile.defaultAgile.sprints[0].id);
+      const lastSprint = profile.visitedSprints.filter(s => s.agile.id === profile.defaultAgile.id)[0];
+      const sprint = await api.getSprint(lastSprint.agile.id, lastSprint.id);
       this.setState({profile, sprint});
     } catch (e) {
       notifyError('Could not load sprint', e);
@@ -86,7 +87,7 @@ export default class AgileBoard extends Component {
         rightButton={<Text></Text>}
         onBack={() => this.setState({showMenu: true})}
       >
-        <Text>{sprint ? sprint.name : 'Loading...'}</Text>
+        <Text>{sprint ? `${sprint.agile.name} > ${sprint.name}` : 'Loading...'}</Text>
       </Header>
     );
   }

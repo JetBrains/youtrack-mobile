@@ -28,7 +28,13 @@ const AGILE_SHORT_WITH_SPRINTS = toField([
 
 const AGILE_PROFILE = toField([
   {
-    defaultAgile: AGILE_SHORT_WITH_SPRINTS.toString()
+    defaultAgile: AGILE_SHORT_WITH_SPRINTS.toString(),
+    visitedSprints: [
+      'id',
+      {
+        agile: 'id'
+      }
+    ]
   }
 ]);
 
