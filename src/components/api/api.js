@@ -253,7 +253,9 @@ class Api {
     const queryString = qs.stringify({
       fields: agileFields.sprint.toString()
     });
-    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}?${queryString}`);
+    const sprint = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}?${queryString}`);
+    ApiHelper.patchAllRelativeAvatarUrls(sprint, this.config.backendUrl);
+    return sprint;
   }
 }
 

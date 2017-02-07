@@ -101,5 +101,27 @@ describe('Api helper', () => {
 
       fixedItems[0].url.should.equal('https://youtrack/bar');
     });
+
+    it('should patch all possible avatar field values', () => {
+      const res = ApiHelper.patchAllRelativeAvatarUrls({
+        val: 'foo',
+        avatarUrl: '/hub/api/rest/avatar/123'
+      }, 'http://test.com');
+
+      res.val.should.equal('foo');
+      res.avatarUrl.should.equal('http://test.com/hub/api/rest/avatar/123');
+    });
+
+    it('should patch nested avatar field values', () => {
+      const res = ApiHelper.patchAllRelativeAvatarUrls({
+        val: 'foo',
+        test: {
+          avatarUrl: '/hub/api/rest/avatar/123'
+        }
+      }, 'http://test.com');
+
+      res.val.should.equal('foo');
+      res.test.avatarUrl.should.equal('http://test.com/hub/api/rest/avatar/123');
+    });
   });
 });

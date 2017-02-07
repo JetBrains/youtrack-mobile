@@ -1,5 +1,6 @@
 /* @flow */
 import {handleRelativeUrl} from '../config/config';
+import objectWalk from 'object-walk';
 
 const API = {
   makeFieldHash: (issue: IssueOnList) => {
@@ -94,6 +95,17 @@ const API = {
 
   getIssueId(issue: AnyIssue) {
     return `${issue.project.shortName}-${issue.numberInProject}`;
+  },
+
+  patchAllRelativeAvatarUrls(data: Object, backendUrl: string) {
+    //TODO: potentially slow place
+    objectWalk(data, (value, propertyName, obj) => {
+      if (typeof value === 'string' && value.indexOf('/hub/api/rest/avatar/') === 0) {
+        obj[propertyName] = handleRelativeUrl(obj[propertyName], backendUrl);
+      }
+    });
+
+    return data;
   }
 };
 
