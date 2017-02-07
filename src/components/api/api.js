@@ -1,6 +1,7 @@
 /* @flow */
 import qs from 'qs';
 import fields from './api__fields';
+import agileFields from './api__agile-fields';
 import Auth from '../auth/auth';
 import log from '../log/log';
 import ApiHelper from './api__helper';
@@ -239,6 +240,20 @@ class Api {
   async getQueryAssistSuggestions(query: string, caret: number) {
     const queryString = qs.stringify({query, caret});
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/rest/search/underlineAndSuggest?${queryString}`);
+  }
+
+  async getAgileUserProfile() {
+    const queryString = qs.stringify({
+      fields: agileFields.agileUserProfile.toString()
+    });
+    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agileUserProfile?${queryString}`);
+  }
+
+  async getSprint(boardId: string, sprintId: string) {
+    const queryString = qs.stringify({
+      fields: agileFields.sprint.toString()
+    });
+    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}?${queryString}`);
   }
 }
 
