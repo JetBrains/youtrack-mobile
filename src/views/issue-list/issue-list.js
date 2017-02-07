@@ -23,10 +23,9 @@ import usage from '../../components/usage/usage';
 import Api from '../../components/api/api';
 import ApiHelper from '../../components/api/api__helper';
 import IssueRow from './issue-list__row';
-import IssueListMenu from './issue-list__menu';
+import Menu from '../../components/menu/menu';
 import Router from '../../components/router/router';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import Drawer from 'react-native-drawer';
 
 const QUERY_STORAGE_KEY = 'YT_QUERY_STORAGE';
 const PAGE_SIZE = 10;
@@ -263,17 +262,12 @@ class IssueList extends React.Component {
   }
 
   render() {
-    return <Drawer
-      type="static"
-      open={this.state.showMenu}
-      content={<IssueListMenu onLogOut={this.logOut.bind(this)}
-                user={this.props.auth.currentUser}
-                backendUrl={this.props.auth.config.backendUrl}
-              />}
-      tapToClose={true}
+    return <Menu
+      show={this.state.showMenu}
+      auth={this.props.auth}
+      onLogOut={this.logOut.bind(this)}
       onOpen={() => this.setState({showMenu: true})}
       onClose={() => this.setState({showMenu: false})}
-      openDrawerOffset={1/4}
     >
       <View style={styles.listContainer}>
         {this._renderHeader()}
@@ -297,7 +291,7 @@ class IssueList extends React.Component {
 
         {Platform.OS == 'ios' && <KeyboardSpacer/>}
       </View>
-    </Drawer>;
+    </Menu>;
   }
 }
 

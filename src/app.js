@@ -12,6 +12,7 @@ import SingleIssue from './views/single-issue/single-issue';
 import CreateIssue from './views/create-issue/create-issue';
 import ShowImage from './views/show-image/show-image';
 import AttachmentPreview from './views/attachment-preview/attachment-preview';
+import AgileBoard from './views/agile-board/agile-board';
 import {loadConfig, getStoredConfig} from './components/config/config';
 // $FlowFixMe: cannot typecheck easy-toast module because of mistakes there
 import Toast from 'react-native-easy-toast';
@@ -152,6 +153,8 @@ class YouTrackMobile extends Component {
     Router.registerRoute({name: 'AttachmentPreview', component: AttachmentPreview, animation: Navigator.SceneConfigs.FloatFromBottom});
 
     Router.registerRoute({name: 'CreateIssue', component: CreateIssue});
+
+    Router.registerRoute({name: 'AgileBoard', component: AgileBoard, type: 'replace'});
   }
 
   handleOrientationChange = (event: Object) => {

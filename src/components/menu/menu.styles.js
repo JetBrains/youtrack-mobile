@@ -25,7 +25,25 @@ export default StyleSheet.create({
     height: UNIT * 4
   },
   logOutText: {
+    fontSize: 16,
     color: COLOR_PINK
+  },
+  menuItems: {
+    marginTop: UNIT * 3,
+    flex: 1
+  },
+  menuItemButton: {
+    marginTop: UNIT * 2,
+    marginLeft: UNIT * 2,
+    height: UNIT * 4
+  },
+  menuItemText: {
+    fontSize: 18,
+    color: COLOR_PINK,
+    flex: 1
+  },
+  label: {
+    fontSize: 14
   },
   menuFooter: {
     position: 'absolute',
