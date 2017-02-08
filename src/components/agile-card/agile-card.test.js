@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 
 import AgileCard from './agile-card';
 
-describe.only('<AgileCard/>', () => {
+describe('<AgileCard/>', () => {
   let fakeIssue;
 
   beforeEach(() => {
