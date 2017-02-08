@@ -37,9 +37,8 @@ const styles = StyleSheet.create({
 
 type Props = {
   style?: any,
-  issue: any
+  issue: IssueOnList
 };
-
 
 export default function AgileCard(props: Props) {
   const { issue, style } = props;

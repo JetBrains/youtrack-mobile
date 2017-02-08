@@ -51,13 +51,11 @@ const AGILE_COLUMN_FIELD_VALUE = toField([
 const AGILE_COLUMN = toField([
   'id',
   'ordinal',
-  'parent($type,id)',
-  'color($type,id)',
+  'color(id)',
   'isResolved',
   'collapsed',
   'isVisible',
-  'wipLimit($type,min,max)',
-  'ordinal',
+  'wipLimit(min,max)',
   {
     fieldValues: AGILE_COLUMN_FIELD_VALUE
   }

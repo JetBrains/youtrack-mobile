@@ -76,7 +76,7 @@ class Api {
     return issues[0];
   }
 
-  async getIssue(id: string) {
+  async getIssue(id: string): Promise<IssueFull> {
     const queryString = qs.stringify({
       fields: fields.singleIssue.toString()
     });
@@ -91,7 +91,7 @@ class Api {
     return issue;
   }
 
-  async getIssues(query: string = '', $top: number, $skip: number = 0) {
+  async getIssues(query: string = '', $top: number, $skip: number = 0): Promise<IssueOnList> {
     const queryString = qs.stringify({
       query, $top, $skip,
       fields: fields.issuesOnList.toString()
@@ -242,14 +242,14 @@ class Api {
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/rest/search/underlineAndSuggest?${queryString}`);
   }
 
-  async getAgileUserProfile() {
+  async getAgileUserProfile(): Promise<AgileUserProfile> {
     const queryString = qs.stringify({
       fields: agileFields.agileUserProfile.toString()
     });
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agileUserProfile?${queryString}`);
   }
 
-  async getSprint(boardId: string, sprintId: string) {
+  async getSprint(boardId: string, sprintId: string): Promise<SprintFull> {
     const queryString = qs.stringify({
       fields: agileFields.sprint.toString()
     });

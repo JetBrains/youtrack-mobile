@@ -20,8 +20,8 @@ type Props = {
 type State = {
   showMenu: boolean,
   isRefreshing: boolean,
-  sprint: ?Object,
-  profile: ?Object,
+  sprint: ?SprintFull,
+  profile: ?AgileUserProfile,
 };
 
 export default class AgileBoard extends Component {
@@ -29,15 +29,15 @@ export default class AgileBoard extends Component {
   state: State;
   api: Api;
 
-  state = {
-    showMenu: false,
-    isRefreshing: false,
-    sprint: null,
-    profile: null
-  };
-
   constructor(props: Props) {
     super(props);
+    this.state = {
+      showMenu: false,
+      isRefreshing: false,
+      sprint: null,
+      profile: null
+    };
+
     this.api = new Api(this.props.auth);
     usage.trackScreenView('Agile board');
   }

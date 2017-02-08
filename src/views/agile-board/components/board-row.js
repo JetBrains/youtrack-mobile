@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
 
 type Props = {
   style?: any,
-  row: any,
+  row: BoardRow,
   onTapIssue: (issue: IssueOnList) => any
 };
 
