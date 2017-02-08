@@ -10,17 +10,12 @@ const SPRINT = toField([
   'goal',
   'archived',
   'start',
-  'finish',
-  'isDefault'
+  'finish'
 ]);
 
 const AGILE_SHORT_WITH_SPRINTS = toField([
   'id',
   'name',
-  'isUpdatable',
-  {
-    status: ['valid']
-  },
   {
     sprints: SPRINT
   }
@@ -40,22 +35,13 @@ const AGILE_PROFILE = toField([
 
 const AGILE_COLUMN_FIELD_VALUE = toField([
   'presentation',
-  'ordinal',
-  'isResolved',
-  'name',
   'id',
-  'column(id)',
-  'canUpdate'
 ]);
 
 const AGILE_COLUMN = toField([
   'id',
-  'ordinal',
-  'color(id)',
-  'isResolved',
   'collapsed',
   'isVisible',
-  'wipLimit(min,max)',
   {
     fieldValues: AGILE_COLUMN_FIELD_VALUE
   }
@@ -64,8 +50,6 @@ const AGILE_COLUMN = toField([
 const BOARD_COLUMN = toField([
   'id',
   'collapsed',
-  'sumEstimation',
-  'sumSpentTime',
   {
     agileColumn: AGILE_COLUMN
   }
@@ -88,7 +72,6 @@ const BOARD_ROW = toField([
 const BOARD = toField([
   'id',
   'name',
-  'notOnBoardCount',
   {
     columns: BOARD_COLUMN
   },
