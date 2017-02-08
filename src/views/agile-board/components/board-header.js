@@ -1,11 +1,12 @@
 /* @flow */
 import {View, Text, StyleSheet} from 'react-native';
 import React from 'react';
-import {UNIT, AGILE_COLUMN_MIN_WIDTH, COLOR_GRAY} from '../../../components/variables/variables';
+import {UNIT, AGILE_COLUMN_MIN_WIDTH, COLOR_GRAY, COLOR_LIGHT_GRAY} from '../../../components/variables/variables';
 
 const styles = StyleSheet.create({
   tableHeader: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    backgroundColor: COLOR_LIGHT_GRAY
   },
   tableHeaderItem: {
     width: AGILE_COLUMN_MIN_WIDTH,
