@@ -78,16 +78,7 @@ type Board = {
   trimmedSwimlanes: Array<BoardRow>
 };
 
-type SprintFull = {
-  id: string,
-  name: string,
-  goal: string,
-  archived: boolean,
-  start: number,
-  finish: number,
-  isDefault: boolean,
-
-
+type SprintFull = SprintInformation & {
   board: Board,
   agile: {
     id: string,
