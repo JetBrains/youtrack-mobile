@@ -11,6 +11,8 @@ const styles = StyleSheet.create({
     padding: UNIT
   },
   summary: {
+    fontSize: 13,
+    height: 56,
     paddingTop: UNIT/2,
     paddingBottom: UNIT/2
   },
@@ -23,7 +25,8 @@ const styles = StyleSheet.create({
     width: null, //Removes fixed width of usual color field
   },
   assignees: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    height: 40
   },
   avatar: {
     width: 40,

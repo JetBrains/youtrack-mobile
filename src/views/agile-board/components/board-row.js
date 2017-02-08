@@ -1,11 +1,9 @@
 /* @flow */
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import React from 'react';
-import { UNIT, COLOR_GRAY, COLOR_PINK } from '../../../components/variables/variables';
+import { UNIT, AGILE_COLUMN_MIN_WIDTH, COLOR_GRAY, COLOR_PINK } from '../../../components/variables/variables';
 import AgileCard from '../../../components/agile-card/agile-card';
 import ApiHelper from '../../../components/api/api__helper';
-
-const COL_WIDTH = 160;
 
 const styles = StyleSheet.create({
   rowContainer: {},
@@ -16,14 +14,14 @@ const styles = StyleSheet.create({
     color: COLOR_PINK
   },
   rowHeaderText: {
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: 'bold'
   },
   row: {
     flexDirection: 'row'
   },
   column: {
-    width: COL_WIDTH,
+    width: AGILE_COLUMN_MIN_WIDTH,
     borderRightWidth: 0.5,
     borderBottomWidth: 0.5,
     borderColor: COLOR_GRAY
