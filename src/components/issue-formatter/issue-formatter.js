@@ -1,5 +1,6 @@
 /* @flow */
 import fromNow from 'from-now';
+import type {IssueUser} from '../../flow/CustomFields';
 
 const shortRelativeFormat = {
   'now': 'just now',

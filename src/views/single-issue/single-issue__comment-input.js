@@ -2,6 +2,7 @@
 import {View, Text, TouchableOpacity, ActivityIndicator, ScrollView, Image} from 'react-native';
 import React, {Component} from 'react';
 import MultilineInput from '../../components/multiline-input/multiline-input';
+import type {IssueUser} from '../../flow/CustomFields';
 
 import styles from './single-issue.styles';
 

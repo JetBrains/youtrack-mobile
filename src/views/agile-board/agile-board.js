@@ -13,6 +13,8 @@ import Api from '../../components/api/api';
 import {COLOR_PINK} from '../../components/variables/variables';
 import {notifyError} from '../../components/notification/notification';
 import {updateRowCollapsedState} from './components/board-updater';
+import type {SprintFull, AgileUserProfile, AgileBoardRow} from '../../flow/Agile';
+import type {IssueOnList} from '../../flow/Issue';
 
 type Props = {
   auth: Auth

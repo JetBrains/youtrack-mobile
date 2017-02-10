@@ -1,7 +1,7 @@
 /* @flow */
 import styles from './single-issue.styles';
 import Comment from '../../components/comment/comment';
-
+import type {IssueComment, Attachment} from '../../flow/CustomFields';
 
 import {View, Text} from 'react-native';
 import React, {Component} from 'react';

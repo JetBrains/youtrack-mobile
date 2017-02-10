@@ -1,6 +1,7 @@
 /* @flow */
 import {AsyncStorage} from 'react-native';
 import UrlParse from 'url-parse';
+import type {AppConfig, AppConfigFilled} from '../../flow/AppConfig';
 
 const MIN_YT_VERSION = 7.0;
 const BACKEND_URL_STORAGE_KEY = 'yt_mobile_backend_url';

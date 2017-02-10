@@ -1,6 +1,7 @@
 /* @flow */
 import {handleRelativeUrl} from '../config/config';
 import objectWalk from 'object-walk';
+import type {IssueOnList, AnyIssue} from '../../flow/Issue';
 
 const API = {
   makeFieldHash: (issue: IssueOnList): Object => {

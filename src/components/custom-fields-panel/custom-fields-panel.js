@@ -11,6 +11,8 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 import Api from '../api/api';
 import IssuePermissions from '../issue-permissions/issue-permissions';
 import styles from './custom-fields-panel.styles';
+import type {IssueFull} from '../../flow/Issue';
+import type {IssueProject} from '../../flow/CustomFields';
 
 type Props = {
   api: Api,

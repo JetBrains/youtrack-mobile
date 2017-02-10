@@ -20,6 +20,7 @@ import Toast from 'react-native-easy-toast';
 import {BackAndroid, Navigator, View} from 'react-native';
 import React, {PropTypes, Component} from 'react';
 import ActionSheet from '@exponent/react-native-action-sheet';
+import type {AppConfig, AppConfigFilled} from './flow/AppConfig';
 
 
 class YouTrackMobile extends Component {

@@ -5,6 +5,8 @@ import { UNIT, AGILE_COLUMN_MIN_WIDTH, COLOR_GRAY, COLOR_PINK } from '../../../c
 import AgileCard from '../../../components/agile-card/agile-card';
 import ApiHelper from '../../../components/api/api__helper';
 import {arrowRightGray, arrowDownGray} from '../../../components/icon/icon';
+import type {AgileBoardRow} from '../../../flow/Agile';
+import type {IssueOnList} from '../../../flow/Issue';
 
 type Props = {
   style?: any,

@@ -6,6 +6,10 @@ import Auth from '../auth/auth';
 import log from '../log/log';
 import ApiHelper from './api__helper';
 import {handleRelativeUrl} from '../config/config';
+import type {SprintFull, AgileUserProfile} from '../../flow/Agile';
+import type {AppConfigFilled} from '../../flow/AppConfig';
+import type {IssueOnList, IssueFull} from '../../flow/Issue';
+import type {IssueProject, FieldValue} from '../../flow/CustomFields';
 
 const STATUS_UNAUTHORIZED = 401;
 const STATUS_OK_IF_MORE_THAN = 200;

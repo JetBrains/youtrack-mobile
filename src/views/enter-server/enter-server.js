@@ -7,6 +7,7 @@ import usage from '../../components/usage/usage';
 import {VERSION_DETECT_FALLBACK_URL} from '../../components/config/config';
 import log from '../../components/log/log';
 import {resolveError, extractErrorMessage} from '../../components/notification/notification';
+import type {AppConfigFilled} from '../../flow/AppConfig';
 
 import styles from './enter-server.styles';
 

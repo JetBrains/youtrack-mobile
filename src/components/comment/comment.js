@@ -9,6 +9,7 @@ import Swipeout from 'react-native-swipeout';
 import SwipeButton from './comment__swipe-button';
 import {relativeDate} from '../issue-formatter/issue-formatter';
 import {reply, share} from '../icon/icon';
+import type {IssueComment, Attachment} from '../../flow/CustomFields';
 
 type Props = {
   comment: IssueComment,

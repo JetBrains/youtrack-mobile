@@ -4,6 +4,7 @@ import React from 'react';
 import {UNIT} from '../variables/variables';
 import ColorField from '../color-field/color-field';
 import ApiHelper from '../api/api__helper';
+import type {IssueOnList} from '../../flow/Issue';
 
 type Props = {
   style?: any,

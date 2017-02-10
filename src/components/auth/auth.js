@@ -4,6 +4,7 @@ import Permissions from './auth__permissions';
 import base64 from 'base64-js';
 import qs from 'qs';
 import log from '../log/log';
+import type {AppConfigFilled} from '../../flow/AppConfig';
 
 const STORAGE_KEY = 'yt_mobile_auth';
 

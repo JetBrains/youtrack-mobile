@@ -3,6 +3,8 @@ import {View, Text, TouchableOpacity} from 'react-native';
 import React, {Component} from 'react';
 import styles from './linked-issues.style';
 import {COLOR_FONT_GRAY} from '../variables/variables';
+import type {IssueLink} from '../../flow/CustomFields';
+import type {IssueOnList} from '../../flow/Issue';
 
 type Props = {
   links: Array<IssueLink>,

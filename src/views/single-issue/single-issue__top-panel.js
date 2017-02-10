@@ -6,6 +6,7 @@ import {View, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
 import ColorField from '../../components/color-field/color-field';
 import {formatDate, shortRelativeDate} from '../../components/issue-formatter/issue-formatter';
+import type {IssueFull} from '../../flow/Issue';
 
 const TOUCH_PADDING = 10;
 

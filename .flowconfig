@@ -31,7 +31,6 @@
 [libs]
 node_modules/react-native/Libraries/react-native/react-native-interface.js
 node_modules/react-native/flow
-src/types/
 
 [options]
 module.file_ext=.ios.js
