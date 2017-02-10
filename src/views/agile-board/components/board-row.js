@@ -1,7 +1,7 @@
 /* @flow */
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import React from 'react';
-import { UNIT, AGILE_COLUMN_MIN_WIDTH, COLOR_GRAY, COLOR_PINK } from '../../../components/variables/variables';
+import { UNIT, AGILE_COLUMN_MIN_WIDTH, COLOR_GRAY, COLOR_FONT_GRAY, COLOR_PINK } from '../../../components/variables/variables';
 import AgileCard from '../../../components/agile-card/agile-card';
 import ApiHelper from '../../../components/api/api__helper';
 import {arrowRightGray, arrowDownGray} from '../../../components/icon/icon';
@@ -33,12 +33,13 @@ function renderCell(cell, props) {
 
 export default function BoardRow(props: Props) {
   const { row, style, onCollapseToggle } = props;
+  const isResolved = row.issue && row.issue.resolved;
 
   return (
     <View style={[styles.rowContainer, style]}>
 
       <View style={styles.rowHeader}>
-        <Text style={styles.headerIssueId}>
+        <Text style={[styles.headerIssueId, isResolved && styles.resolvedIssueText]}>
           {row.issue && ApiHelper.getIssueId(row.issue)}
         </Text>
         <TouchableOpacity
@@ -46,7 +47,7 @@ export default function BoardRow(props: Props) {
           onPress={() => onCollapseToggle(row)}
         >
           <Image source={row.collapsed ? arrowRightGray: arrowDownGray} style={styles.collapseIcon}/>
-          <Text style={styles.rowHeaderText}>
+          <Text style={[styles.rowHeaderText, isResolved && styles.resolvedIssueText]}>
             {row.issue ? row.issue.summary : 'Uncategorizedf Cards'}
           </Text>
         </TouchableOpacity>
@@ -69,6 +70,10 @@ const styles = StyleSheet.create({
     marginLeft: UNIT * 2,
     marginBottom: UNIT/2,
     color: COLOR_PINK
+  },
+  resolvedIssueText: {
+    color: COLOR_FONT_GRAY,
+    textDecorationLine: 'line-through'
   },
   rowHeaderText: {
     fontSize: 17,
