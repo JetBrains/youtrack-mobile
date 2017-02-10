@@ -15,33 +15,35 @@ type Props = {
   onCollapseToggle: (row: AgileBoardRow) => any
 };
 
-function renderIssue(issue: IssueOnList, props) {
-  const {onTapIssue = (issue) => {}} = props;
-
+function renderIssue(issue: IssueOnList, onTapIssue) {
   return <TouchableOpacity key={issue.id} onPress={() => onTapIssue(issue)}>
     <AgileCard issue={issue} style={styles.card}/>
   </TouchableOpacity>;
 }
 
-function renderCell(cell, props) {
+function renderCell(cell, onTapIssue) {
   return (
     <View key={cell.id} style={styles.column}>
-      {cell.issues.map(issue => renderIssue(issue, props))}
+      {cell.issues.map(issue => renderIssue(issue, onTapIssue))}
     </View>
   );
 }
 
 export default function BoardRow(props: Props) {
-  const { row, style, onCollapseToggle } = props;
+  const { row, style, onCollapseToggle, onTapIssue} = props;
   const isResolved = row.issue && row.issue.resolved;
 
   return (
     <View style={[styles.rowContainer, style]}>
 
       <View style={styles.rowHeader}>
-        {row.issue && <Text style={[styles.headerIssueId, isResolved && styles.resolvedIssueText]}>
-          {ApiHelper.getIssueId(row.issue)}
-        </Text>}
+
+        {row.issue && <TouchableOpacity onPress={() => onTapIssue(row.issue)}>
+          <Text style={[styles.headerIssueId, isResolved && styles.resolvedIssueText]}>
+            {ApiHelper.getIssueId(row.issue)}
+          </Text>
+        </TouchableOpacity>}
+
         <TouchableOpacity
           style={styles.collapseButton}
           onPress={() => onCollapseToggle(row)}
@@ -54,7 +56,7 @@ export default function BoardRow(props: Props) {
       </View>
 
       <View style={styles.row}>
-        {!row.collapsed && row.cells.map(cell => renderCell(cell, props))}
+        {!row.collapsed && row.cells.map(cell => renderCell(cell, onTapIssue))}
       </View>
 
     </View>
