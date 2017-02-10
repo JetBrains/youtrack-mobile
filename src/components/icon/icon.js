@@ -12,3 +12,5 @@ export {default as comment} from './comment.png';
 export {default as share} from './permalink.png';
 export {default as reply} from './reply.png';
 export {default as closeOpaque} from './close-opaque.png';
+export {default as arrowRightGray} from './arrow-right-gray.png';
+export {default as arrowDownGray} from './arrow-down-gray.png';
