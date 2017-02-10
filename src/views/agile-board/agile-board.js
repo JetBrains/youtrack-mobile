@@ -53,12 +53,15 @@ export default class AgileBoard extends Component {
   async loadBoard() {
     const {api} = this;
     try {
+      this.setState({isRefreshing: true});
       const profile = await api.getAgileUserProfile();
       const lastSprint = profile.visitedSprints.filter(s => s.agile.id === profile.defaultAgile.id)[0];
       const sprint = await api.getSprint(lastSprint.agile.id, lastSprint.id);
       this.setState({profile, sprint});
     } catch (e) {
       notifyError('Could not load sprint', e);
+    } finally {
+      this.setState({isRefreshing: false});
     }
   }
 
@@ -66,17 +69,7 @@ export default class AgileBoard extends Component {
     return <RefreshControl
       refreshing={this.state.isRefreshing}
       tintColor={COLOR_PINK}
-      onRefresh={async () => {
-        this.setState({isRefreshing: true});
-
-        try {
-          await this.loadBoard();
-        } catch (e) {
-          notifyError('Could not refresh sprint', e);
-        } finally {
-          this.setState({isRefreshing: false});
-        }
-      }}
+      onRefresh={() => this.loadBoard()}
     />;
   }
 
