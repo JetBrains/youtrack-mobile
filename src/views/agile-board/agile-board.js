@@ -16,6 +16,8 @@ import {updateRowCollapsedState} from './components/board-updater';
 import type {SprintFull, AgileUserProfile, AgileBoardRow} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
 
+const PAGE_SIZE = 3;
+
 type Props = {
   auth: Auth
 };
@@ -23,6 +25,7 @@ type Props = {
 type State = {
   showMenu: boolean,
   isRefreshing: boolean,
+  isLoadingMore: boolean,
   sprint: ?SprintFull,
   profile: ?AgileUserProfile,
 };
@@ -37,6 +40,7 @@ export default class AgileBoard extends Component {
     this.state = {
       showMenu: false,
       isRefreshing: false,
+      isLoadingMore: false,
       sprint: null,
       profile: null
     };
@@ -59,13 +63,47 @@ export default class AgileBoard extends Component {
       this.setState({isRefreshing: true});
       const profile = await api.getAgileUserProfile();
       const lastSprint = profile.visitedSprints.filter(s => s.agile.id === profile.defaultAgile.id)[0];
-      const sprint = await api.getSprint(lastSprint.agile.id, lastSprint.id);
+      const sprint = await api.getSprint(lastSprint.agile.id, lastSprint.id, PAGE_SIZE);
 
       this.setState({profile, sprint});
     } catch (e) {
       notifyError('Could not load sprint', e);
     } finally {
       this.setState({isRefreshing: false});
+    }
+  }
+
+  async loadMoreSwimlanes() {
+    const {sprint} = this.state;
+    if (!sprint) {
+      return;
+    }
+    try {
+      this.setState({isLoadingMore: true});
+      const swimlanes = await this.api.getSwimlanes(sprint.agile.id, sprint.id, PAGE_SIZE, sprint.board.trimmedSwimlanes.length);
+      this.setState({sprint: {
+        ...sprint,
+        board: {
+          ...sprint.board,
+          trimmedSwimlanes: sprint.board.trimmedSwimlanes.concat(swimlanes)
+        }
+      }});
+    } catch (e) {
+      notifyError('Could not load more swimlanes', e);
+    } finally {
+      this.setState({isLoadingMore: false});
+    }
+  }
+
+  _onScroll = (event) => {
+    const {nativeEvent} = event;
+    const viewHeight = nativeEvent.layoutMeasurement.height;
+    const scroll = nativeEvent.contentOffset.y;
+    const contentHeight = nativeEvent.contentSize.height;
+    const maxScroll = contentHeight - viewHeight;
+
+    if (maxScroll - scroll < 20) {
+      this.loadMoreSwimlanes();
     }
   }
 
@@ -165,7 +203,7 @@ export default class AgileBoard extends Component {
 
   render() {
     const {auth} = this.props;
-    const {showMenu, sprint} = this.state;
+    const {showMenu, sprint, isLoadingMore} = this.state;
     return (
       <Menu
         show={showMenu}
@@ -176,11 +214,18 @@ export default class AgileBoard extends Component {
       >
         <View style={styles.container}>
           {this._renderHeader()}
-          <ScrollView refreshControl={this._renderRefreshControl()}>
+          <ScrollView
+            refreshControl={this._renderRefreshControl()}
+            onScroll={this._onScroll}
+            scrollEventThrottle={100}
+          >
             <ScrollView horizontal>
               {sprint && this._renderBoard()}
             </ScrollView>
           </ScrollView>
+          {isLoadingMore && <View>
+            <Text>Loading more swimlanes...</Text>
+          </View>}
         </View>
       </Menu>
     );

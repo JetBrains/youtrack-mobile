@@ -6,7 +6,7 @@ import Auth from '../auth/auth';
 import log from '../log/log';
 import ApiHelper from './api__helper';
 import {handleRelativeUrl} from '../config/config';
-import type {SprintFull, AgileUserProfile} from '../../flow/Agile';
+import type {SprintFull, AgileUserProfile, AgileBoardRow} from '../../flow/Agile';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {IssueOnList, IssueFull} from '../../flow/Issue';
 import type {IssueProject, FieldValue} from '../../flow/CustomFields';
@@ -253,13 +253,26 @@ class Api {
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agileUserProfile?${queryString}`);
   }
 
-  async getSprint(boardId: string, sprintId: string): Promise<SprintFull> {
+  async getSprint(boardId: string, sprintId: string, top: number = 100, skip: number = 0): Promise<SprintFull> {
     const queryString = qs.stringify({
-      fields: agileFields.sprint.toString()
+      fields: agileFields.sprint.toString(),
+      $topSwimlanes: top,
+      $skipSwimlanes: skip
     });
     const sprint = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}?${queryString}`);
-    ApiHelper.patchAllRelativeAvatarUrls(sprint, this.config.backendUrl);
-    return sprint;
+    return ApiHelper.patchAllRelativeAvatarUrls(sprint, this.config.backendUrl);
+  }
+
+  async getSwimlanes(boardId: string, sprintId: string, top: number, skip: number = 0): Promise<Array<AgileBoardRow>> {
+    const queryString = qs.stringify({
+      fields: `trimmedSwimlanes(${agileFields.row.toString()})`,
+      $topSwimlanes: top,
+      $skipSwimlanes: skip
+    });
+
+    const board = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}/board?${queryString}`);
+    const swimlanes = board.trimmedSwimlanes;
+    return ApiHelper.patchAllRelativeAvatarUrls(swimlanes, this.config.backendUrl);
   }
 
   async updateRowCollapsedState(boardId: string, sprintId: string, row: Object): Promise<> {
