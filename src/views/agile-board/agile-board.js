@@ -1,5 +1,5 @@
 /* @flow */
-import {ScrollView, View, Text, RefreshControl, ActivityIndicator} from 'react-native';
+import {ScrollView, View, Text, Image, RefreshControl, TouchableOpacity, ActivityIndicator} from 'react-native';
 import React, {Component} from 'react';
 import usage from '../../components/usage/usage';
 import Header from '../../components/header/header';
@@ -13,6 +13,7 @@ import Api from '../../components/api/api';
 import {COLOR_PINK} from '../../components/variables/variables';
 import {notifyError} from '../../components/notification/notification';
 import {updateRowCollapsedState} from './components/board-updater';
+import {zoomIn, zoomOut} from '../../components/icon/icon';
 import type {SprintFull, AgileUserProfile, AgileBoardRow} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
 
@@ -27,6 +28,7 @@ type State = {
   isRefreshing: boolean,
   isLoadingMore: boolean,
   noMoreSwimlanes: boolean,
+  zoomedOut: boolean,
   sprint: ?SprintFull,
   profile: ?AgileUserProfile,
 };
@@ -43,6 +45,7 @@ export default class AgileBoard extends Component {
       isRefreshing: false,
       isLoadingMore: false,
       noMoreSwimlanes: false,
+      zoomedOut: false,
       sprint: null,
       profile: null
     };
@@ -168,7 +171,7 @@ export default class AgileBoard extends Component {
   }
 
   _renderBoard() {
-    const {sprint} = this.state;
+    const {sprint, zoomedOut} = this.state;
     if (!sprint) {
       return;
     }
@@ -184,7 +187,7 @@ export default class AgileBoard extends Component {
     };
 
     return (
-      <View>
+      <View style={zoomedOut && styles.rowContainerZoomedOut}>
         <BoardHeader columns={columns}/>
 
         {sprint.agile.orphansAtTheTop && <BoardRow row={board.orphanRow} {...commonRowProps}/>}
@@ -206,7 +209,7 @@ export default class AgileBoard extends Component {
 
   render() {
     const {auth} = this.props;
-    const {showMenu, sprint, isLoadingMore} = this.state;
+    const {showMenu, sprint, isLoadingMore, zoomedOut} = this.state;
     return (
       <Menu
         show={showMenu}
@@ -227,6 +230,14 @@ export default class AgileBoard extends Component {
             </ScrollView>
             {isLoadingMore && <ActivityIndicator color={COLOR_PINK} style={styles.loadingMoreIndicator}/>}
           </ScrollView>
+
+          <View style={styles.zoomButtonContainer}>
+            <TouchableOpacity
+              style={styles.zoomButton}
+              onPress={() => this.setState({zoomedOut: !zoomedOut})}>
+              <Image source={zoomedOut ? zoomIn : zoomOut} style={styles.zoomButtonIcon}/>
+            </TouchableOpacity>
+          </View>
         </View>
       </Menu>
     );
