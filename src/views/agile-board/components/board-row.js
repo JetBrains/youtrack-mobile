@@ -39,16 +39,16 @@ export default function BoardRow(props: Props) {
     <View style={[styles.rowContainer, style]}>
 
       <View style={styles.rowHeader}>
-        <Text style={[styles.headerIssueId, isResolved && styles.resolvedIssueText]}>
-          {row.issue && ApiHelper.getIssueId(row.issue)}
-        </Text>
+        {row.issue && <Text style={[styles.headerIssueId, isResolved && styles.resolvedIssueText]}>
+          {ApiHelper.getIssueId(row.issue)}
+        </Text>}
         <TouchableOpacity
           style={styles.collapseButton}
           onPress={() => onCollapseToggle(row)}
         >
           <Image source={row.collapsed ? arrowRightGray: arrowDownGray} style={styles.collapseIcon}/>
           <Text style={[styles.rowHeaderText, isResolved && styles.resolvedIssueText]}>
-            {row.issue ? row.issue.summary : 'Uncategorized Cards'}
+            {row.id === 'orphans' ? 'Uncategorized Cards' : (row.issue && row.issue.summary || row.name)}
           </Text>
         </TouchableOpacity>
       </View>
