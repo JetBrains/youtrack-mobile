@@ -1,5 +1,5 @@
 /* @flow */
-import {ScrollView, View, Text, RefreshControl} from 'react-native';
+import {ScrollView, View, Text, RefreshControl, ActivityIndicator} from 'react-native';
 import React, {Component} from 'react';
 import usage from '../../components/usage/usage';
 import Header from '../../components/header/header';
@@ -16,7 +16,7 @@ import {updateRowCollapsedState} from './components/board-updater';
 import type {SprintFull, AgileUserProfile, AgileBoardRow} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
 
-const PAGE_SIZE = 3;
+const PAGE_SIZE = 4;
 
 type Props = {
   auth: Auth
@@ -26,6 +26,7 @@ type State = {
   showMenu: boolean,
   isRefreshing: boolean,
   isLoadingMore: boolean,
+  noMoreSwimlanes: boolean,
   sprint: ?SprintFull,
   profile: ?AgileUserProfile,
 };
@@ -41,6 +42,7 @@ export default class AgileBoard extends Component {
       showMenu: false,
       isRefreshing: false,
       isLoadingMore: false,
+      noMoreSwimlanes: false,
       sprint: null,
       profile: null
     };
@@ -74,8 +76,8 @@ export default class AgileBoard extends Component {
   }
 
   async loadMoreSwimlanes() {
-    const {sprint} = this.state;
-    if (!sprint) {
+    const {sprint, noMoreSwimlanes} = this.state;
+    if (!sprint || noMoreSwimlanes) {
       return;
     }
     try {
@@ -86,7 +88,8 @@ export default class AgileBoard extends Component {
         board: {
           ...sprint.board,
           trimmedSwimlanes: sprint.board.trimmedSwimlanes.concat(swimlanes)
-        }
+        },
+        noMoreSwimlanes: swimlanes.length < PAGE_SIZE
       }});
     } catch (e) {
       notifyError('Could not load more swimlanes', e);
@@ -222,10 +225,8 @@ export default class AgileBoard extends Component {
             <ScrollView horizontal>
               {sprint && this._renderBoard()}
             </ScrollView>
+            {isLoadingMore && <ActivityIndicator color={COLOR_PINK} style={styles.loadingMoreIndicator}/>}
           </ScrollView>
-          {isLoadingMore && <View>
-            <Text>Loading more swimlanes...</Text>
-          </View>}
         </View>
       </Menu>
     );
