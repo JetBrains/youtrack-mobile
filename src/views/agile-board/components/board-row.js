@@ -8,8 +8,9 @@ import {arrowRightGray, arrowDownGray} from '../../../components/icon/icon';
 
 type Props = {
   style?: any,
-  row: BoardRow,
-  onTapIssue: (issue: IssueOnList) => any
+  row: AgileBoardRow,
+  onTapIssue: (issue: IssueOnList) => any,
+  onCollapseToggle: (row: AgileBoardRow) => any
 };
 
 function renderIssue(issue: IssueOnList, props) {
@@ -29,7 +30,7 @@ function renderCell(cell, props) {
 }
 
 export default function BoardRow(props: Props) {
-  const { row, style } = props;
+  const { row, style, onCollapseToggle } = props;
 
   return (
     <View style={[styles.rowContainer, style]}>
@@ -40,9 +41,9 @@ export default function BoardRow(props: Props) {
         </Text>
         <TouchableOpacity
           style={styles.collapseButton}
-          onPress={() => {}}
+          onPress={() => onCollapseToggle(row)}
         >
-          <Image source={arrowRightGray} style={styles.collapseIcon}/>
+          <Image source={row.collapsed ? arrowRightGray: arrowDownGray} style={styles.collapseIcon}/>
           <Text style={styles.rowHeaderText}>
             {row.issue ? row.issue.summary : 'Uncategorizedf Cards'}
           </Text>
@@ -50,7 +51,7 @@ export default function BoardRow(props: Props) {
       </View>
 
       <View style={styles.row}>
-        {row.cells.map(cell => renderCell(cell, props))}
+        {!row.collapsed && row.cells.map(cell => renderCell(cell, props))}
       </View>
 
     </View>
@@ -73,12 +74,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   row: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    borderBottomWidth: 0.5,
+    borderColor: COLOR_GRAY
   },
   column: {
     width: AGILE_COLUMN_MIN_WIDTH,
     borderRightWidth: 0.5,
-    borderBottomWidth: 0.5,
     borderColor: COLOR_GRAY
   },
   card: {

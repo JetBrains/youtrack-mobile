@@ -40,9 +40,11 @@ type BoardCell = {
   issues: Array<IssueOnList>
 };
 
-type BoardRow = {
+type AgileBoardRow = {
+  $type: string,
   id: string,
   name: string,
+  collapsed: boolean,
   issue: IssueOnList,
   cells: Array<BoardCell>
 };
@@ -57,8 +59,8 @@ type Board = {
   id: string,
   name: string,
   columns: Array<BoardColumn>,
-  orphanRow: BoardRow,
-  trimmedSwimlanes: Array<BoardRow>
+  orphanRow: AgileBoardRow,
+  trimmedSwimlanes: Array<AgileBoardRow>
 };
 
 type SprintFull = SprintInformation & {

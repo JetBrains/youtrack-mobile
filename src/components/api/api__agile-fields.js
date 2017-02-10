@@ -56,8 +56,10 @@ const BOARD_COLUMN = toField([
 ]);
 
 const BOARD_ROW = toField([
+  '$type',
   'id',
   'name',
+  'collapsed',
   { issue: IssueFields.issuesOnList },
   {
     cells: [
@@ -92,5 +94,6 @@ const SPRINT_WITH_BOARD = toField([
 
 export default {
   agileUserProfile: AGILE_PROFILE,
-  sprint: SPRINT_WITH_BOARD
+  sprint: SPRINT_WITH_BOARD,
+  row: BOARD_ROW
 };

@@ -257,6 +257,19 @@ class Api {
     ApiHelper.patchAllRelativeAvatarUrls(sprint, this.config.backendUrl);
     return sprint;
   }
+
+  async updateRowCollapsedState(boardId: string, sprintId: string, row: Object): Promise<> {
+    const isOrphan = row.id === 'orphans';
+    const url = isOrphan ?
+      `${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}/board/orphanRow` :
+      `${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}/board/swimlanes/${row.id}`;
+
+    await this.makeAuthorizedRequest(`${url}`, 'POST', {
+      $type: row.$type,
+      id: isOrphan ? null : row.id,
+      collapsed: row.collapsed
+    });
+  }
 }
 
 export default Api;

@@ -12,6 +12,7 @@ import Auth from '../../components/auth/auth';
 import Api from '../../components/api/api';
 import {COLOR_PINK} from '../../components/variables/variables';
 import {notifyError} from '../../components/notification/notification';
+import {updateRowCollapsedState} from './components/board-updater';
 
 type Props = {
   auth: Auth
@@ -81,6 +82,34 @@ export default class AgileBoard extends Component {
     });
   }
 
+  _onCollapseToggle = async (row: AgileBoardRow) => {
+    const {sprint} = this.state;
+    if (!sprint) {
+      return;
+    }
+    const oldCollapsed = row.collapsed;
+
+    try {
+      this.setState({
+        sprint: {
+          ...sprint,
+          board: updateRowCollapsedState(sprint.board, row, !row.collapsed)
+        }
+      });
+      await this.api.updateRowCollapsedState(sprint.agile.id, sprint.id, {
+        ...row,
+        collapsed: !row.collapsed
+      });
+    } catch (e) {
+      this.setState({
+        sprint: {...sprint,
+          board: updateRowCollapsedState(sprint.board, row, oldCollapsed)
+        }
+      });
+      notifyError('Could not update row', e);
+    }
+  }
+
   _renderHeader() {
     const {sprint} = this.state;
     return (
@@ -105,19 +134,28 @@ export default class AgileBoard extends Component {
       return agileColumn.fieldValues.map(val => val.presentation).join(', ');
     });
 
+    const commonRowProps = {
+      onTapIssue: this._onTapIssue,
+      onCollapseToggle: this._onCollapseToggle
+    };
+
     return (
       <View>
         <BoardHeader columns={columns}/>
 
-        {sprint.agile.orphansAtTheTop && <BoardRow row={board.orphanRow} onTapIssue={this._onTapIssue}/>}
+        {sprint.agile.orphansAtTheTop && <BoardRow row={board.orphanRow} {...commonRowProps}/>}
 
         {board.trimmedSwimlanes.map(swimlane => {
           return (
-            <BoardRow key={swimlane.id} row={swimlane} onTapIssue={this._onTapIssue}/>
+            <BoardRow
+              key={swimlane.id}
+              row={swimlane}
+              {...commonRowProps}
+            />
           );
         })}
 
-        {!sprint.agile.orphansAtTheTop && <BoardRow row={board.orphanRow} onTapIssue={this._onTapIssue}/>}
+        {!sprint.agile.orphansAtTheTop && <BoardRow row={board.orphanRow} {...commonRowProps}/>}
       </View>
     );
   }
