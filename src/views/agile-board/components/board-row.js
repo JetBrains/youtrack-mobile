@@ -48,7 +48,7 @@ export default function BoardRow(props: Props) {
         >
           <Image source={row.collapsed ? arrowRightGray: arrowDownGray} style={styles.collapseIcon}/>
           <Text style={[styles.rowHeaderText, isResolved && styles.resolvedIssueText]}>
-            {row.issue ? row.issue.summary : 'Uncategorizedf Cards'}
+            {row.issue ? row.issue.summary : 'Uncategorized Cards'}
           </Text>
         </TouchableOpacity>
       </View>
