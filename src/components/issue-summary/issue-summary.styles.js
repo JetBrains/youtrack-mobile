@@ -5,7 +5,7 @@ export default StyleSheet.create({
   summaryInput: {
     color: COLOR_FONT,
     fontSize: 20,
-    height: UNIT * 5
+    height: UNIT * 5.5
   },
   descriptionInput: {
     height: UNIT * 10,

@@ -1,8 +1,8 @@
 /* @flow */
-import {TextInput} from 'react-native';
+import {TextInput, Platform} from 'react-native';
 import React from 'react';
 
-const INITIAL_INPUT_HEIGHT = 36;
+const INITIAL_INPUT_HEIGHT = Platform.OS === 'ios' ? 34 : 40;
 const MAX_DEFAULT_HEIGHT = 200;
 const DEFAULT_FONT_SIZE = 16;
 const HEIGHT_SHIFT = 9;
