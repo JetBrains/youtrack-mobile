@@ -60,7 +60,7 @@ export default class AgileBoard extends Component {
       const profile = await api.getAgileUserProfile();
       const lastSprint = profile.visitedSprints.filter(s => s.agile.id === profile.defaultAgile.id)[0];
       const sprint = await api.getSprint(lastSprint.agile.id, lastSprint.id);
-      console.log('sprint', sprint)
+
       this.setState({profile, sprint});
     } catch (e) {
       notifyError('Could not load sprint', e);
