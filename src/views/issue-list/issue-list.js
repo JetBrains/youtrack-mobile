@@ -157,20 +157,21 @@ class IssueList extends React.Component {
   }
 
   loadMore() {
-    if (!this.state.isInitialized || this.state.isLoadingMore || this.state.isRefreshing || this.state.loadingError || this.state.listEndReached) {
+    const {isInitialized, isLoadingMore, isRefreshing, loadingError, listEndReached, queryAssistValue, skip, issues, dataSource} = this.state;
+    if (!isInitialized || isLoadingMore || isRefreshing || loadingError || listEndReached) {
       return;
     }
 
     this.setState({isLoadingMore: true});
-    const newSkip = this.state.skip + PAGE_SIZE;
+    const newSkip = skip + PAGE_SIZE;
 
-    return this.api.getIssues(this.state.queryAssistValue, PAGE_SIZE, newSkip)
+    return this.api.getIssues(queryAssistValue, PAGE_SIZE, newSkip)
       .then(ApiHelper.fillIssuesFieldHash)
       .then((newIssues) => {
-        const updatedIssues = this.state.issues.concat(newIssues);
+        const updatedIssues = issues.concat(newIssues);
         this.setState({
           issues: updatedIssues,
-          dataSource: this.state.dataSource.cloneWithRows(updatedIssues),
+          dataSource: dataSource.cloneWithRows(updatedIssues),
           skip: newSkip,
           listEndReached: newIssues.length < PAGE_SIZE
         });
@@ -181,10 +182,6 @@ class IssueList extends React.Component {
         this.setState({isLoadingMore: false});
         return notifyError('Failed to fetch more issues', err);
       });
-  }
-
-  formatErrorMessage(error) {
-    return extractErrorMessage(error);
   }
 
   getSuggestions(query, caret) {
@@ -241,7 +238,7 @@ class IssueList extends React.Component {
       return (<View style={styles.errorContainer}>
         <Text style={styles.listMessageSmile}>{'(>_<)'}</Text>
         <Text style={styles.errorTitle}>Cannot load issues</Text>
-        <Text style={styles.errorContent}>{this.formatErrorMessage(this.state.loadingError)}</Text>
+        <Text style={styles.errorContent}>{extractErrorMessage(this.state.loadingError)}</Text>
         <TouchableOpacity style={styles.tryAgainButton} onPress={() => this.loadIssues(this.state.queryAssistValue)}>
           <Text style={styles.tryAgainText}>Try Again</Text>
         </TouchableOpacity>
