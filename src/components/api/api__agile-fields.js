@@ -1,6 +1,6 @@
 /* @flow */
 import ApiHelper from './api__helper';
-import IssueFields from './api__fields';
+import IssueFields from './api__issue-fields';
 
 const toField = ApiHelper.toField;
 
