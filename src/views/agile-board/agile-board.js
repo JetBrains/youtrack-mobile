@@ -14,43 +14,42 @@ import {COLOR_PINK} from '../../components/variables/variables';
 import {notifyError} from '../../components/notification/notification';
 import {updateRowCollapsedState} from './board-updater';
 import {zoomIn, zoomOut} from '../../components/icon/icon';
-import type {SprintFull, Board, AgileUserProfile, AgileBoardRow, AgileColumn} from '../../flow/Agile';
+import type {SprintFull, Board, AgileBoardRow, AgileColumn} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
+
+
+import * as boardActions from './actions/boardActions';
+import { connect } from 'react-redux';
 
 const PAGE_SIZE = 4;
 
 type Props = {
-  auth: Auth
+  auth: Auth,
+  api: Api,
+  isLoading: boolean,
+  sprint: ?SprintFull,
+  dispatch: (any) => any
 };
 
 type State = {
   showMenu: boolean,
-  isRefreshing: boolean,
   isLoadingMore: boolean,
   noMoreSwimlanes: boolean,
-  zoomedOut: boolean,
-  sprint: ?SprintFull,
-  profile: ?AgileUserProfile,
+  zoomedOut: boolean
 };
 
-export default class AgileBoard extends Component {
+class AgileBoard extends Component {
   props: Props;
   state: State;
-  api: Api;
 
   constructor(props: Props) {
     super(props);
     this.state = {
       showMenu: false,
-      isRefreshing: false,
       isLoadingMore: false,
       noMoreSwimlanes: false,
-      zoomedOut: false,
-      sprint: null,
-      profile: null
+      zoomedOut: false
     };
-
-    this.api = new Api(this.props.auth);
     usage.trackScreenView('Agile board');
   }
 
@@ -62,20 +61,9 @@ export default class AgileBoard extends Component {
 
   }
 
-  async loadBoard() {
-    const {api} = this;
-    try {
-      this.setState({isRefreshing: true});
-      const profile = await api.getAgileUserProfile();
-      const lastSprint = profile.visitedSprints.filter(s => s.agile.id === profile.defaultAgile.id)[0];
-      const sprint = await api.getSprint(lastSprint.agile.id, lastSprint.id, PAGE_SIZE);
-
-      this.setState({profile, sprint});
-    } catch (e) {
-      notifyError('Could not load sprint', e);
-    } finally {
-      this.setState({isRefreshing: false});
-    }
+  loadBoard = () => {
+    const {dispatch, api} = this.props;
+    dispatch(boardActions.fetchAgileBoard(api));
   }
 
   async loadMoreSwimlanes() {
@@ -85,7 +73,7 @@ export default class AgileBoard extends Component {
     }
     try {
       this.setState({isLoadingMore: true});
-      const swimlanes = await this.api.getSwimlanes(sprint.agile.id, sprint.id, PAGE_SIZE, sprint.board.trimmedSwimlanes.length);
+      const swimlanes = await this.props.api.getSwimlanes(sprint.agile.id, sprint.id, PAGE_SIZE, sprint.board.trimmedSwimlanes.length);
       this.setState({sprint: {
         ...sprint,
         board: {
@@ -115,7 +103,7 @@ export default class AgileBoard extends Component {
 
   _renderRefreshControl() {
     return <RefreshControl
-      refreshing={this.state.isRefreshing}
+      refreshing={this.props.isLoading}
       tintColor={COLOR_PINK}
       onRefresh={() => this.loadBoard()}
     />;
@@ -125,7 +113,7 @@ export default class AgileBoard extends Component {
     Router.SingleIssue({
       issuePlaceholder: issue,
       issueId: issue.id,
-      api: this.api,
+      api: this.props.api,
     });
   }
 
@@ -143,7 +131,7 @@ export default class AgileBoard extends Component {
           board: updateRowCollapsedState(sprint.board, row, !row.collapsed)
         }
       });
-      await this.api.updateRowCollapsedState(sprint.agile.id, sprint.id, {
+      await this.props.api.updateRowCollapsedState(sprint.agile.id, sprint.id, {
         ...row,
         collapsed: !row.collapsed
       });
@@ -162,7 +150,7 @@ export default class AgileBoard extends Component {
   }
 
   _renderHeader() {
-    const {sprint} = this.state;
+    const {sprint} = this.props;
     return (
       <Header
         leftButton={<Text>Menu</Text>}
@@ -175,7 +163,8 @@ export default class AgileBoard extends Component {
   }
 
   _renderBoard() {
-    const {sprint, zoomedOut} = this.state;
+    const {sprint} = this.props;
+    const {zoomedOut} = this.state;
     if (!sprint) {
       return;
     }
@@ -209,8 +198,9 @@ export default class AgileBoard extends Component {
   }
 
   render() {
-    const {auth} = this.props;
-    const {showMenu, sprint, isLoadingMore, zoomedOut} = this.state;
+    const {auth, sprint} = this.props;
+
+    const {showMenu, isLoadingMore, zoomedOut} = this.state;
     return (
       <Menu
         show={showMenu}
@@ -244,3 +234,13 @@ export default class AgileBoard extends Component {
     );
   }
 }
+
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    ...ownProps,
+    ...state.board
+  };
+};
+
+export default connect(mapStateToProps)(AgileBoard);
