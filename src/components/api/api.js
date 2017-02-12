@@ -1,6 +1,6 @@
 /* @flow */
 import qs from 'qs';
-import fields from './api__fields';
+import issueFields from './api__issue-fields';
 import agileFields from './api__agile-fields';
 import Auth from '../auth/auth';
 import log from '../log/log';
@@ -73,7 +73,7 @@ class Api {
     const queryString = qs.stringify({
       query: `issue id: ${issueId}`,
       $top: 1,
-      fields: fields.singleIssue.toString()
+      fields: issueFields.singleIssue.toString()
     });
 
     const issues = await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`);
@@ -82,7 +82,7 @@ class Api {
 
   async getIssue(id: string): Promise<IssueFull> {
     const queryString = qs.stringify({
-      fields: fields.singleIssue.toString()
+      fields: issueFields.singleIssue.toString()
     });
 
     const issue = await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${id}?${queryString}`);
@@ -98,7 +98,7 @@ class Api {
   async getIssues(query: string = '', $top: number, $skip: number = 0): Promise<IssueOnList> {
     const queryString = qs.stringify({
       query, $top, $skip,
-      fields: fields.issuesOnList.toString()
+      fields: issueFields.issuesOnList.toString()
     });
 
     return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`);
@@ -112,13 +112,13 @@ class Api {
     log.info('Issue draft to create:', issueDraft);
     const queryString = qs.stringify({
       draftId: issueDraft.id,
-      fields: fields.issuesOnList.toString()
+      fields: issueFields.issuesOnList.toString()
     });
     return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`, 'POST', {});
   }
 
   async loadIssueDraft(draftId: string) {
-    const queryString = qs.stringify({fields: fields.singleIssue.toString()});
+    const queryString = qs.stringify({fields: issueFields.singleIssue.toString()});
     const issue = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/admin/users/me/drafts/${draftId}?${queryString}`);
     issue.attachments = ApiHelper.convertRelativeUrls(issue.attachments, 'url', this.config.backendUrl);
     return issue;
@@ -130,13 +130,13 @@ class Api {
    * @returns {Promise}
      */
   async updateIssueDraft(issue: IssueFull) {
-    const queryString = qs.stringify({fields: fields.singleIssue.toString()});
+    const queryString = qs.stringify({fields: issueFields.singleIssue.toString()});
 
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/admin/users/me/drafts/${issue.id || ''}?${queryString}`, 'POST', issue);
   }
 
   async addComment(issueId: string, comment: string) {
-    const queryString = qs.stringify({fields: fields.issueComment.toString()});
+    const queryString = qs.stringify({fields: issueFields.issueComment.toString()});
     const url = `${this.youTrackIssueUrl}/${issueId}/comments?${queryString}`;
 
     const createdComment =  await this.makeAuthorizedRequest(url, 'POST', {text: comment});
@@ -152,7 +152,7 @@ class Api {
 
   async getProjects(query: string) {
     const queryString = qs.stringify({
-      fields: fields.projectOnList.toString(),
+      fields: issueFields.projectOnList.toString(),
       query: query
     });
     return await this.makeAuthorizedRequest(`${this.youTrackProjectUrl}?${queryString}`);
@@ -160,7 +160,7 @@ class Api {
 
   async getProject(projectId: string) {
     const queryString = qs.stringify({
-      fields: fields.project.toString()
+      fields: issueFields.project.toString()
     });
     return await this.makeAuthorizedRequest(`${this.youTrackProjectUrl}/${projectId}?${queryString}`);
   }
@@ -175,7 +175,7 @@ class Api {
 
   async getCustomFieldValues(bundleId: string, fieldValueType: string) {
     const queryString = qs.stringify({
-      fields: fields.bundle.toString()
+      fields: issueFields.bundle.toString()
     });
 
     const res = await this.makeAuthorizedRequest(`${this.youtTrackFieldBundleUrl}/${fieldValueType}/${bundleId}?${queryString}`);
