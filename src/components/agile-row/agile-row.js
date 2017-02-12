@@ -1,13 +1,13 @@
 /* @flow */
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
-import { UNIT, AGILE_COLUMN_MIN_WIDTH, AGILE_COLLAPSED_COLUMN_WIDTH, COLOR_GRAY, COLOR_FONT_GRAY, COLOR_PINK } from '../../../components/variables/variables';
-import AgileCard from '../../../components/agile-card/agile-card';
-import ApiHelper from '../../../components/api/api__helper';
-import {arrowRightGray, arrowDownGray} from '../../../components/icon/icon';
-import type {AgileBoardRow, BoardCell} from '../../../flow/Agile';
-import type {IssueOnList} from '../../../flow/Issue';
-import {getPriotityField} from '../../../components/issue-formatter/issue-formatter';
+import AgileCard from '../agile-card/agile-card';
+import ApiHelper from '../api/api__helper';
+import {arrowRightGray, arrowDownGray} from '../icon/icon';
+import styles from './agile-row.styles';
+import type {AgileBoardRow, BoardCell} from '../../flow/Agile';
+import type {IssueOnList} from '../../flow/Issue';
+import {getPriotityField} from '../issue-formatter/issue-formatter';
 
 type Props = {
   style?: any,
@@ -79,61 +79,3 @@ export default function BoardRow(props: Props) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  rowContainer: {},
-  rowHeader: {
-    padding: UNIT
-  },
-  headerIssueId: {
-    marginLeft: UNIT * 2,
-    marginBottom: UNIT/2,
-    color: COLOR_PINK
-  },
-  resolvedIssueText: {
-    color: COLOR_FONT_GRAY,
-    textDecorationLine: 'line-through'
-  },
-  rowHeaderText: {
-    fontSize: 17,
-    marginLeft: UNIT / 2,
-    fontWeight: 'bold'
-  },
-  row: {
-    flexDirection: 'row',
-    borderBottomWidth: 0.5,
-    borderColor: COLOR_GRAY
-  },
-  column: {
-    width: AGILE_COLUMN_MIN_WIDTH,
-    borderRightWidth: 0.5,
-    borderColor: COLOR_GRAY
-  },
-  columnCollapsed: {
-    width: AGILE_COLLAPSED_COLUMN_WIDTH,
-    paddingTop: UNIT - 2,
-    paddingLeft: 2,
-    paddingRight: 2,
-    flexDirection: 'row',
-    flexWrap: 'wrap'
-  },
-  card: {
-    marginBottom: UNIT * 2
-  },
-  collapseButton: {
-    flexDirection: 'row',
-  },
-  collapseIcon: {
-    width: 12,
-    height: 12,
-    marginTop: UNIT/2,
-    resizeMode: 'contain'
-  },
-  issueSquare: {
-    width: UNIT,
-    height: UNIT,
-    margin: 2,
-    borderWidth: 1,
-    borderColor: 'rgba(0,0,0,0.1)'
-  }
-});
