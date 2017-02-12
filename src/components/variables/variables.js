@@ -13,5 +13,6 @@ export const COLOR_FONT_GRAY = '#888888';
 export const FOOTER_HEIGHT = 56;
 
 export const AGILE_COLUMN_MIN_WIDTH = 150;
+export const AGILE_COLLAPSED_COLUMN_WIDTH = UNIT * 4;
 
 export const COLOR_LINK = '#1866C5';

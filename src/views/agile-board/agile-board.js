@@ -14,7 +14,7 @@ import {COLOR_PINK} from '../../components/variables/variables';
 import {notifyError} from '../../components/notification/notification';
 import {updateRowCollapsedState} from './components/board-updater';
 import {zoomIn, zoomOut} from '../../components/icon/icon';
-import type {SprintFull, AgileUserProfile, AgileBoardRow} from '../../flow/Agile';
+import type {SprintFull, Board, AgileUserProfile, AgileBoardRow, AgileColumn} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
 
 const PAGE_SIZE = 4;
@@ -129,7 +129,7 @@ export default class AgileBoard extends Component {
     });
   }
 
-  _onCollapseToggle = async (row: AgileBoardRow) => {
+  _onRowCollapseToggle = async (row: AgileBoardRow) => {
     const {sprint} = this.state;
     if (!sprint) {
       return;
@@ -157,6 +157,10 @@ export default class AgileBoard extends Component {
     }
   }
 
+  _onColumnCollapseToggle = async (column: AgileColumn) => {
+
+  }
+
   _renderHeader() {
     const {sprint} = this.state;
     return (
@@ -175,20 +179,17 @@ export default class AgileBoard extends Component {
     if (!sprint) {
       return;
     }
-    const board = sprint.board;
-
-    const columns = board.columns.map(({agileColumn}) => {
-      return agileColumn.fieldValues.map(val => val.presentation).join(', ');
-    });
+    const board: Board = sprint.board;
 
     const commonRowProps = {
+      collapsedColumnIds: board.columns.filter(col => col.collapsed).map(col => col.id),
       onTapIssue: this._onTapIssue,
-      onCollapseToggle: this._onCollapseToggle
+      onCollapseToggle: this._onRowCollapseToggle
     };
 
     return (
       <View style={zoomedOut && styles.rowContainerZoomedOut}>
-        <BoardHeader columns={columns}/>
+        <BoardHeader columns={board.columns} onCollapseToggle={this._onColumnCollapseToggle}/>
 
         {sprint.agile.orphansAtTheTop && <BoardRow row={board.orphanRow} {...commonRowProps}/>}
 
