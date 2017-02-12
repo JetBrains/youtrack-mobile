@@ -5,6 +5,8 @@ import {UNIT} from '../variables/variables';
 import ColorField from '../color-field/color-field';
 import ApiHelper from '../api/api__helper';
 import type {IssueOnList} from '../../flow/Issue';
+import type {CustomFieldValue} from '../../flow/CustomFields';
+import {getPriotityField, getAssigneeField} from '../issue-formatter/issue-formatter';
 
 type Props = {
   style?: any,
@@ -13,27 +15,28 @@ type Props = {
 
 export default function AgileCard(props: Props) {
   const { issue, style } = props;
-  const fieldHash = ApiHelper.makeFieldHash(issue);
+  const priorityField = getPriotityField(issue);
 
-  const issueId = fieldHash.Priority
+  const issueId = priorityField
     ? <View style={styles.colorFieldContainer}>
       <ColorField
         fullText
         style={styles.issueIdColorField}
         text={ApiHelper.getIssueId(issue)}
-        color={fieldHash.Priority.color}
+        color={priorityField.value.color}
       />
     </View>
     : <Text testID="card-simple-issue-id">{ApiHelper.getIssueId(issue)}</Text>;
 
-  const assignees = [fieldHash.Assignee, ...(fieldHash.Assignees || [])].filter(item => item);
+  const assigneeField = getAssigneeField(issue);
+  const assignees = [].concat(assigneeField ? assigneeField.value : null).filter(item => item);
 
   return (
     <View style={[styles.card, style]}>
       {issueId}
       <Text numberOfLines={3} style={styles.summary} testID="card-summary">{issue.summary}</Text>
       <View style={styles.assignees}>
-        {assignees.map(assignee => {
+        {assignees.map((assignee: CustomFieldValue) => {
           return <Image key={assignee.id} style={styles.avatar} source={{ uri: assignee.avatarUrl }} testID="card-avatar"/>;
         })}
       </View>

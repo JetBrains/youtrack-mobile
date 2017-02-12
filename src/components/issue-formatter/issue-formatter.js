@@ -1,6 +1,7 @@
 /* @flow */
 import fromNow from 'from-now';
-import type {IssueUser} from '../../flow/CustomFields';
+import type {IssueUser, CustomField} from '../../flow/CustomFields';
+import type {AnyIssue} from '../../flow/Issue';
 
 const shortRelativeFormat = {
   'now': 'just now',
@@ -58,4 +59,33 @@ function shortRelativeDate(date: Date|number) {
   return `${formatted}${getPostfix(formatted)}`;
 }
 
-export {getForText, formatDate, relativeDate, shortRelativeDate};
+function findIssueField(issue: AnyIssue, predicate: (field: CustomField) => boolean) {
+  const fields: Array<CustomField> = issue.fields;
+
+  for (const field of fields) {
+    if (predicate(field)) {
+      return field;
+    }
+  }
+
+  return null;
+}
+
+function getPriotityField(issue: AnyIssue) {
+  const PRIORITY_FIELDS = ['Priority'];
+  return findIssueField(issue, field => {
+    const fieldName = field.projectCustomField.field.name;
+    return PRIORITY_FIELDS.includes(fieldName);
+  });
+}
+
+function getAssigneeField(issue: AnyIssue) {
+  const PRIORITY_FIELDS = ['Assignee', 'Assignees'];
+  return findIssueField(issue, field => {
+    const fieldName = field.projectCustomField.field.name;
+    return PRIORITY_FIELDS.includes(fieldName);
+  });
+}
+
+
+export {getForText, formatDate, relativeDate, shortRelativeDate, getPriotityField, getAssigneeField};

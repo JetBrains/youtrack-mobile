@@ -7,6 +7,7 @@ import ApiHelper from '../../../components/api/api__helper';
 import {arrowRightGray, arrowDownGray} from '../../../components/icon/icon';
 import type {AgileBoardRow, BoardCell} from '../../../flow/Agile';
 import type {IssueOnList} from '../../../flow/Issue';
+import {getPriotityField} from '../../../components/issue-formatter/issue-formatter';
 
 type Props = {
   style?: any,
@@ -23,7 +24,13 @@ function renderIssue(issue: IssueOnList, onTapIssue) {
 }
 
 function renderIssuqSquare(issue: IssueOnList) {
-    return <View key={issue.id} style={styles.issueSquare}/>;
+    const priorityField = getPriotityField(issue);
+
+    const color = priorityField ? priorityField.value.color : null;
+    return <View
+      key={issue.id}
+      style={[styles.issueSquare, color && {backgroundColor: color.background}]}
+    />;
 }
 
 function renderCell(cell: BoardCell, collapsed: boolean, onTapIssue) {
@@ -123,10 +130,10 @@ const styles = StyleSheet.create({
     resizeMode: 'contain'
   },
   issueSquare: {
-    width: 8,
-    height: 8,
+    width: UNIT,
+    height: UNIT,
     margin: 2,
     borderWidth: 1,
-    borderColor: 'silver'
+    borderColor: 'rgba(0,0,0,0.1)'
   }
 });

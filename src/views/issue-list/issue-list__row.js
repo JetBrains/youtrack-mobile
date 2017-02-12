@@ -2,7 +2,7 @@ import styles from './issue-list.styles';
 import ColorField from '../../components/color-field/color-field';
 import {next} from '../../components/icon/icon';
 import {COLOR_FONT_GRAY} from '../../components/variables/variables';
-import {getForText} from '../../components/issue-formatter/issue-formatter';
+import {getPriotityField, getForText} from '../../components/issue-formatter/issue-formatter';
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import React from 'react';
 
@@ -23,8 +23,9 @@ export default class IssueRow extends React.Component {
 
   render() {
     const issue = this.props.issue;
-    const prioityBlock =issue.fieldHash.Priority ?
-      <ColorField text={issue.fieldHash.Priority.name} color={issue.fieldHash.Priority.color}></ColorField> :
+    const priorityField = getPriotityField(issue);
+    const prioityBlock = priorityField ?
+      <ColorField text={priorityField.value.name} color={priorityField.value.color}></ColorField> :
       <View style={styles.priorityPlaceholder}/>;
 
     return (
