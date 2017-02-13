@@ -11,8 +11,6 @@ import Router from '../../components/router/router';
 import Auth from '../../components/auth/auth';
 import Api from '../../components/api/api';
 import {COLOR_PINK} from '../../components/variables/variables';
-import {notifyError} from '../../components/notification/notification';
-import {updateRowCollapsedState} from './board-updater';
 import {zoomIn, zoomOut} from '../../components/icon/icon';
 import type {SprintFull, Board, AgileBoardRow, AgileColumn} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
@@ -21,20 +19,20 @@ import type {IssueOnList} from '../../flow/Issue';
 import * as boardActions from './actions/boardActions';
 import { connect } from 'react-redux';
 
-const PAGE_SIZE = 4;
-
 type Props = {
   auth: Auth,
   api: Api,
   isLoading: boolean,
+  isLoadingMore: boolean,
+  noMoreSwimlanes: boolean,
   sprint: ?SprintFull,
-  dispatch: (any) => any
+  onLoadBoard: () => any,
+  onLoadMoreSwimlanes: () => any,
+  onRowCollapseToggle: (row: AgileBoardRow) => any
 };
 
 type State = {
   showMenu: boolean,
-  isLoadingMore: boolean,
-  noMoreSwimlanes: boolean,
   zoomedOut: boolean
 };
 
@@ -46,47 +44,17 @@ class AgileBoard extends Component {
     super(props);
     this.state = {
       showMenu: false,
-      isLoadingMore: false,
-      noMoreSwimlanes: false,
       zoomedOut: false
     };
     usage.trackScreenView('Agile board');
   }
 
   componentDidMount() {
-    this.loadBoard();
+    this.props.onLoadBoard();
   }
 
   _onLogOut = () => {
 
-  }
-
-  loadBoard = () => {
-    const {dispatch, api} = this.props;
-    dispatch(boardActions.fetchAgileBoard(api));
-  }
-
-  async loadMoreSwimlanes() {
-    const {sprint, noMoreSwimlanes} = this.state;
-    if (!sprint || noMoreSwimlanes) {
-      return;
-    }
-    try {
-      this.setState({isLoadingMore: true});
-      const swimlanes = await this.props.api.getSwimlanes(sprint.agile.id, sprint.id, PAGE_SIZE, sprint.board.trimmedSwimlanes.length);
-      this.setState({sprint: {
-        ...sprint,
-        board: {
-          ...sprint.board,
-          trimmedSwimlanes: sprint.board.trimmedSwimlanes.concat(swimlanes)
-        },
-        noMoreSwimlanes: swimlanes.length < PAGE_SIZE
-      }});
-    } catch (e) {
-      notifyError('Could not load more swimlanes', e);
-    } finally {
-      this.setState({isLoadingMore: false});
-    }
   }
 
   _onScroll = (event) => {
@@ -97,7 +65,7 @@ class AgileBoard extends Component {
     const maxScroll = contentHeight - viewHeight;
 
     if (maxScroll - scroll < 20) {
-      this.loadMoreSwimlanes();
+      this.props.onLoadMoreSwimlanes();
     }
   }
 
@@ -105,7 +73,7 @@ class AgileBoard extends Component {
     return <RefreshControl
       refreshing={this.props.isLoading}
       tintColor={COLOR_PINK}
-      onRefresh={() => this.loadBoard()}
+      onRefresh={() => this.props.onLoadBoard()}
     />;
   }
 
@@ -116,35 +84,6 @@ class AgileBoard extends Component {
       api: this.props.api,
     });
   }
-
-  _onRowCollapseToggle = async (row: AgileBoardRow) => {
-    const {sprint} = this.state;
-    if (!sprint) {
-      return;
-    }
-    const oldCollapsed = row.collapsed;
-
-    try {
-      this.setState({
-        sprint: {
-          ...sprint,
-          board: updateRowCollapsedState(sprint.board, row, !row.collapsed)
-        }
-      });
-      await this.props.api.updateRowCollapsedState(sprint.agile.id, sprint.id, {
-        ...row,
-        collapsed: !row.collapsed
-      });
-    } catch (e) {
-      this.setState({
-        sprint: {...sprint,
-          board: updateRowCollapsedState(sprint.board, row, oldCollapsed)
-        }
-      });
-      notifyError('Could not update row', e);
-    }
-  }
-
   _onColumnCollapseToggle = async (column: AgileColumn) => {
 
   }
@@ -173,7 +112,7 @@ class AgileBoard extends Component {
     const commonRowProps = {
       collapsedColumnIds: board.columns.filter(col => col.collapsed).map(col => col.id),
       onTapIssue: this._onTapIssue,
-      onCollapseToggle: this._onRowCollapseToggle
+      onCollapseToggle: this.props.onRowCollapseToggle
     };
 
     return (
@@ -198,9 +137,9 @@ class AgileBoard extends Component {
   }
 
   render() {
-    const {auth, sprint} = this.props;
+    const {auth, sprint, isLoadingMore} = this.props;
 
-    const {showMenu, isLoadingMore, zoomedOut} = this.state;
+    const {showMenu, zoomedOut} = this.state;
     return (
       <Menu
         show={showMenu}
@@ -237,10 +176,15 @@ class AgileBoard extends Component {
 
 
 const mapStateToProps = (state, ownProps) => {
+  return state.board;
+};
+
+const mapDispatchToProps = (dispatch) => {
   return {
-    ...ownProps,
-    ...state.board
+    onLoadBoard: () => dispatch(boardActions.fetchAgileBoard()),
+    onLoadMoreSwimlanes: () => dispatch(boardActions.fetchMoreSwimlanes()),
+    onRowCollapseToggle: (row) => console.log('rowCollapseToggle') || dispatch(boardActions.rowCollapseToggle(row))
   };
 };
 
-export default connect(mapStateToProps)(AgileBoard);
+export default connect(mapStateToProps, mapDispatchToProps)(AgileBoard);

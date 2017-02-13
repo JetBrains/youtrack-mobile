@@ -7,8 +7,8 @@ import createLogger from 'redux-logger';
 
 import * as reducers from './reducers';
 import AgileBoardContainer from './agile-board';
-import Api from '../../components/api/api';
 import type Auth from '../../components/auth/auth';
+import {initializeApi} from './actions/boardActions';
 
 const logger = createLogger();
 const createStoreWithMiddleware = applyMiddleware(thunk, logger)(createStore);
@@ -24,10 +24,10 @@ export default class AgileBoard extends Component {
 
   render() {
     const {auth} = this.props;
-    const api = new Api(auth);
+    store.dispatch(initializeApi(auth));
     return (
       <Provider store={store}>
-        <AgileBoardContainer auth={auth} api={api}/>
+        <AgileBoardContainer />
       </Provider>
     );
   }
