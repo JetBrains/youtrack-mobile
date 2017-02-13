@@ -183,4 +183,4 @@ class YouTrackMobile extends Component {
   }
 }
 
-module.exports = YouTrackMobile; // eslint-disable-line import/no-common-js
+module.exports = YouTrackMobile; //eslint-disable-line import/no-commonjs
