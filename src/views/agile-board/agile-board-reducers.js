@@ -1,9 +1,9 @@
 /* @flow */
-import * as types from '../actions/actionTypes';
+import * as types from './actions/actionTypes';
 import {createReducer} from 'redux-create-reducer';
-import type {SprintFull, AgileBoardRow, Board} from '../../../flow/Agile';
-import type Api from '../../../components/api/api';
-import type Auth from '../../../components/auth/auth';
+import type {SprintFull, AgileBoardRow, Board} from '../../flow/Agile';
+import type Api from '../../components/api/api';
+import type Auth from '../../components/auth/auth';
 
 type BoardState = {
   isLoading: boolean,
@@ -36,7 +36,7 @@ function updateRowCollapsedState(
   };
 }
 
-export default createReducer(initialState, {
+const board = createReducer(initialState, {
   [types.INITIALIZE_API](state: BoardState, action: Object = {}) {
     return {
       ...state,
@@ -105,3 +105,8 @@ export default createReducer(initialState, {
     };
   }
 });
+
+export {
+  board
+};
+

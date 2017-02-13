@@ -1,4 +1,7 @@
 /* @flow */
+import store from './store';
+import { Provider } from 'react-redux';
+import {initializeApi} from './views/agile-board/actions/boardActions';
 import PubSub from 'pubsub-js';
 import Auth from './components/auth/auth';
 import Router from './components/router/router';
@@ -12,7 +15,7 @@ import SingleIssue from './views/single-issue/single-issue';
 import CreateIssue from './views/create-issue/create-issue';
 import ShowImage from './views/show-image/show-image';
 import AttachmentPreview from './views/attachment-preview/attachment-preview';
-import AgileBoard from './views/agile-board';
+import AgileBoard from './views/agile-board/agile-board';
 import {loadConfig, getStoredConfig} from './components/config/config';
 // $FlowFixMe: cannot typecheck easy-toast module because of mistakes there
 import Toast from 'react-native-easy-toast';
@@ -69,6 +72,8 @@ class YouTrackMobile extends Component {
 
   async initializeAuth(config: AppConfigFilled) {
     this.auth = new Auth(config);
+    store.dispatch(initializeApi(this.auth));
+
     usage.init(config.statisticsEnabled);
     return await this.checkAuthorization();
   }
@@ -165,13 +170,17 @@ class YouTrackMobile extends Component {
   }
 
   render() {
-    return <ActionSheet ref={component => this._actionSheetRef = component}>
-      <View style={{flex: 1}} onLayout={this.handleOrientationChange}>
-        {Router.renderNavigatorView({initialRoute: Router.routes.Home})}
-        <Toast ref={toast => setNotificationComponent(toast)}/>
-      </View>
-    </ActionSheet>;
+    return (
+      <Provider store={store}>
+        <ActionSheet ref={component => this._actionSheetRef = component}>
+          <View style={{flex: 1}} onLayout={this.handleOrientationChange}>
+            {Router.renderNavigatorView({initialRoute: Router.routes.Home})}
+            <Toast ref={toast => setNotificationComponent(toast)}/>
+          </View>
+        </ActionSheet>
+      </Provider>
+    );
   }
 }
 
-module.exports = YouTrackMobile;
+module.exports = YouTrackMobile; // eslint-disable-line import/no-common-js
