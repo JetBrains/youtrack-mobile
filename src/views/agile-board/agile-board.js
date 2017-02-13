@@ -183,7 +183,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onLoadBoard: () => dispatch(boardActions.fetchAgileBoard()),
     onLoadMoreSwimlanes: () => dispatch(boardActions.fetchMoreSwimlanes()),
-    onRowCollapseToggle: (row) => console.log('rowCollapseToggle') || dispatch(boardActions.rowCollapseToggle(row))
+    onRowCollapseToggle: (row) => dispatch(boardActions.rowCollapseToggle(row))
   };
 };
 

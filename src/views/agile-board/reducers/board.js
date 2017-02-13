@@ -1,15 +1,22 @@
 /* @flow */
 import * as types from '../actions/actionTypes';
+import {createReducer} from 'redux-create-reducer';
 import type {SprintFull, AgileBoardRow, Board} from '../../../flow/Agile';
+import type Api from '../../../components/api/api';
+import type Auth from '../../../components/auth/auth';
 
 type BoardState = {
   isLoading: boolean,
-  sprint: ?SprintFull
+  sprint: ?SprintFull,
+  api: ?Api,
+  auth: ?Auth
 };
 
 const initialState: BoardState = {
   isLoading: false,
-  sprint: null
+  sprint: null,
+  api: null,
+  auth: null
 };
 
 function updateRowCollapsedState(
@@ -29,61 +36,72 @@ function updateRowCollapsedState(
   };
 }
 
-export default function board(state: BoardState = initialState, action: Object = {}): BoardState {
-  switch (action.type) {
-    case types.INITIALIZE_API:
-      return {
-        ...state,
-        api: action.api,
-        auth: action.auth
-      };
-    case types.START_SPRINT_LOADING:
-      return {
-        ...state,
-        isLoading: true
-      };
-    case types.STOP_SPRINT_LOADING:
-      return {
-        ...state,
-        isLoading: false
-      };
-    case types.RECEIVE_SPRINT:
-      return {
-        ...state,
-        sprint: action.sprint
-      };
-    case types.START_SWIMLANES_LOADING:
-      return {
-        ...state,
-        isLoadingMore: true
-      };
-    case types.STOP_SWIMLANES_LOADING:
-      return {
-        ...state,
-        isLoadingMore: false
-      };
-    case types.RECEIVE_SWIMLANES:
-      return {
-        ...state,
-        sprint: {
-          ...state.sprint,
-          board: {
-            ...state.sprint.board,
-            trimmedSwimlanes: state.sprint.board.trimmedSwimlanes.concat(action.swimlanes)
-          }
-        },
-        noMoreSwimlanes: action.swimlanes.length < action.PAGE_SIZE
-      };
-    case types.ROW_COLLAPSE_TOGGLE: {
-      return {
-        ...state,
-        sprint: {
-          ...state.sprint,
-          board: updateRowCollapsedState(state.sprint.board, action.row, action.newCollapsed)
-        }
-      };
-    }
-    default:
+export default createReducer(initialState, {
+  [types.INITIALIZE_API](state: BoardState, action: Object = {}) {
+    return {
+      ...state,
+      api: action.api,
+      auth: action.auth
+    };
+  },
+  [types.START_SPRINT_LOADING](state: BoardState) {
+    return {
+      ...state,
+      isLoading: true
+    };
+  },
+  [types.STOP_SPRINT_LOADING](state: BoardState) {
+    return {
+      ...state,
+      isLoading: false
+    };
+  },
+  [types.RECEIVE_SPRINT](state: BoardState, action: Object) {
+    return {
+      ...state,
+      sprint: action.sprint
+    };
+  },
+  [types.START_SWIMLANES_LOADING](state: BoardState) {
+    return {
+      ...state,
+      isLoadingMore: true
+    };
+  },
+  [types.STOP_SWIMLANES_LOADING](state: BoardState) {
+    return {
+      ...state,
+      isLoadingMore: false
+    };
+  },
+  [types.RECEIVE_SWIMLANES](state:BoardState, action: Object) {
+    const {sprint} = state;
+    if (!sprint) {
       return state;
+    }
+    return {
+      ...state,
+      sprint: {
+        ...sprint,
+        board: {
+          ...sprint.board,
+          trimmedSwimlanes: sprint.board.trimmedSwimlanes.concat(action.swimlanes)
+        }
+      },
+      noMoreSwimlanes: action.swimlanes.length < action.PAGE_SIZE
+    };
+  },
+  [types.ROW_COLLAPSE_TOGGLE](state: BoardState, action: Object) {
+    const {sprint} = state;
+    if (!sprint) {
+      return state;
+    }
+    return {
+      ...state,
+      sprint: {
+        ...sprint,
+        board: updateRowCollapsedState(sprint.board, action.row, action.newCollapsed)
+      }
+    };
   }
-}
+});
