@@ -1,9 +1,9 @@
 /* @flow */
-import * as types from './actionTypes';
-import {notifyError} from '../../../components/notification/notification';
-import Api from '../../../components/api/api';
-import type Auth from '../../../components/auth/auth';
-import type {AgileBoardRow} from '../../../flow/Agile';
+import * as types from './board-action-types';
+import {notifyError} from '../../components/notification/notification';
+import Api from '../../components/api/api';
+import type Auth from '../../components/auth/auth';
+import type {AgileBoardRow} from '../../flow/Agile';
 
 const PAGE_SIZE = 4;
 

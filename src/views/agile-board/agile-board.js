@@ -16,7 +16,7 @@ import type {SprintFull, Board, AgileBoardRow, AgileColumn} from '../../flow/Agi
 import type {IssueOnList} from '../../flow/Issue';
 
 
-import * as boardActions from './actions/boardActions';
+import * as boardActions from './board-actions';
 import { connect } from 'react-redux';
 
 type Props = {

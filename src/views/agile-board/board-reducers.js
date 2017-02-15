@@ -1,5 +1,5 @@
 /* @flow */
-import * as types from './actions/actionTypes';
+import * as types from './board-action-types';
 import {createReducer} from 'redux-create-reducer';
 import type {SprintFull, AgileBoardRow, Board} from '../../flow/Agile';
 import type Api from '../../components/api/api';

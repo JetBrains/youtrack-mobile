@@ -3,7 +3,7 @@ import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 
-import * as agileBoardReducers from './views/agile-board/agile-board-reducers';
+import * as agileBoardReducers from './views/agile-board/board-reducers';
 
 const middlewares = [thunk];
 

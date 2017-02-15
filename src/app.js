@@ -1,7 +1,7 @@
 /* @flow */
 import store from './store';
 import { Provider } from 'react-redux';
-import {initializeApi} from './views/agile-board/actions/boardActions';
+import {initializeApi} from './views/agile-board/board-actions';
 import PubSub from 'pubsub-js';
 import Auth from './components/auth/auth';
 import Router from './components/router/router';
