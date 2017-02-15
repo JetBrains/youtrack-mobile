@@ -21,6 +21,7 @@ type Props = {
   children?: ReactElement<any>,
   show: boolean,
   auth: Auth,
+  issueQuery: ?string,
   onLogOut: () => any,
   onOpen: () => any,
   onClose: () => any
@@ -46,7 +47,7 @@ export default class Menu extends Component<DefaultProps, Props, void> {
   }
 
   _renderMenu() {
-    const {auth, onLogOut} = this.props;
+    const {auth, onLogOut, issueQuery} = this.props;
     const user = auth.currentUser;
     const backendUrl = auth.config.backendUrl;
     const avatarUrl = user.profile && user.profile.avatar && user.profile.avatar.url;
@@ -68,7 +69,7 @@ export default class Menu extends Component<DefaultProps, Props, void> {
             <Text style={styles.menuItemText}>Issues</Text>
             <Image style={styles.menuItemIcon} source={next}></Image>
           </View>
-          <Text style={styles.menuItemSubtext}>No query</Text>
+          <Text style={styles.menuItemSubtext}>{issueQuery || 'No query'}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity activeOpacity={0.4} style={styles.menuItemButton} onPress={this._openAgileBoard}>

@@ -259,9 +259,13 @@ class IssueList extends React.Component {
   }
 
   render() {
+    const {auth} = this.props;
+    const {showMenu, dataSource, queryAssistValue} = this.state;
+
     return <Menu
-      show={this.state.showMenu}
-      auth={this.props.auth}
+      show={showMenu}
+      auth={auth}
+      issueQuery={queryAssistValue}
       onLogOut={this.logOut.bind(this)}
       onOpen={() => this.setState({showMenu: true})}
       onClose={() => this.setState({showMenu: false})}
@@ -271,7 +275,7 @@ class IssueList extends React.Component {
 
         <ListView
           removeClippedSubviews={false}
-          dataSource={this.state.dataSource}
+          dataSource={dataSource}
           enableEmptySections={true}
           renderRow={(issue) => <IssueRow issue={issue} onClick={(issue) => this.goToIssue(issue)}></IssueRow>}
           renderSeparator={(sectionID, rowID) => <View style={styles.separator} key={rowID}/>}
@@ -282,7 +286,7 @@ class IssueList extends React.Component {
           refreshDescription="Refreshing issues"/>
 
         <QueryAssist
-          initialQuery={this.state.queryAssistValue}
+          initialQuery={queryAssistValue}
           dataSource={this.getSuggestions.bind(this)}
           onQueryUpdate={newQuery => this.onQueryUpdated(newQuery)}/>
 
