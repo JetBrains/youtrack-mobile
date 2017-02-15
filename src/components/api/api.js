@@ -302,6 +302,13 @@ class Api {
     });
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${boardId}/sprints?${queryString}`);
   }
+
+  async getAgileBoardsList(): Promise<> {
+    const queryString = qs.stringify({
+      fields: agileFields.boardOnList.toString()
+    });
+    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles?${queryString}`);
+  }
 }
 
 export default Api;

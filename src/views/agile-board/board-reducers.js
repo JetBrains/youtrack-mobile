@@ -132,14 +132,14 @@ const board = createReducer(initialState, {
       }
     };
   },
-  [types.OPEN_SPRINT_SELECT](state: BoardState, action: Object): BoardState {
+  [types.OPEN_AGILE_SELECT](state: BoardState, action: Object): BoardState {
     return {
       ...state,
       isSprintSelectOpen: true,
       selectProps: action.selectProps
     };
   },
-  [types.CLOSE_SPRINT_SELECT](state: BoardState): BoardState {
+  [types.CLOSE_AGILE_SELECT](state: BoardState): BoardState {
     return {
       ...state,
       selectProps: null,

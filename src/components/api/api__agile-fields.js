@@ -83,6 +83,13 @@ const BOARD = toField([
   {trimmedSwimlanes: BOARD_ROW}
 ]);
 
+const BOARD_ON_LIST = toField([
+  'id',
+  'name',
+  {sprints: ['id', 'name']},
+  {creator: ['id', 'fullName']}
+]);
+
 const SPRINT_WITH_BOARD = toField([
   SPRINT,
   { board: BOARD },
@@ -96,5 +103,6 @@ export default {
   agileUserProfile: AGILE_PROFILE,
   sprint: SPRINT_WITH_BOARD,
   sprintShort: SPRINT,
-  row: BOARD_ROW
+  row: BOARD_ROW,
+  boardOnList: BOARD_ON_LIST
 };

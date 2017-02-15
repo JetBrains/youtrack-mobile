@@ -3,7 +3,7 @@ import * as types from './board-action-types';
 import {notifyError} from '../../components/notification/notification';
 import Api from '../../components/api/api';
 import type Auth from '../../components/auth/auth';
-import type {AgileBoardRow, AgileColumn} from '../../flow/Agile';
+import type {AgileBoardRow, AgileColumn, BoardOnList} from '../../flow/Agile';
 
 const PAGE_SIZE = 4;
 
@@ -46,6 +46,13 @@ function loadSprint(agileId: string, sprintId: string) {
     } finally {
       dispatch(stopSprintLoad());
     }
+  };
+}
+
+function loadBoard(boardId: string, sprints: {id: string}) {
+  return async (dispatch: (any) => any, getState: () => Object) => {
+    const lastSprint = sprints[0];
+    dispatch(loadSprint(boardId, lastSprint.id));
   };
 }
 
@@ -155,7 +162,7 @@ export function columnCollapseToggle(column: AgileColumn) {
 }
 
 export function closeSelect() {
-  return {type: types.CLOSE_SPRINT_SELECT};
+  return {type: types.CLOSE_AGILE_SELECT};
 }
 
 export function openSprintSelect() {
@@ -166,14 +173,36 @@ export function openSprintSelect() {
     }
 
     dispatch({
-      type: types.OPEN_SPRINT_SELECT,
+      type: types.OPEN_AGILE_SELECT,
       selectProps: {
         show: true,
         title: 'Select sprint',
-        dataSource: (query: string) => api.getSprintList(sprint.agile.id, query),
+        dataSource: () => api.getSprintList(sprint.agile.id),
         onSelect: selectedSprint => {
           dispatch(closeSelect());
           dispatch(loadSprint(sprint.agile.id, selectedSprint.id));
+        }
+      }
+    });
+  };
+}
+
+export function openBoardSelect() {
+  return (dispatch: (any) => any, getState: () => Object) => {
+    const {sprint, api} = getState().board;
+    if (!sprint) {
+      return;
+    }
+
+    dispatch({
+      type: types.OPEN_AGILE_SELECT,
+      selectProps: {
+        show: true,
+        title: 'Select board',
+        dataSource: () => api.getAgileBoardsList(),
+        onSelect: (selectedBoard: BoardOnList) => {
+          dispatch(closeSelect());
+          dispatch(loadBoard(selectedBoard.id, selectedBoard.sprints));
         }
       }
     });

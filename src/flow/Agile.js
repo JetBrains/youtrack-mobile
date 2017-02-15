@@ -63,6 +63,13 @@ type Board = {
   trimmedSwimlanes: Array<AgileBoardRow>
 };
 
+type BoardOnList = {
+  id: string,
+  name: string,
+  sprints: {id: string, name: string},
+  creator: {id: string, fullName: string}
+}
+
 type SprintFull = SprintInformation & {
   board: Board,
   agile: {

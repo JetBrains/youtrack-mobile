@@ -34,6 +34,7 @@ type Props = {
   onRowCollapseToggle: (row: AgileBoardRow) => any,
   onColumnCollapseToggle: (column: AgileColumn) => any,
   onOpenSprintSelect: (any) => any,
+  onOpenBoardSelect: (any) => any,
   onCloseSelect: (any) => any
 };
 
@@ -93,25 +94,25 @@ class AgileBoard extends Component {
   }
 
   _renderHeader() {
-    const {sprint, onOpenSprintSelect} = this.props;
+    const {sprint, onOpenSprintSelect, onOpenBoardSelect} = this.props;
 
     return (
       <Header
         leftButton={<Text>Menu</Text>}
         onBack={() => this.setState({showMenu: true})}
       >
-        <View style={styles.headerContent}>
-          <TouchableOpacity style={styles.headerBoardButton}>
-            <Text style={styles.headerBoardText} numberOfLines={1}>{sprint && sprint.agile.name}</Text>
+        {sprint && <View style={styles.headerContent}>
+          <TouchableOpacity style={styles.headerBoardButton} onPress={onOpenBoardSelect}>
+            <Text style={styles.headerBoardText} numberOfLines={1}>{sprint.agile.name}</Text>
           </TouchableOpacity>
           <Image style={styles.headerSeparatorIcon} source={next}/>
           <TouchableOpacity
             style={[styles.headerBoardButton, styles.headerBoardNotCollapsibleButton]}
             onPress={onOpenSprintSelect}
           >
-            <Text style={styles.headerSprintText} numberOfLines={1}>{sprint && sprint.name}</Text>
+            <Text style={styles.headerSprintText} numberOfLines={1}>{sprint.name}</Text>
           </TouchableOpacity>
-        </View>
+        </View>}
       </Header>
     );
   }
@@ -216,6 +217,7 @@ const mapDispatchToProps = (dispatch) => {
     onLogOut: () => dispatch(boardActions.logOut()),
     onColumnCollapseToggle: (column) => dispatch(boardActions.columnCollapseToggle(column)),
     onOpenSprintSelect: () => dispatch(boardActions.openSprintSelect()),
+    onOpenBoardSelect: () => dispatch(boardActions.openBoardSelect()),
     onCloseSelect: () => dispatch(boardActions.closeSelect())
   };
 };
