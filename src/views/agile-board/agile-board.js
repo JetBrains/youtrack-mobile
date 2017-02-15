@@ -128,12 +128,8 @@ class AgileBoard extends Component {
     );
   }
 
-  _renderBoard() {
-    const {sprint} = this.props;
+  _renderBoard(sprint: SprintFull) {
     const {zoomedOut} = this.state;
-    if (!sprint) {
-      return;
-    }
     const board: Board = sprint.board;
 
     const commonRowProps = {
@@ -184,7 +180,7 @@ class AgileBoard extends Component {
             scrollEventThrottle={100}
           >
             <ScrollView horizontal>
-              {sprint && this._renderBoard()}
+              {sprint && this._renderBoard(sprint)}
             </ScrollView>
             {isLoadingMore && <ActivityIndicator color={COLOR_PINK} style={styles.loadingMoreIndicator}/>}
           </ScrollView>
