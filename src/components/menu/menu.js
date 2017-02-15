@@ -109,6 +109,8 @@ export default class Menu extends Component<DefaultProps, Props, void> {
         onOpen={onOpen}
         onClose={onClose}
         openDrawerOffset={1 / 4}
+        captureGestures={true}
+        panOpenMask={36}
       >
         <StatusBar animated barStyle={show ? 'light-content' : 'default'}/>
         {children}
