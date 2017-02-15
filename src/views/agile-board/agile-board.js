@@ -3,6 +3,7 @@ import {ScrollView, View, Text, Image, RefreshControl, TouchableOpacity, Activit
 import React, {Component} from 'react';
 import usage from '../../components/usage/usage';
 import Header from '../../components/header/header';
+import Select from '../../components/select/select';
 import styles from './agile-board.styles';
 import Menu from '../../components/menu/menu';
 import BoardHeader from './board-header';
@@ -15,7 +16,6 @@ import {zoomIn, zoomOut, next} from '../../components/icon/icon';
 import type {SprintFull, Board, AgileBoardRow, AgileColumn} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
 
-
 import * as boardActions from './board-actions';
 import { connect } from 'react-redux';
 
@@ -26,11 +26,15 @@ type Props = {
   isLoadingMore: boolean,
   noMoreSwimlanes: boolean,
   sprint: ?SprintFull,
+  isSprintSelectOpen: boolean,
+  selectProps: Object,
   onLoadBoard: () => any,
   onLogOut: () => any,
   onLoadMoreSwimlanes: () => any,
   onRowCollapseToggle: (row: AgileBoardRow) => any,
-  onColumnCollapseToggle: (column: AgileColumn) => any
+  onColumnCollapseToggle: (column: AgileColumn) => any,
+  onOpenSprintSelect: (any) => any,
+  onCloseSelect: (any) => any
 };
 
 type State = {
@@ -89,22 +93,37 @@ class AgileBoard extends Component {
   }
 
   _renderHeader() {
-    const {sprint} = this.props;
+    const {sprint, onOpenSprintSelect} = this.props;
+
     return (
       <Header
         leftButton={<Text>Menu</Text>}
         onBack={() => this.setState({showMenu: true})}
       >
         <View style={styles.headerContent}>
-          <Text style={styles.headerBoardText} numberOfLines={1}>
-            {sprint && sprint.agile.name}
-          </Text>
+          <TouchableOpacity style={styles.headerBoardButton}>
+            <Text style={styles.headerBoardText} numberOfLines={1}>{sprint && sprint.agile.name}</Text>
+          </TouchableOpacity>
           <Image style={styles.headerSeparatorIcon} source={next}/>
-          <Text style={styles.headerSprintText} numberOfLines={1}>
-            {sprint && sprint.name}
-          </Text>
+          <TouchableOpacity
+            style={[styles.headerBoardButton, styles.headerBoardNotCollapsibleButton]}
+            onPress={onOpenSprintSelect}
+          >
+            <Text style={styles.headerSprintText} numberOfLines={1}>{sprint && sprint.name}</Text>
+          </TouchableOpacity>
         </View>
       </Header>
+    );
+  }
+
+  _renderSelect() {
+    const {selectProps} = this.props;
+    return (
+      <Select
+        {...selectProps}
+        getTitle={item => item.name}
+        onCancel={this.props.onCloseSelect}
+      />
     );
   }
 
@@ -144,7 +163,7 @@ class AgileBoard extends Component {
   }
 
   render() {
-    const {auth, sprint, isLoadingMore} = this.props;
+    const {auth, sprint, isLoadingMore, isSprintSelectOpen} = this.props;
 
     const {showMenu, zoomedOut} = this.state;
     return (
@@ -176,6 +195,8 @@ class AgileBoard extends Component {
               <Image source={zoomedOut ? zoomIn : zoomOut} style={styles.zoomButtonIcon}/>
             </TouchableOpacity>
           </View>
+
+          {isSprintSelectOpen && this._renderSelect()}
         </View>
       </Menu>
     );
@@ -193,7 +214,9 @@ const mapDispatchToProps = (dispatch) => {
     onLoadMoreSwimlanes: () => dispatch(boardActions.fetchMoreSwimlanes()),
     onRowCollapseToggle: (row) => dispatch(boardActions.rowCollapseToggle(row)),
     onLogOut: () => dispatch(boardActions.logOut()),
-    onColumnCollapseToggle: (column) => dispatch(boardActions.columnCollapseToggle(column))
+    onColumnCollapseToggle: (column) => dispatch(boardActions.columnCollapseToggle(column)),
+    onOpenSprintSelect: () => dispatch(boardActions.openSprintSelect()),
+    onCloseSelect: () => dispatch(boardActions.closeSelect())
   };
 };
 

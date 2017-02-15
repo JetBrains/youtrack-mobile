@@ -9,8 +9,13 @@ export default StyleSheet.create({
     paddingTop: 3,
     flexDirection: 'row'
   },
+  headerBoardButton: {
+    flexShrink: 1
+  },
+  headerBoardNotCollapsibleButton: {
+    flexShrink: 0
+  },
   headerBoardText: {
-    flexShrink: 1,
     fontSize: 14
   },
   headerSprintText: {

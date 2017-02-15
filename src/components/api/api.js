@@ -281,7 +281,7 @@ class Api {
       `${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}/board/orphanRow` :
       `${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}/board/swimlanes/${row.id}`;
 
-    await this.makeAuthorizedRequest(`${url}`, 'POST', {
+    return await this.makeAuthorizedRequest(`${url}`, 'POST', {
       $type: row.$type,
       id: isOrphan ? null : row.id,
       collapsed: row.collapsed
@@ -289,11 +289,18 @@ class Api {
   }
 
   async updateColumnCollapsedState(boardId: string, sprintId: string, column: Object): Promise<> {
-    await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}/board/columns/${column.id}`,
+    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}/board/columns/${column.id}`,
     'POST',
     {
       collapsed: column.collapsed
     });
+  }
+
+  async getSprintList(boardId: string): Promise<> {
+    const queryString = qs.stringify({
+      fields: agileFields.sprintShort.toString()
+    });
+    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${boardId}/sprints?${queryString}`);
   }
 }
 

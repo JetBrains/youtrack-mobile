@@ -8,7 +8,7 @@ import {notifyError} from '../notification/notification';
 
 const MAX_VISIBLE_ITEMS = 100;
 
-type Props = {
+export type Props = {
   dataSource: (query: string) => Promise<Array<Object>>,
   onSelect: (item: ?Object | Array<Object>) => any,
   onCancel: () => any,

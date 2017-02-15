@@ -95,5 +95,6 @@ const SPRINT_WITH_BOARD = toField([
 export default {
   agileUserProfile: AGILE_PROFILE,
   sprint: SPRINT_WITH_BOARD,
+  sprintShort: SPRINT,
   row: BOARD_ROW
 };

@@ -7,13 +7,17 @@ import type Auth from '../../components/auth/auth';
 
 type BoardState = {
   isLoading: boolean,
+  isSprintSelectOpen: boolean,
   sprint: ?SprintFull,
+  selectProps: ?Object,
   api: ?Api,
   auth: ?Auth
 };
 
 const initialState: BoardState = {
   isLoading: false,
+  isSprintSelectOpen: false,
+  selectProps: null,
   sprint: null,
   api: null,
   auth: null
@@ -80,7 +84,7 @@ const board = createReducer(initialState, {
       isLoadingMore: false
     };
   },
-  [types.RECEIVE_SWIMLANES](state:BoardState, action: Object) {
+  [types.RECEIVE_SWIMLANES](state:BoardState, action: Object): BoardState {
     const {sprint} = state;
     if (!sprint) {
       return state;
@@ -97,7 +101,7 @@ const board = createReducer(initialState, {
       noMoreSwimlanes: action.swimlanes.length < action.PAGE_SIZE
     };
   },
-  [types.ROW_COLLAPSE_TOGGLE](state: BoardState, action: Object) {
+  [types.ROW_COLLAPSE_TOGGLE](state: BoardState, action: Object): BoardState {
     const {sprint} = state;
     if (!sprint) {
       return state;
@@ -110,7 +114,7 @@ const board = createReducer(initialState, {
       }
     };
   },
-  [types.COLUMN_COLLAPSE_TOGGLE](state: BoardState, action: Object) {
+  [types.COLUMN_COLLAPSE_TOGGLE](state: BoardState, action: Object): BoardState {
     const {sprint} = state;
     if (!sprint) {
       return state;
@@ -126,6 +130,20 @@ const board = createReducer(initialState, {
           })
         }
       }
+    };
+  },
+  [types.OPEN_SPRINT_SELECT](state: BoardState, action: Object): BoardState {
+    return {
+      ...state,
+      isSprintSelectOpen: true,
+      selectProps: action.selectProps
+    };
+  },
+  [types.CLOSE_SPRINT_SELECT](state: BoardState): BoardState {
+    return {
+      ...state,
+      selectProps: null,
+      isSprintSelectOpen: false
     };
   }
 });

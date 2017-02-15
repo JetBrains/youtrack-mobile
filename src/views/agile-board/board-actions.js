@@ -38,21 +38,28 @@ function receiveSprint(sprint) {
   };
 }
 
-export function fetchAgileBoard() {
+function loadSprint(agileId: string, sprintId: string) {
   return async (dispatch: (any) => any, getState: () => Object) => {
     const {api} = getState().board;
     dispatch(startSprintLoad());
-
     try {
-      const profile = await api.getAgileUserProfile();
-      const lastSprint = profile.visitedSprints.filter(s => s.agile.id === profile.defaultAgile.id)[0];
-      const sprint = await api.getSprint(lastSprint.agile.id, lastSprint.id, 4);
+      const sprint = await api.getSprint(agileId, sprintId, 4);
       dispatch(receiveSprint(sprint));
     } catch (e) {
       notifyError('Could not load sprint', e);
     } finally {
       dispatch(stopSprintLoad());
     }
+  };
+}
+
+export function fetchAgileBoard() {
+  return async (dispatch: (any) => any, getState: () => Object) => {
+    const {api} = getState().board;
+
+    const profile = await api.getAgileUserProfile();
+    const lastSprint = profile.visitedSprints.filter(s => s.agile.id === profile.defaultAgile.id)[0];
+    dispatch(loadSprint(lastSprint.agile.id, lastSprint.id));
   };
 }
 
@@ -152,5 +159,31 @@ export function columnCollapseToggle(column: AgileColumn) {
       dispatch(updateColumnCollapsedState(column, oldCollapsed));
       notifyError('Could not update column', e);
     }
+  };
+}
+
+export function closeSelect() {
+  return {type: types.CLOSE_SPRINT_SELECT};
+}
+
+export function openSprintSelect() {
+  return (dispatch: (any) => any, getState: () => Object) => {
+    const {sprint, api} = getState().board;
+    if (!sprint) {
+      return;
+    }
+
+    dispatch({
+      type: types.OPEN_SPRINT_SELECT,
+      selectProps: {
+        show: true,
+        title: 'Select sprint',
+        dataSource: (query: string) => api.getSprintList(sprint.agile.id, query),
+        onSelect: selectedSprint => {
+          dispatch(closeSelect());
+          dispatch(loadSprint(sprint.agile.id, selectedSprint.id));
+        }
+      }
+    });
   };
 }
