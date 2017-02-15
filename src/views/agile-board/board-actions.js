@@ -15,6 +15,10 @@ export function initializeApi(auth: Auth) {
   };
 }
 
+export function logOut() {
+  return {type: types.LOG_OUT};
+}
+
 function startSprintLoad() {
   return {
     type: types.START_SPRINT_LOADING

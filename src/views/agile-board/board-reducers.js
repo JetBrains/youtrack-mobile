@@ -44,6 +44,12 @@ const board = createReducer(initialState, {
       auth: action.auth
     };
   },
+  [types.LOG_OUT](state: BoardState, action: Object = {}) {
+    state.auth.logOut();
+    return {
+      ...state
+    };
+  },
   [types.START_SPRINT_LOADING](state: BoardState) {
     return {
       ...state,

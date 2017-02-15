@@ -27,6 +27,7 @@ type Props = {
   noMoreSwimlanes: boolean,
   sprint: ?SprintFull,
   onLoadBoard: () => any,
+  onLogOut: () => any,
   onLoadMoreSwimlanes: () => any,
   onRowCollapseToggle: (row: AgileBoardRow) => any
 };
@@ -54,7 +55,8 @@ class AgileBoard extends Component {
   }
 
   _onLogOut = () => {
-
+    this.props.onLogOut();
+    Router.EnterServer({serverUrl: this.props.auth.config.backendUrl});
   }
 
   _onScroll = (event) => {
@@ -183,7 +185,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onLoadBoard: () => dispatch(boardActions.fetchAgileBoard()),
     onLoadMoreSwimlanes: () => dispatch(boardActions.fetchMoreSwimlanes()),
-    onRowCollapseToggle: (row) => dispatch(boardActions.rowCollapseToggle(row))
+    onRowCollapseToggle: (row) => dispatch(boardActions.rowCollapseToggle(row)),
+    onLogOut: () => dispatch(boardActions.logOut())
   };
 };
 
