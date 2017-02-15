@@ -26,13 +26,12 @@ type Props = {
   onClose: () => any
 };
 
-type State = {
+type DefaultProps = {
+  onOpen: () => any,
+  onClose: () => any
 };
 
-export default class Menu extends Component {
-  props: Props;
-  state: State;
-
+export default class Menu extends Component<DefaultProps, Props, void> {
   static defaultProps = {
     onOpen: () => {},
     onClose: () => {},
