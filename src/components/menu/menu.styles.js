@@ -1,18 +1,30 @@
 import {StyleSheet} from 'react-native';
-import {COLOR_PINK, UNIT, COLOR_FONT_GRAY, COLOR_LINK} from '../../components/variables/variables';
+import {COLOR_PINK, UNIT, COLOR_GRAY, COLOR_FONT} from '../../components/variables/variables';
 
 const AVATAR_SIZE = UNIT * 8;
 
+const bottomBorder = {
+  borderColor: COLOR_FONT,
+  borderBottomWidth: 0.5
+};
+
 export default StyleSheet.create({
   menuContainer: {
-    flex: 1
+    flex: 1,
+    backgroundColor: 'black'
   },
   profileContainer: {
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingBottom: UNIT * 2,
+    ...bottomBorder
   },
   profileName: {
-    color: COLOR_FONT_GRAY,
+    color: COLOR_GRAY,
     marginTop: UNIT
+  },
+  logoutIcon: {
+    height: UNIT * 3,
+    resizeMode: 'contain'
   },
   currentUserAvatarImage: {
     width: AVATAR_SIZE,
@@ -20,29 +32,37 @@ export default StyleSheet.create({
     borderRadius: AVATAR_SIZE/2
   },
   logOutButton: {
-    marginTop: UNIT * 2,
-    alignItems: 'center',
-    height: UNIT * 4
-  },
-  logOutText: {
-    fontSize: 16,
-    color: COLOR_PINK
+    position: 'absolute',
+    right: UNIT
   },
   menuItems: {
-    marginTop: UNIT * 3,
-    flex: 1
+
   },
   menuItemButton: {
-    marginTop: UNIT * 2,
+    paddingRight: UNIT * 2,
+    paddingTop: UNIT * 2,
+    paddingBottom: UNIT * 2,
     marginLeft: UNIT * 2,
-    height: UNIT * 4
+    ...bottomBorder
+  },
+  menuItemTopLine: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  menuItemIcon: {
+    height: UNIT * 2,
+    resizeMode: 'contain'
   },
   menuItemText: {
-    fontSize: 18,
-    color: COLOR_PINK,
-    flex: 1
+    lineHeight: 18,
+    fontSize: 17,
+    fontWeight: 'bold',
+    color: 'white'
   },
-  label: {
+  menuItemSubtext: {
+    lineHeight: 19,
+    paddingTop: UNIT/2,
+    color: COLOR_GRAY,
     fontSize: 14
   },
   menuFooter: {
@@ -57,12 +77,12 @@ export default StyleSheet.create({
   footerText: {
     fontSize: 12,
     lineHeight: UNIT*2,
-    color: COLOR_FONT_GRAY
+    color: COLOR_GRAY
   },
   buttonLink: {
   },
   linkText: {
-    color: COLOR_LINK,
+    color: COLOR_PINK,
     fontSize: 12
   }
 });

@@ -1,5 +1,5 @@
 /* @flow */
-import {View, Text, TouchableOpacity, Image, Linking} from 'react-native';
+import {StatusBar, View, Text, TouchableOpacity, Image, Linking} from 'react-native';
 import React, {Component} from 'react';
 import styles from './menu.styles';
 import {VERSION_STRING} from '../../components/usage/usage';
@@ -8,6 +8,7 @@ import getTopPadding from '../../components/header/header__top-padding';
 import Drawer from 'react-native-drawer';
 import Router from '../../components/router/router';
 import Auth from '../../components/auth/auth';
+import {next, logOut} from '../../components/icon/icon';
 
 const CURRENT_YEAR = (new Date()).getFullYear();
 
@@ -51,25 +52,32 @@ export default class Menu extends Component {
     const backendUrl = auth.config.backendUrl;
     const avatarUrl = user.profile && user.profile.avatar && user.profile.avatar.url;
 
-    return <View style={[styles.menuContainer, {marginTop: getTopPadding()}]}>
-
+    return <View style={[styles.menuContainer, {paddingTop: getTopPadding()}]}>
       <View style={styles.profileContainer}>
         <Image style={styles.currentUserAvatarImage} source={{uri: avatarUrl}}></Image>
 
         <Text style={styles.profileName}>{user.name}</Text>
 
         <TouchableOpacity style={styles.logOutButton} onPress={onLogOut}>
-          <Text style={styles.logOutText}>Log Out</Text>
+          <Image style={styles.logoutIcon} source={logOut}></Image>
         </TouchableOpacity>
       </View>
 
       <View style={styles.menuItems}>
-        <TouchableOpacity style={styles.menuItemButton} onPress={this._openIssueList}>
-          <Text style={styles.menuItemText}>Issues</Text>
+        <TouchableOpacity activeOpacity={0.4} style={styles.menuItemButton} onPress={this._openIssueList}>
+          <View style={styles.menuItemTopLine}>
+            <Text style={styles.menuItemText}>Issues</Text>
+            <Image style={styles.menuItemIcon} source={next}></Image>
+          </View>
+          <Text style={styles.menuItemSubtext}>No query</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.menuItemButton} onPress={this._openAgileBoard}>
-          <Text style={styles.menuItemText}>Agile Board <Text style={styles.label}>(Alpha)</Text></Text>
+        <TouchableOpacity activeOpacity={0.4} style={styles.menuItemButton} onPress={this._openAgileBoard}>
+          <View style={styles.menuItemTopLine}>
+            <Text style={styles.menuItemText}>Agile Boards</Text>
+            <Image style={styles.menuItemIcon} source={next}></Image>
+          </View>
+          <Text style={styles.menuItemSubtext}>Alpha version</Text>
         </TouchableOpacity>
       </View>
 
@@ -102,6 +110,7 @@ export default class Menu extends Component {
         onClose={onClose}
         openDrawerOffset={1 / 4}
       >
+        <StatusBar animated barStyle={show ? 'light-content' : 'default'}/>
         {children}
       </Drawer>
     );

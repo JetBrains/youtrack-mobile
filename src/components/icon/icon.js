@@ -16,3 +16,4 @@ export {default as arrowRightGray} from './arrow-right-gray.png';
 export {default as arrowDownGray} from './arrow-down-gray.png';
 export {default as zoomIn} from './zoom-in.png';
 export {default as zoomOut} from './zoom-out.png';
+export {default as logOut} from './logout.png';
