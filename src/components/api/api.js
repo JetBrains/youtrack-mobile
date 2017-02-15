@@ -6,7 +6,7 @@ import Auth from '../auth/auth';
 import log from '../log/log';
 import ApiHelper from './api__helper';
 import {handleRelativeUrl} from '../config/config';
-import type {SprintFull, AgileUserProfile, AgileBoardRow} from '../../flow/Agile';
+import type {SprintFull, AgileUserProfile, AgileBoardRow, BoardOnList} from '../../flow/Agile';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {IssueOnList, IssueFull} from '../../flow/Issue';
 import type {IssueProject, FieldValue} from '../../flow/CustomFields';
@@ -303,11 +303,17 @@ class Api {
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${boardId}/sprints?${queryString}`);
   }
 
-  async getAgileBoardsList(): Promise<> {
+  async getAgileBoardsList(): Promise<Array<BoardOnList>> {
     const queryString = qs.stringify({
       fields: agileFields.boardOnList.toString()
     });
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles?${queryString}`);
+  }
+
+  async saveLastVisitedSprint(sprintId: string): Promise<> {
+    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agileUserProfile`, 'POST', {
+      visitedSprints: [{id: sprintId}]
+    });
   }
 }
 

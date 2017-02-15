@@ -39,8 +39,9 @@ function loadSprint(agileId: string, sprintId: string) {
     const {api} = getState().board;
     dispatch(startSprintLoad());
     try {
-      const sprint = await api.getSprint(agileId, sprintId, 4);
+      const sprint = await api.getSprint(agileId, sprintId, PAGE_SIZE);
       dispatch(receiveSprint(sprint));
+      await api.saveLastVisitedSprint(sprintId);
     } catch (e) {
       notifyError('Could not load sprint', e);
     } finally {
