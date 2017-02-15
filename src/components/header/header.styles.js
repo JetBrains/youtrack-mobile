@@ -4,6 +4,7 @@ import {UNIT, COLOR_PINK, COLOR_LIGHT_GRAY, COLOR_GRAY} from '../../components/v
 export default StyleSheet.create({
   header: {
     paddingBottom: 9,
+    flex: 0,
     flexDirection: 'row',
     justifyContent: 'space-between',
 
@@ -12,6 +13,7 @@ export default StyleSheet.create({
     borderColor: COLOR_GRAY
   },
   headerButton: {
+    flexShrink: 0,
     height: UNIT * 3,
     padding: 0,
     paddingLeft: UNIT,
@@ -31,6 +33,7 @@ export default StyleSheet.create({
     textAlign: 'right'
   },
   headerCenter: {
+    flexShrink: 1,
     padding: 0
   }
 });

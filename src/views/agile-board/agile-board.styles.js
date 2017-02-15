@@ -1,10 +1,27 @@
 import {StyleSheet} from 'react-native';
-import {UNIT} from '../../components/variables/variables';
+import {UNIT, COLOR_PINK} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#FFF'
+  },
+  headerContent: {
+    paddingTop: 3,
+    flexDirection: 'row'
+  },
+  headerBoardText: {
+    flexShrink: 1,
+    fontSize: 14
+  },
+  headerSprintText: {
+    fontSize: 14,
+    color: COLOR_PINK,
+    fontWeight: 'bold'
+  },
+  headerSeparatorIcon: {
+    alignSelf: 'center',
+    height: UNIT * 1.5,
+    resizeMode: 'contain'
   },
   rowContainerZoomedOut: {
     transform: [{scale: 0.8}]

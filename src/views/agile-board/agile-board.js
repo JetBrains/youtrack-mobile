@@ -11,7 +11,7 @@ import Router from '../../components/router/router';
 import Auth from '../../components/auth/auth';
 import Api from '../../components/api/api';
 import {COLOR_PINK} from '../../components/variables/variables';
-import {zoomIn, zoomOut} from '../../components/icon/icon';
+import {zoomIn, zoomOut, next} from '../../components/icon/icon';
 import type {SprintFull, Board, AgileBoardRow, AgileColumn} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
 
@@ -93,10 +93,17 @@ class AgileBoard extends Component {
     return (
       <Header
         leftButton={<Text>Menu</Text>}
-        rightButton={<Text></Text>}
         onBack={() => this.setState({showMenu: true})}
       >
-        <Text>{sprint ? `${sprint.agile.name} > ${sprint.name}` : 'Loading...'}</Text>
+        <View style={styles.headerContent}>
+          <Text style={styles.headerBoardText} numberOfLines={1}>
+            {sprint && sprint.agile.name}
+          </Text>
+          <Image style={styles.headerSeparatorIcon} source={next}/>
+          <Text style={styles.headerSprintText} numberOfLines={1}>
+            {sprint && sprint.name}
+          </Text>
+        </View>
       </Header>
     );
   }

@@ -42,22 +42,24 @@ export default class Header extends React.Component {
   render() {
     const {leftButton, children, rightButton} = this.props;
 
-    return (<View style={[styles.header, {paddingTop: getTopPadding()}]}>
-      <TouchableOpacity
-        hitSlop={{top: TOUCH_PADDING, left: TOUCH_PADDING, bottom: TOUCH_PADDING, right: TOUCH_PADDING}}
-        style={[styles.headerButton, styles.headerButtonLeft]}
-        onPress={() => this.onBack()}>
-        <Text style={styles.headerButtonText}>{leftButton}</Text>
-      </TouchableOpacity>
+    return (
+      <View style={[styles.header, {paddingTop: getTopPadding()}]}>
+        <TouchableOpacity
+          hitSlop={{top: TOUCH_PADDING, left: TOUCH_PADDING, bottom: TOUCH_PADDING, right: TOUCH_PADDING}}
+          style={[styles.headerButton, styles.headerButtonLeft]}
+          onPress={() => this.onBack()}>
+          <Text style={styles.headerButtonText}>{leftButton}</Text>
+        </TouchableOpacity>
 
-      <View style={styles.headerCenter}>{children}</View>
+        <View style={styles.headerCenter}>{children}</View>
 
-      <TouchableOpacity
-        hitSlop={{top: TOUCH_PADDING, left: TOUCH_PADDING, bottom: TOUCH_PADDING, right: TOUCH_PADDING}}
-        style={[styles.headerButton, styles.headerButtonRight]}
-        onPress={this.onRightButtonClick.bind(this)}>
-        <Text style={[styles.headerButtonText, styles.headerButtonTextRight]}>{rightButton}</Text>
-      </TouchableOpacity>
-    </View>);
+        <TouchableOpacity
+          hitSlop={{top: TOUCH_PADDING, left: TOUCH_PADDING, bottom: TOUCH_PADDING, right: TOUCH_PADDING}}
+          style={[styles.headerButton, styles.headerButtonRight]}
+          onPress={this.onRightButtonClick.bind(this)}>
+          <Text style={[styles.headerButtonText, styles.headerButtonTextRight]}>{rightButton}</Text>
+        </TouchableOpacity>
+      </View>
+    );
   }
 }
