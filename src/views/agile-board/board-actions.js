@@ -20,15 +20,11 @@ export function logOut() {
 }
 
 function startSprintLoad() {
-  return {
-    type: types.START_SPRINT_LOADING
-  };
+  return {type: types.START_SPRINT_LOADING};
 }
 
 function stopSprintLoad() {
-  return {
-    type: types.STOP_SPRINT_LOADING
-  };
+  return {type: types.STOP_SPRINT_LOADING};
 }
 
 function receiveSprint(sprint) {
@@ -53,7 +49,7 @@ function loadSprint(agileId: string, sprintId: string) {
   };
 }
 
-export function fetchAgileBoard() {
+export function fetchDefaultAgileBoard() {
   return async (dispatch: (any) => any, getState: () => Object) => {
     const {api} = getState().board;
 
@@ -64,15 +60,11 @@ export function fetchAgileBoard() {
 }
 
 function startSwimlanesLoading() {
-  return {
-    type: types.START_SWIMLANES_LOADING
-  };
+  return {type: types.START_SWIMLANES_LOADING};
 }
 
 function stopSwimlanesLoading() {
-  return {
-    type: types.STOP_SWIMLANES_LOADING
-  };
+  return {type: types.STOP_SWIMLANES_LOADING};
 }
 
 function receiveSwimlanes(swimlanes) {
