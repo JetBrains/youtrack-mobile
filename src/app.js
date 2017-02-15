@@ -124,6 +124,7 @@ class YouTrackMobile extends Component {
           return loadConfig(newUrl)
             .then(config => {
               this.auth = new Auth(config);
+              store.dispatch(initializeApi(this.auth));
               usage.init(config.statisticsEnabled);
               Router.LogIn();
             });
