@@ -45,10 +45,10 @@ const board = createReducer(initialState, {
     };
   },
   [types.LOG_OUT](state: BoardState, action: Object = {}) {
-    state.auth.logOut();
-    return {
-      ...state
-    };
+    if (state.auth) {
+      state.auth.logOut();
+    }
+    return state;
   },
   [types.START_SPRINT_LOADING](state: BoardState) {
     return {
@@ -107,6 +107,24 @@ const board = createReducer(initialState, {
       sprint: {
         ...sprint,
         board: updateRowCollapsedState(sprint.board, action.row, action.newCollapsed)
+      }
+    };
+  },
+  [types.COLUMN_COLLAPSE_TOGGLE](state: BoardState, action: Object) {
+    const {sprint} = state;
+    if (!sprint) {
+      return state;
+    }
+    return {
+      ...state,
+      sprint: {
+        ...sprint,
+        board: {
+          ...sprint.board,
+          columns: sprint.board.columns.map(it => {
+            return it === action.column ? {...action.column, collapsed: action.newCollapsed} : it;
+          })
+        }
       }
     };
   }

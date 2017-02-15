@@ -29,7 +29,8 @@ type Props = {
   onLoadBoard: () => any,
   onLogOut: () => any,
   onLoadMoreSwimlanes: () => any,
-  onRowCollapseToggle: (row: AgileBoardRow) => any
+  onRowCollapseToggle: (row: AgileBoardRow) => any,
+  onColumnCollapseToggle: (column: AgileColumn) => any
 };
 
 type State = {
@@ -86,9 +87,6 @@ class AgileBoard extends Component {
       api: this.props.api,
     });
   }
-  _onColumnCollapseToggle = async (column: AgileColumn) => {
-
-  }
 
   _renderHeader() {
     const {sprint} = this.props;
@@ -119,7 +117,7 @@ class AgileBoard extends Component {
 
     return (
       <View style={zoomedOut && styles.rowContainerZoomedOut}>
-        <BoardHeader columns={board.columns} onCollapseToggle={this._onColumnCollapseToggle}/>
+        <BoardHeader columns={board.columns} onCollapseToggle={this.props.onColumnCollapseToggle}/>
 
         {sprint.agile.orphansAtTheTop && <BoardRow row={board.orphanRow} {...commonRowProps}/>}
 
@@ -186,7 +184,8 @@ const mapDispatchToProps = (dispatch) => {
     onLoadBoard: () => dispatch(boardActions.fetchAgileBoard()),
     onLoadMoreSwimlanes: () => dispatch(boardActions.fetchMoreSwimlanes()),
     onRowCollapseToggle: (row) => dispatch(boardActions.rowCollapseToggle(row)),
-    onLogOut: () => dispatch(boardActions.logOut())
+    onLogOut: () => dispatch(boardActions.logOut()),
+    onColumnCollapseToggle: (column) => dispatch(boardActions.columnCollapseToggle(column))
   };
 };
 

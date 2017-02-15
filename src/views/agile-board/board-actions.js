@@ -3,7 +3,7 @@ import * as types from './board-action-types';
 import {notifyError} from '../../components/notification/notification';
 import Api from '../../components/api/api';
 import type Auth from '../../components/auth/auth';
-import type {AgileBoardRow} from '../../flow/Agile';
+import type {AgileBoardRow, AgileColumn} from '../../flow/Agile';
 
 const PAGE_SIZE = 4;
 
@@ -121,6 +121,36 @@ export function rowCollapseToggle(row: AgileBoardRow) {
     } catch (e) {
       dispatch(updateRowCollapsedState(row, oldCollapsed));
       notifyError('Could not update row', e);
+    }
+  };
+}
+
+function updateColumnCollapsedState(column, newCollapsed: boolean) {
+  return {
+    type: types.COLUMN_COLLAPSE_TOGGLE,
+    column,
+    newCollapsed
+  };
+}
+
+export function columnCollapseToggle(column: AgileColumn) {
+  return async (dispatch: (any) => any, getState: () => Object) => {
+    const {sprint, api} = getState().board;
+    if (!sprint) {
+      return;
+    }
+    const oldCollapsed = column.collapsed;
+
+    dispatch(updateColumnCollapsedState(column, !column.collapsed));
+
+    try {
+      await api.updateColumnCollapsedState(sprint.agile.id, sprint.id, {
+        ...column,
+        collapsed: !column.collapsed
+      });
+    } catch (e) {
+      dispatch(updateColumnCollapsedState(column, oldCollapsed));
+      notifyError('Could not update column', e);
     }
   };
 }

@@ -287,6 +287,14 @@ class Api {
       collapsed: row.collapsed
     });
   }
+
+  async updateColumnCollapsedState(boardId: string, sprintId: string, column: Object): Promise<> {
+    await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}/board/columns/${column.id}`,
+    'POST',
+    {
+      collapsed: column.collapsed
+    });
+  }
 }
 
 export default Api;
