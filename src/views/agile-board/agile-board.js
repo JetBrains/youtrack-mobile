@@ -144,6 +144,7 @@ class AgileBoard extends Component {
       <Menu
         show={showMenu}
         auth={auth}
+        issueQuery=""
         onLogOut={this._onLogOut}
         onOpen={() => this.setState({showMenu: true})}
         onClose={() => this.setState({showMenu: false})}
