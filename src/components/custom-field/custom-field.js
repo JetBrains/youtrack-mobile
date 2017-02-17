@@ -62,9 +62,10 @@ export default class CustomField extends Component {
 
   _renderValue(value, fieldType: string) {
     const {active} = this.props;
+    const textStyle = [styles.valueText, active && styles.valueTextActive];
 
     const renderOneValue = (val) => {
-      return <Text style={[styles.valueText, active && styles.valueTextActive]} testID="value">{this._getValue(val, fieldType)}</Text>;
+      return <Text style={textStyle} testID="value">{this._getValue(val, fieldType)}</Text>;
     };
 
     if (Array.isArray(value)) {
@@ -74,7 +75,9 @@ export default class CustomField extends Component {
       return value.map((val, ind) => {
         return [
           renderOneValue(val),
-          ind === value.length - 1 ? <Text> </Text> : <Text>, </Text>
+          <Text style={textStyle} key={val}>
+            {ind === value.length - 1 ? ' ' : ', '}
+          </Text>
         ];
       });
     }
