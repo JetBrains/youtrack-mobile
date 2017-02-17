@@ -5,6 +5,7 @@ import styles from './select.styles';
 import Header from '../header/header';
 import ColorField from '../color-field/color-field';
 import {notifyError} from '../notification/notification';
+import {checkWhite} from '../icon/icon';
 import {COLOR_PLACEHOLDER} from '../variables/variables';
 
 const MAX_VISIBLE_ITEMS = 100;
@@ -128,11 +129,13 @@ export default class Select extends React.Component {
   _renderRow(item) {
     return (
       <TouchableOpacity key={item.id} style={styles.row} onPress={() => this._onTouchItem(item)}>
-        {item.avatarUrl && <Image style={styles.itemIcon} source={{uri: item.avatarUrl}}/>}
+        <View style={styles.selectItemValue}>
+          {item.avatarUrl && <Image style={styles.itemIcon} source={{uri: item.avatarUrl}}/>}
 
-        {this._isSelected(item) && <View style={styles.selectedMark}></View>}
+          {this._renderTitle(item)}
+        </View>
 
-        {this._renderTitle(item)}
+        {this._isSelected(item) && <Image source={checkWhite} style={styles.selectedMarkIcon}></Image>}
       </TouchableOpacity>
     );
   }

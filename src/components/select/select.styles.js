@@ -28,7 +28,7 @@ export default StyleSheet.create({
   row: {
     position: 'relative',
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
     alignItems: 'center',
     padding: UNIT,
     paddingLeft: UNIT * 2,
@@ -36,6 +36,9 @@ export default StyleSheet.create({
   },
   headerText: {
     color: COLOR_FONT_ON_BLACK
+  },
+  selectItemValue: {
+    flexDirection: 'row'
   },
   itemIcon: {
     width: UNIT * 4,
@@ -51,13 +54,9 @@ export default StyleSheet.create({
     paddingLeft: UNIT*2,
     color: COLOR_FONT_GRAY
   },
-  selectedMark: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    bottom: 0,
-    width: UNIT / 2,
-    backgroundColor: COLOR_PINK
+  selectedMarkIcon: {
+    width: UNIT * 3,
+    resizeMode: 'contain'
   },
   colorFieldItemWrapper: {
     alignItems: 'center',
