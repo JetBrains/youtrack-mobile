@@ -13,6 +13,7 @@ export default StyleSheet.create({
   },
   headerButton: {
     flex: 1,
+    flexDirection: 'row',
     flexShrink: 0
   },
   headerButtonLeft: {
@@ -29,7 +30,7 @@ export default StyleSheet.create({
     color: COLOR_PINK
   },
   headerCenter: {
-    flex: 4,
+    flex: 2.5,
     alignItems: 'center',
     flexShrink: 1,
     padding: 0
