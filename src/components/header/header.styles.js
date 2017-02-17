@@ -5,23 +5,32 @@ export default StyleSheet.create({
   header: {
     paddingBottom: 12,
     flex: 0,
-    paddingLeft: UNIT * 2,
-    paddingRight: UNIT * 2,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
 
     backgroundColor: COLOR_BLACK,
   },
   headerButton: {
+    flex: 1,
     flexShrink: 0
   },
-  headerButtonLeft: {},
-  headerButtonRight: {},
+  headerButtonLeft: {
+    justifyContent: 'flex-start',
+    paddingLeft: UNIT * 2
+  },
+  headerButtonRight: {
+    justifyContent: 'flex-end',
+    paddingRight: UNIT * 2
+  },
   headerButtonText: {
+    flex: 0,
     fontSize: 17,
     color: COLOR_PINK
   },
   headerCenter: {
+    flex: 4,
+    alignItems: 'center',
     flexShrink: 1,
     padding: 0
   }
