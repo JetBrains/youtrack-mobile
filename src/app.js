@@ -17,6 +17,7 @@ import ShowImage from './views/show-image/show-image';
 import AttachmentPreview from './views/attachment-preview/attachment-preview';
 import AgileBoard from './views/agile-board/agile-board';
 import {loadConfig, getStoredConfig} from './components/config/config';
+import {COLOR_BLACK} from './components/variables/variables';
 // $FlowFixMe: cannot typecheck easy-toast module because of mistakes there
 import Toast from 'react-native-easy-toast';
 
@@ -176,7 +177,7 @@ class YouTrackMobile extends Component {
     return (
       <Provider store={store}>
         <ActionSheet ref={component => this._actionSheetRef = component}>
-          <View style={{flex: 1}} onLayout={this.handleOrientationChange}>
+          <View style={{flex: 1, backgroundColor: COLOR_BLACK}} onLayout={this.handleOrientationChange}>
             {Router.renderNavigatorView({initialRoute: Router.routes.Home})}
             <Toast ref={toast => setNotificationComponent(toast)}/>
           </View>
