@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_SELECTED_DARK, COLOR_TRANSPARENT_BLACK, COLOR_FONT_ON_BLACK, COLOR_PINK, COLOR_FONT_GRAY} from '../../components/variables/variables';
+import {UNIT, COLOR_SELECTED_DARK, COLOR_TRANSPARENT_BLACK, COLOR_FONT_ON_BLACK, COLOR_FONT_GRAY} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   container: {
