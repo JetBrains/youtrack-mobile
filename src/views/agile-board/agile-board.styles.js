@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_PINK} from '../../components/variables/variables';
+import {UNIT, COLOR_FONT_ON_BLACK} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   container: {
@@ -17,12 +17,12 @@ export default StyleSheet.create({
     flexShrink: 0
   },
   headerBoardText: {
-    color: COLOR_PINK,
+    color: COLOR_FONT_ON_BLACK,
     fontSize: 14
   },
   headerSprintText: {
     fontSize: 14,
-    color: COLOR_PINK,
+    color: COLOR_FONT_ON_BLACK,
     fontWeight: 'bold'
   },
   headerSeparatorIcon: {
