@@ -150,6 +150,7 @@ export default class Select extends React.Component {
         </Header>
         <View style={styles.inputWrapper}>
           <TextInput
+            autoFocus
             placeholder="Search item"
             keyboardAppearance="dark"
             placeholderTextColor={COLOR_PLACEHOLDER}

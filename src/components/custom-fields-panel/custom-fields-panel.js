@@ -6,7 +6,7 @@ import CalendarPicker from 'react-native-calendar-picker/CalendarPicker/Calendar
 import CustomField from '../custom-field/custom-field';
 import Select from '../select/select';
 import Header from '../header/header';
-import {COLOR_PINK} from '../../components/variables/variables';
+import {COLOR_PINK, COLOR_PLACEHOLDER} from '../../components/variables/variables';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import Api from '../api/api';
 import IssuePermissions from '../issue-permissions/issue-permissions';
@@ -324,6 +324,8 @@ export default class CustomFieldsPanel extends Component {
         <View>
           <TextInput
             keyboardAppearance="dark"
+            autoFocus
+            placeholderTextColor={COLOR_PLACEHOLDER}
             style={styles.simpleValueInput}
             placeholder={this.state.simpleValue.placeholder}
             underlineColorAndroid="transparent"

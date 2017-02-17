@@ -5,7 +5,8 @@ const SELECTED_ALPHA_HEX = 20;
 
 export default StyleSheet.create({
   wrapper: {
-    padding: 8
+    padding: 8,
+    paddingTop: 6
   },
   wrapperActive: {
     backgroundColor: `${COLOR_PINK}${SELECTED_ALPHA_HEX}`
@@ -17,6 +18,7 @@ export default StyleSheet.create({
   keyText: {
     color: COLOR_FONT_GRAY,
     paddingTop: 2,
+    paddingBottom: 2,
     fontSize: 11,
     fontFamily: 'System'
   },
@@ -40,5 +42,17 @@ export default StyleSheet.create({
   },
   valueTextDisabled: {
     color: COLOR_FONT_GRAY
+  },
+  colorMarkerContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    position: 'absolute',
+    left: 1,
+    right: 1,
+    bottom: 0
+  },
+  colorMarker: {
+    flexGrow: 1,
+    height: 3
   }
 });

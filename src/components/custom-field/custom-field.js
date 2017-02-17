@@ -40,19 +40,32 @@ export default class CustomField extends Component {
     return field.projectCustomField.field.name;
   }
 
-  getValueStyle(value) {
-    if (!value || !value.color) {
+  _renderColorMaker(value) {
+    const values = [].concat(value);
+    if (!values || !values.length) {
       return;
     }
 
-    return {
-      color: value.color.foreground,
-      backgroundColor: value.color.background
+    const renderSingleMarker = (val) => {
+      if (!val || !val.color) {
+        return;
+      }
+      return <View key={val.id} style={[styles.colorMarker, {backgroundColor: val.color.background}]}/>;
     };
+
+    return (
+      <View style={styles.colorMarkerContainer}>
+        {values.map(renderSingleMarker)}
+      </View>
+    );
   }
 
   _renderValue(value, fieldType: string) {
     const {active} = this.props;
+
+    const renderOneValue = (val) => {
+      return <Text style={[styles.valueText, active && styles.valueTextActive]} testID="value">{this._getValue(val, fieldType)}</Text>;
+    };
 
     if (Array.isArray(value)) {
       if (!value.length) {
@@ -60,14 +73,13 @@ export default class CustomField extends Component {
       }
       return value.map((val, ind) => {
         return [
-          <Text key={val.id} style={[styles.valueText, this.getValueStyle(val)]}
-                testID="value">{this._getValue(val, fieldType)}</Text>,
+          renderOneValue(val),
           ind === value.length - 1 ? <Text> </Text> : <Text>, </Text>
         ];
       });
     }
 
-    return <Text style={[styles.valueText, active && styles.valueTextActive, this.getValueStyle(value)]} testID="value">{this._getValue(value, fieldType)}</Text>;
+    return renderOneValue(value);
   }
 
   render() {
@@ -79,6 +91,7 @@ export default class CustomField extends Component {
         disabled={this.props.disabled}>
         <View style={styles.valuesWrapper}>{this._renderValue(field.value, this._getFieldType(field))}</View>
         <Text style={[styles.keyText, this.props.disabled ? styles.valueTextDisabled : null]} testID="name">{this._getKey()}</Text>
+        {this._renderColorMaker(field.value)}
       </TouchableOpacity>
     );
   }
