@@ -2,7 +2,6 @@
 import {Text, View, TouchableOpacity, StatusBar} from 'react-native';
 import React from 'react';
 import styles from './header.styles';
-import {styles2} from './header.styles';
 import Router from '../router/router';
 import getTopPadding, {onHeightChange} from './header__top-padding';
 
