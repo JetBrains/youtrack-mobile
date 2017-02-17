@@ -12,7 +12,7 @@ export default StyleSheet.create({
   },
   searchInput: {
     flex: 1,
-    height: UNIT * 3.5,
+    height: UNIT * 4.5,
     borderRadius: 6,
     backgroundColor: COLOR_SELECTED_DARK,
     margin: UNIT,

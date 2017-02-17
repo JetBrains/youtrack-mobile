@@ -16,7 +16,7 @@ export default StyleSheet.create({
     justifyContent: 'center'
   },
   searchInput: {
-    height: UNIT * 4,
+    height: UNIT * 4.5,
     borderRadius: 6,
     backgroundColor: COLOR_SELECTED_DARK,
     margin: UNIT,
