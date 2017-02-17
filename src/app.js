@@ -25,6 +25,8 @@ import React, {PropTypes, Component} from 'react';
 import ActionSheet from '@exponent/react-native-action-sheet';
 import type {AppConfigFilled} from './flow/AppConfig';
 
+// $FlowFixMe Provides network debugging
+GLOBAL.XMLHttpRequest = GLOBAL.originalXMLHttpRequest || GLOBAL.XMLHttpRequest;
 
 class YouTrackMobile extends Component {
   state: Object;
