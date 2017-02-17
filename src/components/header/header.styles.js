@@ -3,32 +3,23 @@ import {UNIT, COLOR_BLACK, COLOR_PINK} from '../../components/variables/variable
 
 export default StyleSheet.create({
   header: {
-    paddingBottom: 9,
+    paddingBottom: 12,
     flex: 0,
+    paddingLeft: UNIT * 2,
+    paddingRight: UNIT * 2,
     flexDirection: 'row',
     justifyContent: 'space-between',
 
     backgroundColor: COLOR_BLACK,
   },
   headerButton: {
-    flexShrink: 0,
-    height: UNIT * 3,
-    padding: 0,
-    paddingLeft: UNIT,
-    paddingRight: UNIT
+    flexShrink: 0
   },
-  headerButtonLeft: {
-    paddingLeft: UNIT*2
-  },
-  headerButtonRight: {
-    paddingRight: UNIT*2
-  },
+  headerButtonLeft: {},
+  headerButtonRight: {},
   headerButtonText: {
     fontSize: 17,
     color: COLOR_PINK
-  },
-  headerButtonTextRight: {
-    textAlign: 'right'
   },
   headerCenter: {
     flexShrink: 1,

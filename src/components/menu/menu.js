@@ -1,5 +1,5 @@
 /* @flow */
-import {StatusBar, View, Text, TouchableOpacity, Image, Linking} from 'react-native';
+import {View, Text, TouchableOpacity, Image, Linking} from 'react-native';
 import React, {Component} from 'react';
 import styles from './menu.styles';
 import {VERSION_STRING} from '../../components/usage/usage';
@@ -112,7 +112,6 @@ export default class Menu extends Component<DefaultProps, Props, void> {
         captureGestures={true}
         panOpenMask={36}
       >
-        <StatusBar animated barStyle={show ? 'light-content' : 'default'}/>
         {children}
       </Drawer>
     );
