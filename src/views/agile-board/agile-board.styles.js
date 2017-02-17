@@ -17,6 +17,7 @@ export default StyleSheet.create({
     flexShrink: 0
   },
   headerBoardText: {
+    color: COLOR_PINK,
     fontSize: 14
   },
   headerSprintText: {

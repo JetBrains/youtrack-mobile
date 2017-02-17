@@ -1,5 +1,5 @@
 import {StyleSheet, Platform} from 'react-native';
-import {UNIT, COLOR_LIGHT_GRAY, COLOR_FONT_GRAY, COLOR_FONT, COLOR_GRAY, COLOR_PINK} from '../../components/variables/variables';
+import {UNIT, COLOR_LIGHT_GRAY, COLOR_FONT_ON_BLACK, COLOR_BLACK, COLOR_FONT_GRAY, COLOR_FONT, COLOR_TRANSPARENT_BLACK, COLOR_SELECTED_DARK, COLOR_GRAY, COLOR_PINK} from '../../components/variables/variables';
 
 const SUGGESTION_BOTTOM = Platform.OS === 'ios' ? 52 : 48;
 
@@ -9,6 +9,7 @@ export default StyleSheet.create({
     backgroundColor: COLOR_LIGHT_GRAY
   },
   headerText: {
+    color: COLOR_FONT_ON_BLACK,
     fontSize: 17
   },
   savingIndicator: {
@@ -65,15 +66,13 @@ export default StyleSheet.create({
     paddingBottom: UNIT * 6
   },
   commentInputWrapper: {
-    backgroundColor: '#EBEBEB',
+    backgroundColor: COLOR_BLACK,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center'
   },
   commentSuggestionsContainer: {
-    backgroundColor: '#FFF',
-    borderTopWidth: 1,
-    borderColor: COLOR_GRAY,
+    backgroundColor: COLOR_TRANSPARENT_BLACK,
     position: 'absolute',
     top: -140,
     bottom: SUGGESTION_BOTTOM,
@@ -96,7 +95,7 @@ export default StyleSheet.create({
   },
   commentSuggestionName: {
     marginLeft: UNIT,
-    color: COLOR_FONT
+    color: COLOR_FONT_ON_BLACK
   },
   commentSuggestionLogin: {
     color: COLOR_FONT_GRAY
@@ -115,12 +114,12 @@ export default StyleSheet.create({
     flex: 1,
     height: UNIT * 3.5,
     borderRadius: 6,
-    backgroundColor: '#FFF',
+    backgroundColor: COLOR_SELECTED_DARK,
     margin: UNIT,
     paddingTop: 2,
     paddingBottom: 2,
     paddingLeft: UNIT,
-    color: COLOR_FONT,
+    color: COLOR_FONT_ON_BLACK,
     fontSize: 15
   },
   commentSendButton: {

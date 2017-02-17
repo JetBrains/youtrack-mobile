@@ -323,6 +323,7 @@ export default class CustomFieldsPanel extends Component {
         </Header>
         <View>
           <TextInput
+            keyboardAppearance="dark"
             style={styles.simpleValueInput}
             placeholder={this.state.simpleValue.placeholder}
             underlineColorAndroid="transparent"

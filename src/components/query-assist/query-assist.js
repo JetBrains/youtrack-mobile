@@ -4,7 +4,7 @@ import React from 'react';
 import styles from './query-assist.styles';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
 import type {ServersideSuggestion} from './query-assist__suggestion';
-import {COLOR_PINK, COLOR_FONT_GRAY} from '../../components/variables/variables';
+import {COLOR_PINK, COLOR_PLACEHOLDER} from '../../components/variables/variables';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import PubSub from 'pubsub-js';
 
@@ -117,8 +117,9 @@ export default class QueryAssist extends React.Component {
       <View style={styles.inputWrapper} ref="queryAssistContainer">
         <TextInput
           ref="searchInput"
+          keyboardAppearance="dark"
           style={[styles.searchInput, this.state.showQueryAssist ? styles.searchInputActive : null]}
-          placeholderTextColor={this.state.showQueryAssist ? COLOR_FONT_GRAY : COLOR_PINK}
+          placeholderTextColor={this.state.showQueryAssist ? COLOR_PLACEHOLDER : COLOR_PINK}
           placeholder="Enter query"
           clearButtonMode="while-editing"
           returnKeyType="search"

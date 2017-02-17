@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, FOOTER_HEIGHT, COLOR_PINK, COLOR_FONT, COLOR_GRAY} from '../../components/variables/variables';
+import {UNIT, FOOTER_HEIGHT, COLOR_PINK, COLOR_FONT, COLOR_TRANSPARENT_BLACK, COLOR_BLACK, COLOR_DARK_BORDER} from '../../components/variables/variables';
 
 const SAVING_ALPHA = '70';
 
@@ -7,13 +7,13 @@ export default StyleSheet.create({
   customFieldsPanel: {
     paddingLeft: UNIT,
     flexDirection: 'row',
-    backgroundColor: '#FFF',
+    backgroundColor: COLOR_BLACK,
     height: FOOTER_HEIGHT,
     borderTopWidth: 1,
-    borderColor: COLOR_GRAY
+    borderColor: COLOR_DARK_BORDER
   },
   editorViewContainer: {
-    backgroundColor: '#FFFFFFF0',
+    backgroundColor: COLOR_TRANSPARENT_BLACK,
     position: 'absolute',
     left: 0,
     right: 0

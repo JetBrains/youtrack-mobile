@@ -1,6 +1,7 @@
 /* @flow */
 import {View, Text, TouchableOpacity, ActivityIndicator, ScrollView, Image} from 'react-native';
 import React, {Component} from 'react';
+import {COLOR_PLACEHOLDER} from '../../components/variables/variables';
 import MultilineInput from '../../components/multiline-input/multiline-input';
 import type {IssueUser} from '../../flow/CustomFields';
 
@@ -146,6 +147,8 @@ export default class IssueListCommentInput extends Component {
                           value={this.state.commentText}
                           editable={!this.state.isSaving}
                           underlineColorAndroid="transparent"
+                          keyboardAppearance="dark"
+                          placeholderTextColor={COLOR_PLACEHOLDER}
                           autoCapitalize="sentences"
                           {...this.props}
                           onSelectionChange = {(event) => {

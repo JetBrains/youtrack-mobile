@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_PINK, COLOR_LIGHT_GRAY, COLOR_GRAY} from '../../components/variables/variables';
+import {UNIT, COLOR_BLACK, COLOR_PINK} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   header: {
@@ -8,9 +8,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
 
-    backgroundColor: COLOR_LIGHT_GRAY,
-    borderBottomWidth: 0.5,
-    borderColor: COLOR_GRAY
+    backgroundColor: COLOR_BLACK,
   },
   headerButton: {
     flexShrink: 0,

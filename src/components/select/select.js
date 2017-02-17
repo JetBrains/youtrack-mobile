@@ -5,6 +5,7 @@ import styles from './select.styles';
 import Header from '../header/header';
 import ColorField from '../color-field/color-field';
 import {notifyError} from '../notification/notification';
+import {COLOR_PLACEHOLDER} from '../variables/variables';
 
 const MAX_VISIBLE_ITEMS = 100;
 
@@ -145,11 +146,13 @@ export default class Select extends React.Component {
           onBack={this.props.onCancel.bind(this)}
           rightButton={this.props.multi ? <Text>Apply</Text> : null}
           onRightButtonClick={this._onSave.bind(this)}>
-          <Text>{this.props.title}</Text>
+          <Text style={styles.headerText}>{this.props.title}</Text>
         </Header>
         <View style={styles.inputWrapper}>
           <TextInput
             placeholder="Search item"
+            keyboardAppearance="dark"
+            placeholderTextColor={COLOR_PLACEHOLDER}
             returnKeyType="search"
             autoCorrect={false}
             underlineColorAndroid="transparent"

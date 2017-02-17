@@ -1,5 +1,5 @@
 import {StyleSheet, Platform} from 'react-native';
-import {COLOR_FONT_GRAY, COLOR_PINK, COLOR_FONT} from '../variables/variables';
+import {COLOR_FONT_GRAY, COLOR_PINK, COLOR_FONT_ON_BLACK} from '../variables/variables';
 
 const SELECTED_ALPHA_HEX = 20;
 
@@ -15,14 +15,15 @@ export default StyleSheet.create({
     flexWrap: 'nowrap'
   },
   keyText: {
-    color: COLOR_FONT,
+    color: COLOR_FONT_GRAY,
     paddingTop: 2,
     fontSize: 11,
     fontFamily: 'System'
   },
   valueText: {
-    color: COLOR_FONT,
-    fontWeight: 'bold',
+    color: COLOR_PINK,
+    fontFamily: 'System',
+    fontSize: 16,
     marginRight: 0,
     padding: 2,
     ...Platform.select({
@@ -33,6 +34,9 @@ export default StyleSheet.create({
         paddingRight: -1
       }
     })
+  },
+  valueTextActive: {
+    color: COLOR_FONT_ON_BLACK,
   },
   valueTextDisabled: {
     color: COLOR_FONT_GRAY

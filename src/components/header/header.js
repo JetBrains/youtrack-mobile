@@ -1,5 +1,5 @@
 /* @flow */
-import {Text, View, TouchableOpacity} from 'react-native';
+import {Text, View, TouchableOpacity, StatusBar} from 'react-native';
 import React from 'react';
 import styles from './header.styles';
 import Router from '../router/router';
@@ -44,6 +44,8 @@ export default class Header extends React.Component {
 
     return (
       <View style={[styles.header, {paddingTop: getTopPadding()}]}>
+        <StatusBar animated barStyle="light-content"/>
+
         <TouchableOpacity
           hitSlop={{top: TOUCH_PADDING, left: TOUCH_PADDING, bottom: TOUCH_PADDING, right: TOUCH_PADDING}}
           style={[styles.headerButton, styles.headerButtonLeft]}

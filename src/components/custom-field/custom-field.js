@@ -52,6 +52,8 @@ export default class CustomField extends Component {
   }
 
   _renderValue(value, fieldType: string) {
+    const {active} = this.props;
+
     if (Array.isArray(value)) {
       if (!value.length) {
         return this._renderValue(null);
@@ -65,14 +67,14 @@ export default class CustomField extends Component {
       });
     }
 
-    return <Text style={[styles.valueText, this.getValueStyle(value)]} testID="value">{this._getValue(value, fieldType)}</Text>;
+    return <Text style={[styles.valueText, active && styles.valueTextActive, this.getValueStyle(value)]} testID="value">{this._getValue(value, fieldType)}</Text>;
   }
 
   render() {
-    const {field} = this.props;
+    const {field, active} = this.props;
     return (
       <TouchableOpacity
-        style={[styles.wrapper, this.props.active ? styles.wrapperActive : null]}
+        style={[styles.wrapper, active ? styles.wrapperActive : null]}
         onPress={this.props.onPress}
         disabled={this.props.disabled}>
         <View style={styles.valuesWrapper}>{this._renderValue(field.value, this._getFieldType(field))}</View>

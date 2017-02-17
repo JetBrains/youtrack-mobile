@@ -2,7 +2,7 @@
 import {ListView, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import ListViewDataSource from 'react-native/Libraries/CustomComponents/ListView/ListViewDataSource';
 import React from 'react';
-import {UNIT} from '../variables/variables';
+import {UNIT, COLOR_FONT_ON_BLACK} from '../variables/variables';
 import InvertibleScrollView from 'react-native-invertible-scroll-view';
 import type {ServersideSuggestion, TransformedSuggestion} from './query-assist__suggestion';
 
@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
   searchText: {
     fontSize: 24,
     fontWeight: '200',
+    color: COLOR_FONT_ON_BLACK,
     textAlign: 'center'
   }
 });
