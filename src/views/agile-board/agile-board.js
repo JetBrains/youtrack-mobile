@@ -17,7 +17,7 @@ import type {SprintFull, Board, AgileBoardRow, AgileColumn} from '../../flow/Agi
 import type {IssueOnList} from '../../flow/Issue';
 
 import * as boardActions from './board-actions';
-import {globalActions} from '../../actions';
+import {logOut} from '../../actions';
 import { connect } from 'react-redux';
 
 type Props = {
@@ -214,7 +214,7 @@ const mapDispatchToProps = (dispatch) => {
     onLoadBoard: () => dispatch(boardActions.fetchDefaultAgileBoard()),
     onLoadMoreSwimlanes: () => dispatch(boardActions.fetchMoreSwimlanes()),
     onRowCollapseToggle: (row) => dispatch(boardActions.rowCollapseToggle(row)),
-    onLogOut: () => dispatch(globalActions.logOut()),
+    onLogOut: () => dispatch(logOut()),
     onColumnCollapseToggle: (column) => dispatch(boardActions.columnCollapseToggle(column)),
     onOpenSprintSelect: () => dispatch(boardActions.openSprintSelect()),
     onOpenBoardSelect: () => dispatch(boardActions.openBoardSelect()),
