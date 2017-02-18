@@ -161,14 +161,13 @@ class AgileBoard extends Component {
       <Menu>
         <View style={styles.container}>
           {this._renderHeader()}
+
           <ScrollView
             refreshControl={this._renderRefreshControl()}
             onScroll={this._onScroll}
             scrollEventThrottle={100}
           >
-            <ScrollView horizontal>
-              {sprint && this._renderBoard(sprint)}
-            </ScrollView>
+            {sprint && this._renderBoard(sprint)}
             {isLoadingMore && <ActivityIndicator color={COLOR_PINK} style={styles.loadingMoreIndicator}/>}
           </ScrollView>
 

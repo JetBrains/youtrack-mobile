@@ -36,7 +36,9 @@ const styles = StyleSheet.create({
     backgroundColor: COLOR_BLACK
   },
   tableHeaderItem: {
-    width: AGILE_COLUMN_MIN_WIDTH,
+    flexShrink: 1,
+    flex: 1,
+    minWidth: AGILE_COLUMN_MIN_WIDTH,
     alignItems: 'center',
     padding: UNIT/2,
     borderRightWidth: 0.5,
@@ -44,7 +46,9 @@ const styles = StyleSheet.create({
     borderColor: COLOR_GRAY
   },
   collapsedHeaderItem: {
+    flex: 0,
     width: AGILE_COLLAPSED_COLUMN_WIDTH,
+    minWidth: AGILE_COLLAPSED_COLUMN_WIDTH,
   },
   columnText: {
     color: COLOR_FONT_ON_BLACK

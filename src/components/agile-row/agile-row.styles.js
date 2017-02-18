@@ -26,12 +26,16 @@ export default StyleSheet.create({
     borderColor: COLOR_GRAY
   },
   column: {
-    width: AGILE_COLUMN_MIN_WIDTH,
+    flexShrink: 1,
+    flex: 1,
+    minWidth: AGILE_COLUMN_MIN_WIDTH,
     borderRightWidth: 0.5,
     borderColor: COLOR_GRAY
   },
   columnCollapsed: {
+    flex: 0,
     width: AGILE_COLLAPSED_COLUMN_WIDTH,
+    minWidth: AGILE_COLLAPSED_COLUMN_WIDTH,
     paddingTop: UNIT - 2,
     paddingLeft: 2,
     paddingRight: 2,
