@@ -1,5 +1,4 @@
 import {
-  AsyncStorage,
   View,
   Text,
   ListView,
@@ -29,7 +28,6 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 import * as issueActions from './issue-list-actions';
 import {logOut} from '../../actions';
 
-const QUERY_STORAGE_KEY = 'YT_QUERY_STORAGE';
 const PAGE_SIZE = 10;
 const ISSUES_CACHE_KEY = 'yt_mobile_issues_cache';
 
@@ -50,7 +48,6 @@ export class IssueList extends React.Component {
 
       showMenu: false,
       loadingError: null,
-      queryAssistValue: '',
       isInitialized: false,
       isRefreshing: false
     };
@@ -68,7 +65,7 @@ export class IssueList extends React.Component {
 
   _handleAppStateChange(newState) {
     if (newState === 'active') {
-      this.loadIssues(this.state.queryAssistValue);
+      this.loadIssues(this.props.query);
     }
   }
 
@@ -87,11 +84,9 @@ export class IssueList extends React.Component {
         this.onQueryUpdated(issuesQuery);
       });
 
-    if (this.props.query) {
-      this.setQuery(this.props.query);
-    } else {
-      this.loadStoredQuery().then(query => this.setQuery(query));
-    }
+    this.props.loadQuery();
+    //TODO: remove after move to redux
+    setTimeout(() => this.loadIssues(this.props.query), 100);
 
     AppState.addEventListener('change', this._handleAppStateChange);
   }
@@ -101,17 +96,12 @@ export class IssueList extends React.Component {
     AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
-  loadStoredQuery() {
-    this.props.loadQuery();
-    return AsyncStorage.getItem(QUERY_STORAGE_KEY);
-  }
-
   goToIssue(issue) {
     Router.SingleIssue({
       issuePlaceholder: issue,
       issueId: issue.id,
       api: this.props.api,
-      onUpdate: () => this.loadIssues(this.state.queryAssistValue)
+      onUpdate: () => this.loadIssues(this.props.query)
     });
   }
 
@@ -151,11 +141,12 @@ export class IssueList extends React.Component {
   }
 
   updateIssues() {
-    return this.loadIssues(this.state.queryAssistValue);
+    return this.loadIssues(this.props.query);
   }
 
   loadMore() {
-    const {isInitialized, isLoadingMore, isRefreshing, loadingError, listEndReached, queryAssistValue, skip, issues, dataSource} = this.state;
+    const {query} = this.props;
+    const {isInitialized, isLoadingMore, isRefreshing, loadingError, listEndReached, skip, issues, dataSource} = this.state;
     if (!isInitialized || isLoadingMore || isRefreshing || loadingError || listEndReached) {
       return;
     }
@@ -163,7 +154,7 @@ export class IssueList extends React.Component {
     this.setState({isLoadingMore: true});
     const newSkip = skip + PAGE_SIZE;
 
-    return this.props.api.getIssues(queryAssistValue, PAGE_SIZE, newSkip)
+    return this.props.api.getIssues(query, PAGE_SIZE, newSkip)
       .then(ApiHelper.fillIssuesFieldHash)
       .then((newIssues) => {
         const updatedIssues = issues.concat(newIssues);
@@ -190,15 +181,10 @@ export class IssueList extends React.Component {
       .catch(err => notifyError('Failed to fetch query assist suggestions', err));
   }
 
-  setQuery(query) {
-    this.setState({queryAssistValue: query});
-    this.loadIssues(query);
-  }
-
   onQueryUpdated(query) {
     this.props.storeQuery(query);
     this.props.setQuery(query);
-    this.setQuery(query);
+    this.loadIssues(query);
   }
 
   _renderHeader() {
@@ -238,7 +224,7 @@ export class IssueList extends React.Component {
         <Text style={styles.listMessageSmile}>{'(>_<)'}</Text>
         <Text style={styles.errorTitle}>Cannot load issues</Text>
         <Text style={styles.errorContent}>{extractErrorMessage(this.state.loadingError)}</Text>
-        <TouchableOpacity style={styles.tryAgainButton} onPress={() => this.loadIssues(this.state.queryAssistValue)}>
+        <TouchableOpacity style={styles.tryAgainButton} onPress={() => this.loadIssues(this.props.query)}>
           <Text style={styles.tryAgainText}>Try Again</Text>
         </TouchableOpacity>
       </View>);
@@ -259,7 +245,7 @@ export class IssueList extends React.Component {
 
   render() {
     const {auth, query} = this.props;
-    const {showMenu, dataSource, queryAssistValue} = this.state;
+    const {showMenu, dataSource} = this.state;
 
     return <Menu
       show={showMenu}
@@ -285,7 +271,7 @@ export class IssueList extends React.Component {
           refreshDescription="Refreshing issues"/>
 
         <QueryAssist
-          initialQuery={queryAssistValue}
+          initialQuery={query}
           dataSource={this.getSuggestions.bind(this)}
           onQueryUpdate={newQuery => this.onQueryUpdated(newQuery)}/>
 
