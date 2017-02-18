@@ -93,10 +93,10 @@ export default class QueryAssist extends React.Component {
 
   measureSuggestionsListSpace(timeout: number = 0, recheck: boolean = true) {
     setTimeout(() => {
-      if (!this.refs.queryAssistContainer) {
+      if (!this.queryAssistContainer) {
         return;
       }
-      this.refs.queryAssistContainer.measure((ox, oy, width, height, px, assistPositionY) => {
+      this.queryAssistContainer.measure((ox, oy, width, height, px, assistPositionY) => {
         this.setState({suggestionsListTop: -assistPositionY});
         if (recheck) {
           this.measureSuggestionsListSpace(100, false);
