@@ -8,7 +8,9 @@ import getTopPadding from '../../components/header/header__top-padding';
 import Drawer from 'react-native-drawer';
 import Router from '../../components/router/router';
 import Auth from '../../components/auth/auth';
-import {next, logOut} from '../../components/icon/icon';
+import {next, logOut as logOutIcon} from '../../components/icon/icon';
+import {connect} from 'react-redux';
+import {logOut, openMenu, closeMenu} from '../../actions';
 
 const CURRENT_YEAR = (new Date()).getFullYear();
 
@@ -22,6 +24,7 @@ type Props = {
   show: boolean,
   auth: Auth,
   issueQuery: ?string,
+  onBeforeLogOut: () => any,
   onLogOut: () => any,
   onOpen: () => any,
   onClose: () => any
@@ -29,25 +32,35 @@ type Props = {
 
 type DefaultProps = {
   onOpen: () => any,
-  onClose: () => any
+  onClose: () => any,
+  onBeforeLogOut: () => any
 };
 
-export default class Menu extends Component<DefaultProps, Props, void> {
+export class Menu extends Component<DefaultProps, Props, void> {
   static defaultProps = {
     onOpen: () => {},
     onClose: () => {},
+    onBeforeLogOut: () => {}
   };
 
   _openIssueList = () => {
+    this.props.onClose();
     Router.IssueList({auth: this.props.auth});
   }
 
   _openAgileBoard = () => {
+    this.props.onClose();
     Router.AgileBoard({auth: this.props.auth});
   }
 
+  _logOut = () => {
+    this.props.onBeforeLogOut();
+    this.props.onLogOut();
+    this.props.onClose();
+  }
+
   _renderMenu() {
-    const {auth, onLogOut, issueQuery} = this.props;
+    const {auth, issueQuery} = this.props;
     const user = auth.currentUser;
     const backendUrl = auth.config.backendUrl;
     const avatarUrl = user.profile && user.profile.avatar && user.profile.avatar.url;
@@ -58,8 +71,8 @@ export default class Menu extends Component<DefaultProps, Props, void> {
 
         <Text style={styles.profileName}>{user.name}</Text>
 
-        <TouchableOpacity style={styles.logOutButton} onPress={onLogOut}>
-          <Image style={styles.logoutIcon} source={logOut}></Image>
+        <TouchableOpacity style={styles.logOutButton} onPress={this._logOut}>
+          <Image style={styles.logoutIcon} source={logOutIcon}></Image>
         </TouchableOpacity>
       </View>
 
@@ -117,3 +130,23 @@ export default class Menu extends Component<DefaultProps, Props, void> {
     );
   }
 }
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    show: state.app.showMenu,
+    auth: state.app.auth,
+    issueQuery: state.issueList.query,
+    ...ownProps
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onOpen: () => dispatch(openMenu()),
+    onClose: () => dispatch(closeMenu()),
+    onLogOut: () => dispatch(logOut())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Menu);
+

@@ -26,7 +26,7 @@ import Menu from '../../components/menu/menu';
 import Router from '../../components/router/router';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import * as issueActions from './issue-list-actions';
-import {logOut} from '../../actions';
+import {openMenu} from '../../actions';
 
 const PAGE_SIZE = 10;
 const ISSUES_CACHE_KEY = 'yt_mobile_issues_cache';
@@ -46,7 +46,6 @@ export class IssueList extends React.Component {
       isLoadingMore: false,
       listEndReached: false,
 
-      showMenu: false,
       loadingError: null,
       isInitialized: false,
       isRefreshing: false
@@ -105,10 +104,8 @@ export class IssueList extends React.Component {
     });
   }
 
-  logOut() {
-    this.props.onLogOut();
+  logOut = () => {
     this.cache.store([]);
-    Router.EnterServer({serverUrl: this.props.auth.config.backendUrl});
   }
 
   loadIssues(text) {
@@ -192,7 +189,7 @@ export class IssueList extends React.Component {
       <Header
         leftButton={<Text>Menu</Text>}
         rightButton={<Text>Create</Text>}
-        onBack={() => this.setState({showMenu: true})}
+        onBack={this.props.onOpenMenu}
         onRightButtonClick={() => {
           return Router.CreateIssue({
             api: this.props.api,
@@ -244,40 +241,35 @@ export class IssueList extends React.Component {
   }
 
   render() {
-    const {auth, query} = this.props;
-    const {showMenu, dataSource} = this.state;
+    const {query} = this.props;
+    const {dataSource} = this.state;
 
-    return <Menu
-      show={showMenu}
-      auth={auth}
-      issueQuery={query}
-      onLogOut={this.logOut.bind(this)}
-      onOpen={() => this.setState({showMenu: true})}
-      onClose={() => this.setState({showMenu: false})}
-    >
-      <View style={styles.listContainer}>
-        {this._renderHeader()}
+    return (
+      <Menu onBeforeLogOut={this.logOut}>
+        <View style={styles.listContainer}>
+          {this._renderHeader()}
 
-        <ListView
-          removeClippedSubviews={false}
-          dataSource={dataSource}
-          enableEmptySections={true}
-          renderRow={(issue) => <IssueRow issue={issue} onClick={(issue) => this.goToIssue(issue)}></IssueRow>}
-          renderSeparator={(sectionID, rowID) => <View style={styles.separator} key={rowID}/>}
-          onEndReached={this.loadMore.bind(this)}
-          onEndReachedThreshold={30}
-          renderScrollComponent={(props) => <ScrollView {...props} refreshControl={this._renderRefreshControl()}/>}
-          renderFooter={() => this._renderListMessage()}
-          refreshDescription="Refreshing issues"/>
+          <ListView
+            removeClippedSubviews={false}
+            dataSource={dataSource}
+            enableEmptySections={true}
+            renderRow={(issue) => <IssueRow issue={issue} onClick={(issue) => this.goToIssue(issue)}></IssueRow>}
+            renderSeparator={(sectionID, rowID) => <View style={styles.separator} key={rowID}/>}
+            onEndReached={this.loadMore.bind(this)}
+            onEndReachedThreshold={30}
+            renderScrollComponent={(props) => <ScrollView {...props} refreshControl={this._renderRefreshControl()}/>}
+            renderFooter={() => this._renderListMessage()}
+            refreshDescription="Refreshing issues"/>
 
-        <QueryAssist
-          initialQuery={query}
-          dataSource={this.getSuggestions.bind(this)}
-          onQueryUpdate={newQuery => this.onQueryUpdated(newQuery)}/>
+          <QueryAssist
+            initialQuery={query}
+            dataSource={this.getSuggestions.bind(this)}
+            onQueryUpdate={newQuery => this.onQueryUpdated(newQuery)}/>
 
-        {Platform.OS == 'ios' && <KeyboardSpacer/>}
-      </View>
-    </Menu>;
+          {Platform.OS == 'ios' && <KeyboardSpacer/>}
+        </View>
+      </Menu>
+    );
   }
 }
 
@@ -293,7 +285,7 @@ const mapDispatchToProps = (dispatch) => {
     setQuery: (query) => dispatch(issueActions.setIssuesQuery(query)),
     storeQuery: (query) => dispatch(issueActions.storeIssuesQuery(query)),
     loadQuery: () => dispatch(issueActions.readStoredIssuesQuery()),
-    onLogOut: () => dispatch(logOut()),
+    onOpenMenu: () => dispatch(openMenu())
   };
 };
 

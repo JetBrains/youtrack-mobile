@@ -17,7 +17,7 @@ import type {SprintFull, Board, AgileBoardRow, AgileColumn} from '../../flow/Agi
 import type {IssueOnList} from '../../flow/Issue';
 
 import * as boardActions from './board-actions';
-import {logOut} from '../../actions';
+import {openMenu} from '../../actions';
 import { connect } from 'react-redux';
 
 type Props = {
@@ -30,17 +30,16 @@ type Props = {
   isSprintSelectOpen: boolean,
   selectProps: Object,
   onLoadBoard: () => any,
-  onLogOut: () => any,
   onLoadMoreSwimlanes: () => any,
   onRowCollapseToggle: (row: AgileBoardRow) => any,
   onColumnCollapseToggle: (column: AgileColumn) => any,
   onOpenSprintSelect: (any) => any,
   onOpenBoardSelect: (any) => any,
-  onCloseSelect: (any) => any
+  onCloseSelect: (any) => any,
+  onOpenMenu: (any) => any
 };
 
 type State = {
-  showMenu: boolean,
   zoomedOut: boolean
 };
 
@@ -51,7 +50,6 @@ class AgileBoard extends Component {
   constructor(props: Props) {
     super(props);
     this.state = {
-      showMenu: false,
       zoomedOut: false
     };
     usage.trackScreenView('Agile board');
@@ -59,11 +57,6 @@ class AgileBoard extends Component {
 
   componentDidMount() {
     this.props.onLoadBoard();
-  }
-
-  _onLogOut = () => {
-    this.props.onLogOut();
-    Router.EnterServer({serverUrl: this.props.auth.config.backendUrl});
   }
 
   _onScroll = (event) => {
@@ -100,7 +93,7 @@ class AgileBoard extends Component {
     return (
       <Header
         leftButton={<Text>Menu</Text>}
-        onBack={() => this.setState({showMenu: true})}
+        onBack={this.props.onOpenMenu}
       >
         {sprint && <View style={styles.headerContent}>
           <TouchableOpacity style={styles.headerBoardButton} onPress={onOpenBoardSelect}>
@@ -161,18 +154,11 @@ class AgileBoard extends Component {
   }
 
   render() {
-    const {auth, sprint, isLoadingMore, isSprintSelectOpen} = this.props;
+    const {sprint, isLoadingMore, isSprintSelectOpen} = this.props;
 
-    const {showMenu, zoomedOut} = this.state;
+    const {zoomedOut} = this.state;
     return (
-      <Menu
-        show={showMenu}
-        auth={auth}
-        issueQuery=""
-        onLogOut={this._onLogOut}
-        onOpen={() => this.setState({showMenu: true})}
-        onClose={() => this.setState({showMenu: false})}
-      >
+      <Menu>
         <View style={styles.container}>
           {this._renderHeader()}
           <ScrollView
@@ -214,11 +200,11 @@ const mapDispatchToProps = (dispatch) => {
     onLoadBoard: () => dispatch(boardActions.fetchDefaultAgileBoard()),
     onLoadMoreSwimlanes: () => dispatch(boardActions.fetchMoreSwimlanes()),
     onRowCollapseToggle: (row) => dispatch(boardActions.rowCollapseToggle(row)),
-    onLogOut: () => dispatch(logOut()),
     onColumnCollapseToggle: (column) => dispatch(boardActions.columnCollapseToggle(column)),
     onOpenSprintSelect: () => dispatch(boardActions.openSprintSelect()),
     onOpenBoardSelect: () => dispatch(boardActions.openBoardSelect()),
-    onCloseSelect: () => dispatch(boardActions.closeSelect())
+    onCloseSelect: () => dispatch(boardActions.closeSelect()),
+    onOpenMenu: () => dispatch(openMenu())
   };
 };
 

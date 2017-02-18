@@ -5,12 +5,14 @@ import type Auth from '../../components/auth/auth';
 
 type RootState = {
   api: ?Api,
-  auth: ?Auth
+  auth: ?Auth,
+  showMenu: boolean
 };
 
 const initialState: RootState = {
   api: null,
-  auth: null
+  auth: null,
+  showMenu: false
 };
 
 export default createReducer(initialState, {
@@ -25,6 +27,22 @@ export default createReducer(initialState, {
     if (state.auth) {
       state.auth.logOut();
     }
-    return state;
-  }
+    return {
+      ...state,
+      api: null,
+      auth: null
+    };
+  },
+  [types.OPEN_MENU](state: RootState) {
+    return {
+      ...state,
+      showMenu: true
+    };
+  },
+  [types.CLOSE_MENU](state: RootState) {
+    return {
+      ...state,
+      showMenu: false
+    };
+  },
 });
