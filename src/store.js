@@ -1,9 +1,9 @@
 /* @flow */
-import { createStore, applyMiddleware, combineReducers } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 
-import * as agileBoardReducers from './views/agile-board/board-reducers';
+import reducer from './reducers';
 
 const middlewares = [thunk];
 
@@ -13,7 +13,6 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 const createStoreWithMiddleware = applyMiddleware(...middlewares)(createStore);
-const reducer = combineReducers(agileBoardReducers);
 
 const store = createStoreWithMiddleware(
   reducer,

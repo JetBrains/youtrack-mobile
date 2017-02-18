@@ -2,25 +2,19 @@
 import * as types from './board-action-types';
 import {createReducer} from 'redux-create-reducer';
 import type {SprintFull, AgileBoardRow, Board} from '../../flow/Agile';
-import type Api from '../../components/api/api';
-import type Auth from '../../components/auth/auth';
 
 type BoardState = {
   isLoading: boolean,
   isSprintSelectOpen: boolean,
   sprint: ?SprintFull,
   selectProps: ?Object,
-  api: ?Api,
-  auth: ?Auth
 };
 
 const initialState: BoardState = {
   isLoading: false,
   isSprintSelectOpen: false,
   selectProps: null,
-  sprint: null,
-  api: null,
-  auth: null
+  sprint: null
 };
 
 function updateRowCollapsedState(
@@ -41,19 +35,6 @@ function updateRowCollapsedState(
 }
 
 const board = createReducer(initialState, {
-  [types.INITIALIZE_API](state: BoardState, action: Object = {}) {
-    return {
-      ...state,
-      api: action.api,
-      auth: action.auth
-    };
-  },
-  [types.LOG_OUT](state: BoardState, action: Object = {}) {
-    if (state.auth) {
-      state.auth.logOut();
-    }
-    return state;
-  },
   [types.START_SPRINT_LOADING](state: BoardState) {
     return {
       ...state,
@@ -148,7 +129,4 @@ const board = createReducer(initialState, {
   }
 });
 
-export {
-  board
-};
-
+export default board;
