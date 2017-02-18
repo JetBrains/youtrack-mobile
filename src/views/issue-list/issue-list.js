@@ -10,6 +10,7 @@ import {
   AppState
 } from 'react-native';
 import React from 'react';
+import {connect} from 'react-redux';
 
 import openByUrlDetector from '../../components/open-url-handler/open-url-handler';
 import styles from './issue-list.styles';
@@ -20,12 +21,13 @@ import Cache from '../../components/cache/cache';
 import {notifyError, resolveError, extractErrorMessage} from '../../components/notification/notification';
 import usage from '../../components/usage/usage';
 
-import Api from '../../components/api/api';
 import ApiHelper from '../../components/api/api__helper';
 import IssueRow from './issue-list__row';
 import Menu from '../../components/menu/menu';
 import Router from '../../components/router/router';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+import * as issueActions from './issue-list-actions';
+import {logOut} from '../../actions';
 
 const QUERY_STORAGE_KEY = 'YT_QUERY_STORAGE';
 const PAGE_SIZE = 10;
@@ -33,7 +35,7 @@ const ISSUES_CACHE_KEY = 'yt_mobile_issues_cache';
 
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-class IssueList extends React.Component {
+export class IssueList extends React.Component {
 
   constructor() {
     super();
@@ -71,14 +73,13 @@ class IssueList extends React.Component {
   }
 
   componentDidMount() {
-    this.api = new Api(this.props.auth);
     this.unsubscribeFromOpeningWithIssueUrl = openByUrlDetector(
       this.props.auth.config.backendUrl,
       (issueId) => {
         usage.trackEvent('Issue list', 'Open issue in app by URL');
         Router.SingleIssue({
           issueId: issueId,
-          api: this.api,
+          api: this.props.api,
           onUpdate: () => this.loadIssues(null)
         });
       },
@@ -100,11 +101,8 @@ class IssueList extends React.Component {
     AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
-  storeQuery(query) {
-    return AsyncStorage.setItem(QUERY_STORAGE_KEY, query);
-  }
-
   loadStoredQuery() {
+    this.props.loadQuery();
     return AsyncStorage.getItem(QUERY_STORAGE_KEY);
   }
 
@@ -112,21 +110,21 @@ class IssueList extends React.Component {
     Router.SingleIssue({
       issuePlaceholder: issue,
       issueId: issue.id,
-      api: this.api,
+      api: this.props.api,
       onUpdate: () => this.loadIssues(this.state.queryAssistValue)
     });
   }
 
   logOut() {
-    return this.props.auth.logOut()
-      .then(() => this.cache.store([]))
-      .then(() => Router.EnterServer({serverUrl: this.props.auth.config.backendUrl}));
+    this.props.onLogOut();
+    this.cache.store([]);
+    Router.EnterServer({serverUrl: this.props.auth.config.backendUrl});
   }
 
   loadIssues(text) {
     this.setState({loadingError: null, listEndReached: false, isRefreshing: true, skip: 0});
 
-    return this.api.getIssues(text, PAGE_SIZE)
+    return this.props.api.getIssues(text, PAGE_SIZE)
       .then(ApiHelper.fillIssuesFieldHash)
       .then((issues) => {
         this.setState({
@@ -165,7 +163,7 @@ class IssueList extends React.Component {
     this.setState({isLoadingMore: true});
     const newSkip = skip + PAGE_SIZE;
 
-    return this.api.getIssues(queryAssistValue, PAGE_SIZE, newSkip)
+    return this.props.api.getIssues(queryAssistValue, PAGE_SIZE, newSkip)
       .then(ApiHelper.fillIssuesFieldHash)
       .then((newIssues) => {
         const updatedIssues = issues.concat(newIssues);
@@ -185,7 +183,7 @@ class IssueList extends React.Component {
   }
 
   getSuggestions(query, caret) {
-    return this.api.getQueryAssistSuggestions(query, caret)
+    return this.props.api.getQueryAssistSuggestions(query, caret)
       .then(res => {
         return res.suggest.items;
       })
@@ -198,7 +196,8 @@ class IssueList extends React.Component {
   }
 
   onQueryUpdated(query) {
-    this.storeQuery(query);
+    this.props.storeQuery(query);
+    this.props.setQuery(query);
     this.setQuery(query);
   }
 
@@ -210,7 +209,7 @@ class IssueList extends React.Component {
         onBack={() => this.setState({showMenu: true})}
         onRightButtonClick={() => {
           return Router.CreateIssue({
-            api: this.api,
+            api: this.props.api,
             onCreate: (createdIssue) => {
               const updatedIssues = ApiHelper.fillIssuesFieldHash([createdIssue]).concat(this.state.issues);
               this.setState({
@@ -259,13 +258,13 @@ class IssueList extends React.Component {
   }
 
   render() {
-    const {auth} = this.props;
+    const {auth, query} = this.props;
     const {showMenu, dataSource, queryAssistValue} = this.state;
 
     return <Menu
       show={showMenu}
       auth={auth}
-      issueQuery={queryAssistValue}
+      issueQuery={query}
       onLogOut={this.logOut.bind(this)}
       onOpen={() => this.setState({showMenu: true})}
       onClose={() => this.setState({showMenu: false})}
@@ -296,4 +295,20 @@ class IssueList extends React.Component {
   }
 }
 
-export default IssueList;
+const mapStateToProps = (state, ownProps) => {
+  return {
+    ...state.issueList,
+    ...state.app
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setQuery: (query) => dispatch(issueActions.setIssuesQuery(query)),
+    storeQuery: (query) => dispatch(issueActions.storeIssuesQuery(query)),
+    loadQuery: () => dispatch(issueActions.readStoredIssuesQuery()),
+    onLogOut: () => dispatch(logOut()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(IssueList);

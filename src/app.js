@@ -9,6 +9,7 @@ import Home from './views/home/home';
 import EnterServer from './views/enter-server/enter-server';
 import LoginForm from './views/log-in/log-in';
 import usage from './components/usage/usage';
+import log from './components/log/log';
 import {setNotificationComponent} from './components/notification/notification';
 import IssueList from './views/issue-list/issue-list';
 import SingleIssue from './views/single-issue/single-issue';
@@ -62,7 +63,7 @@ class YouTrackMobile extends Component {
 
   async checkAuthorization() {
     await this.auth.loadStoredAuthParams();
-    return Router.IssueList({auth: this.auth});
+    return Router.IssueList();
   }
 
   addAndroidBackButtonSupport() {
@@ -91,6 +92,7 @@ class YouTrackMobile extends Component {
     try {
       await this.initializeAuth(config);
     } catch (error) {
+      log.warn('App failed to initialize auth. Will try to reload config.', error);
       let reloadedConfig;
       try {
         reloadedConfig = await loadConfig(config.backendUrl);

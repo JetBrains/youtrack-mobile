@@ -27,6 +27,7 @@ export default class QueryAssist extends React.Component {
   state: State;
   props: Props;
   pubSubToken: string;
+  queryAssistContainer: ?Object;
 
   constructor() {
     super();
@@ -92,6 +93,9 @@ export default class QueryAssist extends React.Component {
 
   measureSuggestionsListSpace(timeout: number = 0, recheck: boolean = true) {
     setTimeout(() => {
+      if (!this.refs.queryAssistContainer) {
+        return;
+      }
       this.refs.queryAssistContainer.measure((ox, oy, width, height, px, assistPositionY) => {
         this.setState({suggestionsListTop: -assistPositionY});
         if (recheck) {
@@ -116,7 +120,7 @@ export default class QueryAssist extends React.Component {
     }
 
     return (
-      <View style={styles.inputWrapper} ref="queryAssistContainer">
+      <View style={styles.inputWrapper} ref={node => this.queryAssistContainer = node}>
         <TextInput
           ref="searchInput"
           keyboardAppearance="dark"
