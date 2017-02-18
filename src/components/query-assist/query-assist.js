@@ -88,6 +88,7 @@ export default class QueryAssist extends React.Component {
   }
 
   componentDidMount() {
+    this.setState({input: this.props.initialQuery});
     this.measureSuggestionsListSpace();
   }
 
