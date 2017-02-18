@@ -266,7 +266,7 @@ export class IssueList extends React.Component {
             dataSource={this.getSuggestions.bind(this)}
             onQueryUpdate={newQuery => this.onQueryUpdated(newQuery)}/>
 
-          {Platform.OS == 'ios' && <KeyboardSpacer/>}
+          {Platform.OS == 'ios' && <KeyboardSpacer style={styles.keyboardSpacer}/>}
         </View>
       </Menu>
     );
