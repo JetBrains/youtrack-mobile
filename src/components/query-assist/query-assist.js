@@ -102,6 +102,8 @@ export default class QueryAssist extends React.Component {
   }
 
   _renderInput() {
+    const {input, showQueryAssist} = this.state;
+
     let cancelButton = null;
     if (this.state.displayCancelSearch) {
       cancelButton = <TouchableOpacity
@@ -118,8 +120,8 @@ export default class QueryAssist extends React.Component {
         <TextInput
           ref="searchInput"
           keyboardAppearance="dark"
-          style={[styles.searchInput, this.state.showQueryAssist ? styles.searchInputActive : null]}
-          placeholderTextColor={this.state.showQueryAssist ? COLOR_PLACEHOLDER : COLOR_PINK}
+          style={[styles.searchInput, showQueryAssist ? styles.searchInputActive : null]}
+          placeholderTextColor={showQueryAssist ? COLOR_PLACEHOLDER : COLOR_PINK}
           placeholder="Enter query"
           clearButtonMode="while-editing"
           returnKeyType="search"
@@ -129,13 +131,16 @@ export default class QueryAssist extends React.Component {
           onFocus={() => this.beginEditing()}
           onBlur={() => this.stopEditing()}
           onSubmitEditing={() => this.onSubmitEditing()}
-          value={this.state.input}
+          value={input}
           onChangeText={(text) => this.setState({input: text})}
           onSelectionChange = {(event) => {
             const caret = event.nativeEvent.selection.start;
             this.setState({caret});
           }}
         />
+        {(input && showQueryAssist) ? <TouchableOpacity style={styles.clearIconWrapper} onPress={() => this.setState({input: ''})}>
+          <Text style={{color: 'white'}}>X</Text>
+        </TouchableOpacity> : null}
         {cancelButton}
       </View>
     );

@@ -25,6 +25,12 @@ export default StyleSheet.create({
   searchInputActive: {
     color: COLOR_FONT_ON_BLACK
   },
+  clearIconWrapper: {
+    backgroundColor: 'transparent',
+    marginLeft: -24,
+    marginRight: 10,
+    overflow: 'visible'
+  },
   cancelSearch: {
     paddingRight: UNIT * 2,
     padding: UNIT
