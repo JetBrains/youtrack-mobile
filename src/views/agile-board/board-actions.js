@@ -2,6 +2,7 @@
 import * as types from './board-action-types';
 import {notifyError} from '../../components/notification/notification';
 import type {AgileBoardRow, AgileColumn, BoardOnList} from '../../flow/Agile';
+import type Api from '../../components/api/api';
 
 const PAGE_SIZE = 4;
 
@@ -20,9 +21,11 @@ function receiveSprint(sprint) {
   };
 }
 
+type ApiGetter = () => Api;
+
 function loadSprint(agileId: string, sprintId: string) {
-  return async (dispatch: (any) => any, getState: () => Object) => {
-    const {api} = getState().app;
+  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+    const api: Api = getApi();
     dispatch(startSprintLoad());
     try {
       const sprint = await api.getSprint(agileId, sprintId, PAGE_SIZE);
@@ -44,8 +47,8 @@ function loadBoard(boardId: string, sprints: {id: string}) {
 }
 
 export function fetchDefaultAgileBoard() {
-  return async (dispatch: (any) => any, getState: () => Object) => {
-    const {api} = getState().app;
+  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+    const api: Api = getApi();
 
     const profile = await api.getAgileUserProfile();
     const lastSprint = profile.visitedSprints.filter(s => s.agile.id === profile.defaultAgile.id)[0];
@@ -70,9 +73,9 @@ function receiveSwimlanes(swimlanes) {
 }
 
 export function fetchMoreSwimlanes() {
-  return async (dispatch: (any) => any, getState: () => Object) => {
+  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const {sprint, noMoreSwimlanes, isLoadingMore} = getState().agile;
-    const {api} = getState().app;
+    const api: Api = getApi();
     if (!sprint || noMoreSwimlanes || isLoadingMore) {
       return;
     }
@@ -98,9 +101,9 @@ function updateRowCollapsedState(row, newCollapsed: boolean) {
 }
 
 export function rowCollapseToggle(row: AgileBoardRow) {
-  return async (dispatch: (any) => any, getState: () => Object) => {
+  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const {sprint} = getState().agile;
-    const {api} = getState().app;
+    const api: Api = getApi();
     if (!sprint) {
       return;
     }
@@ -129,9 +132,9 @@ function updateColumnCollapsedState(column, newCollapsed: boolean) {
 }
 
 export function columnCollapseToggle(column: AgileColumn) {
-  return async (dispatch: (any) => any, getState: () => Object) => {
+  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const {sprint} = getState().agile;
-    const {api} = getState().app;
+    const api = getApi();
     if (!sprint) {
       return;
     }
@@ -156,9 +159,9 @@ export function closeSelect() {
 }
 
 export function openSprintSelect() {
-  return (dispatch: (any) => any, getState: () => Object) => {
+  return (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const {sprint} = getState().agile;
-    const {api} = getState().app;
+    const api: Api = getApi();
     if (!sprint) {
       return;
     }
@@ -179,9 +182,9 @@ export function openSprintSelect() {
 }
 
 export function openBoardSelect() {
-  return (dispatch: (any) => any, getState: () => Object) => {
+  return (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const {sprint} = getState().agile;
-    const {api} = getState().app;
+    const api: Api = getApi();
     if (!sprint) {
       return;
     }

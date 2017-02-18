@@ -5,7 +5,15 @@ import createLogger from 'redux-logger';
 
 import reducer from './reducers';
 
-const middlewares = [thunk];
+function getApi() {
+  const api = store.getState().app.api;
+  if (!api) {
+    throw new Error('Trying to use API until it is initialized in store');
+  }
+  return api;
+}
+
+const middlewares = [thunk.withExtraArgument(getApi)];
 
 if (process.env.NODE_ENV === 'development') {
   const logger = createLogger();
