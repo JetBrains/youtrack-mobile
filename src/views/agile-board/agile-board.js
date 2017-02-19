@@ -88,15 +88,17 @@ class AgileBoard extends Component {
   }
 
   _getScrollableWidth = () => {
-    const {sprint} = this.props;
-    if (!sprint) {
+    if (!this.props.sprint) {
       return null;
     }
-    const {board} = sprint;
 
-    return board.columns
+    return this.props.sprint.board.columns
       .map(col => col.collapsed ? AGILE_COLLAPSED_COLUMN_WIDTH : AGILE_COLUMN_MIN_WIDTH)
       .reduce((res, item) => res + item);
+  }
+
+  _getStickyIndexes = () => {
+    return this.props.sprint ? [0] : [];
   }
 
   _renderHeader() {
@@ -135,7 +137,6 @@ class AgileBoard extends Component {
   }
 
   _renderBoard(sprint: SprintFull) {
-    const {zoomedOut} = this.state;
     const board: Board = sprint.board;
 
     const commonRowProps = {
@@ -144,25 +145,25 @@ class AgileBoard extends Component {
       onCollapseToggle: this.props.onRowCollapseToggle
     };
 
-    return (
-      <View style={zoomedOut && styles.rowContainerZoomedOut}>
-        <BoardHeader columns={board.columns} onCollapseToggle={this.props.onColumnCollapseToggle}/>
+    const orphan = <BoardRow key="orphan" row={board.orphanRow} {...commonRowProps}/>;
 
-        {sprint.agile.orphansAtTheTop && <BoardRow row={board.orphanRow} {...commonRowProps}/>}
+    return [
+      <BoardHeader key="header" columns={board.columns} onCollapseToggle={this.props.onColumnCollapseToggle}/>,
 
-        {board.trimmedSwimlanes.map(swimlane => {
-          return (
-            <BoardRow
-              key={swimlane.id}
-              row={swimlane}
-              {...commonRowProps}
-            />
-          );
-        })}
+      sprint.agile.orphansAtTheTop && orphan,
 
-        {!sprint.agile.orphansAtTheTop && <BoardRow row={board.orphanRow} {...commonRowProps}/>}
-      </View>
-    );
+      board.trimmedSwimlanes.map(swimlane => {
+        return (
+          <BoardRow
+            key={swimlane.id}
+            row={swimlane}
+            {...commonRowProps}
+          />
+        );
+      }),
+
+      !sprint.agile.orphansAtTheTop && orphan,
+    ];
   }
 
   render() {
@@ -178,7 +179,8 @@ class AgileBoard extends Component {
             refreshControl={this._renderRefreshControl()}
             onScroll={this._onScroll}
             scrollEventThrottle={100}
-            contentContainerStyle={{minWidth: this._getScrollableWidth()}}
+            stickyHeaderIndices={this._getStickyIndexes()}
+            contentContainerStyle={[{minWidth: this._getScrollableWidth()}, zoomedOut && styles.rowContainerZoomedOut]}
           >
             {sprint && this._renderBoard(sprint)}
             {isLoadingMore && <ActivityIndicator color={COLOR_PINK} style={styles.loadingMoreIndicator}/>}
