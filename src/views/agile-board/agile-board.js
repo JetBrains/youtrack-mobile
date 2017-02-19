@@ -11,7 +11,7 @@ import BoardRow from '../../components/agile-row/agile-row';
 import Router from '../../components/router/router';
 import Auth from '../../components/auth/auth';
 import Api from '../../components/api/api';
-import {COLOR_PINK} from '../../components/variables/variables';
+import {COLOR_PINK, AGILE_COLUMN_MIN_WIDTH, AGILE_COLLAPSED_COLUMN_WIDTH} from '../../components/variables/variables';
 import {zoomIn, zoomOut, next} from '../../components/icon/icon';
 import type {SprintFull, Board, AgileBoardRow, AgileColumn} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
@@ -85,6 +85,18 @@ class AgileBoard extends Component {
       issueId: issue.id,
       api: this.props.api,
     });
+  }
+
+  _getScrollableWidth = () => {
+    const {sprint} = this.props;
+    if (!sprint) {
+      return null;
+    }
+    const {board} = sprint;
+
+    return board.columns
+      .map(col => col.collapsed ? AGILE_COLLAPSED_COLUMN_WIDTH : AGILE_COLUMN_MIN_WIDTH)
+      .reduce((res, item) => res + item);
   }
 
   _renderHeader() {
@@ -166,6 +178,7 @@ class AgileBoard extends Component {
             refreshControl={this._renderRefreshControl()}
             onScroll={this._onScroll}
             scrollEventThrottle={100}
+            contentContainerStyle={{minWidth: this._getScrollableWidth()}}
           >
             {sprint && this._renderBoard(sprint)}
             {isLoadingMore && <ActivityIndicator color={COLOR_PINK} style={styles.loadingMoreIndicator}/>}
