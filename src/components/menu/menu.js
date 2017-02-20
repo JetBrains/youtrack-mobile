@@ -123,7 +123,7 @@ export class Menu extends Component<DefaultProps, Props, void> {
         onClose={onClose}
         openDrawerOffset={1 / 4}
         captureGestures={true}
-        panOpenMask={36}
+        panOpenMask={12}
       >
         {children}
       </Drawer>
