@@ -176,7 +176,7 @@ export default class Select extends React.Component {
             {this._renderEmptyValueItem()}
             {this.state.filteredItems.map(item => this._renderRow(item))}
 
-            {!this.state.loaded && <View style={styles.row}>
+            {!this.state.loaded && <View style={[styles.row, styles.loadingRow]}>
               <ActivityIndicator/>
               <Text style={styles.loadingMessage}>Loading values...</Text>
             </View>}

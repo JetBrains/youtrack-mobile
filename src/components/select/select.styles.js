@@ -44,6 +44,9 @@ export default StyleSheet.create({
     paddingLeft: UNIT * 2,
     paddingRight: UNIT * 2
   },
+  loadingRow: {
+    justifyContent: 'center'
+  },
   headerText: {
     color: COLOR_FONT_ON_BLACK
   },
