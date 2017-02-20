@@ -27,13 +27,9 @@ export default StyleSheet.create({
     fontFamily: 'System',
     fontSize: 16,
     marginRight: 0,
-    padding: 2,
     ...Platform.select({
       ios: {
-        marginLeft: -2
-      },
-      android: {
-        paddingRight: -1
+        paddingBottom: 4
       }
     })
   },
