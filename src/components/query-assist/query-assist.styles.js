@@ -27,9 +27,13 @@ export default StyleSheet.create({
   },
   clearIconWrapper: {
     backgroundColor: 'transparent',
-    marginLeft: -24,
-    marginRight: 10,
+    marginLeft: -28,
+    marginRight: 12,
     overflow: 'visible'
+  },
+  clearIcon: {
+    width: UNIT * 2,
+    height: UNIT * 2
   },
   cancelSearch: {
     paddingRight: UNIT * 2,

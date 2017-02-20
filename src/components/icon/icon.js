@@ -18,3 +18,4 @@ export {default as zoomIn} from './zoom-in.png';
 export {default as zoomOut} from './zoom-out.png';
 export {default as logOut} from './logout.png';
 export {default as checkWhite} from './check-white.png';
+export {default as clearSearch} from './clear-search.png';

@@ -1,10 +1,11 @@
 /* @flow */
-import {View, Text, TouchableOpacity, TextInput} from 'react-native';
+import {View, Text, Image, TouchableOpacity, TextInput} from 'react-native';
 import React from 'react';
 import styles from './query-assist.styles';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
 import type {ServersideSuggestion} from './query-assist__suggestion';
 import {COLOR_PINK, COLOR_PLACEHOLDER} from '../../components/variables/variables';
+import {clearSearch} from '../../components/icon/icon';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import PubSub from 'pubsub-js';
 
@@ -144,7 +145,7 @@ export default class QueryAssist extends React.Component {
           }}
         />
         {(input && showQueryAssist) ? <TouchableOpacity style={styles.clearIconWrapper} onPress={() => this.setState({input: ''})}>
-          <Text style={{color: 'white'}}>X</Text>
+          <Image style={styles.clearIcon} source={clearSearch}/>
         </TouchableOpacity> : null}
         {cancelButton}
       </View>
