@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_SELECTED_DARK, COLOR_TRANSPARENT_BLACK, COLOR_FONT_ON_BLACK, COLOR_FONT_GRAY} from '../../components/variables/variables';
+import {UNIT, COLOR_PINK, COLOR_SELECTED_DARK, COLOR_TRANSPARENT_BLACK, COLOR_FONT_ON_BLACK, COLOR_FONT_GRAY} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   container: {
@@ -12,10 +12,20 @@ export default StyleSheet.create({
     backgroundColor: COLOR_TRANSPARENT_BLACK
   },
   inputWrapper: {
+    flexDirection: 'row',
     backgroundColor: COLOR_TRANSPARENT_BLACK,
-    justifyContent: 'center'
+    alignItems: 'center'
+  },
+  cancelButton: {
+    paddingRight: UNIT * 2,
+    padding: UNIT
+  },
+  cancelButtonText: {
+    fontSize: 16,
+    color: COLOR_PINK
   },
   searchInput: {
+    flex: 1,
     height: UNIT * 4.5,
     borderRadius: 6,
     backgroundColor: COLOR_SELECTED_DARK,

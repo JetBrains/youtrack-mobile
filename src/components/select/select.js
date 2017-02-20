@@ -2,11 +2,11 @@
 import {Text, Image, ScrollView, View, TouchableOpacity, TextInput, ActivityIndicator} from 'react-native';
 import React from 'react';
 import styles from './select.styles';
-import Header from '../header/header';
 import ColorField from '../color-field/color-field';
 import {notifyError} from '../notification/notification';
 import {checkWhite} from '../icon/icon';
-import {COLOR_PLACEHOLDER} from '../variables/variables';
+import {UNIT, COLOR_PLACEHOLDER} from '../variables/variables';
+import getTopPadding, {onHeightChange} from '../header/header__top-padding';
 
 const MAX_VISIBLE_ITEMS = 100;
 
@@ -17,7 +17,7 @@ export type Props = {
   getTitle: (item: Object) => string,
   getValue?: (item: Object) => string,
   selectedItems: Array<Object>,
-  title: string,
+  placeholder?: string,
   multi: boolean,
   emptyValue: ?string,
   height: number,
@@ -36,6 +36,10 @@ export default class Select extends React.Component {
   props: Props;
   state: State;
 
+  static defaultProps = {
+    placeholder: 'Search item'
+  };
+
   constructor() {
     super();
     this.state = {
@@ -48,6 +52,8 @@ export default class Select extends React.Component {
   }
 
   componentDidMount() {
+    onHeightChange(() => this.forceUpdate());
+
     const selectedItems = this.props.selectedItems ? this.props.selectedItems : [];
     this.setState({selectedItems});
     this._loadItems(this.state.query);
@@ -141,43 +147,40 @@ export default class Select extends React.Component {
   }
 
   render() {
+    const {style, height, multi, placeholder, onCancel} = this.props;
     return (
-      <View style={[styles.container, this.props.style]}>
-        <View style={{height: this.props.height}}>
-        <Header
-          leftButton={<Text>Cancel</Text>}
-          onBack={this.props.onCancel.bind(this)}
-          rightButton={this.props.multi ? <Text>Apply</Text> : null}
-          onRightButtonClick={this._onSave.bind(this)}>
-          <Text style={styles.headerText}>{this.props.title}</Text>
-        </Header>
-        <View style={styles.inputWrapper}>
-          <TextInput
-            autoFocus
-            placeholder="Search item"
-            keyboardAppearance="dark"
-            placeholderTextColor={COLOR_PLACEHOLDER}
-            returnKeyType="search"
-            autoCorrect={false}
-            underlineColorAndroid="transparent"
-            onSubmitEditing={(e) => this._onSearch(this.state.query)}
-            value={this.state.query}
-            onChangeText={(text) => {
-              this.setState({query: text});
-              this._onSearch(text);
-            }}
-            style={styles.searchInput}/>
-        </View>
-        <ScrollView keyboardShouldPersistTaps="handled"
-                    keyboardDismissMode="on-drag">
-          {this._renderEmptyValueItem()}
-          {this.state.filteredItems.map(item => this._renderRow(item))}
+      <View style={[styles.container, style, {paddingTop: getTopPadding() - UNIT * 2}]}>
+        <View style={{height}}>
+          <View style={styles.inputWrapper}>
+            <TextInput
+              autoFocus
+              placeholder={placeholder}
+              keyboardAppearance="dark"
+              placeholderTextColor={COLOR_PLACEHOLDER}
+              returnKeyType={multi ? 'done' : 'search'}
+              autoCorrect={false}
+              underlineColorAndroid="transparent"
+              onSubmitEditing={(e) => multi ? this._onSave() : this._onSearch(this.state.query)}
+              value={this.state.query}
+              onChangeText={(text) => {
+                this.setState({query: text});
+                this._onSearch(text);
+              }}
+              style={styles.searchInput}/>
+              <TouchableOpacity style={styles.cancelButton} onPress={onCancel}>
+                <Text style={styles.cancelButtonText}>Cancel</Text>
+              </TouchableOpacity>
+          </View>
+          <ScrollView keyboardShouldPersistTaps="handled"
+                      keyboardDismissMode="on-drag">
+            {this._renderEmptyValueItem()}
+            {this.state.filteredItems.map(item => this._renderRow(item))}
 
-          {!this.state.loaded && <View style={styles.row}>
-            <ActivityIndicator/>
-            <Text style={styles.loadingMessage}>Loading values...</Text>
-          </View>}
-        </ScrollView>
+            {!this.state.loaded && <View style={styles.row}>
+              <ActivityIndicator/>
+              <Text style={styles.loadingMessage}>Loading values...</Text>
+            </View>}
+          </ScrollView>
         </View>
       </View>
     );
