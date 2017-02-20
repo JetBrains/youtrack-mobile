@@ -170,7 +170,7 @@ export function openSprintSelect() {
       type: types.OPEN_AGILE_SELECT,
       selectProps: {
         show: true,
-        title: 'Select sprint',
+        placeholder: 'Search for the sprint',
         dataSource: () => api.getSprintList(sprint.agile.id),
         onSelect: selectedSprint => {
           dispatch(closeSelect());
@@ -193,7 +193,7 @@ export function openBoardSelect() {
       type: types.OPEN_AGILE_SELECT,
       selectProps: {
         show: true,
-        title: 'Select board',
+        placeholder: 'Search for the board',
         dataSource: () => api.getAgileBoardsList(),
         onSelect: (selectedBoard: BoardOnList) => {
           dispatch(closeSelect());

@@ -38,6 +38,7 @@ type State = {
     multi: boolean,
     emptyValue?: ?string,
     selectedItems: Array<Object>,
+    placeholder?: string,
     getValue?: (item: Object) => string,
     getTitle?: (item: Object) => string
   },
@@ -144,6 +145,7 @@ export default class CustomFieldsPanel extends Component {
         getValue: project => project.name + project.shortName,
         dataSource: this.props.api.getProjects.bind(this.props.api),
         multi: false,
+        placeholder: 'Search for the project',
         selectedItems: [],
         onSelect: (project: IssueProject) => {
           this.closeEditor();
@@ -211,6 +213,7 @@ export default class CustomFieldsPanel extends Component {
         multi: isMultiValue,
         selectedItems: selectedItems,
         emptyValue: field.projectCustomField.canBeEmpty ? field.projectCustomField.emptyFieldText : null,
+        placeholder: 'Search for the field value',
         dataSource: (query) => {
           if (field.hasStateMachine) {
             return this.props.api.getStateMachineEvents(this.props.issue.id, field.id)
@@ -256,7 +259,6 @@ export default class CustomFieldsPanel extends Component {
           bottom: this.state.height
         }}
       height={this.state.topCoord}
-      title="Select item"
       onCancel={() => this.closeEditor()}
       getTitle={(item) => item.fullName || item.name || item.login}
     />;
