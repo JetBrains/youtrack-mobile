@@ -56,6 +56,7 @@ export default StyleSheet.create({
   },
   selectedMarkIcon: {
     width: UNIT * 3,
+    height: UNIT * 3,
     resizeMode: 'contain'
   },
   colorFieldItemWrapper: {
