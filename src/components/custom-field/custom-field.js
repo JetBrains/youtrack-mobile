@@ -1,6 +1,7 @@
 import {TouchableOpacity, View, Text} from 'react-native';
 import React, {PropTypes, Component} from 'react';
 import styles from './custom-field.styles';
+import {NO_COLOR_ID} from '../color-field/color-field';
 
 export default class CustomField extends Component {
   static propTypes = {
@@ -48,6 +49,9 @@ export default class CustomField extends Component {
 
     const renderSingleMarker = (val) => {
       if (!val || !val.color) {
+        return;
+      }
+      if (val.color.id === NO_COLOR_ID) {
         return;
       }
       return <View key={val.id} style={[styles.colorMarker, {backgroundColor: val.color.background}]}/>;

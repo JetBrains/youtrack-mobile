@@ -3,6 +3,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import React, {PropTypes} from 'react';
 
 export const SIZE = 20;
+export const NO_COLOR_ID = '0';
 
 export default class ColorField extends React.Component {
   static propTypes = {
@@ -24,6 +25,10 @@ export default class ColorField extends React.Component {
   }
 
   render() {
+    if (this.props.color.id === NO_COLOR_ID) {
+      return null;
+    }
+
     return (
       <View style={[styles.wrapper, {backgroundColor: this._getBackgroundColor()}, this.props.style]}>
         <Text
