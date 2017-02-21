@@ -17,7 +17,7 @@ export default StyleSheet.create({
   },
   keyText: {
     color: COLOR_FONT_GRAY,
-    paddingTop: 2,
+    // paddingTop: 2,
     paddingBottom: 2,
     fontSize: 11,
     fontFamily: 'System'
@@ -27,11 +27,8 @@ export default StyleSheet.create({
     fontFamily: 'System',
     fontSize: 16,
     marginRight: 0,
-    ...Platform.select({
-      ios: {
-        paddingBottom: 4
-      }
-    })
+    paddingTop: 2,
+    paddingBottom: 3
   },
   valueTextActive: {
     color: COLOR_FONT_ON_BLACK,
@@ -43,9 +40,9 @@ export default StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     position: 'absolute',
-    left: 1,
-    right: 1,
-    bottom: 0
+    left: 0,
+    right: 0,
+    top: 0
   },
   colorMarker: {
     flexGrow: 1,

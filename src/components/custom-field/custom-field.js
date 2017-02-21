@@ -96,9 +96,9 @@ export default class CustomField extends Component {
         style={[styles.wrapper, active ? styles.wrapperActive : null]}
         onPress={this.props.onPress}
         disabled={this.props.disabled}>
-        <View style={styles.valuesWrapper}>{this._renderValue(field.value, this._getFieldType(field))}</View>
-        <Text style={[styles.keyText, this.props.disabled ? styles.valueTextDisabled : null]} testID="name">{this._getKey()}</Text>
-        {this._renderColorMaker(field.value)}
+          {this._renderColorMaker(field.value)}
+          <View style={styles.valuesWrapper}>{this._renderValue(field.value, this._getFieldType(field))}</View>
+          <Text style={[styles.keyText, this.props.disabled ? styles.valueTextDisabled : null]} testID="name">{this._getKey()}</Text>
       </TouchableOpacity>
     );
   }
