@@ -1,4 +1,4 @@
-import {Text, View, Image, TouchableOpacity, ScrollView, Clipboard, Platform, RefreshControl} from 'react-native';
+import {Text, View, Image, TouchableOpacity, ScrollView, Clipboard, Platform, RefreshControl, Linking} from 'react-native';
 import React, {PropTypes} from 'react';
 
 import ApiHelper from '../../components/api/api__helper';
@@ -244,6 +244,13 @@ export default class SingeIssueView extends React.Component {
           usage.trackEvent(CATEGORY_NAME, 'Copy isue URL');
           Clipboard.setString(this._makeIssueWebUrl(this.state.issue));
           notify('Issue URL has been copied');
+        }
+      },
+      {
+        title: 'Open issue in browser',
+        execute: () => {
+          usage.trackEvent(CATEGORY_NAME, 'Open in browser');
+          Linking.openURL(this._makeIssueWebUrl(this.state.issue));
         }
       },
       addAttachmentAction,
