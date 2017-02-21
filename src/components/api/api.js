@@ -238,8 +238,8 @@ class Api {
     const fields = 'issues(id),users(id,login,fullName,avatarUrl)';
     const queryString = qs.stringify({$top, fields, query});
     const body = {issues:  issueIds.map(id => ({id}))};
-
-    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/mention?${queryString}`, 'POST', body);
+    const suggestions = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/mention?${queryString}`, 'POST', body);
+    return ApiHelper.patchAllRelativeAvatarUrls(suggestions, this.config.backendUrl);
   }
 
   //TODO: this is old API usage, move to new one
