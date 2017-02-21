@@ -117,7 +117,7 @@ class Api {
     return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`, 'POST', {});
   }
 
-  async loadIssueDraft(draftId: string) {
+  async loadIssueDraft(draftId: string): IssueFull {
     const queryString = qs.stringify({fields: issueFields.singleIssue.toString()});
     const issue = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/admin/users/me/drafts/${draftId}?${queryString}`);
     issue.attachments = ApiHelper.convertRelativeUrls(issue.attachments, 'url', this.config.backendUrl);
@@ -129,10 +129,12 @@ class Api {
    * @param issue
    * @returns {Promise}
      */
-  async updateIssueDraft(issue: IssueFull) {
+  async updateIssueDraft(issue: IssueFull): IssueFull {
     const queryString = qs.stringify({fields: issueFields.singleIssue.toString()});
 
-    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/admin/users/me/drafts/${issue.id || ''}?${queryString}`, 'POST', issue);
+    const updatedIssue = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/admin/users/me/drafts/${issue.id || ''}?${queryString}`, 'POST', issue);
+    updatedIssue.attachments = ApiHelper.convertRelativeUrls(issue.attachments, 'url', this.config.backendUrl);
+    return updatedIssue;
   }
 
   async addComment(issueId: string, comment: string) {
