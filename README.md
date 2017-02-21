@@ -45,13 +45,13 @@ Press CMD+D to debug while the app is running on the simulator. Refer to the off
 
 #### Run and debug in WebStorm 2016.3
 
+* Do not forget to set JavaScript language level to "Flow". See details [here](https://blog.jetbrains.com/webstorm/2016/11/using-flow-in-webstorm/).
+
 * Create a new React Native run/debug configuration and select iOS as a target platform
 
 * *Run* the created configuration to run the app (instead of `npm start` and `npm run ios`)
 
-* To debug the app, add some breakpoints and *Debug* the created configuration. When the simulator is running, press CMD+D and select `Remote JS Debugging`. 
-
-* go to `Preferences/Languages & Frameworks/JavaScript/` choose at the `Flow executable` the `flow` binary from this `{yourpath}/youtrack-mobile/node_modules/.bin/flow` in the dropdown list where `{yourpath}` is your directory
+* To debug the app, add some breakpoints and *Debug* the created configuration. When the simulator is running, press CMD+D and select `Remote JS Debugging`.
 
 ### Android
 
@@ -86,4 +86,4 @@ npm run android
 
 #### Debug
 
-Press CMD+M to open the debug menu for Android emulator. Refer to the official [documentation](https://facebook.github.io/react-native/docs/debugging.html). 
+Press CMD+M to open the debug menu for Android emulator. Refer to the official [documentation](https://facebook.github.io/react-native/docs/debugging.html).
