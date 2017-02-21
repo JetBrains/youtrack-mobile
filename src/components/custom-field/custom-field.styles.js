@@ -1,4 +1,4 @@
-import {StyleSheet, Platform} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {COLOR_FONT_GRAY, COLOR_PINK, COLOR_FONT_ON_BLACK} from '../variables/variables';
 
 const SELECTED_ALPHA_HEX = 20;
@@ -17,7 +17,6 @@ export default StyleSheet.create({
   },
   keyText: {
     color: COLOR_FONT_GRAY,
-    // paddingTop: 2,
     paddingBottom: 2,
     fontSize: 11,
     fontFamily: 'System'
