@@ -396,7 +396,7 @@ export default class SingeIssueView extends React.Component {
             onAddComment={(comment) => this.addComment(this.state.issue, comment)}
           />
 
-          {Platform.OS == 'ios' && <KeyboardSpacer/>}
+          {Platform.OS == 'ios' && <KeyboardSpacer style={{backgroundColor: 'black'}}/>}
         </View>}
 
         {this._canAddComment() && <View style={styles.addCommentContainer}>
