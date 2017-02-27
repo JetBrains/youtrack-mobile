@@ -28,6 +28,9 @@ export default StyleSheet.create({
     color: COLOR_PINK
   },
   simpleValueInput: {
+    paddingTop: 2,
+    paddingBottom: 2,
+
     height: UNIT * 4,
     margin: UNIT,
     paddingLeft: UNIT,
