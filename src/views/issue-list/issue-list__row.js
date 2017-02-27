@@ -24,7 +24,7 @@ export default class IssueRow extends React.Component {
   render() {
     const issue = this.props.issue;
     const priorityField = getPriotityField(issue);
-    const prioityBlock = priorityField ?
+    const prioityBlock = (priorityField && priorityField.value) ?
       <ColorField text={priorityField.value.name} color={priorityField.value.color}></ColorField> :
       <View style={styles.priorityPlaceholder}/>;
 
