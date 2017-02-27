@@ -79,7 +79,7 @@ export default class Select extends React.Component {
       <TouchableOpacity key={this.props.emptyValue} style={styles.row} onPress={() => this._onClearValue()}>
         <Text style={[styles.itemTitle, {marginLeft: 0}]}>{this.props.emptyValue}</Text>
 
-        {this.state.selectedItems.length === 0 && <View style={styles.selectedMark}></View>}
+        {this.state.selectedItems.length === 0 && <Image source={checkWhite} style={styles.selectedMarkIcon}/>}
       </TouchableOpacity>
     );
   }
