@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_FONT_ON_BLACK} from '../../components/variables/variables';
+import {UNIT, COLOR_PINK, COLOR_FONT, COLOR_FONT_ON_BLACK} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   container: {
@@ -67,5 +67,24 @@ export default StyleSheet.create({
     marginTop: 4,
     width: UNIT * 3.5,
     height: UNIT * 3.5
+  },
+  agileBoardMessage: {
+    flex: 1,
+    alignItems: 'center'
+  },
+  agileBoardSmile: {
+    paddingTop: UNIT * 6,
+    fontSize: 36,
+    color: COLOR_FONT
+  },
+  agileBoardMessageText: {
+    paddingTop: UNIT,
+    fontSize: 18,
+    color: COLOR_FONT
+  },
+  selectBoardMessage: {
+    paddingTop: UNIT * 2,
+    fontSize: 18,
+    color: COLOR_PINK
   }
 });

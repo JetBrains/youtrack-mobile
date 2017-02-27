@@ -1,7 +1,4 @@
-export const INITIALIZE_API = 'app.INITIALIZE_API';
-
-export const LOG_OUT = 'app.LOG_OUT';
-
+export const NO_AGILE_SELECTED = 'agile.NO_AGILE_SELECTED';
 export const START_SPRINT_LOADING = 'agile.START_SPRINT_LOADING';
 export const STOP_SPRINT_LOADING = 'agile.STOP_SPRINT_LOADING';
 export const RECEIVE_SPRINT = 'agile.RECEIVE_SPRINT';

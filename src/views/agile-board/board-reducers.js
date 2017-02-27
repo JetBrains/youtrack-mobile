@@ -5,6 +5,7 @@ import type {SprintFull, AgileBoardRow, Board} from '../../flow/Agile';
 
 type BoardState = {
   isLoading: boolean,
+  noBoardSelected: boolean,
   isSprintSelectOpen: boolean,
   sprint: ?SprintFull,
   selectProps: ?Object,
@@ -12,6 +13,7 @@ type BoardState = {
 
 const initialState: BoardState = {
   isLoading: false,
+  noBoardSelected: false,
   isSprintSelectOpen: false,
   selectProps: null,
   sprint: null
@@ -35,9 +37,16 @@ function updateRowCollapsedState(
 }
 
 const board = createReducer(initialState, {
+  [types.NO_AGILE_SELECTED](state: BoardState) {
+    return {
+      ...state,
+      noBoardSelected: true
+    };
+  },
   [types.START_SPRINT_LOADING](state: BoardState) {
     return {
       ...state,
+      noBoardSelected: false,
       isLoading: true
     };
   },

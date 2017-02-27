@@ -26,6 +26,7 @@ type Props = {
   isLoading: boolean,
   isLoadingMore: boolean,
   noMoreSwimlanes: boolean,
+  noBoardSelected: boolean,
   sprint: ?SprintFull,
   isSprintSelectOpen: boolean,
   selectProps: Object,
@@ -136,6 +137,18 @@ class AgileBoard extends Component {
     );
   }
 
+  _renderNoSprint() {
+    return (
+      <View style={styles.agileBoardMessage}>
+        <Text style={styles.agileBoardSmile}>(・_・)</Text>
+        <Text style={styles.agileBoardMessageText}>No agile board selected</Text>
+        <TouchableOpacity onPress={this.props.onOpenBoardSelect}>
+          <Text style={styles.selectBoardMessage} numberOfLines={1}>Select board</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   _renderBoard(sprint: SprintFull) {
     const board: Board = sprint.board;
 
@@ -167,7 +180,7 @@ class AgileBoard extends Component {
   }
 
   render() {
-    const {sprint, isLoadingMore, isSprintSelectOpen} = this.props;
+    const {sprint, isLoadingMore, isSprintSelectOpen, noBoardSelected} = this.props;
 
     const {zoomedOut} = this.state;
     return (
@@ -182,6 +195,7 @@ class AgileBoard extends Component {
             stickyHeaderIndices={this._getStickyIndexes()}
             contentContainerStyle={[{minWidth: this._getScrollableWidth()}, zoomedOut && styles.rowContainerZoomedOut]}
           >
+            {noBoardSelected && this._renderNoSprint()}
             {sprint && this._renderBoard(sprint)}
             {isLoadingMore && <ActivityIndicator color={COLOR_PINK} style={styles.loadingMoreIndicator}/>}
           </ScrollView>

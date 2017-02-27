@@ -21,6 +21,10 @@ function receiveSprint(sprint) {
   };
 }
 
+function noAgileSelected() {
+  return {type: types.NO_AGILE_SELECTED};
+}
+
 type ApiGetter = () => Api;
 
 function loadSprint(agileId: string, sprintId: string) {
@@ -52,7 +56,12 @@ export function fetchDefaultAgileBoard() {
 
     const profile = await api.getAgileUserProfile();
     const lastSprint = profile.visitedSprints.filter(s => s.agile.id === profile.defaultAgile.id)[0];
-    dispatch(loadSprint(lastSprint.agile.id, lastSprint.id));
+    if (lastSprint) {
+      dispatch(loadSprint(lastSprint.agile.id, lastSprint.id));
+    } else {
+      dispatch(noAgileSelected());
+      dispatch(stopSprintLoad());
+    }
   };
 }
 
@@ -183,11 +192,7 @@ export function openSprintSelect() {
 
 export function openBoardSelect() {
   return (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
-    const {sprint} = getState().agile;
     const api: Api = getApi();
-    if (!sprint) {
-      return;
-    }
 
     dispatch({
       type: types.OPEN_AGILE_SELECT,
