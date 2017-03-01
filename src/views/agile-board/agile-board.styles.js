@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_PINK, COLOR_FONT, COLOR_FONT_ON_BLACK} from '../../components/variables/variables';
+import {UNIT, COLOR_PINK, COLOR_BLACK, COLOR_FONT, COLOR_FONT_ON_BLACK} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   container: {
@@ -30,7 +30,12 @@ export default StyleSheet.create({
     height: UNIT * 1.5,
     resizeMode: 'contain'
   },
+  boardHeaderContainer: {
+    backgroundColor: COLOR_BLACK
+  },
   rowContainerZoomedOut: {
+    margin: '-10%',
+    marginTop: '-40%',
     transform: [{scale: 0.8}]
   },
   loadingMoreIndicator: {

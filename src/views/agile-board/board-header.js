@@ -5,14 +5,15 @@ import {UNIT, AGILE_COLUMN_MIN_WIDTH, AGILE_COLLAPSED_COLUMN_WIDTH, COLOR_FONT_O
 import type {AgileColumn} from '../../flow/Agile';
 
 type Props = {
+  style?: any,
   columns: Array<AgileColumn>,
   onCollapseToggle: (column: AgileColumn) => any
 };
 
 export default function BoardHeader(props: Props) {
-  const {columns, onCollapseToggle} = props;
+  const {columns, onCollapseToggle, style} = props;
   return (
-    <View style={styles.tableHeader}>
+    <View style={[styles.tableHeader, style]}>
       {columns.map(col => {
         const columnPresentation = col.agileColumn.fieldValues.map(val => val.presentation).join(', ');
 

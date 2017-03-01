@@ -41,7 +41,8 @@ type Props = {
 };
 
 type State = {
-  zoomedOut: boolean
+  zoomedOut: boolean,
+  scrolledX: number
 };
 
 class AgileBoard extends Component {
@@ -51,7 +52,8 @@ class AgileBoard extends Component {
   constructor(props: Props) {
     super(props);
     this.state = {
-      zoomedOut: false
+      zoomedOut: false,
+      scrolledX: 0
     };
     usage.trackScreenView('Agile board');
   }
@@ -66,6 +68,8 @@ class AgileBoard extends Component {
     const scroll = nativeEvent.contentOffset.y;
     const contentHeight = nativeEvent.contentSize.height;
     const maxScroll = contentHeight - viewHeight;
+
+    this.setState({scrolledX: nativeEvent.contentOffset.x});
 
     if (maxScroll - scroll < 20) {
       this.props.onLoadMoreSwimlanes();
@@ -98,10 +102,6 @@ class AgileBoard extends Component {
       .reduce((res, item) => res + item);
   }
 
-  _getStickyIndexes = () => {
-    return this.props.sprint ? [0] : [];
-  }
-
   _renderHeader() {
     const {sprint, onOpenSprintSelect, onOpenBoardSelect} = this.props;
 
@@ -123,6 +123,19 @@ class AgileBoard extends Component {
           </TouchableOpacity>
         </View>}
       </Header>
+    );
+  }
+
+  _renderBoardHeader(sprint: SprintFull) {
+    const {scrolledX} = this.state;
+    return (
+      <View style={styles.boardHeaderContainer}>
+        <BoardHeader
+          style={{left: -scrolledX}}
+          columns={sprint.board.columns}
+          onCollapseToggle={this.props.onColumnCollapseToggle}
+        />
+      </View>
     );
   }
 
@@ -161,8 +174,6 @@ class AgileBoard extends Component {
     const orphan = <BoardRow key="orphan" row={board.orphanRow} {...commonRowProps}/>;
 
     return [
-      <BoardHeader key="header" columns={board.columns} onCollapseToggle={this.props.onColumnCollapseToggle}/>,
-
       sprint.agile.orphansAtTheTop && orphan,
 
       board.trimmedSwimlanes.map(swimlane => {
@@ -188,11 +199,12 @@ class AgileBoard extends Component {
         <View style={styles.container}>
           {this._renderHeader()}
 
+          {sprint && this._renderBoardHeader(sprint)}
+
           <ScrollView
             refreshControl={this._renderRefreshControl()}
             onScroll={this._onScroll}
-            scrollEventThrottle={100}
-            stickyHeaderIndices={this._getStickyIndexes()}
+            scrollEventThrottle={30}
             contentContainerStyle={[{minWidth: this._getScrollableWidth()}, zoomedOut && styles.rowContainerZoomedOut]}
           >
             {noBoardSelected && this._renderNoSprint()}
