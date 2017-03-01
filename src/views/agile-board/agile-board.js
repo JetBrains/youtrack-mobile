@@ -42,19 +42,18 @@ type Props = {
 };
 
 type State = {
-  zoomedOut: boolean,
-  scrolledX: number
+  zoomedOut: boolean
 };
 
 class AgileBoard extends Component {
   props: Props;
   state: State;
+  boardHeader: ?BoardHeader;
 
   constructor(props: Props) {
     super(props);
     this.state = {
-      zoomedOut: false,
-      scrolledX: 0
+      zoomedOut: false
     };
     usage.trackScreenView('Agile board');
   }
@@ -70,7 +69,11 @@ class AgileBoard extends Component {
     const contentHeight = nativeEvent.contentSize.height;
     const maxScroll = contentHeight - viewHeight;
 
-    this.setState({scrolledX: nativeEvent.contentOffset.x});
+    if (this.boardHeader) {
+      this.boardHeader.setNativeProps({
+        style: {left: -nativeEvent.contentOffset.x}
+      });
+    }
 
     if (maxScroll - scroll < 20) {
       this.props.onLoadMoreSwimlanes();
@@ -128,11 +131,10 @@ class AgileBoard extends Component {
   }
 
   _renderBoardHeader(sprint: SprintFull) {
-    const {scrolledX} = this.state;
     return (
       <View style={styles.boardHeaderContainer}>
         <BoardHeader
-          style={{left: -scrolledX}}
+          ref={node => this.boardHeader = node}
           columns={sprint.board.columns}
           onCollapseToggle={this.props.onColumnCollapseToggle}
         />
@@ -206,7 +208,7 @@ class AgileBoard extends Component {
           <ScrollView
             refreshControl={this._renderRefreshControl()}
             onScroll={this._onScroll}
-            scrollEventThrottle={300}
+            scrollEventThrottle={30}
             contentContainerStyle={[{minWidth: this._getScrollableWidth()}, zoomedOut && styles.rowContainerZoomedOut]}
           >
             {noBoardSelected && this._renderNoSprint()}

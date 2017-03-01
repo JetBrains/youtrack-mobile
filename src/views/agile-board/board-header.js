@@ -1,6 +1,6 @@
 /* @flow */
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import React from 'react';
+import React, {PureComponent} from 'react';
 import {UNIT, AGILE_COLUMN_MIN_WIDTH, AGILE_COLLAPSED_COLUMN_WIDTH, COLOR_FONT_ON_BLACK, COLOR_GRAY, COLOR_BLACK} from '../../components/variables/variables';
 import type {AgileColumn} from '../../flow/Agile';
 
@@ -10,25 +10,37 @@ type Props = {
   onCollapseToggle: (column: AgileColumn) => any
 };
 
-export default function BoardHeader(props: Props) {
-  const {columns, onCollapseToggle, style} = props;
-  return (
-    <View style={[styles.tableHeader, style]}>
-      {columns.map(col => {
-        const columnPresentation = col.agileColumn.fieldValues.map(val => val.presentation).join(', ');
+export default class BoardHeader extends PureComponent<void, Props, void> {
+  node: ?Object;
 
-        return (
-          <TouchableOpacity
-            style={[styles.tableHeaderItem, col.collapsed && styles.collapsedHeaderItem]}
-            key={col.id}
-            onPress={() => onCollapseToggle(col)}
-          >
-            <Text numberOfLines={1} style={styles.columnText}>{columnPresentation}</Text>
-          </TouchableOpacity>
-        );
-      })}
-    </View>
-  );
+  setNativeProps(...args: Array<any>) {
+    if (!this.node) {
+      return;
+    }
+    this.node.setNativeProps(...args);
+  }
+
+  render() {
+    const {columns, onCollapseToggle, style} = this.props;
+
+    return (
+      <View style={[styles.tableHeader, style]} ref={component => this.node = component}>
+        {columns.map(col => {
+          const columnPresentation = col.agileColumn.fieldValues.map(val => val.presentation).join(', ');
+
+          return (
+            <TouchableOpacity
+              style={[styles.tableHeaderItem, col.collapsed && styles.collapsedHeaderItem]}
+              key={col.id}
+              onPress={() => onCollapseToggle(col)}
+            >
+              <Text numberOfLines={1} style={styles.columnText}>{columnPresentation}</Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
