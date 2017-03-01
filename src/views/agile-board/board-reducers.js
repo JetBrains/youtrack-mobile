@@ -2,6 +2,7 @@
 import * as types from './board-action-types';
 import {createReducer} from 'redux-create-reducer';
 import type {SprintFull, AgileBoardRow, Board} from '../../flow/Agile';
+import type {IssueFull} from '../../flow/Issue';
 
 type BoardState = {
   isLoading: boolean,
@@ -23,7 +24,7 @@ function updateRowCollapsedState(
   board: Board,
   row: AgileBoardRow,
   collapsed: boolean
-): SprintFull {
+): Board {
   const isOrphan = row.id === 'orphans';
   const trimmedSwimlanes = board.trimmedSwimlanes;
 
@@ -33,6 +34,29 @@ function updateRowCollapsedState(
         return swimlane.id === row.id ? {...row, collapsed} : swimlane;
       }),
       orphanRow: isOrphan ? {...board.orphanRow, collapsed} : board.orphanRow
+  };
+}
+
+function addCardToBoard(
+  board: Board,
+  cellId: string,
+  issue: IssueFull
+): Board {
+  function addCardToRowIfNeeded(row) {
+    const isTargetRow = row.cells.some(cell => cell.id === cellId);
+    if (!isTargetRow) {
+      return row;
+    }
+    return {
+      ...row,
+      cells: row.cells.map(cell => cell.id === cellId ? {...cell, issues: cell.issues.concat(issue)} : cell)
+    };
+  }
+
+  return {
+    ...board,
+    orphanRow: addCardToRowIfNeeded(board.orphanRow),
+    trimmedSwimlanes: board.trimmedSwimlanes.map(addCardToRowIfNeeded)
   };
 }
 
@@ -134,6 +158,19 @@ const board = createReducer(initialState, {
       ...state,
       selectProps: null,
       isSprintSelectOpen: false
+    };
+  },
+  [types.ADD_CARD_TO_CELL](state: BoardState, action: {cellId: string, issue: IssueFull}): BoardState {
+    const {sprint} = state;
+    if (!sprint) {
+      return state;
+    }
+    return {
+      ...state,
+      sprint: {
+        ...sprint,
+        board: addCardToBoard(sprint.board, action.cellId, action.issue)
+      }
     };
   }
 });

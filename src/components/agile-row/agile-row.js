@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
 import AgileCard from '../agile-card/agile-card';
 import ApiHelper from '../api/api__helper';
-import {arrowRightGray, arrowDownGray} from '../icon/icon';
+import {add, arrowRightGray, arrowDownGray} from '../icon/icon';
 import styles from './agile-row.styles';
 import type {AgileBoardRow, BoardCell} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
@@ -14,6 +14,7 @@ type Props = {
   row: AgileBoardRow,
   collapsedColumnIds: Array<string>,
   onTapIssue: (issue: IssueOnList) => any,
+  onTapCreateIssue: (columnId: string, cellId: string) => any,
   onCollapseToggle: (row: AgileBoardRow) => any
 };
 
@@ -33,18 +34,21 @@ function renderIssueSquare(issue: IssueOnList) {
     />;
 }
 
-function renderCell(cell: BoardCell, collapsed: boolean, onTapIssue) {
+function renderCell(cell: BoardCell, collapsed: boolean, onTapIssue, onTapCreateIssue) {
   return (
     <View key={cell.id} style={[styles.column, collapsed && styles.columnCollapsed]}>
       {cell.issues.map(issue => {
         return collapsed ? renderIssueSquare(issue) : renderIssue(issue, onTapIssue);
       })}
+      <TouchableOpacity onPress={() => onTapCreateIssue(cell.column.id, cell.id)} style={styles.addCardButton}>
+        <Image style={styles.addCardIcon} source={add}/>
+      </TouchableOpacity>
     </View>
   );
 }
 
 export default function BoardRow(props: Props) {
-  const { row, style, collapsedColumnIds, onCollapseToggle, onTapIssue} = props;
+  const { row, style, collapsedColumnIds, onCollapseToggle, onTapIssue, onTapCreateIssue} = props;
   const isResolved = row.issue && row.issue.resolved;
 
   return (
@@ -72,7 +76,7 @@ export default function BoardRow(props: Props) {
       <View style={styles.row}>
         {!row.collapsed && row.cells.map(cell => {
           const isCellCollapsed = collapsedColumnIds.includes(cell.column.id);
-          return renderCell(cell, isCellCollapsed, onTapIssue);
+          return renderCell(cell, isCellCollapsed, onTapIssue, onTapCreateIssue);
         })}
       </View>
 

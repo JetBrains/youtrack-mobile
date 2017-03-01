@@ -25,8 +25,8 @@ const notSelectedProject = {
 };
 
 export default class CreateIssue extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       processing: false,
       attachingImage: null,
@@ -43,11 +43,11 @@ export default class CreateIssue extends React.Component {
     this.descriptionInput = null;
     usage.trackScreenView('Create issue');
 
-    this.initializeWithDraftOrProject();
+    this.initializeWithDraftOrProject(props.draftId);
   }
 
-  async initializeWithDraftOrProject() {
-    const draftId = await AsyncStorage.getItem(DRAFT_ID_STORAGE_KEY);
+  async initializeWithDraftOrProject(preDefinedDraftId) {
+    const draftId = preDefinedDraftId || await AsyncStorage.getItem(DRAFT_ID_STORAGE_KEY);
     if (draftId) {
       await this.loadIssueFromDraft(draftId);
     }
@@ -88,7 +88,9 @@ export default class CreateIssue extends React.Component {
     try {
       const issue = await this.props.api.updateIssueDraft(issueToSend);
       this.setState({issue});
-      return await AsyncStorage.setItem(DRAFT_ID_STORAGE_KEY, issue.id);
+      if (!this.props.draftId) {
+        return await AsyncStorage.setItem(DRAFT_ID_STORAGE_KEY, issue.id);
+      }
     } catch (err) {
       const error = await resolveError(err);
       if (error && error.error_description && error.error_description.indexOf(`Can't find entity with id`) !== -1) {

@@ -317,6 +317,12 @@ class Api {
       visitedSprints: [{id: sprintId}]
     });
   }
+
+  async getIssueDraftForAgileCell(boardId: string, sprintId: string, columnId: string, cellId: string): Promise<{id: string}> {
+    const queryString = qs.stringify({fields: 'id'});
+    const url =`${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}/board/columns/${columnId}/cells/${cellId}/draftIssue?${queryString}`;
+    return await this.makeAuthorizedRequest(url, 'POST', {});
+  }
 }
 
 export default Api;

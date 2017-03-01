@@ -13,3 +13,5 @@ export const COLUMN_COLLAPSE_TOGGLE = 'agile.COLUMN_COLLAPSE_TOGGLE';
 export const OPEN_AGILE_SELECT = 'agile.OPEN_AGILE_SELECT';
 export const OPEN_BOARD_SELECT = 'agile.OPEN_BOARD_SELECT';
 export const CLOSE_AGILE_SELECT = 'agile.CLOSE_AGILE_SELECT';
+
+export const ADD_CARD_TO_CELL = 'agile.ADD_CARD_TO_CELL';

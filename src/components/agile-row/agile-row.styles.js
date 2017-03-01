@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import { UNIT, AGILE_COLUMN_MIN_WIDTH, AGILE_COLLAPSED_COLUMN_WIDTH, COLOR_GRAY, COLOR_FONT_GRAY, COLOR_PINK } from '../variables/variables';
+import { UNIT, AGILE_COLUMN_MIN_WIDTH, COLOR_LIGHT_GRAY, AGILE_COLLAPSED_COLUMN_WIDTH, COLOR_GRAY, COLOR_FONT_GRAY, COLOR_PINK } from '../variables/variables';
 
 export default StyleSheet.create({
   rowContainer: {},
@@ -60,5 +60,17 @@ export default StyleSheet.create({
     margin: 2,
     borderWidth: 1,
     borderColor: 'rgba(0,0,0,0.1)'
+  },
+  addCardButton: {
+    margin: UNIT,
+    padding: UNIT/2,
+    borderRadius: UNIT/2,
+    alignItems: 'center',
+    backgroundColor: COLOR_LIGHT_GRAY
+  },
+  addCardIcon: {
+    height: UNIT * 2.5,
+    width: UNIT * 2.5,
+    resizeMode: 'contain'
   }
 });

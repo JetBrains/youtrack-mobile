@@ -37,6 +37,7 @@ type Props = {
   onOpenSprintSelect: (any) => any,
   onOpenBoardSelect: (any) => any,
   onCloseSelect: (any) => any,
+  createCardForCell: (columnId: string, cellId: string) => any,
   onOpenMenu: (any) => any
 };
 
@@ -168,6 +169,7 @@ class AgileBoard extends Component {
     const commonRowProps = {
       collapsedColumnIds: board.columns.filter(col => col.collapsed).map(col => col.id),
       onTapIssue: this._onTapIssue,
+      onTapCreateIssue: this.props.createCardForCell,
       onCollapseToggle: this.props.onRowCollapseToggle
     };
 
@@ -204,7 +206,7 @@ class AgileBoard extends Component {
           <ScrollView
             refreshControl={this._renderRefreshControl()}
             onScroll={this._onScroll}
-            scrollEventThrottle={30}
+            scrollEventThrottle={300}
             contentContainerStyle={[{minWidth: this._getScrollableWidth()}, zoomedOut && styles.rowContainerZoomedOut]}
           >
             {noBoardSelected && this._renderNoSprint()}
@@ -244,7 +246,8 @@ const mapDispatchToProps = (dispatch) => {
     onOpenSprintSelect: () => dispatch(boardActions.openSprintSelect()),
     onOpenBoardSelect: () => dispatch(boardActions.openBoardSelect()),
     onCloseSelect: () => dispatch(boardActions.closeSelect()),
-    onOpenMenu: () => dispatch(openMenu())
+    onOpenMenu: () => dispatch(openMenu()),
+    createCardForCell: (...args) => dispatch(boardActions.createCardForCell(...args))
   };
 };
 

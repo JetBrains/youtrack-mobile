@@ -2,7 +2,9 @@
 import * as types from './board-action-types';
 import {notifyError} from '../../components/notification/notification';
 import type {AgileBoardRow, AgileColumn, BoardOnList} from '../../flow/Agile';
+import type {IssueFull} from '../../flow/Issue';
 import type Api from '../../components/api/api';
+import Router from '../../components/router/router';
 
 const PAGE_SIZE = 4;
 
@@ -32,7 +34,7 @@ function loadSprint(agileId: string, sprintId: string) {
     const api: Api = getApi();
     dispatch(startSprintLoad());
     try {
-      const sprint = await api.getSprint(agileId, sprintId, PAGE_SIZE);
+      const sprint = await api.getSprint(agileId, sprintId, PAGE_SIZE, 4);
       dispatch(receiveSprint(sprint));
       await api.saveLastVisitedSprint(sprintId);
     } catch (e) {
@@ -206,5 +208,26 @@ export function openBoardSelect() {
         }
       }
     });
+  };
+}
+
+export function addCardToCell(cellId: string, issue: IssueFull) {
+  return {type: types.ADD_CARD_TO_CELL, cellId, issue};
+}
+
+export function createCardForCell(columnId: string, cellId: string) {
+  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+    const {sprint} = getState().agile;
+    const api: Api = getApi();
+    try {
+      const draft = await api.getIssueDraftForAgileCell(sprint.agile.id, sprint.id, columnId, cellId);
+      Router.CreateIssue({
+        api,
+        draftId: draft.id,
+        onCreate: createdIssue => dispatch(addCardToCell(cellId, createdIssue))
+      });
+    } catch (err) {
+      notifyError('Could not create card', err);
+    }
   };
 }
