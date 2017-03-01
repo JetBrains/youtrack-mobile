@@ -40,9 +40,9 @@ function renderCell(cell: BoardCell, collapsed: boolean, onTapIssue, onTapCreate
       {cell.issues.map(issue => {
         return collapsed ? renderIssueSquare(issue) : renderIssue(issue, onTapIssue);
       })}
-      <TouchableOpacity onPress={() => onTapCreateIssue(cell.column.id, cell.id)} style={styles.addCardButton}>
+      {!collapsed && <TouchableOpacity onPress={() => onTapCreateIssue(cell.column.id, cell.id)} style={styles.addCardButton}>
         <Image style={styles.addCardIcon} source={add}/>
-      </TouchableOpacity>
+      </TouchableOpacity>}
     </View>
   );
 }
