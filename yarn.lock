@@ -2016,9 +2016,9 @@ flat-cache@^1.2.1:
     graceful-fs "^4.1.2"
     write "^0.2.1"
 
-flow-bin@0.37.0:
-  version "0.37.0"
-  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.37.0.tgz#456ebbd472d20d2d970560cea0a6b3c648878307"
+flow-bin@0.38:
+  version "0.38.0"
+  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.38.0.tgz#3ae096d401c969cc8b5798253fb82381e2d0237a"
 
 foreach@^2.0.5:
   version "2.0.5"
@@ -3605,9 +3605,9 @@ react-native-view-transformer@0.0.28:
     react-native-gesture-responder "0.1.1"
     react-native-scroller "0.0.6"
 
-react-native@0.41.2:
-  version "0.41.2"
-  resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.41.2.tgz#c6f486b8450a9909e6fed2dfd2c2af946563bf4f"
+react-native@0.42.0-rc.3:
+  version "0.42.0-rc.3"
+  resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.42.0-rc.3.tgz#97f852086ac6ed2e4ad2d43a96203cc3761f6a4b"
   dependencies:
     absolute-path "^0.0.0"
     art "^0.10.0"
