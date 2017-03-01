@@ -1,16 +1,3 @@
-export type ServersideSuggestion = {
-  o: string,
-  d: string,
-  hd: string,
-  pre: string,
-  suf: string,
-  ms: number,
-  me: number,
-  cp: number,
-  cs: number,
-  ce: number
-};
-
 export type TransformedSuggestion = {
   prefix: string,
   option: string,

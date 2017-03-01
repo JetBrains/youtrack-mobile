@@ -70,7 +70,7 @@ export default createReducer(initialState, {
       isListEndReached: true,
       loadingError: action.error,
       issues: [],
-      dataSource: this.state.dataSource.cloneWithRows([])
+      dataSource: state.dataSource.cloneWithRows([])
     };
   },
   [types.LIST_END_REACHED]: (state: IssuesListState, action: {error: Object}) => {

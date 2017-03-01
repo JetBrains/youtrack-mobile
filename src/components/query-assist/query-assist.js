@@ -3,7 +3,7 @@ import {View, Text, Image, TouchableOpacity, TextInput} from 'react-native';
 import React from 'react';
 import styles from './query-assist.styles';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
-import type {ServersideSuggestion} from './query-assist__suggestion';
+import type {ServersideSuggestion} from '../../flow/Issue';
 import {COLOR_PINK, COLOR_PLACEHOLDER} from '../../components/variables/variables';
 import {clearSearch} from '../../components/icon/icon';
 import KeyboardSpacer from 'react-native-keyboard-spacer';

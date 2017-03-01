@@ -1,3 +1,4 @@
+/* @flow */
 import {
   View,
   Text,
@@ -8,7 +9,7 @@ import {
   TouchableOpacity,
   AppState
 } from 'react-native';
-import React from 'react';
+import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
@@ -27,16 +28,26 @@ import Router from '../../components/router/router';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import * as issueActions from './issue-list-actions';
 import {openMenu} from '../../actions';
+import type Auth from '../../components/auth/auth';
+import type Api from '../../components/api/api';
+import type {IssuesListState} from './issue-list-reducers';
+import type {IssueOnList, ServersideSuggestion} from '../../flow/Issue';
 
-export class IssueList extends React.Component {
+type Props = IssuesListState & {
+  openMenu: openMenu,
+  auth: Auth,
+  api: Api
+};
+
+export class IssueList extends Component {
+  props: Props;
+  unsubscribeFromOpeningWithIssueUrl: () => any
   constructor() {
     super();
-
-    this._handleAppStateChange = this._handleAppStateChange.bind(this);
     usage.trackScreenView('Issue list');
   }
 
-  _handleAppStateChange(newState) {
+  _handleAppStateChange = (newState) => {
     if (newState === 'active') {
       this.props.refreshIssues();
     }
@@ -67,7 +78,7 @@ export class IssueList extends React.Component {
     AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
-  goToIssue(issue) {
+  goToIssue(issue: IssueOnList) {
     Router.SingleIssue({
       issuePlaceholder: issue,
       issueId: issue.id,
@@ -80,16 +91,17 @@ export class IssueList extends React.Component {
     this.props.cacheIssues([]);
   }
 
-  async getSuggestions(query, caret) {
+  async getSuggestions(query: string, caret: number): Promise<Array<ServersideSuggestion>>{
     try {
       const res = await this.props.api.getQueryAssistSuggestions(query, caret);
       return res.suggest.items;
     } catch (err) {
       notifyError('Failed to fetch query assist suggestions', err);
+      return [];
     }
   }
 
-  onQueryUpdated(query) {
+  onQueryUpdated(query: string) {
     this.props.storeIssuesQuery(query);
     this.props.setIssuesQuery(query);
     this.props.loadIssues(query);

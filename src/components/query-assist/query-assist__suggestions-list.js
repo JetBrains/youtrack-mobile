@@ -4,7 +4,8 @@ import ListViewDataSource from 'react-native/Libraries/CustomComponents/ListView
 import React from 'react';
 import {UNIT, COLOR_FONT_ON_BLACK} from '../variables/variables';
 import InvertibleScrollView from 'react-native-invertible-scroll-view';
-import type {ServersideSuggestion, TransformedSuggestion} from './query-assist__suggestion';
+import type {ServersideSuggestion} from '../../flow/Issue';
+import type {TransformedSuggestion} from './query-assist__suggestion';
 
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
