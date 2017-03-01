@@ -9,6 +9,7 @@ import {
   AppState
 } from 'react-native';
 import React from 'react';
+import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import openByUrlDetector from '../../components/open-url-handler/open-url-handler';
@@ -16,8 +17,7 @@ import styles from './issue-list.styles';
 import Header from '../../components/header/header';
 import QueryAssist from '../../components/query-assist/query-assist';
 import {COLOR_PINK} from '../../components/variables/variables';
-import Cache from '../../components/cache/cache';
-import {notifyError, resolveError, extractErrorMessage} from '../../components/notification/notification';
+import {notifyError, extractErrorMessage} from '../../components/notification/notification';
 import usage from '../../components/usage/usage';
 
 import ApiHelper from '../../components/api/api__helper';
@@ -28,35 +28,9 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 import * as issueActions from './issue-list-actions';
 import {openMenu} from '../../actions';
 
-const PAGE_SIZE = 10;
-const ISSUES_CACHE_KEY = 'yt_mobile_issues_cache';
-
-const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-
 export class IssueList extends React.Component {
-
   constructor() {
     super();
-    this.cache = new Cache(ISSUES_CACHE_KEY);
-
-    this.state = {
-      issues: [],
-      dataSource: ds.cloneWithRows([]),
-      skip: 0,
-      isLoadingMore: false,
-      listEndReached: false,
-
-      loadingError: null,
-      isInitialized: false,
-      isRefreshing: false
-    };
-
-    this.cache.read().then(issues => {
-      this.setState({
-        issues: issues,
-        dataSource: this.state.dataSource.cloneWithRows(issues)
-      });
-    });
 
     this._handleAppStateChange = this._handleAppStateChange.bind(this);
     usage.trackScreenView('Issue list');
@@ -64,7 +38,7 @@ export class IssueList extends React.Component {
 
   _handleAppStateChange(newState) {
     if (newState === 'active') {
-      this.loadIssues(this.props.query);
+      this.props.refreshIssues();
     }
   }
 
@@ -76,16 +50,14 @@ export class IssueList extends React.Component {
         Router.SingleIssue({
           issueId: issueId,
           api: this.props.api,
-          onUpdate: () => this.loadIssues(null)
+          onUpdate: () => this.props.loadIssues(null)
         });
       },
       (issuesQuery) => {
         this.onQueryUpdated(issuesQuery);
       });
 
-    this.props.loadQuery();
-    //TODO: remove after move to redux
-    setTimeout(() => this.loadIssues(this.props.query), 100);
+    this.props.initializeIssuesList();
 
     AppState.addEventListener('change', this._handleAppStateChange);
   }
@@ -100,88 +72,27 @@ export class IssueList extends React.Component {
       issuePlaceholder: issue,
       issueId: issue.id,
       api: this.props.api,
-      onUpdate: () => this.loadIssues(this.props.query)
+      onUpdate: () => this.props.refreshIssues()
     });
   }
 
   logOut = () => {
-    this.cache.store([]);
+    this.props.cacheIssues([]);
   }
 
-  loadIssues(text) {
-    this.setState({loadingError: null, listEndReached: false, isRefreshing: true, skip: 0});
-
-    return this.props.api.getIssues(text, PAGE_SIZE)
-      .then(ApiHelper.fillIssuesFieldHash)
-      .then((issues) => {
-        this.setState({
-          issues: issues,
-          dataSource: this.state.dataSource.cloneWithRows(issues),
-          isRefreshing: false,
-          isInitialized: true,
-          listEndReached: issues.length < PAGE_SIZE
-        });
-        this.cache.store(issues);
-      })
-      .catch((err) => {
-        return resolveError(err)
-          .then(resolvedErr => {
-            this.setState({
-              isRefreshing: false,
-              isInitialized: true,
-              listEndReached: true,
-              loadingError: resolvedErr,
-              dataSource: this.state.dataSource.cloneWithRows([])
-            });
-          });
-      });
-  }
-
-  updateIssues() {
-    return this.loadIssues(this.props.query);
-  }
-
-  loadMore() {
-    const {query} = this.props;
-    const {isInitialized, isLoadingMore, isRefreshing, loadingError, listEndReached, skip, issues, dataSource} = this.state;
-    if (!isInitialized || isLoadingMore || isRefreshing || loadingError || listEndReached) {
-      return;
+  async getSuggestions(query, caret) {
+    try {
+      const res = await this.props.api.getQueryAssistSuggestions(query, caret);
+      return res.suggest.items;
+    } catch (err) {
+      notifyError('Failed to fetch query assist suggestions', err);
     }
-
-    this.setState({isLoadingMore: true});
-    const newSkip = skip + PAGE_SIZE;
-
-    return this.props.api.getIssues(query, PAGE_SIZE, newSkip)
-      .then(ApiHelper.fillIssuesFieldHash)
-      .then((newIssues) => {
-        const updatedIssues = issues.concat(newIssues);
-        this.setState({
-          issues: updatedIssues,
-          dataSource: dataSource.cloneWithRows(updatedIssues),
-          skip: newSkip,
-          listEndReached: newIssues.length < PAGE_SIZE
-        });
-        this.cache.store(updatedIssues);
-      })
-      .then(() => this.setState({isLoadingMore: false}))
-      .catch((err) => {
-        this.setState({isLoadingMore: false});
-        return notifyError('Failed to fetch more issues', err);
-      });
-  }
-
-  getSuggestions(query, caret) {
-    return this.props.api.getQueryAssistSuggestions(query, caret)
-      .then(res => {
-        return res.suggest.items;
-      })
-      .catch(err => notifyError('Failed to fetch query assist suggestions', err));
   }
 
   onQueryUpdated(query) {
-    this.props.storeQuery(query);
-    this.props.setQuery(query);
-    this.loadIssues(query);
+    this.props.storeIssuesQuery(query);
+    this.props.setIssuesQuery(query);
+    this.props.loadIssues(query);
   }
 
   _renderHeader() {
@@ -189,15 +100,13 @@ export class IssueList extends React.Component {
       <Header
         leftButton={<Text>Menu</Text>}
         rightButton={<Text>Create</Text>}
-        onBack={this.props.onOpenMenu}
+        onBack={this.props.openMenu}
         onRightButtonClick={() => {
           return Router.CreateIssue({
             api: this.props.api,
             onCreate: (createdIssue) => {
-              const updatedIssues = ApiHelper.fillIssuesFieldHash([createdIssue]).concat(this.state.issues);
-              this.setState({
-                dataSource: this.state.dataSource.cloneWithRows(updatedIssues)
-              });
+              const updatedIssues = ApiHelper.fillIssuesFieldHash([createdIssue]).concat(this.props.issues);
+              this.props.receiveIssues(updatedIssues);
             }});
           }
         }
@@ -209,24 +118,25 @@ export class IssueList extends React.Component {
 
   _renderRefreshControl() {
     return <RefreshControl
-      refreshing={this.state.isRefreshing}
-      onRefresh={this.updateIssues.bind(this)}
+      refreshing={this.props.isRefreshing}
+      onRefresh={this.props.refreshIssues}
       tintColor={COLOR_PINK}
     />;
   }
 
   _renderListMessage() {
-    if (this.state.loadingError) {
+    const {loadingError, isRefreshing, isListEndReached, isLoadingMore, issues} = this.props;
+    if (loadingError) {
       return (<View style={styles.errorContainer}>
         <Text style={styles.listMessageSmile}>{'(>_<)'}</Text>
         <Text style={styles.errorTitle}>Cannot load issues</Text>
-        <Text style={styles.errorContent}>{extractErrorMessage(this.state.loadingError)}</Text>
-        <TouchableOpacity style={styles.tryAgainButton} onPress={() => this.loadIssues(this.props.query)}>
+        <Text style={styles.errorContent}>{extractErrorMessage(loadingError)}</Text>
+        <TouchableOpacity style={styles.tryAgainButton} onPress={() => this.props.refreshIssues()}>
           <Text style={styles.tryAgainText}>Try Again</Text>
         </TouchableOpacity>
       </View>);
     }
-    if (!this.state.isRefreshing && !this.state.isLoadingMore && this.state.issues.length === 0) {
+    if (!isRefreshing && !isLoadingMore && issues.length === 0) {
       return (
         <View>
           <Text style={styles.listMessageSmile}>(・_・)</Text>
@@ -235,14 +145,13 @@ export class IssueList extends React.Component {
       );
     }
 
-    if (this.state.isLoadingMore && !this.state.listEndReached) {
+    if (isLoadingMore && !isListEndReached) {
       return <Text style={styles.listFooterMessage}>Loading more issues...</Text>;
     }
   }
 
   render() {
-    const {query} = this.props;
-    const {dataSource} = this.state;
+    const {query, dataSource, loadMoreIssues} = this.props;
 
     return (
       <Menu onBeforeLogOut={this.logOut}>
@@ -255,7 +164,7 @@ export class IssueList extends React.Component {
             enableEmptySections={true}
             renderRow={(issue) => <IssueRow issue={issue} onClick={(issue) => this.goToIssue(issue)}></IssueRow>}
             renderSeparator={(sectionID, rowID) => <View style={styles.separator} key={rowID}/>}
-            onEndReached={this.loadMore.bind(this)}
+            onEndReached={loadMoreIssues}
             onEndReachedThreshold={30}
             renderScrollComponent={(props) => <ScrollView {...props} refreshControl={this._renderRefreshControl()}/>}
             renderFooter={() => this._renderListMessage()}
@@ -282,10 +191,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setQuery: (query) => dispatch(issueActions.setIssuesQuery(query)),
-    storeQuery: (query) => dispatch(issueActions.storeIssuesQuery(query)),
-    loadQuery: () => dispatch(issueActions.readStoredIssuesQuery()),
-    onOpenMenu: () => dispatch(openMenu())
+    ...bindActionCreators(issueActions, dispatch),
+    openMenu: () => dispatch(openMenu())
   };
 };
 
