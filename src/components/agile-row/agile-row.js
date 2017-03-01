@@ -23,7 +23,7 @@ function renderIssue(issue: IssueOnList, onTapIssue) {
   </TouchableOpacity>;
 }
 
-function renderIssuqSquare(issue: IssueOnList) {
+function renderIssueSquare(issue: IssueOnList) {
     const priorityField = getPriotityField(issue);
 
     const color = priorityField ? priorityField.value.color : null;
@@ -37,7 +37,7 @@ function renderCell(cell: BoardCell, collapsed: boolean, onTapIssue) {
   return (
     <View key={cell.id} style={[styles.column, collapsed && styles.columnCollapsed]}>
       {cell.issues.map(issue => {
-        return collapsed ? renderIssuqSquare(issue) : renderIssue(issue, onTapIssue);
+        return collapsed ? renderIssueSquare(issue) : renderIssue(issue, onTapIssue);
       })}
     </View>
   );
