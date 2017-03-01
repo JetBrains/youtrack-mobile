@@ -2,7 +2,7 @@
 import * as types from './issue-list-action-types';
 import {AsyncStorage} from 'react-native';
 import ApiHelper from '../../components/api/api__helper';
-import {notifyError} from '../../components/notification/notification';
+import {notifyError, resolveError} from '../../components/notification/notification';
 import type Api from '../../components/api/api';
 import type IssuesListState from './issue-list-reducers';
 import type {IssueOnList} from '../../flow/Issue';
@@ -60,7 +60,7 @@ export function receiveIssues(issues: Array<IssueOnList>) {
 }
 
 export function cacheIssues(issues: Array<IssueOnList>) {
-  return async (dispatch: (any) => any, getState: () => IssuesListState) => {
+  return (dispatch: (any) => any, getState: () => IssuesListState) => {
     const cache = getState().issueList.cache;
     cache.store(issues);
   };
@@ -77,7 +77,10 @@ export function readCachedIssues() {
 }
 
 export function loadingIssuesError(error: Object) {
-  return {type: types.LOADING_ISSUES_ERROR, error};
+  return async (dispatch: (any) => any) => {
+    const resolvedError = await resolveError(error);
+    dispatch({type: types.LOADING_ISSUES_ERROR, error: resolvedError});
+  };
 }
 
 export function loadIssues(query: string) {
@@ -108,8 +111,8 @@ export function refreshIssues() {
 
 export function initializeIssuesList() {
   return async (dispatch: (any) => any, getState: () => IssuesListState) => {
-    dispatch(readStoredIssuesQuery());
-    dispatch(readCachedIssues());
+    await readStoredIssuesQuery()(dispatch, getState);
+    await readCachedIssues()(dispatch, getState);
     dispatch(refreshIssues());
   };
 }
