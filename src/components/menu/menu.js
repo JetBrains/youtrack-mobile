@@ -13,7 +13,7 @@ import {connect} from 'react-redux';
 import {logOut, openMenu, closeMenu} from '../../actions';
 
 const CURRENT_YEAR = (new Date()).getFullYear();
-const MENU_WIDTH = 300;
+const MENU_WIDTH = 280;
 
 function openPrivacyPolicy() {
   Linking.openURL('https://www.jetbrains.com/company/privacy.html');
