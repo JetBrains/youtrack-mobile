@@ -13,6 +13,7 @@ import {connect} from 'react-redux';
 import {logOut, openMenu, closeMenu} from '../../actions';
 
 const CURRENT_YEAR = (new Date()).getFullYear();
+const MENU_WIDTH = 300;
 
 function openPrivacyPolicy() {
   Linking.openURL('https://www.jetbrains.com/company/privacy.html');
@@ -121,7 +122,7 @@ export class Menu extends Component<DefaultProps, Props, void> {
         tapToClose={true}
         onOpen={onOpen}
         onClose={onClose}
-        openDrawerOffset={1 / 4}
+        openDrawerOffset={viewport => viewport.width - MENU_WIDTH}
         captureGestures={true}
         panOpenMask={12}
       >
