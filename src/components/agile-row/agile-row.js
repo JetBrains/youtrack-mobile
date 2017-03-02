@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
 import AgileCard from '../agile-card/agile-card';
 import ApiHelper from '../api/api__helper';
-import {add, arrowRightGray, arrowDownGray} from '../icon/icon';
+import {addGray, arrowRightGray, arrowDownGray} from '../icon/icon';
 import styles from './agile-row.styles';
 import type {AgileBoardRow, BoardCell} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
@@ -41,7 +41,7 @@ function renderCell(cell: BoardCell, collapsed: boolean, onTapIssue, onTapCreate
         return collapsed ? renderIssueSquare(issue) : renderIssue(issue, onTapIssue);
       })}
       {!collapsed && <TouchableOpacity onPress={() => onTapCreateIssue(cell.column.id, cell.id)} style={styles.addCardButton}>
-        <Image style={styles.addCardIcon} source={add}/>
+        <Image style={styles.addCardIcon} source={addGray}/>
       </TouchableOpacity>}
     </View>
   );

@@ -1,6 +1,7 @@
 export {default as logo} from './youtrack-logo-512.png';
 export {default as arrow} from './arrow.png';
 export {default as add} from './add.png';
+export {default as addGray} from './add-gray.png';
 export {default as attach} from './attach.png';
 export {default as back} from './back.png';
 export {default as link} from './link.png';
