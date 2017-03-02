@@ -32,6 +32,9 @@ export default StyleSheet.create({
     borderRightWidth: 0.5,
     borderColor: COLOR_GRAY
   },
+  columnWithoutBorder: {
+    borderRightWidth: 0
+  },
   columnCollapsed: {
     flex: 0,
     width: AGILE_COLLAPSED_COLUMN_WIDTH,

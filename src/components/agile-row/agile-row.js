@@ -34,9 +34,14 @@ function renderIssueSquare(issue: IssueOnList) {
     />;
 }
 
-function renderCell(cell: BoardCell, collapsed: boolean, onTapIssue, onTapCreateIssue) {
+function renderCell(cell: BoardCell, collapsed: boolean, onTapIssue, onTapCreateIssue, lastColumn) {
   return (
-    <View key={cell.id} style={[styles.column, collapsed && styles.columnCollapsed]}>
+    <View key={cell.id} style={[
+        styles.column,
+        collapsed && styles.columnCollapsed,
+        lastColumn && styles.columnWithoutBorder
+      ]}
+    >
       {cell.issues.map(issue => {
         return collapsed ? renderIssueSquare(issue) : renderIssue(issue, onTapIssue);
       })}
@@ -74,9 +79,10 @@ export default function BoardRow(props: Props) {
       </View>
 
       <View style={styles.row}>
-        {!row.collapsed && row.cells.map(cell => {
+        {!row.collapsed && row.cells.map((cell, index) => {
           const isCellCollapsed = collapsedColumnIds.includes(cell.column.id);
-          return renderCell(cell, isCellCollapsed, onTapIssue, onTapCreateIssue);
+          const lastColumn = index === row.cells.length - 1;
+          return renderCell(cell, isCellCollapsed, onTapIssue, onTapCreateIssue, lastColumn);
         })}
       </View>
 

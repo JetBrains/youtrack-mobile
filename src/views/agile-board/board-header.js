@@ -25,12 +25,16 @@ export default class BoardHeader extends PureComponent<void, Props, void> {
 
     return (
       <View style={[styles.tableHeader, style]} ref={component => this.node = component}>
-        {columns.map(col => {
+        {columns.map((col, index) => {
           const columnPresentation = col.agileColumn.fieldValues.map(val => val.presentation).join(', ');
 
           return (
             <TouchableOpacity
-              style={[styles.tableHeaderItem, col.collapsed && styles.collapsedHeaderItem]}
+              style={[
+                styles.tableHeaderItem,
+                index === columns.length - 1 && styles.tableHeaderItemWithoutBorder,
+                col.collapsed && styles.collapsedHeaderItem
+              ]}
               key={col.id}
               onPress={() => onCollapseToggle(col)}
             >
@@ -57,6 +61,9 @@ const styles = StyleSheet.create({
     borderRightWidth: 0.5,
     borderBottomWidth: 0.5,
     borderColor: COLOR_GRAY
+  },
+  tableHeaderItemWithoutBorder: {
+    borderRightWidth: 0
   },
   collapsedHeaderItem: {
     flex: 0,
