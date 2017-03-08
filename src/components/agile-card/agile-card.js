@@ -62,11 +62,11 @@ export default class AgileCard extends PureComponent<void, Props, void> {
 const styles = StyleSheet.create({
   card: {
     flexDirection: 'column',
-    padding: UNIT
+    padding: UNIT,
+    height: 131
   },
   summary: {
     fontSize: 13,
-    height: 56,
     paddingTop: UNIT/2,
     paddingBottom: UNIT/2
   },
