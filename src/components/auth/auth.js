@@ -101,8 +101,8 @@ export default class Auth {
     return this.obtainToken([
       'grant_type=password',
       '&access_type=offline',
-      `&username=${login}`,
-      `&password=${password}`,
+      `&username=${encodeURIComponent(login)}`,
+      `&password=${encodeURIComponent(password)}`,
       `&scope=${this.config.auth.scopes}`
     ].join(''));
   }
