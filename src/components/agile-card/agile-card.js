@@ -1,6 +1,6 @@
 /* @flow */
 import {View, Image, Text, StyleSheet} from 'react-native';
-import React from 'react';
+import React, {PureComponent} from 'react';
 import {UNIT} from '../variables/variables';
 import ColorField from '../color-field/color-field';
 import ApiHelper from '../api/api__helper';
@@ -13,35 +13,50 @@ type Props = {
   issue: IssueOnList
 };
 
-export default function AgileCard(props: Props) {
-  const { issue, style } = props;
-  const priorityField = getPriotityField(issue);
+export default class AgileCard extends PureComponent<void, Props, void> {
+  render() {
+    const { issue, style } = this.props;
+    const priorityField = getPriotityField(issue);
 
-  const issueId = priorityField
-    ? <View style={styles.colorFieldContainer}>
-      <ColorField
-        fullText
-        style={styles.issueIdColorField}
-        text={ApiHelper.getIssueId(issue)}
-        color={priorityField.value.color}
-      />
-    </View>
-    : <Text testID="card-simple-issue-id">{ApiHelper.getIssueId(issue)}</Text>;
+    const issueId = priorityField
+      ? <View style={styles.colorFieldContainer}>
+          <ColorField
+            fullText
+            style={styles.issueIdColorField}
+            text={ApiHelper.getIssueId(issue)}
+            color={priorityField.value.color}
+          />
+        </View>
+      : <Text testID="card-simple-issue-id">
+          {ApiHelper.getIssueId(issue)}
+        </Text>;
 
-  const assigneeField = getAssigneeField(issue);
-  const assignees = [].concat(assigneeField ? assigneeField.value : null).filter(item => item);
+    const assigneeField = getAssigneeField(issue);
+    const assignees = []
+      .concat(assigneeField ? assigneeField.value : null)
+      .filter(item => item);
 
-  return (
-    <View style={[styles.card, style]}>
-      {issueId}
-      <Text numberOfLines={3} style={styles.summary} testID="card-summary">{issue.summary}</Text>
-      <View style={styles.assignees}>
-        {assignees.map((assignee: CustomFieldValue) => {
-          return <Image key={assignee.id} style={styles.avatar} source={{ uri: assignee.avatarUrl }} testID="card-avatar"/>;
-        })}
+    return (
+      <View style={[styles.card, style]}>
+        {issueId}
+        <Text numberOfLines={3} style={styles.summary} testID="card-summary">
+          {issue.summary}
+        </Text>
+        <View style={styles.assignees}>
+          {assignees.map((assignee: CustomFieldValue) => {
+            return (
+              <Image
+                key={assignee.id}
+                style={styles.avatar}
+                source={{ uri: assignee.avatarUrl }}
+                testID="card-avatar"
+              />
+            );
+          })}
+        </View>
       </View>
-    </View>
-  );
+    );
+  }
 }
 
 const styles = StyleSheet.create({
