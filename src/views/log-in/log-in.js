@@ -124,7 +124,7 @@ export default class LoginForm extends React.Component {
             autoCorrect={false}
             editable={!this.state.loggingIn}
             style={styles.input}
-            placeholder="Username"
+            placeholder="Username or email"
             returnKeyType="next"
             underlineColorAndroid="transparent"
             onSubmitEditing={() => this.focusOnPassword()}
