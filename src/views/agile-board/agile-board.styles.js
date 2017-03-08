@@ -1,5 +1,11 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_PINK, COLOR_BLACK, COLOR_FONT, COLOR_FONT_ON_BLACK} from '../../components/variables/variables';
+import {
+  UNIT,
+  COLOR_PINK,
+  COLOR_BLACK,
+  COLOR_FONT,
+  COLOR_FONT_ON_BLACK
+} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   container: {
@@ -28,6 +34,8 @@ export default StyleSheet.create({
   headerSeparatorIcon: {
     alignSelf: 'center',
     height: UNIT * 1.5,
+    marginLeft: UNIT / 2,
+    marginRight: UNIT / 2,
     resizeMode: 'contain'
   },
   boardHeaderContainer: {
