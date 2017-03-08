@@ -160,7 +160,7 @@ describe('Auth', function () {
       request.options.headers['Content-Type'].should.equal('application/x-www-form-urlencoded');
     });
 
-    it.only('should encode params when authorizing via login/password', () => {
+    it('should encode params when authorizing via login/password', () => {
       auth.obtainTokenByCredentials('lo$g', 'pa%ss');
 
       const request = getLastRequest();
