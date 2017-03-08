@@ -1,7 +1,7 @@
 /* @flow */
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import React, {PureComponent} from 'react';
-import {UNIT, AGILE_COLUMN_MIN_WIDTH, AGILE_COLLAPSED_COLUMN_WIDTH, COLOR_FONT_ON_BLACK, COLOR_GRAY, COLOR_BLACK} from '../../components/variables/variables';
+import {UNIT, AGILE_COLUMN_MIN_WIDTH, AGILE_COLLAPSED_COLUMN_WIDTH, COLOR_FONT_ON_BLACK, COLOR_FONT_GRAY, COLOR_GRAY, COLOR_BLACK} from '../../components/variables/variables';
 import type {AgileColumn} from '../../flow/Agile';
 
 type Props = {
@@ -58,9 +58,11 @@ const styles = StyleSheet.create({
     minWidth: AGILE_COLUMN_MIN_WIDTH,
     alignItems: 'center',
     padding: UNIT/2,
+    paddingTop: 0,
+    paddingBottom: UNIT,
     borderRightWidth: 0.5,
     borderBottomWidth: 0.5,
-    borderColor: COLOR_GRAY
+    borderColor: COLOR_FONT_GRAY
   },
   tableHeaderItemWithoutBorder: {
     borderRightWidth: 0
