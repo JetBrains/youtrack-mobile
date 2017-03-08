@@ -42,7 +42,7 @@
     "qs": "6.1.0",
     "react": "15.4.2",
     "react-addons-shallow-compare": "15.4.2",
-    "react-native": "0.42.0-rc.3",
+    "react-native": "0.42.0",
     "react-native-calendar-picker": "huston007/CalendarPicker#83eea4463964d86d5b42d533c76b2ba829a665fb",
     "react-native-device-info": "rebeccahughes/react-native-device-info#e8bfe5e",
     "react-native-drawer": "2.3.0",
