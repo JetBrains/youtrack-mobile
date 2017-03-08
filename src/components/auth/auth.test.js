@@ -160,6 +160,13 @@ describe('Auth', function () {
       request.options.headers['Content-Type'].should.equal('application/x-www-form-urlencoded');
     });
 
+    it.only('should encode params when authorizing via login/password', () => {
+      auth.obtainTokenByCredentials('lo$g', 'pa%ss');
+
+      const request = getLastRequest();
+      request.requestBody.should.equal(`grant_type=password&access_type=offline&username=lo%24g&password=pa%25ss&scope=scope1 scope2`);
+    });
+
     it('should authorize oAUTH2 code', () => {
       auth.obtainTokenByOAuthCode('fake-code');
 
