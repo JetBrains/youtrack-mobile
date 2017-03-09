@@ -170,7 +170,7 @@ export default class Select extends React.Component {
             </TouchableOpacity>
         </View>
         <ScrollView keyboardShouldPersistTaps="handled"
-                    keyboardDismissMode="interactive">
+                    keyboardDismissMode="on-drag">
           {this._renderEmptyValueItem()}
           {this.state.filteredItems.map(item => this._renderRow(item))}
 

@@ -334,7 +334,7 @@ export default class CustomFieldsPanel extends Component {
             <ScrollView
               horizontal={true}
               style={styles.customFieldsPanel}
-              keyboardShouldPersistTaps="handled"
+              keyboardShouldPersistTaps="always"
             >
               <View key="Project">
                 <CustomField disabled={!canEditProject}
