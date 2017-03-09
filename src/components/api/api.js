@@ -8,7 +8,7 @@ import ApiHelper from './api__helper';
 import {handleRelativeUrl} from '../config/config';
 import type {SprintFull, AgileUserProfile, AgileBoardRow, BoardOnList} from '../../flow/Agile';
 import type {AppConfigFilled} from '../../flow/AppConfig';
-import type {IssueOnList, IssueFull, TransformedSuggestion} from '../../flow/Issue';
+import type {IssueOnList, IssueFull, TransformedSuggestion, SavedQuery} from '../../flow/Issue';
 import type {IssueProject, FieldValue} from '../../flow/CustomFields';
 
 const STATUS_UNAUTHORIZED = 401;
@@ -21,7 +21,6 @@ class Api {
   youTrackUrl: string;
   youTrackIssueUrl: string;
   youTrackProjectUrl: string;
-  youTrackIssuesFolderUrl: string;
   youtTrackFieldBundleUrl: string;
 
   constructor(auth: Object) {
@@ -31,7 +30,6 @@ class Api {
     this.youTrackUrl = this.config.backendUrl;
     this.youTrackIssueUrl = `${this.youTrackUrl}/api/issues`;
     this.youTrackProjectUrl =`${this.youTrackUrl}/api/admin/projects`;
-    this.youTrackIssuesFolderUrl = `${this.youTrackUrl}/api/issueFolders`;
 
     this.youtTrackFieldBundleUrl = `${this.youTrackUrl}/api/admin/customFieldSettings/bundles`;
   }
@@ -104,8 +102,9 @@ class Api {
     return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`);
   }
 
-  async getIssueFolders() {
-    return await this.makeAuthorizedRequest(`${this.youTrackIssuesFolderUrl}?fields=$type,name,query`);
+  async getSavedQueries(): Promise<SavedQuery> {
+    const queryString = qs.stringify({fields: issueFields.issueFolder.toString()});
+    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/savedQueries?${queryString}`);
   }
 
   async createIssue(issueDraft: IssueOnList) {

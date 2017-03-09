@@ -3,14 +3,14 @@ import {View, Text, Image, TouchableOpacity, TextInput} from 'react-native';
 import React from 'react';
 import styles from './query-assist.styles';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
-import type {TransformedSuggestion} from '../../flow/Issue';
+import type {TransformedSuggestion, SavedQuery} from '../../flow/Issue';
 import {COLOR_PINK, COLOR_PLACEHOLDER} from '../../components/variables/variables';
 import {clearSearch} from '../../components/icon/icon';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import PubSub from 'pubsub-js';
 
 type Props = {
-  suggestions: Array<TransformedSuggestion>,
+  suggestions: Array<TransformedSuggestion | SavedQuery>,
   currentQuery: string,
   onSetQuery: (query: string) => any,
   onChange: (query: string, caret: number) => any,
@@ -111,9 +111,14 @@ export default class QueryAssist extends React.Component {
 
   onApplySuggestion = (suggestion: TransformedSuggestion) => {
     const suggestionText = `${suggestion.prefix}${suggestion.option}${suggestion.suffix}`;
-    const oldQuery = this.props.currentQuery || '';
+    const oldQuery = this.state.input || '';
     const newQuery = oldQuery.substring(0, suggestion.completionStart) + suggestionText + oldQuery.substring(suggestion.completionEnd);
     return this.props.onSetQuery(newQuery);
+  }
+
+  onApplySavedQuery = (savedQuery: SavedQuery) => {
+    this.blurInput();
+    this.props.onSetQuery(savedQuery.query);
   }
 
   _renderInput() {
@@ -162,7 +167,8 @@ export default class QueryAssist extends React.Component {
     const {suggestions} = this.props;
     return <QueryAssistSuggestionsList style={[styles.searchSuggestions, {top: this.state.suggestionsListTop}]}
                                        suggestions={suggestions}
-                                       onApplySuggestion={this.onApplySuggestion}/>;
+                                       onApplySuggestion={this.onApplySuggestion}
+                                       onApplySavedQuery={this.onApplySavedQuery}/>;
   }
 
   render() {

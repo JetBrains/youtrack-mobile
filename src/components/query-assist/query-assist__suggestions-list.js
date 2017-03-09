@@ -4,7 +4,7 @@ import ListViewDataSource from 'react-native/Libraries/CustomComponents/ListView
 import React from 'react';
 import {UNIT, COLOR_FONT_ON_BLACK} from '../variables/variables';
 import InvertibleScrollView from 'react-native-invertible-scroll-view';
-import type {TransformedSuggestion} from '../../flow/Issue';
+import type {TransformedSuggestion, SavedQuery} from '../../flow/Issue';
 
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -14,8 +14,9 @@ type State = {
 
 type Props = {
   style?: any,
-  suggestions: Array<Object>,
-  onApplySuggestion: (suggestion: TransformedSuggestion) => any
+  suggestions: Array<TransformedSuggestion | SavedQuery>,
+  onApplySuggestion: (suggestion: TransformedSuggestion) => any,
+  onApplySavedQuery: (savedQuery: SavedQuery) => any
 };
 
 export default class QueryAssistSuggestionsList extends React.Component {
@@ -34,11 +35,20 @@ export default class QueryAssistSuggestionsList extends React.Component {
     }
   }
 
-  _renderRow(suggestion) {
-    return (
-      <TouchableOpacity style={styles.searchRow} onPress={() => this.props.onApplySuggestion(suggestion)}>
-        <Text style={styles.searchText}>{suggestion.option}</Text>
-      </TouchableOpacity>);
+  _renderRow(suggestion: TransformedSuggestion | SavedQuery) {
+    if (suggestion.caret) { // marker that this is TransformedSuggestion
+      return (
+        <TouchableOpacity style={styles.searchRow} onPress={() => this.props.onApplySuggestion(suggestion)}>
+          <Text style={styles.searchText}>{suggestion.option}</Text>
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <TouchableOpacity style={styles.searchRow} onPress={() => this.props.onApplySavedQuery(suggestion)}>
+          <Text style={styles.searchText}>{suggestion.name}</Text>
+        </TouchableOpacity>
+      );
+    }
   }
 
   render() {

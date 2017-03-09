@@ -161,6 +161,13 @@ const ISSUE_LINKS_FIELDS = toField([
   }
 ]);
 
+const ISSUE_FOLDER_FIELDS = toField([
+  'id',
+  'name',
+  'query',
+  {color: ['id']}
+]);
+
 export default {
   issuesOnList: ISSUE_SHORT_FIELDS,
   singleIssue: toField([
@@ -203,5 +210,6 @@ export default {
     {values: BUNDLE_VALUE},
     {aggregatedUsers: ISSUE_USER_FIELDS}
   ]),
-  issueComment: ISSUE_COMMENTS_FIELDS
+  issueComment: ISSUE_COMMENTS_FIELDS,
+  issueFolder: ISSUE_FOLDER_FIELDS
 };

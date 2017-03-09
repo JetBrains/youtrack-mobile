@@ -58,3 +58,9 @@ declare type TransformedSuggestion = {
   completionStart: number,
   completionEnd: number
 }
+
+declare type SavedQuery = {
+  id: string,
+  name: string,
+  query: string
+}

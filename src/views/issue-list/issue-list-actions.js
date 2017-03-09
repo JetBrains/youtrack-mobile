@@ -31,8 +31,9 @@ export function readStoredIssuesQuery() {
 
 export function suggestIssuesQuery(query: string, caret: number) {
   return async (dispatch: (any) => any, getState: () => IssuesListState, getApi: ApiGetter) => {
+    const api: Api = getApi();
     try {
-      const suggestions = await getApi().getQueryAssistSuggestions(query, caret);
+      const suggestions = query ? await api.getQueryAssistSuggestions(query, caret) : await api.getSavedQueries();
       dispatch({type: types.SUGGEST_QUERY, suggestions});
     } catch (e) {
       notifyError('Failed to load suggestions', e);
