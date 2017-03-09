@@ -1,15 +1,16 @@
 /* @flow */
-import {View, ScrollView, Text, TouchableOpacity, TextInput, ActivityIndicator} from 'react-native';
+import {View, ScrollView, Text, TouchableOpacity, TextInput, ActivityIndicator, Platform} from 'react-native';
 import React, {Component} from 'react';
 import CalendarPicker from 'react-native-calendar-picker/CalendarPicker/CalendarPicker';
 import CustomField from '../custom-field/custom-field';
 import Select from '../select/select';
 import Header from '../header/header';
-import {COLOR_PINK, COLOR_PLACEHOLDER, FOOTER_HEIGHT} from '../../components/variables/variables';
+import {COLOR_PINK, COLOR_PLACEHOLDER, COLOR_BLACK} from '../../components/variables/variables';
 import Api from '../api/api';
 import IssuePermissions from '../issue-permissions/issue-permissions';
 import styles from './custom-fields-panel.styles';
 import Modal from 'react-native-root-modal';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 import type {IssueFull} from '../../flow/Issue';
 import type {IssueProject} from '../../flow/CustomFields';
 
@@ -232,7 +233,7 @@ export default class CustomFieldsPanel extends Component {
 
     return <Select
       {...this.state.select}
-      style={{bottom: FOOTER_HEIGHT}}
+      style={{flexShrink: 1}}
       onCancel={() => this.closeEditor()}
       getTitle={(item) => item.fullName || item.name || item.login}
     />;
@@ -244,7 +245,7 @@ export default class CustomFieldsPanel extends Component {
     }
 
     return (
-      <Modal visible style={styles.modal}>
+      <View style={styles.editorViewContainer}>
         <Header
           leftButton={<Text>Cancel</Text>}
           rightButton={<Text></Text>}
@@ -273,7 +274,7 @@ export default class CustomFieldsPanel extends Component {
             selectedDayColor={COLOR_PINK}
             selectedDayTextColor="#FFF"/>
         </View>
-      </Modal>
+      </View>
     );
   }
 
@@ -283,7 +284,7 @@ export default class CustomFieldsPanel extends Component {
     }
 
     return (
-      <Modal visible style={styles.modal}>
+      <View style={styles.editorViewContainer}>
         <Header
           leftButton={<Text>Cancel</Text>}
           onBack={() => {
@@ -310,7 +311,7 @@ export default class CustomFieldsPanel extends Component {
             onSubmitEditing={() => this.state.simpleValue.onApply(this.state.simpleValue.value)}
             value={this.state.simpleValue.value}/>
         </View>
-      </Modal>
+      </View>
     );
   }
 
@@ -318,35 +319,46 @@ export default class CustomFieldsPanel extends Component {
     const {issue, issuePermissions, canEditProject} = this.props;
     const {savingField, editingField, isEditingProject, isSavingProject} = this.state;
 
+    const isEditorShown = this.state.select.show || this.state.datePicker.show || this.state.simpleValue.show;
+
     return (
-      <View>
-        {this._renderSelect()}
+      <View style={styles.placeholder}>
+        <Modal visible style={[styles.modal, isEditorShown ? {top: 0} : null]}>
+          {this._renderSelect()}
 
-        {this._renderDatePicker()}
+          {this._renderDatePicker()}
 
-        {this._renderSimpleValueInput()}
+          {this._renderSimpleValueInput()}
 
-        <ScrollView horizontal={true} style={styles.customFieldsPanel}>
-          <View key="Project">
-            <CustomField disabled={!canEditProject}
-                         onPress={() => this.onSelectProject()}
-                         active={isEditingProject}
-                         field={{projectCustomField: {field: {name: 'Project'}}, value: {name: issue.project.shortName}}}/>
-            {isSavingProject && <ActivityIndicator style={styles.savingFieldIndicator}/>}
+          <View>
+            <ScrollView
+              horizontal={true}
+              style={styles.customFieldsPanel}
+              keyboardShouldPersistTaps="handled"
+            >
+              <View key="Project">
+                <CustomField disabled={!canEditProject}
+                            onPress={() => this.onSelectProject()}
+                            active={isEditingProject}
+                            field={{projectCustomField: {field: {name: 'Project'}}, value: {name: issue.project.shortName}}}/>
+                {isSavingProject && <ActivityIndicator style={styles.savingFieldIndicator}/>}
+              </View>
+
+              {issue.fields.map((field) => {
+                return <View key={field.id}>
+                  <CustomField
+                    field={field}
+                    onPress={() => this.onEditField(field)}
+                    active={editingField === field}
+                    disabled={!issuePermissions.canUpdateField(issue, field)}/>
+
+                  {savingField && savingField.id === field.id && <ActivityIndicator style={styles.savingFieldIndicator}/>}
+                </View>;
+              })}
+            </ScrollView>
+            {Platform.OS == 'ios' && <KeyboardSpacer style={{backgroundColor: COLOR_BLACK}}/>}
           </View>
-
-          {issue.fields.map((field) => {
-            return <View key={field.id}>
-              <CustomField
-                field={field}
-                onPress={() => this.onEditField(field)}
-                active={editingField === field}
-                disabled={!issuePermissions.canUpdateField(issue, field)}/>
-
-              {savingField && savingField.id === field.id && <ActivityIndicator style={styles.savingFieldIndicator}/>}
-            </View>;
-          })}
-        </ScrollView>
+        </Modal>
       </View>
     );
   }

@@ -5,9 +5,8 @@ import styles from './select.styles';
 import ColorField from '../color-field/color-field';
 import {notifyError} from '../notification/notification';
 import {checkWhite} from '../icon/icon';
-import {UNIT, COLOR_PLACEHOLDER} from '../variables/variables';
+import {COLOR_PLACEHOLDER, UNIT} from '../variables/variables';
 import getTopPadding, {onHeightChange} from '../header/header__top-padding';
-import Modal from 'react-native-root-modal';
 
 const MAX_VISIBLE_ITEMS = 100;
 
@@ -53,8 +52,7 @@ export default class Select extends React.Component {
 
   componentDidMount() {
     onHeightChange(() => this.forceUpdate());
-
-    const selectedItems = this.props.selectedItems ? this.props.selectedItems : [];
+     const selectedItems = this.props.selectedItems ? this.props.selectedItems : [];
     this.setState({selectedItems});
     this._loadItems(this.state.query);
   }
@@ -150,10 +148,7 @@ export default class Select extends React.Component {
     const {multi, style, placeholder, onCancel} = this.props;
 
     return (
-      <Modal
-        visible
-        style={[styles.modal, style, {paddingTop: getTopPadding() - UNIT * 2}]}
-      >
+      <View style={[styles.container, style, {paddingTop: getTopPadding() - UNIT * 2}]}>
         <View style={styles.inputWrapper}>
           <TextInput
             autoFocus
@@ -175,7 +170,7 @@ export default class Select extends React.Component {
             </TouchableOpacity>
         </View>
         <ScrollView keyboardShouldPersistTaps="handled"
-                    keyboardDismissMode="on-drag">
+                    keyboardDismissMode="interactive">
           {this._renderEmptyValueItem()}
           {this.state.filteredItems.map(item => this._renderRow(item))}
 
@@ -184,7 +179,7 @@ export default class Select extends React.Component {
             <Text style={styles.loadingMessage}>Loading values...</Text>
           </View>}
         </ScrollView>
-      </Modal>
+      </View>
     );
   }
 }

@@ -4,29 +4,31 @@ import {UNIT, FOOTER_HEIGHT, COLOR_PINK, COLOR_SELECTED_DARK, COLOR_TRANSPARENT_
 const SAVING_ALPHA = '70';
 
 export default StyleSheet.create({
+  placeholder: {
+    height: FOOTER_HEIGHT,
+    backgroundColor: COLOR_BLACK
+  },
   customFieldsPanel: {
     paddingLeft: UNIT,
     flexDirection: 'row',
     backgroundColor: COLOR_BLACK,
     height: FOOTER_HEIGHT,
     borderTopWidth: 1,
-    borderColor: COLOR_DARK_BORDER
+    borderColor: COLOR_DARK_BORDER,
+    flexShrink: 0
   },
 
   modal: {
     flex: 1,
-    top: 0,
+    justifyContent: 'space-between',
     left: 0,
     right: 0,
-    bottom: FOOTER_HEIGHT,
+    bottom: 0,
     backgroundColor: COLOR_TRANSPARENT_BLACK
   },
 
   editorViewContainer: {
-    backgroundColor: COLOR_TRANSPARENT_BLACK,
-    position: 'absolute',
-    left: 0,
-    right: 0
+    flex: 1
   },
   calendar: {
     backgroundColor: '#FFFFFFF0',

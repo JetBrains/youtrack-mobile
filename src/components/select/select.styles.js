@@ -11,6 +11,9 @@ export default StyleSheet.create({
 
     backgroundColor: COLOR_TRANSPARENT_BLACK
   },
+  container: {
+
+  },
   inputWrapper: {
     flexDirection: 'row',
     backgroundColor: COLOR_TRANSPARENT_BLACK,
