@@ -1,16 +1,15 @@
 /* @flow */
 import {View, ScrollView, Text, TouchableOpacity, TextInput, ActivityIndicator} from 'react-native';
 import React, {Component} from 'react';
-import PubSub from 'pubsub-js';
 import CalendarPicker from 'react-native-calendar-picker/CalendarPicker/CalendarPicker';
 import CustomField from '../custom-field/custom-field';
 import Select from '../select/select';
 import Header from '../header/header';
 import {COLOR_PINK, COLOR_PLACEHOLDER, FOOTER_HEIGHT} from '../../components/variables/variables';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
 import Api from '../api/api';
 import IssuePermissions from '../issue-permissions/issue-permissions';
 import styles from './custom-fields-panel.styles';
+import Modal from 'react-native-root-modal';
 import type {IssueFull} from '../../flow/Issue';
 import type {IssueProject} from '../../flow/CustomFields';
 
@@ -24,8 +23,6 @@ type Props = {
 };
 
 type State = {
-  topCoord: number,
-  height: number,
   editingField: ?CustomField,
   savingField: ?CustomField,
   isEditingProject: boolean,
@@ -86,7 +83,6 @@ const initialEditorsState = {
 export default class CustomFieldsPanel extends Component {
   props: Props;
   state: State;
-  pubSubToken: string;
 
   constructor() {
     super();
@@ -100,24 +96,6 @@ export default class CustomFieldsPanel extends Component {
       isSavingProject: false,
       ...initialEditorsState
     };
-
-    this.pubSubToken = PubSub.subscribe('YTM_ORIENTATION_CHANGE',  () => this.measureSelect());
-  }
-
-  measureSelect() {
-    setTimeout(() => {
-      this.refs.customFieldsPanelMarker.measure((ox, oy, width, height, px, panelPositionY) => {
-        this.setState({topCoord: panelPositionY, height: height});
-      });
-    });
-  }
-
-  componentDidMount() {
-    this.measureSelect();
-  }
-
-  componentWillUnmount() {
-    PubSub.unsubscribe(this.pubSubToken);
   }
 
   saveUpdatedField(field: CustomField, value: null|number|Object) {
@@ -266,10 +244,7 @@ export default class CustomFieldsPanel extends Component {
     }
 
     return (
-      <View style={[styles.editorViewContainer, {
-          top: -this.state.topCoord,
-          bottom: this.state.height
-      }]}>
+      <Modal visible style={styles.modal}>
         <Header
           leftButton={<Text>Cancel</Text>}
           rightButton={<Text></Text>}
@@ -298,7 +273,7 @@ export default class CustomFieldsPanel extends Component {
             selectedDayColor={COLOR_PINK}
             selectedDayTextColor="#FFF"/>
         </View>
-      </View>
+      </Modal>
     );
   }
 
@@ -308,10 +283,7 @@ export default class CustomFieldsPanel extends Component {
     }
 
     return (
-      <View style={[styles.editorViewContainer, {
-          top: -this.state.topCoord,
-          bottom: this.state.height
-      }]}>
+      <Modal visible style={styles.modal}>
         <Header
           leftButton={<Text>Cancel</Text>}
           onBack={() => {
@@ -338,7 +310,7 @@ export default class CustomFieldsPanel extends Component {
             onSubmitEditing={() => this.state.simpleValue.onApply(this.state.simpleValue.value)}
             value={this.state.simpleValue.value}/>
         </View>
-      </View>
+      </Modal>
     );
   }
 
@@ -347,10 +319,7 @@ export default class CustomFieldsPanel extends Component {
     const {savingField, editingField, isEditingProject, isSavingProject} = this.state;
 
     return (
-      <View ref="panel">
-        <View style={{height: 0, width: 0, opacity: 0}} ref="customFieldsPanelMarker">
-          <KeyboardSpacer onToggle={() => this.measureSelect()}/>
-        </View>
+      <View>
         {this._renderSelect()}
 
         {this._renderDatePicker()}

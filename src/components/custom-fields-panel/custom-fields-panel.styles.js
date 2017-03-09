@@ -12,6 +12,16 @@ export default StyleSheet.create({
     borderTopWidth: 1,
     borderColor: COLOR_DARK_BORDER
   },
+
+  modal: {
+    flex: 1,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: FOOTER_HEIGHT,
+    backgroundColor: COLOR_TRANSPARENT_BLACK
+  },
+
   editorViewContainer: {
     backgroundColor: COLOR_TRANSPARENT_BLACK,
     position: 'absolute',
