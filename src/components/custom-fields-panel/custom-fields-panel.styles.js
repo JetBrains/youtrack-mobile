@@ -2,6 +2,7 @@ import {StyleSheet} from 'react-native';
 import {UNIT, FOOTER_HEIGHT, COLOR_PINK, COLOR_SELECTED_DARK, COLOR_TRANSPARENT_BLACK, COLOR_FONT_ON_BLACK, COLOR_BLACK, COLOR_DARK_BORDER} from '../../components/variables/variables';
 
 const SAVING_ALPHA = '70';
+const DONE_BUTTON_HEIGHT = 24;
 
 export default StyleSheet.create({
   placeholder: {
@@ -56,5 +57,15 @@ export default StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0
+  },
+  doneButton: {
+    backgroundColor: COLOR_PINK,
+    padding: UNIT
+  },
+  doneButtonText: {
+    height: DONE_BUTTON_HEIGHT,
+    fontSize: 20,
+    color: COLOR_FONT_ON_BLACK,
+    textAlign: 'center'
   }
 });

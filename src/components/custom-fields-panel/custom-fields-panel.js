@@ -28,11 +28,13 @@ type State = {
   savingField: ?CustomField,
   isEditingProject: boolean,
   isSavingProject: boolean,
+  keyboardOpen: boolean,
 
   select: {
     show: boolean,
     dataSource: (query: string) => Promise<Array<Object>>,
     onSelect: (item: any) => any,
+    onChangeSelection?: (selectedItems: Array<Object>) => any,
     multi: boolean,
     emptyValue?: ?string,
     selectedItems: Array<Object>,
@@ -60,6 +62,7 @@ const initialEditorsState = {
   select: {
     show: false,
     dataSource: () => Promise.resolve([]),
+    onChangeSelection: items => {},
     onSelect: () => {},
     multi: false,
     selectedItems: []
@@ -93,13 +96,14 @@ export default class CustomFieldsPanel extends Component {
       height: 0,
       editingField: null,
       savingField: null,
+      keyboardOpen: false,
       isEditingProject: false,
       isSavingProject: false,
       ...initialEditorsState
     };
   }
 
-  saveUpdatedField(field: CustomField, value: null|number|Object) {
+  saveUpdatedField(field: CustomField, value: null|number|Object|Array<Object>) {
     this.closeEditor();
     this.setState({savingField: field});
 
@@ -144,6 +148,10 @@ export default class CustomFieldsPanel extends Component {
         ...initialEditorsState
       }, resolve);
     });
+  }
+
+  onApplyCurrentMultiSelection = () => {
+    this.saveUpdatedField(this.state.editingField, this.state.select.selectedItems);
   }
 
   editDateField(field: CustomField) {
@@ -200,6 +208,7 @@ export default class CustomFieldsPanel extends Component {
           }
           return this.props.api.getCustomFieldValues(field.projectCustomField.bundle.id, field.projectCustomField.field.fieldType.valueType);
         },
+        onChangeSelection: selectedItems => this.setState({select: {...this.state.select, selectedItems}}),
         onSelect: (value) => this.saveUpdatedField(field, value)
       }
     });
@@ -224,6 +233,10 @@ export default class CustomFieldsPanel extends Component {
 
         return this.editCustomField(field);
       });
+  }
+
+  handleKeyboardToggle = (keyboardOpen: boolean) => {
+    this.setState({keyboardOpen});
   }
 
   _renderSelect() {
@@ -317,7 +330,7 @@ export default class CustomFieldsPanel extends Component {
 
   render() {
     const {issue, issuePermissions, canEditProject} = this.props;
-    const {savingField, editingField, isEditingProject, isSavingProject} = this.state;
+    const {savingField, editingField, isEditingProject, isSavingProject, keyboardOpen} = this.state;
 
     const isEditorShown = this.state.select.show || this.state.datePicker.show || this.state.simpleValue.show;
 
@@ -356,7 +369,19 @@ export default class CustomFieldsPanel extends Component {
                 </View>;
               })}
             </ScrollView>
+
+            {this.state.select.show && this.state.select.multi && !keyboardOpen &&
+            <TouchableOpacity
+              style={styles.doneButton}
+              onPress={this.onApplyCurrentMultiSelection}
+            >
+              <Text style={styles.doneButtonText}>Done</Text>
+            </TouchableOpacity>}
+
             {Platform.OS == 'ios' && <KeyboardSpacer style={{backgroundColor: COLOR_BLACK}}/>}
+
+            <KeyboardSpacer onToggle={this.handleKeyboardToggle} style={{height: 0}}/>
+
           </View>
         </Modal>
       </View>

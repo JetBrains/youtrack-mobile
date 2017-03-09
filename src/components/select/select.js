@@ -13,6 +13,7 @@ const MAX_VISIBLE_ITEMS = 100;
 export type Props = {
   dataSource: (query: string) => Promise<Array<Object>>,
   onSelect: (item: ?Object | Array<Object>) => any,
+  onChangeSelection: (selectedItems: Array<Object>) => any,
   onCancel: () => any,
   getTitle: (item: Object) => string,
   getValue?: (item: Object) => string,
@@ -36,7 +37,8 @@ export default class Select extends React.Component {
   state: State;
 
   static defaultProps = {
-    placeholder: 'Search item'
+    placeholder: 'Search item',
+    onChangeSelection: (items) => null
   };
 
   constructor() {
@@ -114,11 +116,12 @@ export default class Select extends React.Component {
       return this.props.onSelect(item);
     }
 
-    if (this._isSelected(item)) {
-      this.setState({selectedItems: this.state.selectedItems.filter(it => it.id !== item.id)});
-    } else {
-      this.setState({selectedItems: this.state.selectedItems.concat(item)});
-    }
+    const selectedItems = this._isSelected(item)
+      ? this.state.selectedItems.filter(it => it.id !== item.id)
+      : this.state.selectedItems.concat(item);
+
+    this.setState({selectedItems});
+    this.props.onChangeSelection(selectedItems);
   }
 
   _onClearValue() {
