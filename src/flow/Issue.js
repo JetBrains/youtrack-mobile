@@ -46,3 +46,15 @@ declare type ServersideSuggestion = {
   cs: number,
   ce: number
 };
+
+declare type TransformedSuggestion = {
+  prefix: string,
+  option: string,
+  suffix: string,
+  description: string,
+  matchingStart: number,
+  matchingEnd: number,
+  caret: number,
+  completionStart: number,
+  completionEnd: number
+}

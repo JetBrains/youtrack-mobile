@@ -18,7 +18,7 @@ import styles from './issue-list.styles';
 import Header from '../../components/header/header';
 import QueryAssist from '../../components/query-assist/query-assist';
 import {COLOR_PINK} from '../../components/variables/variables';
-import {notifyError, extractErrorMessage} from '../../components/notification/notification';
+import {extractErrorMessage} from '../../components/notification/notification';
 import usage from '../../components/usage/usage';
 
 import ApiHelper from '../../components/api/api__helper';
@@ -31,7 +31,7 @@ import {openMenu} from '../../actions';
 import type Auth from '../../components/auth/auth';
 import type Api from '../../components/api/api';
 import type {IssuesListState} from './issue-list-reducers';
-import type {IssueOnList, ServersideSuggestion} from '../../flow/Issue';
+import type {IssueOnList} from '../../flow/Issue';
 
 type Props = IssuesListState & {
   openMenu: openMenu,
@@ -91,17 +91,7 @@ export class IssueList extends Component {
     this.props.cacheIssues([]);
   }
 
-  async getSuggestions(query: string, caret: number): Promise<Array<ServersideSuggestion>>{
-    try {
-      const res = await this.props.api.getQueryAssistSuggestions(query, caret);
-      return res.suggest.items;
-    } catch (err) {
-      notifyError('Failed to fetch query assist suggestions', err);
-      return [];
-    }
-  }
-
-  onQueryUpdated(query: string) {
+  onQueryUpdated = (query: string) => {
     this.props.storeIssuesQuery(query);
     this.props.setIssuesQuery(query);
     this.props.loadIssues(query);
@@ -163,7 +153,7 @@ export class IssueList extends Component {
   }
 
   render() {
-    const {query, dataSource, loadMoreIssues} = this.props;
+    const {query, dataSource, loadMoreIssues, suggestIssuesQuery, queryAssistSuggestions} = this.props;
 
     return (
       <Menu onBeforeLogOut={this.logOut}>
@@ -183,9 +173,10 @@ export class IssueList extends Component {
             refreshDescription="Refreshing issues"/>
 
           <QueryAssist
-            initialQuery={query}
-            dataSource={this.getSuggestions.bind(this)}
-            onQueryUpdate={newQuery => this.onQueryUpdated(newQuery)}/>
+            suggestions={queryAssistSuggestions}
+            currentQuery={query}
+            onChange={suggestIssuesQuery}
+            onSetQuery={this.onQueryUpdated}/>
 
           {Platform.OS == 'ios' && <KeyboardSpacer style={styles.keyboardSpacer}/>}
         </View>

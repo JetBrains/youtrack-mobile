@@ -3,16 +3,17 @@ import {View, Text, Image, TouchableOpacity, TextInput} from 'react-native';
 import React from 'react';
 import styles from './query-assist.styles';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
-import type {ServersideSuggestion} from '../../flow/Issue';
+import type {TransformedSuggestion} from '../../flow/Issue';
 import {COLOR_PINK, COLOR_PLACEHOLDER} from '../../components/variables/variables';
 import {clearSearch} from '../../components/icon/icon';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import PubSub from 'pubsub-js';
 
 type Props = {
-  dataSource: (query: string, caret: number) => Promise<Array<ServersideSuggestion>>,
-  onQueryUpdate: (query: string) => any,
-  initialQuery: string
+  suggestions: Array<TransformedSuggestion>,
+  currentQuery: string,
+  onSetQuery: (query: string) => any,
+  onChange: (query: string, caret: number) => any,
 };
 
 type State = {
@@ -48,10 +49,6 @@ export default class QueryAssist extends React.Component {
     PubSub.unsubscribe(this.pubSubToken);
   }
 
-  getSuggestions(...args: Array<any>) {
-    return this.props.dataSource(...args);
-  }
-
   blurInput() {
     this.refs.searchInput.blur();
   }
@@ -79,17 +76,17 @@ export default class QueryAssist extends React.Component {
 
   onSubmitEditing() {
     this.blurInput();
-    this.props.onQueryUpdate(this.state.input || '');
+    this.props.onSetQuery(this.state.input || '');
   }
 
   componentWillReceiveProps(newProps: Props) {
-    if (newProps.initialQuery !== this.props.initialQuery) {
-      this.setState({input: newProps.initialQuery});
+    if (newProps.currentQuery !== this.props.currentQuery) {
+      this.setState({input: newProps.currentQuery});
     }
   }
 
   componentDidMount() {
-    this.setState({input: this.props.initialQuery});
+    this.setState({input: this.props.currentQuery});
     this.measureSuggestionsListSpace();
   }
 
@@ -105,6 +102,18 @@ export default class QueryAssist extends React.Component {
         }
       });
     }, timeout);
+  }
+
+  onSearch(query: string, caret: number) {
+    this.setState({input: query, caret});
+    this.props.onChange(query, caret);
+  }
+
+  onApplySuggestion = (suggestion: TransformedSuggestion) => {
+    const suggestionText = `${suggestion.prefix}${suggestion.option}${suggestion.suffix}`;
+    const oldQuery = this.props.currentQuery || '';
+    const newQuery = oldQuery.substring(0, suggestion.completionStart) + suggestionText + oldQuery.substring(suggestion.completionEnd);
+    return this.props.onSetQuery(newQuery);
   }
 
   _renderInput() {
@@ -138,11 +147,8 @@ export default class QueryAssist extends React.Component {
           onBlur={() => this.stopEditing()}
           onSubmitEditing={() => this.onSubmitEditing()}
           value={input}
-          onChangeText={(text) => this.setState({input: text})}
-          onSelectionChange = {(event) => {
-            const caret = event.nativeEvent.selection.start;
-            this.setState({caret});
-          }}
+          onChangeText={text => this.setState({input: text})}
+          onSelectionChange = {event => this.onSearch(input, event.nativeEvent.selection.start)}
         />
         {(input && showQueryAssist) ? <TouchableOpacity style={styles.clearIconWrapper} onPress={() => this.setState({input: ''})}>
           <Image style={styles.clearIcon} source={clearSearch}/>
@@ -153,11 +159,10 @@ export default class QueryAssist extends React.Component {
   }
 
   _renderSuggestions() {
+    const {suggestions} = this.props;
     return <QueryAssistSuggestionsList style={[styles.searchSuggestions, {top: this.state.suggestionsListTop}]}
-                                       getSuggestions={this.getSuggestions.bind(this)}
-                                       caret={this.state.caret}
-                                       query={this.state.input}
-                                       onApplySuggestion={query => this.setState({input: query})}/>;
+                                       suggestions={suggestions}
+                                       onApplySuggestion={this.onApplySuggestion}/>;
   }
 
   render() {

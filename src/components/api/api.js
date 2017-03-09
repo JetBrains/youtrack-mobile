@@ -8,7 +8,7 @@ import ApiHelper from './api__helper';
 import {handleRelativeUrl} from '../config/config';
 import type {SprintFull, AgileUserProfile, AgileBoardRow, BoardOnList} from '../../flow/Agile';
 import type {AppConfigFilled} from '../../flow/AppConfig';
-import type {IssueOnList, IssueFull} from '../../flow/Issue';
+import type {IssueOnList, IssueFull, TransformedSuggestion} from '../../flow/Issue';
 import type {IssueProject, FieldValue} from '../../flow/CustomFields';
 
 const STATUS_UNAUTHORIZED = 401;
@@ -243,9 +243,11 @@ class Api {
   }
 
   //TODO: this is old API usage, move to new one
-  async getQueryAssistSuggestions(query: string, caret: number) {
+  async getQueryAssistSuggestions(query: string, caret: number): Promise<Array<TransformedSuggestion>> {
     const queryString = qs.stringify({query, caret});
-    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/rest/search/underlineAndSuggest?${queryString}`);
+    const result = await this.makeAuthorizedRequest(`${this.youTrackUrl}/rest/search/underlineAndSuggest?${queryString}`);
+
+    return ApiHelper.convertQueryAssistSuggestions(result.suggest.items);
   }
 
   async getAgileUserProfile(): Promise<AgileUserProfile> {

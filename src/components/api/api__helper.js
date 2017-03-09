@@ -1,7 +1,7 @@
 /* @flow */
 import {handleRelativeUrl} from '../config/config';
 import objectWalk from 'object-walk';
-import type {IssueOnList, AnyIssue} from '../../flow/Issue';
+import type {IssueOnList, AnyIssue, ServersideSuggestion, TransformedSuggestion} from '../../flow/Issue';
 
 const API = {
   makeFieldHash: (issue: IssueOnList): Object => {
@@ -16,6 +16,22 @@ const API = {
   fillIssuesFieldHash: (issues: Array<IssueOnList> = []) => {
     issues.forEach(issue => issue.fieldHash = API.makeFieldHash(issue));
     return issues;
+  },
+
+  convertQueryAssistSuggestions: (suggestions: Array<ServersideSuggestion>): Array<TransformedSuggestion> => {
+    return suggestions.map(suggestion => {
+      return {
+        prefix: suggestion.pre || '',
+        option: suggestion.o || '',
+        suffix: suggestion.suf || '',
+        description: suggestion.hd || suggestion.d || '',
+        matchingStart: suggestion.ms,
+        matchingEnd: suggestion.me,
+        caret: suggestion.cp,
+        completionStart: suggestion.cs,
+        completionEnd: suggestion.ce
+      };
+    });
   },
 
   convertRelativeUrls: (items: Array<Object> = [], urlField: string, backendUrl: string) => {

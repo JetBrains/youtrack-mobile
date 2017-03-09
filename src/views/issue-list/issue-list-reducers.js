@@ -3,7 +3,7 @@ import {createReducer} from 'redux-create-reducer';
 import * as types from './issue-list-action-types';
 import {ListView} from 'react-native';
 import Cache from '../../components/cache/cache';
-import type {IssueOnList} from '../../flow/Issue';
+import type {IssueOnList, TransformedSuggestions} from '../../flow/Issue';
 
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 const ISSUES_CACHE_KEY = 'yt_mobile_issues_cache';
@@ -11,6 +11,7 @@ const ISSUES_CACHE_KEY = 'yt_mobile_issues_cache';
 export type IssuesListState = {
   query: string,
   skip: number,
+  queryAssistSuggestions: Array<TransformedSuggestions>,
 
   isLoadingMore: boolean,
   isListEndReached: boolean,
@@ -25,6 +26,7 @@ export type IssuesListState = {
 
 const initialState: IssuesListState = {
   query: '',
+  queryAssistSuggestions: [],
   skip: 0,
   isLoadingMore: false,
   isListEndReached: false,
@@ -40,6 +42,9 @@ const initialState: IssuesListState = {
 export default createReducer(initialState, {
   [types.SET_ISSUES_QUERY]: (state: IssuesListState, action: Object) => {
     return {...state, query: action.query};
+  },
+  [types.SUGGEST_QUERY]: (state: IssuesListState, action: Object) => {
+    return {...state, queryAssistSuggestions: action.suggestions};
   },
   [types.START_ISSUES_LOADING]: (state: IssuesListState, action: Object) => {
     return {
