@@ -1,6 +1,7 @@
 export const LOAD_ISSUES_QUERY = 'issues.LOAD_ISSUES_QUERY';
 export const SET_ISSUES_QUERY = 'issues.SET_ISSUES_QUERY';
 export const SUGGEST_QUERY = 'issues.SUGGEST_QUERY';
+export const CLEAR_SUGGESTIONS = 'issues.CLEAR_SUGGESTIONS';
 
 export const INITIALIZE_ISSUES_LIST = 'issues.INITIALIZE_ISSUES_LIST';
 export const START_ISSUES_LOADING = 'issues.START_ISSUES_LOADING';

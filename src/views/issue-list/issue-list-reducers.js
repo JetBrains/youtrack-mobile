@@ -46,6 +46,9 @@ export default createReducer(initialState, {
   [types.SUGGEST_QUERY]: (state: IssuesListState, action: Object) => {
     return {...state, queryAssistSuggestions: action.suggestions};
   },
+  [types.CLEAR_SUGGESTIONS]: (state: IssuesListState, action: Object) => {
+    return {...state, queryAssistSuggestions: []};
+  },
   [types.START_ISSUES_LOADING]: (state: IssuesListState, action: Object) => {
     return {
       ...state, loadingError: null, isListEndReached: false, isRefreshing: true, skip: 0

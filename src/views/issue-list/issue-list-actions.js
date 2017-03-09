@@ -42,6 +42,10 @@ export function suggestIssuesQuery(query: string, caret: number) {
   };
 }
 
+export function clearAssistSuggestions() {
+  return {type: types.CLEAR_SUGGESTIONS};
+}
+
 export function listEndReached() {
   return {type: types.LIST_END_REACHED};
 }

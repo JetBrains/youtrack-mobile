@@ -94,6 +94,7 @@ export class IssueList extends Component {
   onQueryUpdated = (query: string) => {
     this.props.storeIssuesQuery(query);
     this.props.setIssuesQuery(query);
+    this.props.clearAssistSuggestions();
     this.props.loadIssues(query);
   }
 

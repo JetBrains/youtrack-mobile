@@ -65,6 +65,7 @@ export default class QueryAssist extends React.Component {
       queryCopy: this.state.input,
       suggestionsListTop: 0
     });
+    this.props.onChange(this.state.input, this.state.caret);
   }
 
   stopEditing() {
