@@ -1,9 +1,8 @@
 /* @flow */
-import {ListView, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, ListView, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import ListViewDataSource from 'react-native/Libraries/CustomComponents/ListView/ListViewDataSource';
 import React from 'react';
 import {UNIT, COLOR_FONT_ON_BLACK} from '../variables/variables';
-import InvertibleScrollView from 'react-native-invertible-scroll-view';
 import type {TransformedSuggestion, SavedQuery} from '../../flow/Issue';
 
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -36,15 +35,22 @@ export default class QueryAssistSuggestionsList extends React.Component {
   }
 
   _renderRow(suggestion: TransformedSuggestion | SavedQuery) {
-    if (suggestion.caret) { // marker that this is TransformedSuggestion
+    if (suggestion.caret) {
+      // marker that this is TransformedSuggestion
       return (
-        <TouchableOpacity style={styles.searchRow} onPress={() => this.props.onApplySuggestion(suggestion)}>
+        <TouchableOpacity
+          style={styles.searchRow}
+          onPress={() => this.props.onApplySuggestion(suggestion)}
+        >
           <Text style={styles.searchText}>{suggestion.option}</Text>
         </TouchableOpacity>
       );
     } else {
       return (
-        <TouchableOpacity style={styles.searchRow} onPress={() => this.props.onApplySavedQuery(suggestion)}>
+        <TouchableOpacity
+          style={styles.searchRow}
+          onPress={() => this.props.onApplySavedQuery(suggestion)}
+        >
           <Text style={styles.searchText}>{suggestion.name}</Text>
         </TouchableOpacity>
       );
@@ -53,18 +59,27 @@ export default class QueryAssistSuggestionsList extends React.Component {
 
   render() {
     return (
-      <ListView
-        style={this.props.style}
-        dataSource={this.state.dataSource}
-        enableEmptySections={true}
-        renderRow={(suggestion) => this._renderRow(suggestion)}
-        renderScrollComponent={props => <InvertibleScrollView {...props} inverted/>}
-        keyboardShouldPersistTaps="handled"/>
+      <View style={[styles.container, this.props.style]}>
+        <ListView
+          style={styles.list}
+          dataSource={this.state.dataSource}
+          enableEmptySections={true}
+          renderRow={suggestion => this._renderRow(suggestion)}
+          keyboardShouldPersistTaps="handled"
+        />
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'flex-end'
+  },
+  list: {
+    overflow: 'visible'
+  },
   searchRow: {
     flex: 1,
     padding: UNIT,

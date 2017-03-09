@@ -3546,13 +3546,6 @@ react-native-image-progress@0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/react-native-image-progress/-/react-native-image-progress-0.6.0.tgz#14614add12beaa247a052e5a52e6a9fee0fb8c67"
 
-react-native-invertible-scroll-view@huston007/react-native-invertible-scroll-view:
-  version "1.0.0"
-  resolved "https://codeload.github.com/huston007/react-native-invertible-scroll-view/tar.gz/663c353fe3953f43afb62d8b9459f9e311c1f3a9"
-  dependencies:
-    react-clone-referenced-element "^1.0.1"
-    react-native-scrollable-mixin "^1.0.1"
-
 react-native-keyboard-spacer@0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/react-native-keyboard-spacer/-/react-native-keyboard-spacer-0.3.0.tgz#09016c11f6b5cfbc3b96c63e6d049e77a3e0908b"
@@ -3577,10 +3570,6 @@ react-native-mock@0.2.8:
     react-addons-update "=15.1.0"
     react-timer-mixin "=0.13.3"
     warning "=2.1.0"
-
-react-native-scrollable-mixin@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-scrollable-mixin/-/react-native-scrollable-mixin-1.0.1.tgz#34a32167b64248594154fd0d6a8b03f22740548e"
 
 react-native-scroller@0.0.6:
   version "0.0.6"
