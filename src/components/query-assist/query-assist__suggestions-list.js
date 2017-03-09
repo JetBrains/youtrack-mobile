@@ -2,10 +2,15 @@
 import {View, ListView, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import ListViewDataSource from 'react-native/Libraries/CustomComponents/ListView/ListViewDataSource';
 import React from 'react';
-import {UNIT, COLOR_FONT_ON_BLACK} from '../variables/variables';
+import {UNIT, COLOR_FONT_ON_BLACK, COLOR_GRAY} from '../variables/variables';
 import type {TransformedSuggestion, SavedQuery} from '../../flow/Issue';
 
-const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+const SAVED_SEARCHES = 'SAVED_SEARCHES';
+
+const ds = new ListView.DataSource({
+  rowHasChanged: (r1, r2) => r1 !== r2,
+  sectionHeaderHasChanged: (s1, s2) => s1 !== s2
+});
 
 type State = {
   dataSource: ListViewDataSource
@@ -22,19 +27,35 @@ export default class QueryAssistSuggestionsList extends React.Component {
   props: Props;
   state: State;
   isUnmounted: boolean;
+  state = {
+    dataSource: ds.cloneWithRows([])
+  };
 
   constructor(props: Props) {
     super(props);
-    this.state = {dataSource: ds.cloneWithRows(props.suggestions || [])};
   }
 
   componentWillReceiveProps(newProps: Props) {
-    if (newProps.suggestions !== this.props.suggestions) {
-      this.setState({dataSource: ds.cloneWithRows(newProps.suggestions)});
+    this._prepareDataSource(newProps.suggestions);
+  }
+
+  _prepareDataSource(suggestions) {
+    const isSavedSearches = suggestions.some(s => s.name);
+
+    if (isSavedSearches) {
+      this.setState({dataSource: ds.cloneWithRowsAndSections(this._prepareSectionedMap(suggestions))});
+    } else {
+      this.setState({dataSource: ds.cloneWithRows(suggestions)});
     }
   }
 
-  _renderRow(suggestion: TransformedSuggestion | SavedQuery) {
+  _prepareSectionedMap = (suggestions: Array<TransformedSuggestion>) => {
+    return {
+      [SAVED_SEARCHES]: suggestions
+    };
+  }
+
+  _renderRow = (suggestion: TransformedSuggestion | SavedQuery) => {
     if (suggestion.caret) {
       // marker that this is TransformedSuggestion
       return (
@@ -57,6 +78,18 @@ export default class QueryAssistSuggestionsList extends React.Component {
     }
   }
 
+  _renderSectionHeader = (sectionData: Array<Object>, category: string) => {
+    if (category === SAVED_SEARCHES) {
+      return (
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionHeaderText}>SAVED SEARCHES</Text>
+        </View>
+      );
+    }
+    return null;
+  };
+
+
   render() {
     return (
       <View style={[styles.container, this.props.style]}>
@@ -64,7 +97,8 @@ export default class QueryAssistSuggestionsList extends React.Component {
           style={styles.list}
           dataSource={this.state.dataSource}
           enableEmptySections={true}
-          renderRow={suggestion => this._renderRow(suggestion)}
+          renderRow={this._renderRow}
+          renderSectionHeader={this._renderSectionHeader}
           keyboardShouldPersistTaps="handled"
         />
       </View>
@@ -78,18 +112,27 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end'
   },
   list: {
-    overflow: 'visible'
+    overflow: 'visible',
+    paddingTop: UNIT * 2,
+    paddingBottom: UNIT*2
   },
   searchRow: {
     flex: 1,
-    padding: UNIT,
-    paddingBottom: UNIT * 2,
-    paddingTop: UNIT * 2
+    padding: UNIT * 2,
+    paddingRight: UNIT
+  },
+  sectionHeader: {
+    padding: UNIT * 2,
+    paddingBottom: UNIT
   },
   searchText: {
     fontSize: 24,
+    fontWeight: '400',
+    color: COLOR_FONT_ON_BLACK
+  },
+  sectionHeaderText: {
     fontWeight: '200',
-    color: COLOR_FONT_ON_BLACK,
-    textAlign: 'center'
+    fontSize: 16,
+    color: COLOR_GRAY
   }
 });
