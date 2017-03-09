@@ -7,6 +7,7 @@ import {notifyError} from '../notification/notification';
 import {checkWhite} from '../icon/icon';
 import {UNIT, COLOR_PLACEHOLDER} from '../variables/variables';
 import getTopPadding, {onHeightChange} from '../header/header__top-padding';
+import Modal from 'react-native-root-modal';
 
 const MAX_VISIBLE_ITEMS = 100;
 
@@ -20,8 +21,7 @@ export type Props = {
   placeholder?: string,
   multi: boolean,
   emptyValue: ?string,
-  height: number,
-  style: any
+  style?: any
 };
 
 type State = {
@@ -147,42 +147,44 @@ export default class Select extends React.Component {
   }
 
   render() {
-    const {style, height, multi, placeholder, onCancel} = this.props;
-    return (
-      <View style={[styles.container, style, {paddingTop: getTopPadding() - UNIT * 2}]}>
-        <View style={{height}}>
-          <View style={styles.inputWrapper}>
-            <TextInput
-              autoFocus
-              placeholder={placeholder}
-              keyboardAppearance="dark"
-              placeholderTextColor={COLOR_PLACEHOLDER}
-              returnKeyType={multi ? 'done' : 'search'}
-              autoCorrect={false}
-              underlineColorAndroid="transparent"
-              onSubmitEditing={(e) => multi ? this._onSave() : this._onSearch(this.state.query)}
-              value={this.state.query}
-              onChangeText={(text) => {
-                this.setState({query: text});
-                this._onSearch(text);
-              }}
-              style={styles.searchInput}/>
-              <TouchableOpacity style={styles.cancelButton} onPress={onCancel}>
-                <Text style={styles.cancelButtonText}>Cancel</Text>
-              </TouchableOpacity>
-          </View>
-          <ScrollView keyboardShouldPersistTaps="handled"
-                      keyboardDismissMode="on-drag">
-            {this._renderEmptyValueItem()}
-            {this.state.filteredItems.map(item => this._renderRow(item))}
+    const {multi, style, placeholder, onCancel} = this.props;
 
-            {!this.state.loaded && <View style={[styles.row, styles.loadingRow]}>
-              <ActivityIndicator/>
-              <Text style={styles.loadingMessage}>Loading values...</Text>
-            </View>}
-          </ScrollView>
+    return (
+      <Modal
+        visible
+        style={[styles.modal, style, {paddingTop: getTopPadding() - UNIT * 2}]}
+      >
+        <View style={styles.inputWrapper}>
+          <TextInput
+            autoFocus
+            placeholder={placeholder}
+            keyboardAppearance="dark"
+            placeholderTextColor={COLOR_PLACEHOLDER}
+            returnKeyType={multi ? 'done' : 'search'}
+            autoCorrect={false}
+            underlineColorAndroid="transparent"
+            onSubmitEditing={(e) => multi ? this._onSave() : this._onSearch(this.state.query)}
+            value={this.state.query}
+            onChangeText={(text) => {
+              this.setState({query: text});
+              this._onSearch(text);
+            }}
+            style={styles.searchInput}/>
+            <TouchableOpacity style={styles.cancelButton} onPress={onCancel}>
+              <Text style={styles.cancelButtonText}>Cancel</Text>
+            </TouchableOpacity>
         </View>
-      </View>
+        <ScrollView keyboardShouldPersistTaps="handled"
+                    keyboardDismissMode="on-drag">
+          {this._renderEmptyValueItem()}
+          {this.state.filteredItems.map(item => this._renderRow(item))}
+
+          {!this.state.loaded && <View style={[styles.row, styles.loadingRow]}>
+            <ActivityIndicator/>
+            <Text style={styles.loadingMessage}>Loading values...</Text>
+          </View>}
+        </ScrollView>
+      </Modal>
     );
   }
 }

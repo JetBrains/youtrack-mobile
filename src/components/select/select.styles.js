@@ -2,13 +2,13 @@ import {StyleSheet} from 'react-native';
 import {UNIT, COLOR_PINK, COLOR_SELECTED_DARK, COLOR_TRANSPARENT_BLACK, COLOR_FONT_ON_BLACK, COLOR_FONT_GRAY} from '../../components/variables/variables';
 
 export default StyleSheet.create({
-  container: {
+  modal: {
     flex: 1,
-    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
+
     backgroundColor: COLOR_TRANSPARENT_BLACK
   },
   inputWrapper: {

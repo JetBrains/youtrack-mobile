@@ -6,7 +6,7 @@ import CalendarPicker from 'react-native-calendar-picker/CalendarPicker/Calendar
 import CustomField from '../custom-field/custom-field';
 import Select from '../select/select';
 import Header from '../header/header';
-import {COLOR_PINK, COLOR_PLACEHOLDER} from '../../components/variables/variables';
+import {COLOR_PINK, COLOR_PLACEHOLDER, FOOTER_HEIGHT} from '../../components/variables/variables';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import Api from '../api/api';
 import IssuePermissions from '../issue-permissions/issue-permissions';
@@ -254,11 +254,7 @@ export default class CustomFieldsPanel extends Component {
 
     return <Select
       {...this.state.select}
-      style={{
-          top: -this.state.topCoord,
-          bottom: this.state.height
-        }}
-      height={this.state.topCoord}
+      style={{bottom: FOOTER_HEIGHT}}
       onCancel={() => this.closeEditor()}
       getTitle={(item) => item.fullName || item.name || item.login}
     />;
