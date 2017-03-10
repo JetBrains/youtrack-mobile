@@ -101,6 +101,7 @@ export default class QueryAssistSuggestionsList extends React.Component {
         <ListView
           style={styles.list}
           dataSource={this.state.dataSource}
+          enableEmptySections
           stickySectionHeadersEnabled={false}
           renderRow={this._renderRow}
           renderSectionHeader={this._renderSectionHeader}
