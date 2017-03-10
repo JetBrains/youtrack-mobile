@@ -59,7 +59,8 @@ export default class QueryAssist extends React.Component {
   }
 
   beginEditing() {
-    const {input} = this.state;
+    let {input} = this.state;
+    input = input || '';
     this.setState({
       showQueryAssist: true,
       displayCancelSearch: true,
