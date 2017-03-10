@@ -119,6 +119,7 @@ export default class CustomFieldsPanel extends Component {
     if (this.state.isEditingProject) {
       return this.closeEditor();
     }
+    const {issuePermissions} = this.props;
 
     this.closeEditor();
     this.setState({
@@ -126,7 +127,10 @@ export default class CustomFieldsPanel extends Component {
       select: {
         show: true,
         getValue: project => project.name + project.shortName,
-        dataSource: this.props.api.getProjects.bind(this.props.api),
+        dataSource: async query => {
+          const projects = await this.props.api.getProjects(query);
+          return projects.filter(project => issuePermissions.canCreateIssueToProject(project));
+        },
         multi: false,
         placeholder: 'Search for the project',
         selectedItems: [this.props.issue.project],

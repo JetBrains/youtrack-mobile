@@ -4,7 +4,7 @@
  */
 import type { Permissions } from '../auth/auth__permissions';
 import type {AnyIssue} from '../../flow/Issue';
-import type {CustomField} from '../../flow/CustomFields';
+import type {CustomField, IssueProject} from '../../flow/CustomFields';
 
 export const CREATE_ISSUE = 'JetBrains.YouTrack.CREATE_ISSUE';
 export const READ_ISSUE = 'JetBrains.YouTrack.READ_ISSUE';
@@ -59,5 +59,9 @@ export default class IssuePermissions {
 
   canAddAttachmentTo(issue: AnyIssue) {
     return this.permissions.has(CAN_ADD_ATTACHMENT, issue.project.ringId);
+  }
+
+  canCreateIssueToProject(project: IssueProject) {
+    return this.permissions.has(CAN_CREATE_ISSUE, project.ringId);
   }
 }

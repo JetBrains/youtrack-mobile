@@ -191,6 +191,7 @@ export default {
   projectOnList: toField([
     'id',
     'name',
+    'ringId',
     'shortName',
     'description'
   ]),
