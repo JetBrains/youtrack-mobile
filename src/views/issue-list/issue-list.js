@@ -61,7 +61,7 @@ export class IssueList extends Component {
         Router.SingleIssue({
           issueId: issueId,
           api: this.props.api,
-          onUpdate: () => this.props.loadIssues(null)
+          onUpdate: issue => this.props.updateIssueInList(issue)
         });
       },
       (issuesQuery) => {
@@ -83,7 +83,7 @@ export class IssueList extends Component {
       issuePlaceholder: issue,
       issueId: issue.id,
       api: this.props.api,
-      onUpdate: () => this.props.refreshIssues()
+      onUpdate: issue => this.props.updateIssueInList(issue)
     });
   }
 

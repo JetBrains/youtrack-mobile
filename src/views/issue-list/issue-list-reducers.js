@@ -3,7 +3,7 @@ import {createReducer} from 'redux-create-reducer';
 import * as types from './issue-list-action-types';
 import {ListView} from 'react-native';
 import Cache from '../../components/cache/cache';
-import type {IssueOnList, TransformedSuggestions} from '../../flow/Issue';
+import type {IssueOnList, IssueFull, TransformedSuggestions} from '../../flow/Issue';
 
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 const ISSUES_CACHE_KEY = 'yt_mobile_issues_cache';
@@ -83,5 +83,27 @@ export default createReducer(initialState, {
   },
   [types.LIST_END_REACHED]: (state: IssuesListState, action: {error: Object}) => {
     return {...state, isListEndReached: true};
+  },
+  [types.UPDATE_ISSUE_ON_LIST]: (state: IssuesListState, action: {issue: IssueFull}) => {
+    const sourceIssue = action.issue;
+    function updateIssue(issue: IssueOnList): IssueOnList {
+      return {
+        ...issue,
+        summary: sourceIssue.summary,
+        resolved: sourceIssue.resolved,
+        project: sourceIssue.project,
+        numberInProject: sourceIssue.numberInProject,
+        updated: sourceIssue.updated,
+        fields: sourceIssue.fields,
+        fieldHash: sourceIssue.fieldHash
+      };
+    }
+
+    const issues = state.issues.map(issue => issue.id === sourceIssue.id ? updateIssue(issue) : issue);
+    return {
+      ...state,
+      issues,
+      dataSource: state.dataSource.cloneWithRows(issues)
+    };
   }
 });
