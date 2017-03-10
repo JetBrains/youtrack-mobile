@@ -87,19 +87,14 @@ export default createReducer(initialState, {
   [types.UPDATE_ISSUE_ON_LIST]: (state: IssuesListState, action: {issue: IssueFull}) => {
     const sourceIssue = action.issue;
     function updateIssue(issue: IssueOnList): IssueOnList {
-      return {
-        ...issue,
-        summary: sourceIssue.summary,
-        resolved: sourceIssue.resolved,
-        project: sourceIssue.project,
-        numberInProject: sourceIssue.numberInProject,
-        updated: sourceIssue.updated,
-        fields: sourceIssue.fields,
-        fieldHash: sourceIssue.fieldHash
-      };
+      return Object.keys(issue).
+        reduce((updated, key) => {
+          return {...updated, [key]: sourceIssue[key]};
+        }, {});
     }
 
     const issues = state.issues.map(issue => issue.id === sourceIssue.id ? updateIssue(issue) : issue);
+
     return {
       ...state,
       issues,
