@@ -2,7 +2,7 @@
 import * as types from './board-action-types';
 import {createReducer} from 'redux-create-reducer';
 import type {SprintFull, AgileBoardRow, Board} from '../../flow/Agile';
-import type {IssueFull} from '../../flow/Issue';
+import type {IssueOnList, IssueFull} from '../../flow/Issue';
 
 type BoardState = {
   isLoading: boolean,
@@ -57,6 +57,38 @@ function addCardToBoard(
     ...board,
     orphanRow: addCardToRowIfNeeded(board.orphanRow),
     trimmedSwimlanes: board.trimmedSwimlanes.map(addCardToRowIfNeeded)
+  };
+}
+
+function fillIssueFromAnotherIssue(issue: IssueOnList, sourceIssue: IssueFull) {
+  return Object.keys(issue).
+    reduce((updated, key) => {
+      return {...updated, [key]: sourceIssue[key]};
+    }, {});
+}
+
+function updateCardOnBoard(board: Board, sourceIssue: IssueFull): Board {
+  function updateIssueInRowIfNeeded(row: AgileBoardRow) {
+    return {
+      ...row,
+      issue: (row.issue && row.issue.id === sourceIssue.id) ? fillIssueFromAnotherIssue(row.issue, sourceIssue) : row.issue,
+      cells: row.cells.
+        map(cell => {
+          if (cell.issues.some(issue => issue.id === sourceIssue.id)) {
+            return {
+              ...cell,
+              issues: cell.issues.map(issue => issue.id === sourceIssue.id ? fillIssueFromAnotherIssue(issue, sourceIssue) : issue)
+            };
+          }
+          return cell;
+        })
+    };
+  }
+
+  return {
+    ...board,
+    orphanRow: updateIssueInRowIfNeeded(board.orphanRow),
+    trimmedSwimlanes: board.trimmedSwimlanes.map(updateIssueInRowIfNeeded)
   };
 }
 
@@ -170,6 +202,19 @@ const board = createReducer(initialState, {
       sprint: {
         ...sprint,
         board: addCardToBoard(sprint.board, action.cellId, action.issue)
+      }
+    };
+  },
+  [types.UPDATE_ISSUE_ON_BOARD](state: BoardState, action: {cellId: string, issue: IssueFull}): BoardState {
+    const {sprint} = state;
+    if (!sprint) {
+      return state;
+    }
+    return {
+      ...state,
+      sprint: {
+        ...sprint,
+        board: updateCardOnBoard(sprint.board, action.issue)
       }
     };
   }

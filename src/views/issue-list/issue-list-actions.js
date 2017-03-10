@@ -6,7 +6,7 @@ import {notifyError, resolveError} from '../../components/notification/notificat
 import Cache from '../../components/cache/cache';
 import type Api from '../../components/api/api';
 import type IssuesListState from './issue-list-reducers';
-import type {IssueOnList, FullIssue} from '../../flow/Issue';
+import type {IssueOnList, IssueFull} from '../../flow/Issue';
 
 const PAGE_SIZE = 10;
 const QUERY_STORAGE_KEY = 'YT_QUERY_STORAGE';
@@ -188,6 +188,6 @@ export function loadMoreIssues() {
   };
 }
 
-export function updateIssueInList(issue: FullIssue) {
+export function updateIssueInList(issue: IssueFull) {
   return {type: types.UPDATE_ISSUE_ON_LIST, issue};
 }

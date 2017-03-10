@@ -215,6 +215,10 @@ export function addCardToCell(cellId: string, issue: IssueFull) {
   return {type: types.ADD_CARD_TO_CELL, cellId, issue};
 }
 
+export function updateIssueOnBoard(issue: IssueFull) {
+  return {type: types.UPDATE_ISSUE_ON_BOARD, issue};
+}
+
 export function createCardForCell(columnId: string, cellId: string) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const {sprint} = getState().agile;

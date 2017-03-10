@@ -30,6 +30,10 @@ export default class SingeIssueView extends React.Component {
     actionSheet: PropTypes.func
   };
 
+  static defaultProps = {
+    onUpdate: () => {}
+  };
+
   constructor(props) {
     super(props);
     this.issuePermissions = new IssuePermissions(this.props.api.auth.permissions, this.props.api.auth.currentUser);
