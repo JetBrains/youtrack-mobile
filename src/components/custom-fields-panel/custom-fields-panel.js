@@ -129,7 +129,7 @@ export default class CustomFieldsPanel extends Component {
         dataSource: this.props.api.getProjects.bind(this.props.api),
         multi: false,
         placeholder: 'Search for the project',
-        selectedItems: [],
+        selectedItems: [this.props.issue.project],
         onSelect: (project: IssueProject) => {
           this.closeEditor();
           this.setState({isSavingProject: true});
