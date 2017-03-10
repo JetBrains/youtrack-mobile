@@ -11,12 +11,12 @@ export default class Cache {
     this.key = key;
   }
 
-  read() {
+  read(): Promise<?any> {
     return AsyncStorage.getItem(this.key)
       .then((data: string) => JSON.parse(data));
   }
 
-  store(data: Object) {
+  store(data: any): Promise<any> {
     return AsyncStorage.setItem(this.key, JSON.stringify(data))
       .then(() => data);
   }

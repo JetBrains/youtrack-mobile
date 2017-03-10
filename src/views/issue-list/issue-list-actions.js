@@ -3,12 +3,16 @@ import * as types from './issue-list-action-types';
 import {AsyncStorage} from 'react-native';
 import ApiHelper from '../../components/api/api__helper';
 import {notifyError, resolveError} from '../../components/notification/notification';
+import Cache from '../../components/cache/cache';
 import type Api from '../../components/api/api';
 import type IssuesListState from './issue-list-reducers';
 import type {IssueOnList} from '../../flow/Issue';
 
 const PAGE_SIZE = 10;
 const QUERY_STORAGE_KEY = 'YT_QUERY_STORAGE';
+const LAST_QUERIES_STORAGE_KEY = 'YT_LAST_QUERIES_STORAGE_KEY';
+const MAX_STORED_QUERIES = 5;
+const lastQueriesCache = new Cache(LAST_QUERIES_STORAGE_KEY);
 
 type ApiGetter = () => Api;
 
@@ -33,7 +37,15 @@ export function suggestIssuesQuery(query: string, caret: number) {
   return async (dispatch: (any) => any, getState: () => IssuesListState, getApi: ApiGetter) => {
     const api: Api = getApi();
     try {
-      const suggestions = query ? await api.getQueryAssistSuggestions(query, caret) : await api.getSavedQueries();
+      let suggestions;
+      if (query) {
+        suggestions = await api.getQueryAssistSuggestions(query, caret);
+      } else {
+        suggestions = await api.getSavedQueries();
+        const lastQueries = (await lastQueriesCache.read() || []).map(query => ({name: query, query}));
+        suggestions = [...suggestions, ...lastQueries];
+      }
+
       dispatch({type: types.SUGGEST_QUERY, suggestions});
     } catch (e) {
       notifyError('Failed to load suggestions', e);
@@ -50,9 +62,19 @@ export function listEndReached() {
   return {type: types.LIST_END_REACHED};
 }
 
+async function storeLastQuery(query: string) {
+  if (!query) {
+    return;
+  }
+  const storedQueries = await lastQueriesCache.read() || [];
+  const updatedQueries = [query, ...storedQueries].slice(0, MAX_STORED_QUERIES);
+  lastQueriesCache.store(updatedQueries);
+}
+
 export function storeIssuesQuery(query: string) {
   return () => {
     AsyncStorage.setItem(QUERY_STORAGE_KEY, query);
+    storeLastQuery(query);
   };
 }
 

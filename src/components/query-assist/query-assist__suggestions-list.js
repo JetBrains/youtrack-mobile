@@ -6,6 +6,8 @@ import {UNIT, COLOR_FONT_ON_BLACK, COLOR_GRAY} from '../variables/variables';
 import type {TransformedSuggestion, SavedQuery} from '../../flow/Issue';
 
 const SAVED_SEARCHES = 'SAVED_SEARCHES';
+const LAST_SEARCHES = 'LAST_SEARCHES';
+const SECTION_SPACING = 24;
 
 const ds = new ListView.DataSource({
   rowHasChanged: (r1, r2) => r1 !== r2,
@@ -51,7 +53,8 @@ export default class QueryAssistSuggestionsList extends React.Component {
 
   _prepareSectionedMap = (suggestions: Array<TransformedSuggestion>) => {
     return {
-      [SAVED_SEARCHES]: suggestions
+      [SAVED_SEARCHES]: suggestions.filter(s => s.id),
+      [LAST_SEARCHES]: suggestions.filter(s => !s.id)
     };
   }
 
@@ -79,10 +82,12 @@ export default class QueryAssistSuggestionsList extends React.Component {
   }
 
   _renderSectionHeader = (sectionData: Array<Object>, category: string) => {
-    if (category === SAVED_SEARCHES) {
+    const savedSearches = category === SAVED_SEARCHES;
+
+    if (savedSearches || category === LAST_SEARCHES) {
       return (
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionHeaderText}>SAVED SEARCHES</Text>
+        <View style={[styles.sectionHeader, !savedSearches && {paddingTop: SECTION_SPACING}]}>
+          <Text style={styles.sectionHeaderText}>{savedSearches ? 'SAVED SEARCHES' : 'RECENT SEARCHES'}</Text>
         </View>
       );
     }
@@ -96,7 +101,7 @@ export default class QueryAssistSuggestionsList extends React.Component {
         <ListView
           style={styles.list}
           dataSource={this.state.dataSource}
-          enableEmptySections={true}
+          stickySectionHeadersEnabled={false}
           renderRow={this._renderRow}
           renderSectionHeader={this._renderSectionHeader}
           keyboardShouldPersistTaps="handled"
@@ -119,15 +124,17 @@ const styles = StyleSheet.create({
   searchRow: {
     flex: 1,
     padding: UNIT * 2,
+    paddingTop: UNIT * 1.5,
+    paddingBottom: UNIT * 1.5,
     paddingRight: UNIT
   },
   sectionHeader: {
     padding: UNIT * 2,
-    paddingBottom: UNIT
+    paddingBottom: 0
   },
   searchText: {
     fontSize: 24,
-    fontWeight: '400',
+    fontWeight: '300',
     color: COLOR_FONT_ON_BLACK
   },
   sectionHeaderText: {
