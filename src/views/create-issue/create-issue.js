@@ -15,8 +15,8 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 import IssueSummary from '../../components/issue-summary/issue-summary';
 import attachFile from '../../components/attach-file/attach-file';
 
-const PROJECT_ID_STORAGE_KEY = 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE';
-const DRAFT_ID_STORAGE_KEY = 'DRAFT_ID_STORAGE_KEY';
+export const PROJECT_ID_STORAGE_KEY = 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE';
+export const DRAFT_ID_STORAGE_KEY = 'DRAFT_ID_STORAGE_KEY';
 const CATEGORY_NAME = 'Create issue view';
 
 const notSelectedProject = {

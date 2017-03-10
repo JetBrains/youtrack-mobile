@@ -3,6 +3,8 @@ import * as types from './action-types';
 import Api from '../components/api/api';
 import type Auth from '../components/auth/auth';
 import Router from '../components/router/router';
+import {AsyncStorage} from 'react-native';
+import {PROJECT_ID_STORAGE_KEY, DRAFT_ID_STORAGE_KEY} from '../views/create-issue/create-issue';
 
 export function initializeApi(auth: Auth) {
   return {
@@ -12,8 +14,13 @@ export function initializeApi(auth: Auth) {
   };
 }
 
+export function clearDrafts() {
+  AsyncStorage.multiRemove([PROJECT_ID_STORAGE_KEY, DRAFT_ID_STORAGE_KEY]);
+}
+
 export function logOut() {
   return (dispatch: (any) => any, getState: () => Object) => {
+    clearDrafts();
     const auth = getState().app.auth;
     Router.EnterServer({serverUrl: auth.config.backendUrl});
 
