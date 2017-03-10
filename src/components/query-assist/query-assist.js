@@ -117,7 +117,7 @@ export default class QueryAssist extends React.Component {
     const suggestionText = `${suggestion.prefix}${suggestion.option}${suggestion.suffix}`;
     const oldQuery = this.state.input || '';
     const newQuery = oldQuery.substring(0, suggestion.completionStart) + suggestionText + oldQuery.substring(suggestion.completionEnd);
-    return this.props.onSetQuery(newQuery);
+    this.setState({input: newQuery});
   }
 
   onApplySavedQuery = (savedQuery: SavedQuery) => {
