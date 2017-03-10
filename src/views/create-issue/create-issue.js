@@ -14,6 +14,7 @@ import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import IssueSummary from '../../components/issue-summary/issue-summary';
 import attachFile from '../../components/attach-file/attach-file';
+import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 
 export const PROJECT_ID_STORAGE_KEY = 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE';
 export const DRAFT_ID_STORAGE_KEY = 'DRAFT_ID_STORAGE_KEY';
@@ -27,6 +28,8 @@ const notSelectedProject = {
 export default class CreateIssue extends React.Component {
   constructor(props) {
     super(props);
+    this.issuePermissions = new IssuePermissions(props.api.auth.permissions, props.api.auth.currentUser);
+
     this.state = {
       processing: false,
       attachingImage: null,
@@ -267,7 +270,7 @@ export default class CreateIssue extends React.Component {
           api={this.props.api}
           issue={issue}
           canEditProject={true}
-          issuePermissions={{canUpdateField: () => true}}
+          issuePermissions={this.issuePermissions}
           onUpdate={this.onSetFieldValue.bind(this)}
           onUpdateProject={this.onUpdateProject.bind(this)}
         />
