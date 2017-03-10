@@ -139,56 +139,60 @@ export default class SingeIssueView extends React.Component {
     }
   }
 
-  onIssueFieldValueUpdate(field, value) {
+  onIssueFieldValueUpdate = async (field, value) => {
     usage.trackEvent(CATEGORY_NAME, 'Update field value');
-    this.setState({
-      issue: {
-        ...this.state.issue,
-        fields: [...this.state.issue.fields].map(it => {
-          return it === field ? {...it, value} : it;
-        })
-      }
-    });
+
+    const {issue} = this.state;
+    const newFields = issue.fields.map(it => it === field ? {...it, value} : it);
+    this.setState({issue: {...issue, fields: newFields}});
 
     const updateMethod = field.hasStateMachine ?
       this.props.api.updateIssueFieldEvent.bind(this.props.api) :
       this.props.api.updateIssueFieldValue.bind(this.props.api);
 
-    return updateMethod(this.state.issue.id, field.id, value)
-      .then(() => this.loadIssue(this.state.issue.id))
-      .then((res) => this.props.onUpdate && this.props.onUpdate(res))
-      .catch((err) => {
-        notifyError('Failed to update issue field', err);
-        return this.loadIssue(this.state.issue.id);
-      });
+    try {
+      await updateMethod(issue.id, field.id, value);
+      const updatedIssue = await this.loadIssue(issue.id);
+      this.props.onUpdate(updatedIssue);
+    } catch (err) {
+      notifyError('Failed to update issue field', err);
+      this.loadIssue(issue.id);
+    }
   }
 
-  onUpdateProject(project) {
-    this.setState({issue: {
-      ...this.state.issue, project
-    }});
-
+  onUpdateProject = async project => {
     usage.trackEvent(CATEGORY_NAME, 'Update project');
 
-    return this.props.api.updateProject(this.state.issue, project)
-      .catch((err) => notifyError('Failed to update issue project', err))
-      .then(() => this.loadIssue(this.state.issue.id));
+    const {issue} = this.state;
+    this.setState({issue: {...issue, project}});
+
+    try {
+      await this.props.api.updateProject(issue, project);
+      const updatedIssue = await this.loadIssue(issue.id);
+      this.props.onUpdate(updatedIssue);
+    } catch (err) {
+      notifyError('Failed to update issue project', err);
+      this.loadIssue(issue.id);
+    }
   }
 
-  onSaveChanges() {
-    this.state.issue.summary = this.state.summaryCopy;
-    this.state.issue.description = this.state.descriptionCopy;
-    this.setState({isSavingEditedIssue: true});
+  onSaveChanges = async () => {
+    const {issue, summaryCopy, descriptionCopy} = this.state;
+    const editedIssue = {...issue, summary: summaryCopy, description: descriptionCopy};
+    this.setState({issue: editedIssue, isSavingEditedIssue: true});
 
-    return this.props.api.updateIssueSummaryDescription(this.state.issue)
-      .then(() => {
-        usage.trackEvent(CATEGORY_NAME, 'Update issue', 'Success');
-        return this.setState({editMode: false, isSavingEditedIssue: false});
-      })
-      .catch((err) => {
-        this.setState({isSavingEditedIssue: false});
-        notifyError('Failed to update issue project', err);
-      });
+    try {
+      await this.props.api.updateIssueSummaryDescription(editedIssue);
+      usage.trackEvent(CATEGORY_NAME, 'Update issue', 'Success');
+
+      const updatedIssue = await this.loadIssue(issue.id);
+      this.props.onUpdate(updatedIssue);
+    } catch (err) {
+      notifyError('Failed to update issue', err);
+      this.loadIssue(issue.id);
+    } finally {
+      this.setState({editMode: false, isSavingEditedIssue: false});
+    }
   }
 
   goToIssue(issue) {
@@ -413,8 +417,8 @@ export default class SingeIssueView extends React.Component {
           canEditProject={this.issuePermissions.canUpdateGeneralInfo(this.state.issue)}
           issue={this.state.issue}
           issuePermissions={this.issuePermissions}
-          onUpdate={this.onIssueFieldValueUpdate.bind(this)}
-          onUpdateProject={this.onUpdateProject.bind(this)}/>}
+          onUpdate={this.onIssueFieldValueUpdate}
+          onUpdateProject={this.onUpdateProject}/>}
       </View>
     );
   }
