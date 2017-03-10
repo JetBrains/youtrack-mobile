@@ -2,7 +2,7 @@
 import {View, ListView, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import ListViewDataSource from 'react-native/Libraries/CustomComponents/ListView/ListViewDataSource';
 import React from 'react';
-import {UNIT, COLOR_FONT_ON_BLACK, COLOR_GRAY} from '../variables/variables';
+import {UNIT, COLOR_FONT_ON_BLACK, COLOR_FONT_GRAY} from '../variables/variables';
 import type {TransformedSuggestion, SavedQuery} from '../../flow/Issue';
 
 const SAVED_SEARCHES = 'SAVED_SEARCHES';
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   },
   sectionHeader: {
     padding: UNIT * 2,
-    paddingBottom: 0
+    paddingBottom: UNIT
   },
   searchText: {
     fontSize: 24,
@@ -140,7 +140,8 @@ const styles = StyleSheet.create({
   },
   sectionHeaderText: {
     fontWeight: '200',
-    fontSize: 16,
-    color: COLOR_GRAY
+    fontSize: 14,
+    letterSpacing: 2,
+    color: COLOR_FONT_GRAY
   }
 });
