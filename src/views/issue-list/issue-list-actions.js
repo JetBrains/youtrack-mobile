@@ -67,8 +67,11 @@ async function storeLastQuery(query: string) {
     return;
   }
   const storedQueries = await lastQueriesCache.read() || [];
-  const updatedQueries = [query, ...storedQueries].slice(0, MAX_STORED_QUERIES);
-  lastQueriesCache.store(updatedQueries);
+  const updatedQueries = [query, ...storedQueries];
+  const uniqueUpdatedQueries = Array.from(new Set(updatedQueries)).
+    slice(0, MAX_STORED_QUERIES);
+
+  lastQueriesCache.store(uniqueUpdatedQueries);
 }
 
 export function storeIssuesQuery(query: string) {
