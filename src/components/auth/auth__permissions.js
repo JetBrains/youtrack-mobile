@@ -30,9 +30,6 @@ class Permissions {
     if (permission.global) {
       return true;
     }
-    if (!projectId) {
-      throw new Error(`authPermissions.has was called with invalid projectId = ${projectId}`);
-    }
     const hasProject = permission.projectIds.indexOf(projectId) !== -1;
 
     return hasProject;
