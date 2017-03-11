@@ -1,5 +1,5 @@
 /* @flow */
-import {View, Text, Image, TouchableOpacity, TextInput, Platform} from 'react-native';
+import {View, Text, Image, TouchableOpacity, TextInput, Animated, Platform} from 'react-native';
 import React from 'react';
 import styles from './query-assist.styles';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
@@ -11,6 +11,8 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 import throttle from 'lodash.throttle';
 
 const SEARCH_THROTTLE = 30;
+const INITIAL_OPACITY = 0.2;
+const SHOW_LIST_ANIMATION_DURATION = 500;
 
 type Props = {
   suggestions: Array<TransformedSuggestion | SavedQuery>,
@@ -25,7 +27,8 @@ type State = {
   input: string,
   caret: number,
   queryCopy: string,
-  suggestionsListTop: number
+  suggestionsListTop: number,
+  listShowAnimation: Object,
 }
 
 export default class QueryAssist extends React.Component {
@@ -42,7 +45,8 @@ export default class QueryAssist extends React.Component {
       input: '',
       caret: 0,
       queryCopy: '',
-      suggestionsListTop: 0
+      suggestionsListTop: 0,
+      listShowAnimation: new Animated.Value(INITIAL_OPACITY)
     };
   }
 
@@ -64,6 +68,9 @@ export default class QueryAssist extends React.Component {
       queryCopy: input,
       suggestionsListTop: 0
     });
+
+    this.state.listShowAnimation.setValue(INITIAL_OPACITY);
+    Animated.timing(this.state.listShowAnimation,{toValue: 1, duration: SHOW_LIST_ANIMATION_DURATION}).start();
 
     this.props.onChange(input, input.length);
   }
@@ -158,12 +165,14 @@ export default class QueryAssist extends React.Component {
   _renderSuggestions() {
     const {suggestions} = this.props;
     return (
-      <QueryAssistSuggestionsList
-        style={styles.searchSuggestions}
-        suggestions={suggestions}
-        onApplySuggestion={this.onApplySuggestion}
-        onApplySavedQuery={this.onApplySavedQuery}
-      />
+      <Animated.View style={[styles.listContainer, {opacity: this.state.listShowAnimation}]}>
+        <QueryAssistSuggestionsList
+          style={styles.searchSuggestions}
+          suggestions={suggestions}
+          onApplySuggestion={this.onApplySuggestion}
+          onApplySavedQuery={this.onApplySavedQuery}
+        />
+      </Animated.View>
     );
   }
 
@@ -172,7 +181,10 @@ export default class QueryAssist extends React.Component {
 
     return (
       <View style={styles.placeHolder}>
-        <Modal visible style={[styles.modal, showQueryAssist && styles.modalFullScreen]}>
+        <Modal
+          visible
+          style={[styles.modal, showQueryAssist && styles.modalFullScreen]}
+        >
           {showQueryAssist && this._renderSuggestions()}
 
           {this._renderInput()}

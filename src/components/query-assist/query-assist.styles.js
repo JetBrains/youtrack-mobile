@@ -11,11 +11,14 @@ export default StyleSheet.create({
     justifyContent: 'flex-end',
     left: 0,
     right: 0,
-    bottom: 0,
-    backgroundColor: COLOR_BLACK
+    bottom: 0
   },
   modalFullScreen: {
     top: 0
+  },
+  listContainer: {
+    flexGrow: 1,
+    backgroundColor: COLOR_TRANSPARENT_BLACK
   },
   keyboardSpacer: {
     backgroundColor: COLOR_BLACK
@@ -60,7 +63,6 @@ export default StyleSheet.create({
     color: COLOR_PINK
   },
   searchSuggestions: {
-    flexShrink: 1,
-    backgroundColor: COLOR_TRANSPARENT_BLACK
+    flexShrink: 1
   }
 });
