@@ -27,6 +27,7 @@ export default class AttachmentsRow extends Component {
           editable={editable}
           placeholder="Summary"
           underlineColorAndroid="transparent"
+          keyboardAppearance="dark"
           returnKeyType="next"
           autoCapitalize="sentences"
           value={summary}
@@ -40,6 +41,7 @@ export default class AttachmentsRow extends Component {
           maxInputHeight={0}
           editable={editable}
           autoCapitalize="sentences"
+          keyboardAppearance="dark"
           style={styles.descriptionInput}
           multiline={true}
           underlineColorAndroid="transparent"

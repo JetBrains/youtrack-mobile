@@ -178,5 +178,8 @@ export default StyleSheet.create({
     marginTop: 4,
     width: UNIT * 3.5,
     height: UNIT * 3.5
+  },
+  keyboardSpacer: {
+    backgroundColor: COLOR_BLACK
   }
 });
