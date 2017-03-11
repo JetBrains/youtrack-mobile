@@ -144,6 +144,7 @@ export default class QueryAssist extends React.Component {
           placeholder="Enter query"
           clearButtonMode="while-editing"
           returnKeyType="search"
+          autoFocus={showQueryAssist}
           autoCorrect={false}
           underlineColorAndroid="transparent"
           autoCapitalize="none"
@@ -178,19 +179,22 @@ export default class QueryAssist extends React.Component {
   render() {
     const {showQueryAssist} = this.state;
 
+    const ContainerComponent = showQueryAssist ? Modal : View;
+    const containerProps = showQueryAssist ? {
+      visible: true,
+      style: [styles.modal, showQueryAssist && styles.modalFullScreen]
+    } : {
+      style: styles.placeHolder
+    };
+
     return (
-      <View style={styles.placeHolder}>
-        <Modal
-          visible
-          style={[styles.modal, showQueryAssist && styles.modalFullScreen]}
-        >
-          {showQueryAssist && this._renderSuggestions()}
+      <ContainerComponent {...containerProps}>
+        {showQueryAssist && this._renderSuggestions()}
 
-          {this._renderInput()}
+        {this._renderInput()}
 
-          {Platform.OS === 'ios' && <KeyboardSpacer style={styles.keyboardSpacer}/>}
-        </Modal>
-      </View>
+        {Platform.OS === 'ios' && <KeyboardSpacer style={styles.keyboardSpacer}/>}
+      </ContainerComponent>
     );
   }
 }

@@ -338,57 +338,63 @@ export default class CustomFieldsPanel extends Component {
 
     const isEditorShown = this.state.select.show || this.state.datePicker.show || this.state.simpleValue.show;
 
+    const ContainerComponent = isEditorShown ? Modal : View;
+    const containerProps = isEditorShown ? {
+      visible: true,
+      style: [styles.modal, isEditorShown ? {top: 0} : null]
+    } : {
+      style: styles.placeholder
+    };
+
     return (
-      <View style={styles.placeholder}>
-        <Modal visible style={[styles.modal, isEditorShown ? {top: 0} : null]}>
-          {this._renderSelect()}
+      <ContainerComponent {...containerProps}>
+        {this._renderSelect()}
 
-          {this._renderDatePicker()}
+        {this._renderDatePicker()}
 
-          {this._renderSimpleValueInput()}
+        {this._renderSimpleValueInput()}
 
-          <View>
-            <ScrollView
-              horizontal={true}
-              style={styles.customFieldsPanel}
-              keyboardShouldPersistTaps="always"
-            >
-              <View key="Project">
-                <CustomField disabled={!canEditProject}
-                            onPress={() => this.onSelectProject()}
-                            active={isEditingProject}
-                            field={{projectCustomField: {field: {name: 'Project'}}, value: {name: issue.project.shortName}}}/>
-                {isSavingProject && <ActivityIndicator style={styles.savingFieldIndicator}/>}
-              </View>
+        <View>
+          <ScrollView
+            horizontal={true}
+            style={styles.customFieldsPanel}
+            keyboardShouldPersistTaps="always"
+          >
+            <View key="Project">
+              <CustomField disabled={!canEditProject}
+                          onPress={() => this.onSelectProject()}
+                          active={isEditingProject}
+                          field={{projectCustomField: {field: {name: 'Project'}}, value: {name: issue.project.shortName}}}/>
+              {isSavingProject && <ActivityIndicator style={styles.savingFieldIndicator}/>}
+            </View>
 
-              {issue.fields.map((field) => {
-                return <View key={field.id}>
-                  <CustomField
-                    field={field}
-                    onPress={() => this.onEditField(field)}
-                    active={editingField === field}
-                    disabled={!issuePermissions.canUpdateField(issue, field)}/>
+            {issue.fields.map((field) => {
+              return <View key={field.id}>
+                <CustomField
+                  field={field}
+                  onPress={() => this.onEditField(field)}
+                  active={editingField === field}
+                  disabled={!issuePermissions.canUpdateField(issue, field)}/>
 
-                  {savingField && savingField.id === field.id && <ActivityIndicator style={styles.savingFieldIndicator}/>}
-                </View>;
-              })}
-            </ScrollView>
+                {savingField && savingField.id === field.id && <ActivityIndicator style={styles.savingFieldIndicator}/>}
+              </View>;
+            })}
+          </ScrollView>
 
-            {this.state.select.show && this.state.select.multi && !keyboardOpen &&
-            <TouchableOpacity
-              style={styles.doneButton}
-              onPress={this.onApplyCurrentMultiSelection}
-            >
-              <Text style={styles.doneButtonText}>Done</Text>
-            </TouchableOpacity>}
+          {this.state.select.show && this.state.select.multi && !keyboardOpen &&
+          <TouchableOpacity
+            style={styles.doneButton}
+            onPress={this.onApplyCurrentMultiSelection}
+          >
+            <Text style={styles.doneButtonText}>Done</Text>
+          </TouchableOpacity>}
 
-            {Platform.OS == 'ios' && <KeyboardSpacer style={{backgroundColor: COLOR_BLACK}}/>}
+          {Platform.OS == 'ios' && <KeyboardSpacer style={{backgroundColor: COLOR_BLACK}}/>}
 
-            <KeyboardSpacer onToggle={this.handleKeyboardToggle} style={{height: 0}}/>
+          <KeyboardSpacer onToggle={this.handleKeyboardToggle} style={{height: 0}}/>
 
-          </View>
-        </Modal>
-      </View>
+        </View>
+      </ContainerComponent>
     );
   }
 }

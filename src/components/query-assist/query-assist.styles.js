@@ -1,7 +1,7 @@
 import {StyleSheet} from 'react-native';
 import {UNIT, COLOR_PINK, COLOR_TRANSPARENT_BLACK, COLOR_FONT_ON_BLACK, COLOR_BLACK, COLOR_SELECTED_DARK} from '../../components/variables/variables';
 
-const QUERY_ASSIST_HEIGHT = 44;
+const QUERY_ASSIST_HEIGHT = 52;
 
 export default StyleSheet.create({
   placeHolder: {
