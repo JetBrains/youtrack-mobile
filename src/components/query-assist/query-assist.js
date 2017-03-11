@@ -1,5 +1,5 @@
 /* @flow */
-import {View, Text, Image, TouchableOpacity, TextInput, Animated, Platform} from 'react-native';
+import {View, Text, Image, TouchableOpacity, TextInput, Platform} from 'react-native';
 import React from 'react';
 import styles from './query-assist.styles';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
@@ -9,9 +9,9 @@ import {clearSearch} from '../../components/icon/icon';
 import Modal from 'react-native-root-modal';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import throttle from 'lodash.throttle';
+import {View as AnimatedView} from 'react-native-animatable';
 
 const SEARCH_THROTTLE = 30;
-const INITIAL_OPACITY = 0.2;
 const SHOW_LIST_ANIMATION_DURATION = 500;
 
 type Props = {
@@ -27,8 +27,7 @@ type State = {
   input: string,
   caret: number,
   queryCopy: string,
-  suggestionsListTop: number,
-  listShowAnimation: Object,
+  suggestionsListTop: number
 }
 
 export default class QueryAssist extends React.Component {
@@ -45,8 +44,7 @@ export default class QueryAssist extends React.Component {
       input: '',
       caret: 0,
       queryCopy: '',
-      suggestionsListTop: 0,
-      listShowAnimation: new Animated.Value(INITIAL_OPACITY)
+      suggestionsListTop: 0
     };
   }
 
@@ -68,9 +66,6 @@ export default class QueryAssist extends React.Component {
       queryCopy: input,
       suggestionsListTop: 0
     });
-
-    this.state.listShowAnimation.setValue(INITIAL_OPACITY);
-    Animated.timing(this.state.listShowAnimation,{toValue: 1, duration: SHOW_LIST_ANIMATION_DURATION}).start();
 
     this.props.onChange(input, input.length);
   }
@@ -166,13 +161,17 @@ export default class QueryAssist extends React.Component {
   _renderSuggestions() {
     const {suggestions} = this.props;
     return (
-      <Animated.View style={[styles.listContainer, {opacity: this.state.listShowAnimation}]}>
+      <AnimatedView
+        style={styles.listContainer}
+        animation="fadeIn"
+        duration={SHOW_LIST_ANIMATION_DURATION}
+      >
         <QueryAssistSuggestionsList
           suggestions={suggestions}
           onApplySuggestion={this.onApplySuggestion}
           onApplySavedQuery={this.onApplySavedQuery}
         />
-      </Animated.View>
+      </AnimatedView>
     );
   }
 

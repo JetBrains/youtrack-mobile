@@ -2869,7 +2869,7 @@ lodash.templatesettings@^3.0.0:
     lodash._reinterpolate "^3.0.0"
     lodash.escape "^3.0.0"
 
-lodash.throttle@^4.1.1:
+lodash.throttle@4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
 
@@ -3484,6 +3484,10 @@ react-mixin@^3.0.5:
   dependencies:
     object-assign "^4.0.1"
     smart-mixin "^2.0.0"
+
+react-native-animatable@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-animatable/-/react-native-animatable-1.1.0.tgz#1ca3e8a00e441979d5711805651ff62a2d3b245a"
 
 react-native-calendar-picker@huston007/CalendarPicker#83eea4463964d86d5b42d533c76b2ba829a665fb:
   version "2.7.0"
