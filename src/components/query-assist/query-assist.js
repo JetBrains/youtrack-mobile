@@ -1,13 +1,13 @@
 /* @flow */
-import {View, Text, Image, TouchableOpacity, TextInput} from 'react-native';
+import {View, Text, Image, TouchableOpacity, TextInput, Platform} from 'react-native';
 import React from 'react';
 import styles from './query-assist.styles';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
 import type {TransformedSuggestion, SavedQuery} from '../../flow/Issue';
 import {COLOR_PINK, COLOR_PLACEHOLDER} from '../../components/variables/variables';
 import {clearSearch} from '../../components/icon/icon';
+import Modal from 'react-native-root-modal';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import PubSub from 'pubsub-js';
 
 type Props = {
   suggestions: Array<TransformedSuggestion | SavedQuery>,
@@ -28,7 +28,6 @@ type State = {
 export default class QueryAssist extends React.Component {
   state: State;
   props: Props;
-  pubSubToken: string;
   queryAssistContainer: ?Object;
 
   constructor() {
@@ -41,12 +40,6 @@ export default class QueryAssist extends React.Component {
       queryCopy: '',
       suggestionsListTop: 0
     };
-
-    this.pubSubToken = PubSub.subscribe('YTM_ORIENTATION_CHANGE',  () => this.measureSuggestionsListSpace(0, false));
-  }
-
-  componentWillUnmount() {
-    PubSub.unsubscribe(this.pubSubToken);
   }
 
   blurInput() {
@@ -91,21 +84,6 @@ export default class QueryAssist extends React.Component {
 
   componentDidMount() {
     this.setState({input: this.props.currentQuery});
-    this.measureSuggestionsListSpace();
-  }
-
-  measureSuggestionsListSpace(timeout: number = 0, recheck: boolean = true) {
-    setTimeout(() => {
-      if (!this.queryAssistContainer) {
-        return;
-      }
-      this.queryAssistContainer.measure((ox, oy, width, height, px, assistPositionY) => {
-        this.setState({suggestionsListTop: -assistPositionY});
-        if (recheck) {
-          this.measureSuggestionsListSpace(100, false);
-        }
-      });
-    }, timeout);
   }
 
   onSearch(query: string, caret: number) {
@@ -169,21 +147,29 @@ export default class QueryAssist extends React.Component {
 
   _renderSuggestions() {
     const {suggestions} = this.props;
-    return <QueryAssistSuggestionsList style={[styles.searchSuggestions, {top: this.state.suggestionsListTop}]}
-                                       suggestions={suggestions}
-                                       onApplySuggestion={this.onApplySuggestion}
-                                       onApplySavedQuery={this.onApplySavedQuery}/>;
+    return (
+      <QueryAssistSuggestionsList
+        style={styles.searchSuggestions}
+        suggestions={suggestions}
+        onApplySuggestion={this.onApplySuggestion}
+        onApplySavedQuery={this.onApplySavedQuery}
+      />
+    );
   }
 
   render() {
-    return <View>
-      {this.state.showQueryAssist && this._renderSuggestions()}
+    const {showQueryAssist} = this.state;
 
-      {this._renderInput()}
+    return (
+      <View style={styles.placeHolder}>
+        <Modal visible style={[styles.modal, showQueryAssist && styles.modalFullScreen]}>
+          {showQueryAssist && this._renderSuggestions()}
 
-      <View style={styles.keyboardSpacerHiddenContaioner}>
-        <KeyboardSpacer onToggle={() => this.measureSuggestionsListSpace()}/>
+          {this._renderInput()}
+
+          {Platform.OS === 'ios' && <KeyboardSpacer style={styles.keyboardSpacer}/>}
+        </Modal>
       </View>
-    </View>;
+    );
   }
 }

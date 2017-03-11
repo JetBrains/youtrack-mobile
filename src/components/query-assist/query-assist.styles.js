@@ -4,6 +4,22 @@ import {UNIT, COLOR_PINK, COLOR_TRANSPARENT_BLACK, COLOR_FONT_ON_BLACK, COLOR_BL
 const QUERY_ASSIST_HEIGHT = 44;
 
 export default StyleSheet.create({
+  placeHolder: {
+    height: QUERY_ASSIST_HEIGHT
+  },
+  modal: {
+    justifyContent: 'flex-end',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: COLOR_BLACK
+  },
+  modalFullScreen: {
+    top: 0
+  },
+  keyboardSpacer: {
+    backgroundColor: COLOR_BLACK
+  },
   inputWrapper: {
     backgroundColor: COLOR_BLACK,
     flexDirection: 'row',
@@ -44,17 +60,7 @@ export default StyleSheet.create({
     color: COLOR_PINK
   },
   searchSuggestions: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: QUERY_ASSIST_HEIGHT,
-    top: -1000,
+    flexShrink: 1,
     backgroundColor: COLOR_TRANSPARENT_BLACK
-  },
-  keyboardSpacerHiddenContaioner: {
-    position: 'absolute',
-    height: 0,
-    width: 0,
-    opacity: 0
   }
 });

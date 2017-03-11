@@ -1,6 +1,6 @@
 import {StyleSheet, Platform} from 'react-native';
 
-import {UNIT, COLOR_FONT_GRAY, COLOR_FONT_ON_BLACK, COLOR_FONT, COLOR_BLACK, COLOR_PINK, COLOR_GRAY} from '../../components/variables/variables';
+import {UNIT, COLOR_FONT_GRAY, COLOR_FONT_ON_BLACK, COLOR_FONT, COLOR_PINK, COLOR_GRAY} from '../../components/variables/variables';
 import {SIZE as COLOR_FIELD_SIZE} from '../../components/color-field/color-field';
 
 export default StyleSheet.create({
@@ -92,8 +92,5 @@ export default StyleSheet.create({
   listFooterMessage: {
     textAlign: 'center',
     padding: UNIT * 2
-  },
-  keyboardSpacer: {
-    backgroundColor: COLOR_BLACK
   }
 });

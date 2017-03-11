@@ -5,7 +5,6 @@ import {
   ListView,
   ScrollView,
   RefreshControl,
-  Platform,
   TouchableOpacity,
   AppState
 } from 'react-native';
@@ -25,7 +24,6 @@ import ApiHelper from '../../components/api/api__helper';
 import IssueRow from './issue-list__row';
 import Menu from '../../components/menu/menu';
 import Router from '../../components/router/router';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
 import * as issueActions from './issue-list-actions';
 import {openMenu} from '../../actions';
 import type Auth from '../../components/auth/auth';
@@ -178,8 +176,6 @@ export class IssueList extends Component {
             currentQuery={query}
             onChange={suggestIssuesQuery}
             onSetQuery={this.onQueryUpdated}/>
-
-          {Platform.OS == 'ios' && <KeyboardSpacer style={styles.keyboardSpacer}/>}
         </View>
       </Menu>
     );
