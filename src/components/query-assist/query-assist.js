@@ -8,6 +8,9 @@ import {COLOR_PINK, COLOR_PLACEHOLDER} from '../../components/variables/variable
 import {clearSearch} from '../../components/icon/icon';
 import Modal from 'react-native-root-modal';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+import throttle from 'lodash.throttle';
+
+const SEARCH_THROTTLE = 30;
 
 type Props = {
   suggestions: Array<TransformedSuggestion | SavedQuery>,
@@ -29,9 +32,10 @@ export default class QueryAssist extends React.Component {
   state: State;
   props: Props;
   queryAssistContainer: ?Object;
+  lastQueryParams: {query: string, caret: number} = {query: '', caret: 0};
 
-  constructor() {
-    super();
+  constructor(props: Props) {
+    super(props);
     this.state = {
       displayCancelSearch: false,
       showQueryAssist: false,
@@ -86,10 +90,16 @@ export default class QueryAssist extends React.Component {
     this.setState({input: this.props.currentQuery});
   }
 
-  onSearch(query: string, caret: number) {
+  onSearch = throttle((query: string, caret: number) => {
+    if (this.lastQueryParams.query === query || this.lastQueryParams.caret === caret) {
+      return;
+    }
+
+    this.lastQueryParams = {query, caret};
     this.setState({input: query, caret});
     this.props.onChange(query, caret);
-  }
+
+  }, SEARCH_THROTTLE)
 
   onApplySuggestion = (suggestion: TransformedSuggestion) => {
     const suggestionText = `${suggestion.prefix}${suggestion.option}${suggestion.suffix}`;
