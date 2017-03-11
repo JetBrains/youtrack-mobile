@@ -13,6 +13,7 @@ import Modal from 'react-native-root-modal';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import type {IssueFull} from '../../flow/Issue';
 import type {IssueProject} from '../../flow/CustomFields';
+import {View as AnimatedView} from 'react-native-animatable';
 
 type Props = {
   api: Api,
@@ -250,7 +251,6 @@ export default class CustomFieldsPanel extends Component {
 
     return <Select
       {...this.state.select}
-      style={{flexShrink: 1}}
       onCancel={() => this.closeEditor()}
       getTitle={(item) => item.fullName || item.name || item.login}
     />;
@@ -262,7 +262,7 @@ export default class CustomFieldsPanel extends Component {
     }
 
     return (
-      <View style={styles.editorViewContainer}>
+      <View>
         <Header
           leftButton={<Text>Cancel</Text>}
           rightButton={<Text></Text>}
@@ -301,7 +301,7 @@ export default class CustomFieldsPanel extends Component {
     }
 
     return (
-      <View style={styles.editorViewContainer}>
+      <View>
         <Header
           leftButton={<Text>Cancel</Text>}
           onBack={() => {
@@ -348,11 +348,17 @@ export default class CustomFieldsPanel extends Component {
 
     return (
       <ContainerComponent {...containerProps}>
-        {this._renderSelect()}
+        <AnimatedView
+          animation="fadeIn"
+          duration={500}
+          style={styles.editorViewContainer}
+        >
+          {this._renderSelect()}
 
-        {this._renderDatePicker()}
+          {this._renderDatePicker()}
 
-        {this._renderSimpleValueInput()}
+          {this._renderSimpleValueInput()}
+        </AnimatedView>
 
         <View>
           <ScrollView

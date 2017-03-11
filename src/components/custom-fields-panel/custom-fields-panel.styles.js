@@ -24,12 +24,13 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     left: 0,
     right: 0,
-    bottom: 0,
-    backgroundColor: COLOR_TRANSPARENT_BLACK
+    bottom: 0
   },
 
   editorViewContainer: {
-    flex: 1
+    flex: 1,
+    flexShrink: 1,
+    backgroundColor: COLOR_TRANSPARENT_BLACK
   },
   calendar: {
     backgroundColor: '#FFFFFFF0',
