@@ -167,7 +167,6 @@ export default class QueryAssist extends React.Component {
     return (
       <Animated.View style={[styles.listContainer, {opacity: this.state.listShowAnimation}]}>
         <QueryAssistSuggestionsList
-          style={styles.searchSuggestions}
           suggestions={suggestions}
           onApplySuggestion={this.onApplySuggestion}
           onApplySavedQuery={this.onApplySavedQuery}

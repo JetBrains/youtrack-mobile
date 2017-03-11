@@ -18,6 +18,8 @@ export default StyleSheet.create({
   },
   listContainer: {
     flexGrow: 1,
+    flexShrink: 1,
+    justifyContent: 'flex-end',
     backgroundColor: COLOR_TRANSPARENT_BLACK
   },
   keyboardSpacer: {
@@ -61,8 +63,5 @@ export default StyleSheet.create({
   cancelText: {
     fontSize: 16,
     color: COLOR_PINK
-  },
-  searchSuggestions: {
-    flexShrink: 1
   }
 });
