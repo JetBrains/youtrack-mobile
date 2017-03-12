@@ -5,7 +5,6 @@ import ApiHelper from '../../components/api/api__helper';
 import {notifyError, resolveError} from '../../components/notification/notification';
 import Cache from '../../components/cache/cache';
 import type Api from '../../components/api/api';
-import type IssuesListState from './issue-list-reducers';
 import type {IssueOnList, IssueFull} from '../../flow/Issue';
 
 const PAGE_SIZE = 10;
@@ -24,7 +23,7 @@ export function setIssuesQuery(query: string) {
 }
 
 export function readStoredIssuesQuery() {
-  return async (dispatch: (any) => any, getState: () => IssuesListState) => {
+  return async (dispatch: (any) => any, getState: () => Object) => {
     const query = await AsyncStorage.getItem(QUERY_STORAGE_KEY);
     dispatch({
       type: types.SET_ISSUES_QUERY,
@@ -34,14 +33,17 @@ export function readStoredIssuesQuery() {
 }
 
 export function suggestIssuesQuery(query: string, caret: number) {
-  return async (dispatch: (any) => any, getState: () => IssuesListState, getApi: ApiGetter) => {
+  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
     try {
       let suggestions;
       if (query) {
         suggestions = await api.getQueryAssistSuggestions(query, caret);
       } else {
+        const currentUser = getState().app.auth.currentUser;
         suggestions = await api.getSavedQueries();
+        suggestions = suggestions.filter(s => s.owner.ringId === currentUser.id);
+
         const lastQueries = (await lastQueriesCache.read() || []).map(query => ({name: query, query}));
         suggestions = [...suggestions, ...lastQueries];
       }
@@ -102,14 +104,14 @@ export function receiveIssues(issues: Array<IssueOnList>) {
 }
 
 export function cacheIssues(issues: Array<IssueOnList>) {
-  return (dispatch: (any) => any, getState: () => IssuesListState) => {
+  return (dispatch: (any) => any, getState: () => Object) => {
     const cache = getState().issueList.cache;
     cache.store(issues);
   };
 }
 
 export function readCachedIssues() {
-  return async (dispatch: (any) => any, getState: () => IssuesListState) => {
+  return async (dispatch: (any) => any, getState: () => Object) => {
     const cache = getState().issueList.cache;
     const issues: ?Array<IssueOnList> = await cache.read();
     if (issues && issues.length) {
@@ -126,7 +128,7 @@ export function loadingIssuesError(error: Object) {
 }
 
 export function loadIssues(query: string) {
-  return async (dispatch: (any) => any, getState: () => IssuesListState, getApi: ApiGetter) => {
+  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
     dispatch(startIssuesLoading());
     try {
@@ -146,13 +148,13 @@ export function loadIssues(query: string) {
 }
 
 export function refreshIssues() {
-  return async (dispatch: (any) => any, getState: () => IssuesListState) => {
+  return async (dispatch: (any) => any, getState: () => Object) => {
     dispatch(loadIssues(getState().issueList.query));
   };
 }
 
 export function initializeIssuesList() {
-  return async (dispatch: (any) => any, getState: () => IssuesListState) => {
+  return async (dispatch: (any) => any, getState: () => Object) => {
     await readStoredIssuesQuery()(dispatch, getState);
     await readCachedIssues()(dispatch, getState);
     dispatch(refreshIssues());
@@ -160,7 +162,7 @@ export function initializeIssuesList() {
 }
 
 export function loadMoreIssues() {
-  return async (dispatch: (any) => any, getState: () => IssuesListState, getApi: ApiGetter) => {
+  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
 
     const {isInitialized, isLoadingMore, isRefreshing, loadingError, isListEndReached, skip, issues, query} = getState().issueList;

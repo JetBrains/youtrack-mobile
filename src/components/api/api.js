@@ -102,7 +102,7 @@ class Api {
     return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`);
   }
 
-  async getSavedQueries(): Promise<SavedQuery> {
+  async getSavedQueries(): Promise<Array<SavedQuery>> {
     const queryString = qs.stringify({fields: issueFields.issueFolder.toString()});
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/savedQueries?${queryString}`);
   }

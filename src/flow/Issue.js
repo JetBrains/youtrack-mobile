@@ -65,5 +65,7 @@ declare type TransformedSuggestion = {
 declare type SavedQuery = {
   id: string,
   name: string,
-  query: string
+  query: string,
+  isUpdatable: boolean,
+  owner: {ringId: string}
 }

@@ -165,7 +165,8 @@ const ISSUE_FOLDER_FIELDS = toField([
   'id',
   'name',
   'query',
-  {color: ['id']}
+  'isUpdatable',
+  {owner: ['ringId']}
 ]);
 
 export default {
