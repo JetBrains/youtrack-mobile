@@ -5,7 +5,9 @@ import ApiHelper from '../../components/api/api__helper';
 import {comment} from '../../components/icon/icon';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
+import IssueToolbar from '../../components/issue-toolbar/issue-toolbar';
 import SingleIssueComments from './single-issue__comments';
+import SingleIssueCommentInput from './single-issue__comment-input';
 import SingleIssueTopPanel from './single-issue__top-panel';
 import Router from '../../components/router/router';
 import Header from '../../components/header/header';
@@ -14,7 +16,6 @@ import {showActions} from '../../components/action-sheet/action-sheet';
 import Wiki, {decorateRawText} from '../../components/wiki/wiki';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import {notifyError, notify} from '../../components/notification/notification';
-import SingleIssueCommentInput from './single-issue__comment-input';
 import {COLOR_PINK} from '../../components/variables/variables';
 import usage from '../../components/usage/usage';
 import attachFile from '../../components/attach-file/attach-file';
@@ -113,7 +114,7 @@ export default class SingeIssueView extends React.Component {
     }
   }
 
-  async attachPhoto(takeFromLibrary = true) {
+  attachPhoto = async (takeFromLibrary = true) => {
     try {
       const attachingImage = await attachFile();
 
@@ -199,6 +200,49 @@ export default class SingeIssueView extends React.Component {
     }
   }
 
+  _onVoteToggle = async (voted: boolean) => {
+    const {issue} = this.state;
+
+    this.setState({
+      issue: {
+        ...issue,
+        votes: voted ? issue.votes + 1 : issue.votes - 1,
+        voters: {
+          ...issue.voters,
+          hasVote: voted
+        }
+      }
+    });
+
+    try {
+      await this.props.api.updateIssueVoted(issue.id, voted);
+    } catch (err) {
+      notifyError('Cannot update "Voted"', err);
+      this.loadIssue(issue.id);
+    }
+  }
+
+  _onStarToggle = async (starred: boolean) => {
+    const {issue} = this.state;
+
+    this.setState({
+      issue: {
+        ...issue,
+        watchers: {
+          ...issue.watchers,
+          hasStar: starred
+        }
+      }
+    });
+
+    try {
+      await this.props.api.updateIssueStarred(issue.id, starred);
+    } catch (err) {
+      notifyError('Cannot update "Starred"', err);
+      this.loadIssue(issue.id);
+    }
+  }
+
   goToIssue(issue) {
     issue.fieldHash = ApiHelper.makeFieldHash(issue);
 
@@ -226,26 +270,17 @@ export default class SingeIssueView extends React.Component {
     return `${this.props.api.config.backendUrl}/issue/${project.shortName}-${numberInProject}${commentHash}`;
   }
 
+  _startEditing = () => {
+    usage.trackEvent(CATEGORY_NAME, 'Start issue editing');
+    this.setState({
+      editMode: true,
+      summaryCopy: this.state.issue.summary,
+      descriptionCopy: this.state.issue.description
+    });
+  }
+
   _showActions() {
-    const editAction = this.issuePermissions.canUpdateGeneralInfo(this.state.issue) ? {
-      title: 'Edit issue',
-      execute: () => {
-        usage.trackEvent(CATEGORY_NAME, 'Start issue editing');
-        this.setState({
-          editMode: true,
-          summaryCopy: this.state.issue.summary,
-          descriptionCopy: this.state.issue.description
-        });
-      }
-    } : null;
-
-    const addAttachmentAction = this.issuePermissions.canAddAttachmentTo(this.state.issue) ? {
-      title: 'Attach image...',
-      execute: this.attachPhoto.bind(this)
-    } : null;
-
     const actions = [
-      editAction,
       {
         title: 'Copy issue URL',
         execute: () => {
@@ -261,10 +296,8 @@ export default class SingeIssueView extends React.Component {
           Linking.openURL(this._makeIssueWebUrl(this.state.issue));
         }
       },
-      addAttachmentAction,
       {title: 'Cancel'}
-    ]
-      .filter(item => item !== null);
+    ];
 
     return showActions(actions, this.context.actionSheet())
       .then(action => action.execute())
@@ -296,7 +329,7 @@ export default class SingeIssueView extends React.Component {
       const actionsAvailable = this.state.issue;
 
       return <Header leftButton={<Text>Back</Text>}
-                     rightButton={<Text style={actionsAvailable ? null : styles.disabledSaveButton}>Actions</Text>}
+                     rightButton={<Text style={actionsAvailable ? null : styles.disabledSaveButton}>More</Text>}
                      onRightButtonClick={() => actionsAvailable && this._showActions()}>
         {title}
       </Header>;
@@ -313,6 +346,34 @@ export default class SingeIssueView extends React.Component {
       </Header>;
 
     }
+  }
+
+  _renderToolbar() {
+    if (!this.state.fullyLoaded) {
+      return;
+    }
+    const issue: IssueFull = this.state.issue;
+    const canUpdateGeneralInfo = this.issuePermissions.canUpdateGeneralInfo(issue);
+
+    return (
+      <IssueToolbar
+        canAttach={this.issuePermissions.canAddAttachmentTo(issue)}
+        attachesCount={issue.attachments.length}
+        onAttach={this.attachPhoto}
+
+        canEdit={canUpdateGeneralInfo}
+        onEdit={this._startEditing}
+
+        canVote={this.issuePermissions.canVote(issue)}
+        votes={issue.votes}
+        voted={issue.voters.hasVote}
+        onVoteToggle={this._onVoteToggle}
+
+        canStar={canUpdateGeneralInfo}
+        starred={issue.watchers.hasStar}
+        onStarToggle={this._onStarToggle}
+      />
+    );
   }
 
   _renderIssueView(issue) {
@@ -368,6 +429,7 @@ export default class SingeIssueView extends React.Component {
     return (
       <View style={styles.container}>
         {this._renderHeader()}
+        {this._renderToolbar()}
 
         {this.state.issue && <ScrollView refreshControl={this._renderRefreshControl()}
                                          keyboardDismissMode="interactive"

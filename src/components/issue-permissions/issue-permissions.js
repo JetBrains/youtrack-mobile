@@ -64,4 +64,8 @@ export default class IssuePermissions {
   canCreateIssueToProject(project: IssueProject) {
     return this.permissions.has(CAN_CREATE_ISSUE, project.ringId);
   }
+
+  canVote(issue: AnyIssue) {
+    return issue.reporter.ringId !== this.currentUser.id;
+  }
 }

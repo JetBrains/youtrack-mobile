@@ -232,6 +232,14 @@ class Api {
     return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/fields/${fieldId}?${queryString}`, 'POST', body);
   }
 
+  async updateIssueStarred(issueId: string, hasStar: boolean) {
+    return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/watchers`, 'POST', {hasStar});
+  }
+
+  async updateIssueVoted(issueId: string, hasVote: boolean) {
+    return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/voters`, 'POST', {hasVote});
+  }
+
   async getMentionSuggests(issueIds: Array<string>, query: string) {
     const $top = 10;
     const fields = 'issues(id),users(id,login,fullName,avatarUrl)';
