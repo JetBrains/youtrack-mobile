@@ -76,7 +76,6 @@ export default StyleSheet.create({
     }
   },
   zoomButtonIcon: {
-    opacity: 0.8,
     marginTop: 4,
     width: UNIT * 3.5,
     height: UNIT * 3.5
