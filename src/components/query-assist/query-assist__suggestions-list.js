@@ -52,10 +52,14 @@ export default class QueryAssistSuggestionsList extends React.Component {
   }
 
   _prepareSectionedMap = (suggestions: Array<TransformedSuggestion>) => {
-    return {
-      [SAVED_SEARCHES]: suggestions.filter(s => s.id),
-      [LAST_SEARCHES]: suggestions.filter(s => !s.id)
-    };
+    const savedSearches = suggestions.filter(s => s.id);
+    const lastSearches = suggestions.filter(s => !s.id);
+
+    let res = {};
+    res = savedSearches.length ? {[SAVED_SEARCHES]: savedSearches} : res;
+    res = lastSearches.length ? {...res, [LAST_SEARCHES]: lastSearches} : res;
+
+    return res;
   }
 
   _renderRow = (suggestion: TransformedSuggestion | SavedQuery) => {
