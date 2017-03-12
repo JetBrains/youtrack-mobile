@@ -99,5 +99,13 @@ export default StyleSheet.create({
     paddingTop: UNIT * 2,
     fontSize: 18,
     color: COLOR_PINK
+  },
+  agileBoardSelect: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    left: 0,
+    bottom: 0,
+    backgroundColor: COLOR_BLACK
   }
 });
