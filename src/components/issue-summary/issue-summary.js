@@ -25,6 +25,7 @@ export default class AttachmentsRow extends Component {
         <TextInput
           style={styles.summaryInput}
           editable={editable}
+          autoFocus
           placeholder="Summary"
           underlineColorAndroid="transparent"
           keyboardAppearance="dark"

@@ -352,7 +352,7 @@ export default class SingeIssueView extends React.Component {
     if (!this.state.fullyLoaded) {
       return;
     }
-    const issue: IssueFull = this.state.issue;
+    const {issue, editMode} = this.state;
     const canUpdateGeneralInfo = this.issuePermissions.canUpdateGeneralInfo(issue);
 
     return (
@@ -362,7 +362,7 @@ export default class SingeIssueView extends React.Component {
         onAttach={this.attachPhoto}
 
         canEdit={canUpdateGeneralInfo}
-        onEdit={this._startEditing}
+        onEdit={() => editMode ? this.setState({editMode: false}) : this._startEditing()}
 
         canVote={this.issuePermissions.canVote(issue)}
         votes={issue.votes}
@@ -426,6 +426,7 @@ export default class SingeIssueView extends React.Component {
   }
 
   render() {
+    const {addCommentMode} = this.state;
     return (
       <View style={styles.container}>
         {this._renderHeader()}
@@ -456,7 +457,7 @@ export default class SingeIssueView extends React.Component {
           {Platform.OS == 'ios' && <KeyboardSpacer/>}
         </ScrollView>}
 
-        {this.state.addCommentMode && <View>
+        {addCommentMode && <View>
           <SingleIssueCommentInput
             autoFocus={true}
             suggestionsDataSource={query => this.loadCommentSuggestions(query)}
@@ -478,13 +479,15 @@ export default class SingeIssueView extends React.Component {
         </View>}
 
 
-        {this.state.issue && !this.state.addCommentMode && <CustomFieldsPanel
+        {this.state.issue && !addCommentMode && <CustomFieldsPanel
           api={this.props.api}
           canEditProject={this.issuePermissions.canUpdateGeneralInfo(this.state.issue)}
           issue={this.state.issue}
           issuePermissions={this.issuePermissions}
           onUpdate={this.onIssueFieldValueUpdate}
           onUpdateProject={this.onUpdateProject}/>}
+
+        {Platform.OS == 'ios' && !addCommentMode && <KeyboardSpacer style={styles.keyboardSpacer}/>}
       </View>
     );
   }
