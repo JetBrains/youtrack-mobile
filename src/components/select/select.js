@@ -54,11 +54,22 @@ export default class Select extends React.Component {
 
   componentDidMount() {
     onHeightChange(() => this.forceUpdate());
-     const selectedItems = this.props.selectedItems ? this.props.selectedItems : [];
+    const selectedItems = this.props.selectedItems ? this.props.selectedItems : [];
     this.setState({selectedItems});
     this._loadItems(this.state.query);
   }
 
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps.dataSource !== this.props.dataSource) {
+      this.setState({
+        loaded: false,
+        filteredItems: [],
+        items: null,
+        selectedItems: this.props.selectedItems || []
+      });
+      this._loadItems(this.state.query);
+    }
+  }
 
   async _loadItems(query) {
     try {

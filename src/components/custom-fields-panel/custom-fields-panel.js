@@ -224,20 +224,17 @@ export default class CustomFieldsPanel extends Component {
       return this.closeEditor();
     }
 
-    return this.closeEditor()
-      .then(() => {
-        this.setState({editingField: field});
+    this.setState({editingField: field, isEditingProject: false, ...initialEditorsState});
 
-        if (field.projectCustomField.field.fieldType.valueType === 'date') {
-          return this.editDateField(field);
-        }
+    if (field.projectCustomField.field.fieldType.valueType === 'date') {
+      return this.editDateField(field);
+    }
 
-        if (['period', 'integer'].indexOf(field.projectCustomField.field.fieldType.valueType) !== -1) {
-          return this.editSimpleValueField(field, field.projectCustomField.field.fieldType.valueType);
-        }
+    if (['period', 'integer'].indexOf(field.projectCustomField.field.fieldType.valueType) !== -1) {
+      return this.editSimpleValueField(field, field.projectCustomField.field.fieldType.valueType);
+    }
 
-        return this.editCustomField(field);
-      });
+    return this.editCustomField(field);
   }
 
   handleKeyboardToggle = (keyboardOpen: boolean) => {
