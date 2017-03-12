@@ -88,6 +88,7 @@ const initialEditorsState = {
 export default class CustomFieldsPanel extends Component {
   props: Props;
   state: State;
+  currentScrollX: number = 0;
 
   constructor() {
     super();
@@ -241,6 +242,18 @@ export default class CustomFieldsPanel extends Component {
     this.setState({keyboardOpen});
   }
 
+  storeScrollPosition = (event: Object) => {
+    const {nativeEvent} = event;
+    this.currentScrollX = nativeEvent.contentOffset.x;
+  }
+
+  restoreScrollPosition = (scrollNode: ?ScrollView) => {
+    if (!scrollNode) {
+      return;
+    }
+    scrollNode.scrollTo({x: this.currentScrollX, y: 0});
+  }
+
   _renderSelect() {
     if (!this.state.select.show) {
       return;
@@ -359,6 +372,9 @@ export default class CustomFieldsPanel extends Component {
 
         <View>
           <ScrollView
+            ref={this.restoreScrollPosition}
+            onScroll={this.storeScrollPosition}
+            scrollEventThrottle={100}
             horizontal={true}
             style={styles.customFieldsPanel}
             keyboardShouldPersistTaps="always"
