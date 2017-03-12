@@ -3,6 +3,9 @@ import {View, Text, TouchableOpacity, Image} from 'react-native';
 import React, {PureComponent} from 'react';
 import {star, starInactive, pencil, vote, voteInactive, attachInactive} from '../icon/icon';
 import styles from './issue-toolbar.styles';
+import {View as AnimatedView} from 'react-native-animatable';
+
+const SHOW_ANIMATION_TIME = 200;
 
 type Props = {
   style?: any,
@@ -27,7 +30,11 @@ export default class IssueToolbar extends PureComponent<void, Props, void> {
     const {starred, voted, votes, attachesCount, canStar, canAttach, canEdit, canVote, onStarToggle, onVoteToggle, onAttach, onEdit, style} = this.props;
 
     return (
-      <View style={[styles.container, style]}>
+      <AnimatedView
+        style={[styles.container, style]}
+        animation="fadeInDown"
+        duration={SHOW_ANIMATION_TIME}
+      >
         {canStar && <TouchableOpacity style={styles.toolbarButton} onPress={() => onStarToggle(!starred)}>
           <View>
             <Image source={starred ? star : starInactive} style={styles.toolbarIcon}/>
@@ -53,7 +60,7 @@ export default class IssueToolbar extends PureComponent<void, Props, void> {
             <Image source={pencil} style={styles.toolbarIcon}/>
           </View>
         </TouchableOpacity>}
-      </View>
+      </AnimatedView>
     );
   }
 }
