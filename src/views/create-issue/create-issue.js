@@ -260,8 +260,6 @@ export default class CreateIssue extends React.Component {
                 <Image style={styles.arrowImage} source={next}></Image>
               </View>
             </View>}
-
-            {Platform.OS == 'ios' && <KeyboardSpacer/>}
           </View>
         </ScrollView>
 
@@ -274,6 +272,8 @@ export default class CreateIssue extends React.Component {
           onUpdate={this.onSetFieldValue.bind(this)}
           onUpdateProject={this.onUpdateProject.bind(this)}
         />
+
+        {Platform.OS == 'ios' && <KeyboardSpacer style={{backgroundColor: 'black'}}/>}
       </View>
     );
   }
