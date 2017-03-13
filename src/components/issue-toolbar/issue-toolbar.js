@@ -33,6 +33,7 @@ export default class IssueToolbar extends PureComponent<void, Props, void> {
       <AnimatedView
         style={[styles.container, style]}
         animation="fadeInDown"
+        useNativeDriver
         duration={SHOW_ANIMATION_TIME}
       >
         {canStar && <TouchableOpacity style={styles.toolbarButton} onPress={() => onStarToggle(!starred)}>

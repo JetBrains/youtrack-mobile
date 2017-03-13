@@ -361,6 +361,7 @@ export default class CustomFieldsPanel extends Component {
         <AnimatedView
           animation="fadeIn"
           duration={500}
+          useNativeDriver
           style={styles.editorViewContainer}
         >
           {this._renderSelect()}

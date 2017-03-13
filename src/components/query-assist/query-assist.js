@@ -164,6 +164,7 @@ export default class QueryAssist extends React.Component {
       <AnimatedView
         style={styles.listContainer}
         animation="fadeIn"
+        useNativeDriver
         duration={SHOW_LIST_ANIMATION_DURATION}
       >
         <QueryAssistSuggestionsList
