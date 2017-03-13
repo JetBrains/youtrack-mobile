@@ -5,24 +5,23 @@ export default StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingLeft: UNIT * 2,
-    paddingRight: UNIT * 2,
+    paddingLeft: UNIT,
+    paddingRight: UNIT,
     backgroundColor: COLOR_BLACK
   },
   toolbarButton: {
     flex: 1,
     alignItems: 'center',
-    paddingTop: UNIT / 2,
-    paddingBottom: UNIT * 1.5
+    paddingBottom: UNIT * 2,
   },
   toolbarIcon: {
-    width: 28,
-    height: 28,
+    width: 24,
+    height: 24,
     resizeMode: 'contain'
   },
   counter: {
     position: 'absolute',
-    top: 0,
+    top: -3,
     right: -14,
 
     fontSize: 14,
