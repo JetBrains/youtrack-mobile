@@ -13,7 +13,7 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     paddingTop: UNIT / 2,
-    paddingBottom: UNIT
+    paddingBottom: UNIT * 1.5
   },
   toolbarIcon: {
     width: 28,
