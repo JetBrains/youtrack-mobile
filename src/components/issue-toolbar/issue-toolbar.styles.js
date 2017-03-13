@@ -23,7 +23,7 @@ export default StyleSheet.create({
   counter: {
     position: 'absolute',
     top: 0,
-    right: -18,
+    right: -14,
 
     fontSize: 14,
     backgroundColor: 'transparent',
