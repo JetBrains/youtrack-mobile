@@ -165,7 +165,6 @@ export default class Select extends React.Component {
       <View style={[styles.container, style, {paddingTop: getTopPadding() - UNIT * 2}]}>
         <View style={styles.inputWrapper}>
           <TextInput
-            autoFocus
             placeholder={placeholder}
             keyboardAppearance="dark"
             placeholderTextColor={COLOR_PLACEHOLDER}
