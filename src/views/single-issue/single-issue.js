@@ -436,13 +436,13 @@ export default class SingeIssueView extends React.Component {
   }
 
   render() {
-    const {addCommentMode} = this.state;
+    const {issue, addCommentMode, fullyLoaded, commentText} = this.state;
     return (
       <View style={styles.container}>
         {this._renderHeader()}
         {this._renderToolbar()}
 
-        {this.state.issue &&
+        {issue &&
         <ScrollView
           refreshControl={this._renderRefreshControl()}
           keyboardDismissMode="interactive"
@@ -450,14 +450,14 @@ export default class SingeIssueView extends React.Component {
           onScroll={this._handleScroll}
           scrollEventThrottle={16}
         >
-          {this._renderIssueView(this.state.issue)}
+          {this._renderIssueView(issue)}
 
-          {!this.state.fullyLoaded && <View><Text style={styles.loading}>Loading...</Text></View>}
+          {!fullyLoaded && <View><Text style={styles.loading}>Loading...</Text></View>}
 
-          {this.state.fullyLoaded && <View style={styles.commentsListContainer}>
+          {fullyLoaded && <View style={styles.commentsListContainer}>
             <SingleIssueComments
-              comments={this.state.issue.comments}
-              attachments={this.state.issue.attachments}
+              comments={issue.comments}
+              attachments={issue.attachments}
               api={this.props.api}
               onReply={(comment) => {
                 this.setState({
@@ -477,9 +477,9 @@ export default class SingeIssueView extends React.Component {
             autoFocus={true}
             suggestionsDataSource={query => this.loadCommentSuggestions(query)}
             onBlur={() => this.setState({addCommentMode: false})}
-            initialText={this.state.commentText}
+            initialText={commentText}
             onChangeText={text => this.setState({commentText: text})}
-            onAddComment={(comment) => this.addComment(this.state.issue, comment)}
+            onAddComment={(comment) => this.addComment(issue, comment)}
           />
 
           {Platform.OS == 'ios' && <KeyboardSpacer style={styles.keyboardSpacer}/>}
@@ -488,16 +488,16 @@ export default class SingeIssueView extends React.Component {
         {this._canAddComment() && <View style={styles.addCommentContainer}>
           <TouchableOpacity
             style={styles.addCommentButton}
-            onPress={() => this.setState({addCommentMode: true, initialText: this.state.commentText})}>
+            onPress={() => this.setState({addCommentMode: true, initialText: commentText})}>
             <Image source={comment} style={styles.addCommentIcon}/>
           </TouchableOpacity>
         </View>}
 
 
-        {this.state.issue && !addCommentMode && <CustomFieldsPanel
+        {issue && !addCommentMode && <CustomFieldsPanel
           api={this.props.api}
-          canEditProject={this.issuePermissions.canUpdateGeneralInfo(this.state.issue)}
-          issue={this.state.issue}
+          canEditProject={this.issuePermissions.canUpdateGeneralInfo(issue)}
+          issue={issue}
           issuePermissions={this.issuePermissions}
           onUpdate={this.onIssueFieldValueUpdate}
           onUpdateProject={this.onUpdateProject}/>}
