@@ -13,12 +13,6 @@ function renderLoading() {
   return <ActivityIndicator style={styles.loadingIndicator} size="large"/>;
 }
 
-function renderError() {
-  return <View style={styles.errorContainer}>
-    <Text style={styles.errorText}>Failed to load attachment</Text>
-  </View>;
-}
-
 export function AttachmentPreview(props: Props) {
 
   return (
@@ -32,7 +26,6 @@ export function AttachmentPreview(props: Props) {
         renderLoading={renderLoading}
         allowsInlineMediaPlayback={true}
         mediaPlaybackRequiresUserAction={true}
-        renderError={renderError}
       />
     </View>
   );
@@ -40,17 +33,11 @@ export function AttachmentPreview(props: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '#FFF'
   },
   loadingIndicator: {
     padding: UNIT * 2
-  },
-  errorContainer: {
-    padding: UNIT * 2
-  },
-  errorText: {
-    textAlign: 'center',
-    color: 'red'
   }
 });
 
