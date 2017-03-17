@@ -321,12 +321,18 @@ export default class SingeIssueView extends React.Component {
   }
 
   _updateToolbarPosition(newY: number) {
-    const marginTop = newY < 0 ? 0 : -newY;
+    const MAX_SHIFT = -50;
+    let marginTop = newY < 0 ? 0 : -newY;
+    if (marginTop < MAX_SHIFT) {
+      marginTop = MAX_SHIFT;
+    }
     this.toolbarNode.setNativeProps({style: {marginTop}});
   }
 
   _handleScroll = ({nativeEvent}) => {
-    this._updateToolbarPosition(nativeEvent.contentOffset.y);
+    if (Platform.OS === 'ios') {
+      this._updateToolbarPosition(nativeEvent.contentOffset.y);
+    }
   }
 
   _renderHeader() {
