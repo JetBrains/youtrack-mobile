@@ -25,12 +25,13 @@ export default class ColorField extends React.Component {
   }
 
   render() {
-    if (this.props.color.id === NO_COLOR_ID) {
+    const {color, fullText, style} = this.props;
+    if (color.id === NO_COLOR_ID && !fullText) {
       return null;
     }
 
     return (
-      <View style={[styles.wrapper, {backgroundColor: this._getBackgroundColor()}, this.props.style]}>
+      <View style={[styles.wrapper, {backgroundColor: this._getBackgroundColor()}, style]}>
         <Text
           style={[styles.text, {color: this._getForegroundColor()}]}
           numberOfLines={1}
