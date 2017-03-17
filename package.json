@@ -27,9 +27,7 @@
     "android-clean": "cd ./android && YT_MOBILE_VERSION=$npm_package_version ./gradlew clean && cd ..",
     "android-release": "YT_MOBILE_VERSION=$npm_package_version android/gradlew -p android/ assembleRelease --info",
     "android-align-after-sign": "$ANDROID_HOME/build-tools/23.0.1/zipalign -v 4 android/app/build/outputs/apk/app-release-unsigned.apk android/app/build/outputs/apk/app-release.apk",
-    "android-emulator": "emulator -avd YouTrackMobile -scale 0.4 -gpu on -memory 2048",
-    "android-emulator-create": "android create avd -n YouTrackMobile -t 1 -b x86 --skin 1080x1920 --device 'Nexus 5'",
-    "android-emulator-delete": "android delete avd -n YouTrackMobile"
+    "android-emulator": "emulator -avd YouTrackMobile -gpu on"
   },
   "dependencies": {
     "@exponent/react-native-action-sheet": "0.3.0",
