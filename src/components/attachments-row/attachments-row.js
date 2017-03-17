@@ -1,6 +1,6 @@
 /* @flow */
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, Animated, ActivityIndicator, ScrollView, Platform} from 'react-native';
+import {Linking, View, Text, TouchableOpacity, Animated, ActivityIndicator, ScrollView, Platform} from 'react-native';
 import ImageProgress from 'react-native-image-progress';
 import flattenStyle from 'react-native/Libraries/StyleSheet/flattenStyle';
 import styles from './attachments-row.styles';
@@ -59,7 +59,10 @@ export default class AttachmentsRow extends Component {
     if (Platform.OS === 'ios' && !isVideo) {
       Router.AttachmentPreview({url, name});
     } else {
-      safariView.show({url});
+      if (Platform.OS === 'ios') {
+        safariView.show({url});
+      }
+      Linking.openURL(url);
     }
     this.props.onOpenAttachment('file', name);
   }
