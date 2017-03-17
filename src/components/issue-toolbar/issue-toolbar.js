@@ -26,6 +26,12 @@ type Props = {
 }
 
 export default class IssueToolbar extends PureComponent<void, Props, void> {
+  node: ?Object;
+
+  setNativeProps(...args: Array<any>) {
+    return this.node && this.node.setNativeProps(...args);
+  }
+
   render() {
     const {starred, voted, votes, attachesCount, canStar, canAttach, canEdit, canVote, onStarToggle, onVoteToggle, onAttach, onEdit, style} = this.props;
 
@@ -35,6 +41,7 @@ export default class IssueToolbar extends PureComponent<void, Props, void> {
         animation="fadeInDown"
         useNativeDriver
         duration={SHOW_ANIMATION_TIME}
+        ref={node => this.node = node}
       >
         {canStar && <TouchableOpacity style={styles.toolbarButton} onPress={() => onStarToggle(!starred)}>
           <View>

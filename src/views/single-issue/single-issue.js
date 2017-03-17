@@ -320,6 +320,15 @@ export default class SingeIssueView extends React.Component {
       this.issuePermissions.canCommentOn(this.state.issue);
   }
 
+  _updateToolbarPosition(newY: number) {
+    const marginTop = newY < 0 ? 0 : -newY;
+    this.toolbarNode.setNativeProps({style: {marginTop}});
+  }
+
+  _handleScroll = ({nativeEvent}) => {
+    this._updateToolbarPosition(nativeEvent.contentOffset.y);
+  }
+
   _renderHeader() {
     const title = <Text style={styles.headerText} selectable={true}>
       {this.state.issue ? `${this.state.issue.project.shortName}-${this.state.issue.numberInProject}` : `Loading...`}
@@ -357,6 +366,7 @@ export default class SingeIssueView extends React.Component {
 
     return (
       <IssueToolbar
+        ref={node => this.toolbarNode = node}
         canAttach={this.issuePermissions.canAddAttachmentTo(issue)}
         attachesCount={issue.attachments.length}
         onAttach={this.attachPhoto}
@@ -432,9 +442,14 @@ export default class SingeIssueView extends React.Component {
         {this._renderHeader()}
         {this._renderToolbar()}
 
-        {this.state.issue && <ScrollView refreshControl={this._renderRefreshControl()}
-                                         keyboardDismissMode="interactive"
-                                         keyboardShouldPersistTaps="handled">
+        {this.state.issue &&
+        <ScrollView
+          refreshControl={this._renderRefreshControl()}
+          keyboardDismissMode="interactive"
+          keyboardShouldPersistTaps="handled"
+          onScroll={this._handleScroll}
+          scrollEventThrottle={16}
+        >
           {this._renderIssueView(this.state.issue)}
 
           {!this.state.fullyLoaded && <View><Text style={styles.loading}>Loading...</Text></View>}
