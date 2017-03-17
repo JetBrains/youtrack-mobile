@@ -1,10 +1,11 @@
 /* @flow */
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, Animated, ActivityIndicator, ScrollView, Platform, Linking} from 'react-native';
+import {View, Text, TouchableOpacity, Animated, ActivityIndicator, ScrollView, Platform} from 'react-native';
 import ImageProgress from 'react-native-image-progress';
 import flattenStyle from 'react-native/Libraries/StyleSheet/flattenStyle';
 import styles from './attachments-row.styles';
 import Router from '../../components/router/router';
+import safariView from '../../components/safari-view/safari-view';
 
 const flatStyles = flattenStyle(styles.attachmentImage) || {};
 const imageWidth = flatStyles.width * 2;
@@ -52,10 +53,13 @@ export default class AttachmentsRow extends Component {
   }
 
   _openAttachmentUrl(name, url) {
-    if (Platform.OS === 'ios') {
+    const ATTACH_EXT_BLACK_LIST = [/\.mp4\?/, /\.m4v\?/];
+    const isVideo = ATTACH_EXT_BLACK_LIST.some(reg => reg.test(url));
+
+    if (Platform.OS === 'ios' && !isVideo) {
       Router.AttachmentPreview({url, name});
     } else {
-      Linking.openURL(url);
+      safariView.show({url});
     }
     this.props.onOpenAttachment('file', name);
   }
