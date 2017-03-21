@@ -1,7 +1,13 @@
-import {Navigator} from 'react-native';
 import React, {createElement} from 'react';
+import {StackNavigator} from 'react-navigation';
 
-import {StackNavigator, addNavigationHelpers} from 'react-navigation';
+const noAnimation = {
+  transitionSpec: {
+    duration: 0
+  },
+  screenInterpolator: null
+};
+
 
 /**
  * Route singleton
@@ -17,16 +23,28 @@ class Router {
     if (!navigator) {
       return;
     }
-    console.log('setNavigator', navigator)
     this._navigator = navigator;
   }
 
-  registerRoute({name, component, props, type, animation}) {
+  getTransitionConfig = (transitionProps) => {
+    if (!this._navigator) {
+      return noAnimation;
+    }
+    const {nav} = this._navigator.state;
+    const currentRouteName = nav.routes[nav.index].routeName;
+
+    const route = this.routes[currentRouteName];
+    if (route.type === 'reset') {
+      return noAnimation;
+    }
+  }
+
+  registerRoute({name, component, props, type, modal}) {
     this.routes[name] = {
       screen: ({navigation}) => createElement(component, navigation.state.params),
       type,
       props,
-      animation
+      modal
     };
 
     if (!this[name]) {
@@ -43,7 +61,7 @@ class Router {
 
   navigate(routeName, props) {
     if (!this._navigator) {
-      throw `call setNavigator(navigator) first!`;
+      throw `Router.navigate: call setNavigator(navigator) first!`;
     }
 
     if (!this.routes[routeName]) {
@@ -53,21 +71,17 @@ class Router {
     const newRoute = Object.assign({}, this.routes[routeName]);
     newRoute.props = Object.assign({}, newRoute.props, props);
 
-    // if (newRoute.type === 'replace') {
-    //   return this._navigator.replace(newRoute);
-    // }
     if (newRoute.type === 'reset') {
-      // debugger
       this._navigator.dispatch({
         type: 'Navigation/RESET',
         index: 0,
         actions: [
-          {type: 'Navigation/NAVIGATE', routeName, params: props}
+          {type: 'Navigation/NAVIGATE', routeName, params: newRoute.props}
         ]
       });
     }
 
-    this._navigator.dispatch({type: 'Navigation/NAVIGATE', routeName, params: props});
+    this._navigator.dispatch({type: 'Navigation/NAVIGATE', routeName, params: newRoute.props});
   }
 
   pop() {
@@ -84,7 +98,7 @@ class Router {
 
   renderNavigatorView() {
     const {AppNavigator} = this;
-    return <AppNavigator ref={this.setNavigator}/>;
+    return <AppNavigator transitionConfig={this.getTransitionConfig} ref={this.setNavigator}/>;
   }
 }
 

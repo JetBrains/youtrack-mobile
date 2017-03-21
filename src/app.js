@@ -164,9 +164,9 @@ class YouTrackMobile extends Component {
 
     Router.registerRoute({name: 'SingleIssue', component: SingleIssue});
 
-    Router.registerRoute({name: 'ShowImage', component: ShowImage, animation: Navigator.SceneConfigs.FloatFromBottom});
+    Router.registerRoute({name: 'ShowImage', component: ShowImage, modal: true});
 
-    Router.registerRoute({name: 'AttachmentPreview', component: AttachmentPreview, animation: Navigator.SceneConfigs.FloatFromBottom});
+    Router.registerRoute({name: 'AttachmentPreview', component: AttachmentPreview, modal: true});
 
     Router.registerRoute({name: 'CreateIssue', component: CreateIssue});
 
