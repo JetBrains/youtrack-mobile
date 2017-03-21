@@ -1,5 +1,5 @@
 /* @flow */
-import {View, Text, TouchableOpacity, Image, Linking} from 'react-native';
+import {View, ScrollView, Text, TouchableOpacity, Image, Linking, Dimensions} from 'react-native';
 import React, {Component} from 'react';
 import styles from './menu.styles';
 import {VERSION_STRING} from '../../components/usage/usage';
@@ -61,54 +61,61 @@ export class Menu extends Component<DefaultProps, Props, void> {
   }
 
   _renderMenu() {
+    const {height} = Dimensions.get('window');
     const {auth, issueQuery} = this.props;
     const user = auth.currentUser;
     const backendUrl = auth.config.backendUrl;
     const avatarUrl = user.profile && user.profile.avatar && user.profile.avatar.url;
 
-    return <View style={[styles.menuContainer, {paddingTop: getTopPadding()}]}>
-      <View style={styles.profileContainer}>
-        <Image style={styles.currentUserAvatarImage} source={{uri: avatarUrl}}></Image>
+    return (
+      <ScrollView>
+        <View style={[styles.menuContainer, {paddingTop: getTopPadding(), minHeight: height}]}>
+          <View style={styles.profileContainer}>
+            <Image style={styles.currentUserAvatarImage} source={{uri: avatarUrl}}></Image>
 
-        <Text style={styles.profileName}>{user.name}</Text>
+            <Text style={styles.profileName}>{user.name}</Text>
 
-        <TouchableOpacity style={styles.logOutButton} onPress={this._logOut}>
-          <Image style={styles.logoutIcon} source={logOutIcon}></Image>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.menuItems}>
-        <TouchableOpacity activeOpacity={0.4} style={styles.menuItemButton} onPress={this._openIssueList}>
-          <View style={styles.menuItemTopLine}>
-            <Text style={styles.menuItemText}>Issues</Text>
-            <Image style={styles.menuItemIcon} source={next}></Image>
+            <TouchableOpacity style={styles.logOutButton} onPress={this._logOut}>
+              <Image style={styles.logoutIcon} source={logOutIcon}></Image>
+            </TouchableOpacity>
           </View>
-          <Text style={styles.menuItemSubtext}>{issueQuery || 'No query'}</Text>
-        </TouchableOpacity>
 
-        <TouchableOpacity activeOpacity={0.4} style={styles.menuItemButton} onPress={this._openAgileBoard}>
-          <View style={styles.menuItemTopLine}>
-            <Text style={styles.menuItemText}>Agile Boards</Text>
-            <Image style={styles.menuItemIcon} source={next}></Image>
+          <View style={styles.menuItems}>
+            <TouchableOpacity activeOpacity={0.4} style={styles.menuItemButton} onPress={this._openIssueList}>
+              <View style={styles.menuItemTopLine}>
+                <Text style={styles.menuItemText}>Issues</Text>
+                <Image style={styles.menuItemIcon} source={next}></Image>
+              </View>
+              <Text style={styles.menuItemSubtext}>{issueQuery || 'No query'}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity activeOpacity={0.4} style={styles.menuItemButton} onPress={this._openAgileBoard}>
+              <View style={styles.menuItemTopLine}>
+                <Text style={styles.menuItemText}>Agile Boards</Text>
+                <Image style={styles.menuItemIcon} source={next}></Image>
+              </View>
+              <Text style={styles.menuItemSubtext}>Alpha version</Text>
+            </TouchableOpacity>
           </View>
-          <Text style={styles.menuItemSubtext}>Alpha version</Text>
-        </TouchableOpacity>
-      </View>
 
-      <View style={styles.menuFooter}>
-        <Text style={styles.footerText}>YouTrack Mobile {VERSION_STRING}</Text>
-        <Text style={styles.footerText}>{formatYouTrackURL(backendUrl)}</Text>
+          <View style={styles.flexSpacer}/>
 
-        <View style={styles.spacer}></View>
-        <Text style={styles.footerText}>© 2000—{CURRENT_YEAR} JetBrains</Text>
-        <Text style={styles.footerText}>All rights reserved</Text>
+          <View style={styles.menuFooter}>
+            <Text style={styles.footerText}>YouTrack Mobile {VERSION_STRING}</Text>
+            <Text style={styles.footerText}>{formatYouTrackURL(backendUrl)}</Text>
 
-        <View style={styles.spacer}></View>
-        <TouchableOpacity style={styles.buttonLink} onPress={openPrivacyPolicy}>
-          <Text style={styles.linkText}>Privacy Policy</Text>
-        </TouchableOpacity>
-      </View>
-    </View>;
+            <View style={styles.spacer}></View>
+            <Text style={styles.footerText}>© 2000—{CURRENT_YEAR} JetBrains</Text>
+            <Text style={styles.footerText}>All rights reserved</Text>
+
+            <View style={styles.spacer}></View>
+            <TouchableOpacity style={styles.buttonLink} onPress={openPrivacyPolicy}>
+              <Text style={styles.linkText}>Privacy Policy</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
+    );
   }
 
   render() {

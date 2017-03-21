@@ -65,11 +65,11 @@ export default StyleSheet.create({
     color: COLOR_GRAY,
     fontSize: 14
   },
+  flexSpacer: {
+    flexGrow: 1
+  },
   menuFooter: {
-    position: 'absolute',
-    left: UNIT*2,
-    right: UNIT*2,
-    bottom: UNIT*2
+    padding: UNIT*2
   },
   spacer: {
     marginTop: UNIT
