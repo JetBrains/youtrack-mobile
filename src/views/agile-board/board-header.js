@@ -22,7 +22,7 @@ export default class BoardHeader extends PureComponent<void, Props, void> {
 
   render() {
     const {columns, onCollapseToggle, style} = this.props;
-console.log('style', style)
+
     return (
       <View
         style={[styles.tableHeader, style]}

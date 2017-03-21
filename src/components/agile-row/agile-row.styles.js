@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import { UNIT, AGILE_COLUMN_MIN_WIDTH, COLOR_LIGHT_GRAY, AGILE_COLLAPSED_COLUMN_WIDTH, COLOR_GRAY, COLOR_FONT_GRAY, COLOR_PINK } from '../variables/variables';
+import { UNIT, COLOR_LIGHT_GRAY, AGILE_COLLAPSED_COLUMN_WIDTH, COLOR_GRAY, COLOR_FONT_GRAY, COLOR_PINK } from '../variables/variables';
 
 export default StyleSheet.create({
   rowContainer: {},
