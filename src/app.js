@@ -171,6 +171,8 @@ class YouTrackMobile extends Component {
     Router.registerRoute({name: 'CreateIssue', component: CreateIssue});
 
     Router.registerRoute({name: 'AgileBoard', component: AgileBoard, type: 'replace'});
+
+    Router.finalizeRoutes('Home');
   }
 
   handleOrientationChange = (event: Object) => {
@@ -184,7 +186,7 @@ class YouTrackMobile extends Component {
       <Provider store={store}>
         <ActionSheet ref={component => this._actionSheetRef = component}>
           <View style={{flex: 1, backgroundColor: COLOR_BLACK}} onLayout={this.handleOrientationChange}>
-            {Router.renderNavigatorView({initialRoute: Router.routes.Home})}
+            {Router.renderNavigatorView()}
             <Toast ref={toast => setNotificationComponent(toast)}/>
           </View>
         </ActionSheet>

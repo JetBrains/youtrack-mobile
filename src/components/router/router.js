@@ -1,6 +1,8 @@
 import {Navigator} from 'react-native';
 import React, {createElement} from 'react';
 
+import {StackNavigator, addNavigationHelpers} from 'react-navigation';
+
 /**
  * Route singleton
  */
@@ -11,13 +13,17 @@ class Router {
     this.routes = {};
   }
 
-  setNavigator(navigator) {
+  setNavigator = (navigator) => {
+    if (!navigator) {
+      return;
+    }
+    console.log('setNavigator', navigator)
     this._navigator = navigator;
   }
 
   registerRoute({name, component, props, type, animation}) {
     this.routes[name] = {
-      component,
+      screen: ({navigation}) => createElement(component, navigation.state.params),
       type,
       props,
       animation
@@ -26,6 +32,13 @@ class Router {
     if (!this[name]) {
       this[name] = (props) => this.navigate(name, props);
     }
+  }
+
+  finalizeRoutes(initialRouteName) {
+    this.AppNavigator = StackNavigator(this.routes, {
+      initialRouteName,
+      headerMode: 'none'
+    });
   }
 
   navigate(routeName, props) {
@@ -40,21 +53,28 @@ class Router {
     const newRoute = Object.assign({}, this.routes[routeName]);
     newRoute.props = Object.assign({}, newRoute.props, props);
 
-    if (newRoute.type === 'replace') {
-      return this._navigator.replace(newRoute);
-    }
+    // if (newRoute.type === 'replace') {
+    //   return this._navigator.replace(newRoute);
+    // }
     if (newRoute.type === 'reset') {
-      return this._navigator.resetTo(newRoute);
+      // debugger
+      this._navigator.dispatch({
+        type: 'Navigation/RESET',
+        index: 0,
+        actions: [
+          {type: 'Navigation/NAVIGATE', routeName, params: props}
+        ]
+      });
     }
 
-    return this._navigator.push(newRoute);
+    this._navigator.dispatch({type: 'Navigation/NAVIGATE', routeName, params: props});
   }
 
   pop() {
-    if (this._navigator.state.presentedIndex < 1) {
+    if (this._navigator.state.nav.routes.length <= 1) {
       return false;
     }
-    this._navigator.pop();
+    this._navigator.dispatch({type: 'Navigation/BACK'});
     return true;
   }
 
@@ -62,20 +82,9 @@ class Router {
     return this._navigator;
   }
 
-  renderNavigatorView({initialRoute}) {
-    return <Navigator
-      initialRoute={initialRoute}
-      configureScene={(route) => {
-          return route.animation || Navigator.SceneConfigs.FloatFromRight;
-        }
-      }
-      renderScene={(route, navigator) => {
-          this.setNavigator(navigator);
-
-          return createElement(route.component, route.props);
-        }
-      }
-    />;
+  renderNavigatorView() {
+    const {AppNavigator} = this;
+    return <AppNavigator ref={this.setNavigator}/>;
   }
 }
 
