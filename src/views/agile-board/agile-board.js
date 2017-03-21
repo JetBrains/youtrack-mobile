@@ -138,6 +138,7 @@ class AgileBoard extends Component {
       <View style={styles.boardHeaderContainer}>
         <BoardHeader
           ref={node => this.boardHeader = node}
+          style={{minWidth: this._getScrollableWidth()}}
           columns={sprint.board.columns}
           onCollapseToggle={this.props.onColumnCollapseToggle}
         />

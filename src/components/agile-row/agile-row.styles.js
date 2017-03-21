@@ -26,9 +26,8 @@ export default StyleSheet.create({
     borderColor: COLOR_GRAY
   },
   column: {
-    flexShrink: 1,
     flex: 1,
-    minWidth: AGILE_COLUMN_MIN_WIDTH,
+
     borderRightWidth: 0.5,
     borderColor: COLOR_GRAY
   },

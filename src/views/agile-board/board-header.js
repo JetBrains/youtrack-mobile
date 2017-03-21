@@ -1,7 +1,7 @@
 /* @flow */
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import React, {PureComponent} from 'react';
-import {UNIT, AGILE_COLUMN_MIN_WIDTH, AGILE_COLLAPSED_COLUMN_WIDTH, COLOR_FONT_ON_BLACK, COLOR_FONT_GRAY, COLOR_BLACK} from '../../components/variables/variables';
+import {UNIT, AGILE_COLLAPSED_COLUMN_WIDTH, COLOR_FONT_ON_BLACK, COLOR_FONT_GRAY, COLOR_BLACK} from '../../components/variables/variables';
 import type {AgileColumn} from '../../flow/Agile';
 
 type Props = {
@@ -22,9 +22,12 @@ export default class BoardHeader extends PureComponent<void, Props, void> {
 
   render() {
     const {columns, onCollapseToggle, style} = this.props;
-
+console.log('style', style)
     return (
-      <View style={[styles.tableHeader, style]} ref={component => this.node = component}>
+      <View
+        style={[styles.tableHeader, style]}
+        ref={component => this.node = component}
+      >
         {columns.map((col, index) => {
           const columnPresentation = col.agileColumn.fieldValues.map(val => val.presentation).join(', ');
 
@@ -53,9 +56,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLOR_BLACK
   },
   tableHeaderItem: {
-    flexShrink: 1,
     flex: 1,
-    minWidth: AGILE_COLUMN_MIN_WIDTH,
     alignItems: 'center',
     padding: UNIT/2,
     paddingTop: 0,
