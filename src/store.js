@@ -1,7 +1,6 @@
 /* @flow */
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import createLogger from 'redux-logger';
 
 import reducer from './reducers';
 
@@ -14,11 +13,6 @@ function getApi() {
 }
 
 const middlewares = [thunk.withExtraArgument(getApi)];
-
-if (process.env.NODE_ENV === 'development') {
-  const logger = createLogger();
-  middlewares.push(logger);
-}
 
 const createStoreWithMiddleware = applyMiddleware(...middlewares)(createStore);
 
