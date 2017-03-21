@@ -183,6 +183,7 @@ export function openSprintSelect() {
         show: true,
         placeholder: 'Search for the sprint',
         dataSource: () => api.getSprintList(sprint.agile.id),
+        selectedItems: [sprint],
         onSelect: selectedSprint => {
           dispatch(closeSelect());
           dispatch(loadSprint(sprint.agile.id, selectedSprint.id));
@@ -195,6 +196,7 @@ export function openSprintSelect() {
 export function openBoardSelect() {
   return (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
+    const {sprint} = getState().agile;
 
     dispatch({
       type: types.OPEN_AGILE_SELECT,
@@ -202,6 +204,7 @@ export function openBoardSelect() {
         show: true,
         placeholder: 'Search for the board',
         dataSource: () => api.getAgileBoardsList(),
+        selectedItems: [sprint.agile],
         onSelect: (selectedBoard: BoardOnList) => {
           dispatch(closeSelect());
           dispatch(loadBoard(selectedBoard.id, selectedBoard.sprints));

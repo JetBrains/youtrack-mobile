@@ -4,7 +4,8 @@ import {
   COLOR_PINK,
   COLOR_BLACK,
   COLOR_FONT,
-  COLOR_FONT_ON_BLACK
+  COLOR_FONT_ON_BLACK,
+  COLOR_TRANSPARENT_BLACK
 } from '../../components/variables/variables';
 
 export default StyleSheet.create({
@@ -99,12 +100,11 @@ export default StyleSheet.create({
     fontSize: 18,
     color: COLOR_PINK
   },
-  agileBoardSelect: {
-    position: 'absolute',
+  selectModal: {
     top: 0,
     right: 0,
     left: 0,
     bottom: 0,
-    backgroundColor: COLOR_BLACK
+    backgroundColor: COLOR_TRANSPARENT_BLACK
   }
 });

@@ -1,6 +1,7 @@
 /* @flow */
 import {ScrollView, View, Text, Image, RefreshControl, TouchableOpacity, ActivityIndicator} from 'react-native';
 import React, {Component} from 'react';
+import Modal from 'react-native-root-modal';
 import usage from '../../components/usage/usage';
 import Header from '../../components/header/header';
 import Select from '../../components/select/select';
@@ -147,12 +148,16 @@ class AgileBoard extends Component {
   _renderSelect() {
     const {selectProps} = this.props;
     return (
-      <Select
-        {...selectProps}
-        style={styles.agileBoardSelect}
-        getTitle={item => item.name}
-        onCancel={this.props.onCloseSelect}
-      />
+      <Modal
+        visible
+        style={styles.selectModal}
+      >
+        <Select
+          {...selectProps}
+          getTitle={item => item.name}
+          onCancel={this.props.onCloseSelect}
+        />
+      </Modal>
     );
   }
 
