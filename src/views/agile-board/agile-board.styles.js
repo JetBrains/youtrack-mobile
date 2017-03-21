@@ -39,13 +39,8 @@ export default StyleSheet.create({
     marginRight: UNIT / 2,
     resizeMode: 'contain'
   },
-  boardHeaderContainer: {
+  boardHeader: {
     backgroundColor: COLOR_BLACK
-  },
-  rowContainerZoomedOut: {
-    margin: '-10%',
-    marginTop: '-40%',
-    transform: [{scale: 0.8}]
   },
   loadingMoreIndicator: {
     padding: UNIT * 2

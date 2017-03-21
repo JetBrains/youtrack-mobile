@@ -134,14 +134,18 @@ class AgileBoard extends Component {
   }
 
   _renderBoardHeader(sprint: SprintFull) {
+    const {zoomedOut} = this.state;
     return (
-      <View style={styles.boardHeaderContainer}>
-        <BoardHeader
-          ref={node => this.boardHeader = node}
-          style={{minWidth: this._getScrollableWidth()}}
-          columns={sprint.board.columns}
-          onCollapseToggle={this.props.onColumnCollapseToggle}
-        />
+      <View>
+      <BoardHeader
+        ref={node => this.boardHeader = node}
+        style={[
+          styles.boardHeader,
+          {minWidth: zoomedOut ? null : this._getScrollableWidth()}
+        ]}
+        columns={sprint.board.columns}
+        onCollapseToggle={this.props.onColumnCollapseToggle}
+      />
       </View>
     );
   }
@@ -218,7 +222,9 @@ class AgileBoard extends Component {
             refreshControl={this._renderRefreshControl()}
             onScroll={this._onScroll}
             scrollEventThrottle={30}
-            contentContainerStyle={[{minWidth: this._getScrollableWidth()}, zoomedOut && styles.rowContainerZoomedOut]}
+            contentContainerStyle={[
+              {minWidth: zoomedOut? null: this._getScrollableWidth()}
+            ]}
           >
             {noBoardSelected && this._renderNoSprint()}
             {sprint && this._renderBoard(sprint)}
