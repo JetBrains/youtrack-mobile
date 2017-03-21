@@ -55,16 +55,16 @@ export default class AttachmentsRow extends Component {
   _openAttachmentUrl(name, url) {
     const ATTACH_EXT_BLACK_LIST = [/\.mp4\?/, /\.m4v\?/];
     const isVideo = ATTACH_EXT_BLACK_LIST.some(reg => reg.test(url));
+    this.props.onOpenAttachment('file', name);
 
     if (Platform.OS === 'ios' && !isVideo) {
       Router.AttachmentPreview({url, name});
     } else {
       if (Platform.OS === 'ios') {
-        safariView.show({url});
+        return safariView.show({url});
       }
       Linking.openURL(url);
     }
-    this.props.onOpenAttachment('file', name);
   }
 
   render() {
