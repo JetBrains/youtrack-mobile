@@ -12,6 +12,7 @@
 # Ignore bad components
 .*/node_modules/y18n/test/.*\.json
 .*/node_modules/simple-markdown/.*
+.*/node_modules/react-navigation/.*
 .*/node_modules/react-native-easy-toast/.*
 .*/node_modules/react-native-gesture-responder/.*
 

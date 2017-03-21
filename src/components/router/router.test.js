@@ -6,10 +6,7 @@ describe('Router', () => {
 
   beforeEach(() => {
     fakeNavigator = {
-      push: sinon.spy(),
-      pop: sinon.spy(),
-      replace: sinon.spy(),
-      resetTo: sinon.spy()
+      dispatch: sinon.spy()
     };
     Router.setNavigator(fakeNavigator);
   });
@@ -27,11 +24,11 @@ describe('Router', () => {
     Router.registerRoute({
       name: 'foo',
       component: {barr: 'bar'},
-      animation: 'fake-animation',
+      modal: true,
       props: {some: 'prop'}
     });
-    Router.routes.foo.component.barr.should.equal('bar');
-    Router.routes.foo.animation.should.equal('fake-animation');
+    Router.routes.foo.screen.should.be.defined;
+    Router.routes.foo.modal.should.be.true;
     Router.routes.foo.props.some.should.equal('prop');
   });
 
@@ -44,7 +41,7 @@ describe('Router', () => {
 
     Router.foo();
 
-    fakeNavigator.push.should.have.been.called;
+    fakeNavigator.dispatch.should.have.been.called;
   });
 
   it('should navigate', () => {
@@ -54,6 +51,6 @@ describe('Router', () => {
 
     Router.navigate('foo');
 
-    fakeNavigator.push.should.have.been.called;
+    fakeNavigator.dispatch.should.have.been.called;
   });
 });
