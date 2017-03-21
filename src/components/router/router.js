@@ -1,5 +1,5 @@
 import React, {createElement} from 'react';
-import {StackNavigator} from 'react-navigation';
+import {StackNavigator, NavigationActions} from 'react-navigation';
 
 const noAnimation = {
   transitionSpec: {
@@ -72,23 +72,20 @@ class Router {
     newRoute.props = Object.assign({}, newRoute.props, props);
 
     if (newRoute.type === 'reset') {
-      this._navigator.dispatch({
-        type: 'Navigation/RESET',
+      return this._navigator.dispatch(NavigationActions.reset({
         index: 0,
-        actions: [
-          {type: 'Navigation/NAVIGATE', routeName, params: newRoute.props}
-        ]
-      });
+        actions: [NavigationActions.navigate({routeName, params: newRoute.props})]
+      }));
     }
 
-    this._navigator.dispatch({type: 'Navigation/NAVIGATE', routeName, params: newRoute.props});
+    this._navigator.dispatch(NavigationActions.navigate({routeName, params: newRoute.props}));
   }
 
   pop() {
     if (this._navigator.state.nav.routes.length <= 1) {
       return false;
     }
-    this._navigator.dispatch({type: 'Navigation/BACK'});
+    this._navigator.dispatch(NavigationActions.back());
     return true;
   }
 
