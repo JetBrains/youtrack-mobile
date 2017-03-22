@@ -3514,9 +3514,9 @@ react-native-easy-toast@1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/react-native-easy-toast/-/react-native-easy-toast-1.0.3.tgz#a3ea60714d74ae17fe4c96acc9e26b48246376f6"
 
-react-native-fence-html@huston007/react-native-fence-html#644ffbd:
+react-native-fence-html@huston007/react-native-fence-html#644ffbd753c1fef9d4cfd2fb69bd45f31236526e:
   version "1.0.6"
-  resolved "https://codeload.github.com/huston007/react-native-fence-html/tar.gz/644ffbd"
+  resolved "https://codeload.github.com/huston007/react-native-fence-html/tar.gz/644ffbd753c1fef9d4cfd2fb69bd45f31236526e"
   dependencies:
     buffer "^4.5.1"
     events "^1.1.0"
