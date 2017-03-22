@@ -62,27 +62,23 @@ export default class QueryAssistSuggestionsList extends React.Component {
     return res;
   }
 
+  _onApplySuggestion = (suggestion: TransformedSuggestion | SavedQuery) => {
+    const isSuggestion = suggestion.caret;
+    const {onApplySuggestion, onApplySavedQuery} = this.props;
+    return isSuggestion ? onApplySuggestion(suggestion) : onApplySavedQuery(suggestion);
+  }
+
   _renderRow = (suggestion: TransformedSuggestion | SavedQuery) => {
-    if (suggestion.caret) {
-      // marker that this is TransformedSuggestion
-      return (
-        <TouchableOpacity
-          style={styles.searchRow}
-          onPress={() => this.props.onApplySuggestion(suggestion)}
-        >
-          <Text style={styles.searchText}>{suggestion.option}</Text>
-        </TouchableOpacity>
-      );
-    } else {
-      return (
-        <TouchableOpacity
-          style={styles.searchRow}
-          onPress={() => this.props.onApplySavedQuery(suggestion)}
-        >
-          <Text style={styles.searchText}>{suggestion.name}</Text>
-        </TouchableOpacity>
-      );
-    }
+    const isSuggestion = suggestion.caret;
+
+    return (
+      <TouchableOpacity
+        style={styles.searchRow}
+        onPress={this._onApplySuggestion}
+      >
+        <Text style={styles.searchText}>{isSuggestion ? suggestion.option : suggestion.name}</Text>
+      </TouchableOpacity>
+    );
   }
 
   _renderSectionHeader = (sectionData: Array<Object>, category: string) => {
@@ -127,7 +123,6 @@ const styles = StyleSheet.create({
     paddingBottom: UNIT*2
   },
   searchRow: {
-    flex: 1,
     padding: UNIT * 2,
     paddingTop: UNIT * 1.5,
     paddingBottom: UNIT * 1.5,
