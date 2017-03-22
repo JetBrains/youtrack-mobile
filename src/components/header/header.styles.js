@@ -4,7 +4,6 @@ import {UNIT, COLOR_BLACK, COLOR_PINK} from '../../components/variables/variable
 export default StyleSheet.create({
   header: {
     paddingBottom: 12,
-    zIndex: 4,
     flex: 0,
     flexDirection: 'row',
     justifyContent: 'space-between',
