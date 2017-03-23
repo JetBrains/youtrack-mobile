@@ -99,7 +99,8 @@ export default class QueryAssistSuggestionsList extends React.Component {
     return (
       <View style={[styles.container, this.props.style]}>
         <ListView
-          style={styles.list}
+          contentContainerStyle={styles.list}
+
           dataSource={this.state.dataSource}
           enableEmptySections
           stickySectionHeadersEnabled={false}
@@ -119,8 +120,7 @@ const styles = StyleSheet.create({
   },
   list: {
     overflow: 'visible',
-    paddingTop: UNIT * 2,
-    paddingBottom: UNIT*2
+    paddingTop: UNIT * 2
   },
   searchRow: {
     padding: UNIT * 2,

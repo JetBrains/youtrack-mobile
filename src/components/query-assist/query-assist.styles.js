@@ -17,6 +17,7 @@ export default StyleSheet.create({
     top: 0
   },
   listContainer: {
+    flex: 1,
     flexGrow: 1,
     flexShrink: 1,
     justifyContent: 'flex-end',
