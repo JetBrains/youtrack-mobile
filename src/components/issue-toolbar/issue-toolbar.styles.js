@@ -3,6 +3,7 @@ import {UNIT, COLOR_BLACK, COLOR_FONT_GRAY} from '../../components/variables/var
 
 export default StyleSheet.create({
   container: {
+    zIndex: -1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingLeft: UNIT,
