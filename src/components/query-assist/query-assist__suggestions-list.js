@@ -74,7 +74,7 @@ export default class QueryAssistSuggestionsList extends React.Component {
     return (
       <TouchableOpacity
         style={styles.searchRow}
-        onPress={this._onApplySuggestion}
+        onPress={() => this._onApplySuggestion(suggestion)}
       >
         <Text style={styles.searchText}>{isSuggestion ? suggestion.option : suggestion.name}</Text>
       </TouchableOpacity>
