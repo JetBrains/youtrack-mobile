@@ -17,6 +17,7 @@ import {View as AnimatedView} from 'react-native-animatable';
 
 type Props = {
   api: Api,
+  autoFocusSelect: boolean,
   issue: IssueFull,
   issuePermissions: IssuePermissions,
   onUpdate: (field: CustomField) => any,
@@ -261,6 +262,7 @@ export default class CustomFieldsPanel extends Component {
 
     return <Select
       {...this.state.select}
+      autoFocus={this.props.autoFocusSelect}
       onCancel={() => this.closeEditor()}
       getTitle={(item) => item.fullName || item.name || item.login}
     />;

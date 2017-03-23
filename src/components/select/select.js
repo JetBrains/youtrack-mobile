@@ -20,6 +20,7 @@ export type Props = {
   selectedItems: Array<Object>,
   placeholder?: string,
   multi: boolean,
+  autoFocus: boolean,
   emptyValue: ?string,
   style?: any
 };
@@ -38,6 +39,7 @@ export default class Select extends React.Component {
 
   static defaultProps = {
     placeholder: 'Search item',
+    autoFocus: false,
     onChangeSelection: (items) => null
   };
 
@@ -159,7 +161,7 @@ export default class Select extends React.Component {
   }
 
   render() {
-    const {multi, style, placeholder, onCancel} = this.props;
+    const {multi, autoFocus, style, placeholder, onCancel} = this.props;
 
     return (
       <View style={[styles.container, style, {paddingTop: getTopPadding() - UNIT * 2}]}>
@@ -167,6 +169,7 @@ export default class Select extends React.Component {
           <TextInput
             placeholder={placeholder}
             keyboardAppearance="dark"
+            autoFocus={autoFocus}
             placeholderTextColor={COLOR_PLACEHOLDER}
             returnKeyType={multi ? 'done' : 'search'}
             autoCorrect={false}
