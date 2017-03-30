@@ -23,18 +23,13 @@ const BUNDLE_VALUE = toField([
   '$type',
   'id',
   'name',
-  'localizedName',
   'description',
-  'assembleDate',
   'ordinal',
   'ringId', // for user bundle elements
   'login', // for user bundle elements
   'released',
   'archived',
-  'releaseDate',
-  'hasRunningJob',
   'isResolved',
-  'usersCount', // for groups
 
   {owner: ['ringId', 'login']},
 
@@ -46,7 +41,6 @@ const ISSUE_FIELD_VALUE = toField([{
       '$type',
       'id',
       'name',
-      'localizedName',
       'ringId',
       'fullName',
       'avatarUrl',
@@ -80,7 +74,6 @@ const PROJECT_CUSTOM_FIELD_FIELDS = toField([
       'id',
       'name',
       'ordinal',
-      'localizedName',
       'isPublic',
 
       {
@@ -151,7 +144,6 @@ const ISSUE_LINKS_FIELDS = toField([
     linkType: [
       'uid',
       'name',
-      'localizedName',
       'sourceToTarget',
       'localizedSourceToTarget',
       'targetToSource',
