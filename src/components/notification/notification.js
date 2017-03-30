@@ -22,21 +22,22 @@ export const extractErrorMessage = function (err: Object | string): string {
     err.error_description,
     err.error_children && err.error_children.map(it => it.error),
     err.body,
-    err.bodyText
+    err.bodyText,
+    err._bodyText
   ].filter(msg => msg);
 
   return values.join('. ');
 };
 
-export function resolveError (err: Object) {
+export async function resolveError (err: Object) {
   if (err.json) {
     try {
-      return err.json();
+      return await err.json();
     } catch (e) {
-      return Promise.resolve(err);
+      return err;
     }
   } else {
-    return Promise.resolve(err);
+    return err;
   }
 }
 
