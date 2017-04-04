@@ -58,7 +58,7 @@ export default createReducer(initialState, {
     return {...state, isRefreshing: false};
   },
   [types.START_LOADING_MORE]: (state: IssuesListState, action: Object) => {
-    return {...state, isLoadingMore: true};
+    return {...state, isLoadingMore: true, skip: action.newSkip};
   },
   [types.STOP_LOADING_MORE]: (state: IssuesListState, action: Object) => {
     return {...state, isLoadingMore: false};

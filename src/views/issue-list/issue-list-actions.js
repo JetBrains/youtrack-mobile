@@ -91,8 +91,8 @@ export function stopIssuesLoading() {
   return {type: types.STOP_ISSUES_LOADING};
 }
 
-export function startMoreIssuesLoading() {
-  return {type: types.START_LOADING_MORE};
+export function startMoreIssuesLoading(newSkip: number) {
+  return {type: types.START_LOADING_MORE, newSkip};
 }
 
 export function stopMoreIssuesLoading() {
@@ -171,7 +171,7 @@ export function loadMoreIssues() {
     }
     const newSkip = skip + PAGE_SIZE;
 
-    dispatch(startMoreIssuesLoading());
+    dispatch(startMoreIssuesLoading(newSkip));
 
     try {
       let moreIssues: Array<IssueOnList> = await api.getIssues(query, PAGE_SIZE, newSkip);
