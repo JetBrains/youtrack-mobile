@@ -46,9 +46,7 @@ export default StyleSheet.create({
     padding: UNIT * 2
   },
   zoomButtonContainer: {
-    opacity: 0.7,
     position: 'absolute',
-
     right: UNIT * 2,
     bottom: UNIT * 2
   },
@@ -57,7 +55,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
 
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFFFFAA',
     borderRadius: UNIT * 4,
 
     width: UNIT * 8,
@@ -73,6 +71,7 @@ export default StyleSheet.create({
   },
   zoomButtonIcon: {
     marginTop: 4,
+    resizeMode: 'contain',
     width: UNIT * 3.5,
     height: UNIT * 3.5
   },

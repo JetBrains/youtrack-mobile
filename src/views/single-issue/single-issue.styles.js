@@ -148,7 +148,6 @@ export default StyleSheet.create({
     color: COLOR_FONT_GRAY
   },
   addCommentContainer: {
-    opacity: 0.7,
     position: 'absolute',
 
     right: UNIT,
@@ -159,7 +158,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
 
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFFFFAA',
     borderRadius: UNIT * 4,
 
     width: UNIT * 8,
