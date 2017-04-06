@@ -181,7 +181,7 @@ export class IssueList extends Component {
             ItemSeparatorComponent={this._renderSeparator}
             ListFooterComponent={this._renderListMessage}
             onEndReached={loadMoreIssues}
-            onEndReachedThreshold={100}
+            onEndReachedThreshold={0.1}
           />
 
           <QueryAssist
