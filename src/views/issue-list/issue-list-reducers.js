@@ -1,11 +1,9 @@
 /* @flow */
 import {createReducer} from 'redux-create-reducer';
 import * as types from './issue-list-action-types';
-import {ListView} from 'react-native';
 import Cache from '../../components/cache/cache';
 import type {IssueOnList, IssueFull, TransformedSuggestions} from '../../flow/Issue';
 
-const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 const ISSUES_CACHE_KEY = 'yt_mobile_issues_cache';
 
 export type IssuesListState = {
@@ -20,8 +18,7 @@ export type IssuesListState = {
   isRefreshing: boolean,
 
   cache: Cache,
-  issues: Array<IssueOnList>,
-  dataSource: Object
+  issues: Array<IssueOnList>
 };
 
 const initialState: IssuesListState = {
@@ -35,8 +32,7 @@ const initialState: IssuesListState = {
   isInitialized: false,
   isRefreshing: false,
   cache: new Cache(ISSUES_CACHE_KEY),
-  issues: [],
-  dataSource: ds.cloneWithRows([])
+  issues: []
 };
 
 export default createReducer(initialState, {
@@ -67,7 +63,6 @@ export default createReducer(initialState, {
     return {
       ...state,
       issues: action.issues,
-      dataSource: state.dataSource.cloneWithRows(action.issues),
       isInitialized: true
     };
   },
@@ -77,8 +72,7 @@ export default createReducer(initialState, {
       isInitialized: true,
       isListEndReached: true,
       loadingError: action.error,
-      issues: [],
-      dataSource: state.dataSource.cloneWithRows([])
+      issues: []
     };
   },
   [types.LIST_END_REACHED]: (state: IssuesListState, action: {error: Object}) => {
@@ -95,10 +89,6 @@ export default createReducer(initialState, {
 
     const issues = state.issues.map(issue => issue.id === sourceIssue.id ? updateIssue(issue) : issue);
 
-    return {
-      ...state,
-      issues,
-      dataSource: state.dataSource.cloneWithRows(issues)
-    };
+    return {...state, issues};
   }
 });
