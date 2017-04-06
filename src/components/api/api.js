@@ -273,7 +273,7 @@ class Api {
       fields: agileFields.sprint.toString(),
       $topSwimlanes: top,
       $skipSwimlanes: skip
-    });
+    }, {encode: false});
     const sprint = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}?${queryString}`);
     return ApiHelper.patchAllRelativeAvatarUrls(sprint, this.config.backendUrl);
   }
