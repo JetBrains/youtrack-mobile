@@ -174,11 +174,20 @@ export default class CustomFieldsPanel extends Component {
   }
 
   editSimpleValueField(field: CustomField, type: string) {
-    const isInteger = type === 'integer';
-    const placeholder = isInteger ? '-12 or 34' : '1w 1d 1h 1m';
-    const valueFormatter = isInteger ?
-      value => parseInt(value) :
-      value => ({presentation: value});
+    const placeholders = {
+      integer: '-12 or 34',
+      string: 'Type value',
+      default: '1w 1d 1h 1m'
+    };
+
+    const valueFormatters = {
+      integer: value => parseInt(value),
+      string: value => value,
+      default: value => ({presentation: value})
+    };
+
+    const placeholder = placeholders[type] || placeholder.default;
+    const valueFormatter = valueFormatters[type] || valueFormatters.default;
 
     const value = field.value ? (field.value.presentation || field.value.toString()) : null;
 
@@ -232,7 +241,7 @@ export default class CustomFieldsPanel extends Component {
       return this.editDateField(field);
     }
 
-    if (['period', 'integer'].indexOf(field.projectCustomField.field.fieldType.valueType) !== -1) {
+    if (['period', 'integer', 'string'].indexOf(field.projectCustomField.field.fieldType.valueType) !== -1) {
       return this.editSimpleValueField(field, field.projectCustomField.field.fieldType.valueType);
     }
 
