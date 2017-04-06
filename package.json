@@ -10,7 +10,7 @@
   "scripts": {
     "start": "./node_modules/react-native-cli/index.js start",
     "test": "jest",
-    "test-ci": "npm test",
+    "test-ci": "TEAMCITY_VERSION=enablereport npm test",
     "test:watch": "npm test -- --watchAll",
     "lint": "eslint src/components src/views && flow check",
     "ios": "./node_modules/react-native-cli/index.js run-ios",
