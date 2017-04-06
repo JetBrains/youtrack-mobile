@@ -12,5 +12,12 @@ chai.use(chaiAsPromised);
 chai.use(sinonChai);
 should();
 
-global.expect = expect;
+jest.mock('react-native', () => {
+  return require('./mocks/react-native');
+});
 
+//Fixes https://github.com/sinonjs/sinon/issues/1051
+global.location = {host: 'localhost', protocol: 'http'};
+
+global.jestExpect = global.expect;
+global.expect = expect;
