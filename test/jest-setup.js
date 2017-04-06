@@ -1,4 +1,4 @@
-import chai, {expect, should} from 'chai';
+import chai, {should} from 'chai';
 import chaiEnzyme from 'chai-enzyme';
 import chaiAsPromised from 'chai-as-promised';
 import sinonChai from 'sinon-chai';
@@ -18,6 +18,3 @@ jest.mock('react-native', () => {
 
 //Fixes https://github.com/sinonjs/sinon/issues/1051
 global.location = {host: 'localhost', protocol: 'http'};
-
-global.jestExpect = global.expect;
-global.expect = expect;

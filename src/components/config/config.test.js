@@ -122,7 +122,7 @@ describe('Config', () => {
 
     it('should return nothing if no stored config found', async() => {
       const config = await getStoredConfig();
-      expect(config).to.be.null;
+      expect(config).toBeNull();
     });
   });
 
