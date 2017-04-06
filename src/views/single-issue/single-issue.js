@@ -65,29 +65,27 @@ export default class SingeIssueView extends React.Component {
     this.isUnmounted = true;
   }
 
-  loadIssue(id) {
+  async loadIssue(id) {
 
-    const getIssue = (issueId) => {
+    const getIssue = async (issueId) => {
       if (/[A-Z]/.test(issueId)) {
         return this.props.api.hackishGetIssueByIssueReadableId(issueId);
       }
       return this.props.api.getIssue(issueId);
     };
 
-    return getIssue(id)
-      .then((issue) => {
-        issue.fieldHash = ApiHelper.makeFieldHash(issue);
-        return issue;
-      })
-      .then((issue) => {
-        log.log('Issue loaded', issue);
-        if (this.isUnmounted) {
-          return;
-        }
-        this.setState({issue, fullyLoaded: true});
-        return issue;
-      })
-      .catch((err) => notifyError('Failed to load issue', err));
+    try {
+      const issue = await getIssue(id);
+      issue.fieldHash = ApiHelper.makeFieldHash(issue);
+      log.log('Issue loaded', issue);
+      if (this.isUnmounted) {
+        return;
+      }
+      this.setState({issue, fullyLoaded: true});
+      return issue;
+    } catch (err) {
+      notifyError('Failed to load issue', err);
+    }
   }
 
   async addComment(issue, comment) {

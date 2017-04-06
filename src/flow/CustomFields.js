@@ -32,18 +32,13 @@ declare type BundleValue = {
   $type: string,
   id: string,
   name: string,
-  localizedName: string,
   description: string,
-  assembleDate: string,
   ordinal: number,
   ringId: string,
   login: string,
   released: boolean,
   archived: boolean,
-  releaseDate: string,
-  hasRunningJob: boolean,
   isResolved: boolean,
-  IssueUsersCount: number,
   owner: {
     ringId: string,
     login: string
@@ -65,7 +60,6 @@ declare type ProjectCustomField = {
     id: string,
     name: string,
     ordinal: number,
-    localizedName: string,
     isPublic: boolean,
     fieldType: {
       valueType: string,
@@ -79,7 +73,6 @@ declare type FieldValue = {
   $type: string,
   id: string,
   name: string,
-  localizedName: string,
   ringId: string,
   fullName: string,
   avatarUrl: string,
@@ -119,7 +112,6 @@ declare type IssueComment = {
 declare type IssueLinkType = {
   uid: number,
   name: string,
-  localizedName: ?string,
   sourceToTarget: string,
   localizedSourceToTarget: ?string,
   targetToSource: string,

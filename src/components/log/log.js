@@ -27,7 +27,6 @@ export default {
     logEnabled = true;
   },
   disableLog() {
-    console.log('Logging has been turned off');
     logEnabled = false;
   }
 };

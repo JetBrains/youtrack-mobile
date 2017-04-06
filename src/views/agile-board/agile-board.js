@@ -158,9 +158,9 @@ class AgileBoard extends Component {
         style={styles.selectModal}
       >
         <Select
-          {...selectProps}
           getTitle={item => item.name}
           onCancel={this.props.onCloseSelect}
+          {...selectProps}
         />
       </Modal>
     );

@@ -122,21 +122,33 @@ describe('Config', () => {
 
     it('should return nothing if no stored config found', async() => {
       const config = await getStoredConfig();
-      expect(config).to.be.null;
+      expect(config).toBeNull();
     });
   });
 
   describe('YouTrack URL formatting', () => {
-    it('should drop http protocol', () => formatYouTrackURL('http://foo.com').should.equal('foo.com'));
+    it('should drop http protocol', () => {
+      formatYouTrackURL('http://foo.com').should.equal('foo.com');
+    });
 
-    it('should drop http protocol for oneword url', () => formatYouTrackURL('http://foo').should.equal('foo'));
+    it('should drop http protocol for oneword url', () => {
+      formatYouTrackURL('http://foo').should.equal('foo');
+    });
 
-    it('should drop http protocol for complex url', () => formatYouTrackURL('http://foo.com:8080/bar').should.equal('foo.com:8080/bar'));
+    it('should drop http protocol for complex url', () => {
+      formatYouTrackURL('http://foo.com:8080/bar').should.equal('foo.com:8080/bar');
+    });
 
-    it('should drop https protocol', () => formatYouTrackURL('https://foo.com').should.equal('foo.com'));
+    it('should drop https protocol', () => {
+      formatYouTrackURL('https://foo.com').should.equal('foo.com');
+    });
 
-    it('should drop /youtrack context', () => formatYouTrackURL('foo.com/youtrack').should.equal('foo.com'));
+    it('should drop /youtrack context', () => {
+      formatYouTrackURL('foo.com/youtrack').should.equal('foo.com');
+    });
 
-    it('should drop both protocol and /youtrack context', () => formatYouTrackURL('http://foo.com/youtrack').should.equal('foo.com'));
+    it('should drop both protocol and /youtrack context', () => {
+      formatYouTrackURL('http://foo.com/youtrack').should.equal('foo.com');
+    });
   });
 });

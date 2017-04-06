@@ -1,2 +1,0 @@
---compilers js:test/compile.js
---require test/setup.js

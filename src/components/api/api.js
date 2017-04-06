@@ -15,6 +15,8 @@ const STATUS_UNAUTHORIZED = 401;
 const STATUS_OK_IF_MORE_THAN = 200;
 const STATUS_BAD_IF_MORE_THATN = 300;
 
+const MAX_QUERY_LENGTH = 2048;
+
 class Api {
   auth: Auth;
   config: AppConfigFilled;
@@ -35,6 +37,8 @@ class Api {
   }
 
   async makeAuthorizedRequest(url: string, method: ?string, body: ?Object) {
+    assertLongQuery(url);
+
     const sendRequest = async () => {
       const authParams = this.auth.authParams;
       if (!authParams) {
@@ -81,7 +85,7 @@ class Api {
   async getIssue(id: string): Promise<IssueFull> {
     const queryString = qs.stringify({
       fields: issueFields.singleIssue.toString()
-    });
+    }, {encode: false});
 
     const issue = await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${id}?${queryString}`);
 
@@ -269,7 +273,7 @@ class Api {
       fields: agileFields.sprint.toString(),
       $topSwimlanes: top,
       $skipSwimlanes: skip
-    });
+    }, {encode: false});
     const sprint = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}?${queryString}`);
     return ApiHelper.patchAllRelativeAvatarUrls(sprint, this.config.backendUrl);
   }
@@ -331,6 +335,18 @@ class Api {
     const queryString = qs.stringify({fields: 'id'});
     const url =`${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}/board/columns/${columnId}/cells/${cellId}/draftIssue?${queryString}`;
     return await this.makeAuthorizedRequest(url, 'POST', {});
+  }
+}
+
+/**
+ * https://youtrack.jetbrains.com/issue/YTM-261
+ * http://www.mytecbits.com/microsoft/iis/iis-changing-maxquerystring-and-maxurl
+ */
+function assertLongQuery(url: string) {
+  const [, ...queryParts] = url.split('?');
+  const query = queryParts.join('');
+  if (query.length > MAX_QUERY_LENGTH) {
+    log.warn(`Query length (${query.length}) is longer than ${MAX_QUERY_LENGTH}. This doesn't work on some servers`, url);
   }
 }
 

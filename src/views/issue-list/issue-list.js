@@ -2,8 +2,7 @@
 import {
   View,
   Text,
-  ListView,
-  ScrollView,
+  FlatList,
   RefreshControl,
   TouchableOpacity,
   AppState
@@ -117,6 +116,14 @@ export class IssueList extends Component {
     );
   }
 
+  _renderRow = ({item}) => {
+    return (
+      <IssueRow key={item.id} issue={item} onClick={(issue) => this.goToIssue(issue)}></IssueRow>
+    );
+  };
+
+  _getIssueId = issue => issue.id;
+
   _renderRefreshControl() {
     return <RefreshControl
       refreshing={this.props.isRefreshing}
@@ -125,7 +132,11 @@ export class IssueList extends Component {
     />;
   }
 
-  _renderListMessage() {
+  _renderSeparator = () => {
+    return <View style={styles.separator}/>;
+  };
+
+  _renderListMessage = () => {
     const {loadingError, isRefreshing, isListEndReached, isLoadingMore, issues} = this.props;
     if (loadingError) {
       return (<View style={styles.errorContainer}>
@@ -149,27 +160,29 @@ export class IssueList extends Component {
     if (isLoadingMore && !isListEndReached) {
       return <Text style={styles.listFooterMessage}>Loading more issues...</Text>;
     }
-  }
+    return null;
+  };
 
   render() {
-    const {query, dataSource, loadMoreIssues, suggestIssuesQuery, queryAssistSuggestions} = this.props;
+    const {query, issues, isRefreshing, refreshIssues, loadMoreIssues, suggestIssuesQuery, queryAssistSuggestions} = this.props;
 
     return (
       <Menu onBeforeLogOut={this.logOut}>
         <View style={styles.listContainer}>
           {this._renderHeader()}
 
-          <ListView
-            removeClippedSubviews={false}
-            dataSource={dataSource}
-            enableEmptySections={true}
-            renderRow={(issue) => <IssueRow issue={issue} onClick={(issue) => this.goToIssue(issue)}></IssueRow>}
-            renderSeparator={(sectionID, rowID) => <View style={styles.separator} key={rowID}/>}
+          <FlatList
+            data={issues}
+            keyExtractor={this._getIssueId}
+            renderItem={this._renderRow}
+            refreshing={isRefreshing}
+            onRefresh={refreshIssues}
+            tintColor={COLOR_PINK}
+            ItemSeparatorComponent={this._renderSeparator}
+            ListFooterComponent={this._renderListMessage}
             onEndReached={loadMoreIssues}
-            onEndReachedThreshold={30}
-            renderScrollComponent={(props) => <ScrollView {...props} refreshControl={this._renderRefreshControl()}/>}
-            renderFooter={() => this._renderListMessage()}
-            refreshDescription="Refreshing issues"/>
+            onEndReachedThreshold={0.1}
+          />
 
           <QueryAssist
             suggestions={queryAssistSuggestions}

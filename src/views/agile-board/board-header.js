@@ -1,7 +1,13 @@
 /* @flow */
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import React, {PureComponent} from 'react';
-import {UNIT, AGILE_COLLAPSED_COLUMN_WIDTH, COLOR_FONT_ON_BLACK, COLOR_FONT_GRAY, COLOR_BLACK} from '../../components/variables/variables';
+import {
+  UNIT,
+  AGILE_COLLAPSED_COLUMN_WIDTH,
+  COLOR_DARK_BORDER,
+  COLOR_FONT_GRAY,
+  COLOR_BLACK
+} from '../../components/variables/variables';
 import type {AgileColumn} from '../../flow/Agile';
 
 type Props = {
@@ -29,19 +35,24 @@ export default class BoardHeader extends PureComponent<void, Props, void> {
         ref={component => this.node = component}
       >
         {columns.map((col, index) => {
-          const columnPresentation = col.agileColumn.fieldValues.map(val => val.presentation).join(', ');
+          const columnPresentation = col.agileColumn.fieldValues
+            .map(val => val.presentation)
+            .join(', ');
 
           return (
             <TouchableOpacity
               style={[
                 styles.tableHeaderItem,
-                index === columns.length - 1 && styles.tableHeaderItemWithoutBorder,
+                index === columns.length - 1 &&
+                  styles.tableHeaderItemWithoutBorder,
                 col.collapsed && styles.collapsedHeaderItem
               ]}
               key={col.id}
               onPress={() => onCollapseToggle(col)}
             >
-              <Text numberOfLines={1} style={styles.columnText}>{columnPresentation}</Text>
+              <Text numberOfLines={1} style={styles.columnText}>
+                {columnPresentation}
+              </Text>
             </TouchableOpacity>
           );
         })}
@@ -57,13 +68,13 @@ const styles = StyleSheet.create({
   },
   tableHeaderItem: {
     flex: 1,
-    alignItems: 'center',
-    padding: UNIT/2,
+    padding: UNIT / 2,
+    paddingLeft: UNIT,
     paddingTop: 0,
     paddingBottom: UNIT,
     borderRightWidth: 0.5,
     borderBottomWidth: 0.5,
-    borderColor: COLOR_FONT_GRAY
+    borderColor: COLOR_DARK_BORDER
   },
   tableHeaderItemWithoutBorder: {
     borderRightWidth: 0
@@ -71,9 +82,9 @@ const styles = StyleSheet.create({
   collapsedHeaderItem: {
     flex: 0,
     width: AGILE_COLLAPSED_COLUMN_WIDTH,
-    minWidth: AGILE_COLLAPSED_COLUMN_WIDTH,
+    minWidth: AGILE_COLLAPSED_COLUMN_WIDTH
   },
   columnText: {
-    color: COLOR_FONT_ON_BLACK
+    color: COLOR_FONT_GRAY
   }
 });

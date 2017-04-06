@@ -17,6 +17,7 @@ import {View as AnimatedView} from 'react-native-animatable';
 
 type Props = {
   api: Api,
+  autoFocusSelect: boolean,
   issue: IssueFull,
   issuePermissions: IssuePermissions,
   onUpdate: (field: CustomField) => any,
@@ -173,11 +174,20 @@ export default class CustomFieldsPanel extends Component {
   }
 
   editSimpleValueField(field: CustomField, type: string) {
-    const isInteger = type === 'integer';
-    const placeholder = isInteger ? '-12 or 34' : '1w 1d 1h 1m';
-    const valueFormatter = isInteger ?
-      value => parseInt(value) :
-      value => ({presentation: value});
+    const placeholders = {
+      integer: '-12 or 34',
+      string: 'Type value',
+      default: '1w 1d 1h 1m'
+    };
+
+    const valueFormatters = {
+      integer: value => parseInt(value),
+      string: value => value,
+      default: value => ({presentation: value})
+    };
+
+    const placeholder = placeholders[type] || placeholders.default;
+    const valueFormatter = valueFormatters[type] || valueFormatters.default;
 
     const value = field.value ? (field.value.presentation || field.value.toString()) : null;
 
@@ -231,7 +241,7 @@ export default class CustomFieldsPanel extends Component {
       return this.editDateField(field);
     }
 
-    if (['period', 'integer'].indexOf(field.projectCustomField.field.fieldType.valueType) !== -1) {
+    if (['period', 'integer', 'string'].indexOf(field.projectCustomField.field.fieldType.valueType) !== -1) {
       return this.editSimpleValueField(field, field.projectCustomField.field.fieldType.valueType);
     }
 
@@ -261,6 +271,7 @@ export default class CustomFieldsPanel extends Component {
 
     return <Select
       {...this.state.select}
+      autoFocus={this.props.autoFocusSelect}
       onCancel={() => this.closeEditor()}
       getTitle={(item) => item.fullName || item.name || item.login}
     />;

@@ -182,8 +182,12 @@ export function openSprintSelect() {
       selectProps: {
         show: true,
         placeholder: 'Search for the sprint',
-        dataSource: () => api.getSprintList(sprint.agile.id),
+        dataSource: async () => {
+          const res = await api.getSprintList(sprint.agile.id);
+          return res.sort(it => it.archived);
+        },
         selectedItems: [sprint],
+        getTitle: sprint => `${sprint.name} ${sprint.archived ? '(archived)' : ''}`,
         onSelect: selectedSprint => {
           dispatch(closeSelect());
           dispatch(loadSprint(sprint.agile.id, selectedSprint.id));
