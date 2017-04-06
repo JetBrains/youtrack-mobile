@@ -10,7 +10,7 @@
   "scripts": {
     "start": "./node_modules/react-native-cli/index.js start",
     "test": "jest",
-    "test-ci": "npm run test -- --testResultsProcessor jest-teamcity-reporter",
+    "test-ci": "npm test",
     "test:watch": "npm test -- --watchAll",
     "lint": "eslint src/components src/views && flow check",
     "ios": "./node_modules/react-native-cli/index.js run-ios",
@@ -31,7 +31,8 @@
   },
   "jest": {
     "preset": "react-native",
-    "setupTestFrameworkScriptFile": "./test/jest-setup.js"
+    "setupTestFrameworkScriptFile": "./test/jest-setup.js",
+    "testResultsProcessor": "jest-teamcity-reporter"
   },
   "dependencies": {
     "@exponent/react-native-action-sheet": "0.3.0",
