@@ -11,8 +11,14 @@ function makeRenderable(componentClass, type) {
   return class extends componentClass {
     render() {
       const {children, testID} = this.props;
+      const props = {
+        type
+      };
+      if (testID) {
+        props['data-test'] = testID;
+      }
 
-      return <div type={type} data-test={testID}>{children}</div>;
+      return <div {...props}>{children}</div>;
     }
   };
 }

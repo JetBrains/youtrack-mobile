@@ -53,6 +53,7 @@ module.exports = {
     'es6': true,
     'commonjs': true,
     'mocha': true,
+    'jest': true,
     'node': true
   },
   'globals': {

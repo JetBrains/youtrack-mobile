@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AgileCard/> should render snapshot 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "flexDirection": "column",
+        "height": 131,
+        "padding": 8,
+      },
+      undefined,
+    ]
+  }
+>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+      }
+    }
+  >
+    <ColorField
+      color={
+        Object {
+          "background": "#000",
+          "foreground": "#FFF",
+          "id": 4,
+        }
+      }
+      fullText={true}
+      style={
+        Object {
+          "paddingLeft": 4,
+          "paddingRight": 4,
+          "width": null,
+        }
+      }
+      text="TT-123"
+    />
+  </View>
+  <Text
+    numberOfLines={3}
+    style={
+      Object {
+        "fontSize": 13,
+        "paddingBottom": 4,
+        "paddingTop": 4,
+      }
+    }
+    testID="card-summary"
+  >
+    issue summary
+  </Text>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+        "height": 40,
+      }
+    }
+  />
+</View>
+`;
