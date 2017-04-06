@@ -186,7 +186,7 @@ export default class CustomFieldsPanel extends Component {
       default: value => ({presentation: value})
     };
 
-    const placeholder = placeholders[type] || placeholder.default;
+    const placeholder = placeholders[type] || placeholders.default;
     const valueFormatter = valueFormatters[type] || valueFormatters.default;
 
     const value = field.value ? (field.value.presentation || field.value.toString()) : null;
