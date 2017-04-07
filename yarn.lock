@@ -3942,6 +3942,14 @@ react-native-easy-toast@1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/react-native-easy-toast/-/react-native-easy-toast-1.0.3.tgz#a3ea60714d74ae17fe4c96acc9e26b48246376f6"
 
+react-native-event-source@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-event-source/-/react-native-event-source-1.0.0.tgz#1736e039f0b80fb7ae63057c399aa9b63ad2cf34"
+
+react-native-eventsource@huston007/react-native-eventsource#c82f4d3f:
+  version "0.0.2"
+  resolved "https://codeload.github.com/huston007/react-native-eventsource/tar.gz/c82f4d3f"
+
 react-native-fence-html@huston007/react-native-fence-html#c1a7050129fc7293df69b14045ed1a04ba2608fa:
   version "1.0.6"
   resolved "https://codeload.github.com/huston007/react-native-fence-html/tar.gz/c1a7050129fc7293df69b14045ed1a04ba2608fa"

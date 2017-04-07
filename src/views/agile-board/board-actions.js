@@ -2,11 +2,13 @@
 import * as types from './board-action-types';
 import {notifyError} from '../../components/notification/notification';
 import type {AgileBoardRow, AgileColumn, BoardOnList} from '../../flow/Agile';
-import type {IssueFull} from '../../flow/Issue';
+import type {IssueFull, IssueOnList} from '../../flow/Issue';
+import ServersideEvents from '../../components/api/api__serverside-events';
 import type Api from '../../components/api/api';
 import Router from '../../components/router/router';
 
 const PAGE_SIZE = 4;
+let serversideEvents = null;
 
 function startSprintLoad() {
   return {type: types.START_SPRINT_LOADING};
@@ -33,9 +35,11 @@ function loadSprint(agileId: string, sprintId: string) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
     dispatch(startSprintLoad());
+    destroyServersideEvents();
     try {
-      const sprint = await api.getSprint(agileId, sprintId, PAGE_SIZE, 4);
+      const sprint = await api.getSprint(agileId, sprintId, PAGE_SIZE);
       dispatch(receiveSprint(sprint));
+      dispatch(subscribeServersideUpdates());
       await api.saveLastVisitedSprint(sprintId);
     } catch (e) {
       notifyError('Could not load sprint', e);
@@ -81,6 +85,21 @@ function receiveSwimlanes(swimlanes) {
     PAGE_SIZE,
     swimlanes
   };
+}
+
+function storeServersideEvents(serversideEventsInstance) {
+  serversideEvents = serversideEventsInstance;
+}
+
+function destroyServersideEvents() {
+  if (serversideEvents) {
+    serversideEvents.close();
+  }
+  serversideEvents = null;
+}
+
+function removeIssueFromBoard(issueId: string) {
+  return {type: types.REMOVE_ISSUE_FROM_BOARD, issueId};
 }
 
 export function fetchMoreSwimlanes() {
@@ -222,8 +241,20 @@ export function addCardToCell(cellId: string, issue: IssueFull) {
   return {type: types.ADD_CARD_TO_CELL, cellId, issue};
 }
 
+export function reorderSwimlanesOrCells(leadingId: ?string, movedId: string) {
+  return {type: types.REORDER_SWIMLANES_OR_CELLS, leadingId, movedId};
+}
+
 export function updateIssueOnBoard(issue: IssueFull) {
   return {type: types.UPDATE_ISSUE_ON_BOARD, issue};
+}
+
+export function addOrUpdateCellOnBoard(issue: IssueOnList, rowId: string, columnId: string) {
+  return {type: types.ADD_OR_UPDATE_CELL_ON_BOARD, issue, rowId, columnId};
+}
+
+export function updateSwimlane(swimlane: AgileBoardRow) {
+  return {type: types.UPDATE_SWIMLANE, swimlane};
 }
 
 export function createCardForCell(columnId: string, cellId: string) {
@@ -240,5 +271,40 @@ export function createCardForCell(columnId: string, cellId: string) {
     } catch (err) {
       notifyError('Could not create card', err);
     }
+  };
+}
+
+export function subscribeServersideUpdates() {
+  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+    const {sprint} = getState().agile;
+    const api: Api = getApi();
+
+    serversideEvents = new ServersideEvents(api.config.backendUrl);
+    serversideEvents.subscribeAgileBoardUpdates(sprint.eventSourceTicket);
+
+    serversideEvents.listenTo('sprintCellUpdate', data => {
+      dispatch(addOrUpdateCellOnBoard(data.issue, data.row.id, data.column.id));
+    });
+
+    serversideEvents.listenTo('sprintSwimlaneUpdate', data => {
+      dispatch(updateSwimlane(data.swimlane));
+    });
+
+    serversideEvents.listenTo('sprintIssueRemove', data => {
+      dispatch(removeIssueFromBoard(data.removedIssue.id));
+    });
+
+    serversideEvents.listenTo('sprintIssueHide', data => {
+      dispatch(removeIssueFromBoard(data.removedIssue.id));
+    });
+
+    serversideEvents.listenTo('sprintIssuesReorder', data => {
+      data.reorders.forEach(function(reorder) {
+        const leadingId = reorder.leading ? reorder.leading.id : null;
+        dispatch(reorderSwimlanesOrCells(leadingId, reorder.moved.id));
+      });
+    });
+
+    storeServersideEvents(serversideEvents);
   };
 }
