@@ -113,7 +113,7 @@ function removeCardFromBoard(board: Board, issueId: string): Board {
   function removeIssueInRow(row: AgileBoardRow) {
     return {
       ...row,
-      cells: row.cells.filter(cell => {
+      cells: row.cells.map(cell => {
         if (cell.issues.some(issue => issue.id === issueId)) {
           return {
             ...cell,

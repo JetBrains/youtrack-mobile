@@ -35,7 +35,7 @@ function loadSprint(agileId: string, sprintId: string) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
     dispatch(startSprintLoad());
-    dispatch(destroyServersideEvents());
+    destroyServersideEvents();
     try {
       const sprint = await api.getSprint(agileId, sprintId, PAGE_SIZE);
       dispatch(receiveSprint(sprint));
@@ -288,6 +288,6 @@ export function subscribeServersideUpdates() {
 
     // serversideEvents.listenTo('sprintIssuesReorder', data => console.log(data));
 
-    dispatch(storeServersideEvents(serversideEvents));
+    storeServersideEvents(serversideEvents);
   };
 }
