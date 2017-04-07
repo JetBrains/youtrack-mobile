@@ -72,6 +72,7 @@ type BoardOnList = {
 
 type SprintFull = SprintInformation & {
   board: Board,
+  eventSourceTicket: string,
   agile: {
     id: string,
     name: string,

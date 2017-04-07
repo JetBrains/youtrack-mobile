@@ -93,8 +93,21 @@ const BOARD_ON_LIST = toField([
 const SPRINT_WITH_BOARD = toField([
   SPRINT,
   { board: BOARD },
+  'eventSourceTicket',
   {
     agile: ['id', 'name', 'orphansAtTheTop']
+  }
+]);
+
+const SPRINT_LIVE_UPDATE = toField([
+  {removedIssue: 'id'},
+  {updatedIssue: 'id'},
+  {row: 'id'},
+  {column: 'id'},
+  'messages',
+  {reorders: [{leading: 'id'}, {moved: 'id'}]},
+  {
+    changedIssue: ['id']
   }
 ]);
 
@@ -104,5 +117,6 @@ export default {
   sprint: SPRINT_WITH_BOARD,
   sprintShort: SPRINT,
   row: BOARD_ROW,
-  boardOnList: BOARD_ON_LIST
+  boardOnList: BOARD_ON_LIST,
+  liveUpdate: SPRINT_LIVE_UPDATE
 };

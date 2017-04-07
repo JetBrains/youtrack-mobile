@@ -25,7 +25,7 @@ class Api {
   youTrackProjectUrl: string;
   youtTrackFieldBundleUrl: string;
 
-  constructor(auth: Object) {
+  constructor(auth: Auth) {
     this.auth = auth;
     this.config = auth.config;
 

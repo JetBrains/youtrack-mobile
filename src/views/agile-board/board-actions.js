@@ -3,6 +3,7 @@ import * as types from './board-action-types';
 import {notifyError} from '../../components/notification/notification';
 import type {AgileBoardRow, AgileColumn, BoardOnList} from '../../flow/Agile';
 import type {IssueFull} from '../../flow/Issue';
+import ServersideEvents from '../../components/api/api__serverside-events';
 import type Api from '../../components/api/api';
 import Router from '../../components/router/router';
 
@@ -33,9 +34,11 @@ function loadSprint(agileId: string, sprintId: string) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
     dispatch(startSprintLoad());
+    dispatch(destroyServersideEvents());
     try {
       const sprint = await api.getSprint(agileId, sprintId, PAGE_SIZE, 4);
       dispatch(receiveSprint(sprint));
+      dispatch(subscribeServersideUpdates());
       await api.saveLastVisitedSprint(sprintId);
     } catch (e) {
       notifyError('Could not load sprint', e);
@@ -81,6 +84,18 @@ function receiveSwimlanes(swimlanes) {
     PAGE_SIZE,
     swimlanes
   };
+}
+
+function storeServersideEvents(serversideEvents) {
+  return {type: types.STORE_EVENT_SOURCE, serversideEvents};
+}
+
+function destroyServersideEvents() {
+  return {type: types.DESTROY_EVENT_SOURCE};
+}
+
+function removeIssueFromBoard(issueId: string) {
+  return {type: types.REMOVE_ISSUE_FROM_BOARD, issueId};
 }
 
 export function fetchMoreSwimlanes() {
@@ -240,5 +255,35 @@ export function createCardForCell(columnId: string, cellId: string) {
     } catch (err) {
       notifyError('Could not create card', err);
     }
+  };
+}
+
+export function subscribeServersideUpdates() {
+  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+    const {sprint} = getState().agile;
+    const api: Api = getApi();
+
+    const serversideEvents = new ServersideEvents(api.config.backendUrl);
+    serversideEvents.subscribeAgileBoardUpdates(sprint.eventSourceTicket);
+
+    // serversideEvents.listenTo('sprintCellUpdate', data => {
+    //   console.log('sprintCellUpdate', data)
+    // });
+
+    // serversideEvents.listenTo('sprintSwimlaneUpdate', data => {
+    //   console.log('sprintSwimlaneUpdate', data)
+    // });
+
+    serversideEvents.listenTo('sprintIssueRemove', data => {
+      dispatch(removeIssueFromBoard(data.removedIssue.id));
+    });
+
+    serversideEvents.listenTo('sprintIssueHide', data => {
+      dispatch(removeIssueFromBoard(data.removedIssue.id));
+    });
+
+    // serversideEvents.listenTo('sprintIssuesReorder', data => console.log(data));
+
+    dispatch(storeServersideEvents(serversideEvents));
   };
 }
