@@ -1,7 +1,7 @@
 /* @flow */
 import * as types from './board-action-types';
 import {createReducer} from 'redux-create-reducer';
-import type {SprintFull, AgileBoardRow, Board} from '../../flow/Agile';
+import type {SprintFull, BoardCell, AgileBoardRow, Board} from '../../flow/Agile';
 import type {IssueOnList, IssueFull} from '../../flow/Issue';
 import type ServersideEvents from '../../components/api/api__serverside-events';
 
@@ -40,6 +40,28 @@ function updateRowCollapsedState(
   };
 }
 
+function updateCellsIssuesIfNeeded(
+  cells: Array<BoardCell>,
+  issueId: string,
+  updateIssues: (Array<IssueOnList>) => Array<IssueOnList>
+) {
+  const isTargetIssueHere = cells.some(cell => cell.issues.some(issue => issue.id === issueId));
+  if (!isTargetIssueHere) {
+    return cells;
+  }
+
+  return cells.map(cell => {
+    if (cell.issues.some(issue => issue.id === issueId)) {
+      return {
+        ...cell,
+        issues: updateIssues(cell.issues)
+      };
+    }
+    return cell;
+  });
+}
+
+
 function addCardToBoard(
   board: Board,
   cellId: string,
@@ -74,19 +96,14 @@ function updateCardOnBoard(board: Board, sourceIssue: IssueFull): Board {
   function updateIssueInRowIfNeeded(row: AgileBoardRow) {
     return {
       ...row,
-      issue: (row.issue && row.issue.id === sourceIssue.id) ? fillIssueFromAnotherIssue(row.issue, sourceIssue) : row.issue,
-      cells: row.cells.
-        map(cell => {
-          if (cell.issues.some(issue => issue.id === sourceIssue.id)) {
-            return {
-              ...cell,
-              issues: cell.issues.map(issue => issue.id === sourceIssue.id ? fillIssueFromAnotherIssue(issue, sourceIssue) : issue)
-            };
-          }
-          return cell;
-        })
+      issue: row.issue && row.issue.id === sourceIssue.id ? fillIssueFromAnotherIssue(row.issue, sourceIssue) : row.issue,
+      cells: updateCellsIssuesIfNeeded(row.cells, sourceIssue.id, issues =>
+        issues.map(
+          issue => issue.id === sourceIssue.id ? fillIssueFromAnotherIssue(issue, sourceIssue) : issue
+        ))
     };
   }
+
 
   return {
     ...board,
@@ -113,15 +130,7 @@ function removeCardFromBoard(board: Board, issueId: string): Board {
   function removeIssueInRow(row: AgileBoardRow) {
     return {
       ...row,
-      cells: row.cells.map(cell => {
-        if (cell.issues.some(issue => issue.id === issueId)) {
-          return {
-            ...cell,
-            issues: cell.issues.filter(issue => issue.id !== issueId)
-          };
-        }
-        return cell;
-      })
+      cells: updateCellsIssuesIfNeeded(row.cells, issueId, issues => issues.filter(issue => issue.id !== issueId))
     };
   }
 
@@ -132,6 +141,36 @@ function removeCardFromBoard(board: Board, issueId: string): Board {
   };
 }
 
+function reorderCollection(colection: Array<{id: string}>, leadingId: ?string, movedId: string) {
+  const moved = colection.filter(s => s.id === movedId)[0];
+  const updated = colection.filter(s => s !== moved);
+  const leadingIndex = updated.findIndex(s => s.id === leadingId);
+  updated.splice(leadingIndex + 1, 0, moved);
+  return updated;
+}
+
+function reorderCardsInRow(row: AgileBoardRow, leadingId: ?string, movedId: string) {
+  return {
+    ...row,
+    cells: updateCellsIssuesIfNeeded(row.cells, movedId, issues => reorderCollection(issues, leadingId, movedId))
+  };
+}
+
+function reorderEntitiesOnBoard(board: Board, leadingId: ?string, movedId: string) {
+  const isSwimlane = board.trimmedSwimlanes.some(
+    (row: AgileBoardRow) => row.issue.id === movedId
+  );
+
+  if (isSwimlane) {
+    return {...board, trimmedSwimlanes: reorderCollection(board.trimmedSwimlanes, leadingId, movedId)};
+  }
+
+  return {
+    ...board,
+    orphanRow: reorderCardsInRow(board.orphanRow, leadingId, movedId),
+    trimmedSwimlanes: board.trimmedSwimlanes.map(reorderCardsInRow)
+  };
+}
 
 
 const board = createReducer(initialState, {
@@ -270,6 +309,19 @@ const board = createReducer(initialState, {
       sprint: {
         ...sprint,
         board: removeCardFromBoard(sprint.board, action.issueId)
+      }
+    };
+  },
+  [types.REORDER_SWIMLANES_OR_CELLS](state: BoardState, action: {leadingId: ?string, movedId: string}): BoardState {
+    const {sprint} = state;
+    if (!sprint) {
+      return state;
+    }
+    return {
+      ...state,
+      sprint: {
+        ...sprint,
+        board: reorderEntitiesOnBoard(sprint.board, action.leadingId, action.movedId)
       }
     };
   }

@@ -241,6 +241,10 @@ export function addCardToCell(cellId: string, issue: IssueFull) {
   return {type: types.ADD_CARD_TO_CELL, cellId, issue};
 }
 
+export function reorderSwimlanesOrCells(leadingId: ?string, movedId: string) {
+  return {type: types.REORDER_SWIMLANES_OR_CELLS, leadingId, movedId};
+}
+
 export function updateIssueOnBoard(issue: IssueFull) {
   return {type: types.UPDATE_ISSUE_ON_BOARD, issue};
 }
@@ -286,7 +290,12 @@ export function subscribeServersideUpdates() {
       dispatch(removeIssueFromBoard(data.removedIssue.id));
     });
 
-    // serversideEvents.listenTo('sprintIssuesReorder', data => console.log(data));
+    serversideEvents.listenTo('sprintIssuesReorder', data => {
+      data.reorders.forEach(function(reorder) {
+        const leadingId = reorder.leading ? reorder.leading.id : null;
+        dispatch(reorderSwimlanesOrCells(leadingId, reorder.moved.id));
+      });
+    });
 
     storeServersideEvents(serversideEvents);
   };
