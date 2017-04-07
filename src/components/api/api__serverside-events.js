@@ -1,11 +1,12 @@
 /* @flow */
-import RNEventSource from 'react-native-event-source';
+import RNEventSource from 'react-native-eventsource';
 import qs from 'qs';
 import log from '../../components/log/log';
 import agileFields from './api__agile-fields';
 
 export default class ServersideEvents {
   backendUrl: string;
+  lastPing: ?Date;
   eventSource: RNEventSource;
 
   constructor(backendUrl: string) {
@@ -26,6 +27,8 @@ export default class ServersideEvents {
     this.eventSource.addEventListener('open', () => log.info('SSE connection opened'));
 
     this.eventSource.addEventListener('error', (e) => log.warn('SSE connection closed', e));
+
+    this.eventSource.addEventListener('ping', () => this.lastPing = new Date());
   }
 
   listenTo(eventName: string, callback: any => any) {
@@ -35,7 +38,7 @@ export default class ServersideEvents {
   }
 
   close() {
-    this.eventSource.removeAllListeners();
+    // this.eventSource.removeAllListeners();
     this.eventSource.close();
   }
 }
