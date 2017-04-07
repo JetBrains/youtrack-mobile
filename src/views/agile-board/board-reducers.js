@@ -114,6 +114,16 @@ function findIssueOnBoard(board: Board, issueId: string) {
   }
 }
 
+function removeAllSwimlaneCardsFromBoard(board: Board, swimlane: AgileBoardRow) {
+  return swimlane.cells.reduce((processingBoard: Board, cell: BoardCell) => {
+    cell.issues.forEach(issue => {
+      processingBoard = removeCardFromBoard(processingBoard, issue.id);
+    });
+
+    return processingBoard;
+  }, board);
+}
+
 function updateCardOnBoard(board: Board, sourceIssue: IssueFull): Board {
   function updateIssueInRowIfNeeded(row: AgileBoardRow) {
     return {
@@ -195,6 +205,8 @@ function reorderEntitiesOnBoard(board: Board, leadingId: ?string, movedId: strin
 }
 
 function addOrUpdateCell(board: Board, issue: IssueOnList, rowId, columnId) {
+  board = removeSwimlaneFromBoard(board, issue.id); // Swimlane could be turn into card
+
   const targetRow = [board.orphanRow, ...board.trimmedSwimlanes].filter(row => row.id === rowId)[0];
   if (!targetRow) {
     return board;
@@ -212,9 +224,31 @@ function addOrUpdateCell(board: Board, issue: IssueOnList, rowId, columnId) {
     return updateCardOnBoard(board, issue);
   }
 
-  board = removeSwimlaneFromBoard(board, issue.id); // Swimlane could be turn into card
   board = removeCardFromBoard(board, issue.id);
   return addCardToBoard(board, targetCell.id, issue);
+}
+
+function updateSwimlane(board: Board, swimlane: AgileBoardRow) {
+  board = removeCardFromBoard(board, swimlane.issue.id); // Card could be turn info swimlane
+
+  const swimlaneToUpdate = board.trimmedSwimlanes.filter(row => row.id === swimlane.id);
+
+  if (swimlaneToUpdate) {
+    if (!swimlaneToUpdate.cells) { // It is new if no cells
+      removeAllSwimlaneCardsFromBoard(board, swimlane);
+    }
+    return {
+      ...board,
+      trimmedSwimlanes: board.trimmedSwimlanes.map(row => row.id === swimlane.id ? swimlane : row)
+    };
+  } else {
+    // Swimlane was added to board
+    removeAllSwimlaneCardsFromBoard(board, swimlane);
+    return {
+      ...board,
+      trimmedSwimlanes: [...board.trimmedSwimlanes, swimlane]
+    };
+  }
 }
 
 /**
@@ -377,6 +411,16 @@ const board = createReducer(initialState, {
         ...sprint,
         board: addOrUpdateCell(sprint.board, action.issue, action.rowId, action.columnId)
       }
+    };
+  },
+  [types.UPDATE_SWIMLANE](state: BoardState, action: {swimlane: AgileBoardRow}): BoardState {
+    const {sprint} = state;
+    if (!sprint) {
+      return state;
+    }
+    return {
+      ...state,
+      board: updateSwimlane(sprint.board, action.swimlane)
     };
   }
 });

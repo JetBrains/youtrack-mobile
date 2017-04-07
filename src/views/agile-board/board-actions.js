@@ -253,6 +253,10 @@ export function addOrUpdateCellOnBoard(issue: IssueOnList, rowId: string, column
   return {type: types.ADD_OR_UPDATE_CELL_ON_BOARD, issue, rowId, columnId};
 }
 
+export function updateSwimlane(swimlane: AgileBoardRow) {
+  return {type: types.UPDATE_SWIMLANE, swimlane};
+}
+
 export function createCardForCell(columnId: string, cellId: string) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const {sprint} = getState().agile;
@@ -282,9 +286,9 @@ export function subscribeServersideUpdates() {
       dispatch(addOrUpdateCellOnBoard(data.issue, data.row.id, data.column.id));
     });
 
-    // serversideEvents.listenTo('sprintSwimlaneUpdate', data => {
-    //   console.log('sprintSwimlaneUpdate', data)
-    // });
+    serversideEvents.listenTo('sprintSwimlaneUpdate', data => {
+      dispatch(updateSwimlane(data.swimlane));
+    });
 
     serversideEvents.listenTo('sprintIssueRemove', data => {
       dispatch(removeIssueFromBoard(data.removedIssue.id));
