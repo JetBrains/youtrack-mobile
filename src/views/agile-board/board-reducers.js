@@ -260,15 +260,6 @@ const board = createReducer(initialState, {
       }
     };
   },
-  [types.STORE_EVENT_SOURCE](state: BoardState, action: {serversideEvents: Object}): BoardState {
-    return {...state, serversideEvents: action.serversideEvents};
-  },
-  [types.DESTROY_EVENT_SOURCE](state: BoardState): BoardState {
-    if (state.serversideEvents) {
-      state.serversideEvents.close();
-    }
-    return {...state, serversideEvents: null};
-  },
   [types.REMOVE_ISSUE_FROM_BOARD](state: BoardState, action: {issueId: string}): BoardState {
     const {sprint} = state;
     if (!sprint) {

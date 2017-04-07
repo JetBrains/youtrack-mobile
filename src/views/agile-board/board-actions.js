@@ -8,6 +8,7 @@ import type Api from '../../components/api/api';
 import Router from '../../components/router/router';
 
 const PAGE_SIZE = 4;
+let serversideEvents = null;
 
 function startSprintLoad() {
   return {type: types.START_SPRINT_LOADING};
@@ -86,12 +87,15 @@ function receiveSwimlanes(swimlanes) {
   };
 }
 
-function storeServersideEvents(serversideEvents) {
-  return {type: types.STORE_EVENT_SOURCE, serversideEvents};
+function storeServersideEvents(serversideEventsInstance) {
+  serversideEvents = serversideEventsInstance;
 }
 
 function destroyServersideEvents() {
-  return {type: types.DESTROY_EVENT_SOURCE};
+  if (serversideEvents) {
+    serversideEvents.close();
+  }
+  serversideEvents = null;
 }
 
 function removeIssueFromBoard(issueId: string) {
@@ -263,7 +267,7 @@ export function subscribeServersideUpdates() {
     const {sprint} = getState().agile;
     const api: Api = getApi();
 
-    const serversideEvents = new ServersideEvents(api.config.backendUrl);
+    serversideEvents = new ServersideEvents(api.config.backendUrl);
     serversideEvents.subscribeAgileBoardUpdates(sprint.eventSourceTicket);
 
     // serversideEvents.listenTo('sprintCellUpdate', data => {
