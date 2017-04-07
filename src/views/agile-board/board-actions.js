@@ -36,7 +36,7 @@ function loadSprint(agileId: string, sprintId: string) {
     dispatch(startSprintLoad());
     dispatch(destroyServersideEvents());
     try {
-      const sprint = await api.getSprint(agileId, sprintId, PAGE_SIZE, 4);
+      const sprint = await api.getSprint(agileId, sprintId, PAGE_SIZE);
       dispatch(receiveSprint(sprint));
       dispatch(subscribeServersideUpdates());
       await api.saveLastVisitedSprint(sprintId);
