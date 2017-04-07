@@ -72,6 +72,7 @@ function addCardToBoard(
     if (!isTargetRow) {
       return row;
     }
+
     return {
       ...row,
       cells: row.cells.map(cell => cell.id === cellId ? {...cell, issues: cell.issues.concat(issue)} : cell)
@@ -90,6 +91,27 @@ function fillIssueFromAnotherIssue(issue: IssueOnList, sourceIssue: IssueFull) {
     reduce((updated, key) => {
       return {...updated, [key]: sourceIssue[key]};
     }, {});
+}
+
+function findIssueOnBoard(board: Board, issueId: string) {
+  const rows = [...board.trimmedSwimlanes, board.orphanRow];
+
+  for (const rowIndex in rows) {
+    const row = rows[rowIndex];
+    for (const cellIndex in row.cells) {
+      const cell = row.cells[cellIndex];
+      const foundIssue = cell.issues.filter(issue => issue.id === issueId)[0];
+
+      if (foundIssue) {
+        return {
+          cell: cell,
+          row: row,
+          issue: foundIssue,
+          column: board.columns[cellIndex]
+        };
+      }
+    }
+  }
 }
 
 function updateCardOnBoard(board: Board, sourceIssue: IssueFull): Board {
@@ -172,7 +194,32 @@ function reorderEntitiesOnBoard(board: Board, leadingId: ?string, movedId: strin
   };
 }
 
+function addOrUpdateCell(board: Board, issue: IssueOnList, rowId, columnId) {
+  const targetRow = [board.orphanRow, ...board.trimmedSwimlanes].filter(row => row.id === rowId)[0];
+  if (!targetRow) {
+    return board;
+  }
+  const targetCell = targetRow.cells.filter((cell: BoardCell) => cell.column.id === columnId)[0];
 
+  const issueOnBoard = findIssueOnBoard(board, issue.id);
+
+  if (!issueOnBoard) {
+    return addCardToBoard(board, targetCell.id, issue);
+  }
+
+  const inSameCell = issueOnBoard.cell.column.id === columnId && issueOnBoard.row.id === rowId;
+  if (inSameCell) {
+    return updateCardOnBoard(board, issue);
+  }
+
+  board = removeSwimlaneFromBoard(board, issue.id); // Swimlane could be turn into card
+  board = removeCardFromBoard(board, issue.id);
+  return addCardToBoard(board, targetCell.id, issue);
+}
+
+/**
+ * Reducer is here
+ */
 const board = createReducer(initialState, {
   [types.NO_AGILE_SELECTED](state: BoardState) {
     return {
@@ -293,10 +340,7 @@ const board = createReducer(initialState, {
     }
     return {
       ...state,
-      sprint: {
-        ...sprint,
-        board: updateCardOnBoard(sprint.board, action.issue)
-      }
+      sprint: {...sprint, board: updateCardOnBoard(sprint.board, action.issue)}
     };
   },
   [types.REMOVE_ISSUE_FROM_BOARD](state: BoardState, action: {issueId: string}): BoardState {
@@ -306,10 +350,7 @@ const board = createReducer(initialState, {
     }
     return {
       ...state,
-      sprint: {
-        ...sprint,
-        board: removeCardFromBoard(sprint.board, action.issueId)
-      }
+      sprint: {...sprint, board: removeCardFromBoard(sprint.board, action.issueId)}
     };
   },
   [types.REORDER_SWIMLANES_OR_CELLS](state: BoardState, action: {leadingId: ?string, movedId: string}): BoardState {
@@ -322,6 +363,19 @@ const board = createReducer(initialState, {
       sprint: {
         ...sprint,
         board: reorderEntitiesOnBoard(sprint.board, action.leadingId, action.movedId)
+      }
+    };
+  },
+  [types.ADD_OR_UPDATE_CELL_ON_BOARD](state: BoardState, action: {issue: IssueOnList, rowId: string, columnId: string}): BoardState {
+    const {sprint} = state;
+    if (!sprint) {
+      return state;
+    }
+    return {
+      ...state,
+      sprint: {
+        ...sprint,
+        board: addOrUpdateCell(sprint.board, action.issue, action.rowId, action.columnId)
       }
     };
   }

@@ -100,6 +100,8 @@ const SPRINT_WITH_BOARD = toField([
 ]);
 
 const SPRINT_LIVE_UPDATE = toField([
+  {swimlane: BOARD_ROW},
+  {issue: IssueFields.issuesOnList},
   {removedIssue: 'id'},
   {updatedIssue: 'id'},
   {row: 'id'},

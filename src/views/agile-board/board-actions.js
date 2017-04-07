@@ -2,7 +2,7 @@
 import * as types from './board-action-types';
 import {notifyError} from '../../components/notification/notification';
 import type {AgileBoardRow, AgileColumn, BoardOnList} from '../../flow/Agile';
-import type {IssueFull} from '../../flow/Issue';
+import type {IssueFull, IssueOnList} from '../../flow/Issue';
 import ServersideEvents from '../../components/api/api__serverside-events';
 import type Api from '../../components/api/api';
 import Router from '../../components/router/router';
@@ -249,6 +249,10 @@ export function updateIssueOnBoard(issue: IssueFull) {
   return {type: types.UPDATE_ISSUE_ON_BOARD, issue};
 }
 
+export function addOrUpdateCellOnBoard(issue: IssueOnList, rowId: string, columnId: string) {
+  return {type: types.ADD_OR_UPDATE_CELL_ON_BOARD, issue, rowId, columnId};
+}
+
 export function createCardForCell(columnId: string, cellId: string) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const {sprint} = getState().agile;
@@ -274,9 +278,9 @@ export function subscribeServersideUpdates() {
     serversideEvents = new ServersideEvents(api.config.backendUrl);
     serversideEvents.subscribeAgileBoardUpdates(sprint.eventSourceTicket);
 
-    // serversideEvents.listenTo('sprintCellUpdate', data => {
-    //   console.log('sprintCellUpdate', data)
-    // });
+    serversideEvents.listenTo('sprintCellUpdate', data => {
+      dispatch(addOrUpdateCellOnBoard(data.issue, data.row.id, data.column.id));
+    });
 
     // serversideEvents.listenTo('sprintSwimlaneUpdate', data => {
     //   console.log('sprintSwimlaneUpdate', data)
