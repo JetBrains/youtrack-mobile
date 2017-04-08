@@ -200,7 +200,7 @@ function reorderEntitiesOnBoard(board: Board, leadingId: ?string, movedId: strin
   return {
     ...board,
     orphanRow: reorderCardsInRow(board.orphanRow, leadingId, movedId),
-    trimmedSwimlanes: board.trimmedSwimlanes.map(reorderCardsInRow)
+    trimmedSwimlanes: board.trimmedSwimlanes.map(row => reorderCardsInRow(row, leadingId, movedId))
   };
 }
 
