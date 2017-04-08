@@ -2,8 +2,9 @@ import * as actions from './issue-list-actions';
 import * as types from './issue-list-action-types';
 import sinon from 'sinon';
 import {AsyncStorage as MockedStorage} from 'react-native';
+import reducer from './issue-list-reducers';
 
-describe.only('Issue list actions', () => {
+describe('Issue list actions', () => {
   let dispatch;
   let getState;
   let sandbox;
@@ -73,6 +74,86 @@ describe.only('Issue list actions', () => {
     actions
       .clearAssistSuggestions()
       .should.deep.equal({type: types.CLEAR_SUGGESTIONS});
+  });
+
+});
+
+describe('Issue list reducers', () => {
+  it('should set issues query', () => {
+    const newState = reducer({}, {type: types.SET_ISSUES_QUERY, query: 'test'});
+    newState.should.deep.equal({query: 'test'});
+  });
+
+  it('should set query assist suggestions', () => {
+    const suggestions = [{id: 'test'}];
+    const newState = reducer({}, {type: types.SUGGEST_QUERY, suggestions});
+    newState.should.deep.equal({queryAssistSuggestions: suggestions});
+  });
+
+  it('should start issue loading', () => {
+    const newState = reducer({}, {type: types.START_ISSUES_LOADING});
+    newState.should.deep.equal({
+      loadingError: null,
+      isListEndReached: false,
+      isRefreshing: true,
+      skip: 0
+    });
+  });
+
+  it('should stop issues loading', () => {
+    reducer({}, {type: types.STOP_ISSUES_LOADING})
+      .should.deep.equal({isRefreshing: false});
+  });
+
+  it('should start loading more issues', () => {
+    reducer({}, {type: types.START_LOADING_MORE, newSkip: 10})
+      .should.deep.equal({isLoadingMore: true, skip: 10});
+  });
+
+  it('should stop loading more', () => {
+    reducer({}, {type: types.STOP_LOADING_MORE})
+      .should.deep.equal({isLoadingMore: false});
+  });
+
+  it('should receive issues', () => {
+    const issues = [{id: 'test'}];
+    reducer({}, {type: types.RECEIVE_ISSUES, issues})
+      .should.deep.equal({issues, isInitialized: true});
+  });
+
+  it('should set error on failed to load issues', () => {
+    const error = new Error();
+    reducer({}, {type: types.LOADING_ISSUES_ERROR, error})
+      .should.deep.equal({
+        isInitialized: true,
+        isListEndReached: true,
+        loadingError: error,
+        issues: []
+      });
+  });
+
+  it('should set that issues list end is reached', () => {
+    reducer({}, {type: types.LIST_END_REACHED})
+      .should.deep.equal({isListEndReached: true});
+  });
+
+  it('should find and update issue in list and not take rest props from updated issue', () => {
+    const state = {
+      issues: [
+        {id: 'test', summary: 'before update'},
+        {id: 'another-issue', summary: 'another'}
+      ]
+    };
+    const updatedIssue = {id: 'test', summary: 'after update', foo: 'bar'};
+    const newState = reducer(state, {
+      type: types.UPDATE_ISSUE_ON_LIST,
+      issue: updatedIssue
+    });
+
+    newState.issues.should.deep.equal([
+      {id: 'test', summary: 'after update'},
+      {id: 'another-issue', summary: 'another'}
+    ]);
   });
 
 });
