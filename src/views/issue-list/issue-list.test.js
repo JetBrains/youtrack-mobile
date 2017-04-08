@@ -76,6 +76,19 @@ describe('Issue list actions', () => {
       .should.deep.equal({type: types.CLEAR_SUGGESTIONS});
   });
 
+  it('should store query', () => {
+    sandbox.stub(MockedStorage, 'setItem');
+    actions.storeIssuesQuery(TEST_QUERY)();
+
+    MockedStorage.setItem.should.have.been.calledWith('YT_QUERY_STORAGE', TEST_QUERY);
+  });
+
+  it('should receive issues', () => {
+    const issues = [{id: 'test'}];
+    actions
+      .receiveIssues(issues)
+      .should.deep.equal({type: types.RECEIVE_ISSUES, issues, pageSize: 10});
+  });
 });
 
 describe('Issue list reducers', () => {

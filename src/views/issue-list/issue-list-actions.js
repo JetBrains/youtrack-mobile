@@ -60,10 +60,6 @@ export function clearAssistSuggestions() {
   return {type: types.CLEAR_SUGGESTIONS};
 }
 
-export function listEndReached() {
-  return {type: types.LIST_END_REACHED};
-}
-
 async function storeLastQuery(query: string) {
   if (!query) {
     return;
@@ -81,6 +77,10 @@ export function storeIssuesQuery(query: string) {
     AsyncStorage.setItem(QUERY_STORAGE_KEY, query);
     storeLastQuery(query);
   };
+}
+
+export function listEndReached() {
+  return {type: types.LIST_END_REACHED};
 }
 
 export function startIssuesLoading() {
