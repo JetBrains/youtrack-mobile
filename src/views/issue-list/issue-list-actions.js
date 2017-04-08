@@ -23,7 +23,7 @@ export function setIssuesQuery(query: string) {
 }
 
 export function readStoredIssuesQuery() {
-  return async (dispatch: (any) => any, getState: () => Object) => {
+  return async (dispatch: (any) => any) => {
     const query = await AsyncStorage.getItem(QUERY_STORAGE_KEY);
     dispatch({
       type: types.SET_ISSUES_QUERY,
