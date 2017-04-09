@@ -298,41 +298,22 @@ const agilePageReducer = createReducer(initialPageState, {
     return initialPageState;
   },
   [types.NO_AGILE_SELECTED](state: AgilePageState) {
-    return {
-      ...state,
-      noBoardSelected: true
-    };
+    return {...state, noBoardSelected: true};
   },
   [types.START_SPRINT_LOADING](state: AgilePageState) {
-    return {
-      ...state,
-      noBoardSelected: false,
-      isLoading: true
-    };
+    return {...state, noBoardSelected: false, isLoading: true};
   },
   [types.STOP_SPRINT_LOADING](state: AgilePageState) {
-    return {
-      ...state,
-      isLoading: false
-    };
+    return {...state, isLoading: false};
   },
   [types.RECEIVE_SPRINT](state: AgilePageState, action: Object) {
-    return {
-      ...state,
-      sprint: action.sprint
-    };
+    return {...state,sprint: action.sprint};
   },
   [types.START_SWIMLANES_LOADING](state: AgilePageState) {
-    return {
-      ...state,
-      isLoadingMore: true
-    };
+    return {...state, isLoadingMore: true};
   },
   [types.STOP_SWIMLANES_LOADING](state: AgilePageState) {
-    return {
-      ...state,
-      isLoadingMore: false
-    };
+    return {...state, isLoadingMore: false};
   },
   [types.RECEIVE_SWIMLANES](state: AgilePageState, action: Object): AgilePageState {
     return {
