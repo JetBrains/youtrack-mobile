@@ -8,7 +8,7 @@ declare type IssueOnList = {
   reporter: IssueUser,
   created: number,
   updated: number,
-  fields: Array<CustomField>,
+  fields: Array<CustomFieldShort>,
   fieldHash: any
 }
 

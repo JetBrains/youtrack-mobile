@@ -101,6 +101,31 @@ const ISSUE_FIELD_FIELDS = toField([
   }
 ]);
 
+const ISSUE_FIELD_SHORT_FIELDS = toField([
+  'id',
+  'name',
+  {
+    value: [
+      'id',
+      'name',
+      'ringId',
+      'avatarUrl',
+      'login',
+      {
+        color: ['id', 'background', 'foreground']
+      }
+    ]
+  },
+  {
+    projectCustomField: [
+      {
+        field: ['id', 'name']
+      }
+    ]
+  }
+]);
+
+
 const ISSUE_TAGS_FIELDS = toField([
   'name',
   'id',
@@ -134,7 +159,7 @@ const ISSUE_SHORT_FIELDS = toField([
   {project: ISSUE_PROJECT_FIELDS},
   'numberInProject',
   {reporter: ISSUE_USER_FIELDS},
-  {fields: ISSUE_FIELD_FIELDS}
+  {fields: ISSUE_FIELD_SHORT_FIELDS}
 ]);
 
 const ISSUE_LINKS_FIELDS = toField([
