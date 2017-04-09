@@ -1,6 +1,6 @@
 /* @flow */
 import * as types from './board-action-types';
-import {notifyError} from '../../components/notification/notification';
+import {notifyError, notify} from '../../components/notification/notification';
 import type {AgileBoardRow, AgileColumn, BoardOnList} from '../../flow/Agile';
 import type {IssueFull, IssueOnList} from '../../flow/Issue';
 import ServersideEvents from '../../components/api/api__serverside-events';
@@ -296,6 +296,10 @@ export function subscribeServersideUpdates() {
 
     serversideEvents.listenTo('sprintIssueHide', data => {
       dispatch(removeIssueFromBoard(data.removedIssue.id));
+    });
+
+    serversideEvents.listenTo('sprintIssueMessage', function(data) {
+      data.messages.forEach(msg => notify(msg));
     });
 
     serversideEvents.listenTo('sprintIssuesReorder', data => {
