@@ -1,5 +1,6 @@
 /* @flow */
 import * as types from './board-action-types';
+import {LOG_OUT} from '../../actions/action-types';
 import {createReducer} from 'redux-create-reducer';
 import type {SprintFull, BoardCell, AgileBoardRow, Board} from '../../flow/Agile';
 import type {IssueOnList, IssueFull} from '../../flow/Issue';
@@ -293,6 +294,9 @@ const boardReducer = createReducer({}, {
 
 
 const agilePageReducer = createReducer(initialPageState, {
+  [LOG_OUT](state: AgilePageState): AgilePageState {
+    return initialPageState;
+  },
   [types.NO_AGILE_SELECTED](state: AgilePageState) {
     return {
       ...state,
