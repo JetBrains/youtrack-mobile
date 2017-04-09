@@ -5,7 +5,9 @@ import type {SprintFull, BoardCell, AgileBoardRow, Board} from '../../flow/Agile
 import type {IssueOnList, IssueFull} from '../../flow/Issue';
 import type ServersideEvents from '../../components/api/api__serverside-events';
 
-type BoardState = {
+type BoardState = Board;
+
+type AgilePageState = {
   isLoading: boolean,
   noBoardSelected: boolean,
   isSprintSelectOpen: boolean,
@@ -14,7 +16,7 @@ type BoardState = {
   serversideEvents: ?ServersideEvents
 };
 
-const initialState: BoardState = {
+const initialPageState: AgilePageState = {
   isLoading: false,
   noBoardSelected: false,
   isSprintSelectOpen: false,
@@ -251,178 +253,118 @@ function updateSwimlane(board: Board, swimlane: AgileBoardRow) {
   }
 }
 
-/**
- * Reducer is here
- */
-const board = createReducer(initialState, {
-  [types.NO_AGILE_SELECTED](state: BoardState) {
+const boardReducer = createReducer({}, {
+  [types.RECEIVE_SWIMLANES](state: BoardState, action: Object): BoardState {
+    return {
+      ...state,
+      trimmedSwimlanes: [...state.trimmedSwimlanes, ...action.swimlanes]
+    };
+  },
+  [types.ROW_COLLAPSE_TOGGLE](state: BoardState, action: {row: AgileBoardRow, newCollapsed: boolean}): BoardState {
+    return updateRowCollapsedState(state, action.row, action.newCollapsed);
+  },
+  [types.COLUMN_COLLAPSE_TOGGLE](state: BoardState, action: Object): BoardState {
+    return {
+      ...state,
+      columns: state.columns.map(it => {
+        return it === action.column ? {...action.column, collapsed: action.newCollapsed} : it;
+      })
+    };
+  },
+  [types.ADD_CARD_TO_CELL](state: BoardState, action: {cellId: string, issue: IssueFull}): BoardState {
+    return addCardToBoard(state, action.cellId, action.issue);
+  },
+  [types.UPDATE_ISSUE_ON_BOARD](state: BoardState, action: {cellId: string, issue: IssueFull}): BoardState {
+    return updateCardOnBoard(state, action.issue);
+  },
+  [types.REMOVE_ISSUE_FROM_BOARD](state: BoardState, action: {issueId: string}): BoardState {
+    return removeCardFromBoard(state, action.issueId);
+  },
+  [types.REORDER_SWIMLANES_OR_CELLS](state: BoardState, action: {leadingId: ?string, movedId: string}): BoardState {
+    return reorderEntitiesOnBoard(state, action.leadingId, action.movedId);
+  },
+  [types.ADD_OR_UPDATE_CELL_ON_BOARD](state: BoardState, action: {issue: IssueOnList, rowId: string, columnId: string}): BoardState {
+    return addOrUpdateCell(state, action.issue, action.rowId, action.columnId);
+  },
+  [types.UPDATE_SWIMLANE](state: BoardState, action: {swimlane: AgileBoardRow}): BoardState {
+    return updateSwimlane(state, action.swimlane);
+  }
+});
+
+
+const agilePageReducer = createReducer(initialPageState, {
+  [types.NO_AGILE_SELECTED](state: AgilePageState) {
     return {
       ...state,
       noBoardSelected: true
     };
   },
-  [types.START_SPRINT_LOADING](state: BoardState) {
+  [types.START_SPRINT_LOADING](state: AgilePageState) {
     return {
       ...state,
       noBoardSelected: false,
       isLoading: true
     };
   },
-  [types.STOP_SPRINT_LOADING](state: BoardState) {
+  [types.STOP_SPRINT_LOADING](state: AgilePageState) {
     return {
       ...state,
       isLoading: false
     };
   },
-  [types.RECEIVE_SPRINT](state: BoardState, action: Object) {
+  [types.RECEIVE_SPRINT](state: AgilePageState, action: Object) {
     return {
       ...state,
       sprint: action.sprint
     };
   },
-  [types.START_SWIMLANES_LOADING](state: BoardState) {
+  [types.START_SWIMLANES_LOADING](state: AgilePageState) {
     return {
       ...state,
       isLoadingMore: true
     };
   },
-  [types.STOP_SWIMLANES_LOADING](state: BoardState) {
+  [types.STOP_SWIMLANES_LOADING](state: AgilePageState) {
     return {
       ...state,
       isLoadingMore: false
     };
   },
-  [types.RECEIVE_SWIMLANES](state:BoardState, action: Object): BoardState {
-    const {sprint} = state;
-    if (!sprint) {
-      return state;
-    }
+  [types.RECEIVE_SWIMLANES](state: AgilePageState, action: Object): AgilePageState {
     return {
       ...state,
-      sprint: {
-        ...sprint,
-        board: {
-          ...sprint.board,
-          trimmedSwimlanes: sprint.board.trimmedSwimlanes.concat(action.swimlanes)
-        }
-      },
       noMoreSwimlanes: action.swimlanes.length < action.PAGE_SIZE
     };
   },
-  [types.ROW_COLLAPSE_TOGGLE](state: BoardState, action: Object): BoardState {
-    const {sprint} = state;
-    if (!sprint) {
-      return state;
-    }
-    return {
-      ...state,
-      sprint: {
-        ...sprint,
-        board: updateRowCollapsedState(sprint.board, action.row, action.newCollapsed)
-      }
-    };
-  },
-  [types.COLUMN_COLLAPSE_TOGGLE](state: BoardState, action: Object): BoardState {
-    const {sprint} = state;
-    if (!sprint) {
-      return state;
-    }
-    return {
-      ...state,
-      sprint: {
-        ...sprint,
-        board: {
-          ...sprint.board,
-          columns: sprint.board.columns.map(it => {
-            return it === action.column ? {...action.column, collapsed: action.newCollapsed} : it;
-          })
-        }
-      }
-    };
-  },
-  [types.OPEN_AGILE_SELECT](state: BoardState, action: Object): BoardState {
+  [types.OPEN_AGILE_SELECT](state: AgilePageState, action: Object): AgilePageState {
     return {
       ...state,
       isSprintSelectOpen: true,
       selectProps: action.selectProps
     };
   },
-  [types.CLOSE_AGILE_SELECT](state: BoardState): BoardState {
+  [types.CLOSE_AGILE_SELECT](state: AgilePageState): AgilePageState {
     return {
       ...state,
       selectProps: null,
       isSprintSelectOpen: false
     };
-  },
-  [types.ADD_CARD_TO_CELL](state: BoardState, action: {cellId: string, issue: IssueFull}): BoardState {
-    const {sprint} = state;
-    if (!sprint) {
-      return state;
-    }
-    return {
-      ...state,
-      sprint: {
-        ...sprint,
-        board: addCardToBoard(sprint.board, action.cellId, action.issue)
-      }
-    };
-  },
-  [types.UPDATE_ISSUE_ON_BOARD](state: BoardState, action: {cellId: string, issue: IssueFull}): BoardState {
-    const {sprint} = state;
-    if (!sprint) {
-      return state;
-    }
-    return {
-      ...state,
-      sprint: {...sprint, board: updateCardOnBoard(sprint.board, action.issue)}
-    };
-  },
-  [types.REMOVE_ISSUE_FROM_BOARD](state: BoardState, action: {issueId: string}): BoardState {
-    const {sprint} = state;
-    if (!sprint) {
-      return state;
-    }
-    return {
-      ...state,
-      sprint: {...sprint, board: removeCardFromBoard(sprint.board, action.issueId)}
-    };
-  },
-  [types.REORDER_SWIMLANES_OR_CELLS](state: BoardState, action: {leadingId: ?string, movedId: string}): BoardState {
-    const {sprint} = state;
-    if (!sprint) {
-      return state;
-    }
-    return {
-      ...state,
-      sprint: {
-        ...sprint,
-        board: reorderEntitiesOnBoard(sprint.board, action.leadingId, action.movedId)
-      }
-    };
-  },
-  [types.ADD_OR_UPDATE_CELL_ON_BOARD](state: BoardState, action: {issue: IssueOnList, rowId: string, columnId: string}): BoardState {
-    const {sprint} = state;
-    if (!sprint) {
-      return state;
-    }
-    return {
-      ...state,
-      sprint: {
-        ...sprint,
-        board: addOrUpdateCell(sprint.board, action.issue, action.rowId, action.columnId)
-      }
-    };
-  },
-  [types.UPDATE_SWIMLANE](state: BoardState, action: {swimlane: AgileBoardRow}): BoardState {
-    const {sprint} = state;
-    if (!sprint) {
-      return state;
-    }
-    return {
-      ...state,
-      board: updateSwimlane(sprint.board, action.swimlane)
-    };
   }
 });
 
-export default board;
+/**
+ * We manyally apply boardReducer only if sptint is loaded to simplify board updating
+ */
+export default function reducer(state: AgilePageState, action: Object): AgilePageState {
+  const newState = agilePageReducer(state, action);
+  if (!newState.sprint) {
+    return newState;
+  }
+  return {
+    ...newState,
+    sprint: {
+      ...newState.sprint,
+      board: boardReducer(newState.sprint.board, action)
+    }
+  };
+}
