@@ -70,6 +70,7 @@ class YouTrackMobile extends Component {
 
   async checkAuthorization() {
     await this.auth.loadStoredAuthParams();
+    store.dispatch(initializeApi(this.auth));
     return Router.IssueList();
   }
 
@@ -83,8 +84,6 @@ class YouTrackMobile extends Component {
 
   async initializeAuth(config: AppConfigFilled) {
     this.auth = new Auth(config);
-    store.dispatch(initializeApi(this.auth));
-
     usage.init(config.statisticsEnabled);
     return await this.checkAuthorization();
   }
@@ -136,7 +135,6 @@ class YouTrackMobile extends Component {
           return loadConfig(newUrl)
             .then(config => {
               this.auth = new Auth(config);
-              store.dispatch(initializeApi(this.auth));
               usage.init(config.statisticsEnabled);
               Router.LogIn();
             });

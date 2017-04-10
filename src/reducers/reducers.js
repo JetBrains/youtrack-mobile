@@ -1,5 +1,6 @@
 import {globalActionTypes as types} from '../actions/';
 import {createReducer} from 'redux-create-reducer';
+import IssuePermissions from '../components/issue-permissions/issue-permissions';
 import type Api from '../../components/api/api';
 import type Auth from '../../components/auth/auth';
 
@@ -16,11 +17,13 @@ const initialState: RootState = {
 };
 
 export default createReducer(initialState, {
-  [types.INITIALIZE_API](state: RootState, action: Object = {}) {
+  [types.INITIALIZE_API](state: RootState, action: {auth: Auth, api: Api}) {
+    const {api, auth} = action;
     return {
       ...state,
-      api: action.api,
-      auth: action.auth
+      api,
+      auth,
+      issuePermissions: new IssuePermissions(auth.permissions, auth.currentUser)
     };
   },
   [types.LOG_OUT](state: RootState, action: Object = {}) {

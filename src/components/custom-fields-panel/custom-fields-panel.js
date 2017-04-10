@@ -17,7 +17,7 @@ import {View as AnimatedView} from 'react-native-animatable';
 
 type Props = {
   api: Api,
-  autoFocusSelect: boolean,
+  autoFocusSelect?: boolean,
   issue: IssueFull,
   issuePermissions: IssuePermissions,
   onUpdate: (field: CustomField) => any,
