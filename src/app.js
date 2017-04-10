@@ -22,11 +22,14 @@ import {COLOR_BLACK} from './components/variables/variables';
 // $FlowFixMe: cannot typecheck easy-toast module because of mistakes there
 import Toast from 'react-native-easy-toast';
 
-import {BackAndroid, Navigator, View} from 'react-native';
+import {BackAndroid, Navigator, View, UIManager} from 'react-native';
 import React, {PropTypes, Component} from 'react';
 import ActionSheet from '@exponent/react-native-action-sheet';
 import type {AppConfigFilled} from './flow/AppConfig';
 
+if (UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 /*
   Uncomment this string to debug network request in Chrome. Chrome should be run with --disable-web-security flag.
   Or use React Native Debugger https://github.com/jhen0409/react-native-debugger

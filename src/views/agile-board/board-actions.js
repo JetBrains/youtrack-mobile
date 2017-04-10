@@ -6,6 +6,7 @@ import type {IssueFull, IssueOnList} from '../../flow/Issue';
 import ServersideEvents from '../../components/api/api__serverside-events';
 import type Api from '../../components/api/api';
 import Router from '../../components/router/router';
+import {LayoutAnimation} from 'react-native';
 
 const PAGE_SIZE = 4;
 let serversideEvents = null;
@@ -283,18 +284,22 @@ export function subscribeServersideUpdates() {
     serversideEvents.subscribeAgileBoardUpdates(sprint.eventSourceTicket);
 
     serversideEvents.listenTo('sprintCellUpdate', data => {
+      LayoutAnimation.easeInEaseOut();
       dispatch(addOrUpdateCellOnBoard(data.issue, data.row.id, data.column.id));
     });
 
     serversideEvents.listenTo('sprintSwimlaneUpdate', data => {
+      LayoutAnimation.easeInEaseOut();
       dispatch(updateSwimlane(data.swimlane));
     });
 
     serversideEvents.listenTo('sprintIssueRemove', data => {
+      LayoutAnimation.easeInEaseOut();
       dispatch(removeIssueFromBoard(data.removedIssue.id));
     });
 
     serversideEvents.listenTo('sprintIssueHide', data => {
+      LayoutAnimation.easeInEaseOut();
       dispatch(removeIssueFromBoard(data.removedIssue.id));
     });
 
@@ -303,6 +308,7 @@ export function subscribeServersideUpdates() {
     });
 
     serversideEvents.listenTo('sprintIssuesReorder', data => {
+      LayoutAnimation.easeInEaseOut();
       data.reorders.forEach(function(reorder) {
         const leadingId = reorder.leading ? reorder.leading.id : null;
         dispatch(reorderSwimlanesOrCells(leadingId, reorder.moved.id));
