@@ -1,4 +1,4 @@
-import {Text, View, Image, TouchableOpacity, ScrollView, Clipboard, Platform, RefreshControl, Linking} from 'react-native';
+import {Text, View, Image, TouchableOpacity, ScrollView, Clipboard, Platform, RefreshControl, Linking, LayoutAnimation} from 'react-native';
 import React, {PropTypes} from 'react';
 
 import ApiHelper from '../../components/api/api__helper';
@@ -81,6 +81,7 @@ export default class SingeIssueView extends React.Component {
       if (this.isUnmounted) {
         return;
       }
+      LayoutAnimation.easeInEaseOut();
       this.setState({issue, fullyLoaded: true});
       return issue;
     } catch (err) {
