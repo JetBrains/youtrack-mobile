@@ -124,6 +124,7 @@ export function fetchMoreSwimlanes() {
 }
 
 function updateRowCollapsedState(row, newCollapsed: boolean) {
+  LayoutAnimation.easeInEaseOut();
   return {
     type: types.ROW_COLLAPSE_TOGGLE,
     row,
@@ -155,6 +156,7 @@ export function rowCollapseToggle(row: AgileBoardRow) {
 }
 
 function updateColumnCollapsedState(column, newCollapsed: boolean) {
+  LayoutAnimation.easeInEaseOut();
   return {
     type: types.COLUMN_COLLAPSE_TOGGLE,
     column,
