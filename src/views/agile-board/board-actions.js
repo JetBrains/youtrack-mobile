@@ -6,9 +6,11 @@ import type {IssueFull, IssueOnList} from '../../flow/Issue';
 import ServersideEvents from '../../components/api/api__serverside-events';
 import type Api from '../../components/api/api';
 import Router from '../../components/router/router';
+import log from '../../components/log/log';
 import {LayoutAnimation} from 'react-native';
 
 const PAGE_SIZE = 4;
+const RECONNECT_TIMEOUT = 60000;
 let serversideEvents = null;
 
 function startSprintLoad() {
@@ -284,6 +286,13 @@ export function subscribeServersideUpdates() {
 
     serversideEvents = new ServersideEvents(api.config.backendUrl);
     serversideEvents.subscribeAgileBoardUpdates(sprint.eventSourceTicket);
+
+    serversideEvents.listenTo('error', () => {
+      setTimeout(() => {
+        log.info('Reloading sprint and reconnecting to LiveUpdate...');
+        dispatch(loadSprint(sprint.agile.id, sprint.id));
+      }, RECONNECT_TIMEOUT);
+    });
 
     serversideEvents.listenTo('sprintCellUpdate', data => {
       LayoutAnimation.easeInEaseOut();
