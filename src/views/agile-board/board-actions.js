@@ -268,11 +268,7 @@ export function createCardForCell(columnId: string, cellId: string) {
     const api: Api = getApi();
     try {
       const draft = await api.getIssueDraftForAgileCell(sprint.agile.id, sprint.id, columnId, cellId);
-      Router.CreateIssue({
-        api,
-        draftId: draft.id,
-        onCreate: createdIssue => dispatch(addCardToCell(cellId, createdIssue))
-      });
+      Router.CreateIssue({predefinedDraftId: draft.id});
     } catch (err) {
       notifyError('Could not create card', err);
     }

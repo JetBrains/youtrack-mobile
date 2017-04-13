@@ -2,6 +2,7 @@
 import {createReducer} from 'redux-create-reducer';
 import * as types from './issue-list-action-types';
 import {LOG_OUT} from '../../actions/action-types';
+import {ISSUE_CREATED} from '../create-issue/create-issue-action-types';
 import Cache from '../../components/cache/cache';
 import type {IssueOnList, IssueFull, TransformedSuggestions} from '../../flow/Issue';
 
@@ -39,6 +40,9 @@ const initialState: IssuesListState = {
 export default createReducer(initialState, {
   [LOG_OUT]: (state: IssuesListState): IssuesListState => {
     return initialState;
+  },
+  [ISSUE_CREATED]: (state: IssuesListState, action: {issue: IssueFull}): IssuesListState => {
+    return {...state, issues: [action.issue, ...state.issues]};
   },
   [types.SET_ISSUES_QUERY]: (state: IssuesListState, action: Object) => {
     return {...state, query: action.query};

@@ -112,7 +112,6 @@ class Api {
   }
 
   async createIssue(issueDraft: IssueOnList) {
-    log.info('Issue draft to create:', issueDraft);
     const queryString = qs.stringify({
       draftId: issueDraft.id,
       fields: issueFields.issuesOnList.toString()

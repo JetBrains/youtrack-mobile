@@ -11,6 +11,7 @@ export const SET_ISSUE_FIELD_VALUE = 'creation.SET_ISSUE_FIELD_VALUE';
 
 export const START_ISSUE_CREATION = 'creation.START_ISSUE_CREATION';
 export const STOP_ISSUE_CREATION = 'creation.STOP_ISSUE_CREATION';
+export const RESET_CREATION = 'creation.RESET_CREATION';
 export const ISSUE_CREATED = 'creation.ISSUE_CREATED';
 
 export const START_IMAGE_ATTACHING = 'creation.START_IMAGE_ATTACHING';

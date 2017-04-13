@@ -19,7 +19,6 @@ import {COLOR_PINK} from '../../components/variables/variables';
 import {extractErrorMessage} from '../../components/notification/notification';
 import usage from '../../components/usage/usage';
 
-import ApiHelper from '../../components/api/api__helper';
 import IssueRow from './issue-list__row';
 import Menu from '../../components/menu/menu';
 import Router from '../../components/router/router';
@@ -101,15 +100,7 @@ export class IssueList extends Component {
         leftButton={<Text>Menu</Text>}
         rightButton={<Text>Create</Text>}
         onBack={this.props.openMenu}
-        onRightButtonClick={() => {
-          return Router.CreateIssue({
-            api: this.props.api,
-            onCreate: (createdIssue) => {
-              const updatedIssues = ApiHelper.fillIssuesFieldHash([createdIssue]).concat(this.props.issues);
-              this.props.receiveIssues(updatedIssues);
-            }});
-          }
-        }
+        onRightButtonClick={() => Router.CreateIssue()}
       >
         <Text style={styles.headerText}>Issues</Text>
       </Header>

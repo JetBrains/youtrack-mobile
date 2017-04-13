@@ -6,7 +6,6 @@ import styles from './create-issue.styles';
 import issueStyles from '../single-issue/single-issue.styles';
 import Header from '../../components/header/header';
 import usage from '../../components/usage/usage';
-import Router from '../../components/router/router';
 import {attach, tag, next} from '../../components/icon/icon';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
@@ -51,7 +50,7 @@ class CreateIssue extends React.Component {
   render() {
     const {
       issuePermissions,
-      updateIssueDraft,
+      storeDraftAndGoBack,
       setIssueSummary,
       setIssueDescription,
       createIssue,
@@ -70,10 +69,7 @@ class CreateIssue extends React.Component {
     return (
       <View style={styles.container}>
         <Header leftButton={<Text>Cancel</Text>}
-                onBack={() => {
-                  updateIssueDraft();
-                  Router.pop();
-                }}
+                onBack={storeDraftAndGoBack}
                 rightButton={createButton}
                 onRightButtonClick={() => canCreateIssue && createIssue()}>
           <Text style={issueStyles.headerText}>New Issue</Text>
@@ -146,8 +142,8 @@ class CreateIssue extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    ...state.createIssue,
-    predefinedDraftId: ownProps.draftId,
+    ...state.creation,
+    predefinedDraftId: ownProps.predefinedDraftId,
     api: state.app.api,
     issuePermissions: state.app.issuePermissions
   };

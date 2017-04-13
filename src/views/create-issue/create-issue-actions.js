@@ -1,7 +1,7 @@
 /* @flow */
 import {AsyncStorage} from 'react-native';
-import log from '../../components/log/log';
 import type Api from '../../components/api/api';
+import ApiHelper from '../../components/api/api__helper';
 import type {IssueFull} from '../../flow/Issue';
 import type {CustomField, FieldValue} from '../../flow/CustomFields';
 import usage from '../../components/usage/usage';
@@ -34,6 +34,10 @@ export function setDraftProjectId(projectId: string) {
 
 export function setIssueProject(project: Object) {
   return {type: types.SET_ISSUE_PROJECT, project};
+}
+
+export function resetIssueCreation() {
+  return {type: types.RESET_CREATION};
 }
 
 export function clearDraftProject() {
@@ -88,12 +92,20 @@ async function storeIssueDraftId(issueId: string) {
   return await AsyncStorage.setItem(DRAFT_ID_STORAGE_KEY, issueId);
 }
 
+export function storeDraftAndGoBack() {
+  return async (dispatch: (any) => any) => {
+    await dispatch(updateIssueDraft());
+    dispatch(resetIssueCreation());
+    Router.pop();
+  };
+}
+
 export function loadStoredProject() {
   return async (dispatch: (any) => any) => {
     const projectId = await AsyncStorage.getItem(PROJECT_ID_STORAGE_KEY);
     if (projectId) {
       dispatch(setDraftProjectId(projectId));
-      return await updateIssueDraft();
+      return await dispatch(updateIssueDraft(true));
     }
   };
 }
@@ -163,12 +175,11 @@ export function createIssue() {
     dispatch(startIssueCreation());
 
     try {
-      await dispatch(updateIssueDraft());
+      await dispatch(updateIssueDraft(false));
       const created = await api.createIssue(getState().creation.issue);
-      log.info('Issue created', created);
 
       usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Success');
-      issueCreated(created);
+      dispatch(issueCreated(ApiHelper.fillIssuesFieldHash([created])[0]));
 
       Router.pop();
       return await AsyncStorage.removeItem(DRAFT_ID_STORAGE_KEY);

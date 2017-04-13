@@ -98,6 +98,9 @@ export default createReducer(initialState, {
   [types.ISSUE_CREATED](state: CreateIssueState): CreateIssueState {
     return initialState;
   },
+  [types.RESET_CREATION](state: CreateIssueState): CreateIssueState {
+    return initialState;
+  },
   [types.START_IMAGE_ATTACHING](state: CreateIssueState, action: {attachingImage: Object}): CreateIssueState {
     const {attachingImage} = action;
     return {
