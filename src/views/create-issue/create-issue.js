@@ -25,7 +25,9 @@ class CreateIssue extends React.Component {
   constructor(props) {
     super(props);
     usage.trackScreenView(CATEGORY_NAME);
+  }
 
+  componentWillMount() {
     this.props.initializeWithDraftOrProject(this.props.predefinedDraftId);
   }
 
