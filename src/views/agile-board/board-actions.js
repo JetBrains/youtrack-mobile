@@ -262,12 +262,17 @@ export function updateSwimlane(swimlane: AgileBoardRow) {
   return {type: types.UPDATE_SWIMLANE, swimlane};
 }
 
+export function storeCreatingIssueDraft(draftId: string, cellId: string) {
+  return {type: types.STORE_CREATING_ISSUE_DRAFT, draftId, cellId};
+}
+
 export function createCardForCell(columnId: string, cellId: string) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const {sprint} = getState().agile;
     const api: Api = getApi();
     try {
       const draft = await api.getIssueDraftForAgileCell(sprint.agile.id, sprint.id, columnId, cellId);
+      dispatch(storeCreatingIssueDraft(draft.id, cellId));
       Router.CreateIssue({predefinedDraftId: draft.id});
     } catch (err) {
       notifyError('Could not create card', err);

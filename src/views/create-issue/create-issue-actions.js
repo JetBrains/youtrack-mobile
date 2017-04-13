@@ -60,8 +60,8 @@ export function stopIssueCreation() {
   return {type: types.STOP_ISSUE_CREATION};
 }
 
-export function issueCreated(issue: IssueFull) {
-  return {type: types.ISSUE_CREATED, issue};
+export function issueCreated(issue: IssueFull, preDefinedDraftId: ?string) {
+  return {type: types.ISSUE_CREATED, issue, preDefinedDraftId};
 }
 
 export function setIssueFieldValue(field: CustomField, value: FieldValue) {
@@ -179,7 +179,9 @@ export function createIssue() {
       const created = await api.createIssue(getState().creation.issue);
 
       usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Success');
-      dispatch(issueCreated(ApiHelper.fillIssuesFieldHash([created])[0]));
+
+      const filledIssue = ApiHelper.fillIssuesFieldHash([created])[0];
+      dispatch(issueCreated(filledIssue, getState().creation.predefinedDraftId));
 
       Router.pop();
       return await AsyncStorage.removeItem(DRAFT_ID_STORAGE_KEY);

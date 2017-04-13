@@ -1,6 +1,7 @@
 /* @flow */
 import * as types from './board-action-types';
 import {LOG_OUT} from '../../actions/action-types';
+import {ISSUE_CREATED} from '../create-issue/create-issue-action-types';
 import {createReducer} from 'redux-create-reducer';
 import type {SprintFull, BoardCell, AgileBoardRow, Board} from '../../flow/Agile';
 import type {IssueOnList, IssueFull} from '../../flow/Issue';
@@ -12,6 +13,8 @@ type AgilePageState = {
   isLoading: boolean,
   noBoardSelected: boolean,
   isSprintSelectOpen: boolean,
+  creatingIssueDraftId: ?string,
+  creatingIssueDraftCellId: ?string,
   sprint: ?SprintFull,
   selectProps: ?Object,
   serversideEvents: ?ServersideEvents
@@ -21,6 +24,8 @@ const initialPageState: AgilePageState = {
   isLoading: false,
   noBoardSelected: false,
   isSprintSelectOpen: false,
+  creatingIssueDraftId: null,
+  creatingIssueDraftCellId: null,
   selectProps: null,
   sprint: null,
   serversideEvents: null
@@ -274,6 +279,19 @@ const boardReducer = createReducer({}, {
   },
   [types.ADD_CARD_TO_CELL](state: BoardState, action: {cellId: string, issue: IssueFull}): BoardState {
     return addCardToBoard(state, action.cellId, action.issue);
+  },
+  [types.STORE_CREATING_ISSUE_DRAFT](state: BoardState, action: {draftId: string, cellId: string}): BoardState {
+    return {...state, creatingIssueDraftId: action.draftId, creatingIssueDraftCellId: action.cellId};
+  },
+  [ISSUE_CREATED]: (state: AgilePageState, action: {issue: IssueFull, preDefinedDraftId: ?string}): AgilePageState => {
+    if (state.creatingIssueDraftId !== action.preDefinedDraftId || !state.creatingIssueDraftCellId) {
+      return state;
+    }
+    return {
+      ...addCardToBoard(state, state.creatingIssueDraftCellId, action.issue),
+      creatingIssueDraftId: null,
+      creatingIssueDraftCellId: null
+    };
   },
   [types.UPDATE_ISSUE_ON_BOARD](state: BoardState, action: {cellId: string, issue: IssueFull}): BoardState {
     return updateCardOnBoard(state, action.issue);

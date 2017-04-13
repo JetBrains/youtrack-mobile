@@ -2,6 +2,7 @@
 export const SET_ISSUE_DRAFT = 'creation.SET_ISSUE_DRAFT';
 export const RESET_ISSUE_DRAFT = 'creation.RESET_ISSUE_DRAFT';
 export const SET_DRAFT_PROJECT_ID = 'creation.SET_DRAFT_PROJECT_ID';
+export const SET_ISSUE_PREDEFINED_DRAFT_ID = 'creation.SET_ISSUE_PREDEFINED_DRAFT_ID';
 export const CLEAR_DRAFT_PROJECT = 'creation.CLEAR_DRAFT_PROJECT';
 
 export const SET_ISSUE_PROJECT = 'creation.SET_ISSUE_PROJECT';
