@@ -1,8 +1,8 @@
 import {globalActionTypes as types} from '../actions/';
 import {createReducer} from 'redux-create-reducer';
 import IssuePermissions from '../components/issue-permissions/issue-permissions';
-import type Api from '../../components/api/api';
-import type Auth from '../../components/auth/auth';
+import type Api from '../components/api/api';
+import type Auth from '../components/auth/auth';
 
 type RootState = {
   api: ?Api,
