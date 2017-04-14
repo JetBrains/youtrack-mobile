@@ -96,6 +96,7 @@ export default class SingeIssueView extends React.Component {
       log.info('Comment created', createdComment);
       usage.trackEvent(CATEGORY_NAME, 'Add comment', 'Success');
 
+      LayoutAnimation.easeInEaseOut();
       this.setState({
         addCommentMode: false,
         commentText: '',
