@@ -416,7 +416,7 @@
 			isa = PBXGroup;
 			children = (
 				146834041AC3E56700842450 /* libReact.a */,
-				55BFD5EC1DEC2594006D0B84 /* libReact-tvOS.a */,
+				55BFD5EC1DEC2594006D0B84 /* libReact.a */,
 				557825661E980BD0002702EF /* libyoga.a */,
 				557825681E980BD0002702EF /* libyoga.a */,
 				5578256A1E980BD0002702EF /* libcxxreact.a */,
@@ -859,7 +859,7 @@
 			remoteRef = 55BFD5E71DEC2594006D0B84 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		55BFD5EC1DEC2594006D0B84 /* libReact-tvOS.a */ = {
+		55BFD5EC1DEC2594006D0B84 /* libReact.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libReact.a;
@@ -1144,7 +1144,7 @@
 					"$(SRCROOT)/../node_modules/react-native-keychain/RNKeychainManager",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1185,7 +1185,7 @@
 					"$(SRCROOT)/../node_modules/react-native/React/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
