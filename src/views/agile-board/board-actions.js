@@ -41,6 +41,7 @@ function loadSprint(agileId: string, sprintId: string) {
     destroyServersideEvents();
     try {
       const sprint = await api.getSprint(agileId, sprintId, PAGE_SIZE);
+      LayoutAnimation.easeInEaseOut();
       dispatch(receiveSprint(sprint));
       dispatch(subscribeServersideUpdates());
       await api.saveLastVisitedSprint(sprintId);
