@@ -6,7 +6,7 @@
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@exponent/react-native-action-sheet/-/react-native-action-sheet-0.3.0.tgz#67636a9bfbef3d6a0aa092122ea98e9f244460f2"
 
-"@huston007/react-native-eventsource@^0.1.0":
+"@huston007/react-native-eventsource@0.1.0":
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/@huston007/react-native-eventsource/-/react-native-eventsource-0.1.0.tgz#855269d3ae6c88804fb01ef49ad091058f6261be"
 
@@ -3946,13 +3946,9 @@ react-native-easy-toast@1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/react-native-easy-toast/-/react-native-easy-toast-1.0.3.tgz#a3ea60714d74ae17fe4c96acc9e26b48246376f6"
 
-"react-native-eventsource@ @huston007/react-native-eventsource@0.1.0":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/react-native-eventsource/-/react-native-eventsource-0.0.2.tgz#cc609d0dfe895dab8cd3bcca81771047a823823d"
-
-react-native-fence-html@huston007/react-native-fence-html#c1a7050129fc7293df69b14045ed1a04ba2608fa:
-  version "1.0.6"
-  resolved "https://codeload.github.com/huston007/react-native-fence-html/tar.gz/c1a7050129fc7293df69b14045ed1a04ba2608fa"
+react-native-fence-html@huston007/react-native-fence-html#fadee9efb0bed8f8cae737a63ba0d4ffea9bda62:
+  version "1.1.0"
+  resolved "https://codeload.github.com/huston007/react-native-fence-html/tar.gz/fadee9efb0bed8f8cae737a63ba0d4ffea9bda62"
   dependencies:
     buffer "^4.5.1"
     events "^1.1.0"
