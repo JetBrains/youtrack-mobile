@@ -1,7 +1,7 @@
 /* @flow */
 import {View, Image, Text, StyleSheet} from 'react-native';
 import React, {PureComponent} from 'react';
-import {UNIT} from '../variables/variables';
+import {UNIT, COLOR_FONT} from '../variables/variables';
 import ColorField from '../color-field/color-field';
 import ApiHelper from '../api/api__helper';
 import type {IssueOnList} from '../../flow/Issue';
@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
     height: 131
   },
   summary: {
+    color: COLOR_FONT,
     fontSize: 13,
     paddingTop: UNIT/2,
     paddingBottom: UNIT/2
