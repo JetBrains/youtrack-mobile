@@ -125,7 +125,7 @@ function findIssueOnBoard(board: Board, issueId: string) {
 function removeAllSwimlaneCardsFromBoard(board: Board, swimlane: AgileBoardRow) {
   return swimlane.cells.reduce((processingBoard: Board, cell: BoardCell) => {
     cell.issues.forEach(issue => {
-      processingBoard = removeCardFromBoard(processingBoard, issue.id);
+      processingBoard = removeIssueFromBoard(processingBoard, issue.id);
     });
 
     return processingBoard;
@@ -159,7 +159,7 @@ function removeSwimlaneFromBoard(board: Board, issueId: string): Board {
   };
 }
 
-function removeCardFromBoard(board: Board, issueId: string): Board {
+function removeIssueFromBoard(board: Board, issueId: string): Board {
   const isSwimlane = board.trimmedSwimlanes.some(
     (row: AgileBoardRow) => row.issue.id === issueId
   );
@@ -232,14 +232,12 @@ function addOrUpdateCell(board: Board, issue: IssueOnList, rowId, columnId) {
     return updateCardOnBoard(board, issue);
   }
 
-  board = removeCardFromBoard(board, issue.id);
+  board = removeIssueFromBoard(board, issue.id);
   return addCardToBoard(board, targetCell.id, issue);
 }
 
 function updateSwimlane(board: Board, swimlane: AgileBoardRow) {
-  board = removeCardFromBoard(board, swimlane.issue.id); // Card could be turn info swimlane
-
-  const swimlaneToUpdate = board.trimmedSwimlanes.filter(row => row.id === swimlane.id);
+  const swimlaneToUpdate = board.trimmedSwimlanes.filter(row => row.id === swimlane.id)[0];
 
   if (swimlaneToUpdate) {
     if (!swimlaneToUpdate.cells) { // It is new if no cells
@@ -250,8 +248,8 @@ function updateSwimlane(board: Board, swimlane: AgileBoardRow) {
       trimmedSwimlanes: board.trimmedSwimlanes.map(row => row.id === swimlane.id ? swimlane : row)
     };
   } else {
-    // Swimlane was added to board
-    removeAllSwimlaneCardsFromBoard(board, swimlane);
+    removeIssueFromBoard(board, swimlane.issue.id); // Card could be turn info swimlane
+    removeAllSwimlaneCardsFromBoard(board, swimlane); // Swimlane was added to board
     return {
       ...board,
       trimmedSwimlanes: [...board.trimmedSwimlanes, swimlane]
@@ -297,7 +295,7 @@ const boardReducer = createReducer({}, {
     return updateCardOnBoard(state, action.issue);
   },
   [types.REMOVE_ISSUE_FROM_BOARD](state: BoardState, action: {issueId: string}): BoardState {
-    return removeCardFromBoard(state, action.issueId);
+    return removeIssueFromBoard(state, action.issueId);
   },
   [types.REORDER_SWIMLANES_OR_CELLS](state: BoardState, action: {leadingId: ?string, movedId: string}): BoardState {
     return reorderEntitiesOnBoard(state, action.leadingId, action.movedId);
