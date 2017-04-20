@@ -100,7 +100,7 @@ export default class LoginForm extends React.Component {
                   keyboardShouldPersistTaps="handled"
                   keyboardDismissMode="on-drag">
 
-        <TouchableOpacity onPress={this.changeYouTrackUrl.bind(this)} style={styles.urlChangeButton}>
+        <TouchableOpacity onPress={this.changeYouTrackUrl.bind(this)} style={styles.urlChangeButton} testID="back-to-url">
           <View style={styles.urlChangeWrapper}>
             <Image source={back} style={styles.urlChangeIcon}/>
             <Text style={styles.urlChangeText}>URL</Text>
@@ -111,7 +111,7 @@ export default class LoginForm extends React.Component {
           <Image style={styles.logoImage} source={logo}/>
         </View>
 
-        <TouchableOpacity onPress={this.changeYouTrackUrl.bind(this)}>
+        <TouchableOpacity onPress={this.changeYouTrackUrl.bind(this)} testID="youtrack-url">
           <View>
             <Text style={styles.welcome}>Login to YouTrack</Text>
             <Text style={[styles.descriptionText, {marginTop: 8}]}>{formatYouTrackURL(this.props.auth.config.backendUrl)}</Text>
@@ -123,6 +123,7 @@ export default class LoginForm extends React.Component {
             autoCapitalize="none"
             autoCorrect={false}
             editable={!this.state.loggingIn}
+            testID="login-input"
             style={styles.input}
             placeholder="Username or email"
             returnKeyType="next"
@@ -133,6 +134,7 @@ export default class LoginForm extends React.Component {
           <TextInput
             ref="passInput"
             editable={!this.state.loggingIn}
+            testID="password-input"
             style={styles.input}
             placeholder="Password"
             returnKeyType="done"
@@ -147,6 +149,7 @@ export default class LoginForm extends React.Component {
         <View style={styles.actionsContainer}>
           <TouchableOpacity style={[styles.signin, this.state.loggingIn ? styles.signinDisabled : {}]}
                             disabled={this.state.loggingIn}
+                            testID="log-in"
                             onPress={this.logInViaCredentials.bind(this)}>
             <Text
               style={styles.signinText}>Log in</Text>
@@ -162,7 +165,11 @@ export default class LoginForm extends React.Component {
             </Text>
           </View>
 
-          <TouchableOpacity style={styles.linkContainer} onPress={this.logInViaHub.bind(this)}>
+          <TouchableOpacity
+            style={styles.linkContainer}
+            testID="log-in-via-browser"
+            onPress={this.logInViaHub.bind(this)}
+          >
             <Text style={styles.linkLike}>
               Log in via Browser</Text>
           </TouchableOpacity>

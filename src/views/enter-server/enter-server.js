@@ -137,6 +137,7 @@ export default class EnterServer extends Component {
 
           <TouchableOpacity style={[styles.apply, isDisabled ? styles.applyDisabled : {}]}
                             disabled={isDisabled}
+                            testID="next"
                             onPress={this.onApplyServerUrlChange.bind(this)}>
             <Text style={styles.applyText}>Next</Text>
             {this.state.connecting && <ActivityIndicator style={styles.connectingIndicator}/>}
