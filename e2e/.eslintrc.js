@@ -10,6 +10,7 @@ module.exports = {
     expect: true,
     element: true,
     device: true,
-    by: true
+    by: true,
+    waitFor: true
   }
 };

@@ -122,7 +122,9 @@ export default class QueryAssist extends React.Component {
     if (this.state.displayCancelSearch) {
       cancelButton = <TouchableOpacity
         style={styles.cancelSearch}
-        onPress={this.cancelSearch.bind(this)}>
+        testID="query-assist-cancel"
+        onPress={this.cancelSearch.bind(this)}
+      >
         <Text style={styles.cancelText}>
           Cancel
         </Text>
@@ -139,6 +141,7 @@ export default class QueryAssist extends React.Component {
           placeholder="Enter query"
           clearButtonMode="while-editing"
           returnKeyType="search"
+          testID="query-assist-input"
           autoFocus={showQueryAssist}
           autoCorrect={false}
           underlineColorAndroid="transparent"
@@ -150,9 +153,11 @@ export default class QueryAssist extends React.Component {
           onChangeText={text => this.setState({input: text})}
           onSelectionChange = {event => this.onSearch(input, event.nativeEvent.selection.start)}
         />
-        {(input && showQueryAssist) ? <TouchableOpacity style={styles.clearIconWrapper} onPress={() => this.setState({input: ''})}>
+        {(input && showQueryAssist)
+        ? <TouchableOpacity style={styles.clearIconWrapper} onPress={() => this.setState({input: ''})} testID="query-assist-clear">
           <Image style={styles.clearIcon} source={clearSearch}/>
-        </TouchableOpacity> : null}
+        </TouchableOpacity>
+        : null}
         {cancelButton}
       </View>
     );

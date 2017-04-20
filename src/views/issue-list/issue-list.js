@@ -120,6 +120,7 @@ export class IssueList extends Component {
       refreshing={this.props.isRefreshing}
       onRefresh={this.props.refreshIssues}
       tintColor={COLOR_PINK}
+      testID="refresh-control"
     />;
   }
 
@@ -132,7 +133,7 @@ export class IssueList extends Component {
     if (loadingError) {
       return (<View style={styles.errorContainer}>
         <Text style={styles.listMessageSmile}>{'(>_<)'}</Text>
-        <Text style={styles.errorTitle}>Cannot load issues</Text>
+        <Text style={styles.errorTitle} testID="cannot-load-message">Cannot load issues</Text>
         <Text style={styles.errorContent}>{extractErrorMessage(loadingError)}</Text>
         <TouchableOpacity style={styles.tryAgainButton} onPress={() => this.props.refreshIssues()}>
           <Text style={styles.tryAgainText}>Try Again</Text>
@@ -143,7 +144,7 @@ export class IssueList extends Component {
       return (
         <View>
           <Text style={styles.listMessageSmile}>(・_・)</Text>
-          <Text style={styles.listFooterMessage}>No issues found</Text>
+          <Text style={styles.listFooterMessage} testID="no-issues">No issues found</Text>
         </View>
       );
     }
@@ -173,6 +174,7 @@ export class IssueList extends Component {
             ListFooterComponent={this._renderListMessage}
             onEndReached={loadMoreIssues}
             onEndReachedThreshold={0.1}
+            testID="issue-list"
           />
 
           <QueryAssist
