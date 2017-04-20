@@ -103,7 +103,7 @@ export default class EnterServer extends Component {
 
     const error = this.state.error ?
       <View style={styles.errorContainer}>
-        <Text style={styles.error} selectable={true} testID="errorMessage">{extractErrorMessage(this.state.error)}</Text>
+        <Text style={styles.error} selectable={true} testID="error-message">{extractErrorMessage(this.state.error)}</Text>
       </View> :
       null;
 

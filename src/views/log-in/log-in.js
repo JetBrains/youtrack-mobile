@@ -143,7 +143,10 @@ export default class LoginForm extends React.Component {
             onSubmitEditing={() => this.logInViaCredentials()}
             secureTextEntry={true}
             onChangeText={(password) => this.setState({password})}/>
-          {this.state.errorMessage ? <View><Text style={styles.error} selectable={true}>{this.state.errorMessage}</Text></View> : null}
+
+          {this.state.errorMessage
+          ? <View><Text style={styles.error} selectable={true} testID="error-message">{this.state.errorMessage}</Text></View>
+          : null}
         </View>
 
         <View style={styles.actionsContainer}>
