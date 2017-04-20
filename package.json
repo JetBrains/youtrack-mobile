@@ -33,7 +33,8 @@
   "jest": {
     "preset": "react-native",
     "setupTestFrameworkScriptFile": "./test/jest-setup.js",
-    "testResultsProcessor": "jest-teamcity-reporter"
+    "testResultsProcessor": "jest-teamcity-reporter",
+    "testPathIgnorePatterns": ["/node_modules/", "/e2e/"]
   },
   "detox": {
     "configurations": {
