@@ -159,7 +159,7 @@ export class IssueList extends Component {
 
     return (
       <Menu onBeforeLogOut={this.logOut}>
-        <View style={styles.listContainer}>
+        <View style={styles.listContainer} testID="issue-list-page">
           {this._renderHeader()}
 
           <FlatList

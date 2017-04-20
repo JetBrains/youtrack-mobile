@@ -11,6 +11,7 @@
     "start": "./node_modules/react-native-cli/index.js start",
     "test": "jest",
     "test-ci": "TEAMCITY_VERSION=enablereport npm test",
+    "e2e": "detox build && detox test",
     "test:watch": "npm test -- --watchAll",
     "lint": "eslint src/components src/views && flow check",
     "ios": "./node_modules/react-native-cli/index.js run-ios",
@@ -33,6 +34,16 @@
     "preset": "react-native",
     "setupTestFrameworkScriptFile": "./test/jest-setup.js",
     "testResultsProcessor": "jest-teamcity-reporter"
+  },
+  "detox": {
+    "configurations": {
+      "ios.sim.debug": {
+        "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/YouTrackMobile.app",
+        "build": "xcodebuild -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile[Release] -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
+        "type": "ios.simulator",
+        "name": "iPhone 7"
+      }
+    }
   },
   "dependencies": {
     "@exponent/react-native-action-sheet": "0.3.0",
@@ -76,6 +87,7 @@
     "chai-enzyme": "0.6.1",
     "cheerio": "0.22.0",
     "core-util-is": "1.0.2",
+    "detox": "^5.0.5",
     "enzyme": "2.8.0",
     "enzyme-to-json": "^1.5.0",
     "eslint": "3.11.0",
@@ -87,6 +99,7 @@
     "flow-bin": "0.40.0",
     "jest": "^19.0.2",
     "jest-teamcity-reporter": "^0.6.2",
+    "mocha": "^3.2.0",
     "react-addons-perf": "16.0.0-alpha.3",
     "react-addons-test-utils": "15.4.2",
     "react-dom": "15.4.2",
