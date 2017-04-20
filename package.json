@@ -12,6 +12,7 @@
     "test": "jest",
     "test-ci": "TEAMCITY_VERSION=enablereport npm test",
     "e2e": "detox build && detox test",
+    "e2e-shutdown": "fbsimctl shutdown",
     "test:watch": "npm test -- --watchAll",
     "lint": "eslint src/components src/views && flow check",
     "ios": "./node_modules/react-native-cli/index.js run-ios",
