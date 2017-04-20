@@ -155,7 +155,7 @@ export class IssueList extends Component {
   };
 
   render() {
-    const {query, issues, isRefreshing, refreshIssues, loadMoreIssues, suggestIssuesQuery, queryAssistSuggestions} = this.props;
+    const {query, issues, loadMoreIssues, suggestIssuesQuery, queryAssistSuggestions} = this.props;
 
     return (
       <Menu onBeforeLogOut={this.logOut}>
@@ -166,8 +166,7 @@ export class IssueList extends Component {
             data={issues}
             keyExtractor={this._getIssueId}
             renderItem={this._renderRow}
-            refreshing={isRefreshing}
-            onRefresh={refreshIssues}
+            refreshControl={this._renderRefreshControl()}
             tintColor={COLOR_PINK}
             ItemSeparatorComponent={this._renderSeparator}
             ListFooterComponent={this._renderListMessage}
