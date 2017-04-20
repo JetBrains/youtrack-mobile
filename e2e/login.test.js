@@ -2,6 +2,8 @@ const loginPage = require('./pages/login');
 
 describe('Connect&Login', () => {
   beforeEach(async () => {
+    await device._fbsimctl._execFbsimctlCommand({args: `${device._simulatorUdid} clear_keychain`});
+    await device.relaunchApp({delete: true});
     await device.reloadReactNative();
   });
 
