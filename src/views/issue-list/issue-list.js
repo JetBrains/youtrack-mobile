@@ -163,6 +163,7 @@ export class IssueList extends Component {
           {this._renderHeader()}
 
           <FlatList
+            removeClippedSubviews={false}
             data={issues}
             keyExtractor={this._getIssueId}
             renderItem={this._renderRow}
