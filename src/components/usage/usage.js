@@ -1,9 +1,10 @@
 /* @flow */
 import DeviceInfo from 'react-native-device-info';
 import {Analytics, Hits as GAHits} from 'react-native-google-analytics';
+import appPackage from '../../../package.json'; // eslint-disable-line import/extensions
 
 const splitRegExp = /[\.-]/i;
-const VERSION = process.env.npm_package_version || 'dev.dev.dev-dev';
+const VERSION = appPackage.version || 'dev.dev.dev-dev';
 
 const [major, minor, patch, build] = VERSION.split(splitRegExp);
 const patchPart = parseInt(patch) === 0 ? '' : `.${patch}`;
