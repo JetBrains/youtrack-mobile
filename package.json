@@ -35,7 +35,10 @@
     "preset": "react-native",
     "setupTestFrameworkScriptFile": "./test/jest-setup.js",
     "testResultsProcessor": "jest-teamcity-reporter",
-    "testPathIgnorePatterns": ["/node_modules/", "/e2e/"]
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/e2e/"
+    ]
   },
   "detox": {
     "configurations": {
@@ -59,7 +62,7 @@
     "pubsub-js": "1.5.4",
     "qs": "6.1.0",
     "react": "16.0.0-alpha.6",
-    "react-native": "0.43.1",
+    "react-native": "0.43.4",
     "react-native-animatable": "^1.1.0",
     "react-native-calendar-picker": "huston007/CalendarPicker#83eea4463964d86d5b42d533c76b2ba829a665fb",
     "react-native-device-info": "rebeccahughes/react-native-device-info#e8bfe5e",
