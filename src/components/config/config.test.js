@@ -39,6 +39,7 @@ describe('Config', () => {
           clientId: 'fake-mobile-id',
           clientSecret: 'fake-service-secret',
           landingUrl: 'ytoauth://landing.url',
+          sessionCookie: null,
           scopes: 'Hub YouTrack',
           serverUri: 'http://hub.com',
           youtrackServiceId: 'fake-service-id'
