@@ -9,6 +9,7 @@ import React, {Component} from 'react';
 type Props = {
   comments: Array<IssueComment>,
   attachments: Array<Attachment>,
+  imageCookie: ?string,
   onReply: () => any,
   onCopyCommentLink: () => any,
   onIssueIdTap: () => any
@@ -28,6 +29,7 @@ export default class SingleIssueComments extends Component {
     return comments.map((comment) => {
       return <Comment key={comment.id}
                       comment={comment}
+                      imageCookie={this.props.imageCookie}
                       onIssueIdTap={this.props.onIssueIdTap}
                       attachments={attachments}
                       onReply={() => this.props.onReply(comment)}

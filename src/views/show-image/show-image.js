@@ -15,11 +15,17 @@ const hitSlop = {
 
 type Props = {
   allImagesUrls: Array<string>,
-  currentImage: string
+  currentImage: string,
+  imageCookie: ?string
 }
 
 export function ShowImage(props: Props) {
   const currentIndex = props.allImagesUrls.indexOf(props.currentImage);
+
+  const allImageSources = props.allImagesUrls.map(uri => ({
+    uri: uri,// + '?rnd=' + Math.random(),
+    headers: {Cookie: props.imageCookie}
+  }));
 
   const closeView = once(function closeView() {
     return Router.pop();
@@ -29,11 +35,15 @@ export function ShowImage(props: Props) {
     <View style={styles.container}>
       <Gallery
         style={styles.gallery}
-        images={props.allImagesUrls}
+        imagesSources={allImageSources}
         initialPage={currentIndex}
         loader={<ActivityIndicator style={styles.loader} size="large"/>}
         onSlideUp={closeView}
         onSlideDown={closeView}
+        pixels={{
+          width: 200, //Hack around https://github.com/ldn0x7dc/react-native-transformable-image/issues/15
+          height: 200
+        }}
       />
 
       <TouchableOpacity style={styles.closeButton}

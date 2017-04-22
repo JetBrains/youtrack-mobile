@@ -14,6 +14,7 @@ import type {IssueComment, Attachment} from '../../flow/CustomFields';
 type Props = {
   comment: IssueComment,
   attachments: Array<Attachment>,
+  imageCookie: ?string,
   onReply: () => any,
   onCopyCommentLink: () => any,
   onIssueIdTap: (issueId: string) => any
@@ -45,9 +46,15 @@ export default class Comment extends React.Component {
   }
 
   _renderComment(comment, attachments) {
-    return <Wiki onIssueIdTap={issueId => this.props.onIssueIdTap(issueId)} attachments={attachments}>
-      {decorateRawText(comment.text, comment.textPreview, attachments)}
-    </Wiki>;
+    return (
+      <Wiki
+        onIssueIdTap={issueId => this.props.onIssueIdTap(issueId)}
+        attachments={attachments}
+        imageCookie={this.props.imageCookie}
+      >
+        {decorateRawText(comment.text, comment.textPreview, attachments)}
+      </Wiki>
+    );
   }
 
   render() {

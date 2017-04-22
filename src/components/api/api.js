@@ -5,7 +5,7 @@ import agileFields from './api__agile-fields';
 import Auth from '../auth/auth';
 import log from '../log/log';
 import ApiHelper from './api__helper';
-import {handleRelativeUrl} from '../config/config';
+import {handleRelativeUrl, storeSessionCookie} from '../config/config';
 import type {SprintFull, AgileUserProfile, AgileBoardRow, BoardOnList} from '../../flow/Agile';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {IssueOnList, IssueFull, TransformedSuggestion, SavedQuery} from '../../flow/Issue';
@@ -50,7 +50,8 @@ class Api {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json, text/plain, */*',
-          'Authorization': `${authParams.token_type} ${authParams.access_token}`
+          'Authorization': `${authParams.token_type} ${authParams.access_token}`,
+          'Cookie': 'foo'
         },
         body: JSON.stringify(body)
       });
@@ -66,6 +67,10 @@ class Api {
 
     if (res.status < STATUS_OK_IF_MORE_THAN || res.status >= STATUS_BAD_IF_MORE_THATN) {
       throw res;
+    }
+
+    if (res.headers.has('set-cookie')) {
+      storeSessionCookie(this.config, res.headers.get('set-cookie'));
     }
 
     return await res.json();

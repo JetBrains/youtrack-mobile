@@ -1,6 +1,6 @@
 /* @flow */
 import React, {Component} from 'react';
-import {Linking, View, Text, TouchableOpacity, Image, Animated, ActivityIndicator, ScrollView, Platform} from 'react-native';
+import {Linking, View, Text, TouchableOpacity, Animated, ActivityIndicator, ScrollView, Platform} from 'react-native';
 import ImageProgress from 'react-native-image-progress';
 import flattenStyle from 'react-native/Libraries/StyleSheet/flattenStyle';
 import styles from './attachments-row.styles';
@@ -14,6 +14,7 @@ const imageHeight = flatStyles.height * 2;
 type Props = {
   attachments: Array<Object>,
   attachingImage: Object,
+  imageCookie: ?string,
   onOpenAttachment: (type: string, name: string) => any
 }
 
@@ -30,6 +31,7 @@ export default class AttachmentsRow extends Component {
   };
 
   static defaultProps = {
+    imageCookie: null,
     onOpenAttachment: () => {}
   };
 
@@ -45,11 +47,12 @@ export default class AttachmentsRow extends Component {
   }
 
   _showImageAttachment(currentImage, allAttachments) {
+    const {imageCookie} = this.props;
     const allImagesUrls = allAttachments
       .map(image => image.url);
     this.props.onOpenAttachment('image', currentImage.id);
 
-    return Router.ShowImage({ currentImage: currentImage.url, allImagesUrls });
+    return Router.ShowImage({ currentImage: currentImage.url, allImagesUrls, imageCookie });
   }
 
   _openAttachmentUrl(name, url) {
@@ -68,7 +71,7 @@ export default class AttachmentsRow extends Component {
   }
 
   render() {
-    const {attachments, attachingImage} = this.props;
+    const {attachments, attachingImage, imageCookie} = this.props;
 
     if (!attachments.length) {
       return null;
@@ -89,16 +92,11 @@ export default class AttachmentsRow extends Component {
                 onPress={() => this._showImageAttachment(attach, attachments)}
                 >
                 <Animated.View style={isAttachingImage ? { transform: [{ scale: this.state.attachingImageAnimation }] } : {}}>
-                  {Platform.OS === 'android'
-                  ? <Image
-                      style={styles.attachmentImage}
-                      source={{uri: url}}
-                    />
-                  : <ImageProgress
-                      style={styles.attachmentImage}
-                      renderIndicator={() => <ActivityIndicator/>}
-                      source={{uri: url}}
-                    />}
+                  <ImageProgress
+                    style={styles.attachmentImage}
+                    renderIndicator={() => <ActivityIndicator/>}
+                    source={{uri: url, headers: {Cookie: imageCookie}}}
+                  />
                   {isAttachingImage && <ActivityIndicator size="large" style={styles.imageActivityIndicator} />}
                 </Animated.View>
               </TouchableOpacity>

@@ -95,7 +95,11 @@ class CreateIssue extends React.Component {
               {issue.project.id &&
               <View style={styles.attachesContainer}>
 
-                <AttachmentsRow attachments={issue.attachments} attachingImage={attachingImage}/>
+                <AttachmentsRow
+                  attachments={issue.attachments}
+                  attachingImage={attachingImage}
+                  imageCookie={this.props.api.config.sessionCookie}
+                />
 
                 <View style={styles.attachButtonsContainer}>
                   <TouchableOpacity
