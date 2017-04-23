@@ -5,7 +5,7 @@ import agileFields from './api__agile-fields';
 import Auth from '../auth/auth';
 import log from '../log/log';
 import ApiHelper from './api__helper';
-import {handleRelativeUrl, storeSessionCookie} from '../config/config';
+import {handleRelativeUrl} from '../config/config';
 import type {SprintFull, AgileUserProfile, AgileBoardRow, BoardOnList} from '../../flow/Agile';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {IssueOnList, IssueFull, TransformedSuggestion, SavedQuery} from '../../flow/Issue';
@@ -40,18 +40,12 @@ class Api {
     assertLongQuery(url);
 
     const sendRequest = async () => {
-      const authParams = this.auth.authParams;
-      if (!authParams) {
-        throw new Error('Using API with uninitializard Auth');
-      }
-
       return await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json, text/plain, */*',
-          'Authorization': `${authParams.token_type} ${authParams.access_token}`,
-          'Cookie': 'foo'
+          ...this.auth.getAuthorizationHeaders()
         },
         body: JSON.stringify(body)
       });
@@ -67,10 +61,6 @@ class Api {
 
     if (res.status < STATUS_OK_IF_MORE_THAN || res.status >= STATUS_BAD_IF_MORE_THATN) {
       throw res;
-    }
-
-    if (res.headers.has('set-cookie')) {
-      storeSessionCookie(this.config, res.headers.get('set-cookie'));
     }
 
     return await res.json();

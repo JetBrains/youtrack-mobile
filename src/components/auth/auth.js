@@ -150,6 +150,15 @@ export default class Auth {
       .then((authParams) => this.authParams = authParams);
   }
 
+  getAuthorizationHeaders(authParams: ?AuthParams = this.authParams) {
+    if (!authParams) {
+      throw new Error('Auth: getAuthorizationHeaders called before authParams initialization');
+    }
+    return {
+      'Authorization': `${authParams.token_type} ${authParams.access_token}`
+    };
+  }
+
   /**
    * Not sure that check is still required.
    */
@@ -159,7 +168,7 @@ export default class Auth {
     return fetch(this.CHECK_TOKEN_URL, {
       headers: {
         'Accept': ACCEPT_HEADER,
-        'Authorization': `${authParams.token_type} ${authParams.access_token}`
+        ...this.getAuthorizationHeaders(authParams)
       }
     }).then((res) => {
       if (res.status > 400) {

@@ -11,7 +11,7 @@ type Props = {
   style?: any,
   children?: ReactElement<any>,
   attachments: Array<Object>,
-  imageCookie: ?string,
+  imageHeaders: ?Object,
   onIssueIdTap: (issueId: string) => any
 };
 
@@ -23,7 +23,7 @@ export default class Wiki extends Component {
   static defaultProps: Props = {
     onIssueIdTap: (issueId: string) => {},
     attachments: [],
-    imageCookie: null
+    imageHeaders: null
   };
 
   constructor(props: Props) {
@@ -37,12 +37,12 @@ export default class Wiki extends Component {
           .filter(attach => attach.mimeType.includes('image'))
           .map(image => image.url);
 
-        return Router.ShowImage({currentImage: url, allImagesUrls, imageCookie: props.imageCookie});
+        return Router.ShowImage({currentImage: url, allImagesUrls, imageHeaders: props.imageHeaders});
       },
       onIssueIdPress: (issueId) => {
         this.props.onIssueIdTap && this.props.onIssueIdTap(issueId);
       }
-    }, props.imageCookie);
+    }, props.imageHeaders);
 
     this.parser = SimpleMarkdown.parserFor(rules);
 

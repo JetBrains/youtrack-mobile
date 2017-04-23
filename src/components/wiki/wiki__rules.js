@@ -12,7 +12,7 @@ const CONTENT_WITHIN_MARKERS = 1;
 const imageWidth = flattenStyle(styles.image).width * 2;
 const imageHeight = flattenStyle(styles.image).height * 2;
 
-export default function (actions, imageCookie = null) {
+export default function (actions, imageHeaders: ?Object = null) {
   return {
     /**
      * Basic rules
@@ -149,7 +149,7 @@ export default function (actions, imageCookie = null) {
         return <Text onPress={() => actions.onImagePress(node.url)} key={state.key}>
           {Platform.OS === 'android' ?
           <Image
-            source={{uri, headers: {Cookie: imageCookie}}}
+            source={{uri, headers: imageHeaders}}
             style={styles.image}/>
           :
           <ImageProgress

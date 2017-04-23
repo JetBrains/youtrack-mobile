@@ -1,5 +1,5 @@
 /* @flow */
-import {AsyncStorage, Platform} from 'react-native';
+import {AsyncStorage} from 'react-native';
 import UrlParse from 'url-parse';
 import type {AppConfig, AppConfigFilled} from '../../flow/AppConfig';
 
@@ -19,7 +19,6 @@ const config: AppConfig = {
     clientId: null,
     clientSecret: null,
     youtrackServiceId: null,
-    sessionCookie: null,
     scopes: 'Hub YouTrack',
     landingUrl: 'ytoauth://landing.url'
   }
@@ -132,16 +131,6 @@ async function loadConfig(ytUrl: string) {
       }
       return Promise.reject(err);
     });
-}
-
-//Workaround for image requests cookie on Android YTM-399 https://github.com/facebook/react-native/issues/13630
-export function storeSessionCookie(config: AppConfigFilled, cookie: string) {
-    if (Platform.OS !== 'android') {
-      return;
-    }
-    const cookieValue = cookie.split(';')[0];
-    config.sessionCookie = cookieValue;
-    return storeConfig(config);
 }
 
 export {loadConfig, getStoredConfig, formatYouTrackURL, handleRelativeUrl, VERSION_DETECT_FALLBACK_URL};

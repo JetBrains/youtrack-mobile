@@ -15,6 +15,7 @@ describe('API', () => {
         token_type: 'token type',
         access_token: 'fake token'
       },
+      getAuthorizationHeaders: () => ({Authorization: 'token type fake token'}),
       config: {
         backendUrl: serverUrl
       }

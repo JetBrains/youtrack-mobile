@@ -16,15 +16,15 @@ const hitSlop = {
 type Props = {
   allImagesUrls: Array<string>,
   currentImage: string,
-  imageCookie: ?string
+  imageHeaders: ?Object
 }
 
 export function ShowImage(props: Props) {
   const currentIndex = props.allImagesUrls.indexOf(props.currentImage);
 
   const allImageSources = props.allImagesUrls.map(uri => ({
-    uri: uri,// + '?rnd=' + Math.random(),
-    headers: {Cookie: props.imageCookie}
+    uri: uri,
+    headers: props.imageHeaders
   }));
 
   const closeView = once(function closeView() {

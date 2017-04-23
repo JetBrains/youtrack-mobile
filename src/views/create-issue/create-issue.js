@@ -98,7 +98,7 @@ class CreateIssue extends React.Component {
                 <AttachmentsRow
                   attachments={issue.attachments}
                   attachingImage={attachingImage}
-                  imageCookie={this.props.api.config.sessionCookie}
+                  imageHeaders={this.props.api.auth.getAuthorizationHeaders()}
                 />
 
                 <View style={styles.attachButtonsContainer}>

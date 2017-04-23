@@ -411,7 +411,7 @@ export default class SingeIssueView extends React.Component {
           {issue.description ? <Wiki
             style={styles.description}
             attachments={issue.attachments}
-            imageCookie={this.props.api.config.sessionCookie}
+            imageHeaders={this.props.api.auth.getAuthorizationHeaders()}
             onIssueIdTap={issueId => this.goToIssueById(issueId)}
           >
             {decorateRawText(issue.description, issue.wikifiedDescription, issue.attachments)}
@@ -421,7 +421,7 @@ export default class SingeIssueView extends React.Component {
         {issue.attachments ? <AttachmentsRow
           attachments={issue.attachments}
           attachingImage={this.state.attachingImage}
-          imageCookie={this.props.api.config.sessionCookie}
+          imageHeaders={this.props.api.auth.getAuthorizationHeaders()}
           onOpenAttachment={(type, name) => usage.trackEvent(CATEGORY_NAME, type === 'image' ? 'Showing image' : 'Open attachment by URL')}
         /> : null}
       </View>
@@ -464,7 +464,7 @@ export default class SingeIssueView extends React.Component {
             <SingleIssueComments
               comments={issue.comments}
               attachments={issue.attachments}
-              imageCookie={this.props.api.config.sessionCookie}
+              imageHeaders={this.props.api.auth.getAuthorizationHeaders()}
               onReply={(comment) => {
                 this.setState({
                   addCommentMode: true,

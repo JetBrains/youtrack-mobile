@@ -14,7 +14,7 @@ import type {IssueComment, Attachment} from '../../flow/CustomFields';
 type Props = {
   comment: IssueComment,
   attachments: Array<Attachment>,
-  imageCookie: ?string,
+  imageHeaders: ?Object,
   onReply: () => any,
   onCopyCommentLink: () => any,
   onIssueIdTap: (issueId: string) => any
@@ -50,7 +50,7 @@ export default class Comment extends React.Component {
       <Wiki
         onIssueIdTap={issueId => this.props.onIssueIdTap(issueId)}
         attachments={attachments}
-        imageCookie={this.props.imageCookie}
+        imageHeaders={this.props.imageHeaders}
       >
         {decorateRawText(comment.text, comment.textPreview, attachments)}
       </Wiki>

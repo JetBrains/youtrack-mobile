@@ -14,7 +14,7 @@ const imageHeight = flatStyles.height * 2;
 type Props = {
   attachments: Array<Object>,
   attachingImage: Object,
-  imageCookie: ?string,
+  imageHeaders: ?Object,
   onOpenAttachment: (type: string, name: string) => any
 }
 
@@ -31,7 +31,7 @@ export default class AttachmentsRow extends Component {
   };
 
   static defaultProps = {
-    imageCookie: null,
+    imageHeaders: null,
     onOpenAttachment: () => {}
   };
 
@@ -47,12 +47,12 @@ export default class AttachmentsRow extends Component {
   }
 
   _showImageAttachment(currentImage, allAttachments) {
-    const {imageCookie} = this.props;
+    const {imageHeaders} = this.props;
     const allImagesUrls = allAttachments
       .map(image => image.url);
     this.props.onOpenAttachment('image', currentImage.id);
 
-    return Router.ShowImage({ currentImage: currentImage.url, allImagesUrls, imageCookie });
+    return Router.ShowImage({ currentImage: currentImage.url, allImagesUrls, imageHeaders });
   }
 
   _openAttachmentUrl(name, url) {
@@ -71,7 +71,7 @@ export default class AttachmentsRow extends Component {
   }
 
   render() {
-    const {attachments, attachingImage, imageCookie} = this.props;
+    const {attachments, attachingImage, imageHeaders} = this.props;
 
     if (!attachments.length) {
       return null;
@@ -95,7 +95,7 @@ export default class AttachmentsRow extends Component {
                   <ImageProgress
                     style={styles.attachmentImage}
                     renderIndicator={() => <ActivityIndicator/>}
-                    source={{uri: url, headers: {Cookie: imageCookie}}}
+                    source={{uri: url, headers: imageHeaders}}
                   />
                   {isAttachingImage && <ActivityIndicator size="large" style={styles.imageActivityIndicator} />}
                 </Animated.View>
