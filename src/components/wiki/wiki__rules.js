@@ -147,16 +147,16 @@ export default function (actions, imageHeaders: ?Object = null) {
         const uri = `${node.url}&w=${imageWidth}&h=${imageHeight}`;
 
         return <Text onPress={() => actions.onImagePress(node.url)} key={state.key}>
-          {Platform.OS === 'android' ?
-          <Image
-            source={{uri, headers: imageHeaders}}
-            style={styles.image}/>
-          :
-          <ImageProgress
-            renderIndicator={() => <ActivityIndicator/>}
-            source={{uri}}
-            style={styles.image}/>
-          }
+          {Platform.OS === 'android'
+          ? <Image
+              source={{uri, headers: imageHeaders}}
+              style={styles.image}
+            />
+          : <ImageProgress
+              renderIndicator={() => <ActivityIndicator/>}
+              source={{uri, headers: imageHeaders}}
+              style={styles.image}
+            />}
         </Text>;
       }
     },
