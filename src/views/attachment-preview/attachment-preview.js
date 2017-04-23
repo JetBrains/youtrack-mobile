@@ -28,7 +28,7 @@ export function AttachmentPreview(props: Props) {
         <Text style={styles.headerText} numberOfLines={1}>{name}</Text>
       </Header>
       <WebView
-        source={{url}}
+        source={{uri: url}}
         renderLoading={renderLoading}
         allowsInlineMediaPlayback={true}
         mediaPlaybackRequiresUserAction={true}
