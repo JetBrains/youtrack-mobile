@@ -29,7 +29,7 @@ export default class IssueRow extends React.Component {
       <View style={styles.priorityPlaceholder}/>;
 
     return (
-      <TouchableOpacity onPress={() => this.props.onClick(issue)}>
+      <TouchableOpacity onPress={() => this.props.onClick(issue)} testID="issue-row">
         <View style={styles.row}>
 
           <View>

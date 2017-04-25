@@ -46,15 +46,18 @@ export default class Header extends React.Component {
       <View style={[styles.header, {paddingTop: getTopPadding()}]}>
         <StatusBar animated barStyle="light-content"/>
         <TouchableOpacity
-            hitSlop={{top: TOUCH_PADDING, left: TOUCH_PADDING, bottom: TOUCH_PADDING, right: TOUCH_PADDING}}
-            style={[styles.headerButton, styles.headerButtonLeft]}
-            onPress={() => this.onBack()}>
+          testID="header-back"
+          hitSlop={{top: TOUCH_PADDING, left: TOUCH_PADDING, bottom: TOUCH_PADDING, right: TOUCH_PADDING}}
+          style={[styles.headerButton, styles.headerButtonLeft]}
+          onPress={() => this.onBack()}
+        >
             <Text style={styles.headerButtonText} numberOfLines={1}>{leftButton}</Text>
         </TouchableOpacity>
 
-        <View style={styles.headerCenter}>{children}</View>
+        <View style={styles.headerCenter} testID="header-content">{children}</View>
 
         <TouchableOpacity
+          testID="header-action"
           hitSlop={{top: TOUCH_PADDING, left: TOUCH_PADDING, bottom: TOUCH_PADDING, right: TOUCH_PADDING}}
           style={[styles.headerButton, styles.headerButtonRight]}
           onPress={this.onRightButtonClick.bind(this)}>

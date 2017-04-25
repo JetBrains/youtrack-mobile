@@ -444,7 +444,7 @@ export default class SingeIssueView extends React.Component {
   render() {
     const {issue, addCommentMode, fullyLoaded, commentText} = this.state;
     return (
-      <View style={styles.container}>
+      <View style={styles.container} testID="issue-view">
         {this._renderHeader()}
         {this._renderToolbar()}
 
