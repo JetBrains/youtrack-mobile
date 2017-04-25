@@ -7,9 +7,11 @@ import ServersideEvents from '../../components/api/api__serverside-events';
 import type Api from '../../components/api/api';
 import Router from '../../components/router/router';
 import log from '../../components/log/log';
+import usage from '../../components/usage/usage';
 import {LayoutAnimation} from 'react-native';
 
 const PAGE_SIZE = 4;
+const CATEGORY_NAME = 'Agile board';
 const RECONNECT_TIMEOUT = 60000;
 let serversideEvents = null;
 
@@ -44,8 +46,10 @@ function loadSprint(agileId: string, sprintId: string) {
       LayoutAnimation.easeInEaseOut();
       dispatch(receiveSprint(sprint));
       dispatch(subscribeServersideUpdates());
+      usage.trackEvent(CATEGORY_NAME, 'Load sprint', 'Success');
       await api.saveLastVisitedSprint(sprintId);
     } catch (e) {
+      usage.trackEvent(CATEGORY_NAME, 'Load sprint', 'Error');
       notifyError('Could not load sprint', e);
     } finally {
       dispatch(stopSprintLoad());
@@ -118,6 +122,7 @@ export function fetchMoreSwimlanes() {
     try {
       const swimlanes = await api.getSwimlanes(sprint.agile.id, sprint.id, PAGE_SIZE, sprint.board.trimmedSwimlanes.length);
       dispatch(receiveSwimlanes(swimlanes));
+      usage.trackEvent(CATEGORY_NAME, 'Load more swimlanes');
     } catch (e) {
       notifyError('Could not load swimlanes', e);
     } finally {
@@ -151,9 +156,10 @@ export function rowCollapseToggle(row: AgileBoardRow) {
         ...row,
         collapsed: !row.collapsed
       });
+      usage.trackEvent(CATEGORY_NAME, 'Toggle row collapsing');
     } catch (e) {
       dispatch(updateRowCollapsedState(row, oldCollapsed));
-      notifyError('Could not update row', e);
+      notifyError('Could not update row', e, !row.collapsed);
     }
   };
 }
@@ -183,9 +189,10 @@ export function columnCollapseToggle(column: AgileColumn) {
         ...column,
         collapsed: !column.collapsed
       });
+      usage.trackEvent(CATEGORY_NAME, 'Toggle column collapsing');
     } catch (e) {
       dispatch(updateColumnCollapsedState(column, oldCollapsed));
-      notifyError('Could not update column', e);
+      notifyError('Could not update column', e, !column.collapsed);
     }
   };
 }
@@ -201,6 +208,7 @@ export function openSprintSelect() {
     if (!sprint) {
       return;
     }
+    usage.trackEvent(CATEGORY_NAME, 'Open sprint select');
 
     dispatch({
       type: types.OPEN_AGILE_SELECT,
@@ -216,6 +224,7 @@ export function openSprintSelect() {
         onSelect: selectedSprint => {
           dispatch(closeSelect());
           dispatch(loadSprint(sprint.agile.id, selectedSprint.id));
+          usage.trackEvent(CATEGORY_NAME, 'Change sprint');
         }
       }
     });
@@ -226,6 +235,7 @@ export function openBoardSelect() {
   return (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {sprint} = getState().agile;
+    usage.trackEvent(CATEGORY_NAME, 'Open board select');
 
     dispatch({
       type: types.OPEN_AGILE_SELECT,
@@ -237,6 +247,7 @@ export function openBoardSelect() {
         onSelect: (selectedBoard: BoardOnList) => {
           dispatch(closeSelect());
           dispatch(loadBoard(selectedBoard.id, selectedBoard.sprints));
+          usage.trackEvent(CATEGORY_NAME, 'Change board');
         }
       }
     });
@@ -275,6 +286,7 @@ export function createCardForCell(columnId: string, cellId: string) {
       const draft = await api.getIssueDraftForAgileCell(sprint.agile.id, sprint.id, columnId, cellId);
       dispatch(storeCreatingIssueDraft(draft.id, cellId));
       Router.CreateIssue({predefinedDraftId: draft.id});
+      usage.trackEvent(CATEGORY_NAME, 'Open create card for cell');
     } catch (err) {
       notifyError('Could not create card', err);
     }

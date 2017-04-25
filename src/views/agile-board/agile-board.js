@@ -21,6 +21,8 @@ import * as boardActions from './board-actions';
 import {openMenu} from '../../actions';
 import { connect } from 'react-redux';
 
+const CATEGORY_NAME = 'Agile board';
+
 type Props = {
   auth: Auth,
   api: Api,
@@ -57,10 +59,10 @@ class AgileBoard extends Component {
     this.state = {
       zoomedOut: false
     };
-    usage.trackScreenView('Agile board');
   }
 
   componentDidMount() {
+    usage.trackScreenView(CATEGORY_NAME);
     this.props.onLoadBoard();
   }
 
@@ -91,6 +93,7 @@ class AgileBoard extends Component {
   }
 
   _onTapIssue = (issue: IssueOnList) => {
+    usage.trackEvent(CATEGORY_NAME, 'Open issue');
     Router.SingleIssue({
       issuePlaceholder: issue,
       issueId: issue.id,
