@@ -11,7 +11,7 @@ const patchPart = parseInt(patch) === 0 ? '' : `.${patch}`;
 
 export const VERSION_STRING = `${major}.${minor}${patchPart} (build ${build})`;
 
-const googleAnalyiticsId = process.env.ANALYTICS_ID;
+const googleAnalyiticsId = appPackage.config.ANALYTICS_ID;
 let isAnalyticsEnabled = false;
 
 const clientId = DeviceInfo.getUniqueID();

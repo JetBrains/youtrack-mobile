@@ -6,6 +6,9 @@
     "url": "youtrack.jetbrains.com/issues/YTM",
     "email": "youtrack-feedback@jetbrains.com"
   },
+  "config": {
+    "ANALYTICS_ID": ""
+  },
   "license": "Apache-2.0",
   "scripts": {
     "start": "./node_modules/react-native-cli/index.js start",
