@@ -22,7 +22,8 @@ import {COLOR_BLACK} from './components/variables/variables';
 // $FlowFixMe: cannot typecheck easy-toast module because of mistakes there
 import Toast from 'react-native-easy-toast';
 
-import {BackAndroid, Navigator, View, UIManager} from 'react-native';
+import {BackHandler, View, UIManager} from 'react-native';
+import {Navigator} from 'react-native-deprecated-custom-components';
 import React, {PropTypes, Component} from 'react';
 import ActionSheet from '@exponent/react-native-action-sheet';
 import type {AppConfigFilled} from './flow/AppConfig';
@@ -75,7 +76,7 @@ class YouTrackMobile extends Component {
   }
 
   addAndroidBackButtonSupport() {
-    BackAndroid.addEventListener('hardwareBackPress', function () {
+    BackHandler.addEventListener('hardwareBackPress', function () {
       const populated = Router.pop();
       const preventCloseApp = populated;
       return preventCloseApp;

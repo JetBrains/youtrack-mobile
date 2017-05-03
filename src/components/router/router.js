@@ -1,4 +1,4 @@
-import {Navigator} from 'react-native';
+import {Navigator} from 'react-native-deprecated-custom-components';
 import React, {createElement} from 'react';
 
 /**

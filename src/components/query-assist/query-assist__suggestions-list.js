@@ -1,6 +1,5 @@
 /* @flow */
 import {View, ListView, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import ListViewDataSource from 'react-native/Libraries/CustomComponents/ListView/ListViewDataSource';
 import React from 'react';
 import {UNIT, COLOR_FONT_ON_BLACK, COLOR_FONT_GRAY} from '../variables/variables';
 import type {TransformedSuggestion, SavedQuery} from '../../flow/Issue';
@@ -15,7 +14,7 @@ const ds = new ListView.DataSource({
 });
 
 type State = {
-  dataSource: ListViewDataSource
+  dataSource: typeof ListView.DataSource
 };
 
 type Props = {
