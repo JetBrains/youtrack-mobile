@@ -22,6 +22,7 @@ import IssueSummary from '../../components/issue-summary/issue-summary';
 import styles from './single-issue.styles';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import * as issueActions from './single-issue-actions';
+import type Api from '../../components/api/api';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {State as SingleIssueState} from './single-issue-reducers';
 import type {IssueFull, IssueOnList} from '../../flow/Issue';
@@ -29,15 +30,16 @@ import type {IssueComment} from '../../flow/CustomFields';
 
 const CATEGORY_NAME = 'Issue';
 
-type Props = SingleIssueState & {
+type AdditionalProps = {
+  api: Api,
   issuePermissions: IssuePermissions,
-  issuePlaceholder: IssueOnList | IssueFull
+  issuePlaceholder: Object
 };
 
-class SingeIssueView extends Component {
+type SingleIssueProps = SingleIssueState & typeof issueActions & AdditionalProps;
+
+class SingeIssueView extends Component<void, SingleIssueProps, void> {
   toolbarNode: Object;
-  props: Props;
-  state: {};
 
   static contextTypes = {
     actionSheet: PropTypes.func
@@ -92,7 +94,18 @@ class SingeIssueView extends Component {
   }
 
   _renderHeader() {
-    const {issue, issuePlaceholder, editMode, summaryCopy, fullyLoaded, isSavingEditedIssue, saveIssueSummaryAndDescriptionChange, showIssueActions} = this.props;
+    const {
+      issue,
+      issuePlaceholder,
+      editMode,
+      summaryCopy,
+      fullyLoaded,
+      isSavingEditedIssue,
+      saveIssueSummaryAndDescriptionChange,
+      showIssueActions,
+      stopEditingIssue
+    } = this.props;
+
     const issueToShow = issue || issuePlaceholder;
     const title = <Text style={styles.headerText} selectable={true}>
       {issueToShow ? `${issueToShow.project.shortName}-${issueToShow.numberInProject}` : `Loading...`}
@@ -116,7 +129,7 @@ class SingeIssueView extends Component {
       return (
       <Header
         leftButton={<Text>Cancel</Text>}
-        onBack={this.props.stopEditingIssue}
+        onBack={stopEditingIssue}
         rightButton={saveButton}
         onRightButtonClick={canSave ? saveIssueSummaryAndDescriptionChange : () => {}}
       >
@@ -278,8 +291,8 @@ class SingeIssueView extends Component {
           canEditProject={issuePermissions.canUpdateGeneralInfo(issue)}
           issue={issue}
           issuePermissions={issuePermissions}
-          onUpdate={updateIssueFieldValue}
-          onUpdateProject={updateProject}/>}
+          onUpdate={async (field) => await updateIssueFieldValue(field)}
+          onUpdateProject={async (project) => await updateProject(project)}/>}
 
         {Platform.OS == 'ios' && !addCommentMode && <KeyboardSpacer style={styles.keyboardSpacer}/>}
       </View>
@@ -287,7 +300,7 @@ class SingeIssueView extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state: {app: Object, singleIssue: SingleIssueState}, ownProps): SingleIssueState & AdditionalProps => {
   return {
     issuePermissions: state.app.issuePermissions,
     api: state.app.api,

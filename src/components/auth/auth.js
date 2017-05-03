@@ -150,7 +150,7 @@ export default class Auth {
       .then((authParams) => this.authParams = authParams);
   }
 
-  getAuthorizationHeaders(authParams: ?AuthParams = this.authParams) {
+  getAuthorizationHeaders(authParams: ?AuthParams = this.authParams): {Authorization: string} {
     if (!authParams) {
       throw new Error('Auth: getAuthorizationHeaders called before authParams initialization');
     }

@@ -15,9 +15,12 @@ type Props = {
   onIssueIdTap: (issueId: string) => any
 };
 
-export default class SingleIssueComments extends Component {
-  props: Props;
+type DefaultProps = {
+  onReply: Function,
+  onCopyCommentLink: Function,
+};
 
+export default class SingleIssueComments extends Component<DefaultProps, Props, void> {
   static defaultProps = {
     onReply: () => {},
     onCopyCommentLink: () => {}

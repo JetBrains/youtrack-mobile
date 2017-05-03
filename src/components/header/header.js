@@ -8,18 +8,20 @@ import getTopPadding, {onHeightChange} from './header__top-padding';
 const TOUCH_PADDING = 8;
 
 type Props = {
-  onBack?: () => void,
-  onRightButtonClick?: () => any,
+  onBack?: () => any,
+  onRightButtonClick?: Function,
   leftButton?: ?ReactElement<any>,
   rightButton?: ?ReactElement<any>,
   children?: ReactElement<any>
 }
 
-export default class Header extends React.Component {
-  props: Props;
+type DefaultProps = {
+  onRightButtonClick: Function
+}
 
+export default class Header extends React.Component<DefaultProps, Props, void> {
   static defaultProps = {
-    onRightButtonClick: () => {},
+    onRightButtonClick: () => undefined,
   };
 
   componentDidMount() {

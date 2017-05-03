@@ -13,19 +13,21 @@ const imageHeight = flatStyles.height * 2;
 
 type Props = {
   attachments: Array<Object>,
-  attachingImage: Object,
+  attachingImage: ?Object,
   imageHeaders: ?Object,
   onOpenAttachment: (type: string, name: string) => any
 }
+
+type DefaultProps = {
+  imageHeaders: ?Object,
+  onOpenAttachment: Function
+};
 
 type State = {
   attachingImageAnimation: Object
 };
 
-export default class AttachmentsRow extends Component {
-  props: Props;
-  state: State;
-
+export default class AttachmentsRow extends Component<DefaultProps, Props, State> {
   state = {
     attachingImageAnimation: new Animated.Value(0),
   };
