@@ -1,6 +1,6 @@
 /* @flow */
 import {ScrollView, View, Text, TouchableOpacity, Image, Platform} from 'react-native';
-import React from 'react';
+import React, {Component} from 'react';
 
 import styles from './create-issue.styles';
 import issueStyles from '../single-issue/single-issue.styles';
@@ -14,12 +14,22 @@ import IssueSummary from '../../components/issue-summary/issue-summary';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as createIssueActions from './create-issue-actions';
+import type Api from '../../components/api/api';
+import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
+import type {CreateIssueState} from './create-issue-reducers';
 
 export const PROJECT_ID_STORAGE_KEY = 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE';
 export const DRAFT_ID_STORAGE_KEY = 'DRAFT_ID_STORAGE_KEY';
 const CATEGORY_NAME = 'Create issue view';
 
-class CreateIssue extends React.Component {
+type AdditionalProps = {
+  api: Api,
+  issuePermissions: IssuePermissions,
+  predefinedDraftId: ?string
+};
+type Props = CreateIssueState & typeof createIssueActions & AdditionalProps;
+
+class CreateIssue extends Component<void, Props, void> {
   fieldsPanel: Object;
 
   constructor(props) {
@@ -136,8 +146,8 @@ class CreateIssue extends React.Component {
           issue={issue}
           canEditProject={true}
           issuePermissions={issuePermissions}
-          onUpdate={updateFieldValue}
-          onUpdateProject={updateProject}
+          onUpdate={async (field) => await updateFieldValue(field)}
+          onUpdateProject={async (project) => await updateProject(project)}
         />
 
         {Platform.OS == 'ios' && <KeyboardSpacer style={{backgroundColor: 'black'}}/>}

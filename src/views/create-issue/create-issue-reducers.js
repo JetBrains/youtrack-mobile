@@ -15,8 +15,8 @@ export type CreateIssueState = {
   attachingImage: ?Object,
   predefinedDraftId: ?string,
   issue: {
-    summary: ?string,
-    description: ?string,
+    summary: string,
+    description: string,
     attachments: Array<Object>,
     fields: Array<CustomField>,
     project: Object
@@ -29,8 +29,8 @@ const initialState: CreateIssueState = {
   predefinedDraftId: null,
 
   issue: {
-    summary: null,
-    description: null,
+    summary: '',
+    description: '',
     attachments: [],
     fields: [],
     project: notSelectedProject
