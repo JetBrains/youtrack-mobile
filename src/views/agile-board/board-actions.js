@@ -262,10 +262,6 @@ export function reorderSwimlanesOrCells(leadingId: ?string, movedId: string) {
   return {type: types.REORDER_SWIMLANES_OR_CELLS, leadingId, movedId};
 }
 
-export function updateIssueOnBoard(issue: IssueFull) {
-  return {type: types.UPDATE_ISSUE_ON_BOARD, issue};
-}
-
 export function addOrUpdateCellOnBoard(issue: IssueOnList, rowId: string, columnId: string) {
   return {type: types.ADD_OR_UPDATE_CELL_ON_BOARD, issue, rowId, columnId};
 }

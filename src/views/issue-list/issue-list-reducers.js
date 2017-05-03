@@ -3,6 +3,7 @@ import {createReducer} from 'redux-create-reducer';
 import * as types from './issue-list-action-types';
 import {LOG_OUT} from '../../actions/action-types';
 import {ISSUE_CREATED} from '../create-issue/create-issue-action-types';
+import {ISSUE_UPDATED} from '../single-issue/single-issue-action-types';
 import Cache from '../../components/cache/cache';
 import type {IssueOnList, IssueFull, TransformedSuggestions} from '../../flow/Issue';
 
@@ -86,7 +87,7 @@ export default createReducer(initialState, {
   [types.LIST_END_REACHED]: (state: IssuesListState, action: {error: Object}) => {
     return {...state, isListEndReached: true};
   },
-  [types.UPDATE_ISSUE_ON_LIST]: (state: IssuesListState, action: {issue: IssueFull}) => {
+  [ISSUE_UPDATED]: (state: IssuesListState, action: {issue: IssueFull}) => {
     const sourceIssue = action.issue;
     function updateIssue(issue: IssueOnList): IssueOnList {
       return Object.keys(issue).

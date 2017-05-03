@@ -54,11 +54,7 @@ export class IssueList extends Component {
       this.props.auth.config.backendUrl,
       (issueId) => {
         usage.trackEvent('Issue list', 'Open issue in app by URL');
-        Router.SingleIssue({
-          issueId: issueId,
-          api: this.props.api,
-          onUpdate: issue => this.props.updateIssueInList(issue)
-        });
+        Router.SingleIssue({issueId});
       },
       (issuesQuery) => {
         this.onQueryUpdated(issuesQuery);
@@ -77,9 +73,7 @@ export class IssueList extends Component {
   goToIssue(issue: IssueOnList) {
     Router.SingleIssue({
       issuePlaceholder: issue,
-      issueId: issue.id,
-      api: this.props.api,
-      onUpdate: issue => this.props.updateIssueInList(issue)
+      issueId: issue.id
     });
   }
 

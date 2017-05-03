@@ -1,5 +1,5 @@
 /* @flow */
-import {Text, View, Image, TouchableOpacity, ScrollView, Clipboard, Platform, RefreshControl, Linking} from 'react-native';
+import {Text, View, Image, TouchableOpacity, ScrollView, Platform, RefreshControl} from 'react-native';
 import React, {PropTypes, Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -14,9 +14,8 @@ import SingleIssueTopPanel from './single-issue__top-panel';
 import Router from '../../components/router/router';
 import Header from '../../components/header/header';
 import LinkedIssues from '../../components/linked-issues/linked-issues';
-import {showActions} from '../../components/action-sheet/action-sheet';
 import Wiki, {decorateRawText} from '../../components/wiki/wiki';
-import {notifyError, notify} from '../../components/notification/notification';
+import {notifyError} from '../../components/notification/notification';
 import {COLOR_PINK} from '../../components/variables/variables';
 import usage from '../../components/usage/usage';
 import IssueSummary from '../../components/issue-summary/issue-summary';
@@ -30,22 +29,18 @@ import type {IssueComment} from '../../flow/CustomFields';
 
 const CATEGORY_NAME = 'Issue';
 
+type Props = SingleIssueState & {
+  issuePermissions: IssuePermissions,
+  issuePlaceholder: IssueOnList | IssueFull
+};
+
 class SingeIssueView extends Component {
   toolbarNode: Object;
-
-  props: SingleIssueState & {
-    issuePermissions: IssuePermissions,
-    issuePlaceholder: IssueOnList | IssueFull
-  };
-
+  props: Props;
   state: {};
 
   static contextTypes = {
     actionSheet: PropTypes.func
-  };
-
-  static defaultProps = {
-    onUpdate: () => {}
   };
 
   componentDidMount() {
@@ -59,58 +54,17 @@ class SingeIssueView extends Component {
 
     Router.SingleIssue({
       issuePlaceholder: issue,
-      issueId: issue.id,
-      api: this.props.api
+      issueId: issue.id
     });
   }
 
   goToIssueById(issueId) {
-    Router.SingleIssue({
-      issueId: issueId,
-      api: this.props.api
-    });
+    Router.SingleIssue({issueId});
   }
 
   openIssueListWithSearch(query) {
     Router.IssueList({auth: this.props.api.auth, query: query});
   }
-
-  _makeIssueWebUrl(issue, commentId) {
-    const {numberInProject, project} = this.props.issue;
-    const commentHash = commentId ? `#comment=${commentId}` : '';
-    return `${this.props.api.config.backendUrl}/issue/${project.shortName}-${numberInProject}${commentHash}`;
-  }
-
-  _showActions() {
-    const {issue} = this.props;
-    const actions = [
-      {
-        title: 'Copy issue URL',
-        execute: () => {
-          usage.trackEvent(CATEGORY_NAME, 'Copy isue URL');
-          Clipboard.setString(this._makeIssueWebUrl(issue));
-          notify('Issue URL has been copied');
-        }
-      },
-      {
-        title: 'Open issue in browser',
-        execute: () => {
-          usage.trackEvent(CATEGORY_NAME, 'Open in browser');
-          Linking.openURL(this._makeIssueWebUrl(issue));
-        }
-      },
-      {title: 'Cancel'}
-    ];
-
-    return showActions(actions, this.context.actionSheet())
-      .then(action => action.execute())
-      .catch(err => {});
-  }
-
-  copyCommentUrl = (comment: IssueComment) => {
-    Clipboard.setString(this._makeIssueWebUrl(this.props.issue, comment.id));
-    notify('Comment URL has been copied');
-  };
 
   loadCommentSuggestions(query) {
     return this.props.api.getMentionSuggests([this.props.issueId], query)
@@ -138,19 +92,18 @@ class SingeIssueView extends Component {
   }
 
   _renderHeader() {
-    const {issue, editMode, summaryCopy, isSavingEditedIssue, saveIssueSummaryAndDescriptionChange} = this.props;
+    const {issue, issuePlaceholder, editMode, summaryCopy, fullyLoaded, isSavingEditedIssue, saveIssueSummaryAndDescriptionChange, showIssueActions} = this.props;
+    const issueToShow = issue || issuePlaceholder;
     const title = <Text style={styles.headerText} selectable={true}>
-      {issue ? `${issue.project.shortName}-${issue.numberInProject}` : `Loading...`}
+      {issueToShow ? `${issueToShow.project.shortName}-${issueToShow.numberInProject}` : `Loading...`}
     </Text>;
 
     if (!editMode) {
-      const actionsAvailable = issue;
-
       return (
         <Header
           leftButton={<Text>Back</Text>}
-          rightButton={<Text style={actionsAvailable ? null : styles.disabledSaveButton}>More</Text>}
-          onRightButtonClick={() => actionsAvailable && this._showActions()}
+          rightButton={<Text style={fullyLoaded ? null : styles.disabledSaveButton}>More</Text>}
+          onRightButtonClick={() => fullyLoaded && showIssueActions(this.context.actionSheet())}
         >
           {title}
         </Header>
@@ -202,7 +155,7 @@ class SingeIssueView extends Component {
     );
   }
 
-  _renderIssueView(issue) {
+  _renderIssueView(issue: IssueFull | IssueOnList) {
     const {editMode, isSavingEditedIssue, summaryCopy, descriptionCopy, attachingImage} = this.props;
     return (
       <View style={styles.issueViewContainer}>
@@ -244,20 +197,33 @@ class SingeIssueView extends Component {
 
   _renderRefreshControl() {
     return <RefreshControl
-      refreshing={this.props.isLoading}
+      refreshing={this.props.isRefreshing}
       tintColor={COLOR_PINK}
       onRefresh={this.props.refreshIssue}
     />;
   }
 
   render() {
-    const {issue, addCommentMode, fullyLoaded, commentText, issuePermissions, updateIssueFieldValue, updateProject, hideCommentInput, setCommentText, addComment} = this.props;
+    const {
+      issue,
+      issuePlaceholder,
+      addCommentMode,
+      fullyLoaded,
+      commentText,
+      issuePermissions,
+      updateIssueFieldValue,
+      updateProject,
+      hideCommentInput,
+      setCommentText,
+      addComment,
+      copyCommentUrl
+    } = this.props;
     return (
       <View style={styles.container} testID="issue-view">
         {this._renderHeader()}
         {this._renderToolbar()}
 
-        {issue &&
+        {(issue || issuePlaceholder) &&
         <ScrollView
           refreshControl={this._renderRefreshControl()}
           keyboardDismissMode="interactive"
@@ -265,7 +231,7 @@ class SingeIssueView extends Component {
           onScroll={this._handleScroll}
           scrollEventThrottle={16}
         >
-          {this._renderIssueView(issue)}
+          {this._renderIssueView(issue || issuePlaceholder)}
 
           {!fullyLoaded && <View><Text style={styles.loading}>Loading...</Text></View>}
 
@@ -274,8 +240,11 @@ class SingeIssueView extends Component {
               comments={issue.comments}
               attachments={issue.attachments}
               imageHeaders={this.props.api.auth.getAuthorizationHeaders()}
-              onReply={(comment: IssueComment) => this.props.startReply(comment.author.login)}
-              onCopyCommentLink={this.copyCommentUrl}
+              onReply={(comment: IssueComment) => {
+                this.props.showCommentInput();
+                this.props.startReply(comment.author.login);
+              }}
+              onCopyCommentLink={copyCommentUrl}
               onIssueIdTap={issueId => this.goToIssueById(issueId)}/>
           </View>}
 
@@ -323,6 +292,7 @@ const mapStateToProps = (state, ownProps) => {
     issuePermissions: state.app.issuePermissions,
     api: state.app.api,
     ...state.singleIssue,
+    issuePlaceholder: ownProps.issuePlaceholder,
     issueId: ownProps.issueId
   };
 };

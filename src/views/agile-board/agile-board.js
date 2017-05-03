@@ -15,7 +15,8 @@ import Api from '../../components/api/api';
 import {COLOR_PINK, AGILE_COLUMN_MIN_WIDTH, AGILE_COLLAPSED_COLUMN_WIDTH} from '../../components/variables/variables';
 import {zoomIn, zoomOut, next} from '../../components/icon/icon';
 import type {SprintFull, Board, AgileBoardRow, AgileColumn} from '../../flow/Agile';
-import type {IssueOnList, IssueFull} from '../../flow/Issue';
+import type {IssueOnList} from '../../flow/Issue';
+import type {AgilePageState} from './board-reducers';
 
 import * as boardActions from './board-actions';
 import {openMenu} from '../../actions';
@@ -23,7 +24,7 @@ import { connect } from 'react-redux';
 
 const CATEGORY_NAME = 'Agile board';
 
-type Props = {
+type Props = AgilePageState & {
   auth: Auth,
   api: Api,
   isLoading: boolean,
@@ -41,8 +42,7 @@ type Props = {
   onOpenBoardSelect: (any) => any,
   onCloseSelect: (any) => any,
   createCardForCell: (columnId: string, cellId: string) => any,
-  onOpenMenu: (any) => any,
-  updateIssueOnBoard: (issue: IssueFull) => any
+  onOpenMenu: (any) => any
 };
 
 type State = {
@@ -96,9 +96,7 @@ class AgileBoard extends Component {
     usage.trackEvent(CATEGORY_NAME, 'Open issue');
     Router.SingleIssue({
       issuePlaceholder: issue,
-      issueId: issue.id,
-      api: this.props.api,
-      onUpdate: this.props.updateIssueOnBoard
+      issueId: issue.id
     });
   }
 
@@ -267,8 +265,7 @@ const mapDispatchToProps = (dispatch) => {
     onOpenBoardSelect: () => dispatch(boardActions.openBoardSelect()),
     onCloseSelect: () => dispatch(boardActions.closeSelect()),
     onOpenMenu: () => dispatch(openMenu()),
-    createCardForCell: (...args) => dispatch(boardActions.createCardForCell(...args)),
-    updateIssueOnBoard: (...args) => dispatch(boardActions.updateIssueOnBoard(...args))
+    createCardForCell: (...args) => dispatch(boardActions.createCardForCell(...args))
   };
 };
 

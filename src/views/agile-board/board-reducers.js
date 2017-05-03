@@ -2,6 +2,7 @@
 import * as types from './board-action-types';
 import {LOG_OUT} from '../../actions/action-types';
 import {ISSUE_CREATED} from '../create-issue/create-issue-action-types';
+import {ISSUE_UPDATED} from '../single-issue/single-issue-action-types';
 import {createReducer} from 'redux-create-reducer';
 import type {SprintFull, BoardCell, AgileBoardRow, Board} from '../../flow/Agile';
 import type {IssueOnList, IssueFull} from '../../flow/Issue';
@@ -9,7 +10,7 @@ import type ServersideEvents from '../../components/api/api__serverside-events';
 
 type BoardState = Board;
 
-type AgilePageState = {
+export type AgilePageState = {
   isLoading: boolean,
   noBoardSelected: boolean,
   isSprintSelectOpen: boolean,
@@ -291,7 +292,7 @@ const boardReducer = createReducer({}, {
       creatingIssueDraftCellId: null
     };
   },
-  [types.UPDATE_ISSUE_ON_BOARD](state: BoardState, action: {cellId: string, issue: IssueFull}): BoardState {
+  [ISSUE_UPDATED](state: BoardState, action: {issue: IssueFull}): BoardState {
     return updateCardOnBoard(state, action.issue);
   },
   [types.REMOVE_ISSUE_FROM_BOARD](state: BoardState, action: {issueId: string}): BoardState {

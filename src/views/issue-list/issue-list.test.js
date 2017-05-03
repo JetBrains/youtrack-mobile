@@ -1,5 +1,6 @@
 import * as actions from './issue-list-actions';
 import * as types from './issue-list-action-types';
+import {ISSUE_UPDATED} from '../single-issue/single-issue-action-types';
 import sinon from 'sinon';
 import {AsyncStorage as MockedStorage} from 'react-native';
 import reducer from './issue-list-reducers';
@@ -159,7 +160,7 @@ describe('Issue list reducers', () => {
     };
     const updatedIssue = {id: 'test', summary: 'after update', foo: 'bar'};
     const newState = reducer(state, {
-      type: types.UPDATE_ISSUE_ON_LIST,
+      type: ISSUE_UPDATED,
       issue: updatedIssue
     });
 

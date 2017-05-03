@@ -5,7 +5,7 @@ import ApiHelper from '../../components/api/api__helper';
 import {notifyError, resolveError} from '../../components/notification/notification';
 import Cache from '../../components/cache/cache';
 import type Api from '../../components/api/api';
-import type {IssueOnList, IssueFull} from '../../flow/Issue';
+import type {IssueOnList} from '../../flow/Issue';
 
 const PAGE_SIZE = 10;
 const QUERY_STORAGE_KEY = 'YT_QUERY_STORAGE';
@@ -188,8 +188,4 @@ export function loadMoreIssues() {
       dispatch(stopMoreIssuesLoading());
     }
   };
-}
-
-export function updateIssueInList(issue: IssueFull) {
-  return {type: types.UPDATE_ISSUE_ON_LIST, issue};
 }

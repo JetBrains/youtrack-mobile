@@ -2,14 +2,14 @@
 import {createReducer} from 'redux-create-reducer';
 import * as types from './single-issue-action-types';
 import type {IssueFull} from '../../flow/Issue';
-import type {CustomField, FieldValue} from '../../flow/CustomFields';
+import type {CustomField, FieldValue, IssueProject} from '../../flow/CustomFields';
 
 
 export type State = {
   issueId: string,
   issue: IssueFull,
   unloadedIssues: Array<IssueFull>,
-  isLoading: boolean,
+  isRefreshing: boolean,
   fullyLoaded: boolean,
   editMode: boolean,
   isSavingEditedIssue: boolean,
@@ -25,7 +25,7 @@ const initialState: State = {
   unloadedIssues: [],
   issueId: '',
   issue: null,
-  isLoading: false,
+  isRefreshing: false,
   fullyLoaded: false,
   editMode: false,
   isSavingEditedIssue: false,
@@ -41,11 +41,11 @@ export default createReducer(initialState, {
   [types.SET_ISSUE_ID]: (state: State, action: {issueId: string}): State => {
     return {...state, issueId: action.issueId};
   },
-  [types.START_ISSUE_LOADING]: (state: State): State => {
-    return {...state, isLoading: true};
+  [types.START_ISSUE_REFRESHING]: (state: State): State => {
+    return {...state, isRefreshing: true};
   },
-  [types.STOP_ISSUE_LOADING]: (state: State): State => {
-    return {...state, isLoading: false};
+  [types.STOP_ISSUE_REFRESHING]: (state: State): State => {
+    return {...state, isRefreshing: false};
   },
   [types.RECEIVE_ISSUE]: (state: State, action: {issue: IssueFull}): State => {
     return {...state, fullyLoaded: true, issue: action.issue};
@@ -60,7 +60,7 @@ export default createReducer(initialState, {
     return {...state, isAddingComment: true, commentText: action.comment};
   },
   [types.STOP_ADDING_COMMENT]: (state: State): State => {
-    return {...state, isAddingComment: true};
+    return {...state, isAddingComment: false};
   },
   [types.SET_COMMENT_TEXT]: (state: State, action: {comment: string}): State => {
     return {...state, commentText: action.comment};
@@ -107,7 +107,7 @@ export default createReducer(initialState, {
   [types.SET_ISSUE_DESCRIPTION_COPY]: (state: State, action: {description: string}): State => {
     return {
       ...state,
-      description: action.description
+      descriptionCopy: action.description
     };
   },
   [types.START_SAVING_EDITED_ISSUE]: (state: State,): State => {
@@ -127,6 +127,42 @@ export default createReducer(initialState, {
           })
         }
     };
+  },
+  [types.SET_PROJECT]: (state: State, action: {project: IssueProject}): State => {
+    return {
+      ...state,
+      issue: {
+        ...state.issue,
+        project: action.project
+      }
+    };
+  },
+  [types.SET_COMMENT_TEXT]: (state: State, action: {comment: string}): State => {
+    return {...state, commentText: action.comment};
+  },
+  [types.START_IMAGE_ATTACHING](state: State, action: {attachingImage: Object}): State {
+    const {attachingImage} = action;
+    return {
+      ...state,
+      issue: {
+        ...state.issue,
+        attachments: [attachingImage, ...state.issue.attachments],
+      },
+      attachingImage
+    };
+  },
+  [types.REMOVE_ATTACHING_IMAGE](state: State): State {
+    return {
+      ...state,
+      issue: {
+        ...state.issue,
+        attachments: state.issue.attachments.filter(attach => attach !== state.attachingImage),
+      },
+      attachingImage: null
+    };
+  },
+  [types.STOP_IMAGE_ATTACHING](state: State): State {
+    return {...state, attachingImage: null};
   },
   [types.SET_VOTED]: (state: State, action: {voted: boolean}): State => {
     const {issue} = state;

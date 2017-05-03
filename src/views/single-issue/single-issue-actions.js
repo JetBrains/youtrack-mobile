@@ -1,11 +1,13 @@
 /* @flow */
+import {Clipboard, Linking} from 'react-native';
 import * as types from './single-issue-action-types';
 import ApiHelper from '../../components/api/api__helper';
-import {notifyError} from '../../components/notification/notification';
+import {notify, notifyError} from '../../components/notification/notification';
 import attachFile from '../../components/attach-file/attach-file';
+import {showActions} from '../../components/action-sheet/action-sheet';
 import usage from '../../components/usage/usage';
 import type {IssueFull} from '../../flow/Issue';
-import type {CustomField, IssueProject, FieldValue} from '../../flow/CustomFields';
+import type {CustomField, IssueProject, FieldValue, IssueComment} from '../../flow/CustomFields';
 import type Api from '../../components/api/api';
 import type {State as SingleIssueState} from './single-issue-reducers';
 
@@ -14,20 +16,16 @@ const CATEGORY_NAME = 'Issue';
 type ApiGetter = () => Api;
 type StateGetter = () => {singleIssue: SingleIssueState};
 
-function onUpdate() {
-  console.warn('TODO: onUpdate is not implemented'); //eslint-disable-line
-}
-
 export function setIssueId(issueId: string) {
   return {type: types.SET_ISSUE_ID, issueId};
 }
 
-export function startIssueLoading() {
-  return {type: types.START_ISSUE_LOADING};
+export function startIssueRefreshing() {
+  return {type: types.START_ISSUE_REFRESHING};
 }
 
-export function stopIssueLoading() {
-  return {type: types.STOP_ISSUE_LOADING};
+export function stopIssueRefreshing() {
+  return {type: types.STOP_ISSUE_REFRESHING};
 }
 
 export function receiveIssue(issue: IssueFull) {
@@ -78,6 +76,10 @@ export function setIssueFieldValue(field: CustomField, value: FieldValue) {
   return {type: types.SET_ISSUE_FIELD_VALUE, field, value};
 }
 
+export function setProject(project: IssueProject) {
+  return {type: types.SET_PROJECT, project};
+}
+
 export function startEditingIssue() {
   return {type: types.START_EDITING_ISSUE};
 }
@@ -114,6 +116,10 @@ export function setStarred(starred: boolean) {
   return {type: types.SET_STARRED, starred};
 }
 
+export function issueUpdated(issue: IssueFull) {
+  return {type: types.ISSUE_UPDATED, issue};
+}
+
 const getIssue = async (api, issueId) => {
   if (/[A-Z]/.test(issueId)) {
     return api.hackishGetIssueByIssueReadableId(issueId);
@@ -127,7 +133,6 @@ export function loadIssue() {
     const api: Api = getApi();
 
     try {
-      dispatch(startIssueLoading());
       const issue = await getIssue(api, issueId);
       issue.fieldHash = ApiHelper.makeFieldHash(issue);
 
@@ -135,15 +140,15 @@ export function loadIssue() {
       return issue;
     } catch (err) {
       notifyError('Failed to load issue', err);
-    } finally {
-      dispatch(stopIssueLoading());
     }
   };
 }
 
 export function refreshIssue() {
   return async (dispatch: (any) => any, getState: StateGetter) => {
-    dispatch(loadIssue());
+    dispatch(startIssueRefreshing());
+    await dispatch(loadIssue());
+    dispatch(stopIssueRefreshing());
   };
 }
 
@@ -153,22 +158,21 @@ export function saveIssueSummaryAndDescriptionChange() {
     const {summaryCopy, descriptionCopy} = getState().singleIssue;
 
     dispatch(setIssueSummaryAndDescription(summaryCopy, descriptionCopy));
-    dispatch(stopEditingIssue());
     dispatch(startSavingEditedIssue());
 
     try {
       const {issue} = getState().singleIssue;
       await api.updateIssueSummaryDescription(issue);
+      dispatch(stopEditingIssue());
       usage.trackEvent(CATEGORY_NAME, 'Update issue', 'Success');
 
       await dispatch(loadIssue());
-      onUpdate(getState().singleIssue.issue);
+      dispatch(issueUpdated(getState().singleIssue.issue));
     } catch (err) {
+      await dispatch(loadIssue());
       notifyError('Failed to update issue', err);
-      dispatch(loadIssue());
     } finally {
       dispatch(stopSavingEditedIssue());
-      this.setState({editMode: false, isSavingEditedIssue: false});
     }
   };
 }
@@ -204,13 +208,13 @@ export function attachImage() {
     getApi: ApiGetter
   ) => {
     const api: Api = getApi();
-    const {issueId} = getState().singleIssue;
+    const {issue} = getState().singleIssue;
     try {
       const attachingImage = await attachFile();
       dispatch(startImageAttaching(attachingImage));
 
       try {
-        await api.attachFile(issueId, attachingImage.url, attachingImage.name);
+        await api.attachFile(issue.id, attachingImage.url, attachingImage.name);
         usage.trackEvent(CATEGORY_NAME, 'Attach image', 'Success');
       } catch (err) {
         notifyError('Cannot attach file', err);
@@ -235,14 +239,14 @@ export function updateIssueFieldValue(field: CustomField, value: FieldValue) {
     usage.trackEvent(CATEGORY_NAME, 'Update field value');
 
     dispatch(setIssueFieldValue(field, value));
-    const updateMethod = field.hasStateMachine ?
-      this.props.api.updateIssueFieldEvent.bind(api) :
-      this.props.api.updateIssueFieldValue.bind(api);
+    const updateMethod = field.hasStateMachine
+      ? api.updateIssueFieldEvent.bind(api)
+      : api.updateIssueFieldValue.bind(api);
 
     try {
       await updateMethod(issue.id, field.id, value);
       await dispatch(loadIssue());
-      onUpdate(getState().singleIssue.issue);
+      dispatch(issueUpdated(getState().singleIssue.issue));
     } catch (err) {
       notifyError('Failed to update issue field', err);
       dispatch(loadIssue());
@@ -260,12 +264,12 @@ export function updateProject(project: IssueProject) {
 
     const api: Api = getApi();
     const {issue} = getState().singleIssue;
-    this.setState({issue: {...issue, project}});
+    dispatch(setProject(project));
 
     try {
       await api.updateProject(issue, project);
       await dispatch(loadIssue());
-      onUpdate(getState().singleIssue.issue);
+      dispatch(issueUpdated(getState().singleIssue.issue));
     } catch (err) {
       notifyError('Failed to update issue project', err);
       dispatch(loadIssue());
@@ -308,5 +312,49 @@ export function toggleStar(starred: boolean) {
       notifyError('Cannot update "Starred"', err);
       dispatch(setStarred(!starred));
     }
+  };
+}
+
+function makeIssueWebUrl(api: Api, issue: IssueFull, commentId: ?string) {
+  const {numberInProject, project} = issue;
+  const commentHash = commentId ? `#comment=${commentId}` : '';
+  return `${api.config.backendUrl}/issue/${project.shortName}-${numberInProject}${commentHash}`;
+}
+
+export function copyCommentUrl(comment: IssueComment) {
+  return (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const {issue} = getState().singleIssue;
+    Clipboard.setString(makeIssueWebUrl(api, issue, comment.id));
+    notify('Comment URL has been copied');
+  };
+}
+
+export function showIssueActions(actionSheet: Object) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const {issue} = getState().singleIssue;
+
+    const actions = [
+      {
+        title: 'Copy issue URL',
+        execute: () => {
+          usage.trackEvent(CATEGORY_NAME, 'Copy issue URL');
+          Clipboard.setString(makeIssueWebUrl(api, issue));
+          notify('Issue URL has been copied');
+        }
+      },
+      {
+        title: 'Open issue in browser',
+        execute: () => {
+          usage.trackEvent(CATEGORY_NAME, 'Open in browser');
+          Linking.openURL(makeIssueWebUrl(api, issue));
+        }
+      },
+      {title: 'Cancel'}
+    ];
+
+    const selectedAction = await showActions(actions, actionSheet);
+    selectedAction.execute();
   };
 }

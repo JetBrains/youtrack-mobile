@@ -11,5 +11,3 @@ export const LOADING_ISSUES_ERROR = 'issues.LOADING_ISSUES_ERROR';
 export const START_LOADING_MORE = 'issues.START_LOADING_MORE';
 export const STOP_LOADING_MORE = 'issues.STOP_LOADING_MORE';
 export const LIST_END_REACHED = 'issues.LIST_END_REACHED';
-
-export const UPDATE_ISSUE_ON_LIST = 'issues.UPDATE_ISSUE_ON_LIST';
