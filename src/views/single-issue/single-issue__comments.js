@@ -10,19 +10,17 @@ type Props = {
   comments: Array<IssueComment>,
   attachments: Array<Attachment>,
   imageHeaders: ?Object,
-  onReply: () => any,
-  onCopyCommentLink: () => any,
-  onIssueIdTap: () => any
+  onReply: (comment: IssueComment) => any,
+  onCopyCommentLink: (comment: IssueComment) => any,
+  onIssueIdTap: (issueId: string) => any
 };
 
 export default class SingleIssueComments extends Component {
   props: Props;
 
   static defaultProps = {
-    onReply: () => {
-    },
-    onCopyCommentLink: () => {
-    }
+    onReply: () => {},
+    onCopyCommentLink: () => {}
   };
 
   _renderCommentsList(comments, attachments) {

@@ -1,5 +1,5 @@
 /* @flow */
-type Action = {title: string, execute: Function}
+type Action = {title: string, execute?: Function}
 type ActionSheet = {showActionSheetWithOptions: Function};
 
 export function showActions(actions: Array<Action>, actionSheetInstance: ActionSheet) {

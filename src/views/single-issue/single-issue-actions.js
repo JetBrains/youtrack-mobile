@@ -1,0 +1,312 @@
+/* @flow */
+import * as types from './single-issue-action-types';
+import ApiHelper from '../../components/api/api__helper';
+import {notifyError} from '../../components/notification/notification';
+import attachFile from '../../components/attach-file/attach-file';
+import usage from '../../components/usage/usage';
+import type {IssueFull} from '../../flow/Issue';
+import type {CustomField, IssueProject, FieldValue} from '../../flow/CustomFields';
+import type Api from '../../components/api/api';
+import type {State as SingleIssueState} from './single-issue-reducers';
+
+const CATEGORY_NAME = 'Issue';
+
+type ApiGetter = () => Api;
+type StateGetter = () => {singleIssue: SingleIssueState};
+
+function onUpdate() {
+  console.warn('TODO: onUpdate is not implemented'); //eslint-disable-line
+}
+
+export function setIssueId(issueId: string) {
+  return {type: types.SET_ISSUE_ID, issueId};
+}
+
+export function startIssueLoading() {
+  return {type: types.START_ISSUE_LOADING};
+}
+
+export function stopIssueLoading() {
+  return {type: types.STOP_ISSUE_LOADING};
+}
+
+export function receiveIssue(issue: IssueFull) {
+  return {type: types.RECEIVE_ISSUE, issue};
+}
+
+export function showCommentInput() {
+  return {type: types.SHOW_COMMENT_INPUT};
+}
+
+export function hideCommentInput() {
+  return {type: types.HIDE_COMMENT_INPUT};
+}
+
+export function startAddingComment() {
+  return {type: types.START_ADDING_COMMENT, comment: ''};
+}
+
+export function startReply(targetLogin: string) {
+  return {type: types.START_ADDING_COMMENT, comment: `@${targetLogin} `};
+}
+
+export function setCommentText(comment: string) {
+  return {type: types.SET_COMMENT_TEXT, comment};
+}
+
+export function stopAddingComment() {
+  return {type: types.STOP_ADDING_COMMENT};
+}
+
+export function receiveComment(comment: Object) {
+  return {type: types.RECEIVE_COMMENT, comment};
+}
+
+export function startImageAttaching(attachingImage: Object) {
+  return {type: types.START_IMAGE_ATTACHING, attachingImage};
+}
+
+export function removeAttachingImage() {
+  return {type: types.REMOVE_ATTACHING_IMAGE};
+}
+
+export function stopImageAttaching() {
+  return {type: types.STOP_IMAGE_ATTACHING};
+}
+
+export function setIssueFieldValue(field: CustomField, value: FieldValue) {
+  return {type: types.SET_ISSUE_FIELD_VALUE, field, value};
+}
+
+export function startEditingIssue() {
+  return {type: types.START_EDITING_ISSUE};
+}
+
+export function stopEditingIssue() {
+  return {type: types.STOP_EDITING_ISSUE};
+}
+
+export function setIssueSummaryAndDescription(summary: string, description: string) {
+  return {type: types.SET_ISSUE_SUMMARY_AND_DESCRIPTION, summary, description};
+}
+
+export function setIssueSummaryCopy(summary: string) {
+  return {type: types.SET_ISSUE_SUMMARY_COPY, summary};
+}
+
+export function setIssueDescriptionCopy(description: string) {
+  return {type: types.SET_ISSUE_DESCRIPTION_COPY, description};
+}
+
+export function startSavingEditedIssue() {
+  return {type: types.START_SAVING_EDITED_ISSUE};
+}
+
+export function stopSavingEditedIssue() {
+  return {type: types.STOP_SAVING_EDITED_ISSUE};
+}
+
+export function setVoted(voted: boolean) {
+  return {type: types.SET_VOTED, voted};
+}
+
+export function setStarred(starred: boolean) {
+  return {type: types.SET_STARRED, starred};
+}
+
+const getIssue = async (api, issueId) => {
+  if (/[A-Z]/.test(issueId)) {
+    return api.hackishGetIssueByIssueReadableId(issueId);
+  }
+  return api.getIssue(issueId);
+};
+
+export function loadIssue() {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const issueId = getState().singleIssue.issueId;
+    const api: Api = getApi();
+
+    try {
+      dispatch(startIssueLoading());
+      const issue = await getIssue(api, issueId);
+      issue.fieldHash = ApiHelper.makeFieldHash(issue);
+
+      dispatch(receiveIssue(issue));
+      return issue;
+    } catch (err) {
+      notifyError('Failed to load issue', err);
+    } finally {
+      dispatch(stopIssueLoading());
+    }
+  };
+}
+
+export function refreshIssue() {
+  return async (dispatch: (any) => any, getState: StateGetter) => {
+    dispatch(loadIssue());
+  };
+}
+
+export function saveIssueSummaryAndDescriptionChange() {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const {summaryCopy, descriptionCopy} = getState().singleIssue;
+
+    dispatch(setIssueSummaryAndDescription(summaryCopy, descriptionCopy));
+    dispatch(stopEditingIssue());
+    dispatch(startSavingEditedIssue());
+
+    try {
+      const {issue} = getState().singleIssue;
+      await api.updateIssueSummaryDescription(issue);
+      usage.trackEvent(CATEGORY_NAME, 'Update issue', 'Success');
+
+      await dispatch(loadIssue());
+      onUpdate(getState().singleIssue.issue);
+    } catch (err) {
+      notifyError('Failed to update issue', err);
+      dispatch(loadIssue());
+    } finally {
+      dispatch(stopSavingEditedIssue());
+      this.setState({editMode: false, isSavingEditedIssue: false});
+    }
+  };
+}
+
+export function addComment(comment: string) {
+  return async (
+    dispatch: any => any,
+    getState: StateGetter,
+    getApi: ApiGetter
+  ) => {
+    const api: Api = getApi();
+    const {issue} = getState().singleIssue;
+    dispatch(startAddingComment());
+    try {
+      const createdComment = await api.addComment(issue.id, comment);
+      usage.trackEvent(CATEGORY_NAME, 'Add comment', 'Success');
+
+      dispatch(receiveComment(createdComment));
+      dispatch(hideCommentInput());
+      dispatch(loadIssue());
+    } catch (err) {
+      notifyError('Cannot post comment', err);
+    } finally {
+      dispatch(stopAddingComment());
+    }
+  };
+}
+
+export function attachImage() {
+  return async (
+    dispatch: any => any,
+    getState: StateGetter,
+    getApi: ApiGetter
+  ) => {
+    const api: Api = getApi();
+    const {issueId} = getState().singleIssue;
+    try {
+      const attachingImage = await attachFile();
+      dispatch(startImageAttaching(attachingImage));
+
+      try {
+        await api.attachFile(issueId, attachingImage.url, attachingImage.name);
+        usage.trackEvent(CATEGORY_NAME, 'Attach image', 'Success');
+      } catch (err) {
+        notifyError('Cannot attach file', err);
+        dispatch(removeAttachingImage());
+      }
+      dispatch(stopImageAttaching());
+    } catch (err) {
+      notifyError('ImagePicker error', err);
+    }
+  };
+}
+
+export function updateIssueFieldValue(field: CustomField, value: FieldValue) {
+  return async (
+    dispatch: any => any,
+    getState: StateGetter,
+    getApi: ApiGetter
+  ) => {
+    const api: Api = getApi();
+    const {issue} = getState().singleIssue;
+
+    usage.trackEvent(CATEGORY_NAME, 'Update field value');
+
+    dispatch(setIssueFieldValue(field, value));
+    const updateMethod = field.hasStateMachine ?
+      this.props.api.updateIssueFieldEvent.bind(api) :
+      this.props.api.updateIssueFieldValue.bind(api);
+
+    try {
+      await updateMethod(issue.id, field.id, value);
+      await dispatch(loadIssue());
+      onUpdate(getState().singleIssue.issue);
+    } catch (err) {
+      notifyError('Failed to update issue field', err);
+      dispatch(loadIssue());
+    }
+  };
+}
+
+export function updateProject(project: IssueProject) {
+  return async (
+    dispatch: any => any,
+    getState: StateGetter,
+    getApi: ApiGetter
+  ) => {
+    usage.trackEvent(CATEGORY_NAME, 'Update project');
+
+    const api: Api = getApi();
+    const {issue} = getState().singleIssue;
+    this.setState({issue: {...issue, project}});
+
+    try {
+      await api.updateProject(issue, project);
+      await dispatch(loadIssue());
+      onUpdate(getState().singleIssue.issue);
+    } catch (err) {
+      notifyError('Failed to update issue project', err);
+      dispatch(loadIssue());
+    }
+  };
+}
+
+export function toggleVote(voted: boolean) {
+  return async (
+    dispatch: any => any,
+    getState: StateGetter,
+    getApi: ApiGetter
+  ) => {
+    const api: Api = getApi();
+    const {issue} = getState().singleIssue;
+
+    dispatch(setVoted(voted));
+    try {
+      await api.updateIssueVoted(issue.id, voted);
+    } catch (err) {
+      notifyError('Cannot update "Voted"', err);
+      dispatch(setVoted(!voted));
+    }
+  };
+}
+
+export function toggleStar(starred: boolean) {
+  return async (
+    dispatch: any => any,
+    getState: StateGetter,
+    getApi: ApiGetter
+  ) => {
+    const api: Api = getApi();
+    const {issue} = getState().singleIssue;
+
+    dispatch(setStarred(starred));
+    try {
+      await api.updateIssueStarred(issue.id, starred);
+    } catch (err) {
+      notifyError('Cannot update "Starred"', err);
+      dispatch(setStarred(!starred));
+    }
+  };
+}
