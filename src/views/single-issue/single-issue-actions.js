@@ -4,6 +4,7 @@ import * as types from './single-issue-action-types';
 import ApiHelper from '../../components/api/api__helper';
 import {notify, notifyError} from '../../components/notification/notification';
 import attachFile from '../../components/attach-file/attach-file';
+import Router from '../../components/router/router';
 import {showActions} from '../../components/action-sheet/action-sheet';
 import usage from '../../components/usage/usage';
 import type {IssueFull} from '../../flow/Issue';
@@ -118,6 +119,18 @@ export function setStarred(starred: boolean) {
 
 export function issueUpdated(issue: IssueFull) {
   return {type: types.ISSUE_UPDATED, issue};
+}
+
+export function resetIssueView() {
+  return {type: types.RESET_SINGLE_ISSUE};
+}
+
+export function unloadActiveIssueView() {
+  return {type: types.UNLOAD_ACTIVE_ISSUE_VIEW};
+}
+
+export function restorePreviousActiveIssueView() {
+  return {type: types.RESTORE_PREVIOUS_ISSUE_VIEW};
 }
 
 const getIssue = async (api, issueId) => {
@@ -357,4 +370,36 @@ export function showIssueActions(actionSheet: Object) {
     const selectedAction = await showActions(actions, actionSheet);
     selectedAction.execute();
   };
+}
+
+export function closeSingleIssue() {
+  return async (dispatch: (any) => any, getState: StateGetter) => {
+    const {unloadedIssueState} = getState().singleIssue;
+    Router.pop();
+
+    if (unloadedIssueState) {
+      dispatch(restorePreviousActiveIssueView());
+    } else {
+      dispatch(resetIssueView());
+    }
+  };
+}
+
+export function openNestedIssueView(issue: ?IssueFull, issueId: ?string) {
+  return async (dispatch: (any) => any, getState: StateGetter) => {
+    dispatch(unloadActiveIssueView());
+    if (!issue) {
+      return Router.SingleIssue({issueId});
+    }
+
+    issue.fieldHash = ApiHelper.makeFieldHash(issue);
+    Router.SingleIssue({
+      issuePlaceholder: issue,
+      issueId: issue.id
+    });
+  };
+}
+
+export function openIssueListWithSearch(query: string) {
+  Router.IssueList({query});
 }

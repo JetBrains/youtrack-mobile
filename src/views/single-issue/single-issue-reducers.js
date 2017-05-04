@@ -8,7 +8,7 @@ import type {CustomField, FieldValue, IssueProject} from '../../flow/CustomField
 export type State = {
   issueId: string,
   issue: IssueFull,
-  unloadedIssues: Array<IssueFull>,
+  unloadedIssueState: ?State,
   isRefreshing: boolean,
   fullyLoaded: boolean,
   editMode: boolean,
@@ -22,7 +22,7 @@ export type State = {
 };
 
 const initialState: State = {
-  unloadedIssues: [],
+  unloadedIssueState: null,
   issueId: '',
   issue: null,
   isRefreshing: false,
@@ -40,6 +40,9 @@ const initialState: State = {
 export default createReducer(initialState, {
   [types.SET_ISSUE_ID]: (state: State, action: {issueId: string}): State => {
     return {...state, issueId: action.issueId};
+  },
+  [types.RESET_SINGLE_ISSUE]: (state: State, action: {issueId: string}): State => {
+    return initialState;
   },
   [types.START_ISSUE_REFRESHING]: (state: State): State => {
     return {...state, isRefreshing: true};
@@ -193,4 +196,10 @@ export default createReducer(initialState, {
       }
     };
   },
+  [types.UNLOAD_ACTIVE_ISSUE_VIEW]: (state: State, action: {starred: boolean}): State => {
+    return {...initialState, unloadedIssueState: state};
+  },
+  [types.RESTORE_PREVIOUS_ISSUE_VIEW]: (state: State, action: {starred: boolean}): State => {
+    return state.unloadedIssueState ? state.unloadedIssueState : initialState;
+  }
 });

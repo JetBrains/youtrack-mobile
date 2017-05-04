@@ -3,7 +3,6 @@ import {Text, View, Image, TouchableOpacity, ScrollView, Platform, RefreshContro
 import React, {PropTypes, Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import ApiHelper from '../../components/api/api__helper';
 import {comment} from '../../components/icon/icon';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
@@ -11,7 +10,6 @@ import IssueToolbar from '../../components/issue-toolbar/issue-toolbar';
 import SingleIssueComments from './single-issue__comments';
 import SingleIssueCommentInput from './single-issue__comment-input';
 import SingleIssueTopPanel from './single-issue__top-panel';
-import Router from '../../components/router/router';
 import Header from '../../components/header/header';
 import LinkedIssues from '../../components/linked-issues/linked-issues';
 import Wiki, {decorateRawText} from '../../components/wiki/wiki';
@@ -51,23 +49,6 @@ class SingeIssueView extends Component<void, SingleIssueProps, void> {
     this.props.loadIssue();
   }
 
-  goToIssue(issue) {
-    issue.fieldHash = ApiHelper.makeFieldHash(issue);
-
-    Router.SingleIssue({
-      issuePlaceholder: issue,
-      issueId: issue.id
-    });
-  }
-
-  goToIssueById(issueId) {
-    Router.SingleIssue({issueId});
-  }
-
-  openIssueListWithSearch(query) {
-    Router.IssueList({auth: this.props.api.auth, query: query});
-  }
-
   loadCommentSuggestions(query) {
     return this.props.api.getMentionSuggests([this.props.issueId], query)
       .catch(err => notifyError('Cannot load suggestions', err));
@@ -101,6 +82,7 @@ class SingeIssueView extends Component<void, SingleIssueProps, void> {
       summaryCopy,
       fullyLoaded,
       isSavingEditedIssue,
+      closeSingleIssue,
       saveIssueSummaryAndDescriptionChange,
       showIssueActions,
       stopEditingIssue
@@ -114,6 +96,7 @@ class SingeIssueView extends Component<void, SingleIssueProps, void> {
     if (!editMode) {
       return (
         <Header
+          onBack={closeSingleIssue}
           leftButton={<Text>Back</Text>}
           rightButton={<Text style={fullyLoaded ? null : styles.disabledSaveButton}>More</Text>}
           onRightButtonClick={() => fullyLoaded && showIssueActions(this.context.actionSheet())}
@@ -169,10 +152,10 @@ class SingeIssueView extends Component<void, SingleIssueProps, void> {
   }
 
   _renderIssueView(issue: IssueFull | IssueOnList) {
-    const {editMode, isSavingEditedIssue, summaryCopy, descriptionCopy, attachingImage} = this.props;
+    const {editMode, api, isSavingEditedIssue, summaryCopy, descriptionCopy, attachingImage, openIssueListWithSearch, openNestedIssueView} = this.props;
     return (
       <View style={styles.issueViewContainer}>
-        <SingleIssueTopPanel issue={issue} onTagPress={query => this.openIssueListWithSearch(query)}/>
+        <SingleIssueTopPanel issue={issue} onTagPress={openIssueListWithSearch}/>
 
         {editMode && <IssueSummary
               editable={!isSavingEditedIssue}
@@ -186,13 +169,13 @@ class SingeIssueView extends Component<void, SingleIssueProps, void> {
         {!editMode && <View>
           <Text style={styles.summary}  selectable={true}>{issue.summary}</Text>
 
-          {issue.links && <LinkedIssues links={issue.links} onIssueTap={issue => this.goToIssue(issue)}/>}
+          {issue.links && <LinkedIssues links={issue.links} onIssueTap={openNestedIssueView}/>}
 
           {issue.description ? <Wiki
             style={styles.description}
             attachments={issue.attachments}
-            imageHeaders={this.props.api.auth.getAuthorizationHeaders()}
-            onIssueIdTap={issueId => this.goToIssueById(issueId)}
+            imageHeaders={api.auth.getAuthorizationHeaders()}
+            onIssueIdTap={issueId => openNestedIssueView(null, issueId)}
           >
             {decorateRawText(issue.description, issue.wikifiedDescription, issue.attachments)}
           </Wiki> : null}
@@ -201,7 +184,7 @@ class SingeIssueView extends Component<void, SingleIssueProps, void> {
         {issue.attachments ? <AttachmentsRow
           attachments={issue.attachments}
           attachingImage={attachingImage}
-          imageHeaders={this.props.api.auth.getAuthorizationHeaders()}
+          imageHeaders={api.auth.getAuthorizationHeaders()}
           onOpenAttachment={(type, name) => usage.trackEvent(CATEGORY_NAME, type === 'image' ? 'Showing image' : 'Open attachment by URL')}
         /> : null}
       </View>
@@ -229,7 +212,8 @@ class SingeIssueView extends Component<void, SingleIssueProps, void> {
       hideCommentInput,
       setCommentText,
       addComment,
-      copyCommentUrl
+      copyCommentUrl,
+      openNestedIssueView
     } = this.props;
     return (
       <View style={styles.container} testID="issue-view">
@@ -258,7 +242,7 @@ class SingeIssueView extends Component<void, SingleIssueProps, void> {
                 this.props.startReply(comment.author.login);
               }}
               onCopyCommentLink={copyCommentUrl}
-              onIssueIdTap={issueId => this.goToIssueById(issueId)}/>
+              onIssueIdTap={issueId => openNestedIssueView(null, issueId)}/>
           </View>}
 
           {Platform.OS == 'ios' && <KeyboardSpacer/>}
