@@ -18,7 +18,9 @@ export type State = {
   isAddingComment: boolean,
   commentText: string,
   summaryCopy: string,
-  descriptionCopy: string
+  descriptionCopy: string,
+  suggestionsAreLoading: boolean,
+  commentSuggestions: ?Object
 };
 
 const initialState: State = {
@@ -34,7 +36,9 @@ const initialState: State = {
   isAddingComment: false,
   commentText: '',
   summaryCopy: '',
-  descriptionCopy: ''
+  descriptionCopy: '',
+  suggestionsAreLoading: false,
+  commentSuggestions: null
 };
 
 export default createReducer(initialState, {
@@ -201,5 +205,14 @@ export default createReducer(initialState, {
   },
   [types.RESTORE_PREVIOUS_ISSUE_VIEW]: (state: State, action: {starred: boolean}): State => {
     return state.unloadedIssueState ? state.unloadedIssueState : initialState;
-  }
+  },
+  [types.START_LOADING_COMMENT_SUGGESTIONS]: (state: State): State => {
+    return {...state, suggestionsAreLoading: true};
+  },
+  [types.STOP_LOADING_COMMENT_SUGGESTIONS]: (state: State): State => {
+    return {...state, suggestionsAreLoading: false};
+  },
+  [types.RECEIVE_COMMENT_SUGGESTIONS]: (state: State, action: {suggestions: Object}): State => {
+    return {...state, commentSuggestions: action.suggestions};
+  },
 });

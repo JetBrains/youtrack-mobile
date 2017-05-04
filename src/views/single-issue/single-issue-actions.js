@@ -133,6 +133,18 @@ export function restorePreviousActiveIssueView() {
   return {type: types.RESTORE_PREVIOUS_ISSUE_VIEW};
 }
 
+export function startLoadingCommentSuggestions() {
+  return {type: types.START_LOADING_COMMENT_SUGGESTIONS};
+}
+
+export function stopLoadingCommentSuggestions() {
+  return {type: types.STOP_LOADING_COMMENT_SUGGESTIONS};
+}
+
+export function receiveCommentSuggestions(suggestions: Object) {
+  return {type: types.RECEIVE_COMMENT_SUGGESTIONS, suggestions};
+}
+
 const getIssue = async (api, issueId) => {
   if (/[A-Z]/.test(issueId)) {
     return api.hackishGetIssueByIssueReadableId(issueId);
@@ -402,4 +414,21 @@ export function openNestedIssueView(issue: ?IssueFull, issueId: ?string) {
 
 export function openIssueListWithSearch(query: string) {
   Router.IssueList({query});
+}
+
+export function loadCommentSuggestions(query: string) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const issue: IssueFull = getState().singleIssue.issue;
+    dispatch(startLoadingCommentSuggestions());
+
+    try {
+      const suggestions = await api.getMentionSuggests([issue.id], query);
+      dispatch(receiveCommentSuggestions(suggestions));
+    } catch (err) {
+      notifyError('Failed to load comment suggestions', err);
+    } finally {
+      dispatch(stopLoadingCommentSuggestions());
+    }
+  };
 }

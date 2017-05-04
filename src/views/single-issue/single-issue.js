@@ -213,7 +213,10 @@ class SingeIssueView extends Component<void, SingleIssueProps, void> {
       setCommentText,
       addComment,
       copyCommentUrl,
-      openNestedIssueView
+      openNestedIssueView,
+      loadCommentSuggestions,
+      suggestionsAreLoading,
+      commentSuggestions
     } = this.props;
     return (
       <View style={styles.container} testID="issue-view">
@@ -251,11 +254,14 @@ class SingeIssueView extends Component<void, SingleIssueProps, void> {
         {addCommentMode && <View>
           <SingleIssueCommentInput
             autoFocus={true}
-            suggestionsDataSource={query => this.loadCommentSuggestions(query)}
             onBlur={hideCommentInput}
             initialText={commentText}
             onChangeText={setCommentText}
             onAddComment={addComment}
+
+            onRequestCommentSuggestions={loadCommentSuggestions}
+            suggestionsAreLoading={suggestionsAreLoading}
+            suggestions={commentSuggestions}
           />
 
           {Platform.OS == 'ios' && <KeyboardSpacer style={styles.keyboardSpacer}/>}
