@@ -8,12 +8,14 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 import throttle from 'lodash.throttle';
 import {View as AnimatedView} from 'react-native-animatable';
 import Header from '../../components/header/header';
-import type {CommandSuggestionResponse, CommandSuggestion} from '../../flow/Issue';
+import ApiHelper from '../../components/api/api__helper';
+import type {CommandSuggestionResponse, CommandSuggestion, SuggestedCommand} from '../../flow/Issue';
 
 const SEARCH_THROTTLE = 30;
 const SHOW_LIST_ANIMATION_DURATION = 500;
 
 type Props = {
+  headerContent: string,
   suggestions: ?CommandSuggestionResponse,
   onApply: (command: string) => any,
   onChange: (command: string, caret: number) => any,
@@ -106,6 +108,25 @@ export default class CommandDialog extends Component<DefaultProps, Props, State>
     );
   }
 
+  _renderCommandPreview() {
+    const {suggestions} = this.props;
+    if (!suggestions) {
+      return null;
+    }
+
+    return (
+      <View style={styles.commandPreview}>
+        {suggestions.commands.map((command: SuggestedCommand, index: number) => (
+          <View key={command.description}>
+            <Text style={[styles.commandDescription, command.error && styles.commandDescriptionError]}>
+              {index + 1}: {ApiHelper.stripHtml(command.description)}
+            </Text>
+          </View>
+        ))}
+      </View>
+    );
+  }
+
   _renderSuggestion = ({item}) => {
     const suggestion: CommandSuggestion = item;
     return (
@@ -153,8 +174,9 @@ export default class CommandDialog extends Component<DefaultProps, Props, State>
           leftButton={<Text>Cancel</Text>}
           onBack={this.props.onCancel}
         >
-          <Text>COMMAND HERE</Text>
+          <Text style={styles.headerText}>{this.props.headerContent}</Text>
         </Header>
+        {this._renderCommandPreview()}
         {this._renderSuggestions()}
         {this._renderInput()}
         {Platform.OS === 'ios' && <KeyboardSpacer style={styles.keyboardSpacer}/>}

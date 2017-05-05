@@ -20,6 +20,7 @@ import IssueSummary from '../../components/issue-summary/issue-summary';
 import CommandDialog from '../../components/command-dialog/command-dialog';
 import styles from './single-issue.styles';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
+import {getReadableID} from '../../components/issue-formatter/issue-formatter';
 import * as issueActions from './single-issue-actions';
 import type Api from '../../components/api/api';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
@@ -91,7 +92,7 @@ class SingeIssueView extends Component<void, SingleIssueProps, void> {
 
     const issueToShow = issue || issuePlaceholder;
     const title = <Text style={styles.headerText} selectable={true}>
-      {issueToShow ? `${issueToShow.project.shortName}-${issueToShow.numberInProject}` : `Loading...`}
+      {issueToShow ? getReadableID(issueToShow) : `Loading...`}
     </Text>;
 
     if (!editMode) {
@@ -295,6 +296,7 @@ class SingeIssueView extends Component<void, SingleIssueProps, void> {
 
         {showCommandDialog && (
           <CommandDialog
+            headerContent={getReadableID(issue)}
             suggestions={commandSuggestions}
             onCancel={closeCommandDialog}
             onChange={loadCommandSuggestions}

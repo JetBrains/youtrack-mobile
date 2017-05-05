@@ -25,6 +25,11 @@ export default StyleSheet.create({
     paddingTop: UNIT * 2
   },
 
+  headerText: {
+    fontSize: 17,
+    color: COLOR_FONT_ON_BLACK
+  },
+
   inputWrapper: {
     backgroundColor: COLOR_BLACK,
     flexDirection: 'row',
@@ -87,5 +92,17 @@ export default StyleSheet.create({
     fontSize: 24,
     fontWeight: '300',
     color: COLOR_FONT_ON_BLACK
+  },
+  commandPreview: {
+    width: '100%',
+    padding: UNIT * 2,
+    paddingTop: UNIT / 2,
+    backgroundColor: COLOR_TRANSPARENT_BLACK
+  },
+  commandDescription: {
+    color: COLOR_FONT_ON_BLACK
+  },
+  commandDescriptionError: {
+    color: 'red'
   }
 });
