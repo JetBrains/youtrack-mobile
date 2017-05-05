@@ -397,7 +397,7 @@ export function showIssueActions(actionSheet: Object) {
         }
       },
       {
-        title: 'Open command dialog...',
+        title: 'Apply command…',
         execute: () => dispatch(openCommandDialog())
       },
       {title: 'Cancel'}
