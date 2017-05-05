@@ -62,6 +62,33 @@ declare type TransformedSuggestion = {
   completionEnd: number
 }
 
+declare type SuggestedCommand = {
+  description: ?string,
+  error: boolean,
+  delete: boolean
+}
+
+declare type CommandSuggestion = {
+  id: string,
+  caret: number,
+  comment: string,
+  completionStart: number,
+  completionEnd: number,
+  matchingStart: number,
+  matchingEnd: number,
+  description: string,
+  option: string,
+  prefix: ?string,
+  suffix: string
+}
+
+declare type CommandSuggestionResponse = {
+  query: string,
+  caret: number,
+  commands: Array<SuggestedCommand>,
+  suggestions: Array<CommandSuggestion>
+};
+
 declare type SavedQuery = {
   id: string,
   name: string,

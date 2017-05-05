@@ -17,6 +17,7 @@ import {notifyError} from '../../components/notification/notification';
 import {COLOR_PINK} from '../../components/variables/variables';
 import usage from '../../components/usage/usage';
 import IssueSummary from '../../components/issue-summary/issue-summary';
+import CommandDialog from '../../components/command-dialog/command-dialog';
 import styles from './single-issue.styles';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import * as issueActions from './single-issue-actions';
@@ -214,9 +215,17 @@ class SingeIssueView extends Component<void, SingleIssueProps, void> {
       addComment,
       copyCommentUrl,
       openNestedIssueView,
+
       loadCommentSuggestions,
       suggestionsAreLoading,
-      commentSuggestions
+      commentSuggestions,
+
+      showCommandDialog,
+      closeCommandDialog,
+      commandSuggestions,
+      loadCommandSuggestions,
+      applyCommand,
+      commandIsApplying
     } = this.props;
     return (
       <View style={styles.container} testID="issue-view">
@@ -283,6 +292,16 @@ class SingeIssueView extends Component<void, SingleIssueProps, void> {
           issuePermissions={issuePermissions}
           onUpdate={async (field) => await updateIssueFieldValue(field)}
           onUpdateProject={async (project) => await updateProject(project)}/>}
+
+        {showCommandDialog && (
+          <CommandDialog
+            suggestions={commandSuggestions}
+            onCancel={closeCommandDialog}
+            onChange={loadCommandSuggestions}
+            onApply={applyCommand}
+            isApplying={commandIsApplying}
+          />
+        )}
 
         {Platform.OS == 'ios' && !addCommentMode && <KeyboardSpacer style={styles.keyboardSpacer}/>}
       </View>

@@ -7,7 +7,7 @@ import attachFile from '../../components/attach-file/attach-file';
 import Router from '../../components/router/router';
 import {showActions} from '../../components/action-sheet/action-sheet';
 import usage from '../../components/usage/usage';
-import type {IssueFull} from '../../flow/Issue';
+import type {IssueFull, CommandSuggestionResponse} from '../../flow/Issue';
 import type {CustomField, IssueProject, FieldValue, IssueComment} from '../../flow/CustomFields';
 import type Api from '../../components/api/api';
 import type {State as SingleIssueState} from './single-issue-reducers';
@@ -143,6 +143,26 @@ export function stopLoadingCommentSuggestions() {
 
 export function receiveCommentSuggestions(suggestions: Object) {
   return {type: types.RECEIVE_COMMENT_SUGGESTIONS, suggestions};
+}
+
+export function openCommandDialog() {
+  return {type: types.OPEN_COMMAND_DIALOG};
+}
+
+export function closeCommandDialog() {
+  return {type: types.CLOSE_COMMAND_DIALOG};
+}
+
+export function receiveCommandSuggestions(suggestions: CommandSuggestionResponse) {
+  return {type: types.RECEIVE_COMMAND_SUGGESTIONS, suggestions};
+}
+
+export function startApplyingCommand() {
+  return {type: types.START_APPLYING_COMMAND};
+}
+
+export function stopApplyingCommand() {
+  return {type: types.STOP_APPLYING_COMMAND};
 }
 
 const getIssue = async (api, issueId) => {
@@ -376,6 +396,10 @@ export function showIssueActions(actionSheet: Object) {
           Linking.openURL(makeIssueWebUrl(api, issue));
         }
       },
+      {
+        title: 'Open command dialog...',
+        execute: () => dispatch(openCommandDialog())
+      },
       {title: 'Cancel'}
     ];
 
@@ -429,6 +453,42 @@ export function loadCommentSuggestions(query: string) {
       notifyError('Failed to load comment suggestions', err);
     } finally {
       dispatch(stopLoadingCommentSuggestions());
+    }
+  };
+}
+
+export function loadCommandSuggestions(command: string, caret: number) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const issueId = getState().singleIssue.issueId;
+    const api: Api = getApi();
+
+    try {
+      const suggestionsRes = await api.getCommandSuggestions([issueId], command, caret);
+
+      dispatch(receiveCommandSuggestions(suggestionsRes));
+    } catch (err) {
+      notifyError('Failed to load command suggestions', err);
+    }
+  };
+}
+
+export function applyCommand(command: string) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const issueId = getState().singleIssue.issueId;
+
+    try {
+      dispatch(startApplyingCommand());
+
+      await getApi().applyCommand({issueIds: [issueId], command});
+
+      notify('Comand successfully applied');
+      dispatch(closeCommandDialog());
+      await dispatch(loadIssue());
+      dispatch(issueUpdated(getState().singleIssue.issue));
+    } catch (err) {
+      notifyError('Failed to apply command', err);
+    } finally {
+      dispatch(stopApplyingCommand());
     }
   };
 }

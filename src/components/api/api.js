@@ -8,7 +8,7 @@ import ApiHelper from './api__helper';
 import {handleRelativeUrl} from '../config/config';
 import type {SprintFull, AgileUserProfile, AgileBoardRow, BoardOnList} from '../../flow/Agile';
 import type {AppConfigFilled} from '../../flow/AppConfig';
-import type {IssueOnList, IssueFull, TransformedSuggestion, SavedQuery} from '../../flow/Issue';
+import type {IssueOnList, IssueFull, TransformedSuggestion, SavedQuery, CommandSuggestionResponse} from '../../flow/Issue';
 import type {IssueProject, FieldValue} from '../../flow/CustomFields';
 
 const STATUS_UNAUTHORIZED = 401;
@@ -245,6 +245,28 @@ class Api {
     const body = {issues:  issueIds.map(id => ({id}))};
     const suggestions = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/mention?${queryString}`, 'POST', body);
     return ApiHelper.patchAllRelativeAvatarUrls(suggestions, this.config.backendUrl);
+  }
+
+  async getCommandSuggestions(issueIds: Array<string>, query: string, caret: number): Promise<CommandSuggestionResponse> {
+    const queryString = qs.stringify({fields: issueFields.commandSuggestionFields.toString()});
+
+    return await this.makeAuthorizedRequest(
+      `${this.youTrackUrl}/api/commands/assist?${queryString}`,
+      'POST',
+      {
+        query,
+        caret,
+        issues: issueIds.map(id => ({id}))
+      }
+    );
+  }
+
+  async applyCommand(options: {issueIds: Array<string>, comment?: ?string, command: string}): Promise<any> {
+    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/commands`, 'POST', {
+      query: options.command,
+      comment: options.comment,
+      issues: options.issueIds.map(id => ({id}))
+    });
   }
 
   //TODO: this is old API usage, move to new one

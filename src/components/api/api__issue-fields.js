@@ -186,6 +186,28 @@ const ISSUE_FOLDER_FIELDS = toField([
   {owner: ['ringId']}
 ]);
 
+
+const SUGGESTION_FIELDS = toField([
+  'id',
+  'caret',
+  'comment',
+  'completionStart',
+  'completionEnd',
+  'matchingStart',
+  'matchingEnd',
+  'description',
+  'option',
+  'prefix',
+  'suffix'
+]);
+
+const COMMAND_SUGGESTION_FIELDS = toField([
+  'query',
+  'caret',
+  {commands: ['description','error','delete']},
+  {suggestions: SUGGESTION_FIELDS}
+]);
+
 export default {
   issuesOnList: ISSUE_SHORT_FIELDS,
   singleIssue: toField([
@@ -233,5 +255,6 @@ export default {
     {aggregatedUsers: ISSUE_USER_FIELDS}
   ]),
   issueComment: ISSUE_COMMENTS_FIELDS,
-  issueFolder: ISSUE_FOLDER_FIELDS
+  issueFolder: ISSUE_FOLDER_FIELDS,
+  commandSuggestionFields: COMMAND_SUGGESTION_FIELDS
 };

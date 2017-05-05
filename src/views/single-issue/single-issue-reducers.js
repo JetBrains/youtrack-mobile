@@ -2,7 +2,7 @@
 import {createReducer} from 'redux-create-reducer';
 import * as types from './single-issue-action-types';
 import type {IssueFull} from '../../flow/Issue';
-import type {CustomField, FieldValue, IssueProject} from '../../flow/CustomFields';
+import type {CustomField, FieldValue, IssueProject, CommandSuggestionResponse} from '../../flow/CustomFields';
 
 
 export type State = {
@@ -20,7 +20,10 @@ export type State = {
   summaryCopy: string,
   descriptionCopy: string,
   suggestionsAreLoading: boolean,
-  commentSuggestions: ?Object
+  commentSuggestions: ?Object,
+  showCommandDialog: boolean,
+  commandSuggestions: ?CommandSuggestionResponse,
+  commandIsApplying: boolean
 };
 
 const initialState: State = {
@@ -38,7 +41,10 @@ const initialState: State = {
   summaryCopy: '',
   descriptionCopy: '',
   suggestionsAreLoading: false,
-  commentSuggestions: null
+  commentSuggestions: null,
+  showCommandDialog: false,
+  commandSuggestions: null,
+  commandIsApplying: false
 };
 
 export default createReducer(initialState, {
@@ -214,5 +220,20 @@ export default createReducer(initialState, {
   },
   [types.RECEIVE_COMMENT_SUGGESTIONS]: (state: State, action: {suggestions: Object}): State => {
     return {...state, commentSuggestions: action.suggestions};
+  },
+  [types.OPEN_COMMAND_DIALOG]: (state: State): State => {
+    return {...state, showCommandDialog: true};
+  },
+  [types.CLOSE_COMMAND_DIALOG]: (state: State): State => {
+    return {...state, showCommandDialog: false, commandSuggestions: null};
+  },
+  [types.RECEIVE_COMMAND_SUGGESTIONS]: (state: State, action: {suggestions: Object}): State => {
+    return {...state, commandSuggestions: action.suggestions};
+  },
+  [types.START_APPLYING_COMMAND]: (state: State): State => {
+    return {...state, commandIsApplying: true};
+  },
+  [types.STOP_APPLYING_COMMAND]: (state: State): State => {
+    return {...state, commandIsApplying: false};
   },
 });
