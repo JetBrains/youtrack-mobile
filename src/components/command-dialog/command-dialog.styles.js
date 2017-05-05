@@ -60,19 +60,32 @@ export default StyleSheet.create({
   suggestionRow: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
     padding: UNIT * 2,
     paddingTop: UNIT * 1.5,
     paddingBottom: UNIT * 1.5,
     paddingRight: UNIT
   },
-  suggestionText: {
-    fontSize: 24,
-    fontWeight: '300',
-    color: COLOR_FONT_ON_BLACK
+  suggestionDescriptionContainer: {
+    flex: 1,
+    flexGrow: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginRight: UNIT * 2
   },
   suggestionDescription: {
     fontSize: 16,
     color: COLOR_PLACEHOLDER
+  },
+  suggestionTextContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    flexGrow: 2,
+    flexShrink: 0
+  },
+  suggestionText: {
+    fontSize: 24,
+    fontWeight: '300',
+    color: COLOR_FONT_ON_BLACK
   }
 });

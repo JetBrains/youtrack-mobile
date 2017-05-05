@@ -110,8 +110,12 @@ export default class CommandDialog extends Component<DefaultProps, Props, State>
     const suggestion: CommandSuggestion = item;
     return (
       <TouchableOpacity style={styles.suggestionRow} onPress={() => this.onApplySuggestion(suggestion)}>
-        <Text style={styles.suggestionText}>{suggestion.option}</Text>
-        <Text style={styles.suggestionDescription}>{suggestion.description}</Text>
+        <View style={styles.suggestionDescriptionContainer}>
+          <Text style={styles.suggestionDescription}>{suggestion.description}</Text>
+        </View>
+        <View style={styles.suggestionTextContainer}>
+          <Text style={styles.suggestionText}>{suggestion.option}</Text>
+        </View>
       </TouchableOpacity>
     );
   };
