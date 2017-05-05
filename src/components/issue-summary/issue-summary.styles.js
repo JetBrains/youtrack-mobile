@@ -8,13 +8,9 @@ export default StyleSheet.create({
     height: UNIT * 5.5
   },
   descriptionInput: {
-    height: UNIT * 10,
-    marginTop: UNIT/2,
-    flex: 1,
-    backgroundColor: '#FFF',
+    marginTop: UNIT / 2,
+    marginBottom: UNIT,
     color: COLOR_FONT,
-    borderColor: 'black',
-    textAlignVertical: 'top',
     fontSize: 16
   },
   separator: {

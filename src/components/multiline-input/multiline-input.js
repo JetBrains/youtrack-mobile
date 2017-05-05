@@ -1,11 +1,9 @@
 /* @flow */
-import {TextInput, Platform} from 'react-native';
+import {TextInput} from 'react-native';
 import React from 'react';
 
-const INITIAL_INPUT_HEIGHT = Platform.OS === 'ios' ? 36 : 40;
 const MAX_DEFAULT_HEIGHT = 200;
 const DEFAULT_FONT_SIZE = 16;
-const HEIGHT_SHIFT = 9;
 
 type Props = {
   value: string,
@@ -14,7 +12,7 @@ type Props = {
 };
 
 type State = {
-  inputHeight: number
+  inputHeight: ?number
 };
 
 export default class MultilineInput extends React.Component {
@@ -29,24 +27,18 @@ export default class MultilineInput extends React.Component {
   constructor(props: Props) {
     super(props);
     this.state = {
-      inputHeight: INITIAL_INPUT_HEIGHT
+      inputHeight: null,
     };
-  }
-
-  componentWillReceiveProps(newProps: Props) {
-    if ('value' in newProps && !newProps.value) {
-      this.setState({inputHeight: INITIAL_INPUT_HEIGHT});
-    }
   }
 
   focus() {
     this.input.focus();
   }
 
-  onSizeChange(e: Object) {
+  onChange = (e: Object) => {
     const {maxInputHeight} = this.props;
 
-    let newHeight = e.nativeEvent.contentSize.height + HEIGHT_SHIFT;
+    let newHeight = e.nativeEvent.contentSize.height;
 
     if (maxInputHeight > 0) {
       newHeight = newHeight > maxInputHeight ? maxInputHeight : newHeight;
@@ -55,14 +47,28 @@ export default class MultilineInput extends React.Component {
     this.setState({inputHeight: newHeight});
   }
 
+  onContentSizeChange = (event: Object) => {
+    const DIFF_SHIFT = 4;
+
+    if (this.state.inputHeight === null) {
+      this.setState({
+        inputHeight: event.nativeEvent.contentSize.height + DIFF_SHIFT
+      });
+    }
+  }
+
   render() {
     const {style, ...rest} = this.props;
 
-    return <TextInput {...rest}
-                      ref={instance => this.input = instance}
-                      multiline={true}
-                      onChange={(e) => this.onSizeChange(e)}
-                      onContentSizeChange={(e) => this.onSizeChange(e)}
-                      style={[{fontSize: DEFAULT_FONT_SIZE}, style, {height: this.state.inputHeight}]}/>;
+    return (
+      <TextInput
+        {...rest}
+        ref={instance => this.input = instance}
+        multiline={true}
+        onChange={this.onChange}
+        onContentSizeChange={this.onContentSizeChange}
+        style={[{fontSize: DEFAULT_FONT_SIZE}, style, {height: this.state.inputHeight}]}
+      />
+    );
   }
 }
