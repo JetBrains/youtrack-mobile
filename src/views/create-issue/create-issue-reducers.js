@@ -107,7 +107,7 @@ export default createReducer(initialState, {
       ...state,
       issue: {
         ...state.issue,
-        attachments: [attachingImage, ...state.issue.attachments],
+        attachments: [...state.issue.attachments, attachingImage],
       },
       attachingImage
     };

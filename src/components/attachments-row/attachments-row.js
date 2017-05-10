@@ -1,15 +1,17 @@
 /* @flow */
 import React, {Component} from 'react';
-import {Linking, View, Text, TouchableOpacity, Animated, ActivityIndicator, ScrollView, Platform} from 'react-native';
+import {Linking, View, Text, TouchableOpacity, ActivityIndicator, ScrollView, Platform} from 'react-native';
 import ImageProgress from 'react-native-image-progress';
 import flattenStyle from 'react-native/Libraries/StyleSheet/flattenStyle';
 import styles from './attachments-row.styles';
 import Router from '../../components/router/router';
 import safariView from '../../components/safari-view/safari-view';
+import {View as AnimatedView} from 'react-native-animatable';
 
 const flatStyles = flattenStyle(styles.attachmentImage) || {};
 const imageWidth = flatStyles.width * 2;
 const imageHeight = flatStyles.height * 2;
+const ANIMATION_DURATION = 700;
 
 type Props = {
   attachments: Array<Object>,
@@ -23,14 +25,8 @@ type DefaultProps = {
   onOpenAttachment: Function
 };
 
-type State = {
-  attachingImageAnimation: Object
-};
-
-export default class AttachmentsRow extends Component<DefaultProps, Props, State> {
-  state = {
-    attachingImageAnimation: new Animated.Value(0),
-  };
+export default class AttachmentsRow extends Component<DefaultProps, Props, void> {
+  scrollView: ?ScrollView;
 
   static defaultProps = {
     imageHeaders: null,
@@ -43,8 +39,7 @@ export default class AttachmentsRow extends Component<DefaultProps, Props, State
 
   componentWillReceiveProps(props: Props) {
     if (props.attachingImage && props.attachingImage !== this.props.attachingImage) {
-      this.state.attachingImageAnimation.setValue(0.1);
-      Animated.spring(this.state.attachingImageAnimation, {toValue: 1, duration: 2000}).start();
+      setTimeout(() => this.scrollView && this.scrollView.scrollToEnd());
     }
   }
 
@@ -72,6 +67,10 @@ export default class AttachmentsRow extends Component<DefaultProps, Props, State
     }
   }
 
+  setScrollRef = (node: ScrollView) => {
+    this.scrollView = node;
+  }
+
   render() {
     const {attachments, attachingImage, imageHeaders} = this.props;
 
@@ -80,7 +79,11 @@ export default class AttachmentsRow extends Component<DefaultProps, Props, State
     }
 
     return (
-      <ScrollView style={styles.attachesScroll} horizontal={true}>
+      <ScrollView
+        ref={this.setScrollRef}
+        style={styles.attachesScroll}
+        horizontal={true}
+      >
 
         {attachments.map(attach => {
           const isImage = attach.mimeType ? attach.mimeType.includes('image') : true;
@@ -93,14 +96,19 @@ export default class AttachmentsRow extends Component<DefaultProps, Props, State
                 key={attach.url || attach.id}
                 onPress={() => this._showImageAttachment(attach, attachments)}
                 >
-                <Animated.View style={isAttachingImage ? { transform: [{ scale: this.state.attachingImageAnimation }] } : {}}>
+                <AnimatedView
+                  animation={isAttachingImage ? 'zoomIn' : null}
+                  useNativeDriver
+                  duration={ANIMATION_DURATION}
+                  easing="ease-out-quart"
+                >
                   <ImageProgress
                     style={styles.attachmentImage}
                     renderIndicator={() => <ActivityIndicator/>}
                     source={{uri: url, headers: imageHeaders}}
                   />
                   {isAttachingImage && <ActivityIndicator size="large" style={styles.imageActivityIndicator} />}
-                </Animated.View>
+                </AnimatedView>
               </TouchableOpacity>
             );
           }
