@@ -25,7 +25,7 @@ import Toast from 'react-native-easy-toast';
 import {BackHandler, View, UIManager} from 'react-native';
 import {Navigator} from 'react-native-deprecated-custom-components';
 import React, {PropTypes, Component} from 'react';
-import ActionSheet from '@exponent/react-native-action-sheet';
+import ActionSheet from '@expo/react-native-action-sheet';
 import type {AppConfigFilled} from './flow/AppConfig';
 
 if (UIManager.setLayoutAnimationEnabledExperimental) {
