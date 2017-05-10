@@ -14,7 +14,7 @@ export function showActions(actions: Array<Action>, actionSheetInstance: ActionS
       const action = actions[actionIndex];
 
       if (actionIndex === cancelIndex) {
-        return reject(action);
+        return resolve(null);
       }
 
       return resolve(action);

@@ -404,7 +404,10 @@ export function showIssueActions(actionSheet: Object) {
     ];
 
     const selectedAction = await showActions(actions, actionSheet);
-    selectedAction.execute();
+
+    if (selectedAction) {
+      selectedAction.execute();
+    }
   };
 }
 

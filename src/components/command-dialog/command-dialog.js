@@ -110,7 +110,8 @@ export default class CommandDialog extends Component<DefaultProps, Props, State>
 
   _renderCommandPreview() {
     const {suggestions} = this.props;
-    if (!suggestions) {
+    const {input} = this.state;
+    if (!suggestions || !input) {
       return null;
     }
 
