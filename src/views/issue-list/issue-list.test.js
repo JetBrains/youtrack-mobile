@@ -90,6 +90,21 @@ describe('Issue list actions', () => {
       .receiveIssues(issues)
       .should.deep.equal({type: types.RECEIVE_ISSUES, issues, pageSize: 10});
   });
+
+  it('should load issues count', async () => {
+    const COUNT = 12;
+    const stateMock = {issueList: {query: 'test-query'}};
+    const apiMock = {
+      getIssuesCount: () => new Promise(resolve => resolve(COUNT))
+    };
+
+    await actions.loadIssuesCount()(dispatch, () => stateMock, () => apiMock);
+
+    dispatch.should.have.been.calledWith({
+      type: types.SET_ISSUES_COUNT,
+      count: COUNT
+    });
+  });
 });
 
 describe('Issue list reducers', () => {
@@ -149,6 +164,11 @@ describe('Issue list reducers', () => {
   it('should set that issues list end is reached', () => {
     reducer({}, {type: types.LIST_END_REACHED})
       .should.deep.equal({isListEndReached: true});
+  });
+
+  it('should set issues counter', () => {
+    reducer({}, {type: types.SET_ISSUES_COUNT, count: 12})
+      .should.deep.equal({issuesCount: 12});
   });
 
   it('should find and update issue in list and not take rest props from updated issue', () => {
