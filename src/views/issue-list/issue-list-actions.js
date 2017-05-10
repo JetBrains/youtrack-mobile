@@ -103,6 +103,14 @@ export function receiveIssues(issues: Array<IssueOnList>) {
   return {type: types.RECEIVE_ISSUES, issues, pageSize: PAGE_SIZE};
 }
 
+export function resetIssuesCount() {
+  return {type: types.RESET_ISSUES_COUNT};
+}
+
+export function setIssuesCount(count: number) {
+  return {type: types.SET_ISSUES_COUNT, count};
+}
+
 export function cacheIssues(issues: Array<IssueOnList>) {
   return (dispatch: (any) => any, getState: () => Object) => {
     const cache = getState().issueList.cache;
@@ -122,6 +130,7 @@ export function readCachedIssues() {
 
 export function loadingIssuesError(error: Object) {
   return async (dispatch: (any) => any) => {
+    dispatch(resetIssuesCount());
     const resolvedError = await resolveError(error);
     dispatch({type: types.LOADING_ISSUES_ERROR, error: resolvedError});
   };
@@ -131,6 +140,7 @@ export function loadIssues(query: string) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
     dispatch(startIssuesLoading());
+    dispatch(loadIssuesCount());
     try {
       let issues: Array<IssueOnList> = await api.getIssues(query, PAGE_SIZE);
       issues = ApiHelper.fillIssuesFieldHash(issues);
@@ -187,5 +197,16 @@ export function loadMoreIssues() {
     } finally {
       dispatch(stopMoreIssuesLoading());
     }
+  };
+}
+
+export function loadIssuesCount() {
+  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const {query} = getState().issueList;
+
+    const count = await api.getIssuesCount(query);
+
+    dispatch(setIssuesCount(count));
   };
 }

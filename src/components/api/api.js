@@ -101,6 +101,17 @@ class Api {
     return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`);
   }
 
+  async getIssuesCount(query: string = ''): Promise<number> {
+    const queryString = qs.stringify({sync: false, filter: query});
+    const countRes = await this.makeAuthorizedRequest(`${this.youTrackUrl}/rest/issue/count?${queryString}`);
+    // If server returns -1 it means that counter is not ready yet, should reload
+    if (countRes.value === -1) {
+      return new Promise(resolve => setTimeout(resolve, 500))
+        .then(() => this.getIssuesCount(query));
+    }
+    return countRes.value;
+  }
+
   async getSavedQueries(): Promise<Array<SavedQuery>> {
     const queryString = qs.stringify({fields: issueFields.issueFolder.toString()});
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/savedQueries?${queryString}`);

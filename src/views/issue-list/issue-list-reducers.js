@@ -21,6 +21,7 @@ export type IssuesListState = {
   isRefreshing: boolean,
 
   cache: Cache,
+  issuesCount: ?number,
   issues: Array<IssueOnList>
 };
 
@@ -34,6 +35,7 @@ const initialState: IssuesListState = {
   loadingError: null,
   isInitialized: false,
   isRefreshing: false,
+  issuesCount: null,
   cache: new Cache(ISSUES_CACHE_KEY),
   issues: []
 };
@@ -86,6 +88,12 @@ export default createReducer(initialState, {
   },
   [types.LIST_END_REACHED]: (state: IssuesListState, action: {error: Object}) => {
     return {...state, isListEndReached: true};
+  },
+  [types.SET_ISSUES_COUNT]: (state: IssuesListState, action: {count: number}) => {
+    return {...state, issuesCount: action.count};
+  },
+  [types.RESET_ISSUES_COUNT]: (state: IssuesListState, action: {count: number}) => {
+    return {...state, issuesCount: null};
   },
   [ISSUE_UPDATED]: (state: IssuesListState, action: {issue: IssueFull}) => {
     const sourceIssue = action.issue;

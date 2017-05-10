@@ -89,6 +89,7 @@ export class IssueList extends Component {
   }
 
   _renderHeader() {
+    const {issuesCount} = this.props;
     return (
       <Header
         leftButton={<Text>Menu</Text>}
@@ -96,7 +97,9 @@ export class IssueList extends Component {
         onBack={this.props.openMenu}
         onRightButtonClick={() => Router.CreateIssue()}
       >
-        <Text style={styles.headerText}>Issues</Text>
+        <Text style={styles.headerText}>
+          {issuesCount}{' '}Issues
+        </Text>
       </Header>
     );
   }
