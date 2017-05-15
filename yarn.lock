@@ -2,9 +2,11 @@
 # yarn lockfile v1
 
 
-"@exponent/react-native-action-sheet@0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@exponent/react-native-action-sheet/-/react-native-action-sheet-0.3.0.tgz#67636a9bfbef3d6a0aa092122ea98e9f244460f2"
+"@expo/react-native-action-sheet@0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@expo/react-native-action-sheet/-/react-native-action-sheet-0.3.1.tgz#cf1fd38e570febb4930c5518e42dfa1a32b1ace5"
+  dependencies:
+    hoist-non-react-statics "^1.2.0"
 
 "@huston007/react-native-eventsource@0.1.2":
   version "0.1.2"
@@ -2344,7 +2346,7 @@ hoek@2.x.x:
   version "2.16.3"
   resolved "https://registry.yarnpkg.com/hoek/-/hoek-2.16.3.tgz#20bb7403d3cea398e91dc4710a8ff1b8274a25ed"
 
-hoist-non-react-statics@^1.0.3:
+hoist-non-react-statics@^1.0.3, hoist-non-react-statics@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-1.2.0.tgz#aa448cf0986d55cc40773b17174b7dd066cb7cfb"
 

@@ -1,9 +1,9 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 import {UNIT, COLOR_BLACK, COLOR_FONT_GRAY} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   container: {
-    zIndex: -1,
+    zIndex: Platform.OS === 'ios' ? -1 : null,
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingLeft: UNIT,
