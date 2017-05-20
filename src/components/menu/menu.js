@@ -63,6 +63,9 @@ export class Menu extends Component<DefaultProps, Props, void> {
   _renderMenu() {
     const {height} = Dimensions.get('window');
     const {auth, issueQuery} = this.props;
+    if (!auth) { //TODO: menu renders right after logOut by some reason.
+      return null;
+    }
     const user = auth.currentUser;
     const backendUrl = auth.config.backendUrl;
     const avatarUrl = user.profile && user.profile.avatar && user.profile.avatar.url;
