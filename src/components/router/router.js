@@ -1,5 +1,6 @@
 import React, {createElement} from 'react';
 import {StackNavigator, NavigationActions} from 'react-navigation';
+import transitionConfigs from 'react-navigation/src/views/TransitionConfigs';
 
 const noAnimation = {
   transitionSpec: {
@@ -26,7 +27,7 @@ class Router {
     this._navigator = navigator;
   }
 
-  getTransitionConfig = (transitionProps) => {
+  getTransitionConfig = () => {
     if (!this._navigator) {
       return noAnimation;
     }
@@ -36,6 +37,10 @@ class Router {
     const route = this.routes[currentRouteName];
     if (route.type === 'reset') {
       return noAnimation;
+    }
+
+    if (route.modal) {
+      return transitionConfigs.defaultTransitionConfig(null, null, true);
     }
   }
 
@@ -55,7 +60,8 @@ class Router {
   finalizeRoutes(initialRouteName) {
     this.AppNavigator = StackNavigator(this.routes, {
       initialRouteName,
-      headerMode: 'none'
+      headerMode: 'none',
+      transitionConfig: this.getTransitionConfig
     });
   }
 
@@ -95,7 +101,7 @@ class Router {
 
   renderNavigatorView() {
     const {AppNavigator} = this;
-    return <AppNavigator transitionConfig={this.getTransitionConfig} ref={this.setNavigator}/>;
+    return <AppNavigator ref={this.setNavigator}/>;
   }
 }
 
