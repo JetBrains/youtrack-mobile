@@ -29,7 +29,7 @@ export default class IssueRow extends React.Component {
       <View style={styles.priorityPlaceholder}/>;
 
     return (
-      <TouchableOpacity onPress={() => this.props.onClick(issue)}>
+      <TouchableOpacity onPress={() => this.props.onClick(issue)} testID="issue-row">
         <View style={styles.row}>
 
           <View>
@@ -39,13 +39,13 @@ export default class IssueRow extends React.Component {
           <View style={styles.rowText}>
 
             <View style={styles.rowTopLine}>
-              <Text style={[styles.summary, this.getSummaryStyle(issue)]} numberOfLines={2}>
+              <Text style={[styles.summary, this.getSummaryStyle(issue)]} numberOfLines={2} testID="issue-row-summary">
                 {issue.summary}
               </Text>
               <Image style={styles.arrowImage} source={next}></Image>
             </View>
 
-            <Text style={styles.subtext} numberOfLines={1}>{IssueRow._getSubText(issue)}</Text>
+            <Text style={styles.subtext} numberOfLines={1} testID="issue-row-details">{IssueRow._getSubText(issue)}</Text>
 
           </View>
         </View>

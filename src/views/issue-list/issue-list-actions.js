@@ -5,7 +5,7 @@ import ApiHelper from '../../components/api/api__helper';
 import {notifyError, resolveError} from '../../components/notification/notification';
 import Cache from '../../components/cache/cache';
 import type Api from '../../components/api/api';
-import type {IssueOnList, IssueFull} from '../../flow/Issue';
+import type {IssueOnList} from '../../flow/Issue';
 
 const PAGE_SIZE = 10;
 const QUERY_STORAGE_KEY = 'YT_QUERY_STORAGE';
@@ -23,7 +23,7 @@ export function setIssuesQuery(query: string) {
 }
 
 export function readStoredIssuesQuery() {
-  return async (dispatch: (any) => any, getState: () => Object) => {
+  return async (dispatch: (any) => any) => {
     const query = await AsyncStorage.getItem(QUERY_STORAGE_KEY);
     dispatch({
       type: types.SET_ISSUES_QUERY,
@@ -60,10 +60,6 @@ export function clearAssistSuggestions() {
   return {type: types.CLEAR_SUGGESTIONS};
 }
 
-export function listEndReached() {
-  return {type: types.LIST_END_REACHED};
-}
-
 async function storeLastQuery(query: string) {
   if (!query) {
     return;
@@ -81,6 +77,10 @@ export function storeIssuesQuery(query: string) {
     AsyncStorage.setItem(QUERY_STORAGE_KEY, query);
     storeLastQuery(query);
   };
+}
+
+export function listEndReached() {
+  return {type: types.LIST_END_REACHED};
 }
 
 export function startIssuesLoading() {
@@ -103,6 +103,14 @@ export function receiveIssues(issues: Array<IssueOnList>) {
   return {type: types.RECEIVE_ISSUES, issues, pageSize: PAGE_SIZE};
 }
 
+export function resetIssuesCount() {
+  return {type: types.RESET_ISSUES_COUNT};
+}
+
+export function setIssuesCount(count: number) {
+  return {type: types.SET_ISSUES_COUNT, count};
+}
+
 export function cacheIssues(issues: Array<IssueOnList>) {
   return (dispatch: (any) => any, getState: () => Object) => {
     const cache = getState().issueList.cache;
@@ -122,6 +130,7 @@ export function readCachedIssues() {
 
 export function loadingIssuesError(error: Object) {
   return async (dispatch: (any) => any) => {
+    dispatch(resetIssuesCount());
     const resolvedError = await resolveError(error);
     dispatch({type: types.LOADING_ISSUES_ERROR, error: resolvedError});
   };
@@ -131,6 +140,7 @@ export function loadIssues(query: string) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
     dispatch(startIssuesLoading());
+    dispatch(loadIssuesCount());
     try {
       let issues: Array<IssueOnList> = await api.getIssues(query, PAGE_SIZE);
       issues = ApiHelper.fillIssuesFieldHash(issues);
@@ -190,6 +200,13 @@ export function loadMoreIssues() {
   };
 }
 
-export function updateIssueInList(issue: IssueFull) {
-  return {type: types.UPDATE_ISSUE_ON_LIST, issue};
+export function loadIssuesCount() {
+  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const {query} = getState().issueList;
+
+    const count = await api.getIssuesCount(query);
+
+    dispatch(setIssuesCount(count));
+  };
 }

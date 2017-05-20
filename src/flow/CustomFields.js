@@ -69,6 +69,13 @@ declare type ProjectCustomField = {
   defaultValues: Array<BundleValue>
 }
 
+declare type ProjectCustomFieldShort = {
+  field: {
+    id: string,
+    name: string
+  }
+}
+
 declare type FieldValue = {
   $type: string,
   id: string,
@@ -83,6 +90,15 @@ declare type FieldValue = {
   color: ColorField
 }
 
+declare type FieldValueShort = {
+  id: string,
+  name: string,
+  ringId: string,
+  avatarUrl: string,
+  login: string,
+  color: ColorField
+}
+
 declare type CustomField = {
   $type: string,
   id: string,
@@ -90,6 +106,13 @@ declare type CustomField = {
   hasStateMachine: boolean,
   value: FieldValue|number,
   projectCustomField: ProjectCustomField
+}
+
+declare type CustomFieldShort = {
+  id: string,
+  name: string,
+  value: FieldValueShort | number,
+  projectCustomField: ProjectCustomFieldShort
 }
 
 declare type Attachment = {

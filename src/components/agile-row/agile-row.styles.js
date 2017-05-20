@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import { UNIT, COLOR_LIGHT_GRAY, AGILE_COLLAPSED_COLUMN_WIDTH, COLOR_GRAY, COLOR_FONT_GRAY, COLOR_PINK } from '../variables/variables';
+import { UNIT, COLOR_LIGHT_GRAY, COLOR_FONT, AGILE_COLLAPSED_COLUMN_WIDTH, COLOR_GRAY, COLOR_FONT_GRAY, COLOR_PINK } from '../variables/variables';
 
 export default StyleSheet.create({
   rowContainer: {},
@@ -16,6 +16,7 @@ export default StyleSheet.create({
     textDecorationLine: 'line-through'
   },
   rowHeaderText: {
+    color: COLOR_FONT,
     fontSize: 17,
     marginLeft: UNIT / 2,
     fontWeight: 'bold'

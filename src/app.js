@@ -22,11 +22,15 @@ import {COLOR_BLACK} from './components/variables/variables';
 // $FlowFixMe: cannot typecheck easy-toast module because of mistakes there
 import Toast from 'react-native-easy-toast';
 
-import {BackAndroid, Navigator, View} from 'react-native';
+import {BackHandler, View, UIManager} from 'react-native';
+import {Navigator} from 'react-native-deprecated-custom-components';
 import React, {PropTypes, Component} from 'react';
-import ActionSheet from '@exponent/react-native-action-sheet';
+import ActionSheet from '@expo/react-native-action-sheet';
 import type {AppConfigFilled} from './flow/AppConfig';
 
+if (UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 /*
   Uncomment this string to debug network request in Chrome. Chrome should be run with --disable-web-security flag.
   Or use React Native Debugger https://github.com/jhen0409/react-native-debugger
@@ -67,11 +71,12 @@ class YouTrackMobile extends Component {
 
   async checkAuthorization() {
     await this.auth.loadStoredAuthParams();
+    store.dispatch(initializeApi(this.auth));
     return Router.IssueList();
   }
 
   addAndroidBackButtonSupport() {
-    BackAndroid.addEventListener('hardwareBackPress', function () {
+    BackHandler.addEventListener('hardwareBackPress', function () {
       const populated = Router.pop();
       const preventCloseApp = populated;
       return preventCloseApp;
@@ -80,8 +85,6 @@ class YouTrackMobile extends Component {
 
   async initializeAuth(config: AppConfigFilled) {
     this.auth = new Auth(config);
-    store.dispatch(initializeApi(this.auth));
-
     usage.init(config.statisticsEnabled);
     return await this.checkAuthorization();
   }
@@ -133,7 +136,6 @@ class YouTrackMobile extends Component {
           return loadConfig(newUrl)
             .then(config => {
               this.auth = new Auth(config);
-              store.dispatch(initializeApi(this.auth));
               usage.init(config.statisticsEnabled);
               Router.LogIn();
             });

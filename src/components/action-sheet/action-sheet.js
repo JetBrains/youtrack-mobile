@@ -1,5 +1,5 @@
 /* @flow */
-type Action = {title: string, execute: Function}
+type Action = {title: string, execute?: Function}
 type ActionSheet = {showActionSheetWithOptions: Function};
 
 export function showActions(actions: Array<Action>, actionSheetInstance: ActionSheet) {
@@ -14,7 +14,7 @@ export function showActions(actions: Array<Action>, actionSheetInstance: ActionS
       const action = actions[actionIndex];
 
       if (actionIndex === cancelIndex) {
-        return reject(action);
+        return resolve(null);
       }
 
       return resolve(action);

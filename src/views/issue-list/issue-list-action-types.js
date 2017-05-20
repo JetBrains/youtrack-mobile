@@ -12,4 +12,5 @@ export const START_LOADING_MORE = 'issues.START_LOADING_MORE';
 export const STOP_LOADING_MORE = 'issues.STOP_LOADING_MORE';
 export const LIST_END_REACHED = 'issues.LIST_END_REACHED';
 
-export const UPDATE_ISSUE_ON_LIST = 'issues.UPDATE_ISSUE_ON_LIST';
+export const RESET_ISSUES_COUNT = 'issues.RESET_ISSUES_COUNT';
+export const SET_ISSUES_COUNT = 'issues.SET_ISSUES_COUNT';

@@ -123,6 +123,10 @@ const API = {
     });
 
     return data;
+  },
+
+  stripHtml(commandPreview: string) {
+    return commandPreview.replace(/<\/?[^>]+(>|$)/g, '');
   }
 };
 

@@ -85,6 +85,9 @@ export default StyleSheet.create({
     alignItems: 'center',
     margin: UNIT
   },
+  suggestionsLoadingMessageText: {
+    color: COLOR_FONT_ON_BLACK
+  },
   commentSuggestionButton: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -112,12 +115,10 @@ export default StyleSheet.create({
   },
   commentInput: {
     flex: 1,
-    height: UNIT * 3.5,
+    minHeight: UNIT * 4,
     borderRadius: 6,
     backgroundColor: COLOR_SELECTED_DARK,
     margin: UNIT,
-    paddingTop: 2,
-    paddingBottom: 2,
     paddingLeft: UNIT,
     color: COLOR_FONT_ON_BLACK,
     fontSize: 15

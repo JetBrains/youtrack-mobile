@@ -8,7 +8,7 @@ declare type IssueOnList = {
   reporter: IssueUser,
   created: number,
   updated: number,
-  fields: Array<CustomField>,
+  fields: Array<CustomFieldShort>,
   fieldHash: any
 }
 
@@ -61,6 +61,33 @@ declare type TransformedSuggestion = {
   completionStart: number,
   completionEnd: number
 }
+
+declare type SuggestedCommand = {
+  description: ?string,
+  error: boolean,
+  delete: boolean
+}
+
+declare type CommandSuggestion = {
+  id: string,
+  caret: number,
+  comment: string,
+  completionStart: number,
+  completionEnd: number,
+  matchingStart: number,
+  matchingEnd: number,
+  description: string,
+  option: string,
+  prefix: ?string,
+  suffix: string
+}
+
+declare type CommandSuggestionResponse = {
+  query: string,
+  caret: number,
+  commands: Array<SuggestedCommand>,
+  suggestions: Array<CommandSuggestion>
+};
 
 declare type SavedQuery = {
   id: string,

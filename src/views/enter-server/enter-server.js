@@ -103,7 +103,7 @@ export default class EnterServer extends Component {
 
     const error = this.state.error ?
       <View style={styles.errorContainer}>
-        <Text style={styles.error} selectable={true} testID="errorMessage">{extractErrorMessage(this.state.error)}</Text>
+        <Text style={styles.error} selectable={true} testID="error-message">{extractErrorMessage(this.state.error)}</Text>
       </View> :
       null;
 
@@ -137,6 +137,7 @@ export default class EnterServer extends Component {
 
           <TouchableOpacity style={[styles.apply, isDisabled ? styles.applyDisabled : {}]}
                             disabled={isDisabled}
+                            testID="next"
                             onPress={this.onApplyServerUrlChange.bind(this)}>
             <Text style={styles.applyText}>Next</Text>
             {this.state.connecting && <ActivityIndicator style={styles.connectingIndicator}/>}

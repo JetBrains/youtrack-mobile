@@ -12,7 +12,7 @@ const CONTENT_WITHIN_MARKERS = 1;
 const imageWidth = flattenStyle(styles.image).width * 2;
 const imageHeight = flattenStyle(styles.image).height * 2;
 
-export default function (actions) {
+export default function (actions, imageHeaders: ?Object = null) {
   return {
     /**
      * Basic rules
@@ -144,28 +144,19 @@ export default function (actions) {
       },
 
       react: (node, output, state) => {
-
-        /**
-         * Hack!!!
-         * Android doesn't load image in wiki first time without this
-         */
-        if (Platform.OS === 'android') {
-          const noop = () => {};
-          Image.getSize(node.url, noop, noop);
-        }
-
+        const uri = `${node.url}&w=${imageWidth}&h=${imageHeight}`;
 
         return <Text onPress={() => actions.onImagePress(node.url)} key={state.key}>
-          {Platform.OS === 'android' ?
-          <Image
-            source={{uri: `${node.url}&w=${imageWidth}&h=${imageHeight}`}}
-            style={styles.image}/>
-          :
-          <ImageProgress
-            renderIndicator={() => <ActivityIndicator/>}
-            source={{uri: `${node.url}&w=${imageWidth}&h=${imageHeight}`}}
-            style={styles.image}/>
-          }
+          {Platform.OS === 'android'
+          ? <Image
+              source={{uri, headers: imageHeaders}}
+              style={styles.image}
+            />
+          : <ImageProgress
+              renderIndicator={() => <ActivityIndicator/>}
+              source={{uri, headers: imageHeaders}}
+              style={styles.image}
+            />}
         </Text>;
       }
     },

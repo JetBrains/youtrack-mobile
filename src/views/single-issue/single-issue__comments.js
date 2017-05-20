@@ -9,25 +9,28 @@ import React, {Component} from 'react';
 type Props = {
   comments: Array<IssueComment>,
   attachments: Array<Attachment>,
-  onReply: () => any,
-  onCopyCommentLink: () => any,
-  onIssueIdTap: () => any
+  imageHeaders: ?Object,
+  onReply: (comment: IssueComment) => any,
+  onCopyCommentLink: (comment: IssueComment) => any,
+  onIssueIdTap: (issueId: string) => any
 };
 
-export default class SingleIssueComments extends Component {
-  props: Props;
+type DefaultProps = {
+  onReply: Function,
+  onCopyCommentLink: Function,
+};
 
+export default class SingleIssueComments extends Component<DefaultProps, Props, void> {
   static defaultProps = {
-    onReply: () => {
-    },
-    onCopyCommentLink: () => {
-    }
+    onReply: () => {},
+    onCopyCommentLink: () => {}
   };
 
   _renderCommentsList(comments, attachments) {
     return comments.map((comment) => {
       return <Comment key={comment.id}
                       comment={comment}
+                      imageHeaders={this.props.imageHeaders}
                       onIssueIdTap={this.props.onIssueIdTap}
                       attachments={attachments}
                       onReply={() => this.props.onReply(comment)}

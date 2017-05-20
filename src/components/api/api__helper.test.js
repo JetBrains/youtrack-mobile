@@ -123,5 +123,13 @@ describe('Api helper', () => {
       res.val.should.equal('foo');
       res.test.avatarUrl.should.equal('http://test.com/hub/api/rest/avatar/123');
     });
+
+    it('should stript html tags from commandPreview', () => {
+      ApiHelper.stripHtml('foo <span class="bold">bar</span>').should.equal('foo bar');
+    });
+
+    it('should not touch clean strings while stripping tags', () => {
+      ApiHelper.stripHtml('foo bar').should.equal('foo bar');
+    });
   });
 });

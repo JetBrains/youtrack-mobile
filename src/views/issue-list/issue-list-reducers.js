@@ -1,6 +1,9 @@
 /* @flow */
 import {createReducer} from 'redux-create-reducer';
 import * as types from './issue-list-action-types';
+import {LOG_OUT} from '../../actions/action-types';
+import {ISSUE_CREATED} from '../create-issue/create-issue-action-types';
+import {ISSUE_UPDATED} from '../single-issue/single-issue-action-types';
 import Cache from '../../components/cache/cache';
 import type {IssueOnList, IssueFull, TransformedSuggestions} from '../../flow/Issue';
 
@@ -18,6 +21,7 @@ export type IssuesListState = {
   isRefreshing: boolean,
 
   cache: Cache,
+  issuesCount: ?number,
   issues: Array<IssueOnList>
 };
 
@@ -31,11 +35,18 @@ const initialState: IssuesListState = {
   loadingError: null,
   isInitialized: false,
   isRefreshing: false,
+  issuesCount: null,
   cache: new Cache(ISSUES_CACHE_KEY),
   issues: []
 };
 
 export default createReducer(initialState, {
+  [LOG_OUT]: (state: IssuesListState): IssuesListState => {
+    return initialState;
+  },
+  [ISSUE_CREATED]: (state: IssuesListState, action: {issue: IssueFull}): IssuesListState => {
+    return {...state, issues: [action.issue, ...state.issues]};
+  },
   [types.SET_ISSUES_QUERY]: (state: IssuesListState, action: Object) => {
     return {...state, query: action.query};
   },
@@ -78,7 +89,13 @@ export default createReducer(initialState, {
   [types.LIST_END_REACHED]: (state: IssuesListState, action: {error: Object}) => {
     return {...state, isListEndReached: true};
   },
-  [types.UPDATE_ISSUE_ON_LIST]: (state: IssuesListState, action: {issue: IssueFull}) => {
+  [types.SET_ISSUES_COUNT]: (state: IssuesListState, action: {count: number}) => {
+    return {...state, issuesCount: action.count};
+  },
+  [types.RESET_ISSUES_COUNT]: (state: IssuesListState, action: {count: number}) => {
+    return {...state, issuesCount: null};
+  },
+  [ISSUE_UPDATED]: (state: IssuesListState, action: {issue: IssueFull}) => {
     const sourceIssue = action.issue;
     function updateIssue(issue: IssueOnList): IssueOnList {
       return Object.keys(issue).

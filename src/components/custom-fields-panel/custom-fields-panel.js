@@ -17,10 +17,10 @@ import {View as AnimatedView} from 'react-native-animatable';
 
 type Props = {
   api: Api,
-  autoFocusSelect: boolean,
+  autoFocusSelect?: boolean,
   issue: IssueFull,
   issuePermissions: IssuePermissions,
-  onUpdate: (field: CustomField) => any,
+  onUpdate: (field: CustomField) => Promise<Object>,
   onUpdateProject: (project: IssueProject) => Promise<Object>,
   canEditProject: boolean
 };
@@ -257,11 +257,17 @@ export default class CustomFieldsPanel extends Component {
     this.currentScrollX = nativeEvent.contentOffset.x;
   }
 
-  restoreScrollPosition = (scrollNode: ?ScrollView) => {
+  restoreScrollPosition = (scrollNode: ?ScrollView, ensure: boolean = true) => {
     if (!scrollNode) {
       return;
     }
-    scrollNode.scrollTo({x: this.currentScrollX, y: 0});
+
+    scrollNode.scrollTo({x: this.currentScrollX, y: 0, animated: false});
+
+    // Android doesn't get first scrollTo call https://youtrack.jetbrains.com/issue/YTM-402
+    if (Platform.OS == 'android' && ensure) {
+      setTimeout(() => this.restoreScrollPosition(scrollNode, false));
+    }
   }
 
   _renderSelect() {

@@ -43,6 +43,7 @@ exports[`<AgileCard/> should render snapshot 1`] = `
     numberOfLines={3}
     style={
       Object {
+        "color": "#444444",
         "fontSize": 13,
         "paddingBottom": 4,
         "paddingTop": 4,

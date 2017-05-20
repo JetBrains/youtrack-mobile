@@ -19,7 +19,6 @@ import {COLOR_PINK} from '../../components/variables/variables';
 import {extractErrorMessage} from '../../components/notification/notification';
 import usage from '../../components/usage/usage';
 
-import ApiHelper from '../../components/api/api__helper';
 import IssueRow from './issue-list__row';
 import Menu from '../../components/menu/menu';
 import Router from '../../components/router/router';
@@ -55,11 +54,7 @@ export class IssueList extends Component {
       this.props.auth.config.backendUrl,
       (issueId) => {
         usage.trackEvent('Issue list', 'Open issue in app by URL');
-        Router.SingleIssue({
-          issueId: issueId,
-          api: this.props.api,
-          onUpdate: issue => this.props.updateIssueInList(issue)
-        });
+        Router.SingleIssue({issueId});
       },
       (issuesQuery) => {
         this.onQueryUpdated(issuesQuery);
@@ -78,9 +73,7 @@ export class IssueList extends Component {
   goToIssue(issue: IssueOnList) {
     Router.SingleIssue({
       issuePlaceholder: issue,
-      issueId: issue.id,
-      api: this.props.api,
-      onUpdate: issue => this.props.updateIssueInList(issue)
+      issueId: issue.id
     });
   }
 
@@ -96,22 +89,17 @@ export class IssueList extends Component {
   }
 
   _renderHeader() {
+    const {issuesCount} = this.props;
     return (
       <Header
         leftButton={<Text>Menu</Text>}
         rightButton={<Text>Create</Text>}
         onBack={this.props.openMenu}
-        onRightButtonClick={() => {
-          return Router.CreateIssue({
-            api: this.props.api,
-            onCreate: (createdIssue) => {
-              const updatedIssues = ApiHelper.fillIssuesFieldHash([createdIssue]).concat(this.props.issues);
-              this.props.receiveIssues(updatedIssues);
-            }});
-          }
-        }
+        onRightButtonClick={() => Router.CreateIssue()}
       >
-        <Text style={styles.headerText}>Issues</Text>
+        <Text style={styles.headerText}>
+          {issuesCount}{' '}Issues
+        </Text>
       </Header>
     );
   }
@@ -129,6 +117,7 @@ export class IssueList extends Component {
       refreshing={this.props.isRefreshing}
       onRefresh={this.props.refreshIssues}
       tintColor={COLOR_PINK}
+      testID="refresh-control"
     />;
   }
 
@@ -141,7 +130,7 @@ export class IssueList extends Component {
     if (loadingError) {
       return (<View style={styles.errorContainer}>
         <Text style={styles.listMessageSmile}>{'(>_<)'}</Text>
-        <Text style={styles.errorTitle}>Cannot load issues</Text>
+        <Text style={styles.errorTitle} testID="cannot-load-message">Cannot load issues</Text>
         <Text style={styles.errorContent}>{extractErrorMessage(loadingError)}</Text>
         <TouchableOpacity style={styles.tryAgainButton} onPress={() => this.props.refreshIssues()}>
           <Text style={styles.tryAgainText}>Try Again</Text>
@@ -152,7 +141,7 @@ export class IssueList extends Component {
       return (
         <View>
           <Text style={styles.listMessageSmile}>(・_・)</Text>
-          <Text style={styles.listFooterMessage}>No issues found</Text>
+          <Text style={styles.listFooterMessage} testID="no-issues">No issues found</Text>
         </View>
       );
     }
@@ -164,24 +153,25 @@ export class IssueList extends Component {
   };
 
   render() {
-    const {query, issues, isRefreshing, refreshIssues, loadMoreIssues, suggestIssuesQuery, queryAssistSuggestions} = this.props;
+    const {query, issues, loadMoreIssues, suggestIssuesQuery, queryAssistSuggestions} = this.props;
 
     return (
       <Menu onBeforeLogOut={this.logOut}>
-        <View style={styles.listContainer}>
+        <View style={styles.listContainer} testID="issue-list-page">
           {this._renderHeader()}
 
           <FlatList
+            removeClippedSubviews={false}
             data={issues}
             keyExtractor={this._getIssueId}
             renderItem={this._renderRow}
-            refreshing={isRefreshing}
-            onRefresh={refreshIssues}
+            refreshControl={this._renderRefreshControl()}
             tintColor={COLOR_PINK}
             ItemSeparatorComponent={this._renderSeparator}
             ListFooterComponent={this._renderListMessage}
             onEndReached={loadMoreIssues}
             onEndReachedThreshold={0.1}
+            testID="issue-list"
           />
 
           <QueryAssist

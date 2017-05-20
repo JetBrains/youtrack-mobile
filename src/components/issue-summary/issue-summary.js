@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import {View, TextInput} from 'react-native';
 import styles from './issue-summary.styles';
 import MultilineInput from '../multiline-input/multiline-input';
+import {COLOR_FONT_GRAY} from '../variables/variables';
 
 type Props = {
   editable: boolean,
@@ -27,6 +28,7 @@ export default class AttachmentsRow extends Component {
           editable={editable}
           autoFocus
           placeholder="Summary"
+          placeholderTextColor={COLOR_FONT_GRAY}
           underlineColorAndroid="transparent"
           keyboardAppearance="dark"
           returnKeyType="next"
@@ -42,11 +44,12 @@ export default class AttachmentsRow extends Component {
           maxInputHeight={0}
           editable={editable}
           autoCapitalize="sentences"
+          placeholderTextColor={COLOR_FONT_GRAY}
+          placeholder="Description"
           keyboardAppearance="dark"
           style={styles.descriptionInput}
           multiline={true}
           underlineColorAndroid="transparent"
-          placeholder="Description"
           value={description}
           onChangeText={this.props.onDescriptionChange} />
       </View>

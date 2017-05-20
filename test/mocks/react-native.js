@@ -27,6 +27,7 @@ function makeRenderable(componentClass, type) {
 ReactNativeMocks.View = makeRenderable(ReactNativeMocks.View, 'View');
 ReactNativeMocks.Text = makeRenderable(ReactNativeMocks.Text, 'Text');
 ReactNativeMocks.Platform.select = (obj) => obj.ios;
+ReactNativeMocks.I18nManager = {isRTL: false};
 
 ReactNativeMocks.NativeModules.RNDeviceInfo = {
   uniqueId: 'unique-id',

@@ -101,6 +101,31 @@ const ISSUE_FIELD_FIELDS = toField([
   }
 ]);
 
+const ISSUE_FIELD_SHORT_FIELDS = toField([
+  'id',
+  'name',
+  {
+    value: [
+      'id',
+      'name',
+      'ringId',
+      'avatarUrl',
+      'login',
+      {
+        color: ['id', 'background', 'foreground']
+      }
+    ]
+  },
+  {
+    projectCustomField: [
+      {
+        field: ['id', 'name']
+      }
+    ]
+  }
+]);
+
+
 const ISSUE_TAGS_FIELDS = toField([
   'name',
   'id',
@@ -134,7 +159,7 @@ const ISSUE_SHORT_FIELDS = toField([
   {project: ISSUE_PROJECT_FIELDS},
   'numberInProject',
   {reporter: ISSUE_USER_FIELDS},
-  {fields: ISSUE_FIELD_FIELDS}
+  {fields: ISSUE_FIELD_SHORT_FIELDS}
 ]);
 
 const ISSUE_LINKS_FIELDS = toField([
@@ -159,6 +184,28 @@ const ISSUE_FOLDER_FIELDS = toField([
   'query',
   'isUpdatable',
   {owner: ['ringId']}
+]);
+
+
+const SUGGESTION_FIELDS = toField([
+  'id',
+  'caret',
+  'comment',
+  'completionStart',
+  'completionEnd',
+  'matchingStart',
+  'matchingEnd',
+  'description',
+  'option',
+  'prefix',
+  'suffix'
+]);
+
+const COMMAND_SUGGESTION_FIELDS = toField([
+  'query',
+  'caret',
+  {commands: ['description','error','delete']},
+  {suggestions: SUGGESTION_FIELDS}
 ]);
 
 export default {
@@ -208,5 +255,6 @@ export default {
     {aggregatedUsers: ISSUE_USER_FIELDS}
   ]),
   issueComment: ISSUE_COMMENTS_FIELDS,
-  issueFolder: ISSUE_FOLDER_FIELDS
+  issueFolder: ISSUE_FOLDER_FIELDS,
+  commandSuggestionFields: COMMAND_SUGGESTION_FIELDS
 };

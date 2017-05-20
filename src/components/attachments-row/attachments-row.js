@@ -1,35 +1,35 @@
 /* @flow */
 import React, {Component} from 'react';
-import {Linking, View, Text, TouchableOpacity, Animated, ActivityIndicator, ScrollView, Platform} from 'react-native';
+import {Linking, View, Text, TouchableOpacity, ActivityIndicator, ScrollView, Platform} from 'react-native';
 import ImageProgress from 'react-native-image-progress';
 import flattenStyle from 'react-native/Libraries/StyleSheet/flattenStyle';
 import styles from './attachments-row.styles';
 import Router from '../../components/router/router';
 import safariView from '../../components/safari-view/safari-view';
+import {View as AnimatedView} from 'react-native-animatable';
 
 const flatStyles = flattenStyle(styles.attachmentImage) || {};
 const imageWidth = flatStyles.width * 2;
 const imageHeight = flatStyles.height * 2;
+const ANIMATION_DURATION = 700;
 
 type Props = {
   attachments: Array<Object>,
-  attachingImage: Object,
+  attachingImage: ?Object,
+  imageHeaders: ?Object,
   onOpenAttachment: (type: string, name: string) => any
 }
 
-type State = {
-  attachingImageAnimation: Object
+type DefaultProps = {
+  imageHeaders: ?Object,
+  onOpenAttachment: Function
 };
 
-export default class AttachmentsRow extends Component {
-  props: Props;
-  state: State;
-
-  state = {
-    attachingImageAnimation: new Animated.Value(0),
-  };
+export default class AttachmentsRow extends Component<DefaultProps, Props, void> {
+  scrollView: ?ScrollView;
 
   static defaultProps = {
+    imageHeaders: null,
     onOpenAttachment: () => {}
   };
 
@@ -39,17 +39,17 @@ export default class AttachmentsRow extends Component {
 
   componentWillReceiveProps(props: Props) {
     if (props.attachingImage && props.attachingImage !== this.props.attachingImage) {
-      this.state.attachingImageAnimation.setValue(0.1);
-      Animated.spring(this.state.attachingImageAnimation, {toValue: 1, duration: 2000}).start();
+      setTimeout(() => this.scrollView && this.scrollView.scrollToEnd());
     }
   }
 
   _showImageAttachment(currentImage, allAttachments) {
+    const {imageHeaders} = this.props;
     const allImagesUrls = allAttachments
       .map(image => image.url);
     this.props.onOpenAttachment('image', currentImage.id);
 
-    return Router.ShowImage({ currentImage: currentImage.url, allImagesUrls });
+    return Router.ShowImage({ currentImage: currentImage.url, allImagesUrls, imageHeaders });
   }
 
   _openAttachmentUrl(name, url) {
@@ -67,15 +67,23 @@ export default class AttachmentsRow extends Component {
     }
   }
 
+  setScrollRef = (node: ScrollView) => {
+    this.scrollView = node;
+  }
+
   render() {
-    const {attachments, attachingImage} = this.props;
+    const {attachments, attachingImage, imageHeaders} = this.props;
 
     if (!attachments.length) {
       return null;
     }
 
     return (
-      <ScrollView style={styles.attachesScroll} horizontal={true}>
+      <ScrollView
+        ref={this.setScrollRef}
+        style={styles.attachesScroll}
+        horizontal={true}
+      >
 
         {attachments.map(attach => {
           const isImage = attach.mimeType ? attach.mimeType.includes('image') : true;
@@ -88,14 +96,19 @@ export default class AttachmentsRow extends Component {
                 key={attach.url || attach.id}
                 onPress={() => this._showImageAttachment(attach, attachments)}
                 >
-                <Animated.View style={isAttachingImage ? { transform: [{ scale: this.state.attachingImageAnimation }] } : {}}>
+                <AnimatedView
+                  animation={isAttachingImage ? 'zoomIn' : null}
+                  useNativeDriver
+                  duration={ANIMATION_DURATION}
+                  easing="ease-out-quart"
+                >
                   <ImageProgress
                     style={styles.attachmentImage}
                     renderIndicator={() => <ActivityIndicator/>}
-                    source={{uri: url}}
+                    source={{uri: url, headers: imageHeaders}}
                   />
                   {isAttachingImage && <ActivityIndicator size="large" style={styles.imageActivityIndicator} />}
-                </Animated.View>
+                </AnimatedView>
               </TouchableOpacity>
             );
           }

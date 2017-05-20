@@ -87,5 +87,9 @@ function getAssigneeField(issue: AnyIssue) {
   });
 }
 
+function getReadableID(issue: AnyIssue) {
+  return `${issue.project.shortName}-${issue.numberInProject}`;
+}
 
-export {getForText, formatDate, relativeDate, shortRelativeDate, getPriotityField, getAssigneeField};
+
+export {getForText, formatDate, relativeDate, shortRelativeDate, getPriotityField, getAssigneeField, getReadableID};

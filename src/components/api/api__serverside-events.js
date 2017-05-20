@@ -1,5 +1,5 @@
 /* @flow */
-import RNEventSource from 'react-native-eventsource';
+import RNEventSource from '@huston007/react-native-eventsource';
 import qs from 'qs';
 import log from '../../components/log/log';
 import agileFields from './api__agile-fields';

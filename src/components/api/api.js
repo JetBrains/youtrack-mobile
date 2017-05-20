@@ -8,7 +8,7 @@ import ApiHelper from './api__helper';
 import {handleRelativeUrl} from '../config/config';
 import type {SprintFull, AgileUserProfile, AgileBoardRow, BoardOnList} from '../../flow/Agile';
 import type {AppConfigFilled} from '../../flow/AppConfig';
-import type {IssueOnList, IssueFull, TransformedSuggestion, SavedQuery} from '../../flow/Issue';
+import type {IssueOnList, IssueFull, TransformedSuggestion, SavedQuery, CommandSuggestionResponse} from '../../flow/Issue';
 import type {IssueProject, FieldValue} from '../../flow/CustomFields';
 
 const STATUS_UNAUTHORIZED = 401;
@@ -40,17 +40,12 @@ class Api {
     assertLongQuery(url);
 
     const sendRequest = async () => {
-      const authParams = this.auth.authParams;
-      if (!authParams) {
-        throw new Error('Using API with uninitializard Auth');
-      }
-
       return await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json, text/plain, */*',
-          'Authorization': `${authParams.token_type} ${authParams.access_token}`
+          ...this.auth.getAuthorizationHeaders()
         },
         body: JSON.stringify(body)
       });
@@ -106,13 +101,23 @@ class Api {
     return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`);
   }
 
+  async getIssuesCount(query: string = ''): Promise<number> {
+    const queryString = qs.stringify({sync: false, filter: query});
+    const countRes = await this.makeAuthorizedRequest(`${this.youTrackUrl}/rest/issue/count?${queryString}`);
+    // If server returns -1 it means that counter is not ready yet, should reload
+    if (countRes.value === -1) {
+      return new Promise(resolve => setTimeout(resolve, 500))
+        .then(() => this.getIssuesCount(query));
+    }
+    return countRes.value;
+  }
+
   async getSavedQueries(): Promise<Array<SavedQuery>> {
     const queryString = qs.stringify({fields: issueFields.issueFolder.toString()});
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/savedQueries?${queryString}`);
   }
 
   async createIssue(issueDraft: IssueOnList) {
-    log.info('Issue draft to create:', issueDraft);
     const queryString = qs.stringify({
       draftId: issueDraft.id,
       fields: issueFields.issuesOnList.toString()
@@ -251,6 +256,28 @@ class Api {
     const body = {issues:  issueIds.map(id => ({id}))};
     const suggestions = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/mention?${queryString}`, 'POST', body);
     return ApiHelper.patchAllRelativeAvatarUrls(suggestions, this.config.backendUrl);
+  }
+
+  async getCommandSuggestions(issueIds: Array<string>, query: string, caret: number): Promise<CommandSuggestionResponse> {
+    const queryString = qs.stringify({fields: issueFields.commandSuggestionFields.toString()});
+
+    return await this.makeAuthorizedRequest(
+      `${this.youTrackUrl}/api/commands/assist?${queryString}`,
+      'POST',
+      {
+        query,
+        caret,
+        issues: issueIds.map(id => ({id}))
+      }
+    );
+  }
+
+  async applyCommand(options: {issueIds: Array<string>, comment?: ?string, command: string}): Promise<any> {
+    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/commands`, 'POST', {
+      query: options.command,
+      comment: options.comment,
+      issues: options.issueIds.map(id => ({id}))
+    });
   }
 
   //TODO: this is old API usage, move to new one
