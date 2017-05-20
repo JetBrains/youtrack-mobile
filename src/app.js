@@ -130,7 +130,7 @@ class YouTrackMobile extends Component {
       name: 'EnterServer',
       component: EnterServer,
       animation: Navigator.SceneConfigs.FloatFromLeft,
-      type: 'replace',
+      type: 'reset',
       props: {
         connectToYoutrack: newUrl => {
           return loadConfig(newUrl)
@@ -161,7 +161,7 @@ class YouTrackMobile extends Component {
     Router.registerRoute({
       name: 'IssueList',
       component: IssueList,
-      type: 'replace'
+      type: 'reset'
     });
 
     Router.registerRoute({name: 'SingleIssue', component: SingleIssue});
@@ -172,7 +172,7 @@ class YouTrackMobile extends Component {
 
     Router.registerRoute({name: 'CreateIssue', component: CreateIssue});
 
-    Router.registerRoute({name: 'AgileBoard', component: AgileBoard, type: 'replace'});
+    Router.registerRoute({name: 'AgileBoard', component: AgileBoard, type: 'reset'});
 
     Router.finalizeRoutes('Home');
   }
