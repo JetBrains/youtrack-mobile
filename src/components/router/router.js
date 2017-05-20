@@ -39,10 +39,17 @@ class Router {
       return noAnimation;
     }
 
-    if (route.modal) {
+    if (route.modal || this._modalTransition) {
       return transitionConfigs.defaultTransitionConfig(null, null, true);
     }
   }
+
+  onTransitionStart = (previousState, nextState) => {
+    const prevRouteName = previousState.scene.route.routeName;
+    const nextRouteName = nextState.scene.route.routeName;
+
+    this._modalTransition = this.routes[prevRouteName].modal || this.routes[nextRouteName].modal;
+  };
 
   registerRoute({name, component, props, type, modal}) {
     this.routes[name] = {
@@ -61,7 +68,8 @@ class Router {
     this.AppNavigator = StackNavigator(this.routes, {
       initialRouteName,
       headerMode: 'none',
-      transitionConfig: this.getTransitionConfig
+      transitionConfig: this.getTransitionConfig,
+      onTransitionStart: this.onTransitionStart
     });
   }
 
