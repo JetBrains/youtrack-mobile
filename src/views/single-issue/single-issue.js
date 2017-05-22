@@ -291,7 +291,7 @@ class SingeIssueView extends Component<void, SingleIssueProps, void> {
           canEditProject={issuePermissions.canUpdateGeneralInfo(issue)}
           issue={issue}
           issuePermissions={issuePermissions}
-          onUpdate={async (field) => await updateIssueFieldValue(field)}
+          onUpdate={async (field, value) => await updateIssueFieldValue(field, value)}
           onUpdateProject={async (project) => await updateProject(project)}/>}
 
         {showCommandDialog && (

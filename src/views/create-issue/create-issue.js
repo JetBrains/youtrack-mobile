@@ -146,7 +146,7 @@ class CreateIssue extends Component<void, Props, void> {
           issue={issue}
           canEditProject={true}
           issuePermissions={issuePermissions}
-          onUpdate={async (field) => await updateFieldValue(field)}
+          onUpdate={async (field, value) => await updateFieldValue(field, value)}
           onUpdateProject={async (project) => await updateProject(project)}
         />
 
