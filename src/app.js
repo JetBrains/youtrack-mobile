@@ -23,7 +23,6 @@ import {COLOR_BLACK} from './components/variables/variables';
 import Toast from 'react-native-easy-toast';
 
 import {BackHandler, View, UIManager} from 'react-native';
-import {Navigator} from 'react-native-deprecated-custom-components';
 import React, {PropTypes, Component} from 'react';
 import ActionSheet from '@expo/react-native-action-sheet';
 import type {AppConfigFilled} from './flow/AppConfig';
@@ -129,7 +128,6 @@ class YouTrackMobile extends Component {
     Router.registerRoute({
       name: 'EnterServer',
       component: EnterServer,
-      animation: Navigator.SceneConfigs.FloatFromLeft,
       type: 'reset',
       props: {
         connectToYoutrack: newUrl => {
