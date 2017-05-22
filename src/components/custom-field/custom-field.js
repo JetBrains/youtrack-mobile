@@ -27,7 +27,7 @@ export default class CustomField extends Component {
       if (fieldType === 'date') {
         return new Date(value).toLocaleDateString();
       }
-      if (fieldType === 'integer' || fieldType === 'string') {
+      if (fieldType === 'integer' || fieldType === 'string' || fieldType === 'float') {
         return value;
       }
       return value.name || value.fullName || value.login || value.presentation;
