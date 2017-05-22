@@ -1,6 +1,6 @@
 import React, {createElement} from 'react';
-import {StackNavigator, NavigationActions} from 'react-navigation';
-import transitionConfigs from 'react-navigation/src/views/TransitionConfigs';
+import {StackNavigator, NavigationActions} from 'react-navigation/lib/react-navigation';
+import transitionConfigs from 'react-navigation/lib/views/TransitionConfigs';
 
 /**
  * Route singleton
