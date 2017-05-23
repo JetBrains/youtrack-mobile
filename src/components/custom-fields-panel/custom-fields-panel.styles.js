@@ -84,7 +84,7 @@ export default StyleSheet.create({
 
 export const calendarTheme = {
   calendarBackground: COLOR_BLACK,
-  textSectionTitleColor: COLOR_PINK,
+  textSectionTitleColor: COLOR_GRAY,
   selectedDayBackgroundColor: COLOR_PINK,
   selectedDayTextColor: COLOR_FONT_ON_BLACK,
   todayTextColor: COLOR_PINK,
