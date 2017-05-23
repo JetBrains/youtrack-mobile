@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 import {Linking, View, Text, TouchableOpacity, ActivityIndicator, ScrollView, Platform} from 'react-native';
 import ImageProgress from 'react-native-image-progress';
+import throttle from 'lodash.throttle';
 import flattenStyle from 'react-native/Libraries/StyleSheet/flattenStyle';
 import styles from './attachments-row.styles';
 import Router from '../../components/router/router';
@@ -12,25 +13,27 @@ const flatStyles = flattenStyle(styles.attachmentImage) || {};
 const imageWidth = flatStyles.width * 2;
 const imageHeight = flatStyles.height * 2;
 const ANIMATION_DURATION = 700;
-
-type Props = {
-  attachments: Array<Object>,
-  attachingImage: ?Object,
-  imageHeaders: ?Object,
-  onOpenAttachment: (type: string, name: string) => any
-}
+const ERROR_HANLDER_THROTTLE = 60 * 1000;
 
 type DefaultProps = {
   imageHeaders: ?Object,
-  onOpenAttachment: Function
+  onOpenAttachment: (type: string, name: string) => any,
+  onImageLoadingError: (error: Object) => any
 };
+
+type Props = DefaultProps & {
+  attachments: Array<Object>,
+  attachingImage: ?Object
+}
+
 
 export default class AttachmentsRow extends Component<DefaultProps, Props, void> {
   scrollView: ?ScrollView;
 
   static defaultProps = {
     imageHeaders: null,
-    onOpenAttachment: () => {}
+    onOpenAttachment: () => {},
+    onImageLoadingError: () => {}
   };
 
   constructor(...args: Array<any>) {
@@ -42,6 +45,10 @@ export default class AttachmentsRow extends Component<DefaultProps, Props, void>
       setTimeout(() => this.scrollView && this.scrollView.scrollToEnd());
     }
   }
+
+  handleLoadError = throttle((err) => {
+    this.props.onImageLoadingError(err);
+  }, ERROR_HANLDER_THROTTLE);
 
   _showImageAttachment(currentImage, allAttachments) {
     const {imageHeaders} = this.props;
@@ -106,6 +113,7 @@ export default class AttachmentsRow extends Component<DefaultProps, Props, void>
                     style={styles.attachmentImage}
                     renderIndicator={() => <ActivityIndicator/>}
                     source={{uri: url, headers: imageHeaders}}
+                    onError={this.handleLoadError}
                   />
                   {isAttachingImage && <ActivityIndicator size="large" style={styles.imageActivityIndicator} />}
                 </AnimatedView>

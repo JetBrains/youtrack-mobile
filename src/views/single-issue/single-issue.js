@@ -187,6 +187,7 @@ class SingeIssueView extends Component<void, SingleIssueProps, void> {
           attachments={issue.attachments}
           attachingImage={attachingImage}
           imageHeaders={api.auth.getAuthorizationHeaders()}
+          onImageLoadingError={this.props.refreshIssue}
           onOpenAttachment={(type, name) => usage.trackEvent(CATEGORY_NAME, type === 'image' ? 'Showing image' : 'Open attachment by URL')}
         /> : null}
       </View>
