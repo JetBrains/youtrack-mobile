@@ -1,6 +1,19 @@
 import React, {createElement} from 'react';
+import {Easing, Animated} from 'react-native';
 import {StackNavigator, NavigationActions} from 'react-navigation/lib/react-navigation';
 import transitionConfigs from 'react-navigation/lib/views/TransitionConfigs';
+import cardInterpolator from 'react-navigation/lib/views/CardStackStyleInterpolator';
+
+const TransitionSpec = {
+  duration: 500,
+  easing: Easing.bezier(0.2833, 0.99, 0.31833, 0.99),
+  timing: Animated.timing
+};
+
+const SlideFromRight = {
+  transitionSpec: TransitionSpec,
+  screenInterpolator: cardInterpolator.forHorizontal
+};
 
 /**
  * Route singleton
@@ -31,6 +44,8 @@ class Router {
     if (route.modal || this._modalTransition) {
       return transitionConfigs.defaultTransitionConfig(null, null, true);
     }
+
+    return SlideFromRight;
   }
 
   registerRoute({name, component, props, type, modal}) {
