@@ -1,11 +1,11 @@
 /* @flow */
 import {View, ScrollView, Text, TouchableOpacity, TextInput, ActivityIndicator, Platform} from 'react-native';
 import React, {Component} from 'react';
-import {Calendar} from 'react-native-calendars';
+import {Calendar} from 'react-native-calendars'; // eslint-disable-line import/named
 import CustomField from '../custom-field/custom-field';
 import Select from '../select/select';
 import Header from '../header/header';
-import {COLOR_PINK, COLOR_PLACEHOLDER, COLOR_BLACK} from '../../components/variables/variables';
+import {COLOR_PLACEHOLDER, COLOR_BLACK} from '../../components/variables/variables';
 import Api from '../api/api';
 import IssuePermissions from '../issue-permissions/issue-permissions';
 import styles, {calendarTheme} from './custom-fields-panel.styles';
