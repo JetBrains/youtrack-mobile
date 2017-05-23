@@ -32,16 +32,15 @@ export function decorateIssueLinks(rawText, wikifiedText) {
 }
 
 export function decorateUserNames(rawText, wikifiedText) {
-  const userLoginRegexp = /<a href=".*\/user.*?title="(.*?)">(.*?)<\/a>/ig;
-
-  const issuesMap = new Map();
+  const userLoginRegexp = /<a href=".*?\/user.*?title="(.*?)">(.*?)<\/a>/ig;
+  const usersMap = new Map();
 
   function onUserLoginDetected(linkTag, login, username) {
-    issuesMap.set(login, username);
+    usersMap.set(login, username);
   }
   wikifiedText.replace(userLoginRegexp, onUserLoginDetected);
 
-  issuesMap.forEach((username, login) => {
+  usersMap.forEach((username, login) => {
     rawText = rawText.replace(new RegExp(`@${login}`), decorateUserName(login, username));
   });
 

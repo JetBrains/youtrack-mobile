@@ -59,8 +59,8 @@ describe('decorateIssueLinks', () => {
 
   it('should decorate multiple issue IDs', () => {
     const result = decorateIssueLinks(`foo barr Y-15 bar JT-123`,
-      `foo barr 
-        <a href="/issue/Y-15" target="_self" title="Fake issue summary">Y-15</a> 
+      `foo barr
+        <a href="/issue/Y-15" target="_self" title="Fake issue summary">Y-15</a>
         bar <a href="/issue/JT-123" target="_self" title="Another summary">JT-123</a>`);
 
 
@@ -128,10 +128,13 @@ describe('decorateUserNames', () => {
     result.should.equal('[ytmuser]userlogin|Mr. User Userson[ytmuser]');
   });
 
-  it('should decorate username inside text', () => {
-    const result = decorateIssueLinks('foo barr @userlogin2 bar foo', wikifiedText);
+  it('should decorate more than one user name', () => {
+    const result = decorateUserNames(
+      'foo barr @userlogin bar @anotheruser foo',
+      `foo barr <a href="/user/userlogin" title="userlogin">Mr. User Userson</a> bar <a href="/user/anotheruser" title="anotheruser">Mr. Another User</a> foo`
+    );
 
-    result.should.equal('foo barr @userlogin2 bar foo');
+    result.should.equal('foo barr [ytmuser]userlogin|Mr. User Userson[ytmuser] bar [ytmuser]anotheruser|Mr. Another User[ytmuser] foo');
   });
 
   it('should parse user names if youtrack is on context', () => {
