@@ -47,6 +47,12 @@ export default class CommandDialog extends Component<DefaultProps, Props, State>
     onChange: () => {}
   };
 
+  componentDidMount() {
+    if (Platform.OS === 'android') {
+      this.onSearch('', 0);
+    }
+  }
+
   onSearch = throttle((command: string, caret: number) => {
     if (this.lastUsedParams.command === command && this.lastUsedParams.caret === caret) {
       return;
@@ -89,7 +95,7 @@ export default class CommandDialog extends Component<DefaultProps, Props, State>
           underlineColorAndroid="transparent"
           autoCapitalize="none"
           value={input}
-          editable={isApplying}
+          editable={!isApplying}
           onChangeText={text => this.setState({input: text})}
           onSelectionChange = {event => this.onSearch(input, event.nativeEvent.selection.start)}
         />
