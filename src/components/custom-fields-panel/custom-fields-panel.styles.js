@@ -1,5 +1,16 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, FOOTER_HEIGHT, COLOR_PINK, COLOR_SELECTED_DARK, COLOR_TRANSPARENT_BLACK, COLOR_FONT_ON_BLACK, COLOR_BLACK, COLOR_DARK_BORDER} from '../../components/variables/variables';
+import {
+  UNIT,
+  FOOTER_HEIGHT,
+  COLOR_PINK,
+  COLOR_SELECTED_DARK,
+  COLOR_GRAY,
+  COLOR_TRANSPARENT_BLACK,
+  COLOR_FONT_GRAY,
+  COLOR_FONT_ON_BLACK,
+  COLOR_BLACK,
+  COLOR_DARK_BORDER
+} from '../../components/variables/variables';
 
 const SAVING_ALPHA = '70';
 const DONE_BUTTON_HEIGHT = 24;
@@ -33,8 +44,8 @@ export default StyleSheet.create({
     backgroundColor: COLOR_TRANSPARENT_BLACK
   },
   calendar: {
-    backgroundColor: '#FFFFFFF0',
-    padding: UNIT*2
+    padding: UNIT*2,
+    paddingBottom: UNIT
   },
   clearDate: {
     paddingTop: UNIT,
@@ -70,3 +81,17 @@ export default StyleSheet.create({
     textAlign: 'center'
   }
 });
+
+export const calendarTheme = {
+  calendarBackground: COLOR_BLACK,
+  textSectionTitleColor: COLOR_PINK,
+  selectedDayBackgroundColor: COLOR_PINK,
+  selectedDayTextColor: COLOR_FONT_ON_BLACK,
+  todayTextColor: COLOR_PINK,
+  dayTextColor: COLOR_FONT_ON_BLACK,
+  textDisabledColor: COLOR_FONT_GRAY,
+  dotColor: COLOR_FONT_ON_BLACK,
+  selectedDotColor: COLOR_FONT_ON_BLACK,
+  arrowColor: COLOR_PINK,
+  monthTextColor: COLOR_FONT_ON_BLACK
+};

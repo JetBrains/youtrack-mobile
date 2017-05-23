@@ -68,7 +68,7 @@
 		"react": "16.0.0-alpha.6",
 		"react-native": "0.44.0",
 		"react-native-animatable": "^1.1.0",
-		"react-native-calendar-picker": "huston007/CalendarPicker#dee74e43",
+		"react-native-calendars": "^1.2.15",
 		"react-native-device-info": "rebeccahughes/react-native-device-info#e8bfe5e",
 		"react-native-drawer": "2.3.0",
 		"react-native-easy-toast": "1.0.3",

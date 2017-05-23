@@ -1,14 +1,14 @@
 /* @flow */
 import {View, ScrollView, Text, TouchableOpacity, TextInput, ActivityIndicator, Platform} from 'react-native';
 import React, {Component} from 'react';
-import CalendarPicker from 'react-native-calendar-picker/CalendarPicker/CalendarPicker';
+import {Calendar} from 'react-native-calendars';
 import CustomField from '../custom-field/custom-field';
 import Select from '../select/select';
 import Header from '../header/header';
 import {COLOR_PINK, COLOR_PLACEHOLDER, COLOR_BLACK} from '../../components/variables/variables';
 import Api from '../api/api';
 import IssuePermissions from '../issue-permissions/issue-permissions';
-import styles from './custom-fields-panel.styles';
+import styles, {calendarTheme} from './custom-fields-panel.styles';
 import Modal from 'react-native-root-modal';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import type {IssueFull} from '../../flow/Issue';
@@ -290,7 +290,7 @@ export default class CustomFieldsPanel extends Component {
     }
 
     return (
-      <View>
+      <View style={{flex: 1}}>
         <Header
           leftButton={<Text>Cancel</Text>}
           rightButton={<Text></Text>}
@@ -299,26 +299,23 @@ export default class CustomFieldsPanel extends Component {
           }}>
           <Text>{this.state.datePicker.title}</Text>
         </Header>
+
         <View style={styles.calendar}>
           {this.state.datePicker.emptyValueName &&
           <TouchableOpacity onPress={() => this.state.datePicker.onSelect(null)}>
             <Text style={styles.clearDate}>{this.state.datePicker.emptyValueName} (Clear value)</Text>
           </TouchableOpacity>}
-
-          <CalendarPicker
-            selectedDate={this.state.datePicker.value}
-            startFromMonday={true}
-            weekdays={['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']}
-            onDateChange={date => {
-              if (this.state.datePicker.value.getMonth() !== date.getMonth()) {
-                this.state.datePicker.value = date;
-                return this.setState({datePicker: this.state.datePicker});
-              }
-              return this.state.datePicker.onSelect(date);
-            }}
-            selectedDayColor={COLOR_PINK}
-            selectedDayTextColor="#FFF"/>
         </View>
+
+        <Calendar
+          current={this.state.datePicker.value}
+          selected={[this.state.datePicker.value]}
+          onDayPress={day => {
+            return this.state.datePicker.onSelect(new Date(day.timestamp));
+          }}
+          firstDay={1}
+          theme={calendarTheme}
+        />
       </View>
     );
   }
@@ -340,7 +337,6 @@ export default class CustomFieldsPanel extends Component {
         <View>
           <TextInput
             keyboardAppearance="dark"
-            autoFocus
             placeholderTextColor={COLOR_PLACEHOLDER}
             style={styles.simpleValueInput}
             placeholder={this.state.simpleValue.placeholder}

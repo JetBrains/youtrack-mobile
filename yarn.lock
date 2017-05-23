@@ -1034,7 +1034,7 @@ chai-as-promised@6.0.0:
   dependencies:
     check-error "^1.0.2"
 
-chai-enzyme@0.7:
+chai-enzyme@0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/chai-enzyme/-/chai-enzyme-0.7.0.tgz#90a4e518ca896045fdb453ec345944fb581d2a0e"
   dependencies:
@@ -4107,11 +4107,11 @@ react-native-animatable@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/react-native-animatable/-/react-native-animatable-1.1.1.tgz#00ddc72985f62f62a11a505abb1a06e77a92cd8a"
 
-react-native-calendar-picker@huston007/CalendarPicker#dee74e43:
-  version "2.7.0"
-  resolved "https://codeload.github.com/huston007/CalendarPicker/tar.gz/dee74e43"
+react-native-calendars@^1.2.15:
+  version "1.2.15"
+  resolved "https://registry.yarnpkg.com/react-native-calendars/-/react-native-calendars-1.2.15.tgz#32622468bb9cd60086656afed924b974a07b8ce0"
   dependencies:
-    lodash "^4.13.1"
+    xdate "^0.8.0"
 
 react-native-cli@^1.0.0:
   version "1.3.0"
@@ -5428,6 +5428,10 @@ xcode@^0.9.1:
     pegjs "^0.10.0"
     simple-plist "^0.2.1"
     uuid "3.0.1"
+
+xdate@^0.8.0:
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/xdate/-/xdate-0.8.2.tgz#d7b033c00485d02695baf0044f4eacda3fc961a3"
 
 xml-name-validator@^2.0.1:
   version "2.0.1"
