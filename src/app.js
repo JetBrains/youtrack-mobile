@@ -1,7 +1,7 @@
 /* @flow */
 import store from './store';
 import { Provider } from 'react-redux';
-import {initializeApi} from './actions';
+import {initializeApi, onNavigateBack} from './actions';
 import PubSub from 'pubsub-js';
 import Auth from './components/auth/auth';
 import Router from './components/router/router';
@@ -52,6 +52,10 @@ class YouTrackMobile extends Component {
     this.registerRoutes();
     this.addAndroidBackButtonSupport();
     this.getStoredUrlAndProceed();
+
+    Router.onBack = (closingView) => {
+      store.dispatch(onNavigateBack(closingView));
+    };
   }
 
   async getStoredUrlAndProceed() {

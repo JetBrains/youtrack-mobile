@@ -1,6 +1,7 @@
 /* @flow */
 import {createReducer} from 'redux-create-reducer';
 import * as types from './single-issue-action-types';
+import {ON_NAVIGATE_BACK} from '../../actions/action-types';
 import type {IssueFull} from '../../flow/Issue';
 import type {CustomField, FieldValue, IssueProject, CommandSuggestionResponse} from '../../flow/CustomFields';
 
@@ -48,6 +49,14 @@ const initialState: State = {
 };
 
 export default createReducer(initialState, {
+  [ON_NAVIGATE_BACK]: (state: State, action: {closingView: {routeName: string, params: {issueId?: string}}}): State => {
+    const isThisView = action.closingView.routeName === 'SingleIssue'
+      && action.closingView.params && action.closingView.params.issueId === state.issueId;
+
+    const previousIssueState = state.unloadedIssueState ? state.unloadedIssueState : initialState;
+
+    return isThisView ? previousIssueState : state;
+  },
   [types.SET_ISSUE_ID]: (state: State, action: {issueId: string}): State => {
     return {...state, issueId: action.issueId};
   },
@@ -208,9 +217,6 @@ export default createReducer(initialState, {
   },
   [types.UNLOAD_ACTIVE_ISSUE_VIEW]: (state: State, action: {starred: boolean}): State => {
     return {...initialState, unloadedIssueState: state};
-  },
-  [types.RESTORE_PREVIOUS_ISSUE_VIEW]: (state: State, action: {starred: boolean}): State => {
-    return state.unloadedIssueState ? state.unloadedIssueState : initialState;
   },
   [types.START_LOADING_COMMENT_SUGGESTIONS]: (state: State): State => {
     return {...state, suggestionsAreLoading: true};

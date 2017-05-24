@@ -86,7 +86,6 @@ class SingeIssueView extends Component<void, SingleIssueProps, void> {
       summaryCopy,
       fullyLoaded,
       isSavingEditedIssue,
-      closeSingleIssue,
       saveIssueSummaryAndDescriptionChange,
       showIssueActions,
       stopEditingIssue
@@ -100,7 +99,6 @@ class SingeIssueView extends Component<void, SingleIssueProps, void> {
     if (!editMode) {
       return (
         <Header
-          onBack={closeSingleIssue}
           leftButton={<Text>Back</Text>}
           rightButton={<Text style={fullyLoaded ? null : styles.disabledSaveButton}>More</Text>}
           onRightButtonClick={() => fullyLoaded && showIssueActions(this.context.actionSheet())}

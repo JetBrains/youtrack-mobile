@@ -129,10 +129,6 @@ export function unloadActiveIssueView() {
   return {type: types.UNLOAD_ACTIVE_ISSUE_VIEW};
 }
 
-export function restorePreviousActiveIssueView() {
-  return {type: types.RESTORE_PREVIOUS_ISSUE_VIEW};
-}
-
 export function startLoadingCommentSuggestions() {
   return {type: types.START_LOADING_COMMENT_SUGGESTIONS};
 }
@@ -407,19 +403,6 @@ export function showIssueActions(actionSheet: Object) {
 
     if (selectedAction) {
       selectedAction.execute();
-    }
-  };
-}
-
-export function closeSingleIssue() {
-  return async (dispatch: (any) => any, getState: StateGetter) => {
-    const {unloadedIssueState} = getState().singleIssue;
-    Router.pop();
-
-    if (unloadedIssueState) {
-      dispatch(restorePreviousActiveIssueView());
-    } else {
-      dispatch(resetIssueView());
     }
   };
 }

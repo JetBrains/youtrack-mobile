@@ -21,6 +21,7 @@ const SlideFromRight = {
 class Router {
   constructor(navigator) {
     this._navigator = null;
+    this.onBack = () => {};
 
     this.routes = {};
   }
@@ -103,9 +104,21 @@ class Router {
     return this._navigator;
   }
 
+  onNavigationStateChange = (prevNav, nav, action) => {
+    if (action.type === NavigationActions.BACK) {
+      const closingView = prevNav.routes[prevNav.index];
+      this.onBack(closingView);
+    }
+  }
+
   renderNavigatorView() {
     const {AppNavigator} = this;
-    return <AppNavigator ref={this.setNavigator}/>;
+    return (
+      <AppNavigator
+        ref={this.setNavigator}
+        onNavigationStateChange={this.onNavigationStateChange}
+      />
+    );
   }
 }
 
