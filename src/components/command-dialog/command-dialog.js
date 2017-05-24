@@ -88,7 +88,7 @@ export default class CommandDialog extends Component<DefaultProps, Props, State>
           placeholderTextColor={COLOR_PLACEHOLDER}
           placeholder="Enter command"
           clearButtonMode="while-editing"
-          returnKeyType="search"
+          returnKeyType="done"
           testID="command-input"
           autoFocus
           autoCorrect={false}
@@ -96,6 +96,7 @@ export default class CommandDialog extends Component<DefaultProps, Props, State>
           autoCapitalize="none"
           value={input}
           editable={!isApplying}
+          onSubmitEditing={() => canApply && this.onApply()}
           onChangeText={text => this.setState({input: text})}
           onSelectionChange = {event => this.onSearch(input, event.nativeEvent.selection.start)}
         />
