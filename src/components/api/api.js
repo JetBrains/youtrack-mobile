@@ -207,6 +207,8 @@ class Api {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest(); //eslint-disable-line no-undef
       xhr.open('POST', `${this.youTrackUrl}/rest/issue/${issueId}/attachment`);
+      const headers = this.auth.getAuthorizationHeaders();
+      xhr.setRequestHeader('Authorization', headers.Authorization);
 
       xhr.onreadystatechange = function () {
         if (xhr.readyState !== 4) {
