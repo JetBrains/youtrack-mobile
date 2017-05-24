@@ -177,6 +177,7 @@ export default class CustomFieldsPanel extends Component {
     const placeholders = {
       integer: '-12 or 34',
       string: 'Type value',
+      float: 'Type float value',
       default: '1w 1d 1h 1m'
     };
 
