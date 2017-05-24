@@ -4162,9 +4162,9 @@ react-native-fence-html@huston007/react-native-fence-html#fadee9efb0bed8f8cae737
     htmlparser2 "^3.9.0"
     stream "0.0.2"
 
-react-native-gallery@huston007/react-native-gallery#026ed1eb:
+react-native-gallery@huston007/react-native-gallery#026ed1ebab354fce7c65e980637e34d8d01d0b2f:
   version "0.0.18"
-  resolved "https://codeload.github.com/huston007/react-native-gallery/tar.gz/026ed1eb"
+  resolved "https://codeload.github.com/huston007/react-native-gallery/tar.gz/026ed1ebab354fce7c65e980637e34d8d01d0b2f"
   dependencies:
     "@ldn0x7dc/react-native-view-pager" "0.0.9"
     react-native-gesture-responder "0.1.1"
