@@ -67,7 +67,9 @@ class SingeIssueView extends Component<void, SingleIssueProps, void> {
     if (marginTop < MAX_SHIFT) {
       marginTop = MAX_SHIFT;
     }
-    this.toolbarNode.setNativeProps({style: {marginTop}});
+    if (this.toolbarNode) {
+      this.toolbarNode.setNativeProps({style: {marginTop}});
+    }
   }
 
   _handleScroll = ({nativeEvent}) => {
