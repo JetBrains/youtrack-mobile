@@ -1,3 +1,4 @@
+import 'core-js/es7/object'; // https://youtrack.jetbrains.com/issue/YTM-421
 import React, {createElement} from 'react';
 import {Easing, Animated} from 'react-native';
 import {StackNavigator, NavigationActions} from 'react-navigation/lib/react-navigation';
