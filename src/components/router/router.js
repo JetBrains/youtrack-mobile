@@ -54,7 +54,10 @@ class Router {
       screen: ({navigation}) => createElement(component, navigation.state.params),
       type,
       props,
-      modal
+      modal,
+      navigationOptions: {
+        gesturesEnabled: true
+      }
     };
 
     if (!this[name]) {
