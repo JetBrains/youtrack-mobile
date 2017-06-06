@@ -42,7 +42,10 @@
 		"testPathIgnorePatterns": [
 			"/node_modules/",
 			"/e2e/"
-		]
+		],
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|react-navigation)"
+    ]
 	},
 	"detox": {
 		"configurations": {
