@@ -43,9 +43,9 @@
 			"/node_modules/",
 			"/e2e/"
 		],
-    "transformIgnorePatterns": [
-      "node_modules/(?!(jest-)?react-native|react-navigation)"
-    ]
+		"transformIgnorePatterns": [
+			"node_modules/(?!(jest-)?react-native|react-navigation)"
+		]
 	},
 	"detox": {
 		"configurations": {
@@ -68,10 +68,10 @@
 		"object-walk": "^0.1.1",
 		"pubsub-js": "1.5.4",
 		"qs": "6.1.0",
-		"react": "16.0.0-alpha.6",
-		"react-native": "0.44.0",
+		"react": "16.0.0-alpha.12",
+		"react-native": "0.45.0",
 		"react-native-animatable": "^1.1.0",
-		"react-native-calendars": "^1.2.15",
+		"react-native-calendars": "1.2.22",
 		"react-native-device-info": "rebeccahughes/react-native-device-info#e8bfe5e",
 		"react-native-drawer": "2.3.0",
 		"react-native-easy-toast": "1.0.3",
@@ -109,15 +109,14 @@
 		"eslint-plugin-import": "2.2.0",
 		"eslint-plugin-react": "6.7.1",
 		"eslint-plugin-react-native": "2.2.0",
-		"flow-bin": "0.42.0",
+		"flow-bin": "0.45.0",
 		"jest": "20.0.3",
 		"jest-teamcity-reporter": "^0.6.2",
 		"mocha": "^3.2.0",
 		"react-addons-perf": "16.0.0-alpha.3",
-		"react-addons-test-utils": "15.4.2",
-		"react-dom": "15.4.2",
+		"react-dom": "16.0.0-alpha.12",
 		"react-native-cli": "^1.0.0",
-		"react-native-mock": "0.3.1",
+		"react-native-mock": "samouss/react-native-mock#42bc829b79becd8184bbc9932b9cf8246376b414",
 		"sinon": "1.17.6",
 		"sinon-chai": "2.8.0",
 		"update-json-file": "^1.1.1"
