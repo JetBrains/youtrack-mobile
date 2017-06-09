@@ -18,7 +18,7 @@
 		"e2e": "detox build && detox test --reuse",
 		"e2e-shutdown": "fbsimctl shutdown",
 		"test:watch": "npm test -- --watchAll",
-		"lint": "eslint src/actions src/components src/reducers src/views src/store && flow check",
+		"lint": "eslint --ignore-pattern src/flow src && flow check",
 		"set-analytics-id": "node ./tools/set-analytics-id",
 		"ios": "./node_modules/react-native-cli/index.js run-ios",
 		"ios-set-version": "node ./tools/set-ios-version",
