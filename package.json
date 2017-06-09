@@ -13,6 +13,7 @@
 	"scripts": {
 		"start": "./node_modules/react-native-cli/index.js start",
 		"test": "jest",
+		"debug-test": "node --inspect-brk ./node_modules/.bin/jest --runInBand",
 		"test-ci": "TEAMCITY_VERSION=enablereport npm test",
 		"e2e": "detox build && detox test --reuse",
 		"e2e-shutdown": "fbsimctl shutdown",
@@ -93,6 +94,7 @@
 		"url-parse": "1.1.7"
 	},
 	"devDependencies": {
+		"@huston007/react-native-mock": "^0.3.2",
 		"babel-core": "6.24.0",
 		"babel-eslint": "7.1.1",
 		"chai": "3.5.0",
@@ -114,9 +116,9 @@
 		"jest-teamcity-reporter": "^0.6.2",
 		"mocha": "^3.2.0",
 		"react-addons-perf": "16.0.0-alpha.3",
+		"react-addons-test-utils": "^15.5.1",
 		"react-dom": "16.0.0-alpha.12",
 		"react-native-cli": "^1.0.0",
-		"react-native-mock": "samouss/react-native-mock#42bc829b79becd8184bbc9932b9cf8246376b414",
 		"sinon": "1.17.6",
 		"sinon-chai": "2.8.0",
 		"update-json-file": "^1.1.1"
