@@ -14,7 +14,7 @@
 .*/node_modules/react-navigation/.*
 .*/node_modules/react-native-easy-toast/.*
 .*/node_modules/react-native-gesture-responder/.*
-.*/node_modules/react-native-mock/.*
+.*/node_modules/@huston007/react-native-mock/.*
 
 ; Ignore unexpected extra "@providesModule"
 .*/node_modules/.*/node_modules/fbjs/.*
