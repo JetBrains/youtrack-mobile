@@ -10,7 +10,7 @@ import Router from '../../components/router/router';
 import Auth from '../../components/auth/auth';
 import {next, logOut as logOutIcon} from '../../components/icon/icon';
 import {connect} from 'react-redux';
-import {logOut, openMenu, closeMenu} from '../../actions';
+import {logOut, openMenu, closeMenu} from '../../actions/app-actions';
 
 const CURRENT_YEAR = (new Date()).getFullYear();
 const MENU_WIDTH = 280;

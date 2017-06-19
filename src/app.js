@@ -1,7 +1,7 @@
 /* @flow */
 import store from './store';
 import { Provider } from 'react-redux';
-import {initializeApi, onNavigateBack} from './actions';
+import {initializeApi, onNavigateBack} from './actions/app-actions';
 import Auth from './components/auth/auth';
 import Router from './components/router/router';
 import Home from './views/home/home';
