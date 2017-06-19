@@ -17,14 +17,17 @@ const initialState: RootState = {
 };
 
 export default createReducer(initialState, {
-  [types.INITIALIZE_API](state: RootState, action: {auth: Auth, api: Api}) {
-    const {api, auth} = action;
+  [types.INITIALIZE_AUTH](state: RootState, action: {auth: Auth}) {
+    const {auth} = action;
     return {
       ...state,
-      api,
       auth,
       issuePermissions: new IssuePermissions(auth.permissions, auth.currentUser)
     };
+  },
+  [types.INITIALIZE_API](state: RootState, action: {api: Api}) {
+    const {api} = action;
+    return {...state, api};
   },
   [types.LOG_OUT](state: RootState, action: Object = {}) {
     if (state.auth) {
