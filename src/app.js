@@ -2,7 +2,6 @@
 import store from './store';
 import { Provider } from 'react-redux';
 import {initializeApi, onNavigateBack} from './actions';
-import PubSub from 'pubsub-js';
 import Auth from './components/auth/auth';
 import Router from './components/router/router';
 import Home from './views/home/home';
@@ -179,17 +178,11 @@ class YouTrackMobile extends Component {
     Router.finalizeRoutes('Home');
   }
 
-  handleOrientationChange = (event: Object) => {
-    const {width, height} = event.nativeEvent.layout;
-    const orientation = (width > height) ? 'LANDSCAPE' : 'PORTRAIT';
-    PubSub.publish('YTM_ORIENTATION_CHANGE', orientation);
-  }
-
   render() {
     return (
       <Provider store={store}>
         <ActionSheet ref={component => this._actionSheetRef = component}>
-          <View style={{flex: 1, backgroundColor: COLOR_BLACK}} onLayout={this.handleOrientationChange}>
+          <View style={{flex: 1, backgroundColor: COLOR_BLACK}}>
             {Router.renderNavigatorView()}
             <Toast ref={toast => setNotificationComponent(toast)}/>
           </View>
