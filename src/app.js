@@ -1,14 +1,13 @@
 /* @flow */
+import {BackHandler, View, UIManager} from 'react-native';
+import React, {PropTypes, Component} from 'react';
 import store from './store';
 import { Provider } from 'react-redux';
-import {initializeApi, onNavigateBack} from './actions/app-actions';
 import Auth from './components/auth/auth';
 import Router from './components/router/router';
 import Home from './views/home/home';
 import EnterServer from './views/enter-server/enter-server';
 import LoginForm from './views/log-in/log-in';
-import usage from './components/usage/usage';
-import log from './components/log/log';
 import {setNotificationComponent} from './components/notification/notification';
 import IssueList from './views/issue-list/issue-list';
 import SingleIssue from './views/single-issue/single-issue';
@@ -16,15 +15,17 @@ import CreateIssue from './views/create-issue/create-issue';
 import ShowImage from './views/show-image/show-image';
 import AttachmentPreview from './views/attachment-preview/attachment-preview';
 import AgileBoard from './views/agile-board/agile-board';
-import {loadConfig, getStoredConfig} from './components/config/config';
 import {COLOR_BLACK} from './components/variables/variables';
+import {
+  getStoredConfigAndProceed,
+  onNavigateBack,
+  connectToNewYoutrack,
+  checkAuthorization
+} from './actions/app-actions';
 // $FlowFixMe: cannot typecheck easy-toast module because of mistakes there
 import Toast from 'react-native-easy-toast';
 
-import {BackHandler, View, UIManager} from 'react-native';
-import React, {PropTypes, Component} from 'react';
 import ActionSheet from '@expo/react-native-action-sheet';
-import type {AppConfigFilled} from './flow/AppConfig';
 
 if (UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -50,31 +51,17 @@ class YouTrackMobile extends Component {
 
     this.registerRoutes();
     this.addAndroidBackButtonSupport();
-    this.getStoredUrlAndProceed();
+    store.dispatch(getStoredConfigAndProceed());
 
     Router.onBack = (closingView) => {
       store.dispatch(onNavigateBack(closingView));
     };
   }
 
-  async getStoredUrlAndProceed() {
-    const storedConfig = await getStoredConfig();
-    if (storedConfig) {
-      return this.initialize(storedConfig);
-    }
-    Router.EnterServer({serverUrl: null});
-  }
-
   getChildContext() {
     return {
       actionSheet: () => this._actionSheetRef
     };
-  }
-
-  async checkAuthorization() {
-    await this.auth.loadStoredAuthParams();
-    store.dispatch(initializeApi(this.auth));
-    return Router.IssueList();
   }
 
   addAndroidBackButtonSupport() {
@@ -85,38 +72,6 @@ class YouTrackMobile extends Component {
     });
   }
 
-  async initializeAuth(config: AppConfigFilled) {
-    this.auth = new Auth(config);
-    usage.init(config.statisticsEnabled);
-    return await this.checkAuthorization();
-  }
-
-  async initialize(config: AppConfigFilled) {
-    Router._getNavigator() && Router.Home({
-      backendUrl: config.backendUrl,
-      error: null,
-      message: 'Connecting to YouTrack...'
-    });
-
-    try {
-      await this.initializeAuth(config);
-    } catch (error) {
-      log.warn('App failed to initialize auth. Will try to reload config.', error);
-      let reloadedConfig;
-      try {
-        reloadedConfig = await loadConfig(config.backendUrl);
-      } catch (error) {
-        return Router.Home({backendUrl: config.backendUrl, error});
-      }
-
-      try {
-        await this.initializeAuth(reloadedConfig);
-      } catch (e) {
-        return Router.LogIn();
-      }
-    }
-  }
-
   registerRoutes() {
     Router.registerRoute({
       name: 'Home',
@@ -124,7 +79,7 @@ class YouTrackMobile extends Component {
       type: 'reset',
       props: {
         message: `Loading configuration...`,
-        onChangeBackendUrl: (oldUrl) => Router.EnterServer({serverUrl: oldUrl})
+        onChangeBackendUrl: oldUrl => Router.EnterServer({serverUrl: oldUrl})
       }
     });
 
@@ -133,27 +88,18 @@ class YouTrackMobile extends Component {
       component: EnterServer,
       type: 'reset',
       props: {
-        connectToYoutrack: newUrl => {
-          return loadConfig(newUrl)
-            .then(config => {
-              this.auth = new Auth(config);
-              usage.init(config.statisticsEnabled);
-              Router.LogIn();
-            });
-        }
+        connectToYoutrack: newURL => store.dispatch(connectToNewYoutrack(newURL))
       }
     });
-
-    const getAuth = () => this.auth;
 
     Router.registerRoute({
       name: 'LogIn',
       component: LoginForm,
       props: {
         get auth() {
-          return getAuth();
+          return store.getState().app.auth;
         },
-        onLogIn: this.checkAuthorization.bind(this),
+        onLogIn: () => store.dispatch(checkAuthorization()),
         onChangeServerUrl: youtrackUrl => Router.EnterServer({serverUrl: youtrackUrl})
       },
       type: 'reset'
