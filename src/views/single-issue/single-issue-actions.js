@@ -177,6 +177,7 @@ export function loadIssue() {
       const issue = await getIssue(api, issueId);
       issue.fieldHash = ApiHelper.makeFieldHash(issue);
 
+      dispatch(setIssueId(issue.id)); //Set issue ID again because first one could be readable like YTM-111
       dispatch(receiveIssue(issue));
       return issue;
     } catch (err) {
