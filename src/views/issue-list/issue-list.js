@@ -98,7 +98,7 @@ export class IssueList extends Component {
         onRightButtonClick={() => Router.CreateIssue()}
       >
         <Text style={styles.headerText}>
-          {issuesCount}{' '}Issues
+          {issuesCount}{' '}{issuesCount === 1 ? 'Issue' : 'Issues'}
         </Text>
       </Header>
     );
