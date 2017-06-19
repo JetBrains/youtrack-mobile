@@ -137,16 +137,13 @@ class AgileBoard extends Component {
   _renderBoardHeader(sprint: SprintFull) {
     const {zoomedOut} = this.state;
     return (
-      <View>
-      <BoardHeader
-        ref={node => this.boardHeader = node}
-        style={[
-          styles.boardHeader,
-          {minWidth: zoomedOut ? null : this._getScrollableWidth()}
-        ]}
-        columns={sprint.board.columns}
-        onCollapseToggle={this.props.onColumnCollapseToggle}
-      />
+      <View style={styles.boardHeaderContainer}>
+        <BoardHeader
+          ref={node => this.boardHeader = node}
+          style={{minWidth: zoomedOut ? null : this._getScrollableWidth()}}
+          columns={sprint.board.columns}
+          onCollapseToggle={this.props.onColumnCollapseToggle}
+        />
       </View>
     );
   }

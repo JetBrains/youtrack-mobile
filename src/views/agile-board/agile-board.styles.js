@@ -39,8 +39,8 @@ export default StyleSheet.create({
     marginRight: UNIT / 2,
     resizeMode: 'contain'
   },
-  boardHeader: {
-    backgroundColor: COLOR_BLACK
+  boardHeaderContainer: {
+    overflow: 'hidden'
   },
   loadingMoreIndicator: {
     padding: UNIT * 2
