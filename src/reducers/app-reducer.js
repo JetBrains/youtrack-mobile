@@ -1,4 +1,4 @@
-import {globalActionTypes as types} from '../actions/';
+import * as types from '../actions/action-types';
 import {createReducer} from 'redux-create-reducer';
 import IssuePermissions from '../components/issue-permissions/issue-permissions';
 import type Api from '../components/api/api';

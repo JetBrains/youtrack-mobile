@@ -23,16 +23,16 @@ import IssueRow from './issue-list__row';
 import Menu from '../../components/menu/menu';
 import Router from '../../components/router/router';
 import * as issueActions from './issue-list-actions';
-import {openMenu} from '../../actions';
+import {openMenu} from '../../actions/app-actions';
 import type Auth from '../../components/auth/auth';
 import type Api from '../../components/api/api';
 import type {IssuesListState} from './issue-list-reducers';
 import type {IssueOnList} from '../../flow/Issue';
 
-type Props = IssuesListState & {
-  openMenu: openMenu,
+type Props = IssuesListState & typeof issueActions & {
+  openMenu: typeof openMenu,
   auth: Auth,
-  api: Api
+  api: Api,
 };
 
 export class IssueList extends Component {

@@ -19,7 +19,7 @@ import type {IssueOnList} from '../../flow/Issue';
 import type {AgilePageState} from './board-reducers';
 
 import * as boardActions from './board-actions';
-import {openMenu} from '../../actions';
+import {openMenu} from '../../actions/app-actions';
 import { connect } from 'react-redux';
 
 const CATEGORY_NAME = 'Agile board';
