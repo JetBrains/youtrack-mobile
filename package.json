@@ -43,9 +43,9 @@
 			"/node_modules/",
 			"/e2e/"
 		],
-    "transformIgnorePatterns": [
-      "node_modules/(?!(jest-)?react-native|react-navigation)"
-    ]
+		"transformIgnorePatterns": [
+			"node_modules/(?!(jest-)?react-native|react-navigation)"
+		]
 	},
 	"detox": {
 		"configurations": {
@@ -66,7 +66,6 @@
 		"lodash.once": "4.1.1",
 		"lodash.throttle": "4.1.1",
 		"object-walk": "^0.1.1",
-		"pubsub-js": "1.5.4",
 		"qs": "6.1.0",
 		"react": "16.0.0-alpha.6",
 		"react-native": "0.44.0",

@@ -2,7 +2,6 @@ import {StyleSheet} from 'react-native';
 import {
   UNIT,
   COLOR_PINK,
-  COLOR_BLACK,
   COLOR_FONT,
   COLOR_FONT_ON_BLACK,
   COLOR_TRANSPARENT_BLACK
