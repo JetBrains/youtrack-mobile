@@ -1,5 +1,5 @@
 /* @flow */
-import {View, ScrollView, Text, TouchableOpacity, Image, Linking, Dimensions} from 'react-native';
+import {View, ScrollView, Text, TouchableOpacity, Image, Linking, Dimensions, Alert} from 'react-native';
 import React, {Component} from 'react';
 import styles from './menu.styles';
 import {VERSION_STRING} from '../../components/usage/usage';
@@ -55,10 +55,24 @@ export class Menu extends Component<DefaultProps, Props, void> {
   }
 
   _logOut = () => {
-    this.props.onBeforeLogOut();
-    this.props.onLogOut();
-    this.props.onClose();
-  }
+    Alert.alert(
+      'Confirm logout',
+      'Do you really want to log out?',
+      [
+        {text: 'Cancel', style: 'cancel'},
+        {
+          text: 'OK',
+          onPress: () => {
+            this.props.onBeforeLogOut();
+            this.props.onLogOut();
+            this.props.onClose();
+          }
+        }
+      ],
+      {cancelable: true}
+    );
+  };
+
 
   _renderMenu() {
     const {height} = Dimensions.get('window');
