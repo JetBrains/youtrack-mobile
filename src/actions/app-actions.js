@@ -57,10 +57,15 @@ export function setAuth(config: AppConfigFilled) {
   return {type: types.INITIALIZE_AUTH, auth};
 }
 
+export function setPermissions(auth: Auth) {
+  return {type: types.SET_PERMISSIONS, auth};
+}
+
 export function initializeAuth(config: AppConfigFilled) {
   return async (dispatch: (any) => any, getState: () => Object) => {
     dispatch(setAuth(config));
     await dispatch(checkAuthorization());
+    dispatch(setPermissions(getState().app.auth));
   };
 }
 
