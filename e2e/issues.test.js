@@ -16,7 +16,9 @@ describe('Issues list', () => {
   });
 
   describe('search', () => {
-    afterEach(async () => await issuesPage.search(''));
+    afterEach(async () => {
+      await issuesPage.search('');
+    });
 
     it('should search for TP-7', async () => {
       await issuesPage.search('issue id: TP-7');
