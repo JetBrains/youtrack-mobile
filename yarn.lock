@@ -1660,21 +1660,21 @@ detect-indent@^4.0.0:
   dependencies:
     repeating "^2.0.0"
 
-detox-server@^1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/detox-server/-/detox-server-1.2.2.tgz#a823c856cb642534ad24833f6f09a1e6ea13660f"
+detox-server@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/detox-server/-/detox-server-2.0.4.tgz#ce4eb83a5d11c88cc8639b192b4b1695d53380e4"
   dependencies:
     lodash "^4.13.1"
     npmlog "^4.0.2"
     ws "^1.1.0"
 
-detox@^5.0.6:
-  version "5.0.6"
-  resolved "https://registry.yarnpkg.com/detox/-/detox-5.0.6.tgz#41f7ef4476c75f6248e9af637cdad69719619540"
+detox@^5.4.0:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/detox/-/detox-5.4.0.tgz#2d5179e2c02a11bea83b7c05c095858cfbbf6e1b"
   dependencies:
     child-process-promise "^2.2.0"
     commander "^2.9.0"
-    detox-server "^1.2.2"
+    detox-server "^2.0.4"
     get-port "^2.1.0"
     lodash "^4.14.1"
     npmlog "^4.0.2"

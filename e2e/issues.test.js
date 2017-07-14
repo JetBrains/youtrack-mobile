@@ -3,7 +3,7 @@ const loginPage = require('./pages/login');
 
 describe('Issues list', () => {
   before(async () => {
-    await device._fbsimctl._execFbsimctlCommand({args: `${device._simulatorUdid} clear_keychain`});
+    await device.deviceDriver._fbsimctl._execFbsimctlCommand({args: `${device._deviceId} clear_keychain`});
     await device.relaunchApp({delete: true});
     await loginPage.connectToServer();
     await loginPage.logIn();
