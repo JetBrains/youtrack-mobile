@@ -2247,9 +2247,9 @@ flat-cache@^1.2.1:
     graceful-fs "^4.1.2"
     write "^0.2.1"
 
-flow-bin@0.45.0:
-  version "0.45.0"
-  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.45.0.tgz#009dd0f577a3f665c74ca8be827ae8c2dd8fd6b5"
+flow-bin@0.47.0:
+  version "0.47.0"
+  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.47.0.tgz#a2a08ab3e0d1f1cb57d17e27b30b118b62fda367"
 
 for-in@^1.0.1:
   version "1.0.2"
@@ -4396,9 +4396,11 @@ react-native-image-picker@0.25.1:
   version "0.25.1"
   resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-0.25.1.tgz#0743f1c30bb942559560295e3408f9fce73da44b"
 
-react-native-image-progress@0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/react-native-image-progress/-/react-native-image-progress-0.6.0.tgz#14614add12beaa247a052e5a52e6a9fee0fb8c67"
+react-native-image-progress@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-image-progress/-/react-native-image-progress-1.0.1.tgz#5ceb4cfefd39d7ebdffab802bc984b5a0fc41021"
+  dependencies:
+    prop-types "^15.5.10"
 
 react-native-invoke@^0.2.1:
   version "0.2.2"
