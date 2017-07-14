@@ -47,6 +47,14 @@ describe('EnterServer', () => {
     connectToYouTrack.should.have.been.calledWith('https://foo.bar');
   });
 
+  it('should replace HTTP with HTTPS on cloud instance', async() => {
+    renderComponent('http://foo.myjetbrains.com');
+    wrapper.find('TouchableOpacity').simulate('press');
+    await waitForNextTick();
+
+    connectToYouTrack.should.have.been.calledWith('https://foo.myjetbrains.com');
+  });
+
   it('should strip wrapping spaces', async() => {
     renderComponent('   foo.bar ');
     wrapper.find('TouchableOpacity').simulate('press');

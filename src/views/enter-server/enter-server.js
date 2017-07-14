@@ -13,6 +13,7 @@ import styles from './enter-server.styles';
 
 const CATEGORY_NAME = 'Choose server';
 const protocolRegExp = /^https?:/i;
+const CLOUD_DOMAIN = 'myjetbrains.com';
 
 type Props = {
   serverUrl: string,
@@ -43,6 +44,10 @@ export default class EnterServer extends Component {
 
   getPossibleUrls(enteredUrl: string) {
     if (protocolRegExp.test(enteredUrl)) {
+      if (enteredUrl.indexOf('http:') === 0 && enteredUrl.indexOf(CLOUD_DOMAIN) !== -1) {
+        enteredUrl = enteredUrl.replace('http:', 'https:');
+        log.info('HTTP protocol was replaced for cloud instance', enteredUrl);
+      }
       return [enteredUrl, `${enteredUrl}/youtrack`, `${enteredUrl}${VERSION_DETECT_FALLBACK_URL}`];
     }
 
