@@ -152,8 +152,12 @@ export class IssueList extends Component {
     return null;
   };
 
+  onEndReached = () => {
+    this.props.loadMoreIssues();
+  };
+
   render() {
-    const {query, issues, loadMoreIssues, suggestIssuesQuery, queryAssistSuggestions} = this.props;
+    const {query, issues, suggestIssuesQuery, queryAssistSuggestions} = this.props;
 
     return (
       <Menu onBeforeLogOut={this.logOut}>
@@ -169,7 +173,7 @@ export class IssueList extends Component {
             tintColor={COLOR_PINK}
             ItemSeparatorComponent={this._renderSeparator}
             ListFooterComponent={this._renderListMessage}
-            onEndReached={loadMoreIssues}
+            onEndReached={this.onEndReached}
             onEndReachedThreshold={0.1}
             testID="issue-list"
           />

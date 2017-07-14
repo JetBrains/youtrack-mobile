@@ -40,6 +40,7 @@ function makeDatePast(date: Date|number) {
 
 function formatDate(date: Date|number) {
   const dateObj = new Date(date);
+  // $FlowFixMe: flow doesn't like this empty array
   return `${dateObj.toLocaleString([], {year: '2-digit', month: 'short', day: '2-digit', hour: '2-digit', minute:'2-digit'})}`;
 }
 

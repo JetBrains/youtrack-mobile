@@ -48,7 +48,7 @@ const usage = {
   },
 
   onGlobalError(error: any, isFatal: boolean) {
-    return usage.trackError(error, 'Global error happened', `isFatal:${isFatal.toString()}`);
+    return usage.trackError(error, `Global error happened, isFatal:${isFatal.toString()}`);
   }
 };
 
