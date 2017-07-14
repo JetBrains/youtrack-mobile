@@ -424,7 +424,9 @@ export function openNestedIssueView(issue: ?IssueFull, issueId: ?string) {
 }
 
 export function openIssueListWithSearch(query: string) {
-  Router.IssueList({query});
+  return () => {
+    Router.IssueList({query});
+  };
 }
 
 export function loadCommentSuggestions(query: string) {

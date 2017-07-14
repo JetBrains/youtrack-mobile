@@ -25,10 +25,7 @@ export function setIssuesQuery(query: string) {
 export function readStoredIssuesQuery() {
   return async (dispatch: (any) => any) => {
     const query = await AsyncStorage.getItem(QUERY_STORAGE_KEY);
-    dispatch({
-      type: types.SET_ISSUES_QUERY,
-      query: query
-    });
+    dispatch(setIssuesQuery(query));
   };
 }
 
@@ -163,9 +160,13 @@ export function refreshIssues() {
   };
 }
 
-export function initializeIssuesList() {
+export function initializeIssuesList(query: ?string) {
   return async (dispatch: (any) => any, getState: () => Object) => {
-    await readStoredIssuesQuery()(dispatch);
+    if (query) {
+      dispatch(setIssuesQuery(query));
+    } else {
+      await readStoredIssuesQuery()(dispatch);
+    }
     await readCachedIssues()(dispatch, getState);
     dispatch(refreshIssues());
   };
