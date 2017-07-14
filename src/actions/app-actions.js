@@ -3,7 +3,8 @@ import * as types from './action-types';
 import Api from '../components/api/api';
 import Router from '../components/router/router';
 import log from '../components/log/log';
-import {AsyncStorage} from 'react-native';
+import {AsyncStorage, Linking} from 'react-native';
+import UrlParse from 'url-parse';
 import {PROJECT_ID_STORAGE_KEY, DRAFT_ID_STORAGE_KEY} from '../views/create-issue/create-issue';
 import usage from '../components/usage/usage';
 import {loadConfig, getStoredConfig} from '../components/config/config';
@@ -111,6 +112,16 @@ export function getStoredConfigAndProceed() {
     if (storedConfig) {
       return dispatch(initializeApp(storedConfig));
     }
-    Router.EnterServer({serverUrl: null});
+
+    try {
+      const url = await Linking.getInitialURL();
+      if (!url) {
+        return Router.EnterServer({serverUrl: null});
+      }
+      const host = UrlParse(url).host;
+      return Router.EnterServer({serverUrl: host});
+    } catch (e) {
+      Router.EnterServer({serverUrl: null});
+    }
   };
 }
