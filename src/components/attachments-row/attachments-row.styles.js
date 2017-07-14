@@ -16,8 +16,7 @@ export default StyleSheet.create({
     borderColor: 'rgba(0, 0, 0, 0.15)',
     borderRadius: 3,
     width: 120,
-    height: UNIT * 8,
-    resizeMode: 'cover'
+    height: UNIT * 8
   },
   attachmentFile: {
     marginRight: UNIT * 2,
