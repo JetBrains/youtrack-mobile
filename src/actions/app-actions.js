@@ -47,6 +47,7 @@ export function checkAuthorization() {
     await auth.loadStoredAuthParams();
 
     dispatch(initializeApi(auth));
+    dispatch(setPermissions(auth));
     Router.IssueList();
   };
 }
@@ -66,7 +67,6 @@ export function initializeAuth(config: AppConfigFilled) {
   return async (dispatch: (any) => any, getState: () => Object) => {
     dispatch(setAuth(config));
     await dispatch(checkAuthorization());
-    dispatch(setPermissions(getState().app.auth));
   };
 }
 
