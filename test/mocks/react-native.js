@@ -1,6 +1,6 @@
 
 import React from 'react';
-import ReactNativeMocks from 'react-native-mock/build/react-native';
+import ReactNativeMocks from '@huston007/react-native-mock/build/react-native';
 
 global.ErrorUtils = {
   getGlobalHandler: () => {},

@@ -159,7 +159,7 @@ export function rowCollapseToggle(row: AgileBoardRow) {
       usage.trackEvent(CATEGORY_NAME, 'Toggle row collapsing');
     } catch (e) {
       dispatch(updateRowCollapsedState(row, oldCollapsed));
-      notifyError('Could not update row', e, !row.collapsed);
+      notifyError('Could not update row', e);
     }
   };
 }
@@ -192,7 +192,7 @@ export function columnCollapseToggle(column: AgileColumn) {
       usage.trackEvent(CATEGORY_NAME, 'Toggle column collapsing');
     } catch (e) {
       dispatch(updateColumnCollapsedState(column, oldCollapsed));
-      notifyError('Could not update column', e, !column.collapsed);
+      notifyError('Could not update column', e);
     }
   };
 }

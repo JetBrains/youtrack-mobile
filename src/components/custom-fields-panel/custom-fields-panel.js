@@ -20,7 +20,7 @@ type Props = {
   autoFocusSelect?: boolean,
   issue: IssueFull,
   issuePermissions: IssuePermissions,
-  onUpdate: (field: CustomField) => Promise<Object>,
+  onUpdate: (field: CustomField, value: null|number|Object|Array<Object>) => Promise<Object>,
   onUpdateProject: (project: IssueProject) => Promise<Object>,
   canEditProject: boolean
 };
@@ -56,7 +56,7 @@ type State = {
     show: boolean,
     value: ?string,
     placeholder: string,
-    onApply: () => any
+    onApply: any => any
   }
 }
 

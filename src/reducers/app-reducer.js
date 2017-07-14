@@ -19,9 +19,12 @@ const initialState: RootState = {
 export default createReducer(initialState, {
   [types.INITIALIZE_AUTH](state: RootState, action: {auth: Auth}) {
     const {auth} = action;
+    return {...state, auth};
+  },
+  [types.SET_PERMISSIONS](state: RootState, action: {auth: Auth}) {
+    const {auth} = action;
     return {
       ...state,
-      auth,
       issuePermissions: new IssuePermissions(auth.permissions, auth.currentUser)
     };
   },

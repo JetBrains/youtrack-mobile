@@ -165,7 +165,7 @@ export function refreshIssues() {
 
 export function initializeIssuesList() {
   return async (dispatch: (any) => any, getState: () => Object) => {
-    await readStoredIssuesQuery()(dispatch, getState);
+    await readStoredIssuesQuery()(dispatch);
     await readCachedIssues()(dispatch, getState);
     dispatch(refreshIssues());
   };
@@ -187,7 +187,7 @@ export function loadMoreIssues() {
       let moreIssues: Array<IssueOnList> = await api.getIssues(query, PAGE_SIZE, newSkip);
       moreIssues = ApiHelper.fillIssuesFieldHash(moreIssues);
       const updatedIssues = issues.concat(moreIssues);
-      dispatch(receiveIssues(updatedIssues, moreIssues));
+      dispatch(receiveIssues(updatedIssues));
       dispatch(cacheIssues(updatedIssues));
       if (moreIssues.length < PAGE_SIZE) {
         dispatch(listEndReached());

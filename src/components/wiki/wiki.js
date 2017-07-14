@@ -17,7 +17,7 @@ type Props = {
 
 export default class Wiki extends Component {
   props: Props;
-  parser: (rawWiki: string) => Object;
+  parser: (rawWiki: string, options: Object) => Object;
   renderer: (tree: Object) => Object;
 
   static defaultProps: Props = {
