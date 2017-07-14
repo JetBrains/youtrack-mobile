@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@expo/react-native-action-sheet@0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@expo/react-native-action-sheet/-/react-native-action-sheet-0.3.1.tgz#cf1fd38e570febb4930c5518e42dfa1a32b1ace5"
+"@expo/react-native-action-sheet@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@expo/react-native-action-sheet/-/react-native-action-sheet-1.0.0.tgz#0677d2c2e3130dc1ed9597cf72c10743b224e4f1"
   dependencies:
     hoist-non-react-statics "^1.2.0"
 
@@ -4314,13 +4314,13 @@ react-mixin@^3.0.5:
     object-assign "^4.0.1"
     smart-mixin "^2.0.0"
 
-react-native-animatable@^1.1.0:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/react-native-animatable/-/react-native-animatable-1.1.1.tgz#00ddc72985f62f62a11a505abb1a06e77a92cd8a"
+react-native-animatable@1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/react-native-animatable/-/react-native-animatable-1.2.2.tgz#a873550e6f7cb95f90baf46b9eb15b1ab56425cb"
 
-react-native-calendars@1.2.22:
-  version "1.2.22"
-  resolved "https://registry.yarnpkg.com/react-native-calendars/-/react-native-calendars-1.2.22.tgz#cdabc427d5d937ef875fe1d929f2babad5c41881"
+react-native-calendars@1.5.3:
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/react-native-calendars/-/react-native-calendars-1.5.3.tgz#882937a40045152d97fb20a5159c68783ce26601"
   dependencies:
     prop-types "^15.5.10"
     xdate "^0.8.0"
@@ -4360,9 +4360,9 @@ react-native-drawer@2.3.0:
   dependencies:
     tween-functions "^1.0.1"
 
-react-native-easy-toast@1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/react-native-easy-toast/-/react-native-easy-toast-1.0.3.tgz#a3ea60714d74ae17fe4c96acc9e26b48246376f6"
+react-native-easy-toast@1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/react-native-easy-toast/-/react-native-easy-toast-1.0.6.tgz#e9e2a0c865fcfdb407dbc2341bc3571a7f5da3b5"
 
 react-native-fence-html@huston007/react-native-fence-html#fadee9efb0bed8f8cae737a63ba0d4ffea9bda62:
   version "1.1.0"
