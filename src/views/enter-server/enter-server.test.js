@@ -3,6 +3,7 @@ import React from 'react';
 import {TouchableOpacity} from 'react-native';
 import {shallow} from 'enzyme';
 import sinon from 'sinon';
+import renderer from 'react-test-renderer';
 
 describe('EnterServer', () => {
   const serverUrl = 'http://foo.com';
@@ -107,18 +108,26 @@ describe('EnterServer', () => {
     wrapper.state('error').message.should.equal('Incompatible youtrack');
   });
 
-  it.skip('should not allow empty input', () => {
-    renderComponent('');
-    wrapper.instance().isValidInput().should.be.false;
+  it('should not allow empty input', () => {
+    const instance = renderer.create(
+      <EnterServer serverUrl={''} connectToYoutrack={connectToYouTrack} onCancel={onCancel}/>
+    ).getInstance();
+    instance.isValidInput().should.be.false;
   });
 
-  it.skip('should not allow AT in server input (to not confuse users with email)', () => {
-    renderComponent('foo@bar.com');
-    wrapper.instance().isValidInput().should.be.false;
+  it('should not allow AT in server input (to not confuse users with email)', () => {
+    const instance = renderer.create(
+      <EnterServer serverUrl={'foo@bar.com'} connectToYoutrack={connectToYouTrack} onCancel={onCancel}/>
+    ).getInstance();
+
+    instance.isValidInput().should.be.false;
   });
 
-  it.skip('should allow not empty input', () => {
-    renderComponent('someserver');
-    wrapper.instance().isValidInput().should.be.true;
+  it('should allow not empty input', () => {
+    const instance = renderer.create(
+      <EnterServer serverUrl={'someserver'} connectToYoutrack={connectToYouTrack} onCancel={onCancel}/>
+    ).getInstance();
+
+    instance.isValidInput().should.be.true;
   });
 });

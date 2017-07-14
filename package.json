@@ -119,6 +119,7 @@
 		"react-addons-test-utils": "^15.5.1",
 		"react-dom": "16.0.0-alpha.12",
 		"react-native-cli": "^1.0.0",
+		"react-test-renderer": "16.0.0-alpha.12",
 		"sinon": "1.17.6",
 		"sinon-chai": "2.8.0",
 		"update-json-file": "^1.1.1"
