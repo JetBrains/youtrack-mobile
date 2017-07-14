@@ -1,6 +1,7 @@
 /* @flow */
 import {View, Text, StyleSheet} from 'react-native';
-import React, {PropTypes} from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 export const SIZE = 20;
 export const NO_COLOR_ID = '0';

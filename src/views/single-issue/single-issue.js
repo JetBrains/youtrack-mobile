@@ -1,6 +1,7 @@
 /* @flow */
 import {Text, View, Image, TouchableOpacity, ScrollView, Platform, RefreshControl} from 'react-native';
-import React, {PropTypes, Component} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {comment} from '../../components/icon/icon';

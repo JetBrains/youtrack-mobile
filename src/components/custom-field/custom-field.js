@@ -1,5 +1,6 @@
 import {TouchableOpacity, View, Text} from 'react-native';
-import React, {PropTypes, Component} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import styles from './custom-field.styles';
 import {NO_COLOR_ID} from '../color-field/color-field';
 

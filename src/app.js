@@ -1,6 +1,7 @@
 /* @flow */
 import {BackHandler, View, UIManager} from 'react-native';
-import React, {PropTypes, Component} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import store from './store';
 import { Provider } from 'react-redux';
 import Auth from './components/auth/auth';
