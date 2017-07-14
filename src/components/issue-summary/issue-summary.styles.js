@@ -9,7 +9,7 @@ export default StyleSheet.create({
   },
   descriptionInput: {
     marginTop: UNIT / 2,
-    marginBottom: UNIT,
+    marginBottom: UNIT*2,
     color: COLOR_FONT,
     fontSize: 16
   },

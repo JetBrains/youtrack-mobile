@@ -35,26 +35,16 @@ export default class MultilineInput extends React.Component {
     this.input.focus();
   }
 
-  onChange = (e: Object) => {
+  onContentSizeChange = (event: Object) => {
     const {maxInputHeight} = this.props;
 
-    let newHeight = e.nativeEvent.contentSize.height;
+    let newHeight = event.nativeEvent.contentSize.height;
 
     if (maxInputHeight > 0) {
       newHeight = newHeight > maxInputHeight ? maxInputHeight : newHeight;
     }
 
     this.setState({inputHeight: newHeight});
-  }
-
-  onContentSizeChange = (event: Object) => {
-    const DIFF_SHIFT = 4;
-
-    if (this.state.inputHeight === null) {
-      this.setState({
-        inputHeight: event.nativeEvent.contentSize.height + DIFF_SHIFT
-      });
-    }
   }
 
   render() {
@@ -65,7 +55,6 @@ export default class MultilineInput extends React.Component {
         {...rest}
         ref={instance => this.input = instance}
         multiline={true}
-        onChange={this.onChange}
         onContentSizeChange={this.onContentSizeChange}
         style={[{fontSize: DEFAULT_FONT_SIZE}, style, {height: this.state.inputHeight}]}
       />
