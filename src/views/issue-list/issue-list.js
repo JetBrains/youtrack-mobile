@@ -33,6 +33,7 @@ type Props = IssuesListState & typeof issueActions & {
   openMenu: typeof openMenu,
   auth: Auth,
   api: Api,
+  overridenQuery: ?string
 };
 
 export class IssueList extends Component {

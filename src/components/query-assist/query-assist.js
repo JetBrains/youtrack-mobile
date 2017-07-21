@@ -83,9 +83,7 @@ export default class QueryAssist extends React.Component {
   }
 
   componentWillReceiveProps(newProps: Props) {
-    console.log('will receive', newProps);
     if (newProps.currentQuery !== this.props.currentQuery) {
-      console.log('new query arrived', newProps.currentQuery)
       this.setState({input: newProps.currentQuery});
     }
   }
