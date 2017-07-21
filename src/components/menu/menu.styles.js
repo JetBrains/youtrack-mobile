@@ -9,6 +9,9 @@ const bottomBorder = {
 };
 
 export default StyleSheet.create({
+  scrollContainer: {
+    backgroundColor: 'black'
+  },
   menuContainer: {
     flex: 1,
     backgroundColor: 'black'

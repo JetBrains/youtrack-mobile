@@ -85,7 +85,7 @@ export class Menu extends Component<DefaultProps, Props, void> {
     const avatarUrl = user.profile && user.profile.avatar && user.profile.avatar.url;
 
     return (
-      <ScrollView>
+      <ScrollView style={styles.scrollContainer}>
         <View style={[styles.menuContainer, {paddingTop: getTopPadding(), minHeight: height}]}>
           <View style={styles.profileContainer}>
             <Image style={styles.currentUserAvatarImage} source={{uri: avatarUrl}}></Image>
