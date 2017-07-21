@@ -205,13 +205,14 @@ class Api {
     formDataContent.append('photo', {uri: fileUri, name: fileName, type: 'image/binary'});
 
     return new Promise((resolve, reject) => {
+      const STATE_DONE = 4;
       const xhr = new XMLHttpRequest(); //eslint-disable-line no-undef
       xhr.open('POST', `${this.youTrackUrl}/rest/issue/${issueId}/attachment`);
       const headers = this.auth.getAuthorizationHeaders();
       xhr.setRequestHeader('Authorization', headers.Authorization);
 
       xhr.onreadystatechange = function () {
-        if (xhr.readyState !== 4) {
+        if (xhr.readyState !== STATE_DONE) {
           return;
         }
         if (xhr.status >= 200 && xhr.status < 400) {
