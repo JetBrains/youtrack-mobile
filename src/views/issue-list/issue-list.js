@@ -60,7 +60,7 @@ export class IssueList extends Component {
         this.onQueryUpdated(issuesQuery);
       });
 
-    this.props.initializeIssuesList(this.props.query);
+    this.props.initializeIssuesList(this.props.overridenQuery);
 
     AppState.addEventListener('change', this._handleAppStateChange);
   }
@@ -193,7 +193,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     ...state.issueList,
     ...state.app,
-    query: ownProps.query
+    overridenQuery: ownProps.query
   };
 };
 
