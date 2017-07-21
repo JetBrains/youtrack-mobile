@@ -12,6 +12,16 @@
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/@huston007/react-native-eventsource/-/react-native-eventsource-0.1.2.tgz#e3cf2582a2694c81f941158e7b26ec1a459084d9"
 
+"@huston007/react-native-fence-html@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@huston007/react-native-fence-html/-/react-native-fence-html-1.1.2.tgz#d5f887e47c88ffc08e7d2d5989ab8048c4f83a53"
+  dependencies:
+    buffer "^4.5.1"
+    events "^1.1.0"
+    html-entities "^1.2.0"
+    htmlparser2 "^3.9.0"
+    stream "0.0.2"
+
 "@huston007/react-native-mock@^0.3.3":
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/@huston007/react-native-mock/-/react-native-mock-0.3.3.tgz#41e60d39f7769471da663e70344c5f47041fd782"
@@ -4363,16 +4373,6 @@ react-native-drawer@2.3.0:
 react-native-easy-toast@1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/react-native-easy-toast/-/react-native-easy-toast-1.0.6.tgz#e9e2a0c865fcfdb407dbc2341bc3571a7f5da3b5"
-
-react-native-fence-html@huston007/react-native-fence-html#fadee9efb0bed8f8cae737a63ba0d4ffea9bda62:
-  version "1.1.0"
-  resolved "https://codeload.github.com/huston007/react-native-fence-html/tar.gz/fadee9efb0bed8f8cae737a63ba0d4ffea9bda62"
-  dependencies:
-    buffer "^4.5.1"
-    events "^1.1.0"
-    html-entities "^1.2.0"
-    htmlparser2 "^3.9.0"
-    stream "0.0.2"
 
 react-native-gallery@huston007/react-native-gallery#026ed1ebab354fce7c65e980637e34d8d01d0b2f:
   version "0.0.18"
