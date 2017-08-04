@@ -58,7 +58,7 @@ Press CMD+D to debug while the app is running on the simulator. Refer to the off
 #### Prepare
 [Setup Android environment](https://facebook.github.io/react-native/docs/getting-started.html#android-development-environment).
 
-After setup is complete,  install project dependencies and create an Android emulator.
+After setup is complete, install project dependencies and create an Android emulator.
 ```sh
 npm install
 npm run android-emulator-create
