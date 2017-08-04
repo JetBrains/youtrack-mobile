@@ -56,20 +56,9 @@ Press CMD+D to debug while the app is running on the simulator. Refer to the off
 ### Android
 
 #### Prepare
-[Setup Android environment](https://facebook.github.io/react-native/docs/android-setup.html).
-After setup is complete,  install project dependencies and create an Android emulator.
+[Setup Android environment](https://facebook.github.io/react-native/docs/getting-started.html#android-development-environment).
 
-Install android-sdk on Mac OS X:
-```sh
-brew install android-sdk
-```
-
-Install all packages required for react-native Android SDK:
-```sh
-android update sdk --all --no-ui -t tools,platform-tools,build-tools-23.0.1,android-23\
-,extra-google-google_play_services,extra-android-m2repository,extra-google-m2repository,extra-android-support
-```
-
+After setup is complete, install project dependencies and create an Android emulator.
 ```sh
 npm install
 npm run android-emulator-create
