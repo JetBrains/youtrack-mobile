@@ -1,6 +1,5 @@
 import React from 'react';
 import {shallow} from 'enzyme';
-import {COLOR_LIGHT_GRAY} from '../variables/variables';
 
 import Wiki from './wiki';
 
@@ -135,7 +134,7 @@ describe('<Wiki/>', () => {
       some code{'\n'}
       ```
     </Wiki>);
-    const node = wrapper.findWhere(component => component.props().style && component.props().style.backgroundColor === COLOR_LIGHT_GRAY);
+    const node = wrapper.findWhere(component => component.props().children && component.props().children === 'some code\n');
     node.length.should.equal(1);
   });
 

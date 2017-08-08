@@ -5,6 +5,7 @@ import flattenStyle from 'react-native/Libraries/StyleSheet/flattenStyle';
 import SimpleMarkdown from 'simple-markdown';
 import styles from './wiki.styles';
 import FenceHtml from '@huston007/react-native-fence-html';
+import SyntaxHighlighter from 'react-native-syntax-highlighter';
 import listRule from './wiki__list-rule';
 
 const CONTENT_WITH_MARKERS = 0;
@@ -231,7 +232,7 @@ export default function (actions, imageHeaders: ?Object = null) {
 
     codeBlock: {
       ...SimpleMarkdown.defaultRules.codeBlock,
-      match: source => /^```([\s\S]+?)```(?!```)/.exec(source) || /^\{code.*\}([\s\S]+?)\{code\}(?!\{code\})/.exec(source),
+      match: source => /^```(?:\S+)?([\s\S]+?)```(?!```)/.exec(source) || /^\{code.*\}([\s\S]+?)\{code\}(?!\{code\})/.exec(source),
 
       parse: function(capture) {
         return {
@@ -240,7 +241,7 @@ export default function (actions, imageHeaders: ?Object = null) {
       },
 
       react: (node, output, state) => {
-        return <Text key={state.key} style={styles.codeBlock} selectable={true}>{node.content}</Text>;
+        return <SyntaxHighlighter key={state.key}>{node.content}</SyntaxHighlighter>;
       }
     },
 

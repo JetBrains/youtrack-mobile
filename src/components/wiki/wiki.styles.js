@@ -61,12 +61,6 @@ export default StyleSheet.create({
     fontSize: FONT_SIZE,
     textDecorationLine: 'line-through'
   },
-  codeBlock: {
-    color: COLOR_FONT,
-    fontSize: FONT_SIZE,
-    backgroundColor: COLOR_LIGHT_GRAY,
-    fontFamily: 'Courier'
-  },
   cutBlock: {
     fontSize: FONT_SIZE,
     color: COLOR_FONT,

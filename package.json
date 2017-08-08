@@ -85,6 +85,7 @@
 		"react-native-keychain": "1.0.0",
 		"react-native-root-modal": "^1.0.8",
 		"react-native-swipeout": "q-m/react-native-swipeout#93b67f7c5c2c44a9b2067499746a729010277ae1",
+		"react-native-syntax-highlighter": "^1.2.3",
 		"react-navigation": "1.0.0-beta.10",
 		"react-redux": "^5.0.3",
 		"redux": "3.6.0",
