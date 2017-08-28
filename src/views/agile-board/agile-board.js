@@ -9,6 +9,7 @@ import styles from './agile-board.styles';
 import Menu from '../../components/menu/menu';
 import BoardHeader from './board-header';
 import BoardRow from '../../components/agile-row/agile-row';
+import AgileCard from '../../components/agile-card/agile-card';
 import Router from '../../components/router/router';
 import Auth from '../../components/auth/auth';
 import Api from '../../components/api/api';
@@ -183,7 +184,14 @@ class AgileBoard extends Component {
       collapsedColumnIds: board.columns.filter(col => col.collapsed).map(col => col.id),
       onTapIssue: this._onTapIssue,
       onTapCreateIssue: this.props.createCardForCell,
-      onCollapseToggle: this.props.onRowCollapseToggle
+      onCollapseToggle: this.props.onRowCollapseToggle,
+      renderIssueCard: (issue: IssueOnList) => {
+        return (
+          <TouchableOpacity key={issue.id} onPress={() => this._onTapIssue(issue)}>
+            <AgileCard issue={issue} style={styles.card}/>
+          </TouchableOpacity>
+        );
+      }
     };
 
     const orphan = <BoardRow key="orphan" row={board.orphanRow} {...commonRowProps}/>;
