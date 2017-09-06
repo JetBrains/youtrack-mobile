@@ -4852,9 +4852,9 @@ react-native-keychain@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-1.0.0.tgz#2fd0394b3ad222e3710e5672a25013e129894c99"
 
-react-native-root-modal@dvel-Inc/react-native-root-modal#743f53f747f844caabff4beb06ffa144df048703:
+react-native-root-modal@huston007/react-native-root-modal#743f53f747f844caabff4beb06ffa144df048703:
   version "1.1.1"
-  resolved "https://codeload.github.com/dvel-Inc/react-native-root-modal/tar.gz/743f53f747f844caabff4beb06ffa144df048703"
+  resolved "https://codeload.github.com/huston007/react-native-root-modal/tar.gz/743f53f747f844caabff4beb06ffa144df048703"
   dependencies:
     react-native-root-siblings "github:dvel-Inc/react-native-root-siblings.git"
 
