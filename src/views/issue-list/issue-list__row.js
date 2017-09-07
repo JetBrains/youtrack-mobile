@@ -1,10 +1,12 @@
+/* @flow */
+import React from 'react';
+import {View, Text, TouchableOpacity, Image} from 'react-native';
 import styles from './issue-list.styles';
 import ColorField from '../../components/color-field/color-field';
 import {next} from '../../components/icon/icon';
 import {COLOR_FONT_GRAY} from '../../components/variables/variables';
 import {getPriotityField, getForText} from '../../components/issue-formatter/issue-formatter';
-import {View, Text, TouchableOpacity, Image} from 'react-native';
-import React from 'react';
+import type {IssueOnList} from '../../flow/Issue';
 
 export default class IssueRow extends React.Component {
   static _getSubText(issue) {
@@ -15,7 +17,7 @@ export default class IssueRow extends React.Component {
       <Text> by {issue.reporter.fullName || issue.reporter.login} {getForText(issue.fieldHash.Assignee)}</Text>
     </Text>);  }
 
-  getSummaryStyle(issue) {
+  getSummaryStyle(issue: IssueOnList) {
     if (issue.resolved) {
       return {color: COLOR_FONT_GRAY, fontWeight: '200'};
     }
