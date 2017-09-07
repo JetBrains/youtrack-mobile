@@ -1,3 +1,4 @@
+/* @flow */
 import {StatusBarIOS, NativeModules} from 'react-native';
 
 const {StatusBarManager} = NativeModules;
@@ -21,6 +22,6 @@ export default function getTopPadding() {
   return height;
 }
 
-export function onHeightChange(callback) {
+export function onHeightChange(callback: any => any) {
   heightChangeCallback = callback;
 }

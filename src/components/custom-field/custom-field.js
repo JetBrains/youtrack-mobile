@@ -1,18 +1,19 @@
+/* @flow */
 import {TouchableOpacity, View, Text} from 'react-native';
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import styles from './custom-field.styles';
 import {NO_COLOR_ID} from '../color-field/color-field';
+import type {CustomField as CustomFieldType, FieldValue} from '../../flow/CustomFields';
 
-export default class CustomField extends Component {
-  static propTypes = {
-    field: PropTypes.object.isRequired,
-    onPress: PropTypes.func,
-    disabled: PropTypes.bool,
-    active: PropTypes.bool
-  }
+type Props = {
+  field: CustomFieldType,
+  onPress: any => any,
+  disabled: boolean,
+  active: boolean
+};
 
-  _getFieldType(field: CustomField) {
+export default class CustomField extends Component<void, Props, void> {
+  _getFieldType(field: CustomFieldType) {
     if (!field.projectCustomField.field.fieldType) {
       return null;
     }
@@ -20,8 +21,8 @@ export default class CustomField extends Component {
     return field.projectCustomField.field.fieldType.valueType;
   }
 
-  _getValue(value, fieldType) {
-    const field = this.props.field;
+  _getValue(value: FieldValue, fieldType: ?string): string {
+    const field: CustomFieldType = this.props.field;
     const emptyValue = field.projectCustomField.emptyFieldText;
 
     if (value) {
@@ -65,7 +66,7 @@ export default class CustomField extends Component {
     );
   }
 
-  _renderValue(value, fieldType: string) {
+  _renderValue(value, fieldType: ?string) {
     const {active} = this.props;
     const textStyle = [styles.valueText, active && styles.valueTextActive];
 
@@ -75,7 +76,7 @@ export default class CustomField extends Component {
 
     if (Array.isArray(value)) {
       if (!value.length) {
-        return this._renderValue(null);
+        return renderOneValue(null);
       }
       return value.map((val, ind) => {
         return [

@@ -12,7 +12,7 @@ import styles, {calendarTheme} from './custom-fields-panel.styles';
 import Modal from 'react-native-root-modal';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import type {IssueFull} from '../../flow/Issue';
-import type {IssueProject} from '../../flow/CustomFields';
+import type {IssueProject, CustomField as CustomFieldType} from '../../flow/CustomFields';
 import {View as AnimatedView} from 'react-native-animatable';
 
 type Props = {
@@ -20,14 +20,14 @@ type Props = {
   autoFocusSelect?: boolean,
   issue: IssueFull,
   issuePermissions: IssuePermissions,
-  onUpdate: (field: CustomField, value: null|number|Object|Array<Object>) => Promise<Object>,
+  onUpdate: (field: CustomFieldType, value: null|number|Object|Array<Object>) => Promise<Object>,
   onUpdateProject: (project: IssueProject) => Promise<Object>,
   canEditProject: boolean
 };
 
 type State = {
-  editingField: ?CustomField,
-  savingField: ?CustomField,
+  editingField: ?CustomFieldType,
+  savingField: ?CustomFieldType,
   isEditingProject: boolean,
   isSavingProject: boolean,
   keyboardOpen: boolean,
@@ -106,7 +106,7 @@ export default class CustomFieldsPanel extends Component {
     };
   }
 
-  saveUpdatedField(field: CustomField, value: null|number|Object|Array<Object>) {
+  saveUpdatedField(field: CustomFieldType, value: null|number|Object|Array<Object>) {
     this.closeEditor();
     this.setState({savingField: field});
 
@@ -158,10 +158,14 @@ export default class CustomFieldsPanel extends Component {
   }
 
   onApplyCurrentMultiSelection = () => {
-    this.saveUpdatedField(this.state.editingField, this.state.select.selectedItems);
+    const {editingField, select} = this.state;
+    if (!editingField) {
+      return;
+    }
+    this.saveUpdatedField(editingField, select.selectedItems);
   }
 
-  editDateField(field: CustomField) {
+  editDateField(field: CustomFieldType) {
     return this.setState({
       datePicker: {
         show: true,
@@ -173,7 +177,7 @@ export default class CustomFieldsPanel extends Component {
     });
   }
 
-  editSimpleValueField(field: CustomField, type: string) {
+  editSimpleValueField(field: CustomFieldType, type: string) {
     const placeholders = {
       integer: '-12 or 34',
       string: 'Type value',
@@ -203,7 +207,7 @@ export default class CustomFieldsPanel extends Component {
     });
   }
 
-  editCustomField(field: CustomField) {
+  editCustomField(field: CustomFieldType) {
     const isMultiValue = field.projectCustomField.field.fieldType.isMultiValue;
     let selectedItems;
     if (isMultiValue) {
@@ -232,7 +236,7 @@ export default class CustomFieldsPanel extends Component {
     });
   }
 
-  onEditField(field: CustomField) {
+  onEditField(field: CustomFieldType) {
     if (field === this.state.editingField) {
       return this.closeEditor();
     }
