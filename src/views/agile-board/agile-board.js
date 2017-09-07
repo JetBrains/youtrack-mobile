@@ -1,7 +1,6 @@
 /* @flow */
-import {ScrollView, View, Text, Image, RefreshControl, TouchableOpacity, ActivityIndicator} from 'react-native';
+import {ScrollView, View, Text, Image, RefreshControl, Modal, TouchableOpacity, ActivityIndicator} from 'react-native';
 import React, {Component} from 'react';
-import Modal from 'react-native-root-modal';
 import usage from '../../components/usage/usage';
 import Header from '../../components/header/header';
 import Select from '../../components/select/select';
@@ -154,11 +153,12 @@ class AgileBoard extends Component {
     return (
       <Modal
         visible
-        style={styles.selectModal}
+        animationType="fade"
       >
         <Select
           getTitle={item => item.name}
           onCancel={this.props.onCloseSelect}
+          style={styles.selectModal}
           {...selectProps}
         />
       </Modal>
