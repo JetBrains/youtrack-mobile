@@ -1,8 +1,8 @@
 import {Linking} from 'react-native';
-
 import qs from 'qs';
+import type {AppConfig} from '../../flow/AppConfig';
 
-function openAuthPage(config) {
+function openAuthPage(config: AppConfig) {
   Linking.openURL([
     `${config.auth.serverUri}/api/rest/oauth2/auth`,
     '?response_type=code',
@@ -13,7 +13,7 @@ function openAuthPage(config) {
   ].join(''));
 }
 
-function authorizeInHub(config) {
+function authorizeInHub(config: AppConfig) {
   return new Promise(function (resolve) {
 
     function onOpenWithUrl(event) {

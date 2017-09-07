@@ -1,8 +1,11 @@
+/* @flow */
+
 import {Linking} from 'react-native';
 import SafariView from '../safari-view/safari-view';
 import qs from 'qs';
+import type {AppConfig} from '../../flow/AppConfig';
 
-async function openAuthPage(config) {
+async function openAuthPage(config: AppConfig) {
   const url =  encodeURI([
     `${config.auth.serverUri}/api/rest/oauth2/auth`,
     '?response_type=code',
@@ -21,7 +24,7 @@ async function openAuthPage(config) {
   SafariView.show({url});
 }
 
-function authorizeInHub(config) {
+function authorizeInHub(config: AppConfig) {
   return new Promise(function (resolve) {
 
     function onOpenWithUrl(event) {
