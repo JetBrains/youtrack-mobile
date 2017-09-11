@@ -30,14 +30,6 @@ export default StyleSheet.create({
     flexShrink: 0
   },
 
-  modal: {
-    flex: 1,
-    justifyContent: 'space-between',
-    left: 0,
-    right: 0,
-    bottom: 0
-  },
-
   editorViewContainer: {
     flex: 1,
     flexShrink: 1,
