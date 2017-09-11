@@ -1,18 +1,15 @@
 /* @flow */
-import {View, TouchableOpacity, Text, TextInput, Platform, FlatList, ActivityIndicator} from 'react-native';
+import {View, TouchableOpacity, Text, TextInput, Platform, FlatList, ActivityIndicator, Modal} from 'react-native';
 import React, {Component} from 'react';
 import styles from './command-dialog.styles';
 import {COLOR_PLACEHOLDER} from '../../components/variables/variables';
-import Modal from 'react-native-root-modal';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import throttle from 'lodash.throttle';
-import {View as AnimatedView} from 'react-native-animatable';
 import Header from '../../components/header/header';
 import ApiHelper from '../../components/api/api__helper';
 import type {CommandSuggestionResponse, CommandSuggestion, SuggestedCommand} from '../../flow/Issue';
 
 const SEARCH_THROTTLE = 30;
-const SHOW_LIST_ANIMATION_DURATION = 500;
 
 type Props = {
   headerContent: string,
@@ -48,9 +45,7 @@ export default class CommandDialog extends Component<DefaultProps, Props, State>
   };
 
   componentDidMount() {
-    if (Platform.OS === 'android') {
-      this.onSearch('', 0);
-    }
+    this.onSearch('', 0);
   }
 
   onSearch = throttle((command: string, caret: number) => {
@@ -68,6 +63,7 @@ export default class CommandDialog extends Component<DefaultProps, Props, State>
     const oldQuery = this.state.input || '';
     const newQuery = oldQuery.substring(0, suggestion.completionStart) + suggestionText + oldQuery.substring(suggestion.completionEnd);
     this.setState({input: newQuery});
+    this.onSearch(newQuery, suggestion.caret);
   };
 
   onApply = () => {
@@ -154,12 +150,7 @@ export default class CommandDialog extends Component<DefaultProps, Props, State>
   _renderSuggestions() {
     const {suggestions} = this.props;
     return (
-      <AnimatedView
-        style={styles.animatedListContainer}
-        animation="fadeIn"
-        useNativeDriver
-        duration={SHOW_LIST_ANIMATION_DURATION}
-      >
+      <View style={styles.animatedListContainer}>
         <View style={styles.listContainer}>
           {suggestions && (
             <FlatList
@@ -171,13 +162,16 @@ export default class CommandDialog extends Component<DefaultProps, Props, State>
             />
           )}
         </View>
-      </AnimatedView>
+      </View>
     );
   }
 
   render() {
     return (
-      <Modal visible>
+      <Modal
+        visible
+        animationType="fade"
+      >
         <Header
           leftButton={<Text>Cancel</Text>}
           onBack={this.props.onCancel}
