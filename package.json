@@ -83,7 +83,7 @@
 		"react-native-image-progress": "1.0.1",
 		"react-native-keyboard-spacer": "0.3.1",
 		"react-native-keychain": "1.0.0",
-		"react-native-root-modal": "git+https://github.com/huston007/react-native-root-modal.git#743f53f7",
+		"react-native-root-modal": "git+https://github.com/huston007/react-native-root-modal.git#974993d4b",
 		"react-native-swipeout": "q-m/react-native-swipeout#93b67f7c5c2c44a9b2067499746a729010277ae1",
 		"react-native-syntax-highlighter": "^1.2.3",
 		"react-navigation": "1.0.0-beta.10",
