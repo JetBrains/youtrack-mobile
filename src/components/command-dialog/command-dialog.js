@@ -171,6 +171,7 @@ export default class CommandDialog extends Component<DefaultProps, Props, State>
       <Modal
         visible
         animationType="fade"
+        onRequestClose={() => true}
       >
         <Header
           leftButton={<Text>Cancel</Text>}

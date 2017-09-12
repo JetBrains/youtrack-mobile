@@ -154,6 +154,7 @@ class AgileBoard extends Component {
       <Modal
         visible
         animationType="fade"
+        onRequestClose={() => true}
       >
         <Select
           getTitle={item => item.name}

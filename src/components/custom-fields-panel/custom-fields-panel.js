@@ -368,8 +368,8 @@ export default class CustomFieldsPanel extends Component {
 
     const ContainerComponent = isEditorShown ? Modal : View;
     const containerProps = isEditorShown ? {
-      style: {opacity: 0},
       transparent: true,
+      onRequestClose: () => true,
       visible: true
     } : {
       style: styles.placeholder
