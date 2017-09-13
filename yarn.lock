@@ -2,6 +2,13 @@
 # yarn lockfile v1
 
 
+"@bam.tech/react-native-root-siblings@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@bam.tech/react-native-root-siblings/-/react-native-root-siblings-1.2.1.tgz#4d948afc29837646299246107c8f09ae4764fd35"
+  dependencies:
+    static-container "^1.0.0"
+    wolfy87-eventemitter "^5.2.2"
+
 "@expo/react-native-action-sheet@1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@expo/react-native-action-sheet/-/react-native-action-sheet-1.0.0.tgz#0677d2c2e3130dc1ed9597cf72c10743b224e4f1"
@@ -4895,17 +4902,11 @@ react-native-keychain@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-1.0.0.tgz#2fd0394b3ad222e3710e5672a25013e129894c99"
 
-"react-native-root-modal@git+https://github.com/huston007/react-native-root-modal.git#743f53f7":
+react-native-root-modal@huston007/react-native-root-modal#cef1a854c0a8ed09260e74ea9c0df8cd9c22d154:
   version "1.1.1"
-  resolved "git+https://github.com/huston007/react-native-root-modal.git#743f53f7"
+  resolved "https://codeload.github.com/huston007/react-native-root-modal/tar.gz/cef1a854c0a8ed09260e74ea9c0df8cd9c22d154"
   dependencies:
-    react-native-root-siblings "github:dvel-Inc/react-native-root-siblings.git"
-
-"react-native-root-siblings@github:dvel-Inc/react-native-root-siblings.git":
-  version "2.0.0"
-  resolved "github:dvel-Inc/react-native-root-siblings.git#3a0bb1d22d7543548a063e48e70bb2f720b7a9c1"
-  dependencies:
-    static-container "^1.0.0"
+    "@bam.tech/react-native-root-siblings" "^1.2.1"
 
 react-native-scroller@0.0.6:
   version "0.0.6"
@@ -6186,6 +6187,10 @@ winston@0.8.x:
     isstream "0.1.x"
     pkginfo "0.3.x"
     stack-trace "0.0.x"
+
+wolfy87-eventemitter@^5.2.2:
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/wolfy87-eventemitter/-/wolfy87-eventemitter-5.2.2.tgz#9cb8e58f6d53814602b91128dd81cad090197a4d"
 
 wordwrap@0.0.2:
   version "0.0.2"
