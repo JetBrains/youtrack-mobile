@@ -1,11 +1,14 @@
 /* @flow */
-import {Linking} from 'react-native';
+import {Linking, Text} from 'react-native';
 import React, {Component} from 'react';
 import HTMLView from 'react-native-htmlview';
 
 import Router from '../router/router';
-import styles from './wiki.styles';
+import styles, {htmlViewStyles} from './wiki.styles';
+import {COLOR_FONT} from '../variables/variables';
 import {renderCode, renderImage} from './wiki__renderers';
+
+HTMLView.propTypes.style = Text.propTypes.style;
 
 type Props = {
   style?: any,
@@ -17,6 +20,12 @@ type Props = {
 
 const HTML_RENDER_NOTHING = null;
 const HTML_RENDER_DEFAULT = undefined;
+
+const selector = (node: Object, tag: string, className: string) => {
+  return node.name === tag &&
+    node.attribs.class &&
+    node.attribs.class.indexOf(className) !== -1;
+};
 
 export default class Wiki extends Component {
   props: Props;
@@ -51,7 +60,7 @@ export default class Wiki extends Component {
     return Router.ShowImage({currentImage: url, allImagesUrls, imageHeaders: this.props.imageHeaders});
   };
 
-  renderNode = (node: Object, index: number, siblings: any, parent: Object, defaultRenderer: any => any) => {
+  renderNode = (node: Object, index: number, siblings: any, parent: Object, defaultRenderer: (any, any) => any) => {
     const {imageHeaders, attachments} = this.props;
 
     if (node.type === 'text' && node.data === '\n') {
@@ -66,6 +75,30 @@ export default class Wiki extends Component {
       return renderImage({node, index, attachments, imageHeaders, onImagePress: this.onImagePress});
     }
 
+    if (node.name === 'font') {
+      return (
+        <Text key={index} style={{color: node.attribs.color || COLOR_FONT}}>{defaultRenderer(node.children, parent)}</Text>
+      );
+    }
+
+    if (node.name === 'del') {
+      return (
+        <Text key={index} style={styles.deleted}>{defaultRenderer(node.children, parent)}</Text>
+      );
+    }
+
+    if (selector(node, 'span', 'monospace')) {
+      return (
+        <Text key={index} style={styles.monospace}>{defaultRenderer(node.children, parent)}</Text>
+      );
+    }
+
+    if (selector(node, 'div', 'quote')) {
+      return (
+        <Text key={index} style={styles.blockQuote}>{defaultRenderer(node.children, parent)}</Text>
+      );
+    }
+
     return HTML_RENDER_DEFAULT;
   };
 
@@ -75,11 +108,13 @@ export default class Wiki extends Component {
     return (
       <HTMLView
         value={children}
-        stylesheet={styles}
+        stylesheet={htmlViewStyles}
         renderNode={this.renderNode}
         onLinkPress={this.handleLinkPress}
 
-        textComponentProps={{style: styles.textBaseStyle}}
+        RootComponent={Text}
+        textComponentProps={{selectable: true}}
+        style={styles.htmlView}
       />
     );
   }

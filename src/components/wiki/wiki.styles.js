@@ -1,14 +1,37 @@
-import {StyleSheet} from 'react-native';
-import {COLOR_LINK, COLOR_FONT} from '../variables/variables';
+import {StyleSheet, Platform} from 'react-native';
+import {COLOR_LINK, COLOR_FONT, COLOR_GRAY, UNIT, COLOR_FONT_GRAY} from '../variables/variables';
 
 const FONT_SIZE = 16;
 
 export default StyleSheet.create({
-  textBaseStyle: {
+  htmlView: {
     fontSize: FONT_SIZE,
     color: COLOR_FONT
   },
+  monospace: {
+    ...Platform.select({
+      ios: {
+        fontFamily: 'Courier New'
+      },
+      android: {
+        fontFamily: 'Droid Sans Mono'
+      }
+    })
+  },
+  deleted: {
+    textDecorationLine: 'line-through'
+  },
+  blockQuote: {
+    color: COLOR_FONT_GRAY,
+    borderLeftWidth: 2,
+    borderLeftColor: COLOR_GRAY,
+    paddingLeft: UNIT / 2
+  }
+});
+
+export const htmlViewStyles = StyleSheet.create({
   a: {
-    color: COLOR_LINK
+    color: COLOR_LINK,
+    textDecorationLine: 'underline'
   }
 });
