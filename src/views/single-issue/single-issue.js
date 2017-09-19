@@ -174,7 +174,7 @@ class SingeIssueView extends Component<void, SingleIssueProps, void> {
 
           {issue.links && <LinkedIssues links={issue.links} onIssueTap={openNestedIssueView}/>}
 
-          {issue.description
+          {issue.wikifiedDescription
           ? <Wiki
               attachments={issue.attachments}
               imageHeaders={api.auth.getAuthorizationHeaders()}

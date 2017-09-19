@@ -212,6 +212,7 @@ export default {
   singleIssue: toField([
     'id',
     'summary',
+    'description',
     'resolved',
     'created',
     'votes',
