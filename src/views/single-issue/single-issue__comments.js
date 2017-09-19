@@ -10,6 +10,7 @@ type Props = {
   comments: Array<IssueComment>,
   attachments: Array<Attachment>,
   imageHeaders: ?Object,
+  backendUrl: string,
   onReply: (comment: IssueComment) => any,
   onCopyCommentLink: (comment: IssueComment) => any,
   onIssueIdTap: (issueId: string) => any
@@ -31,6 +32,7 @@ export default class SingleIssueComments extends Component<DefaultProps, Props, 
       return <Comment key={comment.id}
                       comment={comment}
                       imageHeaders={this.props.imageHeaders}
+                      backendUrl={this.props.backendUrl}
                       onIssueIdTap={this.props.onIssueIdTap}
                       attachments={attachments}
                       onReply={() => this.props.onReply(comment)}

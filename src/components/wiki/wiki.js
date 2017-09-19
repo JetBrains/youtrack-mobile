@@ -6,6 +6,7 @@ import HTMLView from 'react-native-htmlview';
 import Router from '../router/router';
 import styles, {htmlViewStyles} from './wiki.styles';
 import {COLOR_FONT} from '../variables/variables';
+import {getBaseUrl} from '../config/config';
 import {renderCode, renderImage} from './wiki__renderers';
 
 HTMLView.propTypes.style = Text.propTypes.style;
@@ -15,6 +16,7 @@ type Props = {
   children?: ReactElement<any>,
   attachments: Array<Object>,
   imageHeaders: ?Object,
+  backendUrl: string,
   onIssueIdTap: (issueId: string) => any
 };
 
@@ -32,7 +34,7 @@ export default class Wiki extends Component {
   parser: (rawWiki: string, options: Object) => Object;
   renderer: (tree: Object) => Object;
 
-  static defaultProps: Props = {
+  static defaultProps: Object = {
     onIssueIdTap: (issueId: string) => {},
     attachments: [],
     imageHeaders: null
@@ -47,7 +49,9 @@ export default class Wiki extends Component {
       return this.props.onIssueIdTap(issueId);
     }
 
-    //TODO: handle same instance urls like "/youtrack/user/foo";
+    if (url[0] === '/') {
+      url = getBaseUrl(this.props.backendUrl) + url;
+    }
 
     return Linking.openURL(url);
   };

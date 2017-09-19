@@ -79,7 +79,7 @@ function handleIncompatibleYouTrack(response: Object, ytUrl: string) {
   }
 }
 
-function getBaseUrl(url: string) {
+export function getBaseUrl(url: string) {
   if (!url) {
     return url;
   }

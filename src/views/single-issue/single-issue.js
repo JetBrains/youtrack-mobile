@@ -176,6 +176,7 @@ class SingeIssueView extends Component<void, SingleIssueProps, void> {
 
           {issue.wikifiedDescription
           ? <Wiki
+              backendUrl={api.auth.config.backendUrl}
               attachments={issue.attachments}
               imageHeaders={api.auth.getAuthorizationHeaders()}
               onIssueIdTap={issueId => openNestedIssueView(null, issueId)}
@@ -253,6 +254,7 @@ class SingeIssueView extends Component<void, SingleIssueProps, void> {
               comments={issue.comments}
               attachments={issue.attachments}
               imageHeaders={this.props.api.auth.getAuthorizationHeaders()}
+              backendUrl={this.props.api.config.backendUrl}
               onReply={(comment: IssueComment) => {
                 this.props.showCommentInput();
                 this.props.startReply(comment.author.login);

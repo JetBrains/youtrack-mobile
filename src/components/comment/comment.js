@@ -15,6 +15,7 @@ type Props = {
   comment: IssueComment,
   attachments: Array<Attachment>,
   imageHeaders: ?Object,
+  backendUrl: string,
   onReply: () => any,
   onCopyCommentLink: () => any,
   onIssueIdTap: (issueId: string) => any
@@ -48,6 +49,7 @@ export default class Comment extends React.Component {
   _renderComment(comment, attachments) {
     return (
       <Wiki
+        backendUrl={this.props.backendUrl}
         onIssueIdTap={issueId => this.props.onIssueIdTap(issueId)}
         attachments={attachments}
         imageHeaders={this.props.imageHeaders}
