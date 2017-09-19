@@ -4,7 +4,7 @@ import React from 'react';
 import flattenStyle from 'react-native/Libraries/StyleSheet/flattenStyle';
 import SimpleMarkdown from 'simple-markdown';
 import styles from './wiki.styles';
-import FenceHtml from '@huston007/react-native-fence-html';
+import HTMLView from 'react-native-htmlview';
 import SyntaxHighlighter from 'react-native-syntax-highlighter';
 import listRule from './wiki__list-rule';
 
@@ -298,18 +298,13 @@ export default function (actions, imageHeaders: ?Object = null) {
         //Drops custom fonts which could be not available on platform
         const content = node.content.replace(/font-family: .*?;/ig, 'font-family: System;');
 
-        const renderers = {
-          br: (htmlAttribs, children, passProps) => {
-            return <Text>{'\n'}</Text>;
-          }
-        };
-
-        return <FenceHtml
-          key={state.key}
-          html={content}
-          renderers={renderers}
-          onLinkPress={(evt, href) => actions.onLinkPress(href)}
-        />;
+        return (
+          <HTMLView
+            key={state.key}
+            value={content}
+            stylesheet={styles}
+          />
+        );
       }
     },
 
