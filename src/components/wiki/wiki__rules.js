@@ -27,7 +27,8 @@ export default function (actions, imageHeaders: ?Object = null) {
     paragraph: {
       ...SimpleMarkdown.defaultRules.paragraph,
       react: (node, output, state) => {
-        return <View key={state.key}>
+        const isFirstParagraph = state.key === 0;
+        return <View key={state.key} style={!isFirstParagraph && styles.paragraph}>
           <Text selectable={true} style={styles.commonTextItem} testID="paragraph">{output(node.content, state)}</Text>
         </View>;
       }

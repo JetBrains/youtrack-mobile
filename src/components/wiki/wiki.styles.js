@@ -7,6 +7,9 @@ export default StyleSheet.create({
   commonTextItem: {
     fontSize: FONT_SIZE
   },
+  paragraph: {
+    paddingTop: UNIT
+  },
   text: {
     color: COLOR_FONT,
     fontSize: FONT_SIZE
