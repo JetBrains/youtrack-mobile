@@ -13,7 +13,7 @@ import SingleIssueCommentInput from './single-issue__comment-input';
 import SingleIssueTopPanel from './single-issue__top-panel';
 import Header from '../../components/header/header';
 import LinkedIssues from '../../components/linked-issues/linked-issues';
-import Wiki, {decorateRawText} from '../../components/wiki/wiki';
+import Wiki from '../../components/wiki/wiki';
 import {notifyError} from '../../components/notification/notification';
 import {COLOR_PINK} from '../../components/variables/variables';
 import usage from '../../components/usage/usage';
@@ -174,14 +174,15 @@ class SingeIssueView extends Component<void, SingleIssueProps, void> {
 
           {issue.links && <LinkedIssues links={issue.links} onIssueTap={openNestedIssueView}/>}
 
-          {issue.description ? <Wiki
-            style={styles.description}
-            attachments={issue.attachments}
-            imageHeaders={api.auth.getAuthorizationHeaders()}
-            onIssueIdTap={issueId => openNestedIssueView(null, issueId)}
-          >
-            {decorateRawText(issue.description, issue.wikifiedDescription, issue.attachments)}
-          </Wiki> : null}
+          {issue.description
+          ? <Wiki
+              attachments={issue.attachments}
+              imageHeaders={api.auth.getAuthorizationHeaders()}
+              onIssueIdTap={issueId => openNestedIssueView(null, issueId)}
+            >
+              {issue.wikifiedDescription}
+            </Wiki>
+          : null}
         </View>}
 
         {issue.attachments ? <AttachmentsRow

@@ -144,7 +144,6 @@ const ISSUE_ATTACHMENTS_FIELDS = toField([
 
 const ISSUE_COMMENTS_FIELDS = toField([
   'id',
-  'text',
   'created',
   'textPreview',
   {author: ISSUE_USER_FIELDS}
@@ -213,7 +212,6 @@ export default {
   singleIssue: toField([
     'id',
     'summary',
-    'description',
     'resolved',
     'created',
     'votes',

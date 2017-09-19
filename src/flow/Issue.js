@@ -15,7 +15,6 @@ declare type IssueOnList = {
 declare type IssueFull = {
   id: string,
   summary: string,
-  description: string,
   resolved: boolean,
   created: number,
   updated: number,

@@ -126,7 +126,6 @@ declare type Attachment = {
 declare type IssueComment = {
   $type: string,
   id: string,
-  text: string,
   created: number,
   textPreview: string,
   author: IssueUser

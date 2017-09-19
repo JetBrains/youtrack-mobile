@@ -1,11 +1,11 @@
 /* @flow */
-import {View, Linking} from 'react-native';
+import {Linking} from 'react-native';
 import React, {Component} from 'react';
-// $FlowFixMe: cannot typecheck simple-markdown module because of mistakes there
-import SimpleMarkdown from 'simple-markdown';
+import HTMLView from 'react-native-htmlview';
+
 import Router from '../router/router';
-import wikiRules from './wiki__rules';
-import {decorateIssueLinks, replaceImageNamesWithUrls, decorateUserNames} from './wiki__raw-text-decorator';
+import styles from './wiki.styles';
+import {renderCode, renderImage} from './wiki__renderers';
 
 type Props = {
   style?: any,
@@ -14,6 +14,9 @@ type Props = {
   imageHeaders: ?Object,
   onIssueIdTap: (issueId: string) => any
 };
+
+const HTML_RENDER_NOTHING = null;
+const HTML_RENDER_DEFAULT = undefined;
 
 export default class Wiki extends Component {
   props: Props;
@@ -26,54 +29,58 @@ export default class Wiki extends Component {
     imageHeaders: null
   };
 
-  constructor(props: Props) {
-    super(props);
-    const rules = wikiRules({
-      onLinkPress: (url) => {
-        return Linking.openURL(url);
-      },
-      onImagePress: (url) => {
-        const allImagesUrls = props.attachments
-          .filter(attach => attach.mimeType.includes('image'))
-          .map(image => image.url);
+  handleLinkPress = (url: string) => {
+    const ISSUE_ID_REGEX = /issue\/(.+)\/?/;
 
-        return Router.ShowImage({currentImage: url, allImagesUrls, imageHeaders: props.imageHeaders});
-      },
-      onIssueIdPress: (issueId) => {
-        this.props.onIssueIdTap && this.props.onIssueIdTap(issueId);
-      }
-    }, props.imageHeaders);
+    const [, issueId] = url.match(ISSUE_ID_REGEX) || [];
 
-    this.parser = SimpleMarkdown.parserFor(rules);
+    if (issueId) {
+      return this.props.onIssueIdTap(issueId);
+    }
 
-    this.renderer = SimpleMarkdown.reactFor(SimpleMarkdown.ruleOutput(rules, 'react'));
-  }
+    //TODO: handle same instance urls like "/youtrack/user/foo";
 
-  parse(source: string) {
-    const blockSource = `${source}\n\n`;
-    return this.parser(blockSource, {inline: false});
-  }
+    return Linking.openURL(url);
+  };
+
+  onImagePress = (url: String) => {
+    const allImagesUrls = this.props.attachments
+      .filter(attach => attach.mimeType.includes('image'))
+      .map(image => image.url);
+
+    return Router.ShowImage({currentImage: url, allImagesUrls, imageHeaders: this.props.imageHeaders});
+  };
+
+  renderNode = (node: Object, index: number, siblings: any, parent: Object, defaultRenderer: any => any) => {
+    const {imageHeaders, attachments} = this.props;
+
+    if (node.type === 'text' && node.data === '\n') {
+      return HTML_RENDER_NOTHING;
+    }
+
+    if (node.name === 'pre') {
+      return renderCode(node, index);
+    }
+
+    if (node.name === 'img') {
+      return renderImage({node, index, attachments, imageHeaders, onImagePress: this.onImagePress});
+    }
+
+    return HTML_RENDER_DEFAULT;
+  };
 
   render() {
     const {children} = this.props;
-    if (!children) {
-      return null;
-    }
-    const child = Array.isArray(children) ? children.join('') : children.toString();
 
-    const tree = this.parse(child);
+    return (
+      <HTMLView
+        value={children}
+        stylesheet={styles}
+        renderNode={this.renderNode}
+        onLinkPress={this.handleLinkPress}
 
-    return <View style={[this.props.style]}>{this.renderer(tree)}</View>;
+        textComponentProps={{style: styles.textBaseStyle}}
+      />
+    );
   }
 }
-
-const decorateRawText = (source: string, wikifiedOnServer: string, attachments: Array<Object>) => {
-  let result = replaceImageNamesWithUrls(source, attachments);
-  if (wikifiedOnServer) {
-    result = decorateIssueLinks(result, wikifiedOnServer);
-    result = decorateUserNames(result, wikifiedOnServer);
-  }
-  return result;
-};
-
-export {decorateRawText};

@@ -1,6 +1,6 @@
 /* @flow */
 import styles from './comment.styles';
-import Wiki, {decorateRawText} from '../../components/wiki/wiki';
+import Wiki from '../../components/wiki/wiki';
 import {COLOR_LIGHT_GRAY, COLOR_FONT_GRAY, COLOR_PINK} from '../../components/variables/variables';
 
 import {View, Text, Image} from 'react-native';
@@ -52,7 +52,7 @@ export default class Comment extends React.Component {
         attachments={attachments}
         imageHeaders={this.props.imageHeaders}
       >
-        {decorateRawText(comment.text, comment.textPreview, attachments)}
+        {comment.textPreview}
       </Wiki>
     );
   }
