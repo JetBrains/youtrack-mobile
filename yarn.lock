@@ -4906,7 +4906,7 @@ react-native-root-modal@huston007/react-native-root-modal#cef1a854c0a8ed09260e74
   version "1.1.1"
   resolved "https://codeload.github.com/huston007/react-native-root-modal/tar.gz/cef1a854c0a8ed09260e74ea9c0df8cd9c22d154"
   dependencies:
-    "@bam.tech/react-native-root-siblings" "^1.2.1"
+    react-native-root-siblings "github:dvel-Inc/react-native-root-siblings.git"
 
 react-native-scroller@0.0.6:
   version "0.0.6"
@@ -4950,9 +4950,9 @@ react-native-view-transformer@0.0.28:
     react-native-gesture-responder "0.1.1"
     react-native-scroller "0.0.6"
 
-react-native@0.48.1:
-  version "0.48.1"
-  resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.48.1.tgz#052ba5a86d3bdb748c288124248727d02b1c0939"
+react-native@0.48.3:
+  version "0.48.3"
+  resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.48.3.tgz#ec17a66929eb292512b14c091cf260b25e2fba18"
   dependencies:
     absolute-path "^0.0.0"
     art "^0.10.0"
