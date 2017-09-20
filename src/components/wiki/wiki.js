@@ -99,7 +99,7 @@ export default class Wiki extends Component {
 
     if (selector(node, 'div', 'quote')) {
       return (
-        <Text key={index} style={styles.blockQuote}>{defaultRenderer(node.children, parent)}</Text>
+        <Text key={index} style={styles.blockQuote}>{'> '}{defaultRenderer(node.children, parent)}</Text>
       );
     }
 
@@ -108,7 +108,7 @@ export default class Wiki extends Component {
 
   render() {
     const {children} = this.props;
-console.log('content', children)
+
     return (
       <HTMLView
         value={children}
