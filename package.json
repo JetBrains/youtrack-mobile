@@ -45,7 +45,7 @@
 			"/e2e/"
 		],
 		"transformIgnorePatterns": [
-			"node_modules/(?!(jest-)?react-native|react-navigation|react-native-htmlview|@huston007.*)"
+			"node_modules/(?!(jest-)?react-native|react-navigation|@huston007.*)"
 		]
 	},
 	"detox": {
