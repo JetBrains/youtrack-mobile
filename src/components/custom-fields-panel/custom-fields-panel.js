@@ -1,5 +1,5 @@
 /* @flow */
-import {View, ScrollView, Text, TouchableOpacity, TextInput, ActivityIndicator, Platform, Modal} from 'react-native';
+import {View, ScrollView, Text, TouchableOpacity, TextInput, ActivityIndicator, Platform} from 'react-native';
 import React, {Component} from 'react';
 import {Calendar} from 'react-native-calendars'; // eslint-disable-line import/named
 import CustomField from '../custom-field/custom-field';
@@ -9,6 +9,7 @@ import {COLOR_PLACEHOLDER, COLOR_BLACK} from '../../components/variables/variabl
 import Api from '../api/api';
 import IssuePermissions from '../issue-permissions/issue-permissions';
 import styles, {calendarTheme} from './custom-fields-panel.styles';
+import Modal from 'react-native-root-modal';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import type {IssueFull} from '../../flow/Issue';
 import type {IssueProject, CustomField as CustomFieldType} from '../../flow/CustomFields';
@@ -368,9 +369,8 @@ export default class CustomFieldsPanel extends Component {
 
     const ContainerComponent = isEditorShown ? Modal : View;
     const containerProps = isEditorShown ? {
-      transparent: true,
-      onRequestClose: () => true,
-      visible: true
+      visible: true,
+      style: [styles.modal, isEditorShown ? {top: 0} : null]
     } : {
       style: styles.placeholder
     };
@@ -379,7 +379,7 @@ export default class CustomFieldsPanel extends Component {
       <ContainerComponent {...containerProps}>
         <AnimatedView
           animation="fadeIn"
-          duration={300}
+          duration={500}
           useNativeDriver
           style={styles.editorViewContainer}
         >
