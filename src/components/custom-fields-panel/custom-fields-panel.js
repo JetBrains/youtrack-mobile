@@ -271,7 +271,8 @@ export default class CustomFieldsPanel extends Component {
     scrollNode.scrollTo({x: this.currentScrollX, y: 0, animated: false});
 
     // Android doesn't get first scrollTo call https://youtrack.jetbrains.com/issue/YTM-402
-    if (Platform.OS == 'android' && ensure) {
+    // iOS doesn't scroll immediately since 0.48 https://github.com/facebook/react-native/issues/15808
+    if (ensure) {
       setTimeout(() => this.restoreScrollPosition(scrollNode, false));
     }
   }
@@ -394,6 +395,7 @@ export default class CustomFieldsPanel extends Component {
           <ScrollView
             ref={this.restoreScrollPosition}
             onScroll={this.storeScrollPosition}
+            contentOffset={{x: this.currentScrollX, y: 0}}
             scrollEventThrottle={100}
             horizontal={true}
             style={styles.customFieldsPanel}
