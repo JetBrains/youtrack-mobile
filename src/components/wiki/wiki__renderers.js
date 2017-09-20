@@ -8,6 +8,7 @@ const IMAGE_SIZE = 264;
 
 export function renderCode(node: {children: any}, index: number) {
   const code = node.children.map(it => it.data).join('\n');
+
   return (
     <SyntaxHighlighter key={index} PreTag={Text} CodeTag={Text}>{entities.decodeHTML(code)}</SyntaxHighlighter>
   );

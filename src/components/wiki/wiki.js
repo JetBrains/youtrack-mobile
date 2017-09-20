@@ -71,7 +71,7 @@ export default class Wiki extends Component {
       return HTML_RENDER_NOTHING;
     }
 
-    if (node.name === 'pre') {
+    if (selector(node, 'pre', 'wikicode')) {
       return renderCode(node, index);
     }
 
@@ -108,7 +108,7 @@ export default class Wiki extends Component {
 
   render() {
     const {children} = this.props;
-
+console.log('content', children)
     return (
       <HTMLView
         value={children}
