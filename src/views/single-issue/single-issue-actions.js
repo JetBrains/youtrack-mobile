@@ -41,8 +41,8 @@ export function hideCommentInput() {
   return {type: types.HIDE_COMMENT_INPUT};
 }
 
-export function startAddingComment() {
-  return {type: types.START_ADDING_COMMENT, comment: ''};
+export function startAddingComment(comment: string = '') {
+  return {type: types.START_ADDING_COMMENT, comment};
 }
 
 export function startReply(targetLogin: string) {
@@ -236,6 +236,8 @@ export function addComment(comment: string) {
       dispatch(hideCommentInput());
       dispatch(loadIssue());
     } catch (err) {
+      dispatch(showCommentInput());
+      dispatch(startAddingComment(comment));
       notifyError('Cannot post comment', err);
     } finally {
       dispatch(stopAddingComment());
