@@ -40,7 +40,7 @@ export default class MultilineInput extends React.Component {
     const {maxInputHeight} = this.props;
 
     let newHeight = event.nativeEvent.contentSize.height + SPARE_SPACE;
-console.log('onContentSizeChange', newHeight)
+
     if (maxInputHeight > 0) {
       newHeight = newHeight > maxInputHeight ? maxInputHeight : newHeight;
     }
