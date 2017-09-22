@@ -205,10 +205,10 @@ export function saveIssueSummaryAndDescriptionChange() {
     try {
       const {issue} = getState().singleIssue;
       await api.updateIssueSummaryDescription(issue);
-      dispatch(stopEditingIssue());
       usage.trackEvent(CATEGORY_NAME, 'Update issue', 'Success');
 
       await dispatch(loadIssue());
+      dispatch(stopEditingIssue());
       dispatch(issueUpdated(getState().singleIssue.issue));
     } catch (err) {
       await dispatch(loadIssue());
