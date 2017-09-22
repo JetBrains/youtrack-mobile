@@ -4,6 +4,7 @@ import React from 'react';
 
 const MAX_DEFAULT_HEIGHT = 200;
 const DEFAULT_FONT_SIZE = 16;
+const SPARE_SPACE = 2;
 
 type Props = {
   value: string,
@@ -38,8 +39,8 @@ export default class MultilineInput extends React.Component {
   onContentSizeChange = (event: Object) => {
     const {maxInputHeight} = this.props;
 
-    let newHeight = event.nativeEvent.contentSize.height;
-
+    let newHeight = event.nativeEvent.contentSize.height + SPARE_SPACE;
+console.log('onContentSizeChange', newHeight)
     if (maxInputHeight > 0) {
       newHeight = newHeight > maxInputHeight ? maxInputHeight : newHeight;
     }
