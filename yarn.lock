@@ -4750,9 +4750,11 @@ react-native-drawer@2.5.0:
     prop-types "^15.5.8"
     tween-functions "^1.0.1"
 
-react-native-easy-toast@alphasp/react-native-easy-toast#8ff792b2:
+react-native-easy-toast@alphasp/react-native-easy-toast#8ff792b2c3f20850c580bbc345468a68cacfd18a:
   version "1.0.6"
   resolved "https://codeload.github.com/alphasp/react-native-easy-toast/tar.gz/8ff792b2c3f20850c580bbc345468a68cacfd18a"
+  dependencies:
+    prop-types "^15.5.10"
 
 react-native-gesture-responder@0.1.1:
   version "0.1.1"
