@@ -3,19 +3,17 @@ import chaiAsPromised from 'chai-as-promised';
 import sinonChai from 'sinon-chai';
 import 'babel-polyfill';
 import log from '../src/components/log/log';
+import Enzyme from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+import chaiEnzyme from 'chai-enzyme';
+
+Enzyme.configure({adapter: new Adapter()});
 
 log.disableLog();
 
 jest.mock('react-native', () => {
   return require('./mocks/react-native');
 });
-
-jest.mock('react-addons-test-utils', () => {
-  return require('react-dom/test-utils');
-});
-
-// eslint-ignore-next-line
-const chaiEnzyme = require('chai-enzyme');
 
 chai.use(chaiEnzyme());
 chai.use(chaiAsPromised);

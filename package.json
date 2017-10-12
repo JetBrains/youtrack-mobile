@@ -37,8 +37,10 @@
 		"android-emulator": "emulator -avd YouTrackMobile -gpu on"
 	},
 	"jest": {
-    "preset": "react-native",
-    "transform": {"^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"},
+		"preset": "react-native",
+		"transform": {
+			"^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
+		},
 		"setupTestFrameworkScriptFile": "./test/jest-setup.js",
 		"testResultsProcessor": "jest-teamcity-reporter",
 		"testPathIgnorePatterns": [
@@ -102,12 +104,13 @@
 		"babel-eslint": "7.1.1",
 		"chai": "3.5.0",
 		"chai-as-promised": "6.0.0",
-		"chai-enzyme": "0.8.0",
+		"chai-enzyme": "1.0.0-beta.0",
 		"cheerio": "0.22.0",
 		"core-util-is": "1.0.2",
 		"detox": "^5.4.0",
-		"enzyme": "2.9.1",
-		"enzyme-to-json": "^1.5.0",
+		"enzyme": "3.1.0",
+		"enzyme-adapter-react-16": "1.0.1",
+		"enzyme-to-json": "3.1.2",
 		"eslint": "3.11.0",
 		"eslint-config-defaults": "9.0.0",
 		"eslint-plugin-flowtype": "2.28.2",
@@ -118,8 +121,6 @@
 		"jest": "^21.0.1",
 		"jest-teamcity-reporter": "^0.6.2",
 		"mocha": "^3.2.0",
-		"react-addons-perf": "16.0.0-alpha.3",
-		"react-addons-test-utils": "^15.5.1",
 		"react-dom": "16.0.0-alpha.12",
 		"react-native-cli": "^1.0.0",
 		"react-test-renderer": "16.0.0-alpha.12",
