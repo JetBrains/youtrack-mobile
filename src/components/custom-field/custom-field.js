@@ -71,7 +71,7 @@ export default class CustomField extends Component<void, Props, void> {
     const textStyle = [styles.valueText, active && styles.valueTextActive];
 
     const renderOneValue = (val) => {
-      return <Text style={textStyle} testID="value">{this._getValue(val, fieldType)}</Text>;
+      return <Text style={textStyle} testID="value" key="value">{this._getValue(val, fieldType)}</Text>;
     };
 
     if (Array.isArray(value)) {
