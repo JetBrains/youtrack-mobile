@@ -5,7 +5,9 @@ const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
 
 const options = {
   takePhotoButtonTitle: 'Take photo',
-  chooseFromLibraryButtonTitle: 'Choose from library'
+  chooseFromLibraryButtonTitle: 'Choose from library',
+  noData: true,
+  allowsEditing: false
 };
 
 type Attachment = {
