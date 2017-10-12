@@ -1,9 +1,8 @@
 import EnterServer from './enter-server';
 import React from 'react';
 import {TouchableOpacity} from 'react-native';
-import {shallow, mount} from 'enzyme';
+import {shallow} from 'enzyme';
 import sinon from 'sinon';
-import renderer from 'react-test-renderer';
 
 describe('EnterServer', () => {
   const serverUrl = 'http://foo.com';
