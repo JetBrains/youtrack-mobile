@@ -29,7 +29,7 @@
 		"ios-export-ipa": "rm -rf ios/build/YouTrackMobile.ipa && xcodebuild -exportArchive -archivePath ios/build/YouTrackMobile[Release].xcarchive -exportPath ios/build -exportOptionsPlist tools/export.plist",
 		"ios-download-archive": "bash ./tools/download-latest-built-archive.sh",
 		"ios-release": "npm run ios-download-archive && npm run ios-export-ipa",
-		"ios-build-bundle": "react-native bundle --entry-file=index.ios.js --platform ios --dev false --reset-cache --bundle-output build/main.jsbundle --assets-dest build",
+		"ios-build-bundle": "react-native bundle --entry-file=index.js --platform ios --dev false --reset-cache --bundle-output build/main.jsbundle --assets-dest build",
 		"android": "YT_MOBILE_VERSION=$npm_package_version ./node_modules/react-native-cli/index.js run-android",
 		"android-clean": "cd ./android && YT_MOBILE_VERSION=$npm_package_version ./gradlew clean && cd ..",
 		"android-release": "YT_MOBILE_VERSION=$npm_package_version android/gradlew -p android/ assembleRelease --info",
