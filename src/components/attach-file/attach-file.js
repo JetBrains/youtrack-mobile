@@ -29,7 +29,7 @@ export default async function attachPhoto(method: string = 'showImagePicker') {
       }
 
       const filePath = res.path || res.uri || '';
-      const fileName = filePath.match(FILE_NAME_REGEXP)[0];
+      const fileName = res.fileName || filePath.match(FILE_NAME_REGEXP)[0];
       const fileUri = res.uri;
 
       const normalizedAttach = {
