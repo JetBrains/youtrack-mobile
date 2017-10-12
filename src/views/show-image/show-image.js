@@ -4,8 +4,9 @@ import React from 'react';
 import {closeOpaque} from '../../components/icon/icon';
 import Router from '../../components/router/router';
 import {UNIT} from '../../components/variables/variables';
-import Gallery from 'react-native-gallery';
 import once from 'lodash.once';
+import Gallery from 'react-native-image-gallery';
+import ImageProgress from 'react-native-image-progress';
 
 const TOUCH_PADDING = 12;
 
@@ -19,12 +20,24 @@ type Props = {
   imageHeaders: ?Object
 }
 
+function renderImage(imageProps, imageDimensions) {
+  return (
+    <ImageProgress
+      renderIndicator={() => <ActivityIndicator style={styles.loader} size="large"/>}
+      {...imageProps}
+    />
+  );
+}
+
+
 export function ShowImage(props: Props) {
   const currentIndex = props.allImagesUrls.indexOf(props.currentImage);
 
   const allImageSources = props.allImagesUrls.map(uri => ({
-    uri: uri,
-    headers: props.imageHeaders
+    source: {
+      uri: uri,
+      headers: props.imageHeaders
+    }
   }));
 
   const closeView = once(function closeView() {
@@ -35,20 +48,15 @@ export function ShowImage(props: Props) {
     <View style={styles.container}>
       <Gallery
         style={styles.gallery}
-        imagesSources={allImageSources}
+        images={allImageSources}
         initialPage={currentIndex}
-        loader={<ActivityIndicator style={styles.loader} size="large"/>}
-        onSlideUp={closeView}
-        onSlideDown={closeView}
-        pixels={{
-          width: 200, //Hack around https://github.com/ldn0x7dc/react-native-transformable-image/issues/15
-          height: 200
-        }}
+        imageComponent={renderImage}
       />
-
-      <TouchableOpacity style={styles.closeButton}
-                        onPress={closeView}
-                        hitSlop={hitSlop}>
+      <TouchableOpacity
+        style={styles.closeButton}
+        onPress={closeView}
+        hitSlop={hitSlop}
+      >
         <Image style={styles.closeIcon} source={closeOpaque}></Image>
       </TouchableOpacity>
     </View>

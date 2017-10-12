@@ -33,15 +33,6 @@
     react-timer-mixin "^0.13.3"
     warning "^2.1.0"
 
-"@ldn0x7dc/react-native-view-pager@0.0.9":
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/@ldn0x7dc/react-native-view-pager/-/react-native-view-pager-0.0.9.tgz#0ca8d88c9b6da77b581222617e0b04459bcbd3b0"
-  dependencies:
-    react-mixin "^3.0.5"
-    react-native-gesture-responder "0.1.1"
-    react-native-scroller "0.0.6"
-    react-timer-mixin "^0.13.3"
-
 "@types/node@^6.0.46":
   version "6.0.89"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.89.tgz#154be0e6a823760cd6083aa8c48f952e2e63e0b0"
@@ -4753,14 +4744,6 @@ react-native-easy-toast@1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/react-native-easy-toast/-/react-native-easy-toast-1.0.6.tgz#e9e2a0c865fcfdb407dbc2341bc3571a7f5da3b5"
 
-react-native-gallery@huston007/react-native-gallery#026ed1ebab354fce7c65e980637e34d8d01d0b2f:
-  version "0.0.18"
-  resolved "https://codeload.github.com/huston007/react-native-gallery/tar.gz/026ed1ebab354fce7c65e980637e34d8d01d0b2f"
-  dependencies:
-    "@ldn0x7dc/react-native-view-pager" "0.0.9"
-    react-native-gesture-responder "0.1.1"
-    react-native-transformable-image "0.0.18"
-
 react-native-gesture-responder@0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/react-native-gesture-responder/-/react-native-gesture-responder-0.1.1.tgz#802552d8eb7153c0d81a396e98f4b80b404b6798"
@@ -4777,6 +4760,16 @@ react-native-htmlview@^0.12.0:
   dependencies:
     entities "^1.1.1"
     htmlparser2-without-node-native "^3.9.0"
+
+react-native-image-gallery@2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-image-gallery/-/react-native-image-gallery-2.1.2.tgz#cfed9df191478addac6e85659752afbabe673534"
+  dependencies:
+    prop-types "^15.6.0"
+    react-mixin "^3.0.5"
+    react-native-gesture-responder "0.1.1"
+    react-native-scroller "0.0.6"
+    react-timer-mixin "^0.13.3"
 
 react-native-image-picker@0.26.4:
   version "0.26.4"
@@ -4833,19 +4826,6 @@ react-native-tab-view@^0.0.65:
   resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-0.0.65.tgz#b685ea3081ff7c96486cd997361026c407302c59"
   dependencies:
     prop-types "^15.5.8"
-
-react-native-transformable-image@0.0.18:
-  version "0.0.18"
-  resolved "https://registry.yarnpkg.com/react-native-transformable-image/-/react-native-transformable-image-0.0.18.tgz#00229f2410c443a3a6b5fa53714121ecd882396f"
-  dependencies:
-    react-native-view-transformer "0.0.28"
-
-react-native-view-transformer@0.0.28:
-  version "0.0.28"
-  resolved "https://registry.yarnpkg.com/react-native-view-transformer/-/react-native-view-transformer-0.0.28.tgz#01bb8c9e6cfff70a8d400e061c0cd27602662acb"
-  dependencies:
-    react-native-gesture-responder "0.1.1"
-    react-native-scroller "0.0.6"
 
 react-native@0.49.0:
   version "0.49.0"
