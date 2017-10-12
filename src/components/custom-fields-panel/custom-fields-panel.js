@@ -49,12 +49,13 @@ type State = {
     show: boolean,
     title: string,
     value: Date,
+    emptyValueName?: ?string,
     onSelect: (selected: any) => any
   },
 
   simpleValue: {
     show: boolean,
-    value: ?string,
+    value: string,
     placeholder: string,
     onApply: any => any
   }
@@ -80,15 +81,13 @@ const initialEditorsState = {
 
   simpleValue: {
     show: false,
-    value: null,
+    value: '',
     placeholder: '',
     onApply: () => {}
   }
 };
 
-export default class CustomFieldsPanel extends Component {
-  props: Props;
-  state: State;
+export default class CustomFieldsPanel extends Component<Props, State> {
   currentScrollX: number = 0;
 
   constructor() {
@@ -195,7 +194,7 @@ export default class CustomFieldsPanel extends Component {
     const placeholder = placeholders[type] || placeholders.default;
     const valueFormatter = valueFormatters[type] || valueFormatters.default;
 
-    const value = field.value ? (field.value.presentation || field.value.toString()) : null;
+    const value = field.value ? (field.value.presentation || field.value.toString()) : '';
 
     return this.setState({
       simpleValue: {

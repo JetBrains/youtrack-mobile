@@ -17,10 +17,7 @@ type State = {
   youTrackBackendUrl: string
 }
 
-export default class Home extends Component {
-  props: Props;
-  state: State;
-
+export default class Home extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {

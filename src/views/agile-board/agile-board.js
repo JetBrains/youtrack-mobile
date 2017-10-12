@@ -49,9 +49,7 @@ type State = {
   zoomedOut: boolean
 };
 
-class AgileBoard extends Component {
-  props: Props;
-  state: State;
+class AgileBoard extends Component<Props, State> {
   boardHeader: ?BoardHeader;
 
   constructor(props: Props) {
@@ -134,12 +132,18 @@ class AgileBoard extends Component {
     );
   }
 
+  boardHeaderRef = (instance: ?BoardHeader) => {
+    if (instance) {
+      this.boardHeader = instance;
+    }
+  };
+
   _renderBoardHeader(sprint: SprintFull) {
     const {zoomedOut} = this.state;
     return (
       <View style={styles.boardHeaderContainer}>
         <BoardHeader
-          ref={node => this.boardHeader = node}
+          ref={this.boardHeaderRef}
           style={{minWidth: zoomedOut ? null : this._getScrollableWidth()}}
           columns={sprint.board.columns}
           onCollapseToggle={this.props.onColumnCollapseToggle}

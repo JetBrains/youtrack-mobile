@@ -1,6 +1,6 @@
 /* @flow */
 import {View, ListView, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import React from 'react';
+import React, {Component} from 'react';
 import {UNIT, COLOR_FONT_ON_BLACK, COLOR_FONT_GRAY} from '../variables/variables';
 import type {TransformedSuggestion, SavedQuery} from '../../flow/Issue';
 
@@ -14,7 +14,7 @@ const ds = new ListView.DataSource({
 });
 
 type State = {
-  dataSource: typeof ListView.DataSource
+  dataSource: ListView.DataSource
 };
 
 type Props = {
@@ -24,11 +24,9 @@ type Props = {
   onApplySavedQuery: (savedQuery: SavedQuery) => any
 };
 
-export default class QueryAssistSuggestionsList extends React.Component {
-  props: Props;
-  state: State;
+export default class QueryAssistSuggestionsList extends Component<Props, State> {
   isUnmounted: boolean;
-  state = {
+  state: State = {
     dataSource: ds.cloneWithRows([])
   };
 

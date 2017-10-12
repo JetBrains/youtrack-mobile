@@ -4,7 +4,7 @@ import Wiki from '../../components/wiki/wiki';
 import {COLOR_LIGHT_GRAY, COLOR_FONT_GRAY, COLOR_PINK} from '../../components/variables/variables';
 
 import {View, Text, Image} from 'react-native';
-import React from 'react';
+import React, {Component} from 'react';
 import Swipeout from 'react-native-swipeout';
 import SwipeButton from './comment__swipe-button';
 import {relativeDate} from '../issue-formatter/issue-formatter';
@@ -21,9 +21,7 @@ type Props = {
   onIssueIdTap: (issueId: string) => any
 };
 
-export default class Comment extends React.Component {
-  props: Props;
-
+export default class Comment extends Component<Props, void> {
   static defaultProps = {
     onReply: () => {
     },

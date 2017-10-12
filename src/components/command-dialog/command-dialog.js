@@ -30,8 +30,7 @@ type DefaultProps = {
   onChange: Function
 }
 
-export default class CommandDialog extends Component<DefaultProps, Props, State> {
-  props: Props;
+export default class CommandDialog extends Component<Props, State> {
   state: State = {
     displayCancelSearch: false,
     input: '',
@@ -40,7 +39,7 @@ export default class CommandDialog extends Component<DefaultProps, Props, State>
 
   lastUsedParams: {command: ?string, caret: number} = {command: null, caret: 0};
 
-  static defaultProps = {
+  static defaultProps: DefaultProps = {
     onChange: () => {}
   };
 

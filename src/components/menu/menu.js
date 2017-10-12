@@ -21,7 +21,7 @@ function openPrivacyPolicy() {
 
 
 type Props = {
-  children?: ReactElement<any>,
+  children?: React$Element<any>,
   show: boolean,
   auth: Auth,
   issueQuery: ?string,
@@ -37,8 +37,8 @@ type DefaultProps = {
   onBeforeLogOut: () => any
 };
 
-export class Menu extends Component<DefaultProps, Props, void> {
-  static defaultProps = {
+export class Menu extends Component<Props, void> {
+  static defaultProps: DefaultProps = {
     onOpen: () => {},
     onClose: () => {},
     onBeforeLogOut: () => {}

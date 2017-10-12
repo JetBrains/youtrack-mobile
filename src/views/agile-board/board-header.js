@@ -16,7 +16,7 @@ type Props = {
   onCollapseToggle: (column: AgileColumn) => any
 };
 
-export default class BoardHeader extends PureComponent<void, Props, void> {
+export default class BoardHeader extends PureComponent<Props, void> {
   node: ?Object;
 
   setNativeProps(...args: Array<any>) {

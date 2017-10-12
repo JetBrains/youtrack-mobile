@@ -27,10 +27,10 @@ type Props = DefaultProps & {
 }
 
 
-export default class AttachmentsRow extends Component<DefaultProps, Props, void> {
+export default class AttachmentsRow extends Component<Props, void> {
   scrollView: ?ScrollView;
 
-  static defaultProps = {
+  static defaultProps: DefaultProps = {
     imageHeaders: null,
     onOpenAttachment: () => {},
     onImageLoadingError: () => {}
@@ -74,7 +74,7 @@ export default class AttachmentsRow extends Component<DefaultProps, Props, void>
     }
   }
 
-  setScrollRef = (node: ScrollView) => {
+  setScrollRef = (node: ?ScrollView) => {
     this.scrollView = node;
   }
 

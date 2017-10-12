@@ -14,9 +14,14 @@ type Props = {
   onDescriptionChange: (description: string) => any
 }
 
-export default class AttachmentsRow extends Component {
-  props: Props;
+export default class AttachmentsRow extends Component<Props, void> {
   descriptionInput: MultilineInput;
+
+  descriptionInputRef = (instance: ?MultilineInput) => {
+    if (instance) {
+      this.descriptionInput = instance;
+    }
+  };
 
   render() {
     const {editable, showSeparator, summary, description, ...rest} = this.props;
@@ -40,7 +45,7 @@ export default class AttachmentsRow extends Component {
         {showSeparator && <View style={styles.separator} />}
 
         <MultilineInput
-          ref={instance => this.descriptionInput = instance}
+          ref={this.descriptionInputRef}
           maxInputHeight={0}
           editable={editable}
           autoCapitalize="sentences"

@@ -27,10 +27,7 @@ type State = {
   error: ?Object
 };
 
-export default class EnterServer extends Component {
-  props: Props;
-  state: State;
-
+export default class EnterServer extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {

@@ -1,5 +1,5 @@
 /* @flow */
-import React from 'react';
+import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import styles from './issue-list.styles';
 import ColorField from '../../components/color-field/color-field';
@@ -8,7 +8,12 @@ import {COLOR_FONT_GRAY} from '../../components/variables/variables';
 import {getPriotityField, getForText} from '../../components/issue-formatter/issue-formatter';
 import type {IssueOnList} from '../../flow/Issue';
 
-export default class IssueRow extends React.Component {
+type Props = {
+  issue: IssueOnList,
+  onClick: Function
+};
+
+export default class IssueRow extends Component<Props, void> {
   static _getSubText(issue) {
     const issueIdStyle = issue.resolved ? {textDecorationLine: 'line-through'} : null;
 

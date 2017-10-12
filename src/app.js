@@ -38,10 +38,9 @@ if (UIManager.setLayoutAnimationEnabledExperimental) {
 */
 // GLOBAL.XMLHttpRequest = GLOBAL.originalXMLHttpRequest || GLOBAL.XMLHttpRequest;
 
-class YouTrackMobile extends Component {
-  state: Object;
+class YouTrackMobile extends Component<void, void> {
   auth: Auth;
-  _actionSheetRef: Object;
+  _actionSheetRef: ?Object;
 
   static childContextTypes = {
     actionSheet: PropTypes.func
@@ -125,13 +124,19 @@ class YouTrackMobile extends Component {
     Router.finalizeRoutes('Home');
   }
 
+  actionSheetRef = (component: ?React$Element<any>) => {
+    if (component) {
+      this._actionSheetRef = component;
+    }
+  };
+
   render() {
     return (
       <Provider store={store}>
-        <ActionSheet ref={component => this._actionSheetRef = component}>
+        <ActionSheet ref={this.actionSheetRef}>
           <View style={{flex: 1, backgroundColor: COLOR_BLACK}}>
             {Router.renderNavigatorView()}
-            <Toast ref={toast => setNotificationComponent(toast)}/>
+            <Toast ref={toast => toast ? setNotificationComponent(toast) : null}/>
           </View>
         </ActionSheet>
       </Provider>

@@ -1,6 +1,6 @@
 /* @flow */
 import {Text, Image, ScrollView, View, TouchableOpacity, TextInput, ActivityIndicator} from 'react-native';
-import React from 'react';
+import React, {Component} from 'react';
 import styles from './select.styles';
 import ColorField from '../color-field/color-field';
 import {notifyError} from '../notification/notification';
@@ -33,10 +33,7 @@ type State = {
   loaded: boolean
 };
 
-export default class Select extends React.Component {
-  props: Props;
-  state: State;
-
+export default class Select extends Component<Props, State> {
   static defaultProps = {
     placeholder: 'Search item',
     autoFocus: false,

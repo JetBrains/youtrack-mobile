@@ -13,7 +13,7 @@ HTMLView.propTypes.style = Text.propTypes.style;
 
 type Props = {
   style?: any,
-  children?: ReactElement<any>,
+  children?: React$Element<any>,
   attachments: Array<Object>,
   imageHeaders: ?Object,
   backendUrl: string,
@@ -29,8 +29,7 @@ const selector = (node: Object, tag: string, className: string) => {
     node.attribs.class.indexOf(className) !== -1;
 };
 
-export default class Wiki extends Component {
-  props: Props;
+export default class Wiki extends Component<Props, void> {
   parser: (rawWiki: string, options: Object) => Object;
   renderer: (tree: Object) => Object;
 

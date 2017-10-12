@@ -11,9 +11,7 @@ type Props = {
   onIssueTap: (issue: IssueOnList) => any
 }
 
-export default class LinkedIssues extends Component {
-  props: Props;
-
+export default class LinkedIssues extends Component<Props, void> {
   _getLinkTitle(link: IssueLink) {
     if (link.direction === 'OUTWARD' || link.direction === 'BOTH') {
       return link.linkType.localizedSourceToTarget || link.linkType.sourceToTarget;

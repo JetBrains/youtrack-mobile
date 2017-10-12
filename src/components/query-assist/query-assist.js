@@ -1,6 +1,6 @@
 /* @flow */
 import {View, Text, Image, TouchableOpacity, TextInput, Platform} from 'react-native';
-import React from 'react';
+import React, {Component} from 'react';
 import styles from './query-assist.styles';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
 import type {TransformedSuggestion, SavedQuery} from '../../flow/Issue';
@@ -30,9 +30,7 @@ type State = {
   suggestionsListTop: number
 }
 
-export default class QueryAssist extends React.Component {
-  state: State;
-  props: Props;
+export default class QueryAssist extends Component<Props, State> {
   queryAssistContainer: ?Object;
   lastQueryParams: {query: string, caret: number} = {query: '', caret: 0};
 

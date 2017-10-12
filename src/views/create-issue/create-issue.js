@@ -29,7 +29,7 @@ type AdditionalProps = {
 };
 type Props = CreateIssueState & typeof createIssueActions & AdditionalProps;
 
-class CreateIssue extends Component<void, Props, void> {
+class CreateIssue extends Component<Props, void> {
   fieldsPanel: Object;
 
   constructor(props) {
@@ -58,6 +58,12 @@ class CreateIssue extends Component<void, Props, void> {
       </TouchableOpacity>
     );
   }
+
+  fieldsPanelRef = (instance: ?CustomFieldsPanel) => {
+    if (instance) {
+      this.fieldsPanel = instance;
+    }
+  };
 
   render() {
     const {
@@ -141,7 +147,7 @@ class CreateIssue extends Component<void, Props, void> {
         </ScrollView>
 
         <CustomFieldsPanel
-          ref={node => this.fieldsPanel = node}
+          ref={this.fieldsPanelRef}
           api={this.props.api}
           issue={issue}
           canEditProject={true}

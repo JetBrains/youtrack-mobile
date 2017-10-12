@@ -36,8 +36,7 @@ type Props = IssuesListState & typeof issueActions & {
   overridenQuery: ?string
 };
 
-export class IssueList extends Component {
-  props: Props;
+export class IssueList extends Component<Props, void> {
   unsubscribeFromOpeningWithIssueUrl: () => any
   constructor() {
     super();

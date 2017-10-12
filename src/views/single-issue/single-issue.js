@@ -39,7 +39,7 @@ type AdditionalProps = {
 
 type SingleIssueProps = SingleIssueState & typeof issueActions & AdditionalProps;
 
-class SingeIssueView extends Component<void, SingleIssueProps, void> {
+class SingeIssueView extends Component<SingleIssueProps, void> {
   toolbarNode: Object;
 
   static contextTypes = {
@@ -125,6 +125,12 @@ class SingeIssueView extends Component<void, SingleIssueProps, void> {
     }
   }
 
+  toolbarRef = (instance: ?IssueToolbar) => {
+    if (instance) {
+      this.toolbarNode = instance;
+    }
+  }
+
   _renderToolbar() {
     const {issue, editMode, fullyLoaded, issuePermissions, startEditingIssue, attachImage, stopEditingIssue, toggleVote, toggleStar} = this.props;
     if (!fullyLoaded) {
@@ -134,7 +140,7 @@ class SingeIssueView extends Component<void, SingleIssueProps, void> {
 
     return (
       <IssueToolbar
-        ref={node => this.toolbarNode = node}
+        ref={this.toolbarRef}
         canAttach={issuePermissions.canAddAttachmentTo(issue)}
         attachesCount={issue.attachments.length}
         onAttach={attachImage}

@@ -12,7 +12,7 @@ type Props = {
   active: boolean
 };
 
-export default class CustomField extends Component<void, Props, void> {
+export default class CustomField extends Component<Props, void> {
   _getFieldType(field: CustomFieldType) {
     if (!field.projectCustomField.field.fieldType) {
       return null;

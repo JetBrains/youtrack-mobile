@@ -1,18 +1,18 @@
 /* @flow */
 import {View, Text, StyleSheet} from 'react-native';
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {Component} from 'react';
 
 export const SIZE = 20;
 export const NO_COLOR_ID = '0';
 
-export default class ColorField extends React.Component {
-  static propTypes = {
-    text: PropTypes.string.isRequired,
-    color: PropTypes.object.isRequired,
-    fullText: PropTypes.bool
-  }
+type Props = {
+  text: string,
+  color: Object,
+  fullText?: boolean,
+  style?: any
+};
 
+export default class ColorField extends Component<Props, void> {
   _getBackgroundColor() {
     return this.props.color.background;
   }

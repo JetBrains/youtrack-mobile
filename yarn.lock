@@ -4753,8 +4753,6 @@ react-native-drawer@2.5.0:
 react-native-easy-toast@alphasp/react-native-easy-toast#8ff792b2:
   version "1.0.6"
   resolved "https://codeload.github.com/alphasp/react-native-easy-toast/tar.gz/8ff792b2c3f20850c580bbc345468a68cacfd18a"
-  dependencies:
-    prop-types "^15.5.10"
 
 react-native-gesture-responder@0.1.1:
   version "0.1.1"
@@ -4839,9 +4837,9 @@ react-native-tab-view@^0.0.65:
   dependencies:
     prop-types "^15.5.8"
 
-react-native@0.49.0:
-  version "0.49.0"
-  resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.49.0.tgz#7a4e3fd62a4cf841173fc60eaa05e92400fd6408"
+react-native@0.49.3:
+  version "0.49.3"
+  resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.49.3.tgz#0ca459ee49f9c59e8326b2ced9e34c59333a2f26"
   dependencies:
     absolute-path "^0.0.0"
     art "^0.10.0"

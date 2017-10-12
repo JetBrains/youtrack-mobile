@@ -3,7 +3,7 @@
 import styles from './single-issue.styles';
 
 import {View, Text, TouchableOpacity} from 'react-native';
-import React from 'react';
+import React, {Component} from 'react';
 import ColorField from '../../components/color-field/color-field';
 import {formatDate, shortRelativeDate} from '../../components/issue-formatter/issue-formatter';
 import type {IssueFull} from '../../flow/Issue';
@@ -23,8 +23,7 @@ type State = {
   showAdditionalDate: boolean
 }
 
-export default class TopPanel extends React.Component {
-  props: Props;
+export default class TopPanel extends Component<Props, State> {
   state: State = {
     showAdditionalDate: false
   }

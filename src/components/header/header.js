@@ -1,6 +1,6 @@
 /* @flow */
 import {Text, View, TouchableOpacity, StatusBar} from 'react-native';
-import React from 'react';
+import React, {Component} from 'react';
 import styles from './header.styles';
 import Router from '../router/router';
 import getTopPadding, {onHeightChange} from './header__top-padding';
@@ -10,17 +10,17 @@ const TOUCH_PADDING = 8;
 type Props = {
   onBack?: () => any,
   onRightButtonClick?: Function,
-  leftButton?: ?ReactElement<any>,
-  rightButton?: ?ReactElement<any>,
-  children?: ReactElement<any>
+  leftButton?: ?React$Element<any>,
+  rightButton?: ?React$Element<any>,
+  children?: React$Element<any>
 }
 
 type DefaultProps = {
   onRightButtonClick: Function
 }
 
-export default class Header extends React.Component<DefaultProps, Props, void> {
-  static defaultProps = {
+export default class Header extends Component<Props, void> {
+  static defaultProps: DefaultProps = {
     onRightButtonClick: () => undefined,
   };
 

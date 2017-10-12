@@ -25,9 +25,7 @@ type State = {
   commentCaret: number
 };
 
-export default class IssueListCommentInput extends Component {
-  props: Props;
-  state: State;
+export default class IssueListCommentInput extends Component<Props, State> {
   isUnmounted: boolean;
 
   constructor() {

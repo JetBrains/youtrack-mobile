@@ -1,6 +1,6 @@
 /* @flow */
 import {Image, View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator, Linking} from 'react-native';
-import React from 'react';
+import React, {Component} from 'react';
 import Auth from '../../components/auth/auth';
 import {formatYouTrackURL} from '../../components/config/config';
 import {logo, back} from '../../components/icon/icon';
@@ -28,10 +28,7 @@ type State = {
   youTrackBackendUrl: string
 };
 
-export default class LoginForm extends React.Component {
-  props: Props;
-  state: State;
-
+export default class LoginForm extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {

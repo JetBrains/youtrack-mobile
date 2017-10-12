@@ -21,8 +21,8 @@ type DefaultProps = {
   onCopyCommentLink: Function,
 };
 
-export default class SingleIssueComments extends Component<DefaultProps, Props, void> {
-  static defaultProps = {
+export default class SingleIssueComments extends Component<Props, void> {
+  static defaultProps: DefaultProps = {
     onReply: () => {},
     onCopyCommentLink: () => {}
   };

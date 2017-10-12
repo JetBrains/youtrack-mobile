@@ -25,7 +25,7 @@ type Props = {
   onAttach: (any) => any
 }
 
-export default class IssueToolbar extends PureComponent<void, Props, void> {
+export default class IssueToolbar extends PureComponent<Props, void> {
   node: ?Object;
 
   setNativeProps(...args: Array<any>) {

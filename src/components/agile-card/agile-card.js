@@ -13,7 +13,7 @@ type Props = {
   issue: IssueOnList
 };
 
-export default class AgileCard extends PureComponent<void, Props, void> {
+export default class AgileCard extends PureComponent<Props, void> {
   render() {
     const { issue, style } = this.props;
     const priorityField = getPriotityField(issue);
