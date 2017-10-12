@@ -106,21 +106,23 @@ describe('Config', () => {
   });
 
   describe('Loading stored config', () => {
-    const BACKEND_CONFIG_STORAGE_KEY = 'BACKEND_CONFIG_STORAGE_KEY';
     const configMock = {foo: 'bar'};
 
     beforeEach(() => {
-      AsyncStorage.removeItem(BACKEND_CONFIG_STORAGE_KEY);
+      sinon.stub(AsyncStorage, 'getItem').returns(JSON.stringify(configMock));
+    });
+
+    afterEach(() => {
+      AsyncStorage.getItem.restore();
     });
 
     it('should load config from local storage', async() => {
-      AsyncStorage.setItem(BACKEND_CONFIG_STORAGE_KEY, JSON.stringify(configMock));
-
       const config = await getStoredConfig();
       config.should.deep.equal(configMock);
     });
 
     it('should return nothing if no stored config found', async() => {
+      AsyncStorage.getItem.returns(null);
       const config = await getStoredConfig();
       expect(config).toBeNull();
     });

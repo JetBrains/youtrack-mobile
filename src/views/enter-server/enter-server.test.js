@@ -1,7 +1,7 @@
 import EnterServer from './enter-server';
 import React from 'react';
 import {TouchableOpacity} from 'react-native';
-import {shallow} from 'enzyme';
+import {shallow, mount} from 'enzyme';
 import sinon from 'sinon';
 import renderer from 'react-test-renderer';
 
@@ -107,7 +107,7 @@ describe('EnterServer', () => {
     connectToYouTrack.should.have.been.calledWith('http://foo.bar/rest/workflow/version');
   });
 
-  it.skip('should stop and display error if IncompatibleYouTrackError throwed', async() => {
+  it('should stop and display error if IncompatibleYouTrackError throwed', async() => {
     connectPromise = Promise.reject({isIncompatibleYouTrackError: true, message: 'Incompatible youtrack'});
 
     wrapper.find('TouchableOpacity').simulate('press');
@@ -117,24 +117,24 @@ describe('EnterServer', () => {
   });
 
   it('should not allow empty input', () => {
-    const instance = renderer.create(
+    const instance = shallow(
       <EnterServer serverUrl={''} connectToYoutrack={connectToYouTrack} onCancel={onCancel}/>
-    ).getInstance();
+    ).instance();
     instance.isValidInput().should.be.false;
   });
 
   it('should not allow AT in server input (to not confuse users with email)', () => {
-    const instance = renderer.create(
+    const instance = shallow(
       <EnterServer serverUrl={'foo@bar.com'} connectToYoutrack={connectToYouTrack} onCancel={onCancel}/>
-    ).getInstance();
+    ).instance();
 
     instance.isValidInput().should.be.false;
   });
 
   it('should allow not empty input', () => {
-    const instance = renderer.create(
+    const instance = shallow(
       <EnterServer serverUrl={'someserver'} connectToYoutrack={connectToYouTrack} onCancel={onCancel}/>
-    ).getInstance();
+    ).instance();
 
     instance.isValidInput().should.be.true;
   });

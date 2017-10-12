@@ -40,6 +40,10 @@ exports[`<AgileCard/> should render snapshot 1`] = `
     />
   </View>
   <Text
+    accessible={true}
+    allowFontScaling={true}
+    disabled={false}
+    ellipsizeMode="tail"
     numberOfLines={3}
     style={
       Object {
