@@ -31,6 +31,11 @@ public class MainApplication extends Application implements ReactApplication {
             new RNDeviceInfo(),
             new ImagePickerPackage());
     }
+
+    @Override
+    protected String getJSMainModuleName() {
+      return "index";
+    }
   };
 
   @Override

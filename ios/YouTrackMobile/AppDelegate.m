@@ -21,7 +21,7 @@
   // Enables info logging in production https://youtrack.jetbrains.com/issue/YTM-220
   RCTSetLogThreshold(RCTLogLevelInfo);
 
-  jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
+  jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"YouTrackMobile"
