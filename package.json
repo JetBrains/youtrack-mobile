@@ -95,7 +95,6 @@
 		"redux": "3.6.0",
 		"redux-create-reducer": "^1.1.1",
 		"redux-thunk": "2.2.0",
-		"simple-markdown": "0.2.1",
 		"url-parse": "1.1.7"
 	},
 	"devDependencies": {
