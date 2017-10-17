@@ -1,8 +1,8 @@
 import React, {createElement} from 'react';
 import {Easing, Animated} from 'react-native';
 import {StackNavigator, NavigationActions} from 'react-navigation';
-import transitionConfigs from 'react-navigation/src/views/TransitionConfigs';
-import cardInterpolator from 'react-navigation/src/views/CardStackStyleInterpolator';
+import transitionConfigs from 'react-navigation/src/views/CardStack/TransitionConfigs';
+import cardInterpolator from 'react-navigation/src/views/CardStack/CardStackStyleInterpolator';
 
 const TransitionSpec = {
   duration: 500,
