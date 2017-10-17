@@ -1,5 +1,9 @@
+import {StatusBar, PixelRatio} from 'react-native';
+
+const pixelRatio = PixelRatio.get();
+
 export default function getTopPadding() {
-  return 12;
+  return StatusBar.currentHeight / pixelRatio;
 }
 
 export function onHeightChange() {}
