@@ -46,6 +46,12 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
     };
   }
 
+  componentWillReceiveProps(nextProps: Props) {
+    if (nextProps.initialText !== this.props.initialText) {
+      this.setState({commentText: nextProps.initialText});
+    }
+  }
+
   componentDidMount() {
     this.setState({commentText: this.props.initialText});
   }
