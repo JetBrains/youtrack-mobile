@@ -1,7 +1,7 @@
 /* @flow */
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import React, {PureComponent} from 'react';
-import {star, starInactive, pencil, vote, voteInactive, attachInactive} from '../icon/icon';
+import {star, starInactive, pencilInactive, vote, voteInactive, attachInactive} from '../icon/icon';
 import styles from './issue-toolbar.styles';
 import {View as AnimatedView} from 'react-native-animatable';
 
@@ -65,7 +65,7 @@ export default class IssueToolbar extends PureComponent<Props, void> {
 
         {canEdit && <TouchableOpacity style={styles.toolbarButton} onPress={onEdit}>
           <View>
-            <Image source={pencil} style={styles.toolbarIcon}/>
+            <Image source={pencilInactive} style={styles.toolbarIcon}/>
           </View>
         </TouchableOpacity>}
       </AnimatedView>

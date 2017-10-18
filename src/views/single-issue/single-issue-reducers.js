@@ -3,8 +3,7 @@ import {createReducer} from 'redux-create-reducer';
 import * as types from './single-issue-action-types';
 import {ON_NAVIGATE_BACK} from '../../actions/action-types';
 import type {IssueFull} from '../../flow/Issue';
-import type {CustomField, FieldValue, IssueProject, CommandSuggestionResponse} from '../../flow/CustomFields';
-
+import type {CustomField, FieldValue, IssueProject, CommandSuggestionResponse, IssueComment} from '../../flow/CustomFields';
 
 export type State = {
   issueId: string,
@@ -16,8 +15,9 @@ export type State = {
   isSavingEditedIssue: boolean,
   attachingImage: ?Object,
   addCommentMode: boolean,
-  isAddingComment: boolean,
+  submittingComment: boolean,
   commentText: string,
+  editingComment: ?IssueComment,
   summaryCopy: string,
   descriptionCopy: string,
   suggestionsAreLoading: boolean,
@@ -37,8 +37,9 @@ const initialState: State = {
   isSavingEditedIssue: false,
   attachingImage: null,
   addCommentMode: false,
-  isAddingComment: false,
+  submittingComment: false,
   commentText: '',
+  editingComment: null,
   summaryCopy: '',
   descriptionCopy: '',
   suggestionsAreLoading: false,
@@ -78,16 +79,16 @@ export default createReducer(initialState, {
   [types.HIDE_COMMENT_INPUT]: (state: State): State => {
     return {...state, addCommentMode: false};
   },
-  [types.START_ADDING_COMMENT]: (state: State, action: {comment: string}): State => {
-    return {...state, isAddingComment: true, commentText: action.comment};
+  [types.START_SUBMITTING_COMMENT]: (state: State, action: {comment: string}): State => {
+    return {...state, submittingComment: true, commentText: action.comment};
   },
-  [types.STOP_ADDING_COMMENT]: (state: State): State => {
-    return {...state, isAddingComment: false};
+  [types.STOP_SUBMITTING_COMMENT]: (state: State): State => {
+    return {...state, submittingComment: false};
   },
   [types.SET_COMMENT_TEXT]: (state: State, action: {comment: string}): State => {
     return {...state, commentText: action.comment};
   },
-  [types.RECEIVE_COMMENT]: (state: State, action: {comment: Object}): State => {
+  [types.RECEIVE_COMMENT]: (state: State, action: {comment: IssueComment}): State => {
     return {
       ...state,
       issue: {
@@ -96,6 +97,22 @@ export default createReducer(initialState, {
           ...state.issue.comments,
           action.comment
         ]
+      }
+    };
+  },
+  [types.SET_EDITING_COMMENT]: (state: State, action: {comment: IssueComment}): State => {
+    return {...state, editingComment: action.comment};
+  },
+  [types.CLEAR_EDITING_COMMENT]: (state: State): State => {
+    return {...state, editingComment: null};
+  },
+  [types.RECEIVE_UPDATED_COMMENT]: (state: State, action: {comment: IssueComment}): State => {
+    const {comment} = action;
+    return {
+      ...state,
+      issue: {
+        ...state.issue,
+        comments: state.issue.comments.map(it => it.id === comment.id ? comment : it)
       }
     };
   },

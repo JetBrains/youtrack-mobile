@@ -3,14 +3,18 @@ import {View, Text, TouchableOpacity, ActivityIndicator, ScrollView, Image} from
 import React, {Component} from 'react';
 import {COLOR_PLACEHOLDER} from '../../components/variables/variables';
 import MultilineInput from '../../components/multiline-input/multiline-input';
-import type {IssueUser} from '../../flow/CustomFields';
+import {closeOpaque} from '../../components/icon/icon';
+import type {IssueUser, IssueComment} from '../../flow/CustomFields';
 
 import styles from './single-issue.styles';
 
 type Props = {
   initialText: string,
-  onChangeText: (text: string) => any,
-  onAddComment: (comment: string) => any,
+  onChangeText?: (text: string) => any,
+  onSubmitComment: (comment: string) => any,
+
+  editingComment: IssueComment,
+  onCancelEditing: Function,
 
   suggestionsAreLoading: boolean,
   onRequestCommentSuggestions: (query: string) => any,
@@ -25,7 +29,7 @@ type State = {
   commentCaret: number
 };
 
-export default class IssueListCommentInput extends Component<Props, State> {
+export default class SingleIssueCommentInput extends Component<Props, State> {
   isUnmounted: boolean;
 
   constructor() {
@@ -52,7 +56,7 @@ export default class IssueListCommentInput extends Component<Props, State> {
 
   addComment() {
     this.setState({isSaving: true});
-    this.props.onAddComment(this.state.commentText)
+    this.props.onSubmitComment(this.state.commentText)
       .then(() => {
         if (this.isUnmounted) {
           return;
@@ -133,9 +137,24 @@ export default class IssueListCommentInput extends Component<Props, State> {
   }
 
   render() {
+    const {editingComment, onCancelEditing} = this.props;
     return (
       <View>
         {this.renderSuggestions()}
+
+        {editingComment &&
+          <View style={styles.editingCommentWrapper}>
+            <View>
+              <Text style={styles.editingCommentTitle}>Edit comment</Text>
+              <Text style={styles.editingCommentText} numberOfLines={1}>{editingComment.text}</Text>
+            </View>
+            <TouchableOpacity onPress={onCancelEditing}>
+              <Image
+                style={styles.editingCommentCloseIcon}
+                source={closeOpaque}
+              />
+            </TouchableOpacity>
+          </View>}
 
         <View style={styles.commentInputWrapper}>
           <MultilineInput

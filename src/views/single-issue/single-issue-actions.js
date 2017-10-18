@@ -41,24 +41,28 @@ export function hideCommentInput() {
   return {type: types.HIDE_COMMENT_INPUT};
 }
 
-export function startAddingComment(comment: string = '') {
-  return {type: types.START_ADDING_COMMENT, comment};
+export function startSubmittingComment() {
+  return {type: types.START_SUBMITTING_COMMENT};
 }
 
 export function startReply(targetLogin: string) {
-  return {type: types.START_ADDING_COMMENT, comment: `@${targetLogin} `};
+  return {type: types.START_SUBMITTING_COMMENT, comment: `@${targetLogin} `};
 }
 
 export function setCommentText(comment: string) {
   return {type: types.SET_COMMENT_TEXT, comment};
 }
 
-export function stopAddingComment() {
-  return {type: types.STOP_ADDING_COMMENT};
+export function stopSubmittingComment() {
+  return {type: types.STOP_SUBMITTING_COMMENT};
 }
 
 export function receiveComment(comment: Object) {
   return {type: types.RECEIVE_COMMENT, comment};
+}
+
+function updateComment(comment: IssueComment) {
+  return {type: types.RECEIVE_UPDATED_COMMENT, comment};
 }
 
 export function startImageAttaching(attachingImage: Object) {
@@ -219,7 +223,7 @@ export function saveIssueSummaryAndDescriptionChange() {
   };
 }
 
-export function addComment(comment: string) {
+export function addComment(commentText: string) {
   return async (
     dispatch: any => any,
     getState: StateGetter,
@@ -227,9 +231,9 @@ export function addComment(comment: string) {
   ) => {
     const api: Api = getApi();
     const {issue} = getState().singleIssue;
-    dispatch(startAddingComment());
+    dispatch(startSubmittingComment());
     try {
-      const createdComment = await api.addComment(issue.id, comment);
+      const createdComment = await api.submitComment(issue.id, commentText);
       usage.trackEvent(CATEGORY_NAME, 'Add comment', 'Success');
 
       dispatch(receiveComment(createdComment));
@@ -237,10 +241,58 @@ export function addComment(comment: string) {
       dispatch(loadIssue());
     } catch (err) {
       dispatch(showCommentInput());
-      dispatch(startAddingComment(comment));
+      dispatch(setCommentText(commentText));
       notifyError('Cannot post comment', err);
     } finally {
-      dispatch(stopAddingComment());
+      dispatch(stopSubmittingComment());
+    }
+  };
+}
+
+
+export function startEditingComment(comment: IssueComment) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    dispatch(setCommentText(comment.text));
+    dispatch(showCommentInput());
+    dispatch({type: types.SET_EDITING_COMMENT, comment});
+  };
+}
+
+export function stopEditingComment() {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    dispatch(hideCommentInput());
+    dispatch(setCommentText(''));
+    dispatch({type: types.CLEAR_EDITING_COMMENT});
+  };
+}
+
+export function submitEditedComment(comment: IssueComment) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const issueId = getState().singleIssue.issueId;
+    dispatch(startSubmittingComment());
+
+    try {
+      const updatedComment = await getApi().submitComment(issueId,  comment.text, comment.id);
+
+      dispatch(updateComment(updatedComment));
+      notify('Comment successfully edited');
+      dispatch(stopEditingComment());
+      await dispatch(loadIssue());
+    } catch (err) {
+      notifyError('Failed to edit comment', err);
+    } finally {
+      dispatch(stopSubmittingComment());
+    }
+  };
+}
+
+export function addOrEditComment(text: string) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const editingComment = getState().singleIssue.editingComment;
+    if (editingComment) {
+      dispatch(submitEditedComment({...editingComment, text}));
+    } else {
+      dispatch(addComment(text));
     }
   };
 }

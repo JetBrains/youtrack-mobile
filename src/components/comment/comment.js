@@ -1,14 +1,14 @@
 /* @flow */
 import styles from './comment.styles';
 import Wiki from '../../components/wiki/wiki';
-import {COLOR_LIGHT_GRAY, COLOR_FONT_GRAY, COLOR_PINK} from '../../components/variables/variables';
+import {COLOR_LIGHT_GRAY, COLOR_FONT_GRAY, COLOR_PINK, COLOR_PINK_DARK, COLOR_BLACK} from '../../components/variables/variables';
 
 import {View, Text, Image} from 'react-native';
 import React, {Component} from 'react';
 import Swipeout from 'react-native-swipeout';
 import SwipeButton from './comment__swipe-button';
 import {relativeDate} from '../issue-formatter/issue-formatter';
-import {reply, share} from '../icon/icon';
+import {reply, share, pencil} from '../icon/icon';
 import type {IssueComment, Attachment} from '../../flow/CustomFields';
 
 type Props = {
@@ -18,6 +18,7 @@ type Props = {
   backendUrl: string,
   onReply: () => any,
   onCopyCommentLink: () => any,
+  onEdit: () => any,
   onIssueIdTap: (issueId: string) => any
 };
 
@@ -26,6 +27,8 @@ export default class Comment extends Component<Props, void> {
     onReply: () => {
     },
     onCopyCommentLink: () => {
+    },
+    onEdit: () => {
     }
   };
 
@@ -33,10 +36,14 @@ export default class Comment extends Component<Props, void> {
     const swipeoutBtns = [
       {
         backgroundColor: COLOR_PINK,
+        component: <SwipeButton text="Edit" icon={pencil}/>,
+        onPress: this.props.onEdit
+      }, {
+        backgroundColor: COLOR_PINK_DARK,
         component: <SwipeButton text="Reply" icon={reply}/>,
         onPress: this.props.onReply
       }, {
-        backgroundColor: '#000',
+        backgroundColor: COLOR_BLACK,
         component: <SwipeButton text="Copy link" icon={share}/>,
         onPress: this.props.onCopyCommentLink
       }
@@ -67,7 +74,9 @@ export default class Comment extends Component<Props, void> {
           backgroundColor={COLOR_LIGHT_GRAY}
           right={this._getCommentActionButtons()}
           sensitivity={30}
-          autoClose={true}>
+          buttonWidth={56}
+          autoClose={true}
+        >
           <View style={styles.commentWrapper}>
             <Image style={styles.avatar} source={{uri: comment.author.avatarUrl}}/>
             <View style={styles.comment}>

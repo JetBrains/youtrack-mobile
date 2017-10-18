@@ -71,6 +71,27 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  editingCommentWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: COLOR_BLACK,
+    padding: UNIT,
+    paddingLeft: UNIT * 2,
+    paddingRight: UNIT * 2,
+    paddingBottom: 0
+  },
+  editingCommentTitle: {
+    color: COLOR_PINK
+  },
+  editingCommentText: {
+    color: COLOR_FONT_GRAY,
+    paddingRight: UNIT
+  },
+  editingCommentCloseIcon: {
+    height: UNIT * 2.5,
+    width: UNIT * 2.5,
+    resizeMode: 'contain'
+  },
   commentSuggestionsContainer: {
     backgroundColor: COLOR_TRANSPARENT_BLACK,
     position: 'absolute',

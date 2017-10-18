@@ -223,7 +223,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
       updateProject,
       hideCommentInput,
       setCommentText,
-      addComment,
+      addOrEditComment,
       copyCommentUrl,
       openNestedIssueView,
 
@@ -236,8 +236,13 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
       commandSuggestions,
       loadCommandSuggestions,
       applyCommand,
-      commandIsApplying
+      commandIsApplying,
+
+      startEditingComment,
+      stopEditingComment,
+      editingComment
     } = this.props;
+
     return (
       <View style={styles.container} testID="issue-view">
         {this._renderHeader()}
@@ -266,7 +271,9 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
                 this.props.startReply(comment.author.login);
               }}
               onCopyCommentLink={copyCommentUrl}
-              onIssueIdTap={issueId => openNestedIssueView(null, issueId)}/>
+              onIssueIdTap={issueId => openNestedIssueView(null, issueId)}
+              onStartEditing={startEditingComment}
+            />
           </View>}
 
           {Platform.OS == 'ios' && <KeyboardSpacer/>}
@@ -278,7 +285,10 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
             onBlur={hideCommentInput}
             initialText={commentText}
             onChangeText={setCommentText}
-            onAddComment={addComment}
+            onSubmitComment={addOrEditComment}
+
+            onCancelEditing={stopEditingComment}
+            editingComment={editingComment}
 
             onRequestCommentSuggestions={loadCommentSuggestions}
             suggestionsAreLoading={suggestionsAreLoading}

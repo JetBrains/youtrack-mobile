@@ -8,6 +8,8 @@ export const COLOR_DARK_BORDER = '#263B4C';
 
 export const COLOR_PINK = '#FE0082';
 
+export const COLOR_PINK_DARK = '#90004A';
+
 export const COLOR_SELECTED_DARK = '#001526';
 
 export const COLOR_PLACEHOLDER = '#406380';

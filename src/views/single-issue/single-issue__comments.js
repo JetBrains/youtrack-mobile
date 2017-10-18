@@ -11,6 +11,9 @@ type Props = {
   attachments: Array<Attachment>,
   imageHeaders: ?Object,
   backendUrl: string,
+
+  onStartEditing: (comment: IssueComment) => any,
+
   onReply: (comment: IssueComment) => any,
   onCopyCommentLink: (comment: IssueComment) => any,
   onIssueIdTap: (issueId: string) => any
@@ -18,7 +21,7 @@ type Props = {
 
 type DefaultProps = {
   onReply: Function,
-  onCopyCommentLink: Function,
+  onCopyCommentLink: Function
 };
 
 export default class SingleIssueComments extends Component<Props, void> {
@@ -28,26 +31,37 @@ export default class SingleIssueComments extends Component<Props, void> {
   };
 
   _renderCommentsList(comments, attachments) {
-    return comments.map((comment) => {
-      return <Comment key={comment.id}
-                      comment={comment}
-                      imageHeaders={this.props.imageHeaders}
-                      backendUrl={this.props.backendUrl}
-                      onIssueIdTap={this.props.onIssueIdTap}
-                      attachments={attachments}
-                      onReply={() => this.props.onReply(comment)}
-                      onCopyCommentLink={() => this.props.onCopyCommentLink(comment)}/>;
+    return comments.map(comment => {
+      return (
+        <Comment
+          key={comment.id}
+          comment={comment}
+          imageHeaders={this.props.imageHeaders}
+          backendUrl={this.props.backendUrl}
+          onIssueIdTap={this.props.onIssueIdTap}
+          attachments={attachments}
+          onEdit={() => this.props.onStartEditing(comment)}
+          onReply={() => this.props.onReply(comment)}
+          onCopyCommentLink={() => this.props.onCopyCommentLink(comment)}
+        />
+      );
     });
   }
 
   render() {
     const {comments, attachments} = this.props;
-    const reversed = [...comments].reverse();//reverse to get designed order of comments
+    const reversed = [...comments].reverse(); //reverse to get designed order of comments
 
-    const NoComments = <Text style={{textAlign: 'center'}}>No comments yet</Text>;
+    const NoComments = (
+      <Text style={{textAlign: 'center'}}>No comments yet</Text>
+    );
 
-    return (<View style={styles.commentsContainer}>
-      {comments.length ? this._renderCommentsList(reversed, attachments) : NoComments}
-    </View>);
+    return (
+      <View style={styles.commentsContainer}>
+        {comments.length
+          ? this._renderCommentsList(reversed, attachments)
+          : NoComments}
+      </View>
+    );
   }
 }

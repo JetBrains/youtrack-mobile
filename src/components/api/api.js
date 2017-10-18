@@ -145,11 +145,11 @@ class Api {
     return updatedIssue;
   }
 
-  async addComment(issueId: string, comment: string) {
+  async submitComment(issueId: string, commentText: string, commentId: string = '') {
     const queryString = qs.stringify({fields: issueFields.issueComment.toString()});
-    const url = `${this.youTrackIssueUrl}/${issueId}/comments?${queryString}`;
+    const url = `${this.youTrackIssueUrl}/${issueId}/comments/${commentId}?${queryString}`;
 
-    const createdComment =  await this.makeAuthorizedRequest(url, 'POST', {text: comment});
+    const createdComment =  await this.makeAuthorizedRequest(url, 'POST', {text: commentText});
     createdComment.author.avatarUrl = handleRelativeUrl(createdComment.author.avatarUrl, this.config.backendUrl);
 
     return createdComment;

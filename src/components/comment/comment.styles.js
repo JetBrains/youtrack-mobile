@@ -28,7 +28,7 @@ export default StyleSheet.create({
   },
 
   swipeButton: {
-    paddingTop: UNIT * 2,
+    paddingTop: UNIT * 1,
     flex: 1,
     alignItems: 'center'
   },
