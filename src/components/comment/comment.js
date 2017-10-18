@@ -18,6 +18,7 @@ type Props = {
   backendUrl: string,
   onReply: () => any,
   onCopyCommentLink: () => any,
+  canEdit: boolean,
   onEdit: () => any,
   onIssueIdTap: (issueId: string) => any
 };
@@ -33,8 +34,9 @@ export default class Comment extends Component<Props, void> {
   };
 
   _getCommentActionButtons() {
+    const {canEdit} = this.props;
     const swipeoutBtns = [
-      {
+      canEdit && {
         backgroundColor: COLOR_PINK,
         component: <SwipeButton text="Edit" icon={pencil}/>,
         onPress: this.props.onEdit
@@ -48,7 +50,7 @@ export default class Comment extends Component<Props, void> {
         onPress: this.props.onCopyCommentLink
       }
     ];
-    return swipeoutBtns;
+    return swipeoutBtns.filter(it => !!it);
   }
 
   _renderComment(comment, attachments) {

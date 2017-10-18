@@ -4,7 +4,7 @@
  */
 import type { Permissions } from '../auth/auth__permissions';
 import type {AnyIssue} from '../../flow/Issue';
-import type {CustomField, IssueProject} from '../../flow/CustomFields';
+import type {CustomField, IssueComment, IssueProject} from '../../flow/CustomFields';
 
 export const CREATE_ISSUE = 'JetBrains.YouTrack.CREATE_ISSUE';
 export const READ_ISSUE = 'JetBrains.YouTrack.READ_ISSUE';
@@ -12,6 +12,10 @@ export const UPDATE_ISSUE = 'JetBrains.YouTrack.UPDATE_ISSUE';
 export const PRIVATE_UPDATE_ISSUE = 'JetBrains.YouTrack.PRIVATE_UPDATE_ISSUE';
 export const CAN_CREATE_ISSUE = 'JetBrains.YouTrack.CREATE_COMMENT';
 export const CAN_ADD_ATTACHMENT = 'JetBrains.YouTrack.UPDATE_ATTACHMENT_ISSUE';
+export const CAN_UPDATE_COMMENT = 'JetBrains.YouTrack.UPDATE_COMMENT';
+export const CAN_UPDATE_NOT_OWN_COMMENT = 'JetBrains.YouTrack.UPDATE_NOT_OWN_COMMENT';
+export const CAN_DELETE_COMMENT = 'JetBrains.YouTrack.DELETE_COMMENT';
+export const CAN_DELETE_NOT_OWN_COMMENT = 'JetBrains.YouTrack.DELETE_NOT_OWN_COMMENT';
 
 export default class IssuePermissions {
   permissions: Permissions;
@@ -55,6 +59,24 @@ export default class IssuePermissions {
 
   canCommentOn(issue: AnyIssue) {
     return this.permissions.has(CAN_CREATE_ISSUE, issue.project.ringId);
+  }
+
+  canEditComment(issue: AnyIssue, comment: IssueComment) {
+    const projectId = issue.project.ringId;
+    const isAuthor = comment.author.ringId === this.currentUser.id;
+    if (isAuthor) {
+      return this.permissions.has(CAN_UPDATE_COMMENT, projectId);
+    }
+    return this.permissions.has(CAN_UPDATE_NOT_OWN_COMMENT, projectId);
+  }
+
+  canDeleteComment(issue: AnyIssue, comment: IssueComment) {
+    const projectId = issue.project.ringId;
+    const isAuthor = comment.author.ringId === this.currentUser.id;
+    if (isAuthor) {
+      return this.permissions.has(CAN_DELETE_COMMENT, projectId);
+    }
+    return this.permissions.has(CAN_DELETE_NOT_OWN_COMMENT, projectId);
   }
 
   canAddAttachmentTo(issue: AnyIssue) {

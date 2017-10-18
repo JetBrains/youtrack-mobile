@@ -12,6 +12,7 @@ type Props = {
   imageHeaders: ?Object,
   backendUrl: string,
 
+  canEditComment: (comment: IssueComment) => boolean,
   onStartEditing: (comment: IssueComment) => any,
 
   onReply: (comment: IssueComment) => any,
@@ -40,6 +41,7 @@ export default class SingleIssueComments extends Component<Props, void> {
           backendUrl={this.props.backendUrl}
           onIssueIdTap={this.props.onIssueIdTap}
           attachments={attachments}
+          canEdit={this.props.canEditComment(comment)}
           onEdit={() => this.props.onStartEditing(comment)}
           onReply={() => this.props.onReply(comment)}
           onCopyCommentLink={() => this.props.onCopyCommentLink(comment)}

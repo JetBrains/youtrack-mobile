@@ -272,6 +272,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
               }}
               onCopyCommentLink={copyCommentUrl}
               onIssueIdTap={issueId => openNestedIssueView(null, issueId)}
+              canEditComment={comment => issuePermissions.canEditComment(issue, comment)}
               onStartEditing={startEditingComment}
             />
           </View>}
