@@ -1,7 +1,7 @@
-import IssuePermissions, {CREATE_ISSUE, READ_ISSUE, UPDATE_ISSUE} from './issue-permissions';
+import IssuePermissions, {CREATE_ISSUE, READ_ISSUE, UPDATE_ISSUE, CAN_UPDATE_COMMENT} from './issue-permissions';
 import sinon from 'sinon';
 
-describe('IssuePermissions', () => {
+describe('IssuePermissions', function () {
   const USER_ID = 'some-user-id';
   const PROJECT_ID = 'some-project-id';
 
@@ -15,6 +15,12 @@ describe('IssuePermissions', () => {
       reporter: {ringId: USER_ID},
       project: {
         ringId: PROJECT_ID
+      }
+    };
+
+    this.commentMock = {
+      author: {
+        ringId: USER_ID
       }
     };
 
@@ -51,6 +57,21 @@ describe('IssuePermissions', () => {
     it('should not allow to edit if user is not reporter but has READ_ISSUE and not has UPDATE_ISSUE', () => {
       this.issueMock.reporter = {id: 'foo'};
       this.issuePermissions.canUpdateGeneralInfo(this.issueMock).should.be.false;
+    });
+  });
+
+  describe('canEditComment', () => {
+    it('should allow to edit own comment if has update permission', () => {
+      this.permissionsMock.has.withArgs(CAN_UPDATE_COMMENT).returns(true);
+
+      this.issuePermissions.canEditComment(this.issueMock, this.commentMock).should.be.true;
+    });
+
+    it('should not allow to edit not own comment if don\'t have update-not-own permission', () => {
+      this.permissionsMock.has.withArgs(CAN_UPDATE_COMMENT).returns(true);
+      this.commentMock.author = {id: 'foo'};
+
+      this.issuePermissions.canEditComment(this.issueMock, this.commentMock).should.be.false;
     });
   });
 });
