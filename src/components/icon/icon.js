@@ -27,3 +27,4 @@ export {default as star} from './star-active.png';
 export {default as starInactive} from './star-inactive.png';
 export {default as vote} from './vote-active.png';
 export {default as voteInactive} from './vote-inactive.png';
+export {default as trash} from './trash.png';

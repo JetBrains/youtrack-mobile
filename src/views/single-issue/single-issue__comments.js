@@ -15,6 +15,13 @@ type Props = {
   canEditComment: (comment: IssueComment) => boolean,
   onStartEditing: (comment: IssueComment) => any,
 
+  canDeleteComment: (comment: IssueComment) => any,
+  canRestoreComment: (comment: IssueComment) => any,
+  canDeleteCommentPermanently: (comment: IssueComment) => any,
+  onDeleteComment: (comment: IssueComment) => any,
+  onRestoreComment: (comment: IssueComment) => any,
+  onDeleteCommentPermanently: (comment: IssueComment) => any,
+
   onReply: (comment: IssueComment) => any,
   onCopyCommentLink: (comment: IssueComment) => any,
   onIssueIdTap: (issueId: string) => any
@@ -41,8 +48,17 @@ export default class SingleIssueComments extends Component<Props, void> {
           backendUrl={this.props.backendUrl}
           onIssueIdTap={this.props.onIssueIdTap}
           attachments={attachments}
+
           canEdit={this.props.canEditComment(comment)}
           onEdit={() => this.props.onStartEditing(comment)}
+
+          canDelete={this.props.canDeleteComment(comment)}
+          onDelete={() => this.props.onDeleteComment(comment)}
+          canRestore={this.props.canRestoreComment(comment)}
+          onRestore={() => this.props.onRestoreComment(comment)}
+          canDeletePermanently={this.props.canDeleteCommentPermanently(comment)}
+          onDeletePermanently={() => this.props.onDeleteCommentPermanently(comment)}
+
           onReply={() => this.props.onReply(comment)}
           onCopyCommentLink={() => this.props.onCopyCommentLink(comment)}
         />

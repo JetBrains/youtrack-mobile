@@ -240,7 +240,11 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
 
       startEditingComment,
       stopEditingComment,
-      editingComment
+      editingComment,
+
+      deleteComment,
+      restoreComment,
+      deleteCommentPermanently
     } = this.props;
 
     return (
@@ -272,8 +276,16 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
               }}
               onCopyCommentLink={copyCommentUrl}
               onIssueIdTap={issueId => openNestedIssueView(null, issueId)}
+
               canEditComment={comment => issuePermissions.canEditComment(issue, comment)}
               onStartEditing={startEditingComment}
+
+              canDeleteComment={comment => issuePermissions.canDeleteComment(issue, comment)}
+              canRestoreComment={comment => issuePermissions.canRestoreComment(issue, comment)}
+              canDeleteCommentPermanently={comment => issuePermissions.canDeleteCommentPermanently(issue, comment)}
+              onDeleteComment={deleteComment}
+              onRestoreComment={restoreComment}
+              onDeleteCommentPermanently={deleteCommentPermanently}
             />
           </View>}
 

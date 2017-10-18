@@ -1,9 +1,10 @@
 /* @flow */
-import {Clipboard, Linking} from 'react-native';
+import {Clipboard, Linking, Alert} from 'react-native';
 import * as types from './single-issue-action-types';
 import ApiHelper from '../../components/api/api__helper';
 import {notify, notifyError} from '../../components/notification/notification';
 import attachFile from '../../components/attach-file/attach-file';
+import log from '../../components/log/log';
 import Router from '../../components/router/router';
 import {showActions} from '../../components/action-sheet/action-sheet';
 import usage from '../../components/usage/usage';
@@ -63,6 +64,10 @@ export function receiveComment(comment: Object) {
 
 function updateComment(comment: IssueComment) {
   return {type: types.RECEIVE_UPDATED_COMMENT, comment};
+}
+
+function deleteCommentFromList(comment: IssueComment) {
+  return {type: types.DELETE_COMMENT, comment};
 }
 
 export function startImageAttaching(attachingImage: Object) {
@@ -293,6 +298,61 @@ export function addOrEditComment(text: string) {
       dispatch(submitEditedComment({...editingComment, text}));
     } else {
       dispatch(addComment(text));
+    }
+  };
+}
+
+function toggleCommentDeleted(comment: IssueComment, deleted: boolean) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const issueId = getState().singleIssue.issueId;
+    try {
+      dispatch(updateComment({...comment, deleted}));
+      await getApi().updateCommentDeleted(issueId, comment.id, deleted);
+    } catch (err) {
+      dispatch(updateComment({...comment}));
+      notifyError(`Failed to ${deleted ? 'delete' : 'restore'} comment`, err);
+    }
+  };
+}
+
+export function deleteComment(comment: IssueComment) {
+  return async (dispatch: (any) => any) => {
+    return dispatch(toggleCommentDeleted(comment, true));
+  };
+}
+
+export function restoreComment(comment: IssueComment) {
+  return async (dispatch: (any) => any) => {
+    return dispatch(toggleCommentDeleted(comment, false));
+  };
+}
+
+export function deleteCommentPermanently(comment: IssueComment) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const issueId = getState().singleIssue.issueId;
+
+    try {
+      await new Promise((resolve, reject) => {
+        Alert.alert(
+          'Confirmation',
+          'Delete comment permanently?',
+          [
+            {text: 'Cancel', style: 'cancel', onPress: reject},
+            {text: 'OK', onPress: resolve}
+          ],
+          {cancelable: true}
+        );
+      });
+    } catch (err) {
+      log.log('Deletion confirmation declined');
+    }
+
+    try {
+      dispatch(deleteCommentFromList(comment));
+      await getApi().deleteCommentPermanently(issueId, comment.id);
+    } catch (err) {
+      dispatch(loadIssue());
+      notifyError(`Failed to delete comment`, err);
     }
   };
 }

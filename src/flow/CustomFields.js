@@ -128,6 +128,7 @@ declare type IssueComment = {
   id: string,
   created: number,
   textPreview: string,
+  deleted: boolean,
   text: string,
   author: IssueUser
 }

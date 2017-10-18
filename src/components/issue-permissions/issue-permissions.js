@@ -79,6 +79,18 @@ export default class IssuePermissions {
     return this.permissions.has(CAN_DELETE_NOT_OWN_COMMENT, projectId);
   }
 
+  canRestoreComment(issue: AnyIssue, comment: IssueComment) {
+    const isAuthor = comment.author.ringId === this.currentUser.id;
+    if (isAuthor) {
+      return this.canEditComment(issue, comment) || this.canDeleteComment(issue, comment);
+    }
+    return this.permissions.has(CAN_DELETE_NOT_OWN_COMMENT, issue.project.ringId);
+  }
+
+  canDeleteCommentPermanently(issue: AnyIssue, comment: IssueComment) {
+    return this.permissions.has(CAN_DELETE_NOT_OWN_COMMENT, issue.project.ringId);
+  }
+
   canAddAttachmentTo(issue: AnyIssue) {
     return this.permissions.has(CAN_ADD_ATTACHMENT, issue.project.ringId);
   }

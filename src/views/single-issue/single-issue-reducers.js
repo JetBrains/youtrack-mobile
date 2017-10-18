@@ -116,6 +116,16 @@ export default createReducer(initialState, {
       }
     };
   },
+  [types.DELETE_COMMENT]: (state: State, action: {comment: IssueComment}): State => {
+    const {comment} = action;
+    return {
+      ...state,
+      issue: {
+        ...state.issue,
+        comments: state.issue.comments.filter(it => it.id !== comment.id)
+      }
+    };
+  },
   [types.START_EDITING_ISSUE]: (state: State): State => {
     return {
       ...state,

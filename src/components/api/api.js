@@ -17,6 +17,14 @@ const STATUS_BAD_IF_MORE_THATN = 300;
 
 const MAX_QUERY_LENGTH = 2048;
 
+type RequestOptions = {
+  parseJson: boolean
+};
+
+const defaultRequestOptions: RequestOptions = {
+  parseJson: true
+};
+
 class Api {
   auth: Auth;
   config: AppConfigFilled;
@@ -36,7 +44,7 @@ class Api {
     this.youtTrackFieldBundleUrl = `${this.youTrackUrl}/api/admin/customFieldSettings/bundles`;
   }
 
-  async makeAuthorizedRequest(url: string, method: ?string, body: ?Object) {
+  async makeAuthorizedRequest(url: string, method: ?string, body: ?Object, options: RequestOptions = defaultRequestOptions) {
     assertLongQuery(url);
 
     const sendRequest = async () => {
@@ -63,6 +71,9 @@ class Api {
       throw res;
     }
 
+    if (!options.parseJson) {
+      return res;
+    }
     return await res.json();
   }
 
@@ -149,10 +160,24 @@ class Api {
     const queryString = qs.stringify({fields: issueFields.issueComment.toString()});
     const url = `${this.youTrackIssueUrl}/${issueId}/comments/${commentId}?${queryString}`;
 
-    const comment =  await this.makeAuthorizedRequest(url, 'POST', {text: commentText});
+    const comment = await this.makeAuthorizedRequest(url, 'POST', {text: commentText});
     comment.author.avatarUrl = handleRelativeUrl(comment.author.avatarUrl, this.config.backendUrl);
 
     return comment;
+  }
+
+  async updateCommentDeleted(issueId: string, commentId: string, deleted: boolean) {
+    const queryString = qs.stringify({fields: issueFields.issueComment.toString()});
+    const url = `${this.youTrackIssueUrl}/${issueId}/comments/${commentId}?${queryString}`;
+
+    const comment = await this.makeAuthorizedRequest(url, 'POST', {deleted});
+    comment.author.avatarUrl = handleRelativeUrl(comment.author.avatarUrl, this.config.backendUrl);
+
+    return comment;
+  }
+
+  async deleteCommentPermanently(issueId: string, commentId: string) {
+    return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/comments/${commentId}`, 'DELETE', null, {parseJson: false});
   }
 
   async getUserFromHub(id: string) {
