@@ -81,7 +81,7 @@
 		"react-native-drawer": "2.5.0",
 		"react-native-easy-toast": "huston007/react-native-easy-toast#6eb50eff",
 		"react-native-google-analytics": "1.3.2",
-		"react-native-htmlview": "^0.12.0",
+		"react-native-htmlview": "0.12.1",
 		"react-native-image-gallery": "2.1.2",
 		"react-native-image-picker": "0.26.4",
 		"react-native-image-progress": "1.0.1",
