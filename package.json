@@ -88,7 +88,7 @@
 		"react-native-keyboard-spacer": "0.4.1",
 		"react-native-keychain": "1.0.0",
 		"react-native-root-modal": "huston007/react-native-root-modal#9cbd9516d",
-		"react-native-swipeout": "2.2.2",
+		"react-native-swipeout": "huston007/react-native-swipeout#e4f7985170baf5dc5b7e0ae8b17d0b1bd4c53065",
 		"react-native-syntax-highlighter": "^1.2.3",
 		"react-navigation": "1.0.0-beta.13",
 		"react-redux": "^5.0.3",

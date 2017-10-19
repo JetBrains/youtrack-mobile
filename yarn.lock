@@ -4784,9 +4784,9 @@ react-native-scroller@0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/react-native-scroller/-/react-native-scroller-0.0.6.tgz#dea8c89bd1ca2d2445fbb6b3a90960df6c1767ff"
 
-react-native-swipeout@2.2.2:
+react-native-swipeout@huston007/react-native-swipeout#e4f7985170baf5dc5b7e0ae8b17d0b1bd4c53065:
   version "2.2.2"
-  resolved "https://registry.yarnpkg.com/react-native-swipeout/-/react-native-swipeout-2.2.2.tgz#65221abbd7992c83ec325625a45496d804eccd9f"
+  resolved "https://codeload.github.com/huston007/react-native-swipeout/tar.gz/e4f7985170baf5dc5b7e0ae8b17d0b1bd4c53065"
   dependencies:
     create-react-class "^15.6.0"
     prop-types "^15.5.10"
