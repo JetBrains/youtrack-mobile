@@ -122,7 +122,7 @@ export default class Comment extends Component<Props, void> {
           key={comment.id}
           disabled={comment.deleted}
           backgroundColor={COLOR_LIGHT_GRAY}
-          right={comment.deleted ? null : this._getCommentActionButtons()}
+          right={this._getCommentActionButtons()}
           sensitivity={30}
           buttonWidth={56}
           autoClose={true}
