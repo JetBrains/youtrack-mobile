@@ -5,7 +5,6 @@ import log from '../log/log';
 import type {AppConfig, AppConfigFilled} from '../../flow/AppConfig';
 
 const MIN_YT_VERSION = 7.0;
-const BACKEND_URL_STORAGE_KEY = 'yt_mobile_backend_url';
 const BACKEND_CONFIG_STORAGE_KEY = 'BACKEND_CONFIG_STORAGE_KEY';
 const PROTOCOL_REGEXP = /^https?:\/\//i;
 const YOUTRACK_CONTEXT_REGEXP = /\/youtrack$/i;
@@ -29,9 +28,6 @@ class IncompatibleYouTrackError extends Error {
   isIncompatibleYouTrackError = true;
 }
 
-async function getStoredBackendURL() {
-  return AsyncStorage.getItem(BACKEND_URL_STORAGE_KEY);
-}
 async function storeConfig(config: AppConfigFilled): Promise<AppConfigFilled> {
   log.log(`Storing config: ${JSON.stringify(config)}`);
   return AsyncStorage.setItem(
@@ -46,17 +42,6 @@ async function getStoredConfig(): Promise<?AppConfigFilled> {
 
   if (rawConfig) {
     return JSON.parse(rawConfig);
-  }
-
-  //TODO: code below is fallback for previous installs have backend URL only. Should be removed after a while.
-  const fallbackServerURL = await getStoredBackendURL();
-
-  if (fallbackServerURL) {
-    return loadConfig(fallbackServerURL)
-      .then(config => {
-        AsyncStorage.removeItem(BACKEND_URL_STORAGE_KEY);
-        return config;
-      });
   }
 
   return null;
