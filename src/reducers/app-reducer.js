@@ -7,13 +7,15 @@ import type Auth from '../components/auth/auth';
 type RootState = {
   api: ?Api,
   auth: ?Auth,
-  showMenu: boolean
+  showMenu: boolean,
+  showDebugView: boolean
 };
 
 const initialState: RootState = {
   api: null,
   auth: null,
-  showMenu: false
+  showMenu: false,
+  showDebugView: false
 };
 
 export default createReducer(initialState, {
@@ -54,4 +56,16 @@ export default createReducer(initialState, {
       showMenu: false
     };
   },
+  [types.OPEN_DEBUG_VIEW](state: RootState) {
+    return {
+      ...state,
+      showDebugView: true
+    };
+  },
+  [types.CLOSE_DEBUG_VIEW](state: RootState) {
+    return {
+      ...state,
+      showDebugView: false
+    };
+  }
 });

@@ -6,6 +6,7 @@ import store from './store';
 import { Provider } from 'react-redux';
 import Auth from './components/auth/auth';
 import Router from './components/router/router';
+import DebugView from './components/debug-view/debug-view';
 import Home from './views/home/home';
 import EnterServer from './views/enter-server/enter-server';
 import LoginForm from './views/log-in/log-in';
@@ -136,7 +137,10 @@ class YouTrackMobile extends Component<void, void> {
         <ActionSheet ref={this.actionSheetRef}>
           <View style={{flex: 1, backgroundColor: COLOR_BLACK}}>
             {Router.renderNavigatorView()}
+
             <Toast ref={toast => toast ? setNotificationComponent(toast) : null}/>
+
+            <DebugView/>
           </View>
         </ActionSheet>
       </Provider>

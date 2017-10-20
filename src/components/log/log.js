@@ -1,29 +1,37 @@
 /* @flow */
-/*eslint-disable no-console*/
+import deviceLog from 'react-native-device-log';
+
 let logEnabled = true;
+
+deviceLog.init(null, {
+    logToConsole : true,
+    logRNErrors : true,
+    maxNumberToRender : 2000,
+    maxNumberToPersist : 2000
+});
 
 export default {
   log(...params: Array<any>) {
     if (!logEnabled) {
       return;
     }
-    return console.log(...params);
+    return deviceLog.log(...params);
   },
   info(...params: Array<any>) {
     if (!logEnabled) {
       return;
     }
-    return console.info(...params);
+    return deviceLog.info(...params);
   },
   warn(...params: Array<any>) {
     if (!logEnabled) {
       return;
     }
-    return console.warn(...params);
+    return deviceLog.warn(...params);
   },
 
   enableLog() {
-    console.log('Logging has been turned on');
+    deviceLog.log('Logging has been turned on');
     logEnabled = true;
   },
   disableLog() {

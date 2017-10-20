@@ -10,7 +10,7 @@ import Router from '../../components/router/router';
 import Auth from '../../components/auth/auth';
 import {next, logOut as logOutIcon} from '../../components/icon/icon';
 import {connect} from 'react-redux';
-import {logOut, openMenu, closeMenu} from '../../actions/app-actions';
+import {logOut, openMenu, closeMenu, openDebugView} from '../../actions/app-actions';
 
 const CURRENT_YEAR = (new Date()).getFullYear();
 const MENU_WIDTH = 280;
@@ -76,7 +76,7 @@ export class Menu extends Component<Props, void> {
 
   _renderMenu() {
     const {height} = Dimensions.get('window');
-    const {auth, issueQuery} = this.props;
+    const {auth, issueQuery, openDebugView} = this.props;
     if (!auth) { //TODO: menu renders right after logOut by some reason.
       return null;
     }
@@ -118,7 +118,7 @@ export class Menu extends Component<Props, void> {
           <View style={styles.flexSpacer}/>
 
           <View style={styles.menuFooter}>
-            <Text style={styles.footerText}>YouTrack Mobile {VERSION_STRING}</Text>
+            <Text style={styles.footerText} onPress={openDebugView}>YouTrack Mobile {VERSION_STRING}</Text>
             <Text style={styles.footerText}>{formatYouTrackURL(backendUrl)}</Text>
 
             <View style={styles.spacer}></View>
@@ -169,7 +169,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onOpen: () => dispatch(openMenu()),
     onClose: () => dispatch(closeMenu()),
-    onLogOut: () => dispatch(logOut())
+    onLogOut: () => dispatch(logOut()),
+    openDebugView: () => dispatch(openDebugView())
   };
 };
 
