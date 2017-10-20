@@ -6,6 +6,7 @@ let logEnabled = true;
 deviceLog.init(null, {
     logToConsole : true,
     logRNErrors : true,
+    rowInsertDebounceMs: 0,
     maxNumberToRender : 2000,
     maxNumberToPersist : 2000
 });

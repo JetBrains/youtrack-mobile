@@ -69,18 +69,19 @@ export class EnterServer extends Component<Props, State> {
     const trimmedUrl = this.state.serverUrl.trim().replace(/\/$/i, '');
 
     const urlsToTry = this.getPossibleUrls(trimmedUrl);
-    log.log(`${this.state.serverUrl} entered, will try that urls: `, urlsToTry);
+    log.log(`Entered: "${this.state.serverUrl}", will try that urls: ${urlsToTry.join(', ')}`);
 
     let errorToShow = null;
 
     for (const url of urlsToTry) {
-      log.log('Trying', url);
+      log.log(`Trying: "${url}"`);
       try {
         await this.props.connectToYoutrack(url);
-        log.log('Successfully connected to', url);
+        log.log(`Successfully connected to ${url}`);
         return;
       } catch (error) {
         log.log(`Failed to connect to ${url}`, error);
+        log.log(`Connection error for ${url}: ${error && error.toString()}`);
         if (error && error.isIncompatibleYouTrackError) {
           errorToShow = error;
           break;
