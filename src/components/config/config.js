@@ -1,6 +1,7 @@
 /* @flow */
 import {AsyncStorage} from 'react-native';
 import UrlParse from 'url-parse';
+import log from '../log/log';
 import type {AppConfig, AppConfigFilled} from '../../flow/AppConfig';
 
 const MIN_YT_VERSION = 7.0;
@@ -31,10 +32,14 @@ class IncompatibleYouTrackError extends Error {
 async function getStoredBackendURL() {
   return AsyncStorage.getItem(BACKEND_URL_STORAGE_KEY);
 }
-
 async function storeConfig(config: AppConfigFilled): Promise<AppConfigFilled> {
-  return AsyncStorage.setItem(BACKEND_CONFIG_STORAGE_KEY, JSON.stringify(config))
-    .then(() => config);}
+  log.log(`Storing config: ${JSON.stringify(config)}`);
+  return AsyncStorage.setItem(
+    BACKEND_CONFIG_STORAGE_KEY,
+    JSON.stringify(config)
+  ).then(() => config);
+}
+
 
 async function getStoredConfig(): Promise<?AppConfigFilled> {
   const rawConfig: string = await AsyncStorage.getItem(BACKEND_CONFIG_STORAGE_KEY);
@@ -106,7 +111,11 @@ async function loadConfig(ytUrl: string) {
       'Accept': 'application/json, text/plain, */*'
     }
   })
-    .then(res => res.json())
+    .then(res => {
+      log.log(`Got result from ${ytUrl}: ${res && res.status}`);
+      log.log(`Response body: ${res && res._bodyText}`);
+      return res.json();
+    })
     .then(res => {
       handleIncompatibleYouTrack(res, ytUrl);
 
@@ -125,6 +134,7 @@ async function loadConfig(ytUrl: string) {
     })
     .then(storeConfig)
     .catch(err => {
+      log.log(`Loading config failed with an error ${err && err.toString && err.toString()}`);
       // Catches "Unexpected token < in JSON at position 0" error
       if (err instanceof SyntaxError) {
         throw new Error('Invalid server response. The URL is either an unsupported YouTrack version or is not a YouTrack instance. YouTrack Mobile requires YouTrack version 7.0 or later.');
