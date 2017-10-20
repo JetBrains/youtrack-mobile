@@ -1,5 +1,5 @@
 /* @flow */
-import {View, ScrollView, Text, TouchableOpacity, Image, Linking, Dimensions, Alert} from 'react-native';
+import {View, ScrollView, Text, TouchableWithoutFeedback, TouchableOpacity, Image, Linking, Dimensions, Alert} from 'react-native';
 import React, {Component} from 'react';
 import styles from './menu.styles';
 import {VERSION_STRING} from '../../components/usage/usage';
@@ -8,6 +8,7 @@ import getTopPadding from '../../components/header/header__top-padding';
 import Drawer from 'react-native-drawer';
 import Router from '../../components/router/router';
 import Auth from '../../components/auth/auth';
+import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
 import {next, logOut as logOutIcon} from '../../components/icon/icon';
 import {connect} from 'react-redux';
 import {logOut, openMenu, closeMenu, openDebugView} from '../../actions/app-actions';
@@ -28,7 +29,8 @@ type Props = {
   onBeforeLogOut: () => any,
   onLogOut: () => any,
   onOpen: () => any,
-  onClose: () => any
+  onClose: () => any,
+  openDebugView: () => any
 };
 
 type DefaultProps = {
@@ -88,7 +90,9 @@ export class Menu extends Component<Props, void> {
       <ScrollView style={styles.scrollContainer}>
         <View style={[styles.menuContainer, {paddingTop: getTopPadding(), minHeight: height}]}>
           <View style={styles.profileContainer}>
-            <Image style={styles.currentUserAvatarImage} source={{uri: avatarUrl}}></Image>
+            <TouchableWithoutFeedback onPress={() => clicksToShowCounter(openDebugView)}>
+              <Image style={styles.currentUserAvatarImage} source={{uri: avatarUrl}}></Image>
+            </TouchableWithoutFeedback>
 
             <Text style={styles.profileName}>{user.name}</Text>
 
@@ -118,7 +122,7 @@ export class Menu extends Component<Props, void> {
           <View style={styles.flexSpacer}/>
 
           <View style={styles.menuFooter}>
-            <Text style={styles.footerText} onPress={openDebugView}>YouTrack Mobile {VERSION_STRING}</Text>
+            <Text style={styles.footerText}>YouTrack Mobile {VERSION_STRING}</Text>
             <Text style={styles.footerText}>{formatYouTrackURL(backendUrl)}</Text>
 
             <View style={styles.spacer}></View>

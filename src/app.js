@@ -18,12 +18,7 @@ import ShowImage from './views/show-image/show-image';
 import AttachmentPreview from './views/attachment-preview/attachment-preview';
 import AgileBoard from './views/agile-board/agile-board';
 import {COLOR_BLACK} from './components/variables/variables';
-import {
-  getStoredConfigAndProceed,
-  onNavigateBack,
-  connectToNewYoutrack,
-  checkAuthorization
-} from './actions/app-actions';
+import {getStoredConfigAndProceed, onNavigateBack} from './actions/app-actions';
 // $FlowFixMe: cannot typecheck easy-toast module because of mistakes there
 import Toast from 'react-native-easy-toast';
 
@@ -87,10 +82,7 @@ class YouTrackMobile extends Component<void, void> {
     Router.registerRoute({
       name: 'EnterServer',
       component: EnterServer,
-      type: 'reset',
-      props: {
-        connectToYoutrack: newURL => store.dispatch(connectToNewYoutrack(newURL))
-      }
+      type: 'reset'
     });
 
     Router.registerRoute({

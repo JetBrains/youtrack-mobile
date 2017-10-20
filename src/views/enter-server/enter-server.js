@@ -1,13 +1,16 @@
 /* @flow */
-import {Image, View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator} from 'react-native';
+import {Image, View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, ScrollView, ActivityIndicator} from 'react-native';
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import {logo} from '../../components/icon/icon';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import usage from '../../components/usage/usage';
 import {VERSION_DETECT_FALLBACK_URL} from '../../components/config/config';
 import log from '../../components/log/log';
+import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
 import {resolveError, extractErrorMessage} from '../../components/notification/notification';
 import type {AppConfigFilled} from '../../flow/AppConfig';
+import {connectToNewYoutrack, openDebugView} from '../../actions/app-actions';
 
 import styles from './enter-server.styles';
 
@@ -18,6 +21,7 @@ const CLOUD_DOMAIN = 'myjetbrains.com';
 type Props = {
   serverUrl: string,
   connectToYoutrack: (newServerUrl: string) => Promise<AppConfigFilled>,
+  onShowDebugView: Function,
   onCancel: () => any
 };
 
@@ -27,7 +31,7 @@ type State = {
   error: ?Object
 };
 
-export default class EnterServer extends Component<Props, State> {
+export class EnterServer extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -100,6 +104,7 @@ export default class EnterServer extends Component<Props, State> {
   }
 
   render() {
+    const {onShowDebugView} = this.props;
 
     const isDisabled = this.state.connecting || !this.isValidInput();
 
@@ -112,7 +117,9 @@ export default class EnterServer extends Component<Props, State> {
       return (
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
         <View style={styles.logoContainer}>
-          <Image style={styles.logoImage} source={logo}/>
+          <TouchableWithoutFeedback onPress={() => clicksToShowCounter(onShowDebugView)}>
+            <Image style={styles.logoImage} source={logo}/>
+          </TouchableWithoutFeedback>
         </View>
 
         <View>
@@ -157,3 +164,16 @@ export default class EnterServer extends Component<Props, State> {
     );
   }
 }
+
+const mapStateToProps = (state, ownProps) => {
+  return {...ownProps};
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    connectToYoutrack: newURL => dispatch(connectToNewYoutrack(newURL)),
+    onShowDebugView: () => dispatch(openDebugView())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(EnterServer);
