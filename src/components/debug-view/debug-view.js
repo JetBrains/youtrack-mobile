@@ -1,11 +1,22 @@
 /* @flow */
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View, Text, TouchableOpacity, Modal} from 'react-native';
-import {LogView} from 'react-native-device-log';
+import {Clipboard, View, Text, TouchableOpacity, Modal} from 'react-native';
+import deviceLog, {LogView} from 'react-native-device-log';
 import getTopPadding from '../../components/header/header__top-padding';
 import styles from './debug-view.styles';
 import {closeDebugView} from '../../actions/app-actions';
+
+async function copyRawLogs() {
+  const rows = await deviceLog.store.getRows();
+
+  const rowsString = rows
+    .reverse() // They store comments in reverse order
+    .map(row => `${row.timeStamp._i}: ${row.message}`)
+    .join('\n');
+
+  Clipboard.setString(rowsString);
+}
 
 type Props = {
   show: boolean,
@@ -32,9 +43,12 @@ export class DebugView extends Component<Props, void> {
             timeStampFormat="HH:mm:ss"
           />
 
-          <View>
-            <TouchableOpacity style={styles.closeButton} onPress={(onHide)}>
-              <Text style={styles.closeButtonText}>Close log</Text>
+          <View style={styles.buttons}>
+            <TouchableOpacity style={styles.closeButton} onPress={onHide}>
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.closeButton} onPress={copyRawLogs}>
+              <Text style={styles.closeButtonText}>Copy</Text>
             </TouchableOpacity>
           </View>
         </View>

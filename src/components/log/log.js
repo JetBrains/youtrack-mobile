@@ -1,9 +1,9 @@
 /* @flow */
-import deviceLog from 'react-native-device-log';
+import deviceLog, {InMemoryAdapter} from 'react-native-device-log';
 
 let logEnabled = true;
 
-deviceLog.init(null, {
+deviceLog.init(new InMemoryAdapter(), {
     logToConsole : true,
     logRNErrors : true,
     rowInsertDebounceMs: 0,

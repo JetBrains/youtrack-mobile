@@ -6,8 +6,12 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: COLOR_TRANSPARENT_BLACK
   },
+  buttons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
   closeButton: {
-    padding: UNIT *2,
+    padding: UNIT * 2,
     alignItems: 'center'
   },
   closeButtonText: {
