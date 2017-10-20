@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactNative from 'react-native';
-import LogIn from './log-in';
+import {LogIn} from './log-in';
 import {shallow} from 'enzyme';
 import sinon from 'sinon';
 

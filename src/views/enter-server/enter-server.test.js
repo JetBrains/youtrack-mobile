@@ -1,4 +1,4 @@
-import EnterServer from './enter-server';
+import {EnterServer} from './enter-server';
 import React from 'react';
 import {TouchableOpacity} from 'react-native';
 import {shallow} from 'enzyme';

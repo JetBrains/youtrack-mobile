@@ -32,7 +32,7 @@ type State = {
   youTrackBackendUrl: string
 };
 
-export class LoginForm extends Component<Props, State> {
+export class LogIn extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -205,4 +205,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
+export default connect(mapStateToProps, mapDispatchToProps)(LogIn);
