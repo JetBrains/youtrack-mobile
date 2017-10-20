@@ -1,14 +1,17 @@
 /* @flow */
-import {Image, View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator, Linking} from 'react-native';
+import {Image, View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator, Linking, TouchableWithoutFeedback} from 'react-native';
 import React, {Component} from 'react';
 import Auth from '../../components/auth/auth';
+import Router from '../../components/router/router';
+import {connect} from 'react-redux';
 import {formatYouTrackURL} from '../../components/config/config';
 import {logo, back} from '../../components/icon/icon';
 import Keystore from '../../components/keystore/keystore';
 import authorizeInHub from '../../components/auth/auth__oauth';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import usage from '../../components/usage/usage';
-
+import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
+import {openDebugView, checkAuthorization} from '../../actions/app-actions';
 import styles from './log-in.styles';
 
 const noop = () => {};
@@ -17,6 +20,7 @@ const CATEGORY_NAME = 'Login form';
 type Props = {
   auth: Auth,
   onLogIn: () => any,
+  onShowDebugView: Function,
   onChangeServerUrl: (currentUrl: string) => any
 };
 
@@ -28,7 +32,7 @@ type State = {
   youTrackBackendUrl: string
 };
 
-export default class LoginForm extends Component<Props, State> {
+export class LoginForm extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -92,6 +96,7 @@ export default class LoginForm extends Component<Props, State> {
   }
 
   render() {
+    const {onShowDebugView} = this.props;
     return (
       <ScrollView contentContainerStyle={styles.container}
                   keyboardShouldPersistTaps="handled"
@@ -105,7 +110,9 @@ export default class LoginForm extends Component<Props, State> {
         </TouchableOpacity>
 
         <View style={styles.logoContainer}>
-          <Image style={styles.logoImage} source={logo}/>
+          <TouchableWithoutFeedback onPress={() => clicksToShowCounter(onShowDebugView)}>
+            <Image style={styles.logoImage} source={logo}/>
+          </TouchableWithoutFeedback>
         </View>
 
         <TouchableOpacity onPress={this.changeYouTrackUrl.bind(this)} testID="youtrack-url">
@@ -180,3 +187,22 @@ export default class LoginForm extends Component<Props, State> {
     );
   }
 }
+
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    auth: state.app.auth,
+    issueQuery: state.issueList.query,
+    ...ownProps
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onChangeServerUrl: youtrackUrl => Router.EnterServer({serverUrl: youtrackUrl}),
+    onLogIn: () => dispatch(checkAuthorization()),
+    onShowDebugView: () => dispatch(openDebugView())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

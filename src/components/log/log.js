@@ -27,7 +27,9 @@ export default {
     if (!logEnabled) {
       return;
     }
-    return deviceLog.warn(...params);
+    //eslint-disable-next-line no-console
+    console.warn(...params);
+    return deviceLog.info(...params);
   },
 
   enableLog() {

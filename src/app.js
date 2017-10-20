@@ -96,13 +96,6 @@ class YouTrackMobile extends Component<void, void> {
     Router.registerRoute({
       name: 'LogIn',
       component: LoginForm,
-      props: {
-        get auth() {
-          return store.getState().app.auth;
-        },
-        onLogIn: () => store.dispatch(checkAuthorization()),
-        onChangeServerUrl: youtrackUrl => Router.EnterServer({serverUrl: youtrackUrl})
-      },
       type: 'reset'
     });
 
