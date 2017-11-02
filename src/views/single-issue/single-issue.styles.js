@@ -1,5 +1,6 @@
 import {StyleSheet, Platform} from 'react-native';
 import {UNIT, COLOR_LIGHT_GRAY, COLOR_FONT_ON_BLACK, COLOR_BLACK, COLOR_FONT_GRAY, COLOR_FONT, COLOR_TRANSPARENT_BLACK, COLOR_SELECTED_DARK, COLOR_GRAY, COLOR_PINK} from '../../components/variables/variables';
+import bottomPadding from '../../components/bottom-padding/bottom-padding';
 
 const SUGGESTION_BOTTOM = Platform.OS === 'ios' ? 52 : 48;
 
@@ -69,7 +70,8 @@ export default StyleSheet.create({
     backgroundColor: COLOR_BLACK,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingBottom: bottomPadding
   },
   editingCommentWrapper: {
     flexDirection: 'row',
@@ -173,7 +175,7 @@ export default StyleSheet.create({
     position: 'absolute',
 
     right: UNIT,
-    bottom: UNIT * 8
+    bottom: UNIT * 8 + bottomPadding
   },
   addCommentButton: {
     flex: 1,

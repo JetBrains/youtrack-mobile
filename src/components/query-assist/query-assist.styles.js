@@ -1,11 +1,13 @@
 import {StyleSheet} from 'react-native';
+import bottomPadding from '../bottom-padding/bottom-padding';
 import {UNIT, COLOR_PINK, COLOR_TRANSPARENT_BLACK, COLOR_FONT_ON_BLACK, COLOR_BLACK, COLOR_SELECTED_DARK} from '../../components/variables/variables';
 
-const QUERY_ASSIST_HEIGHT = 52;
+const QUERY_ASSIST_HEIGHT = 52 + bottomPadding;
 
 export default StyleSheet.create({
   placeHolder: {
-    height: QUERY_ASSIST_HEIGHT
+    height: QUERY_ASSIST_HEIGHT,
+    backgroundColor: COLOR_BLACK
   },
   modal: {
     justifyContent: 'flex-end',
@@ -30,7 +32,8 @@ export default StyleSheet.create({
     backgroundColor: COLOR_BLACK,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingBottom: bottomPadding
   },
   searchInput: {
     flex: 1,

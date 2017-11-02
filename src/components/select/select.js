@@ -6,7 +6,7 @@ import ColorField from '../color-field/color-field';
 import {notifyError} from '../notification/notification';
 import {checkWhite} from '../icon/icon';
 import {COLOR_PLACEHOLDER, UNIT} from '../variables/variables';
-import getTopPadding, {onHeightChange} from '../header/header__top-padding';
+import getTopPadding, {onHeightChange, isIphoneX} from '../header/header__top-padding';
 
 const MAX_VISIBLE_ITEMS = 100;
 
@@ -160,8 +160,10 @@ export default class Select extends Component<Props, State> {
   render() {
     const {multi, autoFocus, style, placeholder, onCancel} = this.props;
 
+    const paddingTop = isIphoneX ? (getTopPadding() - UNIT) : (getTopPadding() - UNIT * 2);
+
     return (
-      <View style={[styles.container, style, {paddingTop: getTopPadding() - UNIT * 2}]}>
+      <View style={[styles.container, style, {paddingTop}]}>
         <View style={styles.inputWrapper}>
           <TextInput
             placeholder={placeholder}

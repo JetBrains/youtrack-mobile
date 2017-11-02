@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {UNIT, COLOR_TRANSPARENT_BLACK, COLOR_BLACK, COLOR_SELECTED_DARK, COLOR_PINK, COLOR_FONT_ON_BLACK, COLOR_PLACEHOLDER} from '../../components/variables/variables';
+import bottomPadding from '../bottom-padding/bottom-padding';
 
 export default StyleSheet.create({
   modal: {
@@ -34,7 +35,8 @@ export default StyleSheet.create({
     backgroundColor: COLOR_BLACK,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingBottom: bottomPadding
   },
   searchInput: {
     flex: 1,
