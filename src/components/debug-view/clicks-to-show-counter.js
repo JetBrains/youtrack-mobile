@@ -1,9 +1,9 @@
 /* @flow */
 import {notify} from '../notification/notification';
 
-const NEXT_CLICK_MAX_TIMEOUT = 500;
-const CLICKS_TO_SHOW_NOTIFICATION = 5;
-const CLICKS_TO_ACTION = 10;
+const NEXT_CLICK_MAX_TIMEOUT = 1000;
+const CLICKS_TO_SHOW_NOTIFICATION = 3;
+const CLICKS_TO_ACTION = 6;
 
 let timeoutId = null;
 let counter = 0;
