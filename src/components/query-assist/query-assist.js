@@ -104,8 +104,10 @@ export default class QueryAssist extends Component<Props, State> {
   onApplySuggestion = (suggestion: TransformedSuggestion) => {
     const suggestionText = `${suggestion.prefix}${suggestion.option}${suggestion.suffix}`;
     const oldQuery = this.state.input || '';
-    const newQuery = oldQuery.substring(0, suggestion.completionStart) + suggestionText + oldQuery.substring(suggestion.completionEnd);
+    const leftPartAndNewQuery = oldQuery.substring(0, suggestion.completionStart) + suggestionText;
+    const newQuery = leftPartAndNewQuery + oldQuery.substring(suggestion.completionEnd);
     this.setState({input: newQuery});
+    this.props.onChange(newQuery, leftPartAndNewQuery.length);
   }
 
   onApplySavedQuery = (savedQuery: SavedQuery) => {
