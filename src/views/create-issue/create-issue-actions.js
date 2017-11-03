@@ -7,6 +7,7 @@ import type {CustomField, FieldValue} from '../../flow/CustomFields';
 import usage from '../../components/usage/usage';
 import * as types from './create-issue-action-types';
 import Router from '../../components/router/router';
+import log from '../../components/log/log';
 import attachFile from '../../components/attach-file/attach-file';
 import {notifyError, resolveError} from '../../components/notification/notification';
 
@@ -105,6 +106,7 @@ export function loadStoredProject() {
   return async (dispatch: (any) => any) => {
     const projectId = await AsyncStorage.getItem(PROJECT_ID_STORAGE_KEY);
     if (projectId) {
+      log.info(`Stored project loaded, id=${projectId}`);
       dispatch(setDraftProjectId(projectId));
       return await dispatch(updateIssueDraft(true));
     }
@@ -116,8 +118,10 @@ export function loadIssueFromDraft(draftId: string) {
     const api: Api = getApi();
     try {
       const issue = await api.loadIssueDraft(draftId);
+      log.info(`Issue draft loaded, "${issue.summary}"`);
       dispatch(setIssueDraft(issue));
     } catch (err) {
+      log.info('Cannot load issue draft, cleaning up');
       clearIssueDraftStorage();
       dispatch(resetIssueDraftId());
       dispatch(loadStoredProject());
@@ -141,6 +145,7 @@ export function updateIssueDraft(projectOnly: boolean = false) {
 
     try {
       const issue = await api.updateIssueDraft(issueToSend);
+      log.info('Issue draft updated');
       dispatch(setIssueDraft(issue));
       if (!getState().creation.predefinedDraftId) {
         return await storeIssueDraftId(issue.id);
@@ -163,9 +168,11 @@ export function initializeWithDraftOrProject(preDefinedDraftId: ?string) {
     const draftId = preDefinedDraftId || (await AsyncStorage.getItem(DRAFT_ID_STORAGE_KEY));
 
     if (draftId) {
+      log.info(`INitializing with draft ${draftId}`);
       await dispatch(loadIssueFromDraft(draftId));
       return;
     }
+    log.info('Draft not found, initializing new draft');
     await dispatch(loadStoredProject());
   };
 }
@@ -178,7 +185,7 @@ export function createIssue() {
     try {
       await dispatch(updateIssueDraft(false));
       const created = await api.createIssue(getState().creation.issue);
-
+      log.info('Issue has been created');
       usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Success');
 
       const filledIssue = ApiHelper.fillIssuesFieldHash([created])[0];
@@ -206,6 +213,7 @@ export function attachImage(takeFromLibrary: boolean = true) {
 
       try {
         await api.attachFile(issue.id, attachingImage.url, attachingImage.name);
+        log.info('Image attached to draft');
         usage.trackEvent(CATEGORY_NAME, 'Attach image', 'Success');
       } catch (err) {
         notifyError('Cannot attach file', err);
@@ -222,6 +230,7 @@ export function updateProject(project: Object) {
   return async (dispatch: (any) => any, getState: () => Object) => {
     dispatch(setIssueProject(project));
 
+    log.info('Project has been updated');
     usage.trackEvent(CATEGORY_NAME, 'Change project');
     dispatch(updateIssueDraft(project.id));
     storeProjectId(project.id);
@@ -231,6 +240,7 @@ export function updateProject(project: Object) {
 export function updateFieldValue(field: CustomField, value: FieldValue) {
   return async (dispatch: (any) => any, getState: () => Object) => {
     dispatch(setIssueFieldValue(field, value));
+    log.info('Value of draft field has been changed successfully', field, value);
     usage.trackEvent(CATEGORY_NAME, 'Change field value');
     dispatch(updateIssueDraft());
   };
