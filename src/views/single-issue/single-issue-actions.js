@@ -184,6 +184,7 @@ export function loadIssue() {
 
     try {
       const issue = await getIssue(api, issueId);
+      log.info(`Issue "${issueId}" loaded`);
       issue.fieldHash = ApiHelper.makeFieldHash(issue);
 
       dispatch(setIssueId(issue.id)); //Set issue ID again because first one could be readable like YTM-111
@@ -198,6 +199,7 @@ export function loadIssue() {
 export function refreshIssue() {
   return async (dispatch: (any) => any, getState: StateGetter) => {
     dispatch(startIssueRefreshing());
+    log.info('About to refresh issue');
     await dispatch(loadIssue());
     dispatch(stopIssueRefreshing());
   };
@@ -214,6 +216,7 @@ export function saveIssueSummaryAndDescriptionChange() {
     try {
       const {issue} = getState().singleIssue;
       await api.updateIssueSummaryDescription(issue);
+      log.info(`Issue (${issue.id}) summary/description has been updated`);
       usage.trackEvent(CATEGORY_NAME, 'Update issue', 'Success');
 
       await dispatch(loadIssue());
@@ -239,6 +242,7 @@ export function addComment(commentText: string) {
     dispatch(startSubmittingComment());
     try {
       const createdComment = await api.submitComment(issue.id, commentText);
+      log.info(`Comment added to issue ${issue.id}`);
       usage.trackEvent(CATEGORY_NAME, 'Add comment', 'Success');
 
       dispatch(receiveComment(createdComment));
@@ -280,6 +284,7 @@ export function submitEditedComment(comment: IssueComment) {
       const updatedComment = await getApi().submitComment(issueId,  comment.text, comment.id);
 
       dispatch(updateComment(updatedComment));
+      log.info(`Comment ${updatedComment.id} edited`);
       notify('Comment successfully edited');
       dispatch(stopEditingComment());
       await dispatch(loadIssue());
@@ -308,6 +313,7 @@ function toggleCommentDeleted(comment: IssueComment, deleted: boolean) {
     try {
       dispatch(updateComment({...comment, deleted}));
       await getApi().updateCommentDeleted(issueId, comment.id, deleted);
+      log.info(`Comment ${comment.id} deleted state updated: ${deleted.toString()}`);
     } catch (err) {
       dispatch(updateComment({...comment}));
       notifyError(`Failed to ${deleted ? 'delete' : 'restore'} comment`, err);
@@ -349,6 +355,7 @@ export function deleteCommentPermanently(comment: IssueComment) {
 
     try {
       dispatch(deleteCommentFromList(comment));
+      log.info(`Comment ${comment.id} deleted forever`);
       await getApi().deleteCommentPermanently(issueId, comment.id);
     } catch (err) {
       dispatch(loadIssue());
@@ -371,6 +378,7 @@ export function attachImage() {
 
       try {
         await api.attachFile(issue.id, attachingImage.url, attachingImage.name);
+        log.info(`Image attached to issue ${issue.id}`);
         usage.trackEvent(CATEGORY_NAME, 'Attach image', 'Success');
       } catch (err) {
         notifyError('Cannot attach file', err);
@@ -392,6 +400,7 @@ export function updateIssueFieldValue(field: CustomField, value: FieldValue) {
     const api: Api = getApi();
     const {issue} = getState().singleIssue;
 
+    log.info('Field value updated', field, value);
     usage.trackEvent(CATEGORY_NAME, 'Update field value');
 
     dispatch(setIssueFieldValue(field, value));
@@ -424,6 +433,7 @@ export function updateProject(project: IssueProject) {
 
     try {
       await api.updateProject(issue, project);
+      log.info('Project updated');
       await dispatch(loadIssue());
       dispatch(issueUpdated(getState().singleIssue.issue));
     } catch (err) {
