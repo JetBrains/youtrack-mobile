@@ -111,7 +111,7 @@ export default class Auth {
     let token;
     return this.readAuth()
       .then((authParams: AuthParams) => {
-        log.info('Begining token refresh', authParams);
+        log.info('Begining token refresh...');
 
         const config = this.config;
 
@@ -135,7 +135,7 @@ export default class Auth {
       .then(res => res.json())
       .then((authParams: AuthParams) => {
         if (!authParams.error_code) {
-          log.info('Token has been refreshed', authParams);
+          log.info('Token has been refreshed.');
           //restore old refresh token
           authParams.refresh_token = authParams.refresh_token || token;
         } else {

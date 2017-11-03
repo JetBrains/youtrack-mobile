@@ -4,6 +4,7 @@ import {AsyncStorage} from 'react-native';
 import ApiHelper from '../../components/api/api__helper';
 import {notifyError, resolveError} from '../../components/notification/notification';
 import Cache from '../../components/cache/cache';
+import log from '../../components/log/log';
 import type Api from '../../components/api/api';
 import type {IssueOnList} from '../../flow/Issue';
 
@@ -25,6 +26,7 @@ export function setIssuesQuery(query: string) {
 export function readStoredIssuesQuery() {
   return async (dispatch: (any) => any) => {
     const query = await AsyncStorage.getItem(QUERY_STORAGE_KEY);
+    log.info(`Have read stored query: ${query}`);
     dispatch(setIssuesQuery(query));
   };
 }
@@ -120,6 +122,7 @@ export function readCachedIssues() {
     const cache = getState().issueList.cache;
     const issues: ?Array<IssueOnList> = await cache.read();
     if (issues && issues.length) {
+      log.info(`Loaded ${issues.length} cached issues`);
       dispatch(receiveIssues(issues));
     }
   };
@@ -136,14 +139,17 @@ export function loadingIssuesError(error: Object) {
 export function loadIssues(query: string) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
+    log.info('Loading issues...');
     dispatch(startIssuesLoading());
     dispatch(loadIssuesCount());
     try {
       let issues: Array<IssueOnList> = await api.getIssues(query, PAGE_SIZE);
       issues = ApiHelper.fillIssuesFieldHash(issues);
+      log.info(`${issues.length} issues loaded`);
       dispatch(receiveIssues(issues));
       dispatch(cacheIssues(issues));
       if (issues.length < PAGE_SIZE) {
+        log.info('End reached during initial load');
         dispatch(listEndReached());
       }
     } catch (e) {
@@ -167,7 +173,7 @@ export function initializeIssuesList(query: ?string) {
     } else {
       await readStoredIssuesQuery()(dispatch);
     }
-    await readCachedIssues()(dispatch, getState);
+    await dispatch(readCachedIssues());
     dispatch(refreshIssues());
   };
 }
@@ -182,15 +188,18 @@ export function loadMoreIssues() {
     }
     const newSkip = skip + PAGE_SIZE;
 
+    log.info(`Loading more issues. newSkip = ${newSkip}`);
     dispatch(startMoreIssuesLoading(newSkip));
 
     try {
       let moreIssues: Array<IssueOnList> = await api.getIssues(query, PAGE_SIZE, newSkip);
+      log.info(`Loaded ${PAGE_SIZE} more issues.`);
       moreIssues = ApiHelper.fillIssuesFieldHash(moreIssues);
       const updatedIssues = issues.concat(moreIssues);
       dispatch(receiveIssues(updatedIssues));
       dispatch(cacheIssues(updatedIssues));
       if (moreIssues.length < PAGE_SIZE) {
+        log.info(`End of issues reached: all ${updatedIssues.length} issues are loaded`);
         dispatch(listEndReached());
       }
     } catch (err) {
