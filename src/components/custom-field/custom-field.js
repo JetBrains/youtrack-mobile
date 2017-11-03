@@ -1,7 +1,8 @@
 /* @flow */
-import {TouchableOpacity, View, Text} from 'react-native';
+import {TouchableOpacity, View, Text, Image} from 'react-native';
 import React, {Component} from 'react';
 import styles from './custom-field.styles';
+import {lockInactive} from '../icon/icon';
 import {NO_COLOR_ID} from '../color-field/color-field';
 import type {CustomField as CustomFieldType, FieldValue} from '../../flow/CustomFields';
 
@@ -67,8 +68,12 @@ export default class CustomField extends Component<Props, void> {
   }
 
   _renderValue(value, fieldType: ?string) {
-    const {active} = this.props;
-    const textStyle = [styles.valueText, active && styles.valueTextActive];
+    const {active, disabled} = this.props;
+    const textStyle = [
+      styles.valueText,
+      active && styles.valueTextActive,
+      disabled && styles.valueTextDisabled
+    ];
 
     const renderOneValue = (val) => {
       return <Text style={textStyle} testID="value" key="value">{this._getValue(val, fieldType)}</Text>;
@@ -92,15 +97,27 @@ export default class CustomField extends Component<Props, void> {
   }
 
   render() {
-    const {field, active} = this.props;
+    const {field, active, disabled} = this.props;
     return (
       <TouchableOpacity
         style={[styles.wrapper, active ? styles.wrapperActive : null]}
         onPress={this.props.onPress}
         disabled={this.props.disabled}>
           {this._renderColorMaker(field.value)}
-          <View style={styles.valuesWrapper}>{this._renderValue(field.value, this._getFieldType(field))}</View>
-          <Text style={[styles.keyText, this.props.disabled ? styles.valueTextDisabled : null]} testID="name">{this._getKey()}</Text>
+          <View
+            style={styles.valuesWrapper}
+          >
+            {this._renderValue(field.value, this._getFieldType(field))}
+          </View>
+          <View style={styles.keyWrapper}>
+            {disabled && <Image style={styles.keyLockedIcon} source={lockInactive}/>}
+            <Text
+              style={[styles.keyText, this.props.disabled ? styles.valueTextDisabled : null]}
+              testID="name"
+            >
+              {this._getKey()}
+          </Text>
+          </View>
       </TouchableOpacity>
     );
   }

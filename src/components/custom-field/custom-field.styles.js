@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {COLOR_FONT_GRAY, COLOR_PINK, COLOR_FONT_ON_BLACK} from '../variables/variables';
+import {COLOR_FONT_GRAY, COLOR_PINK, COLOR_FONT_ON_BLACK, UNIT} from '../variables/variables';
 
 const SELECTED_ALPHA_HEX = 20;
 
@@ -14,6 +14,15 @@ export default StyleSheet.create({
   valuesWrapper: {
     flexDirection: 'row',
     flexWrap: 'nowrap'
+  },
+  keyWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  keyLockedIcon: {
+    width: 9,
+    marginRight: UNIT / 2,
+    resizeMode: 'contain'
   },
   keyText: {
     color: COLOR_FONT_GRAY,
