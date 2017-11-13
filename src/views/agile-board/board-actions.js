@@ -243,7 +243,7 @@ export function openBoardSelect() {
         show: true,
         placeholder: 'Search for the board',
         dataSource: () => api.getAgileBoardsList(),
-        selectedItems: [sprint.agile],
+        selectedItems: sprint ? [sprint.agile] : [],
         onSelect: (selectedBoard: BoardOnList) => {
           dispatch(closeSelect());
           dispatch(loadBoard(selectedBoard.id, selectedBoard.sprints));
