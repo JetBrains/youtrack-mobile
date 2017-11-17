@@ -263,7 +263,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
   }
 
   restoreScrollPosition = (scrollNode: ?ScrollView, ensure: boolean = true) => {
-    if (!scrollNode) {
+    if (!scrollNode || !this.currentScrollX) {
       return;
     }
 
