@@ -24,7 +24,8 @@ function extractIssuesQuery(issuesUrl: ?string) {
   }
   const match = issuesUrl.match(/\?(.*)/);
   if (!match || !match[1]) {
-    throw new Error(`Cannot extract query string from ${issuesUrl}`);
+    log.warn(`Cannot extract query string from "${issuesUrl}"`);
+    return null;
   }
 
   const queryString: string = match[1];
