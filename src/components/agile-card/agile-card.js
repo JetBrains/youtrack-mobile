@@ -18,7 +18,7 @@ export default class AgileCard extends PureComponent<Props, void> {
     const { issue, style } = this.props;
     const priorityField = getPriotityField(issue);
 
-    const issueId = priorityField
+    const issueId = (priorityField && priorityField.value)
       ? <View style={styles.colorFieldContainer}>
           <ColorField
             fullText

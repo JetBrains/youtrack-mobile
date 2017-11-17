@@ -59,7 +59,7 @@ function shortRelativeDate(date: Date|number) {
   return `${formatted}${getPostfix(formatted)}`;
 }
 
-function findIssueField(issue: AnyIssue, predicate: (field: CustomField) => boolean) {
+function findIssueField(issue: AnyIssue, predicate: (field: CustomField) => boolean): ?CustomField {
   const fields: Array<CustomField> = issue.fields;
 
   for (const field of fields) {
@@ -71,7 +71,7 @@ function findIssueField(issue: AnyIssue, predicate: (field: CustomField) => bool
   return null;
 }
 
-function getPriotityField(issue: AnyIssue) {
+function getPriotityField(issue: AnyIssue): ?CustomField {
   const PRIORITY_FIELDS = ['Priority'];
   return findIssueField(issue, field => {
     const fieldName = field.projectCustomField.field.name;
@@ -79,7 +79,7 @@ function getPriotityField(issue: AnyIssue) {
   });
 }
 
-function getAssigneeField(issue: AnyIssue) {
+function getAssigneeField(issue: AnyIssue): ?CustomField {
   const PRIORITY_FIELDS = ['Assignee', 'Assignees'];
   return findIssueField(issue, field => {
     const fieldName = field.projectCustomField.field.name;
