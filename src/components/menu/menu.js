@@ -83,6 +83,9 @@ export class Menu extends Component<Props, void> {
       return null;
     }
     const user = auth.currentUser;
+    if (!user) {
+      return <View/>;
+    }
     const backendUrl = auth.config.backendUrl;
     const avatarUrl = user.profile && user.profile.avatar && user.profile.avatar.url;
 
