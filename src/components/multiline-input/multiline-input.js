@@ -1,5 +1,5 @@
 /* @flow */
-import {TextInput} from 'react-native';
+import {TextInput, Platform} from 'react-native';
 import React, {Component} from 'react';
 
 const MAX_DEFAULT_HEIGHT = 200;
@@ -20,7 +20,8 @@ export default class MultilineInput extends Component<Props, State> {
   input: TextInput;
 
   static defaultProps = {
-    maxInputHeight: MAX_DEFAULT_HEIGHT
+    maxInputHeight: MAX_DEFAULT_HEIGHT,
+    returnKeyType: Platform.OS === 'ios' ? 'default' : 'none'
   }
 
   constructor(props: Props) {
