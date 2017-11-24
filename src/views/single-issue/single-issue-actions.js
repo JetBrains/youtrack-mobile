@@ -526,7 +526,7 @@ export function showIssueActions(actionSheet: Object) {
 
     const selectedAction = await showActions(actions, actionSheet);
 
-    if (selectedAction) {
+    if (selectedAction && selectedAction.execute) {
       selectedAction.execute();
     }
   };

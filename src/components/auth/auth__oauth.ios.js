@@ -24,7 +24,7 @@ async function openAuthPage(config: AppConfig) {
   SafariView.show({url});
 }
 
-function authorizeInHub(config: AppConfig) {
+function authorizeInHub(config: AppConfig): Promise<string> {
   return new Promise(function (resolve) {
 
     function onOpenWithUrl(event) {

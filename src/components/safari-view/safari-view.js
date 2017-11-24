@@ -12,7 +12,7 @@ type Options = {
 }
 
 export default {
-  show(options: Options) {
+  show(options: Options): Promise<null> {
     return new Promise((resolve, reject) => {
       YTSafariViewController.presentSafari(options.url);
     });
@@ -22,7 +22,7 @@ export default {
     YTSafariViewController.dismiss();
   },
 
-  isAvailable() {
+  isAvailable(): Promise<boolean> {
     return new Promise((resolve, reject) => {
       YTSafariViewController.isAvailable((error) => {
         if (error) {

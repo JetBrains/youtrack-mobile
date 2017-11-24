@@ -39,7 +39,8 @@
 	"jest": {
 		"preset": "react-native",
 		"transform": {
-			"^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
+			"^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js",
+			"^[./a-zA-Z0-9$_-]+\\.(bmp|gif|jpg|jpeg|png|psd|svg|webp)$": "<rootDir>/node_modules/react-native/jest/assetFileTransformer.js"
 		},
 		"setupTestFrameworkScriptFile": "./test/jest-setup.js",
 		"testResultsProcessor": "jest-teamcity-reporter",
@@ -73,8 +74,8 @@
 		"object-walk": "^0.1.1",
 		"prop-types": "^15.5.10",
 		"qs": "6.1.0",
-		"react": "16.0.0-beta.5",
-		"react-native": "0.49.5",
+		"react": "16.0.0",
+		"react-native": "0.50.3",
 		"react-native-animatable": "1.2.4",
 		"react-native-calendars": "1.5.3",
 		"react-native-device-info": "0.11.0",
@@ -116,8 +117,8 @@
 		"eslint-plugin-import": "2.2.0",
 		"eslint-plugin-react": "6.7.1",
 		"eslint-plugin-react-native": "2.2.0",
-		"flow-bin": "0.53.0",
-		"jest": "^21.0.1",
+		"flow-bin": "0.56.0",
+		"jest": "21.2.1",
 		"jest-teamcity-reporter": "^0.6.2",
 		"mocha": "^3.2.0",
 		"react-dom": "16.0.0-beta.5",

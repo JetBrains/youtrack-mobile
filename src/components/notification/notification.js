@@ -47,7 +47,7 @@ const showErrorMessage = function (message: string, error: Object) {
   showNotification(message, extractErrorMessage(error), toastComponentRef);
 };
 
-export function notifyError (message: string, err: Object) {
+export function notifyError (message: string, err: Object): Promise<null> {
   return resolveError(err).then(extracted => showErrorMessage(message, extracted));
 }
 

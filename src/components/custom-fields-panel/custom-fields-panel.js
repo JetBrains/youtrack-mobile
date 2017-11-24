@@ -146,7 +146,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     });
   }
 
-  closeEditor() {
+  closeEditor(): Promise<any> {
     return new Promise(resolve => {
       this.setState({
         editingField: null,

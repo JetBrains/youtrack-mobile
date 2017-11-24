@@ -224,7 +224,7 @@ class Api {
     return await this.makeAuthorizedRequest(url);
   }
 
-  attachFile(issueId: string, fileUri: string, fileName: string) {
+  attachFile(issueId: string, fileUri: string, fileName: string): Promise<XMLHttpRequest> {
     const formDataContent = new FormData(); //eslint-disable-line no-undef
     // $FlowFixMe
     formDataContent.append('photo', {uri: fileUri, name: fileName, type: 'image/binary'});
@@ -345,7 +345,7 @@ class Api {
     return ApiHelper.patchAllRelativeAvatarUrls(swimlanes, this.config.backendUrl);
   }
 
-  async updateRowCollapsedState(boardId: string, sprintId: string, row: Object): Promise<> {
+  async updateRowCollapsedState(boardId: string, sprintId: string, row: Object): Promise<Object> {
     const isOrphan = row.id === 'orphans';
     const url = isOrphan ?
       `${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}/board/orphanRow` :
@@ -358,7 +358,7 @@ class Api {
     });
   }
 
-  async updateColumnCollapsedState(boardId: string, sprintId: string, column: Object): Promise<> {
+  async updateColumnCollapsedState(boardId: string, sprintId: string, column: Object): Promise<Object> {
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}/board/columns/${column.id}`,
     'POST',
     {
@@ -366,7 +366,7 @@ class Api {
     });
   }
 
-  async getSprintList(boardId: string): Promise<> {
+  async getSprintList(boardId: string): Promise<Object> {
     const queryString = qs.stringify({
       fields: agileFields.sprintShort.toString()
     });
@@ -380,7 +380,7 @@ class Api {
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles?${queryString}`);
   }
 
-  async saveLastVisitedSprint(sprintId: string): Promise<> {
+  async saveLastVisitedSprint(sprintId: string): Promise<Object> {
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agileUserProfile`, 'POST', {
       visitedSprints: [{id: sprintId}]
     });
