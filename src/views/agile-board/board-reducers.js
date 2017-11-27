@@ -153,16 +153,16 @@ function updateCardOnBoard(board: Board, sourceIssue: IssueFull): Board {
   };
 }
 
-function removeSwimlaneFromBoard(board: Board, issueId: string): Board {
+function removeSwimlaneFromBoard(board: Board, rowId: string): Board {
   return {
     ...board,
-    trimmedSwimlanes: board.trimmedSwimlanes.filter((row: AgileBoardRow) => row.issue.id !== issueId)
+    trimmedSwimlanes: board.trimmedSwimlanes.filter((row: AgileBoardRow) => row.id !== rowId)
   };
 }
 
 function removeIssueFromBoard(board: Board, issueId: string): Board {
   const isSwimlane = board.trimmedSwimlanes.some(
-    (row: AgileBoardRow) => row.issue.id === issueId
+    (row: AgileBoardRow) => row.issue && row.issue.id === issueId
   );
   if (isSwimlane) {
     return removeSwimlaneFromBoard(board, issueId);
@@ -199,7 +199,7 @@ function reorderCardsInRow(row: AgileBoardRow, leadingId: ?string, movedId: stri
 
 function reorderEntitiesOnBoard(board: Board, leadingId: ?string, movedId: string) {
   const isSwimlane = board.trimmedSwimlanes.some(
-    (row: AgileBoardRow) => row.issue.id === movedId
+    (row: AgileBoardRow) => row.id === movedId
   );
 
   if (isSwimlane) {
