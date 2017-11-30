@@ -185,7 +185,7 @@ class Api {
     return await this.makeAuthorizedRequest(`${this.config.auth.serverUri}/api/rest/users/${id}?${queryString}`);
   }
 
-  async getProjects(query: string) {
+  async getProjects(query: string): Promise<Array<IssueProject>> {
     const queryString = qs.stringify({
       fields: issueFields.projectOnList.toString(),
       query: query

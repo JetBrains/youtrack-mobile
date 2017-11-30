@@ -131,7 +131,10 @@ export default class CustomFieldsPanel extends Component<Props, State> {
         getValue: project => project.name + project.shortName,
         dataSource: async query => {
           const projects = await this.props.api.getProjects(query);
-          return projects.filter(project => issuePermissions.canCreateIssueToProject(project));
+
+          return projects
+            .filter(project => !project.archived)
+            .filter(project => issuePermissions.canCreateIssueToProject(project));
         },
         multi: false,
         placeholder: 'Search for the project',

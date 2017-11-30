@@ -236,6 +236,7 @@ export default {
     'id',
     'name',
     'ringId',
+    'archived',
     'shortName',
     'description'
   ]),

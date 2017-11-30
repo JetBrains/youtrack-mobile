@@ -12,6 +12,7 @@ declare type IssueProject = {
   id: string,
   name: string,
   shortName: string,
+  archived: boolean,
   ringId: string
 }
 
