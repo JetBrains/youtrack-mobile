@@ -4,6 +4,7 @@ import React from 'react';
 import {closeOpaque} from '../../components/icon/icon';
 import Router from '../../components/router/router';
 import {UNIT} from '../../components/variables/variables';
+import {notifyError} from '../../components/notification/notification';
 import once from 'lodash.once';
 import Gallery from 'react-native-image-gallery';
 import ImageProgress from 'react-native-image-progress';
@@ -24,6 +25,7 @@ function renderImage(imageProps, imageDimensions) {
   return (
     <ImageProgress
       renderIndicator={() => <ActivityIndicator style={styles.loader} size="large"/>}
+      onError={error => notifyError('Failed to load image', error)}
       {...imageProps}
     />
   );
@@ -35,7 +37,7 @@ export function ShowImage(props: Props) {
 
   const allImageSources = props.allImagesUrls.map(uri => ({
     source: {
-      uri: uri,
+      uri,
       headers: props.imageHeaders
     }
   }));
