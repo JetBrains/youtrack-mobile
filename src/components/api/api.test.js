@@ -101,15 +101,11 @@ describe('API', () => {
 
   it('should handle relative avatar url in custom field possible values', async () => {
     const relativeUrl = '/hub/users/123';
-    fetchMock.mock(`^${serverUrl}/api/admin/customFieldSettings/bundles`, {
-      aggregatedUsers: [
-        {
-          avatarUrl: relativeUrl
-        }
-      ]
-    });
+    fetchMock.mock(`^${serverUrl}/api/admin/customFieldSettings/bundles`, [
+      {avatarUrl: relativeUrl}
+    ]);
 
-    const res = await createInstance().getCustomFieldValues('test-id', 'foo');
+    const res = await createInstance().getCustomFieldUserValues('test-id');
 
     res[0].avatarUrl.should.equal(`${serverUrl}${relativeUrl}`);
   });

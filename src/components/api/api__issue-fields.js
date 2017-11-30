@@ -256,6 +256,7 @@ export default {
     {values: BUNDLE_VALUE},
     {aggregatedUsers: ISSUE_USER_FIELDS}
   ]),
+  user: ISSUE_USER_FIELDS,
   issueComment: ISSUE_COMMENTS_FIELDS,
   issueFolder: ISSUE_FOLDER_FIELDS,
   commandSuggestionFields: COMMAND_SUGGESTION_FIELDS

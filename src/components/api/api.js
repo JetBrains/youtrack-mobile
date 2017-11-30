@@ -9,7 +9,7 @@ import {handleRelativeUrl} from '../config/config';
 import type {SprintFull, AgileUserProfile, AgileBoardRow, BoardOnList} from '../../flow/Agile';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {IssueOnList, IssueFull, TransformedSuggestion, SavedQuery, CommandSuggestionResponse} from '../../flow/Issue';
-import type {IssueProject, FieldValue} from '../../flow/CustomFields';
+import type {IssueProject, FieldValue, IssueUser} from '../../flow/CustomFields';
 
 const STATUS_UNAUTHORIZED = 401;
 const STATUS_OK_IF_MORE_THAN = 200;
@@ -208,15 +208,32 @@ class Api {
     return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issue.id}`, 'POST', body);
   }
 
-  async getCustomFieldValues(bundleId: string, fieldValueType: string) {
+  async getCustomFieldUserValues(bundleId: string): Promise<Array<IssueUser>> {
+    const queryString = qs.stringify({
+      banned: false,
+      sort: true,
+      fields: issueFields.user.toString()
+    });
+
+    const values = await this.makeAuthorizedRequest(
+      `${this.youtTrackFieldBundleUrl}/user/${bundleId}/aggregatedUsers?${queryString}`
+    );
+
+    return ApiHelper.convertRelativeUrls(values, 'avatarUrl', this.config.backendUrl);
+  }
+
+  async getCustomFieldValues(bundleId: string, fieldValueType: string): Promise<Array<Object>> {
+    if (fieldValueType === 'user') {
+      return this.getCustomFieldUserValues(bundleId);
+    }
     const queryString = qs.stringify({
       fields: issueFields.bundle.toString()
     });
 
-    const res = await this.makeAuthorizedRequest(`${this.youtTrackFieldBundleUrl}/${fieldValueType}/${bundleId}?${queryString}`);
-    const values = res.aggregatedUsers || res.values;
-
-    return ApiHelper.convertRelativeUrls(values, 'avatarUrl', this.config.backendUrl);
+    const res = await this.makeAuthorizedRequest(
+      `${this.youtTrackFieldBundleUrl}/${fieldValueType}/${bundleId}?${queryString}`
+    );
+    return res.values;
   }
 
   async getStateMachineEvents(issueId: string, fieldId: string) {
