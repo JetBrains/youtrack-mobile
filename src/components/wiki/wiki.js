@@ -71,6 +71,9 @@ export default class Wiki extends Component<Props, void> {
     }
 
     if (selector(node, 'pre', 'wikicode')) {
+      if (node.children[0] &&node.children[0].name === 'code') {
+        return renderCode(node.children[0], index);
+      }
       return renderCode(node, index);
     }
 
