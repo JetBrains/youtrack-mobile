@@ -17,7 +17,6 @@ import * as createIssueActions from './create-issue-actions';
 import type Api from '../../components/api/api';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {CreateIssueState} from './create-issue-reducers';
-import type {IssueProject} from '../../flow/CustomField';
 
 export const PROJECT_ID_STORAGE_KEY = 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE';
 export const DRAFT_ID_STORAGE_KEY = 'DRAFT_ID_STORAGE_KEY';
@@ -44,8 +43,8 @@ class CreateIssue extends Component<Props, void> {
 
   renderProjectSelector() {
     const {issue, processing} = this.props;
-    const project: ?IssueProject = issue.project;
-    const projectSelected = project.id;
+    const project = issue.project;
+    const projectSelected = !!project.id;
 
     return (
       <TouchableOpacity
