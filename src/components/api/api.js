@@ -156,6 +156,12 @@ class Api {
     return updatedIssue;
   }
 
+  async updateIssueDraftFieldValue(issueId: string, fieldId: string, value: FieldValue) {
+    const queryString = qs.stringify({fields: 'id,ringId,value'});
+    const body = {id: fieldId, value};
+    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/admin/users/me/drafts/${issueId}/fields/${fieldId}?${queryString}`, 'POST', body);
+  }
+
   async submitComment(issueId: string, commentText: string, commentId: string = '') {
     const queryString = qs.stringify({fields: issueFields.issueComment.toString()});
     const url = `${this.youTrackIssueUrl}/${issueId}/comments/${commentId}?${queryString}`;

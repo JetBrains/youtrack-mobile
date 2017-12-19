@@ -108,7 +108,7 @@ export function loadStoredProject() {
     if (projectId) {
       log.info(`Stored project loaded, id=${projectId}`);
       dispatch(setDraftProjectId(projectId));
-      return await dispatch(updateIssueDraft(true));
+      return await dispatch(updateIssueDraft());
     }
   };
 }
@@ -129,23 +129,25 @@ export function loadIssueFromDraft(draftId: string) {
   };
 }
 
-export function updateIssueDraft(projectOnly: boolean = false) {
+export function updateIssueDraft() {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
+    const {issue} = getState().creation;
 
-    const issueToSend = {...getState().creation.issue};
-    if (!issueToSend.project || !issueToSend.project.id) {
+    if (!issue.project || !issue.project.id) {
       return;
     }
 
-    //If we're changing project, fields shouldn't be passed to avoid "incompatible-issue-custom-field" error
-    if (projectOnly) {
-      delete issueToSend.fields;
-    }
+    const issueToSend = {
+      id: issue.id,
+      summary: issue.summary,
+      description: issue.description,
+      project: issue.project
+    };
 
     try {
       const issue = await api.updateIssueDraft(issueToSend);
-      log.info('Issue draft updated');
+      log.info('Issue draft updated', issueToSend);
       dispatch(setIssueDraft(issue));
       if (!getState().creation.predefinedDraftId) {
         return await storeIssueDraftId(issue.id);
@@ -183,7 +185,7 @@ export function createIssue() {
     dispatch(startIssueCreation());
 
     try {
-      await dispatch(updateIssueDraft(false));
+      await dispatch(updateIssueDraft());
       const created = await api.createIssue(getState().creation.issue);
       log.info('Issue has been created');
       usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Success');
@@ -232,16 +234,28 @@ export function updateProject(project: Object) {
 
     log.info('Project has been updated');
     usage.trackEvent(CATEGORY_NAME, 'Change project');
-    dispatch(updateIssueDraft(project.id));
+    dispatch(updateIssueDraft());
     storeProjectId(project.id);
   };
 }
 
 export function updateFieldValue(field: CustomField, value: FieldValue) {
-  return async (dispatch: (any) => any, getState: () => Object) => {
+  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     dispatch(setIssueFieldValue(field, value));
-    log.info('Value of draft field has been changed successfully', field, value);
     usage.trackEvent(CATEGORY_NAME, 'Change field value');
-    dispatch(updateIssueDraft());
+    log.info('Value of draft field has been changed successfully', {field, value});
+
+    const api = getApi();
+    const {issue} = getState().creation;
+
+    try {
+      await api.updateIssueDraftFieldValue(issue.id, field.id, value);
+      log.info(`Issue field value updated`);
+
+      dispatch(loadIssueFromDraft(issue.id));
+    } catch (err) {
+      const error = await resolveError(err);
+      notifyError('Cannot update field', error);
+    }
   };
 }
