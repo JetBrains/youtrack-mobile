@@ -6,6 +6,7 @@ const toField = ApiHelper.toField;
 const ISSUE_PROJECT_FIELDS = toField([
   '$type',
   'id',
+  'name',
   'shortName',
   'ringId'
 ]);

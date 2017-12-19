@@ -72,8 +72,8 @@ export default StyleSheet.create({
     justifyContent: 'space-between'
   },
   actionIcon: {
-    width: 16,
-    height: 16
+    width: UNIT * 2,
+    height: UNIT * 2
   },
   selectProjectButton: {
     paddingTop: UNIT*2,
@@ -85,11 +85,13 @@ export default StyleSheet.create({
   },
   selectProjectText: {
     color: COLOR_FONT,
-    fontSize: 16
+    fontSize: UNIT * 2,
+    flexShrink: 2,
   },
   selectProjectIcon: {
     alignSelf: 'flex-end',
-    width: 16,
-    height: 16
+    marginLeft: UNIT,
+    width: UNIT * 2,
+    height: UNIT * 2
   },
 });
