@@ -46,7 +46,7 @@ class CreateIssue extends Component<Props, void> {
     const {issue, processing} = this.props;
     const project: ?IssueProject = issue.project;
     const projectSelected = project.id;
-    console.log('project', project)
+
     return (
       <TouchableOpacity
         disabled={processing}
