@@ -96,7 +96,7 @@ export default class Wiki extends Component<Props, void> {
       );
     }
 
-    if (selector(node, 'div', 'quote')) {
+    if (selector(node, 'div', 'quote') || node.name === 'blockquote') {
       return (
         <Text key={index} style={styles.blockQuote}>{'> '}{defaultRenderer(node.children, parent)}</Text>
       );
