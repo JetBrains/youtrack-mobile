@@ -54,7 +54,7 @@ class CreateIssue extends Component<Props, void> {
       >
         <Text style={styles.selectProjectText} numberOfLines={1}>
           {projectSelected
-            ? <Text>{project.shortName} ({project.name})</Text>
+            ? <Text>{project.name} ({project.shortName})</Text>
             : 'Select project'
           }
         </Text>

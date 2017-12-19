@@ -87,6 +87,8 @@ const initialEditorsState = {
   }
 };
 
+const MAX_PROJECT_NAME_LENGTH = 20;
+
 export default class CustomFieldsPanel extends Component<Props, State> {
   currentScrollX: number = 0;
 
@@ -378,6 +380,15 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       style: styles.placeholder
     };
 
+    const projectName: string = issue.project.name;
+    const trimmedProjectName = projectName.length > MAX_PROJECT_NAME_LENGTH
+      ? `${projectName.substring(0, MAX_PROJECT_NAME_LENGTH - 3)}…`
+      : projectName;
+    const projectFakeField = {
+      projectCustomField: {field: {name: 'Project'}},
+      value: {name: trimmedProjectName}
+    };
+
     return (
       <ContainerComponent {...containerProps}>
         <AnimatedView
@@ -404,10 +415,12 @@ export default class CustomFieldsPanel extends Component<Props, State> {
             keyboardShouldPersistTaps="always"
           >
             <View key="Project">
-              <CustomField disabled={!canEditProject}
-                          onPress={() => this.onSelectProject()}
-                          active={isEditingProject}
-                          field={{projectCustomField: {field: {name: 'Project'}}, value: {name: issue.project.shortName}}}/>
+              <CustomField
+                disabled={!canEditProject}
+                onPress={() => this.onSelectProject()}
+                active={isEditingProject}
+                field={projectFakeField}
+              />
               {isSavingProject && <ActivityIndicator style={styles.savingFieldIndicator}/>}
             </View>
 

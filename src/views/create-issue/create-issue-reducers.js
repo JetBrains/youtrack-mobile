@@ -7,7 +7,7 @@ import type {IssueFull} from '../../flow/Issue';
 
 const notSelectedProject = {
   id: null,
-  shortName: 'Not selected'
+  name: 'Not selected'
 };
 
 export type CreateIssueState = {
