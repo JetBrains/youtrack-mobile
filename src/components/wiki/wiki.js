@@ -65,7 +65,7 @@ export default class Wiki extends Component<Props, void> {
 
   renderNode = (node: Object, index: number, siblings: any, parent: Object, defaultRenderer: (any, any) => any) => {
     const {imageHeaders, attachments} = this.props;
-console.log(node)
+
     if (node.type === 'text' && node.data === '\n') {
       return HTML_RENDER_NOTHING;
     }
@@ -84,6 +84,12 @@ console.log(node)
     if (node.name === 'strong') {
       return (
         <Text key={index} style={{fontWeight: 'bold'}}>{defaultRenderer(node.children, parent)}</Text>
+      );
+    }
+
+    if (selector(node, 'ul', 'wiki-list1')) {
+      return (
+        <Text>{'   - '}{defaultRenderer(node.children, parent)}</Text>
       );
     }
 
