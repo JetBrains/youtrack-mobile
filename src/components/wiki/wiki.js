@@ -89,7 +89,7 @@ export default class Wiki extends Component<Props, void> {
 
     if (selector(node, 'ul', 'wiki-list1')) {
       return (
-        <Text>{'   - '}{defaultRenderer(node.children, parent)}</Text>
+        <Text key={index}>{'   - '}{defaultRenderer(node.children, parent)}</Text>
       );
     }
 
