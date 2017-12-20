@@ -23,6 +23,7 @@ export type State = {
   suggestionsAreLoading: boolean,
   commentSuggestions: ?Object,
   showCommandDialog: boolean,
+  initialCommand: string,
   commandSuggestions: ?CommandSuggestionResponse,
   commandIsApplying: boolean
 };
@@ -45,6 +46,7 @@ const initialState: State = {
   suggestionsAreLoading: false,
   commentSuggestions: null,
   showCommandDialog: false,
+  initialCommand: '',
   commandSuggestions: null,
   commandIsApplying: false
 };
@@ -253,11 +255,11 @@ export default createReducer(initialState, {
   [types.RECEIVE_COMMENT_SUGGESTIONS]: (state: State, action: {suggestions: Object}): State => {
     return {...state, commentSuggestions: action.suggestions};
   },
-  [types.OPEN_COMMAND_DIALOG]: (state: State): State => {
-    return {...state, showCommandDialog: true};
+  [types.OPEN_COMMAND_DIALOG]: (state: State, action: {initialCommand: string}): State => {
+    return {...state, showCommandDialog: true, initialCommand: action.initialCommand};
   },
   [types.CLOSE_COMMAND_DIALOG]: (state: State): State => {
-    return {...state, showCommandDialog: false, commandSuggestions: null};
+    return {...state, showCommandDialog: false, commandSuggestions: null, initialCommand: ''};
   },
   [types.RECEIVE_COMMAND_SUGGESTIONS]: (state: State, action: {suggestions: Object}): State => {
     return {...state, commandSuggestions: action.suggestions};

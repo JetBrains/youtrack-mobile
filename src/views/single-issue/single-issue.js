@@ -238,6 +238,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
       loadCommandSuggestions,
       applyCommand,
       commandIsApplying,
+      initialCommand,
 
       startEditingComment,
       stopEditingComment,
@@ -337,6 +338,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
             onChange={loadCommandSuggestions}
             onApply={applyCommand}
             isApplying={commandIsApplying}
+            initialCommand={initialCommand}
           />
         )}
 

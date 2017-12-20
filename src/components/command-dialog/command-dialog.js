@@ -14,6 +14,7 @@ const SEARCH_THROTTLE = 30;
 type Props = {
   headerContent: string,
   suggestions: ?CommandSuggestionResponse,
+  initialCommand: string,
   onApply: (command: string) => any,
   onChange: (command: string, caret: number) => any,
   isApplying: boolean,
@@ -44,7 +45,12 @@ export default class CommandDialog extends Component<Props, State> {
   };
 
   componentDidMount() {
-    this.onSearch('', 0);
+    const {initialCommand} = this.props;
+    if (initialCommand) {
+      this.setState({input: initialCommand, caret: initialCommand.length});
+    }
+
+    this.onSearch(initialCommand, initialCommand.length);
   }
 
   onSearch = throttle((command: string, caret: number) => {

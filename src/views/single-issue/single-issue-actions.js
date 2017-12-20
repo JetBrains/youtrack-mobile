@@ -2,7 +2,7 @@
 import {Clipboard, Linking, Alert} from 'react-native';
 import * as types from './single-issue-action-types';
 import ApiHelper from '../../components/api/api__helper';
-import {notify, notifyError} from '../../components/notification/notification';
+import {notify, notifyError, resolveError} from '../../components/notification/notification';
 import attachFile from '../../components/attach-file/attach-file';
 import log from '../../components/log/log';
 import Router from '../../components/router/router';
@@ -150,8 +150,8 @@ export function receiveCommentSuggestions(suggestions: Object) {
   return {type: types.RECEIVE_COMMENT_SUGGESTIONS, suggestions};
 }
 
-export function openCommandDialog() {
-  return {type: types.OPEN_COMMAND_DIALOG};
+export function openCommandDialog(initialCommand: string = '') {
+  return {type: types.OPEN_COMMAND_DIALOG, initialCommand};
 }
 
 export function closeCommandDialog() {
@@ -400,7 +400,6 @@ export function updateIssueFieldValue(field: CustomField, value: FieldValue) {
     const api: Api = getApi();
     const {issue} = getState().singleIssue;
 
-    log.info('Field value updated', field, value);
     usage.trackEvent(CATEGORY_NAME, 'Update field value');
 
     dispatch(setIssueFieldValue(field, value));
@@ -410,10 +409,18 @@ export function updateIssueFieldValue(field: CustomField, value: FieldValue) {
 
     try {
       await updateMethod(issue.id, field.id, value);
+      log.info('Field value updated', field, value);
       await dispatch(loadIssue());
       dispatch(issueUpdated(getState().singleIssue.issue));
     } catch (err) {
-      notifyError('Failed to update issue field', err);
+      const error = await resolveError(err);
+
+      if (error.error_type === 'workflow' && error.error_workflow_type === 'require') {
+        log.info('Workflow require received', error);
+        dispatch(openCommandDialog(`${error.error_field} `));
+      }
+
+      notifyError('Failed to update issue field', error);
       dispatch(loadIssue());
     }
   };
