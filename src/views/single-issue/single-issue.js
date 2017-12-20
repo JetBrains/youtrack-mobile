@@ -11,6 +11,7 @@ import IssueToolbar from '../../components/issue-toolbar/issue-toolbar';
 import SingleIssueComments from './single-issue__comments';
 import SingleIssueCommentInput from './single-issue__comment-input';
 import SingleIssueTopPanel from './single-issue__top-panel';
+import Router from '../../components/router/router';
 import Header from '../../components/header/header';
 import LinkedIssues from '../../components/linked-issues/linked-issues';
 import Wiki from '../../components/wiki/wiki';
@@ -346,12 +347,15 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
 }
 
 const mapStateToProps = (state: {app: Object, singleIssue: SingleIssueState}, ownProps): SingleIssueState & AdditionalProps => {
+  const isOnTop = Router._currentRoute.params.issueId === ownProps.issueId;
+
   return {
     issuePermissions: state.app.issuePermissions,
     api: state.app.api,
     ...state.singleIssue,
     issuePlaceholder: ownProps.issuePlaceholder,
-    issueId: ownProps.issueId
+    issueId: ownProps.issueId,
+    ...(isOnTop ? {} : {addCommentMode: false})
   };
 };
 

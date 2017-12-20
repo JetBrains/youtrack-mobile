@@ -19,6 +19,8 @@ const SlideFromRight = {
  * Route singleton
  */
 class Router {
+  _currentRoute = null;
+
   constructor(navigator) {
     this._navigator = null;
     this.onBack = () => {};
@@ -108,6 +110,7 @@ class Router {
   }
 
   onNavigationStateChange = (prevNav, nav, action) => {
+    this._currentRoute = nav.routes[nav.index];
     if (action.type === NavigationActions.BACK) {
       const closingView = prevNav.routes[prevNav.index];
       this.onBack(closingView);
