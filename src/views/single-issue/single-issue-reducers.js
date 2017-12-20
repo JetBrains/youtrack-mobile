@@ -51,12 +51,11 @@ const initialState: State = {
 
 export default createReducer(initialState, {
   [ON_NAVIGATE_BACK]: (state: State, action: {closingView: {routeName: string, params: {issueId?: string}}}): State => {
-    const isThisView = action.closingView.routeName === 'SingleIssue'
-      && action.closingView.params && action.closingView.params.issueId === state.issueId;
+    const isIssueView = action.closingView.routeName === 'SingleIssue';
 
     const previousIssueState = state.unloadedIssueState ? state.unloadedIssueState : initialState;
 
-    return isThisView ? previousIssueState : state;
+    return isIssueView ? previousIssueState : state;
   },
   [types.SET_ISSUE_ID]: (state: State, action: {issueId: string}): State => {
     return {...state, issueId: action.issueId};
