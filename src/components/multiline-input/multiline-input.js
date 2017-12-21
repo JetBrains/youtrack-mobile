@@ -7,7 +7,6 @@ const DEFAULT_FONT_SIZE = 16;
 const SPARE_SPACE = 2;
 
 type Props = {
-  value: string,
   maxInputHeight: number,
   style: any
 };

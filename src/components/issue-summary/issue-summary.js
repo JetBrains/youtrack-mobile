@@ -1,6 +1,7 @@
 /* @flow */
 import React, {Component} from 'react';
 import {View, TextInput} from 'react-native';
+import throttle from 'lodash.throttle';
 import styles from './issue-summary.styles';
 import MultilineInput from '../multiline-input/multiline-input';
 import {COLOR_FONT_GRAY} from '../variables/variables';
@@ -14,6 +15,8 @@ type Props = {
   onDescriptionChange: (description: string) => any
 }
 
+const TEXT_UPDATE_DEBOUNCE = 300;
+
 export default class AttachmentsRow extends Component<Props, void> {
   descriptionInput: MultilineInput;
 
@@ -22,6 +25,14 @@ export default class AttachmentsRow extends Component<Props, void> {
       this.descriptionInput = instance;
     }
   };
+
+  onSummaryChange = throttle((text: string) => (
+    this.props.onSummaryChange(text)
+  ), TEXT_UPDATE_DEBOUNCE);
+
+  onDescriptionChange = throttle((text: string) => (
+    this.props.onDescriptionChange(text)
+  ), TEXT_UPDATE_DEBOUNCE);
 
   render() {
     const {editable, showSeparator, summary, description, ...rest} = this.props;
@@ -38,9 +49,10 @@ export default class AttachmentsRow extends Component<Props, void> {
           keyboardAppearance="dark"
           returnKeyType="next"
           autoCapitalize="sentences"
-          value={summary}
+          defaultValue={summary}
           onSubmitEditing={() => this.descriptionInput.focus()}
-          onChangeText={this.props.onSummaryChange} />
+          onChangeText={this.onSummaryChange}
+        />
 
         {showSeparator && <View style={styles.separator} />}
 
@@ -55,8 +67,9 @@ export default class AttachmentsRow extends Component<Props, void> {
           style={styles.descriptionInput}
           multiline={true}
           underlineColorAndroid="transparent"
-          value={description}
-          onChangeText={this.props.onDescriptionChange} />
+          defaultValue={description}
+          onChangeText={this.onDescriptionChange}
+        />
       </View>
     );
   }

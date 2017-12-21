@@ -1,6 +1,7 @@
 /* @flow */
 import {View, Text, TouchableOpacity, ActivityIndicator, ScrollView, Image} from 'react-native';
 import React, {Component} from 'react';
+import throttle from 'lodash.throttle';
 import {COLOR_PLACEHOLDER} from '../../components/variables/variables';
 import MultilineInput from '../../components/multiline-input/multiline-input';
 import {closeOpaque} from '../../components/icon/icon';
@@ -59,6 +60,10 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
   componentWillUnmount() {
     this.isUnmounted = true;
   }
+
+  debouncedOnChange = throttle((text: string) => (
+    this.props.onChangeText && this.props.onChangeText(text)
+  ), 300);
 
   addComment() {
     this.setState({isSaving: true});
@@ -179,7 +184,7 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
             onChangeText={(text) => {
               this.setState({commentText: text});
               this.suggestionsNeededDetector(text, this.state.commentCaret);
-              this.props.onChangeText && this.props.onChangeText(text);
+              this.debouncedOnChange(text);
             }}
             style={styles.commentInput}
           />
