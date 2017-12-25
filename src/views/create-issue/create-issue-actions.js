@@ -249,6 +249,7 @@ export function updateFieldValue(field: CustomField, value: FieldValue) {
     const {issue} = getState().creation;
 
     try {
+      await dispatch(updateIssueDraft()); // Update summary/description first
       await api.updateIssueDraftFieldValue(issue.id, field.id, value);
       log.info(`Issue field value updated`);
 
