@@ -61,7 +61,10 @@
 				"name": "iPhone 7"
 			}
 		}
-	},
+  },
+  "resolutions" : {
+    "uglify-es": "3.1.10"
+  },
 	"dependencies": {
 		"@expo/react-native-action-sheet": "1.0.1",
 		"@huston007/react-native-eventsource": "0.1.2",
