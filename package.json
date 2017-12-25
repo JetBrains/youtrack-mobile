@@ -3,7 +3,7 @@
 	"version": "0.1.0-0",
 	"author": "Andrey Skladchikov <andrey.skladchikov@gmail.com>",
 	"bugs": {
-		"url": "youtrack.jetbrains.com/issues/YTM",
+		"url": "https://youtrack.jetbrains.com/issues/YTM",
 		"email": "youtrack-feedback@jetbrains.com"
 	},
 	"config": {
