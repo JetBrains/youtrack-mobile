@@ -22,6 +22,7 @@ export function logOut() {
     const auth = getState().app.auth;
     Router.EnterServer({serverUrl: auth.config.backendUrl});
 
+    setApi(null);
     dispatch({type: types.LOG_OUT});
   };
 }

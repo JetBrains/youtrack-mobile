@@ -1,18 +1,15 @@
 import * as types from '../actions/action-types';
 import {createReducer} from 'redux-create-reducer';
 import IssuePermissions from '../components/issue-permissions/issue-permissions';
-import type Api from '../components/api/api';
 import type Auth from '../components/auth/auth';
 
 type RootState = {
-  api: ?Api,
   auth: ?Auth,
   showMenu: boolean,
   showDebugView: boolean
 };
 
 const initialState: RootState = {
-  api: null,
   auth: null,
   showMenu: false,
   showDebugView: false
@@ -34,11 +31,7 @@ export default createReducer(initialState, {
     if (state.auth) {
       state.auth.logOut();
     }
-    return {
-      ...state,
-      api: null,
-      auth: null
-    };
+    return {...state, auth: null};
   },
   [types.OPEN_MENU](state: RootState) {
     return {
