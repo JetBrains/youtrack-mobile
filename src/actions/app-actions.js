@@ -1,5 +1,6 @@
 /* @flow */
 import * as types from './action-types';
+import {setApi} from '../components/api/api__instance';
 import Api from '../components/api/api';
 import Router from '../components/router/router';
 import log from '../components/log/log';
@@ -45,16 +46,12 @@ export function onNavigateBack(closingView: Object) {
   return {type: types.ON_NAVIGATE_BACK, closingView};
 }
 
-export function initializeApi(auth: Auth) {
-  return {type: types.INITIALIZE_API, api: new Api(auth)};
-}
-
 export function checkAuthorization() {
   return async (dispatch: (any) => any, getState: () => Object) => {
     const auth = getState().app.auth;
     await auth.loadStoredAuthParams();
 
-    dispatch(initializeApi(auth));
+    setApi(new Api(auth));
     dispatch(setPermissions(auth));
     Router.IssueList();
   };

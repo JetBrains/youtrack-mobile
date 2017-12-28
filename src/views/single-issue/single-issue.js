@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {comment} from '../../components/icon/icon';
+import {getApi} from '../../components/api/api__instance';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import IssueToolbar from '../../components/issue-toolbar/issue-toolbar';
@@ -24,7 +25,6 @@ import styles from './single-issue.styles';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import {getReadableID} from '../../components/issue-formatter/issue-formatter';
 import * as issueActions from './single-issue-actions';
-import type Api from '../../components/api/api';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {State as SingleIssueState} from './single-issue-reducers';
 import type {IssueFull, IssueOnList} from '../../flow/Issue';
@@ -33,7 +33,6 @@ import type {IssueComment} from '../../flow/CustomFields';
 const CATEGORY_NAME = 'Issue';
 
 type AdditionalProps = {
-  api: Api,
   issuePermissions: IssuePermissions,
   issuePlaceholder: Object
 };
@@ -54,7 +53,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
   }
 
   loadCommentSuggestions(query) {
-    return this.props.api.getMentionSuggests([this.props.issueId], query)
+    return getApi().getMentionSuggests([this.props.issueId], query)
       .catch(err => notifyError('Cannot load suggestions', err));
   }
 
@@ -162,7 +161,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
   }
 
   _renderIssueView(issue: IssueFull | IssueOnList) {
-    const {editMode, api, isSavingEditedIssue, summaryCopy, descriptionCopy, attachingImage, openIssueListWithSearch, openNestedIssueView} = this.props;
+    const {editMode, isSavingEditedIssue, summaryCopy, descriptionCopy, attachingImage, openIssueListWithSearch, openNestedIssueView} = this.props;
     return (
       <View style={styles.issueViewContainer}>
         <SingleIssueTopPanel issue={issue} onTagPress={openIssueListWithSearch}/>
@@ -183,9 +182,9 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
 
           {issue.wikifiedDescription
           ? <Wiki
-              backendUrl={api.auth.config.backendUrl}
+              backendUrl={getApi().auth.config.backendUrl}
               attachments={issue.attachments}
-              imageHeaders={api.auth.getAuthorizationHeaders()}
+              imageHeaders={getApi().auth.getAuthorizationHeaders()}
               onIssueIdTap={issueId => openNestedIssueView(null, issueId)}
             >
               {issue.wikifiedDescription}
@@ -196,7 +195,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
         {issue.attachments ? <AttachmentsRow
           attachments={issue.attachments}
           attachingImage={attachingImage}
-          imageHeaders={api.auth.getAuthorizationHeaders()}
+          imageHeaders={getApi().auth.getAuthorizationHeaders()}
           onImageLoadingError={this.props.refreshIssue}
           onOpenAttachment={(type, name) => usage.trackEvent(CATEGORY_NAME, type === 'image' ? 'Showing image' : 'Open attachment by URL')}
         /> : null}
@@ -270,8 +269,8 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
             <SingleIssueComments
               comments={issue.comments}
               attachments={issue.attachments}
-              imageHeaders={this.props.api.auth.getAuthorizationHeaders()}
-              backendUrl={this.props.api.config.backendUrl}
+              imageHeaders={getApi().auth.getAuthorizationHeaders()}
+              backendUrl={getApi().config.backendUrl}
               onReply={(comment: IssueComment) => {
                 this.props.showCommentInput();
                 this.props.startReply(comment.author.login);
@@ -323,7 +322,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
 
 
         {issue && !addCommentMode && <CustomFieldsPanel
-          api={this.props.api}
+          api={getApi()}
           canEditProject={issuePermissions.canUpdateGeneralInfo(issue)}
           issue={issue}
           issuePermissions={issuePermissions}
@@ -353,7 +352,6 @@ const mapStateToProps = (state: {app: Object, singleIssue: SingleIssueState}, ow
 
   return {
     issuePermissions: state.app.issuePermissions,
-    api: state.app.api,
     ...state.singleIssue,
     issuePlaceholder: ownProps.issuePlaceholder,
     issueId: ownProps.issueId,

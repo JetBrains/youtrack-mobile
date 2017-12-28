@@ -6,6 +6,7 @@ import styles from './create-issue.styles';
 import issueStyles from '../single-issue/single-issue.styles';
 import Header from '../../components/header/header';
 import usage from '../../components/usage/usage';
+import {getApi} from '../../components/api/api__instance';
 import {attach, tag, next} from '../../components/icon/icon';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
@@ -14,7 +15,6 @@ import IssueSummary from '../../components/issue-summary/issue-summary';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as createIssueActions from './create-issue-actions';
-import type Api from '../../components/api/api';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {CreateIssueState} from './create-issue-reducers';
 
@@ -23,7 +23,6 @@ export const DRAFT_ID_STORAGE_KEY = 'DRAFT_ID_STORAGE_KEY';
 const CATEGORY_NAME = 'Create issue view';
 
 type AdditionalProps = {
-  api: Api,
   issuePermissions: IssuePermissions,
   predefinedDraftId: ?string
 };
@@ -118,7 +117,7 @@ class CreateIssue extends Component<Props, void> {
                 <AttachmentsRow
                   attachments={issue.attachments}
                   attachingImage={attachingImage}
-                  imageHeaders={this.props.api.auth.getAuthorizationHeaders()}
+                  imageHeaders={getApi().auth.getAuthorizationHeaders()}
                 />
 
                 <View style={styles.attachButtonsContainer}>
@@ -152,7 +151,7 @@ class CreateIssue extends Component<Props, void> {
 
         <CustomFieldsPanel
           ref={this.fieldsPanelRef}
-          api={this.props.api}
+          api={getApi()}
           issue={issue}
           canEditProject={true}
           issuePermissions={issuePermissions}
@@ -170,7 +169,6 @@ const mapStateToProps = (state, ownProps) => {
   return {
     ...state.creation,
     predefinedDraftId: ownProps.predefinedDraftId,
-    api: state.app.api,
     issuePermissions: state.app.issuePermissions
   };
 };
