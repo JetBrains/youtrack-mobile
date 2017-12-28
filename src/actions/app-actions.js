@@ -4,24 +4,21 @@ import {setApi} from '../components/api/api__instance';
 import Api from '../components/api/api';
 import Router from '../components/router/router';
 import log from '../components/log/log';
-import {AsyncStorage, Linking} from 'react-native';
+import {clearCachesAndDrafts} from '../components/storage/storage';
+import {Linking} from 'react-native';
 import UrlParse from 'url-parse';
-import {PROJECT_ID_STORAGE_KEY, DRAFT_ID_STORAGE_KEY} from '../views/create-issue/create-issue';
 import usage from '../components/usage/usage';
 import {loadConfig, getStoredConfig} from '../components/config/config';
 import Auth from '../components/auth/auth';
 import type {AppConfigFilled} from '../flow/AppConfig';
 
-export function clearDrafts() {
-  AsyncStorage.multiRemove([PROJECT_ID_STORAGE_KEY, DRAFT_ID_STORAGE_KEY]);
-}
-
 export function logOut() {
   return (dispatch: (any) => any, getState: () => Object) => {
-    clearDrafts();
+    clearCachesAndDrafts();
     const auth = getState().app.auth;
     Router.EnterServer({serverUrl: auth.config.backendUrl});
 
+    auth.logOut();
     setApi(null);
     dispatch({type: types.LOG_OUT});
   };

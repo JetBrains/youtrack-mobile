@@ -28,9 +28,6 @@ export default createReducer(initialState, {
     };
   },
   [types.LOG_OUT](state: RootState, action: Object = {}) {
-    if (state.auth) {
-      state.auth.logOut();
-    }
     return {...state, auth: null};
   },
   [types.OPEN_MENU](state: RootState) {
