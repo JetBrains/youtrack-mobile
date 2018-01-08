@@ -61,10 +61,10 @@
 				"name": "iPhone 7"
 			}
 		}
-  },
-  "resolutions" : {
-    "uglify-es": "3.1.10"
-  },
+	},
+	"resolutions": {
+		"uglify-es": "3.1.10"
+	},
 	"dependencies": {
 		"@expo/react-native-action-sheet": "1.0.1",
 		"@huston007/react-native-eventsource": "0.1.2",
@@ -77,8 +77,8 @@
 		"object-walk": "^0.1.1",
 		"prop-types": "^15.5.10",
 		"qs": "6.1.0",
-		"react": "16.0.0",
-		"react-native": "0.51.0",
+		"react": "16.2.0",
+		"react-native": "0.52.0",
 		"react-native-animatable": "1.2.4",
 		"react-native-calendars": "1.5.3",
 		"react-native-device-info": "0.11.0",
@@ -120,7 +120,7 @@
 		"eslint-plugin-import": "2.2.0",
 		"eslint-plugin-react": "6.7.1",
 		"eslint-plugin-react-native": "2.2.0",
-		"flow-bin": "0.57.3",
+		"flow-bin": "0.61.0",
 		"jest": "21.2.1",
 		"jest-teamcity-reporter": "^0.6.2",
 		"mocha": "^3.2.0",

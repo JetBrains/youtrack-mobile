@@ -37,7 +37,7 @@ export default class Select extends Component<Props, State> {
   static defaultProps = {
     placeholder: 'Search item',
     autoFocus: false,
-    onChangeSelection: (items) => null
+    onChangeSelection: (items: Array<Object>) => null
   };
 
   constructor() {
