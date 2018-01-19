@@ -74,7 +74,11 @@ export default class Auth {
         'Content-Type': URL_ENCODED_TYPE
       },
       body: body
-    }).then(res => res.json())
+    }).then(async res => {
+      log.log(`Got result from ${hubTokenUrl}: ${res && res.status}`);
+      log.log(`Response body: ${res && res._bodyText}`);
+      return res.json();
+    })
       .then(res => {
         if (res.error) {
           throw res;
