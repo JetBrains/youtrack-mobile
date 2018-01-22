@@ -3,7 +3,7 @@ import {AsyncStorage} from 'react-native';
 
 import log from '../log/log';
 
-import type AuthParams from '../auth/auth';
+import type {AuthParams} from '../auth/auth';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 
 const ISSUES_LIST_CACHE_KEY = 'yt_mobile_issues_cache';

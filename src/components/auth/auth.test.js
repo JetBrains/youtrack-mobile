@@ -116,9 +116,8 @@ describe('Auth', function () {
       return promise.should.be.fulfilled;
     });
 
-    it('should refresh token from hub', () => {
+    it('should refresh token from hub', async () => {
       const response = {access_token: 'new-token', refresh_token: 'new-refresh'};
-      const promise = auth.refreshToken();
 
       sinon.stub(auth, 'loadPermissions', (authParams) => authParams);
 
@@ -129,8 +128,10 @@ describe('Auth', function () {
         options.resolve({status: 200, json: () => ({})});
       };
 
-      return promise.should.eventually.equal(response)
-        .then(() => auth.authParams.should.equal(response));
+      const authParams = await auth.refreshToken();
+
+      authParams.should.deep.equal(response);
+      auth.authParams.should.equal(authParams);
     });
 
     it('should fail refresh if hub ', () => {

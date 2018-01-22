@@ -1,12 +1,10 @@
 /* @flow */
-import {AsyncStorage} from 'react-native';
 import Permissions from './auth__permissions';
+import {getStorageState, flushStoragePart} from '../storage/storage';
 import base64 from 'base64-js';
 import qs from 'qs';
 import log from '../log/log';
 import type {AppConfigFilled} from '../../flow/AppConfig';
-
-const STORAGE_KEY = 'yt_mobile_auth';
 
 const ACCEPT_HEADER = 'application/json, text/plain, */*';
 const URL_ENCODED_TYPE = 'application/x-www-form-urlencoded';
@@ -19,9 +17,9 @@ function makeBtoa(str: string) {
   return base64.fromByteArray(byteArray);
 }
 
-declare type AuthParams = {refresh_token: string; access_token: string, token_type: string};
+export type AuthParams = {refresh_token: string; access_token: string, token_type: string};
 
-export default class Auth {
+export default class AuthTest {
   config: AppConfigFilled;
   authParams: ?AuthParams;
   permissions: Permissions;
@@ -51,15 +49,18 @@ export default class Auth {
       .then(this.storeAuth.bind(this));
   }
 
-  loadStoredAuthParams() {
+  loadStoredAuthParams(): Promise<void> {
     return this.readAuth()
       .then((authParams) => this.verifyToken(authParams))
       .then((authParams) => this.loadPermissions(authParams))
-      .then((authParams) => this.authParams = authParams);
+      .then((authParams) => {
+        this.authParams = authParams;
+      });
   }
 
-  logOut() {
-    return AsyncStorage.removeItem(STORAGE_KEY).then(() => delete this.authParams);
+  async logOut() {
+    await flushStoragePart({authParams: null});
+    delete this.authParams;
   }
 
   obtainToken(body: string) {
@@ -111,7 +112,7 @@ export default class Auth {
     ].join(''));
   }
 
-  refreshToken() {
+  refreshToken(): Promise<AuthParams> {
     let token;
     return this.readAuth()
       .then((authParams: AuthParams) => {
@@ -151,7 +152,10 @@ export default class Auth {
       .then((authParams) => this.verifyToken(authParams))
       .then((authParams) => this.loadPermissions(authParams))
       .then(this.storeAuth.bind(this))
-      .then((authParams) => this.authParams = authParams);
+      .then((authParams) => {
+        this.authParams = authParams;
+        return authParams;
+      });
   }
 
   getAuthorizationHeaders(authParams: ?AuthParams = this.authParams): {Authorization: string} {
@@ -166,7 +170,7 @@ export default class Auth {
   /**
    * Not sure that check is still required.
    */
-  verifyToken(authParams: AuthParams) {
+  verifyToken(authParams: AuthParams): Promise<AuthParams> {
     log.info('Verifying token...');
 
     return fetch(this.CHECK_TOKEN_URL, {
@@ -199,7 +203,7 @@ export default class Auth {
       });
   }
 
-  loadPermissions(authParams: AuthParams) {
+  loadPermissions(authParams: AuthParams): Promise<AuthParams> {
     return fetch(this.PERMISSIONS_CACHE_URL, {
       headers: {
         'Accept': ACCEPT_HEADER,
@@ -217,13 +221,16 @@ export default class Auth {
       });
   }
 
-  storeAuth(authParams: AuthParams) {
-    return AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(authParams))
-      .then(() => authParams);
+  async storeAuth(authParams: AuthParams) {
+    await flushStoragePart({authParams});
+    return authParams;
   }
 
-  readAuth() {
-    return AsyncStorage.getItem(STORAGE_KEY)
-      .then((authParamsString: string) => JSON.parse(authParamsString));
+  async readAuth(): Promise<AuthParams> {
+    const authParams: ?AuthParams = getStorageState().authParams;
+    if (!authParams) {
+      throw new Error('No stored auth params found');
+    }
+    return authParams;
   }
 }
