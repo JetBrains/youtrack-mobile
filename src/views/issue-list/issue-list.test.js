@@ -1,5 +1,6 @@
 import * as actions from './issue-list-actions';
 import * as types from './issue-list-action-types';
+import {populateStorage, flushStoragePart, getStorageState} from '../../components/storage/storage';
 import {ISSUE_UPDATED} from '../single-issue/single-issue-action-types';
 import sinon from 'sinon';
 import {AsyncStorage as MockedStorage} from 'react-native';
@@ -33,7 +34,8 @@ describe('Issue list actions', () => {
   });
 
   it('should read stored query', async () => {
-    sandbox.stub(MockedStorage, 'getItem', () => new Promise(resolve => resolve(TEST_QUERY)));
+    await populateStorage();
+    await flushStoragePart({query: TEST_QUERY});
     await actions.readStoredIssuesQuery()(dispatch);
 
     dispatch.should.have.been.calledWith({type: types.SET_ISSUES_QUERY, query: TEST_QUERY});
@@ -77,11 +79,11 @@ describe('Issue list actions', () => {
       .should.deep.equal({type: types.CLEAR_SUGGESTIONS});
   });
 
-  it('should store query', () => {
-    sandbox.stub(MockedStorage, 'setItem');
-    actions.storeIssuesQuery(TEST_QUERY)();
+  it('should store query', async () => {
+    await populateStorage();
+    actions.storeIssuesQuery('query-update')();
 
-    MockedStorage.setItem.should.have.been.calledWith('YT_QUERY_STORAGE', TEST_QUERY);
+    await getStorageState().query.should.equal('query-update');
   });
 
   it('should receive issues', () => {

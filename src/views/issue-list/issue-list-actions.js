@@ -1,7 +1,7 @@
 /* @flow */
 import * as types from './issue-list-action-types';
-import {AsyncStorage} from 'react-native';
 import ApiHelper from '../../components/api/api__helper';
+import {getStorageState, flushStoragePart} from '../../components/storage/storage';
 import {notifyError, resolveError} from '../../components/notification/notification';
 import Cache from '../../components/cache/cache';
 import log from '../../components/log/log';
@@ -9,7 +9,6 @@ import type Api from '../../components/api/api';
 import type {IssueOnList} from '../../flow/Issue';
 
 const PAGE_SIZE = 10;
-const QUERY_STORAGE_KEY = 'YT_QUERY_STORAGE';
 const LAST_QUERIES_STORAGE_KEY = 'YT_LAST_QUERIES_STORAGE_KEY';
 const MAX_STORED_QUERIES = 5;
 const lastQueriesCache = new Cache(LAST_QUERIES_STORAGE_KEY);
@@ -25,8 +24,7 @@ export function setIssuesQuery(query: string) {
 
 export function readStoredIssuesQuery() {
   return async (dispatch: (any) => any) => {
-    const query = await AsyncStorage.getItem(QUERY_STORAGE_KEY);
-    log.info(`Have read stored query: ${query}`);
+    const query = getStorageState().query || '';
     dispatch(setIssuesQuery(query));
   };
 }
@@ -73,7 +71,7 @@ async function storeLastQuery(query: string) {
 
 export function storeIssuesQuery(query: string) {
   return () => {
-    AsyncStorage.setItem(QUERY_STORAGE_KEY, query);
+    flushStoragePart({query});
     storeLastQuery(query);
   };
 }
