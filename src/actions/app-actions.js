@@ -4,13 +4,15 @@ import {setApi} from '../components/api/api__instance';
 import Api from '../components/api/api';
 import Router from '../components/router/router';
 import log from '../components/log/log';
-import {clearCachesAndDrafts} from '../components/storage/storage';
+import {clearCachesAndDrafts, populateStorage} from '../components/storage/storage';
 import {Linking} from 'react-native';
 import UrlParse from 'url-parse';
 import usage from '../components/usage/usage';
-import {loadConfig, getStoredConfig} from '../components/config/config';
+import {loadConfig} from '../components/config/config';
 import Auth from '../components/auth/auth';
+
 import type {AppConfigFilled} from '../flow/AppConfig';
+import type {StorageState} from '../components/storage/storage';
 
 export function logOut() {
   return (dispatch: (any) => any, getState: () => Object) => {
@@ -111,9 +113,10 @@ export function connectToNewYoutrack(newURL: string) {
 
 export function getStoredConfigAndProceed() {
   return async (dispatch: (any) => any, getState: () => Object) => {
-    const storedConfig: ?AppConfigFilled = await getStoredConfig();
-    if (storedConfig) {
-      return dispatch(initializeApp(storedConfig));
+    const state: StorageState = await populateStorage();
+
+    if (state.config) {
+      return dispatch(initializeApp(state.config));
     }
 
     try {

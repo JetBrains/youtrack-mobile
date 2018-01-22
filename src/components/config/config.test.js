@@ -1,4 +1,5 @@
-import {loadConfig, getStoredConfig, formatYouTrackURL} from './config';
+import {loadConfig, formatYouTrackURL} from './config';
+import {__setStorageState} from '../storage/storage';
 import sinon from 'sinon';
 import {AsyncStorage} from 'react-native';
 
@@ -9,6 +10,8 @@ describe('Config', () => {
     let responseJson;
 
     beforeEach(() => {
+      __setStorageState({config: null});
+
       responseJson = {
         ring: {
           url: 'http://hub.com',
@@ -29,7 +32,11 @@ describe('Config', () => {
       fetch = global.fetch = sinon.stub();
 
       fetch.returns(Promise.resolve(response));
+
+      sinon.stub(AsyncStorage, 'multiSet');
     });
+
+    afterEach(() => AsyncStorage.multiSet.restore());
 
     it('should load config from server', async() => {
       const res = await loadConfig('http://fake.backend');
@@ -53,6 +60,14 @@ describe('Config', () => {
       responseJson.ring.url = '/hub';
       const res = await loadConfig('http://fake.backend');
       res.auth.serverUri.should.equal('http://fake.backend/hub');
+    });
+
+    it.only('should store loaded config to storage', async() => {
+      await loadConfig('http://fake.backend');
+      AsyncStorage.multiSet.should.have.been.calledWith([[
+        'BACKEND_CONFIG_STORAGE_KEY',
+        sinon.match(String)
+      ]]);
     });
 
     it('should correctly construct hub url for embedded hub on cloud', async() => {
@@ -102,29 +117,6 @@ describe('Config', () => {
           err.message.should.contain('The mobile application feature is not enabled');
           done();
         });
-    });
-  });
-
-  describe('Loading stored config', () => {
-    const configMock = {foo: 'bar'};
-
-    beforeEach(() => {
-      sinon.stub(AsyncStorage, 'getItem').returns(JSON.stringify(configMock));
-    });
-
-    afterEach(() => {
-      AsyncStorage.getItem.restore();
-    });
-
-    it('should load config from local storage', async() => {
-      const config = await getStoredConfig();
-      config.should.deep.equal(configMock);
-    });
-
-    it('should return nothing if no stored config found', async() => {
-      AsyncStorage.getItem.returns(null);
-      const config = await getStoredConfig();
-      expect(config).toBeNull();
     });
   });
 

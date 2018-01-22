@@ -1,11 +1,10 @@
 /* @flow */
-import {AsyncStorage} from 'react-native';
 import UrlParse from 'url-parse';
+import {flushStoragePart} from '../storage/storage';
 import log from '../log/log';
 import type {AppConfig, AppConfigFilled} from '../../flow/AppConfig';
 
 const MIN_YT_VERSION = 7.0;
-const BACKEND_CONFIG_STORAGE_KEY = 'BACKEND_CONFIG_STORAGE_KEY';
 const PROTOCOL_REGEXP = /^https?:\/\//i;
 const YOUTRACK_CONTEXT_REGEXP = /\/youtrack$/i;
 const VERSION_DETECT_FALLBACK_URL = '/rest/workflow/version';
@@ -29,22 +28,8 @@ class IncompatibleYouTrackError extends Error {
 }
 
 async function storeConfig(config: AppConfigFilled): Promise<AppConfigFilled> {
-  log.log(`Storing config: ${JSON.stringify(config)}`);
-  return AsyncStorage.setItem(
-    BACKEND_CONFIG_STORAGE_KEY,
-    JSON.stringify(config)
-  ).then(() => config);
-}
-
-
-async function getStoredConfig(): Promise<?AppConfigFilled> {
-  const rawConfig: string = await AsyncStorage.getItem(BACKEND_CONFIG_STORAGE_KEY);
-
-  if (rawConfig) {
-    return JSON.parse(rawConfig);
-  }
-
-  return null;
+  await flushStoragePart({config});
+  return config;
 }
 
 function handleIncompatibleYouTrack(response: Object, ytUrl: string) {
@@ -128,4 +113,4 @@ async function loadConfig(ytUrl: string) {
     });
 }
 
-export {loadConfig, getStoredConfig, formatYouTrackURL, handleRelativeUrl, VERSION_DETECT_FALLBACK_URL};
+export {loadConfig, formatYouTrackURL, handleRelativeUrl, VERSION_DETECT_FALLBACK_URL};
