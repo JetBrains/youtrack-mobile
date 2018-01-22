@@ -6,7 +6,9 @@ const FONT_SIZE = 16;
 export default StyleSheet.create({
   htmlView: {
     fontSize: FONT_SIZE,
-    color: COLOR_FONT
+    color: COLOR_FONT,
+    textAlign: 'left',
+    writingDirection: 'ltr'
   },
   monospace: {
     ...Platform.select({
