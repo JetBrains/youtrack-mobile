@@ -21,7 +21,7 @@ function getForText(assignee: IssueUser | Array<IssueUser>) {
       .join(', ');
   }
   if (assignee && !Array.isArray(assignee)) {
-    return `for ${assignee.fullName || assignee.login}`;
+    return `for ${assignee.fullName || assignee.name || assignee.login}`;
   }
   return '    Unassigned';
 }
