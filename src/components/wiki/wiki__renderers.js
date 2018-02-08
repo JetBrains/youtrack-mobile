@@ -37,7 +37,7 @@ export function renderImage({node, index, attachments, imageHeaders, onImagePres
   const source = {uri, headers: imageHeaders};
 
   return (
-    <Text onPress={() => onImagePress(node.url)} key={index}>
+    <Text onPress={() => onImagePress(src)} key={index}>
       <Image
         source={source}
         style={imgStyle}
