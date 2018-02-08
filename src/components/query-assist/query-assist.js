@@ -154,10 +154,15 @@ export default class QueryAssist extends Component<Props, State> {
           onSelectionChange = {event => this.onSearch(input, event.nativeEvent.selection.start)}
         />
         {(input && showQueryAssist)
-        ? <TouchableOpacity style={styles.clearIconWrapper} onPress={() => this.setState({input: ''})} testID="query-assist-clear">
-          <Image style={styles.clearIcon} source={clearSearch}/>
-        </TouchableOpacity>
-        : null}
+        ? (
+          <TouchableOpacity
+            style={styles.clearIconWrapper}
+            onPress={() => this.setState({input: ''})}
+            testID="query-assist-clear"
+          >
+            <Image style={styles.clearIcon} source={clearSearch}/>
+          </TouchableOpacity>
+        ): null}
         {cancelButton}
       </View>
     );

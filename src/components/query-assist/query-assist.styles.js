@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 import bottomPadding from '../bottom-padding/bottom-padding';
 import {UNIT, COLOR_PINK, COLOR_TRANSPARENT_BLACK, COLOR_FONT_ON_BLACK, COLOR_BLACK, COLOR_SELECTED_DARK} from '../../components/variables/variables';
 
@@ -48,7 +48,12 @@ export default StyleSheet.create({
     fontSize: 15
   },
   searchInputActive: {
-    color: COLOR_FONT_ON_BLACK
+    color: COLOR_FONT_ON_BLACK,
+    ...Platform.select({
+      android: {
+        paddingRight: UNIT * 4
+      }
+    })
   },
   clearIconWrapper: {
     backgroundColor: 'transparent',
