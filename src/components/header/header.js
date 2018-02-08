@@ -4,6 +4,7 @@ import React, {Component} from 'react';
 import styles from './header.styles';
 import Router from '../router/router';
 import getTopPadding, {onHeightChange} from './header__top-padding';
+import type {Node} from 'react';
 
 const TOUCH_PADDING = 8;
 
@@ -12,7 +13,7 @@ type Props = {
   onRightButtonClick?: Function,
   leftButton?: ?React$Element<any>,
   rightButton?: ?React$Element<any>,
-  children?: React$Element<any>
+  children?: Node
 }
 
 type DefaultProps = {

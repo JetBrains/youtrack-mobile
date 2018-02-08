@@ -17,7 +17,9 @@ function resetCounter() {
 }
 
 export default function clicksCounter(actionToPerform: Function) {
-  clearTimeout(timeoutId);
+  if (timeoutId) {
+    clearTimeout(timeoutId);
+  }
   increaseCounter();
 
   if (counter === CLICKS_TO_SHOW_NOTIFICATION) {
