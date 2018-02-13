@@ -35,11 +35,12 @@ export default class IssueRow extends Component<Props, void> {
       return <View style={styles.priorityPlaceholder}/>;
     }
     const values: Array<BundleValue> = [].concat(priorityField.value);
+    const LAST = values.length - 1;
 
     return (
       <ColorField
-        text={values[0].name}
-        color={values[0].color}
+        text={values[LAST].name}
+        color={values[LAST].color}
       />
     );
   }
