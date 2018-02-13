@@ -7,6 +7,7 @@ import {next} from '../../components/icon/icon';
 import {COLOR_FONT_GRAY} from '../../components/variables/variables';
 import {getPriotityField, getForText} from '../../components/issue-formatter/issue-formatter';
 import type {IssueOnList} from '../../flow/Issue';
+import type {BundleValue} from '../../flow/CustomFields';
 
 type Props = {
   issue: IssueOnList,
@@ -28,19 +29,30 @@ export default class IssueRow extends Component<Props, void> {
     }
   }
 
+  renderPriority() {
+    const priorityField = getPriotityField(this.props.issue);
+    if (!priorityField || !priorityField.value || priorityField.value.length === 0) {
+      return <View style={styles.priorityPlaceholder}/>;
+    }
+    const values: Array<BundleValue> = [].concat(priorityField.value);
+
+    return (
+      <ColorField
+        text={values[0].name}
+        color={values[0].color}
+      />
+    );
+  }
+
   render() {
-    const issue = this.props.issue;
-    const priorityField = getPriotityField(issue);
-    const prioityBlock = (priorityField && priorityField.value) ?
-      <ColorField text={priorityField.value.name} color={priorityField.value.color}></ColorField> :
-      <View style={styles.priorityPlaceholder}/>;
+    const {issue} = this.props;
 
     return (
       <TouchableOpacity onPress={() => this.props.onClick(issue)} testID="issue-row">
         <View style={styles.row}>
 
           <View>
-            <View style={styles.priorityWrapper}>{prioityBlock}</View>
+            <View style={styles.priorityWrapper}>{this.renderPriority()}</View>
           </View>
 
           <View style={styles.rowText}>

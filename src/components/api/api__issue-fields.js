@@ -105,6 +105,7 @@ const ISSUE_FIELD_FIELDS = toField([
 const ISSUE_FIELD_SHORT_FIELDS = toField([
   'id',
   'name',
+  '$type',
   {
     value: [
       'id',

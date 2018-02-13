@@ -72,10 +72,15 @@ function findIssueField(issue: AnyIssue, predicate: (field: CustomField) => bool
 }
 
 function getPriotityField(issue: AnyIssue): ?CustomField {
-  const PRIORITY_FIELDS = ['Priority'];
+  const PRIORITY_FIELDS = ['Priority', 'Priorities', 'Приоритет'];
+  const SUPPORTED_TYPES = [
+    'jetbrains.charisma.customfields.complex.enumeration.MultiEnumIssueCustomField',
+    'jetbrains.charisma.customfields.complex.enumeration.SingleEnumIssueCustomField'
+  ];
   return findIssueField(issue, field => {
     const fieldName = field.projectCustomField.field.name;
-    return PRIORITY_FIELDS.includes(fieldName);
+    const fieldType = field.$type;
+    return PRIORITY_FIELDS.includes(fieldName) && SUPPORTED_TYPES.includes(fieldType);
   });
 }
 
