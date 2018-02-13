@@ -15,13 +15,14 @@ describe('<AgileCard/>', () => {
         shortName: 'TT'
       },
       fields: [{
+        $type: 'jetbrains.charisma.customfields.complex.enumeration.SingleEnumIssueCustomField',
         value: {
           name: 'Critical',
           color: {id: 4, background: '#000', foreground: '#FFF'}
         },
         projectCustomField: {
           field: {
-            name: 'Priority'
+            name: 'Priority',
           }
         }
       }]
