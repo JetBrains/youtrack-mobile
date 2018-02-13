@@ -7,13 +7,27 @@ declare type IssueUser = {
   fullName: string
 };
 
+type TimeTrackingFieldInfo = {
+  id: string,
+  field: {
+    id: string,
+    name: string
+  }
+};
+
 declare type IssueProject = {
   $type: string,
   id: string,
   name: string,
   shortName: string,
   archived: boolean,
-  ringId: string
+  ringId: string,
+  plugins: {
+    timeTrackingSettings: {
+      enabled: boolean,
+      timeSpent: ?TimeTrackingFieldInfo
+    }
+  }
 }
 
 declare type ColorField = {

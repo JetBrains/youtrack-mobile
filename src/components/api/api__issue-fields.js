@@ -8,7 +8,17 @@ const ISSUE_PROJECT_FIELDS = toField([
   'id',
   'name',
   'shortName',
-  'ringId'
+  'ringId',
+  {
+    plugins: {
+      timeTrackingSettings: toField([
+        'enabled',
+        {
+          timeSpent: toField(['id', 'field(id,name)'])
+        }
+      ])
+    }
+  }
 ]);
 
 const ISSUE_USER_FIELDS = toField([
@@ -37,8 +47,9 @@ const BUNDLE_VALUE = toField([
   {color: ['id', 'background', 'foreground']}
 ]);
 
-const ISSUE_FIELD_VALUE = toField([{
-    'value': [
+const ISSUE_FIELD_VALUE = toField([
+  {
+    value: [
       '$type',
       'id',
       'name',
@@ -51,11 +62,11 @@ const ISSUE_FIELD_VALUE = toField([{
       'isResolved',
 
       {
-        'color': ['id', 'background', 'foreground']
+        color: ['id', 'background', 'foreground']
       }
-
     ]
-  }]);
+  }
+]);
 
 const PROJECT_CUSTOM_FIELD_FIELDS = toField([
   '$type',
@@ -64,29 +75,23 @@ const PROJECT_CUSTOM_FIELD_FIELDS = toField([
   'canBeEmpty',
   'emptyFieldText',
   {
-    'bundle': [
-      'id',
-      'isUpdateable'
-    ]
+    bundle: ['id', 'isUpdateable']
   },
 
   {
-    'field': [
+    field: [
       'id',
       'name',
       'ordinal',
       'isPublic',
 
       {
-        'fieldType': [
-          'valueType',
-          'isMultiValue'
-        ]
+        fieldType: ['valueType', 'isMultiValue']
       }
     ]
   },
 
-  {'defaultValues': BUNDLE_VALUE}
+  {defaultValues: BUNDLE_VALUE}
 ]);
 
 const ISSUE_FIELD_FIELDS = toField([
@@ -98,7 +103,7 @@ const ISSUE_FIELD_FIELDS = toField([
   ISSUE_FIELD_VALUE,
 
   {
-    'projectCustomField': PROJECT_CUSTOM_FIELD_FIELDS
+    projectCustomField: PROJECT_CUSTOM_FIELD_FIELDS
   }
 ]);
 
@@ -127,7 +132,6 @@ const ISSUE_FIELD_SHORT_FIELDS = toField([
   }
 ]);
 
-
 const ISSUE_TAGS_FIELDS = toField([
   'name',
   'id',
@@ -137,12 +141,7 @@ const ISSUE_TAGS_FIELDS = toField([
   }
 ]);
 
-const ISSUE_ATTACHMENTS_FIELDS = toField([
-  'id',
-  'name',
-  'url',
-  'mimeType'
-]);
+const ISSUE_ATTACHMENTS_FIELDS = toField(['id', 'name', 'url', 'mimeType']);
 
 const ISSUE_COMMENTS_FIELDS = toField([
   'id',
@@ -189,7 +188,6 @@ const ISSUE_FOLDER_FIELDS = toField([
   {owner: ['ringId']}
 ]);
 
-
 const SUGGESTION_FIELDS = toField([
   'id',
   'caret',
@@ -207,7 +205,7 @@ const SUGGESTION_FIELDS = toField([
 const COMMAND_SUGGESTION_FIELDS = toField([
   'query',
   'caret',
-  {commands: ['description','error','delete']},
+  {commands: ['description', 'error', 'delete']},
   {suggestions: SUGGESTION_FIELDS}
 ]);
 

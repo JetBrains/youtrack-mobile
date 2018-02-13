@@ -38,7 +38,7 @@ export default class IssuePermissions {
     return this.permissions.hasEvery([READ_ISSUE, UPDATE_ISSUE], projectId);
   }
 
-  _canUpdatePublicField(issue: AnyIssue, field: CustomField) {
+  _canUpdatePublicField(issue: AnyIssue) {
     const projectId = issue.project.ringId;
     const isReporter = issue.reporter.ringId === this.currentUser.id;
     const canCreateIssue = this.permissions.has(CREATE_ISSUE, projectId);
@@ -46,15 +46,28 @@ export default class IssuePermissions {
     return (isReporter && canCreateIssue) || this.permissions.has(PRIVATE_UPDATE_ISSUE, projectId);
   }
 
-  _canUpdatePrivateField(issue: AnyIssue, field: CustomField) {
+  _canUpdatePrivateField(issue: AnyIssue) {
     return this.permissions.has(PRIVATE_UPDATE_ISSUE, issue.project.ringId);
   }
 
-  canUpdateField(issue: AnyIssue, field: CustomField) {
-    if (field.projectCustomField.field.isPublic) {
-      return this._canUpdatePublicField(issue, field);
+  _isBlockedByTimeTracking(issue: AnyIssue, field: CustomField) {
+    const {timeTrackingSettings} = issue.project.plugins;
+    if (!timeTrackingSettings.enabled || !timeTrackingSettings.timeSpent) {
+      return false;
     }
-    return this._canUpdatePrivateField(issue, field);
+    const isSpentTime = timeTrackingSettings.timeSpent.field.id === field.projectCustomField.field.id;
+
+    return isSpentTime; // Spent Time field is always disabled to edit – calculating automatically
+  }
+
+  canUpdateField(issue: AnyIssue, field: CustomField) {
+    if (this._isBlockedByTimeTracking(issue, field)) {
+      return false;
+    }
+    if (field.projectCustomField.field.isPublic) {
+      return this._canUpdatePublicField(issue);
+    }
+    return this._canUpdatePrivateField(issue);
   }
 
   canCommentOn(issue: AnyIssue) {
