@@ -7,6 +7,7 @@ const ISSUE_PROJECT_FIELDS = toField([
   '$type',
   'id',
   'name',
+  'archived',
   'shortName',
   'ringId',
   {
@@ -232,14 +233,7 @@ export default {
     {comments: ISSUE_COMMENTS_FIELDS},
     {links: ISSUE_LINKS_FIELDS}
   ]),
-  projectOnList: toField([
-    'id',
-    'name',
-    'ringId',
-    'archived',
-    'shortName',
-    'description'
-  ]),
+  projectOnList: ISSUE_PROJECT_FIELDS,
   project: toField([
     'id',
     'name',
