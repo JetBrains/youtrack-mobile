@@ -30,7 +30,7 @@ export default {
     }
     //eslint-disable-next-line no-console
     console.warn(...params);
-    return deviceLog.info(...params);
+    return deviceLog.error(...params);
   },
 
   enableLog() {

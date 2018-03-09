@@ -6,8 +6,9 @@ import deviceLog, {LogView} from 'react-native-device-log';
 import getTopPadding from '../../components/header/header__top-padding';
 import styles from './debug-view.styles';
 import {closeDebugView} from '../../actions/app-actions';
+import {notify} from '../notification/notification';
 
-async function copyRawLogs() {
+export async function copyRawLogs() {
   const rows = await deviceLog.store.getRows();
 
   const rowsString = rows
@@ -16,6 +17,7 @@ async function copyRawLogs() {
     .join('\n');
 
   Clipboard.setString(rowsString);
+  notify('Logs have been copied');
 }
 
 type Props = {
