@@ -51,8 +51,12 @@ export default class IssuePermissions {
   }
 
   _isBlockedByTimeTracking(issue: AnyIssue, field: CustomField) {
+    if (!issue.project.plugins) {
+      return false;
+    }
+
     const {timeTrackingSettings} = issue.project.plugins;
-    if (!timeTrackingSettings.enabled || !timeTrackingSettings.timeSpent) {
+    if (!timeTrackingSettings || !timeTrackingSettings.enabled || !timeTrackingSettings.timeSpent) {
       return false;
     }
     const isSpentTime = timeTrackingSettings.timeSpent.field.id === field.projectCustomField.field.id;

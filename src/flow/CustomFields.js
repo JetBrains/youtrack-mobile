@@ -22,7 +22,7 @@ declare type IssueProject = {
   shortName: string,
   archived: boolean,
   ringId: string,
-  plugins: {
+  plugins?: {
     timeTrackingSettings: {
       enabled: boolean,
       timeSpent: ?TimeTrackingFieldInfo

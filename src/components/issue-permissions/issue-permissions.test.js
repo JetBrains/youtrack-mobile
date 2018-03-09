@@ -127,6 +127,12 @@ describe('IssuePermissions', function () {
       this.issuePermissions.canUpdateField(this.issueMock, this.fieldMock).should.be.false;
     });
 
+    it('should allow to edit spentTime field if old youtrack (no "plugins" field in old YT)', () => {
+      this.permissionsMock.has.withArgs(PRIVATE_UPDATE_ISSUE).returns(true);
+      delete this.issueMock.project.plugins;
+      this.issuePermissions.canUpdateField(this.issueMock, this.fieldMock).should.be.true;
+    });
+
     it('should allow to edit any other time field', () => {
       this.permissionsMock.has.withArgs(PRIVATE_UPDATE_ISSUE).returns(true);
       const {timeTrackingSettings} = this.issueMock.project.plugins;
