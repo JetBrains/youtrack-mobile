@@ -63,7 +63,7 @@ function loadBoard(boardId: string, sprints: Array<{id: string}>) {
     const agileUserProfile: AgileUserProfile = await api.getAgileUserProfile();
     const visitedSprintOnBoard = (agileUserProfile.visitedSprints || []).filter(s => s.agile.id === boardId)[0];
     const targetSprint = visitedSprintOnBoard || sprints[sprints.length - 1];
-    log.info(`Resolving sprint for board ${boardId}. Visited = ${visitedSprintOnBoard ? visitedSprintOnBoard.id : 'NOTHING'}, target = ${targetSprint.id}`)
+    log.info(`Resolving sprint for board ${boardId}. Visited = ${visitedSprintOnBoard ? visitedSprintOnBoard.id : 'NOTHING'}, target = ${targetSprint.id}`);
     dispatch(loadSprint(boardId, targetSprint.id));
   };
 }
