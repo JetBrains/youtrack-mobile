@@ -1,7 +1,7 @@
 /* @flow */
 import * as types from './board-action-types';
 import {notifyError, notify} from '../../components/notification/notification';
-import type {AgileBoardRow, AgileColumn, BoardOnList} from '../../flow/Agile';
+import type {AgileBoardRow, AgileColumn, BoardOnList, AgileUserProfile} from '../../flow/Agile';
 import type {IssueFull, IssueOnList} from '../../flow/Issue';
 import ServersideEvents from '../../components/api/api__serverside-events';
 import type Api from '../../components/api/api';
@@ -57,10 +57,14 @@ function loadSprint(agileId: string, sprintId: string) {
   };
 }
 
-function loadBoard(boardId: string, sprints: {id: string}) {
-  return async (dispatch: (any) => any, getState: () => Object) => {
-    const lastSprint = sprints[0];
-    dispatch(loadSprint(boardId, lastSprint.id));
+function loadBoard(boardId: string, sprints: Array<{id: string}>) {
+  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const agileUserProfile: AgileUserProfile = await api.getAgileUserProfile();
+    const visitedSprintOnBoard = agileUserProfile.visitedSprints.filter(s => s.agile.id === boardId)[0];
+    const targetSprint = visitedSprintOnBoard || sprints[sprints.length - 1];
+    log.info(`Resolving sprint for board ${boardId}. Visited = ${visitedSprintOnBoard ? visitedSprintOnBoard.id : 'NOTHING'}, target = ${targetSprint.id}`)
+    dispatch(loadSprint(boardId, targetSprint.id));
   };
 }
 
