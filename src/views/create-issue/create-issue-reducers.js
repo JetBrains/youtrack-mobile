@@ -45,7 +45,7 @@ export default createReducer(initialState, {
     return {...state, predefinedDraftId: action.draftId};
   },
   [types.SET_ISSUE_DRAFT](state: CreateIssueState, action: {issue: IssueFull}): CreateIssueState {
-    return {...state, issue: action.issue};
+    return {...state, issue: {...state.issue, ...action.issue}};
   },
   [types.RESET_ISSUE_DRAFT](state: CreateIssueState): CreateIssueState {
     return {

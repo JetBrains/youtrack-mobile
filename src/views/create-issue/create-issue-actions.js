@@ -129,7 +129,7 @@ export function loadIssueFromDraft(draftId: string) {
   };
 }
 
-export function updateIssueDraft() {
+export function updateIssueDraft(ignoreFields: boolean = false) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {issue} = getState().creation;
@@ -147,6 +147,11 @@ export function updateIssueDraft() {
 
     try {
       const issue = await api.updateIssueDraft(issueToSend);
+
+      if (ignoreFields) {
+        delete issue.fields;
+      }
+
       log.info('Issue draft updated', issueToSend);
       dispatch(setIssueDraft(issue));
       if (!getState().creation.predefinedDraftId) {
@@ -155,6 +160,9 @@ export function updateIssueDraft() {
     } catch (err) {
       const error = await resolveError(err);
       if (error && error.error_description && error.error_description.indexOf(`Can't find entity with id`) !== -1) {
+        dispatch(clearDraftProject());
+      }
+      if (error && error.error === 'bad_request') {
         dispatch(clearDraftProject());
       }
       notifyError('Cannot update issue draft', error);
@@ -249,7 +257,7 @@ export function updateFieldValue(field: CustomField, value: FieldValue) {
     const {issue} = getState().creation;
 
     try {
-      await dispatch(updateIssueDraft()); // Update summary/description first
+      await dispatch(updateIssueDraft(true)); // Update summary/description first
       await api.updateIssueDraftFieldValue(issue.id, field.id, value);
       log.info(`Issue field value updated`);
 
