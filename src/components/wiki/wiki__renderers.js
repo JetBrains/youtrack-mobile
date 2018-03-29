@@ -2,6 +2,7 @@
 import React from 'react';
 import {Text, Image} from 'react-native';
 import SyntaxHighlighter from 'react-native-syntax-highlighter';
+import {idea} from 'react-syntax-highlighter/styles/hljs';
 import entities from 'entities';
 
 const IMAGE_SIZE = 264;
@@ -10,7 +11,14 @@ export function renderCode(node: {children: any}, index: number) {
   const code = node.children.map(it => it.data).join('\n');
 
   return (
-    <SyntaxHighlighter key={index} PreTag={Text} CodeTag={Text}>{entities.decodeHTML(code)}</SyntaxHighlighter>
+    <SyntaxHighlighter
+      key={index}
+      PreTag={Text}
+      CodeTag={Text}
+      style={idea}
+      >
+        {entities.decodeHTML(code)}
+      </SyntaxHighlighter>
   );
 }
 
