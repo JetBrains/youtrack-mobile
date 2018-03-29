@@ -2,7 +2,7 @@
 import React from 'react';
 import {Text, Image} from 'react-native';
 import SyntaxHighlighter from 'react-native-syntax-highlighter';
-import {idea} from 'react-syntax-highlighter/styles/hljs';
+import {idea} from 'react-syntax-highlighter/dist/styles';
 import entities from 'entities';
 
 const IMAGE_SIZE = 264;
