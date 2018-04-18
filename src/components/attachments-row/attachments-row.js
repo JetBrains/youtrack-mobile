@@ -10,7 +10,9 @@ import safariView from '../../components/safari-view/safari-view';
 import {View as AnimatedView} from 'react-native-animatable';
 
 const flatStyles = flattenStyle(styles.attachmentImage) || {};
+// $FlowFixMe something wrong with Flow here
 const imageWidth = flatStyles.width * 2;
+// $FlowFixMe
 const imageHeight = flatStyles.height * 2;
 const ANIMATION_DURATION = 700;
 const ERROR_HANLDER_THROTTLE = 60 * 1000;
