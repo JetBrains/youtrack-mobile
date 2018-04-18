@@ -32,14 +32,14 @@ describe('<ColorField/>', () => {
   });
 
   it('should set background color', () => {
-    const container = shallow(<ColorField text={fakeField.name} color={fakeField.color}/>).find('View');
+    const container = shallow(<ColorField text={fakeField.name} color={fakeField.color}/>).find({testID: 'color-field-value-wrapper'});
     const backgroundColor = container.props().style[1].backgroundColor;
 
     backgroundColor.should.equal('#000');
   });
 
   it('should set foreground color', () => {
-    const container = shallow(<ColorField text={fakeField.name} color={fakeField.color}/>).find('Text');
+    const container = shallow(<ColorField text={fakeField.name} color={fakeField.color}/>).find({testID: 'color-field-value'});
     const foregroundColor = container.props().style[1].color;
 
     foregroundColor.should.equal('#FFF');

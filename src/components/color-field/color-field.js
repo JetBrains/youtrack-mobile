@@ -32,7 +32,10 @@ export default class ColorField extends Component<Props, void> {
     }
 
     return (
-      <View style={[styles.wrapper, {backgroundColor: this._getBackgroundColor()}, style]}>
+      <View
+        style={[styles.wrapper, {backgroundColor: this._getBackgroundColor()}, style]}
+        testID="color-field-value-wrapper"
+      >
         <Text
           style={[styles.text, {color: this._getForegroundColor()}]}
           numberOfLines={1}
