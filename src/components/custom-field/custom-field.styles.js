@@ -21,7 +21,9 @@ export default StyleSheet.create({
   },
   keyLockedIcon: {
     width: 9,
+    height: 12,
     marginRight: UNIT / 2,
+    marginTop: -(UNIT / 3),
     resizeMode: 'contain'
   },
   keyText: {
