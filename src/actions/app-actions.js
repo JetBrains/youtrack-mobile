@@ -11,7 +11,7 @@ import usage from '../components/usage/usage';
 import {loadConfig} from '../components/config/config';
 import Auth from '../components/auth/auth';
 
-import type {AppConfigFilled} from '../flow/AppConfig';
+import type {AppConfigFilled, EndUserAgreement} from '../flow/AppConfig';
 import type {StorageState} from '../components/storage/storage';
 
 export function logOut() {
@@ -53,7 +53,6 @@ export function checkAuthorization() {
 
     setApi(new Api(auth));
     dispatch(setPermissions(auth));
-    Router.IssueList();
   };
 }
 
@@ -68,10 +67,73 @@ export function setPermissions(auth: Auth) {
   return {type: types.SET_PERMISSIONS, auth};
 }
 
+function showUserAgreement(agreement) {
+  return {type: types.SHOW_USER_AGREEMENT, agreement};
+}
+
+function completeInitizliation() {
+  log.info('Initialization completed');
+  Router.IssueList();
+}
+
+export function acceptUserAgreement() {
+  return async (dispatch: (any) => any, getState: () => Object, getApi: () => Api) => {
+    log.info('User agreement has been accepted');
+    const api: Api = getApi();
+
+    await api.acceptUserAgreement();
+
+    dispatch({type: types.HIDE_USER_AGREEMENT});
+    completeInitizliation();
+  };
+}
+
+export function declineUserAgreement() {
+  return async (dispatch: (any) => any, getState: () => Object, getApi: () => Api) => {
+    log.info('User agreement has been declined');
+    dispatch({type: types.HIDE_USER_AGREEMENT});
+    dispatch(logOut());
+  };
+}
+
 export function initializeAuth(config: AppConfigFilled) {
   return async (dispatch: (any) => any, getState: () => Object) => {
     dispatch(setAuth(config));
     await dispatch(checkAuthorization());
+  };
+}
+
+function checkUserAgreement() {
+  return async (dispatch: (any) => any, getState: () => Object, getApi: () => Api) => {
+    const api: Api = getApi();
+    const auth = getState().app.auth;
+    const {currentUser} = auth;
+
+    log.info('Checking user agreement', currentUser);
+    if (currentUser && currentUser.endUserAgreementConsent && currentUser.endUserAgreementConsent.accepted) {
+      log.info('The EUA is already accepted, skiping check');
+      return;
+    }
+
+    const agreement: EndUserAgreement = await api.getUserAgreement();
+    if (!agreement.enabled) {
+      log.info('EUA is disabled, skiping check');
+      return;
+    }
+
+    log.info('User agreement should be accepted', agreement, currentUser);
+    dispatch(showUserAgreement(agreement));
+  };
+}
+
+export function checkAuthAndUserAgreement() {
+  return async (dispatch: Function, getState: () => Object) => {
+    await dispatch(checkAuthorization());
+    await dispatch(checkUserAgreement());
+
+    if (!getState().app.showUserAgreement) {
+      completeInitizliation();
+    }
   };
 }
 
@@ -99,6 +161,12 @@ export function initializeApp(config: AppConfigFilled) {
       } catch (e) {
         return Router.LogIn();
       }
+    }
+
+    await dispatch(checkUserAgreement());
+
+    if (!getState().app.showUserAgreement) {
+      completeInitizliation();
     }
   };
 }

@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import Auth from './components/auth/auth';
 import Router from './components/router/router';
 import DebugView from './components/debug-view/debug-view';
+import UserAgreement from './components/user-agreement/user-agreement';
 import Home from './views/home/home';
 import EnterServer from './views/enter-server/enter-server';
 import LoginForm from './views/log-in/log-in';
@@ -128,6 +129,7 @@ class YouTrackMobile extends Component<void, void> {
 
             <Toast ref={toast => toast ? setNotificationComponent(toast) : null}/>
 
+            <UserAgreement/>
             <DebugView/>
           </View>
         </ActionSheet>

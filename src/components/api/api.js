@@ -7,7 +7,7 @@ import log from '../log/log';
 import ApiHelper from './api__helper';
 import {handleRelativeUrl} from '../config/config';
 import type {SprintFull, AgileUserProfile, AgileBoardRow, BoardOnList} from '../../flow/Agile';
-import type {AppConfigFilled} from '../../flow/AppConfig';
+import type {AppConfigFilled, EndUserAgreement} from '../../flow/AppConfig';
 import type {IssueOnList, IssueFull, TransformedSuggestion, SavedQuery, CommandSuggestionResponse} from '../../flow/Issue';
 import type {IssueProject, FieldValue, IssueUser} from '../../flow/CustomFields';
 
@@ -121,6 +121,35 @@ class Api {
         .then(() => this.getIssuesCount(query));
     }
     return countRes.value;
+  }
+
+  async getUserAgreement(): Promise<EndUserAgreement> {
+    const queryString = qs.stringify({fields: 'endUserAgreement(enabled,text,majorVersion,minorVersion)'});
+    const res = await this.makeAuthorizedRequest(
+      `${this.auth.config.auth.serverUri}/api/rest/settings/public?${queryString}`,
+      'GET'
+    );
+
+    return res.endUserAgreement;
+  }
+
+  async getUserAgreementState(): Promise<Object> {
+    const queryString = qs.stringify({fields: issueFields.userConsent});
+    return await this.makeAuthorizedRequest(
+      `${this.auth.config.auth.serverUri}/api/rest/users/me?${queryString}`,
+      'GET',
+    );
+  }
+
+  async acceptUserAgreement(): Promise<Object> {
+    const body = {fields: issueFields.userConsent};
+    return await this.makeAuthorizedRequest(
+      `${this.auth.config.auth.serverUri}/api/rest/users/endUserAgreementConsent`,
+      'POST',
+      {
+        body
+      }
+    );
   }
 
   async getSavedQueries(): Promise<Array<SavedQuery>> {

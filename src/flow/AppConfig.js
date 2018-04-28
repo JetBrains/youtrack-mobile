@@ -31,3 +31,10 @@ declare type AppConfigFilled = {
   statisticsEnabled: boolean;
   version: string;
 };
+
+declare type EndUserAgreement {
+  enabled: boolean,
+  text: string,
+  majorVersion: number,
+  minorVersion: number
+}

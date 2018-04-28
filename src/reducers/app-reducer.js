@@ -2,17 +2,22 @@ import * as types from '../actions/action-types';
 import {createReducer} from 'redux-create-reducer';
 import IssuePermissions from '../components/issue-permissions/issue-permissions';
 import type Auth from '../components/auth/auth';
+import type EndUserAgreement from '../flow/AppConfig';
 
 type RootState = {
   auth: ?Auth,
   showMenu: boolean,
-  showDebugView: boolean
+  showDebugView: boolean,
+  showUserAgreement: boolean,
+  endUserAgreement: ?EndUserAgreement
 };
 
 const initialState: RootState = {
   auth: null,
   showMenu: false,
-  showDebugView: false
+  showDebugView: false,
+  showUserAgreement: false,
+  endUserAgreement: null
 };
 
 export default createReducer(initialState, {
@@ -52,6 +57,20 @@ export default createReducer(initialState, {
     return {
       ...state,
       showDebugView: false
+    };
+  },
+  [types.SHOW_USER_AGREEMENT](state: RootState, action: {agreement: EndUserAgreement}) {
+    return {
+      ...state,
+      showUserAgreement: true,
+      endUserAgreement: action.agreement
+    };
+  },
+  [types.HIDE_USER_AGREEMENT](state: RootState) {
+    return {
+      ...state,
+      showUserAgreement: false,
+      endUserAgreement: null
     };
   }
 });

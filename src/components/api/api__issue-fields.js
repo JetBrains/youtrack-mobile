@@ -210,6 +210,9 @@ const COMMAND_SUGGESTION_FIELDS = toField([
   {suggestions: SUGGESTION_FIELDS}
 ]);
 
+const USER_AGREEMENT_FIELDS = 'endUserAgreement(enabled,text,majorVersion,minorVersion)';
+const USER_CONSENT_FIELDS = 'endUserAgreementConsent(accepted,majorVersion,minorVersion)';
+
 export default {
   issuesOnList: ISSUE_SHORT_FIELDS,
   singleIssue: toField([
@@ -253,5 +256,7 @@ export default {
   user: ISSUE_USER_FIELDS,
   issueComment: ISSUE_COMMENTS_FIELDS,
   issueFolder: ISSUE_FOLDER_FIELDS,
-  commandSuggestionFields: COMMAND_SUGGESTION_FIELDS
+  commandSuggestionFields: COMMAND_SUGGESTION_FIELDS,
+  userAgreement: USER_AGREEMENT_FIELDS,
+  userConsent: USER_CONSENT_FIELDS
 };

@@ -6,3 +6,6 @@ export const CLOSE_MENU = 'app.CLOSE_MENU';
 export const OPEN_DEBUG_VIEW = 'app.OPEN_DEBUG_VIEW';
 export const CLOSE_DEBUG_VIEW = 'app.CLOSE_DEBUG_VIEW';
 export const ON_NAVIGATE_BACK = 'app.ON_NAVIGATE_BACK';
+
+export const SHOW_USER_AGREEMENT = 'app.SHOW_USER_AGREEMENT';
+export const HIDE_USER_AGREEMENT =  'app.HIDE_USER_AGREEMENT';
