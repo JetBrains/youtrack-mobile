@@ -68,29 +68,39 @@ export function setPermissions(auth: Auth) {
 }
 
 function showUserAgreement(agreement) {
+  usage.trackEvent('EUA is shown');
   return {type: types.SHOW_USER_AGREEMENT, agreement};
 }
 
 function completeInitizliation() {
-  log.info('Initialization completed');
-  Router.IssueList();
+  return async (dispatch: (any) => any, getState: () => Object) => {
+    log.info('Completing initialization: loading permissions cache');
+    const auth = getState().app.auth;
+    await auth.loadPermissions(auth.authParams);
+    dispatch(setPermissions(auth));
+
+    log.info('Initialization completed');
+    Router.IssueList();
+  };
 }
 
 export function acceptUserAgreement() {
   return async (dispatch: (any) => any, getState: () => Object, getApi: () => Api) => {
     log.info('User agreement has been accepted');
+    usage.trackEvent('EUA is accepted');
     const api: Api = getApi();
 
     await api.acceptUserAgreement();
 
     dispatch({type: types.HIDE_USER_AGREEMENT});
-    completeInitizliation();
+    dispatch(completeInitizliation());
   };
 }
 
 export function declineUserAgreement() {
   return async (dispatch: (any) => any, getState: () => Object, getApi: () => Api) => {
     log.info('User agreement has been declined');
+    usage.trackEvent('EUA is declined');
     dispatch({type: types.HIDE_USER_AGREEMENT});
     dispatch(logOut());
   };
@@ -132,7 +142,7 @@ export function checkAuthAndUserAgreement() {
     await dispatch(checkUserAgreement());
 
     if (!getState().app.showUserAgreement) {
-      completeInitizliation();
+      dispatch(completeInitizliation());
     }
   };
 }
@@ -166,7 +176,7 @@ export function initializeApp(config: AppConfigFilled) {
     await dispatch(checkUserAgreement());
 
     if (!getState().app.showUserAgreement) {
-      completeInitizliation();
+      dispatch(completeInitizliation());
     }
   };
 }

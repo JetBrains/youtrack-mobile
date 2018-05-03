@@ -52,7 +52,6 @@ export default class AuthTest {
   loadStoredAuthParams(): Promise<void> {
     return this.readAuth()
       .then((authParams) => this.verifyToken(authParams))
-      .then((authParams) => this.loadPermissions(authParams))
       .then((authParams) => {
         this.authParams = authParams;
       });
@@ -150,7 +149,6 @@ export default class AuthTest {
         return authParams;
       })
       .then((authParams) => this.verifyToken(authParams))
-      .then((authParams) => this.loadPermissions(authParams))
       .then(this.storeAuth.bind(this))
       .then((authParams) => {
         this.authParams = authParams;
