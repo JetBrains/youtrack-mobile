@@ -1,9 +1,9 @@
 /* @flow */
 import React, {Component} from 'react';
+import { View, Text, TouchableOpacity, Modal, ScrollView} from 'react-native';
 import { MarkdownView } from 'react-native-markdown-view';
 
 import {connect} from 'react-redux';
-import { View, Text, TouchableOpacity, Modal, ScrollView} from 'react-native';
 import styles from './user-agreement.styles';
 import getTopPadding from '../../components/header/header__top-padding';
 import {acceptUserAgreement, declineUserAgreement} from '../../actions/app-actions';
@@ -17,9 +17,28 @@ type Props = {
   onDecline: Function
 };
 
-export class UserAgreementView extends Component<Props, void> {
+type State = {
+  canAccept: boolean
+};
+
+export class UserAgreementView extends Component<Props, State> {
+  state = {canAccept: false};
+
+  onScroll = (event: Object) => {
+    const SCROLL_GAP = 100;
+    const {nativeEvent} = event;
+    const isScrolledDown =
+      nativeEvent.layoutMeasurement.height + nativeEvent.contentOffset.y >=
+      nativeEvent.contentSize.height - SCROLL_GAP;
+
+    if (isScrolledDown) {
+      this.setState({canAccept: true});
+    }
+  };
+
   render() {
     const {show, agreement, onAccept, onDecline} = this.props;
+    const {canAccept} = this.state;
     if (!show) {
       return null;
     }
@@ -30,17 +49,27 @@ export class UserAgreementView extends Component<Props, void> {
         transparent={true}
       >
         <View style={[styles.container, {paddingTop: getTopPadding()}]}>
-          <ScrollView contentContainerStyle={styles.markdownScroll}>
+          <ScrollView
+            contentContainerStyle={styles.markdownScroll}
+            onScroll={this.onScroll}
+            scrollEventThrottle={30}
+          >
             <MarkdownView>
               {agreement.text}
             </MarkdownView>
           </ScrollView>
           <View style={styles.buttons}>
-            <TouchableOpacity style={styles.closeButton} onPress={onAccept}>
-              <Text style={styles.closeButtonText}>Accept</Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={onAccept}
+              disabled={!canAccept}
+            >
+              <Text style={[styles.buttonText, (!canAccept && styles.buttonTextDisabled)]}>
+                {canAccept ? 'Accept' : 'Scroll to accept'}
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.closeButton} onPress={onDecline}>
-              <Text style={styles.closeButtonText}>Decline</Text>
+            <TouchableOpacity style={styles.button} onPress={onDecline}>
+              <Text style={styles.buttonText}>Decline</Text>
             </TouchableOpacity>
           </View>
         </View>

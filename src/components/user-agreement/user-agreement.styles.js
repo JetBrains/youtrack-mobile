@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_PINK} from '../../components/variables/variables';
+import {UNIT, COLOR_PINK, COLOR_FONT_GRAY} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   container: {
@@ -14,11 +14,14 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
-  closeButton: {
+  button: {
     padding: UNIT * 2,
     alignItems: 'center'
   },
-  closeButtonText: {
+  buttonText: {
     color: COLOR_PINK
+  },
+  buttonTextDisabled: {
+    color: COLOR_FONT_GRAY
   }
 });
