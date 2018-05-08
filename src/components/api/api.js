@@ -123,7 +123,7 @@ class Api {
     return countRes.value;
   }
 
-  async getUserAgreement(): Promise<EndUserAgreement> {
+  async getUserAgreement(): Promise<?EndUserAgreement> {
     const queryString = qs.stringify({fields: 'endUserAgreement(enabled,text,majorVersion,minorVersion)'});
     const res = await this.makeAuthorizedRequest(
       `${this.auth.config.auth.serverUri}/api/rest/settings/public?${queryString}`,

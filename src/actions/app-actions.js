@@ -125,9 +125,13 @@ function checkUserAgreement() {
       return;
     }
 
-    const agreement: EndUserAgreement = await api.getUserAgreement();
+    const agreement: ?EndUserAgreement = await api.getUserAgreement();
+    if (!agreement) {
+      log.info('EUA is not supported by backend, skipping check');
+      return;
+    }
     if (!agreement.enabled) {
-      log.info('EUA is disabled, skiping check');
+      log.info('EUA is disabled, skipping check');
       return;
     }
 
