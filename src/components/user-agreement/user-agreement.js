@@ -1,10 +1,10 @@
 /* @flow */
 import React, {Component} from 'react';
-import { View, Text, TouchableOpacity, Modal, ScrollView} from 'react-native';
+import { View, Text, TouchableOpacity, Modal, ScrollView, Linking } from 'react-native';
 import { MarkdownView } from 'react-native-markdown-view';
 
 import {connect} from 'react-redux';
-import styles from './user-agreement.styles';
+import styles, {markdownStyles} from './user-agreement.styles';
 import getTopPadding from '../../components/header/header__top-padding';
 import {acceptUserAgreement, declineUserAgreement} from '../../actions/app-actions';
 
@@ -36,6 +36,10 @@ export class UserAgreementView extends Component<Props, State> {
     }
   };
 
+  onLinkPress = (url: string) => {
+    Linking.openURL(url);
+  };
+
   render() {
     const {show, agreement, onAccept, onDecline} = this.props;
     const {canAccept} = this.state;
@@ -47,14 +51,18 @@ export class UserAgreementView extends Component<Props, State> {
       <Modal
         animationType="fade"
         transparent={true}
+        onRequestClose={() => {}}
       >
         <View style={[styles.container, {paddingTop: getTopPadding()}]}>
           <ScrollView
             contentContainerStyle={styles.markdownScroll}
             onScroll={this.onScroll}
-            scrollEventThrottle={30}
+            scrollEventThrottle={10}
           >
-            <MarkdownView>
+            <MarkdownView
+              onLinkPress={this.onLinkPress}
+              styles={markdownStyles}
+            >
               {agreement.text}
             </MarkdownView>
           </ScrollView>

@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_PINK, COLOR_FONT_GRAY} from '../../components/variables/variables';
+import {UNIT, COLOR_PINK, COLOR_FONT_GRAY, COLOR_FONT} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   container: {
@@ -25,3 +25,13 @@ export default StyleSheet.create({
     color: COLOR_FONT_GRAY
   }
 });
+
+
+export const markdownStyles = {
+  heading: {
+    color: COLOR_FONT
+  },
+  paragraph: {
+    color: COLOR_FONT
+  }
+};
