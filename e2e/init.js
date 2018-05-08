@@ -1,12 +1,13 @@
-require('babel-polyfill');
 const detox = require('detox');
 const config = require('../package.json').detox;
 
-before(async () => {
+// Set the default test timeout of 120s
+jest.setTimeout(120000);
+
+beforeAll(async () => {
   await detox.init(config);
 });
 
-after(async () => {
+afterAll(async () => {
   await detox.cleanup();
-  // await device.shutdown();
 });

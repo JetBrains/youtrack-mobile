@@ -2,7 +2,7 @@ const issuesPage = require('./pages/issues');
 const loginPage = require('./pages/login');
 
 describe('Issues list', () => {
-  before(async () => {
+  beforeAll(async () => {
     await loginPage.connectToServer();
     await loginPage.logIn();
 

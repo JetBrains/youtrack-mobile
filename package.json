@@ -53,6 +53,8 @@
 		]
 	},
 	"detox": {
+    "test-runner": "jest",
+    "runner-config": "e2e/config.json",
 		"configurations": {
 			"ios.sim.debug": {
 				"binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/YouTrackMobile.app",
@@ -124,7 +126,6 @@
 		"flow-bin": "0.67.1",
 		"jest": "21.2.1",
 		"jest-teamcity-reporter": "^0.6.2",
-		"mocha": "^3.2.0",
 		"react-dom": "16.0.0-beta.5",
 		"react-native-cli": "^1.0.0",
 		"react-test-renderer": "16.0.0-beta.5",
