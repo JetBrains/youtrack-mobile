@@ -93,7 +93,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     } = this.props;
 
     const issueToShow = issue || issuePlaceholder;
-    const title = <Text style={styles.headerText} selectable={true}>
+    const title = <Text style={styles.headerText} selectable={true} testID="issue-id">
       {issueToShow ? getReadableID(issueToShow) : `Loading...`}
     </Text>;
 
@@ -176,7 +176,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
         />}
 
         {!editMode && <View>
-          <Text style={styles.summary}  selectable={true}>{issue.summary}</Text>
+          <Text style={styles.summary}  selectable={true} testID="issue-summary">{issue.summary}</Text>
 
           {issue.links && <LinkedIssues links={issue.links} onIssueTap={openNestedIssueView}/>}
 
