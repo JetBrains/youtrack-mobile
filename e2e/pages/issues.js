@@ -8,6 +8,7 @@ module.exports = {
 
   search: async (query) => {
     await element(by.id('query-assist-input')).tap();
-    await element(by.id('query-assist-input')).replaceText(`${query}\n`);
+    await element(by.id('query-assist-input')).replaceText(query);
+    await element(by.id('query-assist-input')).typeText('\n');
   }
 };

@@ -14,10 +14,10 @@ module.exports = {
 
   logIn: async (login = DEFAULT_LOGIN, pass = DEFAULT_PASS) => {
     await element(by.id(LOGIN_INPUT)).tap();
-    await element(by.id(LOGIN_INPUT)).typeText(login);
+    await element(by.id(LOGIN_INPUT)).replaceText(login);
 
     await element(by.id(PASS_INPUT)).tap();
-    await element(by.id(PASS_INPUT)).typeText(pass);
+    await element(by.id(PASS_INPUT)).replaceText(pass);
     await element(by.id('log-in')).tap();
   }
 };
