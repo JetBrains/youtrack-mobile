@@ -132,19 +132,31 @@ describe('Api helper', () => {
       ApiHelper.stripHtml('foo bar').should.equal('foo bar');
     });
 
-    it('should remove duplicates in an array by provided object value name', () => {
-      const items = [{
-        name: 'John',
-        id: 1
-      }, {
-        name: 'Anna',
-        id: 2
-      }, {
-        name: 'John',
-        id: 3
-      }];
 
-      ApiHelper.removeDuplicatesByPropName(items, 'name').length.should.equal(2);
+    describe('removeDuplicatesByPropName', () => {
+      let items = [];
+      beforeEach(() => {
+        items = [{
+          name: 'John',
+          id: 1
+        }, {
+          name: 'Anna',
+          id: 2
+        }, {
+          name: 'John',
+          id: 3
+        }];
+      });
+
+      it('should return an array if an object value name is not provided', function () {
+        const result = ApiHelper.removeDuplicatesByPropName(items);
+        result.should.equal(items);
+        result.length.should.equal(items.length);
+      });
+
+      it('should remove duplicates in an array by provided object value name', () => {
+        ApiHelper.removeDuplicatesByPropName(items, 'name').length.should.equal(2);
+      });
     });
   });
 });

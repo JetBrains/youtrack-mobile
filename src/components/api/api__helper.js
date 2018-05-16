@@ -129,8 +129,12 @@ const API = {
     return commandPreview.replace(/<\/?[^>]+(>|$)/g, '');
   },
 
-  removeDuplicatesByPropName(items: Array, valueName: String) {
-    return items.filter((item, index, it) =>
+  removeDuplicatesByPropName(items: Array<Object>, valueName: string) {
+    if (!valueName) {
+      return items;
+    }
+
+    return (items || []).filter((item, index, it) =>
       index === it.findIndex(i => i[valueName] === item[valueName])
     );
   }
