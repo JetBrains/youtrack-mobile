@@ -193,7 +193,7 @@ export function loadMoreIssues() {
       let moreIssues: Array<IssueOnList> = await api.getIssues(query, PAGE_SIZE, newSkip);
       log.info(`Loaded ${PAGE_SIZE} more issues.`);
       moreIssues = ApiHelper.fillIssuesFieldHash(moreIssues);
-      const updatedIssues = issues.concat(moreIssues);
+      const updatedIssues = ApiHelper.removeDuplicatesByPropName(issues.concat(moreIssues), 'id');
       dispatch(receiveIssues(updatedIssues));
       dispatch(cacheIssues(updatedIssues));
       if (moreIssues.length < PAGE_SIZE) {

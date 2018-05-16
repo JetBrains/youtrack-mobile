@@ -131,5 +131,20 @@ describe('Api helper', () => {
     it('should not touch clean strings while stripping tags', () => {
       ApiHelper.stripHtml('foo bar').should.equal('foo bar');
     });
+
+    it('should remove duplicates in an array by provided object value name', () => {
+      const items = [{
+        name: 'John',
+        id: 1
+      }, {
+        name: 'Anna',
+        id: 2
+      }, {
+        name: 'John',
+        id: 3
+      }];
+
+      ApiHelper.removeDuplicatesByPropName(items, 'name').length.should.equal(2);
+    });
   });
 });

@@ -127,6 +127,12 @@ const API = {
 
   stripHtml(commandPreview: string) {
     return commandPreview.replace(/<\/?[^>]+(>|$)/g, '');
+  },
+
+  removeDuplicatesByPropName(items: Array, valueName: String) {
+    return items.filter((item, index, it) =>
+      index === it.findIndex(i => i[valueName] === item[valueName])
+    );
   }
 };
 
