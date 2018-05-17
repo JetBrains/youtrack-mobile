@@ -5,8 +5,7 @@ import log from '../log/log';
 
 import type {AuthParams} from '../auth/auth';
 import type {AppConfigFilled} from '../../flow/AppConfig';
-
-const ISSUES_LIST_CACHE_KEY = 'yt_mobile_issues_cache';
+import type {IssueOnList} from '../../flow/Issue';
 
 export type StorageState = {|
   projectId: ?string,
@@ -14,7 +13,8 @@ export type StorageState = {|
   authParams: ?AuthParams,
   config: ?AppConfigFilled,
   query: ?string,
-  lastQueries: ?Array<string>
+  lastQueries: ?Array<string>,
+  issuesCache: ?Array<IssueOnList>
 |}
 
 type StorageStateKeys = $Exact<$ObjMap<StorageState, () => string>>;
@@ -25,7 +25,8 @@ const storageKeys: StorageStateKeys = {
   authParams: 'yt_mobile_auth',
   config: 'BACKEND_CONFIG_STORAGE_KEY',
   query: 'YT_QUERY_STORAGE',
-  lastQueries: 'YT_LAST_QUERIES_STORAGE_KEY'
+  lastQueries: 'YT_LAST_QUERIES_STORAGE_KEY',
+  issuesCache: 'yt_mobile_issues_cache'
 };
 
 let storageState: ?StorageState = null;
@@ -36,13 +37,14 @@ const initialState: StorageState = {
   authParams: null,
   config: null,
   query: null,
-  lastQueries: null
+  lastQueries: null,
+  issuesCache: null
 };
 
 export function clearCachesAndDrafts() {
   return AsyncStorage.multiRemove([
     storageKeys.projectId, storageKeys.draftId, storageKeys.query,
-    storageKeys.lastQueries, ISSUES_LIST_CACHE_KEY
+    storageKeys.lastQueries, storageKeys.issuesCache
   ]);
 }
 

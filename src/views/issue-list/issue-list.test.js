@@ -3,7 +3,6 @@ import * as types from './issue-list-action-types';
 import {populateStorage, flushStoragePart, getStorageState} from '../../components/storage/storage';
 import {ISSUE_UPDATED} from '../single-issue/single-issue-action-types';
 import sinon from 'sinon';
-import {AsyncStorage as MockedStorage} from 'react-native';
 import reducer from './issue-list-reducers';
 
 describe('Issue list actions', () => {
@@ -52,10 +51,8 @@ describe('Issue list actions', () => {
       {id: 'saved', owner: {ringId: 'current-user'}},
       {id: 'saved-not-own', owner: {ringId: 'other-user'}}
     ];
-    sinon.stub(MockedStorage,
-      'getItem',
-      () => new Promise(resolve => resolve(JSON.stringify(['last-query'])))
-    );
+
+    flushStoragePart({lastQueries: ['last-query']});
 
     const apiMock = {
       getSavedQueries: () => new Promise(resolve => resolve(savedQueries))

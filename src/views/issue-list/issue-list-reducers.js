@@ -4,10 +4,7 @@ import * as types from './issue-list-action-types';
 import {LOG_OUT} from '../../actions/action-types';
 import {ISSUE_CREATED} from '../create-issue/create-issue-action-types';
 import {ISSUE_UPDATED} from '../single-issue/single-issue-action-types';
-import Cache from '../../components/cache/cache';
 import type {IssueOnList, IssueFull, TransformedSuggestions} from '../../flow/Issue';
-
-const ISSUES_CACHE_KEY = 'yt_mobile_issues_cache';
 
 export type IssuesListState = {
   query: string,
@@ -20,7 +17,6 @@ export type IssuesListState = {
   isInitialized: boolean,
   isRefreshing: boolean,
 
-  cache: Cache,
   issuesCount: ?number,
   issues: Array<IssueOnList>
 };
@@ -36,7 +32,6 @@ const initialState: IssuesListState = {
   isInitialized: false,
   isRefreshing: false,
   issuesCount: null,
-  cache: new Cache(ISSUES_CACHE_KEY),
   issues: []
 };
 

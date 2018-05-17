@@ -3,15 +3,12 @@ import * as types from './issue-list-action-types';
 import ApiHelper from '../../components/api/api__helper';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
 import {notifyError, resolveError} from '../../components/notification/notification';
-import Cache from '../../components/cache/cache';
 import log from '../../components/log/log';
 import type Api from '../../components/api/api';
 import type {IssueOnList} from '../../flow/Issue';
 
 const PAGE_SIZE = 10;
-const LAST_QUERIES_STORAGE_KEY = 'YT_LAST_QUERIES_STORAGE_KEY';
 const MAX_STORED_QUERIES = 5;
-const lastQueriesCache = new Cache(LAST_QUERIES_STORAGE_KEY);
 
 type ApiGetter = () => Api;
 
@@ -41,7 +38,7 @@ export function suggestIssuesQuery(query: string, caret: number) {
         suggestions = await api.getSavedQueries();
         suggestions = suggestions.filter(s => s.owner.ringId === currentUser.id);
 
-        const lastQueries = (await lastQueriesCache.read() || []).map(query => ({name: query, query}));
+        const lastQueries = (getStorageState().lastQueries || []).map(query => ({name: query, query}));
         suggestions = [...suggestions, ...lastQueries];
       }
 
@@ -61,12 +58,12 @@ async function storeLastQuery(query: string) {
   if (!query) {
     return;
   }
-  const storedQueries = await lastQueriesCache.read() || [];
-  const updatedQueries = [query, ...storedQueries];
+
+  const updatedQueries = [query, ...(getStorageState().lastQueries || [])];
   const uniqueUpdatedQueries = Array.from(new Set(updatedQueries)).
     slice(0, MAX_STORED_QUERIES);
 
-  lastQueriesCache.store(uniqueUpdatedQueries);
+  flushStoragePart({lastQueries: uniqueUpdatedQueries});
 }
 
 export function storeIssuesQuery(query: string) {
@@ -109,16 +106,15 @@ export function setIssuesCount(count: number) {
 }
 
 export function cacheIssues(issues: Array<IssueOnList>) {
-  return (dispatch: (any) => any, getState: () => Object) => {
-    const cache = getState().issueList.cache;
-    cache.store(issues);
+  return (dispatch: (any) => any) => {
+    flushStoragePart({issuesCache: issues});
   };
 }
 
 export function readCachedIssues() {
   return async (dispatch: (any) => any, getState: () => Object) => {
-    const cache = getState().issueList.cache;
-    const issues: ?Array<IssueOnList> = await cache.read();
+    const issues = getStorageState().issuesCache;
+
     if (issues && issues.length) {
       log.info(`Loaded ${issues.length} cached issues`);
       dispatch(receiveIssues(issues));
