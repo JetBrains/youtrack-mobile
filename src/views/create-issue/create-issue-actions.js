@@ -1,5 +1,4 @@
 /* @flow */
-import {AsyncStorage} from 'react-native';
 import type Api from '../../components/api/api';
 import ApiHelper from '../../components/api/api__helper';
 import type {IssueFull} from '../../flow/Issue';
@@ -9,10 +8,9 @@ import * as types from './create-issue-action-types';
 import Router from '../../components/router/router';
 import log from '../../components/log/log';
 import attachFile from '../../components/attach-file/attach-file';
+import {getStorageState, flushStoragePart} from '../../components/storage/storage';
 import {notifyError, resolveError} from '../../components/notification/notification';
 
-const PROJECT_ID_STORAGE_KEY = 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE';
-const DRAFT_ID_STORAGE_KEY = 'DRAFT_ID_STORAGE_KEY';
 export const CATEGORY_NAME = 'Create issue view';
 
 type ApiGetter = () => Api;
@@ -81,16 +79,16 @@ export function stopImageAttaching() {
   return {type: types.STOP_IMAGE_ATTACHING};
 }
 
-function clearIssueDraftStorage() {
-  AsyncStorage.removeItem(DRAFT_ID_STORAGE_KEY);
+async function clearIssueDraftStorage() {
+  return await flushStoragePart({draftId: null});
 }
 
-function storeProjectId(projectId: string) {
-  AsyncStorage.setItem(PROJECT_ID_STORAGE_KEY, projectId);
+async function storeProjectId(projectId: string) {
+  return await flushStoragePart({projectId});
 }
 
-async function storeIssueDraftId(issueId: string) {
-  return await AsyncStorage.setItem(DRAFT_ID_STORAGE_KEY, issueId);
+async function storeIssueDraftId(draftId: string) {
+  return await flushStoragePart({draftId});
 }
 
 export function storeDraftAndGoBack() {
@@ -104,7 +102,7 @@ export function storeDraftAndGoBack() {
 
 export function loadStoredProject() {
   return async (dispatch: (any) => any) => {
-    const projectId = await AsyncStorage.getItem(PROJECT_ID_STORAGE_KEY);
+    const projectId = getStorageState().projectId;
     if (projectId) {
       log.info(`Stored project loaded, id=${projectId}`);
       dispatch(setDraftProjectId(projectId));
@@ -175,7 +173,7 @@ export function initializeWithDraftOrProject(preDefinedDraftId: ?string) {
     if (preDefinedDraftId) {
       dispatch(setPredefinedDraftId(preDefinedDraftId));
     }
-    const draftId = preDefinedDraftId || (await AsyncStorage.getItem(DRAFT_ID_STORAGE_KEY));
+    const draftId = preDefinedDraftId || getStorageState().draftId;
 
     if (draftId) {
       log.info(`INitializing with draft ${draftId}`);
@@ -202,7 +200,7 @@ export function createIssue() {
       dispatch(issueCreated(filledIssue, getState().creation.predefinedDraftId));
 
       Router.pop();
-      return await AsyncStorage.removeItem(DRAFT_ID_STORAGE_KEY);
+      return await clearIssueDraftStorage();
 
     } catch (err) {
       usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Error');

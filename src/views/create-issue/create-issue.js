@@ -18,8 +18,6 @@ import * as createIssueActions from './create-issue-actions';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {CreateIssueState} from './create-issue-reducers';
 
-export const PROJECT_ID_STORAGE_KEY = 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE';
-export const DRAFT_ID_STORAGE_KEY = 'DRAFT_ID_STORAGE_KEY';
 const CATEGORY_NAME = 'Create issue view';
 
 type AdditionalProps = {
