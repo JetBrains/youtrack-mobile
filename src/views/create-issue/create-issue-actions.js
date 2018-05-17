@@ -176,7 +176,7 @@ export function initializeWithDraftOrProject(preDefinedDraftId: ?string) {
     const draftId = preDefinedDraftId || getStorageState().draftId;
 
     if (draftId) {
-      log.info(`INitializing with draft ${draftId}`);
+      log.info(`Initializing with draft ${draftId}`);
       await dispatch(loadIssueFromDraft(draftId));
       return;
     }

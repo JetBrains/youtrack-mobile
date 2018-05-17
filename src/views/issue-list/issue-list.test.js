@@ -9,11 +9,9 @@ import reducer from './issue-list-reducers';
 describe('Issue list actions', () => {
   let dispatch;
   let getState;
-  let sandbox;
   const TEST_QUERY = 'test-query';
 
   beforeEach(() => {
-    sandbox = sinon.sandbox.create();
     const state = {
       app: {
         auth: {
@@ -24,8 +22,6 @@ describe('Issue list actions', () => {
     dispatch = sinon.spy();
     getState = () => state;
   });
-
-  afterEach(() => sandbox.restore());
 
   it('should set issues query', () => {
     actions
