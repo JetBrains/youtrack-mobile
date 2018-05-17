@@ -203,5 +203,20 @@ export default StyleSheet.create({
   },
   keyboardSpacer: {
     backgroundColor: COLOR_BLACK
+  },
+  visibility: {
+    flex: 1,
+    flexDirection: 'row',
+    marginLeft: UNIT * 7,
+    marginBottom: UNIT,
+    alignItems: 'center'
+  },
+  visibilityIcon: {
+    width: 16,
+    marginRight: UNIT / 2,
+    resizeMode: 'contain'
+  },
+  visibilityText: {
+    color: COLOR_FONT_GRAY,
   }
 });

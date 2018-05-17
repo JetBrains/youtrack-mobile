@@ -144,13 +144,33 @@ const ISSUE_TAGS_FIELDS = toField([
 
 const ISSUE_ATTACHMENTS_FIELDS = toField(['id', 'name', 'url', 'mimeType']);
 
+const PERMITTED_GROUP_FIELDS = toField([
+  '$type',
+  'id',
+  'name',
+  'allUsersGroup',
+]);
+
+const VISIBILITY_FIELDS = toField([{
+  visibility: toField([
+    '$type',
+    {
+      'permittedGroups': [PERMITTED_GROUP_FIELDS]
+    },
+    {
+      'permittedUsers': [ISSUE_USER_FIELDS]
+    }
+  ])
+}]);
+
 const ISSUE_COMMENTS_FIELDS = toField([
   'id',
   'created',
   'deleted',
   'text',
   'textPreview',
-  {author: ISSUE_USER_FIELDS}
+  {author: ISSUE_USER_FIELDS},
+  VISIBILITY_FIELDS
 ]);
 
 const ISSUE_SHORT_FIELDS = toField([

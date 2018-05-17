@@ -1,4 +1,5 @@
 import ApiHelper from './api__helper';
+import ResourceTypes from './api__resource-types';
 
 describe('Api helper', () => {
 
@@ -157,6 +158,126 @@ describe('Api helper', () => {
       it('should remove duplicates in an array by provided object value name', () => {
         ApiHelper.removeDuplicatesByPropName(items, 'name').length.should.equal(2);
       });
+    });
+  });
+
+
+  describe('isSecured', () => {
+    it('should return true if an object has limited `visibility` type', () => {
+      const entity = createEntity({
+        $type: ResourceTypes.VISIBILITY_LIMITED
+      });
+
+      ApiHelper.isSecured(entity).should.be.true;
+    });
+
+    it('should return true if an object has `permittedGroups`', () => {
+      const entity = createEntity({
+          permittedGroups: [{}]
+        }
+      );
+
+      ApiHelper.isSecured(entity).should.be.true;
+    });
+
+    it('should return true if an object has `permittedUsers`', () => {
+      const entity = createEntity({
+        permittedUsers: [{}]
+      });
+
+      ApiHelper.isSecured(entity).should.be.true;
+    });
+
+    it('should return false if an object has no `visibility`', () => {
+      ApiHelper.isSecured({}).should.be.false;
+    });
+
+    it('should return false if an object has no `permittedUsers` and `permittedGroups`', () => {
+      ApiHelper.isSecured(createEntity()).should.be.false;
+    });
+
+
+    function createEntity(visibility) {
+      return {
+        visibility: visibility || {}
+      };
+    }
+  });
+
+
+  describe('getEntityPresentation', function() {
+    it('should return empty string if no parameter is provided', () => {
+      ApiHelper.getEntityPresentation().should.equal('');
+    });
+
+    it('should return empty string if no parameter has no field to return', () => {
+      ApiHelper.getEntityPresentation({}).should.equal('');
+    });
+
+    it('should return `fullName`', () => {
+      const item = {
+        fullName: 'fullName',
+        name: 'name',
+      };
+
+      ApiHelper.getEntityPresentation(item).should.equal(item.fullName);
+    });
+
+    it('should return `name`', () => {
+      const item = {
+        login: 'login',
+        name: 'name',
+      };
+
+      ApiHelper.getEntityPresentation(item).should.equal(item.name);
+    });
+
+    it('should return `login`', () => {
+      const item = {
+        presentation: 'presentation',
+        login: 'login',
+      };
+
+      ApiHelper.getEntityPresentation(item).should.equal(item.login);
+    });
+
+    it('should return `presentation`', () => {
+      const item = {
+        presentation: 'presentation'
+      };
+
+      ApiHelper.getEntityPresentation(item).should.equal(item.presentation);
+    });
+  });
+
+
+  describe('getVisibilityPresentation', function() {
+    it('should return null if no parameter is provided', () => {
+      const visibilityPresentation = ApiHelper.getVisibilityPresentation() === null;
+      visibilityPresentation.should.be.true;
+    });
+
+    it('should return empty string if there are no `permittedGroups` and `permittedUsers`', () => {
+      const visibilityPresentation = ApiHelper.getVisibilityPresentation({});
+      visibilityPresentation.should.equal('');
+    });
+
+    it('should return combined `permittedGroups` and `permittedUsers` presentation separated by comma', () => {
+      const permittedUsers = [{
+        login: 'userLogin'
+      }];
+      const permittedGroups = [{
+        name: 'groupName'
+      }];
+
+      const visibilityPresentation = ApiHelper.getVisibilityPresentation({
+        visibility: {
+          permittedGroups: permittedGroups,
+          permittedUsers: permittedUsers
+        }
+      });
+
+      visibilityPresentation.should.equal(`${permittedGroups[0].name}, ${permittedUsers[0].login}`);
     });
   });
 });
