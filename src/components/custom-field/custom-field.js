@@ -5,6 +5,7 @@ import styles from './custom-field.styles';
 import {lockInactive} from '../icon/icon';
 import {NO_COLOR_ID} from '../color-field/color-field';
 import type {CustomField as CustomFieldType, FieldValue} from '../../flow/CustomFields';
+import ApiHelper from '../api/api__helper';
 
 type Props = {
   field: CustomFieldType,
@@ -33,7 +34,7 @@ export default class CustomField extends Component<Props, void> {
       if (fieldType === 'integer' || fieldType === 'string' || fieldType === 'float') {
         return value;
       }
-      return value.name || value.fullName || value.login || value.presentation;
+      return ApiHelper.getEntityPresentation(value);
     }
 
     return emptyValue;

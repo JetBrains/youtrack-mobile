@@ -2,6 +2,7 @@
 import fromNow from 'from-now';
 import type {IssueUser, CustomField} from '../../flow/CustomFields';
 import type {AnyIssue} from '../../flow/Issue';
+import ApiHelper from '../api/api__helper';
 
 const shortRelativeFormat = {
   'now': 'just now',
@@ -21,7 +22,7 @@ function getForText(assignee: IssueUser | Array<IssueUser>) {
       .join(', ');
   }
   if (assignee && !Array.isArray(assignee)) {
-    return `for ${assignee.fullName || assignee.name || assignee.login}`;
+    return `for ${ApiHelper.getEntityPresentation(assignee)}`;
   }
   return '    Unassigned';
 }

@@ -8,6 +8,7 @@ import {COLOR_FONT_GRAY} from '../../components/variables/variables';
 import {getPriotityField, getForText} from '../../components/issue-formatter/issue-formatter';
 import type {IssueOnList} from '../../flow/Issue';
 import type {BundleValue} from '../../flow/CustomFields';
+import ApiHelper from '../../components/api/api__helper';
 
 type Props = {
   issue: IssueOnList,
@@ -20,7 +21,7 @@ export default class IssueRow extends Component<Props, void> {
 
     return (<Text>
       <Text style={issueIdStyle}>{issue.project.shortName}-{issue.numberInProject}</Text>
-      <Text> by {issue.reporter.fullName || issue.reporter.login} {getForText(issue.fieldHash.Assignee)}</Text>
+      <Text> by {ApiHelper.getEntityPresentation(issue.reporter)} {getForText(issue.fieldHash.Assignee)}</Text>
     </Text>);  }
 
   getSummaryStyle(issue: IssueOnList) {

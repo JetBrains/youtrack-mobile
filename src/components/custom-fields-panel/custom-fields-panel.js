@@ -14,6 +14,7 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 import type {IssueFull} from '../../flow/Issue';
 import type {IssueProject, CustomField as CustomFieldType} from '../../flow/CustomFields';
 import {View as AnimatedView} from 'react-native-animatable';
+import ApiHelper from '../api/api__helper';
 
 type Props = {
   api: Api,
@@ -290,7 +291,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       {...this.state.select}
       autoFocus={this.props.autoFocusSelect}
       onCancel={() => this.closeEditor()}
-      getTitle={(item) => item.fullName || item.name || item.login}
+      getTitle={(item) => ApiHelper.getEntityPresentation(item)}
     />;
   }
 

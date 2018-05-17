@@ -7,6 +7,7 @@ import React, {Component} from 'react';
 import ColorField from '../../components/color-field/color-field';
 import {formatDate, shortRelativeDate} from '../../components/issue-formatter/issue-formatter';
 import type {IssueFull} from '../../flow/Issue';
+import ApiHelper from '../../components/api/api__helper';
 
 const TOUCH_PADDING = 10;
 
@@ -29,7 +30,7 @@ export default class TopPanel extends Component<Props, State> {
   }
 
   _getUserName(user) {
-    return `${user.fullName || user.login}`;
+    return `${ApiHelper.getEntityPresentation(user)}`;
   }
 
   _renderTags(tags) {

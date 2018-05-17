@@ -16,6 +16,7 @@ import SwipeButton from './comment__swipe-button';
 import {relativeDate} from '../issue-formatter/issue-formatter';
 import {reply, share, pencil, trash} from '../icon/icon';
 import type {IssueComment, Attachment} from '../../flow/CustomFields';
+import ApiHelper from '../api/api__helper';
 
 type Props = {
   comment: IssueComment,
@@ -135,7 +136,7 @@ export default class Comment extends Component<Props, void> {
             <View style={styles.comment}>
               <Text>
                 <Text style={styles.authorName}>
-                  {comment.author.fullName || comment.author.login}
+                  {ApiHelper.getEntityPresentation(comment.author)}
                 </Text>
                 <Text style={{color: COLOR_FONT_GRAY}}>
                   {' '}{relativeDate(comment.created)}
