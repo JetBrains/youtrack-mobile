@@ -253,7 +253,6 @@ export default {
     {fields: ISSUE_FIELD_FIELDS},
     {tags: ISSUE_TAGS_FIELDS},
     {attachments: ISSUE_ATTACHMENTS_FIELDS},
-    {comments: ISSUE_COMMENTS_FIELDS},
     {links: ISSUE_LINKS_FIELDS}
   ]),
   projectOnList: ISSUE_PROJECT_FIELDS,

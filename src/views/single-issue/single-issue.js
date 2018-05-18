@@ -50,6 +50,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     usage.trackScreenView(CATEGORY_NAME);
     this.props.setIssueId(this.props.issueId);
     this.props.loadIssue();
+    this.props.loadIssueComments();
   }
 
   loadCommentSuggestions(query) {
@@ -58,8 +59,8 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
   }
 
   _canAddComment() {
-    const {fullyLoaded, addCommentMode, issue} = this.props;
-    return fullyLoaded && !addCommentMode && this.props.issuePermissions.canCommentOn(issue);
+    const {issueLoaded, addCommentMode, issue} = this.props;
+    return issueLoaded && !addCommentMode && this.props.issuePermissions.canCommentOn(issue);
   }
 
   _updateToolbarPosition(newY: number) {
@@ -85,14 +86,14 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
       issuePlaceholder,
       editMode,
       summaryCopy,
-      fullyLoaded,
+      issueLoaded,
       isSavingEditedIssue,
       saveIssueSummaryAndDescriptionChange,
       showIssueActions,
       stopEditingIssue
     } = this.props;
 
-    const issueToShow = issue || issuePlaceholder;
+    const issueToShow = issueLoaded ? issue : issuePlaceholder;
     const title = <Text style={styles.headerText} selectable={true} testID="issue-id">
       {issueToShow ? getReadableID(issueToShow) : `Loading...`}
     </Text>;
@@ -101,8 +102,8 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
       return (
         <Header
           leftButton={<Text>Back</Text>}
-          rightButton={<Text style={fullyLoaded ? null : styles.disabledSaveButton}>More</Text>}
-          onRightButtonClick={() => fullyLoaded && showIssueActions(this.context.actionSheet())}
+          rightButton={<Text style={issueLoaded ? null : styles.disabledSaveButton}>More</Text>}
+          onRightButtonClick={() => issueLoaded && showIssueActions(this.context.actionSheet())}
         >
           {title}
         </Header>
@@ -132,8 +133,8 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
   }
 
   _renderToolbar() {
-    const {issue, editMode, fullyLoaded, issuePermissions, startEditingIssue, attachImage, stopEditingIssue, toggleVote, toggleStar} = this.props;
-    if (!fullyLoaded) {
+    const {issue, editMode, issueLoaded, issuePermissions, startEditingIssue, attachImage, stopEditingIssue, toggleVote, toggleStar} = this.props;
+    if (!issueLoaded) {
       return;
     }
     const canUpdateGeneralInfo = issuePermissions.canUpdateGeneralInfo(issue);
@@ -216,7 +217,9 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
       issue,
       issuePlaceholder,
       addCommentMode,
-      fullyLoaded,
+      issueLoaded,
+      commentsLoaded,
+      commentsLoadingError,
       commentText,
       issuePermissions,
       updateIssueFieldValue,
@@ -263,32 +266,40 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
         >
           {this._renderIssueView(issue || issuePlaceholder)}
 
-          {!fullyLoaded && <View><Text style={styles.loading}>Loading...</Text></View>}
+          {(!issueLoaded || !commentsLoaded) && (
+            <View><Text style={styles.loading}>Loading...</Text></View>
+          )}
 
-          {fullyLoaded && <View style={styles.commentsListContainer}>
-            <SingleIssueComments
-              comments={issue.comments}
-              attachments={issue.attachments}
-              imageHeaders={getApi().auth.getAuthorizationHeaders()}
-              backendUrl={getApi().config.backendUrl}
-              onReply={(comment: IssueComment) => {
-                this.props.showCommentInput();
-                this.props.startReply(comment.author.login);
-              }}
-              onCopyCommentLink={copyCommentUrl}
-              onIssueIdTap={issueId => openNestedIssueView(null, issueId)}
+          {commentsLoadingError && (
+            <View><Text style={styles.loading}>Failed to load comments.</Text></View>
+          )}
 
-              canEditComment={comment => issuePermissions.canEditComment(issue, comment)}
-              onStartEditing={startEditingComment}
+          {issueLoaded && commentsLoaded && (
+            <View style={styles.commentsListContainer}>
+              <SingleIssueComments
+                comments={issue.comments}
+                attachments={issue.attachments}
+                imageHeaders={getApi().auth.getAuthorizationHeaders()}
+                backendUrl={getApi().config.backendUrl}
+                onReply={(comment: IssueComment) => {
+                  this.props.showCommentInput();
+                  this.props.startReply(comment.author.login);
+                }}
+                onCopyCommentLink={copyCommentUrl}
+                onIssueIdTap={issueId => openNestedIssueView(null, issueId)}
 
-              canDeleteComment={comment => issuePermissions.canDeleteComment(issue, comment)}
-              canRestoreComment={comment => issuePermissions.canRestoreComment(issue, comment)}
-              canDeleteCommentPermanently={comment => issuePermissions.canDeleteCommentPermanently(issue, comment)}
-              onDeleteComment={deleteComment}
-              onRestoreComment={restoreComment}
-              onDeleteCommentPermanently={deleteCommentPermanently}
-            />
-          </View>}
+                canEditComment={comment => issuePermissions.canEditComment(issue, comment)}
+                onStartEditing={startEditingComment}
+
+                canDeleteComment={comment => issuePermissions.canDeleteComment(issue, comment)}
+                canRestoreComment={comment => issuePermissions.canRestoreComment(issue, comment)}
+                canDeleteCommentPermanently={comment => issuePermissions.canDeleteCommentPermanently(issue, comment)}
+                onDeleteComment={deleteComment}
+                onRestoreComment={restoreComment}
+                onDeleteCommentPermanently={deleteCommentPermanently}
+              />
+            </View>
+          )}
 
           {Platform.OS == 'ios' && <KeyboardSpacer/>}
         </ScrollView>}

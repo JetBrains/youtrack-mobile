@@ -42,7 +42,7 @@ export async function resolveError (err: Object) {
 }
 
 const showErrorMessage = function (message: string, error: Object) {
-  log.warn(message, error);
+  log.warn(message, error.toString());
   usage.trackError(error, message);
   showNotification(message, extractErrorMessage(error), toastComponentRef);
 };

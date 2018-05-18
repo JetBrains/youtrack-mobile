@@ -10,7 +10,10 @@ export type State = {
   issue: IssueFull,
   unloadedIssueState: ?State,
   isRefreshing: boolean,
-  fullyLoaded: boolean,
+  issueLoaded: boolean,
+  commentsLoaded: boolean,
+  issueComments: ?Array<IssueComment>,
+  commentsLoadingError: ?Error,
   editMode: boolean,
   isSavingEditedIssue: boolean,
   attachingImage: ?Object,
@@ -33,7 +36,10 @@ const initialState: State = {
   issueId: '',
   issue: null,
   isRefreshing: false,
-  fullyLoaded: false,
+  issueLoaded: false,
+  commentsLoaded: false,
+  issueComments: null,
+  commentsLoadingError: null,
   editMode: false,
   isSavingEditedIssue: false,
   attachingImage: null,
@@ -72,7 +78,26 @@ export default createReducer(initialState, {
     return {...state, isRefreshing: false};
   },
   [types.RECEIVE_ISSUE]: (state: State, action: {issue: IssueFull}): State => {
-    return {...state, fullyLoaded: true, issue: action.issue};
+    return {
+      ...state,
+      issueLoaded: true,
+      issue: {
+        ...action.issue,
+        comments: state.issueComments
+      }
+    };
+  },
+  [types.RECEIVE_COMMENTS]: (state: State, action: {comments: Array<IssueComment>}): State => {
+    const {comments} = action;
+    return {
+      ...state,
+      commentsLoaded: true,
+      issueComments: comments,
+      issue: state.issue ? {...state.issue, comments} : state.issue
+    };
+  },
+  [types.RECEIVE_COMMENTS_ERROR]: (state: State, action: {error: Error}): State => {
+    return {...state, commentsLoadingError: action.error};
   },
   [types.SHOW_COMMENT_INPUT]: (state: State): State => {
     return {...state, addCommentMode: true};

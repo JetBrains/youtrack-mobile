@@ -30,7 +30,7 @@ declare type IssueFull = {
   fields: Array<CustomField>,
   tags: Array<Tag>,
   attachments: Array<Attachment>,
-  comments: Array<IssueComment>,
+  comments?: Array<IssueComment>,
   links: Array<IssueLink>,
   fieldHash: any
 };

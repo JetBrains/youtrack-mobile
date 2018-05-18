@@ -82,21 +82,20 @@ describe('API', () => {
     res.attachments[0].url.should.equal(`${serverUrl}/persistent/123`);
   });
 
-  it('should handle relative avatar url in comments on loading issue', async () => {
+  it('should handle relative avatar url in comments on loading comments', async () => {
     const relativeUrl = '/hub/users/123';
-    fetchMock.mock(`^${serverUrl}/api/issues/test-id`, {
-      comments: [
-        {
-          id: 'foo', author: {
-            avatarUrl: relativeUrl
-          }
+    fetchMock.mock(`^${serverUrl}/api/issues/test-id/comments`, [
+      {
+        id: 'foo',
+        author: {
+          avatarUrl: relativeUrl
         }
-      ]
-    });
+      }
+    ]);
 
-    const res = await createInstance().getIssue('test-id');
+    const comments = await createInstance().getIssueComments('test-id');
 
-    res.comments[0].author.avatarUrl.should.equal(`${serverUrl}${relativeUrl}`);
+    comments[0].author.avatarUrl.should.equal(`${serverUrl}${relativeUrl}`);
   });
 
   it('should handle relative avatar url in custom field possible values', async () => {

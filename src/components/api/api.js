@@ -9,7 +9,7 @@ import {handleRelativeUrl} from '../config/config';
 import type {SprintFull, AgileUserProfile, AgileBoardRow, BoardOnList} from '../../flow/Agile';
 import type {AppConfigFilled, EndUserAgreement} from '../../flow/AppConfig';
 import type {IssueOnList, IssueFull, TransformedSuggestion, SavedQuery, CommandSuggestionResponse} from '../../flow/Issue';
-import type {IssueProject, FieldValue, IssueUser} from '../../flow/CustomFields';
+import type {IssueProject, FieldValue, IssueUser, IssueComment} from '../../flow/CustomFields';
 
 const STATUS_UNAUTHORIZED = 401;
 const STATUS_OK_IF_MORE_THAN = 200;
@@ -94,10 +94,6 @@ class Api {
     }, {encode: false});
 
     const issue = await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${id}?${queryString}`);
-
-    issue.comments.forEach(comment => {
-      comment.author.avatarUrl = handleRelativeUrl(comment.author.avatarUrl, this.config.backendUrl);
-    });
     issue.attachments = ApiHelper.convertRelativeUrls(issue.attachments, 'url', this.config.backendUrl);
 
     return issue;
@@ -110,6 +106,20 @@ class Api {
     });
 
     return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`);
+  }
+
+  async getIssueComments(issueId: string): Promise<Array<IssueComment>> {
+    const queryString = qs.stringify({
+      fields: issueFields.issueComment.toString()
+    });
+
+    const comments = await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/comments?${queryString}`);
+
+    comments.forEach(comment => {
+      comment.author.avatarUrl = handleRelativeUrl(comment.author.avatarUrl, this.config.backendUrl);
+    });
+
+    return comments;
   }
 
   async getIssuesCount(query: string = ''): Promise<number> {

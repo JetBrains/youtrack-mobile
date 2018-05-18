@@ -34,6 +34,10 @@ export function receiveIssue(issue: IssueFull) {
   return {type: types.RECEIVE_ISSUE, issue};
 }
 
+export function receiveComments(comments: Array<IssueComment>) {
+  return {type: types.RECEIVE_COMMENTS, comments};
+}
+
 export function showCommentInput() {
   return {type: types.SHOW_COMMENT_INPUT};
 }
@@ -177,6 +181,22 @@ const getIssue = async (api, issueId) => {
   return api.getIssue(issueId);
 };
 
+export function loadIssueComments() {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const issueId = getState().singleIssue.issueId;
+    const api: Api = getApi();
+
+    try {
+      const comments = await api.getIssueComments(issueId);
+      log.info(`Loaded ${comments.length} comments for "${issueId}" issue`);
+      dispatch(receiveComments(comments));
+    } catch (err) {
+      dispatch({type: types.RECEIVE_COMMENTS_ERROR, error: err});
+      notifyError('Failed to load comments', err);
+    }
+  };
+}
+
 export function loadIssue() {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().singleIssue.issueId;
@@ -200,7 +220,10 @@ export function refreshIssue() {
   return async (dispatch: (any) => any, getState: StateGetter) => {
     dispatch(startIssueRefreshing());
     log.info('About to refresh issue');
-    await dispatch(loadIssue());
+    await Promise.all([
+      await dispatch(loadIssue()),
+      await dispatch(loadIssueComments())
+    ]);
     dispatch(stopIssueRefreshing());
   };
 }
