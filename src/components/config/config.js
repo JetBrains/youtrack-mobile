@@ -1,6 +1,7 @@
 /* @flow */
 import UrlParse from 'url-parse';
 import {flushStoragePart} from '../storage/storage';
+import {USER_AGENT} from '../usage/usage';
 import log from '../log/log';
 import type {AppConfig, AppConfigFilled} from '../../flow/AppConfig';
 
@@ -78,6 +79,7 @@ async function loadConfig(ytUrl: string) {
   return fetch(url, {
     method: 'GET',
     headers: {
+      'User-Agent': USER_AGENT,
       'Accept': 'application/json, text/plain, */*'
     }
   })

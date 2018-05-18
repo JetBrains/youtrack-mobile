@@ -11,6 +11,8 @@ const patchPart = parseInt(patch) === 0 ? '' : `.${patch}`;
 
 export const VERSION_STRING = `${major}.${minor}${patchPart} (build ${build})`;
 
+export const USER_AGENT = `YouTrackMobile/${major}.${minor}${patchPart} (${DeviceInfo.getBrand()} ${DeviceInfo.getSystemName()} ${DeviceInfo.getSystemVersion()})`;
+
 const googleAnalyiticsId = appPackage.config.ANALYTICS_ID;
 let isAnalyticsEnabled = false;
 

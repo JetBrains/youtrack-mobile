@@ -4,6 +4,7 @@ import {getStorageState, flushStoragePart} from '../storage/storage';
 import base64 from 'base64-js';
 import qs from 'qs';
 import log from '../log/log';
+import {USER_AGENT} from '../usage/usage';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 
 const ACCEPT_HEADER = 'application/json, text/plain, */*';
@@ -70,6 +71,7 @@ export default class AuthTest {
       method: 'POST',
       headers: {
         'Accept': ACCEPT_HEADER,
+        'User-Agent': USER_AGENT,
         'Authorization': `Basic ${makeBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`,
         'Content-Type': URL_ENCODED_TYPE
       },
@@ -131,6 +133,7 @@ export default class AuthTest {
           method: 'POST',
           headers: {
             'Accept': ACCEPT_HEADER,
+            'User-Agent': USER_AGENT,
             'Authorization': `Basic ${makeBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`,
             'Content-Type': URL_ENCODED_TYPE
           }
@@ -161,7 +164,8 @@ export default class AuthTest {
       throw new Error('Auth: getAuthorizationHeaders called before authParams initialization');
     }
     return {
-      'Authorization': `${authParams.token_type} ${authParams.access_token}`
+      'Authorization': `${authParams.token_type} ${authParams.access_token}`,
+      'User-Agent': USER_AGENT
     };
   }
 
@@ -175,6 +179,7 @@ export default class AuthTest {
       headers: {
         'Accept': ACCEPT_HEADER,
         'Hub-API-Version': 2,
+        'User-Agent': USER_AGENT,
         ...this.getAuthorizationHeaders(authParams)
       }
     }).then((res) => {
@@ -206,6 +211,7 @@ export default class AuthTest {
     return fetch(this.PERMISSIONS_CACHE_URL, {
       headers: {
         'Accept': ACCEPT_HEADER,
+        'User-Agent': USER_AGENT,
         'Authorization': `${authParams.token_type} ${authParams.access_token}`
       }
     })
