@@ -2,7 +2,6 @@
 import {handleRelativeUrl} from '../config/config';
 import objectWalk from 'object-walk';
 import type {IssueOnList, AnyIssue, ServersideSuggestion, TransformedSuggestion} from '../../flow/Issue';
-import ResourceTypes from './api__resource-types';
 
 const API = {
   makeFieldHash: (issue: IssueOnList): Object => {
@@ -137,48 +136,6 @@ const API = {
 
     return (items || []).filter((item, index, it) =>
       index === it.findIndex(i => i[valueName] === item[valueName])
-    );
-  },
-
-  isSecured(entity: Object) {
-    if (!entity || !entity.visibility) {
-      return false;
-    }
-
-    const visibility = entity.visibility;
-    if (hasLimitedVisibility(visibility)) {
-      return true;
-    }
-
-    return !!(
-      (visibility.permittedUsers && visibility.permittedUsers.length) ||
-      (visibility.permittedGroups && visibility.permittedGroups.length)
-    );
-
-    function hasLimitedVisibility(visibility: Object) {
-      return visibility && visibility.$type && visibility.$type === ResourceTypes.VISIBILITY_LIMITED;
-    }
-  },
-
-  getEntityPresentation(item: Object) {
-    if (!item) {
-      return '';
-    }
-
-    return item.fullName || item.name || item.login || item.presentation || '';
-  },
-
-  getVisibilityPresentation(entity: Object) {
-    if (!entity) {
-      return null;
-    }
-
-    const visibility = entity.visibility || {};
-    return (
-      [].concat(visibility.permittedGroups || [])
-        .concat(visibility.permittedUsers || [])
-        .map(it => API.getEntityPresentation(it))
-        .join(', ')
     );
   },
 

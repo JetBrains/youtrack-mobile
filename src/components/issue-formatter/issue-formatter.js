@@ -2,7 +2,6 @@
 import fromNow from 'from-now';
 import type {IssueUser, CustomField} from '../../flow/CustomFields';
 import type {AnyIssue} from '../../flow/Issue';
-import ApiHelper from '../api/api__helper';
 
 const shortRelativeFormat = {
   'now': 'just now',
@@ -22,7 +21,7 @@ function getForText(assignee: IssueUser | Array<IssueUser>) {
       .join(', ');
   }
   if (assignee && !Array.isArray(assignee)) {
-    return `for ${ApiHelper.getEntityPresentation(assignee)}`;
+    return `for ${getEntityPresentation(assignee)}`;
   }
   return '    Unassigned';
 }
@@ -97,5 +96,29 @@ function getReadableID(issue: AnyIssue) {
   return `${issue.project.shortName}-${issue.numberInProject}`;
 }
 
+function getEntityPresentation(entity: Object) {
+  if (!entity) {
+    return '';
+  }
 
-export {getForText, formatDate, relativeDate, shortRelativeDate, getPriotityField, getAssigneeField, getReadableID};
+  return entity.fullName || entity.name || entity.login || entity.presentation || '';
+}
+
+function getVisibilityPresentation(entity: Object) {
+  if (!entity) {
+    return null;
+  }
+
+  const visibility = entity.visibility || {};
+  return (
+    [].concat(visibility.permittedGroups || [])
+      .concat(visibility.permittedUsers || [])
+      .map(it => getEntityPresentation(it))
+      .join(', ')
+  );
+}
+
+export {
+  getForText, formatDate, relativeDate, shortRelativeDate, getPriotityField, getAssigneeField, getReadableID,
+  getVisibilityPresentation, getEntityPresentation
+};

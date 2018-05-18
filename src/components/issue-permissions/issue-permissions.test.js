@@ -1,6 +1,8 @@
 import IssuePermissions, {CREATE_ISSUE, READ_ISSUE, UPDATE_ISSUE, CAN_UPDATE_COMMENT, PRIVATE_UPDATE_ISSUE} from './issue-permissions';
 import sinon from 'sinon';
 
+import ResourceTypes from '../api/api__resource-types';
+
 describe('IssuePermissions', function () {
   const USER_ID = 'some-user-id';
   const PROJECT_ID = 'some-project-id';
@@ -143,5 +145,48 @@ describe('IssuePermissions', function () {
 
       this.issuePermissions.canUpdateField(this.issueMock, this.fieldMock).should.be.true;
     });
+  });
+
+
+  describe('isSecured', () => {
+    it('should return true if an object has limited `visibility` type', () => {
+      const entity = createEntity({
+        $type: ResourceTypes.VISIBILITY_LIMITED
+      });
+
+      IssuePermissions.isSecured(entity).should.be.true;
+    });
+
+    it('should return true if an object has `permittedGroups`', () => {
+      const entity = createEntity({
+          permittedGroups: [{}]
+        }
+      );
+
+      IssuePermissions.isSecured(entity).should.be.true;
+    });
+
+    it('should return true if an object has `permittedUsers`', () => {
+      const entity = createEntity({
+        permittedUsers: [{}]
+      });
+
+      IssuePermissions.isSecured(entity).should.be.true;
+    });
+
+    it('should return false if an object has no `visibility`', () => {
+      IssuePermissions.isSecured({}).should.be.false;
+    });
+
+    it('should return false if an object has no `permittedUsers` and `permittedGroups`', () => {
+      IssuePermissions.isSecured(createEntity()).should.be.false;
+    });
+
+
+    function createEntity(visibility) {
+      return {
+        visibility: visibility || {}
+      };
+    }
   });
 });
