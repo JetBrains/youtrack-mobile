@@ -53,8 +53,8 @@
 		]
 	},
 	"detox": {
-    "test-runner": "jest",
-    "runner-config": "e2e/config.json",
+		"test-runner": "jest",
+		"runner-config": "e2e/config.json",
 		"configurations": {
 			"ios.sim.debug": {
 				"binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/YouTrackMobile.app",
@@ -128,7 +128,8 @@
 		"jest-teamcity-reporter": "^0.6.2",
 		"react-dom": "16.0.0-beta.5",
 		"react-native-cli": "^1.0.0",
-		"react-test-renderer": "16.0.0-beta.5",
+    "react-test-renderer": "16.0.0-beta.5",
+    "redux-mock-store": "1.5.1",
 		"sinon": "1.17.6",
 		"sinon-chai": "2.8.0",
 		"update-json-file": "^1.1.1"
