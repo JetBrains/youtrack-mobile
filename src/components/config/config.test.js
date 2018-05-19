@@ -62,7 +62,7 @@ describe('Config', () => {
       res.auth.serverUri.should.equal('http://fake.backend/hub');
     });
 
-    it.only('should store loaded config to storage', async() => {
+    it('should store loaded config to storage', async() => {
       await loadConfig('http://fake.backend');
       AsyncStorage.multiSet.should.have.been.calledWith([[
         'BACKEND_CONFIG_STORAGE_KEY',
@@ -81,7 +81,8 @@ describe('Config', () => {
       fetch.should.have.been.calledWith('http://fake.backend/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,statisticsEnabled', {
         method: 'GET',
         headers: {
-          'Accept': 'application/json, text/plain, */*'
+          'Accept': 'application/json, text/plain, */*',
+          'User-Agent': 'YouTrackMobile/0.1 (undefined undefined undefined)'
         }
       });
     });
