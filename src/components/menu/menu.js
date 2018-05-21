@@ -97,6 +97,7 @@ export class Menu extends Component<Props, void> {
               <Image style={styles.currentUserAvatarImage} source={{uri: avatarUrl}}></Image>
             </TouchableWithoutFeedback>
 
+            <Text style={styles.serverURL} numberOfLines={1}>{formatYouTrackURL(backendUrl)}</Text>
             <Text style={styles.profileName}>{user.name}</Text>
 
             <TouchableOpacity style={styles.logOutButton} onPress={this._logOut}>
@@ -126,7 +127,6 @@ export class Menu extends Component<Props, void> {
 
           <View style={styles.menuFooter}>
             <Text style={styles.footerText}>YouTrack Mobile {VERSION_STRING}</Text>
-            <Text style={styles.footerText}>{formatYouTrackURL(backendUrl)}</Text>
 
             <View style={styles.spacer}></View>
             <Text style={styles.footerText}>© 2000—{CURRENT_YEAR} JetBrains</Text>

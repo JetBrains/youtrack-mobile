@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {COLOR_PINK, UNIT, COLOR_GRAY, COLOR_FONT} from '../../components/variables/variables';
+import {COLOR_PINK, UNIT, COLOR_GRAY, COLOR_FONT, COLOR_FONT_ON_BLACK} from '../../components/variables/variables';
 
 const AVATAR_SIZE = UNIT * 8;
 
@@ -23,7 +23,13 @@ export default StyleSheet.create({
   },
   profileName: {
     color: COLOR_GRAY,
-    marginTop: UNIT
+    marginTop: UNIT/2,
+  },
+  serverURL: {
+    marginTop: UNIT,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: COLOR_FONT_ON_BLACK,
   },
   logoutIcon: {
     height: UNIT * 3,
@@ -60,7 +66,7 @@ export default StyleSheet.create({
     lineHeight: 18,
     fontSize: 17,
     fontWeight: 'bold',
-    color: 'white'
+    color: COLOR_FONT_ON_BLACK
   },
   menuItemSubtext: {
     lineHeight: 19,
