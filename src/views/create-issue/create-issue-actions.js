@@ -156,13 +156,16 @@ export function updateIssueDraft(ignoreFields: boolean = false) {
         return await storeIssueDraftId(issue.id);
       }
     } catch (err) {
-      const error = await resolveError(err);
-      if (error && error.error_description && error.error_description.indexOf(`Can't find entity with id`) !== -1) {
+      const error = await resolveError(err) || new Error('Unknown error');
+      const {error_description} = error;
+      if (
+        (error_description && error_description.indexOf(`Can't find entity with id`) !== -1) ||
+        error && (error.error === 'bad_request' || error.error === 'Bad Request')
+      ) {
+        flushStoragePart({projectId: null});
         dispatch(clearDraftProject());
       }
-      if (error && error.error === 'bad_request') {
-        dispatch(clearDraftProject());
-      }
+
       notifyError('Cannot update issue draft', error);
     }
   };
