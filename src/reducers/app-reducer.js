@@ -2,6 +2,7 @@ import * as types from '../actions/action-types';
 import {createReducer} from 'redux-create-reducer';
 import IssuePermissions from '../components/issue-permissions/issue-permissions';
 import type Auth from '../components/auth/auth';
+import type {StorageState} from '../components/storage/storage';
 import type EndUserAgreement from '../flow/AppConfig';
 
 type RootState = {
@@ -9,7 +10,8 @@ type RootState = {
   showMenu: boolean,
   showDebugView: boolean,
   showUserAgreement: boolean,
-  endUserAgreement: ?EndUserAgreement
+  endUserAgreement: ?EndUserAgreement,
+  otherAccounts: ?Array<StorageState>
 };
 
 const initialState: RootState = {
@@ -17,7 +19,8 @@ const initialState: RootState = {
   showMenu: false,
   showDebugView: false,
   showUserAgreement: false,
-  endUserAgreement: null
+  endUserAgreement: null,
+  otherAccounts: null
 };
 
 export default createReducer(initialState, {
@@ -72,5 +75,8 @@ export default createReducer(initialState, {
       showUserAgreement: false,
       endUserAgreement: null
     };
+  },
+  [types.RECEIVE_OTHER_ACCOUNTS](state: RootState, action: {otherAccounts: Array<StorageState>}) {
+    return {...state, otherAccounts: action.otherAccounts};
   }
 });

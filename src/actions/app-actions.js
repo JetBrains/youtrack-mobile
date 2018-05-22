@@ -4,7 +4,7 @@ import {setApi} from '../components/api/api__instance';
 import Api from '../components/api/api';
 import Router from '../components/router/router';
 import log from '../components/log/log';
-import {clearCachesAndDrafts, populateStorage} from '../components/storage/storage';
+import {clearCachesAndDrafts, populateStorage, getOtherAccounts} from '../components/storage/storage';
 import {Linking} from 'react-native';
 import UrlParse from 'url-parse';
 import usage from '../components/usage/usage';
@@ -70,6 +70,13 @@ export function setPermissions(auth: Auth) {
 function showUserAgreement(agreement) {
   usage.trackEvent('EUA is shown');
   return {type: types.SHOW_USER_AGREEMENT, agreement};
+}
+
+function populateAccounts() {
+  return async (dispatch: (any) => any, getState: () => Object) => {
+    const otherAccounts = await getOtherAccounts();
+    dispatch({type: types.RECEIVE_OTHER_ACCOUNTS, otherAccounts});
+  };
 }
 
 function completeInitizliation() {
@@ -196,6 +203,7 @@ export function connectToNewYoutrack(newURL: string) {
 export function getStoredConfigAndProceed() {
   return async (dispatch: (any) => any, getState: () => Object) => {
     const state: StorageState = await populateStorage();
+    dispatch(populateAccounts());
 
     if (state.config) {
       return dispatch(initializeApp(state.config));

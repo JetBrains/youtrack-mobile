@@ -7,6 +7,8 @@ import type {AuthParams} from '../auth/auth';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {IssueOnList} from '../../flow/Issue';
 
+const OTHER_ACCOUNTS_KEY = 'YT_OTHER_ACCOUNTS_STORAGE_KEY';
+
 export type StorageState = {|
   projectId: ?string,
   draftId: ?string,
@@ -102,6 +104,15 @@ export async function flushStoragePart(part: Object): Promise<StorageState> {
     ...getStorageState(),
     ...part
   });
+}
+
+export async function getOtherAccounts(): Promise<Array<StorageState>> {
+  const stored = await AsyncStorage.getItem(OTHER_ACCOUNTS_KEY);
+  return stored ? JSON.parse(stored) : [];
+}
+
+export async function storeAccounts(accounts: Array<StorageState>) {
+  await AsyncStorage.setItem(OTHER_ACCOUNTS_KEY, JSON.stringify(accounts));
 }
 
 // For tests only!
