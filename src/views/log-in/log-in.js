@@ -14,12 +14,14 @@ import clicksToShowCounter from '../../components/debug-view/clicks-to-show-coun
 import {openDebugView, checkAuthAndUserAgreement} from '../../actions/app-actions';
 import styles from './log-in.styles';
 
+import type {AuthParams} from '../../components/auth/auth';
+
 const noop = () => {};
 const CATEGORY_NAME = 'Login form';
 
 type Props = {
   auth: Auth,
-  onLogIn: () => any,
+  onLogIn: (authParams: AuthParams) => any,
   onShowDebugView: Function,
   onChangeServerUrl: (currentUrl: string) => any
 };
@@ -54,45 +56,41 @@ export class LogIn extends Component<Props, State> {
     this.refs.passInput.focus();
   }
 
-  logInViaCredentials() {
+  async logInViaCredentials() {
     const config = this.props.auth.config;
     this.setState({loggingIn: true});
 
-    this.props.auth.authorizeCredentials(this.state.username, this.state.password)
-      .then(() => {
-        return Keystore.setInternetCredentials(config.auth.serverUri, this.state.username, this.state.password)
-          .catch(noop);
-      })
-      .then(() => {
-        usage.trackEvent(CATEGORY_NAME, 'Login via credentials', 'Success');
-        return this.props.onLogIn();
-      })
-      .catch(err => {
-        usage.trackEvent(CATEGORY_NAME, 'Login via credentials', 'Error');
-        this.setState({errorMessage: err.error_description || err.message, loggingIn: false});
-      });
+    try {
+      const authParams = await this.props.auth.obtainTokenByCredentials(this.state.username, this.state.password);
+      Keystore.setInternetCredentials(config.auth.serverUri, this.state.username, this.state.password).catch(noop);
+      usage.trackEvent(CATEGORY_NAME, 'Login via credentials', 'Success');
+
+      return this.props.onLogIn(authParams);
+    } catch (err) {
+      usage.trackEvent(CATEGORY_NAME, 'Login via credentials', 'Error');
+      this.setState({errorMessage: err.error_description || err.message, loggingIn: false});
+    }
   }
 
   changeYouTrackUrl() {
     this.props.onChangeServerUrl(this.props.auth.config.backendUrl);
   }
 
-  logInViaHub() {
+  async logInViaHub() {
     const config = this.props.auth.config;
 
-    return authorizeInHub(config)
-      .then(code => {
-        this.setState({loggingIn: true});
-        return this.props.auth.authorizeOAuth(code);
-      })
-      .then(() => {
-        usage.trackEvent(CATEGORY_NAME, 'Login via browser', 'Success');
-        return this.props.onLogIn();
-      })
-      .catch(err => {
-        usage.trackEvent(CATEGORY_NAME, 'Login via browser', 'Error');
-        this.setState({loggingIn: false, errorMessage: err.error_description || err.message});
-      });
+    try {
+      const code = await authorizeInHub(config);
+      this.setState({loggingIn: true});
+
+      const authParams = await this.props.auth.obtainTokenByOAuthCode(code);
+      usage.trackEvent(CATEGORY_NAME, 'Login via browser', 'Success');
+
+      return this.props.onLogIn(authParams);
+    } catch (err) {
+      usage.trackEvent(CATEGORY_NAME, 'Login via browser', 'Error');
+      this.setState({loggingIn: false, errorMessage: err.error_description || err.message});
+    }
   }
 
   render() {
@@ -192,7 +190,6 @@ export class LogIn extends Component<Props, State> {
 const mapStateToProps = (state, ownProps) => {
   return {
     auth: state.app.auth,
-    issueQuery: state.issueList.query,
     ...ownProps
   };
 };
@@ -200,9 +197,17 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onChangeServerUrl: youtrackUrl => Router.EnterServer({serverUrl: youtrackUrl}),
-    onLogIn: () => dispatch(checkAuthAndUserAgreement()),
+    onLogIn: authParams => dispatch(checkAuthAndUserAgreement(authParams)),
     onShowDebugView: () => dispatch(openDebugView())
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LogIn);
+// Needed to have a possibility to override callback by own props
+const mergeProps = (stateProps, dispatchProps) => {
+  return {
+    ...dispatchProps,
+    ...stateProps
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(LogIn);

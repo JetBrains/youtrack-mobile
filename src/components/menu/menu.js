@@ -9,9 +9,9 @@ import Drawer from 'react-native-drawer';
 import Router from '../../components/router/router';
 import Auth from '../../components/auth/auth';
 import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
-import {next, logOut as logOutIcon} from '../../components/icon/icon';
+import {next, logOut as logOutIcon, add as addIcon} from '../../components/icon/icon';
 import {connect} from 'react-redux';
-import {logOut, openMenu, closeMenu, openDebugView} from '../../actions/app-actions';
+import {logOut, openMenu, closeMenu, openDebugView, addAccount} from '../../actions/app-actions';
 
 const CURRENT_YEAR = (new Date()).getFullYear();
 const MENU_WIDTH = 280;
@@ -28,6 +28,7 @@ type Props = {
   issueQuery: ?string,
   onBeforeLogOut: () => any,
   onLogOut: () => any,
+  onAddAccount: () => any,
   onOpen: () => any,
   onClose: () => any,
   openDebugView: () => any
@@ -75,10 +76,9 @@ export class Menu extends Component<Props, void> {
     );
   };
 
-
   _renderMenu() {
     const {height} = Dimensions.get('window');
-    const {auth, issueQuery, openDebugView} = this.props;
+    const {auth, issueQuery, openDebugView, onAddAccount} = this.props;
     if (!auth) { //TODO: menu renders right after logOut by some reason.
       return null;
     }
@@ -102,6 +102,10 @@ export class Menu extends Component<Props, void> {
 
             <TouchableOpacity style={styles.logOutButton} onPress={this._logOut}>
               <Image style={styles.logoutIcon} source={logOutIcon}></Image>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.addAccountButton} onPress={onAddAccount}>
+              <Image style={styles.addAccountIcon} source={addIcon}></Image>
             </TouchableOpacity>
           </View>
 
@@ -177,7 +181,8 @@ const mapDispatchToProps = (dispatch) => {
     onOpen: () => dispatch(openMenu()),
     onClose: () => dispatch(closeMenu()),
     onLogOut: () => dispatch(logOut()),
-    openDebugView: () => dispatch(openDebugView())
+    onAddAccount: () => dispatch(addAccount()),
+    openDebugView: () => dispatch(openDebugView()),
   };
 };
 

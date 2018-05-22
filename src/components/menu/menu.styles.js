@@ -44,6 +44,13 @@ export default StyleSheet.create({
     position: 'absolute',
     right: UNIT
   },
+  addAccountButton: {
+    marginTop: UNIT
+  },
+  addAccountIcon: {
+    height: UNIT * 2,
+    resizeMode: 'contain'
+  },
   menuItems: {
 
   },

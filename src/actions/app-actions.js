@@ -4,15 +4,17 @@ import {setApi} from '../components/api/api__instance';
 import Api from '../components/api/api';
 import Router from '../components/router/router';
 import log from '../components/log/log';
-import {clearCachesAndDrafts, populateStorage, getOtherAccounts} from '../components/storage/storage';
+import {initialState, clearCachesAndDrafts, populateStorage, getStorageState, flushStorage, flushStoragePart, getOtherAccounts, storeAccounts} from '../components/storage/storage';
 import {Linking} from 'react-native';
 import UrlParse from 'url-parse';
 import usage from '../components/usage/usage';
 import {loadConfig} from '../components/config/config';
 import Auth from '../components/auth/auth';
 
+import type {AuthParams} from '../components/auth/auth';
 import type {AppConfigFilled, EndUserAgreement} from '../flow/AppConfig';
 import type {StorageState} from '../components/storage/storage';
+import type RootState from '../reducers/app-reducer';
 
 export function logOut() {
   return (dispatch: (any) => any, getState: () => Object) => {
@@ -72,10 +74,52 @@ function showUserAgreement(agreement) {
   return {type: types.SHOW_USER_AGREEMENT, agreement};
 }
 
+async function storeConfig(config: AppConfigFilled) {
+  await flushStoragePart({config});
+}
+
 function populateAccounts() {
   return async (dispatch: (any) => any, getState: () => Object) => {
     const otherAccounts = await getOtherAccounts();
     dispatch({type: types.RECEIVE_OTHER_ACCOUNTS, otherAccounts});
+  };
+}
+
+export function addAccount() {
+  return async (dispatch: (any) => any, getState: () => RootState) => {
+    log.info('Adding new account flow started');
+
+    //TODO: Handle errors, add a way to cancel
+    Router.EnterServer({
+      connectToYoutrack: async (newURL) => {
+        const config = await loadConfig(newURL);
+        log.info('Config loaded for new server, logging in...');
+
+        const auth = new Auth(config);
+        Router.LogIn({
+          auth,
+          onLogIn: async (authParams: AuthParams) => {
+            const otherAccounts = await getOtherAccounts();
+            const currentAccount = await getStorageState();
+
+            await storeAccounts([currentAccount, ...otherAccounts]);
+            await flushStorage(initialState);
+
+            await auth.storeAuth(authParams);
+            await storeConfig(config);
+
+            await dispatch(initializeAuth(config));
+            await dispatch(checkUserAgreement());
+
+            if (!getState().app.showUserAgreement) {
+              dispatch(completeInitizliation());
+            }
+
+            log.info('Successfully added account', config);
+          }
+        });
+      }
+    });
   };
 }
 
@@ -147,8 +191,11 @@ function checkUserAgreement() {
   };
 }
 
-export function checkAuthAndUserAgreement() {
+export function checkAuthAndUserAgreement(authParams: AuthParams) {
   return async (dispatch: Function, getState: () => Object) => {
+    const auth = getState().app.auth;
+    await auth.storeAuth(authParams);
+
     await dispatch(checkAuthorization());
     await dispatch(checkUserAgreement());
 
@@ -173,6 +220,7 @@ export function initializeApp(config: AppConfigFilled) {
       let reloadedConfig;
       try {
         reloadedConfig = await loadConfig(config.backendUrl);
+        await storeConfig(reloadedConfig);
       } catch (error) {
         return Router.Home({backendUrl: config.backendUrl, error});
       }
@@ -195,6 +243,7 @@ export function initializeApp(config: AppConfigFilled) {
 export function connectToNewYoutrack(newURL: string) {
   return async (dispatch: (any) => any, getState: () => Object) => {
     const config = await loadConfig(newURL);
+    await storeConfig(config);
     dispatch(setAuth(config));
     Router.LogIn();
   };

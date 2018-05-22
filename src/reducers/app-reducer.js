@@ -1,11 +1,12 @@
+/* @flow */
 import * as types from '../actions/action-types';
 import {createReducer} from 'redux-create-reducer';
 import IssuePermissions from '../components/issue-permissions/issue-permissions';
 import type Auth from '../components/auth/auth';
 import type {StorageState} from '../components/storage/storage';
-import type EndUserAgreement from '../flow/AppConfig';
+import type {EndUserAgreement} from '../flow/AppConfig';
 
-type RootState = {
+declare type RootState = {
   auth: ?Auth,
   showMenu: boolean,
   showDebugView: boolean,

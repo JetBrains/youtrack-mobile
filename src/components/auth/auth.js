@@ -40,16 +40,6 @@ export default class AuthTest {
     this.PERMISSIONS_CACHE_URL = `${this.config.auth.serverUri}/api/rest/permissions/cache?${permissionsQueryString}`;
   }
 
-  authorizeOAuth(code: string) {
-    return this.obtainTokenByOAuthCode(code)
-      .then(this.storeAuth.bind(this));
-  }
-
-  authorizeCredentials(login: string, pass: string) {
-    return this.obtainTokenByCredentials(login, pass)
-      .then(this.storeAuth.bind(this));
-  }
-
   loadStoredAuthParams(): Promise<void> {
     return this.readAuth()
       .then((authParams) => this.verifyToken(authParams))

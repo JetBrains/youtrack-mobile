@@ -1,9 +1,8 @@
 /* @flow */
 import UrlParse from 'url-parse';
-import {flushStoragePart} from '../storage/storage';
 import {USER_AGENT} from '../usage/usage';
 import log from '../log/log';
-import type {AppConfig, AppConfigFilled} from '../../flow/AppConfig';
+import type {AppConfig} from '../../flow/AppConfig';
 
 const MIN_YT_VERSION = 7.0;
 const PROTOCOL_REGEXP = /^https?:\/\//i;
@@ -26,11 +25,6 @@ const config: AppConfig = {
 
 class IncompatibleYouTrackError extends Error {
   isIncompatibleYouTrackError = true;
-}
-
-async function storeConfig(config: AppConfigFilled): Promise<AppConfigFilled> {
-  await flushStoragePart({config});
-  return config;
 }
 
 function handleIncompatibleYouTrack(response: Object, ytUrl: string) {
@@ -104,7 +98,6 @@ async function loadConfig(ytUrl: string) {
 
       return config;
     })
-    .then(storeConfig)
     .catch(err => {
       log.log(`Loading config failed with an error ${err && err.toString && err.toString()}`);
       // Catches "Unexpected token < in JSON at position 0" error

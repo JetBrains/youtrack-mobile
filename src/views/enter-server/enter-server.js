@@ -177,4 +177,12 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(EnterServer);
+// Needed to have a possibility to override callback by own props
+const mergeProps = (stateProps, dispatchProps) => {
+  return {
+    ...dispatchProps,
+    ...stateProps
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(EnterServer);

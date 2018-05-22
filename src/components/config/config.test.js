@@ -62,14 +62,6 @@ describe('Config', () => {
       res.auth.serverUri.should.equal('http://fake.backend/hub');
     });
 
-    it('should store loaded config to storage', async() => {
-      await loadConfig('http://fake.backend');
-      AsyncStorage.multiSet.should.have.been.calledWith([[
-        'BACKEND_CONFIG_STORAGE_KEY',
-        sinon.match(String)
-      ]]);
-    });
-
     it('should correctly construct hub url for embedded hub on cloud', async() => {
       responseJson.ring.url = '/hub';
       const res = await loadConfig('https://foo.myjetbrains.com/youtrack');

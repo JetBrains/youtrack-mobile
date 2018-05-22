@@ -33,7 +33,7 @@ const storageKeys: StorageStateKeys = {
 
 let storageState: ?StorageState = null;
 
-const initialState: StorageState = {
+export const initialState: StorageState = {
   projectId: null,
   draftId: null,
   authParams: null,

@@ -15,8 +15,8 @@ describe('LogIn', () => {
           serverUri: 'http://hub'
         }
       },
-      authorizeCredentials: sinon.spy(),
-      authorizeOAuth: sinon.spy()
+      obtainTokenByCredentials: sinon.spy(),
+      obtainTokenByOAuthCode: sinon.spy()
     };
 
     defaultProps = {
