@@ -91,6 +91,7 @@ export function addAccount() {
 
     //TODO: Handle errors, add a way to cancel
     Router.EnterServer({
+      onCancel: () => Router.IssueList(),
       connectToYoutrack: async (newURL) => {
         const config = await loadConfig(newURL);
         log.info('Config loaded for new server, logging in...');

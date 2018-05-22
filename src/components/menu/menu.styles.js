@@ -45,10 +45,11 @@ export default StyleSheet.create({
     right: UNIT
   },
   addAccountButton: {
-    marginTop: UNIT
+    position: 'absolute',
+    left: UNIT
   },
   addAccountIcon: {
-    height: UNIT * 2,
+    height: UNIT * 3,
     resizeMode: 'contain'
   },
   menuItems: {

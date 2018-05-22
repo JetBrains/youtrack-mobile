@@ -2,7 +2,7 @@
 import {Image, View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, ScrollView, ActivityIndicator} from 'react-native';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {logo} from '../../components/icon/icon';
+import {logo, back as backIcon} from '../../components/icon/icon';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import usage from '../../components/usage/usage';
 import {VERSION_DETECT_FALLBACK_URL} from '../../components/config/config';
@@ -105,7 +105,7 @@ export class EnterServer extends Component<Props, State> {
   }
 
   render() {
-    const {onShowDebugView} = this.props;
+    const {onShowDebugView, onCancel} = this.props;
 
     const isDisabled = this.state.connecting || !this.isValidInput();
 
@@ -117,6 +117,12 @@ export class EnterServer extends Component<Props, State> {
 
       return (
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
+        {onCancel && (
+          <TouchableOpacity onPress={onCancel} style={styles.backIconButton}>
+            <Image style={styles.backIcon} source={backIcon}/>
+          </TouchableOpacity>
+        )}
+
         <View style={styles.logoContainer}>
           <TouchableWithoutFeedback onPress={() => clicksToShowCounter(onShowDebugView)}>
             <Image style={styles.logoImage} source={logo}/>

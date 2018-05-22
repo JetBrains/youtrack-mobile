@@ -20,6 +20,15 @@ export default StyleSheet.create({
     height: UNIT * 10,
     resizeMode: 'contain'
   },
+  backIconButton: {
+    position: 'absolute',
+    left: UNIT * 2,
+    top: UNIT * 6
+  },
+  backIcon: {
+    height: UNIT * 2,
+    resizeMode: 'contain',
+  },
   title: {
     paddingTop: UNIT * 2,
     fontSize: 26,
