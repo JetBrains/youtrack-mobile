@@ -2,16 +2,20 @@
 import {View, ScrollView, Text, TouchableWithoutFeedback, TouchableOpacity, Image, Linking, Dimensions, Alert} from 'react-native';
 import React, {Component} from 'react';
 import styles from './menu.styles';
-import {VERSION_STRING} from '../../components/usage/usage';
-import {formatYouTrackURL} from '../../components/config/config';
-import getTopPadding from '../../components/header/header__top-padding';
+import {VERSION_STRING} from '../usage/usage';
+import {formatYouTrackURL} from '../config/config';
+import getTopPadding from '../header/header__top-padding';
 import Drawer from 'react-native-drawer';
-import Router from '../../components/router/router';
-import Auth from '../../components/auth/auth';
-import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
-import {next, logOut as logOutIcon, add as addIcon} from '../../components/icon/icon';
+import Swiper from 'react-native-swiper';
+import Router from '../router/router';
+import Auth from '../auth/auth';
+import {COLOR_DARK_BORDER} from '../variables/variables';
+import clicksToShowCounter from '../debug-view/clicks-to-show-counter';
+import {next, logOut as logOutIcon, add as addIcon} from '../icon/icon';
 import {connect} from 'react-redux';
-import {logOut, openMenu, closeMenu, openDebugView, addAccount} from '../../actions/app-actions';
+import {logOut, openMenu, closeMenu, openDebugView, addAccount, changeAccount} from '../../actions/app-actions';
+import type {StorageState} from '../storage/storage';
+import type {AppConfigFilled} from '../../flow/AppConfig';
 
 const CURRENT_YEAR = (new Date()).getFullYear();
 const MENU_WIDTH = 280;
@@ -26,9 +30,11 @@ type Props = {
   show: boolean,
   auth: Auth,
   issueQuery: ?string,
+  otherAccounts: Array<StorageState>,
   onBeforeLogOut: () => any,
   onLogOut: () => any,
   onAddAccount: () => any,
+  onChangeAccount: (index: number) => any,
   onOpen: () => any,
   onClose: () => any,
   openDebugView: () => any
@@ -78,7 +84,7 @@ export class Menu extends Component<Props, void> {
 
   _renderMenu() {
     const {height} = Dimensions.get('window');
-    const {auth, issueQuery, openDebugView, onAddAccount} = this.props;
+    const {auth, issueQuery, openDebugView, onAddAccount, onChangeAccount, otherAccounts} = this.props;
     if (!auth) { //TODO: menu renders right after logOut by some reason.
       return null;
     }
@@ -92,22 +98,49 @@ export class Menu extends Component<Props, void> {
     return (
       <ScrollView style={styles.scrollContainer}>
         <View style={[styles.menuContainer, {paddingTop: getTopPadding(), minHeight: height}]}>
-          <View style={styles.profileContainer}>
-            <TouchableWithoutFeedback onPress={() => clicksToShowCounter(openDebugView)}>
-              <Image style={styles.currentUserAvatarImage} source={{uri: avatarUrl}}></Image>
-            </TouchableWithoutFeedback>
+            <View>
+              <Swiper
+                style={styles.swiper}
+                dotColor={COLOR_DARK_BORDER}
+                activeDotColor="white"
+                loop={false}
+                onIndexChanged={onChangeAccount}
+              >
+                  {[null, ...otherAccounts].map((account, index) => {
+                    if (!account) {
+                      return (
+                        <View key={index}  style={styles.profileContainer}>
+                          <TouchableWithoutFeedback onPress={() => clicksToShowCounter(openDebugView)}>
+                            <Image style={styles.currentUserAvatarImage} source={{uri: avatarUrl}}></Image>
+                          </TouchableWithoutFeedback>
 
-            <Text style={styles.serverURL} numberOfLines={1}>{formatYouTrackURL(backendUrl)}</Text>
-            <Text style={styles.profileName}>{user.name}</Text>
+                          <Text style={styles.serverURL} numberOfLines={1}>{formatYouTrackURL(backendUrl)}</Text>
+                          <Text style={styles.profileName}>{user.name}</Text>
+                        </View>
+                      );
+                    }
+                    const config: AppConfigFilled = account.config;
+                    return (
+                      <View key={index} style={styles.profileContainer}>
+                        <TouchableWithoutFeedback>
+                          <Image style={styles.currentUserAvatarImage} source={{uri: avatarUrl}}></Image>
+                        </TouchableWithoutFeedback>
 
-            <TouchableOpacity style={styles.logOutButton} onPress={this._logOut}>
-              <Image style={styles.logoutIcon} source={logOutIcon}></Image>
-            </TouchableOpacity>
+                        <Text style={styles.serverURL} numberOfLines={1}>{formatYouTrackURL(config.backendUrl)}</Text>
+                        <Text style={styles.profileName}>{user.name}</Text>
+                      </View>
+                    );
+                  })}
+              </Swiper>
 
-            <TouchableOpacity style={styles.addAccountButton} onPress={onAddAccount}>
-              <Image style={styles.addAccountIcon} source={addIcon}></Image>
-            </TouchableOpacity>
-          </View>
+              <TouchableOpacity style={styles.logOutButton} onPress={this._logOut}>
+                <Image style={styles.logoutIcon} source={logOutIcon}></Image>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.addAccountButton} onPress={onAddAccount}>
+                <Image style={styles.addAccountIcon} source={addIcon}></Image>
+              </TouchableOpacity>
+            </View>
 
           <View style={styles.menuItems}>
             <TouchableOpacity activeOpacity={0.4} style={styles.menuItemButton} onPress={this._openIssueList}>
@@ -171,6 +204,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     show: state.app.showMenu,
     auth: state.app.auth,
+    otherAccounts: state.app.otherAccounts,
     issueQuery: state.issueList.query,
     ...ownProps
   };
@@ -182,6 +216,7 @@ const mapDispatchToProps = (dispatch) => {
     onClose: () => dispatch(closeMenu()),
     onLogOut: () => dispatch(logOut()),
     onAddAccount: () => dispatch(addAccount()),
+    onChangeAccount: index => dispatch(changeAccount(index)),
     openDebugView: () => dispatch(openDebugView()),
   };
 };

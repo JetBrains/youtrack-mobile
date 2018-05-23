@@ -5316,6 +5316,12 @@ react-native-swipeout@huston007/react-native-swipeout#e4f7985170baf5dc5b7e0ae8b1
     prop-types "^15.5.10"
     react-tween-state "^0.1.5"
 
+react-native-swiper@1.5.13:
+  version "1.5.13"
+  resolved "https://registry.yarnpkg.com/react-native-swiper/-/react-native-swiper-1.5.13.tgz#fa695cd4ab77b9a9df2d2bfee38ea7274dd07a2e"
+  dependencies:
+    prop-types "^15.5.10"
+
 react-native-syntax-highlighter@1.2.6:
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/react-native-syntax-highlighter/-/react-native-syntax-highlighter-1.2.6.tgz#3f329014be07a28c20906eb14a28bd1344940979"

@@ -139,6 +139,12 @@ export function addAccount() {
   };
 }
 
+export function changeAccount(index: number) {
+  return async (dispatch: (any) => any, getState: () => RootState) => {
+    throw new Error(`Not implemented ${index}`);
+  };
+}
+
 function completeInitizliation() {
   return async (dispatch: (any) => any, getState: () => Object) => {
     log.info('Completing initialization: loading permissions cache');
