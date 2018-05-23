@@ -20,11 +20,27 @@ function makeBtoa(str: string) {
 
 export type AuthParams = {refresh_token: string; access_token: string, token_type: string};
 
+export type CurrentUser = {
+  id: string,
+  guest: boolean,
+  name: string,
+  profile?: {
+    avatar?: {
+      url?: string
+    }
+  },
+  endUserAgreementConsent?: {
+    accepted: boolean,
+    majorVersion: string,
+    minorVersion: string
+  }
+};
+
 export default class AuthTest {
   config: AppConfigFilled;
   authParams: ?AuthParams;
   permissions: Permissions;
-  currentUser: Object;
+  currentUser: CurrentUser;
   CHECK_TOKEN_URL: string;
   PERMISSIONS_CACHE_URL: string;
 

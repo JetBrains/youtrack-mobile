@@ -53,6 +53,7 @@ export function checkAuthorization() {
   return async (dispatch: (any) => any, getState: () => Object) => {
     const auth = getState().app.auth;
     await auth.loadStoredAuthParams();
+    await flushStoragePart({currentUser: auth.currentUser});
 
     setApi(new Api(auth));
     dispatch(setPermissions(auth));
@@ -89,7 +90,7 @@ function populateAccounts() {
 async function connectToOneMoreServer() {
   return new Promise((resolve, reject) => {
     Router.EnterServer({
-      onCancel: reject(),
+      onCancel: reject,
       connectToYoutrack: async (newURL) => resolve(await loadConfig(newURL))
     });
   });
@@ -117,10 +118,13 @@ export function addAccount() {
 
       const otherAccounts = await getOtherAccounts();
       const currentAccount = await getStorageState();
+      const newOtherAccounts = [currentAccount, ...otherAccounts];
 
-      await storeAccounts([currentAccount, ...otherAccounts]);
+      await storeAccounts(newOtherAccounts);
+      dispatch({type: types.RECEIVE_OTHER_ACCOUNTS, otherAccounts: newOtherAccounts});
       await flushStorage(initialState);
 
+      await flushStoragePart({creationTimestamp: Date.now()});
       await auth.storeAuth(authParams);
       await storeConfig(config);
 
@@ -213,10 +217,11 @@ function checkUserAgreement() {
   };
 }
 
-export function checkAuthAndUserAgreement(authParams: AuthParams) {
+export function applyAuthorization(authParams: AuthParams) {
   return async (dispatch: Function, getState: () => Object) => {
     const auth = getState().app.auth;
     await auth.storeAuth(authParams);
+    await flushStoragePart({creationTimestamp: Date.now()});
 
     await dispatch(checkAuthorization());
     await dispatch(checkUserAgreement());

@@ -14,6 +14,8 @@ import clicksToShowCounter from '../debug-view/clicks-to-show-counter';
 import {next, logOut as logOutIcon, add as addIcon} from '../icon/icon';
 import {connect} from 'react-redux';
 import {logOut, openMenu, closeMenu, openDebugView, addAccount, changeAccount} from '../../actions/app-actions';
+import {getStorageState} from '../storage/storage';
+
 import type {StorageState} from '../storage/storage';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 
@@ -82,65 +84,69 @@ export class Menu extends Component<Props, void> {
     );
   };
 
+  _renderAccounts() {
+    const {openDebugView, onAddAccount, onChangeAccount, otherAccounts} = this.props;
+
+    const accounts = [getStorageState(), ...otherAccounts]
+      .sort((a, b) => {
+        return (b.creationTimestamp || 0) - (a.creationTimestamp || 0);
+      });
+
+    return (
+      <View>
+        <Swiper
+          style={styles.swiper}
+          dotColor={COLOR_DARK_BORDER}
+          activeDotColor="white"
+          loop={false}
+          index={accounts.indexOf(getStorageState())}
+          onIndexChanged={onChangeAccount}
+        >
+            {accounts.map((account, index) => {
+              const config: AppConfigFilled = account.config;
+              const user = account.currentUser;
+              if (!user) {
+                throw new Error(`Account of ${config.backendUrl} has no currentUser`);
+              }
+              const avatarUrl = user.profile && user.profile.avatar && user.profile.avatar.url;
+
+              return (
+                <View key={index} style={styles.profileContainer}>
+                  <TouchableWithoutFeedback onPress={() => clicksToShowCounter(openDebugView)}>
+                    <Image style={styles.currentUserAvatarImage} source={{uri: avatarUrl}}></Image>
+                  </TouchableWithoutFeedback>
+
+                  <Text style={styles.serverURL} numberOfLines={1}>{formatYouTrackURL(config.backendUrl)}</Text>
+                  <Text style={styles.profileName}>{user.name}</Text>
+                </View>
+              );
+            })}
+        </Swiper>
+
+        <TouchableOpacity style={styles.logOutButton} onPress={this._logOut}>
+          <Image style={styles.logoutIcon} source={logOutIcon}></Image>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.addAccountButton} onPress={onAddAccount}>
+          <Image style={styles.addAccountIcon} source={addIcon}></Image>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   _renderMenu() {
     const {height} = Dimensions.get('window');
-    const {auth, issueQuery, openDebugView, onAddAccount, onChangeAccount, otherAccounts} = this.props;
+    const {auth, issueQuery} = this.props;
     if (!auth) { //TODO: menu renders right after logOut by some reason.
       return null;
     }
-    const user = auth.currentUser;
-    if (!user) {
+    if (!auth.currentUser) {
       return <View/>;
     }
-    const backendUrl = auth.config.backendUrl;
-    const avatarUrl = user.profile && user.profile.avatar && user.profile.avatar.url;
-
     return (
       <ScrollView style={styles.scrollContainer}>
         <View style={[styles.menuContainer, {paddingTop: getTopPadding(), minHeight: height}]}>
-            <View>
-              <Swiper
-                style={styles.swiper}
-                dotColor={COLOR_DARK_BORDER}
-                activeDotColor="white"
-                loop={false}
-                onIndexChanged={onChangeAccount}
-              >
-                  {[null, ...otherAccounts].map((account, index) => {
-                    if (!account) {
-                      return (
-                        <View key={index}  style={styles.profileContainer}>
-                          <TouchableWithoutFeedback onPress={() => clicksToShowCounter(openDebugView)}>
-                            <Image style={styles.currentUserAvatarImage} source={{uri: avatarUrl}}></Image>
-                          </TouchableWithoutFeedback>
-
-                          <Text style={styles.serverURL} numberOfLines={1}>{formatYouTrackURL(backendUrl)}</Text>
-                          <Text style={styles.profileName}>{user.name}</Text>
-                        </View>
-                      );
-                    }
-                    const config: AppConfigFilled = account.config;
-                    return (
-                      <View key={index} style={styles.profileContainer}>
-                        <TouchableWithoutFeedback>
-                          <Image style={styles.currentUserAvatarImage} source={{uri: avatarUrl}}></Image>
-                        </TouchableWithoutFeedback>
-
-                        <Text style={styles.serverURL} numberOfLines={1}>{formatYouTrackURL(config.backendUrl)}</Text>
-                        <Text style={styles.profileName}>{user.name}</Text>
-                      </View>
-                    );
-                  })}
-              </Swiper>
-
-              <TouchableOpacity style={styles.logOutButton} onPress={this._logOut}>
-                <Image style={styles.logoutIcon} source={logOutIcon}></Image>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.addAccountButton} onPress={onAddAccount}>
-                <Image style={styles.addAccountIcon} source={addIcon}></Image>
-              </TouchableOpacity>
-            </View>
+          {this._renderAccounts()}
 
           <View style={styles.menuItems}>
             <TouchableOpacity activeOpacity={0.4} style={styles.menuItemButton} onPress={this._openIssueList}>

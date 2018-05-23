@@ -11,7 +11,7 @@ import authorizeInHub from '../../components/auth/auth__oauth';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import usage from '../../components/usage/usage';
 import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
-import {openDebugView, checkAuthAndUserAgreement} from '../../actions/app-actions';
+import {openDebugView, applyAuthorization} from '../../actions/app-actions';
 import styles from './log-in.styles';
 
 import type {AuthParams} from '../../components/auth/auth';
@@ -197,7 +197,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onChangeServerUrl: youtrackUrl => Router.EnterServer({serverUrl: youtrackUrl}),
-    onLogIn: authParams => dispatch(checkAuthAndUserAgreement(authParams)),
+    onLogIn: authParams => dispatch(applyAuthorization(authParams)),
     onShowDebugView: () => dispatch(openDebugView())
   };
 };

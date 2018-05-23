@@ -3,7 +3,7 @@ import {AsyncStorage} from 'react-native';
 
 import log from '../log/log';
 
-import type {AuthParams} from '../auth/auth';
+import type {AuthParams, CurrentUser} from '../auth/auth';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {IssueOnList} from '../../flow/Issue';
 
@@ -13,6 +13,8 @@ export type StorageState = {|
   projectId: ?string,
   draftId: ?string,
   authParams: ?AuthParams,
+  currentUser: ?CurrentUser,
+  creationTimestamp: ?number,
   config: ?AppConfigFilled,
   query: ?string,
   lastQueries: ?Array<string>,
@@ -25,7 +27,9 @@ const storageKeys: StorageStateKeys = {
   projectId: 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE',
   draftId: 'DRAFT_ID_STORAGE_KEY',
   authParams: 'yt_mobile_auth',
+  currentUser: 'YT_CURRENT_USER_STORAGE_KEY',
   config: 'BACKEND_CONFIG_STORAGE_KEY',
+  creationTimestamp: 'YT_CREATION_TIMESTAMP_STORAGE_KEY',
   query: 'YT_QUERY_STORAGE',
   lastQueries: 'YT_LAST_QUERIES_STORAGE_KEY',
   issuesCache: 'yt_mobile_issues_cache'
@@ -37,6 +41,8 @@ export const initialState: StorageState = {
   projectId: null,
   draftId: null,
   authParams: null,
+  currentUser: null,
+  creationTimestamp: null,
   config: null,
   query: null,
   lastQueries: null,
