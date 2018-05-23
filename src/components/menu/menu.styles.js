@@ -16,10 +16,7 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: 'black'
   },
-  swiper: {
-    flex: 0,
-    height: 158
-  },
+  swiper: {},
   profileContainer: {
     alignItems: 'center',
     paddingBottom: UNIT * 2,

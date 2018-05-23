@@ -1,6 +1,8 @@
 export const SET_PERMISSIONS = 'app.SET_PERMISSIONS';
 export const INITIALIZE_AUTH = 'app.INITIALIZE_AUTH';
 export const RECEIVE_OTHER_ACCOUNTS = 'app.RECEIVE_OTHER_ACCOUNTS';
+export const BEGIN_ACCOUNT_CHANGE = 'app.BEGIN_ACCOUNT_CHANGE';
+export const END_ACCOUNT_CHANGE = 'app.END_ACCOUNT_CHANGE';
 export const LOG_OUT = 'app.LOG_OUT';
 export const OPEN_MENU = 'app.OPEN_MENU';
 export const CLOSE_MENU = 'app.CLOSE_MENU';

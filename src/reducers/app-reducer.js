@@ -12,7 +12,8 @@ declare type RootState = {
   showDebugView: boolean,
   showUserAgreement: boolean,
   endUserAgreement: ?EndUserAgreement,
-  otherAccounts: ?Array<StorageState>
+  otherAccounts: ?Array<StorageState>,
+  isChangingAccount: boolean
 };
 
 const initialState: RootState = {
@@ -21,7 +22,8 @@ const initialState: RootState = {
   showDebugView: false,
   showUserAgreement: false,
   endUserAgreement: null,
-  otherAccounts: null
+  otherAccounts: null,
+  isChangingAccount: false
 };
 
 export default createReducer(initialState, {
@@ -79,5 +81,11 @@ export default createReducer(initialState, {
   },
   [types.RECEIVE_OTHER_ACCOUNTS](state: RootState, action: {otherAccounts: Array<StorageState>}) {
     return {...state, otherAccounts: action.otherAccounts};
+  },
+  [types.BEGIN_ACCOUNT_CHANGE](state: RootState, action: {otherAccounts: Array<StorageState>}) {
+    return {...state, isChangingAccount: true};
+  },
+  [types.END_ACCOUNT_CHANGE](state: RootState, action: {otherAccounts: Array<StorageState>}) {
+    return {...state, isChangingAccount: false};
   }
 });

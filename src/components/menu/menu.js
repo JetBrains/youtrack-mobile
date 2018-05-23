@@ -33,6 +33,7 @@ type Props = {
   auth: Auth,
   issueQuery: ?string,
   otherAccounts: Array<StorageState>,
+  isChangingAccount: boolean,
   onBeforeLogOut: () => any,
   onLogOut: () => any,
   onAddAccount: () => any,
@@ -93,7 +94,7 @@ export class Menu extends Component<Props, void> {
   }
 
   _renderAccounts() {
-    const {openDebugView, onAddAccount, otherAccounts} = this.props;
+    const {openDebugView, onAddAccount, otherAccounts, isChangingAccount} = this.props;
 
     const accounts = [getStorageState(), ...otherAccounts]
       .sort((a, b) => {
@@ -107,6 +108,8 @@ export class Menu extends Component<Props, void> {
           dotColor={COLOR_DARK_BORDER}
           activeDotColor="white"
           loop={false}
+          height={158}
+          scrollEnabled={!isChangingAccount}
           index={accounts.indexOf(getStorageState())}
           onIndexChanged={(index: number) => this._onChangeAccount(accounts[index])}
         >
@@ -218,6 +221,7 @@ const mapStateToProps = (state, ownProps) => {
     auth: state.app.auth,
     otherAccounts: state.app.otherAccounts,
     issueQuery: state.issueList.query,
+    isChangingAccount: state.app.isChangingAccount,
     ...ownProps
   };
 };

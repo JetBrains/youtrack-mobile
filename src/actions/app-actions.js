@@ -91,6 +91,14 @@ function populateAccounts() {
   };
 }
 
+function beginAccountChange() {
+  return {type: types.BEGIN_ACCOUNT_CHANGE};
+}
+
+function endAccountChange() {
+  return {type: types.END_ACCOUNT_CHANGE};
+}
+
 async function connectToOneMoreServer() {
   return new Promise((resolve, reject) => {
     Router.EnterServer({
@@ -162,6 +170,8 @@ export function changeAccount(account: StorageState) {
     }
     const auth = new Auth(config);
 
+    dispatch(beginAccountChange());
+
     try {
       const otherAccounts = getState().app.otherAccounts.filter(acc => acc !== account);
       const currentAccount = await getStorageState();
@@ -186,6 +196,8 @@ export function changeAccount(account: StorageState) {
     } catch (err) {
       notifyError('Could not change account', err);
     }
+
+    dispatch(endAccountChange());
   };
 }
 
