@@ -75,7 +75,9 @@ export class Menu extends Component<Props, void> {
           text: 'OK',
           onPress: () => {
             this.props.onLogOut();
-            this.props.onClose();
+            if (!hasOtherAccounts) {
+              this.props.onClose();
+            }
           }
         }
       ],
@@ -84,6 +86,9 @@ export class Menu extends Component<Props, void> {
   };
 
   _onChangeAccount = (account) => {
+    if (this.props.isChangingAccount) {
+      return;
+    }
     if (account === getStorageState()) {
       return;
     }
