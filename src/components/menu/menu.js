@@ -36,7 +36,7 @@ type Props = {
   onBeforeLogOut: () => any,
   onLogOut: () => any,
   onAddAccount: () => any,
-  onChangeAccount: (index: number) => any,
+  onChangeAccount: (account: StorageState) => any,
   onOpen: () => any,
   onClose: () => any,
   openDebugView: () => any
@@ -84,8 +84,16 @@ export class Menu extends Component<Props, void> {
     );
   };
 
+  _onChangeAccount = (account) => {
+    if (account === getStorageState()) {
+      return;
+    }
+
+    this.props.onChangeAccount(account);
+  }
+
   _renderAccounts() {
-    const {openDebugView, onAddAccount, onChangeAccount, otherAccounts} = this.props;
+    const {openDebugView, onAddAccount, otherAccounts} = this.props;
 
     const accounts = [getStorageState(), ...otherAccounts]
       .sort((a, b) => {
@@ -100,7 +108,7 @@ export class Menu extends Component<Props, void> {
           activeDotColor="white"
           loop={false}
           index={accounts.indexOf(getStorageState())}
-          onIndexChanged={onChangeAccount}
+          onIndexChanged={(index: number) => this._onChangeAccount(accounts[index])}
         >
             {accounts.map((account, index) => {
               const config: AppConfigFilled = account.config;
@@ -111,7 +119,7 @@ export class Menu extends Component<Props, void> {
               const avatarUrl = user.profile && user.profile.avatar && user.profile.avatar.url;
 
               return (
-                <View key={index} style={styles.profileContainer}>
+                <View key={index} style={[styles.profileContainer, accounts.length > 1 && styles.profileContainerWithDots]}>
                   <TouchableWithoutFeedback onPress={() => clicksToShowCounter(openDebugView)}>
                     <Image style={styles.currentUserAvatarImage} source={{uri: avatarUrl}}></Image>
                   </TouchableWithoutFeedback>
@@ -140,9 +148,7 @@ export class Menu extends Component<Props, void> {
     if (!auth) { //TODO: menu renders right after logOut by some reason.
       return null;
     }
-    if (!auth.currentUser) {
-      return <View/>;
-    }
+
     return (
       <ScrollView style={styles.scrollContainer}>
         <View style={[styles.menuContainer, {paddingTop: getTopPadding(), minHeight: height}]}>
@@ -222,7 +228,7 @@ const mapDispatchToProps = (dispatch) => {
     onClose: () => dispatch(closeMenu()),
     onLogOut: () => dispatch(logOut()),
     onAddAccount: () => dispatch(addAccount()),
-    onChangeAccount: index => dispatch(changeAccount(index)),
+    onChangeAccount: (account: StorageState) => dispatch(changeAccount(account)),
     openDebugView: () => dispatch(openDebugView()),
   };
 };

@@ -1,4 +1,5 @@
 /* @flow */
+'use strict';
 import {AsyncStorage} from 'react-native';
 
 import log from '../log/log';
@@ -37,7 +38,7 @@ const storageKeys: StorageStateKeys = {
 
 let storageState: ?StorageState = null;
 
-export const initialState: StorageState = {
+export const initialState: StorageState = Object.freeze({
   projectId: null,
   draftId: null,
   authParams: null,
@@ -47,7 +48,7 @@ export const initialState: StorageState = {
   query: null,
   lastQueries: null,
   issuesCache: null
-};
+});
 
 export function clearCachesAndDrafts() {
   return AsyncStorage.multiRemove([
@@ -66,6 +67,10 @@ export async function populateStorage(): Promise<StorageState> {
     return acc;
   }, {});
 
+
+  // $FlowFixMe Flow doesn't get that it is the same object
+  const initialStateCopy: StorageState = {...initialState};
+
   storageState = Object.entries(storageKeys)
     .reduce((state, [key, storageKey]) => {
       const value = values[storageKey];
@@ -75,7 +80,7 @@ export async function populateStorage(): Promise<StorageState> {
         state[key] = value;
       }
       return state;
-    }, initialState);
+    }, initialStateCopy);
 
   log.log('Storage has been populated', storageState);
 

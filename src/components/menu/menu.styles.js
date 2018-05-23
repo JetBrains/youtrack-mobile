@@ -22,8 +22,11 @@ export default StyleSheet.create({
   },
   profileContainer: {
     alignItems: 'center',
-    paddingBottom: UNIT * 4,
+    paddingBottom: UNIT * 2,
     ...bottomBorder
+  },
+  profileContainerWithDots: {
+    paddingBottom: UNIT * 4,
   },
   profileName: {
     color: COLOR_GRAY,

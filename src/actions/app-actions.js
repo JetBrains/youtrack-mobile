@@ -49,6 +49,10 @@ export function onNavigateBack(closingView: Object) {
   return {type: types.ON_NAVIGATE_BACK, closingView};
 }
 
+export function receiveOtherAccounts(otherAccounts: Array<StorageState>) {
+  return {type: types.RECEIVE_OTHER_ACCOUNTS, otherAccounts};
+}
+
 export function checkAuthorization() {
   return async (dispatch: (any) => any, getState: () => Object) => {
     const auth = getState().app.auth;
@@ -83,7 +87,7 @@ async function storeConfig(config: AppConfigFilled) {
 function populateAccounts() {
   return async (dispatch: (any) => any, getState: () => Object) => {
     const otherAccounts = await getOtherAccounts();
-    dispatch({type: types.RECEIVE_OTHER_ACCOUNTS, otherAccounts});
+    dispatch(receiveOtherAccounts(otherAccounts));
   };
 }
 
@@ -105,6 +109,28 @@ async function authorizeOnOneMoreServer(auth) {
   });
 }
 
+function applyAccount(config: AppConfigFilled, auth: Auth, authParams: AuthParams) {
+  return async (dispatch: (any) => any, getState: () => RootState) => {
+    const otherAccounts = getState().app.otherAccounts;
+    const currentAccount = await getStorageState();
+    const newOtherAccounts = [currentAccount, ...otherAccounts];
+
+    await storeAccounts(newOtherAccounts);
+    dispatch(receiveOtherAccounts(newOtherAccounts));
+    await flushStorage(initialState);
+
+    await auth.storeAuth(authParams);
+    await storeConfig(config);
+
+    await dispatch(initializeAuth(config));
+    await dispatch(checkUserAgreement());
+
+    if (!getState().app.showUserAgreement) {
+      dispatch(completeInitialization());
+    }
+  };
+}
+
 export function addAccount() {
   return async (dispatch: (any) => any, getState: () => RootState) => {
     log.info('Adding new account flow started');
@@ -116,24 +142,8 @@ export function addAccount() {
       const authParams = await authorizeOnOneMoreServer(auth);
       log.info('Authorized on new server, applying');
 
-      const otherAccounts = await getOtherAccounts();
-      const currentAccount = await getStorageState();
-      const newOtherAccounts = [currentAccount, ...otherAccounts];
-
-      await storeAccounts(newOtherAccounts);
-      dispatch({type: types.RECEIVE_OTHER_ACCOUNTS, otherAccounts: newOtherAccounts});
-      await flushStorage(initialState);
-
+      await dispatch(applyAccount(config, auth, authParams));
       await flushStoragePart({creationTimestamp: Date.now()});
-      await auth.storeAuth(authParams);
-      await storeConfig(config);
-
-      await dispatch(initializeAuth(config));
-      await dispatch(checkUserAgreement());
-
-      if (!getState().app.showUserAgreement) {
-        dispatch(completeInitizliation());
-      }
 
       log.info('Successfully added account', config);
     } catch (err) {
@@ -143,13 +153,43 @@ export function addAccount() {
   };
 }
 
-export function changeAccount(index: number) {
+export function changeAccount(account: StorageState) {
   return async (dispatch: (any) => any, getState: () => RootState) => {
-    throw new Error(`Not implemented ${index}`);
+    log.info('Changing account', account.currentUser);
+    const {config, authParams} = account;
+    if (!authParams) {
+      throw new Error('Account doesn\'t have valid authorization, cannot switch onto it.');
+    }
+    const auth = new Auth(config);
+
+    try {
+      const otherAccounts = getState().app.otherAccounts.filter(acc => acc !== account);
+      const currentAccount = await getStorageState();
+      const newOtherAccounts = [currentAccount, ...otherAccounts];
+
+      await storeAccounts(newOtherAccounts);
+      await flushStorage(account);
+
+      await auth.storeAuth(authParams);
+      await storeConfig(config);
+
+      await dispatch(initializeAuth(config));
+      await dispatch(checkUserAgreement());
+      dispatch(receiveOtherAccounts(newOtherAccounts));
+
+      if (!getState().app.showUserAgreement) {
+        dispatch(completeInitialization());
+      }
+
+
+      log.info('Account has been changed', account.currentUser);
+    } catch (err) {
+      notifyError('Could not change account', err);
+    }
   };
 }
 
-function completeInitizliation() {
+function completeInitialization() {
   return async (dispatch: (any) => any, getState: () => Object) => {
     log.info('Completing initialization: loading permissions cache');
     const auth = getState().app.auth;
@@ -170,7 +210,7 @@ export function acceptUserAgreement() {
     await api.acceptUserAgreement();
 
     dispatch({type: types.HIDE_USER_AGREEMENT});
-    dispatch(completeInitizliation());
+    dispatch(completeInitialization());
   };
 }
 
@@ -227,7 +267,7 @@ export function applyAuthorization(authParams: AuthParams) {
     await dispatch(checkUserAgreement());
 
     if (!getState().app.showUserAgreement) {
-      dispatch(completeInitizliation());
+      dispatch(completeInitialization());
     }
   };
 }
@@ -262,7 +302,7 @@ export function initializeApp(config: AppConfigFilled) {
     await dispatch(checkUserAgreement());
 
     if (!getState().app.showUserAgreement) {
-      dispatch(completeInitizliation());
+      dispatch(completeInitialization());
     }
   };
 }
