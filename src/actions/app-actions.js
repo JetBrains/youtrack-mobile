@@ -8,6 +8,7 @@ import {initialState, clearCachesAndDrafts, populateStorage, getStorageState, fl
 import {Linking} from 'react-native';
 import UrlParse from 'url-parse';
 import usage from '../components/usage/usage';
+import {notifyError} from '../components/notification/notification';
 import {loadConfig} from '../components/config/config';
 import Auth from '../components/auth/auth';
 
@@ -85,42 +86,56 @@ function populateAccounts() {
   };
 }
 
+async function connectToOneMoreServer() {
+  return new Promise((resolve, reject) => {
+    Router.EnterServer({
+      onCancel: reject(),
+      connectToYoutrack: async (newURL) => resolve(await loadConfig(newURL))
+    });
+  });
+}
+
+async function authorizeOnOneMoreServer(auth) {
+  return new Promise((resolve, reject) => {
+    Router.LogIn({
+      auth,
+      onLogIn: (authParams: AuthParams) => resolve(authParams)
+    });
+  });
+}
+
 export function addAccount() {
   return async (dispatch: (any) => any, getState: () => RootState) => {
     log.info('Adding new account flow started');
 
-    //TODO: Handle errors, add a way to cancel
-    Router.EnterServer({
-      onCancel: () => Router.IssueList(),
-      connectToYoutrack: async (newURL) => {
-        const config = await loadConfig(newURL);
-        log.info('Config loaded for new server, logging in...');
+    try {
+      const config = await connectToOneMoreServer();
+      log.info('Config loaded for new server, logging in...');
+      const auth = new Auth(config);
+      const authParams = await authorizeOnOneMoreServer(auth);
+      log.info('Authorized on new server, applying');
 
-        const auth = new Auth(config);
-        Router.LogIn({
-          auth,
-          onLogIn: async (authParams: AuthParams) => {
-            const otherAccounts = await getOtherAccounts();
-            const currentAccount = await getStorageState();
+      const otherAccounts = await getOtherAccounts();
+      const currentAccount = await getStorageState();
 
-            await storeAccounts([currentAccount, ...otherAccounts]);
-            await flushStorage(initialState);
+      await storeAccounts([currentAccount, ...otherAccounts]);
+      await flushStorage(initialState);
 
-            await auth.storeAuth(authParams);
-            await storeConfig(config);
+      await auth.storeAuth(authParams);
+      await storeConfig(config);
 
-            await dispatch(initializeAuth(config));
-            await dispatch(checkUserAgreement());
+      await dispatch(initializeAuth(config));
+      await dispatch(checkUserAgreement());
 
-            if (!getState().app.showUserAgreement) {
-              dispatch(completeInitizliation());
-            }
-
-            log.info('Successfully added account', config);
-          }
-        });
+      if (!getState().app.showUserAgreement) {
+        dispatch(completeInitizliation());
       }
-    });
+
+      log.info('Successfully added account', config);
+    } catch (err) {
+      notifyError('Could not add account', err);
+      Router.IssueList();
+    }
   };
 }
 
