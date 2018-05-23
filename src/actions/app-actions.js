@@ -120,7 +120,7 @@ async function authorizeOnOneMoreServer(auth) {
 function applyAccount(config: AppConfigFilled, auth: Auth, authParams: AuthParams) {
   return async (dispatch: (any) => any, getState: () => RootState) => {
     const otherAccounts = getState().app.otherAccounts;
-    const currentAccount = await getStorageState();
+    const currentAccount = getStorageState();
     const newOtherAccounts = [currentAccount, ...otherAccounts];
 
     await storeAccounts(newOtherAccounts);
@@ -161,7 +161,7 @@ export function addAccount() {
   };
 }
 
-export function changeAccount(account: StorageState) {
+export function changeAccount(account: StorageState, dropCurrentAccount: boolean = false) {
   return async (dispatch: (any) => any, getState: () => RootState) => {
     log.info('Changing account', account.currentUser);
     const {config, authParams} = account;
@@ -174,8 +174,8 @@ export function changeAccount(account: StorageState) {
 
     try {
       const otherAccounts = getState().app.otherAccounts.filter(acc => acc !== account);
-      const currentAccount = await getStorageState();
-      const newOtherAccounts = [currentAccount, ...otherAccounts];
+      const currentAccount = dropCurrentAccount ? null : getStorageState();
+      const newOtherAccounts = [...(currentAccount ? [currentAccount] : []), ...otherAccounts];
 
       await storeAccounts(newOtherAccounts);
       await flushStorage(account);
@@ -198,6 +198,18 @@ export function changeAccount(account: StorageState) {
     }
 
     dispatch(endAccountChange());
+  };
+}
+
+export function removeAccountOrLogOut() {
+  return async (dispatch: (any) => any, getState: () => RootState) => {
+    const otherAccounts = getState().app.otherAccounts;
+    if (otherAccounts.length === 0) {
+      log.info('No more accounts left, logging out.');
+      return dispatch(logOut());
+    }
+    log.info('Removing account, choosing another one.');
+    await dispatch(changeAccount(otherAccounts[0], true));
   };
 }
 
@@ -231,7 +243,7 @@ export function declineUserAgreement() {
     log.info('User agreement has been declined');
     usage.trackEvent('EUA is declined');
     dispatch({type: types.HIDE_USER_AGREEMENT});
-    dispatch(logOut());
+    dispatch(removeAccountOrLogOut());
   };
 }
 

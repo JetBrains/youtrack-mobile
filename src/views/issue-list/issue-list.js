@@ -77,10 +77,6 @@ export class IssueList extends Component<Props, void> {
     });
   }
 
-  logOut = () => {
-    this.props.cacheIssues([]);
-  }
-
   onQueryUpdated = (query: string) => {
     this.props.storeIssuesQuery(query);
     this.props.setIssuesQuery(query);
@@ -160,7 +156,7 @@ export class IssueList extends Component<Props, void> {
     const {query, issues, suggestIssuesQuery, queryAssistSuggestions} = this.props;
 
     return (
-      <Menu onBeforeLogOut={this.logOut}>
+      <Menu>
         <View style={styles.listContainer} testID="issue-list-page">
           {this._renderHeader()}
 

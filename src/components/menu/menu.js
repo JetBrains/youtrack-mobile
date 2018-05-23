@@ -13,7 +13,7 @@ import {COLOR_DARK_BORDER} from '../variables/variables';
 import clicksToShowCounter from '../debug-view/clicks-to-show-counter';
 import {next, logOut as logOutIcon, add as addIcon} from '../icon/icon';
 import {connect} from 'react-redux';
-import {logOut, openMenu, closeMenu, openDebugView, addAccount, changeAccount} from '../../actions/app-actions';
+import {removeAccountOrLogOut, openMenu, closeMenu, openDebugView, addAccount, changeAccount} from '../../actions/app-actions';
 import {getStorageState} from '../storage/storage';
 
 import type {StorageState} from '../storage/storage';
@@ -34,7 +34,6 @@ type Props = {
   issueQuery: ?string,
   otherAccounts: Array<StorageState>,
   isChangingAccount: boolean,
-  onBeforeLogOut: () => any,
   onLogOut: () => any,
   onAddAccount: () => any,
   onChangeAccount: (account: StorageState) => any,
@@ -45,15 +44,13 @@ type Props = {
 
 type DefaultProps = {
   onOpen: () => any,
-  onClose: () => any,
-  onBeforeLogOut: () => any
+  onClose: () => any
 };
 
 export class Menu extends Component<Props, void> {
   static defaultProps: DefaultProps = {
     onOpen: () => {},
-    onClose: () => {},
-    onBeforeLogOut: () => {}
+    onClose: () => {}
   };
 
   _openIssueList = () => {
@@ -67,15 +64,16 @@ export class Menu extends Component<Props, void> {
   }
 
   _logOut = () => {
+    const hasOtherAccounts = this.props.otherAccounts.length > 0;
+
     Alert.alert(
-      'Confirm logout',
-      'Do you really want to log out?',
+      hasOtherAccounts ? 'Confirmation required' : 'Confirm logout',
+      hasOtherAccounts ? 'Do you really want to remove this account?' : 'Do you really want to log out?',
       [
         {text: 'Cancel', style: 'cancel'},
         {
           text: 'OK',
           onPress: () => {
-            this.props.onBeforeLogOut();
             this.props.onLogOut();
             this.props.onClose();
           }
@@ -230,7 +228,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onOpen: () => dispatch(openMenu()),
     onClose: () => dispatch(closeMenu()),
-    onLogOut: () => dispatch(logOut()),
+    onLogOut: () => dispatch(removeAccountOrLogOut()),
     onAddAccount: () => dispatch(addAccount()),
     onChangeAccount: (account: StorageState) => dispatch(changeAccount(account)),
     openDebugView: () => dispatch(openDebugView()),

@@ -76,7 +76,7 @@ describe('Issue list actions', () => {
     await populateStorage();
     actions.storeIssuesQuery('query-update')();
 
-    await getStorageState().query.should.equal('query-update');
+    getStorageState().query.should.equal('query-update');
   });
 
   it('should receive issues', () => {
