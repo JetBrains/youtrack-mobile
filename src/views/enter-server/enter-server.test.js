@@ -1,6 +1,5 @@
 import {EnterServer} from './enter-server';
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
 import {shallow} from 'enzyme';
 import sinon from 'sinon';
 
@@ -31,7 +30,7 @@ describe('EnterServer', () => {
   });
 
   it('should connect to youtrack', async() => {
-    const connectButton = wrapper.find(TouchableOpacity);
+    const connectButton = wrapper.find({testID: 'next'});
     connectButton.simulate('press');
     await waitForNextTick();
 
@@ -40,7 +39,7 @@ describe('EnterServer', () => {
 
   it('should add protocol if url entered has no one', async() => {
     renderComponent('foo.bar');
-    wrapper.find('TouchableOpacity').simulate('press');
+    wrapper.find({testID: 'next'}).simulate('press');
     await waitForNextTick();
 
     connectToYouTrack.should.have.been.calledWith('https://foo.bar');
@@ -48,7 +47,7 @@ describe('EnterServer', () => {
 
   it('should replace HTTP with HTTPS on cloud instance', async() => {
     renderComponent('http://foo.myjetbrains.com');
-    wrapper.find('TouchableOpacity').simulate('press');
+    wrapper.find({testID: 'next'}).simulate('press');
     await waitForNextTick();
 
     connectToYouTrack.should.have.been.calledWith('https://foo.myjetbrains.com');
@@ -56,7 +55,7 @@ describe('EnterServer', () => {
 
   it('should strip wrapping spaces', async() => {
     renderComponent('   foo.bar ');
-    wrapper.find('TouchableOpacity').simulate('press');
+    wrapper.find({testID: 'next'}).simulate('press');
     await waitForNextTick();
 
     connectToYouTrack.should.have.been.calledWith('https://foo.bar');
@@ -64,7 +63,7 @@ describe('EnterServer', () => {
 
   it('should strip tailing slash', async() => {
     renderComponent('http://foo.bar/');
-    wrapper.find('TouchableOpacity').simulate('press');
+    wrapper.find({testID: 'next'}).simulate('press');
     await waitForNextTick();
 
     connectToYouTrack.should.have.been.calledWith('http://foo.bar');
@@ -72,7 +71,7 @@ describe('EnterServer', () => {
 
   it('should try next URL on failure if protocol is entered', async() => {
     connectPromise = Promise.reject({message: 'test reject'});
-    const connectButton = wrapper.find(TouchableOpacity);
+    const connectButton = wrapper.find({testID: 'next'});
 
     connectButton.simulate('press');
     await waitForNextTick();
@@ -88,7 +87,7 @@ describe('EnterServer', () => {
   it('should try next URL on failure if no protocol entered', async() => {
     connectPromise = Promise.reject({message: 'test reject'});
     renderComponent('foo.bar');
-    const connectButton = wrapper.find(TouchableOpacity);
+    const connectButton = wrapper.find({testID: 'next'});
 
     connectButton.simulate('press');
     await waitForNextTick();
@@ -109,7 +108,7 @@ describe('EnterServer', () => {
   it('should stop and display error if IncompatibleYouTrackError throwed', async() => {
     connectPromise = Promise.reject({isIncompatibleYouTrackError: true, message: 'Incompatible youtrack'});
 
-    wrapper.find('TouchableOpacity').simulate('press');
+    wrapper.find({testID: 'next'}).simulate('press');
     await waitForNextTick();
 
     wrapper.state('error').message.should.equal('Incompatible youtrack');

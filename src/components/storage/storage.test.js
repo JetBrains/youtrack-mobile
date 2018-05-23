@@ -36,6 +36,8 @@ describe('Storage', () => {
     MockedStorage.multiRemove.should.have.been.calledWith([
       'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE',
       'DRAFT_ID_STORAGE_KEY',
+      'YT_CURRENT_USER_STORAGE_KEY',
+      'YT_CREATION_TIMESTAMP_STORAGE_KEY',
       'YT_LAST_QUERIES_STORAGE_KEY',
       'yt_mobile_issues_cache'
     ]);
