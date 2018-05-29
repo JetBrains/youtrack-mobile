@@ -3,12 +3,10 @@ import styles from './single-issue.styles';
 import Comment from '../../components/comment/comment';
 import type {IssueComment, Attachment} from '../../flow/CustomFields';
 
-import {View, Text, Image} from 'react-native';
+import {View, Text} from 'react-native';
 import React, {Component} from 'react';
 
-import {visibility} from '../../components/icon/icon';
-import IssuePermissions from '../../components/issue-permissions/issue-permissions';
-import {getVisibilityPresentation} from '../../components/issue-formatter/issue-formatter';
+import CommentVisibility from '../../components/comment/comment__visibility';
 
 type Props = {
   comments: Array<IssueComment>,
@@ -68,12 +66,7 @@ export default class SingleIssueComments extends Component<Props, void> {
             onCopyCommentLink={() => this.props.onCopyCommentLink(comment)}
           />
 
-          {IssuePermissions.isSecured(comment) &&
-          <View style={styles.visibility}>
-            <Image style={styles.visibilityIcon} source={visibility} />
-            <Text style={styles.visibilityText}>{getVisibilityPresentation(comment)}</Text>
-          </View>
-          }
+          <CommentVisibility comment={comment}/>
         </View>
       );
     });

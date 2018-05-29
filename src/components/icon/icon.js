@@ -29,4 +29,6 @@ export {default as vote} from './vote-active.png';
 export {default as voteInactive} from './vote-inactive.png';
 export {default as trash} from './trash.png';
 export {default as lockInactive} from './lock-inactive.png';
-export {default as visibility} from './visibility.png';
+export {default as visibilitySmall} from './visibility-small.png';
+export {default as visibility} from './visibility-action.png';
+export {default as visibilityActive} from './visibility-action-active.png';
