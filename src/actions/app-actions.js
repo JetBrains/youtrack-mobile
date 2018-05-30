@@ -165,6 +165,10 @@ export function addAccount(serverUrl: string = '') {
       log.info(`Successfully added account of "${getStorageState().currentUser.name}" on "${config.backendUrl}"`);
     } catch (err) {
       notifyError('Could not add account', err);
+      const {otherAccounts} = getState().app;
+      if (!getStorageState().config && otherAccounts.length) {
+        await dispatch(changeAccount(otherAccounts[0], true));
+      }
       Router.IssueList();
     }
   };

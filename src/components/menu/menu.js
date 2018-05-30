@@ -98,8 +98,8 @@ export class Menu extends Component<Props, void> {
 
   _renderAccounts() {
     const {openDebugView, onAddAccount, otherAccounts, isChangingAccount} = this.props;
-
     const accounts = [getStorageState(), ...otherAccounts]
+      .filter(account => !!account.config) // Do not render if account is not ready
       .sort((a, b) => {
         return (b.creationTimestamp || 0) - (a.creationTimestamp || 0);
       });
