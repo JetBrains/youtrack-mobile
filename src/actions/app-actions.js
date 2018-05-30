@@ -230,7 +230,7 @@ export function removeAccountOrLogOut() {
 
 function completeInitialization() {
   return async (dispatch: (any) => any, getState: () => Object) => {
-    log.info('Completing initialization: loading permissions cache');
+    log.debug('Completing initialization: loading permissions cache');
     const auth = getState().app.auth;
     await auth.loadPermissions(auth.authParams);
     dispatch(setPermissions(auth));
@@ -275,7 +275,7 @@ function checkUserAgreement() {
     const auth = getState().app.auth;
     const {currentUser} = auth;
 
-    log.info('Checking user agreement', currentUser);
+    log.debug('Checking user agreement', currentUser);
     if (currentUser && currentUser.endUserAgreementConsent && currentUser.endUserAgreementConsent.accepted) {
       log.info('The EUA is already accepted, skiping check');
       return;
@@ -283,11 +283,11 @@ function checkUserAgreement() {
 
     const agreement: ?EndUserAgreement = await api.getUserAgreement();
     if (!agreement) {
-      log.info('EUA is not supported by backend, skipping check');
+      log.debug('EUA is not supported by backend, skipping check');
       return;
     }
     if (!agreement.enabled) {
-      log.info('EUA is disabled, skipping check');
+      log.debug('EUA is disabled, skipping check');
       return;
     }
 

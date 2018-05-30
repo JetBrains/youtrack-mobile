@@ -82,7 +82,7 @@ export async function populateStorage(): Promise<StorageState> {
       return state;
     }, initialStateCopy);
 
-  log.log('Storage has been populated', {...storageState, issuesCache: 'NOT PRINTED'});
+  log.debug('Storage has been populated', {...storageState, issuesCache: 'NOT PRINTED'});
 
   return storageState;
 }
@@ -97,7 +97,7 @@ export function getStorageState(): StorageState {
 export async function flushStorage(newState: StorageState): Promise<StorageState> {
     // $FlowFixMe Flow doesn't get that it is the same object
   storageState = {...newState};
-  log.log('Flushing storage', {...storageState, issuesCache: 'NOT PRINTED'});
+  log.debug('Flushing storage', {...storageState, issuesCache: 'NOT PRINTED'});
 
   const pairsToRemove = Object.entries(storageState)
     .filter(([key, value]) => !value);
@@ -107,7 +107,7 @@ export async function flushStorage(newState: StorageState): Promise<StorageState
     .filter(([key, value]) => !!value);
 
   if (pairsToWrite.length === 0) {
-    log.log('Storage state is empty, no actuall write has been done');
+    log.debug('Storage state is empty, no actuall write has been done');
     return newState;
   }
 

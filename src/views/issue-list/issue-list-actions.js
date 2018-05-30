@@ -116,7 +116,7 @@ export function readCachedIssues() {
     const issues = getStorageState().issuesCache;
 
     if (issues && issues.length) {
-      log.info(`Loaded ${issues.length} cached issues`);
+      log.debug(`Loaded ${issues.length} cached issues`);
       dispatch(receiveIssues(issues));
     }
   };
