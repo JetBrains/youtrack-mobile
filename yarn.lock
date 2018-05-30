@@ -5316,9 +5316,9 @@ react-native-swipeout@huston007/react-native-swipeout#e4f7985170baf5dc5b7e0ae8b1
     prop-types "^15.5.10"
     react-tween-state "^0.1.5"
 
-react-native-swiper@1.5.13:
+react-native-swiper@huston007/react-native-swiper#64c56814f:
   version "1.5.13"
-  resolved "https://registry.yarnpkg.com/react-native-swiper/-/react-native-swiper-1.5.13.tgz#fa695cd4ab77b9a9df2d2bfee38ea7274dd07a2e"
+  resolved "https://codeload.github.com/huston007/react-native-swiper/tar.gz/64c56814f49cc6c711004d12b125c29e1c6d9ee9"
   dependencies:
     prop-types "^15.5.10"
 
