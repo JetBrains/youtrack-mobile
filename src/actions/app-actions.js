@@ -151,6 +151,7 @@ export function addAccount(serverUrl: string = '') {
         Router.IssueList();
       });
       log.info(`Config loaded for new server (${config.backendUrl}), logging in...`);
+      // Note: this auth won't be initialized to the end ever. It is just a temperary instance
       const auth = new Auth(config);
       const authParams = await authorizeOnOneMoreServer(auth, function onBack(serverUrl: string) {
         log.info('Authorization canceled by user, going back');
@@ -161,7 +162,7 @@ export function addAccount(serverUrl: string = '') {
       await dispatch(applyAccount(config, auth, authParams));
       await flushStoragePart({creationTimestamp: Date.now()});
 
-      log.info(`Successfully added account of "${auth.currentUser.name}" on "${config.backendUrl}"`);
+      log.info(`Successfully added account of "${getStorageState().currentUser.name}" on "${config.backendUrl}"`);
     } catch (err) {
       notifyError('Could not add account', err);
       Router.IssueList();
