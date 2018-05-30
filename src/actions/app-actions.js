@@ -162,11 +162,13 @@ export function addAccount(serverUrl: string = '') {
       await dispatch(applyAccount(config, auth, authParams));
       await flushStoragePart({creationTimestamp: Date.now()});
 
-      log.info(`Successfully added account of "${getStorageState().currentUser.name}" on "${config.backendUrl}"`);
+      const user = (getStorageState().currentUser || {});
+      log.info(`Successfully added account of "${user.name}" on "${config.backendUrl}"`);
     } catch (err) {
       notifyError('Could not add account', err);
       const {otherAccounts} = getState().app;
       if (!getStorageState().config && otherAccounts.length) {
+        log.info('Recovering from add account error');
         await dispatch(changeAccount(otherAccounts[0], true));
       }
       Router.IssueList();
