@@ -194,9 +194,14 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onChangeServerUrl: youtrackUrl => Router.EnterServer({serverUrl: youtrackUrl}),
+    onChangeServerUrl: youtrackUrl => {
+      if (ownProps.onChangeServerUrl) {
+        return ownProps.onChangeServerUrl(youtrackUrl);
+      }
+      Router.EnterServer({serverUrl: youtrackUrl});
+    },
     onLogIn: authParams => dispatch(applyAuthorization(authParams)),
     onShowDebugView: () => dispatch(openDebugView())
   };

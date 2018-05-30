@@ -99,19 +99,21 @@ function endAccountChange() {
   return {type: types.END_ACCOUNT_CHANGE};
 }
 
-async function connectToOneMoreServer() {
-  return new Promise((resolve, reject) => {
+async function connectToOneMoreServer(serverUrl: string, onBack: Function): Promise<AppConfigFilled> {
+  return new Promise(resolve => {
     Router.EnterServer({
-      onCancel: reject,
+      onCancel: onBack,
+      serverUrl,
       connectToYoutrack: async (newURL) => resolve(await loadConfig(newURL))
     });
   });
 }
 
-async function authorizeOnOneMoreServer(auth) {
-  return new Promise((resolve, reject) => {
+async function authorizeOnOneMoreServer(auth, onBack: (serverUrl: string) => any) {
+  return new Promise(resolve => {
     Router.LogIn({
       auth,
+      onChangeServerUrl: onBack,
       onLogIn: (authParams: AuthParams) => resolve(authParams)
     });
   });
@@ -139,21 +141,27 @@ function applyAccount(config: AppConfigFilled, auth: Auth, authParams: AuthParam
   };
 }
 
-export function addAccount() {
+export function addAccount(serverUrl: string = '') {
   return async (dispatch: (any) => any, getState: () => RootState) => {
     log.info('Adding new account flow started');
 
     try {
-      const config = await connectToOneMoreServer();
-      log.info('Config loaded for new server, logging in...');
+      const config = await connectToOneMoreServer(serverUrl, () => {
+        log.info('Adding new server canceled by user');
+        Router.IssueList();
+      });
+      log.info(`Config loaded for new server (${config.backendUrl}), logging in...`);
       const auth = new Auth(config);
-      const authParams = await authorizeOnOneMoreServer(auth);
+      const authParams = await authorizeOnOneMoreServer(auth, function onBack(serverUrl: string) {
+        log.info('Authorization canceled by user, going back');
+        dispatch(addAccount(serverUrl));
+      });
       log.info('Authorized on new server, applying');
 
       await dispatch(applyAccount(config, auth, authParams));
       await flushStoragePart({creationTimestamp: Date.now()});
 
-      log.info('Successfully added account', config);
+      log.info(`Successfully added account of "${auth.currentUser.name}" on "${config.backendUrl}"`);
     } catch (err) {
       notifyError('Could not add account', err);
       Router.IssueList();
