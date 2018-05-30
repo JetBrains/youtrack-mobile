@@ -82,7 +82,7 @@ export async function populateStorage(): Promise<StorageState> {
       return state;
     }, initialStateCopy);
 
-  log.log('Storage has been populated', storageState);
+  log.log('Storage has been populated', {...storageState, issuesCache: 'NOT PRINTED'});
 
   return storageState;
 }
@@ -96,7 +96,7 @@ export function getStorageState(): StorageState {
 
 export async function flushStorage(newState: StorageState): Promise<StorageState> {
   storageState = newState;
-  log.log('Flushing storage', storageState);
+  log.log('Flushing storage', {...storageState, issuesCache: 'NOT PRINTED'});
 
   const pairsToRemove = Object.entries(storageState)
     .filter(([key, value]) => !value);
