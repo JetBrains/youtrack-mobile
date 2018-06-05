@@ -10,6 +10,7 @@ import Swiper from 'react-native-swiper';
 import Router from '../router/router';
 import Auth from '../auth/auth';
 import {COLOR_DARK_BORDER} from '../variables/variables';
+import Avatar from '../avatar/avatar';
 import clicksToShowCounter from '../debug-view/clicks-to-show-counter';
 import {next, logOut as logOutIcon, add as addIcon} from '../icon/icon';
 import {connect} from 'react-redux';
@@ -122,12 +123,12 @@ export class Menu extends Component<Props, void> {
               if (!user) {
                 throw new Error(`Account of ${config.backendUrl} has no currentUser`);
               }
-              const avatarUrl = user.profile && user.profile.avatar && user.profile.avatar.url;
+              const avatarUrl = user.profile && user.profile.avatar && user.profile.avatar.url || '';
 
               return (
                 <View key={index} style={[styles.profileContainer, accounts.length > 1 && styles.profileContainerWithDots]}>
                   <TouchableWithoutFeedback onPress={() => clicksToShowCounter(openDebugView)}>
-                    <Image style={styles.currentUserAvatarImage} source={{uri: avatarUrl}}></Image>
+                    <Avatar size={64} userName={user.name} source={{uri: avatarUrl}}/>
                   </TouchableWithoutFeedback>
 
                   <Text style={styles.serverURL} numberOfLines={1}>{formatYouTrackURL(config.backendUrl)}</Text>

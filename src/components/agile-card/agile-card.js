@@ -1,8 +1,9 @@
 /* @flow */
-import {View, Image, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import React, {PureComponent} from 'react';
 import {UNIT, COLOR_FONT} from '../variables/variables';
 import ColorField from '../color-field/color-field';
+import Avatar from '../avatar/avatar';
 import ApiHelper from '../api/api__helper';
 import type {IssueOnList} from '../../flow/Issue';
 import type {CustomFieldValue} from '../../flow/CustomFields';
@@ -45,9 +46,10 @@ export default class AgileCard extends PureComponent<Props, void> {
         <View style={styles.assignees}>
           {assignees.map((assignee: CustomFieldValue) => {
             return (
-              <Image
+              <Avatar
                 key={assignee.id}
-                style={styles.avatar}
+                size={40}
+                userName={assignee.name}
                 source={{ uri: assignee.avatarUrl }}
                 testID="card-avatar"
               />
@@ -82,10 +84,5 @@ const styles = StyleSheet.create({
   assignees: {
     flexDirection: 'row',
     height: 40
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20
   }
 });

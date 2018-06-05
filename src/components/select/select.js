@@ -5,6 +5,7 @@ import styles from './select.styles';
 import ColorField from '../color-field/color-field';
 import {notifyError} from '../notification/notification';
 import {checkWhite} from '../icon/icon';
+import Avatar from '../avatar/avatar';
 import {COLOR_PLACEHOLDER, UNIT} from '../variables/variables';
 import getTopPadding, {onHeightChange, isIphoneX} from '../header/header__top-padding';
 
@@ -147,7 +148,7 @@ export default class Select extends Component<Props, State> {
     return (
       <TouchableOpacity key={item.id} style={styles.row} onPress={() => this._onTouchItem(item)}>
         <View style={styles.selectItemValue}>
-          {item.avatarUrl && <Image style={styles.itemIcon} source={{uri: item.avatarUrl}}/>}
+          {item.avatarUrl && <Avatar userName={this.props.getTitle(item)} size={32} style={styles.itemIcon} source={{uri: item.avatarUrl}}/>}
 
           {this._renderTitle(item)}
         </View>

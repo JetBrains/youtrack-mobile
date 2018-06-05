@@ -48,10 +48,7 @@ export default StyleSheet.create({
     flexDirection: 'row'
   },
   itemIcon: {
-    width: UNIT * 4,
-    height: UNIT * 4,
-    marginRight: UNIT * 2,
-    borderRadius: UNIT * 2
+    marginRight: UNIT * 2
   },
   itemTitle: {
     fontSize: 24,

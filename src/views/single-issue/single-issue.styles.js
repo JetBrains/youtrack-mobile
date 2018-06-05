@@ -126,11 +126,6 @@ export default StyleSheet.create({
   commentSuggestionLogin: {
     color: COLOR_FONT_GRAY
   },
-  commentSuggestionAvatar: {
-    width: UNIT * 4,
-    height: UNIT * 4,
-    borderRadius: UNIT * 2
-  },
   loading: {
     textAlign: 'center',
     marginTop: UNIT * 2,

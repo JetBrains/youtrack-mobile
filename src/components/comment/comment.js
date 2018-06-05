@@ -9,12 +9,13 @@ import {
   COLOR_BLACK
 } from '../../components/variables/variables';
 
-import {View, Text, Image} from 'react-native';
+import {View, Text} from 'react-native';
 import React, {Component} from 'react';
 import Swipeout from 'react-native-swipeout';
 import SwipeButton from './comment__swipe-button';
 import {relativeDate, getEntityPresentation} from '../issue-formatter/issue-formatter';
 import {reply, share, pencil, trash} from '../icon/icon';
+import Avatar from '../avatar/avatar';
 import type {IssueComment, Attachment} from '../../flow/CustomFields';
 
 type Props = {
@@ -128,8 +129,9 @@ export default class Comment extends Component<Props, void> {
           autoClose={true}
         >
           <View style={styles.commentWrapper}>
-            <Image
-              style={styles.avatar}
+            <Avatar
+              userName={getEntityPresentation(comment.author)}
+              size={40}
               source={{uri: comment.author.avatarUrl}}
             />
             <View style={styles.comment}>

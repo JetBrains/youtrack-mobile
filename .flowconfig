@@ -13,6 +13,7 @@
 .*/node_modules/simple-markdown/.*
 .*/node_modules/react-navigation/.*
 .*/node_modules/react-native-easy-toast/.*
+.*/node_modules/react-native-linear-gradient/.*
 .*/node_modules/react-native-gesture-responder/.*
 .*/node_modules/@huston007/react-native-mock/.*
 .*/node_modules/react-native-tab-view/.*

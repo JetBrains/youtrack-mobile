@@ -96,12 +96,12 @@ def enableProguardInReleaseBuilds = false
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "25.0.2"
+    buildToolsVersion project.buildToolsVersion
 
     defaultConfig {
         applicationId "com.jetbrains.youtrack.mobile.app"
-        minSdkVersion 16
-        targetSdkVersion 22
+        minSdkVersion project.minSdkVersion
+        targetSdkVersion project.targetSdkVersion
         versionCode buildVersionCode(System.getenv('YT_MOBILE_VERSION'))
         versionName buildVersionName(System.getenv('YT_MOBILE_VERSION'))
         ndk {
@@ -143,6 +143,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-linear-gradient')
     compile project(':react-native-eventsource')
     compile project(':react-native-device-info')
     compile fileTree(dir: "libs", include: ["*.jar"])

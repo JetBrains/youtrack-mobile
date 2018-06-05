@@ -14,11 +14,6 @@ export default StyleSheet.create({
     color: COLOR_FONT,
     fontWeight: 'bold'
   },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20
-  },
   comment: {
     marginLeft: UNIT,
     flex: 1

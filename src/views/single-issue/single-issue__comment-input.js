@@ -5,6 +5,7 @@ import throttle from 'lodash.throttle';
 import {COLOR_PLACEHOLDER} from '../../components/variables/variables';
 import MultilineInput from '../../components/multiline-input/multiline-input';
 import {closeOpaque} from '../../components/icon/icon';
+import Avatar from '../../components/avatar/avatar';
 import type {IssueUser, IssueComment} from '../../flow/CustomFields';
 
 import styles from './single-issue.styles';
@@ -136,7 +137,7 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
             <TouchableOpacity key={user.id}
                               style={styles.commentSuggestionButton}
                               onPress={() => this.applySuggestion(user)}>
-              <Image source={{uri: user.avatarUrl}} style={styles.commentSuggestionAvatar}/>
+              <Avatar userName={user.fullName} size={32} source={{uri: user.avatarUrl}}/>
               <Text style={styles.commentSuggestionName}>{user.fullName}</Text>
               <Text style={styles.commentSuggestionLogin}>  @{user.login}</Text>
             </TouchableOpacity>

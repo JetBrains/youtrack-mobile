@@ -5290,6 +5290,12 @@ react-native-keychain@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-1.0.0.tgz#2fd0394b3ad222e3710e5672a25013e129894c99"
 
+react-native-linear-gradient@2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.4.0.tgz#51d8ea12bb72a59bede9edc87b694b16b64cf435"
+  dependencies:
+    prop-types "^15.5.10"
+
 react-native-markdown-view@1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/react-native-markdown-view/-/react-native-markdown-view-1.1.4.tgz#390fdbe2ececa92505572efe1911ec2c7fe8bc13"

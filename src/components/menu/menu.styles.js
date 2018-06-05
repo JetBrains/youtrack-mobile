@@ -1,8 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {COLOR_PINK, UNIT, COLOR_GRAY, COLOR_FONT, COLOR_FONT_ON_BLACK} from '../../components/variables/variables';
 
-const AVATAR_SIZE = UNIT * 8;
-
 const bottomBorder = {
   borderColor: COLOR_FONT,
   borderBottomWidth: 0.5
@@ -38,11 +36,6 @@ export default StyleSheet.create({
   logoutIcon: {
     height: UNIT * 3,
     resizeMode: 'contain'
-  },
-  currentUserAvatarImage: {
-    width: AVATAR_SIZE,
-    height: AVATAR_SIZE,
-    borderRadius: AVATAR_SIZE/2
   },
   logOutButton: {
     position: 'absolute',
