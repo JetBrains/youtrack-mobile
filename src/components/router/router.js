@@ -1,8 +1,8 @@
 import React, {createElement} from 'react';
 import {Easing, Animated} from 'react-native';
-import {StackNavigator, NavigationActions} from 'react-navigation';
-import transitionConfigs from 'react-navigation/src/views/CardStack/TransitionConfigs';
-import cardInterpolator from 'react-navigation/src/views/CardStack/CardStackStyleInterpolator';
+import {createStackNavigator, StackActions, NavigationActions} from 'react-navigation';
+import transitionConfigs from 'react-navigation/src/views/StackView/StackViewTransitionConfigs';
+import cardInterpolator from 'react-navigation/src/views/StackView/StackViewStyleInterpolator';
 
 const TransitionSpec = {
   duration: 500,
@@ -68,7 +68,7 @@ class Router {
   }
 
   finalizeRoutes(initialRouteName) {
-    this.AppNavigator = StackNavigator(this.routes, {
+    this.AppNavigator = createStackNavigator(this.routes, {
       initialRouteName,
       headerMode: 'none',
       transitionConfig: this.getTransitionConfig,
@@ -88,7 +88,7 @@ class Router {
     newRoute.props = Object.assign({}, newRoute.props, props);
 
     if (newRoute.type === 'reset') {
-      return this._navigator.dispatch(NavigationActions.reset({
+      return this._navigator.dispatch(StackActions.reset({
         index: 0,
         actions: [NavigationActions.navigate({routeName, params: newRoute.props})]
       }));
