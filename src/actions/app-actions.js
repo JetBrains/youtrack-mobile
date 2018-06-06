@@ -7,6 +7,7 @@ import log from '../components/log/log';
 import {initialState, clearCachesAndDrafts, populateStorage, getStorageState, flushStorage, flushStoragePart, getOtherAccounts, storeAccounts} from '../components/storage/storage';
 import {Linking} from 'react-native';
 import UrlParse from 'url-parse';
+import openByUrlDetector, {isOneOfServers} from '../components/open-url-handler/open-url-handler';
 import usage from '../components/usage/usage';
 import {notifyError} from '../components/notification/notification';
 import {loadConfig} from '../components/config/config';
@@ -311,6 +312,43 @@ export function applyAuthorization(authParams: AuthParams) {
   };
 }
 
+function subscribeToURL() {
+  return async (dispatch: (any) => any, getState: () => Object) => {
+    function isAuthorized() {
+      const auth = getState().app.auth;
+      const {currentUser} = auth;
+      if (!currentUser) {
+        log.debug('User is not authorized, URL won\'t be opened');
+      }
+      return !!currentUser;
+    }
+
+    function isServerConfigured(url: ?string) {
+      if (!isOneOfServers(url || '', [(getStorageState().config || {}).backendUrl])) {
+        notifyError('Open URL error', {message: `"${url || ''}" doesn\'t match the configured server`});
+        return false;
+      }
+      return true;
+    }
+
+    openByUrlDetector(
+      (url, issueId) => {
+        if (!isAuthorized() || !isServerConfigured(url)) {
+          return;
+        }
+        usage.trackEvent('app', 'Open issue in app by URL');
+        Router.SingleIssue({issueId});
+      },
+      (url, issuesQuery) => {
+        if (!isAuthorized() || !isServerConfigured(url)) {
+          return;
+        }
+        usage.trackEvent('app', 'Open issues query in app by URL');
+        Router.IssueList({query: issuesQuery});
+      });
+  };
+}
+
 export function initializeApp(config: AppConfigFilled) {
   return async (dispatch: (any) => any, getState: () => Object) => {
     Router._getNavigator() && Router.Home({
@@ -341,8 +379,10 @@ export function initializeApp(config: AppConfigFilled) {
     await dispatch(checkUserAgreement());
 
     if (!getState().app.showUserAgreement) {
-      dispatch(completeInitialization());
+      await dispatch(completeInitialization());
     }
+
+    dispatch(subscribeToURL());
   };
 }
 

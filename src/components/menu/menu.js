@@ -56,12 +56,12 @@ export class Menu extends Component<Props, void> {
 
   _openIssueList = () => {
     this.props.onClose();
-    Router.IssueList({auth: this.props.auth});
+    Router.IssueList();
   }
 
   _openAgileBoard = () => {
     this.props.onClose();
-    Router.AgileBoard({auth: this.props.auth});
+    Router.AgileBoard();
   }
 
   _logOut = () => {

@@ -31,7 +31,7 @@ export type State = {
   commandIsApplying: boolean
 };
 
-const initialState: State = {
+export const initialState: State = {
   unloadedIssueState: null,
   issueId: '',
   issue: null,

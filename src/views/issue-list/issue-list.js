@@ -11,7 +11,6 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
-import openByUrlDetector from '../../components/open-url-handler/open-url-handler';
 import styles from './issue-list.styles';
 import Header from '../../components/header/header';
 import QueryAssist from '../../components/query-assist/query-assist';
@@ -50,23 +49,12 @@ export class IssueList extends Component<Props, void> {
   }
 
   componentDidMount() {
-    this.unsubscribeFromOpeningWithIssueUrl = openByUrlDetector(
-      this.props.auth.config.backendUrl,
-      (issueId) => {
-        usage.trackEvent('Issue list', 'Open issue in app by URL');
-        Router.SingleIssue({issueId});
-      },
-      (issuesQuery) => {
-        this.onQueryUpdated(issuesQuery);
-      });
-
     this.props.initializeIssuesList(this.props.overridenQuery);
 
     AppState.addEventListener('change', this._handleAppStateChange);
   }
 
   componentWillUnmount() {
-    this.unsubscribeFromOpeningWithIssueUrl();
     AppState.removeEventListener('change', this._handleAppStateChange);
   }
 

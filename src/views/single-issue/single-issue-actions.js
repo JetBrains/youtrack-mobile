@@ -8,6 +8,7 @@ import log from '../../components/log/log';
 import Router from '../../components/router/router';
 import {showActions} from '../../components/action-sheet/action-sheet';
 import usage from '../../components/usage/usage';
+import {initialState}  from './single-issue-reducers';
 import type {IssueFull, CommandSuggestionResponse} from '../../flow/Issue';
 import type {CustomField, IssueProject, FieldValue, IssueComment} from '../../flow/CustomFields';
 import type Api from '../../components/api/api';
@@ -564,7 +565,6 @@ export function showIssueActions(actionSheet: Object) {
 
 export function openNestedIssueView(issue: ?IssueFull, issueId: ?string) {
   return async (dispatch: (any) => any, getState: StateGetter) => {
-    dispatch(unloadActiveIssueView());
     if (!issue) {
       return Router.SingleIssue({issueId});
     }
@@ -574,6 +574,15 @@ export function openNestedIssueView(issue: ?IssueFull, issueId: ?string) {
       issuePlaceholder: issue,
       issueId: issue.id
     });
+  };
+}
+
+export function unloadIssueIfExist() {
+  return async (dispatch: (any) => any, getState: StateGetter) => {
+    const state = getState().singleIssue;
+    if (state !== initialState) {
+      dispatch(unloadActiveIssueView());
+    }
   };
 }
 

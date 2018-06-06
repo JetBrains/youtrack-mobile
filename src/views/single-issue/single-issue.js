@@ -48,6 +48,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
 
   componentDidMount() {
     usage.trackScreenView(CATEGORY_NAME);
+    this.props.unloadIssueIfExist();
     this.props.setIssueId(this.props.issueId);
     this.props.loadIssue();
     this.props.loadIssueComments();

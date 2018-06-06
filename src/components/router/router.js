@@ -90,11 +90,15 @@ class Router {
     if (newRoute.type === 'reset') {
       return this._navigator.dispatch(StackActions.reset({
         index: 0,
-        actions: [NavigationActions.navigate({routeName, params: newRoute.props})]
+        actions: [NavigationActions.navigate({routeName, params: newRoute.props, key: Math.random().toString()})]
       }));
     }
 
-    this._navigator.dispatch(NavigationActions.navigate({routeName, params: newRoute.props}));
+    this._navigator.dispatch(NavigationActions.navigate({
+      routeName,
+      params: newRoute.props,
+      key: Math.random().toString()
+    }));
   }
 
   pop() {
