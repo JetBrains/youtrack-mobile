@@ -14,6 +14,11 @@ buildscript {
     }
 }
 
+project.ext.compileSdkVersion = 23
+project.ext.buildToolsVersion = '25.0.2'
+project.ext.minSdkVersion = 16
+project.ext.targetSdkVersion = 22
+
 allprojects {
     repositories {
         mavenLocal()
