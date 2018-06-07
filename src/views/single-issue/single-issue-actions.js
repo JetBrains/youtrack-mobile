@@ -271,7 +271,7 @@ export function addComment(commentText: string) {
 
       dispatch(receiveComment(createdComment));
       dispatch(hideCommentInput());
-      dispatch(loadIssue());
+      dispatch(loadIssueComments());
     } catch (err) {
       dispatch(showCommentInput());
       dispatch(setCommentText(commentText));

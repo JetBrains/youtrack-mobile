@@ -12,7 +12,7 @@ export type State = {
   isRefreshing: boolean,
   issueLoaded: boolean,
   commentsLoaded: boolean,
-  issueComments: ?Array<IssueComment>,
+  tmpIssueComments: ?Array<IssueComment>,
   commentsLoadingError: ?Error,
   editMode: boolean,
   isSavingEditedIssue: boolean,
@@ -38,7 +38,7 @@ export const initialState: State = {
   isRefreshing: false,
   issueLoaded: false,
   commentsLoaded: false,
-  issueComments: null,
+  tmpIssueComments: null,
   commentsLoadingError: null,
   editMode: false,
   isSavingEditedIssue: false,
@@ -78,12 +78,13 @@ export default createReducer(initialState, {
     return {...state, isRefreshing: false};
   },
   [types.RECEIVE_ISSUE]: (state: State, action: {issue: IssueFull}): State => {
+    const {issue} = state;
     return {
       ...state,
       issueLoaded: true,
       issue: {
         ...action.issue,
-        comments: state.issueComments
+        comments: (issue || {}).comments ? issue.comments : state.tmpIssueComments
       }
     };
   },
@@ -92,7 +93,7 @@ export default createReducer(initialState, {
     return {
       ...state,
       commentsLoaded: true,
-      issueComments: comments,
+      tmpIssueComments: comments,
       issue: state.issue ? {...state.issue, comments} : state.issue
     };
   },
