@@ -175,13 +175,6 @@ export function stopApplyingCommand() {
   return {type: types.STOP_APPLYING_COMMAND};
 }
 
-const getIssue = async (api, issueId) => {
-  if (/[A-Z]/.test(issueId)) {
-    return api.hackishGetIssueByIssueReadableId(issueId);
-  }
-  return api.getIssue(issueId);
-};
-
 export function loadIssueComments() {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().singleIssue.issueId;
@@ -193,7 +186,7 @@ export function loadIssueComments() {
       dispatch(receiveComments(comments));
     } catch (err) {
       dispatch({type: types.RECEIVE_COMMENTS_ERROR, error: err});
-      notifyError('Failed to load comments', err);
+      notifyError(`Failed to load comments for "${issueId}"`, err);
     }
   };
 }
@@ -204,7 +197,7 @@ export function loadIssue() {
     const api: Api = getApi();
 
     try {
-      const issue = await getIssue(api, issueId);
+      const issue = await api.getIssue(issueId);
       log.info(`Issue "${issueId}" loaded`);
       issue.fieldHash = ApiHelper.makeFieldHash(issue);
 

@@ -23,7 +23,6 @@ describe('Issue view actions', () => {
     fakeComment = {id: 'fake-comment', text: 'fake-text'};
     fakeApi = {
       getIssue: sinon.stub().returns(fakeIssue),
-      hackishGetIssueByIssueReadableId: sinon.stub().returns(fakeIssue),
       getIssueComments: sinon.stub().returns([fakeComment]),
       submitComment: sinon.stub().returns(fakeComment)
     };
@@ -39,16 +38,6 @@ describe('Issue view actions', () => {
     const dispatched = store.getActions();
     expect(dispatched[0]).toEqual({type: types.SET_ISSUE_ID, issueId: fakeIssue.id});
     expect(dispatched[1]).toEqual({type: types.RECEIVE_ISSUE, issue: fakeIssue});
-  });
-
-  it('should load issue by hackish way if it has readable ID format', async () => {
-    store = mockStore({
-      singleIssue: {issueId: 'TEST-123'}
-    });
-
-    await store.dispatch(actions.loadIssue());
-
-    fakeApi.hackishGetIssueByIssueReadableId.should.have.been.calledWith('TEST-123');
   });
 
   it('should load issue comments', async () => {

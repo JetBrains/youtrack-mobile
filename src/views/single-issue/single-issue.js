@@ -19,6 +19,7 @@ import Wiki from '../../components/wiki/wiki';
 import {notifyError} from '../../components/notification/notification';
 import {COLOR_PINK} from '../../components/variables/variables';
 import usage from '../../components/usage/usage';
+import log from '../../components/log/log';
 import IssueSummary from '../../components/issue-summary/issue-summary';
 import CommandDialog from '../../components/command-dialog/command-dialog';
 import styles from './single-issue.styles';
@@ -198,7 +199,10 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
           attachments={issue.attachments}
           attachingImage={attachingImage}
           imageHeaders={getApi().auth.getAuthorizationHeaders()}
-          onImageLoadingError={this.props.refreshIssue}
+          onImageLoadingError={err => {
+            log.warn('onImageLoadingError', err.nativeEvent);
+            this.props.refreshIssue();
+          }}
           onOpenAttachment={(type, name) => usage.trackEvent(CATEGORY_NAME, type === 'image' ? 'Showing image' : 'Open attachment by URL')}
         /> : null}
       </View>

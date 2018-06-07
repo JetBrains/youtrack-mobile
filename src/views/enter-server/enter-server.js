@@ -161,7 +161,7 @@ export class EnterServer extends Component<Props, State> {
 
           <View>
             <Text style={styles.hintText}>
-              Requires YouTrack 7.0 or later
+              Requires YouTrack 2016.2 or later
             </Text>
           </View>
         </View>

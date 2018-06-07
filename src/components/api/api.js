@@ -77,17 +77,6 @@ class Api {
     return await res.json();
   }
 
-  async hackishGetIssueByIssueReadableId(issueId: string) {
-    const queryString = qs.stringify({
-      query: `issue id: ${issueId}`,
-      $top: 1,
-      fields: issueFields.singleIssue.toString()
-    });
-
-    const issues = await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`);
-    return issues[0];
-  }
-
   async getIssue(id: string): Promise<IssueFull> {
     const queryString = qs.stringify({
       fields: issueFields.singleIssue.toString()
