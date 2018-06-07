@@ -116,6 +116,7 @@ export class Menu extends Component<Props, void> {
           scrollEnabled={!isChangingAccount}
           index={accounts.indexOf(getStorageState())}
           onIndexChanged={(index: number) => this._onChangeAccount(accounts[index])}
+          onTouchStart={() => clicksToShowCounter(openDebugView)}
         >
             {accounts.map((account, index) => {
               const config: AppConfigFilled = account.config;
@@ -127,7 +128,7 @@ export class Menu extends Component<Props, void> {
 
               return (
                 <View key={index} style={[styles.profileContainer, accounts.length > 1 && styles.profileContainerWithDots]}>
-                  <TouchableWithoutFeedback onPress={() => clicksToShowCounter(openDebugView)}>
+                  <TouchableWithoutFeedback>
                     <Avatar size={64} userName={user.name} source={{uri: avatarUrl}}/>
                   </TouchableWithoutFeedback>
 
