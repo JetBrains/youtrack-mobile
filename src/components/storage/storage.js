@@ -97,7 +97,6 @@ export function getStorageState(): StorageState {
 export async function flushStorage(newState: StorageState): Promise<StorageState> {
     // $FlowFixMe Flow doesn't get that it is the same object
   storageState = {...newState};
-  log.debug('Flushing storage', {...storageState, issuesCache: 'NOT PRINTED'});
 
   const pairsToRemove = Object.entries(storageState)
     .filter(([key, value]) => !value);
@@ -118,6 +117,7 @@ export async function flushStorage(newState: StorageState): Promise<StorageState
 }
 
 export async function flushStoragePart(part: Object): Promise<StorageState> {
+  log.debug('Flushing storage part', {...part, issuesCache: 'NOT PRINTED'});
   return flushStorage({
     ...getStorageState(),
     ...part
