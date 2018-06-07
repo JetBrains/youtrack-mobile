@@ -1,6 +1,6 @@
 /* @flow */
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, NativeModules, Linking} from 'react-native';
+import {View, Text, TouchableOpacity, Linking} from 'react-native';
 import usage from '../usage/usage';
 import styles from './error-boundary.styles';
 import {connect} from 'react-redux';
@@ -28,10 +28,6 @@ class ErrorBoundary extends Component<Props, State> {
     this.setState({error});
   }
 
-  relaunchApp = () => {
-    NativeModules.DevMenu.reload();
-  };
-
   contactSupport = () => Linking.openURL('https://youtrack-support.jetbrains.com/hc');
 
   render() {
@@ -47,9 +43,6 @@ class ErrorBoundary extends Component<Props, State> {
           </TouchableOpacity>
           <TouchableOpacity onPress={openDebugView} style={styles.button}>
             <Text style={styles.buttonText}>Open debug view</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={this.relaunchApp} style={styles.button}>
-            <Text style={styles.buttonText}>Relaunch app</Text>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={this.contactSupport} style={styles.button}>
