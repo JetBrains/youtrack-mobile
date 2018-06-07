@@ -311,7 +311,7 @@ export function submitEditedComment(comment: IssueComment) {
       log.info(`Comment ${updatedComment.id} edited`);
       notify('Comment successfully edited');
       dispatch(stopEditingComment());
-      await dispatch(loadIssue());
+      await dispatch(loadIssueComments());
     } catch (err) {
       notifyError('Failed to edit comment', err);
     } finally {
