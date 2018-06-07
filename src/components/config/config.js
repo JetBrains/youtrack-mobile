@@ -9,19 +9,21 @@ const PROTOCOL_REGEXP = /^https?:\/\//i;
 const YOUTRACK_CONTEXT_REGEXP = /\/youtrack$/i;
 const VERSION_DETECT_FALLBACK_URL = '/rest/workflow/version';
 
-const config: AppConfig = {
-  backendUrl: null,
-  statisticsEnabled: null,
-  version: null,
-  auth: {
-    serverUri: null,
-    clientId: null,
-    clientSecret: null,
-    youtrackServiceId: null,
-    scopes: 'Hub YouTrack',
-    landingUrl: 'ytoauth://landing.url'
-  }
-};
+function getDefaultConfig(): AppConfig {
+  return {
+    backendUrl: null,
+    statisticsEnabled: null,
+    version: null,
+    auth: {
+      serverUri: null,
+      clientId: null,
+      clientSecret: null,
+      youtrackServiceId: null,
+      scopes: 'Hub YouTrack',
+      landingUrl: 'ytoauth://landing.url'
+    }
+  };
+}
 
 class IncompatibleYouTrackError extends Error {
   isIncompatibleYouTrackError = true;
@@ -85,6 +87,7 @@ async function loadConfig(ytUrl: string) {
     .then(res => {
       handleIncompatibleYouTrack(res, ytUrl);
 
+      const config = getDefaultConfig();
       config.backendUrl = ytUrl;
       config.statisticsEnabled = res.statisticsEnabled;
       config.version = res.version;
