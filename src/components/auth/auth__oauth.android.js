@@ -23,6 +23,7 @@ function authorizeInHub(config: AppConfig) {
       const [, query_string] = url.match(/\?(.*)/);
       const code = qs.parse(query_string).code;
       resolve(code);
+      Linking.removeEventListener('url', onOpenWithUrl);
     }
 
     Linking.addEventListener('url', onOpenWithUrl);
