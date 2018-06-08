@@ -27,7 +27,7 @@ export default class IssuePermissions {
     this.currentUser = currentUser;
   }
 
-  static isSecured(entity: Object) {
+  static isSecured(entity: ?Object) {
     if (!entity || !entity.visibility) {
       return false;
     }
@@ -47,6 +47,34 @@ export default class IssuePermissions {
     }
   }
 
+  static createVisibility(visibility: Object = {}) {
+    visibility.$type = ResourceTypes.VISIBILITY_LIMITED;
+    visibility.permittedUsers = visibility.permittedUsers || [];
+    visibility.permittedGroups = visibility.permittedGroups || [];
+    return visibility;
+  }
+
+    static toggleVisibilityOption(visibility: Object, option: Object): Object {
+    visibility = IssuePermissions.createVisibility(visibility);
+    for (const it of [
+      {type: ResourceTypes.USER, key: 'permittedUsers'},
+      {type: ResourceTypes.USER_GROUP, key: 'permittedGroups'}
+    ]) {
+      if (option.$type === it.type) {
+        if (hasOption(visibility[it.key], option.id)) {
+          visibility[it.key] = visibility[it.key].filter((user) => user.id !== option.id);
+        } else {
+          visibility[it.key].push(option);
+        }
+        break;
+      }
+    }
+    return visibility;
+
+    function hasOption(collection: Array<Object>, optionId: string) {
+      return collection.some((user) => user.id === optionId);
+    }
+  }
 
   canUpdateGeneralInfo(issue: AnyIssue) {
     const projectId = issue.project.ringId;

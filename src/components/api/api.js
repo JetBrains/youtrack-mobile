@@ -442,6 +442,23 @@ class Api {
     const url =`${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}/board/columns/${columnId}/cells/${cellId}/draftIssue?${queryString}`;
     return await this.makeAuthorizedRequest(url, 'POST', {});
   }
+
+  async getVisibilityOptions(issueId: string): Promise<Array<Object>> {
+    const queryString = qs.stringify({
+      $top: 50,
+      fields: issueFields.getVisibility.toString()
+    });
+    const url =`${this.youTrackUrl}/api/visibilityGroups?${queryString}`;
+    const visibilityOptions = await this.makeAuthorizedRequest(url, 'POST', {issues: [{id: issueId}]});
+    visibilityOptions.visibilityUsers = ApiHelper.convertRelativeUrls((visibilityOptions.visibilityUsers || []), 'avatarUrl', this.config.backendUrl);
+    return visibilityOptions;
+  }
+
+  async saveComment(issueId: string, commentData: Object): Promise<Object> {
+    return await this.makeAuthorizedRequest(
+      `${this.youTrackUrl}/api/issues/${issueId}/comments/${commentData.id}`, 'POST', commentData
+    );
+  }
 }
 
 /**

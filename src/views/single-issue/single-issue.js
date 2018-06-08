@@ -1,5 +1,5 @@
 /* @flow */
-import {Text, View, Image, TouchableOpacity, ScrollView, Platform, RefreshControl} from 'react-native';
+import {Text, View, Image, TouchableOpacity, ScrollView, Platform, RefreshControl, Modal} from 'react-native';
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
@@ -30,12 +30,17 @@ import type IssuePermissions from '../../components/issue-permissions/issue-perm
 import type {State as SingleIssueState} from './single-issue-reducers';
 import type {IssueFull, IssueOnList} from '../../flow/Issue';
 import type {IssueComment} from '../../flow/CustomFields';
+import Select from '../../components/select/select';
 
 const CATEGORY_NAME = 'Issue';
 
 type AdditionalProps = {
   issuePermissions: IssuePermissions,
-  issuePlaceholder: Object
+  issuePlaceholder: Object,
+
+  selectProps: Object,
+  onOpenCommentVisibilitySelect: (any) => any,
+  onCloseSelect: (any) => any,
 };
 
 type SingleIssueProps = SingleIssueState & typeof issueActions & AdditionalProps;
@@ -217,6 +222,24 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     />;
   }
 
+  _renderCommentVisibilitySelect() {
+    const {selectProps, onCloseSelect} = this.props;
+    return (
+      <Modal
+        visible
+        animationType="fade"
+        onRequestClose={() => true}
+      >
+        <Select
+          getTitle={item => item.name}
+          onCancel={onCloseSelect}
+          style={styles.visibilitySelect}
+          {...selectProps}
+        />
+      </Modal>
+    );
+  }
+
   render() {
     const {
       issue,
@@ -253,8 +276,12 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
 
       deleteComment,
       restoreComment,
-      deleteCommentPermanently
+      deleteCommentPermanently,
+      onOpenCommentVisibilitySelect,
+      isSelectOpen
     } = this.props;
+
+    const isSecured = this.props.issuePermissions.constructor.isSecured(editingComment);
 
     return (
       <View style={styles.container} testID="issue-view">
@@ -319,6 +346,8 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
 
             onCancelEditing={stopEditingComment}
             editingComment={editingComment}
+            onEditCommentVisibility={onOpenCommentVisibilitySelect}
+            isSecured={isSecured}
 
             onRequestCommentSuggestions={loadCommentSuggestions}
             suggestionsAreLoading={suggestionsAreLoading}
@@ -358,6 +387,8 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
         )}
 
         {Platform.OS == 'ios' && !addCommentMode && <KeyboardSpacer style={styles.keyboardSpacer}/>}
+
+        {isSelectOpen && this._renderCommentVisibilitySelect()}
       </View>
     );
   }
@@ -371,6 +402,10 @@ const mapStateToProps = (state: {app: Object, singleIssue: SingleIssueState}, ow
     ...state.singleIssue,
     issuePlaceholder: ownProps.issuePlaceholder,
     issueId: ownProps.issueId,
+
+    selectProps: state.singleIssue.selectProps,
+    onOpenCommentVisibilitySelect: state.singleIssue.onOpenCommentVisibilitySelect,
+    onCloseSelect: state.singleIssue.onCloseSelect,
     ...(isOnTop ? {} : {addCommentMode: false})
   };
 };

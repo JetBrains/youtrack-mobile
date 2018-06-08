@@ -144,7 +144,7 @@ const ISSUE_TAGS_FIELDS = toField([
 
 const ISSUE_ATTACHMENTS_FIELDS = toField(['id', 'name', 'url', 'mimeType']);
 
-const PERMITTED_GROUP_FIELDS = toField([
+const USER_GROUP_FIELDS = toField([
   '$type',
   'id',
   'name',
@@ -155,13 +155,22 @@ const VISIBILITY_FIELDS = toField([{
   visibility: toField([
     '$type',
     {
-      'permittedGroups': [PERMITTED_GROUP_FIELDS]
+      'permittedGroups': [USER_GROUP_FIELDS]
     },
     {
       'permittedUsers': [ISSUE_USER_FIELDS]
     }
   ])
 }]);
+
+const GET_VISIBILITY_FIELDS = toField([
+  '$type',
+  {
+    visibilityGroups: USER_GROUP_FIELDS
+  }, {
+    visibilityUsers: ISSUE_USER_FIELDS
+  }
+]);
 
 const ISSUE_COMMENTS_FIELDS = toField([
   'id',
@@ -277,5 +286,6 @@ export default {
   issueFolder: ISSUE_FOLDER_FIELDS,
   commandSuggestionFields: COMMAND_SUGGESTION_FIELDS,
   userAgreement: USER_AGREEMENT_FIELDS,
-  userConsent: USER_CONSENT_FIELDS
+  userConsent: USER_CONSENT_FIELDS,
+  getVisibility: GET_VISIBILITY_FIELDS
 };

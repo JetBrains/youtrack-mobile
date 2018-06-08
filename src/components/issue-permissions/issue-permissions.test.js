@@ -189,4 +189,99 @@ describe('IssuePermissions', function () {
       };
     }
   });
+
+
+  describe('createVisibility', function() {
+    it('should create visibility with empty `permittedUsers` and `permittedGroups` and limited visibility type', () => {
+      const visibility = IssuePermissions.createVisibility();
+
+      visibility.$type.should.equal(ResourceTypes.VISIBILITY_LIMITED);
+      visibility.permittedUsers.length.should.equal(0);
+      visibility.permittedGroups.length.should.equal(0);
+    });
+
+    it('should create change visibility type to limited but leave `permittedUsers` and `permittedGroups` as is', () => {
+      const itemMock = {};
+      const visibilityMock = {
+        $type: ResourceTypes.VISIBILITY_UNLIMITED,
+        permittedUsers: [itemMock],
+        permittedGroups: [{}, itemMock]
+      };
+
+      const visibility = IssuePermissions.createVisibility(visibilityMock);
+
+      visibility.$type.should.equal(ResourceTypes.VISIBILITY_LIMITED);
+      visibility.permittedUsers.length.should.equal(1);
+      visibility.permittedUsers[0].should.equal(itemMock);
+      visibility.permittedGroups.length.should.equal(2);
+      visibility.permittedGroups[1].should.equal(itemMock);
+    });
+  });
+
+
+  describe('toggleVisibilityOption', function() {
+    it('should create a visibility with empty `permittedUsers` and `permittedGroups` and limited visibility type', () => {
+      const visibility = IssuePermissions.createVisibility();
+
+      visibility.$type.should.equal(ResourceTypes.VISIBILITY_LIMITED);
+      visibility.permittedUsers.length.should.equal(0);
+      visibility.permittedGroups.length.should.equal(0);
+    });
+
+    it('should remove an item from `permittedUsers`', () => {
+      const userMock1 = {id: 'bar'};
+      const userMock2 = {$type: ResourceTypes.USER, id: 'foo'};
+      const visibilityMock = {
+        permittedUsers: [userMock1, userMock2]
+      };
+
+      const visibility = IssuePermissions.toggleVisibilityOption(visibilityMock, userMock2);
+
+      visibility.permittedUsers.length.should.equal(1);
+      visibility.permittedUsers[0].should.equal(userMock1);
+      visibility.permittedGroups.length.should.equal(0);
+    });
+
+    it('should add an item to `permittedUsers`', () => {
+      const userMock = {$type: ResourceTypes.USER, id: 'foo'};
+      const visibilityMock = {
+        permittedUsers: []
+      };
+
+      const visibility = IssuePermissions.toggleVisibilityOption(visibilityMock, userMock);
+
+      visibility.$type.should.equal(ResourceTypes.VISIBILITY_LIMITED);
+      visibility.permittedUsers.length.should.equal(1);
+      visibility.permittedUsers[0].id.should.equal(userMock.id);
+      visibility.permittedGroups.length.should.equal(0);
+    });
+
+    it('should remove an item from `permittedGroup`', () => {
+      const userMock1 = {id: 'bar'};
+      const userMock2 = {$type: ResourceTypes.USER_GROUP, id: 'foo'};
+      const visibilityMock = {
+        permittedGroups: [userMock1, userMock2]
+      };
+
+      const visibility = IssuePermissions.toggleVisibilityOption(visibilityMock, userMock2);
+
+      visibility.permittedGroups.length.should.equal(1);
+      visibility.permittedGroups[0].should.equal(userMock1);
+      visibility.permittedUsers.length.should.equal(0);
+    });
+
+    it('should add an item to `permittedGroup`', () => {
+      const userMock = {$type: ResourceTypes.USER_GROUP, id: 'foo'};
+      const visibilityMock = {
+        permittedGroups: []
+      };
+
+      const visibility = IssuePermissions.toggleVisibilityOption(visibilityMock, userMock);
+
+      visibility.$type.should.equal(ResourceTypes.VISIBILITY_LIMITED);
+      visibility.permittedGroups.length.should.equal(1);
+      visibility.permittedGroups[0].should.equal(userMock);
+      visibility.permittedUsers.length.should.equal(0);
+    });
+  });
 });

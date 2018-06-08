@@ -28,7 +28,11 @@ export type State = {
   showCommandDialog: boolean,
   initialCommand: string,
   commandSuggestions: ?CommandSuggestionResponse,
-  commandIsApplying: boolean
+  commandIsApplying: boolean,
+  isSelectOpen: boolean,
+  selectProps: Object,
+  onOpenCommentVisibilitySelect: Function,
+  onCloseSelect: Function
 };
 
 export const initialState: State = {
@@ -54,7 +58,11 @@ export const initialState: State = {
   showCommandDialog: false,
   initialCommand: '',
   commandSuggestions: null,
-  commandIsApplying: false
+  commandIsApplying: false,
+  isSelectOpen: false,
+  selectProps: {},
+  onOpenCommentVisibilitySelect: () => {},
+  onCloseSelect: () => {}
 };
 
 export default createReducer(initialState, {
@@ -296,4 +304,21 @@ export default createReducer(initialState, {
   [types.STOP_APPLYING_COMMAND]: (state: State): State => {
     return {...state, commandIsApplying: false};
   },
+  [types.RECEIVE_VISIBILITY_OPTIONS]: (state: State, action: {options: Object}): State => {
+    return {...state, visibilityOptions: action.options};
+  },
+  [types.OPEN_ISSUE_SELECT]: (state: State, action: Object) => {
+    return {
+      ...state,
+      isSelectOpen: true,
+      selectProps: action.selectProps
+    };
+  },
+  [types.CLOSE_ISSUE_SELECT]: (state: State) => {
+    return {
+      ...state,
+      isSelectOpen: false,
+      selectProps: null
+    };
+  }
 });

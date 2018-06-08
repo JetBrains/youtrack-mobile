@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 import throttle from 'lodash.throttle';
 import {COLOR_PLACEHOLDER} from '../../components/variables/variables';
 import MultilineInput from '../../components/multiline-input/multiline-input';
-import {closeOpaque} from '../../components/icon/icon';
+import {closeOpaque, visibility, visibilityActive} from '../../components/icon/icon';
 import Avatar from '../../components/avatar/avatar';
 import type {IssueUser, IssueComment} from '../../flow/CustomFields';
 
@@ -20,8 +20,10 @@ type Props = {
 
   suggestionsAreLoading: boolean,
   onRequestCommentSuggestions: (query: string) => any,
-  suggestions: ?{users: Array<IssueUser>}
-};
+  suggestions: ?{users: Array<IssueUser>},
+
+  onEditCommentVisibility: (commentId: string) => any,
+  isSecured: boolean};
 
 type State = {
   isSaving: boolean,
@@ -149,7 +151,7 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
   }
 
   render() {
-    const {editingComment, onCancelEditing} = this.props;
+    const {editingComment, onCancelEditing, onEditCommentVisibility} = this.props;
     return (
       <View>
         {this.renderSuggestions()}
@@ -189,6 +191,16 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
             }}
             style={styles.commentInput}
           />
+
+          <TouchableOpacity style={styles.visibilityChangeButton}
+                            onPress={() => onEditCommentVisibility(editingComment)}>
+
+            {!this.state.isSaving
+              ? <Image source={this.props.isSecured ? visibilityActive: visibility}
+                       style={styles.visibilityChangeIcon} />
+              : <ActivityIndicator/>
+            }
+          </TouchableOpacity>
 
           <TouchableOpacity style={styles.commentSendButton}
                             disabled={!this.state.commentText}

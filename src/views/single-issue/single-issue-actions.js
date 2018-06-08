@@ -13,6 +13,8 @@ import type {IssueFull, CommandSuggestionResponse} from '../../flow/Issue';
 import type {CustomField, IssueProject, FieldValue, IssueComment} from '../../flow/CustomFields';
 import type Api from '../../components/api/api';
 import type {State as SingleIssueState} from './single-issue-reducers';
+import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
+import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 
 const CATEGORY_NAME = 'Issue';
 
@@ -635,5 +637,46 @@ export function applyCommand(command: string) {
     } finally {
       dispatch(stopApplyingCommand());
     }
+  };
+}
+
+export function receiveCommentVisibilityOptions() {
+  return {type: types.RECEIVE_VISIBILITY_OPTIONS};
+}
+
+export function onCloseSelect() {
+  return {type: types.CLOSE_ISSUE_SELECT};
+}
+
+export function onOpenCommentVisibilitySelect(comment: IssueComment) {
+  return (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const issue: IssueFull = getState().singleIssue.issue;
+    usage.trackEvent(CATEGORY_NAME, 'Open visibility select');
+
+    dispatch({
+      type: types.OPEN_ISSUE_SELECT,
+      selectProps: {
+        show: true,
+        placeholder: 'Select user or group',
+        dataSource: async () => {
+          const options = await api.getVisibilityOptions(issue.id);
+          dispatch(receiveCommentVisibilityOptions());
+          return [].concat(options.visibilityGroups || []).concat(options.visibilityUsers || []);
+        },
+        selectedItems: [].concat(comment.visibility.permittedGroups || []).concat(comment.visibility.permittedUsers || []),
+        getTitle: item => getEntityPresentation(item),
+        onSelect: (selectedOption) => {
+          dispatch(onCloseSelect());
+          comment.visibility = IssuePermissions.toggleVisibilityOption(comment.visibility, selectedOption);
+          try {
+            api.saveComment(issue.id, comment);
+          } catch (error) {
+            notifyError('Failed to update issue comment', error);
+          }
+          usage.trackEvent(CATEGORY_NAME, 'Visibility changed');
+        }
+      }
+    });
   };
 }

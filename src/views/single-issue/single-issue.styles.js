@@ -198,5 +198,19 @@ export default StyleSheet.create({
   },
   keyboardSpacer: {
     backgroundColor: COLOR_BLACK
-  }
+  },
+  visibilitySelect: {
+    top: 0,
+    right: 0,
+    left: 0,
+    bottom: 0,
+    backgroundColor: COLOR_TRANSPARENT_BLACK
+  },
+  visibilityChangeButton: {
+    padding: UNIT
+  },
+  visibilityChangeIcon: {
+    resizeMode: 'contain',
+    width: 28
+  },
 });
