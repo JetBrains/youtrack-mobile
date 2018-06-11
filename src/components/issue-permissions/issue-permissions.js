@@ -5,6 +5,7 @@
 import type { Permissions } from '../auth/auth__permissions';
 import type {AnyIssue} from '../../flow/Issue';
 import type {CustomField, IssueComment, IssueProject} from '../../flow/CustomFields';
+import type {Visibility} from '../../flow/Visibility';
 import ResourceTypes from '../api/api__resource-types';
 
 export const CREATE_ISSUE = 'JetBrains.YouTrack.CREATE_ISSUE';
@@ -42,19 +43,19 @@ export default class IssuePermissions {
       (visibility.permittedGroups && visibility.permittedGroups.length)
     );
 
-    function hasLimitedVisibility(visibility: Object) {
+    function hasLimitedVisibility(visibility: Visibility) {
       return visibility && visibility.$type && visibility.$type === ResourceTypes.VISIBILITY_LIMITED;
     }
   }
 
-  static createVisibility(visibility: Object = {}) {
+  static createVisibility(visibility: Visibility = {}) {
     visibility.$type = ResourceTypes.VISIBILITY_LIMITED;
     visibility.permittedUsers = visibility.permittedUsers || [];
     visibility.permittedGroups = visibility.permittedGroups || [];
     return visibility;
   }
 
-    static toggleVisibilityOption(visibility: Object, option: Object): Object {
+    static toggleVisibilityOption(visibility: Visibility, option: Object): Object {
     visibility = IssuePermissions.createVisibility(visibility);
     for (const it of [
       {type: ResourceTypes.USER, key: 'permittedUsers'},
