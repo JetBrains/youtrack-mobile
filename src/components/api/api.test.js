@@ -116,19 +116,19 @@ describe('API', () => {
         avatarUrl: 'http://foo.bar'
       }
     });
-    const res = await createInstance().submitComment('test-issue-id', 'test comment text');
+    const res = await createInstance().submitComment('test-issue-id', {text: 'test comment text'});
 
     res.id.should.equal('test-comment');
   });
 
-  it('should update existing comment if ID providded', async () => {
+  it('should update existing comment if ID is provided', async () => {
     fetchMock.post(`^${serverUrl}/api/issues/test-issue-id/comments/123`, {
       id: 'test-comment',
       author: {
         avatarUrl: 'http://foo.bar'
       }
     });
-    const res = await createInstance().submitComment('test-issue-id', 'test comment text', '123');
+    const res = await createInstance().submitComment('test-issue-id', {text: 'test comment text', id: '123'});
 
     res.id.should.equal('test-comment');
   });
@@ -142,7 +142,7 @@ describe('API', () => {
         avatarUrl: relativeUrl
       }
     });
-    const res = await createInstance().submitComment('test-issue-id', 'test comment text');
+    const res = await createInstance().submitComment('test-issue-id', {text: 'test comment text'});
 
     res.author.avatarUrl.should.equal(`${serverUrl}${relativeUrl}`);
   });

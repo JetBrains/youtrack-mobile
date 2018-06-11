@@ -260,7 +260,7 @@ export function addComment(commentText: string) {
     const {issue} = getState().singleIssue;
     dispatch(startSubmittingComment());
     try {
-      const createdComment = await api.submitComment(issue.id, commentText);
+      const createdComment = await api.submitComment(issue.id, {text: commentText});
       log.info(`Comment added to issue ${issue.id}`);
       usage.trackEvent(CATEGORY_NAME, 'Add comment', 'Success');
 
@@ -300,7 +300,7 @@ export function submitEditedComment(comment: IssueComment) {
     dispatch(startSubmittingComment());
 
     try {
-      const updatedComment = await getApi().submitComment(issueId,  comment.text, comment.id);
+      const updatedComment = await getApi().submitComment(issueId, {id: comment.id, text: comment.text});
 
       dispatch(updateComment(updatedComment));
       log.info(`Comment ${updatedComment.id} edited`);
@@ -662,15 +662,16 @@ export function onOpenCommentVisibilitySelect(comment: IssueComment) {
         dataSource: async () => {
           const options = await api.getVisibilityOptions(issue.id);
           dispatch(receiveCommentVisibilityOptions());
-          return [].concat(options.visibilityGroups || []).concat(options.visibilityUsers || []);
+          return [...(options.visibilityGroups || []), ...(options.visibilityUsers || [])];
         },
-        selectedItems: [].concat(comment.visibility.permittedGroups || []).concat(comment.visibility.permittedUsers || []),
+
+        selectedItems: [...(comment.visibility.permittedGroups || []), ...(comment.visibility.permittedUsers || [])],
         getTitle: item => getEntityPresentation(item),
         onSelect: (selectedOption) => {
           dispatch(onCloseSelect());
           comment.visibility = IssuePermissions.toggleVisibilityOption(comment.visibility, selectedOption);
           try {
-            api.saveComment(issue.id, comment);
+            api.submitComment(issue.id, {id: comment.id, visibility: comment.visibility});
           } catch (error) {
             notifyError('Failed to update issue comment', error);
           }

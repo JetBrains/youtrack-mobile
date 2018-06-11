@@ -190,14 +190,16 @@ class Api {
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/admin/users/me/drafts/${issueId}/fields/${fieldId}?${queryString}`, 'POST', body);
   }
 
-  async submitComment(issueId: string, commentText: string, commentId: string = '') {
+  async submitComment(issueId: string, comment: IssueComment) {
     const queryString = qs.stringify({fields: issueFields.issueComment.toString()});
-    const url = `${this.youTrackIssueUrl}/${issueId}/comments/${commentId}?${queryString}`;
+    const url = `${this.youTrackIssueUrl}/${issueId}/comments/${comment.id || ''}?${queryString}`;
 
-    const comment = await this.makeAuthorizedRequest(url, 'POST', {text: commentText});
-    comment.author.avatarUrl = handleRelativeUrl(comment.author.avatarUrl, this.config.backendUrl);
+    const submittedComment = await this.makeAuthorizedRequest(url, 'POST', comment);
+    if (submittedComment.author && submittedComment.author.avatarUrl) {
+      submittedComment.author.avatarUrl = handleRelativeUrl(submittedComment.author.avatarUrl, this.config.backendUrl);
+    }
 
-    return comment;
+    return submittedComment;
   }
 
   async updateCommentDeleted(issueId: string, commentId: string, deleted: boolean) {
@@ -443,7 +445,7 @@ class Api {
     return await this.makeAuthorizedRequest(url, 'POST', {});
   }
 
-  async getVisibilityOptions(issueId: string): Promise<Array<Object>> {
+  async getVisibilityOptions(issueId: string): Promise<any> {
     const queryString = qs.stringify({
       $top: 50,
       fields: issueFields.getVisibility.toString()
@@ -452,12 +454,6 @@ class Api {
     const visibilityOptions = await this.makeAuthorizedRequest(url, 'POST', {issues: [{id: issueId}]});
     visibilityOptions.visibilityUsers = ApiHelper.convertRelativeUrls((visibilityOptions.visibilityUsers || []), 'avatarUrl', this.config.backendUrl);
     return visibilityOptions;
-  }
-
-  async saveComment(issueId: string, commentData: Object): Promise<Object> {
-    return await this.makeAuthorizedRequest(
-      `${this.youTrackUrl}/api/issues/${issueId}/comments/${commentData.id}`, 'POST', commentData
-    );
   }
 }
 
