@@ -3,6 +3,8 @@ import {Image} from 'react-native';
 import React, {Component} from 'react';
 import DefaultAvatar from './default-avatar';
 
+const defaultsCache = new Map();
+
 type Props = {
   userName: string,
   size: number,
@@ -24,10 +26,20 @@ export default class Avatar extends Component<Props, State> {
   }
 
   async checkIfImageIsSVG() {
+    const {uri} = this.props.source;
+    if (defaultsCache.has(uri)) {
+      this.setState({renderDefault: defaultsCache.get(uri)});
+      return;
+    }
+
     const response = await fetch(this.props.source.uri);
+
     if (response.headers.get('Content-Type') === 'image/svg+xml') {
       this.setState({renderDefault: true});
+      defaultsCache.set(uri, true);
+      return;
     }
+    defaultsCache.set(uri, false);
   }
 
   render() {
