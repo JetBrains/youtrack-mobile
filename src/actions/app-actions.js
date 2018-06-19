@@ -179,7 +179,7 @@ export function addAccount(serverUrl: string = '') {
 
 export function changeAccount(account: StorageState, dropCurrentAccount: boolean = false) {
   return async (dispatch: (any) => any, getState: () => RootState) => {
-    log.info('Changing account', account.currentUser);
+    log.info('Changing account', getState().currentUser, account.currentUser);
     const {config, authParams} = account;
     if (!authParams) {
       throw new Error('Account doesn\'t have valid authorization, cannot switch onto it.');
