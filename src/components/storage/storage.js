@@ -50,6 +50,25 @@ export const initialState: StorageState = Object.freeze({
   issuesCache: null
 });
 
+function cleanAndLogState(message, state) {
+  const CENSORED = 'CENSORED';
+  const forLog = {...state};
+
+  if (forLog.authParams) {
+    forLog.authParams = {
+      ...forLog.authParams,
+      access_token: CENSORED,
+      refresh_token: CENSORED,
+    };
+  }
+
+  if (forLog.issuesCache) {
+    forLog.issuesCache = CENSORED;
+  }
+
+  log.debug(message, forLog);
+}
+
 export function clearCachesAndDrafts() {
   return AsyncStorage.multiRemove([
     storageKeys.projectId, storageKeys.draftId, storageKeys.query,
@@ -82,7 +101,7 @@ export async function populateStorage(): Promise<StorageState> {
       return state;
     }, initialStateCopy);
 
-  log.debug('Storage has been populated', {...storageState, issuesCache: 'NOT PRINTED'});
+  cleanAndLogState('Storage populated', storageState);
 
   return storageState;
 }
@@ -117,7 +136,7 @@ export async function flushStorage(newState: StorageState): Promise<StorageState
 }
 
 export async function flushStoragePart(part: Object): Promise<StorageState> {
-  log.debug('Flushing storage part', {...part, issuesCache: 'NOT PRINTED'});
+  cleanAndLogState('Flushing storage part', part);
   return flushStorage({
     ...getStorageState(),
     ...part
