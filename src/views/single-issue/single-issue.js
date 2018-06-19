@@ -38,9 +38,7 @@ type AdditionalProps = {
   issuePermissions: IssuePermissions,
   issuePlaceholder: Object,
 
-  selectProps: Object,
-  onOpenCommentVisibilitySelect: (any) => any,
-  onCloseSelect: (any) => any,
+  selectProps: Object
 };
 
 type SingleIssueProps = SingleIssueState & typeof issueActions & AdditionalProps;
@@ -405,8 +403,6 @@ const mapStateToProps = (state: {app: Object, singleIssue: SingleIssueState}, ow
     issueId: ownProps.issueId,
 
     selectProps: state.singleIssue.selectProps,
-    onOpenCommentVisibilitySelect: state.singleIssue.onOpenCommentVisibilitySelect,
-    onCloseSelect: state.singleIssue.onCloseSelect,
     ...(isOnTop ? {} : {addCommentMode: false})
   };
 };

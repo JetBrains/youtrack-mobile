@@ -31,8 +31,6 @@ export type State = {
   commandIsApplying: boolean,
   isSelectOpen: boolean,
   selectProps: Object,
-  onOpenCommentVisibilitySelect: Function,
-  onCloseSelect: Function
 };
 
 export const initialState: State = {
@@ -60,9 +58,7 @@ export const initialState: State = {
   commandSuggestions: null,
   commandIsApplying: false,
   isSelectOpen: false,
-  selectProps: {},
-  onOpenCommentVisibilitySelect: () => {},
-  onCloseSelect: () => {}
+  selectProps: {}
 };
 
 export default createReducer(initialState, {
