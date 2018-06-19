@@ -52,10 +52,11 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     actionSheet: PropTypes.func
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     usage.trackScreenView(CATEGORY_NAME);
-    this.props.unloadIssueIfExist();
-    this.props.setIssueId(this.props.issueId);
+    await this.props.unloadIssueIfExist();
+    await this.props.setIssueId(this.props.issueId);
+
     this.props.loadIssue();
     this.props.loadIssueComments();
   }

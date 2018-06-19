@@ -215,11 +215,12 @@ export function loadIssue() {
 export function refreshIssue() {
   return async (dispatch: (any) => any, getState: StateGetter) => {
     dispatch(startIssueRefreshing());
-    log.info('About to refresh issue');
+    log.debug(`About to refresh issue "${getState().singleIssue.issueId}"`);
     await Promise.all([
       await dispatch(loadIssue()),
       await dispatch(loadIssueComments())
     ]);
+    log.debug(`Issue "${getState().singleIssue.issueId}" has been refreshed`);
     dispatch(stopIssueRefreshing());
   };
 }
