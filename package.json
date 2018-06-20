@@ -7,8 +7,8 @@
 		"email": "youtrack-feedback@jetbrains.com"
 	},
 	"config": {
-    "ANALYTICS_ID": "",
-    "EXCEPTION_REPORTER_TOKEN": ""
+		"ANALYTICS_ID": "",
+		"EXCEPTION_REPORTER_TOKEN": ""
 	},
 	"license": "Apache-2.0",
 	"scripts": {
