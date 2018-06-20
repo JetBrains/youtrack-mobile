@@ -11,6 +11,9 @@ if (!EXCEPTION_REPORTER_TOKEN) {
 
 const SERVER_URI = 'https://youtrack.jetbrains.com/api/issues?fields=idReadable';
 
+const YOUTRACK_MOBILE_PROJECT_ID = '22-174';
+const YOUTRACK_MOBILE_TEAM_ID = '10-603';
+
 export async function reportCrash(summary: string, description: string): Promise<string> {
   const response = await fetch(SERVER_URI, {
     method: 'POST',
@@ -22,7 +25,11 @@ export async function reportCrash(summary: string, description: string): Promise
     body: JSON.stringify({
       summary,
       description,
-      project: {id: '22-174'}
+      project: {id: YOUTRACK_MOBILE_PROJECT_ID},
+      visibility: {
+        $type: 'jetbrains.charisma.persistent.visibility.LimitedVisibility',
+        permittedGroups: [{id: YOUTRACK_MOBILE_TEAM_ID}]
+      }
     })
   });
   const res: {idReadable: string} = await response.json();

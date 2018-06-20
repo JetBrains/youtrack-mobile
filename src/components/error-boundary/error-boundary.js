@@ -50,7 +50,7 @@ ${logs}
     const reportedId = await reportCrash(`Render crash report: ${errorSummary}`, description);
 
     if (reportedId) {
-      notify(`Issue "${reportedId}" has been reported`);
+      notify(`Crash has been reported`);
     }
   }
 
