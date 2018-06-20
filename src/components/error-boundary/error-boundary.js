@@ -5,8 +5,10 @@ import usage from '../usage/usage';
 import styles from './error-boundary.styles';
 import {connect} from 'react-redux';
 import {openDebugView} from '../../actions/app-actions';
-import {copyRawLogs} from '../debug-view/debug-view';
+import {getLogs} from '../debug-view/debug-view';
 import log from '../log/log';
+import {reportCrash} from './reporter';
+import {notify} from '../notification/notification';
 
 type Props = {
   openDebugView: any => any,
@@ -30,6 +32,28 @@ class ErrorBoundary extends Component<Props, State> {
 
   contactSupport = () => Linking.openURL('https://youtrack-support.jetbrains.com/hc');
 
+  reportCrash = async () => {
+    if (!this.state.error) {
+      return;
+    }
+    const errorMessage = this.state.error.toString();
+    const errorSummary = errorMessage.split('\n')[0];
+    const logs = await getLogs();
+    const description = `
+\`\`\`
+${errorMessage}
+
+============== LOGS ===============
+${logs}
+\`\`\`
+    `;
+    const reportedId = await reportCrash(`Render crash report: ${errorSummary}`, description);
+
+    if (reportedId) {
+      notify(`Issue "${reportedId}" has been reported`);
+    }
+  }
+
   render() {
     const {error} = this.state;
     const {openDebugView} = this.props;
@@ -38,8 +62,9 @@ class ErrorBoundary extends Component<Props, State> {
       return (
         <View style={styles.container}>
           <Text style={styles.title}>The app has failed to render</Text>
-          <TouchableOpacity onPress={copyRawLogs} style={styles.button}>
-            <Text style={styles.buttonText}>Copy error details</Text>
+
+          <TouchableOpacity onPress={this.reportCrash} style={styles.button}>
+            <Text style={styles.buttonText}>Send crash report</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={openDebugView} style={styles.button}>
             <Text style={styles.buttonText}>Open debug view</Text>

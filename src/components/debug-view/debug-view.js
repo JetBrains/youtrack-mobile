@@ -8,15 +8,18 @@ import styles from './debug-view.styles';
 import {closeDebugView} from '../../actions/app-actions';
 import {notify} from '../notification/notification';
 
-export async function copyRawLogs() {
+export async function getLogs() {
   const rows = await deviceLog.store.getRows();
 
-  const rowsString = rows
+  return rows
     .reverse() // They store comments in reverse order
     .map(row => `${row.timeStamp._i}: ${row.message}`)
     .join('\n');
+}
 
-  Clipboard.setString(rowsString);
+export async function copyRawLogs() {
+  const logs = await getLogs();
+  Clipboard.setString(logs);
   notify('Logs have been copied');
 }
 

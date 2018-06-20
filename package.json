@@ -7,7 +7,8 @@
 		"email": "youtrack-feedback@jetbrains.com"
 	},
 	"config": {
-		"ANALYTICS_ID": ""
+    "ANALYTICS_ID": "",
+    "EXCEPTION_REPORTER_TOKEN": ""
 	},
 	"license": "Apache-2.0",
 	"scripts": {
@@ -20,6 +21,7 @@
 		"test:watch": "npm test -- --watchAll",
 		"lint": "eslint --ignore-pattern src/flow src && flow check",
 		"set-analytics-id": "node ./tools/set-analytics-id",
+		"set-exception-reporter-token": "node ./tools/set-exception-reporter-token",
 		"ios": "./node_modules/react-native-cli/index.js run-ios",
 		"ios-set-version": "node ./tools/set-ios-version",
 		"ios-clean": "xcodebuild clean -project ios/YouTrackMobile.xcodeproj -configuration Release -alltargets",
