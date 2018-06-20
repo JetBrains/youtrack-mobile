@@ -281,7 +281,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     } = this.props;
 
     const isSecured = this.props.issuePermissions.constructor.isSecured(editingComment);
-    foo.bar()
+
     return (
       <View style={styles.container} testID="issue-view">
         {this._renderHeader()}
