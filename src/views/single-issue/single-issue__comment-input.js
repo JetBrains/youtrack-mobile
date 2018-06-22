@@ -157,7 +157,7 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
       <View>
         {this.renderSuggestions()}
 
-        {editingComment &&
+        {editingComment && editingComment.id &&
           <View style={styles.editingCommentWrapper}>
             <View>
               <Text style={styles.editingCommentTitle}>Edit comment</Text>
