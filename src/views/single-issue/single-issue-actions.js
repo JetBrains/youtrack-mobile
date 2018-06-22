@@ -8,13 +8,13 @@ import log from '../../components/log/log';
 import Router from '../../components/router/router';
 import {showActions} from '../../components/action-sheet/action-sheet';
 import usage from '../../components/usage/usage';
-import {initialState}  from './single-issue-reducers';
+import {initialState} from './single-issue-reducers';
 import type {IssueFull, CommandSuggestionResponse} from '../../flow/Issue';
 import type {CustomField, IssueProject, FieldValue, IssueComment} from '../../flow/CustomFields';
 import type Api from '../../components/api/api';
 import type {State as SingleIssueState} from './single-issue-reducers';
 import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
-import IssuePermissions from '../../components/issue-permissions/issue-permissions';
+import IssueVisibility from '../../components/issue-visibility/issue-visibility';
 
 const CATEGORY_NAME = 'Issue';
 
@@ -251,7 +251,7 @@ export function saveIssueSummaryAndDescriptionChange() {
   };
 }
 
-export function addComment(commentText: string) {
+export function addComment(comment: Object) {
   return async (
     dispatch: any => any,
     getState: StateGetter,
@@ -261,7 +261,7 @@ export function addComment(commentText: string) {
     const {issue} = getState().singleIssue;
     dispatch(startSubmittingComment());
     try {
-      const createdComment = await api.submitComment(issue.id, {text: commentText});
+      const createdComment = await api.submitComment(issue.id, comment);
       log.info(`Comment added to issue ${issue.id}`);
       usage.trackEvent(CATEGORY_NAME, 'Add comment', 'Success');
 
@@ -270,7 +270,7 @@ export function addComment(commentText: string) {
       dispatch(loadIssueComments());
     } catch (err) {
       dispatch(showCommentInput());
-      dispatch(setCommentText(commentText));
+      dispatch(setCommentText(comment.text));
       notifyError('Cannot post comment', err);
     } finally {
       dispatch(stopSubmittingComment());
@@ -301,7 +301,7 @@ export function submitEditedComment(comment: IssueComment) {
     dispatch(startSubmittingComment());
 
     try {
-      const updatedComment = await getApi().submitComment(issueId, {id: comment.id, text: comment.text});
+      const updatedComment = await getApi().submitComment(issueId, comment);
 
       dispatch(updateComment(updatedComment));
       log.info(`Comment ${updatedComment.id} edited`);
@@ -316,13 +316,13 @@ export function submitEditedComment(comment: IssueComment) {
   };
 }
 
-export function addOrEditComment(text: string) {
-  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+export function addOrEditComment(comment: IssueComment) {
+  return async (dispatch: (any) => any, getState: StateGetter) => {
     const editingComment = getState().singleIssue.editingComment;
     if (editingComment) {
-      dispatch(submitEditedComment({...editingComment, text}));
+      dispatch(submitEditedComment({...editingComment, ...comment}));
     } else {
-      dispatch(addComment(text));
+      dispatch(addComment(comment));
     }
   };
 }
@@ -649,11 +649,20 @@ export function onCloseSelect() {
   return {type: types.CLOSE_ISSUE_SELECT};
 }
 
+export function updateCommentWithVisibility(comment: IssueComment) {
+  return {type: types.SET_COMMENT_VISIBILITY, comment};
+}
+
 export function onOpenCommentVisibilitySelect(comment: IssueComment) {
   return (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
     const issue: IssueFull = getState().singleIssue.issue;
     usage.trackEvent(CATEGORY_NAME, 'Open visibility select');
+    const selectedItems = (
+      comment &&
+      comment.visibility &&
+      [...(comment.visibility.permittedGroups || []), ...(comment.visibility.permittedUsers || [])]
+    );
 
     dispatch({
       type: types.OPEN_ISSUE_SELECT,
@@ -666,16 +675,13 @@ export function onOpenCommentVisibilitySelect(comment: IssueComment) {
           return [...(options.visibilityGroups || []), ...(options.visibilityUsers || [])];
         },
 
-        selectedItems: [...(comment.visibility.permittedGroups || []), ...(comment.visibility.permittedUsers || [])],
+        selectedItems: selectedItems,
         getTitle: item => getEntityPresentation(item),
         onSelect: (selectedOption) => {
           dispatch(onCloseSelect());
-          comment.visibility = IssuePermissions.toggleVisibilityOption(comment.visibility, selectedOption);
-          try {
-            api.submitComment(issue.id, {id: comment.id, visibility: comment.visibility});
-          } catch (error) {
-            notifyError('Failed to update issue comment', error);
-          }
+          comment = comment || {};
+          comment.visibility = IssueVisibility.toggleOption(comment.visibility, selectedOption);
+          dispatch(updateCommentWithVisibility(comment));
           usage.trackEvent(CATEGORY_NAME, 'Visibility changed');
         }
       }

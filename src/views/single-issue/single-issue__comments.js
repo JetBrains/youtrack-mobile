@@ -7,8 +7,7 @@ import {View, Text} from 'react-native';
 import React, {Component} from 'react';
 
 import CommentVisibility from '../../components/comment/comment__visibility';
-import IssuePermissions from '../../components/issue-permissions/issue-permissions';
-import {getVisibilityPresentation} from '../../components/issue-formatter/issue-formatter';
+import IssueVisibility from '../../components/issue-visibility/issue-visibility';
 
 type Props = {
   comments: Array<IssueComment>,
@@ -68,8 +67,8 @@ export default class SingleIssueComments extends Component<Props, void> {
             onCopyCommentLink={() => this.props.onCopyCommentLink(comment)}
           />
 
-          {IssuePermissions.isSecured(comment) &&
-          <CommentVisibility visibility={getVisibilityPresentation(comment)}/>}
+          {IssueVisibility.isSecured(comment.visibility) &&
+          <CommentVisibility visibility={IssueVisibility.getVisibilityPresentation(comment.visibility)}/>}
         </View>
       );
     });

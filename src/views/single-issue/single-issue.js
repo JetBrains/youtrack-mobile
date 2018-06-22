@@ -31,6 +31,7 @@ import type {State as SingleIssueState} from './single-issue-reducers';
 import type {IssueFull, IssueOnList} from '../../flow/Issue';
 import type {IssueComment} from '../../flow/CustomFields';
 import Select from '../../components/select/select';
+import IssueVisibility from '../../components/issue-visibility/issue-visibility';
 
 const CATEGORY_NAME = 'Issue';
 
@@ -280,7 +281,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
       isSelectOpen
     } = this.props;
 
-    const isSecured = this.props.issuePermissions.constructor.isSecured(editingComment);
+    const isSecured = !!editingComment && IssueVisibility.isSecured(editingComment.visibility);
 
     return (
       <View style={styles.container} testID="issue-view">

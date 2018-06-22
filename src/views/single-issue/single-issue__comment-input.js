@@ -23,7 +23,8 @@ type Props = {
   suggestions: ?{users: Array<IssueUser>},
 
   onEditCommentVisibility: (commentId: string) => any,
-  isSecured: boolean};
+  isSecured: boolean
+};
 
 type State = {
   isSaving: boolean,
@@ -70,7 +71,7 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
 
   addComment() {
     this.setState({isSaving: true});
-    this.props.onSubmitComment(this.state.commentText)
+    this.props.onSubmitComment({...this.props.editingComment, ...{text: this.state.commentText}})
       .then(() => {
         if (this.isUnmounted) {
           return;
@@ -151,7 +152,7 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
   }
 
   render() {
-    const {editingComment, onCancelEditing, onEditCommentVisibility} = this.props;
+    const {editingComment, onCancelEditing, onEditCommentVisibility, isSecured} = this.props;
     return (
       <View>
         {this.renderSuggestions()}
@@ -196,7 +197,7 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
                             onPress={() => onEditCommentVisibility(editingComment)}>
 
             {!this.state.isSaving
-              ? <Image source={this.props.isSecured ? visibilityActive: visibility}
+              ? <Image source={isSecured ? visibilityActive : visibility}
                        style={styles.visibilityChangeIcon} />
               : <ActivityIndicator/>
             }

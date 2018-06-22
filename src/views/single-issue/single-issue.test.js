@@ -60,9 +60,9 @@ describe('Issue view actions', () => {
   });
 
   it('should add comment', async () => {
-    await store.dispatch(actions.addComment(fakeComment.text));
+    await store.dispatch(actions.addComment(fakeComment));
 
-    fakeApi.submitComment.should.have.been.calledWith(ISSUE_ID, {text: fakeComment.text});
+    fakeApi.submitComment.should.have.been.calledWith(ISSUE_ID, fakeComment);
 
     const dispatched = store.getActions();
     expect(dispatched[0]).toEqual({type: types.START_SUBMITTING_COMMENT});

@@ -314,7 +314,11 @@ export default createReducer(initialState, {
     return {
       ...state,
       isSelectOpen: false,
-      selectProps: null
+      selectProps: null,
+      addCommentMode: true
     };
+  },
+  [types.SET_COMMENT_VISIBILITY]: (state: State, action: Object) => {
+    return {...state, editingComment: action.comment};
   }
 });

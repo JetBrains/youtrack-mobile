@@ -2,11 +2,9 @@
 /**
  * https://confluence.jetbrains.com/display/TSYS/Issue+access+rights
  */
-import type { Permissions } from '../auth/auth__permissions';
+import type {Permissions} from '../auth/auth__permissions';
 import type {AnyIssue} from '../../flow/Issue';
 import type {CustomField, IssueComment, IssueProject} from '../../flow/CustomFields';
-import type {Visibility} from '../../flow/Visibility';
-import ResourceTypes from '../api/api__resource-types';
 
 export const CREATE_ISSUE = 'JetBrains.YouTrack.CREATE_ISSUE';
 export const READ_ISSUE = 'JetBrains.YouTrack.READ_ISSUE';
@@ -28,54 +26,6 @@ export default class IssuePermissions {
     this.currentUser = currentUser;
   }
 
-  static isSecured(entity: ?Object) {
-    if (!entity || !entity.visibility) {
-      return false;
-    }
-
-    const visibility = entity.visibility;
-    if (hasLimitedVisibility(visibility)) {
-      return true;
-    }
-
-    return !!(
-      (visibility.permittedUsers && visibility.permittedUsers.length) ||
-      (visibility.permittedGroups && visibility.permittedGroups.length)
-    );
-
-    function hasLimitedVisibility(visibility: Visibility) {
-      return visibility && visibility.$type && visibility.$type === ResourceTypes.VISIBILITY_LIMITED;
-    }
-  }
-
-  static createVisibility(visibility: Visibility = {}) {
-    visibility.$type = ResourceTypes.VISIBILITY_LIMITED;
-    visibility.permittedUsers = visibility.permittedUsers || [];
-    visibility.permittedGroups = visibility.permittedGroups || [];
-    return visibility;
-  }
-
-    static toggleVisibilityOption(visibility: Visibility, option: Object): Object {
-    visibility = IssuePermissions.createVisibility(visibility);
-    for (const it of [
-      {type: ResourceTypes.USER, key: 'permittedUsers'},
-      {type: ResourceTypes.USER_GROUP, key: 'permittedGroups'}
-    ]) {
-      if (option.$type === it.type) {
-        if (hasOption(visibility[it.key], option.id)) {
-          visibility[it.key] = visibility[it.key].filter((user) => user.id !== option.id);
-        } else {
-          visibility[it.key].push(option);
-        }
-        break;
-      }
-    }
-    return visibility;
-
-    function hasOption(collection: Array<Object>, optionId: string) {
-      return collection.some((user) => user.id === optionId);
-    }
-  }
 
   canUpdateGeneralInfo(issue: AnyIssue) {
     const projectId = issue.project.ringId;
