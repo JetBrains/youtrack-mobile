@@ -50,13 +50,13 @@
           <category android:name="android.intent.category.DEFAULT"/>
           <category android:name="android.intent.category.BROWSABLE"/>
 
-          <data android:scheme="https" android:pathPattern=".*/issue/.*"/>
-          <data android:scheme="https" android:pathPattern=".*/issues.*"/>
-          <data android:scheme="https" android:pathPattern=".*/issueMobile/.*"/>
+          <data android:scheme="https" android:host="*" android:pathPattern="/.*issue/.*"/>
+          <data android:scheme="https" android:host="*" android:pathPattern="/.*issues.*"/>
+          <data android:scheme="https" android:host="*" android:pathPattern="/.*issueMobile/.*"/>
 
-          <data android:scheme="http" android:pathPattern=".*/issue/.*"/>
-          <data android:scheme="http" android:pathPattern=".*/issues.*"/>
-          <data android:scheme="http" android:pathPattern=".*/issueMobile/.*"/>
+          <data android:scheme="http" android:host="*" android:pathPattern="/.*issue/.*"/>
+          <data android:scheme="http" android:host="*" android:pathPattern="/.*issues.*"/>
+          <data android:scheme="http" android:host="*" android:pathPattern="/.*issueMobile/.*"/>
         </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
