@@ -391,6 +391,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     };
 
     return (
+      // $FlowFixMe: flow fails with this props generation
       <ContainerComponent {...containerProps}>
         <AnimatedView
           animation="fadeIn"

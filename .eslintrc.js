@@ -28,6 +28,7 @@ module.exports = {
     'no-dupe-class-members': ERROR,
     'no-this-before-super': ERROR,
     'require-yield': OFF,
+    'no-useless-escape': OFF,
 
     //Modules
     'import/no-commonjs': ERROR,

@@ -34,7 +34,7 @@ const API = {
     });
   },
 
-  convertRelativeUrls: (items: Array<Object> = [], urlField: string, backendUrl: string) => {
+  convertRelativeUrls: (items: Array<Object> = [], urlField: string, backendUrl: string): Array<Object> => {
     return items.map(item => {
       if (!item[urlField]) {
         return item;
@@ -129,7 +129,7 @@ const API = {
     return commandPreview.replace(/<\/?[^>]+(>|$)/g, '');
   },
 
-  removeDuplicatesByPropName(items: Array<Object>, valueName: string) {
+  removeDuplicatesByPropName(items: Array<Object>, valueName: string): Array<Object> {
     if (!valueName) {
       return items;
     }

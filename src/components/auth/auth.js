@@ -18,7 +18,12 @@ function makeBtoa(str: string) {
   return base64.fromByteArray(byteArray);
 }
 
-export type AuthParams = {refresh_token: string; access_token: string, token_type: string};
+export type AuthParams = {
+  refresh_token: string;
+  access_token: string,
+  token_type: string,
+  error_code?: string
+};
 
 export type CurrentUser = {
   id: string,

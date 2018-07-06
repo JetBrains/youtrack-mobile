@@ -22,13 +22,13 @@ describe('<ColorField/>', () => {
   it('should render first letter of color field', () => {
     const wrapper = shallow(<ColorField text={fakeField.name} color={fakeField.color}/>);
 
-    wrapper.find('Text').children().should.have.text('T');
+    wrapper.find({testID: 'color-field-value'}).children().should.have.text('T');
   });
 
   it('should render whole text of color field', () => {
     const wrapper = shallow(<ColorField text={fakeField.name} fullText={true} color={fakeField.color}/>);
 
-    wrapper.find('Text').children().should.have.text(fakeField.name);
+    wrapper.find({testID: 'color-field-value'}).children().should.have.text(fakeField.name);
   });
 
   it('should set background color', () => {

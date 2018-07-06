@@ -35,7 +35,7 @@ export default class AttachmentsRow extends Component<Props, void> {
   ), TEXT_UPDATE_DEBOUNCE);
 
   render() {
-    const {editable, showSeparator, summary, description, ...rest} = this.props;
+    const {editable, showSeparator, summary, description, onDescriptionChange, onSummaryChange, ...rest} = this.props;
 
     return (
       <View {...rest}>

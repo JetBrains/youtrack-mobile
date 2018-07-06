@@ -15,7 +15,8 @@ type Attachment = {
   uri: string,
   path: ?string,
   isVertical: boolean,
-  error: Object
+  error: Object,
+  didCancel: ?boolean
 }
 
 export default async function attachPhoto(method: string = 'showImagePicker') {

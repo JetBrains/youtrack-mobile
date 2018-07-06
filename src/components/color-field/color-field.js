@@ -42,7 +42,7 @@ export default class ColorField extends Component<Props, void> {
           testID="color-field-value"
         >
           {this._getFieldLetter()}
-          </Text>
+        </Text>
       </View>
     );
   }

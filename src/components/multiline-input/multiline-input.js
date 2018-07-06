@@ -53,7 +53,7 @@ export default class MultilineInput extends Component<Props, State> {
   };
 
   render() {
-    const {style, ...rest} = this.props;
+    const {style, maxInputHeight, ...rest} = this.props;
 
     return (
       <TextInput

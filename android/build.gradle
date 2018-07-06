@@ -3,21 +3,18 @@
 buildscript {
     repositories {
         jcenter()
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
     }
     dependencies {
-        // Have changed to old version because of build on docker issue
-        // See http://stackoverflow.com/questions/40108471/java-lang-nullpointerexception-no-error-message-apk-building
-        classpath 'com.android.tools.build:gradle:2.1.0'
+        classpath 'com.android.tools.build:gradle:2.3.3'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
-
-project.ext.compileSdkVersion = 23
-project.ext.buildToolsVersion = '25.0.2'
-project.ext.minSdkVersion = 16
-project.ext.targetSdkVersion = 22
 
 allprojects {
     repositories {
@@ -27,5 +24,17 @@ allprojects {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url "$rootDir/../node_modules/react-native/android"
         }
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
     }
+}
+
+ext {
+    buildToolsVersion = "26.0.3"
+    minSdkVersion = 16
+    compileSdkVersion = 26
+    targetSdkVersion = 26
+    supportLibVersion = "26.1.0"
 }

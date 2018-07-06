@@ -27,13 +27,15 @@ export default class Home extends Component<Props, State> {
   }
 
   _renderMessage() {
-    if (this.props.error) {
-      const message = this.props.error.message || this.props.error;
+    const {error, message} = this.props;
+    if (error) {
+      // $FlowFixMe
+      const message: string = error.message || error;
       return <Text style={[styles.message, {color: 'red'}]}>{message}</Text>;
     }
 
-    if (this.props.message) {
-      return <Text style={[styles.message]}>{this.props.message}</Text>;
+    if (message) {
+      return <Text style={[styles.message]}>{message}</Text>;
     }
   }
 

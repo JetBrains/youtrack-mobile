@@ -198,6 +198,7 @@ export default class QueryAssist extends Component<Props, State> {
     };
 
     return (
+      // $FlowFixMe: flow fails with this props generation
       <ContainerComponent {...containerProps}>
         {showQueryAssist && this._renderSuggestions()}
 

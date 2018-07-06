@@ -39,10 +39,7 @@ exports[`<AgileCard/> should render snapshot 1`] = `
       text="TT-123"
     />
   </Component>
-  <Text
-    accessible={true}
-    allowFontScaling={true}
-    ellipsizeMode="tail"
+  <Component
     numberOfLines={3}
     style={
       Object {
@@ -55,7 +52,7 @@ exports[`<AgileCard/> should render snapshot 1`] = `
     testID="card-summary"
   >
     issue summary
-  </Text>
+  </Component>
   <Component
     style={
       Object {

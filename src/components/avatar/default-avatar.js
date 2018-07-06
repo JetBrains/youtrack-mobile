@@ -15,7 +15,7 @@ function extractLetters(name: string): string {
 
   if (names.length >= 2) {
     return `${names[0][0].toUpperCase()}${names[1][0].toUpperCase()}`;
-  } else if (names.size == 1) {
+  } else if (names.length == 1) {
     if (names[0].length >= 2) {
       return names[0].toUpperCase().substr(0, 2);
     } else {

@@ -325,7 +325,7 @@ function subscribeToURL() {
 
     function isServerConfigured(url: ?string) {
       if (!isOneOfServers(url || '', [(getStorageState().config || {}).backendUrl])) {
-        notifyError('Open URL error', {message: `"${url || ''}" doesn\'t match the configured server`});
+        notifyError('Open URL error', {message: `"${url || ''}" doesn't match the configured server`});
         return false;
       }
       return true;
