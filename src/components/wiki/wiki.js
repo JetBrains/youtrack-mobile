@@ -29,6 +29,8 @@ const selector = (node: Object, tag: string, className: string) => {
     node.attribs.class.indexOf(className) !== -1;
 };
 
+const RootComponent = props => <Text {...props} />;
+
 export default class Wiki extends Component<Props, void> {
   parser: (rawWiki: string, options: Object) => Object;
   renderer: (tree: Object) => Object;
@@ -130,7 +132,7 @@ export default class Wiki extends Component<Props, void> {
         renderNode={this.renderNode}
         onLinkPress={this.handleLinkPress}
 
-        RootComponent={Text}
+        RootComponent={RootComponent}
         textComponentProps={{selectable: true}}
         style={styles.htmlView}
       />
