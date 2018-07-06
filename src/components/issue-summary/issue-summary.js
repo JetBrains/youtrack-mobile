@@ -35,6 +35,7 @@ export default class AttachmentsRow extends Component<Props, void> {
   ), TEXT_UPDATE_DEBOUNCE);
 
   render() {
+    // eslint-disable-next-line no-unused-vars
     const {editable, showSeparator, summary, description, onDescriptionChange, onSummaryChange, ...rest} = this.props;
 
     return (

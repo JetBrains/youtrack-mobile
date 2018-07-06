@@ -1,4 +1,5 @@
 /* @flow */
+// $FlowFixMe picker uses CommonJS :(
 import ImagePicker from 'react-native-image-picker';
 
 const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
