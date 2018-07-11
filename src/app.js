@@ -1,5 +1,5 @@
 /* @flow */
-import {BackHandler, View, UIManager} from 'react-native';
+import {View, UIManager} from 'react-native';
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import store from './store';
@@ -48,7 +48,6 @@ class YouTrackMobile extends Component<void, void> {
     super();
 
     this.registerRoutes();
-    this.addAndroidBackButtonSupport();
     store.dispatch(getStoredConfigAndProceed());
 
     Router.onBack = (closingView) => {
@@ -60,14 +59,6 @@ class YouTrackMobile extends Component<void, void> {
     return {
       actionSheet: () => this._actionSheetRef
     };
-  }
-
-  addAndroidBackButtonSupport() {
-    BackHandler.addEventListener('hardwareBackPress', function () {
-      const populated = Router.pop();
-      const preventCloseApp = populated;
-      return preventCloseApp;
-    });
   }
 
   registerRoutes() {
