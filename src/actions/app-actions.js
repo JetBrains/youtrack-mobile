@@ -27,6 +27,7 @@ export function logOut() {
     auth.logOut();
     setApi(null);
     dispatch({type: types.LOG_OUT});
+    log.info('User has logged out');
   };
 }
 
@@ -292,7 +293,7 @@ function checkUserAgreement() {
       return;
     }
 
-    log.info('User agreement should be accepted', agreement, currentUser);
+    log.info('User agreement should be accepted', {...agreement, text: 'NOT_PRINTED'}, currentUser);
     dispatch(showUserAgreement(agreement));
   };
 }
@@ -404,9 +405,11 @@ export function getStoredConfigAndProceed() {
       return dispatch(initializeApp(state.config));
     }
 
+    log.info('App is not configured, entering server URL');
     try {
       const url = await Linking.getInitialURL();
       if (!url) {
+
         return Router.EnterServer({serverUrl: null});
       }
       const host = UrlParse(url).host;

@@ -41,6 +41,7 @@ export class EnterServer extends Component<Props, State> {
     };
 
     usage.trackScreenView(CATEGORY_NAME);
+    log.info('Entering server URL view has been opened');
   }
 
   getPossibleUrls(enteredUrl: string) {
