@@ -6,6 +6,7 @@ import store from './store';
 import { Provider } from 'react-redux';
 import Auth from './components/auth/auth';
 import Router from './components/router/router';
+import './components/push-notifications/push-notifications';
 import DebugView from './components/debug-view/debug-view';
 import UserAgreement from './components/user-agreement/user-agreement';
 import Home from './views/home/home';
