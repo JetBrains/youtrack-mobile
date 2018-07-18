@@ -2,7 +2,8 @@
 import * as types from '../actions/action-types';
 import {createReducer} from 'redux-create-reducer';
 import IssuePermissions from '../components/issue-permissions/issue-permissions';
-import type Auth from '../components/auth/auth';
+import type Auth, {CurrentUser} from '../components/auth/auth';
+import type {Permissions} from '../components/auth/auth__permissions';
 import type {StorageState} from '../components/storage/storage';
 import type {EndUserAgreement} from '../flow/AppConfig';
 
@@ -31,11 +32,11 @@ export default createReducer(initialState, {
     const {auth} = action;
     return {...state, auth};
   },
-  [types.SET_PERMISSIONS](state: RootState, action: {auth: Auth}) {
-    const {auth} = action;
+  [types.SET_PERMISSIONS](state: RootState, action: {permissions: Permissions, currentUser: CurrentUser}) {
+    const {permissions, currentUser} = action;
     return {
       ...state,
-      issuePermissions: new IssuePermissions(auth.permissions, auth.currentUser)
+      issuePermissions: new IssuePermissions(permissions, currentUser)
     };
   },
   [types.LOG_OUT](state: RootState, action: Object = {}) {

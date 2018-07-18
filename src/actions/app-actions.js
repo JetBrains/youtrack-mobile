@@ -14,7 +14,8 @@ import {loadConfig} from '../components/config/config';
 import Auth from '../components/auth/auth';
 import {registerForPush} from '../components/push-notifications/push-notifications';
 
-import type {AuthParams} from '../components/auth/auth';
+import type {AuthParams, CurrentUser} from '../components/auth/auth';
+import type {Permissions} from '../components/auth/auth__permissions';
 import type {AppConfigFilled, EndUserAgreement} from '../flow/AppConfig';
 import type {StorageState} from '../components/storage/storage';
 import type RootState from '../reducers/app-reducer';
@@ -63,7 +64,6 @@ export function checkAuthorization() {
     await flushStoragePart({currentUser: auth.currentUser});
 
     setApi(new Api(auth));
-    dispatch(setPermissions(auth));
   };
 }
 
@@ -74,8 +74,8 @@ export function setAuth(config: AppConfigFilled) {
   return {type: types.INITIALIZE_AUTH, auth};
 }
 
-export function setPermissions(auth: Auth) {
-  return {type: types.SET_PERMISSIONS, auth};
+export function setPermissions(permissions: Permissions, currentUser: CurrentUser) {
+  return {type: types.SET_PERMISSIONS, permissions, currentUser};
 }
 
 function showUserAgreement(agreement) {
@@ -236,7 +236,7 @@ function completeInitialization() {
     log.debug('Completing initialization: loading permissions cache');
     const auth = getState().app.auth;
     await auth.loadPermissions(auth.authParams);
-    dispatch(setPermissions(auth));
+    dispatch(setPermissions(auth.permissions, auth.currentUser));
     dispatch(subscribeToPush());
 
     log.info('Initialization completed');
