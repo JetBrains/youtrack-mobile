@@ -455,6 +455,17 @@ class Api {
     visibilityOptions.visibilityUsers = ApiHelper.convertRelativeUrls((visibilityOptions.visibilityUsers || []), 'avatarUrl', this.config.backendUrl);
     return visibilityOptions;
   }
+
+  async getNotificationsToken(): Promise<string> {
+    const url = `${this.youTrackUrl}/api/userNotifications/subscribe?fields=token`;
+    const res = await this.makeAuthorizedRequest(url, 'POST');
+    return res.token;
+  }
+
+  async registerNotificationToken(ytToken: string, deviceToken: string): Promise<any> {
+    const url = `https://konnector.services.jetbrains.com/ring/pushNotifications`;
+    return await this.makeAuthorizedRequest(url, 'POST', {token: ytToken, appleDeviceId: deviceToken});
+  }
 }
 
 /**

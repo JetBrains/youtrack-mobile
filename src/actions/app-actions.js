@@ -12,6 +12,7 @@ import usage from '../components/usage/usage';
 import {notifyError} from '../components/notification/notification';
 import {loadConfig} from '../components/config/config';
 import Auth from '../components/auth/auth';
+import {registerForPush} from '../components/push-notifications/push-notifications';
 
 import type {AuthParams} from '../components/auth/auth';
 import type {AppConfigFilled, EndUserAgreement} from '../flow/AppConfig';
@@ -236,6 +237,7 @@ function completeInitialization() {
     const auth = getState().app.auth;
     await auth.loadPermissions(auth.authParams);
     dispatch(setPermissions(auth));
+    dispatch(subscribeToPush());
 
     log.info('Initialization completed');
     Router.IssueList();
@@ -416,6 +418,32 @@ export function getStoredConfigAndProceed() {
       return Router.EnterServer({serverUrl: host});
     } catch (e) {
       Router.EnterServer({serverUrl: null});
+    }
+  };
+}
+
+function subscribeToPush(config: AppConfigFilled) {
+  return async (dispatch: (any) => any, getState, getApi) => {
+    const {isRegisteredForPush} = getStorageState();
+    if (isRegisteredForPush) {
+      log.debug('Device is already registered for push notifications');
+      return;
+    }
+
+    const api: Api = getApi();
+    try {
+      await registerForPush(api);
+      await flushStoragePart({isRegisteredForPush: true});
+      log.debug('Successfully registered for push notifications');
+    } catch (err) {
+      if (
+        ['Not implemented', 'remote notifications are not supported in the simulator', 'YouTrack does not support push notifications']
+          .includes(err?.message)
+      ) {
+        return;
+      }
+
+      notifyError('Couldn\'t register for notifications', err);
     }
   };
 }

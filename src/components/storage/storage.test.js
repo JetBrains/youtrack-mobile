@@ -39,7 +39,8 @@ describe('Storage', () => {
       'YT_CURRENT_USER_STORAGE_KEY',
       'YT_CREATION_TIMESTAMP_STORAGE_KEY',
       'YT_LAST_QUERIES_STORAGE_KEY',
-      'yt_mobile_issues_cache'
+      'yt_mobile_issues_cache',
+      'YT_IS_REGISTERED_FOR_PUSH'
     ]);
   });
 

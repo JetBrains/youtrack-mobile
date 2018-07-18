@@ -19,7 +19,8 @@ export type StorageState = {|
   config: ?AppConfigFilled,
   query: ?string,
   lastQueries: ?Array<string>,
-  issuesCache: ?Array<IssueOnList>
+  issuesCache: ?Array<IssueOnList>,
+  isRegisteredForPush: boolean
 |}
 
 type StorageStateKeys = $Exact<$ObjMap<StorageState, () => string>>;
@@ -33,7 +34,8 @@ const storageKeys: StorageStateKeys = {
   creationTimestamp: 'YT_CREATION_TIMESTAMP_STORAGE_KEY',
   query: 'YT_QUERY_STORAGE',
   lastQueries: 'YT_LAST_QUERIES_STORAGE_KEY',
-  issuesCache: 'yt_mobile_issues_cache'
+  issuesCache: 'yt_mobile_issues_cache',
+  isRegisteredForPush: 'YT_IS_REGISTERED_FOR_PUSH'
 };
 
 let storageState: ?StorageState = null;
@@ -47,7 +49,8 @@ export const initialState: StorageState = Object.freeze({
   config: null,
   query: null,
   lastQueries: null,
-  issuesCache: null
+  issuesCache: null,
+  isRegisteredForPush: false
 });
 
 function cleanAndLogState(message, state) {
