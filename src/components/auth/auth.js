@@ -1,4 +1,5 @@
 /* @flow */
+import urlJoin from 'url-join';
 import Permissions from './auth__permissions';
 import {getStorageState, flushStoragePart} from '../storage/storage';
 import base64 from 'base64-js';
@@ -52,13 +53,13 @@ export default class AuthTest {
   constructor(config: AppConfigFilled) {
     this.authParams = null;
     this.config = config;
-    this.CHECK_TOKEN_URL = `${this.config.auth.serverUri}/api/rest/users/me?fields=id,guest,name,profile/avatar/url,endUserAgreementConsent(accepted,majorVersion,minorVersion)`;
+    this.CHECK_TOKEN_URL = urlJoin(this.config.auth.serverUri, '/api/rest/users/me?fields=id,guest,name,profile/avatar/url,endUserAgreementConsent(accepted,majorVersion,minorVersion)');
 
     const permissionsQueryString = qs.stringify({
       query: `service:{0-0-0-0-0} or service:{${config.auth.youtrackServiceId}}`,
       fields: 'permission/key,global,projects(id)'
     });
-    this.PERMISSIONS_CACHE_URL = `${this.config.auth.serverUri}/api/rest/permissions/cache?${permissionsQueryString}`;
+    this.PERMISSIONS_CACHE_URL = urlJoin(this.config.auth.serverUri, `/api/rest/permissions/cache?${permissionsQueryString}`);
   }
 
   loadStoredAuthParams(): Promise<void> {
@@ -76,7 +77,7 @@ export default class AuthTest {
 
   obtainToken(body: string) {
     const config = this.config;
-    const hubTokenUrl = `${config.auth.serverUri}/api/rest/oauth2/token`;
+    const hubTokenUrl = urlJoin(config.auth.serverUri, '/api/rest/oauth2/token');
 
     return fetch(hubTokenUrl, {
       method: 'POST',
@@ -135,12 +136,12 @@ export default class AuthTest {
         //store old refresh token
         token = authParams.refresh_token;
 
-        return fetch([
+        return fetch(urlJoin(
           config.auth.serverUri,
           `/api/rest/oauth2/token`,
           '?grant_type=refresh_token',
           `&refresh_token=${authParams.refresh_token}`
-        ].join(''), {
+        ), {
           method: 'POST',
           headers: {
             'Accept': ACCEPT_HEADER,
