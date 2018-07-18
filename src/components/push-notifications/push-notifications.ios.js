@@ -17,7 +17,7 @@ export function registerForPush(api: Api) {
       ytToken = await api.getNotificationsToken();
       log.debug(`YT notifications token received: "${ytToken}"`);
     } catch (err) {
-      if (err.status === 405 || err.status === 400) {
+      if ([400, 404, 405].includes(err?.status)) {
         log.debug('YouTrack server does not support push', err);
         return reject(new Error('YouTrack does not support push notifications'));
       }
