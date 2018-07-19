@@ -8,7 +8,8 @@
 	},
 	"config": {
 		"ANALYTICS_ID": "",
-		"EXCEPTION_REPORTER_TOKEN": ""
+    "EXCEPTION_REPORTER_TOKEN": "",
+    "KONNECTOR_URL": "https://konnector-staging.services.jetbrains.com"
 	},
 	"license": "Apache-2.0",
 	"scripts": {

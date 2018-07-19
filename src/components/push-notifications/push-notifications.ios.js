@@ -1,8 +1,11 @@
 /* @flow */
 import {PushNotificationIOS} from 'react-native';
 
+import appPackage from '../../../package.json'; // eslint-disable-line import/extensions
 import log from '../log/log';
 import type Api from '../api/api';
+
+const {KONNECTOR_URL} = appPackage.config;
 
 PushNotificationIOS.addEventListener('notification', e => log.info('PUSH:notification', e));
 
@@ -27,16 +30,17 @@ export function registerForPush(api: Api) {
     /**
      * Then we register for push notifications with this token
      */
-    PushNotificationIOS.addEventListener('register', deviceToken => {
+    PushNotificationIOS.addEventListener('register', async deviceToken => {
       try {
-        api.registerNotificationToken(ytToken, deviceToken);
+        const url = `${KONNECTOR_URL}/ring/pushNotifications`;
+        await api.makeAuthorizedRequest(url, 'POST', {token: ytToken, appleDeviceId: deviceToken});
         resolve();
       } catch (err) {
         reject(err);
       }
     });
 
-    PushNotificationIOS.addEventListener('registrationError', e => {
+    PushNotificationIOS.addEventListener('registrationError', async e => {
       log.info('PUSH: registration error', e);
       reject(e);
     });

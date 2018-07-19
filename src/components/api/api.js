@@ -463,7 +463,7 @@ class Api {
   }
 
   async registerNotificationToken(ytToken: string, deviceToken: string): Promise<any> {
-    const url = `https://konnector.services.jetbrains.com/ring/pushNotifications`;
+    const url = `https://konnector-staging.services.jetbrains.com/ring/pushNotifications`;
     return await this.makeAuthorizedRequest(url, 'POST', {token: ytToken, appleDeviceId: deviceToken});
   }
 }
