@@ -121,7 +121,7 @@ export default class AuthTest {
       '&access_type=offline',
       `&username=${encodeURIComponent(login)}`,
       `&password=${encodeURIComponent(password)}`,
-      `&scope=${this.config.auth.scopes}`
+      `&scope=${encodeURIComponent(this.config.auth.scopes)}`
     ].join(''));
   }
 
