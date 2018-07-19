@@ -9,7 +9,7 @@ const PROTOCOL_REGEXP = /^https?:\/\//i;
 const YOUTRACK_CONTEXT_REGEXP = /\/youtrack$/i;
 const VERSION_DETECT_FALLBACK_URL = '/rest/workflow/version';
 
-function getDefaultConfig(): AppConfig {
+export function getDefaultConfig(): AppConfig {
   return {
     backendUrl: null,
     statisticsEnabled: null,
@@ -19,7 +19,7 @@ function getDefaultConfig(): AppConfig {
       clientId: null,
       clientSecret: null,
       youtrackServiceId: null,
-      scopes: 'Hub YouTrack',
+      scopes: `Hub YouTrack ${encodeURIComponent('YouTrack Slack Integration')}`,
       landingUrl: 'ytoauth://landing.url'
     }
   };
