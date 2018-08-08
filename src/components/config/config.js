@@ -19,7 +19,7 @@ export function getDefaultConfig(): AppConfig {
       clientId: null,
       clientSecret: null,
       youtrackServiceId: null,
-      scopes: `Hub YouTrack ${encodeURIComponent('YouTrack Slack Integration')}`,
+      scopes: `Hub YouTrack`,
       landingUrl: 'ytoauth://landing.url'
     }
   };
