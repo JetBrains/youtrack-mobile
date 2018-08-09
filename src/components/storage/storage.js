@@ -72,11 +72,13 @@ function cleanAndLogState(message, state) {
   log.debug(message, forLog);
 }
 
-export function clearCachesAndDrafts() {
-  return AsyncStorage.multiRemove([
+export async function clearCachesAndDrafts() {
+  log.debug('Storage drafts has been cleared');
+  await AsyncStorage.multiRemove([
     storageKeys.projectId, storageKeys.draftId, storageKeys.query,
-    storageKeys.lastQueries, storageKeys.issuesCache
+    storageKeys.lastQueries, storageKeys.issuesCache, storageKeys.isRegisteredForPush
   ]);
+  return populateStorage();
 }
 
 export async function populateStorage(): Promise<StorageState> {
