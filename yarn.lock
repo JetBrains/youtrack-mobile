@@ -5678,6 +5678,13 @@ react-native-markdown-view@1.1.4:
     react-native-tabular-grid-markdown-view "0.1.x"
     simple-markdown "0.3.x"
 
+react-native-notifications@1.1.19:
+  version "1.1.19"
+  resolved "https://registry.yarnpkg.com/react-native-notifications/-/react-native-notifications-1.1.19.tgz#0b702878ae8c4e46874f6e8e96864acd2a001b4c"
+  dependencies:
+    core-js "^1.0.0"
+    uuid "^2.0.3"
+
 react-native-root-modal@huston007/react-native-root-modal#9cbd9516d:
   version "1.1.2"
   resolved "https://codeload.github.com/huston007/react-native-root-modal/tar.gz/9cbd9516d595d79518a703238fa2d6ca05a1b2c0"
@@ -7049,6 +7056,10 @@ utils-merge@1.0.1:
 uuid@3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.0.1.tgz#6544bba2dfda8c1cf17e629a3a305e2bb1fee6c1"
+
+uuid@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-2.0.3.tgz#67e2e863797215530dff318e5bf9dcebfd47b21a"
 
 uuid@^3.1.0:
   version "3.3.2"
