@@ -156,7 +156,7 @@ describe('Auth', function () {
       const request = getLastRequest();
 
       request.url.should.equal(`${fakeConfig.auth.serverUri}/api/rest/oauth2/token`);
-      request.requestBody.should.equal(`grant_type=password&access_type=offline&username=log&password=pass&scope=scope1 scope2`);
+      request.requestBody.should.equal(`grant_type=password&access_type=offline&username=log&password=pass&scope=scope1%20scope2`);
       request.options.headers.Authorization.should.equal('Basic Y2xpZW50LWlkOmNsaWVudC1zZWNyZXQ=');
       request.options.headers['Content-Type'].should.equal('application/x-www-form-urlencoded');
     });
@@ -165,7 +165,7 @@ describe('Auth', function () {
       auth.obtainTokenByCredentials('lo$g', 'pa%ss');
 
       const request = getLastRequest();
-      request.requestBody.should.equal(`grant_type=password&access_type=offline&username=lo%24g&password=pa%25ss&scope=scope1 scope2`);
+      request.requestBody.should.equal(`grant_type=password&access_type=offline&username=lo%24g&password=pa%25ss&scope=scope1%20scope2`);
     });
 
     it('should authorize oAUTH2 code', () => {

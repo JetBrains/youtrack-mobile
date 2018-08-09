@@ -1,10 +1,30 @@
 /* @flow */
-import {PushNotificationIOS} from 'react-native';
+import NotificationsIOS from 'react-native-notifications';
 
+import appPackage from '../../../package.json'; // eslint-disable-line import/extensions
+import Router from '../router/router';
 import log from '../log/log';
 import type Api from '../api/api';
 
-PushNotificationIOS.addEventListener('notification', e => log.info('PUSH:notification', e));
+const {KONNECTOR_URL} = appPackage.config;
+
+NotificationsIOS.addEventListener('notificationReceivedBackground', notification => {
+  log.info('PUSH:notification received in background', notification);
+});
+NotificationsIOS.addEventListener('notificationReceivedForeground', notification => {
+  log.info('PUSH:notification received in foreground', notification);
+});
+
+NotificationsIOS.addEventListener('notificationOpened', notification => {
+  log.info('PUSH:notification opened', notification);
+
+  //TODO: get issueId from metadata when it is ready
+  const issueId = notification.getMessage().body.match(/^([^\s]+)/)[0];
+  if (!issueId) {
+    return;
+  }
+  Router.SingleIssue({issueId});
+});
 
 export function registerForPush(api: Api) {
   return new Promise(async (resolve, reject) => {
@@ -27,20 +47,28 @@ export function registerForPush(api: Api) {
     /**
      * Then we register for push notifications with this token
      */
-    PushNotificationIOS.addEventListener('register', deviceToken => {
+    NotificationsIOS.addEventListener('remoteNotificationsRegistered', async deviceToken => {
       try {
-        api.registerNotificationToken(ytToken, deviceToken);
+        const url = `${KONNECTOR_URL}/ring/pushNotifications`;
+        await api.makeAuthorizedRequest(url, 'POST', {token: ytToken, appleDeviceId: deviceToken});
         resolve();
       } catch (err) {
         reject(err);
       }
     });
 
-    PushNotificationIOS.addEventListener('registrationError', e => {
+    NotificationsIOS.addEventListener('remoteNotificationsRegistrationFailed', async e => {
       log.info('PUSH: registration error', e);
       reject(e);
     });
-
-    PushNotificationIOS.requestPermissions();
+    // $FlowFixMe: error in type annotations of library
+    NotificationsIOS.requestPermissions();
   });
+}
+
+
+export function initializePushNotifications() {
+  // $FlowFixMe: error in type annotations of library
+  NotificationsIOS.requestPermissions();
+  NotificationsIOS.consumeBackgroundQueue();
 }

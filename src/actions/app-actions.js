@@ -12,7 +12,7 @@ import usage from '../components/usage/usage';
 import {notifyError} from '../components/notification/notification';
 import {loadConfig} from '../components/config/config';
 import Auth from '../components/auth/auth';
-import {registerForPush} from '../components/push-notifications/push-notifications';
+import {registerForPush, initializePushNotifications} from '../components/push-notifications/push-notifications';
 
 import type {AuthParams, CurrentUser} from '../components/auth/auth';
 import type {Permissions} from '../components/auth/auth__permissions';
@@ -427,6 +427,7 @@ function subscribeToPush(config: AppConfigFilled) {
     const {isRegisteredForPush} = getStorageState();
     if (isRegisteredForPush) {
       log.debug('Device is already registered for push notifications');
+      initializePushNotifications();
       return;
     }
 
@@ -434,12 +435,14 @@ function subscribeToPush(config: AppConfigFilled) {
     try {
       await registerForPush(api);
       await flushStoragePart({isRegisteredForPush: true});
+      initializePushNotifications();
       log.debug('Successfully registered for push notifications');
     } catch (err) {
       if (
         ['Not implemented', 'remote notifications are not supported in the simulator', 'YouTrack does not support push notifications']
           .includes(err?.message)
       ) {
+        log.info(`Push notification is not supported: ${err?.message}`);
         return;
       }
 

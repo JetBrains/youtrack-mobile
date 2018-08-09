@@ -6,7 +6,6 @@
  */
 
 #import <UIKit/UIKit.h>
-#import <React/RCTPushNotificationManager.h>
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
