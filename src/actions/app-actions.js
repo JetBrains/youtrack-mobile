@@ -442,6 +442,7 @@ function subscribeToPush(config: AppConfigFilled) {
         ['Not implemented', 'remote notifications are not supported in the simulator', 'YouTrack does not support push notifications']
           .includes(err?.message)
       ) {
+        log.info(`Push notification is not supported: ${err?.message}`);
         return;
       }
 
