@@ -12,7 +12,7 @@ import usage from '../components/usage/usage';
 import {notifyError} from '../components/notification/notification';
 import {loadConfig} from '../components/config/config';
 import Auth from '../components/auth/auth';
-import {registerForPush, initializePushNotifications} from '../components/push-notifications/push-notifications';
+import {registerForPush, initializePushNotifications, unregisterForPushNotifications} from '../components/push-notifications/push-notifications';
 
 import type {AuthParams, CurrentUser} from '../components/auth/auth';
 import type {Permissions} from '../components/auth/auth__permissions';
@@ -21,10 +21,16 @@ import type {StorageState} from '../components/storage/storage';
 import type RootState from '../reducers/app-reducer';
 
 export function logOut() {
-  return (dispatch: (any) => any, getState: () => Object) => {
+  return async (dispatch: (any) => any, getState: () => Object, getApi: () => Api) => {
     clearCachesAndDrafts();
     const auth = getState().app.auth;
     Router.EnterServer({serverUrl: auth.config.backendUrl});
+
+    try {
+      await unregisterForPushNotifications(getApi());
+    } catch (err) {
+      notifyError('Failed to unsubscribe from PUSH notifications', err);
+    }
 
     auth.logOut();
     setApi(null);

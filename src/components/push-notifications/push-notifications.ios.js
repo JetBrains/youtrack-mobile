@@ -8,6 +8,13 @@ import type Api from '../api/api';
 
 const {KONNECTOR_URL} = appPackage.config;
 
+let appleDeviceToken = null;
+
+NotificationsIOS.addEventListener('remoteNotificationsRegistered', deviceToken => {
+  log.info(`Apple device token received: "${deviceToken}"`);
+  appleDeviceToken = deviceToken;
+});
+
 NotificationsIOS.addEventListener('notificationReceivedBackground', notification => {
   log.info('PUSH:notification received in background', notification);
 });
@@ -63,6 +70,13 @@ export function registerForPush(api: Api) {
     // $FlowFixMe: error in type annotations of library
     NotificationsIOS.requestPermissions();
   });
+}
+
+export async function unregisterForPushNotifications(api: Api) {
+  log.info('Unsubscribing from push notifications...');
+  const url = `${KONNECTOR_URL}/ring/pushNotifications/unsubscribe`;
+  await api.makeAuthorizedRequest(url, 'POST', {appleDeviceId: appleDeviceToken});
+  log.info('Successfully unsubscribed from push notifications');
 }
 
 
