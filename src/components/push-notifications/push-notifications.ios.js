@@ -16,14 +16,13 @@ NotificationsIOS.addEventListener('notificationReceivedForeground', notification
 });
 
 NotificationsIOS.addEventListener('notificationOpened', notification => {
-  log.info('PUSH:notification opened', notification);
-
-  //TODO: get issueId from metadata when it is ready
-  const issueId = notification.getMessage().body.match(/^([^\s]+)/)[0];
-  if (!issueId) {
+  const {ytIssueId, ytUserId} = notification.getData();
+  log.info(`PUSH:notification opened for issue "${ytIssueId}" for user "${ytUserId}"`);
+  if (!ytIssueId) {
     return;
   }
-  Router.SingleIssue({issueId});
+
+  Router.SingleIssue({issueId: ytIssueId});
 });
 
 export function registerForPush(api: Api) {
