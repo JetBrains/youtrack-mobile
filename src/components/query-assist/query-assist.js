@@ -80,7 +80,7 @@ export default class QueryAssist extends Component<Props, State> {
     this.props.onSetQuery(this.state.input || '');
   }
 
-  componentWillReceiveProps(newProps: Props) {
+  UNSAFE_componentWillReceiveProps(newProps: Props) {
     if (newProps.currentQuery !== this.props.currentQuery) {
       this.setState({input: newProps.currentQuery});
     }

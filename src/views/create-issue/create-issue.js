@@ -34,7 +34,7 @@ class CreateIssue extends Component<Props, void> {
     usage.trackScreenView(CATEGORY_NAME);
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.props.initializeWithDraftOrProject(this.props.predefinedDraftId);
   }
 

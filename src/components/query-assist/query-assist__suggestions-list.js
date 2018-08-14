@@ -34,7 +34,7 @@ export default class QueryAssistSuggestionsList extends Component<Props, State> 
     super(props);
   }
 
-  componentWillReceiveProps(newProps: Props) {
+  UNSAFE_componentWillReceiveProps(newProps: Props) {
     this._prepareDataSource(newProps.suggestions);
   }
 

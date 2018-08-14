@@ -42,7 +42,7 @@ export default class AttachmentsRow extends Component<Props, void> {
     super(...args);
   }
 
-  componentWillReceiveProps(props: Props) {
+  UNSAFE_componentWillReceiveProps(props: Props) {
     if (props.attachingImage && props.attachingImage !== this.props.attachingImage) {
       setTimeout(() => this.scrollView && this.scrollView.scrollToEnd());
     }
