@@ -110,7 +110,7 @@
 		"redux-create-reducer": "^1.1.2",
 		"redux-thunk": "2.2.0",
 		"url-join": "4.0.0",
-		"url-parse": "1.1.7"
+		"url-parse": "1.4.3"
 	},
 	"devDependencies": {
 		"@babel/core": "7.0.0-beta.47",
