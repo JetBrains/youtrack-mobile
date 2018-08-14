@@ -47,6 +47,7 @@ function loadSprint(agileId: string, sprintId: string) {
       dispatch(receiveSprint(sprint));
       dispatch(subscribeServersideUpdates());
       usage.trackEvent(CATEGORY_NAME, 'Load sprint', 'Success');
+      log.info(`Sprint ${sprintId} (agileId=${agileId}) has been loaded`);
       await api.saveLastVisitedSprint(sprintId);
     } catch (e) {
       usage.trackEvent(CATEGORY_NAME, 'Load sprint', 'Error');
@@ -126,6 +127,7 @@ export function fetchMoreSwimlanes() {
     try {
       const swimlanes = await api.getSwimlanes(sprint.agile.id, sprint.id, PAGE_SIZE, sprint.board.trimmedSwimlanes.length);
       dispatch(receiveSwimlanes(swimlanes));
+      log.info(`Loaded ${PAGE_SIZE} more swimlanes`);
       usage.trackEvent(CATEGORY_NAME, 'Load more swimlanes');
     } catch (e) {
       notifyError('Could not load swimlanes', e);
@@ -160,6 +162,7 @@ export function rowCollapseToggle(row: AgileBoardRow) {
         ...row,
         collapsed: !row.collapsed
       });
+      log.info(`Collapse state successfully updated for row ${row.id}, new state = ${!row.collapsed}`);
       usage.trackEvent(CATEGORY_NAME, 'Toggle row collapsing');
     } catch (e) {
       dispatch(updateRowCollapsedState(row, oldCollapsed));
@@ -193,6 +196,7 @@ export function columnCollapseToggle(column: AgileColumn) {
         ...column,
         collapsed: !column.collapsed
       });
+      log.info(`Collapse state successfully updated for column ${column.id}, new state = ${!column.collapsed}`);
       usage.trackEvent(CATEGORY_NAME, 'Toggle column collapsing');
     } catch (e) {
       dispatch(updateColumnCollapsedState(column, oldCollapsed));
