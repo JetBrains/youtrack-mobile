@@ -23,7 +23,7 @@ type Props = {
 function renderIssueSquare(issue: IssueOnList) {
     const priorityField = getPriotityField(issue);
 
-    const color = priorityField ? priorityField.value.color : null;
+    const color = priorityField?.value?.color;
     return <View
       key={issue.id}
       style={[styles.issueSquare, color && {backgroundColor: color.background}]}
