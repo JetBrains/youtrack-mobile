@@ -298,7 +298,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
         >
           {this._renderIssueView(issue || issuePlaceholder)}
 
-          {(!issueLoaded || !commentsLoaded) && (
+          {(!issueLoaded || !commentsLoaded) && !commentsLoadingError && (
             <View><Text style={styles.loading}>Loading...</Text></View>
           )}
 

@@ -6,6 +6,7 @@ import Header from '../../components/header/header';
 import Select from '../../components/select/select';
 import styles from './agile-board.styles';
 import Menu from '../../components/menu/menu';
+import log from '../../components/log/log';
 import BoardHeader from './board-header';
 import BoardRow from '../../components/agile-row/agile-row';
 import AgileCard from '../../components/agile-card/agile-card';
@@ -91,6 +92,7 @@ class AgileBoard extends Component<Props, State> {
   }
 
   _onTapIssue = (issue: IssueOnList) => {
+    log.debug(`Opening issue "${issue.id}" from Agile Board`);
     usage.trackEvent(CATEGORY_NAME, 'Open issue');
     Router.SingleIssue({
       issuePlaceholder: issue,

@@ -15,8 +15,9 @@ import styles from './issue-list.styles';
 import Header from '../../components/header/header';
 import QueryAssist from '../../components/query-assist/query-assist';
 import {COLOR_PINK} from '../../components/variables/variables';
-import {extractErrorMessage} from '../../components/notification/notification';
+import {extractErrorMessage, notifyError} from '../../components/notification/notification';
 import usage from '../../components/usage/usage';
+import log from '../../components/log/log';
 
 import IssueRow from './issue-list__row';
 import Menu from '../../components/menu/menu';
@@ -59,6 +60,11 @@ export class IssueList extends Component<Props, void> {
   }
 
   goToIssue(issue: IssueOnList) {
+    log.debug(`Opening issue "${issue.id}" from list`, issue);
+    if (!issue.id) {
+      notifyError('Can\'t open issue', new Error('Attempt to open issue without ID'));
+      return;
+    }
     Router.SingleIssue({
       issuePlaceholder: issue,
       issueId: issue.id

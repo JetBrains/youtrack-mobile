@@ -199,8 +199,12 @@ export function loadIssue() {
     const api: Api = getApi();
 
     try {
+      if (!issueId) {
+        throw new Error('Attempt to load issue with no ID');
+      }
+      log.debug(`Loading issue "${issueId}"`);
       const issue = await api.getIssue(issueId);
-      log.info(`Issue "${issueId}" loaded`);
+      log.info(`Issue "${issueId}" loaded`, issue);
       issue.fieldHash = ApiHelper.makeFieldHash(issue);
 
       dispatch(setIssueId(issue.id)); //Set issue ID again because first one could be readable like YTM-111
