@@ -444,11 +444,12 @@ function subscribeToPush(config: AppConfigFilled) {
       initializePushNotifications();
       log.debug('Successfully registered for push notifications');
     } catch (err) {
+      const message = err?.message || err?.localizedDescription;
       if (
         ['Not implemented', 'remote notifications are not supported in the simulator', 'YouTrack does not support push notifications']
-          .includes(err?.message)
+          .includes(message)
       ) {
-        log.info(`Push notification is not supported: ${err?.message}`);
+        log.info(`Push notification is not supported: ${message}`);
         return;
       }
 
