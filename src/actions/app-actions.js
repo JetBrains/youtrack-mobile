@@ -4,6 +4,7 @@ import {setApi} from '../components/api/api__instance';
 import Api from '../components/api/api';
 import Router from '../components/router/router';
 import log from '../components/log/log';
+import DeviceInfo from 'react-native-device-info';
 import {initialState, clearCachesAndDrafts, populateStorage, getStorageState, flushStorage, flushStoragePart, getOtherAccounts, storeAccounts} from '../components/storage/storage';
 import {Linking} from 'react-native';
 import UrlParse from 'url-parse';
@@ -434,6 +435,11 @@ function subscribeToPush(config: AppConfigFilled) {
     if (isRegisteredForPush) {
       log.debug('Device is already registered for push notifications');
       initializePushNotifications();
+      return;
+    }
+
+    if (DeviceInfo.isEmulator()) {
+      log.debug('Push notifcations won\'t work on simulator');
       return;
     }
 
