@@ -60,8 +60,9 @@ export class IssueList extends Component<Props, void> {
   }
 
   goToIssue(issue: IssueOnList) {
-    log.debug(`Opening issue "${issue.id}" from list`, issue);
+    log.debug(`Opening issue "${issue.id}" from list`);
     if (!issue.id) {
+      log.warn('Attempt to open bad issue', issue);
       notifyError('Can\'t open issue', new Error('Attempt to open issue without ID'));
       return;
     }
