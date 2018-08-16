@@ -8,21 +8,6 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF'
   },
-  errorContainer: {
-    flex: 1
-  },
-  errorTitle: {
-    marginTop: UNIT*2,
-    fontSize: 16,
-    textAlign: 'center'
-  },
-  errorContent: {
-    margin: UNIT,
-    marginTop: UNIT/4,
-    color: COLOR_FONT_GRAY,
-    fontSize: 14,
-    textAlign: 'center'
-  },
   tryAgainButton: {
     alignSelf: 'center',
     paddingTop: UNIT*2

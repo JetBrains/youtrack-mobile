@@ -4,7 +4,6 @@ import {
   Text,
   FlatList,
   RefreshControl,
-  TouchableOpacity,
   AppState
 } from 'react-native';
 import React, {Component} from 'react';
@@ -15,12 +14,13 @@ import styles from './issue-list.styles';
 import Header from '../../components/header/header';
 import QueryAssist from '../../components/query-assist/query-assist';
 import {COLOR_PINK} from '../../components/variables/variables';
-import {extractErrorMessage, notifyError} from '../../components/notification/notification';
+import {notifyError} from '../../components/notification/notification';
 import usage from '../../components/usage/usage';
 import log from '../../components/log/log';
 
 import IssueRow from './issue-list__row';
 import Menu from '../../components/menu/menu';
+import ErrorMessage from '../../components/error-message/error-message';
 import Router from '../../components/router/router';
 import * as issueActions from './issue-list-actions';
 import {openMenu} from '../../actions/app-actions';
@@ -117,16 +117,9 @@ export class IssueList extends Component<Props, void> {
   };
 
   _renderListMessage = () => {
-    const {loadingError, isRefreshing, isListEndReached, isLoadingMore, issues} = this.props;
+    const {loadingError, refreshIssues, isRefreshing, isListEndReached, isLoadingMore, issues} = this.props;
     if (loadingError) {
-      return (<View style={styles.errorContainer}>
-        <Text style={styles.listMessageSmile}>{'(>_<)'}</Text>
-        <Text style={styles.errorTitle} testID="cannot-load-message">Cannot load issues</Text>
-        <Text style={styles.errorContent}>{extractErrorMessage(loadingError)}</Text>
-        <TouchableOpacity style={styles.tryAgainButton} onPress={() => this.props.refreshIssues()}>
-          <Text style={styles.tryAgainText}>Try Again</Text>
-        </TouchableOpacity>
-      </View>);
+      return <ErrorMessage error={loadingError} onTryAgain={refreshIssues}/>;
     }
     if (!isRefreshing && !isLoadingMore && issues.length === 0) {
       return (
