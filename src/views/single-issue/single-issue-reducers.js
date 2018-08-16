@@ -11,6 +11,7 @@ export type State = {
   unloadedIssueState: ?State,
   isRefreshing: boolean,
   issueLoaded: boolean,
+  issueLoadingError: ?Error,
   commentsLoaded: boolean,
   tmpIssueComments: ?Array<IssueComment>,
   commentsLoadingError: ?Error,
@@ -39,6 +40,7 @@ export const initialState: State = {
   issue: null,
   isRefreshing: false,
   issueLoaded: false,
+  issueLoadingError: null,
   commentsLoaded: false,
   tmpIssueComments: null,
   commentsLoadingError: null,
@@ -91,6 +93,9 @@ export default createReducer(initialState, {
         comments: (issue || {}).comments ? issue.comments : state.tmpIssueComments
       }
     };
+  },
+  [types.RECEIVE_ISSUE_ERROR]: (state: State, action: {error: Error}): State => {
+    return {...state, issueLoadingError: action.error};
   },
   [types.RECEIVE_COMMENTS]: (state: State, action: {comments: Array<IssueComment>}): State => {
     const {comments} = action;

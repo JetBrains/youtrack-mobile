@@ -210,8 +210,10 @@ export function loadIssue() {
       dispatch(setIssueId(issue.id)); //Set issue ID again because first one could be readable like YTM-111
       dispatch(receiveIssue(issue));
       return issue;
-    } catch (err) {
-      notifyError('Failed to load issue', err);
+    } catch (rawError) {
+      const error = await resolveError(rawError);
+      dispatch({type: types.RECEIVE_ISSUE_ERROR, error});
+      notifyError('Failed to load issue', error);
     }
   };
 }

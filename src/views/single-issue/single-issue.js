@@ -22,6 +22,7 @@ import usage from '../../components/usage/usage';
 import log from '../../components/log/log';
 import IssueSummary from '../../components/issue-summary/issue-summary';
 import CommandDialog from '../../components/command-dialog/command-dialog';
+import ErrorMessage from '../../components/error-message/error-message';
 import styles from './single-issue.styles';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import {getReadableID} from '../../components/issue-formatter/issue-formatter';
@@ -140,10 +141,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
   }
 
   _renderToolbar() {
-    const {issue, editMode, issueLoaded, issuePermissions, startEditingIssue, attachImage, stopEditingIssue, toggleVote, toggleStar} = this.props;
-    if (!issueLoaded) {
-      return;
-    }
+    const {issue, editMode, issuePermissions, startEditingIssue, attachImage, stopEditingIssue, toggleVote, toggleStar} = this.props;
     const canUpdateGeneralInfo = issuePermissions.canUpdateGeneralInfo(issue);
 
     return (
@@ -246,6 +244,8 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
       issuePlaceholder,
       addCommentMode,
       issueLoaded,
+      issueLoadingError,
+      refreshIssue,
       commentsLoaded,
       commentsLoadingError,
       commentText,
@@ -286,9 +286,12 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     return (
       <View style={styles.container} testID="issue-view">
         {this._renderHeader()}
-        {this._renderToolbar()}
 
-        {(issue || issuePlaceholder) &&
+        {issueLoaded && !issueLoadingError && this._renderToolbar()}
+
+        {issueLoadingError && <ErrorMessage error={issueLoadingError} onTryAgain={refreshIssue}/>}
+
+        {(issue || issuePlaceholder) && !issueLoadingError &&
         <ScrollView
           refreshControl={this._renderRefreshControl()}
           keyboardDismissMode="interactive"

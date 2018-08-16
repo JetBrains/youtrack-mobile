@@ -1,5 +1,6 @@
 export const SET_ISSUE_ID = 'issue.SET_ISSUE_ID';
 export const RECEIVE_ISSUE = 'issue.RECEIVE_ISSUE';
+export const RECEIVE_ISSUE_ERROR = 'issue.RECEIVE_ISSUE_ERROR';
 export const RECEIVE_COMMENTS = 'issue.RECEIVE_COMMENTS';
 export const RECEIVE_COMMENTS_ERROR = 'issue.RECEIVE_COMMENTS_ERROR';
 export const START_ISSUE_REFRESHING = 'issue.START_ISSUE_REFRESHING';
