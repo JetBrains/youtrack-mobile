@@ -26,13 +26,6 @@ export function logOut() {
     clearCachesAndDrafts();
     const auth = getState().app.auth;
     Router.EnterServer({serverUrl: auth.config.backendUrl});
-
-    try {
-      await unregisterForPushNotifications(getApi());
-    } catch (err) {
-      notifyError('Failed to unsubscribe from PUSH notifications', err);
-    }
-
     auth.logOut();
     setApi(null);
     dispatch({type: types.LOG_OUT});
@@ -227,8 +220,15 @@ export function changeAccount(account: StorageState, dropCurrentAccount: boolean
 }
 
 export function removeAccountOrLogOut() {
-  return async (dispatch: (any) => any, getState: () => RootState) => {
+  return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
     const otherAccounts = getState().app.otherAccounts;
+
+    try {
+      await unregisterForPushNotifications(getApi());
+    } catch (err) {
+      notifyError('Failed to unsubscribe from PUSH notifications', err);
+    }
+
     if (otherAccounts.length === 0) {
       log.info('No more accounts left, logging out.');
       return dispatch(logOut());
