@@ -88,6 +88,7 @@ export default createReducer(initialState, {
     return {
       ...state,
       issueLoaded: true,
+      issueLoadingError: null,
       issue: {
         ...action.issue,
         comments: (issue || {}).comments ? issue.comments : state.tmpIssueComments
@@ -103,6 +104,7 @@ export default createReducer(initialState, {
       ...state,
       commentsLoaded: true,
       tmpIssueComments: comments,
+      commentsLoadingError: null,
       issue: state.issue ? {...state.issue, comments} : state.issue
     };
   },
