@@ -8,7 +8,7 @@ import {openDebugView} from '../../actions/app-actions';
 import {getLogs} from '../debug-view/debug-view';
 import log from '../log/log';
 import {reportCrash} from './reporter';
-import {notify} from '../notification/notification';
+import {notify, notifyError} from '../notification/notification';
 
 type Props = {
   openDebugView: any => any,
@@ -16,12 +16,14 @@ type Props = {
 };
 
 type State = {
-  error: ?Error
+  error: ?Error,
+  isReporting: boolean
 };
 
 class ErrorBoundary extends Component<Props, State> {
   state = {
-    error: null
+    error: null,
+    isReporting: false
   };
 
   componentDidCatch(error: Error, info: Object) {
@@ -47,15 +49,20 @@ ${errorMessage}
 ${logs}
 \`\`\`
     `;
-    const reportedId = await reportCrash(`Render crash report: ${errorSummary}`, description);
-
-    if (reportedId) {
-      notify(`Crash has been reported`);
+    try {
+      this.setState({isReporting: true});
+      const reportedId = await reportCrash(`Render crash report: ${errorSummary}`, description);
+      if (reportedId) {
+        notify(`Crash has been reported`);
+      }
+    } catch (err) {
+      this.setState({isReporting: false});
+      notifyError('Could not report crash', err);
     }
   }
 
   render() {
-    const {error} = this.state;
+    const {error, isReporting} = this.state;
     const {openDebugView} = this.props;
 
     if (error) {
@@ -63,8 +70,8 @@ ${logs}
         <View style={styles.container}>
           <Text style={styles.title}>The app has failed to render</Text>
 
-          <TouchableOpacity onPress={this.reportCrash} style={styles.button}>
-            <Text style={styles.buttonText}>Send crash report</Text>
+          <TouchableOpacity disabled={isReporting} onPress={this.reportCrash} style={styles.button}>
+            <Text style={[styles.buttonText, isReporting && styles.buttonTextDisabled]}>Send crash report</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={openDebugView} style={styles.button}>
             <Text style={styles.buttonText}>Open debug view</Text>

@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_BLACK, COLOR_FONT_ON_BLACK, COLOR_PINK} from '../../components/variables/variables';
+import {UNIT, COLOR_BLACK, COLOR_FONT_ON_BLACK, COLOR_PINK, COLOR_PLACEHOLDER} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   container: {
@@ -22,5 +22,8 @@ export default StyleSheet.create({
   buttonText: {
     fontSize: 16,
     color: COLOR_PINK
+  },
+  buttonTextDisabled: {
+    color: COLOR_PLACEHOLDER
   }
 });

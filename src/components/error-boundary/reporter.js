@@ -1,7 +1,6 @@
 /* @flow */
 import appPackage from '../../../package.json'; // eslint-disable-line import/extensions
 import log from '../log/log';
-import { notifyError } from '../notification/notification';
 
 const {EXCEPTION_REPORTER_TOKEN} = appPackage.config;
 
@@ -35,7 +34,7 @@ export async function reportCrash(summary: string, description: string): Promise
   const res: {idReadable: string} = await response.json();
 
   if (response.status > 400) {
-    notifyError('Failed to report crash', res);
+    throw res;
   }
 
   return res.idReadable;
