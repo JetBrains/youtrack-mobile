@@ -90,3 +90,7 @@ export default createReducer(initialState, {
     return {...state, isChangingAccount: false};
   }
 });
+
+export function getIsAuthorized(state: RootState) {
+  return !!state.auth?.currentUser;
+}

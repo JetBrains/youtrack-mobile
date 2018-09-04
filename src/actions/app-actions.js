@@ -1,5 +1,6 @@
 /* @flow */
 import * as types from './action-types';
+import {getIsAuthorized} from '../reducers/app-reducer';
 import {setApi} from '../components/api/api__instance';
 import Api from '../components/api/api';
 import Router from '../components/router/router';
@@ -327,15 +328,6 @@ export function applyAuthorization(authParams: AuthParams) {
 
 function subscribeToURL() {
   return async (dispatch: (any) => any, getState: () => Object) => {
-    function isAuthorized() {
-      const auth = getState().app.auth;
-      const {currentUser} = auth;
-      if (!currentUser) {
-        log.debug('User is not authorized, URL won\'t be opened');
-      }
-      return !!currentUser;
-    }
-
     function isServerConfigured(url: ?string) {
       if (!isOneOfServers(url || '', [(getStorageState().config || {}).backendUrl])) {
         notifyError('Open URL error', {message: `"${url || ''}" doesn't match the configured server`});
@@ -346,14 +338,16 @@ function subscribeToURL() {
 
     openByUrlDetector(
       (url, issueId) => {
-        if (!isAuthorized() || !isServerConfigured(url)) {
+        if (!getIsAuthorized(getState().app) || !isServerConfigured(url)) {
+          log.debug('User is not authorized, URL won\'t be opened');
           return;
         }
         usage.trackEvent('app', 'Open issue in app by URL');
         Router.SingleIssue({issueId});
       },
       (url, issuesQuery) => {
-        if (!isAuthorized() || !isServerConfigured(url)) {
+        if (!getIsAuthorized(getState().app) || !isServerConfigured(url)) {
+          log.debug('User is not authorized, URL won\'t be opened');
           return;
         }
         usage.trackEvent('app', 'Open issues query in app by URL');
