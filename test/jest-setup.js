@@ -24,3 +24,8 @@ ReactNative.NativeModules.RNDeviceInfo = {
   uniqueId: 'unique-id',
   userAgent: 'user-agent'
 };
+
+ReactNative.NativeModules.RNKeychainManager = {
+  getInternetCredentialsForServer: jest.fn(),
+  setInternetCredentialsForServer: jest.fn()
+};

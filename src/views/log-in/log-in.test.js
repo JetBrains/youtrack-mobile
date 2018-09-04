@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactNative from 'react-native';
+import {NativeModules} from 'react-native';
 import {LogIn} from './log-in';
 import {shallow} from 'enzyme';
 import sinon from 'sinon';
@@ -25,10 +25,8 @@ describe('LogIn', () => {
       onChangeServerUrl: sinon.spy()
     };
 
-    ReactNative.NativeModules.RNKeychainManager = {
-      getInternetCredentialsForServer: sinon.stub().returns(Promise.resolve({username: 'foo', password: 'bar'})),
-      setInternetCredentialsForServer: sinon.spy()
-    };
+    NativeModules.RNKeychainManager.getInternetCredentialsForServer = sinon.stub().returns(Promise.resolve({username: 'foo', password: 'bar'}));
+    NativeModules.RNKeychainManager.setInternetCredentialsForServer = sinon.spy();
   });
 
   function shallowRender(props) {
