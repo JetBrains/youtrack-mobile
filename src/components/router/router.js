@@ -4,6 +4,8 @@ import {createStackNavigator, StackActions, NavigationActions} from 'react-navig
 import transitionConfigs from 'react-navigation/src/views/StackView/StackViewTransitionConfigs';
 import cardInterpolator from 'react-navigation/src/views/StackView/StackViewStyleInterpolator';
 
+import log from '../log/log';
+
 const TransitionSpec = {
   duration: 500,
   easing: Easing.bezier(0.2833, 0.99, 0.31833, 0.99),
@@ -76,6 +78,7 @@ class Router {
   }
 
   navigate(routeName, props) {
+    log.debug(`Navigating to ${routeName}`, {...props, imageHeaders: 'CENSORED'});
     if (!this._navigator) {
       throw `Router.navigate: call setNavigator(navigator) first!`;
     }
