@@ -45,6 +45,7 @@ class Api {
   }
 
   async makeAuthorizedRequest(url: string, method: ?string, body: ?Object, options: RequestOptions = defaultRequestOptions) {
+    log.debug(`Making ${method || 'GET'} request to ${url}`);
     assertLongQuery(url);
 
     const sendRequest = async () => {
