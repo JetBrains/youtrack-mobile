@@ -69,6 +69,7 @@ class Api {
     }
 
     if (res.status < STATUS_OK_IF_MORE_THAN || res.status >= STATUS_BAD_IF_MORE_THATN) {
+      log.debug(`Got error from ${url}: ${res?.status}. Response body: ${res?._bodyText}`);
       throw res;
     }
 
