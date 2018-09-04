@@ -31,7 +31,7 @@ type RenderImageOptions = {
 }
 
 export function renderImage({node, index, attachments, imageHeaders, onImagePress}: RenderImageOptions) {
-  let src = node.attribs.src;
+  let src = node.attribs.src || '';
 
   const targetAttach = attachments.filter(it => src.indexOf(it.name) !== -1)[0] || {};
   src = targetAttach.url || src;
