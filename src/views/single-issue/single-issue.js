@@ -88,6 +88,13 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     }
   }
 
+  handleOnBack = () => {
+    const returned = Router.pop();
+    if (!returned) {
+      Router.IssueList();
+    }
+  };
+
   _renderHeader() {
     const {
       issue,
@@ -112,6 +119,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
           leftButton={<Text>Back</Text>}
           rightButton={<Text style={issueLoaded ? null : styles.disabledSaveButton}>More</Text>}
           onRightButtonClick={() => issueLoaded && showIssueActions(this.context.actionSheet())}
+          onBack={this.handleOnBack}
         >
           {title}
         </Header>

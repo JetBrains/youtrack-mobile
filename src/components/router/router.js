@@ -65,7 +65,7 @@ class Router {
     };
 
     if (!this[name]) {
-      this[name] = (props) => this.navigate(name, props);
+      this[name] = (...args) => this.navigate(name, ...args);
     }
   }
 
@@ -77,7 +77,7 @@ class Router {
     });
   }
 
-  navigate(routeName, props) {
+  navigate(routeName, props, {forceReset} = {}) {
     log.debug(`Navigating to ${routeName}`, {...props, imageHeaders: 'CENSORED'});
     if (!this._navigator) {
       throw `Router.navigate: call setNavigator(navigator) first!`;
@@ -90,7 +90,7 @@ class Router {
     const newRoute = Object.assign({}, this.routes[routeName]);
     newRoute.props = Object.assign({}, newRoute.props, props);
 
-    if (newRoute.type === 'reset') {
+    if (newRoute.type === 'reset' || forceReset) {
       return this._navigator.dispatch(StackActions.reset({
         index: 0,
         actions: [NavigationActions.navigate({routeName, params: newRoute.props, key: Math.random().toString()})]
