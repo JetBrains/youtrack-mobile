@@ -222,11 +222,14 @@ export function changeAccount(account: StorageState, dropCurrentAccount: boolean
 export function removeAccountOrLogOut() {
   return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
     const otherAccounts = getState().app.otherAccounts;
+    const {isRegisteredForPush} = getStorageState();
 
-    try {
-      await unregisterForPushNotifications(getApi());
-    } catch (err) {
-      notifyError('Failed to unsubscribe from PUSH notifications', err);
+    if (isRegisteredForPush) {
+      try {
+        await unregisterForPushNotifications(getApi());
+      } catch (err) {
+        notifyError('Failed to unsubscribe from PUSH notifications', err);
+      }
     }
 
     if (otherAccounts.length === 0) {
