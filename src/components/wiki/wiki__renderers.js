@@ -27,7 +27,7 @@ type RenderImageOptions = {
   index: number,
   attachments: Array<Object>,
   imageHeaders: ?Object,
-  onImagePress: String => any
+  onImagePress: string => any
 }
 
 export function renderImage({node, index, attachments, imageHeaders, onImagePress}: RenderImageOptions) {

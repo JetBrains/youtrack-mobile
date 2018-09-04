@@ -57,7 +57,7 @@ export default class Wiki extends Component<Props, void> {
     return Linking.openURL(url);
   };
 
-  onImagePress = (url: String) => {
+  onImagePress = (url: string) => {
     const allImagesUrls = this.props.attachments
       .filter(attach => attach.mimeType.includes('image'))
       .map(image => image.url);
