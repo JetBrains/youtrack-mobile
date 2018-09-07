@@ -61,7 +61,7 @@
     <key>NSMainNibFile~ipad</key>
     <string>LaunchScreen</string>
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>$(PRODUCT_NAME) wants access to phtos</string>
+    <string>$(PRODUCT_NAME) wants access to photos</string>
     <key>NSCameraUsageDescription</key>
     <string>$(PRODUCT_NAME) could take a photo to attach it to issue</string>
 	<key>NSAppTransportSecurity</key>
