@@ -26,7 +26,7 @@ export default class LinkedIssues extends Component<Props, void> {
                              onPress={() => this.props.onIssueTap && this.props.onIssueTap(issue)}
                              style={styles.linkedIssueContainer}>
       <Text style={[styles.linkedIssueText, issueTextStyle]}>
-        {issue.project.shortName}-{issue.numberInProject}
+        {issue.idReadable}
       </Text>
     </TouchableOpacity>;
   }

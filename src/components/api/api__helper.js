@@ -111,7 +111,7 @@ const API = {
   },
 
   getIssueId(issue: AnyIssue) {
-    return `${issue.project.shortName}-${issue.numberInProject}`;
+    return `${issue.idReadable}`;
   },
 
   patchAllRelativeAvatarUrls(data: Object, backendUrl: string) {

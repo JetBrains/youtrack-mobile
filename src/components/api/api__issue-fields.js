@@ -184,12 +184,12 @@ const ISSUE_COMMENTS_FIELDS = toField([
 
 const ISSUE_SHORT_FIELDS = toField([
   'id',
+  'idReadable',
   'summary',
   'resolved',
   'created',
   'updated',
   {project: ISSUE_PROJECT_FIELDS},
-  'numberInProject',
   {reporter: ISSUE_USER_FIELDS},
   {fields: ISSUE_FIELD_SHORT_FIELDS}
 ]);
@@ -246,13 +246,13 @@ export default {
   issuesOnList: ISSUE_SHORT_FIELDS,
   singleIssue: toField([
     'id',
+    'idReadable',
     'summary',
     'description',
     'resolved',
     'created',
     'votes',
     'updated',
-    'numberInProject',
     'wikifiedDescription',
     {watchers: 'hasStar'},
     {voters: 'hasVote'},

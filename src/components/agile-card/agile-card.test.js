@@ -9,8 +9,8 @@ describe('<AgileCard/>', () => {
   beforeEach(() => {
     fakeIssue = {
       id: 'testIssue',
+      idReadable: 'TT-123',
       summary: 'issue summary',
-      numberInProject: 123,
       project: {
         shortName: 'TT'
       },

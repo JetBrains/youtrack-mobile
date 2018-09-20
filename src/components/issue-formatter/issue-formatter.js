@@ -93,7 +93,7 @@ function getAssigneeField(issue: AnyIssue): ?CustomField {
 }
 
 function getReadableID(issue: AnyIssue) {
-  return `${issue.project.shortName}-${issue.numberInProject}`;
+  return `${issue.idReadable}`;
 }
 
 function getEntityPresentation(entity: Object) {

@@ -19,7 +19,7 @@ export default class IssueRow extends Component<Props, void> {
     const issueIdStyle = issue.resolved ? {textDecorationLine: 'line-through'} : null;
 
     return (<Text>
-      <Text style={issueIdStyle}>{issue.project.shortName}-{issue.numberInProject}</Text>
+      <Text style={issueIdStyle}>{issue.idReadable}</Text>
       <Text> by {getEntityPresentation(issue.reporter)} {getForText(issue.fieldHash.Assignee)}</Text>
     </Text>);  }
 

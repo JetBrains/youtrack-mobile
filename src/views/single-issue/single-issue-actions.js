@@ -515,9 +515,8 @@ export function toggleStar(starred: boolean) {
 }
 
 function makeIssueWebUrl(api: Api, issue: IssueFull, commentId: ?string) {
-  const {numberInProject, project} = issue;
   const commentHash = commentId ? `#comment=${commentId}` : '';
-  return `${api.config.backendUrl}/issue/${project.shortName}-${numberInProject}${commentHash}`;
+  return `${api.config.backendUrl}/issue/${issue.idReadable}${commentHash}`;
 }
 
 export function copyCommentUrl(comment: IssueComment) {
