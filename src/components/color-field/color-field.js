@@ -4,21 +4,22 @@ import React, {Component} from 'react';
 
 export const SIZE = 20;
 export const NO_COLOR_ID = '0';
+const INITIAL_COLOR = 'initial';
 
 type Props = {
   text: string,
-  color: Object,
+  color?: Object,
   fullText?: boolean,
   style?: any
 };
 
 export default class ColorField extends Component<Props, void> {
   _getBackgroundColor() {
-    return this.props.color.background;
+    return this.props.color?.background || INITIAL_COLOR;
   }
 
   _getForegroundColor() {
-    return this.props.color.foreground;
+    return this.props.color?.foreground || INITIAL_COLOR;
   }
 
   _getFieldLetter() {
@@ -27,7 +28,7 @@ export default class ColorField extends Component<Props, void> {
 
   render() {
     const {color, fullText, style} = this.props;
-    if (color.id === NO_COLOR_ID && !fullText) {
+    if (color && color.id === NO_COLOR_ID && !fullText) {
       return null;
     }
 
