@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 
 const MAX_DEFAULT_HEIGHT = 200;
 const DEFAULT_FONT_SIZE = 16;
-const SPARE_SPACE = 2;
+const SPARE_SPACE = 16;
 
 type Props = {
   maxInputHeight: number,

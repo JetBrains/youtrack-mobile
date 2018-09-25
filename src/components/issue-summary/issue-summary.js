@@ -60,6 +60,7 @@ export default class AttachmentsRow extends Component<Props, void> {
         <MultilineInput
           ref={this.descriptionInputRef}
           maxInputHeight={0}
+          scrollEnabled={false}
           editable={editable}
           autoCapitalize="sentences"
           placeholderTextColor={COLOR_FONT_GRAY}
