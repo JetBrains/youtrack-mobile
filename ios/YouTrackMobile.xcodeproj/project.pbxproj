@@ -22,12 +22,12 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		233C7C26636041E1822BA464 /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B6F8EC7CE7BD4354BAEC3C6A /* libRNDeviceInfo.a */; };
-		55086C6420A1A254007B3D44 /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 55086C6220A1A236007B3D44 /* libRNImagePicker.a */; };
 		550DF4DC1DD1CA800067B9C9 /* YTSafariViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 550DF4DB1DD1CA800067B9C9 /* YTSafariViewController.m */; };
 		55AB446B211C81D900B68C64 /* libRNNotifications.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 55AB446A211C81C300B68C64 /* libRNNotifications.a */; };
 		55BFD5F01DEC25B5006D0B84 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 55BFD5CC1DEC2594006D0B84 /* libRCTAnimation.a */; };
 		55DCE2B01D01EB6A000DA248 /* YouTrackMobile.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 5507C3E21CF4D63C00039310 /* YouTrackMobile.entitlements */; };
 		55DCE2BC1D01EB80000DA248 /* YouTrackMobile.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 5507C3E21CF4D63C00039310 /* YouTrackMobile.entitlements */; };
+		6417DC83CB4D49F39D2D325E /* libimageCropPicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C078FB59006485292C5F03E /* libimageCropPicker.a */; };
 		80EEC92B73F445E49BED15F6 /* libRNEventSource.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 62349465C1F24CE195C3AE8C /* libRNEventSource.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		9538D6E4A26747948B4C7B79 /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A73FAF22C722477F857704B4 /* libBVLinearGradient.a */; };
@@ -127,13 +127,6 @@
 			remoteGlobalIDString = EBF21BDC1FC498900052F4D5;
 			remoteInfo = jsinspector;
 		};
-		55086C6120A1A236007B3D44 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 55086C5D20A1A235007B3D44 /* RNImagePicker.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 014A3B5C1C6CF33500B6D375;
-			remoteInfo = RNImagePicker;
-		};
 		551CDE061F97B1CD00550FF1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */;
@@ -203,6 +196,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 9114889E1B28A9A700A81437;
 			remoteInfo = RNEventSourceTests;
+		};
+		5579CAFE215A51CC00A4E1E7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B710DA924618469B9C2D3095 /* imageCropPicker.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3400A8081CEB54A6008A0BC7;
+			remoteInfo = imageCropPicker;
 		};
 		5590EB861F726B8700F7B945 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -377,6 +377,7 @@
 		00E356EE1AD99517003FC87E /* YouTrackMobileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = YouTrackMobileTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* YouTrackMobileTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YouTrackMobileTests.m; sourceTree = "<group>"; };
+		0C078FB59006485292C5F03E /* libimageCropPicker.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libimageCropPicker.a; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* YouTrackMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YouTrackMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -390,7 +391,6 @@
 		2E74A9140B5E4F3B97DFD93C /* libRNKeychain.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNKeychain.a; sourceTree = "<group>"; };
 		44CC4E27499042DAB26C13BB /* RNDeviceInfo.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNDeviceInfo.xcodeproj; path = "../node_modules/react-native-device-info/ios/RNDeviceInfo.xcodeproj"; sourceTree = "<group>"; };
 		5507C3E21CF4D63C00039310 /* YouTrackMobile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = YouTrackMobile.entitlements; path = YouTrackMobile/YouTrackMobile.entitlements; sourceTree = "<group>"; };
-		55086C5D20A1A235007B3D44 /* RNImagePicker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNImagePicker.xcodeproj; path = "../node_modules/react-native-image-picker/ios/RNImagePicker.xcodeproj"; sourceTree = "<group>"; };
 		550DF4DA1DD1CA800067B9C9 /* YTSafariViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTSafariViewController.h; sourceTree = "<group>"; };
 		550DF4DB1DD1CA800067B9C9 /* YTSafariViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTSafariViewController.m; sourceTree = "<group>"; };
 		55AB4465211C81C300B68C64 /* RNNotifications.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNNotifications.xcodeproj; path = "../node_modules/react-native-notifications/RNNotifications/RNNotifications.xcodeproj"; sourceTree = "<group>"; };
@@ -402,6 +402,7 @@
 		A73FAF22C722477F857704B4 /* libBVLinearGradient.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libBVLinearGradient.a; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		B6F8EC7CE7BD4354BAEC3C6A /* libRNDeviceInfo.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNDeviceInfo.a; sourceTree = "<group>"; };
+		B710DA924618469B9C2D3095 /* imageCropPicker.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = imageCropPicker.xcodeproj; path = "../node_modules/react-native-image-crop-picker/ios/imageCropPicker.xcodeproj"; sourceTree = "<group>"; };
 		BAB9E79BA0034CC0961B29FA /* RNEventSource.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNEventSource.xcodeproj; path = "../node_modules/@huston007/react-native-eventsource/ios/RNEventSource.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -418,7 +419,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				55AB446B211C81D900B68C64 /* libRNNotifications.a in Frameworks */,
-				55086C6420A1A254007B3D44 /* libRNImagePicker.a in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
@@ -435,6 +435,7 @@
 				233C7C26636041E1822BA464 /* libRNDeviceInfo.a in Frameworks */,
 				80EEC92B73F445E49BED15F6 /* libRNEventSource.a in Frameworks */,
 				9538D6E4A26747948B4C7B79 /* libBVLinearGradient.a in Frameworks */,
+				6417DC83CB4D49F39D2D325E /* libimageCropPicker.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -559,14 +560,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		55086C5E20A1A235007B3D44 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				55086C6220A1A236007B3D44 /* libRNImagePicker.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		55086C6320A1A254007B3D44 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -583,6 +576,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		5579CAFB215A51CB00A4E1E7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5579CAFF215A51CC00A4E1E7 /* libimageCropPicker.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		5590EB801F726B8600F7B945 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
@@ -590,6 +591,7 @@
 				B6F8EC7CE7BD4354BAEC3C6A /* libRNDeviceInfo.a */,
 				62349465C1F24CE195C3AE8C /* libRNEventSource.a */,
 				A73FAF22C722477F857704B4 /* libBVLinearGradient.a */,
+				0C078FB59006485292C5F03E /* libimageCropPicker.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -650,7 +652,6 @@
 			isa = PBXGroup;
 			children = (
 				55AB4465211C81C300B68C64 /* RNNotifications.xcodeproj */,
-				55086C5D20A1A235007B3D44 /* RNImagePicker.xcodeproj */,
 				55BFD5C51DEC2594006D0B84 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -667,6 +668,7 @@
 				BAB9E79BA0034CC0961B29FA /* RNEventSource.xcodeproj */,
 				00755370A8854D3EBB75B714 /* BVLinearGradient.xcodeproj */,
 				44CC4E27499042DAB26C13BB /* RNDeviceInfo.xcodeproj */,
+				B710DA924618469B9C2D3095 /* imageCropPicker.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -799,6 +801,10 @@
 					ProjectRef = 00755370A8854D3EBB75B714 /* BVLinearGradient.xcodeproj */;
 				},
 				{
+					ProductGroup = 5579CAFB215A51CB00A4E1E7 /* Products */;
+					ProjectRef = B710DA924618469B9C2D3095 /* imageCropPicker.xcodeproj */;
+				},
+				{
 					ProductGroup = 00C302A81ABCB8CE00DB3ED1 /* Products */;
 					ProjectRef = 00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */;
 				},
@@ -853,10 +859,6 @@
 				{
 					ProductGroup = 5578254A1E980BD0002702EF /* Products */;
 					ProjectRef = BAB9E79BA0034CC0961B29FA /* RNEventSource.xcodeproj */;
-				},
-				{
-					ProductGroup = 55086C5E20A1A235007B3D44 /* Products */;
-					ProjectRef = 55086C5D20A1A235007B3D44 /* RNImagePicker.xcodeproj */;
 				},
 				{
 					ProductGroup = 55D811251C6CD29A000078B5 /* Products */;
@@ -960,13 +962,6 @@
 			remoteRef = 55086C5720A1A221007B3D44 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		55086C6220A1A236007B3D44 /* libRNImagePicker.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNImagePicker.a;
-			remoteRef = 55086C6120A1A236007B3D44 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		551CDE071F97B1CD00550FF1 /* libfishhook.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1035,6 +1030,13 @@
 			fileType = wrapper.cfbundle;
 			path = RNEventSourceTests.xctest;
 			remoteRef = 557825761E980BD0002702EF /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		5579CAFF215A51CC00A4E1E7 /* libimageCropPicker.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libimageCropPicker.a;
+			remoteRef = 5579CAFE215A51CC00A4E1E7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		5590EB871F726B8700F7B945 /* libRCTBlob-tvOS.a */ = {
@@ -1297,12 +1299,14 @@
 					"$(SRCROOT)/../node_modules/@huston007/react-native-eventsource/ios/RNEventSource",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
+					"$(SRCROOT)/../node_modules/react-native-image-crop-picker/ios/**",
 				);
 				INFOPLIST_FILE = YouTrackMobileTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1332,12 +1336,14 @@
 					"$(SRCROOT)/../node_modules/@huston007/react-native-eventsource/ios/RNEventSource",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
+					"$(SRCROOT)/../node_modules/react-native-image-crop-picker/ios/**",
 				);
 				INFOPLIST_FILE = YouTrackMobileTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1374,6 +1380,7 @@
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/react-native-notifications/RNNotifications",
+					"$(SRCROOT)/../node_modules/react-native-image-crop-picker/ios/**",
 				);
 				INFOPLIST_FILE = YouTrackMobile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1412,6 +1419,7 @@
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/react-native-notifications/RNNotifications",
+					"$(SRCROOT)/../node_modules/react-native-image-crop-picker/ios/**",
 				);
 				INFOPLIST_FILE = YouTrackMobile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;

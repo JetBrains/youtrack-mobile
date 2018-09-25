@@ -1,4 +1,6 @@
 rootProject.name = 'YouTrackMobile'
+include ':react-native-image-crop-picker'
+project(':react-native-image-crop-picker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-image-crop-picker/android')
 include ':react-native-linear-gradient'
 project(':react-native-linear-gradient').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-linear-gradient/android')
 
@@ -7,5 +9,3 @@ include ':react-native-eventsource'
 project(':react-native-eventsource').projectDir = new File(rootProject.projectDir, '../node_modules/@huston007/react-native-eventsource/android')
 include ':react-native-device-info'
 project(':react-native-device-info').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-device-info/android')
-include ':react-native-image-picker'
-project(':react-native-image-picker').projectDir = new File(settingsDir, '../node_modules/react-native-image-picker/android')

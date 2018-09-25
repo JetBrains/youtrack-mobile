@@ -1,46 +1,50 @@
 /* @flow */
-// $FlowFixMe picker uses CommonJS :(
-import ImagePicker from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 
 const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
 
-const options = {
-  takePhotoButtonTitle: 'Take photo',
-  chooseFromLibraryButtonTitle: 'Choose from library',
-  noData: true,
-  allowsEditing: false
-};
-
 type Attachment = {
-  data: string,
-  uri: string,
-  path: ?string,
-  isVertical: boolean,
-  error: Object,
-  didCancel: ?boolean
+  filename?: string,
+  path: string,
+  mime: string
 }
 
-export default async function attachPhoto(method: string = 'showImagePicker') {
-  return new Promise((resolve, reject) => {
-    ImagePicker[method](options, (res: Attachment) => {
-      if (res.didCancel) {
-        return;
-      }
-      if (res.error) {
-        return reject(res.error);
-      }
+type NormalizedAttachment = {
+  url: string,
+  name: string,
+  mimeType: string
+}
 
-      const filePath = res.path || res.uri || '';
-      const fileName = res.fileName || filePath.match(FILE_NAME_REGEXP)[0];
-      const fileUri = res.uri;
+function extractFileNameFromPath(path: string): string {
+  const [fileName] = path.match(FILE_NAME_REGEXP) || [];
+  return fileName;
+}
 
-      const normalizedAttach = {
-        url: fileUri,
-        name: fileName,
-        mimeType: 'image'
-      };
-
-      resolve(normalizedAttach);
-    });
+async function pickPhoto(method: string): Promise<NormalizedAttachment> {
+  const image: Attachment = await ImagePicker[method]({
+    mediaType: 'photo',
+    cropping: true,
+    freeStyleCropEnabled: true,
+    avoidEmptySpaceAroundImage: false
   });
+
+  const filePath = image.path || '';
+  const fileName = image.filename || extractFileNameFromPath(filePath);
+
+  return {
+    url: filePath,
+    name: fileName,
+    mimeType: image.mime
+  };
+}
+
+export default async function attachFile(method: 'openCamera'|'openPicker' = 'openPicker'): Promise<?NormalizedAttachment> {
+  try {
+    return await pickPhoto(method);
+  } catch (err) {
+    if (err.toString().includes('User cancelled image selection')) {
+      return null;
+    }
+    throw err;
+  }
 }

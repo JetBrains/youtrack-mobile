@@ -219,7 +219,10 @@ export function attachImage(takeFromLibrary: boolean = true) {
   const api: Api = getApi();
   const {issue} = getState().creation;
   try {
-      const attachingImage = await attachFile(takeFromLibrary ? 'launchImageLibrary' : 'launchCamera');
+      const attachingImage = await attachFile(takeFromLibrary ? 'openPicker' : 'openCamera');
+      if (!attachingImage) {
+        return;
+      }
       dispatch(startImageAttaching(attachingImage));
 
       try {

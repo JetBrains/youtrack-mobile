@@ -400,6 +400,9 @@ export function attachImage() {
     const {issue} = getState().singleIssue;
     try {
       const attachingImage = await attachFile();
+      if (!attachingImage) {
+        return;
+      }
       dispatch(startImageAttaching(attachingImage));
 
       try {
