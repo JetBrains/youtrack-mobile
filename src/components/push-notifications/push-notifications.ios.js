@@ -53,7 +53,8 @@ export function registerForPush(api: Api) {
     /**
      * Then we register for push notifications with this token
      */
-    NotificationsIOS.addEventListener('remoteNotificationsRegistered', async deviceToken => {
+    async function onRegister(deviceToken) {
+      NotificationsIOS.removeEventListener('remoteNotificationsRegistered', onRegister);
       try {
         const url = `${KONNECTOR_URL}/ring/pushNotifications`;
         await api.makeAuthorizedRequest(url, 'POST', {token: ytToken, appleDeviceId: deviceToken});
@@ -61,12 +62,16 @@ export function registerForPush(api: Api) {
       } catch (err) {
         reject(err);
       }
-    });
+    }
+    NotificationsIOS.addEventListener('remoteNotificationsRegistered', onRegister);
 
-    NotificationsIOS.addEventListener('remoteNotificationsRegistrationFailed', async e => {
+    async function onRegistrationError(e) {
+      NotificationsIOS.removeEventListener('remoteNotificationsRegistrationFailed', onRegistrationError);
       log.info('PUSH: registration error', e);
       reject(e);
-    });
+    }
+    NotificationsIOS.addEventListener('remoteNotificationsRegistrationFailed', onRegistrationError);
+
     // $FlowFixMe: error in type annotations of library
     NotificationsIOS.requestPermissions();
   });
