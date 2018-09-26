@@ -67,7 +67,7 @@ export default class AttachmentsRow extends Component<Props, void> {
     this.props.onOpenAttachment('file', name);
 
     if (Platform.OS === 'ios' && !isVideo) {
-      Router.AttachmentPreview({url, name});
+      Router.AttachmentPreview({url, name, headers: this.props.imageHeaders});
     } else {
       if (Platform.OS === 'ios') {
         return safariView.show({url});
