@@ -1,12 +1,11 @@
 /* @flow */
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Clipboard, View, Text, TouchableOpacity, Modal} from 'react-native';
+import {View, Text, TouchableOpacity, Modal, Share} from 'react-native';
 import deviceLog, {LogView} from 'react-native-device-log';
 import getTopPadding from '../../components/header/header__top-padding';
 import styles from './debug-view.styles';
 import {closeDebugView} from '../../actions/app-actions';
-import {notify} from '../notification/notification';
 
 export async function getLogs() {
   const rows = await deviceLog.store.getRows();
@@ -19,8 +18,7 @@ export async function getLogs() {
 
 export async function copyRawLogs() {
   const logs = await getLogs();
-  Clipboard.setString(logs);
-  notify('Logs have been copied');
+  Share.share({itle: 'YouTrack Mobile render crash logs', message: logs}, {dialogTitle: 'Share issue URL'});
 }
 
 type Props = {
@@ -53,7 +51,7 @@ export class DebugView extends Component<Props, void> {
               <Text style={styles.closeButtonText}>Close</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.closeButton} onPress={copyRawLogs}>
-              <Text style={styles.closeButtonText}>Copy</Text>
+              <Text style={styles.closeButtonText}>Share</Text>
             </TouchableOpacity>
           </View>
         </View>

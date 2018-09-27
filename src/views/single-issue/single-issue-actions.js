@@ -1,5 +1,5 @@
 /* @flow */
-import {Clipboard, Linking, Alert} from 'react-native';
+import {Clipboard, Linking, Alert, Share, Platform} from 'react-native';
 import * as types from './single-issue-action-types';
 import ApiHelper from '../../components/api/api__helper';
 import {notify, notifyError, resolveError} from '../../components/notification/notification';
@@ -538,11 +538,15 @@ export function showIssueActions(actionSheet: Object) {
 
     const actions = [
       {
-        title: 'Copy issue URL',
+        title: 'Share…',
         execute: () => {
+          const url = makeIssueWebUrl(api, issue);
+          if (Platform.OS === 'ios') {
+            Share.share({url});
+          } else {
+            Share.share({title: issue.summary, message: url}, {dialogTitle: 'Share issue URL'});
+          }
           usage.trackEvent(CATEGORY_NAME, 'Copy issue URL');
-          Clipboard.setString(makeIssueWebUrl(api, issue));
-          notify('Issue URL has been copied');
         }
       },
       {
