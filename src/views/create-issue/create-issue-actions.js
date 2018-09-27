@@ -115,7 +115,7 @@ export function loadIssueFromDraft(draftId: string) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
     try {
-      const issue = await api.loadIssueDraft(draftId);
+      const issue = await api.issue.loadIssueDraft(draftId);
       log.info(`Issue draft loaded, "${issue.summary}"`);
       dispatch(setIssueDraft(issue));
     } catch (err) {
@@ -144,7 +144,7 @@ export function updateIssueDraft(ignoreFields: boolean = false) {
     };
 
     try {
-      const issue = await api.updateIssueDraft(issueToSend);
+      const issue = await api.issue.updateIssueDraft(issueToSend);
 
       if (ignoreFields) {
         delete issue.fields;
@@ -195,7 +195,7 @@ export function createIssue() {
 
     try {
       await dispatch(updateIssueDraft());
-      const created = await api.createIssue(getState().creation.issue);
+      const created = await api.issue.createIssue(getState().creation.issue);
       log.info('Issue has been created');
       usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Success');
 
@@ -226,7 +226,7 @@ export function attachImage(takeFromLibrary: boolean = true) {
       dispatch(startImageAttaching(attachingImage));
 
       try {
-        await api.attachFile(issue.id, attachingImage.url, attachingImage.name);
+        await api.issue.attachFile(issue.id, attachingImage.url, attachingImage.name);
         log.info('Image attached to draft');
         usage.trackEvent(CATEGORY_NAME, 'Attach image', 'Success');
       } catch (err) {
@@ -262,7 +262,7 @@ export function updateFieldValue(field: CustomField, value: FieldValue) {
 
     try {
       await dispatch(updateIssueDraft(true)); // Update summary/description first
-      await api.updateIssueDraftFieldValue(issue.id, field.id, value);
+      await api.issue.updateIssueDraftFieldValue(issue.id, field.id, value);
       log.info(`Issue field value updated`);
 
       dispatch(loadIssueFromDraft(issue.id));

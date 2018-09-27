@@ -137,7 +137,7 @@ export function loadIssues(query: string) {
     dispatch(startIssuesLoading());
     dispatch(loadIssuesCount());
     try {
-      let issues: Array<IssueOnList> = await api.getIssues(query, PAGE_SIZE);
+      let issues: Array<IssueOnList> = await api.issues.getIssues(query, PAGE_SIZE);
       issues = ApiHelper.fillIssuesFieldHash(issues);
       log.info(`${issues.length} issues loaded`);
       dispatch(receiveIssues(issues));
@@ -186,7 +186,7 @@ export function loadMoreIssues() {
     dispatch(startMoreIssuesLoading(newSkip));
 
     try {
-      let moreIssues: Array<IssueOnList> = await api.getIssues(query, PAGE_SIZE, newSkip);
+      let moreIssues: Array<IssueOnList> = await api.issues.getIssues(query, PAGE_SIZE, newSkip);
       log.info(`Loaded ${PAGE_SIZE} more issues.`);
       moreIssues = ApiHelper.fillIssuesFieldHash(moreIssues);
       const updatedIssues = ApiHelper.removeDuplicatesByPropName(issues.concat(moreIssues), 'id');
@@ -209,7 +209,7 @@ export function loadIssuesCount() {
     const api: Api = getApi();
     const {query} = getState().issueList;
 
-    const count = await api.getIssuesCount(query);
+    const count = await api.issues.getIssuesCount(query);
 
     dispatch(setIssuesCount(count));
   };

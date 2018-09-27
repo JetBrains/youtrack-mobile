@@ -22,9 +22,11 @@ describe('Issue view actions', () => {
     };
     fakeComment = {id: 'fake-comment', text: 'fake-text'};
     fakeApi = {
-      getIssue: sinon.stub().returns(fakeIssue),
-      getIssueComments: sinon.stub().returns([fakeComment]),
-      submitComment: sinon.stub().returns(fakeComment)
+      issue: {
+        getIssue: sinon.stub().returns(fakeIssue),
+        getIssueComments: sinon.stub().returns([fakeComment]),
+        submitComment: sinon.stub().returns(fakeComment)
+      }
     };
     store = mockStore({
       singleIssue: {issueId: ISSUE_ID, issue: fakeIssue}
@@ -34,7 +36,7 @@ describe('Issue view actions', () => {
   it('should load issue', async () => {
     await store.dispatch(actions.loadIssue());
 
-    fakeApi.getIssue.should.have.been.calledWith(ISSUE_ID);
+    fakeApi.issue.getIssue.should.have.been.calledWith(ISSUE_ID);
     const dispatched = store.getActions();
     expect(dispatched[0]).toEqual({type: types.SET_ISSUE_ID, issueId: fakeIssue.id});
     expect(dispatched[1]).toEqual({type: types.RECEIVE_ISSUE, issue: fakeIssue});
@@ -44,15 +46,15 @@ describe('Issue view actions', () => {
     await store.dispatch(actions.loadIssueComments());
 
     const dispatched = store.getActions();
-    fakeApi.getIssueComments.should.have.been.calledWith(ISSUE_ID);
+    fakeApi.issue.getIssueComments.should.have.been.calledWith(ISSUE_ID);
     expect(dispatched[0]).toEqual({type: types.RECEIVE_COMMENTS, comments: [fakeComment]});
   });
 
   it('should refresh issue and comments', async () => {
     await store.dispatch(actions.refreshIssue());
 
-    fakeApi.getIssue.should.have.been.calledWith(ISSUE_ID);
-    fakeApi.getIssueComments.should.have.been.calledWith(ISSUE_ID);
+    fakeApi.issue.getIssue.should.have.been.calledWith(ISSUE_ID);
+    fakeApi.issue.getIssueComments.should.have.been.calledWith(ISSUE_ID);
 
     const dispatched = store.getActions();
     expect(dispatched[0]).toEqual({type: types.START_ISSUE_REFRESHING});
@@ -62,7 +64,7 @@ describe('Issue view actions', () => {
   it('should add comment', async () => {
     await store.dispatch(actions.addComment(fakeComment));
 
-    fakeApi.submitComment.should.have.been.calledWith(ISSUE_ID, fakeComment);
+    fakeApi.issue.submitComment.should.have.been.calledWith(ISSUE_ID, fakeComment);
 
     const dispatched = store.getActions();
     expect(dispatched[0]).toEqual({type: types.START_SUBMITTING_COMMENT});

@@ -42,13 +42,13 @@ function loadSprint(agileId: string, sprintId: string) {
     dispatch(startSprintLoad());
     destroyServersideEvents();
     try {
-      const sprint = await api.getSprint(agileId, sprintId, PAGE_SIZE);
+      const sprint = await api.agile.getSprint(agileId, sprintId, PAGE_SIZE);
       LayoutAnimation.easeInEaseOut();
       dispatch(receiveSprint(sprint));
       dispatch(subscribeServersideUpdates());
       usage.trackEvent(CATEGORY_NAME, 'Load sprint', 'Success');
       log.info(`Sprint ${sprintId} (agileId=${agileId}) has been loaded`);
-      await api.saveLastVisitedSprint(sprintId);
+      await api.agile.saveLastVisitedSprint(sprintId);
     } catch (e) {
       usage.trackEvent(CATEGORY_NAME, 'Load sprint', 'Error');
       notifyError('Could not load sprint', e);
@@ -61,7 +61,7 @@ function loadSprint(agileId: string, sprintId: string) {
 function loadBoard(boardId: string, sprints: Array<{id: string}>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
-    const agileUserProfile: AgileUserProfile = await api.getAgileUserProfile();
+    const agileUserProfile: AgileUserProfile = await api.agile.getAgileUserProfile();
     const visitedSprintOnBoard = (agileUserProfile.visitedSprints || []).filter(s => s.agile.id === boardId)[0];
     const targetSprint = visitedSprintOnBoard || sprints[sprints.length - 1];
     log.info(`Resolving sprint for board ${boardId}. Visited = ${visitedSprintOnBoard ? visitedSprintOnBoard.id : 'NOTHING'}, target = ${targetSprint.id}`);
@@ -73,7 +73,7 @@ export function fetchDefaultAgileBoard() {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
 
-    const profile = await api.getAgileUserProfile();
+    const profile = await api.agile.getAgileUserProfile();
     const lastSprint = profile.visitedSprints.filter(s => s.agile.id === profile.defaultAgile.id)[0];
     if (lastSprint) {
       dispatch(loadSprint(lastSprint.agile.id, lastSprint.id));
@@ -125,7 +125,7 @@ export function fetchMoreSwimlanes() {
     dispatch(startSwimlanesLoading());
 
     try {
-      const swimlanes = await api.getSwimlanes(sprint.agile.id, sprint.id, PAGE_SIZE, sprint.board.trimmedSwimlanes.length);
+      const swimlanes = await api.agile.getSwimlanes(sprint.agile.id, sprint.id, PAGE_SIZE, sprint.board.trimmedSwimlanes.length);
       dispatch(receiveSwimlanes(swimlanes));
       log.info(`Loaded ${PAGE_SIZE} more swimlanes`);
       usage.trackEvent(CATEGORY_NAME, 'Load more swimlanes');
@@ -158,7 +158,7 @@ export function rowCollapseToggle(row: AgileBoardRow) {
     dispatch(updateRowCollapsedState(row, !row.collapsed));
 
     try {
-      await api.updateRowCollapsedState(sprint.agile.id, sprint.id, {
+      await api.agile.updateRowCollapsedState(sprint.agile.id, sprint.id, {
         ...row,
         collapsed: !row.collapsed
       });
@@ -192,7 +192,7 @@ export function columnCollapseToggle(column: AgileColumn) {
     dispatch(updateColumnCollapsedState(column, !column.collapsed));
 
     try {
-      await api.updateColumnCollapsedState(sprint.agile.id, sprint.id, {
+      await api.agile.updateColumnCollapsedState(sprint.agile.id, sprint.id, {
         ...column,
         collapsed: !column.collapsed
       });
@@ -224,7 +224,7 @@ export function openSprintSelect() {
         show: true,
         placeholder: 'Search for the sprint',
         dataSource: async () => {
-          const res = await api.getSprintList(sprint.agile.id);
+          const res = await api.agile.getSprintList(sprint.agile.id);
           return res.sort(it => it.archived);
         },
         selectedItems: [sprint],
@@ -250,7 +250,7 @@ export function openBoardSelect() {
       selectProps: {
         show: true,
         placeholder: 'Search for the board',
-        dataSource: () => api.getAgileBoardsList(),
+        dataSource: () => api.agile.getAgileBoardsList(),
         selectedItems: sprint ? [sprint.agile] : [],
         onSelect: (selectedBoard: BoardOnList) => {
           dispatch(closeSelect());
@@ -287,7 +287,7 @@ export function createCardForCell(columnId: string, cellId: string) {
     const {sprint} = getState().agile;
     const api: Api = getApi();
     try {
-      const draft = await api.getIssueDraftForAgileCell(sprint.agile.id, sprint.id, columnId, cellId);
+      const draft = await api.agile.getIssueDraftForAgileCell(sprint.agile.id, sprint.id, columnId, cellId);
       dispatch(storeCreatingIssueDraft(draft.id, cellId));
       Router.CreateIssue({predefinedDraftId: draft.id});
       usage.trackEvent(CATEGORY_NAME, 'Open create card for cell');

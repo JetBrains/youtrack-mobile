@@ -90,7 +90,9 @@ describe('Issue list actions', () => {
     const COUNT = 12;
     const stateMock = {issueList: {query: 'test-query'}};
     const apiMock = {
-      getIssuesCount: () => new Promise(resolve => resolve(COUNT))
+      issues: {
+        getIssuesCount: () => new Promise(resolve => resolve(COUNT))
+      }
     };
 
     await actions.loadIssuesCount()(dispatch, () => stateMock, () => apiMock);

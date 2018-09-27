@@ -183,7 +183,7 @@ export function loadIssueComments() {
     const api: Api = getApi();
 
     try {
-      const comments = await api.getIssueComments(issueId);
+      const comments = await api.issue.getIssueComments(issueId);
       log.info(`Loaded ${comments.length} comments for "${issueId}" issue`);
       dispatch(receiveComments(comments));
     } catch (err) {
@@ -203,7 +203,7 @@ export function loadIssue() {
         throw new Error('Attempt to load issue with no ID');
       }
       log.debug(`Loading issue "${issueId}"`);
-      const issue = await api.getIssue(issueId);
+      const issue = await api.issue.getIssue(issueId);
       log.info(`Issue "${issueId}" loaded`, issue);
       issue.fieldHash = ApiHelper.makeFieldHash(issue);
 
@@ -241,7 +241,7 @@ export function saveIssueSummaryAndDescriptionChange() {
 
     try {
       const {issue} = getState().singleIssue;
-      await api.updateIssueSummaryDescription(issue);
+      await api.issue.updateIssueSummaryDescription(issue);
       log.info(`Issue (${issue.id}) summary/description has been updated`);
       usage.trackEvent(CATEGORY_NAME, 'Update issue', 'Success');
 
@@ -267,7 +267,7 @@ export function addComment(comment: Object) {
     const {issue} = getState().singleIssue;
     dispatch(startSubmittingComment());
     try {
-      const createdComment = await api.submitComment(issue.id, comment);
+      const createdComment = await api.issue.submitComment(issue.id, comment);
       log.info(`Comment added to issue ${issue.id}`);
       usage.trackEvent(CATEGORY_NAME, 'Add comment', 'Success');
 
@@ -307,7 +307,7 @@ export function submitEditedComment(comment: IssueComment) {
     dispatch(startSubmittingComment());
 
     try {
-      const updatedComment = await getApi().submitComment(issueId, comment);
+      const updatedComment = await getApi().issue.submitComment(issueId, comment);
 
       dispatch(updateComment(updatedComment));
       log.info(`Comment ${updatedComment.id} edited`);
@@ -338,7 +338,7 @@ function toggleCommentDeleted(comment: IssueComment, deleted: boolean) {
     const issueId = getState().singleIssue.issueId;
     try {
       dispatch(updateComment({...comment, deleted}));
-      await getApi().updateCommentDeleted(issueId, comment.id, deleted);
+      await getApi().issue.updateCommentDeleted(issueId, comment.id, deleted);
       log.info(`Comment ${comment.id} deleted state updated: ${deleted.toString()}`);
     } catch (err) {
       dispatch(updateComment({...comment}));
@@ -382,7 +382,7 @@ export function deleteCommentPermanently(comment: IssueComment) {
     try {
       dispatch(deleteCommentFromList(comment));
       log.info(`Comment ${comment.id} deleted forever`);
-      await getApi().deleteCommentPermanently(issueId, comment.id);
+      await getApi().issue.deleteCommentPermanently(issueId, comment.id);
     } catch (err) {
       dispatch(loadIssue());
       notifyError(`Failed to delete comment`, err);
@@ -406,7 +406,7 @@ export function attachImage() {
       dispatch(startImageAttaching(attachingImage));
 
       try {
-        await api.attachFile(issue.id, attachingImage.url, attachingImage.name);
+        await api.issue.attachFile(issue.id, attachingImage.url, attachingImage.name);
         log.info(`Image attached to issue ${issue.id}`);
         usage.trackEvent(CATEGORY_NAME, 'Attach image', 'Success');
       } catch (err) {
@@ -433,8 +433,8 @@ export function updateIssueFieldValue(field: CustomField, value: FieldValue) {
 
     dispatch(setIssueFieldValue(field, value));
     const updateMethod = field.hasStateMachine
-      ? api.updateIssueFieldEvent.bind(api)
-      : api.updateIssueFieldValue.bind(api);
+      ? api.issue.updateIssueFieldEvent.bind(api)
+      : api.issue.updateIssueFieldValue.bind(api);
 
     try {
       await updateMethod(issue.id, field.id, value);
@@ -468,7 +468,7 @@ export function updateProject(project: IssueProject) {
     dispatch(setProject(project));
 
     try {
-      await api.updateProject(issue, project);
+      await api.issue.updateProject(issue, project);
       log.info('Project updated');
       await dispatch(loadIssue());
       dispatch(issueUpdated(getState().singleIssue.issue));
@@ -490,7 +490,7 @@ export function toggleVote(voted: boolean) {
 
     dispatch(setVoted(voted));
     try {
-      await api.updateIssueVoted(issue.id, voted);
+      await api.issue.updateIssueVoted(issue.id, voted);
     } catch (err) {
       notifyError('Cannot update "Voted"', err);
       dispatch(setVoted(!voted));
@@ -509,7 +509,7 @@ export function toggleStar(starred: boolean) {
 
     dispatch(setStarred(starred));
     try {
-      await api.updateIssueStarred(issue.id, starred);
+      await api.issue.updateIssueStarred(issue.id, starred);
     } catch (err) {
       notifyError('Cannot update "Starred"', err);
       dispatch(setStarred(!starred));
@@ -603,7 +603,7 @@ export function loadCommentSuggestions(query: string) {
     dispatch(startLoadingCommentSuggestions());
 
     try {
-      const suggestions = await api.getMentionSuggests([issue.id], query);
+      const suggestions = await api.issue.getMentionSuggests([issue.id], query);
       dispatch(receiveCommentSuggestions(suggestions));
     } catch (err) {
       notifyError('Failed to load comment suggestions', err);
@@ -678,7 +678,7 @@ export function onOpenCommentVisibilitySelect(comment: IssueComment) {
         show: true,
         placeholder: 'Select user or group',
         dataSource: async () => {
-          const options = await api.getVisibilityOptions(issue.id);
+          const options = await api.issue.getVisibilityOptions(issue.id);
           dispatch(receiveCommentVisibilityOptions());
           return [...(options.visibilityGroups || []), ...(options.visibilityUsers || [])];
         },

@@ -65,7 +65,7 @@ describe('API', () => {
 
   it('should load issue', async () => {
     fetchMock.mock(`^${serverUrl}/api/issues/test-id`, {id: 'issue-id', comments: [{author: {avatarUrl: 'http://foo.bar'}}]});
-    const res = await createInstance().getIssue('test-id');
+    const res = await createInstance().issue.getIssue('test-id');
 
     res.id.should.equal('issue-id');
   });
@@ -77,7 +77,7 @@ describe('API', () => {
         url: '/persistent/123'
       }
     ]});
-    const res = await createInstance().getIssue('test-id');
+    const res = await createInstance().issue.getIssue('test-id');
 
     res.attachments[0].url.should.equal(`${serverUrl}/persistent/123`);
   });
@@ -93,7 +93,7 @@ describe('API', () => {
       }
     ]);
 
-    const comments = await createInstance().getIssueComments('test-id');
+    const comments = await createInstance().issue.getIssueComments('test-id');
 
     comments[0].author.avatarUrl.should.equal(`${serverUrl}${relativeUrl}`);
   });
@@ -116,7 +116,7 @@ describe('API', () => {
         avatarUrl: 'http://foo.bar'
       }
     });
-    const res = await createInstance().submitComment('test-issue-id', {text: 'test comment text'});
+    const res = await createInstance().issue.submitComment('test-issue-id', {text: 'test comment text'});
 
     res.id.should.equal('test-comment');
   });
@@ -128,7 +128,7 @@ describe('API', () => {
         avatarUrl: 'http://foo.bar'
       }
     });
-    const res = await createInstance().submitComment('test-issue-id', {text: 'test comment text', id: '123'});
+    const res = await createInstance().issue.submitComment('test-issue-id', {text: 'test comment text', id: '123'});
 
     res.id.should.equal('test-comment');
   });
@@ -142,7 +142,7 @@ describe('API', () => {
         avatarUrl: relativeUrl
       }
     });
-    const res = await createInstance().submitComment('test-issue-id', {text: 'test comment text'});
+    const res = await createInstance().issue.submitComment('test-issue-id', {text: 'test comment text'});
 
     res.author.avatarUrl.should.equal(`${serverUrl}${relativeUrl}`);
   });

@@ -16,7 +16,6 @@ import Router from '../../components/router/router';
 import Header from '../../components/header/header';
 import LinkedIssues from '../../components/linked-issues/linked-issues';
 import Wiki from '../../components/wiki/wiki';
-import {notifyError} from '../../components/notification/notification';
 import {COLOR_PINK} from '../../components/variables/variables';
 import usage from '../../components/usage/usage';
 import log from '../../components/log/log';
@@ -59,11 +58,6 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
 
     this.props.loadIssue();
     this.props.loadIssueComments();
-  }
-
-  loadCommentSuggestions(query) {
-    return getApi().getMentionSuggests([this.props.issueId], query)
-      .catch(err => notifyError('Cannot load suggestions', err));
   }
 
   _canAddComment() {
