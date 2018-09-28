@@ -1,5 +1,5 @@
 /* @flow */
-import {ScrollView, View, Text, Image, RefreshControl, Modal, TouchableOpacity, ActivityIndicator} from 'react-native';
+import {View, Text, Image, RefreshControl, Modal, TouchableOpacity, ActivityIndicator, Dimensions} from 'react-native';
 import React, {Component} from 'react';
 import usage from '../../components/usage/usage';
 import Header from '../../components/header/header';
@@ -10,10 +10,11 @@ import log from '../../components/log/log';
 import BoardHeader from './board-header';
 import BoardRow from '../../components/agile-row/agile-row';
 import AgileCard from '../../components/agile-card/agile-card';
+import BoardScroller, {COLUMN_SCREEN_PART} from '../../components/board-scroller/board-scroller';
 import Router from '../../components/router/router';
 import Auth from '../../components/auth/auth';
 import Api from '../../components/api/api';
-import {COLOR_PINK, AGILE_COLUMN_MIN_WIDTH, AGILE_COLLAPSED_COLUMN_WIDTH} from '../../components/variables/variables';
+import {COLOR_PINK, AGILE_COLLAPSED_COLUMN_WIDTH} from '../../components/variables/variables';
 import {zoomIn, zoomOut, next} from '../../components/icon/icon';
 import type {SprintFull, Board, AgileBoardRow, AgileColumn} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
@@ -101,12 +102,14 @@ class AgileBoard extends Component<Props, State> {
   }
 
   _getScrollableWidth = () => {
-    if (!this.props.sprint) {
+    const {sprint} = this.props;
+    const COLUMN_WIDTH = Dimensions.get('window').width * COLUMN_SCREEN_PART;
+    if (!sprint) {
       return null;
     }
 
-    return this.props.sprint.board.columns
-      .map(col => col.collapsed ? AGILE_COLLAPSED_COLUMN_WIDTH : AGILE_COLUMN_MIN_WIDTH)
+    return sprint.board.columns
+      .map(col => col.collapsed ? AGILE_COLLAPSED_COLUMN_WIDTH : COLUMN_WIDTH)
       .reduce((res, item) => res + item);
   }
 
@@ -224,6 +227,7 @@ class AgileBoard extends Component<Props, State> {
     const {sprint, isLoadingMore, isSprintSelectOpen, noBoardSelected} = this.props;
 
     const {zoomedOut} = this.state;
+
     return (
       <Menu>
         <View style={styles.container}>
@@ -231,18 +235,23 @@ class AgileBoard extends Component<Props, State> {
 
           {sprint && this._renderBoardHeader(sprint)}
 
-          <ScrollView
+          <BoardScroller
+            columns={sprint?.board.columns}
+            snap={!zoomedOut}
             refreshControl={this._renderRefreshControl()}
-            onScroll={this._onScroll}
-            scrollEventThrottle={30}
-            contentContainerStyle={[
-              {minWidth: zoomedOut? null: this._getScrollableWidth()}
-            ]}
+            horizontalScrollProps={{
+              onScroll: this._onScroll,
+              contentContainerStyle: {
+                display: 'flex',
+                flexDirection: 'column',
+                width: zoomedOut ? '100%' : this._getScrollableWidth()
+              }
+            }}
           >
             {noBoardSelected && this._renderNoSprint()}
             {sprint && this._renderBoard(sprint)}
             {isLoadingMore && <ActivityIndicator color={COLOR_PINK} style={styles.loadingMoreIndicator}/>}
-          </ScrollView>
+          </BoardScroller>
 
           <View style={styles.zoomButtonContainer}>
             <TouchableOpacity
