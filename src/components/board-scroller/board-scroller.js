@@ -48,6 +48,9 @@ export function getClosestSnapPoints(x: number, openColumnStarts: Array<number>)
       break;
     }
   }
+  if (next < prev) {
+    next = prev;
+  }
   return [prev, next];
 }
 

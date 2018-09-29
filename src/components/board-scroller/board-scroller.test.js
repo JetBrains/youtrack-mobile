@@ -75,5 +75,11 @@ describe('BoardScroller', () => {
       event.nativeEvent.velocity.x = -2;
       getSnapToX(event, columns).should.equal(0);
     });
+
+    it('should snap to last column even if moving to next', () => {
+      event.nativeEvent.contentOffset.x = 2225;
+      event.nativeEvent.velocity.x = 2;
+      getSnapToX(event, columns).should.equal(2025);
+    });
   });
 });
