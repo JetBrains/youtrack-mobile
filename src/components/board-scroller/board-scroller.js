@@ -38,20 +38,9 @@ export function getSnapPoints(columns: Array<BoardColumn>): Array<number> {
 }
 
 export function getClosestSnapPoints(x: number, openColumnStarts: Array<number>) {
-  let prev = 0;
-  let next = 0;
-  for (const cursor of openColumnStarts) {
-    if (cursor < x) {
-      prev = cursor;
-    } else {
-      next = cursor;
-      break;
-    }
-  }
-  if (next < prev) {
-    next = prev;
-  }
-  return [prev, next];
+  const prev = openColumnStarts.filter(it => it < x).pop() || 0;
+  const next = openColumnStarts.filter(it => it > x).shift();
+  return [prev, next > x ? next : openColumnStarts[openColumnStarts.length - 1]];
 }
 
 export function getSnapToX(scrollEvent: Object, columns: Array<BoardColumn>) {
