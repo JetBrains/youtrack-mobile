@@ -8,8 +8,6 @@ import {
   COLOR_BLACK
 } from '../../components/variables/variables';
 
-const SAFE_GAP = 200;
-
 export default StyleSheet.create({
   container: {
     flex: 1,
@@ -43,11 +41,7 @@ export default StyleSheet.create({
   },
   boardHeaderContainer: {
     overflow: 'hidden',
-    backgroundColor: COLOR_BLACK,
-    marginLeft: -SAFE_GAP,
-    marginRight: -SAFE_GAP,
-    paddingLeft: SAFE_GAP,
-    paddingRight: SAFE_GAP
+    backgroundColor: COLOR_BLACK
   },
   loadingMoreIndicator: {
     padding: UNIT * 2
