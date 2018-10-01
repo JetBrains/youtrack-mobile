@@ -65,7 +65,7 @@ export default class BoardScroller extends Component<Props, void> {
 
     const GAP_WIDTH = Dimensions.get('window').width * ((1 - COLUMN_SCREEN_PART) / 2);
     const snapX = getSnapToX(event, columns);
-    this.horizontalScroll.scrollTo({x: snapX <= 0 ? 0 : (snapX - GAP_WIDTH) });
+    this.horizontalScroll.scrollTo({x: snapX <= AGILE_COLLAPSED_COLUMN_WIDTH ? 0 : (snapX - GAP_WIDTH) });
   };
 
   horizontalScrollRef = (node: ScrollView) => {
@@ -82,7 +82,7 @@ export default class BoardScroller extends Component<Props, void> {
       >
         <ScrollView
           horizontal
-          scrollEventThrottle={30}
+          scrollEventThrottle={10}
           decelerationRate="fast"
           ref={this.horizontalScrollRef}
           {...horizontalScrollProps}

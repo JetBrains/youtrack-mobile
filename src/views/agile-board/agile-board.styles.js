@@ -4,8 +4,11 @@ import {
   COLOR_PINK,
   COLOR_FONT,
   COLOR_FONT_ON_BLACK,
-  COLOR_TRANSPARENT_BLACK
+  COLOR_TRANSPARENT_BLACK,
+  COLOR_BLACK
 } from '../../components/variables/variables';
+
+const SAFE_GAP = 200;
 
 export default StyleSheet.create({
   container: {
@@ -39,7 +42,12 @@ export default StyleSheet.create({
     resizeMode: 'contain'
   },
   boardHeaderContainer: {
-    overflow: 'hidden'
+    overflow: 'hidden',
+    backgroundColor: COLOR_BLACK,
+    marginLeft: -SAFE_GAP,
+    marginRight: -SAFE_GAP,
+    paddingLeft: SAFE_GAP,
+    paddingRight: SAFE_GAP
   },
   loadingMoreIndicator: {
     padding: UNIT * 2
