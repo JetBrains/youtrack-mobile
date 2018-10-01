@@ -49,6 +49,7 @@ function loadSprint(agileId: string, sprintId: string) {
       usage.trackEvent(CATEGORY_NAME, 'Load sprint', 'Success');
       log.info(`Sprint ${sprintId} (agileId=${agileId}) has been loaded`);
       await api.agile.saveLastVisitedSprint(sprintId);
+      dispatch(loadAgileProfile());
     } catch (e) {
       usage.trackEvent(CATEGORY_NAME, 'Load sprint', 'Error');
       notifyError('Could not load sprint', e);
@@ -69,11 +70,17 @@ function loadBoard(boardId: string, sprints: Array<{id: string}>) {
   };
 }
 
+export function loadAgileProfile() {
+  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+    const profile = await getApi().agile.getAgileUserProfile();
+    dispatch({type: types.RECEIVE_AGILE_PROFILE, profile});
+  };
+}
+
 export function fetchDefaultAgileBoard() {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
-    const api: Api = getApi();
-
-    const profile = await api.agile.getAgileUserProfile();
+    await dispatch(loadAgileProfile());
+    const profile = getState().agile.profile;
     const lastSprint = profile.visitedSprints.filter(s => s.agile.id === profile.defaultAgile.id)[0];
     if (lastSprint) {
       dispatch(loadSprint(lastSprint.agile.id, lastSprint.id));

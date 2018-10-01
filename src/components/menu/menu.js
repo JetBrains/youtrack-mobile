@@ -19,6 +19,7 @@ import {getStorageState} from '../storage/storage';
 
 import type {StorageState} from '../storage/storage';
 import type {AppConfigFilled} from '../../flow/AppConfig';
+import type {AgileUserProfile} from '../../flow/Agile';
 
 const CURRENT_YEAR = (new Date()).getFullYear();
 const MENU_WIDTH = 280;
@@ -35,6 +36,7 @@ type Props = {
   issueQuery: ?string,
   otherAccounts: Array<StorageState>,
   isChangingAccount: boolean,
+  agileProfile: AgileUserProfile,
   onLogOut: () => any,
   onAddAccount: () => any,
   onChangeAccount: (account: StorageState) => any,
@@ -95,6 +97,20 @@ export class Menu extends Component<Props, void> {
     }
 
     this.props.onChangeAccount(account);
+  }
+
+  _getSelectedAgileBoard = () => {
+    const {agileProfile} = this.props;
+    if (!agileProfile) {
+      return '';
+    }
+    const lastSprint = agileProfile.visitedSprints
+      .filter(s => s.agile.id === agileProfile.defaultAgile.id)[0];
+
+    if (!lastSprint) {
+      return '';
+    }
+    return `${agileProfile.defaultAgile.name}, ${lastSprint.name}`;
   }
 
   _renderAccounts() {
@@ -176,7 +192,7 @@ export class Menu extends Component<Props, void> {
                 <Text style={styles.menuItemText}>Agile Boards</Text>
                 <Image style={styles.menuItemIcon} source={next}></Image>
               </View>
-              <Text style={styles.menuItemSubtext}>Alpha version</Text>
+              <Text style={styles.menuItemSubtext}>{this._getSelectedAgileBoard()}</Text>
             </TouchableOpacity>
           </View>
 
@@ -227,6 +243,7 @@ const mapStateToProps = (state, ownProps) => {
     otherAccounts: state.app.otherAccounts,
     issueQuery: state.issueList.query,
     isChangingAccount: state.app.isChangingAccount,
+    agileProfile: state.agile.profile,
     ...ownProps
   };
 };

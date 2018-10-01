@@ -14,6 +14,7 @@ import usage from '../components/usage/usage';
 import {notifyError} from '../components/notification/notification';
 import {loadConfig} from '../components/config/config';
 import Auth from '../components/auth/auth';
+import {loadAgileProfile} from '../views/agile-board/board-actions';
 import {registerForPush, initializePushNotifications, unregisterForPushNotifications} from '../components/push-notifications/push-notifications';
 
 import type {AuthParams, CurrentUser} from '../components/auth/auth';
@@ -249,6 +250,7 @@ function completeInitialization() {
     await auth.loadPermissions(auth.authParams);
     dispatch(setPermissions(auth.permissions, auth.currentUser));
     dispatch(subscribeToPush());
+    dispatch(loadAgileProfile());
 
     log.info('Initialization completed');
     Router.IssueList();

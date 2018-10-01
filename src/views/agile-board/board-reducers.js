@@ -4,7 +4,7 @@ import {LOG_OUT} from '../../actions/action-types';
 import {ISSUE_CREATED} from '../create-issue/create-issue-action-types';
 import {ISSUE_UPDATED} from '../single-issue/single-issue-action-types';
 import {createReducer} from 'redux-create-reducer';
-import type {SprintFull, BoardCell, AgileBoardRow, Board} from '../../flow/Agile';
+import type {SprintFull, BoardCell, AgileBoardRow, Board, AgileUserProfile} from '../../flow/Agile';
 import type {IssueOnList, IssueFull} from '../../flow/Issue';
 import type ServersideEvents from '../../components/api/api__serverside-events';
 
@@ -12,6 +12,7 @@ type BoardState = Board;
 
 export type AgilePageState = {
   isLoading: boolean,
+  profile: ?AgileUserProfile,
   noBoardSelected: boolean,
   isSprintSelectOpen: boolean,
   creatingIssueDraftId: ?string,
@@ -23,6 +24,7 @@ export type AgilePageState = {
 
 const initialPageState: AgilePageState = {
   isLoading: false,
+  profile: null,
   noBoardSelected: false,
   isSprintSelectOpen: false,
   creatingIssueDraftId: null,
@@ -313,6 +315,9 @@ const boardReducer = createReducer({}, {
 const agilePageReducer = createReducer(initialPageState, {
   [LOG_OUT](state: AgilePageState): AgilePageState {
     return initialPageState;
+  },
+  [types.RECEIVE_AGILE_PROFILE](state: AgilePageState, action: {profile: AgileUserProfile}): AgilePageState {
+    return {...state, profile: action.profile};
   },
   [types.NO_AGILE_SELECTED](state: AgilePageState) {
     return {...state, noBoardSelected: true};

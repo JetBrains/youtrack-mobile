@@ -17,6 +17,7 @@ type AgileUserProfile = {
   },
   visitedSprints: Array<{
     id: string,
+    name: string,
     agile: { id: string }
   }>
 };
