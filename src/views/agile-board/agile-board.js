@@ -13,6 +13,7 @@ import AgileCard from '../../components/agile-card/agile-card';
 import BoardScroller, {COLUMN_SCREEN_PART} from '../../components/board-scroller/board-scroller';
 import Router from '../../components/router/router';
 import Auth from '../../components/auth/auth';
+import {Draggable, DragContainer} from '../../components/draggable/';
 import Api from '../../components/api/api';
 import {COLOR_PINK, AGILE_COLLAPSED_COLUMN_WIDTH} from '../../components/variables/variables';
 import {zoomIn, zoomOut, next} from '../../components/icon/icon';
@@ -25,6 +26,8 @@ import {openMenu} from '../../actions/app-actions';
 import { connect } from 'react-redux';
 
 const CATEGORY_NAME = 'Agile board';
+
+const DRAG_DISABLED = true;
 
 type Props = AgilePageState & {
   auth: Auth,
@@ -197,9 +200,9 @@ class AgileBoard extends Component<Props, State> {
       onCollapseToggle: this.props.onRowCollapseToggle,
       renderIssueCard: (issue: IssueOnList) => {
         return (
-          <TouchableOpacity key={issue.id} onPress={() => this._onTapIssue(issue)}>
+          <Draggable key={issue.id} onPress={() => this._onTapIssue(issue)} disabled={DRAG_DISABLED}>
             <AgileCard issue={issue} style={styles.card}/>
-          </TouchableOpacity>
+          </Draggable>
         );
       }
     };
@@ -235,23 +238,25 @@ class AgileBoard extends Component<Props, State> {
 
           {sprint && this._renderBoardHeader(sprint)}
 
-          <BoardScroller
-            columns={sprint?.board.columns}
-            snap={!zoomedOut}
-            refreshControl={this._renderRefreshControl()}
-            horizontalScrollProps={{
-              onScroll: this._onScroll,
-              contentContainerStyle: {
-                display: 'flex',
-                flexDirection: 'column',
-                width: zoomedOut ? '100%' : this._getScrollableWidth()
-              }
-            }}
-          >
-            {noBoardSelected && this._renderNoSprint()}
-            {sprint && this._renderBoard(sprint)}
-            {isLoadingMore && <ActivityIndicator color={COLOR_PINK} style={styles.loadingMoreIndicator}/>}
-          </BoardScroller>
+          <DragContainer>
+            <BoardScroller
+              columns={sprint?.board.columns}
+              snap={!zoomedOut}
+              refreshControl={this._renderRefreshControl()}
+              horizontalScrollProps={{
+                onScroll: this._onScroll,
+                contentContainerStyle: {
+                  display: 'flex',
+                  flexDirection: 'column',
+                  width: zoomedOut ? '100%' : this._getScrollableWidth()
+                }
+              }}
+            >
+              {noBoardSelected && this._renderNoSprint()}
+              {sprint && this._renderBoard(sprint)}
+              {isLoadingMore && <ActivityIndicator color={COLOR_PINK} style={styles.loadingMoreIndicator}/>}
+            </BoardScroller>
+          </DragContainer>
 
           <View style={styles.zoomButtonContainer}>
             <TouchableOpacity

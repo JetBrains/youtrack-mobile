@@ -2,6 +2,7 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
 import ApiHelper from '../api/api__helper';
+import {DropZone} from '../draggable/';
 import {addGray, arrowRightGray, arrowDownGray} from '../icon/icon';
 import styles from './agile-row.styles';
 import type {AgileBoardRow, BoardCell} from '../../flow/Agile';
@@ -33,17 +34,18 @@ function renderIssueSquare(issue: IssueOnList) {
 function renderCell(cell: BoardCell, collapsed: boolean, onTapCreateIssue, lastColumn, renderIssueCard: RenderIssueCard) {
   return (
     <View key={cell.id} style={[
-        styles.column,
-        collapsed && styles.columnCollapsed,
-        lastColumn && styles.columnWithoutBorder
-      ]}
-    >
-      {cell.issues.map(issue => {
-        return collapsed ? renderIssueSquare(issue) : renderIssueCard(issue);
-      })}
-      {!collapsed && <TouchableOpacity onPress={() => onTapCreateIssue(cell.column.id, cell.id)} style={styles.addCardButton}>
-        <Image style={styles.addCardIcon} source={addGray}/>
-      </TouchableOpacity>}
+      styles.column,
+      collapsed && styles.columnCollapsed,
+      lastColumn && styles.columnWithoutBorder
+    ]}>
+      <View style={[collapsed && styles.columnCollapsed]}>
+        {cell.issues.map(issue => {
+          return collapsed ? renderIssueSquare(issue) : renderIssueCard(issue);
+        })}
+        {!collapsed && <TouchableOpacity onPress={() => onTapCreateIssue(cell.column.id, cell.id)} style={styles.addCardButton}>
+          <Image style={styles.addCardIcon} source={addGray}/>
+        </TouchableOpacity>}
+      </View>
     </View>
   );
 }
@@ -53,7 +55,7 @@ export default function BoardRow(props: Props) {
   const isResolved = row.issue && row.issue.resolved;
 
   return (
-    <View style={[styles.rowContainer, style]}>
+    <DropZone style={[styles.rowContainer, style]}>
 
       <View style={styles.rowHeader}>
 
@@ -82,6 +84,6 @@ export default function BoardRow(props: Props) {
         })}
       </View>
 
-    </View>
+    </DropZone>
   );
 }
