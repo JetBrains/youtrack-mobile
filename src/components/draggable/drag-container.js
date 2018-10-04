@@ -199,13 +199,13 @@ class DragContainer extends React.Component {
   }
 
   onDrag(ref, children, data) {
-    ref.measure((...args) => {
+    ref.measure((x, y, width, height, pageX, pageY) => {
       if (this._listener) this.state.location.removeListener(this._listener);
       const location = new Animated.ValueXY();
       this._listener = location.addListener(args =>
         this._handleDragging(this._addLocationOffset(args))
       );
-      this._offset = {x: args[4], y: args[5]};
+      this._offset = {x: pageX, y: pageY};
       location.setOffset(this._offset);
 
       this.setState(
@@ -218,10 +218,10 @@ class DragContainer extends React.Component {
               return React.cloneElement(child, {dragging: true});
             }),
             startPosition: {
-              x: args[4],
-              y: args[5],
-              width: args[2],
-              height: args[3]
+              x: pageX,
+              y: pageY,
+              width,
+              height
             }
           }
         },

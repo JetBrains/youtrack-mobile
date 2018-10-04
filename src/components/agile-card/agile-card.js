@@ -11,12 +11,13 @@ import {getPriotityField, getAssigneeField} from '../issue-formatter/issue-forma
 
 type Props = {
   style?: any,
-  issue: IssueOnList
+  issue: IssueOnList,
+  ghost: boolean // from <Draggable/>
 };
 
 export default class AgileCard extends PureComponent<Props, void> {
   render() {
-    const { issue, style } = this.props;
+    const { issue, style, ghost } = this.props;
     const priorityField = getPriotityField(issue);
 
     const priorityFieldValue = priorityField?.value;
@@ -41,7 +42,7 @@ export default class AgileCard extends PureComponent<Props, void> {
       .filter(item => item);
 
     return (
-      <View style={[styles.card, style]}>
+      <View style={[styles.card, style, ghost ? {display: 'none'} : null]}>
         {issueId}
         <Text numberOfLines={3} style={styles.summary} testID="card-summary">
           {issue.summary}

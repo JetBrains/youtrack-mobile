@@ -4,47 +4,47 @@
  */
 
 import React from 'react';
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import {View} from 'react-native';
 
 class DropZone extends React.Component {
-  constructor(props) {
-    super(props);
-    this.displayName = 'DropZone';
-    this.state = {};
-    this.reportMeasurements = this.reportMeasurements.bind(this);
-    this.onEnter = this.onEnter.bind(this);
-    this.onLeave = this.onLeave.bind(this);
-    this.onDrop = this.onDrop.bind(this);
-  }
+  static contextTypes = {
+    dragContext: PropTypes.any
+  };
 
-  reportMeasurements() {
-    if (this.props.dragging)
+  static propTypes = {
+    onEnter: PropTypes.func,
+    onLeave: PropTypes.func,
+    onDrop: PropTypes.func
+  };
+
+  state = {};
+
+  reportMeasurements = () => {
+    if (this.props.dragging) {
       this.context.dragContext.removeZone(this.refs.wrapper);
+    }
+
     this.refs.wrapper.measure((_, __, width, height, x, y) => {
-      if (!this.props.dragging)
-        this.context.dragContext.updateZone({
-          width,
-          height,
-          x,
-          y,
-          ref: this.refs.wrapper,
-          onEnter: this.onEnter,
-          onLeave: this.onLeave,
-          onDrop: this.onDrop
-        });
+      if (this.props.dragging) {
+        return;
+      }
+      this.context.dragContext.updateZone({
+        width,
+        height,
+        x,
+        y,
+        ref: this.refs.wrapper,
+        onEnter: this.onEnter,
+        onLeave: this.onLeave,
+        onDrop: this.onDrop
+      });
     });
   }
 
-  static propTypes = {
-    onEnter: propTypes.func,
-    onLeave: propTypes.func,
-    onDrop: propTypes.func
-  };
-
   componentDidMount() {
     this.reportMeasurements();
-    this._timer = setInterval(this.reportMeasurements, 1000);
+    // this._timer = setInterval(this.reportMeasurements, 1000);
   }
 
   componentWillUnmount() {
@@ -55,52 +55,52 @@ class DropZone extends React.Component {
     this.reportMeasurements();
   }
 
-  onEnter({x, y}) {
-    if (this.props.disabled) return;
+  onEnter = ({x, y}) => {
+    if (this.props.disabled) {
+      return;
+    }
     if (!this.state.active) {
-      if (this.props.onEnter) this.props.onEnter();
-      this.setState({
-        active: true
-      });
+      if (this.props.onEnter) {
+        this.props.onEnter();
+      }
+      this.setState({active: true});
     }
   }
 
-  onLeave() {
-    if (this.props.disabled) return;
+  onLeave = () => {
+    if (this.props.disabled) {
+      return;
+    }
     if (this.state.active) {
-      if (this.props.onLeave) this.props.onLeave();
-      this.setState({
-        active: false
-      });
+      if (this.props.onLeave) {
+        this.props.onLeave();
+      }
+      this.setState({active: false});
     }
   }
 
-  onDrop(data) {
-    if (this.props.disabled) return;
-    if (this.props.onDrop) this.props.onDrop(data);
-    this.setState({
-      active: false
-    });
+  onDrop = (data) => {
+    if (this.props.disabled) {
+      return;
+    }
+    if (this.props.onDrop) {
+      this.props.onDrop(data);
+    }
+    this.setState({active: false});
   }
-
-  static contextTypes = {
-    dragContext: propTypes.any
-  };
 
   render() {
+    const {style, pointerEvents, children} = this.props;
     return (
       <View
-        style={this.props.style}
-        pointerEvents={this.props.pointerEvents}
+        style={style}
+        pointerEvents={pointerEvents}
         onLayout={this.reportMeasurements}
         ref="wrapper"
       >
-        {React.Children.map(this.props.children, child => {
-          return React.cloneElement(
-            child,
-            Object.assign({}, this.props, {dragOver: this.state.active})
-          );
-        })}
+        {React.Children.map(children, child => (
+          React.cloneElement(child, {dragOver: this.state.active})
+        ))}
       </View>
     );
   }
