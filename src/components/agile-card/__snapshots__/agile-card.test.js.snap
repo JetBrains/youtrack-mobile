@@ -10,6 +10,7 @@ exports[`<AgileCard/> should render snapshot 1`] = `
         "padding": 8,
       },
       undefined,
+      null,
     ]
   }
 >
