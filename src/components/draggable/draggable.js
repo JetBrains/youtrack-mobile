@@ -35,8 +35,8 @@ class Draggable extends React.Component {
   };
 
   render() {
-    let isDragging = this.context.dragContext?.dragging?.ref;
-    isDragging = isDragging && isDragging === this.refs.wrapper;
+    const isDragging = this.context.dragContext?.dragging?.data === this.props.data;
+
     return (
       <TouchableOpacity
         activeOpacity={this.props.activeOpacity}

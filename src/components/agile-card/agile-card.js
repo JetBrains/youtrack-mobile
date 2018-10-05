@@ -9,10 +9,12 @@ import type {IssueOnList} from '../../flow/Issue';
 import type {CustomFieldValue} from '../../flow/CustomFields';
 import {getPriotityField, getAssigneeField} from '../issue-formatter/issue-formatter';
 
+export const AGILE_CARD_HEIGHT = 131;
+
 type Props = {
   style?: any,
   issue: IssueOnList,
-  ghost: boolean // from <Draggable/>
+  ghost?: boolean // from <Draggable/>
 };
 
 export default class AgileCard extends PureComponent<Props, void> {
@@ -69,7 +71,7 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'column',
     padding: UNIT,
-    height: 131
+    height: AGILE_CARD_HEIGHT
   },
   summary: {
     color: COLOR_FONT,

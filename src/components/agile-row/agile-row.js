@@ -2,7 +2,6 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
 import ApiHelper from '../api/api__helper';
-import {DropZone} from '../draggable/';
 import {arrowRightGray, arrowDownGray} from '../icon/icon';
 import AgileRowColumn from './agile-row__column';
 import styles from './agile-row.styles';
@@ -72,7 +71,7 @@ export default function BoardRow(props: Props) {
         </TouchableOpacity>
       </View>
 
-      <DropZone style={styles.row}>
+      <View style={styles.row}>
         {!row.collapsed && row.cells.map((cell, index) => {
           const isCellCollapsed = collapsedColumnIds.includes(cell.column.id);
           const lastColumn = index === row.cells.length - 1;
@@ -89,7 +88,7 @@ export default function BoardRow(props: Props) {
             />
           );
         })}
-      </DropZone>
+      </View>
 
     </View>
   );

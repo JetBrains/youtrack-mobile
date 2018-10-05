@@ -124,7 +124,7 @@ class DragContainer extends React.Component {
     if (this._locked || !point) return;
     this.dropZones.forEach(zone => {
       if (this.inZone(point, zone)) {
-        zone.onEnter(point);
+        zone.onMoveOver(point, zone);
       } else {
         zone.onLeave(point);
       }

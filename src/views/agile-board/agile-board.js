@@ -200,7 +200,7 @@ class AgileBoard extends Component<Props, State> {
       onCollapseToggle: this.props.onRowCollapseToggle,
       renderIssueCard: (issue: IssueOnList) => {
         return (
-          <Draggable key={issue.id} onPress={() => this._onTapIssue(issue)} disabled={DRAG_DISABLED}>
+          <Draggable key={issue.id} data={issue.id} onPress={() => this._onTapIssue(issue)} disabled={DRAG_DISABLED}>
             <AgileCard issue={issue} style={styles.card}/>
           </Draggable>
         );
