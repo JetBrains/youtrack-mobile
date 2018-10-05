@@ -5,12 +5,14 @@ exports[`<AgileCard/> should render snapshot 1`] = `
   style={
     Array [
       Object {
+        "backgroundColor": "#FFF",
         "flexDirection": "column",
         "height": 131,
         "padding": 8,
       },
       undefined,
-      null,
+      undefined,
+      undefined,
     ]
   }
 >

@@ -1,7 +1,7 @@
 /* @flow */
 import {View, Text, StyleSheet} from 'react-native';
 import React, {PureComponent} from 'react';
-import {UNIT, COLOR_FONT} from '../variables/variables';
+import {UNIT, COLOR_FONT, COLOR_PINK} from '../variables/variables';
 import ColorField from '../color-field/color-field';
 import Avatar from '../avatar/avatar';
 import ApiHelper from '../api/api__helper';
@@ -14,12 +14,13 @@ export const AGILE_CARD_HEIGHT = 131;
 type Props = {
   style?: any,
   issue: IssueOnList,
-  ghost?: boolean // from <Draggable/>
+  ghost?: boolean, // from <Draggable/>
+  dragging?: boolean // from <DragContainer/>
 };
 
 export default class AgileCard extends PureComponent<Props, void> {
   render() {
-    const { issue, style, ghost } = this.props;
+    const { issue, style, ghost, dragging } = this.props;
     const priorityField = getPriotityField(issue);
 
     const priorityFieldValue = priorityField?.value;
@@ -44,7 +45,12 @@ export default class AgileCard extends PureComponent<Props, void> {
       .filter(item => item);
 
     return (
-      <View style={[styles.card, style, ghost ? {display: 'none'} : null]}>
+      <View style={[
+        styles.card,
+        style,
+        ghost && styles.ghost,
+        dragging && styles.dragging
+      ]}>
         {issueId}
         <Text numberOfLines={3} style={styles.summary} testID="card-summary">
           {issue.summary}
@@ -71,7 +77,24 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'column',
     padding: UNIT,
-    height: AGILE_CARD_HEIGHT
+    height: AGILE_CARD_HEIGHT,
+    backgroundColor: '#FFF'
+  },
+  ghost: {
+    display: 'none'
+  },
+  dragging: {
+    transform: [{rotate: '-5deg'}],
+    width: '60%',
+    borderRadius: 6,
+    borderColor: `${COLOR_PINK}70`,
+    borderWidth: 4
+
+    // shadowColor: COLOR_PINK,
+    // shadowOffset: { width: 0, height: 0 },
+    // shadowOpacity: 0.8,
+    // shadowRadius: 3,
+    // elevation: 1
   },
   summary: {
     color: COLOR_FONT,
