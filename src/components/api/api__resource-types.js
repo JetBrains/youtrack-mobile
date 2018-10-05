@@ -1,5 +1,6 @@
 const resourceTypes = {
   ISSUE: 'jetbrains.charisma.persistent.Issue',
+  ISSUE_COMMENT: 'jetbrains.charisma.persistent.IssueComment',
 
   VISIBILITY_LIMITED: 'jetbrains.charisma.persistent.visibility.LimitedVisibility',
   VISIBILITY_UNLIMITED: 'jetbrains.charisma.persistent.visibility.UnlimitedVisibility',

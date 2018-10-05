@@ -182,7 +182,7 @@ const ISSUE_COMMENTS_FIELDS = toField([
   VISIBILITY_FIELDS
 ]);
 
-const ISSUE_SHORT_FIELDS = toField([
+const ISSUE_XSHORT_FIELDS = toField([
   'id',
   'idReadable',
   'summary',
@@ -190,6 +190,10 @@ const ISSUE_SHORT_FIELDS = toField([
   'created',
   'updated',
   {project: ISSUE_PROJECT_FIELDS},
+]);
+
+const ISSUE_SHORT_FIELDS = toField([
+  ISSUE_XSHORT_FIELDS,
   {reporter: ISSUE_USER_FIELDS},
   {fields: ISSUE_FIELD_SHORT_FIELDS}
 ]);
@@ -242,8 +246,163 @@ const COMMAND_SUGGESTION_FIELDS = toField([
 const USER_AGREEMENT_FIELDS = 'endUserAgreement(enabled,text,majorVersion,minorVersion)';
 const USER_CONSENT_FIELDS = 'endUserAgreementConsent(accepted,majorVersion,minorVersion)';
 
+const ISSUE_WORK_ITEMS_FIELDS = toField([
+  '$type',
+  'id',
+  'text',
+  'textPreview',
+  'name',
+  'date',
+  'usesMarkdown',
+  {
+    type: ['name', 'id'],
+    duration: [
+      'id',
+      'minutes',
+      'presentation'
+    ],
+    creator: ISSUE_USER_FIELDS,
+    author: ISSUE_USER_FIELDS
+  }
+]);
+const ISSUE_COLOR = {
+  'color': [
+    'id'
+  ]
+};
+const ISSUE_ATTACHMENT_SPECIFIC_FIELDS = toField([
+  'url',
+  'mimeType',
+  'removed',
+  'thumbnailURL',
+  'size',
+  'created',
+  {
+    comment: ['id']
+  }
+]);
+
+const VCS_INTEGRATION_PROCESSOR_FIELDS = toField([
+  '$type',
+  'id',
+  'enabled',
+  'server(id,url,enabled)',
+  'progress(message)',
+  'stateMessage',
+  'project(id)',
+  'params',
+
+  'upsourceProjectName',
+  'upsourceHubResourceKey',
+
+  'handle',
+  'repoName',
+  'repoOwnerName',
+  'handle',
+  'login',
+  'repositoryOwner',
+  'repository',
+  'committers',
+  'tcId',
+  'version'
+]);
+
+const VCS_INTEGRATION_FIELDS = toField([
+  'id',
+  'noUserReason(id)',
+  'noHubUserReason(id)',
+
+  'date',
+  'fetched',
+
+  'text',
+  'version',
+  'branch',
+  'files',
+  'state',
+  {
+    commands: [
+      'hasError',
+      'errorText',
+      'start',
+      'end'
+    ]
+  },
+
+  'userName',
+  {
+    user: ISSUE_USER_FIELDS
+  },
+
+  {
+    'processor': VCS_INTEGRATION_PROCESSOR_FIELDS
+  },
+  {
+    processors: [VCS_INTEGRATION_PROCESSOR_FIELDS]
+  },
+  'urls'
+]);
+
+
+const ISSUE_ACTIVITIES_EVENT_BASE = toField([
+  '$type',
+  'id',
+  'name',
+  'localizedName',
+  'text',
+  'agile(id)'
+]);
+const ISSUE_ACTIVITIES_FIELDS = toField([
+  '$type',
+  'id',
+  'timestamp',
+  'targetMember',
+  'targetSubMember',
+  'markup',
+  {
+    authorGroup: ['icon', 'name'],
+    author: ISSUE_USER_FIELDS,
+    category: ['id'],
+    field: [
+      '$type',
+      'linkId',
+      'id',
+      'presentation',
+      'customField(id,fieldType(isMultiValue,valueType))'
+    ],
+    target: ['id', 'created', 'usesMarkdown'],
+    added: [
+      ISSUE_ACTIVITIES_EVENT_BASE,
+      'shortName',
+
+      ISSUE_COMMENTS_FIELDS,
+      ISSUE_WORK_ITEMS_FIELDS,
+      ISSUE_XSHORT_FIELDS,
+      ISSUE_COLOR,
+      /* may be optional */
+      ISSUE_ATTACHMENT_SPECIFIC_FIELDS,
+      VCS_INTEGRATION_FIELDS
+    ],
+    removed: [
+      ISSUE_ACTIVITIES_EVENT_BASE,
+
+      ISSUE_XSHORT_FIELDS,
+      ISSUE_COLOR
+    ]
+  }
+]);
+
+const ISSUE_ACTIVITIES_CURSOR_FIELDS = toField([
+  'cursor',
+  'till',
+  {
+    activities: ISSUE_ACTIVITIES_FIELDS
+  }
+]);
+
 export default {
   issuesOnList: ISSUE_SHORT_FIELDS,
+  activitiesCursor: ISSUE_ACTIVITIES_CURSOR_FIELDS,
   singleIssue: toField([
     'id',
     'idReadable',
@@ -287,5 +446,9 @@ export default {
   commandSuggestionFields: COMMAND_SUGGESTION_FIELDS,
   userAgreement: USER_AGREEMENT_FIELDS,
   userConsent: USER_CONSENT_FIELDS,
-  getVisibility: GET_VISIBILITY_FIELDS
+  getVisibility: GET_VISIBILITY_FIELDS,
+
+  ISSUE_USER_FIELDS: ISSUE_USER_FIELDS,
+  ISSUE_COMMENTS_FIELDS: ISSUE_COMMENTS_FIELDS,
+  ISSUE_XSHORT_FIELDS: ISSUE_XSHORT_FIELDS
 };

@@ -32,6 +32,9 @@ export type State = {
   commandIsApplying: boolean,
   isSelectOpen: boolean,
   selectProps: Object,
+  activityLoaded: boolean,
+  activityPage: Array<Object>,
+  activitiesLoadingError: ?Error,
 };
 
 export const initialState: State = {
@@ -60,7 +63,10 @@ export const initialState: State = {
   commandSuggestions: null,
   commandIsApplying: false,
   isSelectOpen: false,
-  selectProps: {}
+  selectProps: {},
+  activityLoaded: false,
+  activityPage: [],
+  activitiesLoadingError: null,
 };
 
 export default createReducer(initialState, {
@@ -127,14 +133,18 @@ export default createReducer(initialState, {
     return {...state, commentText: action.comment};
   },
   [types.RECEIVE_COMMENT]: (state: State, action: {comment: IssueComment}): State => {
+    let comments;
+    if (state.issue.comments) {
+      comments = [
+        ...state.issue.comments,
+        action.comment
+      ];
+    }
     return {
       ...state,
       issue: {
         ...state.issue,
-        comments: [
-          ...state.issue.comments,
-          action.comment
-        ]
+        comments: comments
       }
     };
   },
@@ -146,21 +156,32 @@ export default createReducer(initialState, {
   },
   [types.RECEIVE_UPDATED_COMMENT]: (state: State, action: {comment: IssueComment}): State => {
     const {comment} = action;
+    const activityPage = (state.activityPage || []).map(activity => {
+      activity.added = activity.added.map(it => it.id === comment.id ? comment : it);
+      return activity;
+    });
+
     return {
       ...state,
       issue: {
         ...state.issue,
-        comments: state.issue.comments.map(it => it.id === comment.id ? comment : it)
+        comments: (state.issue.comments || []).map(it => it.id === comment.id ? comment : it),
+        activityPage: activityPage
       }
     };
   },
   [types.DELETE_COMMENT]: (state: State, action: {comment: IssueComment}): State => {
     const {comment} = action;
+    const activityPage = (state.activityPage || []).map(activity => {
+      activity.added = activity.added.filter(it => it.id !== comment.id);
+      return activity;
+    });
     return {
       ...state,
       issue: {
         ...state.issue,
-        comments: state.issue.comments.filter(it => it.id !== comment.id)
+        comments: (state.issue.comments || []).filter(it => it.id !== comment.id),
+        activityPage: activityPage
       }
     };
   },
@@ -327,5 +348,15 @@ export default createReducer(initialState, {
   },
   [types.SET_COMMENT_VISIBILITY]: (state: State, action: Object) => {
     return {...state, editingComment: action.comment};
+  },
+
+  [types.RECEIVE_ACTIVITY_PAGE]: (state: State, action: {activityPage: Array<Object>}): State => {
+    const {activityPage} = action;
+    return {
+      ...state,
+      activityLoaded: true,
+      activityPage: activityPage,
+      activitiesLoadingError: null
+    };
   }
 });

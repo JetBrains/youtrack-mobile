@@ -25,7 +25,8 @@ describe('Issue view actions', () => {
       issue: {
         getIssue: sinon.stub().returns(fakeIssue),
         getIssueComments: sinon.stub().returns([fakeComment]),
-        submitComment: sinon.stub().returns(fakeComment)
+        submitComment: sinon.stub().returns(fakeComment),
+        getActivitiesPage: sinon.stub().returns([])
       }
     };
     store = mockStore({
@@ -71,5 +72,13 @@ describe('Issue view actions', () => {
     expect(dispatched[1]).toEqual({type: types.RECEIVE_COMMENT, comment: fakeComment});
     expect(dispatched[2]).toEqual({type: types.HIDE_COMMENT_INPUT});
     expect(dispatched[3]).toEqual({type: types.STOP_SUBMITTING_COMMENT});
+  });
+
+  it('should load issue activities', async () => {
+    await store.dispatch(actions.loadActivitiesPage([]));
+
+    const dispatched = store.getActions();
+    fakeApi.issue.getActivitiesPage.should.have.been.calledWith(ISSUE_ID);
+    expect(dispatched[0]).toEqual({type: types.RECEIVE_ACTIVITY_PAGE, activityPage: []});
   });
 });

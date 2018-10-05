@@ -33,7 +33,11 @@ import type {IssueComment} from '../../flow/CustomFields';
 import Select from '../../components/select/select';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
 
+import {activityCategory} from '../../components/activity/activity__category';
+import SingleIssueActivityPage from './single-issue__activities';
+
 const CATEGORY_NAME = 'Issue';
+let renderActivities: boolean;
 
 type AdditionalProps = {
   issuePermissions: IssuePermissions,
@@ -57,7 +61,23 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     await this.props.setIssueId(this.props.issueId);
 
     this.props.loadIssue();
-    this.props.loadIssueComments();
+
+    renderActivities = this._canShowActivity();
+    if (renderActivities) {
+      this.props.loadActivitiesPage([activityCategory.COMMENT]);
+    } else {
+      this.props.loadIssueComments();
+    }
+  }
+
+  _canShowActivity() {
+    //Activity REST is available from the version 2018.3
+    const MINOR_VERSION_2013 = Number.MAX_SAFE_INTEGER; //TODO: hide this with `Number.MAX_SAFE_INTEGER` until it's under development
+    const minorVersion = parseInt(getApi().config.version.split('.').pop(), 10);
+    if (minorVersion) {
+      return minorVersion >= MINOR_VERSION_2013;
+    }
+    return false;
   }
 
   _canAddComment() {
@@ -124,14 +144,15 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
       const saveButton = <Text style={canSave ? null : styles.disabledSaveButton}>Save</Text>;
 
       return (
-      <Header
-        leftButton={<Text>Cancel</Text>}
-        onBack={stopEditingIssue}
-        rightButton={saveButton}
-        onRightButtonClick={canSave ? saveIssueSummaryAndDescriptionChange : () => {}}
-      >
-        {title}
-      </Header>
+        <Header
+          leftButton={<Text>Cancel</Text>}
+          onBack={stopEditingIssue}
+          rightButton={saveButton}
+          onRightButtonClick={canSave ? saveIssueSummaryAndDescriptionChange : () => {
+          }}
+        >
+          {title}
+        </Header>
       );
     }
   }
@@ -240,6 +261,77 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     );
   }
 
+  _renderActivities() {
+    const {
+      activityPage,
+      issue,
+      copyCommentUrl, openNestedIssueView, issuePermissions,
+      startEditingComment, deleteComment, restoreComment, deleteCommentPermanently
+    } = this.props;
+
+    return (
+      <View style={styles.commentsListContainer}>
+        <SingleIssueActivityPage
+          activityPage={activityPage}
+          attachments={issue.attachments}
+          imageHeaders={getApi().auth.getAuthorizationHeaders()}
+          backendUrl={getApi().config.backendUrl}
+          onReply={(comment: IssueComment) => {
+            this.props.showCommentInput();
+            this.props.startReply(comment.author.login);
+          }}
+          onCopyCommentLink={copyCommentUrl}
+          onIssueIdTap={issueId => openNestedIssueView(null, issueId)}
+
+          canEditComment={comment => issuePermissions.canEditComment(issue, comment)}
+          onStartEditing={startEditingComment}
+
+          canDeleteComment={comment => issuePermissions.canDeleteComment(issue, comment)}
+          canRestoreComment={comment => issuePermissions.canRestoreComment(issue, comment)}
+          canDeleteCommentPermanently={comment => issuePermissions.canDeleteCommentPermanently(issue, comment)}
+          onDeleteComment={deleteComment}
+          onRestoreComment={restoreComment}
+          onDeleteCommentPermanently={deleteCommentPermanently}
+        />
+      </View>
+    );
+  }
+
+  _renderComments() {
+    const {
+      issue,
+      copyCommentUrl, openNestedIssueView, issuePermissions,
+      startEditingComment, deleteComment, restoreComment, deleteCommentPermanently
+    } = this.props;
+
+    return (
+      <View style={styles.commentsListContainer}>
+        <SingleIssueComments
+          comments={issue.comments}
+          attachments={issue.attachments}
+          imageHeaders={getApi().auth.getAuthorizationHeaders()}
+          backendUrl={getApi().config.backendUrl}
+          onReply={(comment: IssueComment) => {
+            this.props.showCommentInput();
+            this.props.startReply(comment.author.login);
+          }}
+          onCopyCommentLink={copyCommentUrl}
+          onIssueIdTap={issueId => openNestedIssueView(null, issueId)}
+
+          canEditComment={comment => issuePermissions.canEditComment(issue, comment)}
+          onStartEditing={startEditingComment}
+
+          canDeleteComment={comment => issuePermissions.canDeleteComment(issue, comment)}
+          canRestoreComment={comment => issuePermissions.canRestoreComment(issue, comment)}
+          canDeleteCommentPermanently={comment => issuePermissions.canDeleteCommentPermanently(issue, comment)}
+          onDeleteComment={deleteComment}
+          onRestoreComment={restoreComment}
+          onDeleteCommentPermanently={deleteCommentPermanently}
+        />
+      </View>
+    );
+  }
+
   render() {
     const {
       issue,
@@ -257,8 +349,6 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
       hideCommentInput,
       setCommentText,
       addOrEditComment,
-      copyCommentUrl,
-      openNestedIssueView,
 
       loadCommentSuggestions,
       suggestionsAreLoading,
@@ -272,18 +362,25 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
       commandIsApplying,
       initialCommand,
 
-      startEditingComment,
       stopEditingComment,
       editingComment,
 
-      deleteComment,
-      restoreComment,
-      deleteCommentPermanently,
       onOpenCommentVisibilitySelect,
-      isSelectOpen
+      isSelectOpen,
+
+      activityLoaded,
+      activitiesLoadingError
     } = this.props;
 
     const isSecured = !!editingComment && IssueVisibility.isSecured(editingComment.visibility);
+
+    const activityLoading = {
+      error: () => renderActivities ? activitiesLoadingError : commentsLoadingError,
+      success: () => renderActivities ? activityLoaded : commentsLoaded,
+    };
+    const showLoading = () => (!issueLoaded || !activityLoading.success()) && !activityLoading.error();
+    const isActivityLoaded = () => issueLoaded && activityLoading.success();
+    const activitySources = renderActivities ? [activityCategory.COMMENT] : null;
 
     return (
       <View style={styles.container} testID="issue-view">
@@ -303,7 +400,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
         >
           {this._renderIssueView(issue || issuePlaceholder)}
 
-          {(!issueLoaded || !commentsLoaded) && !commentsLoadingError && (
+          {showLoading() && (
             <View><Text style={styles.loading}>Loading...</Text></View>
           )}
 
@@ -311,32 +408,11 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
             <View><Text style={styles.loading}>Failed to load comments.</Text></View>
           )}
 
-          {issueLoaded && commentsLoaded && (
-            <View style={styles.commentsListContainer}>
-              <SingleIssueComments
-                comments={issue.comments}
-                attachments={issue.attachments}
-                imageHeaders={getApi().auth.getAuthorizationHeaders()}
-                backendUrl={getApi().config.backendUrl}
-                onReply={(comment: IssueComment) => {
-                  this.props.showCommentInput();
-                  this.props.startReply(comment.author.login);
-                }}
-                onCopyCommentLink={copyCommentUrl}
-                onIssueIdTap={issueId => openNestedIssueView(null, issueId)}
-
-                canEditComment={comment => issuePermissions.canEditComment(issue, comment)}
-                onStartEditing={startEditingComment}
-
-                canDeleteComment={comment => issuePermissions.canDeleteComment(issue, comment)}
-                canRestoreComment={comment => issuePermissions.canRestoreComment(issue, comment)}
-                canDeleteCommentPermanently={comment => issuePermissions.canDeleteCommentPermanently(issue, comment)}
-                onDeleteComment={deleteComment}
-                onRestoreComment={restoreComment}
-                onDeleteCommentPermanently={deleteCommentPermanently}
-              />
-            </View>
-          )}
+          {
+            isActivityLoaded()
+              ? (renderActivities ? this._renderActivities() : this._renderComments())
+              : null
+          }
 
           {Platform.OS == 'ios' && <KeyboardSpacer/>}
         </ScrollView>}
@@ -347,7 +423,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
             onBlur={hideCommentInput}
             initialText={commentText}
             onChangeText={setCommentText}
-            onSubmitComment={addOrEditComment}
+            onSubmitComment={comment => addOrEditComment(comment, activitySources)}
 
             onCancelEditing={stopEditingComment}
             editingComment={editingComment}

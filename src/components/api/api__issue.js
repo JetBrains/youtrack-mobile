@@ -9,6 +9,7 @@ import log from '../log/log';
 import type Auth from '../auth/auth';
 import type {FieldValue} from '../../flow/CustomFields';
 import type {IssueOnList, IssueFull, IssueComment, IssueProject} from '../../flow/Issue';
+import issueActivityPageFields from './api__activities-issue-fields';
 
 export default class IssueAPI extends ApiBase {
   constructor(auth: Auth) {
@@ -168,7 +169,7 @@ export default class IssueAPI extends ApiBase {
       $top: 50,
       fields: issueFields.getVisibility.toString()
     });
-    const url =`${this.youTrackUrl}/api/visibilityGroups?${queryString}`;
+    const url = `${this.youTrackUrl}/api/visibilityGroups?${queryString}`;
     const visibilityOptions = await this.makeAuthorizedRequest(url, 'POST', {issues: [{id: issueId}]});
     visibilityOptions.visibilityUsers = ApiHelper.convertRelativeUrls((visibilityOptions.visibilityUsers || []), 'avatarUrl', this.config.backendUrl);
     return visibilityOptions;
@@ -181,5 +182,17 @@ export default class IssueAPI extends ApiBase {
     const body = {issues: issueIds.map(id => ({id}))};
     const suggestions = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/mention?${queryString}`, 'POST', body);
     return ApiHelper.patchAllRelativeAvatarUrls(suggestions, this.config.backendUrl);
+  }
+
+  async getActivitiesPage(issueId: string, sources: Array<string>): Promise<Array<Object>> {
+    const categories = (sources || []).join('categories=');
+    const queryString = qs.stringify({
+      reverse: true,
+      categories: categories,
+      fields: issueActivityPageFields.toString()
+    });
+
+    return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/activitiesPage?${queryString}`)
+      .then(response => response.activities);
   }
 }
