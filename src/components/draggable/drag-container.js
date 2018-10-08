@@ -23,6 +23,8 @@ const allOrientations = [
   'landscape-right'
 ];
 
+export const DragContext = React.createContext();
+
 class DragModal extends React.Component {
   render() {
     return (
@@ -77,14 +79,6 @@ class DragContainer extends React.Component {
       removeZone: this.removeZone
     };
   }
-
-  getChildContext() {
-    return {dragContext: this.getDragContext()};
-  }
-
-  static childContextTypes = {
-    dragContext: propTypes.any
-  };
 
   updateZone(details) {
     const zone = this.dropZones.find(x => x.ref === details.ref);
@@ -235,20 +229,22 @@ class DragContainer extends React.Component {
 
   render() {
     return (
-      <View
-        style={[{flex: 1}, this.props.style]}
-        onLayout={e => this.containerLayout = e.nativeEvent.layout}
-        {...this._panResponder.panHandlers}
-      >
-        {this.props.children}
-        {this.state.draggingComponent
-          ? <DragModal
-              content={this.state.draggingComponent}
-              location={this.state.location}
-              drop={this._handleDrop}
-            />
-          : null}
-      </View>
+      <DragContext.Provider value={this.getDragContext()}>
+        <View
+          style={[{flex: 1}, this.props.style]}
+          onLayout={e => this.containerLayout = e.nativeEvent.layout}
+          {...this._panResponder.panHandlers}
+        >
+          {this.props.children}
+          {this.state.draggingComponent
+            ? <DragModal
+                content={this.state.draggingComponent}
+                location={this.state.location}
+                drop={this._handleDrop}
+              />
+            : null}
+        </View>
+      </DragContext.Provider>
     );
   }
 }

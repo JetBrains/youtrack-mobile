@@ -9,16 +9,14 @@ import {View, LayoutAnimation} from 'react-native';
 import {AGILE_CARD_HEIGHT} from '../agile-card/agile-card';
 import { COLOR_PINK } from '../variables/variables';
 import Draggable from './draggable';
+import {DragContext} from './drag-container';
 
 class DropZone extends React.Component {
-  static contextTypes = {
-    dragContext: PropTypes.any
-  };
-
   static propTypes = {
     onMoveOver: PropTypes.func,
     onLeave: PropTypes.func,
-    onDrop: PropTypes.func
+    onDrop: PropTypes.func,
+    dragContext: PropTypes.object
   };
 
   state = {
@@ -26,15 +24,17 @@ class DropZone extends React.Component {
   };
 
   reportMeasurements = () => {
-    if (this.props.dragging) {
-      this.context.dragContext.removeZone(this.refs.wrapper);
+    const {dragContext, dragging} = this.props;
+
+    if (dragging) {
+      dragContext.removeZone(this.refs.wrapper);
     }
 
     this.refs.wrapper.measure((_, __, width, height, x, y) => {
-      if (this.props.dragging) {
+      if (dragging) {
         return;
       }
-      this.context.dragContext.updateZone({
+      dragContext.updateZone({
         width,
         height,
         x,
@@ -53,7 +53,7 @@ class DropZone extends React.Component {
   }
 
   componentWillUnmount() {
-    this.context.dragContext.removeZone(this.refs.wrapper);
+    this.props.dragContext.removeZone(this.refs.wrapper);
     clearInterval(this._timer);
   }
   componentDidUpdate() {
@@ -70,7 +70,7 @@ class DropZone extends React.Component {
 
     const draggableChilds = React.Children.toArray(this.props.children)
       .filter(c => c.type === Draggable)
-      .filter(c => this.context.dragContext?.dragging?.data !== c.props.data);
+      .filter(c => this.props.dragContext?.dragging?.data !== c.props.data);
 
       if (placeholderIndex >= draggableChilds.length) {
       placeholderIndex = draggableChilds.length;
@@ -117,7 +117,7 @@ class DropZone extends React.Component {
       return children;
     }
     const childs = React.Children.toArray(children);
-    const withoutMoving = childs.filter(c => this.context.dragContext?.dragging?.data !== c.props.data);
+    const withoutMoving = childs.filter(c => this.props.dragContext?.dragging?.data !== c.props.data);
 
     withoutMoving.splice(placeholderIndex, 0, (
       <View key="placeholder" style={{height: 8, backgroundColor: COLOR_PINK}}></View>
@@ -127,6 +127,7 @@ class DropZone extends React.Component {
 
   render() {
     const {style, pointerEvents, children} = this.props;
+
     return (
       <View
         style={style}
@@ -140,4 +141,8 @@ class DropZone extends React.Component {
   }
 }
 
-export default DropZone;
+export default props => (
+  <DragContext.Consumer>
+  {dragContext => <DropZone {...props} dragContext={dragContext} />}
+</DragContext.Consumer>
+);

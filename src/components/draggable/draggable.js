@@ -5,6 +5,7 @@
 import React from 'react';
 import propTypes from 'prop-types';
 import {TouchableOpacity} from 'react-native';
+import {DragContext} from './drag-container';
 
 class Draggable extends React.Component {
   constructor(props) {
@@ -13,17 +14,14 @@ class Draggable extends React.Component {
     this._initiateDrag = this._initiateDrag.bind(this);
   }
 
-  static contextTypes = {
-    dragContext: propTypes.any
-  };
-
   static propTypes = {
-    dragOn: propTypes.oneOf(['onLongPress', 'onPressIn'])
+    dragOn: propTypes.oneOf(['onLongPress', 'onPressIn']),
+    dragContext: propTypes.object
   };
 
   _initiateDrag() {
     if (!this.props.disabled)
-      this.context.dragContext.onDrag(
+      this.props.dragContext.onDrag(
         this.refs.wrapper,
         this.props.children,
         this.props.data
@@ -35,8 +33,7 @@ class Draggable extends React.Component {
   };
 
   render() {
-    const isDragging = this.context.dragContext?.dragging?.data === this.props.data;
-
+    const isDragging = this.props.dragContext?.dragging?.data === this.props.data;
     return (
       <TouchableOpacity
         activeOpacity={this.props.activeOpacity}
@@ -58,4 +55,9 @@ class Draggable extends React.Component {
   }
 }
 
-export default Draggable;
+export default props => (
+  <DragContext.Consumer>
+    {dragContext => <Draggable {...props} dragContext={dragContext} />}
+  </DragContext.Consumer>
+);
+
