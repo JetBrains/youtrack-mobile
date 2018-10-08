@@ -1,20 +1,14 @@
 /* @flow */
 import React, {Component} from 'react';
-import {ScrollView, Dimensions, Platform} from 'react-native';
+import {ScrollView, Dimensions, Platform, UIManager} from 'react-native';
 import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../variables/variables';
+import {DragContext} from '../draggable/drag-container';
 
 import type {BoardColumn} from '../../flow/Agile';
 
 const MINIMAL_MOMENTUM_SPEED = 0.5;
 export const COLUMN_SCREEN_PART = 0.9;
-
-type Props = {
-  children: any,
-  refreshControl: any,
-  horizontalScrollProps: Object,
-  columns: ?Array<BoardColumn>,
-  snap: boolean
-}
+const AUTOSCROLL_GAP = 50;
 
 export function getSnapPoints(columns: Array<BoardColumn>): Array<number> {
   const COLUMN_WIDTH = Dimensions.get('window').width * COLUMN_SCREEN_PART;
@@ -54,8 +48,31 @@ export function getSnapToX(scrollEvent: Object, columns: Array<BoardColumn>) {
   return snapToLeft ? prev : next;
 }
 
-export default class BoardScroller extends Component<Props, void> {
+type Props = {
+  children: any,
+  refreshControl: any,
+  horizontalScrollProps: Object,
+  columns: ?Array<BoardColumn>,
+  snap: boolean,
+  dragContext: ?Object
+}
+
+type State = {
+  size: {
+    top: number,
+    height: number,
+    width: number
+  },
+  autoScroll: {
+    dx: number,
+    dy: number
+  }
+}
+
+class BoardScroller extends Component<Props, State> {
   horizontalScroll: ScrollView;
+  verticalScroll: ScrollView;
+  state = {layout: {top: 0, width: 0, height: 0}}
 
   onScrollEndDrag = (event: Object) => {
     const {columns, snap} = this.props;
@@ -68,8 +85,39 @@ export default class BoardScroller extends Component<Props, void> {
     this.horizontalScroll.scrollTo({x: snapX <= AGILE_COLLAPSED_COLUMN_WIDTH ? 0 : (snapX - GAP_WIDTH) });
   };
 
-  horizontalScrollRef = (node: ScrollView) => {
-    this.horizontalScroll = node;
+  horizontalScrollRef = (scrollView: ScrollView) => {
+    this.horizontalScroll = scrollView;
+  }
+
+  verticalScrollRef = (scrollView: ScrollView) => {
+    this.verticalScroll = scrollView;
+  }
+
+  onDrag = event => {
+    const {width, height, top} = this.state.layout;
+    const {x, y: absolyteY} = event;
+    const y = absolyteY - top;
+
+    const diffLeft = x - AUTOSCROLL_GAP;
+    const diffRight = x - (width - AUTOSCROLL_GAP);
+    const dx = diffLeft < 0 ? diffLeft : (diffRight > 0 ? diffRight : 0);
+
+
+    const diffTop = y - AUTOSCROLL_GAP;
+    const diffBottom = y - (height - AUTOSCROLL_GAP);
+    const dy = diffTop < 0 ? diffTop : (diffBottom > 0 ? diffBottom : 0);
+
+    this.setState({autoScroll: {dx, dy}});
+  }
+
+  componentDidMount() {
+    this.props.dragContext.registerOnDrag(this.onDrag);
+  }
+
+  onLayout = () => {
+    UIManager.measure(this.verticalScroll.getScrollableNode(), (x, y, width, height, pageX, pageY) => {
+      this.setState({layout: {top: pageY, width, height}});
+    });
   }
 
   render() {
@@ -79,6 +127,8 @@ export default class BoardScroller extends Component<Props, void> {
       <ScrollView
         refreshControl={refreshControl}
         nestedScrollEnabled
+        ref={this.verticalScrollRef}
+        onLayout={this.onLayout}
       >
         <ScrollView
           horizontal
@@ -94,3 +144,9 @@ export default class BoardScroller extends Component<Props, void> {
     );
   }
 }
+
+export default props => (
+  <DragContext.Consumer>
+    {dragContext => <BoardScroller {...props} dragContext={dragContext} />}
+  </DragContext.Consumer>
+);
