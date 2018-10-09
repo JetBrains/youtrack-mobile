@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
   },
   dragging: {
     transform: [{rotate: '-5deg'}],
-    width: '60%',
+    width: '50%',
     borderRadius: 6,
     borderColor: `${COLOR_PINK}70`,
     borderWidth: 4

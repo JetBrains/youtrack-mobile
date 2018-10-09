@@ -55,9 +55,9 @@ class BoardScroller extends Component<Props, void> {
     this.horizontalScroll.scrollTo({x: snapX <= AGILE_COLLAPSED_COLUMN_WIDTH ? 0 : (snapX - GAP_WIDTH) });
   };
 
-  onDrag = (event: {x: number, y: number}) => {
+  onDrag = (data: {point: {x: number, y: number}, width: number, height: number}) => {
     const isScrolling = this.unmanagedState.autoScroll.active;
-    const {dx, dy} = getPointShift(event, this.unmanagedState.layout);
+    const {dx, dy} = getPointShift(data, this.unmanagedState.layout);
     this.unmanagedState.autoScroll = {dx, dy, active: dx !== 0 || dy !== 0};
     if (!isScrolling && this.unmanagedState.autoScroll.active) {
       this.performAutoScroll();
@@ -65,7 +65,7 @@ class BoardScroller extends Component<Props, void> {
   }
 
   performAutoScroll = () => {
-    const SPEED_DIVIDE = 80;
+    const SPEED_DIVIDE = 50;
     const {dx, dy, active} = this.unmanagedState.autoScroll;
     if (!active) {
       return;

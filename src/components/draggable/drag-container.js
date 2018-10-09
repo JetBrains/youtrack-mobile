@@ -117,17 +117,15 @@ class DragContainer extends React.Component {
     this.reportOnDrop = onDrop;
   }
 
-  _addLocationOffset(point) {
-    if (!this.state.draggingComponent) return point;
+  _addLocationOffset(cornerPoint) {
+    if (!this.state.draggingComponent) return cornerPoint;
     return {
-      x: point.x + this.state.draggingComponent.startPosition.width / 2,
-      y: point.y + this.state.draggingComponent.startPosition.height / 2
+      x: cornerPoint.x + this.state.draggingComponent.startPosition.width / 2,
+      y: cornerPoint.y + this.state.draggingComponent.startPosition.height / 2
     };
   }
 
   _handleDragging(point) {
-    this.reportOnDrag(point);
-
     this._point = point;
     if (this._locked || !point) return;
     this.dropZones.forEach(zone => {
@@ -212,9 +210,15 @@ class DragContainer extends React.Component {
     ref.measure((x, y, width, height, pageX, pageY) => {
       if (this._listener) this.state.location.removeListener(this._listener);
       const location = new Animated.ValueXY();
-      this._listener = location.addListener(args =>
-        this._handleDragging(this._addLocationOffset(args))
-      );
+      this._listener = location.addListener(cornerPoint => {
+        this._handleDragging(this._addLocationOffset(cornerPoint));
+
+        this.reportOnDrag({
+          point: cornerPoint,
+          width: this.state.draggingComponent?.startPosition.width,
+          height: this.state.draggingComponent?.startPosition.width,
+        });
+      });
       this._offset = {x: pageX, y: pageY};
       location.setOffset(this._offset);
 

@@ -6,7 +6,7 @@ import type {BoardColumn} from '../../flow/Agile';
 
 const MINIMAL_MOMENTUM_SPEED = 0.5;
 export const COLUMN_SCREEN_PART = 0.9;
-const AUTOSCROLL_GAP = 50;
+const AUTOSCROLL_GAP = 5;
 
 /**
  * Limits value to desired range
@@ -54,19 +54,22 @@ export function getSnapToX(scrollEvent: Object, columns: Array<BoardColumn>) {
 }
 
 /**
- * Calculates touch position shift relative to scroll-sensitive borders
+ * Calculates card edges position shift relative to scroll-sensitive borders
  */
-export function getPointShift(coords: {x: number, y: number}, layout: {width: number, height: number, top: number}): {dx: number, dy: number} {
-  const {x, y: absolyteY} = coords;
+export function getPointShift(
+  dragData: {point: {x: number, y: number}, width: number, height: number},
+  layout: {width: number, height: number, top: number}
+): {dx: number, dy: number} {
+  const {x, y: absolyteY} = dragData.point;
   const {width, height, top} = layout;
   const y = absolyteY - top;
 
   const diffLeft = x - AUTOSCROLL_GAP;
-  const diffRight = x - (width - AUTOSCROLL_GAP);
+  const diffRight = (x + dragData.width * 0.6) - (width - AUTOSCROLL_GAP);
   const dx = diffLeft < 0 ? diffLeft : (diffRight > 0 ? diffRight : 0);
 
   const diffTop = y - AUTOSCROLL_GAP;
-  const diffBottom = y - (height - AUTOSCROLL_GAP);
+  const diffBottom = (y + dragData.height) - (height - AUTOSCROLL_GAP);
   const dy = diffTop < 0 ? diffTop : (diffBottom > 0 ? diffBottom : 0);
 
   return {dx, dy};
