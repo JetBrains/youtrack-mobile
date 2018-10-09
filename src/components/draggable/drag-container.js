@@ -59,6 +59,7 @@ class DragContainer extends React.Component {
     this.updateZone = this.updateZone.bind(this);
     this.removeZone = this.removeZone.bind(this);
     this.reportOnDrag = () => {};
+    this.reportOnDrop = () => {};
   }
 
   static propTypes = {
@@ -78,7 +79,8 @@ class DragContainer extends React.Component {
       dragging: this.state.draggingComponent,
       updateZone: this.updateZone,
       removeZone: this.removeZone,
-      registerOnDrag: this.registerOnDrag
+      registerOnDrag: this.registerOnDrag,
+      registerOnDrop: this.registerOnDrop
     };
   }
 
@@ -112,6 +114,10 @@ class DragContainer extends React.Component {
     this.reportOnDrag = onDrag;
   };
 
+  registerOnDrop = (onDrop) => {
+    this.reportOnDrop = onDrop;
+  }
+
   _addLocationOffset(point) {
     if (!this.state.draggingComponent) return point;
     return {
@@ -135,6 +141,8 @@ class DragContainer extends React.Component {
   }
 
   _handleDrop() {
+    this.reportOnDrop();
+
     const hitZones = [];
     this.dropZones.forEach(zone => {
       if (!this._point) return;
@@ -160,13 +168,13 @@ class DragContainer extends React.Component {
         }
       }).start(() => {
         this._locked = false;
-        this._handleDragging({x: -100000, y: -100000});
+        // this._handleDragging({x: -100000, y: -100000});
         this.setState({
           draggingComponent: null
         });
       });
     }
-    this._handleDragging({x: -100000, y: -100000});
+    // this._handleDragging({x: -100000, y: -100000});
     this.setState({
       draggingComponent: null
     });

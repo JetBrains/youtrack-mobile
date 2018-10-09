@@ -1,52 +1,13 @@
 /* @flow */
 import React, {Component} from 'react';
-import {ScrollView, Dimensions, Platform, UIManager} from 'react-native';
+import {ScrollView, Dimensions, UIManager} from 'react-native';
 import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../variables/variables';
 import {DragContext} from '../draggable/drag-container';
+import {clamp, getSnapToX, getPointShift} from './board-scroller__math';
 
 import type {BoardColumn} from '../../flow/Agile';
 
-const MINIMAL_MOMENTUM_SPEED = 0.5;
 export const COLUMN_SCREEN_PART = 0.9;
-const AUTOSCROLL_GAP = 50;
-
-export function getSnapPoints(columns: Array<BoardColumn>): Array<number> {
-  const COLUMN_WIDTH = Dimensions.get('window').width * COLUMN_SCREEN_PART;
-
-  return columns
-    .map(c => c.collapsed)
-    .map(collapsed => ({collapsed, width: collapsed ? AGILE_COLLAPSED_COLUMN_WIDTH : COLUMN_WIDTH}))
-    .reduce((acc, {collapsed, width}, index) => {
-      const prev = acc[index - 1] || null;
-      return [
-        ...acc,
-        {
-          width,
-          collapsed,
-          start: (prev?.start + prev?.width) || 0
-        }
-      ];
-    }, [])
-    .filter(item => !item.collapsed || item.start === 0)
-    .map(item => item.start);
-}
-
-export function getClosestSnapPoints(x: number, openColumnStarts: Array<number>) {
-  const prev = openColumnStarts.filter(it => it < x).pop() || 0;
-  const next = openColumnStarts.filter(it => it > x).shift();
-  return [prev, next > x ? next : openColumnStarts[openColumnStarts.length - 1]];
-}
-
-export function getSnapToX(scrollEvent: Object, columns: Array<BoardColumn>) {
-  const openColumnStarts = getSnapPoints(columns);
-  const x = scrollEvent.nativeEvent.contentOffset.x;
-  const [prev, next] = getClosestSnapPoints(x, openColumnStarts);
-
-  let xSpeed = scrollEvent.nativeEvent.velocity.x;
-  xSpeed = Platform.OS === 'ios' ? xSpeed : -xSpeed; // On android xSpeed is inverted by unknown reason
-  const snapToLeft = Math.abs(xSpeed) < MINIMAL_MOMENTUM_SPEED ? (x - prev < next - x) : xSpeed < 0;
-  return snapToLeft ? prev : next;
-}
 
 type Props = {
   children: any,
@@ -54,25 +15,34 @@ type Props = {
   horizontalScrollProps: Object,
   columns: ?Array<BoardColumn>,
   snap: boolean,
-  dragContext: ?Object
+  dragContext: Object
 }
 
-type State = {
-  size: {
-    top: number,
-    height: number,
-    width: number
-  },
-  autoScroll: {
-    dx: number,
-    dy: number
-  }
+type UnamangedState = {
+  layout: {top: number, height: number, width: number},
+  autoScroll: {dx: number, dy: number, active: boolean},
+  scrollPositions: {offsetX: number, maxX: number, offsetY: number, maxY: number}
 }
 
-class BoardScroller extends Component<Props, State> {
+class BoardScroller extends Component<Props, void> {
   horizontalScroll: ScrollView;
   verticalScroll: ScrollView;
-  state = {layout: {top: 0, width: 0, height: 0}}
+
+  // This state is not intended to affect render function
+  unmanagedState: UnamangedState = {
+    layout: {top: 0, width: 0, height: 0},
+    autoScroll: {dx: 0, dy: 0, active: false},
+    scrollPositions: {offsetX: 0, maxX: 10000, offsetY: 0, maxY: 10000}
+  }
+
+  componentDidMount() {
+    if (this.props.dragContext) {
+      this.props.dragContext.registerOnDrag(this.onDrag);
+      this.props.dragContext.registerOnDrop(() => {
+        this.unmanagedState.autoScroll.active = false;
+      });
+    }
+  }
 
   onScrollEndDrag = (event: Object) => {
     const {columns, snap} = this.props;
@@ -85,49 +55,80 @@ class BoardScroller extends Component<Props, State> {
     this.horizontalScroll.scrollTo({x: snapX <= AGILE_COLLAPSED_COLUMN_WIDTH ? 0 : (snapX - GAP_WIDTH) });
   };
 
-  horizontalScrollRef = (scrollView: ScrollView) => {
-    this.horizontalScroll = scrollView;
+  onDrag = (event: {x: number, y: number}) => {
+    const isScrolling = this.unmanagedState.autoScroll.active;
+    const {dx, dy} = getPointShift(event, this.unmanagedState.layout);
+    this.unmanagedState.autoScroll = {dx, dy, active: dx !== 0 || dy !== 0};
+    if (!isScrolling && this.unmanagedState.autoScroll.active) {
+      this.performAutoScroll();
+    }
   }
 
-  verticalScrollRef = (scrollView: ScrollView) => {
-    this.verticalScroll = scrollView;
+  performAutoScroll = () => {
+    const SPEED_DIVIDE = 50;
+    const {dx, dy, active} = this.unmanagedState.autoScroll;
+    if (!active) {
+      return;
+    }
+    const {offsetX, maxX, offsetY, maxY} = this.unmanagedState.scrollPositions;
+
+    const newX = dx === 0 ? offsetX : clamp(offsetX + dx/SPEED_DIVIDE, 0, maxX);
+    const newY = dy === 0 ? offsetY : clamp(offsetY + dy/SPEED_DIVIDE, 0, maxY);
+
+    if (newX !== null || newY !== null) {
+      this.horizontalScroll.scrollTo({x: newX, y: newY, animated: false});
+      this.unmanagedState.scrollPositions.offsetX = newX || offsetX;
+      this.unmanagedState.scrollPositions.offsetY = newY || offsetY;
+    }
+
+    requestAnimationFrame(this.performAutoScroll);
   }
 
-  onDrag = event => {
-    const {width, height, top} = this.state.layout;
-    const {x, y: absolyteY} = event;
-    const y = absolyteY - top;
+  onVerticalScroll = event => {
+    const {nativeEvent} = event;
+    const viewHeight = nativeEvent.layoutMeasurement.height;
 
-    const diffLeft = x - AUTOSCROLL_GAP;
-    const diffRight = x - (width - AUTOSCROLL_GAP);
-    const dx = diffLeft < 0 ? diffLeft : (diffRight > 0 ? diffRight : 0);
-
-
-    const diffTop = y - AUTOSCROLL_GAP;
-    const diffBottom = y - (height - AUTOSCROLL_GAP);
-    const dy = diffTop < 0 ? diffTop : (diffBottom > 0 ? diffBottom : 0);
-
-    this.setState({autoScroll: {dx, dy}});
+    this.unmanagedState.scrollPositions.offsetY = nativeEvent.contentOffset.y;
+    this.unmanagedState.scrollPositions.maxY = nativeEvent.contentSize.height - viewHeight;
   }
 
-  componentDidMount() {
-    this.props.dragContext.registerOnDrag(this.onDrag);
+  onHorizontalScroll = event => {
+    if (this.props.horizontalScrollProps) {
+      this.props.horizontalScrollProps.onScroll(event);
+    }
+
+    const {nativeEvent} = event;
+    const viewWidth = nativeEvent.layoutMeasurement.width;
+
+    this.unmanagedState.scrollPositions.offsetX = nativeEvent.contentOffset.x;
+    this.unmanagedState.scrollPositions.maxX = nativeEvent.contentSize.width - viewWidth;
   }
 
-  onLayout = () => {
+  onLayout = (event) => {
     UIManager.measure(this.verticalScroll.getScrollableNode(), (x, y, width, height, pageX, pageY) => {
-      this.setState({layout: {top: pageY, width, height}});
+      this.unmanagedState.layout = {top: pageY, width, height};
     });
+  }
+
+  horizontalScrollRef = (scrollView: ?ScrollView) => {
+    this.horizontalScroll = scrollView ? scrollView : this.horizontalScroll;
+  }
+
+  verticalScrollRef = (scrollView: ?ScrollView) => {
+    this.verticalScroll = scrollView ? scrollView : this.verticalScroll;
   }
 
   render() {
     const {refreshControl, children, horizontalScrollProps} = this.props;
+    const {onScroll, ...restHorizontalScrollProps} = horizontalScrollProps; // eslint-disable-line no-unused-vars
 
     return (
       <ScrollView
         refreshControl={refreshControl}
         nestedScrollEnabled
         ref={this.verticalScrollRef}
+        onScroll={this.onVerticalScroll}
+        scrollEventThrottle={50}
         onLayout={this.onLayout}
       >
         <ScrollView
@@ -135,7 +136,8 @@ class BoardScroller extends Component<Props, State> {
           scrollEventThrottle={10}
           decelerationRate="fast"
           ref={this.horizontalScrollRef}
-          {...horizontalScrollProps}
+          {...restHorizontalScrollProps}
+          onScroll={this.onHorizontalScroll}
           onScrollEndDrag={this.onScrollEndDrag}
         >
           {children}
@@ -145,7 +147,7 @@ class BoardScroller extends Component<Props, State> {
   }
 }
 
-export default props => (
+export default (props: Object) => (
   <DragContext.Consumer>
     {dragContext => <BoardScroller {...props} dragContext={dragContext} />}
   </DragContext.Consumer>

@@ -60,6 +60,7 @@ module.exports = {
   'globals': {
     'fetch': true,
     'console': true,
+    'requestAnimationFrame': true,
     'expect': true
   }
 };

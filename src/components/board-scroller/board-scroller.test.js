@@ -1,4 +1,4 @@
-import {getSnapPoints, getClosestSnapPoints, getSnapToX} from './board-scroller';
+import {getSnapPoints, getClosestSnapPoints, getSnapToX} from './board-scroller__math';
 
 describe('BoardScroller', () => {
   let columns;
