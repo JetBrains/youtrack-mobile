@@ -16,6 +16,7 @@ class DropZone extends React.Component {
     onMoveOver: PropTypes.func,
     onLeave: PropTypes.func,
     onDrop: PropTypes.func,
+    data: PropTypes.any,
     dragContext: PropTypes.object
   };
 
@@ -24,7 +25,7 @@ class DropZone extends React.Component {
   };
 
   reportMeasurements = () => {
-    const {dragContext, dragging} = this.props;
+    const {dragContext, dragging, data} = this.props;
 
     if (dragging) {
       dragContext.removeZone(this.refs.wrapper);
@@ -39,6 +40,8 @@ class DropZone extends React.Component {
         height,
         x,
         y,
+        data,
+        placeholderIndex: this.state.placeholderIndex,
         ref: this.refs.wrapper,
         onMoveOver: this.onMoveOver,
         onLeave: this.onLeave,
@@ -56,6 +59,7 @@ class DropZone extends React.Component {
     this.props.dragContext.removeZone(this.refs.wrapper);
     clearInterval(this._timer);
   }
+
   componentDidUpdate() {
     this.reportMeasurements();
   }
@@ -143,6 +147,6 @@ class DropZone extends React.Component {
 
 export default props => (
   <DragContext.Consumer>
-  {dragContext => <DropZone {...props} dragContext={dragContext} />}
-</DragContext.Consumer>
+    {dragContext => <DropZone {...props} dragContext={dragContext} />}
+  </DragContext.Consumer>
 );

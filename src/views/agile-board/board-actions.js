@@ -354,3 +354,30 @@ export function subscribeServersideUpdates() {
     storeServersideEvents(serversideEvents);
   };
 }
+
+export function onCardDrop(data: {columnId: string, cellId: string, leadingId: ?string, movedId: string}) {
+  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+    const {sprint} = getState().agile;
+    const api: Api = getApi();
+
+    try {
+      log.debug(`Applying ${data.movedId} card moved to ${data.cellId} cell after ${data.leadingId || 'nothing'} card`);
+
+      // TODO: Apply to store
+
+      await api.agile.updateCardPosition(
+        sprint.agile.id,
+        sprint.id,
+        data.columnId,
+        data.cellId,
+        data.leadingId,
+        data.movedId
+      );
+
+      usage.trackEvent(CATEGORY_NAME, 'Card drop');
+    } catch (err) {
+      // TODO: Rever state
+      notifyError('Could not move card', err);
+    }
+  };
+}

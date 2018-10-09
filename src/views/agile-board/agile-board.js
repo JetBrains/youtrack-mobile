@@ -27,7 +27,7 @@ import { connect } from 'react-redux';
 
 const CATEGORY_NAME = 'Agile board';
 
-const DRAG_DISABLED = true;
+const DRAG_DISABLED = false;
 
 type Props = AgilePageState & {
   auth: Auth,
@@ -47,7 +47,8 @@ type Props = AgilePageState & {
   onOpenBoardSelect: (any) => any,
   onCloseSelect: (any) => any,
   createCardForCell: (columnId: string, cellId: string) => any,
-  onOpenMenu: (any) => any
+  onOpenMenu: (any) => any,
+  onCardDrop: (any) => any
 };
 
 type State = {
@@ -226,6 +227,26 @@ class AgileBoard extends Component<Props, State> {
     ];
   }
 
+  onDragStart() {
+    usage.trackEvent(CATEGORY_NAME, 'Card drag start');
+  }
+
+  onDragEnd = (draggingComponent: Object, hitZones: Array<Object>) => {
+    const movedId = draggingComponent.data;
+    const dropZone = hitZones[0];
+    if (!dropZone) {
+      return;
+    }
+
+    this.props.onCardDrop({
+      columnId: dropZone.data.columnId,
+      cellId: dropZone.data.cellId,
+      leadingId: dropZone.data.issueIds
+        .filter(id => id !== movedId)[dropZone.placeholderIndex - 1],
+      movedId
+    });
+  }
+
   render() {
     const {sprint, isLoadingMore, isSprintSelectOpen, noBoardSelected} = this.props;
 
@@ -238,7 +259,7 @@ class AgileBoard extends Component<Props, State> {
 
           {sprint && this._renderBoardHeader(sprint)}
 
-          <DragContainer>
+          <DragContainer onDragStart={this.onDragStart} onDragEnd={this.onDragEnd}>
             <BoardScroller
               columns={sprint?.board.columns}
               snap={!zoomedOut}
@@ -291,7 +312,8 @@ const mapDispatchToProps = (dispatch) => {
     onOpenBoardSelect: () => dispatch(boardActions.openBoardSelect()),
     onCloseSelect: () => dispatch(boardActions.closeSelect()),
     onOpenMenu: () => dispatch(openMenu()),
-    createCardForCell: (...args) => dispatch(boardActions.createCardForCell(...args))
+    createCardForCell: (...args) => dispatch(boardActions.createCardForCell(...args)),
+    onCardDrop: (...args) => dispatch(boardActions.onCardDrop(...args))
   };
 };
 

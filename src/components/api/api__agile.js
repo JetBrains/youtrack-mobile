@@ -88,4 +88,20 @@ export default class AgileAPI extends ApiBase {
     return await this.makeAuthorizedRequest(url, 'POST', {});
   }
 
+  async updateCardPosition(
+    boardId: string,
+    sprintId: string,
+    columnId: string,
+    cellId: string,
+    leadingId?: ?string,
+    movedId: string
+  ) {
+    const queryString = qs.stringify({fields: 'leading(id),moved(id)'});
+    const url = `${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}/board/columns/${columnId}/cells/${cellId}/issueOrder?${queryString}`;
+
+    return await this.makeAuthorizedRequest(url, 'POST', {
+      leading: leadingId ? {id: leadingId} : null,
+      moved: {id: movedId}
+    });
+  }
 }
