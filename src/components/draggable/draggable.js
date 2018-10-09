@@ -21,7 +21,7 @@ class Draggable extends React.Component {
 
   _initiateDrag() {
     if (!this.props.disabled)
-      this.props.dragContext.onDrag(
+      this.props.dragContext.onInitiateDrag(
         this.refs.wrapper,
         this.props.children,
         this.props.data

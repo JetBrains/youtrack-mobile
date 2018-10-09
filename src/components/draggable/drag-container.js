@@ -52,7 +52,6 @@ class DragContainer extends React.Component {
     };
     this.dropZones = [];
     this.draggables = [];
-    this.onDrag = this.onDrag.bind(this);
     this._handleDragging = this._handleDragging.bind(this);
     this._handleDrop = this._handleDrop.bind(this);
     this._listener = location.addListener(this._handleDragging);
@@ -74,7 +73,7 @@ class DragContainer extends React.Component {
   getDragContext() {
     return {
       dropZones: this.dropZones,
-      onDrag: this.onDrag,
+      onInitiateDrag: this.onInitiateDrag,
       container: this.containerLayout,
       dragging: this.state.draggingComponent,
       updateZone: this.updateZone,
@@ -209,7 +208,7 @@ class DragContainer extends React.Component {
     });
   }
 
-  onDrag(ref, children, data) {
+  onInitiateDrag = (ref, children, data) => {
     ref.measure((x, y, width, height, pageX, pageY) => {
       if (this._listener) this.state.location.removeListener(this._listener);
       const location = new Animated.ValueXY();
