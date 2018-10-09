@@ -65,19 +65,22 @@ class BoardScroller extends Component<Props, void> {
   }
 
   performAutoScroll = () => {
-    const SPEED_DIVIDE = 50;
+    const SPEED_DIVIDE = 80;
     const {dx, dy, active} = this.unmanagedState.autoScroll;
     if (!active) {
       return;
     }
     const {offsetX, maxX, offsetY, maxY} = this.unmanagedState.scrollPositions;
 
-    const newX = dx === 0 ? offsetX : clamp(offsetX + dx/SPEED_DIVIDE, 0, maxX);
-    const newY = dy === 0 ? offsetY : clamp(offsetY + dy/SPEED_DIVIDE, 0, maxY);
+    const newX = dx === 0 ? null : clamp(offsetX + dx/SPEED_DIVIDE, 0, maxX);
+    const newY = dy === 0 ? null : clamp(offsetY + dy/SPEED_DIVIDE, 0, maxY);
 
-    if (newX !== null || newY !== null) {
-      this.horizontalScroll.scrollTo({x: newX, y: newY, animated: false});
+    if (newX !== null) {
+      this.horizontalScroll.scrollTo({x: newX, animated: false});
       this.unmanagedState.scrollPositions.offsetX = newX || offsetX;
+    }
+    if (newY !== null) {
+      this.verticalScroll.scrollTo({y: newY, animated: false});
       this.unmanagedState.scrollPositions.offsetY = newY || offsetY;
     }
 
