@@ -4,7 +4,9 @@ import {LOG_OUT} from '../../actions/action-types';
 import {ISSUE_CREATED} from '../create-issue/create-issue-action-types';
 import {ISSUE_UPDATED} from '../single-issue/single-issue-action-types';
 import {createReducer} from 'redux-create-reducer';
-import type {SprintFull, BoardCell, AgileBoardRow, Board, AgileUserProfile} from '../../flow/Agile';
+import log from '../../components/log/log';
+
+import type {SprintFull, BoardCell, AgileBoardRow, Board, AgileColumn, AgileUserProfile} from '../../flow/Agile';
 import type {IssueOnList, IssueFull} from '../../flow/Issue';
 import type ServersideEvents from '../../components/api/api__serverside-events';
 
@@ -104,7 +106,7 @@ function fillIssueFromAnotherIssue(issue: IssueOnList, sourceIssue: IssueFull) {
     }, {});
 }
 
-function findIssueOnBoard(board: Board, issueId: string) {
+function findIssueOnBoard(board: Board, issueId: string): ?{cell: BoardCell, row: AgileBoardRow, issue: IssueOnList, column: AgileColumn} {
   const rows = [...board.trimmedSwimlanes, board.orphanRow];
 
   for (const rowIndex in rows) {
@@ -260,6 +262,17 @@ function updateSwimlane(board: Board, swimlane: AgileBoardRow) {
   }
 }
 
+function moveIssueOnBoard(board: Board, movedId: string, cellId: string, leadingId: ?string) {
+  const issueOnBoard = findIssueOnBoard(board, movedId);
+  if (!issueOnBoard) {
+    log.debug('Cannot find moved issue on board');
+    return;
+  }
+  const boardWithoutMoved = removeIssueFromBoard(board, movedId);
+  const boardWithMovedInProperCell = addCardToBoard(boardWithoutMoved, cellId, issueOnBoard.issue);
+  return reorderEntitiesOnBoard(boardWithMovedInProperCell, leadingId, movedId);
+}
+
 const boardReducer = createReducer({}, {
   [types.RECEIVE_SWIMLANES](state: BoardState, action: Object): BoardState {
     return {
@@ -308,6 +321,9 @@ const boardReducer = createReducer({}, {
   },
   [types.UPDATE_SWIMLANE](state: BoardState, action: {swimlane: AgileBoardRow}): BoardState {
     return updateSwimlane(state, action.swimlane);
+  },
+  [types.MOVE_ISSUE](state: BoardState, action: {movedId: string, cellId: string, leadingId: ?string}): BoardState {
+    return moveIssueOnBoard(state, action.movedId, action.cellId, action.leadingId);
   }
 });
 

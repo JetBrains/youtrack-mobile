@@ -122,6 +122,10 @@ function removeIssueFromBoard(issueId: string) {
   return {type: types.REMOVE_ISSUE_FROM_BOARD, issueId};
 }
 
+function moveIssue(movedId: string, cellId: string, leadingId: ?string) {
+  return {type: types.MOVE_ISSUE, movedId, cellId, leadingId};
+}
+
 export function fetchMoreSwimlanes() {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const {sprint, noMoreSwimlanes, isLoadingMore} = getState().agile;
@@ -361,9 +365,10 @@ export function onCardDrop(data: {columnId: string, cellId: string, leadingId: ?
     const api: Api = getApi();
 
     try {
-      log.debug(`Applying ${data.movedId} card moved to ${data.cellId} cell after ${data.leadingId || 'nothing'} card`);
+      log.info(`Applying issue move: movedId="${data.movedId}", cellId="${data.cellId}", leadingId="${data.leadingId || ''}"`);
 
-      // TODO: Apply to store
+      LayoutAnimation.easeInEaseOut();
+      dispatch(moveIssue(data.movedId, data.cellId, data.leadingId));
 
       await api.agile.updateCardPosition(
         sprint.agile.id,
