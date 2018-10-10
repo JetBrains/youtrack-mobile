@@ -28,16 +28,16 @@ export default class AgileCard extends PureComponent<Props, void> {
 
     const issueId = (priorityFieldValue)
       ? <View style={styles.colorFieldContainer}>
-          <ColorField
-            fullText
-            style={styles.issueIdColorField}
-            text={ApiHelper.getIssueId(issue)}
-            color={priorityFieldValueColor}
-          />
-        </View>
+        <ColorField
+          fullText
+          style={styles.issueIdColorField}
+          text={ApiHelper.getIssueId(issue)}
+          color={priorityFieldValueColor}
+        />
+      </View>
       : <Text testID="card-simple-issue-id">
-          {ApiHelper.getIssueId(issue)}
-        </Text>;
+        {ApiHelper.getIssueId(issue)}
+      </Text>;
 
     const assigneeField = getAssigneeField(issue);
     const assignees = []

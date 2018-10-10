@@ -2,11 +2,11 @@
 import deviceLog, {InMemoryAdapter} from 'react-native-device-log';
 
 deviceLog.init(new InMemoryAdapter(), {
-    logToConsole : true,
-    logRNErrors : true,
-    rowInsertDebounceMs: 0,
-    maxNumberToRender : 2000,
-    maxNumberToPersist : 2000
+  logToConsole : true,
+  logRNErrors : true,
+  rowInsertDebounceMs: 0,
+  maxNumberToRender : 2000,
+  maxNumberToPersist : 2000
 });
 
 export default {

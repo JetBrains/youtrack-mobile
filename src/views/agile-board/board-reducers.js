@@ -45,11 +45,11 @@ function updateRowCollapsedState(
   const trimmedSwimlanes = board.trimmedSwimlanes;
 
   return {
-      ...board,
-      trimmedSwimlanes: isOrphan ? trimmedSwimlanes : trimmedSwimlanes.map(swimlane => {
-        return swimlane.id === row.id ? {...row, collapsed} : swimlane;
-      }),
-      orphanRow: isOrphan ? {...board.orphanRow, collapsed} : board.orphanRow
+    ...board,
+    trimmedSwimlanes: isOrphan ? trimmedSwimlanes : trimmedSwimlanes.map(swimlane => {
+      return swimlane.id === row.id ? {...row, collapsed} : swimlane;
+    }),
+    orphanRow: isOrphan ? {...board.orphanRow, collapsed} : board.orphanRow
   };
 }
 

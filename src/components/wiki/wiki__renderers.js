@@ -16,9 +16,9 @@ export function renderCode(node: {children: any}, index: number) {
       PreTag={Text}
       CodeTag={Text}
       style={idea}
-      >
-        {entities.decodeHTML(code)}
-      </SyntaxHighlighter>
+    >
+      {entities.decodeHTML(code)}
+    </SyntaxHighlighter>
   );
 }
 

@@ -19,7 +19,7 @@ function extractLetters(name: string): string {
     if (names[0].length >= 2) {
       return names[0].toUpperCase().substr(0, 2);
     } else {
-        return `${names[0][0].toUpperCase()}X`;
+      return `${names[0][0].toUpperCase()}X`;
     }
   }
 
@@ -53,8 +53,8 @@ function hashCode(value) {
   let hash = 0, i, chr;
   if (value.length === 0) return hash;
   for (i = 0; i < value.length; i++) {
-    chr   = value.charCodeAt(i);
-    hash  = ((hash << 5) - hash) + chr;
+    chr = value.charCodeAt(i);
+    hash = ((hash << 5) - hash) + chr;
     hash |= 0; // Convert to 32bit integer
   }
   return hash;

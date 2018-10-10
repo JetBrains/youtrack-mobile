@@ -12,13 +12,13 @@ type Props = {
 export default function IssueError({error, onTryAgain}: Props) {
   return (
     <View style={styles.errorContainer}>
-    <Text style={styles.listMessageSmile}>{'(>_<)'}</Text>
-    <Text style={styles.errorTitle} testID="error-message">Failed to load</Text>
-    <Text style={styles.errorContent}>{extractErrorMessage(error)}</Text>
-    <TouchableOpacity style={styles.tryAgainButton} onPress={onTryAgain}>
-      <Text style={styles.tryAgainText}>Try Again</Text>
-    </TouchableOpacity>
-  </View>
+      <Text style={styles.listMessageSmile}>{'(>_<)'}</Text>
+      <Text style={styles.errorTitle} testID="error-message">Failed to load</Text>
+      <Text style={styles.errorContent}>{extractErrorMessage(error)}</Text>
+      <TouchableOpacity style={styles.tryAgainButton} onPress={onTryAgain}>
+        <Text style={styles.tryAgainText}>Try Again</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 

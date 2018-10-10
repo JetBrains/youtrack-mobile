@@ -258,10 +258,10 @@ class DragContainer extends React.Component {
           {this.props.children}
           {this.state.draggingComponent
             ? <DragModal
-                content={this.state.draggingComponent}
-                location={this.state.location}
-                drop={this._handleDrop}
-              />
+              content={this.state.draggingComponent}
+              location={this.state.location}
+              drop={this._handleDrop}
+            />
             : null}
         </View>
       </DragContext.Provider>

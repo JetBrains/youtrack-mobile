@@ -21,7 +21,7 @@ export default class IssueRow extends Component<Props, void> {
     return (<Text>
       <Text style={issueIdStyle}>{issue.idReadable}</Text>
       <Text> by {getEntityPresentation(issue.reporter)} {getForText(issue.fieldHash.Assignee)}</Text>
-    </Text>);  }
+    </Text>); }
 
   getSummaryStyle(issue: IssueOnList) {
     if (issue.resolved) {

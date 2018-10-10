@@ -22,13 +22,13 @@ type Props = {
 };
 
 function renderIssueSquare(issue: IssueOnList) {
-    const priorityField = getPriotityField(issue);
+  const priorityField = getPriotityField(issue);
 
-    const color = priorityField?.value?.color;
-    return <View
-      key={issue.id}
-      style={[styles.issueSquare, color && {backgroundColor: color.background}]}
-    />;
+  const color = priorityField?.value?.color;
+  return <View
+    key={issue.id}
+    style={[styles.issueSquare, color && {backgroundColor: color.background}]}
+  />;
 }
 
 function renderCollapsedColumn(cell: BoardCell, lastColumn: boolean) {

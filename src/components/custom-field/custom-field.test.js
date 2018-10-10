@@ -52,7 +52,7 @@ describe('<CustomField/>', () => {
     value.children().should.have.text(new Date(timestamp).toLocaleDateString());
   });
 
-    it('should render value of type integer', () => {
+  it('should render value of type integer', () => {
     fakeField.value = 123;
     fakeField.projectCustomField.field.fieldType.valueType = 'integer';
 

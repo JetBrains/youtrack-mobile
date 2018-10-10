@@ -76,7 +76,7 @@ class DropZone extends React.Component {
       .filter(c => c.type === Draggable)
       .filter(c => this.props.dragContext?.dragging?.data !== c.props.data);
 
-      if (placeholderIndex >= draggableChilds.length) {
+    if (placeholderIndex >= draggableChilds.length) {
       placeholderIndex = draggableChilds.length;
     }
 

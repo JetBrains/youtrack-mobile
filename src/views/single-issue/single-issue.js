@@ -196,21 +196,21 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
         <SingleIssueTopPanel issue={issue} onTagPress={openIssueListWithSearch}/>
 
         {editMode && <IssueSummary
-              editable={!isSavingEditedIssue}
-              summary={summaryCopy}
-              showSeparator={false}
-              description={descriptionCopy}
-              onSummaryChange={this.props.setIssueSummaryCopy}
-              onDescriptionChange={this.props.setIssueDescriptionCopy}
+          editable={!isSavingEditedIssue}
+          summary={summaryCopy}
+          showSeparator={false}
+          description={descriptionCopy}
+          onSummaryChange={this.props.setIssueSummaryCopy}
+          onDescriptionChange={this.props.setIssueDescriptionCopy}
         />}
 
         {!editMode && <View>
-          <Text style={styles.summary}  selectable={true} testID="issue-summary">{issue.summary}</Text>
+          <Text style={styles.summary} selectable={true} testID="issue-summary">{issue.summary}</Text>
 
           {issue.links && <LinkedIssues links={issue.links} onIssueTap={openNestedIssueView}/>}
 
           {issue.wikifiedDescription
-          ? <Wiki
+            ? <Wiki
               backendUrl={getApi().auth.config.backendUrl}
               attachments={issue.attachments}
               imageHeaders={getApi().auth.getAuthorizationHeaders()}
@@ -218,7 +218,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
             >
               {issue.wikifiedDescription}
             </Wiki>
-          : null}
+            : null}
         </View>}
 
         {issue.attachments ? <AttachmentsRow

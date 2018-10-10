@@ -54,7 +54,7 @@ export default class Header extends Component<Props, void> {
           style={[styles.headerButton, styles.headerButtonLeft]}
           onPress={() => this.onBack()}
         >
-            <Text style={styles.headerButtonText} numberOfLines={1}>{leftButton}</Text>
+          <Text style={styles.headerButtonText} numberOfLines={1}>{leftButton}</Text>
         </TouchableOpacity>
 
         <View style={styles.headerCenter} testID="header-content">{children}</View>
@@ -64,7 +64,7 @@ export default class Header extends Component<Props, void> {
           hitSlop={{top: TOUCH_PADDING, left: TOUCH_PADDING, bottom: TOUCH_PADDING, right: TOUCH_PADDING}}
           style={[styles.headerButton, styles.headerButtonRight]}
           onPress={this.onRightButtonClick.bind(this)}>
-          <Text style={[styles.headerButtonText]}  numberOfLines={1}>{rightButton}</Text>
+          <Text style={[styles.headerButtonText]} numberOfLines={1}>{rightButton}</Text>
         </TouchableOpacity>
       </View>
     );

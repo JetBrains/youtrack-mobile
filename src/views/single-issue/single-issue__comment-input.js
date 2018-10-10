@@ -135,18 +135,18 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
           </View>}
 
         {suggestions
-        ? suggestions.users.map(user => {
-          return (
-            <TouchableOpacity key={user.id}
-                              style={styles.commentSuggestionButton}
-                              onPress={() => this.applySuggestion(user)}>
-              <Avatar userName={user.fullName} size={32} source={{uri: user.avatarUrl}}/>
-              <Text style={styles.commentSuggestionName}>{user.fullName}</Text>
-              <Text style={styles.commentSuggestionLogin}>  @{user.login}</Text>
-            </TouchableOpacity>
-          );
-        })
-        : null}
+          ? suggestions.users.map(user => {
+            return (
+              <TouchableOpacity key={user.id}
+                style={styles.commentSuggestionButton}
+                onPress={() => this.applySuggestion(user)}>
+                <Avatar userName={user.fullName} size={32} source={{uri: user.avatarUrl}}/>
+                <Text style={styles.commentSuggestionName}>{user.fullName}</Text>
+                <Text style={styles.commentSuggestionLogin}>  @{user.login}</Text>
+              </TouchableOpacity>
+            );
+          })
+          : null}
       </ScrollView>
     );
   }
@@ -194,18 +194,18 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
           />
 
           <TouchableOpacity style={styles.visibilityChangeButton}
-                            onPress={() => onEditCommentVisibility(editingComment)}>
+            onPress={() => onEditCommentVisibility(editingComment)}>
 
             {!this.state.isSaving
               ? <Image source={isSecured ? visibilityActive : visibility}
-                       style={styles.visibilityChangeIcon} />
+                style={styles.visibilityChangeIcon} />
               : <ActivityIndicator/>
             }
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.commentSendButton}
-                            disabled={!this.state.commentText}
-                            onPress={() => this.addComment()}>
+            disabled={!this.state.commentText}
+            onPress={() => this.addComment()}>
 
             {!this.state.isSaving ?
               <Text style={[styles.sendComment, this.state.commentText ? null : styles.sendCommentDisabled]}>Send</Text> :

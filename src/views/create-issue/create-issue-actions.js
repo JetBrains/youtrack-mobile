@@ -216,9 +216,9 @@ export function createIssue() {
 
 export function attachImage(takeFromLibrary: boolean = true) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
-  const api: Api = getApi();
-  const {issue} = getState().creation;
-  try {
+    const api: Api = getApi();
+    const {issue} = getState().creation;
+    try {
       const attachingImage = await attachFile(takeFromLibrary ? 'openPicker' : 'openCamera');
       if (!attachingImage) {
         return;

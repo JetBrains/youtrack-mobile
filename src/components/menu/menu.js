@@ -134,25 +134,25 @@ export class Menu extends Component<Props, void> {
           onIndexChanged={(index: number) => this._onChangeAccount(accounts[index])}
           onTouchStart={() => clicksToShowCounter(openDebugView)}
         >
-            {accounts.map((account, index) => {
-              const config: AppConfigFilled = account.config;
-              const user = account.currentUser;
-              if (!user) {
-                throw new Error(`Account of ${config.backendUrl} has no currentUser`);
-              }
-              const avatarUrl = user.profile && user.profile.avatar && user.profile.avatar.url || '';
+          {accounts.map((account, index) => {
+            const config: AppConfigFilled = account.config;
+            const user = account.currentUser;
+            if (!user) {
+              throw new Error(`Account of ${config.backendUrl} has no currentUser`);
+            }
+            const avatarUrl = user.profile && user.profile.avatar && user.profile.avatar.url || '';
 
-              return (
-                <View key={index} style={[styles.profileContainer, accounts.length > 1 && styles.profileContainerWithDots]}>
-                  <TouchableWithoutFeedback>
-                    <Avatar size={64} userName={user.name} source={{uri: avatarUrl}}/>
-                  </TouchableWithoutFeedback>
+            return (
+              <View key={index} style={[styles.profileContainer, accounts.length > 1 && styles.profileContainerWithDots]}>
+                <TouchableWithoutFeedback>
+                  <Avatar size={64} userName={user.name} source={{uri: avatarUrl}}/>
+                </TouchableWithoutFeedback>
 
-                  <Text style={styles.serverURL} numberOfLines={1}>{formatYouTrackURL(config.backendUrl)}</Text>
-                  <Text style={styles.profileName}>{user.name}</Text>
-                </View>
-              );
-            })}
+                <Text style={styles.serverURL} numberOfLines={1}>{formatYouTrackURL(config.backendUrl)}</Text>
+                <Text style={styles.profileName}>{user.name}</Text>
+              </View>
+            );
+          })}
         </Swiper>
 
         <TouchableOpacity style={styles.logOutButton} onPress={this._logOut}>

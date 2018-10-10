@@ -130,11 +130,11 @@ export default createReducer(initialState, {
     return {
       ...state,
       issue: {
-          ...state.issue,
-          fields: [...state.issue.fields].map(it => {
-            return it === field ? {...it, value} : it;
-          })
-        }
+        ...state.issue,
+        fields: [...state.issue.fields].map(it => {
+          return it === field ? {...it, value} : it;
+        })
+      }
     };
   }
 });

@@ -88,9 +88,9 @@ class CreateIssue extends Component<Props, void> {
     return (
       <View style={styles.container}>
         <Header leftButton={<Text>Cancel</Text>}
-                onBack={storeDraftAndGoBack}
-                rightButton={createButton}
-                onRightButtonClick={() => canCreateIssue && createIssue()}>
+          onBack={storeDraftAndGoBack}
+          rightButton={createButton}
+          onRightButtonClick={() => canCreateIssue && createIssue()}>
           <Text style={issueStyles.headerText}>New Issue</Text>
         </Header>
         <ScrollView keyboardShouldPersistTaps="handled" keyboardDismissMode="interactive">
@@ -109,7 +109,7 @@ class CreateIssue extends Component<Props, void> {
               onDescriptionChange={setIssueDescription}
             />
 
-              {issue.project.id &&
+            {issue.project.id &&
               <View style={styles.attachesContainer}>
 
                 <AttachmentsRow

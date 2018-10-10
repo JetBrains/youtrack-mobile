@@ -56,10 +56,10 @@ export default class AgileAPI extends ApiBase {
 
   async updateColumnCollapsedState(boardId: string, sprintId: string, column: Object): Promise<Object> {
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}/board/columns/${column.id}`,
-    'POST',
-    {
-      collapsed: column.collapsed
-    });
+      'POST',
+      {
+        collapsed: column.collapsed
+      });
   }
 
   async getSprintList(boardId: string): Promise<Object> {

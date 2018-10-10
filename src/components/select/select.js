@@ -181,12 +181,12 @@ export default class Select extends Component<Props, State> {
               this._onSearch(text);
             }}
             style={styles.searchInput}/>
-            <TouchableOpacity style={styles.cancelButton} onPress={onCancel}>
-              <Text style={styles.cancelButtonText}>Cancel</Text>
-            </TouchableOpacity>
+          <TouchableOpacity style={styles.cancelButton} onPress={onCancel}>
+            <Text style={styles.cancelButtonText}>Cancel</Text>
+          </TouchableOpacity>
         </View>
         <ScrollView keyboardShouldPersistTaps="handled"
-                    keyboardDismissMode="on-drag">
+          keyboardDismissMode="on-drag">
           {this._renderEmptyValueItem()}
           {this.state.filteredItems.map(item => this._renderRow(item))}
 

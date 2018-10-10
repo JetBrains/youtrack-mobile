@@ -116,7 +116,7 @@ export class EnterServer extends Component<Props, State> {
       </View> :
       null;
 
-      return (
+    return (
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
         {onCancel && (
           <TouchableOpacity onPress={onCancel} style={styles.backIconButton}>
@@ -153,9 +153,9 @@ export class EnterServer extends Component<Props, State> {
           {error}
 
           <TouchableOpacity style={[styles.apply, isDisabled ? styles.applyDisabled : {}]}
-                            disabled={isDisabled}
-                            testID="next"
-                            onPress={this.onApplyServerUrlChange.bind(this)}>
+            disabled={isDisabled}
+            testID="next"
+            onPress={this.onApplyServerUrlChange.bind(this)}>
             <Text style={styles.applyText}>Next</Text>
             {this.state.connecting && <ActivityIndicator style={styles.connectingIndicator}/>}
           </TouchableOpacity>

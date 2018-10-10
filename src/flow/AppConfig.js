@@ -32,7 +32,7 @@ declare type AppConfigFilled = {
   version: string;
 };
 
-declare type EndUserAgreement {
+declare type EndUserAgreement = {
   enabled: boolean,
   text: string,
   majorVersion: number,

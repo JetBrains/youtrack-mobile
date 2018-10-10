@@ -21,10 +21,10 @@ export function AttachmentPreview(props: Props) {
   return (
     <View style={styles.container}>
       <Header leftButton={<Text>Close</Text>}
-              rightButton={<Text>Browser</Text>}
-              onRightButtonClick={() => {
-                safariView.show({url});
-              }}
+        rightButton={<Text>Browser</Text>}
+        onRightButtonClick={() => {
+          safariView.show({url});
+        }}
       >
         <Text style={styles.headerText} numberOfLines={1}>{name}</Text>
       </Header>

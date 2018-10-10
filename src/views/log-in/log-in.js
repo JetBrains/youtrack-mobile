@@ -97,8 +97,8 @@ export class LogIn extends Component<Props, State> {
     const {onShowDebugView} = this.props;
     return (
       <ScrollView contentContainerStyle={styles.container}
-                  keyboardShouldPersistTaps="handled"
-                  keyboardDismissMode="on-drag">
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag">
 
         <TouchableOpacity onPress={this.changeYouTrackUrl.bind(this)} style={styles.urlChangeButton} testID="back-to-url">
           <View style={styles.urlChangeWrapper}>
@@ -147,15 +147,15 @@ export class LogIn extends Component<Props, State> {
             onChangeText={(password) => this.setState({password})}/>
 
           {this.state.errorMessage
-          ? <View><Text style={styles.error} selectable={true} testID="error-message">{this.state.errorMessage}</Text></View>
-          : null}
+            ? <View><Text style={styles.error} selectable={true} testID="error-message">{this.state.errorMessage}</Text></View>
+            : null}
         </View>
 
         <View style={styles.actionsContainer}>
           <TouchableOpacity style={[styles.signin, this.state.loggingIn ? styles.signinDisabled : {}]}
-                            disabled={this.state.loggingIn}
-                            testID="log-in"
-                            onPress={this.logInViaCredentials.bind(this)}>
+            disabled={this.state.loggingIn}
+            testID="log-in"
+            onPress={this.logInViaCredentials.bind(this)}>
             <Text
               style={styles.signinText}>Log in</Text>
             {this.state.loggingIn && <ActivityIndicator style={styles.loggingInIndicator}/>}

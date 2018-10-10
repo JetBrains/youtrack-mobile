@@ -16,6 +16,8 @@ module.exports = {
     'no-console': ERROR,
     'quotes': [ERROR, 'single', {'allowTemplateLiterals': true}],
     'semi': ERROR,
+    'indent': [ERROR, 2],
+    'no-multi-spaces': ERROR,
 
     //ES6
     'constructor-super': ERROR,

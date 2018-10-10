@@ -104,7 +104,7 @@ export default class AttachmentsRow extends Component<Props, void> {
               <TouchableOpacity
                 key={attach.url || attach.id}
                 onPress={() => this._showImageAttachment(attach, attachments)}
-                >
+              >
                 <AnimatedView
                   animation={isAttachingImage ? 'zoomIn' : null}
                   useNativeDriver
