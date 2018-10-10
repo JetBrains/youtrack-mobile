@@ -1,25 +1,25 @@
+/* @flow */
 /**
- * Author: deanmcpherson
- * Copied from https://github.com/deanmcpherson/react-native-drag-drop
+ * Original author: deanmcpherson
+ * Modification of https://github.com/deanmcpherson/react-native-drag-drop
  */
-import React from 'react';
-import propTypes from 'prop-types';
+import React, {Component} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {DragContext} from './drag-container';
 
-class Draggable extends React.Component {
-  constructor(props) {
-    super(props);
-    this.displayName = 'Draggable';
-    this._initiateDrag = this._initiateDrag.bind(this);
-  }
+type Props = {
+  dragOn: 'onLongPress' | 'onPressIn',
+  dragContext: Object,
+  disabled: boolean,
+  children: any,
+  data: any,
+  style: any,
+  activeOpacity: number,
+  onPress: Function
+};
 
-  static propTypes = {
-    dragOn: propTypes.oneOf(['onLongPress', 'onPressIn']),
-    dragContext: propTypes.object
-  };
-
-  _initiateDrag() {
+class Draggable extends Component<Props, void> {
+  _initiateDrag = () => {
     if (!this.props.disabled)
       this.props.dragContext.onInitiateDrag(
         this.refs.wrapper,
@@ -55,7 +55,7 @@ class Draggable extends React.Component {
   }
 }
 
-export default props => (
+export default (props: Object) => (
   <DragContext.Consumer>
     {dragContext => <Draggable {...props} dragContext={dragContext} />}
   </DragContext.Consumer>

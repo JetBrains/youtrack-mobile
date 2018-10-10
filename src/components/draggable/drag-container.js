@@ -1,9 +1,9 @@
+/* @flow */
 /**
- * Author: deanmcpherson
- * Copied from https://github.com/deanmcpherson/react-native-drag-drop
+ * Original author: deanmcpherson
+ * Modification of https://github.com/deanmcpherson/react-native-drag-drop
  */
-import React from 'react';
-import propTypes from 'prop-types';
+import React, {Component} from 'react';
 import {
   View,
   PanResponder,
@@ -13,22 +13,14 @@ import {
   TouchableWithoutFeedback
 } from 'react-native';
 
-global.Easing = Easing;
-
-const allOrientations = [
-  'portrait',
-  'portrait-upside-down',
-  'landscape',
-  'landscape-left',
-  'landscape-right'
-];
+import type {ZoneInfo} from './drop-zone';
 
 export const DragContext = React.createContext();
 
-class DragModal extends React.Component {
+class DragModal extends Component<any, void> {
   render() {
     return (
-      <Modal transparent={true} supportedOrientations={allOrientations}>
+      <Modal transparent>
         <TouchableWithoutFeedback onPressIn={this.props.drop}>
           <Animated.View style={this.props.location.getLayout()}>
             {this.props.content.children}
@@ -39,43 +31,54 @@ class DragModal extends React.Component {
   }
 }
 
-class DragContainer extends React.Component {
-  constructor(props) {
-    super(props);
-    this.displayName = 'DragContainer';
-    this.containerLayout;
+type Props = {
+  onDragStart: Function,
+  reportOnDrop: Function,
+  onDragEnd: (?Object, Array<ZoneInfo>) => any,
+  style?: any,
+  children?: any
+}
 
-    const location = new Animated.ValueXY();
+type State = {
+  location: Animated.ValueXY,
+  draggingComponent: ?Object
+}
 
-    this.state = {
-      location
-    };
-    this.dropZones = [];
-    this.draggables = [];
-    this._handleDragging = this._handleDragging.bind(this);
-    this._handleDrop = this._handleDrop.bind(this);
-    this._listener = location.addListener(this._handleDragging);
-    this.updateZone = this.updateZone.bind(this);
-    this.removeZone = this.removeZone.bind(this);
-    this.reportOnDrag = () => {};
-    this.reportOnDrop = () => {};
-  }
+class DragContainer extends Component<Props, State> {
+  containerLayout = null;
+  _listener: string;
+  _point: ?{x: number, y: number} = null;
+  _offset: ?{x: number, y: number} = null;
+  _locked: boolean = false;
+  _panResponder: PanResponder;
 
-  static propTypes = {
-    onDragStart: propTypes.func,
-    onDragEnd: propTypes.func
+  state = {
+    location: new Animated.ValueXY(),
+    draggingComponent: null
   };
+
+  dropZones = [];
+  draggables = [];
+
+  constructor(props: Props) {
+    super(props);
+
+    this._listener = this.state.location.addListener(this._handleDragging);
+  }
 
   componentWillUnmount() {
     if (this._listener) this.state.location.removeListener(this._listener);
   }
+
+  reportOnDrag: Function = () => {};
+  reportOnDrop: Function = () => {};
 
   getDragContext() {
     return {
       dropZones: this.dropZones,
       onInitiateDrag: this.onInitiateDrag,
       container: this.containerLayout,
-      dragging: this.state.draggingComponent,
+      dragging: this.state.draggingComponent || null,
       updateZone: this.updateZone,
       removeZone: this.removeZone,
       registerOnDrag: this.registerOnDrag,
@@ -83,7 +86,7 @@ class DragContainer extends React.Component {
     };
   }
 
-  updateZone(details) {
+  updateZone = (details: ZoneInfo) => {
     const zone = this.dropZones.find(x => x.ref === details.ref);
     if (!zone) {
       this.dropZones.push(details);
@@ -93,14 +96,11 @@ class DragContainer extends React.Component {
     }
   }
 
-  removeZone(ref) {
-    const i = this.dropZones.find(x => x.ref === ref);
-    if (i !== -1) {
-      this.dropZones.splice(i, 1);
-    }
+  removeZone = (ref: Object) => {
+    this.dropZones = this.dropZones.filter(z => z.ref !== ref);
   }
 
-  inZone({x, y}, zone) {
+  inZone({x, y}: {x: number, y: number}, zone: ZoneInfo) {
     return (
       zone.x <= x &&
       zone.width + zone.x >= x &&
@@ -109,25 +109,31 @@ class DragContainer extends React.Component {
     );
   }
 
-  registerOnDrag = (onDrag) => {
+  registerOnDrag = (onDrag: Function) => {
     this.reportOnDrag = onDrag;
   };
 
-  registerOnDrop = (onDrop) => {
+  registerOnDrop = (onDrop: Function) => {
     this.reportOnDrop = onDrop;
   }
 
   _addLocationOffset(cornerPoint) {
-    if (!this.state.draggingComponent) return cornerPoint;
+    if (!this.state.draggingComponent) {
+      return cornerPoint;
+    }
+    const {startPosition} = this.state.draggingComponent;
     return {
-      x: cornerPoint.x + this.state.draggingComponent.startPosition.width / 2,
-      y: cornerPoint.y + this.state.draggingComponent.startPosition.height / 2
+      x: cornerPoint.x + startPosition.width / 2,
+      y: cornerPoint.y + startPosition.height / 2
     };
   }
 
-  _handleDragging(point) {
+  _handleDragging = point => {
     this._point = point;
-    if (this._locked || !point) return;
+    if (this._locked || !point) {
+      return;
+    }
+
     this.dropZones.forEach(zone => {
       if (this.inZone(point, zone)) {
         zone.onMoveOver(point, zone);
@@ -137,19 +143,24 @@ class DragContainer extends React.Component {
     });
   }
 
-  _handleDrop() {
+  _handleDrop = () => {
     this.reportOnDrop();
 
     const hitZones = [];
     this.dropZones.forEach(zone => {
-      if (!this._point) return;
+      if (!this._point) {
+        return;
+      }
       if (this.inZone(this._point, zone)) {
         hitZones.push(zone);
-        zone.onDrop(this.state.draggingComponent.data);
+        zone.onDrop(this.state.draggingComponent?.data);
       }
     });
-    if (this.props.onDragEnd)
+
+    if (this.props.onDragEnd) {
       this.props.onDragEnd(this.state.draggingComponent, hitZones);
+    }
+
     if (
       !hitZones.length &&
       this.state.draggingComponent &&
@@ -165,16 +176,13 @@ class DragContainer extends React.Component {
         }
       }).start(() => {
         this._locked = false;
-        // this._handleDragging({x: -100000, y: -100000});
         this.setState({
           draggingComponent: null
         });
       });
     }
-    // this._handleDragging({x: -100000, y: -100000});
-    this.setState({
-      draggingComponent: null
-    });
+
+    this.setState({draggingComponent: null});
   }
 
   UNSAFE_componentWillMount() {
@@ -206,9 +214,11 @@ class DragContainer extends React.Component {
     });
   }
 
-  onInitiateDrag = (ref, children, data) => {
+  onInitiateDrag = (ref: Object, children: any, data: Object) => {
     ref.measure((x, y, width, height, pageX, pageY) => {
-      if (this._listener) this.state.location.removeListener(this._listener);
+      if (this._listener) {
+        this.state.location.removeListener(this._listener);
+      }
       const location = new Animated.ValueXY();
       this._listener = location.addListener(cornerPoint => {
         this._handleDragging(this._addLocationOffset(cornerPoint));
@@ -240,8 +250,9 @@ class DragContainer extends React.Component {
           }
         },
         () => {
-          if (this.props.onDragStart)
+          if (this.props.onDragStart){
             this.props.onDragStart(this.state.draggingComponent);
+          }
         }
       );
     });
