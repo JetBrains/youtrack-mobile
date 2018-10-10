@@ -17,6 +17,7 @@ import {Draggable, DragContainer} from '../../components/draggable/';
 import Api from '../../components/api/api';
 import {COLOR_PINK, AGILE_COLLAPSED_COLUMN_WIDTH} from '../../components/variables/variables';
 import {zoomIn, zoomOut, next} from '../../components/icon/icon';
+import {getStorageState, flushStoragePart} from '../../components/storage/storage';
 import type {SprintFull, Board, AgileBoardRow, AgileColumn} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
 import type {AgilePageState} from './board-reducers';
@@ -52,7 +53,7 @@ type Props = AgilePageState & {
 };
 
 type State = {
-  zoomedOut: boolean
+  zoomedIn: boolean
 };
 
 class AgileBoard extends Component<Props, State> {
@@ -61,7 +62,7 @@ class AgileBoard extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      zoomedOut: false
+      zoomedIn: getStorageState().agileZoomedIn ?? true
     };
   }
 
@@ -148,12 +149,12 @@ class AgileBoard extends Component<Props, State> {
   };
 
   _renderBoardHeader(sprint: SprintFull) {
-    const {zoomedOut} = this.state;
+    const {zoomedIn} = this.state;
     return (
       <View style={styles.boardHeaderContainer}>
         <BoardHeader
           ref={this.boardHeaderRef}
-          style={{minWidth: zoomedOut ? null : this._getScrollableWidth()}}
+          style={{minWidth: zoomedIn ? this._getScrollableWidth() : null}}
           columns={sprint.board.columns}
           onCollapseToggle={this.props.onColumnCollapseToggle}
         />
@@ -247,10 +248,16 @@ class AgileBoard extends Component<Props, State> {
     });
   }
 
+  toggleZoom = () => {
+    const zoomedIn = !this.state.zoomedIn;
+    this.setState({zoomedIn});
+    flushStoragePart({agileZoomedIn: zoomedIn});
+  }
+
   render() {
     const {sprint, isLoadingMore, isSprintSelectOpen, noBoardSelected} = this.props;
 
-    const {zoomedOut} = this.state;
+    const {zoomedIn} = this.state;
 
     return (
       <Menu>
@@ -262,14 +269,14 @@ class AgileBoard extends Component<Props, State> {
           <DragContainer onDragStart={this.onDragStart} onDragEnd={this.onDragEnd}>
             <BoardScroller
               columns={sprint?.board.columns}
-              snap={!zoomedOut}
+              snap={zoomedIn}
               refreshControl={this._renderRefreshControl()}
               horizontalScrollProps={{
                 onScroll: this._onScroll,
                 contentContainerStyle: {
                   display: 'flex',
                   flexDirection: 'column',
-                  width: zoomedOut ? '100%' : this._getScrollableWidth()
+                  width: zoomedIn ? this._getScrollableWidth() : '100%'
                 }
               }}
             >
@@ -282,8 +289,8 @@ class AgileBoard extends Component<Props, State> {
           <View style={styles.zoomButtonContainer}>
             <TouchableOpacity
               style={styles.zoomButton}
-              onPress={() => this.setState({zoomedOut: !zoomedOut})}>
-              <Image source={zoomedOut ? zoomIn : zoomOut} style={styles.zoomButtonIcon}/>
+              onPress={this.toggleZoom}>
+              <Image source={zoomedIn ? zoomOut: zoomIn} style={styles.zoomButtonIcon}/>
             </TouchableOpacity>
           </View>
 

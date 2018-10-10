@@ -40,7 +40,8 @@ describe('Storage', () => {
       'YT_CREATION_TIMESTAMP_STORAGE_KEY',
       'YT_LAST_QUERIES_STORAGE_KEY',
       'yt_mobile_issues_cache',
-      'YT_IS_REGISTERED_FOR_PUSH'
+      'YT_IS_REGISTERED_FOR_PUSH',
+      'YT_AGILE_ZOOMED_IN'
     ]);
   });
 
@@ -51,5 +52,10 @@ describe('Storage', () => {
 
     MockedStorage.multiSet.should.have.been.called;
     storage.getStorageState().query.should.equal('foo');
+  });
+
+  it('should update boolean field state on partial flush', async () => {
+    await storage.flushStoragePart({agileZoomedIn: true});
+    storage.getStorageState().agileZoomedIn.should.equal(true);
   });
 });

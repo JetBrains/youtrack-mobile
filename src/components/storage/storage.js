@@ -20,7 +20,8 @@ export type StorageState = {|
   query: ?string,
   lastQueries: ?Array<string>,
   issuesCache: ?Array<IssueOnList>,
-  isRegisteredForPush: boolean
+  isRegisteredForPush: boolean,
+  agileZoomedIn: ?boolean
 |}
 
 type StorageStateKeys = $Exact<$ObjMap<StorageState, () => string>>;
@@ -35,10 +36,13 @@ const storageKeys: StorageStateKeys = {
   query: 'YT_QUERY_STORAGE',
   lastQueries: 'YT_LAST_QUERIES_STORAGE_KEY',
   issuesCache: 'yt_mobile_issues_cache',
-  isRegisteredForPush: 'YT_IS_REGISTERED_FOR_PUSH'
+  isRegisteredForPush: 'YT_IS_REGISTERED_FOR_PUSH',
+  agileZoomedIn: 'YT_AGILE_ZOOMED_IN'
 };
 
 let storageState: ?StorageState = null;
+
+const hasValue = v => v !== null && v !== undefined;
 
 export const initialState: StorageState = Object.freeze({
   projectId: null,
@@ -50,7 +54,8 @@ export const initialState: StorageState = Object.freeze({
   query: null,
   lastQueries: null,
   issuesCache: null,
-  isRegisteredForPush: false
+  isRegisteredForPush: false,
+  agileZoomedIn: null
 });
 
 function cleanAndLogState(message, state) {
@@ -123,18 +128,19 @@ export async function flushStorage(newState: StorageState): Promise<StorageState
   storageState = {...newState};
 
   const pairsToRemove = Object.entries(storageState)
-    .filter(([key, value]) => !value);
+    .filter(([key, value]) => !hasValue(value));
   await AsyncStorage.multiRemove(pairsToRemove.map((([key]) => storageKeys[key])));
 
   const pairsToWrite = Object.entries(storageState)
-    .filter(([key, value]) => !!value);
+    .filter(([key, value]) => value !== null && value !== undefined);
 
   if (pairsToWrite.length === 0) {
     log.debug('Storage state is empty, no actuall write has been done');
     return newState;
   }
 
-  const pairs = pairsToWrite.map(([key, value]) => [storageKeys[key], value ? JSON.stringify(value) : value]);
+  const pairs = pairsToWrite
+    .map(([key, value]) => [storageKeys[key], hasValue(value) ? JSON.stringify(value) : value]);
   await AsyncStorage.multiSet(pairs);
 
   return storageState;
