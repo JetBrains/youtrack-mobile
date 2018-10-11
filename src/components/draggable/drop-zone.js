@@ -102,9 +102,11 @@ class DropZone extends Component<Props, State> {
       placeholderIndex = draggableChilds.length;
     }
 
-    if (placeholderIndex !== this.state.placeholderIndex) {
-      LayoutAnimation.configureNext({duration: 100, update: {type: 'easeInEaseOut'}});
+    if (placeholderIndex === this.state.placeholderIndex) {
+      return;
     }
+
+    LayoutAnimation.configureNext({duration: 100, update: {type: 'easeInEaseOut'}});
     this.setState({placeholderIndex});
 
     if (!this.state.active) {
