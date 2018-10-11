@@ -8,6 +8,7 @@ import type Api from '../../components/api/api';
 import Router from '../../components/router/router';
 import log from '../../components/log/log';
 import usage from '../../components/usage/usage';
+import {findIssueOnBoard} from './board-updaters';
 import {LayoutAnimation} from 'react-native';
 
 const PAGE_SIZE = 4;
@@ -365,6 +366,21 @@ export function onCardDrop(data: {columnId: string, cellId: string, leadingId: ?
     const api: Api = getApi();
 
     try {
+      const issueOnBoard = findIssueOnBoard(getState().agile.sprint.board, data.movedId);
+      if (!issueOnBoard) {
+        log.warn('Cannot find dragged issue on board');
+        return;
+      }
+
+      const currentIndex = issueOnBoard.cell.issues.indexOf(issueOnBoard.issue);
+      if (
+        issueOnBoard.cell.id === data.cellId &&
+        issueOnBoard.cell.issues[currentIndex - 1].id === data.leadingId
+      ) {
+        log.info('Card dropped to original position');
+        return;
+      }
+
       log.info(`Applying issue move: movedId="${data.movedId}", cellId="${data.cellId}", leadingId="${data.leadingId || ''}"`);
 
       LayoutAnimation.easeInEaseOut();
