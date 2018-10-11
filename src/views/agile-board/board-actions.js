@@ -369,22 +369,23 @@ export function onCardDrop(data: {columnId: string, cellId: string, leadingId: ?
     const {sprint} = getState().agile;
     const api: Api = getApi();
 
+    const issueOnBoard = findIssueOnBoard(getState().agile.sprint.board, data.movedId);
+    if (!issueOnBoard) {
+      log.warn('Cannot find dragged issue on board');
+      return;
+    }
+
+    const currentIndex = issueOnBoard.cell.issues.indexOf(issueOnBoard.issue);
+    const currentLeading = issueOnBoard.cell.issues[currentIndex - 1];
+    if (
+      issueOnBoard.cell.id === data.cellId &&
+      currentLeading?.id === data.leadingId
+    ) {
+      log.info('Card dropped to original position');
+      return;
+    }
+
     try {
-      const issueOnBoard = findIssueOnBoard(getState().agile.sprint.board, data.movedId);
-      if (!issueOnBoard) {
-        log.warn('Cannot find dragged issue on board');
-        return;
-      }
-
-      const currentIndex = issueOnBoard.cell.issues.indexOf(issueOnBoard.issue);
-      if (
-        issueOnBoard.cell.id === data.cellId &&
-        issueOnBoard.cell.issues[currentIndex - 1]?.id === data.leadingId
-      ) {
-        log.info('Card dropped to original position');
-        return;
-      }
-
       log.info(`Applying issue move: movedId="${data.movedId}", cellId="${data.cellId}", leadingId="${data.leadingId || ''}"`);
 
       LayoutAnimation.easeInEaseOut();
@@ -401,7 +402,7 @@ export function onCardDrop(data: {columnId: string, cellId: string, leadingId: ?
 
       usage.trackEvent(CATEGORY_NAME, 'Card drop');
     } catch (err) {
-      // TODO: Rever state
+      dispatch(moveIssue(data.movedId, issueOnBoard.cell.id, currentLeading?.id));
       notifyError('Could not move card', err);
     }
   };
