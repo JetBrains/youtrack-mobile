@@ -11,6 +11,8 @@ import { COLOR_PINK } from '../variables/variables';
 import Draggable from './draggable';
 import {DragContext} from './drag-container';
 
+import type {DragContextType} from './drag-container';
+
 export type ZoneInfo = {
   width: number,
   height: number,
@@ -29,7 +31,7 @@ type Props = {
   onLeave: any => any,
   onDrop: (data: ?Object) => any,
   data: Object,
-  dragContext: Object,
+  dragContext: DragContextType,
   dragging?: boolean,
   disabled?: boolean,
   children: any,

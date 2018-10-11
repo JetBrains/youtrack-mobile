@@ -7,9 +7,11 @@ import React, {Component} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {DragContext} from './drag-container';
 
+import type {DragContextType} from './drag-container';
+
 type Props = {
   dragOn: 'onLongPress' | 'onPressIn',
-  dragContext: Object,
+  dragContext: DragContextType,
   disabled: boolean,
   children: any,
   data: any,

@@ -15,7 +15,17 @@ import {
 
 import type {ZoneInfo} from './drop-zone';
 
-export const DragContext = React.createContext();
+export type DragContextType = {
+  dropZones: Array<ZoneInfo>,
+  onInitiateDrag: (ref: Object, children: any, data: Object) => any,
+  dragging: ?Object,
+  updateZone: ZoneInfo => any,
+  removeZone: Object => any,
+  registerOnDrag: Function,
+  registerOnDrop: Function
+}
+
+export const DragContext = React.createContext<?DragContextType>(null);
 
 class DragModal extends Component<any, void> {
   render() {
@@ -45,7 +55,6 @@ type State = {
 }
 
 class DragContainer extends Component<Props, State> {
-  containerLayout = null;
   _listener: string;
   _point: ?{x: number, y: number} = null;
   _offset: ?{x: number, y: number} = null;
@@ -73,11 +82,10 @@ class DragContainer extends Component<Props, State> {
   reportOnDrag: Function = () => {};
   reportOnDrop: Function = () => {};
 
-  getDragContext() {
+  getDragContext(): DragContextType {
     return {
       dropZones: this.dropZones,
       onInitiateDrag: this.onInitiateDrag,
-      container: this.containerLayout,
       dragging: this.state.draggingComponent || null,
       updateZone: this.updateZone,
       removeZone: this.removeZone,
@@ -263,7 +271,6 @@ class DragContainer extends Component<Props, State> {
       <DragContext.Provider value={this.getDragContext()}>
         <View
           style={[{flex: 1}, this.props.style]}
-          onLayout={e => this.containerLayout = e.nativeEvent.layout}
           {...this._panResponder.panHandlers}
         >
           {this.props.children}
