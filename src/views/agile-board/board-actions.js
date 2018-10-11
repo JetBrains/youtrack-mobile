@@ -247,7 +247,7 @@ export function openSprintSelect() {
         onSelect: selectedSprint => {
           dispatch(closeSelect());
           dispatch(loadSprint(sprint.agile.id, selectedSprint.id));
-          dispatch(updateAgileUserProfile(sprint.id));
+          dispatch(updateAgileUserProfile(selectedSprint.id));
           usage.trackEvent(CATEGORY_NAME, 'Change sprint');
         }
       }
