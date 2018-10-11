@@ -379,7 +379,7 @@ export function onCardDrop(data: {columnId: string, cellId: string, leadingId: ?
       const currentIndex = issueOnBoard.cell.issues.indexOf(issueOnBoard.issue);
       if (
         issueOnBoard.cell.id === data.cellId &&
-        issueOnBoard.cell.issues[currentIndex - 1].id === data.leadingId
+        issueOnBoard.cell.issues[currentIndex - 1]?.id === data.leadingId
       ) {
         log.info('Card dropped to original position');
         return;
