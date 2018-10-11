@@ -6,6 +6,7 @@ import ApiHelper from './api__helper';
 import IssueAPI from './api__issue';
 import AgileAPI from './api__agile';
 import IssuesAPI from './api__issues';
+import InboxAPI from './api__inbox';
 
 import type Auth from '../auth/auth';
 import type {EndUserAgreement} from '../../flow/AppConfig';
@@ -19,6 +20,7 @@ class API extends BaseAPI {
   issue: IssueAPI;
   issues: IssuesAPI;
   agile: AgileAPI;
+  inbox: InboxAPI;
 
   constructor(auth: Auth) {
     super(auth);
@@ -26,6 +28,7 @@ class API extends BaseAPI {
     this.issues = new IssuesAPI(auth);
     this.issue = new IssueAPI(auth);
     this.agile = new AgileAPI(auth);
+    this.inbox = new InboxAPI(auth);
 
     this.youTrackProjectUrl =`${this.youTrackUrl}/api/admin/projects`;
     this.youtTrackFieldBundleUrl = `${this.youTrackUrl}/api/admin/customFieldSettings/bundles`;

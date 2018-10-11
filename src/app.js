@@ -19,6 +19,7 @@ import CreateIssue from './views/create-issue/create-issue';
 import ShowImage from './views/show-image/show-image';
 import AttachmentPreview from './views/attachment-preview/attachment-preview';
 import AgileBoard from './views/agile-board/agile-board';
+import Inbox from './views/inbox/inbox';
 import {COLOR_BLACK} from './components/variables/variables';
 import ErrorBoundary from './components/error-boundary/error-boundary';
 import {getStoredConfigAndProceed, onNavigateBack} from './actions/app-actions';
@@ -100,6 +101,8 @@ class YouTrackMobile extends Component<void, void> {
     Router.registerRoute({name: 'CreateIssue', component: CreateIssue});
 
     Router.registerRoute({name: 'AgileBoard', component: AgileBoard, type: 'reset'});
+
+    Router.registerRoute({name: 'Inbox', component: Inbox, type: 'reset'});
 
     Router.finalizeRoutes('Home');
   }

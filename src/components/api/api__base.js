@@ -29,7 +29,8 @@ export default class BaseAPI {
     this.config = auth.config;
 
     this.youTrackUrl = this.config.backendUrl;
-    this.youTrackIssueUrl = `${this.youTrackUrl}/api/issues`;
+    this.youTrackApiUrl = `${this.youTrackUrl}/api`;
+    this.youTrackIssueUrl = `${this.youTrackApiUrl}/issues`;
   }
 
   async makeAuthorizedRequest(url: string, method: ?string, body: ?Object, options: RequestOptions = defaultRequestOptions) {

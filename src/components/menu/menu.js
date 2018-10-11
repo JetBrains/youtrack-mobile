@@ -66,6 +66,11 @@ export class Menu extends Component<Props, void> {
     Router.AgileBoard();
   }
 
+  _openInbox = () => {
+    this.props.onClose();
+    Router.Inbox();
+  }
+
   _logOut = () => {
     const hasOtherAccounts = this.props.otherAccounts.length > 0;
 
@@ -173,27 +178,39 @@ export class Menu extends Component<Props, void> {
       return null;
     }
 
+    const MenuItem = ({label, description = '', onPress = () => {}}) => (
+      <TouchableOpacity activeOpacity={0.4} style={styles.menuItemButton} onPress={onPress}>
+        <View style={styles.menuItemTopLine}>
+          <Text style={styles.menuItemText}>{label}</Text>
+          <Image style={styles.menuItemIcon} source={next}></Image>
+        </View>
+        <Text style={styles.menuItemSubtext}>{description}</Text>
+      </TouchableOpacity>
+    );
+
     return (
       <ScrollView style={styles.scrollContainer}>
         <View style={[styles.menuContainer, {paddingTop: getTopPadding(), minHeight: height}]}>
           {this._renderAccounts()}
 
           <View style={styles.menuItems}>
-            <TouchableOpacity activeOpacity={0.4} style={styles.menuItemButton} onPress={this._openIssueList}>
-              <View style={styles.menuItemTopLine}>
-                <Text style={styles.menuItemText}>Issues</Text>
-                <Image style={styles.menuItemIcon} source={next}></Image>
-              </View>
-              <Text style={styles.menuItemSubtext}>{issueQuery || 'No query'}</Text>
-            </TouchableOpacity>
+            <MenuItem
+              label={'Issues'}
+              description={issueQuery || 'No query'}
+              onPress={this._openIssueList}
+            />
 
-            <TouchableOpacity activeOpacity={0.4} style={styles.menuItemButton} onPress={this._openAgileBoard}>
-              <View style={styles.menuItemTopLine}>
-                <Text style={styles.menuItemText}>Agile Boards</Text>
-                <Image style={styles.menuItemIcon} source={next}></Image>
-              </View>
-              <Text style={styles.menuItemSubtext}>{this._getSelectedAgileBoard()}</Text>
-            </TouchableOpacity>
+            <MenuItem
+              label={'Agile Boards'}
+              description={this._getSelectedAgileBoard()}
+              onPress={this._openAgileBoard}
+            />
+
+            <MenuItem
+              label={'Inbox'}
+              description={'Notifications stream'}
+              onPress={this._openInbox}
+            />
           </View>
 
           <View style={styles.flexSpacer}/>
