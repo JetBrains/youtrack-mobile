@@ -37,6 +37,13 @@ function noAgileSelected() {
 
 type ApiGetter = () => Api;
 
+function updateAgileUserProfile(sprintId) {
+  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+    const profile: AgileUserProfile = await getApi().agile.updateAgileUserProfile(sprintId);
+    dispatch({type: types.RECEIVE_AGILE_PROFILE, profile});
+  };
+}
+
 function loadSprint(agileId: string, sprintId: string) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
@@ -47,10 +54,7 @@ function loadSprint(agileId: string, sprintId: string) {
       LayoutAnimation.easeInEaseOut();
       dispatch(receiveSprint(sprint));
       dispatch(subscribeServersideUpdates());
-      usage.trackEvent(CATEGORY_NAME, 'Load sprint', 'Success');
-      log.info(`Sprint ${sprintId} (agileId=${agileId}) has been loaded`);
-      await api.agile.saveLastVisitedSprint(sprintId);
-      dispatch(loadAgileProfile());
+      log.info(`Sprint ${sprintId} (agileBoardId="${agileId}") has been loaded`);
     } catch (e) {
       usage.trackEvent(CATEGORY_NAME, 'Load sprint', 'Error');
       notifyError('Could not load sprint', e);
@@ -62,9 +66,8 @@ function loadSprint(agileId: string, sprintId: string) {
 
 function loadBoard(boardId: string, sprints: Array<{id: string}>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
-    const api: Api = getApi();
-    const agileUserProfile: AgileUserProfile = await api.agile.getAgileUserProfile();
-    const visitedSprintOnBoard = (agileUserProfile.visitedSprints || []).filter(s => s.agile.id === boardId)[0];
+    const profile = getState().agile.profile;
+    const visitedSprintOnBoard = (profile.visitedSprints || []).filter(s => s.agile.id === boardId)[0];
     const targetSprint = visitedSprintOnBoard || sprints[sprints.length - 1];
     log.info(`Resolving sprint for board ${boardId}. Visited = ${visitedSprintOnBoard ? visitedSprintOnBoard.id : 'NOTHING'}, target = ${targetSprint.id}`);
     dispatch(loadSprint(boardId, targetSprint.id));
@@ -244,6 +247,7 @@ export function openSprintSelect() {
         onSelect: selectedSprint => {
           dispatch(closeSelect());
           dispatch(loadSprint(sprint.agile.id, selectedSprint.id));
+          dispatch(updateAgileUserProfile(sprint.id));
           usage.trackEvent(CATEGORY_NAME, 'Change sprint');
         }
       }
