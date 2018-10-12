@@ -10,12 +10,12 @@
 		"ANALYTICS_ID": "",
 		"EXCEPTION_REPORTER_TOKEN": "",
 		"KONNECTOR_URL": "https://konnector-staging.services.jetbrains.com"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm test && npm run lint"
-    }
-  },
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "npm test && npm run lint"
+		}
+	},
 	"license": "Apache-2.0",
 	"scripts": {
 		"start": "./node_modules/react-native-cli/index.js start",
@@ -78,6 +78,7 @@
 	"dependencies": {
 		"@expo/react-native-action-sheet": "1.0.1",
 		"@huston007/react-native-eventsource": "0.2.2",
+		"base-64": "^0.1.0",
 		"base64-js": "1.2.0",
 		"entities": "^1.1.1",
 		"fetch-mock": "5.6.0",
@@ -85,6 +86,7 @@
 		"lodash.once": "4.1.1",
 		"lodash.throttle": "4.1.1",
 		"object-walk": "^0.1.1",
+		"pako": "^1.0.6",
 		"prop-types": "^15.5.10",
 		"qs": "6.1.0",
 		"react": "16.5.0",

@@ -1,6 +1,8 @@
 /* @flow */
-import {ScrollView, View, Text, Platform} from 'react-native';
+import {FlatList, View, Text, Platform} from 'react-native';
 import React, {Component} from 'react';
+
+import {decode as atob} from 'base-64';
 
 import styles from './inbox.styles';
 import issueStyles from '../single-issue/single-issue.styles';
@@ -11,12 +13,13 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as inboxActions from './inbox-actions';
 import type {InboxState} from './inbox-reducers';
+import Router from '../../components/router/router';
 
 const CATEGORY_NAME = 'Inbox view';
 
 type AdditionalProps = {
-  predefinedDraftId: ?string
 };
+
 type Props = InboxState & typeof inboxActions & AdditionalProps;
 
 class Inbox extends Component<Props, void> {
@@ -26,20 +29,45 @@ class Inbox extends Component<Props, void> {
   }
 
   componentDidMount() {
-    this.props.loadInbox();
+    this.refresh();
   }
+
+
+  handleOnBack = () => {
+    const returned = Router.pop();
+    if (!returned) {
+      Router.IssueList();
+    }
+  };
+
+  refresh = () => {
+    this.props.loadInbox();
+  };
+
+  renderItem = ({item, index}) => {
+    const decoded = atob(item.metadata);
+
+    return (
+      <Text key={index}>{JSON.stringify(decoded)}</Text>
+    );
+  };
 
   render() {
     return (
       <View style={styles.container}>
-        <Header leftButton={<Text>Cancel</Text>}>
-          <Text style={issueStyles.headerText}>New Issue</Text>
+        <Header
+          leftButton={<Text>Back</Text>}
+          onBack={this.handleOnBack}
+        >
+          <Text style={issueStyles.headerText}>Inbox</Text>
         </Header>
-        <ScrollView keyboardShouldPersistTaps="handled" keyboardDismissMode="interactive">
-          <View>
 
-          </View>
-        </ScrollView>
+        <FlatList
+          data={this.props.items}
+          refreshing={this.props.loading}
+          onRefresh={this.refresh}
+          renderItem={this.renderItem}
+        />
 
         {Platform.OS == 'ios' && <KeyboardSpacer style={{backgroundColor: 'black'}}/>}
       </View>
@@ -48,7 +76,7 @@ class Inbox extends Component<Props, void> {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  return {inbox: state.inbox, ...ownProps};
+  return {...state.inbox, ...ownProps};
 };
 
 const mapDispatchToProps = (dispatch) => {
