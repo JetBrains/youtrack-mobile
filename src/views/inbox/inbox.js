@@ -3,6 +3,7 @@ import {FlatList, View, Text, Platform} from 'react-native';
 import React, {Component} from 'react';
 
 import {decode as atob} from 'base-64';
+import pako from 'pako';
 
 import styles from './inbox.styles';
 import issueStyles from '../single-issue/single-issue.styles';
@@ -47,8 +48,12 @@ class Inbox extends Component<Props, void> {
   renderItem = ({item, index}) => {
     const decoded = atob(item.metadata);
 
+    const data = pako.inflate(decoded);
+
+    const strData = String.fromCharCode.apply(null, new Uint16Array(data));
+
     return (
-      <Text key={index}>{JSON.stringify(decoded)}</Text>
+      <Text key={index}>{strData}</Text>
     );
   };
 
