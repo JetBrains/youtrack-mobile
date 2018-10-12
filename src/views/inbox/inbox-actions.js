@@ -1,12 +1,15 @@
 /* @flow */
 import * as types from './inbox-action-types';
 import {notifyError, resolveError} from '../../components/notification/notification';
+import type Api from '../../components/api/api';
 
-export function setInboxLoading(loading) {
+type ApiGetter = () => Api;
+
+export function setInboxLoading(loading: boolean) {
   return {type: types.SET_INBOX_LOADING, loading};
 }
 
-export function updateInbox(inbox) {
+export function updateInbox(inbox: Array<Object>) {
   return {type: types.UPDATE_INBOX, inbox};
 }
 

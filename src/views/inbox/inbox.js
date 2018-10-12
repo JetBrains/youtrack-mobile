@@ -20,8 +20,6 @@ type AdditionalProps = {
 type Props = InboxState & typeof inboxActions & AdditionalProps;
 
 class Inbox extends Component<Props, void> {
-  fieldsPanel: Object;
-
   constructor(props) {
     super(props);
     usage.trackScreenView(CATEGORY_NAME);
@@ -32,14 +30,9 @@ class Inbox extends Component<Props, void> {
   }
 
   render() {
-    const {
-      storeDraftAndGoBack,
-    } = this.props;
-
     return (
       <View style={styles.container}>
-        <Header leftButton={<Text>Cancel</Text>}
-          onBack={storeDraftAndGoBack}>
+        <Header leftButton={<Text>Cancel</Text>}>
           <Text style={issueStyles.headerText}>New Issue</Text>
         </Header>
         <ScrollView keyboardShouldPersistTaps="handled" keyboardDismissMode="interactive">

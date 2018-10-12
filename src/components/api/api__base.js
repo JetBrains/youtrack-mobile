@@ -23,6 +23,7 @@ export default class BaseAPI {
 
   youTrackUrl: string;
   youTrackIssueUrl: string;
+  youTrackApiUrl: string;
 
   constructor(auth: Auth) {
     this.auth = auth;
