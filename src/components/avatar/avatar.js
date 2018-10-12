@@ -1,6 +1,6 @@
 /* @flow */
 import {Image} from 'react-native';
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import DefaultAvatar from './default-avatar';
 
 type Props = {
@@ -14,7 +14,7 @@ type State = {
   renderDefault: boolean
 }
 
-export default class Avatar extends Component<Props, State> {
+export default class Avatar extends PureComponent<Props, State> {
   state = {
     renderDefault: false
   }
