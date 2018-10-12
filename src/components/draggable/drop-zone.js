@@ -4,7 +4,7 @@
  * Modification of https://github.com/deanmcpherson/react-native-drag-drop
  */
 
-import React, {Component} from 'react';
+import * as React from 'react';
 import {View, LayoutAnimation} from 'react-native';
 import {AGILE_CARD_HEIGHT} from '../agile-card/agile-card';
 import { COLOR_PINK } from '../variables/variables';
@@ -20,7 +20,7 @@ export type ZoneInfo = {
   y: number,
   data: Object,
   placeholderIndex: ?number,
-  ref: Object,
+  ref: React.Ref<typeof DropZone>,
   onMoveOver: ({x: number, y: number}, zone: ZoneInfo) => any,
   onLeave: any => any,
   onDrop: (data: ?Object) => any
@@ -31,19 +31,20 @@ type Props = {
   onLeave: any => any,
   onDrop: (data: ?Object) => any,
   data: Object,
-  dragContext: DragContextType,
   dragging?: boolean,
   disabled?: boolean,
-  children: any,
+  children: React.Node,
   style: any
 }
+
+type PropsWithContext = Props & {dragContext: DragContextType};
 
 type State = {
   placeholderIndex: ?number,
   active: boolean
 }
 
-class DropZone extends Component<Props, State> {
+class DropZone extends React.Component<PropsWithContext, State> {
   state = {
     placeholderIndex: null,
     active: false
@@ -147,7 +148,7 @@ class DropZone extends Component<Props, State> {
       return children;
     }
     const childs = React.Children.toArray(children);
-    const withoutMoving = childs.filter((c: Object) => this.props.dragContext?.dragging?.data !== c.props.data);
+    const withoutMoving = childs.filter((c: React.Element<typeof Draggable | any>) => this.props.dragContext?.dragging?.data !== c.props.data);
 
     withoutMoving.splice(placeholderIndex, 0, (
       <View key="placeholder" style={{height: 8, backgroundColor: COLOR_PINK}}></View>
@@ -170,8 +171,13 @@ class DropZone extends Component<Props, State> {
   }
 }
 
-export default (props: any) => (
+export default (props: Props) => (
   <DragContext.Consumer>
-    {dragContext => <DropZone {...props} dragContext={dragContext} />}
+    {dragContext => {
+      if (!dragContext) {
+        throw new Error('DropZone should be rendered inside <DragContainer />');
+      }
+      return <DropZone {...props} dragContext={dragContext} />;
+    }}
   </DragContext.Consumer>
 );

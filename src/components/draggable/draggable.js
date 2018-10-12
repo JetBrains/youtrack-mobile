@@ -3,7 +3,7 @@
  * Original author: deanmcpherson
  * Modification of https://github.com/deanmcpherson/react-native-drag-drop
  */
-import React, {Component} from 'react';
+import * as React from 'react';
 import {TouchableOpacity} from 'react-native';
 import {DragContext} from './drag-container';
 
@@ -11,16 +11,17 @@ import type {DragContextType} from './drag-container';
 
 type Props = {
   dragOn: 'onLongPress' | 'onPressIn',
-  dragContext: DragContextType,
   disabled: boolean,
-  children: any,
-  data: any,
+  children: React.Node,
+  data: String | Object,
   style: any,
   activeOpacity: number,
   onPress: Function
 };
 
-class Draggable extends Component<Props, void> {
+type PropsWithContext = Props & {dragContext: DragContextType};
+
+class Draggable extends React.Component<PropsWithContext, void> {
   _initiateDrag = () => {
     if (!this.props.disabled)
       this.props.dragContext.onInitiateDrag(
@@ -57,9 +58,14 @@ class Draggable extends Component<Props, void> {
   }
 }
 
-export default (props: Object) => (
+export default (props: Props): React.Node => (
   <DragContext.Consumer>
-    {dragContext => <Draggable {...props} dragContext={dragContext} />}
+    {dragContext => {
+      if (!dragContext) {
+        throw new Error('Draggable should be rendered inside <DragContainer />');
+      }
+      return <Draggable {...props} dragContext={dragContext} />;
+    }}
   </DragContext.Consumer>
 );
 

@@ -3,7 +3,7 @@
  * Original author: deanmcpherson
  * Modification of https://github.com/deanmcpherson/react-native-drag-drop
  */
-import React, {Component} from 'react';
+import * as React from 'react';
 import {
   View,
   PanResponder,
@@ -12,22 +12,36 @@ import {
   Animated,
   TouchableWithoutFeedback
 } from 'react-native';
+import DropZone from './drop-zone';
+import Draggable from './draggable';
 
 import type {ZoneInfo} from './drop-zone';
 
-export type DragContextType = {
+type DraggingInfo = {|
+  ref: ?React.Ref<typeof Draggable>,
+  data: Object,
+  children: React.Node,
+  startPosition: {
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  }
+|};
+
+export type DragContextType = {|
   dropZones: Array<ZoneInfo>,
-  onInitiateDrag: (ref: Object, children: any, data: Object) => any,
-  dragging: ?Object,
+  onInitiateDrag: (ref: Object, children: React.Node, data: Object) => any,
+  dragging: ?DraggingInfo,
   updateZone: ZoneInfo => any,
-  removeZone: Object => any,
+  removeZone: React.Ref<typeof DropZone> => any,
   registerOnDrag: Function,
   registerOnDrop: Function
-}
+|}
 
 export const DragContext = React.createContext<?DragContextType>(null);
 
-class DragModal extends Component<any, void> {
+class DragModal extends React.Component<any, void> {
   render() {
     return (
       <Modal transparent>
@@ -51,10 +65,10 @@ type Props = {
 
 type State = {
   location: Animated.ValueXY,
-  draggingComponent: ?Object
+  draggingComponent: ?DraggingInfo
 }
 
-class DragContainer extends Component<Props, State> {
+class DragContainer extends React.Component<Props, State> {
   _listener: string;
   _point: ?{x: number, y: number} = null;
   _offset: ?{x: number, y: number} = null;
@@ -104,7 +118,7 @@ class DragContainer extends Component<Props, State> {
     }
   }
 
-  removeZone = (ref: Object) => {
+  removeZone = (ref: React.Ref<typeof DropZone>) => {
     this.dropZones = this.dropZones.filter(z => z.ref !== ref);
   }
 
