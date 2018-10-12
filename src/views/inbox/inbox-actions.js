@@ -22,7 +22,7 @@ export function loadInbox() {
     try {
       const newInbox = await api.inbox.getInbox();
 
-      dispatch(updateInbox(newInbox));
+      dispatch(updateInbox(newInbox.reverse()));
     } catch (err) {
       const error = await resolveError(err);
       notifyError('Cannot update inbox', error);

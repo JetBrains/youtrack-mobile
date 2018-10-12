@@ -21,6 +21,57 @@ const CATEGORY_NAME = 'Inbox view';
 type AdditionalProps = {
 };
 
+type ChangeValue = {
+  name: string,
+  entityId : string,
+  type : string
+}
+
+type ChangeEvent = {
+  multiValue: boolean,
+  entityId: string,
+  name: String,
+  addedValues: Array<ChangeValue>,
+  removedValues: Array<ChangeValue>
+};
+
+type Reason = {
+  type: string
+};
+
+type Issue = {
+  created: number,
+  project: {
+    entityId: string,
+    shortName: string,
+    name: string
+  },
+  resolved: ?boolean,
+  starred: ?boolean,
+  votes: number,
+  summary: string,
+  description: string
+};
+
+type Metadata = {
+  type: string,
+  initialNotification: boolean,
+  onlyViaDuplicate: boolean,
+  issue: Issue,
+  change: {
+    humanReadableTimeStamp: string,
+    startTimestamp: number,
+    endTimestamp: number,
+    events: Array<ChangeEvent>
+  },
+  header: string,
+  reason: {
+    mentionReasons: Array<Reason>,
+    tagReasons: Array<Reason>,
+    savedSearchReasons: Array<Reason>
+  }
+};
+
 type Props = InboxState & typeof inboxActions & AdditionalProps;
 
 class Inbox extends Component<Props, void> {
@@ -52,8 +103,32 @@ class Inbox extends Component<Props, void> {
 
     const strData = String.fromCharCode.apply(null, new Uint16Array(data));
 
+    const metadata: Metadata = JSON.parse(strData);
+
     return (
-      <Text key={index}>{strData}</Text>
+      <View style={{marginBottom: 20}}>
+        {/*<Text>{metadata.header}</Text>*/}
+        <Text>{metadata.issue.summary}</Text>
+        <Text>{metadata.change.humanReadableTimeStamp}</Text>
+
+        {metadata.change.events.map((event: ChangeEvent, index: number) => (
+          <View key={index}>
+            <Text>{event.name}</Text>
+
+            {event.addedValues.map((value: ChangeValue) => (
+              <View key={value.entityId}>
+                <Text>+ {value.name}</Text>
+              </View>
+            ))}
+
+            {event.removedValues.map((value: ChangeValue) => (
+              <View key={value.entityId}>
+                <Text>- {value.name}</Text>
+              </View>
+            ))}
+          </View>
+        ))}
+      </View>
     );
   };
 
@@ -71,6 +146,7 @@ class Inbox extends Component<Props, void> {
           data={this.props.items}
           refreshing={this.props.loading}
           onRefresh={this.refresh}
+          keyExtractor={(item, index: number) => index.toString()}
           renderItem={this.renderItem}
         />
 
