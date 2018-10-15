@@ -20,7 +20,7 @@ import {getStorageState} from '../storage/storage';
 import type {StorageState} from '../storage/storage';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {AgileUserProfile} from '../../flow/Agile';
-import Feature from '../../feature/feature';
+import Feature from '../feature/feature';
 
 const CURRENT_YEAR = (new Date()).getFullYear();
 const MENU_WIDTH = 280;

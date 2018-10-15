@@ -10,7 +10,7 @@ export default class IssueAPI extends ApiBase {
 
   async getInbox(): Promise<Array<Object>> {
     return await this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/users/notifications?fields=sender(login),recipient(login),metadata,content&since=1`
+      `${this.youTrackApiUrl}/users/notifications?fields=sender(login,name,email,avatarUrl),recipient(login),metadata,content&since=1`
     );
   }
 }
