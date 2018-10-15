@@ -12,13 +12,12 @@ import {
   Animated,
   TouchableWithoutFeedback
 } from 'react-native';
-import DropZone from './drop-zone';
-import Draggable from './draggable';
 
-import type {ZoneInfo} from './drop-zone';
+import typeof Draggable from './draggable';
+import type DropZone, {ZoneInfo} from './drop-zone';
 
 type DraggingInfo = {|
-  ref: ?React.Ref<typeof Draggable>,
+  ref: ?React.Ref<Draggable>,
   data: Object,
   children: React.Node,
   startPosition: {
@@ -34,7 +33,7 @@ export type DragContextType = {|
   onInitiateDrag: (ref: Object, children: React.Node, data: Object) => any,
   dragging: ?DraggingInfo,
   updateZone: ZoneInfo => any,
-  removeZone: React.Ref<typeof DropZone> => any,
+  removeZone: React.Ref<DropZone> => any,
   registerOnDrag: Function,
   registerOnDrop: Function
 |}
@@ -118,7 +117,7 @@ class DragContainer extends React.Component<Props, State> {
     }
   }
 
-  removeZone = (ref: React.Ref<typeof DropZone>) => {
+  removeZone = (ref: React.Ref<DropZone>) => {
     this.dropZones = this.dropZones.filter(z => z.ref !== ref);
   }
 
