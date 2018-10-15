@@ -55,6 +55,8 @@ class YouTrackMobile extends Component<void, void> {
     Router.onBack = (closingView) => {
       store.dispatch(onNavigateBack(closingView));
     };
+
+    Router.rootRoutes = ['IssueList', 'Inbox', 'AgileBoard'];
   }
 
   getChildContext() {

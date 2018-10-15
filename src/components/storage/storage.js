@@ -21,7 +21,8 @@ export type StorageState = {|
   lastQueries: ?Array<string>,
   issuesCache: ?Array<IssueOnList>,
   isRegisteredForPush: boolean,
-  agileZoomedIn: ?boolean
+  agileZoomedIn: ?boolean,
+  lastRoute: ?('IssueList' | 'Inbox' | 'AgileBoard')
 |}
 
 type StorageStateKeys = $Exact<$ObjMap<StorageState, () => string>>;
@@ -37,7 +38,8 @@ const storageKeys: StorageStateKeys = {
   lastQueries: 'YT_LAST_QUERIES_STORAGE_KEY',
   issuesCache: 'yt_mobile_issues_cache',
   isRegisteredForPush: 'YT_IS_REGISTERED_FOR_PUSH',
-  agileZoomedIn: 'YT_AGILE_ZOOMED_IN'
+  agileZoomedIn: 'YT_AGILE_ZOOMED_IN',
+  lastRoute: 'YT_LAST_ROUTE'
 };
 
 let storageState: ?StorageState = null;
@@ -55,7 +57,8 @@ export const initialState: StorageState = Object.freeze({
   lastQueries: null,
   issuesCache: null,
   isRegisteredForPush: false,
-  agileZoomedIn: null
+  agileZoomedIn: null,
+  lastRoute: null
 });
 
 function cleanAndLogState(message, state) {

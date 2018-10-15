@@ -4,6 +4,7 @@ import {createStackNavigator, StackActions, NavigationActions} from 'react-navig
 import transitionConfigs from 'react-navigation/src/views/StackView/StackViewTransitionConfigs';
 import cardInterpolator from 'react-navigation/src/views/StackView/StackViewStyleInterpolator';
 
+import {getStorageState, flushStoragePart} from '../storage/storage';
 import log from '../log/log';
 
 const TransitionSpec = {
@@ -22,6 +23,7 @@ const SlideFromRight = {
  */
 class Router {
   _currentRoute = null;
+  rootRoutes = [];
 
   constructor(navigator) {
     this._navigator = null;
@@ -87,6 +89,10 @@ class Router {
       throw `no such route ${routeName}`;
     }
 
+    if (this.rootRoutes.includes(routeName)) {
+      flushStoragePart({lastRoute: routeName});
+    }
+
     const newRoute = Object.assign({}, this.routes[routeName]);
     newRoute.props = Object.assign({}, newRoute.props, props);
 
@@ -102,6 +108,11 @@ class Router {
       params: newRoute.props,
       key: Math.random().toString()
     }));
+  }
+
+  navigateToDefaultRoute(props = null) {
+    const defaultRoute = getStorageState().lastRoute || this.rootRoutes[0];
+    this.navigate(defaultRoute, props);
   }
 
   pop() {

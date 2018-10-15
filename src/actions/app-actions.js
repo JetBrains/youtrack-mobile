@@ -153,7 +153,7 @@ export function addAccount(serverUrl: string = '') {
     try {
       const config = await connectToOneMoreServer(serverUrl, () => {
         log.info('Adding new server canceled by user');
-        Router.IssueList();
+        Router.navigateToDefaultRoute();
       });
       log.info(`Config loaded for new server (${config.backendUrl}), logging in...`);
       // Note: this auth won't be initialized to the end ever. It is just a temperary instance
@@ -176,7 +176,7 @@ export function addAccount(serverUrl: string = '') {
         log.info('Recovering from add account error');
         await dispatch(changeAccount(otherAccounts[0], true));
       }
-      Router.IssueList();
+      Router.navigateToDefaultRoute();
     }
   };
 }
@@ -253,7 +253,7 @@ function completeInitialization() {
     dispatch(loadAgileProfile());
 
     log.info('Initialization completed');
-    Router.IssueList();
+    Router.navigateToDefaultRoute();
   };
 }
 
