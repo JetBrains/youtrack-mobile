@@ -1,5 +1,5 @@
 /* @flow */
-import {FlatList, Image, View, Text, Platform} from 'react-native';
+import {FlatList, Image, View, Text, Platform, RefreshControl, TouchableOpacity} from 'react-native';
 import React, {Component} from 'react';
 
 import {decode as atob} from 'base-64';
@@ -18,6 +18,8 @@ import Router from '../../components/router/router';
 import {next} from '../../components/icon/icon';
 import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
 import Avatar from '../../components/avatar/avatar';
+import {COLOR_PINK} from '../../components/variables/variables';
+import log from '../../components/log/log';
 
 const CATEGORY_NAME = 'Inbox view';
 
@@ -40,7 +42,14 @@ type ChangeEvent = {
 };
 
 type Reason = {
-  type: string
+  type: string,
+  name?: string
+};
+
+type ReasonCollection = {
+  mentionReasons: Array<Reason>,
+  tagReasons: Array<Reason>,
+  savedSearchReasons: Array<Reason>
 };
 
 type Issue = {
@@ -70,11 +79,7 @@ type Metadata = {
     events: Array<ChangeEvent>
   },
   header: string,
-  reason: {
-    mentionReasons: Array<Reason>,
-    tagReasons: Array<Reason>,
-    savedSearchReasons: Array<Reason>
-  }
+  reason: ReasonCollection
 };
 
 type Props = InboxState & typeof inboxActions & AdditionalProps;
@@ -97,92 +102,134 @@ class Inbox extends Component<Props, void> {
     }
   };
 
+
+  _renderRefreshControl = () => {
+    return <RefreshControl
+      refreshing={this.props.loading}
+      onRefresh={this.refresh}
+      tintColor={COLOR_PINK}
+      testID="refresh-control"
+    />;
+  };
+
+  goToIssue = (issue: Issue) => {
+    log.debug(`Opening issue "${issue.id}" from notifications`);
+    Router.SingleIssue({
+      issuePlaceholder: issue,
+      issueId: issue.id
+    });
+  };
+
   refresh = () => {
     this.props.loadInbox();
   };
 
-  drawChangeValues = (values: Array<ChangeValue>, styles: Object = {}) => values.map(value => (
-    <View style={{flexShrink: 1}} key={value.name || value.entityId}>
-      <Text style={styles}>{value.name}</Text>
+  drawChangeValues = (values: Array<ChangeValue>, extraStyles: Object = {}) => values.map(value => (
+    <View key={value.name || value.entityId}>
+      <Text style={{...styles.textPrimary, ...extraStyles}}>{value.name}</Text>
     </View>
   ));
 
-  drawComment = (event, sender: Object) => (
-    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-      <Avatar
-        style={{marginRight: 10}}
-        userName={getEntityPresentation(sender.author)}
-        size={40}
-        source={{uri: sender.avatarUrl}}
-      />
-
+  drawComment = event => (
+    <View style={{flexDirection: 'row'}}>
       {this.drawChangeValues(event.addedValues)}
     </View>
   );
 
   drawSummaryChange = event => (
     <View>
+      <Text style={styles.textSecondary}>{event.name}:</Text>
       {this.drawChangeValues(event.removedValues, {textDecorationLine: 'line-through'})}
-      {this.drawChangeValues(event.addedValues)}
     </View>
   );
 
   drawCustomFieldChange = event => {
     return (
-      <View style={{flexDirection: 'row'}}>
-        <Text style={{color: '#555'}}>{event.name}: </Text>
+      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+        <Text style={styles.textSecondary}>{event.name}: </Text>
 
         {this.drawChangeValues(event.removedValues)}
 
-        {Boolean(event.removedValues.length && event.addedValues.length) && <Text> → </Text>}
+        {Boolean(event.removedValues.length && event.addedValues.length) && <Text style={styles.textPrimary}> → </Text>}
 
         {this.drawChangeValues(event.addedValues)}
       </View>
     );
   };
 
+  getReasonString = (reason: ReasonCollection) : string => {
+    let reasons = [];
+    let reasonString = '';
+
+    if (reason.mentionReasons.length > 0) {
+      reasons.push('mention');
+    }
+
+    reasons = reasons.concat(reason.tagReasons.map(s => s.name));
+    reasons = reasons.concat(reason.savedSearchReasons.map(s => s.name));
+
+    if (reasons.length) {
+      reasonString = reasons.join(', ');
+    }
+
+    return reasonString;
+  };
+
   renderItem = ({item}) => {
     const decoded = atob(item.metadata);
+    const sender = item.sender;
 
     const data = pako.inflate(decoded);
 
     const strData = String.fromCharCode.apply(null, new Uint16Array(data));
 
     const metadata: Metadata = JSON.parse(strData);
+    const reasonString = this.getReasonString(metadata.reason);
+
+    const onPress = () => this.goToIssue(metadata.issue);
 
     return (
-      <View style={{marginBottom: 20, padding: 10, backgroundColor: '#fff', borderBottomColor: '#dfe5eb', borderBottomWidth: 1, borderTopColor: '#dfe5eb', borderTopWidth: 1}}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text numberOfLines={2} style={{flexShrink: 1}}>{metadata.issue.summary}</Text>
+      <TouchableOpacity style={styles.card} onPress={onPress}>
+        <View style={styles.header}>
+          <Text numberOfLines={2} style={styles.summary}>{metadata.issue.summary}</Text>
           <Image style={styles.arrowImage} source={next}></Image>
         </View>
 
         <View style={{marginTop: 4, flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={{color: '#555'}}>{metadata.issue.id}</Text>
-          <Text style={{color: '#555'}}></Text>
+          <Text style={styles.textSecondary}>{metadata.issue.id}</Text>
+          <Text style={styles.textSecondary}>{reasonString}</Text>
         </View>
 
-        <View style={{marginTop: 10, paddingTop: 10, borderTopColor: '#dfe5eb', borderTopWidth: 1}}>
-          {metadata.change.events.map((event, index: number) => {
-            let changeComponent;
+        <View style={styles.cardContent}>
+          {Boolean(sender.avatarUrl) && <Avatar
+            style={{marginRight: 10}}
+            userName={getEntityPresentation(sender.author)}
+            size={40}
+            source={{uri: sender.avatarUrl}}
+          />}
 
-            if (event.category === 'COMMENT') {
-              changeComponent = this.drawComment(event, item.sender);
-            } else if (event.category === 'SUMMARY') {
-              changeComponent = this.drawSummaryChange(event);
-            } else {
-              changeComponent = this.drawCustomFieldChange(event);
-            }
+          <View style={{flexShrink: 1}}>
+            {metadata.change.events.map((event, index: number) => {
+              let changeComponent;
 
-            return (<View key={index}>{changeComponent}</View>);
-          })}
+              if (event.category === 'COMMENT') {
+                changeComponent = this.drawComment(event);
+              } else if (event.category === 'SUMMARY') {
+                changeComponent = this.drawSummaryChange(event);
+              } else {
+                changeComponent = this.drawCustomFieldChange(event);
+              }
+
+              return (<View key={index} style={{marginTop: index > 0 ? 6 : 0}}>{changeComponent}</View>);
+            })}
+          </View>
         </View>
 
-        <View style={{marginTop: 10, flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={{color: '#555', flexShrink: 1, marginRight: 10}} numberOfLines={1}>{item.sender.login}</Text>
-          <Text style={{color: '#555'}}>{metadata.change.humanReadableTimeStamp}</Text>
+        <View style={styles.cardFooter}>
+          <Text style={{...styles.textSecondary, flexShrink: 1, marginRight: 10}} numberOfLines={1}>{item.sender.login}</Text>
+          <Text style={styles.textSecondary}>{metadata.change.humanReadableTimeStamp}</Text>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -193,13 +240,13 @@ class Inbox extends Component<Props, void> {
           leftButton={<Text>Back</Text>}
           onBack={this.handleOnBack}
         >
-          <Text style={issueStyles.headerText}>Inbox</Text>
+          <Text style={issueStyles.headerText}>Notifications</Text>
         </Header>
 
         <FlatList
           data={this.props.items}
+          refreshControl={this._renderRefreshControl()}
           refreshing={this.props.loading}
-          onRefresh={this.refresh}
           keyExtractor={(item, index: number) => index.toString()}
           renderItem={this.renderItem}
         />

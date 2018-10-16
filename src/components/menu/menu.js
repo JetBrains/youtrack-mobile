@@ -209,8 +209,8 @@ export class Menu extends Component<Props, void> {
 
             <Feature>
               <MenuItem
-                label={'Inbox'}
-                description={'Notifications stream'}
+                label={'Notifications'}
+                description={''}
                 onPress={this._openInbox}
               />
             </Feature>
