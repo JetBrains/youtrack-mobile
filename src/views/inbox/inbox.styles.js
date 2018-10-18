@@ -30,13 +30,17 @@ export default StyleSheet.create({
     color: COLOR_FONT,
     flexShrink: 1
   },
+  reason: {
+    textAlign: 'right',
+    marginLeft: 10,
+    flexShrink: 1
+  },
   cardContent: {
     flexDirection: 'row',
     marginTop: 10,
     paddingTop: 10,
     borderTopColor: '#dfe5eb',
-    borderTopWidth: 1,
-    alignItems: 'center'
+    borderTopWidth: 1
   },
   cardFooter: {
     marginTop: 10,

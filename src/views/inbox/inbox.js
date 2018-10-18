@@ -16,7 +16,7 @@ import * as inboxActions from './inbox-actions';
 import type {InboxState} from './inbox-reducers';
 import Router from '../../components/router/router';
 import {next} from '../../components/icon/icon';
-import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
+import {getEntityPresentation, relativeDate} from '../../components/issue-formatter/issue-formatter';
 import Avatar from '../../components/avatar/avatar';
 import {COLOR_PINK} from '../../components/variables/variables';
 import log from '../../components/log/log';
@@ -126,7 +126,7 @@ class Inbox extends Component<Props, void> {
 
   drawChangeValues = (values: Array<ChangeValue>, extraStyles: Object = {}) => values.map(value => (
     <View key={value.name || value.entityId}>
-      <Text style={{...styles.textPrimary, ...extraStyles}}>{value.name}</Text>
+      <Text numberOfLines={5} style={{...styles.textPrimary, ...extraStyles}}>{value.name}</Text>
     </View>
   ));
 
@@ -168,11 +168,44 @@ class Inbox extends Component<Props, void> {
     reasons = reasons.concat(reason.tagReasons.map(s => s.name));
     reasons = reasons.concat(reason.savedSearchReasons.map(s => s.name));
 
+    const onlyUnique = (value, index, self) => {
+      return self.indexOf(value) === index;
+    };
+
     if (reasons.length) {
-      reasonString = reasons.join(', ');
+      reasonString = reasons.filter(onlyUnique).join(', ');
     }
 
     return reasonString;
+  };
+
+  getRestructuredEvents = events => {
+    const map = {
+      summary: [],
+      description: [],
+      comments: [],
+      customFields: []
+    };
+
+    events.forEach((event, index: number) => {
+      if (event.category === 'COMMENT') {
+        map.comments.push(this.drawComment(event));
+      } else if (event.category === 'SUMMARY') {
+        map.summary.push(this.drawSummaryChange(event));
+      } else if (event.category === 'DESCRIPTION') {
+        map.description.push(this.drawSummaryChange(event));
+      } else {
+        map.customFields.push(this.drawCustomFieldChange(event));
+      }
+    });
+
+    const wrap = (node, index: number) => (<View key={index} style={{marginTop: index > 0 ? 6 : 0}}>{node}</View>);
+
+    return (
+      <View style={{flexShrink: 1}}>
+        {[...map.summary, ...map.description, ...map.customFields, ...map.comments].map(wrap)}
+      </View>
+    );
   };
 
   renderItem = ({item}) => {
@@ -197,7 +230,7 @@ class Inbox extends Component<Props, void> {
 
         <View style={{marginTop: 4, flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={styles.textSecondary}>{metadata.issue.id}</Text>
-          <Text style={styles.textSecondary}>{reasonString}</Text>
+          <Text style={[styles.textSecondary, styles.reason]}>{reasonString}</Text>
         </View>
 
         <View style={styles.cardContent}>
@@ -208,26 +241,12 @@ class Inbox extends Component<Props, void> {
             source={{uri: sender.avatarUrl}}
           />}
 
-          <View style={{flexShrink: 1}}>
-            {metadata.change.events.map((event, index: number) => {
-              let changeComponent;
-
-              if (event.category === 'COMMENT') {
-                changeComponent = this.drawComment(event);
-              } else if (event.category === 'SUMMARY') {
-                changeComponent = this.drawSummaryChange(event);
-              } else {
-                changeComponent = this.drawCustomFieldChange(event);
-              }
-
-              return (<View key={index} style={{marginTop: index > 0 ? 6 : 0}}>{changeComponent}</View>);
-            })}
-          </View>
+          {this.getRestructuredEvents(metadata.change.events)}
         </View>
 
         <View style={styles.cardFooter}>
           <Text style={{...styles.textSecondary, flexShrink: 1, marginRight: 10}} numberOfLines={1}>{item.sender.login}</Text>
-          <Text style={styles.textSecondary}>{metadata.change.humanReadableTimeStamp}</Text>
+          <Text style={styles.textSecondary}>{relativeDate(new Date(metadata.change.humanReadableTimeStamp))}</Text>
         </View>
       </TouchableOpacity>
     );
