@@ -8,9 +8,11 @@ export default class IssueAPI extends ApiBase {
     super(auth);
   }
 
-  async getInbox(): Promise<Array<Object>> {
+  async getInbox(skip: number = 0, top: number = 5): Promise<Array<Object>> {
+    const since = +new Date() - 60*60*24*1000 * 7;
+
     return await this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/users/notifications?fields=sender(login,name,email,avatarUrl),recipient(login),metadata,content&since=1`
+      `${this.youTrackApiUrl}/users/notifications?fields=id,sender(login,name,email,avatarUrl),recipient(login),metadata&reverse=true&since=${since}&$top=${top}&$skip=${skip}`
     );
   }
 }

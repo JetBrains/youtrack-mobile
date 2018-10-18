@@ -124,6 +124,12 @@ class Inbox extends Component<Props, void> {
     this.props.loadInbox();
   };
 
+  onLoadMore = () => {
+    if (!this.props.loading && this.props.items.length > 0 && this.props.hasMore) {
+      this.props.loadInbox(this.props.items.length);
+    }
+  };
+
   drawChangeValues = (values: Array<ChangeValue>, extraStyles: Object = {}) => values.map(value => (
     <View key={value.name || value.entityId}>
       <Text numberOfLines={5} style={{...styles.textPrimary, ...extraStyles}}>{value.name}</Text>
@@ -276,6 +282,8 @@ class Inbox extends Component<Props, void> {
           refreshing={this.props.loading}
           keyExtractor={(item, index: number) => index.toString()}
           renderItem={this.renderItem}
+          onEndReached={this.onLoadMore}
+          onEndReachedThreshold={0.1}
         />
 
         {Platform.OS == 'ios' && <KeyboardSpacer style={{backgroundColor: 'black'}}/>}

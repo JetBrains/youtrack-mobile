@@ -4,11 +4,13 @@ import * as types from './inbox-action-types';
 
 export type InboxState = {
   loading: boolean,
-  items: Array<Object>
+  items: Array<Object>,
+  hasMore: boolean
 };
 
 const initialState: InboxState = {
   loading: false,
+  hasMore: true,
   items: []
 };
 
@@ -17,7 +19,7 @@ export default createReducer(initialState, {
     return {...state, loading};
   },
 
-  [types.UPDATE_INBOX](state, {inbox: items}): InboxState {
-    return {...state, items};
+  [types.UPDATE_INBOX](state, {items, hasMore}): InboxState {
+    return {...state, items, hasMore};
   }
 });
