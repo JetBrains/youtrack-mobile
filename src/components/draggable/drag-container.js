@@ -41,9 +41,10 @@ export type DragContextType = {|
 export const DragContext = React.createContext<?DragContextType>(null);
 
 class DragModal extends React.Component<any, void> {
+  onRequestClose = () => true;
   render() {
     return (
-      <Modal transparent>
+      <Modal transparent onRequestClose={this.onRequestClose}>
         <TouchableWithoutFeedback onPressIn={this.props.drop}>
           <Animated.View style={this.props.location.getLayout()}>
             {this.props.content.children}
