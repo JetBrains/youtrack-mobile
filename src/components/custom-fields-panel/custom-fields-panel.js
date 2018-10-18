@@ -49,6 +49,8 @@ type State = {
   datePicker: {
     show: boolean,
     title: string,
+    withTime: boolean,
+    time: ?string,
     value: Date,
     emptyValueName?: ?string,
     onSelect: (selected: any) => any
@@ -75,6 +77,8 @@ const initialEditorsState = {
   datePicker: {
     show: false,
     title: '',
+    time: null,
+    withTime: false,
     value: new Date(),
     onSelect: () => {
     }
@@ -89,6 +93,7 @@ const initialEditorsState = {
 };
 
 const MAX_PROJECT_NAME_LENGTH = 20;
+const DATE_AND_TIME = 'date and time';
 
 export default class CustomFieldsPanel extends Component<Props, State> {
   currentScrollX: number = 0;
@@ -171,13 +176,33 @@ export default class CustomFieldsPanel extends Component<Props, State> {
   }
 
   editDateField(field: CustomFieldType) {
+    const withTime = field.projectCustomField.field.fieldType.valueType === DATE_AND_TIME;
     return this.setState({
       datePicker: {
         show: true,
+        withTime,
+        time: field.value ? new Date(field.value).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : null,
         title: field.projectCustomField.field.name,
         value: field.value ? new Date(field.value) : new Date(),
         emptyValueName: field.projectCustomField.canBeEmpty ? field.projectCustomField.emptyFieldText : null,
-        onSelect: (date) => this.saveUpdatedField(field, date ? date.getTime() : null)
+        onSelect: (date) => {
+          if (!date) {
+            return this.saveUpdatedField(field, null);
+          }
+          if (withTime && this.state.datePicker.time) {
+            try {
+              const match = this.state.datePicker.time.match(/(\d\d):(\d\d)/);
+              if (match) {
+                const [, hours = 3, minutes = 0] = match;
+                date.setHours(hours, minutes);
+              }
+            } catch (e) {
+              throw new Error(`Invalid date: ${e}`);
+            }
+          }
+
+          this.saveUpdatedField(field, date.getTime());
+        }
       }
     });
   }
@@ -249,7 +274,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
 
     this.setState({editingField: field, isEditingProject: false, ...initialEditorsState});
 
-    if (fieldType.valueType === 'date' || fieldType.valueType === 'date and time') {
+    if (fieldType.valueType === 'date' || fieldType.valueType === DATE_AND_TIME) {
       return this.editDateField(field);
     }
 
@@ -318,6 +343,28 @@ export default class CustomFieldsPanel extends Component<Props, State> {
             <Text style={styles.clearDate}>{this.state.datePicker.emptyValueName} (Clear value)</Text>
           </TouchableOpacity>}
         </View>
+
+        {this.state.datePicker.withTime && (
+          <View>
+            <TextInput
+              keyboardAppearance="dark"
+              placeholderTextColor={COLOR_PLACEHOLDER}
+              style={styles.simpleValueInput}
+              placeholder="13:00"
+              underlineColorAndroid="transparent"
+              clearButtonMode="always"
+              autoCorrect={false}
+              autoCapitalize="none"
+              value={this.state.datePicker.time}
+              onChangeText={text => this.setState({
+                datePicker: {
+                  ...this.state.datePicker,
+                  time: text
+                }
+              })}
+            />
+          </View>
+        )}
 
         <Calendar
           current={this.state.datePicker.value}
