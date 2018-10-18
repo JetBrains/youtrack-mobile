@@ -247,7 +247,7 @@ class DragContainer extends React.Component<Props, State> {
         this.reportOnDrag({
           point: cornerPoint,
           width: this.state.draggingComponent?.startPosition.width,
-          height: this.state.draggingComponent?.startPosition.width,
+          height: this.state.draggingComponent?.startPosition.height,
         });
       });
       this._offset = {x: pageX, y: pageY};
