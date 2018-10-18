@@ -245,15 +245,16 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     if (field === this.state.editingField) {
       return this.closeEditor();
     }
+    const {fieldType} = field.projectCustomField.field;
 
     this.setState({editingField: field, isEditingProject: false, ...initialEditorsState});
 
-    if (field.projectCustomField.field.fieldType.valueType === 'date') {
+    if (fieldType.valueType === 'date' || fieldType.valueType === 'date and time') {
       return this.editDateField(field);
     }
 
-    if (['period', 'integer', 'string', 'float'].indexOf(field.projectCustomField.field.fieldType.valueType) !== -1) {
-      return this.editSimpleValueField(field, field.projectCustomField.field.fieldType.valueType);
+    if (['period', 'integer', 'string', 'float'].indexOf(fieldType.valueType) !== -1) {
+      return this.editSimpleValueField(field, fieldType.valueType);
     }
 
     return this.editCustomField(field);
