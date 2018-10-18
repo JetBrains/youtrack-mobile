@@ -143,6 +143,14 @@ class Inbox extends Component<Props, void> {
     </View>
   );
 
+  drawDescriptionChange = event => (
+    <View>
+      <Text style={styles.textSecondary}>{event.name}:</Text>
+      {this.drawChangeValues(event.addedValues)}
+      {this.drawChangeValues(event.removedValues, {textDecorationLine: 'line-through'})}
+    </View>
+  );
+
   drawCustomFieldChange = event => {
     return (
       <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
@@ -193,7 +201,7 @@ class Inbox extends Component<Props, void> {
       } else if (event.category === 'SUMMARY') {
         map.summary.push(this.drawSummaryChange(event));
       } else if (event.category === 'DESCRIPTION') {
-        map.description.push(this.drawSummaryChange(event));
+        map.description.push(this.drawDescriptionChange(event));
       } else {
         map.customFields.push(this.drawCustomFieldChange(event));
       }
