@@ -23,7 +23,8 @@ export type ZoneInfo = {
   ref: React.Ref<typeof DropZone>,
   onMoveOver: ({x: number, y: number}, zone: ZoneInfo) => any,
   onLeave: any => any,
-  onDrop: (data: ?Object) => any
+  onDrop: (data: ?Object) => any,
+  reportMeasurements: any => any
 }
 
 type Props = {
@@ -51,6 +52,9 @@ class DropZone extends React.Component<PropsWithContext, State> {
   };
 
   reportMeasurements = () => {
+    if (!this.refs.wrapper) {
+      return;
+    }
     const {dragContext, dragging, data} = this.props;
 
     if (dragging) {
@@ -71,7 +75,8 @@ class DropZone extends React.Component<PropsWithContext, State> {
         ref: this.refs.wrapper,
         onMoveOver: this.onMoveOver,
         onLeave: this.onLeave,
-        onDrop: this.onDrop
+        onDrop: this.onDrop,
+        reportMeasurements: this.reportMeasurements
       };
       dragContext.updateZone(zoneInfo);
     });

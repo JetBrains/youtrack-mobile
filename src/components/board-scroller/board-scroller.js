@@ -1,11 +1,13 @@
 /* @flow */
 import React, {Component} from 'react';
+import throttle from 'lodash.throttle';
 import {ScrollView, Dimensions, UIManager} from 'react-native';
 import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../variables/variables';
 import {DragContext} from '../draggable/drag-container';
 import {clamp, getSnapToX, getPointShift} from './board-scroller__math';
 
 import type {BoardColumn} from '../../flow/Agile';
+import type {DragContextType} from '../draggable/drag-container';
 
 export const COLUMN_SCREEN_PART = 0.9;
 
@@ -15,7 +17,7 @@ type Props = {
   horizontalScrollProps: Object,
   columns: ?Array<BoardColumn>,
   snap: boolean,
-  dragContext: Object
+  dragContext: DragContextType
 }
 
 type UnamangedState = {
@@ -65,7 +67,7 @@ class BoardScroller extends Component<Props, void> {
   }
 
   performAutoScroll = () => {
-    const SPEED_DIVIDE = 50;
+    const SPEED_DIVIDE = 30;
     const {dx, dy, active} = this.unmanagedState.autoScroll;
     if (!active) {
       return;
@@ -87,12 +89,19 @@ class BoardScroller extends Component<Props, void> {
     requestAnimationFrame(this.performAutoScroll);
   }
 
+  reportZonesMeasurements = throttle(() => {
+    this.props.dragContext.dropZones.forEach(zone => zone.reportMeasurements());
+  }, 100);
+
+
   onVerticalScroll = event => {
     const {nativeEvent} = event;
     const viewHeight = nativeEvent.layoutMeasurement.height;
 
     this.unmanagedState.scrollPositions.offsetY = nativeEvent.contentOffset.y;
     this.unmanagedState.scrollPositions.maxY = nativeEvent.contentSize.height - viewHeight;
+
+    this.reportZonesMeasurements();
   }
 
   onHorizontalScroll = event => {
@@ -105,6 +114,8 @@ class BoardScroller extends Component<Props, void> {
 
     this.unmanagedState.scrollPositions.offsetX = nativeEvent.contentOffset.x;
     this.unmanagedState.scrollPositions.maxX = nativeEvent.contentSize.width - viewWidth;
+
+    this.reportZonesMeasurements();
   }
 
   onLayout = (event) => {
