@@ -94,13 +94,14 @@ class API extends BaseAPI {
       return this.getCustomFieldUserValues(bundleId);
     }
     const queryString = qs.stringify({
-      fields: issueFields.bundle.toString()
+      $includeArchived: false,
+      sort: true,
+      fields: issueFields.bundleValues.toString()
     });
 
-    const res = await this.makeAuthorizedRequest(
-      `${this.youtTrackFieldBundleUrl}/${fieldValueType}/${bundleId}?${queryString}`
+    return await this.makeAuthorizedRequest(
+      `${this.youtTrackFieldBundleUrl}/${fieldValueType}/${bundleId}/values?${queryString}`
     );
-    return res.values;
   }
 
   async getStateMachineEvents(issueId: string, fieldId: string) {
