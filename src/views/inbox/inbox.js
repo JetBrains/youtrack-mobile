@@ -27,6 +27,7 @@ type AdditionalProps = {
 };
 
 type ChangeValue = {
+  id?: string,
   name: string,
   entityId : string,
   type : string
@@ -132,7 +133,7 @@ class Inbox extends Component<Props, void> {
 
   drawChangeValues = (values: Array<ChangeValue>, extraStyles: Object = {}) => values.map(value => (
     <View key={value.name || value.entityId}>
-      <Text numberOfLines={5} style={{...styles.textPrimary, ...extraStyles}}>{value.name}</Text>
+      <Text numberOfLines={5} style={{...styles.textPrimary, ...extraStyles}}>{value.name || value.id}</Text>
     </View>
   ));
 
@@ -162,7 +163,7 @@ class Inbox extends Component<Props, void> {
       <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
         <Text style={styles.textSecondary}>{event.name}: </Text>
 
-        {this.drawChangeValues(event.removedValues)}
+        {this.drawChangeValues(event.removedValues, event.addedValues.length === 0 ? {textDecorationLine: 'line-through'} : {})}
 
         {Boolean(event.removedValues.length && event.addedValues.length) && <Text style={styles.textPrimary}> → </Text>}
 
