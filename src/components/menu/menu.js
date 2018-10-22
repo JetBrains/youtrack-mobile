@@ -207,7 +207,7 @@ export class Menu extends Component<Props, void> {
               onPress={this._openAgileBoard}
             />
 
-            <Feature>
+            <Feature version={'2018.3'}>
               <MenuItem
                 label={'Notifications'}
                 description={''}

@@ -35,9 +35,9 @@ import IssueVisibility from '../../components/issue-visibility/issue-visibility'
 
 import {activityCategory} from '../../components/activity/activity__category';
 import SingleIssueActivityPage from './single-issue__activities';
+import {checkDev, checkVersion} from '../../components/feature/feature';
 
 const CATEGORY_NAME = 'Issue';
-let renderActivities: boolean;
 
 type AdditionalProps = {
   issuePermissions: IssuePermissions,
@@ -50,6 +50,7 @@ type SingleIssueProps = SingleIssueState & typeof issueActions & AdditionalProps
 
 class SingeIssueView extends Component<SingleIssueProps, void> {
   toolbarNode: Object;
+  activitiesEnabled: boolean = false;
 
   static contextTypes = {
     actionSheet: PropTypes.func
@@ -62,22 +63,12 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
 
     this.props.loadIssue();
 
-    renderActivities = this._canShowActivity();
-    if (renderActivities) {
+    this.activitiesEnabled = checkVersion('2018.3') && checkDev();
+    if (this.activitiesEnabled) {
       this.props.loadActivitiesPage([activityCategory.COMMENT]);
     } else {
       this.props.loadIssueComments();
     }
-  }
-
-  _canShowActivity() {
-    //Activity REST is available from the version 2018.3
-    const MINOR_VERSION_2013 = Number.MAX_SAFE_INTEGER; //TODO: hide this with `Number.MAX_SAFE_INTEGER` until it's under development
-    const minorVersion = parseInt(getApi().config.version.split('.').pop(), 10);
-    if (minorVersion) {
-      return minorVersion >= MINOR_VERSION_2013;
-    }
-    return false;
   }
 
   _canAddComment() {
@@ -375,12 +366,12 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     const isSecured = !!editingComment && IssueVisibility.isSecured(editingComment.visibility);
 
     const activityLoading = {
-      error: () => renderActivities ? activitiesLoadingError : commentsLoadingError,
-      success: () => renderActivities ? activityLoaded : commentsLoaded,
+      error: () => this.activitiesEnabled ? activitiesLoadingError : commentsLoadingError,
+      success: () => this.activitiesEnabled ? activityLoaded : commentsLoaded,
     };
     const showLoading = () => (!issueLoaded || !activityLoading.success()) && !activityLoading.error();
     const isActivityLoaded = () => issueLoaded && activityLoading.success();
-    const activitySources = renderActivities ? [activityCategory.COMMENT] : null;
+    const activitySources = this.activitiesEnabled ? [activityCategory.COMMENT] : null;
 
     return (
       <View style={styles.container} testID="issue-view">
@@ -410,7 +401,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
 
           {
             isActivityLoaded()
-              ? (renderActivities ? this._renderActivities() : this._renderComments())
+              ? (this.activitiesEnabled ? this._renderActivities() : this._renderComments())
               : null
           }
 

@@ -2,9 +2,6 @@
 import {FlatList, Image, View, Text, Platform, RefreshControl, TouchableOpacity} from 'react-native';
 import React, {Component} from 'react';
 
-import {decode as atob} from 'base-64';
-import pako from 'pako';
-
 import styles from './inbox.styles';
 import issueStyles from '../single-issue/single-issue.styles';
 import Header from '../../components/header/header';
@@ -224,14 +221,9 @@ class Inbox extends Component<Props, void> {
   };
 
   renderItem = ({item}) => {
-    const decoded = atob(item.metadata);
     const sender = item.sender;
 
-    const data = pako.inflate(decoded);
-
-    const strData = String.fromCharCode.apply(null, new Uint16Array(data));
-
-    const metadata: Metadata = JSON.parse(strData);
+    const metadata: Metadata = item.metadata;
     const reasonString = this.getReasonString(metadata.reason);
 
     const onPress = () => this.goToIssue(metadata.issue);
