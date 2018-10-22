@@ -9,6 +9,8 @@ import {DragContext} from './drag-container';
 
 import type {DragContextType} from './drag-container';
 
+const LONG_PRESS_DELAY = 500;
+
 type Props = {
   dragOn: 'onLongPress' | 'onPressIn',
   disabled: boolean,
@@ -41,6 +43,7 @@ class Draggable extends React.Component<PropsWithContext, void> {
       <TouchableOpacity
         activeOpacity={this.props.activeOpacity}
         style={this.props.style}
+        delayLongPress={LONG_PRESS_DELAY}
         onLongPress={
           this.props.dragOn === 'onLongPress' ? this._initiateDrag : null
         }

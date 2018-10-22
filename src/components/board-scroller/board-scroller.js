@@ -26,9 +26,12 @@ type UnamangedState = {
   scrollPositions: {offsetX: number, maxX: number, offsetY: number, maxY: number}
 }
 
-class BoardScroller extends Component<Props, void> {
+type State = {isDragging: boolean};
+
+class BoardScroller extends Component<Props, State> {
   horizontalScroll: ScrollView;
   verticalScroll: ScrollView;
+  state: State = {isDragging: false};
 
   // This state is not intended to affect render function
   unmanagedState: UnamangedState = {
@@ -39,9 +42,13 @@ class BoardScroller extends Component<Props, void> {
 
   componentDidMount() {
     if (this.props.dragContext) {
+      this.props.dragContext.registerOnDragStart(() => {
+        this.setState({isDragging: true});
+      });
       this.props.dragContext.registerOnDrag(this.onDrag);
       this.props.dragContext.registerOnDrop(() => {
         this.unmanagedState.autoScroll.active = false;
+        this.setState({isDragging: false});
       });
     }
   }
@@ -135,6 +142,7 @@ class BoardScroller extends Component<Props, void> {
   render() {
     const {refreshControl, children, horizontalScrollProps} = this.props;
     const {onScroll, ...restHorizontalScrollProps} = horizontalScrollProps; // eslint-disable-line no-unused-vars
+    const {isDragging} = this.state;
 
     return (
       <ScrollView
@@ -144,6 +152,7 @@ class BoardScroller extends Component<Props, void> {
         onScroll={this.onVerticalScroll}
         scrollEventThrottle={50}
         onLayout={this.onLayout}
+        scrollEnabled={!isDragging}
       >
         <ScrollView
           horizontal
@@ -153,6 +162,7 @@ class BoardScroller extends Component<Props, void> {
           {...restHorizontalScrollProps}
           onScroll={this.onHorizontalScroll}
           onScrollEndDrag={this.onScrollEndDrag}
+          scrollEnabled={!isDragging}
         >
           {children}
         </ScrollView>

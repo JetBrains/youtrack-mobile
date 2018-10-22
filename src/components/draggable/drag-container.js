@@ -34,6 +34,7 @@ export type DragContextType = {|
   dragging: ?DraggingInfo,
   updateZone: ZoneInfo => any,
   removeZone: React.Ref<DropZone> => any,
+  registerOnDragStart: Function,
   registerOnDrag: Function,
   registerOnDrop: Function
 |}
@@ -93,6 +94,7 @@ class DragContainer extends React.Component<Props, State> {
     if (this._listener) this.state.location.removeListener(this._listener);
   }
 
+  reportOnDragStart: Function = () => {};
   reportOnDrag: Function = () => {};
   reportOnDrop: Function = () => {};
 
@@ -103,6 +105,7 @@ class DragContainer extends React.Component<Props, State> {
       dragging: this.state.draggingComponent || null,
       updateZone: this.updateZone,
       removeZone: this.removeZone,
+      registerOnDragStart: this.registerOnDragStart,
       registerOnDrag: this.registerOnDrag,
       registerOnDrop: this.registerOnDrop
     };
@@ -129,6 +132,10 @@ class DragContainer extends React.Component<Props, State> {
       zone.y <= y &&
       zone.height + zone.y >= y
     );
+  }
+
+  registerOnDragStart = (onDragStart: Function) => {
+    this.reportOnDragStart = onDragStart;
   }
 
   registerOnDrag = (onDrag: Function) => {
@@ -237,6 +244,8 @@ class DragContainer extends React.Component<Props, State> {
   }
 
   onInitiateDrag = (ref: Object, children: any, data: Object) => {
+    this.reportOnDragStart();
+
     ref.measure((x, y, width, height, pageX, pageY) => {
       if (this._listener) {
         this.state.location.removeListener(this._listener);
