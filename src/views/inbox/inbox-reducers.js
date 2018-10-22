@@ -15,11 +15,15 @@ const initialState: InboxState = {
 };
 
 export default createReducer(initialState, {
-  [types.SET_INBOX_LOADING](state, {loading}): InboxState {
+  [types.SET_LOADING](state, {loading}): InboxState {
     return {...state, loading};
   },
 
-  [types.UPDATE_INBOX](state, {items, hasMore}): InboxState {
-    return {...state, items, hasMore};
+  [types.ADD_ITEMS](state, {items, hasMore}): InboxState {
+    return {...state, items: [...state.items, ...items], hasMore};
+  },
+
+  [types.RESET_ITEMS](state): InboxState {
+    return {...state, items: [], hasMore: true};
   }
 });
