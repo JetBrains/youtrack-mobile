@@ -243,9 +243,9 @@ class Inbox extends Component<Props, void> {
           <Image style={styles.arrowImage} source={next}></Image>
         </View>
 
-        <View style={{marginTop: 4, flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={styles.textSecondary}>{metadata.issue.id}</Text>
-          <Text style={[styles.textSecondary, styles.reason]}>{reasonString}</Text>
+        <View style={styles.subHeader}>
+          <Text style={styles.issueId}>{metadata.issue.id}</Text>
+          <Text style={styles.reason}>{reasonString}</Text>
         </View>
 
         <View style={styles.cardContent}>
@@ -260,8 +260,8 @@ class Inbox extends Component<Props, void> {
         </View>
 
         <View style={styles.cardFooter}>
-          <Text style={{...styles.textSecondary, flexShrink: 1, marginRight: 10}} numberOfLines={1}>{item.sender.login}</Text>
-          <Text style={styles.textSecondary}>{relativeDate(new Date(metadata.change.humanReadableTimeStamp))}</Text>
+          <Text style={styles.author} numberOfLines={1}>{item.sender.login}</Text>
+          <Text style={styles.date}>{relativeDate(new Date(metadata.change.humanReadableTimeStamp))}</Text>
         </View>
       </TouchableOpacity>
     );

@@ -1,6 +1,18 @@
 import {StyleSheet} from 'react-native';
 import {COLOR_FONT_GRAY, COLOR_FONT} from '../../components/variables/variables';
 
+const textPrimary = {
+  lineHeight: 18,
+  fontSize: 13,
+  color: COLOR_FONT
+};
+
+const textSecondary = {
+  lineHeight: 18,
+  fontSize: 13,
+  color: COLOR_FONT_GRAY
+};
+
 export default StyleSheet.create({
   container: {
     flex: 1,
@@ -30,11 +42,18 @@ export default StyleSheet.create({
     color: COLOR_FONT,
     flexShrink: 1
   },
+  subHeader: {
+    marginTop: 4,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
   reason: {
     textAlign: 'right',
     marginLeft: 10,
-    flexShrink: 1
+    flexShrink: 1,
+    ...textSecondary
   },
+  issueId: textSecondary,
   cardContent: {
     flexDirection: 'row',
     marginTop: 10,
@@ -47,14 +66,12 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
-  textPrimary: {
-    lineHeight: 18,
-    fontSize: 13,
-    color: COLOR_FONT
+  author: {
+    flexShrink: 1,
+    marginRight: 10,
+    ...textSecondary
   },
-  textSecondary: {
-    lineHeight: 18,
-    fontSize: 13,
-    color: COLOR_FONT_GRAY
-  }
+  date: textSecondary,
+  textPrimary,
+  textSecondary
 });
