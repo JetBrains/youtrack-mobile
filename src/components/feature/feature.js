@@ -1,7 +1,7 @@
 /* @flow */
 /*global __DEV__*/
 
-import {Component} from 'react';
+import {PureComponent} from 'react';
 import {getApi} from '../api/api__instance';
 
 type Props = {
@@ -29,7 +29,7 @@ export const checkVersion = (version?: string) => {
 
 export const checkDev = () => __DEV__;
 
-export default class Feature extends Component<Props, void> {
+export default class Feature extends PureComponent<Props, void> {
   check() {
     return checkVersion(this.props.version) && (this.props.devOnly ? checkDev() : true);
   }
