@@ -14,6 +14,7 @@ import type {InboxState} from './inbox-reducers';
 import Router from '../../components/router/router';
 import {next} from '../../components/icon/icon';
 import {openMenu} from '../../actions/app-actions';
+import Menu from '../../components/menu/menu';
 import {getEntityPresentation, relativeDate} from '../../components/issue-formatter/issue-formatter';
 import Avatar from '../../components/avatar/avatar';
 import {COLOR_PINK} from '../../components/variables/variables';
@@ -273,27 +274,29 @@ class Inbox extends Component<Props, void> {
     const {items, loading, openMenu} = this.props;
 
     return (
-      <View style={styles.container}>
-        <Header
-          leftButton={<Text>Menu</Text>}
-          onBack={openMenu}
-        >
-          <Text style={issueStyles.headerText}>{items.length} {items.length === 1 ? 'Notification' : 'Notifications'}</Text>
-        </Header>
+      <Menu>
+        <View style={styles.container}>
+          <Header
+            leftButton={<Text>Menu</Text>}
+            onBack={openMenu}
+          >
+            <Text style={issueStyles.headerText}>{items.length} {items.length === 1 ? 'Notification' : 'Notifications'}</Text>
+          </Header>
 
-        <FlatList
-          data={items}
-          refreshControl={this._renderRefreshControl()}
-          refreshing={loading}
-          keyExtractor={this.getNotificationId}
-          renderItem={this.renderItem}
-          onEndReached={this.onLoadMore}
-          onEndReachedThreshold={0.1}
-          ListFooterComponent={this._renderListMessage}
-        />
+          <FlatList
+            data={items}
+            refreshControl={this._renderRefreshControl()}
+            refreshing={loading}
+            keyExtractor={this.getNotificationId}
+            renderItem={this.renderItem}
+            onEndReached={this.onLoadMore}
+            onEndReachedThreshold={0.1}
+            ListFooterComponent={this._renderListMessage}
+          />
 
-        {Platform.OS == 'ios' && <KeyboardSpacer style={{backgroundColor: 'black'}}/>}
-      </View>
+          {Platform.OS == 'ios' && <KeyboardSpacer style={{backgroundColor: 'black'}}/>}
+        </View>
+      </Menu>
     );
   }
 }
