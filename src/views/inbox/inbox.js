@@ -254,7 +254,24 @@ class Inbox extends Component<Props, void> {
 
   getNotificationId = notification => notification.id;
 
+
+  _renderListMessage = () => {
+    const {loading, items} = this.props;
+    if (!loading && items.length === 0) {
+      return (
+        <View>
+          <Text style={styles.listMessageSmile}>(・_・)</Text>
+          <Text style={styles.listFooterMessage} testID="no-notifications">You have no notifications</Text>
+        </View>
+      );
+    }
+
+    return null;
+  };
+
   render() {
+    const {items, loading} = this.props;
+
     return (
       <View style={styles.container}>
         <Header
@@ -265,13 +282,14 @@ class Inbox extends Component<Props, void> {
         </Header>
 
         <FlatList
-          data={this.props.items}
+          data={items}
           refreshControl={this._renderRefreshControl()}
-          refreshing={this.props.loading}
+          refreshing={loading}
           keyExtractor={this.getNotificationId}
           renderItem={this.renderItem}
           onEndReached={this.onLoadMore}
           onEndReachedThreshold={0.1}
+          ListFooterComponent={this._renderListMessage}
         />
 
         {Platform.OS == 'ios' && <KeyboardSpacer style={{backgroundColor: 'black'}}/>}

@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {COLOR_FONT_GRAY, COLOR_FONT} from '../../components/variables/variables';
+import {COLOR_FONT_GRAY, COLOR_FONT, UNIT} from '../../components/variables/variables';
 
 const textPrimary = {
   lineHeight: 18,
@@ -73,5 +73,15 @@ export default StyleSheet.create({
   },
   date: textSecondary,
   textPrimary,
-  textSecondary
+  textSecondary,
+  listMessageSmile: {
+    paddingTop: UNIT * 6,
+    fontSize: 36,
+    color: COLOR_FONT,
+    textAlign: 'center'
+  },
+  listFooterMessage: {
+    textAlign: 'center',
+    padding: UNIT * 2
+  }
 });
