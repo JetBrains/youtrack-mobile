@@ -3,6 +3,7 @@ import * as types from './action-types';
 import {getIsAuthorized} from '../reducers/app-reducer';
 import {setApi} from '../components/api/api__instance';
 import Api from '../components/api/api';
+import packageJson from '../../package.json'; // eslint-disable-line import/extensions
 import Router from '../components/router/router';
 import log from '../components/log/log';
 import DeviceInfo from 'react-native-device-info';
@@ -367,6 +368,12 @@ export function initializeApp(config: AppConfigFilled) {
     });
 
     try {
+      if (packageJson.version !== getStorageState().currentAppVersion) {
+        log.info(`App upgraded from ${getStorageState().currentAppVersion || 'NOTHING'} to "${packageJson.version}"; reloading config`);
+        config = await loadConfig(config.backendUrl);
+        await flushStoragePart({config, currentAppVersion: packageJson.version});
+      }
+
       await dispatch(initializeAuth(config));
     } catch (error) {
       log.warn('App failed to initialize auth. Will try to reload config.', error);
