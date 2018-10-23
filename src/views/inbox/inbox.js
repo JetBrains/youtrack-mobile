@@ -13,6 +13,7 @@ import * as inboxActions from './inbox-actions';
 import type {InboxState} from './inbox-reducers';
 import Router from '../../components/router/router';
 import {next} from '../../components/icon/icon';
+import {openMenu} from '../../actions/app-actions';
 import {getEntityPresentation, relativeDate} from '../../components/issue-formatter/issue-formatter';
 import Avatar from '../../components/avatar/avatar';
 import {COLOR_PINK} from '../../components/variables/variables';
@@ -21,6 +22,7 @@ import log from '../../components/log/log';
 const CATEGORY_NAME = 'Inbox view';
 
 type AdditionalProps = {
+  openMenu: Function
 };
 
 type ChangeValue = {
@@ -91,15 +93,6 @@ class Inbox extends Component<Props, void> {
   componentDidMount() {
     this.refresh();
   }
-
-
-  handleOnBack = () => {
-    const returned = Router.pop();
-    if (!returned) {
-      Router.IssueList();
-    }
-  };
-
 
   _renderRefreshControl = () => {
     return <RefreshControl
@@ -259,12 +252,14 @@ class Inbox extends Component<Props, void> {
     );
   };
 
+  getNotificationId = notification => notification.id;
+
   render() {
     return (
       <View style={styles.container}>
         <Header
-          leftButton={<Text>Back</Text>}
-          onBack={this.handleOnBack}
+          leftButton={<Text>Menu</Text>}
+          onBack={this.props.openMenu}
         >
           <Text style={issueStyles.headerText}>Notifications</Text>
         </Header>
@@ -273,7 +268,7 @@ class Inbox extends Component<Props, void> {
           data={this.props.items}
           refreshControl={this._renderRefreshControl()}
           refreshing={this.props.loading}
-          keyExtractor={(item, index: number) => index.toString()}
+          keyExtractor={this.getNotificationId}
           renderItem={this.renderItem}
           onEndReached={this.onLoadMore}
           onEndReachedThreshold={0.1}
@@ -291,7 +286,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    ...bindActionCreators(inboxActions, dispatch)
+    ...bindActionCreators(inboxActions, dispatch),
+    openMenu: () => dispatch(openMenu())
   };
 };
 
