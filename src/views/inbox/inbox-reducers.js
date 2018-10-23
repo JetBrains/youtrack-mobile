@@ -25,5 +25,9 @@ export default createReducer(initialState, {
 
   [types.RESET_ITEMS](state): InboxState {
     return {...state, items: [], hasMore: true};
+  },
+
+  [types.LIST_END_REACHED](state): InboxState {
+    return {...state, hasMore: false};
   }
 });

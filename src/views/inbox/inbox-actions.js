@@ -17,7 +17,11 @@ export function resetItems() {
   return {type: types.RESET_ITEMS};
 }
 
-export function loadInbox(skip?: number, top?: number) {
+export function listEndReached() {
+  return {type: types.LIST_END_REACHED};
+}
+
+export function loadInbox(skip?: number = 0, top?: number = 10) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api = getApi();
 
@@ -31,6 +35,10 @@ export function loadInbox(skip?: number, top?: number) {
       }
 
       dispatch(addItems(newItems, newItems.length > 0));
+
+      if (newItems.length < top) {
+        dispatch(listEndReached());
+      }
     } catch (err) {
       const error = await resolveError(err);
       notifyError('Cannot update inbox', error);
