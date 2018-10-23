@@ -270,15 +270,15 @@ class Inbox extends Component<Props, void> {
   };
 
   render() {
-    const {items, loading} = this.props;
+    const {items, loading, openMenu} = this.props;
 
     return (
       <View style={styles.container}>
         <Header
           leftButton={<Text>Menu</Text>}
-          onBack={this.props.openMenu}
+          onBack={openMenu}
         >
-          <Text style={issueStyles.headerText}>Notifications</Text>
+          <Text style={issueStyles.headerText}>{items.length} notifications</Text>
         </Header>
 
         <FlatList
