@@ -47,6 +47,11 @@ export function addCardToBoard(
   cellId: string,
   issue: IssueFull
 ): Board {
+  const issueOnBoard = findIssueOnBoard(board, issue.id);
+  if (issueOnBoard) {
+    return updateCardOnBoard(board, issue);
+  }
+
   function addCardToRowIfNeeded(row) {
     const isTargetRow = row.cells.some(cell => cell.id === cellId);
     if (!isTargetRow) {
