@@ -15,6 +15,7 @@ type Props = {
   children: any,
   refreshControl: any,
   horizontalScrollProps: Object,
+  verticalScrollProps: Object,
   columns: ?Array<BoardColumn>,
   snap: boolean,
   dragContext: DragContextType
@@ -102,6 +103,10 @@ class BoardScroller extends Component<Props, State> {
 
 
   onVerticalScroll = event => {
+    if (this.props.verticalScrollProps?.onScroll) {
+      this.props.verticalScrollProps.onScroll(event);
+    }
+
     const {nativeEvent} = event;
     const viewHeight = nativeEvent.layoutMeasurement.height;
 
@@ -112,7 +117,7 @@ class BoardScroller extends Component<Props, State> {
   }
 
   onHorizontalScroll = event => {
-    if (this.props.horizontalScrollProps) {
+    if (this.props.horizontalScrollProps?.onScroll) {
       this.props.horizontalScrollProps.onScroll(event);
     }
 
@@ -140,8 +145,7 @@ class BoardScroller extends Component<Props, State> {
   }
 
   render() {
-    const {refreshControl, children, horizontalScrollProps} = this.props;
-    const {onScroll, ...restHorizontalScrollProps} = horizontalScrollProps; // eslint-disable-line no-unused-vars
+    const {refreshControl, children, horizontalScrollProps, verticalScrollProps} = this.props;
     const {isDragging} = this.state;
 
     return (
@@ -149,6 +153,7 @@ class BoardScroller extends Component<Props, State> {
         refreshControl={refreshControl}
         nestedScrollEnabled
         ref={this.verticalScrollRef}
+        {...verticalScrollProps}
         onScroll={this.onVerticalScroll}
         scrollEventThrottle={50}
         onLayout={this.onLayout}
@@ -159,7 +164,7 @@ class BoardScroller extends Component<Props, State> {
           scrollEventThrottle={10}
           decelerationRate="fast"
           ref={this.horizontalScrollRef}
-          {...restHorizontalScrollProps}
+          {...horizontalScrollProps}
           onScroll={this.onHorizontalScroll}
           onScrollEndDrag={this.onScrollEndDrag}
           scrollEnabled={!isDragging}

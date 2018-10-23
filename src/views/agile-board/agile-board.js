@@ -272,12 +272,14 @@ class AgileBoard extends Component<Props, State> {
               snap={zoomedIn}
               refreshControl={this._renderRefreshControl()}
               horizontalScrollProps={{
-                onScroll: this._onScroll,
                 contentContainerStyle: {
                   display: 'flex',
                   flexDirection: 'column',
                   width: zoomedIn ? this._getScrollableWidth() : '100%'
                 }
+              }}
+              verticalScrollProps={{
+                onScroll: this._onScroll
               }}
             >
               {noBoardSelected && this._renderNoSprint()}
