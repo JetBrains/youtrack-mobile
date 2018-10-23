@@ -278,7 +278,7 @@ class Inbox extends Component<Props, void> {
           leftButton={<Text>Menu</Text>}
           onBack={openMenu}
         >
-          <Text style={issueStyles.headerText}>{items.length} notifications</Text>
+          <Text style={issueStyles.headerText}>{items.length} {items.length === 1 ? 'Notification' : 'Notifications'}</Text>
         </Header>
 
         <FlatList
