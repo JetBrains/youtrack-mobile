@@ -77,6 +77,7 @@ type SprintFull = SprintInformation & {
   agile: {
     id: string,
     name: string,
-    orphansAtTheTop: boolean
+    orphansAtTheTop: boolean,
+    isUpdatable: boolean
   }
 };

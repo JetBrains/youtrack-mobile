@@ -25,10 +25,9 @@ import type {AgilePageState} from './board-reducers';
 import * as boardActions from './board-actions';
 import {openMenu} from '../../actions/app-actions';
 import { connect } from 'react-redux';
+import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 
 const CATEGORY_NAME = 'Agile board';
-
-const DRAG_DISABLED = false;
 
 type Props = AgilePageState & {
   auth: Auth,
@@ -40,6 +39,7 @@ type Props = AgilePageState & {
   sprint: ?SprintFull,
   isSprintSelectOpen: boolean,
   selectProps: Object,
+  issuePermissions: IssuePermissions,
   onLoadBoard: () => any,
   onLoadMoreSwimlanes: () => any,
   onRowCollapseToggle: (row: AgileBoardRow) => any,
@@ -201,8 +201,9 @@ class AgileBoard extends Component<Props, State> {
       onTapCreateIssue: this.props.createCardForCell,
       onCollapseToggle: this.props.onRowCollapseToggle,
       renderIssueCard: (issue: IssueOnList) => {
+        const canDrag = sprint.agile.isUpdatable && this.props.issuePermissions.canRunCommand(issue);
         return (
-          <Draggable key={issue.id} data={issue.id} onPress={() => this._onTapIssue(issue)} disabled={DRAG_DISABLED}>
+          <Draggable key={issue.id} data={issue.id} onPress={() => this._onTapIssue(issue)} disabled={!canDrag}>
             <AgileCard issue={issue} style={styles.card}/>
           </Draggable>
         );
