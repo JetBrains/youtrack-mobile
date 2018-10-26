@@ -134,12 +134,15 @@ class Inbox extends Component<Props, void> {
     </View>
   );
 
-  drawSummaryChange = event => (
-    <View>
-      <Text style={styles.textSecondary}>{event.name}:</Text>
-      {this.drawChangeValues(event.removedValues, {textDecorationLine: 'line-through'})}
-    </View>
-  );
+  drawSummaryChange = event => {
+    return (
+      <View>
+        <Text style={styles.textSecondary}>{event.name}:</Text>
+        {event.removedValues.length === 0 && this.drawChangeValues(event.addedValues)}
+        {this.drawChangeValues(event.removedValues, {textDecorationLine: 'line-through'})}
+      </View>
+    );
+  };
 
   drawDescriptionChange = event => (
     <View>
@@ -193,7 +196,14 @@ class Inbox extends Component<Props, void> {
       customFields: []
     };
 
-    events.forEach((event, index: number) => {
+    events.forEach((event: ChangeEvent, index: number) => {
+      event.addedValues = event.addedValues.filter(v => v.id || v.name);
+      event.removedValues = event.removedValues.filter(v => v.id || v.name);
+
+      if (!event.addedValues.length && !event.removedValues.length) {
+        return;
+      }
+
       if (event.category === 'COMMENT') {
         map.comments.push(this.drawComment(event));
       } else if (event.category === 'SUMMARY') {
