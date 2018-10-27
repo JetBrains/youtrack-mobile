@@ -34,8 +34,11 @@ export default class ServersideEvents {
 
   listenTo(eventName: string, callback: any => any) {
     this.eventSource.addEventListener(eventName, event => {
-      const data = event.data? JSON.parse(event.data) : event;
-      apiHelper.patchAllRelativeAvatarUrls(data, this.backendUrl);
+      const data = event.data ? JSON.parse(event.data) : event;
+
+      if (event.data) {
+        apiHelper.patchAllRelativeAvatarUrls(data, this.backendUrl);
+      }
 
       return callback(data);
     });
