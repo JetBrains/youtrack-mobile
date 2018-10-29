@@ -71,23 +71,26 @@ class AgileBoard extends Component<Props, State> {
     this.props.onLoadBoard();
   }
 
-  _onScroll = (event) => {
+  onVerticalScroll = (event) => {
     const {nativeEvent} = event;
     const viewHeight = nativeEvent.layoutMeasurement.height;
     const scroll = nativeEvent.contentOffset.y;
     const contentHeight = nativeEvent.contentSize.height;
     const maxScroll = contentHeight - viewHeight;
 
+    if (maxScroll > 0 && scroll > 0 && (maxScroll - scroll) < 40) {
+      this.props.onLoadMoreSwimlanes();
+    }
+  }
+
+  syncHeaderPosition = (event) => {
+    const {nativeEvent} = event;
     if (this.boardHeader) {
       this.boardHeader.setNativeProps({
         style: {left: -nativeEvent.contentOffset.x}
       });
     }
-
-    if (maxScroll - scroll < 20) {
-      this.props.onLoadMoreSwimlanes();
-    }
-  }
+  };
 
   _renderRefreshControl() {
     return <RefreshControl
@@ -276,11 +279,12 @@ class AgileBoard extends Component<Props, State> {
                 contentContainerStyle: {
                   display: 'flex',
                   flexDirection: 'column',
-                  width: zoomedIn ? this._getScrollableWidth() : '100%'
+                  width: zoomedIn ? this._getScrollableWidth() : '100%',
+                  onScroll: this.syncHeaderPosition
                 }
               }}
               verticalScrollProps={{
-                onScroll: this._onScroll
+                onScroll: this.onVerticalScroll
               }}
             >
               {noBoardSelected && this._renderNoSprint()}
