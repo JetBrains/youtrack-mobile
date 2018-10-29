@@ -279,9 +279,9 @@ class AgileBoard extends Component<Props, State> {
                 contentContainerStyle: {
                   display: 'flex',
                   flexDirection: 'column',
-                  width: zoomedIn ? this._getScrollableWidth() : '100%',
-                  onScroll: this.syncHeaderPosition
-                }
+                  width: zoomedIn ? this._getScrollableWidth() : '100%'
+                },
+                onScroll: this.syncHeaderPosition
               }}
               verticalScrollProps={{
                 onScroll: this.onVerticalScroll
