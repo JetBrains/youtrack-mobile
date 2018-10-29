@@ -284,7 +284,10 @@ class AgileBoard extends Component<Props, State> {
                 onScroll: this.syncHeaderPosition
               }}
               verticalScrollProps={{
-                onScroll: this.onVerticalScroll
+                onScroll: this.onVerticalScroll,
+                contentContainerStyle: {
+                  minHeight: '100%'
+                }
               }}
             >
               {noBoardSelected && this._renderNoSprint()}
