@@ -74,7 +74,14 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-    entryFile: "index.js"
+    entryFile: "index.js",
+    // whether to bundle JS and assets in debug mode
+    bundleInDebug: false,
+    // whether to bundle JS and assets in release mode
+    bundleInRelease: true,
+
+    // the root of your RN project, i.e. where "package.json" lives
+    root: "../../"
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
