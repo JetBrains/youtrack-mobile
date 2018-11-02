@@ -32,7 +32,7 @@ class ErrorBoundary extends Component<Props, State> {
     this.setState({error});
   }
 
-  contactSupport = () => Linking.openURL('https://youtrack-support.jetbrains.com/hc');
+  contactSupport = () => Linking.openURL('https://youtrack-support.jetbrains.com/hc/en-us/requests/new');
 
   reportCrash = async () => {
     if (!this.state.error) {
