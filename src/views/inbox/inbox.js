@@ -79,8 +79,10 @@ type Metadata = {
     endTimestamp: number,
     events: Array<ChangeEvent>
   },
+  subject: ?string,
+  body: ?string,
   header: string,
-  reason: ReasonCollection
+  reason: ?ReasonCollection
 };
 
 type Props = InboxState & typeof inboxActions & AdditionalProps;
@@ -166,7 +168,11 @@ class Inbox extends Component<Props, void> {
     );
   };
 
-  getReasonString = (reason: ReasonCollection) : string => {
+  getReasonString = (reason: ?ReasonCollection) : string => {
+    if (!reason) {
+      return '';
+    }
+
     let reasons = [];
     let reasonString = '';
 
@@ -224,11 +230,46 @@ class Inbox extends Component<Props, void> {
     );
   };
 
-  renderItem = ({item}) => {
-    const sender = item.sender;
-
+  renderNotification = ({item}) => {
     const metadata: Metadata = item.metadata;
-    const reasonString = this.getReasonString(metadata.reason);
+
+    const reason = this.getReasonString(metadata.reason);
+
+    if (metadata.change) {
+      return this.renderIssueChange(item, metadata, reason);
+    } else if (metadata.subject || metadata.body) {
+      return this.renderWorkflowNotification(item, metadata, reason);
+    } else {
+      return null;
+    }
+  };
+
+  renderWorkflowNotification = (item, metadata, reason) => {
+    return (
+      <View style={styles.card}>
+        <View style={styles.header}>
+          <Text numberOfLines={2} style={styles.summary}>{metadata.subject}</Text>
+        </View>
+
+        {Boolean(reason) && <View style={styles.subHeader}>
+          <Text style={styles.reason}>{reason}</Text>
+        </View>}
+
+        <View style={styles.cardContent}>
+          <Text style={styles.textPrimary}>
+            {metadata.body}
+          </Text>
+        </View>
+
+        <View style={styles.cardFooter}>
+          <Text style={styles.author} numberOfLines={1}>Workflow notification</Text>
+        </View>
+      </View>
+    );
+  };
+
+  renderIssueChange = (item, metadata, reason) => {
+    const sender = item.sender;
 
     const onPress = () => this.goToIssue(metadata.issue);
 
@@ -241,7 +282,7 @@ class Inbox extends Component<Props, void> {
 
         <View style={styles.subHeader}>
           <Text style={styles.issueId}>{metadata.issue.id}</Text>
-          <Text style={styles.reason}>{reasonString}</Text>
+          <Text style={styles.reason}>{reason}</Text>
         </View>
 
         <View style={styles.cardContent}>
@@ -298,7 +339,7 @@ class Inbox extends Component<Props, void> {
             refreshControl={this._renderRefreshControl()}
             refreshing={loading}
             keyExtractor={this.getNotificationId}
-            renderItem={this.renderItem}
+            renderItem={this.renderNotification}
             onEndReached={this.onLoadMore}
             onEndReachedThreshold={0.1}
             ListFooterComponent={this._renderListMessage}

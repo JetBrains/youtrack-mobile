@@ -34,7 +34,7 @@ export function loadInbox(skip?: number = 0, top?: number = 10) {
         dispatch(resetItems());
       }
 
-      dispatch(addItems(newItems.filter(item => item.metadata && item.metadata.change), newItems.length > 0));
+      dispatch(addItems(newItems.filter(item => item.metadata), newItems.length > 0));
 
       if (newItems.length < top) {
         dispatch(listEndReached());
