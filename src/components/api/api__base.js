@@ -17,6 +17,38 @@ const defaultRequestOptions: RequestOptions = {
   parseJson: true
 };
 
+function updateQueryStringParameter(uri, key, value) {
+  const re = new RegExp(`([?&])${key}=.*?(&|$)`, 'i');
+  const separator = uri.indexOf('?') !== -1 ? '&' : '?';
+  if (uri.match(re)) {
+    return uri.replace(re, `$1${key}=${value}$2`);
+  }
+  else {
+    return `${uri + separator + key}=${value}`;
+  }
+}
+
+function patchTopParam(url: string) {
+  if (url.includes('$top') || url.includes(encodeURIComponent('$top'))) {
+    return url;
+  }
+
+  return updateQueryStringParameter(url, '$top', '-1');
+}
+
+/**
+ * https://youtrack.jetbrains.com/issue/YTM-261
+ * http://www.mytecbits.com/microsoft/iis/iis-changing-maxquerystring-and-maxurl
+ */
+function assertLongQuery(url: string) {
+  const [, ...queryParts] = url.split('?');
+  const query = queryParts.join('');
+  if (query.length > MAX_QUERY_LENGTH) {
+    log.warn(`Query length (${query.length}) is longer than ${MAX_QUERY_LENGTH}. This doesn't work on some servers`, url);
+  }
+}
+
+
 export default class BaseAPI {
   auth: Auth;
   config: AppConfigFilled;
@@ -35,6 +67,7 @@ export default class BaseAPI {
   }
 
   async makeAuthorizedRequest(url: string, method: ?string, body: ?Object, options: RequestOptions = defaultRequestOptions) {
+    url = patchTopParam(url);
     log.debug(`Making ${method || 'GET'} request to ${url}${body ? ` with body |${JSON.stringify(body)}|` : ''}`);
     assertLongQuery(url);
 
@@ -67,17 +100,5 @@ export default class BaseAPI {
       return res;
     }
     return await res.json();
-  }
-}
-
-/**
- * https://youtrack.jetbrains.com/issue/YTM-261
- * http://www.mytecbits.com/microsoft/iis/iis-changing-maxquerystring-and-maxurl
- */
-function assertLongQuery(url: string) {
-  const [, ...queryParts] = url.split('?');
-  const query = queryParts.join('');
-  if (query.length > MAX_QUERY_LENGTH) {
-    log.warn(`Query length (${query.length}) is longer than ${MAX_QUERY_LENGTH}. This doesn't work on some servers`, url);
   }
 }

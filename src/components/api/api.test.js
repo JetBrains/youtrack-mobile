@@ -37,7 +37,7 @@ describe('API', () => {
   });
 
   it('should make request', async () => {
-    fetchMock.get(serverUrl, {foo: 'bar'});
+    fetchMock.get(`${serverUrl}?$top=-1`, {foo: 'bar'});
     const res = await createInstance().makeAuthorizedRequest(serverUrl);
     res.foo.should.equal('bar');
   });
@@ -46,7 +46,7 @@ describe('API', () => {
     const callSpy = sinon.spy();
 
     let isFirst = true;
-    fetchMock.mock(serverUrl, (...args) => {
+    fetchMock.mock(`${serverUrl}?$top=-1`, (...args) => {
       callSpy(...args);
 
       if (isFirst) {
