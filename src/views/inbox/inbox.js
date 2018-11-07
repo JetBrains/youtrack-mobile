@@ -257,7 +257,7 @@ class Inbox extends Component<Props, void> {
 
         <View style={styles.cardFooter}>
           <Text style={styles.author} numberOfLines={1}>{item.sender.login}</Text>
-          <Text style={styles.date}>{relativeDate(new Date(metadata.change.humanReadableTimeStamp))}</Text>
+          <Text style={styles.date}>{relativeDate(metadata.change.endTimestamp)}</Text>
         </View>
       </TouchableOpacity>
     );
