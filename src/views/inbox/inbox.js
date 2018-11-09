@@ -109,7 +109,7 @@ class Inbox extends Component<Props, void> {
   goToIssue = (issue: Issue) => {
     log.debug(`Opening issue "${issue.id}" from notifications`);
     Router.SingleIssue({
-      issuePlaceholder: issue,
+      issuePlaceholder: {id: issue.id, summary: issue.summary, description: issue.description, created: issue.created},
       issueId: issue.id
     });
   };
