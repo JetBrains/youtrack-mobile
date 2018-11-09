@@ -48,7 +48,7 @@ type Reason = {
 };
 
 type ReasonCollection = {
-  mentionReasons: ?Array<Reason>,
+  mentionReasons: Array<Reason>,
   tagReasons: Array<Reason>,
   savedSearchReasons: Array<Reason>
 };
@@ -176,7 +176,7 @@ class Inbox extends Component<Props, void> {
     let reasons = [];
     let reasonString = '';
 
-    if (reason.mentionReasons && reason.mentionReasons.length > 0) {
+    if (reason.mentionReasons.length > 0) {
       reasons.push('mention');
     }
 
