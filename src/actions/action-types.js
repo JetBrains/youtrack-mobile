@@ -8,6 +8,9 @@ export const OPEN_MENU = 'app.OPEN_MENU';
 export const CLOSE_MENU = 'app.CLOSE_MENU';
 export const OPEN_DEBUG_VIEW = 'app.OPEN_DEBUG_VIEW';
 export const CLOSE_DEBUG_VIEW = 'app.CLOSE_DEBUG_VIEW';
+export const OPEN_FEATURES_VIEW = 'app.OPEN_FEATURES_VIEW';
+export const CLOSE_FEATURES_VIEW = 'app.CLOSE_FEATURES_VIEW';
+export const SET_FEATURES = 'app.SET_FEATURES';
 export const ON_NAVIGATE_BACK = 'app.ON_NAVIGATE_BACK';
 
 export const SHOW_USER_AGREEMENT = 'app.SHOW_USER_AGREEMENT';

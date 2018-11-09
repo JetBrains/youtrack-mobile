@@ -14,17 +14,20 @@ declare type RootState = {
   showUserAgreement: boolean,
   endUserAgreement: ?EndUserAgreement,
   otherAccounts: ?Array<StorageState>,
-  isChangingAccount: boolean
+  isChangingAccount: boolean,
+  features: Array<string>
 };
 
 const initialState: RootState = {
   auth: null,
   showMenu: false,
   showDebugView: false,
+  showFeaturesView: false,
   showUserAgreement: false,
   endUserAgreement: null,
   otherAccounts: null,
-  isChangingAccount: false
+  isChangingAccount: false,
+  features: []
 };
 
 export default createReducer(initialState, {
@@ -64,6 +67,24 @@ export default createReducer(initialState, {
     return {
       ...state,
       showDebugView: false
+    };
+  },
+  [types.OPEN_FEATURES_VIEW](state: RootState) {
+    return {
+      ...state,
+      showFeaturesView: true
+    };
+  },
+  [types.CLOSE_FEATURES_VIEW](state: RootState) {
+    return {
+      ...state,
+      showFeaturesView: false
+    };
+  },
+  [types.SET_FEATURES](state: RootState, action: {features: EndUserAgreement}) {
+    return {
+      ...state,
+      features: action.features
     };
   },
   [types.SHOW_USER_AGREEMENT](state: RootState, action: {agreement: EndUserAgreement}) {

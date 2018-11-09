@@ -52,6 +52,18 @@ export function closeDebugView() {
   return {type: types.CLOSE_DEBUG_VIEW};
 }
 
+export function openFeaturesView() {
+  return {type: types.OPEN_FEATURES_VIEW};
+}
+
+export function closeFeaturesView() {
+  return {type: types.CLOSE_FEATURES_VIEW};
+}
+
+export function setEnabledFeatures(features: Array<string>) {
+  return {type: types.SET_FEATURES, features};
+}
+
 export function onNavigateBack(closingView: Object) {
   return {type: types.ON_NAVIGATE_BACK, closingView};
 }

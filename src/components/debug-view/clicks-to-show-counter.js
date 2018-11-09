@@ -16,14 +16,15 @@ function resetCounter() {
   counter = 0;
 }
 
-export default function clicksCounter(actionToPerform: Function) {
+export default function clicksCounter(actionToPerform: Function, description: string = '') {
   if (timeoutId) {
     clearTimeout(timeoutId);
   }
   increaseCounter();
 
   if (counter === CLICKS_TO_SHOW_NOTIFICATION) {
-    notify(`Click ${CLICKS_TO_ACTION - CLICKS_TO_SHOW_NOTIFICATION} more times to open debug view`);
+    const end = description ? ` to ${description}` : '';
+    notify(`Click ${CLICKS_TO_ACTION - CLICKS_TO_SHOW_NOTIFICATION} more times${end}`);
   }
 
   if (counter === CLICKS_TO_ACTION) {

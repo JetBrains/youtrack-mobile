@@ -23,7 +23,7 @@ export type StorageState = {|
   isRegisteredForPush: boolean,
   agileZoomedIn: ?boolean,
   lastRoute: ?('IssueList' | 'Inbox' | 'AgileBoard'),
-  currentAppVersion: ?string,
+  currentAppVersion: ?string
 |}
 
 type StorageStateKeys = $Exact<$ObjMap<StorageState, () => string>>;

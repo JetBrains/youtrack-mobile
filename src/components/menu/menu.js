@@ -14,7 +14,15 @@ import Avatar from '../avatar/avatar';
 import clicksToShowCounter from '../debug-view/clicks-to-show-counter';
 import {next, logOut as logOutIcon, add as addIcon} from '../icon/icon';
 import {connect} from 'react-redux';
-import {removeAccountOrLogOut, openMenu, closeMenu, openDebugView, addAccount, changeAccount} from '../../actions/app-actions';
+import {
+  removeAccountOrLogOut,
+  openMenu,
+  closeMenu,
+  openDebugView,
+  openFeaturesView,
+  addAccount,
+  changeAccount
+} from '../../actions/app-actions';
 import {getStorageState} from '../storage/storage';
 
 import type {StorageState} from '../storage/storage';
@@ -43,7 +51,8 @@ type Props = {
   onChangeAccount: (account: StorageState) => any,
   onOpen: () => any,
   onClose: () => any,
-  openDebugView: () => any
+  openDebugView: () => any,
+  openFeaturesView: () => any
 };
 
 type DefaultProps = {
@@ -138,7 +147,7 @@ export class Menu extends Component<Props, void> {
           scrollEnabled={!isChangingAccount}
           index={accounts.indexOf(getStorageState())}
           onIndexChanged={(index: number) => this._onChangeAccount(accounts[index])}
-          onTouchStart={() => clicksToShowCounter(openDebugView)}
+          onTouchStart={() => clicksToShowCounter(openDebugView, 'open debug view')}
         >
           {accounts.map((account, index) => {
             const config: AppConfigFilled = account.config;
@@ -174,7 +183,7 @@ export class Menu extends Component<Props, void> {
 
   _renderMenu() {
     const {height} = Dimensions.get('window');
-    const {auth, issueQuery} = this.props;
+    const {auth, issueQuery, openFeaturesView} = this.props;
     if (!auth) { //TODO: menu renders right after logOut by some reason.
       return null;
     }
@@ -219,7 +228,9 @@ export class Menu extends Component<Props, void> {
           <View style={styles.flexSpacer}/>
 
           <View style={styles.menuFooter}>
-            <Text style={styles.footerText}>YouTrack Mobile {VERSION_STRING}</Text>
+            <TouchableWithoutFeedback onPress={() => clicksToShowCounter(openFeaturesView, 'open features list')}>
+              <Text style={styles.footerText}>YouTrack Mobile {VERSION_STRING}</Text>
+            </TouchableWithoutFeedback>
 
             <View style={styles.spacer}></View>
             <Text style={styles.footerText}>© 2000—{CURRENT_YEAR} JetBrains</Text>
@@ -276,6 +287,7 @@ const mapDispatchToProps = (dispatch) => {
     onAddAccount: () => dispatch(addAccount()),
     onChangeAccount: (account: StorageState) => dispatch(changeAccount(account)),
     openDebugView: () => dispatch(openDebugView()),
+    openFeaturesView: () => dispatch(openFeaturesView()),
   };
 };
 
