@@ -9,7 +9,7 @@ export function isOneOfServers(url: string, serverURLs: Array<string>) {
   return serverURLs.some(serverURL => url.indexOf(serverURL) !== -1);
 }
 
-function extractId(issueUrl: ?string) {
+export function extractId(issueUrl: ?string) {
   if (!issueUrl) {
     return null;
   }

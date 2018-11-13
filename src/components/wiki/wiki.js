@@ -8,6 +8,7 @@ import styles, {htmlViewStyles} from './wiki.styles';
 import {COLOR_FONT} from '../variables/variables';
 import {getBaseUrl} from '../config/config';
 import {renderCode, renderImage} from './wiki__renderers';
+import {extractId} from '../open-url-handler/open-url-handler';
 
 HTMLView.propTypes.style = Text.propTypes.style;
 
@@ -42,9 +43,7 @@ export default class Wiki extends Component<Props, void> {
   };
 
   handleLinkPress = (url: string) => {
-    const ISSUE_ID_REGEX = /issue\/(.+)\/?/;
-
-    const [, issueId] = url.match(ISSUE_ID_REGEX) || [];
+    const issueId = extractId(url);
 
     if (issueId) {
       return this.props.onIssueIdTap(issueId);
