@@ -7,6 +7,7 @@ import IssueAPI from './api__issue';
 import AgileAPI from './api__agile';
 import IssuesAPI from './api__issues';
 import InboxAPI from './api__inbox';
+import urlJoin from 'url-join';
 
 import type Auth from '../auth/auth';
 import type {EndUserAgreement} from '../../flow/AppConfig';
@@ -37,7 +38,7 @@ class API extends BaseAPI {
   async getUserAgreement(): Promise<?EndUserAgreement> {
     const queryString = qs.stringify({fields: 'endUserAgreement(enabled,text,majorVersion,minorVersion)'});
     const res = await this.makeAuthorizedRequest(
-      `${this.auth.config.auth.serverUri}/api/rest/settings/public?${queryString}`,
+      urlJoin(this.auth.config.auth.serverUri, `/api/rest/settings/public?${queryString}`),
       'GET'
     );
 
@@ -47,17 +48,17 @@ class API extends BaseAPI {
   async acceptUserAgreement(): Promise<Object> {
     const body = {fields: issueFields.userConsent};
     return await this.makeAuthorizedRequest(
-      `${this.auth.config.auth.serverUri}/api/rest/users/endUserAgreementConsent`,
+      urlJoin(this.auth.config.auth.serverUri, `/api/rest/users/endUserAgreementConsent`),
       'POST',
-      {
-        body
-      }
+      {body}
     );
   }
 
   async getUserFromHub(id: string) {
     const queryString = qs.stringify({fields: 'avatar/url'});
-    return await this.makeAuthorizedRequest(`${this.config.auth.serverUri}/api/rest/users/${id}?${queryString}`);
+    return await this.makeAuthorizedRequest(
+      urlJoin(this.auth.config.auth.serverUri, `/api/rest/users/${id}?${queryString}`)
+    );
   }
 
   async getProjects(query: string): Promise<Array<IssueProject>> {
