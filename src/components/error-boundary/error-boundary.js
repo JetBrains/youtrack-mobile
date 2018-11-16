@@ -9,6 +9,7 @@ import {getLogs} from '../debug-view/debug-view';
 import log from '../log/log';
 import {reportCrash} from './reporter';
 import {notify, notifyError} from '../notification/notification';
+import {flushStoragePart} from '../storage/storage';
 
 type Props = {
   openDebugView: any => any,
@@ -30,6 +31,8 @@ class ErrorBoundary extends Component<Props, State> {
     log.warn(`App has failed to render: ${error.toString()}`);
     usage.trackError(error, info.componentStack);
     this.setState({error});
+    // Reset stored route
+    flushStoragePart({lastRoute: null});
   }
 
   contactSupport = () => Linking.openURL('https://youtrack-support.jetbrains.com/hc/en-us/requests/new');
