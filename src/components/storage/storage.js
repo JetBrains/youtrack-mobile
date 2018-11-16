@@ -87,7 +87,8 @@ export async function clearCachesAndDrafts() {
   log.debug('Storage drafts has been cleared');
   await AsyncStorage.multiRemove([
     storageKeys.projectId, storageKeys.draftId, storageKeys.query,
-    storageKeys.lastQueries, storageKeys.issuesCache, storageKeys.isRegisteredForPush
+    storageKeys.lastQueries, storageKeys.issuesCache, storageKeys.isRegisteredForPush,
+    storageKeys.agileZoomedIn, storageKeys.lastRoute
   ]);
   return populateStorage();
 }
