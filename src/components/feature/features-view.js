@@ -1,7 +1,7 @@
 /* @flow */
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View, Text, TouchableOpacity, Modal, Switch, ScrollView} from 'react-native';
+import {View, Text, TouchableOpacity, Modal, Switch, ScrollView, AsyncStorage} from 'react-native';
 import getTopPadding from '../header/header__top-padding';
 import styles from '../debug-view/debug-view.styles';
 import {closeFeaturesView, setEnabledFeatures} from '../../actions/app-actions';
@@ -14,7 +14,22 @@ type Props = {
   setFeatures: Function
 };
 
+const storageKey = 'experimentalFeatures';
+
 export class FeaturesView extends Component<Props, void> {
+  constructor(props: Props) {
+    super(props);
+
+    AsyncStorage.getItem(storageKey).then(result => {
+      const features = JSON.parse(result) || [];
+      props.setFeatures(features);
+    });
+  }
+
+  persistFeatures = (features: Array<string>) => {
+    AsyncStorage.setItem(storageKey, JSON.stringify(features));
+  };
+
   render() {
     const {show, onHide, features, setFeatures} = this.props;
     if (!show) {
@@ -39,6 +54,7 @@ export class FeaturesView extends Component<Props, void> {
                 }
 
                 setFeatures(newFeatures);
+                this.persistFeatures(newFeatures);
               };
 
               return (
