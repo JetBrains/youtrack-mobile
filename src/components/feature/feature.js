@@ -6,10 +6,12 @@ import {getApi} from '../api/api__instance';
 import connect from 'react-redux/es/connect/connect';
 
 type Props = {
-  children: any,
   devOnly?: boolean,
   name?: string,
   version?: string,
+  fallbackComponent?: Object,
+
+  children: any,
   features: Array<string>
 };
 
@@ -42,7 +44,11 @@ class Feature extends PureComponent<Props, void> {
   }
 
   render() {
-    return this.check() ? this.props.children : null;
+    const {fallbackComponent, children} = this.props;
+
+    const fallback = fallbackComponent ? fallbackComponent : null;
+
+    return this.check() ? children : fallback;
   }
 }
 
