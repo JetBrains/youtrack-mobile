@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<AgileCard/> should render snapshot 1`] = `
-<Component
+<View
   style={
     Array [
       Object {
@@ -16,7 +16,7 @@ exports[`<AgileCard/> should render snapshot 1`] = `
     ]
   }
 >
-  <Component
+  <View
     style={
       Object {
         "flexDirection": "row",
@@ -41,8 +41,8 @@ exports[`<AgileCard/> should render snapshot 1`] = `
       }
       text="TT-123"
     />
-  </Component>
-  <Component
+  </View>
+  <Text
     numberOfLines={3}
     style={
       Object {
@@ -55,8 +55,8 @@ exports[`<AgileCard/> should render snapshot 1`] = `
     testID="card-summary"
   >
     issue summary
-  </Component>
-  <Component
+  </Text>
+  <View
     style={
       Object {
         "flexDirection": "row",
@@ -64,5 +64,5 @@ exports[`<AgileCard/> should render snapshot 1`] = `
       }
     }
   />
-</Component>
+</View>
 `;
