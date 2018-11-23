@@ -32,3 +32,4 @@ export {default as lockInactive} from './lock-inactive.png';
 export {default as visibilitySmall} from './visibility-small.png';
 export {default as visibility} from './visibility-action.png';
 export {default as visibilityActive} from './visibility-action-active.png';
+export {default as qrCode} from './qr-code.png';

@@ -11,6 +11,7 @@ declare type RootState = {
   auth: ?Auth,
   showMenu: boolean,
   showDebugView: boolean,
+  showScanner: boolean,
   showUserAgreement: boolean,
   endUserAgreement: ?EndUserAgreement,
   otherAccounts: ?Array<StorageState>,
@@ -23,6 +24,7 @@ const initialState: RootState = {
   showMenu: false,
   showDebugView: false,
   showFeaturesView: false,
+  showScanner: false,
   showUserAgreement: false,
   endUserAgreement: null,
   otherAccounts: null,
@@ -79,6 +81,18 @@ export default createReducer(initialState, {
     return {
       ...state,
       showFeaturesView: false
+    };
+  },
+  [types.OPEN_SCAN_VIEW](state: RootState) {
+    return {
+      ...state,
+      showScanner: true
+    };
+  },
+  [types.CLOSE_SCAN_VIEW](state: RootState) {
+    return {
+      ...state,
+      showScanner: false
     };
   },
   [types.SET_FEATURES](state: RootState, action: {features: EndUserAgreement}) {

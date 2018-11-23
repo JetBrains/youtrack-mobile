@@ -151,6 +151,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-camera')
     compile project(':react-native-image-crop-picker')
     compile project(':react-native-linear-gradient')
     compile project(':react-native-eventsource')

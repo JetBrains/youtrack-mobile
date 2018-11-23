@@ -3,6 +3,7 @@ package com.jetbrains.youtrack.mobile.app;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import org.reactnative.camera.RNCameraPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.github.jonnybgod.RNEventSource.RNEventSourcePackage;
@@ -28,6 +29,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
+            new RNCameraPackage(),
             new PickerPackage(),
             new LinearGradientPackage(),
             new RNEventSourcePackage(),

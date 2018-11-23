@@ -60,6 +60,14 @@ export function closeFeaturesView() {
   return {type: types.CLOSE_FEATURES_VIEW};
 }
 
+export function openScanView() {
+  return {type: types.OPEN_SCAN_VIEW};
+}
+
+export function closeScanView() {
+  return {type: types.CLOSE_SCAN_VIEW};
+}
+
 export function setEnabledFeatures(features: Array<string>) {
   return {type: types.SET_FEATURES, features};
 }

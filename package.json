@@ -93,6 +93,7 @@
 		"react-native": "0.57.5",
 		"react-native-animatable": "1.2.4",
 		"react-native-calendars": "1.5.3",
+		"react-native-camera": "^1.4.3",
 		"react-native-device-info": "0.21.5",
 		"react-native-device-log": "1.0.2",
 		"react-native-drawer": "2.5.0",

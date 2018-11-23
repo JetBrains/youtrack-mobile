@@ -10,6 +10,8 @@ export const OPEN_DEBUG_VIEW = 'app.OPEN_DEBUG_VIEW';
 export const CLOSE_DEBUG_VIEW = 'app.CLOSE_DEBUG_VIEW';
 export const OPEN_FEATURES_VIEW = 'app.OPEN_FEATURES_VIEW';
 export const CLOSE_FEATURES_VIEW = 'app.CLOSE_FEATURES_VIEW';
+export const OPEN_SCAN_VIEW = 'app.OPEN_SCAN_VIEW';
+export const CLOSE_SCAN_VIEW = 'app.CLOSE_SCAN_VIEW';
 export const SET_FEATURES = 'app.SET_FEATURES';
 export const ON_NAVIGATE_BACK = 'app.ON_NAVIGATE_BACK';
 
