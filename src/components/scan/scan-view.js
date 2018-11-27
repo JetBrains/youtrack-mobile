@@ -6,10 +6,14 @@ import getTopPadding from '../header/header__top-padding';
 import styles from '../debug-view/debug-view.styles';
 import {closeScanView} from '../../actions/app-actions';
 import {RNCamera} from 'react-native-camera';
+import Router from '../router/router';
+import {applyCommand} from '../../views/single-issue/single-issue-actions';
+import {notify} from '../notification/notification';
 
 type Props = {
   show: boolean,
   onHide: Function,
+  onCommandApply: Function,
 };
 
 export class ScanView extends Component<Props, void> {
@@ -19,8 +23,35 @@ export class ScanView extends Component<Props, void> {
     const code = data.data;
 
     if (code.indexOf('youtrack://') !== -1) {
-      console.log('>>>>>>', code); // eslint-disable-line
+      const clearCode = code.replace('youtrack://', '').trim();
+      const parts = clearCode.split(';');
+
+      if (parts.length >= 2) {
+        const [type, arg] = parts;
+
+        if (type === 'issue') {
+          Router.SingleIssue({issueId: arg});
+        } else if (type === 'command') {
+
+          const nav = Router._getNavigator().state.nav;
+
+          const routeIndex = nav.index;
+          const currentRoute = nav.routes[routeIndex];
+
+          if (currentRoute.routeName === 'SingleIssue') {
+            this.props.onCommandApply(arg);
+          } else {
+            notify('Command can be applied only on issue screen');
+          }
+        }
+      } else if (parts.length === 1) {
+        Router.SingleIssue({issueId: parts[0]});
+      } else {
+        notify('Wrong QR code format');
+      }
     }
+
+    this.props.onHide();
   };
 
   render() {
@@ -47,7 +78,7 @@ export class ScanView extends Component<Props, void> {
             flashMode={RNCamera.Constants.FlashMode.auto}
             permissionDialogTitle={'Permission to use camera'}
             permissionDialogMessage={'We need your permission to use your camera phone'}
-          ></RNCamera>
+          />
 
 
           <View style={styles.buttons}>
@@ -70,7 +101,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onHide: () => dispatch(closeScanView())
+    onHide: () => dispatch(closeScanView()),
+    onCommandApply: command => dispatch(applyCommand(command))
   };
 };
 
