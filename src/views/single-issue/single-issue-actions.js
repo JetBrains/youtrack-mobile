@@ -414,7 +414,7 @@ export function deleteCommentPermanently(comment: IssueComment) {
   };
 }
 
-export function attachImage() {
+function attachImage(method: 'openCamera' | 'openPicker') {
   return async (
     dispatch: any => any,
     getState: StateGetter,
@@ -423,7 +423,7 @@ export function attachImage() {
     const api: Api = getApi();
     const {issue} = getState().singleIssue;
     try {
-      const attachingImage = await attachFile();
+      const attachingImage = await attachFile(method);
       if (!attachingImage) {
         return;
       }
@@ -440,6 +440,28 @@ export function attachImage() {
       dispatch(stopImageAttaching());
     } catch (err) {
       notifyError('ImagePicker error', err);
+    }
+  };
+}
+
+export function attachOrTakeImage(actionSheet: Object) {
+  return async (dispatch: any => any) => {
+    const actions = [
+      {
+        title: 'Take a photo…',
+        execute: () => dispatch(attachImage('openCamera'))
+      },
+      {
+        title: 'Choose from library…',
+        execute: () => dispatch(attachImage('openPicker'))
+      },
+      {title: 'Cancel'}
+    ];
+
+    const selectedAction = await showActions(actions, actionSheet);
+
+    if (selectedAction && selectedAction.execute) {
+      selectedAction.execute();
     }
   };
 }

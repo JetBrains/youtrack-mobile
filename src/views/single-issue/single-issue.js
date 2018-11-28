@@ -100,6 +100,8 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     }
   };
 
+  onAttach = () => this.props.attachOrTakeImage(this.context.actionSheet())
+
   _renderHeader() {
     const {
       issue,
@@ -155,7 +157,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
   }
 
   _renderToolbar() {
-    const {issue, editMode, issuePermissions, startEditingIssue, attachImage, stopEditingIssue, toggleVote, toggleStar} = this.props;
+    const {issue, editMode, issuePermissions, startEditingIssue, stopEditingIssue, toggleVote, toggleStar} = this.props;
     const canUpdateGeneralInfo = issuePermissions.canUpdateGeneralInfo(issue);
 
     return (
@@ -163,7 +165,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
         ref={this.toolbarRef}
         canAttach={issuePermissions.canAddAttachmentTo(issue)}
         attachesCount={issue.attachments.length}
-        onAttach={attachImage}
+        onAttach={this.onAttach}
 
         canEdit={canUpdateGeneralInfo}
         onEdit={editMode ? stopEditingIssue : startEditingIssue}
