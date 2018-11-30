@@ -1,6 +1,6 @@
 /* @flow */
 import React from 'react';
-import {Text, Image, Dimensions} from 'react-native';
+import {Text, Image, Dimensions, Platform} from 'react-native';
 import SyntaxHighlighter from 'react-native-syntax-highlighter';
 import {idea} from 'react-syntax-highlighter/dist/styles';
 import entities from 'entities';
@@ -46,11 +46,12 @@ export function renderImage({node, index, attachments, imageHeaders, onImagePres
   const source = {uri, headers: imageHeaders};
 
   return (
-    <Text onPress={() => onImagePress(src)} key={index} style={{overflow: 'hidden'}}>
+    <Text onPress={() => onImagePress(src)} key={index}>
       <Image
         source={source}
         style={imgStyle}
       />
+      {Platform.OS === 'android' && '\n\n\n\n\n\n'}
     </Text>
   );
 }
