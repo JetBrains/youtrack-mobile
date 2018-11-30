@@ -1,11 +1,12 @@
 /* @flow */
 import React from 'react';
-import {Text, Image} from 'react-native';
+import {Text, Image, Dimensions} from 'react-native';
 import SyntaxHighlighter from 'react-native-syntax-highlighter';
 import {idea} from 'react-syntax-highlighter/dist/styles';
 import entities from 'entities';
 
-const IMAGE_SIZE = 264;
+const IMAGE_WIDTH = Math.floor(Dimensions.get('window').width - 32);
+const IMAGE_HEIGHT = 200;
 
 export function renderCode(node: {children: any}, index: number) {
   const code = node.children.map(it => it.data).join('\n');
@@ -37,15 +38,15 @@ export function renderImage({node, index, attachments, imageHeaders, onImagePres
   src = targetAttach.url || src;
 
   const imgStyle = {
-    width: IMAGE_SIZE,
-    height: IMAGE_SIZE,
+    width: IMAGE_WIDTH,
+    height: IMAGE_HEIGHT,
     resizeMode: 'contain'
   };
-  const uri = `${src}&w=${IMAGE_SIZE*2}&h=${IMAGE_SIZE*2}`;
+  const uri = `${src}&w=${IMAGE_WIDTH*2}&h=${IMAGE_HEIGHT*2}`;
   const source = {uri, headers: imageHeaders};
 
   return (
-    <Text onPress={() => onImagePress(src)} key={index}>
+    <Text onPress={() => onImagePress(src)} key={index} style={{overflow: 'hidden'}}>
       <Image
         source={source}
         style={imgStyle}
