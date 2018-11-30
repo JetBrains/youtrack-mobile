@@ -152,6 +152,7 @@ class CreateIssue extends Component<Props, void> {
           api={getApi()}
           issue={issue}
           canEditProject={true}
+          autoFocusSelect
           issuePermissions={issuePermissions}
           onUpdate={async (field, value) => await updateFieldValue(field, value)}
           onUpdateProject={async (project) => await updateProject(project)}

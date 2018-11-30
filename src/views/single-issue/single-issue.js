@@ -442,6 +442,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
 
         {issue && !addCommentMode && <CustomFieldsPanel
           api={getApi()}
+          autoFocusSelect
           canEditProject={issuePermissions.canUpdateGeneralInfo(issue)}
           issue={issue}
           issuePermissions={issuePermissions}
