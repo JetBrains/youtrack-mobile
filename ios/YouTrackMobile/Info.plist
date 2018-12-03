@@ -30,6 +30,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>ytoauth</string>
+				<string>youtrack</string>
 			</array>
 		</dict>
 	</array>
@@ -50,22 +51,21 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
-    <string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSMainNibFile</key>
-    <string>LaunchScreen</string>
-    <key>NSMainNibFile~ipad</key>
-    <string>LaunchScreen</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>$(PRODUCT_NAME) wants access to photos</string>
-    <key>NSCameraUsageDescription</key>
-    <string>$(PRODUCT_NAME) could take a photo to attach it to issue</string>
+	<string>LaunchScreen</string>
+	<key>NSMainNibFile~ipad</key>
+	<string>LaunchScreen</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(PRODUCT_NAME) wants access to photos</string>
+	<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME) could take a photo to attach it to issue</string>
 	<key>NSAppTransportSecurity</key>
-	<!--See http://ste.vn/2015/06/10/configuring-app-transport-security-ios-9-osx-10-11/ -->
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
@@ -75,9 +75,8 @@
 				<true/>
 			</dict>
 		</dict>
-		<!-- YTM-148 Allow all connections because user could have http-only server -->
-    <key>NSAllowsArbitraryLoads</key>
-    <true/>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
 	</dict>
 </dict>
 </plist>

@@ -1,7 +1,7 @@
 /* @flow */
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View, Text, TouchableOpacity, Modal} from 'react-native';
+import {View, Text, TouchableOpacity, Modal, DeviceEventEmitter} from 'react-native';
 import getTopPadding from '../header/header__top-padding';
 import styles from '../debug-view/debug-view.styles';
 import {closeScanView} from '../../actions/app-actions';
@@ -13,15 +13,19 @@ import {notify} from '../notification/notification';
 type Props = {
   show: boolean,
   onHide: Function,
-  onCommandApply: Function,
+  onCommandApply: Function
 };
 
 export class ScanView extends Component<Props, void> {
   camera = null;
 
-  onBarCode = (data: Object) => {
-    const code = data.data;
+  constructor(props: Props) {
+    super(props);
 
+    DeviceEventEmitter.addListener('openWithUrl', this.processLink);
+  }
+
+  processLink = (code: string) => {
     if (code.indexOf('youtrack://') !== -1) {
       const clearCode = code.replace('youtrack://', '').trim();
       const parts = clearCode.split(';');
@@ -50,6 +54,10 @@ export class ScanView extends Component<Props, void> {
         notify('Wrong QR code format');
       }
     }
+  };
+
+  onBarCode = (data: Object) => {
+    this.processLink(data.data);
 
     this.props.onHide();
   };
