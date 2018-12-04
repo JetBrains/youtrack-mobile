@@ -687,7 +687,7 @@ export function applyCommand(command: string) {
 
       await getApi().applyCommand({issueIds: [issueId], command});
 
-      notify('Comand successfully applied');
+      notify('Command successfully applied');
       dispatch(closeCommandDialog());
       await dispatch(loadIssue());
       dispatch(issueUpdated(getState().singleIssue.issue));

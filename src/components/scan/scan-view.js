@@ -8,11 +8,24 @@ import {closeScanView} from '../../actions/app-actions';
 import {RNCamera} from 'react-native-camera';
 import Router from '../router/router';
 import {applyCommand} from '../../views/single-issue/single-issue-actions';
+import {applyCommandForDraft} from '../../views/create-issue/create-issue-actions';
 import {notify} from '../notification/notification';
+
+const commandViews = {
+  SingleIssue: applyCommand,
+  CreateIssue: applyCommandForDraft
+};
+
+const getRoute = () => {
+  const nav = Router._getNavigator().state.nav;
+  const routeIndex = nav.index;
+  return nav.routes[routeIndex];
+};
 
 type Props = {
   show: boolean,
   onHide: Function,
+  draftId?: string,
   onCommandApply: Function
 };
 
@@ -25,7 +38,7 @@ export class ScanView extends Component<Props, void> {
     DeviceEventEmitter.addListener('openWithUrl', this.processLink);
   }
 
-  processLink = (code: string) => {
+  processLink = async (code: string) => {
     if (code.indexOf('youtrack://') !== -1) {
       const clearCode = code.replace('youtrack://', '').trim();
       const parts = clearCode.split(';');
@@ -35,17 +48,21 @@ export class ScanView extends Component<Props, void> {
 
         if (type === 'issue') {
           Router.SingleIssue({issueId: arg});
-        } else if (type === 'command') {
+        } else if (type === 'command' || type === 'create') {
+          if (type === 'create') {
+            Router.CreateIssue();
 
-          const nav = Router._getNavigator().state.nav;
+            while (!this.props.draftId) { // wait for draft being loaded
+              await new Promise(resolve => setTimeout(resolve, 50));
+            }
+          }
 
-          const routeIndex = nav.index;
-          const currentRoute = nav.routes[routeIndex];
+          const applyAction = commandViews[getRoute().routeName];
 
-          if (currentRoute.routeName === 'SingleIssue') {
-            this.props.onCommandApply(arg);
+          if (applyAction) {
+            this.props.onCommandApply(arg, applyAction);
           } else {
-            notify('Command can be applied only on issue screen');
+            notify(`Command can not be applied on this screen`);
           }
         }
       } else if (parts.length === 1) {
@@ -103,6 +120,7 @@ export class ScanView extends Component<Props, void> {
 const mapStateToProps = (state, ownProps) => {
   return {
     show: state.app.showScanner,
+    draftId: state.creation.issue && state.creation.issue.id,
     ...ownProps
   };
 };
@@ -110,7 +128,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onHide: () => dispatch(closeScanView()),
-    onCommandApply: command => dispatch(applyCommand(command))
+    onCommandApply: (command, applyAction) => dispatch(applyAction(command))
   };
 };
 

@@ -9,7 +9,7 @@ import Router from '../../components/router/router';
 import log from '../../components/log/log';
 import attachFile from '../../components/attach-file/attach-file';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
-import {notifyError, resolveError} from '../../components/notification/notification';
+import {notify, notifyError, resolveError} from '../../components/notification/notification';
 
 export const CATEGORY_NAME = 'Create issue view';
 
@@ -123,6 +123,21 @@ export function loadIssueFromDraft(draftId: string) {
       clearIssueDraftStorage();
       dispatch(resetIssueDraftId());
       dispatch(loadStoredProject());
+    }
+  };
+}
+
+export function applyCommandForDraft(command: string) {
+  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+    const draftId = getState().creation.issue.id;
+
+    try {
+      await getApi().applyCommand({issueIds: [draftId], command});
+
+      notify('Command successfully applied');
+      await dispatch(loadIssueFromDraft(draftId));
+    } catch (err) {
+      notifyError('Failed to apply command', err);
     }
   };
 }
