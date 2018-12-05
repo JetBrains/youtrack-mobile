@@ -8,8 +8,9 @@ import {closeScanView} from '../../actions/app-actions';
 import {RNCamera} from 'react-native-camera';
 import Router from '../router/router';
 import {applyCommand} from '../../views/single-issue/single-issue-actions';
-import {applyCommandForDraft} from '../../views/create-issue/create-issue-actions';
+import {applyCommandForDraft, storeProjectId} from '../../views/create-issue/create-issue-actions';
 import {notify} from '../notification/notification';
+import {getStorageState} from '../storage/storage';
 
 const commandViews = {
   SingleIssue: applyCommand,
@@ -25,7 +26,7 @@ const getRoute = () => {
 type Props = {
   show: boolean,
   onHide: Function,
-  draftId?: string,
+  draft?: Object,
   onCommandApply: Function
 };
 
@@ -38,32 +39,51 @@ export class ScanView extends Component<Props, void> {
     DeviceEventEmitter.addListener('openWithUrl', this.processLink);
   }
 
+  applyCommand = (command: string) => {
+    const applyAction = commandViews[getRoute().routeName];
+
+    if (applyAction) {
+      return this.props.onCommandApply(command, applyAction);
+    } else {
+      notify(`Command can not be applied on this screen`);
+    }
+  };
+
   processLink = async (code: string) => {
     if (code.indexOf('youtrack://') !== -1) {
       const clearCode = code.replace('youtrack://', '').trim();
       const parts = clearCode.split(';');
 
       if (parts.length >= 2) {
-        const [type, arg] = parts;
+        const [type, ...rest] = parts;
 
         if (type === 'issue') {
-          Router.SingleIssue({issueId: arg});
-        } else if (type === 'command' || type === 'create') {
-          if (type === 'create') {
-            Router.CreateIssue();
+          Router.SingleIssue({issueId: rest[0]});
+        } else if (type === 'command') {
+          const [command] = rest;
 
-            while (!this.props.draftId) { // wait for draft being loaded
-              await new Promise(resolve => setTimeout(resolve, 50));
-            }
+          this.applyCommand(command);
+        } else if (type === 'create') {
+          const [projectId, projectKey, command] = rest;
+
+          const storedProjectId = getStorageState().projectId;
+          if (!storedProjectId) {
+            await storeProjectId(projectId);
           }
 
-          const applyAction = commandViews[getRoute().routeName];
+          Router.CreateIssue();
 
-          if (applyAction) {
-            this.props.onCommandApply(arg, applyAction);
-          } else {
-            notify(`Command can not be applied on this screen`);
+          // wait for draft being loaded or created
+          while (!(this.props.draft && this.props.draft.id)) {
+            await new Promise(resolve => setTimeout(resolve, 50));
           }
+
+          // change project before real command
+          if (this.props.draft.project.id !== projectId) {
+            await this.applyCommand(`project ${projectKey}`);
+          }
+
+          this.applyCommand(command);
         }
       } else if (parts.length === 1) {
         Router.SingleIssue({issueId: parts[0]});
@@ -120,7 +140,7 @@ export class ScanView extends Component<Props, void> {
 const mapStateToProps = (state, ownProps) => {
   return {
     show: state.app.showScanner,
-    draftId: state.creation.issue && state.creation.issue.id,
+    draft: state.creation.issue,
     ...ownProps
   };
 };

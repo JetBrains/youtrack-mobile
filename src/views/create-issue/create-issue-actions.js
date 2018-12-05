@@ -83,7 +83,7 @@ async function clearIssueDraftStorage() {
   return await flushStoragePart({draftId: null});
 }
 
-async function storeProjectId(projectId: string) {
+export async function storeProjectId(projectId: string) {
   return await flushStoragePart({projectId});
 }
 
