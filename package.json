@@ -89,7 +89,7 @@
 		"prop-types": "^15.5.10",
 		"qs": "6.1.0",
 		"react": "16.6.1",
-		"react-native": "0.57.5",
+		"react-native": "0.57.8",
 		"react-native-animatable": "1.2.4",
 		"react-native-calendars": "1.5.3",
 		"react-native-camera": "^1.4.3",
