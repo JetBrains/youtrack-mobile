@@ -2,7 +2,7 @@
 import type Api from '../../components/api/api';
 import ApiHelper from '../../components/api/api__helper';
 import type {IssueFull} from '../../flow/Issue';
-import type {CustomField, FieldValue} from '../../flow/CustomFields';
+import type {CustomField, FieldValue, Attachment} from '../../flow/CustomFields';
 import usage from '../../components/usage/usage';
 import * as types from './create-issue-action-types';
 import Router from '../../components/router/router';
@@ -284,6 +284,23 @@ export function updateFieldValue(field: CustomField, value: FieldValue) {
     } catch (err) {
       const error = await resolveError(err);
       notifyError('Cannot update field', error);
+    }
+  };
+}
+
+export function removeAttachment(attachment: Attachment) {
+  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+    usage.trackEvent(CATEGORY_NAME, 'Remove attachment');
+
+    const api = getApi();
+    const {issue} = getState().creation;
+
+    try {
+      await api.issue.removeAttachment(issue.id, attachment.id);
+      log.info(`Attachment ${attachment.id} removed from issue draft ${issue.id}`);
+      dispatch({type: types.REMOVE_ATTACHMENT, attachment});
+    } catch (err) {
+      notifyError('Cannot remove attachment', err);
     }
   };
 }

@@ -1,7 +1,7 @@
 /* @flow */
-import {StyleSheet, View, Image, TouchableOpacity, ActivityIndicator} from 'react-native';
-import React from 'react';
-import {closeOpaque} from '../../components/icon/icon';
+import {StyleSheet, View, Image, TouchableOpacity, ActivityIndicator, Alert} from 'react-native';
+import React, {PureComponent} from 'react';
+import {closeOpaque, trash} from '../../components/icon/icon';
 import Router from '../../components/router/router';
 import {UNIT} from '../../components/variables/variables';
 import {notifyError} from '../../components/notification/notification';
@@ -18,7 +18,12 @@ const hitSlop = {
 type Props = {
   allImagesUrls: Array<string>,
   currentImage: string,
-  imageHeaders: ?Object
+  imageHeaders: ?Object,
+  onRemoveImage?: (currentPage: number) => any
+}
+
+type State = {
+  currentPage: number
 }
 
 function renderImage(imageProps, imageDimensions) {
@@ -31,38 +36,74 @@ function renderImage(imageProps, imageDimensions) {
   );
 }
 
+const closeView = once(function closeView() {
+  return Router.pop();
+});
 
-export function ShowImage(props: Props) {
-  const currentIndex = props.allImagesUrls.indexOf(props.currentImage);
+export class ShowImage extends PureComponent<Props, State> {
+  componentDidMount() {
+    const currentPage = this.props.allImagesUrls.indexOf(this.props.currentImage);
+    this.setState({currentPage});
+  }
 
-  const allImageSources = props.allImagesUrls.map(uri => ({
-    source: {
-      uri,
-      headers: props.imageHeaders
-    }
-  }));
+  onPageSelected = (currentPage: number) => this.setState({currentPage});
 
-  const closeView = once(function closeView() {
-    return Router.pop();
-  });
+  onRemove = async () => {
+    const {currentPage} = this.state;
+    Alert.alert(
+      'Confirmation',
+      'Delete attachment?',
+      [
+        {text: 'Cancel', style: 'cancel'},
+        {text: 'Delete', onPress: async () => {
+          if (!this.props.onRemoveImage) {
+            return;
+          }
+          await this.props.onRemoveImage(currentPage);
+          closeView();
+        }}
+      ],
+      {cancelable: true}
+    );
+  };
 
-  return (
-    <View style={styles.container}>
-      <Gallery
-        style={styles.gallery}
-        images={allImageSources}
-        initialPage={currentIndex}
-        imageComponent={renderImage}
-      />
-      <TouchableOpacity
-        style={styles.closeButton}
-        onPress={closeView}
-        hitSlop={hitSlop}
-      >
-        <Image style={styles.closeIcon} source={closeOpaque}></Image>
-      </TouchableOpacity>
-    </View>
-  );
+  render() {
+    const currentIndex = this.props.allImagesUrls.indexOf(this.props.currentImage);
+
+    const allImageSources = this.props.allImagesUrls.map(uri => ({
+      source: {
+        uri,
+        headers: this.props.imageHeaders
+      }
+    }));
+
+    return (
+      <View style={styles.container}>
+        <Gallery
+          style={styles.gallery}
+          images={allImageSources}
+          initialPage={currentIndex}
+          imageComponent={renderImage}
+          onPageSelected={this.onPageSelected}
+        />
+        <TouchableOpacity
+          style={styles.closeButton}
+          onPress={closeView}
+          hitSlop={hitSlop}
+        >
+          <Image style={styles.closeIcon} source={closeOpaque}></Image>
+        </TouchableOpacity>
+
+        {this.props.onRemoveImage && <TouchableOpacity
+          style={styles.removeButton}
+          onPress={this.onRemove}
+          hitSlop={hitSlop}
+        >
+          <Image style={styles.removeIcon} source={trash}></Image>
+        </TouchableOpacity>}
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -89,9 +130,23 @@ const styles = StyleSheet.create({
     left: UNIT * 3
   },
 
+  removeButton: {
+    position: 'absolute',
+    bottom: UNIT * 3,
+    right: UNIT * 3
+  },
+
   closeIcon: {
     width: 30,
-    height: 30
+    height: 30,
+    resizeMode: 'contain'
+  },
+
+  removeIcon: {
+    width: 30,
+    height: 30,
+    resizeMode: 'contain',
+    opacity: 0.4
   }
 });
 

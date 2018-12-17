@@ -78,7 +78,8 @@ class CreateIssue extends Component<Props, void> {
       processing,
       attachImage,
       updateFieldValue,
-      updateProject
+      updateProject,
+      removeAttachment
     } = this.props;
 
     const canCreateIssue = issue.summary && issue.project.id && !processing && !attachingImage;
@@ -116,6 +117,7 @@ class CreateIssue extends Component<Props, void> {
                   attachments={issue.attachments}
                   attachingImage={attachingImage}
                   imageHeaders={getApi().auth.getAuthorizationHeaders()}
+                  onRemoveImage={removeAttachment}
                 />
 
                 <View style={styles.attachButtonsContainer}>

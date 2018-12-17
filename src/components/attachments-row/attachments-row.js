@@ -8,6 +8,7 @@ import styles from './attachments-row.styles';
 import Router from '../../components/router/router';
 import safariView from '../../components/safari-view/safari-view';
 import {View as AnimatedView} from 'react-native-animatable';
+import type {Attachment} from '../../flow/CustomFields';
 
 const flatStyles = flattenStyle(styles.attachmentImage) || {};
 // $FlowFixMe something wrong with Flow here
@@ -24,8 +25,9 @@ type DefaultProps = {
 };
 
 type Props = DefaultProps & {
-  attachments: Array<Object>,
-  attachingImage: ?Object
+  attachments: Array<Attachment>,
+  attachingImage: ?Object,
+  onRemoveImage?: (attachment: Attachment) => any
 }
 
 
@@ -53,12 +55,17 @@ export default class AttachmentsRow extends Component<Props, void> {
   }, ERROR_HANLDER_THROTTLE);
 
   _showImageAttachment(currentImage, allAttachments) {
-    const {imageHeaders} = this.props;
+    const {imageHeaders, onRemoveImage} = this.props;
     const allImagesUrls = allAttachments
       .map(image => image.url);
     this.props.onOpenAttachment('image', currentImage.id);
 
-    return Router.ShowImage({ currentImage: currentImage.url, allImagesUrls, imageHeaders });
+    return Router.ShowImage({
+      currentImage: currentImage.url,
+      allImagesUrls,
+      imageHeaders,
+      ...(onRemoveImage ? {onRemoveImage: (currentPage: number) => onRemoveImage(allAttachments[currentPage])} : {})
+    });
   }
 
   _openAttachmentUrl(name, url) {
