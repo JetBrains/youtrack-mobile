@@ -44,7 +44,12 @@
             <category android:name="android.intent.category.DEFAULT"/>
             <category android:name="android.intent.category.BROWSABLE"/>
             <data android:scheme="ytoauth" android:host="landing.url"/>
-            <data android:scheme="youtrack"/>
+        </intent-filter>
+        <intent-filter android:label="Universal links">
+          <action android:name="android.intent.action.VIEW"/>
+          <category android:name="android.intent.category.DEFAULT"/>
+          <category android:name="android.intent.category.BROWSABLE"/>
+          <data android:scheme="youtrack"/>
         </intent-filter>
         <intent-filter android:label="YouTrack Mobile">
           <action android:name="android.intent.action.VIEW"/>
