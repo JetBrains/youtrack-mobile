@@ -71,6 +71,10 @@ export default class Wiki extends Component<Props, void> {
       return HTML_RENDER_NOTHING;
     }
 
+    if (node.name === 'input') {
+      return <Text key={`checkbox-${node.attribs['data-position']}`}>{'checked' in node.attribs ? '✓' : '☐' }</Text>;
+    }
+
     if (selector(node, 'pre', 'wikicode')) {
       if (node.children[0] &&node.children[0].name === 'code') {
         return renderCode(node.children[0], index);
