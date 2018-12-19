@@ -96,7 +96,7 @@ const SPRINT_WITH_BOARD = toField([
   { board: BOARD },
   'eventSourceTicket',
   {
-    agile: ['id', 'name', 'orphansAtTheTop', 'isUpdatable']
+    agile: ['id', 'name', 'orphansAtTheTop', 'isUpdatable', {estimationField: 'id'}]
   }
 ]);
 

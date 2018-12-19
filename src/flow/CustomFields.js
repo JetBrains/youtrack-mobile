@@ -111,6 +111,7 @@ declare type FieldValueShort = {
   ringId: string,
   avatarUrl: string,
   login: string,
+  presentation: string,
   color: ColorField
 }
 

@@ -119,6 +119,7 @@ const ISSUE_FIELD_SHORT_FIELDS = toField([
       'ringId',
       'avatarUrl',
       'login',
+      'presentation',
       {
         color: ['id', 'background', 'foreground']
       }

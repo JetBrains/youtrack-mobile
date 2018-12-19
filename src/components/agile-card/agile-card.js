@@ -1,12 +1,12 @@
 /* @flow */
 import {View, Text, StyleSheet} from 'react-native';
 import React, {PureComponent} from 'react';
-import {UNIT, COLOR_FONT, COLOR_PINK} from '../variables/variables';
+import {UNIT, COLOR_FONT, COLOR_PINK, COLOR_FONT_GRAY} from '../variables/variables';
 import ColorField from '../color-field/color-field';
 import Avatar from '../avatar/avatar';
 import ApiHelper from '../api/api__helper';
 import type {IssueOnList} from '../../flow/Issue';
-import type {CustomFieldValue} from '../../flow/CustomFields';
+import type {FieldValueShort, CustomFieldShort} from '../../flow/CustomFields';
 import {getPriotityField, getAssigneeField} from '../issue-formatter/issue-formatter';
 
 export const AGILE_CARD_HEIGHT = 131;
@@ -14,13 +14,19 @@ export const AGILE_CARD_HEIGHT = 131;
 type Props = {
   style?: any,
   issue: IssueOnList,
+  estimationField: ?{id: string},
   ghost?: boolean, // from <Draggable/>
   dragging?: boolean // from <DragContainer/>
 };
 
+function getEstimation(estimationField: {id: string}, fields: Array<CustomFieldShort>) {
+  const field = fields.filter(field => field.projectCustomField.field.id === estimationField.id)[0];
+  return field?.value?.presentation || 'Not estimated';
+}
+
 export default class AgileCard extends PureComponent<Props, void> {
   render() {
-    const { issue, style, ghost, dragging } = this.props;
+    const { issue, style, ghost, dragging, estimationField } = this.props;
     const priorityField = getPriotityField(issue);
 
     const priorityFieldValue = priorityField?.value;
@@ -51,12 +57,19 @@ export default class AgileCard extends PureComponent<Props, void> {
         ghost && styles.ghost,
         dragging && styles.dragging
       ]}>
-        {issueId}
+        <View style={styles.topLine}>
+          {issueId}
+          {estimationField && (
+            <Text style={styles.estimation} numberOfLines={1}>
+              {getEstimation(estimationField, issue.fields)}
+            </Text>
+          )}
+        </View>
         <Text numberOfLines={3} style={styles.summary} testID="card-summary">
           {issue.summary}
         </Text>
         <View style={styles.assignees}>
-          {assignees.map((assignee: CustomFieldValue) => {
+          {assignees.map((assignee: FieldValueShort) => {
             return (
               <Avatar
                 key={assignee.id}
@@ -89,12 +102,17 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     borderColor: `${COLOR_PINK}70`,
     borderWidth: 4
-
-    // shadowColor: COLOR_PINK,
-    // shadowOffset: { width: 0, height: 0 },
-    // shadowOpacity: 0.8,
-    // shadowRadius: 3,
-    // elevation: 1
+  },
+  topLine: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  estimation: {
+    flexShrink: 1,
+    marginLeft: UNIT * 2,
+    fontSize: 11,
+    color: COLOR_FONT_GRAY
   },
   summary: {
     color: COLOR_FONT,

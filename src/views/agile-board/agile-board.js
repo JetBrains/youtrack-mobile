@@ -207,7 +207,7 @@ class AgileBoard extends Component<Props, State> {
         const canDrag = sprint.agile.isUpdatable || this.props.issuePermissions.canRunCommand(issue);
         return (
           <Draggable key={issue.id} data={issue.id} onPress={() => this._onTapIssue(issue)} disabled={!canDrag}>
-            <AgileCard issue={issue} style={styles.card}/>
+            <AgileCard issue={issue} style={styles.card} estimationField={sprint.agile.estimationField}/>
           </Draggable>
         );
       }

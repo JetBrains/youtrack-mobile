@@ -78,6 +78,7 @@ type SprintFull = SprintInformation & {
     id: string,
     name: string,
     orphansAtTheTop: boolean,
-    isUpdatable: boolean
+    isUpdatable: boolean,
+    estimationField: {id: string}
   }
 };

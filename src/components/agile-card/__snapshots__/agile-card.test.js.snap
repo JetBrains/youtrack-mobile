@@ -19,28 +19,38 @@ exports[`<AgileCard/> should render snapshot 1`] = `
   <View
     style={
       Object {
+        "alignItems": "center",
         "flexDirection": "row",
+        "justifyContent": "space-between",
       }
     }
   >
-    <ColorField
-      color={
-        Object {
-          "background": "#000",
-          "foreground": "#FFF",
-          "id": 4,
-        }
-      }
-      fullText={true}
+    <View
       style={
         Object {
-          "paddingLeft": 4,
-          "paddingRight": 4,
-          "width": null,
+          "flexDirection": "row",
         }
       }
-      text="TT-123"
-    />
+    >
+      <ColorField
+        color={
+          Object {
+            "background": "#000",
+            "foreground": "#FFF",
+            "id": 4,
+          }
+        }
+        fullText={true}
+        style={
+          Object {
+            "paddingLeft": 4,
+            "paddingRight": 4,
+            "width": null,
+          }
+        }
+        text="TT-123"
+      />
+    </View>
   </View>
   <Text
     numberOfLines={3}
