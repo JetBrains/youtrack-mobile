@@ -179,6 +179,7 @@ const ISSUE_COMMENTS_FIELDS = toField([
   'deleted',
   'text',
   'textPreview',
+  'usesMarkdown',
   {author: ISSUE_USER_FIELDS},
   VISIBILITY_FIELDS
 ]);

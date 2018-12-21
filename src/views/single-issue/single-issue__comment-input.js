@@ -13,7 +13,7 @@ import styles from './single-issue.styles';
 type Props = {
   initialText: string,
   onChangeText?: (text: string) => any,
-  onSubmitComment: (comment: string) => any,
+  onSubmitComment: (comment: IssueComment) => any,
 
   editingComment: IssueComment,
   onCancelEditing: Function,
@@ -71,7 +71,7 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
 
   addComment() {
     this.setState({isSaving: true});
-    this.props.onSubmitComment({...this.props.editingComment, ...{text: this.state.commentText}})
+    this.props.onSubmitComment({...this.props.editingComment, ...{usesMarkdown: true, text: this.state.commentText}})
       .then(() => {
         if (this.isUnmounted) {
           return;

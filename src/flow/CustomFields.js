@@ -146,6 +146,7 @@ declare type IssueComment = {
   textPreview: string,
   deleted: boolean,
   text: string,
+  usesMarkdown: boolean,
   author: IssueUser
 }
 
