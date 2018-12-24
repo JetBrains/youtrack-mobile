@@ -8,9 +8,14 @@ import {closeScanView} from '../../actions/app-actions';
 import {RNCamera} from 'react-native-camera';
 import Router from '../router/router';
 import {applyCommand} from '../../views/single-issue/single-issue-actions';
-import {applyCommandForDraft, storeProjectId} from '../../views/create-issue/create-issue-actions';
+import {
+  applyCommandForDraft,
+  storeProjectId,
+  setIssueDraft
+} from '../../views/create-issue/create-issue-actions';
 import {notify} from '../notification/notification';
 import {getStorageState} from '../storage/storage';
+import {getApi} from '../api/api__instance';
 
 const commandViews = {
   SingleIssue: applyCommand,
@@ -27,7 +32,10 @@ type Props = {
   show: boolean,
   onHide: Function,
   draft?: Object,
-  onCommandApply: Function
+  draftLoading: boolean,
+  onCommandApply: Function,
+  setIssueDraft: Function,
+  storeProjectId: Function
 };
 
 export class ScanView extends Component<Props, void> {
@@ -64,11 +72,21 @@ export class ScanView extends Component<Props, void> {
 
           this.applyCommand(command);
         } else if (type === 'create') {
-          const [projectId, projectKey, command] = rest;
+          const [projectKey, summary = '', description = '', command = ''] = rest;
+
+          const projects = await getApi().getProjects(projectKey);
+          const projectIndex = projects.findIndex(p => p.shortName === projectKey);
+
+          if (projectIndex === -1) {
+            notify(`Project ${projectKey} not found`);
+            return;
+          }
+
+          const projectId = projects[projectIndex].id;
 
           const storedProjectId = getStorageState().projectId;
           if (!storedProjectId) {
-            await storeProjectId(projectId);
+            await this.props.storeProjectId(projectId);
           }
 
           Router.CreateIssue();
@@ -83,7 +101,11 @@ export class ScanView extends Component<Props, void> {
             await this.applyCommand(`project ${projectKey}`);
           }
 
-          this.applyCommand(command);
+          if (command) {
+            await this.applyCommand(command);
+          }
+
+          await this.props.setIssueDraft({summary, description});
         }
       } else if (parts.length === 1) {
         Router.SingleIssue({issueId: parts[0]});
@@ -141,6 +163,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     show: state.app.showScanner,
     draft: state.creation.issue,
+    draftLoading: state.creation.draftLoading,
     ...ownProps
   };
 };
@@ -148,7 +171,9 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onHide: () => dispatch(closeScanView()),
-    onCommandApply: (command, applyAction) => dispatch(applyAction(command))
+    onCommandApply: (command, applyAction) => dispatch(applyAction(command)),
+    setIssueDraft: (...args) => dispatch(setIssueDraft(...args)),
+    storeProjectId: projectId => dispatch(storeProjectId(projectId))
   };
 };
 
