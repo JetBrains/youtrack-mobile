@@ -36,15 +36,15 @@ function renderImage(imageProps, imageDimensions) {
   );
 }
 
-const closeView = once(function closeView() {
-  return Router.pop();
-});
-
 export class ShowImage extends PureComponent<Props, State> {
   componentDidMount() {
     const currentPage = this.props.allImagesUrls.indexOf(this.props.currentImage);
     this.setState({currentPage});
   }
+
+  closeView = once(function closeView() {
+    return Router.pop();
+  });
 
   onPageSelected = (currentPage: number) => this.setState({currentPage});
 
@@ -60,7 +60,7 @@ export class ShowImage extends PureComponent<Props, State> {
             return;
           }
           await this.props.onRemoveImage(currentPage);
-          closeView();
+          this.closeView();
         }}
       ],
       {cancelable: true}
@@ -88,7 +88,7 @@ export class ShowImage extends PureComponent<Props, State> {
         />
         <TouchableOpacity
           style={styles.closeButton}
-          onPress={closeView}
+          onPress={this.closeView}
           hitSlop={hitSlop}
         >
           <Image style={styles.closeIcon} source={closeOpaque}></Image>
