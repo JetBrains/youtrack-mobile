@@ -13,6 +13,7 @@ type Props = {
   onRightButtonClick?: Function,
   leftButton?: ?React$Element<any>,
   rightButton?: ?React$Element<any>,
+  extraButton?: ?React$Element<any>,
   children?: Node,
   openScanView?: Function
 }
@@ -44,7 +45,7 @@ export default class Header extends Component<Props, void> {
   }
 
   render() {
-    const {leftButton, children, rightButton} = this.props;
+    const {leftButton, children, extraButton, rightButton} = this.props;
 
     return (
       <View style={[styles.header, {paddingTop: getTopPadding()}]}>
@@ -59,6 +60,8 @@ export default class Header extends Component<Props, void> {
         </TouchableOpacity>
 
         <View style={styles.headerCenter} testID="header-content">{children}</View>
+
+        {extraButton}
 
         <TouchableOpacity
           testID="header-action"

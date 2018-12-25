@@ -17,6 +17,7 @@ import {connect} from 'react-redux';
 import * as createIssueActions from './create-issue-actions';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {CreateIssueState} from './create-issue-reducers';
+import OpenScanButton from '../../components/scan/open-scan-button';
 
 const CATEGORY_NAME = 'Create issue view';
 
@@ -91,6 +92,7 @@ class CreateIssue extends Component<Props, void> {
         <Header leftButton={<Text>Cancel</Text>}
           onBack={storeDraftAndGoBack}
           rightButton={createButton}
+          extraButton={<OpenScanButton/>}
           onRightButtonClick={() => canCreateIssue && createIssue()}>
           <Text style={issueStyles.headerText}>New Issue</Text>
         </Header>

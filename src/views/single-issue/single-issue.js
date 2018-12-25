@@ -36,6 +36,7 @@ import IssueVisibility from '../../components/issue-visibility/issue-visibility'
 import {activityCategory} from '../../components/activity/activity__category';
 import SingleIssueActivityPage from './single-issue__activities';
 import {checkDev, checkVersion} from '../../components/feature/feature';
+import OpenScanButton from '../../components/scan/open-scan-button';
 
 const CATEGORY_NAME = 'Issue';
 
@@ -125,6 +126,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
         <Header
           leftButton={<Text>Back</Text>}
           rightButton={<Text style={issueLoaded ? null : styles.disabledSaveButton}>More</Text>}
+          extraButton={<OpenScanButton/>}
           onRightButtonClick={() => issueLoaded && showIssueActions(this.context.actionSheet())}
           onBack={this.handleOnBack}
         >

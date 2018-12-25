@@ -28,6 +28,7 @@ import type Auth from '../../components/auth/auth';
 import type Api from '../../components/api/api';
 import type {IssuesListState} from './issue-list-reducers';
 import type {IssueOnList} from '../../flow/Issue';
+import OpenScanButton from '../../components/scan/open-scan-button';
 
 type Props = IssuesListState & typeof issueActions & {
   openMenu: typeof openMenu,
@@ -85,6 +86,7 @@ export class IssueList extends Component<Props, void> {
       <Header
         leftButton={<Text>Menu</Text>}
         rightButton={<Text>Create</Text>}
+        extraButton={<OpenScanButton/>}
         onBack={this.props.openMenu}
         onRightButtonClick={() => Router.CreateIssue()}
       >
