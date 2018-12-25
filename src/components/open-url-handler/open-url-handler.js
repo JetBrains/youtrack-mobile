@@ -1,5 +1,5 @@
 /* @flow */
-import {Linking, DeviceEventEmitter} from 'react-native';
+import {DeviceEventEmitter, Linking} from 'react-native';
 import qs from 'qs';
 import log from '../log/log';
 
@@ -44,6 +44,8 @@ function parseUrl(url, onIssueIdDetected, onQueryDetected) {
     log.info(`Issues query detected in open URL: ${query}`);
     return onQueryDetected(url, query);
   }
+
+  DeviceEventEmitter.emit('openWithUrl', decodeURIComponent(url));
 }
 
 export default function openByUrlDetector(
@@ -62,8 +64,6 @@ export default function openByUrlDetector(
   function onOpenWithUrl(event) {
     const url = event.url || event;
     log.debug(`Linking URL event fired with URL "${url}"`);
-
-    DeviceEventEmitter.emit('openWithUrl', decodeURIComponent(url));
 
     return parseUrl(url, onIssueIdDetected, onQueryDetected);
   }
