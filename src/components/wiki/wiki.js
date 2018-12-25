@@ -7,7 +7,7 @@ import Router from '../router/router';
 import styles, {htmlViewStyles} from './wiki.styles';
 import {COLOR_FONT} from '../variables/variables';
 import {getBaseUrl} from '../config/config';
-import {renderCode, renderImage} from './wiki__renderers';
+import {renderCode, renderImage, renderTable, renderTableRow, renderTableCell} from './wiki__renderers';
 import {extractId} from '../open-url-handler/open-url-handler';
 
 HTMLView.propTypes.style = Text.propTypes.style;
@@ -120,6 +120,18 @@ export default class Wiki extends Component<Props, void> {
       return (
         <Text key={index} style={styles.blockQuote}>{'> '}{defaultRenderer(node.children, parent)}</Text>
       );
+    }
+
+    if (node.name === 'table') {
+      return renderTable(node, index, defaultRenderer);
+    }
+
+    if (node.name === 'tr') {
+      return renderTableRow(node, index, defaultRenderer);
+    }
+
+    if (node.name === 'td' || node.name === 'th') {
+      return renderTableCell(node, index, defaultRenderer);
     }
 
     return HTML_RENDER_DEFAULT;
