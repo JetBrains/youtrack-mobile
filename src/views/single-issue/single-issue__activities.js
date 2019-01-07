@@ -10,7 +10,7 @@ import {isActivityCategory} from '../../components/activity/activity__category';
 
 import CommentVisibility from '../../components/comment/comment__visibility';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
-import {COLOR_FONT_GRAY, UNIT} from '../../components/variables/variables';
+import {COLOR_FONT_GRAY} from '../../components/variables/variables';
 
 import {getEntityPresentation, relativeDate} from '../../components/issue-formatter/issue-formatter';
 
@@ -61,11 +61,11 @@ export default class SingleIssueActivities extends Component<Props, void> {
     }
 
     return (
-      <View key={attachments.id} style={{color: COLOR_FONT_GRAY}}>
+      <View key={attachments.id}>
         {hasAdded || hasRemoved ?
-          <Text>
+          <Text style={{color: COLOR_FONT_GRAY}}>
             {`Attachment: `}
-            {hasAdded ? <Text>{attachments.added.map(it => it.name).join(', ')}</Text> : null}
+            {hasAdded ? <Text>{attachments.added.map(it => it.name).join(' ')}</Text> : null}
             {hasRemoved
               ? <Text>
                 {
@@ -73,8 +73,8 @@ export default class SingleIssueActivities extends Component<Props, void> {
                     (attachment, index) => {
                       return (
                         <Text key={attachment.id}>
-                          {hasAdded || index !== 0 ? <Text>, </Text> : null}
-                          <Text style={{textDecorationLine: 'line-through', marginLeft: UNIT}}>
+                          {hasAdded || index !== 0 ? <Text>{' '}</Text> : null}
+                          <Text style={styles.activityRemoved}>
                             {attachment.name}
                           </Text>
                         </Text>

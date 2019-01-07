@@ -241,7 +241,10 @@ export default StyleSheet.create({
   activityRelatedChanges: {
     marginTop: UNIT,
     padding: UNIT,
-    backgroundColor: '#eaeaea',
+    backgroundColor: '#eaeaea'
+  },
+  activityRemoved: {
+    textDecorationLine: 'line-through'
   }
 
 });
