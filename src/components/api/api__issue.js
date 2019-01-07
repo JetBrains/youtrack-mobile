@@ -185,15 +185,16 @@ export default class IssueAPI extends ApiBase {
   }
 
   async getActivitiesPage(issueId: string, sources: Array<string>): Promise<Array<Object>> {
-    const categories = (sources || []).join('categories=');
+    const categoryKey = '&categories=';
+    const categories = `${categoryKey}${(sources || []).join(categoryKey)}`;
     const queryString = qs.stringify({
+      $top: 100,
       reverse: true,
-      categories: categories,
       fields: issueActivityPageFields.toString()
     });
 
-    return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/activitiesPage?${queryString}`)
-      .then(response => response.activities);
+    const response = await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/activitiesPage?${queryString}${categories}`);
+    return response.activities;
   }
 
   removeAttachment(issueId: string, attachmentID: string) {

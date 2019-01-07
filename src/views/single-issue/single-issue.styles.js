@@ -199,6 +199,7 @@ export default StyleSheet.create({
   keyboardSpacer: {
     backgroundColor: COLOR_BLACK
   },
+
   visibilitySelect: {
     top: 0,
     right: 0,
@@ -213,4 +214,34 @@ export default StyleSheet.create({
     resizeMode: 'contain',
     width: 28
   },
+
+  activityContainer: {
+    borderTopWidth: 1,
+    borderColor: COLOR_GRAY,
+    paddingTop: UNIT
+  },
+  activityWrapper: {
+    flexDirection: 'row',
+    marginBottom: UNIT,
+    marginTop: UNIT,
+    paddingLeft: UNIT,
+    paddingRight: UNIT
+  },
+  activity: {
+    marginLeft: UNIT,
+    flex: 1
+  },
+  authorName: {
+    color: COLOR_FONT,
+    fontWeight: 'bold'
+  },
+  activityContent: {
+    marginTop: UNIT
+  },
+  activityRelatedChanges: {
+    marginTop: UNIT,
+    padding: UNIT,
+    backgroundColor: '#eaeaea',
+  }
+
 });

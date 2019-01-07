@@ -5,7 +5,6 @@ export default StyleSheet.create({
   visibility: {
     flex: 1,
     flexDirection: 'row',
-    marginLeft: UNIT * 7,
     marginBottom: UNIT,
     alignItems: 'center'
   },

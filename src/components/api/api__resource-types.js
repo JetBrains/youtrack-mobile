@@ -7,7 +7,9 @@ const resourceTypes = {
   VISIBILITY_GROUP: 'jetbrains.charisma.persistent.security.VisibilityGroups',
 
   USER: 'jetbrains.charisma.persistence.user.User',
-  USER_GROUP: 'jetbrains.charisma.persistent.security.UserGroup'
+  USER_GROUP: 'jetbrains.charisma.persistent.security.UserGroup',
+
+  EVENT_GROUP: 'jetbrains.youtrack.event.gaprest.ActivityItemGroup',
 };
 
 export default resourceTypes;

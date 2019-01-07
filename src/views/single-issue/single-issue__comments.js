@@ -9,6 +9,8 @@ import React, {Component} from 'react';
 import CommentVisibility from '../../components/comment/comment__visibility';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
 
+import {UNIT} from '../../components/variables/variables';
+
 type Props = {
   comments: Array<IssueComment>,
   attachments: Array<Attachment>,
@@ -27,21 +29,26 @@ type Props = {
 
   onReply: (comment: IssueComment) => any,
   onCopyCommentLink: (comment: IssueComment) => any,
-  onIssueIdTap: (issueId: string) => any
+  onIssueIdTap: (issueId: string) => any,
+
+  activitiesEnabled: boolean
 };
 
 type DefaultProps = {
   onReply: Function,
-  onCopyCommentLink: Function
+  onCopyCommentLink: Function,
+  activitiesEnabled: boolean
 };
 
 export default class SingleIssueComments extends Component<Props, void> {
   static defaultProps: DefaultProps = {
     onReply: () => {},
-    onCopyCommentLink: () => {}
+    onCopyCommentLink: () => {},
+    activitiesEnabled: false
   };
 
   _renderCommentsList(comments, attachments) {
+    const visibilityStyles = !this.props.activitiesEnabled && {paddingLeft: UNIT * 7};
     return comments.map(comment => {
       return (
         <View key={comment.id}>
@@ -65,10 +72,15 @@ export default class SingleIssueComments extends Component<Props, void> {
 
             onReply={() => this.props.onReply(comment)}
             onCopyCommentLink={() => this.props.onCopyCommentLink(comment)}
+
+            activitiesEnabled={this.props.activitiesEnabled}
           />
 
           {IssueVisibility.isSecured(comment.visibility) &&
-          <CommentVisibility visibility={IssueVisibility.getVisibilityPresentation(comment.visibility)}/>}
+          <View style={visibilityStyles}>
+            <CommentVisibility visibility={IssueVisibility.getVisibilityPresentation(comment.visibility)}/>
+          </View>
+          }
         </View>
       );
     });

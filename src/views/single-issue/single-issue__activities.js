@@ -6,11 +6,19 @@ import type {Attachment, IssueComment} from '../../flow/CustomFields';
 import {View, Text} from 'react-native';
 import React, {Component} from 'react';
 
-import {activityCategory} from '../../components/activity/activity__category';
+import {isActivityCategory} from '../../components/activity/activity__category';
 
 import CommentVisibility from '../../components/comment/comment__visibility';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
+import {COLOR_FONT_GRAY, UNIT} from '../../components/variables/variables';
 
+import {getEntityPresentation, relativeDate} from '../../components/issue-formatter/issue-formatter';
+
+import {mergeActivities} from '../../components/activity/activity__merge-activities';
+import {groupActivities} from '../../components/activity/activity__group-activities';
+import {createActivitiesModel} from '../../components/activity/activity__create-model';
+
+import Avatar from '../../components/avatar/avatar';
 
 type Props = {
   activityPage: Array<Object>,
@@ -38,11 +46,49 @@ type DefaultProps = {
   onCopyCommentLink: Function
 };
 
-export default class SingleIssueActivityPage extends Component<Props, void> {
+export default class SingleIssueActivities extends Component<Props, void> {
   static defaultProps: DefaultProps = {
     onReply: () => {},
     onCopyCommentLink: () => {}
   };
+
+  static _renderAttachments(attachments) {
+    const hasAdded = attachments.added.length;
+    const hasRemoved = attachments.removed.length;
+
+    if (!hasAdded && !hasRemoved) {
+      return null;
+    }
+
+    return (
+      <View key={attachments.id} style={{color: COLOR_FONT_GRAY}}>
+        {hasAdded || hasRemoved ?
+          <Text>
+            {`Attachment: `}
+            {hasAdded ? <Text>{attachments.added.map(it => it.name).join(', ')}</Text> : null}
+            {hasRemoved
+              ? <Text>
+                {
+                  attachments.removed.map(
+                    (attachment, index) => {
+                      return (
+                        <Text key={attachment.id}>
+                          {hasAdded || index !== 0 ? <Text>, </Text> : null}
+                          <Text style={{textDecorationLine: 'line-through', marginLeft: UNIT}}>
+                            {attachment.name}
+                          </Text>
+                        </Text>
+                      );
+                    }
+                  )
+                }
+              </Text>
+              : null}
+          </Text> :
+          null}
+      </View>
+    );
+  }
 
   _renderComment(comment) {
     return (
@@ -71,6 +117,8 @@ export default class SingleIssueActivityPage extends Component<Props, void> {
 
           onReply={() => this.props.onReply(comment)}
           onCopyCommentLink={() => this.props.onCopyCommentLink(comment)}
+
+          activitiesEnabled={true}
         />
 
         {!comment.deleted && IssueVisibility.isSecured(comment.visibility) &&
@@ -80,28 +128,75 @@ export default class SingleIssueActivityPage extends Component<Props, void> {
     );
   }
 
-  _renderActivities(activities) {
-    return activities.map(activity => {
-      return activity.added.map(item => {
-        if (activity.category.id === activityCategory.COMMENT) {
-          return this._renderComment(item);
+  _renderActivityByCategory = (activity) => {
+    if (isActivityCategory.attachment(activity)) {
+      return SingleIssueActivities._renderAttachments(activity);
+    }
+  };
+
+  _processActivities(activities) {
+    return groupActivities(activities, {
+      onAddActivityToGroup: (group, activity) => {
+        if (isActivityCategory.issueCreated(activity)) {
+          group.hidden = true;
         }
-      });
+      },
+      onCompleteGroup: (group: Object) => {
+        group.events = mergeActivities(group.events);
+      }
     });
   }
 
   render() {
     const {activityPage} = this.props;
-
-    const NoActivity = (
-      <Text style={{textAlign: 'center'}}>No activity yet</Text>
-    );
+    const groupedActivities = this._processActivities(activityPage);
+    const activities = createActivitiesModel(groupedActivities);
 
     return (
-      <View style={styles.commentsContainer}>
-        {activityPage.length
-          ? this._renderActivities(activityPage)
-          : NoActivity}
+      <View style={styles.activityContainer}>
+        {activities.length
+          ? activities.map((activityGroup, index) => {
+            if (activityGroup.hidden) {
+              return null;
+            }
+
+            return (
+              <View key={activityGroup.timestamp + index} style={styles.activityWrapper}>
+                <Avatar
+                  userName={getEntityPresentation(activityGroup.author)}
+                  size={40}
+                  source={{uri: activityGroup.author.avatarUrl}}
+                />
+
+                <View style={styles.activity}>
+                  <Text>
+                    <Text style={styles.authorName}>
+                      {getEntityPresentation(activityGroup.author)}
+                    </Text>
+                    {activityGroup.comment
+                      ? <Text style={{color: COLOR_FONT_GRAY}}>
+                        {' '}{relativeDate(activityGroup.comment.added[0].created)}
+                      </Text>
+                      : null
+                    }
+                  </Text>
+
+                  <View style={styles.activityContent}>
+                    {activityGroup.comment ? this._renderComment(activityGroup.comment.added[0]) : null}
+
+                    {activityGroup.events.length
+                      ? <View style={styles.activityRelatedChanges}>
+                        {activityGroup.events.map(this._renderActivityByCategory)}
+                      </View>
+                      : null
+                    }
+                  </View>
+                </View>
+
+              </View>
+            );
+          })
+          : <Text style={{textAlign: 'center'}}>No activity yet</Text>}
       </View>
     );
   }

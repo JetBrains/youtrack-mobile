@@ -34,7 +34,7 @@ import Select from '../../components/select/select';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
 
 import {activityCategory} from '../../components/activity/activity__category';
-import SingleIssueActivityPage from './single-issue__activities';
+import SingleIssueActivities from './single-issue__activities';
 import {checkDev, checkVersion} from '../../components/feature/feature';
 import OpenScanButton from '../../components/scan/open-scan-button';
 
@@ -66,7 +66,10 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
 
     this.activitiesEnabled = checkVersion('2018.3') && checkDev();
     if (this.activitiesEnabled) {
-      this.props.loadActivitiesPage([activityCategory.COMMENT]);
+      this.props.loadActivitiesPage([
+        activityCategory.COMMENT,
+        activityCategory.ATTACHMENTS
+      ]);
     } else {
       this.props.loadIssueComments();
     }
@@ -266,7 +269,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
 
     return (
       <View style={styles.commentsListContainer}>
-        <SingleIssueActivityPage
+        <SingleIssueActivities
           activityPage={activityPage}
           attachments={issue.attachments}
           imageHeaders={getApi().auth.getAuthorizationHeaders()}
@@ -322,6 +325,8 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
           onDeleteComment={deleteComment}
           onRestoreComment={restoreComment}
           onDeleteCommentPermanently={deleteCommentPermanently}
+
+          activitiesEnabled={this.activitiesEnabled}
         />
       </View>
     );

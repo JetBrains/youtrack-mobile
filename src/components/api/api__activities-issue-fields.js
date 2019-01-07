@@ -9,8 +9,25 @@ const ISSUE_ACTIVITIES_EVENT_BASE = toField([
   'id',
   'name',
   'text',
-  'color(id)'
+  'color(id)',
 ]);
+
+const ISSUE_ATTACHMENT_FIELDS = toField([
+  'url',
+  'mimeType',
+  'removed',
+  'thumbnailURL',
+  'size',
+  'created',
+  {
+    comment: ['id']
+  }
+]);
+
+const ISSUE_PROJECT_FIELDS = toField([
+  'shortName'
+]);
+
 
 const ISSUE_ACTIVITIES_FIELDS = toField([
   '$type',
@@ -24,19 +41,28 @@ const ISSUE_ACTIVITIES_FIELDS = toField([
     category: ['id'],
     target: ['id', 'created', 'usesMarkdown'],
     added: [
-      'shortName',
+      ISSUE_PROJECT_FIELDS,
+
+      ISSUE_ACTIVITIES_EVENT_BASE,
+      IssueFields.ISSUE_COMMENTS_FIELDS,
+      ISSUE_ATTACHMENT_FIELDS
+    ],
+    removed: [
+      ISSUE_PROJECT_FIELDS,
+
       ISSUE_ACTIVITIES_EVENT_BASE,
       IssueFields.ISSUE_COMMENTS_FIELDS
     ]
   }
 ]);
 
-const ISSUE_ACTIVITIES_CURSOR_FIELDS = toField([
+
+
+
+export default toField([
   'cursor',
   'till',
   {
     activities: ISSUE_ACTIVITIES_FIELDS
   }
 ]);
-
-export default ISSUE_ACTIVITIES_CURSOR_FIELDS;

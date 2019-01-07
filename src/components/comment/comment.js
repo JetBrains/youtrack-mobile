@@ -34,14 +34,17 @@ type Props = {
   canRestore: boolean,
   onRestore: Function,
   canDeletePermanently: boolean,
-  onDeletePermanently: Function
+  onDeletePermanently: Function,
+
+  activitiesEnabled: ?boolean,
 };
 
 export default class Comment extends Component<Props, void> {
   static defaultProps = {
     onReply: () => {},
     onCopyCommentLink: () => {},
-    onEdit: () => {}
+    onEdit: () => {},
+    activitiesEnabled: false
   };
 
   _getCommentActionButtons() {
@@ -128,26 +131,29 @@ export default class Comment extends Component<Props, void> {
           buttonWidth={56}
           autoClose={true}
         >
-          <View style={styles.commentWrapper}>
-            <Avatar
-              userName={getEntityPresentation(comment.author)}
-              size={40}
-              source={{uri: comment.author.avatarUrl}}
-            />
-            <View style={styles.comment}>
-              <Text>
-                <Text style={styles.authorName}>
-                  {getEntityPresentation(comment.author)}
+          {this.props.activitiesEnabled
+            ? this._renderComment(comment, attachments)
+            : <View style={styles.commentWrapper}>
+              <Avatar
+                userName={getEntityPresentation(comment.author)}
+                size={40}
+                source={{uri: comment.author.avatarUrl}}
+              />
+              <View style={styles.comment}>
+                <Text>
+                  <Text style={styles.authorName}>
+                    {getEntityPresentation(comment.author)}
+                  </Text>
+                  <Text style={{color: COLOR_FONT_GRAY}}>
+                    {' '}{relativeDate(comment.created)}
+                  </Text>
                 </Text>
-                <Text style={{color: COLOR_FONT_GRAY}}>
-                  {' '}{relativeDate(comment.created)}
-                </Text>
-              </Text>
-              <View style={styles.commentText}>
-                {this._renderComment(comment, attachments)}
+                <View style={styles.commentText}>
+                  {this._renderComment(comment, attachments)}
+                </View>
               </View>
             </View>
-          </View>
+          }
         </Swipeout>
       </View>
     );
