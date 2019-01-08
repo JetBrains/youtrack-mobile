@@ -245,6 +245,9 @@ export default StyleSheet.create({
   },
   activityRemoved: {
     textDecorationLine: 'line-through'
+  },
+  activityHistory: {
+    color: COLOR_FONT_GRAY
   }
 
 });

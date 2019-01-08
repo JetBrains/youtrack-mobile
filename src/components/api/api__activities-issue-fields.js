@@ -40,6 +40,13 @@ const ISSUE_ACTIVITIES_FIELDS = toField([
     author: IssueFields.ISSUE_USER_FIELDS,
     category: ['id'],
     target: ['id', 'created', 'usesMarkdown'],
+    field: [
+      '$type',
+      'linkId',
+      'id',
+      'presentation',
+      'customField(id,fieldType(isMultiValue,valueType))'
+    ],
     added: [
       ISSUE_PROJECT_FIELDS,
 

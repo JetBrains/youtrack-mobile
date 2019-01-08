@@ -10,13 +10,15 @@ import {isActivityCategory} from '../../components/activity/activity__category';
 
 import CommentVisibility from '../../components/comment/comment__visibility';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
-import {COLOR_FONT_GRAY} from '../../components/variables/variables';
 
 import {getEntityPresentation, relativeDate} from '../../components/issue-formatter/issue-formatter';
 
 import {mergeActivities} from '../../components/activity/activity__merge-activities';
 import {groupActivities} from '../../components/activity/activity__group-activities';
 import {createActivitiesModel} from '../../components/activity/activity__create-model';
+
+import getActivityHistoryLabel from '../../components/activity/activity__history-label';
+import getActivityHistorySingleValue from '../../components/activity/activity__history-single-value';
 
 import Avatar from '../../components/avatar/avatar';
 
@@ -52,30 +54,34 @@ export default class SingleIssueActivities extends Component<Props, void> {
     onCopyCommentLink: () => {}
   };
 
-  static _renderAttachments(attachments) {
-    const hasAdded = attachments.added.length;
-    const hasRemoved = attachments.removed.length;
+  static getRelativeDatePresentation(timestamp: Date) {
+    return relativeDate(timestamp);
+  }
+
+  static renderAttachments(activity: Object) {
+    const hasAdded = activity.added.length;
+    const hasRemoved = activity.removed.length;
 
     if (!hasAdded && !hasRemoved) {
       return null;
     }
 
     return (
-      <View key={attachments.id}>
+      <View key={activity.id}>
         {hasAdded || hasRemoved ?
-          <Text style={{color: COLOR_FONT_GRAY}}>
-            {`Attachment: `}
-            {hasAdded ? <Text>{attachments.added.map(it => it.name).join(' ')}</Text> : null}
+          <Text style={styles.activityHistory}>
+            {getActivityHistoryLabel(activity)}
+            {hasAdded ? <Text>{activity.added.map(it => it.name).join(' ')}</Text> : null}
             {hasRemoved
               ? <Text>
                 {
-                  attachments.removed.map(
-                    (attachment, index) => {
+                  activity.removed.map(
+                    (item, index) => {
                       return (
-                        <Text key={attachment.id}>
+                        <Text key={item.id}>
                           {hasAdded || index !== 0 ? <Text>{' '}</Text> : null}
                           <Text style={styles.activityRemoved}>
-                            {attachment.name}
+                            {item.name}
                           </Text>
                         </Text>
                       );
@@ -83,10 +89,28 @@ export default class SingleIssueActivities extends Component<Props, void> {
                   )
                 }
               </Text>
-              : null}
+              : null
+            }
           </Text> :
           null}
       </View>
+    );
+  }
+
+
+  static renderHistoryChange(activity: Object) {
+    const removed = getActivityHistorySingleValue(activity, true).presentation;
+    const added = getActivityHistorySingleValue(activity).presentation;
+    return (
+      <Text key={activity.id} style={styles.activityHistory}>
+        {getActivityHistoryLabel(activity)}
+
+        <Text style={removed && !added ? styles.activityRemoved : null}>
+          {removed}
+        </Text>
+        {removed && added ? <Text> ⟶ </Text> : null}
+        {added}
+      </Text>
     );
   }
 
@@ -130,7 +154,10 @@ export default class SingleIssueActivities extends Component<Props, void> {
 
   _renderActivityByCategory = (activity) => {
     if (isActivityCategory.attachment(activity)) {
-      return SingleIssueActivities._renderAttachments(activity);
+      return SingleIssueActivities.renderAttachments(activity);
+    }
+    if (isActivityCategory.customField(activity)) {
+      return SingleIssueActivities.renderHistoryChange(activity);
     }
   };
 
@@ -174,8 +201,8 @@ export default class SingleIssueActivities extends Component<Props, void> {
                       {getEntityPresentation(activityGroup.author)}
                     </Text>
                     {activityGroup.comment
-                      ? <Text style={{color: COLOR_FONT_GRAY}}>
-                        {' '}{relativeDate(activityGroup.comment.added[0].created)}
+                      ? <Text style={styles.activityHistory}>
+                        {' '}{SingleIssueActivities.getRelativeDatePresentation(activityGroup.timestamp)}
                       </Text>
                       : null
                     }
@@ -185,7 +212,7 @@ export default class SingleIssueActivities extends Component<Props, void> {
                     {activityGroup.comment ? this._renderComment(activityGroup.comment.added[0]) : null}
 
                     {activityGroup.events.length
-                      ? <View style={styles.activityRelatedChanges}>
+                      ? <View style={activityGroup.comment ? styles.activityRelatedChanges : null}>
                         {activityGroup.events.map(this._renderActivityByCategory)}
                       </View>
                       : null

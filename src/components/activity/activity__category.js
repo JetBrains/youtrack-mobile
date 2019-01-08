@@ -39,6 +39,8 @@ export const activityCategory = {
 
   VOTERS: 'VotersCategory',
   TOTAL_VOTES: 'TotalVotesCategory',
+
+  VISIBILITY: 'PermittedGroupCategory',
 };
 
 
@@ -99,5 +101,15 @@ isActivityCategory.vcs = isActivityCategory(activityCategory.VCS_CHANGE);
 isActivityCategory.voters = isActivityCategory(activityCategory.VOTERS);
 isActivityCategory.totalVotes = isActivityCategory(activityCategory.TOTAL_VOTES);
 isActivityCategory.commentText = isActivityCategory(activityCategory.COMMENT_TEXT);
+
+isActivityCategory.customField = isActivityCategory(activityCategory.CUSTOM_FIELD);
+isActivityCategory.date = isActivityCategory(activityCategory.ISSUE_RESOLVED);
+isActivityCategory.link = isActivityCategory(activityCategory.LINKS);
+isActivityCategory.tag = isActivityCategory(activityCategory.TAGS);
+isActivityCategory.summary = isActivityCategory(activityCategory.SUMMARY);
+isActivityCategory.description = isActivityCategory(activityCategory.DESCRIPTION);
+isActivityCategory.sprint = isActivityCategory(activityCategory.SPRINT);
+isActivityCategory.project = isActivityCategory(activityCategory.PROJECT);
+isActivityCategory.visibility = isActivityCategory(activityCategory.VISIBILITY);
 
 
