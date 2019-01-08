@@ -101,7 +101,7 @@ function getEntityPresentation(entity: Object) {
     return '';
   }
 
-  return entity.fullName || entity.name || entity.login || entity.presentation || '';
+  return entity.fullName || entity.localizedName || entity.name || entity.login || entity.presentation || '';
 }
 
 function getVisibilityPresentation(entity: Object) {

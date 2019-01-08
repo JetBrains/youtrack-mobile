@@ -18,6 +18,15 @@ describe('getEntityPresentation', function() {
     getEntityPresentation(item).should.equal(item.fullName);
   });
 
+  it('should return `localizedName`', () => {
+    const item = {
+      name: 'name',
+      localizedName: 'localizedName'
+    };
+
+    getEntityPresentation(item).should.equal(item.localizedName);
+  });
+
   it('should return `name`', () => {
     const item = {
       login: 'login',

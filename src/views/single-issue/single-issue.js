@@ -69,7 +69,8 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
       this.props.loadActivitiesPage([
         activityCategory.COMMENT,
         activityCategory.ATTACHMENTS,
-        activityCategory.CUSTOM_FIELD
+        activityCategory.CUSTOM_FIELD,
+        activityCategory.TAGS
       ]);
     } else {
       this.props.loadIssueComments();

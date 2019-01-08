@@ -4,15 +4,15 @@ import {isActivityCategory} from './activity__category';
 import {relativeDate, getReadableID, formatDate, getEntityPresentation} from '../issue-formatter/issue-formatter';
 
 
-export default function getActivityHistorySingleValue(event: Object, isRemovedEventValue: boolean = false): Object {
+export default function getActivityHistorySingleValue(event: Object, isRemovedEventValue: boolean = false): string {
   if (!event) {
-    return {};
+    return '';
   }
 
   const eventValue = isRemovedEventValue ? event.removed : event.added;
 
   if (!eventValue) {
-    return getEmptyFieldValue(event);
+    return getEmptyFieldValue(event).presentation;
   }
 
   const eventField = event.field;
@@ -31,8 +31,8 @@ export default function getActivityHistorySingleValue(event: Object, isRemovedEv
   case types.date:
     value.presentation = relativeDate(eventValue);
     break;
-  case types.attachment:
-    value.presentation = eventValue.localizedName || eventValue.name;
+  case types.attachment || types.tag:
+    value.presentation = eventValue;
     break;
   }
 
@@ -42,10 +42,10 @@ export default function getActivityHistorySingleValue(event: Object, isRemovedEv
   }
 
   if (Array.isArray(value.presentation)) {
-    value.presentation = value.presentation.map(getEntityPresentation).join('');
+    value.presentation = value.presentation.map(getEntityPresentation).join(', ');
   }
 
-  return value;
+  return value.presentation;
 
 
   function setSimpleCustomFieldPresentationByType(simpleCustomFieldType, value) {

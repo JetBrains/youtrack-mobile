@@ -58,49 +58,9 @@ export default class SingleIssueActivities extends Component<Props, void> {
     return relativeDate(timestamp);
   }
 
-  static renderAttachments(activity: Object) {
-    const hasAdded = activity.added.length;
-    const hasRemoved = activity.removed.length;
-
-    if (!hasAdded && !hasRemoved) {
-      return null;
-    }
-
-    return (
-      <View key={activity.id}>
-        {hasAdded || hasRemoved ?
-          <Text style={styles.activityHistory}>
-            {getActivityHistoryLabel(activity)}
-            {hasAdded ? <Text>{activity.added.map(it => it.name).join(' ')}</Text> : null}
-            {hasRemoved
-              ? <Text>
-                {
-                  activity.removed.map(
-                    (item, index) => {
-                      return (
-                        <Text key={item.id}>
-                          {hasAdded || index !== 0 ? <Text>{' '}</Text> : null}
-                          <Text style={styles.activityRemoved}>
-                            {item.name}
-                          </Text>
-                        </Text>
-                      );
-                    }
-                  )
-                }
-              </Text>
-              : null
-            }
-          </Text> :
-          null}
-      </View>
-    );
-  }
-
-
-  static renderHistoryChange(activity: Object) {
-    const removed = getActivityHistorySingleValue(activity, true).presentation;
-    const added = getActivityHistorySingleValue(activity).presentation;
+  static renderSingleValueHistoryChange(activity: Object) {
+    const removed = getActivityHistorySingleValue(activity, true);
+    const added = getActivityHistorySingleValue(activity);
     return (
       <Text key={activity.id} style={styles.activityHistory}>
         {getActivityHistoryLabel(activity)}
@@ -153,11 +113,9 @@ export default class SingleIssueActivities extends Component<Props, void> {
   }
 
   _renderActivityByCategory = (activity) => {
-    if (isActivityCategory.attachment(activity)) {
-      return SingleIssueActivities.renderAttachments(activity);
-    }
-    if (isActivityCategory.customField(activity)) {
-      return SingleIssueActivities.renderHistoryChange(activity);
+    if (isActivityCategory.attachment(activity) || isActivityCategory.tag(activity) ||
+      isActivityCategory.customField(activity)) {
+      return SingleIssueActivities.renderSingleValueHistoryChange(activity);
     }
   };
 
