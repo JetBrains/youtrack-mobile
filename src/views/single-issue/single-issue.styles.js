@@ -1,5 +1,17 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_LIGHT_GRAY, COLOR_FONT_ON_BLACK, COLOR_BLACK, COLOR_FONT_GRAY, COLOR_FONT, COLOR_TRANSPARENT_BLACK, COLOR_SELECTED_DARK, COLOR_GRAY, COLOR_PINK} from '../../components/variables/variables';
+import {
+  UNIT,
+  COLOR_LIGHT_GRAY,
+  COLOR_FONT_ON_BLACK,
+  COLOR_BLACK,
+  COLOR_FONT_GRAY,
+  COLOR_FONT,
+  COLOR_TRANSPARENT_BLACK,
+  COLOR_SELECTED_DARK,
+  COLOR_GRAY,
+  COLOR_PINK,
+  COLOR_MEDIUM_GRAY
+} from '../../components/variables/variables';
 import bottomPadding from '../../components/bottom-padding/bottom-padding';
 
 const SUGGESTION_BOTTOM = 48;
@@ -215,39 +227,55 @@ export default StyleSheet.create({
     width: 28
   },
 
-  activityContainer: {
-    borderTopWidth: 1,
-    borderColor: COLOR_GRAY,
-    paddingTop: UNIT
-  },
-  activityWrapper: {
-    flexDirection: 'row',
-    marginBottom: UNIT,
-    marginTop: UNIT,
-    paddingLeft: UNIT,
-    paddingRight: UNIT
+  activities: {
+    marginTop: UNIT
   },
   activity: {
-    marginLeft: UNIT,
-    flex: 1
+    flexDirection: 'row',
+    paddingTop: UNIT * 4,
+    paddingLeft: UNIT,
+    paddingRight: UNIT,
   },
-  authorName: {
+  mergedActivity: {
+    paddingTop: 0,
+    marginBottom: 0,
+    marginLeft: UNIT * 5
+  },
+  activityAuthor: {
+    marginTop: UNIT,
+    marginBottom: UNIT / 2
+  },
+  activityItem: {
+    flex: 1,
+    marginLeft: UNIT,
+  },
+  activityAuthorName: {
     color: COLOR_FONT,
     fontWeight: 'bold'
   },
-  activityContent: {
-    marginTop: UNIT
+  activityTimestamp: {
+    color: COLOR_FONT_GRAY,
+  },
+  activityLabel: {
+    color: COLOR_FONT_GRAY
   },
   activityRelatedChanges: {
-    marginTop: UNIT,
-    padding: UNIT,
-    backgroundColor: '#eaeaea'
+    paddingTop: UNIT ,
+    paddingRight: UNIT ,
+    paddingBottom: UNIT ,
+    marginTop: UNIT * 2,
+    marginRight: -1 * UNIT,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderStyle: 'solid',
+    borderColor: COLOR_MEDIUM_GRAY,
+    lineHeight: 14
+  },
+  activityHistoryChanges: {
+    lineHeight: 14
+
   },
   activityRemoved: {
     textDecorationLine: 'line-through'
   },
-  activityHistory: {
-    color: COLOR_FONT_GRAY
-  }
-
 });

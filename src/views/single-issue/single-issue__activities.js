@@ -3,7 +3,7 @@ import styles from './single-issue.styles';
 import Comment from '../../components/comment/comment';
 import type {Attachment, IssueComment} from '../../flow/CustomFields';
 
-import {View, Text} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import React, {Component} from 'react';
 
 import {isActivityCategory} from '../../components/activity/activity__category';
@@ -54,21 +54,17 @@ export default class SingleIssueActivities extends Component<Props, void> {
     onCopyCommentLink: () => {}
   };
 
-  static getRelativeDatePresentation(timestamp: Date) {
-    return relativeDate(timestamp);
-  }
-
   static renderSingleValueHistoryChange(activity: Object) {
     const removed = getActivityHistorySingleValue(activity, true);
     const added = getActivityHistorySingleValue(activity);
     return (
-      <Text key={activity.id} style={styles.activityHistory}>
-        {getActivityHistoryLabel(activity)}
+      <Text key={activity.id}>
+        <Text style={styles.activityLabel}>{getActivityHistoryLabel(activity)}</Text>
 
         <Text style={removed && !added ? styles.activityRemoved : null}>
           {removed}
         </Text>
-        {removed && added ? <Text> ⟶ </Text> : null}
+        {removed && added ? <Text> → </Text> : null}
         {added}
       </Text>
     );
@@ -132,13 +128,62 @@ export default class SingleIssueActivities extends Component<Props, void> {
     });
   }
 
+  _renderUserAvatar(activityGroup: Object) {
+    if (!activityGroup.merged) {
+      return (
+        <Avatar
+          userName={getEntityPresentation(activityGroup.author)}
+          size={40}
+          source={{uri: activityGroup.author.avatarUrl}}
+        />
+      );
+    }
+  }
+
+  _renderTimestamp(timestamp: Date) {
+    return (
+      <Text style={styles.activityTimestamp}>
+        {' '}{relativeDate(timestamp)}
+      </Text>
+    );
+  }
+
+  _renderUserInfo(activityGroup: Object) {
+    return (
+      <Text style={styles.activityAuthor}>
+        {!activityGroup.merged
+          ? <Text style={styles.activityAuthorName}>
+            {getEntityPresentation(activityGroup.author)}
+          </Text>
+          : null}
+        {this._renderTimestamp(activityGroup.timestamp)}
+      </Text>
+    );
+  }
+
+  _renderContent(activityGroup: Object) {
+    return (
+      <View>
+        {activityGroup.comment ? this._renderComment(activityGroup.comment.added[0]) : null}
+
+        {activityGroup.events.length
+          ? <View
+            style={activityGroup.comment ? styles.activityRelatedChanges : styles.activityHistoryChanges}>
+            {activityGroup.events.map(this._renderActivityByCategory)}
+          </View>
+          : null
+        }
+      </View>
+    );
+  }
+
   render() {
     const {activityPage} = this.props;
     const groupedActivities = this._processActivities(activityPage);
     const activities = createActivitiesModel(groupedActivities);
 
     return (
-      <View style={styles.activityContainer}>
+      <View style={styles.activities}>
         {activities.length
           ? activities.map((activityGroup, index) => {
             if (activityGroup.hidden) {
@@ -146,36 +191,15 @@ export default class SingleIssueActivities extends Component<Props, void> {
             }
 
             return (
-              <View key={activityGroup.timestamp + index} style={styles.activityWrapper}>
-                <Avatar
-                  userName={getEntityPresentation(activityGroup.author)}
-                  size={40}
-                  source={{uri: activityGroup.author.avatarUrl}}
-                />
+              <View key={`${activityGroup.timestamp}-${index}`} style={StyleSheet.flatten([
+                styles.activity,
+                activityGroup.merged ? styles.mergedActivity : null
+              ])}>
+                {this._renderUserAvatar(activityGroup)}
 
-                <View style={styles.activity}>
-                  <Text>
-                    <Text style={styles.authorName}>
-                      {getEntityPresentation(activityGroup.author)}
-                    </Text>
-                    {activityGroup.comment
-                      ? <Text style={styles.activityHistory}>
-                        {' '}{SingleIssueActivities.getRelativeDatePresentation(activityGroup.timestamp)}
-                      </Text>
-                      : null
-                    }
-                  </Text>
-
-                  <View style={styles.activityContent}>
-                    {activityGroup.comment ? this._renderComment(activityGroup.comment.added[0]) : null}
-
-                    {activityGroup.events.length
-                      ? <View style={activityGroup.comment ? styles.activityRelatedChanges : null}>
-                        {activityGroup.events.map(this._renderActivityByCategory)}
-                      </View>
-                      : null
-                    }
-                  </View>
+                <View style={styles.activityItem}>
+                  {this._renderUserInfo(activityGroup)}
+                  {this._renderContent(activityGroup)}
                 </View>
 
               </View>

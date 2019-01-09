@@ -15,6 +15,7 @@ export const COLOR_SELECTED_DARK = '#001526';
 export const COLOR_PLACEHOLDER = '#406380';
 
 export const COLOR_LIGHT_GRAY = '#F4F4F4';
+export const COLOR_MEDIUM_GRAY = '#DFE5EB';
 
 export const COLOR_GRAY = '#CCC';
 
