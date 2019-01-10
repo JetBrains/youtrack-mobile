@@ -1,7 +1,7 @@
 import {StyleSheet} from 'react-native';
 import {
   UNIT,
-  COLOR_LIGHT_GRAY,
+  COLOR_EXTRA_LIGHT_GRAY,
   COLOR_FONT_ON_BLACK,
   COLOR_BLACK,
   COLOR_FONT_GRAY,
@@ -20,7 +20,7 @@ const SUGGESTION_BOTTOM = 48;
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLOR_LIGHT_GRAY
+    backgroundColor: COLOR_EXTRA_LIGHT_GRAY
   },
   headerText: {
     color: COLOR_FONT_ON_BLACK,

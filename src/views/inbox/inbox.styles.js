@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {COLOR_FONT_GRAY, COLOR_FONT, UNIT} from '../../components/variables/variables';
+import {COLOR_FONT_GRAY, COLOR_FONT, UNIT, COLOR_EXTRA_LIGHT_GRAY} from '../../components/variables/variables';
 
 const textPrimary = {
   lineHeight: 18,
@@ -16,7 +16,7 @@ const textSecondary = {
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f7f9fa'
+    backgroundColor: COLOR_EXTRA_LIGHT_GRAY
   },
   arrowImage: {
     marginTop: 4,

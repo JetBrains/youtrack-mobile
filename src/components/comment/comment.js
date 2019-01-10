@@ -2,7 +2,7 @@
 import styles from './comment.styles';
 import Wiki from '../../components/wiki/wiki';
 import {
-  COLOR_LIGHT_GRAY,
+  COLOR_EXTRA_LIGHT_GRAY,
   COLOR_FONT_GRAY,
   COLOR_PINK,
   COLOR_PINK_DARK,
@@ -125,7 +125,7 @@ export default class Comment extends Component<Props, void> {
         <Swipeout
           key={comment.id}
           disabled={comment.deleted}
-          backgroundColor={COLOR_LIGHT_GRAY}
+          backgroundColor={COLOR_EXTRA_LIGHT_GRAY}
           right={this._getCommentActionButtons()}
           sensitivity={30}
           buttonWidth={56}
