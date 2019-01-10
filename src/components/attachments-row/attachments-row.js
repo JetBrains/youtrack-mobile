@@ -102,6 +102,12 @@ export default class AttachmentsRow extends Component<Props, void> {
       >
 
         {attachments.map(attach => {
+          if (!attach.url) {
+            return (
+              <Text key={attach.id} style={[styles.attachmentImage, styles.attachmentFile]}>{attach.name}</Text>
+            );
+          }
+
           const isImage = attach.mimeType ? attach.mimeType.includes('image') : true;
           const isAttachingImage = attachingImage === attach;
           const url = attach.id ? `${attach.url}&w=${imageWidth}&h=${imageHeight}` : attach.url;
@@ -132,7 +138,7 @@ export default class AttachmentsRow extends Component<Props, void> {
 
           return (
             <TouchableOpacity onPress={() => this._openAttachmentUrl(attach.name, attach.url)} key={attach.id}>
-              <View style={styles.attachmentFile}><Text>{attach.name}</Text></View>
+              <View style={[styles.attachmentImage, styles.attachmentFile]}><Text>{attach.name}</Text></View>
             </TouchableOpacity>
           );
         })}

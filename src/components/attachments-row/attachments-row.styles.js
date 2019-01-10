@@ -20,10 +20,8 @@ export default StyleSheet.create({
   },
   attachmentFile: {
     marginRight: UNIT * 2,
-    width: 120,
-    height: 60,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   imageActivityIndicator: {
     backgroundColor: `#CCCCCC${ATTACHING_IMAGE_ALPHA}`,

@@ -3,7 +3,7 @@ import styles from './single-issue.styles';
 import Comment from '../../components/comment/comment';
 import type {Attachment, IssueComment} from '../../flow/CustomFields';
 
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 import React, {Component} from 'react';
 
 import {isActivityCategory} from '../../components/activity/activity__category';
@@ -23,6 +23,14 @@ import getActivityHistorySingleValue from '../../components/activity/activity__h
 import Avatar from '../../components/avatar/avatar';
 
 import Router from '../../components/router/router';
+
+import usage from '../../components/usage/usage';
+import log from '../../components/log/log';
+import {getApi} from '../../components/api/api__instance';
+import AttachmentsRow from '../../components/attachments-row/attachments-row';
+import ApiHelper from '../../components/api/api__helper';
+
+const CATEGORY_NAME = 'Issue Stream';
 
 type Props = {
   activityPage: Array<Object>,
@@ -90,6 +98,33 @@ export default class SingleIssueActivities extends Component<Props, void> {
     );
   }
 
+  _renderAttachmentHistoryChange(event: Object) {
+    const removed = getActivityHistorySingleValue(event, true);
+
+    let added = event.added || [];
+    if (added.length) {
+      added = ApiHelper.convertRelativeUrls(added, 'url', this.props.backendUrl);
+    }
+
+    return (
+      <View key={event.id}>
+        <Text style={styles.activityLabel}>{getActivityHistoryLabel(event)}</Text>
+
+        {added.length && <AttachmentsRow
+          attachments={added}
+          attachingImage={null}
+          imageHeaders={getApi().auth.getAuthorizationHeaders()}
+          onImageLoadingError={err => log.warn('onImageLoadingError', err.nativeEvent)}
+          onOpenAttachment={(type) => (
+            usage.trackEvent(CATEGORY_NAME, type === 'image' ? 'Showing image' : 'Open attachment by URL')
+          )}
+        />}
+
+        {Boolean(removed) && <Text style={styles.activityRemoved}>{removed}</Text>}
+      </View>
+    );
+  }
+
   _renderComment(comment) {
     return (
       <View key={comment.id}>
@@ -129,13 +164,14 @@ export default class SingleIssueActivities extends Component<Props, void> {
   }
 
   _renderActivityByCategory = (activity) => {
-    if (isActivityCategory.attachment(activity) ||
-      isActivityCategory.tag(activity) ||
-      isActivityCategory.customField(activity)) {
+    if (isActivityCategory.tag(activity) || isActivityCategory.customField(activity)) {
       return SingleIssueActivities.renderSingleValueHistoryChange(activity);
     }
     if (isActivityCategory.link(activity)) {
       return SingleIssueActivities.renderLinkHistoryChange(activity);
+    }
+    if (isActivityCategory.attachment(activity)) {
+      return this._renderAttachmentHistoryChange(activity);
     }
   };
 
@@ -215,10 +251,10 @@ export default class SingleIssueActivities extends Component<Props, void> {
             }
 
             return (
-              <View key={`${activityGroup.timestamp}-${index}`} style={StyleSheet.flatten([
+              <View key={`${activityGroup.timestamp}-${index}`} style={[
                 styles.activity,
                 activityGroup.merged ? styles.mergedActivity : null
-              ])}>
+              ]}>
                 {this._renderUserAvatar(activityGroup)}
 
                 <View style={styles.activityItem}>
