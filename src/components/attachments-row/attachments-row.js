@@ -104,7 +104,9 @@ export default class AttachmentsRow extends Component<Props, void> {
         {attachments.map(attach => {
           if (!attach.url) {
             return (
-              <Text key={attach.id} style={[styles.attachmentImage, styles.attachmentFile]}>{attach.name}</Text>
+              <View key={attach.id} style={[styles.attachmentImage, styles.attachmentFile]}>
+                <Text>{attach.name}</Text>
+              </View>
             );
           }
 
