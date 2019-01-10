@@ -10,7 +10,8 @@ import {
   COLOR_SELECTED_DARK,
   COLOR_GRAY,
   COLOR_PINK,
-  COLOR_MEDIUM_GRAY
+  COLOR_MEDIUM_GRAY,
+  COLOR_LINK
 } from '../../components/variables/variables';
 import bottomPadding from '../../components/bottom-padding/bottom-padding';
 
@@ -278,4 +279,12 @@ export default StyleSheet.create({
   activityRemoved: {
     textDecorationLine: 'line-through'
   },
+
+  linkedIssue: {
+    flexDirection: 'row',
+  },
+
+  linkText: {
+    color: COLOR_LINK
+  }
 });

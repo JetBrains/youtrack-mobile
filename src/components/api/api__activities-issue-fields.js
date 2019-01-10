@@ -52,13 +52,17 @@ const ISSUE_ACTIVITIES_FIELDS = toField([
 
       ISSUE_ACTIVITIES_EVENT_BASE,
       IssueFields.ISSUE_COMMENTS_FIELDS,
-      ISSUE_ATTACHMENT_FIELDS
+      ISSUE_ATTACHMENT_FIELDS,
+
+      IssueFields.ISSUE_XSHORT_FIELDS
     ],
     removed: [
       ISSUE_PROJECT_FIELDS,
 
       ISSUE_ACTIVITIES_EVENT_BASE,
-      IssueFields.ISSUE_COMMENTS_FIELDS
+      IssueFields.ISSUE_COMMENTS_FIELDS,
+
+      IssueFields.ISSUE_XSHORT_FIELDS
     ]
   }
 ]);

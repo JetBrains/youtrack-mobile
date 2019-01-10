@@ -3,7 +3,7 @@ import styles from './single-issue.styles';
 import Comment from '../../components/comment/comment';
 import type {Attachment, IssueComment} from '../../flow/CustomFields';
 
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import React, {Component} from 'react';
 
 import {isActivityCategory} from '../../components/activity/activity__category';
@@ -21,6 +21,8 @@ import getActivityHistoryLabel from '../../components/activity/activity__history
 import getActivityHistorySingleValue from '../../components/activity/activity__history-single-value';
 
 import Avatar from '../../components/avatar/avatar';
+
+import Router from '../../components/router/router';
 
 type Props = {
   activityPage: Array<Object>,
@@ -54,12 +56,12 @@ export default class SingleIssueActivities extends Component<Props, void> {
     onCopyCommentLink: () => {}
   };
 
-  static renderSingleValueHistoryChange(activity: Object) {
-    const removed = getActivityHistorySingleValue(activity, true);
-    const added = getActivityHistorySingleValue(activity);
+  static renderSingleValueHistoryChange(event: Object) {
+    const removed = getActivityHistorySingleValue(event, true);
+    const added = getActivityHistorySingleValue(event);
     return (
-      <Text key={activity.id}>
-        <Text style={styles.activityLabel}>{getActivityHistoryLabel(activity)}</Text>
+      <Text key={event.id}>
+        <Text style={styles.activityLabel}>{getActivityHistoryLabel(event)}</Text>
 
         <Text style={removed && !added ? styles.activityRemoved : null}>
           {removed}
@@ -67,6 +69,24 @@ export default class SingleIssueActivities extends Component<Props, void> {
         {removed && added ? <Text> → </Text> : null}
         {added}
       </Text>
+    );
+  }
+
+  static renderLinkHistoryChange(event: Object) {
+    const linkedIssue = event.added[0] || event.removed[0];
+    return (
+      <TouchableOpacity key={event.id} >
+        <Text>
+          <Text style={styles.activityLabel}>{getActivityHistoryLabel(event)}</Text>
+          <Text style={event.removed[0] ? styles.activityRemoved : null} onPress={
+            () => Router.SingleIssue({issueId: linkedIssue.idReadable})}>
+            <Text style={styles.linkText}>
+              {linkedIssue.idReadable}
+            </Text>
+            {` ${ linkedIssue.summary}`}
+          </Text>
+        </Text>
+      </TouchableOpacity>
     );
   }
 
@@ -109,9 +129,13 @@ export default class SingleIssueActivities extends Component<Props, void> {
   }
 
   _renderActivityByCategory = (activity) => {
-    if (isActivityCategory.attachment(activity) || isActivityCategory.tag(activity) ||
+    if (isActivityCategory.attachment(activity) ||
+      isActivityCategory.tag(activity) ||
       isActivityCategory.customField(activity)) {
       return SingleIssueActivities.renderSingleValueHistoryChange(activity);
+    }
+    if (isActivityCategory.link(activity)) {
+      return SingleIssueActivities.renderLinkHistoryChange(activity);
     }
   };
 
