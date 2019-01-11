@@ -5,7 +5,6 @@ const ATTACHING_IMAGE_ALPHA = '70';
 
 export default StyleSheet.create({
   attachesScroll: {
-    marginTop: UNIT * 2,
     paddingLeft: UNIT * 2,
     marginLeft: -UNIT * 2,
     marginRight: -UNIT * 2

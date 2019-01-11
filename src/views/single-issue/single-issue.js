@@ -222,7 +222,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
             : null}
         </View>}
 
-        {issue.attachments ? <AttachmentsRow
+        {issue.attachments ? <View style={styles.attachments}><AttachmentsRow
           attachments={issue.attachments}
           attachingImage={attachingImage}
           imageHeaders={getApi().auth.getAuthorizationHeaders()}
@@ -231,7 +231,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
             this.props.refreshIssue();
           }}
           onOpenAttachment={(type, name) => usage.trackEvent(CATEGORY_NAME, type === 'image' ? 'Showing image' : 'Open attachment by URL')}
-        /> : null}
+        /></View> : null}
       </View>
     );
   }

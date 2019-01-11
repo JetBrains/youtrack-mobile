@@ -26,7 +26,7 @@ export default StyleSheet.create({
     backgroundColor: COLOR_GRAY
   },
   attachesContainer: {
-    marginTop: 0,
+    marginTop: UNIT * 2,
     marginBottom: UNIT,
     marginLeft: UNIT * 2,
     marginRight: UNIT * 2

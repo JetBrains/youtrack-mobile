@@ -64,54 +64,71 @@ export default class SingleIssueActivities extends Component<Props, void> {
     onCopyCommentLink: () => {}
   };
 
-  static renderSingleValueHistoryChange(event: Object) {
+  _renderSingleValueHistoryChange(event: Object, timestamp) {
     const removed = getActivityHistorySingleValue(event, true);
     const added = getActivityHistorySingleValue(event);
     return (
-      <Text key={event.id}>
-        <Text style={styles.activityLabel}>{getActivityHistoryLabel(event)}</Text>
+      <View key={event.id}>
+        <View style={styles.row}>
+          <Text style={{flex: 1}}>
+            <Text style={styles.activityLabel}>{getActivityHistoryLabel(event)}</Text>
+            <Text>
+              <Text style={removed && !added ? styles.activityRemoved : null}>
+                {removed}
+              </Text>
+              {Boolean(removed && added) && <Text> → </Text>}
+              <Text>{added}</Text>
+            </Text>
+          </Text>
+          {this._renderTimestamp(timestamp)}
+        </View>
 
-        <Text style={removed && !added ? styles.activityRemoved : null}>
-          {removed}
-        </Text>
-        {removed && added ? <Text> → </Text> : null}
-        {added}
-      </Text>
+      </View>
     );
   }
 
-  static renderLinkHistoryChange(event: Object) {
+  _renderLinkHistoryChange(event: Object, timestamp) {
     const linkedIssue = event.added[0] || event.removed[0];
     return (
-      <TouchableOpacity key={event.id} >
-        <Text>
+      <TouchableOpacity key={event.id}>
+        <View style={styles.row}>
           <Text style={styles.activityLabel}>{getActivityHistoryLabel(event)}</Text>
-          <Text style={event.removed[0] ? styles.activityRemoved : null} onPress={
-            () => Router.SingleIssue({issueId: linkedIssue.idReadable})}>
-            <Text style={styles.linkText}>
-              {linkedIssue.idReadable}
-            </Text>
-            {` ${ linkedIssue.summary}`}
+          {this._renderTimestamp(timestamp)}
+        </View>
+
+        <Text style={[
+          {lineHeight: 18, marginTop: 2},
+          event.removed[0] ? styles.activityRemoved : null
+        ]} onPress={
+          () => Router.SingleIssue({issueId: linkedIssue.idReadable})}>
+          <Text style={styles.linkText}>
+            {linkedIssue.idReadable}
           </Text>
+          {` ${ linkedIssue.summary}`}
         </Text>
       </TouchableOpacity>
     );
   }
 
-  _renderAttachmentHistoryChange(event: Object) {
-    const removed = getActivityHistorySingleValue(event, true);
+  _renderAttachmentHistoryChange(event: Object, timestamp) {
+    const removed = event.removed || [];
+    const added = event.added || [];
+    const addedAndLaterRemoved = added.filter(it => !it.url);
+    let addedAndAvailable = added.filter(it => it.url);
 
-    let added = event.added || [];
-    if (added.length) {
-      added = ApiHelper.convertRelativeUrls(added, 'url', this.props.backendUrl);
+    if (addedAndAvailable.length) {
+      addedAndAvailable = ApiHelper.convertRelativeUrls(addedAndAvailable, 'url', this.props.backendUrl);
     }
 
     return (
       <View key={event.id}>
-        <Text style={styles.activityLabel}>{getActivityHistoryLabel(event)}</Text>
+        <View style={styles.row}>
+          <Text style={styles.activityLabel}>{getActivityHistoryLabel(event)}</Text>
+          {this._renderTimestamp(timestamp)}
+        </View>
 
-        {added.length && <AttachmentsRow
-          attachments={added}
+        {addedAndAvailable.length > 0 && <AttachmentsRow
+          attachments={addedAndAvailable}
           attachingImage={null}
           imageHeaders={getApi().auth.getAuthorizationHeaders()}
           onImageLoadingError={err => log.warn('onImageLoadingError', err.nativeEvent)}
@@ -119,8 +136,15 @@ export default class SingleIssueActivities extends Component<Props, void> {
             usage.trackEvent(CATEGORY_NAME, type === 'image' ? 'Showing image' : 'Open attachment by URL')
           )}
         />}
+        {addedAndLaterRemoved.length > 0 && addedAndLaterRemoved.map(it => <Text key={it.id}>{it.name}</Text>)}
 
-        {Boolean(removed) && <Text style={styles.activityRemoved}>{removed}</Text>}
+        {removed.length > 0 && <Text>{event.removed.map((it, index) =>
+          <Text key={it.id}>
+            {index > 0 && ', '}
+            <Text style={styles.activityRemoved}>{it.name}</Text>
+          </Text>
+        )}
+        </Text>}
       </View>
     );
   }
@@ -163,15 +187,15 @@ export default class SingleIssueActivities extends Component<Props, void> {
     );
   }
 
-  _renderActivityByCategory = (activity) => {
+  _renderActivityByCategory = (activity, timestamp) => {
     if (isActivityCategory.tag(activity) || isActivityCategory.customField(activity)) {
-      return SingleIssueActivities.renderSingleValueHistoryChange(activity);
+      return this._renderSingleValueHistoryChange(activity, timestamp);
     }
     if (isActivityCategory.link(activity)) {
-      return SingleIssueActivities.renderLinkHistoryChange(activity);
+      return this._renderLinkHistoryChange(activity, timestamp);
     }
     if (isActivityCategory.attachment(activity)) {
-      return this._renderAttachmentHistoryChange(activity);
+      return this._renderAttachmentHistoryChange(activity, timestamp);
     }
   };
 
@@ -189,50 +213,32 @@ export default class SingleIssueActivities extends Component<Props, void> {
   }
 
   _renderUserAvatar(activityGroup: Object) {
-    if (!activityGroup.merged) {
+    return (
+      <Avatar
+        userName={getEntityPresentation(activityGroup.author)}
+        size={40}
+        source={{uri: activityGroup.author.avatarUrl}}
+      />
+    );
+  }
+
+  _renderTimestamp(timestamp) {
+    if (timestamp) {
       return (
-        <Avatar
-          userName={getEntityPresentation(activityGroup.author)}
-          size={40}
-          source={{uri: activityGroup.author.avatarUrl}}
-        />
+        <Text style={styles.activityTimestamp}>
+          {' '}{relativeDate(timestamp)}
+        </Text>
       );
     }
   }
 
-  _renderTimestamp(timestamp: Date) {
-    return (
-      <Text style={styles.activityTimestamp}>
-        {' '}{relativeDate(timestamp)}
-      </Text>
-    );
-  }
-
   _renderUserInfo(activityGroup: Object) {
     return (
-      <Text style={styles.activityAuthor}>
-        {!activityGroup.merged
-          ? <Text style={styles.activityAuthorName}>
-            {getEntityPresentation(activityGroup.author)}
-          </Text>
-          : null}
-        {this._renderTimestamp(activityGroup.timestamp)}
-      </Text>
-    );
-  }
-
-  _renderContent(activityGroup: Object) {
-    return (
-      <View>
-        {activityGroup.comment ? this._renderComment(activityGroup.comment.added[0]) : null}
-
-        {activityGroup.events.length
-          ? <View
-            style={activityGroup.comment ? styles.activityRelatedChanges : styles.activityHistoryChanges}>
-            {activityGroup.events.map(this._renderActivityByCategory)}
-          </View>
-          : null
-        }
+      <View style={[styles.row, styles.activityAuthor]}>
+        <Text style={styles.activityAuthorName}>
+          {getEntityPresentation(activityGroup.author)}
+        </Text>
+        <Text style={styles.alignedRight}>{this._renderTimestamp(activityGroup.timestamp)}</Text>
       </View>
     );
   }
@@ -243,7 +249,7 @@ export default class SingleIssueActivities extends Component<Props, void> {
     const activities = createActivitiesModel(groupedActivities);
 
     return (
-      <View style={styles.activities}>
+      <View>
         {activities.length
           ? activities.map((activityGroup, index) => {
             if (activityGroup.hidden) {
@@ -255,17 +261,31 @@ export default class SingleIssueActivities extends Component<Props, void> {
                 styles.activity,
                 activityGroup.merged ? styles.mergedActivity : null
               ]}>
-                {this._renderUserAvatar(activityGroup)}
+                {!activityGroup.merged && this._renderUserAvatar(activityGroup)}
 
                 <View style={styles.activityItem}>
-                  {this._renderUserInfo(activityGroup)}
-                  {this._renderContent(activityGroup)}
+                  {!activityGroup.merged && this._renderUserInfo(activityGroup)}
+
+                  <View>
+                    <View
+                      style={styles.activityChange}>{activityGroup.comment ? this._renderComment(activityGroup.comment.added[0]) : null}</View>
+
+                    {activityGroup.events.length > 0 &&
+                    <View style={activityGroup.comment ? styles.activityRelatedChanges : styles.activityHistoryChanges}>
+                      {activityGroup.events.map((event) => (
+                        <View key={event.id} style={styles.activityChange}>
+                          {this._renderActivityByCategory(event, activityGroup.merged && activityGroup.timestamp)}
+                        </View>
+                      ))}
+                    </View>}
+                  </View>
+
                 </View>
 
               </View>
             );
           })
-          : <Text style={{textAlign: 'center'}}>No activity yet</Text>}
+          : <Text style={[styles.activityChange, {textAlign: 'center'}]}>No activity yet</Text>}
       </View>
     );
   }

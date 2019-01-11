@@ -76,6 +76,9 @@ export default StyleSheet.create({
   },
   description: {
   },
+  attachments: {
+    marginTop: UNIT * 2,
+  },
   commentsListContainer: {
     paddingBottom: UNIT * 6
   },
@@ -228,9 +231,14 @@ export default StyleSheet.create({
     width: 28
   },
 
-  activities: {
-    marginTop: UNIT
+  row: {
+    flexDirection: 'row',
+    flex: 1
   },
+  alignedRight: {
+    textAlign: 'right'
+  },
+
   activity: {
     flexDirection: 'row',
     paddingTop: UNIT * 4,
@@ -238,19 +246,19 @@ export default StyleSheet.create({
     paddingRight: UNIT,
   },
   mergedActivity: {
-    paddingTop: 0,
     marginBottom: 0,
-    marginLeft: UNIT * 5
+    marginLeft: UNIT * 5,
+    paddingTop: 0
   },
   activityAuthor: {
-    marginTop: UNIT,
-    marginBottom: UNIT / 2
+    flexDirection: 'row'
   },
   activityItem: {
     flex: 1,
     marginLeft: UNIT,
   },
   activityAuthorName: {
+    flex: 1,
     color: COLOR_FONT,
     fontWeight: 'bold'
   },
@@ -258,12 +266,14 @@ export default StyleSheet.create({
     color: COLOR_FONT_GRAY,
   },
   activityLabel: {
+    flex: 1,
     color: COLOR_FONT_GRAY
   },
   activityRelatedChanges: {
+    flex: 1,
     paddingTop: UNIT ,
     paddingRight: UNIT ,
-    paddingBottom: UNIT ,
+    paddingBottom: UNIT * 2,
     marginTop: UNIT * 2,
     marginRight: -1 * UNIT,
     borderTopWidth: 1,
@@ -273,8 +283,11 @@ export default StyleSheet.create({
     lineHeight: 14
   },
   activityHistoryChanges: {
-    lineHeight: 14
-
+    flex: 1,
+    lineHeight: 14,
+  },
+  activityChange: {
+    marginTop: UNIT,
   },
   activityRemoved: {
     textDecorationLine: 'line-through'

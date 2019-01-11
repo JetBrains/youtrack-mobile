@@ -102,14 +102,6 @@ export default class AttachmentsRow extends Component<Props, void> {
       >
 
         {attachments.map(attach => {
-          if (!attach.url) {
-            return (
-              <View key={attach.id} style={[styles.attachmentImage, styles.attachmentFile]}>
-                <Text>{attach.name}</Text>
-              </View>
-            );
-          }
-
           const isImage = attach.mimeType ? attach.mimeType.includes('image') : true;
           const isAttachingImage = attachingImage === attach;
           const url = attach.id ? `${attach.url}&w=${imageWidth}&h=${imageHeight}` : attach.url;
