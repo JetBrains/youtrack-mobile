@@ -396,7 +396,7 @@ export function initializeApp(config: AppConfigFilled) {
 
       await dispatch(initializeAuth(config));
     } catch (error) {
-      log.warn('App failed to initialize auth. Will try to reload config.', error);
+      log.log('App failed to initialize auth. Will try to reload config.', error);
       let reloadedConfig;
       try {
         reloadedConfig = await loadConfig(config.backendUrl);
