@@ -30,6 +30,8 @@ import {getApi} from '../../components/api/api__instance';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import ApiHelper from '../../components/api/api__helper';
 
+import {UNIT} from '../../components/variables/variables';
+
 const CATEGORY_NAME = 'Issue Stream';
 
 type Props = {
@@ -123,7 +125,7 @@ export default class SingleIssueActivities extends Component<Props, void> {
     return (
       <View key={event.id}>
         <View style={styles.row}>
-          <Text style={styles.activityLabel}>{getActivityHistoryLabel(event)}</Text>
+          <Text style={[styles.activityLabel, {paddingBottom: UNIT / 2}]}>{getActivityHistoryLabel(event)}</Text>
           {this._renderTimestamp(timestamp)}
         </View>
 
