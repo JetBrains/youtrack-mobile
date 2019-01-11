@@ -157,7 +157,9 @@ export default createReducer(initialState, {
   [types.RECEIVE_UPDATED_COMMENT]: (state: State, action: {comment: IssueComment}): State => {
     const {comment} = action;
     const activityPage = (state.activityPage || []).map(activity => {
-      activity.added = activity.added.map(it => it.id === comment.id ? comment : it);
+      if (Array.isArray(activity.added)) {
+        activity.added = activity.added.map(it => it.id === comment.id ? comment : it);
+      }
       return activity;
     });
 
