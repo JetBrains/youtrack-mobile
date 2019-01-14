@@ -104,25 +104,21 @@ export const mergeActivities = (activities: Array<Object>) => {
 
     const inB = arrayToMap(B);
 
-    A = A.filter(function (a) {
-      return inB[a.id] ? !(delete inB[a.id]) : a;
-    });
+    A = A.filter(a => inB[a.id] ? !(delete inB[a.id]) : a);
 
     B = mapToArray(inB);
     return [A, B];
   }
 
   function arrayToMap(items) {
-    return items.reduce(function (map, item) {
+    return items.reduce((map, item) => {
       map[item.id] = item;
       return map;
     }, {});
   }
 
   function mapToArray(map) {
-    return Object.keys(map).map(function (id) {
-      return map[id];
-    });
+    return Object.keys(map).map(id => map[id]);
   }
 };
 

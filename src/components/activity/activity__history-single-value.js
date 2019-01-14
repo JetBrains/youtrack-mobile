@@ -115,9 +115,9 @@ function getEmptyFieldValue(activity) {
     return NO_VALUE;
   }
 
-  const foundFields = (activity.target.fields || []).filter(function (issueField) { //TODO: check that here we got all issue fields in target!!!
-    return issueField.projectCustomField.field.id === prototypeId;
-  });
+  const foundFields = (activity.target.fields || []).filter( //TODO: check that here we got all issue fields in target!!!
+    issueField => issueField.projectCustomField.field.id === prototypeId
+  );
   if (foundFields.length && foundFields[0].projectCustomField.emptyFieldText) {
     return {
       presentation: foundFields[0].projectCustomField.emptyFieldText
@@ -164,11 +164,11 @@ function minutesToPeriodFieldValuePresentation(minutes, fullPeriodPresentation) 
 
   const periodToPresentation = function (period, fullPeriodPresentation) {
     const timeIdentifiers = {minutes: 'm', hours: 'h', days: 'd', weeks: 'w', asArray: ['w', 'd', 'h', 'm']};
-    const getPeriodPartPresentation = function (value, id) {
-      return value + (fullPeriodPresentation ? ` ${ getPeriodLocalizedName(value, id) } ` : id);
-    };
+    const getPeriodPartPresentation = (value, id) => (
+      value + (fullPeriodPresentation ? ` ${ getPeriodLocalizedName(value, id) } ` : id)
+    );
 
-    const periodPresentationArray = timeIdentifiers.asArray.map(function (timeIntervalId, index) {
+    const periodPresentationArray = timeIdentifiers.asArray.map((timeIntervalId, index) => {
       const timeIntervalValue = period.asArray[index];
       if (timeIntervalValue > 0) {
         return getPeriodPartPresentation(timeIntervalValue, timeIntervalId);

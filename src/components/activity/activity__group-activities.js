@@ -7,7 +7,7 @@ const IDLE_TIME = 60 * 1000;
 export const groupActivities = (activities: Array<Object>, params: Object) => {
   params = params || {};
 
-  return (activities || []).reduce(function (groups: Array<Object>, activity: Object, activityIndex) {
+  return (activities || []).reduce((groups: Array<Object>, activity: Object, activityIndex) => {
     let group = last(groups);
 
     if (

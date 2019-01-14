@@ -2,10 +2,10 @@
 import ResourceTypes from '../api/api__resource-types';
 import {Activity, isActivityCategory} from './activity__category';
 
-export const createActivitiesModel = function (activityGroups: Array<Object>) {
+export const createActivitiesModel = (activityGroups: Array<Object>) => {
 
   const activities = getStream(activityGroups)
-    .map(function (streamGroup) {
+    .map(streamGroup => {
       streamGroup.events = streamGroup.events.sort(sortByCategory);
       return streamGroup;
     });
@@ -16,7 +16,7 @@ export const createActivitiesModel = function (activityGroups: Array<Object>) {
 
 
   function getStream(activityGroups) {
-    const createGroup = function (event, timestamp, authorGroup) {
+    const createGroup = (event, timestamp, authorGroup) => {
       const streamGroup = {
         $type: ResourceTypes.EVENT_GROUP,
         timestamp: timestamp,
@@ -51,15 +51,13 @@ export const createActivitiesModel = function (activityGroups: Array<Object>) {
 
     const streamDataModel = [];
 
-    const filterOutUnnecessaryEvents = function (event) {
-      return (
-        !isActivityCategory.voters(event) &&
-        !isActivityCategory.totalVotes(event) &&
-        !isActivityCategory.commentText(event)
-      );
-    };
+    const filterOutUnnecessaryEvents = (event) => (
+      !isActivityCategory.voters(event) &&
+      !isActivityCategory.totalVotes(event) &&
+      !isActivityCategory.commentText(event)
+    );
 
-    activityGroups.forEach(function (rawGroup) {
+    activityGroups.forEach(rawGroup => {
       let currentGroup;
       rawGroup.events = rawGroup.events.filter(filterOutUnnecessaryEvents);
       const events = rawGroup.events;
@@ -70,7 +68,7 @@ export const createActivitiesModel = function (activityGroups: Array<Object>) {
 
       let historyChanges = [];
       let isFirst = true;
-      events.forEach(function (event) {
+      events.forEach((event) => {
         if (
           isActivityCategory.comment(event) ||
           isActivityCategory.work(event) ||
@@ -201,9 +199,9 @@ export const createActivitiesModel = function (activityGroups: Array<Object>) {
       return streamGroup;
     }
 
-    let attachmentEvents = streamGroup.events.filter(function (event) {
-      return isActivityCategory.attachment(event);
-    });
+    let attachmentEvents = streamGroup.events.filter(
+      (event) => isActivityCategory.attachment(event)
+    );
 
     if (!attachmentEvents.length) {
       return streamGroup;
@@ -226,7 +224,7 @@ export const createActivitiesModel = function (activityGroups: Array<Object>) {
     if (attachmentEvents.length) {
       const reversedAttachEvents = attachmentEvents.slice(0).reverse();
       const mergedAttachEvent = reversedAttachEvents.pop();
-      reversedAttachEvents.forEach(function (event) {
+      reversedAttachEvents.forEach(event => {
         mergedAttachEvent.added = mergedAttachEvent.added.concat(event.added);
         mergedAttachEvent.removed = mergedAttachEvent.removed.concat(event.removed);
       });
@@ -239,16 +237,14 @@ export const createActivitiesModel = function (activityGroups: Array<Object>) {
   function removeAddEventsAboutCommentAttachments(comment, attachEvents) {
     const attachments = comment.attachments;
     if (attachments && attachments.length) {
-      const idsMap = attachments.filter(function (attachment) {
-        return !attachment.removed;
-      }).reduce(function (idsMap, attachment) {
-        idsMap[attachment.id] = true;
-        return idsMap;
-      }, {});
-      return attachEvents.filter(function (activity) {
-        return (attachEvents.removed && attachEvents.removed.length)
-          || !idsMap[activity.target.id];
-      });
+      const idsMap = attachments
+        .filter(attachment => !attachment.removed)
+        .reduce((idsMap, attachment) => {
+          idsMap[attachment.id] = true;
+          return idsMap;
+        }, {});
+      return attachEvents.filter(activity => (attachEvents.removed && attachEvents.removed.length)
+        || !idsMap[activity.target.id]);
     }
 
     return attachEvents;
