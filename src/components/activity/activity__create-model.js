@@ -2,18 +2,13 @@
 import ResourceTypes from '../api/api__resource-types';
 import {Activity, isActivityCategory} from './activity__category';
 
-const WORK_ICON = 'sand-watch';
-const VCS_ICON = 'vcs';
-const HISTORY_ICON = 'history-change';
-
 export const createActivitiesModel = function (activityGroups: Array<Object>) {
 
   const activities = getStream(activityGroups)
     .map(function (streamGroup) {
       streamGroup.events = streamGroup.events.sort(sortByCategory);
       return streamGroup;
-    })
-    .map(addIconByType);
+    });
 
   return addMergeMetaDataToActivities(
     removeHiddenActivities(activities)
@@ -36,12 +31,10 @@ export const createActivitiesModel = function (activityGroups: Array<Object>) {
 
       switch (true) {
       case isActivityCategory.work(event):
-        event.icon = WORK_ICON;
         streamGroup.work = event;
         streamGroup.key = Activity.Source.WORK_ITEM;
         break;
       case isActivityCategory.vcs(event):
-        event.icon = VCS_ICON;
         streamGroup.vcs = event;
         streamGroup.key = Activity.Source.VCS;
         break;
@@ -259,26 +252,6 @@ export const createActivitiesModel = function (activityGroups: Array<Object>) {
     }
 
     return attachEvents;
-  }
-
-  function addIconByType(group) {
-    let type = null;
-    for (let i = 0; i < group.events.length; i++) {
-      const event = group.events[i];
-      if (type !== event.category.$type) {
-        if (isActivityCategory.work(event)) {
-          event.icon = WORK_ICON;
-        }
-        if (isActivityCategory.vcs(event)) {
-          event.icon = VCS_ICON;
-        } else {
-          event.icon = HISTORY_ICON;
-          break;
-        }
-        type = event.category.$type;
-      }
-    }
-    return group;
   }
 };
 
