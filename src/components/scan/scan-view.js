@@ -5,7 +5,10 @@ import {View, Text, TouchableOpacity, Modal, DeviceEventEmitter} from 'react-nat
 import getTopPadding from '../header/header__top-padding';
 import styles from '../debug-view/debug-view.styles';
 import {closeScanView} from '../../actions/app-actions';
+
+// $FlowFixMe: cannot make type check `react-native-camera` module because of mistakes there
 import {RNCamera} from 'react-native-camera';
+
 import Router from '../router/router';
 import {applyCommand} from '../../views/single-issue/single-issue-actions';
 import {

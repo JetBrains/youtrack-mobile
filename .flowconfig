@@ -19,6 +19,7 @@
 .*/node_modules/react-native-tab-view/.*
 .*/node_modules/art/.*
 .*/node_modules/editions/
+.*/node_modules/react-native-camera/.*
 
 ; Ignore unexpected extra "@providesModule"
 .*/node_modules/.*/node_modules/fbjs/.*
