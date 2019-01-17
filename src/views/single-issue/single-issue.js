@@ -35,7 +35,6 @@ import IssueVisibility from '../../components/issue-visibility/issue-visibility'
 
 import {activityCategory} from '../../components/activity/activity__category';
 import SingleIssueActivities from './single-issue__activities';
-import {checkDev, checkVersion} from '../../components/feature/feature';
 import OpenScanButton from '../../components/scan/open-scan-button';
 
 const CATEGORY_NAME = 'Issue';
@@ -51,7 +50,6 @@ type SingleIssueProps = SingleIssueState & typeof issueActions & AdditionalProps
 
 class SingeIssueView extends Component<SingleIssueProps, void> {
   toolbarNode: Object;
-  activitiesEnabled: boolean = false;
 
   static contextTypes = {
     actionSheet: PropTypes.func
@@ -63,19 +61,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     await this.props.setIssueId(this.props.issueId);
 
     this.props.loadIssue();
-
-    this.activitiesEnabled = checkVersion('2018.3') && checkDev();
-    if (this.activitiesEnabled) {
-      this.props.loadActivitiesPage([
-        activityCategory.COMMENT,
-        activityCategory.ATTACHMENTS,
-        activityCategory.CUSTOM_FIELD,
-        activityCategory.TAGS,
-        activityCategory.LINKS,
-      ]);
-    } else {
-      this.props.loadIssueComments();
-    }
+    this.props.loadIssueActivities();
   }
 
   _canAddComment() {
@@ -302,7 +288,8 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     const {
       issue,
       copyCommentUrl, openNestedIssueView, issuePermissions,
-      startEditingComment, deleteComment, restoreComment, deleteCommentPermanently
+      startEditingComment, deleteComment, restoreComment, deleteCommentPermanently,
+      activitiesEnabled
     } = this.props;
 
     return (
@@ -329,7 +316,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
           onRestoreComment={restoreComment}
           onDeleteCommentPermanently={deleteCommentPermanently}
 
-          activitiesEnabled={this.activitiesEnabled}
+          activitiesEnabled={activitiesEnabled}
         />
       </View>
     );
@@ -371,19 +358,19 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
       onOpenCommentVisibilitySelect,
       isSelectOpen,
 
+      activitiesEnabled,
       activityLoaded,
       activitiesLoadingError
     } = this.props;
 
     const isSecured = !!editingComment && IssueVisibility.isSecured(editingComment.visibility);
-
     const activityLoading = {
-      error: () => this.activitiesEnabled ? activitiesLoadingError : commentsLoadingError,
-      success: () => this.activitiesEnabled ? activityLoaded : commentsLoaded,
+      error: () => activitiesEnabled ? activitiesLoadingError : commentsLoadingError,
+      success: () => activitiesEnabled ? activityLoaded : commentsLoaded,
     };
     const showLoading = () => (!issueLoaded || !activityLoading.success()) && !activityLoading.error();
     const isActivityLoaded = () => issueLoaded && activityLoading.success();
-    const activitySources = this.activitiesEnabled ? [activityCategory.COMMENT] : null;
+    const activitySources = activitiesEnabled ? [activityCategory.COMMENT] : null;
 
     return (
       <View style={styles.container} testID="issue-view">
@@ -413,7 +400,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
 
           {
             isActivityLoaded()
-              ? (this.activitiesEnabled ? this._renderActivities() : this._renderComments())
+              ? (activitiesEnabled ? this._renderActivities() : this._renderComments())
               : null
           }
 

@@ -35,6 +35,7 @@ export type State = {
   activityLoaded: boolean,
   activityPage: Array<Object>,
   activitiesLoadingError: ?Error,
+  activitiesEnabled: boolean
 };
 
 export const initialState: State = {
@@ -67,6 +68,7 @@ export const initialState: State = {
   activityLoaded: false,
   activityPage: [],
   activitiesLoadingError: null,
+  activitiesEnabled: false
 };
 
 export default createReducer(initialState, {
@@ -360,5 +362,8 @@ export default createReducer(initialState, {
       activityPage: activityPage,
       activitiesLoadingError: null
     };
-  }
+  },
+  [types.RECEIVE_ACTIVITY_API_AVAILABILITY]: (state: State, action: Object): State => {
+    return {...state, activitiesEnabled: action.activitiesEnabled};
+  },
 });

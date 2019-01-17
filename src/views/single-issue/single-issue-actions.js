@@ -15,6 +15,8 @@ import type Api from '../../components/api/api';
 import type {State as SingleIssueState} from './single-issue-reducers';
 import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
+import {activityCategory} from '../../components/activity/activity__category';
+import {checkDev, checkVersion} from '../../components/feature/feature';
 
 const CATEGORY_NAME = 'Issue';
 
@@ -39,6 +41,10 @@ export function receiveIssue(issue: IssueFull) {
 
 export function receiveComments(comments: Array<IssueComment>) {
   return {type: types.RECEIVE_COMMENTS, comments};
+}
+
+export function receiveActivityAPIAvailability(activitiesEnabled: boolean) {
+  return {type: types.RECEIVE_ACTIVITY_API_AVAILABILITY, activitiesEnabled};
 }
 
 export function receiveActivityPage(activityPage: Array<Object>) {
@@ -197,13 +203,21 @@ export function loadIssueComments() {
   };
 }
 
-export function loadActivitiesPage(sources: Array<string>) {
+export function loadActivitiesPage(sources: ?Array<string>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().singleIssue.issueId;
     const api: Api = getApi();
 
+    const categories = sources || [ //TODO: should be loaded from a user profile settings
+      activityCategory.COMMENT,
+      activityCategory.ATTACHMENTS,
+      activityCategory.CUSTOM_FIELD,
+      activityCategory.TAGS,
+      activityCategory.LINKS,
+    ];
+
     try {
-      const activityPage = await api.issue.getActivitiesPage(issueId, sources);
+      const activityPage = await api.issue.getActivitiesPage(issueId, categories);
       dispatch(receiveActivityPage(activityPage));
     } catch (error) {
       dispatch({type: types.RECEIVE_ACTIVITY_ERROR, error: error});
@@ -237,13 +251,23 @@ export function loadIssue() {
   };
 }
 
+export function loadIssueActivities() {
+  return async (dispatch: (any) => any) => {
+    const activitiesAPIEnabled = checkVersion('2018.3') && checkDev();
+    await dispatch(receiveActivityAPIAvailability(activitiesAPIEnabled));
+
+    const loadActivities = activitiesAPIEnabled ? loadActivitiesPage : loadIssueComments;
+    await dispatch(loadActivities());
+  };
+}
+
 export function refreshIssue() {
   return async (dispatch: (any) => any, getState: StateGetter) => {
     dispatch(startIssueRefreshing());
     log.debug(`About to refresh issue "${getState().singleIssue.issueId}"`);
     await Promise.all([
       await dispatch(loadIssue()),
-      await dispatch(loadIssueComments())
+      await dispatch(loadIssueActivities())
     ]);
     log.debug(`Issue "${getState().singleIssue.issueId}" has been refreshed`);
     dispatch(stopIssueRefreshing());
