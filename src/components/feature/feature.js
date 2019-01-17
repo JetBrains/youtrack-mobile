@@ -3,7 +3,7 @@
 
 import {PureComponent} from 'react';
 import {getApi} from '../api/api__instance';
-import connect from 'react-redux/es/connect/connect';
+import {connect} from 'react-redux';
 
 type Props = {
   devOnly?: boolean,

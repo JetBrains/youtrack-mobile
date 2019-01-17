@@ -5,7 +5,7 @@ import {Image, TouchableOpacity} from 'react-native';
 import styles from '../debug-view/debug-view.styles';
 import {qrCode} from '../icon/icon';
 import {openScanView} from '../../actions/app-actions';
-import connect from 'react-redux/es/connect/connect';
+import {connect} from 'react-redux';
 
 type Props = {
   show: Function
