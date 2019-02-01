@@ -142,7 +142,9 @@ export class LogIn extends Component<Props, State> {
             returnKeyType="done"
             underlineColorAndroid="transparent"
             value={this.state.password}
-            onSubmitEditing={() => this.logInViaCredentials()}
+            onSubmitEditing={() => {
+              this.logInViaCredentials();
+            }}
             secureTextEntry={true}
             onChangeText={(password) => this.setState({password})}/>
 

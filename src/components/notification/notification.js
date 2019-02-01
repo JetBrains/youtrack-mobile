@@ -29,7 +29,7 @@ export const extractErrorMessage = function (err: Object | string): string {
   return values.join('. ');
 };
 
-export async function resolveError (err: Object) {
+export async function resolveError (err: Object): Promise<Object> {
   if (err.json) {
     try {
       return await err.json();

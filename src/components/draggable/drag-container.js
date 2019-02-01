@@ -74,15 +74,15 @@ class DragContainer extends React.Component<Props, State> {
   _point: ?{x: number, y: number} = null;
   _offset: ?{x: number, y: number} = null;
   _locked: boolean = false;
-  _panResponder: PanResponder;
+  _panResponder: Object;
 
   state = {
     location: new Animated.ValueXY(),
     draggingComponent: null
   };
 
-  dropZones = [];
-  draggables = [];
+  dropZones: Array<Object> = [];
+  draggables: Array<Object> = [];
 
   constructor(props: Props) {
     super(props);

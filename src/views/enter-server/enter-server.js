@@ -146,7 +146,9 @@ export class EnterServer extends Component<Props, State> {
             returnKeyType="done"
             keyboardType="url"
             underlineColorAndroid="transparent"
-            onSubmitEditing={() => this.onApplyServerUrlChange()}
+            onSubmitEditing={() => {
+              this.onApplyServerUrlChange();
+            }}
             value={this.state.serverUrl}
             onChangeText={(serverUrl) => this.setState({serverUrl})}/>
 

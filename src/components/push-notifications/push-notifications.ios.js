@@ -32,7 +32,7 @@ NotificationsIOS.addEventListener('notificationOpened', notification => {
   Router.SingleIssue({issueId: ytIssueId});
 });
 
-export function registerForPush(api: Api) {
+export function registerForPush(api: Api): Promise<void> {
   return new Promise(async (resolve, reject) => {
     /**
      * First we ask YT for token and exit if YT does not support PUSH notifications
@@ -53,7 +53,7 @@ export function registerForPush(api: Api) {
     /**
      * Then we register for push notifications with this token
      */
-    async function onRegister(deviceToken) {
+    async function onRegister(deviceToken): Promise<void> {
       NotificationsIOS.removeEventListener('remoteNotificationsRegistered', onRegister);
       try {
         const url = `${KONNECTOR_URL}/ring/pushNotifications`;
@@ -77,7 +77,7 @@ export function registerForPush(api: Api) {
   });
 }
 
-export async function unregisterForPushNotifications(api: Api) {
+export async function unregisterForPushNotifications(api: Api): Promise<void> {
   log.info('Unsubscribing from push notifications...');
   const url = `${KONNECTOR_URL}/ring/pushNotifications/unsubscribe`;
   await api.makeAuthorizedRequest(url, 'POST', {appleDeviceId: appleDeviceToken});

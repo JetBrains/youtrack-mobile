@@ -36,7 +36,7 @@ type ChangeValue = {
 type ChangeEvent = {
   multiValue: boolean,
   entityId: string,
-  category?: 'COMMENT' | 'CUSTOM_FIELD' | 'SPRINT' | 'SUMMARY',
+  category?: 'COMMENT' | 'CUSTOM_FIELD' | 'SPRINT' | 'SUMMARY' | 'DESCRIPTION',
   name: String,
   addedValues: Array<ChangeValue>,
   removedValues: Array<ChangeValue>

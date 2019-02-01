@@ -97,7 +97,9 @@ export default class CommandDialog extends Component<Props, State> {
           autoCapitalize="none"
           value={input}
           editable={!isApplying}
-          onSubmitEditing={() => canApply && this.onApply()}
+          onSubmitEditing={() => {
+            canApply && this.onApply();
+          }}
           onChangeText={text => this.setState({input: text})}
           onSelectionChange = {event => this.onSearch(input, event.nativeEvent.selection.start)}
         />

@@ -226,7 +226,9 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     return <RefreshControl
       refreshing={this.props.isRefreshing}
       tintColor={COLOR_PINK}
-      onRefresh={this.props.refreshIssue}
+      onRefresh={() => {
+        this.props.refreshIssue();
+      }}
     />;
   }
 
