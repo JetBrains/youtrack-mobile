@@ -2,8 +2,11 @@
 import {StatusBarIOS, NativeModules, Dimensions} from 'react-native';
 
 const {StatusBarManager} = NativeModules;
-export const isIphoneX = Dimensions.get('window').height === 812;
-const HEIGHT_WITH_BAR = isIphoneX ? 40 : 32;
+const X_XS_SIZE = 812;
+const XS_MAX_XR_SIZE = 896;
+export const isIphoneX = [X_XS_SIZE, XS_MAX_XR_SIZE].includes(Dimensions.get('window').height);
+
+const HEIGHT_WITH_BAR = isIphoneX ? 48 : 32;
 const HEIGHT_WITHOUT_BAR = 12;
 
 let height = HEIGHT_WITH_BAR;
