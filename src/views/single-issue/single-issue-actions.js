@@ -16,7 +16,7 @@ import type {State as SingleIssueState} from './single-issue-reducers';
 import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
 import {activityCategory} from '../../components/activity/activity__category';
-import {checkDev, checkVersion} from '../../components/feature/feature';
+import {checkVersion} from '../../components/feature/feature';
 
 const CATEGORY_NAME = 'Issue';
 
@@ -253,7 +253,7 @@ export function loadIssue() {
 
 export function loadIssueActivities() {
   return async (dispatch: (any) => any) => {
-    const activitiesAPIEnabled = checkVersion('2018.3') && checkDev();
+    const activitiesAPIEnabled = checkVersion('2018.3');
     await dispatch(receiveActivityAPIAvailability(activitiesAPIEnabled));
 
     const loadActivities = activitiesAPIEnabled ? loadActivitiesPage : loadIssueComments;
