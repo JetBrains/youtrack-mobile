@@ -45,7 +45,17 @@ const ISSUE_ACTIVITIES_FIELDS = toField([
       'linkId',
       'id',
       'presentation',
-      'customField(id,fieldType(isMultiValue,valueType))'
+      {
+        customField: [
+          'id',
+          {
+            fieldType: [
+              'isMultiValue',
+              'valueType'
+            ]
+          }
+        ]
+      }
     ],
     added: [
       ISSUE_PROJECT_FIELDS,
