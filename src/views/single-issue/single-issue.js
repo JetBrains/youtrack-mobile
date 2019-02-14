@@ -33,7 +33,6 @@ import type {IssueComment} from '../../flow/CustomFields';
 import Select from '../../components/select/select';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
 
-import {activityCategory} from '../../components/activity/activity__category';
 import SingleIssueActivities from './single-issue__activities';
 import OpenScanButton from '../../components/scan/open-scan-button';
 
@@ -372,7 +371,6 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     };
     const showLoading = () => (!issueLoaded || !activityLoading.success()) && !activityLoading.error();
     const isActivityLoaded = () => issueLoaded && activityLoading.success();
-    const activitySources = activitiesEnabled ? [activityCategory.COMMENT] : null;
 
     return (
       <View style={styles.container} testID="issue-view">
@@ -415,7 +413,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
             onBlur={hideCommentInput}
             initialText={commentText}
             onChangeText={setCommentText}
-            onSubmitComment={comment => addOrEditComment(comment, activitySources)}
+            onSubmitComment={comment => addOrEditComment(comment)}
 
             onCancelEditing={stopEditingComment}
             editingComment={editingComment}

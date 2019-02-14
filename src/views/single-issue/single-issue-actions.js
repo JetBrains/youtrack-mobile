@@ -203,12 +203,12 @@ export function loadIssueComments() {
   };
 }
 
-export function loadActivitiesPage(sources: ?Array<string>) {
+export function loadActivitiesPage() {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().singleIssue.issueId;
     const api: Api = getApi();
 
-    const categories = sources || [ //TODO: should be loaded from a user profile settings
+    const categories = [ //TODO: should be loaded from a user profile settings
       activityCategory.COMMENT,
       activityCategory.ATTACHMENTS,
       activityCategory.CUSTOM_FIELD,
@@ -251,9 +251,13 @@ export function loadIssue() {
   };
 }
 
+export function isActivitiesAPIEnabled() {
+  return checkVersion('2018.3');
+}
+
 export function loadIssueActivities() {
   return async (dispatch: (any) => any) => {
-    const activitiesAPIEnabled = checkVersion('2018.3');
+    const activitiesAPIEnabled = isActivitiesAPIEnabled();
     await dispatch(receiveActivityAPIAvailability(activitiesAPIEnabled));
 
     const loadActivities = activitiesAPIEnabled ? loadActivitiesPage : loadIssueComments;
@@ -300,7 +304,7 @@ export function saveIssueSummaryAndDescriptionChange() {
   };
 }
 
-export function addComment(comment: Object, sources: ?Array<string>) {
+export function addComment(comment: Object) {
   return async (
     dispatch: any => any,
     getState: StateGetter,
@@ -317,8 +321,8 @@ export function addComment(comment: Object, sources: ?Array<string>) {
       dispatch(receiveComment(createdComment));
       dispatch(hideCommentInput());
 
-      if (sources) {
-        dispatch(loadActivitiesPage(sources));
+      if (isActivitiesAPIEnabled()) {
+        dispatch(loadActivitiesPage());
       } else {
         dispatch(loadIssueComments());
       }
@@ -370,13 +374,13 @@ export function submitEditedComment(comment: IssueComment) {
   };
 }
 
-export function addOrEditComment(comment: IssueComment, sources: ?Array<string>) {
+export function addOrEditComment(comment: IssueComment) {
   return async (dispatch: (any) => any, getState: StateGetter) => {
     const editingComment = getState().singleIssue.editingComment;
     if (editingComment) {
       dispatch(submitEditedComment({...editingComment, ...comment}));
     } else {
-      dispatch(addComment(comment, sources));
+      dispatch(addComment(comment));
     }
   };
 }
