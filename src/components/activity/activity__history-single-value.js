@@ -63,11 +63,9 @@ export default function getActivityHistorySingleValue(event: Object, isRemovedEv
       value.presentation = minutesToPeriodFieldValuePresentation(eventValue);
       break;
     case SIMPLE_CUSTOM_FIELDS_TYPES.date:
-      // value.presentation = getDatePresentation(eventValue); //TODO
       value.presentation = formatDate(eventValue.timestamp);
       break;
     case SIMPLE_CUSTOM_FIELDS_TYPES.dateTime:
-      // value.presentation = getDateTimePresentation(eventValue); //TODO
       value.presentation = formatDate(eventValue.timestamp);
       break;
     }
