@@ -514,6 +514,7 @@ export function updateIssueFieldValue(field: CustomField, value: FieldValue) {
       await updateMethod(issue.id, field.id, value);
       log.info('Field value updated', field, value);
       await dispatch(loadIssue());
+      await dispatch(loadIssueActivities());
       dispatch(issueUpdated(getState().singleIssue.issue));
     } catch (err) {
       const error = await resolveError(err);
