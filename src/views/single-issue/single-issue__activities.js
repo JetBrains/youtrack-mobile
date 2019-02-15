@@ -134,6 +134,7 @@ export default class SingleIssueActivities extends Component<Props, void> {
     const added = event.added || [];
     const addedAndLaterRemoved = added.filter(it => !it.url);
     let addedAndAvailable = added.filter(it => it.url);
+    const hasAddedAttachments = addedAndAvailable.length > 0;
 
     if (addedAndAvailable.length) {
       addedAndAvailable = ApiHelper.convertRelativeUrls(addedAndAvailable, 'url', this.props.backendUrl);
@@ -146,7 +147,7 @@ export default class SingleIssueActivities extends Component<Props, void> {
           {this._renderTimestamp(timestamp)}
         </View>
 
-        {addedAndAvailable.length > 0 && <AttachmentsRow
+        {hasAddedAttachments && <AttachmentsRow
           attachments={addedAndAvailable}
           attachingImage={null}
           imageHeaders={getApi().auth.getAuthorizationHeaders()}
@@ -157,7 +158,7 @@ export default class SingleIssueActivities extends Component<Props, void> {
         />}
         {addedAndLaterRemoved.length > 0 && addedAndLaterRemoved.map(it => <Text key={it.id}>{it.name}</Text>)}
 
-        {removed.length > 0 && <Text>{event.removed.map((it, index) =>
+        {removed.length > 0 && <Text style={hasAddedAttachments && {marginTop: UNIT / 2}}>{event.removed.map((it, index) =>
           <Text key={it.id}>
             {index > 0 && ', '}
             <Text style={styles.activityRemoved}>{it.name}</Text>
