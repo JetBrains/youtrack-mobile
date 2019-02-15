@@ -58,10 +58,10 @@ export function getTextValueChange(event: Object, isRemovedValue: boolean = fals
       value.presentation = minutesToPeriodFieldValuePresentation(eventValue);
       break;
     case SIMPLE_CUSTOM_FIELDS_TYPES.date:
-      value.presentation = formatDate(eventValue.timestamp);
+      value.presentation = formatDate(eventValue);
       break;
     case SIMPLE_CUSTOM_FIELDS_TYPES.dateTime:
-      value.presentation = formatDate(eventValue.timestamp);
+      value.presentation = formatDate(eventValue);
       break;
     }
   }
@@ -102,10 +102,10 @@ function getEmptyFieldValue(activity) {
   return NO_VALUE;
 }
 
-function getProjectPresentation(data: Object) {
-  const issuePresentation = getReadableID(data);
+function getProjectPresentation(value: Object) {
+  const issuePresentation = getReadableID(value);
   if (issuePresentation) {
-    return `${data.project.name }, ${ issuePresentation}`;
+    return `${value.project.name }, ${ issuePresentation}`;
   }
   return '';
 }

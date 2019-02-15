@@ -72,7 +72,7 @@ function findIssueField(issue: AnyIssue, predicate: (field: CustomField) => bool
 }
 
 function getPriotityField(issue: AnyIssue): ?CustomField {
-  const PRIORITY_FIELDS = ['Priority', 'Priorities', 'Приоритет'];
+  const PRIORITY_FIELDS = ['Priority', 'Priorities', 'Приоритет']; //TODO(xi-eye): this should use only `name` field prop
   const SUPPORTED_TYPES = [
     'jetbrains.charisma.customfields.complex.enumeration.MultiEnumIssueCustomField',
     'jetbrains.charisma.customfields.complex.enumeration.SingleEnumIssueCustomField'
