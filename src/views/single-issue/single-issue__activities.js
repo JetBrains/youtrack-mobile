@@ -104,24 +104,27 @@ export default class SingleIssueActivities extends Component<Props, void> {
   }
 
   _renderLinkChange(event: Object, timestamp) {
-    const linkedIssue = event.added[0] || event.removed[0];
+    const linkedIssues = [].concat(event.added).concat(event.removed);
     return (
       <TouchableOpacity key={event.id}>
         <View style={styles.row}>
           <Text style={styles.activityLabel}>{getHistoryLabel(event)}</Text>
           {this._renderTimestamp(timestamp)}
         </View>
-
-        <Text style={[
-          {lineHeight: 18, marginTop: 2},
-          event.removed[0] ? styles.activityRemoved : null
-        ]} onPress={
-          () => Router.SingleIssue({issueId: linkedIssue.idReadable})}>
-          <Text style={styles.linkText}>
-            {linkedIssue.idReadable}
-          </Text>
-          {` ${ linkedIssue.summary}`}
-        </Text>
+        {
+          linkedIssues.map((linkedIssue) => (
+            <Text key={linkedIssue.id} style={[
+              {lineHeight: 18, marginTop: 2},
+              linkedIssue.resolved && styles.activityRemoved
+            ]} onPress={
+              () => Router.SingleIssue({issueId: linkedIssue.idReadable})}>
+              <Text style={styles.linkText}>
+                {linkedIssue.idReadable}
+              </Text>
+              {` ${ linkedIssue.summary}`}
+            </Text>
+          ))
+        }
       </TouchableOpacity>
     );
   }
