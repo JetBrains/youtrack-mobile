@@ -206,7 +206,11 @@ export default class SingleIssueActivities extends Component<Props, void> {
   _renderActivityByCategory = (activity, timestamp) => {
     let renderedData = null;
     switch (true) {
-    case Boolean(isActivityCategory.tag(activity) || isActivityCategory.customField(activity)):
+    case Boolean(
+      isActivityCategory.tag(activity) ||
+      isActivityCategory.customField(activity) ||
+      isActivityCategory.sprint(activity)
+    ):
       renderedData = this._renderTextValueChange(activity, timestamp);
       break;
     case Boolean(isActivityCategory.link(activity)):
