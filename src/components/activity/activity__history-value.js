@@ -3,7 +3,7 @@
 import {isActivityCategory} from './activity__category';
 import {relativeDate, getReadableID, formatDate, getEntityPresentation} from '../issue-formatter/issue-formatter';
 
-export function getTextValueChange(event: Object, isRemovedValue: boolean = false): string {
+export function getTextValueChange(event: Object, issueFields: Array<Object>, isRemovedValue: boolean = false): string {
   if (!event) {
     return '';
   }
@@ -11,7 +11,7 @@ export function getTextValueChange(event: Object, isRemovedValue: boolean = fals
   const eventValue = isRemovedValue ? event.removed : event.added;
 
   if (!eventValue) {
-    return getEmptyFieldValue(event).presentation;
+    return getEmptyFieldValue(event, issueFields).presentation;
   }
 
   const eventField = event.field;
@@ -76,22 +76,22 @@ function getSimpleCustomFieldType(customField) {
   return fieldType && fieldType.valueType;
 }
 
-function getEmptyFieldValue(activity) {
+function getEmptyFieldValue(activity, issueFields) {
   const NO_VALUE = {
     presentation: 'None'
   };
-  const LOST_EMPTYactivity = {
+  const LOST_EMPTY_VALUE = {
     presentation: '[Empty value]'
   };
   if (!activity.field) {
-    return LOST_EMPTYactivity;
+    return LOST_EMPTY_VALUE;
   }
   const prototypeId = (activity.field.customField || {}).id;
   if (!prototypeId) {
     return NO_VALUE;
   }
 
-  const foundFields = (activity.target.fields || []).filter( //TODO: check that here we got all issue fields in target!!!
+  const foundFields = (issueFields || []).filter(
     issueField => issueField.projectCustomField.field.id === prototypeId
   );
   if (foundFields.length && foundFields[0].projectCustomField.emptyFieldText) {

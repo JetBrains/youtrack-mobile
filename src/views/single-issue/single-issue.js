@@ -260,6 +260,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     return (
       <View style={styles.commentsListContainer}>
         <SingleIssueActivities
+          issueFields={issue.fields}
           activityPage={activityPage}
           attachments={issue.attachments}
           imageHeaders={getApi().auth.getAuthorizationHeaders()}

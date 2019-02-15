@@ -35,6 +35,7 @@ import {COLOR_FONT_GRAY, UNIT} from '../../components/variables/variables';
 const CATEGORY_NAME = 'Issue Stream';
 
 type Props = {
+  issueFields: Array<Object>,
   activityPage: Array<Object>,
   attachments: Array<Attachment>,
   imageHeaders: ?Object,
@@ -79,10 +80,10 @@ export default class SingleIssueActivities extends Component<Props, void> {
     return false;
   }
 
-  _renderTextValueChange(activity: Object, timestamp) {
+  _renderTextValueChange(activity: Object, timestamp, issueFields: Array<Object>) {
     const isMultiValue = this._isMultiValueActivity(activity);
-    const removed = getTextValueChange(activity, true);
-    const added = getTextValueChange(activity);
+    const removed = getTextValueChange(activity, issueFields, true);
+    const added = getTextValueChange(activity, issueFields);
     return (
       <View key={activity.id}>
         <View style={styles.row}>
@@ -217,7 +218,7 @@ export default class SingleIssueActivities extends Component<Props, void> {
       isActivityCategory.sprint(activity) ||
       isActivityCategory.work(activity)
     ):
-      renderedData = this._renderTextValueChange(activity, timestamp);
+      renderedData = this._renderTextValueChange(activity, timestamp, this.props.issueFields);
       break;
     case Boolean(isActivityCategory.link(activity)):
       renderedData = this._renderLinkChange(activity, timestamp);
