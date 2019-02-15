@@ -30,7 +30,7 @@ import {getApi} from '../../components/api/api__instance';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import ApiHelper from '../../components/api/api__helper';
 
-import {UNIT} from '../../components/variables/variables';
+import {COLOR_FONT_GRAY, UNIT} from '../../components/variables/variables';
 
 const CATEGORY_NAME = 'Issue Stream';
 
@@ -113,15 +113,16 @@ export default class SingleIssueActivities extends Component<Props, void> {
         </View>
         {
           linkedIssues.map((linkedIssue) => (
-            <Text key={linkedIssue.id} style={[
-              {lineHeight: 18, marginTop: 2},
-              linkedIssue.resolved && styles.activityRemoved
-            ]} onPress={
-              () => Router.SingleIssue({issueId: linkedIssue.idReadable})}>
-              <Text style={styles.linkText}>
+            <Text key={linkedIssue.id} style={{lineHeight: UNIT * 2.5, marginTop: UNIT / 4}}
+              onPress={() => Router.SingleIssue({issueId: linkedIssue.idReadable})}>
+              <Text style={[
+                styles.linkText,
+                linkedIssue.resolved && {color: COLOR_FONT_GRAY},
+                linkedIssue.resolved && styles.activityRemoved
+              ]}>
                 {linkedIssue.idReadable}
               </Text>
-              {` ${ linkedIssue.summary}`}
+              {`  ${ linkedIssue.summary}`}
             </Text>
           ))
         }
