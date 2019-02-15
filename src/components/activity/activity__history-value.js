@@ -3,13 +3,12 @@
 import {isActivityCategory} from './activity__category';
 import {relativeDate, getReadableID, formatDate, getEntityPresentation} from '../issue-formatter/issue-formatter';
 
-
-export default function getActivityHistorySingleValue(event: Object, isRemovedEventValue: boolean = false): string {
+export function getTextValueChange(event: Object, isRemovedValue: boolean = false): string {
   if (!event) {
     return '';
   }
 
-  const eventValue = isRemovedEventValue ? event.removed : event.added;
+  const eventValue = isRemovedValue ? event.removed : event.added;
 
   if (!eventValue) {
     return getEmptyFieldValue(event).presentation;
@@ -19,24 +18,20 @@ export default function getActivityHistorySingleValue(event: Object, isRemovedEv
   const value = {
     presentation: eventValue
   };
-  const types = getTypes(event);
 
-  switch(true) {
-  case types.project:
+  switch (true) {
+  case isActivityCategory.project(event):
     value.presentation = getProjectPresentation(eventValue);
     break;
-  case types.link:
-    value.presentation = getLinkPresentation(eventValue);
-    break;
-  case types.date:
+  case isActivityCategory.date(event):
     value.presentation = relativeDate(eventValue);
     break;
-  case types.attachment || types.tag:
+  case isActivityCategory.attachment(event) || isActivityCategory.tag(event):
     value.presentation = eventValue;
     break;
   }
 
-  if (eventField && types.customField) {
+  if (eventField && isActivityCategory.customField(event)) {
     const simpleCustomFieldType = getSimpleCustomFieldType(eventField.customField);
     setSimpleCustomFieldPresentationByType(simpleCustomFieldType, value);
   }
@@ -73,23 +68,6 @@ export default function getActivityHistorySingleValue(event: Object, isRemovedEv
 
 }
 
-function getTypes(activity: Object): Object {
-  return {
-    attachment: isActivityCategory.attachment(activity),
-    comment: isActivityCategory.comment(activity),
-    link: isActivityCategory.link(activity),
-    tag: isActivityCategory.tag(activity),
-    summary: isActivityCategory.summary(activity),
-    description: isActivityCategory.description(activity),
-    sprint: isActivityCategory.sprint(activity),
-    date: isActivityCategory.date(activity),
-    project: isActivityCategory.project(activity),
-    customField: isActivityCategory.customField(activity),
-    work: isActivityCategory.work(activity),
-    visibility: isActivityCategory.visibility(activity)
-  };
-}
-
 function getSimpleCustomFieldType(customField) {
   if (!customField) {
     return null;
@@ -102,11 +80,11 @@ function getEmptyFieldValue(activity) {
   const NO_VALUE = {
     presentation: 'None'
   };
-  const LOST_EMPTY_VALUE = {
+  const LOST_EMPTYactivity = {
     presentation: '[Empty value]'
   };
   if (!activity.field) {
-    return LOST_EMPTY_VALUE;
+    return LOST_EMPTYactivity;
   }
   const prototypeId = (activity.field.customField || {}).id;
   if (!prototypeId) {
@@ -130,14 +108,6 @@ function getProjectPresentation(data: Object) {
     return `${data.project.name }, ${ issuePresentation}`;
   }
   return '';
-}
-
-function getLinkPresentation(data) {
-  const issuePresentation = getReadableID(data);
-  if (issuePresentation) {
-    return `${issuePresentation }: ${ data.summary}`;
-  }
-  return data.summary;
 }
 
 function minutesToPeriodFieldValuePresentation(minutes, fullPeriodPresentation) {

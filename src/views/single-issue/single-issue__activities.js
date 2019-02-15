@@ -17,8 +17,8 @@ import {mergeActivities} from '../../components/activity/activity__merge-activit
 import {groupActivities} from '../../components/activity/activity__group-activities';
 import {createActivitiesModel} from '../../components/activity/activity__create-model';
 
-import getActivityHistoryLabel from '../../components/activity/activity__history-label';
-import getActivityHistorySingleValue from '../../components/activity/activity__history-single-value';
+import getHistoryLabel from '../../components/activity/activity__history-label';
+import {getTextValueChange} from '../../components/activity/activity__history-value';
 
 import Avatar from '../../components/avatar/avatar';
 
@@ -66,19 +66,33 @@ export default class SingleIssueActivities extends Component<Props, void> {
     onCopyCommentLink: () => {}
   };
 
-  _renderSingleValueHistoryChange(event: Object, timestamp) {
-    const removed = getActivityHistorySingleValue(event, true);
-    const added = getActivityHistorySingleValue(event);
+  _isMultiValueActivity(activity: Object) {
+    if (isActivityCategory.customField(activity)) {
+      const field = activity.field;
+      return field.customField && field.customField.fieldType && field.customField.fieldType.isMultiValue;
+    }
+
+    if (activity.added && activity.added.length > 1 || activity.removed && activity.removed.length > 1) {
+      return true;
+    }
+
+    return false;
+  }
+
+  _renderTextValueChange(activity: Object, timestamp) {
+    const isMultiValue = this._isMultiValueActivity(activity);
+    const removed = getTextValueChange(activity, true);
+    const added = getTextValueChange(activity);
     return (
-      <View key={event.id}>
+      <View key={activity.id}>
         <View style={styles.row}>
           <Text style={{flex: 1}}>
-            <Text style={styles.activityLabel}>{getActivityHistoryLabel(event)}</Text>
+            <Text style={styles.activityLabel}>{getHistoryLabel(activity)}</Text>
             <Text>
-              <Text style={removed && !added ? styles.activityRemoved : null}>
+              <Text style={isMultiValue || removed && !added ? styles.activityRemoved : null}>
                 {removed}
               </Text>
-              {Boolean(removed && added) && <Text> → </Text>}
+              {Boolean(removed && added) && (isMultiValue ? ', ' : <Text> → </Text>)}
               <Text>{added}</Text>
             </Text>
           </Text>
@@ -89,12 +103,12 @@ export default class SingleIssueActivities extends Component<Props, void> {
     );
   }
 
-  _renderLinkHistoryChange(event: Object, timestamp) {
+  _renderLinkChange(event: Object, timestamp) {
     const linkedIssue = event.added[0] || event.removed[0];
     return (
       <TouchableOpacity key={event.id}>
         <View style={styles.row}>
-          <Text style={styles.activityLabel}>{getActivityHistoryLabel(event)}</Text>
+          <Text style={styles.activityLabel}>{getHistoryLabel(event)}</Text>
           {this._renderTimestamp(timestamp)}
         </View>
 
@@ -112,7 +126,7 @@ export default class SingleIssueActivities extends Component<Props, void> {
     );
   }
 
-  _renderAttachmentHistoryChange(event: Object, timestamp) {
+  _renderAttachmentChange(event: Object, timestamp) {
     const removed = event.removed || [];
     const added = event.added || [];
     const addedAndLaterRemoved = added.filter(it => !it.url);
@@ -125,7 +139,7 @@ export default class SingleIssueActivities extends Component<Props, void> {
     return (
       <View key={event.id}>
         <View style={styles.row}>
-          <Text style={[styles.activityLabel, {paddingBottom: UNIT / 2}]}>{getActivityHistoryLabel(event)}</Text>
+          <Text style={[styles.activityLabel, {paddingBottom: UNIT / 2}]}>{getHistoryLabel(event)}</Text>
           {this._renderTimestamp(timestamp)}
         </View>
 
@@ -190,15 +204,19 @@ export default class SingleIssueActivities extends Component<Props, void> {
   }
 
   _renderActivityByCategory = (activity, timestamp) => {
-    if (isActivityCategory.tag(activity) || isActivityCategory.customField(activity)) {
-      return this._renderSingleValueHistoryChange(activity, timestamp);
+    let renderedData = null;
+    switch (true) {
+    case Boolean(isActivityCategory.tag(activity) || isActivityCategory.customField(activity)):
+      renderedData = this._renderTextValueChange(activity, timestamp);
+      break;
+    case Boolean(isActivityCategory.link(activity)):
+      renderedData = this._renderLinkChange(activity, timestamp);
+      break;
+    case Boolean(isActivityCategory.attachment(activity)):
+      renderedData = this._renderAttachmentChange(activity, timestamp);
+      break;
     }
-    if (isActivityCategory.link(activity)) {
-      return this._renderLinkHistoryChange(activity, timestamp);
-    }
-    if (isActivityCategory.attachment(activity)) {
-      return this._renderAttachmentHistoryChange(activity, timestamp);
-    }
+    return renderedData;
   };
 
   _processActivities(activities) {

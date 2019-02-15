@@ -1,6 +1,6 @@
 /* @flow */
 
-export default function getActivityHistoryLabel(event: Object) {
+export default function getHistoryLabel(event: Object) {
   return formatLabel(getEventPresentation(event));
 }
 
