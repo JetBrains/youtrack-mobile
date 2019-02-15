@@ -96,7 +96,7 @@ export default class SingleIssueActivities extends Component<Props, void> {
               <Text>{added}</Text>
             </Text>
           </Text>
-          {this._renderTimestamp(timestamp)}
+          {this._renderTimestamp(timestamp, styles.alignedRight)}
         </View>
 
       </View>
@@ -109,7 +109,7 @@ export default class SingleIssueActivities extends Component<Props, void> {
       <TouchableOpacity key={event.id}>
         <View style={styles.row}>
           <Text style={styles.activityLabel}>{getHistoryLabel(event)}</Text>
-          {this._renderTimestamp(timestamp)}
+          {this._renderTimestamp(timestamp, styles.alignedRight)}
         </View>
         {
           linkedIssues.map((linkedIssue) => (
@@ -145,7 +145,7 @@ export default class SingleIssueActivities extends Component<Props, void> {
       <View key={event.id}>
         <View style={styles.row}>
           <Text style={[styles.activityLabel, {paddingBottom: UNIT / 2}]}>{getHistoryLabel(event)}</Text>
-          {this._renderTimestamp(timestamp)}
+          {this._renderTimestamp(timestamp, styles.alignedRight)}
         </View>
 
         {hasAddedAttachments && <AttachmentsRow
@@ -252,10 +252,10 @@ export default class SingleIssueActivities extends Component<Props, void> {
     );
   }
 
-  _renderTimestamp(timestamp) {
+  _renderTimestamp(timestamp, style) {
     if (timestamp) {
       return (
-        <Text style={styles.activityTimestamp}>
+        <Text style={[styles.activityTimestamp, style]}>
           {' '}{relativeDate(timestamp)}
         </Text>
       );
@@ -289,6 +289,7 @@ export default class SingleIssueActivities extends Component<Props, void> {
             return (
               <View key={`${activityGroup.timestamp}-${index}`} style={[
                 styles.activity,
+                index === 0 && styles.activityFirstItem,
                 activityGroup.merged ? styles.mergedActivity : null
               ]}>
                 {!activityGroup.merged && this._renderUserAvatar(activityGroup)}

@@ -236,7 +236,8 @@ export default StyleSheet.create({
     flex: 1
   },
   alignedRight: {
-    textAlign: 'right'
+    textAlign: 'right',
+    marginRight: UNIT
   },
 
   activity: {
@@ -244,6 +245,9 @@ export default StyleSheet.create({
     paddingTop: UNIT * 4,
     paddingLeft: UNIT,
     paddingRight: UNIT,
+  },
+  activityFirstItem: {
+    paddingTop: UNIT * 2
   },
   mergedActivity: {
     marginBottom: 0,
