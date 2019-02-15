@@ -209,7 +209,8 @@ export default class SingleIssueActivities extends Component<Props, void> {
     case Boolean(
       isActivityCategory.tag(activity) ||
       isActivityCategory.customField(activity) ||
-      isActivityCategory.sprint(activity)
+      isActivityCategory.sprint(activity) ||
+      isActivityCategory.work(activity)
     ):
       renderedData = this._renderTextValueChange(activity, timestamp);
       break;

@@ -214,7 +214,8 @@ export function loadActivitiesPage() {
       activityCategory.CUSTOM_FIELD,
       activityCategory.TAGS,
       activityCategory.LINKS,
-      activityCategory.SPRINT
+      activityCategory.SPRINT,
+      activityCategory.WORK_ITEM
     ];
 
     try {
