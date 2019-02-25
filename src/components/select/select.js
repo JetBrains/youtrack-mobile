@@ -23,7 +23,8 @@ export type Props = {
   multi: boolean,
   autoFocus: boolean,
   emptyValue: ?string,
-  style?: any
+  style?: any,
+  noFilter?: boolean
 };
 
 type State = {
@@ -38,7 +39,8 @@ export default class Select extends Component<Props, State> {
   static defaultProps = {
     placeholder: 'Search item',
     autoFocus: false,
-    onChangeSelection: (items: Array<Object>) => null
+    onChangeSelection: (items: Array<Object>) => null,
+    noFilter: false
   };
 
   constructor() {
@@ -159,13 +161,13 @@ export default class Select extends Component<Props, State> {
   }
 
   render() {
-    const {multi, autoFocus, style, placeholder, onCancel} = this.props;
+    const {multi, autoFocus, style, placeholder, onCancel, noFilter} = this.props;
 
     const paddingTop = isIphoneX ? (getTopPadding() - UNIT) : (getTopPadding() - UNIT * 2);
 
     return (
       <View style={[styles.container, style, {paddingTop}]}>
-        <View style={styles.inputWrapper}>
+        {!noFilter && <View style={styles.inputWrapper}>
           <TextInput
             placeholder={placeholder}
             keyboardAppearance="dark"
@@ -184,7 +186,7 @@ export default class Select extends Component<Props, State> {
           <TouchableOpacity style={styles.cancelButton} onPress={onCancel}>
             <Text style={styles.cancelButtonText}>Cancel</Text>
           </TouchableOpacity>
-        </View>
+        </View>}
         <ScrollView keyboardShouldPersistTaps="handled"
           keyboardDismissMode="on-drag">
           {this._renderEmptyValueItem()}
