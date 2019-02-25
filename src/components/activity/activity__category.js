@@ -34,9 +34,6 @@ export const activityCategory = {
   WORK_ITEM_DATE: 'WorkItemDateCategory',
   WORK_ITEM_AUTHOR: 'WorkItemAuthorCategory',
 
-  VCS_CHANGE: 'VcsChangeCategory',
-  VCS_CHANGE_STATE: 'VcsChangeStateCategory',
-
   VOTERS: 'VotersCategory',
   TOTAL_VOTES: 'TotalVotesCategory',
 
@@ -47,7 +44,7 @@ export const activityCategory = {
 export const Activity = [
   ['COMMENT', 'IssueComments', [
     activityCategory.COMMENT
-  ]],
+  ], 'Show comments'],
   ['HISTORY', 'IssueHistory', [
     activityCategory.ATTACHMENTS,
     activityCategory.ATTACHMENT_RENAME,
@@ -61,29 +58,25 @@ export const Activity = [
     activityCategory.SPRINT,
     activityCategory.SUMMARY,
     activityCategory.TAGS
-  ]],
+  ], 'History'],
   ['WORK_ITEM', 'TimeTracking', [
     activityCategory.WORK_ITEM
-  ]],
-  ['VCS', 'IssueVcs', [
-    activityCategory.VCS_CHANGE
-  ]]
+  ], 'Work']
 ].reduce(function(Activity, source) {
   const sourceName = source[0];
   const sourceKey = source[1];
   const activityCategories = source[2];
+  const presentation = source[3];
 
   Activity.Source[sourceName] = sourceKey;
+  Activity.CategoryPresentation[sourceKey] = presentation;
   Activity.ActivityCategories[sourceKey] = activityCategories;
 
-  activityCategories.forEach(function(categoryId) {
-    Activity.sourceKeyByCategoryId[categoryId] = sourceKey;
-  });
   return Activity;
 }, {
   Source: {},
-  sourceKeyByCategoryId: {},
-  ActivityCategories: {}
+  ActivityCategories: {},
+  CategoryPresentation: {}
 });
 
 
@@ -97,11 +90,9 @@ isActivityCategory.comment = isActivityCategory(activityCategory.COMMENT);
 isActivityCategory.attachment = isActivityCategory(activityCategory.ATTACHMENTS);
 isActivityCategory.issueCreated = isActivityCategory(activityCategory.ISSUE_CREATED);
 isActivityCategory.work = isActivityCategory(activityCategory.WORK_ITEM);
-isActivityCategory.vcs = isActivityCategory(activityCategory.VCS_CHANGE);
 isActivityCategory.voters = isActivityCategory(activityCategory.VOTERS);
 isActivityCategory.totalVotes = isActivityCategory(activityCategory.TOTAL_VOTES);
 isActivityCategory.commentText = isActivityCategory(activityCategory.COMMENT_TEXT);
-
 isActivityCategory.customField = isActivityCategory(activityCategory.CUSTOM_FIELD);
 isActivityCategory.date = isActivityCategory(activityCategory.ISSUE_RESOLVED);
 isActivityCategory.link = isActivityCategory(activityCategory.LINKS);

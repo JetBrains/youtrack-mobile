@@ -5,6 +5,10 @@ import sinon from 'sinon';
 import * as actions from './single-issue-actions';
 import * as types from './single-issue-action-types';
 
+import {AsyncStorage as MockedStorage} from 'react-native';
+import * as storage from '../../components/storage/storage';
+import {Activity} from '../../components/activity/activity__category';
+
 let fakeApi;
 const getApi = () => fakeApi;
 const ISSUE_ID = 'test-id';
@@ -15,6 +19,7 @@ describe('Issue view actions', () => {
   let store;
   let fakeIssue;
   let fakeComment;
+  let sandbox;
 
   beforeEach(() => {
     fakeIssue = {
@@ -74,11 +79,42 @@ describe('Issue view actions', () => {
     expect(dispatched[3]).toEqual({type: types.STOP_SUBMITTING_COMMENT});
   });
 
-  it('should load issue activities', async () => {
-    await store.dispatch(actions.loadActivitiesPage([]));
 
-    const dispatched = store.getActions();
-    fakeApi.issue.getActivitiesPage.should.have.been.calledWith(ISSUE_ID);
-    expect(dispatched[0]).toEqual({type: types.RECEIVE_ACTIVITY_PAGE, activityPage: []});
+  describe('Activities', function () {
+    const issueCommentsSelectedTypeMock = 'IssueComments';
+    const issueActivityEnabledTypesMock = [{
+      id: issueCommentsSelectedTypeMock,
+      name: 'Show comments'
+    }];
+
+    beforeEach(async () => {
+      sandbox = sinon.sandbox.create();
+      sandbox.stub(MockedStorage, 'multiGet').returns(Promise.resolve([
+        ['YT_ISSUE_ACTIVITIES_ENABLED_TYPES', issueActivityEnabledTypesMock],
+      ]));
+      await storage.populateStorage();
+    });
+
+    it('should load issue activities', async () => {
+      await store.dispatch(actions.loadActivitiesPage([]));
+
+      const dispatched = store.getActions();
+      const categories = Activity.ActivityCategories[issueCommentsSelectedTypeMock];
+
+      fakeApi.issue.getActivitiesPage.should.have.been.calledWith(ISSUE_ID, categories);
+
+      expect(dispatched[0]).toEqual({
+        type: types.RECEIVE_ACTIVITY_CATEGORIES,
+
+        issueActivityTypes: actions.getIssueActivityAllTypes(),
+        issueActivityEnabledTypes: issueActivityEnabledTypesMock
+      });
+
+      expect(dispatched[1]).toEqual({
+        type: types.RECEIVE_ACTIVITY_PAGE,
+        activityPage: []
+      });
+    });
+
   });
 });

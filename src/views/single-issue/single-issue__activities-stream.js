@@ -317,7 +317,7 @@ export default class SingleIssueActivities extends Component<Props, void> {
               </View>
             );
           })
-          : <Text style={[styles.activityChange, {textAlign: 'center'}]}>No activity yet</Text>}
+          : <Text style={[styles.activityChange, {textAlign: 'center', marginTop: UNIT * 5}]}>No activity yet</Text>}
       </View>
     );
   }

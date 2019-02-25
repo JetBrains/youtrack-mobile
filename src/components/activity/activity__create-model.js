@@ -34,10 +34,6 @@ export const createActivitiesModel = (activityGroups: Array<Object>) => {
         streamGroup.work = event;
         streamGroup.key = Activity.Source.WORK_ITEM;
         break;
-      case isActivityCategory.vcs(event):
-        streamGroup.vcs = event;
-        streamGroup.key = Activity.Source.VCS;
-        break;
       case isActivityCategory.comment(event):
         streamGroup.comment = event;
         streamGroup.key = Activity.Source.COMMENT;
@@ -71,8 +67,7 @@ export const createActivitiesModel = (activityGroups: Array<Object>) => {
       events.forEach((event) => {
         if (
           isActivityCategory.comment(event) ||
-          isActivityCategory.work(event) ||
-          isActivityCategory.vcs(event)
+          isActivityCategory.work(event)
         ) {
           if (currentGroup && historyChanges.length && !isFirst) {
             currentGroup.events = historyChanges.slice(0);

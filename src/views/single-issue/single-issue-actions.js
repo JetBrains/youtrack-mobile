@@ -15,8 +15,9 @@ import type Api from '../../components/api/api';
 import type {State as SingleIssueState} from './single-issue-reducers';
 import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
-import {activityCategory} from '../../components/activity/activity__category';
+import {Activity} from '../../components/activity/activity__category';
 import {checkVersion} from '../../components/feature/feature';
+import {getStorageState, flushStoragePart} from '../../components/storage/storage';
 
 const CATEGORY_NAME = 'Issue';
 
@@ -203,23 +204,46 @@ export function loadIssueComments() {
   };
 }
 
+export function saveIssueActivityEnabledTypes(enabledTypes: Array<Object>) {
+  enabledTypes && flushStoragePart({issueActivitiesEnabledTypes: enabledTypes});
+}
+
+export function getIssueActivityAllTypes(): Array<Object> {
+  return Object.keys(Activity.ActivityCategories).map(
+    (key) => Object.assign({id: key, name: Activity.CategoryPresentation[key]})
+  );
+}
+
+export function getIssueActivitiesEnabledTypes() {
+  let enabledTypes = getStorageState().issueActivitiesEnabledTypes || [];
+  if (!enabledTypes.length) {
+    enabledTypes = getIssueActivityAllTypes();
+    saveIssueActivityEnabledTypes(enabledTypes);
+  }
+  return enabledTypes;
+}
+
+function getActivityCategories(categoryTypes) {
+  return (categoryTypes || []).reduce(
+    (list, category) => list.concat(Activity.ActivityCategories[category.id]), []
+  );
+}
+
 export function loadActivitiesPage() {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().singleIssue.issueId;
     const api: Api = getApi();
 
-    const categories = [ //TODO: should be loaded from a user profile settings
-      activityCategory.COMMENT,
-      activityCategory.ATTACHMENTS,
-      activityCategory.CUSTOM_FIELD,
-      activityCategory.TAGS,
-      activityCategory.LINKS,
-      activityCategory.SPRINT,
-      activityCategory.WORK_ITEM
-    ];
-
     try {
-      const activityPage = await api.issue.getActivitiesPage(issueId, categories);
+      const enabledActivityTypes = getIssueActivitiesEnabledTypes();
+      dispatch({
+        type: types.RECEIVE_ACTIVITY_CATEGORIES,
+        issueActivityTypes: getIssueActivityAllTypes(),
+        issueActivityEnabledTypes: enabledActivityTypes
+      });
+
+      const activityCategories = getActivityCategories(enabledActivityTypes);
+      const activityPage = await api.issue.getActivitiesPage(issueId, activityCategories);
       dispatch(receiveActivityPage(activityPage));
     } catch (error) {
       dispatch({type: types.RECEIVE_ACTIVITY_ERROR, error: error});

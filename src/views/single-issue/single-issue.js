@@ -33,8 +33,10 @@ import type {IssueComment} from '../../flow/CustomFields';
 import Select from '../../components/select/select';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
 
-import SingleIssueActivities from './single-issue__activities';
+import SingleIssueActivities from './single-issue__activities-stream';
 import OpenScanButton from '../../components/scan/open-scan-button';
+
+import SingleIssueActivitiesSettings from './single-issue__activities-settings';
 
 const CATEGORY_NAME = 'Issue';
 
@@ -362,7 +364,9 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
 
       activitiesEnabled,
       activityLoaded,
-      activitiesLoadingError
+      activitiesLoadingError,
+      issueActivityTypes,
+      issueActivityEnabledTypes
     } = this.props;
 
     const isSecured = !!editingComment && IssueVisibility.isSecured(editingComment.visibility);
@@ -404,6 +408,12 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
               ? (activitiesEnabled ? this._renderActivities() : this._renderComments())
               : null
           }
+          {activitiesEnabled && !addCommentMode && isActivityLoaded() &&
+          <SingleIssueActivitiesSettings
+            issueActivityTypes={issueActivityTypes}
+            issueActivityEnabledTypes={issueActivityEnabledTypes}
+            onApply={this.props.loadIssueActivities}
+          />}
 
           {Platform.OS == 'ios' && <KeyboardSpacer/>}
         </ScrollView>}

@@ -80,7 +80,7 @@ export default StyleSheet.create({
     marginTop: UNIT * 2,
   },
   commentsListContainer: {
-    paddingBottom: UNIT * 6
+    paddingBottom: UNIT * 3
   },
   commentInputWrapper: {
     backgroundColor: COLOR_BLACK,
@@ -300,8 +300,37 @@ export default StyleSheet.create({
   linkedIssue: {
     flexDirection: 'row',
   },
-
   linkText: {
     color: COLOR_LINK
-  }
+  },
+
+  settingsPanel: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0
+  },
+  settingsApplyButton: {
+    backgroundColor: COLOR_PINK,
+    padding: UNIT,
+  },
+  settingsApplyButtonText: {
+    height: 24,
+    fontSize: 20,
+    color: COLOR_FONT_ON_BLACK,
+    textAlign: 'center'
+  },
+  settingsSelect: {
+    backgroundColor: COLOR_BLACK,
+    paddingBottom: UNIT * 2
+  },
+  settingsToggle: {
+    paddingTop: UNIT,
+    paddingBottom: UNIT,
+    marginBottom: UNIT * 4
+  },
+  settingsToggleText: {
+    color: COLOR_PINK,
+    textAlign: 'center'
+  },
 });

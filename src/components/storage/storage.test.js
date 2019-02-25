@@ -43,7 +43,8 @@ describe('Storage', () => {
       'YT_IS_REGISTERED_FOR_PUSH',
       'YT_AGILE_ZOOMED_IN',
       'YT_LAST_ROUTE',
-      'YT_CURRENT_APP_VERSION'
+      'YT_CURRENT_APP_VERSION',
+      'YT_ISSUE_ACTIVITIES_ENABLED_TYPES'
     ]);
   });
 

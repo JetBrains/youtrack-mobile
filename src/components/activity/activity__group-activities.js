@@ -80,11 +80,7 @@ function containsTerminatedActivity(group: Object) {
 
 
 function isTerminated(activity: Object) {
-  return (
-    isActivityCategory.comment(activity) ||
-      isActivityCategory.issueCreated(activity) ||
-      isActivityCategory.vcs(activity)
-  );
+  return isActivityCategory.comment(activity) || isActivityCategory.issueCreated(activity);
 }
 
 
