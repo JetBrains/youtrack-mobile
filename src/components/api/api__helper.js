@@ -92,24 +92,6 @@ const API = {
     };
   },
 
-  projectFieldTypeToFieldType(projectType: string, isMultiple: boolean) {
-    const map = {
-      'jetbrains.charisma.customfields.complex.user.UserProjectCustomField' : 'jetbrains.charisma.customfields.complex.user.SingleUserIssueCustomField',
-      'jetbrains.charisma.customfields.complex.version.VersionProjectCustomField' : 'jetbrains.charisma.customfields.complex.version.SingleVersionIssueCustomField',
-      'jetbrains.charisma.customfields.complex.state.StateProjectCustomField' : 'jetbrains.charisma.customfields.complex.state.StateIssueCustomField',
-      'jetbrains.charisma.customfields.complex.ownedField.OwnedProjectCustomField' : 'jetbrains.charisma.customfields.complex.ownedField.SingleOwnedIssueCustomField',
-      'jetbrains.charisma.customfields.complex.group.GroupProjectCustomField' : 'jetbrains.charisma.customfields.complex.group.SingleGroupIssueCustomField',
-      'jetbrains.charisma.customfields.complex.enumeration.EnumProjectCustomField' : 'jetbrains.charisma.customfields.complex.enumeration.SingleEnumIssueCustomField',
-      'jetbrains.charisma.customfields.complex.build.BuildProjectCustomField' : 'jetbrains.charisma.customfields.complex.build.SingleBuildIssueCustomField'
-    };
-    let fieldType = map[projectType];
-
-    if (isMultiple) {
-      fieldType = fieldType.replace('Single', 'Multi');
-    }
-    return fieldType;
-  },
-
   getIssueId(issue: AnyIssue) {
     return `${issue.idReadable}`;
   },

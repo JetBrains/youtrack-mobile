@@ -72,12 +72,6 @@ describe('Api helper', () => {
     });
   });
 
-  describe('field types', () => {
-    it('should convert project field type to field type', () => {
-      const fieldType = ApiHelper.projectFieldTypeToFieldType('jetbrains.charisma.customfields.complex.ownedField.OwnedProjectCustomField');
-      fieldType.should.equal('jetbrains.charisma.customfields.complex.ownedField.SingleOwnedIssueCustomField');
-    });
-  });
 
   describe('relative urls converter', () => {
     it('should convert relative urls to absolute', () => {
