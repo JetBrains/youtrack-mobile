@@ -3,7 +3,7 @@ import styles from './single-issue.styles';
 import Comment from '../../components/comment/comment';
 import type {Attachment, IssueComment} from '../../flow/CustomFields';
 
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, Platform} from 'react-native';
 import React, {Component} from 'react';
 
 import {isActivityCategory} from '../../components/activity/activity__category';
@@ -93,7 +93,8 @@ export default class SingleIssueActivities extends Component<Props, void> {
               <Text style={isMultiValue || removed && !added ? styles.activityRemoved : null}>
                 {removed}
               </Text>
-              {Boolean(removed && added) && (isMultiValue ? ', ' : <Text> → </Text>)}
+              {Boolean(removed && added) && (isMultiValue ? ', ' :
+                <Text style={Platform.OS !== 'ios' && {fontSize: 24}}> {'\u2192'} </Text>)}
               <Text>{added}</Text>
             </Text>
           </Text>
