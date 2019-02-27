@@ -217,7 +217,9 @@ export default class SingleIssueActivities extends Component<Props, void> {
       isActivityCategory.tag(activity) ||
       isActivityCategory.customField(activity) ||
       isActivityCategory.sprint(activity) ||
-      isActivityCategory.work(activity)
+      isActivityCategory.work(activity) ||
+      isActivityCategory.description(activity) ||
+      isActivityCategory.summary(activity)
     ):
       renderedData = this._renderTextValueChange(activity, timestamp, this.props.issueFields);
       break;
