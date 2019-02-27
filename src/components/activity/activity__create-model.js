@@ -1,5 +1,5 @@
 /* @flow */
-import ResourceTypes from '../api/api__resource-types';
+import {ResourceTypes} from '../api/api__resource-types';
 import {Activity, isActivityCategory} from './activity__category';
 
 export const createActivitiesModel = (activityGroups: Array<Object>) => {

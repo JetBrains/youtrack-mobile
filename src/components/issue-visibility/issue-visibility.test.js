@@ -1,4 +1,4 @@
-import ResourceTypes from '../api/api__resource-types';
+import {ResourceTypes} from '../api/api__resource-types';
 import IssueVisibility from './issue-visibility';
 
 describe('IssueVisibility', function () {

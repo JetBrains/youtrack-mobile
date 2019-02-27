@@ -1,4 +1,4 @@
-const resourceTypes = {
+export const ResourceTypes = {
   ISSUE: 'jetbrains.charisma.persistent.Issue',
   ISSUE_COMMENT: 'jetbrains.charisma.persistent.IssueComment',
 
@@ -11,5 +11,3 @@ const resourceTypes = {
 
   EVENT_GROUP: 'jetbrains.youtrack.event.gaprest.ActivityItemGroup',
 };
-
-export default resourceTypes;

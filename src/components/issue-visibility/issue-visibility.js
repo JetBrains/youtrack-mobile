@@ -1,7 +1,7 @@
 /* @flow */
 
 import type {Visibility} from '../../flow/Visibility';
-import ResourceTypes from '../api/api__resource-types';
+import {ResourceTypes} from '../api/api__resource-types';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 
 export default class IssueVisibility {
