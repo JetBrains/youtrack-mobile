@@ -80,7 +80,8 @@ export default StyleSheet.create({
     marginTop: UNIT * 2,
   },
   commentsListContainer: {
-    paddingBottom: UNIT * 3
+    paddingBottom: UNIT * 3,
+    backgroundColor: COLOR_EXTRA_LIGHT_GRAY
   },
   commentInputWrapper: {
     backgroundColor: COLOR_BLACK,
