@@ -1,7 +1,7 @@
 /* @flow */
 
 import type {Visibility} from '../../flow/Visibility';
-import {ResourceTypes} from '../api/api__resource-types';
+import {ResourceTypes, addTypes} from '../api/api__resource-types';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 
 export default class IssueVisibility {
@@ -41,16 +41,17 @@ export default class IssueVisibility {
   static toggleOption(visibility: Visibility, option: Object): Object {
     const _visibility = this.visibility(visibility);
     const visibilityTypes = [
-      {type: ResourceTypes.USER, key: 'permittedUsers'},
-      {type: ResourceTypes.USER_GROUP, key: 'permittedGroups'}
+      {type: addTypes(ResourceTypes.USER), key: 'permittedUsers'},
+      {type: addTypes(ResourceTypes.USER_GROUP), key: 'permittedGroups'}
     ];
 
-    for (const it of visibilityTypes) {
-      if (option.$type === it.type) {
-        if (hasOption(_visibility[it.key], option.id)) {
-          _visibility[it.key] = _visibility[it.key].filter((user) => user.id !== option.id);
+    for (const item of visibilityTypes) {
+      const hasVisibilityType = item.type.some((it) => it === option.$type);
+      if (hasVisibilityType) {
+        if (hasOption(_visibility[item.key], option.id)) {
+          _visibility[item.key] = _visibility[item.key].filter((user) => user.id !== option.id);
         } else {
-          _visibility[it.key].push(option);
+          _visibility[item.key].push(option);
         }
         break;
       }

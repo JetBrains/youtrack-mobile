@@ -1,4 +1,4 @@
-import {ResourceTypes} from '../api/api__resource-types';
+import {ResourceTypes, getShortEntityType} from '../api/api__resource-types';
 import IssueVisibility from './issue-visibility';
 
 describe('IssueVisibility', function () {
@@ -73,6 +73,23 @@ describe('IssueVisibility', function () {
       updatedVisibility.permittedGroups.length.should.equal(0);
     });
 
+    it('should remove an item with a short $type from `permittedUsers`', () => {
+      const userMock1 = {id: 'bar'};
+      const userMock2 = {$type: ResourceTypes.USER, id: 'foo'};
+      const visibilityMock = {
+        permittedUsers: [userMock1, userMock2]
+      };
+
+      const updatedVisibility = IssueVisibility.toggleOption(
+        visibilityMock,
+        Object.assign({}, userMock2, {$type: getShortEntityType(ResourceTypes.USER)})
+      );
+
+      updatedVisibility.permittedUsers.length.should.equal(1);
+      updatedVisibility.permittedUsers[0].should.equal(userMock1);
+      updatedVisibility.permittedGroups.length.should.equal(0);
+    });
+
     it('should add an item to `permittedUsers`', () => {
       const userMock = {$type: ResourceTypes.USER, id: 'foo'};
       const visibilityMock = {
@@ -92,6 +109,23 @@ describe('IssueVisibility', function () {
       const userMock2 = {$type: ResourceTypes.USER_GROUP, id: 'foo'};
       const visibilityMock = {
         permittedGroups: [userMock1, userMock2]
+      };
+
+      const updatedVisibility = IssueVisibility.toggleOption(visibilityMock, userMock2);
+
+      updatedVisibility.permittedGroups.length.should.equal(1);
+      updatedVisibility.permittedGroups[0].should.equal(userMock1);
+      updatedVisibility.permittedUsers.length.should.equal(0);
+    });
+
+    it('should remove an item with short $type from `permittedGroup`', () => {
+      const userMock1 = {id: 'bar'};
+      const userMock2 = {$type: ResourceTypes.USER_GROUP, id: 'foo'};
+      const visibilityMock = {
+        permittedGroups: [
+          userMock1,
+          Object.assign({}, userMock2, {$type: getShortEntityType(ResourceTypes.USER_GROUP)})
+        ]
       };
 
       const updatedVisibility = IssueVisibility.toggleOption(visibilityMock, userMock2);

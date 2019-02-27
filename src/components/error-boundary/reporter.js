@@ -1,7 +1,7 @@
 /* @flow */
 import appPackage from '../../../package.json'; // eslint-disable-line import/extensions
 import log from '../log/log';
-import {ResourceTypes} from '../api/api__resource-types';
+import {ResourceTypes, getShortEntityType} from '../api/api__resource-types';
 
 const {EXCEPTION_REPORTER_TOKEN} = appPackage.config;
 
@@ -27,7 +27,7 @@ export async function reportCrash(summary: string, description: string): Promise
       description,
       project: {id: YOUTRACK_MOBILE_PROJECT_ID},
       visibility: {
-        $type: ResourceTypes.VISIBILITY_LIMITED,
+        $type: getShortEntityType( ResourceTypes.VISIBILITY_LIMITED),
         permittedGroups: [{id: YOUTRACK_MOBILE_TEAM_ID}]
       }
     })

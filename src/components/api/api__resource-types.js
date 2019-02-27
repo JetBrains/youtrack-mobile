@@ -15,8 +15,17 @@ export const ResourceTypes = {
 
 export const hasType = function(type: string) {
   return function(it: Object) {
-    return it ? it.$type === type : false;
+    return it ? it.$type === type || it.$type === getShortEntityType(type) : false;
   };
 };
 
 hasType.comment = hasType(ResourceTypes.ISSUE_COMMENT);
+
+
+export const addTypes = function(type: string) {
+  return [].concat(type).concat(getShortEntityType(type));
+};
+
+export function getShortEntityType(type) {
+  return type.split('.').pop();
+}
