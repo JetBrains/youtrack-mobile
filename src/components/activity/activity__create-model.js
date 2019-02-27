@@ -1,5 +1,5 @@
 /* @flow */
-import {ResourceTypes} from '../api/api__resource-types';
+import {ResourceTypes, hasType} from '../api/api__resource-types';
 import {Activity, isActivityCategory} from './activity__category';
 
 export const createActivitiesModel = (activityGroups: Array<Object>) => {
@@ -87,7 +87,7 @@ export const createActivitiesModel = (activityGroups: Array<Object>) => {
           currentGroup.events = currentGroup.events.concat(historyChanges);
         }
       } else {
-        if (rawGroup.category ? isActivityCategory.comment(rawGroup) : itemHasType(rawGroup, ResourceTypes.ISSUE_COMMENT)) {
+        if (isComment(rawGroup)) {
           rawGroup.comment = {...rawGroup.events[0]};
         }
         streamDataModel.push(rawGroup);
@@ -97,20 +97,17 @@ export const createActivitiesModel = (activityGroups: Array<Object>) => {
     return streamDataModel.map(mergeAttachmentEvents);
   }
 
-  function itemHasType(item, entityType): boolean {
-    if (!item) {
-      return false;
+  function isComment(rawGroup) {
+    if (rawGroup.category) {
+      return isActivityCategory.comment(rawGroup);
     }
 
-    let type;
-    if (Array.isArray(item.events) && item.events.length) {
-      const event = item.events[0];
-      type = (event.target || {}).$type;
-    } else {
-      type = item.$type;
+    let entity = rawGroup;
+    if (Array.isArray(rawGroup.events) && rawGroup.events.length) {
+      entity = (rawGroup.events[0] || {}).target;
     }
 
-    return type === entityType;
+    return hasType.comment(entity);
   }
 
 

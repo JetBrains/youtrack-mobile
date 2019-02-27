@@ -11,3 +11,12 @@ export const ResourceTypes = {
 
   EVENT_GROUP: 'jetbrains.youtrack.event.gaprest.ActivityItemGroup',
 };
+
+
+export const hasType = function(type: string) {
+  return function(it: Object) {
+    return it ? it.$type === type : false;
+  };
+};
+
+hasType.comment = hasType(ResourceTypes.ISSUE_COMMENT);
