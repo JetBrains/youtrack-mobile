@@ -99,12 +99,12 @@ export default class SingleIssueActivitiesSettings extends Component<Props, Stat
   render() {
     return (
       <View>
-        {!this.state.visible && <TouchableOpacity
+        <TouchableOpacity
           style={styles.settingsToggle}
           onPress={this._toggleSettingsVisibility}
         >
           <Text style={styles.settingsToggleText}>Activity feed settings</Text>
-        </TouchableOpacity>}
+        </TouchableOpacity>
 
         {this.state.visible && this._renderSettings()}
       </View>
