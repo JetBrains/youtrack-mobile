@@ -64,7 +64,7 @@ export default class Wiki extends Component<Props, void> {
     return Router.ShowImage({currentImage: url, allImagesUrls, imageHeaders: this.props.imageHeaders});
   };
 
-  renderNode = (node: Object, index: number, siblings: any, parent: Object, defaultRenderer: (any, any) => any) => {
+  renderNode = (node: Object, index: number, siblings: Array<any>, parent: Object, defaultRenderer: (any, any) => any) => {
     const {imageHeaders, attachments} = this.props;
 
     if (node.type === 'text' && node.data === '\n') {
@@ -84,6 +84,17 @@ export default class Wiki extends Component<Props, void> {
 
     if (node.name === 'img') {
       return renderImage({node, index, attachments, imageHeaders, onImagePress: this.onImagePress});
+    }
+
+    if (node.name === 'p') {
+      const isLast = index == siblings.length - 2; // Paraghaph always have "\n" last sibling
+      return (
+        <Text key={index}>
+          {index === 0 ? null : '\n'}
+          {defaultRenderer(node.children, parent)}
+          {isLast ? null : '\n'}
+        </Text>
+      );
     }
 
     if (node.name === 'strong') {

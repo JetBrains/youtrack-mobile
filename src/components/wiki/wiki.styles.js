@@ -8,8 +8,7 @@ export default StyleSheet.create({
     fontSize: FONT_SIZE,
     color: COLOR_FONT,
     textAlign: 'left',
-    writingDirection: 'ltr',
-    marginBottom: - (UNIT * 5) // Compensate weird HTML view spacing
+    writingDirection: 'ltr'
   },
   monospace: {
     ...Platform.select({
@@ -29,6 +28,9 @@ export default StyleSheet.create({
     borderLeftWidth: 2,
     borderLeftColor: COLOR_GRAY,
     paddingLeft: UNIT / 2
+  },
+  unspaced: {
+    margin: 0
   }
 });
 
