@@ -415,7 +415,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
             onApply={this.props.loadIssueActivities}
           />}
 
-          {Platform.OS == 'ios' && <KeyboardSpacer/>}
+          {Platform.OS === 'ios' && <KeyboardSpacer/>}
         </ScrollView>}
 
         {addCommentMode && <View>
@@ -436,7 +436,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
             suggestions={commentSuggestions}
           />
 
-          {Platform.OS == 'ios' && <KeyboardSpacer style={styles.keyboardSpacer}/>}
+          {Platform.OS === 'ios' && <KeyboardSpacer style={styles.keyboardSpacer}/>}
         </View>}
 
         {this._canAddComment() && <View style={styles.addCommentContainer}>
@@ -469,7 +469,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
           />
         )}
 
-        {Platform.OS == 'ios' && !addCommentMode && <KeyboardSpacer style={styles.keyboardSpacer}/>}
+        {Platform.OS === 'ios' && !addCommentMode && <KeyboardSpacer style={styles.keyboardSpacer}/>}
 
         {isSelectOpen && this._renderCommentVisibilitySelect()}
       </View>

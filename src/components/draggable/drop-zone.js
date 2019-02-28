@@ -149,7 +149,7 @@ class DropZone extends React.Component<PropsWithContext, State> {
 
   getChildrenWithPlaceholder(children) {
     const {placeholderIndex} = this.state;
-    if (placeholderIndex === null || placeholderIndex == undefined) {
+    if (placeholderIndex === null || placeholderIndex === undefined) {
       return children;
     }
     const childs = React.Children.toArray(children);

@@ -345,7 +345,7 @@ class Inbox extends Component<Props, void> {
             ListFooterComponent={this._renderListMessage}
           />
 
-          {Platform.OS == 'ios' && <KeyboardSpacer style={{backgroundColor: 'black'}}/>}
+          {Platform.OS === 'ios' && <KeyboardSpacer style={{backgroundColor: 'black'}}/>}
         </View>
       </Menu>
     );

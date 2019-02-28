@@ -87,7 +87,7 @@ export default class Wiki extends Component<Props, void> {
     }
 
     if (node.name === 'p') {
-      const isLast = index == siblings.length - 2; // Paraghaph always have "\n" last sibling
+      const isLast = index === siblings.length - 2; // Paraghaph always have "\n" last sibling
       return (
         <Text key={index}>
           {index === 0 ? null : '\n'}

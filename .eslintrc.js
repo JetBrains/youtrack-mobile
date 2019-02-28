@@ -18,6 +18,7 @@ module.exports = {
     'semi': ERROR,
     'indent': [ERROR, 2],
     'no-multi-spaces': ERROR,
+    'eqeqeq': ERROR,
 
     //ES6
     'constructor-super': ERROR,

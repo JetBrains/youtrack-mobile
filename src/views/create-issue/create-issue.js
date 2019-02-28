@@ -162,7 +162,7 @@ class CreateIssue extends Component<Props, void> {
           onUpdateProject={async (project) => await updateProject(project)}
         />
 
-        {Platform.OS == 'ios' && <KeyboardSpacer style={{backgroundColor: 'black'}}/>}
+        {Platform.OS === 'ios' && <KeyboardSpacer style={{backgroundColor: 'black'}}/>}
       </View>
     );
   }

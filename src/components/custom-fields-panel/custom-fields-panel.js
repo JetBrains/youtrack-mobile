@@ -495,7 +495,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
             <Text style={styles.doneButtonText}>Done</Text>
           </TouchableOpacity>}
 
-          {Platform.OS == 'ios' && <KeyboardSpacer style={{backgroundColor: COLOR_BLACK}}/>}
+          {Platform.OS === 'ios' && <KeyboardSpacer style={{backgroundColor: COLOR_BLACK}}/>}
 
           <KeyboardSpacer onToggle={this.handleKeyboardToggle} style={{height: 0}}/>
 
