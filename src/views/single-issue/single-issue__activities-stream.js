@@ -11,7 +11,7 @@ import {isActivityCategory} from '../../components/activity/activity__category';
 import CommentVisibility from '../../components/comment/comment__visibility';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
 
-import {getEntityPresentation, relativeDate} from '../../components/issue-formatter/issue-formatter';
+import {getEntityPresentation, relativeDate, absDate} from '../../components/issue-formatter/issue-formatter';
 
 import {mergeActivities} from '../../components/activity/activity__merge-activities';
 import {groupActivities} from '../../components/activity/activity__group-activities';
@@ -19,6 +19,7 @@ import {createActivitiesModel} from '../../components/activity/activity__create-
 
 import getHistoryLabel from '../../components/activity/activity__history-label';
 import {getTextValueChange} from '../../components/activity/activity__history-value';
+import {periodPresentation} from '../../components/activity/activity__history-period-value';
 
 import Avatar from '../../components/avatar/avatar';
 
@@ -277,6 +278,31 @@ export default class SingleIssueActivities extends Component<Props, void> {
     );
   }
 
+  _renderWork(work: Object) {
+    const duration = periodPresentation(work.duration);
+    const hours = duration.hours();
+    return (
+      <View>
+        <View style={styles.row}>
+          {work.date && <Text>{`${absDate(work.date)}   `}</Text>}
+          <Text style={styles.workTime}>
+            {hours && <Text>{`${hours} `}</Text>}
+            <Text>{duration.minutes()}</Text>
+          </Text>
+          {work.type && <Text>{`   ${work.type.name}`}</Text>}
+        </View>
+        {work.text && <Text>{work.text}</Text>}
+      </View>
+    );
+  }
+
+  _firstActivityChange(event = {}): any {
+    if (!event.added) {
+      return null;
+    }
+    return Array.isArray(event.added) && event.added[0] || event.added;
+  }
+
   render() {
     const {activityPage} = this.props;
     const groupedActivities = this._processActivities(activityPage);
@@ -302,8 +328,10 @@ export default class SingleIssueActivities extends Component<Props, void> {
                   {!activityGroup.merged && this._renderUserInfo(activityGroup)}
 
                   <View>
-                    <View
-                      style={styles.activityChange}>{activityGroup.comment ? this._renderComment(activityGroup.comment.added[0]) : null}</View>
+                    <View style={styles.activityChange}>
+                      {activityGroup.comment && this._renderComment(this._firstActivityChange(activityGroup.comment))}
+                      {activityGroup.work && this._renderWork(this._firstActivityChange(activityGroup.work))}
+                    </View>
 
                     {activityGroup.events.length > 0 &&
                     <View style={activityGroup.comment ? styles.activityRelatedChanges : styles.activityHistoryChanges}>

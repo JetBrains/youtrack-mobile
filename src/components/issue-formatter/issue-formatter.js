@@ -53,6 +53,12 @@ function relativeDate(date: Date|number) {
   return `${formatted}${getPostfix(formatted)}`;
 }
 
+function absDate(date: Date|number, localeString: ?string) {
+  const utcDate = new Date(date);
+  const _locales = localeString ? [localeString] : [];
+  return utcDate.toLocaleTimeString(_locales, {day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'});
+}
+
 function shortRelativeDate(date: Date|number) {
   date = makeDatePast(date);
   const formatted = fromNow(date, shortRelativeFormat);
@@ -114,5 +120,5 @@ function getVisibilityPresentation(entity: Object) {
 
 export {
   getForText, formatDate, relativeDate, shortRelativeDate, getPriotityField, getAssigneeField, getReadableID,
-  getVisibilityPresentation, getEntityPresentation
+  getVisibilityPresentation, getEntityPresentation, absDate
 };

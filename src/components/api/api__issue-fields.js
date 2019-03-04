@@ -23,7 +23,6 @@ const ISSUE_PROJECT_FIELDS = toField([
 ]);
 
 const ISSUE_USER_FIELDS = toField([
-  '$type',
   'login',
   'id',
   'ringId',

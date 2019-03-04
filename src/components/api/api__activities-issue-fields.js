@@ -5,7 +5,6 @@ import IssueFields from './api__issue-fields';
 const toField = ApiHelper.toField;
 
 const ISSUE_ACTIVITIES_EVENT_BASE = toField([
-  '$type',
   'id',
   'name',
   'text',
@@ -16,21 +15,24 @@ const ISSUE_ATTACHMENT_FIELDS = toField([
   'url',
   'mimeType',
   'removed',
-  'thumbnailURL',
-  'size',
-  'created',
-  {
-    comment: ['id']
-  }
+  'thumbnailURL'
 ]);
 
 const ISSUE_PROJECT_FIELDS = toField([
   'shortName'
 ]);
 
+const ISSUE_WORK_ITEMS_FIELDS = toField([
+  '$type',
+  'date',
+  {
+    type: ['name'],
+    duration: ['minutes']
+  }
+]);
+
 
 const ISSUE_ACTIVITIES_FIELDS = toField([
-  '$type',
   'id',
   'timestamp',
   'targetMember',
@@ -41,7 +43,6 @@ const ISSUE_ACTIVITIES_FIELDS = toField([
     category: ['id'],
     target: ['id', 'created', 'usesMarkdown'],
     field: [
-      '$type',
       'linkId',
       'id',
       'presentation',
@@ -64,7 +65,9 @@ const ISSUE_ACTIVITIES_FIELDS = toField([
       IssueFields.ISSUE_COMMENTS_FIELDS,
       ISSUE_ATTACHMENT_FIELDS,
 
-      IssueFields.ISSUE_XSHORT_FIELDS
+      IssueFields.ISSUE_XSHORT_FIELDS,
+
+      ISSUE_WORK_ITEMS_FIELDS,
     ],
     removed: [
       ISSUE_PROJECT_FIELDS,

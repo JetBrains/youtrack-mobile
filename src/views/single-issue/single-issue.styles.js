@@ -334,4 +334,8 @@ export default StyleSheet.create({
     color: COLOR_PINK,
     textAlign: 'center'
   },
+
+  workTime: {
+    fontWeight: 'bold'
+  }
 });

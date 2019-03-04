@@ -1,4 +1,4 @@
-import {getEntityPresentation, getVisibilityPresentation} from './issue-formatter';
+import {getEntityPresentation, getVisibilityPresentation, absDate} from './issue-formatter';
 
 describe('getEntityPresentation', function() {
   it('should return empty string if no parameter is provided', () => {
@@ -82,6 +82,17 @@ describe('getVisibilityPresentation', function() {
     });
 
     visibilityPresentation.should.equal(`${permittedGroups[0].name}, ${permittedUsers[0].login}`);
+  });
+});
+
+
+describe('absDate', function() {
+  it('should return absolute date with provided locale string', () => {
+    absDate(1551448813974, 'en-US').should.equal('March 1, 2019, 3:00 PM');
+  });
+
+  it('should return absolute date with no locale string', () => {
+    absDate(1551448813974).should.equal('2019 M03 1 15:00');
   });
 });
 

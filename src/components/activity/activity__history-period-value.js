@@ -5,6 +5,23 @@ export function minutesToPeriodFieldValuePresentation(minutes: number, fullPerio
   return periodToPresentation(period, fullPeriodPresentation);
 }
 
+export function periodPresentation(duration: Object) {
+  function totalMinutes(d = {}) {
+    return d.value || d.minutes || 0;
+  }
+
+  return {
+    minutes: () => {
+      const minutes = Math.floor(totalMinutes(duration) % 60);
+      return `${Math.floor(minutes / 10) || '0' }${ minutes % 10 || '0' }m`;
+    },
+    hours: () => {
+      const hours = Math.floor(totalMinutes(duration) / 60);
+      return hours ? (`${hours }h`) : '';
+    }
+  };
+}
+
 
 function getPeriodLocalizedName(amount, timeIntervalId) {
   const periodFullName = {

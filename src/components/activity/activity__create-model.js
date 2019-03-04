@@ -176,10 +176,10 @@ export const createActivitiesModel = (activityGroups: Array<Object>) => {
   }
 
   function sortByCategory(item1, item2) {
-    if (item1.category.$type < item2.category.$type) {
+    if (item1.category.id < item2.category.id) {
       return 1;
     }
-    if (item1.category.$type > item2.category.$type) {
+    if (item1.category.id > item2.category.id) {
       return -1;
     }
 
