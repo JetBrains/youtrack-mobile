@@ -1,4 +1,5 @@
 import {getEntityPresentation, getVisibilityPresentation, absDate} from './issue-formatter';
+import sinon from 'sinon';
 
 describe('getEntityPresentation', function() {
   it('should return empty string if no parameter is provided', () => {
@@ -86,13 +87,34 @@ describe('getVisibilityPresentation', function() {
 });
 
 
-describe.skip('absDate', function() {
-  it('should return absolute date with provided locale string', () => {
-    absDate(1551448813974, 'en-US').should.equal('March 1, 2019, 3:00 PM');
+describe('absDate', function () {
+  const dateInMillis = 1551448813974;
+  const dateMock = new Date(dateInMillis);
+  const formatDateParams = {day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'};
+  const _Date = Date;
+
+  beforeEach(() => {
+    dateMock.toLocaleTimeString = sinon.spy();
+    global.Date = class extends _Date {
+      constructor() {
+        super();
+        return dateMock;
+      }
+    };
   });
 
+  afterEach(() => global.Date = _Date);
+
+  it('should return absolute date with provided locale string', () => {
+    const localeString = 'en-US';
+    absDate(dateInMillis, localeString);
+
+    dateMock.toLocaleTimeString.should.have.been.calledWith([localeString], formatDateParams);
+  });
   it('should return absolute date with no locale string', () => {
-    absDate(1551448813974).should.equal('2019 M03 1 15:00');
+    absDate(dateInMillis);
+
+    dateMock.toLocaleTimeString.should.have.been.calledWith([], formatDateParams);
   });
 });
 
