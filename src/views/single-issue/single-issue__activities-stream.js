@@ -282,17 +282,19 @@ export default class SingleIssueActivities extends Component<Props, void> {
     const duration = periodPresentation(work.duration);
     const hours = duration.hours();
     return (
-      <View>
-        <View style={styles.row}>
+      <Text>
+        <Text style={styles.row}>
+          <Text style={styles.activityLabel}>Spent time: </Text>
+
           {work.date && <Text>{`${absDate(work.date)}   `}</Text>}
           <Text style={styles.workTime}>
             {hours && <Text>{`${hours} `}</Text>}
             <Text>{duration.minutes()}</Text>
           </Text>
           {work.type && <Text>{`   ${work.type.name}`}</Text>}
-        </View>
+        </Text>
         {work.text && <Text>{work.text}</Text>}
-      </View>
+      </Text>
     );
   }
 
