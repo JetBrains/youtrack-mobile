@@ -15,15 +15,20 @@ type Props = {
   features: Array<string>
 };
 
+function convertToNumber(semverVersion: string) {
+  const parts = semverVersion.split('.').reverse();
+
+  return parts.reduce((acc, part, index) => {
+    return acc + Number.parseInt(part) * Math.pow(1000, index);
+  }, 0);
+}
+
 export const checkVersion = (version?: string) => {
   try {
     const {version: serverVersion} = getApi().config;
 
     if (version) {
-      const testParts = version.split('.');
-      const serverParts = serverVersion.split('.');
-
-      return serverParts.every((_, index) => +serverParts[index] >= +testParts[index]);
+      return convertToNumber(serverVersion) >= convertToNumber(version);
     } else {
       return true;
     }
