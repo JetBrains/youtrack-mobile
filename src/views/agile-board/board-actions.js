@@ -11,7 +11,7 @@ import usage from '../../components/usage/usage';
 import {findIssueOnBoard} from './board-updaters';
 import {LayoutAnimation} from 'react-native';
 
-const PAGE_SIZE = 4;
+const PAGE_SIZE = 6;
 const CATEGORY_NAME = 'Agile board';
 const RECONNECT_TIMEOUT = 60000;
 let serversideEvents = null;
@@ -142,7 +142,7 @@ export function fetchMoreSwimlanes() {
     try {
       const swimlanes = await api.agile.getSwimlanes(sprint.agile.id, sprint.id, PAGE_SIZE, sprint.board.trimmedSwimlanes.length);
       dispatch(receiveSwimlanes(swimlanes));
-      log.info(`Loaded ${PAGE_SIZE} more swimlanes`);
+      log.info(`Loaded ${swimlanes.length} more swimlanes`);
       usage.trackEvent(CATEGORY_NAME, 'Load more swimlanes');
     } catch (e) {
       notifyError('Could not load swimlanes', e);

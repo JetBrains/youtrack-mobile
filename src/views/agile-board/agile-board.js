@@ -83,6 +83,13 @@ class AgileBoard extends Component<Props, State> {
     }
   }
 
+  onContentSizeChange = (width, height) => {
+    const windowHeight = Dimensions.get('window').height;
+    if (height < windowHeight) {
+      this.props.onLoadMoreSwimlanes();
+    }
+  };
+
   syncHeaderPosition = (event) => {
     const {nativeEvent} = event;
     if (this.boardHeader) {
@@ -285,6 +292,7 @@ class AgileBoard extends Component<Props, State> {
               }}
               verticalScrollProps={{
                 onScroll: this.onVerticalScroll,
+                onContentSizeChange: this.onContentSizeChange,
                 contentContainerStyle: {
                   minHeight: '100%'
                 }
