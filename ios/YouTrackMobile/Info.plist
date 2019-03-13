@@ -62,9 +62,9 @@
 	<key>NSMainNibFile~ipad</key>
 	<string>LaunchScreen</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>$(PRODUCT_NAME) wants access to photos</string>
+	<string>YouTrack Mobile needs access to your photo library so that you can attach photos to issues</string>
 	<key>NSCameraUsageDescription</key>
-	<string>$(PRODUCT_NAME) could take a photo to attach it to issue</string>
+	<string>YouTrack Mobile could take a photo to attach it to issue</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>
