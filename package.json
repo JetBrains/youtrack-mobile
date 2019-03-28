@@ -51,7 +51,9 @@
 			"^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js",
 			"^[./a-zA-Z0-9$_-]+\\.(bmp|gif|jpg|jpeg|png|psd|svg|webp)$": "<rootDir>/node_modules/react-native/jest/assetFileTransformer.js"
 		},
-		"setupFilesAfterEnv": ["./test/jest-setup.js"],
+		"setupFilesAfterEnv": [
+			"./test/jest-setup.js"
+		],
 		"testResultsProcessor": "jest-teamcity-reporter",
 		"testPathIgnorePatterns": [
 			"/node_modules/",
@@ -87,7 +89,7 @@
 		"lodash.throttle": "4.1.1",
 		"object-walk": "^0.1.1",
 		"prop-types": "^15.5.10",
-		"qs": "6.1.0",
+		"qs": "6.7.0",
 		"react": "16.6.3",
 		"react-native": "0.58.6",
 		"react-native-animatable": "1.2.4",
