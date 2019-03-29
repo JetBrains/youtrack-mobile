@@ -19,7 +19,7 @@ import {createActivitiesModel} from '../../components/activity/activity__create-
 
 import getHistoryLabel from '../../components/activity/activity__history-label';
 import {getTextValueChange} from '../../components/activity/activity__history-value';
-import {periodPresentation} from '../../components/activity/activity__history-period-value';
+import {minutesAndHoursFor} from '../../components/time-tracking/time-tracking';
 
 import Avatar from '../../components/avatar/avatar';
 
@@ -30,6 +30,8 @@ import log from '../../components/log/log';
 import {getApi} from '../../components/api/api__instance';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import ApiHelper from '../../components/api/api__helper';
+
+import type {WorkTimeSettings} from '../../flow/WorkTimeSettings';
 
 import {COLOR_FONT_GRAY, UNIT} from '../../components/variables/variables';
 
@@ -54,18 +56,22 @@ type Props = {
 
   onReply: (comment: IssueComment) => any,
   onCopyCommentLink: (comment: IssueComment) => any,
-  onIssueIdTap: (issueId: string) => any
+  onIssueIdTap: (issueId: string) => any,
+
+  workTimeSettings: ?WorkTimeSettings,
 };
 
 type DefaultProps = {
   onReply: Function,
-  onCopyCommentLink: Function
+  onCopyCommentLink: Function,
+  workTimeSettings: WorkTimeSettings
 };
 
 export default class SingleIssueActivities extends Component<Props, void> {
   static defaultProps: DefaultProps = {
     onReply: () => {},
-    onCopyCommentLink: () => {}
+    onCopyCommentLink: () => {},
+    workTimeSettings: {}
   };
 
   _isMultiValueActivity(activity: Object) {
@@ -83,8 +89,14 @@ export default class SingleIssueActivities extends Component<Props, void> {
 
   _renderTextValueChange(activity: Object, timestamp, issueFields: Array<Object>) {
     const isMultiValue = this._isMultiValueActivity(activity);
-    const removed = getTextValueChange(activity, issueFields, true);
-    const added = getTextValueChange(activity, issueFields);
+    const getParams = (isRemovedValue) => ({
+      activity,
+      issueFields,
+      workTimeSettings: this.props.workTimeSettings,
+      isRemovedValue: isRemovedValue
+    });
+    const removed = getTextValueChange(getParams(true));
+    const added = getTextValueChange(getParams(false));
     return (
       <View key={activity.id}>
         <View style={styles.row}>
@@ -279,7 +291,7 @@ export default class SingleIssueActivities extends Component<Props, void> {
   }
 
   _renderWork(work: Object) {
-    const duration = periodPresentation(work.duration);
+    const duration = minutesAndHoursFor(work.duration);
     const hours = duration.hours();
     return (
       <Text>

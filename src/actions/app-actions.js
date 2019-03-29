@@ -21,6 +21,7 @@ import {registerForPush, initializePushNotifications, unregisterForPushNotificat
 import type {AuthParams, CurrentUser} from '../components/auth/auth';
 import type {Permissions} from '../components/auth/auth__permissions';
 import type {AppConfigFilled, EndUserAgreement} from '../flow/AppConfig';
+import type {WorkTimeSettings} from '../flow/WorkTimeSettings';
 import type {StorageState} from '../components/storage/storage';
 import type RootState from '../reducers/app-reducer';
 
@@ -272,9 +273,17 @@ function completeInitialization() {
     dispatch(setPermissions(auth.permissions, auth.currentUser));
     dispatch(subscribeToPush());
     dispatch(loadAgileProfile());
+    dispatch(loadWorkTimeSettings());
 
     log.info('Initialization completed');
     Router.navigateToDefaultRoute();
+  };
+}
+
+function loadWorkTimeSettings() {
+  return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
+    const workTimeSettings: WorkTimeSettings = await getApi().getWorkTimeSettings();
+    await dispatch({type: types.RECEIVE_WORK_TIME_SETTINGS, workTimeSettings});
   };
 }
 

@@ -150,6 +150,12 @@ class API extends BaseAPI {
     const res = await this.makeAuthorizedRequest(url, 'POST');
     return res.token;
   }
+
+  async getWorkTimeSettings(): Promise<Object> {
+    const fields = `id,daysAWeek,workDays,minutesADay`;
+    const url = `${this.youTrackUrl}/api/admin/timeTrackingSettings/workTimeSettings?fields=${fields}`;
+    return await this.makeAuthorizedRequest(url, 'GET');
+  }
 }
 
 export default API;

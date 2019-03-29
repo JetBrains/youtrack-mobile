@@ -4,6 +4,7 @@ import * as types from './single-issue-action-types';
 import {ON_NAVIGATE_BACK} from '../../actions/action-types';
 import type {IssueFull} from '../../flow/Issue';
 import type {CustomField, FieldValue, IssueProject, CommandSuggestionResponse, IssueComment} from '../../flow/CustomFields';
+import type {WorkTimeSettings} from '../../flow/WorkTimeSettings';
 
 export type State = {
   issueId: string,
@@ -37,7 +38,8 @@ export type State = {
   activitiesLoadingError: ?Error,
   activitiesEnabled: boolean,
   issueActivityTypes: Array<Object>,
-  issueActivityEnabledTypes: Array<Object>
+  issueActivityEnabledTypes: Array<Object>,
+  workTimeSettings: ?WorkTimeSettings
 };
 
 export const initialState: State = {
@@ -72,7 +74,8 @@ export const initialState: State = {
   activitiesLoadingError: null,
   activitiesEnabled: false,
   issueActivityTypes: [],
-  issueActivityEnabledTypes: []
+  issueActivityEnabledTypes: [],
+  workTimeSettings: null
 };
 
 export default createReducer(initialState, {
@@ -377,4 +380,10 @@ export default createReducer(initialState, {
       issueActivityEnabledTypes: action.issueActivityEnabledTypes
     };
   },
+  [types.RECEIVE_WORK_TIME_SETTINGS]: (state: State, action: {workTimeSettings: WorkTimeSettings}): State => {
+    return {
+      ...state,
+      workTimeSettings: action.workTimeSettings
+    };
+  }
 });

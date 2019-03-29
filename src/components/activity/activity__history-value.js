@@ -2,39 +2,47 @@
 
 import {isActivityCategory} from './activity__category';
 import {relativeDate, getReadableID, formatDate, getEntityPresentation} from '../issue-formatter/issue-formatter';
-import {minutesToPeriodFieldValuePresentation} from './activity__history-period-value';
+import {getPeriodPresentationFor} from '../time-tracking/time-tracking';
+import type {WorkTimeSettings} from '../../flow/WorkTimeSettings';
 
-export function getTextValueChange(event: Object, issueFields: Array<Object>, isRemovedValue: boolean = false): string {
-  if (!event) {
+type TextValueChangeParams = {
+  activity: Object,
+  issueFields: Array<Object>,
+  workTimeSettings: WorkTimeSettings,
+  isRemovedValue: boolean
+};
+
+export function getTextValueChange(params: TextValueChangeParams): string {
+  if (!params.activity) {
     return '';
   }
 
-  const eventValue = isRemovedValue ? event.removed : event.added;
+  const eventValue = params.isRemovedValue ? params.activity.removed : params.activity.added;
 
   if (!eventValue) {
-    return getEmptyFieldValue(event, issueFields).presentation;
+    return getEmptyFieldValue(params.activity, params.issueFields).presentation;
   }
 
-  const eventField = event.field;
+  const eventField = params.activity.field;
   const value = {
     presentation: eventValue
   };
 
   switch (true) {
-  case isActivityCategory.project(event):
+  case isActivityCategory.project(params.activity):
     value.presentation = getProjectPresentation(eventValue);
     break;
-  case isActivityCategory.date(event):
+  case isActivityCategory.date(params.activity):
     value.presentation = relativeDate(eventValue);
     break;
-  case isActivityCategory.attachment(event) || isActivityCategory.tag(event):
+  case isActivityCategory.attachment(params.activity) || isActivityCategory.tag(params.activity):
     value.presentation = eventValue;
     break;
   }
 
-  if (eventField && isActivityCategory.customField(event)) {
+  if (eventField && isActivityCategory.customField(params.activity)) {
     const simpleCustomFieldType = getSimpleCustomFieldType(eventField.customField);
-    setSimpleCustomFieldPresentationByType(simpleCustomFieldType, value);
+    setSimpleCustomFieldPresentationByType(simpleCustomFieldType, value, params.workTimeSettings);
   }
 
   if (Array.isArray(value.presentation)) {
@@ -44,7 +52,7 @@ export function getTextValueChange(event: Object, issueFields: Array<Object>, is
   return value.presentation;
 
 
-  function setSimpleCustomFieldPresentationByType(simpleCustomFieldType, value) {
+  function setSimpleCustomFieldPresentationByType(simpleCustomFieldType, value, workTimeSettings: WorkTimeSettings) {
     const SIMPLE_CUSTOM_FIELDS_TYPES = {
       integer: 'integer',
       float: 'float',
@@ -56,7 +64,7 @@ export function getTextValueChange(event: Object, issueFields: Array<Object>, is
 
     switch (simpleCustomFieldType) {
     case SIMPLE_CUSTOM_FIELDS_TYPES.period:
-      value.presentation = minutesToPeriodFieldValuePresentation(eventValue);
+      value.presentation = getPeriodPresentationFor(eventValue, workTimeSettings);
       break;
     case SIMPLE_CUSTOM_FIELDS_TYPES.date:
       value.presentation = formatDate(eventValue);
@@ -66,7 +74,6 @@ export function getTextValueChange(event: Object, issueFields: Array<Object>, is
       break;
     }
   }
-
 }
 
 function getSimpleCustomFieldType(customField) {

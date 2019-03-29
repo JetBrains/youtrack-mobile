@@ -256,7 +256,8 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
       activityPage,
       issue,
       copyCommentUrl, openNestedIssueView, issuePermissions,
-      startEditingComment, deleteComment, restoreComment, deleteCommentPermanently
+      startEditingComment, deleteComment, restoreComment, deleteCommentPermanently,
+      workTimeSettings
     } = this.props;
 
     return (
@@ -283,6 +284,8 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
           onDeleteComment={deleteComment}
           onRestoreComment={restoreComment}
           onDeleteCommentPermanently={deleteCommentPermanently}
+
+          workTimeSettings={workTimeSettings}
         />
       </View>
     );
@@ -487,7 +490,9 @@ const mapStateToProps = (state: {app: Object, singleIssue: SingleIssueState}, ow
     issueId: ownProps.issueId,
 
     selectProps: state.singleIssue.selectProps,
-    ...(isOnTop ? {} : {addCommentMode: false})
+    ...(isOnTop ? {} : {addCommentMode: false}),
+
+    workTimeSettings: state.app.workTimeSettings
   };
 };
 
