@@ -9,6 +9,7 @@ import log from '../log/log';
 import type Auth from '../auth/auth';
 import type {FieldValue} from '../../flow/CustomFields';
 import type {IssueOnList, IssueFull, IssueComment, IssueProject} from '../../flow/Issue';
+import type {IssueActivity} from '../../flow/Activity';
 import issueActivityPageFields from './api__activities-issue-fields';
 
 export default class IssueAPI extends ApiBase {
@@ -184,7 +185,7 @@ export default class IssueAPI extends ApiBase {
     return ApiHelper.patchAllRelativeAvatarUrls(suggestions, this.config.backendUrl);
   }
 
-  async getActivitiesPage(issueId: string, sources: Array<string>): Promise<Array<Object>> {
+  async getActivitiesPage(issueId: string, sources: Array<string>): Promise<Array<IssueActivity>> {
     const categoryKey = '&categories=';
     const categories = `${categoryKey}${(sources || []).join(categoryKey)}`;
     const queryString = qs.stringify({

@@ -1,6 +1,7 @@
 /* @flow */
+import type {IssueActivity} from '../../flow/Activity';
 
-export const mergeActivities = (activities: Array<Object>) => {
+export const mergeActivities = (activities: Array<IssueActivity>) => {
   if (!activities || activities.length < 2) {
     return activities;
   }
@@ -28,10 +29,10 @@ export const mergeActivities = (activities: Array<Object>) => {
   }
 
 
-  function removeEmptyActivities(activities: Array<Object>): Array<Object> {
+  function removeEmptyActivities(activities: Array<IssueActivity>): Array<IssueActivity> {
     return activities.filter(hasChanges);
 
-    function hasChanges(mergedActivity) {
+    function hasChanges(mergedActivity: IssueActivity) {
       if (mergedActivity.added === mergedActivity.removed) {
         return false;
       }
@@ -51,7 +52,7 @@ export const mergeActivities = (activities: Array<Object>) => {
   }
 
 
-  function update(mergedActivity, activity) {
+  function update(mergedActivity: IssueActivity, activity: IssueActivity) {
     if (isMultiple(mergedActivity)) {
       const addedRemoved = disjoint(mergedActivity.added, activity.removed);
       const removedAdded = disjoint(mergedActivity.removed, activity.added);
@@ -68,17 +69,17 @@ export const mergeActivities = (activities: Array<Object>) => {
   }
 
 
-  function isMultiple(activity) {
+  function isMultiple(activity: IssueActivity) {
     return Array.isArray(activity.added) || Array.isArray(activity.removed);
   }
 
 
-  function createMergedActivity(activity) {
+  function createMergedActivity(activity: IssueActivity) {
     return Object.create(activity);
   }
 
 
-  function key(activity: Object) {
+  function key(activity: IssueActivity) {
     return `${activity.target.id}${activity.targetMember || ''}`;
   }
 

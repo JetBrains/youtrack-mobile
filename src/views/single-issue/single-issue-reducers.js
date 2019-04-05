@@ -5,6 +5,7 @@ import {ON_NAVIGATE_BACK} from '../../actions/action-types';
 import type {IssueFull} from '../../flow/Issue';
 import type {CustomField, FieldValue, IssueProject, CommandSuggestionResponse, IssueComment} from '../../flow/CustomFields';
 import type {WorkTimeSettings} from '../../flow/WorkTimeSettings';
+import type {IssueActivity} from '../../flow/Activity';
 
 export type State = {
   issueId: string,
@@ -34,7 +35,7 @@ export type State = {
   isSelectOpen: boolean,
   selectProps: Object,
   activityLoaded: boolean,
-  activityPage: Array<Object>,
+  activityPage: Array<IssueActivity>,
   activitiesLoadingError: ?Error,
   activitiesEnabled: boolean,
   issueActivityTypes: Array<Object>,
@@ -361,7 +362,7 @@ export default createReducer(initialState, {
     return {...state, editingComment: action.comment};
   },
 
-  [types.RECEIVE_ACTIVITY_PAGE]: (state: State, action: {activityPage: Array<Object>}): State => {
+  [types.RECEIVE_ACTIVITY_PAGE]: (state: State, action: {activityPage: Array<IssueActivity>}): State => {
     const {activityPage} = action;
     return {
       ...state,

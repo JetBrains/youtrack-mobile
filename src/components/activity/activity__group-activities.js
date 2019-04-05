@@ -1,13 +1,14 @@
 /* @flow */
 
 import {isActivityCategory} from './activity__category';
+import type {IssueActivity} from '../../flow/Activity';
 
 const IDLE_TIME = 60 * 1000;
 
-export const groupActivities = (activities: Array<Object>, params: Object) => {
+export const groupActivities = (activities: Array<IssueActivity>, params: Object) => {
   params = params || {};
 
-  return (activities || []).reduce((groups: Array<Object>, activity: Object, activityIndex) => {
+  return (activities || []).reduce((groups: Array<Object>, activity: IssueActivity, activityIndex) => {
     let group = last(groups);
 
     if (

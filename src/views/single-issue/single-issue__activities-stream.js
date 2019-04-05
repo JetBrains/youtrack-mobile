@@ -32,6 +32,7 @@ import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import ApiHelper from '../../components/api/api__helper';
 
 import type {WorkTimeSettings} from '../../flow/WorkTimeSettings';
+import type {IssueActivity} from '../../flow/Activity';
 
 import {COLOR_FONT_GRAY, UNIT} from '../../components/variables/variables';
 
@@ -39,7 +40,7 @@ const CATEGORY_NAME = 'Issue Stream';
 
 type Props = {
   issueFields: Array<Object>,
-  activityPage: Array<Object>,
+  activityPage: Array<IssueActivity>,
   attachments: Array<Attachment>,
   imageHeaders: ?Object,
   backendUrl: string,
@@ -246,9 +247,9 @@ export default class SingleIssueActivities extends Component<Props, void> {
     return renderedData;
   };
 
-  _processActivities(activities) {
+  _processActivities(activities: Array<IssueActivity>) {
     return groupActivities(activities, {
-      onAddActivityToGroup: (group, activity) => {
+      onAddActivityToGroup: (group, activity: IssueActivity) => {
         if (isActivityCategory.issueCreated(activity)) {
           group.hidden = true;
         }

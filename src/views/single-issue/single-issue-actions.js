@@ -11,6 +11,7 @@ import usage from '../../components/usage/usage';
 import {initialState} from './single-issue-reducers';
 import type {IssueFull, CommandSuggestionResponse} from '../../flow/Issue';
 import type {CustomField, IssueProject, FieldValue, IssueComment} from '../../flow/CustomFields';
+import type {IssueActivity} from '../../flow/Activity';
 import type Api from '../../components/api/api';
 import type {State as SingleIssueState} from './single-issue-reducers';
 import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
@@ -48,7 +49,7 @@ export function receiveActivityAPIAvailability(activitiesEnabled: boolean) {
   return {type: types.RECEIVE_ACTIVITY_API_AVAILABILITY, activitiesEnabled};
 }
 
-export function receiveActivityPage(activityPage: Array<Object>) {
+export function receiveActivityPage(activityPage: Array<IssueActivity>) {
   return {type: types.RECEIVE_ACTIVITY_PAGE, activityPage};
 }
 
@@ -235,6 +236,7 @@ export function loadActivitiesPage() {
     const api: Api = getApi();
 
     try {
+      log.info('Loading activities...');
       const enabledActivityTypes = getIssueActivitiesEnabledTypes();
       dispatch({
         type: types.RECEIVE_ACTIVITY_CATEGORIES,
@@ -243,7 +245,8 @@ export function loadActivitiesPage() {
       });
 
       const activityCategories = getActivityCategories(enabledActivityTypes);
-      const activityPage = await api.issue.getActivitiesPage(issueId, activityCategories);
+      const activityPage: Array<IssueActivity> = await api.issue.getActivitiesPage(issueId, activityCategories);
+      log.info('Received activities', activityPage);
       dispatch(receiveActivityPage(activityPage));
     } catch (error) {
       dispatch({type: types.RECEIVE_ACTIVITY_ERROR, error: error});
