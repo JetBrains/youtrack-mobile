@@ -45,5 +45,5 @@ declare type IssueActivity = {
   target: {id: string, created: number, usesMarkdown: boolean},
   field: Object,
   added: string | Array<AddedActivityItem>,
-  removed: Array<ActivityItem>
+  removed: Array<RemovedActivityItem> | null
 }

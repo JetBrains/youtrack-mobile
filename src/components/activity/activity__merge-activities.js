@@ -43,8 +43,11 @@ export const mergeActivities = (activities: Array<IssueActivity>) => {
           (mergedActivity.removed && mergedActivity.removed.length));
       }
 
+      const bothNotNull = !!mergedActivity.added && !!mergedActivity.removed;
+      const bothComplex = typeof mergedActivity.added === 'object' && typeof mergedActivity.removed === 'object';
+
       return (
-        (typeof mergedActivity.added === 'object' && typeof mergedActivity.removed === 'object') ?
+        (bothNotNull && bothComplex) ?
           mergedActivity.added.id !== mergedActivity.removed.id :
           true
       );
