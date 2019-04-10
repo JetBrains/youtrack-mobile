@@ -1,4 +1,4 @@
-declare type WorkTimeSettings = {
+export type WorkTimeSettings = {
   id: string,
   daysAWeek: number,
   minutesADay: number,

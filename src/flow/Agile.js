@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-type SprintInformation = {
+export type SprintInformation = {
   id: string,
   name: string,
   goal: ?string,
@@ -9,7 +9,7 @@ type SprintInformation = {
   finish: ?number
 };
 
-type AgileUserProfile = {
+export type AgileUserProfile = {
   defaultAgile: {
     id: string,
     name: string,
@@ -22,26 +22,26 @@ type AgileUserProfile = {
   }>
 };
 
-type AgileColumnFieldValue = {
+export type AgileColumnFieldValue = {
   id: string,
   presentation: string,
 };
 
-type AgileColumn = {
+export type AgileColumn = {
   id: string,
   collapsed: boolean,
   isVisible: boolean,
   fieldValues: Array<AgileColumnFieldValue>
 };
 
-type BoardCell = {
+export type BoardCell = {
   id: string,
   tooManyIssues: boolean,
   column: { id: string },
   issues: Array<IssueOnList>
 };
 
-type AgileBoardRow = {
+export type AgileBoardRow = {
   $type: string,
   id: string,
   name: string,
@@ -50,13 +50,13 @@ type AgileBoardRow = {
   cells: Array<BoardCell>
 };
 
-type BoardColumn = {
+export type BoardColumn = {
   id: string,
   collapsed: boolean,
   agileColumn: AgileColumn
 };
 
-type Board = {
+export type Board = {
   id: string,
   name: string,
   columns: Array<BoardColumn>,
@@ -64,14 +64,14 @@ type Board = {
   trimmedSwimlanes: Array<AgileBoardRow>
 };
 
-type BoardOnList = {
+export type BoardOnList = {
   id: string,
   name: string,
   sprints: {id: string, name: string},
   creator: {id: string, fullName: string}
 }
 
-type SprintFull = SprintInformation & {
+export type SprintFull = SprintInformation & {
   board: Board,
   eventSourceTicket: string,
   agile: {

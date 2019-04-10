@@ -1,4 +1,4 @@
-declare type IssueUser = {
+export type IssueUser = {
   $type: string,
   login: string,
   id: string,
@@ -7,7 +7,7 @@ declare type IssueUser = {
   fullName: string
 };
 
-type TimeTrackingFieldInfo = {
+export type TimeTrackingFieldInfo = {
   id: string,
   field: {
     id: string,
@@ -15,7 +15,7 @@ type TimeTrackingFieldInfo = {
   }
 };
 
-declare type IssueProject = {
+export type IssueProject = {
   $type: string,
   id: string,
   name: string,
@@ -30,20 +30,20 @@ declare type IssueProject = {
   }
 }
 
-declare type ColorField = {
+export type ColorField = {
   id: string,
   background: string,
   foreground: string
 }
 
-declare type Tag = {
+export type Tag = {
   id: string,
   name: string,
   query: string,
   color: ColorField
 }
 
-declare type BundleValue = {
+export type BundleValue = {
   $type: string,
   id: string,
   name: string,
@@ -61,7 +61,7 @@ declare type BundleValue = {
   color: ColorField
 }
 
-declare type ProjectCustomField = {
+export type ProjectCustomField = {
   $type: string,
   id: string,
   ordinal: number,
@@ -84,14 +84,14 @@ declare type ProjectCustomField = {
   defaultValues: Array<BundleValue>
 }
 
-declare type ProjectCustomFieldShort = {
+export type ProjectCustomFieldShort = {
   field: {
     id: string,
     name: string
   }
 }
 
-declare type FieldValue = {
+export type FieldValue = {
   $type: string,
   id: string,
   name: string,
@@ -105,7 +105,7 @@ declare type FieldValue = {
   color: ColorField
 }
 
-declare type FieldValueShort = {
+export type FieldValueShort = {
   id: string,
   name: string,
   ringId: string,
@@ -115,7 +115,7 @@ declare type FieldValueShort = {
   color: ColorField
 }
 
-declare type CustomField = {
+export type CustomField = {
   $type: string,
   id: string,
   name: string,
@@ -124,14 +124,14 @@ declare type CustomField = {
   projectCustomField: ProjectCustomField
 }
 
-declare type CustomFieldShort = {
+export type CustomFieldShort = {
   id: string,
   name: string,
   value: FieldValueShort | number,
   projectCustomField: ProjectCustomFieldShort
 }
 
-declare type Attachment = {
+export type Attachment = {
   $type: string,
   id: string,
   name: string,
@@ -139,7 +139,7 @@ declare type Attachment = {
   mimeType: string
 }
 
-declare type IssueComment = {
+export type IssueComment = {
   $type: string,
   id: string,
   created: number,
@@ -150,7 +150,7 @@ declare type IssueComment = {
   author: IssueUser
 }
 
-declare type IssueLinkType = {
+export type IssueLinkType = {
   uid: number,
   name: string,
   sourceToTarget: string,
@@ -159,7 +159,7 @@ declare type IssueLinkType = {
   localizedTargetToSource: ?string
 }
 
-declare type IssueLink = {
+export type IssueLink = {
   $type: string,
   id: string,
   direction: 'string',

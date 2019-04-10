@@ -28,10 +28,10 @@ type ActivityWorkItem = EventBase & {
   duration: {minutes: number}
 }
 
-declare type AddedActivityItem = IssueProject | IssueComment | ActivityAttachment | ActivityIssue | ActivityWorkItem;
-declare type RemovedActivityItem = IssueProject | IssueComment | ActivityIssue;
+export type AddedActivityItem = IssueProject | IssueComment | ActivityAttachment | ActivityIssue | ActivityWorkItem;
+export type RemovedActivityItem = IssueProject | IssueComment | ActivityIssue;
 
-declare type IssueActivity = {
+export type IssueActivity = {
   id: string;
   category: {id: string},
   timestamp: number,

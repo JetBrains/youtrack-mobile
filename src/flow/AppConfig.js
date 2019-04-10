@@ -1,4 +1,4 @@
-declare type ConfigAuth = {
+export type ConfigAuth = {
   serverUri: ?string,
   clientId: ?string,
   clientSecret: ?string,
@@ -8,7 +8,7 @@ declare type ConfigAuth = {
   youtrackServiceId: ?string
 };
 
-declare type ConfigAuthFilled = {
+export type ConfigAuthFilled = {
   serverUri: string,
   clientId: string,
   clientSecret: string,
@@ -18,21 +18,21 @@ declare type ConfigAuthFilled = {
   youtrackServiceId: string
 }
 
-declare type AppConfig = {
+export type AppConfig = {
   backendUrl: ?string;
   auth: ConfigAuth;
   statisticsEnabled: ?boolean;
   version: ?string;
 };
 
-declare type AppConfigFilled = {
+export type AppConfigFilled = {
   backendUrl: string;
   auth: ConfigAuthFilled;
   statisticsEnabled: boolean;
   version: string;
 };
 
-declare type EndUserAgreement = {
+export type EndUserAgreement = {
   enabled: boolean,
   text: string,
   majorVersion: number,

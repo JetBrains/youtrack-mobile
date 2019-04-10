@@ -1,5 +1,5 @@
 
-declare type IssueOnList = {
+export type IssueOnList = {
   id: string,
   summary: string,
   resolved: boolean,
@@ -11,7 +11,7 @@ declare type IssueOnList = {
   fieldHash: any
 }
 
-declare type IssueFull = {
+export type IssueFull = {
   id: string,
   summary: string,
   description: string,
@@ -33,9 +33,9 @@ declare type IssueFull = {
   fieldHash: any
 };
 
-declare type AnyIssue = IssueOnList | IssueFull;
+export type AnyIssue = IssueOnList | IssueFull;
 
-declare type ServersideSuggestion = {
+export type ServersideSuggestion = {
   o: string,
   d: string,
   hd: string,
@@ -48,7 +48,7 @@ declare type ServersideSuggestion = {
   ce: number
 };
 
-declare type TransformedSuggestion = {
+export type TransformedSuggestion = {
   prefix: string,
   option: string,
   suffix: string,
@@ -60,13 +60,13 @@ declare type TransformedSuggestion = {
   completionEnd: number
 }
 
-declare type SuggestedCommand = {
+export type SuggestedCommand = {
   description: ?string,
   error: boolean,
   delete: boolean
 }
 
-declare type CommandSuggestion = {
+export type CommandSuggestion = {
   id: string,
   caret: number,
   comment: string,
@@ -80,14 +80,14 @@ declare type CommandSuggestion = {
   suffix: string
 }
 
-declare type CommandSuggestionResponse = {
+export type CommandSuggestionResponse = {
   query: string,
   caret: number,
   commands: Array<SuggestedCommand>,
   suggestions: Array<CommandSuggestion>
 };
 
-declare type SavedQuery = {
+export type SavedQuery = {
   id: string,
   name: string,
   query: string,
