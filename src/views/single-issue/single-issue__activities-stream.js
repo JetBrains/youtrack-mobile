@@ -78,6 +78,9 @@ export default class SingleIssueActivities extends Component<Props, void> {
   _isMultiValueActivity(activity: Object) {
     if (isActivityCategory.customField(activity)) {
       const field = activity.field;
+      if (!field) {
+        return false;
+      }
       return field.customField && field.customField.fieldType && field.customField.fieldType.isMultiValue;
     }
 

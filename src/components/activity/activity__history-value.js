@@ -94,7 +94,7 @@ function getEmptyFieldValue(activity, issueFields) {
   if (!activity.field) {
     return LOST_EMPTY_VALUE;
   }
-  const prototypeId = (activity.field.customField || {}).id;
+  const prototypeId = (activity.field?.customField || {}).id;
   if (!prototypeId) {
     return NO_VALUE;
   }
