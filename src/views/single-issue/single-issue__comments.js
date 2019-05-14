@@ -10,6 +10,7 @@ import CommentVisibility from '../../components/comment/comment__visibility';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
 
 import {UNIT} from '../../components/variables/variables';
+import CommentActions from '../../components/comment/comment__actions';
 
 type Props = {
   comments: Array<IssueComment>,
@@ -52,29 +53,31 @@ export default class SingleIssueComments extends Component<Props, void> {
     return comments.map(comment => {
       return (
         <View key={comment.id}>
-          <Comment
-            key={comment.id}
-            comment={comment}
-            imageHeaders={this.props.imageHeaders}
-            backendUrl={this.props.backendUrl}
-            onIssueIdTap={this.props.onIssueIdTap}
-            attachments={attachments}
-
-            canEdit={this.props.canEditComment(comment)}
-            onEdit={() => this.props.onStartEditing(comment)}
-
-            canDelete={this.props.canDeleteComment(comment)}
-            onDelete={() => this.props.onDeleteComment(comment)}
-            canRestore={this.props.canRestoreComment(comment)}
-            onRestore={() => this.props.onRestoreComment(comment)}
-            canDeletePermanently={this.props.canDeleteCommentPermanently(comment)}
-            onDeletePermanently={() => this.props.onDeleteCommentPermanently(comment)}
-
+          <CommentActions
             onReply={() => this.props.onReply(comment)}
             onCopyCommentLink={() => this.props.onCopyCommentLink(comment)}
+            canEdit={this.props.canEditComment(comment)}
+            onEdit={() => this.props.onStartEditing(comment)}
+            canDelete={this.props.canDeleteComment(comment)}
+            onDelete={() => this.props.onDeleteComment(comment)}
+            disabled={comment.deleted}
+          >
+            <Comment
+              key={comment.id}
+              comment={comment}
+              imageHeaders={this.props.imageHeaders}
+              backendUrl={this.props.backendUrl}
+              onIssueIdTap={this.props.onIssueIdTap}
+              attachments={attachments}
 
-            activitiesEnabled={this.props.activitiesEnabled}
-          />
+              canRestore={this.props.canRestoreComment(comment)}
+              onRestore={() => this.props.onRestoreComment(comment)}
+              canDeletePermanently={this.props.canDeleteCommentPermanently(comment)}
+              onDeletePermanently={() => this.props.onDeleteCommentPermanently(comment)}
+
+              activitiesEnabled={this.props.activitiesEnabled}
+            />
+          </CommentActions>
 
           {IssueVisibility.isSecured(comment.visibility) &&
           <View style={visibilityStyles}>

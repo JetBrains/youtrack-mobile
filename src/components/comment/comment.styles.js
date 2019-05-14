@@ -40,7 +40,7 @@ export default StyleSheet.create({
   },
   swipeButtonText: {
     color: '#FFF',
-    paddingTop: UNIT,
+    paddingTop: UNIT/2,
     fontSize: 10,
     fontFamily: 'System'
   }

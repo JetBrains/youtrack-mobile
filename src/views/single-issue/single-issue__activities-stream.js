@@ -10,6 +10,7 @@ import {isActivityCategory} from '../../components/activity/activity__category';
 
 import CommentVisibility from '../../components/comment/comment__visibility';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
+import CommentActions from '../../components/comment/comment__actions';
 
 import {getEntityPresentation, relativeDate, absDate} from '../../components/issue-formatter/issue-formatter';
 
@@ -204,18 +205,10 @@ export default class SingleIssueActivities extends Component<Props, void> {
 
           attachments={comment.attachments}
 
-          canEdit={this.props.canEditComment(comment)}
-          onEdit={() => this.props.onStartEditing(comment)}
-
-          canDelete={this.props.canDeleteComment(comment)}
-          onDelete={() => this.props.onDeleteComment(comment)}
           canRestore={this.props.canRestoreComment(comment)}
           onRestore={() => this.props.onRestoreComment(comment)}
           canDeletePermanently={this.props.canDeleteCommentPermanently(comment)}
           onDeletePermanently={() => this.props.onDeleteCommentPermanently(comment)}
-
-          onReply={() => this.props.onReply(comment)}
-          onCopyCommentLink={() => this.props.onCopyCommentLink(comment)}
 
           activitiesEnabled={true}
         />
@@ -333,6 +326,7 @@ export default class SingleIssueActivities extends Component<Props, void> {
             if (activityGroup.hidden) {
               return null;
             }
+            const {comment} = activityGroup;
 
             return (
               <View key={`${activityGroup.timestamp}-${index}`} style={[
@@ -341,28 +335,39 @@ export default class SingleIssueActivities extends Component<Props, void> {
                 activityGroup.merged ? styles.mergedActivity : null
               ]}>
                 {!activityGroup.merged && this._renderUserAvatar(activityGroup)}
-
                 <View style={styles.activityItem}>
-                  {!activityGroup.merged && this._renderUserInfo(activityGroup)}
+                  <CommentActions
+                    onReply={() => this.props.onReply(comment)}
+                    onCopyCommentLink={() => this.props.onCopyCommentLink(comment)}
+                    canEdit={comment && this.props.canEditComment(comment)}
+                    onEdit={() => this.props.onStartEditing(comment)}
+
+                    canDelete={comment && this.props.canDeleteComment(comment)}
+                    onDelete={() => this.props.onDeleteComment(comment)}
+                    disabled={!comment || activityGroup.merged}
+                  >
+                    <View>
+                      {!activityGroup.merged && this._renderUserInfo(activityGroup)}
+
+                      <View style={styles.activityChange}>
+                        {activityGroup.comment && this._renderComment(this._firstActivityChange(activityGroup.comment))}
+                        {activityGroup.work && this._renderWork(this._firstActivityChange(activityGroup.work))}
+                      </View>
+                    </View>
+                  </CommentActions>
 
                   <View>
-                    <View style={styles.activityChange}>
-                      {activityGroup.comment && this._renderComment(this._firstActivityChange(activityGroup.comment))}
-                      {activityGroup.work && this._renderWork(this._firstActivityChange(activityGroup.work))}
-                    </View>
-
-                    {activityGroup.events.length > 0 &&
-                    <View style={activityGroup.comment ? styles.activityRelatedChanges : styles.activityHistoryChanges}>
-                      {activityGroup.events.map((event) => (
-                        <View key={event.id} style={styles.activityChange}>
-                          {this._renderActivityByCategory(event, activityGroup.merged && activityGroup.timestamp)}
-                        </View>
-                      ))}
-                    </View>}
+                    {activityGroup.events.length > 0 && (
+                      <View style={activityGroup.comment ? styles.activityRelatedChanges : styles.activityHistoryChanges}>
+                        {activityGroup.events.map((event) => (
+                          <View key={event.id} style={styles.activityChange}>
+                            {this._renderActivityByCategory(event, activityGroup.merged && activityGroup.timestamp)}
+                          </View>
+                        ))}
+                      </View>
+                    )}
                   </View>
-
                 </View>
-
               </View>
             );
           })
