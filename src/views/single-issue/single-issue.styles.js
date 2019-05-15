@@ -237,7 +237,6 @@ export default StyleSheet.create({
     flex: 1
   },
   alignedRight: {
-    textAlign: 'right',
     marginRight: UNIT
   },
 
@@ -292,7 +291,7 @@ export default StyleSheet.create({
     lineHeight: 14,
   },
   activityChange: {
-    marginTop: UNIT,
+    marginTop: UNIT / 2,
   },
   activityRemoved: {
     textDecorationLine: 'line-through'

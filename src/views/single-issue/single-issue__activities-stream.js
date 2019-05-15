@@ -103,22 +103,17 @@ export default class SingleIssueActivities extends Component<Props, void> {
     const removed = getTextValueChange(getParams(true));
     const added = getTextValueChange(getParams(false));
     return (
-      <View key={activity.id}>
-        <View style={styles.row}>
-          <Text style={{flex: 1}}>
-            <Text style={styles.activityLabel}>{getHistoryLabel(activity)}</Text>
-            <Text>
-              <Text style={isMultiValue || removed && !added ? styles.activityRemoved : null}>
-                {removed}
-              </Text>
-              {Boolean(removed && added) && (isMultiValue ? ', ' :
-                <Text style={Platform.OS !== 'ios' && {fontSize: 24}}> {'\u2192'} </Text>)}
-              <Text>{added}</Text>
-            </Text>
+      <View style={styles.row}>
+        <Text style={{flexGrow: 2, lineHeight: 21}}>
+          <Text style={styles.activityLabel}>{getHistoryLabel(activity)}</Text>
+          <Text style={isMultiValue || removed && !added ? styles.activityRemoved : null}>
+            {removed}
           </Text>
-          {this._renderTimestamp(timestamp, styles.alignedRight)}
-        </View>
-
+          {Boolean(removed && added) && (isMultiValue ? ', ' :
+            <Text style={Platform.OS !== 'ios' && {fontSize: 24}}> {'\u2192'} </Text>)}
+          <Text>{added}</Text>
+        </Text>
+        {this._renderTimestamp(timestamp, styles.alignedRight)}
       </View>
     );
   }
@@ -221,7 +216,6 @@ export default class SingleIssueActivities extends Component<Props, void> {
   }
 
   _renderActivityByCategory = (activity, timestamp) => {
-    let renderedData = null;
     switch (true) {
     case Boolean(
       isActivityCategory.tag(activity) ||
@@ -231,16 +225,13 @@ export default class SingleIssueActivities extends Component<Props, void> {
       isActivityCategory.description(activity) ||
       isActivityCategory.summary(activity)
     ):
-      renderedData = this._renderTextValueChange(activity, timestamp, this.props.issueFields);
-      break;
+      return this._renderTextValueChange(activity, timestamp, this.props.issueFields);
     case Boolean(isActivityCategory.link(activity)):
-      renderedData = this._renderLinkChange(activity, timestamp);
-      break;
+      return this._renderLinkChange(activity, timestamp);
     case Boolean(isActivityCategory.attachment(activity)):
-      renderedData = this._renderAttachmentChange(activity, timestamp);
-      break;
+      return this._renderAttachmentChange(activity, timestamp);
     }
-    return renderedData;
+    return null;
   };
 
   _processActivities(activities: Array<IssueActivity>) {
