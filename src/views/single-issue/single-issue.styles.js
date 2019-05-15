@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
 import {
   UNIT,
+  FOOTER_HEIGHT,
   COLOR_EXTRA_LIGHT_GRAY,
   COLOR_FONT_ON_BLACK,
   COLOR_BLACK,
@@ -313,6 +314,7 @@ export default StyleSheet.create({
   settingsApplyButton: {
     backgroundColor: COLOR_PINK,
     padding: UNIT,
+    paddingBottom: FOOTER_HEIGHT
   },
   settingsApplyButtonText: {
     height: 24,
