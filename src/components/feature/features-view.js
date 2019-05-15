@@ -1,7 +1,8 @@
 /* @flow */
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View, Text, TouchableOpacity, Modal, Switch, ScrollView, AsyncStorage} from 'react-native';
+import {View, Text, TouchableOpacity, Modal, Switch, ScrollView} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import getTopPadding from '../header/header__top-padding';
 import styles from '../debug-view/debug-view.styles';
 import {closeFeaturesView, setEnabledFeatures} from '../../actions/app-actions';

@@ -5,7 +5,7 @@ import sinon from 'sinon';
 import * as actions from './single-issue-actions';
 import * as types from './single-issue-action-types';
 
-import {AsyncStorage as MockedStorage} from 'react-native';
+import MockedStorage from '@react-native-community/async-storage';
 import * as storage from '../../components/storage/storage';
 import {Activity} from '../../components/activity/activity__category';
 

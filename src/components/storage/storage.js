@@ -1,6 +1,6 @@
 /* @flow */
 'use strict';
-import {AsyncStorage} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import log from '../log/log';
 

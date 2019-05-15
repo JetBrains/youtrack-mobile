@@ -1,5 +1,5 @@
 import * as storage from './storage';
-import {AsyncStorage as MockedStorage} from 'react-native';
+import MockedStorage from '@react-native-community/async-storage';
 import sinon from 'sinon';
 
 describe('Storage', () => {

@@ -1,7 +1,7 @@
 import {loadConfig, formatYouTrackURL} from './config';
 import {__setStorageState} from '../storage/storage';
 import sinon from 'sinon';
-import {AsyncStorage} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 describe('Config', () => {
   describe('Loading', () => {
