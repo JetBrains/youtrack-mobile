@@ -229,6 +229,7 @@ export default class AuthTest {
     })
       .then((res) => res.json())
       .then((res) => {
+        log.info('Permissions loaded', res);
         this.permissions = new Permissions(res);
         return authParams;
       })
