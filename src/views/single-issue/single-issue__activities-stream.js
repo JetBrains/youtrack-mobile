@@ -104,13 +104,13 @@ export default class SingleIssueActivities extends Component<Props, void> {
     const added = getTextValueChange(getParams(false));
     return (
       <View style={styles.row}>
-        <Text style={{flexGrow: 2, lineHeight: 21}}>
+        <Text style={{flexGrow: 2}}>
           <Text style={styles.activityLabel}>{getHistoryLabel(activity)}</Text>
           <Text style={isMultiValue || removed && !added ? styles.activityRemoved : null}>
             {removed}
           </Text>
           {Boolean(removed && added) && (isMultiValue ? ', ' :
-            <Text style={Platform.OS !== 'ios' && {fontSize: 24}}> {'\u2192'} </Text>)}
+            <Text>{Platform.OS === 'ios' ? ' → ' : ' ➔ '}</Text>)}
           <Text>{added}</Text>
         </Text>
         {this._renderTimestamp(timestamp, styles.alignedRight)}
