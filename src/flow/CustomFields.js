@@ -67,6 +67,7 @@ export type ProjectCustomField = {
   ordinal: number,
   canBeEmpty: boolean,
   emptyFieldText: ?string,
+  isPublic: boolean,
   bundle: {
     id: string,
     isUpdateable: boolean
@@ -75,7 +76,6 @@ export type ProjectCustomField = {
     id: string,
     name: string,
     ordinal: number,
-    isPublic: boolean,
     fieldType: {
       valueType: string,
       isMultiValue: boolean

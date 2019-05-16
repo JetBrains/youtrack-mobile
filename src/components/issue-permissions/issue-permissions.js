@@ -78,7 +78,7 @@ export default class IssuePermissions {
     if (this._isBlockedByTimeTracking(issue, field)) {
       return false;
     }
-    if (field.projectCustomField.field.isPublic) {
+    if (field.projectCustomField.isPublic) {
       return this._canUpdatePublicField(issue);
     }
     return this._canUpdatePrivateField(issue);

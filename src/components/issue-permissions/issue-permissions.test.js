@@ -32,9 +32,9 @@ describe('IssuePermissions', function () {
 
     this.fieldMock = {
       projectCustomField: {
+        isPublic: true,
         field: {
           id: 'some-field',
-          isPublic: true
         }
       }
     };
@@ -106,12 +106,12 @@ describe('IssuePermissions', function () {
     });
 
     it('should not allow to update private field if has no PRIVATE_UPDATE_ISSUE', () => {
-      this.fieldMock.projectCustomField.field.isPublic = false;
+      this.fieldMock.projectCustomField.isPublic = false;
       this.issuePermissions.canUpdateField(this.issueMock, this.fieldMock).should.be.false;
     });
 
     it('should allow to update private field if has PRIVATE_UPDATE_ISSUE', () => {
-      this.fieldMock.projectCustomField.field.isPublic = false;
+      this.fieldMock.projectCustomField.isPublic = false;
       this.permissionsMock.has.withArgs(PRIVATE_UPDATE_ISSUE).returns(true);
       this.issuePermissions.canUpdateField(this.issueMock, this.fieldMock).should.be.true;
     });

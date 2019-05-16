@@ -74,6 +74,7 @@ const PROJECT_CUSTOM_FIELD_FIELDS = toField([
   'ordinal',
   'canBeEmpty',
   'emptyFieldText',
+  'isPublic',
   {
     bundle: ['id', 'isUpdateable']
   },
@@ -83,8 +84,6 @@ const PROJECT_CUSTOM_FIELD_FIELDS = toField([
       'id',
       'name',
       'ordinal',
-      'isPublic',
-
       {
         fieldType: ['valueType', 'isMultiValue']
       }
