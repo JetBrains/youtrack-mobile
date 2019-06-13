@@ -18,6 +18,9 @@ export default StyleSheet.create({
     marginLeft: UNIT,
     flex: 1
   },
+  commentWikiContainer: {
+    minHeight: UNIT * 5,
+  },
   commentText: {
     marginTop: UNIT
   },
@@ -29,7 +32,7 @@ export default StyleSheet.create({
   },
 
   swipeButton: {
-    paddingTop: UNIT * 1,
+    paddingTop: UNIT,
     flex: 1,
     alignItems: 'center'
   },

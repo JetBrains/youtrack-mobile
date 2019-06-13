@@ -62,14 +62,16 @@ export default class Comment extends Component<Props, void> {
       return this._renderDeletedComment();
     }
     return (
-      <Wiki
-        backendUrl={this.props.backendUrl}
-        onIssueIdTap={issueId => this.props.onIssueIdTap(issueId)}
-        attachments={attachments}
-        imageHeaders={this.props.imageHeaders}
-      >
-        {comment.textPreview}
-      </Wiki>
+      <View style={styles.commentWikiContainer}>
+        <Wiki
+          backendUrl={this.props.backendUrl}
+          onIssueIdTap={issueId => this.props.onIssueIdTap(issueId)}
+          attachments={attachments}
+          imageHeaders={this.props.imageHeaders}
+        >
+          {comment.textPreview}
+        </Wiki>
+      </View>
     );
   }
 
