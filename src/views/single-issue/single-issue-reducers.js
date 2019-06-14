@@ -35,7 +35,7 @@ export type State = {
   isSelectOpen: boolean,
   selectProps: Object,
   activityLoaded: boolean,
-  activityPage: Array<IssueActivity>,
+  activityPage: ?Array<IssueActivity>,
   activitiesLoadingError: ?Error,
   activitiesEnabled: boolean,
   issueActivityTypes: Array<Object>,
@@ -71,7 +71,7 @@ export const initialState: State = {
   isSelectOpen: false,
   selectProps: {},
   activityLoaded: false,
-  activityPage: [],
+  activityPage: null,
   activitiesLoadingError: null,
   activitiesEnabled: false,
   issueActivityTypes: [],
@@ -182,20 +182,16 @@ export default createReducer(initialState, {
       }
     };
   },
-  [types.DELETE_COMMENT]: (state: State, action: {comment: IssueComment}): State => {
-    const {comment} = action;
-    const activityPage = (state.activityPage || []).map(activity => {
-      activity.added = activity.added.filter(it => it.id !== comment.id);
-      return activity;
-    });
-    return {
-      ...state,
+  [types.DELETE_COMMENT]: (state: State, action: {comment: IssueComment, activityId?: string}): State => {
+    const stateUpdate = state.activityPage ? {
+      activityPage: (state.activityPage || []).filter(it => it.id !== action.activityId)
+    } : {
       issue: {
         ...state.issue,
-        comments: (state.issue.comments || []).filter(it => it.id !== comment.id),
-        activityPage: activityPage
+        comments: (state.issue.comments || []).filter(it => it.id !== action.comment.id),
       }
     };
+    return {...state, ...stateUpdate};
   },
   [types.START_EDITING_ISSUE]: (state: State): State => {
     return {

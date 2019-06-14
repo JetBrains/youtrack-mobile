@@ -85,8 +85,8 @@ function updateComment(comment: IssueComment) {
   return {type: types.RECEIVE_UPDATED_COMMENT, comment};
 }
 
-function deleteCommentFromList(comment: IssueComment) {
-  return {type: types.DELETE_COMMENT, comment};
+function deleteCommentFromList(comment: IssueComment, activityId?: string) {
+  return {type: types.DELETE_COMMENT, comment, activityId};
 }
 
 export function startImageAttaching(attachingImage: Object) {
@@ -440,7 +440,7 @@ export function restoreComment(comment: IssueComment) {
   };
 }
 
-export function deleteCommentPermanently(comment: IssueComment) {
+export function deleteCommentPermanently(comment: IssueComment, activityId?: string) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().singleIssue.issueId;
 
@@ -461,7 +461,7 @@ export function deleteCommentPermanently(comment: IssueComment) {
     }
 
     try {
-      dispatch(deleteCommentFromList(comment));
+      dispatch(deleteCommentFromList(comment, activityId));
       log.info(`Comment ${comment.id} deleted forever`);
       await getApi().issue.deleteCommentPermanently(issueId, comment.id);
     } catch (err) {

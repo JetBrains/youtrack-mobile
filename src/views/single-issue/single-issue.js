@@ -283,7 +283,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
           canDeleteCommentPermanently={comment => issuePermissions.canDeleteCommentPermanently(issue, comment)}
           onDeleteComment={deleteComment}
           onRestoreComment={restoreComment}
-          onDeleteCommentPermanently={deleteCommentPermanently}
+          onDeleteCommentPermanently={(comment, activityId) => deleteCommentPermanently(comment, activityId)}
 
           workTimeSettings={workTimeSettings}
         />

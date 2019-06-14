@@ -41,7 +41,7 @@ const CATEGORY_NAME = 'Issue Stream';
 
 type Props = {
   issueFields: Array<Object>,
-  activityPage: Array<IssueActivity>,
+  activityPage: ?Array<IssueActivity>,
   attachments: Array<Attachment>,
   imageHeaders: ?Object,
   backendUrl: string,
@@ -54,7 +54,7 @@ type Props = {
   canDeleteCommentPermanently: (comment: IssueComment) => any,
   onDeleteComment: (comment: IssueComment) => any,
   onRestoreComment: (comment: IssueComment) => any,
-  onDeleteCommentPermanently: (comment: IssueComment) => any,
+  onDeleteCommentPermanently: (comment: IssueComment, activityId?: string) => any,
 
   onReply: (comment: IssueComment) => any,
   onCopyCommentLink: (comment: IssueComment) => any,
@@ -185,55 +185,6 @@ export default class SingleIssueActivities extends Component<Props, void> {
     );
   }
 
-  _renderComment(comment) {
-    return (
-      <View key={comment.id}>
-        <Comment
-          key={comment.id}
-
-          comment={comment}
-
-          imageHeaders={this.props.imageHeaders}
-          backendUrl={this.props.backendUrl}
-
-          onIssueIdTap={this.props.onIssueIdTap}
-
-          attachments={comment.attachments}
-
-          canRestore={this.props.canRestoreComment(comment)}
-          onRestore={() => this.props.onRestoreComment(comment)}
-          canDeletePermanently={this.props.canDeleteCommentPermanently(comment)}
-          onDeletePermanently={() => this.props.onDeleteCommentPermanently(comment)}
-
-          activitiesEnabled={true}
-        />
-
-        {!comment.deleted && IssueVisibility.isSecured(comment.visibility) &&
-        <CommentVisibility visibility={IssueVisibility.getVisibilityPresentation(comment.visibility)}/>}
-      </View>
-
-    );
-  }
-
-  _renderActivityByCategory = (activity, timestamp) => {
-    switch (true) {
-    case Boolean(
-      isActivityCategory.tag(activity) ||
-      isActivityCategory.customField(activity) ||
-      isActivityCategory.sprint(activity) ||
-      isActivityCategory.work(activity) ||
-      isActivityCategory.description(activity) ||
-      isActivityCategory.summary(activity)
-    ):
-      return this._renderTextValueChange(activity, timestamp, this.props.issueFields);
-    case Boolean(isActivityCategory.link(activity)):
-      return this._renderLinkChange(activity, timestamp);
-    case Boolean(isActivityCategory.attachment(activity)):
-      return this._renderAttachmentChange(activity, timestamp);
-    }
-    return null;
-  };
-
   _processActivities(activities: Array<IssueActivity>) {
     return groupActivities(activities, {
       onAddActivityToGroup: (group, activity: IssueActivity) => {
@@ -278,35 +229,146 @@ export default class SingleIssueActivities extends Component<Props, void> {
     );
   }
 
-  _renderWork(work: Object) {
-    const duration = minutesAndHoursFor(work.duration);
-    const hours = duration.hours();
-    return (
-      <Text>
-        <Text style={styles.row}>
-          <Text style={styles.activityLabel}>Spent time: </Text>
+  _firstActivityChange(activity): any {
+    if (!activity.added) {
+      return null;
+    }
+    if (Array.isArray(activity.added)) {
+      return activity.added[0];
+    }
+    return activity.added;
+  }
 
-          {work.date && <Text>{`${absDate(work.date)}   `}</Text>}
-          <Text style={styles.workTime}>
-            {hours && <Text>{`${hours} `}</Text>}
-            <Text>{duration.minutes()}</Text>
-          </Text>
-          {work.type && <Text>{`   ${work.type.name}`}</Text>}
-        </Text>
-        {work.text && <Text>{work.text}</Text>}
-      </Text>
+  _renderCommentActivity(activityGroup) {
+    const comment = this._firstActivityChange(activityGroup.comment);
+    if (!comment) {
+      return null;
+    }
+
+    return (
+      <CommentActions
+        onReply={() => this.props.onReply(comment)}
+        onCopyCommentLink={() => this.props.onCopyCommentLink(comment)}
+        canEdit={comment && this.props.canEditComment(comment)}
+        onEdit={() => this.props.onStartEditing(comment)}
+
+        canDelete={comment && this.props.canDeleteComment(comment)}
+        onDelete={() => this.props.onDeleteComment(comment)}
+        disabled={!comment || activityGroup.merged}
+      >
+        <View>
+          {!activityGroup.merged && this._renderUserInfo(activityGroup)}
+
+          <View style={styles.activityChange}>
+
+            <View key={comment.id}>
+              <Comment
+                key={comment.id}
+
+                comment={comment}
+
+                imageHeaders={this.props.imageHeaders}
+                backendUrl={this.props.backendUrl}
+
+                onIssueIdTap={this.props.onIssueIdTap}
+
+                attachments={comment.attachments}
+
+                canRestore={this.props.canRestoreComment(comment)}
+                canDeletePermanently={this.props.canDeleteCommentPermanently(comment)}
+
+                onRestore={() => this.props.onRestoreComment(comment)}
+                onDeletePermanently={() => this.props.onDeleteCommentPermanently(comment, activityGroup.comment.id)}
+
+                activitiesEnabled={true}
+              />
+
+              {!comment.deleted && IssueVisibility.isSecured(comment.visibility) &&
+              <CommentVisibility visibility={IssueVisibility.getVisibilityPresentation(comment.visibility)}/>}
+            </View>
+
+          </View>
+        </View>
+      </CommentActions>
     );
   }
 
-  _firstActivityChange(event = {}): any {
-    if (!event.added) {
+  _renderWorkActivity(activityGroup) {
+    const work = this._firstActivityChange(activityGroup.work);
+
+    if (!work) {
       return null;
     }
-    return Array.isArray(event.added) && event.added[0] || event.added;
+
+    const duration = minutesAndHoursFor(work.duration);
+    const hours = duration.hours();
+
+    return (
+      <View>
+        {!activityGroup.merged && this._renderUserInfo(activityGroup)}
+
+        <View style={styles.activityChange}>
+          <Text>
+            <Text style={styles.row}>
+              <Text style={styles.activityLabel}>Spent time: </Text>
+
+              {work.date && <Text>{`${absDate(work.date)}   `}</Text>}
+              <Text style={styles.workTime}>
+                {hours && <Text>{`${hours} `}</Text>}
+                <Text>{duration.minutes()}</Text>
+              </Text>
+              {work.type && <Text>{`   ${work.type.name}`}</Text>}
+            </Text>
+            {work.text && <Text>{work.text}</Text>}
+          </Text>
+
+        </View>
+      </View>
+    );
+  }
+
+  _renderActivityByCategory = (activity, timestamp) => {
+    switch (true) {
+    case Boolean(
+      isActivityCategory.tag(activity) ||
+      isActivityCategory.customField(activity) ||
+      isActivityCategory.sprint(activity) ||
+      isActivityCategory.work(activity) ||
+      isActivityCategory.description(activity) ||
+      isActivityCategory.summary(activity)
+    ):
+      return this._renderTextValueChange(activity, timestamp, this.props.issueFields);
+    case Boolean(isActivityCategory.link(activity)):
+      return this._renderLinkChange(activity, timestamp);
+    case Boolean(isActivityCategory.attachment(activity)):
+      return this._renderAttachmentChange(activity, timestamp);
+    }
+    return null;
+  };
+
+  _renderHistoryAndRelatedChanges(activityGroup) {
+    if (activityGroup.events.length > 0) {
+      const style = (activityGroup.comment || activityGroup.work) ?
+        styles.activityRelatedChanges :
+        styles.activityHistoryChanges;
+
+      return (
+        <View style={style}>
+          {activityGroup.events.map((event) => (
+            <View key={event.id} style={styles.activityChange}>
+              {this._renderActivityByCategory(event, activityGroup.merged && activityGroup.timestamp)}
+            </View>
+          ))}
+        </View>
+      );
+    }
   }
 
   render() {
     const {activityPage} = this.props;
+    if (!activityPage) {
+      return null;
+    }
     const groupedActivities = this._processActivities(activityPage);
     const activities = createActivitiesModel(groupedActivities);
 
@@ -317,7 +379,6 @@ export default class SingleIssueActivities extends Component<Props, void> {
             if (activityGroup.hidden) {
               return null;
             }
-            const {comment} = activityGroup;
 
             return (
               <View key={`${activityGroup.timestamp}-${index}`} style={[
@@ -325,40 +386,15 @@ export default class SingleIssueActivities extends Component<Props, void> {
                 index === 0 && styles.activityFirstItem,
                 activityGroup.merged ? styles.mergedActivity : null
               ]}>
+
                 {!activityGroup.merged && this._renderUserAvatar(activityGroup)}
+
                 <View style={styles.activityItem}>
-                  <CommentActions
-                    onReply={() => this.props.onReply(comment)}
-                    onCopyCommentLink={() => this.props.onCopyCommentLink(comment)}
-                    canEdit={comment && this.props.canEditComment(comment)}
-                    onEdit={() => this.props.onStartEditing(comment)}
-
-                    canDelete={comment && this.props.canDeleteComment(comment)}
-                    onDelete={() => this.props.onDeleteComment(comment)}
-                    disabled={!comment || activityGroup.merged}
-                  >
-                    <View>
-                      {!activityGroup.merged && this._renderUserInfo(activityGroup)}
-
-                      <View style={styles.activityChange}>
-                        {activityGroup.comment && this._renderComment(this._firstActivityChange(activityGroup.comment))}
-                        {activityGroup.work && this._renderWork(this._firstActivityChange(activityGroup.work))}
-                      </View>
-                    </View>
-                  </CommentActions>
-
-                  <View>
-                    {activityGroup.events.length > 0 && (
-                      <View style={activityGroup.comment ? styles.activityRelatedChanges : styles.activityHistoryChanges}>
-                        {activityGroup.events.map((event) => (
-                          <View key={event.id} style={styles.activityChange}>
-                            {this._renderActivityByCategory(event, activityGroup.merged && activityGroup.timestamp)}
-                          </View>
-                        ))}
-                      </View>
-                    )}
-                  </View>
+                  {activityGroup.comment && this._renderCommentActivity(activityGroup)}
+                  {activityGroup.work && this._renderWorkActivity(activityGroup)}
+                  {this._renderHistoryAndRelatedChanges(activityGroup)}
                 </View>
+
               </View>
             );
           })
