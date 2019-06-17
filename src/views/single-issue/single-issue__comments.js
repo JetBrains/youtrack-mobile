@@ -18,7 +18,7 @@ type Props = {
   imageHeaders: ?Object,
   backendUrl: string,
 
-  canEditComment: (comment: IssueComment) => boolean,
+  canUpdateComment: (comment: IssueComment) => boolean,
   onStartEditing: (comment: IssueComment) => any,
 
   canDeleteComment: (comment: IssueComment) => any,
@@ -56,7 +56,7 @@ export default class SingleIssueComments extends Component<Props, void> {
           <CommentActions
             onReply={() => this.props.onReply(comment)}
             onCopyCommentLink={() => this.props.onCopyCommentLink(comment)}
-            canEdit={this.props.canEditComment(comment)}
+            canEdit={this.props.canUpdateComment(comment)}
             onEdit={() => this.props.onStartEditing(comment)}
             canDelete={this.props.canDeleteComment(comment)}
             onDelete={() => this.props.onDeleteComment(comment)}

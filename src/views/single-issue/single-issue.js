@@ -275,12 +275,12 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
           onCopyCommentLink={copyCommentUrl}
           onIssueIdTap={issueId => openNestedIssueView(null, issueId)}
 
-          canEditComment={comment => issuePermissions.canEditComment(issue, comment)}
+          canUpdateComment={comment => issuePermissions.canUpdateComment(issue, comment)}
           onStartEditing={startEditingComment}
 
           canDeleteComment={comment => issuePermissions.canDeleteComment(issue, comment)}
           canRestoreComment={comment => issuePermissions.canRestoreComment(issue, comment)}
-          canDeleteCommentPermanently={comment => issuePermissions.canDeleteCommentPermanently(issue, comment)}
+          canDeleteCommentPermanently={() => issuePermissions.canDeleteCommentPermanently(issue)}
           onDeleteComment={deleteComment}
           onRestoreComment={restoreComment}
           onDeleteCommentPermanently={(comment, activityId) => deleteCommentPermanently(comment, activityId)}
@@ -313,12 +313,12 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
           onCopyCommentLink={copyCommentUrl}
           onIssueIdTap={issueId => openNestedIssueView(null, issueId)}
 
-          canEditComment={comment => issuePermissions.canEditComment(issue, comment)}
+          canUpdateComment={comment => issuePermissions.canUpdateComment(issue, comment)}
           onStartEditing={startEditingComment}
 
           canDeleteComment={comment => issuePermissions.canDeleteComment(issue, comment)}
           canRestoreComment={comment => issuePermissions.canRestoreComment(issue, comment)}
-          canDeleteCommentPermanently={comment => issuePermissions.canDeleteCommentPermanently(issue, comment)}
+          canDeleteCommentPermanently={() => issuePermissions.canDeleteCommentPermanently(issue)}
           onDeleteComment={deleteComment}
           onRestoreComment={restoreComment}
           onDeleteCommentPermanently={deleteCommentPermanently}
