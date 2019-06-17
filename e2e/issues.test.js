@@ -33,7 +33,7 @@ describe('Issues list', () => {
     it('should show search error message', async () => {
       await issuesPage.search('#{broken search}');
 
-      await expect(element(by.id('cannot-load-message'))).toExist();
+      await expect(element(by.id('error-message'))).toExist();
     });
   });
 });
