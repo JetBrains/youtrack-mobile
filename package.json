@@ -26,6 +26,7 @@
 		"e2e-shutdown": "fbsimctl shutdown",
 		"test:watch": "npm test -- --watchAll",
 		"lint": "eslint --ignore-pattern src/flow src && flow check",
+    "flow-watch": "fswatch -o ./ | xargs -n1 -I{} sh -c 'clear; printf \"\\033[3J\" && flow'",
 		"postinstall": "cd node_modules/react-native/React/..; exec ./scripts/ios-install-third-party.sh",
 		"set-analytics-id": "node ./tools/set-analytics-id",
 		"set-exception-reporter-token": "node ./tools/set-exception-reporter-token",

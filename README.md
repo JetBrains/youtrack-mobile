@@ -25,6 +25,7 @@ If you are a developer, we invite you to help us improve this open-source app.
 1. Install dependencies via `npm install` or `yarn install`.
 2. Read [getting started](https://facebook.github.io/react-native/docs/getting-started.html).
 3. Check code quality and type safety with `npm run lint`; run tests with `npm test`.
+4. Optional: to check you types continuously during development, install [fswatch](https://github.com/emcrisostomo/fswatch) and run `flow-watch`
 
 ### iOS
 
