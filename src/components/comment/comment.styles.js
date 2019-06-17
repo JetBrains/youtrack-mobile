@@ -19,7 +19,7 @@ export default StyleSheet.create({
     flex: 1
   },
   commentWikiContainer: {
-    minHeight: UNIT * 5,
+    minHeight: UNIT * 3,
   },
   commentText: {
     marginTop: UNIT
