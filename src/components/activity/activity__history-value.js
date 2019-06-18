@@ -40,7 +40,7 @@ export function getTextValueChange(params: TextValueChangeParams): string {
     break;
   }
 
-  if (eventField && isActivityCategory.customField(params.activity)) {
+  if (eventField && eventField.customField && isActivityCategory.customField(params.activity)) {
     const simpleCustomFieldType = getSimpleCustomFieldType(eventField.customField);
     setSimpleCustomFieldPresentationByType(simpleCustomFieldType, value, params.workTimeSettings);
   }
