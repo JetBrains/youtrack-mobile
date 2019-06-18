@@ -19,7 +19,7 @@ describe('IssuePermissions', function () {
     };
 
     this.issueMock = {
-      reporter: {ringId: USER_ID, id: USER_ID},
+      reporter: {ringId: USER_ID},
       project: {
         ringId: PROJECT_ID,
         plugins: {
@@ -33,8 +33,7 @@ describe('IssuePermissions', function () {
 
     this.commentMock = {
       author: {
-        ringId: USER_ID,
-        id: USER_ID
+        ringId: USER_ID
       }
     };
 
@@ -94,27 +93,16 @@ describe('IssuePermissions', function () {
       this.issuePermissions.isCurrentUser().should.be.false;
     });
 
-    describe('Check by entity id', () => {
-      it('should return FALSE if a passed user is not a current user', () => {
-        this.issuePermissions.isCurrentUser({id: 'foo'}).should.be.false;
-      });
-
-      it('should return TRUE if a passed user is a current user', () => {
-        this.issuePermissions.isCurrentUser({id: USER_ID}).should.be.true;
-      });
-
+    it('should return FALSE if `ringId` field is missing', () => {
+      this.issuePermissions.isCurrentUser({}).should.be.false;
     });
 
-    describe('Check by entity ringId', () => {
-      it('should return FALSE if a passed user has is not a current user', () => {
-        this.issuePermissions.isCurrentUser({ringId: 'foo'}).should.be.false;
-      });
+    it('should return FALSE if a passed user is not a current user', () => {
+      this.issuePermissions.isCurrentUser({ringId: 'foo'}).should.be.false;
+    });
 
-      it('should return TRUE if a passed user has is not a current user', () => {
-        this.issuePermissions.currentUser.ringId = USER_ID;
-        this.issuePermissions.isCurrentUser({ringId: USER_ID}).should.be.true;
-      });
-
+    it('should return TRUE if a passed user is a current user', () => {
+      this.issuePermissions.isCurrentUser({ringId: USER_ID}).should.be.true;
     });
   });
 
@@ -159,7 +147,7 @@ describe('IssuePermissions', function () {
     });
 
     it('should return TRUE if user has the same `id` as the current user', () => {
-      this.issuePermissions.isCurrentUser({id: USER_ID}).should.be.true;
+      this.issuePermissions.isCurrentUser({ringId: USER_ID}).should.be.true;
     });
   });
 

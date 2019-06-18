@@ -4,6 +4,7 @@
  */
 import type {Permissions} from '../auth/auth__permissions';
 import type {AnyIssue} from '../../flow/Issue';
+import type {CurrentUser} from '../auth/auth';
 import type {
   CustomField,
   IssueComment,
@@ -26,9 +27,9 @@ export const CAN_UPDATE_WATCH = 'JetBrains.YouTrack.UPDATE_WATCH_FOLDER';
 
 export default class IssuePermissions {
   permissions: Permissions;
-  currentUser: Object;
+  currentUser: CurrentUser;
 
-  constructor(permissions: Object, currentUser: Object) {
+  constructor(permissions: Object, currentUser: CurrentUser) {
     this.permissions = permissions;
     this.currentUser = currentUser;
   }
@@ -53,16 +54,11 @@ export default class IssuePermissions {
   }
 
   isCurrentUser(user: IssueUser): boolean {
-    if (!user) {
+    if (!user || !user.ringId || !this.currentUser) {
       return false;
     }
-    if (user.id && this.currentUser.id) {
-      return user.id === this.currentUser.id;
-    }
-    if (user.ringId && this.currentUser.ringId) {
-      return user.ringId === this.currentUser.ringId;
-    }
-    return false;
+
+    return user.ringId === this.currentUser.id;
   }
 
   canUpdateGeneralInfo(issue: AnyIssue): boolean {
