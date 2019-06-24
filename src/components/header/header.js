@@ -67,7 +67,7 @@ export default class Header extends Component<Props, void> {
           testID="header-action"
           hitSlop={{top: TOUCH_PADDING, left: TOUCH_PADDING, bottom: TOUCH_PADDING, right: TOUCH_PADDING}}
           style={[styles.headerButton, styles.headerButtonRight]}
-          onPress={this.onRightButtonClick.bind(this)}>
+          onPress={() => this.onRightButtonClick()}>
           <Text style={[styles.headerButtonText]} numberOfLines={1}>{rightButton}</Text>
         </TouchableOpacity>
       </View>

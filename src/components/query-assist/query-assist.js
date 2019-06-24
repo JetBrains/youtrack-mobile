@@ -123,7 +123,7 @@ export default class QueryAssist extends Component<Props, State> {
       cancelButton = <TouchableOpacity
         style={styles.cancelSearch}
         testID="query-assist-cancel"
-        onPress={this.cancelSearch.bind(this)}
+        onPress={() => this.cancelSearch()}
       >
         <Text style={styles.cancelText}>
           Cancel

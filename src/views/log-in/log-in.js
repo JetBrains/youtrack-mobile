@@ -100,7 +100,7 @@ export class LogIn extends Component<Props, State> {
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag">
 
-        <TouchableOpacity onPress={this.changeYouTrackUrl.bind(this)} style={styles.urlChangeButton} testID="back-to-url">
+        <TouchableOpacity onPress={() => this.changeYouTrackUrl()} style={styles.urlChangeButton} testID="back-to-url">
           <View style={styles.urlChangeWrapper}>
             <Image source={back} style={styles.urlChangeIcon}/>
             <Text style={styles.urlChangeText}>URL</Text>
@@ -113,7 +113,7 @@ export class LogIn extends Component<Props, State> {
           </TouchableWithoutFeedback>
         </View>
 
-        <TouchableOpacity onPress={this.changeYouTrackUrl.bind(this)} testID="youtrack-url">
+        <TouchableOpacity onPress={() => this.changeYouTrackUrl()} testID="youtrack-url">
           <View>
             <Text style={styles.welcome}>Login to YouTrack</Text>
             <Text style={[styles.descriptionText, {marginTop: 8}]}>{formatYouTrackURL(this.props.auth.config.backendUrl)}</Text>
@@ -157,7 +157,7 @@ export class LogIn extends Component<Props, State> {
           <TouchableOpacity style={[styles.signin, this.state.loggingIn ? styles.signinDisabled : {}]}
             disabled={this.state.loggingIn}
             testID="log-in"
-            onPress={this.logInViaCredentials.bind(this)}>
+            onPress={() => this.logInViaCredentials()}>
             <Text
               style={styles.signinText}>Log in</Text>
             {this.state.loggingIn && <ActivityIndicator style={styles.loggingInIndicator}/>}
@@ -175,7 +175,7 @@ export class LogIn extends Component<Props, State> {
           <TouchableOpacity
             style={styles.linkContainer}
             testID="log-in-via-browser"
-            onPress={this.logInViaHub.bind(this)}
+            onPress={() => this.logInViaHub()}
           >
             <Text style={styles.linkLike}>
               Log in via Browser</Text>

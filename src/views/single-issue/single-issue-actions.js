@@ -535,9 +535,12 @@ export function updateIssueFieldValue(field: CustomField, value: FieldValue) {
     usage.trackEvent(CATEGORY_NAME, 'Update field value');
 
     dispatch(setIssueFieldValue(field, value));
-    const updateMethod = field.hasStateMachine
-      ? api.issue.updateIssueFieldEvent.bind(api)
-      : api.issue.updateIssueFieldValue.bind(api);
+    const updateMethod = (...args) => {
+      if (field.hasStateMachine) {
+        return api.issue.updateIssueFieldEvent(...args);
+      }
+      return api.issue.updateIssueFieldValue(...args);
+    };
 
     try {
       await updateMethod(issue.id, field.id, value);

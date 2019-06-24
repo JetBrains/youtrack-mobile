@@ -164,7 +164,7 @@ export default class AuthTest {
         return authParams;
       })
       .then((authParams) => this.verifyToken(authParams))
-      .then(this.storeAuth.bind(this))
+      .then((authParams) => this.storeAuth(authParams))
       .then((authParams) => {
         this.authParams = authParams;
         return authParams;
