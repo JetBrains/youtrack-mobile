@@ -52,9 +52,18 @@ export default class Home extends Component<Props, State> {
   render() {
     return (
       <View style={styles.container}>
-        <Image style={styles.logoImage} source={logo}/>
-        {this._renderUrl()}
-        {this._renderMessage()}
+
+        <View style={styles.logoContainer}>
+          <Image style={styles.logoImage} source={logo}/>
+        </View>
+
+        {this._renderUrlButton()}
+
+        <View style={styles.messageContainer}>
+          {this._renderRetryAction()}
+          {this._renderMessage()}
+        </View>
+
       </View>
     );
   }

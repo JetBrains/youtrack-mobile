@@ -1,8 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {UNIT, COLOR_FONT_GRAY, COLOR_PINK} from '../../components/variables/variables';
 
-const URL_BUTTON_HEIGHT = 36;
-
 export default StyleSheet.create({
   container: {
     flex: 1,
@@ -10,21 +8,39 @@ export default StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#FFF'
   },
+  logoContainer: {
+    flex: 2,
+    justifyContent: 'flex-end'
+  },
   logoImage: {
     height: UNIT * 20,
     resizeMode: 'contain'
   },
+  retry: {
+    textAlign: 'center',
+    padding: UNIT,
+    fontSize: 17,
+    color: COLOR_PINK
+  },
+  messageContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
   message: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    padding: UNIT * 2,
-    textAlign: 'center'
+    padding: UNIT * 2
   },
   urlButton: {
-    height: URL_BUTTON_HEIGHT,
-    marginBottom: -URL_BUTTON_HEIGHT
+    flex: 0,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
+    height: 46
+  },
+  urlIcon: {
+    width: UNIT * 2,
+    height: UNIT * 2,
+    marginLeft: UNIT,
+    tintColor: COLOR_GRAY
   },
   url: {
     textAlign: 'center',
