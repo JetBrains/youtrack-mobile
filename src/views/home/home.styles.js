@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_FONT_GRAY, COLOR_PINK} from '../../components/variables/variables';
+import {UNIT, COLOR_FONT_GRAY, COLOR_PINK, COLOR_GRAY} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   container: {

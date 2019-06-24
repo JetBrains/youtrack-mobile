@@ -52,13 +52,17 @@ class YouTrackMobile extends Component<void, void> {
     super();
 
     this.registerRoutes();
-    store.dispatch(getStoredConfigAndProceed());
+    YouTrackMobile.init();
 
     Router.onBack = (closingView) => {
       store.dispatch(onNavigateBack(closingView));
     };
 
     Router.rootRoutes = ['IssueList', 'Inbox', 'AgileBoard'];
+  }
+
+  static init() {
+    store.dispatch(getStoredConfigAndProceed());
   }
 
   getChildContext() {
@@ -74,7 +78,8 @@ class YouTrackMobile extends Component<void, void> {
       type: 'reset',
       props: {
         message: `Loading configuration...`,
-        onChangeBackendUrl: oldUrl => Router.EnterServer({serverUrl: oldUrl})
+        onChangeBackendUrl: oldUrl => Router.EnterServer({serverUrl: oldUrl}),
+        onRetry: YouTrackMobile.init
       }
     });
 
