@@ -35,7 +35,8 @@ export default class BoardHeader extends PureComponent<Props, void> {
         ref={component => this.node = component}
       >
         {columns.map((col, index) => {
-          const columnPresentation = col.agileColumn.fieldValues
+          const agileColumn = col.agileColumn || {};
+          const columnPresentation = (agileColumn.fieldValues || [])
             .map(val => val.presentation)
             .join(', ');
 
