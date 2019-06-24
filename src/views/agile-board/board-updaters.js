@@ -3,6 +3,7 @@ import log from '../../components/log/log';
 
 import type {BoardCell, AgileBoardRow, Board, AgileColumn} from '../../flow/Agile';
 import type {IssueOnList, IssueFull} from '../../flow/Issue';
+import {notify} from '../../components/notification/notification';
 
 export function updateRowCollapsedState(
   board: Board,
@@ -196,10 +197,18 @@ export function addOrUpdateCell(board: Board, issue: IssueOnList, rowId: string,
   if (!targetRow) {
     return board;
   }
+
   const targetCell = targetRow.cells.filter((cell: BoardCell) => cell.column.id === columnId)[0];
+  if (!targetCell) {
+    notify(`Agile board settings have been changed. Reload the board.`);
+    return {
+      ...board,
+      orphanRow: board.orphanRow,
+      trimmedSwimlanes: board.trimmedSwimlanes
+    };
+  }
 
   const issueOnBoard = findIssueOnBoard(board, issue.id);
-
   if (!issueOnBoard) {
     return addCardToBoard(board, targetCell.id, issue);
   }
