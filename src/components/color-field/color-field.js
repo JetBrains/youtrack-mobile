@@ -1,6 +1,6 @@
 /* @flow */
 import {View, Text, StyleSheet} from 'react-native';
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 
 export const SIZE = 20;
 export const NO_COLOR_ID = '0';
@@ -13,7 +13,7 @@ type Props = {
   style?: any
 };
 
-export default class ColorField extends Component<Props, void> {
+export default class ColorField extends PureComponent<Props, void> {
   _getBackgroundColor() {
     return this.props.color?.background || INITIAL_COLOR;
   }
@@ -23,6 +23,9 @@ export default class ColorField extends Component<Props, void> {
   }
 
   _getFieldLetter() {
+    if (!this.props.text) {
+      return null;
+    }
     return this.props.fullText ? this.props.text : this.props.text.substr(0, 1);
   }
 
