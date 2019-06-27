@@ -1,6 +1,7 @@
 
 export type IssueOnList = {
   id: string,
+  idReadable: string,
   summary: string,
   resolved: boolean,
   project: IssueProject,
@@ -13,6 +14,7 @@ export type IssueOnList = {
 
 export type IssueFull = {
   id: string,
+  idReadable: string,
   summary: string,
   description: string,
   resolved: boolean,
