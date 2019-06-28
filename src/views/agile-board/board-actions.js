@@ -53,10 +53,12 @@ function loadSprint(agileId: string, sprintId: string) {
       const sprint = await api.agile.getSprint(agileId, sprintId, PAGE_SIZE);
       LayoutAnimation.easeInEaseOut();
       dispatch(receiveSprint(sprint));
+      dispatch(updateAgileUserProfile(sprint.id));
       dispatch(subscribeServersideUpdates());
       log.info(`Sprint ${sprintId} (agileBoardId="${agileId}") has been loaded`);
     } catch (e) {
       usage.trackEvent(CATEGORY_NAME, 'Load sprint', 'Error');
+      //TODO(xi-eye): load last available
       notifyError('Could not load sprint', e);
     } finally {
       dispatch(stopSprintLoad());
@@ -247,7 +249,6 @@ export function openSprintSelect() {
         onSelect: selectedSprint => {
           dispatch(closeSelect());
           dispatch(loadSprint(sprint.agile.id, selectedSprint.id));
-          dispatch(updateAgileUserProfile(selectedSprint.id));
           usage.trackEvent(CATEGORY_NAME, 'Change sprint');
         }
       }
