@@ -99,9 +99,6 @@ describe('<Accounts/>', () => {
 
     it('should not render accounts without `config`', () => {
       wrapper.setProps({otherAccounts: [{}, createAccountMock()]});
-      // wrapper = doShallow({
-      //   otherAccounts: [{}, createAccountMock()]
-      // });
 
       expect(findByTestId(testIdAccountElement)).toHaveLength(2);
     });
