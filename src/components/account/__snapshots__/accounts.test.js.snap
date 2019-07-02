@@ -1,0 +1,239 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Accounts/> Render should match a snapshot 1`] = `
+<View
+  style={
+    Object {
+      "flexDirection": "row",
+    }
+  }
+  testID="accounts"
+>
+  <TouchableOpacity
+    activeOpacity={0.2}
+    onPress={[MockFunction]}
+    style={
+      Object {
+        "flex": 0,
+        "height": 32,
+        "justifyContent": "flex-start",
+      }
+    }
+    testID="accountsAddAccount"
+  >
+    <Image
+      source={
+        Object {
+          "testUri": "../../../src/components/icon/add.png",
+        }
+      }
+      style={
+        Object {
+          "height": 24,
+          "resizeMode": "contain",
+        }
+      }
+    />
+  </TouchableOpacity>
+  <_default
+    activeDotColor="white"
+    automaticallyAdjustContentInsets={false}
+    autoplay={false}
+    autoplayDirection={true}
+    autoplayTimeout={2.5}
+    bounces={false}
+    disableNextButton={false}
+    dotColor="#263B4C"
+    height={158}
+    horizontal={true}
+    index={1}
+    loadMinimal={false}
+    loadMinimalSize={1}
+    loop={false}
+    onIndexChanged={[Function]}
+    onTouchStart={[Function]}
+    pagingEnabled={true}
+    removeClippedSubviews={true}
+    scrollEnabled={true}
+    scrollsToTop={false}
+    showsButtons={false}
+    showsHorizontalScrollIndicator={false}
+    showsPagination={true}
+    showsVerticalScrollIndicator={false}
+  >
+    <View
+      key="0_15"
+      style={
+        Array [
+          Object {
+            "alignItems": "center",
+            "flex": 1,
+            "paddingBottom": 16,
+          },
+          Object {
+            "paddingBottom": 32,
+          },
+        ]
+      }
+      testID="accountsAccount"
+    >
+      <TouchableWithoutFeedback>
+        <Avatar
+          size={64}
+          source={
+            Object {
+              "uri": "",
+            }
+          }
+        />
+      </TouchableWithoutFeedback>
+      <Text
+        numberOfLines={1}
+        style={
+          Object {
+            "color": "#FFF",
+            "fontSize": 16,
+            "fontWeight": "bold",
+            "marginTop": 8,
+          }
+        }
+      >
+        youtrack.com
+      </Text>
+      <Text
+        style={
+          Object {
+            "color": "#CCC",
+            "marginBottom": 16,
+            "marginTop": 4,
+          }
+        }
+      />
+    </View>
+    <View
+      key="1_14"
+      style={
+        Array [
+          Object {
+            "alignItems": "center",
+            "flex": 1,
+            "paddingBottom": 16,
+          },
+          Object {
+            "paddingBottom": 32,
+          },
+        ]
+      }
+      testID="accountsAccount"
+    >
+      <TouchableWithoutFeedback>
+        <Avatar
+          size={64}
+          source={
+            Object {
+              "uri": "",
+            }
+          }
+        />
+      </TouchableWithoutFeedback>
+      <Text
+        numberOfLines={1}
+        style={
+          Object {
+            "color": "#FFF",
+            "fontSize": 16,
+            "fontWeight": "bold",
+            "marginTop": 8,
+          }
+        }
+      >
+        youtrack.com
+      </Text>
+      <Text
+        style={
+          Object {
+            "color": "#CCC",
+            "marginBottom": 16,
+            "marginTop": 4,
+          }
+        }
+      />
+    </View>
+    <View
+      key="2_14"
+      style={
+        Array [
+          Object {
+            "alignItems": "center",
+            "flex": 1,
+            "paddingBottom": 16,
+          },
+          Object {
+            "paddingBottom": 32,
+          },
+        ]
+      }
+      testID="accountsAccount"
+    >
+      <TouchableWithoutFeedback>
+        <Avatar
+          size={64}
+          source={
+            Object {
+              "uri": "",
+            }
+          }
+        />
+      </TouchableWithoutFeedback>
+      <Text
+        numberOfLines={1}
+        style={
+          Object {
+            "color": "#FFF",
+            "fontSize": 16,
+            "fontWeight": "bold",
+            "marginTop": 8,
+          }
+        }
+      >
+        youtrack.com
+      </Text>
+      <Text
+        style={
+          Object {
+            "color": "#CCC",
+            "marginBottom": 16,
+            "marginTop": 4,
+          }
+        }
+      />
+    </View>
+  </_default>
+  <TouchableOpacity
+    activeOpacity={0.2}
+    onPress={[Function]}
+    style={
+      Object {
+        "flex": 0,
+        "height": 32,
+        "justifyContent": "flex-start",
+      }
+    }
+    testID="accountsOnLogOut"
+  >
+    <Image
+      source={
+        Object {
+          "testUri": "../../../src/components/icon/logout.png",
+        }
+      }
+      style={
+        Object {
+          "height": 24,
+          "resizeMode": "contain",
+        }
+      }
+    />
+  </TouchableOpacity>
+</View>
+`;

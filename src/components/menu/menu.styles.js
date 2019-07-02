@@ -7,6 +7,9 @@ const bottomBorder = {
 };
 
 export default StyleSheet.create({
+  accounts: {
+    ...bottomBorder
+  },
   scrollContainer: {
     backgroundColor: 'black'
   },
@@ -14,44 +17,7 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: 'black'
   },
-  swiper: {},
-  profileContainer: {
-    alignItems: 'center',
-    paddingBottom: UNIT * 2,
-    ...bottomBorder
-  },
-  profileContainerWithDots: {
-    paddingBottom: UNIT * 4,
-  },
-  profileName: {
-    color: COLOR_GRAY,
-    marginTop: UNIT/2,
-  },
-  serverURL: {
-    marginTop: UNIT,
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: COLOR_FONT_ON_BLACK,
-  },
-  logoutIcon: {
-    height: UNIT * 3,
-    resizeMode: 'contain'
-  },
-  logOutButton: {
-    position: 'absolute',
-    right: UNIT
-  },
-  addAccountButton: {
-    position: 'absolute',
-    left: UNIT
-  },
-  addAccountIcon: {
-    height: UNIT * 3,
-    resizeMode: 'contain'
-  },
-  menuItems: {
-
-  },
+  menuItems: {},
   menuItemButton: {
     paddingRight: UNIT * 2,
     paddingTop: UNIT * 2,
@@ -93,8 +59,7 @@ export default StyleSheet.create({
     lineHeight: UNIT*2,
     color: COLOR_GRAY
   },
-  buttonLink: {
-  },
+  buttonLink: {},
   linkText: {
     color: COLOR_PINK,
     fontSize: 12
