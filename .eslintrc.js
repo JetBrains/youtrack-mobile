@@ -49,6 +49,7 @@ module.exports = {
     'react/jsx-uses-vars': ERROR,
     'react-native/no-unused-styles': ERROR,
     'react-native/split-platform-components': ERROR,
+    "react-native/no-raw-text": ERROR,
 
     'flowtype/define-flow-type': WARNING,
     'flowtype/no-weak-types': OFF
