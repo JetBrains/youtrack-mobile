@@ -1,13 +1,14 @@
 /* @flow */
 import styles from './single-issue.styles';
 
-import {View, Text, TouchableOpacity, Modal} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 import React, {Component} from 'react';
 
 import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
 import {saveIssueActivityEnabledTypes} from './single-issue-actions';
 
 import Select from '../../components/select/select';
+import ModalView from '../../components/modal-view/modal-view';
 
 type Props = {
   issueActivityTypes: Array<Object>,
@@ -51,7 +52,7 @@ export default class SingleIssueActivitiesSettings extends Component<Props, Stat
   _toggleSettingsVisibility = () => {
     const {visible} = this.state;
     this.setState({visible: !visible});
-  }
+  };
 
   _onApplySettings() {
     saveIssueActivityEnabledTypes(this.state.select.selectedItems);
@@ -77,10 +78,11 @@ export default class SingleIssueActivitiesSettings extends Component<Props, Stat
 
   _renderSettings() {
     return (
-      <Modal
-        visible={this.state.visible}
+      <ModalView
         transparent={true}
+        visible={this.state.visible}
         animationType={'slide'}
+        style={styles.settingsModal}
       >
         <View style={styles.settingsPanel}>
           {this._renderSelect()}
@@ -92,7 +94,7 @@ export default class SingleIssueActivitiesSettings extends Component<Props, Stat
             <Text style={styles.settingsApplyButtonText}>Apply</Text>
           </TouchableOpacity>}
         </View>
-      </Modal>
+      </ModalView>
     );
   }
 

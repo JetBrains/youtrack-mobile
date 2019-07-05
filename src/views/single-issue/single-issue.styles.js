@@ -1,7 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {
   UNIT,
-  FOOTER_HEIGHT,
   COLOR_EXTRA_LIGHT_GRAY,
   COLOR_FONT_ON_BLACK,
   COLOR_BLACK,
@@ -14,7 +13,6 @@ import {
   COLOR_MEDIUM_GRAY,
   COLOR_LINK
 } from '../../components/variables/variables';
-import bottomPadding from '../../components/bottom-padding/bottom-padding';
 
 const SUGGESTION_BOTTOM = 48;
 
@@ -55,19 +53,18 @@ export default StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'flex-start',
-    marginLeft: -UNIT/4,
-    marginRight: -UNIT/4
+    marginLeft: -UNIT / 4,
+    marginRight: -UNIT / 4
   },
   tagColorField: {
     width: null, //Removes fixed width of usual color field
-    paddingLeft: UNIT/2,
-    paddingRight: UNIT/2,
-    margin: UNIT/4,
+    paddingLeft: UNIT / 2,
+    paddingRight: UNIT / 2,
+    margin: UNIT / 4,
     borderWidth: 0.5,
     borderColor: COLOR_GRAY
   },
-  tagButton: {
-  },
+  tagButton: {},
   summary: {
     paddingTop: UNIT,
     fontSize: 20,
@@ -75,8 +72,7 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     color: COLOR_FONT
   },
-  description: {
-  },
+  description: {},
   attachments: {
     marginTop: UNIT * 2,
   },
@@ -88,8 +84,7 @@ export default StyleSheet.create({
     backgroundColor: COLOR_BLACK,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingBottom: bottomPadding
+    justifyContent: 'center'
   },
   editingCommentWrapper: {
     flexDirection: 'row',
@@ -120,7 +115,7 @@ export default StyleSheet.create({
     left: 0,
     right: 0,
     flex: 1,
-    paddingTop: UNIT/2
+    paddingTop: UNIT / 2
   },
   suggestionsLoadingMessage: {
     alignItems: 'center',
@@ -133,7 +128,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    padding: UNIT/2,
+    padding: UNIT / 2,
     paddingLeft: UNIT * 2,
     paddingRight: UNIT * 2
   },
@@ -177,8 +172,8 @@ export default StyleSheet.create({
   },
   separator: {
     height: 0.5,
-    marginLeft: - UNIT*2,
-    marginRight: - UNIT*2,
+    marginLeft: -UNIT * 2,
+    marginRight: -UNIT * 2,
     backgroundColor: COLOR_GRAY
   },
   disabledSaveButton: {
@@ -186,9 +181,8 @@ export default StyleSheet.create({
   },
   addCommentContainer: {
     position: 'absolute',
-
     right: UNIT,
-    bottom: UNIT * 8 + bottomPadding
+    bottom: UNIT * 8
   },
   addCommentButton: {
     flex: 1,
@@ -276,8 +270,8 @@ export default StyleSheet.create({
   },
   activityRelatedChanges: {
     flex: 1,
-    paddingTop: UNIT ,
-    paddingRight: UNIT ,
+    paddingTop: UNIT,
+    paddingRight: UNIT,
     paddingBottom: UNIT * 2,
     marginTop: UNIT * 2,
     marginRight: -1 * UNIT,
@@ -305,16 +299,17 @@ export default StyleSheet.create({
     color: COLOR_LINK
   },
 
+  settingsModal: {
+    justifyContent: 'flex-end'
+  },
   settingsPanel: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0
+    flex: 0,
+    backgroundColor: COLOR_BLACK
   },
   settingsApplyButton: {
     backgroundColor: COLOR_PINK,
     padding: UNIT,
-    paddingBottom: FOOTER_HEIGHT
+    paddingLeft: UNIT * 2
   },
   settingsApplyButtonText: {
     height: 24,
@@ -323,8 +318,8 @@ export default StyleSheet.create({
     textAlign: 'center'
   },
   settingsSelect: {
-    backgroundColor: COLOR_BLACK,
-    paddingBottom: UNIT * 2
+    flex: 0,
+    paddingBottom: UNIT * 2,
   },
   settingsToggle: {
     paddingTop: UNIT,
