@@ -1,5 +1,6 @@
 /* @flow */
-import {View, UIManager} from 'react-native';
+import {View, UIManager, StyleSheet} from 'react-native';
+import SafeAreaView from 'react-native-safe-area-view';
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import store from './store';
@@ -126,18 +127,20 @@ class YouTrackMobile extends Component<void, void> {
     return (
       <Provider store={store}>
         <ActionSheet ref={this.actionSheetRef}>
-          <View style={{flex: 1, backgroundColor: COLOR_BLACK}}>
-            <ErrorBoundary>
-              {Router.renderNavigatorView()}
-            </ErrorBoundary>
+          <SafeAreaView style={Styles.box}>
+            <View style={Styles.box}>
+              <ErrorBoundary>
+                {Router.renderNavigatorView()}
+              </ErrorBoundary>
 
-            <Toast ref={toast => toast ? setNotificationComponent(toast) : null}/>
+              <Toast ref={toast => toast ? setNotificationComponent(toast) : null}/>
 
-            <UserAgreement/>
-            <DebugView/>
-            <FeaturesView/>
-            <ScanView/>
-          </View>
+              <UserAgreement/>
+              <DebugView/>
+              <FeaturesView/>
+              <ScanView/>
+            </View>
+          </SafeAreaView>
         </ActionSheet>
       </Provider>
     );
@@ -145,3 +148,10 @@ class YouTrackMobile extends Component<void, void> {
 }
 
 module.exports = YouTrackMobile; //eslint-disable-line import/no-commonjs
+
+const Styles = StyleSheet.create({
+  box: {
+    flex: 1,
+    backgroundColor: COLOR_BLACK
+  }
+});
