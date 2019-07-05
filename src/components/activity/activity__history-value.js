@@ -111,9 +111,11 @@ function getEmptyFieldValue(activity, issueFields) {
 }
 
 function getProjectPresentation(value: Object) {
+  const LOST_PROJECT_NAME = '[Lost project]';
   const issuePresentation = getReadableID(value);
   if (issuePresentation) {
-    return `${value.project.name }, ${ issuePresentation}`;
+    const projectName = value.project && value.project.name ? value.project.name : LOST_PROJECT_NAME;
+    return `${projectName }, ${ issuePresentation}`;
   }
   return '';
 }

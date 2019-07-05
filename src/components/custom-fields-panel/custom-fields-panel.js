@@ -429,7 +429,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       style: styles.placeholder
     };
 
-    const projectName: string = issue.project.name;
+    const projectName: string = issue.project?.name || '';
     const trimmedProjectName = projectName.length > MAX_PROJECT_NAME_LENGTH
       ? `${projectName.substring(0, MAX_PROJECT_NAME_LENGTH - 3)}…`
       : projectName;
