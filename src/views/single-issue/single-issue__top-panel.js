@@ -4,7 +4,7 @@ import styles from './single-issue.styles';
 
 import {View, Text, TouchableOpacity} from 'react-native';
 import React, {Component} from 'react';
-import ColorField from '../../components/color-field/color-field';
+import Tags from '../../components/tags/tags';
 import {formatDate, shortRelativeDate, getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
 import type {IssueFull} from '../../flow/Issue';
 
@@ -30,22 +30,6 @@ export default class TopPanel extends Component<Props, State> {
 
   _getUserName(user) {
     return `${getEntityPresentation(user)}`;
-  }
-
-  _renderTags(tags) {
-    if (!tags || !tags.length) {
-      return;
-    }
-
-    return <View style={styles.tagsContainer}>
-      {tags.map(tag => {
-        return (
-          <TouchableOpacity onPress={() => this.props.onTagPress(tag.query)} key={tag.id} style={styles.tagButton}>
-            <ColorField text={tag.name} color={tag.color} fullText={true} style={styles.tagColorField}/>
-          </TouchableOpacity>
-        );
-      })}
-    </View>;
   }
 
   _renderUpdatedCreated(issue) {
@@ -85,7 +69,11 @@ export default class TopPanel extends Component<Props, State> {
     const {issue} = this.props;
     return (
       <View>
-        {this._renderTags(issue.tags)}
+        <Tags
+          tags={issue.tags}
+          onTagPress={(query) => this.props.onTagPress(query)}
+        />
+
         {this._renderUpdatedCreated(issue)}
       </View>
     );

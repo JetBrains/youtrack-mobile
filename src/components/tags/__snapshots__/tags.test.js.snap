@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Tags/> Render should match a snapshot 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "flex-start",
+      "flexDirection": "row",
+      "flexWrap": "wrap",
+      "marginLeft": -2,
+      "marginRight": -2,
+    }
+  }
+  testID="tags"
+>
+  <TouchableOpacity
+    activeOpacity={0.2}
+    onPress={[Function]}
+  >
+    <ColorField
+      color={
+        Object {
+          "id": 1,
+        }
+      }
+      fullText={true}
+      style={
+        Object {
+          "borderColor": "#CCC",
+          "borderWidth": 0.5,
+          "margin": 2,
+          "paddingLeft": 4,
+          "paddingRight": 4,
+          "width": null,
+        }
+      }
+      testID="tagColor"
+    />
+  </TouchableOpacity>
+</View>
+`;
