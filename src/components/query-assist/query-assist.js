@@ -6,7 +6,7 @@ import QueryAssistSuggestionsList from './query-assist__suggestions-list';
 import type {TransformedSuggestion, SavedQuery} from '../../flow/Issue';
 import {COLOR_PINK, COLOR_PLACEHOLDER} from '../../components/variables/variables';
 import {clearSearch} from '../../components/icon/icon';
-import Modal from 'react-native-root-modal';
+import ModalView from '../modal-view/modal-view';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import throttle from 'lodash.throttle';
 import {View as AnimatedView} from 'react-native-animatable';
@@ -189,7 +189,7 @@ export default class QueryAssist extends Component<Props, State> {
   render() {
     const {showQueryAssist} = this.state;
 
-    const ContainerComponent = showQueryAssist ? Modal : View;
+    const ContainerComponent = showQueryAssist ? ModalView : View;
     const containerProps = showQueryAssist ? {
       visible: true,
       style: [styles.modal, showQueryAssist && styles.modalFullScreen]
