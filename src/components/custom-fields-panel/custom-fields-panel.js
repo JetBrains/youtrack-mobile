@@ -9,7 +9,7 @@ import {COLOR_PLACEHOLDER, COLOR_BLACK} from '../../components/variables/variabl
 import Api from '../api/api';
 import IssuePermissions from '../issue-permissions/issue-permissions';
 import styles, {calendarTheme} from './custom-fields-panel.styles';
-import Modal from 'react-native-root-modal';
+import ModalView from '../modal-view/modal-view';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import type {IssueFull} from '../../flow/Issue';
 import type {IssueProject, CustomField as CustomFieldType} from '../../flow/CustomFields';
@@ -421,10 +421,10 @@ export default class CustomFieldsPanel extends Component<Props, State> {
 
     const isEditorShown = this.state.select.show || this.state.datePicker.show || this.state.simpleValue.show;
 
-    const ContainerComponent = isEditorShown ? Modal : View;
+    const ContainerComponent = isEditorShown ? ModalView : View;
     const containerProps = isEditorShown ? {
       visible: true,
-      style: [styles.modal, isEditorShown ? {top: 0} : null]
+      style: [isEditorShown ? {top: 0} : null]
     } : {
       style: styles.placeholder
     };

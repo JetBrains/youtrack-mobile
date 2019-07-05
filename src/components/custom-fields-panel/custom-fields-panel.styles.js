@@ -1,5 +1,4 @@
 import {StyleSheet} from 'react-native';
-import bottomPadding from '../bottom-padding/bottom-padding';
 import {
   UNIT,
   FOOTER_HEIGHT,
@@ -18,27 +17,18 @@ const DONE_BUTTON_HEIGHT = 24;
 
 export default StyleSheet.create({
   placeholder: {
-    height: FOOTER_HEIGHT + bottomPadding,
+    height: FOOTER_HEIGHT,
     backgroundColor: COLOR_BLACK
   },
   customFieldsPanel: {
     paddingLeft: UNIT,
     flexDirection: 'row',
     backgroundColor: COLOR_BLACK,
-    height: FOOTER_HEIGHT + bottomPadding,
+    height: FOOTER_HEIGHT,
     borderTopWidth: 1,
     borderColor: COLOR_DARK_BORDER,
     flexShrink: 0
   },
-
-  modal: {
-    flex: 1,
-    justifyContent: 'space-between',
-    left: 0,
-    right: 0,
-    bottom: 0
-  },
-
   editorViewContainer: {
     flex: 1,
     flexShrink: 1,
@@ -73,8 +63,7 @@ export default StyleSheet.create({
   },
   doneButton: {
     backgroundColor: COLOR_PINK,
-    padding: UNIT,
-    paddingBottom: UNIT + bottomPadding
+    padding: UNIT
   },
   doneButtonText: {
     height: DONE_BUTTON_HEIGHT,
