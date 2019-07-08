@@ -6,7 +6,8 @@ import {COLOR_PLACEHOLDER} from '../../components/variables/variables';
 import MultilineInput from '../../components/multiline-input/multiline-input';
 import {closeOpaque, visibility, visibilityActive} from '../../components/icon/icon';
 import Avatar from '../../components/avatar/avatar';
-import type {IssueUser, IssueComment} from '../../flow/CustomFields';
+import type {IssueComment} from '../../flow/CustomFields';
+import type {User} from '../../flow/User';
 
 import styles from './single-issue.styles';
 
@@ -20,7 +21,7 @@ type Props = {
 
   suggestionsAreLoading: boolean,
   onRequestCommentSuggestions: (query: string) => any,
-  suggestions: ?{users: Array<IssueUser>},
+  suggestions: ?{users: Array<User>},
 
   onEditCommentVisibility: (commentId: string) => any,
   isSecured: boolean
@@ -102,7 +103,7 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
     }
   }
 
-  applySuggestion(user: IssueUser) {
+  applySuggestion(user: User) {
     function replaceRange(source, start, end, substitute) {
       return source.substring(0, start) + substitute + source.substring(end);
     }

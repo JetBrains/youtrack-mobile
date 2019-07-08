@@ -1,6 +1,7 @@
 /* @flow */
 import fromNow from 'from-now';
-import type {IssueUser, CustomField} from '../../flow/CustomFields';
+import type {CustomField} from '../../flow/CustomFields';
+import type {User} from '../../flow/User';
 import type {AnyIssue} from '../../flow/Issue';
 
 const shortRelativeFormat = {
@@ -14,7 +15,7 @@ const shortRelativeFormat = {
   'years': ['y', 'y']
 };
 
-function getForText(assignee: IssueUser | Array<IssueUser>) {
+function getForText(assignee: User | Array<User>) {
   if (Array.isArray(assignee) && assignee.length > 0) {
     return assignee
       .map(it => getForText(it))

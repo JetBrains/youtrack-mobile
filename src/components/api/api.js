@@ -12,7 +12,8 @@ import urlJoin from 'url-join';
 import type Auth from '../auth/auth';
 import type {EndUserAgreement} from '../../flow/AppConfig';
 import type {TransformedSuggestion, SavedQuery, CommandSuggestionResponse} from '../../flow/Issue';
-import type {IssueProject, IssueUser} from '../../flow/CustomFields';
+import type {IssueProject} from '../../flow/CustomFields';
+import type {User} from '../../flow/User';
 
 class API extends BaseAPI {
   youTrackProjectUrl: string;
@@ -76,7 +77,7 @@ class API extends BaseAPI {
     return await this.makeAuthorizedRequest(`${this.youTrackProjectUrl}/${projectId}?${queryString}`);
   }
 
-  async getCustomFieldUserValues(bundleId: string): Promise<Array<IssueUser>> {
+  async getCustomFieldUserValues(bundleId: string): Promise<Array<User>> {
     const queryString = qs.stringify({
       banned: false,
       sort: true,

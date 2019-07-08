@@ -1,12 +1,3 @@
-export type IssueUser = {
-  $type: string,
-  login: string,
-  id: string,
-  ringId: string,
-  avatarUrl: string,
-  fullName: string
-};
-
 export type TimeTrackingFieldInfo = {
   id: string,
   field: {
@@ -147,7 +138,7 @@ export type IssueComment = {
   deleted: boolean,
   text: string,
   usesMarkdown: boolean,
-  author: IssueUser
+  author: User
 }
 
 export type IssueLinkType = {

@@ -5,11 +5,11 @@
 import type {Permissions} from '../auth/auth__permissions';
 import type {AnyIssue} from '../../flow/Issue';
 import type {CurrentUser} from '../auth/auth';
+import type {User} from '../../flow/User';
 import type {
   CustomField,
   IssueComment,
-  IssueProject,
-  IssueUser
+  IssueProject
 } from '../../flow/CustomFields';
 
 export const CREATE_ISSUE = 'JetBrains.YouTrack.CREATE_ISSUE';
@@ -53,7 +53,7 @@ export default class IssuePermissions {
     return !!projectRingId && this.permissions.has(permissionName, projectRingId);
   }
 
-  isCurrentUser(user: IssueUser): boolean {
+  isCurrentUser(user: User): boolean {
     if (!user || !user.ringId || !this.currentUser) {
       return false;
     }

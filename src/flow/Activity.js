@@ -41,7 +41,7 @@ export type IssueActivity = {
     icon: string,
     name: string
   },
-  author: IssueUser,
+  author: User,
   target: {id: string, created: number, usesMarkdown: boolean},
   field: Object,
   added: string | Array<AddedActivityItem>,
