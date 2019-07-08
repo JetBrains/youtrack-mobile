@@ -8,10 +8,14 @@ import Tags from './tags';
 describe('<Tags/>', () => {
 
   let wrapper;
+  let tagQueryMock;
+  let onPressMock;
 
   describe('Render', () => {
     beforeEach(() => {
-      wrapper = doShallow([{color: {id: 1}}]);
+      tagQueryMock = 'tag: foo';
+      onPressMock = jest.fn();
+      wrapper = doShallow([{color: {id: 1}, query: tagQueryMock}], onPressMock);
     });
 
     it('should match a snapshot', () => {
@@ -24,6 +28,12 @@ describe('<Tags/>', () => {
 
     it('should render color field', () => {
       expect(findByTestId('tagColor')).toHaveLength(1);
+    });
+
+    it('should redirect on click on a tag', () => {
+      findByTestId('tagsTag').simulate('press');
+
+      expect(onPressMock).toHaveBeenCalledWith(tagQueryMock);
     });
   });
 

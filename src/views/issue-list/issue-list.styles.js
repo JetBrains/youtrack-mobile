@@ -77,5 +77,10 @@ export default StyleSheet.create({
   listFooterMessage: {
     textAlign: 'center',
     padding: UNIT * 2
+  },
+  tags: {
+    height: 22,
+    overflow: 'hidden',
+    marginTop: UNIT / 2
   }
 });

@@ -3,19 +3,23 @@
 exports[`<Tags/> Render should match a snapshot 1`] = `
 <View
   style={
-    Object {
-      "alignItems": "flex-start",
-      "flexDirection": "row",
-      "flexWrap": "wrap",
-      "marginLeft": -2,
-      "marginRight": -2,
-    }
+    Array [
+      Object {
+        "alignItems": "flex-start",
+        "flexDirection": "row",
+        "flexWrap": "wrap",
+        "marginLeft": -2,
+        "marginRight": -2,
+      },
+      Object {},
+    ]
   }
   testID="tags"
 >
   <TouchableOpacity
     activeOpacity={0.2}
     onPress={[Function]}
+    testID="tagsTag"
   >
     <ColorField
       color={

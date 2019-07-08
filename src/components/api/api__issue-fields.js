@@ -195,7 +195,8 @@ const ISSUE_XSHORT_FIELDS = toField([
 const ISSUE_SHORT_FIELDS = toField([
   ISSUE_XSHORT_FIELDS,
   {reporter: ISSUE_USER_FIELDS},
-  {fields: ISSUE_FIELD_SHORT_FIELDS}
+  {fields: ISSUE_FIELD_SHORT_FIELDS},
+  {tags: ISSUE_TAGS_FIELDS}
 ]);
 
 const ISSUE_LINKS_FIELDS = toField([

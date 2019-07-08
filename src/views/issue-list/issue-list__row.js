@@ -1,17 +1,22 @@
 /* @flow */
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, Image} from 'react-native';
-import styles from './issue-list.styles';
-import ColorField from '../../components/color-field/color-field';
-import {next} from '../../components/icon/icon';
-import {COLOR_FONT_GRAY} from '../../components/variables/variables';
-import {getPriotityField, getForText, getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
+
 import type {IssueOnList} from '../../flow/Issue';
 import type {BundleValue} from '../../flow/CustomFields';
 
+import ColorField from '../../components/color-field/color-field';
+import Tags from '../../components/tags/tags';
+import {next} from '../../components/icon/icon';
+import {COLOR_FONT_GRAY} from '../../components/variables/variables';
+import {getPriotityField, getForText, getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
+
+import styles from './issue-list.styles';
+
 type Props = {
   issue: IssueOnList,
-  onClick: Function
+  onClick: Function,
+  onTagPress: (query: string) => any
 };
 
 export default class IssueRow extends Component<Props, void> {
@@ -21,11 +26,15 @@ export default class IssueRow extends Component<Props, void> {
     return (<Text>
       <Text style={issueIdStyle}>{issue.idReadable}</Text>
       <Text> by {getEntityPresentation(issue.reporter)} {getForText(issue.fieldHash.Assignee)}</Text>
-    </Text>); }
+    </Text>);
+  }
 
   getSummaryStyle(issue: IssueOnList) {
     if (issue.resolved) {
-      return {color: COLOR_FONT_GRAY, fontWeight: '200'};
+      return {
+        color: COLOR_FONT_GRAY,
+        fontWeight: '200'
+      };
     }
   }
 
@@ -46,7 +55,7 @@ export default class IssueRow extends Component<Props, void> {
   }
 
   render() {
-    const {issue} = this.props;
+    const {issue, onTagPress} = this.props;
 
     return (
       <TouchableOpacity onPress={() => this.props.onClick(issue)} testID="issue-row">
@@ -66,6 +75,11 @@ export default class IssueRow extends Component<Props, void> {
             </View>
 
             <Text style={styles.subtext} numberOfLines={1} testID="issue-row-details">{IssueRow._getSubText(issue)}</Text>
+
+            {Boolean(issue.tags && issue.tags.length) &&
+            <View style={styles.tags}>
+              <Tags tags={issue.tags} onTagPress={onTagPress}/>
+            </View>}
 
           </View>
         </View>

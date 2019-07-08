@@ -4,19 +4,32 @@ import styles from './tags.styles';
 
 import {View, TouchableOpacity} from 'react-native';
 import React, {PureComponent} from 'react';
+
 import ColorField from '../../components/color-field/color-field';
+
 import type {Tag} from '../../flow/CustomFields';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 
 type Props = {
   tags: Array<Tag>,
-  onTagPress: (query: string) => any
+  onTagPress: (query: string) => any,
+  style?: ViewStyleProp,
+}
+
+type DefaultProps = {
+  onTagPress: () => any,
 }
 
 export default class Tags extends PureComponent<Props, void> {
 
+  static defaultProps: DefaultProps = {
+    onTagPress: () => {}
+  };
+
+
   render() {
-    const {tags} = this.props;
+    const {tags, onTagPress, style = {}} = this.props;
 
     if (!tags || !tags.length) {
       return null;
@@ -25,12 +38,13 @@ export default class Tags extends PureComponent<Props, void> {
     return (
       <View
         testID="tags"
-        style={styles.tagsContainer}
+        style={[styles.tagsContainer, style]}
       >
         {tags.map(tag => {
           return (
             <TouchableOpacity
-              onPress={() => this.props.onTagPress(tag.query)}
+              testID="tagsTag"
+              onPress={() => onTagPress(tag.query)}
               key={tag.id}
             >
               <ColorField

@@ -99,7 +99,11 @@ export class IssueList extends Component<Props, void> {
 
   _renderRow = ({item}) => {
     return (
-      <IssueRow key={item.id} issue={item} onClick={(issue) => this.goToIssue(issue)}></IssueRow>
+      <IssueRow
+        key={item.id}
+        issue={item}
+        onClick={(issue) => this.goToIssue(issue)}
+        onTagPress={(query) => Router.IssueList({query})} />
     );
   };
 
