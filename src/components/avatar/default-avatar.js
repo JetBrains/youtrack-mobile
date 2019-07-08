@@ -73,7 +73,7 @@ export default class DefaultAvatar extends PureComponent<Props, void> {
       justifyContent: 'center',
       width: size,
       height: size,
-      borderRadius: size / 2
+      borderRadius: 3
     };
 
     const textStyle = {

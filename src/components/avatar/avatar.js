@@ -17,7 +17,7 @@ type State = {
 export default class Avatar extends PureComponent<Props, State> {
   state = {
     renderDefault: false
-  }
+  };
 
   handleImageLoadError = () => {
     this.setState({renderDefault: true});
@@ -36,7 +36,7 @@ export default class Avatar extends PureComponent<Props, State> {
     const imageStyle = {
       width: size,
       height: size,
-      borderRadius: size / 2
+      borderRadius: 3
     };
 
     return (
