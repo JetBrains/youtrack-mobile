@@ -257,17 +257,22 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
       issue,
       copyCommentUrl, openNestedIssueView, issuePermissions,
       startEditingComment, deleteComment, restoreComment, deleteCommentPermanently,
-      workTimeSettings
+      workTimeSettings,
+      user
     } = this.props;
 
     return (
       <View style={styles.commentsListContainer}>
         <SingleIssueActivities
-          issueFields={issue.fields}
           activityPage={activityPage}
+          naturalCommentsOrder={user.profiles.appearance.naturalCommentsOrder}
+
+          issueFields={issue.fields}
           attachments={issue.attachments}
+
           imageHeaders={getApi().auth.getAuthorizationHeaders()}
           backendUrl={getApi().config.backendUrl}
+
           onReply={(comment: IssueComment) => {
             this.props.showCommentInput();
             this.props.startReply(comment.author.login);
@@ -492,7 +497,9 @@ const mapStateToProps = (state: {app: Object, singleIssue: SingleIssueState}, ow
     selectProps: state.singleIssue.selectProps,
     ...(isOnTop ? {} : {addCommentMode: false}),
 
-    workTimeSettings: state.app.workTimeSettings
+    workTimeSettings: state.app.workTimeSettings,
+
+    user: state.app.user
   };
 };
 

@@ -61,19 +61,22 @@ type Props = {
   onIssueIdTap: (issueId: string) => any,
 
   workTimeSettings: ?WorkTimeSettings,
+  naturalCommentsOrder: boolean,
 };
 
 type DefaultProps = {
   onReply: Function,
   onCopyCommentLink: Function,
-  workTimeSettings: WorkTimeSettings
+  workTimeSettings: WorkTimeSettings,
+  naturalCommentsOrder: boolean
 };
 
 export default class SingleIssueActivities extends Component<Props, void> {
   static defaultProps: DefaultProps = {
     onReply: () => {},
     onCopyCommentLink: () => {},
-    workTimeSettings: {}
+    workTimeSettings: {},
+    naturalCommentsOrder: true
   };
 
   _isMultiValueActivity(activity: Object) {
@@ -365,12 +368,14 @@ export default class SingleIssueActivities extends Component<Props, void> {
   }
 
   render() {
-    const {activityPage} = this.props;
+    const {activityPage, naturalCommentsOrder} = this.props;
     if (!activityPage) {
       return null;
     }
     const groupedActivities = this._processActivities(activityPage);
-    const activities = createActivitiesModel(groupedActivities);
+    const activities = createActivitiesModel(
+      naturalCommentsOrder ? groupedActivities.reverse() : groupedActivities
+    );
 
     return (
       <View>

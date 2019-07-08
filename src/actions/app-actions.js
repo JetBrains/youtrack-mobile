@@ -24,6 +24,7 @@ import type {AppConfigFilled, EndUserAgreement} from '../flow/AppConfig';
 import type {WorkTimeSettings} from '../flow/WorkTimeSettings';
 import type {StorageState} from '../components/storage/storage';
 import type RootState from '../reducers/app-reducer';
+import type {User} from '../flow/User';
 
 export function logOut() {
   return async (dispatch: (any) => any, getState: () => Object, getApi: () => Api) => {
@@ -274,9 +275,17 @@ function completeInitialization() {
     dispatch(subscribeToPush());
     dispatch(loadAgileProfile());
     dispatch(loadWorkTimeSettings());
+    dispatch(loadUserWithAppearanceProfile());
 
     log.info('Initialization completed');
     Router.navigateToDefaultRoute();
+  };
+}
+
+function loadUserWithAppearanceProfile() {
+  return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
+    const user: User = await getApi().getUserWithAppearanceProfile();
+    await dispatch({type: types.RECEIVE_USER_APPEARANCE_PROFILE, user});
   };
 }
 

@@ -7,6 +7,7 @@ import type {Permissions} from '../components/auth/auth__permissions';
 import type {StorageState} from '../components/storage/storage';
 import type {EndUserAgreement} from '../flow/AppConfig';
 import type {WorkTimeSettings} from '../flow/WorkTimeSettings';
+import type {User} from '../flow/User';
 
 declare type RootState = {
   auth: ?Auth,
@@ -18,7 +19,8 @@ declare type RootState = {
   otherAccounts: ?Array<StorageState>,
   isChangingAccount: boolean,
   features: Array<string>,
-  workTimeSettings: ?WorkTimeSettings
+  workTimeSettings: ?WorkTimeSettings,
+  user?: User,
 };
 
 const initialState: RootState = {
@@ -32,7 +34,8 @@ const initialState: RootState = {
   otherAccounts: null,
   isChangingAccount: false,
   features: [],
-  workTimeSettings: {}
+  workTimeSettings: {},
+  user: null,
 };
 
 export default createReducer(initialState, {
@@ -129,6 +132,14 @@ export default createReducer(initialState, {
   },
   [types.RECEIVE_WORK_TIME_SETTINGS](state: RootState, action: {workTimeSettings: WorkTimeSettings}) {
     return {...state, workTimeSettings: action.workTimeSettings};
+  },
+  [types.RECEIVE_USER_APPEARANCE_PROFILE](state: RootState, action: {user: User}) {
+    const updatedProfiles = {...state.user?.profiles, ...{appearance: action.user.profiles.appearance}};
+    const updatedUser = Object.assign({}, state.user, {profiles: updatedProfiles});
+    return {
+      ...state,
+      ...{user: updatedUser}
+    };
   }
 });
 

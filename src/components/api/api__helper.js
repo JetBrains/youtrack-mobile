@@ -47,7 +47,7 @@ const API = {
   },
 
   //Ported from youtrack frontend
-  toField: function toFieldConstructor(fields: Array<string|Object>) {
+  toField: function toFieldConstructor(fields: Object|Array<string|Object>) {
     const toArray = function(object) {
       if (Array.isArray(object)) {
         return object;

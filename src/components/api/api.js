@@ -157,6 +157,18 @@ class API extends BaseAPI {
     const url = `${this.youTrackUrl}/api/admin/timeTrackingSettings/workTimeSettings?fields=${fields}`;
     return await this.makeAuthorizedRequest(url, 'GET');
   }
+
+  async getUserWithAppearanceProfile(userId: string = 'me'): Promise<User> {
+    const queryString = qs.stringify({
+      fields: ApiHelper.toField({
+        profiles: {
+          appearance: ['naturalCommentsOrder']
+        }
+      }).toString()
+    });
+    return await this.makeAuthorizedRequest(`${this.youTrackApiUrl}/admin/users/${userId}?${queryString}`);
+  }
+
 }
 
 export default API;

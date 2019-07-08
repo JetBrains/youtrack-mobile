@@ -6,6 +6,7 @@ import type {IssueFull} from '../../flow/Issue';
 import type {CustomField, FieldValue, IssueProject, CommandSuggestionResponse, IssueComment} from '../../flow/CustomFields';
 import type {WorkTimeSettings} from '../../flow/WorkTimeSettings';
 import type {IssueActivity} from '../../flow/Activity';
+import type {User} from '../../flow/User';
 
 export type State = {
   issueId: string,
@@ -40,7 +41,8 @@ export type State = {
   activitiesEnabled: boolean,
   issueActivityTypes: Array<Object>,
   issueActivityEnabledTypes: Array<Object>,
-  workTimeSettings: ?WorkTimeSettings
+  workTimeSettings: ?WorkTimeSettings,
+  user: User
 };
 
 export const initialState: State = {
@@ -76,7 +78,8 @@ export const initialState: State = {
   activitiesEnabled: false,
   issueActivityTypes: [],
   issueActivityEnabledTypes: [],
-  workTimeSettings: null
+  workTimeSettings: null,
+  user: null
 };
 
 export default createReducer(initialState, {
