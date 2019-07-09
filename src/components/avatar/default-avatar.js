@@ -4,6 +4,8 @@ import {Text, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import React, {PureComponent} from 'react';
 
+import styles from './default-avatar.styles';
+
 type Props = {|
   text: string,
   size: number,
@@ -66,28 +68,17 @@ export default class DefaultAvatar extends PureComponent<Props, void> {
     if (!text) {
       return null;
     }
+
     const shortText = extractLetters(text);
     const colors = COLOR_PARIS[Math.abs(hashCode(text.toLowerCase()) % COLOR_PARIS.length)];
-
-    const conainerStyle = {
-      justifyContent: 'center',
-      width: size,
-      height: size,
-      borderRadius: 3
-    };
-
-    const textStyle = {
-      fontFamily: 'Arial',
-      color: '#FFF',
-      fontWeight: '600',
-
+    const textStyle = [styles.text, {
       fontSize: size / 3.4,
       lineHeight: size / 3.5,
       paddingLeft: size / 4
-    };
+    }];
 
     return (
-      <LinearGradient colors={colors} style={[conainerStyle, style]}>
+      <LinearGradient colors={colors} style={[styles.size40, style]}>
         <View>
           <Text style={textStyle}>
             {shortText}

@@ -2,6 +2,7 @@
 import {Image} from 'react-native';
 import React, {PureComponent} from 'react';
 import DefaultAvatar from './default-avatar';
+import styles from './default-avatar.styles';
 
 type Props = {
   userName: string,
@@ -33,14 +34,13 @@ export default class Avatar extends PureComponent<Props, State> {
       );
     }
 
-    const imageStyle = {
+    const imageSize = {
       width: size,
-      height: size,
-      borderRadius: 3
+      height: size
     };
 
     return (
-      <Image source={source} style={[imageStyle, style]} onError={this.handleImageLoadError} />
+      <Image source={source} style={[styles.common, imageSize, style]} onError={this.handleImageLoadError} />
     );
   }
 }
