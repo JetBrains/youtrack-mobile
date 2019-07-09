@@ -225,13 +225,10 @@ export default StyleSheet.create({
     paddingLeft: UNIT,
     paddingRight: UNIT,
   },
-  activityFirstItem: {
-    paddingTop: UNIT * 2
-  },
   mergedActivity: {
     marginBottom: 0,
     marginLeft: UNIT * 5,
-    paddingTop: 0
+    paddingTop: UNIT * 2
   },
   activityAuthor: {
     flexDirection: 'row'
@@ -241,16 +238,17 @@ export default StyleSheet.create({
     marginLeft: UNIT,
   },
   activityAuthorName: {
-    flex: 1,
+    flex: 0,
+    marginRight: UNIT / 2,
     color: COLOR_FONT,
     fontWeight: 'bold'
   },
   activityTimestamp: {
-    color: COLOR_FONT_GRAY,
+    color: COLOR_FONT,
   },
   activityLabel: {
     flex: 1,
-    color: COLOR_FONT_GRAY
+    color: '#737577'
   },
   activityRelatedChanges: {
     flex: 1,
@@ -274,6 +272,15 @@ export default StyleSheet.create({
   },
   activityRemoved: {
     textDecorationLine: 'line-through'
+  },
+  activityHistoryIcon: {
+    width: 20,
+    height: 20,
+    marginTop: -1,
+    marginLeft: 10,
+    marginRight: 10,
+    resizeMode: 'contain',
+    opacity: 0.3
   },
 
   linkedIssue: {

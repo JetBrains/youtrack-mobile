@@ -3,7 +3,7 @@ import styles from './single-issue.styles';
 import Comment from '../../components/comment/comment';
 import type {Attachment, IssueComment} from '../../flow/CustomFields';
 
-import {View, Text, TouchableOpacity, Platform} from 'react-native';
+import {View, Text, TouchableOpacity, Platform, Image} from 'react-native';
 import React, {Component} from 'react';
 
 import {isActivityCategory} from '../../components/activity/activity__category';
@@ -26,6 +26,8 @@ import Avatar from '../../components/avatar/avatar';
 
 import Router from '../../components/router/router';
 
+import {history} from '../../components/icon/icon';
+
 import usage from '../../components/usage/usage';
 import log from '../../components/log/log';
 import {getApi} from '../../components/api/api__instance';
@@ -35,7 +37,7 @@ import ApiHelper from '../../components/api/api__helper';
 import type {WorkTimeSettings} from '../../flow/WorkTimeSettings';
 import type {IssueActivity} from '../../flow/Activity';
 
-import {COLOR_FONT_GRAY, UNIT} from '../../components/variables/variables';
+import {COLOR_FONT, COLOR_FONT_GRAY, UNIT} from '../../components/variables/variables';
 
 const CATEGORY_NAME = 'Issue Stream';
 
@@ -73,8 +75,10 @@ type DefaultProps = {
 
 export default class SingleIssueActivities extends Component<Props, void> {
   static defaultProps: DefaultProps = {
-    onReply: () => {},
-    onCopyCommentLink: () => {},
+    onReply: () => {
+    },
+    onCopyCommentLink: () => {
+    },
     workTimeSettings: {},
     naturalCommentsOrder: true
   };
@@ -112,8 +116,8 @@ export default class SingleIssueActivities extends Component<Props, void> {
           <Text style={isMultiValue || removed && !added ? styles.activityRemoved : null}>
             {removed}
           </Text>
-          {Boolean(removed && added) && (isMultiValue ? ', ' :
-            <Text>{Platform.OS === 'ios' ? ' → ' : ' ➔ '}</Text>)}
+          {Boolean(removed && added) && (
+            isMultiValue ? ', ' : <Text>{Platform.OS === 'ios' ? ' → ' : ' ➔ '}</Text>)}
           <Text>{added}</Text>
         </Text>
         {this._renderTimestamp(timestamp, styles.alignedRight)}
@@ -131,7 +135,12 @@ export default class SingleIssueActivities extends Component<Props, void> {
         </View>
         {
           linkedIssues.map((linkedIssue) => (
-            <Text key={linkedIssue.id} style={{lineHeight: UNIT * 2.5, marginTop: UNIT / 4}}
+            <Text
+              key={linkedIssue.id}
+              style={{
+                lineHeight: UNIT * 2.5,
+                marginTop: UNIT / 4
+              }}
               onPress={() => Router.SingleIssue({issueId: linkedIssue.idReadable})}>
               <Text style={[
                 styles.linkText,
@@ -140,7 +149,7 @@ export default class SingleIssueActivities extends Component<Props, void> {
               ]}>
                 {linkedIssue.idReadable}
               </Text>
-              {`  ${ linkedIssue.summary}`}
+              {`  ${linkedIssue.summary}`}
             </Text>
           ))
         }
@@ -177,7 +186,8 @@ export default class SingleIssueActivities extends Component<Props, void> {
         />}
         {addedAndLaterRemoved.length > 0 && addedAndLaterRemoved.map(it => <Text key={it.id}>{it.name}</Text>)}
 
-        {removed.length > 0 && <Text style={hasAddedAttachments && {marginTop: UNIT / 2}}>{event.removed.map((it, index) =>
+        {removed.length > 0 &&
+        <Text style={hasAddedAttachments && {marginTop: UNIT / 2}}>{event.removed.map((it, index) =>
           <Text key={it.id}>
             {index > 0 && ', '}
             <Text style={styles.activityRemoved}>{it.name}</Text>
@@ -201,13 +211,18 @@ export default class SingleIssueActivities extends Component<Props, void> {
     });
   }
 
-  _renderUserAvatar(activityGroup: Object) {
+  _renderUserAvatar(activityGroup: Object, showAvatar: boolean) {
+    if (showAvatar) {
+      return (
+        <Avatar
+          userName={getEntityPresentation(activityGroup.author)}
+          size={40}
+          source={{uri: activityGroup.author.avatarUrl}}
+        />
+      );
+    }
     return (
-      <Avatar
-        userName={getEntityPresentation(activityGroup.author)}
-        size={40}
-        source={{uri: activityGroup.author.avatarUrl}}
-      />
+      <Image source={history} style={styles.activityHistoryIcon}/>
     );
   }
 
@@ -215,19 +230,19 @@ export default class SingleIssueActivities extends Component<Props, void> {
     if (timestamp) {
       return (
         <Text style={[styles.activityTimestamp, style]}>
-          {' '}{relativeDate(timestamp)}
+          {relativeDate(timestamp)}
         </Text>
       );
     }
   }
 
-  _renderUserInfo(activityGroup: Object) {
+  _renderUserInfo(activityGroup: Object, noTimestamp?: boolean) {
     return (
-      <View style={[styles.row, styles.activityAuthor]}>
+      <View style={[styles.activityAuthor]}>
         <Text style={styles.activityAuthorName}>
           {getEntityPresentation(activityGroup.author)}
         </Text>
-        <Text style={styles.alignedRight}>{this._renderTimestamp(activityGroup.timestamp)}</Text>
+        {!noTimestamp && <Text>{this._renderTimestamp(activityGroup.timestamp)}</Text>}
       </View>
     );
   }
@@ -357,9 +372,12 @@ export default class SingleIssueActivities extends Component<Props, void> {
 
       return (
         <View style={style}>
+          {!activityGroup.merged && this._renderUserInfo(activityGroup)}
+          {activityGroup.merged && this._renderTimestamp(activityGroup.timestamp, {color: COLOR_FONT})}
+
           {activityGroup.events.map((event) => (
             <View key={event.id} style={styles.activityChange}>
-              {this._renderActivityByCategory(event, activityGroup.merged && activityGroup.timestamp)}
+              {this._renderActivityByCategory(event)}
             </View>
           ))}
         </View>
@@ -388,11 +406,13 @@ export default class SingleIssueActivities extends Component<Props, void> {
             return (
               <View key={`${activityGroup.timestamp}-${index}`} style={[
                 styles.activity,
-                index === 0 && styles.activityFirstItem,
                 activityGroup.merged ? styles.mergedActivity : null
               ]}>
 
-                {!activityGroup.merged && this._renderUserAvatar(activityGroup)}
+                {!activityGroup.merged && this._renderUserAvatar(
+                  activityGroup,
+                  activityGroup.comment || activityGroup.work
+                )}
 
                 <View style={styles.activityItem}>
                   {activityGroup.comment && this._renderCommentActivity(activityGroup)}
