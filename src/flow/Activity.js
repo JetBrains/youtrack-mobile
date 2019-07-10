@@ -47,3 +47,8 @@ export type IssueActivity = {
   added: string | Array<AddedActivityItem>,
   removed: Array<RemovedActivityItem> | null
 }
+
+export type ActivityEnabledType = {
+  id: string,
+  name: string
+}

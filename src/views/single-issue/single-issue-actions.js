@@ -11,7 +11,7 @@ import usage from '../../components/usage/usage';
 import {initialState} from './single-issue-reducers';
 import type {IssueFull, CommandSuggestionResponse} from '../../flow/Issue';
 import type {CustomField, IssueProject, FieldValue, IssueComment} from '../../flow/CustomFields';
-import type {IssueActivity} from '../../flow/Activity';
+import type {IssueActivity, ActivityEnabledType} from '../../flow/Activity';
 import type Api from '../../components/api/api';
 import type {State as SingleIssueState} from './single-issue-reducers';
 import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
@@ -209,13 +209,13 @@ export function saveIssueActivityEnabledTypes(enabledTypes: Array<Object>) {
   enabledTypes && flushStoragePart({issueActivitiesEnabledTypes: enabledTypes});
 }
 
-export function getIssueActivityAllTypes(): Array<Object> {
+export function getIssueActivityAllTypes(): Array<ActivityEnabledType> {
   return Object.keys(Activity.ActivityCategories).map(
     (key) => Object.assign({id: key, name: Activity.CategoryPresentation[key]})
   );
 }
 
-export function getIssueActivitiesEnabledTypes() {
+export function getIssueActivitiesEnabledTypes(): Array<ActivityEnabledType> {
   let enabledTypes = getStorageState().issueActivitiesEnabledTypes || [];
   if (!enabledTypes.length) {
     enabledTypes = getIssueActivityAllTypes();
