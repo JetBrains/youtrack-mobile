@@ -37,6 +37,8 @@ import SingleIssueActivities from './single-issue__activities-stream';
 import OpenScanButton from '../../components/scan/open-scan-button';
 
 import SingleIssueActivitiesSettings from './single-issue__activities-settings';
+import type {UserAppearanceProfile} from '../../flow/User';
+import {receiveUserAppearanceProfile} from '../../actions/app-actions';
 
 const CATEGORY_NAME = 'Issue';
 
@@ -374,7 +376,10 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
       activityLoaded,
       activitiesLoadingError,
       issueActivityTypes,
-      issueActivityEnabledTypes
+      issueActivityEnabledTypes,
+      loadIssueActivities,
+      user,
+      updateUserAppearanceProfile
     } = this.props;
 
     const isSecured = !!editingComment && IssueVisibility.isSecured(editingComment.visibility);
@@ -420,7 +425,13 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
           <SingleIssueActivitiesSettings
             issueActivityTypes={issueActivityTypes}
             issueActivityEnabledTypes={issueActivityEnabledTypes}
-            onApply={this.props.loadIssueActivities}
+            onApply={(userAppearanceProfile: UserAppearanceProfile) => {
+              if (userAppearanceProfile) {
+                updateUserAppearanceProfile(userAppearanceProfile);
+              }
+              loadIssueActivities(); //TODO(xi-eye:performance): do not reload activityPage if only `naturalCommentsOrder` has changed, just reverse the model
+            }}
+            userAppearanceProfile={user.profiles.appearance}
           />}
 
           {Platform.OS === 'ios' && <KeyboardSpacer/>}
@@ -504,7 +515,16 @@ const mapStateToProps = (state: {app: Object, singleIssue: SingleIssueState}, ow
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {...bindActionCreators(issueActions, dispatch)};
+  return {
+    ...bindActionCreators(issueActions, dispatch),
+    ...{
+      updateUserAppearanceProfile: (userAppearanceProfile: UserAppearanceProfile) => {
+        return dispatch(
+          receiveUserAppearanceProfile(userAppearanceProfile)
+        );
+      }
+    }
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingeIssueView);

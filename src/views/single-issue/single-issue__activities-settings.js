@@ -1,19 +1,28 @@
 /* @flow */
 import styles from './single-issue.styles';
 
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, Image} from 'react-native';
 import React, {Component} from 'react';
+
+import type {UserAppearanceProfile} from '../../flow/User';
+import type {ActivityEnabledType} from '../../flow/Activity';
 
 import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
 import {saveIssueActivityEnabledTypes} from './single-issue-actions';
 
+import apiHelper from '../../components/api/api__helper';
+
 import Select from '../../components/select/select';
 import ModalView from '../../components/modal-view/modal-view';
 
+import {checkWhite} from '../../components/icon/icon';
+import selectStyles from '../../components/select/select.styles';
+
 type Props = {
-  issueActivityTypes: Array<Object>,
-  issueActivityEnabledTypes: Array<Object>,
-  onApply: Function
+  issueActivityTypes: Array<ActivityEnabledType>,
+  issueActivityEnabledTypes: Array<ActivityEnabledType>,
+  onApply: Function,
+  userAppearanceProfile: UserAppearanceProfile
 };
 
 type State = {
@@ -23,9 +32,10 @@ type State = {
     dataSource: () => Promise<Array<Object>>,
     onChangeSelection?: (selectedItems: Array<Object>) => any,
     multi: boolean,
-    selectedItems: Array<Object>,
+    selectedItems: Array<ActivityEnabledType>,
     getTitle?: (item: Object) => string
-  }
+  },
+  naturalCommentsOrder: boolean,
 };
 
 const defaultState = {
@@ -35,16 +45,22 @@ const defaultState = {
     multi: true,
     selectedItems: [],
     dataSource: () => Promise.resolve([]),
-    onChangeSelection: items => {
-    }
-  }
+    onChangeSelection: items => {}
+  },
+  naturalCommentsOrder: true,
 };
 
 
 export default class SingleIssueActivitiesSettings extends Component<Props, State> {
   constructor(props: Object) {
     super();
-    this.state = {...defaultState};
+
+    const naturalCommentsOrder = props.userAppearanceProfile.naturalCommentsOrder;
+    this.state = {
+      ...defaultState,
+      ...{naturalCommentsOrder: naturalCommentsOrder}
+    };
+
     this.state.select.dataSource = () => Promise.resolve(props.issueActivityTypes);
     this.state.select.selectedItems = props.issueActivityEnabledTypes;
   }
@@ -54,10 +70,28 @@ export default class SingleIssueActivitiesSettings extends Component<Props, Stat
     this.setState({visible: !visible});
   };
 
+  _selectedTypesChanged(): boolean {
+    return !apiHelper.equalsByProp(
+      this.props.issueActivityEnabledTypes,
+      this.state.select.selectedItems,
+      'id'
+    );
+  }
+
   _onApplySettings() {
-    saveIssueActivityEnabledTypes(this.state.select.selectedItems);
-    this.props.onApply(this.state.select.selectedItems);
+    const {select, naturalCommentsOrder} = this.state;
+    const {userAppearanceProfile} = this.props;
+
+    saveIssueActivityEnabledTypes(select.selectedItems);
     this._toggleSettingsVisibility();
+
+    const isOrderChanged = userAppearanceProfile.naturalCommentsOrder !== naturalCommentsOrder;
+    if (isOrderChanged || this._selectedTypesChanged()) {
+      this.props.onApply(isOrderChanged && {
+        ...userAppearanceProfile,
+        ...{naturalCommentsOrder: naturalCommentsOrder}
+      });
+    }
   }
 
   _renderSelect() {
@@ -76,6 +110,32 @@ export default class SingleIssueActivitiesSettings extends Component<Props, Stat
     );
   }
 
+  _renderSortOrderSettings() {
+    return (
+      <View style={styles.settingsOrderSettings}>
+        <TouchableOpacity
+          style={selectStyles.row}
+          onPress={() => this.setState({naturalCommentsOrder: true})}
+        >
+          <Text style={styles.settingsOrderSettingsText}>Sort: oldest first</Text>
+          <View style={selectStyles.selectedMarkIconSize}>
+            {this.state.naturalCommentsOrder && <Image source={checkWhite} style={selectStyles.selectedMarkIcon}/>}
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={selectStyles.row}
+          onPress={() => this.setState({naturalCommentsOrder: false})}
+        >
+          <Text style={styles.settingsOrderSettingsText}>Sort: newest first</Text>
+          <View style={selectStyles.selectedMarkIconSize}>
+            {!this.state.naturalCommentsOrder && <Image source={checkWhite} style={selectStyles.selectedMarkIcon}/>}
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   _renderSettings() {
     return (
       <ModalView
@@ -86,6 +146,9 @@ export default class SingleIssueActivitiesSettings extends Component<Props, Stat
       >
         <View style={styles.settingsPanel}>
           {this._renderSelect()}
+
+          {this.state.select.show && this._renderSortOrderSettings()}
+
           {this.state.select.show &&
           <TouchableOpacity
             style={styles.settingsApplyButton}

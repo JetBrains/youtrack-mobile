@@ -24,7 +24,7 @@ import type {AppConfigFilled, EndUserAgreement} from '../flow/AppConfig';
 import type {WorkTimeSettings} from '../flow/WorkTimeSettings';
 import type {StorageState} from '../components/storage/storage';
 import type RootState from '../reducers/app-reducer';
-import type {User} from '../flow/User';
+import type {User, UserAppearanceProfile} from '../flow/User';
 
 export function logOut() {
   return async (dispatch: (any) => any, getState: () => Object, getApi: () => Api) => {
@@ -80,6 +80,23 @@ export function onNavigateBack(closingView: Object) {
 
 export function receiveOtherAccounts(otherAccounts: Array<StorageState>) {
   return {type: types.RECEIVE_OTHER_ACCOUNTS, otherAccounts};
+}
+
+export function receiveUser(user: User) {
+  return {type: types.RECEIVE_USER, user};
+}
+
+export function receiveUserAppearanceProfile(userAppearanceProfile: UserAppearanceProfile) {
+  return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
+    const appearanceProfile: UserAppearanceProfile = await getApi().user.updateUserAppearanceProfile(
+      'me',
+      userAppearanceProfile
+    );
+    dispatch({
+      type: types.RECEIVE_USER_APPEARANCE_PROFILE,
+      ...{userAppearanceProfile: appearanceProfile}
+    });
+  };
 }
 
 export function checkAuthorization() {
@@ -275,17 +292,17 @@ function completeInitialization() {
     dispatch(subscribeToPush());
     dispatch(loadAgileProfile());
     dispatch(loadWorkTimeSettings());
-    dispatch(loadUserWithAppearanceProfile());
+    dispatch(loadUser());
 
     log.info('Initialization completed');
     Router.navigateToDefaultRoute();
   };
 }
 
-function loadUserWithAppearanceProfile() {
+function loadUser(userId?: string = 'me') {
   return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
-    const user: User = await getApi().getUserWithAppearanceProfile();
-    await dispatch({type: types.RECEIVE_USER_APPEARANCE_PROFILE, user});
+    const user: User = await getApi().user.getUser(userId);
+    dispatch({type: types.RECEIVE_USER, user});
   };
 }
 

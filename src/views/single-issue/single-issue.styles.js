@@ -294,7 +294,6 @@ export default StyleSheet.create({
     justifyContent: 'flex-end'
   },
   settingsPanel: {
-    flex: 0,
     backgroundColor: COLOR_BLACK
   },
   settingsApplyButton: {
@@ -310,7 +309,19 @@ export default StyleSheet.create({
   },
   settingsSelect: {
     flex: 0,
-    paddingBottom: UNIT * 2,
+    paddingBottom: UNIT * 2
+  },
+  settingsOrderSettings: {
+    borderTopWidth: 1,
+    borderColor: COLOR_FONT_GRAY,
+    paddingTop: UNIT * 2,
+    paddingBottom: UNIT * 3
+  },
+  settingsOrderSettingsText: {
+    flex: 1,
+    fontSize: 24,
+    color: COLOR_FONT_ON_BLACK,
+    textAlign: 'left'
   },
   settingsToggle: {
     paddingTop: UNIT,

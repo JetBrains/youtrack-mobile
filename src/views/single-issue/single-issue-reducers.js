@@ -42,7 +42,8 @@ export type State = {
   issueActivityTypes: Array<Object>,
   issueActivityEnabledTypes: Array<Object>,
   workTimeSettings: ?WorkTimeSettings,
-  user: User
+  user: User,
+  updateUserAppearanceProfile: Function
 };
 
 export const initialState: State = {
@@ -79,7 +80,8 @@ export const initialState: State = {
   issueActivityTypes: [],
   issueActivityEnabledTypes: [],
   workTimeSettings: null,
-  user: null
+  user: null,
+  updateUserAppearanceProfile: null
 };
 
 export default createReducer(initialState, {

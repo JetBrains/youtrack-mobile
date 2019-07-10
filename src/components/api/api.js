@@ -7,6 +7,7 @@ import IssueAPI from './api__issue';
 import AgileAPI from './api__agile';
 import IssuesAPI from './api__issues';
 import InboxAPI from './api__inbox';
+import UserAPI from './api__user';
 import urlJoin from 'url-join';
 
 import type Auth from '../auth/auth';
@@ -23,6 +24,7 @@ class API extends BaseAPI {
   issues: IssuesAPI;
   agile: AgileAPI;
   inbox: InboxAPI;
+  user: UserAPI;
 
   constructor(auth: Auth) {
     super(auth);
@@ -31,8 +33,9 @@ class API extends BaseAPI {
     this.issue = new IssueAPI(auth);
     this.agile = new AgileAPI(auth);
     this.inbox = new InboxAPI(auth);
+    this.user = new UserAPI(auth);
 
-    this.youTrackProjectUrl =`${this.youTrackUrl}/api/admin/projects`;
+    this.youTrackProjectUrl = `${this.youTrackUrl}/api/admin/projects`;
     this.youtTrackFieldBundleUrl = `${this.youTrackUrl}/api/admin/customFieldSettings/bundles`;
   }
 
@@ -156,17 +159,6 @@ class API extends BaseAPI {
     const fields = `id,daysAWeek,workDays,minutesADay`;
     const url = `${this.youTrackUrl}/api/admin/timeTrackingSettings/workTimeSettings?fields=${fields}`;
     return await this.makeAuthorizedRequest(url, 'GET');
-  }
-
-  async getUserWithAppearanceProfile(userId: string = 'me'): Promise<User> {
-    const queryString = qs.stringify({
-      fields: ApiHelper.toField({
-        profiles: {
-          appearance: ['naturalCommentsOrder']
-        }
-      }).toString()
-    });
-    return await this.makeAuthorizedRequest(`${this.youTrackApiUrl}/admin/users/${userId}?${queryString}`);
   }
 
 }

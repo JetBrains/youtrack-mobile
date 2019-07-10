@@ -121,6 +121,14 @@ const API = {
     );
   },
 
+  equalsByProp(a: Array<Object>, b: Array<Object>, propName: string): boolean {
+    const _a = a.reduce((keys, it) => keys.concat(it[propName]), []);
+    const _b = b.reduce((keys, it) => keys.concat(it[propName]), []);
+
+    return _a.length === _b.length && _a.every((value, index) => value === _b[index]);
+
+  }
+
 };
 
 export default API;
