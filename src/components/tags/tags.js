@@ -45,7 +45,7 @@ export default class Tags extends PureComponent<Props, void> {
             <TouchableOpacity
               testID="tagsTag"
               onPress={() => onTagPress(tag.query)}
-              key={tag.id}
+              key={`${tag.id}_button`}
             >
               <ColorField
                 testID="tagColor"

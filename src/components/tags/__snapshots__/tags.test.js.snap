@@ -18,6 +18,7 @@ exports[`<Tags/> Render should match a snapshot 1`] = `
 >
   <TouchableOpacity
     activeOpacity={0.2}
+    key="undefined_button"
     onPress={[Function]}
     testID="tagsTag"
   >
