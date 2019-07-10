@@ -364,15 +364,11 @@ export default class SingleIssueActivities extends Component<Props, void> {
     return null;
   };
 
-  _renderHistoryAndRelatedChanges(activityGroup) {
+  _renderHistoryAndRelatedChanges(activityGroup: Object, isRelatedChange: boolean) {
     if (activityGroup.events.length > 0) {
-      const style = (activityGroup.comment || activityGroup.work) ?
-        styles.activityRelatedChanges :
-        styles.activityHistoryChanges;
-
       return (
-        <View style={style}>
-          {!activityGroup.merged && this._renderUserInfo(activityGroup)}
+        <View style={isRelatedChange ? styles.activityRelatedChanges : styles.activityHistoryChanges}>
+          {Boolean(!activityGroup.merged && !isRelatedChange) && this._renderUserInfo(activityGroup)}
           {activityGroup.merged && this._renderTimestamp(activityGroup.timestamp, {color: COLOR_FONT})}
 
           {activityGroup.events.map((event) => (
@@ -417,7 +413,7 @@ export default class SingleIssueActivities extends Component<Props, void> {
                 <View style={styles.activityItem}>
                   {activityGroup.comment && this._renderCommentActivity(activityGroup)}
                   {activityGroup.work && this._renderWorkActivity(activityGroup)}
-                  {this._renderHistoryAndRelatedChanges(activityGroup)}
+                  {this._renderHistoryAndRelatedChanges(activityGroup, !!activityGroup.comment || !!activityGroup.work)}
                 </View>
 
               </View>
