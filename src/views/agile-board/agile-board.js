@@ -81,7 +81,7 @@ class AgileBoard extends Component<Props, State> {
     if (maxScroll > 0 && scroll > 0 && (maxScroll - scroll) < 40) {
       this.props.onLoadMoreSwimlanes();
     }
-  }
+  };
 
   onContentSizeChange = (width, height) => {
     const windowHeight = Dimensions.get('window').height;
@@ -114,19 +114,20 @@ class AgileBoard extends Component<Props, State> {
       issuePlaceholder: issue,
       issueId: issue.id
     });
-  }
+  };
 
-  _getScrollableWidth = () => {
+  _getScrollableWidth = (): number|null => {
     const {sprint} = this.props;
-    const COLUMN_WIDTH = Dimensions.get('window').width * COLUMN_SCREEN_PART;
-    if (!sprint) {
+
+    if (!sprint || !sprint.board || !sprint.board.columns) { //YTM-835
       return null;
     }
 
+    const COLUMN_WIDTH = Dimensions.get('window').width * COLUMN_SCREEN_PART;
     return sprint.board.columns
       .map(col => col.collapsed ? AGILE_COLLAPSED_COLUMN_WIDTH : COLUMN_WIDTH)
-      .reduce((res, item) => res + item);
-  }
+      .reduce((res, item) => res + item, 0);
+  };
 
   _renderHeader() {
     const {sprint, onOpenSprintSelect, onOpenBoardSelect} = this.props;
@@ -165,7 +166,7 @@ class AgileBoard extends Component<Props, State> {
         <BoardHeader
           ref={this.boardHeaderRef}
           style={{minWidth: zoomedIn ? this._getScrollableWidth() : null}}
-          columns={sprint.board.columns}
+          columns={sprint?.board?.columns}
           onCollapseToggle={this.props.onColumnCollapseToggle}
         />
       </View>
@@ -257,13 +258,13 @@ class AgileBoard extends Component<Props, State> {
         .filter(id => id !== movedId)[dropZone.placeholderIndex - 1],
       movedId
     });
-  }
+  };
 
   toggleZoom = () => {
     const zoomedIn = !this.state.zoomedIn;
     this.setState({zoomedIn});
     flushStoragePart({agileZoomedIn: zoomedIn});
-  }
+  };
 
   render() {
     const {sprint, isLoadingMore, isSprintSelectOpen, noBoardSelected} = this.props;
@@ -279,7 +280,7 @@ class AgileBoard extends Component<Props, State> {
 
           <DragContainer onDragStart={this.onDragStart} onDragEnd={this.onDragEnd}>
             <BoardScroller
-              columns={sprint?.board.columns}
+              columns={sprint?.board?.columns}
               snap={zoomedIn}
               refreshControl={this._renderRefreshControl()}
               horizontalScrollProps={{

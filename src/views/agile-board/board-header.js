@@ -28,6 +28,10 @@ export default class BoardHeader extends PureComponent<Props, void> {
 
   render() {
     const {columns, onCollapseToggle, style} = this.props;
+    
+    if (!columns || !columns.length) { //YTM-835
+      return null;
+    }
 
     return (
       <View
