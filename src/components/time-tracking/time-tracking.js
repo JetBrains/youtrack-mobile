@@ -16,7 +16,7 @@ export function minutesAndHoursFor(duration: Object) {
   return {
     minutes: () => {
       const minutes = Math.floor(totalMinutes(duration) % 60);
-      return `${Math.floor(minutes / 10) || '0' }${ minutes % 10 || '0' } ${TIME_IDENTIFIERS.minutes}`;
+      return `${Math.floor(minutes / 10) || '0' }${ minutes % 10 || '0' }${TIME_IDENTIFIERS.minutes}`;
     },
     hours: () => {
       const hours = Math.floor(totalMinutes(duration) / 60);

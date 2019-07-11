@@ -34,3 +34,4 @@ export {default as visibility} from './visibility-action.png';
 export {default as visibilityActive} from './visibility-action-active.png';
 export {default as qrCode} from './qr-code.png';
 export {default as history} from './history.png';
+export {default as work} from './work.png';

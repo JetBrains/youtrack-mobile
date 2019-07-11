@@ -247,7 +247,6 @@ export default StyleSheet.create({
     color: COLOR_FONT,
   },
   activityLabel: {
-    flex: 1,
     color: '#737577'
   },
   activityRelatedChanges: {
@@ -335,5 +334,8 @@ export default StyleSheet.create({
 
   workTime: {
     fontWeight: 'bold'
+  },
+  workComment: {
+    marginBottom: UNIT,
   }
 });

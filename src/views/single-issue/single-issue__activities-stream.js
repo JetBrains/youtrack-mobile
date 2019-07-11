@@ -26,7 +26,7 @@ import Avatar from '../../components/avatar/avatar';
 
 import Router from '../../components/router/router';
 
-import {history} from '../../components/icon/icon';
+import {history, work} from '../../components/icon/icon';
 
 import usage from '../../components/usage/usage';
 import log from '../../components/log/log';
@@ -222,7 +222,7 @@ export default class SingleIssueActivities extends Component<Props, void> {
       );
     }
     return (
-      <Image source={history} style={styles.activityHistoryIcon}/>
+      <Image source={activityGroup.work ? work : history} style={styles.activityHistoryIcon}/>
     );
   }
 
@@ -319,26 +319,23 @@ export default class SingleIssueActivities extends Component<Props, void> {
     }
 
     const duration = minutesAndHoursFor(work.duration);
-    const hours = duration.hours();
+    const spentTime = [duration.hours(), duration.minutes()].join(' ');
 
     return (
       <View>
         {!activityGroup.merged && this._renderUserInfo(activityGroup)}
 
         <View style={styles.activityChange}>
-          <Text>
-            <Text style={styles.row}>
-              <Text style={styles.activityLabel}>Spent time: </Text>
 
-              {work.date && <Text>{`${absDate(work.date)}   `}</Text>}
-              <Text style={styles.workTime}>
-                {hours && <Text>{`${hours} `}</Text>}
-                <Text>{duration.minutes()}</Text>
-              </Text>
-              {work.type && <Text>{`   ${work.type.name}`}</Text>}
-            </Text>
-            {work.text && <Text>{work.text}</Text>}
-          </Text>
+          {work.text && <View style={styles.workComment}><Text>{work.text}</Text></View>}
+
+          {work.date && <Text>{absDate(work.date)}</Text>}
+
+          <View style={styles.row}>
+            <Text style={styles.activityLabel}>Spent time: </Text>
+            <Text style={styles.workTime}>{spentTime}</Text>
+            {work.type && <Text>{` ${work.type.name}`}</Text>}
+          </View>
 
         </View>
       </View>
@@ -407,7 +404,7 @@ export default class SingleIssueActivities extends Component<Props, void> {
 
                 {!activityGroup.merged && this._renderUserAvatar(
                   activityGroup,
-                  activityGroup.comment || activityGroup.work
+                  !!activityGroup.comment
                 )}
 
                 <View style={styles.activityItem}>
