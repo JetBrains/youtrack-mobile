@@ -1,8 +1,14 @@
 import React, {createElement} from 'react';
 import {Easing, Animated} from 'react-native';
-import {createStackNavigator, StackActions, NavigationActions} from 'react-navigation';
-import transitionConfigs from 'react-navigation/src/views/StackView/StackViewTransitionConfigs';
-import cardInterpolator from 'react-navigation/src/views/StackView/StackViewStyleInterpolator';
+
+import StackViewStyleInterpolator from 'react-navigation-stack/lib/module/views/StackView/StackViewStyleInterpolator';
+import {
+  createStackNavigator,
+  createAppContainer,
+  StackActions,
+  NavigationActions,
+  StackViewTransitionConfigs
+} from 'react-navigation';
 
 import {getStorageState, flushStoragePart} from '../storage/storage';
 import log from '../log/log';
@@ -15,7 +21,7 @@ const TransitionSpec = {
 
 const SlideFromRight = {
   transitionSpec: TransitionSpec,
-  screenInterpolator: cardInterpolator.forHorizontal
+  screenInterpolator: StackViewStyleInterpolator.forHorizontal
 };
 
 /**
@@ -37,7 +43,7 @@ class Router {
       return;
     }
     this._navigator = navigator;
-  }
+  };
 
   getTransitionConfig = () => {
     if (!this._navigator) {
@@ -49,11 +55,11 @@ class Router {
     const route = this.routes[currentRouteName];
 
     if (route.modal || this._modalTransition) {
-      return transitionConfigs.defaultTransitionConfig(null, null, true);
+      return StackViewTransitionConfigs.defaultTransitionConfig(null, null, true);
     }
 
     return SlideFromRight;
-  }
+  };
 
   registerRoute({name, component, props, type, modal}) {
     this.routes[name] = {
@@ -61,7 +67,7 @@ class Router {
       type,
       props,
       modal,
-      navigationOptions: {
+      defaultNavigationOptions: {
         gesturesEnabled: true
       }
     };
@@ -72,11 +78,13 @@ class Router {
   }
 
   finalizeRoutes(initialRouteName) {
-    this.AppNavigator = createStackNavigator(this.routes, {
+    const MainNavigator = createStackNavigator(this.routes, {
       initialRouteName,
       headerMode: 'none',
       transitionConfig: this.getTransitionConfig,
     });
+
+    this.AppNavigator = createAppContainer(MainNavigator);
   }
 
   navigate(routeName, props, {forceReset} = {}) {
@@ -133,7 +141,7 @@ class Router {
       const closingView = prevNav.routes[prevNav.index];
       this.onBack(closingView);
     }
-  }
+  };
 
   renderNavigatorView() {
     const {AppNavigator} = this;
