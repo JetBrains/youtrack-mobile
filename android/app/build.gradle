@@ -100,6 +100,9 @@ def enableSeparateBuildPerCPUArchitecture = false
  * Run Proguard to shrink the Java bytecode in release builds.
  */
 def enableProguardInReleaseBuilds = false
+def envVersion = System.getenv('YT_MOBILE_VERSION')
+def devVersion = "2019.0.0-1"
+def appVersion = envVersion != null ? envVersion : devVersion
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -113,8 +116,8 @@ android {
         applicationId "com.jetbrains.youtrack.mobile.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode buildVersionCode(System.getenv('YT_MOBILE_VERSION'))
-        versionName buildVersionName(System.getenv('YT_MOBILE_VERSION'))
+        versionCode buildVersionCode(appVersion)
+        versionName buildVersionName(appVersion)
         vectorDrawables.useSupportLibrary = true
         ndk {
             abiFilters "armeabi-v7a", "x86"
