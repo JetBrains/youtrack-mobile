@@ -26,7 +26,7 @@ export default class ColorField extends PureComponent<Props, void> {
     if (!this.props.text) {
       return null;
     }
-    return this.props.fullText ? this.props.text : this.props.text.substr(0, 1);
+    return this.props.fullText ? this.props.text : Array.from(this.props.text)[0];
   }
 
   render() {
