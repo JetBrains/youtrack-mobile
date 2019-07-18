@@ -3,7 +3,7 @@ import {Text, View, TouchableOpacity, StatusBar} from 'react-native';
 import React, {Component} from 'react';
 import styles from './header.styles';
 import Router from '../router/router';
-import getTopPadding, {onHeightChange} from './header__top-padding';
+import {onHeightChange} from './header__top-padding';
 import type {Node} from 'react';
 
 const TOUCH_PADDING = 8;
@@ -48,7 +48,7 @@ export default class Header extends Component<Props, void> {
     const {leftButton, children, extraButton, rightButton} = this.props;
 
     return (
-      <View style={[styles.header, {paddingTop: getTopPadding()}]}>
+      <View style={styles.header}>
         <StatusBar animated barStyle="light-content"/>
         <TouchableOpacity
           testID="header-back"

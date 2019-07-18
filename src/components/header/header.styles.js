@@ -3,6 +3,7 @@ import {UNIT, COLOR_BLACK, COLOR_PINK} from '../../components/variables/variable
 
 export default StyleSheet.create({
   header: {
+    paddingTop: 12,
     paddingBottom: 12,
     flex: 0,
     flexDirection: 'row',

@@ -4,7 +4,7 @@ import SafeAreaView from 'react-native-safe-area-view';
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import store from './store';
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 import Auth from './components/auth/auth';
 import Router from './components/router/router';
 import './components/push-notifications/push-notifications';
@@ -23,7 +23,7 @@ import ShowImage from './views/show-image/show-image';
 import AttachmentPreview from './views/attachment-preview/attachment-preview';
 import AgileBoard from './views/agile-board/agile-board';
 import Inbox from './views/inbox/inbox';
-import {COLOR_BLACK} from './components/variables/variables';
+import {COLOR_BLACK, COLOR_FONT_ON_BLACK} from './components/variables/variables';
 import ErrorBoundary from './components/error-boundary/error-boundary';
 import {getStoredConfigAndProceed, onNavigateBack} from './actions/app-actions';
 // $FlowFixMe: cannot typecheck easy-toast module because of mistakes there
@@ -41,16 +41,22 @@ if (UIManager.setLayoutAnimationEnabledExperimental) {
 */
 // GLOBAL.XMLHttpRequest = GLOBAL.originalXMLHttpRequest || GLOBAL.XMLHttpRequest;
 
-class YouTrackMobile extends Component<void, void> {
-  auth: Auth;
-  _actionSheetRef: ?Object;
+type State = {
+  backgroundColor: string
+}
 
+class YouTrackMobile extends Component<void, State> {
   static childContextTypes = {
     actionSheet: PropTypes.func
   };
+  auth: Auth;
+  _actionSheetRef: ?Object;
+  routeHomeName = 'Home';
 
   constructor() {
     super();
+
+    this.state = {backgroundColor: COLOR_FONT_ON_BLACK};
 
     this.registerRoutes();
     YouTrackMobile.init();
@@ -58,6 +64,10 @@ class YouTrackMobile extends Component<void, void> {
     Router.onBack = (closingView) => {
       store.dispatch(onNavigateBack(closingView));
     };
+    Router.setOnDispatchCallback((routeName: ?string) => {
+      const isHomeRoute: boolean = Boolean(routeName && routeName === this.routeHomeName);
+      this.setState({backgroundColor: isHomeRoute ? COLOR_FONT_ON_BLACK : COLOR_BLACK});
+    });
 
     Router.rootRoutes = ['IssueList', 'Inbox', 'AgileBoard'];
   }
@@ -74,7 +84,7 @@ class YouTrackMobile extends Component<void, void> {
 
   registerRoutes() {
     Router.registerRoute({
-      name: 'Home',
+      name: this.routeHomeName,
       component: Home,
       type: 'reset',
       props: {
@@ -114,7 +124,7 @@ class YouTrackMobile extends Component<void, void> {
 
     Router.registerRoute({name: 'Inbox', component: Inbox, type: 'reset'});
 
-    Router.finalizeRoutes('Home');
+    Router.finalizeRoutes(this.routeHomeName);
   }
 
   actionSheetRef = (component: ?React$Element<any>) => {
@@ -127,7 +137,7 @@ class YouTrackMobile extends Component<void, void> {
     return (
       <Provider store={store}>
         <ActionSheet ref={this.actionSheetRef}>
-          <SafeAreaView style={Styles.box}>
+          <SafeAreaView style={[Styles.box, {backgroundColor: this.state.backgroundColor}]}>
             <View style={Styles.box}>
               <ErrorBoundary>
                 {Router.renderNavigatorView()}
@@ -151,7 +161,6 @@ module.exports = YouTrackMobile; //eslint-disable-line import/no-commonjs
 
 const Styles = StyleSheet.create({
   box: {
-    flex: 1,
-    backgroundColor: COLOR_BLACK
+    flex: 1
   }
 });

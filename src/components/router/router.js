@@ -30,6 +30,7 @@ const SlideFromRight = {
 class Router {
   _currentRoute = null;
   rootRoutes = [];
+  onDispatch = () => {};
 
   constructor(navigator) {
     this._navigator = null;
@@ -87,8 +88,17 @@ class Router {
     this.AppNavigator = createAppContainer(MainNavigator);
   }
 
+  setOnDispatchCallback(onDispatch: Function<Object, ?string>) {
+    this.onDispatch = onDispatch;
+  }
+
+  dispatch(data: Object, routeName?: string) {
+    this._navigator.dispatch(data);
+    this.onDispatch(routeName);
+  }
+
   navigate(routeName, props, {forceReset} = {}) {
-    log.debug(`Navigating to ${routeName}`, {...props, imageHeaders: 'CENSORED'});
+    log.info(`Navigating to ${routeName}`, {...props, imageHeaders: 'CENSORED'});
     if (!this._navigator) {
       throw `Router.navigate: call setNavigator(navigator) first!`;
     }
@@ -105,17 +115,17 @@ class Router {
     newRoute.props = Object.assign({}, newRoute.props, props);
 
     if (newRoute.type === 'reset' || forceReset) {
-      return this._navigator.dispatch(StackActions.reset({
+      return this.dispatch(StackActions.reset({
         index: 0,
         actions: [NavigationActions.navigate({routeName, params: newRoute.props, key: Math.random().toString()})]
-      }));
+      }), routeName);
     }
 
-    this._navigator.dispatch(NavigationActions.navigate({
+    this.dispatch(NavigationActions.navigate({
       routeName,
       params: newRoute.props,
       key: Math.random().toString()
-    }));
+    }), routeName);
   }
 
   navigateToDefaultRoute(props = null) {
@@ -127,7 +137,7 @@ class Router {
     if (this._navigator.state.nav.routes.length <= 1) {
       return false;
     }
-    this._navigator.dispatch(NavigationActions.back());
+    this.dispatch(NavigationActions.back());
     return true;
   }
 
