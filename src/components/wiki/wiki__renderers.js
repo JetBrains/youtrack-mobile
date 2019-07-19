@@ -5,6 +5,8 @@ import SyntaxHighlighter from 'react-native-syntax-highlighter';
 import {idea} from 'react-syntax-highlighter/dist/styles';
 import entities from 'entities';
 import {COLOR_GRAY, COLOR_LIGHT_GRAY} from '../variables/variables';
+import {handleRelativeUrl} from '../config/config';
+import {getStorageState} from '../storage/storage';
 
 const IMAGE_WIDTH = Math.floor(Dimensions.get('window').width - 32);
 const IMAGE_HEIGHT = 200;
@@ -35,7 +37,7 @@ type RenderImageOptions = {
 export function renderImage({node, index, attachments, imageHeaders, onImagePress}: RenderImageOptions) {
   let src = node.attribs.src || '';
 
-  const targetAttach = attachments.filter(it => src.indexOf(it.name) !== -1)[0] || {};
+  const targetAttach = attachments.filter(it => src.indexOf(it.url) !== -1)[0] || {};
   src = targetAttach.url || src;
 
   const imgStyle = {
@@ -43,11 +45,10 @@ export function renderImage({node, index, attachments, imageHeaders, onImagePres
     height: IMAGE_HEIGHT,
     resizeMode: 'contain'
   };
-  const uri = `${src}&w=${IMAGE_WIDTH*2}&h=${IMAGE_HEIGHT*2}`;
-  const source = {uri, headers: imageHeaders};
+  const source = {uri: createUrl(), headers: imageHeaders};
 
   return (
-    <Text onPress={() => onImagePress(src)} key={index}>
+    <Text onPress={() => onImagePress(source.uri)} key={index}>
       <Image
         source={source}
         style={imgStyle}
@@ -55,6 +56,13 @@ export function renderImage({node, index, attachments, imageHeaders, onImagePres
       {Platform.OS === 'android' && '\n\n\n\n\n\n'}
     </Text>
   );
+
+  function createUrl() {
+    const uri = `${src}&w=${IMAGE_WIDTH*2}&h=${IMAGE_HEIGHT*2}`;
+    const backendUrl = getStorageState().config?.backendUrl || '';
+    //TODO(xi-eye): Deal with img relative URLs in one place
+    return handleRelativeUrl(uri, backendUrl);
+  }
 }
 
 export function renderTableRow(node: Object, index: number, defaultRenderer: Function) {

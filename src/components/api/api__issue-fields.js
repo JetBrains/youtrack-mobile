@@ -182,6 +182,23 @@ const ISSUE_COMMENTS_FIELDS = toField([
   VISIBILITY_FIELDS
 ]);
 
+const ISSUE_COMMENTS_WITH_ATTACHMENT_FIELDS = toField([
+  'id',
+  'created',
+  'deleted',
+  'text',
+  'textPreview',
+  'usesMarkdown',
+  {author: ISSUE_USER_FIELDS},
+  VISIBILITY_FIELDS,
+  {
+    attachments: [
+      'url',
+      'mimeType'
+    ]
+  }
+]);
+
 const ISSUE_XSHORT_FIELDS = toField([
   'id',
   'idReadable',
@@ -298,5 +315,6 @@ export default {
 
   ISSUE_USER_FIELDS: ISSUE_USER_FIELDS,
   ISSUE_COMMENTS_FIELDS: ISSUE_COMMENTS_FIELDS,
+  ISSUE_COMMENTS_WITH_ATTACHMENT_FIELDS: ISSUE_COMMENTS_WITH_ATTACHMENT_FIELDS,
   ISSUE_XSHORT_FIELDS: ISSUE_XSHORT_FIELDS
 };
