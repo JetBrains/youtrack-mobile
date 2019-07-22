@@ -120,7 +120,7 @@ android {
         versionName buildVersionName(appVersion)
         vectorDrawables.useSupportLibrary = true
         ndk {
-            abiFilters "armeabi-v7a", "x86"
+            abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
     }
     splits {
