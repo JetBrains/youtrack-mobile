@@ -15,6 +15,7 @@ import type {IssueFull} from '../../flow/Issue';
 import type {IssueProject, CustomField as CustomFieldType} from '../../flow/CustomFields';
 import {View as AnimatedView} from 'react-native-animatable';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
+import {isIphoneX} from '../header/header__top-padding';
 
 type Props = {
   api: Api,
@@ -495,7 +496,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
             <Text style={styles.doneButtonText}>Done</Text>
           </TouchableOpacity>}
 
-          {Platform.OS === 'ios' && <KeyboardSpacer style={{backgroundColor: COLOR_BLACK}}/>}
+          {Platform.OS === 'ios' && <KeyboardSpacer topSpacing={isIphoneX ? -36 : 0} style={{backgroundColor: COLOR_BLACK}}/>}
 
           <KeyboardSpacer onToggle={this.handleKeyboardToggle} style={{height: 0}}/>
 
