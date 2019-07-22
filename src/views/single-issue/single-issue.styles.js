@@ -11,7 +11,8 @@ import {
   COLOR_GRAY,
   COLOR_PINK,
   COLOR_MEDIUM_GRAY,
-  COLOR_LINK
+  COLOR_LINK,
+  COLOR_ICON_GREY
 } from '../../components/variables/variables';
 
 const SUGGESTION_BOTTOM = 48;
@@ -279,7 +280,7 @@ export default StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     resizeMode: 'contain',
-    opacity: 0.3
+    tintColor: COLOR_ICON_GREY
   },
 
   linkedIssue: {
