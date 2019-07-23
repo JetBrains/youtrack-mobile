@@ -13,14 +13,12 @@ export default StyleSheet.create({
   size40: {
     ...commonStyle,
     width: defaultSize,
-    height: defaultSize,
-    borderRadius: defaultSize
+    height: defaultSize
   },
   size20: {
     ...commonStyle,
     width: defaultSize / 2,
-    height: defaultSize / 2,
-    borderRadius: defaultSize / 2
+    height: defaultSize / 2
   },
   text: {
     fontFamily: 'Arial',
