@@ -301,6 +301,10 @@ export default StyleSheet.create({
     padding: UNIT,
     paddingLeft: UNIT * 2
   },
+  settingsApplyButtonDisabled: {
+    backgroundColor: COLOR_FONT,
+    opacity: 0.5
+  },
   settingsApplyButtonText: {
     height: 24,
     fontSize: 20,

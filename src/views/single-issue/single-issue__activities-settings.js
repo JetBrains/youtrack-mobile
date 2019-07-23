@@ -80,14 +80,14 @@ export default class SingleIssueActivitiesSettings extends Component<Props, Stat
 
   _onApplySettings() {
     const {select, naturalCommentsOrder} = this.state;
-    const {userAppearanceProfile} = this.props;
+    const {userAppearanceProfile, onApply} = this.props;
 
     saveIssueActivityEnabledTypes(select.selectedItems);
     this._toggleSettingsVisibility();
 
     const isOrderChanged = userAppearanceProfile.naturalCommentsOrder !== naturalCommentsOrder;
     if (isOrderChanged || this._selectedTypesChanged()) {
-      this.props.onApply(isOrderChanged && {
+      onApply(isOrderChanged && {
         ...userAppearanceProfile,
         ...{naturalCommentsOrder: naturalCommentsOrder}
       });
@@ -137,22 +137,28 @@ export default class SingleIssueActivitiesSettings extends Component<Props, Stat
   }
 
   _renderSettings() {
+    const {visible, select} = this.state;
+
     return (
       <ModalView
         transparent={true}
-        visible={this.state.visible}
+        visible={visible}
         animationType={'slide'}
         style={styles.settingsModal}
       >
         <View style={styles.settingsPanel}>
           {this._renderSelect()}
 
-          {this.state.select.show && this._renderSortOrderSettings()}
+          {select.show && this._renderSortOrderSettings()}
 
-          {this.state.select.show &&
+          {select.show &&
           <TouchableOpacity
-            style={styles.settingsApplyButton}
+            style={[
+              styles.settingsApplyButton,
+              select.selectedItems.length === 0 ? styles.settingsApplyButtonDisabled : {}
+            ]}
             onPress={() => this._onApplySettings()}
+            disabled={select.selectedItems.length === 0}
           >
             <Text style={styles.settingsApplyButtonText}>Apply</Text>
           </TouchableOpacity>}
