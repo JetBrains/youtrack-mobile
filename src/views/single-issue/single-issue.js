@@ -39,6 +39,7 @@ import OpenScanButton from '../../components/scan/open-scan-button';
 import SingleIssueActivitiesSettings from './single-issue__activities-settings';
 import type {UserAppearanceProfile} from '../../flow/User';
 import {receiveUserAppearanceProfile} from '../../actions/app-actions';
+import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
 
 const CATEGORY_NAME = 'Issue';
 
@@ -455,7 +456,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
             suggestions={commentSuggestions}
           />
 
-          {Platform.OS === 'ios' && <KeyboardSpacer style={styles.keyboardSpacer}/>}
+          <KeyboardSpacerIOS/>
         </View>}
 
         {this._canAddComment() && <View style={styles.addCommentContainer}>
@@ -488,7 +489,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
           />
         )}
 
-        {Platform.OS === 'ios' && !addCommentMode && <KeyboardSpacer style={styles.keyboardSpacer}/>}
+        {!addCommentMode && <KeyboardSpacerIOS />}
 
         {isSelectOpen && this._renderCommentVisibilitySelect()}
       </View>

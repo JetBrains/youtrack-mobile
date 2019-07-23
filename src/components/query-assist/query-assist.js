@@ -1,5 +1,5 @@
 /* @flow */
-import {View, Text, Image, TouchableOpacity, TextInput, Platform} from 'react-native';
+import {View, Text, Image, TouchableOpacity, TextInput} from 'react-native';
 import React, {Component} from 'react';
 import styles from './query-assist.styles';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
@@ -7,9 +7,9 @@ import type {TransformedSuggestion, SavedQuery} from '../../flow/Issue';
 import {COLOR_PINK, COLOR_PLACEHOLDER} from '../../components/variables/variables';
 import {clearSearch} from '../../components/icon/icon';
 import ModalView from '../modal-view/modal-view';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
 import throttle from 'lodash.throttle';
 import {View as AnimatedView} from 'react-native-animatable';
+import KeyboardSpacerIOS from '../platform/keyboard-spacer.ios';
 
 const SEARCH_THROTTLE = 30;
 const SHOW_LIST_ANIMATION_DURATION = 500;
@@ -204,7 +204,7 @@ export default class QueryAssist extends Component<Props, State> {
 
         {this._renderInput()}
 
-        {Platform.OS === 'ios' && <KeyboardSpacer style={styles.keyboardSpacer}/>}
+        <KeyboardSpacerIOS/>
       </ContainerComponent>
     );
   }

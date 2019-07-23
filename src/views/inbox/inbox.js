@@ -1,12 +1,11 @@
 /* @flow */
-import {FlatList, Image, View, Text, Platform, RefreshControl, TouchableOpacity} from 'react-native';
+import {FlatList, Image, View, Text, RefreshControl, TouchableOpacity} from 'react-native';
 import React, {Component} from 'react';
 
 import styles from './inbox.styles';
 import issueStyles from '../single-issue/single-issue.styles';
 import Header from '../../components/header/header';
 import usage from '../../components/usage/usage';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as inboxActions from './inbox-actions';
@@ -344,8 +343,6 @@ class Inbox extends Component<Props, void> {
             onEndReachedThreshold={0.1}
             ListFooterComponent={this._renderListMessage}
           />
-
-          {Platform.OS === 'ios' && <KeyboardSpacer style={{backgroundColor: 'black'}}/>}
         </View>
       </Menu>
     );

@@ -1,11 +1,11 @@
 /* @flow */
-import {View, ScrollView, Text, TouchableOpacity, TextInput, ActivityIndicator, Platform} from 'react-native';
+import {View, ScrollView, Text, TouchableOpacity, TextInput, ActivityIndicator} from 'react-native';
 import React, {Component} from 'react';
 import {Calendar} from 'react-native-calendars'; // eslint-disable-line import/named
 import CustomField from '../custom-field/custom-field';
 import Select from '../select/select';
 import Header from '../header/header';
-import {COLOR_PLACEHOLDER, COLOR_BLACK} from '../../components/variables/variables';
+import {COLOR_PLACEHOLDER} from '../../components/variables/variables';
 import Api from '../api/api';
 import IssuePermissions from '../issue-permissions/issue-permissions';
 import styles, {calendarTheme} from './custom-fields-panel.styles';
@@ -15,7 +15,7 @@ import type {IssueFull} from '../../flow/Issue';
 import type {IssueProject, CustomField as CustomFieldType} from '../../flow/CustomFields';
 import {View as AnimatedView} from 'react-native-animatable';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
-import {isIphoneX} from '../header/header__top-padding';
+import KeyboardSpacerIOS from '../platform/keyboard-spacer.ios';
 
 type Props = {
   api: Api,
@@ -496,7 +496,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
             <Text style={styles.doneButtonText}>Done</Text>
           </TouchableOpacity>}
 
-          {Platform.OS === 'ios' && <KeyboardSpacer topSpacing={isIphoneX ? -36 : 0} style={{backgroundColor: COLOR_BLACK}}/>}
+          <KeyboardSpacerIOS/>
 
           <KeyboardSpacer onToggle={this.handleKeyboardToggle} style={{height: 0}}/>
 

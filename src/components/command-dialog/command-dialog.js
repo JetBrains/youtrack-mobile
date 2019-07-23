@@ -1,14 +1,14 @@
 /* @flow */
-import {View, TouchableOpacity, Text, TextInput, Platform, FlatList, ActivityIndicator} from 'react-native';
+import {View, TouchableOpacity, Text, TextInput, FlatList, ActivityIndicator} from 'react-native';
 import React, {Component} from 'react';
 import styles from './command-dialog.styles';
 import {COLOR_PLACEHOLDER} from '../../components/variables/variables';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
 import throttle from 'lodash.throttle';
 import Header from '../../components/header/header';
 import ApiHelper from '../../components/api/api__helper';
 import type {CommandSuggestionResponse, CommandSuggestion, SuggestedCommand} from '../../flow/Issue';
 import ModalView from '../modal-view/modal-view';
+import KeyboardSpacerIOS from '../platform/keyboard-spacer.ios';
 
 const SEARCH_THROTTLE = 30;
 
@@ -189,7 +189,7 @@ export default class CommandDialog extends Component<Props, State> {
         {this._renderCommandPreview()}
         {this._renderSuggestions()}
         {this._renderInput()}
-        {Platform.OS === 'ios' && <KeyboardSpacer style={styles.keyboardSpacer}/>}
+        <KeyboardSpacerIOS/>
       </ModalView>
     );
   }

@@ -1,5 +1,5 @@
 /* @flow */
-import {ScrollView, View, Text, TouchableOpacity, Image, Platform} from 'react-native';
+import {ScrollView, View, Text, TouchableOpacity, Image} from 'react-native';
 import React, {Component} from 'react';
 
 import styles from './create-issue.styles';
@@ -10,7 +10,6 @@ import {getApi} from '../../components/api/api__instance';
 import {attach, tag, next} from '../../components/icon/icon';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
 import IssueSummary from '../../components/issue-summary/issue-summary';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -18,6 +17,7 @@ import * as createIssueActions from './create-issue-actions';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {CreateIssueState} from './create-issue-reducers';
 import OpenScanButton from '../../components/scan/open-scan-button';
+import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
 
 const CATEGORY_NAME = 'Create issue view';
 
@@ -161,8 +161,7 @@ class CreateIssue extends Component<Props, void> {
           onUpdate={async (field, value) => await updateFieldValue(field, value)}
           onUpdateProject={async (project) => await updateProject(project)}
         />
-
-        {Platform.OS === 'ios' && <KeyboardSpacer style={{backgroundColor: 'black'}}/>}
+        <KeyboardSpacerIOS/>
       </View>
     );
   }
