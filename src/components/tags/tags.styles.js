@@ -12,11 +12,13 @@ export default StyleSheet.create({
     marginLeft: -UNIT / 4,
     marginRight: -UNIT / 4
   },
-  tagColorField: {
+  tag: {
     width: null, //Removes fixed width of usual color field
     paddingLeft: UNIT / 2,
     paddingRight: UNIT / 2,
-    margin: UNIT / 4,
+    margin: UNIT / 4
+  },
+  tagNoColor: {
     borderWidth: 0.5,
     borderColor: COLOR_GRAY
   }

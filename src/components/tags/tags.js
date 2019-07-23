@@ -28,6 +28,10 @@ export default class Tags extends PureComponent<Props, void> {
   };
 
 
+  _hasNoColor(tag: Tag) {
+    return tag?.color.id === '0';
+  }
+
   render() {
     const {tags, onTagPress, style = {}} = this.props;
 
@@ -49,7 +53,7 @@ export default class Tags extends PureComponent<Props, void> {
             >
               <ColorField
                 testID="tagColor"
-                style={styles.tagColorField}
+                style={[styles.tag, this._hasNoColor(tag) ? styles.tagNoColor: {}]}
                 text={tag.name}
                 color={tag.color}
                 fullText={true}

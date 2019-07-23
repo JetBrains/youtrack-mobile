@@ -30,14 +30,15 @@ exports[`<Tags/> Render should match a snapshot 1`] = `
       }
       fullText={true}
       style={
-        Object {
-          "borderColor": "#CCC",
-          "borderWidth": 0.5,
-          "margin": 2,
-          "paddingLeft": 4,
-          "paddingRight": 4,
-          "width": null,
-        }
+        Array [
+          Object {
+            "margin": 2,
+            "paddingLeft": 4,
+            "paddingRight": 4,
+            "width": null,
+          },
+          Object {},
+        ]
       }
       testID="tagColor"
     />
