@@ -99,7 +99,7 @@ export default class SingleIssueActivities extends Component<Props, void> {
     return false;
   }
 
-  _renderTextValueChange(activity: Object, timestamp, issueFields: Array<Object>) {
+  _renderTextValueChange(activity: Object, issueFields: Array<Object>) {
     const isMultiValue = this._isMultiValueActivity(activity);
     const getParams = (isRemovedValue) => ({
       activity,
@@ -120,18 +120,16 @@ export default class SingleIssueActivities extends Component<Props, void> {
             isMultiValue ? ', ' : <Text>{Platform.OS === 'ios' ? ' → ' : ' ➔ '}</Text>)}
           <Text>{added}</Text>
         </Text>
-        {this._renderTimestamp(timestamp, styles.alignedRight)}
       </View>
     );
   }
 
-  _renderLinkChange(event: Object, timestamp) {
+  _renderLinkChange(event: Object) {
     const linkedIssues = [].concat(event.added).concat(event.removed);
     return (
       <TouchableOpacity key={event.id}>
         <View style={styles.row}>
           <Text style={styles.activityLabel}>{getHistoryLabel(event)}</Text>
-          {this._renderTimestamp(timestamp, styles.alignedRight)}
         </View>
         {
           linkedIssues.map((linkedIssue) => (
@@ -157,7 +155,7 @@ export default class SingleIssueActivities extends Component<Props, void> {
     );
   }
 
-  _renderAttachmentChange(event: Object, timestamp) {
+  _renderAttachmentChange(event: Object) {
     const removed = event.removed || [];
     const added = event.added || [];
     const addedAndLaterRemoved = added.filter(it => !it.url);
@@ -172,7 +170,6 @@ export default class SingleIssueActivities extends Component<Props, void> {
       <View key={event.id}>
         <View style={styles.row}>
           <Text style={[styles.activityLabel, {paddingBottom: UNIT / 2}]}>{getHistoryLabel(event)}</Text>
-          {this._renderTimestamp(timestamp, styles.alignedRight)}
         </View>
 
         {hasAddedAttachments && <AttachmentsRow
@@ -342,7 +339,7 @@ export default class SingleIssueActivities extends Component<Props, void> {
     );
   }
 
-  _renderActivityByCategory = (activity, timestamp) => {
+  _renderActivityByCategory = (activity) => {
     switch (true) {
     case Boolean(
       isActivityCategory.tag(activity) ||
@@ -352,11 +349,11 @@ export default class SingleIssueActivities extends Component<Props, void> {
       isActivityCategory.description(activity) ||
       isActivityCategory.summary(activity)
     ):
-      return this._renderTextValueChange(activity, timestamp, this.props.issueFields);
+      return this._renderTextValueChange(activity, this.props.issueFields);
     case Boolean(isActivityCategory.link(activity)):
-      return this._renderLinkChange(activity, timestamp);
+      return this._renderLinkChange(activity);
     case Boolean(isActivityCategory.attachment(activity)):
-      return this._renderAttachmentChange(activity, timestamp);
+      return this._renderAttachmentChange(activity);
     }
     return null;
   };
