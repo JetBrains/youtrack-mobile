@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 
 import {
   addAccount,
-  changeAccount,
+  changeAccount, closeMenu,
   openDebugView,
   removeAccountOrLogOut
 } from '../../actions/app-actions';
@@ -70,6 +70,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    onClose: () => dispatch(closeMenu()),
     onLogOut: () => dispatch(removeAccountOrLogOut()),
     onAddAccount: () => dispatch(addAccount()),
     onChangeAccount: (account: StorageState) => dispatch(changeAccount(account)),
