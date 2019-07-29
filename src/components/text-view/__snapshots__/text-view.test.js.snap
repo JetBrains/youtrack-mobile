@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<TextView/> Render should match a snapshot 1`] = `
+<Text
+  testID="textMoreContent"
+>
+  <Text>
+    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA...
+  </Text>
+  <Text
+    onPress={[Function]}
+    style={
+      Object {
+        "color": "#FE0082",
+      }
+    }
+    testID="textMoreShowMore"
+  >
+      Show more ›  
+  </Text>
+</Text>
+`;

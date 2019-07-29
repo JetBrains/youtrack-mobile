@@ -33,6 +33,7 @@ import log from '../../components/log/log';
 import {getApi} from '../../components/api/api__instance';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import ApiHelper from '../../components/api/api__helper';
+import TextView from '../../components/text-view/text-view';
 
 import type {WorkTimeSettings} from '../../flow/WorkTimeSettings';
 import type {IssueActivity} from '../../flow/Activity';
@@ -107,18 +108,36 @@ export default class SingleIssueActivities extends Component<Props, void> {
       workTimeSettings: this.props.workTimeSettings,
       isRemovedValue: isRemovedValue
     });
-    const removed = getTextValueChange(getParams(true));
-    const added = getTextValueChange(getParams(false));
+    const removed: string = getTextValueChange(getParams(true));
+    const added: string = getTextValueChange(getParams(false));
+    //TODO(xi-eye): implement more convenient textDiff component
+    const isSummaryOrDescriptionChange = isActivityCategory.description(activity) || isActivityCategory.summary(activity);
+    let delimiter: string;
+    const TextRenderer: any = isSummaryOrDescriptionChange ? TextView : Text;
+
+    if (isMultiValue) {
+      delimiter = isSummaryOrDescriptionChange ? '\n' : ' ,';
+    } else {
+      delimiter = Platform.OS === 'ios' ? ' → ' : ' ➔ ';
+    }
+
     return (
       <View style={styles.row}>
         <Text style={{flexGrow: 2}}>
           <Text style={styles.activityLabel}>{getHistoryLabel(activity)}</Text>
-          <Text style={isMultiValue || removed && !added ? styles.activityRemoved : null}>
-            {removed}
-          </Text>
+
+          <TextRenderer
+            style={isMultiValue || removed && !added ? styles.activityRemoved : null}
+            text={removed}>{removed}</TextRenderer>
+
           {Boolean(removed && added) && (
-            isMultiValue ? ', ' : <Text>{Platform.OS === 'ios' ? ' → ' : ' ➔ '}</Text>)}
-          <Text>{added}</Text>
+            <Text>
+              {delimiter}
+            </Text>
+          )}
+
+          <TextRenderer text={added}>{added}</TextRenderer>
+
         </Text>
       </View>
     );
