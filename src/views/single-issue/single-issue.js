@@ -29,7 +29,7 @@ import * as issueActions from './single-issue-actions';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {State as SingleIssueState} from './single-issue-reducers';
 import type {IssueFull, IssueOnList} from '../../flow/Issue';
-import type {IssueComment} from '../../flow/CustomFields';
+import type {IssueComment, Attachment} from '../../flow/CustomFields';
 import Select from '../../components/select/select';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
 
@@ -88,7 +88,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     if (Platform.OS === 'ios') {
       this._updateToolbarPosition(nativeEvent.contentOffset.y);
     }
-  }
+  };
 
   handleOnBack = () => {
     const returned = Router.pop();
@@ -97,7 +97,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     }
   };
 
-  onAttach = () => this.props.attachOrTakeImage(this.context.actionSheet())
+  onAttach = () => this.props.attachOrTakeImage(this.context.actionSheet());
 
   _renderHeader() {
     const {
@@ -152,7 +152,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     if (instance) {
       this.toolbarNode = instance;
     }
-  }
+  };
 
   _renderToolbar() {
     const {issue, editMode, issuePermissions, startEditingIssue, stopEditingIssue, toggleVote, toggleStar} = this.props;
@@ -180,8 +180,52 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     );
   }
 
+  _renderLinks(issue: IssueFull | IssueOnList) {
+    if (!issue.links || !issue.links.length) {
+      return null;
+    }
+    return <LinkedIssues links={issue.links} onIssueTap={this.props.openNestedIssueView}/>;
+  }
+
+  _renderDescription(issue: IssueFull | IssueOnList) {
+    const description: ?string | null = issue?.description || issue?.wikifiedDescription;
+    if (description) {
+      return <Wiki
+        backendUrl={getApi().auth.config.backendUrl}
+        attachments={issue.attachments}
+        imageHeaders={getApi().auth.getAuthorizationHeaders()}
+        onIssueIdTap={issueId => this.props.openNestedIssueView(null, issueId)}
+      >
+        {description}
+      </Wiki>;
+    }
+    return null;
+  }
+
+  _renderAttachments(attachments: Array<Attachment>|null) {
+    if (!attachments || !attachments.length) {
+      return null;
+    }
+
+    return (
+      <View style={styles.attachments}>
+        <AttachmentsRow
+          attachments={attachments}
+          attachingImage={this.props.attachingImage}
+          imageHeaders={getApi().auth.getAuthorizationHeaders()}
+          onImageLoadingError={err => {
+            log.warn('onImageLoadingError', err.nativeEvent);
+            this.props.refreshIssue();
+          }}
+          onOpenAttachment={(type) => usage.trackEvent(
+            CATEGORY_NAME,
+            type === 'image' ? 'Showing image' : 'Open attachment by URL')}
+        /></View>
+    );
+  }
+
   _renderIssueView(issue: IssueFull | IssueOnList) {
-    const {editMode, isSavingEditedIssue, summaryCopy, descriptionCopy, attachingImage, openIssueListWithSearch, openNestedIssueView} = this.props;
+    const {editMode, isSavingEditedIssue, summaryCopy, descriptionCopy, openIssueListWithSearch} = this.props;
     return (
       <View style={styles.issueViewContainer}>
         <SingleIssueTopPanel issue={issue} onTagPress={openIssueListWithSearch}/>
@@ -197,31 +241,11 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
 
         {!editMode && <View>
           <Text style={styles.summary} selectable={true} testID="issue-summary">{issue.summary}</Text>
-
-          {issue.links && <LinkedIssues links={issue.links} onIssueTap={openNestedIssueView}/>}
-
-          {issue.wikifiedDescription
-            ? <Wiki
-              backendUrl={getApi().auth.config.backendUrl}
-              attachments={issue.attachments}
-              imageHeaders={getApi().auth.getAuthorizationHeaders()}
-              onIssueIdTap={issueId => openNestedIssueView(null, issueId)}
-            >
-              {issue.wikifiedDescription}
-            </Wiki>
-            : null}
+          {this._renderLinks(issue)}
+          {this._renderDescription(issue)}
         </View>}
 
-        {issue.attachments ? <View style={styles.attachments}><AttachmentsRow
-          attachments={issue.attachments}
-          attachingImage={attachingImage}
-          imageHeaders={getApi().auth.getAuthorizationHeaders()}
-          onImageLoadingError={err => {
-            log.warn('onImageLoadingError', err.nativeEvent);
-            this.props.refreshIssue();
-          }}
-          onOpenAttachment={(type, name) => usage.trackEvent(CATEGORY_NAME, type === 'image' ? 'Showing image' : 'Open attachment by URL')}
-        /></View> : null}
+        {this._renderAttachments(issue.attachments)}
       </View>
     );
   }
@@ -489,7 +513,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
           />
         )}
 
-        {!addCommentMode && <KeyboardSpacerIOS />}
+        {!addCommentMode && <KeyboardSpacerIOS/>}
 
         {isSelectOpen && this._renderCommentVisibilitySelect()}
       </View>
@@ -497,7 +521,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
   }
 }
 
-const mapStateToProps = (state: {app: Object, singleIssue: SingleIssueState}, ownProps): SingleIssueState & AdditionalProps => {
+const mapStateToProps = (state: { app: Object, singleIssue: SingleIssueState }, ownProps): SingleIssueState & AdditionalProps => {
   const isOnTop = Router._currentRoute.params.issueId === ownProps.issueId;
 
   return {
