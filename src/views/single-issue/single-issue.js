@@ -195,6 +195,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
         attachments={issue.attachments}
         imageHeaders={getApi().auth.getAuthorizationHeaders()}
         onIssueIdTap={issueId => this.props.openNestedIssueView(null, issueId)}
+        title={issue.idReadable}
       >
         {description}
       </Wiki>;

@@ -1,7 +1,9 @@
 /* @flow */
+
 import {Linking, Text} from 'react-native';
 import React, {Component} from 'react';
 import HTMLView from 'react-native-htmlview';
+import toHtml from 'htmlparser-to-html';
 
 import Router from '../router/router';
 import styles, {htmlViewStyles} from './wiki.styles';
@@ -18,7 +20,9 @@ type Props = {
   attachments: Array<Object>,
   imageHeaders: ?Object,
   backendUrl: string,
-  onIssueIdTap: (issueId: string) => any
+  onIssueIdTap: (issueId: string) => any,
+  title?: string,
+  renderFullException?: boolean
 };
 
 const HTML_RENDER_NOTHING = null;
@@ -33,14 +37,15 @@ const selector = (node: Object, tag: string, className: string) => {
 const RootComponent = props => <Text {...props} />;
 
 export default class Wiki extends Component<Props, void> {
-  parser: (rawWiki: string, options: Object) => Object;
-  renderer: (tree: Object) => Object;
-
   static defaultProps: Object = {
     onIssueIdTap: (issueId: string) => {},
     attachments: [],
     imageHeaders: null
   };
+
+  parser: (rawWiki: string, options: Object) => Object;
+  renderer: (tree: Object) => Object;
+
 
   handleLinkPress = (url: string) => {
     const issueId = extractId(url);
@@ -62,7 +67,27 @@ export default class Wiki extends Component<Props, void> {
       .filter(attach => attach.mimeType.includes('image'))
       .map(image => updateUrlToAbs(image.url));
 
-    return Router.ShowImage({currentImage: updateUrlToAbs(url), allImagesUrls, imageHeaders: this.props.imageHeaders});
+    return Router.ShowImage({
+      currentImage: updateUrlToAbs(url),
+      allImagesUrls,
+      imageHeaders: this.props.imageHeaders
+    });
+  };
+
+  renderWikiPageLink = (node: Node, index: number) => {
+    return (
+      <Text
+        key={index}
+        style={styles.link}
+        onPress={() => Router.WikiPage({
+          wikiText: toHtml(node),
+          title: this.props.title,
+          onIssueIdTap: this.handleLinkPress
+        })}
+      >
+        {`  Show more `}
+      </Text>
+    );
   };
 
   renderNode = (node: Object, index: number, siblings: Array<any>, parent: Object, defaultRenderer: (any, any) => any) => {
@@ -72,19 +97,37 @@ export default class Wiki extends Component<Props, void> {
       return HTML_RENDER_NOTHING;
     }
 
+    if (selector(node, 'span', 'wiki-plus')) {
+      return HTML_RENDER_NOTHING;
+    }
+
+    if (!this.props.renderFullException && selector(node, 'pre', 'wiki-hidden')) {
+      return this.renderWikiPageLink(node, index);
+    }
+
+    if (!this.props.renderFullException && selector(node, 'span', 'wiki-hellip')) {
+      return HTML_RENDER_NOTHING;
+    }
+
     if (node.name === 'input') {
-      return <Text key={`checkbox-${node.attribs['data-position']}`}>{'checked' in node.attribs ? '✓' : '☐' }</Text>;
+      return <Text key={`checkbox-${node.attribs['data-position']}`}>{'checked' in node.attribs ? '✓' : '☐'}</Text>;
     }
 
     if (selector(node, 'pre', 'wikicode')) {
-      if (node.children[0] &&node.children[0].name === 'code') {
+      if (node.children[0] && node.children[0].name === 'code') {
         return renderCode(node.children[0], index);
       }
       return renderCode(node, index);
     }
 
     if (node.name === 'img') {
-      return renderImage({node, index, attachments, imageHeaders, onImagePress: this.onImagePress});
+      return renderImage({
+        node,
+        index,
+        attachments,
+        imageHeaders,
+        onImagePress: this.onImagePress
+      });
     }
 
     if (node.name === 'p') {
@@ -112,7 +155,8 @@ export default class Wiki extends Component<Props, void> {
 
     if (node.name === 'font') {
       return (
-        <Text key={index} style={{color: node.attribs.color || COLOR_FONT}}>{defaultRenderer(node.children, parent)}</Text>
+        <Text key={index} style={{color: node.attribs.color || COLOR_FONT}}>{defaultRenderer(node.children,
+          parent)}</Text>
       );
     }
 

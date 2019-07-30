@@ -1,10 +1,12 @@
 /* @flow */
+
 import {View, UIManager, StyleSheet} from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import store from './store';
 import {Provider} from 'react-redux';
+
 import Auth from './components/auth/auth';
 import Router from './components/router/router';
 import './components/push-notifications/push-notifications';
@@ -12,10 +14,11 @@ import DebugView from './components/debug-view/debug-view';
 import FeaturesView from './components/feature/features-view';
 import ScanView from './components/scan/scan-view';
 import UserAgreement from './components/user-agreement/user-agreement';
+import {setNotificationComponent} from './components/notification/notification';
+
 import Home from './views/home/home';
 import EnterServer from './views/enter-server/enter-server';
 import LoginForm from './views/log-in/log-in';
-import {setNotificationComponent} from './components/notification/notification';
 import IssueList from './views/issue-list/issue-list';
 import SingleIssue from './views/single-issue/single-issue';
 import CreateIssue from './views/create-issue/create-issue';
@@ -23,6 +26,8 @@ import ShowImage from './views/show-image/show-image';
 import AttachmentPreview from './views/attachment-preview/attachment-preview';
 import AgileBoard from './views/agile-board/agile-board';
 import Inbox from './views/inbox/inbox';
+import WikiPage from './views/wiki-page/wiki-page';
+
 import {COLOR_BLACK, COLOR_FONT_ON_BLACK} from './components/variables/variables';
 import ErrorBoundary from './components/error-boundary/error-boundary';
 import {getStoredConfigAndProceed, onNavigateBack} from './actions/app-actions';
@@ -69,7 +74,7 @@ class YouTrackMobile extends Component<void, State> {
       this.setState({backgroundColor: isHomeRoute ? COLOR_FONT_ON_BLACK : COLOR_BLACK});
     });
 
-    Router.rootRoutes = ['IssueList', 'Inbox', 'AgileBoard'];
+    Router.rootRoutes = ['IssueList', 'Inbox', 'AgileBoard', 'WikiPage'];
   }
 
   static init() {
@@ -123,6 +128,8 @@ class YouTrackMobile extends Component<void, State> {
     Router.registerRoute({name: 'AgileBoard', component: AgileBoard, type: 'reset'});
 
     Router.registerRoute({name: 'Inbox', component: Inbox, type: 'reset'});
+
+    Router.registerRoute({name: 'WikiPage', component: WikiPage});
 
     Router.finalizeRoutes(this.routeHomeName);
   }
