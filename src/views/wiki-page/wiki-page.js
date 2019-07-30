@@ -40,7 +40,7 @@ export default class WikiPage extends PureComponent<Props, void> {
   _onBack() {
     const prevRoute = Router.pop();
     if (!prevRoute) {
-      Router.IssueList();
+      Router.navigateToDefaultRoute();
     }
   }
 
