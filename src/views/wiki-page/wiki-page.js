@@ -28,13 +28,6 @@ type DefaultProps = {
 };
 
 export default class WikiPage extends PureComponent<Props, void> {
-  constructor(props: Props) {
-    super(props);
-
-    if (!props.wikiText) {
-      this._redirectToList();
-    }
-  }
 
   static defaultProps: DefaultProps = {
     onIssueIdTap: () => {}
@@ -44,14 +37,10 @@ export default class WikiPage extends PureComponent<Props, void> {
     usage.trackScreenView(CATEGORY_NAME);
   }
 
-  _redirectToList() {
-    Router.IssueList();
-  }
-
   _onBack() {
     const prevRoute = Router.pop();
     if (!prevRoute) {
-      this._redirectToList();
+      Router.IssueList();
     }
   }
 

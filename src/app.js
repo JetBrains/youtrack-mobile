@@ -74,8 +74,9 @@ class YouTrackMobile extends Component<void, State> {
       this.setState({backgroundColor: isHomeRoute ? COLOR_FONT_ON_BLACK : COLOR_BLACK});
     });
 
-    Router.rootRoutes = ['IssueList', 'Inbox', 'AgileBoard', 'WikiPage'];
+    Router.rootRoutes = ['IssueList', 'Inbox', 'AgileBoard'];
   }
+
 
   static init() {
     store.dispatch(getStoredConfigAndProceed());
@@ -129,7 +130,7 @@ class YouTrackMobile extends Component<void, State> {
 
     Router.registerRoute({name: 'Inbox', component: Inbox, type: 'reset'});
 
-    Router.registerRoute({name: 'WikiPage', component: WikiPage});
+    Router.registerRoute({name: 'WikiPage', component: WikiPage, modal: true});
 
     Router.finalizeRoutes(this.routeHomeName);
   }
