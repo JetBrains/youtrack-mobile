@@ -188,7 +188,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
   }
 
   _renderDescription(issue: IssueFull | IssueOnList) {
-    const description: ?string | null = issue?.description || issue?.wikifiedDescription;
+    const description: ?string | null = issue?.wikifiedDescription || issue?.description;
     if (description) {
       return <Wiki
         backendUrl={getApi().auth.config.backendUrl}
