@@ -88,7 +88,7 @@ export default class Wiki extends Component<Props, void> {
           onIssueIdTap: this.handleLinkPress
         }))}
       >
-        {`  Show more `}
+        {`  Show\xa0more `}
       </Text>
     );
   };

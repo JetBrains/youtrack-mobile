@@ -16,7 +16,7 @@ exports[`<TextView/> Render should match a snapshot 1`] = `
     }
     testID="textMoreShowMore"
   >
-      Show more ›  
+      Show more  
   </Text>
 </Text>
 `;

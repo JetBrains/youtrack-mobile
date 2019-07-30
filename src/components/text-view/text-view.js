@@ -54,7 +54,7 @@ export default class TextView extends PureComponent<Props, State> {
           testID='textMoreShowMore'
           style={styles.more}
           onPress={() => this._toggleShowMore()}>
-          {`  Show more ›  `}
+          {`  Show\xa0more  `}
         </Text>}
       </Text>
     );
