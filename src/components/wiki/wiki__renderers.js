@@ -11,19 +11,26 @@ import {getStorageState} from '../storage/storage';
 const IMAGE_WIDTH = Math.floor(Dimensions.get('window').width - 32);
 const IMAGE_HEIGHT = 200;
 
-export function renderCode(node: {children: any}, index: number) {
-  const code = node.children.map(it => it.data).join('\n');
+export function renderCode(node: { children: any }, index: number) {
+  // App is hanging trying to render a huge text https://github.com/facebook/react-native/issues/19453
+  const MAX_TEXT_LENGTH = 13650;
+  const code = node.children.map(it => it.data).join('\n') || '';
+  let trimmedCode = code;
+  if (code.length > MAX_TEXT_LENGTH) {
+    trimmedCode = [
+      code.substr(0, MAX_TEXT_LENGTH),
+      '...'
+    ].join('\n');
+  }
 
-  return (
-    <SyntaxHighlighter
-      key={index}
-      PreTag={Text}
-      CodeTag={Text}
-      style={idea}
-    >
-      {entities.decodeHTML(code)}
-    </SyntaxHighlighter>
-  );
+  return <SyntaxHighlighter
+    key={index}
+    PreTag={Text}
+    CodeTag={Text}
+    style={idea}
+  >
+    {entities.decodeHTML(trimmedCode)}
+  </SyntaxHighlighter>;
 }
 
 type RenderImageOptions = {
@@ -45,7 +52,10 @@ export function renderImage({node, index, attachments, imageHeaders, onImagePres
     height: IMAGE_HEIGHT,
     resizeMode: 'contain'
   };
-  const source = {uri: createUrl(), headers: imageHeaders};
+  const source = {
+    uri: createUrl(),
+    headers: imageHeaders
+  };
 
   return (
     <Text onPress={() => onImagePress(source.uri)} key={index}>
@@ -58,7 +68,7 @@ export function renderImage({node, index, attachments, imageHeaders, onImagePres
   );
 
   function createUrl() {
-    const uri = `${src}&w=${IMAGE_WIDTH*2}&h=${IMAGE_HEIGHT*2}`;
+    const uri = `${src}&w=${IMAGE_WIDTH * 2}&h=${IMAGE_HEIGHT * 2}`;
     const backendUrl = getStorageState().config?.backendUrl || '';
     //TODO(xi-eye): Deal with img relative URLs in one place
     return handleRelativeUrl(uri, backendUrl);
@@ -68,7 +78,10 @@ export function renderImage({node, index, attachments, imageHeaders, onImagePres
 export function renderTableRow(node: Object, index: number, defaultRenderer: Function) {
   const isBold = node.parent.name === 'thead';
   return (
-    <Text key={index} style={[isBold && {fontWeight: 'bold', backgroundColor: COLOR_GRAY}]}>
+    <Text key={index} style={[isBold && {
+      fontWeight: 'bold',
+      backgroundColor: COLOR_GRAY
+    }]}>
       {''}
       {defaultRenderer(node.children, node.parent)}
       {'\n'}
@@ -78,7 +91,10 @@ export function renderTableRow(node: Object, index: number, defaultRenderer: Fun
 
 export function renderTableCell(node: Object, index: number, defaultRenderer: Function) {
   return (
-    <Text numberOfLines={1} key={index} style={{width: 40, flex: 1}}>
+    <Text numberOfLines={1} key={index} style={{
+      width: 40,
+      flex: 1
+    }}>
       {' | '}
       {defaultRenderer(node.children, node.parent)}
       {!node.next && ' |'}
