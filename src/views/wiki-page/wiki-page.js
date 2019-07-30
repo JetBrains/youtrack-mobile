@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {PureComponent} from 'react';
-import {View, Text, ScrollView, TouchableOpacity} from 'react-native';
+import {View, Text, ScrollView} from 'react-native';
 
 import type {Attachment} from '../../flow/CustomFields';
 
@@ -13,9 +13,8 @@ import Router from '../../components/router/router';
 
 import styles from './wiki-page.styles';
 
-import {COLOR_PINK} from '../../components/variables/variables';
-
 const CATEGORY_NAME = 'WikiPage';
+
 
 type Props = {
   wikiText: string,
@@ -28,32 +27,32 @@ type DefaultProps = {
   onIssueIdTap: () => any
 };
 
-const DEFAULT_TITLE: string = 'Wiki';
-
-
 export default class WikiPage extends PureComponent<Props, void> {
+  constructor(props: Props) {
+    super(props);
+
+    if (!props.wikiText) {
+      this._redirectToList();
+    }
+  }
 
   static defaultProps: DefaultProps = {
-    onIssueIdTap: () => {
-    },
-    title: DEFAULT_TITLE
+    onIssueIdTap: () => {}
   };
 
   async componentDidMount() {
     usage.trackScreenView(CATEGORY_NAME);
   }
 
+  _redirectToList() {
+    Router.IssueList();
+  }
+
   _onBack() {
     const prevRoute = Router.pop();
     if (!prevRoute) {
-      Router.IssueList();
+      this._redirectToList();
     }
-  }
-
-  _renderBackButton() {
-    return <TouchableOpacity onPress={this._onBack}>
-      <Text style={{color: COLOR_PINK}}>Back</Text>
-    </TouchableOpacity>;
   }
 
   _renderHeader() {
@@ -69,8 +68,12 @@ export default class WikiPage extends PureComponent<Props, void> {
 
   render() {
     const {wikiText, attachments, onIssueIdTap} = this.props;
-    const auth = getApi().auth;
 
+    if (!wikiText) {
+      return null;
+    }
+
+    const auth = getApi().auth;
     return (
       <View
         testID="wikiPage"
@@ -78,12 +81,7 @@ export default class WikiPage extends PureComponent<Props, void> {
       >
         {this._renderHeader()}
 
-        {!wikiText && <View>
-          <Text>Nothing to show.</Text>
-          {this._renderBackButton()}
-        </View>}
-
-        {wikiText && <ScrollView
+        <ScrollView
           scrollEventThrottle={100}
         >
           <View style={styles.wiki}>
@@ -98,7 +96,7 @@ export default class WikiPage extends PureComponent<Props, void> {
             </Wiki>
           </View>
 
-        </ScrollView>}
+        </ScrollView>
       </View>
 
     );

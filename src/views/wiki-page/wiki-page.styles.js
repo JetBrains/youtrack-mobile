@@ -12,5 +12,11 @@ export default StyleSheet.create({
     paddingLeft: UNIT * 2,
     paddingRight: UNIT * 2,
     paddingBottom: UNIT * 9
+  },
+  nothighText: {
+    flex: 1,
+    paddingTop: UNIT * 5,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });

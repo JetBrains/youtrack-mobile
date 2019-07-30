@@ -28,10 +28,13 @@ type Props = {
 const HTML_RENDER_NOTHING = null;
 const HTML_RENDER_DEFAULT = undefined;
 
-const selector = (node: Object, tag: string, className: string) => {
-  return node.name === tag &&
-    node.attribs.class &&
-    node.attribs.class.indexOf(className) !== -1;
+const selector = (node: Object, tag: string, className: string): boolean => {
+  if (node.name !== tag) {
+    return false;
+  }
+
+  const classes = node.attribs.class && node.attribs.class.split(' ');
+  return !!classes && classes.some(it => it === className);
 };
 
 const RootComponent = props => <Text {...props} />;
@@ -79,11 +82,11 @@ export default class Wiki extends Component<Props, void> {
       <Text
         key={index}
         style={styles.link}
-        onPress={() => Router.WikiPage({
+        onPress={() => requestAnimationFrame(() => Router.WikiPage({
           wikiText: toHtml(node),
           title: this.props.title,
           onIssueIdTap: this.handleLinkPress
-        })}
+        }))}
       >
         {`  Show more `}
       </Text>
@@ -101,12 +104,12 @@ export default class Wiki extends Component<Props, void> {
       return HTML_RENDER_NOTHING;
     }
 
-    if (!this.props.renderFullException && selector(node, 'pre', 'wiki-hidden')) {
-      return this.renderWikiPageLink(node, index);
-    }
-
     if (!this.props.renderFullException && selector(node, 'span', 'wiki-hellip')) {
       return HTML_RENDER_NOTHING;
+    }
+
+    if (!this.props.renderFullException && selector(node, 'pre', 'wiki-exception')) {
+      return this.renderWikiPageLink(node, index);
     }
 
     if (node.name === 'input') {
