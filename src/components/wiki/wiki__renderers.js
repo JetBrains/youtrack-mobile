@@ -7,30 +7,47 @@ import entities from 'entities';
 import {COLOR_GRAY, COLOR_LIGHT_GRAY} from '../variables/variables';
 import {handleRelativeUrl} from '../config/config';
 import {getStorageState} from '../storage/storage';
+import styles from './wiki.styles';
+import Router from '../router/router';
+import {showMoreText} from '../text-view/text-view';
 
 const IMAGE_WIDTH = Math.floor(Dimensions.get('window').width - 32);
 const IMAGE_HEIGHT = 200;
 
-export function renderCode(node: { children: any }, index: number) {
+export function renderCode(node: { children: any }, index: number, title?: string) {
   // App is hanging trying to render a huge text https://github.com/facebook/react-native/issues/19453
-  const MAX_TEXT_LENGTH = 13650;
+  const MAX_CODE_LENGTH = 3000;
+
   const code = node.children.map(it => it.data).join('\n') || '';
   let trimmedCode = code;
-  if (code.length > MAX_TEXT_LENGTH) {
+  const isCodeTrimmed = code.length > MAX_CODE_LENGTH;
+
+  if (isCodeTrimmed) {
     trimmedCode = [
-      code.substr(0, MAX_TEXT_LENGTH),
+      code.substr(0, MAX_CODE_LENGTH),
       '...'
     ].join('\n');
   }
 
-  return <SyntaxHighlighter
-    key={index}
-    PreTag={Text}
-    CodeTag={Text}
-    style={idea}
-  >
-    {entities.decodeHTML(trimmedCode)}
-  </SyntaxHighlighter>;
+  return <Text key={index}>
+    <SyntaxHighlighter
+      PreTag={Text}
+      CodeTag={Text}
+      style={idea}
+    >
+      {entities.decodeHTML(trimmedCode)}
+    </SyntaxHighlighter>
+    {isCodeTrimmed && <Text
+      style={styles.link}
+      onPress={() => requestAnimationFrame(() => Router.WikiPage({
+        title: title,
+        plainText: code,
+        onIssueIdTap: this.handleLinkPress
+      }))}
+    >
+      {showMoreText}
+    </Text>}
+  </Text>;
 }
 
 type RenderImageOptions = {

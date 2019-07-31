@@ -33,6 +33,7 @@ export default StyleSheet.create({
     margin: 0
   },
   link: {
+    fontSize: FONT_SIZE - 1,
     color: COLOR_PINK
   }
 });

@@ -1,7 +1,9 @@
 /* @flow */
 
 import React, {PureComponent} from 'react';
-import {View, Text, ScrollView} from 'react-native';
+import {View, Text, ScrollView, TextInput} from 'react-native';
+
+import entities from 'entities';
 
 import type {Attachment} from '../../flow/CustomFields';
 
@@ -17,7 +19,8 @@ const CATEGORY_NAME = 'WikiPage';
 
 
 type Props = {
-  wikiText: string,
+  wikiText?: string,
+  plainText?: string,
   title?: string,
   onIssueIdTap: () => any,
   attachments?: Array<Attachment>
@@ -28,6 +31,7 @@ type DefaultProps = {
 };
 
 export default class WikiPage extends PureComponent<Props, void> {
+  MAX_PLAIN_TEXT_LENGTH: number = 5000;
 
   static defaultProps: DefaultProps = {
     onIssueIdTap: () => {}
@@ -55,14 +59,41 @@ export default class WikiPage extends PureComponent<Props, void> {
     );
   }
 
-  render() {
+  _renderWiki() {
     const {wikiText, attachments, onIssueIdTap} = this.props;
+    const auth = getApi().auth;
 
-    if (!wikiText) {
+    return <Wiki
+      backendUrl={auth.config.backendUrl}
+      attachments={attachments}
+      imageHeaders={auth.getAuthorizationHeaders()}
+      onIssueIdTap={onIssueIdTap}
+      renderFullException={true}
+    >
+      {wikiText}
+    </Wiki>;
+  }
+
+  _renderPlainText() {
+    const decodedText:string = entities.decodeHTML(this.props.plainText);
+
+    if (decodedText.length > this.MAX_PLAIN_TEXT_LENGTH) {
+      return <TextInput
+        editable={false}
+        multiline={true}
+        value={decodedText}
+      />;
+    }
+    return <Text>{decodedText}</Text>;
+  }
+
+  render() {
+    const {wikiText, plainText} = this.props;
+
+    if (!wikiText && !plainText) {
       return null;
     }
 
-    const auth = getApi().auth;
     return (
       <View
         testID="wikiPage"
@@ -74,15 +105,8 @@ export default class WikiPage extends PureComponent<Props, void> {
           scrollEventThrottle={100}
         >
           <View style={styles.wiki}>
-            <Wiki
-              backendUrl={auth.config.backendUrl}
-              attachments={attachments}
-              imageHeaders={auth.getAuthorizationHeaders()}
-              onIssueIdTap={onIssueIdTap}
-              renderFullException={true}
-            >
-              {wikiText}
-            </Wiki>
+            {wikiText && this._renderWiki()}
+            {Boolean(!wikiText && plainText) && this._renderPlainText()}
           </View>
 
         </ScrollView>
