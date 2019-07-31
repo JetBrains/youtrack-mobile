@@ -37,7 +37,7 @@ export function renderCode(node: { children: any }, index: number, title?: strin
     {isCodeTrimmed && <Text
       style={styles.exceptionLink}
       onPress={() => Router.WikiPage({
-        style: styles.monospace,
+        style: styles.code,
         title: title,
         plainText: code
       })}

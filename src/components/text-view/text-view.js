@@ -17,7 +17,7 @@ type State = {
   showMore: boolean
 }
 
-export const showMoreText = `Show\xa0more`;
+export const showMoreText = `Show\xa0more…`;
 export const showMoreInlineText = `  ${showMoreText}  `;
 
 export default class TextView extends PureComponent<Props, State> {

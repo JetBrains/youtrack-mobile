@@ -2,6 +2,16 @@ import {StyleSheet, Platform} from 'react-native';
 import {COLOR_LINK, COLOR_FONT, COLOR_GRAY, UNIT, COLOR_FONT_GRAY} from '../variables/variables';
 
 const FONT_SIZE = 16;
+const monospace = {
+  ...Platform.select({
+    ios: {
+      fontFamily: 'CourierNewPSMT'
+    },
+    android: {
+      fontFamily: 'Droid Sans Mono'
+    }
+  })
+};
 
 export default StyleSheet.create({
   htmlView: {
@@ -11,14 +21,7 @@ export default StyleSheet.create({
     writingDirection: 'ltr'
   },
   monospace: {
-    ...Platform.select({
-      ios: {
-        fontFamily: 'Courier New'
-      },
-      android: {
-        fontFamily: 'Droid Sans Mono'
-      }
-    })
+    ...monospace
   },
   deleted: {
     textDecorationLine: 'line-through'
@@ -33,12 +36,17 @@ export default StyleSheet.create({
     margin: 0
   },
   codeLink: {
-    fontSize: FONT_SIZE - 2,
+    fontSize: 14,
     color: COLOR_LINK
   },
   exceptionLink: {
     fontSize: FONT_SIZE,
     color: COLOR_LINK
+  },
+  code: {
+    ...monospace,
+    fontSize: 14,
+    fontWeight: '500',
   }
 });
 
