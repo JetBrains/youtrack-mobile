@@ -250,6 +250,9 @@ export default StyleSheet.create({
   activityLabel: {
     color: '#737577'
   },
+  activityText: {
+    color: COLOR_FONT
+  },
   activityRelatedChanges: {
     flex: 1,
     paddingTop: UNIT,

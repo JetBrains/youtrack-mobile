@@ -127,16 +127,16 @@ export default class SingleIssueActivities extends Component<Props, void> {
           <Text style={styles.activityLabel}>{getHistoryLabel(activity)}</Text>
 
           <TextRenderer
-            style={isMultiValue || removed && !added ? styles.activityRemoved : null}
+            style={[styles.activityText, isMultiValue || removed && !added ? styles.activityRemoved : null]}
             text={removed}>{removed}</TextRenderer>
 
           {Boolean(removed && added) && (
-            <Text>
+            <Text style={styles.activityText}>
               {delimiter}
             </Text>
           )}
 
-          <TextRenderer text={added}>{added}</TextRenderer>
+          <TextRenderer style={styles.activityText} text={added}>{added}</TextRenderer>
 
         </Text>
       </View>
