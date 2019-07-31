@@ -17,7 +17,11 @@ type State = {
   showMore: boolean
 }
 
+export const showMoreText = `Show\xa0more`;
+export const showMoreInlineText = `  ${showMoreText}  `;
+
 export default class TextView extends PureComponent<Props, State> {
+  MAX_TO_SHOW: number = 500;
   DEFAULT_MAX_LENGTH: number = 50;
   THRESHOLD: number = 5;
 
@@ -37,13 +41,13 @@ export default class TextView extends PureComponent<Props, State> {
   }
 
   _getText() {
-    const {text, maxLength} = this.props;
-    const length = maxLength || this.DEFAULT_MAX_LENGTH;
+    const {text, maxLength = this.DEFAULT_MAX_LENGTH} = this.props;
+    const length = Math.min(maxLength, this.MAX_TO_SHOW);
 
     if (this.state.showMore && text.length) {
       return text.substr(0, length);
     }
-    return text;
+    return text.substr(0, this.MAX_TO_SHOW);
   }
 
   render() {
@@ -54,7 +58,7 @@ export default class TextView extends PureComponent<Props, State> {
           testID='textMoreShowMore'
           style={styles.more}
           onPress={() => this._toggleShowMore()}>
-          {`  Show\xa0more  `}
+          {showMoreInlineText}
         </Text>}
       </Text>
     );

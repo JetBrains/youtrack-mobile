@@ -26,7 +26,7 @@ describe('<TextView/>', () => {
     });
 
     it('should render content with `Show more...` if there is not more to show (take a threshold into account)', () => {
-      textMock = 'A'.repeat(wrapper.DEFAULT_MAX_LENGTH + wrapper.THRESHOLD + 1);
+      textMock = 'A'.repeat(wrapper.DEFAULT_CUT_LENGTH + wrapper.THRESHOLD + 1);
       wrapper = doShallow(textMock);
       expect(findByTestId('textMoreContent')).toHaveLength(1);
       expect(findByTestId('textMoreShowMore')).toHaveLength(0);
