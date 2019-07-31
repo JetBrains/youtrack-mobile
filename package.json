@@ -32,6 +32,7 @@
 		"set-exception-reporter-token": "node ./tools/set-exception-reporter-token",
 		"ios": "./node_modules/react-native-cli/index.js run-ios --simulator='iPhone 6'",
 		"ios-iphoneX": "./node_modules/react-native-cli/index.js run-ios --simulator='iPhone X'",
+		"ios-iPadAir": "./node_modules/react-native-cli/index.js run-ios --simulator='iPad Air'",
 		"ios-set-version": "node ./tools/set-ios-version",
 		"ios-clean": "xcodebuild clean -project ios/YouTrackMobile.xcodeproj -configuration Release -alltargets",
 		"ios-archive": "rm -rf ios/build/YouTrackMobile[Release].xcarchive && xcodebuild archive -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile[Release] -archivePath ios/build/YouTrackMobile[Release].xcarchive",
