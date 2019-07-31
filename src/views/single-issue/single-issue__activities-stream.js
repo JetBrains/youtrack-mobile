@@ -116,7 +116,7 @@ export default class SingleIssueActivities extends Component<Props, void> {
     const TextRenderer: any = isSummaryOrDescriptionChange ? TextView : Text;
 
     if (isMultiValue) {
-      delimiter = isSummaryOrDescriptionChange ? '\n' : ' ,';
+      delimiter = isSummaryOrDescriptionChange ? '\n' : ', ';
     } else {
       delimiter = Platform.OS === 'ios' ? ' → ' : ' ➔ ';
     }
