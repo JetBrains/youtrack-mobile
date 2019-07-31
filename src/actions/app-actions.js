@@ -86,8 +86,11 @@ export function receiveUser(user: User) {
   return {type: types.RECEIVE_USER, user};
 }
 
-export function receiveUserAppearanceProfile(userAppearanceProfile: UserAppearanceProfile) {
+export function receiveUserAppearanceProfile(userAppearanceProfile?: UserAppearanceProfile) {
   return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
+    if (!userAppearanceProfile) {
+      return;
+    }
     const appearanceProfile: UserAppearanceProfile = await getApi().user.updateUserAppearanceProfile(
       'me',
       userAppearanceProfile

@@ -134,7 +134,7 @@ export default createReducer(initialState, {
     return {...state, workTimeSettings: action.workTimeSettings};
   },
   [types.RECEIVE_USER](state: RootState, action: {user: User}) {
-    const updatedProfiles = {...state.user?.profiles, ...{appearance: action.user.profiles.appearance}};
+    const updatedProfiles = {...state?.user?.profiles, ...{appearance: action.user.profiles.appearance}};
     const updatedUser = Object.assign({}, state.user, {profiles: updatedProfiles});
     return {
       ...state,
@@ -142,7 +142,7 @@ export default createReducer(initialState, {
     };
   },
   [types.RECEIVE_USER_APPEARANCE_PROFILE](state: RootState, action: {userAppearanceProfile: UserAppearanceProfile}) {
-    const updatedProfiles = {...state.user?.profiles, ...{appearance: action.userAppearanceProfile}};
+    const updatedProfiles = {...state?.user?.profiles, ...{appearance: action.userAppearanceProfile}};
     const updatedUser = {...state.user, ...{profiles: updatedProfiles}};
     return {
       ...state,
