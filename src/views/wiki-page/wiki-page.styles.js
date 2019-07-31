@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {COLOR_FONT_ON_BLACK, UNIT} from '../../components/variables/variables';
+import {COLOR_FONT_ON_BLACK, UNIT, COLOR_FONT} from '../../components/variables/variables';
 
 
 export default StyleSheet.create({
@@ -13,10 +13,7 @@ export default StyleSheet.create({
     paddingRight: UNIT * 2,
     paddingBottom: UNIT * 9
   },
-  nothighText: {
-    flex: 1,
-    paddingTop: UNIT * 5,
-    alignItems: 'center',
-    justifyContent: 'center'
+  plainText: {
+    color: COLOR_FONT
   }
 });

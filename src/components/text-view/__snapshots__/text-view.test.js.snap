@@ -11,7 +11,7 @@ exports[`<TextView/> Render should match a snapshot 1`] = `
     onPress={[Function]}
     style={
       Object {
-        "color": "#FE0082",
+        "color": "#0f5b99",
       }
     }
     testID="textMoreShowMore"

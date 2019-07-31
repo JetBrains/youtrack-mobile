@@ -9,24 +9,21 @@ import {handleRelativeUrl} from '../config/config';
 import {getStorageState} from '../storage/storage';
 import styles from './wiki.styles';
 import Router from '../router/router';
-import {showMoreText} from '../text-view/text-view';
+import {showMoreInlineText} from '../text-view/text-view';
 
 const IMAGE_WIDTH = Math.floor(Dimensions.get('window').width - 32);
 const IMAGE_HEIGHT = 200;
 
 export function renderCode(node: { children: any }, index: number, title?: string) {
   // App is hanging trying to render a huge text https://github.com/facebook/react-native/issues/19453
-  const MAX_CODE_LENGTH = 3000;
+  const MAX_CODE_LENGTH = 700;
 
   const code = node.children.map(it => it.data).join('\n') || '';
   let trimmedCode = code;
   const isCodeTrimmed = code.length > MAX_CODE_LENGTH;
 
   if (isCodeTrimmed) {
-    trimmedCode = [
-      code.substr(0, MAX_CODE_LENGTH),
-      '...'
-    ].join('\n');
+    trimmedCode = `${code.substr(0, MAX_CODE_LENGTH)}...`;
   }
 
   return <Text key={index}>
@@ -38,14 +35,14 @@ export function renderCode(node: { children: any }, index: number, title?: strin
       {entities.decodeHTML(trimmedCode)}
     </SyntaxHighlighter>
     {isCodeTrimmed && <Text
-      style={styles.link}
-      onPress={() => requestAnimationFrame(() => Router.WikiPage({
+      style={styles.exceptionLink}
+      onPress={() => Router.WikiPage({
+        style: styles.monospace,
         title: title,
-        plainText: code,
-        onIssueIdTap: this.handleLinkPress
-      }))}
+        plainText: code
+      })}
     >
-      {showMoreText}
+      {showMoreInlineText}
     </Text>}
   </Text>;
 }

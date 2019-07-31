@@ -3,7 +3,7 @@
 import React, {PureComponent} from 'react';
 import {StyleSheet, Text} from 'react-native';
 
-import {COLOR_PINK} from '../variables/variables';
+import {COLOR_LINK} from '../variables/variables';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 
@@ -68,6 +68,6 @@ export default class TextView extends PureComponent<Props, State> {
 
 const styles = StyleSheet.create({
   more: {
-    color: COLOR_PINK
+    color: COLOR_LINK
   }
 });

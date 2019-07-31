@@ -6,6 +6,7 @@ import {View, Text, ScrollView, TextInput} from 'react-native';
 import entities from 'entities';
 
 import type {Attachment} from '../../flow/CustomFields';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 import {getApi} from '../../components/api/api__instance';
 import usage from '../../components/usage/usage';
@@ -22,19 +23,22 @@ type Props = {
   wikiText?: string,
   plainText?: string,
   title?: string,
-  onIssueIdTap: () => any,
+  style?: ViewStyleProp,
+  onIssueIdTap: () => void,
   attachments?: Array<Attachment>
 };
 
 type DefaultProps = {
-  onIssueIdTap: () => any
+  onIssueIdTap: () => void,
+  title: string
 };
 
 export default class WikiPage extends PureComponent<Props, void> {
   MAX_PLAIN_TEXT_LENGTH: number = 5000;
 
   static defaultProps: DefaultProps = {
-    onIssueIdTap: () => {}
+    onIssueIdTap: () => {},
+    title: ''
   };
 
   async componentDidMount() {
@@ -79,12 +83,13 @@ export default class WikiPage extends PureComponent<Props, void> {
 
     if (decodedText.length > this.MAX_PLAIN_TEXT_LENGTH) {
       return <TextInput
+        style={[styles.plainText, this.props.style]}
         editable={false}
         multiline={true}
         value={decodedText}
       />;
     }
-    return <Text>{decodedText}</Text>;
+    return <Text style={[styles.plainText, this.props.style]}>{decodedText}</Text>;
   }
 
   render() {

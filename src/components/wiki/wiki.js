@@ -11,6 +11,7 @@ import {COLOR_FONT} from '../variables/variables';
 import {getBaseUrl, handleRelativeUrl} from '../config/config';
 import {renderCode, renderImage, renderTable, renderTableRow, renderTableCell} from './wiki__renderers';
 import {extractId} from '../open-url-handler/open-url-handler';
+import {showMoreInlineText} from '../text-view/text-view';
 
 HTMLView.propTypes.style = Text.propTypes.style;
 
@@ -77,18 +78,18 @@ export default class Wiki extends Component<Props, void> {
     });
   };
 
-  renderWikiPageLink = (node: Node, index: number) => {
+  renderShowFullExceptionLink = (node: Node, index: number) => {
     return (
       <Text
         key={index}
-        style={styles.link}
+        style={styles.exceptionLink}
         onPress={() => requestAnimationFrame(() => Router.WikiPage({
           wikiText: toHtml(node),
           title: this.props.title,
           onIssueIdTap: this.handleLinkPress
         }))}
       >
-        {`  Show\xa0more `}
+        {showMoreInlineText}
       </Text>
     );
   };
@@ -109,7 +110,7 @@ export default class Wiki extends Component<Props, void> {
     }
 
     if (!this.props.renderFullException && selector(node, 'pre', 'wiki-exception')) {
-      return this.renderWikiPageLink(node, index);
+      return this.renderShowFullExceptionLink(node, index);
     }
 
     if (node.name === 'input') {
