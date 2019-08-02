@@ -59,6 +59,7 @@ const ISSUE_FIELD_VALUE = toField([
       'login',
       'minutes',
       'presentation',
+      'text',
       'isResolved',
 
       {

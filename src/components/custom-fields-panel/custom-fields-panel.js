@@ -221,14 +221,16 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       integer: value => parseInt(value),
       float: value => parseFloat(value),
       string: value => value,
-      text: value => value,
+      text: value => ({text: value}),
       default: value => ({presentation: value})
     };
 
     const placeholder = placeholders[type] || placeholders.default;
     const valueFormatter = valueFormatters[type] || valueFormatters.default;
 
-    const value = field.value ? (field.value.presentation || field.value.toString()) : '';
+    const value = field.value
+      ? field.value.presentation || field.value.text || field.value.toString()
+      : '';
 
     return this.setState({
       simpleValue: {
