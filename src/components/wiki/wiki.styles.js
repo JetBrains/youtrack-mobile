@@ -1,5 +1,5 @@
 import {StyleSheet, Platform} from 'react-native';
-import {COLOR_LINK, COLOR_FONT, COLOR_GRAY, UNIT, COLOR_FONT_GRAY} from '../variables/variables';
+import {COLOR_LINK, COLOR_FONT, COLOR_GRAY, UNIT, COLOR_FONT_GRAY, COLOR_EXTRA_LIGHT_GRAY} from '../variables/variables';
 
 const FONT_SIZE = 16;
 const monospace = {
@@ -36,10 +36,12 @@ export default StyleSheet.create({
     margin: 0
   },
   codeLink: {
+    fontFamily: 'System',
     fontSize: 14,
     color: COLOR_LINK
   },
   exceptionLink: {
+    fontFamily: 'System',
     fontSize: FONT_SIZE,
     color: COLOR_LINK
   },
@@ -47,6 +49,12 @@ export default StyleSheet.create({
     ...monospace,
     fontSize: 14,
     fontWeight: '500',
+  },
+  codeBlock: {
+    ...monospace,
+    fontSize: 24,
+    padding: UNIT * 3,
+    backgroundColor: COLOR_EXTRA_LIGHT_GRAY
   }
 });
 

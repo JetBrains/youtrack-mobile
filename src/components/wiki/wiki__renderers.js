@@ -2,48 +2,55 @@
 import React from 'react';
 import {Text, Image, Dimensions, Platform} from 'react-native';
 import SyntaxHighlighter from 'react-native-syntax-highlighter';
-import {idea} from 'react-syntax-highlighter/dist/styles';
+import {codeHighlightStyle} from './code-highlight-styles';
 import entities from 'entities';
 import {COLOR_GRAY, COLOR_LIGHT_GRAY} from '../variables/variables';
 import {handleRelativeUrl} from '../config/config';
 import {getStorageState} from '../storage/storage';
 import styles from './wiki.styles';
 import Router from '../router/router';
-import {showMoreInlineText} from '../text-view/text-view';
+import {showMoreText} from '../text-view/text-view';
 
 const IMAGE_WIDTH = Math.floor(Dimensions.get('window').width - 32);
 const IMAGE_HEIGHT = 200;
 
-export function renderCode(node: { children: any }, index: number, title?: string) {
+
+export function renderCode(node: { children: any }, index: number, title?: string, language?: string) {
   // App is hanging trying to render a huge text https://github.com/facebook/react-native/issues/19453
   const MAX_CODE_LENGTH = 700;
+  const newLine = <Text>{'\n'}</Text>;
 
   const code = node.children.map(it => it.data).join('\n') || '';
   let trimmedCode = code;
   const isCodeTrimmed = code.length > MAX_CODE_LENGTH;
 
   if (isCodeTrimmed) {
-    trimmedCode = `${code.substr(0, MAX_CODE_LENGTH)}...`;
+    trimmedCode = `${code.substr(0, MAX_CODE_LENGTH)}\n...`;
   }
 
   return <Text key={index}>
-    <SyntaxHighlighter
-      PreTag={Text}
-      CodeTag={Text}
-      style={idea}
-    >
-      {entities.decodeHTML(trimmedCode)}
-    </SyntaxHighlighter>
-    {isCodeTrimmed && <Text
-      style={styles.exceptionLink}
-      onPress={() => Router.WikiPage({
+    {newLine}
+    <Text
+      style={styles.codeBlock}
+      onPress={() => isCodeTrimmed && Router.WikiPage({
         style: styles.code,
         title: title,
         plainText: code
-      })}
-    >
-      {showMoreInlineText}
-    </Text>}
+      })}>
+      <SyntaxHighlighter
+        key={index}
+        language={language}
+        PreTag={Text}
+        CodeTag={Text}
+        style={codeHighlightStyle}
+      >
+        {entities.decodeHTML(trimmedCode)}
+      </SyntaxHighlighter>
+      {isCodeTrimmed && <Text
+        style={styles.codeLink}
+      >{`${showMoreText}`}</Text>}
+      {newLine}
+    </Text>
   </Text>;
 }
 
