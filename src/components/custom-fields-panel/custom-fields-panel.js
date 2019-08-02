@@ -212,6 +212,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     const placeholders = {
       integer: '-12 or 34',
       string: 'Type value',
+      text: 'Type text value',
       float: 'Type float value',
       default: '1w 1d 1h 1m'
     };
@@ -220,6 +221,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       integer: value => parseInt(value),
       float: value => parseFloat(value),
       string: value => value,
+      text: value => value,
       default: value => ({presentation: value})
     };
 
@@ -279,7 +281,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       return this.editDateField(field);
     }
 
-    if (['period', 'integer', 'string', 'float'].indexOf(fieldType.valueType) !== -1) {
+    if (['period', 'integer', 'string', 'text', 'float'].indexOf(fieldType.valueType) !== -1) {
       return this.editSimpleValueField(field, fieldType.valueType);
     }
 
