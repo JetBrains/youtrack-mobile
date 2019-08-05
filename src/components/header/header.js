@@ -1,6 +1,6 @@
 /* @flow */
 import {Text, View, TouchableOpacity, StatusBar} from 'react-native';
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import styles from './header.styles';
 import Router from '../router/router';
 import {onHeightChange} from './header__top-padding';
@@ -22,7 +22,7 @@ type DefaultProps = {
   onRightButtonClick: Function
 }
 
-export default class Header extends Component<Props, void> {
+export default class Header extends PureComponent<Props, void> {
   static defaultProps: DefaultProps = {
     onRightButtonClick: () => undefined,
   };
