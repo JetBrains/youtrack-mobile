@@ -1,7 +1,7 @@
 /* @flow */
 
 import {Linking, Text} from 'react-native';
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import HTMLView from 'react-native-htmlview';
 import toHtml from 'htmlparser-to-html';
 
@@ -40,7 +40,7 @@ const selector = (node: Object, tag: string, className: string): boolean => {
 
 const RootComponent = props => <Text {...props} />;
 
-export default class Wiki extends Component<Props, void> {
+export default class Wiki extends PureComponent<Props, void> {
   static defaultProps: Object = {
     onIssueIdTap: (issueId: string) => {},
     attachments: [],

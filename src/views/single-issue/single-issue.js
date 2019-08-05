@@ -54,6 +54,8 @@ type SingleIssueProps = SingleIssueState & typeof issueActions & AdditionalProps
 
 class SingeIssueView extends Component<SingleIssueProps, void> {
   toolbarNode: Object;
+  imageHeaders = getApi().auth.getAuthorizationHeaders();
+  backendUrl = getApi().config.backendUrl;
 
   static contextTypes = {
     actionSheet: PropTypes.func
@@ -66,6 +68,10 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
 
     this.props.loadIssue();
     this.props.loadIssueActivities();
+  }
+
+  _onIssueIdTap(issueId) {
+    this.props.openNestedIssueView(null, issueId);
   }
 
   _canAddComment() {
@@ -188,22 +194,20 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
   }
 
   _renderDescription(issue: IssueFull | IssueOnList) {
-    const description: ?string | null = issue?.wikifiedDescription || issue?.description;
-    if (description) {
-      return <Wiki
-        backendUrl={getApi().auth.config.backendUrl}
-        attachments={issue.attachments}
-        imageHeaders={getApi().auth.getAuthorizationHeaders()}
-        onIssueIdTap={issueId => this.props.openNestedIssueView(null, issueId)}
-        title={issue.idReadable}
-      >
-        {description}
-      </Wiki>;
-    }
-    return null;
+    const description: string = issue?.wikifiedDescription || issue.description;
+
+    return <Wiki
+      backendUrl={this.backendUrl}
+      attachments={issue.attachments}
+      imageHeaders={this.imageHeaders}
+      onIssueIdTap={this._onIssueIdTap}
+      title={issue.idReadable}
+    >
+      {description}
+    </Wiki>;
   }
 
-  _renderAttachments(attachments: Array<Attachment>|null) {
+  _renderAttachments(attachments: Array<Attachment> | null) {
     if (!attachments || !attachments.length) {
       return null;
     }
@@ -213,7 +217,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
         <AttachmentsRow
           attachments={attachments}
           attachingImage={this.props.attachingImage}
-          imageHeaders={getApi().auth.getAuthorizationHeaders()}
+          imageHeaders={this.imageHeaders}
           onImageLoadingError={err => {
             log.warn('onImageLoadingError', err.nativeEvent);
             this.props.refreshIssue();
@@ -298,8 +302,8 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
           issueFields={issue.fields}
           attachments={issue.attachments}
 
-          imageHeaders={getApi().auth.getAuthorizationHeaders()}
-          backendUrl={getApi().config.backendUrl}
+          imageHeaders={this.imageHeaders}
+          backendUrl={this.backendUrl}
 
           onReply={(comment: IssueComment) => {
             this.props.showCommentInput();
@@ -337,8 +341,8 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
         <SingleIssueComments
           comments={issue.comments}
           attachments={issue.attachments}
-          imageHeaders={getApi().auth.getAuthorizationHeaders()}
-          backendUrl={getApi().config.backendUrl}
+          imageHeaders={this.imageHeaders}
+          backendUrl={this.backendUrl}
           onReply={(comment: IssueComment) => {
             this.props.showCommentInput();
             this.props.startReply(comment.author.login);
