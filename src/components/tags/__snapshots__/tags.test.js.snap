@@ -4,44 +4,71 @@ exports[`<Tags/> Render should match a snapshot 1`] = `
 <View
   style={
     Array [
-      Object {
-        "alignItems": "flex-start",
-        "flexDirection": "row",
-        "flexWrap": "wrap",
-        "marginLeft": -2,
-        "marginRight": -2,
-      },
-      Object {},
+      undefined,
+      undefined,
     ]
   }
-  testID="tags"
+  testID="tagsContainer"
 >
-  <TouchableOpacity
-    activeOpacity={0.2}
-    key="undefined_button"
-    onPress={[Function]}
-    testID="tagsTag"
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "flexDirection": "row",
+        "flexWrap": "nowrap",
+        "justifyContent": "flex-start",
+      }
+    }
+    testID="tagsList"
   >
-    <ColorField
-      color={
-        Object {
-          "id": 1,
+    <ScrollViewMock
+      keyboardShouldPersistTaps="handled"
+    >
+      <View
+        style={
+          Array [
+            Object {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "flexWrap": "nowrap",
+              "justifyContent": "flex-start",
+            },
+            null,
+          ]
         }
-      }
-      fullText={true}
-      style={
-        Array [
-          Object {
-            "margin": 2,
-            "paddingLeft": 4,
-            "paddingRight": 4,
-            "width": null,
-          },
-          Object {},
-        ]
-      }
-      testID="tagColor"
-    />
-  </TouchableOpacity>
+      >
+        <TouchableOpacity
+          activeOpacity={0.2}
+          key="undefined_button"
+          onPress={[Function]}
+          testID="tagsListTag"
+        >
+          <ColorField
+            color={
+              Object {
+                "id": 1,
+              }
+            }
+            fullText={true}
+            style={
+              Array [
+                Array [
+                  Object {
+                    "margin": 2,
+                    "paddingLeft": 4,
+                    "paddingRight": 4,
+                    "width": null,
+                  },
+                  null,
+                ],
+                null,
+              ]
+            }
+            testID="tagColor"
+          />
+        </TouchableOpacity>
+      </View>
+    </ScrollViewMock>
+  </View>
 </View>
 `;

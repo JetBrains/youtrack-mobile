@@ -4,36 +4,114 @@ import {shallow} from 'enzyme';
 import toJson from 'enzyme-to-json';
 
 import Tags from './tags';
+import styles from './tags.styles';
 
 describe('<Tags/>', () => {
 
   let wrapper;
+  let instance;
   let tagQueryMock;
   let onPressMock;
+  let tagMock;
+
+  beforeEach(() => {
+    tagQueryMock = 'tag: foo';
+    onPressMock = jest.fn();
+    tagMock = {
+      color: {id: 1},
+      query: tagQueryMock
+    };
+    wrapper = doShallow([tagMock], onPressMock);
+    instance = wrapper.instance();
+  });
+
 
   describe('Render', () => {
-    beforeEach(() => {
-      tagQueryMock = 'tag: foo';
-      onPressMock = jest.fn();
-      wrapper = doShallow([{color: {id: 1}, query: tagQueryMock}], onPressMock);
-    });
-
     it('should match a snapshot', () => {
       expect(toJson(wrapper)).toMatchSnapshot();
     });
 
     it('should render component', () => {
-      expect(findByTestId('tags')).toHaveLength(1);
+      expect(findByTestId('tagsList')).toHaveLength(1);
     });
 
     it('should render color field', () => {
       expect(findByTestId('tagColor')).toHaveLength(1);
     });
 
-    it('should redirect on click on a tag', () => {
-      findByTestId('tagsTag').simulate('press');
 
-      expect(onPressMock).toHaveBeenCalledWith(tagQueryMock);
+    describe('Show all tags', () => {
+      beforeEach(() => {
+        wrapper = doShallow([tagMock], onPressMock, true);
+      });
+
+      it('should show all tags', () => {
+        findByTestId('tagsShowMore').simulate('press');
+
+        expect(findByTestId('tagsModal')).toHaveLength(1);
+      });
+
+      it('should close all tags modal', () => {
+        wrapper = doShallow([tagMock], onPressMock, true);
+        findByTestId('tagsShowMore').simulate('press');
+
+        expect(findByTestId('tagsModal')).toHaveLength(1);
+        findByTestId('tagsModalClose').simulate('press');
+        expect(findByTestId('tagsModal')).toHaveLength(0);
+
+      });
+    });
+
+
+    describe('Actions', () => {
+      it('should show actions', () => {
+        instance._showActions = jest.fn();
+        instance.forceUpdate();
+
+        findByTestId('tagsListTag').simulate('press');
+
+        expect(instance._showActions).toHaveBeenCalledWith(tagMock);
+      });
+    });
+  });
+
+
+  describe('_showActions', () => {
+    it('should invoke prop`s `onTagPress` fn', async () => {
+      instance._getSelectedActions = jest.fn(() => instance._getContextActions(tagMock)[0]);
+      instance.forceUpdate();
+
+      await instance._showActions(tagMock);
+
+      expect(instance.props.onTagPress).toHaveBeenCalledWith(tagMock.query);
+    });
+  });
+
+
+  describe('_toggleShowAll', () => {
+    it('should toggle `showAllTags` state', () => {
+      instance._toggleShowAll();
+      expect(instance.state.showAllTags).toEqual(true);
+
+      instance._toggleShowAll();
+      expect(instance.state.showAllTags).toEqual(false);
+    });
+  });
+
+
+  describe('_getTagSpecificStyle', () => {
+    it('should return a specific tag style for a tag without a color coding', () => {
+      expect(
+        instance._getTagSpecificStyle({
+          color: {id: '0'}
+        })
+      ).toEqual(styles.tagNoColor);
+    });
+
+    it('should return NULL for a tag with a color coding', () => {
+      expect(
+        instance._getTagSpecificStyle(tagMock)
+      ).toEqual(null);
     });
   });
 
@@ -42,11 +120,13 @@ describe('<Tags/>', () => {
     return wrapper && wrapper.find({testID: testId});
   }
 
-  function doShallow(tags = [], onTagPress = () => {}) {
+  function doShallow(tags = [], onTagPress = () => {
+  }, showMore = false) {
     return shallow(
       <Tags
         tags={tags}
         onTagPress={onTagPress}
+        showMore={showMore}
       />
     );
   }
