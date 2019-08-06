@@ -12,7 +12,8 @@ export const COLOR_PINK_DARK = '#90004A';
 
 export const COLOR_SELECTED_DARK = '#001526';
 
-export const COLOR_PLACEHOLDER = '#406380';
+export const COLOR_PLACEHOLDER = '#737577';
+export const COLOR_PLACEHOLDER_ACTIVE = '#80929D';
 
 export const COLOR_EXTRA_LIGHT_GRAY = '#F7F9FA';
 export const COLOR_LIGHT_GRAY = '#F4F4F4';

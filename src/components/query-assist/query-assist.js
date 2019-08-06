@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 import styles from './query-assist.styles';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
 import type {TransformedSuggestion, SavedQuery} from '../../flow/Issue';
-import {COLOR_PINK, COLOR_PLACEHOLDER} from '../../components/variables/variables';
+import {COLOR_PLACEHOLDER, COLOR_PLACEHOLDER_ACTIVE} from '../../components/variables/variables';
 import {clearSearch} from '../../components/icon/icon';
 import ModalView from '../modal-view/modal-view';
 import throttle from 'lodash.throttle';
@@ -99,7 +99,7 @@ export default class QueryAssist extends Component<Props, State> {
     this.setState({input: query, caret});
     this.props.onChange(query, caret);
 
-  }, SEARCH_THROTTLE)
+  }, SEARCH_THROTTLE);
 
   onApplySuggestion = (suggestion: TransformedSuggestion) => {
     const suggestionText = `${suggestion.prefix}${suggestion.option}${suggestion.suffix}`;
@@ -108,12 +108,12 @@ export default class QueryAssist extends Component<Props, State> {
     const newQuery = leftPartAndNewQuery + oldQuery.substring(suggestion.completionEnd);
     this.setState({input: newQuery});
     this.props.onChange(newQuery, leftPartAndNewQuery.length);
-  }
+  };
 
   onApplySavedQuery = (savedQuery: SavedQuery) => {
     this.blurInput();
     this.props.onSetQuery(savedQuery.query);
-  }
+  };
 
   _renderInput() {
     const {input, showQueryAssist} = this.state;
@@ -132,12 +132,15 @@ export default class QueryAssist extends Component<Props, State> {
     }
 
     return (
-      <View style={styles.inputWrapper} ref={node => this.queryAssistContainer = node}>
+      <View
+        style={[styles.inputWrapper, showQueryAssist ? styles.inputWrapperActive : null]}
+        ref={node => this.queryAssistContainer = node}
+      >
         <TextInput
           ref="searchInput"
           keyboardAppearance="dark"
           style={[styles.searchInput, showQueryAssist ? styles.searchInputActive : null]}
-          placeholderTextColor={showQueryAssist ? COLOR_PLACEHOLDER : COLOR_PINK}
+          placeholderTextColor={showQueryAssist ? COLOR_PLACEHOLDER_ACTIVE : COLOR_PLACEHOLDER}
           placeholder="Enter query"
           clearButtonMode="while-editing"
           returnKeyType="search"
@@ -151,7 +154,7 @@ export default class QueryAssist extends Component<Props, State> {
           onSubmitEditing={() => this.onSubmitEditing()}
           value={input}
           onChangeText={text => this.setState({input: text})}
-          onSelectionChange = {event => this.onSearch(input, event.nativeEvent.selection.start)}
+          onSelectionChange={event => this.onSearch(input, event.nativeEvent.selection.start)}
         />
         {(input && showQueryAssist)
           ? (
@@ -162,7 +165,7 @@ export default class QueryAssist extends Component<Props, State> {
             >
               <Image style={styles.clearIcon} source={clearSearch}/>
             </TouchableOpacity>
-          ): null}
+          ) : null}
         {cancelButton}
       </View>
     );
@@ -192,7 +195,7 @@ export default class QueryAssist extends Component<Props, State> {
     const ContainerComponent = showQueryAssist ? ModalView : View;
     const containerProps = showQueryAssist ? {
       visible: true,
-      style: [styles.modal, showQueryAssist && styles.modalFullScreen]
+      style: styles.modal
     } : {
       style: styles.placeHolder
     };
@@ -200,11 +203,11 @@ export default class QueryAssist extends Component<Props, State> {
     return (
       // $FlowFixMe: flow fails with this props generation
       <ContainerComponent {...containerProps}>
-        {showQueryAssist && this._renderSuggestions()}
 
         {this._renderInput()}
-
+        {showQueryAssist && this._renderSuggestions()}
         <KeyboardSpacerIOS/>
+
       </ContainerComponent>
     );
   }

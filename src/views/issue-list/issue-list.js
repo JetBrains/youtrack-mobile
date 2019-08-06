@@ -156,6 +156,12 @@ export class IssueList extends Component<Props, void> {
         <View style={styles.listContainer} testID="issue-list-page">
           {this._renderHeader()}
 
+          <QueryAssist
+            suggestions={queryAssistSuggestions}
+            currentQuery={query}
+            onChange={suggestIssuesQuery}
+            onSetQuery={this.onQueryUpdated}/>
+
           <FlatList
             removeClippedSubviews={false}
             data={issues}
@@ -170,11 +176,6 @@ export class IssueList extends Component<Props, void> {
             testID="issue-list"
           />
 
-          <QueryAssist
-            suggestions={queryAssistSuggestions}
-            currentQuery={query}
-            onChange={suggestIssuesQuery}
-            onSetQuery={this.onQueryUpdated}/>
         </View>
       </Menu>
     );
