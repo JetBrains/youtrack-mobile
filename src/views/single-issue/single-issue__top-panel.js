@@ -3,36 +3,46 @@
 import styles from './single-issue.styles';
 
 import {View, Text, TouchableOpacity} from 'react-native';
-import React, {Component} from 'react';
-import Tags from '../../components/tags/tags';
+import React, {PureComponent} from 'react';
 import {formatDate, shortRelativeDate, getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
-import type {IssueFull} from '../../flow/Issue';
+import type {User} from '../../flow/User';
 
 const TOUCH_PADDING = 10;
 
 const moreButtonHitSlop = {
-  top: TOUCH_PADDING, left: TOUCH_PADDING, bottom: TOUCH_PADDING, right: TOUCH_PADDING
+  top: TOUCH_PADDING,
+  left: TOUCH_PADDING,
+  bottom: TOUCH_PADDING,
+  right: TOUCH_PADDING
 };
 
 type Props = {
-  issue: IssueFull,
-  onTagPress: (query: string) => any
+  created: number,
+  updated: number,
+  reporter: User,
+  updater: User,
 }
 
 type State = {
   showAdditionalDate: boolean
 }
 
-export default class TopPanel extends Component<Props, State> {
+export default class TopPanel extends PureComponent<Props, State> {
   state: State = {
     showAdditionalDate: false
+  };
+
+  _getUserName(user: User) {
+    return getEntityPresentation(user);
   }
 
-  _getUserName(user) {
-    return `${getEntityPresentation(user)}`;
-  }
+  render() {
+    const {created, updated, reporter, updater} = this.props;
 
-  _renderUpdatedCreated(issue) {
+    if (!created || !reporter) {
+      return null;
+    }
+
     return (
       <View style={styles.issueTopMessage}>
 
@@ -40,7 +50,7 @@ export default class TopPanel extends Component<Props, State> {
           <View style={{flexDirection: 'row'}}>
             <View style={{flex: 1}}>
               <Text style={styles.issueTopText} selectable={true} numberOfLines={1}>
-                Created by {this._getUserName(issue.reporter)} {shortRelativeDate(issue.created)}
+                Created by {this._getUserName(reporter)} {shortRelativeDate(created)}
               </Text>
             </View>
             {!this.state.showAdditionalDate &&
@@ -49,32 +59,18 @@ export default class TopPanel extends Component<Props, State> {
             </TouchableOpacity>}
           </View>
 
-          {this.state.showAdditionalDate && <Text style={styles.issueTopText}>{formatDate(issue.created)}</Text>}
+          {this.state.showAdditionalDate && <Text style={styles.issueTopText}>{formatDate(created)}</Text>}
         </View>
 
-        {issue.updater && this.state.showAdditionalDate ?
+        {Boolean(updater && updated) && this.state.showAdditionalDate ?
           <View style={styles.updatedInformation}>
             <Text style={styles.issueTopText} selectable={true} numberOfLines={2}>
-              Updated by {this._getUserName(issue.updater)} {shortRelativeDate(issue.updated)}
+              Updated by {this._getUserName(updater)} {shortRelativeDate(updated)}
             </Text>
-            {this.state.showAdditionalDate && <Text style={styles.issueTopText}>{formatDate(issue.updated)}</Text>}
+            {this.state.showAdditionalDate && <Text style={styles.issueTopText}>{formatDate(updated)}</Text>}
           </View>
           : null}
 
-      </View>
-    );
-  }
-
-  render() {
-    const {issue} = this.props;
-    return (
-      <View>
-        <Tags
-          tags={issue.tags}
-          onTagPress={(query) => this.props.onTagPress(query)}
-        />
-
-        {this._renderUpdatedCreated(issue)}
       </View>
     );
   }

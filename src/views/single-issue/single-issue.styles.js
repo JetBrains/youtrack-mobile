@@ -12,7 +12,8 @@ import {
   COLOR_PINK,
   COLOR_MEDIUM_GRAY,
   COLOR_LINK,
-  COLOR_ICON_GREY
+  COLOR_ICON_GREY,
+  COLOR_ICON_MEDIUM_GREY
 } from '../../components/variables/variables';
 
 const SUGGESTION_BOTTOM = 48;
@@ -56,6 +57,22 @@ export default StyleSheet.create({
     lineHeight: 24,
     fontWeight: 'bold',
     color: COLOR_FONT
+  },
+  tags: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    flexWrap: 'nowrap',
+    marginTop: UNIT * 2,
+    marginRight: -UNIT * 2,
+    paddingTop: UNIT,
+    paddingBottom: UNIT,
+    borderColor: COLOR_MEDIUM_GRAY,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+  },
+  tagsTitle: {
+    fontWeight: 'bold'
   },
   description: {},
   attachments: {
@@ -248,7 +265,7 @@ export default StyleSheet.create({
     color: COLOR_FONT,
   },
   activityLabel: {
-    color: '#737577'
+    color: COLOR_ICON_MEDIUM_GREY
   },
   activityText: {
     color: COLOR_FONT

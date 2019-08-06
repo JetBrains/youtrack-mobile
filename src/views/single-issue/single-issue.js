@@ -40,6 +40,7 @@ import SingleIssueActivitiesSettings from './single-issue__activities-settings';
 import type {UserAppearanceProfile} from '../../flow/User';
 import {receiveUserAppearanceProfile} from '../../actions/app-actions';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
+import Tags from '../../components/tags/tags';
 
 const CATEGORY_NAME = 'Issue';
 
@@ -196,6 +197,10 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
   _renderDescription(issue: IssueFull | IssueOnList) {
     const description: string = issue?.wikifiedDescription || issue.description;
 
+    if (!description) {
+      return null;
+    }
+
     return <Wiki
       backendUrl={this.backendUrl}
       attachments={issue.attachments}
@@ -233,7 +238,13 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     const {editMode, isSavingEditedIssue, summaryCopy, descriptionCopy, openIssueListWithSearch} = this.props;
     return (
       <View style={styles.issueViewContainer}>
-        <SingleIssueTopPanel issue={issue} onTagPress={openIssueListWithSearch}/>
+
+        <SingleIssueTopPanel
+          created={issue.created}
+          updated={issue.updated}
+          reporter={issue.reporter}
+          updater={issue.updater}
+        />
 
         {editMode && <IssueSummary
           editable={!isSavingEditedIssue}
@@ -246,6 +257,15 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
 
         {!editMode && <View>
           <Text style={styles.summary} selectable={true} testID="issue-summary">{issue.summary}</Text>
+
+          <Tags
+            style={styles.tags}
+            tags={issue?.tags}
+            onTagPress={openIssueListWithSearch}
+            title={<Text style={styles.tagsTitle}>Tags: </Text>}
+            showMore={true}
+          />
+
           {this._renderLinks(issue)}
           {this._renderDescription(issue)}
         </View>}
