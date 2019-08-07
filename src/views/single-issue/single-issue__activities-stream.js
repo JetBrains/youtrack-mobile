@@ -343,9 +343,9 @@ export default class SingleIssueActivities extends Component<Props, void> {
 
         <View style={styles.activityChange}>
 
-          {work.text && <View style={styles.workComment}><Text>{work.text}</Text></View>}
+          {Boolean(work.text) && <View style={styles.workComment}><Text>{work.text}</Text></View>}
 
-          {work.date && <Text>{absDate(work.date)}</Text>}
+          {Boolean(work.date) && <Text>{absDate(work.date)}</Text>}
 
           <View style={styles.row}>
             <Text style={styles.activityLabel}>Spent time: </Text>
