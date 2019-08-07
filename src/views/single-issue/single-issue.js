@@ -71,9 +71,9 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     this.props.loadIssueActivities();
   }
 
-  _onIssueIdTap(issueId) {
+  _onIssueIdTap = (issueId) => {
     this.props.openNestedIssueView(null, issueId);
-  }
+  };
 
   _canAddComment() {
     const {issueLoaded, addCommentMode, issue} = this.props;
