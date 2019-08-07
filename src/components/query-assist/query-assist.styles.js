@@ -52,11 +52,19 @@ export default StyleSheet.create({
     paddingBottom: 2,
     paddingLeft: UNIT,
     color: COLOR_FONT,
-    fontSize: 15
+    fontSize: 15,
+    borderWidth: 1,
+    borderColor: COLOR_MEDIUM_GRAY,
+    textAlign: 'left'
+  },
+  searchInputEmpty: {
+    textAlign: 'center'
   },
   searchInputActive: {
     backgroundColor: COLOR_SELECTED_DARK,
     color: COLOR_FONT_ON_BLACK,
+    borderWidth: 0,
+    textAlign: 'left',
 
     ...Platform.select({
       android: {

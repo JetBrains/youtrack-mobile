@@ -139,7 +139,7 @@ export default class QueryAssist extends Component<Props, State> {
         <TextInput
           ref="searchInput"
           keyboardAppearance="dark"
-          style={[styles.searchInput, showQueryAssist ? styles.searchInputActive : null]}
+          style={[styles.searchInput, input.length === 0 ? styles.searchInputEmpty : null, showQueryAssist ? styles.searchInputActive : null]}
           placeholderTextColor={showQueryAssist ? COLOR_PLACEHOLDER_ACTIVE : COLOR_PLACEHOLDER}
           placeholder="Enter query"
           clearButtonMode="while-editing"
