@@ -386,6 +386,19 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     );
   }
 
+  _renderCustomFieldPanel() {
+    const {issue, issuePermissions, updateIssueFieldValue, updateProject } = this.props;
+
+    return <CustomFieldsPanel
+      api={getApi()}
+      autoFocusSelect
+      canEditProject={issuePermissions.canUpdateGeneralInfo(issue)}
+      issue={issue}
+      issuePermissions={issuePermissions}
+      onUpdate={async (field, value) => await updateIssueFieldValue(field, value)}
+      onUpdateProject={async (project) => await updateProject(project)}/>;
+  }
+
   render() {
     const {
       issue,
@@ -397,9 +410,6 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
       commentsLoaded,
       commentsLoadingError,
       commentText,
-      issuePermissions,
-      updateIssueFieldValue,
-      updateProject,
       hideCommentInput,
       setCommentText,
       addOrEditComment,
@@ -445,6 +455,8 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
         {this._renderHeader()}
 
         {issueLoaded && !issueLoadingError && this._renderToolbar()}
+
+        {issue && !addCommentMode && this._renderCustomFieldPanel()}
 
         {issueLoadingError && <ErrorMessage error={issueLoadingError} onTryAgain={refreshIssue}/>}
 
@@ -515,16 +527,6 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
             <Image source={comment} style={styles.addCommentIcon}/>
           </TouchableOpacity>
         </View>}
-
-
-        {issue && !addCommentMode && <CustomFieldsPanel
-          api={getApi()}
-          autoFocusSelect
-          canEditProject={issuePermissions.canUpdateGeneralInfo(issue)}
-          issue={issue}
-          issuePermissions={issuePermissions}
-          onUpdate={async (field, value) => await updateIssueFieldValue(field, value)}
-          onUpdateProject={async (project) => await updateProject(project)}/>}
 
         {showCommandDialog && (
           <CommandDialog

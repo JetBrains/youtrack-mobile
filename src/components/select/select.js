@@ -24,7 +24,8 @@ export type Props = {
   autoFocus: boolean,
   emptyValue: ?string,
   style?: any,
-  noFilter?: boolean
+  noFilter?: boolean,
+  topPadding?: number
 };
 
 type State = {
@@ -161,9 +162,12 @@ export default class Select extends Component<Props, State> {
   }
 
   render() {
-    const {multi, autoFocus, style, placeholder, onCancel, noFilter} = this.props;
-
-    const paddingTop = isIphoneX ? (getTopPadding() - UNIT) : (getTopPadding() - UNIT * 2);
+    const {multi, autoFocus, style, placeholder, onCancel, noFilter, topPadding} = this.props;
+    const paddingTop = (
+      typeof topPadding === 'number'
+        ? topPadding
+        : (isIphoneX ? (getTopPadding() - UNIT) : (getTopPadding() - UNIT * 2))
+    );
 
     return (
       <View style={[styles.container, style, {paddingTop}]}>

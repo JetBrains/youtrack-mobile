@@ -8,8 +8,7 @@ import {
   COLOR_TRANSPARENT_BLACK,
   COLOR_FONT_GRAY,
   COLOR_FONT_ON_BLACK,
-  COLOR_BLACK,
-  COLOR_DARK_BORDER
+  COLOR_BLACK
 } from '../../components/variables/variables';
 
 const SAVING_ALPHA = '70';
@@ -20,14 +19,20 @@ export default StyleSheet.create({
     height: FOOTER_HEIGHT,
     backgroundColor: COLOR_BLACK
   },
+  customFieldsEditor: {
+    top: UNIT * 2,
+    borderWidth: 0
+  },
   customFieldsPanel: {
     paddingLeft: UNIT,
     flexDirection: 'row',
     backgroundColor: COLOR_BLACK,
     height: FOOTER_HEIGHT,
     borderTopWidth: 1,
-    borderColor: COLOR_DARK_BORDER,
-    flexShrink: 0
+    borderColor: '#475159'
+  },
+  customFieldsPanelModal: {
+    borderTopWidth: 0
   },
   editorViewContainer: {
     flex: 1,

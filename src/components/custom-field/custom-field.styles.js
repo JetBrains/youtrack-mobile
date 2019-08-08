@@ -1,44 +1,62 @@
 import {StyleSheet} from 'react-native';
-import {COLOR_FONT_GRAY, COLOR_PINK, COLOR_FONT_ON_BLACK, UNIT} from '../variables/variables';
+import {
+  COLOR_FONT_GRAY,
+  COLOR_PINK,
+  COLOR_FONT_ON_BLACK,
+  UNIT,
+  COLOR_PLACEHOLDER_ACTIVE
+} from '../variables/variables';
 
 const SELECTED_ALPHA_HEX = 20;
 
+const sidePadding = {
+  paddingLeft: UNIT,
+  paddingRight: UNIT,
+};
+
+const font = {
+  fontFamily: 'System'
+};
+
 export default StyleSheet.create({
   wrapper: {
-    padding: 8,
-    paddingTop: 6
+    flex: 1,
+    paddingTop: UNIT,
+    flexDirection: 'column'
   },
   wrapperActive: {
     backgroundColor: `${COLOR_PINK}${SELECTED_ALPHA_HEX}`
   },
   valuesWrapper: {
     flexDirection: 'row',
-    flexWrap: 'nowrap'
+    flexWrap: 'nowrap',
+    flexGrow: 3,
+    ...sidePadding
   },
   keyWrapper: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    ...sidePadding
   },
   keyLockedIcon: {
     width: 9,
     height: 12,
     marginRight: UNIT / 2,
-    marginTop: -(UNIT / 3),
-    resizeMode: 'contain'
+    marginTop: -1,
+    resizeMode: 'contain',
+    tintColor: '#66757e'
   },
   keyText: {
-    color: COLOR_FONT_GRAY,
-    paddingBottom: 2,
-    fontSize: 11,
-    fontFamily: 'System'
+    color: COLOR_PLACEHOLDER_ACTIVE,
+    fontSize: 12,
+    ...font,
   },
   valueText: {
-    color: COLOR_PINK,
-    fontFamily: 'System',
-    fontSize: 16,
     marginRight: 0,
-    paddingTop: 2,
-    paddingBottom: 3
+    paddingTop: UNIT / 2,
+    color: COLOR_PINK,
+    ...font,
+    fontSize: 14,
   },
   valueTextActive: {
     color: COLOR_FONT_ON_BLACK,
@@ -48,11 +66,7 @@ export default StyleSheet.create({
   },
   colorMarkerContainer: {
     flex: 1,
-    flexDirection: 'row',
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0
+    flexDirection: 'row'
   },
   colorMarker: {
     flexGrow: 1,

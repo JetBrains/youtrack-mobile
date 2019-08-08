@@ -22,7 +22,7 @@ type Props = {
   autoFocusSelect?: boolean,
   issue: IssueFull,
   issuePermissions: IssuePermissions,
-  onUpdate: (field: CustomFieldType, value: null|number|Object|Array<Object>) => Promise<Object>,
+  onUpdate: (field: CustomFieldType, value: null | number | Object | Array<Object>) => Promise<Object>,
   onUpdateProject: (project: IssueProject) => Promise<Object>,
   canEditProject: boolean
 };
@@ -114,7 +114,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     };
   }
 
-  saveUpdatedField(field: CustomFieldType, value: null|number|Object|Array<Object>) {
+  saveUpdatedField(field: CustomFieldType, value: null | number | Object | Array<Object>) {
     this.closeEditor();
     this.setState({savingField: field});
 
@@ -174,7 +174,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       return;
     }
     this.saveUpdatedField(editingField, select.selectedItems);
-  }
+  };
 
   editDateField(field: CustomFieldType) {
     const withTime = field.projectCustomField.field.fieldType.valueType === DATE_AND_TIME;
@@ -182,7 +182,11 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       datePicker: {
         show: true,
         withTime,
-        time: field.value ? new Date(field.value).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : null,
+        time: field.value ? new Date(field.value).toLocaleTimeString([],
+          {
+            hour: '2-digit',
+            minute: '2-digit'
+          }) : null,
         title: field.projectCustomField.field.name,
         value: field.value ? new Date(field.value) : new Date(),
         emptyValueName: field.projectCustomField.canBeEmpty ? field.projectCustomField.emptyFieldText : null,
@@ -263,9 +267,17 @@ export default class CustomFieldsPanel extends Component<Props, State> {
             return this.props.api.getStateMachineEvents(this.props.issue.id, field.id)
               .then(items => items.map(it => Object.assign(it, {name: `${it.id} (${it.presentation})`})));
           }
-          return this.props.api.getCustomFieldValues(field.projectCustomField.bundle.id, field.projectCustomField.field.fieldType.valueType);
+          return this.props.api.getCustomFieldValues(
+            field.projectCustomField.bundle.id,
+            field.projectCustomField.field.fieldType.valueType
+          );
         },
-        onChangeSelection: selectedItems => this.setState({select: {...this.state.select, selectedItems}}),
+        onChangeSelection: selectedItems => this.setState({
+          select: {
+            ...this.state.select,
+            selectedItems
+          }
+        }),
         onSelect: (value) => this.saveUpdatedField(field, value)
       }
     });
@@ -277,7 +289,10 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     }
     const {fieldType} = field.projectCustomField.field;
 
-    this.setState({editingField: field, isEditingProject: false, ...initialEditorsState});
+    this.setState({
+      editingField: field,
+      isEditingProject: false, ...initialEditorsState
+    });
 
     if (fieldType.valueType === 'date' || fieldType.valueType === DATE_AND_TIME) {
       return this.editDateField(field);
@@ -292,26 +307,30 @@ export default class CustomFieldsPanel extends Component<Props, State> {
 
   handleKeyboardToggle = (keyboardOpen: boolean) => {
     this.setState({keyboardOpen});
-  }
+  };
 
   storeScrollPosition = (event: Object) => {
     const {nativeEvent} = event;
     this.currentScrollX = nativeEvent.contentOffset.x;
-  }
+  };
 
   restoreScrollPosition = (scrollNode: ?ScrollView, ensure: boolean = true) => {
     if (!scrollNode || !this.currentScrollX) {
       return;
     }
 
-    scrollNode.scrollTo({x: this.currentScrollX, y: 0, animated: false});
+    scrollNode.scrollTo({
+      x: this.currentScrollX,
+      y: 0,
+      animated: false
+    });
 
     // Android doesn't get first scrollTo call https://youtrack.jetbrains.com/issue/YTM-402
     // iOS doesn't scroll immediately since 0.48 https://github.com/facebook/react-native/issues/15808
     if (ensure) {
       setTimeout(() => this.restoreScrollPosition(scrollNode, false));
     }
-  }
+  };
 
   _renderSelect() {
     if (!this.state.select.show) {
@@ -323,6 +342,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       autoFocus={this.props.autoFocusSelect}
       onCancel={() => this.closeEditor()}
       getTitle={(item) => getEntityPresentation(item)}
+      topPadding={0}
     />;
   }
 
@@ -411,7 +431,12 @@ export default class CustomFieldsPanel extends Component<Props, State> {
             autoFocus={true}
             autoCapitalize="none"
             onChangeText={(value) => {
-              this.setState({simpleValue: {...this.state.simpleValue, value}});
+              this.setState({
+                simpleValue: {
+                  ...this.state.simpleValue,
+                  value
+                }
+              });
             }}
             onSubmitEditing={() => this.state.simpleValue.onApply(this.state.simpleValue.value)}
             value={this.state.simpleValue.value}/>
@@ -427,12 +452,13 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     const isEditorShown = this.state.select.show || this.state.datePicker.show || this.state.simpleValue.show;
 
     const ContainerComponent = isEditorShown ? ModalView : View;
-    const containerProps = isEditorShown ? {
-      visible: true,
-      style: [isEditorShown ? {top: 0} : null]
-    } : {
-      style: styles.placeholder
-    };
+    const containerProps = (
+      isEditorShown
+        ? {
+          visible: true,
+          style: [isEditorShown ? styles.customFieldsEditor : null]
+        } : {style: styles.placeholder}
+    );
 
     const projectName: string = issue.project?.name || '';
     const trimmedProjectName = projectName.length > MAX_PROJECT_NAME_LENGTH
@@ -446,27 +472,18 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     return (
       // $FlowFixMe: flow fails with this props generation
       <ContainerComponent {...containerProps}>
-        <AnimatedView
-          animation="fadeIn"
-          duration={500}
-          useNativeDriver
-          style={styles.editorViewContainer}
-        >
-          {this._renderSelect()}
-
-          {this._renderDatePicker()}
-
-          {this._renderSimpleValueInput()}
-        </AnimatedView>
 
         <View>
           <ScrollView
             ref={this.restoreScrollPosition}
             onScroll={this.storeScrollPosition}
-            contentOffset={{x: this.currentScrollX, y: 0}}
+            contentOffset={{
+              x: this.currentScrollX,
+              y: 0
+            }}
             scrollEventThrottle={100}
             horizontal={true}
-            style={styles.customFieldsPanel}
+            style={[styles.customFieldsPanel, isEditorShown ? styles.customFieldsPanelModal : null]}
             keyboardShouldPersistTaps="always"
           >
             <View key="Project">
@@ -491,20 +508,30 @@ export default class CustomFieldsPanel extends Component<Props, State> {
               </View>;
             })}
           </ScrollView>
-
-          {this.state.select.show && this.state.select.multi && !keyboardOpen &&
-          <TouchableOpacity
-            style={styles.doneButton}
-            onPress={this.onApplyCurrentMultiSelection}
-          >
-            <Text style={styles.doneButtonText}>Done</Text>
-          </TouchableOpacity>}
-
-          <KeyboardSpacerIOS/>
-
-          <KeyboardSpacer onToggle={this.handleKeyboardToggle} style={{height: 0}}/>
-
         </View>
+
+        <AnimatedView
+          style={styles.editorViewContainer}
+          animation="fadeIn"
+          duration={500}
+          useNativeDriver
+        >
+          {this._renderSelect()}
+          {this._renderDatePicker()}
+          {this._renderSimpleValueInput()}
+        </AnimatedView>
+
+        {this.state.select.show && this.state.select.multi && !keyboardOpen &&
+        <TouchableOpacity
+          style={styles.doneButton}
+          onPress={this.onApplyCurrentMultiSelection}
+        >
+          <Text style={styles.doneButtonText}>Done</Text>
+        </TouchableOpacity>}
+
+        <KeyboardSpacerIOS/>
+        <KeyboardSpacer onToggle={this.handleKeyboardToggle} style={{height: 0}}/>
+
       </ContainerComponent>
     );
   }
