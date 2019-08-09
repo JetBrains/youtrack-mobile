@@ -17,7 +17,7 @@ type Props = {
 
 const TEXT_UPDATE_DEBOUNCE = 300;
 
-export default class AttachmentsRow extends Component<Props, void> {
+export default class IssueSummary extends Component<Props, void> {
   descriptionInput: MultilineInput;
 
   descriptionInputRef = (instance: ?MultilineInput) => {
