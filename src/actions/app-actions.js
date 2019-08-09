@@ -97,7 +97,7 @@ export function receiveUserAppearanceProfile(userAppearanceProfile?: UserAppeara
     );
     dispatch({
       type: types.RECEIVE_USER_APPEARANCE_PROFILE,
-      ...{userAppearanceProfile: appearanceProfile}
+      ...{appearance: appearanceProfile}
     });
   };
 }

@@ -317,7 +317,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
       <View style={styles.commentsListContainer}>
         <SingleIssueActivities
           activityPage={activityPage}
-          naturalCommentsOrder={user.profiles.appearance.naturalCommentsOrder}
+          naturalCommentsOrder={user?.profiles?.appearance?.naturalCommentsOrder}
 
           issueFields={issue.fields}
           attachments={issue.attachments}
