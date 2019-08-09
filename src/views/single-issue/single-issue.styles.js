@@ -142,9 +142,7 @@ export default StyleSheet.create({
     color: COLOR_FONT_GRAY
   },
   loading: {
-    textAlign: 'center',
-    marginTop: UNIT * 2,
-    color: COLOR_FONT_GRAY
+    marginTop: UNIT * 2
   },
   commentInput: {
     flex: 1,

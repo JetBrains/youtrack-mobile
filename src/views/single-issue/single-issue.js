@@ -1,5 +1,15 @@
 /* @flow */
-import {Text, View, Image, TouchableOpacity, ScrollView, Platform, RefreshControl, Modal} from 'react-native';
+import {
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  Platform,
+  RefreshControl,
+  Modal,
+  ActivityIndicator
+} from 'react-native';
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
@@ -527,9 +537,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
         >
           {this._renderIssueView(issue || issuePlaceholder)}
 
-          {showLoading() && (
-            <View><Text style={styles.loading}>Loading...</Text></View>
-          )}
+          {showLoading() && <ActivityIndicator style={styles.loading}/>}
 
           {commentsLoadingError && (
             <View><Text style={styles.loading}>Failed to load comments.</Text></View>
