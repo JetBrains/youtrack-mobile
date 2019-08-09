@@ -12,6 +12,7 @@ import {
 } from '../../components/variables/variables';
 
 const QUERY_ASSIST_HEIGHT = 52;
+const inputBorderWidth = 1;
 
 export default StyleSheet.create({
   placeHolder: {
@@ -36,7 +37,9 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderBottomWidth: 1,
-    borderColor: COLOR_MEDIUM_GRAY
+    borderColor: COLOR_MEDIUM_GRAY,
+    paddingLeft: UNIT - inputBorderWidth * 2,
+    paddingRight: UNIT - inputBorderWidth * 2
   },
   inputWrapperActive: {
     backgroundColor: COLOR_BLACK,
@@ -53,7 +56,7 @@ export default StyleSheet.create({
     paddingLeft: UNIT,
     color: COLOR_FONT,
     fontSize: 15,
-    borderWidth: 1,
+    borderWidth: inputBorderWidth,
     borderColor: COLOR_MEDIUM_GRAY,
     textAlign: 'left'
   },

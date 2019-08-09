@@ -23,7 +23,7 @@ export default StyleSheet.create({
   row: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    paddingLeft: 10,
+    paddingLeft: UNIT * 2,
     paddingRight: UNIT * 1.5,
     paddingTop: 13,
     paddingBottom: UNIT*2

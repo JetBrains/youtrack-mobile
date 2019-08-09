@@ -19,11 +19,11 @@ export default StyleSheet.create({
   },
   headerButtonLeft: {
     justifyContent: 'flex-start',
-    paddingLeft: UNIT
+    paddingLeft: UNIT * 2
   },
   headerButtonRight: {
     justifyContent: 'flex-end',
-    paddingRight: UNIT
+    paddingRight: UNIT * 2
   },
   headerButtonText: {
     flex: 0,

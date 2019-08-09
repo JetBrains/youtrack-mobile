@@ -23,13 +23,17 @@ export default StyleSheet.create({
     top: UNIT * 2,
     borderWidth: 0
   },
+  topBorder: {
+    height: 1,
+    marginLeft: UNIT * 2,
+    marginRight: UNIT * 2,
+    backgroundColor: '#475159'
+  },
   customFieldsPanel: {
     paddingLeft: UNIT,
     flexDirection: 'row',
     backgroundColor: COLOR_BLACK,
-    height: FOOTER_HEIGHT,
-    borderTopWidth: 1,
-    borderColor: '#475159'
+    height: FOOTER_HEIGHT
   },
   customFieldsPanelModal: {
     borderTopWidth: 0

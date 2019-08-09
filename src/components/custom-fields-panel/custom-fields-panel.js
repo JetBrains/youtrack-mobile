@@ -474,6 +474,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       <ContainerComponent {...containerProps}>
 
         <View>
+          {!isEditorShown && <View style={styles.topBorder}/>}
           <ScrollView
             ref={this.restoreScrollPosition}
             onScroll={this.storeScrollPosition}
