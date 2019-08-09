@@ -52,6 +52,8 @@ import {receiveUserAppearanceProfile} from '../../actions/app-actions';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
 import Tags from '../../components/tags/tags';
 
+import commonIssueStyles from '../../components/common-styles/issue';
+
 const CATEGORY_NAME = 'Issue';
 
 type AdditionalProps = {
@@ -266,7 +268,12 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
         />}
 
         {!editMode && <View>
-          <Text style={styles.summary} selectable={true} testID="issue-summary">{issue.summary}</Text>
+          <Text
+            style={[styles.summary, issue.resolved ? commonIssueStyles.resolvedSummary : null]}
+            selectable={true}
+            testID="issue-summary">
+            {issue.summary}
+          </Text>
 
           <Tags
             style={styles.tags}
