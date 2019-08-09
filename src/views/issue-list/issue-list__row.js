@@ -8,10 +8,10 @@ import type {BundleValue} from '../../flow/CustomFields';
 import ColorField from '../../components/color-field/color-field';
 import Tags from '../../components/tags/tags';
 import {next} from '../../components/icon/icon';
-import {COLOR_FONT_GRAY} from '../../components/variables/variables';
 import {getPriotityField, getForText, getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
 
 import styles from './issue-list.styles';
+import commonIssueStyles from '../../components/common-styles/issue';
 
 type Props = {
   issue: IssueOnList,
@@ -27,15 +27,6 @@ export default class IssueRow extends Component<Props, void> {
       <Text style={issueIdStyle}>{issue.idReadable}</Text>
       <Text> by {getEntityPresentation(issue.reporter)} {getForText(issue.fieldHash.Assignee)}</Text>
     </Text>);
-  }
-
-  getSummaryStyle(issue: IssueOnList) {
-    if (issue.resolved) {
-      return {
-        color: COLOR_FONT_GRAY,
-        fontWeight: '200'
-      };
-    }
   }
 
   renderPriority() {
@@ -68,13 +59,24 @@ export default class IssueRow extends Component<Props, void> {
           <View style={styles.rowText}>
 
             <View style={styles.rowTopLine}>
-              <Text style={[styles.summary, this.getSummaryStyle(issue)]} numberOfLines={2} testID="issue-row-summary">
+              <Text
+                style={[
+                  styles.summary,
+                  issue.resolved ? commonIssueStyles.resolvedSummary : null
+                ]}
+                numberOfLines={2}
+                testID="issue-row-summary">
                 {issue.summary}
               </Text>
-              <Image style={styles.arrowImage} source={next}></Image>
+              <Image style={styles.arrowImage} source={next}/>
             </View>
 
-            <Text style={styles.subtext} numberOfLines={1} testID="issue-row-details">{IssueRow._getSubText(issue)}</Text>
+            <Text
+              style={styles.subtext}
+              numberOfLines={1}
+              testID="issue-row-details">
+              {IssueRow._getSubText(issue)}
+            </Text>
 
             {Boolean(issue.tags && issue.tags.length) &&
             <View style={styles.tags}>
