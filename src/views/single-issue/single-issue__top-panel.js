@@ -1,26 +1,21 @@
 /* @flow */
 
+import {View, Text, TouchableOpacity, Image} from 'react-native';
+import React, {PureComponent} from 'react';
+
+import {formatDate, shortRelativeDate, getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
+import {next} from '../../components/icon/icon';
+
 import styles from './single-issue.styles';
 
-import {View, Text, TouchableOpacity} from 'react-native';
-import React, {PureComponent} from 'react';
-import {formatDate, shortRelativeDate, getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
 import type {User} from '../../flow/User';
 
-const TOUCH_PADDING = 10;
-
-const moreButtonHitSlop = {
-  top: TOUCH_PADDING,
-  left: TOUCH_PADDING,
-  bottom: TOUCH_PADDING,
-  right: TOUCH_PADDING
-};
 
 type Props = {
-  created: number,
-  updated: number,
   reporter: User,
+  created: number,
   updater: User,
+  updated: number
 }
 
 type State = {
@@ -33,43 +28,49 @@ export default class TopPanel extends PureComponent<Props, State> {
   };
 
   _getUserName(user: User) {
-    return getEntityPresentation(user);
+    return user ? getEntityPresentation(user) : '';
+  }
+
+  _getDate(timestamp: number, isRelative?: boolean) {
+    const formatter = isRelative ? shortRelativeDate : formatDate;
+    return timestamp ? formatter(timestamp) : '';
   }
 
   render() {
-    const {created, updated, reporter, updater} = this.props;
-
-    if (!created || !reporter) {
-      return null;
-    }
+    const {reporter, created, updater, updated} = this.props;
+    const {showAdditionalDate} = this.state;
 
     return (
-      <View style={styles.issueTopMessage}>
+      <View style={styles.issueTopPanel}>
 
-        <View>
-          <View style={{flexDirection: 'row'}}>
-            <View style={{flex: 1}}>
-              <Text style={styles.issueTopText} selectable={true} numberOfLines={1}>
-                Created by {this._getUserName(reporter)} {shortRelativeDate(created)}
-              </Text>
-            </View>
-            {!this.state.showAdditionalDate &&
-            <TouchableOpacity onPress={() => this.setState({showAdditionalDate: true})} hitSlop={moreButtonHitSlop}>
-              <Text style={styles.showMoreDateButton}>more</Text>
-            </TouchableOpacity>}
-          </View>
-
-          {this.state.showAdditionalDate && <Text style={styles.issueTopText}>{formatDate(created)}</Text>}
-        </View>
-
-        {Boolean(updater && updated) && this.state.showAdditionalDate ?
-          <View style={styles.updatedInformation}>
-            <Text style={styles.issueTopText} selectable={true} numberOfLines={2}>
-              Updated by {this._getUserName(updater)} {shortRelativeDate(updated)}
+        <TouchableOpacity onPress={
+          () => this.setState({showAdditionalDate: !showAdditionalDate})
+        }>
+          <Text>
+            <Text
+              style={styles.issueTopPanelText}
+              numberOfLines={1}
+              selectable={true}
+            >
+              Created by {this._getUserName(reporter)} {this._getDate(created, true)}
             </Text>
-            {this.state.showAdditionalDate && <Text style={styles.issueTopText}>{formatDate(updated)}</Text>}
-          </View>
-          : null}
+            {!showAdditionalDate && <Image style={styles.issueTopPanelMoreIcon} source={next}/>}
+          </Text>
+
+          {showAdditionalDate && <Text style={styles.issueTopPanelText}>{this._getDate(created)}</Text>}
+
+          {showAdditionalDate &&
+          <View style={styles.topPanelUpdatedInformation}>
+            <Text
+              style={styles.issueTopPanelText}
+              numberOfLines={2}
+              selectable={true}
+            >
+              Updated by {this._getUserName(updater)} {this._getDate(updated, true)}
+            </Text>
+            <Text style={styles.issueTopPanelText}>{this._getDate(updated)}</Text>
+          </View>}
+        </TouchableOpacity>
 
       </View>
     );

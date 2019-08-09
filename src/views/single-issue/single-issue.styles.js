@@ -38,18 +38,20 @@ export default StyleSheet.create({
     paddingTop: UNIT,
     backgroundColor: '#FFF'
   },
-  issueTopMessage: {
-    paddingTop: 2
+  issueTopPanel: {
+    flexDirection: 'row',
+    paddingTop: UNIT / 4
   },
-  issueTopText: {
+  issueTopPanelText: {
     fontSize: 14,
     color: COLOR_FONT_GRAY,
   },
-  showMoreDateButton: {
-    fontSize: 14,
-    color: COLOR_FONT_GRAY
+  issueTopPanelMoreIcon: {
+    height: 9,
+    resizeMode: 'contain',
+    tintColor: `${COLOR_FONT}${70}`
   },
-  updatedInformation: {
+  topPanelUpdatedInformation: {
     marginTop: UNIT
   },
   summary: {
