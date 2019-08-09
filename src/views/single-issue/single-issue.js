@@ -399,6 +399,87 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
       onUpdateProject={async (project) => await updateProject(project)}/>;
   }
 
+  _renderActivitySettings() {
+    const {
+      issueActivityTypes, issueActivityEnabledTypes, loadIssueActivities, user, updateUserAppearanceProfile
+    } = this.props;
+
+    return <SingleIssueActivitiesSettings
+      issueActivityTypes={issueActivityTypes}
+      issueActivityEnabledTypes={issueActivityEnabledTypes}
+      onApply={(userAppearanceProfile: UserAppearanceProfile) => {
+        if (userAppearanceProfile) {
+          updateUserAppearanceProfile(userAppearanceProfile);
+        }
+        //TODO(xi-eye:performance): do not reload activityPage if only `naturalCommentsOrder` has changed, just reverse the model
+        loadIssueActivities();
+      }}
+      userAppearanceProfile={user.profiles.appearance}
+    />;
+  }
+
+  _renderAddCommentInput() {
+    const {
+      commentText,
+      hideCommentInput,
+      setCommentText,
+      addOrEditComment,
+
+      loadCommentSuggestions,
+      suggestionsAreLoading,
+      commentSuggestions,
+
+      stopEditingComment,
+      editingComment,
+
+      onOpenCommentVisibilitySelect,
+    } = this.props;
+    const isSecured = !!editingComment && IssueVisibility.isSecured(editingComment.visibility);
+
+    return <View>
+      <SingleIssueCommentInput
+        autoFocus={true}
+        onBlur={hideCommentInput}
+        initialText={commentText}
+        onChangeText={setCommentText}
+        onSubmitComment={comment => addOrEditComment(comment)}
+
+        onCancelEditing={stopEditingComment}
+        editingComment={editingComment}
+        onEditCommentVisibility={onOpenCommentVisibilitySelect}
+        isSecured={isSecured}
+
+        onRequestCommentSuggestions={loadCommentSuggestions}
+        suggestionsAreLoading={suggestionsAreLoading}
+        suggestions={commentSuggestions}
+      />
+
+      <KeyboardSpacerIOS/>
+    </View>;
+  }
+
+  _renderCommandDialog() {
+    const {
+      issue,
+      closeCommandDialog,
+      commandSuggestions,
+      loadCommandSuggestions,
+      applyCommand,
+      commandIsApplying,
+      initialCommand,
+    } = this.props;
+
+    return <CommandDialog
+      headerContent={getReadableID(issue)}
+      suggestions={commandSuggestions}
+      onCancel={closeCommandDialog}
+      onChange={loadCommandSuggestions}
+      onApply={applyCommand}
+      isApplying={commandIsApplying}
+      initialCommand={initialCommand}
+    />;
+  }
+
   render() {
     const {
       issue,
@@ -409,40 +490,16 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
       refreshIssue,
       commentsLoaded,
       commentsLoadingError,
-      commentText,
-      hideCommentInput,
-      setCommentText,
-      addOrEditComment,
-
-      loadCommentSuggestions,
-      suggestionsAreLoading,
-      commentSuggestions,
 
       showCommandDialog,
-      closeCommandDialog,
-      commandSuggestions,
-      loadCommandSuggestions,
-      applyCommand,
-      commandIsApplying,
-      initialCommand,
 
-      stopEditingComment,
-      editingComment,
-
-      onOpenCommentVisibilitySelect,
       isSelectOpen,
 
       activitiesEnabled,
       activityLoaded,
-      activitiesLoadingError,
-      issueActivityTypes,
-      issueActivityEnabledTypes,
-      loadIssueActivities,
-      user,
-      updateUserAppearanceProfile
+      activitiesLoadingError
     } = this.props;
 
-    const isSecured = !!editingComment && IssueVisibility.isSecured(editingComment.visibility);
     const activityLoading = {
       error: () => activitiesEnabled ? activitiesLoadingError : commentsLoadingError,
       success: () => activitiesEnabled ? activityLoaded : commentsLoaded,
@@ -483,42 +540,12 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
               ? (activitiesEnabled ? this._renderActivities() : this._renderComments())
               : null
           }
-          {activitiesEnabled && !addCommentMode && isActivityLoaded() &&
-          <SingleIssueActivitiesSettings
-            issueActivityTypes={issueActivityTypes}
-            issueActivityEnabledTypes={issueActivityEnabledTypes}
-            onApply={(userAppearanceProfile: UserAppearanceProfile) => {
-              if (userAppearanceProfile) {
-                updateUserAppearanceProfile(userAppearanceProfile);
-              }
-              loadIssueActivities(); //TODO(xi-eye:performance): do not reload activityPage if only `naturalCommentsOrder` has changed, just reverse the model
-            }}
-            userAppearanceProfile={user.profiles.appearance}
-          />}
+          {activitiesEnabled && !addCommentMode && isActivityLoaded() && this._renderActivitySettings()}
 
           {Platform.OS === 'ios' && <KeyboardSpacer/>}
         </ScrollView>}
 
-        {addCommentMode && <View>
-          <SingleIssueCommentInput
-            autoFocus={true}
-            onBlur={hideCommentInput}
-            initialText={commentText}
-            onChangeText={setCommentText}
-            onSubmitComment={comment => addOrEditComment(comment)}
-
-            onCancelEditing={stopEditingComment}
-            editingComment={editingComment}
-            onEditCommentVisibility={onOpenCommentVisibilitySelect}
-            isSecured={isSecured}
-
-            onRequestCommentSuggestions={loadCommentSuggestions}
-            suggestionsAreLoading={suggestionsAreLoading}
-            suggestions={commentSuggestions}
-          />
-
-          <KeyboardSpacerIOS/>
-        </View>}
+        {addCommentMode && this._renderAddCommentInput()}
 
         {this._canAddComment() && <View style={styles.addCommentContainer}>
           <TouchableOpacity
@@ -528,17 +555,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
           </TouchableOpacity>
         </View>}
 
-        {showCommandDialog && (
-          <CommandDialog
-            headerContent={getReadableID(issue)}
-            suggestions={commandSuggestions}
-            onCancel={closeCommandDialog}
-            onChange={loadCommandSuggestions}
-            onApply={applyCommand}
-            isApplying={commandIsApplying}
-            initialCommand={initialCommand}
-          />
-        )}
+        {showCommandDialog && this._renderCommandDialog()}
 
         {!addCommentMode && <KeyboardSpacerIOS/>}
 
