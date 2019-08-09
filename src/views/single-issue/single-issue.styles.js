@@ -190,7 +190,7 @@ export default StyleSheet.create({
   addCommentContainer: {
     position: 'absolute',
     right: UNIT,
-    bottom: UNIT * 8
+    bottom: UNIT
   },
   addCommentButton: {
     flex: 1,
