@@ -13,7 +13,8 @@ import {
   COLOR_MEDIUM_GRAY,
   COLOR_LINK,
   COLOR_ICON_GREY,
-  COLOR_ICON_MEDIUM_GREY
+  COLOR_ICON_MEDIUM_GREY,
+  COLOR_PINK_DARK
 } from '../../components/variables/variables';
 
 const SUGGESTION_BOTTOM = 48;
@@ -143,6 +144,11 @@ export default StyleSheet.create({
   },
   loading: {
     marginTop: UNIT * 2
+  },
+  loadingActivityError: {
+    marginTop: UNIT * 2,
+    color: COLOR_PINK_DARK,
+    textAlign: 'center'
   },
   commentInput: {
     flex: 1,

@@ -511,8 +511,8 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     } = this.props;
 
     const activityLoading = {
-      error: () => activitiesEnabled ? activitiesLoadingError : commentsLoadingError,
-      success: () => activitiesEnabled ? activityLoaded : commentsLoaded,
+      error: () => issueLoaded && (activitiesEnabled ? activitiesLoadingError : commentsLoadingError),
+      success: () => issueLoaded && (activitiesEnabled ? activityLoaded : commentsLoaded),
     };
     const showLoading = () => (!issueLoaded || !activityLoading.success()) && !activityLoading.error();
     const isActivityLoaded = () => issueLoaded && activityLoading.success();
@@ -539,9 +539,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
 
           {showLoading() && <ActivityIndicator style={styles.loading}/>}
 
-          {commentsLoadingError && (
-            <View><Text style={styles.loading}>Failed to load comments.</Text></View>
-          )}
+          {activityLoading.error() && <View><Text style={styles.loadingActivityError}>Failed to load activities.</Text></View>}
 
           {
             isActivityLoaded()
