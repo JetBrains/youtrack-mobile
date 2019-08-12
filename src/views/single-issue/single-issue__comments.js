@@ -1,5 +1,4 @@
 /* @flow */
-import styles from './single-issue.styles';
 import Comment from '../../components/comment/comment';
 import type {IssueComment, Attachment} from '../../flow/CustomFields';
 
@@ -11,6 +10,8 @@ import IssueVisibility from '../../components/issue-visibility/issue-visibility'
 
 import {UNIT} from '../../components/variables/variables';
 import CommentActions from '../../components/comment/comment__actions';
+
+import styles from './single-issue__comments.styles';
 
 type Props = {
   comments: Array<IssueComment>,

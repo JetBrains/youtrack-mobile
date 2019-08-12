@@ -53,6 +53,7 @@ import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
 import Tags from '../../components/tags/tags';
 
 import commonIssueStyles from '../../components/common-styles/issue';
+import commentsStyles from './single-issue__comments.styles';
 
 const CATEGORY_NAME = 'Issue';
 
@@ -313,7 +314,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
         <Select
           getTitle={item => item.name}
           onCancel={onCloseSelect}
-          style={styles.visibilitySelect}
+          style={commentsStyles.visibilitySelect}
           {...selectProps}
         />
       </Modal>
@@ -331,7 +332,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     } = this.props;
 
     return (
-      <View style={styles.commentsListContainer}>
+      <View style={commentsStyles.commentsListContainer}>
         <SingleIssueActivities
           activityPage={activityPage}
           naturalCommentsOrder={user?.profiles?.appearance?.naturalCommentsOrder}
@@ -374,7 +375,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     } = this.props;
 
     return (
-      <View style={styles.commentsListContainer}>
+      <View style={commentsStyles.commentsListContainer}>
         <SingleIssueComments
           comments={issue.comments}
           attachments={issue.attachments}
@@ -560,11 +561,11 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
 
         {addCommentMode && this._renderAddCommentInput()}
 
-        {this._canAddComment() && <View style={styles.addCommentContainer}>
+        {this._canAddComment() && <View style={commentsStyles.addCommentContainer}>
           <TouchableOpacity
-            style={styles.addCommentButton}
+            style={commentsStyles.addCommentButton}
             onPress={this.props.showCommentInput}>
-            <Image source={comment} style={styles.addCommentIcon}/>
+            <Image source={comment} style={commentsStyles.addCommentIcon}/>
           </TouchableOpacity>
         </View>}
 

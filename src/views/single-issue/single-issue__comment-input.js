@@ -9,7 +9,7 @@ import Avatar from '../../components/avatar/avatar';
 import type {IssueComment} from '../../flow/CustomFields';
 import type {User} from '../../flow/User';
 
-import styles from './single-issue.styles';
+import styles from './single-issue__comments.styles';
 
 type Props = {
   initialText: string,
