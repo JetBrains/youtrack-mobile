@@ -1,6 +1,6 @@
 /* @flow */
 import {View, Text, TouchableOpacity} from 'react-native';
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import styles from './linked-issues.style';
 import {COLOR_FONT_GRAY} from '../variables/variables';
 import type {IssueLink} from '../../flow/CustomFields';
@@ -11,7 +11,7 @@ type Props = {
   onIssueTap: (issue: IssueOnList) => any
 }
 
-export default class LinkedIssues extends Component<Props, void> {
+export default class LinkedIssues extends PureComponent<Props, void> {
   _getLinkTitle(link: IssueLink) {
     if (link.direction === 'OUTWARD' || link.direction === 'BOTH') {
       return link.linkType.localizedSourceToTarget || link.linkType.sourceToTarget;
