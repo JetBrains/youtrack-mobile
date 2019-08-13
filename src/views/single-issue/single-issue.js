@@ -21,7 +21,6 @@ import SingleIssueTopPanel from './single-issue__top-panel';
 import Router from '../../components/router/router';
 import Header from '../../components/header/header';
 import LinkedIssues from '../../components/linked-issues/linked-issues';
-import Wiki from '../../components/wiki/wiki';
 import {COLOR_PINK} from '../../components/variables/variables';
 import usage from '../../components/usage/usage';
 import log from '../../components/log/log';
@@ -50,6 +49,7 @@ import Tags from '../../components/tags/tags';
 
 import commonIssueStyles from '../../components/common-styles/issue';
 import commentsStyles from './single-issue__comments.styles';
+import IssueDescription from './single-issue__description';
 
 const CATEGORY_NAME = 'Issue';
 
@@ -203,24 +203,6 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     return <LinkedIssues links={issue.links} onIssueTap={this.props.openNestedIssueView}/>;
   }
 
-  _renderDescription(issue: IssueFull | IssueOnList) {
-    const description: string = issue?.wikifiedDescription || issue.description;
-
-    if (!description) {
-      return null;
-    }
-
-    return <Wiki
-      backendUrl={this.backendUrl}
-      attachments={issue.attachments}
-      imageHeaders={this.imageHeaders}
-      onIssueIdTap={this._onIssueIdTap}
-      title={issue.idReadable}
-    >
-      {description}
-    </Wiki>;
-  }
-
   _renderAttachments(attachments: Array<Attachment> | null) {
     if (!attachments || !attachments.length) {
       return null;
@@ -281,7 +263,15 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
           />
 
           {this._renderLinks(issue)}
-          {this._renderDescription(issue)}
+
+          <IssueDescription
+            backendUrl={this.backendUrl}
+            attachments={issue.attachments}
+            imageHeaders={this.imageHeaders}
+            onIssueIdTap={this._onIssueIdTap}
+            title={issue.idReadable}
+            description={issue.wikifiedDescription}
+          />
         </View>}
 
         {this._renderAttachments(issue.attachments)}
