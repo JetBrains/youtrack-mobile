@@ -23,7 +23,7 @@ export default StyleSheet.create({
 
   commentEditContainer: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
     paddingTop: UNIT * 2,
     paddingBottom: UNIT * 3,
     paddingLeft: UNIT * 3,
