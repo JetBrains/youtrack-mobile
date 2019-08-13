@@ -1,5 +1,5 @@
 /* @flow */
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {Linking, View, Text, TouchableOpacity, ActivityIndicator, ScrollView, Platform} from 'react-native';
 import ImageProgress from 'react-native-image-progress';
 import throttle from 'lodash.throttle';
@@ -31,7 +31,7 @@ type Props = DefaultProps & {
 }
 
 
-export default class AttachmentsRow extends Component<Props, void> {
+export default class AttachmentsRow extends PureComponent<Props, void> {
   scrollView: ?ScrollView;
 
   static defaultProps: DefaultProps = {

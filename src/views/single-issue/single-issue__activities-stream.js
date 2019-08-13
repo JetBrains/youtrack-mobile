@@ -4,7 +4,7 @@ import Comment from '../../components/comment/comment';
 import type {Attachment, IssueComment} from '../../flow/CustomFields';
 
 import {View, Text, TouchableOpacity, Platform, Image} from 'react-native';
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 
 import {isActivityCategory} from '../../components/activity/activity__category';
 
@@ -74,7 +74,7 @@ type DefaultProps = {
   naturalCommentsOrder: boolean
 };
 
-export default class SingleIssueActivities extends Component<Props, void> {
+export default class SingleIssueActivities extends PureComponent<Props, void> {
   static defaultProps: DefaultProps = {
     onReply: () => {
     },
