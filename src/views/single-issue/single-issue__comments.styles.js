@@ -3,53 +3,50 @@ import {
   UNIT,
   COLOR_EXTRA_LIGHT_GRAY,
   COLOR_FONT_ON_BLACK,
-  COLOR_BLACK,
   COLOR_FONT_GRAY,
   COLOR_TRANSPARENT_BLACK,
-  COLOR_SELECTED_DARK,
   COLOR_GRAY,
-  COLOR_PINK
+  COLOR_PINK,
+  COLOR_MEDIUM_GRAY,
+  COLOR_FONT,
+  COLOR_ICON_MEDIUM_GREY
 } from '../../components/variables/variables';
 
-const SUGGESTION_BOTTOM = 48;
+const SUGGESTION_BOTTOM = 58;
 
 export default StyleSheet.create({
+  commentContainer: {
+    backgroundColor: COLOR_EXTRA_LIGHT_GRAY,
+    borderTopWidth: 1,
+    borderColor: COLOR_MEDIUM_GRAY
+  },
 
-  commentsListContainer: {
+  commentEditContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    paddingTop: UNIT * 2,
     paddingBottom: UNIT * 3,
-    backgroundColor: COLOR_EXTRA_LIGHT_GRAY
+    paddingLeft: UNIT * 3,
+    paddingRight: UNIT * 4
   },
-  commentInputWrapper: {
-    backgroundColor: COLOR_BLACK,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  editingCommentWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: COLOR_BLACK,
-    padding: UNIT,
-    paddingLeft: UNIT * 2,
-    paddingRight: UNIT * 2,
-    paddingBottom: 0
-  },
-  editingCommentTitle: {
+  commentEditTitle: {
     color: COLOR_PINK
   },
-  editingCommentText: {
-    color: COLOR_FONT_GRAY,
+  commentEditText: {
+    color: COLOR_FONT,
     paddingRight: UNIT
   },
-  editingCommentCloseIcon: {
+  commentEditCloseIcon: {
     height: UNIT * 2.5,
     width: UNIT * 2.5,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
+    tintColor: COLOR_ICON_MEDIUM_GREY
   },
-  commentSuggestionsContainer: {
+
+  suggestionsContainer: {
     backgroundColor: COLOR_TRANSPARENT_BLACK,
     position: 'absolute',
-    top: -140,
+    top: -176,
     bottom: SUGGESTION_BOTTOM,
     left: 0,
     right: 0,
@@ -63,7 +60,7 @@ export default StyleSheet.create({
   suggestionsLoadingMessageText: {
     color: COLOR_FONT_ON_BLACK
   },
-  commentSuggestionButton: {
+  suggestionButton: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -71,70 +68,47 @@ export default StyleSheet.create({
     paddingLeft: UNIT * 2,
     paddingRight: UNIT * 2
   },
-  commentSuggestionName: {
+  suggestionName: {
     marginLeft: UNIT,
     color: COLOR_FONT_ON_BLACK
   },
-  commentSuggestionLogin: {
+  suggestionLogin: {
     color: COLOR_FONT_GRAY
+  },
+
+  commentInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingLeft: UNIT * 2
   },
   commentInput: {
     flex: 1,
     minHeight: UNIT * 4,
-    borderRadius: 6,
-    backgroundColor: COLOR_SELECTED_DARK,
-    margin: UNIT,
     paddingLeft: UNIT,
-    color: COLOR_FONT_ON_BLACK,
+    borderRadius: 5,
+    backgroundColor: COLOR_FONT_ON_BLACK,
+    borderWidth: 1,
+    borderColor: COLOR_MEDIUM_GRAY,
+    color: COLOR_FONT,
     fontSize: 15
   },
   commentSendButton: {
     paddingRight: UNIT * 2,
     padding: UNIT
   },
-  sendComment: {
+  commentSendButtonText: {
     fontSize: 16,
     color: COLOR_PINK
   },
-  sendCommentDisabled: {
+  commentSendButtonTextDisabled: {
     color: COLOR_FONT_GRAY
   },
-  commentsContainer: {
+
+  commentListContainer: {
     borderTopWidth: 1,
     borderColor: COLOR_GRAY,
     paddingTop: UNIT
-  },
-  addCommentContainer: {
-    position: 'absolute',
-    right: UNIT,
-    bottom: UNIT
-  },
-  addCommentButton: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-
-    backgroundColor: '#FFFFFFAA',
-    borderRadius: UNIT * 4,
-
-    width: UNIT * 8,
-    height: UNIT * 8,
-
-    shadowColor: '#000',
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    shadowOffset: {
-      height: 2,
-      width: 0
-    }
-  },
-  addCommentIcon: {
-    marginTop: 4,
-    width: UNIT * 3.5,
-    height: UNIT * 3.5
-  },
-  keyboardSpacer: {
-    backgroundColor: COLOR_BLACK
   },
 
   visibilitySelect: {

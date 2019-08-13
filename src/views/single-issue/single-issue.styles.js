@@ -6,7 +6,6 @@ import {
   COLOR_BLACK,
   COLOR_FONT_GRAY,
   COLOR_FONT,
-  COLOR_GRAY,
   COLOR_PINK,
   COLOR_MEDIUM_GRAY,
   COLOR_LINK,
@@ -18,7 +17,9 @@ import {
 
 export default StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
+  },
+  issueContent: {
     backgroundColor: COLOR_EXTRA_LIGHT_GRAY
   },
   headerText: {
@@ -101,6 +102,14 @@ export default StyleSheet.create({
     marginRight: UNIT
   },
 
+  issueCommentInputContainer: {
+    justifyContent: 'flex-end'
+  },
+
+  activitiesContainer: {
+    paddingBottom: UNIT * 3,
+    backgroundColor: COLOR_EXTRA_LIGHT_GRAY
+  },
   activity: {
     flexDirection: 'row',
     paddingTop: UNIT * 4,

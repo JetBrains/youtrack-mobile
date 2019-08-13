@@ -99,7 +99,7 @@ export default class SingleIssueComments extends Component<Props, void> {
     );
 
     return (
-      <View style={styles.commentsContainer}>
+      <View style={styles.commentListContainer}>
         {comments.length
           ? this._renderCommentsList(reversed, attachments)
           : NoComments}

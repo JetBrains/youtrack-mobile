@@ -66,7 +66,8 @@ export default StyleSheet.create({
   },
   colorMarkerContainer: {
     flex: 1,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    paddingBottom: 1
   },
   colorMarker: {
     flexGrow: 1,

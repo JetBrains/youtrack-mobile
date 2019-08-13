@@ -2,8 +2,6 @@
 import {
   Text,
   View,
-  Image,
-  TouchableOpacity,
   ScrollView,
   Platform,
   RefreshControl,
@@ -14,9 +12,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {comment} from '../../components/icon/icon';
 import {getApi} from '../../components/api/api__instance';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import IssueToolbar from '../../components/issue-toolbar/issue-toolbar';
 import SingleIssueComments from './single-issue__comments';
@@ -332,7 +328,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     } = this.props;
 
     return (
-      <View style={commentsStyles.commentsListContainer}>
+      <View style={styles.activitiesContainer}>
         <SingleIssueActivities
           activityPage={activityPage}
           naturalCommentsOrder={user?.profiles?.appearance?.naturalCommentsOrder}
@@ -375,7 +371,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     } = this.props;
 
     return (
-      <View style={commentsStyles.commentsListContainer}>
+      <View style={styles.activitiesContainer}>
         <SingleIssueComments
           comments={issue.comments}
           attachments={issue.attachments}
@@ -405,7 +401,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
   }
 
   _renderCustomFieldPanel() {
-    const {issue, issuePermissions, updateIssueFieldValue, updateProject } = this.props;
+    const {issue, issuePermissions, updateIssueFieldValue, updateProject} = this.props;
 
     return <CustomFieldsPanel
       api={getApi()}
@@ -436,7 +432,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     />;
   }
 
-  _renderAddCommentInput() {
+  _renderEditCommentInput(focus: boolean) {
     const {
       commentText,
       hideCommentInput,
@@ -450,13 +446,13 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
       stopEditingComment,
       editingComment,
 
-      onOpenCommentVisibilitySelect,
+      onOpenCommentVisibilitySelect
     } = this.props;
     const isSecured = !!editingComment && IssueVisibility.isSecured(editingComment.visibility);
 
-    return <View>
+    return <View style={styles.issueCommentInputContainer}>
       <SingleIssueCommentInput
-        autoFocus={true}
+        autoFocus={focus}
         onBlur={hideCommentInput}
         initialText={commentText}
         onChangeText={setCommentText}
@@ -529,14 +525,15 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
       <View style={styles.container} testID="issue-view">
         {this._renderHeader()}
 
-        {issueLoaded && !issueLoadingError && this._renderToolbar()}
+        {Boolean(issueLoaded && !issueLoadingError) && this._renderToolbar()}
 
-        {issue && !addCommentMode && this._renderCustomFieldPanel()}
+        {Boolean(issue && !addCommentMode) && this._renderCustomFieldPanel()}
 
         {issueLoadingError && <ErrorMessage error={issueLoadingError} onTryAgain={refreshIssue}/>}
 
         {(issue || issuePlaceholder) && !issueLoadingError &&
         <ScrollView
+          style={styles.issueContent}
           refreshControl={this._renderRefreshControl()}
           keyboardDismissMode="interactive"
           keyboardShouldPersistTaps="handled"
@@ -547,7 +544,8 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
 
           {showLoading() && <ActivityIndicator style={styles.loading}/>}
 
-          {activityLoading.error() && <View><Text style={styles.loadingActivityError}>Failed to load activities.</Text></View>}
+          {activityLoading.error() &&
+          <View><Text style={styles.loadingActivityError}>Failed to load activities.</Text></View>}
 
           {
             isActivityLoaded()
@@ -556,22 +554,12 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
           }
           {activitiesEnabled && !addCommentMode && isActivityLoaded() && this._renderActivitySettings()}
 
-          {Platform.OS === 'ios' && <KeyboardSpacer/>}
         </ScrollView>}
 
-        {addCommentMode && this._renderAddCommentInput()}
-
-        {this._canAddComment() && <View style={commentsStyles.addCommentContainer}>
-          <TouchableOpacity
-            style={commentsStyles.addCommentButton}
-            onPress={this.props.showCommentInput}>
-            <Image source={comment} style={commentsStyles.addCommentIcon}/>
-          </TouchableOpacity>
-        </View>}
+        {Boolean(!addCommentMode && this._canAddComment()) && this._renderEditCommentInput(false)}
+        {Boolean(addCommentMode) && this._renderEditCommentInput(true)}
 
         {showCommandDialog && this._renderCommandDialog()}
-
-        {!addCommentMode && <KeyboardSpacerIOS/>}
 
         {isSelectOpen && this._renderCommentVisibilitySelect()}
       </View>
