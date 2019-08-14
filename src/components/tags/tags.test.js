@@ -32,46 +32,7 @@ describe('<Tags/>', () => {
     });
 
     it('should render component', () => {
-      expect(findByTestId('tagsList')).toHaveLength(1);
-    });
-
-    it('should render color field', () => {
-      expect(findByTestId('tagColor')).toHaveLength(1);
-    });
-
-
-    describe('Show all tags', () => {
-      beforeEach(() => {
-        wrapper = doShallow([tagMock], onPressMock, true);
-      });
-
-      it('should show all tags', () => {
-        findByTestId('tagsShowMore').simulate('press');
-
-        expect(findByTestId('tagsModal')).toHaveLength(1);
-      });
-
-      it('should close all tags modal', () => {
-        wrapper = doShallow([tagMock], onPressMock, true);
-        findByTestId('tagsShowMore').simulate('press');
-
-        expect(findByTestId('tagsModal')).toHaveLength(1);
-        findByTestId('tagsModalClose').simulate('press');
-        expect(findByTestId('tagsModal')).toHaveLength(0);
-
-      });
-    });
-
-
-    describe('Actions', () => {
-      it('should show actions', () => {
-        instance._showActions = jest.fn();
-        instance.forceUpdate();
-
-        findByTestId('tagsListTag').simulate('press');
-
-        expect(instance._showActions).toHaveBeenCalledWith(tagMock);
-      });
+      expect(findByTestId('tagsListContainer')).toHaveLength(1);
     });
   });
 
@@ -120,13 +81,12 @@ describe('<Tags/>', () => {
     return wrapper && wrapper.find({testID: testId});
   }
 
-  function doShallow(tags = [], onTagPress = () => {
-  }, showMore = false) {
+  function doShallow(tags = [], onTagPress = () => {}, inline = false) {
     return shallow(
       <Tags
         tags={tags}
         onTagPress={onTagPress}
-        showMore={showMore}
+        inline={inline}
       />
     );
   }

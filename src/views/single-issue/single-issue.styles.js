@@ -59,19 +59,6 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     color: COLOR_FONT
   },
-  tags: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    flexWrap: 'nowrap',
-    marginTop: UNIT * 2,
-    marginRight: -UNIT * 2,
-    paddingTop: UNIT,
-    paddingBottom: UNIT,
-    borderColor: COLOR_MEDIUM_GRAY,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-  },
   tagsTitle: {
     fontWeight: 'bold'
   },

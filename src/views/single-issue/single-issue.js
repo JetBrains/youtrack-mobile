@@ -255,7 +255,6 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
           </Text>
 
           <Tags
-            style={styles.tags}
             tags={issue?.tags}
             onTagPress={openIssueListWithSearch}
             title={<Text style={styles.tagsTitle}>Tags: </Text>}

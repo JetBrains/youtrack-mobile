@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LineBlock/> Render should match a snapshot 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "alignItems": "center",
+        "borderBottomWidth": 1,
+        "borderColor": "#DFE5EB",
+        "borderTopWidth": 1,
+        "flexDirection": "row",
+        "flexWrap": "nowrap",
+        "justifyContent": "flex-start",
+        "marginRight": -16,
+        "marginTop": 16,
+        "paddingBottom": 8,
+        "paddingTop": 8,
+      },
+      undefined,
+    ]
+  }
+  testID="lineBlock"
+>
+  <Text
+    testID="lineBlockChildrenMock"
+  >
+    'content'
+  </Text>
+  <TouchableOpacity
+    activeOpacity={0.2}
+    onPress={[Function]}
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#FFF",
+        "bottom": 0,
+        "justifyContent": "center",
+        "position": "absolute",
+        "right": 0,
+        "top": 0,
+        "width": 40,
+      }
+    }
+    testID="lineBlockMore"
+  >
+    <Image
+      source={
+        Object {
+          "testUri": "../../../src/components/icon/next.png",
+        }
+      }
+      style={
+        Object {
+          "height": 14,
+          "resizeMode": "contain",
+          "tintColor": "#737577",
+        }
+      }
+    />
+  </TouchableOpacity>
+</View>
+`;
