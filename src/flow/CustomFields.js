@@ -142,7 +142,6 @@ export type IssueComment = {
 }
 
 export type IssueLinkType = {
-  uid: number,
   name: string,
   sourceToTarget: string,
   localizedSourceToTarget: ?string,

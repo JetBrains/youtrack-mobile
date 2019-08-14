@@ -200,13 +200,17 @@ const ISSUE_COMMENTS_WITH_ATTACHMENT_FIELDS = toField([
   }
 ]);
 
-const ISSUE_XSHORT_FIELDS = toField([
+const ISSUE_BASE_FIELDS = toField([
   'id',
   'idReadable',
   'summary',
   'resolved',
   'created',
-  'updated',
+  'updated'
+]);
+
+const ISSUE_XSHORT_FIELDS = toField([
+  ISSUE_BASE_FIELDS,
   {project: ISSUE_PROJECT_FIELDS},
 ]);
 
@@ -222,14 +226,13 @@ const ISSUE_LINKS_FIELDS = toField([
   'direction',
   {
     linkType: [
-      'uid',
       'name',
       'sourceToTarget',
       'localizedSourceToTarget',
       'targetToSource',
       'localizedTargetToSource'
     ],
-    trimmedIssues: ISSUE_SHORT_FIELDS
+    trimmedIssues: ISSUE_BASE_FIELDS
   }
 ]);
 
