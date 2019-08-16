@@ -12,7 +12,7 @@ import {Linking} from 'react-native';
 import UrlParse from 'url-parse';
 import openByUrlDetector, {isOneOfServers} from '../components/open-url-handler/open-url-handler';
 import usage from '../components/usage/usage';
-import {notifyError} from '../components/notification/notification';
+import {notifyError, notify} from '../components/notification/notification';
 import {loadConfig} from '../components/config/config';
 import Auth from '../components/auth/auth';
 import {loadAgileProfile} from '../views/agile-board/board-actions';
@@ -91,14 +91,18 @@ export function receiveUserAppearanceProfile(userAppearanceProfile?: UserAppeara
     if (!userAppearanceProfile) {
       return;
     }
-    const appearanceProfile: UserAppearanceProfile = await getApi().user.updateUserAppearanceProfile(
-      'me',
-      userAppearanceProfile
-    );
-    dispatch({
-      type: types.RECEIVE_USER_APPEARANCE_PROFILE,
-      ...{appearance: appearanceProfile}
-    });
+    try {
+      const appearanceProfile: UserAppearanceProfile = await getApi().user.updateUserAppearanceProfile(
+        'me',
+        userAppearanceProfile
+      );
+      dispatch({
+        type: types.RECEIVE_USER_APPEARANCE_PROFILE,
+        ...{appearance: appearanceProfile}
+      });
+    } catch (error) {
+      notify('Can\'t update user appearance profile.');
+    }
   };
 }
 

@@ -55,7 +55,7 @@ export default class SingleIssueActivitiesSettings extends Component<Props, Stat
   constructor(props: Object) {
     super();
 
-    const naturalCommentsOrder = props.userAppearanceProfile.naturalCommentsOrder;
+    const naturalCommentsOrder = props?.userAppearanceProfile?.naturalCommentsOrder;
     this.state = {
       ...defaultState,
       ...{naturalCommentsOrder: naturalCommentsOrder}

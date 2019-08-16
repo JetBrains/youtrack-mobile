@@ -7,6 +7,8 @@ import type Auth from '../auth/auth';
 import ApiBase from './api__base';
 import ApiHelper from './api__helper';
 
+import {ResourceTypes} from './api__resource-types';
+
 
 export default class UserAPI extends ApiBase {
 
@@ -44,7 +46,9 @@ export default class UserAPI extends ApiBase {
     return await this.makeAuthorizedRequest(
       `${this.apiUrl}/${userId}/profiles/appearance?${queryString}`,
       'POST',
-      appearanceProfile
+      appearanceProfile.$type
+        ? appearanceProfile
+        : Object.assign({}, appearanceProfile, {$type: ResourceTypes.USER_APPEARANCE_PROFILE})
     );
   }
 

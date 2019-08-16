@@ -3,7 +3,7 @@ import showNotification from './notification_show';
 import log from '../log/log';
 import usage from '../usage/usage';
 
-const NOTIFY_DURATION = 2000;
+const NOTIFY_DURATION = 3000;
 let toastComponentRef: Object;
 
 export const extractErrorMessage = function (err: Object | string): string {

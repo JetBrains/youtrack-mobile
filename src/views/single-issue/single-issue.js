@@ -306,21 +306,26 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     );
   }
 
+  _getUserAppearanceProfile(): UserAppearanceProfile | { naturalCommentsOrder: boolean } {
+    const DEFAULT_USER_APPEARANCE_PROFILE = {naturalCommentsOrder: true};
+    const {user} = this.props;
+    return user?.profiles?.appearance || DEFAULT_USER_APPEARANCE_PROFILE;
+  }
+
   _renderActivities() {
     const {
       activityPage,
       issue,
       copyCommentUrl, openNestedIssueView, issuePermissions,
       startEditingComment, deleteComment, restoreComment, deleteCommentPermanently,
-      workTimeSettings,
-      user
+      workTimeSettings
     } = this.props;
 
     return (
       <View style={styles.activitiesContainer}>
         <SingleIssueActivities
           activityPage={activityPage}
-          naturalCommentsOrder={user?.profiles?.appearance?.naturalCommentsOrder}
+          naturalCommentsOrder={this._getUserAppearanceProfile().naturalCommentsOrder}
 
           issueFields={issue.fields}
           attachments={issue.attachments}
@@ -404,7 +409,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
 
   _renderActivitySettings() {
     const {
-      issueActivityTypes, issueActivityEnabledTypes, loadIssueActivities, user, updateUserAppearanceProfile
+      issueActivityTypes, issueActivityEnabledTypes, loadIssueActivities, updateUserAppearanceProfile
     } = this.props;
 
     return <SingleIssueActivitiesSettings
@@ -417,7 +422,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
         //TODO(xi-eye:performance): do not reload activityPage if only `naturalCommentsOrder` has changed, just reverse the model
         loadIssueActivities();
       }}
-      userAppearanceProfile={user.profiles.appearance}
+      userAppearanceProfile={this._getUserAppearanceProfile()}
     />;
   }
 
