@@ -2,6 +2,8 @@
 import log from '../log/log';
 import type Auth from '../auth/auth';
 import type {AppConfigFilled} from '../../flow/AppConfig';
+import qs from 'qs';
+import ApiHelper from './api__helper';
 
 const STATUS_UNAUTHORIZED = 401;
 const STATUS_OK_IF_MORE_THAN = 200;
@@ -64,6 +66,15 @@ export default class BaseAPI {
     this.youTrackUrl = this.config.backendUrl;
     this.youTrackApiUrl = `${this.youTrackUrl}/api`;
     this.youTrackIssueUrl = `${this.youTrackApiUrl}/issues`;
+  }
+
+  static createFieldsQuery(fields: Object|Array<Object|string>, restParams?: Object): string {
+    return qs.stringify(
+      Object.assign({
+        ...restParams,
+        ...{fields: ApiHelper.toField(fields).toString()}
+      })
+    );
   }
 
   async makeAuthorizedRequest(url: string, method: ?string, body: ?Object, options: RequestOptions = defaultRequestOptions) {

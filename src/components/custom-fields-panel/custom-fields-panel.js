@@ -247,8 +247,10 @@ export default class CustomFieldsPanel extends Component<Props, State> {
   }
 
   editCustomField(field: CustomFieldType) {
-    const isMultiValue = field.projectCustomField.field.fieldType.isMultiValue;
+    const projectCustomField = field.projectCustomField;
+    const isMultiValue = projectCustomField.field.fieldType.isMultiValue;
     let selectedItems;
+
     if (isMultiValue) {
       selectedItems = field.value;
     } else {
@@ -260,16 +262,16 @@ export default class CustomFieldsPanel extends Component<Props, State> {
         show: true,
         multi: isMultiValue,
         selectedItems: selectedItems,
-        emptyValue: field.projectCustomField.canBeEmpty ? field.projectCustomField.emptyFieldText : null,
+        emptyValue: projectCustomField.canBeEmpty ? projectCustomField.emptyFieldText : null,
         placeholder: 'Search for the field value',
-        dataSource: (query) => {
+        dataSource: () => {
           if (field.hasStateMachine) {
             return this.props.api.getStateMachineEvents(this.props.issue.id, field.id)
               .then(items => items.map(it => Object.assign(it, {name: `${it.id} (${it.presentation})`})));
           }
           return this.props.api.getCustomFieldValues(
-            field.projectCustomField.bundle.id,
-            field.projectCustomField.field.fieldType.valueType
+            projectCustomField?.bundle?.id,
+            projectCustomField.field.fieldType.valueType
           );
         },
         onChangeSelection: selectedItems => this.setState({
