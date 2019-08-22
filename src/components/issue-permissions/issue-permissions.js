@@ -54,7 +54,7 @@ export default class IssuePermissions {
   }
 
   isCurrentUser(user: User): boolean {
-    if (!user || !user.ringId || !this.currentUser) {
+    if (!user || !user.ringId || !this.currentUser || !this.currentUser.id) {
       return false;
     }
 
@@ -73,8 +73,7 @@ export default class IssuePermissions {
     if (this.isCurrentUser(issue.reporter) && this.hasPermissionFor(issue, CREATE_ISSUE)) {
       return true;
     }
-    //TODO: revise this check, cause it should be just `UPDATE_ISSUE`
-    return this.hasPermissionFor(issue, PRIVATE_UPDATE_ISSUE);
+    return this.hasPermissionFor(issue, UPDATE_ISSUE);
   }
 
   _canUpdatePrivateField(issue: AnyIssue): boolean {

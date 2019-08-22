@@ -182,12 +182,12 @@ describe('IssuePermissions', function () {
       this.issuePermissions.canUpdateField(this.issueMock, this.fieldMock).should.be.true;
     });
 
-    it('should not allow to edit public field if not reporter and has no PRIVATE_UPDATE_ISSUE', () => {
+    it('should not allow to edit public field if not reporter and has no UPDATE_ISSUE', () => {
       this.issuePermissions.canUpdateField(this.issueMock, this.fieldMock).should.be.false;
     });
 
-    it('should allow to edit public field if has PRIVATE_UPDATE_ISSUE', () => {
-      this.permissionsMock.has.withArgs(PRIVATE_UPDATE_ISSUE).returns(true);
+    it('should allow to edit public field if has UPDATE_ISSUE', () => {
+      this.permissionsMock.has.withArgs(UPDATE_ISSUE).returns(true);
       this.issuePermissions.canUpdateField(this.issueMock, this.fieldMock).should.be.true;
     });
 
@@ -214,13 +214,13 @@ describe('IssuePermissions', function () {
     });
 
     it('should allow to edit spentTime field if old youtrack (no "plugins" field in old YT)', () => {
-      this.permissionsMock.has.withArgs(PRIVATE_UPDATE_ISSUE).returns(true);
+      this.permissionsMock.has.withArgs(UPDATE_ISSUE).returns(true);
       delete this.issueMock.project.plugins;
       this.issuePermissions.canUpdateField(this.issueMock, this.fieldMock).should.be.true;
     });
 
     it('should allow to edit any other time field', () => {
-      this.permissionsMock.has.withArgs(PRIVATE_UPDATE_ISSUE).returns(true);
+      this.permissionsMock.has.withArgs(UPDATE_ISSUE).returns(true);
       const {timeTrackingSettings} = this.issueMock.project.plugins;
       timeTrackingSettings.enabled = true;
       timeTrackingSettings.timeSpent = {
