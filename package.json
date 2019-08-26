@@ -63,6 +63,7 @@
 			"./test/jest-setup.js"
 		],
 		"testResultsProcessor": "jest-teamcity-reporter",
+		"coverageReporters": ["teamcity"],
 		"testPathIgnorePatterns": [
 			"/node_modules/",
 			"/e2e/"
