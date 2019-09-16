@@ -18,6 +18,7 @@ import {getEntityPresentation, relativeDate} from '../../components/issue-format
 import Avatar from '../../components/avatar/avatar';
 import {COLOR_PINK} from '../../components/variables/variables';
 import log from '../../components/log/log';
+import type {User} from '../../flow/User';
 
 const CATEGORY_NAME = 'Inbox view';
 
@@ -28,8 +29,8 @@ type AdditionalProps = {
 type ChangeValue = {
   id?: string,
   name: string,
-  entityId : string,
-  type : string
+  entityId: string,
+  type: string
 }
 
 type ChangeEvent = {
@@ -108,7 +109,12 @@ class Inbox extends Component<Props, void> {
   goToIssue = (issue: Issue) => {
     log.debug(`Opening issue "${issue.id}" from notifications`);
     Router.SingleIssue({
-      issuePlaceholder: {id: issue.id, summary: issue.summary, description: issue.description, created: issue.created},
+      issuePlaceholder: {
+        id: issue.id,
+        summary: issue.summary,
+        description: issue.description,
+        created: issue.created
+      },
       issueId: issue.id
     });
   };
@@ -155,10 +161,14 @@ class Inbox extends Component<Props, void> {
 
   drawCustomFieldChange = event => {
     return (
-      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+      <View style={{
+        flexDirection: 'row',
+        flexWrap: 'wrap'
+      }}>
         <Text style={styles.textSecondary}>{event.name}: </Text>
 
-        {this.drawChangeValues(event.removedValues, event.addedValues.length === 0 ? {textDecorationLine: 'line-through'} : {})}
+        {this.drawChangeValues(event.removedValues,
+          event.addedValues.length === 0 ? {textDecorationLine: 'line-through'} : {})}
 
         {Boolean(event.removedValues.length && event.addedValues.length) && <Text style={styles.textPrimary}> → </Text>}
 
@@ -167,7 +177,7 @@ class Inbox extends Component<Props, void> {
     );
   };
 
-  getReasonString = (reason: ?ReasonCollection) : string => {
+  getReasonString = (reason: ?ReasonCollection): string => {
     if (!reason) {
       return '';
     }
@@ -201,7 +211,7 @@ class Inbox extends Component<Props, void> {
       customFields: []
     };
 
-    events.forEach((event: ChangeEvent, index: number) => {
+    events.forEach((event: ChangeEvent) => {
       event.addedValues = event.addedValues.filter(v => v.id || v.name);
       event.removedValues = event.removedValues.filter(v => v.id || v.name);
 
@@ -209,38 +219,53 @@ class Inbox extends Component<Props, void> {
         return;
       }
 
-      if (event.category === 'COMMENT') {
+      switch (true) {
+      case event.category === 'COMMENT':
         map.comments.push(this.drawComment(event));
-      } else if (event.category === 'SUMMARY') {
+        break;
+      case event.category === 'SUMMARY':
         map.summary.push(this.drawSummaryChange(event));
-      } else if (event.category === 'DESCRIPTION') {
+        break;
+      case event.category === 'DESCRIPTION':
         map.description.push(this.drawDescriptionChange(event));
-      } else {
+        break;
+      default:
         map.customFields.push(this.drawCustomFieldChange(event));
       }
     });
 
-    const wrap = (node, index: number) => (<View key={index} style={{marginTop: index > 0 ? 6 : 0}}>{node}</View>);
+    const wrap = (node, index: number) => (
+      <View
+        key={index}
+        style={{marginTop: index > 0 ? 6 : 0}}
+      >
+        {node}
+      </View>
+    );
 
     return (
       <View style={{flexShrink: 1}}>
-        {[...map.summary, ...map.description, ...map.customFields, ...map.comments].map(wrap)}
+        {[
+          ...map.summary,
+          ...map.description,
+          ...map.customFields,
+          ...map.comments
+        ].map(wrap)}
       </View>
     );
   };
 
   renderNotification = ({item}) => {
     const metadata: Metadata = item.metadata;
-
     const reason = this.getReasonString(metadata.reason);
 
     if (metadata.change) {
       return this.renderIssueChange(item, metadata, reason);
-    } else if (metadata.subject || metadata.body) {
-      return this.renderWorkflowNotification(item, metadata, reason);
-    } else {
-      return null;
     }
+    if (metadata.subject || metadata.body) {
+      return this.renderWorkflowNotification(item, metadata, reason);
+    }
+    return null;
   };
 
   renderWorkflowNotification = (item, metadata, reason) => {
@@ -267,8 +292,8 @@ class Inbox extends Component<Props, void> {
     );
   };
 
-  renderIssueChange = (item, metadata, reason) => {
-    const sender = item.sender;
+  renderIssueChange = (item, metadata, reason: string) => {
+    const sender: User = item.sender;
 
     const onPress = () => this.goToIssue(metadata.issue);
 
@@ -276,7 +301,7 @@ class Inbox extends Component<Props, void> {
       <TouchableOpacity style={styles.card} onPress={onPress}>
         <View style={styles.header}>
           <Text numberOfLines={2} style={styles.summary}>{metadata.issue.summary}</Text>
-          <Image style={styles.arrowImage} source={next}></Image>
+          <Image style={styles.arrowImage} source={next}/>
         </View>
 
         <View style={styles.subHeader}>
