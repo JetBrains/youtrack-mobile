@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<UserInfo/> Render should match a snapshot 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "flexDirection": "row",
+      },
+      undefined,
+    ]
+  }
+  testID="UserInfo"
+>
+  <Text
+    style={
+      Object {
+        "color": "#444444",
+        "flex": 0,
+        "fontWeight": "bold",
+        "marginLeft": 8,
+        "marginRight": 4,
+      }
+    }
+    testID="UserInfoName"
+  >
+    userFullName
+  </Text>
+  <Text
+    style={
+      Object {
+        "color": "#444444",
+      }
+    }
+    testID="UserInfoTimestamp"
+  >
+    just now
+  </Text>
+</View>
+`;
