@@ -11,6 +11,9 @@
 		"EXCEPTION_REPORTER_TOKEN": "",
 		"KONNECTOR_URL": "https://konnector-staging.services.jetbrains.com"
 	},
+  "app": {
+    "build-no-sign-params": " CODE_SIGN_IDENTITY='' CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED='NO'"
+  },
 	"husky": {
 		"hooks": {
 			"pre-commit": "npm test && npm run lint"
@@ -24,7 +27,7 @@
 		"test-ci": "TEAMCITY_VERSION=enablereport npm test",
 		"e2e-clean": "detox clean-framework-cache && detox build-framework-cache",
 		"e2e-build:ios": "detox build --configuration ios.sim.debug --cleanup",
-		"e2e-test:ios": "detox test --configuration ios.sim.debug",
+		"e2e-test:ios": "detox test --configuration ios.sim.debug --loglevel verbose",
 		"e2e:ios": "npm run e2e-clean && npm run e2e-build:ios && npm run e2e-test:ios",
 		"e2e-shutdown": "fbsimctl shutdown",
 		"test:watch": "npm test -- --watchAll",
@@ -37,12 +40,12 @@
 		"ios-iphoneX": "./node_modules/react-native-cli/index.js run-ios --simulator='iPhone X'",
 		"ios-iPadAir": "./node_modules/react-native-cli/index.js run-ios --simulator='iPad Air'",
 		"ios-set-version": "node ./tools/set-ios-version",
-		"ios-clean": "xcodebuild clean -project ios/YouTrackMobile.xcodeproj -configuration Release -alltargets",
-		"ios-archive": "rm -rf ios/build/YouTrackMobile[Release].xcarchive && xcodebuild archive -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile[Release] -archivePath ios/build/YouTrackMobile[Release].xcarchive",
-		"ios-archive-no-sign": "npm run ios-archive -- CODE_SIGNING_REQUIRED=NO",
+    "ios-clean": "xcodebuild clean -project ios/YouTrackMobile.xcodeproj -configuration Release -alltargets",
+		"ios-archive": "xcodebuild archive -allowProvisioningUpdates -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile[Release] -archivePath ios/build/YouTrackMobile[Release].xcarchive",
+		"ios-archive-no-sign": "npm run ios-archive -- CODE_SIGN_IDENTITY='' CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED='NO'",
 		"postios-archive-no-sign": "cp ios/build/YouTrackMobile[Release].xcarchive/Products/Applications/YouTrackMobile.app/YouTrackMobile.entitlements ios/build/YouTrackMobile[Release].xcarchive/Products/Applications/YouTrackMobile.app/archived-expanded-entitlements.xcent",
-		"ios-export-ipa": "rm -rf ios/build/YouTrackMobile.ipa && xcodebuild -exportArchive -archivePath ios/build/YouTrackMobile[Release].xcarchive -exportPath ios/build -exportOptionsPlist tools/export.plist",
-		"ios-download-archive": "bash ./tools/download-latest-built-archive.sh",
+    "ios-export-ipa": "xcodebuild -exportArchive -allowProvisioningUpdates -archivePath ios/build/YouTrackMobile[Release].xcarchive -exportPath ios/build -exportOptionsPlist tools/export.plist",
+    "ios-download-archive": "bash ./tools/download-latest-built-archive.sh",
 		"ios-release": "npm run ios-download-archive && npm run ios-export-ipa",
 		"ios-build-bundle": "react-native bundle --entry-file=index.js --platform ios --dev false --reset-cache --bundle-output build/main.jsbundle --assets-dest build",
 		"android": "YT_MOBILE_VERSION=$npm_package_version ./node_modules/react-native-cli/index.js run-android",
