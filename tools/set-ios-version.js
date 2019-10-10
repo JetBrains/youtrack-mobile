@@ -1,24 +1,22 @@
 const exec = require('child_process').exec;
 
-const npmPackageVersion = process.env.npm_package_version;
-const splitRegExp = /[\.-]/i;
+const BUILD_NUMBER = process.env.buildNumber || 2222.2;
+const VERSION_NUMBER = process.env.versionNumber || 7777;
 
-const versionParts = npmPackageVersion.split(splitRegExp);
-const major = versionParts[0];
-const minor = versionParts[1];
-const patch = versionParts[2];
-const buildNumber = versionParts[3];
-const patchPart = parseInt(patch) === 0 ? '' : `.${patch}`;
-
-const marketingVersion = `${major}.${minor}${patchPart}`;
-
-function reporter(error, stdout) {
-  if (error) {
-    throw error;
-  }
-  console.log(stdout);
+if (!BUILD_NUMBER || !VERSION_NUMBER) {
+  console.error('process.env', process.env); //eslint-disable-line
+  throw new Error('`versionNumber` and `buildNumber` are required.');
 }
 
-console.log(`Setting iOS version. Marketing = ${marketingVersion}, build number = ${buildNumber}`);
+console.log(`Setting version and build number in Xcode project: Marketing = ${VERSION_NUMBER}, build number = ${BUILD_NUMBER}`);//eslint-disable-line
 
-exec(`cd ios && agvtool new-marketing-version ${marketingVersion} && agvtool new-version -all ${buildNumber}`, reporter);
+exec(
+  `cd ios && agvtool new-marketing-version ${VERSION_NUMBER} && agvtool new-version -all ${BUILD_NUMBER}`,
+  function reporter(error, stdout) {
+    if (error) {
+      throw error;
+    }
+    console.log(stdout);//eslint-disable-line
+  }
+);
+
