@@ -1,3 +1,5 @@
+import type {IssueProject, CustomFieldShort, CustomField, Tag, Attachment, IssueComment, IssueLink} from './CustomFields';
+import type {User} from './User';
 
 export type IssueOnList = {
   id: string,
