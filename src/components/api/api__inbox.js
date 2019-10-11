@@ -12,7 +12,7 @@ export default class IssueAPI extends ApiBase {
     const since = +new Date() - 60*60*24*1000 * 7;
 
     return await this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/users/notifications?fields=id,sender(login,name,email,avatarUrl),recipient(login),metadata&reverse=true&since=${since}&$top=${top}&$skip=${skip}&uncompressed=true`
+      `${this.youTrackApiUrl}/users/notifications?fields=id,sender(login,fullName,email,avatarUrl),recipient(login),metadata&reverse=true&since=${since}&$top=${top}&$skip=${skip}&uncompressed=true`
     );
   }
 }

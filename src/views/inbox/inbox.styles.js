@@ -1,16 +1,27 @@
 import {StyleSheet} from 'react-native';
-import {COLOR_FONT_GRAY, COLOR_FONT, UNIT, COLOR_EXTRA_LIGHT_GRAY} from '../../components/variables/variables';
+import {
+  COLOR_FONT_GRAY,
+  COLOR_FONT,
+  UNIT,
+  COLOR_EXTRA_LIGHT_GRAY,
+  COLOR_ICON_MEDIUM_GREY,
+  COLOR_MEDIUM_GRAY,
+  COLOR_FONT_ON_BLACK
+} from '../../components/variables/variables';
+
+const font = {
+  lineHeight: 18,
+  fontSize: 14,
+};
 
 const textPrimary = {
-  lineHeight: 18,
-  fontSize: 13,
+  ...font,
   color: COLOR_FONT
 };
 
 const textSecondary = {
-  lineHeight: 18,
-  fontSize: 13,
-  color: COLOR_FONT_GRAY
+  ...font,
+  color: COLOR_ICON_MEDIUM_GREY
 };
 
 export default StyleSheet.create({
@@ -19,17 +30,18 @@ export default StyleSheet.create({
     backgroundColor: COLOR_EXTRA_LIGHT_GRAY
   },
   arrowImage: {
-    marginTop: 4,
+    marginTop: UNIT / 2,
     height: 14,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
+    tintColor: COLOR_ICON_MEDIUM_GREY
   },
   card: {
-    marginBottom: 20,
-    padding: 10,
-    backgroundColor: '#fff',
-    borderBottomColor: '#dfe5eb',
+    marginBottom: UNIT * 2,
+    padding: UNIT * 2,
+    backgroundColor: COLOR_FONT_ON_BLACK,
+    borderBottomColor: COLOR_MEDIUM_GRAY,
     borderBottomWidth: 1,
-    borderTopColor: '#dfe5eb',
+    borderTopColor: COLOR_MEDIUM_GRAY,
     borderTopWidth: 1
   },
   header: {
@@ -37,8 +49,8 @@ export default StyleSheet.create({
     justifyContent: 'space-between'
   },
   summary: {
-    fontSize: 15,
-    lineHeight: 18,
+    lineHeight: 20,
+    fontSize: 17,
     color: COLOR_FONT,
     flexShrink: 1
   },
@@ -48,30 +60,26 @@ export default StyleSheet.create({
     justifyContent: 'space-between'
   },
   reason: {
-    textAlign: 'right',
-    marginLeft: 10,
-    flexShrink: 1,
-    ...textSecondary
+    lineHeight: 15,
+    fontSize: 12,
+    color: COLOR_FONT_GRAY
   },
   issueId: textSecondary,
   cardContent: {
-    flexDirection: 'row',
-    marginTop: 10,
-    paddingTop: 10,
-    borderTopColor: '#dfe5eb',
+    marginTop: -2 * UNIT,
+    marginLeft: UNIT * 6,
+    marginBottom: UNIT * 2,
+  },
+  cardContentWorkflow: {
+    marginTop: UNIT,
+    marginLeft: 0
+  },
+  userInfo: {
+    marginTop: UNIT * 2,
+    paddingTop: UNIT * 1.5,
+    borderTopColor: COLOR_MEDIUM_GRAY,
     borderTopWidth: 1
   },
-  cardFooter: {
-    marginTop: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  author: {
-    flexShrink: 1,
-    marginRight: 10,
-    ...textSecondary
-  },
-  date: textSecondary,
   textPrimary,
   textSecondary,
   listMessageSmile: {
@@ -83,5 +91,9 @@ export default StyleSheet.create({
   listFooterMessage: {
     textAlign: 'center',
     padding: UNIT * 2
+  },
+  strong: {
+    color: COLOR_FONT,
+    fontWeight: '600'
   }
 });

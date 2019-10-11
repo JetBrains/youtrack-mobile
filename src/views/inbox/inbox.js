@@ -9,89 +9,44 @@ import usage from '../../components/usage/usage';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as inboxActions from './inbox-actions';
-import type {InboxState} from './inbox-reducers';
 import Router from '../../components/router/router';
 import {next} from '../../components/icon/icon';
 import {openMenu} from '../../actions/app-actions';
 import Menu from '../../components/menu/menu';
-import {getEntityPresentation, relativeDate} from '../../components/issue-formatter/issue-formatter';
-import Avatar from '../../components/avatar/avatar';
 import {COLOR_PINK} from '../../components/variables/variables';
 import log from '../../components/log/log';
+import {handleRelativeUrl} from '../../components/config/config';
+import {getStorageState} from '../../components/storage/storage';
+import UserInfo from '../../components/user/user-info';
+
+import type {InboxState} from './inbox-reducers';
 import type {User} from '../../flow/User';
+import type {Notification, Metadata, ChangeValue, ChangeEvent, Issue} from '../../flow/Inbox';
+import type {AppConfigFilled} from '../../flow/AppConfig';
 
 const CATEGORY_NAME = 'Inbox view';
 
 type AdditionalProps = {
   openMenu: Function
 };
-
-type ChangeValue = {
-  id?: string,
-  name: string,
-  entityId: string,
-  type: string
-}
-
-type ChangeEvent = {
-  multiValue: boolean,
-  entityId: string,
-  category?: 'COMMENT' | 'CUSTOM_FIELD' | 'SPRINT' | 'SUMMARY' | 'DESCRIPTION',
-  name: String,
-  addedValues: Array<ChangeValue>,
-  removedValues: Array<ChangeValue>
-};
-
-type Reason = {
-  type: string,
-  name?: string
-};
-
-type ReasonCollection = {
-  mentionReasons: Array<Reason>,
-  tagReasons: Array<Reason>,
-  savedSearchReasons: Array<Reason>
-};
-
-type Issue = {
-  created: number,
-  id: string,
-  project: {
-    entityId: string,
-    shortName: string,
-    name: string
-  },
-  resolved: ?boolean,
-  starred: ?boolean,
-  votes: number,
-  summary: string,
-  description: string
-};
-
-type Metadata = {
-  type: string,
-  initialNotification: boolean,
-  onlyViaDuplicate: boolean,
-  issue: Issue,
-  change: {
-    humanReadableTimeStamp: string,
-    startTimestamp: number,
-    endTimestamp: number,
-    events: Array<ChangeEvent>
-  },
-  subject: ?string,
-  body: ?string,
-  header: string,
-  reason: ?ReasonCollection
-};
-
 type Props = InboxState & typeof inboxActions & AdditionalProps;
 
+
 class Inbox extends Component<Props, void> {
+  config: AppConfigFilled;
+
   constructor(props) {
     super(props);
+    this.config = getStorageState().config;
     usage.trackScreenView(CATEGORY_NAME);
   }
+
+  static notificationReasons = {
+    mentionReasons: 'You are mentioned',
+    tagReasons: 'Enabled notifications for tags',
+    savedSearchReasons: 'Enabled notifications for saved searches',
+    workflow: 'Workflow notification'
+  };
 
   componentDidMount() {
     this.refresh();
@@ -129,37 +84,37 @@ class Inbox extends Component<Props, void> {
     }
   };
 
-  drawChangeValues = (values: Array<ChangeValue>, extraStyles: Object = {}) => values.map(value => (
+  renderChangeValues = (values: Array<ChangeValue>, extraStyles: Object = {}) => values.map(value => (
     <View key={value.name || value.entityId}>
       <Text numberOfLines={5} style={{...styles.textPrimary, ...extraStyles}}>{value.name || value.id}</Text>
     </View>
   ));
 
-  drawComment = event => (
+  renderComment = (event: ChangeEvent) => (
     <View style={{flexDirection: 'row'}}>
-      {this.drawChangeValues(event.addedValues)}
+      {this.renderChangeValues(event.addedValues)}
     </View>
   );
 
-  drawSummaryChange = event => {
+  renderSummaryChange = (event: ChangeEvent) => {
     return (
       <View>
         <Text style={styles.textSecondary}>{event.name}:</Text>
-        {event.removedValues.length === 0 && this.drawChangeValues(event.addedValues)}
-        {this.drawChangeValues(event.removedValues, {textDecorationLine: 'line-through'})}
+        {event.removedValues.length === 0 && this.renderChangeValues(event.addedValues)}
+        {this.renderChangeValues(event.removedValues, {textDecorationLine: 'line-through'})}
       </View>
     );
   };
 
-  drawDescriptionChange = event => (
+  renderDescriptionChange = (event: ChangeEvent) => (
     <View>
       <Text style={styles.textSecondary}>{event.name}:</Text>
-      {this.drawChangeValues(event.addedValues)}
-      {this.drawChangeValues(event.removedValues, {textDecorationLine: 'line-through'})}
+      {this.renderChangeValues(event.addedValues)}
+      {this.renderChangeValues(event.removedValues, {textDecorationLine: 'line-through'})}
     </View>
   );
 
-  drawCustomFieldChange = event => {
+  renderCustomFieldChange = (event: ChangeEvent) => {
     return (
       <View style={{
         flexDirection: 'row',
@@ -167,74 +122,46 @@ class Inbox extends Component<Props, void> {
       }}>
         <Text style={styles.textSecondary}>{event.name}: </Text>
 
-        {this.drawChangeValues(event.removedValues,
+        {this.renderChangeValues(event.removedValues,
           event.addedValues.length === 0 ? {textDecorationLine: 'line-through'} : {})}
 
         {Boolean(event.removedValues.length && event.addedValues.length) && <Text style={styles.textPrimary}> → </Text>}
 
-        {this.drawChangeValues(event.addedValues)}
+        {this.renderChangeValues(event.addedValues)}
       </View>
     );
   };
 
-  getReasonString = (reason: ?ReasonCollection): string => {
-    if (!reason) {
-      return '';
-    }
-
-    let reasons = [];
-    let reasonString = '';
-
-    if (reason.mentionReasons.length > 0) {
-      reasons.push('mention');
-    }
-
-    reasons = reasons.concat(reason.tagReasons.map(s => s.name));
-    reasons = reasons.concat(reason.savedSearchReasons.map(s => s.name));
-
-    const onlyUnique = (value, index, self) => {
-      return self.indexOf(value) === index;
-    };
-
-    if (reasons.length) {
-      reasonString = reasons.filter(onlyUnique).join(', ');
-    }
-
-    return reasonString;
-  };
-
-  getRestructuredEvents = events => {
+  renderEvents = (events: Array<ChangeEvent> = []) => {
     const map = {
       summary: [],
       description: [],
       comments: [],
       customFields: []
     };
+    const hasValues = (values: Array<ChangeValue> = []) => values.filter(it => it.id || it.name).length;
 
     events.forEach((event: ChangeEvent) => {
-      event.addedValues = event.addedValues.filter(v => v.id || v.name);
-      event.removedValues = event.removedValues.filter(v => v.id || v.name);
-
-      if (!event.addedValues.length && !event.removedValues.length) {
+      if (!hasValues(event.addedValues) && !hasValues(event.removedValues)) {
         return;
       }
 
       switch (true) {
       case event.category === 'COMMENT':
-        map.comments.push(this.drawComment(event));
+        map.comments.push(this.renderComment(event));
         break;
       case event.category === 'SUMMARY':
-        map.summary.push(this.drawSummaryChange(event));
+        map.summary.push(this.renderSummaryChange(event));
         break;
       case event.category === 'DESCRIPTION':
-        map.description.push(this.drawDescriptionChange(event));
+        map.description.push(this.renderDescriptionChange(event));
         break;
       default:
-        map.customFields.push(this.drawCustomFieldChange(event));
+        map.customFields.push(this.renderCustomFieldChange(event));
       }
     });
 
-    const wrap = (node, index: number) => (
+    const renderNode = (node, index: number) => (
       <View
         key={index}
         style={{marginTop: index > 0 ? 6 : 0}}
@@ -250,52 +177,102 @@ class Inbox extends Component<Props, void> {
           ...map.description,
           ...map.customFields,
           ...map.comments
-        ].map(wrap)}
+        ].map(renderNode)}
       </View>
     );
   };
 
-  renderNotification = ({item}) => {
-    const metadata: Metadata = item.metadata;
-    const reason = this.getReasonString(metadata.reason);
+  getNotificationText(metadata: Metadata): string {
+    const PARSE_ERROR_NOTIFICATION: string = '<i>Unable to show notification text.</i>';
+    return metadata && (metadata.body || metadata.text || metadata.subject) || PARSE_ERROR_NOTIFICATION;
+  }
 
-    if (metadata.change) {
-      return this.renderIssueChange(item, metadata, reason);
+  isIssueDigestChange(metadata: Metadata): boolean {
+    return metadata && metadata.change;
+  }
+
+  renderNotification = ({item}: Notification) => {
+    const metadata: Metadata = item.metadata;
+
+    if (this.isIssueDigestChange(metadata)) {
+      return this.renderIssueChange(item, metadata);
     }
-    if (metadata.subject || metadata.body) {
-      return this.renderWorkflowNotification(item, metadata, reason);
+
+    if (metadata.subject || metadata.body) { //workflow
+      return this.renderWorkflowNotification(this.getNotificationText(metadata));
     }
+
     return null;
   };
 
-  renderWorkflowNotification = (item, metadata, reason) => {
+  renderWorkflowNotification = (text: string) => {
+    const title: string = 'Workflow notification';
+
     return (
       <View style={styles.card}>
-        <View style={styles.header}>
-          <Text numberOfLines={2} style={styles.summary}>{metadata.subject}</Text>
-        </View>
+        <View><Text style={[styles.textPrimary, styles.strong]}>{`${title}:`}</Text></View>
 
-        {Boolean(reason) && <View style={styles.subHeader}>
-          <Text style={styles.reason}>{reason}</Text>
-        </View>}
-
-        <View style={styles.cardContent}>
+        <View style={[styles.cardContent, styles.cardContentWorkflow]}>
           <Text style={styles.textPrimary}>
-            {metadata.body}
+            {text}
           </Text>
         </View>
 
-        <View style={styles.cardFooter}>
-          <Text style={styles.author} numberOfLines={1}>Workflow notification</Text>
-        </View>
+        {this.renderNotificationReason({
+          reason: {
+            title: [{title}]
+          }
+        })}
       </View>
     );
   };
 
-  renderIssueChange = (item, metadata, reason: string) => {
-    const sender: User = item.sender;
+  getEvenValueName(value: Object) {
+    return value.name;
+  }
 
+  createAvatarUrl(sender: User): string | null {
+    if (!sender.avatarUrl || !this.config || !this.config.backendUrl) {
+      return null;
+    }
+    return handleRelativeUrl(sender.avatarUrl, this.config.backendUrl);
+  }
+
+  renderNotificationReason(metadata: Metadata) {
+    if (!metadata.reason) {
+      return null;
+    }
+
+    const _reasons = Object.keys(metadata.reason).reduce((reasons, key) => {
+      if (metadata.reason[key].length) {
+        const isMention = key === Inbox.notificationReasons.mentionReasons;
+        return reasons.concat(
+          {
+            title: Inbox.notificationReasons[key] ? `${Inbox.notificationReasons[key]} ` : '',
+            value: isMention ? '' : metadata.reason[key].map(this.getEvenValueName).join(', ')
+          }
+        );
+      }
+      return reasons;
+    }, []);
+
+    if (_reasons && _reasons.length) {
+      return <View>
+        <Text style={styles.reason}>
+          {_reasons.map((it) => it.title + it.value).join('. ')}
+        </Text>
+      </View>;
+    }
+  }
+
+  renderIssueChange = (item, metadata) => {
     const onPress = () => this.goToIssue(metadata.issue);
+    const sender: User = item.sender;
+    const events: Array<ChangeEvent> = metadata?.change?.events;
+    const avatarURL: string | null = this.createAvatarUrl(sender);
+    if (avatarURL) {
+      sender.avatarUrl = avatarURL;
+    }
 
     return (
       <TouchableOpacity style={styles.card} onPress={onPress}>
@@ -306,24 +283,15 @@ class Inbox extends Component<Props, void> {
 
         <View style={styles.subHeader}>
           <Text style={styles.issueId}>{metadata.issue.id}</Text>
-          <Text style={styles.reason}>{reason}</Text>
         </View>
 
-        <View style={styles.cardContent}>
-          {Boolean(sender.avatarUrl) && <Avatar
-            style={{marginRight: 10}}
-            userName={getEntityPresentation(sender.author)}
-            size={40}
-            source={{uri: sender.avatarUrl}}
-          />}
+        <UserInfo style={styles.userInfo} user={sender} timestamp={metadata?.change?.endTimestamp}/>
 
-          {this.getRestructuredEvents(metadata.change.events)}
-        </View>
+        {Boolean(events && events.length) && <View style={styles.cardContent}>
+          <View>{this.renderEvents(events)}</View>
+        </View>}
 
-        <View style={styles.cardFooter}>
-          <Text style={styles.author} numberOfLines={1}>{item.sender.login}</Text>
-          <Text style={styles.date}>{relativeDate(metadata.change.endTimestamp)}</Text>
-        </View>
+        {this.renderNotificationReason(metadata)}
       </TouchableOpacity>
     );
   };
