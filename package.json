@@ -47,7 +47,7 @@
     "test-dev-config": "node tools/test-dev-config.js",
 		"start": "./node_modules/react-native-cli/index.js start",
 		"test": "jest",
-		"test-ci": "DETOX_DISABLE_POSTINSTALL=true TEAMCITY_VERSION=enablereport npm test",
+		"test-ci": "export DETOX_DISABLE_POSTINSTALL=true && export TEAMCITY_VERSION=enablereport && npm test",
 		"test:watch": "npm test -- --watchAll",
     "ios-clean": "xcodebuild clean -project ios/YouTrackMobile.xcodeproj -configuration Release -alltargets",
     "ios-delete-build": "rm -rf ios/build/",
