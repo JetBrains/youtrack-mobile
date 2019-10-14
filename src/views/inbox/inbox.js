@@ -18,6 +18,8 @@ import log from '../../components/log/log';
 import {handleRelativeUrl} from '../../components/config/config';
 import {getStorageState} from '../../components/storage/storage';
 import UserInfo from '../../components/user/user-info';
+import TextView from '../../components/text-view/text-view';
+import Wiki from '../../components/wiki/wiki';
 
 import type {InboxState} from './inbox-reducers';
 import type {User} from '../../flow/User';
@@ -33,6 +35,12 @@ type Props = InboxState & typeof inboxActions & AdditionalProps;
 
 
 class Inbox extends Component<Props, void> {
+  static notificationReasons = {
+    mentionReasons: 'You are mentioned',
+    tagReasons: 'Enabled notifications for tags',
+    savedSearchReasons: 'Enabled notifications for saved searches',
+    workflow: 'Workflow notification'
+  };
   config: AppConfigFilled;
 
   constructor(props) {
@@ -40,13 +48,6 @@ class Inbox extends Component<Props, void> {
     this.config = getStorageState().config;
     usage.trackScreenView(CATEGORY_NAME);
   }
-
-  static notificationReasons = {
-    mentionReasons: 'You are mentioned',
-    tagReasons: 'Enabled notifications for tags',
-    savedSearchReasons: 'Enabled notifications for saved searches',
-    workflow: 'Workflow notification'
-  };
 
   componentDidMount() {
     this.refresh();
@@ -84,35 +85,33 @@ class Inbox extends Component<Props, void> {
     }
   };
 
-  renderChangeValues = (values: Array<ChangeValue>, extraStyles: Object = {}) => values.map(value => (
-    <View key={value.name || value.entityId}>
-      <Text numberOfLines={5} style={{...styles.textPrimary, ...extraStyles}}>{value.name || value.id}</Text>
-    </View>
-  ));
-
-  renderComment = (event: ChangeEvent) => (
-    <View style={{flexDirection: 'row'}}>
-      {this.renderChangeValues(event.addedValues)}
-    </View>
+  renderChangeValues = (values: Array<ChangeValue>, extraStyles: Object = {}, trimText: ?boolean = false) => (
+    values.map(it => {
+      const text = it.name || it.id;
+      return (
+        <View key={it.name || it.entityId}>
+          {trimText && <TextView text={text} style={{...styles.textPrimary, ...extraStyles}}/>}
+          {!trimText && <Text numberOfLines={5} style={{...styles.textPrimary, ...extraStyles}}>{text}</Text>}
+        </View>
+      );
+    })
   );
 
-  renderSummaryChange = (event: ChangeEvent) => {
+  renderTextChange = (event: ChangeEvent, isAddedOnly: ?boolean) => {
     return (
       <View>
         <Text style={styles.textSecondary}>{event.name}:</Text>
-        {event.removedValues.length === 0 && this.renderChangeValues(event.addedValues)}
-        {this.renderChangeValues(event.removedValues, {textDecorationLine: 'line-through'})}
+        {
+          Boolean(event.addedValues && event.addedValues.length) &&
+          this.renderChangeValues(event.addedValues, null, true)
+        }
+        {
+          Boolean(!isAddedOnly && event.removedValues && event.removedValues.length) &&
+          this.renderChangeValues(event.removedValues, {textDecorationLine: 'line-through'}, true)
+        }
       </View>
     );
   };
-
-  renderDescriptionChange = (event: ChangeEvent) => (
-    <View>
-      <Text style={styles.textSecondary}>{event.name}:</Text>
-      {this.renderChangeValues(event.addedValues)}
-      {this.renderChangeValues(event.removedValues, {textDecorationLine: 'line-through'})}
-    </View>
-  );
 
   renderCustomFieldChange = (event: ChangeEvent) => {
     return (
@@ -147,14 +146,8 @@ class Inbox extends Component<Props, void> {
       }
 
       switch (true) {
-      case event.category === 'COMMENT':
-        map.comments.push(this.renderComment(event));
-        break;
-      case event.category === 'SUMMARY':
-        map.summary.push(this.renderSummaryChange(event));
-        break;
-      case event.category === 'DESCRIPTION':
-        map.description.push(this.renderDescriptionChange(event));
+      case event.category === 'COMMENT' || event.category === 'SUMMARY' || event.category === 'DESCRIPTION':
+        map.comments.push(this.renderTextChange(event, event.category === 'COMMENT'));
         break;
       default:
         map.customFields.push(this.renderCustomFieldChange(event));
@@ -182,53 +175,67 @@ class Inbox extends Component<Props, void> {
     );
   };
 
-  getNotificationText(metadata: Metadata): string {
-    const PARSE_ERROR_NOTIFICATION: string = '<i>Unable to show notification text.</i>';
-    return metadata && (metadata.body || metadata.text || metadata.subject) || PARSE_ERROR_NOTIFICATION;
-  }
-
   isIssueDigestChange(metadata: Metadata): boolean {
     return metadata && metadata.change;
   }
 
-  renderNotification = ({item}: Notification) => {
-    const metadata: Metadata = item.metadata;
+  isWorkflowNotification(metadata: Metadata): boolean {
+    return !this.isIssueDigestChange(metadata) && (metadata.body || metadata.text || metadata.subject);
+  }
 
-    if (this.isIssueDigestChange(metadata)) {
-      return this.renderIssueChange(item, metadata);
-    }
-
-    if (metadata.subject || metadata.body) { //workflow
-      return this.renderWorkflowNotification(this.getNotificationText(metadata));
-    }
-
-    return null;
-  };
-
-  renderWorkflowNotification = (text: string) => {
-    const title: string = 'Workflow notification';
+  renderWorkflowNotification (text: string, wikified: ?boolean) {
+    const title: string = Inbox.notificationReasons.workflow;
 
     return (
       <View style={styles.card}>
         <View><Text style={[styles.textPrimary, styles.strong]}>{`${title}:`}</Text></View>
 
         <View style={[styles.cardContent, styles.cardContentWorkflow]}>
+          {wikified && <Wiki
+            backendUrl={this.config.backendUrl}
+            onIssueIdTap={(issueId) => Router.SingleIssue({issueId})}>
+            {text}
+          </Wiki>}
+          {!wikified &&
           <Text style={styles.textPrimary}>
             {text}
-          </Text>
+          </Text>}
         </View>
 
         {this.renderNotificationReason({
           reason: {
-            title: [{title}]
+            [title]: [{title}]
           }
         })}
       </View>
     );
-  };
+  }
 
-  getEvenValueName(value: Object) {
-    return value.name;
+  getWorkflowNotificationText(metadata: Metadata): string {
+    const PARSE_ERROR_NOTIFICATION: string = '<i>Unable to parse workflow notification.</i>';
+    let text: string;
+
+    if (metadata.body && metadata.body.indexOf('<html') === 0) {
+      text = `${metadata.subject || ''}\n${metadata.text || ''}`;
+      text = text.trim().length ? text.replace(/\s+/g, ' ') : PARSE_ERROR_NOTIFICATION;
+    } else {
+      text = metadata.body || metadata.text || metadata.subject;
+    }
+
+    return text || PARSE_ERROR_NOTIFICATION;
+  }
+
+  renderNotification (item: Notification) {
+    const metadata: Metadata = item.metadata;
+    let renderer = null;
+
+    if (this.isIssueDigestChange(metadata)) {
+      renderer = this.renderIssueChange(item, metadata);
+    } else if (this.isWorkflowNotification(metadata)) {
+      renderer = this.renderWorkflowNotification(this.getWorkflowNotificationText(metadata), true);
+    }
+
+    return renderer;
   }
 
   createAvatarUrl(sender: User): string | null {
@@ -249,7 +256,7 @@ class Inbox extends Component<Props, void> {
         return reasons.concat(
           {
             title: Inbox.notificationReasons[key] ? `${Inbox.notificationReasons[key]} ` : '',
-            value: isMention ? '' : metadata.reason[key].map(this.getEvenValueName).join(', ')
+            value: isMention ? '' : metadata.reason[key].map((it: Object) => it.name).join(', ')
           }
         );
       }
@@ -265,7 +272,7 @@ class Inbox extends Component<Props, void> {
     }
   }
 
-  renderIssueChange = (item, metadata) => {
+  renderIssueChange = (item: Notification, metadata: Metadata) => {
     const onPress = () => this.goToIssue(metadata.issue);
     const sender: User = item.sender;
     const events: Array<ChangeEvent> = metadata?.change?.events;
@@ -331,7 +338,7 @@ class Inbox extends Component<Props, void> {
             refreshControl={this._renderRefreshControl()}
             refreshing={loading}
             keyExtractor={this.getNotificationId}
-            renderItem={this.renderNotification}
+            renderItem={(listItem) => this.renderNotification(listItem.item)}
             onEndReached={this.onLoadMore}
             onEndReachedThreshold={0.1}
             ListFooterComponent={this._renderListMessage}
