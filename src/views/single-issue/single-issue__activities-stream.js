@@ -3,7 +3,7 @@ import styles from './single-issue.styles';
 import Comment from '../../components/comment/comment';
 import type {Attachment, IssueComment} from '../../flow/CustomFields';
 
-import {View, Text, TouchableOpacity, Platform, Image} from 'react-native';
+import {View, Text, TouchableOpacity, Image} from 'react-native';
 import React, {PureComponent} from 'react';
 
 import {isActivityCategory} from '../../components/activity/activity__category';
@@ -34,6 +34,7 @@ import {getApi} from '../../components/api/api__instance';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import ApiHelper from '../../components/api/api__helper';
 import TextView from '../../components/text-view/text-view';
+import CustomFieldChangeDelimiter from '../../components/custom-field/custom-field__change-delimiter';
 
 import type {WorkTimeSettings} from '../../flow/WorkTimeSettings';
 import type {IssueActivity} from '../../flow/Activity';
@@ -118,7 +119,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
     if (isMultiValue) {
       delimiter = isSummaryOrDescriptionChange ? '\n' : ', ';
     } else {
-      delimiter = Platform.OS === 'ios' ? ' → ' : ' ➔ ';
+      delimiter = CustomFieldChangeDelimiter;
     }
 
     return (
