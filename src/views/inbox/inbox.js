@@ -13,17 +13,18 @@ import Router from '../../components/router/router';
 import {next} from '../../components/icon/icon';
 import {openMenu} from '../../actions/app-actions';
 import Menu from '../../components/menu/menu';
-import {COLOR_PINK} from '../../components/variables/variables';
+import {COLOR_PINK, UNIT} from '../../components/variables/variables';
 import log from '../../components/log/log';
 import {handleRelativeUrl} from '../../components/config/config';
 import {getStorageState} from '../../components/storage/storage';
 import UserInfo from '../../components/user/user-info';
-import TextView from '../../components/text-view/text-view';
+import Diff from '../../components/diff/diff';
 import Wiki from '../../components/wiki/wiki';
+import CustomFieldChangeDelimiter from '../../components/custom-field/custom-field__change-delimiter';
 
 import type {InboxState} from './inbox-reducers';
 import type {User} from '../../flow/User';
-import type {Notification, Metadata, ChangeValue, ChangeEvent, Issue} from '../../flow/Inbox';
+import type {Notification, Metadata, ChangeValue, ChangeEvent, Issue, IssueChange} from '../../flow/Inbox';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 
 const CATEGORY_NAME = 'Inbox view';
@@ -85,92 +86,142 @@ class Inbox extends Component<Props, void> {
     }
   };
 
-  renderChangeValues = (values: Array<ChangeValue>, extraStyles: Object = {}, trimText: ?boolean = false) => (
-    values.map(it => {
-      const text = it.name || it.id;
-      return (
-        <View key={it.name || it.entityId}>
-          {trimText && <TextView text={text} style={{...styles.textPrimary, ...extraStyles}}/>}
-          {!trimText && <Text numberOfLines={5} style={{...styles.textPrimary, ...extraStyles}}>{text}</Text>}
-        </View>
-      );
-    })
-  );
-
-  renderTextChange = (event: ChangeEvent, isAddedOnly: ?boolean) => {
+  renderValues = (values: Array<ChangeValue>, eventId: string) => {
     return (
-      <View>
-        <Text style={styles.textSecondary}>{event.name}:</Text>
-        {
-          Boolean(event.addedValues && event.addedValues.length) &&
-          this.renderChangeValues(event.addedValues, null, true)
-        }
-        {
-          Boolean(!isAddedOnly && event.removedValues && event.removedValues.length) &&
-          this.renderChangeValues(event.removedValues, {textDecorationLine: 'line-through'}, true)
-        }
-      </View>
+      values.map((it) => {
+        const value = this.getChangeValue(it);
+        return (
+          <Text
+            key={`${eventId}-${value}`}
+            numberOfLines={5}
+            style={styles.textPrimary}>
+            {value}
+          </Text>
+        );
+      })
     );
   };
 
-  renderCustomFieldChange = (event: ChangeEvent) => {
+  getChangeValue(change): string {
+    return change.name;
+  }
+
+  isEventHasField(event: ChangeEvent, fieldName: string): boolean {
+    return Boolean(event && event[fieldName] && event[fieldName].length);
+  }
+
+  hasAddedValues(event: ChangeEvent): boolean {
+    return this.isEventHasField(event, 'addedValues');
+  }
+
+  hasRemovedValues(event: ChangeEvent): boolean {
+    return this.isEventHasField(event, 'removedValues');
+  }
+
+  renderMultiValueCustomFieldChange(event: ChangeEvent) {
+    const delimiter = ', ';
+    const added: string = (event.addedValues || []).map(this.getChangeValue).join(delimiter);
+    const removed: string = (event.removedValues || []).map(this.getChangeValue).join(delimiter);
+    const hasRemovedChange: boolean = this.hasRemovedValues(event);
+
     return (
-      <View style={{
-        flexDirection: 'row',
-        flexWrap: 'wrap'
-      }}>
-        <Text style={styles.textSecondary}>{event.name}: </Text>
+      <Text>
+        {hasRemovedChange && <Text style={styles.changeRemoved}>
+          {removed}
+        </Text>}
+        {this.hasAddedValues(event) && (<Text>
+          {hasRemovedChange ? delimiter : ''}
+          {added}
+        </Text>)}
+      </Text>
+    );
+  }
 
-        {this.renderChangeValues(event.removedValues,
-          event.addedValues.length === 0 ? {textDecorationLine: 'line-through'} : {})}
+  renderSingleValueCustomFieldChange(event: ChangeEvent) {
+    const hasAddedValues: boolean = this.hasAddedValues(event);
+    const hasRemovedValues: boolean = this.hasRemovedValues(event);
+    const hasDelimiter: boolean = hasAddedValues && hasRemovedValues;
 
-        {Boolean(event.removedValues.length && event.addedValues.length) && <Text style={styles.textPrimary}> → </Text>}
+    return (
+      <Text>
+        {hasRemovedValues && (
+          <Text style={!hasAddedValues ? styles.changeRemoved : null}>
+            {this.renderValues(event.removedValues, event.entityId)}
+          </Text>
+        )}
+        {hasDelimiter && <Text style={styles.textPrimary}>{CustomFieldChangeDelimiter}</Text>}
+        {hasAddedValues && this.renderValues(event.addedValues, event.entityId)}
+      </Text>
+    );
+  }
 
-        {this.renderChangeValues(event.addedValues)}
+  renderEventName(event: ChangeEvent) {
+    return <Text style={styles.textSecondary}>{event.name}: </Text>;
+  }
+
+  renderCustomFieldChange(event: ChangeEvent) {
+    return (
+      <View style={styles.change}>
+        {this.renderEventName(event)}
+        {event?.multiValue === true
+          ? this.renderMultiValueCustomFieldChange(event)
+          : this.renderSingleValueCustomFieldChange(event)}
       </View>
     );
-  };
+  }
+
+  renderTextDiff(event: IssueChange) {
+    return (
+      <Diff
+        text1={this.getChangeValue(event.removedValues[0])}
+        text2={this.getChangeValue(event.addedValues[0])}
+      />
+    );
+  }
 
   renderEvents = (events: Array<ChangeEvent> = []) => {
-    const map = {
-      summary: [],
-      description: [],
-      comments: [],
-      customFields: []
-    };
-    const hasValues = (values: Array<ChangeValue> = []) => values.filter(it => it.id || it.name).length;
+    const eventNodes = [];
 
     events.forEach((event: ChangeEvent) => {
-      if (!hasValues(event.addedValues) && !hasValues(event.removedValues)) {
+      if (!this.hasAddedValues(event) && !this.hasRemovedValues(event)) {
         return;
       }
 
       switch (true) {
-      case event.category === 'COMMENT' || event.category === 'SUMMARY' || event.category === 'DESCRIPTION':
-        map.comments.push(this.renderTextChange(event, event.category === 'COMMENT'));
+      case event.category === 'COMMENT':
+        //TODO(xi-eye): do not show updating comment`s text
+        eventNodes.push(
+          <View>
+            {this.renderEventName(event)}
+            {this.hasRemovedValues(event) && (this.getChangeValue(event.removedValues[0]).length
+              ? this.renderTextDiff(event)
+              : this.renderValues(event.addedValues, event.entityId))
+            }
+          </View>
+        );
+        break;
+      case event.category === 'SUMMARY' || event.category === 'DESCRIPTION':
+        eventNodes.push(this.renderTextDiff(event));
         break;
       default:
-        map.customFields.push(this.renderCustomFieldChange(event));
+        eventNodes.push(
+          this.renderCustomFieldChange(event)
+        );
       }
     });
 
-    const renderNode = (node, index: number) => (
-      <View
-        key={index}
-        style={{marginTop: index > 0 ? 6 : 0}}
-      >
-        {node}
-      </View>
-    );
-
     return (
-      <View style={{flexShrink: 1}}>
-        {[
-          ...map.summary,
-          ...map.description,
-          ...map.customFields,
-          ...map.comments
-        ].map(renderNode)}
+      <View>
+        {eventNodes.map((node, index) => {
+          return (
+            <View
+              key={index}
+              style={{marginTop: index > 0 ? UNIT : 0}}
+            >
+              {node}
+            </View>
+          );
+        })}
       </View>
     );
   };
@@ -183,30 +234,28 @@ class Inbox extends Component<Props, void> {
     return !this.isIssueDigestChange(metadata) && (metadata.body || metadata.text || metadata.subject);
   }
 
-  renderWorkflowNotification (text: string, wikified: ?boolean) {
+  renderWorkflowNotification(text: string) {
     const title: string = Inbox.notificationReasons.workflow;
+    const workflowMetadata: Metadata = {
+      reason: {
+        [title]: [{title}]
+      }
+    };
 
     return (
-      <View style={styles.card}>
+      <View style={styles.notification}>
         <View><Text style={[styles.textPrimary, styles.strong]}>{`${title}:`}</Text></View>
 
-        <View style={[styles.cardContent, styles.cardContentWorkflow]}>
-          {wikified && <Wiki
+        <View style={[styles.notificationContent, styles.notificationContentWorkflow]}>
+          <Wiki
             backendUrl={this.config.backendUrl}
-            onIssueIdTap={(issueId) => Router.SingleIssue({issueId})}>
+            onIssueIdTap={(issueId) => Router.SingleIssue({issueId})}
+          >
             {text}
-          </Wiki>}
-          {!wikified &&
-          <Text style={styles.textPrimary}>
-            {text}
-          </Text>}
+          </Wiki>
         </View>
 
-        {this.renderNotificationReason({
-          reason: {
-            [title]: [{title}]
-          }
-        })}
+        {this.renderNotificationReason(workflowMetadata)}
       </View>
     );
   }
@@ -225,14 +274,14 @@ class Inbox extends Component<Props, void> {
     return text || PARSE_ERROR_NOTIFICATION;
   }
 
-  renderNotification (item: Notification) {
-    const metadata: Metadata = item.metadata;
+  renderNotification(notification: Notification) {
+    const metadata: Metadata = notification.metadata;
     let renderer = null;
 
     if (this.isIssueDigestChange(metadata)) {
-      renderer = this.renderIssueChange(item, metadata);
+      renderer = this.renderIssueChange(notification);
     } else if (this.isWorkflowNotification(metadata)) {
-      renderer = this.renderWorkflowNotification(this.getWorkflowNotificationText(metadata), true);
+      renderer = this.renderWorkflowNotification(this.getWorkflowNotificationText(metadata));
     }
 
     return renderer;
@@ -246,10 +295,6 @@ class Inbox extends Component<Props, void> {
   }
 
   renderNotificationReason(metadata: Metadata) {
-    if (!metadata.reason) {
-      return null;
-    }
-
     const _reasons = Object.keys(metadata.reason).reduce((reasons, key) => {
       if (metadata.reason[key].length) {
         const isMention = key === Inbox.notificationReasons.mentionReasons;
@@ -272,9 +317,10 @@ class Inbox extends Component<Props, void> {
     }
   }
 
-  renderIssueChange = (item: Notification, metadata: Metadata) => {
+  renderIssueChange = (notification: Notification) => {
+    const metadata: Metadata = notification.metadata;
     const onPress = () => this.goToIssue(metadata.issue);
-    const sender: User = item.sender;
+    const sender: User = notification.sender;
     const events: Array<ChangeEvent> = metadata?.change?.events;
     const avatarURL: string | null = this.createAvatarUrl(sender);
     if (avatarURL) {
@@ -282,7 +328,7 @@ class Inbox extends Component<Props, void> {
     }
 
     return (
-      <TouchableOpacity style={styles.card} onPress={onPress}>
+      <TouchableOpacity style={styles.notification} onPress={onPress}>
         <View style={styles.header}>
           <Text numberOfLines={2} style={styles.summary}>{metadata.issue.summary}</Text>
           <Image style={styles.arrowImage} source={next}/>
@@ -294,9 +340,9 @@ class Inbox extends Component<Props, void> {
 
         <UserInfo style={styles.userInfo} user={sender} timestamp={metadata?.change?.endTimestamp}/>
 
-        {Boolean(events && events.length) && <View style={styles.cardContent}>
+        {Boolean(events && events.length) && (<View style={styles.notificationContent}>
           <View>{this.renderEvents(events)}</View>
-        </View>}
+        </View>)}
 
         {this.renderNotificationReason(metadata)}
       </TouchableOpacity>

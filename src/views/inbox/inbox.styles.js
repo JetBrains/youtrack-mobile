@@ -35,7 +35,7 @@ export default StyleSheet.create({
     resizeMode: 'contain',
     tintColor: COLOR_ICON_MEDIUM_GREY
   },
-  card: {
+  notification: {
     marginBottom: UNIT * 2,
     padding: UNIT * 2,
     backgroundColor: COLOR_FONT_ON_BLACK,
@@ -65,12 +65,12 @@ export default StyleSheet.create({
     color: COLOR_FONT_GRAY
   },
   issueId: textSecondary,
-  cardContent: {
+  notificationContent: {
     marginTop: -2 * UNIT,
     marginLeft: UNIT * 6,
     marginBottom: UNIT * 2,
   },
-  cardContentWorkflow: {
+  notificationContentWorkflow: {
     marginTop: UNIT,
     marginLeft: 0
   },
@@ -95,5 +95,12 @@ export default StyleSheet.create({
   strong: {
     color: COLOR_FONT,
     fontWeight: '600'
+  },
+  change: {
+    flexDirection: 'row',
+    flexWrap: 'wrap'
+  },
+  changeRemoved: {
+    textDecorationLine: 'line-through'
   }
 });
