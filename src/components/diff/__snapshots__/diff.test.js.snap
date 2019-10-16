@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Diff/> Render should match a snapshot 1`] = `
+<Text
+  testID="diff"
+>
+  <Text
+    key="0"
+    style={
+      Object {
+        "backgroundColor": "#E6FFE6",
+      }
+    }
+    testID="diffInsert"
+  >
+    x
+  </Text>
+  <Text
+    key="1"
+    style={Object {}}
+    testID="diffEqual"
+  >
+    ABC
+  </Text>
+  <Text
+    key="2"
+    style={
+      Object {
+        "backgroundColor": "#FFE6E6",
+      }
+    }
+    testID="diffDelete"
+  >
+    y
+  </Text>
+</Text>
+`;
