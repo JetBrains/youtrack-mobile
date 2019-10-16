@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import {COLOR_ICON_MEDIUM_GREY, UNIT} from '../variables/variables';
 
 export default StyleSheet.create({
   diffInsert: {
@@ -7,5 +8,19 @@ export default StyleSheet.create({
   diffDelete: {
     backgroundColor: '#FFE6E6'
   },
-  diffEqual: {}
+  diffEqual: {},
+  title: {
+    marginBottom: UNIT,
+    color: COLOR_ICON_MEDIUM_GREY
+  },
+  icon: {
+    width: 10,
+    height: 10,
+    resizeMode: 'contain',
+    tintColor: COLOR_ICON_MEDIUM_GREY,
+    transform: []
+  },
+  iconCollapse: {
+    transform: [{rotate: '180deg'}]
+  }
 });

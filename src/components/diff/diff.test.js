@@ -11,9 +11,12 @@ describe('<Diff/>', () => {
   let text1;
   let text2;
 
-  describe('Render', () => {
+  beforeEach(() => {
     text1 = 'ABCy';
     text2 = 'xABC';
+  });
+
+  describe('Render', () => {
     beforeEach(() => {
       wrapper = doShallow(text1, text2);
     });
@@ -27,9 +30,36 @@ describe('<Diff/>', () => {
     });
 
     it('should render difference', () => {
+      expect(findByTestId('diffText')).toHaveLength(1);
       expect(findByTestId('diffInsert')).toHaveLength(1);
       expect(findByTestId('diffDelete')).toHaveLength(1);
       expect(findByTestId('diffEqual')).toHaveLength(1);
+    });
+
+    it('should not render collapse/expand title', () => {
+      expect(findByTestId('diffToggle')).toHaveLength(0);
+    });
+  });
+
+
+  describe('Collapse/expand', () => {
+    let title;
+    beforeEach(() => {
+      title = 'Details';
+      wrapper = doShallow(text1, text2, title);
+    });
+
+    it('should render collapse/expand title', () => {
+      expect(findByTestId('diffToggle')).toHaveLength(1);
+    });
+
+    it('should not render diff', () => {
+      expect(findByTestId('diffText')).toHaveLength(0);
+    });
+
+    it('should render diff after click on a title', () => {
+      findByTestId('diffToggle').simulate('press');
+      expect(findByTestId('diffText')).toHaveLength(1);
     });
   });
 
@@ -38,9 +68,9 @@ describe('<Diff/>', () => {
     return wrapper && wrapper.find({testID: testId});
   }
 
-  function doShallow(text1, text2) {
+  function doShallow(text1, text2, title) {
     return shallow(
-      <Diff text1={text1} text2={text2}/>
+      <Diff title={title} text1={text1} text2={text2}/>
     );
   }
 });

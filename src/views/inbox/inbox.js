@@ -152,18 +152,16 @@ class Inbox extends Component<Props, void> {
 
   renderCustomFieldChange(event: ChangeEvent) {
     return (
-      <View style={styles.change}>
-        {this.renderEventName(event)}
-        {event?.multiValue === true
-          ? this.renderMultiValueCustomFieldChange(event)
-          : this.renderSingleValueCustomFieldChange(event)}
-      </View>
+      event?.multiValue === true
+        ? this.renderMultiValueCustomFieldChange(event)
+        : this.renderSingleValueCustomFieldChange(event)
     );
   }
 
-  renderTextDiff(event: IssueChange) {
+  renderTextDiff(event: IssueChange, title: ?string) {
     return (
       <Diff
+        title={title || 'Details'}
         text1={this.getChangeValue(event.removedValues[0])}
         text2={this.getChangeValue(event.addedValues[0])}
       />
@@ -182,7 +180,7 @@ class Inbox extends Component<Props, void> {
       case event.category === 'COMMENT':
         //TODO(xi-eye): do not show updating comment`s text
         eventNodes.push(
-          <View>
+          <View style={styles.change}>
             {this.renderEventName(event)}
             {this.hasRemovedValues(event) && (this.getChangeValue(event.removedValues[0]).length
               ? this.renderTextDiff(event)
@@ -192,11 +190,16 @@ class Inbox extends Component<Props, void> {
         );
         break;
       case event.category === 'SUMMARY' || event.category === 'DESCRIPTION':
-        eventNodes.push(this.renderTextDiff(event));
+        eventNodes.push(
+          this.renderTextDiff(event, `${event.name} changed`)
+        );
         break;
       default:
         eventNodes.push(
-          this.renderCustomFieldChange(event)
+          <View style={styles.change}>
+            {this.renderEventName(event)}
+            {this.renderCustomFieldChange(event)}
+          </View>
         );
       }
     });

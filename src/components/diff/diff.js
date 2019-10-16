@@ -1,8 +1,9 @@
 /* @flow */
 
 import React, {PureComponent} from 'react';
-import {Text} from 'react-native';
+import {View, Text, TouchableOpacity, Image} from 'react-native';
 import DiffMatchPatch from 'diff-match-patch';
+import {arrowDownGray} from '../icon/icon';
 
 import styles from './diff.styles';
 
@@ -15,15 +16,24 @@ type DiffInfo = {
 
 type Props = {
   text1: string,
-  text2: string
+  text2: string,
+  title?: string
 }
 
-export default class Diff extends PureComponent<Props, void> {
+type State = {
+  collapsed: boolean
+}
+
+export default class Diff extends PureComponent<Props, State> {
   diffMatchPatch: Object;
 
   constructor(props: Props) {
     super(props);
     this.diffMatchPatch = new DiffMatchPatch();
+    this.state = {};
+    if (props.title) {
+      this.state.collapsed = true;
+    }
   }
 
   getDiffInfo(key: string): DiffInfo {
@@ -59,9 +69,9 @@ export default class Diff extends PureComponent<Props, void> {
     return this.diffMatchPatch.diff_main(text1, text2);
   }
 
-  render() {
+  renderDiff() {
     return (
-      <Text testID="diff">
+      <Text testID="diffText">
         {this.createDiff().map(
           (it, index) => {
             const diffInfo = this.getDiffInfo(it[0]);
@@ -74,6 +84,26 @@ export default class Diff extends PureComponent<Props, void> {
           }
         )}
       </Text>
+    );
+  }
+
+  render() {
+    const {title} = this.props;
+    const {collapsed} = this.state;
+
+    return (
+      <View testID="diff">
+        {title && <TouchableOpacity
+          testID="diffToggle"
+          onPress={() => this.setState({collapsed: !collapsed})}>
+          <Text style={styles.title}>
+            {`${title} `}
+            <Image source={arrowDownGray} style={[styles.icon, !collapsed && styles.iconCollapse]}/>
+          </Text>
+        </TouchableOpacity>}
+
+        {(!title || (title && !collapsed)) && this.renderDiff()}
+      </View>
     );
   }
 }
