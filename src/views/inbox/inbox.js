@@ -54,16 +54,11 @@ class Inbox extends Component<Props, void> {
     this.refresh();
   }
 
-  _renderRefreshControl = () => {
-    return <RefreshControl
-      refreshing={this.props.loading}
-      onRefresh={this.refresh}
-      tintColor={COLOR_PINK}
-      testID="refresh-control"
-    />;
+  refresh = () => {
+    this.props.loadInbox();
   };
 
-  goToIssue = (issue: Issue) => {
+  goToIssue(issue: Issue) {
     log.debug(`Opening issue "${issue.id}" from notifications`);
     Router.SingleIssue({
       issuePlaceholder: {
@@ -74,11 +69,7 @@ class Inbox extends Component<Props, void> {
       },
       issueId: issue.id
     });
-  };
-
-  refresh = () => {
-    this.props.loadInbox();
-  };
+  }
 
   onLoadMore = () => {
     if (!this.props.loading && this.props.items.length > 0 && this.props.hasMore) {
@@ -86,7 +77,7 @@ class Inbox extends Component<Props, void> {
     }
   };
 
-  renderValues = (values: Array<ChangeValue>, eventId: string) => {
+  renderValues(values: Array<ChangeValue>, eventId: string) {
     return (
       values.map((it) => {
         const value = this.getChangeValue(it);
@@ -100,7 +91,7 @@ class Inbox extends Component<Props, void> {
         );
       })
     );
-  };
+  }
 
   getChangeValue(change): string {
     return change.name;
@@ -179,7 +170,7 @@ class Inbox extends Component<Props, void> {
     );
   }
 
-  renderEvents = (events: Array<ChangeEvent> = []) => {
+  renderEvents(events: Array<ChangeEvent> = []) {
     const eventNodes = [];
 
     events.forEach((event: ChangeEvent) => {
@@ -224,7 +215,7 @@ class Inbox extends Component<Props, void> {
         })}
       </View>
     );
-  };
+  }
 
   isIssueDigestChange(metadata: Metadata): boolean {
     return metadata && metadata.change;
@@ -317,7 +308,7 @@ class Inbox extends Component<Props, void> {
     }
   }
 
-  renderIssueChange = (notification: Notification) => {
+  renderIssueChange(notification: Notification) {
     const metadata: Metadata = notification.metadata;
     const onPress = () => this.goToIssue(metadata.issue);
     const sender: User = notification.sender;
@@ -347,23 +338,36 @@ class Inbox extends Component<Props, void> {
         {this.renderNotificationReason(metadata)}
       </TouchableOpacity>
     );
-  };
+  }
 
-  getNotificationId = notification => notification.id;
-
-
-  _renderListMessage = () => {
+  renderListMessage = () => {
     const {loading, items} = this.props;
     if (!loading && items.length === 0) {
       return (
         <View>
           <Text style={styles.listMessageSmile}>(・_・)</Text>
-          <Text style={styles.listFooterMessage} testID="no-notifications">You have no notifications</Text>
+          <Text
+            style={styles.listFooterMessage}
+            testID="no-notifications"
+          >
+            You have no notifications.
+          </Text>
         </View>
       );
     }
 
     return null;
+  };
+
+  renderRefreshControl = () => {
+    return (
+      <RefreshControl
+        refreshing={this.props.loading}
+        onRefresh={this.refresh}
+        tintColor={COLOR_PINK}
+        testID="refresh-control"
+      />
+    );
   };
 
   render() {
@@ -381,13 +385,13 @@ class Inbox extends Component<Props, void> {
 
           <FlatList
             data={items}
-            refreshControl={this._renderRefreshControl()}
+            refreshControl={this.renderRefreshControl()}
             refreshing={loading}
-            keyExtractor={this.getNotificationId}
+            keyExtractor={notification => notification.id}
             renderItem={(listItem) => this.renderNotification(listItem.item)}
             onEndReached={this.onLoadMore}
             onEndReachedThreshold={0.1}
-            ListFooterComponent={this._renderListMessage}
+            ListFooterComponent={this.renderListMessage}
           />
         </View>
       </Menu>
