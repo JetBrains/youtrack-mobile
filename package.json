@@ -1,178 +1,180 @@
 {
-	"name": "YouTrackMobile",
-	"version": "0.1.0-0",
-	"author": "Andrey Skladchikov <andrey.skladchikov@gmail.com>",
-	"bugs": {
-		"url": "https://youtrack.jetbrains.com/issues/YTM",
-		"email": "youtrack-feedback@jetbrains.com"
-	},
-	"config": {
-		"ANALYTICS_ID": "",
-		"EXCEPTION_REPORTER_TOKEN": "",
-		"KONNECTOR_URL": "https://konnector-staging.services.jetbrains.com"
-	},
-	"husky": {
-		"hooks": {
-			"pre-commit": "npm run test-dev-config && npm test && npm run lint"
-		}
-	},
-	"license": "Apache-2.0",
-	"scripts": {
-		"android": "YT_MOBILE_VERSION=$npm_package_version ./node_modules/react-native-cli/index.js run-android",
-		"android-align-after-sign": "$ANDROID_HOME/build-tools/28.0.3/zipalign -v 4 android/app/build/outputs/apk/release/app-release-unsigned.apk android/app/build/outputs/apk/release/app-release.apk",
-		"android-bundle-release": "cd android && YT_MOBILE_VERSION=$npm_package_version ./gradlew bundleRelease && cd ..",
-		"android-clean": "cd ./android && YT_MOBILE_VERSION=$npm_package_version ./gradlew clean && cd ..",
-		"android-develop": "npm start & npm run android-emulator & npm run android",
-		"android-emulator": "./tools/android-emulator.sh",
-		"android-release": "cd android && YT_MOBILE_VERSION=$npm_package_version ./gradlew assembleRelease && cd ..",
-		"debug-test": "node --inspect-brk ./node_modules/.bin/jest --runInBand",
-		"e2e-build:ios": "detox build --configuration ios.sim.release",
-		"e2e-clean": "detox clean-framework-cache && detox build-framework-cache",
-		"e2e-shutdown": "fbsimctl shutdown",
-		"e2e-test:ios": "detox test --configuration ios.sim.release --debug-synchronization 200 --detectOpenHandles",
-		"e2e:ios": "npm run e2e-clean && npm run e2e-build:ios && npm run e2e-test:ios",
-		"flow-watch": "fswatch -o ./ | xargs -n1 -I{} sh -c 'clear; printf \"\\033[3J\" && flow'",
-		"ios": "./node_modules/react-native-cli/index.js run-ios --simulator='iPhone 6'",
-		"ios-archive": "xcodebuild archive -allowProvisioningUpdates -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile[Release] -archivePath ios/build/YouTrackMobile[Release].xcarchive",
-		"ios-archive-no-sign": "export RCT_NO_LAUNCH_PACKAGER=true && npm run ios-archive -- CODE_SIGN_IDENTITY='' CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED='NO'",
-		"ios-build-bundle": "react-native bundle --entry-file=index.js --platform ios --dev false --reset-cache --bundle-output build/main.jsbundle --assets-dest build",
+  "name": "YouTrackMobile",
+  "version": "0.1.0-0",
+  "author": "Andrey Skladchikov <andrey.skladchikov@gmail.com>",
+  "bugs": {
+    "url": "https://youtrack.jetbrains.com/issues/YTM",
+    "email": "youtrack-feedback@jetbrains.com"
+  },
+  "config": {
+    "ANALYTICS_ID": "",
+    "EXCEPTION_REPORTER_TOKEN": "",
+    "KONNECTOR_URL": "https://konnector-staging.services.jetbrains.com"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run test-dev-config && npm test && npm run lint"
+    }
+  },
+  "license": "Apache-2.0",
+  "scripts": {
+    "android": "YT_MOBILE_VERSION=$npm_package_version ./node_modules/react-native-cli/index.js run-android",
+    "android-align-after-sign": "$ANDROID_HOME/build-tools/28.0.3/zipalign -v 4 android/app/build/outputs/apk/release/app-release-unsigned.apk android/app/build/outputs/apk/release/app-release.apk",
+    "android-bundle-release": "cd android && YT_MOBILE_VERSION=$npm_package_version ./gradlew bundleRelease && cd ..",
+    "android-clean": "cd ./android && YT_MOBILE_VERSION=$npm_package_version ./gradlew clean && cd ..",
+    "android-develop": "npm start & npm run android-emulator & npm run android",
+    "android-emulator": "./tools/android-emulator.sh",
+    "android-release": "cd android && YT_MOBILE_VERSION=$npm_package_version ./gradlew assembleRelease && cd ..",
+    "debug-test": "node --inspect-brk ./node_modules/.bin/jest --runInBand",
+    "e2e-build:ios": "detox build --configuration ios.sim.release",
+    "e2e-clean": "detox clean-framework-cache && detox build-framework-cache",
+    "e2e-shutdown": "fbsimctl shutdown",
+    "e2e-test:ios": "detox test --configuration ios.sim.release --debug-synchronization 200 --detectOpenHandles",
+    "e2e:ios": "npm run e2e-clean && npm run e2e-build:ios && npm run e2e-test:ios",
+    "flow-watch": "fswatch -o ./ | xargs -n1 -I{} sh -c 'clear; printf \"\\033[3J\" && flow'",
+    "ios": "./node_modules/react-native-cli/index.js run-ios --simulator='iPhone 6'",
+    "ios-archive": "xcodebuild archive -allowProvisioningUpdates -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile[Release] -archivePath ios/build/YouTrackMobile[Release].xcarchive",
+    "ios-archive-no-sign": "export RCT_NO_LAUNCH_PACKAGER=true && npm run ios-archive -- CODE_SIGN_IDENTITY='' CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED='NO'",
+    "ios-build-bundle": "react-native bundle --entry-file=index.js --platform ios --dev false --reset-cache --bundle-output build/main.jsbundle --assets-dest build",
     "ios-iPadAir": "./node_modules/react-native-cli/index.js run-ios --simulator='iPad Air'",
-		"ios-iphoneX": "./node_modules/react-native-cli/index.js run-ios --simulator='iPhone X'",
-		"ios-release": "npm run ios-download-archive && npm run ios-export-ipa",
-		"ios-set-version": "node ./tools/set-ios-version",
-		"lint": "eslint --ignore-pattern src/flow src && flow check",
-		"postinstall": "cd node_modules/react-native/React/..; exec ./scripts/ios-install-third-party.sh",
-		"postios-archive-no-sign": "cp ios/build/YouTrackMobile[Release].xcarchive/Products/Applications/YouTrackMobile.app/YouTrackMobile.entitlements ios/build/YouTrackMobile[Release].xcarchive/Products/Applications/YouTrackMobile.app/archived-expanded-entitlements.xcent",
+    "ios-iphoneX": "./node_modules/react-native-cli/index.js run-ios --simulator='iPhone X'",
+    "ios-release": "npm run ios-download-archive && npm run ios-export-ipa",
+    "ios-set-version": "node ./tools/set-ios-version",
+    "lint": "eslint --ignore-pattern src/flow src && flow check",
+    "postinstall": "cd node_modules/react-native/React/..; exec ./scripts/ios-install-third-party.sh",
+    "postios-archive-no-sign": "cp ios/build/YouTrackMobile[Release].xcarchive/Products/Applications/YouTrackMobile.app/YouTrackMobile.entitlements ios/build/YouTrackMobile[Release].xcarchive/Products/Applications/YouTrackMobile.app/archived-expanded-entitlements.xcent",
     "prepare-config": "node ./tools/prepare-config",
     "test-dev-config": "node tools/test-dev-config.js",
-		"start": "./node_modules/react-native-cli/index.js start",
-		"test": "jest",
-		"test-ci": "export DETOX_DISABLE_POSTINSTALL=true && export TEAMCITY_VERSION=enablereport && npm test",
-		"test:watch": "npm test -- --watchAll",
+    "start": "./node_modules/react-native-cli/index.js start",
+    "test": "jest",
+    "test-ci": "DETOX_DISABLE_POSTINSTALL=true TEAMCITY_VERSION=enablereport npm test",
+    "test:watch": "npm test -- --watchAll",
     "ios-clean": "xcodebuild clean -project ios/YouTrackMobile.xcodeproj -configuration Release -alltargets",
     "ios-delete-build": "rm -rf ios/build/",
     "ios-download-archive": "bash ./tools/download-latest-built-archive.sh",
     "ios-export-ipa": "xcodebuild -exportArchive -allowProvisioningUpdates -archivePath ios/build/YouTrackMobile[Release].xcarchive -exportPath ios/build -exportOptionsPlist tools/export.plist"
   },
-	"jest": {
-		"preset": "react-native",
-		"transform": {
-			"^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js",
-			"^[./a-zA-Z0-9$_-]+\\.(bmp|gif|jpg|jpeg|png|psd|svg|webp)$": "<rootDir>/node_modules/react-native/jest/assetFileTransformer.js"
-		},
-		"setupFilesAfterEnv": [
-			"./test/jest-setup.js"
-		],
-		"testResultsProcessor": "jest-teamcity-reporter",
-		"coverageReporters": ["teamcity"],
-		"testPathIgnorePatterns": [
-			"/node_modules/",
-			"/e2e/"
-		],
-		"transformIgnorePatterns": [
-			"node_modules/(?!(jest-)?react-native|@react-native-community|react-navigation|@huston007.*)"
-		]
-	},
-	"detox": {
-		"test-runner": "jest",
-		"runner-config": "./e2e/config.json",
-		"configurations": {
-			"ios.sim.debug": {
-				"binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/YouTrackMobile.app",
-				"build": "set -o pipefail && export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -UseNewBuildSystem=NO -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile[Release] -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
-				"type": "ios.simulator",
-				"name": "iPhone 7"
-			},
-			"ios.sim.release": {
-				"binaryPath": "ios/build/Build/Products/Release-iphonesimulator/YouTrackMobile.app",
-				"build": "set -o pipefail && export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -UseNewBuildSystem=NO -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile[Release] -configuration Release -sdk iphonesimulator -derivedDataPath ios/build",
-				"type": "ios.simulator",
-				"name": "iPhone 7"
-			}
-		}
-	},
-	"resolutions": {
-		"uglify-es": "3.1.10"
-	},
-	"dependencies": {
-		"@expo/react-native-action-sheet": "1.0.1",
-		"@huston007/react-native-eventsource": "0.2.2",
-		"@react-native-community/async-storage": "^1.4.0",
-		"base64-js": "1.3.0",
-		"entities": "^1.1.1",
-		"fetch-mock": "5.6.0",
-		"from-now": "1.0.2",
-		"htmlparser-to-html": "0.0.6",
-		"lodash.once": "4.1.1",
-		"lodash.throttle": "4.1.1",
-		"object-walk": "^0.1.1",
-		"prop-types": "^15.5.10",
-		"qs": "6.7.0",
-		"react": "16.8.3",
-		"react-native": "0.59.8",
-		"react-native-animatable": "1.2.4",
-		"react-native-calendars": "1.5.3",
-		"react-native-camera": "^1.4.3",
-		"react-native-device-info": "2.1.2",
-		"react-native-device-log": "1.0.2",
-		"react-native-drawer": "2.5.0",
-		"react-native-easy-toast": "git://github.com/huston007/react-native-easy-toast.git#6eb50ef",
-		"react-native-gesture-handler": "1.3.0",
-		"react-native-google-analytics": "1.3.2",
-		"react-native-htmlview": "0.13.0",
-		"react-native-image-crop-picker": "0.21.2",
-		"react-native-image-gallery": "git://github.com/Elvenisboy/react-native-image-gallery.git#9282a87",
-		"react-native-image-progress": "1.0.1",
-		"react-native-keyboard-spacer": "0.4.1",
-		"react-native-keychain": "1.0.0",
-		"react-native-linear-gradient": "2.4.0",
-		"react-native-markdown-view": "1.1.4",
-		"react-native-notifications": "1.1.19",
-		"react-native-root-modal": "git://github.com/huston007/react-native-root-modal.git#9cbd951",
-		"react-native-safe-area-view": "0.14.6",
-		"react-native-swipeout": "2.3.6",
-		"react-native-swiper": "git://github.com/huston007/react-native-swiper.git#64c5681",
-		"react-native-syntax-highlighter": "1.2.6",
-		"react-navigation": "^3.11.0",
-		"react-navigation-stack": "^1.4.0",
-		"react-redux": "^5.0.7",
-		"redux": "4.0.0",
-		"redux-create-reducer": "^1.1.2",
-		"redux-thunk": "2.2.0",
-		"url-join": "4.0.0",
-		"url-parse": "1.4.3"
-	},
-	"devDependencies": {
-		"@babel/core": "^7.4.3",
-		"@babel/runtime": "^7.4.3",
-		"babel-eslint": "9.0.0",
-		"babel-jest": "24.8.0",
-		"chai": "3.5.0",
-		"chai-as-promised": "6.0.0",
-		"chai-enzyme": "1.0.0-beta.0",
-		"cheerio": "0.22.0",
-		"core-util-is": "1.0.2",
-		"detox": "13.3.3",
-		"enzyme": "3.6.0",
-		"enzyme-adapter-react-16": "1.1.1",
-		"enzyme-to-json": "3.3.4",
-		"eslint": "5.16.0",
-		"eslint-config-defaults": "9.0.0",
-		"eslint-plugin-flowtype": "3.0.0",
-		"eslint-plugin-import": "2.14.0",
-		"eslint-plugin-react": "7.11.1",
-		"eslint-plugin-react-native": "3.5.0",
-		"flow-bin": "0.92.0",
-		"metro-react-native-babel-preset": "^0.53.1",
-		"husky": "2.4.0",
-		"jest": "^24.8.0",
-		"jest-teamcity-reporter": "^0.9.0",
-		"react-dom": "16.5.0",
-		"react-native-cli": "^2.0.1",
-		"react-test-renderer": "16.8.3",
-		"redux-mock-store": "1.5.1",
-		"sinon": "1.17.6",
-		"sinon-chai": "2.8.0",
-		"update-json-file": "^1.1.1"
-	}
+  "jest": {
+    "preset": "react-native",
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js",
+      "^[./a-zA-Z0-9$_-]+\\.(bmp|gif|jpg|jpeg|png|psd|svg|webp)$": "<rootDir>/node_modules/react-native/jest/assetFileTransformer.js"
+    },
+    "setupFilesAfterEnv": [
+      "./test/jest-setup.js"
+    ],
+    "testResultsProcessor": "jest-teamcity-reporter",
+    "coverageReporters": [
+      "teamcity"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/e2e/"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|@react-native-community|react-navigation|@huston007.*)"
+    ]
+  },
+  "detox": {
+    "test-runner": "jest",
+    "runner-config": "./e2e/config.json",
+    "configurations": {
+      "ios.sim.debug": {
+        "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/YouTrackMobile.app",
+        "build": "set -o pipefail && export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -UseNewBuildSystem=NO -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile[Release] -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
+        "type": "ios.simulator",
+        "name": "iPhone 7"
+      },
+      "ios.sim.release": {
+        "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/YouTrackMobile.app",
+        "build": "set -o pipefail && RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -UseNewBuildSystem=NO -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile[Release] -configuration Release -sdk iphonesimulator -derivedDataPath ios/build",
+        "type": "ios.simulator",
+        "name": "iPhone 7"
+      }
+    }
+  },
+  "resolutions": {
+    "uglify-es": "3.1.10"
+  },
+  "dependencies": {
+    "@expo/react-native-action-sheet": "1.0.1",
+    "@huston007/react-native-eventsource": "0.2.2",
+    "@react-native-community/async-storage": "^1.4.0",
+    "base64-js": "1.3.0",
+    "entities": "^1.1.1",
+    "fetch-mock": "5.6.0",
+    "from-now": "1.0.2",
+    "htmlparser-to-html": "0.0.6",
+    "lodash.once": "4.1.1",
+    "lodash.throttle": "4.1.1",
+    "object-walk": "^0.1.1",
+    "prop-types": "^15.5.10",
+    "qs": "6.7.0",
+    "react": "16.8.3",
+    "react-native": "0.59.8",
+    "react-native-animatable": "1.2.4",
+    "react-native-calendars": "1.5.3",
+    "react-native-camera": "^1.4.3",
+    "react-native-device-info": "2.1.2",
+    "react-native-device-log": "1.0.2",
+    "react-native-drawer": "2.5.0",
+    "react-native-easy-toast": "git://github.com/huston007/react-native-easy-toast.git#6eb50ef",
+    "react-native-gesture-handler": "1.3.0",
+    "react-native-google-analytics": "1.3.2",
+    "react-native-htmlview": "0.13.0",
+    "react-native-image-crop-picker": "0.21.2",
+    "react-native-image-gallery": "git://github.com/Elvenisboy/react-native-image-gallery.git#9282a87",
+    "react-native-image-progress": "1.0.1",
+    "react-native-keyboard-spacer": "0.4.1",
+    "react-native-keychain": "1.0.0",
+    "react-native-linear-gradient": "2.4.0",
+    "react-native-markdown-view": "1.1.4",
+    "react-native-notifications": "1.1.19",
+    "react-native-root-modal": "git://github.com/huston007/react-native-root-modal.git#9cbd951",
+    "react-native-safe-area-view": "0.14.6",
+    "react-native-swipeout": "2.3.6",
+    "react-native-swiper": "git://github.com/huston007/react-native-swiper.git#64c5681",
+    "react-native-syntax-highlighter": "1.2.6",
+    "react-navigation": "^3.11.0",
+    "react-navigation-stack": "^1.4.0",
+    "react-redux": "^5.0.7",
+    "redux": "4.0.0",
+    "redux-create-reducer": "^1.1.2",
+    "redux-thunk": "2.2.0",
+    "url-join": "4.0.0",
+    "url-parse": "1.4.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.3",
+    "@babel/runtime": "^7.4.3",
+    "babel-eslint": "9.0.0",
+    "babel-jest": "24.8.0",
+    "chai": "3.5.0",
+    "chai-as-promised": "6.0.0",
+    "chai-enzyme": "1.0.0-beta.0",
+    "cheerio": "0.22.0",
+    "core-util-is": "1.0.2",
+    "detox": "13.3.3",
+    "enzyme": "3.6.0",
+    "enzyme-adapter-react-16": "1.1.1",
+    "enzyme-to-json": "3.3.4",
+    "eslint": "5.16.0",
+    "eslint-config-defaults": "9.0.0",
+    "eslint-plugin-flowtype": "3.0.0",
+    "eslint-plugin-import": "2.14.0",
+    "eslint-plugin-react": "7.11.1",
+    "eslint-plugin-react-native": "3.5.0",
+    "flow-bin": "0.92.0",
+    "metro-react-native-babel-preset": "^0.53.1",
+    "husky": "2.4.0",
+    "jest": "^24.8.0",
+    "jest-teamcity-reporter": "^0.9.0",
+    "react-dom": "16.5.0",
+    "react-native-cli": "^2.0.1",
+    "react-test-renderer": "16.8.3",
+    "redux-mock-store": "1.5.1",
+    "sinon": "1.17.6",
+    "sinon-chai": "2.8.0",
+    "update-json-file": "^1.1.1"
+  }
 }
