@@ -1,6 +1,8 @@
 /* @flow */
 import * as types from './inbox-action-types';
-import {notifyError, resolveError} from '../../components/notification/notification';
+import {notify, resolveError} from '../../components/notification/notification';
+import log from '../../components/log/log';
+
 import type Api from '../../components/api/api';
 
 type ApiGetter = () => Api;
@@ -41,7 +43,9 @@ export function loadInbox(skip?: number = 0, top?: number = 10) {
       }
     } catch (err) {
       const error = await resolveError(err);
-      notifyError('Cannot update inbox', error);
+      const msg = 'Cannot update Inbox.';
+      log.info(msg, error);
+      notify(`${msg} Server in unavailable. Try later.`);
     }
 
     dispatch(setLoading(false));
