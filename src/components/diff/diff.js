@@ -2,7 +2,7 @@
 
 import React, {PureComponent} from 'react';
 import {View, Text, TouchableOpacity, Image} from 'react-native';
-import DiffMatchPatch from 'diff-match-patch';
+import DiffMatchWord from './diff__match-word';
 import {arrowDownGray} from '../icon/icon';
 
 import styles from './diff.styles';
@@ -25,11 +25,9 @@ type State = {
 }
 
 export default class Diff extends PureComponent<Props, State> {
-  diffMatchPatch: Object;
 
   constructor(props: Props) {
     super(props);
-    this.diffMatchPatch = new DiffMatchPatch();
     this.state = {};
     if (props.title) {
       this.state.collapsed = true;
@@ -43,19 +41,19 @@ export default class Diff extends PureComponent<Props, State> {
     };
 
     switch (true) {
-    case key === DiffMatchPatch.DIFF_INSERT:
+    case key === DiffMatchWord.diffPatchType.DIFF_INSERT:
       diffInfo = {
         id: 'diffInsert',
         style: styles.diffInsert
       };
       break;
-    case key === DiffMatchPatch.DIFF_DELETE:
+    case key === DiffMatchWord.diffPatchType.DIFF_DELETE:
       diffInfo = {
         id: 'diffDelete',
         style: styles.diffDelete
       };
       break;
-    case key === DiffMatchPatch.DIFF_EQUAL:
+    case key === DiffMatchWord.diffPatchType.DIFF_EQUAL:
       diffInfo = {
         id: 'diffEqual',
         style: styles.diffEqual
@@ -66,7 +64,7 @@ export default class Diff extends PureComponent<Props, State> {
 
   createDiff() {
     const {text1, text2} = this.props;
-    return this.diffMatchPatch.diff_main(text1, text2);
+    return DiffMatchWord.diff(text1, text2);
   }
 
   renderDiff() {
