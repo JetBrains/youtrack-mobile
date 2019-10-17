@@ -13,7 +13,7 @@ import Router from '../../components/router/router';
 import {next} from '../../components/icon/icon';
 import {openMenu} from '../../actions/app-actions';
 import Menu from '../../components/menu/menu';
-import {COLOR_PINK, UNIT} from '../../components/variables/variables';
+import {COLOR_PINK} from '../../components/variables/variables';
 import log from '../../components/log/log';
 import {handleRelativeUrl} from '../../components/config/config';
 import {getStorageState} from '../../components/storage/storage';
@@ -146,10 +146,6 @@ class Inbox extends Component<Props, void> {
     );
   }
 
-  renderEventName(event: ChangeEvent) {
-    return <Text style={styles.textSecondary}>{event.name}: </Text>;
-  }
-
   renderCustomFieldChange(event: ChangeEvent) {
     return (
       event?.multiValue === true
@@ -168,54 +164,61 @@ class Inbox extends Component<Props, void> {
     );
   }
 
+  renderEventItem(event: ChangeEvent) {
+    const textChangeEventName = (event: ChangeEvent) => `${event.name} changed`;
+    const renderEventName = (event: ChangeEvent) => <Text style={styles.textSecondary}>{event.name}: </Text>;
+
+    if (!this.hasAddedValues(event) && !this.hasRemovedValues(event)) {
+      return null;
+    }
+
+    switch (true) {
+
+    case event.category === 'COMMENT': //TODO(xi-eye): filter out text update events
+      return (
+        <View style={styles.change}>
+          {this.hasRemovedValues(event) && (
+            this.getChangeValue(event.removedValues[0]).length
+              ? this.renderTextDiff(event, textChangeEventName(event))
+              : <View>{renderEventName(event)}{this.renderValues(event.addedValues, event.entityId)}</View>
+          )}
+        </View>
+      );
+
+    case event.category === 'SUMMARY' || event.category === 'DESCRIPTION':
+      return (
+        this.renderTextDiff(event, textChangeEventName(event))
+      );
+
+    default:
+      return (
+        <View style={styles.change}>
+          {renderEventName(event)}
+          {this.renderCustomFieldChange(event)}
+        </View>
+      );
+    }
+  }
+
   renderEvents(events: Array<ChangeEvent> = []) {
-    const eventNodes = [];
-
-    events.forEach((event: ChangeEvent) => {
-      if (!this.hasAddedValues(event) && !this.hasRemovedValues(event)) {
-        return;
-      }
-
-      switch (true) {
-      case event.category === 'COMMENT':
-        //TODO(xi-eye): do not show updating comment`s text
-        eventNodes.push(
-          <View style={styles.change}>
-            {this.renderEventName(event)}
-            {this.hasRemovedValues(event) && (this.getChangeValue(event.removedValues[0]).length
-              ? this.renderTextDiff(event)
-              : this.renderValues(event.addedValues, event.entityId))
-            }
-          </View>
-        );
-        break;
-      case event.category === 'SUMMARY' || event.category === 'DESCRIPTION':
-        eventNodes.push(
-          this.renderTextDiff(event, `${event.name} changed`)
-        );
-        break;
-      default:
-        eventNodes.push(
-          <View style={styles.change}>
-            {this.renderEventName(event)}
-            {this.renderCustomFieldChange(event)}
-          </View>
-        );
-      }
-    });
+    const nodes = events.reduce((list, event) => {
+      const item = this.renderEventItem(event);
+      item && list.push(item);
+      return list;
+    }, []);
 
     return (
       <View>
-        {eventNodes.map((node, index) => {
-          return (
+        {nodes.map((node, index) =>
+          (
             <View
               key={index}
-              style={{marginTop: index > 0 ? UNIT : 0}}
+              style={index > 0 ? styles.changeItem : null}
             >
               {node}
             </View>
-          );
-        })}
+          )
+        )}
       </View>
     );
   }

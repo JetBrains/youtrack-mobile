@@ -100,6 +100,9 @@ export default StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap'
   },
+  changeItem: {
+    marginTop: UNIT
+  },
   changeRemoved: {
     textDecorationLine: 'line-through'
   }
