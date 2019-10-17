@@ -277,6 +277,7 @@ class AgileBoard extends Component<Props, State> {
           {this._renderHeader()}
 
           {sprint && this._renderBoardHeader(sprint)}
+          {noBoardSelected && this._renderNoSprint()}
 
           <DragContainer onDragStart={this.onDragStart} onDragEnd={this.onDragEnd}>
             <BoardScroller
@@ -299,7 +300,6 @@ class AgileBoard extends Component<Props, State> {
                 }
               }}
             >
-              {noBoardSelected && this._renderNoSprint()}
               {sprint && this._renderBoard(sprint)}
               {isLoadingMore && <ActivityIndicator color={COLOR_PINK} style={styles.loadingMoreIndicator}/>}
             </BoardScroller>

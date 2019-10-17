@@ -11,7 +11,7 @@ import {
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF'
+    backgroundColor: COLOR_FONT_ON_BLACK
   },
   headerContent: {
     paddingTop: 3,
