@@ -40,7 +40,10 @@ type ApiGetter = () => Api;
 function updateAgileUserProfile(sprintId) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const profile: AgileUserProfile = await getApi().agile.updateAgileUserProfile(sprintId);
-    dispatch({type: types.RECEIVE_AGILE_PROFILE, profile});
+    dispatch({
+      type: types.RECEIVE_AGILE_PROFILE,
+      profile
+    });
   };
 }
 
@@ -79,18 +82,21 @@ function loadBoard(boardId: string, sprints: Array<{id: string}>) {
 export function loadAgileProfile() {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const profile = await getApi().agile.getAgileUserProfile();
-    dispatch({type: types.RECEIVE_AGILE_PROFILE, profile});
+    dispatch({
+      type: types.RECEIVE_AGILE_PROFILE,
+      profile
+    });
   };
 }
 
 export function fetchDefaultAgileBoard() {
-  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+  return async (dispatch: (any) => any, getState: () => Object) => {
     await dispatch(loadAgileProfile());
-    const profile = getState().agile.profile;
-    const lastSprint = profile.visitedSprints.filter(s => s.agile.id === profile.defaultAgile.id)[0];
-    if (lastSprint) {
-      dispatch(loadSprint(lastSprint.agile.id, lastSprint.id));
-    } else {
+    try {
+      const profile = getState().agile.profile;
+      const lastSprint = profile.visitedSprints.filter(s => s.agile.id === profile.defaultAgile.id)[0];
+      lastSprint && dispatch(loadSprint(lastSprint.agile.id, lastSprint.id));
+    } catch (e) {
       dispatch(noAgileSelected());
       dispatch(stopSprintLoad());
     }
@@ -125,11 +131,19 @@ function destroyServersideEvents() {
 }
 
 function removeIssueFromBoard(issueId: string) {
-  return {type: types.REMOVE_ISSUE_FROM_BOARD, issueId};
+  return {
+    type: types.REMOVE_ISSUE_FROM_BOARD,
+    issueId
+  };
 }
 
 function moveIssue(movedId: string, cellId: string, leadingId: ?string) {
-  return {type: types.MOVE_ISSUE, movedId, cellId, leadingId};
+  return {
+    type: types.MOVE_ISSUE,
+    movedId,
+    cellId,
+    leadingId
+  };
 }
 
 export function fetchMoreSwimlanes() {
@@ -142,7 +156,10 @@ export function fetchMoreSwimlanes() {
     dispatch(startSwimlanesLoading());
 
     try {
-      const swimlanes = await api.agile.getSwimlanes(sprint.agile.id, sprint.id, PAGE_SIZE, sprint.board.trimmedSwimlanes.length);
+      const swimlanes = await api.agile.getSwimlanes(sprint.agile.id,
+        sprint.id,
+        PAGE_SIZE,
+        sprint.board.trimmedSwimlanes.length);
       dispatch(receiveSwimlanes(swimlanes));
       log.info(`Loaded ${swimlanes.length} more swimlanes`);
       usage.trackEvent(CATEGORY_NAME, 'Load more swimlanes');
@@ -280,23 +297,43 @@ export function openBoardSelect() {
 }
 
 export function addCardToCell(cellId: string, issue: IssueFull) {
-  return {type: types.ADD_CARD_TO_CELL, cellId, issue};
+  return {
+    type: types.ADD_CARD_TO_CELL,
+    cellId,
+    issue
+  };
 }
 
 export function reorderSwimlanesOrCells(leadingId: ?string, movedId: string) {
-  return {type: types.REORDER_SWIMLANES_OR_CELLS, leadingId, movedId};
+  return {
+    type: types.REORDER_SWIMLANES_OR_CELLS,
+    leadingId,
+    movedId
+  };
 }
 
 export function addOrUpdateCellOnBoard(issue: IssueOnList, rowId: string, columnId: string) {
-  return {type: types.ADD_OR_UPDATE_CELL_ON_BOARD, issue, rowId, columnId};
+  return {
+    type: types.ADD_OR_UPDATE_CELL_ON_BOARD,
+    issue,
+    rowId,
+    columnId
+  };
 }
 
 export function updateSwimlane(swimlane: AgileBoardRow) {
-  return {type: types.UPDATE_SWIMLANE, swimlane};
+  return {
+    type: types.UPDATE_SWIMLANE,
+    swimlane
+  };
 }
 
 export function storeCreatingIssueDraft(draftId: string, cellId: string) {
-  return {type: types.STORE_CREATING_ISSUE_DRAFT, draftId, cellId};
+  return {
+    type: types.STORE_CREATING_ISSUE_DRAFT,
+    draftId,
+    cellId
+  };
 }
 
 export function createCardForCell(columnId: string, cellId: string) {
@@ -349,13 +386,13 @@ export function subscribeServersideUpdates() {
       dispatch(removeIssueFromBoard(data.removedIssue.id));
     });
 
-    serversideEvents.listenTo('sprintIssueMessage', function(data) {
+    serversideEvents.listenTo('sprintIssueMessage', function (data) {
       data.messages.forEach(msg => notify(msg));
     });
 
     serversideEvents.listenTo('sprintIssuesReorder', data => {
       LayoutAnimation.easeInEaseOut();
-      data.reorders.forEach(function(reorder) {
+      data.reorders.forEach(function (reorder) {
         const leadingId = reorder.leading ? reorder.leading.id : null;
         dispatch(reorderSwimlanesOrCells(leadingId, reorder.moved.id));
       });
@@ -365,7 +402,7 @@ export function subscribeServersideUpdates() {
   };
 }
 
-export function onCardDrop(data: {columnId: string, cellId: string, leadingId: ?string, movedId: string}) {
+export function onCardDrop(data: { columnId: string, cellId: string, leadingId: ?string, movedId: string }) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const {sprint} = getState().agile;
     const api: Api = getApi();
