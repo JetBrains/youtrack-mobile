@@ -29,7 +29,7 @@
     "e2e-build:ios": "detox build --configuration ios.sim.release",
     "e2e-clean": "detox clean-framework-cache && detox build-framework-cache",
     "e2e-shutdown": "fbsimctl shutdown",
-    "e2e-test:ios": "detox test --configuration ios.sim.release --debug-synchronization 200 --detectOpenHandles",
+    "e2e-test:ios": "detox test --configuration ios.sim.release --debug-synchronization 200 --detectOpenHandles --artifacts-location ./e2e/tmplogs --record-logs failing",
     "e2e:ios": "npm run e2e-clean && npm run e2e-build:ios && npm run e2e-test:ios",
     "flow-watch": "fswatch -o ./ | xargs -n1 -I{} sh -c 'clear; printf \"\\033[3J\" && flow'",
     "ios": "./node_modules/react-native-cli/index.js run-ios --simulator='iPhone 6'",
@@ -77,17 +77,18 @@
   },
   "detox": {
     "test-runner": "jest",
+    "specs": "./e2e",
     "runner-config": "./e2e/config.json",
     "configurations": {
       "ios.sim.debug": {
         "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/YouTrackMobile.app",
-        "build": "set -o pipefail && export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -UseNewBuildSystem=NO -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile[Release] -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
+        "build": "set -o pipefail && export RCT_NO_LAUNCH_PACKAGER=true RN_SRC_EXT=e2e.js xcodebuild -UseNewBuildSystem=NO -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile[Release] -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
         "type": "ios.simulator",
         "name": "iPhone 7"
       },
       "ios.sim.release": {
         "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/YouTrackMobile.app",
-        "build": "set -o pipefail && RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -UseNewBuildSystem=NO -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile[Release] -configuration Release -sdk iphonesimulator -derivedDataPath ios/build",
+        "build": "set -o pipefail && RCT_NO_LAUNCH_PACKAGER=true RN_SRC_EXT=e2e.js xcodebuild -UseNewBuildSystem=NO -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile[Release] -configuration Release -sdk iphonesimulator -derivedDataPath ios/build",
         "type": "ios.simulator",
         "name": "iPhone 7"
       }

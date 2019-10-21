@@ -273,7 +273,9 @@ class AgileBoard extends Component<Props, State> {
 
     return (
       <Menu>
-        <View style={styles.container}>
+        <View
+          testID='pageAgile'
+          style={styles.container}>
           {this._renderHeader()}
 
           {sprint && this._renderBoardHeader(sprint)}

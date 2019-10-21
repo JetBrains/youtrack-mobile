@@ -3,12 +3,17 @@ const loginPage = require('./pages/login');
 
 describe('Issues view', () => {
   beforeAll(async () => {
+    await device.launchApp({delete: true});
+  });
+
+  beforeAll(async () => {
     await loginPage.connectToServer();
     await loginPage.logIn();
   });
 
   beforeEach(async () => {
     await device.reloadReactNative();
+
     await issuesPage.search('issue id: TP-7');
     await element(by.id('issue-row')).tap();
   });

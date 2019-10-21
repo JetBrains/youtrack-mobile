@@ -3,6 +3,10 @@ const loginPage = require('./pages/login');
 
 describe('Issues list', () => {
   beforeAll(async () => {
+    await device.launchApp({delete: true});
+  });
+
+  beforeAll(async () => {
     await loginPage.connectToServer();
     await loginPage.logIn();
 

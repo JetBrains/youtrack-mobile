@@ -1,5 +1,5 @@
 /* @flow */
-import {View, ScrollView, Text, TouchableWithoutFeedback, TouchableOpacity, Image, Linking, Dimensions} from 'react-native';
+import {View, ScrollView, Text, TouchableWithoutFeedback, TouchableOpacity, Linking, Dimensions} from 'react-native';
 import React, {Component} from 'react';
 import styles from './menu.styles';
 import {VERSION_STRING} from '../usage/usage';
@@ -7,8 +7,8 @@ import getTopPadding from '../header/header__top-padding';
 import Drawer from 'react-native-drawer';
 import Router from '../router/router';
 import Auth from '../auth/auth';
+import MenuItem from './menu__item';
 import clicksToShowCounter from '../debug-view/clicks-to-show-counter';
-import {next} from '../icon/icon';
 import {connect} from 'react-redux';
 import {
   openMenu,
@@ -86,16 +86,6 @@ export class Menu extends Component<Props, void> {
       return null;
     }
 
-    const MenuItem = ({label, description = '', onPress = () => {}}) => (
-      <TouchableOpacity activeOpacity={0.4} style={styles.menuItemButton} onPress={onPress}>
-        <View style={styles.menuItemTopLine}>
-          <Text style={styles.menuItemText}>{label}</Text>
-          <Image style={styles.menuItemIcon} source={next}/>
-        </View>
-        <Text style={styles.menuItemSubtext}>{description}</Text>
-      </TouchableOpacity>
-    );
-
     return (
       <ScrollView style={styles.scrollContainer}>
         <View style={[styles.menuContainer, {paddingTop: getTopPadding(), minHeight: height}]}>
@@ -110,6 +100,7 @@ export class Menu extends Component<Props, void> {
 
             <MenuItem
               label={'Agile Boards'}
+              testId="pageAgileBoards"
               description={this._getSelectedAgileBoard()}
               onPress={this._openAgileBoard}
             />
