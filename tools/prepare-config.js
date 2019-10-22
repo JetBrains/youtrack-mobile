@@ -1,7 +1,7 @@
 const updateJsonFile = require('update-json-file');
 
 const ANALYTICS_ID = process.env.googleAnalyticsID;
-const KONNECTOR_URL = process.env.konnectorURL;
+const KONNECTOR_URL = process.env.konnektorURL;
 const BUILD_NUMBER = process.env.buildNumber;
 const VERSION_NUMBER = process.env.versionNumber;
 const EXCEPTION_REPORTER_TOKEN = process.env.exeptionReporterToken;
