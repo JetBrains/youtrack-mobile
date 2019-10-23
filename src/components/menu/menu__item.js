@@ -5,7 +5,7 @@ import React, {PureComponent} from 'react';
 
 import {next} from '../icon/icon';
 
-import styles from './menu.styles';
+import styles from './menu__item.styles';
 
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
@@ -20,12 +20,12 @@ type Props = {
 export default class MenuItem extends PureComponent<Props, void> {
 
   render() {
-    const {onPress, style = null, testId = null, label, description} = this.props;
+    const {onPress, style = null, testId = null, label, description = ''} = this.props;
 
     return (
       <TouchableOpacity
         testID={testId}
-        style={style}
+        style={[styles.menuItem, style]}
         activeOpacity={0.4}
         onPress={onPress}
       >
@@ -33,7 +33,7 @@ export default class MenuItem extends PureComponent<Props, void> {
           <Text style={styles.menuItemText}>{label}</Text>
           <Image style={styles.menuItemIcon} source={next}/>
         </View>
-        {Boolean(description) && <Text style={styles.menuItemSubtext}>{description}</Text>}
+        <Text style={styles.menuItemSubtext}>{description}</Text>
       </TouchableOpacity>
     );
   }
