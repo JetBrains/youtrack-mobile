@@ -10,6 +10,7 @@ import log from '../../components/log/log';
 import usage from '../../components/usage/usage';
 import {findIssueOnBoard} from './board-updaters';
 import {LayoutAnimation} from 'react-native';
+import {getGroupedSprints} from './agile-board__helper';
 
 const PAGE_SIZE = 6;
 const CATEGORY_NAME = 'Agile board';
@@ -258,8 +259,8 @@ export function openSprintSelect() {
         show: true,
         placeholder: 'Search for the sprint',
         dataSource: async () => {
-          const res = await api.agile.getSprintList(sprint.agile.id);
-          return res.sort(it => it.archived);
+          const sprints = await api.agile.getSprintList(sprint.agile.id);
+          return getGroupedSprints(sprints);
         },
         selectedItems: [sprint],
         getTitle: sprint => `${sprint.name} ${sprint.archived ? '(archived)' : ''}`,

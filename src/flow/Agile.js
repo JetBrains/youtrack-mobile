@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-export type SprintInformation = {
+export type Sprint = {
   id: string,
   name: string,
   goal: ?string,
@@ -13,7 +13,7 @@ export type AgileUserProfile = {
   defaultAgile: {
     id: string,
     name: string,
-    sprints: Array<SprintInformation>
+    sprints: Array<Sprint>
   },
   visitedSprints: Array<{
     id: string,
@@ -71,7 +71,7 @@ export type BoardOnList = {
   creator: {id: string, fullName: string}
 }
 
-export type SprintFull = SprintInformation & {
+export type SprintFull = Sprint & {
   board: Board,
   eventSourceTicket: string,
   agile: {
