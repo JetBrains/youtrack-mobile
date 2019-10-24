@@ -44,7 +44,7 @@
     "postinstall": "cd node_modules/react-native/React/..; exec ./scripts/ios-install-third-party.sh",
     "postios-archive-no-sign": "cp ios/build/YouTrackMobile[Release].xcarchive/Products/Applications/YouTrackMobile.app/YouTrackMobile.entitlements ios/build/YouTrackMobile[Release].xcarchive/Products/Applications/YouTrackMobile.app/archived-expanded-entitlements.xcent",
     "prepare-config": "node ./tools/prepare-config",
-    "test-dev-config": "node tools/test-app-config.js",
+    "test-app-config": "node tools/test-app-config.js",
     "start": "./node_modules/react-native-cli/index.js start",
     "test": "jest",
     "test-set-env": "DETOX_DISABLE_POSTINSTALL=true TEAMCITY_VERSION=enablereport",
