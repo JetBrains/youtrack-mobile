@@ -15,7 +15,7 @@ import {getGroupedSprints} from './agile-board__helper';
 const PAGE_SIZE = 6;
 const CATEGORY_NAME = 'Agile board';
 const RECONNECT_TIMEOUT = 60000;
-let serversideEvents = null;
+let serverSideEventsInstance = null;
 
 function startSprintLoad() {
   return {type: types.START_SPRINT_LOADING};
@@ -52,7 +52,7 @@ function loadSprint(agileId: string, sprintId: string) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
     dispatch(startSprintLoad());
-    destroyServersideEvents();
+    destroySSE();
     try {
       const sprint = await api.agile.getSprint(agileId, sprintId, PAGE_SIZE);
       LayoutAnimation.easeInEaseOut();
@@ -120,15 +120,16 @@ function receiveSwimlanes(swimlanes) {
   };
 }
 
-function storeServersideEvents(serversideEventsInstance) {
-  serversideEvents = serversideEventsInstance;
+function setSSEInstance(sseInstance) {
+  serverSideEventsInstance = sseInstance;
 }
 
-function destroyServersideEvents() {
-  if (serversideEvents) {
-    serversideEvents.close();
+function destroySSE() {
+  if (serverSideEventsInstance) {
+    log.info('Destroying SSE');
+    serverSideEventsInstance.close();
   }
-  serversideEvents = null;
+  setSSEInstance(null);
 }
 
 function removeIssueFromBoard(issueId: string) {
@@ -357,41 +358,41 @@ export function subscribeServersideUpdates() {
     const {sprint} = getState().agile;
     const api: Api = getApi();
 
-    serversideEvents = new ServersideEvents(api.config.backendUrl);
-    serversideEvents.subscribeAgileBoardUpdates(sprint.eventSourceTicket);
+    serverSideEventsInstance = new ServersideEvents(api.config.backendUrl);
+    serverSideEventsInstance.subscribeAgileBoardUpdates(sprint.eventSourceTicket);
 
-    serversideEvents.listenTo('error', () => {
+    serverSideEventsInstance.listenTo('error', () => {
       setTimeout(() => {
         log.info('Reloading sprint and reconnecting to LiveUpdate...');
         dispatch(loadSprint(sprint.agile.id, sprint.id));
       }, RECONNECT_TIMEOUT);
     });
 
-    serversideEvents.listenTo('sprintCellUpdate', data => {
+    serverSideEventsInstance.listenTo('sprintCellUpdate', data => {
       LayoutAnimation.easeInEaseOut();
       dispatch(addOrUpdateCellOnBoard(data.issue, data.row.id, data.column.id));
     });
 
-    serversideEvents.listenTo('sprintSwimlaneUpdate', data => {
+    serverSideEventsInstance.listenTo('sprintSwimlaneUpdate', data => {
       LayoutAnimation.easeInEaseOut();
       dispatch(updateSwimlane(data.swimlane));
     });
 
-    serversideEvents.listenTo('sprintIssueRemove', data => {
+    serverSideEventsInstance.listenTo('sprintIssueRemove', data => {
       LayoutAnimation.easeInEaseOut();
       dispatch(removeIssueFromBoard(data.removedIssue.id));
     });
 
-    serversideEvents.listenTo('sprintIssueHide', data => {
+    serverSideEventsInstance.listenTo('sprintIssueHide', data => {
       LayoutAnimation.easeInEaseOut();
       dispatch(removeIssueFromBoard(data.removedIssue.id));
     });
 
-    serversideEvents.listenTo('sprintIssueMessage', function (data) {
+    serverSideEventsInstance.listenTo('sprintIssueMessage', function (data) {
       data.messages.forEach(msg => notify(msg));
     });
 
-    serversideEvents.listenTo('sprintIssuesReorder', data => {
+    serverSideEventsInstance.listenTo('sprintIssuesReorder', data => {
       LayoutAnimation.easeInEaseOut();
       data.reorders.forEach(function (reorder) {
         const leadingId = reorder.leading ? reorder.leading.id : null;
@@ -399,7 +400,7 @@ export function subscribeServersideUpdates() {
       });
     });
 
-    storeServersideEvents(serversideEvents);
+    setSSEInstance(serverSideEventsInstance);
   };
 }
 

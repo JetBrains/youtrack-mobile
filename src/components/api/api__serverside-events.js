@@ -27,7 +27,12 @@ export default class ServersideEvents {
 
     this.eventSource.addEventListener('open', () => log.info('SSE connection opened'));
 
-    this.eventSource.addEventListener('error', (e) => log.warn('SSE connection closed'));
+    this.eventSource.addEventListener('error', (event) => {
+      if (event?.target?.readyState !== this.eventSource?.CLOSED) {
+        this.close();
+      }
+      return log.info('SSE connection closed', event);
+    });
 
     this.eventSource.addEventListener('ping', () => this.lastPing = new Date());
   }
