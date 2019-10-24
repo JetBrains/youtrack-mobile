@@ -129,7 +129,7 @@ export class IssueList extends Component<Props, void> {
     if (loadingError) {
       return <ErrorMessage error={loadingError} onTryAgain={refreshIssues}/>;
     }
-    if (!isRefreshing && !isLoadingMore && issues.length === 0) {
+    if (!isRefreshing && !isLoadingMore && issues?.length === 0) {
       return (
         <View>
           <Text style={styles.listMessageSmile}>(・_・)</Text>

@@ -139,10 +139,10 @@ export function loadIssues(query: string) {
     try {
       let issues: Array<IssueOnList> = await api.issues.getIssues(query, PAGE_SIZE);
       issues = ApiHelper.fillIssuesFieldHash(issues);
-      log.info(`${issues.length} issues loaded`);
+      log.info(`${issues?.length} issues loaded`);
       dispatch(receiveIssues(issues));
       dispatch(cacheIssues(issues));
-      if (issues.length < PAGE_SIZE) {
+      if (issues?.length < PAGE_SIZE) {
         log.info('End reached during initial load');
         dispatch(listEndReached());
       }
@@ -192,8 +192,8 @@ export function loadMoreIssues() {
       const updatedIssues = ApiHelper.removeDuplicatesByPropName(issues.concat(moreIssues), 'id');
       dispatch(receiveIssues(updatedIssues));
       dispatch(cacheIssues(updatedIssues));
-      if (moreIssues.length < PAGE_SIZE) {
-        log.info(`End of issues reached: all ${updatedIssues.length} issues are loaded`);
+      if (moreIssues?.length < PAGE_SIZE) {
+        log.info(`End of issues reached: all ${updatedIssues?.length} issues are loaded`);
         dispatch(listEndReached());
       }
     } catch (err) {
