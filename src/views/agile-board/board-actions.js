@@ -55,7 +55,7 @@ function loadSprint(agileId: string, sprintId: string) {
     destroySSE();
     try {
       const sprint = await api.agile.getSprint(agileId, sprintId, PAGE_SIZE);
-      LayoutAnimation.easeInEaseOut();
+      layoutAnimation();
       dispatch(receiveSprint(sprint));
       dispatch(updateAgileUserProfile(sprint.id));
       dispatch(subscribeServersideUpdates());
@@ -174,7 +174,7 @@ export function fetchMoreSwimlanes() {
 }
 
 function updateRowCollapsedState(row, newCollapsed: boolean) {
-  LayoutAnimation.easeInEaseOut();
+  layoutAnimation();
   return {
     type: types.ROW_COLLAPSE_TOGGLE,
     row,
@@ -208,7 +208,7 @@ export function rowCollapseToggle(row: AgileBoardRow) {
 }
 
 function updateColumnCollapsedState(column, newCollapsed: boolean) {
-  LayoutAnimation.easeInEaseOut();
+  layoutAnimation();
   return {
     type: types.COLUMN_COLLAPSE_TOGGLE,
     column,
@@ -369,22 +369,22 @@ export function subscribeServersideUpdates() {
     });
 
     serverSideEventsInstance.listenTo('sprintCellUpdate', data => {
-      LayoutAnimation.easeInEaseOut();
+      layoutAnimation();
       dispatch(addOrUpdateCellOnBoard(data.issue, data.row.id, data.column.id));
     });
 
     serverSideEventsInstance.listenTo('sprintSwimlaneUpdate', data => {
-      LayoutAnimation.easeInEaseOut();
+      layoutAnimation();
       dispatch(updateSwimlane(data.swimlane));
     });
 
     serverSideEventsInstance.listenTo('sprintIssueRemove', data => {
-      LayoutAnimation.easeInEaseOut();
+      layoutAnimation();
       dispatch(removeIssueFromBoard(data.removedIssue.id));
     });
 
     serverSideEventsInstance.listenTo('sprintIssueHide', data => {
-      LayoutAnimation.easeInEaseOut();
+      layoutAnimation();
       dispatch(removeIssueFromBoard(data.removedIssue.id));
     });
 
@@ -393,7 +393,7 @@ export function subscribeServersideUpdates() {
     });
 
     serverSideEventsInstance.listenTo('sprintIssuesReorder', data => {
-      LayoutAnimation.easeInEaseOut();
+      layoutAnimation();
       data.reorders.forEach(function (reorder) {
         const leadingId = reorder.leading ? reorder.leading.id : null;
         dispatch(reorderSwimlanesOrCells(leadingId, reorder.moved.id));
@@ -427,8 +427,7 @@ export function onCardDrop(data: { columnId: string, cellId: string, leadingId: 
 
     try {
       log.info(`Applying issue move: movedId="${data.movedId}", cellId="${data.cellId}", leadingId="${data.leadingId || ''}"`);
-
-      LayoutAnimation.easeInEaseOut();
+      layoutAnimation();
       dispatch(moveIssue(data.movedId, data.cellId, data.leadingId));
 
       await api.agile.updateCardPosition(
@@ -446,4 +445,15 @@ export function onCardDrop(data: { columnId: string, cellId: string, leadingId: 
       notifyError('Could not move card', err);
     }
   };
+}
+
+function layoutAnimation() { //https://github.com/facebook/react-native/issues/13984
+  if (!layoutAnimation.layoutAnimationActive) {
+    layoutAnimation.layoutAnimationActive = true;
+    const effect = LayoutAnimation.Presets.easeInEaseOut;
+    effect && LayoutAnimation.configureNext(
+      effect,
+      () => { layoutAnimation.layoutAnimationActive = null; }
+    );
+  }
 }

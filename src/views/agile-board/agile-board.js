@@ -130,7 +130,11 @@ class AgileBoard extends Component<Props, State> {
   };
 
   _renderHeader() {
-    const {sprint, onOpenSprintSelect, onOpenBoardSelect} = this.props;
+    const {sprint, onOpenSprintSelect, onOpenBoardSelect, isLoading} = this.props;
+    const textStyle = (isSprint: ?boolean) => [
+      isSprint ? styles.headerSprintText : styles.headerBoardText,
+      isLoading ? styles.headerTextDisabled : null
+    ];
 
     return (
       <Header
@@ -138,15 +142,30 @@ class AgileBoard extends Component<Props, State> {
         onBack={this.props.onOpenMenu}
       >
         {sprint && <View style={styles.headerContent}>
-          <TouchableOpacity style={styles.headerBoardButton} onPress={onOpenBoardSelect}>
-            <Text style={styles.headerBoardText} numberOfLines={1}>{sprint.agile.name}</Text>
+          <TouchableOpacity
+            style={styles.headerBoardButton}
+            disabled={isLoading}
+            onPress={onOpenBoardSelect}
+          >
+            <Text
+              style={textStyle()}
+              numberOfLines={1}
+            >
+              {sprint.agile.name}
+            </Text>
           </TouchableOpacity>
           <Image style={styles.headerSeparatorIcon} source={next}/>
           <TouchableOpacity
             style={[styles.headerBoardButton, styles.headerBoardNotCollapsibleButton]}
+            disabled={isLoading}
             onPress={onOpenSprintSelect}
           >
-            <Text style={styles.headerSprintText} numberOfLines={1}>{sprint.name}</Text>
+            <Text
+              style={textStyle(true)}
+              numberOfLines={1}
+            >
+              {sprint.name}
+            </Text>
           </TouchableOpacity>
         </View>}
       </Header>

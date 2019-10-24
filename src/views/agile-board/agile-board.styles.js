@@ -5,8 +5,14 @@ import {
   COLOR_FONT,
   COLOR_FONT_ON_BLACK,
   COLOR_TRANSPARENT_BLACK,
-  COLOR_BLACK
+  COLOR_BLACK,
+  COLOR_FONT_GRAY
 } from '../../components/variables/variables';
+
+const headerText = {
+  fontSize: 14,
+  color: COLOR_FONT_ON_BLACK
+};
 
 export default StyleSheet.create({
   container: {
@@ -24,13 +30,14 @@ export default StyleSheet.create({
     flexShrink: 0
   },
   headerBoardText: {
-    color: COLOR_FONT_ON_BLACK,
-    fontSize: 14
+    ...headerText
   },
   headerSprintText: {
-    fontSize: 14,
-    color: COLOR_FONT_ON_BLACK,
+    ...headerText,
     fontWeight: 'bold'
+  },
+  headerTextDisabled: {
+    color: COLOR_FONT_GRAY
   },
   headerSeparatorIcon: {
     alignSelf: 'center',
