@@ -286,7 +286,18 @@ export function openBoardSelect() {
       selectProps: {
         show: true,
         placeholder: 'Search for the board',
-        dataSource: () => api.agile.getAgileBoardsList(),
+        dataSource: async () => {
+          const agileBoardsList = await api.agile.getAgileBoardsList();
+          const boards = agileBoardsList.sort(sortByName).reduce((list, board) => {
+            if (board.favorite) {
+              list.favorites.push(board);
+            } else {
+              list.regular.push(board);
+            }
+            return list;
+          }, {favorites: [], regular: []});
+          return [].concat(boards.favorites).concat(boards.regular);
+        },
         selectedItems: sprint ? [sprint.agile] : [],
         onSelect: (selectedBoard: BoardOnList) => {
           dispatch(closeSelect());
@@ -295,6 +306,16 @@ export function openBoardSelect() {
         }
       }
     });
+
+    function sortByName(item1, item2) {
+      if (item1.name > item2.name) {
+        return 1;
+      }
+      if (item1.name < item2.name) {
+        return -1;
+      }
+      return 0;
+    }
   };
 }
 

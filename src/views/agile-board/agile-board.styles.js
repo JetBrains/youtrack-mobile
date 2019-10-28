@@ -35,6 +35,9 @@ export default StyleSheet.create({
   headerTextDisabled: {
     color: COLOR_FONT_GRAY
   },
+  headerIconDisabled: {
+    tintColor: COLOR_FONT_GRAY
+  },
   headerSelectIcon: {
     width: 9,
     marginLeft: UNIT / 2,

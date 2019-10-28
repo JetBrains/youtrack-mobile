@@ -145,7 +145,10 @@ class AgileBoard extends Component<Props, State> {
           >
             {text}
           </Text>
-          <Image source={arrowDownGray} style={styles.headerSelectIcon}/>
+          <Image source={arrowDownGray} style={[
+            styles.headerSelectIcon,
+            isLoading ? styles.headerIconDisabled : null
+          ]}/>
         </TouchableOpacity>
       );
     }

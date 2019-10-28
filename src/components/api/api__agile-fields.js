@@ -87,8 +87,8 @@ const BOARD = toField([
 const BOARD_ON_LIST = toField([
   'id',
   'name',
-  {sprints: ['id', 'name']},
-  {creator: ['id', 'fullName']}
+  'favorite',
+  {sprints: ['id', 'name']}
 ]);
 
 const SPRINT_WITH_BOARD = toField([
