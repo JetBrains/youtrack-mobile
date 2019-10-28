@@ -9,42 +9,39 @@ import {
   COLOR_FONT_GRAY
 } from '../../components/variables/variables';
 
-const headerText = {
-  fontSize: 14,
-  color: COLOR_FONT_ON_BLACK
-};
-
 export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLOR_FONT_ON_BLACK
   },
   headerContent: {
-    paddingTop: 3,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
   },
   headerBoardButton: {
-    flexShrink: 1
+    flexDirection: 'row',
+    flexShrink: 1,
+    justifyContent: 'center'
   },
   headerBoardNotCollapsibleButton: {
-    flexShrink: 0
+    marginLeft: UNIT * 2.5
   },
-  headerBoardText: {
-    ...headerText
-  },
-  headerSprintText: {
-    ...headerText,
-    fontWeight: 'bold'
+  headerText: {
+    fontSize: 17,
+    color: COLOR_FONT_ON_BLACK
   },
   headerTextDisabled: {
     color: COLOR_FONT_GRAY
   },
-  headerSeparatorIcon: {
-    alignSelf: 'center',
-    height: UNIT * 1.5,
+  headerSelectIcon: {
+    width: 9,
     marginLeft: UNIT / 2,
-    marginRight: UNIT / 2,
-    resizeMode: 'contain'
+    paddingRight: UNIT / 2,
+    alignSelf: 'center',
+    resizeMode: 'contain',
+    tintColor: COLOR_FONT_ON_BLACK
   },
   boardHeaderContainer: {
     overflow: 'hidden',

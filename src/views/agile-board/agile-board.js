@@ -16,7 +16,7 @@ import Auth from '../../components/auth/auth';
 import {Draggable, DragContainer} from '../../components/draggable/';
 import Api from '../../components/api/api';
 import {COLOR_PINK, AGILE_COLLAPSED_COLUMN_WIDTH} from '../../components/variables/variables';
-import {zoomIn, zoomOut, next} from '../../components/icon/icon';
+import {zoomIn, zoomOut, arrowDownGray} from '../../components/icon/icon';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
 import type {SprintFull, Board, AgileBoardRow, AgileColumn} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
@@ -24,8 +24,9 @@ import type {AgilePageState} from './board-reducers';
 
 import * as boardActions from './board-actions';
 import {openMenu} from '../../actions/app-actions';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 const CATEGORY_NAME = 'Agile board';
 
@@ -116,7 +117,7 @@ class AgileBoard extends Component<Props, State> {
     });
   };
 
-  _getScrollableWidth = (): number|null => {
+  _getScrollableWidth = (): number | null => {
     const {sprint} = this.props;
 
     if (!sprint || !sprint.board || !sprint.board.columns) { //YTM-835
@@ -129,44 +130,46 @@ class AgileBoard extends Component<Props, State> {
       .reduce((res, item) => res + item, 0);
   };
 
+  renderHeaderButton(text: ?string, onPress: () => any, buttonStyle: ViewStyleProp = null) {
+    if (text) {
+      const {isLoading} = this.props;
+      return (
+        <TouchableOpacity
+          style={[styles.headerBoardButton, buttonStyle]}
+          disabled={isLoading}
+          onPress={onPress}
+        >
+          <Text
+            style={[styles.headerText, isLoading ? styles.headerTextDisabled : null]}
+            numberOfLines={1}
+          >
+            {text}
+          </Text>
+          <Image source={arrowDownGray} style={styles.headerSelectIcon}/>
+        </TouchableOpacity>
+      );
+    }
+  }
+
   _renderHeader() {
-    const {sprint, onOpenSprintSelect, onOpenBoardSelect, isLoading} = this.props;
-    const textStyle = (isSprint: ?boolean) => [
-      isSprint ? styles.headerSprintText : styles.headerBoardText,
-      isLoading ? styles.headerTextDisabled : null
-    ];
+    const {sprint, onOpenSprintSelect, onOpenBoardSelect} = this.props;
 
     return (
       <Header
         leftButton={<Text>Menu</Text>}
         onBack={this.props.onOpenMenu}
       >
-        {sprint && <View style={styles.headerContent}>
-          <TouchableOpacity
-            style={styles.headerBoardButton}
-            disabled={isLoading}
-            onPress={onOpenBoardSelect}
-          >
-            <Text
-              style={textStyle()}
-              numberOfLines={1}
-            >
-              {sprint.agile.name}
-            </Text>
-          </TouchableOpacity>
-          <Image style={styles.headerSeparatorIcon} source={next}/>
-          <TouchableOpacity
-            style={[styles.headerBoardButton, styles.headerBoardNotCollapsibleButton]}
-            disabled={isLoading}
-            onPress={onOpenSprintSelect}
-          >
-            <Text
-              style={textStyle(true)}
-              numberOfLines={1}
-            >
-              {sprint.name}
-            </Text>
-          </TouchableOpacity>
+        {Boolean(sprint) && <View style={styles.headerContent}>
+          {this.renderHeaderButton(
+            sprint?.agile?.name,
+            onOpenBoardSelect
+          )}
+          {this.renderHeaderButton(
+            sprint?.name,
+            onOpenSprintSelect,
+            styles.headerBoardNotCollapsibleButton
+          )}
+
         </View>}
       </Header>
     );
@@ -330,7 +333,7 @@ class AgileBoard extends Component<Props, State> {
             <TouchableOpacity
               style={styles.zoomButton}
               onPress={this.toggleZoom}>
-              <Image source={zoomedIn ? zoomOut: zoomIn} style={styles.zoomButtonIcon}/>
+              <Image source={zoomedIn ? zoomOut : zoomIn} style={styles.zoomButtonIcon}/>
             </TouchableOpacity>
           </View>
 
