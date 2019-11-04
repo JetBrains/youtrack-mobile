@@ -1,7 +1,7 @@
 /* @flow */
 import * as types from './board-action-types';
 import {notifyError, notify} from '../../components/notification/notification';
-import type {AgileBoardRow, AgileColumn, BoardOnList, AgileUserProfile} from '../../flow/Agile';
+import type {AgileBoardRow, AgileColumn, BoardOnList, AgileUserProfile, Sprint, Board} from '../../flow/Agile';
 import type {IssueFull, IssueOnList} from '../../flow/Issue';
 import ServersideEvents from '../../components/api/api__serverside-events';
 import type Api from '../../components/api/api';
@@ -9,10 +9,12 @@ import Router from '../../components/router/router';
 import log from '../../components/log/log';
 import usage from '../../components/usage/usage';
 import {findIssueOnBoard} from './board-updaters';
-import {LayoutAnimation} from 'react-native';
 import {getGroupedSprints} from './agile-board__helper';
+import animation from '../../components/animation/animation';
 
-const PAGE_SIZE = 6;
+type ApiGetter = () => Api;
+
+export const PAGE_SIZE = 6;
 const CATEGORY_NAME = 'Agile board';
 const RECONNECT_TIMEOUT = 60000;
 let serverSideEventsInstance = null;
@@ -36,7 +38,48 @@ function noAgileSelected() {
   return {type: types.NO_AGILE_SELECTED};
 }
 
-type ApiGetter = () => Api;
+function track(msg: string, additionalParam: ?string) {
+  usage.trackEvent(CATEGORY_NAME, msg, additionalParam);
+}
+
+function trackError(msg: string) {
+  track(msg, 'Error');
+}
+
+function trackEvent(msg: string) {
+  track(msg);
+}
+
+function animateLayout() {
+  animation.layoutAnimation();
+}
+
+function getLastVisitedSprint(boardId: string, visitedSprints: ?Array<Sprint>): ?Sprint {
+  return boardId && (visitedSprints || []).find((sprint: Sprint) => sprint.agile.id === boardId);
+}
+
+function loadBoard(board: Board) {
+  return async (dispatch: (any) => any, getState: () => Object) => {
+    const agileUserProfile: AgileUserProfile = getState()?.agile?.profile;
+    let sprint: Sprint = getLastVisitedSprint(board.id, agileUserProfile?.visitedSprints);
+    if (!sprint) {
+      sprint = board.sprints.slice(-1)[0];
+      trackError('Cannot find last visited sprint');
+      log.info(`Last visited sprint is undefined. Use the last one of the current board.`);
+    }
+    log.info(`Loading: Board ${board.name}, Sprint = ${sprint.name}`);
+
+    dispatch(loadSprint(board.id, sprint.id));
+  };
+}
+
+function showManualBoardSelect() {
+  return async (dispatch: (any) => any) => {
+    log.info('Select board manually');
+    trackEvent('Select board manually');
+    dispatch(noAgileSelected());
+  };
+}
 
 function updateAgileUserProfile(sprintId) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
@@ -48,35 +91,26 @@ function updateAgileUserProfile(sprintId) {
   };
 }
 
-function loadSprint(agileId: string, sprintId: string) {
+export function loadSprint(agileId: string, sprintId: string) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
     dispatch(startSprintLoad());
     destroySSE();
     try {
       const sprint = await api.agile.getSprint(agileId, sprintId, PAGE_SIZE);
-      layoutAnimation();
+      animateLayout();
       dispatch(receiveSprint(sprint));
       dispatch(updateAgileUserProfile(sprint.id));
       dispatch(subscribeServersideUpdates());
       log.info(`Sprint ${sprintId} (agileBoardId="${agileId}") has been loaded`);
     } catch (e) {
-      usage.trackEvent(CATEGORY_NAME, 'Load sprint', 'Error');
-      //TODO(xi-eye): load last available
-      notifyError('Could not load sprint', e);
+      notify('Could not load requested sprint');
+      trackError('Load sprint');
+      log.info('Could not load requested sprint', e);
+      dispatch(showManualBoardSelect());
     } finally {
       dispatch(stopSprintLoad());
     }
-  };
-}
-
-function loadBoard(boardId: string, sprints: Array<{id: string}>) {
-  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
-    const profile = getState().agile.profile;
-    const visitedSprintOnBoard = (profile.visitedSprints || []).filter(s => s.agile.id === boardId)[0];
-    const targetSprint = visitedSprintOnBoard || sprints[sprints.length - 1];
-    log.info(`Resolving sprint for board ${boardId}. Visited = ${visitedSprintOnBoard ? visitedSprintOnBoard.id : 'NOTHING'}, target = ${targetSprint.id}`);
-    dispatch(loadSprint(boardId, targetSprint.id));
   };
 }
 
@@ -90,16 +124,20 @@ export function loadAgileProfile() {
   };
 }
 
-export function fetchDefaultAgileBoard() {
+export function loadDefaultAgileBoard() {
   return async (dispatch: (any) => any, getState: () => Object) => {
     await dispatch(loadAgileProfile());
-    try {
-      const profile = getState().agile.profile;
-      const lastSprint = profile.visitedSprints.filter(s => s.agile.id === profile.defaultAgile.id)[0];
-      lastSprint && dispatch(loadSprint(lastSprint.agile.id, lastSprint.id));
-    } catch (e) {
-      dispatch(noAgileSelected());
-      dispatch(stopSprintLoad());
+
+    const state = getState();
+    const agileUserProfile: AgileUserProfile = state?.agile?.profile;
+    const board: ?Board = agileUserProfile?.defaultAgile;
+
+    if (board) {
+      log.info('Loading Default Agile board', board?.name || board?.id);
+      dispatch(loadBoard(board));
+    } else {
+      trackError('Default board is unknown');
+      dispatch(showManualBoardSelect());
     }
   };
 }
@@ -164,7 +202,7 @@ export function fetchMoreSwimlanes() {
         sprint.board.trimmedSwimlanes.length);
       dispatch(receiveSwimlanes(swimlanes));
       log.info(`Loaded ${swimlanes.length} more swimlanes`);
-      usage.trackEvent(CATEGORY_NAME, 'Load more swimlanes');
+      trackEvent('Load more swimlanes');
     } catch (e) {
       notifyError('Could not load swimlanes', e);
     } finally {
@@ -174,7 +212,7 @@ export function fetchMoreSwimlanes() {
 }
 
 function updateRowCollapsedState(row, newCollapsed: boolean) {
-  layoutAnimation();
+  animateLayout();
   return {
     type: types.ROW_COLLAPSE_TOGGLE,
     row,
@@ -199,7 +237,7 @@ export function rowCollapseToggle(row: AgileBoardRow) {
         collapsed: !row.collapsed
       });
       log.info(`Collapse state successfully updated for row ${row.id}, new state = ${!row.collapsed}`);
-      usage.trackEvent(CATEGORY_NAME, 'Toggle row collapsing');
+      trackEvent('Toggle row collapsing');
     } catch (e) {
       dispatch(updateRowCollapsedState(row, oldCollapsed));
       notifyError('Could not update row', e);
@@ -208,7 +246,7 @@ export function rowCollapseToggle(row: AgileBoardRow) {
 }
 
 function updateColumnCollapsedState(column, newCollapsed: boolean) {
-  layoutAnimation();
+  animateLayout();
   return {
     type: types.COLUMN_COLLAPSE_TOGGLE,
     column,
@@ -233,7 +271,7 @@ export function columnCollapseToggle(column: AgileColumn) {
         collapsed: !column.collapsed
       });
       log.info(`Collapse state successfully updated for column ${column.id}, new state = ${!column.collapsed}`);
-      usage.trackEvent(CATEGORY_NAME, 'Toggle column collapsing');
+      trackEvent('Toggle column collapsing');
     } catch (e) {
       dispatch(updateColumnCollapsedState(column, oldCollapsed));
       notifyError('Could not update column', e);
@@ -252,7 +290,7 @@ export function openSprintSelect() {
     if (!sprint) {
       return;
     }
-    usage.trackEvent(CATEGORY_NAME, 'Open sprint select');
+    trackEvent('Open sprint select');
 
     dispatch({
       type: types.OPEN_AGILE_SELECT,
@@ -268,7 +306,7 @@ export function openSprintSelect() {
         onSelect: selectedSprint => {
           dispatch(closeSelect());
           dispatch(loadSprint(sprint.agile.id, selectedSprint.id));
-          usage.trackEvent(CATEGORY_NAME, 'Change sprint');
+          trackEvent('Change sprint');
         }
       }
     });
@@ -279,7 +317,7 @@ export function openBoardSelect() {
   return (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {sprint} = getState().agile;
-    usage.trackEvent(CATEGORY_NAME, 'Open board select');
+    trackEvent('Open board select');
 
     dispatch({
       type: types.OPEN_AGILE_SELECT,
@@ -288,21 +326,27 @@ export function openBoardSelect() {
         placeholder: 'Search for the board',
         dataSource: async () => {
           const agileBoardsList = await api.agile.getAgileBoardsList();
-          const boards = agileBoardsList.sort(sortByName).reduce((list, board) => {
-            if (board.favorite) {
-              list.favorites.push(board);
-            } else {
-              list.regular.push(board);
+          const boards = agileBoardsList.sort(sortByName).reduce(
+            (list, board) => {
+              if (board.favorite) {
+                list.favorites.push(board);
+              } else {
+                list.regular.push(board);
+              }
+              return list;
+            },
+            {
+              favorites: [],
+              regular: []
             }
-            return list;
-          }, {favorites: [], regular: []});
+          );
           return [].concat(boards.favorites).concat(boards.regular);
         },
         selectedItems: sprint ? [sprint.agile] : [],
         onSelect: (selectedBoard: BoardOnList) => {
           dispatch(closeSelect());
-          dispatch(loadBoard(selectedBoard.id, selectedBoard.sprints));
-          usage.trackEvent(CATEGORY_NAME, 'Change board');
+          dispatch(loadBoard(selectedBoard));
+          trackEvent('Change board');
         }
       }
     });
@@ -367,7 +411,7 @@ export function createCardForCell(columnId: string, cellId: string) {
       const draft = await api.agile.getIssueDraftForAgileCell(sprint.agile.id, sprint.id, columnId, cellId);
       dispatch(storeCreatingIssueDraft(draft.id, cellId));
       Router.CreateIssue({predefinedDraftId: draft.id});
-      usage.trackEvent(CATEGORY_NAME, 'Open create card for cell');
+      trackEvent('Open create card for cell');
     } catch (err) {
       notifyError('Could not create card', err);
     }
@@ -390,22 +434,22 @@ export function subscribeServersideUpdates() {
     });
 
     serverSideEventsInstance.listenTo('sprintCellUpdate', data => {
-      layoutAnimation();
+      animateLayout();
       dispatch(addOrUpdateCellOnBoard(data.issue, data.row.id, data.column.id));
     });
 
     serverSideEventsInstance.listenTo('sprintSwimlaneUpdate', data => {
-      layoutAnimation();
+      animateLayout();
       dispatch(updateSwimlane(data.swimlane));
     });
 
     serverSideEventsInstance.listenTo('sprintIssueRemove', data => {
-      layoutAnimation();
+      animateLayout();
       dispatch(removeIssueFromBoard(data.removedIssue.id));
     });
 
     serverSideEventsInstance.listenTo('sprintIssueHide', data => {
-      layoutAnimation();
+      animateLayout();
       dispatch(removeIssueFromBoard(data.removedIssue.id));
     });
 
@@ -414,7 +458,7 @@ export function subscribeServersideUpdates() {
     });
 
     serverSideEventsInstance.listenTo('sprintIssuesReorder', data => {
-      layoutAnimation();
+      animateLayout();
       data.reorders.forEach(function (reorder) {
         const leadingId = reorder.leading ? reorder.leading.id : null;
         dispatch(reorderSwimlanesOrCells(leadingId, reorder.moved.id));
@@ -448,7 +492,7 @@ export function onCardDrop(data: { columnId: string, cellId: string, leadingId: 
 
     try {
       log.info(`Applying issue move: movedId="${data.movedId}", cellId="${data.cellId}", leadingId="${data.leadingId || ''}"`);
-      layoutAnimation();
+      animateLayout();
       dispatch(moveIssue(data.movedId, data.cellId, data.leadingId));
 
       await api.agile.updateCardPosition(
@@ -460,21 +504,10 @@ export function onCardDrop(data: { columnId: string, cellId: string, leadingId: 
         data.movedId
       );
 
-      usage.trackEvent(CATEGORY_NAME, 'Card drop');
+      trackEvent('Card drop');
     } catch (err) {
       dispatch(moveIssue(data.movedId, issueOnBoard.cell.id, currentLeading?.id));
       notifyError('Could not move card', err);
     }
   };
-}
-
-function layoutAnimation() { //https://github.com/facebook/react-native/issues/13984
-  if (!layoutAnimation.layoutAnimationActive) {
-    layoutAnimation.layoutAnimationActive = true;
-    const effect = LayoutAnimation.Presets.easeInEaseOut;
-    effect && LayoutAnimation.configureNext(
-      effect,
-      () => { layoutAnimation.layoutAnimationActive = null; }
-    );
-  }
 }

@@ -6,7 +6,8 @@ export type Sprint = {
   goal: ?string,
   archived: boolean,
   start: ?number,
-  finish: ?number
+  finish: ?number,
+  agile: ?Board
 };
 
 export type AgileUserProfile = {
@@ -61,7 +62,8 @@ export type Board = {
   name: string,
   columns: Array<BoardColumn>,
   orphanRow: AgileBoardRow,
-  trimmedSwimlanes: Array<AgileBoardRow>
+  trimmedSwimlanes: Array<AgileBoardRow>,
+  sprints: Array<Sprint>
 };
 
 export type BoardOnList = {

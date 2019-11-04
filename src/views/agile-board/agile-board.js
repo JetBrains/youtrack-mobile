@@ -357,7 +357,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onLoadBoard: () => dispatch(boardActions.fetchDefaultAgileBoard()),
+    onLoadBoard: () => dispatch(boardActions.loadDefaultAgileBoard()),
     onLoadMoreSwimlanes: () => dispatch(boardActions.fetchMoreSwimlanes()),
     onRowCollapseToggle: (row) => dispatch(boardActions.rowCollapseToggle(row)),
     onColumnCollapseToggle: (column) => dispatch(boardActions.columnCollapseToggle(column)),
