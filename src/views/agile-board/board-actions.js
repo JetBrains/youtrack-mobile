@@ -58,9 +58,17 @@ function getLastVisitedSprint(boardId: string, visitedSprints: ?Array<Sprint>): 
   return boardId && (visitedSprints || []).find((sprint: Sprint) => sprint.agile.id === boardId);
 }
 
-function loadBoard(board: Board) {
+export function getAgileUserProfile(): AgileUserProfile | {} {
   return async (dispatch: (any) => any, getState: () => Object) => {
-    const agileUserProfile: AgileUserProfile = getState()?.agile?.profile;
+    const state = getState();
+    return state?.agile?.profile || {};
+  };
+}
+
+function loadBoard(board: Board) {
+  return async (dispatch: (any) => any) => {
+    const agileUserProfile: AgileUserProfile = await dispatch(getAgileUserProfile());
+
     let sprint: Sprint = getLastVisitedSprint(board.id, agileUserProfile?.visitedSprints);
     if (!sprint) {
       sprint = board.sprints.slice(-1)[0];
@@ -125,11 +133,10 @@ export function loadAgileProfile() {
 }
 
 export function loadDefaultAgileBoard() {
-  return async (dispatch: (any) => any, getState: () => Object) => {
+  return async (dispatch: (any) => any) => {
     await dispatch(loadAgileProfile());
 
-    const state = getState();
-    const agileUserProfile: AgileUserProfile = state?.agile?.profile;
+    const agileUserProfile: AgileUserProfile = await dispatch(getAgileUserProfile());
     const board: ?Board = agileUserProfile?.defaultAgile;
 
     if (board) {

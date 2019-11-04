@@ -10,7 +10,7 @@ import type {AgileUserProfile, Board, Sprint} from '../../flow/Agile';
 
 let apiMock;
 let store;
-let agileProfileMock: AgileUserProfile;
+let agileUserProfileMock: AgileUserProfile;
 let agileMock: Board;
 let sprintMock: Sprint;
 let storeActions;
@@ -32,7 +32,7 @@ describe('Agile board async actions', () => {
     ]);
     agileMock = sprintMock.agile;
 
-    agileProfileMock = {
+    agileUserProfileMock = {
       defaultAgile: agileMock,
       visitedSprints: [
         createSprintMock('baz'),
@@ -44,12 +44,12 @@ describe('Agile board async actions', () => {
     apiMock = {
       agile: {
         getSprint: jest.fn(() => sprintMock),
-        getAgileUserProfile: jest.fn(() => agileProfileMock),
+        getAgileUserProfile: jest.fn(() => agileUserProfileMock),
         updateAgileUserProfile: jest.fn(() => sprintMock)
       }
     };
 
-    updateStore({agile: {profile: agileProfileMock}});
+    updateStore({agile: {profile: agileUserProfileMock}});
   });
 
 
@@ -61,7 +61,7 @@ describe('Agile board async actions', () => {
 
       expect(storeActions[0]).toEqual({
         type: types.RECEIVE_AGILE_PROFILE,
-        profile: agileProfileMock
+        profile: agileUserProfileMock
       });
     });
 
@@ -167,7 +167,31 @@ describe('Agile board async actions', () => {
       });
     });
   });
+
+
+  describe('getAgileUserProfile', () => {
+    const NULL_AGILE_STATE = {};
+    it('should return Agile user profile', async () => {
+      const agileUserProfile = await store.dispatch(actions.getAgileUserProfile());
+      expect(agileUserProfile).toEqual(agileUserProfileMock);
+    });
+
+    it('should not throw if agile profile is missing in a store', async () => {
+      updateStore({
+        agile: {profile: null}
+      });
+      const agileUserProfile = await store.dispatch(actions.getAgileUserProfile());
+      expect(agileUserProfile).toEqual(NULL_AGILE_STATE);
+    });
+
+    it('should not throw if agile is missing in a store', async () => {
+      updateStore({});
+      const agileUserProfile = await store.dispatch(actions.getAgileUserProfile());
+      expect(agileUserProfile).toEqual(NULL_AGILE_STATE);
+    });
+  });
 });
+
 
 async function setLoadSprintExpectation(sprintId: ?string, agileId: ?string) {
   await store.dispatch(actions.loadSprint(
