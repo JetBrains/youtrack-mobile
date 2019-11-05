@@ -92,10 +92,14 @@ export default class Diff extends PureComponent<Props, State> {
     return (
       <View testID="diff">
         {title && <TouchableOpacity
+          style={styles.button}
           testID="diffToggle"
           onPress={() => this.setState({collapsed: !collapsed})}>
           <Text style={styles.title}>
-            {`${title} `}
+            {`${title}: `}
+          </Text>
+          <Text style={styles.toggle}>
+            {'Details '}
             <Image source={arrowDownGray} style={[styles.icon, !collapsed && styles.iconCollapse]}/>
           </Text>
         </TouchableOpacity>}
