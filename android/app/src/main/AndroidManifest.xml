@@ -9,9 +9,7 @@
     <uses-feature android:name="android.hardware.camera" android:required="false"/>
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
 
-    <uses-sdk
-      android:minSdkVersion="16"
-      android:targetSdkVersion="22"/>
+    <uses-sdk android:targetSdkVersion="22"/>
 
     <application
       android:name=".MainApplication"

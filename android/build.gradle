@@ -7,6 +7,10 @@ buildscript {
       compileSdkVersion = 28
       targetSdkVersion = 28
       supportLibVersion = "28.0.0"
+
+      //Fix for `Manifest merger failed` related to AndroidX
+      firebaseVersion = "17.6.0"
+      googlePlayServicesVersion = "16.+"
     }
     repositories {
         jcenter()
