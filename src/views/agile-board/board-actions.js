@@ -67,6 +67,7 @@ export function getAgileUserProfile(): AgileUserProfile | {} {
 
 function loadBoard(board: Board) {
   return async (dispatch: (any) => any) => {
+    destroySSE();
     const agileUserProfile: AgileUserProfile = await dispatch(getAgileUserProfile());
 
     let sprint: Sprint = getLastVisitedSprint(board.id, agileUserProfile?.visitedSprints);
@@ -171,10 +172,10 @@ function setSSEInstance(sseInstance) {
 
 function destroySSE() {
   if (serverSideEventsInstance) {
-    log.info('Destroying SSE');
+    log.info('Force close SSE');
     serverSideEventsInstance.close();
+    setSSEInstance(null);
   }
-  setSSEInstance(null);
 }
 
 function removeIssueFromBoard(issueId: string) {

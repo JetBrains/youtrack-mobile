@@ -27,12 +27,7 @@ export default class ServersideEvents {
 
     this.eventSource.addEventListener('open', () => log.info('SSE connection opened'));
 
-    this.eventSource.addEventListener('error', (event) => {
-      if (event?.target?.readyState !== this.eventSource?.CLOSED) {
-        this.close();
-      }
-      return log.info('SSE connection closed', event);
-    });
+    this.eventSource.addEventListener('error', () => log.info('SSE connection closed'));
 
     this.eventSource.addEventListener('ping', () => this.lastPing = new Date());
   }
@@ -50,7 +45,9 @@ export default class ServersideEvents {
   }
 
   close() {
-    // this.eventSource.removeAllListeners();
+    if (this.eventSource._unregisterEvents) {
+      this.eventSource._unregisterEvents();
+    }
     this.eventSource.close();
   }
 }
