@@ -75,7 +75,7 @@ export default StyleSheet.create({
     marginLeft: 0
   },
   userInfo: {
-    marginTop: UNIT * 2,
+    marginTop: UNIT,
     paddingTop: UNIT * 1.5,
     borderTopColor: COLOR_MEDIUM_GRAY,
     borderTopWidth: 1

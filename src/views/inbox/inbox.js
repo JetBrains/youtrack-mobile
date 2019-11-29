@@ -325,15 +325,17 @@ class Inbox extends Component<Props, void> {
     }
 
     return (
-      <TouchableOpacity style={styles.notification} onPress={onPress}>
-        <View style={styles.header}>
-          <Text numberOfLines={2} style={styles.summary}>{metadata.issue.summary}</Text>
-          <Image style={styles.arrowImage} source={next}/>
-        </View>
+      <View style={styles.notification}>
+        <TouchableOpacity onPress={onPress}>
+          <View style={styles.header}>
+            <Text numberOfLines={2} style={styles.summary}>{metadata.issue.summary}</Text>
+            <Image style={styles.arrowImage} source={next}/>
+          </View>
 
-        <View style={styles.subHeader}>
-          <Text style={styles.issueId}>{metadata.issue.id}</Text>
-        </View>
+          <View style={styles.subHeader}>
+            <Text style={styles.issueId}>{metadata.issue.id}</Text>
+          </View>
+        </TouchableOpacity>
 
         <UserInfo style={styles.userInfo} user={sender} timestamp={metadata?.change?.endTimestamp}/>
 
@@ -342,7 +344,7 @@ class Inbox extends Component<Props, void> {
         </View>)}
 
         {this.renderNotificationReason(metadata)}
-      </TouchableOpacity>
+      </View>
     );
   }
 
