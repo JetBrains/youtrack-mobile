@@ -1,9 +1,9 @@
 /* @flow */
 
 import React, {PureComponent} from 'react';
-import {View, Text, TouchableOpacity, Image} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 import DiffMatchWord from './diff__match-word';
-import {arrowDownGray} from '../icon/icon';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import styles from './diff.styles';
 
@@ -100,7 +100,7 @@ export default class Diff extends PureComponent<Props, State> {
           </Text>
           <Text style={styles.toggle}>
             {'Details '}
-            <Image source={arrowDownGray} style={[styles.icon, !collapsed && styles.iconCollapse]}/>
+            <Icon name={collapsed ? 'angle-down' : 'angle-up'} />
           </Text>
         </TouchableOpacity>}
 

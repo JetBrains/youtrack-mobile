@@ -1,5 +1,5 @@
 /* @flow */
-import {FlatList, Image, View, Text, RefreshControl, TouchableOpacity} from 'react-native';
+import {FlatList, View, Text, RefreshControl, TouchableOpacity} from 'react-native';
 import React, {Component} from 'react';
 
 import styles from './inbox.styles';
@@ -10,10 +10,9 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as inboxActions from './inbox-actions';
 import Router from '../../components/router/router';
-import {next} from '../../components/icon/icon';
 import {openMenu} from '../../actions/app-actions';
 import Menu from '../../components/menu/menu';
-import {COLOR_PINK} from '../../components/variables/variables';
+import {COLOR_PINK, COLOR_ICON_MEDIUM_GREY} from '../../components/variables/variables';
 import log from '../../components/log/log';
 import {handleRelativeUrl} from '../../components/config/config';
 import {getStorageState} from '../../components/storage/storage';
@@ -21,6 +20,7 @@ import UserInfo from '../../components/user/user-info';
 import Diff from '../../components/diff/diff';
 import Wiki from '../../components/wiki/wiki';
 import CustomFieldChangeDelimiter from '../../components/custom-field/custom-field__change-delimiter';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import type {InboxState} from './inbox-reducers';
 import type {User} from '../../flow/User';
@@ -329,7 +329,7 @@ class Inbox extends Component<Props, void> {
         <TouchableOpacity onPress={onPress}>
           <View style={styles.header}>
             <Text numberOfLines={2} style={styles.summary}>{metadata.issue.summary}</Text>
-            <Image style={styles.arrowImage} source={next}/>
+            <Icon name="angle-right" size={22} color={COLOR_ICON_MEDIUM_GREY}/>
           </View>
 
           <View style={styles.subHeader}>

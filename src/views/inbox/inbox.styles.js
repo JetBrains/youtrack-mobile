@@ -29,12 +29,6 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: COLOR_EXTRA_LIGHT_GRAY
   },
-  arrowImage: {
-    marginTop: UNIT / 2,
-    height: 14,
-    resizeMode: 'contain',
-    tintColor: COLOR_ICON_MEDIUM_GREY
-  },
   notification: {
     marginBottom: UNIT * 2,
     padding: UNIT * 2,
