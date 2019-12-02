@@ -53,7 +53,7 @@ export default class IssueToolbar extends PureComponent<Props, void> {
         {canAttach && <TouchableOpacity style={styles.toolbarButton} onPress={onAttach}>
           <View>
             <MaterialIcon name="paperclip" size={24} color={COLOR_ICON_MEDIUM_GREY}/>
-            <Text style={[styles.counter, styles.counterAttach]}>{attachesCount}</Text>
+            <Text style={styles.counter}>{attachesCount}</Text>
           </View>
         </TouchableOpacity>}
 

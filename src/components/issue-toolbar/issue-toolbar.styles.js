@@ -28,8 +28,5 @@ export default StyleSheet.create({
     fontSize: 14,
     backgroundColor: 'transparent',
     color: COLOR_FONT_GRAY
-  },
-  counterAttach: {
-    right: -7,
   }
 });
