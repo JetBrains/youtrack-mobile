@@ -1,13 +1,12 @@
 /* @flow */
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, Image} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 
 import type {IssueOnList} from '../../flow/Issue';
 import type {BundleValue} from '../../flow/CustomFields';
 
 import ColorField from '../../components/color-field/color-field';
 import Tags from '../../components/tags/tags';
-import {next} from '../../components/icon/icon';
 import {getPriotityField, getForText, getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
 
 import styles from './issue-list.styles';
@@ -68,7 +67,6 @@ export default class IssueRow extends Component<Props, void> {
                 testID="issue-row-summary">
                 {issue.summary}
               </Text>
-              <Image style={styles.arrowImage} source={next}/>
             </View>
 
             <Text

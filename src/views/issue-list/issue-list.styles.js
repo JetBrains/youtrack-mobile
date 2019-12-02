@@ -47,11 +47,6 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
-  arrowImage: {
-    marginTop: 4,
-    height: 14,
-    resizeMode: 'contain'
-  },
   separator: {
     height: 0.5,
     marginLeft: 40,
