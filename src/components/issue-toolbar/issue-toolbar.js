@@ -1,9 +1,10 @@
 /* @flow */
-import {View, Text, TouchableOpacity, Image} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 import React, {PureComponent} from 'react';
-import {star, starInactive, pencilInactive, vote, voteInactive, attachInactive} from '../icon/icon';
 import styles from './issue-toolbar.styles';
 import {View as AnimatedView} from 'react-native-animatable';
+import {COLOR_ICON_MEDIUM_GREY, COLOR_PINK} from '../variables/variables';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const SHOW_ANIMATION_TIME = 200;
 
@@ -45,27 +46,27 @@ export default class IssueToolbar extends PureComponent<Props, void> {
       >
         {canStar && <TouchableOpacity style={styles.toolbarButton} onPress={() => onStarToggle(!starred)}>
           <View>
-            <Image source={starred ? star : starInactive} style={styles.toolbarIcon}/>
+            <MaterialIcon name="star-outline" size={25} color={starred ? COLOR_PINK : COLOR_ICON_MEDIUM_GREY}/>
           </View>
         </TouchableOpacity>}
 
         {canAttach && <TouchableOpacity style={styles.toolbarButton} onPress={onAttach}>
           <View>
-            <Image source={attachInactive} style={styles.toolbarIcon}/>
-            <Text style={styles.counter}>{attachesCount}</Text>
+            <MaterialIcon name="paperclip" size={24} color={COLOR_ICON_MEDIUM_GREY}/>
+            <Text style={[styles.counter, styles.counterAttach]}>{attachesCount}</Text>
           </View>
         </TouchableOpacity>}
 
         {canVote && <TouchableOpacity style={styles.toolbarButton} onPress={() => onVoteToggle(!voted)}>
           <View>
-            <Image source={voted ? vote : voteInactive} style={styles.toolbarIcon}/>
+            <MaterialIcon name="thumb-up-outline" size={25} color={voted ? COLOR_PINK : COLOR_ICON_MEDIUM_GREY}/>
             <Text style={styles.counter}>{votes}</Text>
           </View>
         </TouchableOpacity>}
 
         {canEdit && <TouchableOpacity style={styles.toolbarButton} onPress={onEdit}>
           <View>
-            <Image source={pencilInactive} style={styles.toolbarIcon}/>
+            <MaterialIcon name="pencil-outline" size={25} color={COLOR_ICON_MEDIUM_GREY}/>
           </View>
         </TouchableOpacity>}
       </AnimatedView>

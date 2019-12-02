@@ -55,4 +55,8 @@ export default StyleSheet.create({
     height: 14,
     resizeMode: 'contain',
     tintColor: COLOR_ICON_MEDIUM_GREY
-  }});
+  },
+  arrowIcon: {
+    lineHeight: 22
+  }
+});

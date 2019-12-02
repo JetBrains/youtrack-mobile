@@ -1,14 +1,16 @@
 /* @flow */
 
-import {View, TouchableOpacity, Image} from 'react-native';
+import {View, TouchableOpacity, Text} from 'react-native';
 import React, {PureComponent} from 'react';
 
 import ModalView from '../modal-view/modal-view';
-import {closeOpaque, next} from '../icon/icon';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import styles from './line-block.styles';
 
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import {COLOR_GRAY} from '../variables/variables';
 
 type Props = {
   inline?: boolean,
@@ -57,7 +59,7 @@ export default class LineBlock extends PureComponent<Props, State> {
           style={styles.showMore}
           onPress={onShowAllToggle}
         >
-          <Image style={styles.showMoreIcon} source={next}/>
+          <Text style={styles.arrowIcon}><Icon name="angle-right" size={24} color={COLOR_GRAY}/></Text>
         </TouchableOpacity>}
 
         {this.state.showMore &&
@@ -72,7 +74,7 @@ export default class LineBlock extends PureComponent<Props, State> {
             onPress={onShowAllToggle}
             hitSlop={this.hitSlop}
           >
-            <Image style={styles.closeIcon} source={closeOpaque}/>
+            <MaterialIcon name="close" size={40} color={COLOR_GRAY}/>
           </TouchableOpacity>
         </ModalView>}
 

@@ -44,20 +44,20 @@ exports[`<LineBlock/> Render should match a snapshot 1`] = `
     }
     testID="lineBlockMore"
   >
-    <Image
-      source={
-        Object {
-          "testUri": "../../../src/components/icon/next.png",
-        }
-      }
+    <Text
       style={
         Object {
-          "height": 14,
-          "resizeMode": "contain",
-          "tintColor": "#737577",
+          "lineHeight": 22,
         }
       }
-    />
+    >
+      <Icon
+        allowFontScaling={false}
+        color="#CCC"
+        name="angle-right"
+        size={24}
+      />
+    </Text>
   </TouchableOpacity>
 </View>
 `;
