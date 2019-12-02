@@ -2,6 +2,12 @@ apply plugin: "com.android.application"
 apply from: 'versioning.gradle'
 apply plugin: 'com.bugsnag.android.gradle'
 
+project.ext.vectoricons = [
+    iconFontNames: [ 'MaterialCommunity.ttf', 'FontAwesome.ttf' ]
+]
+
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+
 import com.android.build.OutputFile
 
 /**
