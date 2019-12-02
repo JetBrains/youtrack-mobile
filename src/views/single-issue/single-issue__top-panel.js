@@ -1,10 +1,11 @@
 /* @flow */
 
-import {View, Text, TouchableOpacity, Image} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 import React, {PureComponent} from 'react';
 
 import {formatDate, shortRelativeDate, getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
-import {next} from '../../components/icon/icon';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {COLOR_FONT_GRAY} from '../../components/variables/variables';
 
 import styles from './single-issue.styles';
 
@@ -54,7 +55,8 @@ export default class TopPanel extends PureComponent<Props, State> {
             >
               Created by {this._getUserName(reporter)} {this._getDate(created, true)}
             </Text>
-            {!showAdditionalDate && <Image style={styles.issueTopPanelMoreIcon} source={next}/>}
+            <Text>{' '}</Text>
+            <Icon name={showAdditionalDate ? 'angle-up' : 'angle-down'} color={COLOR_FONT_GRAY}/>
           </Text>
 
           {showAdditionalDate && <Text style={styles.issueTopPanelText}>{this._getDate(created)}</Text>}
