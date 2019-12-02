@@ -37,10 +37,10 @@ type Props = InboxState & typeof inboxActions & AdditionalProps;
 
 class Inbox extends Component<Props, void> {
   static notificationReasons = {
-    mentionReasons: 'You are mentioned',
-    tagReasons: 'Enabled notifications for tags',
-    savedSearchReasons: 'Enabled notifications for saved searches',
-    workflow: 'Workflow notification'
+    mentionReasons: 'Mention',
+    tagReasons: '',
+    savedSearchReasons: '',
+    workflow: 'Workflow'
   };
   config: AppConfigFilled;
 
@@ -294,11 +294,10 @@ class Inbox extends Component<Props, void> {
   renderNotificationReason(metadata: Metadata) {
     const _reasons = Object.keys(metadata.reason).reduce((reasons, key) => {
       if (metadata.reason[key].length) {
-        const isMention = key === Inbox.notificationReasons.mentionReasons;
         return reasons.concat(
           {
             title: Inbox.notificationReasons[key] ? `${Inbox.notificationReasons[key]} ` : '',
-            value: isMention ? '' : metadata.reason[key].map((it: Object) => it.name).join(', ')
+            value: metadata.reason[key].map((it: Object) => it.name).join(', ')
           }
         );
       }
@@ -308,7 +307,7 @@ class Inbox extends Component<Props, void> {
     if (_reasons && _reasons.length) {
       return <View>
         <Text style={styles.reason}>
-          {_reasons.map((it) => it.title + it.value).join('. ')}
+          {_reasons.map((it) => it.title + it.value).join(', ')}
         </Text>
       </View>;
     }
