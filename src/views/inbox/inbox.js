@@ -12,7 +12,7 @@ import * as inboxActions from './inbox-actions';
 import Router from '../../components/router/router';
 import {openMenu} from '../../actions/app-actions';
 import Menu from '../../components/menu/menu';
-import {COLOR_PINK, COLOR_ICON_MEDIUM_GREY} from '../../components/variables/variables';
+import {COLOR_PINK, COLOR_GRAY} from '../../components/variables/variables';
 import log from '../../components/log/log';
 import {handleRelativeUrl} from '../../components/config/config';
 import {getStorageState} from '../../components/storage/storage';
@@ -329,7 +329,7 @@ class Inbox extends Component<Props, void> {
         <TouchableOpacity onPress={onPress}>
           <View style={styles.header}>
             <Text numberOfLines={2} style={styles.summary}>{metadata.issue.summary}</Text>
-            <Icon name="angle-right" size={22} color={COLOR_ICON_MEDIUM_GREY}/>
+            <Text style={styles.arrowImage}><Icon name="angle-right" size={24} color={COLOR_GRAY}/></Text>
           </View>
 
           <View style={styles.subHeader}>

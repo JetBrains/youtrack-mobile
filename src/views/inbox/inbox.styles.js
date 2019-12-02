@@ -29,6 +29,9 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: COLOR_EXTRA_LIGHT_GRAY
   },
+  arrowImage: {
+    lineHeight: 22
+  },
   notification: {
     marginBottom: UNIT * 2,
     padding: UNIT * 2,
