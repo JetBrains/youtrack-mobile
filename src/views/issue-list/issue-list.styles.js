@@ -49,7 +49,7 @@ export default StyleSheet.create({
   },
   separator: {
     height: 0.5,
-    marginLeft: 40,
+    marginLeft: UNIT * 2,
     backgroundColor: COLOR_GRAY
   },
   summary: {
