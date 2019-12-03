@@ -3,7 +3,7 @@ apply from: 'versioning.gradle'
 apply plugin: 'com.bugsnag.android.gradle'
 
 project.ext.vectoricons = [
-    iconFontNames: [ 'MaterialCommunity.ttf', 'FontAwesome.ttf' ]
+    iconFontNames: [ 'MaterialCommunityIcons.ttf', 'FontAwesome.ttf' ]
 ]
 
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
@@ -170,6 +170,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-svg')
     implementation project(':react-native-vector-icons')
     implementation project(':bugsnag-react-native')
     implementation project(':react-native-gesture-handler')
