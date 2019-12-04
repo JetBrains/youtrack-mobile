@@ -144,6 +144,7 @@
     "react-native-notifications": "1.1.19",
     "react-native-root-modal": "git://github.com/huston007/react-native-root-modal.git#9cbd951",
     "react-native-safe-area-view": "0.14.6",
+    "react-native-svg": "^9.13.3",
     "react-native-swipeout": "2.3.6",
     "react-native-swiper": "git://github.com/huston007/react-native-swiper.git#64c5681",
     "react-native-syntax-highlighter": "1.2.6",

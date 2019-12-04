@@ -1,18 +1,18 @@
 /* @flow */
 import React from 'react';
-import {Text, Image, Dimensions, Platform} from 'react-native';
+import {Text, Image, Platform} from 'react-native';
 import SyntaxHighlighter from 'react-native-syntax-highlighter';
 import {codeHighlightStyle} from './code-highlight-styles';
 import entities from 'entities';
 import {COLOR_GRAY, COLOR_LIGHT_GRAY} from '../variables/variables';
-import {handleRelativeUrl} from '../config/config';
-import {getStorageState} from '../storage/storage';
 import styles from './wiki.styles';
 import Router from '../router/router';
 import {showMoreText} from '../text-view/text-view';
+import type {Attachment} from '../../flow/CustomFields';
+import {hasMimeType} from '../mime-type/mime-type';
+import {SvgFromUri} from 'react-native-svg';
 
-const IMAGE_WIDTH = Math.floor(Dimensions.get('window').width - 32);
-const IMAGE_HEIGHT = 200;
+const IMAGE_SIZE = 200;
 
 
 export function renderCode(node: { children: any }, index: number, title?: string, language?: string) {
@@ -57,43 +57,74 @@ export function renderCode(node: { children: any }, index: number, title?: strin
 type RenderImageOptions = {
   node: Object,
   index: number,
-  attachments: Array<Object>,
+  attachments: Array<Attachment>,
   imageHeaders: ?Object,
   onImagePress: string => any
 }
 
+function getUrlParams(url): Object {
+  const urlParams = url.split('?')[1];
+  return (
+    urlParams
+      ? urlParams.split('&').map(keyValue => keyValue.split('=')).reduce((params, [key, value]) => {
+        params[key] = value;
+        return params;
+      }, {})
+      : {file: url}
+  );
+}
+
+function findTargetAttach(src: string, attachments: Array<Attachment>): ?Object {
+  let attachId: string;
+  let targetAttach: Attachment;
+  const urlFileParam = getUrlParams(src).file;
+
+  if (urlFileParam) {
+    attachId = urlFileParam;
+    targetAttach = attachments.find(attach => getUrlParams(attach.url).file === attachId) || {};
+  } else {
+    attachId = src.split('?')[0].split('/').pop();
+    targetAttach = attachments.find(it => it.id === attachId) || {};
+  }
+  return targetAttach;
+}
+
 export function renderImage({node, index, attachments, imageHeaders, onImagePress}: RenderImageOptions) {
-  let src = node.attribs.src || '';
+  const targetAttach: Attachment = findTargetAttach(node.attribs.src || '', attachments);
 
-  const targetAttach = attachments.filter(it => src.indexOf(it.url) !== -1)[0] || {};
-  src = targetAttach.url || src;
+  if (!targetAttach) {
+    return null;
+  }
 
-  const imgStyle = {
-    width: IMAGE_WIDTH,
-    height: IMAGE_HEIGHT,
-    resizeMode: 'contain'
-  };
-  const source = {
-    uri: createUrl(),
-    headers: imageHeaders
-  };
+  const source = Object.assign({uri: targetAttach.url, headers: imageHeaders}, targetAttach);
+  const isSvg = hasMimeType.svg(source);
+  const isImage = hasMimeType.image(source);
 
   return (
-    <Text onPress={() => onImagePress(source.uri)} key={index}>
-      <Image
-        source={source}
-        style={imgStyle}
-      />
+    <Text
+      onPress={() => onImagePress(source.url)}
+      key={`wiki-image-${index}`}
+    >
+      {isSvg && (
+        <SvgFromUri
+          width="100%"
+          height="100%"
+          uri={source.url}
+        />
+      )}
+      {isImage && (
+        <Image
+          source={source}
+          style={{
+            width: IMAGE_SIZE,
+            height: IMAGE_SIZE,
+            resizeMode: 'contain'
+          }}
+        />
+      )}
       {Platform.OS === 'android' && '\n\n\n\n\n\n'}
     </Text>
   );
-
-  function createUrl() {
-    const uri = `${src}&w=${IMAGE_WIDTH * 2}&h=${IMAGE_HEIGHT * 2}`;
-    const backendUrl = getStorageState().config?.backendUrl || '';
-    //TODO(xi-eye): Deal with img relative URLs in one place
-    return handleRelativeUrl(uri, backendUrl);
-  }
 }
 
 export function renderTableRow(node: Object, index: number, defaultRenderer: Function) {

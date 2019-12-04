@@ -1,13 +1,18 @@
 /* @flow */
-import {StyleSheet, View, Image, TouchableOpacity, ActivityIndicator, Alert} from 'react-native';
+import {View, Image, TouchableOpacity, ActivityIndicator, Alert} from 'react-native';
 import React, {PureComponent} from 'react';
 import {closeOpaque, trash} from '../../components/icon/icon';
 import Router from '../../components/router/router';
-import {UNIT} from '../../components/variables/variables';
-import {notifyError} from '../../components/notification/notification';
+import {notify} from '../../components/notification/notification';
 import once from 'lodash.once';
 import Gallery from 'react-native-image-gallery';
 import ImageProgress from 'react-native-image-progress';
+import {SvgFromUri} from 'react-native-svg';
+import {hasMimeType} from '../../components/mime-type/mime-type';
+
+import styles from './show-image.styles';
+
+import type {Attachment} from '../../flow/CustomFields';
 
 const TOUCH_PADDING = 12;
 
@@ -16,8 +21,8 @@ const hitSlop = {
 };
 
 type Props = {
-  allImagesUrls: Array<string>,
-  currentImage: string,
+  imageAttachments: Array<Attachment>,
+  current: Attachment,
   imageHeaders: ?Object,
   onRemoveImage?: (currentPage: number) => any
 }
@@ -26,20 +31,35 @@ type State = {
   currentPage: number
 }
 
-function renderImage(imageProps, imageDimensions) {
-  return (
-    <ImageProgress
-      renderIndicator={() => <ActivityIndicator style={styles.loader} size="large"/>}
-      onError={error => notifyError('Failed to load image', error)}
-      {...imageProps}
-    />
-  );
-}
-
 export class ShowImage extends PureComponent<Props, State> {
   componentDidMount() {
-    const currentPage = this.props.allImagesUrls.indexOf(this.props.currentImage);
+    const currentPage = this.getCurrentPage(this.props.current);
     this.setState({currentPage});
+  }
+
+  renderImage = (imageProps: Object) => {
+    const source = imageProps.source;
+    const attach = source && this.props.imageAttachments[this.getCurrentPage(source)];
+
+    if (hasMimeType.svg(attach)) {
+      return <SvgFromUri
+        width="100%"
+        height="100%"
+        uri={attach.url}
+      />;
+    }
+
+    return (
+      <ImageProgress
+        renderIndicator={() => <ActivityIndicator style={styles.loader} size="large"/>}
+        onError={error => notify('Failed to load image')}
+        {...imageProps}
+      />
+    );
+  };
+
+  getCurrentPage(current: Attachment) {
+    return this.props.imageAttachments.findIndex(attach => attach.id === current.id);
   }
 
   closeView = once(function closeView() {
@@ -68,22 +88,23 @@ export class ShowImage extends PureComponent<Props, State> {
   };
 
   render() {
-    const currentIndex = this.props.allImagesUrls.indexOf(this.props.currentImage);
-
-    const allImageSources = this.props.allImagesUrls.map(uri => ({
+    const currentIndex = this.getCurrentPage(this.props.current);
+    const createSource = attach => ({
       source: {
-        uri,
-        headers: this.props.imageHeaders
+        id: attach.id,
+        uri: attach.url,
+        headers: this.props.imageHeaders,
+        mimeType: attach.mimeType
       }
-    }));
+    });
 
     return (
       <View style={styles.container}>
         <Gallery
           style={styles.gallery}
-          images={allImageSources}
+          images={this.props.imageAttachments.map(createSource)}
           initialPage={currentIndex}
-          imageComponent={renderImage}
+          imageComponent={this.renderImage}
           onPageSelected={this.onPageSelected}
         />
         <TouchableOpacity
@@ -91,7 +112,7 @@ export class ShowImage extends PureComponent<Props, State> {
           onPress={this.closeView}
           hitSlop={hitSlop}
         >
-          <Image style={styles.closeIcon} source={closeOpaque}></Image>
+          <Image style={styles.closeIcon} source={closeOpaque}/>
         </TouchableOpacity>
 
         {this.props.onRemoveImage && <TouchableOpacity
@@ -99,55 +120,11 @@ export class ShowImage extends PureComponent<Props, State> {
           onPress={this.onRemove}
           hitSlop={hitSlop}
         >
-          <Image style={styles.removeIcon} source={trash}></Image>
+          <Image style={styles.removeIcon} source={trash}/>
         </TouchableOpacity>}
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-
-  gallery: {
-    flex: 1,
-    backgroundColor: 'black'
-  },
-
-  loader: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0
-  },
-
-  closeButton: {
-    position: 'absolute',
-    bottom: UNIT * 3,
-    left: UNIT * 3
-  },
-
-  removeButton: {
-    position: 'absolute',
-    bottom: UNIT * 3,
-    right: UNIT * 3
-  },
-
-  closeIcon: {
-    width: 30,
-    height: 30,
-    resizeMode: 'contain'
-  },
-
-  removeIcon: {
-    width: 30,
-    height: 30,
-    resizeMode: 'contain',
-    opacity: 0.4
-  }
-});
 
 export default ShowImage;

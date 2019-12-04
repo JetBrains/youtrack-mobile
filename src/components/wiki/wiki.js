@@ -8,10 +8,11 @@ import toHtml from 'htmlparser-to-html';
 import Router from '../router/router';
 import styles, {htmlViewStyles} from './wiki.styles';
 import {COLOR_FONT} from '../variables/variables';
-import {getBaseUrl, handleRelativeUrl} from '../config/config';
+import {getBaseUrl} from '../config/config';
 import {renderCode, renderImage, renderTable, renderTableRow, renderTableCell} from './wiki__renderers';
 import {extractId} from '../open-url-handler/open-url-handler';
 import {showMoreInlineText} from '../text-view/text-view';
+import {hasMimeType} from '../mime-type/mime-type';
 
 HTMLView.propTypes.style = Text.propTypes.style;
 
@@ -65,15 +66,10 @@ export default class Wiki extends PureComponent<Props, void> {
     return Linking.openURL(url);
   };
 
-  onImagePress = (url: string) => {
-    const updateUrlToAbs = (url) => handleRelativeUrl(url, this.props.backendUrl); //TODO(xi-eye): Deal with img relative URLs in one place
-    const allImagesUrls = this.props.attachments
-      .filter(attach => attach.mimeType.includes('image'))
-      .map(image => updateUrlToAbs(image.url));
-
+  onImagePress = (source: Object) => {
     return Router.ShowImage({
-      currentImage: updateUrlToAbs(url),
-      allImagesUrls,
+      current: source,
+      imageAttachments: this.props.attachments.filter(attach => hasMimeType.previewable(attach)),
       imageHeaders: this.props.imageHeaders
     });
   };

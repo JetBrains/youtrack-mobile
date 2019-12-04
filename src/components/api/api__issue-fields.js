@@ -142,7 +142,7 @@ const ISSUE_TAGS_FIELDS = toField([
   }
 ]);
 
-const ISSUE_ATTACHMENTS_FIELDS = toField(['id', 'name', 'url', 'mimeType']);
+const ISSUE_ATTACHMENTS_FIELDS = toField(['id', 'name', 'url', 'thumbnailURL', 'mimeType']);
 
 const USER_GROUP_FIELDS = toField([
   '$type',

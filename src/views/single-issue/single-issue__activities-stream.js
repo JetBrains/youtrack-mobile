@@ -175,16 +175,22 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
     );
   }
 
+  updateToAbsUrl(attachments: Array<Attachment>): Array<Attachment> {
+    if (attachments.length) {
+      ['url', 'thumbnailURL'].forEach(
+        fieldName => (attachments = ApiHelper.convertRelativeUrls(attachments, fieldName, this.props.backendUrl)
+        )
+      );
+    }
+    return attachments;
+  }
+
   _renderAttachmentChange(event: Object) {
     const removed = event.removed || [];
     const added = event.added || [];
     const addedAndLaterRemoved = added.filter(it => !it.url);
-    let addedAndAvailable = added.filter(it => it.url);
+    const addedAndAvailable = this.updateToAbsUrl(added.filter(it => it.url));
     const hasAddedAttachments = addedAndAvailable.length > 0;
-
-    if (addedAndAvailable.length) {
-      addedAndAvailable = ApiHelper.convertRelativeUrls(addedAndAvailable, 'url', this.props.backendUrl);
-    }
 
     return (
       <View key={event.id}>
@@ -280,6 +286,8 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
       return null;
     }
 
+    const allAttachments = this.updateToAbsUrl(comment.attachments).concat(this.props.attachments);
+
     return (
       <CommentActions
         onReply={() => this.props.onReply(comment)}
@@ -307,7 +315,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
 
                 onIssueIdTap={this.props.onIssueIdTap}
 
-                attachments={comment.attachments}
+                attachments={allAttachments}
 
                 canRestore={this.props.canRestoreComment(comment)}
                 canDeletePermanently={this.props.canDeleteCommentPermanently(comment)}

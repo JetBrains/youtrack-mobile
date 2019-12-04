@@ -12,6 +12,7 @@ const ISSUE_ACTIVITIES_EVENT_BASE = toField([
 ]);
 
 const ISSUE_ATTACHMENT_FIELDS = toField([
+  'id',
   'url',
   'mimeType',
   'removed',

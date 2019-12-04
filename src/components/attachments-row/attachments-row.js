@@ -3,18 +3,15 @@ import React, {PureComponent} from 'react';
 import {Linking, View, Text, TouchableOpacity, ActivityIndicator, ScrollView, Platform} from 'react-native';
 import ImageProgress from 'react-native-image-progress';
 import throttle from 'lodash.throttle';
-import flattenStyle from 'react-native/Libraries/StyleSheet/flattenStyle';
 import styles from './attachments-row.styles';
 import Router from '../../components/router/router';
 import safariView from '../../components/safari-view/safari-view';
 import {View as AnimatedView} from 'react-native-animatable';
+import {SvgUri} from 'react-native-svg';
+import {hasMimeType} from '../../components/mime-type/mime-type';
+
 import type {Attachment} from '../../flow/CustomFields';
 
-const flatStyles = flattenStyle(styles.attachmentImage) || {};
-// $FlowFixMe something wrong with Flow here
-const imageWidth = flatStyles.width * 2;
-// $FlowFixMe
-const imageHeight = flatStyles.height * 2;
 const ANIMATION_DURATION = 700;
 const ERROR_HANLDER_THROTTLE = 60 * 1000;
 
@@ -54,17 +51,19 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
     this.props.onImageLoadingError(err);
   }, ERROR_HANLDER_THROTTLE);
 
-  _showImageAttachment(currentImage, allAttachments) {
+  _showImageAttachment(attach: Attachment, attachments: Array<Attachment>) {
     const {imageHeaders, onRemoveImage} = this.props;
-    const allImagesUrls = allAttachments
-      .map(image => image.url);
-    this.props.onOpenAttachment('image', currentImage.id);
+    this.props.onOpenAttachment('image', attach.id);
+
+    if (Platform.OS !== 'ios' && hasMimeType.svg(attach)) {
+      return this._openAttachmentUrl(attach.name, attach.url);
+    }
 
     return Router.ShowImage({
-      currentImage: currentImage.url,
-      allImagesUrls,
+      imageAttachments: attachments.filter(attach => hasMimeType.previewable(attach)),
+      current: attach,
       imageHeaders,
-      ...(onRemoveImage ? {onRemoveImage: (currentPage: number) => onRemoveImage(allAttachments[currentPage])} : {})
+      ...(onRemoveImage ? {onRemoveImage: (currentPage: number) => onRemoveImage(attachments[currentPage])} : {})
     });
   }
 
@@ -85,7 +84,7 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
 
   setScrollRef = (node: ?ScrollView) => {
     this.scrollView = node;
-  }
+  };
 
   render() {
     const {attachments, attachingImage, imageHeaders} = this.props;
@@ -102,17 +101,25 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
       >
 
         {attachments.map(attach => {
-          const isImage = attach.mimeType ? attach.mimeType.includes('image') : true;
+          const isImage = hasMimeType.image(attach);
+          const isSvg = hasMimeType.svg(attach);
           const isAttachingImage = attachingImage === attach;
-          const url = attach.id ? `${attach.url}&w=${imageWidth}&h=${imageHeight}` : attach.url;
 
-          if (isImage) {
+          if (isImage || isSvg) {
             return (
               <TouchableOpacity
-                key={attach.url || attach.id}
+                key={attach.id}
                 onPress={() => this._showImageAttachment(attach, attachments)}
               >
-                <AnimatedView
+                {isSvg && <View style={styles.attachmentImage}>
+                  <SvgUri
+                    width="100%"
+                    height="100%"
+                    uri={attach.thumbnailURL}
+                  />
+                </View>}
+
+                {Boolean(isImage && !isSvg) && <AnimatedView
                   animation={isAttachingImage ? 'zoomIn' : null}
                   useNativeDriver
                   duration={ANIMATION_DURATION}
@@ -121,11 +128,11 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
                   <ImageProgress
                     style={styles.attachmentImage}
                     renderIndicator={() => <ActivityIndicator/>}
-                    source={{uri: url, headers: imageHeaders}}
+                    source={{uri: attach.thumbnailURL, headers: imageHeaders}}
                     onError={this.handleLoadError}
                   />
-                  {isAttachingImage && <ActivityIndicator size="large" style={styles.imageActivityIndicator} />}
-                </AnimatedView>
+                  {isAttachingImage && <ActivityIndicator size="large" style={styles.imageActivityIndicator}/>}
+                </AnimatedView>}
               </TouchableOpacity>
             );
           }
