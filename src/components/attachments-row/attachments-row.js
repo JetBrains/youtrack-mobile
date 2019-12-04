@@ -100,7 +100,7 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
         horizontal={true}
       >
 
-        {attachments.map(attach => {
+        {attachments.map((attach, index) => {
           const isImage = hasMimeType.image(attach);
           const isSvg = hasMimeType.svg(attach);
           const isAttachingImage = attachingImage === attach;
@@ -108,7 +108,7 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
           if (isImage || isSvg) {
             return (
               <TouchableOpacity
-                key={attach.id}
+                key={attach?.id || `attachments-row-${index}`}
                 onPress={() => this._showImageAttachment(attach, attachments)}
               >
                 {isSvg && <View style={styles.attachmentImage}>
