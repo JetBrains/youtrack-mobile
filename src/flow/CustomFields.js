@@ -122,12 +122,18 @@ export type CustomFieldShort = {
   projectCustomField: ProjectCustomFieldShort
 }
 
+export type ImageDimensions = {
+  width: number,
+  height: number
+};
+
 export type Attachment = {
   $type: string,
   id: string,
   name: string,
   url: string,
-  mimeType: string
+  mimeType: string,
+  imageDimension: ?ImageDimensions
 }
 
 export type IssueComment = {

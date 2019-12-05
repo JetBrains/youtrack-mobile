@@ -1,19 +1,25 @@
 /* @flow */
 import React from 'react';
-import {Text, Image, Platform} from 'react-native';
+import {Text, Image, Platform, Dimensions} from 'react-native';
 import SyntaxHighlighter from 'react-native-syntax-highlighter';
 import {codeHighlightStyle} from './code-highlight-styles';
 import entities from 'entities';
-import {COLOR_GRAY, COLOR_LIGHT_GRAY} from '../variables/variables';
+import {COLOR_GRAY, COLOR_LIGHT_GRAY, UNIT} from '../variables/variables';
 import styles from './wiki.styles';
 import Router from '../router/router';
 import {showMoreText} from '../text-view/text-view';
 import type {Attachment} from '../../flow/CustomFields';
 import {hasMimeType} from '../mime-type/mime-type';
-import {SvgFromUri} from 'react-native-svg';
+import calculateAspectRatio from '../../components/aspect-ratio/aspect-ratio';
 
-const IMAGE_SIZE = 200;
+type ImageDimensions = {
+  width: number,
+  height: number
+};
 
+const DIMENSION_WIDTH = Dimensions.get('window').width;
+const IMAGE_WIDTH = Math.floor(DIMENSION_WIDTH - UNIT * 4);
+const IMAGE_HEIGHT = 200;
 
 export function renderCode(node: { children: any }, index: number, title?: string, language?: string) {
   // App is hanging trying to render a huge text https://github.com/facebook/react-native/issues/19453
@@ -74,7 +80,7 @@ function getUrlParams(url): Object {
   );
 }
 
-function findTargetAttach(src: string, attachments: Array<Attachment>): ?Object {
+function findTargetAttach(src: string, attachments: Array<Attachment>): ?Attachment {
   let attachId: string;
   let targetAttach: Attachment;
   const urlFileParam = getUrlParams(src).file;
@@ -92,39 +98,34 @@ function findTargetAttach(src: string, attachments: Array<Attachment>): ?Object 
 export function renderImage({node, index, attachments, imageHeaders, onImagePress}: RenderImageOptions) {
   const targetAttach: Attachment = findTargetAttach(node.attribs.src || '', attachments);
 
-  if (!targetAttach) {
-    return null;
-  }
+  if (targetAttach && !hasMimeType.svg(targetAttach)) {
+    //TODO(investigation): for some reason SVG is not rendered here
+    const source = Object.assign({uri: targetAttach.url, headers: imageHeaders}, targetAttach);
 
-  const source = Object.assign({uri: targetAttach.url, headers: imageHeaders}, targetAttach);
-  const isSvg = hasMimeType.svg(source);
-  const isImage = hasMimeType.image(source);
+    //TODO(investigation): fix inconsistency with  W,H
+    const isAndroid = Platform.OS === 'android';
+    const dimensions: ImageDimensions = (isAndroid
+      ? {width: IMAGE_WIDTH, height: IMAGE_HEIGHT}
+      : calculateAspectRatio(targetAttach.imageDimension));
 
-  return (
-    <Text
-      onPress={() => onImagePress(source.url)}
-      key={`wiki-image-${index}`}
-    >
-      {isSvg && (
-        <SvgFromUri
-          width="100%"
-          height="100%"
-          uri={source.url}
-        />
-      )}
-      {isImage && (
+    return (
+      <Text
+        onPress={() => onImagePress(source)}
+        key={`wiki-image-${index}`}
+      >
         <Image
           source={source}
           style={{
-            width: IMAGE_SIZE,
-            height: IMAGE_SIZE,
+            marginTop: UNIT * 2,
+            width: dimensions.width,
+            height: dimensions.height,
             resizeMode: 'contain'
           }}
         />
-      )}
-      {Platform.OS === 'android' && '\n\n\n\n\n\n'}
-    </Text>
-  );
+        {Platform.OS === 'android' && '\n\n\n\n\n\n'}
+      </Text>
+    );
+  }
 }
 
 export function renderTableRow(node: Object, index: number, defaultRenderer: Function) {

@@ -142,7 +142,14 @@ const ISSUE_TAGS_FIELDS = toField([
   }
 ]);
 
-const ISSUE_ATTACHMENTS_FIELDS = toField(['id', 'name', 'url', 'thumbnailURL', 'mimeType']);
+const ISSUE_ATTACHMENTS_FIELDS = toField([
+  'id',
+  'name',
+  'url',
+  'thumbnailURL',
+  'mimeType',
+  'imageDimension(width,height)'
+]);
 
 const USER_GROUP_FIELDS = toField([
   '$type',
@@ -195,9 +202,16 @@ const ISSUE_COMMENTS_WITH_ATTACHMENT_FIELDS = toField([
   {
     attachments: [
       'url',
-      'mimeType'
+      'mimeType',
+      'imageDimension(width,height)'
     ]
   }
+]);
+
+const ISSUE_COMMENTS_REMOVED = toField([
+  'id',
+  'created',
+  'deleted',
 ]);
 
 const ISSUE_BASE_FIELDS = toField([
@@ -320,5 +334,6 @@ export default {
   ISSUE_USER_FIELDS: ISSUE_USER_FIELDS,
   ISSUE_COMMENTS_FIELDS: ISSUE_COMMENTS_FIELDS,
   ISSUE_COMMENTS_WITH_ATTACHMENT_FIELDS: ISSUE_COMMENTS_WITH_ATTACHMENT_FIELDS,
+  ISSUE_COMMENTS_REMOVED_FIELDS: ISSUE_COMMENTS_REMOVED,
   ISSUE_XSHORT_FIELDS: ISSUE_XSHORT_FIELDS
 };
