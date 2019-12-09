@@ -90,7 +90,7 @@ export default class Tags extends PureComponent<Props, State> {
           <View
             style={[styles.tagsContainer, multiline ? styles.tagsContainerAll : null]}
           >
-            {tags.map(tag => {
+            {tags.map((tag, index) => {
               return (
                 <TouchableOpacity
                   testID="tagsListTag"
@@ -99,7 +99,7 @@ export default class Tags extends PureComponent<Props, State> {
                 >
                   <ColorField
                     testID="tagColor"
-                    style={[tagStyle, this._getTagSpecificStyle(tag)]}
+                    style={[tagStyle, this._getTagSpecificStyle(tag), index === 0 ? {marginLeft: 0} : null]}
                     text={tag.name}
                     color={tag.color}
                     fullText={true}

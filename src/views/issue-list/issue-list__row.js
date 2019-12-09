@@ -7,10 +7,15 @@ import type {BundleValue} from '../../flow/CustomFields';
 
 import ColorField from '../../components/color-field/color-field';
 import Tags from '../../components/tags/tags';
-import {getPriotityField, getForText, getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
+import {
+  getPriotityField,
+  getEntityPresentation,
+  relativeDate
+} from '../../components/issue-formatter/issue-formatter';
 
 import styles from './issue-list.styles';
 import commonIssueStyles from '../../components/common-styles/issue';
+import Avatar from '../../components/avatar/avatar';
 
 type Props = {
   issue: IssueOnList,
@@ -19,14 +24,6 @@ type Props = {
 };
 
 export default class IssueRow extends Component<Props, void> {
-  static _getSubText(issue) {
-    const issueIdStyle = issue.resolved ? {textDecorationLine: 'line-through'} : null;
-
-    return (<Text>
-      <Text style={issueIdStyle}>{issue.idReadable}</Text>
-      <Text> by {getEntityPresentation(issue.reporter)} {getForText(issue.fieldHash.Assignee)}</Text>
-    </Text>);
-  }
 
   renderPriority() {
     const priorityField = getPriotityField(this.props.issue);
@@ -47,40 +44,47 @@ export default class IssueRow extends Component<Props, void> {
   render() {
     const {issue, onTagPress} = this.props;
 
+
     return (
-      <TouchableOpacity onPress={() => this.props.onClick(issue)} testID="issue-row">
+      <TouchableOpacity
+        onPress={() => this.props.onClick(issue)}
+        testID="issue-row"
+      >
         <View style={styles.row}>
-
-          <View>
+          <View
+            testID="issue-row-details"
+            style={styles.rowLine}
+          >
             <View style={styles.priorityWrapper}>{this.renderPriority()}</View>
-          </View>
-
-          <View style={styles.rowText}>
-
-            <View style={styles.rowTopLine}>
-              <Text
-                style={[
-                  styles.summary,
-                  issue.resolved ? commonIssueStyles.resolvedSummary : null
-                ]}
-                numberOfLines={2}
-                testID="issue-row-summary">
-                {issue.summary}
-              </Text>
-            </View>
-
             <Text
-              style={styles.subtext}
-              numberOfLines={1}
-              testID="issue-row-details">
-              {IssueRow._getSubText(issue)}
+              style={[styles.headLeft, issue.resolved ? {textDecorationLine: 'line-through'} : null]}>
+              {issue.idReadable}
             </Text>
 
-            {Boolean(issue.tags && issue.tags.length) &&
-            <Tags inline={true} tags={issue.tags} onTagPress={onTagPress}/>
-            }
-
+            <View style={styles.headRight}>
+              <Text style={styles.secondaryText}>{`${relativeDate(issue.created)}  `}</Text>
+              <Avatar
+                userName={getEntityPresentation(issue.reporter)}
+                size={20}
+                source={{uri: issue.reporter?.avatarUrl}}
+              />
+            </View>
           </View>
+
+          <Text
+            style={[
+              styles.summary,
+              issue.resolved ? commonIssueStyles.resolvedSummary : null
+            ]}
+            numberOfLines={2}
+            testID="issue-row-summary">
+            {issue.summary}
+          </Text>
+
+          {Boolean(issue.tags && issue.tags.length) &&
+          <Tags inline={true} tags={issue.tags} onTagPress={onTagPress}/>
+          }
+
         </View>
       </TouchableOpacity>
     );

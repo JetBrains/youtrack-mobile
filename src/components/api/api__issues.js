@@ -4,6 +4,7 @@ import ApiBase from './api__base';
 import issueFields from './api__issue-fields';
 
 import type {IssueOnList} from '../../flow/Issue';
+import ApiHelper from './api__helper';
 
 export default class IssuesAPI extends ApiBase {
   async getIssues(query: string = '', $top: number, $skip: number = 0): Promise<IssueOnList> {
@@ -12,7 +13,9 @@ export default class IssuesAPI extends ApiBase {
       fields: issueFields.issuesOnList.toString()
     });
 
-    return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`);
+    const issues = await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`);
+    ApiHelper.patchAllRelativeAvatarUrls(issues, this.config.backendUrl);
+    return issues;
   }
 
   async getIssuesCount(query: string = ''): Promise<number> {

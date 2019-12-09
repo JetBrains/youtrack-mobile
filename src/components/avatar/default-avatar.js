@@ -78,7 +78,7 @@ export default class DefaultAvatar extends PureComponent<Props, void> {
     }];
 
     return (
-      <LinearGradient colors={colors} style={[styles.size40, style]}>
+      <LinearGradient colors={colors} style={[size || styles.size40, style]}>
         <View>
           <Text style={textStyle}>
             {shortText}
