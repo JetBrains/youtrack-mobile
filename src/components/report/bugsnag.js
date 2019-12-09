@@ -12,13 +12,13 @@ class Bugsnag {
   constructor() {
     this.config = new Configuration(appPackage.bugsnag.token);
     this.config.automaticallyCollectBreadcrumbs = false;
+    this.config.appVersion = appPackage.bugsnag.version;
+    this.bugsnag = new Client(this.config);
     this.bugsnag.setUser(
       DeviceInfo.getBrand(),
       DeviceInfo.getSystemName(),
       DeviceInfo.getSystemVersion()
     );
-    this.config.appVersion = appPackage.bugsnag.version;
-    this.bugsnag = new Client(this.config);
     log.info(`Exception reporter instance created`);
   }
 
