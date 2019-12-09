@@ -28,13 +28,14 @@ export default class IssueRow extends Component<Props, void> {
   renderPriority() {
     const priorityField = getPriotityField(this.props.issue);
     if (!priorityField || !priorityField.value || priorityField.value.length === 0) {
-      return <View style={styles.priorityPlaceholder}/>;
+      return null;
     }
     const values: Array<BundleValue> = [].concat(priorityField.value);
     const LAST = values.length - 1;
 
     return (
       <ColorField
+        style={styles.priorityWrapper}
         text={values[LAST].name}
         color={values[LAST].color}
       />
@@ -55,7 +56,7 @@ export default class IssueRow extends Component<Props, void> {
             testID="issue-row-details"
             style={styles.rowLine}
           >
-            <View style={styles.priorityWrapper}>{this.renderPriority()}</View>
+            {this.renderPriority()}
             <Text
               style={[styles.headLeft, issue.resolved ? {textDecorationLine: 'line-through'} : null]}>
               {issue.idReadable}
