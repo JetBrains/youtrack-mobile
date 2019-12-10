@@ -10,6 +10,7 @@ import ModalView from '../modal-view/modal-view';
 import throttle from 'lodash.throttle';
 import {View as AnimatedView} from 'react-native-animatable';
 import KeyboardSpacerIOS from '../platform/keyboard-spacer.ios';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const SEARCH_THROTTLE = 30;
 const SHOW_LIST_ANIMATION_DURATION = 500;
@@ -32,7 +33,17 @@ type State = {
 
 export default class QueryAssist extends Component<Props, State> {
   queryAssistContainer: ?Object;
-  lastQueryParams: {query: string, caret: number} = {query: '', caret: 0};
+  lastQueryParams: { query: string, caret: number } = {query: '', caret: 0};
+  onSearch = throttle((query: string, caret: number) => {
+    if (this.lastQueryParams.query === query || this.lastQueryParams.caret === caret) {
+      return;
+    }
+
+    this.lastQueryParams = {query, caret};
+    this.setState({input: query, caret});
+    this.props.onChange(query, caret);
+
+  }, SEARCH_THROTTLE);
 
   constructor(props: Props) {
     super(props);
@@ -90,17 +101,6 @@ export default class QueryAssist extends Component<Props, State> {
     this.setState({input: this.props.currentQuery});
   }
 
-  onSearch = throttle((query: string, caret: number) => {
-    if (this.lastQueryParams.query === query || this.lastQueryParams.caret === caret) {
-      return;
-    }
-
-    this.lastQueryParams = {query, caret};
-    this.setState({input: query, caret});
-    this.props.onChange(query, caret);
-
-  }, SEARCH_THROTTLE);
-
   onApplySuggestion = (suggestion: TransformedSuggestion) => {
     const suggestionText = `${suggestion.prefix}${suggestion.option}${suggestion.suffix}`;
     const oldQuery = this.state.input || '';
@@ -136,12 +136,18 @@ export default class QueryAssist extends Component<Props, State> {
         style={[styles.inputWrapper, showQueryAssist ? styles.inputWrapperActive : null]}
         ref={node => this.queryAssistContainer = node}
       >
+        {Boolean(!showQueryAssist && !input) && (
+          <Text style={styles.icon}>
+            <Icon name={'magnify'} size={22} color={COLOR_PLACEHOLDER}/>
+          </Text>
+        )}
+
         <TextInput
           ref="searchInput"
           keyboardAppearance="dark"
-          style={[styles.searchInput, input.length === 0 ? styles.searchInputEmpty : null, showQueryAssist ? styles.searchInputActive : null]}
+          style={[styles.searchInput, showQueryAssist ? styles.searchInputActive : null]}
           placeholderTextColor={showQueryAssist ? COLOR_PLACEHOLDER_ACTIVE : COLOR_PLACEHOLDER}
-          placeholder="Enter query"
+          placeholder="Enter search request"
           clearButtonMode="while-editing"
           returnKeyType="search"
           testID="query-assist-input"

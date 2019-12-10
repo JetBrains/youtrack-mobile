@@ -11,18 +11,17 @@ export default StyleSheet.create({
     ...commonStyle,
   },
   size40: {
-    ...commonStyle,
     width: defaultSize,
     height: defaultSize
   },
   size20: {
-    ...commonStyle,
     width: defaultSize / 2,
     height: defaultSize / 2
   },
   text: {
     fontFamily: 'Arial',
     color: '#FFF',
-    fontWeight: '600'
+    fontWeight: '600',
+    textAlign: 'center'
   }
 });

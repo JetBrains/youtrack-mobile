@@ -6,7 +6,7 @@ import {
   COLOR_FONT_ON_BLACK,
   COLOR_FONT,
   COLOR_PINK,
-  COLOR_GRAY,
+  COLOR_MEDIUM_GRAY,
   COLOR_ICON_MEDIUM_GREY
 } from '../../components/variables/variables';
 import {SIZE as COLOR_FIELD_SIZE} from '../../components/color-field/color-field';
@@ -21,7 +21,7 @@ const secondaryText = {color: COLOR_ICON_MEDIUM_GREY};
 export default StyleSheet.create({
   listContainer: {
     flex: 1,
-    backgroundColor: '#FFF'
+    backgroundColor: COLOR_FONT_ON_BLACK
   },
   tryAgainButton: {
     alignSelf: 'center',
@@ -59,7 +59,7 @@ export default StyleSheet.create({
   separator: {
     height: 0.5,
     marginLeft: UNIT * 2,
-    backgroundColor: COLOR_GRAY
+    backgroundColor: COLOR_MEDIUM_GRAY
   },
   secondaryText: {
     ...secondaryText
@@ -76,7 +76,7 @@ export default StyleSheet.create({
   },
   summary: {
     flex: 1,
-    marginTop: UNIT / 2,
+    marginTop: UNIT,
     color: '#1f2326',
     fontSize: 16,
     lineHeight: 20,

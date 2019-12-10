@@ -6,18 +6,18 @@ import {
   COLOR_TRANSPARENT_BLACK,
   COLOR_FONT_ON_BLACK,
   COLOR_BLACK,
-  COLOR_SELECTED_DARK,
-  COLOR_EXTRA_LIGHT_GRAY,
-  COLOR_MEDIUM_GRAY, COLOR_FONT
+  COLOR_SELECTED_DARK
 } from '../../components/variables/variables';
 
-const QUERY_ASSIST_HEIGHT = 52;
-const inputBorderWidth = 1;
+const QUERY_ASSIST_HEIGHT = UNIT * 6;
 
 export default StyleSheet.create({
   placeHolder: {
     height: QUERY_ASSIST_HEIGHT,
-    backgroundColor: COLOR_BLACK
+    paddingLeft: UNIT * 2,
+    paddingRight: UNIT * 2,
+    marginTop: UNIT * 2,
+    marginBottom: UNIT * 3
   },
   modal: {
     flex: 1,
@@ -32,36 +32,29 @@ export default StyleSheet.create({
     backgroundColor: COLOR_TRANSPARENT_BLACK,
   },
   inputWrapper: {
-    backgroundColor: COLOR_EXTRA_LIGHT_GRAY,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    borderBottomWidth: 1,
-    borderColor: COLOR_MEDIUM_GRAY,
-    paddingLeft: UNIT - inputBorderWidth * 2,
-    paddingRight: UNIT - inputBorderWidth * 2
+    backgroundColor: '#f6f6f6',
+    borderRadius: UNIT
   },
   inputWrapperActive: {
     backgroundColor: COLOR_BLACK,
-    borderBottomWidth: 0
+    paddingLeft: UNIT * 2
   },
   searchInput: {
     flex: 1,
-    height: UNIT * 4.5,
-    borderRadius: 6,
-    backgroundColor: COLOR_FONT_ON_BLACK,
-    margin: UNIT,
-    paddingTop: 2,
-    paddingBottom: 2,
-    paddingLeft: UNIT,
-    color: COLOR_FONT,
-    fontSize: 15,
-    borderWidth: inputBorderWidth,
-    borderColor: COLOR_MEDIUM_GRAY,
-    textAlign: 'left'
+    height: QUERY_ASSIST_HEIGHT,
+    paddingLeft: UNIT * 2,
+    fontSize: 16,
+    letterSpacing: 0.08,
+    textAlign: 'left',
+    color: '#717171'
   },
-  searchInputEmpty: {
-    textAlign: 'center'
+  icon: {
+    lineHeight: 48,
+    marginLeft: UNIT * 2,
+    color: '#717171'
   },
   searchInputActive: {
     backgroundColor: COLOR_SELECTED_DARK,

@@ -72,18 +72,25 @@ export default class DefaultAvatar extends PureComponent<Props, void> {
     const shortText = extractLetters(text);
     const colors = COLOR_PARIS[Math.abs(hashCode(text.toLowerCase()) % COLOR_PARIS.length)];
     const textStyle = [styles.text, {
-      fontSize: size / 3.4,
-      lineHeight: size / 3.5,
-      paddingLeft: size / 4
+      fontSize: size / 2,
+      lineHeight: size / 2
     }];
 
     return (
-      <LinearGradient colors={colors} style={[size || styles.size40, style]}>
+      <LinearGradient
+        colors={colors}
+        style={
+          [
+            styles.common,
+            style,
+            size ? {width: size, height: size,} : styles.size40
+          ]
+        }
+      >
         <View>
           <Text style={textStyle}>
             {shortText}
           </Text>
-          <Text style={textStyle}>_</Text>
         </View>
       </LinearGradient>
     );
