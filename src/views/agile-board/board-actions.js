@@ -11,6 +11,7 @@ import usage from '../../components/usage/usage';
 import {findIssueOnBoard} from './board-updaters';
 import {getGroupedSprints} from './agile-board__helper';
 import animation from '../../components/animation/animation';
+import {sortByName} from '../../components/search/sorting';
 
 type ApiGetter = () => Api;
 
@@ -358,16 +359,6 @@ export function openBoardSelect() {
         }
       }
     });
-
-    function sortByName(item1, item2) {
-      if (item1.name > item2.name) {
-        return 1;
-      }
-      if (item1.name < item2.name) {
-        return -1;
-      }
-      return 0;
-    }
   };
 }
 

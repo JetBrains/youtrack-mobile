@@ -7,6 +7,7 @@ import log from '../log/log';
 import type {AuthParams, CurrentUser} from '../auth/auth';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {IssueOnList} from '../../flow/Issue';
+import type {Folder} from '../../flow/User';
 
 const OTHER_ACCOUNTS_KEY = 'YT_OTHER_ACCOUNTS_STORAGE_KEY';
 
@@ -18,6 +19,7 @@ export type StorageState = {|
   creationTimestamp: ?number,
   config: ?AppConfigFilled,
   query: ?string,
+  searchContext: ?Folder,
   lastQueries: ?Array<string>,
   issuesCache: ?Array<IssueOnList>,
   isRegisteredForPush: boolean,
@@ -37,6 +39,7 @@ const storageKeys: StorageStateKeys = {
   config: 'BACKEND_CONFIG_STORAGE_KEY',
   creationTimestamp: 'YT_CREATION_TIMESTAMP_STORAGE_KEY',
   query: 'YT_QUERY_STORAGE',
+  searchContext: 'YT_SEARCH_CONTEXT_STORAGE',
   lastQueries: 'YT_LAST_QUERIES_STORAGE_KEY',
   issuesCache: 'yt_mobile_issues_cache',
   isRegisteredForPush: 'YT_IS_REGISTERED_FOR_PUSH',
@@ -58,6 +61,7 @@ export const initialState: StorageState = Object.freeze({
   creationTimestamp: null,
   config: null,
   query: null,
+  searchContext: null,
   lastQueries: null,
   issuesCache: null,
   isRegisteredForPush: false,

@@ -19,6 +19,8 @@ import {
 import type {AgileUserProfile} from '../../flow/Agile';
 import Feature from '../feature/feature';
 import ConnectedAccounts from './menu__connected-accounts';
+import {EVERYTHING_CONTEXT} from '../../components/search/search-context';
+import type {Folder} from '../../flow/User';
 
 const CURRENT_YEAR = (new Date()).getFullYear();
 const MENU_WIDTH = 280;
@@ -32,7 +34,7 @@ type Props = {
   children?: React$Element<any>,
   show: boolean,
   auth: Auth,
-  issueQuery: ?string,
+  searchContext: ?Folder,
   agileProfile: AgileUserProfile,
   onOpen: () => any,
   onClose: () => any,
@@ -81,7 +83,7 @@ export class Menu extends Component<Props, void> {
 
   _renderMenu() {
     const {height} = Dimensions.get('window');
-    const {auth, issueQuery, openFeaturesView} = this.props;
+    const {auth, openFeaturesView, searchContext} = this.props;
     if (!auth) { //TODO: menu renders right after logOut by some reason.
       return null;
     }
@@ -94,7 +96,7 @@ export class Menu extends Component<Props, void> {
           <View style={styles.menuItems}>
             <MenuItem
               label={'Issues'}
-              description={issueQuery || 'No query'}
+              description={searchContext?.name || EVERYTHING_CONTEXT.name}
               onPress={this._openIssueList}
             />
 
@@ -160,7 +162,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     show: state.app.showMenu,
     auth: state.app.auth,
-    issueQuery: state.issueList.query,
+    searchContext: state.app?.user?.profiles?.general?.searchContext,
     agileProfile: state.agile.profile,
     ...ownProps
   };

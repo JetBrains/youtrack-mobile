@@ -4,7 +4,9 @@ import {
   Text,
   FlatList,
   RefreshControl,
-  AppState
+  AppState,
+  Modal,
+  TouchableOpacity
 } from 'react-native';
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
@@ -29,16 +31,19 @@ import type Api from '../../components/api/api';
 import type {IssuesListState} from './issue-list-reducers';
 import type {IssueOnList} from '../../flow/Issue';
 import OpenScanButton from '../../components/scan/open-scan-button';
+import Select from '../../components/select/select';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 type Props = IssuesListState & typeof issueActions & {
   openMenu: typeof openMenu,
   auth: Auth,
   api: Api,
-  overridenQuery: ?string
+  overridenQuery: ?string,
+  onOpenContextSelect: () => any
 };
 
 export class IssueList extends Component<Props, void> {
-  unsubscribeFromOpeningWithIssueUrl: () => any
   constructor() {
     super();
     usage.trackScreenView('Issue list');
@@ -48,7 +53,7 @@ export class IssueList extends Component<Props, void> {
     if (newState === 'active') {
       this.props.refreshIssues();
     }
-  }
+  };
 
   componentDidMount() {
     this.props.initializeIssuesList(this.props.overridenQuery);
@@ -71,13 +76,6 @@ export class IssueList extends Component<Props, void> {
       issuePlaceholder: issue,
       issueId: issue.id
     });
-  }
-
-  onQueryUpdated = (query: string) => {
-    this.props.storeIssuesQuery(query);
-    this.props.setIssuesQuery(query);
-    this.props.clearAssistSuggestions();
-    this.props.loadIssues(query);
   }
 
   _renderHeader() {
@@ -103,7 +101,7 @@ export class IssueList extends Component<Props, void> {
         key={item.id}
         issue={item}
         onClick={(issue) => this.goToIssue(issue)}
-        onTagPress={(query) => Router.IssueList({query})} />
+        onTagPress={(query) => Router.IssueList({query})}/>
     );
   };
 
@@ -148,19 +146,61 @@ export class IssueList extends Component<Props, void> {
     this.props.loadMoreIssues();
   };
 
+  renderContextButton() {
+    const {onOpenContextSelect, isRefreshing, searchContext} = this.props;
+
+    return (
+      <TouchableOpacity
+        style={styles.contextButton}
+        disabled={isRefreshing || !searchContext}
+        onPress={onOpenContextSelect}
+      >
+        {searchContext && (
+          <Text
+            numberOfLines={1}
+            style={styles.contextButtonText}
+          >
+            {`${searchContext.name} `}
+            <Icon name="angle-down" size={20}/>
+          </Text>
+        )}
+      </TouchableOpacity>
+    );
+  }
+
+
+  renderContextSelect() {
+    return (
+      <Modal
+        visible
+        animationType="fade"
+        onRequestClose={() => true}
+      >
+        <Select
+          style={styles.contextSelect}
+          getTitle={item => item.name}
+          {...this.props.selectProps}
+        />
+      </Modal>
+    );
+  }
+
   render() {
-    const {query, issues, suggestIssuesQuery, queryAssistSuggestions} = this.props;
+    const {query, issues, suggestIssuesQuery, queryAssistSuggestions, isIssuesContextOpen, onQueryUpdate} = this.props;
 
     return (
       <Menu>
         <View style={styles.listContainer} testID="issue-list-page">
           {this._renderHeader()}
 
+          {this.renderContextButton()}
+          {isIssuesContextOpen && this.renderContextSelect()}
+
           <QueryAssist
             suggestions={queryAssistSuggestions}
             currentQuery={query}
             onChange={suggestIssuesQuery}
-            onSetQuery={this.onQueryUpdated}/>
+            onSetQuery={onQueryUpdate}/>
 
           <FlatList
             removeClippedSubviews={false}
@@ -186,14 +226,17 @@ const mapStateToProps = (state, ownProps) => {
   return {
     ...state.issueList,
     ...state.app,
-    overridenQuery: ownProps.query
+    overridenQuery: ownProps.query,
+    searchContext: state.app?.user?.profiles?.general?.searchContext
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(issueActions, dispatch),
-    openMenu: () => dispatch(openMenu())
+    openMenu: () => dispatch(openMenu()),
+    onQueryUpdate: (query) => dispatch(issueActions.onQueryUpdate(query)),
+    onOpenContextSelect: () => dispatch(issueActions.openIssuesContextSelect())
   };
 };
 

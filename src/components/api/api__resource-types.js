@@ -9,6 +9,7 @@ export const ResourceTypes = {
   USER: 'jetbrains.charisma.persistence.user.User',
   USER_GROUP: 'jetbrains.charisma.persistent.security.UserGroup',
   USER_APPEARANCE_PROFILE: 'AppearanceUserProfile',
+  USER_GENERAL_PROFILE: 'GeneralUserProfile',
 
   EVENT_GROUP: 'jetbrains.youtrack.event.gaprest.ActivityItemGroup',
 };

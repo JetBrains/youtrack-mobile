@@ -7,7 +7,9 @@ import {
   COLOR_FONT,
   COLOR_PINK,
   COLOR_MEDIUM_GRAY,
-  COLOR_ICON_MEDIUM_GREY
+  COLOR_ICON_MEDIUM_GREY,
+  COLOR_BLACK,
+  COLOR_TRANSPARENT_BLACK
 } from '../../components/variables/variables';
 import {SIZE as COLOR_FIELD_SIZE} from '../../components/color-field/color-field';
 
@@ -77,7 +79,7 @@ export default StyleSheet.create({
   summary: {
     flex: 1,
     marginTop: UNIT,
-    color: '#1f2326',
+    color: COLOR_BLACK,
     fontSize: 16,
     lineHeight: 20,
   },
@@ -100,5 +102,24 @@ export default StyleSheet.create({
     height: 22,
     overflow: 'hidden',
     marginTop: UNIT / 2
+  },
+  contextButton: {
+    marginLeft: UNIT * 2,
+    marginTop: UNIT,
+    marginRight: UNIT * 2,
+    paddingTop: UNIT,
+    paddingBottom: UNIT / 2,
+    height: UNIT * 5
+  },
+  contextButtonText: {
+    fontSize: 20,
+    letterSpacing: 0.13
+  },
+  contextSelect: {
+    top: 0,
+    right: 0,
+    left: 0,
+    bottom: 0,
+    backgroundColor: COLOR_TRANSPARENT_BLACK
   }
 });

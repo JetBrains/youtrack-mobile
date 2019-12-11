@@ -17,6 +17,7 @@ import {loadConfig} from '../components/config/config';
 import Auth from '../components/auth/auth';
 import {loadAgileProfile} from '../views/agile-board/board-actions';
 import {registerForPush, initializePushNotifications, unregisterForPushNotifications} from '../components/push-notifications/push-notifications';
+import {EVERYTHING_CONTEXT} from '../components/search/search-context';
 
 import type {AuthParams, CurrentUser} from '../components/auth/auth';
 import type {Permissions} from '../components/auth/auth__permissions';
@@ -24,7 +25,9 @@ import type {AppConfigFilled, EndUserAgreement} from '../flow/AppConfig';
 import type {WorkTimeSettings} from '../flow/WorkTimeSettings';
 import type {StorageState} from '../components/storage/storage';
 import type RootState from '../reducers/app-reducer';
-import type {User, UserAppearanceProfile} from '../flow/User';
+import type {User, UserAppearanceProfile, UserGeneralProfile} from '../flow/User';
+import {refreshIssues, storeSearchContext} from '../views/issue-list/issue-list-actions';
+
 
 export function logOut() {
   return async (dispatch: (any) => any, getState: () => Object, getApi: () => Api) => {
@@ -102,6 +105,25 @@ export function receiveUserAppearanceProfile(userAppearanceProfile?: UserAppeara
       });
     } catch (error) {
       notify('Can\'t update user appearance profile.');
+    }
+  };
+}
+
+export function updateUserGeneralProfile(userGeneralProfile: UserGeneralProfile) {
+  return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
+    try {
+      const updatedUserGeneralProfile: UserGeneralProfile = await getApi().user.updateUserGeneralProfile(userGeneralProfile);
+
+      if (updatedUserGeneralProfile.searchContext === null) {
+        updatedUserGeneralProfile.searchContext = EVERYTHING_CONTEXT;
+      }
+
+      dispatch({
+        type: types.RECEIVE_USER_GENERAL_PROFILE,
+        ...{general: updatedUserGeneralProfile}
+      });
+    } catch (e) {
+      notify('Cannot update your profile');
     }
   };
 }
@@ -296,10 +318,10 @@ function completeInitialization() {
     const auth = getState().app.auth;
     await auth.loadPermissions(auth.authParams);
     dispatch(setPermissions(auth.permissions, auth.currentUser));
+    dispatch(loadUser());
     dispatch(subscribeToPush());
     dispatch(loadAgileProfile());
     dispatch(loadWorkTimeSettings());
-    dispatch(loadUser());
 
     log.info('Initialization completed');
     Router.navigateToDefaultRoute();
@@ -309,7 +331,14 @@ function completeInitialization() {
 function loadUser(userId: string = 'me') {
   return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
     const user: User = await getApi().user.getUser(userId);
+
+    if (user.profiles.general.searchContext === null) {
+      user.profiles.general.searchContext = EVERYTHING_CONTEXT;
+    }
+
+    dispatch(storeSearchContext(user.profiles.general.searchContext));
     dispatch({type: types.RECEIVE_USER, user});
+    dispatch(refreshIssues());
   };
 }
 
@@ -507,7 +536,7 @@ function subscribeToPush(config: AppConfigFilled) {
     }
 
     if (DeviceInfo.isEmulator()) {
-      log.debug('Push notifcations won\'t work on simulator');
+      log.debug('Push notifications won\'t work on simulator');
       return;
     }
 

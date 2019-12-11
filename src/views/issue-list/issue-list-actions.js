@@ -1,16 +1,28 @@
 /* @flow */
+
 import * as types from './issue-list-action-types';
 import ApiHelper from '../../components/api/api__helper';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
 import {notifyError, resolveError} from '../../components/notification/notification';
 import log from '../../components/log/log';
+import usage from '../../components/usage/usage';
+
 import type Api from '../../components/api/api';
 import type {IssueOnList} from '../../flow/Issue';
+import type {Folder} from '../../flow/User';
+import {updateUserGeneralProfile} from '../../actions/app-actions';
+import {EVERYTHING_CONTEXT} from '../../components/search/search-context';
+import {sortByName} from '../../components/search/sorting';
 
 const PAGE_SIZE = 10;
 const MAX_STORED_QUERIES = 5;
+const CATEGORY_NAME = 'Issue List';
 
 type ApiGetter = () => Api;
+
+function trackEvent(msg: string, additionalParam: ?string) {
+  usage.trackEvent(CATEGORY_NAME, msg, additionalParam);
+}
 
 export function setIssuesQuery(query: string) {
   return {
@@ -60,8 +72,7 @@ async function storeLastQuery(query: string) {
   }
 
   const updatedQueries = [query, ...(getStorageState().lastQueries || [])];
-  const uniqueUpdatedQueries = Array.from(new Set(updatedQueries)).
-    slice(0, MAX_STORED_QUERIES);
+  const uniqueUpdatedQueries = Array.from(new Set(updatedQueries)).slice(0, MAX_STORED_QUERIES);
 
   flushStoragePart({lastQueries: uniqueUpdatedQueries});
 }
@@ -71,6 +82,15 @@ export function storeIssuesQuery(query: string) {
     flushStoragePart({query});
     storeLastQuery(query);
   };
+}
+
+export function readStoredSearchContextQuery() {
+  const storageSearchContext: ?Folder = getStorageState().searchContext;
+  return storageSearchContext?.query || '';
+}
+
+export function storeSearchContext(searchContext: Folder) {
+  return () => flushStoragePart({searchContext});
 }
 
 export function listEndReached() {
@@ -104,6 +124,103 @@ export function resetIssuesCount() {
 export function setIssuesCount(count: number) {
   return {type: types.SET_ISSUES_COUNT, count};
 }
+
+export function closeIssuesContextSelect() {
+  return {type: types.CLOSE_SEARCH_CONTEXT_SELECT};
+}
+
+export function getSearchQuery(query: string) {
+  return (dispatch: (any) => any, getState: () => Object) => {
+    const userGeneralProfileSearchContext = getState().app?.user?.profiles?.general?.searchContext;
+    const searchContextQuery = userGeneralProfileSearchContext?.query || readStoredSearchContextQuery();
+    return `${searchContextQuery} ${query}`;
+  };
+}
+
+
+export function onQueryUpdate(query: string) {
+  return (dispatch: (any) => any) => {
+    const searchQuery = dispatch(getSearchQuery(query));
+    dispatch(storeIssuesQuery(query));
+    dispatch(setIssuesQuery(query));
+    dispatch(clearAssistSuggestions());
+    dispatch(loadIssues(searchQuery));
+  };
+}
+
+export function openIssuesContextSelect() {
+  return (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const currentUser = getState().app?.user;
+    const currentUserGeneralProfile = currentUser?.profiles?.general;
+    const currentSearchContext = currentUserGeneralProfile?.searchContext || EVERYTHING_CONTEXT;
+    const starTagId = currentUserGeneralProfile?.star?.id;
+
+    trackEvent('Issue list context select');
+
+    dispatch({
+      type: types.OPEN_SEARCH_CONTEXT_SELECT,
+      selectProps: {
+        show: true,
+        placeholder: 'Filter items',
+        dataSource: async () => {
+          const folders = await api.user.getUserFolders();
+          const groupedFolders = getGroupedFolders(folders, currentSearchContext, starTagId);
+
+          return [EVERYTHING_CONTEXT].concat(
+            groupedFolders.current,
+            groupedFolders.star,
+            groupedFolders.pinned.sort(sortByName),
+            groupedFolders.regular.sort(sortByName)
+          );
+        },
+        selectedItems: [currentSearchContext],
+        onCancel: () => dispatch(closeIssuesContextSelect()),
+        onSelect: (selectedContext: Folder) => {
+          dispatch(storeSearchContext(selectedContext));
+          dispatch(closeIssuesContextSelect());
+          dispatch(onQueryUpdate(selectedContext.query));
+          dispatch(updateUserGeneralProfile({
+            searchContext: selectedContext.id ? selectedContext : null
+          }));
+        }
+      }
+    });
+
+    function getGroupedFolders(folders: Array<Folder>, currentSearchContext: Folder, starTagId: string) {
+      return folders.reduce(
+        (list, folder) => {
+          let target;
+          switch (true) {
+          case currentSearchContext?.id === folder.id:
+            target = list.current;
+            break;
+          case folder.id === starTagId:
+            target = list.star;
+            break;
+          case list.pinned:
+            target = list.pinned;
+            break;
+          default:
+            target = list.regular;
+          }
+
+          if (Array.isArray(target)) {
+            target.push(folder);
+          }
+          return list;
+        },
+        {
+          pinned: [],
+          regular: [],
+          star: [],
+          current: []
+        }
+      );
+    }
+  };
+}
+
 
 export function cacheIssues(issues: Array<IssueOnList>) {
   return (dispatch: (any) => any) => {
@@ -156,7 +273,8 @@ export function loadIssues(query: string) {
 
 export function refreshIssues() {
   return async (dispatch: (any) => any, getState: () => Object) => {
-    dispatch(loadIssues(getState().issueList.query));
+    const searchQuery = dispatch(getSearchQuery(getState().issueList.query));
+    dispatch(loadIssues(searchQuery));
   };
 }
 
@@ -168,7 +286,6 @@ export function initializeIssuesList(query: ?string) {
       await readStoredIssuesQuery()(dispatch);
     }
     await dispatch(readCachedIssues());
-    dispatch(refreshIssues());
   };
 }
 

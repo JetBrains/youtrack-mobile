@@ -7,7 +7,7 @@ import type {Permissions} from '../components/auth/auth__permissions';
 import type {StorageState} from '../components/storage/storage';
 import type {EndUserAgreement} from '../flow/AppConfig';
 import type {WorkTimeSettings} from '../flow/WorkTimeSettings';
-import type {User, UserAppearanceProfile} from '../flow/User';
+import type {User, UserAppearanceProfile, UserGeneralProfile} from '../flow/User';
 
 declare type RootState = {
   auth: ?Auth,
@@ -148,9 +148,25 @@ export default createReducer(initialState, {
       ...state,
       ...{user: updatedUser}
     };
+  },
+  [types.RECEIVE_USER_GENERAL_PROFILE](state: RootState, action: {general: UserGeneralProfile}) {
+    const updatedUser = mergeUserProfile(state, 'general', action.general);
+    return {
+      ...state,
+      ...{user: updatedUser}
+    };
   }
 });
 
 export function getIsAuthorized(state: RootState) {
   return !!state.auth?.currentUser;
+}
+
+function mergeUserProfile(state: RootState, profileName: string, newProfile: UserGeneralProfile | UserAppearanceProfile): User {
+  const {user} = state;
+  const _user = user || {profiles: {}};
+  const userProfiles = Object.assign({}, _user.profiles || {});
+  const updatedProfile = Object.assign({}, userProfiles[profileName], newProfile);
+  const updatedProfiles = Object.assign({}, _user.profiles || {}, {[profileName]: updatedProfile});
+  return {...state.user, ...{profiles: updatedProfiles}};
 }

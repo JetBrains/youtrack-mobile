@@ -30,7 +30,7 @@ import WikiPage from './views/wiki-page/wiki-page';
 
 import {COLOR_BLACK, COLOR_FONT_ON_BLACK} from './components/variables/variables';
 import ErrorBoundary from './components/error-boundary/error-boundary';
-import {getStoredConfigAndProceed, onNavigateBack} from './actions/app-actions';
+import {setAccount, onNavigateBack} from './actions/app-actions';
 // $FlowFixMe: cannot typecheck easy-toast module because of mistakes there
 import Toast from 'react-native-easy-toast';
 
@@ -79,7 +79,7 @@ class YouTrackMobile extends Component<void, State> {
 
 
   static init() {
-    store.dispatch(getStoredConfigAndProceed());
+    store.dispatch(setAccount());
   }
 
   getChildContext() {

@@ -5,6 +5,7 @@ import {LOG_OUT} from '../../actions/action-types';
 import {ISSUE_CREATED} from '../create-issue/create-issue-action-types';
 import {ISSUE_UPDATED} from '../single-issue/single-issue-action-types';
 import type {IssueOnList, IssueFull, TransformedSuggestions} from '../../flow/Issue';
+import type {Folder} from '../../flow/User';
 
 export type IssuesListState = {
   query: string,
@@ -16,9 +17,13 @@ export type IssuesListState = {
   loadingError: ?Object,
   isInitialized: boolean,
   isRefreshing: boolean,
+  isIssuesContextOpen: boolean,
 
   issuesCount: ?number,
-  issues: Array<IssueOnList>
+  issues: Array<IssueOnList>,
+
+  selectProps: Object,
+  searchContext: ?Folder
 };
 
 const initialState: IssuesListState = {
@@ -31,8 +36,12 @@ const initialState: IssuesListState = {
   loadingError: null,
   isInitialized: false,
   isRefreshing: false,
+  isIssuesContextOpen: false,
   issuesCount: null,
-  issues: []
+  issues: [],
+
+  selectProps: null,
+  searchContext: null
 };
 
 export default createReducer(initialState, {
@@ -102,5 +111,19 @@ export default createReducer(initialState, {
     const issues = state.issues.map(issue => issue.id === sourceIssue.id ? updateIssue(issue) : issue);
 
     return {...state, issues};
+  },
+  [types.OPEN_SEARCH_CONTEXT_SELECT](state: IssuesListState, action: Object): IssuesListState {
+    return {
+      ...state,
+      selectProps: action.selectProps,
+      isIssuesContextOpen: true
+    };
+  },
+  [types.CLOSE_SEARCH_CONTEXT_SELECT](state: IssuesListState): IssuesListState {
+    return {
+      ...state,
+      selectProps: null,
+      isIssuesContextOpen: false
+    };
   }
 });

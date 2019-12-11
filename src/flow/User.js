@@ -8,7 +8,7 @@ export type User = {
   id: string,
   issueRelatedGroup?: IssueRelatedGroup,
   login?: string,
-  profiles?: Array<UserProfile>,
+  profiles?: Array<UserProfile | UserGeneralProfile | UserAppearanceProfile>,
   ringId?: string
 };
 
@@ -27,7 +27,7 @@ export type FeatureFlags = {
 export type UserProfile = {
   $type: string,
   appearance?: UserAppearanceProfile,
-  general?: Object,
+  general?: UserGeneralProfile,
   issuesList?: Object,
   notifications?: Object,
   teamcity?: Object,
@@ -45,4 +45,23 @@ export type UserAppearanceProfile = {
   showSimilarIssues?: boolean,
   uiTheme?: string,
   useAbsoluteDates?: boolean
+}
+
+export type UserGeneralProfile = {
+  $type: string,
+  id: string,
+  searchContext?: Folder,
+}
+
+export type Folder = {
+  $type: string,
+  id: ?string,
+  $type: ?string,
+  shortName: ?string,
+  name: ?string,
+  query: ?string,
+  pinned: ?string,
+  issuesUrl: ?string,
+  fqFolderId: ?string,
+  isUpdatable: ?string
 }
