@@ -121,5 +121,11 @@ export default StyleSheet.create({
     left: 0,
     bottom: 0,
     backgroundColor: COLOR_TRANSPARENT_BLACK
+  },
+  issuesCount: {
+    marginTop: -1 * UNIT,
+    marginLeft: UNIT * 2,
+    marginBottom: UNIT * 2,
+    color: COLOR_ICON_MEDIUM_GREY
   }
 });

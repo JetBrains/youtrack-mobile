@@ -78,8 +78,14 @@ export class IssueList extends Component<Props, void> {
     });
   }
 
+  renderIssuesCount() {
+    const {issuesCount, isRefreshing} = this.props;
+    return <Text style={styles.issuesCount}>
+      {issuesCount && !isRefreshing ? `Matches ${issuesCount || '?'} issue${issuesCount >= 1 ? 's' : ''}` : ' '}
+    </Text>;
+  }
+
   _renderHeader() {
-    const {issuesCount} = this.props;
     return (
       <Header
         leftButton={<Text>Menu</Text>}
@@ -88,9 +94,6 @@ export class IssueList extends Component<Props, void> {
         onBack={this.props.openMenu}
         onRightButtonClick={() => Router.CreateIssue()}
       >
-        <Text style={styles.headerText}>
-          {issuesCount}{' '}{issuesCount === 1 ? 'Issue' : 'Issues'}
-        </Text>
       </Header>
     );
   }
@@ -201,6 +204,8 @@ export class IssueList extends Component<Props, void> {
             currentQuery={query}
             onChange={suggestIssuesQuery}
             onSetQuery={onQueryUpdate}/>
+
+          {this.renderIssuesCount()}
 
           <FlatList
             removeClippedSubviews={false}
