@@ -5,16 +5,16 @@ import log from '../log/log';
 import appPackage from '../../../package.json'; // eslint-disable-line import/extensions
 import DeviceInfo from 'react-native-device-info';
 
-class Bugsnag {
-  bugsnag: Client;
+class ExceptionReporter {
+  exceptionReporter: Client;
   config: Configuration;
 
   constructor() {
     this.config = new Configuration(appPackage.bugsnag.token);
     this.config.automaticallyCollectBreadcrumbs = false;
     this.config.appVersion = appPackage.bugsnag.version;
-    this.bugsnag = new Client(this.config);
-    this.bugsnag.setUser(
+    this.exceptionReporter = new Client(this.config);
+    this.exceptionReporter.setUser(
       DeviceInfo.getBrand(),
       DeviceInfo.getSystemName(),
       DeviceInfo.getSystemVersion()
@@ -25,7 +25,7 @@ class Bugsnag {
   notify(error: String | Object | null): void {
     const err = new Error(error);
     const buildNumber = appPackage.version.split('-').pop();
-    this.bugsnag.notify(err, (report) => {
+    this.exceptionReporter.notify(err, (report) => {
       report.metadata = {
         Build: {
           build: buildNumber,
@@ -37,4 +37,4 @@ class Bugsnag {
   }
 }
 
-export default new Bugsnag();
+export default new ExceptionReporter();

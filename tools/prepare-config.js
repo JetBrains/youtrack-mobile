@@ -18,10 +18,11 @@ updateJsonFile('package.json', data => {
   data.config.EXCEPTION_REPORTER_TOKEN = EXCEPTION_REPORTER_TOKEN;
   data.config.KONNECTOR_URL = KONNECTOR_URL;
   data.config.BUGSNAG_TOKEN = BUGSNAG_TOKEN;
+  console.info('Config', data.config); //eslint-disable-line
 
   data.bugsnag.version = VERSION_NUMBER;
   data.bugsnag.token = BUGSNAG_TOKEN;
-  console.info('Config', data.config, data.bugsnag); //eslint-disable-line
+  console.info('Bugsnag', data.bugsnag); //eslint-disable-line
 
   data.version = `${VERSION_NUMBER }-${ BUILD_NUMBER}`;
   console.info('Version', data.version); //eslint-disable-line
