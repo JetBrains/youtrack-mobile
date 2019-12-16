@@ -23,7 +23,8 @@ export type IssuesListState = {
   issues: Array<IssueOnList>,
 
   selectProps: Object,
-  searchContext: ?Folder
+  searchContext: ?Folder,
+  isSearchContextPinned: boolean
 };
 
 const initialState: IssuesListState = {
@@ -41,7 +42,8 @@ const initialState: IssuesListState = {
   issues: [],
 
   selectProps: null,
-  searchContext: null
+  searchContext: null,
+  isSearchContextPinned: false
 };
 
 export default createReducer(initialState, {
@@ -125,5 +127,11 @@ export default createReducer(initialState, {
       selectProps: null,
       isIssuesContextOpen: false
     };
-  }
+  },
+  [types.IS_SEARCH_CONTEXT_PINNED](state: IssuesListState, action: Object): IssuesListState {
+    return {
+      ...state,
+      isSearchContextPinned: action.isSearchContextPinned
+    };
+  },
 });

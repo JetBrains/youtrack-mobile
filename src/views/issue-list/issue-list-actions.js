@@ -125,6 +125,10 @@ export function setIssuesCount(count: number) {
   return {type: types.SET_ISSUES_COUNT, count};
 }
 
+export function updateSearchContextPinned(isPinned: boolean) {
+  return {type: types.IS_SEARCH_CONTEXT_PINNED, isSearchContextPinned: isPinned};
+}
+
 export function closeIssuesContextSelect() {
   return {type: types.CLOSE_SEARCH_CONTEXT_SELECT};
 }

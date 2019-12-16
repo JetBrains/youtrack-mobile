@@ -103,13 +103,25 @@ export default StyleSheet.create({
     overflow: 'hidden',
     marginTop: UNIT / 2
   },
-  contextButton: {
-    marginLeft: UNIT * 2,
+  searchContext: {
+    height: UNIT * 7,
+    backgroundColor: COLOR_FONT_ON_BLACK,
+    borderBottomWidth: 1,
+    borderColor: 'transparent'
+  },
+  searchContextPinned: {
+    shadowColor: COLOR_BLACK,
+    shadowOpacity: 0.15,
+    shadowRadius: 1,
+    shadowOffset: { width: 0, height: 1 }
+  },
+  searchContextButton: {
     marginTop: UNIT,
     marginRight: UNIT * 2,
+    marginLeft: UNIT * 2,
     paddingTop: UNIT,
-    paddingBottom: UNIT / 2,
-    height: UNIT * 5
+    paddingBottom: UNIT,
+    backgroundColor: COLOR_FONT_ON_BLACK
   },
   contextButtonText: {
     fontSize: 20,
@@ -122,10 +134,12 @@ export default StyleSheet.create({
     bottom: 0,
     backgroundColor: COLOR_TRANSPARENT_BLACK
   },
+  searchPanel: {
+    zIndex: -1,
+    marginBottom: UNIT * 2
+  },
   issuesCount: {
-    marginTop: -1 * UNIT,
     marginLeft: UNIT * 2,
-    marginBottom: UNIT * 2,
     color: COLOR_ICON_MEDIUM_GREY
   }
 });

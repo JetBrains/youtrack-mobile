@@ -1,4 +1,5 @@
 /* @flow */
+
 import {
   View,
   Text,
@@ -14,7 +15,6 @@ import {connect} from 'react-redux';
 
 import styles from './issue-list.styles';
 import Header from '../../components/header/header';
-import QueryAssist from '../../components/query-assist/query-assist';
 import {COLOR_PINK} from '../../components/variables/variables';
 import {notifyError} from '../../components/notification/notification';
 import usage from '../../components/usage/usage';
@@ -33,6 +33,7 @@ import type {IssueOnList} from '../../flow/Issue';
 import OpenScanButton from '../../components/scan/open-scan-button';
 import Select from '../../components/select/select';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import SearchPanel from './issue-list__search-panel';
 
 
 type Props = IssuesListState & typeof issueActions & {
@@ -44,6 +45,8 @@ type Props = IssuesListState & typeof issueActions & {
 };
 
 export class IssueList extends Component<Props, void> {
+  searchPanelNode: Object;
+
   constructor() {
     super();
     usage.trackScreenView('Issue list');
@@ -76,13 +79,6 @@ export class IssueList extends Component<Props, void> {
       issuePlaceholder: issue,
       issueId: issue.id
     });
-  }
-
-  renderIssuesCount() {
-    const {issuesCount, isRefreshing} = this.props;
-    return <Text style={styles.issuesCount}>
-      {issuesCount && !isRefreshing ? `Matches ${issuesCount || '?'} issue${issuesCount >= 1 ? 's' : ''}` : ' '}
-    </Text>;
   }
 
   _renderHeader() {
@@ -150,25 +146,31 @@ export class IssueList extends Component<Props, void> {
   };
 
   renderContextButton() {
-    const {onOpenContextSelect, isRefreshing, searchContext} = this.props;
-
-    return (
-      <TouchableOpacity
-        style={styles.contextButton}
-        disabled={isRefreshing || !searchContext}
-        onPress={onOpenContextSelect}
-      >
-        {searchContext && (
-          <Text
-            numberOfLines={1}
-            style={styles.contextButtonText}
+    const {onOpenContextSelect, isRefreshing, searchContext, isSearchContextPinned} = this.props;
+    if (searchContext) {
+      return (
+        <TouchableOpacity
+          style={[
+            styles.searchContext,
+            isSearchContextPinned ? styles.searchContextPinned : null
+          ]}
+          disabled={isRefreshing || !searchContext}
+          onPress={onOpenContextSelect}
+        >
+          <View
+            style={styles.searchContextButton}
           >
-            {`${searchContext.name} `}
-            <Icon name="angle-down" size={20}/>
-          </Text>
-        )}
-      </TouchableOpacity>
-    );
+            <Text
+              numberOfLines={1}
+              style={styles.contextButtonText}
+            >
+              {`${searchContext.name} `}
+              <Icon name="angle-down" size={20}/>
+            </Text>
+          </View>
+        </TouchableOpacity>
+      );
+    }
   }
 
 
@@ -188,8 +190,32 @@ export class IssueList extends Component<Props, void> {
     );
   }
 
+  searchPanelRef = (instance: ?SearchPanel) => {
+    if (instance) {
+      this.searchPanelNode = instance;
+    }
+  };
+
+  onScroll = (nativeEvent: Object) => {
+    const newY = nativeEvent.contentOffset.y;
+    const MAX_SHIFT = -104;
+    let opacity = 1;
+    let marginTop = newY < 0 ? 0 : -newY;
+    const isHideSearch = marginTop < MAX_SHIFT;
+    if (isHideSearch) {
+      marginTop = MAX_SHIFT;
+      opacity = 0;
+    }
+
+    this.props.updateSearchContextPinned(isHideSearch);
+
+    if (this.searchPanelNode) {
+      this.searchPanelNode.setNativeProps({style: {marginTop, opacity}});
+    }
+  };
+
   render() {
-    const {query, issues, suggestIssuesQuery, queryAssistSuggestions, isIssuesContextOpen, onQueryUpdate} = this.props;
+    const {query, issues, suggestIssuesQuery, queryAssistSuggestions, isIssuesContextOpen, onQueryUpdate, issuesCount} = this.props;
 
     return (
       <Menu>
@@ -199,13 +225,14 @@ export class IssueList extends Component<Props, void> {
           {this.renderContextButton()}
           {isIssuesContextOpen && this.renderContextSelect()}
 
-          <QueryAssist
-            suggestions={queryAssistSuggestions}
-            currentQuery={query}
-            onChange={suggestIssuesQuery}
-            onSetQuery={onQueryUpdate}/>
-
-          {this.renderIssuesCount()}
+          <SearchPanel
+            ref={this.searchPanelRef}
+            queryAssistSuggestions={queryAssistSuggestions}
+            query={query}
+            suggestIssuesQuery={suggestIssuesQuery}
+            onQueryUpdate={onQueryUpdate}
+            issuesCount={issuesCount}
+          />
 
           <FlatList
             removeClippedSubviews={false}
@@ -219,6 +246,7 @@ export class IssueList extends Component<Props, void> {
             onEndReached={this.onEndReached}
             onEndReachedThreshold={0.1}
             testID="issue-list"
+            onScroll={(params) => this.onScroll(params.nativeEvent)}
           />
 
         </View>
@@ -241,7 +269,8 @@ const mapDispatchToProps = (dispatch) => {
     ...bindActionCreators(issueActions, dispatch),
     openMenu: () => dispatch(openMenu()),
     onQueryUpdate: (query) => dispatch(issueActions.onQueryUpdate(query)),
-    onOpenContextSelect: () => dispatch(issueActions.openIssuesContextSelect())
+    onOpenContextSelect: () => dispatch(issueActions.openIssuesContextSelect()),
+    updateSearchContextPinned: (isSearchScrolledUp) => dispatch(issueActions.updateSearchContextPinned(isSearchScrolledUp))
   };
 };
 

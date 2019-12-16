@@ -16,8 +16,8 @@ export default StyleSheet.create({
     height: QUERY_ASSIST_HEIGHT,
     paddingLeft: UNIT * 2,
     paddingRight: UNIT * 2,
-    marginTop: UNIT * 2,
-    marginBottom: UNIT * 3
+    marginTop: UNIT,
+    marginBottom: UNIT * 2
   },
   modal: {
     flex: 1,
