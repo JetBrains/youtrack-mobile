@@ -2,17 +2,19 @@
 
 import {LayoutAnimation} from 'react-native';
 
-function layoutAnimation() {
+const defaultConfig = LayoutAnimation.Presets.easeInEaseOut;
+
+function layoutAnimation(config?: Object) {
   if (!layoutAnimation.layoutAnimationActive) {//https://github.com/facebook/react-native/issues/13984
     layoutAnimation.layoutAnimationActive = true;
-    const defaultEffect = LayoutAnimation.Presets.easeInEaseOut;
-    defaultEffect && LayoutAnimation.configureNext(
-      defaultEffect,
+    LayoutAnimation.configureNext(
+      config || defaultConfig,
       () => { layoutAnimation.layoutAnimationActive = null; }
     );
   }
 }
 
 export default {
-  layoutAnimation
+  layoutAnimation,
+  LayoutAnimation
 };

@@ -19,6 +19,8 @@ const rowLine = {
 };
 
 const secondaryText = {color: COLOR_ICON_MEDIUM_GREY};
+const searchPanelHeight = UNIT * 12;
+const searchContextHeight = UNIT * 7;
 
 export default StyleSheet.create({
   listContainer: {
@@ -104,7 +106,7 @@ export default StyleSheet.create({
     marginTop: UNIT / 2
   },
   searchContext: {
-    height: UNIT * 7,
+    height: searchContextHeight,
     backgroundColor: COLOR_FONT_ON_BLACK,
     borderBottomWidth: 1,
     borderColor: 'transparent'
@@ -136,7 +138,8 @@ export default StyleSheet.create({
   },
   searchPanel: {
     zIndex: -1,
-    marginBottom: UNIT * 2
+    marginBottom: UNIT * 2,
+    height: searchPanelHeight
   },
   issuesCount: {
     marginLeft: UNIT * 2,

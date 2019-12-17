@@ -13,7 +13,6 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
-import styles from './issue-list.styles';
 import Header from '../../components/header/header';
 import {COLOR_PINK} from '../../components/variables/variables';
 import {notifyError} from '../../components/notification/notification';
@@ -34,7 +33,9 @@ import OpenScanButton from '../../components/scan/open-scan-button';
 import Select from '../../components/select/select';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SearchPanel from './issue-list__search-panel';
+import animation from '../../components/animation/animation';
 
+import styles from './issue-list.styles';
 
 type Props = IssuesListState & typeof issueActions & {
   openMenu: typeof openMenu,
@@ -147,30 +148,29 @@ export class IssueList extends Component<Props, void> {
 
   renderContextButton() {
     const {onOpenContextSelect, isRefreshing, searchContext, isSearchContextPinned} = this.props;
-    if (searchContext) {
-      return (
-        <TouchableOpacity
-          style={[
-            styles.searchContext,
-            isSearchContextPinned ? styles.searchContextPinned : null
-          ]}
-          disabled={isRefreshing || !searchContext}
-          onPress={onOpenContextSelect}
+
+    return (
+      <TouchableOpacity
+        style={[
+          styles.searchContext,
+          isSearchContextPinned ? styles.searchContextPinned : null
+        ]}
+        disabled={isRefreshing || !searchContext}
+        onPress={onOpenContextSelect}
+      >
+        <View
+          style={styles.searchContextButton}
         >
-          <View
-            style={styles.searchContextButton}
+          <Text
+            numberOfLines={1}
+            style={styles.contextButtonText}
           >
-            <Text
-              numberOfLines={1}
-              style={styles.contextButtonText}
-            >
-              {`${searchContext.name} `}
-              <Icon name="angle-down" size={20}/>
-            </Text>
-          </View>
-        </TouchableOpacity>
-      );
-    }
+            {`${searchContext?.name || ''} `}
+            {searchContext && <Icon name="angle-down" size={20}/>}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
   }
 
 
@@ -198,7 +198,7 @@ export class IssueList extends Component<Props, void> {
 
   onScroll = (nativeEvent: Object) => {
     const newY = nativeEvent.contentOffset.y;
-    const MAX_SHIFT = -104;
+    const MAX_SHIFT = -112;
     let opacity = 1;
     let marginTop = newY < 0 ? 0 : -newY;
     const isHideSearch = marginTop < MAX_SHIFT;
@@ -209,13 +209,20 @@ export class IssueList extends Component<Props, void> {
 
     this.props.updateSearchContextPinned(isHideSearch);
 
+    animation.layoutAnimation({
+      ...animation.LayoutAnimation.Presets.linear,
+      duration: 50
+    });
+
     if (this.searchPanelNode) {
       this.searchPanelNode.setNativeProps({style: {marginTop, opacity}});
     }
   };
 
   render() {
-    const {query, issues, suggestIssuesQuery, queryAssistSuggestions, isIssuesContextOpen, onQueryUpdate, issuesCount} = this.props;
+    const {
+      query, issues, suggestIssuesQuery, queryAssistSuggestions, isIssuesContextOpen, onQueryUpdate, issuesCount
+    } = this.props;
 
     return (
       <Menu>
