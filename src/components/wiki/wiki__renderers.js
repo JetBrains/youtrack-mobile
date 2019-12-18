@@ -24,9 +24,10 @@ const IMAGE_HEIGHT = 200;
 export function renderCode(node: { children: any }, index: number, title?: string, language?: string) {
   // App is hanging trying to render a huge text https://github.com/facebook/react-native/issues/19453
   const MAX_CODE_LENGTH = 700;
+  const isIOS = Platform.OS === 'ios';
   const newLine = <Text>{'\n'}</Text>;
 
-  const code = node.children.map(it => it.data).join('\n') || '';
+  const code = (node?.children || []).map(it => it.data).join('\n') || '';
   let trimmedCode = code;
   const isCodeTrimmed = code.length > MAX_CODE_LENGTH;
 
@@ -37,18 +38,19 @@ export function renderCode(node: { children: any }, index: number, title?: strin
   return <Text key={index}>
     {newLine}
     <Text
-      style={styles.codeBlock}
       onPress={() => isCodeTrimmed && Router.WikiPage({
         style: styles.code,
         title: title,
         plainText: code
       })}>
       <SyntaxHighlighter
-        key={index}
         language={language}
         PreTag={Text}
         CodeTag={Text}
+
         style={codeHighlightStyle}
+        fontSize={isIOS ? 16 : 14}
+        fontFamily={isIOS ? 'Courier' : 'monospace'}
       >
         {entities.decodeHTML(trimmedCode)}
       </SyntaxHighlighter>

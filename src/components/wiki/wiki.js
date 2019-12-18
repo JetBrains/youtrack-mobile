@@ -1,6 +1,6 @@
 /* @flow */
 
-import {Linking, Text} from 'react-native';
+import {Linking, Text, ScrollView} from 'react-native';
 import React, {PureComponent} from 'react';
 import HTMLView from 'react-native-htmlview';
 import toHtml from 'htmlparser-to-html';
@@ -11,7 +11,7 @@ import {COLOR_FONT} from '../variables/variables';
 import {getBaseUrl} from '../config/config';
 import {renderCode, renderImage, renderTable, renderTableRow, renderTableCell} from './wiki__renderers';
 import {extractId} from '../open-url-handler/open-url-handler';
-import {showMoreInlineText} from '../text-view/text-view';
+import {showMoreText} from '../text-view/text-view';
 import {hasMimeType} from '../mime-type/mime-type';
 import {nodeHasType} from './wiki__node-type';
 
@@ -76,14 +76,19 @@ export default class Wiki extends PureComponent<Props, void> {
           onIssueIdTap: this.handleLinkPress
         }))}
       >
-        {showMoreInlineText}
+        {`\n${showMoreText}`}
       </Text>
     );
   };
 
+  getLanguage(node: Object): string {
+    return (node?.attribs?.class || '').split('language-').pop();
+  }
+
   renderNode = (node: Object, index: number, siblings: Array<any>, parent: Object, defaultRenderer: (any, any) => any) => {
     const {imageHeaders, attachments, renderFullException, title} = this.props;
     const wikiNodeType = nodeHasType(node);
+    const getCode = () => (node.children[0] && node.children[0].name === 'code') ? node.children[0] : node;
 
     switch (true) {
 
@@ -101,10 +106,12 @@ export default class Wiki extends PureComponent<Props, void> {
       return <Text key={`checkbox-${node.attribs['data-position']}`}>{'checked' in node.attribs ? '✓' : '☐'}</Text>;
 
     case (wikiNodeType.code):
-      if (node.children[0] && node.children[0].name === 'code') {
-        return renderCode(node.children[0], index, title);
-      }
-      return renderCode(node, index, title);
+      return renderCode(
+        getCode(),
+        index,
+        title,
+        this.getLanguage(getCode())
+      );
 
     case (wikiNodeType.image):
       return renderImage({
@@ -133,7 +140,9 @@ export default class Wiki extends PureComponent<Props, void> {
 
     case (wikiNodeType.font):
       return (
-        <Text key={index} style={{color: node.attribs.color || COLOR_FONT}}>{defaultRenderer(node.children, parent)}</Text>
+        <Text
+          key={index}
+          style={{color: node.attribs.color || COLOR_FONT}}>{defaultRenderer(node.children, parent)}</Text>
       );
 
     case (wikiNodeType.del):
@@ -163,16 +172,20 @@ export default class Wiki extends PureComponent<Props, void> {
     const {children} = this.props;
 
     return (
-      <HTMLView
-        value={children}
-        stylesheet={htmlViewStyles}
-        renderNode={this.renderNode}
-        onLinkPress={this.handleLinkPress}
+      <ScrollView
+        horizontal={true}
+      >
+        <HTMLView
+          value={children}
+          stylesheet={htmlViewStyles}
+          renderNode={this.renderNode}
+          onLinkPress={this.handleLinkPress}
 
-        RootComponent={RootComponent}
-        textComponentProps={{selectable: true}}
-        style={styles.htmlView}
-      />
+          RootComponent={RootComponent}
+          textComponentProps={{selectable: true}}
+          style={styles.htmlView}
+        />
+      </ScrollView>
     );
   }
 }
