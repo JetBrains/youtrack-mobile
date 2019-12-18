@@ -1,6 +1,6 @@
 /* @flow */
 
-import {Linking, Text} from 'react-native';
+import {Linking, Text, ScrollView} from 'react-native';
 import React, {PureComponent} from 'react';
 import HTMLView from 'react-native-htmlview';
 import toHtml from 'htmlparser-to-html';
@@ -11,8 +11,9 @@ import {COLOR_FONT} from '../variables/variables';
 import {getBaseUrl} from '../config/config';
 import {renderCode, renderImage, renderTable, renderTableRow, renderTableCell} from './wiki__renderers';
 import {extractId} from '../open-url-handler/open-url-handler';
-import {showMoreInlineText} from '../text-view/text-view';
+import {showMoreText} from '../text-view/text-view';
 import {hasMimeType} from '../mime-type/mime-type';
+import {nodeHasType} from './wiki__node-type';
 
 HTMLView.propTypes.style = Text.propTypes.style;
 
@@ -29,16 +30,6 @@ type Props = {
 
 const HTML_RENDER_NOTHING = null;
 const HTML_RENDER_DEFAULT = undefined;
-
-const selector = (node: Object, tag: string, className: string): boolean => {
-  if (node.name !== tag) {
-    return false;
-  }
-
-  const classes = node.attribs.class && node.attribs.class.split(' ');
-  return !!classes && classes.some(it => it === className);
-};
-
 const RootComponent = props => <Text {...props} />;
 
 export default class Wiki extends PureComponent<Props, void> {
@@ -85,42 +76,44 @@ export default class Wiki extends PureComponent<Props, void> {
           onIssueIdTap: this.handleLinkPress
         }))}
       >
-        {showMoreInlineText}
+        {`\n${showMoreText}`}
       </Text>
     );
   };
 
+  getLanguage(node: Object): string {
+    return (node?.attribs?.class || '').split('language-').pop();
+  }
+
   renderNode = (node: Object, index: number, siblings: Array<any>, parent: Object, defaultRenderer: (any, any) => any) => {
-    const {imageHeaders, attachments} = this.props;
+    const {imageHeaders, attachments, renderFullException, title} = this.props;
+    const wikiNodeType = nodeHasType(node);
+    const getCode = () => (node.children[0] && node.children[0].name === 'code') ? node.children[0] : node;
 
-    if (node.type === 'text' && node.data === '\n') {
+    switch (true) {
+
+    case (
+      wikiNodeType.textOrNewLine ||
+      wikiNodeType.expandCollapseToggle ||
+      (wikiNodeType.exceptionTitle && !renderFullException)
+    ):
       return HTML_RENDER_NOTHING;
-    }
 
-    if (selector(node, 'span', 'wiki-plus')) {
-      return HTML_RENDER_NOTHING;
-    }
-
-    if (!this.props.renderFullException && selector(node, 'span', 'wiki-hellip')) {
-      return HTML_RENDER_NOTHING;
-    }
-
-    if (!this.props.renderFullException && selector(node, 'pre', 'wiki-exception')) {
+    case (wikiNodeType.exception && !renderFullException):
       return this.renderShowFullExceptionLink(node, index);
-    }
 
-    if (node.name === 'input') {
+    case (wikiNodeType.checkbox):
       return <Text key={`checkbox-${node.attribs['data-position']}`}>{'checked' in node.attribs ? '✓' : '☐'}</Text>;
-    }
 
-    if (selector(node, 'pre', 'wikicode')) {
-      if (node.children[0] && node.children[0].name === 'code') {
-        return renderCode(node.children[0], index, this.props.title);
-      }
-      return renderCode(node, index, this.props.title);
-    }
+    case (wikiNodeType.code):
+      return renderCode(
+        getCode(),
+        index,
+        title,
+        this.getLanguage(getCode())
+      );
 
-    if (node.name === 'img') {
+    case (wikiNodeType.image):
       return renderImage({
         node,
         index,
@@ -128,85 +121,71 @@ export default class Wiki extends PureComponent<Props, void> {
         imageHeaders,
         onImagePress: this.onImagePress
       });
-    }
 
-    if (node.name === 'p') {
-      const isLast = index === siblings.length - 2; // Paraghaph always have "\n" last sibling
+    case (wikiNodeType.p):
+      // Paragraph always have "\n" last sibling --> `index === siblings.length - 2`
       return (
         <Text key={index}>
           {index === 0 ? null : '\n'}
           {defaultRenderer(node.children, parent)}
-          {isLast ? null : '\n'}
+          {index === siblings.length - 2 ? null : '\n'}
         </Text>
       );
-    }
 
-    if (node.name === 'strong') {
+    case (wikiNodeType.strong):
+      return <Text key={index} style={{fontWeight: 'bold'}}>{defaultRenderer(node.children, parent)}</Text>;
+
+    case (wikiNodeType.ul):
+      return <Text key={index}>{'   - '}{defaultRenderer(node.children, parent)}</Text>;
+
+    case (wikiNodeType.font):
       return (
-        <Text key={index} style={{fontWeight: 'bold'}}>{defaultRenderer(node.children, parent)}</Text>
+        <Text
+          key={index}
+          style={{color: node.attribs.color || COLOR_FONT}}>{defaultRenderer(node.children, parent)}</Text>
       );
-    }
 
-    if (selector(node, 'ul', 'wiki-list1')) {
-      return (
-        <Text key={index}>{'   - '}{defaultRenderer(node.children, parent)}</Text>
-      );
-    }
+    case (wikiNodeType.del):
+      return <Text key={index} style={styles.deleted}>{defaultRenderer(node.children, parent)}</Text>;
 
-    if (node.name === 'font') {
-      return (
-        <Text key={index} style={{color: node.attribs.color || COLOR_FONT}}>{defaultRenderer(node.children,
-          parent)}</Text>
-      );
-    }
+    case (wikiNodeType.monospace):
+      return <Text key={index} style={styles.monospace}>{defaultRenderer(node.children, parent)}</Text>;
 
-    if (node.name === 'del') {
-      return (
-        <Text key={index} style={styles.deleted}>{defaultRenderer(node.children, parent)}</Text>
-      );
-    }
+    case (wikiNodeType.quoteOrBlockquote):
+      return <Text key={index} style={styles.blockQuote}>{'> '}{defaultRenderer(node.children, parent)}</Text>;
 
-    if (selector(node, 'span', 'monospace')) {
-      return (
-        <Text key={index} style={styles.monospace}>{defaultRenderer(node.children, parent)}</Text>
-      );
-    }
-
-    if (selector(node, 'div', 'quote') || node.name === 'blockquote') {
-      return (
-        <Text key={index} style={styles.blockQuote}>{'> '}{defaultRenderer(node.children, parent)}</Text>
-      );
-    }
-
-    if (node.name === 'table') {
+    case (wikiNodeType.table):
       return renderTable(node, index, defaultRenderer);
-    }
 
-    if (node.name === 'tr') {
+    case (wikiNodeType.tr):
       return renderTableRow(node, index, defaultRenderer);
-    }
 
-    if (node.name === 'td' || node.name === 'th') {
+    case (wikiNodeType.td || wikiNodeType.th):
       return renderTableCell(node, index, defaultRenderer);
-    }
 
-    return HTML_RENDER_DEFAULT;
+    default:
+      return HTML_RENDER_DEFAULT;
+    }
   };
 
   render() {
     const {children} = this.props;
 
     return (
-      <HTMLView
-        value={children}
-        stylesheet={htmlViewStyles}
-        renderNode={this.renderNode}
-        onLinkPress={this.handleLinkPress}
+      <ScrollView
+        horizontal={true}
+      >
+        <HTMLView
+          value={children}
+          stylesheet={htmlViewStyles}
+          renderNode={this.renderNode}
+          onLinkPress={this.handleLinkPress}
 
-        RootComponent={RootComponent}
-        textComponentProps={{selectable: true}}
-        style={styles.htmlView}
-      />
+          RootComponent={RootComponent}
+          textComponentProps={{selectable: true}}
+          style={styles.htmlView}
+        />
+      </ScrollView>
     );
   }
 }
