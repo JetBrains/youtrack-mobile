@@ -28,8 +28,7 @@ type ActivityWorkItem = EventBase & {
   duration: {minutes: number}
 }
 
-export type AddedActivityItem = IssueProject | IssueComment | ActivityAttachment | ActivityIssue | ActivityWorkItem;
-export type RemovedActivityItem = IssueProject | IssueComment | ActivityIssue;
+export type ActivityItem = IssueProject | IssueComment | ActivityAttachment | ActivityIssue | ActivityWorkItem | string | null;
 
 export type IssueActivity = {
   id: string;
@@ -44,8 +43,8 @@ export type IssueActivity = {
   author: User,
   target: {id: string, created: number, usesMarkdown: boolean},
   field: Object,
-  added: string | Array<AddedActivityItem>,
-  removed: Array<RemovedActivityItem> | null
+  added: ActivityItem | Array<ActivityItem>,
+  removed: ActivityItem | Array<ActivityItem>
 }
 
 export type ActivityEnabledType = {

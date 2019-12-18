@@ -18,7 +18,7 @@ import {mergeActivities} from '../../components/activity/activity__merge-activit
 import {groupActivities} from '../../components/activity/activity__group-activities';
 import {createActivitiesModel} from '../../components/activity/activity__create-model';
 
-import getHistoryLabel from '../../components/activity/activity__history-label';
+import getEventTitle from '../../components/activity/activity__history-title';
 import {getTextValueChange} from '../../components/activity/activity__history-value';
 import {minutesAndHoursFor} from '../../components/time-tracking/time-tracking';
 
@@ -33,13 +33,13 @@ import log from '../../components/log/log';
 import {getApi} from '../../components/api/api__instance';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import ApiHelper from '../../components/api/api__helper';
-import TextView from '../../components/text-view/text-view';
 import CustomFieldChangeDelimiter from '../../components/custom-field/custom-field__change-delimiter';
 
 import type {WorkTimeSettings} from '../../flow/WorkTimeSettings';
-import type {IssueActivity} from '../../flow/Activity';
+import type {ActivityItem, IssueActivity} from '../../flow/Activity';
 
 import {COLOR_FONT, COLOR_FONT_GRAY, UNIT} from '../../components/variables/variables';
+import Diff from '../../components/diff/diff';
 
 const CATEGORY_NAME = 'Issue Stream';
 
@@ -75,6 +75,11 @@ type DefaultProps = {
   naturalCommentsOrder: boolean
 };
 
+type Change = {
+  added: ActivityItem,
+  removed: ActivityItem
+};
+
 export default class SingleIssueActivities extends PureComponent<Props, void> {
   static defaultProps: DefaultProps = {
     onReply: () => {
@@ -101,45 +106,67 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
     return false;
   }
 
-  _renderTextValueChange(activity: Object, issueFields: Array<Object>) {
-    const isMultiValue = this._isMultiValueActivity(activity);
+  getTextChange(activity: IssueActivity, issueFields: Array<Object>): Change {
     const getParams = (isRemovedValue) => ({
       activity,
       issueFields,
       workTimeSettings: this.props.workTimeSettings,
       isRemovedValue: isRemovedValue
     });
-    const removed: string = getTextValueChange(getParams(true));
-    const added: string = getTextValueChange(getParams(false));
-    //TODO(xi-eye): implement more convenient textDiff component
-    const isSummaryOrDescriptionChange = isActivityCategory.description(activity) || isActivityCategory.summary(activity);
-    let delimiter: string;
-    const TextRenderer: any = isSummaryOrDescriptionChange ? TextView : Text;
 
-    if (isMultiValue) {
-      delimiter = isSummaryOrDescriptionChange ? '\n' : ', ';
-    } else {
-      delimiter = CustomFieldChangeDelimiter;
-    }
+    return {
+      added: getTextValueChange(getParams(false)),
+      removed: getTextValueChange(getParams(true))
+    };
+  }
+
+  renderTextDiff(activity: IssueActivity, textChange: Change) {
+    return <Diff
+      title={getEventTitle(activity, true)}
+      text1={textChange.removed}
+      text2={textChange.added}
+    />;
+  }
+
+  renderTextChange(activity: IssueActivity, textChange: Change) {
+    const isMultiValue = this._isMultiValueActivity(activity);
+    return (
+      <Text>
+        <Text style={styles.activityLabel}>{getEventTitle(activity)}</Text>
+
+        <Text
+          style={[
+            styles.activityText,
+            isMultiValue || textChange.removed && !textChange.added ? styles.activityRemoved : null
+          ]}
+        >
+          {textChange.removed}
+        </Text>
+
+        {Boolean(textChange.removed && textChange.added) && (
+          <Text style={styles.activityText}>
+            {isMultiValue ? ', ' : CustomFieldChangeDelimiter}
+          </Text>
+        )}
+
+        <Text style={styles.activityText}>{textChange.added}</Text>
+      </Text>
+    );
+  }
+
+  renderTextValueChange(activity: IssueActivity, issueFields: Array<Object>) {
+    const textChange = this.getTextChange(activity, issueFields);
+    const isTextDiff = (
+      isActivityCategory.description(activity) ||
+      isActivityCategory.summary(activity)
+    );
 
     return (
       <View style={styles.row}>
-        <Text style={{flexGrow: 2}}>
-          <Text style={styles.activityLabel}>{getHistoryLabel(activity)}</Text>
-
-          <TextRenderer
-            style={[styles.activityText, isMultiValue || removed && !added ? styles.activityRemoved : null]}
-            text={removed}>{removed}</TextRenderer>
-
-          {Boolean(removed && added) && (
-            <Text style={styles.activityText}>
-              {delimiter}
-            </Text>
-          )}
-
-          <TextRenderer style={styles.activityText} text={added}>{added}</TextRenderer>
-
-        </Text>
+        <View style={{flexGrow: 2}}>
+          {isTextDiff && this.renderTextDiff(activity, textChange)}
+          {!isTextDiff && this.renderTextChange(activity, textChange)}
+        </View>
       </View>
     );
   }
@@ -149,7 +176,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
     return (
       <TouchableOpacity key={event.id}>
         <View style={styles.row}>
-          <Text style={styles.activityLabel}>{getHistoryLabel(event)}</Text>
+          <Text style={styles.activityLabel}>{getEventTitle(event)}</Text>
         </View>
         {
           linkedIssues.map((linkedIssue) => (
@@ -195,7 +222,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
     return (
       <View key={event.id}>
         <View style={styles.row}>
-          <Text style={[styles.activityLabel, {paddingBottom: UNIT / 2}]}>{getHistoryLabel(event)}</Text>
+          <Text style={[styles.activityLabel, {paddingBottom: UNIT / 2}]}>{getEventTitle(event)}</Text>
         </View>
 
         {hasAddedAttachments && <AttachmentsRow
@@ -377,7 +404,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
       isActivityCategory.description(activity) ||
       isActivityCategory.summary(activity)
     ):
-      return this._renderTextValueChange(activity, this.props.issueFields);
+      return this.renderTextValueChange(activity, this.props.issueFields);
     case Boolean(isActivityCategory.link(activity)):
       return this._renderLinkChange(activity);
     case Boolean(isActivityCategory.attachment(activity)):
