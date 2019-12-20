@@ -6,7 +6,6 @@ import deviceLog, {LogView} from 'react-native-device-log';
 import getTopPadding from '../../components/header/header__top-padding';
 import styles from './debug-view.styles';
 import {closeDebugView} from '../../actions/app-actions';
-import ExceptionReporter from '../exception-report/exception-reporter';
 
 export async function getLogs() {
   const rows = await deviceLog.store.getRows();
@@ -50,9 +49,6 @@ export class DebugView extends Component<Props, void> {
           <View style={styles.buttons}>
             <TouchableOpacity style={styles.closeButton} onPress={onHide}>
               <Text style={styles.closeButtonText}>Close</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.closeButton} onPress={() => ExceptionReporter.notify(new Error('-====TestException====-'))}>
-              <Text style={styles.closeButtonText}>Test exception reporter</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.closeButton} onPress={copyRawLogs}>
               <Text style={styles.closeButtonText}>Share</Text>

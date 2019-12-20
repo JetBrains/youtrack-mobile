@@ -10,7 +10,6 @@ import log from '../log/log';
 import {reportCrash} from './reporter';
 import {notify, notifyError} from '../notification/notification';
 import {flushStoragePart} from '../storage/storage';
-import ExceptionReporter from '../exception-report/exception-reporter';
 
 type Props = {
   openDebugView: any => any,
@@ -29,7 +28,6 @@ class ErrorBoundary extends Component<Props, State> {
   };
 
   componentDidCatch(error: Error, info: Object) {
-    ExceptionReporter.notify(error);
     log.warn(`App has failed to render: ${error.toString()}`);
     usage.trackError(error, info.componentStack);
     this.setState({error});
