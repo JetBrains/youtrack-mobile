@@ -120,6 +120,7 @@ export function loadSprint(agileId: string, sprintId: string) {
       dispatch(showManualBoardSelect());
     } finally {
       dispatch(stopSprintLoad());
+      dispatch(setOutOfDate(false));
     }
   };
 }
@@ -402,6 +403,13 @@ export function storeCreatingIssueDraft(draftId: string, cellId: string) {
   };
 }
 
+export function setOutOfDate(isOutOfDate: boolean) {
+  return {
+    type: types.IS_OUT_OF_DATE,
+    isOutOfDate
+  };
+}
+
 export function createCardForCell(columnId: string, cellId: string) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const {sprint} = getState().agile;
@@ -506,7 +514,15 @@ export function onCardDrop(data: { columnId: string, cellId: string, leadingId: 
       trackEvent('Card drop');
     } catch (err) {
       dispatch(moveIssue(data.movedId, issueOnBoard.cell.id, currentLeading?.id));
-      notifyError('Could not move card', err);
+      dispatch(setOutOfDate(true));
+      log.warn('Could not move card', err);
     }
+  };
+}
+
+export function refreshAgile(agileId: string, sprintId: string) {
+  return async (dispatch: (any) => any) => {
+    log.info('Refresh agile with popup');
+    dispatch(loadSprint(agileId, sprintId));
   };
 }

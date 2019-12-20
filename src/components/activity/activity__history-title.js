@@ -1,12 +1,16 @@
 /* @flow */
 
-export default function getHistoryLabel(event: Object) {
-  return formatLabel(getEventPresentation(event));
+export default function getEventTitle(event: Object, omitFormatting?: boolean): ?string {
+  const title = getTitle(event);
+  if (omitFormatting) {
+    return title;
+  }
+  return format(title);
 }
 
-function getEventPresentation(event) {
+function getTitle(event) {
   const eventField = event.field;
-  let label = '';
+  let label;
 
   switch(true) {
   case !eventField:
@@ -30,8 +34,8 @@ function getEventPresentation(event) {
   return label;
 }
 
-function formatLabel(label: string) {
-  return label ? `${label}: ` : null;
+function format(title: string) {
+  return title ? `${title}: ` : null;
 }
 
 function countAllEventEntities(event): number {

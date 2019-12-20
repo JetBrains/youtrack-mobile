@@ -6,7 +6,8 @@ import {
   COLOR_FONT_ON_BLACK,
   COLOR_TRANSPARENT_BLACK,
   COLOR_BLACK,
-  COLOR_FONT_GRAY
+  COLOR_FONT_GRAY,
+  COLOR_GRAY
 } from '../../components/variables/variables';
 
 export default StyleSheet.create({
@@ -108,5 +109,30 @@ export default StyleSheet.create({
     left: 0,
     bottom: 0,
     backgroundColor: COLOR_TRANSPARENT_BLACK
-  }
+  },
+  popupModal: {
+    justifyContent: 'flex-end'
+  },
+  popupPanel: {
+    padding: UNIT * 2,
+    paddingBottom: UNIT * 4,
+    backgroundColor: COLOR_FONT_ON_BLACK,
+    borderTopWidth: 1,
+    borderColor: COLOR_GRAY
+  },
+  popupText: {
+    fontSize: 18,
+  },
+  popupButton: {
+    marginTop: UNIT * 4,
+    padding: UNIT,
+    backgroundColor: COLOR_PINK,
+    paddingLeft: UNIT * 2
+  },
+  popupButtonText: {
+    height: 24,
+    fontSize: 20,
+    color: COLOR_FONT_ON_BLACK,
+    textAlign: 'center'
+  },
 });

@@ -94,6 +94,9 @@ class Inbox extends Component<Props, void> {
   }
 
   getChangeValue(change): string {
+    if (change.category === 'LINKS') {
+      return change.id;
+    }
     return change.name;
   }
 
@@ -110,9 +113,16 @@ class Inbox extends Component<Props, void> {
   }
 
   renderMultiValueCustomFieldChange(event: ChangeEvent) {
+    const combinedChangeValue = (values: Array<ChangeValue> = []) => (
+      values.map(it => {
+        it.category = event.category;
+        return it;
+      }).map(this.getChangeValue).join(delimiter)
+    );
+
     const delimiter = ', ';
-    const added: string = (event.addedValues || []).map(this.getChangeValue).join(delimiter);
-    const removed: string = (event.removedValues || []).map(this.getChangeValue).join(delimiter);
+    const added: string = combinedChangeValue(event.addedValues);
+    const removed: string = combinedChangeValue(event.removedValues);
     const hasRemovedChange: boolean = this.hasRemovedValues(event);
 
     return (

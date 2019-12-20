@@ -93,7 +93,7 @@ export function findIssueOnBoard(board: Board, issueId: string): ?{cell: BoardCe
           cell: cell,
           row: row,
           issue: foundIssue,
-          column: board.columns[cellIndex]
+          column: (board.columns || [])[cellIndex]
         };
       }
     }

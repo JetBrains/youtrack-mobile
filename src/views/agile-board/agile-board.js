@@ -27,6 +27,7 @@ import {openMenu} from '../../actions/app-actions';
 import {connect} from 'react-redux';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import ModalView from '../../components/modal-view/modal-view';
 
 const CATEGORY_NAME = 'Agile board';
 
@@ -50,7 +51,9 @@ type Props = AgilePageState & {
   onCloseSelect: (any) => any,
   createCardForCell: (columnId: string, cellId: string) => any,
   onOpenMenu: (any) => any,
-  onCardDrop: (any) => any
+  onCardDrop: (any) => any,
+  refreshAgile: (agileId: string, sprintId: string) => any,
+  toggleRefreshPopup: (isOutOfDate: boolean) => any
 };
 
 type State = {
@@ -120,7 +123,7 @@ class AgileBoard extends Component<Props, State> {
   _getScrollableWidth = (): number | null => {
     const {sprint} = this.props;
 
-    if (!sprint || !sprint.board || !sprint.board.columns) { //YTM-835
+    if (!sprint || !sprint.board || !sprint.board.columns) {
       return null;
     }
 
@@ -216,6 +219,41 @@ class AgileBoard extends Component<Props, State> {
     );
   }
 
+  renderRefreshPopup() {
+    const {sprint, refreshAgile, toggleRefreshPopup} = this.props;
+
+    if (!sprint || !sprint.agile) {
+      return null;
+    }
+
+    return (
+      <ModalView
+        transparent={true}
+        style={styles.popupModal}
+        visible
+        animationType="slide"
+        onRequestClose={() => true}
+      >
+        <View style={styles.popupPanel}>
+          <Text style={styles.popupText}>
+            The current sprint is out of date. Reload it to avoid data inconsistency.
+          </Text>
+
+          <TouchableOpacity
+            style={styles.popupButton}
+            onPress={() => refreshAgile(sprint.agile.id, sprint.id)}>
+            <Text style={styles.popupButtonText}>Refresh</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.popupButton}
+            onPress={() => toggleRefreshPopup(false)}>
+            <Text style={styles.popupButtonText}>Cancel</Text>
+          </TouchableOpacity>
+        </View>
+      </ModalView>
+    );
+  }
   _renderNoSprint() {
     return (
       <View style={styles.agileBoardMessage}>
@@ -232,7 +270,7 @@ class AgileBoard extends Component<Props, State> {
     const board: Board = sprint.board;
 
     const commonRowProps = {
-      collapsedColumnIds: board.columns.filter(col => col.collapsed).map(col => col.id),
+      collapsedColumnIds: (board.columns || []).filter(col => col.collapsed).map(col => col.id),
       onTapIssue: this._onTapIssue,
       onTapCreateIssue: this.props.createCardForCell,
       onCollapseToggle: this.props.onRowCollapseToggle,
@@ -292,7 +330,7 @@ class AgileBoard extends Component<Props, State> {
   };
 
   render() {
-    const {sprint, isLoadingMore, isSprintSelectOpen, noBoardSelected} = this.props;
+    const {sprint, isLoadingMore, isSprintSelectOpen, noBoardSelected, isOutOfDate} = this.props;
 
     const {zoomedIn} = this.state;
 
@@ -341,6 +379,7 @@ class AgileBoard extends Component<Props, State> {
           </View>
 
           {isSprintSelectOpen && this._renderSelect()}
+          {isOutOfDate && this.renderRefreshPopup()}
         </View>
       </Menu>
     );
@@ -366,7 +405,9 @@ const mapDispatchToProps = (dispatch) => {
     onCloseSelect: () => dispatch(boardActions.closeSelect()),
     onOpenMenu: () => dispatch(openMenu()),
     createCardForCell: (...args) => dispatch(boardActions.createCardForCell(...args)),
-    onCardDrop: (...args) => dispatch(boardActions.onCardDrop(...args))
+    onCardDrop: (...args) => dispatch(boardActions.onCardDrop(...args)),
+    refreshAgile: (agileId: string, sprintId: string) => dispatch(boardActions.refreshAgile(agileId, sprintId)),
+    toggleRefreshPopup: (isOutOfDate: boolean) => dispatch(boardActions.setOutOfDate(isOutOfDate))
   };
 };
 

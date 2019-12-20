@@ -17,7 +17,7 @@ type DiffInfo = {
 type Props = {
   text1: string,
   text2: string,
-  title?: string
+  title?: ?string
 }
 
 type State = {

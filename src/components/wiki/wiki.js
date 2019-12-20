@@ -1,6 +1,6 @@
 /* @flow */
 
-import {Linking, Text, ScrollView} from 'react-native';
+import {Linking, Text} from 'react-native';
 import React, {PureComponent} from 'react';
 import HTMLView from 'react-native-htmlview';
 import toHtml from 'htmlparser-to-html';
@@ -11,7 +11,7 @@ import {COLOR_FONT} from '../variables/variables';
 import {getBaseUrl} from '../config/config';
 import {renderCode, renderImage, renderTable, renderTableRow, renderTableCell} from './wiki__renderers';
 import {extractId} from '../open-url-handler/open-url-handler';
-import {showMoreText} from '../text-view/text-view';
+import {showMoreInlineText} from '../text-view/text-view';
 import {hasMimeType} from '../mime-type/mime-type';
 import {nodeHasType} from './wiki__node-type';
 
@@ -76,7 +76,7 @@ export default class Wiki extends PureComponent<Props, void> {
           onIssueIdTap: this.handleLinkPress
         }))}
       >
-        {`\n${showMoreText}`}
+        {showMoreInlineText}
       </Text>
     );
   };
@@ -172,20 +172,16 @@ export default class Wiki extends PureComponent<Props, void> {
     const {children} = this.props;
 
     return (
-      <ScrollView
-        horizontal={true}
-      >
-        <HTMLView
-          value={children}
-          stylesheet={htmlViewStyles}
-          renderNode={this.renderNode}
-          onLinkPress={this.handleLinkPress}
+      <HTMLView
+        value={children}
+        stylesheet={htmlViewStyles}
+        renderNode={this.renderNode}
+        onLinkPress={this.handleLinkPress}
 
-          RootComponent={RootComponent}
-          textComponentProps={{selectable: true}}
-          style={styles.htmlView}
-        />
-      </ScrollView>
+        RootComponent={RootComponent}
+        textComponentProps={{selectable: true}}
+        style={styles.htmlView}
+      />
     );
   }
 }
