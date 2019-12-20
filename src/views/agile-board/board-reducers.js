@@ -17,6 +17,7 @@ export type AgilePageState = {
   profile: ?AgileUserProfile,
   noBoardSelected: boolean,
   isSprintSelectOpen: boolean,
+  isOutOfDate: boolean,
   creatingIssueDraftId: ?string,
   creatingIssueDraftCellId: ?string,
   sprint: ?SprintFull,
@@ -29,6 +30,7 @@ const initialPageState: AgilePageState = {
   profile: null,
   noBoardSelected: false,
   isSprintSelectOpen: false,
+  isOutOfDate: false,
   creatingIssueDraftId: null,
   creatingIssueDraftCellId: null,
   selectProps: null,
@@ -49,7 +51,7 @@ const boardReducer = createReducer({}, {
   [types.COLUMN_COLLAPSE_TOGGLE](state: BoardState, action: Object): BoardState {
     return {
       ...state,
-      columns: state.columns.map(it => {
+      columns: (state.columns || []).map(it => {
         return it === action.column ? {...action.column, collapsed: action.newCollapsed} : it;
       })
     };
@@ -135,7 +137,13 @@ const agilePageReducer = createReducer(initialPageState, {
       selectProps: null,
       isSprintSelectOpen: false
     };
-  }
+  },
+  [types.IS_OUT_OF_DATE](state: AgilePageState, action: {isOutOfDate: boolean}): AgilePageState {
+    return {
+      ...state,
+      isOutOfDate: action.isOutOfDate
+    };
+  },
 });
 
 /**

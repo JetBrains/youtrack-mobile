@@ -152,6 +152,10 @@ describe('Agile board async actions', () => {
         expect(storeActions[2]).toEqual({
           type: types.STOP_SPRINT_LOADING
         });
+        expect(storeActions[3]).toEqual({
+          isOutOfDate: false,
+          type: types.IS_OUT_OF_DATE
+        });
       });
     });
 
