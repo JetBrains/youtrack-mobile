@@ -5,24 +5,18 @@ const KONNECTOR_URL = process.env.konnektorURL;
 const BUILD_NUMBER = process.env.buildNumber;
 const VERSION_NUMBER = process.env.versionNumber;
 const EXCEPTION_REPORTER_TOKEN = process.env.exeptionReporterToken;
-const BUGSNAG_TOKEN = process.env.bugsnagToken;
 
 
-if (!ANALYTICS_ID || !KONNECTOR_URL || !BUILD_NUMBER || !VERSION_NUMBER || !BUGSNAG_TOKEN) {
+if (!ANALYTICS_ID || !KONNECTOR_URL || !BUILD_NUMBER || !VERSION_NUMBER) {
   console.error('process.env', process.env); //eslint-disable-line
-  throw new Error('One or several env params `ANALYTICS_ID`, `KONNECTOR_URL`, `BUILD_NUMBER`, `VERSION_NUMBER`, `BUGSNAG_TOKEN` are not set');
+  throw new Error('One or several env params `ANALYTICS_ID`, `KONNECTOR_URL`, `BUILD_NUMBER`, `VERSION_NUMBER` are not set');
 }
 
 updateJsonFile('package.json', data => {
   data.config.ANALYTICS_ID = ANALYTICS_ID;
   data.config.EXCEPTION_REPORTER_TOKEN = EXCEPTION_REPORTER_TOKEN;
   data.config.KONNECTOR_URL = KONNECTOR_URL;
-  data.config.BUGSNAG_TOKEN = BUGSNAG_TOKEN;
   console.info('Config', data.config); //eslint-disable-line
-
-  data.bugsnag.version = VERSION_NUMBER;
-  data.bugsnag.token = BUGSNAG_TOKEN;
-  console.info('Bugsnag', data.bugsnag); //eslint-disable-line
 
   data.version = `${VERSION_NUMBER }-${ BUILD_NUMBER}`;
   console.info('Version', data.version); //eslint-disable-line
