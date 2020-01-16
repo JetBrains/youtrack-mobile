@@ -51,7 +51,6 @@
     "test:watch": "yarn test -- --watchAll",
     "ios-clean": "xcodebuild clean -project ios/YouTrackMobile.xcodeproj -configuration Release -alltargets",
     "ios-delete-build": "rm -rf ios/build/",
-    "ios-download-archive": "bash ./tools/download-latest-built-archive.sh",
     "ios-export-ipa": "xcodebuild -exportArchive -allowProvisioningUpdates -archivePath ios/build/YouTrackMobile[Release].xcarchive -exportPath ios/build -exportOptionsPlist tools/export.plist"
   },
   "jest": {
