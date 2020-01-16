@@ -1,6 +1,5 @@
 apply plugin: "com.android.application"
 apply from: 'versioning.gradle'
-apply plugin: 'com.bugsnag.android.gradle'
 
 project.ext.vectoricons = [
     iconFontNames: [ 'MaterialCommunityIcons.ttf', 'FontAwesome.ttf' ]
@@ -111,9 +110,6 @@ def envVersion = System.getenv('YT_MOBILE_VERSION')
 def devVersion = "2019.0.0-1"
 def appVersion = envVersion != null ? envVersion : devVersion
 
-def envBugsnagToken = System.getenv('BUGSNAG_TOKEN')
-def bugsnagToken = envBugsnagToken != null ? envBugsnagToken : ""
-
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
@@ -133,7 +129,6 @@ android {
             abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
         multiDexEnabled true
-        manifestPlaceholders = [bugsnagToken: bugsnagToken]
     }
     splits {
         abi {
@@ -191,11 +186,4 @@ dependencies {
 task copyDownloadableDepsToLibs(type: Copy) {
   from configurations.compile
   into 'libs'
-}
-
-// https://docs.bugsnag.com/build-integrations/gradle/
-bugsnag {
-    builderName "JetBrains"
-    ndk true
-    sharedObjectPath "app/build/jni/libs"
 }
