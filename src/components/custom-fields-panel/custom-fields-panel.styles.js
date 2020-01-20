@@ -71,6 +71,7 @@ export default StyleSheet.create({
     bottom: 0
   },
   doneButton: {
+    marginBottom: UNIT,
     backgroundColor: COLOR_PINK,
     padding: UNIT
   },

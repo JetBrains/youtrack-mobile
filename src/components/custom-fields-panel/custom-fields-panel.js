@@ -529,7 +529,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
           style={styles.doneButton}
           onPress={this.onApplyCurrentMultiSelection}
         >
-          <Text style={styles.doneButtonText}>Done</Text>
+          <Text style={styles.doneButtonText}>Apply</Text>
         </TouchableOpacity>}
 
         <KeyboardSpacerIOS/>
