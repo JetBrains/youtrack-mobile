@@ -42,9 +42,8 @@ export default StyleSheet.create({
     resizeMode: 'contain',
     tintColor: COLOR_ICON_MEDIUM_GREY
   },
-
   suggestionsContainer: {
-    backgroundColor: COLOR_TRANSPARENT_BLACK,
+    backgroundColor: COLOR_EXTRA_LIGHT_GRAY,
     position: 'absolute',
     top: -176,
     bottom: SUGGESTION_BOTTOM,
@@ -58,7 +57,7 @@ export default StyleSheet.create({
     margin: UNIT
   },
   suggestionsLoadingMessageText: {
-    color: COLOR_FONT_ON_BLACK
+    color: COLOR_FONT
   },
   suggestionButton: {
     flexDirection: 'row',
@@ -70,9 +69,10 @@ export default StyleSheet.create({
   },
   suggestionName: {
     marginLeft: UNIT,
-    color: COLOR_FONT_ON_BLACK
+    color: COLOR_FONT
   },
   suggestionLogin: {
+    fontSize: 11,
     color: COLOR_FONT_GRAY
   },
 

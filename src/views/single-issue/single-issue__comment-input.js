@@ -1,5 +1,6 @@
 /* @flow */
-import {View, Text, TouchableOpacity, ActivityIndicator, ScrollView, Image} from 'react-native';
+import {View, Text, ActivityIndicator, ScrollView, Image} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import React, {Component} from 'react';
 import throttle from 'lodash.throttle';
 import {COLOR_PLACEHOLDER} from '../../components/variables/variables';
@@ -163,7 +164,7 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
                     height: this.SUGGESTION_AVATAR_SIZE
                   }}/>
                 <Text style={styles.suggestionName}>{user.fullName}</Text>
-                <Text style={styles.suggestionLogin}> @{user.login}</Text>
+                <Text style={styles.suggestionLogin}> (@{user.login})</Text>
               </TouchableOpacity>
             );
           })
