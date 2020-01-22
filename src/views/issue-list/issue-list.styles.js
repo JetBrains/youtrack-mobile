@@ -7,22 +7,18 @@ import {
   COLOR_FONT,
   COLOR_PINK,
   COLOR_MEDIUM_GRAY,
-  COLOR_ICON_MEDIUM_GREY,
+  COLOR_DARK,
   COLOR_BLACK,
   COLOR_TRANSPARENT_BLACK
 } from '../../components/variables/variables';
 import {SIZE as COLOR_FIELD_SIZE} from '../../components/color-field/color-field';
+import {secondaryText, mainText} from '../../components/common-styles/issue';
 
 const rowLine = {
   flexDirection: 'row',
   alignItems: 'center'
 };
 
-const secondaryText = {
-  color: COLOR_ICON_MEDIUM_GREY,
-  fontSize: 14,
-  letterSpacing: -0.17
-};
 const searchPanelHeight = UNIT * 12;
 const searchContextHeight = UNIT * 7;
 
@@ -85,11 +81,9 @@ export default StyleSheet.create({
   summary: {
     flex: 1,
     marginTop: UNIT,
-    color: COLOR_BLACK,
-    fontSize: 16,
-    lineHeight: 20,
+    color: COLOR_DARK,
+    ...mainText,
     fontWeight: '500',
-    letterSpacing: -0.19
   },
   subtext: {
     paddingTop: 6,
@@ -149,6 +143,6 @@ export default StyleSheet.create({
   },
   issuesCount: {
     marginLeft: UNIT * 2,
-    color: COLOR_ICON_MEDIUM_GREY
+    ...secondaryText
   }
 });
