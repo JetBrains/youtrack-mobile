@@ -18,7 +18,11 @@ const rowLine = {
   alignItems: 'center'
 };
 
-const secondaryText = {color: COLOR_ICON_MEDIUM_GREY};
+const secondaryText = {
+  color: COLOR_ICON_MEDIUM_GREY,
+  fontSize: 14,
+  letterSpacing: -0.17
+};
 const searchPanelHeight = UNIT * 12;
 const searchContextHeight = UNIT * 7;
 
@@ -72,8 +76,6 @@ export default StyleSheet.create({
     flexShrink: 0,
     flexGrow: 0,
     ...secondaryText,
-    fontSize: 14,
-    letterSpacing: -0.17
   },
   headRight: {
     ...rowLine,
