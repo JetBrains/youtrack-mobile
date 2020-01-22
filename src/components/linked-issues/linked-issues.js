@@ -3,6 +3,8 @@ import {View, Text, TouchableOpacity} from 'react-native';
 import React, {PureComponent} from 'react';
 import styles from './linked-issues.style';
 import {COLOR_FONT_GRAY} from '../variables/variables';
+import {getReadableID} from '../issue-formatter/issue-formatter';
+
 import type {IssueLink} from '../../flow/CustomFields';
 import type {IssueOnList} from '../../flow/Issue';
 
@@ -26,7 +28,7 @@ export default class LinkedIssues extends PureComponent<Props, void> {
       onPress={() => this.props.onIssueTap && this.props.onIssueTap(issue)}
       style={styles.linkedIssueContainer}>
       <Text style={[styles.linkedIssueText, issueTextStyle]}>
-        {issue.idReadable}
+        {getReadableID(issue)}
       </Text>
     </TouchableOpacity>;
   }

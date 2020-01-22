@@ -12,7 +12,7 @@ import CommentVisibility from '../../components/comment/comment__visibility';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
 import CommentActions from '../../components/comment/comment__actions';
 
-import {getEntityPresentation, relativeDate, absDate} from '../../components/issue-formatter/issue-formatter';
+import {getEntityPresentation, relativeDate, absDate, getReadableID} from '../../components/issue-formatter/issue-formatter';
 
 import {mergeActivities} from '../../components/activity/activity__merge-activities';
 import {groupActivities} from '../../components/activity/activity__group-activities';
@@ -179,24 +179,27 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
           <Text style={styles.activityLabel}>{getEventTitle(event)}</Text>
         </View>
         {
-          linkedIssues.map((linkedIssue) => (
-            <Text
-              key={linkedIssue.id}
-              style={{
-                lineHeight: UNIT * 2.5,
-                marginTop: UNIT / 4
-              }}
-              onPress={() => Router.SingleIssue({issueId: linkedIssue.idReadable})}>
-              <Text style={[
-                styles.linkText,
-                linkedIssue.resolved && {color: COLOR_FONT_GRAY},
-                linkedIssue.resolved && styles.activityRemoved
-              ]}>
-                {linkedIssue.idReadable}
+          linkedIssues.map((linkedIssue) => {
+            const readableIssueId = getReadableID(linkedIssue);
+            return (
+              <Text
+                key={linkedIssue.id}
+                style={{
+                  lineHeight: UNIT * 2.5,
+                  marginTop: UNIT / 4
+                }}
+                onPress={() => Router.SingleIssue({issueId: readableIssueId})}>
+                <Text style={[
+                  styles.linkText,
+                  linkedIssue.resolved && {color: COLOR_FONT_GRAY},
+                  linkedIssue.resolved && styles.activityRemoved
+                ]}>
+                  {readableIssueId}
+                </Text>
+                {`  ${linkedIssue.summary}`}
               </Text>
-              {`  ${linkedIssue.summary}`}
-            </Text>
-          ))
+            );
+          })
         }
       </TouchableOpacity>
     );

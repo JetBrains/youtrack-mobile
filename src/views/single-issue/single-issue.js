@@ -268,7 +268,7 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
             attachments={issue.attachments}
             imageHeaders={this.imageHeaders}
             onIssueIdTap={this._onIssueIdTap}
-            title={issue.idReadable}
+            title={getReadableID(issue)}
             description={issue.wikifiedDescription}
           />
         </View>}

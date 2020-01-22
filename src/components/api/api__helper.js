@@ -1,6 +1,8 @@
 /* @flow */
 import {handleRelativeUrl} from '../config/config';
 import objectWalk from 'object-walk';
+import {getReadableID} from '../issue-formatter/issue-formatter';
+
 import type {IssueOnList, AnyIssue, ServersideSuggestion, TransformedSuggestion} from '../../flow/Issue';
 
 const API = {
@@ -93,7 +95,7 @@ const API = {
   },
 
   getIssueId(issue: AnyIssue) {
-    return `${issue.idReadable}`;
+    return getReadableID(issue);
   },
 
   patchAllRelativeAvatarUrls(data: Object, backendUrl: string) {

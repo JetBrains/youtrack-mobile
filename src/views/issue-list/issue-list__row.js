@@ -10,7 +10,8 @@ import Tags from '../../components/tags/tags';
 import {
   getPriotityField,
   getEntityPresentation,
-  relativeDate
+  relativeDate,
+  getReadableID
 } from '../../components/issue-formatter/issue-formatter';
 
 import styles from './issue-list.styles';
@@ -59,7 +60,7 @@ export default class IssueRow extends Component<Props, void> {
             {this.renderPriority()}
             <Text
               style={[styles.headLeft, issue.resolved ? {textDecorationLine: 'line-through'} : null]}>
-              {issue.idReadable}
+              {getReadableID(issue)}
             </Text>
 
             <View style={styles.headRight}>
