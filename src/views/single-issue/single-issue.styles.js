@@ -13,6 +13,7 @@ import {
   COLOR_ICON_MEDIUM_GREY,
   COLOR_PINK_DARK
 } from '../../components/variables/variables';
+import {secondaryText} from '../../components/common-styles/issue';
 
 
 export default StyleSheet.create({
@@ -37,12 +38,10 @@ export default StyleSheet.create({
     backgroundColor: '#FFF'
   },
   issueTopPanel: {
-    flexDirection: 'row',
     paddingTop: UNIT / 4
   },
   issueTopPanelText: {
-    fontSize: 14,
-    color: COLOR_FONT_GRAY,
+    ...secondaryText
   },
   issueTopPanelMoreIcon: {
     height: 9,
@@ -50,7 +49,7 @@ export default StyleSheet.create({
     tintColor: `${COLOR_FONT}${70}`
   },
   topPanelUpdatedInformation: {
-    marginTop: UNIT
+    marginTop: UNIT * 0.75
   },
   summary: {
     paddingTop: UNIT,
