@@ -16,7 +16,9 @@ type SearchPanelProps = {
   onQueryUpdate: (query: string) => any,
 
   issuesCount?: ?number,
-  style?: ViewStyleProp
+  style?: ViewStyleProp,
+
+  clearButtonMode?: ('never' | 'while-editing' | 'unless-editing' | 'always')
 };
 
 export default class SearchPanel extends PureComponent<SearchPanelProps, void> {
@@ -47,7 +49,7 @@ export default class SearchPanel extends PureComponent<SearchPanelProps, void> {
   }
 
   render() {
-    const {queryAssistSuggestions, query, suggestIssuesQuery, onQueryUpdate, style} = this.props;
+    const {queryAssistSuggestions, query, suggestIssuesQuery, onQueryUpdate, style, clearButtonMode} = this.props;
 
     return (
       <View
@@ -58,7 +60,9 @@ export default class SearchPanel extends PureComponent<SearchPanelProps, void> {
           suggestions={queryAssistSuggestions}
           currentQuery={query}
           onChange={suggestIssuesQuery}
-          onSetQuery={onQueryUpdate}/>
+          onSetQuery={onQueryUpdate}
+          clearButtonMode={clearButtonMode}
+        />
 
         {this.renderIssuesCount()}
       </View>

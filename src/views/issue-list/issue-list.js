@@ -222,6 +222,7 @@ export class IssueList extends Component<Props, void> {
                 suggestIssuesQuery={suggestIssuesQuery}
                 onQueryUpdate={onQueryUpdate}
                 issuesCount={issuesCount}
+                clearButtonMode="always"
               />
             }
             removeClippedSubviews={false}

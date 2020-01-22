@@ -20,6 +20,7 @@ type Props = {
   currentQuery: string,
   onSetQuery: (query: string) => any,
   onChange: (query: string, caret: number) => any,
+  clearButtonMode?: ('never' | 'while-editing' | 'unless-editing' | 'always')
 };
 
 type State = {
@@ -148,7 +149,7 @@ export default class QueryAssist extends Component<Props, State> {
           style={[styles.searchInput, showQueryAssist ? styles.searchInputActive : null]}
           placeholderTextColor={showQueryAssist ? COLOR_PLACEHOLDER_ACTIVE : COLOR_PLACEHOLDER}
           placeholder="Enter search request"
-          clearButtonMode="while-editing"
+          clearButtonMode={this.props.clearButtonMode || 'while-editing'}
           returnKeyType="search"
           testID="query-assist-input"
           autoFocus={showQueryAssist}
