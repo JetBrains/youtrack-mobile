@@ -14,7 +14,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import Header from '../../components/header/header';
-import {COLOR_PINK} from '../../components/variables/variables';
+import {COLOR_PINK, UNIT} from '../../components/variables/variables';
 import {notifyError} from '../../components/notification/notification';
 import usage from '../../components/usage/usage';
 import log from '../../components/log/log';
@@ -33,7 +33,6 @@ import OpenScanButton from '../../components/scan/open-scan-button';
 import Select from '../../components/select/select';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SearchPanel from './issue-list__search-panel';
-import animation from '../../components/animation/animation';
 
 import styles from './issue-list.styles';
 
@@ -198,25 +197,7 @@ export class IssueList extends Component<Props, void> {
 
   onScroll = (nativeEvent: Object) => {
     const newY = nativeEvent.contentOffset.y;
-    const MAX_SHIFT = -112;
-    let opacity = 1;
-    let marginTop = newY < 0 ? 0 : -newY;
-    const isHideSearch = marginTop < MAX_SHIFT;
-    if (isHideSearch) {
-      marginTop = MAX_SHIFT;
-      opacity = 0;
-    }
-
-    this.props.updateSearchContextPinned(isHideSearch);
-
-    animation.layoutAnimation({
-      ...animation.LayoutAnimation.Presets.linear,
-      duration: 50
-    });
-
-    if (this.searchPanelNode) {
-      this.searchPanelNode.setNativeProps({style: {marginTop, opacity}});
-    }
+    this.props.updateSearchContextPinned(newY >= UNIT / 2);
   };
 
   render() {
@@ -232,16 +213,17 @@ export class IssueList extends Component<Props, void> {
           {this.renderContextButton()}
           {isIssuesContextOpen && this.renderContextSelect()}
 
-          <SearchPanel
-            ref={this.searchPanelRef}
-            queryAssistSuggestions={queryAssistSuggestions}
-            query={query}
-            suggestIssuesQuery={suggestIssuesQuery}
-            onQueryUpdate={onQueryUpdate}
-            issuesCount={issuesCount}
-          />
-
           <FlatList
+            ListHeaderComponent={
+              <SearchPanel
+                ref={this.searchPanelRef}
+                queryAssistSuggestions={queryAssistSuggestions}
+                query={query}
+                suggestIssuesQuery={suggestIssuesQuery}
+                onQueryUpdate={onQueryUpdate}
+                issuesCount={issuesCount}
+              />
+            }
             removeClippedSubviews={false}
             data={issues}
             keyExtractor={this._getIssueId}
