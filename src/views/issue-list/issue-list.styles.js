@@ -71,7 +71,9 @@ export default StyleSheet.create({
   headLeft: {
     flexShrink: 0,
     flexGrow: 0,
-    ...secondaryText
+    ...secondaryText,
+    fontSize: 14,
+    letterSpacing: -0.17
   },
   headRight: {
     ...rowLine,
@@ -84,6 +86,8 @@ export default StyleSheet.create({
     color: COLOR_BLACK,
     fontSize: 16,
     lineHeight: 20,
+    fontWeight: '500',
+    letterSpacing: -0.19
   },
   subtext: {
     paddingTop: 6,
