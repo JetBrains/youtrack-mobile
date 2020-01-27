@@ -5,6 +5,7 @@ import React, {PureComponent} from 'react';
 import Wiki from '../../components/wiki/wiki';
 
 import type {Attachment} from '../../flow/CustomFields';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 
 type Props = {
@@ -13,14 +14,15 @@ type Props = {
   imageHeaders: {Authorization: string},
   onIssueIdTap: () => void,
   title?: string,
-  description?: string
+  description?: string,
+  style?: ViewStyleProp,
 }
 
 
 export default class IssueDescription extends PureComponent<Props, void> {
 
   render() {
-    const {backendUrl, attachments, imageHeaders, onIssueIdTap, title, description} = this.props;
+    const {backendUrl, attachments, imageHeaders, onIssueIdTap, title, description, style} = this.props;
 
     if (!description) {
       return null;
@@ -28,6 +30,7 @@ export default class IssueDescription extends PureComponent<Props, void> {
 
     return (
       <Wiki
+        style={style}
         backendUrl={backendUrl}
         attachments={attachments}
         imageHeaders={imageHeaders}

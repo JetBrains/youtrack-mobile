@@ -318,7 +318,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
   }
 
   _renderLinks(issue: IssueFull | IssueOnList) {
-    return <LinkedIssues links={issue.links} onIssueTap={this.props.openNestedIssueView}/>;
+    return <LinkedIssues style={styles.links} links={issue.links} onIssueTap={this.props.openNestedIssueView}/>;
   }
 
   _renderAttachments(attachments: Array<Attachment> | null) {
@@ -383,6 +383,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
           {this._renderLinks(issue)}
 
           <IssueDescription
+            style={styles.description}
             backendUrl={this.backendUrl}
             attachments={issue.attachments}
             imageHeaders={this.imageHeaders}

@@ -14,11 +14,12 @@ import {extractId} from '../open-url-handler/open-url-handler';
 import {showMoreInlineText} from '../text-view/text-view';
 import {hasMimeType} from '../mime-type/mime-type';
 import {nodeHasType} from './wiki__node-type';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 HTMLView.propTypes.style = Text.propTypes.style;
 
 type Props = {
-  style?: any,
+  style?: ViewStyleProp,
   children?: React$Element<any>,
   attachments: Array<Object>,
   imageHeaders: ?Object,
@@ -169,7 +170,7 @@ export default class Wiki extends PureComponent<Props, void> {
   };
 
   render() {
-    const {children} = this.props;
+    const {children, style} = this.props;
 
     return (
       <HTMLView
@@ -180,7 +181,7 @@ export default class Wiki extends PureComponent<Props, void> {
 
         RootComponent={RootComponent}
         textComponentProps={{selectable: true}}
-        style={styles.htmlView}
+        style={[styles.htmlView, style]}
       />
     );
   }

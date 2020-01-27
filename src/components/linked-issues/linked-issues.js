@@ -7,10 +7,12 @@ import {getReadableID} from '../issue-formatter/issue-formatter';
 
 import type {IssueLink} from '../../flow/CustomFields';
 import type {IssueOnList} from '../../flow/Issue';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   links: Array<IssueLink>,
-  onIssueTap: (issue: IssueOnList) => any
+  onIssueTap: (issue: IssueOnList) => any,
+  style?: ViewStyleProp,
 }
 
 export default class LinkedIssues extends PureComponent<Props, void> {
@@ -46,11 +48,12 @@ export default class LinkedIssues extends PureComponent<Props, void> {
   }
 
   render() {
-    const linksWithIssues = this.props.links.filter(link => (link.trimmedIssues || []).length > 0);
+    const {links, style} = this.props;
+    const linksWithIssues = links.filter(link => (link.trimmedIssues || []).length > 0);
 
     if (linksWithIssues.length > 0) {
       return (
-        <View style={styles.linkedIssuesContainer}>
+        <View style={[styles.linkedIssuesContainer, style]}>
           {linksWithIssues.map(link => this._renderLinkType(link))}
         </View>
       );

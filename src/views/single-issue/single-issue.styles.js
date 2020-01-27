@@ -48,19 +48,23 @@ export default StyleSheet.create({
     tintColor: `${COLOR_FONT}${70}`
   },
   topPanelUpdatedInformation: {
-    marginTop: UNIT * 0.75
+    marginTop: UNIT * 0.75,
+    marginBottom: UNIT * 2
   },
   summary: {
     paddingTop: UNIT,
-    fontSize: 20,
+    fontSize: 18,
+    fontWeight: '500',
     lineHeight: 24,
-    fontWeight: 'bold',
-    color: COLOR_FONT
+    letterSpacing: -0.19,
+    color: COLOR_BLACK
   },
   tags: {
     marginTop: UNIT * 2
   },
-  description: {},
+  description: {
+    marginTop: UNIT * 2,
+  },
   attachments: {
     marginTop: UNIT * 2,
   },
@@ -161,6 +165,9 @@ export default StyleSheet.create({
     tintColor: COLOR_ICON_GREY
   },
 
+  links: {
+    marginTop: UNIT * 1.5
+  },
   linkedIssue: {
     flexDirection: 'row',
   },

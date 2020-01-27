@@ -9,13 +9,16 @@ export default StyleSheet.create({
   linkedIssuesSection: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
+    marginTop: UNIT / 2,
   },
   relationTitle: {
     color: COLOR_FONT_GRAY
   },
   linkedIssueContainer: {
-    marginLeft: UNIT
+    marginTop: UNIT / -4,
+    marginLeft: UNIT,
+    padding: UNIT / 4
   },
   linkedIssueText: {
     color: COLOR_LINK

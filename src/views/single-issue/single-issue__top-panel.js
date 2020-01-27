@@ -43,7 +43,7 @@ export default class TopPanel extends PureComponent<Props, void> {
         </Text>
 
         <Text
-          style={[styles.topPanelUpdatedInformation, styles.issueTopPanelText]}
+          style={[styles.issueTopPanelText, styles.topPanelUpdatedInformation]}
           selectable={true}
         >
           Updated by {this._getUserName(updater)} {this._getDate(updated, true)}
