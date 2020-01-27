@@ -14,6 +14,11 @@ type Props = {
 }
 
 export default class LinkedIssues extends PureComponent<Props, void> {
+  static defaultProps: Props = {
+    onIssueTap: (issue: IssueOnList) => {},
+    links: []
+  };
+
   _getLinkTitle(link: IssueLink) {
     if (link.direction === 'OUTWARD' || link.direction === 'BOTH') {
       return link.linkType.localizedSourceToTarget || link.linkType.sourceToTarget;
@@ -41,10 +46,16 @@ export default class LinkedIssues extends PureComponent<Props, void> {
   }
 
   render() {
-    const links = this.props.links.filter(link => link.trimmedIssues.length > 0);
+    const linksWithIssues = this.props.links.filter(link => (link.trimmedIssues || []).length > 0);
 
-    return <View style={styles.linkedIssuesContainer}>
-      {links.map(link => this._renderLinkType(link))}
-    </View>;
+    if (linksWithIssues.length > 0) {
+      return (
+        <View style={styles.linkedIssuesContainer}>
+          {linksWithIssues.map(link => this._renderLinkType(link))}
+        </View>
+      );
+    }
+
+    return null;
   }
 }
