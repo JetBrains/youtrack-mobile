@@ -476,7 +476,6 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       <ContainerComponent {...containerProps}>
 
         <View>
-          {!isEditorShown && <View style={styles.topBorder}/>}
           <ScrollView
             ref={this.restoreScrollPosition}
             onScroll={this.storeScrollPosition}
@@ -511,6 +510,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
               </View>;
             })}
           </ScrollView>
+          {!isEditorShown && <View style={styles.bottomBorder}/>}
         </View>
 
         <AnimatedView

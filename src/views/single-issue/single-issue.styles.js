@@ -21,7 +21,7 @@ export default StyleSheet.create({
     flex: 1
   },
   issueContent: {
-    backgroundColor: COLOR_EXTRA_LIGHT_GRAY
+    backgroundColor: COLOR_FONT_ON_BLACK,
   },
   headerText: {
     color: COLOR_FONT_ON_BLACK,
@@ -32,10 +32,9 @@ export default StyleSheet.create({
     width: 30,
     height: 20
   },
-  issueViewContainer: {
-    padding: UNIT * 2,
-    paddingTop: UNIT,
-    backgroundColor: '#FFF'
+  issueView: {
+    marginTop: UNIT * 2,
+    padding: UNIT * 2
   },
   issueTopPanel: {
     paddingTop: UNIT / 4

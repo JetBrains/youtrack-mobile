@@ -3,7 +3,7 @@ import {TouchableOpacity, View, Text, Image} from 'react-native';
 import React, {Component} from 'react';
 import styles from './custom-field.styles';
 import {lockInactive} from '../icon/icon';
-import {NO_COLOR_ID} from '../color-field/color-field';
+import ColorField from '../color-field/color-field';
 import type {CustomField as CustomFieldType, FieldValue} from '../../flow/CustomFields';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 
@@ -54,27 +54,20 @@ export default class CustomField extends Component<Props, void> {
     return field.projectCustomField.field.name;
   }
 
-  _renderColorMaker(value) {
-    const values = [].concat(value);
-    if (!values || !values.length) {
-      return;
-    }
-
-    const renderSingleMarker = (val) => {
-      if (!val || !val.color) {
-        return;
-      }
-      if (val.color.id === NO_COLOR_ID) {
-        return;
-      }
-      return <View key={val.id} style={[styles.colorMarker, {backgroundColor: val.color.background}]}/>;
-    };
-
-    return (
-      <View style={styles.colorMarkerContainer}>
-        {values.map(renderSingleMarker)}
-      </View>
+  _renderColorMaker(value: ?FieldValue | ?Array<FieldValue>) {
+    const firstColorCodedValue = value && [].concat(value).find(
+      fieldValue => fieldValue.color
     );
+
+    if (firstColorCodedValue) {
+      return (
+        <ColorField
+          style={styles.colorMarker}
+          text={firstColorCodedValue.name}
+          color={firstColorCodedValue.color}
+        />
+      );
+    }
   }
 
   _renderValue(value, fieldType: ?string) {
@@ -125,10 +118,10 @@ export default class CustomField extends Component<Props, void> {
         </View>
 
         <View style={styles.valuesWrapper}>
+          {this._renderColorMaker(field.value)}
           {this._renderValue(field.value, this._getFieldType(field))}
         </View>
 
-        {this._renderColorMaker(field.value)}
 
       </TouchableOpacity>
     );

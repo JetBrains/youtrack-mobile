@@ -4,8 +4,8 @@ import {
   COLOR_PINK,
   COLOR_FONT_ON_BLACK,
   UNIT,
-  COLOR_PLACEHOLDER_ACTIVE
 } from '../variables/variables';
+import {mainText, secondaryText} from '../common-styles/issue';
 
 const SELECTED_ALPHA_HEX = 20;
 
@@ -21,7 +21,7 @@ const font = {
 export default StyleSheet.create({
   wrapper: {
     flex: 1,
-    paddingTop: UNIT,
+    paddingTop: UNIT * 2,
     flexDirection: 'column'
   },
   wrapperActive: {
@@ -30,7 +30,8 @@ export default StyleSheet.create({
   valuesWrapper: {
     flexDirection: 'row',
     flexWrap: 'nowrap',
-    flexGrow: 3,
+    alignItems: 'center',
+    justifyContent: 'center',
     ...sidePadding
   },
   keyWrapper: {
@@ -47,16 +48,15 @@ export default StyleSheet.create({
     tintColor: '#66757e'
   },
   keyText: {
-    color: COLOR_PLACEHOLDER_ACTIVE,
-    fontSize: 12,
-    ...font,
+    marginBottom: UNIT / 2,
+    ...secondaryText,
+    ...font
   },
   valueText: {
     marginRight: 0,
-    paddingTop: UNIT / 2,
-    color: COLOR_PINK,
+    ...mainText,
     ...font,
-    fontSize: 14,
+    color: COLOR_PINK
   },
   valueTextActive: {
     color: COLOR_FONT_ON_BLACK,
@@ -64,13 +64,7 @@ export default StyleSheet.create({
   valueTextDisabled: {
     color: COLOR_FONT_GRAY
   },
-  colorMarkerContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    paddingBottom: 1
-  },
   colorMarker: {
-    flexGrow: 1,
-    height: 3
+    marginRight: UNIT
   }
 });

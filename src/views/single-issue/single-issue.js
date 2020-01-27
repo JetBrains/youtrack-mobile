@@ -21,7 +21,7 @@ import SingleIssueTopPanel from './single-issue__top-panel';
 import Router from '../../components/router/router';
 import Header from '../../components/header/header';
 import LinkedIssues from '../../components/linked-issues/linked-issues';
-import {COLOR_DARK, COLOR_FONT_ON_BLACK, COLOR_PINK} from '../../components/variables/variables';
+import {COLOR_DARK, COLOR_PINK} from '../../components/variables/variables';
 import usage from '../../components/usage/usage';
 import log from '../../components/log/log';
 import IssueSummary from '../../components/issue-summary/issue-summary';
@@ -346,7 +346,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
   _renderIssueView(issue: IssueFull | IssueOnList) {
     const {editMode, isSavingEditedIssue, summaryCopy, descriptionCopy, openIssueListWithSearch} = this.props;
     return (
-      <View style={styles.issueViewContainer}>
+      <View style={styles.issueView}>
 
         <SingleIssueTopPanel
           created={issue.created}

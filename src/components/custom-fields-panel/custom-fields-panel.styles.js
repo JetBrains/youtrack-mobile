@@ -1,39 +1,39 @@
 import {StyleSheet} from 'react-native';
 import {
   UNIT,
-  FOOTER_HEIGHT,
   COLOR_PINK,
   COLOR_SELECTED_DARK,
   COLOR_GRAY,
   COLOR_TRANSPARENT_BLACK,
   COLOR_FONT_GRAY,
   COLOR_FONT_ON_BLACK,
-  COLOR_BLACK
+  COLOR_BLACK,
+  COLOR_MEDIUM_GRAY
 } from '../../components/variables/variables';
 
+const HEIGHT = UNIT * 10;
 const SAVING_ALPHA = '70';
 const DONE_BUTTON_HEIGHT = 24;
 
 export default StyleSheet.create({
   placeholder: {
-    height: FOOTER_HEIGHT,
-    backgroundColor: COLOR_BLACK
+    height: HEIGHT,
+    marginTop: UNIT,
+    paddingTop: UNIT
   },
   customFieldsEditor: {
     top: UNIT * 2,
     borderWidth: 0
   },
-  topBorder: {
+  bottomBorder: {
     height: 1,
     marginLeft: UNIT * 2,
-    marginRight: UNIT * 2,
-    backgroundColor: '#475159'
+    backgroundColor: COLOR_MEDIUM_GRAY
   },
   customFieldsPanel: {
     paddingLeft: UNIT,
     flexDirection: 'row',
-    backgroundColor: COLOR_BLACK,
-    height: FOOTER_HEIGHT
+    height: HEIGHT
   },
   customFieldsPanelModal: {
     borderTopWidth: 0
