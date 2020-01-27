@@ -98,3 +98,5 @@ export type SavedQuery = {
   isUpdatable: boolean,
   owner: {ringId: string}
 }
+
+export type TabRoute = { key: string, title: string }

@@ -7370,6 +7370,11 @@ react-native-notifications@1.1.19:
     core-js "^1.0.0"
     uuid "^2.0.3"
 
+react-native-reanimated@1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.7.0.tgz#896db2576552ac59d288a1f6c7f00afc171f240c"
+  integrity sha512-FQWSqP605eQVJumuK2HpR+7heF0ZI+qfy4jNguv3Xv8nPFHeIgZaRTXHCEQL2AcuSIj50zy8jGJf5l134QMQWQ==
+
 "react-native-root-modal@git://github.com/huston007/react-native-root-modal.git#9cbd951":
   version "1.1.2"
   resolved "git://github.com/huston007/react-native-root-modal.git#9cbd9516d595d79518a703238fa2d6ca05a1b2c0"
@@ -7432,6 +7437,11 @@ react-native-syntax-highlighter@1.2.6:
     babel-preset-react "^6.24.1"
     babel-runtime "^6.23.0"
     react-syntax-highlighter "^5.6.2"
+
+react-native-tab-view@2.11.0:
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-2.11.0.tgz#2e57d1f617ccc88c7f452708804f3409f880b700"
+  integrity sha512-vqetlxGO7A8bnqvXcB50MWpRZAImXFrDGz1WCQKdCqe03Ey3ZzENe7yLuWrtBJYlepGfOLAsmCXv+wW82Yfm1w==
 
 react-native-tab-view@^1.2.0, react-native-tab-view@^1.4.1:
   version "1.4.1"

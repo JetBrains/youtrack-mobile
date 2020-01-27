@@ -3,10 +3,10 @@ import {
   Text,
   View,
   ScrollView,
-  Platform,
   RefreshControl,
   Modal,
-  ActivityIndicator
+  ActivityIndicator,
+  Dimensions
 } from 'react-native';
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
@@ -21,7 +21,7 @@ import SingleIssueTopPanel from './single-issue__top-panel';
 import Router from '../../components/router/router';
 import Header from '../../components/header/header';
 import LinkedIssues from '../../components/linked-issues/linked-issues';
-import {COLOR_PINK} from '../../components/variables/variables';
+import {COLOR_DARK, COLOR_FONT_ON_BLACK, COLOR_PINK} from '../../components/variables/variables';
 import usage from '../../components/usage/usage';
 import log from '../../components/log/log';
 import IssueSummary from '../../components/issue-summary/issue-summary';
@@ -33,7 +33,7 @@ import {getReadableID} from '../../components/issue-formatter/issue-formatter';
 import * as issueActions from './single-issue-actions';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {State as SingleIssueState} from './single-issue-reducers';
-import type {IssueFull, IssueOnList} from '../../flow/Issue';
+import type {IssueFull, IssueOnList, TabRoute} from '../../flow/Issue';
 import type {IssueComment, Attachment} from '../../flow/CustomFields';
 import Select from '../../components/select/select';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
@@ -51,7 +51,15 @@ import commonIssueStyles from '../../components/common-styles/issue';
 import commentsStyles from './single-issue__comments.styles';
 import IssueDescription from './single-issue__description';
 
+// $FlowFixMe: module throws on type check
+import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
+
 const CATEGORY_NAME = 'Issue';
+const tabRoutes: Array<TabRoute> = [
+  {key: 'details', title: 'Details'},
+  {key: 'activity', title: 'Activity'},
+];
+
 
 type AdditionalProps = {
   issuePermissions: IssuePermissions,
@@ -61,23 +69,153 @@ type AdditionalProps = {
 };
 
 type SingleIssueProps = SingleIssueState & typeof issueActions & AdditionalProps;
+type TabsState = {
+  index: number,
+  routes: Array<TabRoute>
+};
 
-class SingeIssueView extends Component<SingleIssueProps, void> {
+class SingeIssueView extends Component<SingleIssueProps, TabsState> {
+  static contextTypes = {
+    actionSheet: PropTypes.func
+  };
+
   toolbarNode: Object;
   imageHeaders = getApi().auth.getAuthorizationHeaders();
   backendUrl = getApi().config.backendUrl;
-
-  static contextTypes = {
-    actionSheet: PropTypes.func
+  activityLoaded: boolean;
+  state = {
+    index: 0,
+    routes: tabRoutes,
   };
 
   async componentDidMount() {
     usage.trackScreenView(CATEGORY_NAME);
     await this.props.unloadIssueIfExist();
     await this.props.setIssueId(this.props.issueId);
-
     this.props.loadIssue();
-    this.props.loadIssueActivities();
+  }
+
+  renderDetailsTab = () => {
+    const {issue, issuePlaceholder, issueLoaded, addCommentMode} = this.props;
+
+    return (
+      <ScrollView
+        style={styles.issueContent}
+        refreshControl={this._renderRefreshControl()}
+        keyboardDismissMode="interactive"
+        keyboardShouldPersistTaps="handled"
+        scrollEventThrottle={16}
+      >
+        {Boolean(issue && !addCommentMode) && this._renderCustomFieldPanel()}
+        {this._renderIssueView(issue || issuePlaceholder)}
+        {!issueLoaded && <ActivityIndicator style={styles.loading}/>}
+      </ScrollView>
+    );
+  };
+
+  loadActivity() {
+    if (!this.activityLoaded) {
+      this.props.loadIssueActivities();
+      this.activityLoaded = true;
+    }
+  }
+
+  renderActivityTab = () => {
+    const {
+      addCommentMode,
+      issueLoaded,
+      issueLoadingError,
+      commentsLoaded,
+      commentsLoadingError,
+      activitiesEnabled,
+      activityLoaded,
+      activitiesLoadingError
+    } = this.props;
+
+    const activityLoading = {
+      error: () => issueLoaded && (activitiesEnabled ? activitiesLoadingError : commentsLoadingError),
+      success: () => issueLoaded && (activitiesEnabled ? activityLoaded : commentsLoaded),
+    };
+    const showLoading = () => (!issueLoaded || !activityLoading.success()) && !activityLoading.error();
+    const isActivityLoaded = () => issueLoaded && activityLoading.success();
+
+    if (!issueLoadingError) {
+      return (
+        <View style={{
+          flexDirection: 'column',
+          flex: 1
+        }}>
+          <ScrollView
+            style={styles.issueContent}
+            refreshControl={this._renderRefreshControl()}
+            keyboardDismissMode="interactive"
+            keyboardShouldPersistTaps="handled"
+            scrollEventThrottle={16}
+          >
+            {showLoading() && <ActivityIndicator style={styles.loading}/>}
+
+            {activityLoading.error() &&
+            <View><Text style={styles.loadingActivityError}>Failed to load activities.</Text></View>}
+
+            {
+              isActivityLoaded()
+                ? (activitiesEnabled ? this._renderActivities() : this._renderComments())
+                : null
+            }
+            {activitiesEnabled && !addCommentMode && isActivityLoaded() && this._renderActivitySettings()}
+
+          </ScrollView>
+
+          {Boolean(!addCommentMode && this._canAddComment()) && this._renderEditCommentInput(false)}
+          {Boolean(addCommentMode) && this._renderEditCommentInput(true)}
+        </View>
+      );
+    }
+  };
+
+  renderTabBar() {
+    return props => (
+      <TabBar
+        {...props}
+        indicatorStyle={{backgroundColor: COLOR_PINK}}
+        style={{backgroundColor: COLOR_FONT_ON_BLACK}}
+        renderLabel={({route, focused}) => (
+          <Text style={{
+            ...styles.tabLabel,
+            color: focused ? COLOR_PINK : COLOR_DARK
+          }}>
+            {route.title}
+          </Text>
+        )}
+      />
+    );
+  }
+
+  renderTabs() {
+    const sceneMap = {
+      [tabRoutes[0].key]: this.renderDetailsTab.bind(this), //TODO: get rid of bindings
+      [tabRoutes[1].key]: this.renderActivityTab.bind(this),
+    };
+
+    return (
+      <TabView
+        testID="issueTabs"
+        lazy
+        renderLazyPlaceholder={({route}) => (
+          <View style={styles.tabLazyPlaceholder}>
+            <Text>Loading {route.title}…</Text>
+          </View>
+        )}
+        navigationState={this.state}
+        renderScene={SceneMap(sceneMap)}
+        initialLayout={{width: Dimensions.get('window').width}}
+        renderTabBar={this.renderTabBar()}
+        onIndexChange={index => {
+          index === 1 && this.loadActivity();
+          this.setState({index});
+        }}
+      />
+    );
   }
 
   _onIssueIdTap = (issueId) => {
@@ -88,23 +226,6 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     const {issueLoaded, addCommentMode, issue} = this.props;
     return issueLoaded && !addCommentMode && this.props.issuePermissions.canCommentOn(issue);
   }
-
-  _updateToolbarPosition(newY: number) {
-    const MAX_SHIFT = -50;
-    let marginTop = newY < 0 ? 0 : -newY;
-    if (marginTop < MAX_SHIFT) {
-      marginTop = MAX_SHIFT;
-    }
-    if (this.toolbarNode) {
-      this.toolbarNode.setNativeProps({style: {marginTop}});
-    }
-  }
-
-  _handleScroll = ({nativeEvent}) => {
-    if (Platform.OS === 'ios') {
-      this._updateToolbarPosition(nativeEvent.contentOffset.y);
-    }
-  };
 
   handleOnBack = () => {
     const returned = Router.pop();
@@ -490,30 +611,12 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
 
   render() {
     const {
-      issue,
-      issuePlaceholder,
-      addCommentMode,
       issueLoaded,
       issueLoadingError,
       refreshIssue,
-      commentsLoaded,
-      commentsLoadingError,
-
       showCommandDialog,
-
       isSelectOpen,
-
-      activitiesEnabled,
-      activityLoaded,
-      activitiesLoadingError
     } = this.props;
-
-    const activityLoading = {
-      error: () => issueLoaded && (activitiesEnabled ? activitiesLoadingError : commentsLoadingError),
-      success: () => issueLoaded && (activitiesEnabled ? activityLoaded : commentsLoaded),
-    };
-    const showLoading = () => (!issueLoaded || !activityLoading.success()) && !activityLoading.error();
-    const isActivityLoaded = () => issueLoaded && activityLoading.success();
 
     return (
       <View style={styles.container} testID="issue-view">
@@ -521,37 +624,9 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
 
         {Boolean(issueLoaded && !issueLoadingError) && this._renderToolbar()}
 
-        {Boolean(issue && !addCommentMode) && this._renderCustomFieldPanel()}
-
         {issueLoadingError && <ErrorMessage error={issueLoadingError} onTryAgain={refreshIssue}/>}
 
-        {(issue || issuePlaceholder) && !issueLoadingError &&
-        <ScrollView
-          style={styles.issueContent}
-          refreshControl={this._renderRefreshControl()}
-          keyboardDismissMode="interactive"
-          keyboardShouldPersistTaps="handled"
-          onScroll={this._handleScroll}
-          scrollEventThrottle={16}
-        >
-          {this._renderIssueView(issue || issuePlaceholder)}
-
-          {showLoading() && <ActivityIndicator style={styles.loading}/>}
-
-          {activityLoading.error() &&
-          <View><Text style={styles.loadingActivityError}>Failed to load activities.</Text></View>}
-
-          {
-            isActivityLoaded()
-              ? (activitiesEnabled ? this._renderActivities() : this._renderComments())
-              : null
-          }
-          {activitiesEnabled && !addCommentMode && isActivityLoaded() && this._renderActivitySettings()}
-
-        </ScrollView>}
-
-        {Boolean(!addCommentMode && this._canAddComment()) && this._renderEditCommentInput(false)}
-        {Boolean(addCommentMode) && this._renderEditCommentInput(true)}
+        {this.renderTabs()}
 
         {showCommandDialog && this._renderCommandDialog()}
 

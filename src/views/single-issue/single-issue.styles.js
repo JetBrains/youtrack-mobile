@@ -13,7 +13,7 @@ import {
   COLOR_ICON_MEDIUM_GREY,
   COLOR_PINK_DARK
 } from '../../components/variables/variables';
-import {secondaryText} from '../../components/common-styles/issue';
+import {secondaryText, mainText} from '../../components/common-styles/issue';
 
 
 export default StyleSheet.create({
@@ -221,5 +221,15 @@ export default StyleSheet.create({
   },
   workComment: {
     marginBottom: UNIT,
+  },
+
+  tabLabel: {
+    ...mainText,
+    textTransform: 'none'
+  },
+  tabLazyPlaceholder: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
