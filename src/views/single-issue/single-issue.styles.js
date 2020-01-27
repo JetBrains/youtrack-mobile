@@ -241,6 +241,7 @@ export default StyleSheet.create({
   },
   tabLabel: {
     ...mainText,
+    fontWeight: '500',
     textTransform: 'none'
   },
   tabLazyPlaceholder: {
