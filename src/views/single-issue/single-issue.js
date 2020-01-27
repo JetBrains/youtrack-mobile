@@ -373,9 +373,10 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
           </Text>
 
           <Tags
+            style={styles.tags}
+            multiline={true}
             tags={issue?.tags}
             onTagPress={openIssueListWithSearch}
-            title={<Text style={styles.tagsTitle}>Tags: </Text>}
             showMore={true}
           />
 

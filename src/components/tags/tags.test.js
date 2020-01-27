@@ -32,7 +32,7 @@ describe('<Tags/>', () => {
     });
 
     it('should render component', () => {
-      expect(findByTestId('tagsListContainer')).toHaveLength(1);
+      expect(findByTestId('tagsList')).toHaveLength(1);
     });
   });
 

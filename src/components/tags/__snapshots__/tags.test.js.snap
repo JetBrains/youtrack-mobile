@@ -1,22 +1,69 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Tags/> Render should match a snapshot 1`] = `
-<LineBlock
-  allChildrenRenderer={[Function]}
-  childrenRenderer={[Function]}
-  inline={false}
+<View
   style={
-    Object {
-      "alignItems": "center",
-      "flexDirection": "row",
-      "justifyContent": "flex-start",
-    }
+    Array [
+      Object {
+        "alignItems": "center",
+        "flexDirection": "row",
+        "justifyContent": "flex-start",
+      },
+      undefined,
+    ]
   }
-  testID="tagsListContainer"
-  title={
-    <Text>
-      Tags: 
-    </Text>
-  }
-/>
+  testID="tagsList"
+>
+  <ScrollViewMock
+    keyboardShouldPersistTaps="handled"
+  >
+    <View
+      style={
+        Array [
+          Object {
+            "alignItems": "center",
+            "flexDirection": "row",
+            "justifyContent": "flex-start",
+          },
+          null,
+        ]
+      }
+    >
+      <TouchableOpacity
+        activeOpacity={0.2}
+        key="undefined_button"
+        onPress={[Function]}
+        testID="tagsListTag"
+      >
+        <ColorField
+          color={
+            Object {
+              "id": 1,
+            }
+          }
+          fullText={true}
+          style={
+            Array [
+              Array [
+                Object {
+                  "marginBottom": 2,
+                  "marginRight": 8,
+                  "paddingLeft": 4,
+                  "paddingRight": 4,
+                  "width": null,
+                },
+                null,
+              ],
+              null,
+              Object {
+                "marginLeft": 0,
+              },
+            ]
+          }
+          testID="tagColor"
+        />
+      </TouchableOpacity>
+    </View>
+  </ScrollViewMock>
+</View>
 `;

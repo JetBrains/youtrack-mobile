@@ -57,8 +57,8 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     color: COLOR_FONT
   },
-  tagsTitle: {
-    fontWeight: 'bold'
+  tags: {
+    marginTop: UNIT * 2
   },
   description: {},
   attachments: {

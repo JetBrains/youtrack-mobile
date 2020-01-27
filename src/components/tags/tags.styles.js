@@ -8,20 +8,20 @@ export default StyleSheet.create({
   modal: {
     paddingTop: UNIT * 2
   },
-  tagsContainer: {
+  tags: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start'
   },
-  tagsContainerAll: {
-    flexDirection: 'column',
-    alignItems: 'flex-start'
+  tagsMultiline: {
+    flexWrap: 'wrap'
   },
   tag: {
     width: null, //Removes fixed width of usual color field
     paddingLeft: UNIT / 2,
     paddingRight: UNIT / 2,
-    margin: UNIT / 4
+    marginBottom: UNIT / 4,
+    marginRight: UNIT,
   },
   tagMultiline: {
     marginBottom: UNIT,

@@ -84,7 +84,7 @@ export default class IssueRow extends Component<Props, void> {
           </Text>
 
           {Boolean(issue.tags && issue.tags.length) &&
-          <Tags inline={true} tags={issue.tags} onTagPress={onTagPress}/>
+          <Tags tags={issue.tags} onTagPress={onTagPress} style={styles.tags}/>
           }
 
         </View>

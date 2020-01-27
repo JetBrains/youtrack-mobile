@@ -1,6 +1,7 @@
 /* @flow */
 import {View, Text, StyleSheet} from 'react-native';
 import React, {PureComponent} from 'react';
+import {secondaryText} from '../common-styles/issue';
 
 export const SIZE = 20;
 export const NO_COLOR_ID = '0';
@@ -61,6 +62,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 12,
+    ...secondaryText,
     textAlign: 'center'
   }
 });

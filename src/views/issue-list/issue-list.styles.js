@@ -101,9 +101,7 @@ export default StyleSheet.create({
     padding: UNIT * 2
   },
   tags: {
-    height: 22,
-    overflow: 'hidden',
-    marginTop: UNIT / 2
+    marginTop: UNIT
   },
   searchContext: {
     height: searchContextHeight,

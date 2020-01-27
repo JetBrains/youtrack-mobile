@@ -1,10 +1,9 @@
 /* @flow */
 
-import {View, TouchableOpacity, ScrollView, Text} from 'react-native';
+import {View, TouchableOpacity, ScrollView} from 'react-native';
 import React, {PureComponent} from 'react';
 
 import ColorField from '../../components/color-field/color-field';
-import LineBlock from '../line-block/line-block';
 import {showActions} from '../action-sheet/action-sheet';
 import PropTypes from 'prop-types';
 
@@ -18,8 +17,8 @@ type Props = {
   tags: Array<Tag>,
   onTagPress: (query: string) => any,
   style?: ViewStyleProp,
-  title?: React$Element<*>,
-  inline?: boolean
+  title?: React$Element<any>,
+  multiline?: boolean
 }
 
 type DefaultProps = {
@@ -73,14 +72,19 @@ export default class Tags extends PureComponent<Props, State> {
     }
   }
 
-  _renderTags(multiline?: boolean) {
-    const {tags, title} = this.props;
+  render() {
+    const {tags, multiline, title, style} = this.props;
+
+    if (!tags || !tags.length) {
+      return null;
+    }
+
     const tagStyle = [styles.tag, multiline ? styles.tagMultiline : null];
 
     return (
       <View
         testID="tagsList"
-        style={styles.tagsContainer}
+        style={[styles.tags, style]}
       >
         {title}
 
@@ -88,7 +92,7 @@ export default class Tags extends PureComponent<Props, State> {
           keyboardShouldPersistTaps="handled"
         >
           <View
-            style={[styles.tagsContainer, multiline ? styles.tagsContainerAll : null]}
+            style={[styles.tags, multiline ? styles.tagsMultiline : null]}
           >
             {tags.map((tag, index) => {
               return (
@@ -110,25 +114,6 @@ export default class Tags extends PureComponent<Props, State> {
           </View>
         </ScrollView>
       </View>
-    );
-  }
-
-  render() {
-    const {tags, inline} = this.props;
-
-    if (!tags || !tags.length) {
-      return null;
-    }
-
-    return (
-      <LineBlock
-        style={styles.tagsContainer}
-        testID="tagsListContainer"
-        inline={inline}
-        title={<Text>{`Tags: `}</Text>}
-        childrenRenderer={() => this._renderTags()}
-        allChildrenRenderer={() => this._renderTags(true)}
-      />
     );
   }
 }
