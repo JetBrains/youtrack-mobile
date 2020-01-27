@@ -31,7 +31,6 @@ export default StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'nowrap',
     alignItems: 'center',
-    justifyContent: 'center',
     ...sidePadding
   },
   keyWrapper: {
