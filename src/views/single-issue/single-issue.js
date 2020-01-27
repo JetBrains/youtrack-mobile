@@ -178,7 +178,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
       <TabBar
         {...props}
         indicatorStyle={{backgroundColor: COLOR_PINK}}
-        style={{backgroundColor: COLOR_FONT_ON_BLACK}}
+        style={styles.tabsBar}
         renderLabel={({route, focused}) => (
           <Text style={{
             ...styles.tabLabel,

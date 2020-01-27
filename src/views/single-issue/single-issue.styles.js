@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 import {
   UNIT,
   COLOR_EXTRA_LIGHT_GRAY,
@@ -223,6 +223,23 @@ export default StyleSheet.create({
     marginBottom: UNIT,
   },
 
+  tabsBar: {
+    backgroundColor: COLOR_FONT_ON_BLACK,
+    ...Platform.select({
+      ios: {
+        shadowRadius: 0.6,
+        shadowColor: COLOR_BLACK,
+        shadowOffset: {
+          width: 0,
+          height: 1
+        },
+        shadowOpacity: 0.25,
+      },
+      android: {
+        elevation: 1
+      },
+    }),
+  },
   tabLabel: {
     ...mainText,
     textTransform: 'none'
