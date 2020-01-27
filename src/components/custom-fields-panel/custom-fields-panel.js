@@ -98,6 +98,7 @@ const DATE_AND_TIME = 'date and time';
 
 export default class CustomFieldsPanel extends Component<Props, State> {
   currentScrollX: number = 0;
+  isComponentMounted: ?boolean;
 
   constructor() {
     super();
@@ -114,16 +115,25 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     };
   }
 
+  componentDidMount(): void {
+    this.isComponentMounted = true;
+  }
+
+  componentWillUnmount(): void {
+    this.isComponentMounted = null;
+  }
+
   saveUpdatedField(field: CustomFieldType, value: null | number | Object | Array<Object>) {
+    const updateSavingState = (value) => this.isComponentMounted && this.setState({savingField: value});
     this.closeEditor();
-    this.setState({savingField: field});
+    updateSavingState(field);
 
     return this.props.onUpdate(field, value)
       .then(res => {
-        this.setState({savingField: null});
+        updateSavingState(null);
         return res;
       })
-      .catch(() => this.setState({savingField: null}));
+      .catch(() => updateSavingState(null));
   }
 
   onSelectProject() {
