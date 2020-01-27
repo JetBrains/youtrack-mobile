@@ -19,7 +19,7 @@ export default StyleSheet.create({
   placeholder: {
     height: HEIGHT,
     marginTop: UNIT,
-    paddingTop: UNIT
+    paddingTop: UNIT / 2
   },
   customFieldsEditor: {
     top: UNIT * 2,
