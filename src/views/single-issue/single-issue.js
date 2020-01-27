@@ -318,9 +318,6 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
   }
 
   _renderLinks(issue: IssueFull | IssueOnList) {
-    if (!issue.links || !issue.links.length) {
-      return null;
-    }
     return <LinkedIssues links={issue.links} onIssueTap={this.props.openNestedIssueView}/>;
   }
 
