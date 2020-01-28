@@ -157,12 +157,12 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
             {activityLoading.error() &&
             <View><Text style={styles.loadingActivityError}>Failed to load activities.</Text></View>}
 
+            {activitiesEnabled && !addCommentMode && isActivityLoaded() && this._renderActivitySettings()}
             {
               isActivityLoaded()
                 ? (activitiesEnabled ? this._renderActivities() : this._renderComments())
                 : null
             }
-            {activitiesEnabled && !addCommentMode && isActivityLoaded() && this._renderActivitySettings()}
 
           </ScrollView>
 

@@ -15,6 +15,7 @@ import {secondaryText, mainText} from '../../components/common-styles/issue';
 
 
 export default StyleSheet.create({
+  secondaryText: secondaryText,
   container: {
     flex: 1
   },
@@ -218,13 +219,17 @@ export default StyleSheet.create({
     textAlign: 'left'
   },
   settingsToggle: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: UNIT,
     paddingTop: UNIT,
-    paddingBottom: UNIT,
-    marginBottom: UNIT * 4
+    paddingBottom: UNIT
   },
-  settingsToggleText: {
-    color: COLOR_PINK,
-    textAlign: 'center'
+  settingsToggleIcon: {
+    marginTop: -1,
+    marginLeft: UNIT,
+    color: COLOR_ICON_MEDIUM_GREY
   },
 
   workTime: {

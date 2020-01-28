@@ -1,4 +1,5 @@
 /* @flow */
+
 import styles from './single-issue.styles';
 
 import {View, Text, TouchableOpacity, Image} from 'react-native';
@@ -17,6 +18,7 @@ import ModalView from '../../components/modal-view/modal-view';
 
 import {checkWhite} from '../../components/icon/icon';
 import selectStyles from '../../components/select/select.styles';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 type Props = {
   issueActivityTypes: Array<ActivityEnabledType>,
@@ -168,13 +170,17 @@ export default class SingleIssueActivitiesSettings extends Component<Props, Stat
   }
 
   render() {
+    const selectedCategoriesTitle = this.state.select.selectedItems.map(
+      (category) => category.name
+    ).join(', ');
     return (
       <View>
         <TouchableOpacity
           style={styles.settingsToggle}
           onPress={this._toggleSettingsVisibility}
         >
-          <Text style={styles.settingsToggleText}>Activity feed settings</Text>
+          <Text style={styles.secondaryText}>{selectedCategoriesTitle}</Text>
+          <Icon style={styles.settingsToggleIcon} size={20} name="angle-down"/>
         </TouchableOpacity>
 
         {this.state.visible && this._renderSettings()}
