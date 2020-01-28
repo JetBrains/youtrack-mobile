@@ -16,7 +16,6 @@ const SUGGESTION_BOTTOM = 58;
 
 export default StyleSheet.create({
   commentContainer: {
-    backgroundColor: COLOR_EXTRA_LIGHT_GRAY,
     borderTopWidth: 1,
     borderColor: COLOR_MEDIUM_GRAY
   },

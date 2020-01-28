@@ -4,8 +4,8 @@ import type {Node} from 'react';
 import {
   COLOR_PINK,
   COLOR_PINK_DARK,
-  COLOR_EXTRA_LIGHT_GRAY,
-  COLOR_BLACK
+  COLOR_BLACK,
+  COLOR_FONT_ON_BLACK
 } from '../../components/variables/variables';
 import {reply, share, pencil, trash} from '../icon/icon';
 import Swipeout from 'react-native-swipeout';
@@ -58,7 +58,7 @@ export default class CommentActions extends Component<Props, void> {
     return (
       <Swipeout
         disabled={disabled}
-        backgroundColor={COLOR_EXTRA_LIGHT_GRAY}
+        backgroundColor={COLOR_FONT_ON_BLACK}
         right={this._getCommentActionButtons()}
         sensitivity={30}
         buttonWidth={56}

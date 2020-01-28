@@ -1,15 +1,13 @@
 import {StyleSheet, Platform} from 'react-native';
 import {
   UNIT,
-  COLOR_EXTRA_LIGHT_GRAY,
   COLOR_FONT_ON_BLACK,
   COLOR_BLACK,
   COLOR_FONT_GRAY,
   COLOR_FONT,
   COLOR_PINK,
   COLOR_MEDIUM_GRAY,
-  COLOR_LINK,
-  COLOR_ICON_GREY,
+  COLOR_ICON_LIGHT_BLUE,
   COLOR_ICON_MEDIUM_GREY,
   COLOR_PINK_DARK
 } from '../../components/variables/variables';
@@ -96,8 +94,9 @@ export default StyleSheet.create({
   },
 
   activitiesContainer: {
+    paddingLeft: UNIT,
     paddingBottom: UNIT * 3,
-    backgroundColor: COLOR_EXTRA_LIGHT_GRAY
+    paddingRight: UNIT
   },
   activity: {
     flexDirection: 'row',
@@ -105,9 +104,13 @@ export default StyleSheet.create({
     paddingLeft: UNIT,
     paddingRight: UNIT,
   },
+  activityAvatar: {
+    width: 32,
+    height: 32,
+    alignItems: 'center',
+  },
   mergedActivity: {
     marginBottom: 0,
-    marginLeft: UNIT * 5,
     paddingTop: UNIT * 2
   },
   activityAuthor: {
@@ -115,22 +118,27 @@ export default StyleSheet.create({
   },
   activityItem: {
     flex: 1,
-    marginLeft: UNIT,
+    marginLeft: UNIT * 2,
   },
   activityAuthorName: {
     flex: 0,
     marginRight: UNIT / 2,
     color: COLOR_FONT,
-    fontWeight: 'bold'
+    fontSize: 18,
+    lineHeight: 17,
+    fontWeight: '500',
+    letterSpacing: -0.22,
   },
   activityTimestamp: {
+    ...secondaryText,
     color: COLOR_FONT,
+    lineHeight: 16
   },
   activityLabel: {
     color: COLOR_ICON_MEDIUM_GREY
   },
   activityText: {
-    color: COLOR_FONT
+    color: COLOR_ICON_MEDIUM_GREY
   },
   activityRelatedChanges: {
     flex: 1,
@@ -158,11 +166,8 @@ export default StyleSheet.create({
   activityHistoryIcon: {
     width: 20,
     height: 20,
-    marginTop: -1,
-    marginLeft: 10,
-    marginRight: 10,
     resizeMode: 'contain',
-    tintColor: COLOR_ICON_GREY
+    tintColor: COLOR_ICON_LIGHT_BLUE
   },
 
   links: {
@@ -172,7 +177,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
   },
   linkText: {
-    color: COLOR_LINK
+    color: COLOR_PINK
   },
 
   settingsModal: {

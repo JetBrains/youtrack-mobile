@@ -36,4 +36,5 @@ export const AGILE_COLLAPSED_COLUMN_WIDTH = UNIT * 4;
 export const COLOR_LINK = '#0f5b99';
 
 export const COLOR_ICON_GREY = '#999';
+export const COLOR_ICON_LIGHT_BLUE = '#b8d1e4';
 export const COLOR_ICON_MEDIUM_GREY = '#737577';

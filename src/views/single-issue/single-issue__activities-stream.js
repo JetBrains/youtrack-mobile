@@ -12,7 +12,12 @@ import CommentVisibility from '../../components/comment/comment__visibility';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
 import CommentActions from '../../components/comment/comment__actions';
 
-import {getEntityPresentation, relativeDate, absDate, getReadableID} from '../../components/issue-formatter/issue-formatter';
+import {
+  getEntityPresentation,
+  relativeDate,
+  absDate,
+  getReadableID
+} from '../../components/issue-formatter/issue-formatter';
 
 import {mergeActivities} from '../../components/activity/activity__merge-activities';
 import {groupActivities} from '../../components/activity/activity__group-activities';
@@ -132,7 +137,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
     const isMultiValue = this._isMultiValueActivity(activity);
     return (
       <Text>
-        <Text style={styles.activityLabel}>{getEventTitle(activity)}</Text>
+        <Text style={styles.activityLabel}>{this.getActivityEventTitle(activity)}</Text>
 
         <Text
           style={[
@@ -171,12 +176,12 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
     );
   }
 
-  _renderLinkChange(event: Object) {
-    const linkedIssues = [].concat(event.added).concat(event.removed);
+  _renderLinkChange(activity: IssueActivity) {
+    const linkedIssues = [].concat(activity.added).concat(activity.removed);
     return (
-      <TouchableOpacity key={event.id}>
+      <TouchableOpacity key={activity.id}>
         <View style={styles.row}>
-          <Text style={styles.activityLabel}>{getEventTitle(event)}</Text>
+          <Text style={styles.activityLabel}>{this.getActivityEventTitle(activity)}</Text>
         </View>
         {
           linkedIssues.map((linkedIssue) => {
@@ -194,9 +199,8 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
                   linkedIssue.resolved && {color: COLOR_FONT_GRAY},
                   linkedIssue.resolved && styles.activityRemoved
                 ]}>
-                  {readableIssueId}
+                  {`${readableIssueId} ${linkedIssue.summary}`}
                 </Text>
-                {`  ${linkedIssue.summary}`}
               </Text>
             );
           })
@@ -215,17 +219,22 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
     return attachments;
   }
 
-  _renderAttachmentChange(event: Object) {
-    const removed = event.removed || [];
-    const added = event.added || [];
+  getActivityEventTitle(activity: IssueActivity) {
+    const title = getEventTitle(activity) || '';
+    return `${title} `;
+  }
+
+  _renderAttachmentChange(activity: Object) {
+    const removed = activity.removed || [];
+    const added = activity.added || [];
     const addedAndLaterRemoved = added.filter(it => !it.url);
     const addedAndAvailable = this.updateToAbsUrl(added.filter(it => it.url));
     const hasAddedAttachments = addedAndAvailable.length > 0;
 
     return (
-      <View key={event.id}>
+      <View key={activity.id}>
         <View style={styles.row}>
-          <Text style={[styles.activityLabel, {paddingBottom: UNIT / 2}]}>{getEventTitle(event)}</Text>
+          <Text style={[styles.activityLabel, {paddingBottom: UNIT / 2}]}>{this.getActivityEventTitle(activity)}</Text>
         </View>
 
         {hasAddedAttachments && <AttachmentsRow
@@ -240,7 +249,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
         {addedAndLaterRemoved.length > 0 && addedAndLaterRemoved.map(it => <Text key={it.id}>{it.name}</Text>)}
 
         {removed.length > 0 &&
-        <Text style={hasAddedAttachments && {marginTop: UNIT / 2}}>{event.removed.map((it, index) =>
+        <Text style={hasAddedAttachments && {marginTop: UNIT / 2}}>{activity.removed.map((it, index) =>
           <Text key={it.id}>
             {index > 0 && ', '}
             <Text style={styles.activityRemoved}>{it.name}</Text>
@@ -265,17 +274,19 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
   }
 
   _renderUserAvatar(activityGroup: Object, showAvatar: boolean) {
-    if (showAvatar) {
-      return (
-        <Avatar
-          userName={getEntityPresentation(activityGroup.author)}
-          size={40}
-          source={{uri: activityGroup.author.avatarUrl}}
-        />
-      );
-    }
     return (
-      <Image source={activityGroup.work ? work : history} style={styles.activityHistoryIcon}/>
+      <View style={styles.activityAvatar}>
+        {Boolean(!activityGroup.merged && showAvatar) && (
+          <Avatar
+            userName={getEntityPresentation(activityGroup.author)}
+            size={32}
+            source={{uri: activityGroup.author.avatarUrl}}
+          />
+        )}
+        {Boolean(!activityGroup.merged && !showAvatar) && (
+          <Image source={activityGroup.work ? work : history} style={styles.activityHistoryIcon}/>
+        )}
+      </View>
     );
   }
 
@@ -457,10 +468,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
                 activityGroup.merged ? styles.mergedActivity : null
               ]}>
 
-                {!activityGroup.merged && this._renderUserAvatar(
-                  activityGroup,
-                  !!activityGroup.comment
-                )}
+                {this._renderUserAvatar(activityGroup, !!activityGroup.comment)}
 
                 <View style={styles.activityItem}>
                   {activityGroup.comment && this._renderCommentActivity(activityGroup)}
