@@ -9,6 +9,9 @@ import MockedStorage from '@react-native-community/async-storage';
 import * as storage from '../../components/storage/storage';
 import {Activity} from '../../components/activity/activity__category';
 
+import * as notification from '../../components/notification/notification';
+import * as activity from './single-issue-activity';
+
 let fakeApi;
 const getApi = () => fakeApi;
 const ISSUE_ID = 'test-id';
@@ -37,6 +40,8 @@ describe('Issue view actions', () => {
     store = mockStore({
       singleIssue: {issueId: ISSUE_ID, issue: fakeIssue}
     });
+
+    sandbox = sinon.sandbox.create();
   });
 
   it('should load issue', async () => {
@@ -56,17 +61,6 @@ describe('Issue view actions', () => {
     expect(dispatched[0]).toEqual({type: types.RECEIVE_COMMENTS, comments: [fakeComment]});
   });
 
-  it('should refresh issue and comments', async () => {
-    await store.dispatch(actions.refreshIssue());
-
-    fakeApi.issue.getIssue.should.have.been.calledWith(ISSUE_ID);
-    fakeApi.issue.getIssueComments.should.have.been.calledWith(ISSUE_ID);
-
-    const dispatched = store.getActions();
-    expect(dispatched[0]).toEqual({type: types.START_ISSUE_REFRESHING});
-    expect(dispatched[dispatched.length - 1]).toEqual({type: types.STOP_ISSUE_REFRESHING});
-  });
-
   it('should add comment', async () => {
     await store.dispatch(actions.addComment(fakeComment));
 
@@ -80,41 +74,80 @@ describe('Issue view actions', () => {
   });
 
 
-  describe('Activities', function () {
+  describe('Refresh issue', () => {
     const issueCommentsSelectedTypeMock = 'IssueComments';
     const issueActivityEnabledTypesMock = [{
       id: issueCommentsSelectedTypeMock,
       name: 'Show comments'
     }];
+    let notificationNotify;
+    let actionsIsActivitiesAPIEnabled;
+    let getIssueActivitiesEnabledTypes;
+    let categories;
 
-    beforeEach(async () => {
-      sandbox = sinon.sandbox.create();
-      sandbox.stub(MockedStorage, 'multiGet').returns(Promise.resolve([
-        ['YT_ISSUE_ACTIVITIES_ENABLED_TYPES', issueActivityEnabledTypesMock],
-      ]));
-      await storage.populateStorage();
+    beforeEach(() => {
+      categories = Activity.ActivityCategories[issueCommentsSelectedTypeMock];
+      notificationNotify = sinon.stub(notification, 'notify');
+      actionsIsActivitiesAPIEnabled = sinon.stub(activity, 'isActivitiesAPIEnabled').returns(true);
+      getIssueActivitiesEnabledTypes = sinon.stub(activity, 'getIssueActivitiesEnabledTypes').returns(issueActivityEnabledTypesMock);
     });
 
-    it('should load issue activities', async () => {
-      await store.dispatch(actions.loadActivitiesPage([]));
+    afterEach(() => {
+      notificationNotify.restore();
+      actionsIsActivitiesAPIEnabled.restore();
+      getIssueActivitiesEnabledTypes.restore();
+    });
+
+    it('should refresh issue details', async () => {
+      await store.dispatch(actions.refreshIssue(false));
+
+      fakeApi.issue.getIssue.should.have.been.calledWith(ISSUE_ID);
 
       const dispatched = store.getActions();
-      const categories = Activity.ActivityCategories[issueCommentsSelectedTypeMock];
+      expect(dispatched[0]).toEqual({type: types.START_ISSUE_REFRESHING});
+      expect(dispatched[dispatched.length - 1]).toEqual({type: types.STOP_ISSUE_REFRESHING});
+    });
+
+    it('should refresh issue activity', async () => {
+      await store.dispatch(actions.refreshIssue(true));
 
       fakeApi.issue.getActivitiesPage.should.have.been.calledWith(ISSUE_ID, categories);
 
-      expect(dispatched[0]).toEqual({
-        type: types.RECEIVE_ACTIVITY_CATEGORIES,
+      const dispatched = store.getActions();
+      expect(dispatched[0]).toEqual({type: types.START_ISSUE_REFRESHING});
+      expect(dispatched[dispatched.length - 1]).toEqual({type: types.STOP_ISSUE_REFRESHING});
 
-        issueActivityTypes: actions.getIssueActivityAllTypes(),
-        issueActivityEnabledTypes: issueActivityEnabledTypesMock
-      });
-
-      expect(dispatched[1]).toEqual({
-        type: types.RECEIVE_ACTIVITY_PAGE,
-        activityPage: []
-      });
     });
 
+
+    describe('Activities', function () {
+      beforeEach(async () => {
+        sandbox.stub(MockedStorage, 'multiGet').returns(Promise.resolve([
+          ['YT_ISSUE_ACTIVITIES_ENABLED_TYPES', issueActivityEnabledTypesMock],
+        ]));
+        await storage.populateStorage();
+      });
+
+      it('should load issue activities', async () => {
+        await store.dispatch(actions.loadActivitiesPage());
+
+        const dispatched = store.getActions();
+
+        fakeApi.issue.getActivitiesPage.should.have.been.calledWith(ISSUE_ID, categories);
+
+        expect(dispatched[0]).toEqual({
+          type: types.RECEIVE_ACTIVITY_CATEGORIES,
+
+          issueActivityTypes: activity.getIssueActivityAllTypes(),
+          issueActivityEnabledTypes: issueActivityEnabledTypesMock
+        });
+
+        expect(dispatched[1]).toEqual({
+          type: types.RECEIVE_ACTIVITY_PAGE,
+          activityPage: []
+        });
+      });
+
+    });
   });
 });

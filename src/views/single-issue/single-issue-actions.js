@@ -1,4 +1,5 @@
 /* @flow */
+
 import {Clipboard, Linking, Alert, Share, Platform} from 'react-native';
 import * as types from './single-issue-action-types';
 import ApiHelper from '../../components/api/api__helper';
@@ -11,14 +12,12 @@ import usage from '../../components/usage/usage';
 import {initialState} from './single-issue-reducers';
 import type {IssueFull, CommandSuggestionResponse} from '../../flow/Issue';
 import type {CustomField, IssueProject, FieldValue, IssueComment} from '../../flow/CustomFields';
-import type {IssueActivity, ActivityEnabledType} from '../../flow/Activity';
+import type {IssueActivity} from '../../flow/Activity';
 import type Api from '../../components/api/api';
 import type {State as SingleIssueState} from './single-issue-reducers';
 import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
-import {Activity} from '../../components/activity/activity__category';
-import {checkVersion} from '../../components/feature/feature';
-import {getStorageState, flushStoragePart} from '../../components/storage/storage';
+import * as activity from './single-issue-activity';
 
 const CATEGORY_NAME = 'Issue';
 
@@ -205,31 +204,6 @@ export function loadIssueComments() {
   };
 }
 
-export function saveIssueActivityEnabledTypes(enabledTypes: Array<Object>) {
-  enabledTypes && flushStoragePart({issueActivitiesEnabledTypes: enabledTypes});
-}
-
-export function getIssueActivityAllTypes(): Array<ActivityEnabledType> {
-  return Object.keys(Activity.ActivityCategories).map(
-    (key) => Object.assign({id: key, name: Activity.CategoryPresentation[key]})
-  );
-}
-
-export function getIssueActivitiesEnabledTypes(): Array<ActivityEnabledType> {
-  let enabledTypes = getStorageState().issueActivitiesEnabledTypes || [];
-  if (!enabledTypes.length) {
-    enabledTypes = getIssueActivityAllTypes();
-    saveIssueActivityEnabledTypes(enabledTypes);
-  }
-  return enabledTypes;
-}
-
-function getActivityCategories(categoryTypes) {
-  return (categoryTypes || []).reduce(
-    (list, category) => list.concat(Activity.ActivityCategories[category.id]), []
-  );
-}
-
 export function loadActivitiesPage() {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().singleIssue.issueId;
@@ -237,14 +211,14 @@ export function loadActivitiesPage() {
 
     try {
       log.info('Loading activities...');
-      const enabledActivityTypes = getIssueActivitiesEnabledTypes();
+      const enabledActivityTypes = activity.getIssueActivitiesEnabledTypes();
       dispatch({
         type: types.RECEIVE_ACTIVITY_CATEGORIES,
-        issueActivityTypes: getIssueActivityAllTypes(),
+        issueActivityTypes: activity.getIssueActivityAllTypes(),
         issueActivityEnabledTypes: enabledActivityTypes
       });
 
-      const activityCategories = getActivityCategories(enabledActivityTypes);
+      const activityCategories = activity.getActivityCategories(enabledActivityTypes);
       const activityPage: Array<IssueActivity> = await api.issue.getActivitiesPage(issueId, activityCategories);
       log.info('Received activities', activityPage);
       dispatch(receiveActivityPage(activityPage));
@@ -280,13 +254,9 @@ export function loadIssue() {
   };
 }
 
-export function isActivitiesAPIEnabled() {
-  return checkVersion('2018.3');
-}
-
 export function loadIssueActivities() {
   return async (dispatch: (any) => any) => {
-    const activitiesAPIEnabled = isActivitiesAPIEnabled();
+    const activitiesAPIEnabled = activity.isActivitiesAPIEnabled();
     await dispatch(receiveActivityAPIAvailability(activitiesAPIEnabled));
 
     const loadActivities = activitiesAPIEnabled ? loadActivitiesPage : loadIssueComments;
@@ -294,15 +264,18 @@ export function loadIssueActivities() {
   };
 }
 
-export function refreshIssue() {
+export function refreshIssue(isActivity?: boolean) {
   return async (dispatch: (any) => any, getState: StateGetter) => {
     dispatch(startIssueRefreshing());
     log.debug(`About to refresh issue "${getState().singleIssue.issueId}"`);
-    await Promise.all([
-      await dispatch(loadIssue()),
-      await dispatch(loadIssueActivities())
-    ]);
-    log.debug(`Issue "${getState().singleIssue.issueId}" has been refreshed`);
+    const message = `Issue ${isActivity ? 'activity' : 'details'}`;
+    if (isActivity) {
+      await dispatch(loadIssueActivities());
+    } else {
+      await dispatch(loadIssue());
+    }
+    notify(`${message} updated`);
+    log.debug(`${message} "${getState().singleIssue.issueId}" loaded`);
     dispatch(stopIssueRefreshing());
   };
 }
@@ -350,7 +323,7 @@ export function addComment(comment: Object) {
       dispatch(receiveComment(createdComment));
       dispatch(hideCommentInput());
 
-      if (isActivitiesAPIEnabled()) {
+      if (activity.isActivitiesAPIEnabled()) {
         dispatch(loadActivitiesPage());
       } else {
         dispatch(loadIssueComments());
@@ -457,7 +430,7 @@ export function deleteCommentPermanently(comment: IssueComment, activityId?: str
         );
       });
     } catch (err) {
-      log.log('Deletion confirmation declined');
+      log.log('Deletion confirmation declined', err);
     }
 
     try {
@@ -678,16 +651,20 @@ export function showIssueActions(actionSheet: Object) {
   };
 }
 
-export function openNestedIssueView(issue: ?IssueFull, issueId: ?string) {
-  return async (dispatch: (any) => any, getState: StateGetter) => {
-    if (!issue) {
-      return Router.SingleIssue({issueId});
+type OpenNestedViewParams = {
+  issue?: IssueFull,
+  issueId?: string
+};
+
+export function openNestedIssueView(params: OpenNestedViewParams) {
+  return () => {
+    if (!params.issue) {
+      return Router.SingleIssue({issueId: params.issueId});
     }
 
-    issue.fieldHash = ApiHelper.makeFieldHash(issue);
     Router.SingleIssue({
-      issuePlaceholder: issue,
-      issueId: issue.id
+      issuePlaceholder: {...params.issue, ...{fieldHash: ApiHelper.makeFieldHash(params.issue)}},
+      issueId: params.issue?.id
     });
   };
 }

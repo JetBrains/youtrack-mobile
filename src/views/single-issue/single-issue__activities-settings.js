@@ -9,7 +9,7 @@ import type {UserAppearanceProfile} from '../../flow/User';
 import type {ActivityEnabledType} from '../../flow/Activity';
 
 import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
-import {saveIssueActivityEnabledTypes} from './single-issue-actions';
+import {saveIssueActivityEnabledTypes} from './single-issue-activity';
 
 import apiHelper from '../../components/api/api__helper';
 

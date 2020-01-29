@@ -13,28 +13,22 @@ import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {getApi} from '../../components/api/api__instance';
-import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import IssueToolbar from '../../components/issue-toolbar/issue-toolbar';
 import SingleIssueComments from './single-issue__comments';
 import SingleIssueCommentInput from './single-issue__comment-input';
-import SingleIssueTopPanel from './single-issue__top-panel';
 import Router from '../../components/router/router';
 import Header from '../../components/header/header';
-import LinkedIssues from '../../components/linked-issues/linked-issues';
-import {COLOR_DARK, COLOR_PINK} from '../../components/variables/variables';
+import {COLOR_DARK, COLOR_FONT_GRAY, COLOR_PINK} from '../../components/variables/variables';
 import usage from '../../components/usage/usage';
-import log from '../../components/log/log';
-import IssueSummary from '../../components/issue-summary/issue-summary';
 import CommandDialog from '../../components/command-dialog/command-dialog';
 import ErrorMessage from '../../components/error-message/error-message';
 import styles from './single-issue.styles';
-import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import {getReadableID} from '../../components/issue-formatter/issue-formatter';
 import * as issueActions from './single-issue-actions';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {State as SingleIssueState} from './single-issue-reducers';
-import type {IssueFull, IssueOnList, TabRoute} from '../../flow/Issue';
-import type {IssueComment, Attachment} from '../../flow/CustomFields';
+import type {TabRoute} from '../../flow/Issue';
+import type {IssueComment} from '../../flow/CustomFields';
 import Select from '../../components/select/select';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
 
@@ -45,14 +39,11 @@ import SingleIssueActivitiesSettings from './single-issue__activities-settings';
 import type {UserAppearanceProfile} from '../../flow/User';
 import {receiveUserAppearanceProfile} from '../../actions/app-actions';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
-import Tags from '../../components/tags/tags';
-
-import commonIssueStyles from '../../components/common-styles/issue';
 import commentsStyles from './single-issue__comments.styles';
-import IssueDescription from './single-issue__description';
 
 // $FlowFixMe: module throws on type check
-import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
+import {TabView, TabBar} from 'react-native-tab-view';
+import IssueDetails from './single-issue__details';
 
 const CATEGORY_NAME = 'Issue';
 const tabRoutes: Array<TabRoute> = [
@@ -95,23 +86,58 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
     this.props.loadIssue();
   }
 
-  renderDetailsTab = () => {
-    const {issue, issuePlaceholder, issueLoaded, addCommentMode} = this.props;
+  renderDetailsTab() {
+    const {
+      loadIssue,
+      openNestedIssueView,
+      attachingImage,
+      refreshIssue,
+      issuePermissions,
+      updateIssueFieldValue,
+      updateProject,
+
+      isSavingEditedIssue,
+      summaryCopy,
+      descriptionCopy,
+      openIssueListWithSearch,
+      setIssueSummaryCopy,
+      setIssueDescriptionCopy,
+
+      issue, issuePlaceholder, issueLoaded, addCommentMode, editMode
+    } = this.props;
+
+    const _issue = issue || issuePlaceholder;
 
     return (
-      <ScrollView
-        style={styles.issueContent}
-        refreshControl={this._renderRefreshControl()}
-        keyboardDismissMode="interactive"
-        keyboardShouldPersistTaps="handled"
-        scrollEventThrottle={16}
-      >
-        {Boolean(issue && !addCommentMode) && this._renderCustomFieldPanel()}
-        {this._renderIssueView(issue || issuePlaceholder)}
-        {!issueLoaded && <ActivityIndicator style={styles.loading}/>}
-      </ScrollView>
+      <IssueDetails
+        loadIssue={loadIssue}
+        openNestedIssueView={openNestedIssueView}
+        attachingImage={attachingImage}
+        refreshIssue={refreshIssue}
+
+        issuePermissions={issuePermissions}
+        updateIssueFieldValue={updateIssueFieldValue}
+        updateProject={updateProject}
+
+        issue={_issue}
+        issuePlaceholder={issuePlaceholder}
+        issueLoaded={issueLoaded}
+        addCommentMode={addCommentMode}
+        editMode={editMode}
+
+        openIssueListWithSearch={openIssueListWithSearch}
+        isSavingEditedIssue={isSavingEditedIssue}
+
+        summaryCopy={summaryCopy}
+        descriptionCopy={descriptionCopy}
+        setIssueSummaryCopy={setIssueSummaryCopy}
+        setIssueDescriptionCopy={setIssueDescriptionCopy}
+
+        analyticCategory={CATEGORY_NAME}
+        renderRefreshControl={this._renderRefreshControl.bind(this)}
+      />
     );
-  };
+  }
 
   loadActivity() {
     if (!this.activityLoaded) {
@@ -182,7 +208,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
         renderLabel={({route, focused}) => (
           <Text style={{
             ...styles.tabLabel,
-            color: focused ? COLOR_PINK : COLOR_DARK
+            color: focused ? COLOR_PINK : this.isTabChangeEnabled() ? COLOR_DARK : COLOR_FONT_GRAY
           }}>
             {route.title}
           </Text>
@@ -191,36 +217,44 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
     );
   }
 
-  renderTabs() {
-    const sceneMap = {
-      [tabRoutes[0].key]: this.renderDetailsTab.bind(this), //TODO: get rid of bindings
-      [tabRoutes[1].key]: this.renderActivityTab.bind(this),
-    };
+  renderScene = ({route}) => {
+    if (route.key === tabRoutes[0].key) {
+      return this.renderDetailsTab();
+    }
+    return this.renderActivityTab();
+  };
 
+  isTabChangeEnabled() {
+    const {editMode, addCommentMode, isSavingEditedIssue, isRefreshing, attachingImage} = this.props;
+    return (
+      !editMode && !addCommentMode && !isSavingEditedIssue && !isRefreshing && !attachingImage
+    );
+  }
+
+  renderTabs() {
     return (
       <TabView
         testID="issueTabs"
         lazy
+        swipeEnabled={this.isTabChangeEnabled()}
         renderLazyPlaceholder={({route}) => (
           <View style={styles.tabLazyPlaceholder}>
             <Text>Loading {route.title}…</Text>
           </View>
         )}
         navigationState={this.state}
-        renderScene={SceneMap(sceneMap)}
+        renderScene={this.renderScene}
         initialLayout={{width: Dimensions.get('window').width}}
         renderTabBar={this.renderTabBar()}
         onIndexChange={index => {
-          index === 1 && this.loadActivity();
-          this.setState({index});
+          if (this.isTabChangeEnabled()) {
+            index === 1 && this.loadActivity();
+            this.setState({index});
+          }
         }}
       />
     );
   }
-
-  _onIssueIdTap = (issueId) => {
-    this.props.openNestedIssueView(null, issueId);
-  };
 
   _canAddComment() {
     const {issueLoaded, addCommentMode, issue} = this.props;
@@ -260,7 +294,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
           leftButton={<Text>Back</Text>}
           rightButton={<Text style={issueLoaded ? null : styles.disabledSaveButton}>More</Text>}
           extraButton={<OpenScanButton/>}
-          onRightButtonClick={() => issueLoaded && showIssueActions(this.context.actionSheet())}
+          onRightButtonClick={() => this.state.index === 0 && issueLoaded && showIssueActions(this.context.actionSheet())}
           onBack={this.handleOnBack}
         >
           {title}
@@ -317,93 +351,12 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
     );
   }
 
-  _renderLinks(issue: IssueFull | IssueOnList) {
-    return <LinkedIssues style={styles.links} links={issue.links} onIssueTap={this.props.openNestedIssueView}/>;
-  }
-
-  _renderAttachments(attachments: Array<Attachment> | null) {
-    if (!attachments || !attachments.length) {
-      return null;
-    }
-
-    return (
-      <View style={styles.attachments}>
-        <AttachmentsRow
-          attachments={attachments}
-          attachingImage={this.props.attachingImage}
-          imageHeaders={this.imageHeaders}
-          onImageLoadingError={err => {
-            log.warn('onImageLoadingError', err.nativeEvent);
-            this.props.refreshIssue();
-          }}
-          onOpenAttachment={(type) => usage.trackEvent(
-            CATEGORY_NAME,
-            type === 'image' ? 'Showing image' : 'Open attachment by URL')}
-        /></View>
-    );
-  }
-
-  _renderIssueView(issue: IssueFull | IssueOnList) {
-    const {editMode, isSavingEditedIssue, summaryCopy, descriptionCopy, openIssueListWithSearch} = this.props;
-    return (
-      <View style={styles.issueView}>
-
-        <SingleIssueTopPanel
-          created={issue.created}
-          updated={issue.updated}
-          reporter={issue.reporter}
-          updater={issue.updater}
-        />
-
-        {editMode && <IssueSummary
-          editable={!isSavingEditedIssue}
-          summary={summaryCopy}
-          showSeparator={false}
-          description={descriptionCopy}
-          onSummaryChange={this.props.setIssueSummaryCopy}
-          onDescriptionChange={this.props.setIssueDescriptionCopy}
-        />}
-
-        {!editMode && <View>
-          <Text
-            style={[styles.summary, issue.resolved ? commonIssueStyles.resolvedSummary : null]}
-            selectable={true}
-            testID="issue-summary">
-            {issue.summary}
-          </Text>
-
-          <Tags
-            style={styles.tags}
-            multiline={true}
-            tags={issue?.tags}
-            onTagPress={openIssueListWithSearch}
-            showMore={true}
-          />
-
-          {this._renderLinks(issue)}
-
-          <IssueDescription
-            style={styles.description}
-            backendUrl={this.backendUrl}
-            attachments={issue.attachments}
-            imageHeaders={this.imageHeaders}
-            onIssueIdTap={this._onIssueIdTap}
-            title={getReadableID(issue)}
-            description={issue.wikifiedDescription}
-          />
-        </View>}
-
-        {this._renderAttachments(issue.attachments)}
-      </View>
-    );
-  }
-
   _renderRefreshControl() {
     return <RefreshControl
       refreshing={this.props.isRefreshing}
       tintColor={COLOR_PINK}
       onRefresh={() => {
-        this.props.refreshIssue();
+        this.props.refreshIssue(this.state.index > 0);
       }}
     />;
   }
@@ -458,7 +411,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
             this.props.startReply(comment.author.login);
           }}
           onCopyCommentLink={copyCommentUrl}
-          onIssueIdTap={issueId => openNestedIssueView(null, issueId)}
+          onIssueIdTap={issueId => openNestedIssueView({issueId})}
 
           canUpdateComment={comment => issuePermissions.canUpdateComment(issue, comment)}
           onStartEditing={startEditingComment}
@@ -496,7 +449,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
             this.props.startReply(comment.author.login);
           }}
           onCopyCommentLink={copyCommentUrl}
-          onIssueIdTap={issueId => openNestedIssueView(null, issueId)}
+          onIssueIdTap={issueId => openNestedIssueView({issueId})}
 
           canUpdateComment={comment => issuePermissions.canUpdateComment(issue, comment)}
           onStartEditing={startEditingComment}
@@ -512,19 +465,6 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
         />
       </View>
     );
-  }
-
-  _renderCustomFieldPanel() {
-    const {issue, issuePermissions, updateIssueFieldValue, updateProject} = this.props;
-
-    return <CustomFieldsPanel
-      api={getApi()}
-      autoFocusSelect
-      canEditProject={issuePermissions.canUpdateGeneralInfo(issue)}
-      issue={issue}
-      issuePermissions={issuePermissions}
-      onUpdate={async (field, value) => await updateIssueFieldValue(field, value)}
-      onUpdateProject={async (project) => await updateProject(project)}/>;
   }
 
   _renderActivitySettings() {
@@ -617,15 +557,16 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
       isSelectOpen,
     } = this.props;
 
+    const isIssueLoaded = Boolean(issueLoaded && !issueLoadingError);
     return (
       <View style={styles.container} testID="issue-view">
         {this._renderHeader()}
 
-        {Boolean(issueLoaded && !issueLoadingError) && this._renderToolbar()}
+        {isIssueLoaded && this._renderToolbar()}
 
         {issueLoadingError && <ErrorMessage error={issueLoadingError} onTryAgain={refreshIssue}/>}
 
-        {this.renderTabs()}
+        {isIssueLoaded && this.renderTabs()}
 
         {showCommandDialog && this._renderCommandDialog()}
 
