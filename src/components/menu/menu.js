@@ -1,9 +1,8 @@
 /* @flow */
-import {View, ScrollView, Text, TouchableWithoutFeedback, TouchableOpacity, Linking, Dimensions} from 'react-native';
+import {View, ScrollView, Text, TouchableWithoutFeedback, TouchableOpacity, Linking} from 'react-native';
 import React, {Component} from 'react';
 import styles from './menu.styles';
 import {VERSION_STRING} from '../usage/usage';
-import getTopPadding from '../header/header__top-padding';
 import Drawer from 'react-native-drawer';
 import Router from '../router/router';
 import Auth from '../auth/auth';
@@ -80,7 +79,6 @@ export class Menu extends Component<Props, void> {
   };
 
   _renderMenu() {
-    const {height} = Dimensions.get('window');
     const {auth, issueQuery, openFeaturesView} = this.props;
     if (!auth) { //TODO: menu renders right after logOut by some reason.
       return null;
@@ -88,7 +86,7 @@ export class Menu extends Component<Props, void> {
 
     return (
       <ScrollView style={styles.scrollContainer}>
-        <View style={[styles.menuContainer, {paddingTop: getTopPadding(), minHeight: height}]}>
+        <View style={styles.menuContainer}>
           <View style={styles.accounts}><ConnectedAccounts/></View>
 
           <View style={styles.menuItems}>
@@ -113,8 +111,6 @@ export class Menu extends Component<Props, void> {
               />
             </Feature>
           </View>
-
-          <View style={styles.flexSpacer}/>
 
           <View style={styles.menuFooter}>
             <TouchableWithoutFeedback onPress={() => clicksToShowCounter(openFeaturesView, 'open features list')}>
