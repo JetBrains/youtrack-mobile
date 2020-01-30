@@ -93,8 +93,10 @@ export default StyleSheet.create({
     fontSize: 15
   },
   commentSendButton: {
-    paddingRight: UNIT * 2,
-    padding: UNIT
+    alignItems: 'center',
+    minWidth: UNIT * 8,
+    padding: UNIT,
+    paddingRight: UNIT * 2
   },
   commentSendButtonText: {
     fontSize: 16,

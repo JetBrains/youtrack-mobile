@@ -11,29 +11,30 @@ export default StyleSheet.create({
   },
   menuContainer: {
     flex: 1,
-    backgroundColor: 'black'
+    flexDirection: 'column',
+    paddingTop: UNIT * 1.5
   },
   menuItems: {
-    paddingRight: UNIT * 2,
+    flexGrow: 2,
+    padding: UNIT * 2,
     paddingTop: UNIT,
-    paddingBottom: UNIT * 2,
-    marginLeft: UNIT * 2,
-  },
-  flexSpacer: {
-    flexGrow: 1
   },
   menuFooter: {
-    padding: UNIT*2
+    padding: UNIT * 2,
+    paddingTop: UNIT * 4
   },
   spacer: {
     marginTop: UNIT
   },
   footerText: {
     fontSize: 12,
-    lineHeight: UNIT*2,
+    lineHeight: UNIT * 2,
     color: COLOR_GRAY
   },
-  buttonLink: {},
+  buttonLink: {
+    padding: UNIT,
+    paddingLeft: 0
+  },
   linkText: {
     color: COLOR_PINK,
     fontSize: 12

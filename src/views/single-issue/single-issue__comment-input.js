@@ -217,25 +217,22 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
 
           <TouchableOpacity
             style={styles.visibilityChangeButton}
-            onPress={() => onEditCommentVisibility(editingComment)}>
-
-            {!this.state.isSaving
-              ? <Image
-                source={isSecured ? visibilityActive : visibility}
-                style={styles.visibilityChangeIcon}/>
-              : <ActivityIndicator/>
-            }
+            disabled={this.state.isSaving}
+            onPress={() => onEditCommentVisibility(editingComment)}
+          >
+            <Image
+              source={isSecured ? visibilityActive : visibility}
+              style={styles.visibilityChangeIcon}/>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.commentSendButton}
-            disabled={!this.state.commentText}
+            disabled={!this.state.commentText || this.state.isSaving}
             onPress={() => this.addComment()}>
             {!this.state.isSaving
-              ? <Text style={
+              ? (<Text style={
                 [styles.commentSendButtonText, this.state.commentText ? null : styles.commentSendButtonTextDisabled]}
-              >
-                Send</Text>
+              > Send </Text>)
               : <ActivityIndicator/>
             }
           </TouchableOpacity>
