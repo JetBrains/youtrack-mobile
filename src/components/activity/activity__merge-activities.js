@@ -1,7 +1,7 @@
 /* @flow */
 import type {IssueActivity} from '../../flow/Activity';
 
-export const mergeActivities = (activities: Array<IssueActivity>) => {
+export const mergeActivities = (activities: Array<IssueActivity> = []) => {
   if (!activities || activities.length < 2) {
     return activities;
   }
