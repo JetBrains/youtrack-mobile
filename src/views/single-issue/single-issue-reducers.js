@@ -148,18 +148,11 @@ export default createReducer(initialState, {
     return {...state, commentText: action.comment};
   },
   [types.RECEIVE_COMMENT]: (state: State, action: {comment: IssueComment}): State => {
-    let comments;
-    if (state.issue.comments) {
-      comments = [
-        ...state.issue.comments,
-        action.comment
-      ];
-    }
     return {
       ...state,
       issue: {
         ...state.issue,
-        comments: comments
+        comments: [].concat(state.issue.comments || []).concat(action.comment)
       }
     };
   },

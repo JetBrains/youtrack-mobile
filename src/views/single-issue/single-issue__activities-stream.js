@@ -209,7 +209,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
     );
   }
 
-  updateToAbsUrl(attachments: Array<Attachment>): Array<Attachment> {
+  updateToAbsUrl(attachments: Array<Attachment> = []): Array<Attachment> {
     if (attachments.length) {
       ['url', 'thumbnailURL'].forEach(
         fieldName => (attachments = ApiHelper.convertRelativeUrls(attachments, fieldName, this.props.backendUrl)
@@ -452,7 +452,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
     const groupedActivities = this._processActivities(activityPage);
     const activities = createActivitiesModel(
       naturalCommentsOrder ? groupedActivities.reverse() : groupedActivities
-    );
+    ) || [];
 
     return (
       <View>
