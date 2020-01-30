@@ -74,6 +74,7 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
   }
 
   addComment() {
+    let clearTimer;
     this.setState({isSaving: true});
     this.props.onSubmitComment({
       ...this.props.editingComment, ...{
@@ -82,12 +83,13 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
       }
     })
       .then(() => {
+        clearTimeout(clearTimer);
         if (this.isUnmounted) {
           return;
         }
-        setTimeout(() => this.setState({commentText: ''}), UPDATE_TEXT_TIMEOUT);
+        clearTimer = setTimeout(() => !this.isUnmounted && this.setState({commentText: ''}), UPDATE_TEXT_TIMEOUT);
       })
-      .finally(() => this.setState({isSaving: false}));
+      .finally(() => !this.isUnmounted && this.setState({isSaving: false}));
   }
 
   suggestionsNeededDetector(text: string, caret: number) {
