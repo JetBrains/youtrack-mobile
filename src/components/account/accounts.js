@@ -70,7 +70,7 @@ export default class Accounts extends PureComponent<Props, void> {
   render() {
     const {openDebugView, onAddAccount, otherAccounts, isChangingAccount} = this.props;
     const storageState = getStorageState();
-    const accounts: Array<StorageState> = [storageState, ...otherAccounts]
+    const accounts: Array<StorageState> = [].concat(storageState).concat(otherAccounts || [])
       .filter(account => !!account.config) // Do not render if account is not ready
       .sort((a, b) => (b.creationTimestamp || 0) - (a.creationTimestamp || 0));
 

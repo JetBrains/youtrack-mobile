@@ -5,10 +5,8 @@ import type {IssueActivity} from '../../flow/Activity';
 
 const IDLE_TIME = 60 * 1000;
 
-export const groupActivities = (activities: Array<IssueActivity>, params: Object) => {
-  params = params || {};
-
-  return (activities || []).reduce((groups: Array<Object>, activity: IssueActivity, activityIndex) => {
+export const groupActivities = (activities: Array<IssueActivity> = [], params: Object = {}) => {
+  return activities.reduce((groups: Array<Object>, activity: IssueActivity, activityIndex) => {
     let group = last(groups);
 
     if (

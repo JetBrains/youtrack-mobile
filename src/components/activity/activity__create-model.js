@@ -2,7 +2,7 @@
 import {ResourceTypes, hasType} from '../api/api__resource-types';
 import {Activity, isActivityCategory} from './activity__category';
 
-export const createActivitiesModel = (activityGroups: Array<Object>) => {
+export const createActivitiesModel = (activityGroups: Array<Object> = []) => {
 
   const activities = getStream(activityGroups)
     .map(streamGroup => {
@@ -115,7 +115,7 @@ export const createActivitiesModel = (activityGroups: Array<Object>) => {
     return activities.filter((it: Object) => !it.hidden);
   }
 
-  function addMergeMetaDataToActivities(activities) {
+  function addMergeMetaDataToActivities(activities = []) {
     let currentIndex = activities.length - 1;
     let activity = null;
     let prevActivity = null;

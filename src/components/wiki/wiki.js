@@ -129,7 +129,7 @@ export default class Wiki extends PureComponent<Props, void> {
         <Text key={index}>
           {index === 0 ? null : '\n'}
           {defaultRenderer(node.children, parent)}
-          {index === siblings.length - 2 ? null : '\n'}
+          {((siblings || []).length - 2) === index ? null : '\n'}
         </Text>
       );
 
