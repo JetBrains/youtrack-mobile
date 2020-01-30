@@ -36,12 +36,14 @@ type State = {
   commentCaret: number
 };
 
+const UPDATE_TEXT_TIMEOUT = 300;
+
 export default class SingleIssueCommentInput extends Component<Props, State> {
   isUnmounted: boolean;
   SUGGESTION_AVATAR_SIZE = 32;
   debouncedOnChange = throttle((text: string) => (
     this.props.onChangeText && this.props.onChangeText(text)
-  ), 300);
+  ), UPDATE_TEXT_TIMEOUT);
 
   constructor() {
     super();
@@ -83,12 +85,9 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
         if (this.isUnmounted) {
           return;
         }
-        this.setState({
-          isSaving: false,
-          commentText: ''
-        });
+        setTimeout(() => this.setState({commentText: ''}), UPDATE_TEXT_TIMEOUT);
       })
-      .catch(() => this.setState({isSaving: false}));
+      .finally(() => this.setState({isSaving: false}));
   }
 
   suggestionsNeededDetector(text: string, caret: number) {
