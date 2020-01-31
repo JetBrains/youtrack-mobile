@@ -306,7 +306,7 @@ function completeInitialization() {
   };
 }
 
-function loadUser(userId?: string = 'me') {
+function loadUser(userId: string = 'me') {
   return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
     const user: User = await getApi().user.getUser(userId);
     dispatch({type: types.RECEIVE_USER, user});
