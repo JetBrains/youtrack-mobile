@@ -392,11 +392,12 @@ export function submitEditedComment(comment: IssueComment) {
 
       dispatch(updateComment(updatedComment));
       log.info(`Comment ${updatedComment.id} edited`);
-      notify('Comment successfully edited');
+      notify('Comment updated');
       dispatch(stopEditingComment());
       await dispatch(loadIssueActivities());
     } catch (err) {
-      notifyError('Failed to edit comment', err);
+      log.warn(`Edit comment failed`, err);
+      notify('Cannot update comment');
     } finally {
       dispatch(stopSubmittingComment());
     }
