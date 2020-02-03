@@ -232,6 +232,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
   }
 
   renderTabs() {
+    const window = Dimensions.get('window');
     return (
       <TabView
         testID="issueTabs"
@@ -244,7 +245,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
         )}
         navigationState={this.state}
         renderScene={this.renderScene}
-        initialLayout={{width: Dimensions.get('window').width}}
+        initialLayout={{width: window.width, height: window.height}}
         renderTabBar={this.renderTabBar()}
         onIndexChange={index => {
           if (this.isTabChangeEnabled()) {
