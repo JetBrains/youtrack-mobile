@@ -10,6 +10,7 @@ import log from '../log/log';
 import {reportCrash} from './reporter';
 import {notify, notifyError} from '../notification/notification';
 import {flushStoragePart} from '../storage/storage';
+import DeviceInfo from 'react-native-device-info';
 
 type Props = {
   openDebugView: any => any,
@@ -46,7 +47,15 @@ class ErrorBoundary extends Component<Props, State> {
     const logs = await getLogs();
     const description = `
 \`\`\`
-${errorMessage}
+App version: ${DeviceInfo.getVersion()};
+App build: ${DeviceInfo.getBuildNumber()};
+OS: ${DeviceInfo.getSystemName()};
+System version: ${DeviceInfo.getSystemVersion()};
+Device: ${DeviceInfo.getBrand()} ${DeviceInfo.getDeviceId()};
+\`\`\`
+============== ERROR ==============
+
+    ${errorMessage}
 
 ============== LOGS ===============
 ${logs}
@@ -62,7 +71,7 @@ ${logs}
       this.setState({isReporting: false});
       notifyError('Could not report crash', err);
     }
-  }
+  };
 
   render() {
     const {error, isReporting} = this.state;
