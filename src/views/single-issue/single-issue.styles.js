@@ -258,6 +258,8 @@ export default StyleSheet.create({
   },
   tabLabel: {
     ...mainText,
+    paddingTop: UNIT,
+    paddingBottom: UNIT,
     fontWeight: '500',
     textTransform: 'none'
   },
