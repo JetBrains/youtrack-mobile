@@ -23,7 +23,7 @@ export function listEndReached() {
   return {type: types.LIST_END_REACHED};
 }
 
-export function loadInbox(skip?: number = 0, top?: number = 10) {
+export function loadInbox(skip: number = 0, top: number = 10) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api = getApi();
 

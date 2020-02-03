@@ -79,7 +79,7 @@ export default class WikiPage extends PureComponent<Props, void> {
   }
 
   _renderPlainText() {
-    const decodedText:string = entities.decodeHTML(this.props.plainText);
+    const decodedText:string = entities.decodeHTML(this.props.plainText) || '';
 
     if (decodedText.length > this.MAX_PLAIN_TEXT_LENGTH) {
       return <TextInput
