@@ -1,5 +1,8 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_FONT, COLOR_FONT_GRAY, COLOR_PINK} from '../../components/variables/variables';
+import {UNIT, COLOR_FONT, COLOR_FONT_GRAY} from '../../components/variables/variables';
+
+import {mainText} from '../common-styles/issue';
+import {link} from '../common-styles/link-button';
 
 export default StyleSheet.create({
   commentWrapper: {
@@ -25,10 +28,15 @@ export default StyleSheet.create({
     marginTop: UNIT
   },
   deletedCommentText: {
+    ...mainText,
     color: COLOR_FONT_GRAY
   },
+  actions: {
+    marginTop: UNIT,
+  },
   actionLink: {
-    color: COLOR_PINK
+    ...mainText,
+    ...link,
   },
 
   swipeButton: {

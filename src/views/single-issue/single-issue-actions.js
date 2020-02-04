@@ -652,6 +652,42 @@ export function showIssueActions(actionSheet: Object) {
   };
 }
 
+export function showIssueCommentActions(actionSheet: Object, comment: IssueComment) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+
+    const actions = [
+      {
+        title: 'Copy',
+        execute: () => {
+          dispatch(copyCommentUrl(comment));
+          usage.trackEvent(CATEGORY_NAME, 'Copy comment URL');
+        }
+      },
+      {
+        title: 'Edit',
+        execute: () => {
+          usage.trackEvent(CATEGORY_NAME, 'Edit comment');
+          dispatch(startEditingComment(comment));
+        }
+      },
+      {
+        title: 'Delete',
+        execute: () => {
+          usage.trackEvent(CATEGORY_NAME, 'Delete comment');
+          dispatch(deleteComment(comment));
+        }
+      },
+      {title: 'Cancel'}
+    ];
+
+    const selectedAction = await showActions(actions, actionSheet);
+
+    if (selectedAction && selectedAction.execute) {
+      selectedAction.execute();
+    }
+  };
+}
+
 type OpenNestedViewParams = {
   issue?: IssueFull,
   issueId?: string

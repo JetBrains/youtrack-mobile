@@ -10,7 +10,6 @@ import {isActivityCategory} from '../../components/activity/activity__category';
 
 import CommentVisibility from '../../components/comment/comment__visibility';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
-import CommentActions from '../../components/comment/comment__actions';
 
 import {
   getEntityPresentation,
@@ -43,8 +42,18 @@ import CustomFieldChangeDelimiter from '../../components/custom-field/custom-fie
 import type {WorkTimeSettings} from '../../flow/WorkTimeSettings';
 import type {ActivityItem, IssueActivity} from '../../flow/Activity';
 
-import {COLOR_FONT, COLOR_FONT_GRAY, UNIT} from '../../components/variables/variables';
+import {
+  COLOR_FONT,
+  COLOR_FONT_GRAY,
+  COLOR_ICON_GREY,
+  COLOR_ICON_LIGHT_BLUE,
+  UNIT
+} from '../../components/variables/variables';
 import Diff from '../../components/diff/diff';
+import {HIT_SLOP} from '../../components/common-styles/link-button';
+
+import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const CATEGORY_NAME = 'Issue Stream';
 
@@ -71,6 +80,9 @@ type Props = {
 
   workTimeSettings: ?WorkTimeSettings,
   naturalCommentsOrder: boolean,
+
+  onShowCommentActions: () => any,
+  issuePermissions: IssuePermissions
 };
 
 type DefaultProps = {
@@ -87,10 +99,8 @@ type Change = {
 
 export default class SingleIssueActivities extends PureComponent<Props, void> {
   static defaultProps: DefaultProps = {
-    onReply: () => {
-    },
-    onCopyCommentLink: () => {
-    },
+    onReply: () => {},
+    onCopyCommentLink: () => {},
     workTimeSettings: {},
     naturalCommentsOrder: true
   };
@@ -321,60 +331,72 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
     return activity.added;
   }
 
-  _renderCommentActivity(activityGroup) {
+  renderCommentActions(comment: IssueComment, disabled: boolean) {
+    const isAuthor = this.props.issuePermissions.isCurrentUser(comment.author);
+
+    if (!comment.deleted) {
+      return <View style={styles.commentActions}>
+        <View style={styles.container}>
+          <TouchableOpacity
+            hitSlop={HIT_SLOP}
+            disabled={disabled}
+            onPress={() => isAuthor ? this.props.onStartEditing(comment) : this.props.onReply(comment)}>
+            <Text style={styles.link}>
+              {isAuthor ? 'Edit' : 'Reply'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity
+          hitSlop={HIT_SLOP}
+          disabled={disabled}
+          onPress={() => this.props.onShowCommentActions()}>
+          <Icon color={COLOR_ICON_GREY} name="dots-horizontal" size={22}/>
+        </TouchableOpacity>
+      </View>;
+    }
+  }
+
+  renderCommentActivity(activityGroup: Object) {
     const comment = this._firstActivityChange(activityGroup.comment);
     if (!comment) {
       return null;
     }
 
     const allAttachments = this.updateToAbsUrl(comment.attachments).concat(this.props.attachments);
-
     return (
-      <CommentActions
-        onReply={() => this.props.onReply(comment)}
-        onCopyCommentLink={() => this.props.onCopyCommentLink(comment)}
-        canEdit={comment && this.props.canUpdateComment(comment)}
-        onEdit={() => this.props.onStartEditing(comment)}
+      <View key={comment.id}>
+        {!activityGroup.merged && this._renderUserInfo(activityGroup)}
 
-        canDelete={comment && this.props.canDeleteComment(comment)}
-        onDelete={() => this.props.onDeleteComment(comment)}
-        disabled={!comment || activityGroup.merged}
-      >
-        <View>
-          {!activityGroup.merged && this._renderUserInfo(activityGroup)}
+        <View style={styles.activityChange}>
 
-          <View style={styles.activityChange}>
+          <View>
+            <Comment
+              key={comment.id}
+              comment={comment}
+              imageHeaders={this.props.imageHeaders}
+              backendUrl={this.props.backendUrl}
+              onIssueIdTap={this.props.onIssueIdTap}
+              attachments={allAttachments}
+              canRestore={this.props.canRestoreComment(comment)}
+              canDeletePermanently={this.props.canDeleteCommentPermanently(comment)}
+              onRestore={() => this.props.onRestoreComment(comment)}
+              onDeletePermanently={() => this.props.onDeleteCommentPermanently(comment, activityGroup.comment.id)}
+              activitiesEnabled={true}
+            />
 
-            <View key={comment.id}>
-              <Comment
-                key={comment.id}
+            {!comment.deleted && IssueVisibility.isSecured(comment.visibility) &&
+            <CommentVisibility
+              visibility={IssueVisibility.getVisibilityPresentation(comment.visibility)}
+              color={COLOR_ICON_LIGHT_BLUE}
+            />}
 
-                comment={comment}
-
-                imageHeaders={this.props.imageHeaders}
-                backendUrl={this.props.backendUrl}
-
-                onIssueIdTap={this.props.onIssueIdTap}
-
-                attachments={allAttachments}
-
-                canRestore={this.props.canRestoreComment(comment)}
-                canDeletePermanently={this.props.canDeleteCommentPermanently(comment)}
-
-                onRestore={() => this.props.onRestoreComment(comment)}
-                onDeletePermanently={() => this.props.onDeleteCommentPermanently(comment, activityGroup.comment.id)}
-
-                activitiesEnabled={true}
-              />
-
-              {!comment.deleted && IssueVisibility.isSecured(comment.visibility) &&
-              <CommentVisibility visibility={IssueVisibility.getVisibilityPresentation(comment.visibility)}/>}
-            </View>
-
+            {this.renderCommentActions(comment, !comment || activityGroup.merged)}
           </View>
+
         </View>
-      </CommentActions>
+      </View>
     );
+
   }
 
   _renderWorkActivity(activityGroup) {
@@ -471,7 +493,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
                 {this._renderUserAvatar(activityGroup, !!activityGroup.comment)}
 
                 <View style={styles.activityItem}>
-                  {activityGroup.comment && this._renderCommentActivity(activityGroup)}
+                  {activityGroup.comment && this.renderCommentActivity(activityGroup)}
                   {activityGroup.work && this._renderWorkActivity(activityGroup)}
                   {this._renderHistoryAndRelatedChanges(activityGroup, !!activityGroup.comment || !!activityGroup.work)}
                 </View>

@@ -31,6 +31,7 @@ export default class Comment extends Component<Props, void> {
     onEdit: () => {},
     activitiesEnabled: false
   };
+
   _renderDeletedComment() {
     const {
       onRestore,
@@ -41,18 +42,31 @@ export default class Comment extends Component<Props, void> {
 
     return (
       <View>
-        <Text style={styles.deletedCommentText}>
-          <Text>Comment was deleted. </Text>
-          {canRestore &&
-            <Text onPress={onRestore} style={styles.actionLink}>
-              Restore
-            </Text>}
-          {canDeletePermanently && <Text> or </Text>}
-          {canDeletePermanently &&
-            <Text onPress={onDeletePermanently} style={styles.actionLink}>
-              Delete permanently
-            </Text>}
-        </Text>
+        <View><Text style={styles.deletedCommentText}>Comment was deleted.</Text></View>
+
+        {Boolean(canRestore || canDeletePermanently) && (
+          <View style={styles.actions}>
+            <Text>
+              {canRestore && (
+                <Text
+                  onPress={onRestore}
+                  style={styles.actionLink}
+                >
+                  Restore
+                </Text>
+              )}
+              {canDeletePermanently && <Text> or </Text>}
+              {canDeletePermanently &&
+              <Text
+                onPress={onDeletePermanently}
+                style={styles.actionLink}
+              >
+                Delete permanently
+              </Text>}
+            </Text>
+          </View>
+        )}
+
       </View>
     );
   }

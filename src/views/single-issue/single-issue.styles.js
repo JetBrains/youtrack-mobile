@@ -12,6 +12,7 @@ import {
   COLOR_PINK_DARK
 } from '../../components/variables/variables';
 import {secondaryText, mainText} from '../../components/common-styles/issue';
+import {link} from '../../components/common-styles/link-button';
 
 
 export default StyleSheet.create({
@@ -267,5 +268,13 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  link: {
+    ...mainText,
+    ...link
+  },
+  commentActions: {
+    flexDirection: 'row',
+    marginTop: UNIT
   }
 });

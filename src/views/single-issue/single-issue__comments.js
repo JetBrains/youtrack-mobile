@@ -53,7 +53,7 @@ export default class SingleIssueComments extends Component<Props, void> {
     const visibilityStyles = !this.props.activitiesEnabled && {paddingLeft: UNIT * 7};
     return comments.map(comment => {
       return (
-        <View key={comment.id}>
+        <View key={comment.id} style={{marginTop: UNIT}}>
           <CommentActions
             onReply={() => this.props.onReply(comment)}
             onCopyCommentLink={() => this.props.onCopyCommentLink(comment)}

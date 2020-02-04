@@ -392,7 +392,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
       issue,
       copyCommentUrl, openNestedIssueView, issuePermissions,
       startEditingComment, deleteComment, restoreComment, deleteCommentPermanently,
-      workTimeSettings
+      workTimeSettings, showIssueCommentActions
     } = this.props;
 
     return (
@@ -425,6 +425,14 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
           onDeleteCommentPermanently={(comment, activityId) => deleteCommentPermanently(comment, activityId)}
 
           workTimeSettings={workTimeSettings}
+
+          onShowCommentActions={
+            (comment) => this.state.index === 1 && showIssueCommentActions(
+              this.context.actionSheet(),
+              comment
+            )
+          }
+          issuePermissions={issuePermissions}
         />
       </View>
     );
