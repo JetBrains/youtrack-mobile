@@ -22,7 +22,7 @@ import * as activity from './single-issue-activity';
 const CATEGORY_NAME = 'Issue';
 
 type ApiGetter = () => Api;
-type StateGetter = () => {singleIssue: SingleIssueState};
+type StateGetter = () => { singleIssue: SingleIssueState };
 
 export function setIssueId(issueId: string) {
   return {type: types.SET_ISSUE_ID, issueId};
@@ -377,9 +377,15 @@ export function submitEditedComment(comment: IssueComment) {
   };
 }
 
-export function addOrEditComment(comment: IssueComment) {
+export function addOrEditComment(comment: IssueComment | null) {
   return async (dispatch: (any) => any, getState: StateGetter) => {
     const editingComment = getState().singleIssue.editingComment;
+
+    if (!comment) {
+      dispatch(stopSubmittingComment());
+      return dispatch(stopEditingComment());
+    }
+
     if (editingComment) {
       dispatch(submitEditedComment({...editingComment, ...comment}));
     } else {
@@ -653,7 +659,7 @@ export function showIssueActions(actionSheet: Object) {
 }
 
 export function showIssueCommentActions(actionSheet: Object, comment: IssueComment) {
-  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+  return async (dispatch: (any) => any) => {
 
     const actions = [
       {

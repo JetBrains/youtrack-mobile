@@ -81,7 +81,7 @@ type Props = {
   workTimeSettings: ?WorkTimeSettings,
   naturalCommentsOrder: boolean,
 
-  onShowCommentActions: () => any,
+  onShowCommentActions: (comment: IssueComment) => any,
   issuePermissions: IssuePermissions
 };
 
@@ -349,7 +349,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
         <TouchableOpacity
           hitSlop={HIT_SLOP}
           disabled={disabled}
-          onPress={() => this.props.onShowCommentActions()}>
+          onPress={() => this.props.onShowCommentActions(comment)}>
           <Icon color={COLOR_ICON_GREY} name="dots-horizontal" size={22}/>
         </TouchableOpacity>
       </View>;

@@ -73,23 +73,37 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
     this.isUnmounted = true;
   }
 
-  addComment() {
+  isCommentChanged(): boolean {
+    return this.state.commentText !== this.props.editingComment?.text;
+  }
+
+  updateComment() {
     let clearTimer;
     this.setState({isSaving: true});
-    this.props.onSubmitComment({
-      ...this.props.editingComment, ...{
-        usesMarkdown: true,
-        text: this.state.commentText
-      }
-    })
-      .then(() => {
-        clearTimeout(clearTimer);
-        if (this.isUnmounted) {
-          return;
+    const comment = (
+      this.isCommentChanged()
+        ? {
+          ...this.props.editingComment,
+          ...{
+            usesMarkdown: true,
+            text: this.state.commentText
+          }
         }
-        clearTimer = setTimeout(() => !this.isUnmounted && this.setState({commentText: ''}), UPDATE_TEXT_TIMEOUT);
-      })
-      .finally(() => !this.isUnmounted && this.setState({isSaving: false}));
+        : null
+    );
+
+    this.props.onSubmitComment(comment).then(() => {
+      clearTimeout(clearTimer);
+      if (this.isUnmounted) {
+        return;
+      }
+      clearTimer = setTimeout(() => !this.isUnmounted && this.setState({commentText: ''}), UPDATE_TEXT_TIMEOUT);
+    }).finally(() => {
+      clearTimeout(clearTimer);
+      if (!this.isUnmounted) {
+        this.setState({isSaving: false});
+      }
+    });
   }
 
   suggestionsNeededDetector(text: string, caret: number) {
@@ -228,8 +242,8 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
 
           <TouchableOpacity
             style={styles.commentSendButton}
-            disabled={!this.state.commentText || this.state.isSaving}
-            onPress={() => this.addComment()}>
+            disabled={!(this.state.commentText || '').trim() || this.state.isSaving}
+            onPress={() => this.updateComment()}>
             {!this.state.isSaving
               ? (<Text style={
                 [styles.commentSendButtonText, this.state.commentText ? null : styles.commentSendButtonTextDisabled]}
