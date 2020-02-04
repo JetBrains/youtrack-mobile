@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<CommentVisibility/> Render should match a snapshot 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "flex": 1,
+      "flexDirection": "row",
+      "marginBottom": 8,
+      "marginTop": 8,
+    }
+  }
+  testID="commentVisibility"
+>
+  <Icon
+    allowFontScaling={false}
+    color="#888888"
+    name="lock"
+    size={16}
+    testID="commentVisibilityIcon"
+  />
+  <Text
+    style={
+      Array [
+        Object {
+          "color": "#888888",
+          "marginLeft": 5.333333333333333,
+        },
+        null,
+      ]
+    }
+  />
+</View>
+`;

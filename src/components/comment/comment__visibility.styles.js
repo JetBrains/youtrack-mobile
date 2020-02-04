@@ -1,19 +1,18 @@
 import {StyleSheet} from 'react-native';
 import {UNIT, COLOR_FONT_GRAY} from '../../components/variables/variables';
 
+export const COLOR = COLOR_FONT_GRAY;
+
 export default StyleSheet.create({
-  visibility: {
+  commentVisibility: {
     flex: 1,
     flexDirection: 'row',
-    marginBottom: UNIT,
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop: UNIT,
+    marginBottom: UNIT
   },
-  visibilityIcon: {
-    width: 16,
-    marginRight: UNIT / 2,
-    resizeMode: 'contain'
-  },
-  visibilityText: {
-    color: COLOR_FONT_GRAY,
+  commentVisibilityText: {
+    color: COLOR,
+    marginLeft: UNIT / 1.5,
   }
 });
