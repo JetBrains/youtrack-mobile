@@ -9,38 +9,27 @@ import {
   COLOR_PINK,
   COLOR_MEDIUM_GRAY,
   COLOR_FONT,
-  COLOR_ICON_MEDIUM_GREY
+  COLOR_BLACK
 } from '../../components/variables/variables';
+import {mainText, secondaryText} from '../../components/common-styles/issue';
 
 const SUGGESTION_BOTTOM = 58;
+const INPUT_BORDER_RADIUS = UNIT;
+const MIN_INPUT_SIZE = UNIT * 4;
 
 export default StyleSheet.create({
   commentContainer: {
-    borderTopWidth: 1,
-    borderColor: COLOR_MEDIUM_GRAY
+    backgroundColor: COLOR_FONT_ON_BLACK,
+    elevation: 5,
+    shadowColor: COLOR_BLACK,
+    shadowOpacity: 0.2,
+    shadowRadius: 0.5,
+    shadowOffset: {
+      height: -0.5,
+      width: 0
+    }
   },
 
-  commentEditContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingTop: UNIT * 2,
-    paddingBottom: UNIT * 3,
-    paddingLeft: UNIT * 3,
-    paddingRight: UNIT * 4
-  },
-  commentEditTitle: {
-    color: COLOR_PINK
-  },
-  commentEditText: {
-    color: COLOR_FONT,
-    paddingRight: UNIT
-  },
-  commentEditCloseIcon: {
-    height: UNIT * 2.5,
-    width: UNIT * 2.5,
-    resizeMode: 'contain',
-    tintColor: COLOR_ICON_MEDIUM_GREY
-  },
   suggestionsContainer: {
     backgroundColor: COLOR_EXTRA_LIGHT_GRAY,
     position: 'absolute',
@@ -77,33 +66,40 @@ export default StyleSheet.create({
 
   commentInputContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     justifyContent: 'center',
-    paddingLeft: UNIT * 2
+    marginLeft: UNIT * 2,
+    marginRight: UNIT * 2,
+    marginBottom: UNIT,
+    padding: 2,
+    borderRadius: INPUT_BORDER_RADIUS,
+    borderWidth: 1,
+    borderColor: COLOR_MEDIUM_GRAY,
   },
   commentInput: {
     flex: 1,
-    minHeight: UNIT * 4,
+    minHeight: MIN_INPUT_SIZE,
+    padding: 0,
     paddingLeft: UNIT,
-    borderRadius: 5,
+    marginRight: UNIT,
     backgroundColor: COLOR_FONT_ON_BLACK,
-    borderWidth: 1,
-    borderColor: COLOR_MEDIUM_GRAY,
-    color: COLOR_FONT,
-    fontSize: 15
+    ...mainText,
+    color: COLOR_BLACK
   },
   commentSendButton: {
+    width: MIN_INPUT_SIZE,
+    height: MIN_INPUT_SIZE,
+    borderRadius: INPUT_BORDER_RADIUS - 1,
     alignItems: 'center',
-    minWidth: UNIT * 8,
-    padding: UNIT,
-    paddingRight: UNIT * 2
+    justifyContent: 'center',
+    backgroundColor: COLOR_PINK
   },
   commentSendButtonText: {
     fontSize: 16,
     color: COLOR_PINK
   },
   commentSendButtonTextDisabled: {
-    color: COLOR_FONT_GRAY
+    backgroundColor: COLOR_FONT_GRAY
   },
 
   commentListContainer: {
@@ -120,10 +116,16 @@ export default StyleSheet.create({
     backgroundColor: COLOR_TRANSPARENT_BLACK
   },
   visibilityChangeButton: {
-    padding: UNIT
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: UNIT * 2
   },
-  visibilityChangeIcon: {
-    resizeMode: 'contain',
-    width: 28
+  visibilityChangeButtonLockIcon: {
+    marginRight: UNIT
+  },
+  visibilityChangeButtonText: {
+    ...secondaryText,
+    marginRight: UNIT
   }
 });

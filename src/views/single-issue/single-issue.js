@@ -506,7 +506,6 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
       suggestionsAreLoading,
       commentSuggestions,
 
-      stopEditingComment,
       editingComment,
 
       onOpenCommentVisibilitySelect
@@ -521,7 +520,6 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
         onChangeText={setCommentText}
         onSubmitComment={comment => addOrEditComment(comment)}
 
-        onCancelEditing={stopEditingComment}
         editingComment={editingComment}
         onEditCommentVisibility={onOpenCommentVisibilitySelect}
         isSecured={isSecured}

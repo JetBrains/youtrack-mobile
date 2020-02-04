@@ -1,13 +1,16 @@
 /* @flow */
-import {TextInput, Platform} from 'react-native';
+
 import React, {Component} from 'react';
+import {TextInput, Platform} from 'react-native';
+import {UNIT} from '../variables/variables';
 
 const MAX_DEFAULT_HEIGHT = 200;
+const MIN_DEFAULT_HEIGHT = UNIT * 4;
 const DEFAULT_FONT_SIZE = 16;
-const SPARE_SPACE = 16;
 
 type Props = {
   maxInputHeight: number,
+  minInputHeight: number,
   style: any
 };
 
@@ -16,12 +19,13 @@ type State = {
 };
 
 export default class MultilineInput extends Component<Props, State> {
-  input: TextInput;
-
   static defaultProps = {
     maxInputHeight: MAX_DEFAULT_HEIGHT,
+    minInputHeight: MIN_DEFAULT_HEIGHT,
     returnKeyType: Platform.OS === 'ios' ? 'default' : 'none'
-  }
+  };
+
+  input: TextInput;
 
   constructor(props: Props) {
     super(props);
@@ -35,16 +39,16 @@ export default class MultilineInput extends Component<Props, State> {
   }
 
   onContentSizeChange = (event: Object) => {
-    const {maxInputHeight} = this.props;
+    const {maxInputHeight, minInputHeight} = this.props;
 
-    let newHeight = event.nativeEvent.contentSize.height + SPARE_SPACE;
+    let newHeight = event.nativeEvent.contentSize.height;
 
     if (maxInputHeight > 0) {
-      newHeight = newHeight > maxInputHeight ? maxInputHeight : newHeight;
+      newHeight = newHeight > maxInputHeight ? maxInputHeight : Math.max(newHeight, minInputHeight);
     }
 
     this.setState({inputHeight: newHeight});
-  }
+  };
 
   inputRef = (instance: ?TextInput) => {
     if (instance) {
@@ -54,7 +58,7 @@ export default class MultilineInput extends Component<Props, State> {
 
   render() {
     // eslint-disable-next-line no-unused-vars
-    const {style, maxInputHeight, ...rest} = this.props;
+    const {style, maxInputHeight, minInputHeight, ...rest} = this.props;
 
     return (
       <TextInput
@@ -62,7 +66,11 @@ export default class MultilineInput extends Component<Props, State> {
         ref={this.inputRef}
         multiline={true}
         onContentSizeChange={this.onContentSizeChange}
-        style={[{fontSize: DEFAULT_FONT_SIZE}, style, {height: this.state.inputHeight}]}
+        style={[
+          {fontSize: DEFAULT_FONT_SIZE},
+          style,
+          {height: this.state.inputHeight}
+        ]}
       />
     );
   }

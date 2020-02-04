@@ -1,16 +1,24 @@
 /* @flow */
-import {View, Text, ActivityIndicator, ScrollView, Image} from 'react-native';
+
+import {View, Text, ActivityIndicator, ScrollView} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import React, {Component} from 'react';
 import throttle from 'lodash.throttle';
-import {COLOR_PLACEHOLDER} from '../../components/variables/variables';
+import {
+  COLOR_FONT_ON_BLACK,
+  COLOR_ICON_LIGHT_BLUE,
+  COLOR_ICON_MEDIUM_GREY,
+  COLOR_PLACEHOLDER
+} from '../../components/variables/variables';
 import MultilineInput from '../../components/multiline-input/multiline-input';
-import {closeOpaque, visibility, visibilityActive} from '../../components/icon/icon';
 import Avatar from '../../components/avatar/avatar';
 import type {IssueComment} from '../../flow/CustomFields';
 import type {User} from '../../flow/User';
 
 import styles from './single-issue__comments.styles';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import IssueVisibility from '../../components/issue-visibility/issue-visibility';
 
 type Props = {
   initialText: string,
@@ -18,7 +26,6 @@ type Props = {
   onSubmitComment: (comment: IssueComment) => any,
 
   editingComment: IssueComment,
-  onCancelEditing: Function,
 
   suggestionsAreLoading: boolean,
   onRequestCommentSuggestions: (query: string) => any,
@@ -188,69 +195,88 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
     );
   }
 
+  renderVisibility() {
+    const {editingComment, onEditCommentVisibility, isSecured} = this.props;
+
+    return (
+      <TouchableOpacity
+        style={styles.visibilityChangeButton}
+        disabled={this.state.isSaving}
+        onPress={() => onEditCommentVisibility(editingComment)}
+      >
+        {isSecured && (
+          <IconMaterial
+            style={styles.visibilityChangeButtonLockIcon}
+            name="lock"
+            size={16}
+            color={COLOR_ICON_LIGHT_BLUE}
+          />
+        )}
+        <Text style={styles.visibilityChangeButtonText}>
+          {isSecured ? IssueVisibility.getVisibilityPresentation(editingComment.visibility) : 'Visible to All Users'}
+        </Text>
+        <Icon
+          name="angle-down"
+          size={20}
+          color={COLOR_ICON_MEDIUM_GREY}
+        />
+      </TouchableOpacity>
+    );
+  }
+
+  renderSendButton() {
+    const {isSaving, commentText} = this.state;
+
+    return (
+      <TouchableOpacity
+        style={styles.commentSendButton}
+        disabled={!(commentText || '').trim() || isSaving}
+        onPress={() => this.updateComment()}>
+        {!this.state.isSaving
+          ? (
+            <IconMaterial
+              name="arrow-up" size={22}
+              color={COLOR_FONT_ON_BLACK}
+            />
+          )
+          : <ActivityIndicator/>
+        }
+      </TouchableOpacity>
+    );
+  }
+
   render() {
-    const {editingComment, onCancelEditing, onEditCommentVisibility, isSecured} = this.props;
+    const {isSaving, commentText, commentCaret} = this.state;
+
     return (
       <View style={styles.commentContainer}>
         {this.renderSuggestions()}
 
-        {editingComment && editingComment.id &&
-        <View style={styles.commentEditContainer}>
-          <View>
-            <Text style={styles.commentEditTitle}>Edit comment</Text>
-            <Text style={styles.commentEditText} numberOfLines={1}>{editingComment.text}</Text>
-          </View>
-          <TouchableOpacity onPress={onCancelEditing}>
-            <Image
-              style={styles.commentEditCloseIcon}
-              source={closeOpaque}
-            />
-          </TouchableOpacity>
-        </View>}
+        {this.renderVisibility()}
 
         <View style={styles.commentInputContainer}>
           <MultilineInput
+            {...this.props}
             placeholder="Write comment, @mention people"
-            value={this.state.commentText}
-            editable={!this.state.isSaving}
+            value={commentText}
+            editable={!isSaving}
             underlineColorAndroid="transparent"
             keyboardAppearance="dark"
             placeholderTextColor={COLOR_PLACEHOLDER}
             autoCapitalize="sentences"
-            {...this.props}
             onSelectionChange={(event) => {
               const caret = event.nativeEvent.selection.start;
               this.setState({commentCaret: caret});
             }}
             onChangeText={(text) => {
               this.setState({commentText: text});
-              this.suggestionsNeededDetector(text, this.state.commentCaret);
+              this.suggestionsNeededDetector(text, commentCaret);
               this.debouncedOnChange(text);
             }}
             style={styles.commentInput}
           />
 
-          <TouchableOpacity
-            style={styles.visibilityChangeButton}
-            disabled={this.state.isSaving}
-            onPress={() => onEditCommentVisibility(editingComment)}
-          >
-            <Image
-              source={isSecured ? visibilityActive : visibility}
-              style={styles.visibilityChangeIcon}/>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.commentSendButton}
-            disabled={!(this.state.commentText || '').trim() || this.state.isSaving}
-            onPress={() => this.updateComment()}>
-            {!this.state.isSaving
-              ? (<Text style={
-                [styles.commentSendButtonText, this.state.commentText ? null : styles.commentSendButtonTextDisabled]}
-              > Send </Text>)
-              : <ActivityIndicator/>
-            }
-          </TouchableOpacity>
+          {this.renderSendButton()}
         </View>
       </View>
     );
