@@ -5,8 +5,9 @@ import styles from './header.styles';
 import Router from '../router/router';
 import {onHeightChange} from './header__top-padding';
 import type {Node} from 'react';
+import {UNIT} from '../variables/variables';
 
-const TOUCH_PADDING = 8;
+const TOUCH_PADDING = UNIT;
 
 type Props = {
   onBack?: () => any,

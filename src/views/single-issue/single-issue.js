@@ -33,7 +33,6 @@ import Select from '../../components/select/select';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
 
 import SingleIssueActivities from './single-issue__activities-stream';
-import OpenScanButton from '../../components/scan/open-scan-button';
 
 import SingleIssueActivitiesSettings from './single-issue__activities-settings';
 import type {UserAppearanceProfile} from '../../flow/User';
@@ -44,6 +43,9 @@ import commentsStyles from './single-issue__comments.styles';
 // $FlowFixMe: module throws on type check
 import {TabView, TabBar} from 'react-native-tab-view';
 import IssueDetails from './single-issue__details';
+
+import ActionsIcon from '../../components/menu/actions-icon';
+import BackIcon from '../../components/menu/back-icon';
 
 const CATEGORY_NAME = 'Issue';
 const tabRoutes: Array<TabRoute> = [
@@ -62,7 +64,8 @@ type AdditionalProps = {
 type SingleIssueProps = SingleIssueState & typeof issueActions & AdditionalProps;
 type TabsState = {
   index: number,
-  routes: Array<TabRoute>
+  routes: Array<TabRoute>,
+  isTransitionInProgress: boolean
 };
 
 class SingeIssueView extends Component<SingleIssueProps, TabsState> {
@@ -77,6 +80,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
   state = {
     index: 0,
     routes: tabRoutes,
+    isTransitionInProgress: false
   };
 
   async componentDidMount() {
@@ -263,11 +267,24 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
   }
 
   handleOnBack = () => {
+    this.setState({isTransitionInProgress: true});
     const returned = Router.pop();
     if (!returned) {
       Router.IssueList();
     }
   };
+
+  renderBackIcon() {
+    if (!this.state.isTransitionInProgress) {
+      return <BackIcon/>;
+    }
+  }
+
+  renderActionsIcon() {
+    if (!this.state.isTransitionInProgress) {
+      return <ActionsIcon/>;
+    }
+  }
 
   onAttach = () => this.props.attachOrTakeImage(this.context.actionSheet());
 
@@ -292,16 +309,14 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
     if (!editMode) {
       return (
         <Header
-          leftButton={<Text>Back</Text>}
-          rightButton={<Text style={issueLoaded ? null : styles.disabledSaveButton}>More</Text>}
-          extraButton={<OpenScanButton/>}
+          leftButton={this.renderBackIcon()}
+          rightButton={this.renderActionsIcon()}
           onRightButtonClick={() => this.state.index === 0 && issueLoaded && showIssueActions(this.context.actionSheet())}
           onBack={this.handleOnBack}
         >
           {title}
         </Header>
       );
-
     } else {
       const canSave = Boolean(summaryCopy) && !isSavingEditedIssue;
       const saveButton = <Text style={canSave ? null : styles.disabledSaveButton}>Save</Text>;

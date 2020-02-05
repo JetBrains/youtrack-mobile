@@ -21,6 +21,7 @@ import Diff from '../../components/diff/diff';
 import Wiki from '../../components/wiki/wiki';
 import CustomFieldChangeDelimiter from '../../components/custom-field/custom-field__change-delimiter';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import MenuIcon from '../../components/menu/menu-icon';
 
 import type {InboxState} from './inbox-reducers';
 import type {User} from '../../flow/User';
@@ -394,7 +395,7 @@ class Inbox extends Component<Props, void> {
       <Menu>
         <View style={styles.container}>
           <Header
-            leftButton={<Text>Menu</Text>}
+            leftButton={<MenuIcon/>}
             onBack={openMenu}
           >
             <Text style={issueStyles.headerText}>Notifications</Text>

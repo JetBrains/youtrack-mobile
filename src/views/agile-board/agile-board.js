@@ -28,6 +28,7 @@ import {connect} from 'react-redux';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import ModalView from '../../components/modal-view/modal-view';
+import MenuIcon from '../../components/menu/menu-icon';
 
 const CATEGORY_NAME = 'Agile board';
 
@@ -162,7 +163,7 @@ class AgileBoard extends Component<Props, State> {
 
     return (
       <Header
-        leftButton={<Text>Menu</Text>}
+        leftButton={<MenuIcon/>}
         onBack={this.props.onOpenMenu}
       >
         {Boolean(sprint) && <View style={styles.headerContent}>

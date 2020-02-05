@@ -32,7 +32,10 @@ import type {IssueOnList} from '../../flow/Issue';
 import OpenScanButton from '../../components/scan/open-scan-button';
 import Select from '../../components/select/select';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import SearchPanel from './issue-list__search-panel';
+
+import MenuIcon from '../../components/menu/menu-icon';
 
 import styles from './issue-list.styles';
 
@@ -84,8 +87,8 @@ export class IssueList extends Component<Props, void> {
   _renderHeader() {
     return (
       <Header
-        leftButton={<Text>Menu</Text>}
-        rightButton={<Text>Create</Text>}
+        leftButton={<MenuIcon/>}
+        rightButton={<IconMaterial name="plus" size={28}/>}
         extraButton={<OpenScanButton/>}
         onBack={this.props.openMenu}
         onRightButtonClick={() => Router.CreateIssue()}
