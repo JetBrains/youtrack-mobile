@@ -87,7 +87,7 @@ export class IssueList extends Component<Props, void> {
   _renderHeader() {
     return (
       <Header
-        leftButton={<MenuIcon/>}
+        leftButton={<Text>{' '}<MenuIcon/></Text>}
         rightButton={<IconMaterial name="plus" size={28}/>}
         extraButton={<OpenScanButton/>}
         onBack={this.props.openMenu}

@@ -5,6 +5,8 @@ export default StyleSheet.create({
   header: {
     paddingTop: 12,
     paddingBottom: 12,
+    paddingLeft: UNIT,
+    paddingRight: UNIT,
     flex: 0,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -12,26 +14,18 @@ export default StyleSheet.create({
 
     backgroundColor: COLOR_BLACK,
   },
-  headerButton: {
-    flex: 1,
-    flexDirection: 'row',
-    flexShrink: 0
-  },
   headerButtonLeft: {
-    justifyContent: 'flex-start',
-    paddingLeft: UNIT * 2
+    justifyContent: 'flex-start'
   },
   headerButtonRight: {
-    justifyContent: 'flex-end',
-    paddingRight: UNIT * 2
+    justifyContent: 'flex-end'
   },
   headerButtonText: {
-    flex: 0,
     fontSize: 17,
     color: COLOR_PINK
   },
   headerCenter: {
-    flex: 2.5,
+    flex: 1,
     alignItems: 'center',
     flexShrink: 1,
     padding: 0
