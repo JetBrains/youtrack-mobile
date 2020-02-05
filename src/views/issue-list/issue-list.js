@@ -86,7 +86,7 @@ export class IssueList extends Component<Props, void> {
     const {issuesCount} = this.props;
     return (
       <Header
-        leftButton={<MenuIcon/>}
+        leftButton={<Text>{' '}<MenuIcon/></Text>}
         rightButton={<Icon name="plus" size={28}/>}
         extraButton={<OpenScanButton/>}
         onBack={this.props.openMenu}

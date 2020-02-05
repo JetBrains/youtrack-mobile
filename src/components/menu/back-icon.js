@@ -13,7 +13,7 @@ export default class BackIcon extends PureComponent<Props, void> {
     return (
       <Icon
         name={isAndroid ? 'arrow-left' : 'chevron-left'}
-        size={isAndroid ? 24 : 30}
+        size={isAndroid ? 22 : 30}
       />
     );
   }

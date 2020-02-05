@@ -54,7 +54,7 @@ export default class Header extends PureComponent<Props, void> {
         <TouchableOpacity
           testID="header-back"
           hitSlop={{top: TOUCH_PADDING, left: TOUCH_PADDING, bottom: TOUCH_PADDING, right: TOUCH_PADDING}}
-          style={[styles.headerButton, styles.headerButtonLeft]}
+          style={styles.headerButtonLeft}
           onPress={() => this.onBack()}
         >
           <Text style={styles.headerButtonText} numberOfLines={1}>{leftButton}</Text>
@@ -67,9 +67,9 @@ export default class Header extends PureComponent<Props, void> {
         <TouchableOpacity
           testID="header-action"
           hitSlop={{top: TOUCH_PADDING, left: TOUCH_PADDING, bottom: TOUCH_PADDING, right: TOUCH_PADDING}}
-          style={[styles.headerButton, styles.headerButtonRight]}
+          style={styles.headerButtonRight}
           onPress={() => this.onRightButtonClick()}>
-          <Text style={[styles.headerButtonText]} numberOfLines={1}>{rightButton}</Text>
+          <Text style={styles.headerButtonText} numberOfLines={1}>{rightButton}</Text>
         </TouchableOpacity>
       </View>
     );
