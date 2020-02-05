@@ -29,6 +29,8 @@ import type Api from '../../components/api/api';
 import type {IssuesListState} from './issue-list-reducers';
 import type {IssueOnList} from '../../flow/Issue';
 import OpenScanButton from '../../components/scan/open-scan-button';
+import MenuIcon from '../../components/menu/menu-icon';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 type Props = IssuesListState & typeof issueActions & {
   openMenu: typeof openMenu,
@@ -38,7 +40,7 @@ type Props = IssuesListState & typeof issueActions & {
 };
 
 export class IssueList extends Component<Props, void> {
-  unsubscribeFromOpeningWithIssueUrl: () => any
+  unsubscribeFromOpeningWithIssueUrl: () => any;
   constructor() {
     super();
     usage.trackScreenView('Issue list');
@@ -48,7 +50,7 @@ export class IssueList extends Component<Props, void> {
     if (newState === 'active') {
       this.props.refreshIssues();
     }
-  }
+  };
 
   componentDidMount() {
     this.props.initializeIssuesList(this.props.overridenQuery);
@@ -78,14 +80,14 @@ export class IssueList extends Component<Props, void> {
     this.props.setIssuesQuery(query);
     this.props.clearAssistSuggestions();
     this.props.loadIssues(query);
-  }
+  };
 
   _renderHeader() {
     const {issuesCount} = this.props;
     return (
       <Header
-        leftButton={<Text>Menu</Text>}
-        rightButton={<Text>Create</Text>}
+        leftButton={<MenuIcon/>}
+        rightButton={<Icon name="plus" size={28}/>}
         extraButton={<OpenScanButton/>}
         onBack={this.props.openMenu}
         onRightButtonClick={() => Router.CreateIssue()}

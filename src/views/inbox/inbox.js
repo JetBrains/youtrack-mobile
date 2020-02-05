@@ -26,6 +26,7 @@ import type {InboxState} from './inbox-reducers';
 import type {User} from '../../flow/User';
 import type {Notification, Metadata, ChangeValue, ChangeEvent, Issue, IssueChange} from '../../flow/Inbox';
 import type {AppConfigFilled} from '../../flow/AppConfig';
+import MenuIcon from '../../components/menu/menu-icon';
 
 const CATEGORY_NAME = 'Inbox view';
 
@@ -394,7 +395,7 @@ class Inbox extends Component<Props, void> {
       <Menu>
         <View style={styles.container}>
           <Header
-            leftButton={<Text>Menu</Text>}
+            leftButton={<MenuIcon/>}
             onBack={openMenu}
           >
             <Text style={issueStyles.headerText}>Notifications</Text>

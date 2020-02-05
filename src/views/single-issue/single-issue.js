@@ -39,7 +39,6 @@ import Select from '../../components/select/select';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
 
 import SingleIssueActivities from './single-issue__activities-stream';
-import OpenScanButton from '../../components/scan/open-scan-button';
 
 import SingleIssueActivitiesSettings from './single-issue__activities-settings';
 import type {UserAppearanceProfile} from '../../flow/User';
@@ -50,6 +49,9 @@ import Tags from '../../components/tags/tags';
 import commonIssueStyles from '../../components/common-styles/issue';
 import commentsStyles from './single-issue__comments.styles';
 import IssueDescription from './single-issue__description';
+
+import ActionsIcon from '../../components/menu/actions-icon';
+import BackIcon from '../../components/menu/back-icon';
 
 const CATEGORY_NAME = 'Issue';
 
@@ -62,14 +64,23 @@ type AdditionalProps = {
 
 type SingleIssueProps = SingleIssueState & typeof issueActions & AdditionalProps;
 
-class SingeIssueView extends Component<SingleIssueProps, void> {
+type State = {
+  isTransitionInProgress: boolean
+}
+
+class SingeIssueView extends Component<SingleIssueProps, State> {
+  static contextTypes = {
+    actionSheet: PropTypes.func
+  };
   toolbarNode: Object;
   imageHeaders = getApi().auth.getAuthorizationHeaders();
   backendUrl = getApi().config.backendUrl;
 
-  static contextTypes = {
-    actionSheet: PropTypes.func
-  };
+  constructor() {
+    super();
+    this.state = {isTransitionInProgress: false};
+  }
+
 
   async componentDidMount() {
     usage.trackScreenView(CATEGORY_NAME);
@@ -107,11 +118,24 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
   };
 
   handleOnBack = () => {
+    this.setState({isTransitionInProgress: true});
     const returned = Router.pop();
     if (!returned) {
       Router.IssueList();
     }
   };
+
+  renderBackIcon() {
+    if (!this.state.isTransitionInProgress) {
+      return <BackIcon/>;
+    }
+  }
+
+  renderActionsIcon() {
+    if (!this.state.isTransitionInProgress) {
+      return <ActionsIcon/>;
+    }
+  }
 
   onAttach = () => this.props.attachOrTakeImage(this.context.actionSheet());
 
@@ -136,16 +160,14 @@ class SingeIssueView extends Component<SingleIssueProps, void> {
     if (!editMode) {
       return (
         <Header
-          leftButton={<Text>Back</Text>}
-          rightButton={<Text style={issueLoaded ? null : styles.disabledSaveButton}>More</Text>}
-          extraButton={<OpenScanButton/>}
+          leftButton={this.renderBackIcon()}
+          rightButton={this.renderActionsIcon()}
           onRightButtonClick={() => issueLoaded && showIssueActions(this.context.actionSheet())}
           onBack={this.handleOnBack}
         >
           {title}
         </Header>
       );
-
     } else {
       const canSave = Boolean(summaryCopy) && !isSavingEditedIssue;
       const saveButton = <Text style={canSave ? null : styles.disabledSaveButton}>Save</Text>;
