@@ -66,16 +66,21 @@ export class Menu extends Component<Props, void> {
 
   _getSelectedAgileBoard = () => {
     const {agileProfile} = this.props;
-    if (!agileProfile) {
-      return '';
-    }
-    const lastSprint = agileProfile.visitedSprints
-      .filter(s => s.agile.id === agileProfile.defaultAgile.id)[0];
 
-    if (!lastSprint) {
+    if (!agileProfile || !agileProfile.defaultAgile) {
       return '';
     }
-    return `${agileProfile.defaultAgile.name}, ${lastSprint.name}`;
+
+    const lastAgileName = agileProfile.defaultAgile?.name || '';
+    let lastSprintName;
+
+    if (agileProfile.visitedSprints) {
+      lastSprintName = agileProfile.visitedSprints.find(
+        sprint => sprint.agile && (sprint.agile.id === agileProfile.defaultAgile?.id)
+      )?.name || '';
+    }
+
+    return [lastAgileName, lastSprintName].filter(Boolean).join(', ');
   };
 
   _renderMenu() {
@@ -85,7 +90,9 @@ export class Menu extends Component<Props, void> {
     }
 
     return (
-      <ScrollView style={styles.scrollContainer}>
+      <ScrollView
+        testID="menuContainer"
+        style={styles.scrollContainer}>
         <View style={styles.menuContainer}>
           <View style={styles.accounts}><ConnectedAccounts/></View>
 
@@ -136,6 +143,7 @@ export class Menu extends Component<Props, void> {
 
     return (
       <Drawer
+        testID="menuDrawer"
         type="static"
         open={show}
         content={this._renderMenu()}
