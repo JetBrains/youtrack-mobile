@@ -1,10 +1,10 @@
-import {EnterServer} from './enter-server';
+import {EnterServer, NETWORK_PROBLEM_TIPS} from './enter-server';
 import React from 'react';
 import {shallow} from 'enzyme';
 import sinon from 'sinon';
 
 describe('EnterServer', () => {
-  const serverUrl = 'http://foo.com';
+  const serverUrl = 'http://example.com';
   let connectToYouTrack;
   let onCancel;
   let wrapper;
@@ -29,7 +29,7 @@ describe('EnterServer', () => {
     wrapper.should.be.defined;
   });
 
-  it('should connect to youtrack', async() => {
+  it('should connect to server', async() => {
     const connectButton = wrapper.find({testID: 'next'});
     connectButton.simulate('press');
     await waitForNextTick();
@@ -78,9 +78,9 @@ describe('EnterServer', () => {
     connectButton.simulate('press');
     await waitForNextTick();
 
-    connectToYouTrack.should.have.been.calledWith('http://foo.com');
-    connectToYouTrack.should.have.been.calledWith('http://foo.com/youtrack');
-    connectToYouTrack.should.have.been.calledWith('http://foo.com/rest/workflow/version');
+    connectToYouTrack.should.have.been.calledWith(serverUrl);
+    connectToYouTrack.should.have.been.calledWith(`${serverUrl}/youtrack`);
+    connectToYouTrack.should.have.been.calledWith(`${serverUrl}/rest/workflow/version`);
   });
 
 
@@ -106,12 +106,15 @@ describe('EnterServer', () => {
   });
 
   it('should stop and display error if IncompatibleYouTrackError throwed', async() => {
-    connectPromise = Promise.reject({isIncompatibleYouTrackError: true, message: 'Incompatible youtrack'});
+    const incompatibleYoutrackMsg = 'Incompatible youtrack';
+    connectPromise = Promise.reject({isIncompatibleYouTrackError: true, message: incompatibleYoutrackMsg});
 
     wrapper.find({testID: 'next'}).simulate('press');
     await waitForNextTick();
 
-    wrapper.state('error').message.should.equal('Incompatible youtrack');
+    wrapper.state('error').message.should.equal(
+      [incompatibleYoutrackMsg].concat(NETWORK_PROBLEM_TIPS).join('\n')
+    );
   });
 
   it('should not allow empty input', () => {

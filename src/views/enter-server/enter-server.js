@@ -1,22 +1,37 @@
 /* @flow */
-import {Image, View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, ScrollView, ActivityIndicator} from 'react-native';
+
+import {
+  ActivityIndicator,
+  Image,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View
+} from 'react-native';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {logo, back as backIcon} from '../../components/icon/icon';
+import {back as backIcon, logo} from '../../components/icon/icon';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import usage from '../../components/usage/usage';
 import {VERSION_DETECT_FALLBACK_URL} from '../../components/config/config';
 import log from '../../components/log/log';
 import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
-import {resolveError, extractErrorMessage} from '../../components/notification/notification';
+import {extractErrorMessage, resolveError} from '../../components/notification/notification';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import {connectToNewYoutrack, openDebugView} from '../../actions/app-actions';
+import throttle from 'lodash.throttle';
 
 import styles from './enter-server.styles';
 
 const CATEGORY_NAME = 'Choose server';
 const protocolRegExp = /^https?:/i;
 const CLOUD_DOMAIN = 'myjetbrains.com';
+export const NETWORK_PROBLEM_TIPS = [
+  '\nMake sure that your YouTrack instance is available.',
+  'URL address should match formats:\n • youtrack-example.com:PORT\n • XX.XX.XX.XXX:PORT'
+];
 
 type Props = {
   serverUrl: string,
@@ -92,40 +107,48 @@ export class EnterServer extends Component<Props, State> {
     }
 
     const error = await resolveError(errorToShow || {message: 'Unknown error'});
+    error.message = [error.message || ''].concat(NETWORK_PROBLEM_TIPS).join('\n');
     this.setState({error, connecting: false});
   }
 
   isValidInput() {
-    let {serverUrl} = this.state;
-    if (!serverUrl) {
-      return false;
-    }
-    serverUrl = serverUrl.trim();
-
-    return serverUrl && !serverUrl.match(/@/g);
+    return throttle(() => {
+      const url = (this.state.serverUrl || '').trim();
+      return url.length > 0 && !url.match(/@/g);
+    }, 500)();
   }
 
   render() {
     const {onShowDebugView, onCancel} = this.props;
-
     const isDisabled = this.state.connecting || !this.isValidInput();
 
-    const error = this.state.error ?
-      <View style={styles.errorContainer}>
-        <Text style={styles.error} selectable={true} testID="error-message">{extractErrorMessage(this.state.error)}</Text>
-      </View> :
-      null;
+    const error = (
+      this.state.error
+        ? <View style={styles.errorContainer}>
+          <Text
+            style={styles.error} selectable={true}
+            testID="error-message">
+            {extractErrorMessage(this.state.error)}
+          </Text>
+        </View>
+        : null
+    );
 
     return (
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
         {onCancel && (
-          <TouchableOpacity onPress={onCancel} style={styles.backIconButton}>
+          <TouchableOpacity
+            onPress={onCancel}
+            style={styles.backIconButton}
+          >
             <Image style={styles.backIcon} source={backIcon}/>
           </TouchableOpacity>
         )}
 
         <View style={styles.logoContainer}>
-          <TouchableWithoutFeedback onPress={() => clicksToShowCounter(onShowDebugView)}>
+          <TouchableWithoutFeedback
+            onPress={() => clicksToShowCounter(onShowDebugView)}
+          >
             <Image style={styles.logoImage} source={logo}/>
           </TouchableWithoutFeedback>
         </View>
@@ -133,7 +156,11 @@ export class EnterServer extends Component<Props, State> {
         <View>
           <Text style={styles.title}>Enter YouTrack URL</Text>
         </View>
-
+        <View>
+          <Text style={styles.hintText}>
+            Requires YouTrack 2016.2 or later
+          </Text>
+        </View>
         <View>
           <TextInput
             testID="server-url"
@@ -142,19 +169,18 @@ export class EnterServer extends Component<Props, State> {
             selectTextOnFocus={true}
             autoCorrect={false}
             style={styles.input}
-            placeholder="youtrack-example.com"
+            placeholder="youtrack-example.com:PORT"
             returnKeyType="done"
             keyboardType="url"
             underlineColorAndroid="transparent"
-            onSubmitEditing={() => {
-              this.onApplyServerUrlChange();
-            }}
+            onSubmitEditing={() => this.onApplyServerUrlChange()}
             value={this.state.serverUrl}
             onChangeText={(serverUrl) => this.setState({serverUrl})}/>
 
           {error}
 
-          <TouchableOpacity style={[styles.apply, isDisabled ? styles.applyDisabled : {}]}
+          <TouchableOpacity
+            style={[styles.apply, isDisabled ? styles.applyDisabled : {}]}
             disabled={isDisabled}
             testID="next"
             onPress={() => this.onApplyServerUrlChange()}>
@@ -163,9 +189,12 @@ export class EnterServer extends Component<Props, State> {
           </TouchableOpacity>
 
           <View>
-            <Text style={styles.hintText}>
-              Requires YouTrack 2016.2 or later
-            </Text>
+            <View>
+              <Text style={styles.hintText}>
+                You can also use IP address XX.XX.XX.XXX:PORT
+              </Text>
+            </View>
+
           </View>
         </View>
 
