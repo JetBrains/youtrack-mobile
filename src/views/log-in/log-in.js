@@ -68,7 +68,11 @@ export class LogIn extends Component<Props, State> {
       return this.props.onLogIn(authParams);
     } catch (err) {
       usage.trackEvent(CATEGORY_NAME, 'Login via credentials', 'Error');
-      this.setState({errorMessage: err.error_description || err.message, loggingIn: false});
+      const errorMessage = [
+        err.error_description || err.message,
+        'Use Log in via Browser if 2FA is enabled.'
+      ].join('\n');
+      this.setState({errorMessage: errorMessage, loggingIn: false});
     }
   }
 
@@ -120,7 +124,25 @@ export class LogIn extends Component<Props, State> {
           </View>
         </TouchableOpacity>
 
+        {Boolean(this.state.errorMessage) && (
+          <View>
+            <Text
+              style={styles.error}
+              selectable={true}
+              testID="error-message">
+              {'\n'}{this.state.errorMessage}{'\n'}
+            </Text>
+            <Text
+              onPress={() => Linking.openURL('https://youtrack-support.jetbrains.com/hc/en-us/requests/new')}
+              style={styles.privacyPolicy}>
+              Contact support
+            </Text>
+
+          </View>
+        )}
+
         <View style={styles.inputsContainer}>
+
           <TextInput
             autoCapitalize="none"
             autoCorrect={false}
@@ -147,10 +169,6 @@ export class LogIn extends Component<Props, State> {
             }}
             secureTextEntry={true}
             onChangeText={(password) => this.setState({password})}/>
-
-          {this.state.errorMessage
-            ? <View><Text style={styles.error} selectable={true} testID="error-message">{this.state.errorMessage}</Text></View>
-            : null}
         </View>
 
         <View style={styles.actionsContainer}>

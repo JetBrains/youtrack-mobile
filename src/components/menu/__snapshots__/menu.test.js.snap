@@ -1,0 +1,177 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Menu/> Render should match a snapshot 1`] = `
+<Drawer
+  acceptDoubleTap={false}
+  acceptPan={true}
+  acceptPanOnDrawer={true}
+  acceptTap={false}
+  captureGestures={true}
+  closedDrawerOffset={0}
+  content={
+    <ScrollViewMock
+      style={
+        Object {
+          "backgroundColor": "black",
+        }
+      }
+      testID="menuContainer"
+    >
+      <View
+        style={
+          Object {
+            "flex": 1,
+            "flexDirection": "column",
+            "paddingTop": 12,
+          }
+        }
+      >
+        <View
+          style={
+            Object {
+              "borderBottomWidth": 0.5,
+              "borderColor": "#444444",
+            }
+          }
+        >
+          <Connect(Accounts) />
+        </View>
+        <View
+          style={
+            Object {
+              "flexGrow": 2,
+              "padding": 16,
+              "paddingTop": 8,
+            }
+          }
+        >
+          <MenuItem
+            description="No query"
+            label="Issues"
+            onPress={[Function]}
+          />
+          <MenuItem
+            description=""
+            label="Agile Boards"
+            onPress={[Function]}
+            testId="pageAgileBoards"
+          />
+          <Connect(Feature)
+            version="2018.3"
+          >
+            <MenuItem
+              description=""
+              label="Notifications"
+              onPress={[Function]}
+            />
+          </Connect(Feature)>
+        </View>
+        <View
+          style={
+            Object {
+              "padding": 16,
+              "paddingTop": 32,
+            }
+          }
+        >
+          <TouchableWithoutFeedback
+            onPress={[Function]}
+          >
+            <Text
+              style={
+                Object {
+                  "color": "#CCC",
+                  "fontSize": 12,
+                  "lineHeight": 16,
+                }
+              }
+            >
+              YouTrack Mobile 
+              0.1 (build 0)
+            </Text>
+          </TouchableWithoutFeedback>
+          <View
+            style={
+              Object {
+                "marginTop": 8,
+              }
+            }
+          />
+          <Text
+            style={
+              Object {
+                "color": "#CCC",
+                "fontSize": 12,
+                "lineHeight": 16,
+              }
+            }
+          >
+            © 2000—
+            2020
+             JetBrains
+          </Text>
+          <Text
+            style={
+              Object {
+                "color": "#CCC",
+                "fontSize": 12,
+                "lineHeight": 16,
+              }
+            }
+          >
+            All rights reserved
+          </Text>
+          <View
+            style={
+              Object {
+                "marginTop": 8,
+              }
+            }
+          />
+          <TouchableOpacity
+            activeOpacity={0.2}
+            onPress={[Function]}
+            style={
+              Object {
+                "padding": 8,
+                "paddingLeft": 0,
+              }
+            }
+          >
+            <Text
+              style={
+                Object {
+                  "color": "#FE0082",
+                  "fontSize": 12,
+                }
+              }
+            >
+              Privacy Policy
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </ScrollViewMock>
+  }
+  disabled={false}
+  elevation={0}
+  initializeOpen={false}
+  negotiatePan={false}
+  onClose={[Function]}
+  onOpen={[Function]}
+  open={true}
+  openDrawerOffset={[Function]}
+  panCloseMask={null}
+  panOpenMask={12}
+  panThreshold={0.25}
+  side="left"
+  styles={Object {}}
+  tapToClose={true}
+  testID="menuDrawer"
+  tweenDuration={250}
+  tweenEasing="linear"
+  tweenHandler={null}
+  type="static"
+  useInteractionManager={false}
+/>
+`;
