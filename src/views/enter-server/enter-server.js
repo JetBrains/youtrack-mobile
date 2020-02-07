@@ -86,6 +86,7 @@ export class EnterServer extends Component<Props, State> {
 
     let errorToShow = null;
 
+    // eslint-disable-next-line no-unused-vars
     for (const url of urlsToTry) {
       log.log(`Trying: "${url}"`);
       try {

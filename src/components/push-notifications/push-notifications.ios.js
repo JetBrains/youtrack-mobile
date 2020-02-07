@@ -33,6 +33,7 @@ NotificationsIOS.addEventListener('notificationOpened', notification => {
 });
 
 export function registerForPush(api: Api): Promise<void> {
+  // eslint-disable-next-line no-async-promise-executor
   return new Promise(async (resolve, reject) => {
     /**
      * First we ask YT for token and exit if YT does not support PUSH notifications

@@ -9,7 +9,8 @@ module.exports = {
     'react',
     'react-native',
     'flowtype',
-    'import'
+    'import',
+    'jest'
   ],
   'rules': {
     'no-unused-vars': [ERROR, {'vars': 'local', 'args': 'none'}],
@@ -52,7 +53,14 @@ module.exports = {
     "react-native/no-raw-text": ERROR,
 
     'flowtype/define-flow-type': WARNING,
-    'flowtype/no-weak-types': OFF
+    'flowtype/no-weak-types': OFF,
+
+    //Jest
+    'jest/no-disabled-tests': 'warn',
+    'jest/no-focused-tests': 'error',
+    'jest/no-identical-title': 'error',
+    'jest/prefer-to-have-length': 'warn',
+    'jest/valid-expect': 'error'
   },
   'env': {
     'es6': true,
