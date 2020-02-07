@@ -1,4 +1,5 @@
 const loginPage = require('./pages/login');
+const errorTips = require('../src/components/error-message/error-tips');
 
 describe('Connect&Login', () => {
   beforeEach(async () => {
@@ -26,7 +27,9 @@ describe('Connect&Login', () => {
   it('should not login to test server with bad credentials', async () => {
     await loginPage.connectToServer();
     await loginPage.logIn('BadUser', 'badpass');
-    await expect(element(by.id('error-message')))
-      .toHaveText('Invalid resource owner credentials');
+
+    await expect(element(by.id('errorMessage'))).toHaveText('Invalid resource owner credentials');
+    await expect(element(by.id('errorMessageTip'))).toHaveText(errorTips.LOG_IN_2FA_TIP);
+    await expect(element(by.id('errorMessageContactSupportLink'))).toExist();
   });
 });

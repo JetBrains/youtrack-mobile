@@ -89,9 +89,13 @@ export default StyleSheet.create({
     marginTop: UNIT
   },
   error: {
+    marginTop: UNIT,
+  },
+  errorText: {
+    marginBottom: UNIT,
     color: 'red'
   },
-  privacyPolicy: {
+  link: {
     color: COLOR_LINK
   }
 });

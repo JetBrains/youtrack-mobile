@@ -1,7 +1,8 @@
-import {EnterServer, NETWORK_PROBLEM_TIPS} from './enter-server';
+import {EnterServer} from './enter-server';
 import React from 'react';
 import {shallow} from 'enzyme';
 import sinon from 'sinon';
+import {NETWORK_PROBLEM_TIPS} from '../../components/error-message/error-tips';
 
 describe('EnterServer', () => {
   const serverUrl = 'http://example.com';

@@ -1,4 +1,5 @@
 /* @flow */
+
 import {Image, View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator, Linking, TouchableWithoutFeedback} from 'react-native';
 import React, {Component} from 'react';
 import Auth from '../../components/auth/auth';
@@ -12,6 +13,7 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 import usage from '../../components/usage/usage';
 import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
 import {openDebugView, applyAuthorization} from '../../actions/app-actions';
+import {LOG_IN_2FA_TIP} from '../../components/error-message/error-tips';
 import styles from './log-in.styles';
 
 import type {AuthParams} from '../../components/auth/auth';
@@ -68,10 +70,7 @@ export class LogIn extends Component<Props, State> {
       return this.props.onLogIn(authParams);
     } catch (err) {
       usage.trackEvent(CATEGORY_NAME, 'Login via credentials', 'Error');
-      const errorMessage = [
-        err.error_description || err.message,
-        'Use Log in via Browser if 2FA is enabled.'
-      ].join('\n');
+      const errorMessage = err.error_description || err.message;
       this.setState({errorMessage: errorMessage, loggingIn: false});
     }
   }
@@ -125,16 +124,23 @@ export class LogIn extends Component<Props, State> {
         </TouchableOpacity>
 
         {Boolean(this.state.errorMessage) && (
-          <View>
+          <View style={styles.error}>
             <Text
-              style={styles.error}
+              style={styles.errorText}
               selectable={true}
-              testID="error-message">
-              {'\n'}{this.state.errorMessage}{'\n'}
+              testID="errorMessage">
+              {this.state.errorMessage}
             </Text>
             <Text
+              style={styles.errorText}
+              selectable={true}
+              testID="errorMessageTip">
+              {LOG_IN_2FA_TIP}
+            </Text>
+            <Text
+              testID="errorMessageContactSupportLink"
               onPress={() => Linking.openURL('https://youtrack-support.jetbrains.com/hc/en-us/requests/new')}
-              style={styles.privacyPolicy}>
+              style={[styles.error, styles.link]}>
               Contact support
             </Text>
 
@@ -184,7 +190,7 @@ export class LogIn extends Component<Props, State> {
           <View style={styles.description}>
             <Text style={styles.descriptionText}>
               {'You need a YouTrack account to use the app.\n By logging in, you agree to the '}
-              <Text style={styles.privacyPolicy} onPress={() => Linking.openURL('https://www.jetbrains.com/company/privacy.html')}>
+              <Text style={styles.link} onPress={() => Linking.openURL('https://www.jetbrains.com/company/privacy.html')}>
                 Privacy Policy
               </Text>.
             </Text>

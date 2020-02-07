@@ -22,16 +22,13 @@ import {extractErrorMessage, resolveError} from '../../components/notification/n
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import {connectToNewYoutrack, openDebugView} from '../../actions/app-actions';
 import throttle from 'lodash.throttle';
+import {NETWORK_PROBLEM_TIPS} from '../../components/error-message/error-tips';
 
 import styles from './enter-server.styles';
 
 const CATEGORY_NAME = 'Choose server';
 const protocolRegExp = /^https?:/i;
 const CLOUD_DOMAIN = 'myjetbrains.com';
-export const NETWORK_PROBLEM_TIPS = [
-  '\nMake sure that your YouTrack instance is available.',
-  'URL address should match formats:\n • youtrack-example.com:PORT\n • XX.XX.XX.XXX:PORT'
-];
 
 type Props = {
   serverUrl: string,
