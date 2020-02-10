@@ -13,7 +13,7 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 import usage from '../../components/usage/usage';
 import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
 import {openDebugView, applyAuthorization} from '../../actions/app-actions';
-import {LOG_IN_2FA_TIP} from '../../components/error-message/error-tips';
+import {LOG_IN_2FA_TIP} from '../../components/error-message/error-text-messages';
 
 import {resolveErrorMessage} from '../../components/notification/notification';
 import ErrorMessageInline from '../../components/error-message/error-message-inline';

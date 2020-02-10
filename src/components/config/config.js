@@ -3,13 +3,13 @@ import UrlParse from 'url-parse';
 import {USER_AGENT} from '../usage/usage';
 import log from '../log/log';
 import type {AppConfig} from '../../flow/AppConfig';
+import {YT_SUPPORTED_VERSION} from '../error-message/error-text-messages';
 
 const MIN_YT_VERSION = 7.0;
 const PROTOCOL_REGEXP = /^https?:\/\//i;
 const YOUTRACK_CONTEXT_REGEXP = /\/youtrack$/i;
 const VERSION_DETECT_FALLBACK_URL = '/rest/workflow/version';
 
-export const SUPPORTED_YT_MSG = `YouTrack Mobile requires YouTrack version 2016.2 or later.`;
 
 export function getDefaultConfig(): AppConfig {
   return {
@@ -36,16 +36,16 @@ function handleIncompatibleYouTrack(response: Object, ytUrl: string) {
 
   //Handle very old (6.5 and below) instances
   if (response.error === 'Not Found') {
-    throw new IncompatibleYouTrackError(`Cannot connect to ${ytUrl} - this version of YouTrack is not supported. ${SUPPORTED_YT_MSG}`);
+    throw new IncompatibleYouTrackError(`Cannot connect to ${ytUrl} - this version of YouTrack is not supported. ${YT_SUPPORTED_VERSION}`);
   }
 
   //Handle config load error
   if (response.error_developer_message) {
-    throw new IncompatibleYouTrackError(`Unable to connect to this YouTrack instance. ${SUPPORTED_YT_MSG} ${response.error_developer_message}`);
+    throw new IncompatibleYouTrackError(`Unable to connect to this YouTrack instance. ${YT_SUPPORTED_VERSION} ${response.error_developer_message}`);
   }
 
   if (parseFloat(response.version) < MIN_YT_VERSION) {
-    throw new IncompatibleYouTrackError(`${SUPPORTED_YT_MSG} ${ytUrl} has version ${response.version}.`);
+    throw new IncompatibleYouTrackError(`${YT_SUPPORTED_VERSION} ${ytUrl} has version ${response.version}.`);
   }
 
   if (!response.mobile || !response.mobile.serviceId) {
@@ -107,7 +107,7 @@ async function loadConfig(ytUrl: string) {
       log.log(`Loading config failed with an error ${err && err.toString && err.toString()}`);
       // Catches "Unexpected token < in JSON at position 0" error
       if (err instanceof SyntaxError) {
-        throw new Error('Invalid server response. The URL is either an unsupported YouTrack version or is not a YouTrack instance. YouTrack Mobile requires YouTrack version 7.0 or later.');
+        throw new Error(`Invalid server response. The URL is either an unsupported YouTrack version or is not a YouTrack instance. ${YT_SUPPORTED_VERSION}`);
       }
       return Promise.reject(err);
     });

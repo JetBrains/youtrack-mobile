@@ -8,9 +8,11 @@ const NETWORK_PROBLEM_TIPS = [
   '\nAt the moment we do not support client certificate authentication.',
 ];
 
+const YT_SUPPORTED_VERSION = `YouTrack Mobile requires YouTrack version 2016.2 or later.`;
 
 /* eslint-disable import/no-commonjs */
 module.exports = {
   LOG_IN_2FA_TIP: LOG_IN_2FA_TIP,
-  NETWORK_PROBLEM_TIPS: NETWORK_PROBLEM_TIPS.join('\n')
+  NETWORK_PROBLEM_TIPS: NETWORK_PROBLEM_TIPS.join('\n'),
+  YT_SUPPORTED_VERSION: YT_SUPPORTED_VERSION
 };

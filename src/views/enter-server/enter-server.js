@@ -22,7 +22,7 @@ import {resolveErrorMessage} from '../../components/notification/notification';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import {connectToNewYoutrack, openDebugView} from '../../actions/app-actions';
 import throttle from 'lodash.throttle';
-import {NETWORK_PROBLEM_TIPS} from '../../components/error-message/error-tips';
+import {NETWORK_PROBLEM_TIPS} from '../../components/error-message/error-text-messages';
 
 import styles from './enter-server.styles';
 import ErrorMessageInline from '../../components/error-message/error-message-inline';
