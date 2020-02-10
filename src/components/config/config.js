@@ -30,20 +30,21 @@ class IncompatibleYouTrackError extends Error {
 }
 
 function handleIncompatibleYouTrack(response: Object, ytUrl: string) {
+  const SUPPORTED_YT_MSG = `YouTrack Mobile requires YouTrack version 2016.2 or later.`;
   ytUrl = ytUrl.replace(VERSION_DETECT_FALLBACK_URL, '');
 
   //Handle very old (6.5 and below) instances
   if (response.error === 'Not Found') {
-    throw new IncompatibleYouTrackError(`Cannot connect to ${ytUrl} - this version of YouTrack is not supported. YouTrack Mobile requires version 7.0 or later.`);
+    throw new IncompatibleYouTrackError(`Cannot connect to ${ytUrl} - this version of YouTrack is not supported. ${SUPPORTED_YT_MSG}`);
   }
 
   //Handle config load error
   if (response.error_developer_message) {
-    throw new IncompatibleYouTrackError(`Unable to connect to this YouTrack instance. Check that your YouTrack version is 7.0 or later. ${response.error_developer_message}`);
+    throw new IncompatibleYouTrackError(`Unable to connect to this YouTrack instance. ${SUPPORTED_YT_MSG} ${response.error_developer_message}`);
   }
 
   if (parseFloat(response.version) < MIN_YT_VERSION) {
-    throw new IncompatibleYouTrackError(`YouTrack Mobile requires YouTrack version 7.0 or later. ${ytUrl} has version ${response.version}.`);
+    throw new IncompatibleYouTrackError(`${SUPPORTED_YT_MSG} ${ytUrl} has version ${response.version}.`);
   }
 
   if (!response.mobile || !response.mobile.serviceId) {
