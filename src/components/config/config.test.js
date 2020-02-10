@@ -1,4 +1,4 @@
-import {loadConfig, formatYouTrackURL} from './config';
+import {loadConfig, formatYouTrackURL, SUPPORTED_YT_MSG} from './config';
 import {__setStorageState} from '../storage/storage';
 import sinon from 'sinon';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -84,11 +84,11 @@ describe('Config', () => {
       fetch.should.have.been.calledWith('http://fake.backend/rest/workflow/version', sinon.match.object);
     });
 
-    it('should throw IncompatibleYouTrackError if old youtrack entered', (done) => {
+    it('should throw IncompatibleYouTrackError if old YouTrack entered', (done) => {
       responseJson.version = '6.5';
       loadConfig('http://fake.backend')
         .catch(err => {
-          err.message.should.contain('YouTrack Mobile requires YouTrack version 7.0 or later');
+          err.message.should.contain(SUPPORTED_YT_MSG);
           done();
         });
     });

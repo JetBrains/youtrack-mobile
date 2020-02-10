@@ -9,6 +9,8 @@ const PROTOCOL_REGEXP = /^https?:\/\//i;
 const YOUTRACK_CONTEXT_REGEXP = /\/youtrack$/i;
 const VERSION_DETECT_FALLBACK_URL = '/rest/workflow/version';
 
+export const SUPPORTED_YT_MSG = `YouTrack Mobile requires YouTrack version 2016.2 or later.`;
+
 export function getDefaultConfig(): AppConfig {
   return {
     backendUrl: null,
@@ -30,7 +32,6 @@ class IncompatibleYouTrackError extends Error {
 }
 
 function handleIncompatibleYouTrack(response: Object, ytUrl: string) {
-  const SUPPORTED_YT_MSG = `YouTrack Mobile requires YouTrack version 2016.2 or later.`;
   ytUrl = ytUrl.replace(VERSION_DETECT_FALLBACK_URL, '');
 
   //Handle very old (6.5 and below) instances
