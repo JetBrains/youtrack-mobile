@@ -12,7 +12,7 @@ describe('Login', () => {
   it('should not login to a test server with wrong credentials', async () => {
     await loginPage.logIn('UnknownUser', 'UnknownUserPass');
 
-    await expect(element(by.id('errorMessageInline1'))).toExist();
+    await expect(element(by.id('errorMessageInline'))).toExist();
     await expect(element(by.id('errorMessageInlineError'))).toHaveText('Invalid resource owner credentials');
     await expect(element(by.id('errorMessageInlineTip'))).toHaveText(errorTextMessages.LOG_IN_2FA_TIP);
     await expect(element(by.id('errorMessageInlineSupportLink'))).toExist();
