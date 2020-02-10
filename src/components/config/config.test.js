@@ -1,4 +1,5 @@
-import {loadConfig, formatYouTrackURL, SUPPORTED_YT_MSG} from './config';
+import {loadConfig, formatYouTrackURL} from './config';
+import {YT_SUPPORTED_VERSION} from '../error-message/error-text-messages';
 import {__setStorageState} from '../storage/storage';
 import sinon from 'sinon';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -88,7 +89,7 @@ describe('Config', () => {
       responseJson.version = '6.5';
       loadConfig('http://fake.backend')
         .catch(err => {
-          err.message.should.contain(SUPPORTED_YT_MSG);
+          err.message.should.contain(YT_SUPPORTED_VERSION);
           done();
         });
     });
