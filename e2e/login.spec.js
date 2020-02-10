@@ -1,32 +1,25 @@
 const loginPage = require('./pages/login');
+const errorTextMessages = require('../src/components/error-message/error-text-messages');
 
-describe('Connect&Login', () => {
+describe('Login', () => {
   beforeEach(async () => {
     await device.launchApp({delete: true});
     await device.reloadReactNative();
-  });
 
-  it('should connect to test server', async () => {
     await loginPage.connectToServer();
-    await expect(element(by.id('youtrack-url'))).toBeVisible();
   });
 
-  it('should not connect to bad server', async () => {
-    await loginPage.connectToServer('google.com');
-    await expect(element(by.id('error-message')))
-      .toHaveText('Invalid server response. The URL is either an unsupported YouTrack version or is not a YouTrack instance. YouTrack Mobile requires YouTrack version 7.0 or later.');
+  it('should not login to a test server with wrong credentials', async () => {
+    await loginPage.logIn('UnknownUser', 'UnknownUserPass');
+
+    await expect(element(by.id('errorMessageInline1'))).toExist();
+    await expect(element(by.id('errorMessageInlineError'))).toHaveText('Invalid resource owner credentials');
+    await expect(element(by.id('errorMessageInlineTip'))).toHaveText(errorTextMessages.LOG_IN_2FA_TIP);
+    await expect(element(by.id('errorMessageInlineSupportLink'))).toExist();
   });
 
   it('should login to test server', async () => {
-    await loginPage.connectToServer();
     await loginPage.logIn();
     await expect(element(by.id('issue-list-page'))).toExist();
-  });
-
-  it('should not login to test server with bad credentials', async () => {
-    await loginPage.connectToServer();
-    await loginPage.logIn('BadUser', 'badpass');
-    await expect(element(by.id('error-message')))
-      .toHaveText('Invalid resource owner credentials');
   });
 });

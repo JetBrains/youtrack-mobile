@@ -18,20 +18,18 @@ import usage from '../../components/usage/usage';
 import {VERSION_DETECT_FALLBACK_URL} from '../../components/config/config';
 import log from '../../components/log/log';
 import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
-import {extractErrorMessage, resolveError} from '../../components/notification/notification';
+import {resolveErrorMessage} from '../../components/notification/notification';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import {connectToNewYoutrack, openDebugView} from '../../actions/app-actions';
 import throttle from 'lodash.throttle';
+import {NETWORK_PROBLEM_TIPS} from '../../components/error-message/error-text-messages';
 
 import styles from './enter-server.styles';
+import ErrorMessageInline from '../../components/error-message/error-message-inline';
 
 const CATEGORY_NAME = 'Choose server';
 const protocolRegExp = /^https?:/i;
 const CLOUD_DOMAIN = 'myjetbrains.com';
-export const NETWORK_PROBLEM_TIPS = [
-  '\nMake sure that your YouTrack instance is available.',
-  'URL address should match formats:\n • youtrack-example.com:PORT\n • XX.XX.XX.XXX:PORT'
-];
 
 type Props = {
   serverUrl: string,
@@ -43,7 +41,7 @@ type Props = {
 type State = {
   serverUrl: string,
   connecting: boolean,
-  error: ?Object
+  error: ?string
 };
 
 export class EnterServer extends Component<Props, State> {
@@ -89,6 +87,7 @@ export class EnterServer extends Component<Props, State> {
 
     let errorToShow = null;
 
+    // eslint-disable-next-line no-unused-vars
     for (const url of urlsToTry) {
       log.log(`Trying: "${url}"`);
       try {
@@ -106,9 +105,8 @@ export class EnterServer extends Component<Props, State> {
       }
     }
 
-    const error = await resolveError(errorToShow || {message: 'Unknown error'});
-    error.message = [error.message || ''].concat(NETWORK_PROBLEM_TIPS).join('\n');
-    this.setState({error, connecting: false});
+    const errorMessage = await resolveErrorMessage(errorToShow);
+    this.setState({error: errorMessage, connecting: false});
   }
 
   isValidInput() {
@@ -121,18 +119,6 @@ export class EnterServer extends Component<Props, State> {
   render() {
     const {onShowDebugView, onCancel} = this.props;
     const isDisabled = this.state.connecting || !this.isValidInput();
-
-    const error = (
-      this.state.error
-        ? <View style={styles.errorContainer}>
-          <Text
-            style={styles.error} selectable={true}
-            testID="error-message">
-            {extractErrorMessage(this.state.error)}
-          </Text>
-        </View>
-        : null
-    );
 
     return (
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
@@ -177,7 +163,13 @@ export class EnterServer extends Component<Props, State> {
             value={this.state.serverUrl}
             onChangeText={(serverUrl) => this.setState({serverUrl})}/>
 
-          {error}
+          {Boolean(this.state.error) && (
+            <ErrorMessageInline
+              error={this.state.error}
+              tips={NETWORK_PROBLEM_TIPS}
+              showSupportLink={true}
+            />
+          )}
 
           <TouchableOpacity
             style={[styles.apply, isDisabled ? styles.applyDisabled : {}]}

@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ErrorMessageInline/> Render should match a snapshot 1`] = `
+<View
+  style={
+    Object {
+      "marginBottom": 16,
+      "marginTop": 8,
+    }
+  }
+  testID="errorMessageInline"
+>
+  <Text
+    selectable={true}
+    style={
+      Object {
+        "color": "red",
+        "marginBottom": 8,
+      }
+    }
+    testID="errorMessageInlineError"
+  >
+    Test error
+  </Text>
+</View>
+`;

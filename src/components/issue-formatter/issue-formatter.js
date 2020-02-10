@@ -69,6 +69,7 @@ function shortRelativeDate(date: Date|number) {
 function findIssueField(issue: AnyIssue, predicate: (field: CustomField) => boolean): ?CustomField {
   const fields: Array<CustomField> = issue.fields;
 
+  // eslint-disable-next-line no-unused-vars
   for (const field of fields) {
     if (predicate(field)) {
       return field;

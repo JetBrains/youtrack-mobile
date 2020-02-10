@@ -1,4 +1,4 @@
-import {EnterServer, NETWORK_PROBLEM_TIPS} from './enter-server';
+import {EnterServer} from './enter-server';
 import React from 'react';
 import {shallow} from 'enzyme';
 import sinon from 'sinon';
@@ -29,7 +29,7 @@ describe('EnterServer', () => {
     wrapper.should.be.defined;
   });
 
-  it('should connect to server', async() => {
+  it('should connect to server', async () => {
     const connectButton = wrapper.find({testID: 'next'});
     connectButton.simulate('press');
     await waitForNextTick();
@@ -37,7 +37,7 @@ describe('EnterServer', () => {
     connectToYouTrack.should.have.been.calledWith(serverUrl);
   });
 
-  it('should add protocol if url entered has no one', async() => {
+  it('should add protocol if url entered has no one', async () => {
     renderComponent('foo.bar');
     wrapper.find({testID: 'next'}).simulate('press');
     await waitForNextTick();
@@ -45,7 +45,7 @@ describe('EnterServer', () => {
     connectToYouTrack.should.have.been.calledWith('https://foo.bar');
   });
 
-  it('should replace HTTP with HTTPS on cloud instance', async() => {
+  it('should replace HTTP with HTTPS on cloud instance', async () => {
     renderComponent('http://foo.myjetbrains.com');
     wrapper.find({testID: 'next'}).simulate('press');
     await waitForNextTick();
@@ -53,7 +53,7 @@ describe('EnterServer', () => {
     connectToYouTrack.should.have.been.calledWith('https://foo.myjetbrains.com');
   });
 
-  it('should strip wrapping spaces', async() => {
+  it('should strip wrapping spaces', async () => {
     renderComponent('   foo.bar ');
     wrapper.find({testID: 'next'}).simulate('press');
     await waitForNextTick();
@@ -61,7 +61,7 @@ describe('EnterServer', () => {
     connectToYouTrack.should.have.been.calledWith('https://foo.bar');
   });
 
-  it('should strip tailing slash', async() => {
+  it('should strip tailing slash', async () => {
     renderComponent('http://foo.bar/');
     wrapper.find({testID: 'next'}).simulate('press');
     await waitForNextTick();
@@ -69,7 +69,7 @@ describe('EnterServer', () => {
     connectToYouTrack.should.have.been.calledWith('http://foo.bar');
   });
 
-  it('should try next URL on failure if protocol is entered', async() => {
+  it('should try next URL on failure if protocol is entered', async () => {
     connectPromise = Promise.reject({message: 'test reject'});
     const connectButton = wrapper.find({testID: 'next'});
 
@@ -84,7 +84,7 @@ describe('EnterServer', () => {
   });
 
 
-  it('should try next URL on failure if no protocol entered', async() => {
+  it('should try next URL on failure if no protocol entered', async () => {
     connectPromise = Promise.reject({message: 'test reject'});
     renderComponent('foo.bar');
     const connectButton = wrapper.find({testID: 'next'});
@@ -105,16 +105,17 @@ describe('EnterServer', () => {
     connectToYouTrack.should.have.been.calledWith('http://foo.bar/rest/workflow/version');
   });
 
-  it('should stop and display error if IncompatibleYouTrackError throwed', async() => {
+  it('should stop and display error if `IncompatibleYouTrackError` is thrown', async () => {
     const incompatibleYoutrackMsg = 'Incompatible youtrack';
-    connectPromise = Promise.reject({isIncompatibleYouTrackError: true, message: incompatibleYoutrackMsg});
+    connectPromise = Promise.reject({
+      isIncompatibleYouTrackError: true,
+      message: incompatibleYoutrackMsg
+    });
 
     wrapper.find({testID: 'next'}).simulate('press');
     await waitForNextTick();
 
-    wrapper.state('error').message.should.equal(
-      [incompatibleYoutrackMsg].concat(NETWORK_PROBLEM_TIPS).join('\n')
-    );
+    wrapper.state('error').should.equal(incompatibleYoutrackMsg);
   });
 
   it('should not allow empty input', () => {

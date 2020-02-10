@@ -11,6 +11,7 @@ exports[`<Accounts/> Render should match a snapshot 1`] = `
 >
   <TouchableOpacity
     activeOpacity={0.2}
+    disabled={false}
     onPress={[MockFunction]}
     style={
       Object {
@@ -211,6 +212,7 @@ exports[`<Accounts/> Render should match a snapshot 1`] = `
   </_default>
   <TouchableOpacity
     activeOpacity={0.2}
+    disabled={false}
     onPress={[Function]}
     style={
       Object {

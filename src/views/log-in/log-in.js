@@ -1,4 +1,5 @@
 /* @flow */
+
 import {Image, View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator, Linking, TouchableWithoutFeedback} from 'react-native';
 import React, {Component} from 'react';
 import Auth from '../../components/auth/auth';
@@ -12,9 +13,14 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 import usage from '../../components/usage/usage';
 import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
 import {openDebugView, applyAuthorization} from '../../actions/app-actions';
-import styles from './log-in.styles';
+import {LOG_IN_2FA_TIP} from '../../components/error-message/error-text-messages';
+
+import {resolveErrorMessage} from '../../components/notification/notification';
+import ErrorMessageInline from '../../components/error-message/error-message-inline';
 
 import type {AuthParams} from '../../components/auth/auth';
+
+import styles from './log-in.styles';
 
 const noop = () => {};
 const CATEGORY_NAME = 'Login form';
@@ -68,10 +74,7 @@ export class LogIn extends Component<Props, State> {
       return this.props.onLogIn(authParams);
     } catch (err) {
       usage.trackEvent(CATEGORY_NAME, 'Login via credentials', 'Error');
-      const errorMessage = [
-        err.error_description || err.message,
-        'Use Log in via Browser if 2FA is enabled.'
-      ].join('\n');
+      const errorMessage = err.error_description || err.message;
       this.setState({errorMessage: errorMessage, loggingIn: false});
     }
   }
@@ -93,7 +96,8 @@ export class LogIn extends Component<Props, State> {
       return this.props.onLogIn(authParams);
     } catch (err) {
       usage.trackEvent(CATEGORY_NAME, 'Login via browser', 'Error');
-      this.setState({loggingIn: false, errorMessage: err.error_description || err.message});
+      const errorMessage = await resolveErrorMessage(err);
+      this.setState({loggingIn: false, errorMessage: errorMessage});
     }
   }
 
@@ -125,24 +129,14 @@ export class LogIn extends Component<Props, State> {
         </TouchableOpacity>
 
         {Boolean(this.state.errorMessage) && (
-          <View>
-            <Text
-              style={styles.error}
-              selectable={true}
-              testID="error-message">
-              {'\n'}{this.state.errorMessage}{'\n'}
-            </Text>
-            <Text
-              onPress={() => Linking.openURL('https://youtrack-support.jetbrains.com/hc/en-us/requests/new')}
-              style={styles.privacyPolicy}>
-              Contact support
-            </Text>
-
-          </View>
+          <ErrorMessageInline
+            error={this.state.errorMessage}
+            tips={LOG_IN_2FA_TIP}
+            showSupportLink={true}
+          />
         )}
 
         <View style={styles.inputsContainer}>
-
           <TextInput
             autoCapitalize="none"
             autoCorrect={false}
@@ -184,7 +178,7 @@ export class LogIn extends Component<Props, State> {
           <View style={styles.description}>
             <Text style={styles.descriptionText}>
               {'You need a YouTrack account to use the app.\n By logging in, you agree to the '}
-              <Text style={styles.privacyPolicy} onPress={() => Linking.openURL('https://www.jetbrains.com/company/privacy.html')}>
+              <Text style={styles.link} onPress={() => Linking.openURL('https://www.jetbrains.com/company/privacy.html')}>
                 Privacy Policy
               </Text>.
             </Text>
