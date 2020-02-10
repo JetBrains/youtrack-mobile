@@ -25,7 +25,7 @@ export default class ErrorMessageInline extends PureComponent<Props, void> {
         <Text
           style={styles.errorText}
           selectable={true}
-          testID="errorMessage">
+          testID="errorMessageInlineError">
           {error}
         </Text>
         {Boolean(tips) && (

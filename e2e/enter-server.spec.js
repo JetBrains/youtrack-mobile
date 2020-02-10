@@ -16,7 +16,7 @@ describe('Enter Server', () => {
     await loginPage.connectToServer('jetbrains.com');
 
     await expect(element(by.id('errorMessageInline'))).toExist();
-    await expect(element(by.id('errorMessage')))
+    await expect(element(by.id('errorMessageInlineError')))
       .toHaveText(`Invalid server response. The URL is either an unsupported YouTrack version or is not a YouTrack instance. ${errorTextMessages.YT_SUPPORTED_VERSION}`);
   });
 

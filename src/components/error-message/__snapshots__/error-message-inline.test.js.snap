@@ -18,7 +18,7 @@ exports[`<ErrorMessageInline/> Render should match a snapshot 1`] = `
         "marginBottom": 8,
       }
     }
-    testID="errorMessage"
+    testID="errorMessageInlineError"
   >
     Test error
   </Text>

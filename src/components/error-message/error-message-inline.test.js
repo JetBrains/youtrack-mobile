@@ -8,7 +8,7 @@ import ErrorMessageInline from './error-message-inline';
 
 describe('<ErrorMessageInline/>', () => {
 
-  const ERROR_TEST_ID = 'errorMessage';
+  const ERROR_TEST_ID = 'errorMessageInlineError';
   const TIPS_TEST_ID = 'errorMessageInlineTip';
   const LINK_TEST_ID = 'errorMessageInlineSupportLink';
   let wrapper;
