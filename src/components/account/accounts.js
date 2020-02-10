@@ -81,6 +81,7 @@ export default class Accounts extends PureComponent<Props, void> {
         <TouchableOpacity
           testID="accountsAddAccount"
           style={styles.action}
+          disabled={isChangingAccount}
           onPress={onAddAccount}>
           <Image style={styles.actionIcon} source={addIcon}/>
         </TouchableOpacity>
@@ -122,6 +123,7 @@ export default class Accounts extends PureComponent<Props, void> {
         <TouchableOpacity
           testID="accountsOnLogOut"
           style={styles.action}
+          disabled={isChangingAccount}
           onPress={this._logOut}>
           <Image style={styles.actionIcon} source={logOutIcon}/>
         </TouchableOpacity>
