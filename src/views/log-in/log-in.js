@@ -14,9 +14,13 @@ import usage from '../../components/usage/usage';
 import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
 import {openDebugView, applyAuthorization} from '../../actions/app-actions';
 import {LOG_IN_2FA_TIP} from '../../components/error-message/error-tips';
-import styles from './log-in.styles';
+
+import {resolveErrorMessage} from '../../components/notification/notification';
+import ErrorMessageInline from '../../components/error-message/error-message-inline';
 
 import type {AuthParams} from '../../components/auth/auth';
+
+import styles from './log-in.styles';
 
 const noop = () => {};
 const CATEGORY_NAME = 'Login form';
@@ -92,7 +96,8 @@ export class LogIn extends Component<Props, State> {
       return this.props.onLogIn(authParams);
     } catch (err) {
       usage.trackEvent(CATEGORY_NAME, 'Login via browser', 'Error');
-      this.setState({loggingIn: false, errorMessage: err.error_description || err.message});
+      const errorMessage = await resolveErrorMessage(err);
+      this.setState({loggingIn: false, errorMessage: errorMessage});
     }
   }
 
@@ -124,31 +129,14 @@ export class LogIn extends Component<Props, State> {
         </TouchableOpacity>
 
         {Boolean(this.state.errorMessage) && (
-          <View style={styles.error}>
-            <Text
-              style={styles.errorText}
-              selectable={true}
-              testID="errorMessage">
-              {this.state.errorMessage}
-            </Text>
-            <Text
-              style={styles.errorText}
-              selectable={true}
-              testID="errorMessageTip">
-              {LOG_IN_2FA_TIP}
-            </Text>
-            <Text
-              testID="errorMessageContactSupportLink"
-              onPress={() => Linking.openURL('https://youtrack-support.jetbrains.com/hc/en-us/requests/new')}
-              style={[styles.error, styles.link]}>
-              Contact support
-            </Text>
-
-          </View>
+          <ErrorMessageInline
+            error={this.state.errorMessage}
+            tips={LOG_IN_2FA_TIP}
+            showSupportLink={true}
+          />
         )}
 
         <View style={styles.inputsContainer}>
-
           <TextInput
             autoCapitalize="none"
             autoCorrect={false}
