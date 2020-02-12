@@ -46,7 +46,7 @@ exports[`<Menu/> Render should match a snapshot 1`] = `
           }
         >
           <MenuItem
-            description="No query"
+            description="Everything"
             label="Issues"
             onPress={[Function]}
           />
