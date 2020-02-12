@@ -3,6 +3,7 @@
 import {
   ActivityIndicator,
   Image,
+  Linking,
   ScrollView,
   Text,
   TextInput,
@@ -12,7 +13,7 @@ import {
 } from 'react-native';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {back as backIcon, logo} from '../../components/icon/icon';
+import {logo} from '../../components/icon/icon';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import usage from '../../components/usage/usage';
 import {VERSION_DETECT_FALLBACK_URL} from '../../components/config/config';
@@ -24,8 +25,12 @@ import {connectToNewYoutrack, openDebugView} from '../../actions/app-actions';
 import throttle from 'lodash.throttle';
 import {NETWORK_PROBLEM_TIPS} from '../../components/error-message/error-text-messages';
 
-import styles from './enter-server.styles';
 import ErrorMessageInline from '../../components/error-message/error-message-inline';
+import BackIcon from '../../components/menu/back-icon';
+import {COLOR_PINK, UNIT} from '../../components/variables/variables';
+
+import styles from './enter-server.styles';
+import {formStyles} from '../../components/common-styles/form';
 
 const CATEGORY_NAME = 'Choose server';
 const protocolRegExp = /^https?:/i;
@@ -43,6 +48,8 @@ type State = {
   connecting: boolean,
   error: ?string
 };
+
+const hitSlop = {top: UNIT, bottom: UNIT, left: UNIT, right: UNIT};
 
 export class EnterServer extends Component<Props, State> {
   constructor(props: Props) {
@@ -121,76 +128,86 @@ export class EnterServer extends Component<Props, State> {
     const isDisabled = this.state.connecting || !this.isValidInput();
 
     return (
-      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-        {onCancel && (
-          <TouchableOpacity
-            onPress={onCancel}
-            style={styles.backIconButton}
-          >
-            <Image style={styles.backIcon} source={backIcon}/>
-          </TouchableOpacity>
-        )}
-
-        <View style={styles.logoContainer}>
-          <TouchableWithoutFeedback
-            onPress={() => clicksToShowCounter(onShowDebugView)}
-          >
-            <Image style={styles.logoImage} source={logo}/>
-          </TouchableWithoutFeedback>
-        </View>
-
-        <View>
-          <Text style={styles.title}>Enter YouTrack URL</Text>
-        </View>
-        <View>
-          <Text style={styles.hintText}>
-            Requires YouTrack 2016.2 or later
-          </Text>
-        </View>
-        <View>
-          <TextInput
-            testID="server-url"
-            autoCapitalize="none"
-            autoFocus={true}
-            selectTextOnFocus={true}
-            autoCorrect={false}
-            style={styles.input}
-            placeholder="youtrack-example.com:PORT"
-            returnKeyType="done"
-            keyboardType="url"
-            underlineColorAndroid="transparent"
-            onSubmitEditing={() => this.onApplyServerUrlChange()}
-            value={this.state.serverUrl}
-            onChangeText={(serverUrl) => this.setState({serverUrl})}/>
-
-          {Boolean(this.state.error) && (
-            <ErrorMessageInline
-              error={this.state.error}
-              tips={NETWORK_PROBLEM_TIPS}
-              showSupportLink={true}
-            />
+      <ScrollView
+        testID="enterServer"
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
+        contentContainerStyle={styles.scrollContainer}
+      >
+        <View style={styles.container}>
+          {onCancel && (
+            <TouchableOpacity
+              testID="enterServerBackButton"
+              onPress={onCancel}
+              style={styles.backIconButton}
+            >
+              <BackIcon color={COLOR_PINK}/>
+            </TouchableOpacity>
           )}
 
-          <TouchableOpacity
-            style={[styles.apply, isDisabled ? styles.applyDisabled : {}]}
-            disabled={isDisabled}
-            testID="next"
-            onPress={() => this.onApplyServerUrlChange()}>
-            <Text style={styles.applyText}>Next</Text>
-            {this.state.connecting && <ActivityIndicator style={styles.connectingIndicator}/>}
-          </TouchableOpacity>
+          <View style={styles.formContent}>
+            <TouchableWithoutFeedback
+              testID="enterServerLogo"
+              onPress={() => clicksToShowCounter(onShowDebugView)}
+            >
+              <Image style={styles.logoImage} source={logo}/>
+            </TouchableWithoutFeedback>
 
-          <View>
-            <View>
-              <Text style={styles.hintText}>
-                You can also use IP address XX.XX.XX.XXX:PORT
-              </Text>
+            <View testID="enterServerHint">
+              <Text style={styles.title}>Enter YouTrack URL</Text>
             </View>
 
-          </View>
-        </View>
+            <TextInput
+              testID="server-url"
+              style={styles.input}
+              autoCapitalize="none"
+              autoFocus={true}
+              selectTextOnFocus={true}
+              autoCorrect={false}
+              placeholder="youtrack-server.com:PORT"
+              returnKeyType="done"
+              keyboardType="url"
+              underlineColorAndroid="transparent"
+              onSubmitEditing={() => this.onApplyServerUrlChange()}
+              value={this.state.serverUrl}
+              onChangeText={(serverUrl) => this.setState({serverUrl})}/>
 
-        <KeyboardSpacer/>
+            {Boolean(this.state.error) && (
+              <ErrorMessageInline
+                testID="enterServerError"
+                error={this.state.error}
+                tips={NETWORK_PROBLEM_TIPS}
+              />
+            )}
+
+            <TouchableOpacity
+              style={[formStyles.button, isDisabled ? formStyles.buttonDisabled : null]}
+              disabled={isDisabled}
+              testID="next"
+              onPress={() => this.onApplyServerUrlChange()}>
+              <Text style={formStyles.buttonText}>Next</Text>
+              {this.state.connecting && <ActivityIndicator style={styles.progressIndicator}/>}
+            </TouchableOpacity>
+
+            <Text style={styles.hintText}>
+              You can also use IP address XX.XX.XX.XXX:PORT
+            </Text>
+          </View>
+
+          <View
+            testID="enterServerSupportLink"
+            style={styles.supportLinkContent}
+          >
+            <TouchableOpacity
+              hitSlop={hitSlop}
+              onPress={() => Linking.openURL('https://youtrack-support.jetbrains.com/hc/en-us/requests/new')}
+            >
+              <Text style={formStyles.link}>Contact support</Text>
+            </TouchableOpacity>
+          </View>
+
+          <KeyboardSpacer/>
+        </View>
       </ScrollView>
     );
   }

@@ -1,12 +1,22 @@
 /* @flow */
 
-import {Image, View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator, Linking, TouchableWithoutFeedback} from 'react-native';
+import {
+  Image,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+  Linking,
+  TouchableWithoutFeedback
+} from 'react-native';
 import React, {Component} from 'react';
 import Auth from '../../components/auth/auth';
 import Router from '../../components/router/router';
 import {connect} from 'react-redux';
 import {formatYouTrackURL} from '../../components/config/config';
-import {logo, back} from '../../components/icon/icon';
+import {logo} from '../../components/icon/icon';
 import Keystore from '../../components/keystore/keystore';
 import authorizeInHub from '../../components/auth/auth__oauth';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
@@ -20,7 +30,11 @@ import ErrorMessageInline from '../../components/error-message/error-message-inl
 
 import type {AuthParams} from '../../components/auth/auth';
 
+import {COLOR_PINK} from '../../components/variables/variables';
+import BackIcon from '../../components/menu/back-icon';
+
 import styles from './log-in.styles';
+import {formStyles} from '../../components/common-styles/form';
 
 const noop = () => {};
 const CATEGORY_NAME = 'Login form';
@@ -103,98 +117,99 @@ export class LogIn extends Component<Props, State> {
 
   render() {
     const {onShowDebugView} = this.props;
+
     return (
-      <ScrollView contentContainerStyle={styles.container}
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
         keyboardShouldPersistTaps="handled"
-        keyboardDismissMode="on-drag">
-
-        <TouchableOpacity onPress={() => this.changeYouTrackUrl()} style={styles.urlChangeButton} testID="back-to-url">
-          <View style={styles.urlChangeWrapper}>
-            <Image source={back} style={styles.urlChangeIcon}/>
-            <Text style={styles.urlChangeText}>URL</Text>
-          </View>
-        </TouchableOpacity>
-
-        <View style={styles.logoContainer}>
-          <TouchableWithoutFeedback onPress={() => clicksToShowCounter(onShowDebugView)}>
-            <Image style={styles.logoImage} source={logo}/>
-          </TouchableWithoutFeedback>
-        </View>
-
-        <TouchableOpacity onPress={() => this.changeYouTrackUrl()} testID="youtrack-url">
-          <View>
-            <Text style={styles.welcome}>Login to YouTrack</Text>
-            <Text style={[styles.descriptionText, {marginTop: 8}]}>{formatYouTrackURL(this.props.auth.config.backendUrl)}</Text>
-          </View>
-        </TouchableOpacity>
-
-        {Boolean(this.state.errorMessage) && (
-          <ErrorMessageInline
-            error={this.state.errorMessage}
-            tips={LOG_IN_2FA_TIP}
-            showSupportLink={true}
-          />
-        )}
-
-        <View style={styles.inputsContainer}>
-          <TextInput
-            autoCapitalize="none"
-            autoCorrect={false}
-            editable={!this.state.loggingIn}
-            testID="login-input"
-            style={styles.input}
-            placeholder="Username or email"
-            returnKeyType="next"
-            underlineColorAndroid="transparent"
-            onSubmitEditing={() => this.focusOnPassword()}
-            value={this.state.username}
-            onChangeText={(username) => this.setState({username})}/>
-          <TextInput
-            ref="passInput"
-            editable={!this.state.loggingIn}
-            testID="password-input"
-            style={styles.input}
-            placeholder="Password"
-            returnKeyType="done"
-            underlineColorAndroid="transparent"
-            value={this.state.password}
-            onSubmitEditing={() => {
-              this.logInViaCredentials();
-            }}
-            secureTextEntry={true}
-            onChangeText={(password) => this.setState({password})}/>
-        </View>
-
-        <View style={styles.actionsContainer}>
-          <TouchableOpacity style={[styles.signin, this.state.loggingIn ? styles.signinDisabled : {}]}
-            disabled={this.state.loggingIn}
-            testID="log-in"
-            onPress={() => this.logInViaCredentials()}>
-            <Text
-              style={styles.signinText}>Log in</Text>
-            {this.state.loggingIn && <ActivityIndicator style={styles.loggingInIndicator}/>}
+        keyboardDismissMode="on-drag"
+      >
+        <View style={styles.container}>
+          <TouchableOpacity
+            onPress={() => this.changeYouTrackUrl()}
+            style={styles.backIconButton}
+            testID="back-to-url"
+          >
+            <BackIcon color={COLOR_PINK}/>
           </TouchableOpacity>
 
-          <View style={styles.description}>
-            <Text style={styles.descriptionText}>
+          <View style={styles.formContent}>
+            <TouchableWithoutFeedback onPress={() => clicksToShowCounter(onShowDebugView)}>
+              <Image style={styles.logoImage} source={logo}/>
+            </TouchableWithoutFeedback>
+
+            <TouchableOpacity onPress={() => this.changeYouTrackUrl()} testID="youtrack-url">
+              <Text style={styles.title}>Login to YouTrack</Text>
+              <Text
+                style={styles.hintText}>{formatYouTrackURL(this.props.auth.config.backendUrl)}</Text>
+            </TouchableOpacity>
+
+            <TextInput
+              autoCapitalize="none"
+              autoCorrect={false}
+              editable={!this.state.loggingIn}
+              testID="login-input"
+              style={styles.inputUser}
+              placeholder="Username or email"
+              returnKeyType="next"
+              underlineColorAndroid="transparent"
+              onSubmitEditing={() => this.focusOnPassword()}
+              value={this.state.username}
+              onChangeText={(username) => this.setState({username})}/>
+            <TextInput
+              ref="passInput"
+              editable={!this.state.loggingIn}
+              testID="password-input"
+              style={styles.inputPass}
+              placeholder="Password"
+              returnKeyType="done"
+              underlineColorAndroid="transparent"
+              value={this.state.password}
+              onSubmitEditing={() => {
+                this.logInViaCredentials();
+              }}
+              secureTextEntry={true}
+              onChangeText={(password) => this.setState({password})}/>
+
+            {Boolean(this.state.errorMessage) && (
+              <ErrorMessageInline
+                error={this.state.errorMessage}
+                tips={LOG_IN_2FA_TIP}
+              />
+            )}
+
+            <TouchableOpacity
+              style={[formStyles.button, this.state.loggingIn ? formStyles.buttonDisabled : null]}
+              disabled={this.state.loggingIn}
+              testID="log-in"
+              onPress={() => this.logInViaCredentials()}>
+              <Text
+                style={formStyles.buttonText}>Log in</Text>
+              {this.state.loggingIn && <ActivityIndicator style={styles.progressIndicator}/>}
+            </TouchableOpacity>
+
+            <Text style={styles.hintText}>
               {'You need a YouTrack account to use the app.\n By logging in, you agree to the '}
-              <Text style={styles.link} onPress={() => Linking.openURL('https://www.jetbrains.com/company/privacy.html')}>
+              <Text
+                style={formStyles.link}
+                onPress={() => Linking.openURL('https://www.jetbrains.com/company/privacy.html')}>
                 Privacy Policy
               </Text>.
             </Text>
+
           </View>
 
           <TouchableOpacity
-            style={styles.linkContainer}
+            style={styles.support}
             testID="log-in-via-browser"
             onPress={() => this.logInViaHub()}
           >
-            <Text style={styles.linkLike}>
+            <Text style={styles.action}>
               Log in via Browser</Text>
           </TouchableOpacity>
-        </View>
 
-        <KeyboardSpacer/>
+          <KeyboardSpacer/>
+        </View>
       </ScrollView>
     );
   }

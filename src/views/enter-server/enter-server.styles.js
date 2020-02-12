@@ -1,78 +1,15 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_LIGHT_GRAY, COLOR_PINK, COLOR_FONT_GRAY} from '../../components/variables/variables';
+import {UNIT} from '../../components/variables/variables';
+import {formStyles} from '../../components/common-styles/form';
+import {loginStylesForm} from '../../components/common-styles/login-form';
 
-const FONT_SIZE = 18;
 
 export default StyleSheet.create({
-  container: {
-    flexDirection: 'column',
-    flex: 1,
-    paddingTop: UNIT * 8,
-    paddingLeft: UNIT * 4,
-    paddingRight: UNIT * 4,
-    paddingBottom: UNIT * 2,
-    backgroundColor: '#FFF'
-  },
-  logoContainer: {
-    alignItems: 'center'
-  },
-  logoImage: {
-    height: UNIT * 10,
-    resizeMode: 'contain'
-  },
-  backIconButton: {
-    position: 'absolute',
-    left: UNIT * 2,
-    top: UNIT * 6
-  },
-  backIcon: {
-    height: UNIT * 2,
-    resizeMode: 'contain',
-  },
-  title: {
-    paddingTop: UNIT * 2,
-    fontSize: 26,
-    textAlign: 'center'
-  },
+  ...loginStylesForm,
+
   input: {
-    height: UNIT * 5,
-    marginTop: UNIT*4,
-    marginBottom: UNIT*2,
-    backgroundColor: '#FFF',
-    color: '#7E7E84',
-    fontSize: FONT_SIZE
-  },
-  apply: {
-    padding: 10,
-    borderRadius: 6,
-    backgroundColor: COLOR_PINK,
-    alignItems: 'center'
-  },
-  applyDisabled: {
-    backgroundColor: COLOR_LIGHT_GRAY
-  },
-  applyText: {
-    fontSize: FONT_SIZE,
-    color: '#FFF',
-    alignSelf: 'stretch',
-    textAlign: 'center'
-  },
-  connectingIndicator: {
-    position: 'absolute',
-    right: UNIT*2,
-    top: 12
-  },
-  errorContainer: {
-    marginTop: UNIT,
-    marginBottom: UNIT * 2
-  },
-  hintText: {
-    fontSize: 12,
-    color: COLOR_FONT_GRAY,
-    textAlign: 'center',
-    marginTop: UNIT*2
-  },
-  error: {
-    color: 'red'
+    marginTop: UNIT * 3,
+    marginBottom: UNIT * 2,
+    ...formStyles.input
   }
 });

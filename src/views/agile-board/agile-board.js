@@ -1,4 +1,5 @@
 /* @flow */
+
 import {View, Text, Image, RefreshControl, Modal, TouchableOpacity, ActivityIndicator, Dimensions} from 'react-native';
 import React, {Component} from 'react';
 import usage from '../../components/usage/usage';
@@ -169,7 +170,8 @@ class AgileBoard extends Component<Props, State> {
         {Boolean(sprint) && <View style={styles.headerContent}>
           {this.renderHeaderButton(
             sprint?.agile?.name,
-            onOpenBoardSelect
+            onOpenBoardSelect,
+            styles.headerBoardNotCollapsibleButton
           )}
           {this.renderHeaderButton(
             sprint?.name,
@@ -255,6 +257,7 @@ class AgileBoard extends Component<Props, State> {
       </ModalView>
     );
   }
+
   _renderNoSprint() {
     return (
       <View style={styles.agileBoardMessage}>
