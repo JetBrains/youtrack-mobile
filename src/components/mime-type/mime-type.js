@@ -8,7 +8,7 @@ export const hasMimeType = function(mimeType: string) {
 
 hasMimeType.svg = hasMimeType('image/svg+xml');
 
-hasMimeType.image = (file) => !hasMimeType.svg(file) && hasMimeType('image/')(file);
+hasMimeType.image = (file) => !hasMimeType.svg(file) && hasMimeType('image/')(file) && !hasMimeType('/targa')(file);
 
 hasMimeType.pdf = hasMimeType('application/pdf');
 

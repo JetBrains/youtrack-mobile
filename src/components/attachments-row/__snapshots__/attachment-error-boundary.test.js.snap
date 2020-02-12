@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AttachmentErrorBoundary/> Render should match a snapshot 1`] = `
+<Text
+  testID="attachmentErrorBoundaryChildren"
+>
+  children
+</Text>
+`;
