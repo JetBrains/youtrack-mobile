@@ -73,7 +73,7 @@ describe('<UserInfo/>', () => {
     return wrapper && wrapper.find({testID: testId});
   }
 
-  function doShallow(user: User = {}, timestamp?: Number = Date.now()) {
+  function doShallow(user: User = {}, timestamp: Number = Date.now()) {
     return shallow(
       <UserInfo
         user={user}
