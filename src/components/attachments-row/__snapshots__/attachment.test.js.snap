@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Attachment/> Render should match a snapshot 1`] = `
+<TouchableOpacity
+  activeOpacity={0.2}
+  key="attachId"
+  onPress={[Function]}
+  testID="attachment"
+>
+  <withAnimatable(View)
+    animation={null}
+    delay={0}
+    direction="normal"
+    duration={700}
+    easing="ease-out-quart"
+    iterationCount={1}
+    onAnimationBegin={[Function]}
+    onAnimationEnd={[Function]}
+    testID="attachmentImage"
+    useNativeDriver={true}
+  >
+    <ImageProgress
+      errorContainerStyle={
+        Object {
+          "alignItems": "center",
+          "bottom": 0,
+          "justifyContent": "center",
+          "left": 0,
+          "position": "absolute",
+          "right": 0,
+          "top": 0,
+        }
+      }
+      indicatorContainerStyle={
+        Object {
+          "alignItems": "center",
+          "bottom": 0,
+          "justifyContent": "center",
+          "left": 0,
+          "position": "absolute",
+          "right": 0,
+          "top": 0,
+        }
+      }
+      onError={[Function]}
+      renderIndicator={[Function]}
+      source={
+        Object {
+          "headers": null,
+          "uri": undefined,
+        }
+      }
+      style={
+        Object {
+          "borderColor": "rgba(0, 0, 0, 0.15)",
+          "borderRadius": 3,
+          "borderWidth": 1,
+          "height": 64,
+          "marginRight": 8,
+          "overflow": "hidden",
+          "width": 120,
+        }
+      }
+      threshold={50}
+    />
+  </withAnimatable(View)>
+</TouchableOpacity>
+`;
