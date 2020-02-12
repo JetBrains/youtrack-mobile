@@ -10,7 +10,6 @@ describe('<ErrorMessageInline/>', () => {
 
   const ERROR_TEST_ID = 'errorMessageInlineError';
   const TIPS_TEST_ID = 'errorMessageInlineTip';
-  const LINK_TEST_ID = 'errorMessageInlineSupportLink';
   let wrapper;
   let instance;
   let errorMock;
@@ -31,7 +30,6 @@ describe('<ErrorMessageInline/>', () => {
 
       expect(findByTestId(ERROR_TEST_ID)).toHaveLength(1);
       expect(findByTestId(TIPS_TEST_ID)).toHaveLength(0);
-      expect(findByTestId(LINK_TEST_ID)).toHaveLength(0);
     });
 
     it('should render error with tips', () => {
@@ -39,7 +37,6 @@ describe('<ErrorMessageInline/>', () => {
 
       expect(findByTestId(ERROR_TEST_ID)).toHaveLength(1);
       expect(findByTestId(TIPS_TEST_ID)).toHaveLength(1);
-      expect(findByTestId(LINK_TEST_ID)).toHaveLength(0);
     });
 
     it('should render error with a support link', () => {
@@ -47,7 +44,6 @@ describe('<ErrorMessageInline/>', () => {
 
       expect(findByTestId(ERROR_TEST_ID)).toHaveLength(1);
       expect(findByTestId(TIPS_TEST_ID)).toHaveLength(0);
-      expect(findByTestId(LINK_TEST_ID)).toHaveLength(1);
     });
 
   });

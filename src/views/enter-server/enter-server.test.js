@@ -1,7 +1,10 @@
-import {EnterServer} from './enter-server';
 import React from 'react';
+
 import {shallow} from 'enzyme';
 import sinon from 'sinon';
+import toJson from 'enzyme-to-json';
+
+import {EnterServer} from './enter-server';
 
 describe('EnterServer', () => {
   const serverUrl = 'http://example.com';
@@ -25,8 +28,21 @@ describe('EnterServer', () => {
     renderComponent();
   });
 
-  it('should render', () => {
-    wrapper.should.be.defined;
+  describe('Render', () => {
+
+    it('should render', () => {
+      expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
+    it('should render element', () => {
+      expect(findByTestId('enterServer')).toHaveLength(1);
+      expect(findByTestId('enterServerBackButton')).toHaveLength(1);
+      expect(findByTestId('server-url')).toHaveLength(1);
+      expect(findByTestId('enterServerLogo')).toHaveLength(1);
+      expect(findByTestId('next')).toHaveLength(1);
+      expect(findByTestId('enterServerHint')).toHaveLength(1);
+      expect(findByTestId('enterServerSupportLink')).toHaveLength(1);
+    });
   });
 
   it('should connect to server', async () => {
@@ -37,7 +53,7 @@ describe('EnterServer', () => {
     connectToYouTrack.should.have.been.calledWith(serverUrl);
   });
 
-  it('should add protocol if url entered has no one', async () => {
+  it('should add protocol for entered URL', async () => {
     renderComponent('foo.bar');
     wrapper.find({testID: 'next'}).simulate('press');
     await waitForNextTick();
@@ -45,7 +61,7 @@ describe('EnterServer', () => {
     connectToYouTrack.should.have.been.calledWith('https://foo.bar');
   });
 
-  it('should replace HTTP with HTTPS on cloud instance', async () => {
+  it('should replace HTTP with HTTPS for a cloud instance', async () => {
     renderComponent('http://foo.myjetbrains.com');
     wrapper.find({testID: 'next'}).simulate('press');
     await waitForNextTick();
@@ -125,7 +141,7 @@ describe('EnterServer', () => {
     instance.isValidInput().should.be.false;
   });
 
-  it('should not allow AT in server input (to not confuse users with email)', () => {
+  it('should not allow `@` character in server input (to not confuse users with email)', () => {
     const instance = shallow(
       <EnterServer serverUrl={'foo@bar.com'} connectToYoutrack={connectToYouTrack} onCancel={onCancel}/>
     ).instance();
@@ -140,4 +156,9 @@ describe('EnterServer', () => {
 
     instance.isValidInput().should.be.true;
   });
+
+
+  function findByTestId(testId) {
+    return wrapper && wrapper.find({testID: testId});
+  }
 });

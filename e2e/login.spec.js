@@ -15,7 +15,6 @@ describe('Login', () => {
     await expect(element(by.id('errorMessageInline'))).toExist();
     await expect(element(by.id('errorMessageInlineError'))).toHaveText('Invalid resource owner credentials');
     await expect(element(by.id('errorMessageInlineTip'))).toHaveText(errorTextMessages.LOG_IN_2FA_TIP);
-    await expect(element(by.id('errorMessageInlineSupportLink'))).toExist();
   });
 
   it('should login to test server', async () => {
