@@ -1,46 +1,46 @@
 /* @flow */
-import styles from './single-issue.styles';
-import Comment from '../../components/comment/comment';
-import type {Attachment, IssueComment} from '../../flow/CustomFields';
+import styles from '../single-issue.styles';
+import Comment from '../../../components/comment/comment';
+import type {Attachment, IssueComment} from '../../../flow/CustomFields';
 
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import React, {PureComponent} from 'react';
 
-import {isActivityCategory} from '../../components/activity/activity__category';
+import {isActivityCategory} from '../../../components/activity/activity__category';
 
-import CommentVisibility from '../../components/comment/comment__visibility';
-import IssueVisibility from '../../components/issue-visibility/issue-visibility';
+import CommentVisibility from '../../../components/comment/comment__visibility';
+import IssueVisibility from '../../../components/issue-visibility/issue-visibility';
 
 import {
   getEntityPresentation,
   relativeDate,
   absDate,
   getReadableID
-} from '../../components/issue-formatter/issue-formatter';
+} from '../../../components/issue-formatter/issue-formatter';
 
-import {mergeActivities} from '../../components/activity/activity__merge-activities';
-import {groupActivities} from '../../components/activity/activity__group-activities';
-import {createActivitiesModel} from '../../components/activity/activity__create-model';
+import {mergeActivities} from '../../../components/activity/activity__merge-activities';
+import {groupActivities} from '../../../components/activity/activity__group-activities';
+import {createActivitiesModel} from '../../../components/activity/activity__create-model';
 
-import getEventTitle from '../../components/activity/activity__history-title';
-import {getTextValueChange} from '../../components/activity/activity__history-value';
-import {minutesAndHoursFor} from '../../components/time-tracking/time-tracking';
+import getEventTitle from '../../../components/activity/activity__history-title';
+import {getTextValueChange} from '../../../components/activity/activity__history-value';
+import {minutesAndHoursFor} from '../../../components/time-tracking/time-tracking';
 
-import Avatar from '../../components/avatar/avatar';
+import Avatar from '../../../components/avatar/avatar';
 
-import Router from '../../components/router/router';
+import Router from '../../../components/router/router';
 
-import {history, work} from '../../components/icon/icon';
+import {history, work} from '../../../components/icon/icon';
 
-import usage from '../../components/usage/usage';
-import log from '../../components/log/log';
-import {getApi} from '../../components/api/api__instance';
-import AttachmentsRow from '../../components/attachments-row/attachments-row';
-import ApiHelper from '../../components/api/api__helper';
-import CustomFieldChangeDelimiter from '../../components/custom-field/custom-field__change-delimiter';
+import usage from '../../../components/usage/usage';
+import log from '../../../components/log/log';
+import {getApi} from '../../../components/api/api__instance';
+import AttachmentsRow from '../../../components/attachments-row/attachments-row';
+import ApiHelper from '../../../components/api/api__helper';
+import CustomFieldChangeDelimiter from '../../../components/custom-field/custom-field__change-delimiter';
 
-import type {WorkTimeSettings} from '../../flow/WorkTimeSettings';
-import type {ActivityItem, IssueActivity} from '../../flow/Activity';
+import type {WorkTimeSettings} from '../../../flow/WorkTimeSettings';
+import type {ActivityItem, IssueActivity} from '../../../flow/Activity';
 
 import {
   COLOR_FONT,
@@ -48,18 +48,18 @@ import {
   COLOR_ICON_GREY,
   COLOR_ICON_LIGHT_BLUE,
   UNIT
-} from '../../components/variables/variables';
-import Diff from '../../components/diff/diff';
-import {HIT_SLOP} from '../../components/common-styles/link-button';
+} from '../../../components/variables/variables';
+import Diff from '../../../components/diff/diff';
+import {HIT_SLOP} from '../../../components/common-styles/link-button';
 
-import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
+import type IssuePermissions from '../../../components/issue-permissions/issue-permissions';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const CATEGORY_NAME = 'Issue Stream';
 
 type Props = {
   issueFields: Array<Object>,
-  activityPage: ?Array<IssueActivity>,
+  activityPage: Array<IssueActivity> | null,
   attachments: Array<Attachment>,
   imageHeaders: ?Object,
   backendUrl: string,
@@ -86,10 +86,10 @@ type Props = {
 };
 
 type DefaultProps = {
-  onReply: Function,
+  naturalCommentsOrder: boolean,
   onCopyCommentLink: Function,
-  workTimeSettings: WorkTimeSettings,
-  naturalCommentsOrder: boolean
+  onReply: Function,
+  workTimeSettings: WorkTimeSettings
 };
 
 type Change = {
@@ -270,7 +270,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
     );
   }
 
-  _processActivities(activities: Array<IssueActivity>) {
+  _processActivities(activities: Array<IssueActivity> = []) {
     return groupActivities(activities, {
       onAddActivityToGroup: (group, activity: IssueActivity) => {
         if (isActivityCategory.issueCreated(activity)) {
@@ -478,7 +478,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
 
     return (
       <View>
-        {activities.length
+        {activities.length > 0
           ? activities.map((activityGroup, index) => {
             if (activityGroup.hidden) {
               return null;

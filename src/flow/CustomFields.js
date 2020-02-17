@@ -1,3 +1,5 @@
+import type {Visibility} from './Visibility';
+
 export type TimeTrackingFieldInfo = {
   id: string,
   field: {
@@ -145,7 +147,8 @@ export type IssueComment = {
   deleted: boolean,
   text: string,
   usesMarkdown: boolean,
-  author: User
+  author: User,
+  visibility: Visibility
 }
 
 export type IssueLinkType = {

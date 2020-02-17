@@ -1,30 +1,31 @@
 /* @flow */
 
-import styles from './single-issue.styles';
+import styles from '../single-issue.styles';
 
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import React, {Component} from 'react';
 
-import type {UserAppearanceProfile} from '../../flow/User';
-import type {ActivityEnabledType} from '../../flow/Activity';
+import type {UserAppearanceProfile} from '../../../flow/User';
+import type {ActivityEnabledType} from '../../../flow/Activity';
 
-import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
-import {saveIssueActivityEnabledTypes} from './single-issue-activity';
+import {getEntityPresentation} from '../../../components/issue-formatter/issue-formatter';
+import {saveIssueActivityEnabledTypes} from './single-issue-activity__helper';
 
-import apiHelper from '../../components/api/api__helper';
+import apiHelper from '../../../components/api/api__helper';
 
-import Select from '../../components/select/select';
-import ModalView from '../../components/modal-view/modal-view';
+import Select from '../../../components/select/select';
+import ModalView from '../../../components/modal-view/modal-view';
 
-import {checkWhite} from '../../components/icon/icon';
-import selectStyles from '../../components/select/select.styles';
+import {checkWhite} from '../../../components/icon/icon';
+import selectStyles from '../../../components/select/select.styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 type Props = {
   issueActivityTypes: Array<ActivityEnabledType>,
   issueActivityEnabledTypes: Array<ActivityEnabledType>,
   onApply: Function,
-  userAppearanceProfile: UserAppearanceProfile
+  userAppearanceProfile: UserAppearanceProfile,
+  disabled?: boolean,
 };
 
 type State = {
@@ -89,7 +90,7 @@ export default class SingleIssueActivitiesSettings extends Component<Props, Stat
 
     const isOrderChanged = userAppearanceProfile.naturalCommentsOrder !== naturalCommentsOrder;
     if (isOrderChanged || this._selectedTypesChanged()) {
-      onApply(isOrderChanged && {
+      onApply({
         ...userAppearanceProfile,
         ...{naturalCommentsOrder: naturalCommentsOrder}
       });
@@ -176,6 +177,7 @@ export default class SingleIssueActivitiesSettings extends Component<Props, Stat
     return (
       <View>
         <TouchableOpacity
+          disabled={this.props.disabled}
           style={styles.settingsToggle}
           onPress={this._toggleSettingsVisibility}
         >

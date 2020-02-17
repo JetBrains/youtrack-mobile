@@ -29,7 +29,7 @@ export const mergeActivities = (activities: Array<IssueActivity> = []) => {
   }
 
 
-  function removeEmptyActivities(activities: Array<IssueActivity>): Array<IssueActivity> {
+  function removeEmptyActivities(activities: Array<IssueActivity> = []): Array<IssueActivity> {
     return activities.filter(hasChanges);
 
     function hasChanges(mergedActivity: IssueActivity) {

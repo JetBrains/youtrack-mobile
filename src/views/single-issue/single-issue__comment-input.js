@@ -47,7 +47,7 @@ const UPDATE_TEXT_TIMEOUT = 300;
 
 export default class SingleIssueCommentInput extends Component<Props, State> {
   isUnmounted: boolean;
-  SUGGESTION_AVATAR_SIZE = 32;
+  SUGGESTION_AVATAR_SIZE = 24;
   debouncedOnChange = throttle((text: string) => (
     this.props.onChangeText && this.props.onChangeText(text)
   ), UPDATE_TEXT_TIMEOUT);
@@ -80,24 +80,16 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
     this.isUnmounted = true;
   }
 
-  isCommentChanged(): boolean {
-    return this.state.commentText !== this.props.editingComment?.text;
-  }
-
   updateComment() {
     let clearTimer;
     this.setState({isSaving: true});
-    const comment = (
-      this.isCommentChanged()
-        ? {
-          ...this.props.editingComment,
-          ...{
-            usesMarkdown: true,
-            text: this.state.commentText
-          }
-        }
-        : null
-    );
+    const comment = {
+      ...this.props.editingComment,
+      ...{
+        usesMarkdown: true,
+        text: this.state.commentText
+      }
+    };
 
     this.props.onSubmitComment(comment).then(() => {
       clearTimeout(clearTimer);
@@ -157,40 +149,42 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
 
   renderSuggestions() {
     const {suggestions, suggestionsAreLoading} = this.props;
-    if (!this.state.showSuggestions) {
-      return;
-    }
 
     return (
-      <ScrollView style={styles.suggestionsContainer} keyboardShouldPersistTaps="handled">
+      <ScrollView
+        contentContainerStyle={styles.suggestionsContainer}
+        keyboardShouldPersistTaps="handled">
 
-        {suggestionsAreLoading &&
         <View style={styles.suggestionsLoadingMessage}>
-          <Text style={styles.suggestionsLoadingMessageText}>Loading suggestions...</Text>
-        </View>}
+          {suggestionsAreLoading && <Text style={styles.suggestionsLoadingMessageText}>Loading suggestions... </Text>}
+        </View>
 
-        {suggestions
-          ? suggestions.users.map(user => {
-            return (
-              <TouchableOpacity
-                key={user.id}
-                style={styles.suggestionButton}
-                onPress={() => this.applySuggestion(user)}
-              >
-                <Avatar
-                  userName={user.fullName}
-                  size={this.SUGGESTION_AVATAR_SIZE}
-                  source={{uri: user.avatarUrl}}
-                  style={{
-                    width: this.SUGGESTION_AVATAR_SIZE,
-                    height: this.SUGGESTION_AVATAR_SIZE
-                  }}/>
-                <Text style={styles.suggestionName}>{user.fullName}</Text>
-                <Text style={styles.suggestionLogin}> (@{user.login})</Text>
-              </TouchableOpacity>
-            );
-          })
-          : null}
+        <View>
+          {suggestions
+            ? suggestions.users.map(user => {
+              return (
+                <TouchableOpacity
+                  key={user.id}
+                  style={styles.suggestionButton}
+                  onPress={() => this.applySuggestion(user)}
+                >
+                  <Avatar
+                    userName={user.fullName}
+                    size={this.SUGGESTION_AVATAR_SIZE}
+                    source={{uri: user.avatarUrl}}
+                    style={{
+                      width: this.SUGGESTION_AVATAR_SIZE,
+                      height: this.SUGGESTION_AVATAR_SIZE
+                    }}/>
+                  <Text style={styles.suggestionName}>{user.login}</Text>
+                  <Text style={styles.suggestionLogin}> {user.fullName}</Text>
+                </TouchableOpacity>
+              );
+            })
+            : null}
+
+        </View>
+
       </ScrollView>
     );
   }
@@ -246,13 +240,13 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
   }
 
   render() {
-    const {isSaving, commentText, commentCaret} = this.state;
+    const {isSaving, commentText, commentCaret, showSuggestions} = this.state;
 
     return (
       <View style={styles.commentContainer}>
-        {this.renderSuggestions()}
+        {showSuggestions && this.renderSuggestions()}
 
-        {this.renderVisibility()}
+        {!showSuggestions && this.renderVisibility()}
 
         <View style={styles.commentInputContainer}>
           <MultilineInput

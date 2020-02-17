@@ -29,7 +29,7 @@ export default class IssuePermissions {
   permissions: Permissions;
   currentUser: CurrentUser;
 
-  constructor(permissions: Object, currentUser: CurrentUser) {
+  constructor(permissions: Permissions, currentUser: CurrentUser) {
     this.permissions = permissions;
     this.currentUser = currentUser;
   }

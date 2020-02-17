@@ -1,9 +1,9 @@
 /* @flow */
 
-import type {ActivityEnabledType} from '../../flow/Activity';
-import {flushStoragePart, getStorageState} from '../../components/storage/storage';
-import {checkVersion} from '../../components/feature/feature';
-import {Activity} from '../../components/activity/activity__category';
+import type {ActivityEnabledType} from '../../../flow/Activity';
+import {flushStoragePart, getStorageState} from '../../../components/storage/storage';
+import {checkVersion} from '../../../components/feature/feature';
+import {Activity} from '../../../components/activity/activity__category';
 
 
 export function isActivitiesAPIEnabled() {

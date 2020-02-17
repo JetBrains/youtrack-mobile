@@ -68,9 +68,6 @@ export default StyleSheet.create({
   attachments: {
     marginTop: UNIT * 2,
   },
-  loading: {
-    marginTop: UNIT * 2
-  },
   loadingActivityError: {
     marginTop: UNIT * 2,
     color: COLOR_PINK_DARK,

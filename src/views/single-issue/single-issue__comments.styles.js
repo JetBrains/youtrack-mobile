@@ -1,7 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {
   UNIT,
-  COLOR_EXTRA_LIGHT_GRAY,
   COLOR_FONT_ON_BLACK,
   COLOR_FONT_GRAY,
   COLOR_TRANSPARENT_BLACK,
@@ -9,16 +8,16 @@ import {
   COLOR_PINK,
   COLOR_MEDIUM_GRAY,
   COLOR_FONT,
-  COLOR_BLACK
+  COLOR_BLACK, COLOR_LIGHT_GRAY
 } from '../../components/variables/variables';
 import {mainText, secondaryText} from '../../components/common-styles/issue';
 
-const SUGGESTION_BOTTOM = 58;
 const INPUT_BORDER_RADIUS = UNIT;
 const MIN_INPUT_SIZE = UNIT * 4;
 
 export default StyleSheet.create({
   commentContainer: {
+    justifyContent: 'flex-end',
     backgroundColor: COLOR_FONT_ON_BLACK,
     elevation: 5,
     shadowColor: COLOR_BLACK,
@@ -31,36 +30,32 @@ export default StyleSheet.create({
   },
 
   suggestionsContainer: {
-    backgroundColor: COLOR_EXTRA_LIGHT_GRAY,
-    position: 'absolute',
-    top: -176,
-    bottom: SUGGESTION_BOTTOM,
-    left: 0,
-    right: 0,
-    flex: 1,
-    paddingTop: UNIT / 2
+    flexGrow: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
   },
   suggestionsLoadingMessage: {
+    flexGrow: 1,
     alignItems: 'center',
-    margin: UNIT
   },
   suggestionsLoadingMessageText: {
     color: COLOR_FONT
   },
   suggestionButton: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
     alignItems: 'center',
-    padding: UNIT / 2,
-    paddingLeft: UNIT * 2,
-    paddingRight: UNIT * 2
+    padding: UNIT * 2,
+    paddingTop: UNIT * 1.5,
+    paddingBottom: UNIT * 1.5,
+    borderBottomWidth: 1,
+    borderColor: COLOR_LIGHT_GRAY
   },
   suggestionName: {
+    flexGrow: 1,
     marginLeft: UNIT,
-    color: COLOR_FONT
+    color: COLOR_BLACK
   },
   suggestionLogin: {
-    fontSize: 11,
     color: COLOR_FONT_GRAY
   },
 

@@ -36,8 +36,6 @@ type Props = {
   issuePlaceholder: IssueOnList,
   issueLoaded: boolean,
 
-  addCommentMode: boolean,
-
   editMode: boolean,
   isSavingEditedIssue: boolean,
   summaryCopy: string,
@@ -178,7 +176,7 @@ export default class IssueDetails extends PureComponent<Props, TabsState> {
   }
 
   render() {
-    const {issue, issuePlaceholder, issueLoaded, addCommentMode, renderRefreshControl} = this.props;
+    const {issue, issuePlaceholder, issueLoaded, renderRefreshControl} = this.props;
 
     return (
       <ScrollView
@@ -188,7 +186,7 @@ export default class IssueDetails extends PureComponent<Props, TabsState> {
         keyboardShouldPersistTaps="handled"
         scrollEventThrottle={16}
       >
-        {Boolean(issue && !addCommentMode) && this.renderCustomFieldPanel()}
+        {Boolean(issue) && this.renderCustomFieldPanel()}
         {this._renderIssueView(issue || issuePlaceholder)}
         {!issueLoaded && <ActivityIndicator style={styles.loading}/>}
       </ScrollView>

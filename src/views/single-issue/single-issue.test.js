@@ -3,14 +3,11 @@ import thunk from 'redux-thunk';
 import sinon from 'sinon';
 
 import * as actions from './single-issue-actions';
+import * as activityCommentActions from './activity/single-issue-activity__comment-actions';
 import * as types from './single-issue-action-types';
 
-import MockedStorage from '@react-native-community/async-storage';
-import * as storage from '../../components/storage/storage';
-import {Activity} from '../../components/activity/activity__category';
-
 import * as notification from '../../components/notification/notification';
-import * as activity from './single-issue-activity';
+import * as activity from './activity/single-issue-activity__helper';
 
 let fakeApi;
 const getApi = () => fakeApi;
@@ -22,7 +19,6 @@ describe('Issue view actions', () => {
   let store;
   let fakeIssue;
   let fakeComment;
-  let sandbox;
 
   beforeEach(() => {
     fakeIssue = {
@@ -40,8 +36,6 @@ describe('Issue view actions', () => {
     store = mockStore({
       singleIssue: {issueId: ISSUE_ID, issue: fakeIssue}
     });
-
-    sandbox = sinon.sandbox.create();
   });
 
   it('should load issue', async () => {
@@ -54,7 +48,7 @@ describe('Issue view actions', () => {
   });
 
   it('should load issue comments', async () => {
-    await store.dispatch(actions.loadIssueComments());
+    await store.dispatch(activityCommentActions.loadIssueComments());
 
     const dispatched = store.getActions();
     fakeApi.issue.getIssueComments.should.have.been.calledWith(ISSUE_ID);
@@ -62,15 +56,15 @@ describe('Issue view actions', () => {
   });
 
   it('should add comment', async () => {
-    await store.dispatch(actions.addComment(fakeComment));
+    await store.dispatch(activityCommentActions.addComment(fakeComment));
 
     fakeApi.issue.submitComment.should.have.been.calledWith(ISSUE_ID, fakeComment);
 
     const dispatched = store.getActions();
+
     expect(dispatched[0]).toEqual({type: types.START_SUBMITTING_COMMENT});
-    expect(dispatched[1]).toEqual({type: types.RECEIVE_COMMENT, comment: fakeComment});
-    expect(dispatched[2]).toEqual({type: types.HIDE_COMMENT_INPUT});
-    expect(dispatched[3]).toEqual({type: types.STOP_SUBMITTING_COMMENT});
+    expect(dispatched[1]).toEqual({type: types.STOP_SUBMITTING_COMMENT});
+    expect(dispatched[2]).toEqual({type: types.RECEIVE_COMMENTS, comments: [fakeComment]});
   });
 
 
@@ -83,10 +77,8 @@ describe('Issue view actions', () => {
     let notificationNotify;
     let actionsIsActivitiesAPIEnabled;
     let getIssueActivitiesEnabledTypes;
-    let categories;
 
     beforeEach(() => {
-      categories = Activity.ActivityCategories[issueCommentsSelectedTypeMock];
       notificationNotify = sinon.stub(notification, 'notify');
       actionsIsActivitiesAPIEnabled = sinon.stub(activity, 'isActivitiesAPIEnabled').returns(true);
       getIssueActivitiesEnabledTypes = sinon.stub(activity, 'getIssueActivitiesEnabledTypes').returns(issueActivityEnabledTypesMock);
@@ -99,7 +91,7 @@ describe('Issue view actions', () => {
     });
 
     it('should refresh issue details', async () => {
-      await store.dispatch(actions.refreshIssue(false));
+      await store.dispatch(actions.refreshIssue());
 
       fakeApi.issue.getIssue.should.have.been.calledWith(ISSUE_ID);
 
@@ -108,46 +100,5 @@ describe('Issue view actions', () => {
       expect(dispatched[dispatched.length - 1]).toEqual({type: types.STOP_ISSUE_REFRESHING});
     });
 
-    it('should refresh issue activity', async () => {
-      await store.dispatch(actions.refreshIssue(true));
-
-      fakeApi.issue.getActivitiesPage.should.have.been.calledWith(ISSUE_ID, categories);
-
-      const dispatched = store.getActions();
-      expect(dispatched[0]).toEqual({type: types.START_ISSUE_REFRESHING});
-      expect(dispatched[dispatched.length - 1]).toEqual({type: types.STOP_ISSUE_REFRESHING});
-
-    });
-
-
-    describe('Activities', function () {
-      beforeEach(async () => {
-        sandbox.stub(MockedStorage, 'multiGet').returns(Promise.resolve([
-          ['YT_ISSUE_ACTIVITIES_ENABLED_TYPES', issueActivityEnabledTypesMock],
-        ]));
-        await storage.populateStorage();
-      });
-
-      it('should load issue activities', async () => {
-        await store.dispatch(actions.loadActivitiesPage());
-
-        const dispatched = store.getActions();
-
-        fakeApi.issue.getActivitiesPage.should.have.been.calledWith(ISSUE_ID, categories);
-
-        expect(dispatched[0]).toEqual({
-          type: types.RECEIVE_ACTIVITY_CATEGORIES,
-
-          issueActivityTypes: activity.getIssueActivityAllTypes(),
-          issueActivityEnabledTypes: issueActivityEnabledTypesMock
-        });
-
-        expect(dispatched[1]).toEqual({
-          type: types.RECEIVE_ACTIVITY_PAGE,
-          activityPage: []
-        });
-      });
-
-    });
   });
 });

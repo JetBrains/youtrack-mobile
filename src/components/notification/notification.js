@@ -71,7 +71,10 @@ export function notifyError(message: string, err: Object): Promise<null> {
   return resolveError(err).then(extracted => showErrorMessage(message, extracted));
 }
 
-export function notify(message: string) {
+export function notify(message: string, error?: Object) {
+  if (error) {
+    log.warn(message, error);
+  }
   return showNotification(message, null, toastComponentRef, NOTIFY_DURATION);
 }
 
