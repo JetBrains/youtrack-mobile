@@ -13,7 +13,6 @@ import Select from '../../../components/select/select';
 import SingleIssueActivities from './single-issue__activities-stream';
 import SingleIssueActivitiesSettings from './single-issue__activities-settings';
 import SingleIssueCommentInput from '../single-issue__comment-input';
-import SingleIssueComments from '../single-issue__comments';
 import {getApi} from '../../../components/api/api__instance';
 
 import * as activityActions from './single-issue-activity__actions';
@@ -57,7 +56,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     if (isActivitiesAPIEnabled()) {
       this.props.loadActivitiesPage();
     } else {
-      this.props.loadIssueComments();
+      this.props.loadIssueCommentsAsActivityPage();
     }
   }
 
@@ -79,47 +78,6 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       }}
       userAppearanceProfile={this.getUserAppearanceProfile()}
     />;
-  }
-
-  renderComments() {
-    const {
-      issue,
-      openNestedIssueView,
-      issuePermissions,
-      startEditingComment,
-      activitiesEnabled,
-      startReply,
-      copyCommentUrl,
-      deleteComment,
-      restoreComment,
-      deleteCommentPermanently
-    } = this.props;
-
-    return (
-      <View style={styles.activitiesContainer}>
-        <SingleIssueComments
-          comments={issue.comments}
-          attachments={issue.attachments}
-          imageHeaders={this.imageHeaders}
-          backendUrl={this.backendUrl}
-          onReply={(comment: IssueComment) => startReply(comment.author.login)}
-          onCopyCommentLink={copyCommentUrl}
-          onIssueIdTap={issueId => openNestedIssueView({issueId})}
-
-          canUpdateComment={comment => issuePermissions.canUpdateComment(issue, comment)}
-          onStartEditing={startEditingComment}
-
-          canDeleteComment={comment => issuePermissions.canDeleteComment(issue, comment)}
-          canRestoreComment={comment => issuePermissions.canRestoreComment(issue, comment)}
-          canDeleteCommentPermanently={() => issuePermissions.canDeleteCommentPermanently(issue)}
-          onDeleteComment={deleteComment}
-          onRestoreComment={restoreComment}
-          onDeleteCommentPermanently={deleteCommentPermanently}
-
-          activitiesEnabled={activitiesEnabled}
-        />
-      </View>
-    );
   }
 
   getUserAppearanceProfile(): UserAppearanceProfile | { naturalCommentsOrder: boolean } {
@@ -282,8 +240,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
           {showActivitySettings && this.renderActivitySettings()}
 
-          {activitiesApiEnabled && activityLoaded && this._renderActivities()}
-          {!activitiesApiEnabled && activityLoaded && this.renderComments()}
+          {activityLoaded && this._renderActivities()}
 
         </ScrollView>
 

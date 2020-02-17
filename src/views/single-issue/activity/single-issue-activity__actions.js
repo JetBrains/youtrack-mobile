@@ -20,6 +20,18 @@ export function receiveActivityPage(activityPage: Array<IssueActivity>) {
   return {type: types.RECEIVE_ACTIVITY_PAGE, activityPage};
 }
 
+export function receiveActivityPageError(error: Error) {
+  return {type: types.RECEIVE_ACTIVITY_ERROR, error: error};
+}
+
+export function receiveActivityEnabledTypes() {
+  return {
+    type: types.RECEIVE_ACTIVITY_CATEGORIES,
+    issueActivityTypes: activityHelper.getIssueActivityAllTypes(),
+    issueActivityEnabledTypes: activityHelper.getIssueActivitiesEnabledTypes()
+  };
+}
+
 export function loadActivitiesPage() {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().singleIssue.issueId;
@@ -29,18 +41,15 @@ export function loadActivitiesPage() {
 
     try {
       log.info('Loading activities...');
-      const enabledActivityTypes = activityHelper.getIssueActivitiesEnabledTypes();
-      dispatch({
-        type: types.RECEIVE_ACTIVITY_CATEGORIES,
-        issueActivityTypes: activityHelper.getIssueActivityAllTypes(),
-        issueActivityEnabledTypes: enabledActivityTypes
-      });
-
-      const activityCategories = activityHelper.getActivityCategories(enabledActivityTypes);
+      dispatch(receiveActivityEnabledTypes());
+      const activityCategories = activityHelper.getActivityCategories(
+        activityHelper.getIssueActivitiesEnabledTypes()
+      );
       const activityPage: Array<IssueActivity> = await api.issue.getActivitiesPage(issueId, activityCategories);
-      log.info('Received activities', activityPage);
       dispatch(receiveActivityPage(activityPage));
+      log.info('Received activities', activityPage);
     } catch (error) {
+      dispatch(receiveActivityPageError(error));
       dispatch({type: types.RECEIVE_ACTIVITY_ERROR, error: error});
       notify('Failed to load activity', error);
     }

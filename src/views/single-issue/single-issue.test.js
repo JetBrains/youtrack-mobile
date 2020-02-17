@@ -2,12 +2,13 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import sinon from 'sinon';
 
+import * as Mocks from '../../../test/mocks';
+
 import * as actions from './single-issue-actions';
 import * as activityCommentActions from './activity/single-issue-activity__comment-actions';
 import * as types from './single-issue-action-types';
 
-import * as notification from '../../components/notification/notification';
-import * as activity from './activity/single-issue-activity__helper';
+import * as activityHelper from './activity/single-issue-activity__helper';
 
 let fakeApi;
 const getApi = () => fakeApi;
@@ -47,15 +48,9 @@ describe('Issue view actions', () => {
     expect(dispatched[1]).toEqual({type: types.RECEIVE_ISSUE, issue: fakeIssue});
   });
 
-  it('should load issue comments', async () => {
-    await store.dispatch(activityCommentActions.loadIssueComments());
-
-    const dispatched = store.getActions();
-    fakeApi.issue.getIssueComments.should.have.been.calledWith(ISSUE_ID);
-    expect(dispatched[0]).toEqual({type: types.RECEIVE_COMMENTS, comments: [fakeComment]});
-  });
-
   it('should add comment', async () => {
+    Mocks.default.setStorage({});
+
     await store.dispatch(activityCommentActions.addComment(fakeComment));
 
     fakeApi.issue.submitComment.should.have.been.calledWith(ISSUE_ID, fakeComment);
@@ -64,7 +59,11 @@ describe('Issue view actions', () => {
 
     expect(dispatched[0]).toEqual({type: types.START_SUBMITTING_COMMENT});
     expect(dispatched[1]).toEqual({type: types.STOP_SUBMITTING_COMMENT});
-    expect(dispatched[2]).toEqual({type: types.RECEIVE_COMMENTS, comments: [fakeComment]});
+    expect(dispatched[2]).toEqual({type: types.RECEIVE_ACTIVITY_API_AVAILABILITY, activitiesEnabled: false});
+    expect(dispatched[4]).toEqual({
+      type: types.RECEIVE_ACTIVITY_PAGE,
+      activityPage: activityHelper.convertCommentsToActivityPage([fakeComment])
+    });
   });
 
 
@@ -74,18 +73,15 @@ describe('Issue view actions', () => {
       id: issueCommentsSelectedTypeMock,
       name: 'Show comments'
     }];
-    let notificationNotify;
     let actionsIsActivitiesAPIEnabled;
     let getIssueActivitiesEnabledTypes;
 
     beforeEach(() => {
-      notificationNotify = sinon.stub(notification, 'notify');
-      actionsIsActivitiesAPIEnabled = sinon.stub(activity, 'isActivitiesAPIEnabled').returns(true);
-      getIssueActivitiesEnabledTypes = sinon.stub(activity, 'getIssueActivitiesEnabledTypes').returns(issueActivityEnabledTypesMock);
+      actionsIsActivitiesAPIEnabled = sinon.stub(activityHelper, 'isActivitiesAPIEnabled').returns(true);
+      getIssueActivitiesEnabledTypes = sinon.stub(activityHelper, 'getIssueActivitiesEnabledTypes').returns(issueActivityEnabledTypesMock);
     });
 
     afterEach(() => {
-      notificationNotify.restore();
       actionsIsActivitiesAPIEnabled.restore();
       getIssueActivitiesEnabledTypes.restore();
     });

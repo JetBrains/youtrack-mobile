@@ -1,33 +1,23 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import sinon from 'sinon';
-import MockedStorage from '@react-native-community/async-storage';
-
+import * as Mocks from '../../../../test/mocks';
 
 import * as activityActions from './single-issue-activity__actions';
 import * as issueCommentActions from './single-issue-activity__comment-actions';
 
 import * as types from '../single-issue-action-types';
-import * as storage from '../../../components/storage/storage';
-import * as activity from './single-issue-activity__helper';
-
-import {Activity} from '../../../components/activity/activity__category';
+import * as activityHelper from './single-issue-activity__helper';
 
 let APIMock;
 const getApi = () => APIMock;
 const ISSUE_ID = 'test-id';
 
-const issueCommentsSelectedTypeMock = 'IssueComments';
-const issueActivityEnabledTypesMock = [{
-  id: issueCommentsSelectedTypeMock,
-  name: 'Show comments'
-}];
-const mockStore = configureMockStore([thunk.withExtraArgument(getApi)]);
+const issueActivityAllTypes = activityHelper.getIssueActivityAllTypes();
 
+const mockStore = configureMockStore([thunk.withExtraArgument(getApi)]);
 
 describe('Issue activity', () => {
   let store;
-  let sandbox;
   let issueMock;
   let commentMock;
   let activityPageMock;
@@ -47,24 +37,35 @@ describe('Issue activity', () => {
     store = mockStore({
       singleIssue: {issueId: ISSUE_ID, issue: issueMock}
     });
-
-    sandbox = sinon.sandbox.create();
   });
 
-  const categories = Activity.ActivityCategories[issueCommentsSelectedTypeMock];
+  beforeEach(async () => {
+    Mocks.default.setStorage({});
+  });
 
 
   describe('Comments', function () {
 
     it('should load issue comments', async () => {
-      await store.dispatch(issueCommentActions.loadIssueComments());
+      await store.dispatch(issueCommentActions.loadIssueCommentsAsActivityPage());
       const dispatched = store.getActions();
 
       expect(APIMock.issue.getIssueComments).toHaveBeenCalledWith(issueMock.id);
 
       expect(dispatched[0]).toEqual({
-        type: types.RECEIVE_COMMENTS,
-        comments: [commentMock]
+        type: types.RECEIVE_ACTIVITY_API_AVAILABILITY,
+        activitiesEnabled: false
+      });
+
+      expect(dispatched[1]).toEqual({
+        type: types.RECEIVE_ACTIVITY_CATEGORIES,
+        issueActivityTypes: issueActivityAllTypes,
+        issueActivityEnabledTypes: issueActivityAllTypes
+      });
+
+      expect(dispatched[2]).toEqual({
+        type: types.RECEIVE_ACTIVITY_PAGE,
+        activityPage: activityHelper.convertCommentsToActivityPage([commentMock])
       });
     });
 
@@ -72,13 +73,7 @@ describe('Issue activity', () => {
 
 
   describe('Load Activities', function () {
-
-    beforeEach(async () => {
-      sandbox.stub(MockedStorage, 'multiGet').returns(Promise.resolve([
-        ['YT_ISSUE_ACTIVITIES_ENABLED_TYPES', issueActivityEnabledTypesMock],
-      ]));
-      await storage.populateStorage();
-    });
+    const categories = activityHelper.getActivityCategories(issueActivityAllTypes);
 
     it('should load issue activity page', async () => {
       await store.dispatch(activityActions.loadActivitiesPage());
@@ -93,9 +88,8 @@ describe('Issue activity', () => {
 
       expect(dispatched[1]).toEqual({
         type: types.RECEIVE_ACTIVITY_CATEGORIES,
-
-        issueActivityTypes: activity.getIssueActivityAllTypes(),
-        issueActivityEnabledTypes: issueActivityEnabledTypesMock
+        issueActivityTypes: issueActivityAllTypes,
+        issueActivityEnabledTypes: issueActivityAllTypes
       });
 
       expect(dispatched[2]).toEqual({

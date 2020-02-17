@@ -12,8 +12,14 @@ import type Api from '../../../components/api/api';
 import type {State as SingleIssueState} from '../single-issue-reducers';
 import {getEntityPresentation} from '../../../components/issue-formatter/issue-formatter';
 import IssueVisibility from '../../../components/issue-visibility/issue-visibility';
-import {loadActivitiesPage} from './single-issue-activity__actions';
-import {isActivitiesAPIEnabled} from './single-issue-activity__helper';
+import {
+  loadActivitiesPage,
+  receiveActivityAPIAvailability, receiveActivityEnabledTypes,
+  receiveActivityPage
+} from './single-issue-activity__actions';
+
+import * as activityHelper from './single-issue-activity__helper';
+
 import type {State as IssueActivityState} from './single-issue-activity__reducers';
 import type {State as IssueCommentActivityState} from './single-issue-activity__comment-reducers';
 
@@ -66,7 +72,7 @@ export function receiveCommentSuggestions(suggestions: Object) {
   return {type: types.RECEIVE_COMMENT_SUGGESTIONS, suggestions};
 }
 
-export function loadIssueComments() {
+export function loadIssueCommentsAsActivityPage() {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().singleIssue.issueId;
     const api: Api = getApi();
@@ -74,7 +80,10 @@ export function loadIssueComments() {
     try {
       const comments = await api.issue.getIssueComments(issueId);
       log.info(`Loaded ${comments.length} comments for ${issueId} issue`);
-      dispatch(receiveComments(comments));
+      dispatch(receiveActivityAPIAvailability(false));
+      const activityPage = activityHelper.convertCommentsToActivityPage(comments);
+      dispatch(receiveActivityEnabledTypes());
+      dispatch(receiveActivityPage(activityPage));
     } catch (error) {
       dispatch({type: types.RECEIVE_COMMENTS_ERROR, error: error});
       notify('Failed to load comments. Try refresh', error);
@@ -84,10 +93,10 @@ export function loadIssueComments() {
 
 export function reLoad() { //TODO(performance): try to make an incremental update
   return async (dispatch: any => any) => {
-    if (isActivitiesAPIEnabled()) {
+    if (activityHelper.isActivitiesAPIEnabled()) {
       dispatch(loadActivitiesPage());
     } else {
-      dispatch(loadIssueComments());
+      dispatch(loadIssueCommentsAsActivityPage());
     }
   };
 }
