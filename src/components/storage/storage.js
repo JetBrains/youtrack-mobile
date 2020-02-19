@@ -71,19 +71,44 @@ function cleanAndLogState(message, state) {
   const CENSORED = 'CENSORED';
   const forLog = {...state};
 
-  if (forLog.authParams) {
-    forLog.authParams = {
-      ...forLog.authParams,
-      access_token: CENSORED,
-      refresh_token: CENSORED,
-    };
-  }
-
+  censorAuthParams();
+  censorCurrentUser();
+  censorConfig();
   if (forLog.issuesCache) {
     forLog.issuesCache = CENSORED;
   }
 
   log.debug(message, forLog);
+
+
+  function censorAuthParams() {
+    if (forLog.authParams) {
+      forLog.authParams = {
+        ...forLog.authParams,
+        access_token: CENSORED,
+        refresh_token: CENSORED,
+      };
+    }
+  }
+
+  function censorConfig() {
+    if (forLog.config && forLog.config.auth) {
+      forLog.config.auth = {
+        ...forLog.config.auth,
+        clientId: CENSORED,
+        clientSecret: CENSORED,
+        youtrackServiceId: CENSORED
+      };
+    }
+  }
+
+  function censorCurrentUser() {
+    if (forLog.currentUser) {
+      forLog.currentUser = {
+        guest: forLog.currentUser.guest
+      };
+    }
+  }
 }
 
 export async function clearCachesAndDrafts() {
