@@ -2,7 +2,6 @@
 set -e
 
 echo "=========== 🧰 Install modules ==========="
-rm -rf node_modules/
 yarn install
 
 echo "=========== 🏁 Start YouTrack Server ==========="
