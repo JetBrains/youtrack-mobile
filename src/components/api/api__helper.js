@@ -93,7 +93,7 @@ const API = {
   },
 
   getIssueId(issue: AnyIssue) {
-    return `${issue.idReadable}`;
+    return issue.idReadable ? issue.idReadable : issue.id;
   },
 
   patchAllRelativeAvatarUrls(data: Object, backendUrl: string) {
