@@ -1,6 +1,6 @@
-const SERVER_URL = 'ytm-test.myjetbrains.com';
-const DEFAULT_LOGIN = 'TestYTM';
-const DEFAULT_PASS = 'TestYTM';
+const SERVER_URL = 'http://127.0.0.1:8088';
+const DEFAULT_LOGIN = 'root';
+const DEFAULT_PASS = 'root';
 
 const LOGIN_INPUT = 'login-input';
 const PASS_INPUT = 'password-input';
