@@ -1,10 +1,11 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_PINK, COLOR_FONT_GRAY, COLOR_FONT} from '../../components/variables/variables';
+import {UNIT, COLOR_PINK, COLOR_FONT_GRAY, COLOR_FONT, COLOR_FONT_ON_BLACK} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white'
+    marginTop: UNIT * 2,
+    backgroundColor: COLOR_FONT_ON_BLACK
   },
   markdownScroll: {
     paddingTop: 0,
