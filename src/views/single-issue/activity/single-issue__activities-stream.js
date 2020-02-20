@@ -50,7 +50,7 @@ import {
   UNIT
 } from '../../../components/variables/variables';
 import Diff from '../../../components/diff/diff';
-import {HIT_SLOP} from '../../../components/common-styles/link-button';
+import {HIT_SLOP} from '../../../components/common-styles/button';
 
 import type IssuePermissions from '../../../components/issue-permissions/issue-permissions';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';

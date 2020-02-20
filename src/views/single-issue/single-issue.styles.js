@@ -12,7 +12,7 @@ import {
   COLOR_PINK_DARK
 } from '../../components/variables/variables';
 import {secondaryText, mainText} from '../../components/common-styles/issue';
-import {link} from '../../components/common-styles/link-button';
+import {link} from '../../components/common-styles/button';
 
 
 export default StyleSheet.create({
@@ -273,5 +273,12 @@ export default StyleSheet.create({
   commentActions: {
     flexDirection: 'row',
     marginTop: UNIT
+  },
+  issueAdditionalInfoContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-start'
+  },
+  issueAdditionalInfo: {
+    flex: 1
   }
 });

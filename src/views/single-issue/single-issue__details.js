@@ -4,7 +4,7 @@ import {Text, View, ScrollView, ActivityIndicator} from 'react-native';
 import React, {PureComponent} from 'react';
 import {getApi} from '../../components/api/api__instance';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
-import SingleIssueTopPanel from './single-issue__top-panel';
+import IssueAdditionalInfo from './single-issue__additional-info';
 import LinkedIssues from '../../components/linked-issues/linked-issues';
 import usage from '../../components/usage/usage';
 import log from '../../components/log/log';
@@ -20,6 +20,7 @@ import type {Attachment, CustomField, FieldValue, IssueProject} from '../../flow
 
 import commonIssueStyles from '../../components/common-styles/issue';
 import IssueDescription from './single-issue__description';
+import IssueVotes from '../../components/issue-toolbar/issue-votes';
 
 
 type Props = {
@@ -46,7 +47,9 @@ type Props = {
 
   analyticCategory: string,
 
-  renderRefreshControl: () => any
+  renderRefreshControl: () => any,
+
+  onVoteToggle: (voted: boolean) => any
 }
 
 type TabsState = {
@@ -100,6 +103,18 @@ export default class IssueDetails extends PureComponent<Props, TabsState> {
     );
   }
 
+  renderIssueVotes() {
+    const {issue, issuePermissions, onVoteToggle} = this.props;
+    return (
+      <IssueVotes
+        canVote={issuePermissions.canVote(issue)}
+        votes={issue.votes}
+        voted={issue.voters.hasVote}
+        onVoteToggle={onVoteToggle}
+      />
+    );
+  }
+
   _renderIssueView(issue: IssueFull | IssueOnList) {
     const {
       editMode,
@@ -112,12 +127,16 @@ export default class IssueDetails extends PureComponent<Props, TabsState> {
     return (
       <View style={styles.issueView}>
 
-        <SingleIssueTopPanel
-          created={issue.created}
-          updated={issue.updated}
-          reporter={issue.reporter}
-          updater={issue.updater}
-        />
+        <View style={styles.issueAdditionalInfoContainer}>
+          <IssueAdditionalInfo
+            style={styles.issueAdditionalInfo}
+            created={issue.created}
+            updated={issue.updated}
+            reporter={issue.reporter}
+            updater={issue.updater}
+          />
+          {this.renderIssueVotes()}
+        </View>
 
         {editMode && <IssueSummary
           editable={!isSavingEditedIssue}

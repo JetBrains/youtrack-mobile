@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 import {UNIT, COLOR_FONT, COLOR_FONT_GRAY} from '../../components/variables/variables';
 
 import {mainText} from '../common-styles/issue';
-import {link} from '../common-styles/link-button';
+import {link} from '../common-styles/button';
 
 export default StyleSheet.create({
   commentWrapper: {

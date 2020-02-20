@@ -99,7 +99,8 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
       setIssueSummaryCopy,
       setIssueDescriptionCopy,
 
-      issue, issuePlaceholder, issueLoaded, editMode
+      issue, issuePlaceholder, issueLoaded, editMode,
+      toggleVote
     } = this.props;
 
     const _issue = issue || issuePlaceholder;
@@ -130,6 +131,8 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
 
         analyticCategory={CATEGORY_NAME}
         renderRefreshControl={this.renderRefreshControl}
+
+        onVoteToggle={toggleVote}
       />
     );
   }
@@ -284,7 +287,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
   };
 
   _renderToolbar() {
-    const {issue, editMode, issuePermissions, startEditingIssue, stopEditingIssue, toggleVote, toggleStar} = this.props;
+    const {issue, editMode, issuePermissions, startEditingIssue, stopEditingIssue, toggleStar} = this.props;
     const canUpdateGeneralInfo = issuePermissions.canUpdateGeneralInfo(issue);
 
     return (
@@ -296,11 +299,6 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
 
         canEdit={canUpdateGeneralInfo}
         onEdit={editMode ? stopEditingIssue : startEditingIssue}
-
-        canVote={issuePermissions.canVote(issue)}
-        votes={issue.votes}
-        voted={issue.voters.hasVote}
-        onVoteToggle={toggleVote}
 
         canStar={canUpdateGeneralInfo}
         starred={issue.watchers.hasStar}
