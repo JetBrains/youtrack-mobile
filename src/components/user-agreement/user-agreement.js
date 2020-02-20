@@ -1,14 +1,15 @@
 /* @flow */
 import React, {Component} from 'react';
-import { View, Text, TouchableOpacity, Modal, ScrollView, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Linking } from 'react-native';
 import { MarkdownView } from 'react-native-markdown-view';
 
 import {connect} from 'react-redux';
 import styles, {markdownStyles} from './user-agreement.styles';
-import getTopPadding from '../../components/header/header__top-padding';
 import {acceptUserAgreement, declineUserAgreement} from '../../actions/app-actions';
 
-import type EndUserAgreement from '../../flow/AppConfig';
+import type {EndUserAgreement} from '../../flow/AppConfig';
+import ModalView from '../modal-view/modal-view';
+import {UNIT} from '../variables/variables';
 
 type Props = {
   show: boolean,
@@ -17,24 +18,7 @@ type Props = {
   onDecline: Function
 };
 
-type State = {
-  canAccept: boolean
-};
-
-export class UserAgreementView extends Component<Props, State> {
-  state = {canAccept: false};
-
-  onScroll = (event: Object) => {
-    const SCROLL_GAP = 100;
-    const {nativeEvent} = event;
-    const isScrolledDown =
-      nativeEvent.layoutMeasurement.height + nativeEvent.contentOffset.y >=
-      nativeEvent.contentSize.height - SCROLL_GAP;
-
-    if (isScrolledDown) {
-      this.setState({canAccept: true});
-    }
-  };
+export class UserAgreementView extends Component<Props, void> {
 
   onLinkPress = (url: string) => {
     Linking.openURL(url);
@@ -42,22 +26,19 @@ export class UserAgreementView extends Component<Props, State> {
 
   render() {
     const {show, agreement, onAccept, onDecline} = this.props;
-    const {canAccept} = this.state;
     if (!show) {
       return null;
     }
 
     return (
-      <Modal
+      <ModalView
         animationType="fade"
         transparent={true}
         onRequestClose={() => {}}
       >
-        <View style={[styles.container, {paddingTop: getTopPadding()}]}>
+        <View style={styles.container}>
           <ScrollView
             contentContainerStyle={styles.markdownScroll}
-            onScroll={this.onScroll}
-            scrollEventThrottle={10}
           >
             <MarkdownView
               onLinkPress={this.onLinkPress}
@@ -68,12 +49,12 @@ export class UserAgreementView extends Component<Props, State> {
           </ScrollView>
           <View style={styles.buttons}>
             <TouchableOpacity
+              hitSlop={{top: UNIT, left: UNIT, bottom: UNIT, right: UNIT}}
               style={styles.button}
               onPress={onAccept}
-              disabled={!canAccept}
             >
-              <Text style={[styles.buttonText, (!canAccept && styles.buttonTextDisabled)]}>
-                {canAccept ? 'Accept' : 'Scroll to accept'}
+              <Text style={styles.buttonText}>
+                Accept
               </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={onDecline}>
@@ -81,7 +62,7 @@ export class UserAgreementView extends Component<Props, State> {
             </TouchableOpacity>
           </View>
         </View>
-      </Modal>
+      </ModalView>
     );
   }
 }
