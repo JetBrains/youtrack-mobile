@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_BLACK, COLOR_PINK} from '../../components/variables/variables';
+import {UNIT, COLOR_PINK, COLOR_FONT_ON_BLACK} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   header: {
@@ -12,7 +12,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
 
-    backgroundColor: COLOR_BLACK,
+    backgroundColor: COLOR_FONT_ON_BLACK,
   },
   headerButtonLeft: {
     justifyContent: 'flex-start'
@@ -26,8 +26,9 @@ export default StyleSheet.create({
   },
   headerCenter: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: 'flex-start',
     flexShrink: 1,
-    padding: 0
+    padding: 0,
+    paddingLeft: UNIT * 2,
   }
 });

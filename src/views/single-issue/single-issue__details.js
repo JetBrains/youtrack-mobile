@@ -105,14 +105,31 @@ export default class IssueDetails extends PureComponent<Props, TabsState> {
 
   renderIssueVotes() {
     const {issue, issuePermissions, onVoteToggle} = this.props;
-    return (
-      <IssueVotes
-        canVote={issuePermissions.canVote(issue)}
-        votes={issue.votes}
-        voted={issue.voters.hasVote}
-        onVoteToggle={onVoteToggle}
-      />
-    );
+    if (issue) {
+      return (
+        <IssueVotes
+          canVote={issuePermissions.canVote(issue)}
+          votes={issue.votes}
+          voted={issue.voters.hasVote}
+          onVoteToggle={onVoteToggle}
+        />
+      );
+    }
+  }
+
+  renderAdditionalInfo() {
+    const {issue} = this.props;
+    if (issue) {
+      return (
+        <IssueAdditionalInfo
+          style={styles.issueAdditionalInfo}
+          created={issue.created}
+          updated={issue.updated}
+          reporter={issue.reporter}
+          updater={issue.updater}
+        />
+      );
+    }
   }
 
   _renderIssueView(issue: IssueFull | IssueOnList) {
@@ -128,13 +145,7 @@ export default class IssueDetails extends PureComponent<Props, TabsState> {
       <View style={styles.issueView}>
 
         <View style={styles.issueAdditionalInfoContainer}>
-          <IssueAdditionalInfo
-            style={styles.issueAdditionalInfo}
-            created={issue.created}
-            updated={issue.updated}
-            reporter={issue.reporter}
-            updater={issue.updater}
-          />
+          {this.renderAdditionalInfo()}
           {this.renderIssueVotes()}
         </View>
 

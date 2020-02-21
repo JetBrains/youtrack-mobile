@@ -24,8 +24,18 @@ export default StyleSheet.create({
     backgroundColor: COLOR_FONT_ON_BLACK,
   },
   headerText: {
-    color: COLOR_FONT_ON_BLACK,
-    fontSize: 17
+    color: COLOR_BLACK,
+    fontSize: 20,
+    letterSpacing: 0.13,
+    fontWeight: '500'
+  },
+  headerTextResolved: {
+    color: COLOR_ICON_MEDIUM_GREY,
+    textDecorationLine: 'line-through'
+  },
+  issueStar: {
+    marginLeft: UNIT * 2,
+    marginRight: UNIT * 2
   },
   savingIndicator: {
     paddingTop: 4,

@@ -10,7 +10,6 @@ import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {getApi} from '../../components/api/api__instance';
-import IssueToolbar from '../../components/issue-toolbar/issue-toolbar';
 import Router from '../../components/router/router';
 import Header from '../../components/header/header';
 import {COLOR_DARK, COLOR_FONT_GRAY, COLOR_PINK} from '../../components/variables/variables';
@@ -35,6 +34,7 @@ import IssueDetails from './single-issue__details';
 import ActionsIcon from '../../components/menu/actions-icon';
 import BackIcon from '../../components/menu/back-icon';
 import IssueActivity from './activity/single-issue__activity';
+import IssueStar from '../../components/issue-toolbar/issue-star';
 
 const CATEGORY_NAME = 'Issue';
 const tabRoutes: Array<TabRoute> = [
@@ -60,7 +60,6 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
     actionSheet: PropTypes.func
   };
 
-  toolbarNode: Object;
   imageHeaders = getApi().auth.getAuthorizationHeaders();
   backendUrl = getApi().config.backendUrl;
   state = {
@@ -225,9 +224,28 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
     }
   }
 
+  canUpdateGeneralInfo(): boolean {
+    const {issue, issuePermissions} = this.props;
+    return !!issue && issuePermissions.canUpdateGeneralInfo(issue);
+  }
+
   renderActionsIcon() {
     if (!this.state.isTransitionInProgress) {
       return <ActionsIcon/>;
+    }
+  }
+
+  renderStar() {
+    const {issue, toggleStar} = this.props;
+    if (issue) {
+      return (
+        <IssueStar
+          style={styles.issueStar}
+          canStar={this.canUpdateGeneralInfo()}
+          starred={issue.watchers.hasStar}
+          onStarToggle={toggleStar}
+        />
+      );
     }
   }
 
@@ -247,15 +265,22 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
     } = this.props;
 
     const issueToShow = issueLoaded ? issue : issuePlaceholder;
-    const title = <Text style={styles.headerText} selectable={true} testID="issue-id">
-      {issueToShow ? getReadableID(issueToShow) : `Loading...`}
-    </Text>;
+    const title = (
+      <Text
+        style={[styles.headerText, issueToShow && issueToShow.resolved ? styles.headerTextResolved : null]}
+        selectable={true}
+        testID="issue-id"
+      >
+        {Boolean(issueToShow) && getReadableID(issueToShow)}
+      </Text>
+    );
 
     if (!editMode) {
       return (
         <Header
           leftButton={this.renderBackIcon()}
           rightButton={this.renderActionsIcon()}
+          extraButton={this.renderStar()}
           onRightButtonClick={() => this.state.index === 0 && issueLoaded && showIssueActions(this.context.actionSheet())}
           onBack={this.handleOnBack}
         >
@@ -271,40 +296,12 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
           leftButton={<Text>Cancel</Text>}
           onBack={stopEditingIssue}
           rightButton={saveButton}
-          onRightButtonClick={canSave ? saveIssueSummaryAndDescriptionChange : () => {
-          }}
+          onRightButtonClick={canSave ? saveIssueSummaryAndDescriptionChange : () => {}}
         >
           {title}
         </Header>
       );
     }
-  }
-
-  toolbarRef = (instance: ?IssueToolbar) => {
-    if (instance) {
-      this.toolbarNode = instance;
-    }
-  };
-
-  _renderToolbar() {
-    const {issue, editMode, issuePermissions, startEditingIssue, stopEditingIssue, toggleStar} = this.props;
-    const canUpdateGeneralInfo = issuePermissions.canUpdateGeneralInfo(issue);
-
-    return (
-      <IssueToolbar
-        ref={this.toolbarRef}
-        canAttach={issuePermissions.canAddAttachmentTo(issue)}
-        attachesCount={issue.attachments.length}
-        onAttach={this.onAttach}
-
-        canEdit={canUpdateGeneralInfo}
-        onEdit={editMode ? stopEditingIssue : startEditingIssue}
-
-        canStar={canUpdateGeneralInfo}
-        starred={issue.watchers.hasStar}
-        onStarToggle={toggleStar}
-      />
-    );
   }
 
   _renderRefreshControl(onRefresh: () => any = () => {}) {
@@ -357,8 +354,6 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
     return (
       <View style={styles.container} testID="issue-view">
         {this._renderHeader()}
-
-        {isIssueLoaded && this._renderToolbar()}
 
         {issueLoadingError && <ErrorMessage error={issueLoadingError} onTryAgain={refreshIssue}/>}
 

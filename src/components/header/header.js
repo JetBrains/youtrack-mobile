@@ -5,9 +5,8 @@ import styles from './header.styles';
 import Router from '../router/router';
 import {onHeightChange} from './header__top-padding';
 import type {Node} from 'react';
-import {UNIT} from '../variables/variables';
+import {HIT_SLOP} from '../common-styles/button';
 
-const TOUCH_PADDING = UNIT;
 
 type Props = {
   onBack?: () => any,
@@ -53,7 +52,7 @@ export default class Header extends PureComponent<Props, void> {
         <StatusBar animated barStyle="light-content"/>
         <TouchableOpacity
           testID="header-back"
-          hitSlop={{top: TOUCH_PADDING, left: TOUCH_PADDING, bottom: TOUCH_PADDING, right: TOUCH_PADDING}}
+          hitSlop={HIT_SLOP}
           style={styles.headerButtonLeft}
           onPress={() => this.onBack()}
         >
@@ -66,7 +65,7 @@ export default class Header extends PureComponent<Props, void> {
 
         <TouchableOpacity
           testID="header-action"
-          hitSlop={{top: TOUCH_PADDING, left: TOUCH_PADDING, bottom: TOUCH_PADDING, right: TOUCH_PADDING}}
+          hitSlop={HIT_SLOP}
           style={styles.headerButtonRight}
           onPress={() => this.onRightButtonClick()}>
           <Text style={styles.headerButtonText} numberOfLines={1}>{rightButton}</Text>
