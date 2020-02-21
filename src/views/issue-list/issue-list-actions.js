@@ -3,7 +3,7 @@
 import * as types from './issue-list-action-types';
 import ApiHelper from '../../components/api/api__helper';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
-import {notifyError, resolveError} from '../../components/notification/notification';
+import {notify, notifyError, resolveError} from '../../components/notification/notification';
 import log from '../../components/log/log';
 import usage from '../../components/usage/usage';
 
@@ -181,12 +181,16 @@ export function openIssuesContextSelect() {
         selectedItems: [currentSearchContext],
         onCancel: () => dispatch(closeIssuesContextSelect()),
         onSelect: (selectedContext: Folder) => {
-          dispatch(storeSearchContext(selectedContext));
-          dispatch(closeIssuesContextSelect());
-          dispatch(onQueryUpdate(selectedContext.query));
-          dispatch(updateUserGeneralProfile({
-            searchContext: selectedContext.id ? selectedContext : null
-          }));
+          try {
+            dispatch(storeSearchContext(selectedContext));
+            dispatch(closeIssuesContextSelect());
+            dispatch(updateUserGeneralProfile({
+              searchContext: selectedContext.id ? selectedContext : null
+            }));
+            dispatch(refreshIssues());
+          } catch (error) {
+            notify('Failed to change a context', error);
+          }
         }
       }
     });
