@@ -18,7 +18,6 @@ import type IssuePermissions from '../../components/issue-permissions/issue-perm
 import type {IssueFull, IssueOnList, TabRoute} from '../../flow/Issue';
 import type {Attachment, CustomField, FieldValue, IssueProject} from '../../flow/CustomFields';
 
-import commonIssueStyles from '../../components/common-styles/issue';
 import IssueDescription from './single-issue__description';
 import IssueVotes from '../../components/issue-actions/issue-votes';
 
@@ -160,7 +159,7 @@ export default class IssueDetails extends PureComponent<Props, TabsState> {
 
         {!editMode && <View>
           <Text
-            style={[styles.summary, issue.resolved ? commonIssueStyles.resolvedSummary : null]}
+            style={styles.summary}
             selectable={true}
             testID="issue-summary">
             {issue.summary}
