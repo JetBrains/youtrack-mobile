@@ -9,7 +9,7 @@ import {
   COLOR_MEDIUM_GRAY,
   COLOR_ICON_LIGHT_BLUE,
   COLOR_ICON_MEDIUM_GREY,
-  COLOR_PINK_DARK
+  COLOR_PINK_DARK, COLOR_PLACEHOLDER
 } from '../../components/variables/variables';
 import {secondaryText, mainText} from '../../components/common-styles/issue';
 import {link} from '../../components/common-styles/button';
@@ -251,8 +251,8 @@ export default StyleSheet.create({
     backgroundColor: COLOR_FONT_ON_BLACK,
     ...Platform.select({
       ios: {
-        shadowRadius: 0.6,
-        shadowColor: COLOR_BLACK,
+        shadowRadius: 0.75,
+        shadowColor: COLOR_PLACEHOLDER,
         shadowOffset: {
           width: 0,
           height: 1
