@@ -28,7 +28,7 @@ import AgileBoard from './views/agile-board/agile-board';
 import Inbox from './views/inbox/inbox';
 import WikiPage from './views/wiki-page/wiki-page';
 
-import {COLOR_BLACK, COLOR_FONT_ON_BLACK} from './components/variables/variables';
+import {COLOR_FONT_ON_BLACK} from './components/variables/variables';
 import ErrorBoundary from './components/error-boundary/error-boundary';
 import {setAccount, onNavigateBack} from './actions/app-actions';
 // $FlowFixMe: cannot typecheck easy-toast module because of mistakes there
@@ -69,10 +69,6 @@ class YouTrackMobile extends Component<void, State> {
     Router.onBack = (closingView) => {
       store.dispatch(onNavigateBack(closingView));
     };
-    Router.setOnDispatchCallback((routeName: ?string) => {
-      const isHomeRoute: boolean = Boolean(routeName && routeName === this.routeHomeName);
-      this.setState({backgroundColor: isHomeRoute ? COLOR_FONT_ON_BLACK : COLOR_BLACK});
-    });
 
     Router.rootRoutes = ['IssueList', 'Inbox', 'AgileBoard'];
   }
