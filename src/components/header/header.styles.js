@@ -8,6 +8,7 @@ export default StyleSheet.create({
     paddingLeft: UNIT,
     paddingRight: UNIT,
     flex: 0,
+    minHeight: 56,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

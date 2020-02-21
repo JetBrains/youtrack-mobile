@@ -4,8 +4,10 @@ import React, {PureComponent} from 'react';
 import styles from './header.styles';
 import Router from '../router/router';
 import {onHeightChange} from './header__top-padding';
-import type {Node} from 'react';
 import {HIT_SLOP} from '../common-styles/button';
+
+import type {Node} from 'react';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 
 type Props = {
@@ -15,7 +17,8 @@ type Props = {
   rightButton?: ?React$Element<any>,
   extraButton?: ?React$Element<any>,
   children?: Node,
-  openScanView?: Function
+  openScanView?: Function,
+  style?: ViewStyleProp
 }
 
 type DefaultProps = {
@@ -45,10 +48,10 @@ export default class Header extends PureComponent<Props, void> {
   }
 
   render() {
-    const {leftButton, children, extraButton, rightButton} = this.props;
+    const {leftButton, children, extraButton, rightButton, style} = this.props;
 
     return (
-      <View style={styles.header}>
+      <View style={[styles.header, style]}>
         <StatusBar animated barStyle="light-content"/>
         <TouchableOpacity
           testID="header-back"

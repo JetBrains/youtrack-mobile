@@ -12,7 +12,7 @@ import {connect} from 'react-redux';
 import {getApi} from '../../components/api/api__instance';
 import Router from '../../components/router/router';
 import Header from '../../components/header/header';
-import {COLOR_DARK, COLOR_FONT_GRAY, COLOR_PINK} from '../../components/variables/variables';
+import {COLOR_DARK, COLOR_FONT_GRAY, COLOR_GRAY, COLOR_PINK, UNIT} from '../../components/variables/variables';
 import usage from '../../components/usage/usage';
 import CommandDialog from '../../components/command-dialog/command-dialog';
 import ErrorMessage from '../../components/error-message/error-message';
@@ -20,6 +20,8 @@ import styles from './single-issue.styles';
 import {getReadableID} from '../../components/issue-formatter/issue-formatter';
 import * as issueActions from './single-issue-actions';
 import * as issueImageAttachActions from './activity/single-issue-activity__image-attach-actions';
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {State as SingleIssueState} from './single-issue-reducers';
 import type {TabRoute} from '../../flow/Issue';
@@ -153,15 +155,17 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
   };
 
   renderTabBar() {
+    const {editMode} = this.props;
+
     return props => (
       <TabBar
         {...props}
-        indicatorStyle={{backgroundColor: COLOR_PINK}}
-        style={styles.tabsBar}
+        indicatorStyle={{backgroundColor:  editMode ? 'transparent' : COLOR_PINK}}
+        style={[styles.tabsBar, editMode ? {height : 1} : null]}
         renderLabel={({route, focused}) => (
           <Text style={{
             ...styles.tabLabel,
-            color: focused ? COLOR_PINK : this.isTabChangeEnabled() ? COLOR_DARK : COLOR_FONT_GRAY
+            color: focused && !editMode ? COLOR_PINK : this.isTabChangeEnabled() ? COLOR_DARK : COLOR_FONT_GRAY
           }}>
             {route.title}
           </Text>
@@ -289,17 +293,16 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
       );
     } else {
       const canSave = Boolean(summaryCopy) && !isSavingEditedIssue;
-      const saveButton = <Text style={canSave ? null : styles.disabledSaveButton}>Save</Text>;
+      const saveButton = <IconMaterial name="check" size={28} color={canSave ? COLOR_PINK : COLOR_GRAY}/>;
 
       return (
         <Header
-          leftButton={<Text>Cancel</Text>}
+          style={{paddingLeft: UNIT * 2, paddingRight: UNIT * 2}}
+          leftButton={<Text>{<IconMaterial name="close" size={28} color={isSavingEditedIssue ? COLOR_GRAY : COLOR_PINK}/>}</Text>}
           onBack={stopEditingIssue}
           rightButton={saveButton}
           onRightButtonClick={canSave ? saveIssueSummaryAndDescriptionChange : () => {}}
-        >
-          {title}
-        </Header>
+        />
       );
     }
   }

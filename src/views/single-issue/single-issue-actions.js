@@ -291,6 +291,13 @@ export function showIssueActions(actionSheet: Object) {
 
     const actions = [
       {
+        title: 'Edit',
+        execute: () => {
+          dispatch(startEditingIssue());
+          usage.trackEvent(CATEGORY_NAME, 'Edit issue');
+        }
+      },
+      {
         title: 'Share…',
         execute: () => {
           const url = makeIssueWebUrl(api, issue);
