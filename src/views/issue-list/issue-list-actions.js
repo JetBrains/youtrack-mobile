@@ -281,6 +281,8 @@ export function loadIssues(query: string) {
 
 export function refreshIssues() {
   return async (dispatch: (any) => any, getState: () => Object) => {
+
+
     const searchQuery = dispatch(getSearchQuery(getState().issueList.query));
     dispatch(loadIssues(searchQuery));
   };
@@ -311,7 +313,8 @@ export function loadMoreIssues() {
     dispatch(startMoreIssuesLoading(newSkip));
 
     try {
-      let moreIssues: Array<IssueOnList> = await api.issues.getIssues(query, PAGE_SIZE, newSkip);
+      const searchQuery = dispatch(getSearchQuery(query));
+      let moreIssues: Array<IssueOnList> = await api.issues.getIssues(searchQuery, PAGE_SIZE, newSkip);
       log.info(`Loaded ${PAGE_SIZE} more issues.`);
       moreIssues = ApiHelper.fillIssuesFieldHash(moreIssues);
       const updatedIssues = ApiHelper.removeDuplicatesByPropName(issues.concat(moreIssues), 'id');
