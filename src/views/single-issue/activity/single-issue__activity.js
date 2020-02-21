@@ -169,7 +169,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
         autoFocus={focus}
         initialText={commentText}
         onChangeText={setCommentText}
-        onSubmitComment={comment => addOrEditComment(comment,)}
+        onSubmitComment={comment => addOrEditComment(comment)}
 
         editingComment={editingComment}
         onEditCommentVisibility={onOpenCommentVisibilitySelect}

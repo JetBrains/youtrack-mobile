@@ -19,18 +19,16 @@ import styles from './single-issue__comments.styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
+import {HIT_SLOP} from '../../components/common-styles/button';
 
 type Props = {
   initialText: string,
   onChangeText?: (text: string) => any,
   onSubmitComment: (comment: IssueComment) => any,
-
   editingComment: IssueComment,
-
   suggestionsAreLoading: boolean,
   onRequestCommentSuggestions: (query: string) => any,
   suggestions: ?{ users: Array<User> },
-
   onEditCommentVisibility: (commentId: string) => any,
   isSecured: boolean
 };
@@ -40,29 +38,30 @@ type State = {
   commentText: string,
   showSuggestions: boolean,
   suggestionsQuery: string,
-  commentCaret: number
+  commentCaret: number,
+  inputFocus: boolean,
 };
 
-const UPDATE_TEXT_TIMEOUT = 300;
 
 export default class SingleIssueCommentInput extends Component<Props, State> {
   isUnmounted: boolean;
+  editCommentInput: MultilineInput;
   SUGGESTION_AVATAR_SIZE = 24;
   debouncedOnChange = throttle((text: string) => (
     this.props.onChangeText && this.props.onChangeText(text)
-  ), UPDATE_TEXT_TIMEOUT);
+  ), 300);
 
   constructor() {
     super();
     this.state = {
       isSaving: false,
       commentText: '',
-
       isLoadingSuggestions: false,
       showSuggestions: false,
       suggestionsQuery: '',
       suggestedUsers: [],
-      commentCaret: 0
+      commentCaret: 0,
+      inputFocus: false
     };
   }
 
@@ -81,7 +80,6 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
   }
 
   updateComment() {
-    let clearTimer;
     this.setState({isSaving: true});
     const comment = {
       ...this.props.editingComment,
@@ -92,13 +90,13 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
     };
 
     this.props.onSubmitComment(comment).then(() => {
-      clearTimeout(clearTimer);
-      if (this.isUnmounted) {
-        return;
+      if (!this.isUnmounted) {
+        this.setState({
+          commentText: '',
+          inputFocus: false
+        });
       }
-      clearTimer = setTimeout(() => !this.isUnmounted && this.setState({commentText: ''}), UPDATE_TEXT_TIMEOUT);
     }).finally(() => {
-      clearTimeout(clearTimer);
       if (!this.isUnmounted) {
         this.setState({isSaving: false});
       }
@@ -142,7 +140,8 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
         `@${user.login}`);
       this.setState({
         commentText: newText,
-        showSuggestions: false
+        showSuggestions: false,
+        inputFocus: true
       });
     }
   }
@@ -197,6 +196,7 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
         style={styles.visibilityChangeButton}
         disabled={this.state.isSaving}
         onPress={() => onEditCommentVisibility(editingComment)}
+        hitSlop={HIT_SLOP}
       >
         {isSecured && (
           <IconMaterial
@@ -241,15 +241,17 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
 
   render() {
     const {isSaving, commentText, commentCaret, showSuggestions} = this.state;
+    const isVisibilityShown = !showSuggestions && (this.state.inputFocus || !!commentText);
 
     return (
       <View style={styles.commentContainer}>
         {showSuggestions && this.renderSuggestions()}
 
-        {!showSuggestions && this.renderVisibility()}
+        {isVisibilityShown && this.renderVisibility()}
 
         <View style={styles.commentInputContainer}>
           <MultilineInput
+            ref={(instance: ?MultilineInput) => instance && (this.editCommentInput = instance)}
             {...this.props}
             placeholder="Write comment, @mention people"
             value={commentText}
@@ -267,6 +269,8 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
               this.suggestionsNeededDetector(text, commentCaret);
               this.debouncedOnChange(text);
             }}
+            onFocus={() => this.setState({inputFocus: true})}
+            onBlur={() => this.setState({inputFocus: false})}
             style={styles.commentInput}
           />
 

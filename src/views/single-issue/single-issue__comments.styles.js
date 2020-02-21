@@ -18,6 +18,7 @@ const MIN_INPUT_SIZE = UNIT * 4;
 export default StyleSheet.create({
   commentContainer: {
     justifyContent: 'flex-end',
+    paddingTop: UNIT,
     backgroundColor: COLOR_FONT_ON_BLACK,
     elevation: 5,
     shadowColor: COLOR_BLACK,
@@ -39,6 +40,7 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   suggestionsLoadingMessageText: {
+    padding: UNIT,
     color: COLOR_FONT
   },
   suggestionButton: {
@@ -114,7 +116,8 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: UNIT * 2
+    margin: UNIT * 2,
+    marginTop: UNIT
   },
   visibilityChangeButtonLockIcon: {
     marginRight: UNIT

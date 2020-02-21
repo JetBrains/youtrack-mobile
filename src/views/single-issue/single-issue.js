@@ -79,7 +79,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
     this.loadIssue();
   }
 
-  componentDidUpdate(prevProps: $ReadOnly<SingleIssueProps>): void {
+  componentDidUpdate(prevProps: $Shape<SingleIssueProps>): void {
     if (this.props.editMode === true && !prevProps.editMode && this.state.index === 1) {
       this.setState({index: 0});
     }
