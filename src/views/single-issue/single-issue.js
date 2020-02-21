@@ -19,7 +19,7 @@ import ErrorMessage from '../../components/error-message/error-message';
 import styles from './single-issue.styles';
 import {getReadableID} from '../../components/issue-formatter/issue-formatter';
 import * as issueActions from './single-issue-actions';
-import * as issueImageAttachActions from './activity/single-issue-activity__image-attach-actions';
+
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
@@ -36,7 +36,7 @@ import IssueDetails from './single-issue__details';
 import ActionsIcon from '../../components/menu/actions-icon';
 import BackIcon from '../../components/menu/back-icon';
 import IssueActivity from './activity/single-issue__activity';
-import IssueStar from '../../components/issue-toolbar/issue-star';
+import IssueStar from '../../components/issue-actions/issue-star';
 
 const CATEGORY_NAME = 'Issue';
 const tabRoutes: Array<TabRoute> = [
@@ -50,7 +50,7 @@ type AdditionalProps = {
   issuePlaceholder: Object,
 };
 
-type SingleIssueProps = SingleIssueState & typeof issueActions & typeof issueImageAttachActions & AdditionalProps;
+type SingleIssueProps = SingleIssueState & typeof issueActions & AdditionalProps;
 type TabsState = {
   index: number,
   routes: Array<TabRoute>,
@@ -259,8 +259,6 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
     }
   }
 
-  onAttach = () => this.props.attachOrTakeImage(this.context.actionSheet());
-
   _renderHeader() {
     const {
       issue,
@@ -393,7 +391,6 @@ const mapStateToProps = (state: { app: Object, singleIssue: SingleIssueState }, 
 const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(issueActions, dispatch),
-    ...bindActionCreators(issueImageAttachActions, dispatch),
     ...{
       updateUserAppearanceProfile: (userAppearanceProfile: UserAppearanceProfile) => {
         return dispatch(

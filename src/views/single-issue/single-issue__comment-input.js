@@ -20,6 +20,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
 import {HIT_SLOP} from '../../components/common-styles/button';
+import IssueAttach from '../../components/issue-actions/issue-attach';
 
 type Props = {
   initialText: string,
@@ -30,7 +31,9 @@ type Props = {
   onRequestCommentSuggestions: (query: string) => any,
   suggestions: ?{ users: Array<User> },
   onEditCommentVisibility: (commentId: string) => any,
-  isSecured: boolean
+  isSecured: boolean,
+  canAttach: boolean,
+  onAttach: () => any
 };
 
 type State = {
@@ -239,42 +242,55 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
     );
   }
 
+  renderIssueAttachIcon() {
+    return (
+      <IssueAttach
+        canAttach={this.props.canAttach}
+        onAttach={this.props.onAttach}
+      />
+    );
+  }
+
   render() {
     const {isSaving, commentText, commentCaret, showSuggestions} = this.state;
     const isVisibilityShown = !showSuggestions && (this.state.inputFocus || !!commentText);
 
     return (
-      <View style={styles.commentContainer}>
+      <View style={styles.container}>
         {showSuggestions && this.renderSuggestions()}
 
         {isVisibilityShown && this.renderVisibility()}
 
-        <View style={styles.commentInputContainer}>
-          <MultilineInput
-            ref={(instance: ?MultilineInput) => instance && (this.editCommentInput = instance)}
-            {...this.props}
-            placeholder="Write comment, @mention people"
-            value={commentText}
-            editable={!isSaving}
-            underlineColorAndroid="transparent"
-            keyboardAppearance="dark"
-            placeholderTextColor={COLOR_PLACEHOLDER}
-            autoCapitalize="sentences"
-            onSelectionChange={(event) => {
-              const caret = event.nativeEvent.selection.start;
-              this.setState({commentCaret: caret});
-            }}
-            onChangeText={(text) => {
-              this.setState({commentText: text});
-              this.suggestionsNeededDetector(text, commentCaret);
-              this.debouncedOnChange(text);
-            }}
-            onFocus={() => this.setState({inputFocus: true})}
-            onBlur={() => this.setState({inputFocus: false})}
-            style={styles.commentInput}
-          />
+        <View style={styles.commentContainer}>
+          {this.renderIssueAttachIcon()}
 
-          {this.renderSendButton()}
+          <View style={styles.commentInputContainer}>
+            <MultilineInput
+              ref={(instance: ?MultilineInput) => instance && (this.editCommentInput = instance)}
+              {...this.props}
+              placeholder="Write comment, @mention people"
+              value={commentText}
+              editable={!isSaving}
+              underlineColorAndroid="transparent"
+              keyboardAppearance="dark"
+              placeholderTextColor={COLOR_PLACEHOLDER}
+              autoCapitalize="sentences"
+              onSelectionChange={(event) => {
+                const caret = event.nativeEvent.selection.start;
+                this.setState({commentCaret: caret});
+              }}
+              onChangeText={(text) => {
+                this.setState({commentText: text});
+                this.suggestionsNeededDetector(text, commentCaret);
+                this.debouncedOnChange(text);
+              }}
+              onFocus={() => this.setState({inputFocus: true})}
+              onBlur={() => this.setState({inputFocus: false})}
+              style={styles.commentInput}
+            />
+
+            {this.renderSendButton()}
+          </View>
         </View>
       </View>
     );

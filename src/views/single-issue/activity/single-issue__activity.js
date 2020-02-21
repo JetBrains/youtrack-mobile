@@ -17,6 +17,7 @@ import {getApi} from '../../../components/api/api__instance';
 
 import * as activityActions from './single-issue-activity__actions';
 import * as activityCommentActions from './single-issue-activity__comment-actions';
+import * as activityImageAttachActions from './single-issue-activity__image-attach-actions';
 
 import {isActivitiesAPIEnabled} from './single-issue-activity__helper';
 
@@ -37,6 +38,11 @@ type IssueActivityProps = $Shape<
   & typeof activityActions
   & IssueCommentActivityState
   & typeof activityCommentActions
+  & typeof activityImageAttachActions
+  & {
+  canAttach: boolean,
+  onAttach: () => any
+}
   >;
 
 export class IssueActivity extends PureComponent<IssueActivityProps, void> {
@@ -160,7 +166,11 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
       editingComment,
 
-      onOpenCommentVisibilitySelect
+      onOpenCommentVisibilitySelect,
+
+      issuePermissions,
+      issue,
+      attachOrTakeImage
     } = this.props;
     const isSecured = !!editingComment && IssueVisibility.isSecured(editingComment.visibility);
 
@@ -178,6 +188,9 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
         onRequestCommentSuggestions={loadCommentSuggestions}
         suggestionsAreLoading={suggestionsAreLoading}
         suggestions={commentSuggestions}
+
+        canAttach={issuePermissions.canAddAttachmentTo(issue)}
+        onAttach={() => attachOrTakeImage(this.context.actionSheet())}
       />
 
       <KeyboardSpacerIOS/>
@@ -270,7 +283,8 @@ const mapStateToProps = (
 const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(activityActions, dispatch),
-    ...bindActionCreators(activityCommentActions, dispatch)
+    ...bindActionCreators(activityCommentActions, dispatch),
+    ...bindActionCreators(activityImageAttachActions, dispatch)
   };
 };
 

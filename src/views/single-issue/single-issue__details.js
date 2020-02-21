@@ -20,7 +20,7 @@ import type {Attachment, CustomField, FieldValue, IssueProject} from '../../flow
 
 import commonIssueStyles from '../../components/common-styles/issue';
 import IssueDescription from './single-issue__description';
-import IssueVotes from '../../components/issue-toolbar/issue-votes';
+import IssueVotes from '../../components/issue-actions/issue-votes';
 
 
 type Props = {

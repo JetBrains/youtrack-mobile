@@ -1,13 +1,13 @@
 /* @flow */
 
 import React, {PureComponent} from 'react';
-import {Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {COLOR_ICON_LIGHT_BLUE} from '../variables/variables';
+import {COLOR_ICON_LIGHT_BLUE, UNIT} from '../variables/variables';
 import {HIT_SLOP} from '../../components/common-styles/button';
 
-import styles from './issue-votes.styles';
+import {secondaryText} from '../common-styles/issue';
 
 type Props = {
   voted: boolean,
@@ -41,3 +41,16 @@ export default class IssueVotes extends PureComponent<Props, void> {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  button: {
+    marginLeft: UNIT * 0.75,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
+  counter: {
+    marginRight: UNIT,
+    ...secondaryText
+  }
+});

@@ -16,9 +16,11 @@ const INPUT_BORDER_RADIUS = UNIT;
 const MIN_INPUT_SIZE = UNIT * 4;
 
 export default StyleSheet.create({
-  commentContainer: {
+  container: {
     justifyContent: 'flex-end',
     paddingTop: UNIT,
+    paddingLeft: UNIT * 3,
+    paddingRight: UNIT * 3,
     backgroundColor: COLOR_FONT_ON_BLACK,
     elevation: 5,
     shadowColor: COLOR_BLACK,
@@ -61,14 +63,15 @@ export default StyleSheet.create({
     color: COLOR_FONT_GRAY
   },
 
+  commentContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   commentInputContainer: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-    marginLeft: UNIT * 2,
-    marginRight: UNIT * 2,
-    marginBottom: UNIT,
     padding: 2,
+    marginLeft: UNIT,
     borderRadius: INPUT_BORDER_RADIUS,
     borderWidth: 1,
     borderColor: COLOR_MEDIUM_GRAY,

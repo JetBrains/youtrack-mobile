@@ -1,11 +1,11 @@
 /* @flow */
 
-import {TouchableOpacity} from 'react-native';
 import React, {PureComponent} from 'react';
+import {TouchableOpacity} from 'react-native';
+
 import {COLOR_ICON_MEDIUM_GREY, COLOR_PINK} from '../variables/variables';
 import {HIT_SLOP} from '../common-styles/button';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import styles from './issue-votes.styles';
 
 type Props = {
   style?: any,
@@ -26,7 +26,7 @@ export default class IssueStar extends PureComponent<Props, void> {
     return (
       <TouchableOpacity
         hitSlop={HIT_SLOP}
-        style={[styles.container, style]}
+        style={style}
         onPress={() => onStarToggle(!starred)}>
         <MaterialIcon
           name="star-outline"
