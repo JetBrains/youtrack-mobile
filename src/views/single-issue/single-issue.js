@@ -79,6 +79,12 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
     this.loadIssue();
   }
 
+  componentDidUpdate(prevProps: $ReadOnly<SingleIssueProps>): void {
+    if (this.props.editMode === true && !prevProps.editMode && this.state.index === 1) {
+      this.setState({index: 0});
+    }
+  }
+
   loadIssue() {
     this.props.loadIssue();
   }
@@ -160,8 +166,8 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
     return props => (
       <TabBar
         {...props}
-        indicatorStyle={{backgroundColor:  editMode ? 'transparent' : COLOR_PINK}}
-        style={[styles.tabsBar, editMode ? {height : 1} : null]}
+        indicatorStyle={{backgroundColor: editMode ? 'transparent' : COLOR_PINK}}
+        style={[styles.tabsBar, editMode ? {height: 1} : null]}
         renderLabel={({route, focused}) => (
           <Text style={{
             ...styles.tabLabel,
@@ -285,7 +291,12 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
           leftButton={this.renderBackIcon()}
           rightButton={this.renderActionsIcon()}
           extraButton={this.renderStar()}
-          onRightButtonClick={() => this.state.index === 0 && issueLoaded && showIssueActions(this.context.actionSheet())}
+          onRightButtonClick={() => {
+            if (issueLoaded) {
+              showIssueActions(this.context.actionSheet());
+            }
+          }
+          }
           onBack={this.handleOnBack}
         >
           {title}
@@ -298,7 +309,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
       return (
         <Header
           style={{paddingLeft: UNIT * 2, paddingRight: UNIT * 2}}
-          leftButton={<Text>{<IconMaterial name="close" size={28} color={isSavingEditedIssue ? COLOR_GRAY : COLOR_PINK}/>}</Text>}
+          leftButton={<IconMaterial name="close" size={28} color={isSavingEditedIssue ? COLOR_GRAY : COLOR_PINK}/>}
           onBack={stopEditingIssue}
           rightButton={saveButton}
           onRightButtonClick={canSave ? saveIssueSummaryAndDescriptionChange : () => {}}
