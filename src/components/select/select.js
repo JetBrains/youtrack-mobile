@@ -8,7 +8,7 @@ import Avatar from '../avatar/avatar';
 import {COLOR_PLACEHOLDER, UNIT} from '../variables/variables';
 import getTopPadding, {onHeightChange, isIphoneX} from '../header/header__top-padding';
 
-import {MagnifyIcon, CloseIcon, CheckIcon} from '../icon/icon';
+import {IconMagnify, IconClose, IconCheck} from '../icon/icon';
 
 const MAX_VISIBLE_ITEMS = 100;
 
@@ -94,7 +94,7 @@ export default class Select extends Component<Props, State> {
       <TouchableOpacity key={this.props.emptyValue} style={styles.row} onPress={() => this._onClearValue()}>
         <Text style={[styles.itemTitle, {marginLeft: 0}]}>{this.props.emptyValue}</Text>
 
-        {this.state.selectedItems.length === 0 && <CheckIcon/>}
+        {this.state.selectedItems.length === 0 && <IconCheck/>}
       </TouchableOpacity>
     );
   }
@@ -157,7 +157,7 @@ export default class Select extends Component<Props, State> {
           {this._renderTitle(item)}
         </View>
 
-        {this._isSelected(item) && <CheckIcon/>}
+        {this._isSelected(item) && <IconCheck/>}
       </TouchableOpacity>
     );
   }
@@ -173,7 +173,7 @@ export default class Select extends Component<Props, State> {
     return (
       <View style={[styles.container, style, {paddingTop}]}>
         {!noFilter && <View style={styles.inputWrapper}>
-          <MagnifyIcon/>
+          <IconMagnify/>
           <TextInput
             placeholder={placeholder}
             keyboardAppearance="dark"
@@ -190,7 +190,7 @@ export default class Select extends Component<Props, State> {
             }}
             style={styles.searchInput}/>
           <TouchableOpacity style={styles.cancelButton} onPress={onCancel}>
-            <CloseIcon/>
+            <IconClose/>
           </TouchableOpacity>
         </View>}
         <ScrollView keyboardShouldPersistTaps="handled"

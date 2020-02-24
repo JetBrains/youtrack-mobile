@@ -64,19 +64,19 @@ class DefaultIconMaterial extends PureComponent<Props, void> {
 }
 
 
-export const CheckIcon = (props?: Props) => <DefaultIconMaterial {...Object.assign({
+export const IconCheck = (props?: Props) => <DefaultIconMaterial {...Object.assign({
   name: 'check',
   size: 26,
   color: COLOR_ICON_GREY
 }, props)} />;
 
-export const CloseIcon = (props?: Props) => <DefaultIconMaterial {...Object.assign({
+export const IconClose = (props?: Props) => <DefaultIconMaterial {...Object.assign({
   name: 'close',
   size: 28,
   color: COLOR_PINK
 }, props)} />;
 
-export const MagnifyIcon = (props?: Props) => <DefaultIconMaterial {...Object.assign({
+export const IconMagnify = (props?: Props) => <DefaultIconMaterial {...Object.assign({
   name: 'magnify',
   size: 22,
   color: COLOR_PLACEHOLDER
