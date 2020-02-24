@@ -331,7 +331,13 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
     return activity.added;
   }
 
-  renderCommentActions(comment: IssueComment, disabled: boolean) {
+  renderCommentActions(activityGroup: Object) {
+    const comment = this._firstActivityChange(activityGroup.comment);
+    if (!comment) {
+      return null;
+    }
+
+    const disabled = activityGroup.merged;
     const isAuthor = this.props.issuePermissions.isCurrentUser(comment.author);
 
     if (!comment.deleted) {
@@ -389,8 +395,6 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
               visibility={IssueVisibility.getVisibilityPresentation(comment.visibility)}
               color={COLOR_ICON_LIGHT_BLUE}
             />}
-
-            {this.renderCommentActions(comment, !comment || activityGroup.merged)}
           </View>
 
         </View>
@@ -494,8 +498,12 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
 
                 <View style={styles.activityItem}>
                   {activityGroup.comment && this.renderCommentActivity(activityGroup)}
+
                   {activityGroup.work && this._renderWorkActivity(activityGroup)}
+
                   {this._renderHistoryAndRelatedChanges(activityGroup, !!activityGroup.comment || !!activityGroup.work)}
+
+                  {activityGroup.comment && this.renderCommentActions(activityGroup)}
                 </View>
 
               </View>

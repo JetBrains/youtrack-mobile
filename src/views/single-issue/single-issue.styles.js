@@ -6,10 +6,9 @@ import {
   COLOR_FONT_GRAY,
   COLOR_FONT,
   COLOR_PINK,
-  COLOR_MEDIUM_GRAY,
   COLOR_ICON_LIGHT_BLUE,
   COLOR_ICON_MEDIUM_GREY,
-  COLOR_PINK_DARK, COLOR_PLACEHOLDER
+  COLOR_PINK_DARK, COLOR_PLACEHOLDER, COLOR_LIGHT_GRAY
 } from '../../components/variables/variables';
 import {secondaryText, mainText} from '../../components/common-styles/issue';
 import {link} from '../../components/common-styles/button';
@@ -151,15 +150,11 @@ export default StyleSheet.create({
   },
   activityRelatedChanges: {
     flex: 1,
+    padding: UNIT * 2,
     paddingTop: UNIT,
-    paddingRight: UNIT,
-    paddingBottom: UNIT * 2,
     marginTop: UNIT * 2,
-    marginRight: -1 * UNIT,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderStyle: 'solid',
-    borderColor: COLOR_MEDIUM_GRAY,
+    backgroundColor: COLOR_LIGHT_GRAY,
+    borderRadius: UNIT,
     lineHeight: 14
   },
   activityHistoryChanges: {
@@ -282,7 +277,7 @@ export default StyleSheet.create({
   },
   commentActions: {
     flexDirection: 'row',
-    marginTop: UNIT
+    marginTop: UNIT * 2
   },
   issueAdditionalInfoContainer: {
     flexDirection: 'row',
