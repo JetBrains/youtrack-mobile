@@ -1,39 +1,25 @@
-import {Platform, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {
   UNIT,
   COLOR_FONT_GRAY,
   COLOR_FONT,
   COLOR_FONT_ON_BLACK,
-  COLOR_PLACEHOLDER,
   COLOR_MEDIUM_GRAY, COLOR_BLACK
 } from '../../components/variables/variables';
 import {mainText} from '../common-styles/issue';
+import {elevation1} from '../common-styles/form';
 
 export default StyleSheet.create({
   container: {
     flex: 1
   },
   inputWrapper: {
+    ...elevation1,
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: UNIT * 1.5,
     marginBottom: UNIT * 2,
     backgroundColor: COLOR_FONT_ON_BLACK,
-
-    ...Platform.select({
-      ios: {
-        shadowRadius: 0.75,
-        shadowColor: COLOR_PLACEHOLDER,
-        shadowOffset: {
-          width: 0,
-          height: 1
-        },
-        shadowOpacity: 0.25,
-      },
-      android: {
-        elevation: 1
-      },
-    }),
   },
   cancelButton: {
     paddingRight: UNIT * 1.5,

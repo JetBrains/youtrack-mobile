@@ -1,16 +1,15 @@
 /* @flow */
-import {View, Text, Image, TouchableOpacity, TextInput} from 'react-native';
+import {View, Text, TouchableOpacity, TextInput} from 'react-native';
 import React, {Component} from 'react';
 import styles from './query-assist.styles';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
 import type {TransformedSuggestion, SavedQuery} from '../../flow/Issue';
-import {COLOR_PLACEHOLDER, COLOR_PLACEHOLDER_ACTIVE} from '../../components/variables/variables';
-import {clearSearch} from '../../components/icon/icon';
+import {COLOR_PLACEHOLDER} from '../../components/variables/variables';
+import {IconClose, IconMagnify} from '../../components/icon/icon';
 import ModalView from '../modal-view/modal-view';
 import throttle from 'lodash.throttle';
 import {View as AnimatedView} from 'react-native-animatable';
 import KeyboardSpacerIOS from '../platform/keyboard-spacer.ios';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const SEARCH_THROTTLE = 30;
 const SHOW_LIST_ANIMATION_DURATION = 500;
@@ -122,13 +121,10 @@ export default class QueryAssist extends Component<Props, State> {
     let cancelButton = null;
     if (this.state.displayCancelSearch) {
       cancelButton = <TouchableOpacity
-        style={styles.cancelSearch}
         testID="query-assist-cancel"
         onPress={() => this.cancelSearch()}
       >
-        <Text style={styles.cancelText}>
-          Cancel
-        </Text>
+        <IconClose/>
       </TouchableOpacity>;
     }
 
@@ -137,17 +133,13 @@ export default class QueryAssist extends Component<Props, State> {
         style={[styles.inputWrapper, showQueryAssist ? styles.inputWrapperActive : null]}
         ref={node => this.queryAssistContainer = node}
       >
-        {Boolean(!showQueryAssist && !input) && (
-          <Text style={styles.icon}>
-            <Icon name={'magnify'} size={22} color={COLOR_PLACEHOLDER}/>
-          </Text>
-        )}
+        <Text style={styles.iconMagnify}><IconMagnify/></Text>
 
         <TextInput
           ref="searchInput"
           keyboardAppearance="dark"
-          style={[styles.searchInput, showQueryAssist ? styles.searchInputActive : null]}
-          placeholderTextColor={showQueryAssist ? COLOR_PLACEHOLDER_ACTIVE : COLOR_PLACEHOLDER}
+          style={styles.searchInput}
+          placeholderTextColor={COLOR_PLACEHOLDER}
           placeholder="Enter search request"
           clearButtonMode={this.props.clearButtonMode || 'while-editing'}
           returnKeyType="search"
@@ -163,16 +155,6 @@ export default class QueryAssist extends Component<Props, State> {
           onChangeText={text => this.setState({input: text})}
           onSelectionChange={event => this.onSearch(input, event.nativeEvent.selection.start)}
         />
-        {(input && showQueryAssist)
-          ? (
-            <TouchableOpacity
-              style={styles.clearIconWrapper}
-              onPress={() => this.setState({input: ''})}
-              testID="query-assist-clear"
-            >
-              <Image style={styles.clearIcon} source={clearSearch}/>
-            </TouchableOpacity>
-          ) : null}
         {cancelButton}
       </View>
     );
@@ -202,6 +184,7 @@ export default class QueryAssist extends Component<Props, State> {
     const ContainerComponent = showQueryAssist ? ModalView : View;
     const containerProps = showQueryAssist ? {
       visible: true,
+      animationType: 'fade',
       style: styles.modal
     } : {
       style: styles.placeHolder

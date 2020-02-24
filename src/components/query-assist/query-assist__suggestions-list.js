@@ -1,8 +1,9 @@
 /* @flow */
 import {View, ListView, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import React, {Component} from 'react';
-import {UNIT, COLOR_FONT_ON_BLACK, COLOR_FONT_GRAY} from '../variables/variables';
+import {UNIT, COLOR_BLACK} from '../variables/variables';
 import type {TransformedSuggestion, SavedQuery} from '../../flow/Issue';
+import {mainText, secondaryText} from '../common-styles/issue';
 
 const SAVED_SEARCHES = 'SAVED_SEARCHES';
 const LAST_SEARCHES = 'LAST_SEARCHES';
@@ -25,7 +26,6 @@ type Props = {
 };
 
 export default class QueryAssistSuggestionsList extends Component<Props, State> {
-  isUnmounted: boolean;
   state: State = {
     dataSource: ds.cloneWithRows([])
   };
@@ -57,13 +57,13 @@ export default class QueryAssistSuggestionsList extends Component<Props, State> 
     res = lastSearches.length ? {...res, [LAST_SEARCHES]: lastSearches} : res;
 
     return res;
-  }
+  };
 
   _onApplySuggestion = (suggestion: TransformedSuggestion | SavedQuery) => {
     const isSuggestion = suggestion.caret;
     const {onApplySuggestion, onApplySavedQuery} = this.props;
     return isSuggestion ? onApplySuggestion(suggestion) : onApplySavedQuery(suggestion);
-  }
+  };
 
   _renderRow = (suggestion: TransformedSuggestion | SavedQuery) => {
     const isSuggestion = suggestion.caret;
@@ -76,7 +76,7 @@ export default class QueryAssistSuggestionsList extends Component<Props, State> 
         <Text style={styles.searchText}>{isSuggestion ? suggestion.option : suggestion.name}</Text>
       </TouchableOpacity>
     );
-  }
+  };
 
   _renderSectionHeader = (sectionData: Array<Object>, category: string) => {
     const savedSearches = category === SAVED_SEARCHES;
@@ -130,14 +130,11 @@ const styles = StyleSheet.create({
     paddingBottom: UNIT
   },
   searchText: {
-    fontSize: 24,
-    fontWeight: '300',
-    color: COLOR_FONT_ON_BLACK
+    ...mainText,
+    fontWeight: '500',
+    color: COLOR_BLACK
   },
   sectionHeaderText: {
-    fontWeight: '200',
-    fontSize: 14,
-    letterSpacing: 2,
-    color: COLOR_FONT_GRAY
+    ...secondaryText
   }
 });

@@ -1,13 +1,12 @@
-import {StyleSheet, Platform} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {keyboardSpacerTop} from '../platform/keyboard-spacer.ios';
 import {
   UNIT,
-  COLOR_PINK,
-  COLOR_TRANSPARENT_BLACK,
   COLOR_FONT_ON_BLACK,
   COLOR_BLACK,
-  COLOR_SELECTED_DARK
+  COLOR_LIGHT_GRAY,
 } from '../../components/variables/variables';
+import {elevation1} from '../common-styles/form';
 
 const QUERY_ASSIST_HEIGHT = UNIT * 6;
 
@@ -27,63 +26,40 @@ export default StyleSheet.create({
     flex: 1,
     flexGrow: 1,
     flexShrink: 1,
-    paddingBottom: keyboardSpacerTop,
     justifyContent: 'flex-start',
-    backgroundColor: COLOR_TRANSPARENT_BLACK,
+    padding: UNIT,
+    paddingBottom: keyboardSpacerTop,
   },
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#f6f6f6',
-    borderRadius: UNIT
+    justifyContent: 'flex-start',
+    paddingLeft: UNIT,
+    paddingRight: UNIT,
+    borderRadius: UNIT,
+    backgroundColor: COLOR_LIGHT_GRAY
   },
   inputWrapperActive: {
-    backgroundColor: COLOR_BLACK,
-    paddingLeft: UNIT * 2
+    ...elevation1,
+    backgroundColor: COLOR_FONT_ON_BLACK,
+    paddingLeft: UNIT * 2,
+    paddingRight: UNIT * 2,
+    borderRadius: 0,
+    borderBottomColor: 'transparent',
   },
   searchInput: {
     flex: 1,
     height: QUERY_ASSIST_HEIGHT,
-    paddingLeft: UNIT * 2,
+    paddingLeft: UNIT,
+    marginLeft: UNIT,
+    marginRight: UNIT,
+
     fontSize: 16,
     letterSpacing: 0.08,
     textAlign: 'left',
-    color: '#717171'
+    color: COLOR_BLACK
   },
-  icon: {
-    lineHeight: 48,
-    marginLeft: UNIT * 2,
-    color: '#717171'
-  },
-  searchInputActive: {
-    backgroundColor: COLOR_SELECTED_DARK,
-    color: COLOR_FONT_ON_BLACK,
-    borderWidth: 0,
-    textAlign: 'left',
-
-    ...Platform.select({
-      android: {
-        paddingRight: UNIT * 4
-      }
-    })
-  },
-  clearIconWrapper: {
-    backgroundColor: 'transparent',
-    marginLeft: -28,
-    marginRight: 12,
-    overflow: 'visible'
-  },
-  clearIcon: {
-    width: UNIT * 2,
-    height: UNIT * 2
-  },
-  cancelSearch: {
-    paddingRight: UNIT * 2,
-    padding: UNIT
-  },
-  cancelText: {
-    fontSize: 16,
-    color: COLOR_PINK
+  iconMagnify: {
+    marginLeft: UNIT,
   }
 });
