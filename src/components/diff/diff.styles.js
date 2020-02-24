@@ -1,7 +1,7 @@
 import {StyleSheet} from 'react-native';
-import {COLOR_ICON_MEDIUM_GREY, COLOR_LINK, UNIT} from '../variables/variables';
+import {COLOR_ICON_MEDIUM_GREY, COLOR_PINK, UNIT} from '../variables/variables';
 
-const toggleColor = COLOR_LINK;
+const toggleColor = COLOR_PINK;
 
 export default StyleSheet.create({
   button: {
@@ -15,20 +15,19 @@ export default StyleSheet.create({
   },
   diffEqual: {},
   title: {
-    marginBottom: UNIT,
     color: COLOR_ICON_MEDIUM_GREY
   },
   toggle: {
     color: toggleColor
   },
+  content: {
+    paddingTop: UNIT,
+    paddingBottom: UNIT
+  },
   icon: {
     width: 10,
     height: 10,
     resizeMode: 'contain',
-    tintColor: toggleColor,
-    transform: []
-  },
-  iconCollapse: {
-    transform: [{rotate: '180deg'}]
+    tintColor: toggleColor
   }
 });

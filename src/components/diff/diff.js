@@ -69,7 +69,10 @@ export default class Diff extends PureComponent<Props, State> {
 
   renderDiff() {
     return (
-      <Text testID="diffText">
+      <Text
+        style={styles.content}
+        testID="diffText"
+      >
         {this.createDiff().map(
           (it, index) => {
             const diffInfo = this.getDiffInfo(it[0]);
@@ -100,7 +103,7 @@ export default class Diff extends PureComponent<Props, State> {
           </Text>
           <Text style={styles.toggle}>
             {'Details '}
-            <Icon name={collapsed ? 'angle-down' : 'angle-up'} />
+            <Icon name={collapsed ? 'angle-down' : 'angle-up'}/>
           </Text>
         </TouchableOpacity>}
 

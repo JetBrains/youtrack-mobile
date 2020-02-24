@@ -5,6 +5,12 @@ exports[`<Diff/> Render should match a snapshot 1`] = `
   testID="diff"
 >
   <Text
+    style={
+      Object {
+        "paddingBottom": 8,
+        "paddingTop": 8,
+      }
+    }
     testID="diffText"
   >
     <Text
