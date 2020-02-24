@@ -375,27 +375,25 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
 
         <View style={styles.activityChange}>
 
-          <View>
-            <Comment
-              key={comment.id}
-              comment={comment}
-              imageHeaders={this.props.imageHeaders}
-              backendUrl={this.props.backendUrl}
-              onIssueIdTap={this.props.onIssueIdTap}
-              attachments={allAttachments}
-              canRestore={this.props.canRestoreComment(comment)}
-              canDeletePermanently={this.props.canDeleteCommentPermanently(comment)}
-              onRestore={() => this.props.onRestoreComment(comment)}
-              onDeletePermanently={() => this.props.onDeleteCommentPermanently(comment, activityGroup.comment.id)}
-              activitiesEnabled={true}
-            />
+          <Comment
+            key={comment.id}
+            comment={comment}
+            imageHeaders={this.props.imageHeaders}
+            backendUrl={this.props.backendUrl}
+            onIssueIdTap={this.props.onIssueIdTap}
+            attachments={allAttachments}
+            canRestore={this.props.canRestoreComment(comment)}
+            canDeletePermanently={this.props.canDeleteCommentPermanently(comment)}
+            onRestore={() => this.props.onRestoreComment(comment)}
+            onDeletePermanently={() => this.props.onDeleteCommentPermanently(comment, activityGroup.comment.id)}
+            activitiesEnabled={true}
+          />
 
-            {!comment.deleted && IssueVisibility.isSecured(comment.visibility) &&
-            <CommentVisibility
-              visibility={IssueVisibility.getVisibilityPresentation(comment.visibility)}
-              color={COLOR_ICON_LIGHT_BLUE}
-            />}
-          </View>
+          {!comment.deleted && IssueVisibility.isSecured(comment.visibility) &&
+          <CommentVisibility
+            visibility={IssueVisibility.getVisibilityPresentation(comment.visibility)}
+            color={COLOR_ICON_LIGHT_BLUE}
+          />}
 
         </View>
       </View>
