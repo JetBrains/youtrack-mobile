@@ -1,5 +1,5 @@
 /* @flow */
-import styles from '../single-issue.styles';
+import styles from './single-issue-activity.styles';
 import Comment from '../../../components/comment/comment';
 import type {Attachment, IssueComment} from '../../../flow/CustomFields';
 
@@ -341,7 +341,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
     const isAuthor = this.props.issuePermissions.isCurrentUser(comment.author);
 
     if (!comment.deleted) {
-      return <View style={styles.commentActions}>
+      return <View style={styles.activityCommentActions}>
         <View style={styles.container}>
           <TouchableOpacity
             hitSlop={HIT_SLOP}

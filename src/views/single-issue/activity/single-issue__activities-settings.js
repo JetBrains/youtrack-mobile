@@ -1,6 +1,6 @@
 /* @flow */
 
-import styles from '../single-issue.styles';
+import styles from './single-issue-activity.styles';
 
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import React, {Component} from 'react';

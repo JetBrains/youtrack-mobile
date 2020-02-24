@@ -5,13 +5,10 @@ import {
   COLOR_BLACK,
   COLOR_FONT_GRAY,
   COLOR_FONT,
-  COLOR_PINK,
-  COLOR_ICON_LIGHT_BLUE,
   COLOR_ICON_MEDIUM_GREY,
-  COLOR_PINK_DARK, COLOR_PLACEHOLDER, COLOR_LIGHT_GRAY
+  COLOR_PINK_DARK, COLOR_PLACEHOLDER
 } from '../../components/variables/variables';
 import {secondaryText, mainText} from '../../components/common-styles/issue';
-import {link} from '../../components/common-styles/button';
 
 
 export default StyleSheet.create({
@@ -97,151 +94,6 @@ export default StyleSheet.create({
     marginRight: UNIT
   },
 
-  issueCommentInputContainer: {
-    justifyContent: 'flex-end'
-  },
-
-  activitiesContainer: {
-    paddingLeft: UNIT,
-    paddingBottom: UNIT * 3,
-    paddingRight: UNIT
-  },
-  activity: {
-    flexDirection: 'row',
-    paddingTop: UNIT * 4,
-    paddingLeft: UNIT,
-    paddingRight: UNIT,
-  },
-  activityAvatar: {
-    width: 32,
-    height: 32,
-    alignItems: 'center',
-  },
-  mergedActivity: {
-    marginBottom: 0,
-    paddingTop: UNIT * 2
-  },
-  activityAuthor: {
-    flexDirection: 'row'
-  },
-  activityItem: {
-    flex: 1,
-    marginLeft: UNIT * 2,
-  },
-  activityAuthorName: {
-    flex: 0,
-    marginRight: UNIT / 2,
-    color: COLOR_FONT,
-    fontSize: 18,
-    lineHeight: 17,
-    fontWeight: '500',
-    letterSpacing: -0.22,
-  },
-  activityTimestamp: {
-    ...secondaryText,
-    color: COLOR_FONT,
-    lineHeight: 16
-  },
-  activityLabel: {
-    color: COLOR_ICON_MEDIUM_GREY
-  },
-  activityText: {
-    color: COLOR_ICON_MEDIUM_GREY
-  },
-  activityRelatedChanges: {
-    flex: 1,
-    padding: UNIT * 2,
-    paddingTop: UNIT,
-    marginTop: UNIT * 2,
-    backgroundColor: COLOR_LIGHT_GRAY,
-    borderRadius: UNIT,
-    lineHeight: 14
-  },
-  activityHistoryChanges: {
-    flex: 1,
-    lineHeight: 14,
-  },
-  activityChange: {
-    marginTop: UNIT / 2,
-  },
-  activityRemoved: {
-    textDecorationLine: 'line-through'
-  },
-  activityHistoryIcon: {
-    width: 20,
-    height: 20,
-    resizeMode: 'contain',
-    tintColor: COLOR_ICON_LIGHT_BLUE
-  },
-
-  links: {
-    marginTop: UNIT * 1.5
-  },
-  linkedIssue: {
-    flexDirection: 'row',
-  },
-  linkText: {
-    color: COLOR_PINK
-  },
-
-  settingsModal: {
-    justifyContent: 'flex-end'
-  },
-  settingsPanel: {
-    backgroundColor: COLOR_BLACK
-  },
-  settingsApplyButton: {
-    backgroundColor: COLOR_PINK,
-    padding: UNIT,
-    paddingLeft: UNIT * 2
-  },
-  settingsApplyButtonDisabled: {
-    backgroundColor: COLOR_FONT,
-    opacity: 0.5
-  },
-  settingsApplyButtonText: {
-    height: 24,
-    fontSize: 20,
-    color: COLOR_FONT_ON_BLACK,
-    textAlign: 'center'
-  },
-  settingsSelect: {
-    flex: 0,
-    paddingBottom: UNIT * 2
-  },
-  settingsOrderSettings: {
-    borderTopWidth: 1,
-    borderColor: COLOR_FONT_GRAY,
-    paddingTop: UNIT * 2,
-    paddingBottom: UNIT * 3
-  },
-  settingsOrderSettingsText: {
-    flex: 1,
-    fontSize: 24,
-    color: COLOR_FONT_ON_BLACK,
-    textAlign: 'left'
-  },
-  settingsToggle: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: UNIT,
-    paddingTop: UNIT,
-    paddingBottom: UNIT
-  },
-  settingsToggleIcon: {
-    marginTop: -1,
-    marginLeft: UNIT,
-    color: COLOR_ICON_MEDIUM_GREY
-  },
-
-  workTime: {
-    fontWeight: 'bold'
-  },
-  workComment: {
-    marginBottom: UNIT,
-  },
-
   tabsBar: {
     backgroundColor: COLOR_FONT_ON_BLACK,
     ...Platform.select({
@@ -270,14 +122,6 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center'
-  },
-  link: {
-    ...mainText,
-    ...link
-  },
-  commentActions: {
-    flexDirection: 'row',
-    marginTop: UNIT * 2
   },
   issueAdditionalInfoContainer: {
     flexDirection: 'row',

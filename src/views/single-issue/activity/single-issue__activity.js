@@ -21,7 +21,7 @@ import * as activityImageAttachActions from './single-issue-activity__image-atta
 
 import {isActivitiesAPIEnabled} from './single-issue-activity__helper';
 
-import styles from '../single-issue.styles';
+import styles from './single-issue-activity.styles';
 
 import PropTypes from 'prop-types';
 
@@ -174,7 +174,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     } = this.props;
     const isSecured = !!editingComment && IssueVisibility.isSecured(editingComment.visibility);
 
-    return <View style={styles.issueCommentInputContainer}>
+    return <View style={styles.activityAddCommentInputContainer}>
       <SingleIssueCommentInput
         autoFocus={focus}
         initialText={commentText}
@@ -234,10 +234,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     );
 
     return (
-      <View style={{
-        flexDirection: 'column',
-        flex: 1
-      }}>
+      <View style={styles.activities}>
 
         {isSelectOpen && this.renderCommentVisibilitySelect()}
 
