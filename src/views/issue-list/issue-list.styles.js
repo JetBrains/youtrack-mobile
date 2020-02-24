@@ -43,7 +43,7 @@ export default StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     paddingLeft: UNIT * 2,
-    paddingRight: UNIT * 1.5,
+    paddingRight: UNIT * 2,
     paddingTop: 13,
     paddingBottom: UNIT * 1.5
   },
