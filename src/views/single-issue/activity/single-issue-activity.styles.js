@@ -50,14 +50,15 @@ export default StyleSheet.create({
   },
   activityAuthor: {
     flexDirection: 'row',
-    marginBottom: UNIT
+    marginBottom: UNIT * 1.5
   },
   activityItem: {
     flex: 1,
     marginLeft: UNIT * 2,
   },
   activityAuthorName: {
-    flex: 0,
+    flexGrow: 1,
+    flexShrink: 0,
     marginRight: UNIT / 2,
     color: COLOR_FONT,
     fontSize: 18,
@@ -67,7 +68,6 @@ export default StyleSheet.create({
   },
   activityTimestamp: {
     ...secondaryText,
-    color: COLOR_FONT,
     lineHeight: 16
   },
   activityLabel: {

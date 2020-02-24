@@ -43,7 +43,6 @@ import type {WorkTimeSettings} from '../../../flow/WorkTimeSettings';
 import type {ActivityItem, IssueActivity} from '../../../flow/Activity';
 
 import {
-  COLOR_FONT,
   COLOR_FONT_GRAY,
   COLOR_ICON_GREY,
   COLOR_ICON_LIGHT_BLUE,
@@ -308,7 +307,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
 
   _renderUserInfo(activityGroup: Object, noTimestamp?: boolean) {
     return (
-      <View style={[styles.activityAuthor]}>
+      <View style={styles.activityAuthor}>
         <Text style={styles.activityAuthorName}>
           {getEntityPresentation(activityGroup.author)}
         </Text>
@@ -452,7 +451,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
       return (
         <View style={isRelatedChange ? styles.activityRelatedChanges : styles.activityHistoryChanges}>
           {Boolean(!activityGroup.merged && !isRelatedChange) && this._renderUserInfo(activityGroup)}
-          {activityGroup.merged && this._renderTimestamp(activityGroup.timestamp, {color: COLOR_FONT})}
+          {activityGroup.merged && this._renderTimestamp(activityGroup.timestamp)}
 
           {activityGroup.events.map((event) => (
             <View key={event.id} style={styles.activityChange}>
