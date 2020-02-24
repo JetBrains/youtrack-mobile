@@ -2,12 +2,12 @@ import {StyleSheet} from 'react-native';
 import {
   UNIT,
   COLOR_FONT_ON_BLACK,
-  COLOR_FONT_GRAY,
   COLOR_FONT,
   COLOR_PINK,
   COLOR_ICON_LIGHT_BLUE,
   COLOR_ICON_MEDIUM_GREY,
-  COLOR_LIGHT_GRAY
+  COLOR_LIGHT_GRAY,
+  COLOR_BLACK
 } from '../../../components/variables/variables';
 import {mainText, secondaryText} from '../../../components/common-styles/issue';
 import {link} from '../../../components/common-styles/button';
@@ -111,7 +111,9 @@ export default StyleSheet.create({
   settingsModal: {
     justifyContent: 'flex-end'
   },
-  settingsPanel: {
+  settingsModalContent: {
+    borderTopWidth: 1,
+    borderColor: 'rgba(110,110,110,0.2)',
     backgroundColor: COLOR_FONT_ON_BLACK
   },
   settingsApplyButton: {
@@ -130,19 +132,15 @@ export default StyleSheet.create({
     textAlign: 'center'
   },
   settingsSelect: {
-    flex: 0,
-    paddingBottom: UNIT * 2
+    flex: 0
   },
   settingsOrderSettings: {
-    borderTopWidth: 1,
-    borderColor: COLOR_FONT_GRAY,
-    paddingTop: UNIT * 2,
-    paddingBottom: UNIT * 3
+    marginBottom: UNIT * 3
   },
   settingsOrderSettingsText: {
+    ...mainText,
     flex: 1,
-    fontSize: 24,
-    color: COLOR_FONT_ON_BLACK,
+    color: COLOR_BLACK,
     textAlign: 'left'
   },
   settingsToggle: {

@@ -52,10 +52,10 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginLeft: UNIT * 2,
-    padding: UNIT * 2,
-    paddingLeft: 0,
+    paddingRight: UNIT * 1.5,
     borderColor: COLOR_MEDIUM_GRAY,
     borderBottomWidth: 0.3,
+    height: UNIT * 7
   },
   loadingRow: {
     justifyContent: 'center'

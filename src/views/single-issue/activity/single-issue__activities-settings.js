@@ -2,7 +2,7 @@
 
 import styles from './single-issue-activity.styles';
 
-import {View, Text, TouchableOpacity, Image} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 import React, {Component} from 'react';
 
 import type {UserAppearanceProfile} from '../../../flow/User';
@@ -16,9 +16,10 @@ import apiHelper from '../../../components/api/api__helper';
 import Select from '../../../components/select/select';
 import ModalView from '../../../components/modal-view/modal-view';
 
-import {checkWhite} from '../../../components/icon/icon';
-import selectStyles from '../../../components/select/select.styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
+import selectStyles from '../../../components/select/select.styles';
+import {IconCheck} from '../../../components/icon/icon';
 
 type Props = {
   issueActivityTypes: Array<ActivityEnabledType>,
@@ -53,6 +54,7 @@ const defaultState = {
   naturalCommentsOrder: true,
 };
 
+type SettingsOrderItem = { label: string, isNaturalCommentsOrder: boolean };
 
 export default class SingleIssueActivitiesSettings extends Component<Props, State> {
   constructor(props: Object) {
@@ -104,37 +106,38 @@ export default class SingleIssueActivitiesSettings extends Component<Props, Stat
         {...this.state.select}
         noFilter={true}
         emptyValue={null}
-        onSelect={() => {
-        }}
+        onSelect={() => {}}
         getTitle={getEntityPresentation}
         onCancel={this._toggleSettingsVisibility}
         onChangeSelection={(selectedItems) => this.setState({select: {...this.state.select, selectedItems}})}
+        topPadding={0}
       />
     );
   }
 
   _renderSortOrderSettings() {
+    const orderData: Array<SettingsOrderItem> = [
+      {
+        label: 'Sort: oldest first',
+        isNaturalCommentsOrder: true
+      },
+      {
+        label: 'Sort: newest first',
+        isNaturalCommentsOrder: false
+      }
+    ];
     return (
       <View style={styles.settingsOrderSettings}>
-        <TouchableOpacity
-          style={selectStyles.row}
-          onPress={() => this.setState({naturalCommentsOrder: true})}
-        >
-          <Text style={styles.settingsOrderSettingsText}>Sort: oldest first</Text>
-          <View style={selectStyles.selectedMarkIconSize}>
-            {this.state.naturalCommentsOrder && <Image source={checkWhite} style={selectStyles.selectedMarkIcon}/>}
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={selectStyles.row}
-          onPress={() => this.setState({naturalCommentsOrder: false})}
-        >
-          <Text style={styles.settingsOrderSettingsText}>Sort: newest first</Text>
-          <View style={selectStyles.selectedMarkIconSize}>
-            {!this.state.naturalCommentsOrder && <Image source={checkWhite} style={selectStyles.selectedMarkIcon}/>}
-          </View>
-        </TouchableOpacity>
+        {orderData.map((it: SettingsOrderItem) => (
+          <TouchableOpacity
+            key={it.label}
+            style={[selectStyles.row, {minHeight: 62}]}
+            onPress={() => this.setState({naturalCommentsOrder: it.isNaturalCommentsOrder})}
+          >
+            <Text style={styles.settingsOrderSettingsText}>{it.label}</Text>
+            {this.state.naturalCommentsOrder === it.isNaturalCommentsOrder && <IconCheck/>}
+          </TouchableOpacity>
+        ))}
       </View>
     );
   }
@@ -149,16 +152,14 @@ export default class SingleIssueActivitiesSettings extends Component<Props, Stat
         animationType={'slide'}
         style={styles.settingsModal}
       >
-        <View style={styles.settingsPanel}>
+        <View style={styles.settingsModalContent}>
           {this._renderSelect()}
-
           {select.show && this._renderSortOrderSettings()}
-
           {select.show &&
           <TouchableOpacity
             style={[
               styles.settingsApplyButton,
-              select.selectedItems.length === 0 ? styles.settingsApplyButtonDisabled : {}
+              select.selectedItems.length === 0 ? styles.settingsApplyButtonDisabled : null
             ]}
             onPress={() => this._onApplySettings()}
             disabled={select.selectedItems.length === 0}
