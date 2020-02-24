@@ -229,15 +229,13 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
         style={styles.commentSendButton}
         disabled={!(commentText || '').trim() || isSaving}
         onPress={() => this.updateComment()}>
-        {!this.state.isSaving
-          ? (
-            <IconMaterial
-              name="arrow-up" size={22}
-              color={COLOR_FONT_ON_BLACK}
-            />
-          )
-          : <ActivityIndicator/>
-        }
+        {!this.state.isSaving && (
+          <IconMaterial
+            name="arrow-up" size={22}
+            color={COLOR_FONT_ON_BLACK}
+          />
+        )}
+        {this.state.isSaving && <ActivityIndicator color={COLOR_FONT_ON_BLACK}/>}
       </TouchableOpacity>
     );
   }

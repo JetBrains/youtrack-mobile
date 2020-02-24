@@ -168,9 +168,9 @@ export function addOrEditComment(comment: IssueComment | null) {
     }
 
     if (editingComment) {
-      dispatch(submitEditedComment({...editingComment, ...comment}));
+      return dispatch(submitEditedComment({...editingComment, ...comment}));
     } else {
-      dispatch(addComment(comment));
+      return dispatch(addComment(comment));
     }
   };
 }
