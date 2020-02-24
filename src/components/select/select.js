@@ -1,13 +1,14 @@
 /* @flow */
-import {Text, Image, ScrollView, View, TouchableOpacity, TextInput, ActivityIndicator} from 'react-native';
+import {Text, ScrollView, View, TouchableOpacity, TextInput, ActivityIndicator} from 'react-native';
 import React, {Component} from 'react';
 import styles from './select.styles';
 import ColorField from '../color-field/color-field';
 import {notifyError} from '../notification/notification';
-import {checkWhite} from '../icon/icon';
 import Avatar from '../avatar/avatar';
 import {COLOR_PLACEHOLDER, UNIT} from '../variables/variables';
 import getTopPadding, {onHeightChange, isIphoneX} from '../header/header__top-padding';
+
+import {MagnifyIcon, CloseIcon, CheckIcon} from '../icon/icon';
 
 const MAX_VISIBLE_ITEMS = 100;
 
@@ -93,7 +94,7 @@ export default class Select extends Component<Props, State> {
       <TouchableOpacity key={this.props.emptyValue} style={styles.row} onPress={() => this._onClearValue()}>
         <Text style={[styles.itemTitle, {marginLeft: 0}]}>{this.props.emptyValue}</Text>
 
-        {this.state.selectedItems.length === 0 && <Image source={checkWhite} style={styles.selectedMarkIcon}/>}
+        {this.state.selectedItems.length === 0 && <CheckIcon/>}
       </TouchableOpacity>
     );
   }
@@ -156,7 +157,7 @@ export default class Select extends Component<Props, State> {
           {this._renderTitle(item)}
         </View>
 
-        {this._isSelected(item) && <Image source={checkWhite} style={styles.selectedMarkIcon}></Image>}
+        {this._isSelected(item) && <CheckIcon/>}
       </TouchableOpacity>
     );
   }
@@ -172,6 +173,7 @@ export default class Select extends Component<Props, State> {
     return (
       <View style={[styles.container, style, {paddingTop}]}>
         {!noFilter && <View style={styles.inputWrapper}>
+          <MagnifyIcon/>
           <TextInput
             placeholder={placeholder}
             keyboardAppearance="dark"
@@ -188,7 +190,7 @@ export default class Select extends Component<Props, State> {
             }}
             style={styles.searchInput}/>
           <TouchableOpacity style={styles.cancelButton} onPress={onCancel}>
-            <Text style={styles.cancelButtonText}>Cancel</Text>
+            <CloseIcon/>
           </TouchableOpacity>
         </View>}
         <ScrollView keyboardShouldPersistTaps="handled"

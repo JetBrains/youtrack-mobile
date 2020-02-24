@@ -358,21 +358,25 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     />;
   }
 
+  renderHeader(title: string) {
+    return (
+      <Header
+        leftButton={<Text></Text>}
+        rightButton={<Text>Cancel</Text>}
+        onBack={() => this.closeEditor()}>
+        <Text>{title}</Text>
+      </Header>
+    );
+  }
+
   _renderDatePicker() {
     if (!this.state.datePicker.show) {
       return;
     }
 
     return (
-      <View style={{flex: 1}}>
-        <Header
-          leftButton={<Text>Cancel</Text>}
-          rightButton={<Text></Text>}
-          onBack={() => {
-            this.closeEditor();
-          }}>
-          <Text>{this.state.datePicker.title}</Text>
-        </Header>
+      <View style={styles.container}>
+        {this.renderHeader(this.state.datePicker.title)}
 
         <View style={styles.calendar}>
           {this.state.datePicker.emptyValueName &&
@@ -423,13 +427,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
 
     return (
       <View>
-        <Header
-          leftButton={<Text>Cancel</Text>}
-          onBack={() => {
-            this.closeEditor();
-          }}>
-          <Text>{this.state.editingField.projectCustomField.field.name}</Text>
-        </Header>
+        {this.renderHeader(this.state.editingField.projectCustomField.field.name)}
         <View>
           <TextInput
             keyboardAppearance="dark"
@@ -457,22 +455,10 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     );
   }
 
-  render() {
+  renderFields() {
     const {issue, issuePermissions, canEditProject} = this.props;
-    const {savingField, editingField, isEditingProject, isSavingProject, keyboardOpen} = this.state;
-
-    const isEditorShown = this.state.select.show || this.state.datePicker.show || this.state.simpleValue.show;
-
-    const ContainerComponent = isEditorShown ? ModalView : View;
-    const containerProps = (
-      isEditorShown
-        ? {
-          visible: true,
-          style: [isEditorShown ? styles.customFieldsEditor : null]
-        } : {style: styles.placeholder}
-    );
-
-    const projectName: string = issue.project?.name || '';
+    const {savingField, editingField, isEditingProject, isSavingProject} = this.state;
+    const projectName: string = issue?.project?.name || '';
     const trimmedProjectName = projectName.length > MAX_PROJECT_NAME_LENGTH
       ? `${projectName.substring(0, MAX_PROJECT_NAME_LENGTH - 3)}…`
       : projectName;
@@ -482,46 +468,63 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     };
 
     return (
+      <View>
+        <ScrollView
+          ref={this.restoreScrollPosition}
+          onScroll={this.storeScrollPosition}
+          contentOffset={{
+            x: this.currentScrollX,
+            y: 0
+          }}
+          scrollEventThrottle={100}
+          horizontal={true}
+          style={styles.customFieldsPanel}
+          keyboardShouldPersistTaps="always"
+        >
+          <View key="Project">
+            <CustomField
+              disabled={!canEditProject}
+              onPress={() => this.onSelectProject()}
+              active={isEditingProject}
+              field={projectFakeField}
+            />
+            {isSavingProject && <ActivityIndicator style={styles.savingFieldIndicator}/>}
+          </View>
+
+          {issue.fields.map((field) => {
+            return <View key={field.id}>
+              <CustomField
+                field={field}
+                onPress={() => this.onEditField(field)}
+                active={editingField === field}
+                disabled={!issuePermissions.canUpdateField(issue, field)}/>
+
+              {savingField && savingField.id === field.id && <ActivityIndicator style={styles.savingFieldIndicator}/>}
+            </View>;
+          })}
+        </ScrollView>
+        <View style={styles.bottomBorder}/>
+      </View>
+    );
+  }
+
+  render() {
+    const {keyboardOpen} = this.state;
+    const isEditorShown = this.state.select.show || this.state.datePicker.show || this.state.simpleValue.show;
+    const ContainerComponent = isEditorShown ? ModalView : View;
+    const containerProps = (
+      isEditorShown
+        ? {
+          visible: true,
+          animationType: 'slide'
+        } : {style: styles.placeholder}
+    );
+
+    return (
       // $FlowFixMe: flow fails with this props generation
       <ContainerComponent {...containerProps}>
 
-        <View>
-          <ScrollView
-            ref={this.restoreScrollPosition}
-            onScroll={this.storeScrollPosition}
-            contentOffset={{
-              x: this.currentScrollX,
-              y: 0
-            }}
-            scrollEventThrottle={100}
-            horizontal={true}
-            style={[styles.customFieldsPanel, isEditorShown ? styles.customFieldsPanelModal : null]}
-            keyboardShouldPersistTaps="always"
-          >
-            <View key="Project">
-              <CustomField
-                disabled={!canEditProject}
-                onPress={() => this.onSelectProject()}
-                active={isEditingProject}
-                field={projectFakeField}
-              />
-              {isSavingProject && <ActivityIndicator style={styles.savingFieldIndicator}/>}
-            </View>
-
-            {issue.fields.map((field) => {
-              return <View key={field.id}>
-                <CustomField
-                  field={field}
-                  onPress={() => this.onEditField(field)}
-                  active={editingField === field}
-                  disabled={!issuePermissions.canUpdateField(issue, field)}/>
-
-                {savingField && savingField.id === field.id && <ActivityIndicator style={styles.savingFieldIndicator}/>}
-              </View>;
-            })}
-          </ScrollView>
-          {!isEditorShown && <View style={styles.bottomBorder}/>}
-        </View>
+        {!isEditorShown && this.renderFields()}
 
         <AnimatedView
           style={styles.editorViewContainer}

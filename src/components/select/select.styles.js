@@ -1,5 +1,13 @@
-import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_PINK, COLOR_SELECTED_DARK, COLOR_TRANSPARENT_BLACK, COLOR_FONT_ON_BLACK, COLOR_FONT_GRAY} from '../../components/variables/variables';
+import {Platform, StyleSheet} from 'react-native';
+import {
+  UNIT,
+  COLOR_FONT_GRAY,
+  COLOR_FONT,
+  COLOR_FONT_ON_BLACK,
+  COLOR_PLACEHOLDER,
+  COLOR_MEDIUM_GRAY, COLOR_BLACK
+} from '../../components/variables/variables';
+import {mainText} from '../common-styles/issue';
 
 export default StyleSheet.create({
   container: {
@@ -7,42 +15,53 @@ export default StyleSheet.create({
   },
   inputWrapper: {
     flexDirection: 'row',
-    backgroundColor: COLOR_TRANSPARENT_BLACK,
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingLeft: UNIT * 1.5,
+    marginBottom: UNIT * 2,
+    backgroundColor: COLOR_FONT_ON_BLACK,
+
+    ...Platform.select({
+      ios: {
+        shadowRadius: 0.75,
+        shadowColor: COLOR_PLACEHOLDER,
+        shadowOffset: {
+          width: 0,
+          height: 1
+        },
+        shadowOpacity: 0.25,
+      },
+      android: {
+        elevation: 1
+      },
+    }),
   },
   cancelButton: {
-    paddingRight: UNIT * 2,
+    paddingRight: UNIT * 1.5,
     padding: UNIT
   },
-  cancelButtonText: {
-    fontSize: 16,
-    color: COLOR_PINK
-  },
   searchInput: {
+    ...mainText,
     flex: 1,
-    height: UNIT * 4.5,
-    borderRadius: 6,
-    backgroundColor: COLOR_SELECTED_DARK,
+    height: UNIT * 5,
     margin: UNIT,
-    paddingTop: 2,
-    paddingBottom: 2,
-    paddingLeft: UNIT,
-    color: COLOR_FONT_ON_BLACK
+    color: COLOR_FONT
   },
   row: {
     position: 'relative',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: UNIT,
-    paddingLeft: UNIT * 2,
-    paddingRight: UNIT * 2
+    marginLeft: UNIT * 2,
+    padding: UNIT * 2,
+    paddingLeft: 0,
+    borderColor: COLOR_MEDIUM_GRAY,
+    borderBottomWidth: 0.3,
   },
   loadingRow: {
     justifyContent: 'center'
   },
   headerText: {
-    color: COLOR_FONT_ON_BLACK
+    color: COLOR_FONT
   },
   selectItemValue: {
     flexDirection: 'row'
@@ -51,11 +70,11 @@ export default StyleSheet.create({
     marginRight: UNIT * 2
   },
   itemTitle: {
-    fontSize: 24,
-    color: COLOR_FONT_ON_BLACK
+    ...mainText,
+    color: COLOR_BLACK
   },
   loadingMessage: {
-    paddingLeft: UNIT*2,
+    paddingLeft: UNIT * 2,
     color: COLOR_FONT_GRAY
   },
   selectedMarkIcon: {

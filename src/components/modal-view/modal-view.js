@@ -8,7 +8,7 @@ import type {ModalOrientation, ModalAnimationType} from '../../flow/ModalView';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 import {Orientation, AnimationType} from '../../flow/ModalView';
-import {COLOR_BLACK} from '../variables/variables';
+import {APP_BACKGROUND} from '../common-styles/app';
 
 
 type DefaultProps = {
@@ -50,7 +50,7 @@ export default class ModalView extends PureComponent<Props, void> {
         supportedOrientations={supportedOrientations}
         onRequestClose={onRequestClose}
       >
-        <SafeAreaView style={[Styles.box, transparent === true ? {} : {backgroundColor: COLOR_BLACK}]}>
+        <SafeAreaView style={[Styles.box, transparent === true ? {} : {backgroundColor: APP_BACKGROUND}]}>
           <View style={[Styles.box, style]}>
             {children}
           </View>

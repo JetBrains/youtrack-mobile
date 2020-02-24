@@ -2,28 +2,26 @@ import {StyleSheet} from 'react-native';
 import {
   UNIT,
   COLOR_PINK,
-  COLOR_SELECTED_DARK,
   COLOR_GRAY,
-  COLOR_TRANSPARENT_BLACK,
   COLOR_FONT_GRAY,
   COLOR_FONT_ON_BLACK,
   COLOR_BLACK,
   COLOR_MEDIUM_GRAY
 } from '../../components/variables/variables';
+import {formStyles} from '../common-styles/form';
 
 const HEIGHT = UNIT * 10;
 const SAVING_ALPHA = '70';
 const DONE_BUTTON_HEIGHT = 24;
 
 export default StyleSheet.create({
+  container: {
+    flex: 1
+  },
   placeholder: {
     height: HEIGHT,
     marginTop: UNIT,
     paddingTop: UNIT / 2
-  },
-  customFieldsEditor: {
-    top: UNIT * 2,
-    borderWidth: 0
   },
   bottomBorder: {
     height: 1,
@@ -35,13 +33,10 @@ export default StyleSheet.create({
     flexDirection: 'row',
     height: HEIGHT
   },
-  customFieldsPanelModal: {
-    borderTopWidth: 0
-  },
   editorViewContainer: {
     flex: 1,
     flexShrink: 1,
-    backgroundColor: COLOR_TRANSPARENT_BLACK
+    backgroundColor: COLOR_FONT_ON_BLACK
   },
   calendar: {
     padding: UNIT*2,
@@ -53,14 +48,7 @@ export default StyleSheet.create({
     color: COLOR_PINK
   },
   simpleValueInput: {
-    paddingTop: 2,
-    paddingBottom: 2,
-
-    height: UNIT * 4,
-    margin: UNIT,
-    paddingLeft: UNIT,
-    backgroundColor: COLOR_SELECTED_DARK,
-    color: COLOR_FONT_ON_BLACK
+    ...formStyles.input,
   },
   savingFieldIndicator: {
     backgroundColor: `#CCCCCC${SAVING_ALPHA}`,

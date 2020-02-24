@@ -21,7 +21,7 @@ exports[`<ModalView/> Render should match a snapshot 1`] = `
           "flex": 1,
         },
         Object {
-          "backgroundColor": "#000",
+          "backgroundColor": "#FFF",
         },
       ]
     }

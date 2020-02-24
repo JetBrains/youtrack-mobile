@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 import {
   COLOR_FONT_GRAY,
   COLOR_PINK,
-  COLOR_FONT_ON_BLACK,
+  COLOR_FONT,
   UNIT,
 } from '../variables/variables';
 import {mainText, secondaryText} from '../common-styles/issue';
@@ -58,7 +58,7 @@ export default StyleSheet.create({
     color: COLOR_PINK
   },
   valueTextActive: {
-    color: COLOR_FONT_ON_BLACK,
+    color: COLOR_FONT,
   },
   valueTextDisabled: {
     color: COLOR_FONT_GRAY

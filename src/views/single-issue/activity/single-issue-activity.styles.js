@@ -2,7 +2,6 @@ import {StyleSheet} from 'react-native';
 import {
   UNIT,
   COLOR_FONT_ON_BLACK,
-  COLOR_BLACK,
   COLOR_FONT_GRAY,
   COLOR_FONT,
   COLOR_PINK,
@@ -113,7 +112,7 @@ export default StyleSheet.create({
     justifyContent: 'flex-end'
   },
   settingsPanel: {
-    backgroundColor: COLOR_BLACK
+    backgroundColor: COLOR_FONT_ON_BLACK
   },
   settingsApplyButton: {
     backgroundColor: COLOR_PINK,

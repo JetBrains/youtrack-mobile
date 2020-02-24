@@ -1,3 +1,8 @@
+import React, {PureComponent} from 'react';
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import {COLOR_ICON_GREY, COLOR_PINK, COLOR_PLACEHOLDER} from '../variables/variables';
+
 export {default as logo} from './youtrack-logo-512.png';
 export {default as arrow} from './arrow.png';
 export {default as add} from './add.png';
@@ -35,3 +40,44 @@ export {default as visibilityActive} from './visibility-action-active.png';
 export {default as qrCode} from './qr-code.png';
 export {default as history} from './history.png';
 export {default as work} from './work.png';
+
+
+type Props = {
+  name?: string,
+  size?: number,
+  color?: string
+};
+
+class DefaultIconMaterial extends PureComponent<Props, void> {
+  static defaultProps: Props = {
+    name: '',
+    size: 26,
+    color: COLOR_PINK
+  };
+
+  render() {
+    if (this.props.name) {
+      return <IconMaterial name={this.props.name} size={this.props.size} color={this.props.color}/>;
+    }
+    return null;
+  }
+}
+
+
+export const CheckIcon = (props?: Props) => <DefaultIconMaterial {...Object.assign({
+  name: 'check',
+  size: 26,
+  color: COLOR_ICON_GREY
+}, props)} />;
+
+export const CloseIcon = (props?: Props) => <DefaultIconMaterial {...Object.assign({
+  name: 'close',
+  size: 28,
+  color: COLOR_PINK
+}, props)} />;
+
+export const MagnifyIcon = (props?: Props) => <DefaultIconMaterial {...Object.assign({
+  name: 'magnify',
+  size: 22,
+  color: COLOR_PLACEHOLDER
+}, props)} />;
