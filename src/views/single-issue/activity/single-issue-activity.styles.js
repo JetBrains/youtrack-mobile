@@ -46,10 +46,11 @@ export default StyleSheet.create({
   },
   mergedActivity: {
     marginBottom: 0,
-    paddingTop: UNIT * 2
+    paddingTop: UNIT * 3
   },
   activityAuthor: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    marginBottom: UNIT
   },
   activityItem: {
     flex: 1,
