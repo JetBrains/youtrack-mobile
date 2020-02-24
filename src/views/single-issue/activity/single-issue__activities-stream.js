@@ -243,10 +243,6 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
 
     return (
       <View key={activity.id}>
-        <View style={styles.row}>
-          <Text style={[styles.activityLabel, {paddingBottom: UNIT / 2}]}>{this.getActivityEventTitle(activity)}</Text>
-        </View>
-
         {hasAddedAttachments && <AttachmentsRow
           attachments={addedAndAvailable}
           attachingImage={null}
