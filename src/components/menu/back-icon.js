@@ -15,7 +15,7 @@ export default class BackIcon extends PureComponent<Props, void> {
     return (
       <Icon
         name={isAndroid ? 'arrow-left' : 'chevron-left'}
-        size={isAndroid ? 22 : 30}
+        size={isAndroid ? 23 : 30}
         color={this.props.color}
       />
     );
