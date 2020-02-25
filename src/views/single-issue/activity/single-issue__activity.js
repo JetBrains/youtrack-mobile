@@ -8,7 +8,7 @@ import {connect} from 'react-redux';
 
 import commentsStyles from '../single-issue__comments.styles';
 import IssueVisibility from '../../../components/issue-visibility/issue-visibility';
-import KeyboardSpacerIOS from '../../../components/platform/keyboard-spacer';
+import KeyboardSpacerIOS from '../../../components/platform/keyboard-spacer.ios';
 import Select from '../../../components/select/select';
 import SingleIssueActivities from './single-issue__activities-stream';
 import SingleIssueActivitiesSettings from './single-issue__activities-settings';
