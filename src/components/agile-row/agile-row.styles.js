@@ -27,10 +27,7 @@ export default StyleSheet.create({
     borderColor: COLOR_GRAY
   },
   column: {
-    flex: 1,
-
-    borderRightWidth: 0.5,
-    borderColor: COLOR_GRAY
+    flex: 1
   },
   columnWithoutBorder: {
     borderRightWidth: 0

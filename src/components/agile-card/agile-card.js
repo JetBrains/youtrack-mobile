@@ -1,7 +1,13 @@
 /* @flow */
 import {View, Text, StyleSheet} from 'react-native';
 import React, {PureComponent} from 'react';
-import {UNIT, COLOR_FONT, COLOR_PINK, COLOR_FONT_GRAY} from '../variables/variables';
+import {
+  UNIT,
+  COLOR_FONT,
+  COLOR_FONT_GRAY,
+  COLOR_LIGHT_GRAY,
+  COLOR_ICON_LIGHT_BLUE
+} from '../variables/variables';
 import ColorField from '../color-field/color-field';
 import Avatar from '../avatar/avatar';
 import ApiHelper from '../api/api__helper';
@@ -90,18 +96,18 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'column',
     padding: UNIT,
+    marginBottom: UNIT,
+    marginRight: UNIT * 2,
     height: AGILE_CARD_HEIGHT,
-    backgroundColor: '#FFF'
+    backgroundColor: COLOR_LIGHT_GRAY,
+    borderRadius: UNIT * 0.75
   },
   ghost: {
     display: 'none'
   },
   dragging: {
-    transform: [{rotate: '-5deg'}],
     width: '50%',
-    borderRadius: 6,
-    borderColor: `${COLOR_PINK}70`,
-    borderWidth: 4
+    borderColor: COLOR_ICON_LIGHT_BLUE
   },
   topLine: {
     flexDirection: 'row',
