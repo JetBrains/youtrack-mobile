@@ -48,7 +48,7 @@ export default StyleSheet.create({
   },
   boardHeaderContainer: {
     overflow: 'hidden',
-    backgroundColor: COLOR_BLACK
+    marginTop: UNIT
   },
   loadingMoreIndicator: {
     padding: UNIT * 2

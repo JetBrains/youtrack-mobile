@@ -4,16 +4,16 @@ import React, {PureComponent} from 'react';
 import {
   UNIT,
   AGILE_COLLAPSED_COLUMN_WIDTH,
-  COLOR_DARK_BORDER,
-  COLOR_FONT_GRAY,
-  COLOR_BLACK
+  COLOR_MEDIUM_GRAY
 } from '../../components/variables/variables';
 import type {AgileColumn} from '../../flow/Agile';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import {secondaryText} from '../../components/common-styles/issue';
 
 type Props = {
-  style?: any,
+  style?: ViewStyleProp,
   columns: Array<AgileColumn>,
-  onCollapseToggle: (column: AgileColumn) => any
+  onCollapseToggle: (column: AgileColumn) => any,
 };
 
 export default class BoardHeader extends PureComponent<Props, void> {
@@ -28,7 +28,7 @@ export default class BoardHeader extends PureComponent<Props, void> {
 
   render() {
     const {columns, onCollapseToggle, style} = this.props;
-    
+
     if (!columns || !columns.length) { //YTM-835
       return null;
     }
@@ -68,18 +68,14 @@ export default class BoardHeader extends PureComponent<Props, void> {
 
 const styles = StyleSheet.create({
   tableHeader: {
-    flexDirection: 'row',
-    backgroundColor: COLOR_BLACK
+    flexDirection: 'row'
   },
   tableHeaderItem: {
     flex: 1,
-    padding: UNIT / 2,
-    paddingLeft: UNIT,
-    paddingTop: 0,
+    paddingRight: UNIT / 2,
     paddingBottom: UNIT,
-    borderRightWidth: 0.5,
     borderBottomWidth: 0.5,
-    borderColor: COLOR_DARK_BORDER
+    borderColor: COLOR_MEDIUM_GRAY
   },
   tableHeaderItemWithoutBorder: {
     borderRightWidth: 0
@@ -90,6 +86,7 @@ const styles = StyleSheet.create({
     minWidth: AGILE_COLLAPSED_COLUMN_WIDTH
   },
   columnText: {
-    color: COLOR_FONT_GRAY
+    ...secondaryText,
+    textTransform: 'uppercase'
   }
 });
