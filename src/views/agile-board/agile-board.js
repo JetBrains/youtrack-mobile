@@ -16,8 +16,8 @@ import Router from '../../components/router/router';
 import Auth from '../../components/auth/auth';
 import {Draggable, DragContainer} from '../../components/draggable/';
 import Api from '../../components/api/api';
-import {COLOR_PINK, AGILE_COLLAPSED_COLUMN_WIDTH} from '../../components/variables/variables';
-import {zoomIn, zoomOut, arrowDownGray, IconMenu} from '../../components/icon/icon';
+import {COLOR_PINK, AGILE_COLLAPSED_COLUMN_WIDTH, COLOR_BLACK} from '../../components/variables/variables';
+import {zoomIn, zoomOut, IconMenu, IconAngleDown} from '../../components/icon/icon';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
 import type {SprintFull, Board, AgileBoardRow, AgileColumn} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
@@ -27,7 +27,6 @@ import * as boardActions from './board-actions';
 import {openMenu} from '../../actions/app-actions';
 import {connect} from 'react-redux';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import ModalView from '../../components/modal-view/modal-view';
 
 const CATEGORY_NAME = 'Agile board';
@@ -134,51 +133,61 @@ class AgileBoard extends Component<Props, State> {
       .reduce((res, item) => res + item, 0);
   };
 
-  renderHeaderButton(text: ?string, onPress: () => any, buttonStyle: ViewStyleProp = null) {
-    if (text) {
-      const {isLoading} = this.props;
-      return (
-        <TouchableOpacity
-          style={[styles.headerBoardButton, buttonStyle]}
-          disabled={isLoading}
-          onPress={onPress}
-        >
-          <Text
-            style={[styles.headerText, isLoading ? styles.headerTextDisabled : null]}
-            numberOfLines={1}
-          >
-            {text}
-          </Text>
-          <Image source={arrowDownGray} style={[
-            styles.headerSelectIcon,
-            isLoading ? styles.headerIconDisabled : null
-          ]}/>
-        </TouchableOpacity>
-      );
+  renderNavigation() {
+    const {sprint, onOpenSprintSelect, onOpenBoardSelect, isLoading} = this.props;
+    if (!sprint) {
+      return null;
     }
+    const navigation = [
+      {
+        label: sprint?.agile?.name,
+        id: 'sprintAgileName',
+        onPress: onOpenBoardSelect,
+        textStyle: styles.agileNavigationButtonTextMain
+      },
+      {
+        label: sprint?.name,
+        id: 'sprintName',
+        onPress: onOpenSprintSelect
+      },
+    ];
+
+    return (
+      <View style={styles.agileNavigation}>
+        {navigation.map(it => {
+          if (it.label) {
+            return (
+              <TouchableOpacity
+                key={it.id}
+                style={styles.agileNavigationButton}
+                disabled={isLoading}
+                onPress={it.onPress}
+              >
+                <Text
+                  style={[
+                    styles.agileNavigationButtonText,
+                    it.textStyle,
+                    isLoading ? styles.agileNavigationButtonTextDisabled : null
+                  ]}
+                  numberOfLines={1}
+                >
+                  {`${it.label} `}
+                </Text>
+                <IconAngleDown size={15} color={COLOR_BLACK} style={styles.agileNavigationButtonIcon}/>
+              </TouchableOpacity>
+            );
+          }
+        })}
+      </View>
+    );
   }
 
   _renderHeader() {
-    const {sprint, onOpenSprintSelect, onOpenBoardSelect} = this.props;
-
     return (
       <Header
         leftButton={<IconMenu/>}
         onBack={this.props.onOpenMenu}
       >
-        {Boolean(sprint) && <View style={styles.headerContent}>
-          {this.renderHeaderButton(
-            sprint?.agile?.name,
-            onOpenBoardSelect,
-            styles.headerBoardNotCollapsibleButton
-          )}
-          {this.renderHeaderButton(
-            sprint?.name,
-            onOpenSprintSelect,
-            styles.headerBoardNotCollapsibleButton
-          )}
-
-        </View>}
       </Header>
     );
   }
@@ -343,6 +352,7 @@ class AgileBoard extends Component<Props, State> {
           testID='pageAgile'
           style={styles.container}>
           {this._renderHeader()}
+          {this.renderNavigation()}
 
           {sprint && this._renderBoardHeader(sprint)}
           {noBoardSelected && this._renderNoSprint()}

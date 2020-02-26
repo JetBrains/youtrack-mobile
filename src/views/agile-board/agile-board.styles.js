@@ -7,45 +7,44 @@ import {
   COLOR_TRANSPARENT_BLACK,
   COLOR_BLACK,
   COLOR_FONT_GRAY,
-  COLOR_GRAY
+  COLOR_GRAY,
+  COLOR_DARK
 } from '../../components/variables/variables';
+import {mainText} from '../../components/common-styles/issue';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
+    padding: UNIT * 2,
     backgroundColor: COLOR_FONT_ON_BLACK
   },
-  headerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
+  agileNavigation: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
   },
-  headerBoardButton: {
+  agileNavigationButton: {
     flexDirection: 'row',
     flexShrink: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginBottom: UNIT * 2
   },
-  headerBoardNotCollapsibleButton: {
-    marginLeft: UNIT * 2.5
+  agileNavigationButtonText: {
+    ...mainText,
+    fontWeight: '500',
+    color: COLOR_DARK
   },
-  headerText: {
-    fontSize: 17,
-    color: COLOR_FONT_ON_BLACK
+  agileNavigationButtonTextMain: {
+    fontSize: 20
   },
-  headerTextDisabled: {
+  agileNavigationButtonTextDisabled: {
     color: COLOR_FONT_GRAY
+  },
+  agileNavigationButtonIcon: {
+    lineHeight: 19
   },
   headerIconDisabled: {
     tintColor: COLOR_FONT_GRAY
-  },
-  headerSelectIcon: {
-    width: 9,
-    marginLeft: UNIT / 2,
-    paddingRight: UNIT / 2,
-    alignSelf: 'center',
-    resizeMode: 'contain',
-    tintColor: COLOR_FONT_ON_BLACK
   },
   boardHeaderContainer: {
     overflow: 'hidden',
@@ -70,7 +69,7 @@ export default StyleSheet.create({
     width: UNIT * 8,
     height: UNIT * 8,
 
-    shadowColor: '#000',
+    shadowColor: COLOR_BLACK,
     shadowOpacity: 0.2,
     shadowRadius: 4,
     shadowOffset: {
@@ -132,7 +131,7 @@ export default StyleSheet.create({
   popupButtonText: {
     height: 24,
     fontSize: 20,
-    color: COLOR_FONT_ON_BLACK,
+    color: COLOR_BLACK,
     textAlign: 'center'
   },
 });
