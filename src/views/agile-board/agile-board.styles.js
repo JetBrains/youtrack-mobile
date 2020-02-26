@@ -4,13 +4,13 @@ import {
   COLOR_PINK,
   COLOR_FONT,
   COLOR_FONT_ON_BLACK,
-  COLOR_TRANSPARENT_BLACK,
   COLOR_BLACK,
   COLOR_FONT_GRAY,
   COLOR_GRAY,
   COLOR_DARK
 } from '../../components/variables/variables';
 import {mainText} from '../../components/common-styles/issue';
+import {link} from '../../components/common-styles/button';
 
 export default StyleSheet.create({
   container: {
@@ -102,19 +102,11 @@ export default StyleSheet.create({
     fontSize: 18,
     color: COLOR_PINK
   },
-  selectModal: {
-    top: 0,
-    right: 0,
-    left: 0,
-    bottom: 0,
-    backgroundColor: COLOR_TRANSPARENT_BLACK
-  },
   popupModal: {
     justifyContent: 'flex-end'
   },
   popupPanel: {
     padding: UNIT * 2,
-    paddingBottom: UNIT * 4,
     backgroundColor: COLOR_FONT_ON_BLACK,
     borderTopWidth: 1,
     borderColor: COLOR_GRAY
@@ -122,16 +114,13 @@ export default StyleSheet.create({
   popupText: {
     fontSize: 18,
   },
-  popupButton: {
-    marginTop: UNIT * 4,
-    padding: UNIT,
-    backgroundColor: COLOR_PINK,
-    paddingLeft: UNIT * 2
+  popupButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: UNIT * 2
   },
   popupButtonText: {
-    height: 24,
-    fontSize: 20,
-    color: COLOR_BLACK,
-    textAlign: 'center'
+    ...mainText,
+    ...link
   },
 });

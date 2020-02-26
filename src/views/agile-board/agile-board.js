@@ -1,6 +1,6 @@
 /* @flow */
 
-import {View, Text, Image, RefreshControl, Modal, TouchableOpacity, ActivityIndicator, Dimensions} from 'react-native';
+import {View, Text, Image, RefreshControl, TouchableOpacity, ActivityIndicator, Dimensions} from 'react-native';
 import React, {Component} from 'react';
 import usage from '../../components/usage/usage';
 import Header from '../../components/header/header';
@@ -28,6 +28,7 @@ import {openMenu} from '../../actions/app-actions';
 import {connect} from 'react-redux';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import ModalView from '../../components/modal-view/modal-view';
+import {HIT_SLOP} from '../../components/common-styles/button';
 
 const CATEGORY_NAME = 'Agile board';
 
@@ -215,7 +216,7 @@ class AgileBoard extends Component<Props, State> {
   _renderSelect() {
     const {selectProps} = this.props;
     return (
-      <Modal
+      <ModalView
         visible
         animationType="fade"
         onRequestClose={() => true}
@@ -223,10 +224,9 @@ class AgileBoard extends Component<Props, State> {
         <Select
           getTitle={item => item.name}
           onCancel={this.props.onCloseSelect}
-          style={styles.selectModal}
           {...selectProps}
         />
-      </Modal>
+      </ModalView>
     );
   }
 
@@ -250,17 +250,19 @@ class AgileBoard extends Component<Props, State> {
             The current sprint is out of date. Reload it to avoid data inconsistency.
           </Text>
 
-          <TouchableOpacity
-            style={styles.popupButton}
-            onPress={() => refreshAgile(sprint.agile.id, sprint.id)}>
-            <Text style={styles.popupButtonText}>Refresh</Text>
-          </TouchableOpacity>
+          <View style={styles.popupButtons}>
+            <TouchableOpacity
+              hitSlop={HIT_SLOP}
+              onPress={() => toggleRefreshPopup(false)}>
+              <Text style={styles.popupButtonText}>Cancel</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.popupButton}
-            onPress={() => toggleRefreshPopup(false)}>
-            <Text style={styles.popupButtonText}>Cancel</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              hitSlop={HIT_SLOP}
+              onPress={() => refreshAgile(sprint.agile.id, sprint.id)}>
+              <Text style={styles.popupButtonText}>Refresh</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ModalView>
     );

@@ -306,7 +306,7 @@ export function openSprintSelect() {
       type: types.OPEN_AGILE_SELECT,
       selectProps: {
         show: true,
-        placeholder: 'Search for the sprint',
+        placeholder: 'Type sprint name',
         dataSource: async () => {
           const sprints = await api.agile.getSprintList(sprint.agile.id);
           return getGroupedSprints(sprints);
@@ -333,7 +333,7 @@ export function openBoardSelect() {
       type: types.OPEN_AGILE_SELECT,
       selectProps: {
         show: true,
-        placeholder: 'Search for the board',
+        placeholder: 'Type board name',
         dataSource: async () => {
           const agileBoardsList = await api.agile.getAgileBoardsList();
           const boards = agileBoardsList.sort(sortByName).reduce(
