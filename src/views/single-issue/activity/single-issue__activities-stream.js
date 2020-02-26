@@ -30,7 +30,7 @@ import Avatar from '../../../components/avatar/avatar';
 
 import Router from '../../../components/router/router';
 
-import {history, work} from '../../../components/icon/icon';
+import {history, IconActions, work} from '../../../components/icon/icon';
 
 import usage from '../../../components/usage/usage';
 import log from '../../../components/log/log';
@@ -52,7 +52,6 @@ import Diff from '../../../components/diff/diff';
 import {HIT_SLOP} from '../../../components/common-styles/button';
 
 import type IssuePermissions from '../../../components/issue-permissions/issue-permissions';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const CATEGORY_NAME = 'Issue Stream';
 
@@ -351,7 +350,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
           hitSlop={HIT_SLOP}
           disabled={disabled}
           onPress={() => this.props.onShowCommentActions(comment)}>
-          <Icon color={COLOR_ICON_GREY} name="dots-horizontal" size={22}/>
+          <IconActions size={22} color={COLOR_ICON_GREY}/>
         </TouchableOpacity>
       </View>;
     }

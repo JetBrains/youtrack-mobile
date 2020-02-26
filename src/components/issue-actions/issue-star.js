@@ -3,9 +3,9 @@
 import React, {PureComponent} from 'react';
 import {TouchableOpacity} from 'react-native';
 
+import {IconStar} from '../icon/icon';
 import {COLOR_ICON_MEDIUM_GREY, COLOR_PINK} from '../variables/variables';
 import {HIT_SLOP} from '../common-styles/button';
-import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 type Props = {
   style?: any,
@@ -28,9 +28,8 @@ export default class IssueStar extends PureComponent<Props, void> {
         hitSlop={HIT_SLOP}
         style={style}
         onPress={() => onStarToggle(!starred)}>
-        <MaterialIcon
-          name="star-outline"
-          size={20}
+        <IconStar
+          size={22}
           color={starred ? COLOR_PINK : COLOR_ICON_MEDIUM_GREY}
         />
       </TouchableOpacity>

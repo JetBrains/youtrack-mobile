@@ -3,7 +3,7 @@
 import React, {PureComponent} from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 
-import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {IconThumbUp} from '../icon/icon';
 import {COLOR_ICON_LIGHT_BLUE, UNIT} from '../variables/variables';
 import {HIT_SLOP} from '../../components/common-styles/button';
 
@@ -32,8 +32,8 @@ export default class IssueVotes extends PureComponent<Props, void> {
         onPress={() => onVoteToggle(!voted)}
       >
         <Text style={styles.counter}>{votes}</Text>
-        <MaterialIcon
-          name={voted ? 'thumb-up' : 'thumb-up-outline'}
+        <IconThumbUp
+          isActive={voted}
           size={20}
           color={COLOR_ICON_LIGHT_BLUE}
         />

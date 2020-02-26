@@ -5,9 +5,9 @@ import toJson from 'enzyme-to-json';
 
 import {ResourceTypes} from '../api/api__resource-types';
 import CommentVisibility from './comment__visibility';
+import {IconLock} from '../icon/icon';
 
 import type {Visibility} from '../../flow/Visibility';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
 describe('<CommentVisibility/>', () => {
@@ -47,7 +47,7 @@ describe('<CommentVisibility/>', () => {
       wrapper = doShallow(visibilityMock, color);
 
       expect(wrapper.contains(
-        <Icon testID="commentVisibilityIcon" name="lock" size={16} color={color}/>
+        <IconLock testID="commentVisibilityIcon" name="lock" size={16} color={color}/>
       )).toEqual(true);
     });
   });

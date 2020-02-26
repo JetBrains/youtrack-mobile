@@ -36,9 +36,7 @@ exports[`EnterServer Render should render 1`] = `
       }
       testID="enterServerBackButton"
     >
-      <BackIcon
-        color="#FE0082"
-      />
+      <IconBack />
     </TouchableOpacity>
     <View
       style={

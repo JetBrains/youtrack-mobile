@@ -124,7 +124,7 @@ export default class QueryAssist extends Component<Props, State> {
         testID="query-assist-cancel"
         onPress={() => this.cancelSearch()}
       >
-        <IconClose/>
+        <IconClose size={28}/>
       </TouchableOpacity>;
     }
 
@@ -133,7 +133,7 @@ export default class QueryAssist extends Component<Props, State> {
         style={[styles.inputWrapper, showQueryAssist ? styles.inputWrapperActive : null]}
         ref={node => this.queryAssistContainer = node}
       >
-        <Text style={styles.iconMagnify}><IconMagnify/></Text>
+        <Text style={styles.iconMagnify}><IconMagnify size={22} color={COLOR_PLACEHOLDER}/></Text>
 
         <TextInput
           ref="searchInput"

@@ -151,11 +151,6 @@ export default StyleSheet.create({
     paddingTop: UNIT,
     paddingBottom: UNIT
   },
-  settingsToggleIcon: {
-    marginTop: -1,
-    marginLeft: UNIT,
-    color: COLOR_ICON_MEDIUM_GREY
-  },
 
   links: {
     marginTop: UNIT * 1.5

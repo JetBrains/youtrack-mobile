@@ -15,7 +15,7 @@ import Wiki from '../../components/wiki/wiki';
 import Router from '../../components/router/router';
 
 import styles from './wiki-page.styles';
-import BackIcon from '../../components/menu/back-icon';
+import {IconBack} from '../../components/icon/icon';
 
 const CATEGORY_NAME = 'WikiPage';
 
@@ -56,7 +56,7 @@ export default class WikiPage extends PureComponent<Props, void> {
   _renderHeader() {
     return (
       <Header
-        leftButton={<BackIcon/>}
+        leftButton={<IconBack/>}
         onBack={this._onBack}
       >
         <Text style={styles.headerTitle} selectable={true}>{this.props.title}</Text>

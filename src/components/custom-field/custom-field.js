@@ -1,8 +1,9 @@
 /* @flow */
-import {TouchableOpacity, View, Text, Image} from 'react-native';
+import {TouchableOpacity, View, Text} from 'react-native';
 import React, {Component} from 'react';
+import {COLOR_ICON_GREY} from '../variables/variables';
+import {IconLock} from '../icon/icon';
 import styles from './custom-field.styles';
-import {lockInactive} from '../icon/icon';
 import ColorField from '../color-field/color-field';
 import type {CustomField as CustomFieldType, FieldValue} from '../../flow/CustomFields';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
@@ -108,7 +109,7 @@ export default class CustomField extends Component<Props, void> {
         disabled={this.props.disabled}>
 
         <View style={styles.keyWrapper}>
-          {disabled && <Image style={styles.keyLockedIcon} source={lockInactive}/>}
+          {disabled && <IconLock size={16} color={COLOR_ICON_GREY}/>}
           <Text
             style={styles.keyText}
             testID="name"

@@ -16,10 +16,9 @@ import apiHelper from '../../../components/api/api__helper';
 import Select from '../../../components/select/select';
 import ModalView from '../../../components/modal-view/modal-view';
 
-import Icon from 'react-native-vector-icons/FontAwesome';
-
+import {COLOR_ICON_GREY, COLOR_ICON_MEDIUM_GREY} from '../../../components/variables/variables';
+import {IconAngleDown, IconCheck} from '../../../components/icon/icon';
 import selectStyles from '../../../components/select/select.styles';
-import {IconCheck} from '../../../components/icon/icon';
 
 type Props = {
   issueActivityTypes: Array<ActivityEnabledType>,
@@ -135,7 +134,7 @@ export default class SingleIssueActivitiesSettings extends Component<Props, Stat
             onPress={() => this.setState({naturalCommentsOrder: it.isNaturalCommentsOrder})}
           >
             <Text style={styles.settingsOrderSettingsText}>{it.label}</Text>
-            {this.state.naturalCommentsOrder === it.isNaturalCommentsOrder && <IconCheck/>}
+            {this.state.naturalCommentsOrder === it.isNaturalCommentsOrder && <IconCheck size={26} color={COLOR_ICON_GREY}/>}
           </TouchableOpacity>
         ))}
       </View>
@@ -182,8 +181,8 @@ export default class SingleIssueActivitiesSettings extends Component<Props, Stat
           style={styles.settingsToggle}
           onPress={this._toggleSettingsVisibility}
         >
-          <Text style={styles.secondaryText}>{selectedCategoriesTitle}</Text>
-          <Icon style={styles.settingsToggleIcon} size={20} name="angle-down"/>
+          <Text style={styles.secondaryText}>{selectedCategoriesTitle} </Text>
+          <IconAngleDown size={19} color={COLOR_ICON_MEDIUM_GREY}/>
         </TouchableOpacity>
 
         {this.state.visible && this._renderSettings()}

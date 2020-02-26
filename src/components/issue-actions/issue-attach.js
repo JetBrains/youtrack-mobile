@@ -4,7 +4,7 @@ import React, {PureComponent} from 'react';
 import {TouchableOpacity, StyleSheet} from 'react-native';
 
 import {COLOR_ICON_LIGHT_BLUE, UNIT} from '../variables/variables';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {IconPaperClip} from '../icon/icon';
 
 type Props = {
   style?: any,
@@ -24,11 +24,7 @@ export default class IssueAttach extends PureComponent<Props, void> {
       <TouchableOpacity
         style={[styles.container, style]}
         onPress={onAttach}>
-        <Icon
-          name="paperclip"
-          size={26}
-          color={COLOR_ICON_LIGHT_BLUE}
-        />
+        <IconPaperClip size={26} color={COLOR_ICON_LIGHT_BLUE}/>
       </TouchableOpacity>
     );
   }

@@ -17,7 +17,7 @@ import Auth from '../../components/auth/auth';
 import {Draggable, DragContainer} from '../../components/draggable/';
 import Api from '../../components/api/api';
 import {COLOR_PINK, AGILE_COLLAPSED_COLUMN_WIDTH} from '../../components/variables/variables';
-import {zoomIn, zoomOut, arrowDownGray} from '../../components/icon/icon';
+import {zoomIn, zoomOut, arrowDownGray, IconMenu} from '../../components/icon/icon';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
 import type {SprintFull, Board, AgileBoardRow, AgileColumn} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
@@ -29,7 +29,6 @@ import {connect} from 'react-redux';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import ModalView from '../../components/modal-view/modal-view';
-import MenuIcon from '../../components/menu/menu-icon';
 
 const CATEGORY_NAME = 'Agile board';
 
@@ -164,7 +163,7 @@ class AgileBoard extends Component<Props, State> {
 
     return (
       <Header
-        leftButton={<MenuIcon/>}
+        leftButton={<IconMenu/>}
         onBack={this.props.onOpenMenu}
       >
         {Boolean(sprint) && <View style={styles.headerContent}>

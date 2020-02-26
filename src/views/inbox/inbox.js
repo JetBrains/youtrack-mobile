@@ -20,8 +20,7 @@ import UserInfo from '../../components/user/user-info';
 import Diff from '../../components/diff/diff';
 import Wiki from '../../components/wiki/wiki';
 import CustomFieldChangeDelimiter from '../../components/custom-field/custom-field__change-delimiter';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import MenuIcon from '../../components/menu/menu-icon';
+import {IconMenu, IconAngleRight} from '../../components/icon/icon';
 
 import type {InboxState} from './inbox-reducers';
 import type {User} from '../../flow/User';
@@ -339,7 +338,7 @@ class Inbox extends Component<Props, void> {
         <TouchableOpacity onPress={onPress}>
           <View style={styles.header}>
             <Text numberOfLines={2} style={styles.summary}>{metadata.issue.summary}</Text>
-            <Text style={styles.arrowImage}><Icon name="angle-right" size={24} color={COLOR_GRAY}/></Text>
+            <Text style={styles.arrowImage}><IconAngleRight size={24} color={COLOR_GRAY}/></Text>
           </View>
 
           <View style={styles.subHeader}>
@@ -395,7 +394,7 @@ class Inbox extends Component<Props, void> {
       <Menu>
         <View style={styles.container}>
           <Header
-            leftButton={<MenuIcon/>}
+            leftButton={<IconMenu/>}
             onBack={openMenu}
           >
             <Text style={issueStyles.headerText}>Notifications</Text>

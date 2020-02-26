@@ -125,7 +125,8 @@ export default StyleSheet.create({
   },
   contextButtonText: {
     fontSize: 20,
-    letterSpacing: 0.13
+    letterSpacing: 0.13,
+    color: COLOR_BLACK
   },
   contextSelect: {
     top: 0,

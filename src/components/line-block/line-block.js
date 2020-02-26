@@ -4,8 +4,7 @@ import {View, TouchableOpacity, Text} from 'react-native';
 import React, {PureComponent} from 'react';
 
 import ModalView from '../modal-view/modal-view';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {IconAngleRight, IconClose} from '../icon/icon';
 
 import styles from './line-block.styles';
 
@@ -59,7 +58,7 @@ export default class LineBlock extends PureComponent<Props, State> {
           style={styles.showMore}
           onPress={onShowAllToggle}
         >
-          <Text style={styles.arrowIcon}><Icon name="angle-right" size={24} color={COLOR_GRAY}/></Text>
+          <Text style={styles.arrowIcon}><IconAngleRight size={24} color={COLOR_GRAY}/></Text>
         </TouchableOpacity>}
 
         {this.state.showMore &&
@@ -74,7 +73,7 @@ export default class LineBlock extends PureComponent<Props, State> {
             onPress={onShowAllToggle}
             hitSlop={this.hitSlop}
           >
-            <MaterialIcon name="close" size={40} color={COLOR_GRAY}/>
+            <IconClose size={40} color={COLOR_GRAY}/>
           </TouchableOpacity>
         </ModalView>}
 

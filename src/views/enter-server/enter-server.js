@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {logo} from '../../components/icon/icon';
+import {logo, IconBack} from '../../components/icon/icon';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import usage from '../../components/usage/usage';
 import {VERSION_DETECT_FALLBACK_URL} from '../../components/config/config';
@@ -26,8 +26,7 @@ import throttle from 'lodash.throttle';
 import {NETWORK_PROBLEM_TIPS} from '../../components/error-message/error-text-messages';
 
 import ErrorMessageInline from '../../components/error-message/error-message-inline';
-import BackIcon from '../../components/menu/back-icon';
-import {COLOR_PINK, UNIT} from '../../components/variables/variables';
+import {UNIT} from '../../components/variables/variables';
 
 import styles from './enter-server.styles';
 import {formStyles} from '../../components/common-styles/form';
@@ -141,7 +140,7 @@ export class EnterServer extends Component<Props, State> {
               onPress={onCancel}
               style={styles.backIconButton}
             >
-              <BackIcon color={COLOR_PINK}/>
+              <IconBack/>
             </TouchableOpacity>
           )}
 

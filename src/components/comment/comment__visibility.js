@@ -2,7 +2,7 @@
 
 import {View, Text} from 'react-native';
 import React, {PureComponent} from 'react';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {IconLock} from '../icon/icon';
 
 import styles, {COLOR} from './comment__visibility.styles';
 
@@ -19,7 +19,7 @@ export default class CommentVisibility extends PureComponent<Props, void> {
         <View
           testID="commentVisibility"
           style={styles.commentVisibility}>
-          <Icon testID="commentVisibilityIcon" name="lock" size={16} color={this.props.color || COLOR}/>
+          <IconLock testID="commentVisibilityIcon" name="lock" size={16} color={this.props.color || COLOR}/>
           <Text style={[
             styles.commentVisibilityText,
             this.props.color ? {color: this.props.color} : null

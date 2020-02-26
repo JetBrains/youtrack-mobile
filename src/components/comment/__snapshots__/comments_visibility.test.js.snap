@@ -13,8 +13,7 @@ exports[`<CommentVisibility/> Render should match a snapshot 1`] = `
   }
   testID="commentVisibility"
 >
-  <Icon
-    allowFontScaling={false}
+  <IconLock
     color="#888888"
     name="lock"
     size={16}

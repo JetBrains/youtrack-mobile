@@ -14,7 +14,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import Header from '../../components/header/header';
-import {COLOR_PINK, UNIT} from '../../components/variables/variables';
+import {COLOR_BLACK, COLOR_PINK, UNIT} from '../../components/variables/variables';
 import {notifyError} from '../../components/notification/notification';
 import usage from '../../components/usage/usage';
 import log from '../../components/log/log';
@@ -31,11 +31,9 @@ import type {IssuesListState} from './issue-list-reducers';
 import type {IssueOnList} from '../../flow/Issue';
 import OpenScanButton from '../../components/scan/open-scan-button';
 import Select from '../../components/select/select';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import SearchPanel from './issue-list__search-panel';
 
-import MenuIcon from '../../components/menu/menu-icon';
+import {IconAngleDown, IconMenu, IconPlus} from '../../components/icon/icon';
 
 import styles from './issue-list.styles';
 
@@ -87,8 +85,8 @@ export class IssueList extends Component<Props, void> {
   _renderHeader() {
     return (
       <Header
-        leftButton={<Text>{' '}<MenuIcon/></Text>}
-        rightButton={<IconMaterial name="plus" size={28}/>}
+        leftButton={<Text>{' '}<IconMenu/></Text>}
+        rightButton={<IconPlus size={28}/>}
         extraButton={<OpenScanButton/>}
         onBack={this.props.openMenu}
         onRightButtonClick={() => Router.CreateIssue()}
@@ -168,7 +166,7 @@ export class IssueList extends Component<Props, void> {
             style={styles.contextButtonText}
           >
             {`${searchContext?.name || ''} `}
-            {searchContext && <Icon name="angle-down" size={20}/>}
+            {searchContext && <IconAngleDown color={COLOR_BLACK} size={17}/>}
           </Text>
         </View>
       </TouchableOpacity>

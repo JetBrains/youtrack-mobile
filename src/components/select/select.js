@@ -5,7 +5,7 @@ import styles from './select.styles';
 import ColorField from '../color-field/color-field';
 import {notifyError} from '../notification/notification';
 import Avatar from '../avatar/avatar';
-import {COLOR_PLACEHOLDER, UNIT} from '../variables/variables';
+import {COLOR_ICON_GREY, COLOR_PLACEHOLDER, UNIT} from '../variables/variables';
 import getTopPadding, {onHeightChange, isIphoneX} from '../header/header__top-padding';
 
 import {IconMagnify, IconClose, IconCheck} from '../icon/icon';
@@ -94,7 +94,7 @@ export default class Select extends Component<Props, State> {
       <TouchableOpacity key={this.props.emptyValue} style={styles.row} onPress={() => this._onClearValue()}>
         <Text style={[styles.itemTitle, {marginLeft: 0}]}>{this.props.emptyValue}</Text>
 
-        {this.state.selectedItems.length === 0 && <IconCheck/>}
+        {this.state.selectedItems.length === 0 && <IconCheck size={26} color={COLOR_ICON_GREY}/>}
       </TouchableOpacity>
     );
   }
@@ -157,7 +157,7 @@ export default class Select extends Component<Props, State> {
           {this._renderTitle(item)}
         </View>
 
-        {this._isSelected(item) && <IconCheck/>}
+        {this._isSelected(item) && <IconCheck size={26} color={COLOR_ICON_GREY}/>}
       </TouchableOpacity>
     );
   }
@@ -173,7 +173,7 @@ export default class Select extends Component<Props, State> {
     return (
       <View style={[styles.container, style, {paddingTop}]}>
         {!noFilter && <View style={styles.inputWrapper}>
-          <IconMagnify/>
+          <IconMagnify size={22} color={COLOR_PLACEHOLDER}/>
           <TextInput
             placeholder={placeholder}
             keyboardAppearance="dark"
@@ -190,7 +190,7 @@ export default class Select extends Component<Props, State> {
             }}
             style={styles.searchInput}/>
           <TouchableOpacity style={styles.cancelButton} onPress={onCancel}>
-            <IconClose/>
+            <IconClose size={28}/>
           </TouchableOpacity>
         </View>}
         <ScrollView keyboardShouldPersistTaps="handled"

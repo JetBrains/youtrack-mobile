@@ -1,7 +1,9 @@
 import React, {PureComponent} from 'react';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconFA from 'react-native-vector-icons/FontAwesome';
 
-import {COLOR_ICON_GREY, COLOR_PINK, COLOR_PLACEHOLDER} from '../variables/variables';
+import {COLOR_PINK} from '../variables/variables';
+import {Platform} from 'react-native';
 
 export {default as logo} from './youtrack-logo-512.png';
 export {default as arrow} from './arrow.png';
@@ -45,39 +47,114 @@ export {default as work} from './work.png';
 type Props = {
   name?: string,
   size?: number,
-  color?: string
+  color?: string,
+  isFontAwesome?: boolean
 };
 
-class DefaultIconMaterial extends PureComponent<Props, void> {
+const isAndroid = Platform.OS === 'android';
+
+class DefaultIcon extends PureComponent<Props, void> {
   static defaultProps: Props = {
     name: '',
     size: 26,
-    color: COLOR_PINK
+    color: COLOR_PINK,
+    isFontAwesome: false
   };
 
   render() {
-    if (this.props.name) {
-      return <IconMaterial name={this.props.name} size={this.props.size} color={this.props.color}/>;
+    if (!this.props.name) {
+      return null;
     }
-    return null;
+    const Icon = this.props.isFontAwesome ? IconFA : IconMaterial;
+    return <Icon {...this.props}/>;
   }
 }
 
+/* Main menu icons */
 
-export const IconCheck = (props?: Props) => <DefaultIconMaterial {...Object.assign({
+export const IconBack = (props?: Props) => <DefaultIcon {...{
+  name: isAndroid ? 'arrow-left' : 'chevron-left',
+  size: isAndroid ? 22 : 30,
+  ...props
+}} />;
+
+export const IconMenu = (props?: Props) => <DefaultIcon {...{
+  name: 'menu',
+  size: 24,
+  ...props
+}} />;
+
+
+/* Material icons */
+
+export const IconCheck = (props?: Props) => <DefaultIcon {...{
   name: 'check',
-  size: 26,
-  color: COLOR_ICON_GREY
-}, props)} />;
+  ...props
+}} />;
 
-export const IconClose = (props?: Props) => <DefaultIconMaterial {...Object.assign({
+export const IconClose = (props?: Props) => <DefaultIcon {...{
   name: 'close',
-  size: 28,
-  color: COLOR_PINK
-}, props)} />;
+  ...props
+}} />;
 
-export const IconMagnify = (props?: Props) => <DefaultIconMaterial {...Object.assign({
+export const IconMagnify = (props?: Props) => <DefaultIcon {...{
   name: 'magnify',
-  size: 22,
-  color: COLOR_PLACEHOLDER
-}, props)} />;
+  ...props
+}} />;
+
+export const IconLock = (props?: Props) => <DefaultIcon {...{
+  name: 'lock',
+  ...props
+}} />;
+
+export const IconArrowUp = (props?: Props) => <DefaultIcon {...{
+  name: 'arrow-up',
+  ...props
+}} />;
+
+export const IconPlus = (props?: Props) => <DefaultIcon {...{
+  name: 'plus',
+  ...props
+}} />;
+
+export const IconActions = (props?: Props) => <DefaultIcon {...{
+  name: 'dots-horizontal',
+  ...props
+}} />;
+
+export const IconStar = (props?: Props) => <DefaultIcon {...{
+  name: 'star-outline',
+  ...props
+}} />;
+
+export const IconThumbUp = (props?: Props & { isActive?: boolean }) => <DefaultIcon {...{
+  name: props.isActive ? 'thumb-up' : 'thumb-up-outline',
+  ...props
+}} />;
+
+
+/* FontAwesome icons */
+
+export const IconAngleDown = (props?: Props) => <DefaultIcon {...{
+  isFontAwesome: true,
+  name: 'angle-down',
+  ...props
+}} />;
+
+export const IconAngleDownUp = (props?: Props & { isDown?: boolean }) => <DefaultIcon {...{
+  isFontAwesome: true,
+  name: props.isDown ? 'angle-down' : 'angle-up',
+  ...props
+}}/>;
+
+export const IconAngleRight = (props?: Props) => <DefaultIcon {...{
+  isFontAwesome: true,
+  name: 'angle-right',
+  ...props
+}} />;
+
+export const IconPaperClip = (props?: Props) => <DefaultIcon {...{
+  isFontAwesome: true,
+  name: 'paperclip',
+  ...props
+}} />;

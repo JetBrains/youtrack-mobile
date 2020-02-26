@@ -20,8 +20,6 @@ import styles from './single-issue.styles';
 import {getReadableID} from '../../components/issue-formatter/issue-formatter';
 import * as issueActions from './single-issue-actions';
 
-import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {State as SingleIssueState} from './single-issue-reducers';
 import type {TabRoute} from '../../flow/Issue';
@@ -33,8 +31,7 @@ import {receiveUserAppearanceProfile} from '../../actions/app-actions';
 import {TabView, TabBar} from 'react-native-tab-view';
 import IssueDetails from './single-issue__details';
 
-import ActionsIcon from '../../components/menu/actions-icon';
-import BackIcon from '../../components/menu/back-icon';
+import {IconBack, IconActions, IconCheck, IconClose} from '../../components/icon/icon';
 import IssueActivity from './activity/single-issue__activity';
 import IssueStar from '../../components/issue-actions/issue-star';
 
@@ -230,7 +227,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
 
   renderBackIcon() {
     if (!this.state.isTransitionInProgress) {
-      return <BackIcon/>;
+      return <IconBack/>;
     }
   }
 
@@ -241,7 +238,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
 
   renderActionsIcon() {
     if (!this.state.isTransitionInProgress) {
-      return <ActionsIcon/>;
+      return <IconActions size={26}/>;
     }
   }
 
@@ -302,12 +299,12 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
       );
     } else {
       const canSave = Boolean(summaryCopy) && !isSavingEditedIssue;
-      const saveButton = <IconMaterial name="check" size={28} color={canSave ? COLOR_PINK : COLOR_GRAY}/>;
+      const saveButton = <IconCheck size={28} color={canSave ? COLOR_PINK : COLOR_GRAY}/>;
 
       return (
         <Header
           style={{paddingLeft: UNIT * 2, paddingRight: UNIT * 2}}
-          leftButton={<IconMaterial name="close" size={28} color={isSavingEditedIssue ? COLOR_GRAY : COLOR_PINK}/>}
+          leftButton={<IconClose size={28} color={isSavingEditedIssue ? COLOR_GRAY : COLOR_PINK}/>}
           onBack={stopEditingIssue}
           rightButton={saveButton}
           onRightButtonClick={canSave ? saveIssueSummaryAndDescriptionChange : () => {}}

@@ -16,11 +16,10 @@ import type {IssueComment} from '../../flow/CustomFields';
 import type {User} from '../../flow/User';
 
 import styles from './single-issue__comments.styles';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import IssueAttach from '../../components/issue-actions/issue-attach';
+import {IconAngleDown, IconArrowUp, IconLock} from '../../components/icon/icon';
 
 type Props = {
   initialText: string,
@@ -202,9 +201,8 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
         hitSlop={HIT_SLOP}
       >
         {isSecured && (
-          <IconMaterial
+          <IconLock
             style={styles.visibilityChangeButtonLockIcon}
-            name="lock"
             size={16}
             color={COLOR_ICON_LIGHT_BLUE}
           />
@@ -212,11 +210,7 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
         <Text style={styles.visibilityChangeButtonText}>
           {isSecured ? IssueVisibility.getVisibilityPresentation(editingComment.visibility) : 'Visible to All Users'}
         </Text>
-        <Icon
-          name="angle-down"
-          size={20}
-          color={COLOR_ICON_MEDIUM_GREY}
-        />
+        <IconAngleDown size={20} color={COLOR_ICON_MEDIUM_GREY}/>
       </TouchableOpacity>
     );
   }
@@ -230,8 +224,8 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
         disabled={!(commentText || '').trim() || isSaving}
         onPress={() => this.updateComment()}>
         {!this.state.isSaving && (
-          <IconMaterial
-            name="arrow-up" size={22}
+          <IconArrowUp
+            size={22}
             color={COLOR_FONT_ON_BLACK}
           />
         )}

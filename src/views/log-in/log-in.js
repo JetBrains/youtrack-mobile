@@ -16,7 +16,7 @@ import Auth from '../../components/auth/auth';
 import Router from '../../components/router/router';
 import {connect} from 'react-redux';
 import {formatYouTrackURL} from '../../components/config/config';
-import {logo} from '../../components/icon/icon';
+import {logo, IconBack} from '../../components/icon/icon';
 import Keystore from '../../components/keystore/keystore';
 import authorizeInHub from '../../components/auth/auth__oauth';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
@@ -29,9 +29,6 @@ import {resolveErrorMessage} from '../../components/notification/notification';
 import ErrorMessageInline from '../../components/error-message/error-message-inline';
 
 import type {AuthParams} from '../../components/auth/auth';
-
-import {COLOR_PINK} from '../../components/variables/variables';
-import BackIcon from '../../components/menu/back-icon';
 
 import styles from './log-in.styles';
 import {formStyles} from '../../components/common-styles/form';
@@ -130,7 +127,7 @@ export class LogIn extends Component<Props, State> {
             style={styles.backIconButton}
             testID="back-to-url"
           >
-            <BackIcon color={COLOR_PINK}/>
+            <IconBack/>
           </TouchableOpacity>
 
           <View style={styles.formContent}>
