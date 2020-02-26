@@ -1,6 +1,6 @@
 /* @flow */
 
-import {View, Text, Image, RefreshControl, TouchableOpacity, ActivityIndicator, Dimensions} from 'react-native';
+import {View, Text, RefreshControl, TouchableOpacity, ActivityIndicator, Dimensions} from 'react-native';
 import React, {Component} from 'react';
 import usage from '../../components/usage/usage';
 import Header from '../../components/header/header';
@@ -17,7 +17,7 @@ import Auth from '../../components/auth/auth';
 import {Draggable, DragContainer} from '../../components/draggable/';
 import Api from '../../components/api/api';
 import {COLOR_PINK, AGILE_COLLAPSED_COLUMN_WIDTH, COLOR_BLACK} from '../../components/variables/variables';
-import {zoomIn, zoomOut, IconMenu, IconAngleDown} from '../../components/icon/icon';
+import {IconMenu, IconAngleDown, IconMagnifyZoom} from '../../components/icon/icon';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
 import type {SprintFull, Board, AgileBoardRow, AgileColumn} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
@@ -184,9 +184,17 @@ class AgileBoard extends Component<Props, State> {
   }
 
   _renderHeader() {
+    const {zoomedIn} = this.state;
+
     return (
       <Header
         leftButton={<IconMenu/>}
+        rightButton={
+          <Text
+            onPress={this.toggleZoom}>
+            <IconMagnifyZoom zoomedIn={zoomedIn} size={24}/>
+          </Text>
+        }
         onBack={this.props.onOpenMenu}
       >
       </Header>
@@ -303,7 +311,7 @@ class AgileBoard extends Component<Props, State> {
     return [
       sprint.agile.orphansAtTheTop && orphan,
 
-      board.trimmedSwimlanes.map(swimlane => {
+      board.trimmedSwimlanes.map((swimlane: Object & {id: string}) => {
         return (
           <BoardRow
             key={swimlane.id}
@@ -345,7 +353,6 @@ class AgileBoard extends Component<Props, State> {
 
   render() {
     const {sprint, isLoadingMore, isSprintSelectOpen, noBoardSelected, isOutOfDate} = this.props;
-
     const {zoomedIn} = this.state;
 
     return (
@@ -384,14 +391,6 @@ class AgileBoard extends Component<Props, State> {
               {isLoadingMore && <ActivityIndicator color={COLOR_PINK} style={styles.loadingMoreIndicator}/>}
             </BoardScroller>
           </DragContainer>
-
-          <View style={styles.zoomButtonContainer}>
-            <TouchableOpacity
-              style={styles.zoomButton}
-              onPress={this.toggleZoom}>
-              <Image source={zoomedIn ? zoomOut : zoomIn} style={styles.zoomButtonIcon}/>
-            </TouchableOpacity>
-          </View>
 
           {isSprintSelectOpen && this._renderSelect()}
           {isOutOfDate && this.renderRefreshPopup()}

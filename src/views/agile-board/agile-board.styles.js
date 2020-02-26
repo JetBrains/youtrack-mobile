@@ -4,7 +4,6 @@ import {
   COLOR_PINK,
   COLOR_FONT,
   COLOR_FONT_ON_BLACK,
-  COLOR_BLACK,
   COLOR_FONT_GRAY,
   COLOR_GRAY,
   COLOR_DARK
@@ -53,35 +52,10 @@ export default StyleSheet.create({
   loadingMoreIndicator: {
     padding: UNIT * 2
   },
-  zoomButtonContainer: {
-    position: 'absolute',
-    right: UNIT * 2,
-    bottom: UNIT * 2
-  },
-  zoomButton: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-
-    backgroundColor: '#FFFFFFAA',
-    borderRadius: UNIT * 4,
-
-    width: UNIT * 8,
-    height: UNIT * 8,
-
-    shadowColor: COLOR_BLACK,
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    shadowOffset: {
-      height: 2,
-      width: 0
-    }
-  },
   zoomButtonIcon: {
-    marginTop: 4,
     resizeMode: 'contain',
-    width: UNIT * 3.5,
-    height: UNIT * 3.5
+    width: UNIT * 2,
+    height: UNIT * 2
   },
   agileBoardMessage: {
     flex: 1,

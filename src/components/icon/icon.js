@@ -102,6 +102,11 @@ export const IconMagnify = (props?: Props) => <DefaultIcon {...{
   ...props
 }} />;
 
+export const IconMagnifyZoom = (props?: Props & {zoomedIn?: boolean}) => <DefaultIcon {...{
+  name: props.zoomedIn ? 'magnify-minus-outline' : 'magnify-plus-outline',
+  ...props
+}} />;
+
 export const IconLock = (props?: Props) => <DefaultIcon {...{
   name: 'lock',
   ...props
