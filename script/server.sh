@@ -48,7 +48,12 @@ server() {
     rm youtrack*.jar
     ;;
 
+  "killProcess")
+    kill $( lsof -i:"$(server 'port')" -t )
+    ;;
+
   "start")
+    server 'killProcess'
     server 'user.home.clear'
     server 'user.home.create'
     server 'db.home.create'
