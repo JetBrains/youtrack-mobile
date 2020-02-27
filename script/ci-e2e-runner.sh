@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+echo "=========== 🧰 Install WGET ==========="
+brew install wget
+
 echo "=========== 🧰 Install modules ==========="
 yarn install
 
