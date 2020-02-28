@@ -30,6 +30,7 @@ import type IssuePermissions from '../../components/issue-permissions/issue-perm
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import ModalView from '../../components/modal-view/modal-view';
 import MenuIcon from '../../components/menu/menu-icon';
+import ErrorMessageInline from '../../components/error-message/error-message-inline';
 
 const CATEGORY_NAME = 'Agile board';
 
@@ -258,20 +259,43 @@ class AgileBoard extends Component<Props, State> {
     );
   }
 
-  _renderNoSprint() {
+  renderSelectBoardButton() {
+    return (
+      <TouchableOpacity onPress={this.props.onOpenBoardSelect}>
+        <Text style={styles.selectBoardMessage} numberOfLines={1}>Select board</Text>
+      </TouchableOpacity>
+    );
+  }
+
+  renderManualBoardSelect() {
+    const {agile} = this.props;
+    const errors = agile?.status?.errors || [];
+    const hasErrors = errors.length > 0;
+
     return (
       <View style={styles.agileBoardMessage}>
-        <Text style={styles.agileBoardSmile}>(・_・)</Text>
-        <Text style={styles.agileBoardMessageText}>No agile board selected</Text>
-        <TouchableOpacity onPress={this.props.onOpenBoardSelect}>
-          <Text style={styles.selectBoardMessage} numberOfLines={1}>Select board</Text>
-        </TouchableOpacity>
+        {hasErrors && (
+          <View>
+            {errors.map(
+              (error, index) => <ErrorMessageInline key={`agileError-${index}`} error={error}/>)
+            }
+          </View>
+        )}
+
+        {!hasErrors && <Text style={styles.agileBoardSmile}>(・_・)</Text>}
+        {!hasErrors && <Text style={styles.agileBoardMessageText}>No agile board selected</Text>}
+        {this.renderSelectBoardButton()}
+
       </View>
     );
   }
 
   _renderBoard(sprint: SprintFull) {
-    const board: Board = sprint.board;
+    const board: Board = sprint?.board;
+
+    if (!sprint || !board) {
+      return null;
+    }
 
     const commonRowProps = {
       collapsedColumnIds: (board.columns || []).filter(col => col.collapsed).map(col => col.id),
@@ -333,56 +357,81 @@ class AgileBoard extends Component<Props, State> {
     flushStoragePart({agileZoomedIn: zoomedIn});
   };
 
-  render() {
-    const {sprint, isLoadingMore, isSprintSelectOpen, noBoardSelected, isOutOfDate} = this.props;
-
+  renderBoard() {
+    const {sprint, isLoadingMore} = this.props;
     const {zoomedIn} = this.state;
+
+    return (
+      <DragContainer onDragStart={this.onDragStart} onDragEnd={this.onDragEnd}>
+        <BoardScroller
+          columns={sprint?.board?.columns}
+          snap={zoomedIn}
+          refreshControl={this._renderRefreshControl()}
+          horizontalScrollProps={{
+            contentContainerStyle: {
+              display: 'flex',
+              flexDirection: 'column',
+              width: zoomedIn ? this._getScrollableWidth() : '100%'
+            },
+            onScroll: this.syncHeaderPosition
+          }}
+          verticalScrollProps={{
+            onScroll: this.onVerticalScroll,
+            onContentSizeChange: this.onContentSizeChange,
+            contentContainerStyle: {
+              minHeight: '100%'
+            }
+          }}
+        >
+
+          {this._renderBoard(sprint)}
+          {isLoadingMore && <ActivityIndicator color={COLOR_PINK} style={styles.loadingMoreIndicator}/>}
+
+        </BoardScroller>
+      </DragContainer>
+    );
+  }
+
+  render() {
+    const {sprint, isSprintSelectOpen, noBoardSelected, isOutOfDate, agile, isLoading} = this.props;
+    const {zoomedIn} = this.state;
+    const isValidBoard: boolean = agile?.status?.valid === true;
+    const isValidSprint: boolean = !!sprint && isValidBoard;
+    const isFirstLoading = Boolean(isLoading && !sprint);
 
     return (
       <Menu>
         <View
           testID='pageAgile'
-          style={styles.container}>
+          style={styles.container}
+        >
           {this._renderHeader()}
 
-          {sprint && this._renderBoardHeader(sprint)}
-          {noBoardSelected && this._renderNoSprint()}
+          {isValidSprint && this._renderBoardHeader(sprint)}
 
-          <DragContainer onDragStart={this.onDragStart} onDragEnd={this.onDragEnd}>
-            <BoardScroller
-              columns={sprint?.board?.columns}
-              snap={zoomedIn}
-              refreshControl={this._renderRefreshControl()}
-              horizontalScrollProps={{
-                contentContainerStyle: {
-                  display: 'flex',
-                  flexDirection: 'column',
-                  width: zoomedIn ? this._getScrollableWidth() : '100%'
-                },
-                onScroll: this.syncHeaderPosition
-              }}
-              verticalScrollProps={{
-                onScroll: this.onVerticalScroll,
-                onContentSizeChange: this.onContentSizeChange,
-                contentContainerStyle: {
-                  minHeight: '100%'
-                }
-              }}
-            >
-              {sprint && this._renderBoard(sprint)}
-              {isLoadingMore && <ActivityIndicator color={COLOR_PINK} style={styles.loadingMoreIndicator}/>}
-            </BoardScroller>
-          </DragContainer>
+          {isFirstLoading && (
+            <View style={styles.loadingIndicator}>
+              <Text>Loading agile...</Text>
+              {this.renderSelectBoardButton()}
+            </View>
+          )}
 
-          <View style={styles.zoomButtonContainer}>
-            <TouchableOpacity
-              style={styles.zoomButton}
-              onPress={this.toggleZoom}>
-              <Image source={zoomedIn ? zoomOut : zoomIn} style={styles.zoomButtonIcon}/>
-            </TouchableOpacity>
-          </View>
+          {noBoardSelected && this.renderManualBoardSelect()}
+
+          {isValidSprint && this.renderBoard()}
+
+          {isValidSprint && (
+            <View style={styles.zoomButtonContainer}>
+              <TouchableOpacity
+                style={styles.zoomButton}
+                onPress={this.toggleZoom}>
+                <Image source={zoomedIn ? zoomOut : zoomIn} style={styles.zoomButtonIcon}/>
+              </TouchableOpacity>
+            </View>
+          )}
 
           {isSprintSelectOpen && this._renderSelect()}
+
           {isOutOfDate && this.renderRefreshPopup()}
         </View>
       </Menu>

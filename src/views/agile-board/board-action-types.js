@@ -25,3 +25,5 @@ export const UPDATE_SWIMLANE = 'agile.UPDATE_SWIMLANE';
 export const MOVE_ISSUE = 'agile.MOVE_ISSUE';
 
 export const IS_OUT_OF_DATE = 'agile.IS_OUT_OF_DATE';
+
+export const RECEIVE_AGILE = 'agile.RECEIVE_AGILE';
