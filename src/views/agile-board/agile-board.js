@@ -17,7 +17,6 @@ import Auth from '../../components/auth/auth';
 import {Draggable, DragContainer} from '../../components/draggable/';
 import Api from '../../components/api/api';
 import {COLOR_PINK, AGILE_COLLAPSED_COLUMN_WIDTH, COLOR_BLACK} from '../../components/variables/variables';
-import {IconMenu, IconAngleDown, IconMagnifyZoom} from '../../components/icon/icon';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
 import type {SprintFull, Board, AgileBoardRow, AgileColumn} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
@@ -28,7 +27,9 @@ import {openMenu} from '../../actions/app-actions';
 import {connect} from 'react-redux';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import ModalView from '../../components/modal-view/modal-view';
+import ErrorMessageInline from '../../components/error-message/error-message-inline';
 import {HIT_SLOP} from '../../components/common-styles/button';
+import {IconAngleDown, IconMagnifyZoom, IconMenu} from '../../components/icon/icon';
 
 const CATEGORY_NAME = 'Agile board';
 
@@ -135,55 +136,51 @@ class AgileBoard extends Component<Props, State> {
   };
 
   renderNavigation() {
-    const {sprint, onOpenSprintSelect, onOpenBoardSelect, isLoading} = this.props;
-    if (!sprint) {
+    const {agile, sprint, onOpenSprintSelect, onOpenBoardSelect, isLoading} = this.props;
+    if (!agile || !sprint) {
       return null;
     }
-    const navigation = [
-      {
-        label: sprint?.agile?.name,
-        id: 'sprintAgileName',
-        onPress: onOpenBoardSelect,
-        textStyle: styles.agileNavigationButtonTextMain
-      },
-      {
-        label: sprint?.name,
-        id: 'sprintName',
-        onPress: onOpenSprintSelect
-      },
-    ];
+    const navigation = [{
+      label: sprint.agile.name,
+      id: 'sprintAgileName',
+      onPress: onOpenBoardSelect,
+      textStyle: styles.agileNavigationButtonTextMain
+    }, {
+      label: sprint.name,
+      id: 'sprintName',
+      onPress: onOpenSprintSelect,
+      textStyle: styles.null
+    }];
 
     return (
       <View style={styles.agileNavigation}>
         {navigation.map(it => {
-          if (it.label) {
-            return (
-              <TouchableOpacity
-                key={it.id}
-                style={styles.agileNavigationButton}
-                disabled={isLoading}
-                onPress={it.onPress}
+          return (
+            <TouchableOpacity
+              key={it.id}
+              style={styles.agileNavigationButton}
+              disabled={isLoading}
+              onPress={it.onPress}
+            >
+              <Text
+                style={[
+                  styles.agileNavigationButtonText,
+                  it.textStyle,
+                  isLoading ? styles.agileNavigationButtonTextDisabled : null
+                ]}
+                numberOfLines={1}
               >
-                <Text
-                  style={[
-                    styles.agileNavigationButtonText,
-                    it.textStyle,
-                    isLoading ? styles.agileNavigationButtonTextDisabled : null
-                  ]}
-                  numberOfLines={1}
-                >
-                  {`${it.label} `}
-                </Text>
-                <IconAngleDown size={15} color={COLOR_BLACK} style={styles.agileNavigationButtonIcon}/>
-              </TouchableOpacity>
-            );
-          }
+                {`${it.label} `}
+              </Text>
+              <IconAngleDown size={15} color={COLOR_BLACK} style={styles.agileNavigationButtonIcon}/>
+            </TouchableOpacity>
+          );
         })}
       </View>
     );
   }
 
-  _renderHeader() {
+  _renderHeader(isValidSprint: boolean) {
     const {zoomedIn} = this.state;
 
     return (
@@ -192,7 +189,7 @@ class AgileBoard extends Component<Props, State> {
         rightButton={
           <Text
             onPress={this.toggleZoom}>
-            <IconMagnifyZoom zoomedIn={zoomedIn} size={24}/>
+            {isValidSprint && <IconMagnifyZoom zoomedIn={zoomedIn} size={24}/>}
           </Text>
         }
         onBack={this.props.onOpenMenu}
@@ -276,20 +273,27 @@ class AgileBoard extends Component<Props, State> {
     );
   }
 
-  _renderNoSprint() {
-    return (
-      <View style={styles.agileBoardMessage}>
-        <Text style={styles.agileBoardSmile}>(・_・)</Text>
-        <Text style={styles.agileBoardMessageText}>No agile board selected</Text>
-        <TouchableOpacity onPress={this.props.onOpenBoardSelect}>
-          <Text style={styles.selectBoardMessage} numberOfLines={1}>Select board</Text>
-        </TouchableOpacity>
-      </View>
-    );
+  renderErrors() {
+    const {agile} = this.props;
+    const errors = agile?.status?.errors || [];
+
+    if (errors.length > 0) {
+      return (
+        <View>
+          {errors.map(
+            (error, index) => <ErrorMessageInline key={`agileError-${index}`} error={error}/>)
+          }
+        </View>
+      );
+    }
   }
 
   _renderBoard(sprint: SprintFull) {
-    const board: Board = sprint.board;
+    const board: Board = sprint?.board;
+
+    if (!sprint || !board) {
+      return null;
+    }
 
     const commonRowProps = {
       collapsedColumnIds: (board.columns || []).filter(col => col.collapsed).map(col => col.id),
@@ -311,7 +315,7 @@ class AgileBoard extends Component<Props, State> {
     return [
       sprint.agile.orphansAtTheTop && orphan,
 
-      board.trimmedSwimlanes.map((swimlane: Object & {id: string}) => {
+      board.trimmedSwimlanes.map((swimlane: Object & { id: string }) => {
         return (
           <BoardRow
             key={swimlane.id}
@@ -351,48 +355,71 @@ class AgileBoard extends Component<Props, State> {
     flushStoragePart({agileZoomedIn: zoomedIn});
   };
 
-  render() {
-    const {sprint, isLoadingMore, isSprintSelectOpen, noBoardSelected, isOutOfDate} = this.props;
+  renderBoard() {
+    const {sprint, isLoadingMore} = this.props;
     const {zoomedIn} = this.state;
+
+    return (
+      <DragContainer onDragStart={this.onDragStart} onDragEnd={this.onDragEnd}>
+        <BoardScroller
+          columns={sprint?.board?.columns}
+          snap={zoomedIn}
+          refreshControl={this._renderRefreshControl()}
+          horizontalScrollProps={{
+            contentContainerStyle: {
+              display: 'flex',
+              flexDirection: 'column',
+              width: zoomedIn ? this._getScrollableWidth() : '100%'
+            },
+            onScroll: this.syncHeaderPosition
+          }}
+          verticalScrollProps={{
+            onScroll: this.onVerticalScroll,
+            onContentSizeChange: this.onContentSizeChange,
+            contentContainerStyle: {
+              minHeight: '100%'
+            }
+          }}
+        >
+
+          {this._renderBoard(sprint)}
+          {isLoadingMore && <ActivityIndicator color={COLOR_PINK} style={styles.loadingMoreIndicator}/>}
+
+        </BoardScroller>
+      </DragContainer>
+    );
+  }
+
+  render() {
+    const {sprint, isSprintSelectOpen, isOutOfDate, agile, isLoading} = this.props;
+    const isValidBoard: boolean = agile?.status?.valid === true;
+    const isSprintLoaded: boolean = !!sprint && isValidBoard;
+    const isFirstLoading = Boolean(isLoading && !sprint);
 
     return (
       <Menu>
         <View
           testID='pageAgile'
-          style={styles.container}>
-          {this._renderHeader()}
+          style={styles.container}
+        >
+          {this._renderHeader(isSprintLoaded)}
+
           {this.renderNavigation()}
 
-          {sprint && this._renderBoardHeader(sprint)}
-          {noBoardSelected && this._renderNoSprint()}
+          {isSprintLoaded && this._renderBoardHeader(sprint)}
 
-          <DragContainer onDragStart={this.onDragStart} onDragEnd={this.onDragEnd}>
-            <BoardScroller
-              columns={sprint?.board?.columns}
-              snap={zoomedIn}
-              refreshControl={this._renderRefreshControl()}
-              horizontalScrollProps={{
-                contentContainerStyle: {
-                  display: 'flex',
-                  flexDirection: 'column',
-                  width: zoomedIn ? this._getScrollableWidth() : '100%'
-                },
-                onScroll: this.syncHeaderPosition
-              }}
-              verticalScrollProps={{
-                onScroll: this.onVerticalScroll,
-                onContentSizeChange: this.onContentSizeChange,
-                contentContainerStyle: {
-                  minHeight: '100%'
-                }
-              }}
-            >
-              {sprint && this._renderBoard(sprint)}
-              {isLoadingMore && <ActivityIndicator color={COLOR_PINK} style={styles.loadingMoreIndicator}/>}
-            </BoardScroller>
-          </DragContainer>
+          {isFirstLoading && (
+            <View style={styles.loadingIndicator}>
+              <Text>Loading agile...</Text>
+            </View>
+          )}
+
+          {this.renderErrors()}
+
+          {isSprintLoaded && this.renderBoard()}
 
           {isSprintSelectOpen && this._renderSelect()}
+
           {isOutOfDate && this.renderRefreshPopup()}
         </View>
       </Menu>

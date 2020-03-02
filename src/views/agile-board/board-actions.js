@@ -1,6 +1,6 @@
 /* @flow */
 import * as types from './board-action-types';
-import {notifyError, notify} from '../../components/notification/notification';
+import {notifyError, notify, DEFAULT_ERROR_MESSAGE} from '../../components/notification/notification';
 import type {AgileBoardRow, AgileColumn, BoardOnList, AgileUserProfile, Sprint, Board} from '../../flow/Agile';
 import type {IssueFull, IssueOnList} from '../../flow/Issue';
 import ServersideEvents from '../../components/api/api__serverside-events';
@@ -19,6 +19,7 @@ export const PAGE_SIZE = 6;
 const CATEGORY_NAME = 'Agile board';
 const RECONNECT_TIMEOUT = 60000;
 let serverSideEventsInstance = null;
+export const DEFAULT_ERROR_AGILE_WITH_INVALID_STATUS = {status: {valid: false, errors: [DEFAULT_ERROR_MESSAGE]}};
 
 function startSprintLoad() {
   return {type: types.START_SPRINT_LOADING};
@@ -33,10 +34,6 @@ function receiveSprint(sprint) {
     type: types.RECEIVE_SPRINT,
     sprint
   };
-}
-
-function noAgileSelected() {
-  return {type: types.NO_AGILE_SELECTED};
 }
 
 function track(msg: string, additionalParam: ?string) {
@@ -66,9 +63,15 @@ export function getAgileUserProfile(): AgileUserProfile | {} {
   };
 }
 
-function loadBoard(board: Board) {
+export function loadBoard(board: Board) {
   return async (dispatch: (any) => any) => {
     destroySSE();
+
+    const agileWithStatus = await dispatch(loadAgile(board.id));
+    if (!agileWithStatus.status.valid) {
+      return dispatch(stopSprintLoad());
+    }
+
     const agileUserProfile: AgileUserProfile = await dispatch(getAgileUserProfile());
 
     let sprint: Sprint = getLastVisitedSprint(board.id, agileUserProfile?.visitedSprints);
@@ -83,14 +86,6 @@ function loadBoard(board: Board) {
   };
 }
 
-function showManualBoardSelect() {
-  return async (dispatch: (any) => any) => {
-    log.info('Select board manually');
-    trackEvent('Select board manually');
-    dispatch(noAgileSelected());
-  };
-}
-
 function updateAgileUserProfile(sprintId) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const profile: AgileUserProfile = await getApi().agile.updateAgileUserProfile(sprintId);
@@ -98,6 +93,24 @@ function updateAgileUserProfile(sprintId) {
       type: types.RECEIVE_AGILE_PROFILE,
       profile
     });
+  };
+}
+
+export function loadAgile(agileId: string) {
+  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    try {
+      const agileWithStatus = await api.agile.getAgile(agileId);
+      dispatch({
+        type: types.RECEIVE_AGILE,
+        agile: agileWithStatus
+      });
+      log.info(`Loaded agile board ${agileId} status`, agileWithStatus);
+      return agileWithStatus;
+    } catch (error) {
+      log.warn(`Cannot load agile board ${agileId} status`, error);
+      return DEFAULT_ERROR_AGILE_WITH_INVALID_STATUS;
+    }
   };
 }
 
@@ -117,7 +130,6 @@ export function loadSprint(agileId: string, sprintId: string) {
       notify('Could not load requested sprint');
       trackError('Load sprint');
       log.info('Could not load requested sprint', e);
-      dispatch(showManualBoardSelect());
     } finally {
       dispatch(stopSprintLoad());
       dispatch(setOutOfDate(false));
@@ -144,10 +156,9 @@ export function loadDefaultAgileBoard() {
 
     if (board) {
       log.info('Loading Default Agile board', board?.name || board?.id);
-      dispatch(loadBoard(board));
+      await dispatch(loadBoard(board));
     } else {
       trackError('Default board is unknown');
-      dispatch(showManualBoardSelect());
     }
   };
 }
@@ -355,6 +366,7 @@ export function openBoardSelect() {
         selectedItems: sprint ? [sprint.agile] : [],
         onSelect: (selectedBoard: BoardOnList) => {
           dispatch(closeSelect());
+          dispatch(startSprintLoad());
           dispatch(loadBoard(selectedBoard));
           trackEvent('Change board');
         }

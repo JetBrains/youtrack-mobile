@@ -108,7 +108,7 @@ server() {
     echo "ℹ️ Info(Server): YouTrack has started on $serverHost"
     ;;
   "stop")
-    if [ ! "$(netstat -ltnp | grep $ytShutdownPort)" ]; then
+    if [ ! "$(netstat -- -ltnp | grep $ytShutdownPort)" ]; then
       exit 0
     fi
 

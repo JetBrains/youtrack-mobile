@@ -49,6 +49,11 @@ export default StyleSheet.create({
     overflow: 'hidden',
     marginTop: UNIT
   },
+  loadingIndicator: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   loadingMoreIndicator: {
     padding: UNIT * 2
   },
@@ -56,10 +61,6 @@ export default StyleSheet.create({
     resizeMode: 'contain',
     width: UNIT * 2,
     height: UNIT * 2
-  },
-  agileBoardMessage: {
-    flex: 1,
-    alignItems: 'center'
   },
   agileBoardSmile: {
     paddingTop: UNIT * 6,

@@ -63,7 +63,11 @@ export type Board = {
   columns: Array<BoardColumn>,
   orphanRow: AgileBoardRow,
   trimmedSwimlanes: Array<AgileBoardRow>,
-  sprints: Array<Sprint>
+  sprints: Array<Sprint>,
+  status: {
+    valid: boolean,
+    error: Array<string>
+  }
 };
 
 export type BoardOnList = {

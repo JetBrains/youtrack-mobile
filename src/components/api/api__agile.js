@@ -5,11 +5,18 @@ import agileFields from './api__agile-fields';
 import ApiHelper from './api__helper';
 
 import type Auth from '../auth/auth';
-import type {AgileUserProfile, SprintFull, AgileBoardRow, BoardOnList} from '../../flow/Agile';
+import type {AgileUserProfile, SprintFull, AgileBoardRow, BoardOnList, Board} from '../../flow/Agile';
 
 export default class AgileAPI extends ApiBase {
   constructor(auth: Auth) {
     super(auth);
+  }
+
+  async getAgile(agileId: string): Promise<Board> {
+    const queryString = qs.stringify({
+      fields: 'id,name,status(errors,valid)',
+    });
+    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${agileId}?${queryString}`);
   }
 
   async getSprint(boardId: string, sprintId: string, top: number = 100, skip: number = 0): Promise<SprintFull> {

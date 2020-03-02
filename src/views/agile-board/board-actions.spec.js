@@ -11,10 +11,11 @@ import type {AgileUserProfile, Board, Sprint} from '../../flow/Agile';
 let apiMock;
 let store;
 let agileUserProfileMock: AgileUserProfile;
-let agileMock: Board;
+let defaultAgileMock: Board;
+let agileWithStatusMock;
 let sprintMock: Sprint;
 let storeActions;
-const sprintIdMock = 'foo';
+const sprintIdMock = 'sprint-foo';
 
 const getApi = () => apiMock;
 const middlewares = [thunk.withExtraArgument(getApi)];
@@ -26,26 +27,22 @@ describe('Agile board async actions', () => {
   beforeEach(() => {
     animation.layoutAnimation = jest.fn();
 
-    sprintMock = createSprintMock(sprintIdMock, [
-      createSprintMock(sprintIdMock),
-      createSprintMock('bar')
-    ]);
-    agileMock = sprintMock.agile;
+    sprintMock = createSprintMock(sprintIdMock, [createSprintMock(sprintIdMock), createSprintMock('sprint-bar')]);
+    defaultAgileMock = sprintMock.agile;
 
     agileUserProfileMock = {
-      defaultAgile: agileMock,
-      visitedSprints: [
-        createSprintMock('baz'),
-        createSprintMock('boo'),
-        sprintMock
-      ]
+      defaultAgile: defaultAgileMock,
+      visitedSprints: [createSprintMock('sprint-baz'), createSprintMock('sprint-boo'), sprintMock]
     };
+
+    agileWithStatusMock = {status: {valid: true, errors: []}};
 
     apiMock = {
       agile: {
         getSprint: jest.fn(() => sprintMock),
         getAgileUserProfile: jest.fn(() => agileUserProfileMock),
-        updateAgileUserProfile: jest.fn(() => sprintMock)
+        updateAgileUserProfile: jest.fn(() => sprintMock),
+        getAgile: jest.fn(() => agileWithStatusMock),
       }
     };
 
@@ -74,49 +71,56 @@ describe('Agile board async actions', () => {
 
 
   describe('Agile board', () => {
-    it('should load last visited sprint', async () => {
-      await store.dispatch(actions.loadDefaultAgileBoard());
 
-      expect(apiMock.agile.getSprint).toHaveBeenCalledWith(
-        agileMock.id,
-        sprintIdMock,
-        actions.PAGE_SIZE
-      );
+    describe('Load Agile with a status', () => {
+
+      it('should load an agile', async () => {
+        agileWithStatusMock = {status: {valid: true, errors: []}};
+        const agile = await store.dispatch(actions.loadAgile(defaultAgileMock.id));
+
+        expect(apiMock.agile.getAgile).toHaveBeenCalledWith(defaultAgileMock.id);
+        expect(agile).toEqual(agileWithStatusMock);
+      });
+
+      it('should return default invalid status', async () => {
+        agileWithStatusMock = Promise.reject('request error');
+        const agile = await store.dispatch(actions.loadAgile(''));
+
+        expect(agile).toEqual(actions.DEFAULT_ERROR_AGILE_WITH_INVALID_STATUS);
+      });
     });
 
-    it('should load last profile default board`s sprint if there is no matching items from `visitedSprints`',
-      async () => {
-        updateStore({
-          agile: {
-            profile: {
-              defaultAgile: agileMock,
-              visitedSprints: []
-            }
-          }
-        });
+
+    describe('Default agile', () => {
+      it('should load the last visited sprint of the default agile', async () => {
         await store.dispatch(actions.loadDefaultAgileBoard());
 
-        const targetSprint = agileMock.sprints[agileMock.sprints.length - 1];
         expect(apiMock.agile.getSprint).toHaveBeenCalledWith(
-          targetSprint.agile.id,
-          targetSprint.id,
+          defaultAgileMock.id,
+          sprintIdMock,
           actions.PAGE_SIZE
         );
       });
 
-    it('should show select board manually control if default board is missing in an agile profile', async () => {
-      updateStore({
-        agile: {profile: {defaultAgile: null}}
-      });
+      it('should load the default agile board`s sprint if there is no matching items from `visitedSprints`',
+        async () => {
+          updateStore({
+            agile: {
+              profile: {
+                defaultAgile: defaultAgileMock,
+                visitedSprints: []
+              }
+            }
+          });
+          await store.dispatch(actions.loadDefaultAgileBoard());
 
-      await store.dispatch(actions.loadDefaultAgileBoard());
-      storeActions = store.getActions();
-
-      expect(apiMock.agile.getSprint).not.toHaveBeenCalled();
-      expect(storeActions[1]).toEqual({
-        type: types.NO_AGILE_SELECTED
-      });
-
+          const targetSprint = defaultAgileMock.sprints[defaultAgileMock.sprints.length - 1];
+          expect(apiMock.agile.getSprint).toHaveBeenCalledWith(
+            targetSprint.agile.id,
+            targetSprint.id,
+            actions.PAGE_SIZE
+          );
+        });
     });
   });
 
@@ -160,13 +164,13 @@ describe('Agile board async actions', () => {
     });
 
     describe('Error loading', () => {
-      it('should show select board manually control if loaded sprint is invalid', async () => {
+      it('should stop loading if loaded sprint is invalid', async () => {
         apiMock.agile.getSprint = jest.fn(() => null);
         notification.setNotificationComponent({show: jest.fn()});
         await setLoadSprintExpectation();
 
         expect(storeActions[2]).toEqual({
-          type: types.NO_AGILE_SELECTED
+          type: types.STOP_SPRINT_LOADING
         });
       });
     });
@@ -211,7 +215,7 @@ function updateStore(state: ?Object = {}) {
 }
 
 function createSprintMock(id: string, agileSprints: ?Array<Sprint>) {
-  const agileId = `agileId-${id}`;
+  const agileId = `agileId-of-${id}`;
   const sprints = agileSprints && agileSprints.map(it => {
     it.agile.id = agileId;
     return it;
