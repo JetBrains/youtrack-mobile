@@ -406,9 +406,9 @@ class AgileBoard extends Component<Props, State> {
 
           {this.renderNavigation()}
 
-          {isSprintLoaded && this._renderBoardHeader(sprint)}
+          {isSprintLoaded && !isLoading && this._renderBoardHeader(sprint)}
 
-          {isFirstLoading && (
+          {(isFirstLoading || isLoading) && (
             <View style={styles.loadingIndicator}>
               <Text>Loading agile...</Text>
             </View>
@@ -416,7 +416,7 @@ class AgileBoard extends Component<Props, State> {
 
           {this.renderErrors()}
 
-          {isSprintLoaded && this.renderBoard()}
+          {isSprintLoaded && !isLoading && this.renderBoard()}
 
           {isSprintSelectOpen && this._renderSelect()}
 
