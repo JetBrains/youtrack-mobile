@@ -24,7 +24,6 @@ type BoardState = Board;
 export type AgilePageState = {
   isLoading: boolean,
   profile: ?AgileUserProfile,
-  noBoardSelected: boolean,
   isSprintSelectOpen: boolean,
   isOutOfDate: boolean,
   creatingIssueDraftId: ?string,
@@ -38,7 +37,6 @@ export type AgilePageState = {
 const initialPageState: AgilePageState = {
   isLoading: false,
   profile: null,
-  noBoardSelected: false,
   isSprintSelectOpen: false,
   isOutOfDate: false,
   creatingIssueDraftId: null,
@@ -111,11 +109,8 @@ const agilePageReducer = createReducer(initialPageState, {
   [types.RECEIVE_AGILE_PROFILE](state: AgilePageState, action: { profile: AgileUserProfile }): AgilePageState {
     return {...state, profile: action.profile};
   },
-  [types.NO_AGILE_SELECTED](state: AgilePageState, action: Object) {
-    return {...state, noBoardSelected: action.noBoardSelected};
-  },
   [types.START_SPRINT_LOADING](state: AgilePageState) {
-    return {...state, noBoardSelected: false, isLoading: true};
+    return {...state, isLoading: true};
   },
   [types.STOP_SPRINT_LOADING](state: AgilePageState) {
     return {...state, isLoading: false};

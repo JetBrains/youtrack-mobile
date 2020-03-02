@@ -39,7 +39,6 @@ type Props = AgilePageState & {
   isLoading: boolean,
   isLoadingMore: boolean,
   noMoreSwimlanes: boolean,
-  noBoardSelected: boolean,
   sprint: ?SprintFull,
   isSprintSelectOpen: boolean,
   selectProps: Object,
@@ -180,7 +179,7 @@ class AgileBoard extends Component<Props, State> {
     );
   }
 
-  _renderHeader(isValidSprint: boolean) {
+  _renderHeader(isSprintLoaded: boolean) {
     const {zoomedIn} = this.state;
 
     return (
@@ -189,7 +188,7 @@ class AgileBoard extends Component<Props, State> {
         rightButton={
           <Text
             onPress={this.toggleZoom}>
-            {isValidSprint && <IconMagnifyZoom zoomedIn={zoomedIn} size={24}/>}
+            {isSprintLoaded && <IconMagnifyZoom zoomedIn={zoomedIn} size={24}/>}
           </Text>
         }
         onBack={this.props.onOpenMenu}
