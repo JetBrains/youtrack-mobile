@@ -392,8 +392,9 @@ class AgileBoard extends Component<Props, State> {
   render() {
     const {sprint, isSprintSelectOpen, isOutOfDate, agile, isLoading} = this.props;
     const isValidBoard: boolean = agile?.status?.valid === true;
-    const isSprintLoaded: boolean = !!sprint && isValidBoard;
-    const isFirstLoading = Boolean(isLoading && !sprint);
+    const hasSprint = !!sprint;
+    const isSprintLoaded: boolean = hasSprint && isValidBoard;
+    const isFirstLoading = Boolean(isLoading && !hasSprint);
 
     return (
       <Menu>
@@ -407,9 +408,9 @@ class AgileBoard extends Component<Props, State> {
 
           {isSprintLoaded && !isLoading && this._renderBoardHeader(sprint)}
 
-          {(isFirstLoading || isLoading) && (
+          {((isFirstLoading && isValidBoard) || isLoading) && (
             <View style={styles.loadingIndicator}>
-              <Text>Loading agile...</Text>
+              <Text>Loading agile {agile?.name || ''}...</Text>
             </View>
           )}
 

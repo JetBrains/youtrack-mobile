@@ -66,6 +66,7 @@ export function getAgileUserProfile(): AgileUserProfile | {} {
 export function loadBoard(board: Board) {
   return async (dispatch: (any) => any) => {
     destroySSE();
+    dispatch(receiveSprint(null));
 
     const agileWithStatus = await dispatch(loadAgile(board.id));
     if (!agileWithStatus.status.valid) {
@@ -337,7 +338,7 @@ export function openSprintSelect() {
 export function openBoardSelect() {
   return (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
-    const {sprint} = getState().agile;
+    const {sprint, agile} = getState().agile;
     trackEvent('Open board select');
 
     dispatch({
@@ -363,7 +364,7 @@ export function openBoardSelect() {
           );
           return [].concat(boards.favorites).concat(boards.regular);
         },
-        selectedItems: sprint ? [sprint.agile] : [],
+        selectedItems: sprint ? [sprint.agile] : agile ? [agile] : [],
         onSelect: (selectedBoard: BoardOnList) => {
           dispatch(closeSelect());
           dispatch(startSprintLoad());
