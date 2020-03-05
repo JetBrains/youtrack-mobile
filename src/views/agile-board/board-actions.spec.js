@@ -132,7 +132,8 @@ describe('Agile board async actions', () => {
 
         expect(apiMock.agile.getSprint).not.toHaveBeenCalled();
         expect(storeActions[1]).toEqual({
-          type: types.NO_AGILE_SELECTED
+          type: types.NO_AGILE_SELECTED,
+          noBoardSelected: true
         });
       });
     });
@@ -184,7 +185,8 @@ describe('Agile board async actions', () => {
         await setLoadSprintExpectation();
 
         expect(storeActions[2]).toEqual({
-          type: types.NO_AGILE_SELECTED
+          type: types.NO_AGILE_SELECTED,
+          noBoardSelected: true
         });
       });
     });

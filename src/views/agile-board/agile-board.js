@@ -161,14 +161,14 @@ class AgileBoard extends Component<Props, State> {
   }
 
   _renderHeader() {
-    const {sprint, onOpenSprintSelect, onOpenBoardSelect} = this.props;
+    const {sprint, onOpenSprintSelect, onOpenBoardSelect, noBoardSelected} = this.props;
 
     return (
       <Header
         leftButton={<MenuIcon/>}
         onBack={this.props.onOpenMenu}
       >
-        {Boolean(sprint) && <View style={styles.headerContent}>
+        {Boolean(sprint && !noBoardSelected) && <View style={styles.headerContent}>
           {this.renderHeaderButton(
             sprint?.agile?.name,
             onOpenBoardSelect,
@@ -396,8 +396,9 @@ class AgileBoard extends Component<Props, State> {
     const {sprint, isSprintSelectOpen, noBoardSelected, isOutOfDate, agile, isLoading} = this.props;
     const {zoomedIn} = this.state;
     const isValidBoard: boolean = agile?.status?.valid === true;
-    const isValidSprint: boolean = !!sprint && isValidBoard;
-    const isFirstLoading = Boolean(isLoading && !sprint);
+    const hasSprint = !!sprint;
+    const isValidSprint: boolean = hasSprint && isValidBoard;
+    const isFirstLoading = Boolean(isLoading && !hasSprint);
 
     return (
       <Menu>
@@ -409,9 +410,9 @@ class AgileBoard extends Component<Props, State> {
 
           {isValidSprint && this._renderBoardHeader(sprint)}
 
-          {isFirstLoading && (
+          {isFirstLoading && isValidBoard && (
             <View style={styles.loadingIndicator}>
-              <Text>Loading agile...</Text>
+              <Text>Loading agile board {agile?.name || ''}...</Text>
               {this.renderSelectBoardButton()}
             </View>
           )}
