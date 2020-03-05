@@ -16,7 +16,12 @@ import Router from '../../components/router/router';
 import Auth from '../../components/auth/auth';
 import {Draggable, DragContainer} from '../../components/draggable/';
 import Api from '../../components/api/api';
-import {COLOR_PINK, AGILE_COLLAPSED_COLUMN_WIDTH, COLOR_BLACK} from '../../components/variables/variables';
+import {
+  COLOR_PINK,
+  AGILE_COLLAPSED_COLUMN_WIDTH,
+  COLOR_BLACK,
+  COLOR_FONT_GRAY
+} from '../../components/variables/variables';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
 import type {SprintFull, Board, AgileBoardRow, AgileColumn} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
@@ -136,20 +141,24 @@ class AgileBoard extends Component<Props, State> {
 
   renderNavigation() {
     const {agile, sprint, onOpenSprintSelect, onOpenBoardSelect, isLoading} = this.props;
-    if (!agile || !sprint) {
+    if (!agile) {
       return null;
     }
     const navigation = [{
-      label: sprint.agile.name,
+      label: agile.name,
       id: 'sprintAgileName',
       onPress: onOpenBoardSelect,
       textStyle: styles.agileNavigationButtonTextMain
-    }, {
-      label: sprint.name,
-      id: 'sprintName',
-      onPress: onOpenSprintSelect,
-      textStyle: styles.null
     }];
+
+    if (sprint) {
+      navigation.push({
+        label: sprint.name,
+        id: 'sprintName',
+        onPress: onOpenSprintSelect,
+        textStyle: styles.null
+      });
+    }
 
     return (
       <View style={styles.agileNavigation}>
@@ -171,7 +180,7 @@ class AgileBoard extends Component<Props, State> {
               >
                 {`${it.label} `}
               </Text>
-              <IconAngleDown size={15} color={COLOR_BLACK} style={styles.agileNavigationButtonIcon}/>
+              <IconAngleDown size={15} color={isLoading ? COLOR_FONT_GRAY : COLOR_BLACK} style={styles.agileNavigationButtonIcon}/>
             </TouchableOpacity>
           );
         })}
@@ -410,7 +419,7 @@ class AgileBoard extends Component<Props, State> {
 
           {((isFirstLoading && isValidBoard) || isLoading) && (
             <View style={styles.loadingIndicator}>
-              <Text>Loading agile {agile?.name || ''}...</Text>
+              <ActivityIndicator color={COLOR_PINK}/>
             </View>
           )}
 
