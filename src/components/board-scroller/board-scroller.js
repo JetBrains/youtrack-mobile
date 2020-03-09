@@ -9,7 +9,7 @@ import {clamp, getSnapToX, getPointShift} from './board-scroller__math';
 import type {BoardColumn} from '../../flow/Agile';
 import type {DragContextType} from '../draggable/drag-container';
 
-export const COLUMN_SCREEN_PART = 0.9;
+export const COLUMN_SCREEN_PART = 0.85;
 
 type Props = {
   children: any,
