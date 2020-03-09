@@ -53,7 +53,6 @@ server() {
     ;;
 
   "start")
-    server 'killProcess'
     server 'user.home.clear'
     server 'user.home.create'
     server 'db.home.create'
