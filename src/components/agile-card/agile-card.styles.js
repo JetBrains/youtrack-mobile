@@ -10,8 +10,6 @@ import {
 } from '../variables/variables';
 import {issueCard} from '../common-styles/issue';
 
-export const AGILE_CARD_HEIGHT = 131;
-
 export default StyleSheet.create({
   card: {
     flexDirection: 'column',
@@ -26,6 +24,7 @@ export default StyleSheet.create({
   },
   dragging: {
     width: '50%',
+    borderWidth: 2,
     borderColor: COLOR_ICON_LIGHT_BLUE
   },
   topLine: {
