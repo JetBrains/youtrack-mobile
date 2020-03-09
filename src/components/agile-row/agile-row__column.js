@@ -1,11 +1,13 @@
 /* @flow */
+
 import React from 'react';
-import {Image, TouchableOpacity} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import styles from './agile-row.styles';
 import { DropZone } from '../draggable';
-import {addGray} from '../icon/icon';
+import {IconPlus} from '../icon/icon';
 import type {BoardCell} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
+import {COLOR_PINK} from '../variables/variables';
 
 type ColumnProps = {
   cell: BoardCell,
@@ -28,7 +30,7 @@ export default function AgileRowColumn(props: ColumnProps) {
     >
       {props.cell.issues.map(props.renderIssueCard)}
       <TouchableOpacity onPress={() => props.onTapCreateIssue(cell.column.id, cell.id)} style={styles.addCardButton}>
-        <Image style={styles.addCardIcon} source={addGray}/>
+        <IconPlus color={COLOR_PINK} size={24}/>
       </TouchableOpacity>
     </DropZone>
   );

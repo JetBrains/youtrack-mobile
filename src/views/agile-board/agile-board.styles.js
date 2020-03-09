@@ -102,4 +102,7 @@ export default StyleSheet.create({
     ...mainText,
     ...link
   },
+  card: {
+    marginBottom: UNIT * 2
+  }
 });

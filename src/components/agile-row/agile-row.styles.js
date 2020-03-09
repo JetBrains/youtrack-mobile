@@ -1,5 +1,13 @@
 import {StyleSheet} from 'react-native';
-import { UNIT, COLOR_LIGHT_GRAY, COLOR_FONT, AGILE_COLLAPSED_COLUMN_WIDTH, COLOR_GRAY, COLOR_FONT_GRAY, COLOR_PINK } from '../variables/variables';
+import {
+  UNIT,
+  COLOR_LIGHT_GRAY,
+  COLOR_FONT,
+  AGILE_COLLAPSED_COLUMN_WIDTH,
+  COLOR_GRAY,
+  COLOR_FONT_GRAY,
+  COLOR_PINK
+} from '../variables/variables';
 
 export default StyleSheet.create({
   rowContainer: {},
@@ -8,7 +16,7 @@ export default StyleSheet.create({
   },
   headerIssueId: {
     marginLeft: UNIT * 2,
-    marginBottom: UNIT/2,
+    marginBottom: UNIT / 2,
     color: COLOR_PINK
   },
   resolvedIssueText: {
@@ -51,7 +59,7 @@ export default StyleSheet.create({
   collapseIcon: {
     width: 12,
     height: 12,
-    marginTop: UNIT/2,
+    marginTop: UNIT / 2,
     resizeMode: 'contain'
   },
   issueSquare: {
@@ -62,10 +70,12 @@ export default StyleSheet.create({
     borderColor: 'rgba(0,0,0,0.1)'
   },
   addCardButton: {
-    margin: UNIT,
-    padding: UNIT/2,
-    borderRadius: UNIT/2,
+    marginBottom: UNIT * 2,
+    marginRight: UNIT * 2,
+    height: UNIT * 4,
+    borderRadius: UNIT,
     alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: COLOR_LIGHT_GRAY
   },
   addCardIcon: {
