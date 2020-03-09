@@ -5,7 +5,7 @@ const LOG_IN_2FA_TIP = 'Use "Log in via Browser" if 2FA is enabled.';
 const NETWORK_PROBLEM_TIPS = [
   '\nMake sure that your YouTrack instance is available.',
   'URL address should match formats:\n • youtrack-example.com:PORT\n • XX.XX.XX.XXX:PORT',
-  '\nWe do not support client certificate authentication.',
+  '\nClient certificate authentication is not supported.',
 ];
 
 const YT_SUPPORTED_VERSION = `YouTrack Mobile requires YouTrack version 2016.2 or later.`;
