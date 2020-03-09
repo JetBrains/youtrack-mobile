@@ -7,8 +7,7 @@ import {
   COLOR_FONT,
   COLOR_PINK,
   COLOR_MEDIUM_GRAY,
-  COLOR_BLACK,
-  COLOR_TRANSPARENT_BLACK
+  COLOR_BLACK
 } from '../../components/variables/variables';
 import {SIZE as COLOR_FIELD_SIZE} from '../../components/color-field/color-field';
 import {secondaryText, issueCard} from '../../components/common-styles/issue';
@@ -120,13 +119,6 @@ export default StyleSheet.create({
     fontSize: 20,
     letterSpacing: 0.13,
     color: COLOR_BLACK
-  },
-  contextSelect: {
-    top: 0,
-    right: 0,
-    left: 0,
-    bottom: 0,
-    backgroundColor: COLOR_TRANSPARENT_BLACK
   },
   searchPanel: {
     zIndex: -1,

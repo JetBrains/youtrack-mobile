@@ -6,7 +6,6 @@ import {
   FlatList,
   RefreshControl,
   AppState,
-  Modal,
   TouchableOpacity
 } from 'react-native';
 import React, {Component} from 'react';
@@ -32,6 +31,7 @@ import type {IssueOnList} from '../../flow/Issue';
 import OpenScanButton from '../../components/scan/open-scan-button';
 import Select from '../../components/select/select';
 import SearchPanel from './issue-list__search-panel';
+import ModalView from '../../components/modal-view/modal-view';
 
 import {IconAngleDown, IconMenu, IconPlus} from '../../components/icon/icon';
 
@@ -176,17 +176,16 @@ export class IssueList extends Component<Props, void> {
 
   renderContextSelect() {
     return (
-      <Modal
+      <ModalView
         visible
         animationType="fade"
         onRequestClose={() => true}
       >
         <Select
-          style={styles.contextSelect}
           getTitle={item => item.name}
           {...this.props.selectProps}
         />
-      </Modal>
+      </ModalView>
     );
   }
 
