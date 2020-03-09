@@ -1,38 +1,34 @@
 /* @flow */
-import {View, Text, StyleSheet} from 'react-native';
+
+import {View, Text} from 'react-native';
 import React, {PureComponent} from 'react';
-import {
-  UNIT,
-  COLOR_FONT,
-  COLOR_FONT_GRAY,
-  COLOR_LIGHT_GRAY,
-  COLOR_ICON_LIGHT_BLUE
-} from '../variables/variables';
 import ColorField from '../color-field/color-field';
 import Avatar from '../avatar/avatar';
 import ApiHelper from '../api/api__helper';
+import {getPriotityField, getAssigneeField} from '../issue-formatter/issue-formatter';
+import Tags from '../tags/tags';
+import styles from './agile-card.styles';
+
 import type {IssueOnList} from '../../flow/Issue';
 import type {FieldValueShort, CustomFieldShort} from '../../flow/CustomFields';
-import {getPriotityField, getAssigneeField} from '../issue-formatter/issue-formatter';
-
-export const AGILE_CARD_HEIGHT = 131;
 
 type Props = {
   style?: any,
   issue: IssueOnList,
-  estimationField: ?{id: string},
+  estimationField: ?{ id: string },
   ghost?: boolean, // from <Draggable/>
   dragging?: boolean // from <DragContainer/>
 };
+export const AGILE_CARD_HEIGHT = 131;
 
-function getEstimation(estimationField: {id: string}, fields: Array<CustomFieldShort>) {
+function getEstimation(estimationField: { id: string }, fields: Array<CustomFieldShort>) {
   const field = fields.filter(field => field.projectCustomField.field.id === estimationField.id)[0];
   return field?.value?.presentation || 'Not estimated';
 }
 
 export default class AgileCard extends PureComponent<Props, void> {
   render() {
-    const { issue, style, ghost, dragging, estimationField } = this.props;
+    const {issue, style, ghost, dragging, estimationField} = this.props;
     const priorityField = getPriotityField(issue);
 
     const priorityFieldValue = priorityField?.value;
@@ -65,77 +61,39 @@ export default class AgileCard extends PureComponent<Props, void> {
       ]}>
         <View style={styles.topLine}>
           {issueId}
+
           {estimationField && (
             <Text style={styles.estimation} numberOfLines={1}>
               {getEstimation(estimationField, issue.fields)}
             </Text>
           )}
+
+          <View style={styles.assignees}>
+            {assignees.map((assignee: FieldValueShort) => {
+              return (
+                <Avatar
+                  style={styles.assignee}
+                  key={assignee.id}
+                  size={20}
+                  userName={assignee.name}
+                  source={{uri: assignee.avatarUrl}}
+                  testID="card-avatar"
+                />
+              );
+            })}
+          </View>
         </View>
-        <Text numberOfLines={3} style={styles.summary} testID="card-summary">
+
+        <Text
+          testID="card-summary"
+          numberOfLines={3}
+          style={styles.summary}
+        >
           {issue.summary}
         </Text>
-        <View style={styles.assignees}>
-          {assignees.map((assignee: FieldValueShort) => {
-            return (
-              <Avatar
-                key={assignee.id}
-                size={40}
-                userName={assignee.name}
-                source={{ uri: assignee.avatarUrl }}
-                testID="card-avatar"
-              />
-            );
-          })}
-        </View>
+
+        <Tags style={styles.tags} tags={issue.tags}/>
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  card: {
-    flexDirection: 'column',
-    padding: UNIT,
-    marginBottom: UNIT,
-    marginRight: UNIT * 2,
-    height: AGILE_CARD_HEIGHT,
-    backgroundColor: COLOR_LIGHT_GRAY,
-    borderRadius: UNIT * 0.75
-  },
-  ghost: {
-    display: 'none'
-  },
-  dragging: {
-    width: '50%',
-    borderColor: COLOR_ICON_LIGHT_BLUE
-  },
-  topLine: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  estimation: {
-    flexShrink: 1,
-    marginLeft: UNIT * 2,
-    fontSize: 11,
-    color: COLOR_FONT_GRAY
-  },
-  summary: {
-    color: COLOR_FONT,
-    fontSize: 13,
-    paddingTop: UNIT/2,
-    paddingBottom: UNIT/2
-  },
-  colorFieldContainer: {
-    flexDirection: 'row'
-  },
-  issueIdColorField: {
-    paddingLeft: UNIT/2,
-    paddingRight: UNIT/2,
-    width: null, //Removes fixed width of usual color field
-  },
-  assignees: {
-    flexDirection: 'row',
-    height: 40
-  }
-});

@@ -7,12 +7,11 @@ import {
   COLOR_FONT,
   COLOR_PINK,
   COLOR_MEDIUM_GRAY,
-  COLOR_DARK,
   COLOR_BLACK,
   COLOR_TRANSPARENT_BLACK
 } from '../../components/variables/variables';
 import {SIZE as COLOR_FIELD_SIZE} from '../../components/color-field/color-field';
-import {secondaryText, mainText} from '../../components/common-styles/issue';
+import {secondaryText, issueCard} from '../../components/common-styles/issue';
 
 const rowLine = {
   flexDirection: 'row',
@@ -69,9 +68,7 @@ export default StyleSheet.create({
     ...secondaryText
   },
   headLeft: {
-    flexShrink: 0,
-    flexGrow: 0,
-    ...secondaryText,
+    ...issueCard.issueId
   },
   headRight: {
     ...rowLine,
@@ -79,11 +76,7 @@ export default StyleSheet.create({
     justifyContent: 'flex-end'
   },
   summary: {
-    flex: 1,
-    marginTop: UNIT,
-    color: COLOR_DARK,
-    ...mainText,
-    fontWeight: '500',
+    ...issueCard.issueSummary
   },
   subtext: {
     paddingTop: 6,

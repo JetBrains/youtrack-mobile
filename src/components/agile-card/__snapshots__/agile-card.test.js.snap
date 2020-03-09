@@ -31,7 +31,12 @@ exports[`<AgileCard/> should render snapshot 1`] = `
     <View
       style={
         Object {
+          "color": "#737577",
           "flexDirection": "row",
+          "flexGrow": 0,
+          "flexShrink": 0,
+          "fontSize": 14,
+          "letterSpacing": -0.17,
         }
       }
     >
@@ -54,26 +59,36 @@ exports[`<AgileCard/> should render snapshot 1`] = `
         text="TT-123"
       />
     </View>
+    <View
+      style={
+        Object {
+          "flexDirection": "row",
+        }
+      }
+    />
   </View>
   <Text
     numberOfLines={3}
     style={
       Object {
-        "color": "#444444",
-        "fontSize": 13,
-        "paddingBottom": 4,
-        "paddingTop": 4,
+        "color": "#1f2326",
+        "flex": 1,
+        "fontSize": 16,
+        "fontWeight": "500",
+        "letterSpacing": -0.19,
+        "lineHeight": 20,
+        "marginTop": 8,
       }
     }
     testID="card-summary"
   >
     issue summary
   </Text>
-  <View
+  <Tags
+    onTagPress={[Function]}
     style={
       Object {
-        "flexDirection": "row",
-        "height": 40,
+        "marginTop": 8,
       }
     }
   />
