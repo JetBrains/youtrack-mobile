@@ -193,7 +193,7 @@ class AgileBoard extends Component<Props, State> {
 
     return (
       <Header
-        leftButton={<IconMenu/>}
+        leftButton={<IconMenu style={styles.headerMenuItem}/>}
         rightButton={
           <Text
             onPress={this.toggleZoom}>
@@ -407,11 +407,11 @@ class AgileBoard extends Component<Props, State> {
 
     return (
       <Menu>
+        {this._renderHeader(isSprintLoaded)}
         <View
           testID='pageAgile'
           style={styles.container}
         >
-          {this._renderHeader(isSprintLoaded)}
 
           {this.renderNavigation()}
 

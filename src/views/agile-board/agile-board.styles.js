@@ -15,6 +15,7 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     padding: UNIT * 2,
+    paddingRight: 0,
     backgroundColor: COLOR_FONT_ON_BLACK
   },
   agileNavigation: {
@@ -26,7 +27,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     flexShrink: 1,
     justifyContent: 'center',
-    marginBottom: UNIT * 2
+    marginBottom: UNIT * 2,
   },
   agileNavigationButtonText: {
     ...mainText,
@@ -41,6 +42,9 @@ export default StyleSheet.create({
   },
   agileNavigationButtonIcon: {
     lineHeight: 19
+  },
+  headerMenuItem: {
+    paddingLeft: UNIT
   },
   headerIconDisabled: {
     tintColor: COLOR_FONT_GRAY
