@@ -15,10 +15,9 @@ export const AGILE_CARD_HEIGHT = 131;
 export default StyleSheet.create({
   card: {
     flexDirection: 'column',
-    padding: UNIT,
+    padding: UNIT * 2,
     marginBottom: UNIT,
     marginRight: UNIT * 2,
-    height: AGILE_CARD_HEIGHT,
     backgroundColor: COLOR_LIGHT_GRAY,
     borderRadius: UNIT * 0.75
   },
