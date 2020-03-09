@@ -1,4 +1,4 @@
-import {StyleSheet, Platform} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {
   UNIT,
   COLOR_FONT_ON_BLACK,
@@ -6,7 +6,7 @@ import {
   COLOR_FONT_GRAY,
   COLOR_FONT,
   COLOR_ICON_MEDIUM_GREY,
-  COLOR_PINK_DARK, COLOR_PLACEHOLDER
+  COLOR_PINK_DARK
 } from '../../components/variables/variables';
 import {secondaryText, mainText} from '../../components/common-styles/issue';
 import {shadowBottom} from '../../components/common-styles/app';
