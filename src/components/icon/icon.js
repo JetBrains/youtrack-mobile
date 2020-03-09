@@ -152,6 +152,12 @@ export const IconAngleDownUp = (props?: Props & { isDown?: boolean }) => <Defaul
   ...props
 }}/>;
 
+export const IconAngleDownRight = (props?: Props & { isDown?: boolean }) => <DefaultIcon {...{
+  isFontAwesome: true,
+  name: props.isDown ? 'angle-down' : 'angle-right',
+  ...props
+}}/>;
+
 export const IconAngleRight = (props?: Props) => <DefaultIcon {...{
   isFontAwesome: true,
   name: 'angle-right',

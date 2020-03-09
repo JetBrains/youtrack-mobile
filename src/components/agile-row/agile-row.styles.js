@@ -6,18 +6,24 @@ import {
   AGILE_COLLAPSED_COLUMN_WIDTH,
   COLOR_GRAY,
   COLOR_FONT_GRAY,
-  COLOR_PINK
 } from '../variables/variables';
+import {issueCard, issueResolved, issueIdResolved} from '../common-styles/issue';
 
 export default StyleSheet.create({
+  issueResolved: issueResolved,
+  issueIdResolved: issueIdResolved,
+
   rowContainer: {},
   rowHeader: {
-    padding: UNIT
+    paddingTop: UNIT * 2,
+    paddingRight: UNIT,
+    paddingBottom: UNIT * 2,
+    paddingLeft: UNIT,
   },
   headerIssueId: {
-    marginLeft: UNIT * 2,
-    marginBottom: UNIT / 2,
-    color: COLOR_PINK
+    ...issueCard.issueId,
+    marginLeft: UNIT * 3,
+    marginBottom: UNIT / 2
   },
   resolvedIssueText: {
     color: COLOR_FONT_GRAY,
@@ -25,9 +31,10 @@ export default StyleSheet.create({
   },
   rowHeaderText: {
     color: COLOR_FONT,
-    fontSize: 17,
-    marginLeft: UNIT / 2,
-    fontWeight: 'bold'
+    fontSize: 20,
+    marginLeft: UNIT,
+    fontWeight: '500',
+    letterSpacing: 0.13,
   },
   row: {
     flexDirection: 'row',
@@ -56,11 +63,9 @@ export default StyleSheet.create({
   collapseButton: {
     flexDirection: 'row',
   },
-  collapseIcon: {
-    width: 12,
-    height: 12,
-    marginTop: UNIT / 2,
-    resizeMode: 'contain'
+  collapseButtonIcon: {
+    marginTop: UNIT / 4,
+    width: UNIT * 2
   },
   issueSquare: {
     width: UNIT,

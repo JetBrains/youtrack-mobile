@@ -1,5 +1,3 @@
-import {StyleSheet} from 'react-native';
-
 import {
   COLOR_DARK,
   COLOR_FONT_GRAY,
@@ -40,12 +38,12 @@ export const issueCard = {
   }
 };
 
-export default StyleSheet.create({
-  resolved: {
-    ...resolvedTextColor
-  },
-  resolvedSummary: {
-    ...resolvedTextColor,
-    fontWeight: '200'
-  }
-});
+export const issueResolved = {
+  ...resolvedTextColor
+};
+
+export const issueIdResolved = {
+  ...resolvedTextColor,
+  textDecorationLine: 'line-through'
+};
+

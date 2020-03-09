@@ -14,8 +14,52 @@ async function setStorage(state: StorageState) {
   return await storage.__setStorageState(state);
 }
 
+
+function createIssuePriorityFieldMock(...args) {
+  return Object.assign({
+    projectCustomField: {
+      field: {
+        name: 'priority'
+      },
+      bundle: {
+        id: '',
+        $type: 'EnumBundle'
+      },
+      ordinal: 2,
+      canBeEmpty: false
+    },
+    value: {
+      localizedName: null,
+      color: {
+        id: '17',
+        $type: 'FieldStyle'
+      },
+      archived: false,
+      name: 'Normal'
+    },
+    localizedName: null,
+    color: {id: '17', $type: 'FieldStyle'},
+  }, ...args);
+}
+
+function createIssueMock(...args) {
+  return Object.assign(
+    {
+      $type: 'Issue',
+      id: '00-00',
+      summary: 'Issue test summary',
+      description: 'Issue test description',
+      fields: [createIssuePriorityFieldMock()]
+    },
+    ...args
+  );
+}
+
 export default {
   sandbox,
   mockStorage,
-  setStorage
+  setStorage,
+
+  createIssueMock,
+  createIssueFieldMock: createIssuePriorityFieldMock
 };

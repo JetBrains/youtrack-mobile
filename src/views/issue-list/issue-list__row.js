@@ -15,7 +15,7 @@ import {
 } from '../../components/issue-formatter/issue-formatter';
 
 import styles from './issue-list.styles';
-import commonIssueStyles from '../../components/common-styles/issue';
+import {issueResolved} from '../../components/common-styles/issue';
 import Avatar from '../../components/avatar/avatar';
 
 type Props = {
@@ -76,7 +76,7 @@ export default class IssueRow extends Component<Props, void> {
           <Text
             style={[
               styles.summary,
-              issue.resolved ? commonIssueStyles.resolvedSummary : null
+              issue.resolved ? issueResolved : null
             ]}
             numberOfLines={2}
             testID="issue-row-summary">

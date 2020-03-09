@@ -1,18 +1,23 @@
 /* @flow */
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+
+import {View, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
 import ApiHelper from '../api/api__helper';
-import {arrowRightGray, arrowDownGray} from '../icon/icon';
+import {IconAngleDownRight} from '../icon/icon';
 import AgileRowColumn from './agile-row__column';
+import {getPriotityField} from '../issue-formatter/issue-formatter';
+import {COLOR_DARK} from '../variables/variables';
+
 import styles from './agile-row.styles';
+
 import type {AgileBoardRow, BoardCell} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
-import {getPriotityField} from '../issue-formatter/issue-formatter';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type RenderIssueCard = (issue: IssueOnList) => any;
 
 type Props = {
-  style?: any,
+  style?: ViewStyleProp,
   row: AgileBoardRow,
   collapsedColumnIds: Array<string>,
   onTapIssue: (issue: IssueOnList) => any,
@@ -25,24 +30,32 @@ function renderIssueSquare(issue: IssueOnList) {
   const priorityField = getPriotityField(issue);
 
   const color = priorityField?.value?.color;
-  return <View
-    key={issue.id}
-    style={[styles.issueSquare, color && {backgroundColor: color.background}]}
-  />;
+  return (
+    <View
+      testID="agileRowColumnCollapsedCard"
+      key={issue.id}
+      style={[styles.issueSquare, color && {backgroundColor: color.background}]}
+    />
+  );
 }
 
 function renderCollapsedColumn(cell: BoardCell, lastColumn: boolean) {
-  return (
-    <View key={cell.id} style={[
-      styles.column,
-      styles.columnCollapsed,
-      lastColumn && styles.columnWithoutBorder
-    ]}>
-      <View style={styles.columnCollapsed}>
-        {cell.issues.map(renderIssueSquare)}
+  if (cell.issues) {
+    return (
+      <View
+        testID="agileRowColumnCollapsed"
+        key={cell.id}
+        style={[
+          styles.column,
+          styles.columnCollapsed,
+          lastColumn && styles.columnWithoutBorder
+        ]}>
+        <View style={styles.columnCollapsed}>
+          {cell.issues.map(renderIssueSquare)}
+        </View>
       </View>
-    </View>
-  );
+    );
+  }
 }
 
 export default function BoardRow(props: Props) {
@@ -50,22 +63,40 @@ export default function BoardRow(props: Props) {
   const isResolved = row.issue && row.issue.resolved;
 
   return (
-    <View style={[styles.rowContainer, style]}>
+    <View
+      testID="agileRow"
+      style={[styles.rowContainer, style]}
+    >
+      <View
+        testID="agileRowHeader"
+        style={styles.rowHeader}>
 
-      <View style={styles.rowHeader}>
-
-        {row.issue && <TouchableOpacity onPress={() => onTapIssue(row.issue)}>
-          <Text style={[styles.headerIssueId, isResolved && styles.resolvedIssueText]}>
-            {ApiHelper.getIssueId(row.issue)}
-          </Text>
-        </TouchableOpacity>}
+        {row.issue && (
+          <TouchableOpacity onPress={() => onTapIssue(row.issue)}>
+            <Text
+              testID="agileRowIssueId"
+              style={[styles.headerIssueId, isResolved && styles.issueResolved]}
+            >
+              {ApiHelper.getIssueId(row.issue)}
+            </Text>
+          </TouchableOpacity>
+        )}
 
         <TouchableOpacity
+          testID="agileRowCollapseButton"
           style={styles.collapseButton}
           onPress={() => onCollapseToggle(row)}
         >
-          <Image source={row.collapsed ? arrowRightGray: arrowDownGray} style={styles.collapseIcon}/>
-          <Text style={[styles.rowHeaderText, isResolved && styles.resolvedIssueText]}>
+          <IconAngleDownRight
+            style={styles.collapseButtonIcon}
+            isDown={!row.collapsed}
+            size={20}
+            color={COLOR_DARK}
+          />
+          <Text style={[
+            styles.rowHeaderText,
+            isResolved && styles.issueIdResolved
+          ]}>
             {row.id === 'orphans' ? 'Uncategorized Cards' : (row.issue && row.issue.summary || row.name)}
           </Text>
         </TouchableOpacity>
@@ -80,6 +111,7 @@ export default function BoardRow(props: Props) {
           }
           return (
             <AgileRowColumn
+              testID="agileRowColumn"
               key={cell.id}
               cell={cell}
               onTapCreateIssue={onTapCreateIssue}

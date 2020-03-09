@@ -1,0 +1,92 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<BoardRow/> Render should render a snapshot 1`] = `
+<View
+  style={
+    Array [
+      Object {},
+      undefined,
+    ]
+  }
+  testID="agileRow"
+>
+  <View
+    style={
+      Object {
+        "paddingBottom": 16,
+        "paddingLeft": 8,
+        "paddingRight": 8,
+        "paddingTop": 16,
+      }
+    }
+    testID="agileRowHeader"
+  >
+    <TouchableOpacity
+      activeOpacity={0.2}
+      onPress={[Function]}
+      style={
+        Object {
+          "flexDirection": "row",
+        }
+      }
+      testID="agileRowCollapseButton"
+    >
+      <IconAngleDownRight
+        color="#1f2326"
+        isDown={true}
+        size={20}
+        style={
+          Object {
+            "marginTop": 2,
+            "width": 16,
+          }
+        }
+      />
+      <Text
+        style={
+          Array [
+            Object {
+              "color": "#444444",
+              "fontSize": 20,
+              "fontWeight": "500",
+              "letterSpacing": 0.13,
+              "marginLeft": 8,
+            },
+            undefined,
+          ]
+        }
+      >
+        orphans
+      </Text>
+    </TouchableOpacity>
+  </View>
+  <View
+    style={
+      Object {
+        "borderBottomWidth": 0.5,
+        "borderColor": "#CCC",
+        "flexDirection": "row",
+      }
+    }
+  >
+    <AgileRowColumn
+      cell={
+        Object {
+          "column": Object {
+            "collapsed": false,
+            "id": "id",
+          },
+          "id": "id",
+          "issues": Array [],
+          "row": Object {
+            "id": "orphans",
+          },
+        }
+      }
+      key="id"
+      lastColumn={true}
+      testID="agileRowColumn"
+    />
+  </View>
+</View>
+`;
