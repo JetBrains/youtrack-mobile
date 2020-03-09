@@ -9,6 +9,7 @@ import {
   COLOR_PINK_DARK, COLOR_PLACEHOLDER
 } from '../../components/variables/variables';
 import {secondaryText, mainText} from '../../components/common-styles/issue';
+import {shadowBottom} from '../../components/common-styles/app';
 
 
 export default StyleSheet.create({
@@ -94,23 +95,7 @@ export default StyleSheet.create({
     marginRight: UNIT
   },
 
-  tabsBar: {
-    backgroundColor: COLOR_FONT_ON_BLACK,
-    ...Platform.select({
-      ios: {
-        shadowRadius: 0.75,
-        shadowColor: COLOR_PLACEHOLDER,
-        shadowOffset: {
-          width: 0,
-          height: 1
-        },
-        shadowOpacity: 0.25,
-      },
-      android: {
-        elevation: 1
-      },
-    }),
-  },
+  tabsBar: shadowBottom,
   tabLabel: {
     ...mainText,
     paddingTop: UNIT,
