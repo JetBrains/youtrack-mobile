@@ -6,7 +6,6 @@ import {
   COLOR_FONT_ON_BLACK,
   COLOR_FONT_GRAY,
   COLOR_GRAY,
-  COLOR_DARK
 } from '../../components/variables/variables';
 import {mainText} from '../../components/common-styles/issue';
 import {link} from '../../components/common-styles/button';
@@ -18,43 +17,20 @@ export default StyleSheet.create({
     paddingRight: 0,
     backgroundColor: COLOR_FONT_ON_BLACK
   },
-  agileNavigation: {
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-  },
-  agileNavigationButton: {
-    flexDirection: 'row',
-    flexShrink: 1,
-    justifyContent: 'center',
-    marginBottom: UNIT * 2,
-  },
-  agileNavigationButtonText: {
-    ...mainText,
-    fontWeight: '500',
-    color: COLOR_DARK
-  },
-  agileNavigationButtonTextMain: {
-    fontSize: 20
-  },
-  agileNavigationButtonTextDisabled: {
-    color: COLOR_FONT_GRAY
-  },
-  agileNavigationButtonIcon: {
-    lineHeight: 19
-  },
-  headerMenuItem: {
-    paddingLeft: UNIT
-  },
   headerIconDisabled: {
     tintColor: COLOR_FONT_GRAY
   },
   boardHeaderContainer: {
     overflow: 'hidden',
-    marginTop: UNIT
+    backgroundColor: COLOR_FONT_ON_BLACK
   },
   loadingIndicator: {
-    flex: 1,
+    position: 'absolute',
+    zIndex: 1,
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
     alignItems: 'center',
     justifyContent: 'center'
   },

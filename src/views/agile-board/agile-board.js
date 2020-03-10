@@ -16,12 +16,7 @@ import Router from '../../components/router/router';
 import Auth from '../../components/auth/auth';
 import {Draggable, DragContainer} from '../../components/draggable/';
 import Api from '../../components/api/api';
-import {
-  COLOR_PINK,
-  AGILE_COLLAPSED_COLUMN_WIDTH,
-  COLOR_BLACK,
-  COLOR_FONT_GRAY
-} from '../../components/variables/variables';
+import {COLOR_PINK, AGILE_COLLAPSED_COLUMN_WIDTH, COLOR_FONT_ON_BLACK} from '../../components/variables/variables';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
 import type {SprintFull, Board, AgileBoardRow, AgileColumn} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
@@ -34,14 +29,14 @@ import type IssuePermissions from '../../components/issue-permissions/issue-perm
 import ModalView from '../../components/modal-view/modal-view';
 import ErrorMessageInline from '../../components/error-message/error-message-inline';
 import {HIT_SLOP} from '../../components/common-styles/button';
-import {IconAngleDown, IconMagnifyZoom, IconMenu} from '../../components/icon/icon';
+import {IconMagnifyZoom, IconMenu} from '../../components/icon/icon';
+import {renderNavigationItem} from './agile-board__renderer';
 
 const CATEGORY_NAME = 'Agile board';
 
 type Props = AgilePageState & {
   auth: Auth,
   api: Api,
-  isLoading: boolean,
   isLoadingMore: boolean,
   noMoreSwimlanes: boolean,
   sprint: ?SprintFull,
@@ -112,7 +107,7 @@ class AgileBoard extends Component<Props, State> {
   _renderRefreshControl() {
     return <RefreshControl
       refreshing={this.props.isLoading}
-      tintColor={COLOR_PINK}
+      tintColor={this.props.isLoadingAgile ? COLOR_FONT_ON_BLACK : COLOR_PINK}
       onRefresh={() => this.props.onLoadBoard()}
     />;
   }
@@ -139,65 +134,42 @@ class AgileBoard extends Component<Props, State> {
       .reduce((res, item) => res + item, 0);
   };
 
-  renderNavigation() {
-    const {agile, sprint, onOpenSprintSelect, onOpenBoardSelect, isLoading} = this.props;
-    if (!agile) {
-      return null;
-    }
-    const navigation = [{
-      label: agile.name,
-      id: 'sprintAgileName',
-      onPress: onOpenBoardSelect,
-      textStyle: styles.agileNavigationButtonTextMain
-    }];
-
-    if (sprint) {
-      navigation.push({
-        label: sprint.name,
-        id: 'sprintName',
-        onPress: onOpenSprintSelect,
-        textStyle: styles.null
+  renderAgileSelector() {
+    const {agile, onOpenBoardSelect, isLoading} = this.props;
+    if (agile) {
+      return renderNavigationItem({
+        key: agile.id,
+        label: agile.name,
+        onPress: onOpenBoardSelect,
+        textStyle: {fontSize: 20},
+        isLoading,
       });
     }
-
-    return (
-      <View style={styles.agileNavigation}>
-        {navigation.map(it => {
-          return (
-            <TouchableOpacity
-              key={it.id}
-              style={styles.agileNavigationButton}
-              disabled={isLoading}
-              onPress={it.onPress}
-            >
-              <Text
-                style={[
-                  styles.agileNavigationButtonText,
-                  it.textStyle,
-                  isLoading ? styles.agileNavigationButtonTextDisabled : null
-                ]}
-                numberOfLines={1}
-              >
-                {`${it.label} `}
-              </Text>
-              <IconAngleDown size={15} color={isLoading ? COLOR_FONT_GRAY : COLOR_BLACK} style={styles.agileNavigationButtonIcon}/>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-    );
   }
 
-  _renderHeader(isSprintLoaded: boolean) {
+  renderSprintSelector() {
+    const {sprint, onOpenSprintSelect, isLoading} = this.props;
+    if (sprint) {
+      return renderNavigationItem({
+        key: sprint.id,
+        label: sprint.name,
+        onPress: onOpenSprintSelect,
+        isLoading
+      });
+    }
+  }
+
+  _renderHeader() {
+    const {isLoading, isLoadingAgile, sprint} = this.props;
     const {zoomedIn} = this.state;
 
     return (
       <Header
-        leftButton={<IconMenu style={styles.headerMenuItem}/>}
+        leftButton={<IconMenu/>}
         rightButton={
           <Text
             onPress={this.toggleZoom}>
-            {isSprintLoaded && <IconMagnifyZoom zoomedIn={zoomedIn} size={24}/>}
+            {Boolean(!isLoading && !isLoadingAgile && sprint) && <IconMagnifyZoom zoomedIn={zoomedIn} size={24}/>}
           </Text>
         }
         onBack={this.props.onOpenMenu}
@@ -212,18 +184,21 @@ class AgileBoard extends Component<Props, State> {
     }
   };
 
-  _renderBoardHeader(sprint: SprintFull) {
+  renderSprintHeader() {
     const {zoomedIn} = this.state;
-    return (
-      <View style={styles.boardHeaderContainer}>
-        <BoardHeader
-          ref={this.boardHeaderRef}
-          style={{minWidth: zoomedIn ? this._getScrollableWidth() : null}}
-          columns={sprint?.board?.columns}
-          onCollapseToggle={this.props.onColumnCollapseToggle}
-        />
-      </View>
-    );
+
+    if (this.props.sprint) {
+      return (
+        <View style={styles.boardHeaderContainer}>
+          <BoardHeader
+            ref={this.boardHeaderRef}
+            style={{minWidth: zoomedIn ? this._getScrollableWidth() : null}}
+            columns={this.props.sprint.board?.columns}
+            onCollapseToggle={this.props.onColumnCollapseToggle}
+          />
+        </View>
+      );
+    }
   }
 
   _renderSelect() {
@@ -282,8 +257,7 @@ class AgileBoard extends Component<Props, State> {
   }
 
   renderErrors() {
-    const {agile} = this.props;
-    const errors = agile?.status?.errors || [];
+    const errors = this.props.agile?.status?.errors || [];
 
     if (errors.length > 0) {
       return (
@@ -296,7 +270,7 @@ class AgileBoard extends Component<Props, State> {
     }
   }
 
-  _renderBoard(sprint: SprintFull) {
+  renderSprint(sprint: SprintFull) {
     const board: Board = sprint?.board;
 
     if (!sprint || !board) {
@@ -373,8 +347,9 @@ class AgileBoard extends Component<Props, State> {
   };
 
   renderBoard() {
-    const {sprint, isLoadingMore} = this.props;
+    const {agile, sprint, isLoadingMore, isLoading} = this.props;
     const {zoomedIn} = this.state;
+    const isSprintLoaded = agile?.status?.valid === true && !!sprint && !isLoading;
 
     return (
       <DragContainer onDragStart={this.onDragStart} onDragEnd={this.onDragEnd}>
@@ -397,9 +372,11 @@ class AgileBoard extends Component<Props, State> {
               minHeight: '100%'
             }
           }}
+          boardHeader={isSprintLoaded && this.renderSprintHeader()}
+          sprintSelector={this.renderSprintSelector()}
         >
 
-          {this._renderBoard(sprint)}
+          {this.renderSprint(sprint)}
           {isLoadingMore && <ActivityIndicator color={COLOR_PINK} style={styles.loadingMoreIndicator}/>}
 
         </BoardScroller>
@@ -408,37 +385,30 @@ class AgileBoard extends Component<Props, State> {
   }
 
   render() {
-    const {sprint, isSprintSelectOpen, isOutOfDate, agile, isLoading} = this.props;
-    const isValidBoard: boolean = agile?.status?.valid === true;
-    const hasSprint = !!sprint;
-    const isSprintLoaded: boolean = hasSprint && isValidBoard;
-    const isFirstLoading = Boolean(isLoading && !hasSprint);
+    const {sprint, isSprintSelectOpen, isOutOfDate, isLoading, isLoadingAgile} = this.props;
 
     return (
       <Menu>
-        {this._renderHeader(isSprintLoaded)}
+        {this._renderHeader()}
         <View
           testID='pageAgile'
           style={styles.container}
         >
-
-          {this.renderNavigation()}
-
-          {isSprintLoaded && !isLoading && this._renderBoardHeader(sprint)}
-
-          {((isFirstLoading && isValidBoard) || isLoading) && (
-            <View style={styles.loadingIndicator}>
-              <ActivityIndicator color={COLOR_PINK}/>
-            </View>
-          )}
+          {this.renderAgileSelector()}
 
           {this.renderErrors()}
 
-          {isSprintLoaded && !isLoading && this.renderBoard()}
+          {this.renderBoard()}
 
           {isSprintSelectOpen && this._renderSelect()}
 
           {isOutOfDate && this.renderRefreshPopup()}
+
+          {Boolean(isLoadingAgile || (!sprint && isLoading)) && (
+            <View style={styles.loadingIndicator}>
+              <ActivityIndicator size="large" color={COLOR_PINK}/>
+            </View>
+          )}
         </View>
       </Menu>
     );

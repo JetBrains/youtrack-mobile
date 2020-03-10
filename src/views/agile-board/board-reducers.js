@@ -23,6 +23,7 @@ type BoardState = Board;
 
 export type AgilePageState = {
   isLoading: boolean,
+  isLoadingAgile: boolean,
   profile: ?AgileUserProfile,
   isSprintSelectOpen: boolean,
   isOutOfDate: boolean,
@@ -36,6 +37,7 @@ export type AgilePageState = {
 
 const initialPageState: AgilePageState = {
   isLoading: false,
+  isLoadingAgile: false,
   profile: null,
   isSprintSelectOpen: false,
   isOutOfDate: false,
@@ -148,6 +150,18 @@ const agilePageReducer = createReducer(initialPageState, {
     return {
       ...state,
       isOutOfDate: action.isOutOfDate
+    };
+  },
+  [types.START_LOADING_AGILE](state: AgilePageState): AgilePageState {
+    return {
+      ...state,
+      isLoadingAgile: true
+    };
+  },
+  [types.STOP_LOADING_AGILE](state: AgilePageState): AgilePageState {
+    return {
+      ...state,
+      isLoadingAgile: false
     };
   },
   [types.RECEIVE_AGILE](state: AgilePageState, action: { agile: Board }): AgilePageState {

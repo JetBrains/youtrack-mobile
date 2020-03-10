@@ -65,10 +65,12 @@ export function getAgileUserProfile(): AgileUserProfile | {} {
 
 export function loadBoard(board: Board) {
   return async (dispatch: (any) => any) => {
+    dispatch({type: types.START_LOADING_AGILE});
     destroySSE();
     dispatch(receiveSprint(null));
 
     const agileWithStatus = await dispatch(loadAgile(board.id));
+    dispatch({type: types.STOP_LOADING_AGILE});
     if (!agileWithStatus.status.valid) {
       return dispatch(stopSprintLoad());
     }

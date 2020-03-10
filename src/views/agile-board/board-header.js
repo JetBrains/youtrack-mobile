@@ -3,8 +3,7 @@ import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import React, {PureComponent} from 'react';
 import {
   UNIT,
-  AGILE_COLLAPSED_COLUMN_WIDTH,
-  COLOR_MEDIUM_GRAY
+  AGILE_COLLAPSED_COLUMN_WIDTH
 } from '../../components/variables/variables';
 import type {AgileColumn} from '../../flow/Agile';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
@@ -72,10 +71,9 @@ const styles = StyleSheet.create({
   },
   tableHeaderItem: {
     flex: 1,
+    paddingTop: UNIT * 1.5,
+    paddingBottom: UNIT * 1.5,
     paddingRight: UNIT / 2,
-    paddingBottom: UNIT,
-    borderBottomWidth: 0.5,
-    borderColor: COLOR_MEDIUM_GRAY
   },
   tableHeaderItemWithoutBorder: {
     borderRightWidth: 0
