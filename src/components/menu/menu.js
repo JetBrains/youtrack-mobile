@@ -148,7 +148,7 @@ export class Menu extends Component<Props, void> {
         testID="menuDrawer"
         type="static"
         open={show}
-        content={this._renderMenu()}
+        content={show && this._renderMenu()}
         tapToClose={true}
         onOpen={onOpen}
         onClose={onClose}

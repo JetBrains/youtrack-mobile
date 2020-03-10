@@ -7,7 +7,7 @@ import throttle from 'lodash.throttle';
 import {clamp, getSnapToX, getPointShift} from './board-scroller__math';
 import {DragContext} from '../draggable/drag-container';
 import {shadowBottom} from '../common-styles/app';
-import {AGILE_COLLAPSED_COLUMN_WIDTH, COLOR_MEDIUM_GRAY, UNIT} from '../variables/variables';
+import {AGILE_COLLAPSED_COLUMN_WIDTH, UNIT} from '../variables/variables';
 
 import type {BoardColumn} from '../../flow/Agile';
 import type {DragContextType} from '../draggable/drag-container';
@@ -161,18 +161,6 @@ class BoardScroller extends Component<Props, State> {
   render() {
     const {refreshControl, children, horizontalScrollProps, verticalScrollProps, boardHeader, sprintSelector} = this.props;
     const {isDragging, isBoardHeaderPinned} = this.state;
-    const headerStyle = [
-      {
-        borderTopWidth: 1.5,
-        borderBottomWidth: 1,
-        borderColor: 'transparent'
-      },
-      !isBoardHeaderPinned ? {borderBottomColor: COLOR_MEDIUM_GRAY} : null,
-      isBoardHeaderPinned ? [
-        shadowBottom,
-        {borderTopColor: '#eaeaea'}
-      ] : null,
-    ];
 
     return (
       <ScrollView
@@ -188,7 +176,7 @@ class BoardScroller extends Component<Props, State> {
       >
         {sprintSelector}
         {boardHeader && (
-          <View style={headerStyle}>
+          <View style={isBoardHeaderPinned ? shadowBottom : null}>
             {boardHeader}
           </View>
         )}

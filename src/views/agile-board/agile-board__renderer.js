@@ -4,41 +4,42 @@ import React from 'react';
 import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
 
 import {IconAngleDown} from '../../components/icon/icon';
-import {COLOR_BLACK, COLOR_DARK, COLOR_FONT_GRAY, UNIT} from '../../components/variables/variables';
+import {COLOR_BLACK, COLOR_DARK, COLOR_FONT_GRAY, COLOR_MEDIUM_GRAY, UNIT} from '../../components/variables/variables';
 import {mainText} from '../../components/common-styles/issue';
 
 import type {TextStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 
-export function renderNavigationItem(selectData: {
+export function renderNavigationItem(item: {
   key: string,
   label: string,
   onPress: () => any,
   textStyle?: TextStyleProp,
+  showBottomBorder?: boolean,
   isLoading: boolean
 }) {
 
   return (
-    <View style={styles.navigationItem}>
+    <View style={[styles.navigationItem, item.showBottomBorder ? styles.navigationItemBorder : null]}>
       <TouchableOpacity
-        key={selectData.key}
+        key={item.key}
         style={styles.navigationItemButton}
-        disabled={selectData.isLoading}
-        onPress={selectData.onPress}
+        disabled={item.isLoading}
+        onPress={item.onPress}
       >
         <Text
           style={[
             styles.navigationItemButtonText,
-            selectData.textStyle,
-            selectData.isLoading ? styles.navigationItemButtonTextDisabled : null
+            item.textStyle,
+            item.isLoading ? styles.navigationItemButtonTextDisabled : null
           ]}
           numberOfLines={1}
         >
-          {`${selectData.label} `}
+          {`${item.label} `}
         </Text>
         <IconAngleDown
           size={15}
-          color={selectData.isLoading ? COLOR_FONT_GRAY : COLOR_BLACK}
+          color={item.isLoading ? COLOR_FONT_GRAY : COLOR_BLACK}
           style={styles.navigationItemButtonIcon}
         />
       </TouchableOpacity>
@@ -48,9 +49,13 @@ export function renderNavigationItem(selectData: {
 
 const styles = StyleSheet.create({
   navigationItem: {
-    flexDirection: 'column',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
+    borderBottomWidth: 1,
+    borderColor: 'transparent'
+  },
+  navigationItemBorder: {
+    borderColor: COLOR_MEDIUM_GRAY
   },
   navigationItemButton: {
     flexDirection: 'row',
