@@ -90,11 +90,11 @@ class AgileBoard extends Component<Props, State> {
 
   toggleHeaderHeight(newY: number) {
     if (newY > this.state.offsetY) { //scroll down
-      if (newY > UNIT * 4) {
+      if ((newY > UNIT * 4) && this.state.isHeaderVisible) {
         animation.layoutAnimation();
         this.setState({isHeaderVisible: false});
       }
-    } else { //scroll up
+    } else if ((newY < this.state.offsetY) && !this.state.isHeaderVisible){ //scroll up
       animation.layoutAnimation();
       this.setState({isHeaderVisible: true});
     }
@@ -112,7 +112,7 @@ class AgileBoard extends Component<Props, State> {
       this.props.onLoadMoreSwimlanes();
     }
 
-    this.toggleHeaderHeight(newY);
+    this.toggleHeaderHeight(Math.floor(newY));
 
     this.setState({isSprintSelectorInvisible: newY > UNIT * 2});
   };
@@ -191,11 +191,10 @@ class AgileBoard extends Component<Props, State> {
 
   renderHeader() {
     const {isLoading, isLoadingAgile, sprint} = this.props;
-    const {zoomedIn, isHeaderVisible} = this.state;
+    const {zoomedIn} = this.state;
 
     return (
       <Header
-        style={!isHeaderVisible ? {height: 0} : null}
         leftButton={<IconMenu/>}
         rightButton={
           <Text
@@ -204,8 +203,7 @@ class AgileBoard extends Component<Props, State> {
           </Text>
         }
         onBack={this.props.onOpenMenu}
-      >
-      </Header>
+      />
     );
   }
 
