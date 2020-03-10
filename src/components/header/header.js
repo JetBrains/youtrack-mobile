@@ -52,7 +52,7 @@ export default class Header extends PureComponent<Props, void> {
 
     return (
       <View style={[styles.header, style]}>
-        <StatusBar animated barStyle="light-content"/>
+        <StatusBar animated barStyle="dark-content"/>
         <TouchableOpacity
           testID="header-back"
           hitSlop={HIT_SLOP}
