@@ -24,7 +24,7 @@ export default StyleSheet.create({
     paddingTop: UNIT / 2
   },
   bottomBorder: {
-    height: 1,
+    height: 0.5,
     marginLeft: UNIT * 2,
     backgroundColor: COLOR_MEDIUM_GRAY
   },

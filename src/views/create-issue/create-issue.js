@@ -6,7 +6,7 @@ import React, {Component} from 'react';
 import Header from '../../components/header/header';
 import usage from '../../components/usage/usage';
 import {getApi} from '../../components/api/api__instance';
-import {attach, next, IconCheck, IconClose} from '../../components/icon/icon';
+import {attach, IconCheck, IconClose} from '../../components/icon/icon';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import IssueSummary from '../../components/issue-summary/issue-summary';
@@ -38,28 +38,6 @@ class CreateIssue extends Component<Props, void> {
 
   UNSAFE_componentWillMount() {
     this.props.initializeWithDraftOrProject(this.props.predefinedDraftId);
-  }
-
-  renderProjectSelector() {
-    const {issue, processing} = this.props;
-    const project = issue.project;
-    const projectSelected = !!project.id;
-
-    return (
-      <TouchableOpacity
-        disabled={processing}
-        style={styles.selectProjectButton}
-        onPress={() => this.fieldsPanel.onSelectProject()}
-      >
-        <Text style={styles.selectProjectText} numberOfLines={1}>
-          {projectSelected
-            ? <Text>{project.name} ({project.shortName})</Text>
-            : 'Select project'
-          }
-        </Text>
-        <Image style={styles.selectProjectIcon} source={next} resizeMode="contain"/>
-      </TouchableOpacity>
-    );
   }
 
   fieldsPanelRef = (instance: ?CustomFieldsPanel) => {
@@ -98,56 +76,6 @@ class CreateIssue extends Component<Props, void> {
 
         <View style={styles.separator}/>
 
-        <ScrollView
-          keyboardShouldPersistTaps="handled"
-          keyboardDismissMode="interactive"
-        >
-          <View>
-            {this.renderProjectSelector()}
-
-
-            <IssueSummary
-              style={styles.issueSummary}
-              showSeparator={true}
-              summary={issue.summary}
-              description={issue.description}
-              editable={!processing}
-              onSummaryChange={setIssueSummary}
-              onDescriptionChange={setIssueDescription}
-            />
-
-            {issue.project.id &&
-            <View style={styles.attachesContainer}>
-
-              <AttachmentsRow
-                attachments={issue.attachments}
-                attachingImage={attachingImage}
-                imageHeaders={getApi().auth.getAuthorizationHeaders()}
-                onRemoveImage={removeAttachment}
-              />
-
-              <View style={styles.attachButtonsContainer}>
-                <TouchableOpacity
-                  disabled={attachingImage !== null}
-                  style={styles.attachButton}
-                  onPress={() => attachImage(true)}>
-                  <Image style={styles.attachIcon} source={attach} resizeMode="contain"/>
-                  <Text style={styles.attachButtonText}>Choose from library...</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  disabled={attachingImage !== null}
-                  style={styles.attachButton}
-                  onPress={() => attachImage(false)}>
-                  <Text style={styles.attachButtonText}>Take a picture...</Text>
-                </TouchableOpacity>
-              </View>
-            </View>}
-
-            <View style={styles.separator}/>
-          </View>
-        </ScrollView>
-
         <CustomFieldsPanel
           ref={this.fieldsPanelRef}
           api={getApi()}
@@ -158,6 +86,52 @@ class CreateIssue extends Component<Props, void> {
           onUpdate={async (field, value) => await updateFieldValue(field, value)}
           onUpdateProject={async (project) => await updateProject(project)}
         />
+
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="interactive"
+        >
+          <IssueSummary
+            style={styles.issueSummary}
+            showSeparator={true}
+            summary={issue.summary}
+            description={issue.description}
+            editable={!processing}
+            onSummaryChange={setIssueSummary}
+            onDescriptionChange={setIssueDescription}
+          />
+
+          {issue.project.id &&
+          <View style={styles.attachesContainer}>
+
+            <AttachmentsRow
+              attachments={issue.attachments}
+              attachingImage={attachingImage}
+              imageHeaders={getApi().auth.getAuthorizationHeaders()}
+              onRemoveImage={removeAttachment}
+            />
+
+            <View style={styles.attachButtonsContainer}>
+              <TouchableOpacity
+                disabled={attachingImage !== null}
+                style={styles.attachButton}
+                onPress={() => attachImage(true)}>
+                <Image style={styles.attachIcon} source={attach} resizeMode="contain"/>
+                <Text style={styles.attachButtonText}>Choose from library...</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                disabled={attachingImage !== null}
+                style={styles.attachButton}
+                onPress={() => attachImage(false)}>
+                <Text style={styles.attachButtonText}>Take a picture...</Text>
+              </TouchableOpacity>
+            </View>
+          </View>}
+
+          <View style={styles.separator}/>
+        </ScrollView>
+
         <KeyboardSpacerIOS/>
       </View>
     );

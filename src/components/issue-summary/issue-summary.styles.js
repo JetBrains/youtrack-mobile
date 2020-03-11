@@ -1,24 +1,23 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_FONT, COLOR_GRAY} from '../../components/variables/variables';
+import {UNIT, COLOR_FONT, COLOR_MEDIUM_GRAY} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   summaryInput: {
-    color: COLOR_FONT,
+    height: UNIT * 5.5,
     fontSize: 20,
-    height: UNIT * 5.5
+    color: COLOR_FONT
   },
   descriptionInput: {
     marginTop: UNIT / 2,
-    marginBottom: UNIT*2,
+    marginBottom: UNIT * 2,
     color: COLOR_FONT,
-    fontSize: 16
+    backgroundColor: 'yellow'
   },
   separator: {
     height: 0.5,
     marginTop: UNIT,
     marginBottom: UNIT,
-    marginLeft: - UNIT*2,
-    marginRight: - UNIT*2,
-    backgroundColor: COLOR_GRAY
+    marginRight: -UNIT * 2,
+    backgroundColor: COLOR_MEDIUM_GRAY
   },
 });
