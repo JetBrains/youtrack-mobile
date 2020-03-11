@@ -1,13 +1,12 @@
 /* @flow */
+
 import {ScrollView, View, Text, TouchableOpacity, Image} from 'react-native';
 import React, {Component} from 'react';
 
-import styles from './create-issue.styles';
-import issueStyles from '../single-issue/single-issue.styles';
 import Header from '../../components/header/header';
 import usage from '../../components/usage/usage';
 import {getApi} from '../../components/api/api__instance';
-import {attach, tag, next} from '../../components/icon/icon';
+import {attach, tag, next, IconCheck, IconClose} from '../../components/icon/icon';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import IssueSummary from '../../components/issue-summary/issue-summary';
@@ -16,8 +15,10 @@ import {connect} from 'react-redux';
 import * as createIssueActions from './create-issue-actions';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {CreateIssueState} from './create-issue-reducers';
-import OpenScanButton from '../../components/scan/open-scan-button';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
+import {COLOR_GRAY, COLOR_PINK} from '../../components/variables/variables';
+
+import styles from './create-issue.styles';
 
 const CATEGORY_NAME = 'Create issue view';
 
@@ -85,16 +86,13 @@ class CreateIssue extends Component<Props, void> {
 
     const canCreateIssue = issue.summary && issue.project.id && !processing && !attachingImage;
 
-    const createButton = <Text style={canCreateIssue ? null : styles.disabledCreateButton}>Create</Text>;
-
     return (
       <View style={styles.container}>
-        <Header leftButton={<Text>Cancel</Text>}
+        <Header leftButton={<IconClose size={28} color={COLOR_PINK}/>}
           onBack={storeDraftAndGoBack}
-          rightButton={createButton}
-          extraButton={<OpenScanButton/>}
+          rightButton={<IconCheck size={28} color={canCreateIssue ? COLOR_PINK : COLOR_GRAY}/>}
           onRightButtonClick={() => canCreateIssue && createIssue()}>
-          <Text style={issueStyles.headerText}>New Issue</Text>
+          <Text style={styles.title}>New Issue</Text>
         </Header>
         <ScrollView keyboardShouldPersistTaps="handled" keyboardDismissMode="interactive">
           <View>

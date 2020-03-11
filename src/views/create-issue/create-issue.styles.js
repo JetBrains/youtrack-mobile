@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_PINK, COLOR_FONT, COLOR_FONT_GRAY, COLOR_GRAY} from '../../components/variables/variables';
+import {UNIT, COLOR_PINK, COLOR_FONT, COLOR_GRAY} from '../../components/variables/variables';
+import issueStyles from '../single-issue/single-issue.styles';
 
 const ATTACHING_IMAGE_ALPHA = '70';
 
@@ -8,13 +9,14 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF'
   },
+  title: {
+    paddingLeft: UNIT * 2,
+    ...issueStyles.headerText
+  },
   issueSummary: {
     marginTop: UNIT,
     marginLeft: UNIT * 2,
     marginRight: UNIT * 2
-  },
-  disabledCreateButton: {
-    color: COLOR_FONT_GRAY
   },
   creatingIndicator: {
     paddingTop: 4,
