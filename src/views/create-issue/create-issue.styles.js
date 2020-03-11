@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_PINK, COLOR_FONT, COLOR_GRAY} from '../../components/variables/variables';
+import {UNIT, COLOR_PINK, COLOR_FONT, COLOR_MEDIUM_GRAY} from '../../components/variables/variables';
 import issueStyles from '../single-issue/single-issue.styles';
 
 const ATTACHING_IMAGE_ALPHA = '70';
@@ -24,8 +24,8 @@ export default StyleSheet.create({
     height: 20
   },
   separator: {
-    height: 0.5,
-    backgroundColor: COLOR_GRAY
+    height: 1,
+    backgroundColor: COLOR_MEDIUM_GRAY
   },
   attachesContainer: {
     marginTop: UNIT * 2,

@@ -57,7 +57,7 @@ class CreateIssue extends Component<Props, void> {
             : 'Select project'
           }
         </Text>
-        <Image style={styles.selectProjectIcon} source={next} resizeMode="contain" />
+        <Image style={styles.selectProjectIcon} source={next} resizeMode="contain"/>
       </TouchableOpacity>
     );
   }
@@ -88,17 +88,23 @@ class CreateIssue extends Component<Props, void> {
 
     return (
       <View style={styles.container}>
-        <Header leftButton={<IconClose size={28} color={COLOR_PINK}/>}
+        <Header
+          leftButton={<IconClose size={28} color={COLOR_PINK}/>}
           onBack={storeDraftAndGoBack}
           rightButton={<IconCheck size={28} color={canCreateIssue ? COLOR_PINK : COLOR_GRAY}/>}
           onRightButtonClick={() => canCreateIssue && createIssue()}>
           <Text style={styles.title}>New Issue</Text>
         </Header>
-        <ScrollView keyboardShouldPersistTaps="handled" keyboardDismissMode="interactive">
+
+        <View style={styles.separator}/>
+
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="interactive"
+        >
           <View>
             {this.renderProjectSelector()}
 
-            <View style={styles.separator} />
 
             <IssueSummary
               style={styles.issueSummary}
@@ -111,32 +117,32 @@ class CreateIssue extends Component<Props, void> {
             />
 
             {issue.project.id &&
-              <View style={styles.attachesContainer}>
+            <View style={styles.attachesContainer}>
 
-                <AttachmentsRow
-                  attachments={issue.attachments}
-                  attachingImage={attachingImage}
-                  imageHeaders={getApi().auth.getAuthorizationHeaders()}
-                  onRemoveImage={removeAttachment}
-                />
+              <AttachmentsRow
+                attachments={issue.attachments}
+                attachingImage={attachingImage}
+                imageHeaders={getApi().auth.getAuthorizationHeaders()}
+                onRemoveImage={removeAttachment}
+              />
 
-                <View style={styles.attachButtonsContainer}>
-                  <TouchableOpacity
-                    disabled={attachingImage !== null}
-                    style={styles.attachButton}
-                    onPress={() => attachImage(true)}>
-                    <Image style={styles.attachIcon} source={attach} resizeMode="contain"/>
-                    <Text style={styles.attachButtonText}>Choose from library...</Text>
-                  </TouchableOpacity>
+              <View style={styles.attachButtonsContainer}>
+                <TouchableOpacity
+                  disabled={attachingImage !== null}
+                  style={styles.attachButton}
+                  onPress={() => attachImage(true)}>
+                  <Image style={styles.attachIcon} source={attach} resizeMode="contain"/>
+                  <Text style={styles.attachButtonText}>Choose from library...</Text>
+                </TouchableOpacity>
 
-                  <TouchableOpacity
-                    disabled={attachingImage !== null}
-                    style={styles.attachButton}
-                    onPress={() => attachImage(false)}>
-                    <Text style={styles.attachButtonText}>Take a picture...</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>}
+                <TouchableOpacity
+                  disabled={attachingImage !== null}
+                  style={styles.attachButton}
+                  onPress={() => attachImage(false)}>
+                  <Text style={styles.attachButtonText}>Take a picture...</Text>
+                </TouchableOpacity>
+              </View>
+            </View>}
 
             <View style={styles.separator}/>
           </View>
