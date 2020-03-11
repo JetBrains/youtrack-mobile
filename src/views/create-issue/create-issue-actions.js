@@ -1,4 +1,5 @@
 /* @flow */
+
 import type Api from '../../components/api/api';
 import ApiHelper from '../../components/api/api__helper';
 import type {IssueFull} from '../../flow/Issue';
@@ -10,6 +11,7 @@ import log from '../../components/log/log';
 import attachFile from '../../components/attach-file/attach-file';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
 import {notify, notifyError, resolveError} from '../../components/notification/notification';
+import {showActions} from '../../components/action-sheet/action-sheet';
 
 export const CATEGORY_NAME = 'Create issue view';
 
@@ -304,3 +306,27 @@ export function removeAttachment(attachment: Attachment) {
     }
   };
 }
+
+export function showCreateIssueActions(actionSheet: Object) {
+  return async (dispatch: (any) => any) => {
+
+    const actions = [
+      {
+        title: 'Choose from library',
+        execute: () => dispatch(attachImage(true))
+      },
+      {
+        title: 'Take a picture',
+        execute: () => dispatch(attachImage(false))
+      },
+      {title: 'Cancel'}
+    ];
+
+    const selectedAction = await showActions(actions, actionSheet);
+
+    if (selectedAction && selectedAction.execute) {
+      selectedAction.execute();
+    }
+  };
+}
+

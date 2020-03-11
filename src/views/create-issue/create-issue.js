@@ -1,22 +1,24 @@
 /* @flow */
 
-import {ScrollView, View, Text, TouchableOpacity, Image} from 'react-native';
+import {ScrollView, View, Text, TouchableOpacity} from 'react-native';
 import React, {Component} from 'react';
 
 import Header from '../../components/header/header';
 import usage from '../../components/usage/usage';
 import {getApi} from '../../components/api/api__instance';
-import {attach, IconCheck, IconClose} from '../../components/icon/icon';
+import {IconCheck, IconClose, IconPaperClip} from '../../components/icon/icon';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import IssueSummary from '../../components/issue-summary/issue-summary';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as createIssueActions from './create-issue-actions';
-import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
-import type {CreateIssueState} from './create-issue-reducers';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
 import {COLOR_GRAY, COLOR_PINK} from '../../components/variables/variables';
+
+import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
+import type {CreateIssueState} from './create-issue-reducers';
+import PropTypes from 'prop-types';
 
 import styles from './create-issue.styles';
 
@@ -29,6 +31,9 @@ type AdditionalProps = {
 type Props = CreateIssueState & typeof createIssueActions & AdditionalProps;
 
 class CreateIssue extends Component<Props, void> {
+  static contextTypes = {
+    actionSheet: PropTypes.func
+  };
   fieldsPanel: Object;
 
   constructor(props) {
@@ -56,13 +61,15 @@ class CreateIssue extends Component<Props, void> {
       issue,
       attachingImage,
       processing,
-      attachImage,
       updateFieldValue,
       updateProject,
-      removeAttachment
+      removeAttachment,
+      showCreateIssueActions
     } = this.props;
 
-    const canCreateIssue = issue.summary && issue.project.id && !processing && !attachingImage;
+    const isAttaching = attachingImage !== null;
+    const isProcessing = processing || isAttaching;
+    const canCreateIssue = issue.summary && issue.project.id && !isProcessing;
 
     return (
       <View style={styles.container}>
@@ -113,18 +120,14 @@ class CreateIssue extends Component<Props, void> {
 
             <View style={styles.attachButtonsContainer}>
               <TouchableOpacity
-                disabled={attachingImage !== null}
+                disabled={isProcessing}
                 style={styles.attachButton}
-                onPress={() => attachImage(true)}>
-                <Image style={styles.attachIcon} source={attach} resizeMode="contain"/>
-                <Text style={styles.attachButtonText}>Choose from library...</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                disabled={attachingImage !== null}
-                style={styles.attachButton}
-                onPress={() => attachImage(false)}>
-                <Text style={styles.attachButtonText}>Take a picture...</Text>
+                onPress={() => showCreateIssueActions(this.context.actionSheet())}
+              >
+                <IconPaperClip size={24} color={isProcessing ? COLOR_GRAY : COLOR_PINK}/>
+                <Text style={[styles.attachButtonText, isProcessing ? {color: COLOR_GRAY} : null]}>
+                  Add Attachment
+                </Text>
               </TouchableOpacity>
             </View>
           </View>}

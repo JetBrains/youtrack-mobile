@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
 import {UNIT, COLOR_PINK, COLOR_FONT, COLOR_MEDIUM_GRAY} from '../../components/variables/variables';
 import issueStyles from '../single-issue/single-issue.styles';
+import {mainText} from '../../components/common-styles/issue';
 
 const ATTACHING_IMAGE_ALPHA = '70';
 
@@ -52,15 +53,10 @@ export default StyleSheet.create({
     paddingBottom: UNIT,
     flexDirection: 'row'
   },
-  attachIcon: {
-    marginRight: UNIT * 1.5,
-    width: 20,
-    height: 20
-  },
   attachButtonText: {
-    color: COLOR_PINK,
-    fontSize: 16,
-    fontWeight: '200'
+    ...mainText,
+    paddingLeft: UNIT * 2,
+    color: COLOR_PINK
   },
   actionContainer: {
     flexDirection: 'row',
