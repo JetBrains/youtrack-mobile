@@ -41,13 +41,13 @@ export default class MultilineInput extends Component<Props, State> {
   onContentSizeChange = (event: Object) => {
     const {maxInputHeight, minInputHeight} = this.props;
 
-    let newHeight = event.nativeEvent.contentSize.height;
+    let newHeight = event.nativeEvent.contentSize.height + UNIT * 2;
 
     if (maxInputHeight > 0) {
       newHeight = newHeight > maxInputHeight ? maxInputHeight : Math.max(newHeight, minInputHeight);
     }
 
-    this.setState({inputHeight: newHeight});
+    this.setState({inputHeight: Math.ceil(newHeight)});
   };
 
   inputRef = (instance: ?TextInput) => {
