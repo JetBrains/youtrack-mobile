@@ -2,6 +2,8 @@ import MockedStorage from '@react-native-community/async-storage';
 import * as storage from '../src/components/storage/storage';
 import sinon from 'sinon';
 import type {StorageState} from '../src/components/storage/storage';
+import thunk from 'redux-thunk';
+import configureMockStore from 'redux-mock-store';
 
 const sandbox = sinon.sandbox.create();
 
@@ -55,11 +57,17 @@ function createIssueMock(...args) {
   );
 }
 
+function createMockStore(middlewareArgument) {
+  const middleware = [thunk.withExtraArgument(middlewareArgument)];
+  return configureMockStore(middleware);
+}
+
 export default {
   sandbox,
   mockStorage,
   setStorage,
 
   createIssueMock,
-  createIssueFieldMock: createIssuePriorityFieldMock
+  createIssueFieldMock: createIssuePriorityFieldMock,
+  createMockStore
 };

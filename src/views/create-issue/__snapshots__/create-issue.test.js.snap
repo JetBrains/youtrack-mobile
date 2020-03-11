@@ -1,0 +1,212 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<CreateIssue/> Render Component should match a snapshot 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "#FFF",
+      "flex": 1,
+    }
+  }
+  testID="createIssue"
+>
+  <Header
+    leftButton={
+      <IconClose
+        color="#FE0082"
+        size={28}
+      />
+    }
+    onBack={[Function]}
+    onRightButtonClick={[Function]}
+    rightButton={
+      <IconCheck
+        color="#FE0082"
+        size={28}
+      />
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "#000",
+          "fontSize": 20,
+          "fontWeight": "500",
+          "letterSpacing": 0.13,
+          "paddingLeft": 16,
+        }
+      }
+    >
+      New Issue
+    </Text>
+  </Header>
+  <View
+    style={
+      Object {
+        "backgroundColor": "#DFE5EB",
+        "height": 1,
+      }
+    }
+  />
+  <CustomFieldsPanel
+    api={
+      Object {
+        "auth": Object {
+          "getAuthorizationHeaders": [MockFunction] {
+            "calls": Array [
+              Array [],
+            ],
+            "results": Array [
+              Object {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      }
+    }
+    autoFocusSelect={true}
+    canEditProject={true}
+    issue={
+      Object {
+        "$type": "Issue",
+        "description": "Issue test description",
+        "fields": Array [
+          Object {
+            "color": Object {
+              "$type": "FieldStyle",
+              "id": "17",
+            },
+            "localizedName": null,
+            "projectCustomField": Object {
+              "bundle": Object {
+                "$type": "EnumBundle",
+                "id": "",
+              },
+              "canBeEmpty": false,
+              "field": Object {
+                "name": "priority",
+              },
+              "ordinal": 2,
+            },
+            "value": Object {
+              "archived": false,
+              "color": Object {
+                "$type": "FieldStyle",
+                "id": "17",
+              },
+              "localizedName": null,
+              "name": "Normal",
+            },
+          },
+        ],
+        "id": "00-00",
+        "project": Object {
+          "id": "PROJECT_ID",
+        },
+        "summary": "Issue test summary",
+      }
+    }
+    issuePermissions={Object {}}
+    onUpdate={[Function]}
+    onUpdateProject={[Function]}
+    testID="createIssueFields"
+  />
+  <ScrollViewMock
+    keyboardDismissMode="interactive"
+    keyboardShouldPersistTaps="handled"
+  >
+    <IssueSummary
+      description="Issue test description"
+      editable={true}
+      onDescriptionChange={[Function]}
+      onSummaryChange={[Function]}
+      showSeparator={true}
+      style={
+        Object {
+          "marginLeft": 16,
+          "marginRight": 16,
+          "marginTop": 8,
+        }
+      }
+      summary="Issue test summary"
+      testID="createIssueSummary"
+    />
+    <View
+      style={
+        Object {
+          "marginBottom": 8,
+          "marginLeft": 16,
+          "marginRight": 16,
+          "marginTop": 16,
+        }
+      }
+      testID="createIssueAttachments"
+    >
+      <AttachmentsRow
+        attachingImage={null}
+        imageHeaders={null}
+        onImageLoadingError={[Function]}
+        onOpenAttachment={[Function]}
+        onRemoveImage={[Function]}
+        testID="createIssueAttachmentRow"
+      />
+      <View
+        style={
+          Object {
+            "flexDirection": "row",
+            "justifyContent": "space-between",
+            "marginRight": 8,
+            "marginTop": 8,
+          }
+        }
+      >
+        <TouchableOpacity
+          activeOpacity={0.2}
+          disabled={false}
+          onPress={[Function]}
+          style={
+            Object {
+              "flexDirection": "row",
+              "paddingBottom": 8,
+              "paddingTop": 8,
+            }
+          }
+          testID="createIssueAttachmentButton"
+        >
+          <IconPaperClip
+            color="#FE0082"
+            size={24}
+          />
+          <Text
+            style={
+              Array [
+                Object {
+                  "color": "#FE0082",
+                  "fontSize": 16,
+                  "letterSpacing": -0.19,
+                  "lineHeight": 20,
+                  "paddingLeft": 16,
+                },
+                null,
+              ]
+            }
+          >
+            Add Attachment
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+    <View
+      style={
+        Object {
+          "backgroundColor": "#DFE5EB",
+          "height": 1,
+        }
+      }
+    />
+  </ScrollViewMock>
+  <KeyboardSpacerIOS />
+</View>
+`;

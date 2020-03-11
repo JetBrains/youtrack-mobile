@@ -69,10 +69,12 @@ class CreateIssue extends Component<Props, void> {
 
     const isAttaching = attachingImage !== null;
     const isProcessing = processing || isAttaching;
-    const canCreateIssue = issue.summary && issue.project.id && !isProcessing;
+    const canCreateIssue = issue.summary && issue?.project?.id && !isProcessing;
 
     return (
-      <View style={styles.container}>
+      <View
+        testID="createIssue"
+        style={styles.container}>
         <Header
           leftButton={<IconClose size={28} color={COLOR_PINK}/>}
           onBack={storeDraftAndGoBack}
@@ -84,6 +86,7 @@ class CreateIssue extends Component<Props, void> {
         <View style={styles.separator}/>
 
         <CustomFieldsPanel
+          testID="createIssueFields"
           ref={this.fieldsPanelRef}
           api={getApi()}
           issue={issue}
@@ -99,6 +102,7 @@ class CreateIssue extends Component<Props, void> {
           keyboardDismissMode="interactive"
         >
           <IssueSummary
+            testID="createIssueSummary"
             style={styles.issueSummary}
             showSeparator={true}
             summary={issue.summary}
@@ -108,29 +112,34 @@ class CreateIssue extends Component<Props, void> {
             onDescriptionChange={setIssueDescription}
           />
 
-          {issue.project.id &&
-          <View style={styles.attachesContainer}>
+          {issue?.project?.id && (
+            <View
+              testID="createIssueAttachments"
+              style={styles.attachesContainer}>
 
-            <AttachmentsRow
-              attachments={issue.attachments}
-              attachingImage={attachingImage}
-              imageHeaders={getApi().auth.getAuthorizationHeaders()}
-              onRemoveImage={removeAttachment}
-            />
+              <AttachmentsRow
+                testID="createIssueAttachmentRow"
+                attachments={issue.attachments}
+                attachingImage={attachingImage}
+                imageHeaders={getApi().auth.getAuthorizationHeaders()}
+                onRemoveImage={removeAttachment}
+              />
 
-            <View style={styles.attachButtonsContainer}>
-              <TouchableOpacity
-                disabled={isProcessing}
-                style={styles.attachButton}
-                onPress={() => showCreateIssueActions(this.context.actionSheet())}
-              >
-                <IconPaperClip size={24} color={isProcessing ? COLOR_GRAY : COLOR_PINK}/>
-                <Text style={[styles.attachButtonText, isProcessing ? {color: COLOR_GRAY} : null]}>
-                  Add Attachment
-                </Text>
-              </TouchableOpacity>
+              <View style={styles.attachButtonsContainer}>
+                <TouchableOpacity
+                  testID="createIssueAttachmentButton"
+                  disabled={isProcessing}
+                  style={styles.attachButton}
+                  onPress={() => showCreateIssueActions(this.context.actionSheet())}
+                >
+                  <IconPaperClip size={24} color={isProcessing ? COLOR_GRAY : COLOR_PINK}/>
+                  <Text style={[styles.attachButtonText, isProcessing ? {color: COLOR_GRAY} : null]}>
+                    Add Attachment
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>}
+          )}
 
           <View style={styles.separator}/>
         </ScrollView>
