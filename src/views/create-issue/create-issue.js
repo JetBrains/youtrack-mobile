@@ -6,7 +6,7 @@ import React, {Component} from 'react';
 import Header from '../../components/header/header';
 import usage from '../../components/usage/usage';
 import {getApi} from '../../components/api/api__instance';
-import {attach, tag, next, IconCheck, IconClose} from '../../components/icon/icon';
+import {attach, next, IconCheck, IconClose} from '../../components/icon/icon';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import IssueSummary from '../../components/issue-summary/issue-summary';
@@ -139,13 +139,6 @@ class CreateIssue extends Component<Props, void> {
               </View>}
 
             <View style={styles.separator}/>
-            {false && <View style={styles.actionContainer}>
-              <Image style={styles.actionIcon} source={tag}/>
-              <View style={styles.actionContent}>
-                <Text>Add tag</Text>
-                <Image style={styles.arrowImage} source={next}></Image>
-              </View>
-            </View>}
           </View>
         </ScrollView>
 
