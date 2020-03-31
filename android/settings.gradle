@@ -19,3 +19,6 @@ include ':react-native-eventsource'
 project(':react-native-eventsource').projectDir = new File(rootProject.projectDir, '../node_modules/@huston007/react-native-eventsource/android')
 include ':react-native-device-info'
 project(':react-native-device-info').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-device-info/android')
+
+include ':react-native-notifications'
+project(':react-native-notifications').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-notifications-latest/lib/android/app')

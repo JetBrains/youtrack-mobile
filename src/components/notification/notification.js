@@ -71,8 +71,13 @@ export function notifyError(message: string, err: Object): Promise<null> {
   return resolveError(err).then(extracted => showErrorMessage(message, extracted));
 }
 
-export function notify(message: string) {
-  return showNotification(message, null, toastComponentRef, NOTIFY_DURATION);
+export function notify(message: string, multiplier?: number) {
+  const duration: number = typeof multiplier === 'number' ? NOTIFY_DURATION * multiplier : NOTIFY_DURATION;
+  return showNotification(message, null, toastComponentRef, duration);
+}
+
+export function notifyLonger(message: string) {
+  return showNotification(message, null, toastComponentRef, NOTIFY_DURATION * 2);
 }
 
 export function setNotificationComponent(reference: Object) {

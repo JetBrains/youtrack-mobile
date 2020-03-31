@@ -1,9 +1,10 @@
 /* @flow */
-import NotificationsIOS from 'react-native-notifications';
 
-import appPackage from '../../../package.json'; // eslint-disable-line import/extensions
+import NotificationsIOS from 'react-native-notifications';
 import Router from '../router/router';
 import log from '../log/log';
+import appPackage from '../../../package.json'; // eslint-disable-line import/extensions
+
 import type Api from '../api/api';
 
 const {KONNECTOR_URL} = appPackage.config;
@@ -32,7 +33,7 @@ NotificationsIOS.addEventListener('notificationOpened', notification => {
   Router.SingleIssue({issueId: ytIssueId});
 });
 
-export function registerForPush(api: Api): Promise<void> {
+function register(api: Api): Promise<void> {
   // eslint-disable-next-line no-async-promise-executor
   return new Promise(async (resolve, reject) => {
     /**
@@ -78,16 +79,22 @@ export function registerForPush(api: Api): Promise<void> {
   });
 }
 
-export async function unregisterForPushNotifications(api: Api): Promise<void> {
+async function unregister(api: Api): Promise<void> {
   log.info('Unsubscribing from push notifications...');
   const url = `${KONNECTOR_URL}/ring/pushNotifications/unsubscribe`;
   await api.makeAuthorizedRequest(url, 'POST', {appleDeviceId: appleDeviceToken});
   log.info('Successfully unsubscribed from push notifications');
 }
 
-
-export function initializePushNotifications() {
+function initialize() {
   // $FlowFixMe: error in type annotations of library
   NotificationsIOS.requestPermissions();
   NotificationsIOS.consumeBackgroundQueue();
+  log.info('push-notifications.ios(initialize): initialized');
 }
+
+export default {
+  register,
+  unregister,
+  initialize,
+};
