@@ -76,10 +76,6 @@ export function notify(message: string, multiplier?: number) {
   return showNotification(message, null, toastComponentRef, duration);
 }
 
-export function notifyLonger(message: string) {
-  return showNotification(message, null, toastComponentRef, NOTIFY_DURATION * 2);
-}
-
 export function setNotificationComponent(reference: Object) {
   toastComponentRef = reference;
 }
