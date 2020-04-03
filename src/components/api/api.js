@@ -166,6 +166,14 @@ class API extends BaseAPI {
     return res.token;
   }
 
+  async subscribeToFCMNotifications(konnectorURL: string, youtrackToken: string, deviceToken: string): Promise<string> {
+    const url = `${konnectorURL}/ring/fcmPushNotifications`;
+    return await this.makeAuthorizedRequest(url, 'POST', {
+      youtrackToken: youtrackToken,
+      deviceToken: deviceToken
+    });
+  }
+
   async getWorkTimeSettings(): Promise<Object> {
     const fields = `id,daysAWeek,workDays,minutesADay`;
     const url = `${this.youTrackUrl}/api/admin/timeTrackingSettings/workTimeSettings?fields=${fields}`;

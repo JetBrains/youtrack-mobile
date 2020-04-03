@@ -30,6 +30,9 @@ describe('app-actions', () => {
     beforeEach(() => {
       jest.spyOn(PushNotifications, 'register').mockReturnValue(Promise.resolve());
       jest.spyOn(PushNotifications, 'initialize');
+      jest.spyOn(Notification, 'notifyError');
+      jest.spyOn(Notification, 'notify');
+      Notification.setNotificationComponent({show: jest.fn()});
       setRegistered(false);
     });
 
@@ -60,7 +63,6 @@ describe('app-actions', () => {
 
       beforeEach(() => {
         jest.spyOn(log, 'warn');
-        jest.spyOn(Notification, 'notifyError');
       });
 
       it('should not initialize if registration failed', async () => {

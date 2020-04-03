@@ -1,6 +1,6 @@
 /* @flow */
 
-import {Notifications, Notification} from 'react-native-notifications-latest';
+import {Notifications, Notification, Registered, RegistrationError} from 'react-native-notifications-latest';
 
 import {notify} from '../notification/notification';
 import appPackage from '../../../package.json'; // eslint-disable-line import/extensions
@@ -18,50 +18,23 @@ type NotificationCompletion = { // TS interfaces that are used in `react-native-
 export default class PushNotificationsProcessor {
   static KONNECTOR_URL = appPackage.config.KONNECTOR_URL;
 
-  API: Api;
-  onNotificationOpen: ({ issueId: string }) => void;
-  deviceToken: string;
-
-  constructor(api: Api, onNotificationOpen: ({ issueId: string }) => void, deviceToken: string) {
-    this.API = api;
-    this.onNotificationOpen = onNotificationOpen;
-    this.deviceToken = deviceToken;
-
-    this.register();
+  static subscribeOnRegistrationEvent(onSuccess: (deviceToken: string) => void, onError: (error: RegistrationError) => void) {
+    const eventsRegistry = Notifications.events();
+    eventsRegistry.registerRemoteNotificationsRegistered(
+      (event: Registered) => {
+        onSuccess(event.deviceToken);
+      }
+    );
+    eventsRegistry.registerRemoteNotificationsRegistrationFailed((error: RegistrationError) => {
+      onError(error);
+    });
   }
 
-  static async unsubscribe(api: Api, deviceToken: string) {
-    const logMsgPrefix: string = 'PushNotificationsProcessor(unsubscribe): ';
-    log.info(`${logMsgPrefix}Unsubscribing from push notifications...`);
-    const url = `${PushNotificationsProcessor.KONNECTOR_URL}/ring/fcmPushNotifications/unsubscribe`;
-    try {
-      await api.makeAuthorizedRequest(url, 'POST', {deviceToken: deviceToken});
-      log.info(`${logMsgPrefix}Successfully unsubscribed from push notifications`);
-    } catch (error) {
-      const errorMsg = 'Failed to unsubscribed from push notifications';
-      log.warn(`${logMsgPrefix}${errorMsg}`, error);
-      notify(errorMsg);
-    }
-  }
-
-  async register() {
-    try {
-      const youtrackToken = await this.getYouTrackToken();
-      await this.subscribe(youtrackToken, this.deviceToken);
-      this.registerNotificationEvents();
-      notify('Push notifications enabled', 2);
-    } catch (error) {
-      const errorMsg = 'Cannot initialize push notifications';
-      notify(errorMsg, 2);
-      log.warn(`PushNotificationsProcessor(register): ${errorMsg}`, error);
-    }
-  }
-
-  registerNotificationEvents() {
-    Notifications.registerRemoteNotifications();
-
+  static registerNotificationEvents(onNotificationOpen: (issueId: string) => void) {
     const eventsRegistry = Notifications.events();
     const logMsgPrefix: string = 'PushNotificationsProcessor(registerNotificationReceivedForeground): ';
+
+    Notifications.registerRemoteNotifications();
 
     eventsRegistry.registerNotificationReceivedForeground(
       (notification: Notification, completion: (response: NotificationCompletion) => void) => {
@@ -79,45 +52,59 @@ export default class PushNotificationsProcessor {
 
     eventsRegistry.registerNotificationOpened(
       (notification: Notification, completion: () => void) => {
-        const {issueId, userId}: {issueId: string, userId: string} = notification.payload;
+        const {issueId, userId}: { issueId: string, userId: string } = notification.payload;
         const msg: string = 'PushNotificationsProcessor(registerNotificationOpened): Notification';
         log.debug(`${msg} ${JSON.stringify(notification.payload)}`);
         log.debug(`${msg} opened issue "${issueId}" by user "${userId}"`);
 
-        if (issueId) {
-          this.onNotificationOpen({issueId: notification.payload.issueId});
-        }
+        onNotificationOpen(issueId);
         completion();
       }
     );
   }
 
-  async getYouTrackToken() {
-    const logMsgPrefix: string = 'PushNotificationsProcessor(getYouTrackToken): ';
+  static async unsubscribe(api: Api, deviceToken: string) {
+    const logMsgPrefix: string = 'PushNotificationsProcessor(unsubscribe): ';
+    log.info(`${logMsgPrefix}Unsubscribing from push notifications...`);
+    const url = `${PushNotificationsProcessor.KONNECTOR_URL}/ring/fcmPushNotifications/unsubscribe`;
     try {
-      log.info(`${logMsgPrefix}Requesting YouTrack token...`);
-      const youTrackToken = await this.API.getNotificationsToken();
-      log.info(`${logMsgPrefix}YouTrack token received`);
-      return Promise.resolve(youTrackToken);
+      await api.makeAuthorizedRequest(url, 'POST', {deviceToken: deviceToken});
+      log.info(`${logMsgPrefix}Successfully unsubscribed from push notifications`);
     } catch (error) {
-      if ([400, 404, 405].includes(error?.status)) {
-        const errorMsg = `${logMsgPrefix}YT server does not support push notifications`;
-        log.warn(errorMsg, error);
-        return Promise.reject(new Error(errorMsg));
-      }
-      throw error;
+      const errorMsg = 'Failed to unsubscribed from push notifications';
+      log.warn(`${logMsgPrefix}${errorMsg}`, error);
+      notify(errorMsg);
     }
   }
 
-  async subscribe(youtrackToken: string, deviceToken: string): Promise<any> {
+  static async getYouTrackToken(api: Api) {
+    const logMsgPrefix: string = 'PushNotificationsProcessor(getYouTrackToken): ';
+    try {
+      log.info(`${logMsgPrefix}Requesting YouTrack token...`);
+      const youTrackToken = await api.getNotificationsToken();
+      log.info(`${logMsgPrefix}YouTrack token received`);
+      return youTrackToken;
+    } catch (error) {
+      let err: Error = error;
+      if ([400, 404, 405].includes(error?.status)) {
+        const errorMsg = `${logMsgPrefix}YT server does not support push notifications`;
+        log.warn(errorMsg, error);
+        err = new Error(errorMsg);
+      }
+      throw err;
+    }
+  }
+
+  static async subscribe(api: Api, deviceToken: string): Promise<any> {
     const logMsgPrefix: string = 'PushNotificationsProcessor(subscribe): ';
     try {
+      const youtrackToken = await PushNotificationsProcessor.getYouTrackToken(api);
       log.info(`${logMsgPrefix}Subscribing to push notifications...`);
-      const url = `${PushNotificationsProcessor.KONNECTOR_URL}/ring/fcmPushNotifications`;
-      const response = await this.API.makeAuthorizedRequest(url, 'POST', {
-        youtrackToken: youtrackToken,
-        deviceToken: deviceToken
-      });
+      const response = api.subscribeToFCMNotifications(
+        PushNotificationsProcessor.KONNECTOR_URL,
+        youtrackToken,
+        deviceToken
+      );
       log.info(`${logMsgPrefix}Subscribed to push notifications`);
       return response;
     } catch (error) {
