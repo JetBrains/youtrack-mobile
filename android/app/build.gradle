@@ -167,6 +167,7 @@ android {
 }
 
 dependencies {
+    implementation project(':bugsnag-react-native')
     implementation project(':react-native-notifications')
     implementation 'com.google.firebase:firebase-core:16.0.0'
     implementation project(':react-native-svg')
