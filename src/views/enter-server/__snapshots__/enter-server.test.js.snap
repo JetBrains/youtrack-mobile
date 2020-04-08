@@ -46,6 +46,7 @@ exports[`EnterServer Render should render 1`] = `
           "alignItems": "center",
           "flex": 1,
           "justifyContent": "center",
+          "marginTop": 16,
         }
       }
     >
