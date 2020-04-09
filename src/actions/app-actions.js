@@ -545,10 +545,16 @@ export function subscribeToPushNotifications() {
   };
 }
 
-function isIOSSimulator() {
-  return DeviceInfo.isEmulator() && Platform.OS === 'ios';
+function isIOS(): boolean {
+  return Platform.OS === 'ios';
+}
+
+function isIOSSimulator(): boolean {
+  return isIOS() && DeviceInfo.isEmulator();
 }
 
 function isRegisteredForPush(): boolean {
-  return getStorageState().isRegisteredForPush;
+  const storageState = getStorageState();
+  //TODO:YTM-1267
+  return isIOS() ? storageState.isRegisteredForPush : storageState.isPushNotificationsRegistered;
 }

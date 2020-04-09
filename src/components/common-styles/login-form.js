@@ -21,7 +21,8 @@ export const loginStylesForm = {
   formContent: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginTop: UNIT * 2
   },
   hintText: {
     marginTop: UNIT * 2,

@@ -21,6 +21,7 @@ export type StorageState = {|
   lastQueries: ?Array<string>,
   issuesCache: ?Array<IssueOnList>,
   isRegisteredForPush: boolean,
+  isPushNotificationsRegistered: boolean,
   agileZoomedIn: ?boolean,
   lastRoute: ?('IssueList' | 'Inbox' | 'AgileBoard'),
   currentAppVersion: ?string,
@@ -40,6 +41,7 @@ const storageKeys: StorageStateKeys = {
   lastQueries: 'YT_LAST_QUERIES_STORAGE_KEY',
   issuesCache: 'yt_mobile_issues_cache',
   isRegisteredForPush: 'YT_IS_REGISTERED_FOR_PUSH',
+  isPushNotificationsRegistered: 'YT_IS_PUSH_NOTIFICATIONS_REGISTERED',
   agileZoomedIn: 'YT_AGILE_ZOOMED_IN',
   lastRoute: 'YT_LAST_ROUTE',
   currentAppVersion: 'YT_CURRENT_APP_VERSION',
@@ -61,6 +63,7 @@ export const initialState: StorageState = Object.freeze({
   lastQueries: null,
   issuesCache: null,
   isRegisteredForPush: false,
+  isPushNotificationsRegistered: false, //TODO:YTM-1267
   agileZoomedIn: null,
   lastRoute: null,
   currentAppVersion: null,
@@ -91,7 +94,9 @@ export async function clearCachesAndDrafts() {
   await AsyncStorage.multiRemove([
     storageKeys.projectId, storageKeys.draftId, storageKeys.query,
     storageKeys.lastQueries, storageKeys.issuesCache, storageKeys.isRegisteredForPush,
-    storageKeys.agileZoomedIn, storageKeys.lastRoute
+    storageKeys.agileZoomedIn, storageKeys.lastRoute,
+    storageKeys.issueActivitiesEnabledTypes,
+    storageKeys.isPushNotificationsRegistered
   ]);
   return populateStorage();
 }

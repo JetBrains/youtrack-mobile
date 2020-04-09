@@ -1,16 +1,18 @@
 /* @flow */
 
+import {Notifications, RegistrationError} from 'react-native-notifications-latest';
+
 import log from '../log/log';
 import Router from '../router/router';
 
-import {Notifications, RegistrationError} from 'react-native-notifications-latest';
 import PushNotificationsProcessor from './push-notifications-processor';
 import {receiveDeviceToken} from './push-notifications.android__get-token';
 
 import type Api from '../api/api';
 
-const componentPrefix: string = 'PushNotificationAndroid';
-const deviceTokenPromise: Promise<string | RegistrationError> = receiveDeviceToken();
+const componentLogPrefix: string = 'PushNotificationsAndroid';
+
+const deviceTokenPromise: Promise<string | RegistrationError> = receiveDeviceToken(componentLogPrefix);
 let deviceToken: ?string = null;
 
 
@@ -24,24 +26,24 @@ async function unregister(api: Api) {
 }
 
 function initialize() {
-  const prefixLogMsg: string = `${componentPrefix}(initialize): `;
+  const logMsgPrefix: string = `${componentLogPrefix}(initialize): `;
   const onNotification = (issueId) => Router.SingleIssue({issueId});
 
   PushNotificationsProcessor.registerNotificationEvents(onNotification);
 
   Notifications.getInitialNotification()
     .then((notification) => {
-      log.info(prefixLogMsg, (notification ? JSON.stringify(notification.payload) : 'N/A'));
+      log.info(logMsgPrefix, (notification ? JSON.stringify(notification.payload) : 'N/A'));
       if (notification?.payload?.issueId) {
         log.info(
-          `${prefixLogMsg}redirecting to the issue ${notification.payload.issueId}`,
+          `${logMsgPrefix}redirecting to the issue ${notification.payload.issueId}`,
           JSON.stringify(notification.payload)
         );
         onNotification(notification.payload.issueId);
       }
-      log.info(`${prefixLogMsg}initialized`);
+      log.info(`${logMsgPrefix}initialized`);
     })
-    .catch((err) => log.warn(`${prefixLogMsg}failed`, err));
+    .catch((err) => log.warn(`${logMsgPrefix}failed`, err));
 }
 
 export default {
