@@ -69,7 +69,9 @@ class ErrorBoundary extends Component<Props, State> {
         notify(`Crash has been reported`);
       }
     } catch (err) {
-      notify('Failed to report the crash. Try one more time.', err);
+      const errorMsg: string = 'Failed to report the crash.';
+      log.warn(errorMsg, err);
+      notify(`${errorMsg} Try one more time.`, err);
     } finally {
       this.setState({isReporting: false});
     }

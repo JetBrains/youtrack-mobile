@@ -16,7 +16,8 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    padding: UNIT * 2
+    padding: UNIT * 2,
+    backgroundColor: COLOR_FONT_ON_BLACK
   },
   row: {
     flexDirection: 'row',

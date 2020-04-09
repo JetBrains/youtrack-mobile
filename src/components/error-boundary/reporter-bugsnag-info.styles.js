@@ -60,6 +60,11 @@ export default StyleSheet.create({
     fontSize: 16,
     color: COLOR_PINK
   },
+  extendedReportModalTitle: {
+    ...extendedReportModalText,
+    fontWeight: '500',
+    marginBottom: UNIT / 2
+  },
   extendedReportModalText: extendedReportModalText,
   extendedReportModalTextInfo: {
     marginTop: UNIT,

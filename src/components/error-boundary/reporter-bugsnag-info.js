@@ -30,6 +30,7 @@ export default class ReporterBugsnagInfo extends PureComponent<Props, void> {
 
           <View style={styles.extendedReportModalContent}>
             <View>
+              <Text style={styles.extendedReportModalTitle}>Help us fix problems faster</Text>
               <Text style={[styles.extendedReportModalText, styles.extendedReportModalTextInfo]}>
                 In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag,
                 a third-party service, that help us diagnose and fix problems faster, monitor application stability.
