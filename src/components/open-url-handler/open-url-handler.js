@@ -10,11 +10,11 @@ export function isOneOfServers(url: string, serverURLs: Array<string>) {
 }
 
 export function extractId(issueUrl: ?string) {
-  if (!issueUrl) {
-    return null;
+  if (issueUrl) {
+    const match = decodeURIComponent(issueUrl).match(issueIdReg);
+    return match && match[2];
   }
-  const match = issueUrl.match(issueIdReg);
-  return match && match[2];
+  return null;
 }
 
 function extractIssuesQuery(issuesUrl: ?string) {

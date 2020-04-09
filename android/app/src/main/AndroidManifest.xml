@@ -19,6 +19,14 @@
       android:icon="@mipmap/yt_logo"
       android:theme="@style/AppTheme">
 
+      <meta-data
+          android:name="com.google.firebase.messaging.default_notification_icon"
+          android:resource="@drawable/notification_icon"/>
+
+      <meta-data
+          android:name="com.google.firebase.messaging.default_notification_color"
+          android:resource="@color/notification_icon_color"/>
+
       <activity
         android:name=".SplashActivity"
         android:label="@string/app_name"
@@ -55,16 +63,26 @@
           <category android:name="android.intent.category.BROWSABLE"/>
 
           <data android:scheme="https" android:host="*" android:pathPattern="/.*issue/.*"/>
-          <data android:scheme="https" android:host="*.myjetbrains.com" android:pathPattern="/.*issues"/>
-          <data android:scheme="https" android:host="*.jetbrains.com" android:pathPattern="/.*issues"/>
-          <data android:scheme="https" android:host="*" android:pathPattern="/.*youtrack/issues"/>
-          <data android:scheme="https" android:host="*" android:pathPattern="/.*issueMobile/.*"/>
-
           <data android:scheme="http" android:host="*" android:pathPattern="/.*issue/.*"/>
-          <data android:scheme="http" android:host="*.myjetbrains.com" android:pathPattern="/.*issues"/>
-          <data android:scheme="http" android:host="*.jetbrains.com" android:pathPattern="/.*issues"/>
+          <data android:scheme="https" android:host="*" android:pathPattern="/.*oauth.*"/>
+          <data android:scheme="http" android:host="*" android:pathPattern="/.*oauth.*"/>
+          <data android:scheme="http" android:host="*" android:pathPattern="/.*issue/.*"/>
+          <data android:scheme="https" android:host="*" android:pathPattern="/.*youtrack/issues"/>
           <data android:scheme="http" android:host="*" android:pathPattern="/.*youtrack/issues"/>
+          <data android:scheme="https" android:host="*" android:pathPattern="/.*youtrack/oauth.*"/>
+          <data android:scheme="http" android:host="*" android:pathPattern="/.*youtrack/oauth.*"/>
+          <data android:scheme="https" android:host="*" android:pathPattern="/.*issueMobile/.*"/>
           <data android:scheme="http" android:host="*" android:pathPattern="/.*issueMobile/.*"/>
+
+          <data android:scheme="https" android:host="*.jetbrains.com" android:pathPattern="/.*issues"/>
+          <data android:scheme="http" android:host="*.jetbrains.com" android:pathPattern="/.*issues"/>
+          <data android:scheme="https" android:host="*.jetbrains.com" android:pathPattern="/.*oauth.*"/>
+          <data android:scheme="http" android:host="*.jetbrains.com" android:pathPattern="/.*oauth.*"/>
+
+          <data android:scheme="https" android:host="*.myjetbrains.com" android:pathPattern="/.*issues"/>
+          <data android:scheme="http" android:host="*.myjetbrains.com" android:pathPattern="/.*issues"/>
+          <data android:scheme="https" android:host="*.myjetbrains.com" android:pathPattern="/.*oauth.*"/>
+          <data android:scheme="http" android:host="*.myjetbrains.com" android:pathPattern="/.*oauth.*"/>
         </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />

@@ -130,6 +130,7 @@ android {
         }
         multiDexEnabled true
         missingDimensionStrategy 'react-native-camera', 'general'
+        missingDimensionStrategy "RNNotifications.reactNativeVersion", "reactNative60"
     }
     splits {
         abi {
@@ -166,6 +167,9 @@ android {
 }
 
 dependencies {
+    implementation project(':bugsnag-react-native')
+    implementation project(':react-native-notifications')
+    implementation 'com.google.firebase:firebase-core:16.0.0'
     implementation project(':react-native-reanimated')
     implementation project(':react-native-svg')
     implementation project(':react-native-vector-icons')
@@ -189,3 +193,5 @@ task copyDownloadableDepsToLibs(type: Copy) {
   from configurations.compile
   into 'libs'
 }
+
+apply plugin: 'com.google.gms.google-services'

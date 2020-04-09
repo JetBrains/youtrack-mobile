@@ -1,4 +1,5 @@
 /* @flow */
+
 import * as types from './action-types';
 import {getIsAuthorized} from '../reducers/app-reducer';
 import {setApi} from '../components/api/api__instance';
@@ -7,8 +8,17 @@ import packageJson from '../../package.json'; // eslint-disable-line import/exte
 import Router from '../components/router/router';
 import log from '../components/log/log';
 import DeviceInfo from 'react-native-device-info';
-import {initialState, clearCachesAndDrafts, populateStorage, getStorageState, flushStorage, flushStoragePart, getOtherAccounts, storeAccounts} from '../components/storage/storage';
-import {Linking} from 'react-native';
+import {
+  initialState,
+  clearCachesAndDrafts,
+  populateStorage,
+  getStorageState,
+  flushStorage,
+  flushStoragePart,
+  getOtherAccounts,
+  storeAccounts
+} from '../components/storage/storage';
+import {Linking, Platform} from 'react-native';
 import UrlParse from 'url-parse';
 import openByUrlDetector, {isOneOfServers} from '../components/open-url-handler/open-url-handler';
 import usage from '../components/usage/usage';
@@ -16,7 +26,7 @@ import {notifyError, notify} from '../components/notification/notification';
 import {loadConfig} from '../components/config/config';
 import Auth from '../components/auth/auth';
 import {loadAgileProfile} from '../views/agile-board/board-actions';
-import {registerForPush, initializePushNotifications, unregisterForPushNotifications} from '../components/push-notifications/push-notifications';
+import PushNotifications from '../components/push-notifications/push-notifications';
 import {EVERYTHING_CONTEXT} from '../components/search/search-context';
 
 import type {AuthParams, CurrentUser} from '../components/auth/auth';
@@ -27,6 +37,17 @@ import type {StorageState} from '../components/storage/storage';
 import type RootState from '../reducers/app-reducer';
 import type {User, UserAppearanceProfile, UserGeneralProfile} from '../flow/User';
 import {refreshIssues, storeSearchContext} from '../views/issue-list/issue-list-actions';
+
+
+export const REGISTRATION_ERRORS = [
+  'Not implemented',
+  'remote notifications are not supported in the simulator',
+  'YouTrack does not support push notifications'
+];
+export const ERROR_MESSAGE = {
+  FAIL: 'Push notifications registration failed',
+  NOT_SUPPORTED: 'Push notification is not supported: '
+};
 
 
 export function logOut() {
@@ -293,13 +314,12 @@ export function changeAccount(account: StorageState, dropCurrentAccount: boolean
 export function removeAccountOrLogOut() {
   return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
     const otherAccounts = getState().app.otherAccounts;
-    const {isRegisteredForPush} = getStorageState();
 
-    if (isRegisteredForPush) {
+    if (isRegisteredForPush()) {
       try {
-        await unregisterForPushNotifications(getApi());
+        await PushNotifications.unregister(getApi());
       } catch (err) {
-        notifyError('Failed to unsubscribe from PUSH notifications', err);
+        notifyError('Failed to unsubscribe from push notifications', err);
       }
     }
 
@@ -319,7 +339,7 @@ function completeInitialization() {
     await auth.loadPermissions(auth.authParams);
     dispatch(setPermissions(auth.permissions, auth.currentUser));
     dispatch(loadUser());
-    dispatch(subscribeToPush());
+    dispatch(subscribeToPushNotifications());
     dispatch(loadAgileProfile());
     dispatch(loadWorkTimeSettings());
 
@@ -526,37 +546,44 @@ export function setAccount() {
   };
 }
 
-function subscribeToPush(config: AppConfigFilled) {
-  return async (dispatch: (any) => any, getState, getApi) => {
-    const {isRegisteredForPush} = getStorageState();
-    if (isRegisteredForPush) {
-      log.debug('Device is already registered for push notifications');
-      initializePushNotifications();
-      return;
+export function subscribeToPushNotifications() {
+  return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
+    if (isIOSSimulator()) {
+      return log.debug('Push notifications is not supported on iOS simulator');
     }
 
-    if (DeviceInfo.isEmulator()) {
-      log.debug('Push notifications won\'t work on simulator');
-      return;
+    if (isRegisteredForPush()) {
+      log.info('Device was already registered for push notifications. Initializing...');
+      return PushNotifications.initialize();
     }
 
-    const api: Api = getApi();
     try {
-      await registerForPush(api);
+      await PushNotifications.register(getApi());
+      PushNotifications.initialize();
       await flushStoragePart({isRegisteredForPush: true});
-      initializePushNotifications();
       log.debug('Successfully registered for push notifications');
     } catch (err) {
       const message = err?.message || err?.localizedDescription;
-      if (
-        ['Not implemented', 'remote notifications are not supported in the simulator', 'YouTrack does not support push notifications']
-          .includes(message)
-      ) {
-        log.info(`Push notification is not supported: ${message}`);
-        return;
+
+      if (message && REGISTRATION_ERRORS.includes(message)) {
+        return log.warn(ERROR_MESSAGE.NOT_SUPPORTED + message);
       }
 
-      notifyError('Couldn\'t register for notifications', err);
+      notifyError(ERROR_MESSAGE.FAIL, err);
     }
   };
+}
+
+function isIOS(): boolean {
+  return Platform.OS === 'ios';
+}
+
+function isIOSSimulator(): boolean {
+  return isIOS() && DeviceInfo.isEmulator();
+}
+
+function isRegisteredForPush(): boolean {
+  const storageState = getStorageState();
+  //TODO:YTM-1267
+  return isIOS() ? storageState.isRegisteredForPush : storageState.isPushNotificationsRegistered;
 }

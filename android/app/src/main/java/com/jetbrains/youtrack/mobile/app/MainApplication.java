@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.facebook.react.ReactApplication;
 import com.swmansion.reanimated.ReanimatedPackage;
+import com.bugsnag.BugsnagReactNative;
 import com.horcrux.svg.SvgPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
@@ -22,6 +23,8 @@ import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import java.util.Arrays;
 import java.util.List;
 
+import com.wix.reactnativenotifications.RNNotificationsPackage;
+
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
@@ -35,6 +38,7 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
             new ReanimatedPackage(),
+            BugsnagReactNative.getPackage(),
             new SvgPackage(),
             new VectorIconsPackage(),
             new RNGestureHandlerPackage(),
@@ -43,7 +47,9 @@ public class MainApplication extends Application implements ReactApplication {
             new PickerPackage(),
             new LinearGradientPackage(),
             new RNEventSourcePackage(),
-            new RNDeviceInfo());
+            new RNDeviceInfo(),
+            new RNNotificationsPackage(MainApplication.this)
+      );
     }
 
     @Override
