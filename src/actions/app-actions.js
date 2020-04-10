@@ -531,7 +531,7 @@ export function subscribeToPushNotifications() {
     try {
       await PushNotifications.register(getApi());
       PushNotifications.initialize();
-      await flushStoragePart({isRegisteredForPush: true});
+      setRegisteredForPush();
       log.debug('Successfully registered for push notifications');
     } catch (err) {
       const message = err?.message || err?.localizedDescription;
@@ -557,4 +557,9 @@ function isRegisteredForPush(): boolean {
   const storageState = getStorageState();
   //TODO:YTM-1267
   return isIOS() ? storageState.isRegisteredForPush : storageState.isPushNotificationsRegistered;
+}
+
+async function setRegisteredForPush(): Promise<StorageState> {
+  const data = isIOS() ? {isRegisteredForPush: true} : {isPushNotificationsRegistered: true};
+  return await flushStoragePart(data);
 }
