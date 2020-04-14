@@ -11,18 +11,27 @@ import {receiveDeviceToken} from './push-notifications.android__get-token';
 import type Api from '../api/api';
 
 const componentLogPrefix: string = 'PushNotificationsAndroid';
+let deviceToken: ?string = null;
 
 const deviceTokenPromise: Promise<string | RegistrationError> = receiveDeviceToken(componentLogPrefix);
-let deviceToken: ?string = null;
+deviceTokenPromise.then(
+  (token: string) => {
+    deviceToken = token;
+    log.info(`${componentLogPrefix}(deviceTokenPromise): set device token: ${deviceToken}`);
+  }
+);
 
 
 async function register(api: Api) {
-  deviceToken = await deviceTokenPromise;
-  await PushNotificationsProcessor.subscribe(api, deviceToken);
+  return deviceTokenPromise.then(async () => {
+    return await PushNotificationsProcessor.subscribe(api, deviceToken);
+  }).catch((error: Error) => {
+    throw error;
+  });
 }
 
 async function unregister(api: Api) {
-  await PushNotificationsProcessor.unsubscribe(api, deviceToken);
+  return await PushNotificationsProcessor.unsubscribe(api, deviceToken);
 }
 
 function initialize() {

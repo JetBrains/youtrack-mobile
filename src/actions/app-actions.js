@@ -531,8 +531,8 @@ export function subscribeToPushNotifications() {
     try {
       await PushNotifications.register(getApi());
       PushNotifications.initialize();
-      setRegisteredForPush();
-      log.debug('Successfully registered for push notifications');
+      await setRegisteredForPush();
+      log.info('Successfully registered for push notifications');
     } catch (err) {
       const message = err?.message || err?.localizedDescription;
 
