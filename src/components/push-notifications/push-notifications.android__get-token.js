@@ -13,7 +13,7 @@ export const receiveDeviceToken = (componentLogPrefix: string = 'Android'): Prom
 
   return new Promise((resolve: (token: string) => any, reject: (error:RegistrationError) => any) => {
     PushNotificationsProcessor.subscribeOnRegistrationEvent((token: string) => {
-      log.info(`${logPrefix}Device token received`);
+      log.debug(`${logPrefix}Device token received`, token);
       resolve(token);
     }, (error: RegistrationError) => {
       const errorMsg = 'Cannot get a device token.';

@@ -16,7 +16,9 @@ if (!ANALYTICS_ID || !KONNECTOR_URL || !BUILD_NUMBER || !VERSION_NUMBER || !BUGS
 updateJsonFile('package.json', data => {
   data.config.ANALYTICS_ID = ANALYTICS_ID;
   data.config.EXCEPTION_REPORTER_TOKEN = EXCEPTION_REPORTER_TOKEN;
-  data.config.KONNECTOR_URL = KONNECTOR_URL;
+  if (!process.env.STAGING) {
+    data.config.KONNECTOR_URL = KONNECTOR_URL;
+  }
   data.config.BUGSNAG_TOKEN = BUGSNAG_TOKEN;
   data.bugsnag.version = VERSION_NUMBER;
   data.bugsnag.token = BUGSNAG_TOKEN;
