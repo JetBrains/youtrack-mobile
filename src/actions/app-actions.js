@@ -294,10 +294,11 @@ export function removeAccountOrLogOut() {
     const otherAccounts = getState().app.otherAccounts;
 
     if (isRegisteredForPush()) {
+      setRegisteredForPush(false);
       try {
         await PushNotifications.unregister(getApi());
       } catch (err) {
-        notifyError('Failed to unsubscribe from push notifications', err);
+        log.warn('Failed to unsubscribe from push notifications', err);
       }
     }
 
@@ -531,7 +532,7 @@ export function subscribeToPushNotifications() {
     try {
       await PushNotifications.register(getApi());
       PushNotifications.initialize();
-      await setRegisteredForPush();
+      await setRegisteredForPush(true);
       log.info('Successfully registered for push notifications');
     } catch (err) {
       const message = err?.message || err?.localizedDescription;
@@ -559,7 +560,7 @@ function isRegisteredForPush(): boolean {
   return isIOS() ? storageState.isRegisteredForPush : storageState.isPushNotificationsRegistered;
 }
 
-async function setRegisteredForPush(): Promise<StorageState> {
-  const data = isIOS() ? {isRegisteredForPush: true} : {isPushNotificationsRegistered: true};
+async function setRegisteredForPush(isRegistered: boolean): Promise<StorageState> {
+  const data = isIOS() ? {isRegisteredForPush: isRegistered} : {isPushNotificationsRegistered: isRegistered};
   return await flushStoragePart(data);
 }
