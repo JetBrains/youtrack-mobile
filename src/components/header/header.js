@@ -1,14 +1,16 @@
 /* @flow */
+
 import {Text, View, TouchableOpacity, StatusBar} from 'react-native';
 import React, {PureComponent} from 'react';
-import styles from './header.styles';
+
 import Router from '../router/router';
 import {onHeightChange} from './header__top-padding';
 import {HIT_SLOP} from '../common-styles/button';
 
-import type {Node} from 'react';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import styles from './header.styles';
 
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import {headerTitle} from '../common-styles/navigation';
 
 type Props = {
   onBack?: () => any,
@@ -16,9 +18,9 @@ type Props = {
   leftButton?: ?React$Element<any>,
   rightButton?: ?React$Element<any>,
   extraButton?: ?React$Element<any>,
-  children?: Node,
-  openScanView?: Function,
-  style?: ViewStyleProp
+  children?: ?React$Element<any>,
+  style?: ViewStyleProp,
+  title?: string
 }
 
 type DefaultProps = {
@@ -27,7 +29,7 @@ type DefaultProps = {
 
 export default class Header extends PureComponent<Props, void> {
   static defaultProps: DefaultProps = {
-    onRightButtonClick: () => undefined,
+    onRightButtonClick: () => undefined
   };
 
   componentDidMount() {
@@ -48,10 +50,13 @@ export default class Header extends PureComponent<Props, void> {
   }
 
   render() {
-    const {leftButton, children, extraButton, rightButton, style} = this.props;
+    const {leftButton, children, extraButton, rightButton, style, title} = this.props;
 
     return (
-      <View style={[styles.header, style]}>
+      <View
+        testID="header"
+        style={[styles.header, style]}
+      >
         <StatusBar animated barStyle="dark-content"/>
         <TouchableOpacity
           testID="header-back"
@@ -62,7 +67,14 @@ export default class Header extends PureComponent<Props, void> {
           <Text style={styles.headerButtonText} numberOfLines={1}>{leftButton}</Text>
         </TouchableOpacity>
 
-        <View style={styles.headerCenter} testID="header-content">{children}</View>
+        <View style={styles.headerCenter} testID="header-content">
+          {Boolean(title) && (
+            <Text
+              testID="headerTitle"
+              style={{...headerTitle}}>{title}</Text>
+          )}
+          {children}
+        </View>
 
         {extraButton}
 

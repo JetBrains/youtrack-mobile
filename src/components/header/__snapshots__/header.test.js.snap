@@ -1,0 +1,98 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Header/> Render should match a snapshot 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#FFF",
+        "flex": 0,
+        "flexDirection": "row",
+        "justifyContent": "space-between",
+        "minHeight": 56,
+        "paddingBottom": 12,
+        "paddingLeft": 8,
+        "paddingRight": 8,
+        "paddingTop": 12,
+      },
+      undefined,
+    ]
+  }
+  testID="header"
+>
+  <StatusBar
+    animated={true}
+    barStyle="dark-content"
+    showHideTransition="fade"
+  />
+  <TouchableOpacity
+    activeOpacity={0.2}
+    hitSlop={
+      Object {
+        "bottom": 8,
+        "left": 8,
+        "right": 8,
+        "top": 8,
+      }
+    }
+    onPress={[Function]}
+    style={
+      Object {
+        "justifyContent": "flex-start",
+      }
+    }
+    testID="header-back"
+  >
+    <Text
+      numberOfLines={1}
+      style={
+        Object {
+          "color": "#FE0082",
+          "fontSize": 17,
+        }
+      }
+    />
+  </TouchableOpacity>
+  <View
+    style={
+      Object {
+        "alignItems": "flex-start",
+        "flex": 1,
+        "flexShrink": 1,
+        "padding": 0,
+        "paddingLeft": 16,
+      }
+    }
+    testID="header-content"
+  />
+  <TouchableOpacity
+    activeOpacity={0.2}
+    hitSlop={
+      Object {
+        "bottom": 8,
+        "left": 8,
+        "right": 8,
+        "top": 8,
+      }
+    }
+    onPress={[Function]}
+    style={
+      Object {
+        "justifyContent": "flex-end",
+      }
+    }
+    testID="header-action"
+  >
+    <Text
+      numberOfLines={1}
+      style={
+        Object {
+          "color": "#FE0082",
+          "fontSize": 17,
+        }
+      }
+    />
+  </TouchableOpacity>
+</View>
+`;
