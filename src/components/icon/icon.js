@@ -117,6 +117,11 @@ export const IconMagnifyZoom = (props?: Props & {zoomedIn?: boolean}) => <Defaul
   ...props
 }} />;
 
+export const IconLogout = (props?: Props) => <DefaultIcon {...{
+  name: 'logout',
+  ...props
+}} />;
+
 export const IconLock = (props?: Props) => <DefaultIcon {...{
   name: 'lock',
   ...props
