@@ -31,6 +31,23 @@ export const elevation1 = {
   })
 };
 
+export const elevationTop = {
+  ...Platform.select({
+    ios: {
+      shadowRadius: 0.75,
+      shadowColor: COLOR_PLACEHOLDER,
+      shadowOffset: {
+        width: 0,
+        height: -1
+      },
+      shadowOpacity: 0.25,
+    },
+    android: {
+      elevation: 4
+    },
+  })
+};
+
 export const formStyles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1
