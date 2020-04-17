@@ -3,15 +3,12 @@ import {FlatList, View, Text, RefreshControl, TouchableOpacity} from 'react-nati
 import React, {Component} from 'react';
 
 import styles from './inbox.styles';
-import issueStyles from '../single-issue/single-issue.styles';
 import Header from '../../components/header/header';
 import usage from '../../components/usage/usage';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as inboxActions from './inbox-actions';
 import Router from '../../components/router/router';
-import {openMenu} from '../../actions/app-actions';
-import Menu from '../../components/menu/menu';
 import {COLOR_PINK, COLOR_GRAY} from '../../components/variables/variables';
 import log from '../../components/log/log';
 import {handleRelativeUrl} from '../../components/config/config';
@@ -20,7 +17,7 @@ import UserInfo from '../../components/user/user-info';
 import Diff from '../../components/diff/diff';
 import Wiki from '../../components/wiki/wiki';
 import CustomFieldChangeDelimiter from '../../components/custom-field/custom-field__change-delimiter';
-import {IconMenu, IconAngleRight} from '../../components/icon/icon';
+import {IconAngleRight} from '../../components/icon/icon';
 
 import type {InboxState} from './inbox-reducers';
 import type {User} from '../../flow/User';
@@ -29,10 +26,7 @@ import type {AppConfigFilled} from '../../flow/AppConfig';
 
 const CATEGORY_NAME = 'Inbox view';
 
-type AdditionalProps = {
-  openMenu: Function
-};
-type Props = InboxState & typeof inboxActions & AdditionalProps;
+type Props = InboxState & typeof inboxActions;
 
 
 class Inbox extends Component<Props, void> {
@@ -388,30 +382,23 @@ class Inbox extends Component<Props, void> {
   };
 
   render() {
-    const {items, loading, openMenu} = this.props;
+    const {items, loading} = this.props;
 
     return (
-      <Menu>
-        <View style={styles.container}>
-          <Header
-            leftButton={<IconMenu/>}
-            onBack={openMenu}
-          >
-            <Text style={issueStyles.headerText}>Notifications</Text>
-          </Header>
+      <View style={styles.container}>
+        <Header title="Notifications"/>
 
-          <FlatList
-            data={items}
-            refreshControl={this.renderRefreshControl()}
-            refreshing={loading}
-            keyExtractor={notification => notification.id}
-            renderItem={(listItem) => this.renderNotification(listItem.item)}
-            onEndReached={this.onLoadMore}
-            onEndReachedThreshold={0.1}
-            ListFooterComponent={this.renderListMessage}
-          />
-        </View>
-      </Menu>
+        <FlatList
+          data={items}
+          refreshControl={this.renderRefreshControl()}
+          refreshing={loading}
+          keyExtractor={notification => notification.id}
+          renderItem={(listItem) => this.renderNotification(listItem.item)}
+          onEndReached={this.onLoadMore}
+          onEndReachedThreshold={0.1}
+          ListFooterComponent={this.renderListMessage}
+        />
+      </View>
     );
   }
 }
@@ -422,8 +409,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    ...bindActionCreators(inboxActions, dispatch),
-    openMenu: () => dispatch(openMenu())
+    ...bindActionCreators(inboxActions, dispatch)
   };
 };
 

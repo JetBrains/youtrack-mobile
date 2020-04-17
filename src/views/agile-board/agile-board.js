@@ -6,7 +6,6 @@ import usage from '../../components/usage/usage';
 import Header from '../../components/header/header';
 import Select from '../../components/select/select';
 import styles from './agile-board.styles';
-import Menu from '../../components/menu/menu';
 import log from '../../components/log/log';
 import BoardHeader from './board-header';
 import BoardRow from '../../components/agile-row/agile-row';
@@ -28,13 +27,12 @@ import type {IssueOnList} from '../../flow/Issue';
 import type {AgilePageState} from './board-reducers';
 
 import * as boardActions from './board-actions';
-import {openMenu} from '../../actions/app-actions';
 import {connect} from 'react-redux';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import ModalView from '../../components/modal-view/modal-view';
 import ErrorMessageInline from '../../components/error-message/error-message-inline';
 import {HIT_SLOP} from '../../components/common-styles/button';
-import {IconMagnifyZoom, IconMenu} from '../../components/icon/icon';
+import {IconMagnifyZoom} from '../../components/icon/icon';
 import {renderNavigationItem} from './agile-board__renderer';
 import animation from '../../components/animation/animation';
 
@@ -57,7 +55,6 @@ type Props = AgilePageState & {
   onOpenBoardSelect: (any) => any,
   onCloseSelect: (any) => any,
   createCardForCell: (columnId: string, cellId: string) => any,
-  onOpenMenu: (any) => any,
   onCardDrop: (any) => any,
   refreshAgile: (agileId: string, sprintId: string) => any,
   toggleRefreshPopup: (isOutOfDate: boolean) => any
@@ -195,14 +192,12 @@ class AgileBoard extends Component<Props, State> {
 
     return (
       <Header
-        leftButton={<IconMenu/>}
         rightButton={
           <Text
             onPress={this.toggleZoom}>
             {Boolean(!isLoading && !isLoadingAgile && sprint) && <IconMagnifyZoom zoomedIn={zoomedIn} size={24}/>}
           </Text>
         }
-        onBack={this.props.onOpenMenu}
       />
     );
   }
@@ -417,29 +412,29 @@ class AgileBoard extends Component<Props, State> {
     const {sprint, isSprintSelectOpen, isOutOfDate, isLoading, isLoadingAgile} = this.props;
 
     return (
-      <Menu>
+      <View
+        testID="pageAgile"
+        style={styles.agile}
+      >
+
         {this.state.isHeaderVisible && this.renderHeader()}
-        <View
-          testID='pageAgile'
-          style={styles.container}
-        >
-          {this.renderAgileSelector()}
 
-          {this.renderErrors()}
+        {this.renderAgileSelector()}
 
-          {this.renderBoard()}
+        {this.renderErrors()}
 
-          {isSprintSelectOpen && this._renderSelect()}
+        {this.renderBoard()}
 
-          {isOutOfDate && this.renderRefreshPopup()}
+        {isSprintSelectOpen && this._renderSelect()}
 
-          {Boolean(isLoadingAgile || (!sprint && isLoading)) && (
-            <View style={styles.loadingIndicator}>
-              <ActivityIndicator size="large" color={COLOR_PINK}/>
-            </View>
-          )}
-        </View>
-      </Menu>
+        {isOutOfDate && this.renderRefreshPopup()}
+
+        {Boolean(isLoadingAgile || (!sprint && isLoading)) && (
+          <View style={styles.loadingIndicator}>
+            <ActivityIndicator size="large" color={COLOR_PINK}/>
+          </View>
+        )}
+      </View>
     );
   }
 }
@@ -461,7 +456,6 @@ const mapDispatchToProps = (dispatch) => {
     onOpenSprintSelect: () => dispatch(boardActions.openSprintSelect()),
     onOpenBoardSelect: () => dispatch(boardActions.openBoardSelect()),
     onCloseSelect: () => dispatch(boardActions.closeSelect()),
-    onOpenMenu: () => dispatch(openMenu()),
     createCardForCell: (...args) => dispatch(boardActions.createCardForCell(...args)),
     onCardDrop: (...args) => dispatch(boardActions.onCardDrop(...args)),
     refreshAgile: (agileId: string, sprintId: string) => dispatch(boardActions.refreshAgile(agileId, sprintId)),

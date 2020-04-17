@@ -1,177 +1,92 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Menu/> Render should match a snapshot 1`] = `
-<Drawer
-  acceptDoubleTap={false}
-  acceptPan={true}
-  acceptPanOnDrawer={true}
-  acceptTap={false}
-  captureGestures={true}
-  closedDrawerOffset={0}
-  content={
-    <ScrollViewMock
-      style={
-        Object {
-          "backgroundColor": "black",
-        }
-      }
-      testID="menuContainer"
-    >
-      <View
+<withAnimatable(View)
+  animation="fadeIn"
+  delay={0}
+  direction="normal"
+  duration={500}
+  iterationCount={1}
+  onAnimationBegin={[Function]}
+  onAnimationEnd={[Function]}
+  style={
+    Array [
+      Object {
+        "backgroundColor": "#FFF",
+        "flexDirection": "row",
+        "flexGrow": 1,
+        "height": 64,
+        "justifyContent": "space-between",
+        "shadowColor": "#717171",
+        "shadowOffset": Object {
+          "height": -1,
+          "width": 0,
+        },
+        "shadowOpacity": 0.25,
+        "shadowRadius": 0.75,
+      },
+      Object {
+        "width": 750,
+      },
+      undefined,
+    ]
+  }
+  testID="menu"
+  useNativeDriver={true}
+>
+  <MenuItem
+    icon={
+      <IconCheckMarked
+        color="#737577"
+        size={24}
         style={
           Object {
-            "flex": 1,
-            "flexDirection": "column",
-            "paddingTop": 12,
+            "maxHeight": 22,
           }
         }
-      >
-        <View
-          style={
-            Object {
-              "borderBottomWidth": 0.5,
-              "borderColor": "#444444",
-            }
-          }
-        >
-          <Connect(Accounts) />
-        </View>
-        <View
-          style={
-            Object {
-              "flexGrow": 2,
-              "padding": 16,
-              "paddingTop": 8,
-            }
-          }
-        >
-          <MenuItem
-            description="Everything"
-            label="Issues"
-            onPress={[Function]}
-          />
-          <MenuItem
-            description=""
-            label="Agile Boards"
-            onPress={[Function]}
-            testId="pageAgileBoards"
-          />
-          <Connect(Feature)
-            version="2018.3"
-          >
-            <MenuItem
-              description=""
-              label="Notifications"
-              onPress={[Function]}
-            />
-          </Connect(Feature)>
-        </View>
-        <View
-          style={
-            Object {
-              "padding": 16,
-              "paddingTop": 32,
-            }
-          }
-        >
-          <TouchableWithoutFeedback
-            onPress={[Function]}
-          >
-            <Text
-              style={
-                Object {
-                  "color": "#CCC",
-                  "fontSize": 12,
-                  "lineHeight": 16,
-                }
-              }
-            >
-              YouTrack Mobile 
-              0.1 (build 0)
-            </Text>
-          </TouchableWithoutFeedback>
-          <View
-            style={
-              Object {
-                "marginTop": 8,
-              }
-            }
-          />
-          <Text
-            style={
-              Object {
-                "color": "#CCC",
-                "fontSize": 12,
-                "lineHeight": 16,
-              }
-            }
-          >
-            © 2000—
-            2020
-             JetBrains
-          </Text>
-          <Text
-            style={
-              Object {
-                "color": "#CCC",
-                "fontSize": 12,
-                "lineHeight": 16,
-              }
-            }
-          >
-            All rights reserved
-          </Text>
-          <View
-            style={
-              Object {
-                "marginTop": 8,
-              }
-            }
-          />
-          <TouchableOpacity
-            activeOpacity={0.2}
-            onPress={[Function]}
-            style={
-              Object {
-                "padding": 8,
-                "paddingLeft": 0,
-              }
-            }
-          >
-            <Text
-              style={
-                Object {
-                  "color": "#FE0082",
-                  "fontSize": 12,
-                }
-              }
-            >
-              Privacy Policy
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </ScrollViewMock>
-  }
-  disabled={false}
-  elevation={0}
-  initializeOpen={false}
-  negotiatePan={false}
-  onClose={[Function]}
-  onOpen={[Function]}
-  open={true}
-  openDrawerOffset={[Function]}
-  panCloseMask={null}
-  panOpenMask={12}
-  panThreshold={0.25}
-  side="left"
-  styles={Object {}}
-  tapToClose={true}
-  testID="menuDrawer"
-  tweenDuration={250}
-  tweenEasing="linear"
-  tweenHandler={null}
-  type="static"
-  useInteractionManager={false}
-/>
+      />
+    }
+    isActive={false}
+    label="Issues"
+    onPress={[Function]}
+  />
+  <MenuItem
+    icon={
+      <IconPause
+        color="#737577"
+        size={20}
+      />
+    }
+    isActive={false}
+    label="Agile Boards"
+    onPress={[Function]}
+    testId="pageAgileBoards"
+  />
+  <Connect(Feature)
+    version="2018.3"
+  >
+    <MenuItem
+      icon={
+        <IconBell
+          color="#737577"
+          size={22}
+        />
+      }
+      isActive={false}
+      label="Notifications"
+      onPress={[Function]}
+    />
+  </Connect(Feature)>
+  <MenuItem
+    icon={
+      <IconCog
+        color="#737577"
+        size={22}
+      />
+    }
+    isActive={false}
+    label="Settings"
+    onPress={[Function]}
+  />
+</withAnimatable(View)>
 `;

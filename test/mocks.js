@@ -62,6 +62,17 @@ function createMockStore(middlewareArgument) {
   return configureMockStore(middleware);
 }
 
+const navigatorMock = {
+  context: {},
+  dispatch: jest.fn(),
+  props: {onNavigationStateChange: jest.fn()},
+  refs: {},
+  state: {nav: {}},
+  subs: {remove: jest.fn()},
+  updater: jest.fn()
+};
+
+
 export default {
   sandbox,
   mockStorage,
@@ -69,5 +80,7 @@ export default {
 
   createIssueMock,
   createIssueFieldMock: createIssuePriorityFieldMock,
-  createMockStore
+  createMockStore,
+
+  navigatorMock
 };

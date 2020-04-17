@@ -3,7 +3,6 @@ import {
   COLOR_FONT_GRAY,
   COLOR_FONT,
   UNIT,
-  COLOR_EXTRA_LIGHT_GRAY,
   COLOR_ICON_MEDIUM_GREY,
   COLOR_MEDIUM_GRAY,
   COLOR_FONT_ON_BLACK
@@ -27,7 +26,7 @@ const textSecondary = {
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLOR_EXTRA_LIGHT_GRAY
+    backgroundColor: COLOR_FONT_ON_BLACK
   },
   arrowImage: {
     lineHeight: 22

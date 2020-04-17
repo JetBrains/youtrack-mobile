@@ -19,7 +19,6 @@ import usage from '../../components/usage/usage';
 import log from '../../components/log/log';
 
 import IssueRow from './issue-list__row';
-import Menu from '../../components/menu/menu';
 import ErrorMessage from '../../components/error-message/error-message';
 import Router from '../../components/router/router';
 import * as issueActions from './issue-list-actions';
@@ -33,7 +32,7 @@ import Select from '../../components/select/select';
 import SearchPanel from './issue-list__search-panel';
 import ModalView from '../../components/modal-view/modal-view';
 
-import {IconAngleDown, IconMenu, IconPlus} from '../../components/icon/icon';
+import {IconAngleDown, IconPlus} from '../../components/icon/icon';
 
 import styles from './issue-list.styles';
 
@@ -85,7 +84,6 @@ export class IssueList extends Component<Props, void> {
   _renderHeader() {
     return (
       <Header
-        leftButton={<Text>{' '}<IconMenu/></Text>}
         rightButton={<IconPlus size={28}/>}
         extraButton={<OpenScanButton/>}
         onBack={this.props.openMenu}
@@ -206,41 +204,43 @@ export class IssueList extends Component<Props, void> {
     } = this.props;
 
     return (
-      <Menu>
-        <View style={styles.listContainer} testID="issue-list-page">
-          {this._renderHeader()}
+      <View
+        style={styles.listContainer}
+        testID="issue-list-page"
+      >
 
-          {this.renderContextButton()}
-          {isIssuesContextOpen && this.renderContextSelect()}
+        {this._renderHeader()}
 
-          <FlatList
-            ListHeaderComponent={
-              <SearchPanel
-                ref={this.searchPanelRef}
-                queryAssistSuggestions={queryAssistSuggestions}
-                query={query}
-                suggestIssuesQuery={suggestIssuesQuery}
-                onQueryUpdate={onQueryUpdate}
-                issuesCount={issuesCount}
-                clearButtonMode="always"
-              />
-            }
-            removeClippedSubviews={false}
-            data={issues}
-            keyExtractor={this._getIssueId}
-            renderItem={this._renderRow}
-            refreshControl={this._renderRefreshControl()}
-            tintColor={COLOR_PINK}
-            ItemSeparatorComponent={this._renderSeparator}
-            ListFooterComponent={this._renderListMessage}
-            onEndReached={this.onEndReached}
-            onEndReachedThreshold={0.1}
-            testID="issue-list"
-            onScroll={(params) => this.onScroll(params.nativeEvent)}
-          />
+        {this.renderContextButton()}
+        {isIssuesContextOpen && this.renderContextSelect()}
 
-        </View>
-      </Menu>
+        <FlatList
+          ListHeaderComponent={
+            <SearchPanel
+              ref={this.searchPanelRef}
+              queryAssistSuggestions={queryAssistSuggestions}
+              query={query}
+              suggestIssuesQuery={suggestIssuesQuery}
+              onQueryUpdate={onQueryUpdate}
+              issuesCount={issuesCount}
+              clearButtonMode="always"
+            />
+          }
+          removeClippedSubviews={false}
+          data={issues}
+          keyExtractor={this._getIssueId}
+          renderItem={this._renderRow}
+          refreshControl={this._renderRefreshControl()}
+          tintColor={COLOR_PINK}
+          ItemSeparatorComponent={this._renderSeparator}
+          ListFooterComponent={this._renderListMessage}
+          onEndReached={this.onEndReached}
+          onEndReachedThreshold={0.1}
+          testID="issue-list"
+          onScroll={(params) => this.onScroll(params.nativeEvent)}
+        />
+
+      </View>
     );
   }
 }

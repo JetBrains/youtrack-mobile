@@ -1,19 +1,41 @@
 import React from 'react';
-import {Text} from 'react-native';
 
 import {shallow} from 'enzyme';
 import toJson from 'enzyme-to-json';
 
-import {Menu} from './menu';
+import Menu from './menu';
 import Router from '../router/router';
+import {rootRoutesList} from '../../app-routes';
 
+import Mocks from '../../../test/mocks';
+
+
+let apiMock;
+const getApi = () => apiMock;
+const createStoreMock = Mocks.createMockStore(getApi);
+const rootTestID = 'menu';
 
 describe('<Menu/>', () => {
 
-  const rootTestID = 'menuDrawer';
-  const containerTestID = 'menuContainer';
   let wrapper;
   let instance;
+  let storeMock;
+  let stateMock;
+  let ownPropsMock;
+
+  beforeEach(() => {
+    stateMock = {
+      app: {
+        otherAccounts: [],
+        isChangingAccount: false,
+        auth: {},
+        user: {},
+      }
+    };
+    ownPropsMock = {};
+    storeMock = createStoreMock(stateMock, ownPropsMock);
+  });
+
 
   describe('Render', () => {
 
@@ -27,131 +49,55 @@ describe('<Menu/>', () => {
       render({auth: {}, agileUserProfile: {}});
 
       expect(findByTestId(rootTestID)).toHaveLength(1);
-      expect(findChildByTestId(rootTestID, containerTestID)).toHaveLength(1);
     });
 
     it('should not render menu container if `auth` is not provided', () => {
       render({});
 
       expect(findByTestId(rootTestID)).toHaveLength(1);
-      expect(findChildByTestId(rootTestID, containerTestID)).toHaveLength(0);
-    });
-
-    it('should render menu children', () => {
-      const menuChildrenTestId = 'menuChildren';
-      render({auth: {}, children: <Text testID={menuChildrenTestId}>node</Text>});
-
-      expect(findByTestId(rootTestID)).toHaveLength(1);
-      expect(findChildByTestId(rootTestID, menuChildrenTestId)).toHaveLength(1);
     });
   });
 
 
-  describe('_getSelectedAgileBoard', () => {
-    const idMock = 'id';
-    const agileNameMock = 'agileName';
-    const lastVisitedSprintNameMock = 'sprintName';
-
-    it('should return empty string if an `agileProfile` is not provided', () => {
-      render({auth: {}});
-
-      expect(instance._getSelectedAgileBoard()).toEqual('');
-    });
-
-    it('should return empty string if there is no `defaultAgile` filed in an `agileProfile`', () => {
-      renderWithAuth({});
-
-      expect(instance._getSelectedAgileBoard()).toEqual('');
-    });
-
-    it('should return empty string if a `defaultAgile` filed has no name', () => {
-      renderWithAuth({
-        defaultAgile: {}
-      });
-
-      expect(instance._getSelectedAgileBoard()).toEqual('');
-    });
-
-    it('should return empty string if a `defaultAgile` is empty but `visitedSprints` is not empty', () => {
-      renderWithAuth({
-        defaultAgile: {},
-        visitedSprints: [
-          {agile: {id: 'id'}}
-        ]
-      });
-
-      expect(instance._getSelectedAgileBoard()).toEqual('');
-    });
-
-    it('should return agile name', () => {
-      renderWithAuth({
-        defaultAgile: {name: agileNameMock},
-        visitedSprints: []
-      });
-
-      expect(instance._getSelectedAgileBoard()).toEqual(agileNameMock);
-    });
-
-    it('should return agile and last visited sprint', () => {
-
-      renderWithAuth({
-        defaultAgile: {name: agileNameMock, id: idMock},
-        visitedSprints: [{
-          name: lastVisitedSprintNameMock,
-          agile: {id: idMock}
-        }]
-      });
-
-      expect(instance._getSelectedAgileBoard()).toEqual(`${agileNameMock}, ${lastVisitedSprintNameMock}`);
-    });
-
-  });
-
-
-  describe('', () => {
-    let _methods;
-
+  describe('Navigate to views', () => {
     beforeEach(() => {
       renderWithAuth();
-      _methods = [Router.IssueList, Router.AgileBoard];
-      Router.IssueList = jest.fn();
-      Router.AgileBoard = jest.fn();
+      Router.setNavigator(Mocks.navigatorMock);
 
-      wrapper.setProps({
-        onClose: jest.fn()
-      });
+      rootRoutesList
+        .map(routeName => {
+          Router.registerRoute({name: routeName, component: null});
+          return routeName;
+        })
+        .map(routeName => jest.spyOn(Router, routeName));
+
     });
 
     afterEach(() => {
-      Router.IssueList = _methods[0];
-      Router.AgileBoard = _methods[1];
+      jest.restoreAllMocks();
     });
 
-    describe('_openIssueList', () => {
-      it('should close menu', () => {
-        instance._openIssueList();
-
-        expect(wrapper.props().onClose).toHaveBeenCalled();
-      });
-
+    describe('openIssueList', () => {
       it('should redirect to Issue list', () => {
-        instance._openIssueList();
+        instance.openIssueList();
 
         expect(Router.IssueList).toHaveBeenCalled();
       });
     });
 
-    describe('_openAgileBoard', () => {
-      it('should close menu', () => {
-        instance._openAgileBoard();
-
-        expect(wrapper.props().onClose).toHaveBeenCalled();
-      });
-
+    describe('openAgileBoard', () => {
       it('should redirect to Agile board', () => {
-        instance._openIssueList();
+        instance.openIssueList();
 
         expect(Router.IssueList).toHaveBeenCalled();
+      });
+    });
+
+    describe('openInbox', () => {
+      it('should redirect to Inbox', () => {
+        instance.openInbox();
+
+        expect(Router.Inbox).toHaveBeenCalled();
       });
     });
   });
@@ -170,16 +116,10 @@ describe('<Menu/>', () => {
     return wrapper && wrapper.find({testID: testId});
   }
 
-  function findChildByTestId(parentTestId, targetTestId) {
-    const parentShallowWrapper = findByTestId(parentTestId);
-    if (parentShallowWrapper) {
-      return parentShallowWrapper.dive().find({testID: targetTestId});
-    }
-  }
-
   function doShallow(auth, agileUserProfile, children) {
     return shallow(
       <Menu
+        store={storeMock}
         auth={auth}
         show={true}
         onOpen={() => {}}
@@ -188,6 +128,6 @@ describe('<Menu/>', () => {
         agileProfile={agileUserProfile}
         issueQuery={''}
       >{children}</Menu>
-    );
+    ).shallow();
   }
 });

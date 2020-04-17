@@ -27,6 +27,7 @@ import AttachmentPreview from './views/attachment-preview/attachment-preview';
 import AgileBoard from './views/agile-board/agile-board';
 import Inbox from './views/inbox/inbox';
 import WikiPage from './views/wiki-page/wiki-page';
+import Settings from './views/settings/settings';
 
 import {APP_BACKGROUND} from './components/common-styles/app';
 import ErrorBoundary from './components/error-boundary/error-boundary';
@@ -35,6 +36,9 @@ import {setAccount, onNavigateBack} from './actions/app-actions';
 import Toast from 'react-native-easy-toast';
 
 import ActionSheet from '@expo/react-native-action-sheet';
+import Menu from './components/menu/menu';
+import {routeMap, rootRoutesList} from './app-routes';
+import {menuHeight} from './components/common-styles/navigation';
 
 if (UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -70,7 +74,7 @@ class YouTrackMobile extends Component<void, State> {
       store.dispatch(onNavigateBack(closingView));
     };
 
-    Router.rootRoutes = ['IssueList', 'Inbox', 'AgileBoard'];
+    Router.rootRoutes = rootRoutesList;
   }
 
 
@@ -97,36 +101,38 @@ class YouTrackMobile extends Component<void, State> {
     });
 
     Router.registerRoute({
-      name: 'EnterServer',
+      name: routeMap.EnterServer,
       component: EnterServer,
       type: 'reset'
     });
 
     Router.registerRoute({
-      name: 'LogIn',
+      name: routeMap.LogIn,
       component: LoginForm,
       type: 'reset'
     });
 
     Router.registerRoute({
-      name: 'IssueList',
+      name: routeMap.IssueList,
       component: IssueList,
       type: 'reset'
     });
 
-    Router.registerRoute({name: 'SingleIssue', component: SingleIssue});
+    Router.registerRoute({name: routeMap.Settings, component: Settings});
 
-    Router.registerRoute({name: 'ShowImage', component: ShowImage, modal: true});
+    Router.registerRoute({name: routeMap.SingleIssue, component: SingleIssue});
 
-    Router.registerRoute({name: 'AttachmentPreview', component: AttachmentPreview, modal: true});
+    Router.registerRoute({name: routeMap.ShowImage, component: ShowImage, modal: true});
 
-    Router.registerRoute({name: 'CreateIssue', component: CreateIssue});
+    Router.registerRoute({name: routeMap.AttachmentPreview, component: AttachmentPreview, modal: true});
 
-    Router.registerRoute({name: 'AgileBoard', component: AgileBoard, type: 'reset'});
+    Router.registerRoute({name: routeMap.CreateIssue, component: CreateIssue});
 
-    Router.registerRoute({name: 'Inbox', component: Inbox, type: 'reset'});
+    Router.registerRoute({name: routeMap.AgileBoard, component: AgileBoard, type: 'reset'});
 
-    Router.registerRoute({name: 'WikiPage', component: WikiPage, modal: true});
+    Router.registerRoute({name: routeMap.Inbox, component: Inbox, type: 'reset'});
+
+    Router.registerRoute({name: routeMap.WikiPage, component: WikiPage, modal: true});
 
     Router.finalizeRoutes(this.routeHomeName);
   }
@@ -141,19 +147,28 @@ class YouTrackMobile extends Component<void, State> {
     return (
       <Provider store={store}>
         <ActionSheet ref={this.actionSheetRef}>
-          <SafeAreaView style={[Styles.box, {backgroundColor: this.state.backgroundColor}]}>
-            <View style={Styles.box}>
-              <ErrorBoundary>
-                {Router.renderNavigatorView()}
-              </ErrorBoundary>
+          <SafeAreaView style={[Styles.flexBox, {backgroundColor: this.state.backgroundColor}]}>
+            <ErrorBoundary>
+              <View style={Styles.flexBox}>
 
-              <Toast ref={toast => toast ? setNotificationComponent(toast) : null}/>
+                <View style={Styles.view}>
+                  {Router.renderNavigatorView()}
+                </View>
+
+                <View style={Styles.navigation}>
+                  <Menu/>
+                </View>
+
+              </View>
 
               <UserAgreement/>
               <DebugView/>
               <FeaturesView/>
               <ScanView/>
-            </View>
+            </ErrorBoundary>
+
+            <Toast ref={toast => toast ? setNotificationComponent(toast) : null}/>
+
           </SafeAreaView>
         </ActionSheet>
       </Provider>
@@ -164,7 +179,13 @@ class YouTrackMobile extends Component<void, State> {
 module.exports = YouTrackMobile; //eslint-disable-line import/no-commonjs
 
 const Styles = StyleSheet.create({
-  box: {
+  flexBox: {
     flex: 1
+  },
+  view: {
+    flexGrow: 1
+  },
+  navigation: {
+    height: menuHeight
   }
 });

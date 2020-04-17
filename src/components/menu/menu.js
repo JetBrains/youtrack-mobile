@@ -1,184 +1,174 @@
 /* @flow */
-import {View, ScrollView, Text, TouchableWithoutFeedback, TouchableOpacity, Linking} from 'react-native';
+
+import {Dimensions, StyleSheet} from 'react-native';
 import React, {Component} from 'react';
-import styles from './menu.styles';
-import {VERSION_STRING} from '../usage/usage';
-import Drawer from 'react-native-drawer';
+import {View as AnimatedView} from 'react-native-animatable';
 import Router from '../router/router';
-import Auth from '../auth/auth';
-import MenuItem from './menu__item';
-import clicksToShowCounter from '../debug-view/clicks-to-show-counter';
 import {connect} from 'react-redux';
-import {
-  openMenu,
-  closeMenu,
-  openFeaturesView,
-} from '../../actions/app-actions';
+import {MenuItem} from './menu__item';
 
-import type {AgileUserProfile} from '../../flow/Agile';
 import Feature from '../feature/feature';
-import ConnectedAccounts from './menu__connected-accounts';
-import {EVERYTHING_CONTEXT} from '../../components/search/search-context';
-import type {Folder} from '../../flow/User';
+import {menuHeight} from '../common-styles/navigation';
 
-const CURRENT_YEAR = (new Date()).getFullYear();
-const MENU_WIDTH = 280;
+import {IconBell, IconCheckMarked, IconCog, IconPause} from '../icon/icon';
+import {COLOR_FONT_ON_BLACK, COLOR_GRAY, COLOR_ICON_MEDIUM_GREY, COLOR_PINK} from '../variables/variables';
 
-function openPrivacyPolicy() {
-  Linking.openURL('https://www.jetbrains.com/company/privacy.html');
-}
+import {elevationTop} from '../common-styles/form';
+import {routeMap} from '../../app-routes';
 
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
-  children?: React$Element<any>,
-  show: boolean,
-  auth: Auth,
-  searchContext: ?Folder,
-  agileProfile: AgileUserProfile,
-  onOpen: () => any,
-  onClose: () => any,
-  openFeaturesView: () => any
-};
+  isVisible: boolean,
+  isDisabled: boolean,
+  style?: ViewStyleProp
+}
 
-type DefaultProps = {
-  onOpen: () => any,
-  onClose: () => any
-};
+type State = {
+  currentRouteName?: string | null
+}
 
-export class Menu extends Component<Props, void> {
-  static defaultProps: DefaultProps = {
-    onOpen: () => {},
-    onClose: () => {}
+const styles = StyleSheet.create({
+  menu: {
+    height: menuHeight,
+    flexGrow: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: COLOR_FONT_ON_BLACK,
+    ...elevationTop
+  }
+});
+
+
+class Menu extends Component<Props, State> {
+  static defaultProps: Props = {
+    isVisible: false,
+    isDisabled: false,
   };
 
-  _openIssueList = () => {
-    this.props.onClose();
-    Router.IssueList();
+  constructor() {
+    super();
+
+    this.state = {
+      currentRouteName: null
+    };
+
+    Router.setOnDispatchCallback((routeName) => {
+      this.setState({currentRouteName: routeName});
+    });
+  }
+
+
+  setCurrentRouteName = (routeName) => this.setState({
+    currentRouteName: routeName
+  });
+
+  isCurrentRoute = (routeName: string) => {
+    return this.state.currentRouteName === routeName;
   };
 
-  _openAgileBoard = () => {
-    this.props.onClose();
-    Router.AgileBoard();
+  canNavigateTo = (routeName: string) => {
+    return !this.props.isDisabled && !this.isCurrentRoute(routeName);
   };
 
-  _openInbox = () => {
-    this.props.onClose();
-    Router.Inbox();
-  };
-
-  _getSelectedAgileBoard = () => {
-    const {agileProfile} = this.props;
-
-    if (!agileProfile || !agileProfile.defaultAgile) {
-      return '';
+  openIssueList = () => {
+    if (this.canNavigateTo(routeMap.IssueList)) {
+      Router.IssueList();
+      this.setCurrentRouteName(routeMap.IssueList);
     }
-
-    const lastAgileName = agileProfile.defaultAgile?.name || '';
-    let lastSprintName;
-
-    if (agileProfile.visitedSprints) {
-      lastSprintName = agileProfile.visitedSprints.find(
-        sprint => sprint.agile && (sprint.agile.id === agileProfile.defaultAgile?.id)
-      )?.name || '';
-    }
-
-    return [lastAgileName, lastSprintName].filter(Boolean).join(', ');
   };
 
-  _renderMenu() {
-    const {auth, openFeaturesView, searchContext} = this.props;
-    if (!auth) { //TODO: menu renders right after logOut by some reason.
+  openAgileBoard = () => {
+    if (this.canNavigateTo(routeMap.AgileBoard)) {
+      this.setCurrentRouteName(routeMap.AgileBoard);
+      Router.AgileBoard();
+    }
+  };
+
+  openInbox = () => {
+    if (this.canNavigateTo(routeMap.Inbox)) {
+      this.setCurrentRouteName(routeMap.Inbox);
+      Router.Inbox();
+    }
+  };
+
+  openSettings = () => {
+    if (this.canNavigateTo(routeMap.Settings)) {
+      this.setCurrentRouteName(routeMap.Settings);
+      Router.Settings();
+    }
+  };
+
+  render() {
+    const {style, isVisible, isDisabled} = this.props;
+
+    if (!isVisible) {
       return null;
     }
 
-    return (
-      <ScrollView
-        testID="menuContainer"
-        style={styles.scrollContainer}>
-        <View style={styles.menuContainer}>
-          <View style={styles.accounts}><ConnectedAccounts/></View>
-
-          <View style={styles.menuItems}>
-            <MenuItem
-              label={'Issues'}
-              description={searchContext?.name || EVERYTHING_CONTEXT.name}
-              onPress={this._openIssueList}
-            />
-
-            <MenuItem
-              label={'Agile Boards'}
-              testId="pageAgileBoards"
-              description={this._getSelectedAgileBoard()}
-              onPress={this._openAgileBoard}
-            />
-
-            <Feature version={'2018.3'}>
-              <MenuItem
-                label={'Notifications'}
-                description={''}
-                onPress={this._openInbox}
-              />
-            </Feature>
-          </View>
-
-          <View style={styles.menuFooter}>
-            <TouchableWithoutFeedback onPress={() => clicksToShowCounter(openFeaturesView, 'open features list')}>
-              <Text style={styles.footerText}>YouTrack Mobile {VERSION_STRING}</Text>
-            </TouchableWithoutFeedback>
-
-            <View style={styles.spacer}/>
-            <Text style={styles.footerText}>© 2000—{CURRENT_YEAR} JetBrains</Text>
-            <Text style={styles.footerText}>All rights reserved</Text>
-
-            <View style={styles.spacer}/>
-            <TouchableOpacity style={styles.buttonLink} onPress={openPrivacyPolicy}>
-              <Text style={styles.linkText}>Privacy Policy</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ScrollView>
-    );
-  }
-
-  render() {
-    const {children, show, onOpen, onClose} = this.props;
+    const color = (routeName: string) => {
+      return (
+        isDisabled
+          ? COLOR_GRAY
+          : this.isCurrentRoute(routeName) ? COLOR_PINK : COLOR_ICON_MEDIUM_GREY
+      );
+    };
 
     return (
-      <Drawer
-        testID="menuDrawer"
-        type="static"
-        open={show}
-        content={show && this._renderMenu()}
-        tapToClose={true}
-        onOpen={onOpen}
-        onClose={onClose}
-        openDrawerOffset={viewport => viewport.width - MENU_WIDTH}
-        captureGestures={true}
-        panOpenMask={12}
+      <AnimatedView
+        useNativeDriver
+        duration={500}
+        animation="fadeIn"
+
+        testID="menu"
+        style={[
+          styles.menu,
+          {width: Dimensions.get('window').width},
+          style
+        ]}
       >
-        {children}
-      </Drawer>
+        <MenuItem
+          isActive={this.isCurrentRoute(routeMap.IssueList)}
+          icon={<IconCheckMarked style={{maxHeight: 22}} size={24} color={color(routeMap.IssueList)}/>}
+          label={'Issues'}
+          onPress={this.openIssueList}
+        />
+
+        <MenuItem
+          isActive={this.isCurrentRoute(routeMap.AgileBoard)}
+          icon={<IconPause size={20} color={color(routeMap.AgileBoard)}/>}
+          label={'Agile Boards'}
+          testId="pageAgileBoards"
+          onPress={this.openAgileBoard}
+        />
+
+        <Feature version={'2018.3'}>
+          <MenuItem
+            isActive={this.isCurrentRoute(routeMap.Inbox)}
+            icon={<IconBell size={22} color={color(routeMap.Inbox)}/>}
+            label={'Notifications'}
+            onPress={this.openInbox}
+          />
+        </Feature>
+
+        <MenuItem
+          isActive={this.isCurrentRoute(routeMap.Settings)}
+          icon={<IconCog size={22} color={color(routeMap.Settings)}/>}
+          label={'Settings'}
+          onPress={this.openSettings}
+        />
+
+      </AnimatedView>
     );
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   return {
-    show: state.app.showMenu,
-    auth: state.app.auth,
-    searchContext: state.app?.user?.profiles?.general?.searchContext,
-    agileProfile: state.agile.profile,
-    ...ownProps
+    isVisible: state.app.auth && state.app.user,
+    isDisabled: state.app.isChangingAccount
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onOpen: () => dispatch(openMenu()),
-    onClose: () => dispatch(closeMenu()),
-    openFeaturesView: () => dispatch(openFeaturesView()),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Menu);
+export default connect(mapStateToProps, null)(Menu);
 

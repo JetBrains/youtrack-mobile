@@ -11,7 +11,7 @@ import {mainText} from '../../components/common-styles/issue';
 import {link} from '../../components/common-styles/button';
 
 export default StyleSheet.create({
-  container: {
+  agile: {
     flex: 1,
     padding: UNIT * 2,
     paddingRight: 0,

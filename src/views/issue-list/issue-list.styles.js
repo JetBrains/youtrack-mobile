@@ -11,6 +11,7 @@ import {
 } from '../../components/variables/variables';
 import {SIZE as COLOR_FIELD_SIZE} from '../../components/color-field/color-field';
 import {secondaryText, issueCard} from '../../components/common-styles/issue';
+import {elevation1} from '../../components/common-styles/form';
 
 const rowLine = {
   flexDirection: 'row',
@@ -102,10 +103,7 @@ export default StyleSheet.create({
     borderColor: 'transparent'
   },
   searchContextPinned: {
-    shadowColor: COLOR_BLACK,
-    shadowOpacity: 0.15,
-    shadowRadius: 1,
-    shadowOffset: { width: 0, height: 1 }
+    ...elevation1
   },
   searchContextButton: {
     marginTop: UNIT,

@@ -1,0 +1,103 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Settings Render should match a snapshot 1`] = `
+<View
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+  testID="settings"
+>
+  <Header
+    onRightButtonClick={[Function]}
+    title="Settings"
+  />
+  <View
+    style={
+      Object {
+        "flex": 1,
+        "paddingBottom": 24,
+        "paddingLeft": 16,
+        "paddingRight": 16,
+      }
+    }
+  >
+    <Accounts
+      isChangingAccount={false}
+      onAddAccount={[Function]}
+      onChangeAccount={[Function]}
+      onClose={[Function]}
+      onLogOut={[Function]}
+      openDebugView={[Function]}
+      otherAccounts={Array []}
+      testID="settingsAccounts"
+    />
+    <View
+      style={
+        Object {
+          "flexGrow": 1,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "flexDirection": "column",
+          "justifyContent": "center",
+        }
+      }
+      testID="settingsFooter"
+    >
+      <Text
+        style={
+          Object {
+            "color": "#000",
+            "fontSize": 18,
+            "fontWeight": "500",
+            "letterSpacing": -0.19,
+            "lineHeight": 20,
+          }
+        }
+      >
+        YouTrack Mobile
+      </Text>
+      <TouchableOpacity
+        activeOpacity={0.2}
+        onPress={[Function]}
+      >
+        <Text
+          style={
+            Object {
+              "color": "#FE0082",
+              "fontSize": 16,
+              "letterSpacing": -0.19,
+              "lineHeight": 20,
+              "marginBottom": 8,
+              "marginTop": 8,
+            }
+          }
+        >
+          jetbrains.com/youtrack
+        </Text>
+      </TouchableOpacity>
+      <TouchableWithoutFeedback
+        onPress={[Function]}
+      >
+        <Text
+          style={
+            Object {
+              "color": "#737577",
+              "fontSize": 14,
+              "letterSpacing": -0.17,
+            }
+          }
+        >
+          0.1 (build 0)
+        </Text>
+      </TouchableWithoutFeedback>
+    </View>
+  </View>
+</View>
+`;

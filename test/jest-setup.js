@@ -8,6 +8,7 @@ import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import chaiEnzyme from 'chai-enzyme';
 import mockAsyncStorage from '@react-native-community/async-storage/jest/async-storage-mock';
+import mockReanimated from 'react-native-reanimated/mock';
 import mockReactNativeNotification from './jest-mock__react-native-notifications';
 
 Enzyme.configure({adapter: new Adapter()});
@@ -35,6 +36,12 @@ ReactNative.NativeModules.RNKeychainManager = {
 };
 
 jest.mock('@react-native-community/async-storage', () => mockAsyncStorage);
+
+jest.mock('react-native-reanimated', () => mockReanimated);
+
+jest.mock('react-native-gesture-handler', () => ({}));
+
+jest.mock('react-native-tab-view', () => ({}));
 
 jest.mock('StatusBarIOS', () => ({
   addListener: jest.fn()
