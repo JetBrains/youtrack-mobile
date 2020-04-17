@@ -87,8 +87,18 @@ export const IconMenu = (props?: Props) => <DefaultIcon {...{
 
 /* Material icons */
 
+export const IconBell = (props?: Props) => <DefaultIcon {...{
+  name: 'bell',
+  ...props
+}} />;
+
 export const IconCheck = (props?: Props) => <DefaultIcon {...{
   name: 'check',
+  ...props
+}} />;
+
+export const IconCheckMarked = (props?: Props) => <DefaultIcon {...{
+  name: 'checkbox-marked-outline',
   ...props
 }} />;
 
@@ -164,8 +174,20 @@ export const IconAngleRight = (props?: Props) => <DefaultIcon {...{
   ...props
 }} />;
 
+export const IconCog = (props?: Props) => <DefaultIcon {...{
+  isFontAwesome: true,
+  name: 'cog',
+  ...props
+}} />;
+
 export const IconPaperClip = (props?: Props) => <DefaultIcon {...{
   isFontAwesome: true,
   name: 'paperclip',
+  ...props
+}} />;
+
+export const IconPause = (props?: Props) => <DefaultIcon {...{
+  isFontAwesome: true,
+  name: 'pause',
   ...props
 }} />;
