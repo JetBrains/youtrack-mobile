@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import {UNIT} from '../variables/variables';
 
 const defaultSize = 40;
 const commonStyle = {
@@ -9,6 +10,11 @@ const commonStyle = {
 export default StyleSheet.create({
   common: {
     ...commonStyle,
+  },
+  size80: {
+    width: defaultSize,
+    height: defaultSize,
+    borderRadius: UNIT
   },
   size40: {
     width: defaultSize,
