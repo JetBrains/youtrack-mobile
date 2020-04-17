@@ -8,6 +8,7 @@ export const COLOR_TRANSPARENT_BLACK = '#000000F0';
 export const COLOR_DARK_BORDER = '#263B4C';
 
 export const COLOR_PINK = '#FE0082';
+export const COLOR_PINK_TRANSPARENT = 'rgba(254, 0, 130, 0.3)';
 
 export const COLOR_PINK_DARK = '#90004A';
 
