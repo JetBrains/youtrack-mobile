@@ -13,7 +13,7 @@
   },
   "bugsnag": {
     "version": "0.1.0",
-    "token": "",
+    "token": " ",
     "uploadurl": "https://upload.bugsnag.com/react-native-source-map"
   },
   "husky": {
