@@ -18,7 +18,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn run lint && yarn run test-app-config && yarn test"
+      "pre-commit": "yarn run lint && yarn run test-dev-data && yarn test"
     }
   },
   "license": "Apache-2.0",
@@ -56,9 +56,9 @@
     "postinstall": "script/postinstall.sh",
     "postios-archive-no-sign": "cp ios/build/YouTrackMobile[Release].xcarchive/Products/Applications/YouTrackMobile.app/YouTrackMobile.entitlements ios/build/YouTrackMobile[Release].xcarchive/Products/Applications/YouTrackMobile.app/archived-expanded-entitlements.xcent",
     "prepare-config": "node script/prepare-config",
-    "test-app-config": "node script/test-app-config.js",
+    "test-dev-data": "node script/test-dev-data.js",
     "start": "./node_modules/react-native-cli/index.js start",
-    "test": "jest",
+    "test": "yarn test-dev-data && jest",
     "test-set-env": "DETOX_DISABLE_POSTINSTALL=true TEAMCITY_VERSION=enablereport",
     "test:watch": "yarn test -- --watchAll",
     "ios-clean": "xcodebuild clean -project ios/YouTrackMobile.xcodeproj -configuration Release -alltargets",
