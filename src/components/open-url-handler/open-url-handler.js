@@ -29,14 +29,17 @@ function extractIssuesQuery(issuesUrl: ?string) {
 
   const queryString: string = match[1];
   const query = qs.parse(queryString).q;
+  log.info(`extractIssuesQuery: ${query} :: from URL: "${issuesUrl}"`);
   return query;
 }
 
 function parseUrl(url, onIssueIdDetected, onQueryDetected) {
   const id = extractId(url);
   if (id) {
-    log.info(`Issue id detected in open URL, id ${id}`);
+    log.info(`Issue ID detected in URL: ${id}`);
     return onIssueIdDetected(url, id);
+  } else {
+    log.info(`(parseUrl): cannot extract issue id from ${url}`);
   }
 
   const query = extractIssuesQuery(url);
