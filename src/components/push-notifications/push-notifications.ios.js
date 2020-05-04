@@ -86,7 +86,7 @@ async function unregister(api: Api): Promise<void> {
   log.info('Successfully unsubscribed from push notifications');
 }
 
-function initialize() {
+function initialize(api: Api) {
   // $FlowFixMe: error in type annotations of library
   NotificationsIOS.requestPermissions();
   NotificationsIOS.consumeBackgroundQueue();

@@ -41,7 +41,7 @@ describe('Storage', () => {
       'YT_LAST_QUERIES_STORAGE_KEY',
       'yt_mobile_issues_cache',
       'YT_IS_REGISTERED_FOR_PUSH',
-      'YT_IS_PUSH_NOTIFICATIONS_REGISTERED',
+      'YT_DEVICE_TOKEN',
       'YT_AGILE_ZOOMED_IN',
       'YT_LAST_ROUTE',
       'YT_CURRENT_APP_VERSION',

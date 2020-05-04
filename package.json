@@ -146,7 +146,7 @@
     "react-native-linear-gradient": "2.4.0",
     "react-native-markdown-view": "1.1.4",
     "react-native-notifications": "1.1.19",
-    "react-native-notifications-latest": "git://github.com/anisimov74/react-native-notifications.git#0009b0d",
+    "react-native-notifications-latest": "npm:react-native-notifications@^3.1.4",
     "react-native-root-modal": "git://github.com/huston007/react-native-root-modal.git#9cbd951",
     "react-native-safe-area-view": "0.14.6",
     "react-native-svg": "^9.13.3",

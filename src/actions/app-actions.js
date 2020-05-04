@@ -311,7 +311,7 @@ export function removeAccountOrLogOut() {
   };
 }
 
-function completeInitialization() {
+function completeInitialization(issueId: ?string = null) {
   return async (dispatch: (any) => any, getState: () => Object) => {
     log.debug('Completing initialization: loading permissions cache');
     const auth = getState().app.auth;
@@ -323,7 +323,7 @@ function completeInitialization() {
     dispatch(loadUser());
 
     log.info('Initialization completed');
-    Router.navigateToDefaultRoute();
+    Router.navigateToDefaultRoute(issueId ? {issueId} : null);
   };
 }
 
@@ -442,7 +442,7 @@ function subscribeToURL() {
   };
 }
 
-export function initializeApp(config: AppConfigFilled) {
+export function initializeApp(config: AppConfigFilled, issueId: string | null) {
   return async (dispatch: (any) => any, getState: () => Object) => {
     Router._getNavigator() && Router.Home({
       backendUrl: config.backendUrl,
@@ -478,7 +478,7 @@ export function initializeApp(config: AppConfigFilled) {
     await dispatch(checkUserAgreement());
 
     if (!getState().app.showUserAgreement) {
-      await dispatch(completeInitialization());
+      await dispatch(completeInitialization(issueId));
     }
 
     dispatch(subscribeToURL());
@@ -494,13 +494,13 @@ export function connectToNewYoutrack(newURL: string) {
   };
 }
 
-export function getStoredConfigAndProceed() {
+export function getStoredConfigAndProceed(issueId: string | null) {
   return async (dispatch: (any) => any, getState: () => Object) => {
     const state: StorageState = await populateStorage();
     dispatch(populateAccounts());
 
     if (state.config) {
-      return dispatch(initializeApp(state.config));
+      return dispatch(initializeApp(state.config, issueId));
     }
 
     log.info('App is not configured, entering server URL');
@@ -525,14 +525,14 @@ export function subscribeToPushNotifications() {
     }
 
     if (isRegisteredForPush()) {
-      log.info('Device was already registered for push notifications. Initializing...');
-      return PushNotifications.initialize();
+      log.info('Device was already registered for push notifications. Initializing.');
+      return PushNotifications.initialize(getApi());
     }
 
     try {
       await PushNotifications.register(getApi());
-      PushNotifications.initialize();
-      await setRegisteredForPush(true);
+      PushNotifications.initialize(getApi());
+      setRegisteredForPush(true);
       log.info('Successfully registered for push notifications');
     } catch (err) {
       const message = err?.message || err?.localizedDescription;
@@ -554,13 +554,13 @@ function isIOSSimulator(): boolean {
   return isIOS() && DeviceInfo.isEmulator();
 }
 
-function isRegisteredForPush(): boolean {
-  const storageState = getStorageState();
-  //TODO:YTM-1267
-  return isIOS() ? storageState.isRegisteredForPush : storageState.isPushNotificationsRegistered;
+function isRegisteredForPush(): boolean { //TODO: YTM-1267
+  const storageState: StorageState = getStorageState();
+  return isIOS() ? storageState.isRegisteredForPush : Boolean(storageState.deviceToken);
 }
 
-async function setRegisteredForPush(isRegistered: boolean): Promise<StorageState> {
-  const data = isIOS() ? {isRegisteredForPush: isRegistered} : {isPushNotificationsRegistered: isRegistered};
-  return await flushStoragePart(data);
+async function setRegisteredForPush(isRegistered: boolean) {
+  if (isIOS()) { //TODO: also use device token
+    flushStoragePart({isRegisteredForPush: isRegistered});
+  }
 }

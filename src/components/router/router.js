@@ -128,9 +128,12 @@ class Router {
     }), routeName);
   }
 
-  navigateToDefaultRoute(props = null) {
+  navigateToDefaultRoute(props: Object & {issueId: string} = null) {
     const defaultRoute = getStorageState().lastRoute || this.rootRoutes[0];
     this.navigate(defaultRoute, props);
+    if (props && props.issueId) {
+      this.navigate('SingleIssue', props);
+    }
   }
 
   pop() {

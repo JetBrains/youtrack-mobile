@@ -5,7 +5,6 @@ import appPackage from '../../../package.json'; // eslint-disable-line import/ex
 import PushNotificationsProcessor from './push-notifications-processor';
 
 import {eventsRegistryMock} from '../../../test/jest-mock__react-native-notifications';
-import {Notifications} from 'react-native-notifications-latest';
 
 import type API from '../api/api';
 
@@ -27,24 +26,22 @@ describe('PushNotificationsProcessor', () => {
     });
 
     it('should subscribe to registration success event', () => {
-      PushNotificationsProcessor.subscribeOnRegistrationEvent(onSuccessMock, onErrorMock);
+      PushNotificationsProcessor.init(onSuccessMock, onErrorMock);
 
       expect(eventsRegistryMock.registerRemoteNotificationsRegistered).toHaveBeenCalled();
       expect(onSuccessMock).toHaveBeenCalled();
     });
 
     it('should subscribe to registration fail event', () => {
-      PushNotificationsProcessor.subscribeOnRegistrationEvent(onSuccessMock, onErrorMock);
+      PushNotificationsProcessor.init(onSuccessMock, onErrorMock);
 
       expect(eventsRegistryMock.registerRemoteNotificationsRegistrationFailed).toHaveBeenCalled();
       expect(onErrorMock).toHaveBeenCalledWith(eventsRegistryMock.errorMock);
     });
 
     it('should register notification events', () => {
-      const onNotificationsOpenMock = jest.fn();
-      PushNotificationsProcessor.registerNotificationEvents(onNotificationsOpenMock);
+      PushNotificationsProcessor.init(onSuccessMock, onErrorMock);
 
-      expect(Notifications.registerRemoteNotifications).toHaveBeenCalled();
       expect(eventsRegistryMock.registerNotificationReceivedForeground).toHaveBeenCalled();
       expect(eventsRegistryMock.registerNotificationReceivedBackground).toHaveBeenCalled();
       expect(eventsRegistryMock.registerNotificationOpened).toHaveBeenCalled();
