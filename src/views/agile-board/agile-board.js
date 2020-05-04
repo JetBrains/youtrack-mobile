@@ -276,6 +276,9 @@ class AgileBoard extends Component<Props, State> {
       <View style={styles.agileBoardMessage}>
         {hasErrors && (
           <View>
+            <View>
+              <Text style={styles.title}>Agile board has configuration errors:</Text>
+            </View>
             {errors.map(
               (error, index) => <ErrorMessageInline key={`agileError-${index}`} error={error}/>)
             }
@@ -396,9 +399,8 @@ class AgileBoard extends Component<Props, State> {
     const {sprint, isSprintSelectOpen, noBoardSelected, isOutOfDate, agile, isLoading} = this.props;
     const {zoomedIn} = this.state;
     const isValidBoard: boolean = agile?.status?.valid === true;
-    const hasSprint = !!sprint;
-    const isValidSprint: boolean = hasSprint && isValidBoard;
-    const isFirstLoading = Boolean(isLoading && !hasSprint);
+    const isInvalidBoard: boolean = agile?.status?.valid === false;
+    const isValidSprint: boolean = isValidBoard && !!sprint;
 
     return (
       <Menu>
@@ -410,14 +412,13 @@ class AgileBoard extends Component<Props, State> {
 
           {isValidSprint && this._renderBoardHeader(sprint)}
 
-          {isFirstLoading && isValidBoard && (
+          {isLoading && (
             <View style={styles.loadingIndicator}>
-              <Text>Loading agile board {agile?.name || ''}...</Text>
-              {this.renderSelectBoardButton()}
+              <Text>Loading agile board{agile && agile.name ? (` ${agile.name}`) : ''}...</Text>
             </View>
           )}
 
-          {noBoardSelected && this.renderManualBoardSelect()}
+          {Boolean(!isLoading && (isInvalidBoard || noBoardSelected)) && this.renderManualBoardSelect()}
 
           {isValidSprint && this.renderBoard()}
 

@@ -29,6 +29,10 @@ export default StyleSheet.create({
   headerBoardNotCollapsibleButton: {
     marginLeft: UNIT * 2.5
   },
+  title: {
+    fontSize: 17,
+    color: COLOR_BLACK
+  },
   headerText: {
     fontSize: 17,
     color: COLOR_FONT_ON_BLACK

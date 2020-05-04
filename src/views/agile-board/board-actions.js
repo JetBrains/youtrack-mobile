@@ -73,6 +73,7 @@ export function loadBoard(board: Board) {
 
     const agileWithStatus = await dispatch(loadAgile(board.id));
     if (!agileWithStatus.status.valid) {
+      dispatch(stopSprintLoad());
       return dispatch(showManualBoardSelect());
     }
 
