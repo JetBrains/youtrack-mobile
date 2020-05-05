@@ -18,6 +18,7 @@ class ReporterBugsnag {
     this.config = new Configuration(token);
     this.config.automaticallyCollectBreadcrumbs = false;
     this.config.appVersion = appPackage.bugsnag.version;
+    this.config.notifyReleaseStages = ['production'];
     this.exceptionReporter = new Client(this.config);
     log.info(`Bugsnag exception reporter instance created`);
   }

@@ -7,6 +7,7 @@ import appPackage from '../../../package.json'; // eslint-disable-line import/ex
 import log from '../log/log';
 
 import type Api from '../api/api';
+import Router from '../router/router';
 
 type NotificationCompletion = { // TS interfaces that are used in `react-native-notifications-latest` module
   badge?: boolean;
@@ -17,54 +18,68 @@ type NotificationCompletion = { // TS interfaces that are used in `react-native-
 
 export default class PushNotificationsProcessor {
   static KONNECTOR_URL = appPackage.config.KONNECTOR_URL;
+  static deviceToken = null;
+  static logPrefix = 'PNProcessor';
 
-  static subscribeOnRegistrationEvent(onSuccess: (deviceToken: string) => void, onError: (error: RegistrationError) => void) {
-    const eventsRegistry = Notifications.events();
-    eventsRegistry.registerRemoteNotificationsRegistered(
+  static setDeviceToken(token: string) {
+    this.deviceToken = token;
+    log.info(`${PushNotificationsProcessor.logPrefix}(setDeviceToken): ${token}`);
+  }
+
+  static getDeviceToken() {
+    return this.deviceToken;
+  }
+
+  static onNotification(issueId?: string) {
+    if (issueId) {
+      Router.SingleIssue({issueId});
+    } else {
+      log.warn('No "issueId" param is found in a notification payload');
+    }
+  }
+
+  static getIssueId(notification: Object) {
+    return notification?.issueId || notification?.payload?.issueId || notification?.data?.issueId;
+  }
+
+  static init(onSuccess: (deviceToken: string) => void, onError: (error: RegistrationError) => void) {
+    const logMsgPrefix: string = `${PushNotificationsProcessor.logPrefix}(init): `;
+    const logData = (message: string, data: Object) => log.debug(`${message} ${data ? JSON.stringify(data) : 'N/A'}`);
+
+    Notifications.events().registerRemoteNotificationsRegistered(
       (event: Registered) => {
         onSuccess(event.deviceToken);
       }
     );
-    eventsRegistry.registerRemoteNotificationsRegistrationFailed((error: RegistrationError) => {
-      onError(error);
-    });
-  }
 
-  static registerNotificationEvents(onNotificationOpen: (issueId: string) => void) {
-    const eventsRegistry = Notifications.events();
-    const logMsgPrefix: string = 'PushNotificationsProcessor(registerNotificationReceivedForeground): ';
+    Notifications.events().registerRemoteNotificationsRegistrationFailed(
+      (error: RegistrationError) => onError(error)
+    );
 
-    Notifications.registerRemoteNotifications();
-
-    eventsRegistry.registerNotificationReceivedForeground(
+    Notifications.events().registerNotificationReceivedForeground(
       (notification: Notification, completion: (response: NotificationCompletion) => void) => {
-        log.debug(`${logMsgPrefix}Notification received in foreground: ${JSON.stringify(notification.payload)}`);
+        logData(`${logMsgPrefix}Foreground notification:`, notification);
         completion({alert: false, sound: false, badge: false});
       }
     );
 
-    eventsRegistry.registerNotificationReceivedBackground(
+    Notifications.events().registerNotificationReceivedBackground(
       (notification: Notification, completion: (response: NotificationCompletion) => void) => {
-        log.debug(`${logMsgPrefix}Notification received in background: ${JSON.stringify(notification.payload)}`);
+        logData(`${logMsgPrefix}Background notification:`, notification);
         completion({alert: true, sound: true, badge: false});
       }
     );
 
-    eventsRegistry.registerNotificationOpened(
+    Notifications.events().registerNotificationOpened(
       (notification: Notification, completion: () => void) => {
-        const {issueId, userId}: { issueId: string, userId: string } = notification.payload;
-        const msg: string = 'PushNotificationsProcessor(registerNotificationOpened): Notification';
-        log.debug(`${msg} ${JSON.stringify(notification.payload)}`);
-        log.debug(`${msg} opened issue "${issueId}" by user "${userId}"`);
-
-        onNotificationOpen(issueId);
+        logData(`${PushNotificationsProcessor.logPrefix}(open):`, notification);
+        PushNotificationsProcessor.onNotification(PushNotificationsProcessor.getIssueId(notification));
         completion();
-      }
-    );
+      });
   }
 
   static async unsubscribe(api: Api, deviceToken: string) {
-    const logMsgPrefix: string = 'PushNotificationsProcessor(unsubscribe): ';
+    const logMsgPrefix: string = `${PushNotificationsProcessor.logPrefix}(unsubscribe): `;
     log.info(`${logMsgPrefix}Unsubscribing from push notifications...`);
     const url = `${PushNotificationsProcessor.KONNECTOR_URL}/ring/fcmPushNotifications/unsubscribe`;
     try {
@@ -78,7 +93,7 @@ export default class PushNotificationsProcessor {
   }
 
   static async getYouTrackToken(api: Api) {
-    const logMsgPrefix: string = 'PushNotificationsProcessor(getYouTrackToken): ';
+    const logMsgPrefix: string = `${PushNotificationsProcessor.logPrefix}(getYouTrackToken): `;
     try {
       log.info(`${logMsgPrefix}Requesting YouTrack token...`);
       const youTrackToken = await api.getNotificationsToken();
@@ -87,7 +102,7 @@ export default class PushNotificationsProcessor {
     } catch (error) {
       let err: Error = error;
       if ([400, 404, 405].includes(error?.status)) {
-        const errorMsg = `${logMsgPrefix}YT server does not support push notifications`;
+        const errorMsg = `${logMsgPrefix}server does not support push notifications`;
         log.warn(errorMsg, error);
         err = new Error(errorMsg);
       }
@@ -96,7 +111,7 @@ export default class PushNotificationsProcessor {
   }
 
   static async subscribe(api: Api, deviceToken: string): Promise<any> {
-    const logMsgPrefix: string = 'PushNotificationsProcessor(subscribe): ';
+    const logMsgPrefix: string = `${PushNotificationsProcessor.logPrefix}(subscribe): `;
     try {
       const youtrackToken = await PushNotificationsProcessor.getYouTrackToken(api);
       log.info(`${logMsgPrefix}Subscribing to push notifications...`);

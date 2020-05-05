@@ -286,6 +286,9 @@ class AgileBoard extends Component<Props, State> {
     if (errors.length > 0) {
       return (
         <View>
+          <View>
+            <Text style={styles.title}>Agile board has configuration errors:</Text>
+          </View>
           {errors.map(
             (error, index) => <ErrorMessageInline key={`agileError-${index}`} error={error}/>)
           }

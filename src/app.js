@@ -39,6 +39,9 @@ import ActionSheet from '@expo/react-native-action-sheet';
 import Menu from './components/menu/menu';
 import {routeMap, rootRoutesList} from './app-routes';
 import {menuHeight} from './components/common-styles/navigation';
+import PushNotificationsProcessor from './components/push-notifications/push-notifications-processor';
+import log from './components/log/log';
+import {Notifications} from 'react-native-notifications-latest';
 
 if (UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -68,18 +71,34 @@ class YouTrackMobile extends Component<void, State> {
     this.state = {backgroundColor: APP_BACKGROUND};
 
     this.registerRoutes();
-    YouTrackMobile.init();
+    YouTrackMobile.init(YouTrackMobile.getNotificationIssueId);
 
     Router.onBack = (closingView) => {
       store.dispatch(onNavigateBack(closingView));
     };
 
     Router.rootRoutes = rootRoutesList;
+
+    PushNotificationsProcessor.init((token: string) => {
+      PushNotificationsProcessor.setDeviceToken(token);
+    }, (error) => {
+      log.warn(`Cannot get a device token`, error);
+    });
   }
 
+  static async getNotificationIssueId() {
+    const notification = await Notifications.getInitialNotification();
+    const issueId = notification?.payload?.issueId;
+    log.debug(`app(getNotificationIssueId): found initial notification with issueId: ${issueId}`);
+    return issueId;
+  }
 
-  static init() {
-    store.dispatch(setAccount());
+  static async init(getRouteIssueId: () => Promise<string>) {
+    let issueId = null;
+    if (getRouteIssueId) {
+      issueId = await getRouteIssueId();
+    }
+    store.dispatch(setAccount(issueId));
   }
 
   getChildContext() {

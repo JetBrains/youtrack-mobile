@@ -6,6 +6,7 @@ import {
   COLOR_FONT_ON_BLACK,
   COLOR_FONT_GRAY,
   COLOR_GRAY,
+  COLOR_BLACK
 } from '../../components/variables/variables';
 import {mainText} from '../../components/common-styles/issue';
 import {link} from '../../components/common-styles/button';
@@ -16,6 +17,10 @@ export default StyleSheet.create({
     padding: UNIT * 2,
     paddingRight: 0,
     backgroundColor: COLOR_FONT_ON_BLACK
+  },
+  title: {
+    fontSize: 17,
+    color: COLOR_BLACK
   },
   headerIconDisabled: {
     tintColor: COLOR_FONT_GRAY
