@@ -1,7 +1,7 @@
 const pkg = require('../package.json'); //eslint-disable-line
 
 
-if (hasExceptionReporterToken() || hasAnalyticsId() || hasKonnektorData() || hasGoogleServicesData() || hasBugsnagData()) {
+if (hasExceptionReporterToken() || hasAnalyticsId() || hasKonnektorData() || hasBugsnagData()) {
   throw new Error('`Config` or `Bugsnag Config` or `Google Services` is touched. Revert changes and proceed.');
 }
 
@@ -16,16 +16,6 @@ function hasAnalyticsId() {
 
 function hasKonnektorData() {
   return pkg.config.KONNECTOR_URL !== 'https://konnector-staging.services.jetbrains.com';
-}
-
-function hasGoogleServicesData() {
-  const googleServicesData = require('../android/app/google-services');
-  return (
-    isNotEmpty(googleServicesData.project_info.project_number)||
-    isNotEmpty(googleServicesData.project_info.firebase_url) ||
-    isNotEmpty(googleServicesData.project_info.project_id) ||
-    isNotEmpty(googleServicesData.project_info.storage_bucket)
-  );
 }
 
 function hasBugsnagData() {
