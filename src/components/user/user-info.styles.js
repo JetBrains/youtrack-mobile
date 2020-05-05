@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_FONT} from '../../components/variables/variables';
+import {UNIT, COLOR_ICON_MEDIUM_GREY} from '../../components/variables/variables';
 
 export default StyleSheet.create({
   user: {
@@ -9,10 +9,12 @@ export default StyleSheet.create({
     flex: 0,
     marginRight: UNIT / 2,
     marginLeft: UNIT,
-    color: COLOR_FONT,
-    fontWeight: 'bold'
+    color: COLOR_ICON_MEDIUM_GREY
+  },
+  userAvatar: {
+    borderRadius: 4
   },
   timestamp: {
-    color: COLOR_FONT,
+    color: COLOR_ICON_MEDIUM_GREY,
   },
 });

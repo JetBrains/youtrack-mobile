@@ -1,12 +1,14 @@
 import {StyleSheet} from 'react-native';
 import {
-  COLOR_FONT_GRAY,
   COLOR_FONT,
   UNIT,
   COLOR_ICON_MEDIUM_GREY,
   COLOR_MEDIUM_GRAY,
-  COLOR_FONT_ON_BLACK
+  COLOR_FONT_ON_BLACK,
+  COLOR_LIGHT_GRAY,
+  COLOR_DARK
 } from '../../components/variables/variables';
+import {mainText, secondaryText} from '../../components/common-styles/issue';
 
 const font = {
   lineHeight: 18,
@@ -32,39 +34,35 @@ export default StyleSheet.create({
     lineHeight: 22
   },
   notification: {
-    marginBottom: UNIT * 2,
-    padding: UNIT * 2,
-    backgroundColor: COLOR_FONT_ON_BLACK,
+    paddingLeft: UNIT * 2,
+  },
+  notificationContent: {
+    marginLeft: UNIT * 5,
+    paddingBottom: UNIT * 2,
+    paddingRight: UNIT * 2,
     borderBottomColor: COLOR_MEDIUM_GRAY,
-    borderBottomWidth: 1,
-    borderTopColor: COLOR_MEDIUM_GRAY,
-    borderTopWidth: 1
+    borderBottomWidth: 0.5,
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
+  notificationIssue: {
+    marginTop: -UNIT,
   },
-  summary: {
-    lineHeight: 20,
-    fontSize: 17,
-    color: COLOR_FONT,
-    flexShrink: 1
-  },
-  subHeader: {
-    marginTop: 4,
-    flexDirection: 'row',
-    justifyContent: 'space-between'
+  notificationIssueInfo: {
+    ...mainText,
+    fontWeight: '500',
+    color: COLOR_DARK
   },
   reason: {
-    lineHeight: 15,
-    fontSize: 12,
-    color: COLOR_FONT_GRAY
+    ...secondaryText,
+    paddingRight: UNIT
   },
-  issueId: textSecondary,
-  notificationContent: {
-    marginTop: -2 * UNIT,
-    marginLeft: UNIT * 6,
-    marginBottom: UNIT * 2,
+  notificationChange: {
+    marginTop: UNIT * 2,
+    marginRight: -UNIT,
+    marginBottom: UNIT * 2.5,
+    padding: UNIT * 1.5,
+    paddingRight: UNIT * 2,
+    borderRadius: UNIT,
+    backgroundColor: COLOR_LIGHT_GRAY
   },
   notificationContentWorkflow: {
     marginTop: UNIT,
@@ -72,9 +70,7 @@ export default StyleSheet.create({
   },
   userInfo: {
     marginTop: UNIT,
-    paddingTop: UNIT * 1.5,
-    borderTopColor: COLOR_MEDIUM_GRAY,
-    borderTopWidth: 1
+    paddingTop: UNIT * 1.5
   },
   textPrimary,
   textSecondary,
@@ -87,10 +83,6 @@ export default StyleSheet.create({
   listFooterMessage: {
     textAlign: 'center',
     padding: UNIT * 2
-  },
-  strong: {
-    color: COLOR_FONT,
-    fontWeight: '600'
   },
   change: {
     flexDirection: 'row',

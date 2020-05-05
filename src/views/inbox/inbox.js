@@ -9,7 +9,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as inboxActions from './inbox-actions';
 import Router from '../../components/router/router';
-import {COLOR_PINK, COLOR_GRAY} from '../../components/variables/variables';
+import {COLOR_PINK} from '../../components/variables/variables';
 import log from '../../components/log/log';
 import {handleRelativeUrl} from '../../components/config/config';
 import {getStorageState} from '../../components/storage/storage';
@@ -17,7 +17,6 @@ import UserInfo from '../../components/user/user-info';
 import Diff from '../../components/diff/diff';
 import Wiki from '../../components/wiki/wiki';
 import CustomFieldChangeDelimiter from '../../components/custom-field/custom-field__change-delimiter';
-import {IconAngleRight} from '../../components/icon/icon';
 
 import type {InboxState} from './inbox-reducers';
 import type {User} from '../../flow/User';
@@ -245,7 +244,7 @@ class Inbox extends Component<Props, void> {
 
     return (
       <View style={styles.notification}>
-        <View><Text style={[styles.textPrimary, styles.strong]}>{`${title}:`}</Text></View>
+        <View><Text style={[styles.textPrimary, styles.notificationIssueInfo]}>{`${title}:`}</Text></View>
 
         <View style={[styles.notificationContent, styles.notificationContentWorkflow]}>
           <Wiki
@@ -329,24 +328,27 @@ class Inbox extends Component<Props, void> {
 
     return (
       <View style={styles.notification}>
-        <TouchableOpacity onPress={onPress}>
-          <View style={styles.header}>
-            <Text numberOfLines={2} style={styles.summary}>{metadata.issue.summary}</Text>
-            <Text style={styles.arrowImage}><IconAngleRight size={24} color={COLOR_GRAY}/></Text>
-          </View>
-
-          <View style={styles.subHeader}>
-            <Text style={styles.issueId}>{metadata.issue.id}</Text>
-          </View>
-        </TouchableOpacity>
-
         <UserInfo style={styles.userInfo} user={sender} timestamp={metadata?.change?.endTimestamp}/>
 
-        {Boolean(events && events.length) && (<View style={styles.notificationContent}>
-          <View>{this.renderEvents(events)}</View>
-        </View>)}
+        <View style={styles.notificationContent}>
+          <TouchableOpacity
+            style={styles.notificationIssue}
+            onPress={onPress}
+          >
+            <Text>
+              <Text style={styles.notificationIssueInfo}>{metadata.issue.id}</Text>
+              <Text numberOfLines={2} style={styles.notificationIssueInfo}>{` ${metadata.issue.summary}`}</Text>
+            </Text>
+          </TouchableOpacity>
 
-        {this.renderNotificationReason(metadata)}
+          {Boolean(events && events.length) && (
+            <View style={styles.notificationChange}>
+              {this.renderEvents(events)}
+            </View>
+          )}
+
+          {this.renderNotificationReason(metadata)}
+        </View>
       </View>
     );
   }

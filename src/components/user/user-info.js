@@ -31,7 +31,8 @@ export default class UserInfo extends PureComponent<Props, void> {
         {Boolean(user.avatarUrl) && <Avatar
           testID="UserInfoAvatar"
           userName={userName}
-          size={40}
+          size={32}
+          style={styles.userAvatar}
           source={{uri: user.avatarUrl}}
         />}
 
