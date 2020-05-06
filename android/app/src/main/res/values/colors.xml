@@ -2,4 +2,5 @@
 <resources>
   <color name="white">#FFF</color>
   <color name="notification_icon_color">#000</color>
+  <color name="colorAccent">#000</color>
 </resources>

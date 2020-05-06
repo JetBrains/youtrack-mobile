@@ -1,6 +1,6 @@
 /* @flow */
 
-import {View, UIManager, StyleSheet} from 'react-native';
+import {View, UIManager, StyleSheet, Platform} from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
@@ -39,13 +39,13 @@ import ActionSheet from '@expo/react-native-action-sheet';
 import Menu from './components/menu/menu';
 import {routeMap, rootRoutesList} from './app-routes';
 import {menuHeight} from './components/common-styles/navigation';
-import PushNotificationsProcessor from './components/push-notifications/push-notifications-processor';
 import log from './components/log/log';
-import {Notifications} from 'react-native-notifications-latest';
 
 if (UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
+
+const isAndroid: boolean = Platform.OS === 'android';
 /*
   Uncomment this string to debug network request in Chrome. Chrome should be run with --disable-web-security flag.
   Or use React Native Debugger https://github.com/jhen0409/react-native-debugger
@@ -79,21 +79,32 @@ class YouTrackMobile extends Component<void, State> {
 
     Router.rootRoutes = rootRoutesList;
 
-    PushNotificationsProcessor.init((token: string) => {
-      PushNotificationsProcessor.setDeviceToken(token);
-    }, (error) => {
-      log.warn(`Cannot get a device token`, error);
-    });
+    YouTrackMobile.initAndroidPushNotification();
+  }
+
+  static async initAndroidPushNotification() {
+    if (isAndroid) {
+      const PushNotificationsProcessor = (await import('./components/push-notifications/push-notifications-processor')).default;
+      PushNotificationsProcessor.init((token: string) => {
+        PushNotificationsProcessor.setDeviceToken(token);
+      }, (error) => {
+        log.warn(`Cannot get a device token`, error);
+      });
+    }
   }
 
   static async getNotificationIssueId() {
-    const notification = await Notifications.getInitialNotification();
-    const issueId = notification?.payload?.issueId;
-    log.debug(`app(getNotificationIssueId): found initial notification with issueId: ${issueId}`);
+    let issueId: string | null = null;
+    if (isAndroid) {
+      const ReactNativeNotifications = await import('react-native-notifications-latest');
+      const initialNotification = await ReactNativeNotifications.Notifications.getInitialNotification();
+      issueId = initialNotification?.payload?.issueId;
+      log.debug(`app(getNotificationIssueId): found initial notification with issueId: ${issueId}`);
+    }
     return issueId;
   }
 
-  static async init(getRouteIssueId: () => Promise<string>) {
+  static async init(getRouteIssueId: () => Promise<string | null>) {
     let issueId = null;
     if (getRouteIssueId) {
       issueId = await getRouteIssueId();
