@@ -61,7 +61,7 @@ exports[`<Menu/> Render should match a snapshot 1`] = `
           >
             <MenuItem
               description=""
-              label="Notifications"
+              label="Activity"
               onPress={[Function]}
             />
           </Connect(Feature)>

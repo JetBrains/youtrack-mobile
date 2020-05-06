@@ -112,7 +112,7 @@ export class Menu extends Component<Props, void> {
 
             <Feature version={'2018.3'}>
               <MenuItem
-                label={'Notifications'}
+                label={'Activity'}
                 description={''}
                 onPress={this._openInbox}
               />
