@@ -7805,9 +7805,9 @@ react-native-markdown-view@1.1.4:
     react-native-tabular-grid-markdown-view "0.1.x"
     simple-markdown "0.3.x"
 
-"react-native-notifications-latest@git://github.com/anisimov74/react-native-notifications.git#4c0b0e7":
+"react-native-notifications-latest@git://github.com/anisimov74/react-native-notifications.git#fd47b17":
   version "3.1.4"
-  resolved "git://github.com/anisimov74/react-native-notifications.git#4c0b0e703ef652106115a1c4aa84f4abd8ddcd2c"
+  resolved "git://github.com/anisimov74/react-native-notifications.git#fd47b17436a22e619afef8bc094f5cefe45d5b79"
 
 react-native-notifications@1.1.19:
   version "1.1.19"
