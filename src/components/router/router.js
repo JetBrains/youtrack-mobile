@@ -12,6 +12,7 @@ import {
 
 import {getStorageState, flushStoragePart} from '../storage/storage';
 import log from '../log/log';
+import {routeMap} from '../../app-routes';
 
 const TransitionSpec = {
   duration: 500,
@@ -132,7 +133,7 @@ class Router {
     const defaultRoute = getStorageState().lastRoute || this.rootRoutes[0];
     this.navigate(defaultRoute, props);
     if (props && props.issueId) {
-      this.navigate('SingleIssue', props);
+      this.navigate(routeMap.SingleIssue, props);
     }
   }
 
@@ -148,20 +149,21 @@ class Router {
     return this._navigator;
   }
 
-  onNavigationStateChange = (prevNav, nav, action) => {
+  onNavigationStateChange = (prevNav, nav, action, onRoute) => {
     this._currentRoute = nav.routes[nav.index];
+    onRoute(this._currentRoute);
     if (action.type === NavigationActions.BACK) {
       const closingView = prevNav.routes[prevNav.index];
       this.onBack(closingView);
     }
   };
 
-  renderNavigatorView() {
+  renderNavigatorView(onRoute) {
     const {AppNavigator} = this;
     return (
       <AppNavigator
         ref={this.setNavigator}
-        onNavigationStateChange={this.onNavigationStateChange}
+        onNavigationStateChange={(prevNav, nav, action) => this.onNavigationStateChange(prevNav, nav, action, onRoute)}
       />
     );
   }

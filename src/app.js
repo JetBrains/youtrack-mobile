@@ -1,15 +1,13 @@
 /* @flow */
 
-import {View, UIManager, StyleSheet} from 'react-native';
+import {UIManager} from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import store from './store';
 import {Provider} from 'react-redux';
 
-import Auth from './components/auth/auth';
 import Router from './components/router/router';
-import './components/push-notifications/push-notifications';
 import DebugView from './components/debug-view/debug-view';
 import FeaturesView from './components/feature/features-view';
 import ScanView from './components/scan/scan-view';
@@ -36,11 +34,10 @@ import {setAccount, onNavigateBack} from './actions/app-actions';
 import Toast from 'react-native-easy-toast';
 
 import ActionSheet from '@expo/react-native-action-sheet';
-import Menu from './components/menu/menu';
 import {routeMap, rootRoutesList} from './app-routes';
-import {menuHeight} from './components/common-styles/navigation';
 import log from './components/log/log';
 import {isAndroidPlatform} from './util/util';
+import Navigation from './navigation';
 
 if (UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -62,7 +59,6 @@ class YouTrackMobile extends Component<void, State> {
   static childContextTypes = {
     actionSheet: PropTypes.func
   };
-  auth: Auth;
   _actionSheetRef: ?Object;
   routeHomeName = 'Home';
 
@@ -178,19 +174,10 @@ class YouTrackMobile extends Component<void, State> {
     return (
       <Provider store={store}>
         <ActionSheet ref={this.actionSheetRef}>
-          <SafeAreaView style={[Styles.flexBox, {backgroundColor: this.state.backgroundColor}]}>
+          <SafeAreaView style={[{flex: 1}, {backgroundColor: this.state.backgroundColor}]}>
             <ErrorBoundary>
-              <View style={Styles.flexBox}>
 
-                <View style={Styles.view}>
-                  {Router.renderNavigatorView()}
-                </View>
-
-                <View style={Styles.navigation}>
-                  <Menu/>
-                </View>
-
-              </View>
+              <Navigation/>
 
               <UserAgreement/>
               <DebugView/>
@@ -208,15 +195,3 @@ class YouTrackMobile extends Component<void, State> {
 }
 
 module.exports = YouTrackMobile; //eslint-disable-line import/no-commonjs
-
-const Styles = StyleSheet.create({
-  flexBox: {
-    flex: 1
-  },
-  view: {
-    flexGrow: 1
-  },
-  navigation: {
-    height: menuHeight
-  }
-});
