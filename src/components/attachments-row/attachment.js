@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {PureComponent} from 'react';
-import {View, ActivityIndicator, TouchableOpacity, Text, Platform, Linking} from 'react-native';
+import {View, ActivityIndicator, TouchableOpacity, Text, Linking} from 'react-native';
 import {SvgUri} from 'react-native-svg';
 
 import {View as AnimatedView} from 'react-native-animatable';
@@ -14,6 +14,7 @@ import throttle from 'lodash.throttle';
 import styles from './attachments-row.styles';
 
 import type {Attachment} from '../../flow/CustomFields';
+import {isAndroidPlatform} from '../../util/util';
 
 type Props = {
   attach: Attachment,
@@ -33,6 +34,7 @@ type DefaultProps = {
 
 const ANIMATION_DURATION = 700;
 const ERROR_HANDLER_THROTTLE = 60 * 1000;
+const isAndroid: boolean = isAndroidPlatform();
 
 export default class Attach extends PureComponent<Props, void> {
 
@@ -51,7 +53,7 @@ export default class Attach extends PureComponent<Props, void> {
 
     this.props.onOpenAttachment('image', attach.id);
 
-    if (Platform.OS !== 'ios' && hasMimeType.svg(attach)) {
+    if (isAndroid && hasMimeType.svg(attach)) {
       return this.openAttachmentUrl(attach.name, attach.url);
     }
 
@@ -68,14 +70,14 @@ export default class Attach extends PureComponent<Props, void> {
     const isVideo = ATTACH_EXT_BLACK_LIST.some(reg => reg.test(url));
     this.props.onOpenAttachment('file', name);
 
-    if (Platform.OS === 'ios' && !isVideo) {
+    if (!isAndroid && !isVideo) {
       Router.AttachmentPreview({
         url,
         name,
         headers: this.props.imageHeaders
       });
     } else {
-      if (Platform.OS === 'ios') {
+      if (!isAndroid) {
         return safariView.show({url});
       }
       Linking.openURL(url);

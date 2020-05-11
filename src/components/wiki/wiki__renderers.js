@@ -1,6 +1,6 @@
 /* @flow */
 import React from 'react';
-import {Text, Image, Platform, Dimensions} from 'react-native';
+import {Text, Image, Dimensions} from 'react-native';
 import SyntaxHighlighter from 'react-native-syntax-highlighter';
 import {codeHighlightStyle} from './code-highlight-styles';
 import entities from 'entities';
@@ -11,6 +11,7 @@ import {showMoreText} from '../text-view/text-view';
 import type {Attachment} from '../../flow/CustomFields';
 import {hasMimeType} from '../mime-type/mime-type';
 import calculateAspectRatio from '../../components/aspect-ratio/aspect-ratio';
+import {isAndroidPlatform} from '../../util/util';
 
 type ImageDimensions = {
   width: number,
@@ -20,11 +21,11 @@ type ImageDimensions = {
 const DIMENSION_WIDTH = Dimensions.get('window').width;
 const IMAGE_WIDTH = Math.floor(DIMENSION_WIDTH - UNIT * 4);
 const IMAGE_HEIGHT = 200;
+const isAndroid: boolean = isAndroidPlatform();
 
 export function renderCode(node: { children: any }, index: number, title?: string, language?: string) {
   // App is hanging trying to render a huge text https://github.com/facebook/react-native/issues/19453
   const MAX_CODE_LENGTH = 700;
-  const isIOS = Platform.OS === 'ios';
   const newLine = <Text>{'\n'}</Text>;
 
   const code = (node?.children || []).map(it => it.data).join('\n') || '';
@@ -49,8 +50,8 @@ export function renderCode(node: { children: any }, index: number, title?: strin
         CodeTag={Text}
 
         style={codeHighlightStyle}
-        fontSize={isIOS ? 16 : 14}
-        fontFamily={isIOS ? 'Courier' : 'monospace'}
+        fontSize={!isAndroid ? 16 : 14}
+        fontFamily={!isAndroid ? 'Courier' : 'monospace'}
       >
         {entities.decodeHTML(trimmedCode)}
       </SyntaxHighlighter>
@@ -105,7 +106,6 @@ export function renderImage({node, index, attachments, imageHeaders, onImagePres
     const source = Object.assign({uri: targetAttach.url, headers: imageHeaders}, targetAttach);
 
     //TODO(investigation): fix inconsistency with  W,H
-    const isAndroid = Platform.OS === 'android';
     const dimensions: ImageDimensions = (isAndroid
       ? {width: IMAGE_WIDTH, height: IMAGE_HEIGHT}
       : calculateAspectRatio(targetAttach.imageDimension));
@@ -124,7 +124,7 @@ export function renderImage({node, index, attachments, imageHeaders, onImagePres
             resizeMode: 'contain'
           }}
         />
-        {Platform.OS === 'android' && '\n\n\n\n\n\n'}
+        {isAndroid && '\n\n\n\n\n\n'}
       </Text>
     );
   }

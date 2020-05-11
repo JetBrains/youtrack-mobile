@@ -1,3 +1,3 @@
-import {Platform} from 'react-native';
+import {isIOSPlatform} from '../../util/util';
 
-export default Platform.OS === 'ios' ? ' → ' : ' ➔ ';
+export default isIOSPlatform() ? ' → ' : ' ➔ ';

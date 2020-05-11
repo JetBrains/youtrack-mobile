@@ -6,7 +6,8 @@ import React, {PureComponent} from 'react';
 import {COLOR_BLACK} from '../variables/variables';
 import {isIphoneX} from '../header/header__top-padding.ios';
 
-import {Platform, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
+import {isIOSPlatform} from '../../util/util';
 
 export const keyboardSpacerTop = 36;
 
@@ -14,7 +15,7 @@ type Props = {}
 export default class KeyboardSpacerIOS extends PureComponent<Props, void> {
 
   render() {
-    if (Platform.OS === 'ios') {
+    if (isIOSPlatform()) {
       return <KeyboardSpacer topSpacing={isIphoneX ? -keyboardSpacerTop : 0} style={styles.keyboardSpacer}/>;
     }
     return null;

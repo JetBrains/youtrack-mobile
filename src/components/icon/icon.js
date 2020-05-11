@@ -3,7 +3,7 @@ import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 
 import {COLOR_PINK} from '../variables/variables';
-import {Platform} from 'react-native';
+import {isAndroidPlatform} from '../../util/util';
 
 export {default as logo} from './youtrack-logo-512.png';
 export {default as arrow} from './arrow.png';
@@ -51,7 +51,7 @@ type Props = {
   isFontAwesome?: boolean
 };
 
-const isAndroid = Platform.OS === 'android';
+const isAndroid = isAndroidPlatform();
 
 class DefaultIcon extends PureComponent<Props, void> {
   static defaultProps: Props = {

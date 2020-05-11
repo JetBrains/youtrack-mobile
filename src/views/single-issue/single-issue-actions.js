@@ -1,6 +1,6 @@
 /* @flow */
 
-import {Linking, Share, Platform} from 'react-native';
+import {Linking, Share} from 'react-native';
 import * as types from './single-issue-action-types';
 import ApiHelper from '../../components/api/api__helper';
 import {notify, notifyError, resolveError} from '../../components/notification/notification';
@@ -9,6 +9,8 @@ import Router from '../../components/router/router';
 import {showActions} from '../../components/action-sheet/action-sheet';
 import usage from '../../components/usage/usage';
 import {initialState} from './single-issue-reducers';
+import {isIOSPlatform} from '../../util/util';
+
 import type {IssueFull, CommandSuggestionResponse, OpenNestedViewParams} from '../../flow/Issue';
 import type {CustomField, IssueProject, FieldValue} from '../../flow/CustomFields';
 import type Api from '../../components/api/api';
@@ -301,7 +303,7 @@ export function showIssueActions(actionSheet: Object) {
         title: 'Share…',
         execute: () => {
           const url = makeIssueWebUrl(api, issue);
-          if (Platform.OS === 'ios') {
+          if (isIOSPlatform()) {
             Share.share({url});
           } else {
             Share.share({title: issue.summary, message: url}, {dialogTitle: 'Share issue URL'});

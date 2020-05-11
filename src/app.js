@@ -1,6 +1,6 @@
 /* @flow */
 
-import {View, UIManager, StyleSheet, Platform} from 'react-native';
+import {View, UIManager, StyleSheet} from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
@@ -40,12 +40,13 @@ import Menu from './components/menu/menu';
 import {routeMap, rootRoutesList} from './app-routes';
 import {menuHeight} from './components/common-styles/navigation';
 import log from './components/log/log';
+import {isAndroidPlatform} from './util/util';
 
 if (UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const isAndroid: boolean = Platform.OS === 'android';
+const isAndroid: boolean = isAndroidPlatform();
 /*
   Uncomment this string to debug network request in Chrome. Chrome should be run with --disable-web-security flag.
   Or use React Native Debugger https://github.com/jhen0409/react-native-debugger

@@ -1,8 +1,9 @@
 /* @flow */
-import {Dimensions, Platform} from 'react-native';
+import {Dimensions} from 'react-native';
 import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../variables/variables';
 
 import type {BoardColumn} from '../../flow/Agile';
+import {isIOSPlatform} from '../../util/util';
 
 const MINIMAL_MOMENTUM_SPEED = 0.5;
 export const COLUMN_SCREEN_PART = 0.9;
@@ -48,7 +49,7 @@ export function getSnapToX(scrollEvent: Object, columns: Array<BoardColumn>) {
   const [prev, next] = getClosestSnapPoints(x, openColumnStarts);
 
   let xSpeed = scrollEvent.nativeEvent.velocity.x;
-  xSpeed = Platform.OS === 'ios' ? xSpeed : -xSpeed; // On android xSpeed is inverted by unknown reason
+  xSpeed = isIOSPlatform() ? xSpeed : -xSpeed; // On android xSpeed is inverted by unknown reason
   const snapToLeft = Math.abs(xSpeed) < MINIMAL_MOMENTUM_SPEED ? (x - prev < next - x) : xSpeed < 0;
   return snapToLeft ? prev : next;
 }
