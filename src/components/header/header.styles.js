@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_PINK, COLOR_FONT_ON_BLACK} from '../../components/variables/variables';
+import {UNIT, COLOR_PINK, COLOR_FONT_ON_BLACK} from '../variables/variables';
 
 export default StyleSheet.create({
   header: {

@@ -12,8 +12,7 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
-import Header from '../../components/header/header';
-import {COLOR_BLACK, COLOR_PINK, UNIT} from '../../components/variables/variables';
+import {COLOR_BLACK, COLOR_PINK} from '../../components/variables/variables';
 import {notifyError} from '../../components/notification/notification';
 import usage from '../../components/usage/usage';
 import log from '../../components/log/log';
@@ -27,14 +26,15 @@ import type Auth from '../../components/auth/auth';
 import type Api from '../../components/api/api';
 import type {IssuesListState} from './issue-list-reducers';
 import type {IssueOnList} from '../../flow/Issue';
-import OpenScanButton from '../../components/scan/open-scan-button';
 import Select from '../../components/select/select';
 import SearchPanel from './issue-list__search-panel';
 import ModalView from '../../components/modal-view/modal-view';
 
 import {IconAngleDown, IconPlus} from '../../components/icon/icon';
+import {isReactElement} from '../../util/util';
+import {HIT_SLOP} from '../../components/common-styles/button';
 
-import styles from './issue-list.styles';
+import styles, {SEARCH_CONTEXT_SEPARATOR_HEIGHT} from './issue-list.styles';
 
 type Props = IssuesListState & typeof issueActions & {
   openMenu: typeof openMenu,
@@ -81,19 +81,27 @@ export class IssueList extends Component<Props, void> {
     });
   }
 
-  _renderHeader() {
+  renderCreateIssueButton = () => {
     return (
-      <Header
-        rightButton={<IconPlus size={28}/>}
-        extraButton={<OpenScanButton/>}
-        onBack={this.props.openMenu}
-        onRightButtonClick={() => Router.CreateIssue()}
-      >
-      </Header>
+      <View>
+        <TouchableOpacity
+          hitSlop={HIT_SLOP}
+          style={styles.createIssueButton}
+          onPress={() => Router.CreateIssue()}
+        >
+          <IconPlus size={28} color={COLOR_PINK}/>
+        </TouchableOpacity>
+      </View>
     );
-  }
+  };
+
+
 
   _renderRow = ({item}) => {
+    if (isReactElement(item)) {
+      return item;
+    }
+
     return (
       <IssueRow
         key={item.id}
@@ -103,7 +111,9 @@ export class IssueList extends Component<Props, void> {
     );
   };
 
-  _getIssueId = issue => issue.id;
+  getKey = (item: Object) => {
+    return `${isReactElement(item) ? item.key : item.id}`;
+  };
 
   _renderRefreshControl() {
     return <RefreshControl
@@ -116,7 +126,10 @@ export class IssueList extends Component<Props, void> {
     />;
   }
 
-  _renderSeparator = () => {
+  _renderSeparator = (item) => {
+    if (isReactElement(item.leadingItem)) {
+      return null;
+    }
     return <View style={styles.separator}/>;
   };
 
@@ -144,11 +157,12 @@ export class IssueList extends Component<Props, void> {
     this.props.loadMoreIssues();
   };
 
-  renderContextButton() {
+  renderContextButton = () => {
     const {onOpenContextSelect, isRefreshing, searchContext, isSearchContextPinned} = this.props;
 
     return (
       <TouchableOpacity
+        key="issueListContext"
         style={[
           styles.searchContext,
           isSearchContextPinned ? styles.searchContextPinned : null
@@ -169,7 +183,7 @@ export class IssueList extends Component<Props, void> {
         </View>
       </TouchableOpacity>
     );
-  }
+  };
 
 
   renderContextSelect() {
@@ -195,13 +209,35 @@ export class IssueList extends Component<Props, void> {
 
   onScroll = (nativeEvent: Object) => {
     const newY = nativeEvent.contentOffset.y;
-    this.props.updateSearchContextPinned(newY >= UNIT / 2);
+    const isPinned: boolean = newY >= SEARCH_CONTEXT_SEPARATOR_HEIGHT;
+    if (this.props.isSearchContextPinned !== isPinned) {
+      this.props.updateSearchContextPinned(isPinned);
+    }
+  };
+
+  renderSearchPanel = () => {
+    const {query, suggestIssuesQuery, queryAssistSuggestions, onQueryUpdate, issuesCount} = this.props;
+    return (
+      <SearchPanel
+        key="SearchPanel"
+        ref={this.searchPanelRef}
+        queryAssistSuggestions={queryAssistSuggestions}
+        query={query}
+        suggestIssuesQuery={suggestIssuesQuery}
+        onQueryUpdate={onQueryUpdate}
+        issuesCount={issuesCount}
+        clearButtonMode="always"
+      />
+    );
   };
 
   render() {
-    const {
-      query, issues, suggestIssuesQuery, queryAssistSuggestions, isIssuesContextOpen, onQueryUpdate, issuesCount
-    } = this.props;
+    const {issues, isIssuesContextOpen} = this.props;
+    const listData: Array<Object> = [
+      <View key="issueListContextSeparator" style={styles.searchContextSeparator}/>,
+      this.renderContextButton(),
+      this.renderSearchPanel()
+    ].concat(issues);
 
     return (
       <View
@@ -209,26 +245,14 @@ export class IssueList extends Component<Props, void> {
         testID="issue-list-page"
       >
 
-        {this._renderHeader()}
-
-        {this.renderContextButton()}
+        {this.renderCreateIssueButton()}
         {isIssuesContextOpen && this.renderContextSelect()}
 
         <FlatList
-          ListHeaderComponent={
-            <SearchPanel
-              ref={this.searchPanelRef}
-              queryAssistSuggestions={queryAssistSuggestions}
-              query={query}
-              suggestIssuesQuery={suggestIssuesQuery}
-              onQueryUpdate={onQueryUpdate}
-              issuesCount={issuesCount}
-              clearButtonMode="always"
-            />
-          }
+          stickyHeaderIndices={[1]}
           removeClippedSubviews={false}
-          data={issues}
-          keyExtractor={this._getIssueId}
+          data={listData}
+          keyExtractor={this.getKey}
           renderItem={this._renderRow}
           refreshControl={this._renderRefreshControl()}
           tintColor={COLOR_PINK}
