@@ -93,5 +93,11 @@ export default StyleSheet.create({
   },
   changeRemoved: {
     textDecorationLine: 'line-through'
+  },
+  headerTitle: {
+    paddingTop: UNIT,
+    paddingLeft: UNIT * 2,
+    paddingBottom: UNIT * 2,
+    backgroundColor: COLOR_FONT_ON_BLACK
   }
 });

@@ -7,10 +7,10 @@ import Router from '../router/router';
 import {onHeightChange} from './header__top-padding';
 import {HIT_SLOP} from '../common-styles/button';
 
+import {headerTitle} from '../common-styles/header';
 import styles from './header.styles';
 
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import {headerTitle} from '../common-styles/navigation';
 
 type Props = {
   onBack?: () => any,

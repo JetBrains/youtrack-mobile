@@ -8,12 +8,13 @@ import {connect} from 'react-redux';
 import {MenuItem} from './menu__item';
 
 import Feature from '../feature/feature';
-import {menuHeight} from '../common-styles/navigation';
 
 import {IconBell, IconCheckMarked, IconCog, IconPause} from '../icon/icon';
 import {COLOR_FONT_ON_BLACK, COLOR_GRAY, COLOR_ICON_MEDIUM_GREY, COLOR_PINK} from '../variables/variables';
 
 import {elevationTop} from '../common-styles/form';
+import {menuHeight} from '../common-styles/header';
+
 import {routeMap} from '../../app-routes';
 
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';

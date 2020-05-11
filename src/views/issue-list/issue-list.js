@@ -33,7 +33,7 @@ import {IconAngleDown, IconPlus} from '../../components/icon/icon';
 import {isReactElement} from '../../util/util';
 import {HIT_SLOP} from '../../components/common-styles/button';
 
-import {headerSeparator} from '../../components/common-styles/navigation';
+import {headerSeparator} from '../../components/common-styles/header';
 import styles from './issue-list.styles';
 
 type Props = IssuesListState & typeof issueActions & {

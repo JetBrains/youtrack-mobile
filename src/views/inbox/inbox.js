@@ -1,9 +1,8 @@
 /* @flow */
+
 import {FlatList, View, Text, RefreshControl, TouchableOpacity} from 'react-native';
 import React, {Component} from 'react';
 
-import styles from './inbox.styles';
-import Header from '../../components/header/header';
 import usage from '../../components/usage/usage';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -17,6 +16,11 @@ import UserInfo from '../../components/user/user-info';
 import Diff from '../../components/diff/diff';
 import Wiki from '../../components/wiki/wiki';
 import CustomFieldChangeDelimiter from '../../components/custom-field/custom-field__change-delimiter';
+import {headerSeparator, headerTitle} from '../../components/common-styles/header';
+import {isReactElement} from '../../util/util';
+
+import {elevation1} from '../../components/common-styles/form';
+import styles from './inbox.styles';
 
 import type {InboxState} from './inbox-reducers';
 import type {User} from '../../flow/User';
@@ -27,8 +31,12 @@ const CATEGORY_NAME = 'Inbox view';
 
 type Props = InboxState & typeof inboxActions;
 
+type State = {
+  isTitlePinned: boolean
+};
 
-class Inbox extends Component<Props, void> {
+
+class Inbox extends Component<Props, State> {
   static notificationReasons = {
     mentionReasons: 'Mention',
     tagReasons: '',
@@ -39,6 +47,7 @@ class Inbox extends Component<Props, void> {
 
   constructor(props) {
     super(props);
+    this.state = {isTitlePinned: false};
     this.config = getStorageState().config;
     usage.trackScreenView(CATEGORY_NAME);
   }
@@ -274,12 +283,16 @@ class Inbox extends Component<Props, void> {
     return text || PARSE_ERROR_NOTIFICATION;
   }
 
-  renderNotification(notification: Notification) {
-    const metadata: Metadata = notification.metadata;
+  renderItem(item: Object & { key: string } | Notification) {
+    if (isReactElement(item)) {
+      return item;
+    }
+
+    const metadata: Metadata = item.metadata;
     let renderer = null;
 
     if (this.isIssueDigestChange(metadata)) {
-      renderer = this.renderIssueChange(notification);
+      renderer = this.renderIssueChange(item);
     } else if (this.isWorkflowNotification(metadata)) {
       renderer = this.renderWorkflowNotification(this.getWorkflowNotificationText(metadata));
     }
@@ -383,22 +396,50 @@ class Inbox extends Component<Props, void> {
     );
   };
 
+  renderTitle() {
+    return (
+      <View
+        key="activityHeaderTitle"
+        style={[
+          styles.headerTitle,
+          this.state.isTitlePinned ? elevation1 : null
+        ]}
+      >
+        <Text style={headerTitle}>Activity</Text>
+      </View>
+    );
+  }
+
+  onScroll(nativeEvent) {
+    const newY = nativeEvent.contentOffset.y;
+    this.setState({
+      isTitlePinned: newY >= headerSeparator.height
+    });
+
+  }
+
   render() {
     const {items, loading} = this.props;
+    const data: Array<React$Element<any> | Notification> = [
+      <View key="activityHeaderTitleSeparator" style={headerSeparator}/>,
+      this.renderTitle()
+    ].concat(items);
 
     return (
       <View style={styles.container}>
-        <Header title="Notifications"/>
 
         <FlatList
-          data={items}
+          data={data}
           refreshControl={this.renderRefreshControl()}
           refreshing={loading}
-          keyExtractor={notification => notification.id}
-          renderItem={(listItem) => this.renderNotification(listItem.item)}
+          keyExtractor={(item: Object & { key: string } | Notification) => item.key || item.id}
+          renderItem={(listItem) => this.renderItem(listItem.item)}
           onEndReached={this.onLoadMore}
           onEndReachedThreshold={0.1}
+          onScroll={(params) => this.onScroll(params.nativeEvent)}
           ListFooterComponent={this.renderListMessage}
+          scrollEventThrottle={10}
+          stickyHeaderIndices={[1]}
         />
       </View>
     );

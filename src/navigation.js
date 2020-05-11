@@ -5,8 +5,9 @@ import {StyleSheet, View} from 'react-native';
 
 import Router from './components/router/router';
 import Menu from './components/menu/menu';
-import {menuHeight} from './components/common-styles/navigation';
 import {routeMap} from './app-routes';
+
+import {menuHeight} from './components/common-styles/header';
 
 const styles = StyleSheet.create({
   flexBox: {

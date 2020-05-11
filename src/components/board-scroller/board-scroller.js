@@ -8,7 +8,7 @@ import {clamp, getPointShift, getSnapToX} from './board-scroller__math';
 import type {DragContextType} from '../draggable/drag-container';
 import {DragContext} from '../draggable/drag-container';
 import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../variables/variables';
-import {headerSeparator} from '../common-styles/navigation';
+import {headerSeparator} from '../common-styles/header';
 
 import type {BoardColumn} from '../../flow/Agile';
 
