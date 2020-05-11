@@ -7,10 +7,10 @@ export const isReactElement = (element: any) => {
   return React.isValidElement(element);
 };
 
-export const isIOS = () => {
+export const isIOSPlatform = () => {
   return Platform.OS === 'ios';
 };
 
-export const isAndroid = () => {
+export const isAndroidPlatform = () => {
   return Platform.OS === 'android';
 };

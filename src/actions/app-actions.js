@@ -29,7 +29,7 @@ import {loadAgileProfile} from '../views/agile-board/board-actions';
 import PushNotifications from '../components/push-notifications/push-notifications';
 import {EVERYTHING_CONTEXT} from '../components/search/search-context';
 import {refreshIssues, storeSearchContext} from '../views/issue-list/issue-list-actions';
-import {isIOS} from '../util/util';
+import {isIOSPlatform} from '../util/util';
 
 import type {AuthParams, CurrentUser} from '../components/auth/auth';
 import type {Permissions} from '../components/auth/auth__permissions';
@@ -579,11 +579,11 @@ export function subscribeToPushNotifications() {
 
 function isRegisteredForPush(): boolean { //TODO: YTM-1267
   const storageState: StorageState = getStorageState();
-  return isIOS() ? storageState.isRegisteredForPush : Boolean(storageState.deviceToken);
+  return isIOSPlatform() ? storageState.isRegisteredForPush : Boolean(storageState.deviceToken);
 }
 
 async function setRegisteredForPush(isRegistered: boolean) {
-  if (isIOS()) { //TODO: also use device token
+  if (isIOSPlatform()) { //TODO: also use device token
     flushStoragePart({isRegisteredForPush: isRegistered});
   }
 }
