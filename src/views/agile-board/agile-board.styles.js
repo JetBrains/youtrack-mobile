@@ -15,6 +15,7 @@ export default StyleSheet.create({
   agile: {
     flex: 1,
     padding: UNIT * 2,
+    paddingBottom: 0,
     paddingRight: 0,
     backgroundColor: COLOR_FONT_ON_BLACK
   },
