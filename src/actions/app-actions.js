@@ -63,14 +63,6 @@ export function logOut() {
   };
 }
 
-export function openMenu() {
-  return {type: types.OPEN_MENU};
-}
-
-export function closeMenu() {
-  return {type: types.CLOSE_MENU};
-}
-
 export function openDebugView() {
   return {type: types.OPEN_DEBUG_VIEW};
 }

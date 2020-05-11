@@ -21,7 +21,6 @@ import IssueRow from './issue-list__row';
 import ErrorMessage from '../../components/error-message/error-message';
 import Router from '../../components/router/router';
 import * as issueActions from './issue-list-actions';
-import {openMenu} from '../../actions/app-actions';
 import type Auth from '../../components/auth/auth';
 import type Api from '../../components/api/api';
 import type {IssuesListState} from './issue-list-reducers';
@@ -37,7 +36,6 @@ import {HIT_SLOP} from '../../components/common-styles/button';
 import styles, {SEARCH_CONTEXT_SEPARATOR_HEIGHT} from './issue-list.styles';
 
 type Props = IssuesListState & typeof issueActions & {
-  openMenu: typeof openMenu,
   auth: Auth,
   api: Api,
   overridenQuery: ?string,
@@ -281,7 +279,6 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(issueActions, dispatch),
-    openMenu: () => dispatch(openMenu()),
     onQueryUpdate: (query) => dispatch(issueActions.onQueryUpdate(query)),
     onOpenContextSelect: () => dispatch(issueActions.openIssuesContextSelect()),
     updateSearchContextPinned: (isSearchScrolledUp) => dispatch(issueActions.updateSearchContextPinned(isSearchScrolledUp))
