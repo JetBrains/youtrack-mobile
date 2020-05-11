@@ -21,7 +21,6 @@ const rowLine = {
 const searchPanelHeight = UNIT * 12;
 const searchContextHeight = UNIT * 7;
 
-export const SEARCH_CONTEXT_SEPARATOR_HEIGHT = UNIT * 8;
 export default StyleSheet.create({
   listContainer: {
     flex: 1,
@@ -97,9 +96,6 @@ export default StyleSheet.create({
   tags: {
     marginTop: UNIT
   },
-  searchContextSeparator: {
-    height: SEARCH_CONTEXT_SEPARATOR_HEIGHT
-  },
   searchContext: {
     height: searchContextHeight,
     backgroundColor: COLOR_FONT_ON_BLACK
@@ -131,7 +127,6 @@ export default StyleSheet.create({
   },
   createIssueButton: {
     position: 'absolute',
-    zIndex: 1,
     top: UNIT,
     right: 0,
     height: UNIT * 5,

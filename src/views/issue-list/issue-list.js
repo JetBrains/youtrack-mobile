@@ -33,7 +33,8 @@ import {IconAngleDown, IconPlus} from '../../components/icon/icon';
 import {isReactElement} from '../../util/util';
 import {HIT_SLOP} from '../../components/common-styles/button';
 
-import styles, {SEARCH_CONTEXT_SEPARATOR_HEIGHT} from './issue-list.styles';
+import {headerSeparator} from '../../components/common-styles/navigation';
+import styles from './issue-list.styles';
 
 type Props = IssuesListState & typeof issueActions & {
   auth: Auth,
@@ -81,15 +82,13 @@ export class IssueList extends Component<Props, void> {
 
   renderCreateIssueButton = () => {
     return (
-      <View>
-        <TouchableOpacity
-          hitSlop={HIT_SLOP}
-          style={styles.createIssueButton}
-          onPress={() => Router.CreateIssue()}
-        >
-          <IconPlus size={28} color={COLOR_PINK}/>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        hitSlop={HIT_SLOP}
+        style={styles.createIssueButton}
+        onPress={() => Router.CreateIssue()}
+      >
+        <IconPlus size={28} color={COLOR_PINK}/>
+      </TouchableOpacity>
     );
   };
 
@@ -207,7 +206,7 @@ export class IssueList extends Component<Props, void> {
 
   onScroll = (nativeEvent: Object) => {
     const newY = nativeEvent.contentOffset.y;
-    const isPinned: boolean = newY >= SEARCH_CONTEXT_SEPARATOR_HEIGHT;
+    const isPinned: boolean = newY >= headerSeparator.height;
     if (this.props.isSearchContextPinned !== isPinned) {
       this.props.updateSearchContextPinned(isPinned);
     }
@@ -232,7 +231,7 @@ export class IssueList extends Component<Props, void> {
   render() {
     const {issues, isIssuesContextOpen} = this.props;
     const listData: Array<Object> = [
-      <View key="issueListContextSeparator" style={styles.searchContextSeparator}/>,
+      <View key="issueListContextSeparator" style={headerSeparator}/>,
       this.renderContextButton(),
       this.renderSearchPanel()
     ].concat(issues);
@@ -243,7 +242,6 @@ export class IssueList extends Component<Props, void> {
         testID="issue-list-page"
       >
 
-        {this.renderCreateIssueButton()}
         {isIssuesContextOpen && this.renderContextSelect()}
 
         <FlatList
@@ -261,6 +259,8 @@ export class IssueList extends Component<Props, void> {
           testID="issue-list"
           onScroll={(params) => this.onScroll(params.nativeEvent)}
         />
+
+        {this.renderCreateIssueButton()}
 
       </View>
     );
