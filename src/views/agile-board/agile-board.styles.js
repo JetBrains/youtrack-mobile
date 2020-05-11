@@ -27,7 +27,9 @@ export default StyleSheet.create({
   },
   boardHeaderContainer: {
     overflow: 'hidden',
-    backgroundColor: COLOR_FONT_ON_BLACK
+    backgroundColor: COLOR_FONT_ON_BLACK,
+    borderBottomWidth: 0.5,
+    borderColor: COLOR_GRAY
   },
   loadingIndicator: {
     position: 'absolute',
@@ -41,6 +43,12 @@ export default StyleSheet.create({
   },
   loadingMoreIndicator: {
     padding: UNIT * 2
+  },
+  zoomButton: {
+    position: 'absolute',
+    zIndex: 1,
+    top: UNIT * 2,
+    right: UNIT * 2
   },
   zoomButtonIcon: {
     resizeMode: 'contain',
@@ -85,5 +93,11 @@ export default StyleSheet.create({
   },
   card: {
     marginBottom: UNIT * 2
+  },
+  agileSelector: {
+    backgroundColor: COLOR_FONT_ON_BLACK
+  },
+  agileSelectorText: {
+    fontSize: 20
   }
 });

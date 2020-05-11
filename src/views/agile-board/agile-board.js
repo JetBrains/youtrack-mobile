@@ -3,7 +3,6 @@
 import {View, Text, RefreshControl, TouchableOpacity, ActivityIndicator, Dimensions} from 'react-native';
 import React, {Component} from 'react';
 import usage from '../../components/usage/usage';
-import Header from '../../components/header/header';
 import Select from '../../components/select/select';
 import styles from './agile-board.styles';
 import log from '../../components/log/log';
@@ -34,7 +33,7 @@ import ErrorMessageInline from '../../components/error-message/error-message-inl
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconMagnifyZoom} from '../../components/icon/icon';
 import {renderNavigationItem} from './agile-board__renderer';
-import animation from '../../components/animation/animation';
+import {View as AnimatedView} from 'react-native-animatable';
 
 const CATEGORY_NAME = 'Agile board';
 
@@ -62,8 +61,7 @@ type Props = AgilePageState & {
 
 type State = {
   zoomedIn: boolean,
-  isSprintSelectorInvisible: boolean,
-  isHeaderVisible: boolean,
+  stickElement: { agile: boolean, boardHeader: boolean },
   offsetY: number
 };
 
@@ -74,8 +72,10 @@ class AgileBoard extends Component<Props, State> {
     super(props);
     this.state = {
       zoomedIn: getStorageState().agileZoomedIn ?? true,
-      isSprintSelectorInvisible: false,
-      isHeaderVisible: true,
+      stickElement: {
+        agile: false,
+        boardHeader: false
+      },
       offsetY: 0
     };
   }
@@ -83,19 +83,6 @@ class AgileBoard extends Component<Props, State> {
   componentDidMount() {
     usage.trackScreenView(CATEGORY_NAME);
     this.props.onLoadBoard();
-  }
-
-  toggleHeaderHeight(newY: number) {
-    if (newY > this.state.offsetY) { //scroll down
-      if ((newY > UNIT * 4) && this.state.isHeaderVisible) {
-        animation.layoutAnimation();
-        this.setState({isHeaderVisible: false});
-      }
-    } else if ((newY < this.state.offsetY) && !this.state.isHeaderVisible){ //scroll up
-      animation.layoutAnimation();
-      this.setState({isHeaderVisible: true});
-    }
-    this.setState({offsetY: newY});
   }
 
   onVerticalScroll = (event) => {
@@ -109,9 +96,12 @@ class AgileBoard extends Component<Props, State> {
       this.props.onLoadMoreSwimlanes();
     }
 
-    this.toggleHeaderHeight(Math.floor(newY));
-
-    this.setState({isSprintSelectorInvisible: newY > UNIT * 2});
+    this.setState({
+      stickElement: {
+        agile: newY > UNIT * 4,
+        boardHeader: newY > UNIT * 16
+      }
+    });
   };
 
   onContentSizeChange = (width, height) => {
@@ -167,9 +157,10 @@ class AgileBoard extends Component<Props, State> {
         key: agile.id,
         label: agile.name,
         onPress: onOpenBoardSelect,
-        textStyle: {fontSize: 20},
+        style: styles.agileSelector,
+        textStyle: styles.agileSelectorText,
         isLoading,
-        showBottomBorder: this.state.isSprintSelectorInvisible
+        showBottomBorder: this.state.stickElement.agile
       });
     }
   }
@@ -186,20 +177,28 @@ class AgileBoard extends Component<Props, State> {
     }
   }
 
-  renderHeader() {
+  renderZoomButton() {
     const {isLoading, isLoadingAgile, sprint} = this.props;
-    const {zoomedIn} = this.state;
+    const {zoomedIn, stickElement} = this.state;
 
-    return (
-      <Header
-        rightButton={
-          <Text
-            onPress={this.toggleZoom}>
-            {Boolean(!isLoading && !isLoadingAgile && sprint) && <IconMagnifyZoom zoomedIn={zoomedIn} size={24}/>}
-          </Text>
-        }
-      />
-    );
+    if (!stickElement.boardHeader && !isLoading && !isLoadingAgile && sprint) {
+      return (
+        <AnimatedView
+          useNativeDriver
+          duration={300}
+          animation="zoomIn"
+          style={styles.zoomButton}
+        >
+          <TouchableOpacity
+            onPress={this.toggleZoom}
+          >
+            <IconMagnifyZoom zoomedIn={zoomedIn} size={24}/>
+          </TouchableOpacity>
+        </AnimatedView>
+      );
+    }
+
+    return null;
   }
 
   boardHeaderRef = (instance: ?BoardHeader) => {
@@ -208,7 +207,7 @@ class AgileBoard extends Component<Props, State> {
     }
   };
 
-  renderSprintHeader() {
+  renderBoardHeader() {
     const {zoomedIn} = this.state;
 
     if (this.props.sprint) {
@@ -281,16 +280,14 @@ class AgileBoard extends Component<Props, State> {
   }
 
   renderErrors() {
-    const errors = this.props.agile?.status?.errors || [];
+    const errors: Array<?string> = this.props.agile?.status?.errors || [];
 
     if (errors.length > 0) {
       return (
         <View>
-          <View>
-            <Text style={styles.title}>Agile board has configuration errors:</Text>
-          </View>
+          <Text style={styles.title}>Agile board has configuration errors:</Text>
           {errors.map(
-            (error, index) => <ErrorMessageInline key={`agileError-${index}`} error={error}/>)
+            (errorText, index) => <ErrorMessageInline key={`agileError-${index}`} error={errorText}/>)
           }
         </View>
       );
@@ -399,8 +396,11 @@ class AgileBoard extends Component<Props, State> {
               minHeight: '100%'
             }
           }}
-          boardHeader={isSprintLoaded && this.renderSprintHeader()}
-          sprintSelector={this.renderSprintSelector()}
+
+          agileSelector={this.renderAgileSelector()}
+          sprintSelector={isSprintLoaded && this.renderSprintSelector()}
+          boardHeader={isSprintLoaded && this.renderBoardHeader()}
+
         >
 
           {this.renderSprint(sprint)}
@@ -420,9 +420,7 @@ class AgileBoard extends Component<Props, State> {
         style={styles.agile}
       >
 
-        {this.state.isHeaderVisible && this.renderHeader()}
-
-        {this.renderAgileSelector()}
+        {this.renderZoomButton()}
 
         {this.renderErrors()}
 

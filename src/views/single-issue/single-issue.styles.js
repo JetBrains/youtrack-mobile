@@ -9,7 +9,7 @@ import {
   COLOR_PINK_DARK
 } from '../../components/variables/variables';
 import {secondaryText, mainText} from '../../components/common-styles/issue';
-import {shadowBottom} from '../../components/common-styles/app';
+import {elevation1} from '../../components/common-styles/form';
 
 
 export default StyleSheet.create({
@@ -95,7 +95,7 @@ export default StyleSheet.create({
     marginRight: UNIT
   },
 
-  tabsBar: shadowBottom,
+  tabsBar: elevation1,
   tabLabel: {
     ...mainText,
     paddingTop: UNIT,

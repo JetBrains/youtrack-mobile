@@ -4,23 +4,29 @@ import React from 'react';
 import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
 
 import {IconAngleDown} from '../../components/icon/icon';
-import {COLOR_BLACK, COLOR_DARK, COLOR_FONT_GRAY, COLOR_MEDIUM_GRAY, UNIT} from '../../components/variables/variables';
+import {COLOR_BLACK, COLOR_DARK, COLOR_FONT_GRAY, UNIT} from '../../components/variables/variables';
 import {mainText} from '../../components/common-styles/issue';
+import {elevation1} from '../../components/common-styles/form';
 
-import type {TextStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {TextStyleProp, ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 
 export function renderNavigationItem(item: {
   key: string,
   label: string,
   onPress: () => any,
+  style?: ViewStyleProp,
   textStyle?: TextStyleProp,
   showBottomBorder?: boolean,
   isLoading: boolean
 }) {
 
   return (
-    <View style={[styles.navigationItem, item.showBottomBorder ? styles.navigationItemBorder : null]}>
+    <View style={[
+      styles.navigationItem,
+      item.style,
+      item.showBottomBorder ? styles.navigationItemBorder : null
+    ]}>
       <TouchableOpacity
         key={item.key}
         style={styles.navigationItemButton}
@@ -50,12 +56,10 @@ export function renderNavigationItem(item: {
 const styles = StyleSheet.create({
   navigationItem: {
     alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    borderBottomWidth: 1,
-    borderColor: 'transparent'
+    justifyContent: 'space-between'
   },
   navigationItemBorder: {
-    borderColor: COLOR_MEDIUM_GRAY
+    ...elevation1
   },
   navigationItemButton: {
     flexDirection: 'row',

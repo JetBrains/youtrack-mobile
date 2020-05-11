@@ -1,16 +1,16 @@
 /* @flow */
 
 import React, {Component} from 'react';
-import {ScrollView, Dimensions, UIManager, View} from 'react-native';
+import {Dimensions, ScrollView, UIManager, View} from 'react-native';
 
 import throttle from 'lodash.throttle';
-import {clamp, getSnapToX, getPointShift} from './board-scroller__math';
+import {clamp, getPointShift, getSnapToX} from './board-scroller__math';
+import type {DragContextType} from '../draggable/drag-container';
 import {DragContext} from '../draggable/drag-container';
-import {shadowBottom} from '../common-styles/app';
-import {AGILE_COLLAPSED_COLUMN_WIDTH, UNIT} from '../variables/variables';
+import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../variables/variables';
+import {headerSeparator} from '../common-styles/navigation';
 
 import type {BoardColumn} from '../../flow/Agile';
-import type {DragContextType} from '../draggable/drag-container';
 
 export const COLUMN_SCREEN_PART = 0.85;
 
@@ -23,7 +23,8 @@ type Props = {
   snap: boolean,
   dragContext: DragContextType,
   boardHeader: React$Element<any>,
-  sprintSelector: React$Element<any>
+  sprintSelector: React$Element<any>,
+  agileSelector: React$Element<any>
 }
 
 type UnamangedState = {
@@ -33,16 +34,14 @@ type UnamangedState = {
 }
 
 type State = {
-  isDragging: boolean,
-  isBoardHeaderPinned: boolean
+  isDragging: boolean
 };
 
 class BoardScroller extends Component<Props, State> {
   horizontalScroll: ScrollView;
   verticalScroll: ScrollView;
   state: State = {
-    isDragging: false,
-    isBoardHeaderPinned: false
+    isDragging: false
   };
 
   // This state is not intended to affect render function
@@ -118,16 +117,10 @@ class BoardScroller extends Component<Props, State> {
 
     const {nativeEvent} = event;
     const viewHeight = nativeEvent.layoutMeasurement.height;
-    const newY = nativeEvent.contentOffset.y;
-
-    this.unmanagedState.scrollPositions.offsetY = newY;
+    this.unmanagedState.scrollPositions.offsetY = nativeEvent.contentOffset.y;
     this.unmanagedState.scrollPositions.maxY = nativeEvent.contentSize.height - viewHeight;
 
     this.reportZonesMeasurements();
-
-    this.setState({
-      isBoardHeaderPinned: newY >= UNIT * 4
-    });
   };
 
   onHorizontalScroll = event => {
@@ -159,8 +152,16 @@ class BoardScroller extends Component<Props, State> {
   };
 
   render() {
-    const {refreshControl, children, horizontalScrollProps, verticalScrollProps, boardHeader, sprintSelector} = this.props;
-    const {isDragging, isBoardHeaderPinned} = this.state;
+    const {
+      refreshControl,
+      children,
+      horizontalScrollProps,
+      verticalScrollProps,
+      boardHeader,
+      agileSelector,
+      sprintSelector
+    } = this.props;
+    const {isDragging} = this.state;
 
     return (
       <ScrollView
@@ -169,17 +170,19 @@ class BoardScroller extends Component<Props, State> {
         ref={this.verticalScrollRef}
         {...verticalScrollProps}
         onScroll={this.onVerticalScroll}
-        scrollEventThrottle={50}
+        scrollEventThrottle={10}
         onLayout={this.onLayout}
         scrollEnabled={!isDragging}
-        stickyHeaderIndices={[1]}
+        stickyHeaderIndices={[1,3]}
       >
+        <View
+          key="agileBoardAgileSelectorSeparator"
+          style={headerSeparator}/>
+
+        {agileSelector}
         {sprintSelector}
-        {boardHeader && (
-          <View style={isBoardHeaderPinned ? shadowBottom : null}>
-            {boardHeader}
-          </View>
-        )}
+        {boardHeader}
+
         <ScrollView
           horizontal
           scrollEventThrottle={10}
