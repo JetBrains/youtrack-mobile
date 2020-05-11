@@ -18,7 +18,7 @@ import {
   getOtherAccounts,
   storeAccounts
 } from '../components/storage/storage';
-import {Linking, Platform} from 'react-native';
+import {Linking} from 'react-native';
 import UrlParse from 'url-parse';
 import openByUrlDetector, {isOneOfServers} from '../components/open-url-handler/open-url-handler';
 import usage from '../components/usage/usage';
@@ -28,6 +28,8 @@ import Auth from '../components/auth/auth';
 import {loadAgileProfile} from '../views/agile-board/board-actions';
 import PushNotifications from '../components/push-notifications/push-notifications';
 import {EVERYTHING_CONTEXT} from '../components/search/search-context';
+import {refreshIssues, storeSearchContext} from '../views/issue-list/issue-list-actions';
+import {isIOS} from '../util/util';
 
 import type {AuthParams, CurrentUser} from '../components/auth/auth';
 import type {Permissions} from '../components/auth/auth__permissions';
@@ -36,7 +38,6 @@ import type {WorkTimeSettings} from '../flow/WorkTimeSettings';
 import type {StorageState} from '../components/storage/storage';
 import type RootState from '../reducers/app-reducer';
 import type {User, UserAppearanceProfile, UserGeneralProfile} from '../flow/User';
-import {refreshIssues, storeSearchContext} from '../views/issue-list/issue-list-actions';
 
 
 export const REGISTRATION_ERRORS = [
@@ -549,8 +550,8 @@ export function setAccount(issueId: string | null) {
 
 export function subscribeToPushNotifications() {
   return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
-    if (isIOSSimulator()) {
-      return log.debug('Push notifications is not supported on iOS simulator');
+    if (DeviceInfo.isEmulator()) {
+      return log.debug('Skip push notifications on a simulator');
     }
 
     if (isRegisteredForPush()) {
@@ -575,13 +576,6 @@ export function subscribeToPushNotifications() {
   };
 }
 
-function isIOS(): boolean {
-  return Platform.OS === 'ios';
-}
-
-function isIOSSimulator(): boolean {
-  return isIOS() && DeviceInfo.isEmulator();
-}
 
 function isRegisteredForPush(): boolean { //TODO: YTM-1267
   const storageState: StorageState = getStorageState();
