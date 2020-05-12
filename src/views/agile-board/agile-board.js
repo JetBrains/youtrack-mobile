@@ -258,20 +258,22 @@ class AgileBoard extends Component<Props, State> {
       >
         <View style={styles.popupPanel}>
           <Text style={styles.popupText}>
-            The current sprint is out of date. Reload it to avoid data inconsistency.
+            The current sprint is out of date. Reload it to avoid data loss or any other inconsistency.
           </Text>
 
           <View style={styles.popupButtons}>
             <TouchableOpacity
               hitSlop={HIT_SLOP}
-              onPress={() => toggleRefreshPopup(false)}>
-              <Text style={styles.popupButtonText}>Cancel</Text>
+              style={styles.popupButton}
+              onPress={() => refreshAgile(sprint.agile.id, sprint.id)}>
+              <Text style={styles.popupButtonText}>Refresh</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               hitSlop={HIT_SLOP}
-              onPress={() => refreshAgile(sprint.agile.id, sprint.id)}>
-              <Text style={styles.popupButtonText}>Refresh</Text>
+              style={styles.popupButton}
+              onPress={() => toggleRefreshPopup(false)}>
+              <Text style={styles.popupButtonText}>Cancel</Text>
             </TouchableOpacity>
           </View>
         </View>

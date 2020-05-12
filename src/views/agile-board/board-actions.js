@@ -451,7 +451,7 @@ export function subscribeServersideUpdates() {
     serverSideEventsInstance.listenTo('error', () => {
       setTimeout(() => {
         log.info('Reloading sprint and reconnecting to LiveUpdate...');
-        dispatch(loadSprint(sprint.agile.id, sprint.id));
+        dispatch(setOutOfDate(true));
       }, RECONNECT_TIMEOUT);
     });
 
