@@ -584,7 +584,7 @@ class SingeIssueView extends Component<SingleIssueProps, State> {
 }
 
 const mapStateToProps = (state: { app: Object, singleIssue: SingleIssueState }, ownProps): SingleIssueState & AdditionalProps => {
-  const isOnTop = Router._currentRoute.params.issueId === ownProps.issueId;
+  const isOnTop = Router?._currentRoute?.params?.issueId === ownProps.issueId;
 
   return {
     issuePermissions: state.app.issuePermissions,
