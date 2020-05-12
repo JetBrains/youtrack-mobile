@@ -1,4 +1,5 @@
 /* @flow */
+
 import urlJoin from 'url-join';
 import Permissions from './auth__permissions';
 import {getStorageState, flushStoragePart} from '../storage/storage';
@@ -6,10 +7,18 @@ import base64 from 'base64-js';
 import qs from 'qs';
 import log from '../log/log';
 import {USER_AGENT} from '../usage/usage';
+import ReporterBugsnag from '../error-boundary/reporter-bugsnag';
+
 import type {AppConfigFilled} from '../../flow/AppConfig';
 
 const ACCEPT_HEADER = 'application/json, text/plain, */*';
 const URL_ENCODED_TYPE = 'application/x-www-form-urlencoded';
+
+const reportError = (error) => {
+  if (ReporterBugsnag && ReporterBugsnag.notify) {
+    ReporterBugsnag.notify(error);
+  }
+};
 
 function makeBtoa(str: string) {
   const byteArray = [];
@@ -95,6 +104,7 @@ export default class AuthTest {
     })
       .then(res => {
         if (res.error) {
+          reportError(res.error);
           throw res;
         }
         return res;
@@ -158,7 +168,9 @@ export default class AuthTest {
           //restore old refresh token
           authParams.refresh_token = authParams.refresh_token || token;
         } else {
-          log.warn('Token refreshing failed', authParams);
+          const message: string = 'Token refreshing failed';
+          log.warn(message, authParams);
+          reportError(new Error(message));
           throw authParams;
         }
         return authParams;
@@ -197,6 +209,7 @@ export default class AuthTest {
     }).then((res) => {
       if (res.status > 400) {
         log.log('Check token error', res);
+        reportError(res);
         throw res;
       }
       log.info('Token has been verified');
@@ -211,10 +224,12 @@ export default class AuthTest {
           log.log('Trying to refresh token', res);
           return this.refreshToken();
         }
+        reportError(res);
         throw res;
       })
       .catch((err) => {
         log.log('Error during token validation', err);
+        reportError(err);
         throw err;
       });
   }
@@ -224,7 +239,7 @@ export default class AuthTest {
       headers: {
         'Accept': ACCEPT_HEADER,
         'User-Agent': USER_AGENT,
-        'Authorization': `${authParams.token_type} ${authParams.access_token}`
+        'Authorization': `${authParams?.token_type} ${authParams?.access_token}`
       }
     })
       .then((res) => res.json())
@@ -234,7 +249,14 @@ export default class AuthTest {
         return authParams;
       })
       .catch(err => {
-        log.log('Cant load permissions', err);
+        const errorMessage = 'Cant load permissions';
+        log.log(errorMessage, err);
+        try {
+          err.stack = `"${errorMessage}"\n\n${err.stack || ''}`;
+          reportError(err);
+        } catch(e) {
+          //
+        }
         throw err;
       });
   }

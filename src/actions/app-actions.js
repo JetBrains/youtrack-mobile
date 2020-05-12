@@ -239,7 +239,7 @@ export function addAccount(serverUrl: string = '') {
         Router.navigateToDefaultRoute();
       });
       log.info(`Config loaded for new server (${config.backendUrl}), logging in...`);
-      // Note: this auth won't be initialized to the end ever. It is just a temperary instance
+      // Note: this auth won't be initialized to the end ever. It is just a temporary instance
       const auth = new Auth(config);
       const authParams = await authorizeOnOneMoreServer(auth, function onBack(serverUrl: string) {
         log.info('Authorization canceled by user, going back');
