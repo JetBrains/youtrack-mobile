@@ -333,12 +333,13 @@ function completeInitialization(issueId: ?string = null) {
     await auth.loadPermissions(auth.authParams);
     dispatch(setPermissions(auth.permissions, auth.currentUser));
     dispatch(loadUser());
-    dispatch(subscribeToPushNotifications());
     dispatch(loadAgileProfile());
     dispatch(loadWorkTimeSettings());
 
     log.info('Initialization completed');
     Router.navigateToDefaultRoute(issueId ? {issueId} : null);
+
+    dispatch(subscribeToPushNotifications());
   };
 }
 

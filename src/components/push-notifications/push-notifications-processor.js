@@ -21,6 +21,10 @@ export default class PushNotificationsProcessor {
   static deviceToken = null;
   static logPrefix = 'PNProcessor';
 
+  static logData (message: string, data: Object) {
+    log.debug(`${message} ${data ? JSON.stringify(data) : 'N/A'}`);
+  }
+
   static setDeviceToken(token: string) {
     this.deviceToken = token;
     log.info(`${PushNotificationsProcessor.logPrefix}(setDeviceToken): ${token}`);
@@ -44,7 +48,6 @@ export default class PushNotificationsProcessor {
 
   static init(onSuccess: (deviceToken: string) => void, onError: (error: RegistrationError) => void) {
     const logMsgPrefix: string = `${PushNotificationsProcessor.logPrefix}(init): `;
-    const logData = (message: string, data: Object) => log.debug(`${message} ${data ? JSON.stringify(data) : 'N/A'}`);
 
     Notifications.events().registerRemoteNotificationsRegistered(
       (event: Registered) => {
@@ -58,22 +61,28 @@ export default class PushNotificationsProcessor {
 
     Notifications.events().registerNotificationReceivedForeground(
       (notification: Notification, completion: (response: NotificationCompletion) => void) => {
-        logData(`${logMsgPrefix}Foreground notification:`, notification);
+        PushNotificationsProcessor.logData(`${logMsgPrefix}Foreground notification:`, notification);
         completion({alert: false, sound: false, badge: false});
       }
     );
 
     Notifications.events().registerNotificationReceivedBackground(
       (notification: Notification, completion: (response: NotificationCompletion) => void) => {
-        logData(`${logMsgPrefix}Background notification:`, notification);
+        PushNotificationsProcessor.logData(`${logMsgPrefix}Background notification:`, notification);
         completion({alert: true, sound: true, badge: false});
       }
     );
+  }
 
+  static subscribeOnNotificationOpen() {
     Notifications.events().registerNotificationOpened(
       (notification: Notification, completion: () => void) => {
-        logData(`${PushNotificationsProcessor.logPrefix}(open):`, notification);
-        PushNotificationsProcessor.onNotification(PushNotificationsProcessor.getIssueId(notification));
+        PushNotificationsProcessor.logData(`${PushNotificationsProcessor.logPrefix}(open):`, notification);
+
+        PushNotificationsProcessor.onNotification(
+          PushNotificationsProcessor.getIssueId(notification)
+        );
+
         completion();
       });
   }
