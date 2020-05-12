@@ -34,6 +34,13 @@ ReactNative.NativeModules.RNKeychainManager = {
   setInternetCredentialsForServer: jest.fn()
 };
 
+jest.mock('bugsnag-react-native', () => {
+  return {
+    Client: jest.fn(() => ({notify: jest.fn()})),
+    Configuration: jest.fn()
+  };
+});
+
 jest.mock('@react-native-community/async-storage', () => mockAsyncStorage);
 
 // react-native-notification mock
