@@ -40,10 +40,10 @@ export const elevationTop = {
         width: 0,
         height: -1
       },
-      shadowOpacity: 0.25,
+      shadowOpacity: 0.35,
     },
     android: {
-      elevation: 4
+      elevation: 5
     },
   })
 };

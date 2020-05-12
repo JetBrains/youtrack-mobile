@@ -95,7 +95,10 @@ export default StyleSheet.create({
     marginRight: UNIT
   },
 
-  tabsBar: elevation1,
+  tabsBar: {
+    ...elevation1,
+    backgroundColor: COLOR_FONT_ON_BLACK
+  },
   tabLabel: {
     ...mainText,
     paddingTop: UNIT,

@@ -22,7 +22,7 @@ exports[`<Menu/> Render should match a snapshot 1`] = `
           "height": -1,
           "width": 0,
         },
-        "shadowOpacity": 0.25,
+        "shadowOpacity": 0.35,
         "shadowRadius": 0.75,
       },
       Object {
