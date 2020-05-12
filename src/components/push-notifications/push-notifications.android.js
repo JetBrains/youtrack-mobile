@@ -56,6 +56,8 @@ async function initialize(api) {
     log.info(`'${componentLogPrefix}'(initialize): device token has changed, re-subscribe`);
     await register(api);
   }
+
+  PushNotificationsProcessor.subscribeOnNotificationOpen();
 }
 
 export default {

@@ -317,13 +317,14 @@ function completeInitialization(issueId: ?string = null) {
     const auth = getState().app.auth;
     await auth.loadPermissions(auth.authParams);
     dispatch(setPermissions(auth.permissions, auth.currentUser));
-    dispatch(subscribeToPushNotifications());
     dispatch(loadAgileProfile());
     dispatch(loadWorkTimeSettings());
     dispatch(loadUser());
 
     log.info('Initialization completed');
     Router.navigateToDefaultRoute(issueId ? {issueId} : null);
+
+    dispatch(subscribeToPushNotifications());
   };
 }
 
