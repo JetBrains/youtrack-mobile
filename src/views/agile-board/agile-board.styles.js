@@ -134,14 +134,22 @@ export default StyleSheet.create({
   popupText: {
     fontSize: 18,
   },
+  popupButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
   popupButton: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
     marginTop: UNIT * 4,
     padding: UNIT,
     backgroundColor: COLOR_PINK,
-    paddingLeft: UNIT * 2
+    borderRadius: UNIT / 2,
+    marginLeft: UNIT * 2
   },
   popupButtonText: {
-    height: 24,
     fontSize: 20,
     color: COLOR_FONT_ON_BLACK,
     textAlign: 'center'
