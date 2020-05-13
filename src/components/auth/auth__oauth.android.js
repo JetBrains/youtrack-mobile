@@ -1,6 +1,8 @@
 import {Linking} from 'react-native';
 import urlJoin from 'url-join';
-import qs from 'qs';
+
+import {parseQueryString} from './auth-helper';
+
 import type {AppConfig} from '../../flow/AppConfig';
 
 function openAuthPage(config: AppConfig) {
@@ -22,8 +24,7 @@ function authorizeInHub(config: AppConfig) {
       Linking.removeEventListener('url', onOpenWithUrl);
       const url = event.url || event;
 
-      const [, query_string] = url.match(/\?(.*)/);
-      const code = qs.parse(query_string).code;
+      const code = parseQueryString(url).code;
       resolve(code);
       Linking.removeEventListener('url', onOpenWithUrl);
     }
