@@ -10,8 +10,9 @@ import Router from '../../components/router/router';
 import log from '../../components/log/log';
 import attachFile from '../../components/attach-file/attach-file';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
-import {notify, notifyError, resolveError} from '../../components/notification/notification';
+import {notify, notifyError} from '../../components/notification/notification';
 import {showActions} from '../../components/action-sheet/action-sheet';
+import {resolveError, DEFAULT_ERROR_MESSAGE} from '../../components/error-message/error-resolver';
 
 export const CATEGORY_NAME = 'Create issue view';
 
@@ -173,7 +174,7 @@ export function updateIssueDraft(ignoreFields: boolean = false) {
         return await storeIssueDraftId(issue.id);
       }
     } catch (err) {
-      const error = await resolveError(err) || new Error('Unknown error');
+      const error = await resolveError(err) || new Error(DEFAULT_ERROR_MESSAGE);
       const {error_description} = error;
       if (
         (error_description && error_description.indexOf(`Can't find entity with id`) !== -1) ||

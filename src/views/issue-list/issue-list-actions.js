@@ -3,7 +3,8 @@
 import * as types from './issue-list-action-types';
 import ApiHelper from '../../components/api/api__helper';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
-import {notify, notifyError, resolveError} from '../../components/notification/notification';
+import {notify, notifyError} from '../../components/notification/notification';
+import {resolveError} from '../../components/error-message/error-resolver';
 import log from '../../components/log/log';
 import usage from '../../components/usage/usage';
 
@@ -325,7 +326,7 @@ export function loadMoreIssues() {
         dispatch(listEndReached());
       }
     } catch (err) {
-      notifyError('Failed to fetch more issues', err);
+      notifyError('Failed to load more issues', err);
     } finally {
       dispatch(stopMoreIssuesLoading());
     }

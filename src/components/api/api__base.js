@@ -4,10 +4,9 @@ import type Auth from '../auth/auth';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import qs from 'qs';
 import ApiHelper from './api__helper';
+import ReporterBugsnag from '../error-boundary/reporter-bugsnag';
+import {resolveErrorMessage, HTTP_STATUS} from '../error-message/error-resolver';
 
-const STATUS_UNAUTHORIZED = 401;
-const STATUS_OK_IF_MORE_THAN = 200;
-const STATUS_BAD_IF_MORE_THATN = 300;
 
 const MAX_QUERY_LENGTH = 2048;
 
@@ -24,8 +23,7 @@ function updateQueryStringParameter(uri, key, value) {
   const separator = uri.indexOf('?') !== -1 ? '&' : '?';
   if (uri.match(re)) {
     return uri.replace(re, `$1${key}=${value}$2`);
-  }
-  else {
+  } else {
     return `${uri + separator + key}=${value}`;
   }
 }
@@ -68,7 +66,7 @@ export default class BaseAPI {
     this.youTrackIssueUrl = `${this.youTrackApiUrl}/issues`;
   }
 
-  static createFieldsQuery(fields: Object|Array<Object|string>, restParams?: Object): string {
+  static createFieldsQuery(fields: Object | Array<Object | string>, restParams?: Object): string {
     return qs.stringify(
       Object.assign({
         ...restParams,
@@ -79,7 +77,7 @@ export default class BaseAPI {
 
   async makeAuthorizedRequest(url: string, method: ?string, body: ?Object, options: RequestOptions = defaultRequestOptions) {
     url = patchTopParam(url);
-    log.debug(`Making ${method || 'GET'} request to ${url}${body ? ` with body |${JSON.stringify(body)}|` : ''}`);
+    log.debug(`"${method || 'GET'}" request to ${url}${body ? ` with body |${JSON.stringify(body)}|` : ''}`);
     assertLongQuery(url);
 
     const sendRequest = async () => {
@@ -94,22 +92,41 @@ export default class BaseAPI {
       });
     };
 
-    let res = await sendRequest();
+    const logError = async (errorMessage) => {
+      const getLogMessage = (logURL: string) => `"${method || 'GET'}" request to ${logURL}\n\n${errorMessage}`;
 
-    if (res.status === STATUS_UNAUTHORIZED) {
-      log.info('Looks like the token is expired, will try to refresh', res);
+      try {
+        const sanitizedURL: string = (url.split(this.youTrackUrl).pop() || '').split('?fields=')[0];
+        const logError: Error = new Error(getLogMessage(sanitizedURL));
+        ReporterBugsnag.notify(logError);
+        log.debug(logError);
+      } catch (e) {
+        //
+      }
+
+      log.debug(getLogMessage(url));
+    };
+
+
+    let response = await sendRequest();
+
+    if (response.status === HTTP_STATUS.UNAUTHORIZED) {
+      log.info('Token is expired, refreshing token', response);
       await this.auth.refreshToken();
-      res = await sendRequest();
+      response = await sendRequest();
     }
 
-    if (res.status < STATUS_OK_IF_MORE_THAN || res.status >= STATUS_BAD_IF_MORE_THATN) {
-      log.debug(`Got error from ${url}: ${res?.status}. Response body: ${res?._bodyText}`);
-      throw res;
+    if (response.status < HTTP_STATUS.SUCCESS || response.status >= HTTP_STATUS.REDIRECT) {
+      const errorMessage: string = await resolveErrorMessage(response);
+      logError(errorMessage);
+
+      throw new Error(errorMessage);
     }
 
     if (!options.parseJson) {
-      return res;
+      return response;
     }
-    return await res.json();
+
+    return await response.json();
   }
 }

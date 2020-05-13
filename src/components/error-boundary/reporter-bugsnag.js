@@ -46,15 +46,19 @@ class ReporterBugsnag {
     const buildNumber = appPackage.version.split('-').pop();
 
     log.debug(`Reporting Bugsnag exception...`, err);
-    this.exceptionReporter.notify(err, (report) => {
-      report.metadata = {
-        Build: {
-          build: buildNumber,
-        }
-      };
-    });
-    log.debug(`Bugsnag exception reported`, err);
 
+    try {
+      this.exceptionReporter.notify(err, (report) => {
+        report.metadata = {
+          'build': {
+            'buildNumber': buildNumber,
+          }
+        };
+      });
+      log.debug(`Bugsnag exception reported`, err);
+    } catch (e) {
+      //
+    }
   }
 }
 
