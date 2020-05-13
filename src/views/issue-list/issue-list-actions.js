@@ -2,7 +2,8 @@
 import * as types from './issue-list-action-types';
 import ApiHelper from '../../components/api/api__helper';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
-import {notifyError, resolveError} from '../../components/notification/notification';
+import {notifyError} from '../../components/notification/notification';
+import {resolveError} from '../../components/error-message/error-resolver';
 import log from '../../components/log/log';
 import type Api from '../../components/api/api';
 import type {IssueOnList} from '../../flow/Issue';
@@ -197,7 +198,7 @@ export function loadMoreIssues() {
         dispatch(listEndReached());
       }
     } catch (err) {
-      notifyError('Failed to fetch more issues', err);
+      notifyError('Failed to load more issues', err);
     } finally {
       dispatch(stopMoreIssuesLoading());
     }

@@ -1,9 +1,12 @@
 /* @flow */
+
 import UrlParse from 'url-parse';
 import {USER_AGENT} from '../usage/usage';
 import log from '../log/log';
-import type {AppConfig} from '../../flow/AppConfig';
 import {YT_SUPPORTED_VERSION} from '../error-message/error-text-messages';
+import ReporterBugsnag from '../error-boundary/reporter-bugsnag';
+
+import type {AppConfig} from '../../flow/AppConfig';
 
 const MIN_YT_VERSION = 7.0;
 const PROTOCOL_REGEXP = /^https?:\/\//i;
@@ -103,12 +106,19 @@ async function loadConfig(ytUrl: string) {
 
       return config;
     })
-    .catch(err => {
-      log.log(`Loading config failed with an error ${err && err.toString && err.toString()}`);
+    .catch((err: Error) => {
+      log.log(`Failed to load config: ${err && err.toString && err.toString()}`);
       // Catches "Unexpected token < in JSON at position 0" error
-      if (err instanceof SyntaxError) {
-        throw new Error(`Invalid server response. The URL is either an unsupported YouTrack version or is not a YouTrack instance. ${YT_SUPPORTED_VERSION}`);
+      const isSyntaxError: boolean = err instanceof SyntaxError;
+      const logError = (error: Error) => ReporterBugsnag.notify(error);
+
+      if (isSyntaxError) {
+        const unsupportedError: Error = new Error(`Invalid server response. The URL is either an unsupported YouTrack version or is not a YouTrack instance. ${YT_SUPPORTED_VERSION}`);
+        logError(unsupportedError);
+        throw unsupportedError;
       }
+
+      logError(err);
       return Promise.reject(err);
     });
 }
