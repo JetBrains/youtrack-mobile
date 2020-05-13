@@ -18,7 +18,7 @@ function showInfoMessage() {
   if (getStorageState().deviceToken === null) {
     Alert.alert(
       'Push Notifications Available',
-      'Make sure that all "YouTrack" related notification options are allowed (show, sound, vibration etc.) in your device settings.\n',
+      'Make sure that all "YouTrack" related notification options are allowed (show, sound, vibration, light etc.) in your device settings.\n',
       [
         {
           text: 'Dismiss',
