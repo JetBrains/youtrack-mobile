@@ -5,7 +5,7 @@ import {Calendar} from 'react-native-calendars'; // eslint-disable-line import/n
 import CustomField from '../custom-field/custom-field';
 import Select from '../select/select';
 import Header from '../header/header';
-import {COLOR_PLACEHOLDER} from '../../components/variables/variables';
+import {COLOR_PLACEHOLDER} from '../variables/variables';
 import Api from '../api/api';
 import IssuePermissions from '../issue-permissions/issue-permissions';
 import styles, {calendarTheme} from './custom-fields-panel.styles';
@@ -16,6 +16,7 @@ import type {IssueProject, CustomField as CustomFieldType} from '../../flow/Cust
 import {View as AnimatedView} from 'react-native-animatable';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import KeyboardSpacerIOS from '../platform/keyboard-spacer.ios';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   api: Api,
@@ -24,7 +25,8 @@ type Props = {
   issuePermissions: IssuePermissions,
   onUpdate: (field: CustomFieldType, value: null | number | Object | Array<Object>) => Promise<Object>,
   onUpdateProject: (project: IssueProject) => Promise<Object>,
-  canEditProject: boolean
+  canEditProject: boolean,
+  style?: ViewStyleProp
 };
 
 type State = {
@@ -375,7 +377,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     }
 
     return (
-      <View style={styles.container}>
+      <View style={styles.pickerContainer}>
         {this.renderHeader(this.state.datePicker.title)}
 
         <View style={styles.calendar}>
@@ -516,8 +518,9 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       isEditorShown
         ? {
           visible: true,
-          animationType: 'slide'
-        } : {style: styles.placeholder}
+          animationType: 'slide',
+          style: this.props.style
+        } : {style: [styles.container, this.props.style]}
     );
 
     return (

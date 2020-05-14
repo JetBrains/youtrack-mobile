@@ -1,5 +1,11 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_PINK, COLOR_FONT, COLOR_MEDIUM_GRAY} from '../../components/variables/variables';
+import {
+  UNIT,
+  COLOR_PINK,
+  COLOR_FONT,
+  COLOR_MEDIUM_GRAY,
+  COLOR_FONT_ON_BLACK
+} from '../../components/variables/variables';
 import issueStyles from '../single-issue/single-issue.styles';
 import {mainText} from '../../components/common-styles/issue';
 
@@ -8,7 +14,7 @@ const ATTACHING_IMAGE_ALPHA = '70';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF'
+    backgroundColor: COLOR_FONT_ON_BLACK
   },
   title: {
     paddingLeft: UNIT * 2,

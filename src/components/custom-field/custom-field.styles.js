@@ -21,8 +21,9 @@ const font = {
 export default StyleSheet.create({
   wrapper: {
     flex: 1,
-    paddingTop: UNIT * 2,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   wrapperActive: {
     backgroundColor: `${COLOR_PINK}${SELECTED_ALPHA_HEX}`

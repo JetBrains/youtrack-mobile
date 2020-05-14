@@ -3,7 +3,7 @@
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import React, {PureComponent} from 'react';
 
-import {COLOR_BLACK} from '../variables/variables';
+import {COLOR_FONT_ON_BLACK} from '../variables/variables';
 import {isIphoneX} from '../header/header__top-padding.ios';
 
 import {StyleSheet} from 'react-native';
@@ -24,6 +24,6 @@ export default class KeyboardSpacerIOS extends PureComponent<Props, void> {
 
 const styles = StyleSheet.create({
   keyboardSpacer: {
-    backgroundColor: COLOR_BLACK
+    backgroundColor: COLOR_FONT_ON_BLACK
   }
 });

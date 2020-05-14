@@ -7,21 +7,20 @@ import {
   COLOR_FONT_ON_BLACK,
   COLOR_BLACK,
   COLOR_MEDIUM_GRAY
-} from '../../components/variables/variables';
+} from '../variables/variables';
 import {formStyles} from '../common-styles/form';
 
-const HEIGHT = UNIT * 10;
+const HEIGHT = UNIT * 12;
 const SAVING_ALPHA = '70';
 const DONE_BUTTON_HEIGHT = 24;
 
 export default StyleSheet.create({
   container: {
-    flex: 1
+    height: HEIGHT
   },
-  placeholder: {
-    height: HEIGHT,
-    marginTop: UNIT,
-    paddingTop: UNIT / 2
+  pickerContainer: {
+    flex: 1,
+    backgroundColor: COLOR_FONT_ON_BLACK
   },
   bottomBorder: {
     height: 0.5,
@@ -29,14 +28,13 @@ export default StyleSheet.create({
     backgroundColor: COLOR_MEDIUM_GRAY
   },
   customFieldsPanel: {
-    paddingLeft: UNIT,
     flexDirection: 'row',
-    height: HEIGHT
+    height: HEIGHT,
+    paddingLeft: UNIT,
   },
   editorViewContainer: {
     flex: 1,
-    flexShrink: 1,
-    backgroundColor: COLOR_FONT_ON_BLACK
+    flexShrink: 1
   },
   calendar: {
     padding: UNIT*2,
