@@ -83,9 +83,6 @@ export default StyleSheet.create({
   disabledSaveButton: {
     color: COLOR_FONT_GRAY
   },
-  keyboardSpacer: {
-    backgroundColor: COLOR_BLACK
-  },
 
   row: {
     flexDirection: 'row',
