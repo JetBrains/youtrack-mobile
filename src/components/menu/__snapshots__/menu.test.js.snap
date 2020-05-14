@@ -37,7 +37,7 @@ exports[`<Menu/> Render should match a snapshot 1`] = `
   <MenuItem
     icon={
       <IconCheckMarked
-        color="#737577"
+        color="#FE0082"
         size={24}
         style={
           Object {
@@ -46,7 +46,7 @@ exports[`<Menu/> Render should match a snapshot 1`] = `
         }
       />
     }
-    isActive={false}
+    isActive={true}
     label="Issues"
     onPress={[Function]}
   />

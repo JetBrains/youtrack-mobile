@@ -55,7 +55,7 @@ class Menu extends Component<Props, State> {
     };
 
     Router.setOnDispatchCallback((routeName) => {
-      this.setState({currentRouteName: routeName});
+      this.setCurrentRouteName(routeName);
     });
   }
 
@@ -65,7 +65,8 @@ class Menu extends Component<Props, State> {
   });
 
   isCurrentRoute = (routeName: string) => {
-    return this.state.currentRouteName === routeName;
+    const currentRouteName = this.state.currentRouteName || routeMap.IssueList;
+    return currentRouteName === routeName;
   };
 
   canNavigateTo = (routeName: string) => {

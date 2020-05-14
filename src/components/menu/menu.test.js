@@ -5,7 +5,7 @@ import toJson from 'enzyme-to-json';
 
 import Menu from './menu';
 import Router from '../router/router';
-import {rootRoutesList} from '../../app-routes';
+import {rootRoutesList, routeMap} from '../../app-routes';
 
 import Mocks from '../../../test/mocks';
 
@@ -22,6 +22,7 @@ describe('<Menu/>', () => {
   let storeMock;
   let stateMock;
   let ownPropsMock;
+  let router;
 
   beforeEach(() => {
     stateMock = {
@@ -34,6 +35,7 @@ describe('<Menu/>', () => {
     };
     ownPropsMock = {};
     storeMock = createStoreMock(stateMock, ownPropsMock);
+    router = Router;
   });
 
 
@@ -68,8 +70,9 @@ describe('<Menu/>', () => {
         .map(routeName => {
           Router.registerRoute({name: routeName, component: null});
           return routeName;
-        })
-        .map(routeName => jest.spyOn(Router, routeName));
+        });
+
+      jest.spyOn(router, 'navigate');
 
     });
 
@@ -77,19 +80,28 @@ describe('<Menu/>', () => {
       jest.restoreAllMocks();
     });
 
+    it('should not redirect to the same route ', () => {
+      instance.setCurrentRouteName(routeMap.IssueList);
+      instance.openIssueList();
+
+      expect(Router.navigate).not.toHaveBeenCalled();
+    });
+
     describe('openIssueList', () => {
+
       it('should redirect to Issue list', () => {
+        instance.setCurrentRouteName(routeMap.AgileBoard);
         instance.openIssueList();
 
-        expect(Router.IssueList).toHaveBeenCalled();
+        expect(Router.navigate).toHaveBeenCalledWith(routeMap.IssueList);
       });
     });
 
     describe('openAgileBoard', () => {
       it('should redirect to Agile board', () => {
-        instance.openIssueList();
+        instance.openAgileBoard();
 
-        expect(Router.IssueList).toHaveBeenCalled();
+        expect(Router.navigate).toHaveBeenCalledWith(routeMap.AgileBoard);
       });
     });
 
@@ -97,7 +109,7 @@ describe('<Menu/>', () => {
       it('should redirect to Inbox', () => {
         instance.openInbox();
 
-        expect(Router.Inbox).toHaveBeenCalled();
+        expect(Router.navigate).toHaveBeenCalledWith(routeMap.Inbox);
       });
     });
   });
