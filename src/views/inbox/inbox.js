@@ -398,7 +398,7 @@ class Inbox extends Component<Props, void> {
             leftButton={<MenuIcon/>}
             onBack={openMenu}
           >
-            <Text style={issueStyles.headerText}>Notifications</Text>
+            <Text style={issueStyles.headerText}>Activity</Text>
           </Header>
 
           <FlatList
