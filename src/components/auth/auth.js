@@ -8,6 +8,7 @@ import qs from 'qs';
 import log from '../log/log';
 import {USER_AGENT} from '../usage/usage';
 import ReporterBugsnag from '../error-boundary/reporter-bugsnag';
+import {resolveErrorMessage} from '../error-message/error-resolver';
 
 import type {AppConfigFilled} from '../../flow/AppConfig';
 
@@ -209,7 +210,7 @@ export default class AuthTest {
     }).then((res) => {
       if (res.status > 400) {
         log.log('Check token error', res);
-        reportError(res);
+        reportError(resolveErrorMessage(res));
         throw res;
       }
       log.info('Token has been verified');

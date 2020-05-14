@@ -37,7 +37,12 @@ class ReporterBugsnag {
       this.logMessage(false);
       return;
     }
-    const err = error instanceof Error ? error : new Error(error);
+    let err;
+    if (error instanceof Error) {
+      err = error;
+    } else {
+      err = new Error(typeof error !== 'string' ? JSON.stringify(error) : error);
+    }
     const buildNumber = appPackage.version.split('-').pop();
 
     log.debug(`Reporting Bugsnag exception...`, err);
