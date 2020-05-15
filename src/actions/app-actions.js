@@ -487,7 +487,7 @@ export function initializeApp(config: AppConfigFilled, issueId: string | null) {
 }
 
 export function connectToNewYoutrack(newURL: string) {
-  return async (dispatch: (any) => any, getState: () => Object) => {
+  return async (dispatch: (any) => any) => {
     const config = await loadConfig(newURL);
     await storeConfig(config);
     dispatch(setAuth(config));
@@ -496,7 +496,7 @@ export function connectToNewYoutrack(newURL: string) {
 }
 
 export function getStoredConfigAndProceed(issueId: string | null) {
-  return async (dispatch: (any) => any, getState: () => Object) => {
+  return async (dispatch: (any) => any) => {
     const state: StorageState = await populateStorage();
     dispatch(populateAccounts());
 
