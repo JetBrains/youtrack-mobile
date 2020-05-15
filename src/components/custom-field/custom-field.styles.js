@@ -22,7 +22,6 @@ export default StyleSheet.create({
   wrapper: {
     flex: 1,
     flexDirection: 'column',
-    alignItems: 'center',
     justifyContent: 'center'
   },
   wrapperActive: {
