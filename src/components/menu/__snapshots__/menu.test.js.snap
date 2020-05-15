@@ -73,7 +73,7 @@ exports[`<Menu/> Render should match a snapshot 1`] = `
         />
       }
       isActive={false}
-      label="Notifications"
+      label="Activity"
       onPress={[Function]}
     />
   </Connect(Feature)>
