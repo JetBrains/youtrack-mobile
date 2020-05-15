@@ -74,7 +74,7 @@ class DefaultIcon extends PureComponent<Props, void> {
 
 export const IconBack = (props?: Props) => <DefaultIcon {...{
   name: isAndroid ? 'arrow-left' : 'chevron-left',
-  size: isAndroid ? 22 : 30,
+  size: isAndroid ? 22 : 36,
   ...props
 }} />;
 
