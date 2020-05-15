@@ -17,7 +17,7 @@ function storeDeviceToken(token: string | null) {
 function showInfoMessage() {
   if (getStorageState().deviceToken === null) {
     Alert.alert(
-      'Push Notifications Available',
+      'Push Notifications',
       'Make sure that all "YouTrack" related notification options in your device settings are allowed:\n• Show\n• Show on Lock Screen\n• Sound\n• Vibration\n• LED Light\n\nWe also recommend to allow Autostart.\n',
       [
         {
@@ -32,6 +32,7 @@ function showInfoMessage() {
 }
 
 async function register(api: Api) {
+  showInfoMessage();
   const deviceToken: string = PushNotificationsProcessor.getDeviceToken();
   if (deviceToken !== null) {
     await PushNotificationsProcessor.subscribe(api, deviceToken);
@@ -56,7 +57,6 @@ async function initialize(api) {
     await register(api);
   }
 
-  showInfoMessage();
   PushNotificationsProcessor.subscribeOnNotificationOpen();
 }
 
