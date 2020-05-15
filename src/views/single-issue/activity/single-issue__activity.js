@@ -174,7 +174,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     } = this.props;
     const isSecured = !!editingComment && IssueVisibility.isSecured(editingComment.visibility);
 
-    return <View style={styles.activityAddCommentInputContainer}>
+    return <View>
       <SingleIssueCommentInput
         autoFocus={focus}
         initialText={commentText}

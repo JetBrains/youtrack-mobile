@@ -17,8 +17,8 @@ const MIN_INPUT_SIZE = UNIT * 4;
 
 export default StyleSheet.create({
   container: {
-    justifyContent: 'flex-end',
     paddingTop: UNIT,
+    paddingBottom: UNIT,
     paddingLeft: UNIT * 3,
     paddingRight: UNIT * 3,
     backgroundColor: COLOR_FONT_ON_BLACK,

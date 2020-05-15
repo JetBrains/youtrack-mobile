@@ -104,9 +104,6 @@ export default StyleSheet.create({
     flexDirection: 'row',
     marginTop: UNIT * 2
   },
-  activityAddCommentInputContainer: {
-    justifyContent: 'flex-end'
-  },
 
   settingsModal: {
     justifyContent: 'flex-end'
