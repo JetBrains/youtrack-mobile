@@ -3,6 +3,9 @@
 import {Client, Configuration} from 'bugsnag-react-native';
 import log from '../log/log';
 import appPackage from '../../../package.json'; // eslint-disable-line import/extensions
+import {getDefaultConfig} from '../config/config';
+
+import type {AppConfig} from '../../flow/AppConfig';
 
 class ReporterBugsnag {
   exceptionReporter: Client;
@@ -49,10 +52,15 @@ class ReporterBugsnag {
 
     try {
       this.exceptionReporter.notify(err, (report) => {
+        const defaultConfig: AppConfig = getDefaultConfig();
+
         report.metadata = {
           'build': {
             'buildNumber': buildNumber,
-          }
+          },
+          'YouTrack': {
+            'version': defaultConfig?.version
+          },
         };
       });
       log.debug(`Bugsnag exception reported`, err);
