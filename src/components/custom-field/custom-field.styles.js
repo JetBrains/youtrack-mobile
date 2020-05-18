@@ -51,6 +51,9 @@ export default StyleSheet.create({
     ...secondaryText,
     ...font
   },
+  value: {
+    flexDirection: 'row',
+  },
   valueText: {
     marginRight: 0,
     ...mainText,

@@ -25,7 +25,7 @@ export default class Avatar extends PureComponent<Props, State> {
   };
 
   render() {
-    const {source, userName, size, style} = this.props;
+    const {source, userName = 'A', size, style} = this.props;
     const {renderDefault} = this.state;
 
     if (renderDefault) {

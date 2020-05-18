@@ -2,6 +2,7 @@ import React from 'react';
 import {shallow} from 'enzyme';
 
 import CustomField from './custom-field';
+import {__setStorageState} from '../storage/storage';
 
 describe('<CustomField/>', () => {
   let fakeField;
@@ -40,6 +41,29 @@ describe('<CustomField/>', () => {
     const wrapper = shallow(<CustomField field={fakeField}/>);
     const value = wrapper.find({testID: 'value'});
     value.children().should.have.text(fakeField.value.name);
+  });
+
+  it('should render user field value with avatar', () => {
+    __setStorageState({});
+
+    const userFieldMock = {
+      projectCustomField: {
+        field: {
+          fieldType: {
+            valueType: 'user'
+          }
+        }
+      },
+      value: {
+        fullName: 'Full Name',
+        avatarUrl: '/userAvatarUrl'
+      }
+    };
+
+    const wrapper = shallow(<CustomField field={userFieldMock}/>);
+
+    expect(wrapper.find({testID: 'customFieldAvatar'})).toHaveLength(1);
+    expect(wrapper.find({testID: 'value'}).children()).toHaveLength(1);
   });
 
   it('should render value of type date', () => {

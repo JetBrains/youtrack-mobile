@@ -1,12 +1,20 @@
 /* @flow */
-import {TouchableOpacity, View, Text} from 'react-native';
+
 import React, {Component} from 'react';
+import {TouchableOpacity, View, Text} from 'react-native';
+
 import {COLOR_ICON_GREY} from '../variables/variables';
 import {IconLock} from '../icon/icon';
-import styles from './custom-field.styles';
 import ColorField from '../color-field/color-field';
-import type {CustomField as CustomFieldType, FieldValue} from '../../flow/CustomFields';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
+import {getHUBUrl} from '../../util/util';
+import Avatar from '../avatar/avatar';
+import ApiHelper from '../api/api__helper';
+
+import styles from './custom-field.styles';
+
+import type {CustomField as CustomFieldType, FieldValue} from '../../flow/CustomFields';
+import type {User} from '../../flow/User';
 
 type Props = {
   field: CustomFieldType,
@@ -71,7 +79,7 @@ export default class CustomField extends Component<Props, void> {
     }
   }
 
-  _renderValue(value, fieldType: ?string) {
+  _renderValue(value: Object | Array<Object>, fieldType: ?string) {
     const {active, disabled} = this.props;
     const textStyle = [
       styles.valueText,
@@ -79,17 +87,26 @@ export default class CustomField extends Component<Props, void> {
       disabled && styles.valueTextDisabled
     ];
 
-    const renderOneValue = (val) => {
-      return <Text style={textStyle} testID="value" key="value">{this._getValue(val, fieldType)}</Text>;
+    const render = (val) => {
+      return (
+        <View
+          style={styles.value}
+          key="value"
+        >
+          {fieldType === 'user' ? this.renderAvatar(val) : null}
+          <Text testID="value" style={textStyle}>{this._getValue(val, fieldType)}</Text>
+        </View>
+      );
     };
 
     if (Array.isArray(value)) {
       if (!value.length) {
-        return renderOneValue(null);
+        return render(null);
       }
+
       return value.map((val, ind) => {
         return [
-          renderOneValue(val),
+          render(val),
           <Text style={textStyle} key={val}>
             {ind === value.length - 1 ? ' ' : ', '}
           </Text>
@@ -97,7 +114,21 @@ export default class CustomField extends Component<Props, void> {
       });
     }
 
-    return renderOneValue(value);
+    return render(value);
+  }
+
+  renderAvatar(fieldValue: User) {
+    const user: User = ApiHelper.convertRelativeUrls([fieldValue], 'avatarUrl', getHUBUrl())[0];
+    return (
+      <Avatar
+        testID="customFieldAvatar"
+        style={styles.colorMarker}
+        key={user.id}
+        userName={getEntityPresentation(user)}
+        size={20}
+        source={{uri: user.avatarUrl}}
+      />
+    );
   }
 
   render() {
