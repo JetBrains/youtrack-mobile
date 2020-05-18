@@ -17,30 +17,21 @@ describe('PushNotificationsProcessor', () => {
 
 
   describe('Native subscription', () => {
-    let onSuccessMock: () => any;
-    let onErrorMock: () => any;
 
-    beforeEach(() => {
-      onSuccessMock = jest.fn();
-      onErrorMock = jest.fn();
-    });
-
-    it('should subscribe to registration success event', () => {
-      PushNotificationsProcessor.init(onSuccessMock, onErrorMock);
+    it('should subscribe to registration success event', async () => {
+      PushNotificationsProcessor.init();
 
       expect(eventsRegistryMock.registerRemoteNotificationsRegistered).toHaveBeenCalled();
-      expect(onSuccessMock).toHaveBeenCalled();
     });
 
     it('should subscribe to registration fail event', () => {
-      PushNotificationsProcessor.init(onSuccessMock, onErrorMock);
+      PushNotificationsProcessor.init();
 
       expect(eventsRegistryMock.registerRemoteNotificationsRegistrationFailed).toHaveBeenCalled();
-      expect(onErrorMock).toHaveBeenCalledWith(eventsRegistryMock.errorMock);
     });
 
     it('should register notification events', () => {
-      PushNotificationsProcessor.init(onSuccessMock, onErrorMock);
+      PushNotificationsProcessor.init();
 
       expect(eventsRegistryMock.registerNotificationReceivedForeground).toHaveBeenCalled();
       expect(eventsRegistryMock.registerNotificationReceivedBackground).toHaveBeenCalled();
