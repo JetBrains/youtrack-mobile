@@ -14,24 +14,26 @@ type NotificationCompletion = { // TS interfaces that are used in `react-native-
   alert?: boolean;
   sound?: boolean;
 }
+type TokenHandler = (token: string) => void;
 
 
 export default class PushNotificationsProcessor {
   static KONNECTOR_URL = appPackage.config.KONNECTOR_URL;
   static deviceToken = null;
   static logPrefix = 'PNProcessor';
+  static deviceTokenPromise = null;
 
-  static logData (message: string, data: Object) {
+  static logData(message: string, data: Object) {
     log.debug(`${message} ${data ? JSON.stringify(data) : 'N/A'}`);
   }
 
   static setDeviceToken(token: string) {
-    this.deviceToken = token;
+    PushNotificationsProcessor.deviceToken = token;
     log.info(`${PushNotificationsProcessor.logPrefix}(setDeviceToken): ${token}`);
   }
 
-  static getDeviceToken() {
-    return this.deviceToken;
+  static async getDeviceToken(): Promise<string | null> {
+    return PushNotificationsProcessor.deviceTokenPromise;
   }
 
   static onNotification(issueId?: string) {
@@ -46,17 +48,25 @@ export default class PushNotificationsProcessor {
     return notification?.issueId || notification?.payload?.issueId || notification?.data?.issueId;
   }
 
-  static init(onSuccess: (deviceToken: string) => void, onError: (error: RegistrationError) => void) {
+  static async init() {
     const logMsgPrefix: string = `${PushNotificationsProcessor.logPrefix}(init): `;
+    let resolveToken: TokenHandler = () => {};
+    let rejectToken: TokenHandler = () => {};
+
+    PushNotificationsProcessor.deviceTokenPromise = new Promise<string>((resolve: TokenHandler, reject: TokenHandler) => {
+      resolveToken = resolve;
+      rejectToken = reject;
+    });
 
     Notifications.events().registerRemoteNotificationsRegistered(
       (event: Registered) => {
-        onSuccess(event.deviceToken);
+        PushNotificationsProcessor.setDeviceToken(event.deviceToken);
+        resolveToken(event.deviceToken);
       }
     );
 
     Notifications.events().registerRemoteNotificationsRegistrationFailed(
-      (error: RegistrationError) => onError(error)
+      (error: RegistrationError) => rejectToken(error)
     );
 
     Notifications.events().registerNotificationReceivedForeground(
@@ -124,7 +134,7 @@ export default class PushNotificationsProcessor {
     try {
       const youtrackToken = await PushNotificationsProcessor.getYouTrackToken(api);
       log.info(`${logMsgPrefix}Subscribing to push notifications...`);
-      const response = api.subscribeToFCMNotifications(
+      const response = await api.subscribeToFCMNotifications(
         PushNotificationsProcessor.KONNECTOR_URL,
         youtrackToken,
         deviceToken

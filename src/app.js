@@ -82,11 +82,7 @@ class YouTrackMobile extends Component<void, State> {
   static async initAndroidPushNotification() {
     if (isAndroid) {
       const PushNotificationsProcessor = (await import('./components/push-notifications/push-notifications-processor')).default;
-      PushNotificationsProcessor.init((token: string) => {
-        PushNotificationsProcessor.setDeviceToken(token);
-      }, (error) => {
-        log.warn(`Cannot get a device token`, error);
-      });
+      PushNotificationsProcessor.init();
     }
   }
 

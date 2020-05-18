@@ -509,7 +509,7 @@ export function initializeApp(config: AppConfigFilled, issueId: string | null) {
 }
 
 export function connectToNewYoutrack(newURL: string) {
-  return async (dispatch: (any) => any, getState: () => Object) => {
+  return async (dispatch: (any) => any) => {
     const config = await loadConfig(newURL);
     await storeConfig(config);
     dispatch(setAuth(config));
