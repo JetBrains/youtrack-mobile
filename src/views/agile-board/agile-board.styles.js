@@ -14,9 +14,7 @@ import {link} from '../../components/common-styles/button';
 export default StyleSheet.create({
   agile: {
     flex: 1,
-    padding: UNIT * 2,
-    paddingBottom: 0,
-    paddingRight: 0,
+    paddingLeft: UNIT * 2,
     backgroundColor: COLOR_FONT_ON_BLACK
   },
   title: {
@@ -108,6 +106,7 @@ export default StyleSheet.create({
     marginBottom: UNIT * 2
   },
   agileSelector: {
+    paddingTop: UNIT,
     backgroundColor: COLOR_FONT_ON_BLACK
   },
   agileSelectorText: {
