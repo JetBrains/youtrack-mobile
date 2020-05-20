@@ -26,6 +26,7 @@ import throttle from 'lodash.throttle';
 import {NETWORK_PROBLEM_TIPS} from '../../components/error-message/error-text-messages';
 
 import ErrorMessageInline from '../../components/error-message/error-message-inline';
+import {View as AnimatedView} from 'react-native-animatable';
 import {UNIT} from '../../components/variables/variables';
 
 import styles from './enter-server.styles';
@@ -85,7 +86,7 @@ export class EnterServer extends Component<Props, State> {
     if (!this.isValidInput()) {
       return;
     }
-    this.setState({connecting: true});
+    this.setState({connecting: true, error: null});
     const trimmedUrl = this.state.serverUrl.trim().replace(/\/$/i, '');
 
     const urlsToTry = this.getPossibleUrls(trimmedUrl);
@@ -172,11 +173,17 @@ export class EnterServer extends Component<Props, State> {
               onChangeText={(serverUrl) => this.setState({serverUrl})}/>
 
             {Boolean(this.state.error) && (
-              <ErrorMessageInline
-                testID="enterServerError"
-                error={this.state.error}
-                tips={NETWORK_PROBLEM_TIPS}
-              />
+              <AnimatedView
+                animation="slideInDown"
+                duration={500}
+                useNativeDriver
+              >
+                <ErrorMessageInline
+                  testID="enterServerError"
+                  error={this.state.error}
+                  tips={NETWORK_PROBLEM_TIPS}
+                />
+              </AnimatedView>
             )}
 
             <TouchableOpacity
