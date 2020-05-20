@@ -97,10 +97,8 @@ export default class AuthTest {
       log.log(`Response body: ${res && res._bodyText}`);
       return res.json();
     })
-      .then(async res => {
+      .then(res => {
         if (res.error) {
-          const extendedErrorMessage = await createExtendedErrorMessage(res.error, config.auth.serverUri, 'POST');
-          reportError(extendedErrorMessage, 'Obtain Token Error');
           throw res;
         }
         return res;
@@ -165,7 +163,6 @@ export default class AuthTest {
           authParams.refresh_token = authParams.refresh_token || token;
         } else {
           const message: string = 'Token refreshing failed';
-          reportError(`${message} at ${config.auth.serverUri}`);
           log.warn(message, authParams);
           throw authParams;
         }
@@ -202,12 +199,10 @@ export default class AuthTest {
         'User-Agent': USER_AGENT,
         ...this.getAuthorizationHeaders(authParams)
       }
-    }).then(async (res) => {
+    }).then((res) => {
       if (res.status > 400) {
         const errorTitle: string = 'Check token error';
         log.log(errorTitle, res);
-        const extendedErrorMessage = await createExtendedErrorMessage(res, this.CHECK_TOKEN_URL);
-        reportError(extendedErrorMessage, errorTitle);
         throw res;
       }
       log.info('Token has been verified');
@@ -222,12 +217,10 @@ export default class AuthTest {
           log.log('Trying to refresh token', res);
           return this.refreshToken();
         }
-        reportError(res);
         throw res;
       })
       .catch((err) => {
         log.log('Error during token validation', err);
-        reportError(err);
         throw err;
       });
   }

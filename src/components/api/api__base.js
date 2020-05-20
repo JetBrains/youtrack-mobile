@@ -103,7 +103,11 @@ export default class BaseAPI {
     if (response.status < HTTP_STATUS.SUCCESS || response.status >= HTTP_STATUS.REDIRECT) {
       const errorMessage: string = await createExtendedErrorMessage(response, url, method);
       const error = Object.assign(new Error(errorMessage), response);
-      reportError(error, 'Request error');
+
+      if (response.status !== HTTP_STATUS.NOT_FOUND) {
+        const title: string = response.message || response.error_message || response.error_description || '';
+        reportError(error, `Request error${title.length > 0 ? ': ' : ''}${title}`);
+      }
 
       throw error;
     }
