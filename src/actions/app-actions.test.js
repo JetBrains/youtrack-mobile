@@ -9,6 +9,7 @@ import * as actions from './app-actions';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import Router from '../components/router/router';
+import {CUSTOM_ERROR_MESSAGE, REGISTRATION_ERRORS, UNSUPPORTED_ERRORS} from '../components/error/error-codes';
 
 let apiMock;
 let store;
@@ -59,7 +60,7 @@ describe('app-actions', () => {
 
     describe('Registration error', () => {
       const registrationErrorMock = new Error('Registration failed');
-      const errorMessageMock = actions.REGISTRATION_ERRORS[0];
+      const errorMessageMock = REGISTRATION_ERRORS[0];
 
       beforeEach(() => {
         jest.spyOn(log, 'warn');
@@ -79,7 +80,7 @@ describe('app-actions', () => {
 
         await store.dispatch(actions.subscribeToPushNotifications());
 
-        expect(Notification.notifyError).toHaveBeenCalledWith(actions.ERROR_MESSAGE.FAIL, registrationErrorMock);
+        expect(Notification.notifyError).toHaveBeenCalledWith(CUSTOM_ERROR_MESSAGE.FAIL, registrationErrorMock);
       });
 
       it('should not initialize if a registration service returns error', async () => {
@@ -97,7 +98,7 @@ describe('app-actions', () => {
         await store.dispatch(actions.subscribeToPushNotifications());
 
         expect(Notification.notifyError).not.toHaveBeenCalled();
-        expect(log.warn).toHaveBeenCalledWith(actions.ERROR_MESSAGE.NOT_SUPPORTED + errorMessageMock);
+        expect(log.warn).toHaveBeenCalledWith(UNSUPPORTED_ERRORS.PUSH_NOTIFICATION_NOT_SUPPORTED);
       });
 
       function setRegistrationThrow() {

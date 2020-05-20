@@ -2,7 +2,7 @@
 import React from 'react';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import {UNIT, COLOR_FONT_GRAY, COLOR_FONT, COLOR_PINK} from '../variables/variables';
-import {extractErrorMessage} from './error-resolver';
+import {extractErrorMessage} from '../error/error-resolver';
 
 type Props = {
   error: Error,

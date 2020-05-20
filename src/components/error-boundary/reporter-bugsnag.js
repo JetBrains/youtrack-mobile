@@ -3,13 +3,14 @@
 import {Client, Configuration} from 'bugsnag-react-native';
 import log from '../log/log';
 import appPackage from '../../../package.json'; // eslint-disable-line import/extensions
-import {getDefaultConfig} from '../config/config';
+import {getStorageState} from '../storage/storage';
 
 import type {AppConfig} from '../../flow/AppConfig';
 
 class ReporterBugsnag {
   exceptionReporter: Client;
   config: Configuration;
+  buildNumber: string = appPackage.version.split('-').pop();
 
   constructor() {
     const token = this.hasToken();
@@ -32,7 +33,7 @@ class ReporterBugsnag {
 
   logMessage(isWarning: boolean) {
     const logMethod = isWarning ? log.warn : log.debug;
-    logMethod('Bugsnag token missing. Bugsnag reporter disabled.');
+    logMethod('Bugsnag token missing, report not sent.');
   }
 
   notify(error: String | Object | null): void {
@@ -40,26 +41,32 @@ class ReporterBugsnag {
       this.logMessage(false);
       return;
     }
+
     let err;
     if (error instanceof Error) {
       err = error;
     } else {
       err = new Error(typeof error !== 'string' ? JSON.stringify(error) : error);
     }
-    const buildNumber = appPackage.version.split('-').pop();
 
     log.debug(`Reporting Bugsnag exception...`, err);
 
+    let config: AppConfig | Object = {};
+    try {
+      config = getStorageState().config;
+    } catch (e) {
+      //
+    }
+
     try {
       this.exceptionReporter.notify(err, (report) => {
-        const defaultConfig: AppConfig = getDefaultConfig();
 
         report.metadata = {
           'build': {
-            'buildNumber': buildNumber,
+            'buildNumber': this.buildNumber,
           },
           'YouTrack': {
-            'version': defaultConfig?.version
+            'version': config?.version
           },
         };
       });

@@ -25,7 +25,7 @@ import clicksToShowCounter from '../../components/debug-view/clicks-to-show-coun
 import {openDebugView, applyAuthorization} from '../../actions/app-actions';
 import {LOG_IN_2FA_TIP} from '../../components/error-message/error-text-messages';
 
-import {resolveErrorMessage} from '../../components/error-message/error-resolver';
+import {resolveErrorMessage} from '../../components/error/error-resolver';
 import ErrorMessageInline from '../../components/error-message/error-message-inline';
 
 import type {AuthParams} from '../../components/auth/auth';

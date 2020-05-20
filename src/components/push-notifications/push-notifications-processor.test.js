@@ -70,14 +70,14 @@ describe('PushNotificationsProcessor', () => {
 
 
     describe('subscribe', () => {
-      it('should receive a YouTrack token first', async () => {
-        await PushNotificationsProcessor.subscribe(apiMock, eventsRegistryMock.deviceTokenMock);
+      it('should receive a YouTrack first', async () => {
+        await PushNotificationsProcessor.getYouTrackToken(apiMock);
 
         expect(apiMock.getNotificationsToken).toHaveBeenCalled();
       });
 
       it('should subscribe in YouTrack', async () => {
-        await PushNotificationsProcessor.subscribe(apiMock, eventsRegistryMock.deviceTokenMock);
+        await PushNotificationsProcessor.subscribe(apiMock, eventsRegistryMock.deviceTokenMock, youTrackTokenMock);
 
         expect(apiMock.subscribeToFCMNotifications).toHaveBeenCalledWith(
           PushNotificationsProcessor.KONNECTOR_URL,
@@ -86,21 +86,12 @@ describe('PushNotificationsProcessor', () => {
         );
       });
 
-      it('should not subscribe if YouTrack fails to issue a subscription token', async () => {
-        apiMock.getNotificationsToken.mockImplementationOnce(() => {throw tokenSubscriptionErrorMock;});
-
-        await expect(
-          PushNotificationsProcessor.subscribe(apiMock, eventsRegistryMock.deviceTokenMock)
-        ).rejects.toEqual(tokenSubscriptionErrorMock);
-
-      });
-
       it('should not subscribe if Konnector failed to subscribe', async () => {
         const subscriptionErrorMock = new Error('Failed to subscribe to FCM');
         apiMock.subscribeToFCMNotifications.mockImplementationOnce(() => {throw subscriptionErrorMock;});
 
         await expect(
-          PushNotificationsProcessor.subscribe(apiMock, eventsRegistryMock.deviceTokenMock)
+          PushNotificationsProcessor.subscribe(apiMock, eventsRegistryMock.deviceTokenMock, youTrackTokenMock)
         ).rejects.toEqual(subscriptionErrorMock);
       });
     });

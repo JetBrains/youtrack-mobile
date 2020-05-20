@@ -1,15 +1,8 @@
 /* @flow */
 
 import type {CustomError} from '../../flow/Error';
+import {DEFAULT_ERROR_MESSAGE, UNSUPPORTED_ERRORS} from './error-codes';
 
-
-export const HTTP_STATUS = {
-  UNAUTHORIZED: 401,
-  SUCCESS: 200,
-  REDIRECT: 300
-};
-
-export const DEFAULT_ERROR_MESSAGE = 'Something went wrong.';
 
 export const extractErrorMessage = function (err: Object | string): string {
   if (!err) {
@@ -49,4 +42,14 @@ export async function resolveError(err: ?CustomError): Promise<Object> {
 export async function resolveErrorMessage(err: ?CustomError): Promise<string> {
   const error = await resolveError(err);
   return extractErrorMessage(error);
+}
+
+export function getErrorMessage(error: ?CustomError): ?string {
+  return error?.message || error?.localizedDescription || '';
+}
+
+export function isUnsupportedFeatureError(error: ?CustomError): boolean {
+  return Object.keys(UNSUPPORTED_ERRORS).map(
+    (key: string) => UNSUPPORTED_ERRORS[key]
+  ).includes(getErrorMessage(error));
 }

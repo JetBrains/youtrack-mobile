@@ -7,19 +7,13 @@ import base64 from 'base64-js';
 import qs from 'qs';
 import log from '../log/log';
 import {USER_AGENT} from '../usage/usage';
-import ReporterBugsnag from '../error-boundary/reporter-bugsnag';
-import {resolveErrorMessage} from '../error-message/error-resolver';
+import {createExtendedErrorMessage, reportError} from '../error/error-reporter';
 
 import type {AppConfigFilled} from '../../flow/AppConfig';
 
 const ACCEPT_HEADER = 'application/json, text/plain, */*';
 const URL_ENCODED_TYPE = 'application/x-www-form-urlencoded';
 
-const reportError = (error) => {
-  if (ReporterBugsnag && ReporterBugsnag.notify) {
-    ReporterBugsnag.notify(error);
-  }
-};
 
 function makeBtoa(str: string) {
   const byteArray = [];
@@ -103,9 +97,10 @@ export default class AuthTest {
       log.log(`Response body: ${res && res._bodyText}`);
       return res.json();
     })
-      .then(res => {
+      .then(async res => {
         if (res.error) {
-          reportError(res.error);
+          const extendedErrorMessage = await createExtendedErrorMessage(res.error, config.auth.serverUri, 'POST');
+          reportError(extendedErrorMessage, 'Obtain Token Error');
           throw res;
         }
         return res;
@@ -138,11 +133,11 @@ export default class AuthTest {
 
   refreshToken(): Promise<AuthParams> {
     let token;
+    const config = this.config;
+
     return this.readAuth()
       .then((authParams: AuthParams) => {
         log.info('Begining token refresh...');
-
-        const config = this.config;
 
         //store old refresh token
         token = authParams.refresh_token;
@@ -163,15 +158,15 @@ export default class AuthTest {
         });
       })
       .then(res => res.json())
-      .then((authParams: AuthParams) => {
+      .then(async (authParams: AuthParams) => {
         if (!authParams.error_code) {
           log.info('Token has been refreshed.');
           //restore old refresh token
           authParams.refresh_token = authParams.refresh_token || token;
         } else {
           const message: string = 'Token refreshing failed';
+          reportError(`${message} at ${config.auth.serverUri}`);
           log.warn(message, authParams);
-          reportError(new Error(message));
           throw authParams;
         }
         return authParams;
@@ -184,7 +179,7 @@ export default class AuthTest {
       });
   }
 
-  getAuthorizationHeaders(authParams: ?AuthParams = this.authParams): {Authorization: string} {
+  getAuthorizationHeaders(authParams: ?AuthParams = this.authParams): { Authorization: string } {
     if (!authParams) {
       throw new Error('Auth: getAuthorizationHeaders called before authParams initialization');
     }
@@ -207,10 +202,12 @@ export default class AuthTest {
         'User-Agent': USER_AGENT,
         ...this.getAuthorizationHeaders(authParams)
       }
-    }).then((res) => {
+    }).then(async (res) => {
       if (res.status > 400) {
-        log.log('Check token error', res);
-        reportError(resolveErrorMessage(res));
+        const errorTitle: string = 'Check token error';
+        log.log(errorTitle, res);
+        const extendedErrorMessage = await createExtendedErrorMessage(res, this.CHECK_TOKEN_URL);
+        reportError(extendedErrorMessage, errorTitle);
         throw res;
       }
       log.info('Token has been verified');
@@ -249,15 +246,11 @@ export default class AuthTest {
         this.permissions = new Permissions(res);
         return authParams;
       })
-      .catch(err => {
-        const errorMessage = 'Cant load permissions';
+      .catch(async err => {
+        const errorMessage = 'Failed to load permissions';
         log.log(errorMessage, err);
-        try {
-          err.stack = `"${errorMessage}"\n\n${err.stack || ''}`;
-          reportError(err);
-        } catch(e) {
-          //
-        }
+        const extendedErrorMessage = await createExtendedErrorMessage(err, this.PERMISSIONS_CACHE_URL, 'GET');
+        reportError(extendedErrorMessage, errorMessage);
         throw err;
       });
   }

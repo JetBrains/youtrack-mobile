@@ -6,8 +6,9 @@ import type Api from '../api/api';
 import {flushStoragePart, getStorageState} from '../storage/storage';
 import log from '../log/log';
 import {Alert} from 'react-native';
-import {resolveErrorMessage} from '../error-message/error-resolver';
-import ReporterBugsnag from '../error-boundary/reporter-bugsnag';
+import {isUnsupportedFeatureError} from '../error/error-resolver';
+import {reportError} from '../error/error-reporter';
+import {DEFAULT_ERROR_MESSAGE} from '../error/error-codes';
 
 const componentLogPrefix: string = 'PNAndroid';
 const messageDefaultButton: Object = {
@@ -39,54 +40,76 @@ function showInfoMessage(title: string, message: string, buttons: Array<Object> 
   );
 }
 
+async function getYouTrackToken(api: Api) {
+  let youtrackToken: string | null = null;
+  try {
+    youtrackToken = await PushNotificationsProcessor.getYouTrackToken(api);
+  } catch (e) {
+    log.debug(e);
+    throw e;
+  }
+  return youtrackToken;
+}
+
 async function register(api: Api) {
   const deviceToken = await getDeviceToken();
-
   if (deviceToken === null) {
     return;
   }
 
-  const reportError = (error: Error) => ReporterBugsnag.notify(error);
-  const doSubscribe = async () => {
-    await PushNotificationsProcessor.subscribe(api, deviceToken);
+  const youtrackToken = await getYouTrackToken(api);
+  // The method call above throws if YT instance doesn't support push notifications and the following code is not invoked
+
+  let isSecondTry: boolean = false;
+  await doSubscribe();
+
+
+  async function doSubscribe() {
+    let alertErrorMessage: string;
+    let alertExtraButton = [];
+
+    try {
+      await PushNotificationsProcessor.subscribe(api, deviceToken, youtrackToken);
+      showSuccessMessage();
+      storeDeviceToken(deviceToken);
+    } catch (error) {
+      if (isUnsupportedFeatureError(error)) {
+        return;
+      }
+
+      reportError(error);
+      storeDeviceToken(null);
+
+      if (isSecondTry) {
+        alertErrorMessage = 'Server not responding. We will try to subscribe you later.';
+        alertExtraButton = [];
+      } else {
+        alertErrorMessage = `${DEFAULT_ERROR_MESSAGE} We can't subscribe next time when you open the application.`;
+        alertExtraButton = [{
+          text: 'Try again',
+          onPress: doSubscribe
+        }];
+      }
+
+      showErrorMessage(alertErrorMessage, alertExtraButton);
+      isSecondTry = true;
+    }
+  }
+
+  function showSuccessMessage() {
     if (getStorageState().deviceToken === null) {
       showInfoMessage(
         'You are subscribed to push notifications',
         'Make sure that the following application notifications options in your device settings are allowed:\n• Show\n• Sound\n• Vibration\n• LED light\n'
       );
     }
-    storeDeviceToken(deviceToken);
-  };
+  }
 
-  try {
-    await doSubscribe();
-  } catch (error) {
-    storeDeviceToken(null);
-
-    const errorMessage: string = await resolveErrorMessage(error);
-    const reSubscribe = async () => {
-      try {
-        await doSubscribe();
-      } catch (err) {
-        reportError(err);
-        showInfoMessage('Server overloaded', 'We will try to subscribe you next time when you open the application.');
-      }
-    };
-
+  function showErrorMessage(message: string, extraButton: Array<?Object>) {
     showInfoMessage(
       'Push notification subscription error',
-      errorMessage.substr(0, 300),
-      [
-        messageDefaultButton,
-        {
-          text: 'Report',
-          onPress: () => reportError(error)
-        },
-        {
-          text: 'Subscribe again',
-          onPress: reSubscribe
-        }
-      ]
+      message,
+      [messageDefaultButton].concat(extraButton)
     );
   }
 }

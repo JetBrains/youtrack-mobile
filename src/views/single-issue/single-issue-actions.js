@@ -4,7 +4,7 @@ import {Linking, Share} from 'react-native';
 import * as types from './single-issue-action-types';
 import ApiHelper from '../../components/api/api__helper';
 import {notify, notifyError} from '../../components/notification/notification';
-import {resolveError} from '../../components/error-message/error-resolver';
+import {resolveError} from '../../components/error/error-resolver';
 import log from '../../components/log/log';
 import Router from '../../components/router/router';
 import {showActions} from '../../components/action-sheet/action-sheet';

@@ -1,4 +1,7 @@
 /* @flow */
+
+import {Share} from 'react-native';
+
 import deviceLog, {InMemoryAdapter} from 'react-native-device-log';
 
 deviceLog.init(new InMemoryAdapter(), {
@@ -31,3 +34,17 @@ export default {
     deviceLog.options.logToConsole = false;
   }
 };
+
+export async function getLogs() {
+  const rows = await deviceLog.store.getRows();
+
+  return rows
+    .reverse() // They store comments in reverse order
+    .map(row => `${row.timeStamp._i}: ${row.message}`)
+    .join('\n');
+}
+
+export async function copyRawLogs() {
+  const logs = await getLogs();
+  Share.share({itle: 'YouTrack Mobile render crash logs', message: logs}, {dialogTitle: 'Share issue URL'});
+}

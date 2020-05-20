@@ -6,7 +6,7 @@ import styles from './error-boundary.styles';
 import {connect} from 'react-redux';
 import {openDebugView} from '../../actions/app-actions';
 import log from '../log/log';
-import {reportCrash, createErrorData} from './reporter';
+import {sendErrorReport, createReportErrorData} from '../error/error-reporter';
 import {notify} from '../notification/notification';
 import {flushStoragePart} from '../storage/storage';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -15,7 +15,7 @@ import {COLOR_ICON_MEDIUM_GREY, COLOR_MEDIUM_GRAY, COLOR_PINK} from '../variable
 import ReporterBugsnagInfo from './reporter-bugsnag-info';
 import ReporterBugsnag from './reporter-bugsnag';
 
-import type {ErrorData} from './reporter';
+import type {ReportErrorData} from '../error/error-reporter';
 
 type Props = {
   openDebugView: any => any,
@@ -55,7 +55,7 @@ class ErrorBoundary extends Component<Props, State> {
       return;
     }
 
-    const errorData: ErrorData = await createErrorData(error);
+    const errorData: ReportErrorData = await createReportErrorData(error);
 
     try {
       this.setState({isReporting: true});
@@ -64,7 +64,7 @@ class ErrorBoundary extends Component<Props, State> {
         ReporterBugsnag.notify(error);
       }
 
-      const reportedId = await reportCrash(`Render crash report: ${errorData.summary}`, errorData.description);
+      const reportedId = await sendErrorReport(`Render crash report: ${errorData.summary}`, errorData.description);
       if (reportedId) {
         notify(`Crash has been reported`);
       }

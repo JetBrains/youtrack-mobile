@@ -1,7 +1,7 @@
 /* @flow */
 import * as types from './board-action-types';
 import {notifyError, notify} from '../../components/notification/notification';
-import {DEFAULT_ERROR_MESSAGE} from '../../components/error-message/error-resolver';
+import {DEFAULT_ERROR_MESSAGE} from '../../components/error/error-codes';
 import type {AgileBoardRow, AgileColumn, BoardOnList, AgileUserProfile, Sprint, Board} from '../../flow/Agile';
 import type {IssueFull, IssueOnList} from '../../flow/Issue';
 import ServersideEvents from '../../components/api/api__serverside-events';

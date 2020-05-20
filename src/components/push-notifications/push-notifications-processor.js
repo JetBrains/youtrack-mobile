@@ -2,12 +2,14 @@
 
 import {Notifications, Notification, Registered, RegistrationError} from 'react-native-notifications-latest';
 
-import {notify} from '../notification/notification';
 import appPackage from '../../../package.json'; // eslint-disable-line import/extensions
 import log from '../log/log';
 
-import type Api from '../api/api';
 import Router from '../router/router';
+import {UNSUPPORTED_ERRORS} from '../error/error-codes';
+
+import type Api from '../api/api';
+import type {CustomError} from '../../flow/Error';
 
 type NotificationCompletion = { // TS interfaces that are used in `react-native-notifications-latest` module
   badge?: boolean;
@@ -97,6 +99,14 @@ export default class PushNotificationsProcessor {
       });
   }
 
+  static composeError(error: CustomError) {
+    let err: Error = error;
+    if ([400, 404, 405].includes(error?.status)) {
+      err = new Error(UNSUPPORTED_ERRORS.PUSH_NOTIFICATION_NOT_SUPPORTED);
+    }
+    return err;
+  }
+
   static async unsubscribe(api: Api, deviceToken: string) {
     const logMsgPrefix: string = `${PushNotificationsProcessor.logPrefix}(unsubscribe): `;
     log.info(`${logMsgPrefix}Unsubscribing from push notifications...`);
@@ -107,7 +117,6 @@ export default class PushNotificationsProcessor {
     } catch (error) {
       const errorMsg = 'Failed to unsubscribed from push notifications';
       log.warn(`${logMsgPrefix}${errorMsg}`, error);
-      notify(errorMsg);
     }
   }
 
@@ -119,20 +128,13 @@ export default class PushNotificationsProcessor {
       log.info(`${logMsgPrefix}YouTrack token received`);
       return youTrackToken;
     } catch (error) {
-      let err: Error = error;
-      if ([400, 404, 405].includes(error?.status)) {
-        const errorMsg = `${logMsgPrefix}server does not support push notifications`;
-        log.warn(errorMsg, error);
-        err = new Error(errorMsg);
-      }
-      throw err;
+      throw PushNotificationsProcessor.composeError(error);
     }
   }
 
-  static async subscribe(api: Api, deviceToken: string): Promise<any> {
+  static async subscribe(api: Api, deviceToken: string, youtrackToken: string): Promise<any> {
     const logMsgPrefix: string = `${PushNotificationsProcessor.logPrefix}(subscribe): `;
     try {
-      const youtrackToken = await PushNotificationsProcessor.getYouTrackToken(api);
       log.info(`${logMsgPrefix}Subscribing to push notifications...`);
       const response = await api.subscribeToFCMNotifications(
         PushNotificationsProcessor.KONNECTOR_URL,
@@ -142,9 +144,9 @@ export default class PushNotificationsProcessor {
       log.info(`${logMsgPrefix}Subscribed to push notifications`);
       return response;
     } catch (error) {
-      log.warn(`${logMsgPrefix}Subscribe to push notifications failed`, error);
+      const err = PushNotificationsProcessor.composeError(error);
+      log.warn(`${logMsgPrefix}Subscribe to push notifications failed`, err);
       return Promise.reject(error);
     }
   }
-
 }

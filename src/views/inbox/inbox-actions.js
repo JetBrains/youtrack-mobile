@@ -1,7 +1,7 @@
 /* @flow */
 import * as types from './inbox-action-types';
 import {notify} from '../../components/notification/notification';
-import {resolveError} from '../../components/error-message/error-resolver';
+import {resolveError} from '../../components/error/error-resolver';
 import log from '../../components/log/log';
 
 import type Api from '../../components/api/api';

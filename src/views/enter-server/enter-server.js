@@ -19,7 +19,7 @@ import usage from '../../components/usage/usage';
 import {VERSION_DETECT_FALLBACK_URL} from '../../components/config/config';
 import log from '../../components/log/log';
 import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
-import {resolveErrorMessage} from '../../components/error-message/error-resolver';
+import {resolveErrorMessage} from '../../components/error/error-resolver';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import {connectToNewYoutrack, openDebugView} from '../../actions/app-actions';
 import throttle from 'lodash.throttle';

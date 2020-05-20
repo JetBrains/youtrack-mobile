@@ -4,7 +4,7 @@ import UrlParse from 'url-parse';
 import {USER_AGENT} from '../usage/usage';
 import log from '../log/log';
 import {YT_SUPPORTED_VERSION} from '../error-message/error-text-messages';
-import ReporterBugsnag from '../error-boundary/reporter-bugsnag';
+import {reportError} from '../error/error-reporter';
 
 import type {AppConfig} from '../../flow/AppConfig';
 
@@ -110,15 +110,16 @@ async function loadConfig(ytUrl: string) {
       log.log(`Failed to load config: ${err && err.toString && err.toString()}`);
       // Catches "Unexpected token < in JSON at position 0" error
       const isSyntaxError: boolean = err instanceof SyntaxError;
-      const logError = (error: Error) => ReporterBugsnag.notify(error);
+      const errorReportTitle: string = 'Get YT config Error';
 
       if (isSyntaxError) {
         const unsupportedError: Error = new Error(`Invalid server response. The URL is either an unsupported YouTrack version or is not a YouTrack instance. ${YT_SUPPORTED_VERSION}`);
-        logError(unsupportedError);
+        reportError(unsupportedError, errorReportTitle);
+
         throw unsupportedError;
       }
 
-      logError(err);
+      reportError(err, errorReportTitle);
       return Promise.reject(err);
     });
 }

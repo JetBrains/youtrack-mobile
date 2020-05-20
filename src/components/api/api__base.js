@@ -4,8 +4,8 @@ import type Auth from '../auth/auth';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import qs from 'qs';
 import ApiHelper from './api__helper';
-import ReporterBugsnag from '../error-boundary/reporter-bugsnag';
-import {resolveErrorMessage, HTTP_STATUS} from '../error-message/error-resolver';
+import {HTTP_STATUS} from '../error/error-codes';
+import {createExtendedErrorMessage, reportError} from '../error/error-reporter';
 
 
 const MAX_QUERY_LENGTH = 2048;
@@ -77,7 +77,7 @@ export default class BaseAPI {
 
   async makeAuthorizedRequest(url: string, method: ?string, body: ?Object, options: RequestOptions = defaultRequestOptions) {
     url = patchTopParam(url);
-    log.debug(`"${method || 'GET'}" request to ${url}${body ? ` with body |${JSON.stringify(body)}|` : ''}`);
+    log.debug(`"${method || 'GET'}" to ${url}${body ? ` with body |${JSON.stringify(body)}|` : ''}`);
     assertLongQuery(url);
 
     const sendRequest = async () => {
@@ -92,22 +92,6 @@ export default class BaseAPI {
       });
     };
 
-    const logError = async (errorMessage) => {
-      const getLogMessage = (logURL: string) => `"${method || 'GET'}" request to ${logURL}\n\n${errorMessage}`;
-
-      try {
-        const sanitizedURL: string = (url.split(this.youTrackUrl).pop() || '').split('?fields=')[0];
-        const logError: Error = new Error(getLogMessage(sanitizedURL));
-        ReporterBugsnag.notify(logError);
-        log.debug(logError);
-      } catch (e) {
-        //
-      }
-
-      log.debug(getLogMessage(url));
-    };
-
-
     let response = await sendRequest();
 
     if (response.status === HTTP_STATUS.UNAUTHORIZED) {
@@ -117,10 +101,11 @@ export default class BaseAPI {
     }
 
     if (response.status < HTTP_STATUS.SUCCESS || response.status >= HTTP_STATUS.REDIRECT) {
-      const errorMessage: string = await resolveErrorMessage(response);
-      logError(errorMessage);
+      const errorMessage: string = await createExtendedErrorMessage(response, url, method);
+      const error = Object.assign(new Error(errorMessage), response);
+      reportError(error, 'Request error');
 
-      throw new Error(errorMessage);
+      throw error;
     }
 
     if (!options.parseJson) {

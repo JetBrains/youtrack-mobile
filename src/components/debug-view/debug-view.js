@@ -1,25 +1,12 @@
 /* @flow */
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View, Text, TouchableOpacity, Modal, Share} from 'react-native';
-import deviceLog, {LogView} from 'react-native-device-log';
+import {Modal, Text, TouchableOpacity, View} from 'react-native';
+import {LogView} from 'react-native-device-log';
 import getTopPadding from '../../components/header/header__top-padding';
 import styles from './debug-view.styles';
 import {closeDebugView} from '../../actions/app-actions';
-
-export async function getLogs() {
-  const rows = await deviceLog.store.getRows();
-
-  return rows
-    .reverse() // They store comments in reverse order
-    .map(row => `${row.timeStamp._i}: ${row.message}`)
-    .join('\n');
-}
-
-export async function copyRawLogs() {
-  const logs = await getLogs();
-  Share.share({itle: 'YouTrack Mobile render crash logs', message: logs}, {dialogTitle: 'Share issue URL'});
-}
+import {copyRawLogs} from '../log/log';
 
 type Props = {
   show: boolean,
