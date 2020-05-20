@@ -129,7 +129,7 @@ export function updateUserGeneralProfile(userGeneralProfile: UserGeneralProfile)
         ...{general: updatedUserGeneralProfile}
       });
     } catch (e) {
-      notify('Cannot update your profile');
+      log.info('Cannot update your profile');
     }
   };
 }
