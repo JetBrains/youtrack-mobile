@@ -7,7 +7,7 @@ import {
   COLOR_FONT,
   COLOR_PINK,
   COLOR_MEDIUM_GRAY,
-  COLOR_BLACK
+  COLOR_DARK
 } from '../../components/variables/variables';
 import {SIZE as COLOR_FIELD_SIZE} from '../../components/color-field/color-field';
 import {secondaryText, issueCard} from '../../components/common-styles/issue';
@@ -104,7 +104,6 @@ export default StyleSheet.create({
     ...elevation1
   },
   searchContextButton: {
-    marginTop: UNIT,
     marginRight: UNIT * 2,
     marginLeft: UNIT * 2,
     paddingTop: UNIT,
@@ -114,7 +113,8 @@ export default StyleSheet.create({
   contextButtonText: {
     fontSize: 20,
     letterSpacing: 0.13,
-    color: COLOR_BLACK
+    fontWeight: '500',
+    color: COLOR_DARK
   },
   searchPanel: {
     zIndex: -1,
