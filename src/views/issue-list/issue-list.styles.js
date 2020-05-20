@@ -104,6 +104,7 @@ export default StyleSheet.create({
     ...elevation1
   },
   searchContextButton: {
+    marginTop: UNIT,
     marginRight: UNIT * 2,
     marginLeft: UNIT * 2,
     paddingTop: UNIT,
