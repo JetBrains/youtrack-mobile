@@ -87,13 +87,13 @@ export default class CustomField extends Component<Props, void> {
       disabled && styles.valueTextDisabled
     ];
 
-    const render = (val) => {
+    const render = (val: Object | null) => {
       return (
         <View
           style={styles.value}
           key="value"
         >
-          {fieldType === 'user' ? this.renderAvatar(val) : null}
+          {val && fieldType === 'user' ? this.renderAvatar(val) : null}
           <Text testID="value" style={textStyle}>{this._getValue(val, fieldType)}</Text>
         </View>
       );
