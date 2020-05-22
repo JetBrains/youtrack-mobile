@@ -134,7 +134,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
         setIssueDescriptionCopy={setIssueDescriptionCopy}
 
         analyticCategory={CATEGORY_NAME}
-        renderRefreshControl={this.renderRefreshControl}
+        renderRefreshControl={() => this.renderRefreshControl(() => this.loadIssue())}
 
         onVoteToggle={toggleVote}
       />
@@ -152,7 +152,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
         issuePermissions={issuePermissions}
         selectProps={selectProps}
         updateUserAppearanceProfile={updateUserAppearanceProfile}
-        renderRefreshControl={this.renderRefreshControl}
+        renderRefreshControl={(loadActivities: () => any) => this.renderRefreshControl(loadActivities)}
       />
     );
   };
@@ -313,16 +313,13 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
     }
   }
 
-  _renderRefreshControl(onRefresh: () => any = () => {}) {
+  _renderRefreshControl(onRefresh?: Function) {
     return <RefreshControl
       refreshing={this.props.isRefreshing}
       tintColor={COLOR_PINK}
       onRefresh={() => {
-        this.props.refreshIssue();
         if (onRefresh) {
           onRefresh();
-        } else {
-          this.loadIssue();
         }
       }}
     />;
