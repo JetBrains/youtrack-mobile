@@ -5,7 +5,7 @@ import {secondaryText} from '../common-styles/issue';
 
 export const SIZE = 20;
 export const NO_COLOR_ID = '0';
-const INITIAL_COLOR = 'initial';
+export const INITIAL_COLOR = 'initial';
 
 type Props = {
   text: string,

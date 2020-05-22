@@ -6,11 +6,11 @@ exports[`<AgileCard/> should render snapshot 1`] = `
     Array [
       Object {
         "backgroundColor": "#f6f6f6",
-        "borderRadius": 6,
-        "flexDirection": "column",
+        "borderRadius": 8,
+        "flexDirection": "row",
         "marginBottom": 8,
         "marginRight": 16,
-        "padding": 16,
+        "overflow": "hidden",
       },
       undefined,
       undefined,
@@ -20,76 +20,112 @@ exports[`<AgileCard/> should render snapshot 1`] = `
 >
   <View
     style={
-      Object {
-        "alignItems": "center",
-        "flexDirection": "row",
-        "justifyContent": "space-between",
-      }
+      Array [
+        Object {
+          "borderBottomLeftRadius": 8,
+          "borderTopLeftRadius": 8,
+          "flexShrink": 0,
+          "marginBottom": 2,
+          "marginTop": 2,
+          "width": 4,
+        },
+        Object {
+          "backgroundColor": "#000",
+        },
+      ]
+    }
+  />
+  <View
+    style={
+      Array [
+        Object {
+          "flexDirection": "column",
+          "flexGrow": 1,
+          "padding": 16,
+          "paddingBottom": 14,
+          "paddingTop": 14,
+        },
+        Object {
+          "padding": 8,
+        },
+      ]
     }
   >
     <View
       style={
         Object {
-          "color": "#737577",
           "flexDirection": "row",
-          "flexGrow": 0,
-          "flexShrink": 0,
-          "fontSize": 14,
-          "letterSpacing": -0.17,
         }
       }
     >
-      <ColorField
-        color={
-          Object {
-            "background": "#000",
-            "foreground": "#FFF",
-            "id": 4,
-          }
-        }
-        fullText={true}
+      <View
         style={
           Object {
-            "paddingLeft": 4,
-            "paddingRight": 4,
-            "width": null,
+            "flexGrow": 1,
           }
         }
-        text="TT-123"
+      >
+        <Text
+          style={
+            Array [
+              Object {
+                "color": "#737577",
+                "flexGrow": 0,
+                "flexShrink": 0,
+                "fontSize": 14,
+                "letterSpacing": -0.17,
+              },
+              Object {
+                "fontSize": 11,
+              },
+            ]
+          }
+          testID="card-simple-issue-id"
+        >
+          TT-123
+        </Text>
+      </View>
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "flexDirection": "row",
+          }
+        }
       />
     </View>
-    <View
-      style={
-        Object {
-          "flexDirection": "row",
+    <View>
+      <Text
+        numberOfLines={2}
+        style={
+          Array [
+            Object {
+              "color": "#1f2326",
+              "flex": 1,
+              "fontSize": 16,
+              "fontWeight": "500",
+              "letterSpacing": -0.19,
+              "lineHeight": 20,
+              "marginTop": 8,
+            },
+            Object {
+              "fontSize": 11,
+            },
+          ]
         }
-      }
-    />
+        testID="card-summary"
+      >
+        issue summary
+      </Text>
+      <Tags
+        onTagPress={[Function]}
+        style={
+          Object {
+            "marginTop": 8,
+          }
+        }
+      />
+    </View>
   </View>
-  <Text
-    numberOfLines={3}
-    style={
-      Object {
-        "color": "#1f2326",
-        "flex": 1,
-        "fontSize": 16,
-        "fontWeight": "500",
-        "letterSpacing": -0.19,
-        "lineHeight": 20,
-        "marginTop": 8,
-      }
-    }
-    testID="card-summary"
-  >
-    issue summary
-  </Text>
-  <Tags
-    onTagPress={[Function]}
-    style={
-      Object {
-        "marginTop": 8,
-      }
-    }
-  />
 </View>
 `;

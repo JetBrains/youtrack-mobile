@@ -4,54 +4,69 @@ import {StyleSheet} from 'react-native';
 
 import {
   UNIT,
-  COLOR_FONT_GRAY,
   COLOR_LIGHT_GRAY,
   COLOR_ICON_LIGHT_BLUE
 } from '../variables/variables';
-import {issueCard} from '../common-styles/issue';
+import {issueCard, secondaryText} from '../common-styles/issue';
 
 export default StyleSheet.create({
   card: {
-    flexDirection: 'column',
-    padding: UNIT * 2,
+    flexDirection: 'row',
     marginBottom: UNIT,
     marginRight: UNIT * 2,
-    backgroundColor: COLOR_LIGHT_GRAY,
-    borderRadius: UNIT * 0.75
+    borderRadius: UNIT,
+    overflow: 'hidden',
+    backgroundColor: COLOR_LIGHT_GRAY
+  },
+  cardColorCoding: {
+    flexShrink: 0,
+    marginTop: UNIT / 4,
+    marginBottom: UNIT / 4,
+    width: UNIT / 2,
+    borderTopLeftRadius: UNIT,
+    borderBottomLeftRadius: UNIT
+  },
+  cardContainer: {
+    flexGrow: 1,
+    flexDirection: 'column',
+    padding: UNIT * 2,
+    paddingTop: UNIT * 1.75,
+    paddingBottom: UNIT * 1.75,
+  },
+  cardContainerNotZoomed: {
+    padding: UNIT,
+  },
+  cardContent: {
+    flexDirection: 'column'
+  },
+  issueHeader: {
+    flexDirection: 'row'
+  },
+  issueHeaderLeft: {
+    flexGrow: 1,
   },
   ghost: {
     display: 'none'
   },
   dragging: {
-    width: '50%',
+    width: '80%',
     borderWidth: 2,
     borderColor: COLOR_ICON_LIGHT_BLUE
   },
-  topLine: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
+  draggingZoomedOut: {
+    width: '20%'
   },
   estimation: {
-    flexShrink: 1,
-    marginLeft: UNIT * 2,
-    fontSize: 11,
-    color: COLOR_FONT_GRAY
+    marginRight: UNIT,
+    ...secondaryText
   },
   summary: {
     ...issueCard.issueSummary,
   },
-  colorFieldContainer: {
-    ...issueCard.issueId,
-    flexDirection: 'row'
-  },
-  issueIdColorField: {
-    paddingLeft: UNIT / 2,
-    paddingRight: UNIT / 2,
-    width: null, //Removes fixed width of usual color field
-  },
+  issueId: issueCard.issueId,
   assignees: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   assignee: {
     marginLeft: UNIT / 2
@@ -59,4 +74,7 @@ export default StyleSheet.create({
   tags: {
     marginTop: UNIT
   },
+  zoomedInText: {
+    fontSize: 11
+  }
 });

@@ -321,6 +321,7 @@ class AgileBoard extends Component<Props, State> {
               issue={issue}
               style={styles.card}
               estimationField={sprint.agile.estimationField}
+              zoomedIn={this.state.zoomedIn}
             />
           </Draggable>
         );
