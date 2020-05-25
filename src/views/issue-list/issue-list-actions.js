@@ -9,7 +9,7 @@ import log from '../../components/log/log';
 import usage from '../../components/usage/usage';
 
 import type Api from '../../components/api/api';
-import type {IssueOnList} from '../../flow/Issue';
+import type {IssueOnList, SavedQuery} from '../../flow/Issue';
 import type {Folder} from '../../flow/User';
 import {updateUserGeneralProfile} from '../../actions/app-actions';
 import {EVERYTHING_CONTEXT} from '../../components/search/search-context';
@@ -85,11 +85,6 @@ export function storeIssuesQuery(query: string) {
   };
 }
 
-export function readStoredSearchContextQuery() {
-  const storageSearchContext: ?Folder = getStorageState().searchContext;
-  return storageSearchContext?.query || '';
-}
-
 export function storeSearchContext(searchContext: Folder) {
   return () => flushStoragePart({searchContext});
 }
@@ -135,9 +130,9 @@ export function closeIssuesContextSelect() {
 }
 
 export function getSearchQuery(query: string) {
-  return (dispatch: (any) => any, getState: () => Object) => {
-    const userGeneralProfileSearchContext = getState().app?.user?.profiles?.general?.searchContext;
-    const searchContextQuery = userGeneralProfileSearchContext?.query || readStoredSearchContextQuery();
+  return () => {
+    const userSearchContext: SavedQuery = getStorageState().searchContext;
+    const searchContextQuery = userSearchContext?.query;
     return `${searchContextQuery} ${query}`;
   };
 }
@@ -181,13 +176,15 @@ export function openIssuesContextSelect() {
         },
         selectedItems: [currentSearchContext],
         onCancel: () => dispatch(closeIssuesContextSelect()),
-        onSelect: (selectedContext: Folder) => {
+        onSelect: async (selectedContext: Folder) => {
           try {
-            dispatch(storeSearchContext(selectedContext));
             dispatch(closeIssuesContextSelect());
+
+            await dispatch(storeSearchContext(selectedContext));
             dispatch(updateUserGeneralProfile({
               searchContext: selectedContext.id ? selectedContext : null
             }));
+
             dispatch(refreshIssues());
           } catch (error) {
             notify('Failed to change a context', error);
@@ -282,9 +279,9 @@ export function loadIssues(query: string) {
 
 export function refreshIssues() {
   return async (dispatch: (any) => any, getState: () => Object) => {
+    const additionalQuery: string = getState().issueList.query;
+    const searchQuery: string = await dispatch(getSearchQuery(additionalQuery));
 
-
-    const searchQuery = dispatch(getSearchQuery(getState().issueList.query));
     dispatch(loadIssues(searchQuery));
   };
 }

@@ -343,7 +343,8 @@ function loadUser(userId: string = 'me') {
       user.profiles.general.searchContext = EVERYTHING_CONTEXT;
     }
 
-    dispatch(storeSearchContext(user.profiles.general.searchContext));
+    await dispatch(storeSearchContext(user.profiles.general.searchContext));
+
     dispatch({type: types.RECEIVE_USER, user});
     dispatch(refreshIssues());
   };
