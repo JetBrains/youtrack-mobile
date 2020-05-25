@@ -1,5 +1,6 @@
 /* @flow */
-import {View, ListView, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, ListView, Text, StyleSheet} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import React, {Component} from 'react';
 import {UNIT, COLOR_BLACK} from '../variables/variables';
 import type {TransformedSuggestion, SavedQuery} from '../../flow/Issue';
