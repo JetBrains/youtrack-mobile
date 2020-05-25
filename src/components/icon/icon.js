@@ -196,3 +196,9 @@ export const IconPause = (props?: Props) => <DefaultIcon {...{
   name: 'pause',
   ...props
 }} />;
+
+export const IconTrash = (props?: Props) => <DefaultIcon {...{
+  isFontAwesome: true,
+  name: 'trash',
+  ...props
+}} />;

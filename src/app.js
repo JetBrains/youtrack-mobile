@@ -20,7 +20,7 @@ import LoginForm from './views/log-in/log-in';
 import IssueList from './views/issue-list/issue-list';
 import SingleIssue from './views/single-issue/single-issue';
 import CreateIssue from './views/create-issue/create-issue';
-import ShowImage from './views/show-image/show-image';
+import Image from './views/image/image';
 import AttachmentPreview from './views/attachment-preview/attachment-preview';
 import AgileBoard from './views/agile-board/agile-board';
 import Inbox from './views/inbox/inbox';
@@ -145,7 +145,7 @@ class YouTrackMobile extends Component<void, State> {
 
     Router.registerRoute({name: routeMap.SingleIssue, component: SingleIssue});
 
-    Router.registerRoute({name: routeMap.ShowImage, component: ShowImage, modal: true});
+    Router.registerRoute({name: routeMap.Image, component: Image, modal: true});
 
     Router.registerRoute({name: routeMap.AttachmentPreview, component: AttachmentPreview, modal: true});
 

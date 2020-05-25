@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT} from '../../components/variables/variables';
+import {UNIT} from '../variables/variables';
 
 const ATTACHING_IMAGE_ALPHA = '70';
 

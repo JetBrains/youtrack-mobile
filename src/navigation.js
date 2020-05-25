@@ -36,7 +36,8 @@ export default class Navigation extends PureComponent<{}, {isMenuShown: boolean}
       const isMenuShown = (
         currentRoute.routeName !== routeMap.EnterServer &&
         currentRoute.routeName !== routeMap.LogIn &&
-        currentRoute.routeName !== routeMap.SingleIssue &&
+        currentRoute.routeName !== routeMap.Image &&
+        currentRoute.routeName !== routeMap.AttachmentPreview &&
         currentRoute.routeName !== routeMap.CreateIssue
       );
       this.setState({isMenuShown});

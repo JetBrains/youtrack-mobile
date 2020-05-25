@@ -9,7 +9,7 @@ export const routeMap = {
   IssueList: 'IssueList',
   LogIn: 'LogIn',
   Settings: 'Settings',
-  ShowImage: 'ShowImage',
+  Image: 'Image',
   SingleIssue: 'SingleIssue',
   WikiPage: 'WikiPage'
 };

@@ -59,7 +59,7 @@ export default class Wiki extends PureComponent<Props, void> {
   };
 
   onImagePress = (source: Object) => {
-    return Router.ShowImage({
+    return Router.Image({
       current: source,
       imageAttachments: this.props.attachments.filter(attach => hasMimeType.previewable(attach)),
       imageHeaders: this.props.imageHeaders

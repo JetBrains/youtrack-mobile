@@ -1,7 +1,7 @@
 /* @flow */
-import {View, Image, TouchableOpacity, ActivityIndicator, Alert} from 'react-native';
+import {TouchableOpacity, ActivityIndicator, Alert} from 'react-native';
 import React, {PureComponent} from 'react';
-import {closeOpaque, trash} from '../../components/icon/icon';
+import {IconClose, IconTrash} from '../../components/icon/icon';
 import Router from '../../components/router/router';
 import {notify} from '../../components/notification/notification';
 import once from 'lodash.once';
@@ -9,16 +9,13 @@ import Gallery from 'react-native-image-gallery';
 import ImageProgress from 'react-native-image-progress';
 import {SvgFromUri} from 'react-native-svg';
 import {hasMimeType} from '../../components/mime-type/mime-type';
+import ModalView from '../../components/modal-view/modal-view';
+import {COLOR_PINK} from '../../components/variables/variables';
 
-import styles from './show-image.styles';
+import styles from './image.styles';
 
 import type {Attachment} from '../../flow/CustomFields';
-
-const TOUCH_PADDING = 12;
-
-const hitSlop = {
-  top: TOUCH_PADDING, left: TOUCH_PADDING, bottom: TOUCH_PADDING, right: TOUCH_PADDING
-};
+import {HIT_SLOP} from '../../components/common-styles/button';
 
 type Props = {
   imageAttachments: Array<Attachment>,
@@ -31,7 +28,7 @@ type State = {
   currentPage: number
 }
 
-export class ShowImage extends PureComponent<Props, State> {
+export class Image extends PureComponent<Props, State> {
   componentDidMount() {
     const currentPage = this.getCurrentPage(this.props.current);
     this.setState({currentPage});
@@ -99,9 +96,9 @@ export class ShowImage extends PureComponent<Props, State> {
     });
 
     return (
-      <View style={styles.container}>
+      <ModalView style={styles.container}>
         <Gallery
-          style={styles.gallery}
+          style={styles.container}
           images={this.props.imageAttachments.map(createSource)}
           initialPage={currentIndex}
           imageComponent={this.renderImage}
@@ -110,21 +107,21 @@ export class ShowImage extends PureComponent<Props, State> {
         <TouchableOpacity
           style={styles.closeButton}
           onPress={this.closeView}
-          hitSlop={hitSlop}
+          hitSlop={HIT_SLOP}
         >
-          <Image style={styles.closeIcon} source={closeOpaque}/>
+          <IconClose size={28} color={COLOR_PINK}/>
         </TouchableOpacity>
 
         {this.props.onRemoveImage && <TouchableOpacity
           style={styles.removeButton}
           onPress={this.onRemove}
-          hitSlop={hitSlop}
+          hitSlop={HIT_SLOP}
         >
-          <Image style={styles.removeIcon} source={trash}/>
+          <IconTrash size={28} color={COLOR_PINK}/>
         </TouchableOpacity>}
-      </View>
+      </ModalView>
     );
   }
 }
 
-export default ShowImage;
+export default Image;

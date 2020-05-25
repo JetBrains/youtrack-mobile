@@ -8,11 +8,6 @@ export default StyleSheet.create({
     flex: 1
   },
 
-  gallery: {
-    flex: 1,
-    backgroundColor: 'black'
-  },
-
   loader: {
     position: 'absolute',
     top: 0,
@@ -24,13 +19,13 @@ export default StyleSheet.create({
   closeButton: {
     position: 'absolute',
     bottom: UNIT * 3,
-    left: UNIT * 3
+    right: UNIT * 3
   },
 
   removeButton: {
     position: 'absolute',
     bottom: UNIT * 3,
-    right: UNIT * 3
+    left: UNIT * 3
   },
 
   closeIcon: {

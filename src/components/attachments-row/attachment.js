@@ -57,7 +57,7 @@ export default class Attach extends PureComponent<Props, void> {
       return this.openAttachmentUrl(attach.name, attach.url);
     }
 
-    return Router.ShowImage({
+    return Router.Image({
       imageAttachments: attachments.filter(attach => hasMimeType.previewable(attach)),
       current: attach,
       imageHeaders,
