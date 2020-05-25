@@ -39,7 +39,7 @@ import styles from './issue-list.styles';
 type Props = IssuesListState & typeof issueActions & {
   auth: Auth,
   api: Api,
-  overridenQuery: ?string,
+  initialSearchQuery: ?string,
   onOpenContextSelect: () => any
 };
 
@@ -58,7 +58,7 @@ export class IssueList extends Component<Props, void> {
   };
 
   componentDidMount() {
-    this.props.initializeIssuesList(this.props.overridenQuery);
+    this.props.initializeIssuesList(this.props.initialSearchQuery);
 
     AppState.addEventListener('change', this._handleAppStateChange);
   }
@@ -271,7 +271,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     ...state.issueList,
     ...state.app,
-    overridenQuery: ownProps.query,
+    initialSearchQuery: ownProps.query,
     searchContext: state.app?.user?.profiles?.general?.searchContext
   };
 };

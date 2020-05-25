@@ -294,6 +294,10 @@ export function initializeIssuesList(query: ?string) {
       await readStoredIssuesQuery()(dispatch);
     }
     await dispatch(readCachedIssues());
+
+    if (query) {
+      dispatch(loadIssues(query));
+    }
   };
 }
 
