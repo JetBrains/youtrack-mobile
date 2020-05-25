@@ -3,7 +3,7 @@
 import * as types from './issue-list-action-types';
 import ApiHelper from '../../components/api/api__helper';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
-import {notify, notifyError} from '../../components/notification/notification';
+import {notifyError} from '../../components/notification/notification';
 import {resolveError} from '../../components/error/error-resolver';
 import log from '../../components/log/log';
 import usage from '../../components/usage/usage';
@@ -187,7 +187,7 @@ export function openIssuesContextSelect() {
 
             dispatch(refreshIssues());
           } catch (error) {
-            notify('Failed to change a context', error);
+            log.warn('Failed to change a context', error);
           }
         }
       }
