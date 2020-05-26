@@ -111,6 +111,7 @@ export default class QueryAssist extends Component<Props, State> {
   };
 
   onApplySavedQuery = (savedQuery: SavedQuery) => {
+    this.setState({input: savedQuery.query});
     this.blurInput();
     this.props.onSetQuery(savedQuery.query);
   };
