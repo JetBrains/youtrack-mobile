@@ -95,6 +95,10 @@ class Inbox extends Component<Props, State> {
     );
   }
 
+  isCreateCategory(change): boolean {
+    return change.category === 'CREATED';
+  }
+
   getChangeValue(change): string {
     if (change.category === 'LINKS') {
       return change.id;
@@ -333,7 +337,7 @@ class Inbox extends Component<Props, State> {
     const metadata: Metadata = notification.metadata;
     const onPress = () => this.goToIssue(metadata.issue);
     const sender: User = notification.sender;
-    const events: Array<ChangeEvent> = metadata?.change?.events;
+    const events: Array<ChangeEvent> = (metadata?.change?.events || []).filter((event) => !this.isCreateCategory(event));
     const avatarURL: string | null = this.createAvatarUrl(sender);
     if (avatarURL) {
       sender.avatarUrl = avatarURL;
@@ -354,7 +358,7 @@ class Inbox extends Component<Props, State> {
             </Text>
           </TouchableOpacity>
 
-          {Boolean(events && events.length) && (
+          {events.length > 0 && (
             <View style={styles.notificationChange}>
               {this.renderEvents(events)}
             </View>
