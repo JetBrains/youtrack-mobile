@@ -130,7 +130,13 @@ class Router {
   }
 
   navigateToDefaultRoute(props: Object & {issueId: string} = null) {
-    const defaultRoute = getStorageState().lastRoute || this.rootRoutes[0];
+    const lastRoute: string = getStorageState().lastRoute;
+    let defaultRoute: string;
+    if (this.rootRoutes.includes(lastRoute)) {
+      defaultRoute = lastRoute;
+    } else {
+      defaultRoute = this.rootRoutes[0];
+    }
     this.navigate(defaultRoute, props);
     if (props && props.issueId) {
       this.navigate(routeMap.SingleIssue, props);

@@ -34,6 +34,7 @@ export default class Navigation extends PureComponent<{}, {isMenuShown: boolean}
   render() {
     const onRoute = (currentRoute) => {
       const isMenuShown = (
+        currentRoute.routeName !== routeMap.Home &&
         currentRoute.routeName !== routeMap.EnterServer &&
         currentRoute.routeName !== routeMap.LogIn &&
         currentRoute.routeName !== routeMap.Image &&
