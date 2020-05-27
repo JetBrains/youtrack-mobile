@@ -1,14 +1,14 @@
 /* @flow */
-import {View, ListView, Text, StyleSheet} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+
+import {View, ListView, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import React, {Component} from 'react';
 import {UNIT, COLOR_BLACK} from '../variables/variables';
 import type {TransformedSuggestion, SavedQuery} from '../../flow/Issue';
 import {mainText, secondaryText} from '../common-styles/issue';
 
-const SAVED_SEARCHES = 'SAVED_SEARCHES';
-const LAST_SEARCHES = 'LAST_SEARCHES';
-const SECTION_SPACING = 24;
+const SAVED_SEARCHES: string = 'SAVED_SEARCHES';
+const LAST_SEARCHES: string = 'LAST_SEARCHES';
+const SECTION_SPACING: number = 24;
 
 const ds = new ListView.DataSource({
   rowHasChanged: (r1, r2) => r1 !== r2,

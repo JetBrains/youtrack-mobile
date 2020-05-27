@@ -122,10 +122,6 @@ export default StyleSheet.create({
     marginBottom: UNIT * 2,
     height: searchPanelHeight
   },
-  issuesCount: {
-    marginLeft: UNIT * 2,
-    ...secondaryText
-  },
   createIssueButton: {
     position: 'absolute',
     top: UNIT,

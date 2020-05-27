@@ -1,10 +1,11 @@
 /* @flow */
-import {View, Text} from 'react-native';
+
+import {View} from 'react-native';
 import React, {PureComponent} from 'react';
 
-import styles from './issue-list.styles';
 import QueryAssist from '../../components/query-assist/query-assist';
-import {View as AnimatedView} from 'react-native-animatable';
+
+import styles from './issue-list.styles';
 
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {TransformedSuggestion} from '../../flow/Issue';
@@ -14,6 +15,7 @@ type SearchPanelProps = {
   query: string,
   suggestIssuesQuery: (query: string, caret: number) => any,
   onQueryUpdate: (query: string) => any,
+  onClose: () => any,
 
   issuesCount?: ?number,
   style?: ViewStyleProp,
@@ -28,28 +30,16 @@ export default class SearchPanel extends PureComponent<SearchPanelProps, void> {
     return this.node && this.node.setNativeProps(...args);
   }
 
-  renderIssuesCount() {
-    const {issuesCount} = this.props;
-    const text = (
-      !issuesCount
-        ? ' '
-        : `Matches ${issuesCount} issue${issuesCount >= 0 ? 's' : ''}`
-    );
+  loadSuggests = (query: string, caret: number) => {
+    return this.props.suggestIssuesQuery(query, caret);
+  };
 
-    return (
-      <AnimatedView
-        useNativeDriver
-        duration={500}
-        animation="fadeIn">
-        <Text style={styles.issuesCount}>
-          {text}
-        </Text>
-      </AnimatedView>
-    );
+  applyQuery = (query: string) => {
+    return this.props.onQueryUpdate(query);
   }
 
   render() {
-    const {queryAssistSuggestions, query, suggestIssuesQuery, onQueryUpdate, style, clearButtonMode} = this.props;
+    const {queryAssistSuggestions, query, style, clearButtonMode} = this.props;
 
     return (
       <View
@@ -59,12 +49,12 @@ export default class SearchPanel extends PureComponent<SearchPanelProps, void> {
         <QueryAssist
           suggestions={queryAssistSuggestions}
           currentQuery={query}
-          onChange={suggestIssuesQuery}
-          onSetQuery={onQueryUpdate}
+          onChange={this.loadSuggests}
+          onApplyQuery={this.applyQuery}
+          onClose={this.props.onClose}
           clearButtonMode={clearButtonMode}
         />
 
-        {this.renderIssuesCount()}
       </View>
     );
   }

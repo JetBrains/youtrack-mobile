@@ -28,6 +28,7 @@ import type {IssueOnList} from '../../flow/Issue';
 import Select from '../../components/select/select';
 import SearchPanel from './issue-list__search-panel';
 import ModalView from '../../components/modal-view/modal-view';
+import QueryInput from '../../components/query-assist/query-input';
 
 import {IconAngleDown, IconPlus} from '../../components/icon/icon';
 import {isReactElement} from '../../util/util';
@@ -35,6 +36,7 @@ import {HIT_SLOP} from '../../components/common-styles/button';
 
 import {headerSeparator} from '../../components/common-styles/header';
 import styles from './issue-list.styles';
+import IssuesCount from './issue-list__count';
 
 type Props = IssuesListState & typeof issueActions & {
   auth: Auth,
@@ -43,11 +45,16 @@ type Props = IssuesListState & typeof issueActions & {
   onOpenContextSelect: () => any
 };
 
-export class IssueList extends Component<Props, void> {
+type State = {
+  isEditQuery: boolean
+}
+
+export class IssueList extends Component<Props, State> {
   searchPanelNode: Object;
 
   constructor() {
     super();
+    this.state = {isEditQuery: false};
     usage.trackScreenView('Issue list');
   }
 
@@ -91,8 +98,6 @@ export class IssueList extends Component<Props, void> {
       </TouchableOpacity>
     );
   };
-
-
 
   _renderRow = ({item}) => {
     if (isReactElement(item)) {
@@ -212,8 +217,14 @@ export class IssueList extends Component<Props, void> {
     }
   };
 
+  setEditQueryMode(isEditQuery: boolean) {
+    this.setState({
+      isEditQuery: isEditQuery
+    });
+  }
+
   renderSearchPanel = () => {
-    const {query, suggestIssuesQuery, queryAssistSuggestions, onQueryUpdate, issuesCount} = this.props;
+    const {query, suggestIssuesQuery, queryAssistSuggestions, onQueryUpdate} = this.props;
     return (
       <SearchPanel
         key="SearchPanel"
@@ -221,10 +232,27 @@ export class IssueList extends Component<Props, void> {
         queryAssistSuggestions={queryAssistSuggestions}
         query={query}
         suggestIssuesQuery={suggestIssuesQuery}
-        onQueryUpdate={onQueryUpdate}
-        issuesCount={issuesCount}
+        onQueryUpdate={(query: string) => {
+          this.setEditQueryMode(false);
+          onQueryUpdate(query);
+        }}
+        onClose={() => this.setEditQueryMode(false)}
         clearButtonMode="always"
       />
+    );
+  };
+
+  renderSearchQuery = () => {
+    const {query, issuesCount} = this.props;
+
+    return (
+      <View>
+        <QueryInput
+          input={query}
+          onFocus={() => this.setEditQueryMode(true)}
+        />
+        <IssuesCount issuesCount={issuesCount}/>
+      </View>
     );
   };
 
@@ -233,7 +261,7 @@ export class IssueList extends Component<Props, void> {
     const listData: Array<Object> = [
       <View key="issueListContextSeparator" style={headerSeparator}/>,
       this.renderContextButton(),
-      this.renderSearchPanel()
+      this.renderSearchQuery()
     ].concat(issues);
 
     return (
@@ -242,6 +270,7 @@ export class IssueList extends Component<Props, void> {
         testID="issue-list-page"
       >
 
+        {this.state.isEditQuery && this.renderSearchPanel()}
         {isIssuesContextOpen && this.renderContextSelect()}
 
         <FlatList
