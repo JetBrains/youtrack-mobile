@@ -1,6 +1,6 @@
 /* @flow */
 
-import {Notifications, Notification, Registered, RegistrationError} from 'react-native-notifications-latest';
+import {Notification, Notifications, Registered, RegistrationError} from 'react-native-notifications-latest';
 
 import appPackage from '../../../package.json'; // eslint-disable-line import/extensions
 import log from '../log/log';
@@ -10,13 +10,7 @@ import {UNSUPPORTED_ERRORS} from '../error/error-codes';
 
 import type Api from '../api/api';
 import type {CustomError} from '../../flow/Error';
-
-type NotificationCompletion = { // TS interfaces that are used in `react-native-notifications-latest` module
-  badge?: boolean;
-  alert?: boolean;
-  sound?: boolean;
-}
-type TokenHandler = (token: string) => void;
+import type {NotificationCompletion, TokenHandler} from '../../flow/Notification';
 
 
 export default class PushNotificationsProcessor {
@@ -31,7 +25,7 @@ export default class PushNotificationsProcessor {
 
   static setDeviceToken(token: string) {
     PushNotificationsProcessor.deviceToken = token;
-    log.info(`${PushNotificationsProcessor.logPrefix}(setDeviceToken): token received`);
+    log.debug(`${PushNotificationsProcessor.logPrefix}(setDeviceToken): ${token}`);
   }
 
   static async getDeviceToken(): Promise<string | null> {

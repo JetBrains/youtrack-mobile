@@ -1,135 +1,86 @@
 /* @flow */
 
 import PushNotificationsProcessor from './push-notifications-processor';
+import PNHelper from './push-notifications-helper';
+
+import {isUnsupportedFeatureError} from '../error/error-resolver';
+import log from '../log/log';
 
 import type Api from '../api/api';
-import {flushStoragePart, getStorageState} from '../storage/storage';
-import log from '../log/log';
-import {Alert} from 'react-native';
-import {isUnsupportedFeatureError} from '../error/error-resolver';
-import {reportError} from '../error/error-reporter';
-import {DEFAULT_ERROR_MESSAGE} from '../error/error-codes';
+import type {Token} from '../../flow/Notification';
 
 const componentLogPrefix: string = 'PNAndroid';
-const messageDefaultButton: Object = {
-  text: 'Close',
-  onPress: () => {}
-};
 
 
-function storeDeviceToken(token: string | null) {
-  flushStoragePart({deviceToken: token});
-}
-
-async function getDeviceToken() {
-  let deviceToken: string;
+async function getDeviceToken(): Token {
+  let deviceToken: Token = null;
   try {
     deviceToken = await PushNotificationsProcessor.getDeviceToken();
   } catch (e) {
-    deviceToken = null;
+    log.warn(`${componentLogPrefix}: cannot retrieve device token from the phone`, e);
   }
   return deviceToken;
 }
 
-function showInfoMessage(title: string, message: string, buttons: Array<Object> = [messageDefaultButton]) {
-  Alert.alert(
-    title,
-    message,
-    buttons,
-    {cancelable: false}
-  );
-}
-
 async function getYouTrackToken(api: Api) {
-  let youtrackToken: string | null = null;
+  let youtrackToken: Token = null;
   try {
     youtrackToken = await PushNotificationsProcessor.getYouTrackToken(api);
   } catch (e) {
-    log.debug(e);
-    throw e;
+    log.warn(`${componentLogPrefix}: cannot get YouTrack subscription`, e);
   }
   return youtrackToken;
 }
 
-async function register(api: Api) {
-  const deviceToken = await getDeviceToken();
-  if (deviceToken === null) {
-    return;
-  }
+async function doSubscribe(api: Api, youtrackToken: string, deviceToken: string) {
+  try {
+    await PushNotificationsProcessor.subscribe(api, deviceToken, youtrackToken);
+    showSuccessMessage();
+    PNHelper.storeDeviceToken(deviceToken);
+  } catch (error) {
+    PNHelper.storeDeviceToken(null);
 
-  const youtrackToken = await getYouTrackToken(api);
-  // The method call above throws if YT instance doesn't support push notifications and the following code is not invoked
-
-  let isSecondTry: boolean = false;
-  await doSubscribe();
-
-
-  async function doSubscribe() {
-    let alertErrorMessage: string;
-    let alertExtraButton = [];
-
-    try {
-      await PushNotificationsProcessor.subscribe(api, deviceToken, youtrackToken);
-      showSuccessMessage();
-      storeDeviceToken(deviceToken);
-    } catch (error) {
-      if (isUnsupportedFeatureError(error)) {
-        return;
-      }
-
-      reportError(error);
-      storeDeviceToken(null);
-
-      if (isSecondTry) {
-        alertErrorMessage = 'Server not responding. We will try to subscribe you later.';
-        alertExtraButton = [];
-      } else {
-        alertErrorMessage = `${DEFAULT_ERROR_MESSAGE} We can't subscribe next time when you open the application.`;
-        alertExtraButton = [{
-          text: 'Try again',
-          onPress: doSubscribe
-        }];
-      }
-
-      showErrorMessage(alertErrorMessage, alertExtraButton);
-      isSecondTry = true;
+    if (isUnsupportedFeatureError(error)) {
+      return log.info(`${componentLogPrefix}: push notifications are not supported in your version of YouTrack`);
     }
+
+    log.warn(`${componentLogPrefix}: failed to subscribe`, error);
   }
 
   function showSuccessMessage() {
-    if (getStorageState().deviceToken === null) {
-      showInfoMessage(
+    if (!PNHelper.getStoredDeviceToken()) {
+      PNHelper.showInfoMessage(
         'You are subscribed to push notifications',
         'Make sure that the following application notifications options in your device settings are allowed:\n• Show\n• Sound\n• Vibration\n• LED light\n'
       );
     }
   }
+}
 
-  function showErrorMessage(message: string, extraButton: Array<?Object>) {
-    showInfoMessage(
-      'Push notification subscription error',
-      message,
-      [messageDefaultButton].concat(extraButton)
-    );
+async function register(api: Api) {
+  const deviceToken: Token = await getDeviceToken();
+
+  if (deviceToken) {
+    const youtrackToken: Token = await getYouTrackToken(api);
+    if (youtrackToken) {
+      await doSubscribe(api, youtrackToken, deviceToken);
+    }
   }
 }
 
 async function unregister(api: Api) {
-  storeDeviceToken(null);
-  const deviceToken: string = await getDeviceToken();
+  PNHelper.storeDeviceToken(null);
+  const deviceToken: Token = await getDeviceToken();
+
   if (deviceToken) {
     return await PushNotificationsProcessor.unsubscribe(api, deviceToken);
   }
 }
 
-function deviceTokenChanged(deviceToken: string) {
-  const storedDeviceToken: string | null = getStorageState().deviceToken;
-  return storedDeviceToken !== null && deviceToken !== null && storedDeviceToken !== deviceToken;
-}
-
 async function initialize(api) {
-  const deviceToken: string = await getDeviceToken();
-  if (deviceTokenChanged(deviceToken)) {
+  const deviceToken: Token = await getDeviceToken();
+
+  if (PNHelper.isDeviceTokenChanged(deviceToken)) {
     log.info(`'${componentLogPrefix}'(initialize): device token has changed, re-subscribe`);
     await register(api);
   }
