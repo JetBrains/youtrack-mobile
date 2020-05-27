@@ -27,7 +27,7 @@ import type {User} from '../../flow/User';
 import type {Notification, Metadata, ChangeValue, ChangeEvent, Issue, IssueChange} from '../../flow/Inbox';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 
-const CATEGORY_NAME = 'Inbox view';
+const CATEGORY_NAME = 'inbox view';
 
 type Props = InboxState & typeof inboxActions;
 
@@ -35,6 +35,15 @@ type State = {
   isTitlePinned: boolean
 };
 
+const Category: Object = {
+  CREATED: 'CREATED',
+  LINKS: 'LINKS',
+  COMMENT: 'COMMENT',
+  SUMMARY: 'SUMMARY',
+  DESCRIPTION: 'DESCRIPTION',
+};
+
+const MAX_TEXT_CHANGE_LENGTH: number = 5000;
 
 class Inbox extends Component<Props, State> {
   static notificationReasons = {
@@ -96,13 +105,18 @@ class Inbox extends Component<Props, State> {
   }
 
   isCreateCategory(change): boolean {
-    return change.category === 'CREATED';
+    return change.category === Category.CREATED;
   }
 
   getChangeValue(change): string {
-    if (change.category === 'LINKS') {
+    if (change.category === Category.LINKS) {
       return change.id;
     }
+
+    if (typeof change.name === 'string' && change.name.length > MAX_TEXT_CHANGE_LENGTH) {
+      return `${change.name.substr(0, MAX_TEXT_CHANGE_LENGTH)}...`;
+    }
+
     return change.name;
   }
 
@@ -190,7 +204,7 @@ class Inbox extends Component<Props, State> {
 
     switch (true) {
 
-    case event.category === 'COMMENT': //TODO(xi-eye): filter out text update events
+    case event.category === Category.COMMENT: //TODO(xi-eye): filter out text update events
       return (
         <View style={styles.change}>
           {this.hasRemovedValues(event) && (
@@ -201,7 +215,7 @@ class Inbox extends Component<Props, State> {
         </View>
       );
 
-    case event.category === 'SUMMARY' || event.category === 'DESCRIPTION':
+    case event.category === Category.SUMMARY || event.category === Category.DESCRIPTION:
       return (
         this.renderTextDiff(event, textChangeEventName(event))
       );
