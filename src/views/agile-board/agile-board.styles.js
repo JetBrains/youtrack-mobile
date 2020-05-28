@@ -10,6 +10,7 @@ import {
 } from '../../components/variables/variables';
 import {mainText} from '../../components/common-styles/issue';
 import {link} from '../../components/common-styles/button';
+import {elevationTop} from '../../components/common-styles/form';
 
 export default StyleSheet.create({
   agile: {
@@ -74,9 +75,9 @@ export default StyleSheet.create({
   },
   popupPanel: {
     padding: UNIT * 2,
+    paddingBottom: UNIT * 4,
     backgroundColor: COLOR_FONT_ON_BLACK,
-    borderTopWidth: 1,
-    borderColor: COLOR_GRAY
+    ...elevationTop
   },
   popupText: {
     fontSize: 18,
@@ -87,20 +88,20 @@ export default StyleSheet.create({
     justifyContent: 'space-between'
   },
   popupButton: {
-    flexGrow: 1,
+    flexGrow: 0.46,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: UNIT * 4,
+    marginTop: UNIT * 2,
     backgroundColor: COLOR_PINK,
-    borderRadius: UNIT / 2,
-    marginLeft: UNIT * 2
+    borderRadius: UNIT
   },
   popupButtonText: {
+    padding: UNIT,
     fontSize: 20,
-    color: COLOR_FONT_ON_BLACK,
     textAlign: 'center',
     ...mainText,
-    ...link
+    ...link,
+    color: COLOR_FONT_ON_BLACK,
   },
   card: {
     marginBottom: UNIT * 2
