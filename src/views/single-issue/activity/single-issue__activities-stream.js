@@ -482,7 +482,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
 
             return (
               <View key={`${activityGroup.timestamp}-${index}`}>
-                {index > 0 && <View style={styles.activitySeparator}/>}
+                {index > 0 && !activityGroup.merged && <View style={styles.activitySeparator}/>}
 
                 <View style={[
                   styles.activity,
