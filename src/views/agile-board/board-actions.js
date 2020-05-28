@@ -20,6 +20,7 @@ export const PAGE_SIZE = 6;
 const CATEGORY_NAME = 'Agile board';
 const RECONNECT_TIMEOUT = 60000;
 let serverSideEventsInstance = null;
+let serverSideEventsInstanceErrorTimer = null;
 export const DEFAULT_ERROR_AGILE_WITH_INVALID_STATUS = {status: {valid: false, errors: [DEFAULT_ERROR_MESSAGE]}};
 
 function startSprintLoad() {
@@ -187,9 +188,13 @@ function setSSEInstance(sseInstance) {
   serverSideEventsInstance = sseInstance;
 }
 
-function destroySSE() {
+export function destroySSE() {
   if (serverSideEventsInstance) {
     log.info('Force close SSE');
+
+    clearTimeout(serverSideEventsInstanceErrorTimer);
+    serverSideEventsInstanceErrorTimer = null;
+
     serverSideEventsInstance.close();
     setSSEInstance(null);
   }
@@ -450,7 +455,8 @@ export function subscribeServersideUpdates() {
     serverSideEventsInstance.subscribeAgileBoardUpdates(sprint.eventSourceTicket);
 
     serverSideEventsInstance.listenTo('error', () => {
-      setTimeout(() => {
+      clearTimeout(serverSideEventsInstanceErrorTimer);
+      serverSideEventsInstanceErrorTimer = setTimeout(() => {
         log.info('Reloading sprint and reconnecting to LiveUpdate...');
         dispatch(setOutOfDate(true));
       }, RECONNECT_TIMEOUT);

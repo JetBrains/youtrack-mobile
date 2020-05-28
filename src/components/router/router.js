@@ -14,6 +14,14 @@ import {getStorageState, flushStoragePart} from '../storage/storage';
 import log from '../log/log';
 import {routeMap} from '../../app-routes';
 
+import type {
+  NavigationNavigator,
+  NavigationResetActionPayload,
+  NavigationJumpToActionPayload,
+  NavigationState,
+  NavigationResetAction
+} from 'react-navigation';
+
 const TransitionSpec = {
   duration: 500,
   easing: Easing.bezier(0.2833, 0.99, 0.31833, 0.99),
@@ -29,18 +37,17 @@ const SlideFromRight = {
  * Route singleton
  */
 class Router {
-  _currentRoute = null;
-  rootRoutes = [];
-  onDispatch = () => {};
+  _navigator:NavigationNavigator = null;
+  _currentRoute:NavigationJumpToActionPayload = null;
+  rootRoutes: Array<NavigationJumpToActionPayload> = [];
+  onDispatchCallbacks: ?Array<Function> = [];
 
-  constructor(navigator) {
-    this._navigator = null;
+  constructor() {
     this.onBack = () => {};
-
     this.routes = {};
   }
 
-  setNavigator = (navigator) => {
+  setNavigator = (navigator?: NavigationNavigator) => {
     if (!navigator) {
       return;
     }
@@ -79,7 +86,7 @@ class Router {
     }
   }
 
-  finalizeRoutes(initialRouteName) {
+  finalizeRoutes(initialRouteName: string) {
     const MainNavigator = createStackNavigator(this.routes, {
       initialRouteName,
       headerMode: 'none',
@@ -90,15 +97,16 @@ class Router {
   }
 
   setOnDispatchCallback(onDispatch: Function<Object, ?string>) {
-    this.onDispatch = onDispatch;
+    // this.onDispatch = onDispatch;
+    this.onDispatchCallbacks.push(onDispatch);
   }
 
-  dispatch(data: Object, routeName?: string) {
+  dispatch(data: NavigationResetActionPayload, routeName?: string, prevRouteName?: string) {
     this._navigator.dispatch(data);
-    this.onDispatch(routeName);
+    this.onDispatchCallbacks.forEach(onDispatch => onDispatch(routeName, prevRouteName));
   }
 
-  navigate(routeName, props, {forceReset} = {}) {
+  navigate(routeName: string, props: Object, {forceReset} = {}) {
     log.info(`Navigating to ${routeName}`, {...props, imageHeaders: 'CENSORED'});
     if (!this._navigator) {
       throw `Router.navigate: call setNavigator(navigator) first!`;
@@ -118,18 +126,17 @@ class Router {
     if (newRoute.type === 'reset' || forceReset) {
       return this.dispatch(StackActions.reset({
         index: 0,
-        actions: [NavigationActions.navigate({routeName, params: newRoute.props, key: Math.random().toString()})]
-      }), routeName);
+        actions: [NavigationActions.navigate({routeName, params: newRoute.props, key: Math.random().toString()})],
+      }), routeName, this._currentRoute?.routeName);
     }
-
     this.dispatch(NavigationActions.navigate({
       routeName,
       params: newRoute.props,
       key: Math.random().toString()
-    }), routeName);
+    }), routeName, this._currentRoute?.routeName);
   }
 
-  navigateToDefaultRoute(props: Object & {issueId: string} = null) {
+  navigateToDefaultRoute(props: Object & { issueId: string } = null) {
     const lastRoute: string = getStorageState().lastRoute;
     let defaultRoute: string;
     if (this.rootRoutes.includes(lastRoute)) {
@@ -164,12 +171,14 @@ class Router {
     }
   };
 
-  renderNavigatorView(onRoute) {
+  renderNavigatorView(onRoute?: (currentRoute: NavigationJumpToActionPayload) => any) {
     const {AppNavigator} = this;
     return (
       <AppNavigator
         ref={this.setNavigator}
-        onNavigationStateChange={(prevNav, nav, action) => this.onNavigationStateChange(prevNav, nav, action, onRoute)}
+        onNavigationStateChange={(prevNav: NavigationState, nav: NavigationState, action: NavigationResetAction) => {
+          this.onNavigationStateChange(prevNav, nav, action, onRoute);
+        }}
       />
     );
   }

@@ -10,8 +10,11 @@ describe('Router', () => {
     Router.setNavigator(navigatorMock);
   });
 
+  describe('Singleton', () => {
+    beforeEach(() => {
+      navigatorMock = {};
+    });
 
-  describe('Create', () => {
     it('should create a Singleton', () => {
       expect(Router).toBeDefined();
     });
@@ -45,26 +48,57 @@ describe('Router', () => {
       expect(Router.routes.foo.props[propNameMock]).toEqual(propsMock);
     });
 
-    it('should allow to call route right on Router', () => {
-      Router.registerRoute({
-        name: routeNameMock,
-        component: {barr: componentNameMock},
-        animation: 'fake-animation'
+    describe('Navigation', () => {
+      it('should allow to call route', () => {
+        Router.registerRoute({
+          name: routeNameMock,
+          component: {barr: componentNameMock},
+          animation: 'fake-animation'
+        });
+
+        Router.foo();
+
+        expect(navigatorMock.dispatch).toHaveBeenCalled();
       });
 
-      Router.foo();
+      it('should navigate', () => {
+        Router.registerRoute({
+          name: routeNameMock
+        });
 
-      expect(navigatorMock.dispatch).toHaveBeenCalled();
+        Router.navigate(routeNameMock);
+
+        expect(navigatorMock.dispatch).toHaveBeenCalled();
+      });
+    });
+  });
+
+
+  describe('Dispatch callbacks', () => {
+    let callback;
+    beforeEach(() => {
+      callback = jest.fn();
+      Router.setOnDispatchCallback(callback);
     });
 
-    it('should navigate', () => {
-      Router.registerRoute({
-        name: routeNameMock
-      });
+    it('should set on dispatch callback', () => {
+      expect(Router.onDispatchCallbacks).toHaveLength(1);
+      expect(Router.onDispatchCallbacks[0]).toEqual(callback);
+    });
 
+    it('should invoke a callback on dispatch', () => {
+      const routeNameMock = 'mainROOT';
+      const routeNameMock2 = 'mainROOT';
+      const prevRouteNameMock = undefined;
+
+      Router.registerRoute({name: routeNameMock});
+      Router.registerRoute({name: routeNameMock2});
       Router.navigate(routeNameMock);
 
-      expect(navigatorMock.dispatch).toHaveBeenCalled();
+      expect(callback).toHaveBeenCalledWith(
+        routeNameMock,
+        prevRouteNameMock
+      );
     });
   });
 

@@ -34,6 +34,7 @@ import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconMagnifyZoom} from '../../components/icon/icon';
 import {renderNavigationItem} from './agile-board__renderer';
 import {View as AnimatedView} from 'react-native-animatable';
+import {routeMap} from '../../app-routes';
 
 const CATEGORY_NAME = 'Agile board';
 
@@ -78,11 +79,20 @@ class AgileBoard extends Component<Props, State> {
       },
       offsetY: 0
     };
+    Router.setOnDispatchCallback(this.onBoardLeave);
   }
 
   componentDidMount() {
     usage.trackScreenView(CATEGORY_NAME);
     this.props.onLoadBoard();
+  }
+
+  onBoardLeave = (routeName: string, prevRouteName?: string) => {
+    const agileBoardRouteName = routeMap.AgileBoard;
+    if (routeName !== agileBoardRouteName && prevRouteName === agileBoardRouteName) {
+      boardActions.destroySSE();
+      this.props.toggleRefreshPopup(false);
+    }
   }
 
   onVerticalScroll = (event) => {
