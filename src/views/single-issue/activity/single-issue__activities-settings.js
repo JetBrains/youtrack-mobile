@@ -183,7 +183,7 @@ export default class SingleIssueActivitiesSettings extends Component<Props, Stat
           style={styles.settingsToggle}
           onPress={this._toggleSettingsVisibility}
         >
-          <Text style={styles.secondaryText}>{selectedCategoriesTitle} </Text>
+          <Text style={styles.secondaryText}>{selectedCategoriesTitle}{`  `}</Text>
           <IconAngleDown size={19} color={COLOR_ICON_MEDIUM_GREY}/>
         </TouchableOpacity>
 
