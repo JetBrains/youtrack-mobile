@@ -1,56 +1,71 @@
 import Router from './router';
-import sinon from 'sinon';
 
 describe('Router', () => {
-  let fakeNavigator;
+  let navigatorMock;
 
   beforeEach(() => {
-    fakeNavigator = {
-      dispatch: sinon.spy()
+    navigatorMock = {
+      dispatch: jest.fn()
     };
-    Router.setNavigator(fakeNavigator);
+    Router.setNavigator(navigatorMock);
   });
 
-  it('should init', () => {
-    Router.should.be.defined;
-  });
 
-  it('should accept navigator instance', () => {
-    Router.setNavigator(fakeNavigator);
-    Router._navigator.should.equal(fakeNavigator);
-  });
-
-  it('should register route', () => {
-    Router.registerRoute({
-      name: 'foo',
-      component: {barr: 'bar'},
-      modal: true,
-      props: {some: 'prop'}
-    });
-    Router.routes.foo.screen.should.be.defined;
-    Router.routes.foo.modal.should.be.true;
-    Router.routes.foo.props.some.should.equal('prop');
-  });
-
-  it('should allow to call route right on Router', () => {
-    Router.registerRoute({
-      name: 'foo',
-      component: {barr: 'bar'},
-      animation: 'fake-animation'
+  describe('Create', () => {
+    it('should create a Singleton', () => {
+      expect(Router).toBeDefined();
     });
 
-    Router.foo();
+    it('should set an instance', () => {
+      Router.setNavigator(navigatorMock);
 
-    fakeNavigator.dispatch.should.have.been.called;
+      expect(Router._navigator).toEqual(navigatorMock);
+    });
   });
 
-  it('should navigate', () => {
-    Router.registerRoute({
-      name: 'foo'
+
+  describe('Routes', () => {
+    const routeNameMock = 'foo';
+    const componentNameMock = 'bar';
+    const propsMock = 'prop';
+
+    it('should register route', () => {
+      const modalParamMock = true;
+      const propNameMock = 'someProp';
+
+      Router.registerRoute({
+        name: routeNameMock,
+        component: {barr: componentNameMock},
+        modal: modalParamMock,
+        props: {[propNameMock]: propsMock}
+      });
+
+      expect(Router.routes.foo.screen).toBeDefined();
+      expect(Router.routes.foo.modal).toEqual(modalParamMock);
+      expect(Router.routes.foo.props[propNameMock]).toEqual(propsMock);
     });
 
-    Router.navigate('foo');
+    it('should allow to call route right on Router', () => {
+      Router.registerRoute({
+        name: routeNameMock,
+        component: {barr: componentNameMock},
+        animation: 'fake-animation'
+      });
 
-    fakeNavigator.dispatch.should.have.been.called;
+      Router.foo();
+
+      expect(navigatorMock.dispatch).toHaveBeenCalled();
+    });
+
+    it('should navigate', () => {
+      Router.registerRoute({
+        name: routeNameMock
+      });
+
+      Router.navigate(routeNameMock);
+
+      expect(navigatorMock.dispatch).toHaveBeenCalled();
+    });
   });
+
 });
