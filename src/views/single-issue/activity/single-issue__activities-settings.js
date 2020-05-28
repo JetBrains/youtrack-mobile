@@ -19,6 +19,7 @@ import ModalView from '../../../components/modal-view/modal-view';
 import {COLOR_ICON_GREY, COLOR_ICON_MEDIUM_GREY} from '../../../components/variables/variables';
 import {IconAngleDown, IconCheck} from '../../../components/icon/icon';
 import selectStyles from '../../../components/select/select.styles';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   issueActivityTypes: Array<ActivityEnabledType>,
@@ -26,6 +27,7 @@ type Props = {
   onApply: Function,
   userAppearanceProfile: UserAppearanceProfile,
   disabled?: boolean,
+  style?: ViewStyleProp
 };
 
 type State = {
@@ -175,7 +177,7 @@ export default class SingleIssueActivitiesSettings extends Component<Props, Stat
       (category) => category.name
     ).join(', ');
     return (
-      <View>
+      <View style={this.props.style}>
         <TouchableOpacity
           disabled={this.props.disabled}
           style={styles.settingsToggle}

@@ -6,12 +6,12 @@ import {
   COLOR_FONT_ON_BLACK,
   COLOR_FONT,
   COLOR_PINK,
-  COLOR_MEDIUM_GRAY,
   COLOR_DARK
 } from '../../components/variables/variables';
 import {SIZE as COLOR_FIELD_SIZE} from '../../components/color-field/color-field';
 import {secondaryText, issueCard} from '../../components/common-styles/issue';
 import {elevation1} from '../../components/common-styles/form';
+import {separator} from '../../components/common-styles/list';
 
 const rowLine = {
   flexDirection: 'row',
@@ -59,11 +59,7 @@ export default StyleSheet.create({
     })
   },
   rowLine: rowLine,
-  separator: {
-    height: 0.5,
-    marginLeft: UNIT * 2,
-    backgroundColor: COLOR_MEDIUM_GRAY
-  },
+  separator: separator,
   secondaryText: {
     ...secondaryText
   },

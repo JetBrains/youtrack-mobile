@@ -11,6 +11,7 @@ import {
 } from '../../../components/variables/variables';
 import {mainText, secondaryText} from '../../../components/common-styles/issue';
 import {link} from '../../../components/common-styles/button';
+import {separator} from '../../../components/common-styles/list';
 
 export default StyleSheet.create({
   secondaryText: secondaryText,
@@ -34,13 +35,19 @@ export default StyleSheet.create({
 
   activity: {
     flexDirection: 'row',
-    paddingTop: UNIT * 4,
+    paddingTop: UNIT,
     paddingLeft: UNIT,
-    paddingRight: UNIT,
+    paddingRight: UNIT
+  },
+  activitySeparator: {
+    ...separator,
+    margin: UNIT * 2,
+    marginLeft: UNIT * 7,
+    marginRight: -UNIT
   },
   activityAvatar: {
-    width: 32,
-    height: 32,
+    width: UNIT * 4,
+    height: UNIT * 4,
     alignItems: 'center',
   },
   mergedActivity: {
@@ -105,6 +112,9 @@ export default StyleSheet.create({
     marginTop: UNIT * 2
   },
 
+  settings: {
+    margin: UNIT * 1.5
+  },
   settingsModal: {
     justifyContent: 'flex-end'
   },

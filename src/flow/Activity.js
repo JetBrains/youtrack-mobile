@@ -1,3 +1,5 @@
+import type {IssueComment} from './CustomFields';
+
 type EventBase = {
   id: string,
   name: string,
@@ -44,7 +46,11 @@ export type IssueActivity = {
   target: {id: string, created: number, usesMarkdown: boolean},
   field: Object,
   added: ActivityItem | Array<ActivityItem>,
-  removed: ActivityItem | Array<ActivityItem>
+  removed: ActivityItem | Array<ActivityItem>,
+
+  comment?: IssueComment,
+  work?: Object,
+  merged?: boolean
 }
 
 export type ActivityEnabledType = {

@@ -481,23 +481,27 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
             }
 
             return (
-              <View key={`${activityGroup.timestamp}-${index}`} style={[
-                styles.activity,
-                activityGroup.merged ? styles.mergedActivity : null
-              ]}>
+              <View key={`${activityGroup.timestamp}-${index}`}>
+                {index > 0 && <View style={styles.activitySeparator}/>}
 
-                {this._renderUserAvatar(activityGroup, !!activityGroup.comment)}
+                <View style={[
+                  styles.activity,
+                  activityGroup.merged ? styles.mergedActivity : null
+                ]}>
 
-                <View style={styles.activityItem}>
-                  {activityGroup.comment && this.renderCommentActivity(activityGroup)}
+                  {this._renderUserAvatar(activityGroup, !!activityGroup.comment)}
 
-                  {activityGroup.work && this._renderWorkActivity(activityGroup)}
+                  <View style={styles.activityItem}>
+                    {activityGroup.comment && this.renderCommentActivity(activityGroup)}
 
-                  {this._renderHistoryAndRelatedChanges(activityGroup, !!activityGroup.comment || !!activityGroup.work)}
+                    {activityGroup.work && this._renderWorkActivity(activityGroup)}
 
-                  {activityGroup.comment && this.renderCommentActions(activityGroup)}
+                    {this._renderHistoryAndRelatedChanges(activityGroup, !!activityGroup.comment || !!activityGroup.work)}
+
+                    {activityGroup.comment && this.renderCommentActions(activityGroup)}
+                  </View>
+
                 </View>
-
               </View>
             );
           })

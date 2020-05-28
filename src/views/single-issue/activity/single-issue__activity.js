@@ -74,6 +74,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     } = this.props;
 
     return <SingleIssueActivitiesSettings
+      style={styles.settings}
       issueActivityTypes={issueActivityTypes}
       issueActivityEnabledTypes={issueActivityEnabledTypes}
       onApply={(userAppearanceProfile: UserAppearanceProfile) => {
