@@ -176,4 +176,8 @@ export default StyleSheet.create({
     marginBottom: UNIT,
   },
 
+  visibility: {
+    marginTop: UNIT,
+    marginBottom: UNIT
+  }
 });

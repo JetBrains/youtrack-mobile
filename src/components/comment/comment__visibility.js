@@ -1,14 +1,17 @@
 /* @flow */
 
-import {View, Text} from 'react-native';
+import {Text, View} from 'react-native';
 import React, {PureComponent} from 'react';
 import {IconLock} from '../icon/icon';
 
-import styles, {COLOR} from './comment__visibility.styles';
+import styles from './comment__visibility.styles';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import {COLOR_FONT_GRAY} from '../variables/variables';
 
 type Props = {
   visibility: ?string,
-  color?: string
+  color?: string,
+  style?: ViewStyleProp
 };
 
 export default class CommentVisibility extends PureComponent<Props, void> {
@@ -18,8 +21,8 @@ export default class CommentVisibility extends PureComponent<Props, void> {
       return (
         <View
           testID="commentVisibility"
-          style={styles.commentVisibility}>
-          <IconLock testID="commentVisibilityIcon" name="lock" size={16} color={this.props.color || COLOR}/>
+          style={[styles.commentVisibility, this.props.style]}>
+          <IconLock testID="commentVisibilityIcon" name="lock" size={16} color={this.props.color || COLOR_FONT_GRAY}/>
           <Text style={[
             styles.commentVisibilityText,
             this.props.color ? {color: this.props.color} : null

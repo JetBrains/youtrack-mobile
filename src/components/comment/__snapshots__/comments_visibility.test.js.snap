@@ -3,13 +3,14 @@
 exports[`<CommentVisibility/> Render should match a snapshot 1`] = `
 <View
   style={
-    Object {
-      "alignItems": "center",
-      "flex": 1,
-      "flexDirection": "row",
-      "marginBottom": 8,
-      "marginTop": 8,
-    }
+    Array [
+      Object {
+        "alignItems": "center",
+        "flex": 1,
+        "flexDirection": "row",
+      },
+      undefined,
+    ]
   }
   testID="commentVisibility"
 >

@@ -1,18 +1,14 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_FONT_GRAY} from '../../components/variables/variables';
-
-export const COLOR = COLOR_FONT_GRAY;
+import {COLOR_FONT_GRAY, UNIT} from '../variables/variables';
 
 export default StyleSheet.create({
   commentVisibility: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: UNIT,
-    marginBottom: UNIT
+    alignItems: 'center'
   },
   commentVisibilityText: {
-    color: COLOR,
+    color: COLOR_FONT_GRAY,
     marginLeft: UNIT / 1.5,
   }
 });

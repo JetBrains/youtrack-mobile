@@ -385,6 +385,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
 
           {!comment.deleted && IssueVisibility.isSecured(comment.visibility) &&
           <CommentVisibility
+            style={styles.visibility}
             visibility={IssueVisibility.getVisibilityPresentation(comment.visibility)}
             color={COLOR_ICON_LIGHT_BLUE}
           />}
