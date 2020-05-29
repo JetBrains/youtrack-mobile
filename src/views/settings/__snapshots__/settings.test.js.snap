@@ -5,21 +5,26 @@ exports[`Settings Render should match a snapshot 1`] = `
   style={
     Object {
       "flex": 1,
+      "paddingLeft": 16,
+      "paddingRight": 16,
     }
   }
   testID="settings"
 >
   <Header
     onRightButtonClick={[Function]}
+    style={
+      Object {
+        "marginTop": 64,
+      }
+    }
     title="Settings"
   />
   <View
     style={
       Object {
-        "flex": 1,
-        "paddingBottom": 24,
-        "paddingLeft": 16,
-        "paddingRight": 16,
+        "flexDirection": "column",
+        "flexGrow": 1,
       }
     }
   >
@@ -37,6 +42,8 @@ exports[`Settings Render should match a snapshot 1`] = `
       style={
         Object {
           "flexGrow": 1,
+          "paddingLeft": 8,
+          "paddingRight": 8,
         }
       }
     />
@@ -46,6 +53,8 @@ exports[`Settings Render should match a snapshot 1`] = `
           "alignItems": "center",
           "flexDirection": "column",
           "justifyContent": "center",
+          "marginBottom": 24,
+          "marginTop": 16,
         }
       }
       testID="settingsFooter"
@@ -61,7 +70,8 @@ exports[`Settings Render should match a snapshot 1`] = `
           }
         }
       >
-        YouTrack Mobile
+        YouTrack Mobile 
+        0.1.0
       </Text>
       <TouchableOpacity
         activeOpacity={0.2}

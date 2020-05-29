@@ -5,8 +5,8 @@ exports[`<Accounts/> Render should match a snapshot 1`] = `
   style={
     Object {
       "flexDirection": "row",
-      "height": 192,
       "marginTop": 24,
+      "minHeight": 200,
     }
   }
   testID="accounts"
@@ -26,6 +26,7 @@ exports[`<Accounts/> Render should match a snapshot 1`] = `
     style={
       Object {
         "height": 48,
+        "width": 32,
       }
     }
     testID="accountsAddAccount"
@@ -44,6 +45,7 @@ exports[`<Accounts/> Render should match a snapshot 1`] = `
     bounces={false}
     disableNextButton={false}
     dotColor="rgba(254, 0, 130, 0.3)"
+    height={200}
     horizontal={true}
     index={1}
     loadMinimal={false}
@@ -61,15 +63,15 @@ exports[`<Accounts/> Render should match a snapshot 1`] = `
     showsVerticalScrollIndicator={false}
   >
     <View
-      key="0_15"
+      key="https://youtrack.com_15"
       style={
-        Object {
-          "alignItems": "center",
-          "height": 150,
-          "justifyContent": "flex-start",
-          "marginLeft": 24,
-          "marginRight": 24,
-        }
+        Array [
+          Object {
+            "alignItems": "center",
+            "flexDirection": "column",
+          },
+          undefined,
+        ]
       }
       testID="accountsAccount"
     >
@@ -84,8 +86,8 @@ exports[`<Accounts/> Render should match a snapshot 1`] = `
           style={
             Object {
               "borderRadius": 8,
-              "height": 40,
-              "width": 40,
+              "height": 80,
+              "width": 80,
             }
           }
         />
@@ -93,13 +95,13 @@ exports[`<Accounts/> Render should match a snapshot 1`] = `
       <Text
         style={
           Object {
-            "color": "#444444",
+            "color": "#000",
             "fontSize": 18,
             "fontWeight": "500",
             "letterSpacing": -0.19,
             "lineHeight": 20,
             "marginBottom": 8,
-            "marginTop": 16,
+            "marginTop": 24,
           }
         }
       />
@@ -107,7 +109,7 @@ exports[`<Accounts/> Render should match a snapshot 1`] = `
         numberOfLines={1}
         style={
           Object {
-            "color": "#444444",
+            "color": "#000",
             "fontSize": 14,
             "letterSpacing": -0.17,
           }
@@ -117,15 +119,15 @@ exports[`<Accounts/> Render should match a snapshot 1`] = `
       </Text>
     </View>
     <View
-      key="1_14"
+      key="https://youtrack.com_14"
       style={
-        Object {
-          "alignItems": "center",
-          "height": 150,
-          "justifyContent": "flex-start",
-          "marginLeft": 24,
-          "marginRight": 24,
-        }
+        Array [
+          Object {
+            "alignItems": "center",
+            "flexDirection": "column",
+          },
+          undefined,
+        ]
       }
       testID="accountsAccount"
     >
@@ -140,8 +142,8 @@ exports[`<Accounts/> Render should match a snapshot 1`] = `
           style={
             Object {
               "borderRadius": 8,
-              "height": 40,
-              "width": 40,
+              "height": 80,
+              "width": 80,
             }
           }
         />
@@ -149,13 +151,13 @@ exports[`<Accounts/> Render should match a snapshot 1`] = `
       <Text
         style={
           Object {
-            "color": "#444444",
+            "color": "#000",
             "fontSize": 18,
             "fontWeight": "500",
             "letterSpacing": -0.19,
             "lineHeight": 20,
             "marginBottom": 8,
-            "marginTop": 16,
+            "marginTop": 24,
           }
         }
       />
@@ -163,7 +165,7 @@ exports[`<Accounts/> Render should match a snapshot 1`] = `
         numberOfLines={1}
         style={
           Object {
-            "color": "#444444",
+            "color": "#000",
             "fontSize": 14,
             "letterSpacing": -0.17,
           }
@@ -173,15 +175,15 @@ exports[`<Accounts/> Render should match a snapshot 1`] = `
       </Text>
     </View>
     <View
-      key="2_14"
+      key="https://youtrack.com_14"
       style={
-        Object {
-          "alignItems": "center",
-          "height": 150,
-          "justifyContent": "flex-start",
-          "marginLeft": 24,
-          "marginRight": 24,
-        }
+        Array [
+          Object {
+            "alignItems": "center",
+            "flexDirection": "column",
+          },
+          undefined,
+        ]
       }
       testID="accountsAccount"
     >
@@ -196,8 +198,8 @@ exports[`<Accounts/> Render should match a snapshot 1`] = `
           style={
             Object {
               "borderRadius": 8,
-              "height": 40,
-              "width": 40,
+              "height": 80,
+              "width": 80,
             }
           }
         />
@@ -205,13 +207,13 @@ exports[`<Accounts/> Render should match a snapshot 1`] = `
       <Text
         style={
           Object {
-            "color": "#444444",
+            "color": "#000",
             "fontSize": 18,
             "fontWeight": "500",
             "letterSpacing": -0.19,
             "lineHeight": 20,
             "marginBottom": 8,
-            "marginTop": 16,
+            "marginTop": 24,
           }
         }
       />
@@ -219,7 +221,7 @@ exports[`<Accounts/> Render should match a snapshot 1`] = `
         numberOfLines={1}
         style={
           Object {
-            "color": "#444444",
+            "color": "#000",
             "fontSize": 14,
             "letterSpacing": -0.17,
           }
@@ -242,9 +244,15 @@ exports[`<Accounts/> Render should match a snapshot 1`] = `
     }
     onPress={[Function]}
     style={
-      Object {
-        "height": 48,
-      }
+      Array [
+        Object {
+          "height": 48,
+          "width": 32,
+        },
+        Object {
+          "alignItems": "flex-end",
+        },
+      ]
     }
     testID="accountsOnLogOut"
   >

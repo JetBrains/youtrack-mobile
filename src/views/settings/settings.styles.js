@@ -11,21 +11,28 @@ export default StyleSheet.create({
   ...formStyles,
 
   settings: {
-    flex: 1
-  },
-  settingsContent: {
     flex: 1,
     paddingLeft: UNIT * 2,
     paddingRight: UNIT * 2,
-    paddingBottom: UNIT * 3
+  },
+  settingsHeader: {
+    marginTop: UNIT * 8
+  },
+  settingsContent: {
+    flexGrow: 1,
+    flexDirection: 'column'
   },
   settingsOther: {
-    flexGrow: 1
+    flexGrow: 1,
+    paddingLeft: UNIT,
+    paddingRight: UNIT,
   },
   settingsFooter: {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: UNIT * 2,
+    marginBottom: UNIT * 3
   },
   settingsFooterTitle: {
     ...mainText,

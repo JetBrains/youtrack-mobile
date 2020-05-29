@@ -58,33 +58,34 @@ export default class Header extends PureComponent<Props, void> {
         style={[styles.header, style]}
       >
         <StatusBar animated barStyle="dark-content"/>
-        <TouchableOpacity
+        {<TouchableOpacity
           testID="header-back"
           hitSlop={HIT_SLOP}
           style={styles.headerButtonLeft}
           onPress={() => this.onBack()}
         >
           <Text style={styles.headerButtonText} numberOfLines={1}>{leftButton}</Text>
-        </TouchableOpacity>
+        </TouchableOpacity>}
+
+        {Boolean(title) && (
+          <Text
+            testID="headerTitle"
+            style={{...headerTitle}}>{title}</Text>
+        )}
 
         <View style={styles.headerCenter} testID="header-content">
-          {Boolean(title) && (
-            <Text
-              testID="headerTitle"
-              style={{...headerTitle}}>{title}</Text>
-          )}
           {children}
         </View>
 
         {extraButton}
 
-        <TouchableOpacity
+        {rightButton && <TouchableOpacity
           testID="header-action"
           hitSlop={HIT_SLOP}
           style={styles.headerButtonRight}
           onPress={() => this.onRightButtonClick()}>
           <Text style={styles.headerButtonText} numberOfLines={1}>{rightButton}</Text>
-        </TouchableOpacity>
+        </TouchableOpacity>}
       </View>
     );
   }

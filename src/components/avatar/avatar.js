@@ -30,7 +30,7 @@ export default class Avatar extends PureComponent<Props, State> {
 
     if (renderDefault) {
       return (
-        <DefaultAvatar size={size} text={userName} style={style}/>
+        <DefaultAvatar size={size} text={userName} style={[styles.common, style]}/>
       );
     }
 

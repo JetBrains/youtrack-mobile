@@ -9,6 +9,7 @@ import clicksToShowCounter from '../../components/debug-view/clicks-to-show-coun
 import Header from '../../components/header/header';
 import usage, {VERSION_STRING} from '../../components/usage/usage';
 import * as AppActions from '../../actions/app-actions';
+import {AppVersion} from '../../util/util';
 
 import styles from './settings.styles';
 
@@ -52,7 +53,7 @@ class Settings extends Component<Props, void> {
         testID="settings"
         style={styles.settings}
       >
-        <Header title="Settings"/>
+        <Header style={styles.settingsHeader} title="Settings"/>
 
         <View style={styles.settingsContent}>
           <Accounts
@@ -67,14 +68,14 @@ class Settings extends Component<Props, void> {
           />
 
           <View style={styles.settingsOther}>
-            {/* Other settings */}
+
           </View>
 
           <View
             testID="settingsFooter"
             style={styles.settingsFooter}
           >
-            <Text style={styles.settingsFooterTitle}>YouTrack Mobile</Text>
+            <Text style={styles.settingsFooterTitle}>YouTrack Mobile {AppVersion}</Text>
 
             <TouchableOpacity
               onPress={() => Linking.openURL('https://jetbrains.com/youtrack')}>

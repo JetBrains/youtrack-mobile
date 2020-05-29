@@ -15,4 +15,4 @@ export const routeMap = {
   WikiPage: 'WikiPage'
 };
 
-export const rootRoutesList = [routeMap.IssueList, routeMap.AgileBoard, routeMap.Inbox];
+export const rootRoutesList = [routeMap.IssueList, routeMap.AgileBoard, routeMap.Inbox, routeMap.Settings];

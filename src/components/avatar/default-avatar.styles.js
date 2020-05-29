@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT} from '../variables/variables';
+import {COLOR_FONT_ON_BLACK, UNIT} from '../variables/variables';
 
 const defaultSize = 40;
 const commonStyle = {
@@ -12,8 +12,8 @@ export default StyleSheet.create({
     ...commonStyle,
   },
   size80: {
-    width: defaultSize,
-    height: defaultSize,
+    width: defaultSize * 2,
+    height: defaultSize * 2,
     borderRadius: UNIT
   },
   size40: {
@@ -26,7 +26,7 @@ export default StyleSheet.create({
   },
   text: {
     fontFamily: 'Arial',
-    color: '#FFF',
+    color: COLOR_FONT_ON_BLACK,
     fontWeight: '600',
     textAlign: 'center'
   }

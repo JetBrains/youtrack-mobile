@@ -2,9 +2,15 @@
 
 import React from 'react';
 import {Platform} from 'react-native';
-import type {StorageState} from '../components/storage/storage';
 import {getStorageState} from '../components/storage/storage';
 import qs from 'qs';
+import appPackage from '../../package.json'; // eslint-disable-line import/extensions
+
+
+import type {StorageState} from '../components/storage/storage';
+
+
+export const AppVersion = appPackage.version.split('-')[0];
 
 export const isReactElement = (element: any) => {
   return React.isValidElement(element);

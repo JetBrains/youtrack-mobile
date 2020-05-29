@@ -66,33 +66,5 @@ exports[`<Header/> Render should match a snapshot 1`] = `
     }
     testID="header-content"
   />
-  <TouchableOpacity
-    activeOpacity={0.2}
-    hitSlop={
-      Object {
-        "bottom": 8,
-        "left": 8,
-        "right": 8,
-        "top": 8,
-      }
-    }
-    onPress={[Function]}
-    style={
-      Object {
-        "justifyContent": "flex-end",
-      }
-    }
-    testID="header-action"
-  >
-    <Text
-      numberOfLines={1}
-      style={
-        Object {
-          "color": "#FE0082",
-          "fontSize": 17,
-        }
-      }
-    />
-  </TouchableOpacity>
 </View>
 `;

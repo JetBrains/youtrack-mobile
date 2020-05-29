@@ -1,37 +1,39 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_FONT} from '../variables/variables';
+import {UNIT, COLOR_BLACK} from '../variables/variables';
 import {mainText, secondaryText} from '../common-styles/issue';
 
+export const SWIPER_HEIGHT = 200;
 
 export default StyleSheet.create({
   accountContainer: {
     flexDirection: 'row',
     marginTop: UNIT * 3,
-    height: 192
+    minHeight: SWIPER_HEIGHT
   },
   accountProfile: {
-    height: 150,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    marginLeft: UNIT * 3,
-    marginRight: UNIT * 3
+    flexDirection: 'column',
+    alignItems: 'center'
   },
   accountProfileAvatar: {
     borderRadius: UNIT
   },
   accountProfileName: {
     ...mainText,
-    marginTop: UNIT * 2,
-    marginBottom: UNIT,
     fontSize: 18,
+    marginTop: UNIT * 3,
+    marginBottom: UNIT,
     fontWeight: '500',
-    color: COLOR_FONT,
+    color: COLOR_BLACK,
   },
   accountProfileServerURL: {
     ...secondaryText,
-    color: COLOR_FONT,
+    color: COLOR_BLACK,
   },
   accountAction: {
+    width: UNIT * 4,
     height: UNIT * 6
+  },
+  accountActionLogOut: {
+    alignItems: 'flex-end'
   }
 });

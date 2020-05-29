@@ -141,7 +141,7 @@ class YouTrackMobile extends Component<void, State> {
       type: 'reset'
     });
 
-    Router.registerRoute({name: routeMap.Settings, component: Settings});
+    Router.registerRoute({name: routeMap.Settings, component: Settings, type: 'reset'});
 
     Router.registerRoute({name: routeMap.SingleIssue, component: SingleIssue});
 

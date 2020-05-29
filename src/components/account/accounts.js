@@ -17,8 +17,9 @@ import {getStorageState} from '../storage/storage';
 import {HIT_SLOP} from '../common-styles/button';
 
 import avatarStyles from '../avatar/default-avatar.styles';
-import styles from './accounts.styles';
+import styles, {SWIPER_HEIGHT} from './accounts.styles';
 
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   otherAccounts: Array<StorageState>,
@@ -29,7 +30,8 @@ type Props = {
   onAddAccount: () => any,
   onChangeAccount: (account: StorageState) => any,
 
-  openDebugView: () => any
+  openDebugView: () => any,
+  style?: ViewStyleProp
 };
 
 export default class Accounts extends PureComponent<Props, void> {
@@ -68,7 +70,7 @@ export default class Accounts extends PureComponent<Props, void> {
     this.props.onChangeAccount(account);
   };
 
-  renderAccount(account: StorageState, key: string) {
+  renderAccount(account: StorageState) {
     const config: AppConfigFilled = account.config;
     const user = account.currentUser;
 
@@ -76,19 +78,17 @@ export default class Accounts extends PureComponent<Props, void> {
       throw new Error(`Account of ${config.backendUrl} has no currentUser`);
     }
 
-    const avatarUrl = user?.profile?.avatar?.url || '';
-
     return (
       <View
         testID="accountsAccount"
-        key={key}
-        style={styles.accountProfile}
+        key={`${config?.backendUrl}_${account.creationTimestamp || ''}`}
+        style={[styles.accountProfile, this.props.style]}
       >
         <TouchableWithoutFeedback>
           <Avatar
             size={80}
             userName={user.name}
-            source={{uri: avatarUrl}}
+            source={{uri: user?.profile?.avatar?.url || ''}}
             style={avatarStyles.size80}
           />
         </TouchableWithoutFeedback>
@@ -123,6 +123,7 @@ export default class Accounts extends PureComponent<Props, void> {
         </TouchableOpacity>
 
         <Swiper
+          height={SWIPER_HEIGHT}
           dotColor={COLOR_PINK_TRANSPARENT}
           activeDotColor={COLOR_PINK}
           loop={false}
@@ -131,18 +132,13 @@ export default class Accounts extends PureComponent<Props, void> {
           onIndexChanged={(index: number) => this._onChangeAccount(accounts[index])}
           onTouchStart={() => clicksToShowCounter(openDebugView, 'open debug view')}
         >
-          {accounts.map(
-            (account, index) => this.renderAccount(
-              account,
-              `${index}_${account.creationTimestamp || 0}`
-            )
-          )}
+          {accounts.map((account:StorageState) => this.renderAccount(account))}
         </Swiper>
 
         <TouchableOpacity
           testID="accountsOnLogOut"
           hitSlop={HIT_SLOP}
-          style={styles.accountAction}
+          style={[styles.accountAction, styles.accountActionLogOut]}
           disabled={isChangingAccount}
           onPress={this._logOut}>
           <IconLogout size={22} color={COLOR_PINK}/>
