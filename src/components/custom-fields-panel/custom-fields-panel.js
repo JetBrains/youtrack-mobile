@@ -5,7 +5,7 @@ import {Calendar} from 'react-native-calendars'; // eslint-disable-line import/n
 import CustomField from '../custom-field/custom-field';
 import Select from '../select/select';
 import Header from '../header/header';
-import {COLOR_PLACEHOLDER} from '../variables/variables';
+import {COLOR_PINK, COLOR_PLACEHOLDER} from '../variables/variables';
 import Api from '../api/api';
 import IssuePermissions from '../issue-permissions/issue-permissions';
 import styles, {calendarTheme} from './custom-fields-panel.styles';
@@ -17,6 +17,7 @@ import {View as AnimatedView} from 'react-native-animatable';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import KeyboardSpacerIOS from '../platform/keyboard-spacer.ios';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import {IconClose} from '../icon/icon';
 
 type Props = {
   api: Api,
@@ -347,50 +348,45 @@ export default class CustomFieldsPanel extends Component<Props, State> {
   };
 
   _renderSelect() {
-    if (!this.state.select.show) {
-      return;
-    }
-
     return <Select
       {...this.state.select}
       autoFocus={this.props.autoFocusSelect}
       onCancel={() => this.closeEditor()}
       getTitle={(item) => getEntityPresentation(item)}
-      topPadding={0}
     />;
   }
 
   renderHeader(title: string) {
     return (
       <Header
-        leftButton={<Text></Text>}
-        rightButton={<Text>Cancel</Text>}
-        onBack={() => this.closeEditor()}>
-        <Text>{title}</Text>
-      </Header>
+        style={styles.customFieldEditorHeader}
+        rightButton={<IconClose size={24} color={COLOR_PINK}/>}
+        onRightButtonClick={() => this.closeEditor()}
+        title={title}
+      />
     );
   }
 
   _renderDatePicker() {
-    if (!this.state.datePicker.show) {
-      return;
-    }
+    const {datePicker} = this.state;
 
     return (
-      <View style={styles.pickerContainer}>
-        {this.renderHeader(this.state.datePicker.title)}
+      <ModalView
+        animationType="slide"
+      >
+        {this.renderHeader(datePicker.title)}
 
-        <View style={styles.calendar}>
-          {this.state.datePicker.emptyValueName &&
-          <TouchableOpacity onPress={() => this.state.datePicker.onSelect(null)}>
-            <Text style={styles.clearDate}>{this.state.datePicker.emptyValueName} (Clear value)</Text>
-          </TouchableOpacity>}
-        </View>
+        <View style={styles.customFieldDateEditor}>
 
-        {this.state.datePicker.withTime && (
-          <View>
+          <View style={styles.customFieldDateEditorValue}>
+            {datePicker.emptyValueName &&
+            <TouchableOpacity onPress={() => datePicker.onSelect(null)}>
+              <Text style={styles.clearDate}>{datePicker.emptyValueName} (Clear value)</Text>
+            </TouchableOpacity>}
+          </View>
+
+          {datePicker.withTime && (
             <TextInput
-              keyboardAppearance="dark"
               placeholderTextColor={COLOR_PLACEHOLDER}
               style={styles.simpleValueInput}
               placeholder="13:00"
@@ -398,44 +394,51 @@ export default class CustomFieldsPanel extends Component<Props, State> {
               clearButtonMode="always"
               autoCorrect={false}
               autoCapitalize="none"
-              value={this.state.datePicker.time}
-              onChangeText={text => this.setState({
-                datePicker: {
-                  ...this.state.datePicker,
-                  time: text
-                }
-              })}
+              value={datePicker.time}
+              onSubmitEditing={() => {
+                datePicker.onSelect(datePicker.value);
+                this.closeEditor();
+              }}
+              onChangeText={text => {
+                this.setState({
+                  datePicker: {
+                    ...datePicker,
+                    time: text
+                  }
+                });
+              }}
             />
-          </View>
-        )}
+          )}
 
-        <Calendar
-          current={this.state.datePicker.value}
-          selected={[this.state.datePicker.value]}
-          onDayPress={day => {
-            return this.state.datePicker.onSelect(new Date(day.timestamp));
-          }}
-          firstDay={1}
-          theme={calendarTheme}
-        />
-      </View>
+          <Calendar
+            style={styles.customFieldDateEditorCalendar}
+            current={datePicker.value}
+            selected={[datePicker.value]}
+            onDayPress={day => {
+              return datePicker.onSelect(new Date(day.timestamp));
+            }}
+            firstDay={1}
+            theme={calendarTheme}
+          />
+        </View>
+      </ModalView>
     );
   }
 
   _renderSimpleValueInput() {
-    if (!this.state.simpleValue.show || !this.state.editingField) {
-      return;
-    }
+    const {simpleValue, editingField} = this.state;
 
     return (
-      <View>
-        {this.renderHeader(this.state.editingField.projectCustomField.field.name)}
-        <View>
+      <ModalView
+        animationType="slide"
+      >
+        {this.renderHeader(editingField?.projectCustomField?.field?.name || '')}
+
+        <View style={styles.customFieldSimpleEditor}>
           <TextInput
-            keyboardAppearance="dark"
             placeholderTextColor={COLOR_PLACEHOLDER}
             style={styles.simpleValueInput}
-            placeholder={this.state.simpleValue.placeholder}
+            placeholder={simpleValue.placeholder}
             underlineColorAndroid="transparent"
             clearButtonMode="always"
             returnKeyType="done"
@@ -450,10 +453,11 @@ export default class CustomFieldsPanel extends Component<Props, State> {
                 }
               });
             }}
-            onSubmitEditing={() => this.state.simpleValue.onApply(this.state.simpleValue.value)}
-            value={this.state.simpleValue.value}/>
+            onSubmitEditing={() => simpleValue.onApply(simpleValue.value)}
+            value={simpleValue.value}/>
         </View>
-      </View>
+      </ModalView>
+
     );
   }
 
@@ -511,23 +515,14 @@ export default class CustomFieldsPanel extends Component<Props, State> {
   }
 
   render() {
-    const {keyboardOpen} = this.state;
-    const isEditorShown = this.state.select.show || this.state.datePicker.show || this.state.simpleValue.show;
-    const ContainerComponent = isEditorShown ? ModalView : View;
-    const containerProps = (
-      isEditorShown
-        ? {
-          visible: true,
-          animationType: 'slide',
-          style: this.props.style
-        } : {style: [styles.container, this.props.style]}
-    );
+    const {keyboardOpen, select, datePicker, simpleValue, editingField} = this.state;
 
     return (
-      // $FlowFixMe: flow fails with this props generation
-      <ContainerComponent {...containerProps}>
+      <View
+        style={[styles.container, this.props.style]}
+      >
 
-        {!isEditorShown && this.renderFields()}
+        {this.renderFields()}
 
         <AnimatedView
           style={styles.editorViewContainer}
@@ -535,12 +530,12 @@ export default class CustomFieldsPanel extends Component<Props, State> {
           duration={500}
           useNativeDriver
         >
-          {this._renderSelect()}
-          {this._renderDatePicker()}
-          {this._renderSimpleValueInput()}
+          {select.show && this._renderSelect()}
+          {datePicker.show && this._renderDatePicker()}
+          {(simpleValue.show && !!editingField) && this._renderSimpleValueInput()}
         </AnimatedView>
 
-        {this.state.select.show && this.state.select.multi && !keyboardOpen &&
+        {select.show && select.multi && !keyboardOpen &&
         <TouchableOpacity
           style={styles.doneButton}
           onPress={this.onApplyCurrentMultiSelection}
@@ -551,7 +546,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
         <KeyboardSpacerIOS/>
         <KeyboardSpacer onToggle={this.handleKeyboardToggle} style={{height: 0}}/>
 
-      </ContainerComponent>
+      </View>
     );
   }
 }

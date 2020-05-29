@@ -16,11 +16,13 @@ const DONE_BUTTON_HEIGHT = 24;
 
 export default StyleSheet.create({
   container: {
-    height: HEIGHT
+    position: 'relative',
+    zIndex: 1,
+    height: HEIGHT,
   },
-  pickerContainer: {
+  customFieldDateEditor: {
     flex: 1,
-    backgroundColor: COLOR_FONT_ON_BLACK
+    padding: UNIT * 2
   },
   bottomBorder: {
     height: 0.5,
@@ -32,13 +34,22 @@ export default StyleSheet.create({
     height: HEIGHT,
     paddingLeft: UNIT,
   },
+  customFieldEditorHeader: {
+    paddingLeft: UNIT * 2
+  },
+  customFieldSimpleEditor: {
+    flex: 1,
+    padding: UNIT * 2
+  },
   editorViewContainer: {
     flex: 1,
     flexShrink: 1
   },
-  calendar: {
-    padding: UNIT*2,
-    paddingBottom: UNIT
+  customFieldDateEditorValue: {
+    marginBottom: UNIT * 2
+  },
+  customFieldDateEditorCalendar: {
+    marginTop: UNIT * 2
   },
   clearDate: {
     paddingTop: UNIT,
@@ -70,15 +81,15 @@ export default StyleSheet.create({
 });
 
 export const calendarTheme = {
-  calendarBackground: COLOR_BLACK,
+  calendarBackground: COLOR_FONT_ON_BLACK,
   textSectionTitleColor: COLOR_GRAY,
   selectedDayBackgroundColor: COLOR_PINK,
   selectedDayTextColor: COLOR_FONT_ON_BLACK,
   todayTextColor: COLOR_PINK,
-  dayTextColor: COLOR_FONT_ON_BLACK,
+  dayTextColor: COLOR_BLACK,
   textDisabledColor: COLOR_FONT_GRAY,
-  dotColor: COLOR_FONT_ON_BLACK,
-  selectedDotColor: COLOR_FONT_ON_BLACK,
+  dotColor: COLOR_BLACK,
+  selectedDotColor: COLOR_BLACK,
   arrowColor: COLOR_PINK,
-  monthTextColor: COLOR_FONT_ON_BLACK
+  monthTextColor: COLOR_BLACK
 };

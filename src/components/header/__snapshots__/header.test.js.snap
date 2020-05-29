@@ -6,7 +6,6 @@ exports[`<Header/> Render should match a snapshot 1`] = `
     Array [
       Object {
         "alignItems": "center",
-        "backgroundColor": "#FFF",
         "flex": 0,
         "flexDirection": "row",
         "justifyContent": "space-between",

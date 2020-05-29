@@ -111,7 +111,6 @@ export default class SingleIssueActivitiesSettings extends Component<Props, Stat
         getTitle={getEntityPresentation}
         onCancel={this._toggleSettingsVisibility}
         onChangeSelection={(selectedItems) => this.setState({select: {...this.state.select, selectedItems}})}
-        topPadding={0}
       />
     );
   }
