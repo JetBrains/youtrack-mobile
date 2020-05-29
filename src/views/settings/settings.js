@@ -14,6 +14,7 @@ import {AppVersion} from '../../util/util';
 import styles from './settings.styles';
 
 import type {StorageState} from '../../components/storage/storage';
+import {HIT_SLOP} from '../../components/common-styles/button';
 
 type Props = {
   onLogOut: () => any,
@@ -69,6 +70,11 @@ class Settings extends Component<Props, void> {
 
           <View style={styles.settingsOther}>
 
+            <TouchableOpacity
+              hitSlop={HIT_SLOP}
+              onPress={openDebugView}>
+              <Text style={styles.settingsFooterLink}>Show logs</Text>
+            </TouchableOpacity>
           </View>
 
           <View

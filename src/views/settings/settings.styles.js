@@ -26,6 +26,7 @@ export default StyleSheet.create({
     flexGrow: 1,
     paddingLeft: UNIT,
     paddingRight: UNIT,
+    alignItems: 'center'
   },
   settingsFooter: {
     flexDirection: 'column',

@@ -41,12 +41,41 @@ exports[`Settings Render should match a snapshot 1`] = `
     <View
       style={
         Object {
+          "alignItems": "center",
           "flexGrow": 1,
           "paddingLeft": 8,
           "paddingRight": 8,
         }
       }
-    />
+    >
+      <TouchableOpacity
+        activeOpacity={0.2}
+        hitSlop={
+          Object {
+            "bottom": 8,
+            "left": 8,
+            "right": 8,
+            "top": 8,
+          }
+        }
+        onPress={[Function]}
+      >
+        <Text
+          style={
+            Object {
+              "color": "#FE0082",
+              "fontSize": 16,
+              "letterSpacing": -0.19,
+              "lineHeight": 20,
+              "marginBottom": 8,
+              "marginTop": 8,
+            }
+          }
+        >
+          Show logs
+        </Text>
+      </TouchableOpacity>
+    </View>
     <View
       style={
         Object {
