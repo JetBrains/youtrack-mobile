@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {PureComponent} from 'react';
-import {Text, View, ScrollView, Modal} from 'react-native';
+import {Text, View, ScrollView} from 'react-native';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -200,17 +200,11 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
   renderCommentVisibilitySelect() {
     const {selectProps, onCloseSelect} = this.props;
     return (
-      <Modal
-        visible
-        animationType="fade"
-        onRequestClose={() => true}
-      >
-        <Select
-          getTitle={item => item.name}
-          onCancel={onCloseSelect}
-          {...selectProps}
-        />
-      </Modal>
+      <Select
+        getTitle={item => item.name}
+        onCancel={onCloseSelect}
+        {...selectProps}
+      />
     );
   }
 
