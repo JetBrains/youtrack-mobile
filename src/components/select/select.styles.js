@@ -10,9 +10,6 @@ import {mainText} from '../common-styles/issue';
 import {elevation1} from '../common-styles/form';
 
 export default StyleSheet.create({
-  container: {
-    flex: 1
-  },
   inputWrapper: {
     ...elevation1,
     flexDirection: 'row',

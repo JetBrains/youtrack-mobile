@@ -5,8 +5,9 @@ import styles from './select.styles';
 import ColorField from '../color-field/color-field';
 import {notifyError} from '../notification/notification';
 import Avatar from '../avatar/avatar';
-import {COLOR_ICON_GREY, COLOR_PLACEHOLDER, UNIT} from '../variables/variables';
-import getTopPadding, {onHeightChange, isIphoneX} from '../header/header__top-padding';
+import {COLOR_ICON_GREY, COLOR_PLACEHOLDER} from '../variables/variables';
+import ModalView from '../modal-view/modal-view';
+import {onHeightChange} from '../header/header__top-padding';
 
 import {IconCheck, IconBack} from '../icon/icon';
 
@@ -25,8 +26,7 @@ export type Props = {
   autoFocus: boolean,
   emptyValue: ?string,
   style?: any,
-  noFilter?: boolean,
-  topPadding?: number
+  noFilter?: boolean
 };
 
 type State = {
@@ -163,15 +163,15 @@ export default class Select extends Component<Props, State> {
   }
 
   render() {
-    const {multi, autoFocus, style, placeholder, onCancel, noFilter, topPadding} = this.props;
-    const paddingTop = (
-      typeof topPadding === 'number'
-        ? topPadding
-        : (isIphoneX ? (getTopPadding() - UNIT) : (getTopPadding() - UNIT * 2))
-    );
+    const {multi, autoFocus, style, placeholder, onCancel, noFilter} = this.props;
 
     return (
-      <View style={[styles.container, style, {paddingTop}]}>
+      <ModalView
+        testID="select"
+        visible={true}
+        animationType="slide"
+        style={style}
+      >
         {!noFilter && (
           <View style={styles.inputWrapper}>
 
@@ -183,6 +183,7 @@ export default class Select extends Component<Props, State> {
             </TouchableOpacity>
 
             <TextInput
+              testID="selectInput"
               placeholder={placeholder}
               keyboardAppearance="dark"
               autoFocus={autoFocus}
@@ -200,8 +201,11 @@ export default class Select extends Component<Props, State> {
 
           </View>
         )}
-        <ScrollView keyboardShouldPersistTaps="handled"
-          keyboardDismissMode="on-drag">
+        <ScrollView
+          testID="selectItems"
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+        >
           {this._renderEmptyValueItem()}
           {this.state.filteredItems.map(item => this._renderRow(item))}
 
@@ -210,7 +214,7 @@ export default class Select extends Component<Props, State> {
             <Text style={styles.loadingMessage}>Loading values...</Text>
           </View>}
         </ScrollView>
-      </View>
+      </ModalView>
     );
   }
 }

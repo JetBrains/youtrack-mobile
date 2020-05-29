@@ -1,0 +1,113 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Select/> Render should match a snapshot 1`] = `
+<ModalView
+  animationType="slide"
+  onRequestClose={[Function]}
+  supportedOrientations={
+    Array [
+      "portrait",
+      "landscape",
+    ]
+  }
+  testID="select"
+  visible={true}
+>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#FFF",
+        "flexDirection": "row",
+        "marginBottom": 16,
+        "paddingLeft": 12,
+        "shadowColor": "#717171",
+        "shadowOffset": Object {
+          "height": 1,
+          "width": 0,
+        },
+        "shadowOpacity": 0.25,
+        "shadowRadius": 0.75,
+      }
+    }
+  >
+    <TouchableOpacity
+      activeOpacity={0.2}
+      testID="selectBackButton"
+    >
+      <IconBack
+        size={28}
+      />
+    </TouchableOpacity>
+    <TextInput
+      allowFontScaling={true}
+      autoCorrect={false}
+      autoFocus={false}
+      keyboardAppearance="dark"
+      onChangeText={[Function]}
+      onSubmitEditing={[Function]}
+      placeholder="Search item"
+      placeholderTextColor="#717171"
+      rejectResponderTermination={true}
+      returnKeyType="search"
+      style={
+        Object {
+          "color": "#444444",
+          "flex": 1,
+          "fontSize": 16,
+          "height": 40,
+          "letterSpacing": -0.19,
+          "lineHeight": 20,
+          "margin": 8,
+        }
+      }
+      testID="selectInput"
+      underlineColorAndroid="transparent"
+      value=""
+    />
+  </View>
+  <ScrollViewMock
+    keyboardDismissMode="on-drag"
+    keyboardShouldPersistTaps="handled"
+    testID="selectItems"
+  >
+    <View
+      style={
+        Array [
+          Object {
+            "alignItems": "center",
+            "borderBottomWidth": 0.3,
+            "borderColor": "#DFE5EB",
+            "flexDirection": "row",
+            "height": 56,
+            "justifyContent": "space-between",
+            "marginLeft": 16,
+            "paddingRight": 12,
+            "position": "relative",
+          },
+          Object {
+            "justifyContent": "center",
+          },
+        ]
+      }
+    >
+      <ActivityIndicator
+        animating={true}
+        color="#999999"
+        hidesWhenStopped={true}
+        size="small"
+      />
+      <Text
+        style={
+          Object {
+            "color": "#888888",
+            "paddingLeft": 16,
+          }
+        }
+      >
+        Loading values...
+      </Text>
+    </View>
+  </ScrollViewMock>
+</ModalView>
+`;
