@@ -4,7 +4,7 @@ import {
   COLOR_FONT_GRAY,
   COLOR_FONT,
   COLOR_MEDIUM_GRAY,
-  COLOR_BLACK
+  COLOR_BLACK, COLOR_FONT_ON_BLACK
 } from '../variables/variables';
 import {mainText} from '../common-styles/issue';
 import {elevation1} from '../common-styles/form';
@@ -19,6 +19,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     paddingLeft: UNIT * 1.5,
     marginBottom: UNIT * 2,
+    backgroundColor: COLOR_FONT_ON_BLACK,
   },
   cancelButton: {
     paddingRight: UNIT * 1.5,

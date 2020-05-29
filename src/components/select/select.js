@@ -8,7 +8,7 @@ import Avatar from '../avatar/avatar';
 import {COLOR_ICON_GREY, COLOR_PLACEHOLDER, UNIT} from '../variables/variables';
 import getTopPadding, {onHeightChange, isIphoneX} from '../header/header__top-padding';
 
-import {IconMagnify, IconClose, IconCheck} from '../icon/icon';
+import {IconCheck, IconBack} from '../icon/icon';
 
 const MAX_VISIBLE_ITEMS = 100;
 
@@ -172,27 +172,34 @@ export default class Select extends Component<Props, State> {
 
     return (
       <View style={[styles.container, style, {paddingTop}]}>
-        {!noFilter && <View style={styles.inputWrapper}>
-          <IconMagnify size={22} color={COLOR_PLACEHOLDER}/>
-          <TextInput
-            placeholder={placeholder}
-            keyboardAppearance="dark"
-            autoFocus={autoFocus}
-            placeholderTextColor={COLOR_PLACEHOLDER}
-            returnKeyType={multi ? 'done' : 'search'}
-            autoCorrect={false}
-            underlineColorAndroid="transparent"
-            onSubmitEditing={(e) => multi ? this._onSave() : this._onSearch(this.state.query)}
-            value={this.state.query}
-            onChangeText={(text) => {
-              this.setState({query: text});
-              this._onSearch(text);
-            }}
-            style={styles.searchInput}/>
-          <TouchableOpacity style={styles.cancelButton} onPress={onCancel}>
-            <IconClose size={28}/>
-          </TouchableOpacity>
-        </View>}
+        {!noFilter && (
+          <View style={styles.inputWrapper}>
+
+            <TouchableOpacity
+              testID="selectBackButton"
+              onPress={onCancel}
+            >
+              <IconBack size={28}/>
+            </TouchableOpacity>
+
+            <TextInput
+              placeholder={placeholder}
+              keyboardAppearance="dark"
+              autoFocus={autoFocus}
+              placeholderTextColor={COLOR_PLACEHOLDER}
+              returnKeyType={multi ? 'done' : 'search'}
+              autoCorrect={false}
+              underlineColorAndroid="transparent"
+              onSubmitEditing={(e) => multi ? this._onSave() : this._onSearch(this.state.query)}
+              value={this.state.query}
+              onChangeText={(text) => {
+                this.setState({query: text});
+                this._onSearch(text);
+              }}
+              style={styles.searchInput}/>
+
+          </View>
+        )}
         <ScrollView keyboardShouldPersistTaps="handled"
           keyboardDismissMode="on-drag">
           {this._renderEmptyValueItem()}
