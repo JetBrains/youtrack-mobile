@@ -6,7 +6,6 @@ import {Text, View, ScrollView, Modal} from 'react-native';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
-import commentsStyles from '../single-issue__comments.styles';
 import IssueVisibility from '../../../components/issue-visibility/issue-visibility';
 import KeyboardSpacerIOS from '../../../components/platform/keyboard-spacer.ios';
 import Select from '../../../components/select/select';
@@ -209,7 +208,6 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
         <Select
           getTitle={item => item.name}
           onCancel={onCloseSelect}
-          style={commentsStyles.visibilitySelect}
           {...selectProps}
         />
       </Modal>

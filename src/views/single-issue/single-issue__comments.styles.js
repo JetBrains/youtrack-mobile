@@ -3,7 +3,6 @@ import {
   UNIT,
   COLOR_FONT_ON_BLACK,
   COLOR_FONT_GRAY,
-  COLOR_TRANSPARENT_BLACK,
   COLOR_GRAY,
   COLOR_PINK,
   COLOR_MEDIUM_GRAY,
@@ -108,13 +107,6 @@ export default StyleSheet.create({
     paddingTop: UNIT
   },
 
-  visibilitySelect: {
-    top: 0,
-    right: 0,
-    left: 0,
-    bottom: 0,
-    backgroundColor: COLOR_TRANSPARENT_BLACK
-  },
   visibilityChangeButton: {
     flexDirection: 'row',
     alignItems: 'center',
