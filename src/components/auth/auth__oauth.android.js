@@ -1,9 +1,8 @@
 import {Linking} from 'react-native';
 import urlJoin from 'url-join';
 
-import {parseQueryString} from './auth-helper';
-
 import type {AppConfig} from '../../flow/AppConfig';
+import {parseUrlQueryString} from '../../util/util';
 
 function openAuthPage(config: AppConfig) {
   Linking.openURL(encodeURI(urlJoin(
@@ -24,7 +23,7 @@ function authorizeInHub(config: AppConfig) {
       Linking.removeEventListener('url', onOpenWithUrl);
       const url = event.url || event;
 
-      const code = parseQueryString(url).code;
+      const code = parseUrlQueryString(url).code;
       resolve(code);
       Linking.removeEventListener('url', onOpenWithUrl);
     }

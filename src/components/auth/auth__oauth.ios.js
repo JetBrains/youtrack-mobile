@@ -3,9 +3,9 @@
 import {Linking} from 'react-native';
 import urlJoin from 'url-join';
 import SafariView from '../safari-view/safari-view';
-import {parseQueryString} from './auth-helper';
 
 import type {AppConfig} from '../../flow/AppConfig';
+import {parseUrlQueryString} from '../../util/util';
 
 async function openAuthPage(config: AppConfig) {
   const url = encodeURI(urlJoin(
@@ -36,7 +36,7 @@ function authorizeInHub(config: AppConfig): Promise<string> {
 
       const url = event.url || event;
 
-      const code = parseQueryString(url).code;
+      const code = parseUrlQueryString(url).code;
       resolve(code);
       Linking.removeEventListener('url', onOpenWithUrl);
     }
