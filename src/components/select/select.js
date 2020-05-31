@@ -1,5 +1,5 @@
 /* @flow */
-import {Text, ScrollView, View, TouchableOpacity, TextInput, ActivityIndicator} from 'react-native';
+import {Text, View, TouchableOpacity, TextInput, ActivityIndicator, FlatList} from 'react-native';
 import React, {Component} from 'react';
 import styles from './select.styles';
 import ColorField from '../color-field/color-field';
@@ -150,15 +150,44 @@ export default class Select extends Component<Props, State> {
 
   _renderRow(item) {
     return (
-      <TouchableOpacity key={item.id} style={styles.row} onPress={() => this._onTouchItem(item)}>
+      <TouchableOpacity
+        key={item.id}
+        style={styles.row}
+        onPress={() => this._onTouchItem(item)}
+      >
         <View style={styles.selectItemValue}>
-          {item.avatarUrl && <Avatar userName={this.props.getTitle(item)} size={32} style={styles.itemIcon} source={{uri: item.avatarUrl}}/>}
+          {item.avatarUrl && (
+            <Avatar
+              userName={this.props.getTitle(item)}
+              size={32}
+              style={styles.itemIcon}
+              source={{uri: item.avatarUrl}}
+            />
+          )}
 
           {this._renderTitle(item)}
         </View>
 
         {this._isSelected(item) && <IconCheck size={26} color={COLOR_ICON_GREY}/>}
       </TouchableOpacity>
+    );
+  }
+
+  renderItems() {
+    return (
+      <FlatList
+        testID="selectItems"
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
+
+        ListHeaderComponent={this._renderEmptyValueItem()}
+        scrollEventThrottle={10}
+        stickyHeaderIndices={[]}
+
+        data={this.state.filteredItems}
+        keyExtractor={(item: Object & { id: string }) => item.id}
+        renderItem={(listItem: Object) => this._renderRow(listItem.item)}
+      />
     );
   }
 
@@ -185,7 +214,6 @@ export default class Select extends Component<Props, State> {
             <TextInput
               testID="selectInput"
               placeholder={placeholder}
-              keyboardAppearance="dark"
               autoFocus={autoFocus}
               placeholderTextColor={COLOR_PLACEHOLDER}
               returnKeyType={multi ? 'done' : 'search'}
@@ -199,21 +227,24 @@ export default class Select extends Component<Props, State> {
               }}
               style={styles.searchInput}/>
 
+            {multi && <TouchableOpacity
+              testID="applyButton"
+              style={styles.applyButton}
+              onPress={() => this._onSave()}
+            >
+              <IconCheck size={28}/>
+            </TouchableOpacity>}
+
           </View>
         )}
-        <ScrollView
-          testID="selectItems"
-          keyboardShouldPersistTaps="handled"
-          keyboardDismissMode="on-drag"
-        >
-          {this._renderEmptyValueItem()}
-          {this.state.filteredItems.map(item => this._renderRow(item))}
 
-          {!this.state.loaded && <View style={[styles.row, styles.loadingRow]}>
-            <ActivityIndicator/>
-            <Text style={styles.loadingMessage}>Loading values...</Text>
-          </View>}
-        </ScrollView>
+        {!this.state.loaded && <View style={[styles.row, styles.loadingRow]}>
+          <ActivityIndicator/>
+          <Text style={styles.loadingMessage}>Loading values...</Text>
+        </View>}
+
+        {this.renderItems()}
+
       </ModalView>
     );
   }

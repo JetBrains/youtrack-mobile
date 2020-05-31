@@ -15,7 +15,6 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: UNIT * 1.5,
-    marginBottom: UNIT * 2,
     backgroundColor: COLOR_FONT_ON_BLACK,
   },
   cancelButton: {
@@ -72,5 +71,8 @@ export default StyleSheet.create({
   },
   colorField: {
     marginRight: UNIT * 2
+  },
+  applyButton: {
+    paddingRight: UNIT
   }
 });

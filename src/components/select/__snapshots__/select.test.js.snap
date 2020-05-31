@@ -19,7 +19,6 @@ exports[`<Select/> Render should match a snapshot 1`] = `
         "alignItems": "center",
         "backgroundColor": "#FFF",
         "flexDirection": "row",
-        "marginBottom": 16,
         "paddingLeft": 12,
         "shadowColor": "#717171",
         "shadowOffset": Object {
@@ -43,7 +42,6 @@ exports[`<Select/> Render should match a snapshot 1`] = `
       allowFontScaling={true}
       autoCorrect={false}
       autoFocus={false}
-      keyboardAppearance="dark"
       onChangeText={[Function]}
       onSubmitEditing={[Function]}
       placeholder="Search item"
@@ -66,48 +64,61 @@ exports[`<Select/> Render should match a snapshot 1`] = `
       value=""
     />
   </View>
-  <ScrollViewMock
-    keyboardDismissMode="on-drag"
-    keyboardShouldPersistTaps="handled"
-    testID="selectItems"
+  <View
+    style={
+      Array [
+        Object {
+          "alignItems": "center",
+          "borderBottomWidth": 0.3,
+          "borderColor": "#DFE5EB",
+          "flexDirection": "row",
+          "height": 56,
+          "justifyContent": "space-between",
+          "marginLeft": 16,
+          "paddingRight": 12,
+          "position": "relative",
+        },
+        Object {
+          "justifyContent": "center",
+        },
+      ]
+    }
   >
-    <View
+    <ActivityIndicator
+      animating={true}
+      color="#999999"
+      hidesWhenStopped={true}
+      size="small"
+    />
+    <Text
       style={
-        Array [
-          Object {
-            "alignItems": "center",
-            "borderBottomWidth": 0.3,
-            "borderColor": "#DFE5EB",
-            "flexDirection": "row",
-            "height": 56,
-            "justifyContent": "space-between",
-            "marginLeft": 16,
-            "paddingRight": 12,
-            "position": "relative",
-          },
-          Object {
-            "justifyContent": "center",
-          },
-        ]
+        Object {
+          "color": "#888888",
+          "paddingLeft": 16,
+        }
       }
     >
-      <ActivityIndicator
-        animating={true}
-        color="#999999"
-        hidesWhenStopped={true}
-        size="small"
-      />
-      <Text
-        style={
-          Object {
-            "color": "#888888",
-            "paddingLeft": 16,
-          }
-        }
-      >
-        Loading values...
-      </Text>
-    </View>
-  </ScrollViewMock>
+      Loading values...
+    </Text>
+  </View>
+  <FlatList
+    data={Array []}
+    disableVirtualization={false}
+    horizontal={false}
+    initialNumToRender={10}
+    keyExtractor={[Function]}
+    keyboardDismissMode="on-drag"
+    keyboardShouldPersistTaps="handled"
+    maxToRenderPerBatch={10}
+    numColumns={1}
+    onEndReachedThreshold={2}
+    removeClippedSubviews={false}
+    renderItem={[Function]}
+    scrollEventThrottle={10}
+    stickyHeaderIndices={Array []}
+    testID="selectItems"
+    updateCellsBatchingPeriod={50}
+    windowSize={21}
+  />
 </ModalView>
 `;
