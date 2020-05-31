@@ -12,7 +12,6 @@ import {formStyles} from '../common-styles/form';
 
 const HEIGHT = UNIT * 12;
 const SAVING_ALPHA = '70';
-const DONE_BUTTON_HEIGHT = 24;
 
 export default StyleSheet.create({
   container: {
@@ -66,17 +65,6 @@ export default StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0
-  },
-  doneButton: {
-    marginBottom: UNIT * 2,
-    backgroundColor: COLOR_PINK,
-    padding: UNIT
-  },
-  doneButtonText: {
-    height: DONE_BUTTON_HEIGHT,
-    fontSize: 20,
-    color: COLOR_FONT_ON_BLACK,
-    textAlign: 'center'
   }
 });
 

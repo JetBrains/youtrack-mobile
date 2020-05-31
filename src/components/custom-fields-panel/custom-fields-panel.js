@@ -10,7 +10,6 @@ import Api from '../api/api';
 import IssuePermissions from '../issue-permissions/issue-permissions';
 import styles, {calendarTheme} from './custom-fields-panel.styles';
 import ModalView from '../modal-view/modal-view';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
 import type {IssueFull} from '../../flow/Issue';
 import type {IssueProject, CustomField as CustomFieldType} from '../../flow/CustomFields';
 import {View as AnimatedView} from 'react-native-animatable';
@@ -35,7 +34,6 @@ type State = {
   savingField: ?CustomFieldType,
   isEditingProject: boolean,
   isSavingProject: boolean,
-  keyboardOpen: boolean,
 
   select: {
     show: boolean,
@@ -111,7 +109,6 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       height: 0,
       editingField: null,
       savingField: null,
-      keyboardOpen: false,
       isEditingProject: false,
       isSavingProject: false,
       ...initialEditorsState
@@ -180,14 +177,6 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       }, resolve);
     });
   }
-
-  onApplyCurrentMultiSelection = () => {
-    const {editingField, select} = this.state;
-    if (!editingField) {
-      return;
-    }
-    this.saveUpdatedField(editingField, select.selectedItems);
-  };
 
   editDateField(field: CustomFieldType) {
     const withTime = field.projectCustomField.field.fieldType.valueType === DATE_AND_TIME;
@@ -319,10 +308,6 @@ export default class CustomFieldsPanel extends Component<Props, State> {
 
     return this.editCustomField(field);
   }
-
-  handleKeyboardToggle = (keyboardOpen: boolean) => {
-    this.setState({keyboardOpen});
-  };
 
   storeScrollPosition = (event: Object) => {
     const {nativeEvent} = event;
@@ -515,7 +500,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
   }
 
   render() {
-    const {keyboardOpen, select, datePicker, simpleValue, editingField} = this.state;
+    const {select, datePicker, simpleValue, editingField} = this.state;
 
     return (
       <View
@@ -535,16 +520,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
           {(simpleValue.show && !!editingField) && this._renderSimpleValueInput()}
         </AnimatedView>
 
-        {select.show && select.multi && !keyboardOpen &&
-        <TouchableOpacity
-          style={styles.doneButton}
-          onPress={this.onApplyCurrentMultiSelection}
-        >
-          <Text style={styles.doneButtonText}>Apply</Text>
-        </TouchableOpacity>}
-
         <KeyboardSpacerIOS/>
-        <KeyboardSpacer onToggle={this.handleKeyboardToggle} style={{height: 0}}/>
 
       </View>
     );
