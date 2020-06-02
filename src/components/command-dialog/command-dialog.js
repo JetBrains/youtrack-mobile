@@ -130,7 +130,6 @@ export default class CommandDialog extends Component<Props, State> {
   }
 
   _renderSuggestion = (suggestion: CommandSuggestion) => {
-
     return (
       <SelectItem
         item={suggestion}
@@ -140,7 +139,7 @@ export default class CommandDialog extends Component<Props, State> {
             <Text style={styles.suggestionText}>{suggestion.option}</Text>
           </View>
         )}
-        onTouch={() => this.onApplySuggestion(suggestion)}
+        onPress={() => this.onApplySuggestion(suggestion)}
         isSelected={false}
       />
     );

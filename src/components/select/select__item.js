@@ -14,14 +14,14 @@ import styles from './select.styles';
 export type Props = {
   item: Object,
   isSelected: boolean,
-  onTouch: (item: Object) => any,
+  onPress: (item: Object) => any,
   titleRenderer?: (item: Object) => any
 };
 
 export default class SelectItem extends PureComponent<Props, void> {
   static defaultProps = {
     isSelected: false,
-    onTouch: (item: Object) => {}
+    onPress: (item: Object) => {}
   };
 
   getDefaultTitle(item: Object): string {
@@ -37,7 +37,7 @@ export default class SelectItem extends PureComponent<Props, void> {
   }
 
   render() {
-    const {item, onTouch, isSelected} = this.props;
+    const {item, onPress, isSelected} = this.props;
 
     if (!item) {
       return null;
@@ -47,7 +47,7 @@ export default class SelectItem extends PureComponent<Props, void> {
       <TouchableOpacity
         key={item.id}
         style={styles.row}
-        onPress={() => onTouch(item)}
+        onPress={() => onPress(item)}
       >
         <View style={styles.selectItemValue}>
           {item.avatarUrl && (

@@ -174,7 +174,7 @@ export default class Select extends Component<Props, State> {
       <SelectItem
         item={item}
         isSelected={this.state.selectedItems.some(selectedItem => item.id === selectedItem.id)}
-        onTouch={() => this._onTouchItem(item)}
+        onPress={() => this._onTouchItem(item)}
         titleRenderer={() => this._renderTitle(item)}
       />
     );
