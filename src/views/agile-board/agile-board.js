@@ -237,17 +237,11 @@ class AgileBoard extends Component<Props, State> {
   _renderSelect() {
     const {selectProps} = this.props;
     return (
-      <ModalView
-        visible
-        animationType="fade"
-        onRequestClose={() => true}
-      >
-        <Select
-          getTitle={item => item.name}
-          onCancel={this.props.onCloseSelect}
-          {...selectProps}
-        />
-      </ModalView>
+      <Select
+        getTitle={item => item.name}
+        onCancel={this.props.onCloseSelect}
+        {...selectProps}
+      />
     );
   }
 
