@@ -13,7 +13,6 @@ import ModalView from '../modal-view/modal-view';
 import type {IssueFull} from '../../flow/Issue';
 import type {IssueProject, CustomField as CustomFieldType} from '../../flow/CustomFields';
 import {View as AnimatedView} from 'react-native-animatable';
-import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import KeyboardSpacerIOS from '../platform/keyboard-spacer.ios';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {IconClose} from '../icon/icon';
@@ -337,7 +336,6 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       {...this.state.select}
       autoFocus={this.props.autoFocusSelect}
       onCancel={() => this.closeEditor()}
-      getTitle={(item) => getEntityPresentation(item)}
     />;
   }
 
