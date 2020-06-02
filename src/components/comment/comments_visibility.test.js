@@ -47,7 +47,7 @@ describe('<CommentVisibility/>', () => {
       wrapper = doShallow(visibilityMock, color);
 
       expect(wrapper.contains(
-        <IconLock testID="commentVisibilityIcon" name="lock" size={16} color={color}/>
+        <IconLock testID="commentVisibilityIcon" size={16} color={color}/>
       )).toEqual(true);
     });
   });

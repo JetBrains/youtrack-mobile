@@ -22,7 +22,11 @@ export default class CommentVisibility extends PureComponent<Props, void> {
         <View
           testID="commentVisibility"
           style={[styles.commentVisibility, this.props.style]}>
-          <IconLock testID="commentVisibilityIcon" name="lock" size={16} color={this.props.color || COLOR_FONT_GRAY}/>
+          <IconLock
+            testID="commentVisibilityIcon"
+            size={16}
+            color={this.props.color || COLOR_FONT_GRAY}
+          />
           <Text style={[
             styles.commentVisibilityText,
             this.props.color ? {color: this.props.color} : null
