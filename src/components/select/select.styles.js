@@ -53,6 +53,7 @@ export default StyleSheet.create({
   },
   itemTitle: {
     ...mainText,
+    fontWeight: '500',
     color: COLOR_BLACK
   },
   loadingMessage: {
