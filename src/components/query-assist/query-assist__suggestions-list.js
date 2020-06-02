@@ -1,6 +1,6 @@
 /* @flow */
 
-import {View, ListView, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, ListView, Text, StyleSheet, TouchableOpacity, Platform} from 'react-native';
 import React, {Component} from 'react';
 import {UNIT, COLOR_BLACK} from '../variables/variables';
 import type {TransformedSuggestion, SavedQuery} from '../../flow/Issue';
@@ -114,7 +114,15 @@ export default class QueryAssistSuggestionsList extends Component<Props, State> 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    alignItems: 'flex-end'
+    alignItems: 'flex-end',
+    ...Platform.select({
+      ios: {
+        marginBottom: UNIT * 5
+      },
+      android: {
+        marginBottom: UNIT * 2
+      }
+    })
   },
   list: {
     overflow: 'visible',
