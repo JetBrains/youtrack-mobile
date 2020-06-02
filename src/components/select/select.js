@@ -1,22 +1,24 @@
 /* @flow */
 import {Text, View, TouchableOpacity, TextInput, ActivityIndicator, FlatList} from 'react-native';
 import React, {Component} from 'react';
-import styles from './select.styles';
+
 import ColorField from '../color-field/color-field';
 import {notifyError} from '../notification/notification';
-import Avatar from '../avatar/avatar';
 import {COLOR_ICON_GREY, COLOR_PLACEHOLDER} from '../variables/variables';
 import ModalView from '../modal-view/modal-view';
 import {onHeightChange} from '../header/header__top-padding';
-
 import {IconCheck, IconBack} from '../icon/icon';
+import {getEntityPresentation} from '../issue-formatter/issue-formatter';
+import SelectItem from './select__item';
+
+import styles from './select.styles';
 
 const MAX_VISIBLE_ITEMS = 100;
 
 export type Props = {
   dataSource: (query: string) => Promise<Array<Object>>,
   onSelect: (item: ?Object | Array<Object>) => any,
-  onChangeSelection: (selectedItems: Array<Object>) => any,
+  onChangeSelection: (selectedItems: Array<Object>, current: Object) => any,
   onCancel: () => any,
   getTitle: (item: Object) => string,
   getValue?: (item: Object) => string,
@@ -42,7 +44,8 @@ export default class Select extends Component<Props, State> {
     placeholder: 'Search item',
     autoFocus: false,
     onChangeSelection: (items: Array<Object>) => null,
-    noFilter: false
+    noFilter: false,
+    getTitle: (item: Object) => getEntityPresentation(item)
   };
 
   constructor() {
@@ -113,13 +116,22 @@ export default class Select extends Component<Props, State> {
   }
 
   _renderTitle(item) {
+    const label: React$Element<any> = <Text style={styles.itemTitle}>{this.props.getTitle(item)}</Text>;
+
     if (item.color) {
-      return <View style={styles.colorFieldItemWrapper}>
-        <ColorField text={this.props.getTitle(item)} color={item.color} style={styles.colorField}/>
-        <Text style={styles.itemTitle}>{this.props.getTitle(item)}</Text>
-      </View>;
+      return (
+        <View style={styles.colorFieldItemWrapper}>
+          <ColorField
+            text={this.props.getTitle(item)}
+            color={item.color}
+            style={styles.colorField}
+          />
+          {label}
+        </View>
+      );
     }
-    return <Text style={styles.itemTitle}>{this.props.getTitle(item)}</Text>;
+
+    return label;
   }
 
   _isSelected(item) {
@@ -131,12 +143,21 @@ export default class Select extends Component<Props, State> {
       return this.props.onSelect(item);
     }
 
-    const selectedItems = this._isSelected(item)
+    let selectedItems = this._isSelected(item)
       ? this.state.selectedItems.filter(it => it.id !== item.id)
       : this.state.selectedItems.concat(item);
 
+    if (item.toggleItem) {
+      selectedItems = selectedItems.filter((it: Object) => {
+        if (!it.toggleItem) {
+          return it;
+        }
+        return it.id === item.id;
+      });
+    }
+
     this.setState({selectedItems});
-    this.props.onChangeSelection(selectedItems);
+    this.props.onChangeSelection(selectedItems, item);
   }
 
   _onClearValue() {
@@ -148,30 +169,16 @@ export default class Select extends Component<Props, State> {
     return this.props.onSelect(this.state.selectedItems);
   }
 
-  _renderRow(item) {
+  _renderRow = (item) => {
     return (
-      <TouchableOpacity
-        key={item.id}
-        style={styles.row}
-        onPress={() => this._onTouchItem(item)}
-      >
-        <View style={styles.selectItemValue}>
-          {item.avatarUrl && (
-            <Avatar
-              userName={this.props.getTitle(item)}
-              size={32}
-              style={styles.itemIcon}
-              source={{uri: item.avatarUrl}}
-            />
-          )}
-
-          {this._renderTitle(item)}
-        </View>
-
-        {this._isSelected(item) && <IconCheck size={26} color={COLOR_ICON_GREY}/>}
-      </TouchableOpacity>
+      <SelectItem
+        item={item}
+        isSelected={this.state.selectedItems.some(selectedItem => item.id === selectedItem.id)}
+        onTouch={() => this._onTouchItem(item)}
+        titleRenderer={() => this._renderTitle(item)}
+      />
     );
-  }
+  };
 
   renderItems() {
     return (
@@ -182,11 +189,12 @@ export default class Select extends Component<Props, State> {
 
         ListHeaderComponent={this._renderEmptyValueItem()}
         scrollEventThrottle={10}
-        stickyHeaderIndices={[]}
 
         data={this.state.filteredItems}
         keyExtractor={(item: Object & { id: string }) => item.id}
         renderItem={(listItem: Object) => this._renderRow(listItem.item)}
+
+        extraData={this.state.selectedItems}
       />
     );
   }

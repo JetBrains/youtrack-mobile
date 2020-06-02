@@ -104,6 +104,7 @@ exports[`<Select/> Render should match a snapshot 1`] = `
   <FlatList
     data={Array []}
     disableVirtualization={false}
+    extraData={Array []}
     horizontal={false}
     initialNumToRender={10}
     keyExtractor={[Function]}
@@ -115,7 +116,6 @@ exports[`<Select/> Render should match a snapshot 1`] = `
     removeClippedSubviews={false}
     renderItem={[Function]}
     scrollEventThrottle={10}
-    stickyHeaderIndices={Array []}
     testID="selectItems"
     updateCellsBatchingPeriod={50}
     windowSize={21}
