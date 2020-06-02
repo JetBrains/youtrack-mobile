@@ -3,16 +3,15 @@ import {
   UNIT,
   COLOR_FONT_ON_BLACK,
   COLOR_BLACK,
-  COLOR_ICON_MEDIUM_GREY, COLOR_MEDIUM_GRAY
+  COLOR_MEDIUM_GRAY,
+  COLOR_FONT
 } from '../variables/variables';
-import {formStyles} from '../common-styles/form';
+import {elevation1} from '../common-styles/form';
 import {mainText} from '../common-styles/issue';
 
 export default StyleSheet.create({
   modal: {
     backgroundColor: COLOR_FONT_ON_BLACK,
-    paddingLeft: UNIT,
-    paddingRight: UNIT,
   },
   listContainer: {
     flexDirection: 'row',
@@ -24,45 +23,34 @@ export default StyleSheet.create({
     overflow: 'visible',
     paddingTop: UNIT * 2
   },
-  headerText: {
-    fontSize: 17,
-    color: COLOR_FONT_ON_BLACK
-  },
   inputWrapper: {
+    ...elevation1,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: UNIT,
+    paddingLeft: UNIT * 1.5,
+    backgroundColor: COLOR_FONT_ON_BLACK,
   },
   searchInput: {
-    ...formStyles.input,
-  },
-  suggestionRow: {
+    ...mainText,
     flex: 1,
-    flexDirection: 'row',
-    paddingTop: UNIT * 1.5,
-    paddingBottom: UNIT * 2,
-    borderBottomColor: COLOR_MEDIUM_GRAY,
-    borderBottomWidth: 0.5,
+    height: UNIT * 5,
+    margin: UNIT,
+    color: COLOR_FONT
   },
-  suggestionDescriptionContainer: {
-    flex: 1,
+  suggestion: {
     flexGrow: 1,
     flexDirection: 'row',
-    marginRight: UNIT * 2,
+    alignItems: 'center',
   },
   suggestionDescription: {
-    ...mainText,
-    color: COLOR_ICON_MEDIUM_GREY
-  },
-  suggestionTextContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    flexGrow: 2,
-    flexShrink: 0
+    flex: 0.5,
+    marginRight: UNIT,
+    ...mainText
   },
   suggestionText: {
     ...mainText,
-    fontWeight: '300',
+    flex: 1,
+    fontWeight: '500',
     color: COLOR_BLACK
   },
   commandPreview: {
@@ -78,5 +66,8 @@ export default StyleSheet.create({
   },
   commandDescriptionError: {
     color: 'red'
+  },
+  applyButton: {
+    paddingRight: UNIT
   }
 });

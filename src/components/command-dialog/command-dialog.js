@@ -1,17 +1,17 @@
 /* @flow */
 import {View, TouchableOpacity, Text, TextInput, FlatList, ActivityIndicator} from 'react-native';
 import React, {Component} from 'react';
-import styles from './command-dialog.styles';
-import {COLOR_ICON_MEDIUM_GREY, COLOR_PINK, COLOR_PLACEHOLDER} from '../variables/variables';
+import {COLOR_GRAY, COLOR_PINK, COLOR_PLACEHOLDER} from '../variables/variables';
 import throttle from 'lodash.throttle';
-import Header from '../../components/header/header';
 import ApiHelper from '../../components/api/api__helper';
-import type {CommandSuggestionResponse, CommandSuggestion, SuggestedCommand} from '../../flow/Issue';
 import ModalView from '../modal-view/modal-view';
 import KeyboardSpacerIOS from '../platform/keyboard-spacer.ios';
-import {IconCheck, IconClose} from '../icon/icon';
+import {IconBack, IconCheck} from '../icon/icon';
 
-const SEARCH_THROTTLE = 30;
+import styles from './command-dialog.styles';
+
+import type {CommandSuggestionResponse, CommandSuggestion, SuggestedCommand} from '../../flow/Issue';
+import SelectItem from '../select/select__item';
 
 type Props = {
   headerContent: string,
@@ -32,6 +32,8 @@ type State = {
 type DefaultProps = {
   onChange: Function
 }
+
+const SEARCH_THROTTLE = 30;
 
 export default class CommandDialog extends Component<Props, State> {
   static defaultProps: DefaultProps = {
@@ -74,37 +76,36 @@ export default class CommandDialog extends Component<Props, State> {
     this.props.onApply(this.state.input);
   };
 
-  _renderInput() {
+  canApplyCommand(): boolean {
     const {input} = this.state;
     const {isApplying, suggestions} = this.props;
+    return !!input && !isApplying && !!suggestions && suggestions.commands.every(command => !command.error);
+  }
 
-    const canApply = !isApplying && suggestions && suggestions.commands.every(command => !command.error);
+  _renderInput() {
+    const {input} = this.state;
+    const {isApplying} = this.props;
 
     return (
-      <View style={styles.inputWrapper}>
-        <TextInput
-          keyboardAppearance="dark"
-          style={styles.searchInput}
-          placeholderTextColor={COLOR_PLACEHOLDER}
-          placeholder="Enter command"
-          clearButtonMode="while-editing"
-          returnKeyType="done"
-          testID="command-input"
-          autoFocus
-          autoCorrect={false}
-          underlineColorAndroid="transparent"
-          autoCapitalize="none"
-          value={input}
-          editable={!isApplying}
-          onSubmitEditing={() => {
-            canApply && this.onApply();
-          }}
-          onChangeText={text => this.setState({input: text})}
-          onSelectionChange={event => this.onSearch(input, event.nativeEvent.selection.start)}
-        />
-
-        {isApplying && <ActivityIndicator/>}
-      </View>
+      <TextInput
+        style={styles.searchInput}
+        placeholderTextColor={COLOR_PLACEHOLDER}
+        placeholder="Enter command"
+        clearButtonMode="while-editing"
+        returnKeyType="done"
+        testID="command-input"
+        autoFocus
+        autoCorrect={false}
+        underlineColorAndroid="transparent"
+        autoCapitalize="none"
+        value={input}
+        editable={!isApplying}
+        onSubmitEditing={() => {
+          this.canApplyCommand() && this.onApply();
+        }}
+        onChangeText={text => this.setState({input: text})}
+        onSelectionChange={event => this.onSearch(input, event.nativeEvent.selection.start)}
+      />
     );
   }
 
@@ -128,17 +129,20 @@ export default class CommandDialog extends Component<Props, State> {
     );
   }
 
-  _renderSuggestion = ({item}) => {
-    const suggestion: CommandSuggestion = item;
+  _renderSuggestion = (suggestion: CommandSuggestion) => {
+
     return (
-      <TouchableOpacity style={styles.suggestionRow} onPress={() => this.onApplySuggestion(suggestion)}>
-        <View style={styles.suggestionDescriptionContainer}>
-          <Text style={styles.suggestionDescription}>{suggestion.description}</Text>
-        </View>
-        <View style={styles.suggestionTextContainer}>
-          <Text style={styles.suggestionText}>{suggestion.option}</Text>
-        </View>
-      </TouchableOpacity>
+      <SelectItem
+        item={suggestion}
+        titleRenderer={() => (
+          <View style={styles.suggestion}>
+            <Text style={styles.suggestionDescription}>{suggestion.description}</Text>
+            <Text style={styles.suggestionText}>{suggestion.option}</Text>
+          </View>
+        )}
+        onTouch={() => this.onApplySuggestion(suggestion)}
+        isSelected={false}
+      />
     );
   };
 
@@ -153,7 +157,7 @@ export default class CommandDialog extends Component<Props, State> {
             contentContainerStyle={styles.suggestionsList}
             data={suggestions.suggestions}
             keyExtractor={this._extractKey}
-            renderItem={this._renderSuggestion}
+            renderItem={(listItem) => this._renderSuggestion(listItem.item)}
             keyboardShouldPersistTaps="handled"
           />
         )}
@@ -162,31 +166,42 @@ export default class CommandDialog extends Component<Props, State> {
   }
 
   render() {
-    const {isApplying, suggestions} = this.props;
-    const canApply = !isApplying && suggestions && suggestions.commands.every(command => !command.error);
+    const {isApplying} = this.props;
+    const canApply = this.canApplyCommand();
 
     return (
       <ModalView
         visible
-        animationType="fade"
+        animationType="slide"
         style={styles.modal}
       >
-        <Header
-          leftButton={<IconClose size={24} color={COLOR_PINK}/>}
+        <View style={styles.inputWrapper}>
 
-          rightButton={
-            <IconCheck testID="command-apply" size={24} color={canApply ? COLOR_PINK : COLOR_ICON_MEDIUM_GREY}/>
-          }
-          onRightButtonClick={() => canApply && this.onApply()}
+          <TouchableOpacity
+            testID="commandBackButton"
+            onPress={this.props.onCancel}
+          >
+            <IconBack size={28}/>
+          </TouchableOpacity>
 
-          onBack={this.props.onCancel}
-        >
-          <Text style={styles.headerText}>{this.props.headerContent}</Text>
-        </Header>
+          {this._renderInput()}
 
-        {this._renderInput()}
+          <TouchableOpacity
+            testID="command-apply"
+            disabled={!canApply}
+            style={styles.applyButton}
+            onPress={() => this.onApply()}
+          >
+            <IconCheck size={28} color={canApply ? COLOR_PINK : COLOR_GRAY}/>
+          </TouchableOpacity>
+
+        </View>
+
         {this._renderCommandPreview()}
+
         {this._renderSuggestions()}
+
+        {isApplying && <ActivityIndicator/>}
 
         {<KeyboardSpacerIOS/>}
       </ModalView>
