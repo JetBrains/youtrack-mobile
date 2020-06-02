@@ -1,10 +1,9 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_TRANSPARENT_BLACK, COLOR_PINK} from '../../components/variables/variables';
+import {UNIT, COLOR_PINK} from '../variables/variables';
 
 export default StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: COLOR_TRANSPARENT_BLACK
+    flex: 1
   },
   buttons: {
     flexDirection: 'row',

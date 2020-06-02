@@ -1,19 +1,22 @@
 /* @flow */
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
+import {Text, TouchableOpacity, View} from 'react-native';
+
 import {connect} from 'react-redux';
-import {Modal, Text, TouchableOpacity, View} from 'react-native';
+
 import {LogView} from 'react-native-device-log';
-import getTopPadding from '../../components/header/header__top-padding';
-import styles from './debug-view.styles';
 import {closeDebugView} from '../../actions/app-actions';
 import {copyRawLogs} from '../log/log';
+import ModalView from '../modal-view/modal-view';
+
+import styles from './debug-view.styles';
 
 type Props = {
   show: boolean,
   onHide: Function
 };
 
-export class DebugView extends Component<Props, void> {
+export class DebugView extends PureComponent<Props, void> {
   render() {
     const {show, onHide} = this.props;
     if (!show) {
@@ -21,12 +24,11 @@ export class DebugView extends Component<Props, void> {
     }
 
     return (
-      <Modal
+      <ModalView
         animationType="slide"
-        transparent={true}
         onRequestClose={onHide}
       >
-        <View style={[styles.container, {paddingTop: getTopPadding()}]}>
+        <View style={styles.container}>
           <LogView
             inverted={true}
             multiExpanded={true}
@@ -42,7 +44,7 @@ export class DebugView extends Component<Props, void> {
             </TouchableOpacity>
           </View>
         </View>
-      </Modal>
+      </ModalView>
     );
   }
 }
