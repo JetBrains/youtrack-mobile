@@ -27,7 +27,6 @@ import type {IssuesListState} from './issue-list-reducers';
 import type {IssueOnList} from '../../flow/Issue';
 import Select from '../../components/select/select';
 import SearchPanel from './issue-list__search-panel';
-import ModalView from '../../components/modal-view/modal-view';
 import QueryInput from '../../components/query-assist/query-input';
 
 import {IconAngleDown, IconPlus} from '../../components/icon/icon';
@@ -190,16 +189,10 @@ export class IssueList extends Component<Props, State> {
 
   renderContextSelect() {
     return (
-      <ModalView
-        visible
-        animationType="fade"
-        onRequestClose={() => true}
-      >
-        <Select
-          getTitle={item => item.name}
-          {...this.props.selectProps}
-        />
-      </ModalView>
+      <Select
+        getTitle={item => item.name}
+        {...this.props.selectProps}
+      />
     );
   }
 
