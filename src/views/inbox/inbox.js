@@ -71,15 +71,17 @@ class Inbox extends Component<Props, State> {
 
   goToIssue(issue: Issue) {
     log.debug(`Opening issue "${issue.id}" from notifications`);
-    Router.SingleIssue({
-      issuePlaceholder: {
-        id: issue.id,
-        summary: issue.summary,
-        description: issue.description,
-        created: issue.created
-      },
-      issueId: issue.id
-    });
+    if (issue?.id) {
+      Router.SingleIssue({
+        issuePlaceholder: {
+          id: issue.id,
+          summary: issue?.summary,
+          description: issue?.description,
+          created: issue?.created
+        },
+        issueId: issue.id
+      });
+    }
   }
 
   onLoadMore = () => {
@@ -310,7 +312,7 @@ class Inbox extends Component<Props, State> {
     let renderer = null;
 
     if (this.isIssueDigestChange(metadata)) {
-      renderer = this.renderIssueChange(item);
+      renderer = metadata.issue ? this.renderIssueChange(metadata, item.sender) : null;
     } else if (this.isWorkflowNotification(metadata)) {
       renderer = this.renderWorkflowNotification(this.getWorkflowNotificationText(metadata));
     }
@@ -347,10 +349,9 @@ class Inbox extends Component<Props, State> {
     }
   }
 
-  renderIssueChange(notification: Notification) {
-    const metadata: Metadata = notification.metadata;
-    const onPress = () => this.goToIssue(metadata.issue);
-    const sender: User = notification.sender;
+  renderIssueChange(metadata: Metadata, sender: User = {}) {
+    const issue: Issue = metadata.issue;
+    const onPress = () => this.goToIssue(issue);
     const events: Array<ChangeEvent> = (metadata?.change?.events || []).filter((event) => !this.isCreateCategory(event));
     const avatarURL: string | null = this.createAvatarUrl(sender);
     if (avatarURL) {
@@ -367,8 +368,10 @@ class Inbox extends Component<Props, State> {
             onPress={onPress}
           >
             <Text>
-              <Text style={styles.notificationIssueInfo}>{metadata.issue.id}</Text>
-              <Text numberOfLines={2} style={styles.notificationIssueInfo}>{` ${metadata.issue.summary}`}</Text>
+              {!!issue.id && <Text style={styles.notificationIssueInfo}>{issue.id}</Text>}
+              {!!issue.summary && (
+                <Text numberOfLines={2} style={styles.notificationIssueInfo}>{` ${issue.summary}`}</Text>
+              )}
             </Text>
           </TouchableOpacity>
 

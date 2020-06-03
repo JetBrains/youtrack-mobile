@@ -12,7 +12,8 @@ export type Notification = {
   id: string,
   metadata: Metadata,
   recipient: User,
-  sender: User
+  sender: User,
+  issue?: Issue
 }
 
 export type ChangeEvent = {
@@ -61,7 +62,7 @@ export type Metadata = {
   type: string,
   initialNotification: boolean,
   onlyViaDuplicate: boolean,
-  issue: Issue,
+  issue?: Issue,
   change: IssueChange,
   subject: ?string,
   body: ?string,
