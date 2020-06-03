@@ -84,7 +84,7 @@ export default class SingleIssueActivitiesSettings extends Component<Props, Stat
 
     const select = Object.assign({}, defaultState, {
       dataSource: () => Promise.resolve(
-        selected.concat(SingleIssueActivitiesSettings.sortOrderOptions)
+        props.issueActivityTypes.concat(SingleIssueActivitiesSettings.sortOrderOptions)
       ),
       selectedItems: selected.concat(sortOrderSelected)
     });
