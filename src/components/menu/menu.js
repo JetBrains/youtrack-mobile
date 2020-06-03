@@ -1,6 +1,6 @@
 /* @flow */
 
-import {Dimensions, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import React, {Component} from 'react';
 import {View as AnimatedView} from 'react-native-animatable';
 import Router from '../router/router';
@@ -125,7 +125,6 @@ class Menu extends Component<Props, State> {
         testID="menu"
         style={[
           styles.menu,
-          {width: Dimensions.get('window').width},
           style
         ]}
       >
