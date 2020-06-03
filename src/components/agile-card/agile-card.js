@@ -22,7 +22,7 @@ type Props = {
   ghost?: boolean, // from <Draggable/>
   dragging?: boolean // from <DragContainer/>
 };
-export const AGILE_CARD_HEIGHT = 131;
+export const AGILE_CARD_HEIGHT = 100;
 
 function getEstimation(estimationField: { id: string }, fields: Array<CustomFieldShort>) {
   const field = fields.filter(field => field.projectCustomField.field.id === estimationField.id)[0];
@@ -47,11 +47,12 @@ export default class AgileCard extends PureComponent<Props, void> {
         styles.card,
         style,
         ghost && styles.ghost,
-        dragging && ([styles.dragging, !zoomedIn && styles.draggingZoomedOut])
+        dragging && ([styles.dragging, !zoomedIn && styles.draggingZoomedOut]),
+        {height: AGILE_CARD_HEIGHT},
       ]}>
         <View style={[
           styles.cardColorCoding,
-          priorityField ? {backgroundColor: priorityFieldValueBackgroundColor} : null
+          priorityField ? {backgroundColor: priorityFieldValueBackgroundColor} : null,
         ]}/>
 
         <View style={[
@@ -94,7 +95,7 @@ export default class AgileCard extends PureComponent<Props, void> {
 
           </View>
 
-          <View>
+          <View style={styles.issueContent}>
             <Text
               testID="card-summary"
               numberOfLines={zoomedIn ? 3 : 2}

@@ -15,6 +15,9 @@ exports[`<AgileCard/> should render snapshot 1`] = `
       undefined,
       undefined,
       undefined,
+      Object {
+        "height": 100,
+      },
     ]
   }
 >
@@ -41,9 +44,7 @@ exports[`<AgileCard/> should render snapshot 1`] = `
         Object {
           "flexDirection": "column",
           "flexGrow": 1,
-          "padding": 16,
-          "paddingBottom": 14,
-          "paddingTop": 14,
+          "padding": 14,
         },
         Object {
           "padding": 8,
@@ -94,7 +95,13 @@ exports[`<AgileCard/> should render snapshot 1`] = `
         }
       />
     </View>
-    <View>
+    <View
+      style={
+        Object {
+          "flexGrow": 1,
+        }
+      }
+    >
       <Text
         numberOfLines={2}
         style={
@@ -102,11 +109,12 @@ exports[`<AgileCard/> should render snapshot 1`] = `
             Object {
               "color": "#1f2326",
               "flex": 1,
+              "flexGrow": 1,
               "fontSize": 16,
               "fontWeight": "500",
               "letterSpacing": -0.19,
               "lineHeight": 20,
-              "marginTop": 8,
+              "marginTop": 4,
             },
             Object {
               "fontSize": 11,
@@ -121,6 +129,7 @@ exports[`<AgileCard/> should render snapshot 1`] = `
         onTagPress={[Function]}
         style={
           Object {
+            "flexGrow": 0,
             "marginTop": 8,
           }
         }
