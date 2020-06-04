@@ -28,7 +28,7 @@ import Auth from '../components/auth/auth';
 import {loadAgileProfile} from '../views/agile-board/board-actions';
 import PushNotifications from '../components/push-notifications/push-notifications';
 import {EVERYTHING_CONTEXT} from '../components/search/search-context';
-import {refreshIssues, storeSearchContext} from '../views/issue-list/issue-list-actions';
+import {storeSearchContext} from '../views/issue-list/issue-list-actions';
 import {isIOSPlatform} from '../util/util';
 import {CUSTOM_ERROR_MESSAGE, UNSUPPORTED_ERRORS} from '../components/error/error-codes';
 import {isUnsupportedFeatureError} from '../components/error/error-resolver';
@@ -346,7 +346,6 @@ function loadUser(userId: string = 'me') {
     await dispatch(storeSearchContext(user.profiles.general.searchContext));
 
     dispatch({type: types.RECEIVE_USER, user});
-    dispatch(refreshIssues());
   };
 }
 

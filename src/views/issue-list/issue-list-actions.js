@@ -297,6 +297,8 @@ export function initializeIssuesList(query: ?string) {
 
     if (query) {
       dispatch(loadIssues(query));
+    } else {
+      dispatch(refreshIssues());
     }
   };
 }
