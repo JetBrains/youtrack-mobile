@@ -466,7 +466,9 @@ export function subscribeServersideUpdates() {
       clearTimeout(serverSideEventsInstanceErrorTimer);
       serverSideEventsInstanceErrorTimer = setTimeout(() => {
         log.info('Reloading sprint and reconnecting to LiveUpdate...');
-        dispatch(setOutOfDate(true));
+        if (serverSideEventsInstanceErrorTimer && serverSideEventsInstance) {
+          dispatch(setOutOfDate(true));
+        }
       }, RECONNECT_TIMEOUT);
     });
 
