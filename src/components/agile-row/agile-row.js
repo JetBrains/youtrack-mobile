@@ -92,7 +92,7 @@ export default function BoardRow(props: Props) {
           <IconAngleDownRight
             style={styles.collapseButtonIcon}
             isDown={!row.collapsed}
-            size={20}
+            size={19}
             color={COLOR_DARK}
           />
           <Text style={[

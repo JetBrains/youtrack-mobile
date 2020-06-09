@@ -34,7 +34,7 @@ exports[`<BoardRow/> Render should render a snapshot 1`] = `
       <IconAngleDownRight
         color="#1f2326"
         isDown={true}
-        size={20}
+        size={19}
         style={
           Object {
             "marginTop": 2,
@@ -46,7 +46,7 @@ exports[`<BoardRow/> Render should render a snapshot 1`] = `
         style={
           Array [
             Object {
-              "color": "#444444",
+              "color": "#1f2326",
               "fontSize": 20,
               "fontWeight": "500",
               "letterSpacing": 0.13,

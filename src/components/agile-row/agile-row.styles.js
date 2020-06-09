@@ -2,13 +2,14 @@ import {StyleSheet} from 'react-native';
 import {
   UNIT,
   COLOR_LIGHT_GRAY,
-  COLOR_FONT,
   AGILE_COLLAPSED_COLUMN_WIDTH,
   COLOR_GRAY,
   COLOR_FONT_GRAY,
+  COLOR_DARK,
 } from '../variables/variables';
 import {issueCard, issueResolved, issueIdResolved} from '../common-styles/issue';
 import {MAIN_FONT_SIZE} from '../common-styles/typography';
+import {link} from '../common-styles/button';
 
 export default StyleSheet.create({
   issueResolved: issueResolved,
@@ -23,6 +24,7 @@ export default StyleSheet.create({
   },
   headerIssueId: {
     ...issueCard.issueId,
+    ...link,
     marginLeft: UNIT * 3,
     marginBottom: UNIT / 2
   },
@@ -31,7 +33,7 @@ export default StyleSheet.create({
     textDecorationLine: 'line-through'
   },
   rowHeaderText: {
-    color: COLOR_FONT,
+    color: COLOR_DARK,
     fontSize: 20,
     lineHeight: 24,
     marginLeft: UNIT,
