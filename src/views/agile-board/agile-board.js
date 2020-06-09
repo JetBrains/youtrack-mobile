@@ -347,7 +347,7 @@ class AgileBoard extends Component<Props, State> {
       }
     };
 
-    const orphan = <BoardRow key="orphan" row={board.orphanRow} {...commonRowProps}/>;
+    const orphan = <BoardRow key="orphan" row={board.orphanRow} zoomedIn={this.state.zoomedIn} {...commonRowProps}/>;
 
     return [
       sprint.agile.orphansAtTheTop && orphan,
@@ -357,6 +357,7 @@ class AgileBoard extends Component<Props, State> {
           <BoardRow
             key={swimlane.id}
             row={swimlane}
+            zoomedIn={this.state.zoomedIn}
             {...commonRowProps}
           />
         );

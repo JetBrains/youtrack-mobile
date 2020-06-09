@@ -1,7 +1,8 @@
 /* @flow */
 
-import {View, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
+import {View, Text, TouchableOpacity} from 'react-native';
+
 import ApiHelper from '../api/api__helper';
 import {IconAngleDownRight} from '../icon/icon';
 import AgileRowColumn from './agile-row__column';
@@ -23,7 +24,8 @@ type Props = {
   onTapIssue: (issue: IssueOnList) => any,
   onTapCreateIssue: (columnId: string, cellId: string) => any,
   onCollapseToggle: (row: AgileBoardRow) => any,
-  renderIssueCard: RenderIssueCard
+  renderIssueCard: RenderIssueCard,
+  zoomedIn?: boolean
 };
 
 function renderIssueSquare(issue: IssueOnList) {
@@ -59,7 +61,7 @@ function renderCollapsedColumn(cell: BoardCell, lastColumn: boolean) {
 }
 
 export default function BoardRow(props: Props) {
-  const {row, style, collapsedColumnIds, onCollapseToggle, onTapIssue, onTapCreateIssue, renderIssueCard} = props;
+  const {row, style, collapsedColumnIds, onCollapseToggle, onTapIssue, onTapCreateIssue, renderIssueCard, zoomedIn} = props;
   const isResolved = row.issue && row.issue.resolved;
 
   return (
@@ -71,7 +73,7 @@ export default function BoardRow(props: Props) {
         testID="agileRowHeader"
         style={styles.rowHeader}>
 
-        {row.issue && (
+        {Boolean(zoomedIn && row.issue) && (
           <TouchableOpacity onPress={() => onTapIssue(row.issue)}>
             <Text
               testID="agileRowIssueId"
@@ -95,6 +97,7 @@ export default function BoardRow(props: Props) {
           />
           <Text style={[
             styles.rowHeaderText,
+            !zoomedIn ? styles.rowHeaderTextZoomedOut : null,
             isResolved && styles.issueIdResolved
           ]}>
             {row.id === 'orphans' ? 'Uncategorized Cards' : (row.issue && row.issue.summary || row.name)}

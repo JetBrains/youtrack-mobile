@@ -50,7 +50,11 @@ exports[`<BoardRow/> Render should render a snapshot 1`] = `
               "fontSize": 20,
               "fontWeight": "500",
               "letterSpacing": 0.13,
+              "lineHeight": 24,
               "marginLeft": 8,
+            },
+            Object {
+              "fontSize": 16,
             },
             undefined,
           ]

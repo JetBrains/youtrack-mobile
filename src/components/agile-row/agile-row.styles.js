@@ -8,6 +8,7 @@ import {
   COLOR_FONT_GRAY,
 } from '../variables/variables';
 import {issueCard, issueResolved, issueIdResolved} from '../common-styles/issue';
+import {MAIN_FONT_SIZE} from '../common-styles/typography';
 
 export default StyleSheet.create({
   issueResolved: issueResolved,
@@ -32,9 +33,13 @@ export default StyleSheet.create({
   rowHeaderText: {
     color: COLOR_FONT,
     fontSize: 20,
+    lineHeight: 24,
     marginLeft: UNIT,
     fontWeight: '500',
     letterSpacing: 0.13,
+  },
+  rowHeaderTextZoomedOut: {
+    fontSize: MAIN_FONT_SIZE,
   },
   row: {
     flexDirection: 'row',

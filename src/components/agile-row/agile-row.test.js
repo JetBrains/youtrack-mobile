@@ -18,7 +18,7 @@ describe('<BoardRow/>', () => {
   describe('Render', () => {
 
     beforeEach(() => {
-      doShallow(createRowMock());
+      doShallow(createRowMock(), false);
     });
 
     it('should render a snapshot', () => {
@@ -34,12 +34,20 @@ describe('<BoardRow/>', () => {
     });
 
     describe('Issue id', () => {
+      const rowMock = createRowMock({issue: {idReadable: 'X-1'}});
+
       it('should not render an issue readable id', () => {
         expect(findByTestId('agileRowIssueId')).toHaveLength(0);
       });
 
+      it('should not render an issue readable id in a zoomed out mode', () => {
+        doShallow(rowMock, false);
+
+        expect(findByTestId('agileRowIssueId')).toHaveLength(0);
+      });
+
       it('should render an issue readable id', () => {
-        doShallow(createRowMock({issue: {idReadable: 'X-1'}}));
+        doShallow(rowMock);
 
         expect(findByTestId('agileRowIssueId')).toHaveLength(1);
       });
@@ -64,7 +72,7 @@ describe('<BoardRow/>', () => {
               }
             }]
           });
-          doShallow(rowMock, [collapsedColumnIdMock]);
+          doShallow(rowMock, true, [collapsedColumnIdMock]);
         });
 
         it('should render a collapsed column', () => {
@@ -92,8 +100,8 @@ describe('<BoardRow/>', () => {
   });
 
 
-  function doShallow(row, collapsedColumnIds: ?Array<string> = []) {
-    wrapper = shallow(<BoardRow row={row} collapsedColumnIds={collapsedColumnIds}/>);
+  function doShallow(row, zoomedIn: boolean = true, collapsedColumnIds: ?Array<string> = []) {
+    wrapper = shallow(<BoardRow row={row} collapsedColumnIds={collapsedColumnIds} zoomedIn={zoomedIn}/>);
   }
 
   function findByTestId(testId) {
