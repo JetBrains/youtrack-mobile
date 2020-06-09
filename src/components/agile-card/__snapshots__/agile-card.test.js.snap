@@ -16,7 +16,7 @@ exports[`<AgileCard/> should render snapshot 1`] = `
       undefined,
       undefined,
       Object {
-        "height": 100,
+        "height": 50,
       },
     ]
   }
@@ -33,7 +33,7 @@ exports[`<AgileCard/> should render snapshot 1`] = `
           "width": 4,
         },
         Object {
-          "backgroundColor": "#000",
+          "backgroundColor": "initial",
         },
       ]
     }
@@ -83,57 +83,50 @@ exports[`<AgileCard/> should render snapshot 1`] = `
           }
           testID="card-simple-issue-id"
         >
-          TT-123
+          00-00
         </Text>
       </View>
-      <View
-        style={
-          Object {
-            "alignItems": "center",
-            "flexDirection": "row",
-          }
-        }
-      />
     </View>
     <View
       style={
         Object {
+          "flexDirection": "column",
           "flexGrow": 1,
+          "justifyContent": "space-between",
         }
       }
     >
       <Text
-        numberOfLines={2}
-        style={
-          Array [
-            Object {
-              "color": "#1f2326",
-              "flex": 1,
-              "flexGrow": 1,
-              "fontSize": 16,
-              "fontWeight": "500",
-              "letterSpacing": -0.19,
-              "lineHeight": 20,
-              "marginTop": 4,
-            },
-            Object {
-              "fontSize": 11,
-            },
-          ]
-        }
-        testID="card-summary"
-      >
-        issue summary
-      </Text>
-      <Tags
-        onTagPress={[Function]}
+        numberOfLines={1}
         style={
           Object {
-            "flexGrow": 0,
-            "marginTop": 8,
+            "flexGrow": 1,
           }
         }
-      />
+      >
+        <Text
+          style={
+            Array [
+              Object {
+                "color": "#1f2326",
+                "flex": 1,
+                "flexGrow": 1,
+                "fontSize": 16,
+                "fontWeight": "500",
+                "letterSpacing": -0.19,
+                "lineHeight": 20,
+                "marginTop": 8,
+              },
+              Object {
+                "fontSize": 11,
+              },
+            ]
+          }
+          testID="card-summary"
+        >
+          Issue test summary
+        </Text>
+      </Text>
     </View>
   </View>
 </View>

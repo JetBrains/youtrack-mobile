@@ -1,46 +1,34 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import AgileCard from './agile-card';
 import toJson from 'enzyme-to-json';
 
+import AgileCard from './agile-card';
+import Mocks from '../../../test/mocks';
+
 describe('<AgileCard/>', () => {
-  let fakeIssue;
+  let issueMock;
 
   beforeEach(() => {
-    fakeIssue = {
-      id: 'testIssue',
-      idReadable: 'TT-123',
-      summary: 'issue summary',
-      project: {
-        shortName: 'TT'
-      },
-      fields: [{
-        $type: 'jetbrains.charisma.customfields.complex.enumeration.SingleEnumIssueCustomField',
-        value: {
-          name: 'Critical',
-          color: {id: 4, background: '#000', foreground: '#FFF'}
-        },
-        projectCustomField: {
-          field: {
-            name: 'Priority',
-          }
-        }
-      }]
-    };
+    Mocks.setStorage({});
+    issueMock = Mocks.createIssueMock();
   });
 
   it('should init', () => {
-    const wrapper = shallow(<AgileCard issue={fakeIssue} />);
-    wrapper.should.be.defined;
+    const wrapper = shallow(<AgileCard issue={issueMock} />);
+
+    expect(wrapper).toBeDefined();
   });
 
   it('should render snapshot', () => {
-    const tree = shallow(<AgileCard issue={fakeIssue} />);
+    const tree = shallow(<AgileCard issue={issueMock} />);
+
     expect(toJson(tree)).toMatchSnapshot();
   });
 
   it('should show summary', () => {
-    const wrapper = shallow(<AgileCard issue={fakeIssue} />);
-    wrapper.find({testID: 'card-summary'}).children().should.have.text(fakeIssue.summary);
+    const wrapper = shallow(<AgileCard issue={issueMock} />);
+    const summary = wrapper.find({testID: 'card-summary'}).children();
+
+    expect(summary.text()).toEqual(issueMock.summary);
   });
 });

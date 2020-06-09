@@ -13,6 +13,7 @@ import styles from './agile-card.styles';
 import type {IssueOnList} from '../../flow/Issue';
 import type {FieldValueShort, CustomFieldShort} from '../../flow/CustomFields';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import {getStorageState} from '../storage/storage';
 
 type Props = {
   style?: any,
@@ -22,7 +23,9 @@ type Props = {
   ghost?: boolean, // from <Draggable/>
   dragging?: boolean // from <DragContainer/>
 };
-export const AGILE_CARD_HEIGHT = 100;
+
+
+export const getAgileCardHeight = () => getStorageState().agileZoomedIn ? 110 : 50;
 
 function getEstimation(estimationField: { id: string }, fields: Array<CustomFieldShort>) {
   const field = fields.filter(field => field.projectCustomField.field.id === estimationField.id)[0];
@@ -48,7 +51,7 @@ export default class AgileCard extends PureComponent<Props, void> {
         style,
         ghost && styles.ghost,
         dragging && ([styles.dragging, !zoomedIn && styles.draggingZoomedOut]),
-        {height: AGILE_CARD_HEIGHT},
+        {height: getAgileCardHeight()},
       ]}>
         <View style={[
           styles.cardColorCoding,
@@ -72,14 +75,14 @@ export default class AgileCard extends PureComponent<Props, void> {
               </Text>
             </View>
 
-            <View style={styles.assignees}>
+            {zoomedIn && <View style={styles.assignees}>
               {!!estimationField && zoomedIn && (
                 <Text style={styles.estimation} numberOfLines={1}>
                   {getEstimation(estimationField, issue.fields)}
                 </Text>
               )}
 
-              {zoomedIn && assignees.map((assignee: FieldValueShort) => {
+              {assignees.map((assignee: FieldValueShort) => {
                 return (
                   <Avatar
                     style={styles.assignee}
@@ -91,20 +94,24 @@ export default class AgileCard extends PureComponent<Props, void> {
                   />
                 );
               })}
-            </View>
+            </View>}
 
           </View>
 
           <View style={styles.issueContent}>
             <Text
-              testID="card-summary"
-              numberOfLines={zoomedIn ? 3 : 2}
-              style={[styles.summary, zoomedInTextStyle]}
+              style={styles.issueSummary}
+              numberOfLines={zoomedIn ? 2 : 1}
             >
-              {issue.summary}
+              <Text
+                testID="card-summary"
+                style={[styles.summary, zoomedInTextStyle]}
+              >
+                {issue.summary}
+              </Text>
             </Text>
 
-            <Tags style={styles.tags} tags={issue.tags}/>
+            {zoomedIn && <Tags tags={issue.tags} style={styles.tags} tagStyle={{fontSize: 9}}/>}
           </View>
 
         </View>

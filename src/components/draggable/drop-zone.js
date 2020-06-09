@@ -6,7 +6,7 @@
 
 import * as React from 'react';
 import {View, LayoutAnimation} from 'react-native';
-import {AGILE_CARD_HEIGHT} from '../agile-card/agile-card';
+import {getAgileCardHeight} from '../agile-card/agile-card';
 import { COLOR_PINK } from '../variables/variables';
 import Draggable from './draggable';
 import {DragContext} from './drag-container';
@@ -100,7 +100,7 @@ class DropZone extends React.Component<PropsWithContext, State> {
     }
 
     const relativeY = y - zone.y;
-    let placeholderIndex = Math.floor(relativeY / AGILE_CARD_HEIGHT);
+    let placeholderIndex = Math.floor(relativeY / getAgileCardHeight());
 
     const draggableChilds = React.Children.toArray(this.props.children)
       .filter(c => c.type === Draggable)

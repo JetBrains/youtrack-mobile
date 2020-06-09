@@ -61,8 +61,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   text: {
-    fontSize: 12,
     ...secondaryText,
+    fontSize: 13,
+    lineHeight: 15,
     textAlign: 'center'
   }
 });

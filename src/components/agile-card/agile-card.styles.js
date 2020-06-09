@@ -30,9 +30,6 @@ export default StyleSheet.create({
     flexGrow: 1,
     flexDirection: 'column',
     padding: UNIT * 1.75,
-    // paddingTop: UNIT * 1.75,
-    // paddingRight: UNIT * 1.75,
-    // paddingBottom: UNIT * 1.75,
   },
   cardContainerNotZoomed: {
     padding: UNIT,
@@ -47,6 +44,11 @@ export default StyleSheet.create({
     flexGrow: 1,
   },
   issueContent: {
+    flexGrow: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between'
+  },
+  issueSummary: {
     flexGrow: 1,
   },
   ghost: {
@@ -67,7 +69,7 @@ export default StyleSheet.create({
   summary: {
     flexGrow: 1,
     ...issueCard.issueSummary,
-    marginTop: UNIT / 2,
+    marginTop: UNIT
   },
   issueId: issueCard.issueId,
   assignees: {
