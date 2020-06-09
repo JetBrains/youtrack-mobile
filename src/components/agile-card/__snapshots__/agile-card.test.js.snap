@@ -1,0 +1,133 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AgileCard/> should render snapshot 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "backgroundColor": "#f6f6f6",
+        "borderRadius": 8,
+        "flexDirection": "row",
+        "marginBottom": 8,
+        "marginRight": 16,
+        "overflow": "hidden",
+      },
+      undefined,
+      undefined,
+      undefined,
+      Object {
+        "height": 50,
+      },
+    ]
+  }
+>
+  <View
+    style={
+      Array [
+        Object {
+          "borderBottomLeftRadius": 8,
+          "borderTopLeftRadius": 8,
+          "flexShrink": 0,
+          "marginBottom": 2,
+          "marginTop": 2,
+          "width": 4,
+        },
+        Object {
+          "backgroundColor": "initial",
+        },
+      ]
+    }
+  />
+  <View
+    style={
+      Array [
+        Object {
+          "flexDirection": "column",
+          "flexGrow": 1,
+          "padding": 14,
+        },
+        Object {
+          "padding": 8,
+        },
+      ]
+    }
+  >
+    <View
+      style={
+        Object {
+          "flexDirection": "row",
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "flexGrow": 1,
+          }
+        }
+      >
+        <Text
+          style={
+            Array [
+              Object {
+                "color": "#737577",
+                "flexGrow": 0,
+                "flexShrink": 0,
+                "fontSize": 14,
+                "letterSpacing": -0.17,
+              },
+              Object {
+                "fontSize": 11,
+              },
+            ]
+          }
+          testID="card-simple-issue-id"
+        >
+          00-00
+        </Text>
+      </View>
+    </View>
+    <View
+      style={
+        Object {
+          "flexDirection": "column",
+          "flexGrow": 1,
+          "justifyContent": "space-between",
+        }
+      }
+    >
+      <Text
+        numberOfLines={1}
+        style={
+          Object {
+            "flexGrow": 1,
+          }
+        }
+      >
+        <Text
+          style={
+            Array [
+              Object {
+                "color": "#1f2326",
+                "flex": 1,
+                "flexGrow": 1,
+                "fontSize": 16,
+                "fontWeight": "500",
+                "letterSpacing": -0.19,
+                "lineHeight": 20,
+                "marginTop": 8,
+              },
+              Object {
+                "fontSize": 11,
+              },
+            ]
+          }
+          testID="card-summary"
+        >
+          Issue test summary
+        </Text>
+      </Text>
+    </View>
+  </View>
+</View>
+`;
