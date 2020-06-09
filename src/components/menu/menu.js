@@ -64,39 +64,35 @@ class Menu extends Component<Props, State> {
     currentRouteName: routeName
   });
 
-  isCurrentRoute = (routeName: string) => {
-    const currentRouteName = this.state.currentRouteName || routeMap.IssueList;
+  isActiveRoute = (routeName: string) => {
+    const currentRouteName = this.state.currentRouteName;
     return currentRouteName === routeName;
   };
 
   canNavigateTo = (routeName: string) => {
-    return !this.props.isDisabled && !this.isCurrentRoute(routeName);
+    return !this.props.isDisabled && !this.isActiveRoute(routeName);
   };
 
   openIssueList = () => {
     if (this.canNavigateTo(routeMap.IssueList)) {
       Router.IssueList();
-      this.setCurrentRouteName(routeMap.IssueList);
     }
   };
 
   openAgileBoard = () => {
     if (this.canNavigateTo(routeMap.AgileBoard)) {
-      this.setCurrentRouteName(routeMap.AgileBoard);
       Router.AgileBoard();
     }
   };
 
   openInbox = () => {
     if (this.canNavigateTo(routeMap.Inbox)) {
-      this.setCurrentRouteName(routeMap.Inbox);
       Router.Inbox();
     }
   };
 
   openSettings = () => {
     if (this.canNavigateTo(routeMap.Settings)) {
-      this.setCurrentRouteName(routeMap.Settings);
       Router.Settings();
     }
   };
@@ -112,7 +108,7 @@ class Menu extends Component<Props, State> {
       return (
         isDisabled
           ? COLOR_GRAY
-          : this.isCurrentRoute(routeName) ? COLOR_PINK : COLOR_ICON_MEDIUM_GREY
+          : this.isActiveRoute(routeName) ? COLOR_PINK : COLOR_ICON_MEDIUM_GREY
       );
     };
 
@@ -129,14 +125,14 @@ class Menu extends Component<Props, State> {
         ]}
       >
         <MenuItem
-          isActive={this.isCurrentRoute(routeMap.IssueList)}
+          isActive={this.isActiveRoute(routeMap.IssueList)}
           icon={<IconCheckMarked style={{maxHeight: 22}} size={24} color={color(routeMap.IssueList)}/>}
           label={'Issues'}
           onPress={this.openIssueList}
         />
 
         <MenuItem
-          isActive={this.isCurrentRoute(routeMap.AgileBoard)}
+          isActive={this.isActiveRoute(routeMap.AgileBoard)}
           icon={<IconPause size={20} color={color(routeMap.AgileBoard)}/>}
           label={'Agile Boards'}
           testId="pageAgileBoards"
@@ -145,7 +141,7 @@ class Menu extends Component<Props, State> {
 
         <Feature version={'2018.3'}>
           <MenuItem
-            isActive={this.isCurrentRoute(routeMap.Inbox)}
+            isActive={this.isActiveRoute(routeMap.Inbox)}
             icon={<IconBell size={22} color={color(routeMap.Inbox)}/>}
             label={'Activity'}
             onPress={this.openInbox}
@@ -153,7 +149,7 @@ class Menu extends Component<Props, State> {
         </Feature>
 
         <MenuItem
-          isActive={this.isCurrentRoute(routeMap.Settings)}
+          isActive={this.isActiveRoute(routeMap.Settings)}
           icon={<IconCog size={22} color={color(routeMap.Settings)}/>}
           label={'Settings'}
           onPress={this.openSettings}

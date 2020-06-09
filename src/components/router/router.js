@@ -151,10 +151,11 @@ class Router {
   }
 
   pop() {
-    if (this._navigator.state.nav.routes.length <= 1) {
+    const routes = this._navigator.state.nav.routes;
+    if (routes.length <= 1) {
       return false;
     }
-    this.dispatch(NavigationActions.back());
+    this.dispatch(NavigationActions.back(), routes[routes.length - 2].routeName, this._currentRoute.routeName);
     return true;
   }
 
