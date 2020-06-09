@@ -9,8 +9,7 @@ import {
   COLOR_PINK,
   UNIT,
 } from '../variables/variables';
-
-export const FONT_SIZE = 16;
+import {MAIN_FONT_SIZE} from './typography';
 
 export const containerPadding = UNIT * 4;
 
@@ -34,7 +33,7 @@ export const formStyles = StyleSheet.create({
     borderRadius: UNIT,
     backgroundColor: COLOR_LIGHT_GRAY,
     color: COLOR_BLACK,
-    fontSize: FONT_SIZE
+    fontSize: MAIN_FONT_SIZE
   },
   button: {
     width: '100%',
@@ -49,7 +48,7 @@ export const formStyles = StyleSheet.create({
   buttonText: {
     alignSelf: 'center',
     textAlign: 'center',
-    fontSize: FONT_SIZE,
+    fontSize: MAIN_FONT_SIZE,
     color: COLOR_FONT_ON_BLACK
   },
   title: {

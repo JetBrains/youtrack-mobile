@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
 import {UNIT} from '../../components/variables/variables';
-import {formStyles, FONT_SIZE} from '../../components/common-styles/form';
+import {MAIN_FONT_SIZE} from '../../components/common-styles/typography';
+import {formStyles} from '../../components/common-styles/form';
 import {loginStylesForm} from '../../components/common-styles/login-form';
 
 export default StyleSheet.create({
@@ -29,6 +30,6 @@ export default StyleSheet.create({
   },
   action: {
     ...formStyles.link,
-    fontSize: FONT_SIZE
+    fontSize: MAIN_FONT_SIZE
   }
 });
