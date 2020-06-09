@@ -7,7 +7,7 @@ import {
   COLOR_ICON_MEDIUM_GREY,
   COLOR_LIGHT_GRAY,
 } from '../../../components/variables/variables';
-import {mainText, secondaryText} from '../../../components/common-styles/issue';
+import {mainText, secondaryText} from '../../../components/common-styles/typography';
 import {link} from '../../../components/common-styles/button';
 import {separator} from '../../../components/common-styles/list';
 

@@ -7,7 +7,7 @@ import {
   COLOR_FONT_ON_BLACK
 } from '../../components/variables/variables';
 import issueStyles from '../single-issue/single-issue.styles';
-import {mainText} from '../../components/common-styles/issue';
+import {mainText} from '../../components/common-styles/typography';
 
 const ATTACHING_IMAGE_ALPHA = '70';
 

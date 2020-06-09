@@ -5,7 +5,7 @@ import {
   COLOR_FONT,
   UNIT,
 } from '../variables/variables';
-import {mainText, secondaryText} from '../common-styles/issue';
+import {mainText, secondaryText} from '../common-styles/typography';
 
 const SELECTED_ALPHA_HEX = 20;
 

@@ -8,7 +8,8 @@ import {
   COLOR_DARK
 } from '../../components/variables/variables';
 import {SIZE as COLOR_FIELD_SIZE} from '../../components/color-field/color-field';
-import {secondaryText, issueCard} from '../../components/common-styles/issue';
+import {secondaryText} from '../../components/common-styles/typography';
+import {issueCard} from '../../components/common-styles/issue';
 import {elevation1} from '../../components/common-styles/shadow';
 import {separator} from '../../components/common-styles/list';
 

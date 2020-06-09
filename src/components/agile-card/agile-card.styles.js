@@ -7,7 +7,8 @@ import {
   COLOR_LIGHT_GRAY,
   COLOR_ICON_LIGHT_BLUE
 } from '../variables/variables';
-import {issueCard, secondaryText} from '../common-styles/issue';
+import {issueCard} from '../common-styles/issue';
+import {secondaryText} from '../common-styles/typography';
 
 export default StyleSheet.create({
   card: {

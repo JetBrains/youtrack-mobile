@@ -8,7 +8,7 @@ import {
   COLOR_ICON_MEDIUM_GREY,
   COLOR_PINK_DARK
 } from '../../components/variables/variables';
-import {secondaryText, mainText} from '../../components/common-styles/issue';
+import {mainText, secondaryText} from '../../components/common-styles/typography';
 import {elevation1} from '../../components/common-styles/shadow';
 
 

@@ -1,7 +1,7 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_FONT, COLOR_FONT_GRAY} from '../../components/variables/variables';
+import {UNIT, COLOR_FONT, COLOR_FONT_GRAY} from '../variables/variables';
 
-import {mainText} from '../common-styles/issue';
+import {mainText} from '../common-styles/typography';
 import {link} from '../common-styles/button';
 
 export default StyleSheet.create({

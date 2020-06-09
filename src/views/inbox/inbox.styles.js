@@ -8,7 +8,7 @@ import {
   COLOR_LIGHT_GRAY,
   COLOR_DARK
 } from '../../components/variables/variables';
-import {mainText, secondaryText} from '../../components/common-styles/issue';
+import {mainText, secondaryText} from '../../components/common-styles/typography';
 
 const font = {
   lineHeight: 18,

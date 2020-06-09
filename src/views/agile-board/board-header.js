@@ -7,7 +7,7 @@ import {
 } from '../../components/variables/variables';
 import type {AgileColumn} from '../../flow/Agile';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import {secondaryText} from '../../components/common-styles/issue';
+import {secondaryText} from '../../components/common-styles/typography';
 
 type Props = {
   style?: ViewStyleProp,

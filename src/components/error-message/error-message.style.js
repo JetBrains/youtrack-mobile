@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
 import {COLOR_PINK, UNIT} from '../variables/variables';
-import {secondaryText, title} from '../common-styles/issue';
+import {secondaryText} from '../common-styles/typography';
+import {title} from '../common-styles/issue';
 
 export const styles = StyleSheet.create({
   errorContainer: {

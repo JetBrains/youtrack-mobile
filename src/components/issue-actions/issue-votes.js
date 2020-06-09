@@ -5,9 +5,9 @@ import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 import {IconThumbUp} from '../icon/icon';
 import {COLOR_ICON_LIGHT_BLUE, UNIT} from '../variables/variables';
-import {HIT_SLOP} from '../../components/common-styles/button';
+import {HIT_SLOP} from '../common-styles/button';
 
-import {secondaryText} from '../common-styles/issue';
+import {secondaryText} from '../common-styles/typography';
 
 type Props = {
   voted: boolean,

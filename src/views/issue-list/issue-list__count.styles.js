@@ -3,7 +3,7 @@ import {StyleSheet} from 'react-native';
 import {
   UNIT,
 } from '../../components/variables/variables';
-import {secondaryText} from '../../components/common-styles/issue';
+import {secondaryText} from '../../components/common-styles/typography';
 
 export default StyleSheet.create({
   issuesCount: {

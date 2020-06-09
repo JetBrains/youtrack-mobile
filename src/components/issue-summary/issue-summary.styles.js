@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_FONT, COLOR_MEDIUM_GRAY} from '../../components/variables/variables';
-import {mainText} from '../common-styles/issue';
+import {UNIT, COLOR_FONT, COLOR_MEDIUM_GRAY} from '../variables/variables';
+import {mainText} from '../common-styles/typography';
 
 export default StyleSheet.create({
   summaryInput: {

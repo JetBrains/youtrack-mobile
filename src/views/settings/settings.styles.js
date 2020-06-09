@@ -3,7 +3,7 @@
 import {StyleSheet} from 'react-native';
 import {COLOR_BLACK, UNIT} from '../../components/variables/variables';
 
-import {mainText, secondaryText} from '../../components/common-styles/issue';
+import {mainText, secondaryText} from '../../components/common-styles/typography';
 import {formStyles} from '../../components/common-styles/form';
 
 

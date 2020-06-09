@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {UNIT, COLOR_BLACK} from '../variables/variables';
-import {mainText, secondaryText} from '../common-styles/issue';
+import {mainText, secondaryText} from '../common-styles/typography';
 
 export const SWIPER_HEIGHT = 200;
 

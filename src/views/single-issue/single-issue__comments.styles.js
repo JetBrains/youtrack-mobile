@@ -9,7 +9,7 @@ import {
   COLOR_FONT,
   COLOR_BLACK, COLOR_LIGHT_GRAY
 } from '../../components/variables/variables';
-import {mainText, secondaryText} from '../../components/common-styles/issue';
+import {mainText, secondaryText} from '../../components/common-styles/typography';
 
 const INPUT_BORDER_RADIUS = UNIT;
 const MIN_INPUT_SIZE = UNIT * 4;

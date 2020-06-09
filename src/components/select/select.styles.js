@@ -6,7 +6,7 @@ import {
   COLOR_MEDIUM_GRAY,
   COLOR_BLACK, COLOR_FONT_ON_BLACK
 } from '../variables/variables';
-import {mainText} from '../common-styles/issue';
+import {mainText} from '../common-styles/typography';
 import {elevation1} from '../common-styles/shadow';
 
 export default StyleSheet.create({

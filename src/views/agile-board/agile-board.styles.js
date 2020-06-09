@@ -8,7 +8,7 @@ import {
   COLOR_GRAY,
   COLOR_BLACK
 } from '../../components/variables/variables';
-import {mainText} from '../../components/common-styles/issue';
+import {mainText} from '../../components/common-styles/typography';
 import {link} from '../../components/common-styles/button';
 import {elevationTop} from '../../components/common-styles/shadow';
 

@@ -4,7 +4,7 @@ import {View, ListView, Text, StyleSheet, TouchableOpacity, Platform} from 'reac
 import React, {Component} from 'react';
 import {UNIT, COLOR_BLACK} from '../variables/variables';
 import type {TransformedSuggestion, SavedQuery} from '../../flow/Issue';
-import {mainText, secondaryText} from '../common-styles/issue';
+import {mainText, secondaryText} from '../common-styles/typography';
 
 const SAVED_SEARCHES: string = 'SAVED_SEARCHES';
 const LAST_SEARCHES: string = 'LAST_SEARCHES';
