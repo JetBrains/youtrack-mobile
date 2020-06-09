@@ -18,6 +18,14 @@ export default StyleSheet.create({
     paddingLeft: UNIT * 2,
     backgroundColor: COLOR_FONT_ON_BLACK
   },
+  agileNoSprint: {
+    marginTop: UNIT * 7,
+    backgroundColor: COLOR_FONT_ON_BLACK
+  },
+  error: {
+    marginTop: UNIT * 5,
+    marginLeft: -UNIT * 2
+  },
   title: {
     fontSize: 17,
     color: COLOR_BLACK

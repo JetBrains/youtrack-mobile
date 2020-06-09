@@ -28,3 +28,5 @@ export const IS_OUT_OF_DATE = 'agile.IS_OUT_OF_DATE';
 export const START_LOADING_AGILE = 'agile.START_LOADING_AGILE';
 export const STOP_LOADING_AGILE = 'agile.STOP_LOADING_AGILE';
 export const RECEIVE_AGILE = 'agile.RECEIVE_AGILE';
+
+export const AGILE_ERROR = 'agile.AGILE_ERROR';

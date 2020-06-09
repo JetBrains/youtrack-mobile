@@ -29,12 +29,13 @@ import * as boardActions from './board-actions';
 import {connect} from 'react-redux';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import ModalView from '../../components/modal-view/modal-view';
-import ErrorMessageInline from '../../components/error-message/error-message-inline';
 import {HIT_SLOP} from '../../components/common-styles/button';
-import {IconMagnifyZoom} from '../../components/icon/icon';
+import {IconExclamation, IconMagnifyZoom} from '../../components/icon/icon';
 import {renderNavigationItem} from './agile-board__renderer';
 import {View as AnimatedView} from 'react-native-animatable';
 import {routeMap} from '../../app-routes';
+import ErrorMessage from '../../components/error-message/error-message';
+import type {CustomError} from '../../flow/Error';
 
 const CATEGORY_NAME = 'Agile board';
 
@@ -93,7 +94,7 @@ class AgileBoard extends Component<Props, State> {
       boardActions.destroySSE();
       this.props.toggleRefreshPopup(false);
     }
-  }
+  };
 
   onVerticalScroll = (event) => {
     const {nativeEvent} = event;
@@ -285,18 +286,32 @@ class AgileBoard extends Component<Props, State> {
     );
   }
 
-  renderErrors() {
-    const errors: Array<?string> = this.props.agile?.status?.errors || [];
+  getError(): CustomError | null {
+    return this.props.error;
+  }
 
-    if (errors.length > 0) {
-      return (
-        <View>
-          <Text style={styles.title}>Agile board has configuration errors:</Text>
-          {errors.map(
-            (errorText, index) => <ErrorMessageInline key={`agileError-${index}`} error={errorText}/>)
-          }
-        </View>
-      );
+  getAgileError(): string | null {
+    const errors: Array<?string> = this.props.agile?.status?.errors || [];
+    return errors.length > 0 ? errors.join('\n') : null;
+  }
+
+  renderErrors() {
+    const error: CustomError | null = this.getError();
+    const agileErrors: string | null = this.getAgileError();
+
+    if (error) {
+      return <ErrorMessage style={styles.error} error={this.props.error}/>;
+    }
+
+    if (agileErrors) {
+      return <ErrorMessage
+        style={styles.error}
+        errorMessageData={{
+          title: 'Configuration errors',
+          description: agileErrors,
+          icon: IconExclamation,
+          iconSize: 64
+        }}/>;
     }
   }
 
@@ -382,6 +397,10 @@ class AgileBoard extends Component<Props, State> {
     const {zoomedIn} = this.state;
     const isSprintLoaded = agile?.status?.valid === true && !!sprint && !isLoading;
 
+    if (!sprint) {
+      return <View style={styles.agileNoSprint}>{this.renderAgileSelector()}</View>;
+    }
+
     return (
       <DragContainer onDragStart={this.onDragStart} onDragEnd={this.onDragEnd}>
         <BoardScroller
@@ -429,9 +448,9 @@ class AgileBoard extends Component<Props, State> {
 
         {this.renderZoomButton()}
 
-        {this.renderErrors()}
-
         {this.renderBoard()}
+
+        {this.renderErrors()}
 
         {isSprintSelectOpen && this._renderSelect()}
 

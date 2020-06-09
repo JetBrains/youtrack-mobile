@@ -99,5 +99,10 @@ export default StyleSheet.create({
     paddingLeft: UNIT * 2,
     paddingBottom: UNIT * 2,
     backgroundColor: COLOR_FONT_ON_BLACK
+  },
+  error: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });

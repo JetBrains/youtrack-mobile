@@ -32,6 +32,7 @@ import QueryInput from '../../components/query-assist/query-input';
 import {IconAngleDown, IconPlus} from '../../components/icon/icon';
 import {isReactElement} from '../../util/util';
 import {HIT_SLOP} from '../../components/common-styles/button';
+import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
 
 import {headerSeparator} from '../../components/common-styles/header';
 import styles from './issue-list.styles';
@@ -86,12 +87,13 @@ export class IssueList extends Component<Props, State> {
     });
   }
 
-  renderCreateIssueButton = () => {
+  renderCreateIssueButton = (isDisabled: boolean) => {
     return (
       <TouchableOpacity
         hitSlop={HIT_SLOP}
         style={styles.createIssueButton}
         onPress={() => Router.CreateIssue()}
+        disabled={isDisabled}
       >
         <IconPlus size={28} color={COLOR_PINK}/>
       </TouchableOpacity>
@@ -132,26 +134,6 @@ export class IssueList extends Component<Props, State> {
       return null;
     }
     return <View style={styles.separator}/>;
-  };
-
-  _renderListMessage = () => {
-    const {loadingError, refreshIssues, isRefreshing, isListEndReached, isLoadingMore, issues} = this.props;
-    if (loadingError) {
-      return <ErrorMessage error={loadingError} onTryAgain={refreshIssues}/>;
-    }
-    if (!isRefreshing && !isLoadingMore && issues?.length === 0) {
-      return (
-        <View>
-          <Text style={styles.listMessageSmile}>(・_・)</Text>
-          <Text style={styles.listFooterMessage} testID="no-issues">No issues found</Text>
-        </View>
-      );
-    }
-
-    if (isLoadingMore && !isListEndReached) {
-      return <Text style={styles.listFooterMessage}>Loading more issues...</Text>;
-    }
-    return null;
   };
 
   onEndReached = () => {
@@ -217,7 +199,7 @@ export class IssueList extends Component<Props, State> {
   }
 
   renderSearchPanel = () => {
-    const {query, suggestIssuesQuery, queryAssistSuggestions, onQueryUpdate} = this.props;
+    const {query, suggestIssuesQuery, queryAssistSuggestions, onQueryUpdate, setIssuesCount} = this.props;
     return (
       <SearchPanel
         key="SearchPanel"
@@ -227,6 +209,7 @@ export class IssueList extends Component<Props, State> {
         suggestIssuesQuery={suggestIssuesQuery}
         onQueryUpdate={(query: string) => {
           this.setEditQueryMode(false);
+          setIssuesCount(null);
           onQueryUpdate(query);
         }}
         onClose={() => this.setEditQueryMode(false)}
@@ -249,8 +232,8 @@ export class IssueList extends Component<Props, State> {
     );
   };
 
-  render() {
-    const {issues, isIssuesContextOpen} = this.props;
+  renderIssues() {
+    const {issues, isLoadingMore, isListEndReached} = this.props;
     const listData: Array<Object> = [
       <View key="issueListContextSeparator" style={headerSeparator}/>,
       this.renderContextButton(),
@@ -258,32 +241,73 @@ export class IssueList extends Component<Props, State> {
     ].concat(issues);
 
     return (
+      <FlatList
+        style={styles.list}
+        testID="issue-list"
+        stickyHeaderIndices={[1]}
+        removeClippedSubviews={false}
+
+        data={listData}
+        keyExtractor={this.getKey}
+        renderItem={this._renderRow}
+        ItemSeparatorComponent={this._renderSeparator}
+        ListEmptyComponent={() => {
+          return <Text>No issues found</Text>;
+        }}
+        ListFooterComponent={() => {
+          if (isLoadingMore && !isListEndReached) {
+            return <Text style={styles.listFooterMessage}>Loading more issues...</Text>;
+          }
+          return null;
+        }}
+
+        refreshControl={this._renderRefreshControl()}
+        onScroll={(params) => this.onScroll(params.nativeEvent)}
+        tintColor={COLOR_PINK}
+
+        onEndReached={this.onEndReached}
+        onEndReachedThreshold={0.1}
+      />
+    );
+  }
+
+  renderError() {
+    const {isRefreshing, loadingError, issues, isInitialized} = this.props;
+    if (isRefreshing || !isInitialized) {
+      return null;
+    }
+
+    const props = Object.assign(
+      {},
+      loadingError
+        ? {error: loadingError}
+        : issues?.length === 0
+          ? {errorMessageData: ERROR_MESSAGE_DATA.NO_ISSUES_FOUND}
+          : null
+    );
+
+    if (Object.keys(props).length > 0) {
+      return <ErrorMessage testID="issuesLoadingError" {...props}/>;
+    }
+
+    return null;
+  }
+
+  render() {
+    const {isIssuesContextOpen, isRefreshing} = this.props;
+
+    return (
       <View
         style={styles.listContainer}
         testID="issue-list-page"
       >
-
-        {this.state.isEditQuery && this.renderSearchPanel()}
         {isIssuesContextOpen && this.renderContextSelect()}
+        {this.state.isEditQuery && this.renderSearchPanel()}
 
-        <FlatList
-          stickyHeaderIndices={[1]}
-          removeClippedSubviews={false}
-          data={listData}
-          keyExtractor={this.getKey}
-          renderItem={this._renderRow}
-          refreshControl={this._renderRefreshControl()}
-          tintColor={COLOR_PINK}
-          ItemSeparatorComponent={this._renderSeparator}
-          ListFooterComponent={this._renderListMessage}
-          onEndReached={this.onEndReached}
-          onEndReachedThreshold={0.1}
-          testID="issue-list"
-          onScroll={(params) => this.onScroll(params.nativeEvent)}
-        />
+        {this.renderIssues()}
+        {this.renderError()}
 
-        {this.renderCreateIssueButton()}
-
+        {this.renderCreateIssueButton(isRefreshing)}
       </View>
     );
   }
@@ -303,7 +327,8 @@ const mapDispatchToProps = (dispatch) => {
     ...bindActionCreators(issueActions, dispatch),
     onQueryUpdate: (query) => dispatch(issueActions.onQueryUpdate(query)),
     onOpenContextSelect: () => dispatch(issueActions.openIssuesContextSelect()),
-    updateSearchContextPinned: (isSearchScrolledUp) => dispatch(issueActions.updateSearchContextPinned(isSearchScrolledUp))
+    updateSearchContextPinned: (isSearchScrolledUp) => dispatch(issueActions.updateSearchContextPinned(isSearchScrolledUp)),
+    setIssuesCount: (count: number | null) => dispatch(issueActions.setIssuesCount(count))
   };
 };
 

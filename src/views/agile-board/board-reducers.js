@@ -32,7 +32,8 @@ export type AgilePageState = {
   sprint: ?SprintFull,
   selectProps: ?Object,
   serversideEvents: ?ServersideEvents,
-  agile: ?Board
+  agile: ?Board,
+  error?: Error | null
 };
 
 const initialPageState: AgilePageState = {
@@ -46,7 +47,8 @@ const initialPageState: AgilePageState = {
   selectProps: null,
   sprint: null,
   serversideEvents: null,
-  agile: null
+  agile: null,
+  error: null
 };
 
 const boardReducer = createReducer({}, {
@@ -171,6 +173,12 @@ const agilePageReducer = createReducer(initialPageState, {
         ...state.agile,
         ...action.agile
       }
+    };
+  },
+  [types.AGILE_ERROR](state: AgilePageState, action: { error: Error }): AgilePageState {
+    return {
+      ...state,
+      error: action.error
     };
   },
 });

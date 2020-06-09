@@ -75,7 +75,6 @@ async function loadConfig(ytUrl: string) {
   const url = ytUrl.includes(VERSION_DETECT_FALLBACK_URL) ?
     ytUrl :
     `${ytUrl}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,statisticsEnabled`;
-
   return fetch(url, {
     method: 'GET',
     headers: {

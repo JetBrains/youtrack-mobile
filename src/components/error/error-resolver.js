@@ -1,10 +1,10 @@
 /* @flow */
 
 import type {CustomError} from '../../flow/Error';
-import {DEFAULT_ERROR_MESSAGE, UNSUPPORTED_ERRORS} from './error-codes';
+import {DEFAULT_ERROR_MESSAGE, UNSUPPORTED_ERRORS} from './error-messages';
 
 
-export const extractErrorMessage = function (err: Object | string): string {
+export const extractErrorMessage = function (err: Object | string, isDescriptionOnly: ?boolean): string {
   if (!err) {
     return DEFAULT_ERROR_MESSAGE;
   }
@@ -13,18 +13,24 @@ export const extractErrorMessage = function (err: Object | string): string {
     return err;
   }
 
-  const values = [
-    err.status,
-    err.message,
-    err.error_message,
+  let fields = [
     err.error_description,
     err.error_children && err.error_children.map(it => it.error),
-    err.body,
-    err.bodyText,
-    err._bodyText
-  ].filter(Boolean);
+  ];
 
-  return values.join('. ') || DEFAULT_ERROR_MESSAGE;
+  if (!isDescriptionOnly) {
+    fields = fields.concat([
+      err.error_message,
+      err.status,
+      err.message,
+      err.body,
+      err.bodyText,
+      err._bodyText
+    ]);
+  }
+
+  const errorText = fields.filter(Boolean).join('. ');
+  return errorText || DEFAULT_ERROR_MESSAGE;
 };
 
 export async function resolveError(err: ?CustomError): Promise<Object> {
@@ -39,9 +45,9 @@ export async function resolveError(err: ?CustomError): Promise<Object> {
   }
 }
 
-export async function resolveErrorMessage(err: ?CustomError): Promise<string> {
+export async function resolveErrorMessage(err: ?CustomError, isDescriptionOnly?: boolean): Promise<string> {
   const error = await resolveError(err);
-  return extractErrorMessage(error);
+  return extractErrorMessage(error, isDescriptionOnly);
 }
 
 export function getErrorMessage(error: ?CustomError): ?string {

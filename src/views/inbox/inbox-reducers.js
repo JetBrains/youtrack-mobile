@@ -1,17 +1,22 @@
 /* @flow */
+
 import {createReducer} from 'redux-create-reducer';
 import * as types from './inbox-action-types';
+
+import type {CustomError} from '../../flow/Error';
 
 export type InboxState = {
   loading: boolean,
   items: Array<Object>,
-  hasMore: boolean
+  hasMore: boolean,
+  error: CustomError | null
 };
 
 const initialState: InboxState = {
   loading: false,
   hasMore: true,
-  items: []
+  items: [],
+  error: null
 };
 
 export default createReducer(initialState, {
@@ -29,5 +34,12 @@ export default createReducer(initialState, {
 
   [types.LIST_END_REACHED](state): InboxState {
     return {...state, hasMore: false};
+  },
+
+  [types.ERROR](state, {error}): InboxState {
+    return {
+      ...state,
+      error
+    };
   }
 });

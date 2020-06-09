@@ -6,7 +6,7 @@ import appPackage from '../../../package.json'; // eslint-disable-line import/ex
 import log from '../log/log';
 
 import Router from '../router/router';
-import {UNSUPPORTED_ERRORS} from '../error/error-codes';
+import {UNSUPPORTED_ERRORS} from '../error/error-messages';
 
 import type Api from '../api/api';
 import type {CustomError} from '../../flow/Error';

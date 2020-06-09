@@ -30,7 +30,7 @@ import PushNotifications from '../components/push-notifications/push-notificatio
 import {EVERYTHING_CONTEXT} from '../components/search/search-context';
 import {storeSearchContext} from '../views/issue-list/issue-list-actions';
 import {isIOSPlatform} from '../util/util';
-import {CUSTOM_ERROR_MESSAGE, UNSUPPORTED_ERRORS} from '../components/error/error-codes';
+import {CUSTOM_ERROR_MESSAGE, UNSUPPORTED_ERRORS} from '../components/error/error-messages';
 import {isUnsupportedFeatureError} from '../components/error/error-resolver';
 
 import type {AuthParams, CurrentUser} from '../components/auth/auth';
@@ -554,7 +554,7 @@ export function subscribeToPushNotifications() {
         return log.warn(UNSUPPORTED_ERRORS.PUSH_NOTIFICATION_NOT_SUPPORTED);
       }
 
-      notifyError(CUSTOM_ERROR_MESSAGE.FAIL, err);
+      notifyError(CUSTOM_ERROR_MESSAGE.PUSH_NOTIFICATION_REGISTRATION, err);
     }
   };
 }

@@ -8,7 +8,7 @@ import {View as AnimatedView} from 'react-native-animatable';
 import styles from './issue-list__count.styles';
 
 type Props = {
-  issuesCount?: ?number
+  issuesCount: ?number
 };
 
 
@@ -16,11 +16,12 @@ export default class IssuesCount extends PureComponent<Props, void> {
 
   render() {
     const {issuesCount} = this.props;
-    const text = (
-      !issuesCount
-        ? ' '
-        : `Matches ${issuesCount} issue${issuesCount >= 0 ? 's' : ''}`
-    );
+
+    if (!issuesCount) {
+      return null;
+    }
+
+    const text = `Matches ${issuesCount} issue${issuesCount >= 0 ? 's' : ''}`;
 
     return (
       <AnimatedView

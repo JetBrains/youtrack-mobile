@@ -9,7 +9,7 @@ import * as actions from './app-actions';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import Router from '../components/router/router';
-import {CUSTOM_ERROR_MESSAGE, REGISTRATION_ERRORS, UNSUPPORTED_ERRORS} from '../components/error/error-codes';
+import {CUSTOM_ERROR_MESSAGE, REGISTRATION_ERRORS, UNSUPPORTED_ERRORS} from '../components/error/error-messages';
 
 let apiMock;
 let store;
@@ -80,7 +80,7 @@ describe('app-actions', () => {
 
         await store.dispatch(actions.subscribeToPushNotifications());
 
-        expect(Notification.notifyError).toHaveBeenCalledWith(CUSTOM_ERROR_MESSAGE.FAIL, registrationErrorMock);
+        expect(Notification.notifyError).toHaveBeenCalledWith(CUSTOM_ERROR_MESSAGE.PUSH_NOTIFICATION_REGISTRATION, registrationErrorMock);
       });
 
       it('should not initialize if a registration service returns error', async () => {

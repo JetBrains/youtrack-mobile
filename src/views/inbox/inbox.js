@@ -18,6 +18,8 @@ import Wiki from '../../components/wiki/wiki';
 import CustomFieldChangeDelimiter from '../../components/custom-field/custom-field__change-delimiter';
 import {headerSeparator, headerTitle} from '../../components/common-styles/header';
 import {isReactElement} from '../../util/util';
+import ErrorMessage from '../../components/error-message/error-message';
+import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
 
 import {elevation1} from '../../components/common-styles/form';
 import styles from './inbox.styles';
@@ -388,19 +390,9 @@ class Inbox extends Component<Props, State> {
   }
 
   renderListMessage = () => {
-    const {loading, items} = this.props;
-    if (!loading && items.length === 0) {
-      return (
-        <View>
-          <Text style={styles.listMessageSmile}>(・_・)</Text>
-          <Text
-            style={styles.listFooterMessage}
-            testID="no-notifications"
-          >
-            You have no notifications.
-          </Text>
-        </View>
-      );
+    const {loading, items, error} = this.props;
+    if (!error && !loading && items.length === 0) {
+      return <ErrorMessage errorMessageData={ERROR_MESSAGE_DATA.NOT_FOUND}/>;
     }
 
     return null;
@@ -440,8 +432,9 @@ class Inbox extends Component<Props, State> {
   }
 
   render() {
-    const {items, loading} = this.props;
-    const data: Array<React$Element<any> | Notification> = [
+    const {items, loading, error} = this.props;
+    const hasError: boolean = !!error;
+    const data: Array<React$Element<any> | Notification> = hasError ? [] : [
       <View key="activityHeaderTitleSeparator" style={headerSeparator}/>,
       this.renderTitle()
     ].concat(items);
@@ -449,7 +442,16 @@ class Inbox extends Component<Props, State> {
     return (
       <View style={styles.container}>
 
-        <FlatList
+        {hasError && (
+          <View
+            testID="no-notifications"
+            style={styles.error}
+          >
+            <ErrorMessage error={error}/>
+          </View>
+        )}
+
+        {!hasError && <FlatList
           data={data}
           refreshControl={this.renderRefreshControl()}
           refreshing={loading}
@@ -461,7 +463,7 @@ class Inbox extends Component<Props, State> {
           ListFooterComponent={this.renderListMessage}
           scrollEventThrottle={10}
           stickyHeaderIndices={[1]}
-        />
+        />}
       </View>
     );
   }

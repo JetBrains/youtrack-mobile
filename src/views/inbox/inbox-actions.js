@@ -1,7 +1,5 @@
 /* @flow */
 import * as types from './inbox-action-types';
-import {notify} from '../../components/notification/notification';
-import {resolveError} from '../../components/error/error-resolver';
 import log from '../../components/log/log';
 
 import type Api from '../../components/api/api';
@@ -24,6 +22,10 @@ export function listEndReached() {
   return {type: types.LIST_END_REACHED};
 }
 
+export function setError(error: Error) {
+  return {type: types.ERROR, error};
+}
+
 export function loadInbox(skip: number = 0, top: number = 10) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api = getApi();
@@ -42,11 +44,9 @@ export function loadInbox(skip: number = 0, top: number = 10) {
       if (newItems.length < top) {
         dispatch(listEndReached());
       }
-    } catch (err) {
-      const error = await resolveError(err);
-      const msg = 'Cannot update Inbox.';
-      log.info(msg, error);
-      notify(`${msg} Server in unavailable. Try later.`);
+    } catch (error) {
+      log.warn('Cannot load Inbox.', error);
+      dispatch(setError(error));
     }
 
     dispatch(setLoading(false));

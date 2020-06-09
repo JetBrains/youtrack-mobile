@@ -256,20 +256,19 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
     }
   }
 
-  _renderHeader() {
+  _renderHeader(isIssueLoaded: boolean) {
     const {
       issue,
       issuePlaceholder,
       editMode,
       summaryCopy,
-      issueLoaded,
       isSavingEditedIssue,
       saveIssueSummaryAndDescriptionChange,
       showIssueActions,
       stopEditingIssue
     } = this.props;
 
-    const issueToShow = issueLoaded ? issue : issuePlaceholder;
+    const issueToShow = isIssueLoaded ? issue : issuePlaceholder;
     const title = (
       <Text
         style={[styles.headerText, issueToShow && issueToShow.resolved ? styles.headerTextResolved : null]}
@@ -284,10 +283,10 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
       return (
         <Header
           leftButton={this.renderBackIcon()}
-          rightButton={this.renderActionsIcon()}
-          extraButton={this.renderStar()}
+          rightButton={isIssueLoaded ? this.renderActionsIcon() : null}
+          extraButton={isIssueLoaded ? this.renderStar() : null}
           onRightButtonClick={() => {
-            if (issueLoaded) {
+            if (isIssueLoaded) {
               showIssueActions(this.context.actionSheet());
             }
           }
@@ -351,7 +350,6 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
     const {
       issueLoaded,
       issueLoadingError,
-      refreshIssue,
       showCommandDialog,
     } = this.props;
 
@@ -359,13 +357,14 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
 
     return (
       <View style={styles.container} testID="issue-view">
-        {this._renderHeader()}
+        {this._renderHeader(isIssueLoaded)}
 
-        {issueLoadingError && <ErrorMessage error={issueLoadingError} onTryAgain={refreshIssue}/>}
+        {issueLoadingError && <View style={styles.error}><ErrorMessage error={issueLoadingError}/></View>}
+
 
         {isIssueLoaded && this.renderTabs()}
 
-        {showCommandDialog && this._renderCommandDialog()}
+        {isIssueLoaded && showCommandDialog && this._renderCommandDialog()}
 
       </View>
     );

@@ -1,9 +1,10 @@
 import {
+  COLOR_BLACK,
   COLOR_DARK,
   COLOR_FONT_GRAY,
   COLOR_ICON_MEDIUM_GREY,
   UNIT,
-} from '../../components/variables/variables';
+} from '../variables/variables';
 
 
 export const resolvedTextColor = {
@@ -20,6 +21,14 @@ export const mainText = {
   fontSize: 16,
   lineHeight: 20,
   letterSpacing: -0.19
+};
+
+export const title = {
+  fontSize: 18,
+  fontWeight: '500',
+  lineHeight: 21,
+  letterSpacing: -0.22,
+  color: COLOR_BLACK
 };
 
 export const issueCard = {

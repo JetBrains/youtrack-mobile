@@ -134,7 +134,7 @@ export function loadIssue() {
     } catch (rawError) {
       const error = await resolveError(rawError);
       dispatch({type: types.RECEIVE_ISSUE_ERROR, error});
-      notifyError('Failed to load issue', error);
+      log.warn('Failed to load issue', error);
     }
   };
 }

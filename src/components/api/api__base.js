@@ -4,8 +4,7 @@ import type Auth from '../auth/auth';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import qs from 'qs';
 import ApiHelper from './api__helper';
-import {HTTP_STATUS} from '../error/error-codes';
-import {createExtendedErrorMessage, reportError} from '../error/error-reporter';
+import {HTTP_STATUS} from '../error/error-http-codes';
 
 
 const MAX_QUERY_LENGTH = 2048;
@@ -101,15 +100,7 @@ export default class BaseAPI {
     }
 
     if (response.status < HTTP_STATUS.SUCCESS || response.status >= HTTP_STATUS.REDIRECT) {
-      const errorMessage: string = await createExtendedErrorMessage(response, url, method);
-      const error = Object.assign(new Error(errorMessage), response);
-
-      if (response.status !== HTTP_STATUS.NOT_FOUND) {
-        const title: string = response.message || response.error_message || response.error_description || '';
-        reportError(error, `Request error${title.length > 0 ? ': ' : ''}${title}`);
-      }
-
-      throw error;
+      throw response;
     }
 
     if (!options.parseJson) {

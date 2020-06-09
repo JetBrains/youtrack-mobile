@@ -15,9 +15,9 @@ import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 type Props = {
   onBack?: () => any,
   onRightButtonClick?: Function,
-  leftButton?: ?React$Element<any>,
-  rightButton?: ?React$Element<any>,
-  extraButton?: ?React$Element<any>,
+  leftButton?: ?React$Element<any> | null,
+  rightButton?: ?React$Element<any> | null,
+  extraButton?: ?React$Element<any> | null,
   children?: ?React$Element<any>,
   style?: ViewStyleProp,
   title?: string

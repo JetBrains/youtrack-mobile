@@ -13,7 +13,7 @@ import {getStorageState, flushStoragePart} from '../../components/storage/storag
 import {notify, notifyError} from '../../components/notification/notification';
 import {showActions} from '../../components/action-sheet/action-sheet';
 import {resolveError} from '../../components/error/error-resolver';
-import {DEFAULT_ERROR_MESSAGE} from '../../components/error/error-codes';
+import {DEFAULT_ERROR_MESSAGE} from '../../components/error/error-messages';
 
 export const CATEGORY_NAME = 'Create issue view';
 

@@ -19,7 +19,7 @@ export type IssuesListState = {
   isRefreshing: boolean,
   isIssuesContextOpen: boolean,
 
-  issuesCount: ?number,
+  issuesCount: number | null,
   issues: Array<IssueOnList>,
 
   selectProps: Object,

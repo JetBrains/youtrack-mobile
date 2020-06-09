@@ -4,7 +4,6 @@ import * as types from './issue-list-action-types';
 import ApiHelper from '../../components/api/api__helper';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
 import {notifyError} from '../../components/notification/notification';
-import {resolveError} from '../../components/error/error-resolver';
 import log from '../../components/log/log';
 import usage from '../../components/usage/usage';
 
@@ -117,7 +116,7 @@ export function resetIssuesCount() {
   return {type: types.RESET_ISSUES_COUNT};
 }
 
-export function setIssuesCount(count: number) {
+export function setIssuesCount(count: number | null) {
   return {type: types.SET_ISSUES_COUNT, count};
 }
 
@@ -248,8 +247,7 @@ export function readCachedIssues() {
 export function loadingIssuesError(error: Object) {
   return async (dispatch: (any) => any) => {
     dispatch(resetIssuesCount());
-    const resolvedError = await resolveError(error);
-    dispatch({type: types.LOADING_ISSUES_ERROR, error: resolvedError});
+    dispatch({type: types.LOADING_ISSUES_ERROR, error: error});
   };
 }
 

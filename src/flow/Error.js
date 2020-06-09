@@ -40,3 +40,10 @@ export type HTTPHeaders = {
       'x-xss-protection': string,
   }
 };
+
+export type ErrorMessageData = {
+  title: string,
+  description?: ?string,
+  icon?: Object,
+  iconSize?: number
+}

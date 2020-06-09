@@ -72,6 +72,11 @@ class DefaultIcon extends PureComponent<Props, void> {
 
 /* Main menu icons */
 
+export const IconAccountAlert = (props?: Props) => <DefaultIcon {...{
+  name: 'account-alert',
+  ...props
+}} />;
+
 export const IconBack = (props?: Props) => <DefaultIcon {...{
   name: isAndroid ? 'arrow-left' : 'chevron-left',
   size: isAndroid ? 22 : 36,
@@ -107,6 +112,11 @@ export const IconClose = (props?: Props) => <DefaultIcon {...{
   ...props
 }} />;
 
+export const IconInformation = (props?: Props) => <DefaultIcon {...{
+  name: 'information',
+  ...props
+}} />;
+
 export const IconMagnify = (props?: Props) => <DefaultIcon {...{
   name: 'magnify',
   ...props
@@ -139,6 +149,11 @@ export const IconPlus = (props?: Props) => <DefaultIcon {...{
 
 export const IconActions = (props?: Props) => <DefaultIcon {...{
   name: 'dots-horizontal',
+  ...props
+}} />;
+
+export const IconExclamation = (props?: Props) => <DefaultIcon {...{
+  name: 'information-outline',
   ...props
 }} />;
 

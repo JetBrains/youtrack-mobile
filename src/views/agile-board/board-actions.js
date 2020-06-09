@@ -1,7 +1,7 @@
 /* @flow */
 import * as types from './board-action-types';
 import {notifyError, notify} from '../../components/notification/notification';
-import {DEFAULT_ERROR_MESSAGE} from '../../components/error/error-codes';
+import {DEFAULT_ERROR_MESSAGE} from '../../components/error/error-messages';
 import type {AgileBoardRow, AgileColumn, BoardOnList, AgileUserProfile, Sprint, Board} from '../../flow/Agile';
 import type {IssueFull, IssueOnList} from '../../flow/Issue';
 import ServersideEvents from '../../components/api/api__serverside-events';
@@ -144,11 +144,19 @@ export function loadSprint(agileId: string, sprintId: string) {
 
 export function loadAgileProfile() {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
-    const profile = await getApi().agile.getAgileUserProfile();
-    dispatch({
-      type: types.RECEIVE_AGILE_PROFILE,
-      profile
-    });
+    let profile;
+    try {
+      profile = await getApi().agile.getAgileUserProfile();
+      dispatch({
+        type: types.RECEIVE_AGILE_PROFILE,
+        profile
+      });
+    } catch (error) {
+      dispatch({
+        type: types.AGILE_ERROR,
+        error
+      });
+    }
   };
 }
 

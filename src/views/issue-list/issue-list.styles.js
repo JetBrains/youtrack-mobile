@@ -4,7 +4,6 @@ import {
   UNIT,
   COLOR_FONT_GRAY,
   COLOR_FONT_ON_BLACK,
-  COLOR_FONT,
   COLOR_PINK,
   COLOR_DARK
 } from '../../components/variables/variables';
@@ -25,6 +24,10 @@ export default StyleSheet.create({
   listContainer: {
     flex: 1,
     backgroundColor: COLOR_FONT_ON_BLACK
+  },
+  list: {
+    flexGrow: 0,
+    paddingBottom: UNIT * 4
   },
   tryAgainButton: {
     alignSelf: 'center',
@@ -78,12 +81,6 @@ export default StyleSheet.create({
     paddingTop: 6,
     fontSize: 14,
     color: COLOR_FONT_GRAY
-  },
-  listMessageSmile: {
-    paddingTop: UNIT * 6,
-    fontSize: 36,
-    color: COLOR_FONT,
-    textAlign: 'center'
   },
   listFooterMessage: {
     textAlign: 'center',
