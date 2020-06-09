@@ -50,7 +50,7 @@ export async function sendErrorReport(summary: string, description: string): Pro
   return res.idReadable;
 }
 
-export async function createReportErrorData(error: Error | string): Promise<ReportErrorData> {
+export async function createReportErrorData(error: Error | string, isCrashReport: boolean = false): Promise<ReportErrorData> {
   const logs = await getLogs();
   const message = error.toString();
   const summary = message.split('\n')[0];
@@ -62,6 +62,7 @@ export async function createReportErrorData(error: Error | string): Promise<Repo
   }
 
   const description = `
+  ${isCrashReport ? '#### CrashReport' : ''}
   App version: ${DeviceInfo.getVersion()};
   App build: ${DeviceInfo.getBuildNumber()};
   OS: ${DeviceInfo.getSystemName()};

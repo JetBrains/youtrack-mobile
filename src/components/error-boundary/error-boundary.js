@@ -55,7 +55,7 @@ class ErrorBoundary extends Component<Props, State> {
       return;
     }
 
-    const errorData: ReportErrorData = await createReportErrorData(error);
+    const errorData: ReportErrorData = await createReportErrorData(error, true);
 
     try {
       this.setState({isReporting: true});
