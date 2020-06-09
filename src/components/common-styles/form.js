@@ -1,41 +1,18 @@
-import {Platform, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 
 import {
-  UNIT,
   COLOR_BLACK,
+  COLOR_FONT_GRAY,
+  COLOR_FONT_ON_BLACK,
+  COLOR_GRAY,
   COLOR_LIGHT_GRAY,
   COLOR_PINK,
-  COLOR_GRAY,
-  COLOR_FONT_ON_BLACK,
-  COLOR_FONT_GRAY,
-  COLOR_PLACEHOLDER,
-  COLOR_EXTRA_MEDIUM_GRAY,
+  UNIT,
 } from '../variables/variables';
 
 export const FONT_SIZE = 16;
 
 export const containerPadding = UNIT * 4;
-export const elevation1 = {
-  ...Platform.select({
-    ios: {
-      shadowRadius: 0.75,
-      shadowColor: COLOR_PLACEHOLDER,
-      shadowOffset: {
-        width: 0,
-        height: 1
-      },
-      shadowOpacity: 0.25,
-    },
-    android: {
-      elevation: 2
-    },
-  })
-};
-
-export const elevationTop = {
-  borderTopWidth: 0.3,
-  borderColor: COLOR_EXTRA_MEDIUM_GRAY
-};
 
 export const formStyles = StyleSheet.create({
   scrollContainer: {

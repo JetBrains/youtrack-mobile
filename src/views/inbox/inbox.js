@@ -21,7 +21,7 @@ import {isReactElement} from '../../util/util';
 import ErrorMessage from '../../components/error-message/error-message';
 import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
 
-import {elevation1} from '../../components/common-styles/form';
+import {elevation1} from '../../components/common-styles/shadow';
 import styles from './inbox.styles';
 
 import type {InboxState} from './inbox-reducers';

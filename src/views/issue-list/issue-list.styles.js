@@ -9,7 +9,7 @@ import {
 } from '../../components/variables/variables';
 import {SIZE as COLOR_FIELD_SIZE} from '../../components/color-field/color-field';
 import {secondaryText, issueCard} from '../../components/common-styles/issue';
-import {elevation1} from '../../components/common-styles/form';
+import {elevation1} from '../../components/common-styles/shadow';
 import {separator} from '../../components/common-styles/list';
 
 const rowLine = {

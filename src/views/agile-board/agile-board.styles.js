@@ -10,7 +10,7 @@ import {
 } from '../../components/variables/variables';
 import {mainText} from '../../components/common-styles/issue';
 import {link} from '../../components/common-styles/button';
-import {elevationTop} from '../../components/common-styles/form';
+import {elevationTop} from '../../components/common-styles/shadow';
 
 export default StyleSheet.create({
   agile: {

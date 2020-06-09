@@ -5,7 +5,7 @@ import {
   COLOR_BLACK,
   COLOR_LIGHT_GRAY,
 } from '../variables/variables';
-import {elevation1} from '../common-styles/form';
+import {elevation1} from '../common-styles/shadow';
 
 const QUERY_ASSIST_HEIGHT = UNIT * 6;
 

@@ -7,7 +7,7 @@ import {
   COLOR_BLACK, COLOR_FONT_ON_BLACK
 } from '../variables/variables';
 import {mainText} from '../common-styles/issue';
-import {elevation1} from '../common-styles/form';
+import {elevation1} from '../common-styles/shadow';
 
 export default StyleSheet.create({
   inputWrapper: {

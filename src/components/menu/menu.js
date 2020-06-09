@@ -12,8 +12,8 @@ import Feature from '../feature/feature';
 import {IconBell, IconCheckMarked, IconCog, IconPause} from '../icon/icon';
 import {COLOR_FONT_ON_BLACK, COLOR_GRAY, COLOR_ICON_MEDIUM_GREY, COLOR_PINK} from '../variables/variables';
 
-import {elevationTop} from '../common-styles/form';
 import {menuHeight} from '../common-styles/header';
+import {elevationTop} from '../common-styles/shadow';
 
 import {routeMap} from '../../app-routes';
 

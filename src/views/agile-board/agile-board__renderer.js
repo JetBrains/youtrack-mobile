@@ -6,7 +6,7 @@ import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
 import {IconAngleDown} from '../../components/icon/icon';
 import {COLOR_BLACK, COLOR_DARK, COLOR_FONT_GRAY, UNIT} from '../../components/variables/variables';
 import {mainText} from '../../components/common-styles/issue';
-import {elevation1} from '../../components/common-styles/form';
+import {elevation1} from '../../components/common-styles/shadow';
 
 import type {TextStyleProp, ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 

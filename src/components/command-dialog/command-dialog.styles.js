@@ -6,8 +6,8 @@ import {
   COLOR_MEDIUM_GRAY,
   COLOR_FONT
 } from '../variables/variables';
-import {elevation1} from '../common-styles/form';
 import {mainText} from '../common-styles/issue';
+import {elevation1} from '../common-styles/shadow';
 
 export default StyleSheet.create({
   modal: {

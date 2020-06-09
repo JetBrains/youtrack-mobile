@@ -9,7 +9,7 @@ import {
   COLOR_PINK_DARK
 } from '../../components/variables/variables';
 import {secondaryText, mainText} from '../../components/common-styles/issue';
-import {elevation1} from '../../components/common-styles/form';
+import {elevation1} from '../../components/common-styles/shadow';
 
 
 export default StyleSheet.create({
