@@ -8,7 +8,8 @@ import {
   COLOR_GRAY,
   COLOR_FONT_ON_BLACK,
   COLOR_FONT_GRAY,
-  COLOR_PLACEHOLDER
+  COLOR_PLACEHOLDER,
+  COLOR_EXTRA_MEDIUM_GRAY,
 } from '../variables/variables';
 
 export const FONT_SIZE = 16;
@@ -26,26 +27,14 @@ export const elevation1 = {
       shadowOpacity: 0.25,
     },
     android: {
-      elevation: 1
+      elevation: 2
     },
   })
 };
 
 export const elevationTop = {
-  ...Platform.select({
-    ios: {
-      shadowRadius: 0.75,
-      shadowColor: COLOR_PLACEHOLDER,
-      shadowOffset: {
-        width: 0,
-        height: -1
-      },
-      shadowOpacity: 0.35,
-    },
-    android: {
-      elevation: 5
-    },
-  })
+  borderTopWidth: 0.3,
+  borderColor: COLOR_EXTRA_MEDIUM_GRAY
 };
 
 export const formStyles = StyleSheet.create({

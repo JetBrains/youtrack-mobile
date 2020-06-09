@@ -13,17 +13,12 @@ exports[`<Menu/> Render should match a snapshot 1`] = `
     Array [
       Object {
         "backgroundColor": "#FFF",
+        "borderColor": "rgba(100, 100, 100, 0.2)",
+        "borderTopWidth": 0.3,
         "flexDirection": "row",
         "flexGrow": 1,
         "height": 64,
         "justifyContent": "space-between",
-        "shadowColor": "#717171",
-        "shadowOffset": Object {
-          "height": -1,
-          "width": 0,
-        },
-        "shadowOpacity": 0.35,
-        "shadowRadius": 0.75,
       },
       undefined,
     ]

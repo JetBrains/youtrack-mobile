@@ -20,7 +20,7 @@ export const COLOR_PLACEHOLDER_ACTIVE = '#80929D';
 export const COLOR_EXTRA_LIGHT_GRAY = '#F7F9FA';
 export const COLOR_LIGHT_GRAY = '#f6f6f6';
 export const COLOR_MEDIUM_GRAY = '#DFE5EB';
-
+export const COLOR_EXTRA_MEDIUM_GRAY = 'rgba(100, 100, 100, 0.2)';
 export const COLOR_GRAY = '#CCC';
 
 export const COLOR_FONT = '#444444';
