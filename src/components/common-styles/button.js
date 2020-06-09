@@ -1,7 +1,7 @@
 import {
   COLOR_PINK,
   UNIT,
-} from '../../components/variables/variables';
+} from '../variables/variables';
 
 
 export const HIT_SLOP = {

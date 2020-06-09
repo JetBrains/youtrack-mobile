@@ -1,5 +1,5 @@
 import {UNIT} from '../variables/variables';
-import {formStyles, containerPadding} from '../common-styles/form';
+import {formStyles, containerPadding} from './form';
 
 export const loginStylesForm = {
   scrollContainer: {

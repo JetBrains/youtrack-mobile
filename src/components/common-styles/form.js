@@ -9,7 +9,7 @@ import {
   COLOR_FONT_ON_BLACK,
   COLOR_FONT_GRAY,
   COLOR_PLACEHOLDER
-} from '../../components/variables/variables';
+} from '../variables/variables';
 
 export const FONT_SIZE = 16;
 
