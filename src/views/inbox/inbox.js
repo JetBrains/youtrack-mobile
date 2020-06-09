@@ -18,7 +18,6 @@ import Wiki from '../../components/wiki/wiki';
 import CustomFieldChangeDelimiter from '../../components/custom-field/custom-field__change-delimiter';
 import {isReactElement} from '../../util/util';
 import ErrorMessage from '../../components/error-message/error-message';
-import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
 
 import {headerSeparator} from '../../components/common-styles/header';
 import {elevation1} from '../../components/common-styles/shadow';
@@ -391,9 +390,20 @@ class Inbox extends Component<Props, State> {
   }
 
   renderListMessage = () => {
-    const {loading, items, error} = this.props;
-    if (!error && !loading && items.length === 0) {
-      return <ErrorMessage errorMessageData={ERROR_MESSAGE_DATA.NOT_FOUND}/>;
+    const {loading, items} = this.props;
+
+    if (!loading && items.length === 0) {
+      return (
+        <View style={styles.noNotification}>
+          <Text style={styles.listMessageSmile}>(・_・)</Text>
+          <Text
+            style={styles.listFooterMessage}
+            testID="no-notifications"
+          >
+            You have no notifications
+          </Text>
+        </View>
+      );
     }
 
     return null;
@@ -429,25 +439,32 @@ class Inbox extends Component<Props, State> {
     this.setState({
       isTitlePinned: newY >= headerSeparator.height
     });
+  }
 
+  getListData(): Array<React$Element<any> | Notification> {
+    const {items, error} = this.props;
+    let data: Array<React$Element<any> | Notification> = [];
+
+    if (!error) {
+      data = [<View key="activityHeaderTitleSeparator" style={headerSeparator}/>];
+      if (items?.length > 0) {
+        data.push(this.renderTitle());
+      }
+    }
+
+    return data.concat(items);
   }
 
   render() {
-    const {items, loading, error} = this.props;
+    const {loading, error} = this.props;
     const hasError: boolean = !!error;
-    const data: Array<React$Element<any> | Notification> = hasError ? [] : [
-      <View key="activityHeaderTitleSeparator" style={headerSeparator}/>,
-      this.renderTitle()
-    ].concat(items);
+    const data: Array<React$Element<any> | Notification> = this.getListData();
 
     return (
       <View style={styles.container}>
 
         {hasError && (
-          <View
-            testID="no-notifications"
-            style={styles.error}
-          >
+          <View style={styles.error}>
             <ErrorMessage error={error}/>
           </View>
         )}

@@ -6,7 +6,7 @@ import {
   COLOR_MEDIUM_GRAY,
   COLOR_FONT_ON_BLACK,
   COLOR_LIGHT_GRAY,
-  COLOR_DARK
+  COLOR_DARK, COLOR_PLACEHOLDER, COLOR_BLACK
 } from '../../components/variables/variables';
 import {mainText, secondaryText} from '../../components/common-styles/typography';
 
@@ -76,13 +76,19 @@ export default StyleSheet.create({
   textSecondary,
   listMessageSmile: {
     paddingTop: UNIT * 6,
-    fontSize: 36,
-    color: COLOR_FONT,
-    textAlign: 'center'
+    fontSize: 40,
+    fontWeight: '500',
+    color: COLOR_PLACEHOLDER,
+    textAlign: 'center',
+    letterSpacing: -2
   },
   listFooterMessage: {
+    ...mainText,
+    color: COLOR_BLACK,
+    fontSize: 18,
+    fontWeight: '500',
     textAlign: 'center',
-    padding: UNIT * 2
+    marginTop: UNIT * 4
   },
   change: {
     flexDirection: 'row',
