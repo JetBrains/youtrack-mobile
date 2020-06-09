@@ -16,12 +16,13 @@ import UserInfo from '../../components/user/user-info';
 import Diff from '../../components/diff/diff';
 import Wiki from '../../components/wiki/wiki';
 import CustomFieldChangeDelimiter from '../../components/custom-field/custom-field__change-delimiter';
-import {headerSeparator, headerTitle} from '../../components/common-styles/header';
 import {isReactElement} from '../../util/util';
 import ErrorMessage from '../../components/error-message/error-message';
 import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
 
+import {headerSeparator} from '../../components/common-styles/header';
 import {elevation1} from '../../components/common-styles/shadow';
+import {headerTitle} from '../../components/common-styles/typography';
 import styles from './inbox.styles';
 
 import type {InboxState} from './inbox-reducers';

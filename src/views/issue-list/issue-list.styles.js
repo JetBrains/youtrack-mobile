@@ -4,11 +4,10 @@ import {
   UNIT,
   COLOR_FONT_GRAY,
   COLOR_FONT_ON_BLACK,
-  COLOR_PINK,
-  COLOR_DARK
+  COLOR_PINK
 } from '../../components/variables/variables';
 import {SIZE as COLOR_FIELD_SIZE} from '../../components/color-field/color-field';
-import {secondaryText} from '../../components/common-styles/typography';
+import {headerTitle, secondaryText} from '../../components/common-styles/typography';
 import {issueCard} from '../../components/common-styles/issue';
 import {elevation1} from '../../components/common-styles/shadow';
 import {separator} from '../../components/common-styles/list';
@@ -106,10 +105,7 @@ export default StyleSheet.create({
     backgroundColor: COLOR_FONT_ON_BLACK
   },
   contextButtonText: {
-    fontSize: 20,
-    letterSpacing: 0.13,
-    fontWeight: '500',
-    color: COLOR_DARK
+    ...headerTitle,
   },
   searchPanel: {
     zIndex: -1,

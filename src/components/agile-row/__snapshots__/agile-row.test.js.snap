@@ -46,6 +46,7 @@ exports[`<BoardRow/> Render should render a snapshot 1`] = `
         style={
           Array [
             Object {
+              "backgroundColor": "#FFF",
               "color": "#1f2326",
               "fontSize": 20,
               "fontWeight": "500",

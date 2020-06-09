@@ -8,7 +8,7 @@ import {
   COLOR_ICON_MEDIUM_GREY,
   COLOR_PINK_DARK
 } from '../../components/variables/variables';
-import {mainText, secondaryText} from '../../components/common-styles/typography';
+import {headerTitle, mainText, secondaryText} from '../../components/common-styles/typography';
 import {elevation1} from '../../components/common-styles/shadow';
 
 
@@ -21,9 +21,7 @@ export default StyleSheet.create({
     backgroundColor: COLOR_FONT_ON_BLACK,
   },
   headerText: {
-    color: COLOR_BLACK,
-    fontSize: 20,
-    letterSpacing: 0.13,
+    ...headerTitle,
     fontWeight: '500'
   },
   headerTextResolved: {

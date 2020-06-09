@@ -5,9 +5,9 @@ import React, {PureComponent} from 'react';
 
 import Router from '../router/router';
 import {onHeightChange} from './header__top-padding';
-import {HIT_SLOP} from '../common-styles/button';
 
-import {headerTitle} from '../common-styles/header';
+import {HIT_SLOP} from '../common-styles/button';
+import {headerTitle} from '../common-styles/typography';
 import styles from './header.styles';
 
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';

@@ -29,7 +29,8 @@ exports[`<CreateIssue/> Render Component should match a snapshot 1`] = `
     <Text
       style={
         Object {
-          "color": "#000",
+          "backgroundColor": "#FFF",
+          "color": "#1f2326",
           "fontSize": 20,
           "fontWeight": "500",
           "letterSpacing": 0.13,

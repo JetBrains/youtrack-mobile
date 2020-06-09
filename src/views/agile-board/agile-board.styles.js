@@ -8,7 +8,7 @@ import {
   COLOR_GRAY,
   COLOR_BLACK
 } from '../../components/variables/variables';
-import {mainText} from '../../components/common-styles/typography';
+import {headerTitle, mainText} from '../../components/common-styles/typography';
 import {link} from '../../components/common-styles/button';
 import {elevationTop} from '../../components/common-styles/shadow';
 
@@ -119,6 +119,6 @@ export default StyleSheet.create({
     backgroundColor: COLOR_FONT_ON_BLACK
   },
   agileSelectorText: {
-    fontSize: 20
+    ...headerTitle,
   }
 });

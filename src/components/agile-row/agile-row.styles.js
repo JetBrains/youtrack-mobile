@@ -4,11 +4,10 @@ import {
   COLOR_LIGHT_GRAY,
   AGILE_COLLAPSED_COLUMN_WIDTH,
   COLOR_GRAY,
-  COLOR_FONT_GRAY,
-  COLOR_DARK,
+  COLOR_FONT_GRAY
 } from '../variables/variables';
 import {issueCard, issueResolved, issueIdResolved} from '../common-styles/issue';
-import {MAIN_FONT_SIZE} from '../common-styles/typography';
+import {headerTitle, MAIN_FONT_SIZE} from '../common-styles/typography';
 import {link} from '../common-styles/button';
 
 export default StyleSheet.create({
@@ -33,12 +32,10 @@ export default StyleSheet.create({
     textDecorationLine: 'line-through'
   },
   rowHeaderText: {
-    color: COLOR_DARK,
-    fontSize: 20,
+    ...headerTitle,
     lineHeight: 24,
     marginLeft: UNIT,
-    fontWeight: '500',
-    letterSpacing: 0.13,
+    fontWeight: '500'
   },
   rowHeaderTextZoomedOut: {
     fontSize: MAIN_FONT_SIZE,
