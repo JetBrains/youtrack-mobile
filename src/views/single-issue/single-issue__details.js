@@ -170,7 +170,6 @@ export default class IssueDetails extends PureComponent<Props, TabsState> {
             multiline={true}
             tags={issue?.tags}
             onTagPress={openIssueListWithSearch}
-            showMore={true}
           />
 
           {this.renderLinks(issue)}

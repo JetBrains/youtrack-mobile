@@ -2,13 +2,14 @@ import {StyleSheet} from 'react-native';
 import {
   UNIT,
   COLOR_GRAY
-} from '../../components/variables/variables';
+} from '../variables/variables';
 
 export default StyleSheet.create({
   modal: {
     paddingTop: UNIT * 2
   },
   tags: {
+    overflow: 'hidden',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start'

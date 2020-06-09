@@ -1,6 +1,6 @@
 /* @flow */
 
-import {View, TouchableOpacity, ScrollView} from 'react-native';
+import {View, TouchableOpacity} from 'react-native';
 import React, {PureComponent} from 'react';
 
 import ColorField from '../../components/color-field/color-field';
@@ -84,35 +84,27 @@ export default class Tags extends PureComponent<Props, State> {
     return (
       <View
         testID="tagsList"
-        style={[styles.tags, style]}
+        style={[styles.tags, multiline ? styles.tagsMultiline : null, style]}
       >
         {title}
 
-        <ScrollView
-          keyboardShouldPersistTaps="handled"
-        >
-          <View
-            style={[styles.tags, multiline ? styles.tagsMultiline : null]}
-          >
-            {tags.map((tag, index) => {
-              return (
-                <TouchableOpacity
-                  testID="tagsListTag"
-                  onPress={() => this._showActions(tag)}
-                  key={`${tag.id}_button`}
-                >
-                  <ColorField
-                    testID="tagColor"
-                    style={[tagStyle, this._getTagSpecificStyle(tag), index === 0 ? {marginLeft: 0} : null]}
-                    text={tag.name}
-                    color={tag.color}
-                    fullText={true}
-                  />
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        </ScrollView>
+        {tags.map((tag, index) => {
+          return (
+            <TouchableOpacity
+              testID="tagsListTag"
+              onPress={() => this._showActions(tag)}
+              key={`${tag.id}_button`}
+            >
+              <ColorField
+                testID="tagColor"
+                style={[tagStyle, this._getTagSpecificStyle(tag), index === 0 ? {marginLeft: 0} : null]}
+                text={tag.name}
+                color={tag.color}
+                fullText={true}
+              />
+            </TouchableOpacity>
+          );
+        })}
       </View>
     );
   }

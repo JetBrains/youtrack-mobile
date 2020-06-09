@@ -111,7 +111,7 @@ export default class AgileCard extends PureComponent<Props, void> {
               </Text>
             </Text>
 
-            {zoomedIn && <Tags tags={issue.tags} style={styles.tags} tagStyle={{fontSize: 9}}/>}
+            {zoomedIn && <Tags tags={issue.tags} style={styles.tags} multiline={true}/>}
           </View>
 
         </View>
