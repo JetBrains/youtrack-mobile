@@ -9,14 +9,17 @@ import {isIphoneX} from '../header/header__top-padding.ios';
 import {StyleSheet} from 'react-native';
 import {isIOSPlatform} from '../../util/util';
 
-export const keyboardSpacerTop = 36;
+export const keyboardSpacerTop = 64;
 
-type Props = {}
+type Props = {
+  top?: number
+}
 export default class KeyboardSpacerIOS extends PureComponent<Props, void> {
 
   render() {
     if (isIOSPlatform()) {
-      return <KeyboardSpacer topSpacing={isIphoneX ? -keyboardSpacerTop : 0} style={styles.keyboardSpacer}/>;
+      const top = this.props.top;
+      return <KeyboardSpacer topSpacing={isIphoneX ? -(top || keyboardSpacerTop) : -keyboardSpacerTop} style={styles.keyboardSpacer}/>;
     }
     return null;
   }

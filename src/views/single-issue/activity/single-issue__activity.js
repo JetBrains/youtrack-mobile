@@ -193,7 +193,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
         onAttach={() => attachOrTakeImage(this.context.actionSheet())}
       />
 
-      <KeyboardSpacerIOS/>
+      <KeyboardSpacerIOS top={98}/>
     </View>;
   }
 
