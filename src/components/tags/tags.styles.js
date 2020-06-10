@@ -5,9 +5,6 @@ import {
 } from '../variables/variables';
 
 export default StyleSheet.create({
-  modal: {
-    paddingTop: UNIT * 2
-  },
   tags: {
     overflow: 'hidden',
     flexDirection: 'row',
