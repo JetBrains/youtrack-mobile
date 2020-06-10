@@ -10,25 +10,16 @@ import {mainText} from '../common-styles/typography';
 import {elevation1} from '../common-styles/shadow';
 
 export default StyleSheet.create({
-  modal: {
-    backgroundColor: COLOR_FONT_ON_BLACK,
-  },
-  listContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    paddingLeft: UNIT,
-    paddingRight: UNIT,
-  },
-  suggestionsList: {
-    overflow: 'visible',
-    paddingTop: UNIT * 2
-  },
   inputWrapper: {
     ...elevation1,
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: UNIT * 1.5,
     backgroundColor: COLOR_FONT_ON_BLACK,
+  },
+  listContainer: {
+    flex: 1,
+    flexDirection: 'row'
   },
   searchInput: {
     ...mainText,
@@ -56,8 +47,10 @@ export default StyleSheet.create({
   commandPreview: {
     paddingTop: UNIT * 2,
     paddingBottom: UNIT * 2,
-    marginLeft: UNIT,
-    marginRight: UNIT,
+    paddingLeft: UNIT * 4,
+    paddingRight: UNIT * 4,
+    marginLeft: -UNIT,
+    marginRight: -UNIT,
     borderBottomColor: COLOR_MEDIUM_GRAY,
     borderBottomWidth: 0.5,
   },

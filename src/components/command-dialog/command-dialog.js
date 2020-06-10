@@ -153,7 +153,6 @@ export default class CommandDialog extends Component<Props, State> {
       <View style={styles.listContainer}>
         {suggestions && (
           <FlatList
-            contentContainerStyle={styles.suggestionsList}
             data={suggestions.suggestions}
             keyExtractor={this._extractKey}
             renderItem={(listItem) => this._renderSuggestion(listItem.item)}
@@ -170,9 +169,7 @@ export default class CommandDialog extends Component<Props, State> {
 
     return (
       <ModalView
-        visible
         animationType="slide"
-        style={styles.modal}
       >
         <View style={styles.inputWrapper}>
 
