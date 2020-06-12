@@ -3,7 +3,7 @@ import styles from './single-issue-activity.styles';
 import Comment from '../../../components/comment/comment';
 import type {Attachment, IssueComment} from '../../../flow/CustomFields';
 
-import {View, Text, TouchableOpacity, Image} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 import React, {PureComponent} from 'react';
 
 import {isActivityCategory} from '../../../components/activity/activity__category';
@@ -30,7 +30,7 @@ import Avatar from '../../../components/avatar/avatar';
 
 import Router from '../../../components/router/router';
 
-import {history, IconActions, work} from '../../../components/icon/icon';
+import {IconActions, IconHistory, IconWork} from '../../../components/icon/icon';
 
 import usage from '../../../components/usage/usage';
 import log from '../../../components/log/log';
@@ -277,7 +277,16 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
     });
   }
 
+  renderActivityIcon(activityGroup: Object) {
+    if (activityGroup.work) {
+      return <IconWork size={24} color={COLOR_ICON_LIGHT_BLUE} style={{position: 'relative', top: -2}}/>;
+    }
+    return <IconHistory size={26} color={COLOR_ICON_LIGHT_BLUE}/>;
+  }
+
   _renderUserAvatar(activityGroup: Object, showAvatar: boolean) {
+    const shouldRenderIcon: boolean = Boolean(!activityGroup.merged && !showAvatar);
+
     return (
       <View style={styles.activityAvatar}>
         {Boolean(!activityGroup.merged && showAvatar) && (
@@ -287,9 +296,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
             source={{uri: activityGroup.author.avatarUrl}}
           />
         )}
-        {Boolean(!activityGroup.merged && !showAvatar) && (
-          <Image source={activityGroup.work ? work : history} style={styles.activityHistoryIcon}/>
-        )}
+        {shouldRenderIcon && this.renderActivityIcon(activityGroup)}
       </View>
     );
   }

@@ -6,7 +6,7 @@ import {COLOR_ICON_MEDIUM_GREY} from '../variables/variables';
 import {DEFAULT_ERROR_MESSAGE} from '../error/error-messages';
 import {ERROR_MESSAGE_DATA} from '../error/error-message-data';
 import {HTTP_STATUS} from '../error/error-http-codes';
-import {IconMagnify} from '../icon/icon';
+import {IconSearch} from '../icon/icon';
 import {extractErrorMessage, resolveError} from '../error/error-resolver';
 
 import {styles} from './error-message.style';
@@ -54,7 +54,7 @@ export default class ErrorMessage extends PureComponent<Props, State> {
       return null;
     }
 
-    const Icon = errorMessageData.icon ? errorMessageData.icon : IconMagnify;
+    const Icon = errorMessageData.icon ? errorMessageData.icon : IconSearch;
     const iconSize = errorMessageData.iconSize || 80;
 
     return (

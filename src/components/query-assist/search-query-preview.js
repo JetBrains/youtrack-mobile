@@ -4,7 +4,7 @@ import {View, Text} from 'react-native';
 import React, {PureComponent} from 'react';
 
 import {COLOR_PLACEHOLDER} from '../variables/variables';
-import {IconMagnify} from '../icon/icon';
+import {IconSearch} from '../icon/icon';
 
 import styles from './query-assist.styles';
 
@@ -26,7 +26,7 @@ export default class SearchQueryPreview extends PureComponent<Props, void> {
     return (
       <View style={styles.placeHolder}>
         <View style={styles.inputWrapper}>
-          <IconMagnify style={styles.searchIcon} size={22} color={COLOR_PLACEHOLDER}/>
+          <IconSearch style={styles.searchIcon} size={20} color={COLOR_PLACEHOLDER}/>
 
           <Text
             onPress={onFocus}

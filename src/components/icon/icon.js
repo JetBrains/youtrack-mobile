@@ -42,8 +42,6 @@ export {default as visibilitySmall} from './visibility-small.png';
 export {default as visibility} from './visibility-action.png';
 export {default as visibilityActive} from './visibility-action-active.png';
 export {default as qrCode} from './qr-code.png';
-export {default as history} from './history.png';
-export {default as work} from './work.png';
 
 
 type Props = {
@@ -55,13 +53,15 @@ type Props = {
 
 const isAndroid = isAndroidPlatform();
 
+const defaultProps = {
+  name: '',
+  size: 26,
+  color: COLOR_PINK,
+  isFontAwesome: false
+};
+
 class DefaultIcon extends PureComponent<Props, void> {
-  static defaultProps: Props = {
-    name: '',
-    size: 26,
-    color: COLOR_PINK,
-    isFontAwesome: false
-  };
+  static defaultProps: Props = defaultProps;
 
   render() {
     if (!this.props.name) {
@@ -192,6 +192,12 @@ export const IconAdd = (props?: Props) => <IconYTM {...{
   ...props
 }} />;
 
+export const IconAttachment = (props?: Props) => <IconYTM {...{
+  name: 'attachment',
+  ...props
+}} />;
+
+
 export const IconBack = (props?: Props) => {
   if (isAndroid) {
     return <DefaultIcon {...{
@@ -201,6 +207,7 @@ export const IconBack = (props?: Props) => {
     }} />;
   }
   return <IconYTM {...{
+    ...defaultProps,
     name: 'chevron-left',
     size: 30,
     ...props
@@ -208,17 +215,38 @@ export const IconBack = (props?: Props) => {
 };
 
 export const IconBoard = (props?: Props) => <IconYTM {...{
+  ...defaultProps,
   name: 'board',
   ...props
 }} />;
 
+export const IconHistory = (props?: Props) => <IconYTM {...{
+  ...defaultProps,
+  name: 'history',
+  ...props
+}} />;
+
+
 export const IconTask = (props?: Props) => <IconYTM {...{
+  ...defaultProps,
   name: 'task',
   ...props
 }} />;
 
+export const IconSearch = (props?: Props) => <IconYTM {...{
+  ...defaultProps,
+  name: 'search',
+  ...props
+}} />;
+
 export const IconSettings = (props?: Props) => <IconYTM {...{
+  ...defaultProps,
   name: 'settings-20px',
   ...props
 }} />;
 
+export const IconWork = (props?: Props) => <IconYTM {...{
+  ...defaultProps,
+  name: 'hourglass-20px',
+  ...props
+}} />;
