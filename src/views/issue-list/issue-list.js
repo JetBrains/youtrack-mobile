@@ -41,7 +41,6 @@ import IssuesCount from './issue-list__count';
 type Props = IssuesListState & typeof issueActions & {
   auth: Auth,
   api: Api,
-  initialSearchQuery: ?string,
   onOpenContextSelect: () => any
 };
 
@@ -65,7 +64,7 @@ export class IssueList extends Component<Props, State> {
   };
 
   componentDidMount() {
-    this.props.initializeIssuesList(this.props.initialSearchQuery);
+    this.props.initializeIssuesList();
 
     AppState.addEventListener('change', this._handleAppStateChange);
   }
@@ -313,11 +312,10 @@ export class IssueList extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   return {
     ...state.issueList,
     ...state.app,
-    initialSearchQuery: ownProps.query,
     searchContext: state.app?.user?.profiles?.general?.searchContext
   };
 };

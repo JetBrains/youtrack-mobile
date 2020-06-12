@@ -31,13 +31,6 @@ export function setIssuesQuery(query: string) {
   };
 }
 
-export function readStoredIssuesQuery() {
-  return async (dispatch: (any) => any) => {
-    const query = getStorageState().query || '';
-    dispatch(setIssuesQuery(query));
-  };
-}
-
 export function suggestIssuesQuery(query: string, caret: number) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
@@ -284,20 +277,10 @@ export function refreshIssues() {
   };
 }
 
-export function initializeIssuesList(query: ?string) {
-  return async (dispatch: (any) => any, getState: () => Object) => {
-    if (query) {
-      dispatch(setIssuesQuery(query));
-    } else {
-      await readStoredIssuesQuery()(dispatch);
-    }
+export function initializeIssuesList() {
+  return async (dispatch: (any) => any) => {
     await dispatch(readCachedIssues());
-
-    if (query) {
-      dispatch(loadIssues(query));
-    } else {
-      dispatch(refreshIssues());
-    }
+    dispatch(refreshIssues());
   };
 }
 
