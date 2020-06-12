@@ -79,19 +79,6 @@ export const IconAccountAlert = (props?: Props) => <DefaultIcon {...{
   ...props
 }} />;
 
-export const IconBack = (props?: Props) => <DefaultIcon {...{
-  name: isAndroid ? 'arrow-left' : 'chevron-left',
-  size: isAndroid ? 22 : 36,
-  ...props
-}} />;
-
-export const IconMenu = (props?: Props) => <DefaultIcon {...{
-  name: 'menu',
-  size: 24,
-  ...props
-}} />;
-
-
 /* Material icons */
 
 export const IconBell = (props?: Props) => <DefaultIcon {...{
@@ -104,18 +91,8 @@ export const IconCheck = (props?: Props) => <DefaultIcon {...{
   ...props
 }} />;
 
-export const IconCheckMarked = (props?: Props) => <DefaultIcon {...{
-  name: 'checkbox-marked-outline',
-  ...props
-}} />;
-
 export const IconClose = (props?: Props) => <DefaultIcon {...{
   name: 'close',
-  ...props
-}} />;
-
-export const IconInformation = (props?: Props) => <DefaultIcon {...{
-  name: 'information',
   ...props
 }} />;
 
@@ -196,21 +173,9 @@ export const IconAngleRight = (props?: Props) => <DefaultIcon {...{
   ...props
 }} />;
 
-export const IconCog = (props?: Props) => <DefaultIcon {...{
-  isFontAwesome: true,
-  name: 'cog',
-  ...props
-}} />;
-
 export const IconPaperClip = (props?: Props) => <DefaultIcon {...{
   isFontAwesome: true,
   name: 'paperclip',
-  ...props
-}} />;
-
-export const IconPause = (props?: Props) => <DefaultIcon {...{
-  isFontAwesome: true,
-  name: 'pause',
   ...props
 }} />;
 
@@ -226,6 +191,21 @@ export const IconAdd = (props?: Props) => <IconYTM {...{
   name: 'add',
   ...props
 }} />;
+
+export const IconBack = (props?: Props) => {
+  if (isAndroid) {
+    return <DefaultIcon {...{
+      name: 'arrow-left',
+      size: 22,
+      ...props
+    }} />;
+  }
+  return <IconYTM {...{
+    name: 'chevron-left',
+    size: 30,
+    ...props
+  }} />;
+};
 
 export const IconBoard = (props?: Props) => <IconYTM {...{
   name: 'board',

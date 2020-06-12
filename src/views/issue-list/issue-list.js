@@ -29,7 +29,7 @@ import Select from '../../components/select/select';
 import SearchPanel from './issue-list__search-panel';
 import SearchQueryPreview from '../../components/query-assist/search-query-preview';
 
-import {IconAngleDown, IconPlus} from '../../components/icon/icon';
+import {IconAdd, IconAngleDown} from '../../components/icon/icon';
 import {isReactElement} from '../../util/util';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
@@ -94,7 +94,7 @@ export class IssueList extends Component<Props, State> {
         onPress={() => Router.CreateIssue()}
         disabled={isDisabled}
       >
-        <IconPlus size={28} color={COLOR_PINK}/>
+        <IconAdd size={20} color={COLOR_PINK}/>
       </TouchableOpacity>
     );
   };
