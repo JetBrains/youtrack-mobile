@@ -10,7 +10,7 @@ import {COLOR_PINK, COLOR_PINK_TRANSPARENT} from '../variables/variables';
 
 import Swiper from 'react-native-swiper';
 import Avatar from '../avatar/avatar';
-import {IconPlus, IconLogout} from '../icon/icon';
+import {IconLogout, IconAdd} from '../icon/icon';
 import {formatYouTrackURL} from '../config/config';
 import clicksToShowCounter from '../debug-view/clicks-to-show-counter';
 import {getStorageState} from '../storage/storage';
@@ -119,7 +119,7 @@ export default class Accounts extends PureComponent<Props, void> {
           style={styles.accountAction}
           disabled={isChangingAccount}
           onPress={onAddAccount}>
-          <IconPlus size={24} color={COLOR_PINK}/>
+          <IconAdd size={24} color={COLOR_PINK}/>
         </TouchableOpacity>
 
         <Swiper
