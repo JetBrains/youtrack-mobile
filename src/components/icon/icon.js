@@ -5,6 +5,8 @@ import IconFA from 'react-native-vector-icons/FontAwesome';
 import {COLOR_PINK} from '../variables/variables';
 import {isAndroidPlatform} from '../../util/util';
 
+import IconYTM from './youtrack-icon';
+
 export {default as logo} from './youtrack-logo-512.png';
 export {default as arrow} from './arrow.png';
 export {default as add} from './add.png';
@@ -217,3 +219,26 @@ export const IconTrash = (props?: Props) => <DefaultIcon {...{
   name: 'trash',
   ...props
 }} />;
+
+// JetBrains RingUI custom icons
+
+export const IconAdd = (props?: Props) => <IconYTM {...{
+  name: 'add',
+  ...props
+}} />;
+
+export const IconBoard = (props?: Props) => <IconYTM {...{
+  name: 'board',
+  ...props
+}} />;
+
+export const IconTask = (props?: Props) => <IconYTM {...{
+  name: 'task',
+  ...props
+}} />;
+
+export const IconSettings = (props?: Props) => <IconYTM {...{
+  name: 'settings-20px',
+  ...props
+}} />;
+
