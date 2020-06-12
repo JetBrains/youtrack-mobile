@@ -144,18 +144,6 @@ export const IconThumbUp = (props?: Props & { isActive?: boolean }) => <DefaultI
 
 /* FontAwesome icons */
 
-export const IconAngleDown = (props?: Props) => <DefaultIcon {...{
-  isFontAwesome: true,
-  name: 'angle-down',
-  ...props
-}} />;
-
-export const IconAngleDownUp = (props?: Props & { isDown?: boolean }) => <DefaultIcon {...{
-  isFontAwesome: true,
-  name: props.isDown ? 'angle-down' : 'angle-up',
-  ...props
-}}/>;
-
 export const IconAngleDownRight = (props?: Props & { isDown?: boolean }) => <DefaultIcon {...{
   isFontAwesome: true,
   name: props.isDown ? 'angle-down' : 'angle-right',
@@ -186,6 +174,18 @@ export const IconAdd = (props?: Props) => <IconYTM {...{
   name: 'add',
   ...props
 }} />;
+
+export const IconAngleDown = (props?: Props) => <IconYTM {...{
+  ...defaultProps,
+  name: 'chevron-down',
+  ...props
+}} />;
+
+export const IconChevronDownUp = (props?: Props & { isDown?: boolean }) => <IconYTM {...{
+  ...defaultProps,
+  name: props.isDown ? 'chevron-down' : 'chevron-up',
+  ...props
+}}/>;
 
 export const IconAttachment = (props?: Props) => <IconYTM {...{
   name: 'attachment',

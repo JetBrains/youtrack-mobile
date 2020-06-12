@@ -4,7 +4,7 @@ import React, {PureComponent} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import DiffMatchWord from './diff__match-word';
 import {COLOR_PINK} from '../variables/variables';
-import {IconAngleDownUp} from '../icon/icon';
+import {IconChevronDownUp} from '../icon/icon';
 
 import styles from './diff.styles';
 
@@ -104,7 +104,7 @@ export default class Diff extends PureComponent<Props, State> {
           </Text>
           <Text style={styles.toggle}>
             {'Details '}
-            <IconAngleDownUp size={15} isDown={collapsed} color={COLOR_PINK}/>
+            <IconChevronDownUp size={13} isDown={collapsed} color={COLOR_PINK}/>
           </Text>
         </TouchableOpacity>}
 
