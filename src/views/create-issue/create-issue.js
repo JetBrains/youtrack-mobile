@@ -76,7 +76,7 @@ class CreateIssue extends Component<Props, void> {
         testID="createIssue"
         style={styles.container}>
         <Header
-          leftButton={<IconClose size={28} color={COLOR_PINK}/>}
+          leftButton={<IconClose size={21} color={COLOR_PINK}/>}
           onBack={storeDraftAndGoBack}
           rightButton={<IconCheck size={20} color={canCreateIssue ? COLOR_PINK : COLOR_GRAY}/>}
           onRightButtonClick={() => canCreateIssue && createIssue()}>

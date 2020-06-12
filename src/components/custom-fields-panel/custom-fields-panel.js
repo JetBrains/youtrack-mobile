@@ -342,7 +342,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     return (
       <Header
         style={styles.customFieldEditorHeader}
-        rightButton={<IconClose size={24} color={COLOR_PINK}/>}
+        rightButton={<IconClose size={21} color={COLOR_PINK}/>}
         onRightButtonClick={() => this.closeEditor()}
         title={title}
       />
