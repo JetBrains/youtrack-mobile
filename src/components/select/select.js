@@ -97,7 +97,7 @@ export default class Select extends Component<Props, State> {
       <TouchableOpacity key={this.props.emptyValue} style={styles.row} onPress={() => this._onClearValue()}>
         <Text style={[styles.itemTitle, {marginLeft: 0}]}>{this.props.emptyValue}</Text>
 
-        {this.state.selectedItems.length === 0 && <IconCheck size={26} color={COLOR_ICON_GREY}/>}
+        {this.state.selectedItems.length === 0 && <IconCheck size={20} color={COLOR_ICON_GREY}/>}
       </TouchableOpacity>
     );
   }
@@ -240,7 +240,7 @@ export default class Select extends Component<Props, State> {
               style={styles.applyButton}
               onPress={() => this._onSave()}
             >
-              <IconCheck size={28}/>
+              <IconCheck size={20}/>
             </TouchableOpacity>}
 
           </View>

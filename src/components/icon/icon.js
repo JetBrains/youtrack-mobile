@@ -86,11 +86,6 @@ export const IconBell = (props?: Props) => <DefaultIcon {...{
   ...props
 }} />;
 
-export const IconCheck = (props?: Props) => <DefaultIcon {...{
-  name: 'check',
-  ...props
-}} />;
-
 export const IconClose = (props?: Props) => <DefaultIcon {...{
   name: 'close',
   ...props
@@ -212,6 +207,12 @@ export const IconBack = (props?: Props) => {
 export const IconBoard = (props?: Props) => <IconYTM {...{
   ...defaultProps,
   name: 'board',
+  ...props
+}} />;
+
+export const IconCheck = (props?: Props) => <IconYTM {...{
+  ...defaultProps,
+  name: 'checkmark',
   ...props
 }} />;
 

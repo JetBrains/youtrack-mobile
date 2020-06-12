@@ -62,7 +62,7 @@ export default class SelectItem extends PureComponent<Props, void> {
           {this.renderTitle(item)}
         </View>
 
-        {isSelected && <IconCheck size={26} color={COLOR_PINK}/>}
+        {isSelected && <IconCheck size={20} color={COLOR_PINK}/>}
       </TouchableOpacity>
     );
   }

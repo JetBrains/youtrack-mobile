@@ -188,7 +188,7 @@ export default class CommandDialog extends Component<Props, State> {
             style={styles.applyButton}
             onPress={() => this.onApply()}
           >
-            <IconCheck size={28} color={canApply ? COLOR_PINK : COLOR_GRAY}/>
+            <IconCheck size={20} color={canApply ? COLOR_PINK : COLOR_GRAY}/>
           </TouchableOpacity>
 
         </View>

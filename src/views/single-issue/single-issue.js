@@ -298,7 +298,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
       );
     } else {
       const canSave = Boolean(summaryCopy) && !isSavingEditedIssue;
-      const saveButton = <IconCheck size={28} color={canSave ? COLOR_PINK : COLOR_GRAY}/>;
+      const saveButton = <IconCheck size={20} color={canSave ? COLOR_PINK : COLOR_GRAY}/>;
 
       return (
         <Header
