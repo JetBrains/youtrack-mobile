@@ -30,7 +30,7 @@ import {connect} from 'react-redux';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import ModalView from '../../components/modal-view/modal-view';
 import {HIT_SLOP} from '../../components/common-styles/button';
-import {IconExclamation, IconMagnifyZoom} from '../../components/icon/icon';
+import {IconException, IconMagnifyZoom} from '../../components/icon/icon';
 import {renderNavigationItem} from './agile-board__renderer';
 import {View as AnimatedView} from 'react-native-animatable';
 import {routeMap} from '../../app-routes';
@@ -309,8 +309,8 @@ class AgileBoard extends Component<Props, State> {
         errorMessageData={{
           title: 'Configuration errors',
           description: agileErrors,
-          icon: IconExclamation,
-          iconSize: 64
+          icon: IconException,
+          iconSize: 56
         }}/>;
     }
   }

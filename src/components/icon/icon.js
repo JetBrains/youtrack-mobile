@@ -131,11 +131,6 @@ export const IconActions = (props?: Props) => <DefaultIcon {...{
   ...props
 }} />;
 
-export const IconExclamation = (props?: Props) => <DefaultIcon {...{
-  name: 'information-outline',
-  ...props
-}} />;
-
 export const IconStar = (props?: Props) => <DefaultIcon {...{
   name: 'star-outline',
   ...props
@@ -220,12 +215,17 @@ export const IconBoard = (props?: Props) => <IconYTM {...{
   ...props
 }} />;
 
+export const IconException = (props?: Props) => <IconYTM {...{
+  ...defaultProps,
+  name: 'exception',
+  ...props
+}} />;
+
 export const IconHistory = (props?: Props) => <IconYTM {...{
   ...defaultProps,
   name: 'history',
   ...props
 }} />;
-
 
 export const IconTask = (props?: Props) => <IconYTM {...{
   ...defaultProps,
