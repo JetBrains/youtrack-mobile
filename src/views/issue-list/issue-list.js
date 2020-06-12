@@ -27,7 +27,7 @@ import type {IssuesListState} from './issue-list-reducers';
 import type {IssueOnList} from '../../flow/Issue';
 import Select from '../../components/select/select';
 import SearchPanel from './issue-list__search-panel';
-import QueryInput from '../../components/query-assist/query-input';
+import SearchQueryPreview from '../../components/query-assist/search-query-preview';
 
 import {IconAngleDown, IconPlus} from '../../components/icon/icon';
 import {isReactElement} from '../../util/util';
@@ -222,8 +222,8 @@ export class IssueList extends Component<Props, State> {
 
     return (
       <View>
-        <QueryInput
-          input={query}
+        <SearchQueryPreview
+          query={query}
           onFocus={() => this.setEditQueryMode(true)}
         />
         <IssuesCount issuesCount={issuesCount}/>
@@ -294,7 +294,6 @@ export class IssueList extends Component<Props, State> {
 
   render() {
     const {isIssuesContextOpen, isRefreshing} = this.props;
-
     return (
       <View
         style={styles.listContainer}

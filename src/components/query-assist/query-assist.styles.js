@@ -4,10 +4,25 @@ import {
   COLOR_FONT_ON_BLACK,
   COLOR_BLACK,
   COLOR_LIGHT_GRAY,
+  COLOR_PLACEHOLDER,
 } from '../variables/variables';
 import {elevation1} from '../common-styles/shadow';
 
 const QUERY_ASSIST_HEIGHT = UNIT * 6;
+
+const searchInput = {
+  flex: 1,
+  height: QUERY_ASSIST_HEIGHT,
+  paddingLeft: UNIT / 1.5,
+  marginLeft: UNIT,
+  marginRight: UNIT,
+
+  fontSize: 16,
+  letterSpacing: 0.08,
+  textAlign: 'left',
+  color: COLOR_BLACK
+};
+
 
 export default StyleSheet.create({
   placeHolder: {
@@ -40,17 +55,11 @@ export default StyleSheet.create({
     borderRadius: 0,
     borderBottomColor: 'transparent',
   },
-  searchInput: {
-    flex: 1,
-    height: QUERY_ASSIST_HEIGHT,
-    paddingLeft: UNIT / 1.5,
-    marginLeft: UNIT,
-    marginRight: UNIT,
-
-    fontSize: 16,
-    letterSpacing: 0.08,
-    textAlign: 'left',
-    color: COLOR_BLACK
+  searchInput: searchInput,
+  searchInputPlaceholder: {
+    justifyContent: 'center',
+    color: COLOR_PLACEHOLDER,
+    lineHeight: QUERY_ASSIST_HEIGHT
   },
   searchIcon: {
     marginTop: UNIT / 2,
