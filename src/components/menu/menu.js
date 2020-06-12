@@ -9,7 +9,7 @@ import {MenuItem} from './menu__item';
 
 import Feature from '../feature/feature';
 
-import {IconBell, IconCheckMarked, IconCog, IconPause} from '../icon/icon';
+import {IconBell, IconBoard,IconSettings, IconTask} from '../icon/icon';
 import {COLOR_FONT_ON_BLACK, COLOR_GRAY, COLOR_ICON_MEDIUM_GREY, COLOR_PINK} from '../variables/variables';
 
 import {menuHeight} from '../common-styles/header';
@@ -126,14 +126,14 @@ class Menu extends Component<Props, State> {
       >
         <MenuItem
           isActive={this.isActiveRoute(routeMap.IssueList)}
-          icon={<IconCheckMarked style={{maxHeight: 22}} size={24} color={color(routeMap.IssueList)}/>}
+          icon={<IconTask size={21} color={color(routeMap.IssueList)}/>}
           label={'Issues'}
           onPress={this.openIssueList}
         />
 
         <MenuItem
           isActive={this.isActiveRoute(routeMap.AgileBoard)}
-          icon={<IconPause size={20} color={color(routeMap.AgileBoard)}/>}
+          icon={<IconBoard size={24} color={color(routeMap.AgileBoard)}/>}
           label={'Agile Boards'}
           testId="pageAgileBoards"
           onPress={this.openAgileBoard}
@@ -142,7 +142,7 @@ class Menu extends Component<Props, State> {
         <Feature version={'2018.3'}>
           <MenuItem
             isActive={this.isActiveRoute(routeMap.Inbox)}
-            icon={<IconBell size={22} color={color(routeMap.Inbox)}/>}
+            icon={<IconBell size={20} color={color(routeMap.Inbox)}/>}
             label={'Activity'}
             onPress={this.openInbox}
           />
@@ -150,7 +150,7 @@ class Menu extends Component<Props, State> {
 
         <MenuItem
           isActive={this.isActiveRoute(routeMap.Settings)}
-          icon={<IconCog size={22} color={color(routeMap.Settings)}/>}
+          icon={<IconSettings size={18} color={color(routeMap.Settings)}/>}
           label={'Settings'}
           onPress={this.openSettings}
         />

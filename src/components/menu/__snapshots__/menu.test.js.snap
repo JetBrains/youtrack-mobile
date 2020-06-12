@@ -28,14 +28,9 @@ exports[`<Menu/> Render should match a snapshot 1`] = `
 >
   <MenuItem
     icon={
-      <IconCheckMarked
+      <IconTask
         color="#737577"
-        size={24}
-        style={
-          Object {
-            "maxHeight": 22,
-          }
-        }
+        size={21}
       />
     }
     isActive={false}
@@ -44,9 +39,9 @@ exports[`<Menu/> Render should match a snapshot 1`] = `
   />
   <MenuItem
     icon={
-      <IconPause
+      <IconBoard
         color="#737577"
-        size={20}
+        size={24}
       />
     }
     isActive={false}
@@ -61,7 +56,7 @@ exports[`<Menu/> Render should match a snapshot 1`] = `
       icon={
         <IconBell
           color="#737577"
-          size={22}
+          size={20}
         />
       }
       isActive={false}
@@ -71,9 +66,9 @@ exports[`<Menu/> Render should match a snapshot 1`] = `
   </Connect(Feature)>
   <MenuItem
     icon={
-      <IconCog
+      <IconSettings
         color="#737577"
-        size={22}
+        size={18}
       />
     }
     isActive={false}
