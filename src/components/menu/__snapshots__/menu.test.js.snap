@@ -30,7 +30,7 @@ exports[`<Menu/> Render should match a snapshot 1`] = `
     icon={
       <IconTask
         color="#737577"
-        size={21}
+        size={24}
       />
     }
     isActive={false}
@@ -41,7 +41,7 @@ exports[`<Menu/> Render should match a snapshot 1`] = `
     icon={
       <IconBoard
         color="#737577"
-        size={24}
+        size={28}
       />
     }
     isActive={false}
@@ -56,7 +56,7 @@ exports[`<Menu/> Render should match a snapshot 1`] = `
       icon={
         <IconBell
           color="#737577"
-          size={20}
+          size={24}
         />
       }
       isActive={false}
@@ -68,7 +68,7 @@ exports[`<Menu/> Render should match a snapshot 1`] = `
     icon={
       <IconSettings
         color="#737577"
-        size={18}
+        size={22}
       />
     }
     isActive={false}
