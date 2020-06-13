@@ -31,7 +31,7 @@ exports[`<Accounts/> Render should match a snapshot 1`] = `
     }
     testID="accountsAddAccount"
   >
-    <IconPlus
+    <IconAdd
       color="#FE0082"
       size={24}
     />
