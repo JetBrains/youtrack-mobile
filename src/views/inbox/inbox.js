@@ -470,6 +470,7 @@ class Inbox extends Component<Props, State> {
         )}
 
         {!hasError && <FlatList
+          removeClippedSubviews={false}
           data={data}
           refreshControl={this.renderRefreshControl()}
           refreshing={loading}
