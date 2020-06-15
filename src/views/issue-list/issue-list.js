@@ -12,7 +12,7 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
-import {COLOR_BLACK, COLOR_PINK} from '../../components/variables/variables';
+import {COLOR_BLACK, COLOR_PINK, UNIT} from '../../components/variables/variables';
 import {notifyError} from '../../components/notification/notification';
 import usage from '../../components/usage/usage';
 import log from '../../components/log/log';
@@ -34,7 +34,6 @@ import {isReactElement} from '../../util/util';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
 
-import {headerSeparator} from '../../components/common-styles/header';
 import styles from './issue-list.styles';
 import IssuesCount from './issue-list__count';
 
@@ -185,7 +184,7 @@ export class IssueList extends Component<Props, State> {
 
   onScroll = (nativeEvent: Object) => {
     const newY = nativeEvent.contentOffset.y;
-    const isPinned: boolean = newY >= headerSeparator.height;
+    const isPinned: boolean = newY >= UNIT;
     if (this.props.isSearchContextPinned !== isPinned) {
       this.props.updateSearchContextPinned(isPinned);
     }
@@ -234,7 +233,6 @@ export class IssueList extends Component<Props, State> {
   renderIssues() {
     const {issues, isLoadingMore, isListEndReached} = this.props;
     const listData: Array<Object> = [
-      <View key="issueListContextSeparator" style={headerSeparator}/>,
       this.renderContextButton(),
       this.renderSearchQuery()
     ].concat(issues);
@@ -243,7 +241,7 @@ export class IssueList extends Component<Props, State> {
       <FlatList
         style={styles.list}
         testID="issue-list"
-        stickyHeaderIndices={[1]}
+        stickyHeaderIndices={[0]}
         removeClippedSubviews={false}
 
         data={listData}

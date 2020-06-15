@@ -19,7 +19,6 @@ export default StyleSheet.create({
     backgroundColor: COLOR_FONT_ON_BLACK
   },
   agileNoSprint: {
-    marginTop: UNIT * 7,
     backgroundColor: COLOR_FONT_ON_BLACK
   },
   error: {

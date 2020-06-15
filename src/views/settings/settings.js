@@ -54,7 +54,7 @@ class Settings extends Component<Props, void> {
         testID="settings"
         style={styles.settings}
       >
-        <Header style={styles.settingsHeader} title="Settings"/>
+        <Header title="Settings"/>
 
         <View style={styles.settingsContent}>
           <Accounts

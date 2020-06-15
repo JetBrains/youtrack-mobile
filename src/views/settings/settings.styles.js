@@ -15,9 +15,6 @@ export default StyleSheet.create({
     paddingLeft: UNIT * 2,
     paddingRight: UNIT * 2,
   },
-  settingsHeader: {
-    marginTop: UNIT * 8
-  },
   settingsContent: {
     flexGrow: 1,
     flexDirection: 'column'

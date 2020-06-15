@@ -1,14 +1,13 @@
 /* @flow */
 
 import React, {Component} from 'react';
-import {Dimensions, ScrollView, UIManager, View} from 'react-native';
+import {Dimensions, ScrollView, UIManager} from 'react-native';
 
 import throttle from 'lodash.throttle';
 import {clamp, getPointShift, getSnapToX} from './board-scroller__math';
 import type {DragContextType} from '../draggable/drag-container';
 import {DragContext} from '../draggable/drag-container';
 import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../variables/variables';
-import {headerSeparator} from '../common-styles/header';
 
 import type {BoardColumn} from '../../flow/Agile';
 
@@ -173,12 +172,8 @@ class BoardScroller extends Component<Props, State> {
         scrollEventThrottle={10}
         onLayout={this.onLayout}
         scrollEnabled={!isDragging}
-        stickyHeaderIndices={[1,3]}
+        stickyHeaderIndices={[0,2]}
       >
-        <View
-          key="agileBoardAgileSelectorSeparator"
-          style={headerSeparator}/>
-
         {agileSelector}
         {sprintSelector}
         {boardHeader}

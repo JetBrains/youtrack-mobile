@@ -8,7 +8,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as inboxActions from './inbox-actions';
 import Router from '../../components/router/router';
-import {COLOR_PINK} from '../../components/variables/variables';
+import {COLOR_PINK, UNIT} from '../../components/variables/variables';
 import log from '../../components/log/log';
 import {handleRelativeUrl} from '../../components/config/config';
 import {getStorageState} from '../../components/storage/storage';
@@ -19,7 +19,6 @@ import CustomFieldChangeDelimiter from '../../components/custom-field/custom-fie
 import {isReactElement} from '../../util/util';
 import ErrorMessage from '../../components/error-message/error-message';
 
-import {headerSeparator} from '../../components/common-styles/header';
 import {elevation1} from '../../components/common-styles/shadow';
 import {headerTitle} from '../../components/common-styles/typography';
 import styles from './inbox.styles';
@@ -437,16 +436,15 @@ class Inbox extends Component<Props, State> {
   onScroll(nativeEvent) {
     const newY = nativeEvent.contentOffset.y;
     this.setState({
-      isTitlePinned: newY >= headerSeparator.height
+      isTitlePinned: newY >= UNIT
     });
   }
 
   getListData(): Array<React$Element<any> | Notification> {
     const {items, error} = this.props;
-    let data: Array<React$Element<any> | Notification> = [];
+    const data: Array<React$Element<any> | Notification> = [];
 
     if (!error) {
-      data = [<View key="activityHeaderTitleSeparator" style={headerSeparator}/>];
       if (items?.length > 0) {
         data.push(this.renderTitle());
       }
@@ -481,7 +479,7 @@ class Inbox extends Component<Props, State> {
           onScroll={(params) => this.onScroll(params.nativeEvent)}
           ListFooterComponent={this.renderListMessage}
           scrollEventThrottle={10}
-          stickyHeaderIndices={[1]}
+          stickyHeaderIndices={[0]}
         />}
       </View>
     );

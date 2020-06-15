@@ -13,11 +13,6 @@ exports[`Settings Render should match a snapshot 1`] = `
 >
   <Header
     onRightButtonClick={[Function]}
-    style={
-      Object {
-        "marginTop": 64,
-      }
-    }
     title="Settings"
   />
   <View

@@ -109,8 +109,8 @@ class AgileBoard extends Component<Props, State> {
 
     this.setState({
       stickElement: {
-        agile: newY > UNIT * 4,
-        boardHeader: newY > UNIT * 16
+        agile: newY > UNIT * 2,
+        boardHeader: newY > UNIT * 8
       }
     });
   };
