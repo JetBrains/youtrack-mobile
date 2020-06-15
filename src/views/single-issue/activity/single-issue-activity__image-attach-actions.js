@@ -14,6 +14,12 @@ const CATEGORY_NAME = 'Issue';
 type ApiGetter = () => Api;
 type StateGetter = () => { singleIssue: SingleIssueState };
 
+const attachFileMethod: Object = {
+  openCamera: 'openCamera',
+  openPicker: 'openPicker'
+};
+
+
 export function startImageAttaching(attachingImage: Object) {
   return {type: types.START_IMAGE_ATTACHING, attachingImage};
 }
@@ -26,7 +32,7 @@ export function stopImageAttaching() {
   return {type: types.STOP_IMAGE_ATTACHING};
 }
 
-function attachImage(method: 'openCamera' | 'openPicker') {
+function attachImage(method: typeof attachFileMethod) {
   return async (
     dispatch: any => any,
     getState: StateGetter,
@@ -56,19 +62,22 @@ function attachImage(method: 'openCamera' | 'openPicker') {
   };
 }
 
+export function createAttachActions(dispatch: (Function) => any): Array<Object> {
+  return [
+    {
+      title: 'Take a photo…',
+      execute: () => dispatch(attachImage(attachFileMethod.openCamera))
+    },
+    {
+      title: 'Add file from library…',
+      execute: () => dispatch(attachImage(attachFileMethod.openPicker))
+    }
+  ];
+}
+
 export function attachOrTakeImage(actionSheet: Object) {
   return async (dispatch: any => any) => {
-    const actions = [
-      {
-        title: 'Take a photo…',
-        execute: () => dispatch(attachImage('openCamera'))
-      },
-      {
-        title: 'Choose from library…',
-        execute: () => dispatch(attachImage('openPicker'))
-      },
-      {title: 'Cancel'}
-    ];
+    const actions = createAttachActions(dispatch).concat({title: 'Cancel'});
 
     const selectedAction = await showActions(actions, actionSheet);
 

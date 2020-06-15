@@ -11,6 +11,7 @@ import {showActions} from '../../components/action-sheet/action-sheet';
 import usage from '../../components/usage/usage';
 import {initialState} from './single-issue-reducers';
 import {isIOSPlatform} from '../../util/util';
+import {createAttachActions} from './activity/single-issue-activity__image-attach-actions';
 
 import type {IssueFull, CommandSuggestionResponse, OpenNestedViewParams} from '../../flow/Issue';
 import type {CustomField, IssueProject, FieldValue} from '../../flow/CustomFields';
@@ -299,32 +300,35 @@ export function showIssueActions(actionSheet: Object) {
           dispatch(startEditingIssue());
           usage.trackEvent(CATEGORY_NAME, 'Edit issue');
         }
-      },
-      {
-        title: 'Share…',
-        execute: () => {
-          const url = makeIssueWebUrl(api, issue);
-          if (isIOSPlatform()) {
-            Share.share({url});
-          } else {
-            Share.share({title: issue.summary, message: url}, {dialogTitle: 'Share issue URL'});
-          }
-          usage.trackEvent(CATEGORY_NAME, 'Copy issue URL');
-        }
-      },
-      {
-        title: 'Open issue in browser',
-        execute: () => {
-          usage.trackEvent(CATEGORY_NAME, 'Open in browser');
-          Linking.openURL(makeIssueWebUrl(api, issue));
-        }
-      },
-      {
+      }
+    ]
+      .concat(createAttachActions(dispatch))
+      .concat([{
         title: 'Apply command…',
         execute: () => dispatch(openCommandDialog())
-      },
-      {title: 'Cancel'}
-    ];
+      }])
+      .concat([
+        {
+          title: 'Open issue in browser',
+          execute: () => {
+            usage.trackEvent(CATEGORY_NAME, 'Open in browser');
+            Linking.openURL(makeIssueWebUrl(api, issue));
+          }
+        },
+        {
+          title: 'Share…',
+          execute: () => {
+            const url = makeIssueWebUrl(api, issue);
+            if (isIOSPlatform()) {
+              Share.share({url});
+            } else {
+              Share.share({title: issue.summary, message: url}, {dialogTitle: 'Share issue URL'});
+            }
+            usage.trackEvent(CATEGORY_NAME, 'Copy issue URL');
+          }
+        }
+      ])
+      .concat({title: 'Cancel'});
 
     const selectedAction = await showActions(actions, actionSheet);
 
