@@ -16,7 +16,7 @@ exports[`<AgileCard/> should render snapshot 1`] = `
       undefined,
       undefined,
       Object {
-        "height": 50,
+        "height": 110,
       },
     ]
   }

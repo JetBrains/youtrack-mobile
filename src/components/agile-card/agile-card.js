@@ -25,7 +25,7 @@ type Props = {
 };
 
 
-export const getAgileCardHeight = () => getStorageState().agileZoomedIn ? 110 : 50;
+export const getAgileCardHeight = () => getStorageState().agileZoomedIn ? 50 : 110;
 
 function getEstimation(estimationField: { id: string }, fields: Array<CustomFieldShort>) {
   const field = fields.filter(field => field.projectCustomField.field.id === estimationField.id)[0];
