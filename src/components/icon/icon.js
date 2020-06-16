@@ -187,7 +187,7 @@ export const IconBack = (props?: Props) => {
   if (isAndroid) {
     return <DefaultIcon {...{
       name: 'arrow-left',
-      size: 22,
+      size: 24,
       ...props
     }} />;
   }
