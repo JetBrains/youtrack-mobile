@@ -342,11 +342,18 @@ class Inbox extends Component<Props, State> {
     }, []);
 
     if (_reasons && _reasons.length) {
-      return <View>
-        <Text style={styles.reason}>
-          {_reasons.map((it) => it.title + it.value).join(', ')}
-        </Text>
-      </View>;
+      const reasonsPresentation: string = _reasons.map(
+        (it) => it.title.trim() + it.value.trim()
+      ).filter(Boolean).join(', ');
+
+      if (reasonsPresentation.length > 0) {
+        return <View>
+          <Text style={styles.reason}>
+            {reasonsPresentation}
+          </Text>
+        </View>;
+      }
+      return null;
     }
   }
 
