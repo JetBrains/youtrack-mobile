@@ -27,6 +27,7 @@ import type {InboxState} from './inbox-reducers';
 import type {User} from '../../flow/User';
 import type {Notification, Metadata, ChangeValue, ChangeEvent, Issue, IssueChange} from '../../flow/Inbox';
 import type {AppConfigFilled} from '../../flow/AppConfig';
+import type {IssueOnList} from '../../flow/Issue';
 
 const CATEGORY_NAME = 'inbox view';
 
@@ -197,6 +198,24 @@ class Inbox extends Component<Props, State> {
     );
   }
 
+  renderLinks(event: ChangeEvent) {
+    const issues = [].concat(event.addedValues).concat(event.removedValues);
+
+    return (
+      issues.map((issue: IssueOnList) => {
+        return (
+          <TouchableOpacity key={`${event.entityId}_${issue.entityId}`}>
+            <Text onPress={() => Router.SingleIssue({issueId: issue.id})}>
+              <Text style={styles.link}>
+                {`${issue.id} ${issue.summary}`}
+              </Text>
+            </Text>
+          </TouchableOpacity>
+        );
+      })
+    );
+  }
+
   renderEventItem(event: ChangeEvent) {
     const textChangeEventName = (event: ChangeEvent) => `${event.name} changed`;
     const renderEventName = (event: ChangeEvent) => <Text style={styles.textSecondary}>{event.name}: </Text>;
@@ -221,6 +240,14 @@ class Inbox extends Component<Props, State> {
     case event.category === Category.SUMMARY || event.category === Category.DESCRIPTION:
       return (
         this.renderTextDiff(event, textChangeEventName(event))
+      );
+
+    case event.category === Category.LINKS:
+      return (
+        <View style={styles.change}>
+          {renderEventName(event)}
+          {this.renderLinks(event)}
+        </View>
       );
 
     default:

@@ -9,6 +9,7 @@ import {
   COLOR_DARK, COLOR_PLACEHOLDER, COLOR_BLACK
 } from '../../components/variables/variables';
 import {mainText, secondaryText} from '../../components/common-styles/typography';
+import {link} from '../../components/common-styles/button';
 
 const font = {
   lineHeight: 18,
@@ -111,5 +112,11 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  link: {
+    ...font,
+    ...link,
+    flexWrap: 'wrap'
   }
+
 });
