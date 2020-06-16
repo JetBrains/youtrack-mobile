@@ -1,6 +1,6 @@
 /* @flow */
 import {Dimensions} from 'react-native';
-import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../variables/variables';
+import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../agile-column/agile-column';
 
 import type {BoardColumn} from '../../flow/Agile';
 import {isIOSPlatform} from '../../util/util';

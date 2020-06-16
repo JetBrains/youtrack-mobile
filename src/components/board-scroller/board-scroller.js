@@ -7,7 +7,7 @@ import throttle from 'lodash.throttle';
 import {clamp, getPointShift, getSnapToX} from './board-scroller__math';
 import type {DragContextType} from '../draggable/drag-container';
 import {DragContext} from '../draggable/drag-container';
-import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../variables/variables';
+import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../agile-column/agile-column';
 
 import type {BoardColumn} from '../../flow/Agile';
 

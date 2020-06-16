@@ -21,13 +21,13 @@ describe('BoardScroller', () => {
     it('should not drop first snap if first column is collapsed', () => {
       columns[0].collapsed = true;
       const points = getSnapPoints(columns);
-      points.should.deep.equal([0, 32, 707, 1382]);
+      points.should.deep.equal([0, 64, 739, 1414]);
     });
 
-    it('should ajust if second column is collapsed', () => {
+    it('should adjust if second column is collapsed', () => {
       columns[1].collapsed = true;
       const points = getSnapPoints(columns);
-      points.should.deep.equal([0, 707, 1382]);
+      points.should.deep.equal([0, 739, 1414]);
     });
   });
 

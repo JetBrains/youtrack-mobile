@@ -1,13 +1,20 @@
 /* @flow */
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+
 import React, {PureComponent} from 'react';
+
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+
 import {
   UNIT,
-  AGILE_COLLAPSED_COLUMN_WIDTH
+  COLOR_PINK
 } from '../../components/variables/variables';
+import {isAllColumnsCollapsed} from './agile-board__helper';
+import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../../components/agile-column/agile-column';
+
+import {secondaryText} from '../../components/common-styles/typography';
+
 import type {AgileColumn} from '../../flow/Agile';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import {secondaryText} from '../../components/common-styles/typography';
 
 type Props = {
   style?: ViewStyleProp,
@@ -49,13 +56,15 @@ export default class BoardHeader extends PureComponent<Props, void> {
                 styles.tableHeaderItem,
                 index === columns.length - 1 &&
                   styles.tableHeaderItemWithoutBorder,
-                col.collapsed && styles.collapsedHeaderItem
+                col.collapsed && styles.collapsedHeaderItem,
+                isAllColumnsCollapsed(columns) && styles.collapsedHeaderItemAllCollapsed
               ]}
               key={col.id}
               onPress={() => onCollapseToggle(col)}
             >
-              <Text numberOfLines={1} style={styles.columnText}>
+              <Text numberOfLines={1} style={[styles.columnText, col.collapsed ? styles.columnTextCollapsed : null]}>
                 {columnPresentation}
+                {col.collapsed && <Text style={styles.columnTextCollapsed}>...</Text>}
               </Text>
             </TouchableOpacity>
           );
@@ -83,8 +92,15 @@ const styles = StyleSheet.create({
     width: AGILE_COLLAPSED_COLUMN_WIDTH,
     minWidth: AGILE_COLLAPSED_COLUMN_WIDTH
   },
+  collapsedHeaderItemAllCollapsed: {
+    flex: 1,
+    width: null
+  },
   columnText: {
     ...secondaryText,
     textTransform: 'uppercase'
+  },
+  columnTextCollapsed: {
+    color: COLOR_PINK
   }
 });

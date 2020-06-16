@@ -1,6 +1,6 @@
 /* @flow */
 
-import type {Sprint} from '../../flow/Agile';
+import type {BoardColumn, Sprint} from '../../flow/Agile';
 
 type GroupedSprints = {
   active: Array<Sprint>,
@@ -42,4 +42,8 @@ export function getGroupedSprints(sprints: Array<Sprint>): Array<Sprint> {
   ).concat(
     groupedSprints.archived.sort(sprintComparator)
   );
+}
+
+export function isAllColumnsCollapsed(columns: Array<BoardColumn> = []) {
+  return !columns.some((column: BoardColumn) => !column.collapsed);
 }

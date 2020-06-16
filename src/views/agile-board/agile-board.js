@@ -16,10 +16,10 @@ import {Draggable, DragContainer} from '../../components/draggable/';
 import Api from '../../components/api/api';
 import {
   COLOR_PINK,
-  AGILE_COLLAPSED_COLUMN_WIDTH,
   COLOR_FONT_ON_BLACK,
   UNIT
 } from '../../components/variables/variables';
+import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../../components/agile-column/agile-column';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
 import type {SprintFull, Board, AgileBoardRow, AgileColumn} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
@@ -36,6 +36,7 @@ import {View as AnimatedView} from 'react-native-animatable';
 import {routeMap} from '../../app-routes';
 import ErrorMessage from '../../components/error-message/error-message';
 import type {CustomError} from '../../flow/Error';
+import {isAllColumnsCollapsed} from './agile-board__helper';
 
 const CATEGORY_NAME = 'Agile board';
 
@@ -155,7 +156,13 @@ class AgileBoard extends Component<Props, State> {
       return null;
     }
 
-    const COLUMN_WIDTH = Dimensions.get('window').width * COLUMN_SCREEN_PART;
+    const windowWidth = Dimensions.get('window').width;
+    const COLUMN_WIDTH = windowWidth * COLUMN_SCREEN_PART;
+
+    if (isAllColumnsCollapsed(sprint.board.columns)) {
+      return windowWidth;
+    }
+
     return sprint.board.columns
       .map(col => col.collapsed ? AGILE_COLLAPSED_COLUMN_WIDTH : COLUMN_WIDTH)
       .reduce((res, item) => res + item, 0);
@@ -347,7 +354,13 @@ class AgileBoard extends Component<Props, State> {
       }
     };
 
-    const orphan = <BoardRow key="orphan" row={board.orphanRow} zoomedIn={this.state.zoomedIn} {...commonRowProps}/>;
+    const orphan = (<BoardRow
+      key="orphan"
+      row={board.orphanRow}
+      zoomedIn={this.state.zoomedIn}
+      columns={board.columns}
+      {...commonRowProps}
+    />);
 
     return [
       sprint.agile.orphansAtTheTop && orphan,
@@ -358,6 +371,7 @@ class AgileBoard extends Component<Props, State> {
             key={swimlane.id}
             row={swimlane}
             zoomedIn={this.state.zoomedIn}
+            columns={board.columns}
             {...commonRowProps}
           />
         );

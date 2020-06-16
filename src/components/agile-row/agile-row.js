@@ -8,10 +8,11 @@ import {IconAngleDownRight} from '../icon/icon';
 import AgileRowColumn from './agile-row__column';
 import {getPriotityField} from '../issue-formatter/issue-formatter';
 import {COLOR_DARK} from '../variables/variables';
+import {isAllColumnsCollapsed} from '../../views/agile-board/agile-board__helper';
 
 import styles from './agile-row.styles';
 
-import type {AgileBoardRow, BoardCell} from '../../flow/Agile';
+import type {AgileBoardRow, BoardCell, BoardColumn} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
@@ -25,10 +26,11 @@ type Props = {
   onTapCreateIssue: (columnId: string, cellId: string) => any,
   onCollapseToggle: (row: AgileBoardRow) => any,
   renderIssueCard: RenderIssueCard,
-  zoomedIn?: boolean
+  zoomedIn?: boolean,
+  columns: Array<BoardColumn>
 };
 
-function renderIssueSquare(issue: IssueOnList) {
+function renderCollapsedCard(issue: IssueOnList) {
   const priorityField = getPriotityField(issue);
 
   const color = priorityField?.value?.color;
@@ -41,7 +43,7 @@ function renderIssueSquare(issue: IssueOnList) {
   );
 }
 
-function renderCollapsedColumn(cell: BoardCell, lastColumn: boolean) {
+function renderCollapsedColumn(cell: BoardCell, lastColumn: boolean, isAllCollapsed: boolean) {
   if (cell.issues) {
     return (
       <View
@@ -50,10 +52,11 @@ function renderCollapsedColumn(cell: BoardCell, lastColumn: boolean) {
         style={[
           styles.column,
           styles.columnCollapsed,
+          isAllCollapsed ? styles.columnCollapsedAll : null,
           lastColumn && styles.columnWithoutBorder
         ]}>
         <View style={styles.columnCollapsed}>
-          {cell.issues.map(renderIssueSquare)}
+          {cell.issues.map(renderCollapsedCard)}
         </View>
       </View>
     );
@@ -61,7 +64,18 @@ function renderCollapsedColumn(cell: BoardCell, lastColumn: boolean) {
 }
 
 export default function BoardRow(props: Props) {
-  const {row, style, collapsedColumnIds, onCollapseToggle, onTapIssue, onTapCreateIssue, renderIssueCard, zoomedIn} = props;
+  const {
+    row,
+    style,
+    collapsedColumnIds,
+    onCollapseToggle,
+    onTapIssue,
+    onTapCreateIssue,
+    renderIssueCard,
+    zoomedIn,
+    columns
+  } = props;
+
   const isResolved = row.issue && row.issue.resolved;
 
   return (
@@ -109,9 +123,11 @@ export default function BoardRow(props: Props) {
         {!row.collapsed && row.cells.map((cell, index) => {
           const isCellCollapsed = collapsedColumnIds.includes(cell.column.id);
           const lastColumn = index === row.cells.length - 1;
+
           if (isCellCollapsed) {
-            return renderCollapsedColumn(cell, lastColumn);
+            return renderCollapsedColumn(cell, lastColumn, isAllColumnsCollapsed(columns));
           }
+
           return (
             <AgileRowColumn
               testID="agileRowColumn"

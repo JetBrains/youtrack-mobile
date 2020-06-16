@@ -1,11 +1,12 @@
 import {StyleSheet} from 'react-native';
+
 import {
   UNIT,
   COLOR_LIGHT_GRAY,
-  AGILE_COLLAPSED_COLUMN_WIDTH,
   COLOR_GRAY,
   COLOR_FONT_GRAY
 } from '../variables/variables';
+import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../agile-column/agile-column';
 import {issueCard, issueResolved, issueIdResolved} from '../common-styles/issue';
 import {headerTitle, MAIN_FONT_SIZE} from '../common-styles/typography';
 import {link} from '../common-styles/button';
@@ -60,6 +61,10 @@ export default StyleSheet.create({
     paddingRight: 2,
     flexDirection: 'row',
     flexWrap: 'wrap'
+  },
+  columnCollapsedAll: {
+    width: null,
+    flex: 1
   },
   card: {
     marginBottom: UNIT * 2
