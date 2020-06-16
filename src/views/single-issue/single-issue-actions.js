@@ -1,6 +1,6 @@
 /* @flow */
 
-import {Linking, Share} from 'react-native';
+import {Clipboard, Share} from 'react-native';
 import * as types from './single-issue-action-types';
 import ApiHelper from '../../components/api/api__helper';
 import {notify, notifyError} from '../../components/notification/notification';
@@ -295,6 +295,14 @@ export function showIssueActions(actionSheet: Object) {
 
     const actions = [
       {
+        title: 'Copy issue URL',
+        execute: () => {
+          usage.trackEvent(CATEGORY_NAME, 'Open in browser');
+          Clipboard.setString(makeIssueWebUrl(api, issue));
+          notify('Issue URL copied');
+        }
+      },
+      {
         title: 'Edit',
         execute: () => {
           dispatch(startEditingIssue());
@@ -308,13 +316,6 @@ export function showIssueActions(actionSheet: Object) {
         execute: () => dispatch(openCommandDialog())
       }])
       .concat([
-        {
-          title: 'Open issue in browser',
-          execute: () => {
-            usage.trackEvent(CATEGORY_NAME, 'Open in browser');
-            Linking.openURL(makeIssueWebUrl(api, issue));
-          }
-        },
         {
           title: 'Share…',
           execute: () => {
