@@ -20,6 +20,7 @@ import type {Attachment, CustomField, FieldValue, IssueProject} from '../../flow
 
 import IssueDescription from './single-issue__description';
 import IssueVotes from '../../components/issue-actions/issue-votes';
+import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
 
 
 type Props = {
@@ -186,6 +187,8 @@ export default class IssueDetails extends PureComponent<Props, TabsState> {
         </View>}
 
         {this.renderAttachments(issue.attachments)}
+
+        {editMode && <KeyboardSpacerIOS/>}
       </View>
     );
   }
