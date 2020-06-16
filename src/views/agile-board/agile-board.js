@@ -21,7 +21,7 @@ import {
 } from '../../components/variables/variables';
 import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../../components/agile-column/agile-column';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
-import type {SprintFull, Board, AgileBoardRow, AgileColumn} from '../../flow/Agile';
+import type {SprintFull, Board, AgileBoardRow, AgileColumn, BoardColumn} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
 import type {AgilePageState} from './board-reducers';
 
@@ -37,6 +37,7 @@ import {routeMap} from '../../app-routes';
 import ErrorMessage from '../../components/error-message/error-message';
 import type {CustomError} from '../../flow/Error';
 import {isAllColumnsCollapsed} from './agile-board__helper';
+import {notify} from '../../components/notification/notification';
 
 const CATEGORY_NAME = 'Agile board';
 
@@ -225,6 +226,11 @@ class AgileBoard extends Component<Props, State> {
     }
   };
 
+  toggleColumn = (column: BoardColumn) => {
+    notify(column.collapsed ? 'Column expanded' : 'Column collapsed');
+    this.props.onColumnCollapseToggle(column);
+  }
+
   renderBoardHeader() {
     const {zoomedIn} = this.state;
 
@@ -235,7 +241,7 @@ class AgileBoard extends Component<Props, State> {
             ref={this.boardHeaderRef}
             style={{minWidth: zoomedIn ? this._getScrollableWidth() : null}}
             columns={this.props.sprint.board?.columns}
-            onCollapseToggle={this.props.onColumnCollapseToggle}
+            onCollapseToggle={this.toggleColumn}
           />
         </View>
       );
