@@ -191,6 +191,7 @@ class AgileBoard extends Component<Props, State> {
         key: sprint.id,
         label: sprint.name,
         onPress: onOpenSprintSelect,
+        style: styles.sprintSelector,
         isLoading
       });
     }

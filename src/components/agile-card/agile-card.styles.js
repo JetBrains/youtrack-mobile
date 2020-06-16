@@ -14,7 +14,7 @@ export default StyleSheet.create({
   card: {
     flexDirection: 'row',
     marginBottom: UNIT,
-    marginRight: UNIT * 2,
+    marginLeft: UNIT * 2,
     borderRadius: UNIT,
     overflow: 'hidden',
     backgroundColor: COLOR_LIGHT_GRAY

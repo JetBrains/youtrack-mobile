@@ -52,6 +52,9 @@ export default StyleSheet.create({
   columnWithoutBorder: {
     borderRightWidth: 0
   },
+  columnFirst: {
+    marginLeft: UNIT
+  },
   columnCollapsed: {
     flex: 0,
     width: AGILE_COLLAPSED_COLUMN_WIDTH,
@@ -85,7 +88,7 @@ export default StyleSheet.create({
   },
   addCardButton: {
     marginBottom: UNIT * 2,
-    marginRight: UNIT * 2,
+    marginLeft: UNIT * 2,
     height: UNIT * 4,
     borderRadius: UNIT,
     alignItems: 'center',

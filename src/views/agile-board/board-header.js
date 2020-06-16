@@ -54,8 +54,8 @@ export default class BoardHeader extends PureComponent<Props, void> {
             <TouchableOpacity
               style={[
                 styles.tableHeaderItem,
-                index === columns.length - 1 &&
-                  styles.tableHeaderItemWithoutBorder,
+                index === 0 ? styles.tableHeaderItemFirst : null,
+                index === columns.length - 1 ? styles.tableHeaderItemWithoutBorder : null,
                 col.collapsed && styles.collapsedHeaderItem,
                 isAllColumnsCollapsed(columns) && styles.collapsedHeaderItemAllCollapsed
               ]}
@@ -83,6 +83,9 @@ const styles = StyleSheet.create({
     paddingTop: UNIT * 1.5,
     paddingBottom: UNIT * 1.5,
     paddingRight: UNIT / 2,
+  },
+  tableHeaderItemFirst: {
+    marginLeft: UNIT * 2
   },
   tableHeaderItemWithoutBorder: {
     borderRightWidth: 0

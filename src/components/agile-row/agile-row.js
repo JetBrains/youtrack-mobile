@@ -43,7 +43,7 @@ function renderCollapsedCard(issue: IssueOnList) {
   );
 }
 
-function renderCollapsedColumn(cell: BoardCell, lastColumn: boolean, isAllCollapsed: boolean) {
+function renderCollapsedColumn(cell: BoardCell, columnPositionData: Object, isAllCollapsed: boolean) {
   if (cell.issues) {
     return (
       <View
@@ -53,7 +53,8 @@ function renderCollapsedColumn(cell: BoardCell, lastColumn: boolean, isAllCollap
           styles.column,
           styles.columnCollapsed,
           isAllCollapsed ? styles.columnCollapsedAll : null,
-          lastColumn && styles.columnWithoutBorder
+          columnPositionData.firstColumn ? styles.columnFirst : null,
+          columnPositionData.lastColumn ? styles.columnWithoutBorder : null
         ]}>
         <View style={styles.columnCollapsed}>
           {cell.issues.map(renderCollapsedCard)}
@@ -125,7 +126,7 @@ export default function BoardRow(props: Props) {
           const lastColumn = index === row.cells.length - 1;
 
           if (isCellCollapsed) {
-            return renderCollapsedColumn(cell, lastColumn, isAllColumnsCollapsed(columns));
+            return renderCollapsedColumn(cell, {firstColumn: index === 0, lastColumn: index === row.cells.length - 1}, isAllColumnsCollapsed(columns));
           }
 
           return (

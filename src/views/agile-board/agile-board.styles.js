@@ -15,7 +15,6 @@ import {elevationTop} from '../../components/common-styles/shadow';
 export default StyleSheet.create({
   agile: {
     flex: 1,
-    paddingLeft: UNIT * 2,
     backgroundColor: COLOR_FONT_ON_BLACK
   },
   agileNoSprint: {
@@ -115,7 +114,11 @@ export default StyleSheet.create({
   },
   agileSelector: {
     paddingTop: UNIT,
+    marginLeft: UNIT * 2,
     backgroundColor: COLOR_FONT_ON_BLACK
+  },
+  sprintSelector: {
+    marginLeft: UNIT * 2
   },
   agileSelectorText: {
     ...headerTitle,
