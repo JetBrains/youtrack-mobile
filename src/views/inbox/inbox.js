@@ -427,7 +427,7 @@ class Inbox extends Component<Props, State> {
 
     if (!loading && items.length === 0) {
       return (
-        <View style={styles.noNotification}>
+        <View>
           <Text style={styles.listMessageSmile}>(・_・)</Text>
           <Text
             style={styles.listFooterMessage}
