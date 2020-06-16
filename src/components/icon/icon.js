@@ -121,11 +121,6 @@ export const IconActions = (props?: Props) => <DefaultIcon {...{
   ...props
 }} />;
 
-export const IconStar = (props?: Props) => <DefaultIcon {...{
-  name: 'star-outline',
-  ...props
-}} />;
-
 export const IconThumbUp = (props?: Props & { isActive?: boolean }) => <DefaultIcon {...{
   name: props.isActive ? 'thumb-up' : 'thumb-up-outline',
   ...props
@@ -244,6 +239,18 @@ export const IconSearch = (props?: Props) => <IconYTM {...{
 export const IconSettings = (props?: Props) => <IconYTM {...{
   ...defaultProps,
   name: 'settings-20px',
+  ...props
+}} />;
+
+export const IconStar = (props?: Props) => <IconYTM {...{
+  ...defaultProps,
+  name: 'star-filled',
+  ...props
+}} />;
+
+export const IconStarOutline = (props?: Props) => <IconYTM {...{
+  ...defaultProps,
+  name: 'star-empty',
   ...props
 }} />;
 
