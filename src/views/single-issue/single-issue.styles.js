@@ -2,7 +2,6 @@ import {StyleSheet} from 'react-native';
 import {
   UNIT,
   COLOR_FONT_ON_BLACK,
-  COLOR_BLACK,
   COLOR_FONT_GRAY,
   COLOR_FONT,
   COLOR_ICON_MEDIUM_GREY,
@@ -10,6 +9,7 @@ import {
 } from '../../components/variables/variables';
 import {headerTitle, mainText, secondaryText} from '../../components/common-styles/typography';
 import {elevation1} from '../../components/common-styles/shadow';
+import {summary} from '../../components/issue-summary/issue-summary.styles';
 
 
 export default StyleSheet.create({
@@ -58,11 +58,7 @@ export default StyleSheet.create({
   },
   summary: {
     paddingTop: UNIT,
-    fontSize: 18,
-    fontWeight: '500',
-    lineHeight: 24,
-    letterSpacing: -0.19,
-    color: COLOR_BLACK
+    ...summary
   },
   tags: {
     marginTop: UNIT * 2

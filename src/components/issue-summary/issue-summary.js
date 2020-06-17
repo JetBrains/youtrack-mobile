@@ -41,7 +41,8 @@ export default class IssueSummary extends Component<Props, void> {
     return (
       <View {...rest}>
         <TextInput
-          style={styles.summaryInput}
+          style={styles.summary}
+          multiline={true}
           editable={editable}
           autoFocus
           placeholder="Summary"
@@ -55,7 +56,7 @@ export default class IssueSummary extends Component<Props, void> {
           onChangeText={this.onSummaryChange}
         />
 
-        {showSeparator && <View style={styles.separator} />}
+        <View style={styles.separator} />
 
         <MultilineInput
           ref={this.descriptionInputRef}
