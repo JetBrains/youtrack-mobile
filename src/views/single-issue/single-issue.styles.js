@@ -10,7 +10,13 @@ import {
 import {headerTitle, mainText, secondaryText} from '../../components/common-styles/typography';
 import {elevation1} from '../../components/common-styles/shadow';
 import {summary} from '../../components/issue-summary/issue-summary.styles';
+import {link} from '../../components/common-styles/button';
 
+const centered = {
+  flex: 1,
+  alignItems: 'center',
+  justifyContent: 'center'
+};
 
 export default StyleSheet.create({
   secondaryText: secondaryText,
@@ -98,9 +104,7 @@ export default StyleSheet.create({
     textTransform: 'none'
   },
   tabLazyPlaceholder: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
+    ...centered
   },
   issueAdditionalInfoContainer: {
     flexDirection: 'row',
@@ -109,9 +113,12 @@ export default StyleSheet.create({
   issueAdditionalInfo: {
     flex: 1
   },
-  centered: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
+  switchToActivityButton: {
+    marginTop: UNIT * 4,
+    ...centered,
+  },
+  switchToActivityButtonText: {
+    ...mainText,
+    ...link
   }
 });

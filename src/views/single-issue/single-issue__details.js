@@ -1,7 +1,8 @@
 /* @flow */
 
-import {Text, View, ScrollView, ActivityIndicator} from 'react-native';
+import {Text, View, ScrollView, ActivityIndicator, TouchableOpacity} from 'react-native';
 import React, {PureComponent} from 'react';
+
 import {getApi} from '../../components/api/api__instance';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import IssueAdditionalInfo from './single-issue__additional-info';
@@ -13,9 +14,10 @@ import styles from './single-issue.styles';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import {getReadableID} from '../../components/issue-formatter/issue-formatter';
 import Tags from '../../components/tags/tags';
+import {HIT_SLOP} from '../../components/common-styles/button';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
-import type {IssueFull, IssueOnList, TabRoute} from '../../flow/Issue';
+import type {IssueFull, IssueOnList} from '../../flow/Issue';
 import type {Attachment, CustomField, FieldValue, IssueProject} from '../../flow/CustomFields';
 
 import IssueDescription from './single-issue__description';
@@ -49,27 +51,14 @@ type Props = {
 
   renderRefreshControl: () => any,
 
-  onVoteToggle: (voted: boolean) => any
+  onVoteToggle: (voted: boolean) => any,
+
+  onSwitchToActivity: () => any
 }
 
-type TabsState = {
-  index: number,
-  routes: Array<TabRoute>
-};
-
-const tabRoutes: Array<TabRoute> = [
-  {key: 'details', title: 'Details'},
-  {key: 'activity', title: 'Activity'},
-];
-
-
-export default class IssueDetails extends PureComponent<Props, TabsState> {
+export default class IssueDetails extends PureComponent<Props, void> {
   imageHeaders = getApi().auth.getAuthorizationHeaders();
   backendUrl = getApi().config.backendUrl;
-  state = {
-    index: 0,
-    routes: tabRoutes,
-  };
 
   renderLinks(issue: IssueFull) {
     if (issue.links && issue.links.length) {
@@ -207,7 +196,7 @@ export default class IssueDetails extends PureComponent<Props, TabsState> {
   }
 
   render() {
-    const {issue, issuePlaceholder, issueLoaded, renderRefreshControl} = this.props;
+    const {issue, issuePlaceholder, issueLoaded, renderRefreshControl, onSwitchToActivity} = this.props;
 
     return (
       <ScrollView
@@ -219,6 +208,15 @@ export default class IssueDetails extends PureComponent<Props, TabsState> {
       >
         {Boolean(issue) && this.renderCustomFieldPanel()}
         {this._renderIssueView(issue || issuePlaceholder)}
+
+        <TouchableOpacity
+          style={styles.switchToActivityButton}
+          hitSlop={HIT_SLOP}
+          onPress={onSwitchToActivity}
+        >
+          <Text style={styles.switchToActivityButtonText}>Show activity</Text>
+        </TouchableOpacity>
+
         {!issueLoaded && <ActivityIndicator style={styles.loading}/>}
       </ScrollView>
     );

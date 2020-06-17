@@ -137,6 +137,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
         renderRefreshControl={() => this.renderRefreshControl(() => this.loadIssue())}
 
         onVoteToggle={toggleVote}
+        onSwitchToActivity={this.switchToActivityTab}
       />
     );
   }
@@ -189,6 +190,12 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
     return (
       !editMode && !isSavingEditedIssue && !isRefreshing && !attachingImage
     );
+  }
+
+  switchToActivityTab = () => {
+    this.setState({
+      index: 1
+    });
   }
 
   renderTabs() {
