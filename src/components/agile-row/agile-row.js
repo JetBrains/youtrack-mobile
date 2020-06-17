@@ -86,18 +86,10 @@ export default function BoardRow(props: Props) {
     >
       <View
         testID="agileRowHeader"
-        style={styles.rowHeader}>
-
-        {Boolean(zoomedIn && row.issue) && (
-          <TouchableOpacity onPress={() => onTapIssue(row.issue)}>
-            <Text
-              testID="agileRowIssueId"
-              style={[styles.headerIssueId, isResolved && styles.issueResolved]}
-            >
-              {ApiHelper.getIssueId(row.issue)}
-            </Text>
-          </TouchableOpacity>
-        )}
+        style={[
+          styles.rowHeader,
+          !zoomedIn ? styles.rowHeaderZoomedOut : null,
+        ]}>
 
         <TouchableOpacity
           testID="agileRowCollapseButton"
@@ -118,6 +110,22 @@ export default function BoardRow(props: Props) {
             {row.id === 'orphans' ? 'Uncategorized Cards' : (row.issue && row.issue.summary || row.name)}
           </Text>
         </TouchableOpacity>
+
+        {Boolean(row.issue) && (
+          <TouchableOpacity onPress={() => onTapIssue(row.issue)}>
+            <Text
+              testID="agileRowIssueId"
+              style={[
+                styles.headerIssueId,
+                isResolved && styles.issueResolved,
+                !zoomedIn ? styles.headerIssueIdZoomedOut : null,
+              ]}
+            >
+              {ApiHelper.getIssueId(row.issue)}
+            </Text>
+          </TouchableOpacity>
+        )}
+
       </View>
 
       <View style={styles.row}>

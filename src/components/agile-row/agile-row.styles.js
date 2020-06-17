@@ -7,9 +7,11 @@ import {
   COLOR_FONT_GRAY
 } from '../variables/variables';
 import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../agile-column/agile-column';
-import {issueCard, issueResolved, issueIdResolved} from '../common-styles/issue';
-import {headerTitle, MAIN_FONT_SIZE} from '../common-styles/typography';
+import {issueResolved, issueIdResolved} from '../common-styles/issue';
+import {headerTitle, MAIN_FONT_SIZE, mainText} from '../common-styles/typography';
 import {link} from '../common-styles/button';
+
+const ROW_TEXT_LINE_HEIGHT = 24;
 
 export default StyleSheet.create({
   issueResolved: issueResolved,
@@ -17,16 +19,24 @@ export default StyleSheet.create({
 
   rowContainer: {},
   rowHeader: {
+    flexDirection: 'row',
     paddingTop: UNIT * 2,
     paddingRight: UNIT,
     paddingBottom: UNIT * 2,
     paddingLeft: UNIT,
   },
+  rowHeaderZoomedOut: {
+    flexWrap: 'wrap'
+  },
   headerIssueId: {
-    ...issueCard.issueId,
-    ...link,
+    marginLeft: UNIT * 2,
+    ...mainText,
+    lineHeight: ROW_TEXT_LINE_HEIGHT + 2,
+    ...link
+  },
+  headerIssueIdZoomedOut: {
     marginLeft: UNIT * 3,
-    marginBottom: UNIT / 2
+    fontSize: MAIN_FONT_SIZE - 2,
   },
   resolvedIssueText: {
     color: COLOR_FONT_GRAY,
@@ -34,7 +44,7 @@ export default StyleSheet.create({
   },
   rowHeaderText: {
     ...headerTitle,
-    lineHeight: 24,
+    lineHeight: ROW_TEXT_LINE_HEIGHT,
     marginLeft: UNIT,
     fontWeight: '500'
   },

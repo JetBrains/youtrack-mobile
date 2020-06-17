@@ -12,12 +12,18 @@ exports[`<BoardRow/> Render should render a snapshot 1`] = `
 >
   <View
     style={
-      Object {
-        "paddingBottom": 16,
-        "paddingLeft": 8,
-        "paddingRight": 8,
-        "paddingTop": 16,
-      }
+      Array [
+        Object {
+          "flexDirection": "row",
+          "paddingBottom": 16,
+          "paddingLeft": 8,
+          "paddingRight": 8,
+          "paddingTop": 16,
+        },
+        Object {
+          "flexWrap": "wrap",
+        },
+      ]
     }
     testID="agileRowHeader"
   >

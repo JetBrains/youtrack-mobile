@@ -40,12 +40,6 @@ describe('<BoardRow/>', () => {
         expect(findByTestId('agileRowIssueId')).toHaveLength(0);
       });
 
-      it('should not render an issue readable id in a zoomed out mode', () => {
-        doShallow(rowMock, false);
-
-        expect(findByTestId('agileRowIssueId')).toHaveLength(0);
-      });
-
       it('should render an issue readable id', () => {
         doShallow(rowMock);
 
