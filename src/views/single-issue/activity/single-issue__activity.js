@@ -170,7 +170,9 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
       issuePermissions,
       issue,
-      attachOrTakeImage
+      attachOrTakeImage,
+
+      stopSubmittingComment
     } = this.props;
     const isSecured = !!editingComment && IssueVisibility.isSecured(editingComment.visibility);
 
@@ -191,6 +193,8 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
         canAttach={issuePermissions.canAddAttachmentTo(issue)}
         onAttach={() => attachOrTakeImage(this.context.actionSheet())}
+
+        onCancel={stopSubmittingComment}
       />
 
       <KeyboardSpacerIOS top={98}/>
@@ -274,7 +278,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(activityActions, dispatch),
     ...bindActionCreators(activityCommentActions, dispatch),
-    ...bindActionCreators(activityImageAttachActions, dispatch)
+    ...bindActionCreators(activityImageAttachActions, dispatch),
+    stopSubmittingComment: () => dispatch(activityCommentActions.stopEditingComment())
   };
 };
 

@@ -62,6 +62,21 @@ export default StyleSheet.create({
     color: COLOR_FONT_GRAY
   },
 
+  commentHeaderContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: -UNIT * 1.5,
+    marginRight: -UNIT * 2,
+  },
+  commentHeaderContainerEdit: {
+    justifyContent: 'space-between',
+  },
+  commentHeaderContainerCreate: {
+    paddingTop: UNIT,
+    paddingBottom: UNIT * 1.5,
+    justifyContent: 'center',
+  },
   commentContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -110,9 +125,7 @@ export default StyleSheet.create({
   visibilityChangeButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    margin: UNIT * 2,
-    marginTop: UNIT
+    justifyContent: 'center'
   },
   visibilityChangeButtonLockIcon: {
     marginRight: UNIT

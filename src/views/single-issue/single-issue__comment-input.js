@@ -8,6 +8,7 @@ import {
   COLOR_FONT_ON_BLACK,
   COLOR_ICON_LIGHT_BLUE,
   COLOR_ICON_MEDIUM_GREY,
+  COLOR_PINK,
   COLOR_PLACEHOLDER
 } from '../../components/variables/variables';
 import MultilineInput from '../../components/multiline-input/multiline-input';
@@ -19,7 +20,7 @@ import styles from './single-issue__comments.styles';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import IssueAttach from '../../components/issue-actions/issue-attach';
-import {IconAngleDown, IconArrowUp, IconLock} from '../../components/icon/icon';
+import {IconAngleDown, IconArrowUp, IconCheck, IconClose, IconLock} from '../../components/icon/icon';
 
 type Props = {
   initialText: string,
@@ -32,7 +33,8 @@ type Props = {
   onEditCommentVisibility: (commentId: string) => any,
   isSecured: boolean,
   canAttach: boolean,
-  onAttach: () => any
+  onAttach: () => any,
+  onCancel: () => any
 };
 
 type State = {
@@ -81,7 +83,7 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
     this.isUnmounted = true;
   }
 
-  updateComment() {
+  updateComment = () => {
     this.setState({isSaving: true});
     const comment = {
       ...this.props.editingComment,
@@ -103,7 +105,7 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
         this.setState({isSaving: false});
       }
     });
-  }
+  };
 
   suggestionsNeededDetector(text: string, caret: number) {
     const match = /[\S\@]+$/.exec(text.slice(0, caret));
@@ -222,7 +224,7 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
       <TouchableOpacity
         style={styles.commentSendButton}
         disabled={!(commentText || '').trim() || isSaving}
-        onPress={() => this.updateComment()}>
+        onPress={this.updateComment}>
         {!this.state.isSaving && (
           <IconArrowUp
             size={22}
@@ -244,14 +246,44 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
   }
 
   render() {
+    const {editingComment, onCancel = () => null} = this.props;
     const {isSaving, commentText, commentCaret, showSuggestions} = this.state;
-    const isVisibilityShown = !showSuggestions && (this.state.inputFocus || !!commentText);
+
+    const isEditComment: boolean = !!editingComment;
+    const isAddComment: boolean = !showSuggestions && (this.state.inputFocus || !!commentText);
 
     return (
       <View style={styles.container}>
         {showSuggestions && this.renderSuggestions()}
 
-        {isVisibilityShown && this.renderVisibility()}
+        <View style={[
+          styles.commentHeaderContainer,
+          isAddComment ? styles.commentHeaderContainerCreate : null,
+          isEditComment ? styles.commentHeaderContainerEdit : null
+        ]}>
+
+          {isEditComment && (
+            <TouchableOpacity
+              hitSlop={HIT_SLOP}
+              onPress={onCancel}
+            >
+              <IconClose size={21} color={COLOR_PINK}/>
+            </TouchableOpacity>
+          )}
+
+          {isAddComment && this.renderVisibility()}
+
+          {isEditComment && (
+            <TouchableOpacity
+              hitSlop={HIT_SLOP}
+              onPress={this.updateComment}
+            >
+              <IconCheck size={21} color={COLOR_PINK}/>
+            </TouchableOpacity>
+          )}
+
+        </View>
+
 
         <View style={styles.commentContainer}>
           {this.renderIssueAttachIcon()}
@@ -281,7 +313,7 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
               style={styles.commentInput}
             />
 
-            {this.renderSendButton()}
+            {isAddComment && !isEditComment && this.renderSendButton()}
           </View>
         </View>
       </View>
