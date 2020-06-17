@@ -415,11 +415,14 @@ class AgileBoard extends Component<Props, State> {
   };
 
   renderBoard() {
-    const {agile, sprint, isLoadingMore, isLoading} = this.props;
+    const {agile, sprint, isLoadingMore, isLoading, error} = this.props;
     const {zoomedIn} = this.state;
     const isSprintLoaded = agile?.status?.valid === true && !!sprint && !isLoading;
 
     if (!sprint) {
+      if (error && error.noAgiles) {
+        return null;
+      }
       return <View style={styles.agileNoSprint}>{this.renderAgileSelector()}</View>;
     }
 

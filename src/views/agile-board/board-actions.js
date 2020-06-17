@@ -13,6 +13,7 @@ import {findIssueOnBoard} from './board-updaters';
 import {getGroupedSprints} from './agile-board__helper';
 import animation from '../../components/animation/animation';
 import {sortByName} from '../../components/search/sorting';
+import type {CustomError} from '../../flow/Error';
 
 type ApiGetter = () => Api;
 
@@ -35,6 +36,13 @@ function receiveSprint(sprint) {
   return {
     type: types.RECEIVE_SPRINT,
     sprint
+  };
+}
+
+function setError(error: CustomError) {
+  return {
+    type: types.AGILE_ERROR,
+    error
   };
 }
 
@@ -132,9 +140,12 @@ export function loadSprint(agileId: string, sprintId: string) {
       dispatch(subscribeServersideUpdates());
       log.info(`Sprint ${sprintId} (agileBoardId="${agileId}") has been loaded`);
     } catch (e) {
-      notify('Could not load requested sprint');
+      const message: string = 'Could not load requested sprint';
+      const error: CustomError = new Error(message);
+      error.error_description = 'Check that the sprint exists';
+      dispatch(setError(error));
       trackError('Load sprint');
-      log.info('Could not load requested sprint', e);
+      log.info(message, e);
     } finally {
       dispatch(stopSprintLoad());
       dispatch(setOutOfDate(false));
@@ -146,15 +157,19 @@ export function loadAgileProfile() {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     let profile;
     try {
+      dispatch({
+        type: types.START_RECEIVE_AGILE_PROFILE
+      });
       profile = await getApi().agile.getAgileUserProfile();
       dispatch({
         type: types.RECEIVE_AGILE_PROFILE,
         profile
       });
     } catch (error) {
+      dispatch(setError(error));
+    } finally {
       dispatch({
-        type: types.AGILE_ERROR,
-        error
+        type: types.STOP_RECEIVE_AGILE_PROFILE
       });
     }
   };
@@ -162,6 +177,9 @@ export function loadAgileProfile() {
 
 export function loadDefaultAgileBoard() {
   return async (dispatch: (any) => any) => {
+    dispatch(setError(null));
+    dispatch(receiveSprint(null));
+
     await dispatch(loadAgileProfile());
 
     const agileUserProfile: AgileUserProfile = await dispatch(getAgileUserProfile());
@@ -171,6 +189,10 @@ export function loadDefaultAgileBoard() {
       log.info('Loading Default Agile board', board?.name || board?.id);
       await dispatch(loadBoard(board));
     } else {
+      const error: CustomError = new Error('No agile boards found');
+      error.error_description = `Create an agile board first`;
+      error.noAgiles = true;
+      dispatch(setError(error));
       trackError('Default board is unknown');
     }
   };

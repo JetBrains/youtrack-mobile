@@ -57,6 +57,9 @@ describe('Agile board async actions', () => {
       storeActions = store.getActions();
 
       expect(storeActions[0]).toEqual({
+        type: types.START_RECEIVE_AGILE_PROFILE
+      });
+      expect(storeActions[1]).toEqual({
         type: types.RECEIVE_AGILE_PROFILE,
         profile: agileUserProfileMock
       });
@@ -169,7 +172,18 @@ describe('Agile board async actions', () => {
         notification.setNotificationComponent({show: jest.fn()});
         await setLoadSprintExpectation();
 
+        expect(storeActions[0]).toEqual({
+          type: types.START_SPRINT_LOADING
+        });
+        expect(storeActions[1]).toEqual({
+          type: types.RECEIVE_SPRINT,
+          sprint: null
+        });
         expect(storeActions[2]).toEqual({
+          type: types.AGILE_ERROR,
+          error: new Error('Could not load requested sprint')
+        });
+        expect(storeActions[3]).toEqual({
           type: types.STOP_SPRINT_LOADING
         });
       });

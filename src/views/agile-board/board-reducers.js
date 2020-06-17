@@ -18,12 +18,14 @@ import {
 import type {SprintFull, AgileBoardRow, Board, AgileUserProfile} from '../../flow/Agile';
 import type {IssueOnList, IssueFull} from '../../flow/Issue';
 import type ServersideEvents from '../../components/api/api__serverside-events';
+import type {CustomError} from '../../flow/Error';
 
 type BoardState = Board;
 
 export type AgilePageState = {
   isLoading: boolean,
   isLoadingAgile: boolean,
+  isLoadingProfile: boolean,
   profile: ?AgileUserProfile,
   isSprintSelectOpen: boolean,
   isOutOfDate: boolean,
@@ -33,12 +35,13 @@ export type AgilePageState = {
   selectProps: ?Object,
   serversideEvents: ?ServersideEvents,
   agile: ?Board,
-  error?: Error | null
+  error?: CustomError | null
 };
 
 const initialPageState: AgilePageState = {
   isLoading: false,
   isLoadingAgile: false,
+  isLoadingProfile: false,
   profile: null,
   isSprintSelectOpen: false,
   isOutOfDate: false,
@@ -109,6 +112,18 @@ const boardReducer = createReducer({}, {
 const agilePageReducer = createReducer(initialPageState, {
   [LOG_OUT](state: AgilePageState): AgilePageState {
     return initialPageState;
+  },
+  [types.START_RECEIVE_AGILE_PROFILE](state: AgilePageState): AgilePageState {
+    return {
+      ...state,
+      isLoadingProfile: true
+    };
+  },
+  [types.STOP_RECEIVE_AGILE_PROFILE](state: AgilePageState): AgilePageState {
+    return {
+      ...state,
+      isLoadingProfile: false
+    };
   },
   [types.RECEIVE_AGILE_PROFILE](state: AgilePageState, action: { profile: AgileUserProfile }): AgilePageState {
     return {...state, profile: action.profile};
