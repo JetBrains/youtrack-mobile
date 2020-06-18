@@ -3,8 +3,8 @@
 import {View, TouchableOpacity, TextInput} from 'react-native';
 import React, {Component} from 'react';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
-import {COLOR_PLACEHOLDER} from '../variables/variables';
-import {IconBack} from '../icon/icon';
+import {COLOR_PINK, COLOR_PLACEHOLDER} from '../variables/variables';
+import {IconBack, IconClose} from '../icon/icon';
 import ModalView from '../modal-view/modal-view';
 import throttle from 'lodash.throttle';
 import {View as AnimatedView} from 'react-native-animatable';
@@ -13,6 +13,7 @@ import KeyboardSpacerIOS from '../platform/keyboard-spacer.ios';
 import styles from './query-assist.styles';
 
 import type {TransformedSuggestion, SavedQuery} from '../../flow/Issue';
+import {HIT_SLOP} from '../common-styles/button';
 
 const SEARCH_THROTTLE = 30;
 const SHOW_LIST_ANIMATION_DURATION = 500;
@@ -22,8 +23,7 @@ type Props = {
   currentQuery: string,
   onApplyQuery: (query: string) => any,
   onChange: (query: string, caret: number) => any,
-  onClose: () => any,
-  clearButtonMode?: ('never' | 'while-editing' | 'unless-editing' | 'always')
+  onClose: () => any
 };
 
 type State = {
@@ -50,12 +50,19 @@ export default class QueryAssist extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    this.state = {
+    this.state = {};
+    this.resetState();
+  }
+
+  resetState = () => {
+    const initialState: State = {
       inputValue: '',
       caret: 0,
       queryCopy: '',
       suggestionsListTop: 0
     };
+    this.setState(initialState);
+    return initialState;
   }
 
   blurInput() {
@@ -108,9 +115,21 @@ export default class QueryAssist extends Component<Props, State> {
     this.props.onApplyQuery(savedQuery.query);
   };
 
+  renderClearIcon() {
+    return (
+      <TouchableOpacity
+        onPress={this.resetState}
+        hitSlop={HIT_SLOP}
+        style={styles.clearIcon}
+      >
+        <IconClose size={21} color={COLOR_PINK}/>
+      </TouchableOpacity>
+    );
+  }
+
   _renderInput() {
     const {inputValue} = this.state;
-    const {onClose, clearButtonMode} = this.props;
+    const {onClose} = this.props;
 
     return (
       <View
@@ -128,7 +147,7 @@ export default class QueryAssist extends Component<Props, State> {
             onClose();
           }}
         >
-          <IconBack size={28}/>
+          <IconBack/>
         </TouchableOpacity>
 
         <TextInput
@@ -140,7 +159,7 @@ export default class QueryAssist extends Component<Props, State> {
           placeholderTextColor={COLOR_PLACEHOLDER}
           placeholder="Enter search request"
 
-          clearButtonMode={clearButtonMode || 'while-editing'}
+          clearButtonMode="never"
           returnKeyType="search"
           autoFocus={true}
           autoCorrect={false}
@@ -156,6 +175,8 @@ export default class QueryAssist extends Component<Props, State> {
 
           value={inputValue}
         />
+
+        {!!inputValue && this.renderClearIcon()}
       </View>
     );
   }

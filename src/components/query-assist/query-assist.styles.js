@@ -4,7 +4,7 @@ import {
   COLOR_FONT_ON_BLACK,
   COLOR_BLACK,
   COLOR_LIGHT_GRAY,
-  COLOR_PLACEHOLDER,
+  COLOR_PLACEHOLDER
 } from '../variables/variables';
 import {elevation1} from '../common-styles/shadow';
 
@@ -56,6 +56,9 @@ export default StyleSheet.create({
     borderBottomColor: 'transparent',
   },
   searchInput: searchInput,
+  searchInputHasText: {
+    color: COLOR_BLACK
+  },
   searchInputPlaceholder: {
     justifyContent: 'center',
     color: COLOR_PLACEHOLDER,
@@ -64,5 +67,9 @@ export default StyleSheet.create({
   searchIcon: {
     marginTop: UNIT / 2,
     marginLeft: UNIT / 2
+  },
+  clearIcon: {
+    marginLeft: UNIT,
+    marginRight: UNIT * 2
   }
 });

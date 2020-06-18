@@ -44,7 +44,8 @@ type Props = IssuesListState & typeof issueActions & {
 };
 
 type State = {
-  isEditQuery: boolean
+  isEditQuery: boolean,
+  clearSearchQuery: boolean
 }
 
 export class IssueList extends Component<Props, State> {
@@ -52,7 +53,10 @@ export class IssueList extends Component<Props, State> {
 
   constructor() {
     super();
-    this.state = {isEditQuery: false};
+    this.state = {
+      isEditQuery: false,
+      clearSearchQuery: false
+    };
     usage.trackScreenView('Issue list');
   }
 
@@ -196,14 +200,28 @@ export class IssueList extends Component<Props, State> {
     });
   }
 
+  clearSearchQuery(clearSearchQuery: boolean) {
+    this.setState({
+      clearSearchQuery: clearSearchQuery
+    });
+  }
+
+  onSearchQueryPanelFocus = (clearSearchQuery: boolean = false) => {
+    this.setEditQueryMode(true);
+    this.clearSearchQuery(clearSearchQuery);
+  }
+
+
   renderSearchPanel = () => {
     const {query, suggestIssuesQuery, queryAssistSuggestions, onQueryUpdate, setIssuesCount} = this.props;
+    const _query = this.state.clearSearchQuery ? '' : query;
+
     return (
       <SearchPanel
         key="SearchPanel"
         ref={this.searchPanelRef}
         queryAssistSuggestions={queryAssistSuggestions}
-        query={query}
+        query={_query}
         suggestIssuesQuery={suggestIssuesQuery}
         onQueryUpdate={(query: string) => {
           this.setEditQueryMode(false);
@@ -223,7 +241,7 @@ export class IssueList extends Component<Props, State> {
       <View>
         <SearchQueryPreview
           query={query}
-          onFocus={() => this.setEditQueryMode(true)}
+          onFocus={this.onSearchQueryPanelFocus}
         />
         <IssuesCount issuesCount={issuesCount}/>
       </View>
