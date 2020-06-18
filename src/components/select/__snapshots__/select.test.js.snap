@@ -38,6 +38,7 @@ exports[`<Select/> Render should match a snapshot 1`] = `
     </TouchableOpacity>
     <TextInput
       allowFontScaling={true}
+      autoCapitalize="none"
       autoCorrect={false}
       autoFocus={false}
       onChangeText={[Function]}

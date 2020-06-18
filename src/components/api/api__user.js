@@ -27,7 +27,8 @@ export default class UserAPI extends ApiBase {
     'name',
     'query',
     'pinned',
-    'star(id)'
+    'star(id)',
+    'shortName'
   ];
 
 

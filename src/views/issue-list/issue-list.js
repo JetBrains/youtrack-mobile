@@ -174,7 +174,7 @@ export class IssueList extends Component<Props, State> {
   renderContextSelect() {
     return (
       <Select
-        getTitle={item => item.name}
+        getTitle={item => item.name + (item.shortName ? ` (${item.shortName})` : '')}
         {...this.props.selectProps}
       />
     );

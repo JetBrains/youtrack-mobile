@@ -10,6 +10,7 @@ import {onHeightChange} from '../header/header__top-padding';
 import {IconCheck, IconBack} from '../icon/icon';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import SelectItem from './select__item';
+import {sortByName} from '../search/sorting';
 
 import styles from './select.styles';
 
@@ -110,7 +111,8 @@ export default class Select extends Component<Props, State> {
       const label = (getValue && getValue(item)) || getTitle(item) || '';
       return label.toLowerCase().indexOf(query.toLowerCase()) !== -1;
     })
-      .slice(0, MAX_VISIBLE_ITEMS);
+      .slice(0, MAX_VISIBLE_ITEMS)
+      .sort(sortByName);
 
     this.setState({filteredItems});
   }
@@ -233,6 +235,7 @@ export default class Select extends Component<Props, State> {
                 this.setState({query: text});
                 this._onSearch(text);
               }}
+              autoCapitalize="none"
               style={styles.searchInput}/>
 
             {multi && <TouchableOpacity
