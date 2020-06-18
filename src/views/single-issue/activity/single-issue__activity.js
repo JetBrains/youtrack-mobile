@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {PureComponent} from 'react';
-import {Text, View, ScrollView} from 'react-native';
+import {Text, View, ScrollView, ActivityIndicator} from 'react-native';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -19,6 +19,7 @@ import * as activityCommentActions from './single-issue-activity__comment-action
 import * as activityImageAttachActions from './single-issue-activity__image-attach-actions';
 
 import {isActivitiesAPIEnabled} from './single-issue-activity__helper';
+import {COLOR_PINK} from '../../../components/variables/variables';
 
 import styles from './single-issue-activity.styles';
 
@@ -107,7 +108,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     } = this.props;
 
     if (!issue || !activityPage|| activityPage.length === 0) {
-      return null;
+      return <ActivityIndicator style={styles.loadingIndicator} color={COLOR_PINK}/>;
     }
 
     return (

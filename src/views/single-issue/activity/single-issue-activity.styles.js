@@ -142,5 +142,8 @@ export default StyleSheet.create({
   visibility: {
     marginTop: UNIT,
     marginBottom: UNIT
+  },
+  loadingIndicator: {
+    marginTop: UNIT * 1.5
   }
 });
