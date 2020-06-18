@@ -27,6 +27,7 @@ export default StyleSheet.create({
   },
   list: {
     flexGrow: 0,
+    minHeight: 160,
     paddingBottom: UNIT * 4
   },
   tryAgainButton: {
