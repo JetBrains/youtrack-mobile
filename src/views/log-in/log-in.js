@@ -32,6 +32,7 @@ import type {AuthParams} from '../../components/auth/auth';
 
 import styles from './log-in.styles';
 import {formStyles} from '../../components/common-styles/form';
+import {HIT_SLOP} from '../../components/common-styles/button';
 
 const noop = () => {};
 const CATEGORY_NAME = 'Login form';
@@ -197,6 +198,7 @@ export class LogIn extends Component<Props, State> {
           </View>
 
           <TouchableOpacity
+            hitSlop={HIT_SLOP}
             style={styles.support}
             testID="log-in-via-browser"
             onPress={() => this.logInViaHub()}
