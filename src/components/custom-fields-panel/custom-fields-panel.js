@@ -457,40 +457,42 @@ export default class CustomFieldsPanel extends Component<Props, State> {
 
     return (
       <View>
-        <ScrollView
-          ref={this.restoreScrollPosition}
-          onScroll={this.storeScrollPosition}
-          contentOffset={{
-            x: this.currentScrollX,
-            y: 0
-          }}
-          scrollEventThrottle={100}
-          horizontal={true}
-          style={styles.customFieldsPanel}
-          keyboardShouldPersistTaps="always"
-        >
-          <View key="Project">
-            <CustomField
-              disabled={!canEditProject}
-              onPress={() => this.onSelectProject()}
-              active={isEditingProject}
-              field={projectFakeField}
-            />
-            {isSavingProject && <ActivityIndicator style={styles.savingFieldIndicator}/>}
-          </View>
-
-          {issue.fields.map((field) => {
-            return <View key={field.id}>
+        {!!issue.fields && (
+          <ScrollView
+            ref={this.restoreScrollPosition}
+            onScroll={this.storeScrollPosition}
+            contentOffset={{
+              x: this.currentScrollX,
+              y: 0
+            }}
+            scrollEventThrottle={100}
+            horizontal={true}
+            style={styles.customFieldsPanel}
+            keyboardShouldPersistTaps="always"
+          >
+            <View key="Project">
               <CustomField
-                field={field}
-                onPress={() => this.onEditField(field)}
-                active={editingField === field}
-                disabled={!issuePermissions.canUpdateField(issue, field)}/>
+                disabled={!canEditProject}
+                onPress={() => this.onSelectProject()}
+                active={isEditingProject}
+                field={projectFakeField}
+              />
+              {isSavingProject && <ActivityIndicator style={styles.savingFieldIndicator}/>}
+            </View>
 
-              {savingField && savingField.id === field.id && <ActivityIndicator style={styles.savingFieldIndicator}/>}
-            </View>;
-          })}
-        </ScrollView>
+            {issue.fields.map((field) => {
+              return <View key={field.id}>
+                <CustomField
+                  field={field}
+                  onPress={() => this.onEditField(field)}
+                  active={editingField === field}
+                  disabled={!issuePermissions.canUpdateField(issue, field)}/>
+
+                {savingField && savingField.id === field.id && <ActivityIndicator style={styles.savingFieldIndicator}/>}
+              </View>;
+            })}
+          </ScrollView>
+        )}
         <View style={styles.bottomBorder}/>
       </View>
     );

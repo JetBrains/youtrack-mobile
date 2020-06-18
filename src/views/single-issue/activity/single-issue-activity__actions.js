@@ -37,6 +37,7 @@ export function loadActivitiesPage() {
     const issueId = getState().singleIssue.issueId;
     const api: Api = getApi();
 
+    dispatch(receiveActivityPage([]));
     dispatch(receiveActivityAPIAvailability(true));
 
     try {

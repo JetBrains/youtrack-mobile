@@ -94,7 +94,8 @@ export default class IssueDetails extends PureComponent<Props, void> {
 
   renderIssueVotes() {
     const {issue, issuePermissions, onVoteToggle} = this.props;
-    if (issue) {
+
+    if (issue?.votes && issue?.voters) {
       return (
         <IssueVotes
           canVote={issuePermissions.canVote(issue)}
@@ -197,6 +198,10 @@ export default class IssueDetails extends PureComponent<Props, void> {
 
   render() {
     const {issue, issuePlaceholder, issueLoaded, renderRefreshControl, onSwitchToActivity} = this.props;
+
+    if (!issue && !issuePlaceholder) {
+      return null;
+    }
 
     return (
       <ScrollView

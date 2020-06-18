@@ -57,7 +57,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     this.loadIssueActivities();
   }
 
-  loadIssueActivities() {
+  loadIssueActivities = () => {
     if (isActivitiesAPIEnabled()) {
       this.props.loadActivitiesPage();
     } else {
@@ -65,7 +65,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     }
   }
 
-  renderActivitySettings() {
+  renderActivitySettings(disabled: boolean) {
     const {
       issueActivityTypes,
       issueActivityEnabledTypes,
@@ -73,6 +73,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     } = this.props;
 
     return <SingleIssueActivitiesSettings
+      disabled={disabled}
       style={styles.settings}
       issueActivityTypes={issueActivityTypes}
       issueActivityEnabledTypes={issueActivityEnabledTypes}
@@ -105,14 +106,18 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       deleteCommentPermanently
     } = this.props;
 
+    if (!issue || !activityPage|| activityPage.length === 0) {
+      return null;
+    }
+
     return (
       <View style={styles.activitiesContainer}>
         <SingleIssueActivities
           activityPage={activityPage}
           naturalCommentsOrder={this.getUserAppearanceProfile().naturalCommentsOrder}
 
-          issueFields={issue.fields}
-          attachments={issue.attachments}
+          issueFields={issue?.fields}
+          attachments={issue?.attachments}
 
           imageHeaders={this.imageHeaders}
           backendUrl={this.backendUrl}
@@ -220,13 +225,17 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     return !this.hasLoadingError() && (!!this.props.activityPage || !!this.props.tmpIssueComments);
   }
 
+  renderRefreshControl = () => {
+    return this.props.renderRefreshControl(this.loadIssueActivities);
+  }
+
   render() {
     const {isSelectOpen} = this.props;
     const activitiesApiEnabled: boolean = isActivitiesAPIEnabled();
     const hasError: boolean = this.hasLoadingError();
     const activityLoaded: boolean = this.isActivityLoaded();
     const showLoading: boolean = !activityLoaded && !hasError;
-    const showActivitySettings: boolean = (
+    const isActivitySettingEnabled: boolean = (
       activitiesApiEnabled && !showLoading && !hasError && activityLoaded
     );
 
@@ -237,7 +246,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
         <ScrollView
           style={styles.issueContent}
-          refreshControl={this.props.renderRefreshControl(() => this.loadIssueActivities())}
+          refreshControl={this.renderRefreshControl()}
           keyboardDismissMode="interactive"
           keyboardShouldPersistTaps="handled"
           scrollEventThrottle={16}
@@ -245,7 +254,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
           {hasError && <View><Text style={styles.loadingActivityError}>Failed to load activities.</Text></View>}
 
-          {showActivitySettings && this.renderActivitySettings()}
+          {this.renderActivitySettings(!isActivitySettingEnabled)}
 
           {activityLoaded && this._renderActivities()}
 
