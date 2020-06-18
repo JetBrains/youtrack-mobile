@@ -5,21 +5,38 @@ import {ISSUE_UPDATED} from '../single-issue/single-issue-action-types';
 import sinon from 'sinon';
 import reducer from './issue-list-reducers';
 
+let dispatch;
+let stateMock;
+let apiMock;
+let issueContextQueryMock;
+let issueListQueryMock;
+
 describe('Issue list actions', () => {
-  let dispatch;
   let getState;
   const TEST_QUERY = 'test-query';
 
+  afterEach(() => jest.restoreAllMocks());
+
   beforeEach(() => {
-    const state = {
+    issueContextQueryMock = 'project YouTrackMobile';
+    issueListQueryMock = 'test-query';
+
+    stateMock = {
       app: {
         auth: {
           currentUser: {id: 'current-user'}
         }
+      },
+      searchContext: {
+        query: issueContextQueryMock
+      },
+      issueList: {
+        query: issueListQueryMock
       }
     };
     dispatch = sinon.spy();
-    getState = () => state;
+    getState = () => stateMock;
+    apiMock = {};
   });
 
   it('should set issues query', () => {
@@ -32,9 +49,8 @@ describe('Issue list actions', () => {
     await populateStorage();
 
     const suggestions = [{id: 'test'}];
-    const apiMock = {
-      getQueryAssistSuggestions: () => new Promise(resolve => resolve(suggestions))
-    };
+    apiMock.getQueryAssistSuggestions = () => new Promise(resolve => resolve(suggestions));
+
     await actions.suggestIssuesQuery(TEST_QUERY, 4)(dispatch, getState, () => apiMock);
 
     dispatch.should.have.been.calledWith({type: types.SUGGEST_QUERY, suggestions});
@@ -48,9 +64,7 @@ describe('Issue list actions', () => {
 
     flushStoragePart({lastQueries: ['last-query']});
 
-    const apiMock = {
-      getSavedQueries: () => new Promise(resolve => resolve(savedQueries))
-    };
+    apiMock.getSavedQueries = () => new Promise(resolve => resolve(savedQueries));
 
     await actions.suggestIssuesQuery('', 0)(dispatch, getState, () => apiMock);
 
@@ -80,23 +94,34 @@ describe('Issue list actions', () => {
       .should.deep.equal({type: types.RECEIVE_ISSUES, issues, pageSize: 10});
   });
 
-  it('should load issues count', async () => {
-    const COUNT = 12;
-    const stateMock = {issueList: {query: 'test-query'}};
-    const apiMock = {
-      issues: {
-        getIssuesCount: () => new Promise(resolve => resolve(COUNT))
-      }
-    };
 
-    await actions.loadIssuesCount()(dispatch, () => stateMock, () => apiMock);
+  describe('loadIssuesCount', () => {
+    it('should set issues count', async () => {
+      const countMock = 12;
+      apiMock.issues = {
+        getIssuesCount: jest.fn().mockResolvedValueOnce(countMock)
+      };
 
-    dispatch.should.have.been.calledWith({
-      type: types.SET_ISSUES_COUNT,
-      count: COUNT
+      await actions.loadIssuesCount()(dispatch, () => stateMock, () => apiMock);
+
+      dispatch.should.have.been.calledWith({
+        type: types.SET_ISSUES_COUNT,
+        count: countMock
+      });
+    });
+
+    it('should retrieve issues count', async () => {
+      apiMock.issues = {
+        getIssuesCount: jest.fn()
+      };
+
+      await actions.loadIssuesCount(issueContextQueryMock)(dispatch, () => stateMock, () => apiMock);
+
+      expect(apiMock.issues.getIssuesCount).toHaveBeenCalledWith(issueContextQueryMock);
     });
   });
 });
+
 
 describe('Issue list reducers', () => {
   it('should set issues query', () => {
@@ -143,13 +168,14 @@ describe('Issue list reducers', () => {
 
   it('should set error on failed to load issues', () => {
     const error = new Error();
-    reducer({}, {type: types.LOADING_ISSUES_ERROR, error})
-      .should.deep.equal({
+    reducer({}, {type: types.LOADING_ISSUES_ERROR, error}).should.deep.equal(
+      {
         isInitialized: true,
         isListEndReached: true,
         loadingError: error,
         issues: []
-      });
+      }
+    );
   });
 
   it('should set that issues list end is reached', () => {

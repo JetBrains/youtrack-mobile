@@ -132,11 +132,10 @@ export function getSearchQuery(query: string) {
 
 export function onQueryUpdate(query: string) {
   return (dispatch: (any) => any) => {
-    const searchQuery = dispatch(getSearchQuery(query));
     dispatch(storeIssuesQuery(query));
     dispatch(setIssuesQuery(query));
     dispatch(clearAssistSuggestions());
-    dispatch(loadIssues(searchQuery));
+    dispatch(refreshIssues());
   };
 }
 
@@ -249,7 +248,7 @@ export function loadIssues(query: string) {
     const api: Api = getApi();
     log.info('Loading issues...');
     dispatch(startIssuesLoading());
-    dispatch(loadIssuesCount());
+
     try {
       let issues: Array<IssueOnList> = await api.issues.getIssues(query, PAGE_SIZE);
       issues = ApiHelper.fillIssuesFieldHash(issues);
@@ -270,10 +269,11 @@ export function loadIssues(query: string) {
 
 export function refreshIssues() {
   return async (dispatch: (any) => any, getState: () => Object) => {
-    const additionalQuery: string = getState().issueList.query;
-    const searchQuery: string = await dispatch(getSearchQuery(additionalQuery));
+    const userQuery: string = getState().issueList.query;
+    const searchQuery: string = await dispatch(getSearchQuery(userQuery));
 
     dispatch(loadIssues(searchQuery));
+    dispatch(loadIssuesCount(searchQuery));
   };
 }
 
@@ -317,10 +317,9 @@ export function loadMoreIssues() {
   };
 }
 
-export function loadIssuesCount() {
+export function loadIssuesCount(query: string = '') {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
-    const {query} = getState().issueList;
 
     const count = await api.issues.getIssuesCount(query);
 

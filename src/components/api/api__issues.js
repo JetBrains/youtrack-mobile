@@ -18,6 +18,7 @@ export default class IssuesAPI extends ApiBase {
     return issues;
   }
 
+  // `issuesGetter/count` introduced in 2019.1.51759
   async getIssuesCount(query: string = ''): Promise<number> {
     const queryString = qs.stringify({sync: false, filter: query});
     const countRes = await this.makeAuthorizedRequest(`${this.youTrackUrl}/rest/issue/count?${queryString}`);
