@@ -34,9 +34,7 @@ exports[`<Select/> Render should match a snapshot 1`] = `
       activeOpacity={0.2}
       testID="selectBackButton"
     >
-      <IconBack
-        size={28}
-      />
+      <IconBack />
     </TouchableOpacity>
     <TextInput
       allowFontScaling={true}
