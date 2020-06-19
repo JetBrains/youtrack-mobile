@@ -6,7 +6,7 @@ import {
   FlatList,
   RefreshControl,
   AppState,
-  TouchableOpacity
+  TouchableOpacity, ActivityIndicator
 } from 'react-native';
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
@@ -248,12 +248,20 @@ export class IssueList extends Component<Props, State> {
     );
   };
 
+  renderIssuesFooter = () => {
+    const {isLoadingMore, isListEndReached} = this.props;
+    if (isLoadingMore && !isListEndReached) {
+      return <ActivityIndicator color={COLOR_PINK} style={styles.listFooterMessage}/>;
+    }
+    return null;
+  }
+
   renderIssues() {
-    const {issues, isLoadingMore, isListEndReached} = this.props;
+    const {issues} = this.props;
     const listData: Array<Object> = [
       this.renderContextButton(),
       this.renderSearchQuery()
-    ].concat(issues);
+    ].concat(issues || []);
 
     return (
       <FlatList
@@ -269,12 +277,7 @@ export class IssueList extends Component<Props, State> {
         ListEmptyComponent={() => {
           return <Text>No issues found</Text>;
         }}
-        ListFooterComponent={() => {
-          if (isLoadingMore && !isListEndReached) {
-            return <Text style={styles.listFooterMessage}>Loading more issues...</Text>;
-          }
-          return null;
-        }}
+        ListFooterComponent={this.renderIssuesFooter}
 
         refreshControl={this._renderRefreshControl()}
         onScroll={(params) => this.onScroll(params.nativeEvent)}
