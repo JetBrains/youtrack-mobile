@@ -45,9 +45,15 @@ describe('Issue list actions', () => {
       .should.deep.equal({type: types.SET_ISSUES_QUERY, query: TEST_QUERY});
   });
 
-  it('should load query assist suggestions if query is not empty', async () => {
+  it('should read stored query', async () => {
     await populateStorage();
+    await flushStoragePart({query: TEST_QUERY});
+    await actions.readStoredIssuesQuery()(dispatch);
 
+    dispatch.should.have.been.calledWith({type: types.SET_ISSUES_QUERY, query: TEST_QUERY});
+  });
+
+  it('should load query assist suggestions if query is not empty', async () => {
     const suggestions = [{id: 'test'}];
     apiMock.getQueryAssistSuggestions = () => new Promise(resolve => resolve(suggestions));
 
