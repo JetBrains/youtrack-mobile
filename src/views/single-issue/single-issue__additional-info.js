@@ -44,12 +44,14 @@ export default class IssueAdditionalInfo extends PureComponent<Props, void> {
           Created by {this._getUserName(reporter)} {this._getDate(created, true)}
         </Text>
 
-        <Text
-          style={[styles.issueTopPanelText, styles.topPanelUpdatedInformation]}
-          selectable={true}
-        >
-          Updated by {this._getUserName(updater)} {this._getDate(updated, true)}
-        </Text>
+        {created !== updated && (
+          <Text
+            style={[styles.issueTopPanelText, styles.topPanelUpdatedInformation]}
+            selectable={true}
+          >
+            Updated by {this._getUserName(updater)} {this._getDate(updated, true)}
+          </Text>
+        )}
 
       </View>
     );

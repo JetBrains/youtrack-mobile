@@ -48,7 +48,8 @@ export default StyleSheet.create({
     padding: UNIT * 2
   },
   issueTopPanel: {
-    paddingTop: UNIT / 4
+    paddingTop: UNIT / 4,
+    marginBottom: UNIT * 2
   },
   issueTopPanelText: {
     ...secondaryText
@@ -60,7 +61,6 @@ export default StyleSheet.create({
   },
   topPanelUpdatedInformation: {
     marginTop: UNIT * 0.75,
-    marginBottom: UNIT * 2
   },
   summary: {
     paddingTop: UNIT,
