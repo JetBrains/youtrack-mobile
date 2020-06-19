@@ -37,16 +37,6 @@ export default StyleSheet.create({
     borderBottomWidth: 0.5,
     borderColor: COLOR_GRAY
   },
-  loadingIndicator: {
-    position: 'absolute',
-    zIndex: 1,
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
   loadingMoreIndicator: {
     padding: UNIT * 2
   },

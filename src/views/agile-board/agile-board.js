@@ -463,7 +463,7 @@ class AgileBoard extends Component<Props, State> {
   }
 
   render() {
-    const {sprint, isSprintSelectOpen, isOutOfDate, isLoading, isLoadingAgile} = this.props;
+    const {isSprintSelectOpen, isOutOfDate} = this.props;
 
     return (
       <View
@@ -481,11 +481,6 @@ class AgileBoard extends Component<Props, State> {
 
         {isOutOfDate && this.renderRefreshPopup()}
 
-        {Boolean(isLoadingAgile || (!sprint && isLoading)) && (
-          <View style={styles.loadingIndicator}>
-            <ActivityIndicator size="large" color={COLOR_PINK}/>
-          </View>
-        )}
       </View>
     );
   }
