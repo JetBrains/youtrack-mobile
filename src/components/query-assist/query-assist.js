@@ -36,6 +36,17 @@ type State = {
 export default class QueryAssist extends Component<Props, State> {
   queryAssistContainer: ?Object;
   lastQueryParams: { query: string, caret: number } = {query: '', caret: 0};
+  initialState: State = {
+    inputValue: '',
+    caret: 0,
+    queryCopy: '',
+    suggestionsListTop: 0
+  };
+
+  constructor(props: Props) {
+    super(props);
+    this.state = Object.assign({}, this.initialState);
+  }
 
   onSearch = throttle((query: string, caret: number) => {
     if (this.lastQueryParams.query === query || this.lastQueryParams.caret === caret) {
@@ -48,22 +59,9 @@ export default class QueryAssist extends Component<Props, State> {
 
   }, SEARCH_THROTTLE);
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {};
-    this.resetState();
-  }
-
   resetState = () => {
-    const initialState: State = {
-      inputValue: '',
-      caret: 0,
-      queryCopy: '',
-      suggestionsListTop: 0
-    };
-    this.setState(initialState);
-    return initialState;
-  }
+    this.setState(this.initialState);
+  };
 
   blurInput() {
     this.refs.searchInput.blur();
