@@ -214,6 +214,8 @@ export default class IssueDetails extends PureComponent<Props, void> {
         {Boolean(issue) && this.renderCustomFieldPanel()}
         {this._renderIssueView(issue || issuePlaceholder)}
 
+        {!issueLoaded && <ActivityIndicator style={styles.loading}/>}
+
         <TouchableOpacity
           style={styles.switchToActivityButton}
           hitSlop={HIT_SLOP}
@@ -222,7 +224,6 @@ export default class IssueDetails extends PureComponent<Props, void> {
           <Text style={styles.switchToActivityButtonText}>Show activity</Text>
         </TouchableOpacity>
 
-        {!issueLoaded && <ActivityIndicator style={styles.loading}/>}
       </ScrollView>
     );
   }

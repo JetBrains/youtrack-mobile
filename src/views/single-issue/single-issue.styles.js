@@ -119,6 +119,8 @@ export default StyleSheet.create({
   },
   switchToActivityButtonText: {
     ...mainText,
-    ...link
+    ...link,
+    padding: UNIT,
+    marginBottom: UNIT * 3
   }
 });
