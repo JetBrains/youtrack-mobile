@@ -7,7 +7,7 @@
 import * as React from 'react';
 import {View, LayoutAnimation} from 'react-native';
 import {getAgileCardHeight} from '../agile-card/agile-card';
-import { COLOR_PINK } from '../variables/variables';
+import {COLOR_PINK, UNIT} from '../variables/variables';
 import Draggable from './draggable';
 import {DragContext} from './drag-container';
 
@@ -156,7 +156,7 @@ class DropZone extends React.Component<PropsWithContext, State> {
     const withoutMoving = childs.filter((c: React.Element<typeof Draggable | any>) => this.props.dragContext?.dragging?.data !== c.props.data);
 
     withoutMoving.splice(placeholderIndex, 0, (
-      <View key="placeholder" style={{height: 8, backgroundColor: COLOR_PINK}}></View>
+      <View key="placeholder" style={{height: UNIT, marginLeft: UNIT * 2, backgroundColor: COLOR_PINK}}/>
     ));
     return withoutMoving;
   }

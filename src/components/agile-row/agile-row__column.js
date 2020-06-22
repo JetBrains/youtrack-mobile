@@ -29,6 +29,7 @@ export default function AgileRowColumn(props: ColumnProps) {
       }}
     >
       {props.cell.issues.map(props.renderIssueCard)}
+
       <TouchableOpacity onPress={() => props.onTapCreateIssue(cell.column.id, cell.id)} style={styles.addCardButton}>
         <IconAdd color={COLOR_PINK} size={18}/>
       </TouchableOpacity>

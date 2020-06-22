@@ -99,9 +99,6 @@ export default StyleSheet.create({
     ...link,
     color: COLOR_FONT_ON_BLACK,
   },
-  card: {
-    marginBottom: UNIT * 2
-  },
   agileSelector: {
     paddingTop: UNIT,
     marginLeft: UNIT * 2,

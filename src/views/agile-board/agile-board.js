@@ -352,7 +352,6 @@ class AgileBoard extends Component<Props, State> {
           >
             <AgileCard
               issue={issue}
-              style={styles.card}
               estimationField={sprint.agile.estimationField}
               zoomedIn={this.state.zoomedIn}
             />

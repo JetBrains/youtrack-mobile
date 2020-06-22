@@ -13,7 +13,6 @@ import {secondaryText} from '../common-styles/typography';
 export default StyleSheet.create({
   card: {
     flexDirection: 'row',
-    marginBottom: UNIT,
     marginLeft: UNIT * 2,
     borderRadius: UNIT,
     overflow: 'hidden',
@@ -57,6 +56,7 @@ export default StyleSheet.create({
   },
   dragging: {
     width: '80%',
+    transform: [{rotate: '-3deg'}],
     borderWidth: 2,
     borderColor: COLOR_ICON_LIGHT_BLUE
   },
