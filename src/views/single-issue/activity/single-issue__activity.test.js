@@ -82,20 +82,20 @@ describe('Issue activity', () => {
       expect(APIMock.issue.getActivitiesPage).toHaveBeenCalledWith(ISSUE_ID, categories);
 
       expect(dispatched[0]).toEqual({
-        type: types.RECEIVE_ACTIVITY_PAGE,
-        activityPage: []
-      });
-
-      expect(dispatched[1]).toEqual({
-        type: types.RECEIVE_ACTIVITY_API_AVAILABILITY,
-        activitiesEnabled: true
-      });
-      expect(dispatched[2]).toEqual({
         type: types.RECEIVE_ACTIVITY_CATEGORIES,
         issueActivityTypes: issueActivityAllTypes,
         issueActivityEnabledTypes: issueActivityAllTypes
       });
 
+      expect(dispatched[1]).toEqual({
+        type: types.RECEIVE_ACTIVITY_PAGE,
+        activityPage: []
+      });
+
+      expect(dispatched[2]).toEqual({
+        type: types.RECEIVE_ACTIVITY_API_AVAILABILITY,
+        activitiesEnabled: true
+      });
       expect(dispatched[3]).toEqual({
         type: types.RECEIVE_ACTIVITY_PAGE,
         activityPage: activityPageMock

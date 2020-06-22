@@ -37,15 +37,16 @@ export function loadActivitiesPage() {
     const issueId = getState().singleIssue.issueId;
     const api: Api = getApi();
 
+    dispatch(receiveActivityEnabledTypes());
+    const activityCategories = activityHelper.getActivityCategories(
+      activityHelper.getIssueActivitiesEnabledTypes()
+    );
+
     dispatch(receiveActivityPage([]));
     dispatch(receiveActivityAPIAvailability(true));
 
     try {
       log.info('Loading activities...');
-      dispatch(receiveActivityEnabledTypes());
-      const activityCategories = activityHelper.getActivityCategories(
-        activityHelper.getIssueActivitiesEnabledTypes()
-      );
       const activityPage: Array<IssueActivity> = await api.issue.getActivitiesPage(issueId, activityCategories);
       dispatch(receiveActivityPage(activityPage));
       log.info('Received activities', activityPage);

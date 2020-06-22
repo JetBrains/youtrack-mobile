@@ -72,28 +72,29 @@ export default class SingleIssueActivitiesSettings extends Component<Props, Stat
     }
   ];
 
-  constructor(props: Object) {
+  constructor(props: Props) {
     super(props);
-
-    const naturalCommentsOrder = props?.userAppearanceProfile?.naturalCommentsOrder;
-
-    const selected: Array<Object> = props.issueActivityEnabledTypes;
-    const sortOrderSelected = SingleIssueActivitiesSettings.sortOrderOptions.filter(
-      (it: SortOrderOption) => it.isNaturalCommentsOrder === naturalCommentsOrder
-    );
-
-    const select = Object.assign({}, defaultState, {
-      dataSource: () => Promise.resolve(
-        props.issueActivityTypes.concat(SingleIssueActivitiesSettings.sortOrderOptions)
-      ),
-      selectedItems: selected.concat(sortOrderSelected)
-    });
 
     this.state = {
       ...defaultState,
-      ...{naturalCommentsOrder: naturalCommentsOrder},
-      select
+      ...{naturalCommentsOrder: props?.userAppearanceProfile?.naturalCommentsOrder}
     };
+  }
+
+  componentDidUpdate(prevProps: $ReadOnly<Props>) {
+    this.initSelectData();
+  }
+
+  initSelectData() {
+    const selected: Array<Object> = this.props.issueActivityEnabledTypes;
+    const sortOrderSelected: Array<Object> = SingleIssueActivitiesSettings.sortOrderOptions.filter(
+      (it: SortOrderOption) => it.isNaturalCommentsOrder === this.props?.userAppearanceProfile?.naturalCommentsOrder
+    );
+
+    this.state.select.dataSource = () => Promise.resolve(
+      this.props.issueActivityTypes.concat(SingleIssueActivitiesSettings.sortOrderOptions)
+    );
+    this.state.select.selectedItems = selected.concat(sortOrderSelected);
   }
 
   toggleSettingsVisibility = () => {
@@ -148,7 +149,8 @@ export default class SingleIssueActivitiesSettings extends Component<Props, Stat
         emptyValue={null}
         multi={true}
         onSelect={(selectedItems) => {
-          return this.onApplySettings((selectedItems || []).filter(it => !it.toggleItem));}}
+          return this.onApplySettings((selectedItems || []).filter(it => !it.toggleItem));
+        }}
         getTitle={getEntityPresentation}
         onCancel={() => this.toggleSettingsVisibility()}
         onChangeSelection={(selected: Array<Object>, current: Object) => this.onSelect(selected, current)}
