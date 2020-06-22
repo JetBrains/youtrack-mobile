@@ -98,11 +98,11 @@ class BoardScroller extends Component<Props, State> {
     const newY = dy === 0 ? null : clamp(offsetY + dy / SPEED_DIVIDE, 0, maxY);
 
     if (newX !== null) {
-      this.horizontalScroll.scrollTo({x: newX, animated: false});
+      this.horizontalScroll && this.horizontalScroll.scrollTo({x: newX, animated: false});
       this.unmanagedState.scrollPositions.offsetX = newX || offsetX;
     }
     if (newY !== null) {
-      this.verticalScroll.scrollTo({y: newY, animated: false});
+      this.verticalScroll && this.verticalScroll.scrollTo({y: newY, animated: false});
       this.unmanagedState.scrollPositions.offsetY = newY || offsetY;
     }
 
