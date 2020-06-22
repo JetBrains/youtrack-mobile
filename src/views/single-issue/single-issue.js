@@ -369,7 +369,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
         {issueLoadingError && <View style={styles.error}><ErrorMessage error={issueLoadingError}/></View>}
 
 
-        {this.renderTabs()}
+        {!issueLoadingError && this.renderTabs()}
 
         {isIssueLoaded && showCommandDialog && this._renderCommandDialog()}
 
