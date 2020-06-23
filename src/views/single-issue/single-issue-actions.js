@@ -391,8 +391,14 @@ export function applyCommand(command: string) {
 
       await getApi().applyCommand({issueIds: [issueId], command});
 
-      notify('Command successfully applied');
       dispatch(closeCommandDialog());
+
+      if (command.trim() === 'delete') {
+        notify('Issue deleted');
+        return Router.IssueList();
+      }
+
+      notify('Command successfully applied');
       await dispatch(loadIssue());
       dispatch(issueUpdated(getState().singleIssue.issue));
     } catch (err) {
