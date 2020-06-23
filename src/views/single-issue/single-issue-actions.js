@@ -311,10 +311,6 @@ export function showIssueActions(actionSheet: Object) {
       }
     ]
       .concat(createAttachActions(dispatch))
-      .concat([{
-        title: 'Apply command…',
-        execute: () => dispatch(openCommandDialog())
-      }])
       .concat([
         {
           title: 'Share…',
@@ -327,6 +323,10 @@ export function showIssueActions(actionSheet: Object) {
             }
             usage.trackEvent(CATEGORY_NAME, 'Copy issue URL');
           }
+        },
+        {
+          title: 'Apply command…',
+          execute: () => dispatch(openCommandDialog())
         }
       ])
       .concat({title: 'Cancel'});

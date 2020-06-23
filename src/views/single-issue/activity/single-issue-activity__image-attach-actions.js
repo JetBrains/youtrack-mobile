@@ -65,7 +65,7 @@ function attachImage(method: typeof attachFileMethod) {
 export function createAttachActions(dispatch: (Function) => any): Array<Object> {
   return [
     {
-      title: 'Take a photo…',
+      title: 'Add photo…',
       execute: () => dispatch(attachImage(attachFileMethod.openCamera))
     },
     {
