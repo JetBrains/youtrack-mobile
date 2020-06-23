@@ -58,8 +58,8 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
       horizontal={true}
     >
 
-      {attachments.map((attach: Attachment) => (
-        <View key={attach.id}>
+      {attachments.map((attach: Attachment, index: number) => (
+        <View key={attach.id || `issue-attachment-${index}`}>
           <AttachmentErrorBoundary
             attachName={attach.name}
           >
