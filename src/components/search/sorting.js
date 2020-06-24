@@ -1,8 +1,11 @@
 /* @flow */
 
-export function sortByName(item1: {name: string}, item2: {name: string}) {
-  const name1 = item1.name.toLowerCase();
-  const name2 = item2.name.toLowerCase();
+import {getEntityPresentation} from '../issue-formatter/issue-formatter';
+
+export function sortAlphabetically(item1: Object, item2: Object) {
+  const name1 = getEntityPresentation(item1).toLowerCase();
+  const name2 = getEntityPresentation(item2).toLowerCase();
+
   if (name1 > name2) {
     return 1;
   }

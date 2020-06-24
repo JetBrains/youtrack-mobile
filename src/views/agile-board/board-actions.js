@@ -12,7 +12,7 @@ import usage from '../../components/usage/usage';
 import {findIssueOnBoard} from './board-updaters';
 import {getGroupedSprints} from './agile-board__helper';
 import animation from '../../components/animation/animation';
-import {sortByName} from '../../components/search/sorting';
+import {sortAlphabetically} from '../../components/search/sorting';
 import type {CustomError} from '../../flow/Error';
 
 type ApiGetter = () => Api;
@@ -386,7 +386,7 @@ export function openBoardSelect() {
         placeholder: 'Type board name',
         dataSource: async () => {
           const agileBoardsList = await api.agile.getAgileBoardsList();
-          const boards = agileBoardsList.sort(sortByName).reduce(
+          const boards = agileBoardsList.sort(sortAlphabetically).reduce(
             (list, board) => {
               if (board.favorite) {
                 list.favorites.push(board);

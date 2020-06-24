@@ -29,7 +29,8 @@ export type State = {
   user: User,
   updateUserAppearanceProfile: Function,
 
-  attachingImage: ?Object
+  attachingImage: ?Object,
+  isAttachFileDialogVisible: boolean
 };
 
 export const initialState: State = {
@@ -53,7 +54,8 @@ export const initialState: State = {
   user: null,
   updateUserAppearanceProfile: null,
 
-  attachingImage: null
+  attachingImage: null,
+  isAttachFileDialogVisible: false
 };
 
 export default createReducer(initialState, {
@@ -80,6 +82,12 @@ export default createReducer(initialState, {
   },
   [types.STOP_IMAGE_ATTACHING](state: State): State {
     return {...state, attachingImage: null};
+  },
+  [types.TOGGLE_ATTACH_FILE_DIALOG](state: State, action: {isAttachFileDialogVisible: boolean}): State {
+    return {
+      ...state,
+      isAttachFileDialogVisible: action.isAttachFileDialogVisible
+    };
   },
 
   ...{

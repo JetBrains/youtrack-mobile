@@ -6,7 +6,9 @@ const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
 type Attachment = {
   filename?: string,
   path: string,
-  mime: string
+  mime: string,
+  width?: number,
+  height?: number
 }
 
 type NormalizedAttachment = {
@@ -34,7 +36,11 @@ async function pickPhoto(method: string): Promise<NormalizedAttachment> {
   return {
     url: filePath,
     name: fileName,
-    mimeType: image.mime
+    mimeType: image.mime,
+    dimensions: {
+      width: image.width,
+      height: image.height
+    }
   };
 }
 

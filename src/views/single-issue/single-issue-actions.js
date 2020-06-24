@@ -11,7 +11,7 @@ import {showActions} from '../../components/action-sheet/action-sheet';
 import usage from '../../components/usage/usage';
 import {initialState} from './single-issue-reducers';
 import {isIOSPlatform} from '../../util/util';
-import {createAttachActions} from './activity/single-issue-activity__image-attach-actions';
+import {toggleAttachFileDialog} from './activity/single-issue-activity__image-attach-actions';
 
 import type {IssueFull, CommandSuggestionResponse, OpenNestedViewParams} from '../../flow/Issue';
 import type {CustomField, IssueProject, FieldValue} from '../../flow/CustomFields';
@@ -308,9 +308,15 @@ export function showIssueActions(actionSheet: Object) {
           dispatch(startEditingIssue());
           usage.trackEvent(CATEGORY_NAME, 'Edit issue');
         }
+      },
+      {
+        title: 'Attach file',
+        execute: () => {
+          dispatch(toggleAttachFileDialog(true));
+        }
       }
     ]
-      .concat(createAttachActions(dispatch))
+      // .concat(createAttachActions(dispatch))
       .concat([
         {
           title: 'Share…',

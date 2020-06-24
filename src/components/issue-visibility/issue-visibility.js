@@ -6,17 +6,22 @@ import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 
 export default class IssueVisibility {
 
-  static visibility(visibility: Visibility, isLimited: ?boolean) {
-    return Object.assign(
+  static visibility(visibility: Visibility, isLimited: boolean = false) {
+    const _visibility: Visibility = Object.assign(
       {
         permittedUsers: [],
         permittedGroups: []
       },
-      visibility,
-      {
-        $type: isLimited ? ResourceTypes.VISIBILITY_LIMITED : ResourceTypes.VISIBILITY_UNLIMITED,
-      },
+      visibility
     );
+
+    const hasVisibility: boolean = _visibility.permittedGroups.length > 0 || _visibility.permittedUsers.length > 0;
+    _visibility.$type = (
+      isLimited === true || hasVisibility
+        ? ResourceTypes.VISIBILITY_LIMITED
+        : ResourceTypes.VISIBILITY_UNLIMITED
+    );
+    return _visibility;
   }
 
   static hasUsersOrGroups(visibility: Visibility): boolean {

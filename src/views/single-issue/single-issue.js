@@ -19,6 +19,7 @@ import ErrorMessage from '../../components/error-message/error-message';
 import styles from './single-issue.styles';
 import {getReadableID} from '../../components/issue-formatter/issue-formatter';
 import * as issueActions from './single-issue-actions';
+import * as activityImageAttachActions from './activity/single-issue-activity__image-attach-actions';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {State as SingleIssueState} from './single-issue-reducers';
@@ -34,17 +35,23 @@ import IssueDetails from './single-issue__details';
 import {IconBack, IconActions, IconCheck, IconClose} from '../../components/icon/icon';
 import IssueActivity from './activity/single-issue__activity';
 import IssueStar from '../../components/issue-actions/issue-star';
+import AttachFileModal from '../../components/attach-file/attach-file-modal';
+import type {Attachment} from '../../flow/CustomFields';
 
 const CATEGORY_NAME = 'Issue';
 const tabRoutes: Array<TabRoute> = [
   {key: 'details', title: 'Details'},
-  {key: 'activity', title: 'Activity'},
+  {key: 'activity', title: 'Activity'}
 ];
 
 
 type AdditionalProps = {
   issuePermissions: IssuePermissions,
   issuePlaceholder: Object,
+
+  uploadAttach: (attach: Attachment) => any,
+  cancelUploadAttach: () => any,
+  createAttachActions: () => any
 };
 
 type SingleIssueProps = SingleIssueState & typeof issueActions & AdditionalProps;
@@ -353,11 +360,24 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
     />;
   }
 
+  renderAttachFileDialog() {
+    return (
+      <AttachFileModal
+        issueId={this.props.issue.id}
+        attach={this.props.attachingImage}
+        actions={this.props.createAttachActions()}
+        onCancel={this.props.cancelUploadAttach}
+        onAttach={this.props.uploadAttach}
+      />
+    );
+  }
+
   render() {
     const {
       issueLoaded,
       issueLoadingError,
       showCommandDialog,
+      isAttachFileDialogVisible
     } = this.props;
 
     const isIssueLoaded = Boolean(issueLoaded && !issueLoadingError);
@@ -373,6 +393,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
 
         {isIssueLoaded && showCommandDialog && this._renderCommandDialog()}
 
+        {isAttachFileDialogVisible && this.renderAttachFileDialog()}
       </View>
     );
   }
@@ -391,13 +412,14 @@ const mapStateToProps = (state: { app: Object, singleIssue: SingleIssueState }, 
 const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(issueActions, dispatch),
-    ...{
-      updateUserAppearanceProfile: (userAppearanceProfile: UserAppearanceProfile) => {
-        return dispatch(
-          receiveUserAppearanceProfile(userAppearanceProfile)
-        );
-      }
-    }
+    updateUserAppearanceProfile: (userAppearanceProfile: UserAppearanceProfile) => {
+      return dispatch(
+        receiveUserAppearanceProfile(userAppearanceProfile)
+      );
+    },
+    uploadAttach: (attach: Attachment) => dispatch(activityImageAttachActions.uploadFile(attach)),
+    cancelUploadAttach: () => dispatch(activityImageAttachActions.toggleAttachFileDialog(false)),
+    createAttachActions: () => activityImageAttachActions.createAttachActions(dispatch)
   };
 };
 

@@ -12,7 +12,7 @@ import type {IssueOnList, SavedQuery} from '../../flow/Issue';
 import type {Folder} from '../../flow/User';
 import {updateUserGeneralProfile} from '../../actions/app-actions';
 import {EVERYTHING_CONTEXT} from '../../components/search/search-context';
-import {sortByName} from '../../components/search/sorting';
+import {sortAlphabetically} from '../../components/search/sorting';
 
 const PAGE_SIZE = 10;
 const MAX_STORED_QUERIES = 5;
@@ -168,8 +168,8 @@ export function openIssuesContextSelect() {
           return [EVERYTHING_CONTEXT].concat(
             groupedFolders.current,
             groupedFolders.star,
-            groupedFolders.pinned.sort(sortByName),
-            groupedFolders.regular.sort(sortByName)
+            groupedFolders.pinned.sort(sortAlphabetically),
+            groupedFolders.regular.sort(sortAlphabetically)
           );
         },
         selectedItems: [currentSearchContext],

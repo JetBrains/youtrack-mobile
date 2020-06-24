@@ -8,6 +8,8 @@ import {showActions} from '../../../components/action-sheet/action-sheet';
 import usage from '../../../components/usage/usage';
 import type Api from '../../../components/api/api';
 import type {State as SingleIssueState} from '../single-issue-reducers';
+import type {Attachment} from '../../../flow/CustomFields';
+import {IconAttachment, IconCamera} from '../../../components/icon/icon';
 
 const CATEGORY_NAME = 'Issue';
 
@@ -19,6 +21,10 @@ const attachFileMethod: Object = {
   openPicker: 'openPicker'
 };
 
+
+export function toggleAttachFileDialog(isAttachFileDialogVisible: boolean = false) {
+  return {type: types.TOGGLE_ATTACH_FILE_DIALOG, isAttachFileDialogVisible};
+}
 
 export function startImageAttaching(attachingImage: Object) {
   return {type: types.START_IMAGE_ATTACHING, attachingImage};
@@ -32,32 +38,39 @@ export function stopImageAttaching() {
   return {type: types.STOP_IMAGE_ATTACHING};
 }
 
-function attachImage(method: typeof attachFileMethod) {
-  return async (
-    dispatch: any => any,
-    getState: StateGetter,
-    getApi: ApiGetter
-  ) => {
+export function uploadFile(attach: Attachment) {
+  return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {issue} = getState().singleIssue;
+
+    try {
+      await api.issue.attachFile(issue.id, attach.url, attach.name);
+      log.info(`Image attached to issue ${issue.id}`);
+      usage.trackEvent(CATEGORY_NAME, 'Attach image', 'Success');
+
+      dispatch(stopImageAttaching());
+      dispatch(toggleAttachFileDialog(false));
+
+    } catch (err) {
+      notify('Cannot attach file', err);
+    }
+  };
+}
+
+function attachImage(method: typeof attachFileMethod) {
+  return async (dispatch: any => any) => {
     try {
       const attachingImage = await attachFile(method);
-      if (!attachingImage) {
-        return;
-      }
-      dispatch(startImageAttaching(attachingImage));
 
-      try {
-        await api.issue.attachFile(issue.id, attachingImage.url, attachingImage.name);
-        log.info(`Image attached to issue ${issue.id}`);
-        usage.trackEvent(CATEGORY_NAME, 'Attach image', 'Success');
-      } catch (err) {
-        notify('Cannot attach file', err);
-        dispatch(removeAttachingImage());
+      if (attachingImage) {
+        dispatch(startImageAttaching(attachingImage));
+        dispatch(toggleAttachFileDialog(true));
+
+        // dispatch(uploadFile(attachingImage));
+        // dispatch(stopImageAttaching());
       }
-      dispatch(stopImageAttaching());
     } catch (err) {
-      notify('ImagePicker error', err);
+      notify('Can\'t add file', err);
     }
   };
 }
@@ -65,12 +78,14 @@ function attachImage(method: typeof attachFileMethod) {
 export function createAttachActions(dispatch: (Function) => any): Array<Object> {
   return [
     {
-      title: 'Add photo…',
-      execute: () => dispatch(attachImage(attachFileMethod.openCamera))
+      title: 'Choose from library…',
+      icon: IconAttachment,
+      execute: () => dispatch(attachImage(attachFileMethod.openPicker))
     },
     {
-      title: 'Add file from library…',
-      execute: () => dispatch(attachImage(attachFileMethod.openPicker))
+      title: 'Take a picture…',
+      icon: IconCamera,
+      execute: () => dispatch(attachImage(attachFileMethod.openCamera))
     }
   ];
 }

@@ -22,6 +22,8 @@ export const hasType = function(type: string) {
 };
 
 hasType.comment = hasType(ResourceTypes.ISSUE_COMMENT);
+hasType.user = hasType(ResourceTypes.USER);
+hasType.userGroup = hasType(ResourceTypes.USER_GROUP);
 
 
 export const addTypes = function(type: string) {

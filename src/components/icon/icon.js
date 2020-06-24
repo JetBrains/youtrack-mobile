@@ -135,6 +135,12 @@ export const IconAngleRight = (props?: Props) => <DefaultIcon {...{
   ...props
 }} />;
 
+export const IconCamera = (props?: Props) => <DefaultIcon {...{
+  isFontAwesome: true,
+  name: 'camera',
+  ...props
+}} />;
+
 export const IconPaperClip = (props?: Props) => <DefaultIcon {...{
   isFontAwesome: true,
   name: 'paperclip',
