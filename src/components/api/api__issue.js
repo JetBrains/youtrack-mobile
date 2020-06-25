@@ -4,10 +4,10 @@ import ApiBase from './api__base';
 import issueFields from './api__issue-fields';
 import ApiHelper from './api__helper';
 import {handleRelativeUrl} from '../config/config';
-import issueActivityPageFields from './api__activities-issue-fields';
+import issueActivityPageFields, {ISSUE_ATTACHMENT_FIELDS} from './api__activities-issue-fields';
 
 import type Auth from '../auth/auth';
-import type {FieldValue, IssueComment, IssueProject} from '../../flow/CustomFields';
+import type {Attachment, FieldValue, IssueComment, IssueProject} from '../../flow/CustomFields';
 import type {IssueOnList, IssueFull} from '../../flow/Issue';
 import type {IssueActivity} from '../../flow/Activity';
 import type {Visibility} from '../../flow/Visibility';
@@ -23,10 +23,7 @@ export default class IssueAPI extends ApiBase {
     }, {encode: false});
 
     const issue = await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${id}?${queryString}`);
-    ['url', 'thumbnailURL'].forEach(
-      fieldName => issue.attachments = ApiHelper.convertRelativeUrls(issue.attachments, fieldName, this.config.backendUrl)
-    );
-
+    issue.attachments = ApiHelper.convertAttachmentRelativeToAbsURLs(issue.attachments, this.config.backendUrl);
     return issue;
   }
 
@@ -56,9 +53,7 @@ export default class IssueAPI extends ApiBase {
   async loadIssueDraft(draftId: string): IssueFull {
     const queryString = qs.stringify({fields: issueFields.singleIssue.toString()});
     const issue = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/admin/users/me/drafts/${draftId}?${queryString}`);
-    ['url', 'thumbnailURL'].forEach(
-      fieldName => issue.attachments = ApiHelper.convertRelativeUrls(issue.attachments, fieldName, this.config.backendUrl)
-    );
+    issue.attachments = ApiHelper.convertAttachmentRelativeToAbsURLs(issue.attachments, this.config.backendUrl);
     return issue;
   }
 
@@ -71,9 +66,7 @@ export default class IssueAPI extends ApiBase {
     const queryString = qs.stringify({fields: issueFields.singleIssue.toString()});
 
     const updatedIssue = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/admin/users/me/drafts/${issue.id || ''}?${queryString}`, 'POST', issue);
-    ['url', 'thumbnailURL'].forEach(
-      fieldName => updatedIssue.attachments = ApiHelper.convertRelativeUrls(issue.attachments, fieldName, this.config.backendUrl)
-    );
+    updatedIssue.attachments = ApiHelper.convertAttachmentRelativeToAbsURLs(updatedIssue.attachments, this.config.backendUrl);
     return updatedIssue;
   }
 
@@ -109,6 +102,11 @@ export default class IssueAPI extends ApiBase {
     return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/comments/${commentId}`, 'DELETE', null, {parseJson: false});
   }
 
+  async getIssueAttachments(issueId: string): Promise<Array<Attachment>> {
+    const queryString = qs.stringify({fields: ISSUE_ATTACHMENT_FIELDS.toString()});
+    const attachments: Array<Attachment> = await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/attachments?${queryString}`);
+    return ApiHelper.convertAttachmentRelativeToAbsURLs(attachments, this.config.backendUrl);
+  }
 
   async attachFile(issueId: string, fileUri: string, fileName: string): Promise<XMLHttpRequest> {
     const url = `${this.youTrackIssueUrl}/${issueId}/attachments?fields=id,name`;

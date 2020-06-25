@@ -83,7 +83,9 @@ const ISSUE_ACTIVITIES_FIELDS = toField([
 ]);
 
 
-
+export {
+  ISSUE_ATTACHMENT_FIELDS
+};
 
 export default toField([
   'cursor',

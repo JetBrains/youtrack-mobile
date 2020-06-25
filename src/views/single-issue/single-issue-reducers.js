@@ -89,6 +89,15 @@ export default createReducer(initialState, {
       isAttachFileDialogVisible: action.isAttachFileDialogVisible
     };
   },
+  [types.RECEIVE_ISSUE_ATTACHMENTS](state: State, action: {attachments: boolean}): State {
+    return {
+      ...state,
+      issue: {
+        ...state.issue,
+        attachments: action.attachments,
+      }
+    };
+  },
 
   ...{
     [ON_NAVIGATE_BACK]: (state: State, action: {closingView: {routeName: string, params: {issueId?: string}}}): State => {

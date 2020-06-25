@@ -1,8 +1,10 @@
 /* @flow */
+
 import {handleRelativeUrl} from '../config/config';
 import objectWalk from 'object-walk';
 import {getReadableID} from '../issue-formatter/issue-formatter';
 
+import type {Attachment} from '../../flow/CustomFields';
 import type {IssueOnList, AnyIssue, ServersideSuggestion, TransformedSuggestion} from '../../flow/Issue';
 
 const API = {
@@ -48,9 +50,17 @@ const API = {
     });
   },
 
+  convertAttachmentRelativeToAbsURLs(attachments: Array<Attachment>, backendUrl: string) {
+    let convertedItems: Array<any> = attachments;
+    ['url', 'thumbnailURL'].forEach(
+      fieldName => convertedItems = this.convertRelativeUrls(convertedItems, fieldName, backendUrl)
+    );
+    return convertedItems;
+  },
+
   //Ported from youtrack frontend
-  toField: function toFieldConstructor(fields: Object|Array<string|Object>) {
-    const toArray = function(object) {
+  toField: function toFieldConstructor(fields: Object | Array<string | Object>) {
+    const toArray = function (object) {
       if (Array.isArray(object)) {
         return object;
       }
@@ -58,8 +68,8 @@ const API = {
       return [object];
     };
 
-    const toFieldString = function(fields: Array<any>) {
-      return toArray(fields).map(function(field) {
+    const toFieldString = function (fields: Array<any>) {
+      return toArray(fields).map(function (field) {
         if (typeof field === 'string') {
           return field;
         }
@@ -72,7 +82,7 @@ const API = {
           return toFieldString(field);
         }
 
-        return Object.keys(field).map(function(key) {
+        return Object.keys(field).map(function (key) {
           const value = field[key];
 
           if (value) {
@@ -88,7 +98,7 @@ const API = {
 
     return {
       constructor: toFieldConstructor,
-      toString: function() {
+      toString: function () {
         return fieldsString;
       }
     };

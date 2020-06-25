@@ -51,6 +51,7 @@ type AdditionalProps = {
   issuePlaceholder: Object,
 
   uploadAttach: (attach: Attachment) => any,
+  loadAttachments: () => any,
   cancelUploadAttach: () => any,
   createAttachActions: () => any
 };
@@ -362,16 +363,22 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
   }
 
   renderAttachFileDialog() {
-    const {attachingImage, createAttachActions, cancelUploadAttach, uploadAttach} = this.props;
+    const {attachingImage, createAttachActions, cancelUploadAttach} = this.props;
     return (
       <AttachFileDialog
         issueId={this.props.issue.id}
         attach={attachingImage}
         actions={createAttachActions()}
         onCancel={cancelUploadAttach}
-        onAttach={uploadAttach}
+        onAttach={this.addAttachment}
       />
     );
+  }
+
+  addAttachment = async (attach: Attachment) => {
+    const {uploadAttach, loadAttachments} = this.props;
+    await uploadAttach(attach);
+    loadAttachments();
   }
 
   render() {
@@ -420,6 +427,7 @@ const mapDispatchToProps = (dispatch) => {
       );
     },
     uploadAttach: (attach: Attachment) => dispatch(activityImageAttachActions.uploadFile(attach)),
+    loadAttachments: () => dispatch(issueActions.loadIssueAttachments()),
     cancelUploadAttach: () => dispatch(activityImageAttachActions.toggleAttachFileDialog(false)),
     createAttachActions: () => activityImageAttachActions.createAttachActions(dispatch)
   };

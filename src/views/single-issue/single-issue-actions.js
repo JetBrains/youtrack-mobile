@@ -115,6 +115,25 @@ export function stopApplyingCommand() {
   return {type: types.STOP_APPLYING_COMMAND};
 }
 
+export function loadIssueAttachments() {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const issueId = getState().singleIssue.issueId;
+    if (!issueId) {
+      return;
+    }
+
+    try {
+      const attachments = await getApi().issue.getIssueAttachments(issueId);
+      dispatch({
+        type: types.RECEIVE_ISSUE_ATTACHMENTS,
+        attachments
+      });
+    } catch (error) {
+      log.warn('Failed to load issue attachments', error);
+    }
+  };
+}
+
 export function loadIssue() {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().singleIssue.issueId;
@@ -316,7 +335,6 @@ export function showIssueActions(actionSheet: Object) {
         }
       }
     ]
-      // .concat(createAttachActions(dispatch))
       .concat([
         {
           title: 'Share…',
