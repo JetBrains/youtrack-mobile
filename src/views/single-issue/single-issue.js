@@ -87,7 +87,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
 
   componentDidUpdate(prevProps: $Shape<SingleIssueProps>): void {
     if (this.props.editMode === true && !prevProps.editMode && this.state.index === 1) {
-      this.setState({index: 0});
+      this.switchToDetailsTab();
     }
   }
 
@@ -202,9 +202,11 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
   }
 
   switchToActivityTab = () => {
-    this.setState({
-      index: 1
-    });
+    this.setState({index: 1});
+  };
+
+  switchToDetailsTab = () => {
+    this.setState({index: 0});
   };
 
   renderTabs() {
@@ -303,7 +305,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
           extraButton={isIssueLoaded ? this.renderStar() : null}
           onRightButtonClick={() => {
             if (isIssueLoaded) {
-              showIssueActions(this.context.actionSheet());
+              showIssueActions(this.context.actionSheet(), this.switchToDetailsTab);
             }
           }
           }

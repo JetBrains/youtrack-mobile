@@ -307,7 +307,7 @@ function makeIssueWebUrl(api: Api, issue: IssueFull, commentId: ?string) {
   return `${api.config.backendUrl}/issue/${issue.idReadable}${commentHash}`;
 }
 
-export function showIssueActions(actionSheet: Object) {
+export function showIssueActions(actionSheet: Object, switchToDetailsTab: () => any) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {issue} = getState().singleIssue;
@@ -331,6 +331,7 @@ export function showIssueActions(actionSheet: Object) {
       {
         title: 'Attach file',
         execute: () => {
+          switchToDetailsTab();
           dispatch(toggleAttachFileDialog(true));
         }
       }
