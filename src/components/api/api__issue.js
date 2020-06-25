@@ -4,13 +4,13 @@ import ApiBase from './api__base';
 import issueFields from './api__issue-fields';
 import ApiHelper from './api__helper';
 import {handleRelativeUrl} from '../config/config';
-import log from '../log/log';
+import issueActivityPageFields from './api__activities-issue-fields';
 
 import type Auth from '../auth/auth';
-import type {FieldValue} from '../../flow/CustomFields';
-import type {IssueOnList, IssueFull, IssueComment, IssueProject} from '../../flow/Issue';
+import type {FieldValue, IssueComment, IssueProject} from '../../flow/CustomFields';
+import type {IssueOnList, IssueFull} from '../../flow/Issue';
 import type {IssueActivity} from '../../flow/Activity';
-import issueActivityPageFields from './api__activities-issue-fields';
+import type {Visibility} from '../../flow/Visibility';
 
 export default class IssueAPI extends ApiBase {
   constructor(auth: Auth) {
@@ -66,7 +66,7 @@ export default class IssueAPI extends ApiBase {
    * Creates (if issue has no id) or updates issue draft
    * @param issue
    * @returns {Promise}
-     */
+   */
   async updateIssueDraft(issue: IssueFull): IssueFull {
     const queryString = qs.stringify({fields: issueFields.singleIssue.toString()});
 
@@ -110,30 +110,34 @@ export default class IssueAPI extends ApiBase {
   }
 
 
-  attachFile(issueId: string, fileUri: string, fileName: string): Promise<XMLHttpRequest> {
-    const formDataContent = new FormData(); //eslint-disable-line no-undef
+  async attachFile(issueId: string, fileUri: string, fileName: string): Promise<XMLHttpRequest> {
+    const url = `${this.youTrackIssueUrl}/${issueId}/attachments?fields=id,name`;
+    const headers = this.auth.getAuthorizationHeaders();
+    const formData = new FormData(); //eslint-disable-line no-undef
     // $FlowFixMe
-    formDataContent.append('photo', {uri: fileUri, name: fileName, type: 'image/binary'});
-
-    return new Promise((resolve, reject) => {
-      const STATE_DONE = 4;
-      const xhr = new XMLHttpRequest(); //eslint-disable-line no-undef
-      xhr.open('POST', `${this.youTrackUrl}/rest/issue/${issueId}/attachment`);
-      const headers = this.auth.getAuthorizationHeaders();
-      xhr.setRequestHeader('Authorization', headers.Authorization);
-
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState !== STATE_DONE) {
-          return;
-        }
-        if (xhr.status >= 200 && xhr.status < 400) {
-          log.log('attach result', xhr);
-          return resolve(xhr);
-        }
-        return reject(xhr);
-      };
-      xhr.send(formDataContent);
+    formData.append('photo', {
+      uri: fileUri,
+      name: fileName,
+      type: 'image/binary'
     });
+
+    const response = await fetch(
+      url,
+      {
+        method: 'POST',
+        body: formData,
+        headers: headers,
+      }
+    );
+
+    return await response.json();
+  }
+
+  async updateIssueAttachmentVisibility(issueId: string, attachmentId: string, visibility: Visibility | null) {
+    const queryString = qs.stringify({fields: 'id,thumbnailURL,url,visibility($type,permittedGroups($type,id),permittedUsers($type,id))'});
+    const body = {visibility};
+
+    return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/attachments/${attachmentId}?${queryString}`, 'POST', body);
   }
 
   async updateIssueSummaryDescription(issue: IssueFull) {

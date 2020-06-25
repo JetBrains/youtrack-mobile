@@ -3,6 +3,8 @@
 import type {Visibility} from '../../flow/Visibility';
 import {ResourceTypes, addTypes} from '../api/api__resource-types';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
+import type {UserGroup} from '../../flow/UserGroup';
+import type {User} from '../../flow/User';
 
 export default class IssueVisibility {
 
@@ -72,10 +74,19 @@ export default class IssueVisibility {
     }
   }
 
+  static getVisibilityAsArray(visibility: Visibility = {}): Array<User | UserGroup> {
+    return [...(visibility.permittedGroups || []), ...(visibility.permittedUsers || [])];
+  }
+
   static getVisibilityPresentation(visibility: Visibility = {}) {
-    return [...(visibility.permittedGroups || []), ...(visibility.permittedUsers || [])]
+    return IssueVisibility.getVisibilityAsArray(visibility)
       .map(it => getEntityPresentation(it))
       .join(', ');
   }
 
+  static getVisibilityShortPresentation(visibility: Visibility = {}): string {
+    const visibilityItems: Array<UserGroup | User> = IssueVisibility.getVisibilityAsArray(visibility);
+    const firstItemPresentation: string = getEntityPresentation(visibilityItems[0]);
+    return `${firstItemPresentation} ${visibilityItems.length > 1 ? `+${visibilityItems.length - 1}`: ''}`;
+  }
 }

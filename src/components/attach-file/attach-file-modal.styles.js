@@ -6,7 +6,6 @@ import {headerTitle, mainText} from '../common-styles/typography';
 
 export default StyleSheet.create({
   container: {
-    padding: UNIT,
     paddingBottom: UNIT * 2
   },
   content: {
@@ -33,5 +32,8 @@ export default StyleSheet.create({
   },
   buttonText: {
     ...mainText
+  },
+  visibilityButton: {
+    margin: UNIT * 3
   }
 });

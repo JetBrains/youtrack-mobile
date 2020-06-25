@@ -44,7 +44,9 @@ export function uploadFile(attach: Attachment) {
     const {issue} = getState().singleIssue;
 
     try {
-      await api.issue.attachFile(issue.id, attach.url, attach.name);
+      const response: Attachment = await api.issue.attachFile(issue.id, attach.url, attach.name);
+      await api.issue.updateIssueAttachmentVisibility(issue.id, response[0].id, attach.visibility);
+
       log.info(`Image attached to issue ${issue.id}`);
       usage.trackEvent(CATEGORY_NAME, 'Attach image', 'Success');
 
@@ -57,17 +59,13 @@ export function uploadFile(attach: Attachment) {
   };
 }
 
-function attachImage(method: typeof attachFileMethod) {
+function showAttachImageDialog(method: typeof attachFileMethod) {
   return async (dispatch: any => any) => {
     try {
       const attachingImage = await attachFile(method);
-
       if (attachingImage) {
         dispatch(startImageAttaching(attachingImage));
         dispatch(toggleAttachFileDialog(true));
-
-        // dispatch(uploadFile(attachingImage));
-        // dispatch(stopImageAttaching());
       }
     } catch (err) {
       notify('Can\'t add file', err);
@@ -80,12 +78,12 @@ export function createAttachActions(dispatch: (Function) => any): Array<Object> 
     {
       title: 'Choose from library…',
       icon: IconAttachment,
-      execute: () => dispatch(attachImage(attachFileMethod.openPicker))
+      execute: () => dispatch(showAttachImageDialog(attachFileMethod.openPicker))
     },
     {
       title: 'Take a picture…',
       icon: IconCamera,
-      execute: () => dispatch(attachImage(attachFileMethod.openCamera))
+      execute: () => dispatch(showAttachImageDialog(attachFileMethod.openCamera))
     }
   ];
 }

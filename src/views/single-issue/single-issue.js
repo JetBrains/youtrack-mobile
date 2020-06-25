@@ -26,6 +26,8 @@ import type {State as SingleIssueState} from './single-issue-reducers';
 import type {TabRoute} from '../../flow/Issue';
 
 import type {UserAppearanceProfile} from '../../flow/User';
+import type {Attachment} from '../../flow/CustomFields';
+
 import {receiveUserAppearanceProfile} from '../../actions/app-actions';
 
 // $FlowFixMe: module throws on type check
@@ -35,8 +37,7 @@ import IssueDetails from './single-issue__details';
 import {IconBack, IconActions, IconCheck, IconClose} from '../../components/icon/icon';
 import IssueActivity from './activity/single-issue__activity';
 import IssueStar from '../../components/issue-actions/issue-star';
-import AttachFileModal from '../../components/attach-file/attach-file-modal';
-import type {Attachment} from '../../flow/CustomFields';
+import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
 
 const CATEGORY_NAME = 'Issue';
 const tabRoutes: Array<TabRoute> = [
@@ -203,7 +204,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
     this.setState({
       index: 1
     });
-  }
+  };
 
   renderTabs() {
     const window = Dimensions.get('window');
@@ -361,13 +362,14 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
   }
 
   renderAttachFileDialog() {
+    const {attachingImage, createAttachActions, cancelUploadAttach, uploadAttach} = this.props;
     return (
-      <AttachFileModal
+      <AttachFileDialog
         issueId={this.props.issue.id}
-        attach={this.props.attachingImage}
-        actions={this.props.createAttachActions()}
-        onCancel={this.props.cancelUploadAttach}
-        onAttach={this.props.uploadAttach}
+        attach={attachingImage}
+        actions={createAttachActions()}
+        onCancel={cancelUploadAttach}
+        onAttach={uploadAttach}
       />
     );
   }
@@ -399,7 +401,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
   }
 }
 
-const mapStateToProps = (state: { app: Object, singleIssue: SingleIssueState }, ownProps): SingleIssueState & AdditionalProps => {
+const mapStateToProps = (state: { app: Object, singleIssue: SingleIssueState }, ownProps): SingleIssueState => {
   return {
     issuePermissions: state.app.issuePermissions,
     ...state.singleIssue,
