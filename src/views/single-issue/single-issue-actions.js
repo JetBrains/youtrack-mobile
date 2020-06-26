@@ -2,6 +2,7 @@
 
 import {Clipboard, Share} from 'react-native';
 import * as types from './single-issue-action-types';
+import {attachmentTypes, attachmentActions} from './single-issue__attachment-actions-and-types';
 import ApiHelper from '../../components/api/api__helper';
 import {notify, notifyError} from '../../components/notification/notification';
 import {resolveError} from '../../components/error/error-resolver';
@@ -11,12 +12,13 @@ import {showActions} from '../../components/action-sheet/action-sheet';
 import usage from '../../components/usage/usage';
 import {initialState} from './single-issue-reducers';
 import {isIOSPlatform} from '../../util/util';
-import {toggleAttachFileDialog} from './activity/single-issue-activity__image-attach-actions';
 
 import type {IssueFull, CommandSuggestionResponse, OpenNestedViewParams} from '../../flow/Issue';
-import type {CustomField, IssueProject, FieldValue} from '../../flow/CustomFields';
+import type {CustomField, IssueProject, FieldValue, Attachment} from '../../flow/CustomFields';
 import type Api from '../../components/api/api';
 import type {State as SingleIssueState} from './single-issue-reducers';
+import type {UserAppearanceProfile} from '../../flow/User';
+import {receiveUserAppearanceProfile} from '../../actions/app-actions';
 
 const CATEGORY_NAME = 'Issue';
 
@@ -125,7 +127,7 @@ export function loadIssueAttachments() {
     try {
       const attachments = await getApi().issue.getIssueAttachments(issueId);
       dispatch({
-        type: types.RECEIVE_ISSUE_ATTACHMENTS,
+        type: attachmentTypes.ATTACH_RECEIVE_ALL_ATTACHMENTS,
         attachments
       });
     } catch (error) {
@@ -332,7 +334,7 @@ export function showIssueActions(actionSheet: Object, switchToDetailsTab: () => 
         title: 'Attach file',
         execute: () => {
           switchToDetailsTab();
-          dispatch(toggleAttachFileDialog(true));
+          dispatch(attachmentActions.toggleAttachFileDialog(true));
         }
       }
     ]
@@ -434,3 +436,32 @@ export function applyCommand(command: string) {
   };
 }
 
+export function updateUserAppearanceProfile(userAppearanceProfile: UserAppearanceProfile) {
+  return async (dispatch: (any) => any) => {
+    dispatch(receiveUserAppearanceProfile(userAppearanceProfile));
+  };
+}
+
+export function uploadAttach(attach: Attachment) {
+  return async (dispatch: (any) => any) => {
+    await dispatch(attachmentActions.uploadFile(attach));
+  };
+}
+
+export function loadAttachments() {
+  return async (dispatch: (any) => any) => {
+    dispatch(loadIssueAttachments());
+  };
+}
+
+export function cancelUploadAttach() {
+  return async (dispatch: (any) => any) => {
+    dispatch(attachmentActions.toggleAttachFileDialog(false));
+  };
+}
+
+export function deleteAttach(attach: Attachment) {
+  return async (dispatch: (any) => any) => {
+    dispatch(attachmentActions.removeAttachment(attach));
+  };
+}

@@ -19,16 +19,12 @@ import ErrorMessage from '../../components/error-message/error-message';
 import styles from './single-issue.styles';
 import {getReadableID} from '../../components/issue-formatter/issue-formatter';
 import * as issueActions from './single-issue-actions';
-import * as activityImageAttachActions from './activity/single-issue-activity__image-attach-actions';
+import {attachmentActions} from './single-issue__attachment-actions-and-types';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {State as SingleIssueState} from './single-issue-reducers';
 import type {TabRoute} from '../../flow/Issue';
-
-import type {UserAppearanceProfile} from '../../flow/User';
 import type {Attachment} from '../../flow/CustomFields';
-
-import {receiveUserAppearanceProfile} from '../../actions/app-actions';
 
 // $FlowFixMe: module throws on type check
 import {TabView, TabBar} from 'react-native-tab-view';
@@ -386,7 +382,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
     const {uploadAttach, loadAttachments} = this.props;
     await uploadAttach(attach);
     loadAttachments();
-  }
+  };
 
   render() {
     const {
@@ -428,16 +424,7 @@ const mapStateToProps = (state: { app: Object, singleIssue: SingleIssueState }, 
 const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(issueActions, dispatch),
-    updateUserAppearanceProfile: (userAppearanceProfile: UserAppearanceProfile) => {
-      return dispatch(
-        receiveUserAppearanceProfile(userAppearanceProfile)
-      );
-    },
-    uploadAttach: (attach: Attachment) => dispatch(activityImageAttachActions.uploadFile(attach)),
-    loadAttachments: () => dispatch(issueActions.loadIssueAttachments()),
-    cancelUploadAttach: () => dispatch(activityImageAttachActions.toggleAttachFileDialog(false)),
-    createAttachActions: () => activityImageAttachActions.createAttachActions(dispatch),
-    deleteAttach: (attach: Attachment) => dispatch(activityImageAttachActions.removeAttachment(attach)),
+    createAttachActions: () => attachmentActions.createAttachActions(dispatch)
   };
 };
 

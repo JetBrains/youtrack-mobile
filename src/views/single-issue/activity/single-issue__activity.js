@@ -16,7 +16,7 @@ import {getApi} from '../../../components/api/api__instance';
 
 import * as activityActions from './single-issue-activity__actions';
 import * as activityCommentActions from './single-issue-activity__comment-actions';
-import * as activityImageAttachActions from './single-issue-activity__image-attach-actions';
+import {attachmentActions} from '../single-issue__attachment-actions-and-types';
 
 import {isActivitiesAPIEnabled} from './single-issue-activity__helper';
 import {COLOR_PINK} from '../../../components/variables/variables';
@@ -38,7 +38,7 @@ type IssueActivityProps = $Shape<
   & typeof activityActions
   & IssueCommentActivityState
   & typeof activityCommentActions
-  & typeof activityImageAttachActions
+  & typeof attachmentActions
   & {
   canAttach: boolean,
   onAttach: () => any
@@ -288,7 +288,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(activityActions, dispatch),
     ...bindActionCreators(activityCommentActions, dispatch),
-    ...bindActionCreators(activityImageAttachActions, dispatch),
+    ...bindActionCreators(attachmentActions, dispatch),
     stopSubmittingComment: () => dispatch(activityCommentActions.stopEditingComment())
   };
 };

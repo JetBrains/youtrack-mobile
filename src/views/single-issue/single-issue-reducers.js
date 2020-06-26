@@ -2,6 +2,7 @@
 
 import {createReducer} from 'redux-create-reducer';
 import * as types from './single-issue-action-types';
+import {attachmentTypes} from './single-issue__attachment-actions-and-types';
 import {ON_NAVIGATE_BACK} from '../../actions/action-types';
 
 import type {IssueFull, CommandSuggestionResponse} from '../../flow/Issue';
@@ -59,7 +60,7 @@ export const initialState: State = {
 };
 
 export default createReducer(initialState, {
-  [types.START_IMAGE_ATTACHING](state: State, action: {attachingImage: Object}): State {
+  [attachmentTypes.ATTACH_START_ADDING](state: State, action: {attachingImage: Object}): State {
     const {attachingImage} = action;
     return {
       ...state,
@@ -70,7 +71,7 @@ export default createReducer(initialState, {
       attachingImage
     };
   },
-  [types.REMOVE_ATTACH](state: State, action: {attachmentId: string}): State {
+  [attachmentTypes.ATTACH_REMOVE](state: State, action: {attachmentId: string}): State {
     return {
       ...state,
       issue: {
@@ -79,16 +80,16 @@ export default createReducer(initialState, {
       }
     };
   },
-  [types.STOP_IMAGE_ATTACHING](state: State): State {
+  [attachmentTypes.ATTACH_STOP_ADDING](state: State): State {
     return {...state, attachingImage: null};
   },
-  [types.TOGGLE_ATTACH_FILE_DIALOG](state: State, action: {isAttachFileDialogVisible: boolean}): State {
+  [attachmentTypes.ATTACH_TOGGLE_ADD_FILE_DIALOG](state: State, action: {isAttachFileDialogVisible: boolean}): State {
     return {
       ...state,
       isAttachFileDialogVisible: action.isAttachFileDialogVisible
     };
   },
-  [types.RECEIVE_ISSUE_ATTACHMENTS](state: State, action: {attachments: boolean}): State {
+  [attachmentTypes.ATTACH_RECEIVE_ALL_ATTACHMENTS](state: State, action: {attachments: boolean}): State {
     return {
       ...state,
       issue: {
