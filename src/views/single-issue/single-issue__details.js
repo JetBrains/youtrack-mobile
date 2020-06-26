@@ -53,7 +53,9 @@ type Props = {
 
   onVoteToggle: (voted: boolean) => any,
 
-  onSwitchToActivity: () => any
+  onSwitchToActivity: () => any,
+
+  onRemoveAttachment: () => any
 }
 
 export default class IssueDetails extends PureComponent<Props, void> {
@@ -75,6 +77,8 @@ export default class IssueDetails extends PureComponent<Props, void> {
       return null;
     }
 
+    const {onRemoveAttachment, issue} = this.props;
+
     return (
       <View style={styles.attachments}>
         <AttachmentsRow
@@ -85,6 +89,8 @@ export default class IssueDetails extends PureComponent<Props, void> {
             log.warn('onImageLoadingError', err.nativeEvent);
             this.props.refreshIssue();
           }}
+          canRemoveAttachment={this.props.issuePermissions.canRemoveAttachment(issue)}
+          onRemoveImage={onRemoveAttachment}
           onOpenAttachment={(type) => usage.trackEvent(
             this.props.analyticCategory,
             type === 'image' ? 'Showing image' : 'Open attachment by URL')}

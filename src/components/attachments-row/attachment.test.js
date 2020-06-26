@@ -36,6 +36,12 @@ describe('<Attachment/>', () => {
       expect(findByTestId('attachmentImage')).toHaveLength(1);
       expect(findByTestId('attachmentSvg')).toHaveLength(0);
       expect(findByTestId('attachmentFile')).toHaveLength(0);
+      expect(findByTestId('attachmentRemove')).toHaveLength(0);
+    });
+
+    it('should render remove image button', () => {
+      renderImage(true);
+      expect(findByTestId('attachmentRemove')).toHaveLength(1);
     });
   });
 
@@ -92,22 +98,22 @@ describe('<Attachment/>', () => {
   });
 
 
-  function renderImage() {
-    renderWithMimeType('image/png');
+  function renderImage(canRemoveImage) {
+    renderWithMimeType('image/png', canRemoveImage);
   }
 
-  function renderFile() {
-    renderWithMimeType('application/stream');
+  function renderFile(canRemoveImage) {
+    renderWithMimeType('application/stream', canRemoveImage);
   }
 
-  function renderWithMimeType(mimeType: string) {
+  function renderWithMimeType(mimeType: string, canRemoveImage: boolean) {
     render({
       mimeType: mimeType
-    });
+    }, canRemoveImage);
   }
 
-  function render(attachment: Attachment) {
-    wrapper = doShallow(Object.assign({}, attachmentMock, attachment));
+  function render(attachment: Attachment, canRemoveImage: boolean) {
+    wrapper = doShallow(Object.assign({}, attachmentMock, attachment), canRemoveImage);
     instance = wrapper.instance();
   }
 
@@ -115,10 +121,11 @@ describe('<Attachment/>', () => {
     return wrapper && wrapper.find({testID: testId});
   }
 
-  function doShallow(attachment: Attachment) {
+  function doShallow(attachment: Attachment, canRemoveImage: boolean = false) {
     return shallow(
       <Attachment
         attach={attachment}
+        canRemoveImage={canRemoveImage}
       />
     );
   }

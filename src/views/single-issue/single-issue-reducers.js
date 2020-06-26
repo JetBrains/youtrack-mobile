@@ -70,14 +70,13 @@ export default createReducer(initialState, {
       attachingImage
     };
   },
-  [types.REMOVE_ATTACHING_IMAGE](state: State): State {
+  [types.REMOVE_ATTACH](state: State, action: {attachmentId: string}): State {
     return {
       ...state,
       issue: {
         ...state.issue,
-        attachments: state.issue.attachments.filter(attach => attach !== state.attachingImage),
-      },
-      attachingImage: null
+        attachments: state.issue.attachments.filter(attach => attach.id !== action.attachmentId),
+      }
     };
   },
   [types.STOP_IMAGE_ATTACHING](state: State): State {

@@ -230,6 +230,12 @@ export const IconHistory = (props?: Props) => <IconYTM {...{
   ...props
 }} />;
 
+export const IconRemoveFilled = (props?: Props) => <IconYTM {...{
+  ...defaultProps,
+  name: 'remove-filled',
+  ...props
+}} />;
+
 export const IconTask = (props?: Props) => <IconYTM {...{
   ...defaultProps,
   name: 'task',

@@ -122,6 +122,7 @@ class CreateIssue extends Component<Props, void> {
                 attachments={issue.attachments}
                 attachingImage={attachingImage}
                 imageHeaders={getApi().auth.getAuthorizationHeaders()}
+                canRemoveAttachment={true}
                 onRemoveImage={removeAttachment}
               />
 

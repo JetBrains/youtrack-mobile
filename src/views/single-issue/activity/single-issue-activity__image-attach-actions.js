@@ -30,8 +30,8 @@ export function startImageAttaching(attachingImage: Object) {
   return {type: types.START_IMAGE_ATTACHING, attachingImage};
 }
 
-export function removeAttachingImage() {
-  return {type: types.REMOVE_ATTACHING_IMAGE};
+export function doRemoveAttach(attachmentId: string) {
+  return {type: types.REMOVE_ATTACH, attachmentId};
 }
 
 export function stopImageAttaching() {
@@ -53,8 +53,25 @@ export function uploadFile(attach: Attachment) {
       dispatch(stopImageAttaching());
       dispatch(toggleAttachFileDialog(false));
 
-    } catch (err) {
-      notify('Cannot attach file', err);
+    } catch (error) {
+      const message: string = 'Failed to attach file';
+      log.warn(message, error);
+      notify(message, error);
+    }
+  };
+}
+
+export function removeAttachment(attach: Attachment) {
+  return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const {issue} = getState().singleIssue;
+    try {
+      await api.issue.removeAttachment(issue.id, attach.id);
+      dispatch(doRemoveAttach(attach.id));
+    } catch (error) {
+      const message: string = 'Failed to remove attachment';
+      log.warn(message, error);
+      notify(message, error);
     }
   };
 }

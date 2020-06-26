@@ -16,6 +16,6 @@ export const RESET_CREATION = 'creation.RESET_CREATION';
 export const ISSUE_CREATED = 'creation.ISSUE_CREATED';
 
 export const START_IMAGE_ATTACHING = 'creation.START_IMAGE_ATTACHING';
-export const REMOVE_ATTACHING_IMAGE = 'creation.REMOVE_ATTACHING_IMAGE';
+export const REMOVE_ATTACHING_IMAGE = 'creation.REMOVE_ATTACH';
 export const STOP_IMAGE_ATTACHING = 'creation.STOP_IMAGE_ATTACHING';
 export const REMOVE_ATTACHMENT = 'creation.REMOVE_ATTACHMENT';

@@ -1,36 +1,38 @@
 /* @flow */
 
 import React, {PureComponent} from 'react';
-import {View, ActivityIndicator, TouchableOpacity, Text, Linking} from 'react-native';
+import {View, ActivityIndicator, TouchableOpacity, Text, Linking, Alert} from 'react-native';
 import {SvgUri} from 'react-native-svg';
 
 import {View as AnimatedView} from 'react-native-animatable';
-import {hasMimeType} from '../mime-type/mime-type';
 import ImageProgress from 'react-native-image-progress';
 import Router from '../router/router';
 import safariView from '../safari-view/safari-view';
 import throttle from 'lodash.throttle';
+import {hasMimeType} from '../mime-type/mime-type';
+import {isAndroidPlatform} from '../../util/util';
+import {IconRemoveFilled} from '../icon/icon';
+
+import {HIT_SLOP} from '../common-styles/button';
+import {COLOR_PINK} from '../variables/variables';
 
 import styles from './attachments-row.styles';
 
 import type {Attachment} from '../../flow/CustomFields';
-import {isAndroidPlatform} from '../../util/util';
-
-type Props = {
-  attach: Attachment,
-  attachments: Array<Attachment>,
-  attachingImage: ?Object,
-  imageHeaders: ?Object,
-  onOpenAttachment: (type: string, name: string) => any,
-  onImageLoadingError: (error: Object) => any,
-  onRemoveImage?: (attachment: Attachment) => any
-}
 
 type DefaultProps = {
   imageHeaders: ?Object,
   onOpenAttachment: (type: string, name: string) => any,
-  onImageLoadingError: (error: Object) => any
+  onImageLoadingError: (error: Object) => any,
+  canRemoveImage?: boolean,
+  onRemoveImage: (attachment: Attachment) => any,
 };
+
+type Props = DefaultProps & {
+  attach: Attachment,
+  attachments: Array<Attachment>,
+  attachingImage: ?Object,
+}
 
 const ANIMATION_DURATION = 700;
 const ERROR_HANDLER_THROTTLE = 60 * 1000;
@@ -40,8 +42,10 @@ export default class Attach extends PureComponent<Props, void> {
 
   static defaultProps: DefaultProps = {
     imageHeaders: null,
+    canRemoveImage: false,
     onOpenAttachment: () => {},
-    onImageLoadingError: () => {}
+    onImageLoadingError: () => {},
+    onRemoveImage: () => {},
   };
 
   handleLoadError = throttle((err) => {
@@ -137,8 +141,25 @@ export default class Attach extends PureComponent<Props, void> {
     );
   }
 
+  remove = () => {
+    Alert.alert(
+      'Delete attachment?',
+      'This action deletes the attachment permanently and cannot be undone.',
+      [
+        {
+          text: 'Cancel'
+        },
+        {
+          text: 'Delete',
+          onPress: () => this.props.onRemoveImage(this.props.attach)
+        }
+      ],
+      {cancelable: true}
+    );
+  }
+
   render() {
-    const {attach} = this.props;
+    const {attach, canRemoveImage} = this.props;
 
     const isImage = hasMimeType.image(attach);
     const isSvg = hasMimeType.svg(attach);
@@ -150,16 +171,31 @@ export default class Attach extends PureComponent<Props, void> {
     );
 
     return (
-      <TouchableOpacity
+      <View
         key={attach.id}
-        testID="attachment"
-        onPress={onPress}
       >
-        {isSvg && this.renderSVG()}
-        {Boolean(isImage && !isSvg) && this.renderImage()}
-        {Boolean(!isImage && !isSvg) && this.renderFile()}
+        <TouchableOpacity
+          testID="attachment"
+          onPress={onPress}
+        >
+          {isSvg && this.renderSVG()}
+          {Boolean(isImage && !isSvg) && this.renderImage()}
+          {Boolean(!isImage && !isSvg) && this.renderFile()}
 
-      </TouchableOpacity>
+        </TouchableOpacity>
+
+        {canRemoveImage && (
+          <TouchableOpacity
+            style={styles.removeButton}
+            hitSlop={HIT_SLOP}
+            testID="attachmentRemove"
+            onPress={this.remove}
+          >
+            <IconRemoveFilled size={24} color={COLOR_PINK} />
+
+          </TouchableOpacity>
+        )}
+      </View>
     );
   }
 }

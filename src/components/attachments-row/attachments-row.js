@@ -18,6 +18,7 @@ type DefaultProps = {
 type Props = DefaultProps & {
   attachments: Array<Attachment>,
   attachingImage: ?Object,
+  canRemoveAttachment?: boolean,
   onRemoveImage?: (attachment: Attachment) => any
 }
 
@@ -27,8 +28,10 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
 
   static defaultProps: DefaultProps = {
     imageHeaders: null,
+    canRemoveAttachment: false,
     onOpenAttachment: () => {},
-    onImageLoadingError: () => {}
+    onImageLoadingError: () => {},
+    onRemoveImage: () => {}
   };
 
   constructor(...args: Array<any>) {
@@ -46,7 +49,7 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
   };
 
   render() {
-    const {attachments, attachingImage, imageHeaders, onOpenAttachment, onRemoveImage} = this.props;
+    const {attachments, attachingImage, imageHeaders, onOpenAttachment, onRemoveImage, canRemoveAttachment} = this.props;
 
     if (!attachments.length) {
       return null;
@@ -69,6 +72,7 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
               attachingImage={attachingImage}
               imageHeaders={imageHeaders}
               onOpenAttachment={onOpenAttachment}
+              canRemoveImage={canRemoveAttachment}
               onRemoveImage={onRemoveImage}
             />
           </AttachmentErrorBoundary>

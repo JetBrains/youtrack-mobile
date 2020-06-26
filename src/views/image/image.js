@@ -1,21 +1,24 @@
 /* @flow */
-import {TouchableOpacity, ActivityIndicator, Alert} from 'react-native';
+
 import React, {PureComponent} from 'react';
-import {IconClose, IconTrash} from '../../components/icon/icon';
-import Router from '../../components/router/router';
-import {notify} from '../../components/notification/notification';
-import once from 'lodash.once';
+import {TouchableOpacity, ActivityIndicator} from 'react-native';
+
+import {SvgFromUri} from 'react-native-svg';
 import Gallery from 'react-native-image-gallery';
 import ImageProgress from 'react-native-image-progress';
-import {SvgFromUri} from 'react-native-svg';
+
+import once from 'lodash.once';
+import Router from '../../components/router/router';
+import {IconClose} from '../../components/icon/icon';
+import {notify} from '../../components/notification/notification';
 import {hasMimeType} from '../../components/mime-type/mime-type';
 import ModalView from '../../components/modal-view/modal-view';
 import {COLOR_PINK} from '../../components/variables/variables';
+import {HIT_SLOP} from '../../components/common-styles/button';
 
 import styles from './image.styles';
 
 import type {Attachment} from '../../flow/CustomFields';
-import {HIT_SLOP} from '../../components/common-styles/button';
 
 type Props = {
   imageAttachments: Array<Attachment>,
@@ -65,25 +68,6 @@ export class Image extends PureComponent<Props, State> {
 
   onPageSelected = (currentPage: number) => this.setState({currentPage});
 
-  onRemove = async () => {
-    const {currentPage} = this.state;
-    Alert.alert(
-      'Confirmation',
-      'Delete attachment?',
-      [
-        {text: 'Cancel', style: 'cancel'},
-        {text: 'Delete', onPress: async () => {
-          if (!this.props.onRemoveImage) {
-            return;
-          }
-          await this.props.onRemoveImage(currentPage);
-          this.closeView();
-        }}
-      ],
-      {cancelable: true}
-    );
-  };
-
   render() {
     const currentIndex = this.getCurrentPage(this.props.current);
     const createSource = attach => ({
@@ -111,14 +95,6 @@ export class Image extends PureComponent<Props, State> {
         >
           <IconClose size={28} color={COLOR_PINK}/>
         </TouchableOpacity>
-
-        {this.props.onRemoveImage && <TouchableOpacity
-          style={styles.removeButton}
-          onPress={this.onRemove}
-          hitSlop={HIT_SLOP}
-        >
-          <IconTrash size={28} color={COLOR_PINK}/>
-        </TouchableOpacity>}
       </ModalView>
     );
   }

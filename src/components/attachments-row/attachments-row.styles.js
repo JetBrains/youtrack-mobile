@@ -31,4 +31,9 @@ export default StyleSheet.create({
     right: UNIT,
     bottom: 0
   },
+  removeButton: {
+    position: 'absolute',
+    top: UNIT / 2,
+    right: UNIT * 1.5
+  }
 });

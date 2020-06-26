@@ -206,7 +206,7 @@ export default class IssueAPI extends ApiBase {
     return response.activities;
   }
 
-  removeAttachment(issueId: string, attachmentID: string) {
-    return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/attachments/${attachmentID}`, 'DELETE', null, {parseJson: false});
+  removeAttachment(issueId: string, attachmentId: string) {
+    return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/attachments/${attachmentId}`, 'DELETE', null, {parseJson: false});
   }
 }

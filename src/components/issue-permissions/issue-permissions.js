@@ -18,6 +18,7 @@ export const UPDATE_ISSUE = 'JetBrains.YouTrack.UPDATE_ISSUE';
 export const PRIVATE_UPDATE_ISSUE = 'JetBrains.YouTrack.PRIVATE_UPDATE_ISSUE';
 export const CAN_CREATE_COMMENT = 'JetBrains.YouTrack.CREATE_COMMENT';
 export const CAN_ADD_ATTACHMENT = 'JetBrains.YouTrack.CREATE_ATTACHMENT_ISSUE';
+export const CAN_REMOVE_ATTACHMENT = 'JetBrains.YouTrack.DELETE_ATTACHMENT_ISSUE';
 export const CAN_UPDATE_COMMENT = 'JetBrains.YouTrack.UPDATE_COMMENT';
 export const CAN_UPDATE_NOT_OWN_COMMENT = 'JetBrains.YouTrack.UPDATE_NOT_OWN_COMMENT';
 export const CAN_DELETE_COMMENT = 'JetBrains.YouTrack.DELETE_COMMENT';
@@ -140,6 +141,10 @@ export default class IssuePermissions {
 
   canAddAttachmentTo(issue: AnyIssue): boolean {
     return this.hasPermissionFor(issue, CAN_ADD_ATTACHMENT);
+  }
+
+  canRemoveAttachment(issue: AnyIssue): boolean {
+    return this.hasPermissionFor(issue, CAN_REMOVE_ATTACHMENT);
   }
 
   canCreateIssueToProject(project: IssueProject): boolean {

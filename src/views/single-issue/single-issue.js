@@ -53,7 +53,8 @@ type AdditionalProps = {
   uploadAttach: (attach: Attachment) => any,
   loadAttachments: () => any,
   cancelUploadAttach: () => any,
-  createAttachActions: () => any
+  createAttachActions: () => any,
+  deleteAttach: (attach: Attachment) => any
 };
 
 type SingleIssueProps = SingleIssueState & typeof issueActions & AdditionalProps;
@@ -113,7 +114,9 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
       setIssueDescriptionCopy,
 
       issue, issuePlaceholder, issueLoaded, editMode,
-      toggleVote
+      toggleVote,
+
+      deleteAttach
     } = this.props;
 
     const _issue = issue || issuePlaceholder;
@@ -147,6 +150,8 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
 
         onVoteToggle={toggleVote}
         onSwitchToActivity={this.switchToActivityTab}
+
+        onRemoveAttachment={deleteAttach}
       />
     );
   }
@@ -431,7 +436,8 @@ const mapDispatchToProps = (dispatch) => {
     uploadAttach: (attach: Attachment) => dispatch(activityImageAttachActions.uploadFile(attach)),
     loadAttachments: () => dispatch(issueActions.loadIssueAttachments()),
     cancelUploadAttach: () => dispatch(activityImageAttachActions.toggleAttachFileDialog(false)),
-    createAttachActions: () => activityImageAttachActions.createAttachActions(dispatch)
+    createAttachActions: () => activityImageAttachActions.createAttachActions(dispatch),
+    deleteAttach: (attach: Attachment) => dispatch(activityImageAttachActions.removeAttachment(attach)),
   };
 };
 

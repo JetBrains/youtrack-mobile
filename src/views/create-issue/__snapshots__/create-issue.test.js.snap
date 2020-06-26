@@ -147,6 +147,7 @@ exports[`<CreateIssue/> Render Component should match a snapshot 1`] = `
     >
       <AttachmentsRow
         attachingImage={null}
+        canRemoveAttachment={true}
         imageHeaders={null}
         onImageLoadingError={[Function]}
         onOpenAttachment={[Function]}
