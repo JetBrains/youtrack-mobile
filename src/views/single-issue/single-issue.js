@@ -48,9 +48,9 @@ type AdditionalProps = {
 
   uploadAttach: (attach: Attachment) => any,
   loadAttachments: () => any,
-  cancelUploadAttach: () => any,
+  hideAddAttachDialog: () => any,
   createAttachActions: () => any,
-  deleteAttach: (attach: Attachment) => any
+  removeAttachment: (attach: Attachment) => any
 };
 
 type SingleIssueProps = SingleIssueState & typeof issueActions & AdditionalProps;
@@ -112,7 +112,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
       issue, issuePlaceholder, issueLoaded, editMode,
       toggleVote,
 
-      deleteAttach
+      removeAttachment
     } = this.props;
 
     const _issue = issue || issuePlaceholder;
@@ -147,7 +147,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
         onVoteToggle={toggleVote}
         onSwitchToActivity={this.switchToActivityTab}
 
-        onRemoveAttachment={deleteAttach}
+        onRemoveAttachment={removeAttachment}
       />
     );
   }
@@ -366,13 +366,13 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
   }
 
   renderAttachFileDialog() {
-    const {attachingImage, createAttachActions, cancelUploadAttach} = this.props;
+    const {attachingImage, createAttachActions, hideAddAttachDialog} = this.props;
     return (
       <AttachFileDialog
         issueId={this.props.issue.id}
         attach={attachingImage}
         actions={createAttachActions()}
-        onCancel={cancelUploadAttach}
+        onCancel={hideAddAttachDialog}
         onAttach={this.addAttachment}
       />
     );

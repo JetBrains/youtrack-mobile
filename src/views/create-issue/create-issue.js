@@ -3,19 +3,24 @@
 import {ScrollView, View, Text, TouchableOpacity} from 'react-native';
 import React, {Component} from 'react';
 
-import Header from '../../components/header/header';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 import usage from '../../components/usage/usage';
+
+import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
+import Header from '../../components/header/header';
 import {getApi} from '../../components/api/api__instance';
 import {IconCheck, IconClose, IconPaperClip} from '../../components/icon/icon';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import IssueSummary from '../../components/issue-summary/issue-summary';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import * as createIssueActions from './create-issue-actions';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
 import {COLOR_GRAY, COLOR_PINK} from '../../components/variables/variables';
 
+import * as createIssueActions from './create-issue-actions';
+import {attachmentActions} from './create-issue__attachment-actions-and-types';
+
+import type {Attachment} from '../../flow/CustomFields';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {CreateIssueState} from './create-issue-reducers';
 import PropTypes from 'prop-types';
@@ -26,9 +31,11 @@ const CATEGORY_NAME = 'Create issue view';
 
 type AdditionalProps = {
   issuePermissions: IssuePermissions,
-  predefinedDraftId: ?string
+  predefinedDraftId: ?string,
+  getAttachActions: () => any,
 };
-type Props = CreateIssueState & typeof createIssueActions & AdditionalProps;
+
+type Props = CreateIssueState & typeof createIssueActions & typeof attachmentActions & AdditionalProps;
 
 class CreateIssue extends Component<Props, void> {
   static contextTypes = {
@@ -51,6 +58,30 @@ class CreateIssue extends Component<Props, void> {
     }
   };
 
+  onAddAttachment = async (attach: Attachment) => {
+    const {uploadAttach, loadAttachments} = this.props;
+    await uploadAttach(attach);
+    loadAttachments();
+  }
+
+  renderAttachFileDialog() {
+    const {issue, getAttachActions, attachingImage, hideAddAttachDialog} = this.props;
+
+    if (!issue || !issue.id) {
+      return null;
+    }
+
+    return (
+      <AttachFileDialog
+        issueId={issue.id}
+        actions={getAttachActions()}
+        attach={attachingImage}
+        onCancel={hideAddAttachDialog}
+        onAttach={this.onAddAttachment}
+      />
+    );
+  }
+
   render() {
     const {
       issuePermissions,
@@ -64,7 +95,8 @@ class CreateIssue extends Component<Props, void> {
       updateFieldValue,
       updateProject,
       removeAttachment,
-      showCreateIssueActions
+      showAddAttachDialog,
+      isAttachFileDialogVisible
     } = this.props;
 
     const isAttaching = attachingImage !== null;
@@ -131,7 +163,7 @@ class CreateIssue extends Component<Props, void> {
                   testID="createIssueAttachmentButton"
                   disabled={isProcessing}
                   style={styles.attachButton}
-                  onPress={() => showCreateIssueActions(this.context.actionSheet())}
+                  onPress={showAddAttachDialog}
                 >
                   <IconPaperClip size={24} color={isProcessing ? COLOR_GRAY : COLOR_PINK}/>
                   <Text style={[styles.attachButtonText, isProcessing ? {color: COLOR_GRAY} : null]}>
@@ -146,6 +178,8 @@ class CreateIssue extends Component<Props, void> {
         </ScrollView>
 
         <KeyboardSpacerIOS/>
+
+        {isAttachFileDialogVisible && this.renderAttachFileDialog()}
       </View>
     );
   }
@@ -161,7 +195,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    ...bindActionCreators(createIssueActions, dispatch)
+    ...bindActionCreators(createIssueActions, dispatch),
+    getAttachActions: () => attachmentActions.createAttachActions(dispatch)
   };
 };
 

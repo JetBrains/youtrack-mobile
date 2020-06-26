@@ -1,23 +1,24 @@
 /* @flow */
 
-import type Api from '../../components/api/api';
 import ApiHelper from '../../components/api/api__helper';
-import type {IssueFull} from '../../flow/Issue';
-import type {CustomField, FieldValue, Attachment} from '../../flow/CustomFields';
-import usage from '../../components/usage/usage';
-import * as types from './create-issue-action-types';
-import Router from '../../components/router/router';
 import log from '../../components/log/log';
-import attachFile from '../../components/attach-file/attach-file';
+import Router from '../../components/router/router';
+import usage from '../../components/usage/usage';
+import {DEFAULT_ERROR_MESSAGE} from '../../components/error/error-messages';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
 import {notify, notifyError} from '../../components/notification/notification';
-import {showActions} from '../../components/action-sheet/action-sheet';
 import {resolveError} from '../../components/error/error-resolver';
-import {DEFAULT_ERROR_MESSAGE} from '../../components/error/error-messages';
 
-export const CATEGORY_NAME = 'Create issue view';
+import * as types from './create-issue-action-types';
+import {attachmentActions} from './create-issue__attachment-actions-and-types';
+
+import type Api from '../../components/api/api';
+import type {CustomField, FieldValue, Attachment} from '../../flow/CustomFields';
+import type {IssueFull} from '../../flow/Issue';
 
 type ApiGetter = () => Api;
+
+export const CATEGORY_NAME = 'Create issue view';
 
 export function setIssueDraft(issue: IssueFull) {
   return {type: types.SET_ISSUE_DRAFT, issue};
@@ -69,18 +70,6 @@ export function issueCreated(issue: IssueFull, preDefinedDraftId: ?string) {
 
 export function setIssueFieldValue(field: CustomField, value: FieldValue) {
   return {type: types.SET_ISSUE_FIELD_VALUE, field, value};
-}
-
-export function startImageAttaching(attachingImage: Object) {
-  return {type: types.START_IMAGE_ATTACHING, attachingImage};
-}
-
-export function removeAttachingImage() {
-  return {type: types.REMOVE_ATTACHING_IMAGE};
-}
-
-export function stopImageAttaching() {
-  return {type: types.STOP_IMAGE_ATTACHING};
 }
 
 async function clearIssueDraftStorage() {
@@ -233,32 +222,6 @@ export function createIssue() {
   };
 }
 
-export function attachImage(takeFromLibrary: boolean = true) {
-  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
-    const api: Api = getApi();
-    const {issue} = getState().creation;
-    try {
-      const attachingImage = await attachFile(takeFromLibrary ? 'openPicker' : 'openCamera');
-      if (!attachingImage) {
-        return;
-      }
-      dispatch(startImageAttaching(attachingImage));
-
-      try {
-        await api.issue.attachFile(issue.id, attachingImage.url, attachingImage.name);
-        log.info('Image attached to draft');
-        usage.trackEvent(CATEGORY_NAME, 'Attach image', 'Success');
-      } catch (err) {
-        notifyError('Cannot attach file', err);
-        dispatch(removeAttachingImage());
-      }
-      dispatch(stopImageAttaching());
-    } catch (err) {
-      notifyError('ImagePicker error', err);
-    }
-  };
-}
-
 export function updateProject(project: Object) {
   return async (dispatch: (any) => any, getState: () => Object) => {
     dispatch(setIssueProject(project));
@@ -292,43 +255,35 @@ export function updateFieldValue(field: CustomField, value: FieldValue) {
   };
 }
 
-export function removeAttachment(attachment: Attachment) {
-  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
-    usage.trackEvent(CATEGORY_NAME, 'Remove attachment');
-
-    const api = getApi();
-    const {issue} = getState().creation;
-
-    try {
-      await api.issue.removeAttachment(issue.id, attachment.id);
-      log.info(`Attachment ${attachment.id} removed from issue draft ${issue.id}`);
-      dispatch({type: types.REMOVE_ATTACHMENT, attachment});
-    } catch (err) {
-      notifyError('Cannot remove attachment', err);
-    }
+export function uploadAttach(attach: Attachment) {
+  return async (dispatch: (any) => any, getState: () => Object) => {
+    const draftId = getState().creation.issue.id;
+    await dispatch(attachmentActions.uploadFile(attach, draftId));
   };
 }
 
-export function showCreateIssueActions(actionSheet: Object) {
+export function loadAttachments() {
+  return async (dispatch: (any) => any, getState: () => Object) => {
+    const draftId = getState().creation.issue.id;
+    dispatch(attachmentActions.loadIssueAttachments(draftId));
+  };
+}
+
+export function showAddAttachDialog() {
   return async (dispatch: (any) => any) => {
-
-    const actions = [
-      {
-        title: 'Choose from library',
-        execute: () => dispatch(attachImage(true))
-      },
-      {
-        title: 'Take a picture',
-        execute: () => dispatch(attachImage(false))
-      },
-      {title: 'Cancel'}
-    ];
-
-    const selectedAction = await showActions(actions, actionSheet);
-
-    if (selectedAction && selectedAction.execute) {
-      selectedAction.execute();
-    }
+    dispatch(attachmentActions.toggleAttachFileDialog(true));
   };
 }
 
+export function hideAddAttachDialog() {
+  return async (dispatch: (any) => any) => {
+    dispatch(attachmentActions.toggleAttachFileDialog(false));
+  };
+}
+
+export function removeAttachment(attach: Attachment) {
+  return async (dispatch: (any) => any, getState: () => Object) => {
+    const draftId = getState().creation.issue.id;
+    dispatch(attachmentActions.removeAttachment(attach, draftId));
+  };
+}

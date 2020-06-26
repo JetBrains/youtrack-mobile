@@ -24,7 +24,7 @@ const attachFileMethod: Object = {
 };
 
 export const getAttachmentActions = (prefix: string) => {
-  const types = createAttachmentTypes(prefix);
+  const types: Object = createAttachmentTypes(prefix);
 
   return {
     toggleAttachFileDialog: function (isAttachFileDialogVisible: boolean = false) {
@@ -43,16 +43,14 @@ export const getAttachmentActions = (prefix: string) => {
       return {type: types.ATTACH_STOP_ADDING};
     },
 
-    uploadFile: function (attach: Attachment) {
+    uploadFile: function (attach: Attachment, issueId: string) {
       return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
         const api: Api = getApi();
-        const {issue} = getState().singleIssue;
-
         try {
-          const response: Attachment = await api.issue.attachFile(issue.id, attach.url, attach.name);
-          await api.issue.updateIssueAttachmentVisibility(issue.id, response[0].id, attach.visibility);
+          const response: Attachment = await api.issue.attachFile(issueId, attach.url, attach.name);
+          await api.issue.updateIssueAttachmentVisibility(issueId, response[0].id, attach.visibility);
 
-          log.info(`Image attached to issue ${issue.id}`);
+          log.info(`Image attached to issue ${issueId}`);
           usage.trackEvent(CATEGORY_NAME, 'Attach image', 'Success');
 
           dispatch(this.stopImageAttaching());
@@ -66,12 +64,11 @@ export const getAttachmentActions = (prefix: string) => {
       };
     },
 
-    removeAttachment: function (attach: Attachment) {
+    removeAttachment: function (attach: Attachment, issueId: string) {
       return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
         const api: Api = getApi();
-        const {issue} = getState().singleIssue;
         try {
-          await api.issue.removeAttachment(issue.id, attach.id);
+          await api.issue.removeAttachment(issueId, attach.id);
           dispatch(this.doRemoveAttach(attach.id));
         } catch (error) {
           const message: string = 'Failed to remove attachment';
@@ -120,7 +117,26 @@ export const getAttachmentActions = (prefix: string) => {
           selectedAction.execute();
         }
       };
+    },
+
+    loadIssueAttachments: function(issueId: string) {
+      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+        if (!issueId) {
+          return;
+        }
+
+        try {
+          const attachments = await getApi().issue.getIssueAttachments(issueId);
+          dispatch({
+            type: types.ATTACH_RECEIVE_ALL_ATTACHMENTS,
+            attachments
+          });
+        } catch (error) {
+          log.warn('Failed to load issue attachments', error);
+        }
+      };
     }
+
   };
 
 };

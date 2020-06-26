@@ -443,25 +443,25 @@ export function updateUserAppearanceProfile(userAppearanceProfile: UserAppearanc
 }
 
 export function uploadAttach(attach: Attachment) {
-  return async (dispatch: (any) => any) => {
-    await dispatch(attachmentActions.uploadFile(attach));
+  return async (dispatch: (any) => any, getState: StateGetter) => {
+    await dispatch(attachmentActions.uploadFile(attach, getState().singleIssue.issueId));
   };
 }
 
 export function loadAttachments() {
-  return async (dispatch: (any) => any) => {
-    dispatch(loadIssueAttachments());
+  return async (dispatch: (any) => any, getState: StateGetter) => {
+    dispatch(attachmentActions.loadIssueAttachments(getState().singleIssue.issueId));
   };
 }
 
-export function cancelUploadAttach() {
+export function hideAddAttachDialog() {
   return async (dispatch: (any) => any) => {
     dispatch(attachmentActions.toggleAttachFileDialog(false));
   };
 }
 
-export function deleteAttach(attach: Attachment) {
-  return async (dispatch: (any) => any) => {
-    dispatch(attachmentActions.removeAttachment(attach));
+export function removeAttachment(attach: Attachment) {
+  return async (dispatch: (any) => any, getState: StateGetter) => {
+    dispatch(attachmentActions.removeAttachment(attach, getState().singleIssue.issueId));
   };
 }
