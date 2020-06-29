@@ -26,7 +26,7 @@ const attachFileMethod: Object = {
 export const getAttachmentActions = (prefix: string) => {
   const types: Object = createAttachmentTypes(prefix);
 
-  return {
+  const actions: Object = {
     toggleAttachFileDialog: function (isAttachFileDialogVisible: boolean = false) {
       return {type: types.ATTACH_TOGGLE_ADD_FILE_DIALOG, isAttachFileDialogVisible};
     },
@@ -53,8 +53,8 @@ export const getAttachmentActions = (prefix: string) => {
           log.info(`Image attached to issue ${issueId}`);
           usage.trackEvent(CATEGORY_NAME, 'Attach image', 'Success');
 
-          dispatch(this.stopImageAttaching());
-          dispatch(this.toggleAttachFileDialog(false));
+          dispatch(actions.stopImageAttaching());
+          dispatch(actions.toggleAttachFileDialog(false));
 
         } catch (error) {
           const message: string = 'Failed to attach file';
@@ -83,8 +83,8 @@ export const getAttachmentActions = (prefix: string) => {
         try {
           const attachingImage = await attachFile(method);
           if (attachingImage) {
-            dispatch(this.startImageAttaching(attachingImage));
-            dispatch(this.toggleAttachFileDialog(true));
+            dispatch(actions.startImageAttaching(attachingImage));
+            dispatch(actions.toggleAttachFileDialog(true));
           }
         } catch (err) {
           notify('Can\'t add file', err);
@@ -97,21 +97,20 @@ export const getAttachmentActions = (prefix: string) => {
         {
           title: 'Choose from library…',
           icon: IconAttachment,
-          execute: () => dispatch(this.showAttachImageDialog(attachFileMethod.openPicker))
+          execute: () => dispatch(actions.showAttachImageDialog(attachFileMethod.openPicker))
         },
         {
           title: 'Take a picture…',
           icon: IconCamera,
-          execute: () => dispatch(this.showAttachImageDialog(attachFileMethod.openCamera))
+          execute: () => dispatch(actions.showAttachImageDialog(attachFileMethod.openCamera))
         }
       ];
     },
 
     attachOrTakeImage: function (actionSheet: Object) {
       return async (dispatch: any => any) => {
-        const actions = this.createAttachActions(dispatch).concat({title: 'Cancel'});
-
-        const selectedAction = await showActions(actions, actionSheet);
+        const contextActions = actions.createAttachActions(dispatch).concat({title: 'Cancel'});
+        const selectedAction = await showActions(contextActions, actionSheet);
 
         if (selectedAction && selectedAction.execute) {
           selectedAction.execute();
@@ -138,5 +137,7 @@ export const getAttachmentActions = (prefix: string) => {
     }
 
   };
+
+  return actions;
 
 };
