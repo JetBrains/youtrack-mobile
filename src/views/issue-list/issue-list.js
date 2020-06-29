@@ -6,7 +6,7 @@ import {
   FlatList,
   RefreshControl,
   AppState,
-  TouchableOpacity, ActivityIndicator
+  TouchableOpacity
 } from 'react-native';
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
@@ -28,14 +28,15 @@ import type {IssueOnList} from '../../flow/Issue';
 import Select from '../../components/select/select';
 import SearchPanel from './issue-list__search-panel';
 import SearchQueryPreview from '../../components/query-assist/search-query-preview';
+import IssuesCount from './issue-list__count';
 
 import {IconAdd, IconAngleDown} from '../../components/icon/icon';
 import {isReactElement} from '../../util/util';
+import {LoadMoreList} from '../../components/progress/load-more-list';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
 
 import styles from './issue-list.styles';
-import IssuesCount from './issue-list__count';
 
 type Props = IssuesListState & typeof issueActions & {
   auth: Auth,
@@ -252,7 +253,7 @@ export class IssueList extends Component<Props, State> {
   renderIssuesFooter = () => {
     const {isLoadingMore, isListEndReached} = this.props;
     if (isLoadingMore && !isListEndReached) {
-      return <ActivityIndicator color={COLOR_PINK} style={styles.listFooterMessage}/>;
+      return <LoadMoreList/>;
     }
     return null;
   }

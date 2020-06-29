@@ -4,7 +4,7 @@ import {
   UNIT,
   COLOR_FONT_GRAY,
   COLOR_FONT_ON_BLACK,
-  COLOR_PINK, COLOR_LIGHT_GRAY
+  COLOR_PINK
 } from '../../components/variables/variables';
 import {SIZE as COLOR_FIELD_SIZE} from '../../components/color-field/color-field';
 import {headerTitle, secondaryText} from '../../components/common-styles/typography';
@@ -82,13 +82,6 @@ export default StyleSheet.create({
     paddingTop: 6,
     fontSize: 14,
     color: COLOR_FONT_GRAY
-  },
-  listFooterMessage: {
-    textAlign: 'center',
-    padding: UNIT * 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: COLOR_LIGHT_GRAY
   },
   tags: {
     marginTop: UNIT

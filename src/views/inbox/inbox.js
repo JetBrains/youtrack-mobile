@@ -18,6 +18,7 @@ import Wiki from '../../components/wiki/wiki';
 import CustomFieldChangeDelimiter from '../../components/custom-field/custom-field__change-delimiter';
 import {isReactElement} from '../../util/util';
 import ErrorMessage from '../../components/error-message/error-message';
+import {LoadMoreList} from '../../components/progress/load-more-list';
 
 import {elevation1} from '../../components/common-styles/shadow';
 import {headerTitle} from '../../components/common-styles/typography';
@@ -423,7 +424,7 @@ class Inbox extends Component<Props, State> {
   }
 
   renderListMessage = () => {
-    const {loading, items} = this.props;
+    const {loading, items, hasMore} = this.props;
 
     if (!loading && items.length === 0) {
       return (
@@ -437,6 +438,10 @@ class Inbox extends Component<Props, State> {
           </Text>
         </View>
       );
+    }
+
+    if (loading && hasMore) {
+      return <LoadMoreList/>;
     }
 
     return null;
