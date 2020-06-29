@@ -1,6 +1,6 @@
 /* @flow */
 
-import {Text, View, TouchableOpacity, StatusBar} from 'react-native';
+import {Text, View, TouchableOpacity} from 'react-native';
 import React, {PureComponent} from 'react';
 
 import Router from '../router/router';
@@ -57,7 +57,6 @@ export default class Header extends PureComponent<Props, void> {
         testID="header"
         style={[styles.header, style]}
       >
-        <StatusBar animated barStyle="dark-content"/>
         {<TouchableOpacity
           testID="header-back"
           hitSlop={HIT_SLOP}

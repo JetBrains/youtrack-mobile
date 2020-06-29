@@ -1,6 +1,6 @@
 /* @flow */
 
-import {UIManager} from 'react-native';
+import {UIManager, StatusBar} from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
@@ -171,10 +171,11 @@ class YouTrackMobile extends Component<void, State> {
       <Provider store={store}>
         <ActionSheet ref={this.actionSheetRef}>
           <SafeAreaView style={[{flex: 1}, {backgroundColor: this.state.backgroundColor}]}>
+
+            <StatusBar backgroundColor={this.state.backgroundColor} barStyle={'dark-content'} translucent={false}/>
+
             <ErrorBoundary>
-
               <Navigation/>
-
               <UserAgreement/>
               <DebugView/>
               <FeaturesView/>

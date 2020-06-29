@@ -20,11 +20,6 @@ exports[`<Header/> Render should match a snapshot 1`] = `
   }
   testID="header"
 >
-  <StatusBar
-    animated={true}
-    barStyle="dark-content"
-    showHideTransition="fade"
-  />
   <TouchableOpacity
     activeOpacity={0.2}
     hitSlop={
