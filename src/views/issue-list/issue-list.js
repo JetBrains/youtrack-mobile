@@ -124,10 +124,8 @@ export class IssueList extends Component<Props, State> {
 
   _renderRefreshControl() {
     return <RefreshControl
-      refreshing={this.props.isRefreshing}
-      onRefresh={() => {
-        this.props.refreshIssues();
-      }}
+      refreshing={false}
+      onRefresh={this.props.refreshIssues}
       tintColor={COLOR_PINK}
       testID="refresh-control"
     />;
