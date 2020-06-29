@@ -3,8 +3,6 @@
 import React, {Component} from 'react';
 import {TouchableOpacity, View, Text} from 'react-native';
 
-import {COLOR_ICON_GREY} from '../variables/variables';
-import {IconLock} from '../icon/icon';
 import ColorField from '../color-field/color-field';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import {getHUBUrl} from '../../util/util';
@@ -132,7 +130,7 @@ export default class CustomField extends Component<Props, void> {
   }
 
   render() {
-    const {field, active, disabled} = this.props;
+    const {field, active} = this.props;
     return (
       <TouchableOpacity
         style={[styles.wrapper, active ? styles.wrapperActive : null]}
@@ -140,7 +138,6 @@ export default class CustomField extends Component<Props, void> {
         disabled={this.props.disabled}>
 
         <View style={styles.keyWrapper}>
-          {disabled && <IconLock size={16} color={COLOR_ICON_GREY}/>}
           <Text
             style={styles.keyText}
             testID="name"

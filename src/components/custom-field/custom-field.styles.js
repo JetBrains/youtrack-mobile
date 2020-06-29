@@ -1,6 +1,5 @@
 import {StyleSheet} from 'react-native';
 import {
-  COLOR_FONT_GRAY,
   COLOR_PINK,
   COLOR_FONT,
   UNIT,
@@ -38,14 +37,6 @@ export default StyleSheet.create({
     alignItems: 'center',
     ...sidePadding
   },
-  keyLockedIcon: {
-    width: 9,
-    height: 12,
-    marginRight: UNIT / 2,
-    marginTop: -1,
-    resizeMode: 'contain',
-    tintColor: '#66757e'
-  },
   keyText: {
     marginBottom: UNIT / 2,
     ...secondaryText,
@@ -64,7 +55,7 @@ export default StyleSheet.create({
     color: COLOR_FONT,
   },
   valueTextDisabled: {
-    color: COLOR_FONT_GRAY
+    color: COLOR_FONT
   },
   colorMarker: {
     marginRight: UNIT
