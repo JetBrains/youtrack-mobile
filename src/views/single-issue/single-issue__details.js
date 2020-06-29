@@ -239,7 +239,7 @@ export default class IssueDetails extends PureComponent<Props, void> {
           hitSlop={HIT_SLOP}
           onPress={onSwitchToActivity}
         >
-          <Text style={styles.switchToActivityButtonText}>Show activity</Text>
+          <Text style={styles.switchToActivityButtonText}>View comments and other activity</Text>
         </TouchableOpacity>
 
       </ScrollView>
