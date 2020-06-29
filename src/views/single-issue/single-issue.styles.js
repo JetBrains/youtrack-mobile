@@ -44,7 +44,7 @@ export default StyleSheet.create({
     height: 20
   },
   issueView: {
-    marginTop: UNIT * 2,
+    marginTop: UNIT,
     padding: UNIT * 2
   },
   issueTopPanel: {
@@ -122,5 +122,8 @@ export default StyleSheet.create({
     ...link,
     padding: UNIT,
     marginBottom: UNIT * 3
+  },
+  visibility: {
+    marginBottom: UNIT
   }
 });

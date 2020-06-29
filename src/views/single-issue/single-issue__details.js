@@ -16,13 +16,15 @@ import {getReadableID} from '../../components/issue-formatter/issue-formatter';
 import Tags from '../../components/tags/tags';
 import {HIT_SLOP} from '../../components/common-styles/button';
 
-import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
-import type {IssueFull, IssueOnList} from '../../flow/Issue';
-import type {Attachment, CustomField, FieldValue, IssueProject} from '../../flow/CustomFields';
-
 import IssueDescription from './single-issue__description';
 import IssueVotes from '../../components/issue-actions/issue-votes';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
+import VisibilityControl from '../../components/issue-visibility/visibility';
+
+import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
+import type {IssueFull, IssueOnList} from '../../flow/Issue';
+import type {Attachment, CustomField, FieldValue, IssueProject} from '../../flow/CustomFields';
+import type {Visibility} from '../../flow/Visibility';
 
 
 type Props = {
@@ -55,7 +57,9 @@ type Props = {
 
   onSwitchToActivity: () => any,
 
-  onRemoveAttachment: () => any
+  onRemoveAttachment: () => any,
+
+  onVisibilityChange: (visibility: Visibility) => any
 }
 
 export default class IssueDetails extends PureComponent<Props, void> {
@@ -135,10 +139,18 @@ export default class IssueDetails extends PureComponent<Props, void> {
       summaryCopy,
       descriptionCopy,
       openIssueListWithSearch,
-      openNestedIssueView
+      openNestedIssueView,
+      onVisibilityChange
     } = this.props;
     return (
       <View style={styles.issueView}>
+
+        <VisibilityControl
+          style={styles.visibility}
+          issueId={issue.id}
+          visibility={issue.visibility}
+          onSubmit={onVisibilityChange}
+        />
 
         <View style={styles.issueAdditionalInfoContainer}>
           {this.renderAdditionalInfo()}

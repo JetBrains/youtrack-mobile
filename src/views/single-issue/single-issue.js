@@ -112,7 +112,8 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
       issue, issuePlaceholder, issueLoaded, editMode,
       toggleVote,
 
-      removeAttachment
+      removeAttachment,
+      updateIssueVisibility
     } = this.props;
 
     const _issue = issue || issuePlaceholder;
@@ -148,6 +149,8 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
         onSwitchToActivity={this.switchToActivityTab}
 
         onRemoveAttachment={removeAttachment}
+
+        onVisibilityChange={updateIssueVisibility}
       />
     );
   }

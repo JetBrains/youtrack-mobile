@@ -7,8 +7,7 @@ import {secondaryText} from '../common-styles/typography';
 export default StyleSheet.create({
   container: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'
+    alignItems: 'center'
   },
   resetButton: {
     marginRight: UNIT * 2

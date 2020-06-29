@@ -27,6 +27,16 @@ export default class IssueAPI extends ApiBase {
     return issue;
   }
 
+  async updateVisibility(issueId: string, visibility: Visibility | null) {
+    const queryString = qs.stringify({fields: 'id,visibility($type,permittedGroups($type,id,name),permittedUsers($type,id,name))'});
+    const url = `${this.youTrackIssueUrl}/${issueId}?${queryString}`;
+    return await this.makeAuthorizedRequest(
+      url,
+      'POST',
+      {visibility}
+    );
+  }
+
 
   async getIssueComments(issueId: string): Promise<Array<IssueComment>> {
     const queryString = qs.stringify({

@@ -8,6 +8,7 @@ import {ON_NAVIGATE_BACK} from '../../actions/action-types';
 import type {IssueFull, CommandSuggestionResponse} from '../../flow/Issue';
 import type {CustomField, FieldValue, IssueProject} from '../../flow/CustomFields';
 import type {User} from '../../flow/User';
+import type {Visibility} from '../../flow/Visibility';
 
 export type State = {
   issueId: string,
@@ -129,6 +130,15 @@ export default createReducer(initialState, {
       issueLoadingError: null,
       issue: {
         ...action.issue,
+      }
+    };
+  },
+  [types.RECEIVE_ISSUE_VISIBILITY]: (state: State, action: { visibility: Visibility }): State => {
+    return {
+      ...state,
+      issue: {
+        ...state.issue,
+        visibility: action.visibility
       }
     };
   },

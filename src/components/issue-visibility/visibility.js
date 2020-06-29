@@ -23,7 +23,9 @@ import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   issueId: string,
+  visibility?: Visibility,
   onApply: (visibility: Visibility) => any,
+  onSubmit?: ?(visibility: Visibility) => any,
   style: ?ViewStyleProp
 };
 
@@ -36,7 +38,8 @@ type State = {
 export default class VisibilityControl extends PureComponent<Props, State> {
   static defaultProps: Props = {
     issueId: '',
-    onApply: () => null,
+    visibility: null,
+    onApply: (visibility: Visibility) => null,
     style: null
   };
 
@@ -49,8 +52,20 @@ export default class VisibilityControl extends PureComponent<Props, State> {
     };
   }
 
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps.visibility !== this.props.visibility) {
+      this.setState({
+        visibility: this.props.visibility
+      });
+    }
+  }
+
   updateVisibility = (visibility: Visibility | null) => {
     this.setState({visibility});
+    if (this.props.onSubmit) {
+      this.props.onSubmit(visibility);
+      return this.closeSelect();
+    }
     this.props.onApply(visibility);
   };
 
@@ -63,10 +78,13 @@ export default class VisibilityControl extends PureComponent<Props, State> {
   };
 
   createSelectItems = (visibility: Visibility): Array<User | UserGroup> => {
-    const visibilityGroups: Array<UserGroup> = (visibility.visibilityGroups || []).filter(
-      (group: UserGroup) => !group.allUsersGroup
+    const visibilityGroups: Array<UserGroup> = (
+      visibility.visibilityGroups || visibility.permittedGroups || []
+    ).filter((group: UserGroup) => !group.allUsersGroup).sort(sortAlphabetically);
+
+    const visibilityUsers: Array<User> = (
+      visibility.visibilityUsers || visibility.permittedUsers || []
     ).sort(sortAlphabetically);
-    const visibilityUsers: Array<User> = (visibility.visibilityUsers || []).sort(sortAlphabetically);
 
     return visibilityGroups.concat(visibilityUsers);
   };
@@ -128,6 +146,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
   }
 
   renderVisibilityButton() {
+    const {onSubmit} = this.props;
     const {visibility} = this.state;
     const isSecured: boolean = IssueVisibility.isSecured(visibility);
 
@@ -139,7 +158,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
         ]}
         hitSlop={HIT_SLOP}
       >
-        {isSecured && (
+        {!onSubmit && isSecured && (
           <TouchableOpacity
             style={styles.resetButton}
             onPress={this.resetVisibility}

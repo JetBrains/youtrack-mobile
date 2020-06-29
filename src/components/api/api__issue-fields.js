@@ -281,6 +281,26 @@ const COMMAND_SUGGESTION_FIELDS = toField([
 
 const USER_AGREEMENT_FIELDS = 'endUserAgreement(enabled,text,majorVersion,minorVersion)';
 const USER_CONSENT_FIELDS = 'endUserAgreementConsent(accepted,majorVersion,minorVersion)';
+const VISIBILITY = toField([
+  {
+    visibility: [
+      {
+        permittedGroups: [
+          '$type',
+          'id',
+          'name'
+        ]
+      },
+      {
+        permittedUsers: [
+          '$type',
+          'id',
+          'name'
+        ]
+      }
+    ]
+  }
+]);
 
 
 export default {
@@ -303,7 +323,8 @@ export default {
     {fields: ISSUE_FIELD_FIELDS},
     {tags: ISSUE_TAGS_FIELDS},
     {attachments: ISSUE_ATTACHMENTS_FIELDS},
-    {links: ISSUE_LINKS_FIELDS}
+    {links: ISSUE_LINKS_FIELDS},
+    VISIBILITY
   ]),
   projectOnList: ISSUE_PROJECT_FIELDS,
   project: toField([
@@ -335,5 +356,7 @@ export default {
   ISSUE_COMMENTS_FIELDS: ISSUE_COMMENTS_FIELDS,
   ISSUE_COMMENTS_WITH_ATTACHMENT_FIELDS: ISSUE_COMMENTS_WITH_ATTACHMENT_FIELDS,
   ISSUE_COMMENTS_REMOVED_FIELDS: ISSUE_COMMENTS_REMOVED,
-  ISSUE_XSHORT_FIELDS: ISSUE_XSHORT_FIELDS
+  ISSUE_XSHORT_FIELDS: ISSUE_XSHORT_FIELDS,
+
+  VISIBILITY: VISIBILITY
 };

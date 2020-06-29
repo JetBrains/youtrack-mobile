@@ -12,13 +12,14 @@ import {showActions} from '../../components/action-sheet/action-sheet';
 import usage from '../../components/usage/usage';
 import {initialState} from './single-issue-reducers';
 import {isIOSPlatform} from '../../util/util';
+import {receiveUserAppearanceProfile} from '../../actions/app-actions';
 
 import type {IssueFull, CommandSuggestionResponse, OpenNestedViewParams} from '../../flow/Issue';
 import type {CustomField, IssueProject, FieldValue, Attachment} from '../../flow/CustomFields';
 import type Api from '../../components/api/api';
 import type {State as SingleIssueState} from './single-issue-reducers';
 import type {UserAppearanceProfile} from '../../flow/User';
-import {receiveUserAppearanceProfile} from '../../actions/app-actions';
+import type {Visibility} from '../../flow/Visibility';
 
 const CATEGORY_NAME = 'Issue';
 
@@ -115,6 +116,10 @@ export function startApplyingCommand() {
 
 export function stopApplyingCommand() {
   return {type: types.STOP_APPLYING_COMMAND};
+}
+
+export function receiveIssueVisibility(visibility: Visibility) {
+  return {type: types.RECEIVE_ISSUE_VISIBILITY, visibility};
 }
 
 export function loadIssueAttachments() {
@@ -463,5 +468,23 @@ export function hideAddAttachDialog() {
 export function removeAttachment(attach: Attachment) {
   return async (dispatch: (any) => any, getState: StateGetter) => {
     dispatch(attachmentActions.removeAttachment(attach, getState().singleIssue.issueId));
+  };
+}
+
+export function updateIssueVisibility(visibility: Visibility) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const singleIssue: IssueFull = getState().singleIssue;
+    const prevVisibility: Visibility = singleIssue.issue.visibility;
+
+    try {
+      const issueWithUpdatedVisibility: Visibility = await getApi().issue.updateVisibility(singleIssue.issueId, visibility);
+      dispatch(receiveIssueVisibility(issueWithUpdatedVisibility.visibility));
+
+    } catch (err) {
+      dispatch(receiveIssueVisibility(Object.assign({timestamp: Date.now()}, prevVisibility)));
+      const message: string = 'Cannot update issue visibility';
+      notify(message, err);
+      log.warn(message, err);
+    }
   };
 }
