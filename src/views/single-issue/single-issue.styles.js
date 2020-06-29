@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import {
   UNIT,
   COLOR_FONT_ON_BLACK,
@@ -28,7 +28,15 @@ export default StyleSheet.create({
   },
   headerText: {
     ...headerTitle,
-    fontWeight: '500'
+    fontWeight: '500',
+    ...Platform.select({
+      ios: {
+        marginLeft: UNIT * 2,
+      },
+      android: {
+        marginLeft: UNIT * 3,
+      }
+    })
   },
   headerTextResolved: {
     color: COLOR_ICON_MEDIUM_GREY,
@@ -101,7 +109,18 @@ export default StyleSheet.create({
     paddingTop: UNIT,
     paddingBottom: UNIT,
     fontWeight: '500',
-    textTransform: 'none'
+    textTransform: 'none',
+
+    ...Platform.select({
+      ios: {},
+      android: {
+        fontSize: 18,
+        fontWeight: '400',
+      }
+    })
+  },
+  tabLabelActive: {
+    fontWeight: '400',
   },
   tabLazyPlaceholder: {
     ...centered

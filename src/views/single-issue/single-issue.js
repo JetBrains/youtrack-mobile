@@ -12,7 +12,13 @@ import {connect} from 'react-redux';
 import {getApi} from '../../components/api/api__instance';
 import Router from '../../components/router/router';
 import Header from '../../components/header/header';
-import {COLOR_DARK, COLOR_FONT_GRAY, COLOR_GRAY, COLOR_PINK, UNIT} from '../../components/variables/variables';
+import {
+  COLOR_DARK,
+  COLOR_FONT_GRAY,
+  COLOR_GRAY,
+  COLOR_PINK,
+  UNIT
+} from '../../components/variables/variables';
 import usage from '../../components/usage/usage';
 import CommandDialog from '../../components/command-dialog/command-dialog';
 import ErrorMessage from '../../components/error-message/error-message';
@@ -36,6 +42,8 @@ import IssueStar from '../../components/issue-actions/issue-star';
 import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
 
 const CATEGORY_NAME = 'Issue';
+const initialWindowDimentions = Dimensions.get('window');
+
 const tabRoutes: Array<TabRoute> = [
   {key: 'details', title: 'Details'},
   {key: 'activity', title: 'Activity'}
@@ -180,10 +188,11 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
         indicatorStyle={{backgroundColor: editMode ? 'transparent' : COLOR_PINK}}
         style={[styles.tabsBar, editMode ? {height: 1} : null]}
         renderLabel={({route, focused}) => (
-          <Text style={{
-            ...styles.tabLabel,
-            color: focused && !editMode ? COLOR_PINK : this.isTabChangeEnabled() ? COLOR_DARK : COLOR_FONT_GRAY
-          }}>
+          <Text style={[
+            styles.tabLabel,
+            focused ? styles.tabLabelActive : null,
+            {color: focused && !editMode ? COLOR_PINK : this.isTabChangeEnabled() ? COLOR_DARK : COLOR_FONT_GRAY}
+          ]}>
             {route.title}
           </Text>
         )}
@@ -214,7 +223,6 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
   };
 
   renderTabs() {
-    const window = Dimensions.get('window');
     return (
       <TabView
         testID="issueTabs"
@@ -227,7 +235,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
         )}
         navigationState={this.state}
         renderScene={this.renderScene}
-        initialLayout={{width: window.width, height: window.height}}
+        initialLayout={{width: initialWindowDimentions.width, height: initialWindowDimentions.height}}
         renderTabBar={this.renderTabBar()}
         onIndexChange={index => {
           if (this.isTabChangeEnabled()) {

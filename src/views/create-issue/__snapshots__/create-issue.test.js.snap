@@ -34,6 +34,7 @@ exports[`<CreateIssue/> Render Component should match a snapshot 1`] = `
           "fontSize": 20,
           "fontWeight": "500",
           "letterSpacing": 0.13,
+          "marginLeft": 16,
           "paddingLeft": 16,
         }
       }
