@@ -85,7 +85,6 @@ export default StyleSheet.create({
   commentInputContainer: {
     flexDirection: 'row',
     padding: 2,
-    marginLeft: UNIT,
     borderRadius: INPUT_BORDER_RADIUS,
     borderWidth: 1,
     borderColor: COLOR_MEDIUM_GRAY,

@@ -19,7 +19,6 @@ import type {User} from '../../flow/User';
 import styles from './single-issue__comments.styles';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
 import {HIT_SLOP} from '../../components/common-styles/button';
-import IssueAttach from '../../components/issue-actions/issue-attach';
 import {IconAngleDown, IconArrowUp, IconCheck, IconClose, IconLock} from '../../components/icon/icon';
 
 type Props = {
@@ -236,15 +235,6 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
     );
   }
 
-  renderIssueAttachIcon() {
-    return (
-      <IssueAttach
-        canAttach={this.props.canAttach}
-        onAttach={this.props.onAttach}
-      />
-    );
-  }
-
   render() {
     const {editingComment, onCancel = () => null} = this.props;
     const {isSaving, commentText, commentCaret, showSuggestions} = this.state;
@@ -286,7 +276,6 @@ export default class SingleIssueCommentInput extends Component<Props, State> {
 
 
         <View style={styles.commentContainer}>
-          {this.renderIssueAttachIcon()}
 
           <View style={styles.commentInputContainer}>
             <MultilineInput
