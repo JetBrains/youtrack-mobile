@@ -9,6 +9,8 @@ import {
 import {mainText} from '../common-styles/typography';
 import {elevation1} from '../common-styles/shadow';
 
+const minButtonWidth = UNIT * 5;
+
 export default StyleSheet.create({
   inputWrapper: {
     ...elevation1,
@@ -18,8 +20,7 @@ export default StyleSheet.create({
     backgroundColor: COLOR_FONT_ON_BLACK,
   },
   cancelButton: {
-    paddingRight: UNIT * 1.5,
-    padding: UNIT
+    minWidth: minButtonWidth
   },
   searchInput: {
     ...mainText,
@@ -74,6 +75,9 @@ export default StyleSheet.create({
     marginRight: UNIT * 2
   },
   applyButton: {
-    paddingRight: UNIT
+    minWidth: minButtonWidth,
+    padding: UNIT,
+    paddingLeft: UNIT * 2,
+    backgroundColor: 'lime',
   }
 });

@@ -215,7 +215,7 @@ export default class Select extends Component<Props, State> {
               testID="selectBackButton"
               onPress={onCancel}
             >
-              <IconBack/>
+              <IconBack style={styles.cancelButton}/>
             </TouchableOpacity>
 
             <TextInput

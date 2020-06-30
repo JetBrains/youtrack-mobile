@@ -63,7 +63,7 @@ export default class Header extends PureComponent<Props, void> {
           style={styles.headerButtonLeft}
           onPress={() => this.onBack()}
         >
-          <Text style={styles.headerButtonText} numberOfLines={1}>{leftButton}</Text>
+          {leftButton}
         </TouchableOpacity>}
 
         {Boolean(title) && (

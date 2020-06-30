@@ -31,10 +31,10 @@ export default StyleSheet.create({
     fontWeight: '500',
     ...Platform.select({
       ios: {
-        marginLeft: UNIT * 2,
+        marginLeft: UNIT,
       },
       android: {
-        marginLeft: UNIT * 3,
+        marginLeft: UNIT * 1.5,
       }
     })
   },

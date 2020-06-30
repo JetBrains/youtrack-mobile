@@ -34,20 +34,11 @@ exports[`<Header/> Render should match a snapshot 1`] = `
     style={
       Object {
         "justifyContent": "flex-start",
+        "minWidth": 40,
       }
     }
     testID="header-back"
-  >
-    <Text
-      numberOfLines={1}
-      style={
-        Object {
-          "color": "#FE0082",
-          "fontSize": 17,
-        }
-      }
-    />
-  </TouchableOpacity>
+  />
   <View
     style={
       Object {

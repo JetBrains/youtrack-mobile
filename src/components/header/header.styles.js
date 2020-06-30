@@ -1,6 +1,8 @@
 import {StyleSheet} from 'react-native';
 import {UNIT, COLOR_PINK} from '../variables/variables';
 
+const minButtonWidth = UNIT * 5;
+
 export default StyleSheet.create({
   header: {
     paddingTop: 12,
@@ -14,10 +16,13 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   headerButtonLeft: {
+    minWidth: minButtonWidth,
     justifyContent: 'flex-start'
   },
   headerButtonRight: {
-    justifyContent: 'flex-end'
+    minWidth: minButtonWidth,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
   },
   headerButtonText: {
     fontSize: 17,
