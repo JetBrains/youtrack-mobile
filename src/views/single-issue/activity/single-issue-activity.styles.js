@@ -5,9 +5,11 @@ import {
   COLOR_PINK,
   COLOR_ICON_LIGHT_BLUE,
   COLOR_ICON_MEDIUM_GREY,
-  COLOR_LIGHT_GRAY
+  COLOR_LIGHT_GRAY,
+  COLOR_FONT_ON_BLACK,
+  COLOR_MEDIUM_GRAY
 } from '../../../components/variables/variables';
-import {mainText, secondaryText} from '../../../components/common-styles/typography';
+import {MAIN_FONT_SIZE, mainText, secondaryText} from '../../../components/common-styles/typography';
 import {link} from '../../../components/common-styles/button';
 import {separator} from '../../../components/common-styles/list';
 import issueStyles from '../single-issue.styles';
@@ -152,7 +154,15 @@ export default StyleSheet.create({
   },
   settingsContainer: {
     flex: 1,
-    padding: UNIT * 2
+    justifyContent: 'flex-end'
+  },
+  settingsContent: {
+    padding: UNIT * 2,
+    paddingTop: UNIT,
+    paddingBottom: UNIT * 3,
+    borderTopWidth: 0.7,
+    borderColor: COLOR_MEDIUM_GRAY,
+    backgroundColor: COLOR_FONT_ON_BLACK
   },
   settingsTitle: {
     ...issueStyles.headerText,
@@ -166,7 +176,13 @@ export default StyleSheet.create({
     marginTop: UNIT,
     marginBottom: UNIT,
   },
+  settingsNameContainer: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
   settingsName: {
+    fontSize: MAIN_FONT_SIZE,
+    fontWeight: '500',
     textTransform: 'capitalize'
   },
 });

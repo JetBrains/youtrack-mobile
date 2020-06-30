@@ -3,13 +3,14 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
-import {toggleIssueActivityEnabledType} from './single-issue-activity__helper';
+import {getIssueActivityIcon, toggleIssueActivityEnabledType} from './single-issue-activity__helper';
 import {IconAngleDown, IconClose} from '../../../components/icon/icon';
 import Switch from 'react-native-switch-pro';
 import ModalView from '../../../components/modal-view/modal-view';
 import Header from '../../../components/header/header';
 
 import {
+  COLOR_ICON_LIGHT_BLUE,
   COLOR_ICON_MEDIUM_GREY,
   COLOR_PINK,
   COLOR_PINK_TRANSPARENT
@@ -111,19 +112,22 @@ export default class IssueActivitiesSettings extends Component<Props, State> {
   renderSettingsDialog() {
     return (
       <ModalView
+        transparent={true}
         animationType="slide"
         testID="activitySettingsDialog"
         style={styles.settingsContainer}
       >
-        <Header
-          leftButton={<IconClose size={21} color={COLOR_PINK}/>}
-          onBack={this.toggleSettingsDialogVisibility}
-        >
-          <Text style={styles.settingsTitle}>Activity setting</Text>
-        </Header>
+        <View style={styles.settingsContent}>
+          <Header
+            leftButton={<IconClose size={21} color={COLOR_PINK}/>}
+            onBack={this.toggleSettingsDialogVisibility}
+          >
+            <Text style={styles.settingsTitle}>Activity setting</Text>
+          </Header>
 
-        {this.renderOrderItem()}
-        {this.renderTypesList()}
+          {this.renderOrderItem()}
+          {this.renderTypesList()}
+        </View>
       </ModalView>
     );
   }
@@ -134,7 +138,7 @@ export default class IssueActivitiesSettings extends Component<Props, State> {
       <View
         style={styles.settingsItem}
       >
-        <Text>{this.sortOrderOption.name}</Text>
+        <Text style={styles.settingsName}>{this.sortOrderOption.name}</Text>
         <Switch
           {...IssueActivitiesSettings.switchCommonProps}
           disabled={disabled}
@@ -158,12 +162,18 @@ export default class IssueActivitiesSettings extends Component<Props, State> {
       <View>
         {issueActivityTypes.map((type: ActivityType) => {
           const isEnabled = issueActivityEnabledTypes.some(enabled => enabled.id === type.id);
+          const Icon: any = getIssueActivityIcon(type.id);
           return (
             <View
               key={type.id}
               style={styles.settingsItem}
             >
-              <Text style={styles.settingsName}>{type.name}</Text>
+              <View style={styles.settingsNameContainer}>
+                {!!Icon && <Icon size={22} color={COLOR_ICON_LIGHT_BLUE}/>}
+                <Text style={styles.settingsName}>
+                  {`  ${type.name}`}
+                </Text>
+              </View>
               <Switch
                 {...IssueActivitiesSettings.switchCommonProps}
                 value={isEnabled}

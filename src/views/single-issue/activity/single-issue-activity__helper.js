@@ -4,10 +4,17 @@ import {flushStoragePart, getStorageState} from '../../../components/storage/sto
 import {checkVersion} from '../../../components/feature/feature';
 import {Activity} from '../../../components/activity/activity__category';
 
+import {IconComment, IconHistory, IconHourGlass} from '../../../components/icon/icon';
+
 import type {ActivityType, ActivityItem} from '../../../flow/Activity';
 import type {IssueComment} from '../../../flow/CustomFields';
 import type {StorageState} from '../../../components/storage/storage';
 
+const activityIconMap = {
+  [Activity.Source.COMMENT]: IconComment,
+  [Activity.Source.HISTORY]: IconHistory,
+  [Activity.Source.WORK_ITEM]: IconHourGlass
+};
 
 export function isActivitiesAPIEnabled() {
   return checkVersion('2018.3');
@@ -36,6 +43,10 @@ export async function toggleIssueActivityEnabledType(type: ActivityType, enable:
   }
 
   return flushStoragePart({issueActivitiesEnabledTypes: enabledTypes});
+}
+
+export function getIssueActivityIcon(activityTypeName: string): React$Component<any> {
+  return activityIconMap[activityTypeName];
 }
 
 export function getIssueActivityAllTypes(): Array<ActivityType> {

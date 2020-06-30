@@ -218,6 +218,12 @@ export const IconClose = (props?: Props) => <IconYTM {...{
   ...props
 }} />;
 
+export const IconComment = (props?: Props) => <IconYTM {...{
+  ...defaultProps,
+  name: 'comment',
+  ...props
+}} />;
+
 export const IconException = (props?: Props) => <IconYTM {...{
   ...defaultProps,
   name: 'exception',
@@ -227,6 +233,12 @@ export const IconException = (props?: Props) => <IconYTM {...{
 export const IconHistory = (props?: Props) => <IconYTM {...{
   ...defaultProps,
   name: 'history',
+  ...props
+}} />;
+
+export const IconHourGlass = (props?: Props) => <IconYTM {...{
+  ...defaultProps,
+  name: 'hourglass',
   ...props
 }} />;
 
