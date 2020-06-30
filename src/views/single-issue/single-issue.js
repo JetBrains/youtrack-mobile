@@ -377,16 +377,22 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
   }
 
   renderAttachFileDialog() {
-    const {attachingImage, createAttachActions, hideAddAttachDialog} = this.props;
+    const {attachingImage, createAttachActions} = this.props;
     return (
       <AttachFileDialog
         issueId={this.props.issue.id}
         attach={attachingImage}
         actions={createAttachActions()}
-        onCancel={hideAddAttachDialog}
+        onCancel={this.cancelAddAttach}
         onAttach={this.addAttachment}
       />
     );
+  }
+
+  cancelAddAttach = () => {
+    const {cancelAddAttach, hideAddAttachDialog, attachingImage} = this.props;
+    cancelAddAttach(attachingImage);
+    hideAddAttachDialog();
   }
 
   addAttachment = async (attach: Attachment) => {

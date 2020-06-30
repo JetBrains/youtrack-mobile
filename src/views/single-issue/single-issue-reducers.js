@@ -72,6 +72,17 @@ const attachReducers = {
       attachingImage
     };
   },
+  [attachmentTypes.ATTACH_CANCEL_ADDING](state: State, action: {attachingImage: Object}): State {
+    const {attachingImage} = action;
+    return {
+      ...state,
+      issue: {
+        ...state.issue,
+        attachments: state.issue.attachments.filter(attachment => attachment !== attachingImage),
+      },
+      attachingImage: null
+    };
+  },
   [attachmentTypes.ATTACH_REMOVE](state: State, action: {attachmentId: string}): State {
     return {
       ...state,
