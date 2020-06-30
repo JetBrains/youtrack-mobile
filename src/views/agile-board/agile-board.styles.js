@@ -100,8 +100,8 @@ export default StyleSheet.create({
     color: COLOR_FONT_ON_BLACK,
   },
   agileSelector: {
-    paddingTop: UNIT,
-    marginLeft: UNIT * 2,
+    paddingTop: UNIT * 1.5,
+    paddingLeft: UNIT * 2,
     backgroundColor: COLOR_FONT_ON_BLACK
   },
   sprintSelector: {

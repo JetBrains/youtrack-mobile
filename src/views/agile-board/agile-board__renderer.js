@@ -44,9 +44,8 @@ export function renderNavigationItem(item: {
           {`${item.label} `}
         </Text>
         <IconAngleDown
-          size={15}
+          size={17}
           color={item.isLoading ? COLOR_FONT_GRAY : COLOR_BLACK}
-          style={styles.navigationItemButtonIcon}
         />
       </TouchableOpacity>
     </View>
@@ -75,8 +74,5 @@ const styles = StyleSheet.create({
   },
   navigationItemButtonTextDisabled: {
     color: COLOR_FONT_GRAY
-  },
-  navigationItemButtonIcon: {
-    lineHeight: 19
-  },
+  }
 });
