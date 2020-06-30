@@ -107,7 +107,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       deleteCommentPermanently
     } = this.props;
 
-    if (!issue || !activityPage|| activityPage.length === 0) {
+    if (!issue || !activityPage) {
       return <ActivityIndicator style={styles.loadingIndicator} color={COLOR_PINK}/>;
     }
 
