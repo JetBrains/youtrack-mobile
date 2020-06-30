@@ -7871,6 +7871,13 @@ react-native-swipeout@2.3.6:
   dependencies:
     prop-types "^15.5.10"
 
+react-native-switch-pro@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-switch-pro/-/react-native-switch-pro-1.0.4.tgz#9007628e4b8721b44fa0d6ecd07013f6afd0031a"
+  integrity sha512-HCuvKVrCbN/wO6rFfwCS9ds4CbqldUMdtINosbVVrR72Zf9YiG/rLrsDC/8ezJSc1Q2P03vCF89odaS81bJyow==
+  dependencies:
+    prop-types "^15.5.10"
+
 react-native-syntax-highlighter@1.2.6:
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/react-native-syntax-highlighter/-/react-native-syntax-highlighter-1.2.6.tgz#3f329014be07a28c20906eb14a28bd1344940979"

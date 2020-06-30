@@ -4,15 +4,16 @@ import {flushStoragePart, getStorageState} from '../../../components/storage/sto
 import {checkVersion} from '../../../components/feature/feature';
 import {Activity} from '../../../components/activity/activity__category';
 
-import type {ActivityEnabledType, ActivityItem} from '../../../flow/Activity';
+import type {ActivityType, ActivityItem} from '../../../flow/Activity';
 import type {IssueComment} from '../../../flow/CustomFields';
+import type {StorageState} from '../../../components/storage/storage';
 
 
 export function isActivitiesAPIEnabled() {
   return checkVersion('2018.3');
 }
 
-export function getIssueActivitiesEnabledTypes(): Array<ActivityEnabledType> {
+export function getIssueActivitiesEnabledTypes(): Array<ActivityType> {
   let enabledTypes = getStorageState().issueActivitiesEnabledTypes || [];
   if (!enabledTypes.length) {
     enabledTypes = getIssueActivityAllTypes();
@@ -21,19 +22,31 @@ export function getIssueActivitiesEnabledTypes(): Array<ActivityEnabledType> {
   return enabledTypes;
 }
 
-export function saveIssueActivityEnabledTypes(enabledTypes: Array<Object>) {
+export function saveIssueActivityEnabledTypes(enabledTypes: Array<ActivityType>) {
   enabledTypes && flushStoragePart({issueActivitiesEnabledTypes: enabledTypes});
 }
 
-export function getIssueActivityAllTypes(): Array<ActivityEnabledType> {
+export async function toggleIssueActivityEnabledType(type: ActivityType, enable: boolean): Promise<StorageState> {
+  let enabledTypes: Array<ActivityType> = getIssueActivitiesEnabledTypes();
+
+  if (enable) {
+    enabledTypes.push(type);
+  } else {
+    enabledTypes = enabledTypes.filter(it => it.id !== type.id);
+  }
+
+  return flushStoragePart({issueActivitiesEnabledTypes: enabledTypes});
+}
+
+export function getIssueActivityAllTypes(): Array<ActivityType> {
   return Object.keys(Activity.ActivityCategories).map(
     (key) => Object.assign({id: key, name: Activity.CategoryPresentation[key]})
   );
 }
 
-export function getActivityCategories(categoryTypes: Array<ActivityEnabledType> = []): Array<string> {
+export function getActivityCategories(categoryTypes: Array<ActivityType> = []): Array<string> {
   return categoryTypes.reduce(
-    (list: Array<string>, category: ActivityEnabledType) => list.concat(Activity.ActivityCategories[category.id]), []
+    (list: Array<string>, category: ActivityType) => list.concat(Activity.ActivityCategories[category.id]), []
   );
 }
 

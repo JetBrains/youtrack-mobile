@@ -53,7 +53,7 @@ export type IssueActivity = {
   merged?: boolean
 }
 
-export type ActivityEnabledType = {
+export type ActivityType = {
   id: string,
   name: string
 }

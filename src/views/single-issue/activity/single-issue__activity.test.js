@@ -89,13 +89,14 @@ describe('Issue activity', () => {
 
       expect(dispatched[1]).toEqual({
         type: types.RECEIVE_ACTIVITY_PAGE,
-        activityPage: []
+        activityPage: null
       });
 
       expect(dispatched[2]).toEqual({
         type: types.RECEIVE_ACTIVITY_API_AVAILABILITY,
         activitiesEnabled: true
       });
+
       expect(dispatched[3]).toEqual({
         type: types.RECEIVE_ACTIVITY_PAGE,
         activityPage: activityPageMock

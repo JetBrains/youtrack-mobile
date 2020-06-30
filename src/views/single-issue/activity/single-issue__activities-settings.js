@@ -3,25 +3,28 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
-import type {UserAppearanceProfile} from '../../../flow/User';
-import type {ActivityEnabledType} from '../../../flow/Activity';
+import {toggleIssueActivityEnabledType} from './single-issue-activity__helper';
+import {IconAngleDown, IconClose} from '../../../components/icon/icon';
+import Switch from 'react-native-switch-pro';
+import ModalView from '../../../components/modal-view/modal-view';
+import Header from '../../../components/header/header';
 
-import {getEntityPresentation} from '../../../components/issue-formatter/issue-formatter';
-import {saveIssueActivityEnabledTypes} from './single-issue-activity__helper';
-
-import apiHelper from '../../../components/api/api__helper';
-import Select from '../../../components/select/select';
-
-import {COLOR_ICON_MEDIUM_GREY} from '../../../components/variables/variables';
-import {IconAngleDown} from '../../../components/icon/icon';
+import {
+  COLOR_ICON_MEDIUM_GREY,
+  COLOR_PINK,
+  COLOR_PINK_TRANSPARENT
+} from '../../../components/variables/variables';
+import {HIT_SLOP} from '../../../components/common-styles/button';
 
 import styles from './single-issue-activity.styles';
 
+import type {ActivityType} from '../../../flow/Activity';
+import type {UserAppearanceProfile} from '../../../flow/User';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
-  issueActivityTypes: Array<ActivityEnabledType>,
-  issueActivityEnabledTypes: Array<ActivityEnabledType>,
+  issueActivityTypes: Array<ActivityType>,
+  issueActivityEnabledTypes: Array<ActivityType>,
   onApply: Function,
   userAppearanceProfile: UserAppearanceProfile,
   disabled?: boolean,
@@ -30,131 +33,151 @@ type Props = {
 
 type State = {
   visible: boolean,
-  select: {
-    show: boolean,
-    dataSource: () => Promise<Array<Object>>,
-    onChangeSelection?: (selectedItems: Array<Object>) => any,
-    multi: boolean,
-    selectedItems: Array<ActivityEnabledType>,
-    getTitle?: (item: Object) => string
-  },
-  naturalCommentsOrder: boolean,
+  settings: Array<ActivityType>
 };
 
-const defaultState = {
-  visible: false,
-  select: {
-    show: true,
-    multi: true,
-    selectedItems: [],
-    dataSource: () => Promise.resolve([]),
-    onChangeSelection: items => {}
-  },
-  naturalCommentsOrder: true,
-};
+type SortOrder = { name: string, isNaturalCommentsOrder: boolean };
 
-type SortOrderOption = { name: string, id: string, isNaturalCommentsOrder: boolean };
 
-export default class SingleIssueActivitiesSettings extends Component<Props, State> {
-
-  static sortOrderOptions: Array<SortOrderOption> = [
-    {
-      id: 'OldestFirst',
-      name: 'Sort: oldest first',
-      toggleItem: true,
-      isNaturalCommentsOrder: true
-    },
-    {
-      id: 'NewestFirst',
-      name: 'Sort: newest first',
-      toggleItem: true,
-      isNaturalCommentsOrder: false
-    }
-  ];
+export default class IssueActivitiesSettings extends Component<Props, State> {
+  static switchCommonProps: Object = {
+    width: 40,
+    circleColorActive: COLOR_PINK,
+    circleColorInactive: '#f1f1f1',
+    backgroundActive: COLOR_PINK_TRANSPARENT,
+    backgroundInactive: 'rgba(34, 31, 31, 0.26)'
+  };
+  sortOrderOption: SortOrder;
 
   constructor(props: Props) {
     super(props);
 
+    this.sortOrderOption = {
+      name: 'Sort: oldest first',
+      isNaturalCommentsOrder: props?.userAppearanceProfile?.naturalCommentsOrder
+    };
+
     this.state = {
-      ...defaultState,
-      ...{naturalCommentsOrder: props?.userAppearanceProfile?.naturalCommentsOrder}
+      visible: false,
+      settings: []
     };
   }
 
-  componentDidUpdate(prevProps: $ReadOnly<Props>) {
-    this.initSelectData();
+  componentDidUpdate(prevProps: Props) {
+    if (
+      this.props?.userAppearanceProfile?.naturalCommentsOrder !== prevProps?.userAppearanceProfile?.naturalCommentsOrder ||
+      this.props.issueActivityTypes?.length !== prevProps.issueActivityTypes?.length ||
+      this.props.issueActivityEnabledTypes?.length !== prevProps.issueActivityEnabledTypes?.length
+    ) {
+      this.updateSettingsList();
+    }
   }
 
-  initSelectData() {
-    const selected: Array<Object> = this.props.issueActivityEnabledTypes;
-    const sortOrderSelected: Array<Object> = SingleIssueActivitiesSettings.sortOrderOptions.filter(
-      (it: SortOrderOption) => it.isNaturalCommentsOrder === this.props?.userAppearanceProfile?.naturalCommentsOrder
-    );
-
-    this.state.select.dataSource = () => Promise.resolve(
-      this.props.issueActivityTypes.concat(SingleIssueActivitiesSettings.sortOrderOptions)
-    );
-    this.state.select.selectedItems = selected.concat(sortOrderSelected);
+  updateSettingsList() {
+    const {issueActivityTypes, issueActivityEnabledTypes, userAppearanceProfile} = this.props;
+    this.setState({
+      settings: this.createSettingsList(
+        issueActivityTypes,
+        issueActivityEnabledTypes,
+        userAppearanceProfile.naturalCommentsOrder
+      )
+    });
   }
 
-  toggleSettingsVisibility = () => {
+  createSettingsList(
+    issueActivityTypes: Array<ActivityType> = [],
+    issueActivityEnabledTypes: Array<ActivityType> = [],
+    naturalCommentsOrder: boolean
+  ): Array<$Shape<ActivityType | SortOrder>> {
+    const list: Array<ActivityType> = issueActivityTypes.reduce(
+      (list: Array<ActivityType>, type: ActivityType) => {
+        type.enabled = issueActivityEnabledTypes.some((enabledType: ActivityType) => enabledType.id === type.id);
+        return list.concat(type);
+      },
+      []);
+    this.sortOrderOption.isNaturalCommentsOrder = naturalCommentsOrder;
+    return list.concat(this.sortOrderOption);
+  }
+
+  toggleSettingsDialogVisibility = () => {
     const {visible} = this.state;
     this.setState({visible: !visible});
   };
 
-  selectedTypesChanged(): boolean {
-    return !apiHelper.equalsByProp(
-      this.props.issueActivityEnabledTypes,
-      this.state.select.selectedItems,
-      'id'
-    );
+  onApplySettings(userAppearanceProfile: UserAppearanceProfile) {
+    this.props.onApply(userAppearanceProfile);
   }
 
-  onApplySettings(selectedItems: Array<Object>) {
-    const {naturalCommentsOrder} = this.state;
-    const {userAppearanceProfile, onApply} = this.props;
-
-    saveIssueActivityEnabledTypes(selectedItems);
-    this.toggleSettingsVisibility();
-
-    const isOrderChanged = userAppearanceProfile.naturalCommentsOrder !== naturalCommentsOrder;
-    if (isOrderChanged || this.selectedTypesChanged()) {
-      onApply({
-        ...userAppearanceProfile,
-        ...{naturalCommentsOrder: naturalCommentsOrder}
-      });
-    }
-  }
-
-  onSelect(selected: Array<Object>, item: Object) {
-    const naturalCommentsOrder = (
-      typeof item.isNaturalCommentsOrder === 'boolean'
-        ? item.isNaturalCommentsOrder
-        : this.state.naturalCommentsOrder
-    );
-
-    this.setState({
-      naturalCommentsOrder: naturalCommentsOrder,
-      select: {
-        ...this.state.select,
-        selectedItems: selected
-      }
-    });
-  }
-
-  renderSettingsSelect() {
+  renderSettingsDialog() {
     return (
-      <Select
-        {...this.state.select}
-        emptyValue={null}
-        multi={true}
-        onSelect={(selectedItems) => {
-          return this.onApplySettings((selectedItems || []).filter(it => !it.toggleItem));
-        }}
-        getTitle={getEntityPresentation}
-        onCancel={() => this.toggleSettingsVisibility()}
-        onChangeSelection={(selected: Array<Object>, current: Object) => this.onSelect(selected, current)}
-      />
+      <ModalView
+        animationType="slide"
+        testID="activitySettingsDialog"
+        style={styles.settingsContainer}
+      >
+        <Header
+          leftButton={<IconClose size={21} color={COLOR_PINK}/>}
+          onBack={this.toggleSettingsDialogVisibility}
+        >
+          <Text style={styles.settingsTitle}>Activity setting</Text>
+        </Header>
+
+        {this.renderOrderItem()}
+        {this.renderTypesList()}
+      </ModalView>
+    );
+  }
+
+  renderOrderItem() {
+    const {userAppearanceProfile, onApply, disabled} = this.props;
+    return (
+      <View
+        style={styles.settingsItem}
+      >
+        <Text>{this.sortOrderOption.name}</Text>
+        <Switch
+          {...IssueActivitiesSettings.switchCommonProps}
+          disabled={disabled}
+          value={this.props.userAppearanceProfile.naturalCommentsOrder}
+          onSyncPress={isNaturalOrder => {
+            onApply({
+              ...userAppearanceProfile,
+              ...{naturalCommentsOrder: isNaturalOrder}
+            });
+          }}
+        />
+
+      </View>
+    );
+  }
+
+  renderTypesList() {
+    const {issueActivityTypes, issueActivityEnabledTypes, disabled} = this.props;
+
+    return (
+      <View>
+        {issueActivityTypes.map((type: ActivityType) => {
+          const isEnabled = issueActivityEnabledTypes.some(enabled => enabled.id === type.id);
+          return (
+            <View
+              key={type.id}
+              style={styles.settingsItem}
+            >
+              <Text style={styles.settingsName}>{type.name}</Text>
+              <Switch
+                {...IssueActivitiesSettings.switchCommonProps}
+                value={isEnabled}
+                disabled={disabled}
+                onSyncPress={async (enable: ActivityType) => {
+                  await toggleIssueActivityEnabledType(type, enable);
+                  this.onApplySettings(null);
+                }}
+              />
+
+            </View>
+          );
+        })}
+      </View>
     );
   }
 
@@ -166,15 +189,16 @@ export default class SingleIssueActivitiesSettings extends Component<Props, Stat
     return (
       <View style={this.props.style}>
         <TouchableOpacity
+          hitSlop={HIT_SLOP}
           disabled={this.props.disabled}
           style={styles.settingsButton}
-          onPress={this.toggleSettingsVisibility}
+          onPress={this.toggleSettingsDialogVisibility}
         >
-          <Text style={styles.secondaryText}>{this.getTitle()}{`  `}</Text>
+          <Text style={styles.settingsButtonText}>{this.getTitle()}</Text>
           <IconAngleDown size={19} color={COLOR_ICON_MEDIUM_GREY}/>
         </TouchableOpacity>
 
-        {this.state.visible && this.renderSettingsSelect()}
+        {this.state.visible && this.renderSettingsDialog()}
       </View>
     );
   }

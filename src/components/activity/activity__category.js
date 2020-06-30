@@ -44,7 +44,7 @@ export const activityCategory = {
 export const Activity = [
   ['COMMENT', 'IssueComments', [
     activityCategory.COMMENT
-  ], 'Show comments'],
+  ], 'Comments'],
   ['HISTORY', 'IssueHistory', [
     activityCategory.ATTACHMENTS,
     activityCategory.ATTACHMENT_RENAME,

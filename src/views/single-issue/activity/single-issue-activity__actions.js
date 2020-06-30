@@ -16,7 +16,7 @@ export function receiveActivityAPIAvailability(activitiesEnabled: boolean) {
   return {type: types.RECEIVE_ACTIVITY_API_AVAILABILITY, activitiesEnabled};
 }
 
-export function receiveActivityPage(activityPage: Array<IssueActivity>) {
+export function receiveActivityPage(activityPage: Array<IssueActivity> | null) {
   return {type: types.RECEIVE_ACTIVITY_PAGE, activityPage};
 }
 
@@ -42,7 +42,7 @@ export function loadActivitiesPage() {
       activityHelper.getIssueActivitiesEnabledTypes()
     );
 
-    dispatch(receiveActivityPage([]));
+    dispatch(receiveActivityPage(null));
     dispatch(receiveActivityAPIAvailability(true));
 
     try {
