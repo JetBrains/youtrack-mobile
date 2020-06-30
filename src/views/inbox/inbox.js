@@ -440,7 +440,7 @@ class Inbox extends Component<Props, State> {
       );
     }
 
-    if (loading && hasMore) {
+    if (items.length > 0 && loading && hasMore) {
       return <LoadMoreList/>;
     }
 
