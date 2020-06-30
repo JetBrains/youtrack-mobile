@@ -10,7 +10,7 @@ import IssueVisibility from '../../../components/issue-visibility/issue-visibili
 import KeyboardSpacerIOS from '../../../components/platform/keyboard-spacer.ios';
 import Select from '../../../components/select/select';
 import SingleIssueActivities from './single-issue__activities-stream';
-import SingleIssueActivitiesSettings from './single-issue__activities-settings';
+import IssueActivitiesSettings from './single-issue__activities-settings';
 import SingleIssueCommentInput from '../single-issue__comment-input';
 import {getApi} from '../../../components/api/api__instance';
 
@@ -19,20 +19,23 @@ import * as activityCommentActions from './single-issue-activity__comment-action
 import {attachmentActions} from '../single-issue__attachment-actions-and-types';
 
 import {isActivitiesAPIEnabled} from './single-issue-activity__helper';
+import {createActivitiesModel} from '../../../components/activity/activity__create-model';
+import {groupActivities} from '../../../components/activity/activity__group-activities';
+import {isActivityCategory} from '../../../components/activity/activity__category';
+import {mergeActivities} from '../../../components/activity/activity__merge-activities';
+
 import {COLOR_PINK} from '../../../components/variables/variables';
 
 import styles from './single-issue-activity.styles';
 
 import PropTypes from 'prop-types';
 
-import type {UserAppearanceProfile} from '../../../flow/User';
+import type {ActivityItem} from '../../../flow/Activity';
 import type {IssueComment} from '../../../flow/CustomFields';
 import type {State as IssueActivityState} from './single-issue-activity__reducers';
 import type {State as IssueCommentActivityState} from './single-issue-activity__comment-reducers';
+import type {UserAppearanceProfile} from '../../../flow/User';
 
-//TODO: understand why FlowJs throws
-// property `activitiesEnabled/loadActivityPage/commentSuggestions/addComment`
-// is missing in `*__actions.js but exists in State` without $Shape
 type IssueActivityProps = $Shape<
   IssueActivityState
   & typeof activityActions
@@ -73,15 +76,15 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       updateUserAppearanceProfile,
     } = this.props;
 
-    return <SingleIssueActivitiesSettings
+    return <IssueActivitiesSettings
       disabled={disabled}
       style={styles.settings}
       issueActivityTypes={issueActivityTypes}
       issueActivityEnabledTypes={issueActivityEnabledTypes}
       onApply={(userAppearanceProfile: UserAppearanceProfile) => {
-        updateUserAppearanceProfile(userAppearanceProfile);
-
-        //TODO(xi-eye:performance): do not reload activityPage if only `naturalCommentsOrder` has changed, just reverse the model
+        if (userAppearanceProfile) {
+          return updateUserAppearanceProfile(userAppearanceProfile);
+        }
         this.loadIssueActivities();
       }}
       userAppearanceProfile={this.getUserAppearanceProfile()}
@@ -92,6 +95,32 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     const DEFAULT_USER_APPEARANCE_PROFILE = {naturalCommentsOrder: true};
     const {user} = this.props;
     return user?.profiles?.appearance || DEFAULT_USER_APPEARANCE_PROFILE;
+  }
+
+  getGroupedActivity(activityPage: Array<IssueActivity> = []) {
+    return groupActivities(activityPage, {
+      onAddActivityToGroup: (group, activity: IssueActivity) => {
+        if (isActivityCategory.issueCreated(activity)) {
+          group.hidden = true;
+        }
+      },
+      onCompleteGroup: (group: Object) => {
+        group.events = mergeActivities(group.events);
+      }
+    });
+  }
+
+  createActivityModel(activityPage: Array<ActivityItem> | null) {
+    if (!activityPage) {
+      return null;
+    }
+
+    const naturalCommentsOrder = this.getUserAppearanceProfile().naturalCommentsOrder;
+    const groupedActivities = this.getGroupedActivity(activityPage);
+
+    return createActivitiesModel(
+      naturalCommentsOrder ? groupedActivities.reverse() : groupedActivities
+    ) || [];
   }
 
   _renderActivities() {
@@ -107,15 +136,11 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       deleteCommentPermanently
     } = this.props;
 
-    if (!issue || !activityPage) {
-      return <ActivityIndicator style={styles.loadingIndicator} color={COLOR_PINK}/>;
-    }
 
     return (
       <View style={styles.activitiesContainer}>
         <SingleIssueActivities
-          activityPage={activityPage}
-          naturalCommentsOrder={this.getUserAppearanceProfile().naturalCommentsOrder}
+          activities={this.createActivityModel(activityPage)}
 
           issueFields={issue?.fields}
           attachments={issue?.attachments}
@@ -257,6 +282,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
           {this.renderActivitySettings(!isActivitySettingEnabled)}
 
+          {!activityLoaded && <ActivityIndicator style={styles.loadingIndicator} color={COLOR_PINK}/>}
           {activityLoaded && this._renderActivities()}
 
         </ScrollView>

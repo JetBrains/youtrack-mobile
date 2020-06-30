@@ -18,10 +18,6 @@ import {
   getReadableID
 } from '../../../components/issue-formatter/issue-formatter';
 
-import {mergeActivities} from '../../../components/activity/activity__merge-activities';
-import {groupActivities} from '../../../components/activity/activity__group-activities';
-import {createActivitiesModel} from '../../../components/activity/activity__create-model';
-
 import getEventTitle from '../../../components/activity/activity__history-title';
 import {getTextValueChange} from '../../../components/activity/activity__history-value';
 import {minutesAndHoursFor} from '../../../components/time-tracking/time-tracking';
@@ -57,7 +53,7 @@ const CATEGORY_NAME = 'Issue Stream';
 
 type Props = {
   issueFields: Array<Object>,
-  activityPage: Array<IssueActivity> | null,
+  activities: Array<IssueActivity> | null,
   attachments: Array<Attachment>,
   imageHeaders: ?Object,
   backendUrl: string,
@@ -77,14 +73,12 @@ type Props = {
   onIssueIdTap: (issueId: string) => any,
 
   workTimeSettings: ?WorkTimeSettings,
-  naturalCommentsOrder: boolean,
 
   onShowCommentActions: (comment: IssueComment) => any,
   issuePermissions: IssuePermissions
 };
 
 type DefaultProps = {
-  naturalCommentsOrder: boolean,
   onCopyCommentLink: Function,
   onReply: Function,
   workTimeSettings: WorkTimeSettings
@@ -100,7 +94,6 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
     onReply: () => {},
     onCopyCommentLink: () => {},
     workTimeSettings: {},
-    naturalCommentsOrder: true
   };
 
   _isMultiValueActivity(activity: Object) {
@@ -262,19 +255,6 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
         </Text>}
       </View>
     );
-  }
-
-  _processActivities(activities: Array<IssueActivity> = []) {
-    return groupActivities(activities, {
-      onAddActivityToGroup: (group, activity: IssueActivity) => {
-        if (isActivityCategory.issueCreated(activity)) {
-          group.hidden = true;
-        }
-      },
-      onCompleteGroup: (group: Object) => {
-        group.events = mergeActivities(group.events);
-      }
-    });
   }
 
   renderActivityIcon(activityGroup: Object) {
@@ -471,14 +451,11 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
   }
 
   render() {
-    const {activityPage, naturalCommentsOrder} = this.props;
-    if (!activityPage) {
+    const {activities} = this.props;
+
+    if (!activities) {
       return null;
     }
-    const groupedActivities = this._processActivities(activityPage);
-    const activities = createActivitiesModel(
-      naturalCommentsOrder ? groupedActivities.reverse() : groupedActivities
-    ) || [];
 
     return (
       <View>
