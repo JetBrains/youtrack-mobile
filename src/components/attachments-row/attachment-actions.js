@@ -35,6 +35,10 @@ export const getAttachmentActions = (prefix: string) => {
       return {type: types.ATTACH_START_ADDING, attachingImage};
     },
 
+    cancelImageAttaching: function (attachingImage: Object) {
+      return {type: types.ATTACH_CANCEL_ADDING, attachingImage};
+    },
+
     doRemoveAttach: (attachmentId: string) => {
       return {type: types.ATTACH_REMOVE, attachmentId};
     },

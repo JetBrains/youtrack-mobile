@@ -59,6 +59,18 @@ const attachReducers = {
     };
   },
   //$FlowFixMe
+  [attachmentTypes.ATTACH_CANCEL_ADDING](state: CreateIssueState, action: {attachingImage: Object}): CreateIssueState {
+    const {attachingImage} = action;
+    return {
+      ...state,
+      issue: {
+        ...state.issue,
+        attachments: state.issue.attachments.filter(attachment => attachment !== attachingImage),
+      },
+      attachingImage: null
+    };
+  },
+  //$FlowFixMe
   [attachmentTypes.ATTACH_REMOVE](state: CreateIssueState, action: {attachmentId: string}): State {
     return {
       ...state,

@@ -262,6 +262,12 @@ export function uploadAttach(attach: Attachment) {
   };
 }
 
+export function cancelAddAttach(attach: Attachment) {
+  return async (dispatch: (any) => any) => {
+    await dispatch(attachmentActions.cancelImageAttaching(attach));
+  };
+}
+
 export function loadAttachments() {
   return async (dispatch: (any) => any, getState: () => Object) => {
     const draftId = getState().creation.issue.id;

@@ -64,8 +64,14 @@ class CreateIssue extends Component<Props, void> {
     loadAttachments();
   }
 
+  cancelAddAttach = () => {
+    const {cancelAddAttach, hideAddAttachDialog, attachingImage} = this.props;
+    cancelAddAttach(attachingImage);
+    hideAddAttachDialog();
+  }
+
   renderAttachFileDialog() {
-    const {issue, getAttachActions, attachingImage, hideAddAttachDialog} = this.props;
+    const {issue, getAttachActions, attachingImage} = this.props;
 
     if (!issue || !issue.id) {
       return null;
@@ -76,7 +82,7 @@ class CreateIssue extends Component<Props, void> {
         issueId={issue.id}
         actions={getAttachActions()}
         attach={attachingImage}
-        onCancel={hideAddAttachDialog}
+        onCancel={this.cancelAddAttach}
         onAttach={this.onAddAttachment}
       />
     );
