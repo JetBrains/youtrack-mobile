@@ -4,7 +4,7 @@ import {createReducer} from 'redux-create-reducer';
 import IssuePermissions from '../components/issue-permissions/issue-permissions';
 
 import type Auth from '../components/auth/auth';
-import type {Permissions} from '../components/auth/auth__permissions';
+import type {PermissionsStore} from '../components/permissions-store/permissions-store';
 import type {StorageState} from '../components/storage/storage';
 import type {EndUserAgreement} from '../flow/AppConfig';
 import type {WorkTimeSettings} from '../flow/WorkTimeSettings';
@@ -44,11 +44,11 @@ export default createReducer(initialState, {
     const {auth} = action;
     return {...state, auth};
   },
-  [types.SET_PERMISSIONS](state: RootState, action: {permissions: Permissions, currentUser: User}) {
-    const {permissions, currentUser} = action;
+  [types.SET_PERMISSIONS](state: RootState, action: {permissionsStore: PermissionsStore, currentUser: User}) {
+    const {permissionsStore, currentUser} = action;
     return {
       ...state,
-      issuePermissions: new IssuePermissions(permissions, currentUser)
+      issuePermissions: new IssuePermissions(permissionsStore, currentUser)
     };
   },
   [types.LOG_OUT](state: RootState, action: Object = {}) {

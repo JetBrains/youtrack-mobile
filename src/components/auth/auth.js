@@ -1,7 +1,7 @@
 /* @flow */
 
 import urlJoin from 'url-join';
-import Permissions from './auth__permissions';
+import PermissionsStore from '../permissions-store/permissions-store';
 import {flushStoragePart, getStorageState} from '../storage/storage';
 import base64 from 'base64-js';
 import qs from 'qs';
@@ -29,7 +29,7 @@ function makeBtoa(str: string) {
 export default class AuthTest {
   config: AppConfigFilled;
   authParams: ?AuthParams;
-  permissions: Permissions;
+  permissionsStore: PermissionsStore;
   currentUser: User;
   CHECK_TOKEN_URL: string;
   PERMISSIONS_CACHE_URL: string;
@@ -228,7 +228,7 @@ export default class AuthTest {
           notify(errorMessage, 7000);
         }
 
-        this.permissions = new Permissions(res);
+        this.permissionsStore = new PermissionsStore(res);
         return authParams;
       })
       .catch(async err => {

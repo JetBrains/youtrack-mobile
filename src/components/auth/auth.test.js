@@ -196,7 +196,7 @@ describe('Auth', function () {
     it('should create a map of user permissions even they are not loaded correctly', async () => {
       await auth.loadPermissions(authParamsMock);
 
-      expect(auth.permissions.permissionsMap.size).toEqual(0);
+      expect(auth.permissionsStore.permissionsMap.size).toEqual(0);
     });
 
     it('should notify user that permissions are not loaded correctly', async () => {

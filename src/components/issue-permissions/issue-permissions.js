@@ -3,7 +3,7 @@
  * https://confluence.jetbrains.com/display/TSYS/Issue+access+rights
  */
 import type {AnyIssue} from '../../flow/Issue';
-import type {Permissions} from '../auth/auth__permissions';
+import type {PermissionsStore} from '../permissions-store/permissions-store';
 import type {User} from '../../flow/User';
 import type {
   CustomField,
@@ -26,11 +26,11 @@ export const CAN_LINK_ISSUE = 'JetBrains.YouTrack.LINK_ISSUE';
 export const CAN_UPDATE_WATCH = 'JetBrains.YouTrack.UPDATE_WATCH_FOLDER';
 
 export default class IssuePermissions {
-  permissions: Permissions;
+  permissionsStore: PermissionsStore;
   currentUser: User;
 
-  constructor(permissions: Permissions, currentUser: User) {
-    this.permissions = permissions;
+  constructor(permissionsStore: PermissionsStore, currentUser: User) {
+    this.permissionsStore = permissionsStore;
     this.currentUser = currentUser;
   }
 
@@ -50,7 +50,7 @@ export default class IssuePermissions {
 
   hasPermissionFor(issue: AnyIssue, permissionName: string): boolean {
     const projectRingId = IssuePermissions.getIssueProjectRingId(issue);
-    return !!projectRingId && this.permissions.has(permissionName, projectRingId);
+    return !!projectRingId && this.permissionsStore.has(permissionName, projectRingId);
   }
 
   isCurrentUser(user: User): boolean {
@@ -66,7 +66,7 @@ export default class IssuePermissions {
       return true;
     }
     const projectRingId = IssuePermissions.getIssueProjectRingId(issue);
-    return !!projectRingId && this.permissions.hasEvery([READ_ISSUE, UPDATE_ISSUE], projectRingId);
+    return !!projectRingId && this.permissionsStore.hasEvery([READ_ISSUE, UPDATE_ISSUE], projectRingId);
   }
 
   _canUpdatePublicField(issue: AnyIssue): boolean {
@@ -155,7 +155,7 @@ export default class IssuePermissions {
   }
 
   canRunCommand(issue: AnyIssue): boolean {
-    const has = (...args) => this.permissions.has(...args);
+    const has = (...args) => this.permissionsStore.has(...args);
 
     return this.isCurrentUser(issue.reporter) || hasAnyPermission();
 

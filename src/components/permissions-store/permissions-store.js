@@ -2,7 +2,7 @@
 
 import type {PermissionCacheItem} from '../../flow/Permission';
 
-class Permissions {
+class PermissionsStore {
   permissionsMap: Object;
 
   constructor(permissionsCache: Array<PermissionCacheItem>) {
@@ -36,6 +36,6 @@ class Permissions {
   }
 }
 
-export type { Permissions };
+export type { PermissionsStore };
 
-export default Permissions;
+export default PermissionsStore;

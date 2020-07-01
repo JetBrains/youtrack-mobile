@@ -35,7 +35,7 @@ import {isUnsupportedFeatureError} from '../components/error/error-resolver';
 
 import type {AuthParams} from '../flow/Auth';
 import type {AppConfigFilled, EndUserAgreement} from '../flow/AppConfig';
-import type {Permissions} from '../components/auth/auth__permissions';
+import type {PermissionsStore} from '../components/permissions-store/permissions-store';
 import type {WorkTimeSettings} from '../flow/WorkTimeSettings';
 import type {StorageState} from '../components/storage/storage';
 import type RootState from '../reducers/app-reducer';
@@ -151,8 +151,8 @@ export function setAuth(config: AppConfigFilled) {
   return {type: types.INITIALIZE_AUTH, auth};
 }
 
-export function setPermissions(permissions: Permissions, currentUser: User) {
-  return {type: types.SET_PERMISSIONS, permissions, currentUser};
+export function setPermissions(permissionsStore: PermissionsStore, currentUser: User) {
+  return {type: types.SET_PERMISSIONS, permissionsStore, currentUser};
 }
 
 function showUserAgreement(agreement) {
@@ -323,7 +323,7 @@ function completeInitialization(issueId: ?string = null) {
     log.debug('Completing initialization: loading permissions cache');
     const auth = getState().app.auth;
     await auth.loadPermissions(auth.authParams);
-    dispatch(setPermissions(auth.permissions, auth.currentUser));
+    dispatch(setPermissions(auth.permissionsStore, auth.currentUser));
     dispatch(loadUser());
     dispatch(loadAgileProfile());
     dispatch(loadWorkTimeSettings());
