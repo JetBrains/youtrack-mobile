@@ -1,11 +1,7 @@
 /* @flow */
-import * as types from './board-action-types';
 import {notifyError, notify} from '../../components/notification/notification';
 import {DEFAULT_ERROR_MESSAGE} from '../../components/error/error-messages';
-import type {AgileBoardRow, AgileColumn, BoardOnList, AgileUserProfile, Sprint, Board} from '../../flow/Agile';
-import type {IssueFull, IssueOnList} from '../../flow/Issue';
 import ServersideEvents from '../../components/api/api__serverside-events';
-import type Api from '../../components/api/api';
 import Router from '../../components/router/router';
 import log from '../../components/log/log';
 import usage from '../../components/usage/usage';
@@ -13,7 +9,13 @@ import {findIssueOnBoard} from './board-updaters';
 import {getGroupedSprints} from './agile-board__helper';
 import animation from '../../components/animation/animation';
 import {sortAlphabetically} from '../../components/search/sorting';
+import {flushStoragePart, getStorageState} from '../../components/storage/storage';
+
+import * as types from './board-action-types';
+import type Api from '../../components/api/api';
+import type {AgileBoardRow, AgileColumn, BoardOnList, AgileUserProfile, Sprint, Board} from '../../flow/Agile';
 import type {CustomError} from '../../flow/Error';
+import type {IssueFull, IssueOnList} from '../../flow/Issue';
 
 type ApiGetter = () => Api;
 
@@ -77,11 +79,12 @@ export function loadBoard(board: Board) {
   return async (dispatch: (any) => any) => {
     dispatch({type: types.START_LOADING_AGILE});
     destroySSE();
-    dispatch(receiveSprint(null));
 
     const agileWithStatus = await dispatch(loadAgile(board.id));
     dispatch({type: types.STOP_LOADING_AGILE});
+
     if (!agileWithStatus.status.valid) {
+      dispatch(receiveSprint(null));
       return dispatch(stopSprintLoad());
     }
 
@@ -127,6 +130,12 @@ export function loadAgile(agileId: string) {
   };
 }
 
+export function cacheSprint(sprint: Sprint) {
+  return async () => {
+    await flushStoragePart({agileLastSprint: sprint});
+  };
+}
+
 export function loadSprint(agileId: string, sprintId: string) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
@@ -139,6 +148,7 @@ export function loadSprint(agileId: string, sprintId: string) {
       dispatch(updateAgileUserProfile(sprint.id));
       dispatch(subscribeServersideUpdates());
       log.info(`Sprint ${sprintId} (agileBoardId="${agileId}") has been loaded`);
+      dispatch(cacheSprint(sprint));
     } catch (e) {
       const message: string = 'Could not load requested sprint';
       const error: CustomError = new Error(message);
@@ -178,7 +188,7 @@ export function loadAgileProfile() {
 export function loadDefaultAgileBoard() {
   return async (dispatch: (any) => any) => {
     dispatch(setError(null));
-    dispatch(receiveSprint(null));
+    dispatch(receiveSprint(getStorageState().agileLastSprint));
 
     await dispatch(loadAgileProfile());
 
@@ -189,6 +199,7 @@ export function loadDefaultAgileBoard() {
       log.info('Loading Default Agile board', board?.name || board?.id);
       await dispatch(loadBoard(board));
     } else {
+      dispatch(receiveSprint(null));
       const error: CustomError = new Error('No agile boards found');
       error.error_description = `Create an agile board first`;
       error.noAgiles = true;

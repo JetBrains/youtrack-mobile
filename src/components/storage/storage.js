@@ -8,6 +8,7 @@ import type {AuthParams, CurrentUser} from '../auth/auth';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {IssueOnList} from '../../flow/Issue';
 import type {Folder} from '../../flow/User';
+import type {Sprint} from '../../flow/Agile';
 
 const OTHER_ACCOUNTS_KEY = 'YT_OTHER_ACCOUNTS_STORAGE_KEY';
 
@@ -25,6 +26,7 @@ export type StorageState = {|
   isRegisteredForPush: boolean,
   deviceToken: ?string,
   agileZoomedIn: ?boolean,
+  agileLastSprint: ?Sprint,
   lastRoute: ?('IssueList' | 'Inbox' | 'AgileBoard'),
   currentAppVersion: ?string,
   issueActivitiesEnabledTypes: ?Array<Object>
@@ -46,6 +48,7 @@ const storageKeys: StorageStateKeys = {
   isRegisteredForPush: 'YT_IS_REGISTERED_FOR_PUSH',
   deviceToken: 'YT_DEVICE_TOKEN',
   agileZoomedIn: 'YT_AGILE_ZOOMED_IN',
+  agileLastSprint: 'YT_AGILE_LAST_SPRINT',
   lastRoute: 'YT_LAST_ROUTE',
   currentAppVersion: 'YT_CURRENT_APP_VERSION',
   issueActivitiesEnabledTypes: 'YT_ISSUE_ACTIVITIES_ENABLED_TYPES'
@@ -69,6 +72,7 @@ export const initialState: StorageState = Object.freeze({
   isRegisteredForPush: false,
   deviceToken: null,
   agileZoomedIn: null,
+  agileLastSprint: null,
   lastRoute: null,
   currentAppVersion: null,
   issueActivitiesEnabledTypes: null
@@ -104,6 +108,7 @@ export async function clearCachesAndDrafts() {
     storageKeys.isRegisteredForPush,
     storageKeys.deviceToken,
     storageKeys.agileZoomedIn,
+    storageKeys.agileLastSprint,
     storageKeys.lastRoute,
     storageKeys.issueActivitiesEnabledTypes,
   ]);

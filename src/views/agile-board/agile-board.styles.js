@@ -32,6 +32,7 @@ export default StyleSheet.create({
     tintColor: COLOR_FONT_GRAY
   },
   boardHeaderContainer: {
+    minHeight: UNIT * 5,
     overflow: 'hidden',
     backgroundColor: COLOR_FONT_ON_BLACK,
     borderBottomWidth: 0.5,
@@ -100,11 +101,13 @@ export default StyleSheet.create({
     color: COLOR_FONT_ON_BLACK,
   },
   agileSelector: {
+    minHeight: UNIT * 7,
     paddingTop: UNIT * 1.5,
     paddingLeft: UNIT * 2,
     backgroundColor: COLOR_FONT_ON_BLACK
   },
   sprintSelector: {
+    minHeight: UNIT * 5,
     marginLeft: UNIT * 2
   },
   agileSelectorText: {

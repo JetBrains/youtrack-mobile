@@ -1,11 +1,12 @@
-/* @flow */
-
-import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import * as actions from './board-actions';
-import * as types from './board-action-types';
+import configureMockStore from 'redux-mock-store';
+import {__setStorageState, getStorageState} from '../../components/storage/storage';
 import animation from '../../components/animation/animation';
+
+import * as actions from './board-actions';
 import * as notification from '../../components/notification/notification';
+
+import * as types from './board-action-types';
 import type {AgileUserProfile, Board, Sprint} from '../../flow/Agile';
 
 let apiMock;
@@ -21,10 +22,16 @@ const getApi = () => apiMock;
 const middlewares = [thunk.withExtraArgument(getApi)];
 const storeMock = configureMockStore(middlewares);
 
+let cachedSprintMock;
+let cachedSprintIdMock;
+
 describe('Agile board async actions', () => {
   afterEach(() => {jest.clearAllMocks();});
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    cachedSprintIdMock = 'cachedSprint';
+    cachedSprintMock = createSprintMock(cachedSprintIdMock);
+
     animation.layoutAnimation = jest.fn();
 
     sprintMock = createSprintMock(sprintIdMock, [createSprintMock(sprintIdMock), createSprintMock('sprint-bar')]);
@@ -47,6 +54,10 @@ describe('Agile board async actions', () => {
     };
 
     updateStore({agile: {profile: agileUserProfileMock}});
+
+    await __setStorageState({
+      agileLastSprint: cachedSprintMock
+    });
   });
 
 
@@ -103,6 +114,16 @@ describe('Agile board async actions', () => {
           sprintIdMock,
           actions.PAGE_SIZE
         );
+      });
+
+      it('should load cached sprint first', async () => {
+        await store.dispatch(actions.loadDefaultAgileBoard());
+        storeActions = store.getActions();
+
+        expect(storeActions[1]).toEqual({
+          type: types.RECEIVE_SPRINT,
+          sprint: cachedSprintMock
+        });
       });
 
       it('should load the default agile board`s sprint if there is no matching items from `visitedSprints`',
@@ -163,6 +184,10 @@ describe('Agile board async actions', () => {
           isOutOfDate: false,
           type: types.IS_OUT_OF_DATE
         });
+      });
+
+      it('should cache the last loaded sprint', async () => {
+        await expect(getStorageState().agileLastSprint.id).toEqual(sprintIdMock);
       });
     });
 

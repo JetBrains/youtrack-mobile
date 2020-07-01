@@ -44,6 +44,7 @@ describe('Storage', () => {
       'YT_IS_REGISTERED_FOR_PUSH',
       'YT_DEVICE_TOKEN',
       'YT_AGILE_ZOOMED_IN',
+      'YT_AGILE_LAST_SPRINT',
       'YT_LAST_ROUTE',
       'YT_CURRENT_APP_VERSION',
       'YT_ISSUE_ACTIVITIES_ENABLED_TYPES'

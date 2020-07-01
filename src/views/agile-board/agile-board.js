@@ -182,6 +182,7 @@ class AgileBoard extends Component<Props, State> {
         showBottomBorder: this.state.stickElement.agile
       });
     }
+    return <View style={styles.agileSelector}/>;
   }
 
   renderSprintSelector() {
@@ -195,6 +196,7 @@ class AgileBoard extends Component<Props, State> {
         isLoading
       });
     }
+    return <View style={styles.sprintSelector}/>;
   }
 
   renderZoomButton() {
@@ -234,21 +236,17 @@ class AgileBoard extends Component<Props, State> {
 
   renderBoardHeader() {
     const {zoomedIn} = this.state;
-
-    if (this.props.sprint) {
-      return (
-        <View style={styles.boardHeaderContainer}>
-          <BoardHeader
-            ref={this.boardHeaderRef}
-            style={{minWidth: zoomedIn ? this._getScrollableWidth() : null}}
-            columns={this.props.sprint.board?.columns}
-            onCollapseToggle={this.toggleColumn}
-          />
-        </View>
-      );
-    }
+    return (
+      <View style={styles.boardHeaderContainer}>
+        {this.props.sprint && <BoardHeader
+          ref={this.boardHeaderRef}
+          style={{minWidth: zoomedIn ? this._getScrollableWidth() : null}}
+          columns={this.props.sprint.board?.columns}
+          onCollapseToggle={this.toggleColumn}
+        />}
+      </View>
+    );
   }
-
   _renderSelect() {
     const {selectProps} = this.props;
     return (
@@ -414,9 +412,8 @@ class AgileBoard extends Component<Props, State> {
   };
 
   renderBoard() {
-    const {agile, sprint, isLoadingMore, isLoading, error} = this.props;
+    const {sprint, isLoadingMore, error} = this.props;
     const {zoomedIn} = this.state;
-    const isSprintLoaded = agile?.status?.valid === true && !!sprint && !isLoading;
 
     if (!sprint) {
       if (error && error.noAgiles) {
@@ -448,8 +445,8 @@ class AgileBoard extends Component<Props, State> {
           }}
 
           agileSelector={this.renderAgileSelector()}
-          sprintSelector={isSprintLoaded && this.renderSprintSelector()}
-          boardHeader={isSprintLoaded && this.renderBoardHeader()}
+          sprintSelector={this.renderSprintSelector()}
+          boardHeader={this.renderBoardHeader()}
 
         >
 
