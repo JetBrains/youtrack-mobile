@@ -4,12 +4,18 @@ export type User = {
   email?: string,
   featureFlags?: Array<FeatureFlags>,
   fullName?: string,
+  name?: string,
   guest?: boolean,
   id: string,
   issueRelatedGroup?: IssueRelatedGroup,
   login?: string,
   profiles?: Array<UserProfile | UserGeneralProfile | UserAppearanceProfile>,
-  ringId?: string
+  ringId?: string,
+  endUserAgreementConsent?: {
+    accepted: boolean,
+    majorVersion: string,
+    minorVersion: string
+  }
 };
 
 export type IssueRelatedGroup = {

@@ -2,9 +2,8 @@
 /**
  * https://confluence.jetbrains.com/display/TSYS/Issue+access+rights
  */
-import type {Permissions} from '../auth/auth__permissions';
 import type {AnyIssue} from '../../flow/Issue';
-import type {CurrentUser} from '../auth/auth';
+import type {Permissions} from '../auth/auth__permissions';
 import type {User} from '../../flow/User';
 import type {
   CustomField,
@@ -28,9 +27,9 @@ export const CAN_UPDATE_WATCH = 'JetBrains.YouTrack.UPDATE_WATCH_FOLDER';
 
 export default class IssuePermissions {
   permissions: Permissions;
-  currentUser: CurrentUser;
+  currentUser: User;
 
-  constructor(permissions: Permissions, currentUser: CurrentUser) {
+  constructor(permissions: Permissions, currentUser: User) {
     this.permissions = permissions;
     this.currentUser = currentUser;
   }

@@ -1,14 +1,16 @@
 /* @flow */
 'use strict';
+
 import AsyncStorage from '@react-native-community/async-storage';
 
 import log from '../log/log';
 
-import type {AuthParams, CurrentUser} from '../auth/auth';
 import type {AppConfigFilled} from '../../flow/AppConfig';
+import type {AuthParams} from '../../flow/Auth';
+import type {Folder, User} from '../../flow/User';
 import type {IssueOnList} from '../../flow/Issue';
-import type {Folder} from '../../flow/User';
 import type {Sprint} from '../../flow/Agile';
+import type {PermissionCacheItem} from '../../flow/Permission';
 
 const OTHER_ACCOUNTS_KEY = 'YT_OTHER_ACCOUNTS_STORAGE_KEY';
 
@@ -16,7 +18,7 @@ export type StorageState = {|
   projectId: ?string,
   draftId: ?string,
   authParams: ?AuthParams,
-  currentUser: ?CurrentUser,
+  currentUser: ?User,
   creationTimestamp: ?number,
   config: ?AppConfigFilled,
   query: ?string,
@@ -29,7 +31,8 @@ export type StorageState = {|
   agileLastSprint: ?Sprint,
   lastRoute: ?('IssueList' | 'Inbox' | 'AgileBoard'),
   currentAppVersion: ?string,
-  issueActivitiesEnabledTypes: ?Array<Object>
+  issueActivitiesEnabledTypes: ?Array<Object>,
+  permissions: ?Array<PermissionCacheItem>
 |}
 
 type StorageStateKeys = $Exact<$ObjMap<StorageState, () => string>>;
@@ -51,7 +54,8 @@ const storageKeys: StorageStateKeys = {
   agileLastSprint: 'YT_AGILE_LAST_SPRINT',
   lastRoute: 'YT_LAST_ROUTE',
   currentAppVersion: 'YT_CURRENT_APP_VERSION',
-  issueActivitiesEnabledTypes: 'YT_ISSUE_ACTIVITIES_ENABLED_TYPES'
+  issueActivitiesEnabledTypes: 'YT_ISSUE_ACTIVITIES_ENABLED_TYPES',
+  permissions: 'YT_USER_PERMISSIONS'
 };
 
 let storageState: ?StorageState = null;
@@ -75,7 +79,8 @@ export const initialState: StorageState = Object.freeze({
   agileLastSprint: null,
   lastRoute: null,
   currentAppVersion: null,
-  issueActivitiesEnabledTypes: null
+  issueActivitiesEnabledTypes: null,
+  permissions: null
 });
 
 function cleanAndLogState(message, state) {
@@ -111,6 +116,7 @@ export async function clearCachesAndDrafts() {
     storageKeys.agileLastSprint,
     storageKeys.lastRoute,
     storageKeys.issueActivitiesEnabledTypes,
+    storageKeys.permissions
   ]);
   return populateStorage();
 }

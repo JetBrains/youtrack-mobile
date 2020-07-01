@@ -28,14 +28,11 @@ import {LOG_IN_2FA_TIP} from '../../components/error-message/error-text-messages
 import {resolveErrorMessage} from '../../components/error/error-resolver';
 import ErrorMessageInline from '../../components/error-message/error-message-inline';
 
-import type {AuthParams} from '../../components/auth/auth';
-
 import styles from './log-in.styles';
 import {formStyles} from '../../components/common-styles/form';
 import {HIT_SLOP} from '../../components/common-styles/button';
 
-const noop = () => {};
-const CATEGORY_NAME = 'Login form';
+import type {AuthParams} from '../../flow/Auth';
 
 type Props = {
   auth: Auth,
@@ -51,6 +48,10 @@ type State = {
   loggingIn: boolean,
   youTrackBackendUrl: string
 };
+
+const noop = () => {};
+const CATEGORY_NAME = 'Login form';
+
 
 export class LogIn extends Component<Props, State> {
   constructor(props: Props) {

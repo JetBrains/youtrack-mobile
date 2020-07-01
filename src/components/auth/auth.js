@@ -2,7 +2,7 @@
 
 import urlJoin from 'url-join';
 import Permissions from './auth__permissions';
-import {getStorageState, flushStoragePart} from '../storage/storage';
+import {flushStoragePart, getStorageState} from '../storage/storage';
 import base64 from 'base64-js';
 import qs from 'qs';
 import log from '../log/log';
@@ -11,6 +11,8 @@ import {createExtendedErrorMessage, reportError} from '../error/error-reporter';
 import {notify} from '../notification/notification';
 
 import type {AppConfigFilled} from '../../flow/AppConfig';
+import type {AuthParams} from '../../flow/Auth';
+import type {User} from '../../flow/User';
 
 const ACCEPT_HEADER = 'application/json, text/plain, */*';
 const URL_ENCODED_TYPE = 'application/x-www-form-urlencoded';
@@ -24,34 +26,11 @@ function makeBtoa(str: string) {
   return base64.fromByteArray(byteArray);
 }
 
-export type AuthParams = {
-  refresh_token: string;
-  access_token: string,
-  token_type: string,
-  error_code?: string
-};
-
-export type CurrentUser = {
-  id: string,
-  guest: boolean,
-  name: string,
-  profile?: {
-    avatar?: {
-      url?: string
-    }
-  },
-  endUserAgreementConsent?: {
-    accepted: boolean,
-    majorVersion: string,
-    minorVersion: string
-  }
-};
-
 export default class AuthTest {
   config: AppConfigFilled;
   authParams: ?AuthParams;
   permissions: Permissions;
-  currentUser: CurrentUser;
+  currentUser: User;
   CHECK_TOKEN_URL: string;
   PERMISSIONS_CACHE_URL: string;
 

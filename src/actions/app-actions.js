@@ -33,9 +33,9 @@ import {isIOSPlatform} from '../util/util';
 import {CUSTOM_ERROR_MESSAGE, UNSUPPORTED_ERRORS} from '../components/error/error-messages';
 import {isUnsupportedFeatureError} from '../components/error/error-resolver';
 
-import type {AuthParams, CurrentUser} from '../components/auth/auth';
-import type {Permissions} from '../components/auth/auth__permissions';
+import type {AuthParams} from '../flow/Auth';
 import type {AppConfigFilled, EndUserAgreement} from '../flow/AppConfig';
+import type {Permissions} from '../components/auth/auth__permissions';
 import type {WorkTimeSettings} from '../flow/WorkTimeSettings';
 import type {StorageState} from '../components/storage/storage';
 import type RootState from '../reducers/app-reducer';
@@ -151,7 +151,7 @@ export function setAuth(config: AppConfigFilled) {
   return {type: types.INITIALIZE_AUTH, auth};
 }
 
-export function setPermissions(permissions: Permissions, currentUser: CurrentUser) {
+export function setPermissions(permissions: Permissions, currentUser: User) {
   return {type: types.SET_PERMISSIONS, permissions, currentUser};
 }
 

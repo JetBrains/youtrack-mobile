@@ -1,13 +1,6 @@
 /* @flow */
 
-type CacheItemProject = {id: string};
-type Permission = {key: string};
-type PermissionCacheItem = {
-  projects: Array<CacheItemProject>,
-  projectIds: Array<string>,
-  global: Boolean,
-  permission: Permission
-};
+import type {PermissionCacheItem} from '../../flow/Permission';
 
 class Permissions {
   permissionsMap: Object;

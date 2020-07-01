@@ -47,7 +47,8 @@ describe('Storage', () => {
       'YT_AGILE_LAST_SPRINT',
       'YT_LAST_ROUTE',
       'YT_CURRENT_APP_VERSION',
-      'YT_ISSUE_ACTIVITIES_ENABLED_TYPES'
+      'YT_ISSUE_ACTIVITIES_ENABLED_TYPES',
+      'YT_USER_PERMISSIONS'
     ]);
   });
 
