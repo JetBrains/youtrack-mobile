@@ -13,7 +13,7 @@ class Permissions {
   permissionsMap: Object;
 
   constructor(permissionsCache: Array<PermissionCacheItem>) {
-    const convertedPermissions = permissionsCache.map(cacheItem => {
+    const convertedPermissions = (permissionsCache || []).map(cacheItem => {
       cacheItem.projectIds = (cacheItem.projects || []).map(project => project.id);
       return cacheItem;
     });
@@ -30,9 +30,8 @@ class Permissions {
     if (permission.global) {
       return true;
     }
-    const hasProject = permission.projectIds.indexOf(projectId) !== -1;
 
-    return hasProject;
+    return permission.projectIds.indexOf(projectId) !== -1;
   }
 
   hasEvery(permissionIds: Array<string>, projectId: string) {

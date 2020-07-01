@@ -18,11 +18,11 @@ export function notifyError(message: string, err: Object): Promise<null> {
   return resolveError(err).then(extracted => showErrorMessage(message, extracted));
 }
 
-export function notify(message: string, error?: Object) {
+export function notify(message: string, error?: Object, duration: number = NOTIFY_DURATION) {
   if (error) {
     log.warn(message, error);
   }
-  return showNotification(message, null, toastComponentRef, NOTIFY_DURATION);
+  return showNotification(message, null, toastComponentRef, duration);
 }
 
 export function setNotificationComponent(reference: Object) {

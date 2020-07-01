@@ -3,28 +3,8 @@ import Permissions from './auth__permissions';
 describe('Permissions', () => {
 
   beforeEach(() => {
-    this.fakePermissionsCache = [
-      {
-        global: true,
-        permission: {
-          key: 'global-permission'
-        }
-      }, {
-        global: true,
-        permission: {
-          key: 'global-permission-two'
-        }
-      }, {
-        permission: {
-          key: 'per-project-permission'
-        },
-        projects: [
-          {id: 'permitted-project'}
-        ]
-      }
-    ];
-
-    this.permissions = new Permissions(this.fakePermissionsCache);
+    this.permissionsCacheMock = createPermissionsCache();
+    this.permissions = new Permissions(this.permissionsCacheMock);
   });
 
   it('should create instance', () => {
@@ -71,3 +51,27 @@ describe('Permissions', () => {
     this.permissions.hasSome(['non-exist1', 'non-exist2']).should.be.false;
   });
 });
+
+
+function createPermissionsCache() {
+  return [
+    {
+      global: true,
+      permission: {
+        key: 'global-permission'
+      }
+    }, {
+      global: true,
+      permission: {
+        key: 'global-permission-two'
+      }
+    }, {
+      permission: {
+        key: 'per-project-permission'
+      },
+      projects: [
+        {id: 'permitted-project'}
+      ]
+    }
+  ];
+}

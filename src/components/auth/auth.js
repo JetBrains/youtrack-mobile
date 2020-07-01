@@ -8,6 +8,7 @@ import qs from 'qs';
 import log from '../log/log';
 import {USER_AGENT} from '../usage/usage';
 import {createExtendedErrorMessage, reportError} from '../error/error-reporter';
+import {notify} from '../notification/notification';
 
 import type {AppConfigFilled} from '../../flow/AppConfig';
 
@@ -225,22 +226,33 @@ export default class AuthTest {
       });
   }
 
-  loadPermissions(authParams: AuthParams): Promise<AuthParams> {
+  getPermissionCache(authParams: AuthParams) {
     return fetch(this.PERMISSIONS_CACHE_URL, {
       headers: {
         'Accept': ACCEPT_HEADER,
         'User-Agent': USER_AGENT,
         'Authorization': `${authParams?.token_type} ${authParams?.access_token}`
       }
-    })
+    });
+  }
+
+  loadPermissions(authParams: AuthParams): Promise<AuthParams> {
+    const errorMessage: string = 'Failed to load permissions';
+
+    return this.getPermissionCache(authParams)
       .then((res) => res.json())
       .then((res) => {
         log.info('Permissions loaded', res);
+
+        if (!res) {
+          log.warn(errorMessage, res);
+          notify(errorMessage, 7000);
+        }
+
         this.permissions = new Permissions(res);
         return authParams;
       })
       .catch(async err => {
-        const errorMessage = 'Failed to load permissions';
         log.log(errorMessage, err);
         const extendedErrorMessage = await createExtendedErrorMessage(err, this.PERMISSIONS_CACHE_URL, 'GET');
         reportError(extendedErrorMessage, errorMessage);
