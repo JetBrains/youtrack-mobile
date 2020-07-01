@@ -77,7 +77,6 @@ export default StyleSheet.create({
   applyButton: {
     minWidth: minButtonWidth,
     padding: UNIT,
-    paddingLeft: UNIT * 2,
-    backgroundColor: 'lime',
+    paddingLeft: UNIT * 2
   }
 });
