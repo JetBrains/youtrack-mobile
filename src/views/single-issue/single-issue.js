@@ -265,14 +265,17 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
   canUpdateGeneralInfo = (): boolean => {
     const {issue, issuePermissions} = this.props;
     return !!issue && issuePermissions.canUpdateGeneralInfo(issue);
-  }
+  };
 
   renderActionsIcon() {
     if (!this.state.isTransitionInProgress) {
       return (
-        isIOSPlatform()
-          ? <IconMoreOptions style={styles.issueMoreOptionsIcon} size={24}/>
-          : <IconDrag style={styles.issueMoreOptionsIcon} size={22}/>
+        <Text>
+          {isIOSPlatform()
+            ? <IconMoreOptions size={24}/>
+            : <IconDrag size={22}/>}
+          <Text>{' '}</Text>
+        </Text>
       );
     }
   }
@@ -407,7 +410,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
     const {cancelAddAttach, hideAddAttachDialog, attachingImage} = this.props;
     cancelAddAttach(attachingImage);
     hideAddAttachDialog();
-  }
+  };
 
   addAttachment = async (attach: Attachment) => {
     const {uploadAttach, loadAttachments} = this.props;
