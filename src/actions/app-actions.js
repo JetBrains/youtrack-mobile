@@ -49,7 +49,7 @@ export function logOut() {
   return async (dispatch: (any) => any, getState: () => Object, getApi: () => Api) => {
     clearCachesAndDrafts();
     const auth = getState().app.auth;
-    Router.EnterServer({serverUrl: auth.config.backendUrl});
+    Router.EnterServer({serverUrl: auth?.config?.backendUrl});
     auth.logOut();
     setApi(null);
     dispatch({type: types.LOG_OUT});
