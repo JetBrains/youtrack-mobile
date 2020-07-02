@@ -10,6 +10,9 @@ import ApiHelper from './api__helper';
 
 import {ResourceTypes} from './api__resource-types';
 
+import type {Tag} from '../../flow/CustomFields';
+import type {SavedQuery} from '../../flow/Issue';
+
 
 export default class UserAPI extends ApiBase {
 
@@ -60,7 +63,7 @@ export default class UserAPI extends ApiBase {
     return await this.makeAuthorizedRequest(`${this.adminApiUrl}/${userId}?${queryString}`);
   }
 
-  async getUserFolders(folderId: string = ''): Promise<User> {
+  async getUserFolders(folderId: string = ''): Promise<User | Tag | SavedQuery> {
     const queryString = UserAPI.createFieldsQuery(this.USER_FOLDERS_FIELDS);
 
     return await this.makeAuthorizedRequest(`${this.youTrackApiUrl}/userIssueFolders/${folderId}?${queryString}`);

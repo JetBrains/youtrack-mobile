@@ -12,7 +12,6 @@ import type {IssueOnList, SavedQuery} from '../../flow/Issue';
 import type {Folder} from '../../flow/User';
 import {updateUserGeneralProfile} from '../../actions/app-actions';
 import {EVERYTHING_CONTEXT} from '../../components/search/search-context';
-import {sortAlphabetically} from '../../components/search/sorting';
 
 const PAGE_SIZE = 10;
 const MAX_STORED_QUERIES = 5;
@@ -152,7 +151,6 @@ export function openIssuesContextSelect() {
     const currentUser = getState().app?.user;
     const currentUserGeneralProfile = currentUser?.profiles?.general;
     const currentSearchContext = currentUserGeneralProfile?.searchContext || EVERYTHING_CONTEXT;
-    const starTagId = currentUserGeneralProfile?.star?.id;
 
     trackEvent('Issue list context select');
 
@@ -162,15 +160,13 @@ export function openIssuesContextSelect() {
         show: true,
         placeholder: 'Filter items',
         dataSource: async () => {
-          const folders = await api.user.getUserFolders();
-          const groupedFolders = getGroupedFolders(folders, currentSearchContext, starTagId);
-
-          return [EVERYTHING_CONTEXT].concat(
-            groupedFolders.current,
-            groupedFolders.star,
-            groupedFolders.pinned.sort(sortAlphabetically),
-            groupedFolders.regular.sort(sortAlphabetically)
-          );
+          let folders = [];
+          try {
+            folders = await api.user.getUserFolders();
+          } catch (e) {
+            log.warn('Failed to load user folders for the context');
+          }
+          return [EVERYTHING_CONTEXT].concat(folders);
         },
         selectedItems: [currentSearchContext],
         onCancel: () => dispatch(closeIssuesContextSelect()),
@@ -190,38 +186,6 @@ export function openIssuesContextSelect() {
         }
       }
     });
-
-    function getGroupedFolders(folders: Array<Folder>, currentSearchContext: Folder, starTagId: string) {
-      return folders.reduce(
-        (list, folder) => {
-          let target;
-          switch (true) {
-          case currentSearchContext?.id === folder.id:
-            target = list.current;
-            break;
-          case folder.id === starTagId:
-            target = list.star;
-            break;
-          case list.pinned:
-            target = list.pinned;
-            break;
-          default:
-            target = list.regular;
-          }
-
-          if (Array.isArray(target)) {
-            target.push(folder);
-          }
-          return list;
-        },
-        {
-          pinned: [],
-          regular: [],
-          star: [],
-          current: []
-        }
-      );
-    }
   };
 }
 
