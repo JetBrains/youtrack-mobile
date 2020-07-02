@@ -5,12 +5,15 @@ import PushNotifications from '../components/push-notifications/push-notificatio
 import * as Notification from '../components/notification/notification';
 
 import * as actions from './app-actions';
+import * as types from './action-types';
 
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import Router from '../components/router/router';
 import {CUSTOM_ERROR_MESSAGE, REGISTRATION_ERRORS, UNSUPPORTED_ERRORS} from '../components/error/error-messages';
-import PermissionsHelper from '../components/permissions-store/permissions-helper';
+import permissionsHelper from '../components/permissions-store/permissions-helper';
+import * as appActionHelper from './app-actions-helper';
+import PermissionsStore from '../components/permissions-store/permissions-store';
 
 let apiMock;
 let store;
@@ -33,6 +36,7 @@ describe('app-actions', () => {
 
     appStateMock = {
       auth: {
+        currentUser: {},
         logOut: authLogOutMock,
         getPermissionsCacheURL: jest.fn(() => permissionsCacheURLMock),
         authParams: {
@@ -172,23 +176,89 @@ describe('app-actions', () => {
   });
 
   describe('Permissions', () => {
+    let actualPermissionsMock;
+    let cachedPermissionsMock;
+    let permissionItemMock;
+
     beforeEach(() => {
+      permissionItemMock = {permission: {key: 'permissionName'}};
+      cachedPermissionsMock = [permissionItemMock];
+      actualPermissionsMock = [
+        permissionItemMock,
+        permissionItemMock
+      ];
+
       createStore();
+      jest.spyOn(permissionsHelper, 'loadPermissions').mockResolvedValueOnce(actualPermissionsMock);
     });
 
     it('should load permissions', async () => {
-      const permissionsMock = [];
-      jest.spyOn(PermissionsHelper, 'loadPermissions').mockResolvedValueOnce(permissionsMock);
-
       await store.dispatch(actions.loadUserPermissions());
 
-      expect(PermissionsHelper.loadPermissions).toHaveBeenCalledWith(
+      expect(permissionsHelper.loadPermissions).toHaveBeenCalledWith(
         appStateMock.auth.authParams.token_type,
         appStateMock.auth.authParams.access_token,
         permissionsCacheURLMock
       );
     });
 
+    it('should not set permissions from cache if there are no any', async () => {
+      setCachedPermissions(null);
+
+      await store.dispatch(actions.loadUserPermissions());
+
+      const storeAction = store.getActions();
+
+      expect(storeAction).toHaveLength(1);
+
+      expect(storeAction[0]).toEqual({
+        type: types.SET_PERMISSIONS,
+        permissionsStore: new PermissionsStore(actualPermissionsMock),
+        currentUser: appStateMock.auth.currentUser
+      });
+    });
+
+    it('should set permissions from cache', async () => {
+      setCachedPermissions(cachedPermissionsMock);
+
+      await store.dispatch(actions.loadUserPermissions());
+
+      const storeAction = store.getActions();
+
+      expect(storeAction).toHaveLength(2);
+
+      expect(storeAction[0]).toEqual({
+        type: types.SET_PERMISSIONS,
+        permissionsStore: new PermissionsStore(cachedPermissionsMock),
+        currentUser: appStateMock.auth.currentUser
+      });
+    });
+
+    it('should update permissions', async () => {
+      setCachedPermissions(cachedPermissionsMock);
+
+      await store.dispatch(actions.loadUserPermissions());
+
+      expect(store.getActions()[1]).toEqual({
+        type: types.SET_PERMISSIONS,
+        permissionsStore: new PermissionsStore(actualPermissionsMock),
+        currentUser: appStateMock.auth.currentUser
+      });
+    });
+
+    it('should update permissions cache', async () => {
+      jest.spyOn(appActionHelper, 'updateCachedPermissions');
+
+      await store.dispatch(actions.loadUserPermissions());
+
+      expect(appActionHelper.updateCachedPermissions).toHaveBeenCalledWith(actualPermissionsMock);
+    });
+
+    function setCachedPermissions(permissions) {
+      __setStorageState({
+        permissions: permissions
+      });
+    }
   });
 
 

@@ -7,12 +7,11 @@ import PermissionsHelper from '../components/permissions-store/permissions-helpe
 
 import type {PermissionCacheItem} from '../flow/Permission';
 
-async function set(permissions: ?Array<PermissionsHelper>): Promise<?Array<PermissionCacheItem>> {
-  await flushStoragePart({permissions});
-  return permissions;
+function updateCachedPermissions(permissions: ?Array<PermissionsHelper>): void {
+  flushStoragePart({permissions});
 }
 
-function get(): ?Array<PermissionCacheItem> {
+function getCachedPermissions(): ?Array<PermissionCacheItem> {
   return getStorageState().permissions;
 }
 
@@ -36,7 +35,7 @@ async function loadPermissions(token_type: ?string, access_token: ?string, permi
 }
 
 export {
-  set,
-  get,
+  updateCachedPermissions,
+  getCachedPermissions,
   loadPermissions,
 };

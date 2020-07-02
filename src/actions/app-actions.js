@@ -33,7 +33,7 @@ import {isIOSPlatform} from '../util/util';
 import {CUSTOM_ERROR_MESSAGE, UNSUPPORTED_ERRORS} from '../components/error/error-messages';
 import {isUnsupportedFeatureError} from '../components/error/error-resolver';
 
-import {loadPermissions} from './app-actions-helper';
+import * as appActionsHelper from './app-actions-helper';
 import PermissionsStore from '../components/permissions-store/permissions-store';
 
 import type {AuthParams} from '../flow/Auth';
@@ -316,19 +316,36 @@ export function removeAccountOrLogOut() {
   };
 }
 
-export function loadUserPermissions() {
-  return async (dispatch: (any) => any, getState: () => Object) => {
+function setUserPermissions(permissions: Array<PermissionCacheItem>) {
+  return async (dispatch: (any) => any, getState: () => RootState) => {
     const auth: Auth = getState().app.auth;
-    const permissions: Array<PermissionCacheItem> = await loadPermissions(
-      auth.authParams?.token_type,
-      auth.authParams?.access_token,
-      auth.getPermissionsCacheURL()
-    );
     dispatch({
       type: types.SET_PERMISSIONS,
       permissionsStore: new PermissionsStore(permissions),
       currentUser: auth.currentUser
     });
+  };
+}
+
+export function loadUserPermissions() {
+  return async (dispatch: (any) => any, getState: () => Object) => {
+    const cachedPermissions: ?Array<PermissionCacheItem> = appActionsHelper.getCachedPermissions();
+    if (cachedPermissions) {
+      dispatch(setUserPermissions(cachedPermissions));
+      log.debug('Use permissions from cache');
+    }
+
+    const auth: Auth = getState().app.auth;
+    const authParams: AuthParams = auth.authParams;
+    const permissions: Array<PermissionCacheItem> = await appActionsHelper.loadPermissions(
+      authParams?.token_type,
+      authParams?.access_token,
+      auth.getPermissionsCacheURL()
+    );
+
+    dispatch(setUserPermissions(permissions));
+    appActionsHelper.updateCachedPermissions(permissions);
+    log.debug('Actual permissions cached');
   };
 }
 
