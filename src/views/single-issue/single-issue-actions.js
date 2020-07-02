@@ -14,6 +14,7 @@ import {initialState} from './single-issue-reducers';
 import {isIOSPlatform} from '../../util/util';
 import {receiveUserAppearanceProfile} from '../../actions/app-actions';
 
+import type ActionSheet from '@expo/react-native-action-sheet/ActionSheet.ios';
 import type {IssueFull, CommandSuggestionResponse, OpenNestedViewParams} from '../../flow/Issue';
 import type {CustomField, IssueProject, FieldValue, Attachment} from '../../flow/CustomFields';
 import type Api from '../../components/api/api';
@@ -314,12 +315,28 @@ function makeIssueWebUrl(api: Api, issue: IssueFull, commentId: ?string) {
   return `${api.config.backendUrl}/issue/${issue.idReadable}${commentHash}`;
 }
 
-export function showIssueActions(actionSheet: Object, switchToDetailsTab: () => any) {
+export function showIssueActions(
+  actionSheet: ActionSheet,
+  permissions: { canAttach: boolean, canEdit: boolean, canApplyCommand: boolean },
+  switchToDetailsTab: () => any
+) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {issue} = getState().singleIssue;
 
     const actions = [
+      {
+        title: 'Share…',
+        execute: () => {
+          const url = makeIssueWebUrl(api, issue);
+          if (isIOSPlatform()) {
+            Share.share({url});
+          } else {
+            Share.share({title: issue.summary, message: url}, {dialogTitle: 'Share issue URL'});
+          }
+          usage.trackEvent(CATEGORY_NAME, 'Copy issue URL');
+        }
+      },
       {
         title: 'Copy issue URL',
         execute: () => {
@@ -327,41 +344,41 @@ export function showIssueActions(actionSheet: Object, switchToDetailsTab: () => 
           Clipboard.setString(makeIssueWebUrl(api, issue));
           notify('Issue URL copied');
         }
-      },
-      {
+      }
+    ];
+
+    if (permissions.canEdit) {
+      actions.push({
         title: 'Edit',
         execute: () => {
           dispatch(startEditingIssue());
           usage.trackEvent(CATEGORY_NAME, 'Edit issue');
         }
-      },
-      {
+      });
+    }
+
+    if (permissions.canAttach) {
+      actions.push({
         title: 'Attach image',
         execute: () => {
           switchToDetailsTab();
           dispatch(attachmentActions.toggleAttachFileDialog(true));
+          usage.trackEvent(CATEGORY_NAME, 'Attach file');
         }
-      }
-    ]
-      .concat([
-        {
-          title: 'Share…',
-          execute: () => {
-            const url = makeIssueWebUrl(api, issue);
-            if (isIOSPlatform()) {
-              Share.share({url});
-            } else {
-              Share.share({title: issue.summary, message: url}, {dialogTitle: 'Share issue URL'});
-            }
-            usage.trackEvent(CATEGORY_NAME, 'Copy issue URL');
-          }
-        },
-        {
-          title: 'Apply command…',
-          execute: () => dispatch(openCommandDialog())
+      });
+    }
+
+    if (permissions.canApplyCommand) {
+      actions.push({
+        title: 'Apply command…',
+        execute: () => {
+          dispatch(openCommandDialog());
+          usage.trackEvent(CATEGORY_NAME, 'Apply command');
         }
-      ])
-      .concat({title: 'Cancel'});
+      });
+    }
+
+    actions.push({title: 'Cancel'});
 
     const selectedAction = await showActions(actions, actionSheet);
 

@@ -261,7 +261,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
     }
   }
 
-  canUpdateGeneralInfo(): boolean {
+  canUpdateGeneralInfo = (): boolean => {
     const {issue, issuePermissions} = this.props;
     return !!issue && issuePermissions.canUpdateGeneralInfo(issue);
   }
@@ -295,7 +295,8 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
       isSavingEditedIssue,
       saveIssueSummaryAndDescriptionChange,
       showIssueActions,
-      stopEditingIssue
+      stopEditingIssue,
+      issuePermissions
     } = this.props;
 
     const issueToShow = isIssueLoaded ? issue : issuePlaceholder;
@@ -317,7 +318,15 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
           extraButton={isIssueLoaded ? this.renderStar() : null}
           onRightButtonClick={() => {
             if (isIssueLoaded) {
-              showIssueActions(this.context.actionSheet(), this.switchToDetailsTab);
+              showIssueActions(
+                this.context.actionSheet(),
+                {
+                  canAttach: issuePermissions.canAddAttachmentTo(issue),
+                  canEdit: this.canUpdateGeneralInfo(),
+                  canApplyCommand: issuePermissions.canRunCommand(issue)
+                },
+                this.switchToDetailsTab,
+              );
             }
           }
           }
