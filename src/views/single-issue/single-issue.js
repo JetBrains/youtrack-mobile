@@ -36,10 +36,11 @@ import type {Attachment} from '../../flow/CustomFields';
 import {TabView, TabBar} from 'react-native-tab-view';
 import IssueDetails from './single-issue__details';
 
-import {IconBack, IconActions, IconCheck, IconClose} from '../../components/icon/icon';
+import {IconBack, IconCheck, IconClose, IconMoreOptions, IconDrag} from '../../components/icon/icon';
 import IssueActivity from './activity/single-issue__activity';
 import IssueStar from '../../components/issue-actions/issue-star';
 import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
+import {isIOSPlatform} from '../../util/util';
 
 const CATEGORY_NAME = 'Issue';
 const initialWindowDimentions = Dimensions.get('window');
@@ -268,7 +269,11 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
 
   renderActionsIcon() {
     if (!this.state.isTransitionInProgress) {
-      return <IconActions size={26}/>;
+      return (
+        isIOSPlatform()
+          ? <IconMoreOptions style={styles.issueMoreOptionsIcon} size={24}/>
+          : <IconDrag style={styles.issueMoreOptionsIcon} size={22}/>
+      );
     }
   }
 

@@ -111,6 +111,10 @@ export default StyleSheet.create({
     flexDirection: 'row',
     marginTop: UNIT * 2
   },
+  activityCommentActionsMoreIcon: {
+    paddingRight: UNIT,
+    marginRight: -UNIT *2
+  },
 
   settings: {
     margin: UNIT * 1.5

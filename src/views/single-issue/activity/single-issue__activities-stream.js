@@ -26,7 +26,7 @@ import Avatar from '../../../components/avatar/avatar';
 
 import Router from '../../../components/router/router';
 
-import {IconActions, IconHistory, IconWork} from '../../../components/icon/icon';
+import {IconDrag, IconHistory, IconMoreOptions, IconWork} from '../../../components/icon/icon';
 
 import usage from '../../../components/usage/usage';
 import log from '../../../components/log/log';
@@ -34,6 +34,7 @@ import {getApi} from '../../../components/api/api__instance';
 import AttachmentsRow from '../../../components/attachments-row/attachments-row';
 import ApiHelper from '../../../components/api/api__helper';
 import CustomFieldChangeDelimiter from '../../../components/custom-field/custom-field__change-delimiter';
+import {isIOSPlatform} from '../../../util/util';
 
 import type {WorkTimeSettings} from '../../../flow/WorkTimeSettings';
 import type {ActivityItem, IssueActivity} from '../../../flow/Activity';
@@ -337,7 +338,9 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
           hitSlop={HIT_SLOP}
           disabled={disabled}
           onPress={() => this.props.onShowCommentActions(comment)}>
-          <IconActions size={22} color={COLOR_ICON_GREY}/>
+          {isIOSPlatform()
+            ? <IconMoreOptions style={styles.activityCommentActionsMoreIcon} size={24} color={COLOR_ICON_GREY}/>
+            : <IconDrag style={styles.activityCommentActionsMoreIcon} size={22} color={COLOR_ICON_GREY}/>}
         </TouchableOpacity>
       </View>;
     }

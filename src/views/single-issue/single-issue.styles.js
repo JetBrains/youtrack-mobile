@@ -3,7 +3,6 @@ import {
   UNIT,
   COLOR_FONT_ON_BLACK,
   COLOR_FONT_GRAY,
-  COLOR_FONT,
   COLOR_ICON_MEDIUM_GREY,
   COLOR_PINK_DARK
 } from '../../components/variables/variables';
@@ -61,11 +60,6 @@ export default StyleSheet.create({
   },
   issueTopPanelText: {
     ...secondaryText
-  },
-  issueTopPanelMoreIcon: {
-    height: 9,
-    resizeMode: 'contain',
-    tintColor: `${COLOR_FONT}${70}`
   },
   topPanelUpdatedInformation: {
     marginTop: UNIT * 0.75,

@@ -224,6 +224,12 @@ export const IconComment = (props?: Props) => <IconYTM {...{
   ...props
 }} />;
 
+export const IconDrag = (props?: Props) => <IconYTM {...{
+  ...defaultProps,
+  name: 'drag',
+  ...props
+}} />;
+
 export const IconException = (props?: Props) => <IconYTM {...{
   ...defaultProps,
   name: 'exception',
@@ -239,6 +245,12 @@ export const IconHistory = (props?: Props) => <IconYTM {...{
 export const IconHourGlass = (props?: Props) => <IconYTM {...{
   ...defaultProps,
   name: 'hourglass',
+  ...props
+}} />;
+
+export const IconMoreOptions = (props?: Props) => <IconYTM {...{
+  ...defaultProps,
+  name: 'more-options',
   ...props
 }} />;
 
