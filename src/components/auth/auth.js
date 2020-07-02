@@ -7,8 +7,6 @@ import base64 from 'base64-js';
 import qs from 'qs';
 import log from '../log/log';
 import {USER_AGENT} from '../usage/usage';
-import {createExtendedErrorMessage, reportError} from '../error/error-reporter';
-import {notify} from '../notification/notification';
 
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {AuthParams} from '../../flow/Auth';
@@ -52,6 +50,10 @@ export default class AuthTest {
       .then((authParams) => {
         this.authParams = authParams;
       });
+  }
+
+  getPermissionsCacheURL(): string {
+    return this.PERMISSIONS_CACHE_URL;
   }
 
   async logOut() {
@@ -201,40 +203,6 @@ export default class AuthTest {
       })
       .catch((err) => {
         log.log('Error during token validation', err);
-        throw err;
-      });
-  }
-
-  getPermissionCache(authParams: AuthParams) {
-    return fetch(this.PERMISSIONS_CACHE_URL, {
-      headers: {
-        'Accept': ACCEPT_HEADER,
-        'User-Agent': USER_AGENT,
-        'Authorization': `${authParams?.token_type} ${authParams?.access_token}`
-      }
-    });
-  }
-
-  loadPermissions(authParams: AuthParams): Promise<AuthParams> {
-    const errorMessage: string = 'Failed to load permissions';
-
-    return this.getPermissionCache(authParams)
-      .then((res) => res.json())
-      .then((res) => {
-        log.info('Permissions loaded', res);
-
-        if (!res) {
-          log.warn(errorMessage, res);
-          notify(errorMessage, 7000);
-        }
-
-        this.permissionsStore = new PermissionsStore(res);
-        return authParams;
-      })
-      .catch(async err => {
-        log.log(errorMessage, err);
-        const extendedErrorMessage = await createExtendedErrorMessage(err, this.PERMISSIONS_CACHE_URL, 'GET');
-        reportError(extendedErrorMessage, errorMessage);
         throw err;
       });
   }

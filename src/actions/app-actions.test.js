@@ -10,6 +10,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import Router from '../components/router/router';
 import {CUSTOM_ERROR_MESSAGE, REGISTRATION_ERRORS, UNSUPPORTED_ERRORS} from '../components/error/error-messages';
+import PermissionsHelper from '../components/permissions-store/permissions-helper';
 
 let apiMock;
 let store;
@@ -17,14 +18,37 @@ const getApi = () => apiMock;
 const middlewares = [thunk.withExtraArgument(getApi)];
 const storeMock = configureMockStore(middlewares);
 
+const backendURLMock = 'https://example.com';
+const permissionsCacheURLMock = `${backendURLMock}/permissionsCache`;
+let authLogOutMock;
+let appStateMock;
+
+
 describe('app-actions', () => {
+  beforeEach(() => jest.restoreAllMocks());
+
   beforeEach(async () => {
     apiMock = {};
+    authLogOutMock = jest.fn();
+
+    appStateMock = {
+      auth: {
+        logOut: authLogOutMock,
+        getPermissionsCacheURL: jest.fn(() => permissionsCacheURLMock),
+        authParams: {
+          token_type: 'token_type',
+          access_token: 'access_token'
+        },
+        config: {
+          backendUrl: backendURLMock,
+          serverUri: `${backendURLMock}/hub`
+        },
+      },
+    };
+
     updateStore({});
     await populateStorage();
   });
-
-  beforeEach(() => jest.restoreAllMocks());
 
 
   describe('subscribeToPushNotifications', () => {
@@ -115,14 +139,12 @@ describe('app-actions', () => {
 
 
   describe('removeAccountOrLogOut', () => {
-    const URL = 'https://example.com';
-    let authLogOutMock;
-
+    const copy = Router.EnterServer;
+    afterEach(() => Router.EnterServer = copy);
     beforeEach(() => {
-      authLogOutMock = jest.fn();
-      jest.spyOn(PushNotifications, 'unregister').mockReturnValue(Promise.resolve());
+      jest.spyOn(PushNotifications, 'unregister').mockResolvedValueOnce({});
       Router.EnterServer = jest.fn();
-      setAppStateMock();
+      createStore();
     });
 
     it('should logout from the only account', async () => {
@@ -147,17 +169,26 @@ describe('app-actions', () => {
       expect(PushNotifications.unregister).toHaveBeenCalled();
     });
 
-    function setAppStateMock(otherAccounts) {
-      const appStateMock = {
-        auth: {
-          logOut: authLogOutMock,
-          config: {backendUrl: URL}
-        },
-        otherAccounts: otherAccounts || []
-      };
+  });
 
-      updateStore({app: appStateMock});
-    }
+  describe('Permissions', () => {
+    beforeEach(() => {
+      createStore();
+    });
+
+    it('should load permissions', async () => {
+      const permissionsMock = [];
+      jest.spyOn(PermissionsHelper, 'loadPermissions').mockResolvedValueOnce(permissionsMock);
+
+      await store.dispatch(actions.loadUserPermissions());
+
+      expect(PermissionsHelper.loadPermissions).toHaveBeenCalledWith(
+        appStateMock.auth.authParams.token_type,
+        appStateMock.auth.authParams.access_token,
+        permissionsCacheURLMock
+      );
+    });
+
   });
 
 
@@ -165,11 +196,15 @@ describe('app-actions', () => {
     __setStorageState({isRegisteredForPush: isRegistered});
   }
 
+  function createStore(otherAccounts) {
+    appStateMock.otherAccounts = otherAccounts || appStateMock.otherAccounts || [];
+
+    updateStore({app: appStateMock});
+  }
+
   function updateStore(state: ?Object = {}) {
     store = storeMock(state);
   }
-
-
 
 });
 

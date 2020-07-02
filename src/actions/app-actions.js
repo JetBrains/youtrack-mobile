@@ -33,14 +33,16 @@ import {isIOSPlatform} from '../util/util';
 import {CUSTOM_ERROR_MESSAGE, UNSUPPORTED_ERRORS} from '../components/error/error-messages';
 import {isUnsupportedFeatureError} from '../components/error/error-resolver';
 
+import {loadPermissions} from './app-actions-helper';
+import PermissionsStore from '../components/permissions-store/permissions-store';
+
 import type {AuthParams} from '../flow/Auth';
 import type {AppConfigFilled, EndUserAgreement} from '../flow/AppConfig';
-import type {PermissionsStore} from '../components/permissions-store/permissions-store';
 import type {WorkTimeSettings} from '../flow/WorkTimeSettings';
 import type {StorageState} from '../components/storage/storage';
 import type RootState from '../reducers/app-reducer';
 import type {User, UserAppearanceProfile, UserGeneralProfile} from '../flow/User';
-
+import type {PermissionCacheItem} from '../flow/Permission';
 
 
 export function logOut() {
@@ -149,10 +151,6 @@ export function setAuth(config: AppConfigFilled) {
   usage.init(config.statisticsEnabled);
 
   return {type: types.INITIALIZE_AUTH, auth};
-}
-
-export function setPermissions(permissionsStore: PermissionsStore, currentUser: User) {
-  return {type: types.SET_PERMISSIONS, permissionsStore, currentUser};
 }
 
 function showUserAgreement(agreement) {
@@ -298,7 +296,7 @@ export function changeAccount(account: StorageState, dropCurrentAccount: boolean
 
 export function removeAccountOrLogOut() {
   return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
-    const otherAccounts = getState().app.otherAccounts;
+    const otherAccounts: Array<StorageState> = getState().app.otherAccounts;
 
     if (isRegisteredForPush()) {
       setRegisteredForPush(false);
@@ -318,12 +316,26 @@ export function removeAccountOrLogOut() {
   };
 }
 
-function completeInitialization(issueId: ?string = null) {
+export function loadUserPermissions() {
   return async (dispatch: (any) => any, getState: () => Object) => {
+    const auth: Auth = getState().app.auth;
+    const permissions: Array<PermissionCacheItem> = await loadPermissions(
+      auth.authParams?.token_type,
+      auth.authParams?.access_token,
+      auth.getPermissionsCacheURL()
+    );
+    dispatch({
+      type: types.SET_PERMISSIONS,
+      permissionsStore: new PermissionsStore(permissions),
+      currentUser: auth.currentUser
+    });
+  };
+}
+
+export function completeInitialization(issueId: ?string = null) {
+  return async (dispatch: (any) => any) => {
     log.debug('Completing initialization: loading permissions cache');
-    const auth = getState().app.auth;
-    await auth.loadPermissions(auth.authParams);
-    dispatch(setPermissions(auth.permissionsStore, auth.currentUser));
+    dispatch(loadUserPermissions());
     dispatch(loadUser());
     dispatch(loadAgileProfile());
     dispatch(loadWorkTimeSettings());

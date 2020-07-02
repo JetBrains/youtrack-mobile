@@ -1,6 +1,5 @@
 import Auth from './auth';
 import sinon from 'sinon';
-import * as notification from '../notification/notification';
 
 describe('Auth', function () {
   let configMock;
@@ -123,8 +122,6 @@ describe('Auth', function () {
     it('should refresh token from hub', async () => {
       const response = {access_token: 'new-token', refresh_token: 'new-refresh'};
 
-      sinon.stub(auth, 'loadPermissions', (authParams) => authParams);
-
       global.fetch.onRequest = options => {
         if (options.url.includes('/api/rest/oauth2/token')) {
           return options.resolve({status: 200, json: () => (response)});
@@ -141,8 +138,6 @@ describe('Auth', function () {
     it('should fail refresh if hub ', () => {
       const response = {error_code: 500};
       const promise = auth.refreshToken();
-
-      sinon.stub(auth, 'loadPermissions', (authParams) => authParams);
 
       global.fetch.onRequest = options => {
         if (options.url.includes('/api/rest/oauth2/token')) {
@@ -182,31 +177,6 @@ describe('Auth', function () {
       request.options.headers.Authorization.should.equal('Basic Y2xpZW50LWlkOmNsaWVudC1zZWNyZXQ=');
       request.requestBody.should.equal(`grant_type=authorization_code&code=fake-code&client_id=client-id&client_secret=client-secret&redirect_uri=ytoauth://landing.url`);
     });
-  });
-
-
-  describe('Permissions', () => {
-    beforeEach(() => {
-      auth = createAuthMock();
-      jest.spyOn(auth, 'getPermissionCache').mockResolvedValueOnce({
-        json: jest.fn(() => null)
-      });
-    });
-
-    it('should create a map of user permissions even they are not loaded correctly', async () => {
-      await auth.loadPermissions(authParamsMock);
-
-      expect(auth.permissionsStore.permissionsMap.size).toEqual(0);
-    });
-
-    it('should notify user that permissions are not loaded correctly', async () => {
-      jest.spyOn(notification, 'notify');
-
-      await auth.loadPermissions(authParamsMock);
-
-      expect(notification.notify).toHaveBeenCalled();
-    });
-
   });
 
 

@@ -5,8 +5,8 @@ import type {PermissionCacheItem} from '../../flow/Permission';
 class PermissionsStore {
   permissionsMap: Object;
 
-  constructor(permissionsCache: Array<PermissionCacheItem>) {
-    const convertedPermissions = (permissionsCache || []).map(cacheItem => {
+  constructor(permissions: Array<PermissionCacheItem>) {
+    const convertedPermissions = (permissions || []).map(cacheItem => {
       cacheItem.projectIds = (cacheItem.projects || []).map(project => project.id);
       return cacheItem;
     });
