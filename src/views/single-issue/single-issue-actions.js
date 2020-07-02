@@ -336,7 +336,7 @@ export function showIssueActions(actionSheet: Object, switchToDetailsTab: () => 
         }
       },
       {
-        title: 'Attach file',
+        title: 'Attach image',
         execute: () => {
           switchToDetailsTab();
           dispatch(attachmentActions.toggleAttachFileDialog(true));
