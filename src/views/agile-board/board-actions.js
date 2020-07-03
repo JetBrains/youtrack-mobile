@@ -79,8 +79,14 @@ export function loadAgileWithStatus(agileId: string) {
   return async (dispatch: (any) => any) => {
     dispatch({type: types.START_LOADING_AGILE});
 
-    const agileWithStatus = await dispatch(loadAgile(agileId));
+    const cachedDefaultAgileBoard: ?Board = getStorageState().agileDefaultBoard;
+    if (cachedDefaultAgileBoard) {
+      dispatch(receiveAgile(cachedDefaultAgileBoard));
+    }
+
+    const agileWithStatus: Board = await dispatch(loadAgile(agileId));
     dispatch({type: types.STOP_LOADING_AGILE});
+    flushStoragePart({agileDefaultBoard: agileWithStatus});
 
     if (!agileWithStatus.status.valid) {
       dispatch(receiveSprint(null));
@@ -119,15 +125,20 @@ function updateAgileUserProfile(sprintId) {
   };
 }
 
+function receiveAgile(agile: Board) {
+  return {
+    type: types.RECEIVE_AGILE,
+    agile
+  };
+}
+
 export function loadAgile(agileId: string) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
+
     try {
       const agileWithStatus = await api.agile.getAgile(agileId);
-      dispatch({
-        type: types.RECEIVE_AGILE,
-        agile: agileWithStatus
-      });
+      dispatch(receiveAgile(agileWithStatus));
       log.info(`Loaded agile board ${agileId} status`, agileWithStatus);
       return agileWithStatus;
     } catch (error) {

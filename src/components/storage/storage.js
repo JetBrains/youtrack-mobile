@@ -9,7 +9,7 @@ import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {AuthParams} from '../../flow/Auth';
 import type {Folder, User} from '../../flow/User';
 import type {IssueOnList} from '../../flow/Issue';
-import type {Sprint} from '../../flow/Agile';
+import type {Board, Sprint} from '../../flow/Agile';
 import type {PermissionCacheItem} from '../../flow/Permission';
 
 const OTHER_ACCOUNTS_KEY = 'YT_OTHER_ACCOUNTS_STORAGE_KEY';
@@ -29,6 +29,7 @@ export type StorageState = {|
   deviceToken: ?string,
   agileZoomedIn: ?boolean,
   agileLastSprint: ?Sprint,
+  agileDefaultBoard: ?Board,
   lastRoute: ?('IssueList' | 'Inbox' | 'AgileBoard'),
   currentAppVersion: ?string,
   issueActivitiesEnabledTypes: ?Array<Object>,
@@ -52,6 +53,7 @@ const storageKeys: StorageStateKeys = {
   deviceToken: 'YT_DEVICE_TOKEN',
   agileZoomedIn: 'YT_AGILE_ZOOMED_IN',
   agileLastSprint: 'YT_AGILE_LAST_SPRINT',
+  agileDefaultBoard: 'YT_AGILE_DEFAULT_BOARD',
   lastRoute: 'YT_LAST_ROUTE',
   currentAppVersion: 'YT_CURRENT_APP_VERSION',
   issueActivitiesEnabledTypes: 'YT_ISSUE_ACTIVITIES_ENABLED_TYPES',
@@ -80,7 +82,8 @@ export const initialState: StorageState = Object.freeze({
   lastRoute: null,
   currentAppVersion: null,
   issueActivitiesEnabledTypes: null,
-  permissions: null
+  permissions: null,
+  agileDefaultBoard: null
 });
 
 function cleanAndLogState(message, state) {
@@ -116,7 +119,8 @@ export async function clearCachesAndDrafts() {
     storageKeys.agileLastSprint,
     storageKeys.lastRoute,
     storageKeys.issueActivitiesEnabledTypes,
-    storageKeys.permissions
+    storageKeys.permissions,
+    storageKeys.agileDefaultBoard
   ]);
   return populateStorage();
 }
