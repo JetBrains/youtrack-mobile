@@ -73,27 +73,30 @@ class Inbox extends Component<Props, State> {
   };
 
   goToIssue(issue: Issue) {
-    log.debug(`Opening issue "${issue.id}" from notifications`);
-    if (issue?.id) {
-      Router.SingleIssue({
-        issuePlaceholder: {
-          id: issue.id,
-          summary: issue?.summary,
-          description: issue?.description,
-          created: issue?.created
-        },
-        issueId: issue.id
-      });
+    if (!issue?.id) {
+      return;
     }
+
+    log.debug(`Opening issue "${issue.id}" from notifications`);
+    Router.SingleIssue({
+      issuePlaceholder: {
+        id: issue.id,
+        summary: issue?.summary,
+        description: issue?.description,
+        created: issue?.created
+      },
+      issueId: issue.id
+    });
   }
 
   onLoadMore = () => {
-    if (!this.props.loading && this.props.items.length > 0 && this.props.hasMore) {
-      this.props.loadInbox(this.props.items.length);
+    const {loading, items, hasMore} = this.props;
+    if (!loading && items.length > 0 && hasMore) {
+      this.props.loadInbox(items.length);
     }
   };
 
-  renderValues(values: Array<ChangeValue>, eventId: string) {
+  renderValues(values: Array<ChangeValue> = [], eventId: string) {
     return (
       values.map((it) => {
         const value = this.getChangeValue(it);
@@ -332,24 +335,24 @@ class Inbox extends Component<Props, State> {
     return text || PARSE_ERROR_NOTIFICATION;
   }
 
-  renderItem(item: Object & { key: string } | Notification) {
+  renderItem(item: Notification | Object & { key: string }) {
     if (isReactElement(item)) {
       return item;
     }
 
-    const metadata: Metadata = item.metadata;
+    const metadata: Metadata = item?.metadata;
     let renderer = null;
 
-    if (this.isIssueDigestChange(metadata)) {
+    if (metadata && this.isIssueDigestChange(metadata)) {
       renderer = metadata.issue ? this.renderIssueChange(metadata, item.sender) : null;
-    } else if (this.isWorkflowNotification(metadata)) {
+    } else if (metadata && this.isWorkflowNotification(metadata)) {
       renderer = this.renderWorkflowNotification(this.getWorkflowNotificationText(metadata));
     }
 
     return renderer;
   }
 
-  createAvatarUrl(sender: User): string | null {
+  createAvatarUrl(sender: User = {}): string | null {
     if (!sender.avatarUrl || !this.config || !this.config.backendUrl) {
       return null;
     }
@@ -357,7 +360,7 @@ class Inbox extends Component<Props, State> {
   }
 
   renderNotificationReason(metadata: Metadata) {
-    const _reasons = Object.keys(metadata.reason).reduce((reasons, key) => {
+    const _reasons = Object.keys(metadata.reason || []).reduce((reasons, key) => {
       if (metadata.reason[key].length) {
         return reasons.concat(
           {
@@ -369,7 +372,7 @@ class Inbox extends Component<Props, State> {
       return reasons;
     }, []);
 
-    if (_reasons && _reasons.length) {
+    if (_reasons?.length) {
       const reasonsPresentation: string = _reasons.map(
         (it) => it.title.trim() + it.value.trim()
       ).filter(Boolean).join(', ');
@@ -386,9 +389,14 @@ class Inbox extends Component<Props, State> {
   }
 
   renderIssueChange(metadata: Metadata, sender: User = {}) {
-    const issue: Issue = metadata.issue;
+    const {issue, change} = metadata;
+
+    if (!issue) {
+      return null;
+    }
+
     const onPress = () => this.goToIssue(issue);
-    const events: Array<ChangeEvent> = (metadata?.change?.events || []).filter((event) => !this.isCreateCategory(event));
+    const events: Array<ChangeEvent> = (change?.events || []).filter((event) => !this.isCreateCategory(event));
     const avatarURL: string | null = this.createAvatarUrl(sender);
     if (avatarURL) {
       sender.avatarUrl = avatarURL;
@@ -396,7 +404,7 @@ class Inbox extends Component<Props, State> {
 
     return (
       <View style={styles.notification}>
-        <UserInfo style={styles.userInfo} user={sender} timestamp={metadata?.change?.endTimestamp}/>
+        <UserInfo style={styles.userInfo} user={sender} timestamp={change?.endTimestamp}/>
 
         <View style={styles.notificationContent}>
           <TouchableOpacity
