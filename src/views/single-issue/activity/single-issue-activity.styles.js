@@ -127,6 +127,9 @@ export default StyleSheet.create({
     ...secondaryText,
     fontWeight: '500'
   },
+  settingsSwitchDisabled: {
+    opacity: 0.4
+  },
 
   links: {
     marginTop: UNIT * 1.5

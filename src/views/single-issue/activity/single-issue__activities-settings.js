@@ -140,6 +140,7 @@ export default class IssueActivitiesSettings extends Component<Props, State> {
       >
         <Text style={styles.settingsName}>{this.sortOrderOption.name}</Text>
         <Switch
+          style={disabled ? styles.settingsSwitchDisabled : null}
           {...IssueActivitiesSettings.switchCommonProps}
           disabled={disabled}
           value={this.props.userAppearanceProfile.naturalCommentsOrder}
@@ -175,6 +176,7 @@ export default class IssueActivitiesSettings extends Component<Props, State> {
                 </Text>
               </View>
               <Switch
+                style={disabled ? styles.settingsSwitchDisabled : null}
                 {...IssueActivitiesSettings.switchCommonProps}
                 value={isEnabled}
                 disabled={disabled}
