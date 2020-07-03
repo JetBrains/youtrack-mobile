@@ -75,18 +75,25 @@ export function getAgileUserProfile(): AgileUserProfile | {} {
   };
 }
 
-export function loadBoard(board: Board) {
+export function loadAgileWithStatus(agileId: string) {
   return async (dispatch: (any) => any) => {
     dispatch({type: types.START_LOADING_AGILE});
-    destroySSE();
 
-    const agileWithStatus = await dispatch(loadAgile(board.id));
+    const agileWithStatus = await dispatch(loadAgile(agileId));
     dispatch({type: types.STOP_LOADING_AGILE});
 
     if (!agileWithStatus.status.valid) {
       dispatch(receiveSprint(null));
       return dispatch(stopSprintLoad());
     }
+  };
+}
+
+export function loadBoard(board: Board) {
+  return async (dispatch: (any) => any) => {
+    destroySSE();
+
+    dispatch(loadAgileWithStatus(board.id));
 
     const agileUserProfile: AgileUserProfile = await dispatch(getAgileUserProfile());
 
