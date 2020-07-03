@@ -10,6 +10,7 @@ import {headerTitle, mainText, secondaryText} from '../../components/common-styl
 import {elevation1} from '../../components/common-styles/shadow';
 import {summary} from '../../components/issue-summary/issue-summary.styles';
 import {link} from '../../components/common-styles/button';
+import {separatorBorder} from '../../components/common-styles/list';
 
 const centered = {
   flex: 1,
@@ -61,15 +62,20 @@ export default StyleSheet.create({
   issueTopPanelText: {
     ...secondaryText
   },
+  tags: {
+    marginTop: UNIT * 2
+  },
+  tagsSeparator: {
+    height: UNIT,
+    marginRight: -UNIT * 2,
+    ...separatorBorder
+  },
   topPanelUpdatedInformation: {
     marginTop: UNIT * 0.75,
   },
   summary: {
     paddingTop: UNIT,
     ...summary
-  },
-  tags: {
-    marginTop: UNIT * 2
   },
   description: {
     marginTop: UNIT * 2,

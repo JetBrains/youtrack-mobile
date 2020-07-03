@@ -181,6 +181,8 @@ export default class IssueDetails extends PureComponent<Props, void> {
             onTagPress={openIssueListWithSearch}
           />
 
+          {Boolean(issue?.tags?.length > 0) && <View style={styles.tagsSeparator}/>}
+
           {this.renderLinks(issue)}
 
           <IssueDescription
