@@ -45,6 +45,7 @@ export function renderNavigationItem(item: {
         </Text>
         <IconAngleDown
           size={17}
+          style={{lineHeight: 20}}
           color={item.isLoading ? COLOR_FONT_GRAY : COLOR_BLACK}
         />
       </TouchableOpacity>
