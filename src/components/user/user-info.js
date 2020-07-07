@@ -43,11 +43,14 @@ export default class UserInfo extends PureComponent<Props, void> {
           {userName}
         </Text>}
 
-        <Text
+        <View
           testID="UserInfoTimestamp"
-          style={styles.timestamp}>
-          {relativeDate(timestamp)}
-        </Text>
+          style={styles.timestampContainer}
+        >
+          <Text style={styles.timestamp}>
+            {relativeDate(timestamp)}
+          </Text>
+        </View>
       </View>
     );
   }

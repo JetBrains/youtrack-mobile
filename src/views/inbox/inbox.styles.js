@@ -38,7 +38,7 @@ export default StyleSheet.create({
     paddingLeft: UNIT * 2,
   },
   notificationContent: {
-    marginLeft: UNIT * 5,
+    marginLeft: UNIT * 6,
     paddingBottom: UNIT * 2,
     paddingRight: UNIT * 2,
     borderBottomColor: COLOR_MEDIUM_GRAY,

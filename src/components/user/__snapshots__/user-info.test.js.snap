@@ -17,7 +17,7 @@ exports[`<UserInfo/> Render should match a snapshot 1`] = `
       Object {
         "color": "#737577",
         "flex": 0,
-        "marginLeft": 8,
+        "marginLeft": 16,
         "marginRight": 4,
       }
     }
@@ -25,15 +25,25 @@ exports[`<UserInfo/> Render should match a snapshot 1`] = `
   >
     userFullName
   </Text>
-  <Text
+  <View
     style={
       Object {
-        "color": "#737577",
+        "alignItems": "flex-end",
+        "flexGrow": 1,
+        "marginRight": 16,
       }
     }
     testID="UserInfoTimestamp"
   >
-    just now
-  </Text>
+    <Text
+      style={
+        Object {
+          "color": "#737577",
+        }
+      }
+    >
+      just now
+    </Text>
+  </View>
 </View>
 `;
