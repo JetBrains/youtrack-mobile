@@ -9,13 +9,13 @@ import {UNIT} from '../variables/variables';
 type SkeletonProps = {
   width: number,
   height?: number,
-  borderRadius?: number,
+  borderRadius?: number
 }
 
-export const WIDTH: number = 100;
-export const HEIGHT: number = 20;
-export const SECONDARY_HEIGHT: number = 14;
-export const DEFAULT_BORDER_RADIUS: number = UNIT / 2;
+export const SKELETON_WIDTH: number = 100;
+export const SKELETON_HEIGHT: number = 20;
+export const SKELETON_SECONDARY_HEIGHT: number = 14;
+export const SKELETON_DEFAULT_BORDER_RADIUS: number = UNIT / 2;
 
 export const skeletonPlaceholderDefaultProps = {
   backgroundColor: 'rgba(0,0,0,0.02)',
@@ -23,9 +23,9 @@ export const skeletonPlaceholderDefaultProps = {
 };
 
 const defaultSkeletonProps: SkeletonProps = {
-  width: WIDTH,
-  height: HEIGHT,
-  borderRadius: DEFAULT_BORDER_RADIUS
+  width: SKELETON_WIDTH,
+  height: SKELETON_HEIGHT,
+  borderRadius: SKELETON_DEFAULT_BORDER_RADIUS
 };
 
 export const Skeleton = (props: SkeletonProps) => {
@@ -42,8 +42,17 @@ export const Skeleton = (props: SkeletonProps) => {
 export const SkeletonSecondaryLine = (props: SkeletonProps) => {
   return <SkeletonPlaceholder.Item
     {...defaultSkeletonProps}
-    height={SECONDARY_HEIGHT}
-    borderRadius={DEFAULT_BORDER_RADIUS}
+    width={'100%'}
+    height={SKELETON_SECONDARY_HEIGHT}
+    {...props}
+  />;
+};
+
+export const SkeletonLine = (props: SkeletonProps) => {
+  return <SkeletonPlaceholder.Item
+    {...defaultSkeletonProps}
+    width={'100%'}
+    height={SKELETON_SECONDARY_HEIGHT}
     {...props}
   />;
 };

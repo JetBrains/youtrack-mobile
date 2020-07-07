@@ -20,6 +20,7 @@ import log from '../../components/log/log';
 import IssueRow from './issue-list__row';
 import ErrorMessage from '../../components/error-message/error-message';
 import Router from '../../components/router/router';
+import {View as AnimatedView} from 'react-native-animatable';
 import * as issueActions from './issue-list-actions';
 import type Auth from '../../components/auth/auth';
 import type Api from '../../components/api/api';
@@ -33,6 +34,7 @@ import IssuesCount from './issue-list__count';
 import {IconAdd, IconAngleDown} from '../../components/icon/icon';
 import {isReactElement} from '../../util/util';
 import {LoadMoreList} from '../../components/progress/load-more-list';
+import {SkeletonIssues} from './issues__skeleton';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
 
@@ -238,13 +240,18 @@ export class IssueList extends Component<Props, State> {
     const {query, issuesCount} = this.props;
 
     return (
-      <View>
+      <AnimatedView
+        useNativeDriver
+        duration={500}
+        animation="fadeIn"
+        style={styles.listHeader}
+      >
         <SearchQueryPreview
           query={query}
           onFocus={this.onSearchQueryPanelFocus}
         />
         <IssuesCount issuesCount={issuesCount}/>
-      </View>
+      </AnimatedView>
     );
   };
 
@@ -258,9 +265,23 @@ export class IssueList extends Component<Props, State> {
 
   renderIssues() {
     const {issues} = this.props;
+    const contextButton = this.renderContextButton();
+    const searchQuery = this.renderSearchQuery();
+
+    if (issues.length === 0) {
+      return (
+        <View style={styles.list}>
+          {contextButton}
+          {searchQuery}
+
+          <SkeletonIssues/>
+        </View>
+      );
+    }
+
     const listData: Array<Object> = [
-      this.renderContextButton(),
-      this.renderSearchQuery()
+      contextButton,
+      searchQuery
     ].concat(issues || []);
 
     return (

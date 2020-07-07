@@ -86,6 +86,9 @@ export default StyleSheet.create({
   tags: {
     marginTop: UNIT
   },
+  listHeader: {
+    minHeight: 105
+  },
   searchContext: {
     height: searchContextHeight,
     backgroundColor: COLOR_FONT_ON_BLACK

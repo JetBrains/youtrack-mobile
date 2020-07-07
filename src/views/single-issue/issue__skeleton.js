@@ -3,10 +3,10 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 import {UNIT} from '../../components/variables/variables';
 import {
-  DEFAULT_BORDER_RADIUS,
-  HEIGHT,
+  SKELETON_DEFAULT_BORDER_RADIUS,
+  SKELETON_HEIGHT,
   skeletonPlaceholderDefaultProps,
-  SECONDARY_HEIGHT,
+  SKELETON_SECONDARY_HEIGHT,
   SkeletonSecondaryLine
 } from '../../components/skeleton/skeleton';
 
@@ -14,9 +14,9 @@ function skeletonUserInfo() {
   return <SkeletonPlaceholder.Item flexGrow={1}>
     <SkeletonPlaceholder.Item
       width={140}
-      height={HEIGHT}
+      height={SKELETON_HEIGHT}
       marginLeft={UNIT}
-      borderRadius={DEFAULT_BORDER_RADIUS}
+      borderRadius={SKELETON_DEFAULT_BORDER_RADIUS}
     />
   </SkeletonPlaceholder.Item>;
 }
@@ -24,8 +24,8 @@ function skeletonUserInfo() {
 function skeletonDate() {
   return <SkeletonPlaceholder.Item
     width={80}
-    height={SECONDARY_HEIGHT}
-    borderRadius={DEFAULT_BORDER_RADIUS}
+    height={SKELETON_SECONDARY_HEIGHT}
+    borderRadius={SKELETON_DEFAULT_BORDER_RADIUS}
   />;
 }
 
@@ -45,15 +45,15 @@ export const SkeletonIssueContent = () => {
     <SkeletonPlaceholder.Item
       marginTop={UNIT * 4}
       width={300}
-      height={HEIGHT}
-      borderRadius={DEFAULT_BORDER_RADIUS}
+      height={SKELETON_HEIGHT}
+      borderRadius={SKELETON_DEFAULT_BORDER_RADIUS}
     />
 
     <SkeletonPlaceholder.Item
       marginTop={UNIT * 3}
       width={320}
       height={120}
-      borderRadius={DEFAULT_BORDER_RADIUS}
+      borderRadius={SKELETON_DEFAULT_BORDER_RADIUS}
     />
 
   </SkeletonPlaceholder>;
@@ -62,7 +62,7 @@ export const SkeletonIssueCustomFields = () => {
   const props = {
     width: 90,
     height: 36,
-    borderRadius: DEFAULT_BORDER_RADIUS,
+    borderRadius: SKELETON_DEFAULT_BORDER_RADIUS,
     marginTop: UNIT / 2,
     marginLeft: UNIT,
     marginRight: UNIT
