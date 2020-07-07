@@ -1,4 +1,4 @@
-import {getEntityPresentation, getVisibilityPresentation, absDate} from './issue-formatter';
+import {getEntityPresentation, getVisibilityPresentation, absDate, getReadableID} from './issue-formatter';
 import sinon from 'sinon';
 
 describe('getEntityPresentation', function() {
@@ -115,6 +115,29 @@ describe('absDate', function () {
     absDate(dateInMillis);
 
     dateMock.toLocaleTimeString.should.have.been.calledWith([], formatDateParams);
+  });
+
+
+  describe('getReadableID', () => {
+    it('should return empty string if issue is not provided', () => {
+      expect(getReadableID()).toEqual('');
+    });
+
+    it('should return empty string if there is no `idReadable` or `id`', () => {
+      expect(getReadableID({})).toEqual('');
+    });
+
+    it('should return issue `idReadable` value', () => {
+      const issueMock = {id: 'id', idReadable: 'idReadable'};
+
+      expect(getReadableID(issueMock)).toEqual(issueMock.idReadable);
+    });
+
+    it('should return issue `id` value', () => {
+      const issueMock = {id: 'id', type: 0};
+
+      expect(getReadableID(issueMock)).toEqual(issueMock.id);
+    });
   });
 });
 
