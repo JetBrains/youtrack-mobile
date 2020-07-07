@@ -42,7 +42,7 @@ export const Skeleton = (props: SkeletonProps) => {
 export const SkeletonSecondaryLine = (props: SkeletonProps) => {
   return <SkeletonPlaceholder.Item
     {...defaultSkeletonProps}
-    width={'100%'}
+    width={props.width || '100%'}
     height={SKELETON_SECONDARY_HEIGHT}
     {...props}
   />;
@@ -52,7 +52,7 @@ export const SkeletonLine = (props: SkeletonProps) => {
   return <SkeletonPlaceholder.Item
     {...defaultSkeletonProps}
     width={'100%'}
-    height={SKELETON_SECONDARY_HEIGHT}
+    height={SKELETON_HEIGHT}
     {...props}
   />;
 };
@@ -89,19 +89,28 @@ export const SkeletonIssueContent = () => {
     {...skeletonPlaceholderDefaultProps}
   >
 
-    <SkeletonPlaceholder.Item
-      marginTop={UNIT * 4}
-      width={300}
-      height={SKELETON_HEIGHT}
-      borderRadius={SKELETON_DEFAULT_BORDER_RADIUS}
-    />
+    {SkeletonLine({
+      marginTop: UNIT * 3,
+    })}
 
-    <SkeletonPlaceholder.Item
-      marginTop={UNIT * 3}
-      width={320}
-      height={120}
-      borderRadius={SKELETON_DEFAULT_BORDER_RADIUS}
-    />
+    {SkeletonSecondaryLine({
+      marginTop: UNIT * 3,
+    })}
+
+    {SkeletonSecondaryLine({
+      width: 300,
+      marginTop: UNIT,
+    })}
+
+    {SkeletonSecondaryLine({
+      width: 180,
+      marginTop: UNIT,
+    })}
+
+    {SkeletonSecondaryLine({
+      width: 220,
+      marginTop: UNIT,
+    })}
 
   </SkeletonPlaceholder>;
 };
