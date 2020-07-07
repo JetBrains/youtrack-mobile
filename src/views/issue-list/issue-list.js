@@ -264,11 +264,11 @@ export class IssueList extends Component<Props, State> {
   }
 
   renderIssues() {
-    const {issues} = this.props;
+    const {issues, isRefreshing} = this.props;
     const contextButton = this.renderContextButton();
     const searchQuery = this.renderSearchQuery();
 
-    if (issues.length === 0) {
+    if (isRefreshing) {
       return (
         <View style={styles.list}>
           {contextButton}
