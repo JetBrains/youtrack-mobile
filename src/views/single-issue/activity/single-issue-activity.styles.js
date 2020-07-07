@@ -56,6 +56,7 @@ export default StyleSheet.create({
   },
   activityAuthor: {
     flexDirection: 'row',
+    marginTop: UNIT / 2,
     marginBottom: UNIT
   },
   activityItem: {
