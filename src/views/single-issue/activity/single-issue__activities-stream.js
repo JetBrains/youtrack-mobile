@@ -35,6 +35,7 @@ import AttachmentsRow from '../../../components/attachments-row/attachments-row'
 import ApiHelper from '../../../components/api/api__helper';
 import CustomFieldChangeDelimiter from '../../../components/custom-field/custom-field__change-delimiter';
 import {isIOSPlatform} from '../../../util/util';
+import {SkeletonIssueActivities} from '../issue__skeleton';
 
 import type {WorkTimeSettings} from '../../../flow/WorkTimeSettings';
 import type {ActivityItem, IssueActivity} from '../../../flow/Activity';
@@ -457,7 +458,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
     const {activities} = this.props;
 
     if (!activities) {
-      return null;
+      return <SkeletonIssueActivities/>;
     }
 
     return (

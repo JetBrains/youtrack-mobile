@@ -95,7 +95,7 @@ function getAssigneeField(issue: AnyIssue): ?CustomField {
 }
 
 function getReadableID(issue: AnyIssue): string {
-  return `${issue.idReadable || issue.id}`;
+  return issue.idReadable || issue.id || '';
 }
 
 function getEntityPresentation(entity: Object) {

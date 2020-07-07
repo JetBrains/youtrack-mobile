@@ -1,18 +1,21 @@
 /* @flow */
 
-import {Text, View, ScrollView, ActivityIndicator, TouchableOpacity} from 'react-native';
+import {Text, View, ScrollView, TouchableOpacity} from 'react-native';
 import React, {PureComponent} from 'react';
 
 import {getApi} from '../../components/api/api__instance';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
-import IssueAdditionalInfo from './single-issue__additional-info';
 import LinkedIssues from '../../components/linked-issues/linked-issues';
 import usage from '../../components/usage/usage';
 import log from '../../components/log/log';
 import IssueSummary from '../../components/issue-summary/issue-summary';
 import styles from './single-issue.styles';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
-import {getReadableID} from '../../components/issue-formatter/issue-formatter';
+import {
+  getEntityPresentation,
+  getReadableID,
+  shortRelativeDate
+} from '../../components/issue-formatter/issue-formatter';
 import Tags from '../../components/tags/tags';
 import {HIT_SLOP} from '../../components/common-styles/button';
 
@@ -20,6 +23,7 @@ import IssueDescription from './single-issue__description';
 import IssueVotes from '../../components/issue-actions/issue-votes';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
 import VisibilityControl from '../../components/issue-visibility/visibility';
+import {SkeletonIssueContent, SkeletonIssueInfoLine} from './issue__skeleton';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {IssueFull, IssueOnList} from '../../flow/Issue';
@@ -119,38 +123,100 @@ export default class IssueDetails extends PureComponent<Props, void> {
 
   renderAdditionalInfo() {
     const {issue} = this.props;
-    if (issue) {
-      return (
-        <IssueAdditionalInfo
-          style={styles.issueAdditionalInfo}
-          created={issue.created}
-          updated={issue.updated}
-          reporter={issue.reporter}
-          updater={issue.updater}
-        />
-      );
-    }
+
+    return (
+      issue
+        ? <View style={[styles.issueTopPanel, styles.issueAdditionalInfo]}>
+          <Text
+            style={styles.issueTopPanelText}
+            selectable={true}
+          >
+            Created by {getEntityPresentation(issue.reporter)} {shortRelativeDate(issue?.created) || ''}
+          </Text>
+
+          {issue.created !== issue.updated && (
+            <Text
+              style={[styles.issueTopPanelText, styles.topPanelUpdatedInformation]}
+              selectable={true}
+            >
+              Updated by {getEntityPresentation(issue.updater)} {shortRelativeDate(issue?.updated) || ''}
+            </Text>
+          )}
+        </View>
+        : <SkeletonIssueInfoLine lines={2}/>
+    );
   }
 
-  _renderIssueView(issue: IssueFull | IssueOnList) {
-    const {
-      editMode,
-      isSavingEditedIssue,
-      summaryCopy,
-      descriptionCopy,
-      openIssueListWithSearch,
-      openNestedIssueView,
-      onVisibilityChange
-    } = this.props;
-    return (
-      <View style={styles.issueView}>
+  renderIssueVisibility() {
+    const {issue, onVisibilityChange} = this.props;
 
+    if (issue) {
+      return (
         <VisibilityControl
           style={styles.visibility}
           issueId={issue.id}
           visibility={issue.visibility}
           onSubmit={onVisibilityChange}
         />
+      );
+    }
+
+    return <SkeletonIssueInfoLine/>;
+  }
+
+  renderIssueContent() {
+    const {issue, openIssueListWithSearch, openNestedIssueView} = this.props;
+
+    if (!issue) {
+      return <SkeletonIssueContent/>;
+    }
+
+    return (
+      <View>
+        <Text
+          style={styles.summary}
+          selectable={true}
+          testID="issue-summary">
+          {issue.summary}
+        </Text>
+
+        <Tags
+          style={styles.tags}
+          multiline={true}
+          tags={issue?.tags}
+          onTagPress={openIssueListWithSearch}
+        />
+
+        {Boolean(issue?.tags?.length > 0) && <View style={styles.tagsSeparator}/>}
+
+        {this.renderLinks(issue)}
+
+        <IssueDescription
+          style={styles.description}
+          backendUrl={this.backendUrl}
+          attachments={issue.attachments}
+          imageHeaders={this.imageHeaders}
+          onIssueIdTap={issueId => openNestedIssueView({issueId})}
+          title={getReadableID(issue)}
+          description={issue.wikifiedDescription}
+        />
+      </View>
+    );
+  }
+
+  _renderIssueView() {
+    const {
+      issue,
+      editMode,
+      isSavingEditedIssue,
+      summaryCopy,
+      descriptionCopy,
+    } = this.props;
+
+    return (
+      <View style={styles.issueView}>
+
+        {this.renderIssueVisibility()}
 
         <View style={styles.issueAdditionalInfoContainer}>
           {this.renderAdditionalInfo()}
@@ -166,37 +232,9 @@ export default class IssueDetails extends PureComponent<Props, void> {
           onDescriptionChange={this.props.setIssueDescriptionCopy}
         />}
 
-        {!editMode && <View>
-          <Text
-            style={styles.summary}
-            selectable={true}
-            testID="issue-summary">
-            {issue.summary}
-          </Text>
+        {!editMode && this.renderIssueContent()}
 
-          <Tags
-            style={styles.tags}
-            multiline={true}
-            tags={issue?.tags}
-            onTagPress={openIssueListWithSearch}
-          />
-
-          {Boolean(issue?.tags?.length > 0) && <View style={styles.tagsSeparator}/>}
-
-          {this.renderLinks(issue)}
-
-          <IssueDescription
-            style={styles.description}
-            backendUrl={this.backendUrl}
-            attachments={issue.attachments}
-            imageHeaders={this.imageHeaders}
-            onIssueIdTap={issueId => openNestedIssueView({issueId})}
-            title={getReadableID(issue)}
-            description={issue.wikifiedDescription}
-          />
-        </View>}
-
-        {this.renderAttachments(issue.attachments)}
+        {issue?.attachments && this.renderAttachments(issue.attachments)}
 
         {editMode && <KeyboardSpacerIOS/>}
       </View>
@@ -217,11 +255,7 @@ export default class IssueDetails extends PureComponent<Props, void> {
   }
 
   render() {
-    const {issue, issuePlaceholder, issueLoaded, renderRefreshControl, onSwitchToActivity} = this.props;
-
-    if (!issue && !issuePlaceholder) {
-      return null;
-    }
+    const {renderRefreshControl, onSwitchToActivity} = this.props;
 
     return (
       <ScrollView
@@ -231,10 +265,8 @@ export default class IssueDetails extends PureComponent<Props, void> {
         keyboardShouldPersistTaps="handled"
         scrollEventThrottle={16}
       >
-        {Boolean(issue) && this.renderCustomFieldPanel()}
-        {this._renderIssueView(issue || issuePlaceholder)}
-
-        {!issueLoaded && <ActivityIndicator style={styles.loading}/>}
+        {this.renderCustomFieldPanel()}
+        {this._renderIssueView()}
 
         <TouchableOpacity
           style={styles.switchToActivityButton}

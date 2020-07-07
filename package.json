@@ -151,6 +151,7 @@
     "react-native-reanimated": "1.7.0",
     "react-native-root-modal": "git://github.com/huston007/react-native-root-modal.git#9cbd951",
     "react-native-safe-area-view": "0.14.6",
+    "react-native-skeleton-placeholder": "^2.0.7",
     "react-native-svg": "^9.13.3",
     "react-native-swipeout": "2.3.6",
     "react-native-swiper": "git://github.com/huston007/react-native-swiper.git#64c5681",

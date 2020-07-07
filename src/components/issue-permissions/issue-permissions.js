@@ -61,16 +61,16 @@ export default class IssuePermissions {
     return user.ringId === this.currentUser.id;
   }
 
-  canUpdateGeneralInfo(issue: AnyIssue): boolean {
-    if (this.isCurrentUser(issue.reporter) && this.hasPermissionFor(issue, CREATE_ISSUE)) {
+  canUpdateGeneralInfo(issue: ?AnyIssue): boolean {
+    if (this.isCurrentUser(issue?.reporter) && this.hasPermissionFor(issue, CREATE_ISSUE)) {
       return true;
     }
     const projectRingId = IssuePermissions.getIssueProjectRingId(issue);
     return !!projectRingId && this.permissionsStore.hasEvery([READ_ISSUE, UPDATE_ISSUE], projectRingId);
   }
 
-  _canUpdatePublicField(issue: AnyIssue): boolean {
-    if (this.isCurrentUser(issue.reporter) && this.hasPermissionFor(issue, CREATE_ISSUE)) {
+  _canUpdatePublicField(issue: ?AnyIssue): boolean {
+    if (this.isCurrentUser(issue?.reporter) && this.hasPermissionFor(issue, CREATE_ISSUE)) {
       return true;
     }
     return this.hasPermissionFor(issue, UPDATE_ISSUE);

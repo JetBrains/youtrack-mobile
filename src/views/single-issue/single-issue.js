@@ -29,7 +29,7 @@ import {attachmentActions} from './single-issue__attachment-actions-and-types';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {State as SingleIssueState} from './single-issue-reducers';
-import type {TabRoute} from '../../flow/Issue';
+import type {AnyIssue, TabRoute} from '../../flow/Issue';
 import type {Attachment} from '../../flow/CustomFields';
 
 // $FlowFixMe: module throws on type check
@@ -41,6 +41,7 @@ import IssueActivity from './activity/single-issue__activity';
 import IssueStar from '../../components/issue-actions/issue-star';
 import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
 import {isIOSPlatform} from '../../util/util';
+import {Skeleton} from '../../components/skeleton/skeleton';
 
 const CATEGORY_NAME = 'Issue';
 const initialWindowDimentions = Dimensions.get('window');
@@ -125,8 +126,6 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
       updateIssueVisibility
     } = this.props;
 
-    const _issue = issue || issuePlaceholder;
-
     return (
       <IssueDetails
         loadIssue={loadIssue}
@@ -138,7 +137,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
         updateIssueFieldValue={updateIssueFieldValue}
         updateProject={updateProject}
 
-        issue={_issue}
+        issue={issue}
         issuePlaceholder={issuePlaceholder}
         issueLoaded={issueLoaded}
         editMode={editMode}
@@ -229,11 +228,6 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
         testID="issueTabs"
         lazy
         swipeEnabled={this.isTabChangeEnabled()}
-        renderLazyPlaceholder={({route}) => (
-          <View style={styles.tabLazyPlaceholder}>
-            <Text>Loading {route.title}…</Text>
-          </View>
-        )}
         navigationState={this.state}
         renderScene={this.renderScene}
         initialLayout={{width: initialWindowDimentions.width, height: initialWindowDimentions.height}}
@@ -268,6 +262,10 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
   };
 
   renderActionsIcon() {
+    if (!this.isIssueLoaded()) {
+      return <Skeleton width={24}/>;
+    }
+
     if (!this.state.isTransitionInProgress) {
       return (
         <Text>
@@ -282,7 +280,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
 
   renderStar() {
     const {issue, toggleStar} = this.props;
-    if (issue) {
+    if (this.isIssueLoaded()) {
       return (
         <IssueStar
           style={styles.issueStar}
@@ -292,12 +290,33 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
         />
       );
     }
+
+    return <Skeleton width={24}/>;
   }
 
-  _renderHeader(isIssueLoaded: boolean) {
+
+  renderHeaderIssueTitle() {
+    const {issue, issuePlaceholder} = this.props;
+    const _issue: AnyIssue = issue || issuePlaceholder;
+    const readableID: ?string = getReadableID(_issue);
+    if (readableID) {
+      return (
+        <Text
+          style={[styles.headerText, _issue?.resolved ? styles.headerTextResolved : null]}
+          selectable={true}
+          testID="issue-id"
+        >
+          {readableID}
+        </Text>
+      );
+    }
+
+    return <Skeleton width={120}/>;
+  }
+
+  _renderHeader() {
     const {
       issue,
-      issuePlaceholder,
       editMode,
       summaryCopy,
       isSavingEditedIssue,
@@ -307,18 +326,8 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
       issuePermissions
     } = this.props;
 
-    const issueToShow = isIssueLoaded ? issue : issuePlaceholder;
-    const title = (
-      <Text
-        style={[styles.headerText, issueToShow && issueToShow.resolved ? styles.headerTextResolved : null]}
-        selectable={true}
-        testID="issue-id"
-      >
-        {Boolean(issueToShow) && getReadableID(issueToShow)}
-      </Text>
-    );
-
     if (!editMode) {
+      const isIssueLoaded: boolean = this.isIssueLoaded();
       return (
         <Header
           leftButton={this.renderBackIcon()}
@@ -340,7 +349,7 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
           }
           onBack={this.handleOnBack}
         >
-          {title}
+          {this.renderHeaderIssueTitle()}
         </Header>
       );
     } else {
@@ -418,26 +427,28 @@ class SingeIssueView extends Component<SingleIssueProps, TabsState> {
     loadAttachments();
   };
 
+  isIssueLoaded = (): boolean => {
+    const {issueLoaded, issueLoadingError} = this.props;
+    return Boolean(issueLoaded && !issueLoadingError);
+  };
+
   render() {
     const {
-      issueLoaded,
       issueLoadingError,
       showCommandDialog,
       isAttachFileDialogVisible
     } = this.props;
 
-    const isIssueLoaded = Boolean(issueLoaded && !issueLoadingError);
-
     return (
       <View style={styles.container} testID="issue-view">
-        {this._renderHeader(isIssueLoaded)}
+        {this._renderHeader()}
 
         {issueLoadingError && <View style={styles.error}><ErrorMessage error={issueLoadingError}/></View>}
 
 
         {!issueLoadingError && this.renderTabs()}
 
-        {isIssueLoaded && showCommandDialog && this._renderCommandDialog()}
+        {this.isIssueLoaded() && showCommandDialog && this._renderCommandDialog()}
 
         {isAttachFileDialogVisible && this.renderAttachFileDialog()}
       </View>

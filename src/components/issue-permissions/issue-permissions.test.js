@@ -107,7 +107,18 @@ describe('IssuePermissions', function () {
   });
 
 
+  describe('_canUpdatePublicField', () => {
+    it('should return false if issue parameter is not passed', () => {
+      expect(this.issuePermissions._canUpdatePublicField(null)).toEqual(false);
+    });
+  });
+
+
   describe('canUpdateGeneralInfo', () => {
+    it('should return false if issue parameter is not passed', () => {
+      expect(this.issuePermissions.canUpdateGeneralInfo(null)).toEqual(false);
+    });
+
     it('should allow to edit general info if user is reporter and has READ_ISSUE', () => {
       this.permissionsMock.has.withArgs(CREATE_ISSUE).returns(true);
       this.issuePermissions.canUpdateGeneralInfo(this.issueMock).should.be.true;

@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {PureComponent} from 'react';
-import {Text, View, ScrollView, ActivityIndicator} from 'react-native';
+import {Text, View, ScrollView} from 'react-native';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -23,8 +23,6 @@ import {createActivitiesModel} from '../../../components/activity/activity__crea
 import {groupActivities} from '../../../components/activity/activity__group-activities';
 import {isActivityCategory} from '../../../components/activity/activity__category';
 import {mergeActivities} from '../../../components/activity/activity__merge-activities';
-
-import {COLOR_PINK} from '../../../components/variables/variables';
 
 import styles from './single-issue-activity.styles';
 
@@ -282,8 +280,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
           {this.renderActivitySettings(!isActivitySettingEnabled)}
 
-          {!activityLoaded && <ActivityIndicator style={styles.loadingIndicator} color={COLOR_PINK}/>}
-          {activityLoaded && this._renderActivities()}
+          {this._renderActivities()}
 
         </ScrollView>
 
