@@ -34,7 +34,7 @@ import IssuesCount from './issue-list__count';
 import {IconAdd, IconAngleDown} from '../../components/icon/icon';
 import {isReactElement} from '../../util/util';
 import {LoadMoreList} from '../../components/progress/load-more-list';
-import {SkeletonIssues} from './issues__skeleton';
+import {SkeletonIssues} from '../../components/skeleton/skeleton';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
 

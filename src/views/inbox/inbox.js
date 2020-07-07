@@ -19,6 +19,7 @@ import CustomFieldChangeDelimiter from '../../components/custom-field/custom-fie
 import {isReactElement} from '../../util/util';
 import ErrorMessage from '../../components/error-message/error-message';
 import {LoadMoreList} from '../../components/progress/load-more-list';
+import {SkeletonIssueActivities} from '../../components/skeleton/skeleton';
 
 import {elevation1} from '../../components/common-styles/shadow';
 import {headerTitle} from '../../components/common-styles/typography';
@@ -434,6 +435,10 @@ class Inbox extends Component<Props, State> {
   renderListMessage = () => {
     const {loading, items, hasMore} = this.props;
 
+    if (loading) {
+      return <SkeletonIssueActivities marginTop={UNIT * 2} marginLeft={UNIT} marginRight={UNIT}/>;
+    }
+
     if (!loading && items.length === 0) {
       return (
         <View>
@@ -458,7 +463,7 @@ class Inbox extends Component<Props, State> {
   renderRefreshControl = () => {
     return (
       <RefreshControl
-        refreshing={this.props.loading}
+        refreshing={false}
         onRefresh={this.refresh}
         tintColor={COLOR_PINK}
         testID="refresh-control"
@@ -487,23 +492,10 @@ class Inbox extends Component<Props, State> {
     });
   }
 
-  getListData(): Array<React$Element<any> | Notification> {
-    const {items, error} = this.props;
-    const data: Array<React$Element<any> | Notification> = [];
-
-    if (!error) {
-      if (items?.length > 0) {
-        data.push(this.renderTitle());
-      }
-    }
-
-    return data.concat(items);
-  }
-
   render() {
-    const {loading, error} = this.props;
+    const {loading, error, items} = this.props;
     const hasError: boolean = !!error;
-    const data: Array<React$Element<any> | Notification> = this.getListData();
+    const data: Array<React$Element<any> | Notification> = [this.renderTitle()].concat(items || []);
 
     return (
       <View style={styles.container}>

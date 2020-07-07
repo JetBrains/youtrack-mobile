@@ -23,7 +23,7 @@ import IssueDescription from './single-issue__description';
 import IssueVotes from '../../components/issue-actions/issue-votes';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
 import VisibilityControl from '../../components/issue-visibility/visibility';
-import {SkeletonIssueContent, SkeletonIssueInfoLine} from './issue__skeleton';
+import {SkeletonIssueContent, SkeletonIssueInfoLine} from '../../components/skeleton/skeleton';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {IssueFull, IssueOnList} from '../../flow/Issue';

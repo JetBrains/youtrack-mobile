@@ -8,7 +8,7 @@ import Header from '../header/header';
 import {COLOR_PINK, COLOR_PLACEHOLDER} from '../variables/variables';
 import Api from '../api/api';
 import IssuePermissions from '../issue-permissions/issue-permissions';
-import {SkeletonIssueCustomFields} from '../../views/single-issue/issue__skeleton';
+import {SkeletonIssueCustomFields} from '../skeleton/skeleton';
 import styles, {calendarTheme} from './custom-fields-panel.styles';
 import ModalView from '../modal-view/modal-view';
 import type {IssueFull} from '../../flow/Issue';
