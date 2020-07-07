@@ -1,7 +1,7 @@
 import {StyleSheet, Platform} from 'react-native';
-import {COLOR_LINK, COLOR_FONT, COLOR_GRAY, UNIT, COLOR_FONT_GRAY} from '../variables/variables';
+import {COLOR_LINK, COLOR_FONT, COLOR_GRAY, UNIT, COLOR_FONT_GRAY, COLOR_PINK} from '../variables/variables';
+import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from '../common-styles/typography';
 
-const FONT_SIZE = 16;
 const monospace = {
   ...Platform.select({
     ios: {
@@ -13,9 +13,17 @@ const monospace = {
   })
 };
 
+const link = {
+  marginBottom: UNIT * 2,
+  fontFamily: 'System',
+  fontSize: SECONDARY_FONT_SIZE,
+  textAlign: 'center',
+  color: COLOR_PINK
+};
+
 export default StyleSheet.create({
   htmlView: {
-    fontSize: FONT_SIZE,
+    fontSize: MAIN_FONT_SIZE,
     color: COLOR_FONT,
     textAlign: 'left',
     writingDirection: 'ltr'
@@ -35,19 +43,11 @@ export default StyleSheet.create({
   unspaced: {
     margin: 0
   },
-  codeLink: {
-    fontFamily: 'System',
-    fontSize: 14,
-    color: COLOR_LINK
-  },
-  exceptionLink: {
-    fontFamily: 'System',
-    fontSize: FONT_SIZE,
-    color: COLOR_LINK
-  },
+  codeLink: link,
+  exceptionLink: link,
   code: {
     ...monospace,
-    fontSize: 14,
+    fontSize: SECONDARY_FONT_SIZE,
     fontWeight: '500',
   }
 });

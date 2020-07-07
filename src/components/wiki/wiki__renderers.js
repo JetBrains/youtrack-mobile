@@ -2,16 +2,19 @@
 import React from 'react';
 import {Text, Image, Dimensions} from 'react-native';
 import SyntaxHighlighter from 'react-native-syntax-highlighter';
-import {codeHighlightStyle} from './code-highlight-styles';
 import entities from 'entities';
 import {COLOR_GRAY, COLOR_LIGHT_GRAY, UNIT} from '../variables/variables';
-import styles from './wiki.styles';
 import Router from '../router/router';
 import {showMoreText} from '../text-view/text-view';
 import type {Attachment} from '../../flow/CustomFields';
 import {hasMimeType} from '../mime-type/mime-type';
 import calculateAspectRatio from '../../components/aspect-ratio/aspect-ratio';
 import {isAndroidPlatform} from '../../util/util';
+
+import {codeHighlightStyle} from './code-highlight-styles';
+import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from '../common-styles/typography';
+
+import styles from './wiki.styles';
 
 type ImageDimensions = {
   width: number,
@@ -50,14 +53,14 @@ export function renderCode(node: { children: any }, index: number, title?: strin
         CodeTag={Text}
 
         style={codeHighlightStyle}
-        fontSize={!isAndroid ? 16 : 14}
+        fontSize={!isAndroid ? MAIN_FONT_SIZE : SECONDARY_FONT_SIZE}
         fontFamily={!isAndroid ? 'Courier' : 'monospace'}
       >
         {entities.decodeHTML(trimmedCode)}
       </SyntaxHighlighter>
       {isCodeTrimmed && <Text
         style={styles.codeLink}
-      >{`${showMoreText}`}</Text>}
+      >{`${showMoreText}\n`}</Text>}
       {newLine}
     </Text>
   </Text>;
