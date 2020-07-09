@@ -50,12 +50,20 @@ export default class Attach extends PureComponent<Props, State> {
     onImageLoadingError: () => {},
     onRemoveImage: () => {},
   };
-
+  _isUnmounted: boolean;
   handleLoadError = throttle((err) => {
     this.props.onImageLoadingError(err);
   }, ERROR_HANDLER_THROTTLE);
 
   state = {isRemoving: false};
+
+  componentDidMount() {
+    this._isUnmounted = false;
+  }
+
+  componentWillUnmount() {
+    this._isUnmounted = true;
+  }
 
   showImageAttachment(attach: Attachment) {
     const {imageHeaders, onRemoveImage, attachments = [attach]} = this.props;
@@ -159,7 +167,9 @@ export default class Attach extends PureComponent<Props, State> {
           onPress: async () => {
             this.setState({isRemoving: true});
             await this.props.onRemoveImage(this.props.attach);
-            this.setState({isRemoving: false});
+            if (!this._isUnmounted) {
+              this.setState({isRemoving: false});
+            }
           }
         }
       ],
