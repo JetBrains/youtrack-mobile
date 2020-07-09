@@ -2,7 +2,7 @@
 
 import {View, Text, ActivityIndicator, ScrollView} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import throttle from 'lodash.throttle';
 import {
   COLOR_FONT_ON_BLACK,
@@ -46,7 +46,7 @@ type State = {
 };
 
 
-export default class SingleIssueCommentInput extends Component<Props, State> {
+export default class SingleIssueCommentInput extends PureComponent<Props, State> {
   isUnmounted: boolean;
   editCommentInput: MultilineInput;
   SUGGESTION_AVATAR_SIZE = 24;
