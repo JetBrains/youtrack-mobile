@@ -13,13 +13,15 @@ import {
 } from '../../components/variables/variables';
 import MultilineInput from '../../components/multiline-input/multiline-input';
 import Avatar from '../../components/avatar/avatar';
-import type {IssueComment} from '../../flow/CustomFields';
-import type {User} from '../../flow/User';
 
-import styles from './single-issue__comments.styles';
 import IssueVisibility from '../../components/issue-visibility/issue-visibility';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconAngleDown, IconArrowUp, IconCheck, IconClose, IconLock} from '../../components/icon/icon';
+
+import styles from './single-issue__comment-input.styles';
+
+import type {IssueComment} from '../../flow/CustomFields';
+import type {User} from '../../flow/User';
 
 type Props = {
   initialText: string,
