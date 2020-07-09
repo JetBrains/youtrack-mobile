@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
 import {getIssueActivityIcon, toggleIssueActivityEnabledType} from './single-issue-activity__helper';
@@ -40,7 +40,7 @@ type State = {
 type SortOrder = { name: string, isNaturalCommentsOrder: boolean };
 
 
-export default class IssueActivitiesSettings extends Component<Props, State> {
+export default class IssueActivitiesSettings extends PureComponent<Props, State> {
   static switchCommonProps: Object = {
     width: 40,
     circleColorActive: COLOR_PINK,
