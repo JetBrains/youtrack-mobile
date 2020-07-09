@@ -13,8 +13,6 @@ import SelectItem from './select__item';
 
 import styles from './select.styles';
 
-const MAX_VISIBLE_ITEMS = 100;
-
 export type Props = {
   dataSource: (query: string) => Promise<Array<Object>>,
   onSelect: (item: ?Object | Array<Object>) => any,
@@ -109,8 +107,7 @@ export default class Select extends Component<Props, State> {
     const filteredItems = (this.state.items || []).filter(item => {
       const label = (getValue && getValue(item)) || getTitle(item) || '';
       return label.toLowerCase().indexOf(query.toLowerCase()) !== -1;
-    })
-      .slice(0, MAX_VISIBLE_ITEMS);
+    });
     this.setState({filteredItems});
   }
 
