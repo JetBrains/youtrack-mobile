@@ -5,7 +5,7 @@ import {
   RefreshControl,
   Dimensions
 } from 'react-native';
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -70,7 +70,7 @@ type TabsState = {
   isTransitionInProgress: boolean
 };
 
-class SingeIssueView extends Component<SingleIssueProps, TabsState> {
+class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
   static contextTypes = {
     actionSheet: PropTypes.func
   };
