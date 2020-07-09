@@ -3,6 +3,7 @@
 exports[`<Attachment/> Render should match a snapshot 1`] = `
 <View
   key="attachId"
+  style={null}
 >
   <TouchableOpacity
     activeOpacity={0.2}

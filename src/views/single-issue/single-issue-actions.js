@@ -490,7 +490,7 @@ export function hideAddAttachDialog() {
 
 export function removeAttachment(attach: Attachment) {
   return async (dispatch: (any) => any, getState: StateGetter) => {
-    dispatch(attachmentActions.removeAttachment(attach, getState().singleIssue.issueId));
+    await dispatch(attachmentActions.removeAttachment(attach, getState().singleIssue.issueId));
   };
 }
 

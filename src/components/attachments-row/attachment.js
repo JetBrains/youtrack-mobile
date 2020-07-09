@@ -14,7 +14,7 @@ import {isAndroidPlatform} from '../../util/util';
 import {IconRemoveFilled} from '../icon/icon';
 
 import {HIT_SLOP} from '../common-styles/button';
-import {COLOR_PINK} from '../variables/variables';
+import {COLOR_LIGHT_GRAY, COLOR_PINK} from '../variables/variables';
 
 import styles from './attachments-row.styles';
 
@@ -34,12 +34,15 @@ type Props = DefaultProps & {
   attachingImage: ?Object,
 }
 
+type State = {
+  isRemoving: boolean
+}
+
 const ANIMATION_DURATION = 700;
 const ERROR_HANDLER_THROTTLE = 60 * 1000;
 const isAndroid: boolean = isAndroidPlatform();
 
-export default class Attach extends PureComponent<Props, void> {
-
+export default class Attach extends PureComponent<Props, State> {
   static defaultProps: DefaultProps = {
     imageHeaders: null,
     canRemoveImage: false,
@@ -51,6 +54,8 @@ export default class Attach extends PureComponent<Props, void> {
   handleLoadError = throttle((err) => {
     this.props.onImageLoadingError(err);
   }, ERROR_HANDLER_THROTTLE);
+
+  state = {isRemoving: false};
 
   showImageAttachment(attach: Attachment) {
     const {imageHeaders, onRemoveImage, attachments = [attach]} = this.props;
@@ -151,32 +156,47 @@ export default class Attach extends PureComponent<Props, void> {
         },
         {
           text: 'Delete',
-          onPress: () => this.props.onRemoveImage(this.props.attach)
+          onPress: async () => {
+            this.setState({isRemoving: true});
+            await this.props.onRemoveImage(this.props.attach);
+            this.setState({isRemoving: false});
+          }
         }
       ],
       {cancelable: true}
     );
+  };
+
+  onAttachPress = () => {
+    const {attach} = this.props;
+    if (this.isImage() || this.isSVG()) {
+      this.showImageAttachment(attach);
+    } else {
+      this.openAttachmentUrl(attach.name, attach.url);
+    }
+  };
+
+  isImage() {
+    return hasMimeType.image(this.props.attach);
+  }
+
+  isSVG() {
+    return hasMimeType.svg(this.props.attach);
   }
 
   render() {
     const {attach, canRemoveImage} = this.props;
-
-    const isImage = hasMimeType.image(attach);
-    const isSvg = hasMimeType.svg(attach);
-
-    const onPress = (
-      (isImage || isSvg)
-        ? () => this.showImageAttachment(attach)
-        : () => this.openAttachmentUrl(attach.name, attach.url)
-    );
+    const isImage = this.isImage();
+    const isSvg = this.isSVG();
 
     return (
       <View
         key={attach.id}
+        style={this.state.isRemoving ? styles.removingAttach : null}
       >
         <TouchableOpacity
           testID="attachment"
-          onPress={onPress}
+          onPress={this.onAttachPress}
         >
           {isSvg && this.renderSVG()}
           {Boolean(isImage && !isSvg) && this.renderImage()}
@@ -188,10 +208,11 @@ export default class Attach extends PureComponent<Props, void> {
           <TouchableOpacity
             style={styles.removeButton}
             hitSlop={HIT_SLOP}
+            disabled={this.state.isRemoving}
             testID="attachmentRemove"
             onPress={this.remove}
           >
-            <IconRemoveFilled size={24} color={COLOR_PINK} />
+            <IconRemoveFilled size={24} color={this.state.isRemoving ? COLOR_LIGHT_GRAY : COLOR_PINK}/>
 
           </TouchableOpacity>
         )}

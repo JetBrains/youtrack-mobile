@@ -35,5 +35,8 @@ export default StyleSheet.create({
     position: 'absolute',
     top: UNIT / 2,
     right: UNIT * 1.5
+  },
+  removingAttach: {
+    opacity: .3
   }
 });
