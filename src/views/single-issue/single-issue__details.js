@@ -26,7 +26,7 @@ import VisibilityControl from '../../components/issue-visibility/visibility';
 import {SkeletonIssueContent, SkeletonIssueInfoLine} from '../../components/skeleton/skeleton';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
-import type {IssueFull, IssueOnList} from '../../flow/Issue';
+import type {AnyIssue, IssueFull, IssueOnList} from '../../flow/Issue';
 import type {Attachment, CustomField, FieldValue, IssueProject} from '../../flow/CustomFields';
 import type {Visibility} from '../../flow/Visibility';
 
@@ -85,7 +85,7 @@ export default class IssueDetails extends PureComponent<Props, void> {
       return null;
     }
 
-    const {onRemoveAttachment, issue} = this.props;
+    const {onRemoveAttachment, issue, issuePermissions} = this.props;
 
     return (
       <View style={styles.attachments}>
@@ -97,7 +97,7 @@ export default class IssueDetails extends PureComponent<Props, void> {
             log.warn('onImageLoadingError', err.nativeEvent);
             this.props.refreshIssue();
           }}
-          canRemoveAttachment={this.props.issuePermissions.canRemoveAttachment(issue)}
+          canRemoveAttachment={issuePermissions.canRemoveAttachment(issue)}
           onRemoveImage={onRemoveAttachment}
           onOpenAttachment={(type) => usage.trackEvent(
             this.props.analyticCategory,
@@ -241,17 +241,38 @@ export default class IssueDetails extends PureComponent<Props, void> {
     );
   }
 
+  getIssue(): AnyIssue {
+    return this.props.issue || this.props.issuePlaceholder;
+  }
+
+  canUpdateField = (field: CustomField) => this.props.issuePermissions.canUpdateField(this.getIssue(), field);
+
+  canCreateIssueToProject = (project: IssueProject) => this.props.issuePermissions.canCreateIssueToProject(project);
+
+  onFieldUpdate = async (field: CustomField, value: any) => await this.props.updateIssueFieldValue(field, value);
+
+  onUpdateProject = async (project: IssueProject) => await this.props.updateProject(project);
+
   renderCustomFieldPanel() {
-    const {issue, issuePermissions, updateIssueFieldValue, updateProject} = this.props;
+    const {issuePermissions} = this.props;
+    const _issue: AnyIssue = this.getIssue();
 
     return <CustomFieldsPanel
-      api={getApi()}
       autoFocusSelect
-      canEditProject={issuePermissions.canUpdateGeneralInfo(issue)}
-      issue={issue}
-      issuePermissions={issuePermissions}
-      onUpdate={async (field, value) => await updateIssueFieldValue(field, value)}
-      onUpdateProject={async (project) => await updateProject(project)}/>;
+
+      issueId={_issue.id}
+      issueProject={_issue.project}
+      fields={_issue.fields}
+
+      hasPermission={{
+        canUpdateField: this.canUpdateField,
+        canCreateIssueToProject: this.canCreateIssueToProject,
+        canEditProject: issuePermissions.canUpdateGeneralInfo(_issue)
+      }}
+
+      onUpdate={this.onFieldUpdate}
+      onUpdateProject={this.onUpdateProject}
+    />;
   }
 
   render() {

@@ -20,7 +20,7 @@ import {COLOR_GRAY, COLOR_PINK} from '../../components/variables/variables';
 import * as createIssueActions from './create-issue-actions';
 import {attachmentActions} from './create-issue__attachment-actions-and-types';
 
-import type {Attachment} from '../../flow/CustomFields';
+import type {Attachment, CustomField, IssueProject} from '../../flow/CustomFields';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {CreateIssueState} from './create-issue-reducers';
 import PropTypes from 'prop-types';
@@ -88,9 +88,39 @@ class CreateIssue extends Component<Props, void> {
     );
   }
 
+  canUpdateField = (field: CustomField) => this.props.issuePermissions.canUpdateField(this.props.issue, field);
+
+  canCreateIssueToProject = (project: IssueProject) => this.props.issuePermissions.canCreateIssueToProject(project);
+
+  onFieldUpdate = async (field: CustomField, value: any) => await this.props.updateFieldValue(field, value);
+
+  onUpdateProject = async (project: IssueProject) => await this.props.updateProject(project);
+
+  renderCustomFieldPanel() {
+    const {issue} = this.props;
+
+    return <CustomFieldsPanel
+      autoFocusSelect
+      testID="createIssueFields"
+      ref={this.fieldsPanelRef}
+
+      issueId={issue.id}
+      issueProject={issue.project}
+      fields={issue.fields}
+
+      hasPermission={{
+        canUpdateField: this.canUpdateField,
+        canCreateIssueToProject: this.canCreateIssueToProject,
+        canEditProject: true
+      }}
+
+      onUpdate={this.onFieldUpdate}
+      onUpdateProject={this.onUpdateProject}
+    />;
+  }
+
   render() {
     const {
-      issuePermissions,
       storeDraftAndGoBack,
       setIssueSummary,
       setIssueDescription,
@@ -98,8 +128,6 @@ class CreateIssue extends Component<Props, void> {
       issue,
       attachingImage,
       processing,
-      updateFieldValue,
-      updateProject,
       removeAttachment,
       showAddAttachDialog,
       isAttachFileDialogVisible
@@ -123,17 +151,7 @@ class CreateIssue extends Component<Props, void> {
 
         <View style={styles.separator}/>
 
-        <CustomFieldsPanel
-          testID="createIssueFields"
-          ref={this.fieldsPanelRef}
-          api={getApi()}
-          issue={issue}
-          canEditProject={true}
-          autoFocusSelect
-          issuePermissions={issuePermissions}
-          onUpdate={async (field, value) => await updateFieldValue(field, value)}
-          onUpdateProject={async (project) => await updateProject(project)}
-        />
+        {this.renderCustomFieldPanel()}
 
         <ScrollView
           keyboardShouldPersistTaps="handled"

@@ -7,25 +7,33 @@ import Select from '../select/select';
 import Header from '../header/header';
 import {COLOR_PINK, COLOR_PLACEHOLDER} from '../variables/variables';
 import Api from '../api/api';
-import IssuePermissions from '../issue-permissions/issue-permissions';
 import {SkeletonIssueCustomFields} from '../skeleton/skeleton';
-import styles, {calendarTheme} from './custom-fields-panel.styles';
 import ModalView from '../modal-view/modal-view';
-import type {IssueFull} from '../../flow/Issue';
-import type {IssueProject, CustomField as CustomFieldType} from '../../flow/CustomFields';
 import {View as AnimatedView} from 'react-native-animatable';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {IconClose} from '../icon/icon';
+import {getApi} from '../api/api__instance';
+
+import styles, {calendarTheme} from './custom-fields-panel.styles';
+
+import type {IssueProject, CustomField as CustomFieldType, ProjectCustomField} from '../../flow/CustomFields';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
-  api: Api,
   autoFocusSelect?: boolean,
-  issue: IssueFull,
-  issuePermissions: IssuePermissions,
+  style?: ViewStyleProp,
+
+  issueId: string,
+  issueProject: IssueProject,
+  fields: Array<CustomFieldType>,
+
+  hasPermission: {
+    canUpdateField: (field: CustomFieldType) => boolean,
+    canCreateIssueToProject: (project: IssueProject) => boolean,
+    canEditProject: boolean
+  },
+
   onUpdate: (field: CustomFieldType, value: null | number | Object | Array<Object>) => Promise<Object>,
   onUpdateProject: (project: IssueProject) => Promise<Object>,
-  canEditProject: boolean,
-  style?: ViewStyleProp
 };
 
 type State = {
@@ -97,6 +105,7 @@ const MAX_PROJECT_NAME_LENGTH = 20;
 const DATE_AND_TIME = 'date and time';
 
 export default class CustomFieldsPanel extends Component<Props, State> {
+  api: Api = getApi();
   currentScrollX: number = 0;
   isComponentMounted: ?boolean;
 
@@ -122,6 +131,10 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     this.isComponentMounted = null;
   }
 
+  shouldComponentUpdate(nextProps: Props, prevState: State): boolean {
+    return this.props.fields !== nextProps.fields || this.state !== prevState;
+  }
+
   saveUpdatedField(field: CustomFieldType, value: null | number | Object | Array<Object>) {
     const updateSavingState = (value) => this.isComponentMounted && this.setState({savingField: value});
     this.closeEditor();
@@ -135,11 +148,12 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       .catch(() => updateSavingState(null));
   }
 
-  onSelectProject() {
+  onSelectProject = () => {
     if (this.state.isEditingProject) {
       return this.closeEditor();
     }
-    const {issuePermissions} = this.props;
+
+    const {hasPermission} = this.props;
 
     this.closeEditor();
     this.setState({
@@ -148,20 +162,19 @@ export default class CustomFieldsPanel extends Component<Props, State> {
         show: true,
         getValue: project => project.name + project.shortName,
         dataSource: async query => {
-          const projects = await this.props.api.getProjects(query);
+          const projects = await this.api.getProjects(query);
 
           return projects
             .filter(project => !project.archived)
-            .filter(project => issuePermissions.canCreateIssueToProject(project));
+            .filter(project => hasPermission.canCreateIssueToProject(project));
         },
         multi: false,
         placeholder: 'Search for the project',
-        selectedItems: [this.props.issue.project],
+        selectedItems: [this.props.issueProject],
         onSelect: (project: IssueProject) => {
           this.closeEditor();
           this.setState({isSavingProject: true});
-          return this.props.onUpdateProject(project)
-            .then(() => this.setState({isSavingProject: false}));
+          return this.props.onUpdateProject(project).then(() => this.setState({isSavingProject: false}));
         }
       }
     });
@@ -258,7 +271,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       selectedItems = field.value ? [field.value] : [];
     }
 
-    return this.setState({
+    this.setState({
       select: {
         show: true,
         multi: isMultiValue,
@@ -267,10 +280,10 @@ export default class CustomFieldsPanel extends Component<Props, State> {
         placeholder: 'Search for the field value',
         dataSource: () => {
           if (field.hasStateMachine) {
-            return this.props.api.getStateMachineEvents(this.props.issue.id, field.id)
+            return this.api.getStateMachineEvents(this.props.issueId, field.id)
               .then(items => items.map(it => Object.assign(it, {name: `${it.id} (${it.presentation})`})));
           }
-          return this.props.api.getCustomFieldValues(
+          return this.api.getCustomFieldValues(
             projectCustomField?.bundle?.id,
             projectCustomField.field.fieldType.valueType
           );
@@ -286,7 +299,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     });
   }
 
-  onEditField(field: CustomFieldType) {
+  onEditField = (field: CustomFieldType) => {
     if (field === this.state.editingField) {
       return this.closeEditor();
     }
@@ -444,28 +457,32 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     );
   }
 
-  renderFields() {
-    const {issue, issuePermissions, canEditProject} = this.props;
-    const {savingField, editingField, isEditingProject, isSavingProject} = this.state;
-    const projectName: string = issue?.project?.name || '';
-    const trimmedProjectName = projectName.length > MAX_PROJECT_NAME_LENGTH
-      ? `${projectName.substring(0, MAX_PROJECT_NAME_LENGTH - 3)}…`
-      : projectName;
-    const projectFakeField = {
-      projectCustomField: {field: {name: 'Project'}},
-      value: {name: trimmedProjectName}
-    };
+  getIssueProjectField(): {projectCustomField: ProjectCustomField, value: { name: string }} {
+    const projectName: string = this.props.issueProject?.name || '';
+    const visibleProjectName: string = (
+      projectName.length > MAX_PROJECT_NAME_LENGTH
+        ? `${projectName.substring(0, MAX_PROJECT_NAME_LENGTH - 3)}…`
+        : projectName
+    );
 
-    const hasFields: boolean = !!issue?.fields;
+    return {
+      projectCustomField: {field: {name: 'Project'}},
+      value: {name: visibleProjectName}
+    };
+  }
+
+  renderFields() {
+    const {hasPermission, fields} = this.props;
+    const {savingField, editingField, isEditingProject, isSavingProject} = this.state;
 
     return (
       <View>
 
-        {!hasFields && <View style={styles.customFieldsPanel}>
+        {!fields && <View style={styles.customFieldsPanel}>
           <SkeletonIssueCustomFields/>
         </View>}
 
-        {hasFields && <ScrollView
+        {!!fields && <ScrollView
           ref={this.restoreScrollPosition}
           onScroll={this.storeScrollPosition}
           contentOffset={{
@@ -479,21 +496,21 @@ export default class CustomFieldsPanel extends Component<Props, State> {
         >
           <View key="Project">
             <CustomField
-              disabled={!canEditProject}
-              onPress={() => this.onSelectProject()}
+              disabled={!hasPermission.canEditProject}
+              onPress={this.onSelectProject}
               active={isEditingProject}
-              field={projectFakeField}
+              field={this.getIssueProjectField()}
             />
             {isSavingProject && <ActivityIndicator style={styles.savingFieldIndicator}/>}
           </View>
 
-          {issue.fields.map((field) => {
+          {fields.map((field) => {
             return <View key={field.id}>
               <CustomField
                 field={field}
                 onPress={() => this.onEditField(field)}
                 active={editingField === field}
-                disabled={!issuePermissions.canUpdateField(issue, field)}/>
+                disabled={!hasPermission.canUpdateField(field)}/>
 
               {savingField && savingField.id === field.id && <ActivityIndicator style={styles.savingFieldIndicator}/>}
             </View>;

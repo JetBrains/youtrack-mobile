@@ -51,66 +51,51 @@ exports[`<CreateIssue/> Render Component should match a snapshot 1`] = `
     }
   />
   <CustomFieldsPanel
-    api={
-      Object {
-        "auth": Object {
-          "getAuthorizationHeaders": [MockFunction] {
-            "calls": Array [
-              Array [],
-            ],
-            "results": Array [
-              Object {
-                "type": "return",
-                "value": undefined,
-              },
-            ],
-          },
-        },
-      }
-    }
     autoFocusSelect={true}
-    canEditProject={true}
-    issue={
-      Object {
-        "$type": "Issue",
-        "description": "Issue test description",
-        "fields": Array [
-          Object {
+    fields={
+      Array [
+        Object {
+          "color": Object {
+            "$type": "FieldStyle",
+            "id": "17",
+          },
+          "localizedName": null,
+          "projectCustomField": Object {
+            "bundle": Object {
+              "$type": "EnumBundle",
+              "id": "",
+            },
+            "canBeEmpty": false,
+            "field": Object {
+              "name": "priority",
+            },
+            "ordinal": 2,
+          },
+          "value": Object {
+            "archived": false,
             "color": Object {
               "$type": "FieldStyle",
               "id": "17",
             },
             "localizedName": null,
-            "projectCustomField": Object {
-              "bundle": Object {
-                "$type": "EnumBundle",
-                "id": "",
-              },
-              "canBeEmpty": false,
-              "field": Object {
-                "name": "priority",
-              },
-              "ordinal": 2,
-            },
-            "value": Object {
-              "archived": false,
-              "color": Object {
-                "$type": "FieldStyle",
-                "id": "17",
-              },
-              "localizedName": null,
-              "name": "Normal",
-            },
+            "name": "Normal",
           },
-        ],
-        "id": "00-00",
-        "project": Object {
-          "id": "PROJECT_ID",
         },
-        "summary": "Issue test summary",
+      ]
+    }
+    hasPermission={
+      Object {
+        "canCreateIssueToProject": [Function],
+        "canEditProject": true,
+        "canUpdateField": [Function],
       }
     }
-    issuePermissions={Object {}}
+    issueId="00-00"
+    issueProject={
+      Object {
+        "id": "PROJECT_ID",
+      }
+    }
     onUpdate={[Function]}
     onUpdateProject={[Function]}
     testID="createIssueFields"

@@ -20,7 +20,7 @@ export type CreateIssueState = {
   attachingImage: ?Object,
   predefinedDraftId: ?string,
   issue: {
-    id: ?string,
+    id: string,
     summary: string,
     description: string,
     attachments: Array<Object>,
@@ -120,7 +120,7 @@ export default createReducer(initialState, {
       ...state,
       issue: {
         ...state.issue,
-        id: null
+        id: ''
       }
     };
   },

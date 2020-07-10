@@ -108,9 +108,9 @@ export function loadIssueFromDraft(draftId: string) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
     try {
-      const issue = await api.issue.loadIssueDraft(draftId);
-      log.info(`Issue draft loaded, "${issue.summary}"`);
-      dispatch(setIssueDraft(issue));
+      const draftIssue = await api.issue.loadIssueDraft(draftId);
+      log.info(`Issue draft loaded, "${draftIssue.summary}"`);
+      dispatch(setIssueDraft(draftIssue));
     } catch (err) {
       log.info('Cannot load issue draft, cleaning up');
       clearIssueDraftStorage();
@@ -144,7 +144,7 @@ export function updateIssueDraft(ignoreFields: boolean = false) {
       return;
     }
 
-    const issueToSend = {
+    const draftIssue = {
       id: issue.id,
       summary: issue.summary,
       description: issue.description,
@@ -152,16 +152,16 @@ export function updateIssueDraft(ignoreFields: boolean = false) {
     };
 
     try {
-      const issue = await api.issue.updateIssueDraft(issueToSend);
+      const actualDraftIssue = await api.issue.updateIssueDraft(draftIssue);
 
       if (ignoreFields) {
-        delete issue.fields;
+        delete actualDraftIssue.fields;
       }
 
-      log.info('Issue draft updated', issueToSend);
-      dispatch(setIssueDraft(issue));
+      log.info('Issue draft updated', draftIssue);
+      dispatch(setIssueDraft(actualDraftIssue));
       if (!getState().creation.predefinedDraftId) {
-        return await storeIssueDraftId(issue.id);
+        return await storeIssueDraftId(actualDraftIssue.id);
       }
     } catch (err) {
       const error = await resolveError(err) || new Error(DEFAULT_ERROR_MESSAGE);
