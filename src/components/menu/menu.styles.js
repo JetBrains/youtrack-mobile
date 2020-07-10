@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {COLOR_FONT_ON_BLACK} from '../../components/variables/variables';
+import {COLOR_FONT_ON_BLACK} from '../variables/variables';
 
 export default StyleSheet.create({
   menu: {

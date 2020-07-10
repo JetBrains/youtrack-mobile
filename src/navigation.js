@@ -8,6 +8,7 @@ import Menu from './components/menu/menu';
 import {routeMap} from './app-routes';
 
 import {menuHeight} from './components/common-styles/header';
+import {View as AnimatedView} from 'react-native-animatable';
 
 const styles = StyleSheet.create({
   flexBox: {
@@ -18,6 +19,10 @@ const styles = StyleSheet.create({
   },
   navigation: {
     height: menuHeight
+  },
+  navigationHidden: {
+    position: 'absolute',
+    bottom: -100
   }
 });
 
@@ -51,9 +56,16 @@ export default class Navigation extends PureComponent<{}, {isMenuShown: boolean}
           {Router.renderNavigatorView(onRoute)}
         </View>
 
-        {this.state.isMenuShown && <View style={styles.navigation}>
+        <AnimatedView
+          animation="slideInUp"
+          duration={500}
+          useNativeDriver
+          style={[
+            styles.navigation,
+            this.state.isMenuShown ? null : styles.navigationHidden
+          ]}>
           <Menu/>
-        </View>}
+        </AnimatedView>
 
       </View>
     );

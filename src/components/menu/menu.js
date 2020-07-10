@@ -9,7 +9,7 @@ import {MenuItem} from './menu__item';
 
 import Feature from '../feature/feature';
 
-import {IconBell, IconBoard,IconSettings, IconTask} from '../icon/icon';
+import {IconBell, IconBoard, IconSettings, IconTask} from '../icon/icon';
 import {COLOR_FONT_ON_BLACK, COLOR_GRAY, COLOR_ICON_MEDIUM_GREY, COLOR_PINK} from '../variables/variables';
 
 import {menuHeight} from '../common-styles/header';
