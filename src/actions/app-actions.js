@@ -353,7 +353,7 @@ export function completeInitialization(issueId: ?string = null) {
   return async (dispatch: (any) => any) => {
     log.debug('Completing initialization: loading permissions cache');
     dispatch(loadUserPermissions());
-    dispatch(loadUser());
+    await dispatch(loadUser());
     dispatch(loadAgileProfile());
     dispatch(loadWorkTimeSettings());
 
