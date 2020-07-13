@@ -35,17 +35,18 @@ import {IconAdd, IconAngleDown} from '../../components/icon/icon';
 import {isReactElement} from '../../util/util';
 import {LoadMoreList} from '../../components/progress/load-more-list';
 import {SkeletonIssues} from '../../components/skeleton/skeleton';
+import {initialState} from './issue-list-reducers';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
 
 import styles from './issue-list.styles';
 
-type Props = IssuesListState & typeof issueActions & {
+type Props = $Shape<IssuesListState & typeof issueActions & {
   auth: Auth,
   api: Api,
   initialSearchQuery: ?string,
   onOpenContextSelect: () => any
-};
+}>;
 
 type State = {
   isEditQuery: boolean,
@@ -78,6 +79,14 @@ export class IssueList extends Component<Props, State> {
 
   componentWillUnmount() {
     AppState.removeEventListener('change', this._handleAppStateChange);
+  }
+
+  shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
+    if (Object.keys(initialState).some((stateKey: string) => this.props[stateKey] !== nextProps[stateKey])) {
+      return true;
+    }
+
+    return this.state !== nextState;
   }
 
   goToIssue(issue: IssueOnList) {
@@ -268,7 +277,7 @@ export class IssueList extends Component<Props, State> {
     const contextButton = this.renderContextButton();
     const searchQuery = this.renderSearchQuery();
 
-    if (isRefreshing) {
+    if (isRefreshing || !issues) {
       return (
         <View style={styles.list}>
           {contextButton}

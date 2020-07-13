@@ -27,7 +27,7 @@ export type IssuesListState = {
   isSearchContextPinned: boolean
 };
 
-const initialState: IssuesListState = {
+export const initialState: IssuesListState = {
   query: '',
   queryAssistSuggestions: [],
   skip: 0,
