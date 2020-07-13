@@ -17,7 +17,6 @@ import {
 
 import type {SprintFull, AgileBoardRow, Board, AgileUserProfile} from '../../flow/Agile';
 import type {IssueOnList, IssueFull} from '../../flow/Issue';
-import type ServersideEvents from '../../components/api/api__serverside-events';
 import type {CustomError} from '../../flow/Error';
 
 type BoardState = Board;
@@ -33,7 +32,6 @@ export type AgilePageState = {
   creatingIssueDraftCellId: ?string,
   sprint: ?SprintFull,
   selectProps: ?Object,
-  serversideEvents: ?ServersideEvents,
   agile: ?Board,
   error?: CustomError | null
 };
@@ -49,7 +47,6 @@ const initialPageState: AgilePageState = {
   creatingIssueDraftCellId: null,
   selectProps: null,
   sprint: null,
-  serversideEvents: null,
   agile: null,
   error: null
 };
