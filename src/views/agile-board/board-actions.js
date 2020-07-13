@@ -185,9 +185,6 @@ export function loadAgileProfile() {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     let profile;
     try {
-      dispatch({
-        type: types.START_RECEIVE_AGILE_PROFILE
-      });
       profile = await getApi().agile.getAgileUserProfile();
       dispatch({
         type: types.RECEIVE_AGILE_PROFILE,
@@ -195,10 +192,6 @@ export function loadAgileProfile() {
       });
     } catch (error) {
       dispatch(setError(error));
-    } finally {
-      dispatch({
-        type: types.STOP_RECEIVE_AGILE_PROFILE
-      });
     }
   };
 }

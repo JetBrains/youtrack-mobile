@@ -38,6 +38,7 @@ import ErrorMessage from '../../components/error-message/error-message';
 import type {CustomError} from '../../flow/Error';
 import {isAllColumnsCollapsed} from './agile-board__helper';
 import {notify} from '../../components/notification/notification';
+import isEqual from 'react-fast-compare';
 
 const CATEGORY_NAME = 'Agile board';
 
@@ -88,6 +89,12 @@ class AgileBoard extends Component<Props, State> {
   componentDidMount() {
     usage.trackScreenView(CATEGORY_NAME);
     this.props.onLoadBoard();
+  }
+
+  shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
+    const isPropsEqual: boolean = isEqual(this.props, nextProps);
+    const isStateEqual: boolean = isEqual(this.state, nextState);
+    return !isPropsEqual || !isStateEqual;
   }
 
   onBoardLeave = (routeName: string, prevRouteName?: string) => {

@@ -68,9 +68,6 @@ describe('Agile board async actions', () => {
       storeActions = store.getActions();
 
       expect(storeActions[0]).toEqual({
-        type: types.START_RECEIVE_AGILE_PROFILE
-      });
-      expect(storeActions[1]).toEqual({
         type: types.RECEIVE_AGILE_PROFILE,
         profile: agileUserProfileMock
       });
