@@ -5,8 +5,6 @@ exports[`Settings Render should match a snapshot 1`] = `
   style={
     Object {
       "flex": 1,
-      "paddingLeft": 16,
-      "paddingRight": 16,
     }
   }
   testID="settings"
@@ -20,6 +18,8 @@ exports[`Settings Render should match a snapshot 1`] = `
       Object {
         "flexDirection": "column",
         "flexGrow": 1,
+        "paddingLeft": 16,
+        "paddingRight": 16,
       }
     }
   >

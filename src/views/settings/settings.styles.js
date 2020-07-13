@@ -12,11 +12,11 @@ export default StyleSheet.create({
 
   settings: {
     flex: 1,
-    paddingLeft: UNIT * 2,
-    paddingRight: UNIT * 2,
   },
   settingsContent: {
     flexGrow: 1,
+    paddingLeft: UNIT * 2,
+    paddingRight: UNIT * 2,
     flexDirection: 'column'
   },
   settingsOther: {

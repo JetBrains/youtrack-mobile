@@ -7,7 +7,6 @@ import Router from '../router/router';
 import {onHeightChange} from './header__top-padding';
 
 import {HIT_SLOP} from '../common-styles/button';
-import {headerTitle} from '../common-styles/typography';
 import styles from './header.styles';
 
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
@@ -57,7 +56,7 @@ export default class Header extends PureComponent<Props, void> {
         testID="header"
         style={[styles.header, style]}
       >
-        {<TouchableOpacity
+        {!!leftButton && <TouchableOpacity
           testID="header-back"
           hitSlop={HIT_SLOP}
           style={styles.headerButtonLeft}
@@ -66,10 +65,10 @@ export default class Header extends PureComponent<Props, void> {
           {leftButton}
         </TouchableOpacity>}
 
-        {Boolean(title) && (
+        {!!title && (
           <Text
             testID="headerTitle"
-            style={{...headerTitle}}>{title}</Text>
+            style={styles.headerTitle}>{title}</Text>
         )}
 
         <View style={styles.headerCenter} testID="header-content">
@@ -78,7 +77,7 @@ export default class Header extends PureComponent<Props, void> {
 
         {extraButton}
 
-        {rightButton && <TouchableOpacity
+        {!!rightButton && <TouchableOpacity
           testID="header-action"
           hitSlop={HIT_SLOP}
           style={styles.headerButtonRight}

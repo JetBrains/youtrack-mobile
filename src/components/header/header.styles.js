@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {UNIT, COLOR_PINK} from '../variables/variables';
+import {headerTitle} from '../common-styles/typography';
 
 const minButtonWidth = UNIT * 5;
 
@@ -14,6 +15,10 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  headerTitle: {
+    ...headerTitle,
+    marginLeft: UNIT
   },
   headerButtonLeft: {
     minWidth: minButtonWidth,

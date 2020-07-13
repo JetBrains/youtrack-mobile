@@ -102,7 +102,7 @@ export default StyleSheet.create({
     textDecorationLine: 'line-through'
   },
   headerTitle: {
-    paddingTop: UNIT,
+    paddingTop: UNIT * 2,
     paddingLeft: UNIT * 2,
     paddingBottom: UNIT * 2,
     backgroundColor: COLOR_FONT_ON_BLACK,
