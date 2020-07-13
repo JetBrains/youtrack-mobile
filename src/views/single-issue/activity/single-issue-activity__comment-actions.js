@@ -20,6 +20,7 @@ import {
 
 import * as activityHelper from './single-issue-activity__helper';
 
+import type {IssueActivity} from '../../../flow/Activity';
 import type {State as IssueActivityState} from './single-issue-activity__reducers';
 import type {State as IssueCommentActivityState} from './single-issue-activity__comment-reducers';
 
@@ -91,10 +92,10 @@ export function loadIssueCommentsAsActivityPage() {
   };
 }
 
-export function reLoad() { //TODO(performance): try to make an incremental update
+export function loadActivity(doNotReset: boolean = false) {
   return async (dispatch: any => any) => {
     if (activityHelper.isActivitiesAPIEnabled()) {
-      dispatch(loadActivitiesPage());
+      dispatch(loadActivitiesPage(doNotReset));
     } else {
       dispatch(loadIssueCommentsAsActivityPage());
     }
@@ -103,17 +104,18 @@ export function reLoad() { //TODO(performance): try to make an incremental updat
 
 export function addComment(comment: IssueComment) {
   return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
-    const api: Api = getApi();
     const issueId = getState().singleIssue.issue.id;
+    const activityPage: ?Array<IssueActivity> = getState().issueActivity.activityPage;
     dispatch(startSubmittingComment());
 
     try {
-      await api.issue.submitComment(issueId, comment);
+      await getApi().issue.submitComment(issueId, comment);
       usage.trackEvent(CATEGORY_NAME, 'Add comment', 'Success');
       log.info(`Comment created in issue ${issueId}. Reloading...`);
-      dispatch(reLoad());
+      dispatch(loadActivity(true));
     } catch (error) {
       dispatch(setCommentText(comment.text));
+      activityPage && dispatch(receiveActivityPage(activityPage.filter(it => !it.tmp)));
       notify('Cannot create comment', error);
     } finally {
       dispatch(stopSubmittingComment());
@@ -144,7 +146,7 @@ export function submitEditedComment(comment: IssueComment) {
     try {
       const updatedComment = await getApi().issue.submitComment(issueId, comment);
       dispatch(stopEditingComment());
-      dispatch(reLoad());
+      dispatch(loadActivity());
       log.info(`Comment ${updatedComment.id} edited. Reloading...`);
       notify('Comment updated');
     } catch (error) {
@@ -227,9 +229,9 @@ export function deleteCommentPermanently(comment: IssueComment, activityId?: str
       await getApi().issue.deleteCommentPermanently(issueId, comment.id);
       log.info(`Comment ${comment.id} deleted forever`);
       dispatch(deleteCommentFromList(comment, activityId));
-      dispatch(reLoad());
+      dispatch(loadActivity());
     } catch (error) {
-      dispatch(reLoad());
+      dispatch(loadActivity());
       notify(`Failed to delete comment. Refresh`, error);
     }
   };

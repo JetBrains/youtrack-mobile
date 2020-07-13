@@ -1,12 +1,12 @@
 /* @flow */
 
+import * as activityHelper from './single-issue-activity__helper';
 import * as types from '../single-issue-action-types';
-import {notify} from '../../../components/notification/notification';
+
 import log from '../../../components/log/log';
 import type {IssueActivity} from '../../../flow/Activity';
 import type Api from '../../../components/api/api';
 import type {State as SingleIssueState} from '../single-issue-reducers';
-import * as activityHelper from './single-issue-activity__helper';
 
 type ApiGetter = () => Api;
 type StateGetter = () => { singleIssue: SingleIssueState };
@@ -21,7 +21,7 @@ export function receiveActivityPage(activityPage: Array<IssueActivity> | null) {
 }
 
 export function receiveActivityPageError(error: Error) {
-  return {type: types.RECEIVE_ACTIVITY_ERROR, error: error};
+  return {type: types.RECEIVE_ACTIVITY_ERROR, error};
 }
 
 export function receiveActivityEnabledTypes() {
@@ -32,7 +32,7 @@ export function receiveActivityEnabledTypes() {
   };
 }
 
-export function loadActivitiesPage() {
+export function loadActivitiesPage(doNotReset: boolean = false) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().singleIssue.issueId;
     const api: Api = getApi();
@@ -42,7 +42,9 @@ export function loadActivitiesPage() {
       activityHelper.getIssueActivitiesEnabledTypes()
     );
 
-    dispatch(receiveActivityPage(null));
+    if (!doNotReset) {
+      dispatch(receiveActivityPage(null));
+    }
     dispatch(receiveActivityAPIAvailability(true));
 
     try {
@@ -52,8 +54,8 @@ export function loadActivitiesPage() {
       log.info('Received activities', activityPage);
     } catch (error) {
       dispatch(receiveActivityPageError(error));
-      dispatch({type: types.RECEIVE_ACTIVITY_ERROR, error: error});
-      notify('Failed to load activity', error);
+      dispatch({type: types.RECEIVE_ACTIVITY_ERROR, error});
+      log.warn('Failed to load activity', error);
     }
   };
 }

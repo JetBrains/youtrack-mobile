@@ -2,16 +2,15 @@
 
 import qs from 'qs';
 
-import type {User, UserAppearanceProfile, UserGeneralProfile} from '../../flow/User';
-import type Auth from '../auth/auth';
-
 import ApiBase from './api__base';
 import ApiHelper from './api__helper';
-
+import {handleRelativeUrl} from '../config/config';
 import {ResourceTypes} from './api__resource-types';
 
-import type {Tag} from '../../flow/CustomFields';
+import type Auth from '../auth/auth';
 import type {SavedQuery} from '../../flow/Issue';
+import type {Tag} from '../../flow/CustomFields';
+import type {User, UserAppearanceProfile, UserGeneralProfile} from '../../flow/User';
 
 
 export default class UserAPI extends ApiBase {
@@ -49,6 +48,9 @@ export default class UserAPI extends ApiBase {
   async getUser(userId: string = 'me'): Promise<User> {
     const queryString = UserAPI.createFieldsQuery([
       'id',
+      'avatarUrl',
+      'login',
+      'fullName',
       {
         profiles: {
           general: {
@@ -60,7 +62,9 @@ export default class UserAPI extends ApiBase {
       }
     ]);
 
-    return await this.makeAuthorizedRequest(`${this.adminApiUrl}/${userId}?${queryString}`);
+    const user: User = await this.makeAuthorizedRequest(`${this.adminApiUrl}/${userId}?${queryString}`);
+    user.avatarUrl = handleRelativeUrl(user.avatarUrl, this.config.backendUrl);
+    return user;
   }
 
   async getUserFolders(folderId: string = ''): Promise<User | Tag | SavedQuery> {

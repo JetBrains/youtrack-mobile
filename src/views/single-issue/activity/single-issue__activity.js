@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {PureComponent} from 'react';
-import {Text, View, ScrollView} from 'react-native';
+import {View, ScrollView} from 'react-native';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -12,13 +12,14 @@ import Select from '../../../components/select/select';
 import SingleIssueActivities from './single-issue__activities-stream';
 import IssueActivitiesSettings from './single-issue__activities-settings';
 import SingleIssueCommentInput from '../single-issue__comment-input';
-import {getApi} from '../../../components/api/api__instance';
+import ErrorMessage from '../../../components/error-message/error-message';
 
 import * as activityActions from './single-issue-activity__actions';
 import * as activityCommentActions from './single-issue-activity__comment-actions';
 import {attachmentActions} from '../single-issue__attachment-actions-and-types';
 
-import {isActivitiesAPIEnabled} from './single-issue-activity__helper';
+import {getApi} from '../../../components/api/api__instance';
+import {isActivitiesAPIEnabled, convertCommentsToActivityPage} from './single-issue-activity__helper';
 import {createActivitiesModel} from '../../../components/activity/activity__create-model';
 import {groupActivities} from '../../../components/activity/activity__group-activities';
 import {isActivityCategory} from '../../../components/activity/activity__category';
@@ -32,10 +33,9 @@ import type {ActivityItem} from '../../../flow/Activity';
 import type {IssueComment} from '../../../flow/CustomFields';
 import type {State as IssueActivityState} from './single-issue-activity__reducers';
 import type {State as IssueCommentActivityState} from './single-issue-activity__comment-reducers';
-import type {UserAppearanceProfile} from '../../../flow/User';
+import type {User, UserAppearanceProfile} from '../../../flow/User';
 
-type IssueActivityProps = $Shape<
-  IssueActivityState
+type IssueActivityProps = $Shape<IssueActivityState
   & typeof activityActions
   & IssueCommentActivityState
   & typeof activityCommentActions
@@ -43,8 +43,7 @@ type IssueActivityProps = $Shape<
   & {
   canAttach: boolean,
   onAttach: () => any
-}
-  >;
+}>;
 
 export class IssueActivity extends PureComponent<IssueActivityProps, void> {
   static contextTypes = {
@@ -65,7 +64,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     } else {
       this.props.loadIssueCommentsAsActivityPage();
     }
-  }
+  };
 
   renderActivitySettings(disabled: boolean) {
     const {
@@ -183,24 +182,41 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     return issuePermissions.canCommentOn(issue);
   }
 
+  onSubmitComment = (comment: Comment) => {
+    const {addOrEditComment, activityPage, updateOptimisticallyActivityPage} = this.props;
+
+    const currentUser: User = this.props.user;
+    const commentActivity = [Object.assign(
+      convertCommentsToActivityPage([comment])[0],
+      {
+        tmp: true,
+        timestamp: Date.now(),
+        author: currentUser,
+      })];
+
+    let newActivityPage = [].concat(activityPage);
+    if (currentUser?.profiles?.appearance?.naturalCommentsOrder) {
+      newActivityPage = newActivityPage.concat(commentActivity);
+    } else {
+      newActivityPage = commentActivity.concat(activityPage);
+    }
+    updateOptimisticallyActivityPage(newActivityPage);
+
+    return addOrEditComment(comment);
+  };
+
   renderEditCommentInput(focus: boolean) {
     const {
       commentText,
       setCommentText,
-      addOrEditComment,
-
       loadCommentSuggestions,
       suggestionsAreLoading,
       commentSuggestions,
-
       editingComment,
-
       onOpenCommentVisibilitySelect,
-
       issuePermissions,
       issue,
       attachOrTakeImage,
-
       stopSubmittingComment
     } = this.props;
     const isSecured = !!editingComment && IssueVisibility.isSecured(editingComment.visibility);
@@ -210,7 +226,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
         autoFocus={focus}
         initialText={commentText}
         onChangeText={setCommentText}
-        onSubmitComment={comment => addOrEditComment(comment)}
+        onSubmitComment={this.onSubmitComment}
 
         editingComment={editingComment}
         onEditCommentVisibility={onOpenCommentVisibilitySelect}
@@ -251,10 +267,10 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
   renderRefreshControl = () => {
     return this.props.renderRefreshControl(this.loadIssueActivities);
-  }
+  };
 
   render() {
-    const {isSelectOpen} = this.props;
+    const {isSelectOpen, activitiesLoadingError} = this.props;
     const activitiesApiEnabled: boolean = isActivitiesAPIEnabled();
     const hasError: boolean = this.hasLoadingError();
     const activityLoaded: boolean = this.isActivityLoaded();
@@ -276,11 +292,11 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
           scrollEventThrottle={16}
         >
 
-          {hasError && <View><Text style={styles.loadingActivityError}>Failed to load activities.</Text></View>}
+          {!hasError && this.renderActivitySettings(!isActivitySettingEnabled)}
 
-          {this.renderActivitySettings(!isActivitySettingEnabled)}
+          {hasError && <ErrorMessage error={activitiesLoadingError}/>}
 
-          {this._renderActivities()}
+          {!hasError && this._renderActivities()}
 
         </ScrollView>
 
@@ -312,7 +328,8 @@ const mapDispatchToProps = (dispatch) => {
     ...bindActionCreators(activityActions, dispatch),
     ...bindActionCreators(activityCommentActions, dispatch),
     ...bindActionCreators(attachmentActions, dispatch),
-    stopSubmittingComment: () => dispatch(activityCommentActions.stopEditingComment())
+    stopSubmittingComment: () => dispatch(activityCommentActions.stopEditingComment()),
+    updateOptimisticallyActivityPage: (activityPage) => dispatch(activityActions.receiveActivityPage(activityPage))
   };
 };
 

@@ -83,7 +83,7 @@ export default class Comment extends Component<Props, void> {
           attachments={attachments}
           imageHeaders={this.props.imageHeaders}
         >
-          {comment.textPreview}
+          {comment.textPreview || comment.text}
         </Wiki>
       </View>
     );

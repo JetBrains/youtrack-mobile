@@ -3,11 +3,13 @@
 import {createReducer} from 'redux-create-reducer';
 import IssuePermissions from '../../../components/issue-permissions/issue-permissions';
 import * as types from '../single-issue-action-types';
-import type {IssueComment} from '../../../flow/CustomFields';
-import type {WorkTimeSettings} from '../../../flow/WorkTimeSettings';
+
 import type {ActivityItem, IssueActivity} from '../../../flow/Activity';
+import type {CustomError} from '../../../flow/Error';
+import type {IssueComment} from '../../../flow/CustomFields';
 import type {IssueFull, OpenNestedViewParams} from '../../../flow/Issue';
 import type {User, UserAppearanceProfile} from '../../../flow/User';
+import type {WorkTimeSettings} from '../../../flow/WorkTimeSettings';
 
 type ActivityPage = Array<ActivityItem> | null;
 
@@ -57,8 +59,14 @@ export default createReducer(initialState, {
     const {activityPage} = action;
     return {
       ...state,
-      activityPage: activityPage,
+      activityPage,
       activitiesLoadingError: null
+    };
+  },
+  [types.RECEIVE_ACTIVITY_ERROR]: (state: State, action: { error: CustomError }): State => {
+    return {
+      ...state,
+      activitiesLoadingError: action.error
     };
   },
   [types.RECEIVE_ACTIVITY_API_AVAILABILITY]: (state: State, action: Object): State => {
