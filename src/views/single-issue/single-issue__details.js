@@ -260,9 +260,9 @@ export default class IssueDetails extends PureComponent<Props, void> {
     return <CustomFieldsPanel
       autoFocusSelect
 
-      issueId={_issue.id}
-      issueProject={_issue.project}
-      fields={_issue.fields}
+      issueId={_issue?.id}
+      issueProject={_issue?.project}
+      fields={_issue?.fields}
 
       hasPermission={{
         canUpdateField: this.canUpdateField,
