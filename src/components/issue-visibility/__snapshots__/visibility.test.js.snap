@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<VisibiltyControl/> Render should match a snapshot 1`] = `
+<View
+  testID="visibilityControl"
+>
+  <View
+    hitSlop={
+      Object {
+        "bottom": 8,
+        "left": 8,
+        "right": 8,
+        "top": 8,
+      }
+    }
+    style={
+      Array [
+        Object {
+          "alignItems": "center",
+          "flexDirection": "row",
+        },
+        null,
+      ]
+    }
+    testID="visibilityControlButton"
+  >
+    <TouchableOpacity
+      activeOpacity={0.2}
+      hitSlop={
+        Object {
+          "bottom": 8,
+          "left": 8,
+          "right": 8,
+          "top": 8,
+        }
+      }
+      onPress={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "flexDirection": "row",
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#737577",
+            "fontSize": 14,
+            "letterSpacing": -0.17,
+          }
+        }
+      >
+        Visible to All Users
+      </Text>
+      <IconAngleDown
+        color="#737577"
+        size={20}
+      />
+    </TouchableOpacity>
+  </View>
+</View>
+`;
