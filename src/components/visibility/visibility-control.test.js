@@ -4,7 +4,7 @@ import {shallow} from 'enzyme';
 import toJson from 'enzyme-to-json';
 
 import {ResourceTypes} from '../api/api__resource-types';
-import VisibilityControl from './visibility';
+import VisibilityControl from './visibility-control';
 
 describe('<VisibiltyControl/>', () => {
 

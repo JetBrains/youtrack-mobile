@@ -9,7 +9,7 @@ import AttachmentErrorBoundary from '../attachments-row/attachment-error-boundar
 import calculateAspectRatio from '../aspect-ratio/aspect-ratio';
 import {getApi} from '../api/api__instance';
 import {IconCheck, IconClose} from '../icon/icon';
-import VisibilityControl from '../issue-visibility/visibility';
+import VisibilityControl from '../visibility/visibility-control';
 import usage from '../usage/usage';
 
 import {COLOR_GRAY, COLOR_ICON_LIGHT_BLUE, COLOR_PINK} from '../variables/variables';

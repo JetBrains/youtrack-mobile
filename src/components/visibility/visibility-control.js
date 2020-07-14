@@ -14,7 +14,7 @@ import IssueVisibility from './issue-visibility';
 import {HIT_SLOP} from '../common-styles/button';
 import {COLOR_ICON_LIGHT_BLUE, COLOR_ICON_MEDIUM_GREY, COLOR_PINK} from '../variables/variables';
 
-import styles from './visibility.styles';
+import styles from './visibility-control.styles';
 
 import type {User} from '../../flow/User';
 import type {UserGroup} from '../../flow/UserGroup';

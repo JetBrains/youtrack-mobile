@@ -14,7 +14,7 @@ import {
 import MultilineInput from '../../components/multiline-input/multiline-input';
 import Avatar from '../../components/avatar/avatar';
 
-import IssueVisibility from '../../components/issue-visibility/issue-visibility';
+import IssueVisibility from '../../components/visibility/issue-visibility';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconAngleDown, IconArrowUp, IconCheck, IconClose, IconLock} from '../../components/icon/icon';
 

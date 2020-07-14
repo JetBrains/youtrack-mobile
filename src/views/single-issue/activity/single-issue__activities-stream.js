@@ -9,7 +9,7 @@ import React, {PureComponent} from 'react';
 import {isActivityCategory} from '../../../components/activity/activity__category';
 
 import CommentVisibility from '../../../components/comment/comment__visibility';
-import IssueVisibility from '../../../components/issue-visibility/issue-visibility';
+import IssueVisibility from '../../../components/visibility/issue-visibility';
 
 import {
   getEntityPresentation,

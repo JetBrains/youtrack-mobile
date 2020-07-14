@@ -11,7 +11,7 @@ import type {IssueComment} from '../../../flow/CustomFields';
 import type Api from '../../../components/api/api';
 import type {State as SingleIssueState} from '../single-issue-reducers';
 import {getEntityPresentation} from '../../../components/issue-formatter/issue-formatter';
-import IssueVisibility from '../../../components/issue-visibility/issue-visibility';
+import IssueVisibility from '../../../components/visibility/issue-visibility';
 import {
   loadActivitiesPage,
   receiveActivityAPIAvailability, receiveActivityEnabledTypes,

@@ -6,7 +6,7 @@ import {View, ScrollView} from 'react-native';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
-import IssueVisibility from '../../../components/issue-visibility/issue-visibility';
+import IssueVisibility from '../../../components/visibility/issue-visibility';
 import KeyboardSpacerIOS from '../../../components/platform/keyboard-spacer.ios';
 import Select from '../../../components/select/select';
 import SingleIssueActivities from './single-issue__activities-stream';

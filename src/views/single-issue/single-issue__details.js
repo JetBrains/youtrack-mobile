@@ -22,7 +22,7 @@ import {HIT_SLOP} from '../../components/common-styles/button';
 import IssueDescription from './single-issue__description';
 import IssueVotes from '../../components/issue-actions/issue-votes';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
-import VisibilityControl from '../../components/issue-visibility/visibility';
+import VisibilityControl from '../../components/visibility/visibility-control';
 import {SkeletonIssueContent, SkeletonIssueInfoLine} from '../../components/skeleton/skeleton';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
