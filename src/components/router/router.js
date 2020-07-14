@@ -97,7 +97,6 @@ class Router {
   }
 
   setOnDispatchCallback(onDispatch: Function<Object, ?string>) {
-    // this.onDispatch = onDispatch;
     this.onDispatchCallbacks.push(onDispatch);
   }
 
