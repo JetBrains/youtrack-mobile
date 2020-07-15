@@ -162,6 +162,10 @@ class Router {
     return this._navigator;
   }
 
+  getCurrentRouteName(): string {
+    return this._currentRoute.routeName;
+  }
+
   onNavigationStateChange = (prevNav, nav, action, onRoute) => {
     this._currentRoute = nav.routes[nav.index];
     onRoute(this._currentRoute);

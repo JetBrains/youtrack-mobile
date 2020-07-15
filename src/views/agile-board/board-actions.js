@@ -10,6 +10,7 @@ import {getGroupedSprints} from './agile-board__helper';
 import animation from '../../components/animation/animation';
 import {sortAlphabetically} from '../../components/search/sorting';
 import {flushStoragePart, getStorageState} from '../../components/storage/storage';
+import {routeMap} from '../../app-routes';
 
 import * as types from './board-action-types';
 import type Api from '../../components/api/api';
@@ -508,9 +509,13 @@ export function subscribeServersideUpdates() {
 
     serverSideEventsInstance.listenTo('error', () => {
       clearTimeout(serverSideEventsInstanceErrorTimer);
+
       serverSideEventsInstanceErrorTimer = setTimeout(() => {
         log.info('Reloading sprint and reconnecting to LiveUpdate...');
-        if (serverSideEventsInstanceErrorTimer && serverSideEventsInstance) {
+        if (Router.getCurrentRouteName() !== routeMap.AgileBoard) {
+          dispatch(setOutOfDate(false));
+          destroySSE();
+        } else if (serverSideEventsInstanceErrorTimer && serverSideEventsInstance) {
           dispatch(setOutOfDate(true));
         }
       }, RECONNECT_TIMEOUT);
