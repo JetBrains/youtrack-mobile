@@ -311,7 +311,7 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
       );
     }
 
-    return <Skeleton width={120}/>;
+    return this.isIssueLoaded() ? null : <Skeleton width={120}/>;
   }
 
   _renderHeader() {
