@@ -5,11 +5,18 @@ import {
   COLOR_PINK,
   COLOR_BLACK,
   COLOR_ICON_MEDIUM_GREY
-} from '../../components/variables/variables';
+} from '../variables/variables';
+import {link} from '../common-styles/button';
 
 const alignCenter = {
   justifyContent: 'center',
   alignItems: 'center'
+};
+
+const extendedReportModalText = {
+  letterSpacing: 0.08,
+  fontSize: 16,
+  lineHeight: 26,
 };
 
 export default StyleSheet.create({
@@ -67,5 +74,20 @@ export default StyleSheet.create({
     marginRight: UNIT * 1.5,
     marginLeft: UNIT * 1.5,
     color: COLOR_ICON_MEDIUM_GREY
+  },
+  extendedReportModalTitle: {
+    ...extendedReportModalText,
+    fontWeight: '500',
+    marginBottom: UNIT / 2
+  },
+  extendedReportModalText: extendedReportModalText,
+  extendedReportModalTextInfo: {
+    marginTop: UNIT,
+    marginBottom: UNIT * 2,
+    color: COLOR_ICON_MEDIUM_GREY
+  },
+  extendedReportModalTextLink: {
+    ...link,
+    marginBottom: UNIT * 2
   }
 });

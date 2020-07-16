@@ -12,7 +12,7 @@ import {flushStoragePart} from '../storage/storage';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import {COLOR_ICON_MEDIUM_GREY, COLOR_MEDIUM_GRAY, COLOR_PINK} from '../variables/variables';
-import ReporterBugsnagInfo from './reporter-bugsnag-info';
+import Popup from '../popup/popup';
 import ReporterBugsnag from './reporter-bugsnag';
 
 import type {ReportErrorData} from '../error/error-reporter';
@@ -77,12 +77,40 @@ class ErrorBoundary extends Component<Props, State> {
     }
   };
 
+  renderExtendedReportPopupContent() {
+    return (
+      <React.Fragment>
+        <View>
+          <Text style={styles.extendedReportModalTitle}>Help us fix problems faster</Text>
+          <Text style={[styles.extendedReportModalText, styles.extendedReportModalTextInfo]}>
+            In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag,
+            a third-party service, that help us diagnose and fix problems faster, monitor application stability.
+            We will only share error report data with Bugsnag if you agree to do so.
+          </Text>
+        </View>
+
+        <TouchableOpacity onPress={() => Linking.openURL('https://www.jetbrains.com/company/privacy.html')}>
+          <Text style={styles.extendedReportModalTextLink}>JetBrains privacy policy</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => Linking.openURL('https://docs.bugsnag.com/legal/privacy-policy/')}>
+          <Text style={styles.extendedReportModalTextLink}>Bugsnag privacy policy</Text>
+        </TouchableOpacity>
+
+      </React.Fragment>
+    );
+  }
+
+  toggleInfoModalVisibility = () => {
+    const {isExtendedReportInfoVisible} = this.state;
+    this.setState({isExtendedReportInfoVisible: !isExtendedReportInfoVisible});
+  };
+
   render() {
     const {error, isReporting, isExtendedReportEnabled, isExtendedReportInfoVisible} = this.state;
     const {openDebugView} = this.props;
 
     if (error) {
-      const toggleInfoModalVisibility = () => this.setState({isExtendedReportInfoVisible: !isExtendedReportInfoVisible});
       const buttonStyle = [styles.button, isReporting ? styles.buttonDisabled : null];
 
       return (
@@ -137,7 +165,7 @@ class ErrorBoundary extends Component<Props, State> {
               </TouchableOpacity>
               <TouchableOpacity
                 disabled={isReporting}
-                onPress={toggleInfoModalVisibility}
+                onPress={this.toggleInfoModalVisibility}
               >
                 <IconMaterial
                   name="information"
@@ -159,7 +187,12 @@ class ErrorBoundary extends Component<Props, State> {
             </TouchableOpacity>
           </View>
 
-          {isExtendedReportInfoVisible && <ReporterBugsnagInfo onHide={toggleInfoModalVisibility}/>}
+          {isExtendedReportInfoVisible && (
+            <Popup
+              childrenRenderer={this.renderExtendedReportPopupContent}
+              onHide={this.toggleInfoModalVisibility}
+            />
+          )}
         </View>
       );
     }

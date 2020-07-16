@@ -3,7 +3,7 @@ export const UNIT = 8;
 export const COLOR_BLACK = '#000';
 export const COLOR_DARK = '#1f2326';
 
-export const COLOR_TRANSPARENT_BLACK = '#000000F0';
+export const COLOR_TRANSPARENT_BLACK = '#00000057';
 
 export const COLOR_DARK_BORDER = '#263B4C';
 
