@@ -145,6 +145,14 @@ export default class VisibilityControl extends PureComponent<Props, State> {
     );
   }
 
+  getVisibilityPresentation(visibility: Visibility): string {
+    const author: ?User = visibility?.implicitPermittedUsers && visibility.implicitPermittedUsers[0];
+    return [
+      getEntityPresentation(author),
+      IssueVisibility.getVisibilityShortPresentation(visibility)
+    ].join(', ');
+  }
+
   renderVisibilityButton() {
     const {onSubmit} = this.props;
     const {visibility} = this.state;
@@ -182,7 +190,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
             />
           )}
           <Text style={styles.buttonText}>
-            {isSecured ? IssueVisibility.getVisibilityShortPresentation(visibility) : 'Visible to All Users'}
+            {isSecured ? this.getVisibilityPresentation(visibility) : 'Visible to All Users'}
           </Text>
           <IconAngleDown size={20} color={COLOR_ICON_MEDIUM_GREY}/>
         </TouchableOpacity>
