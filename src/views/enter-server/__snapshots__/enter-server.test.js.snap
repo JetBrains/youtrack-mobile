@@ -143,18 +143,6 @@ exports[`EnterServer Render should render 1`] = `
           Next
         </Text>
       </TouchableOpacity>
-      <Text
-        style={
-          Object {
-            "color": "#888888",
-            "fontSize": 12,
-            "marginTop": 16,
-            "textAlign": "center",
-          }
-        }
-      >
-        You can also use IP address XX.XX.XX.XXX:PORT
-      </Text>
     </View>
     <View
       style={

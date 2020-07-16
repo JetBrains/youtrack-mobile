@@ -195,9 +195,6 @@ export class EnterServer extends Component<Props, State> {
               {this.state.connecting && <ActivityIndicator style={styles.progressIndicator}/>}
             </TouchableOpacity>
 
-            <Text style={styles.hintText}>
-              You can also use IP address XX.XX.XX.XXX:PORT
-            </Text>
           </View>
 
           <View
