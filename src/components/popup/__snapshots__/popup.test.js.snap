@@ -1,0 +1,104 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Popup/> Render should match a snapshot 1`] = `
+<ModalView
+  animationType="fade"
+  onRequestClose={[Function]}
+  style={
+    Object {
+      "alignItems": "center",
+      "justifyContent": "center",
+    }
+  }
+  supportedOrientations={
+    Array [
+      "portrait",
+      "landscape",
+    ]
+  }
+  testID="popup"
+  transparent={true}
+>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#00000057",
+        "flex": 1,
+        "justifyContent": "center",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "backgroundColor": "#FFF",
+          "borderRadius": 6,
+          "margin": 40,
+          "padding": 24,
+          "paddingBottom": 8,
+          "shadowColor": "rgba(0, 0, 0, 0.6)",
+          "shadowOffset": Object {
+            "height": 0,
+            "width": 0,
+          },
+          "shadowOpacity": 0.6,
+          "shadowRadius": 16,
+        }
+      }
+    >
+      <View
+        testID="popupContentChildren"
+      >
+        <Text
+          testID="popupChildren"
+        />
+      </View>
+      <View
+        style={
+          Object {
+            "flexDirection": "row",
+            "justifyContent": "flex-end",
+            "marginBottom": 8,
+            "marginRight": -8,
+            "marginTop": 8,
+            "position": "relative",
+          }
+        }
+      >
+        <TouchableOpacity
+          activeOpacity={0.2}
+          hitSlop={
+            Object {
+              "bottom": 8,
+              "left": 8,
+              "right": 8,
+              "top": 8,
+            }
+          }
+          style={
+            Object {
+              "alignItems": "center",
+              "marginLeft": 8,
+              "padding": 8,
+              "paddingLeft": 16,
+              "paddingRight": 16,
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "color": "#FE0082",
+                "fontSize": 16,
+              }
+            }
+          >
+            Close
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  </View>
+</ModalView>
+`;

@@ -3,8 +3,8 @@ import {
   UNIT,
   COLOR_FONT_ON_BLACK,
   COLOR_PINK,
-  COLOR_ICON_MEDIUM_GREY
-} from '../../components/variables/variables';
+} from '../variables/variables';
+import {mask} from '../common-styles/app';
 
 const extendedReportModalText = {
   letterSpacing: 0.08,
@@ -23,52 +23,47 @@ export default StyleSheet.create({
     marginBottom: UNIT,
     color: COLOR_PINK
   },
-  extendedReportModal: {
+  modal: {
     ...alignCenter
   },
-  extendedReportModalContainer: {
+  container: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    ...mask,
     ...alignCenter
   },
-  extendedReportModalContent: {
+  content: {
     margin: UNIT * 5,
     padding: UNIT * 3,
     paddingBottom: UNIT,
     backgroundColor: COLOR_FONT_ON_BLACK,
+    shadowOpacity: 0.6,
     borderRadius: 6,
     shadowOffset: {width: 0, height: 0},
     shadowColor: 'rgba(0, 0, 0, 0.6)',
-    shadowOpacity: 0.6,
-    shadowRadius: 16
+    shadowRadius: UNIT * 2
   },
-  extendedReportModalButtons: {
+  title: {
+    ...extendedReportModalText,
+    fontWeight: '500',
+    marginBottom: UNIT / 2
+  },
+  buttons: {
     position: 'relative',
     flexDirection: 'row',
     justifyContent: 'flex-end',
     marginTop: UNIT,
+    marginBottom: UNIT,
     marginRight: -UNIT,
   },
-  extendedReportButton: {
+  button: {
     marginLeft: UNIT,
     padding: UNIT,
     paddingRight: UNIT * 2,
     paddingLeft: UNIT * 2,
     alignItems: 'center',
   },
-  extendedReportButtonText: {
+  buttonText: {
     fontSize: 16,
     color: COLOR_PINK
-  },
-  extendedReportModalTitle: {
-    ...extendedReportModalText,
-    fontWeight: '500',
-    marginBottom: UNIT / 2
-  },
-  extendedReportModalText: extendedReportModalText,
-  extendedReportModalTextInfo: {
-    marginTop: UNIT,
-    marginBottom: UNIT * 2,
-    color: COLOR_ICON_MEDIUM_GREY
   }
 });
