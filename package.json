@@ -97,13 +97,13 @@
         "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/YouTrackMobile.app",
         "build": "set -o pipefail && export RCT_NO_LAUNCH_PACKAGER=true RN_SRC_EXT=e2e.js xcodebuild -UseNewBuildSystem=NO -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile[Release] -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
         "type": "ios.simulator",
-        "name": "iPhone 8"
+        "name": "iPhone 11"
       },
       "ios.sim.release": {
         "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/YouTrackMobile.app",
         "build": "set -o pipefail && RCT_NO_LAUNCH_PACKAGER=true RN_SRC_EXT=e2e.js xcodebuild -UseNewBuildSystem=NO -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile[Release] -configuration Release -sdk iphonesimulator -derivedDataPath ios/build",
         "type": "ios.simulator",
-        "name": "iPhone 8"
+        "name": "iPhone 11"
       }
     }
   },
@@ -178,7 +178,7 @@
     "chai-enzyme": "1.0.0-beta.0",
     "cheerio": "0.22.0",
     "core-util-is": "1.0.2",
-    "detox": "13.3.3",
+    "detox": "14.3.4",
     "enzyme": "3.6.0",
     "enzyme-adapter-react-16": "1.1.1",
     "enzyme-to-json": "3.3.4",
