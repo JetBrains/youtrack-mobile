@@ -25,8 +25,6 @@ import java.util.List;
 
 import com.wix.reactnativenotifications.RNNotificationsPackage;
 
-import com.proyecto26.inappbrowser.RNInAppBrowserPackage;
-
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
@@ -50,8 +48,7 @@ public class MainApplication extends Application implements ReactApplication {
             new LinearGradientPackage(),
             new RNEventSourcePackage(),
             new RNDeviceInfo(),
-            new RNNotificationsPackage(MainApplication.this),
-            new RNInAppBrowserPackage()
+            new RNNotificationsPackage(MainApplication.this)
       );
     }
 

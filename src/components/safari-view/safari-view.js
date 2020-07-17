@@ -1,7 +1,11 @@
 /* @flow */
+import {NativeModules} from 'react-native';
 
-//$FlowFixMe
-import InAppBrowser from 'react-native-inappbrowser-reborn';
+const YTSafariViewController = NativeModules.YTSafariViewController;
+
+/**
+ * High-level docs for the SafariViewManager iOS API can be written here.
+ */
 
 type Options = {
   url: string
@@ -9,16 +13,24 @@ type Options = {
 
 export default {
   show(options: Options): Promise<null> {
-    return new Promise(() => {
-      InAppBrowser.open(options.url);
+    return new Promise((resolve, reject) => {
+      YTSafariViewController.presentSafari(options.url);
     });
   },
 
   dismiss() {
-    InAppBrowser.close();
+    YTSafariViewController.dismiss();
   },
 
-  async isAvailable(): Promise<boolean> {
-    return await InAppBrowser.isAvailable();
+  isAvailable(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      YTSafariViewController.isAvailable((error) => {
+        if (error) {
+          return reject(error);
+        }
+
+        resolve(true);
+      });
+    });
   }
 };

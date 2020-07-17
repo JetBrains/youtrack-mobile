@@ -167,7 +167,6 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-inappbrowser-reborn')
     implementation project(':bugsnag-react-native')
     implementation project(':react-native-notifications')
     implementation 'com.google.firebase:firebase-core:16.0.0'
