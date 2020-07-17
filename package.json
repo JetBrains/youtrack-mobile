@@ -97,13 +97,13 @@
         "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/YouTrackMobile.app",
         "build": "set -o pipefail && export RCT_NO_LAUNCH_PACKAGER=true RN_SRC_EXT=e2e.js xcodebuild -UseNewBuildSystem=NO -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile[Release] -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
         "type": "ios.simulator",
-        "name": "iPhone 7"
+        "name": "iPhone 8"
       },
       "ios.sim.release": {
         "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/YouTrackMobile.app",
         "build": "set -o pipefail && RCT_NO_LAUNCH_PACKAGER=true RN_SRC_EXT=e2e.js xcodebuild -UseNewBuildSystem=NO -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile[Release] -configuration Release -sdk iphonesimulator -derivedDataPath ios/build",
         "type": "ios.simulator",
-        "name": "iPhone 7"
+        "name": "iPhone 8"
       }
     }
   },
