@@ -13,7 +13,6 @@ import {hasMimeType} from '../mime-type/mime-type';
 import {isAndroidPlatform} from '../../util/util';
 import {IconRemoveFilled} from '../icon/icon';
 
-import {HIT_SLOP} from '../common-styles/button';
 import {COLOR_LIGHT_GRAY, COLOR_PINK} from '../variables/variables';
 
 import styles from './attachments-row.styles';
@@ -217,7 +216,6 @@ export default class Attach extends PureComponent<Props, State> {
         {canRemoveImage && (
           <TouchableOpacity
             style={styles.removeButton}
-            hitSlop={HIT_SLOP}
             disabled={this.state.isRemoving}
             testID="attachmentRemove"
             onPress={this.remove}

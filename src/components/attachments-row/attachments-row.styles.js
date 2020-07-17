@@ -33,8 +33,9 @@ export default StyleSheet.create({
   },
   removeButton: {
     position: 'absolute',
-    top: UNIT / 2,
-    right: UNIT * 1.5
+    top: 0,
+    right: UNIT,
+    padding: UNIT
   },
   removingAttach: {
     opacity: .3
