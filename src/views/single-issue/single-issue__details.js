@@ -1,7 +1,7 @@
 /* @flow */
 
 import {Text, View, ScrollView, TouchableOpacity} from 'react-native';
-import React, {PureComponent} from 'react';
+import React, {Component} from 'react';
 
 import {getApi} from '../../components/api/api__instance';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
@@ -66,9 +66,22 @@ type Props = {
   onVisibilityChange: (visibility: Visibility) => any
 }
 
-export default class IssueDetails extends PureComponent<Props, void> {
+export default class IssueDetails extends Component<Props, void> {
   imageHeaders = getApi().auth.getAuthorizationHeaders();
   backendUrl = getApi().config.backendUrl;
+
+  shouldComponentUpdate(nextProps: Props): boolean {
+    if (nextProps.issue !== this.props.issue) {
+      return true;
+    }
+    if (nextProps.editMode !== this.props.editMode) {
+      return true;
+    }
+    if (nextProps.isSavingEditedIssue !== this.props.isSavingEditedIssue) {
+      return true;
+    }
+    return false;
+  }
 
   renderLinks(issue: IssueFull) {
     if (issue.links && issue.links.length) {
