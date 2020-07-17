@@ -26,10 +26,12 @@ RCT_EXPORT_METHOD(presentSafari:(NSString *)url) {
 }
 
 -(void) safariViewControllerDidFinish:(nonnull SFSafariViewController *)controller {
-  UIViewController *rootViewController = [
-                                          [[UIApplication sharedApplication] keyWindow] rootViewController];
+  dispatch_async(dispatch_get_main_queue(), ^{
+    UIViewController *rootViewController = [
+                                            [[UIApplication sharedApplication] keyWindow] rootViewController];
   
-  [rootViewController dismissViewControllerAnimated:YES completion:nil];
+    [rootViewController dismissViewControllerAnimated:YES completion:nil];
+  });
 }
 
 RCT_EXPORT_METHOD(isAvailable:(RCTResponseSenderBlock)callback)
