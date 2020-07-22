@@ -1,27 +1,66 @@
 /* @flow */
+
 import {Dimensions} from 'react-native';
 import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../agile-column/agile-column';
+import {UNIT} from '../variables/variables';
+
+import {isIOSPlatform} from '../../util/util';
+import {isAllColumnsCollapsed} from '../../views/agile-board/agile-board__helper';
 
 import type {BoardColumn} from '../../flow/Agile';
-import {isIOSPlatform} from '../../util/util';
+
+type WidthData = { windowWidth: number, cardWidth: number };
+
+export const COLUMN_VIEWPORT_WIDTH_FACTOR = 0.85;
 
 const MINIMAL_MOMENTUM_SPEED = 0.5;
-export const COLUMN_SCREEN_PART = 0.9;
 const AUTOSCROLL_GAP = 5;
+const LEFT_BOARD_SPACE: number = UNIT * 3.5;
+
+function calculateWidthData(): WidthData {
+  const windowWidth = Dimensions.get('window').width;
+  return {
+    windowWidth,
+    cardWidth: windowWidth * COLUMN_VIEWPORT_WIDTH_FACTOR
+  };
+}
 
 /**
  * Limits value to desired range
  */
+
 export function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
 }
 
-export function getSnapPoints(columns: Array<BoardColumn>): Array<number> {
-  const COLUMN_WIDTH = Dimensions.get('window').width * COLUMN_SCREEN_PART;
+export function getColumnsWidthAsArray(columns: Array<BoardColumn> = []): Array<number> {
+  const widthData: WidthData = calculateWidthData();
 
   return columns
+    .map(col => col.collapsed ? AGILE_COLLAPSED_COLUMN_WIDTH : widthData.cardWidth);
+}
+
+export function getScrollableWidth(columns: Array<BoardColumn> = []): number {
+  const widthData: WidthData = calculateWidthData();
+
+  if (isAllColumnsCollapsed(columns)) {
+    return widthData.windowWidth;
+  }
+
+  return getColumnsWidthAsArray(columns).reduce((totalWidth: number, item: number) => totalWidth + item, 0);
+}
+
+export function getSnapPoints(columns: Array<BoardColumn>): Array<number> {
+  const widthData = calculateWidthData();
+  return columns
     .map(c => c.collapsed)
-    .map(collapsed => ({collapsed, width: collapsed ? AGILE_COLLAPSED_COLUMN_WIDTH : COLUMN_WIDTH}))
+    .map(collapsed => {
+      return {
+        collapsed,
+        width: collapsed ? AGILE_COLLAPSED_COLUMN_WIDTH : widthData.cardWidth
+      };
+    })
+
     .reduce((acc, {collapsed, width}, index) => {
       const prev = acc[index - 1] || null;
       return [
@@ -51,7 +90,7 @@ export function getSnapToX(scrollEvent: Object, columns: Array<BoardColumn>) {
   let xSpeed = scrollEvent.nativeEvent.velocity.x;
   xSpeed = isIOSPlatform() ? xSpeed : -xSpeed; // On android xSpeed is inverted by unknown reason
   const snapToLeft = Math.abs(xSpeed) < MINIMAL_MOMENTUM_SPEED ? (x - prev < next - x) : xSpeed < 0;
-  return snapToLeft ? prev : next;
+  return snapToLeft ? prev + LEFT_BOARD_SPACE : next + LEFT_BOARD_SPACE;
 }
 
 /**

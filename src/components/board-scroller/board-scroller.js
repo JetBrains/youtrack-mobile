@@ -4,14 +4,12 @@ import React, {Component} from 'react';
 import {Dimensions, ScrollView, UIManager} from 'react-native';
 
 import throttle from 'lodash.throttle';
-import {clamp, getPointShift, getSnapToX} from './board-scroller__math';
+import {clamp, getPointShift, getSnapToX, COLUMN_VIEWPORT_WIDTH_FACTOR} from './board-scroller__math';
 import type {DragContextType} from '../draggable/drag-container';
 import {DragContext} from '../draggable/drag-container';
 import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../agile-column/agile-column';
 
 import type {BoardColumn} from '../../flow/Agile';
-
-export const COLUMN_SCREEN_PART = 0.85;
 
 type Props = {
   children: any,
@@ -72,7 +70,7 @@ class BoardScroller extends Component<Props, State> {
       return;
     }
 
-    const GAP_WIDTH = Dimensions.get('window').width * ((1 - COLUMN_SCREEN_PART) / 2);
+    const GAP_WIDTH = Dimensions.get('window').width * ((1 - COLUMN_VIEWPORT_WIDTH_FACTOR) / 2);
     const snapX = getSnapToX(event, columns);
     this.horizontalScroll.scrollTo({x: snapX <= AGILE_COLLAPSED_COLUMN_WIDTH ? 0 : (snapX - GAP_WIDTH)});
   };

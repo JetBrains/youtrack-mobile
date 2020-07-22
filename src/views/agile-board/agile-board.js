@@ -9,7 +9,7 @@ import log from '../../components/log/log';
 import BoardHeader from './board-header';
 import BoardRow from '../../components/agile-row/agile-row';
 import AgileCard from '../../components/agile-card/agile-card';
-import BoardScroller, {COLUMN_SCREEN_PART} from '../../components/board-scroller/board-scroller';
+import BoardScroller from '../../components/board-scroller/board-scroller';
 import Router from '../../components/router/router';
 import Auth from '../../components/auth/auth';
 import {Draggable, DragContainer} from '../../components/draggable/';
@@ -19,7 +19,6 @@ import {
   COLOR_FONT_ON_BLACK,
   UNIT
 } from '../../components/variables/variables';
-import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../../components/agile-column/agile-column';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
 import type {SprintFull, Board, AgileBoardRow, AgileColumn, BoardColumn} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
@@ -35,10 +34,11 @@ import {renderNavigationItem} from './agile-board__renderer';
 import {View as AnimatedView} from 'react-native-animatable';
 import {routeMap} from '../../app-routes';
 import ErrorMessage from '../../components/error-message/error-message';
-import type {CustomError} from '../../flow/Error';
-import {isAllColumnsCollapsed} from './agile-board__helper';
 import {notify} from '../../components/notification/notification';
 import isEqual from 'react-fast-compare';
+import {getScrollableWidth} from '../../components/board-scroller/board-scroller__math';
+
+import type {CustomError} from '../../flow/Error';
 
 const CATEGORY_NAME = 'Agile board';
 
@@ -164,16 +164,7 @@ class AgileBoard extends Component<Props, State> {
       return null;
     }
 
-    const windowWidth = Dimensions.get('window').width;
-    const COLUMN_WIDTH = windowWidth * COLUMN_SCREEN_PART;
-
-    if (isAllColumnsCollapsed(sprint.board.columns)) {
-      return windowWidth;
-    }
-
-    return sprint.board.columns
-      .map(col => col.collapsed ? AGILE_COLLAPSED_COLUMN_WIDTH : COLUMN_WIDTH)
-      .reduce((res, item) => res + item, 0);
+    return getScrollableWidth(sprint.board.columns);
   };
 
   renderAgileSelector() {

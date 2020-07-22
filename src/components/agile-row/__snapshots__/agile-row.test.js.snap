@@ -15,6 +15,7 @@ exports[`<BoardRow/> Render should render a snapshot 1`] = `
       Array [
         Object {
           "flexDirection": "row",
+          "marginLeft": 8,
           "paddingBottom": 16,
           "paddingLeft": 8,
           "paddingRight": 8,

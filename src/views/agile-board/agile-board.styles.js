@@ -103,7 +103,7 @@ export default StyleSheet.create({
   agileSelector: {
     minHeight: UNIT * 7,
     paddingTop: UNIT * 1.5,
-    paddingLeft: UNIT * 2,
+    marginLeft: UNIT * 2,
     backgroundColor: COLOR_FONT_ON_BLACK
   },
   sprintSelector: {

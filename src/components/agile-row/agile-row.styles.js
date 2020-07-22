@@ -20,10 +20,11 @@ export default StyleSheet.create({
   rowContainer: {},
   rowHeader: {
     flexDirection: 'row',
+    marginLeft: UNIT,
     paddingTop: UNIT * 2,
     paddingRight: UNIT,
     paddingBottom: UNIT * 2,
-    paddingLeft: UNIT,
+    paddingLeft: UNIT
   },
   rowHeaderZoomedOut: {
     flexWrap: 'wrap'
