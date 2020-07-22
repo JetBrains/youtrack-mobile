@@ -11,6 +11,9 @@ import {elevation1} from '../common-styles/shadow';
 
 const minButtonWidth = UNIT * 5;
 
+export const SELECT_ITEM_HEIGHT = UNIT * 7;
+export const SELECT_ITEM_SEPARATOR_HEIGHT = 1;
+
 export default StyleSheet.create({
   inputWrapper: {
     ...elevation1,
@@ -36,9 +39,13 @@ export default StyleSheet.create({
     alignItems: 'center',
     marginLeft: UNIT * 2,
     paddingRight: UNIT * 1.5,
+    height: SELECT_ITEM_HEIGHT
+  },
+  rowSeparator: {
+    height: SELECT_ITEM_SEPARATOR_HEIGHT,
     borderColor: COLOR_MEDIUM_GRAY,
     borderBottomWidth: 0.3,
-    height: UNIT * 7
+    marginLeft: UNIT * 2
   },
   loadingRow: {
     justifyContent: 'center'
@@ -47,7 +54,8 @@ export default StyleSheet.create({
     color: COLOR_FONT
   },
   selectItemValue: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   itemIcon: {
     marginRight: UNIT * 2

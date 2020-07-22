@@ -11,7 +11,7 @@ import {IconCheck, IconBack} from '../icon/icon';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import SelectItem from './select__item';
 
-import styles from './select.styles';
+import styles, {SELECT_ITEM_HEIGHT, SELECT_ITEM_SEPARATOR_HEIGHT} from './select.styles';
 
 export type Props = {
   dataSource: (query: string) => Promise<Array<Object>>,
@@ -87,16 +87,26 @@ export default class Select extends Component<Props, State> {
     }
   }
 
-  _renderEmptyValueItem() {
-    if (!this.props.emptyValue) {
+  renderEmptyValueItem() {
+    const {emptyValue} = this.props;
+
+    if (!emptyValue) {
       return;
     }
     return (
-      <TouchableOpacity key={this.props.emptyValue} style={styles.row} onPress={() => this._onClearValue()}>
-        <Text style={[styles.itemTitle, {marginLeft: 0}]}>{this.props.emptyValue}</Text>
+      <View
+        key={emptyValue}
+      >
+        <TouchableOpacity
+          style={styles.row}
+          onPress={this.onClearValue}
+        >
+          <Text style={styles.itemTitle}>{emptyValue}</Text>
 
-        {this.state.selectedItems.length === 0 && <IconCheck size={20} color={COLOR_ICON_GREY}/>}
-      </TouchableOpacity>
+          {this.state.selectedItems.length === 0 && <IconCheck size={20} color={COLOR_ICON_GREY}/>}
+        </TouchableOpacity>
+        {this.renderSeparator()}
+      </View>
     );
   }
 
@@ -156,16 +166,27 @@ export default class Select extends Component<Props, State> {
     this.props.onChangeSelection(selectedItems, item);
   }
 
-  _onClearValue() {
-    const emptyValue = this.props.multi ? [] : null;
-    return this.props.onSelect(emptyValue);
+  onClearValue = () => {
+    return this.props.onSelect(this.props.multi ? [] : null);
   }
 
   _onSave() {
     return this.props.onSelect(this.state.selectedItems);
   }
 
-  _renderRow = (item) => {
+  renderSeparator() {
+    return <View style={styles.rowSeparator}/>;
+  }
+
+  getItemLayout(items: ?Array<Object>, index: number) {
+    return {
+      length: SELECT_ITEM_HEIGHT,
+      offset: (SELECT_ITEM_HEIGHT + SELECT_ITEM_SEPARATOR_HEIGHT) * index,
+      index
+    };
+  }
+
+  renderItem = ({item}: Object) => {
     return (
       <SelectItem
         item={item}
@@ -183,12 +204,15 @@ export default class Select extends Component<Props, State> {
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
 
-        ListHeaderComponent={this._renderEmptyValueItem()}
+        ListHeaderComponent={this.renderEmptyValueItem()}
         scrollEventThrottle={10}
 
         data={this.state.filteredItems}
         keyExtractor={(item: Object & { id: string }) => item.id}
-        renderItem={(listItem: Object) => this._renderRow(listItem.item)}
+        renderItem={this.renderItem}
+
+        ItemSeparatorComponent={this.renderSeparator}
+        getItemLayout={this.getItemLayout}
 
         extraData={this.state.selectedItems}
       />

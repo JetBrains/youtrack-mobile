@@ -74,8 +74,6 @@ exports[`<Select/> Render should match a snapshot 1`] = `
       Array [
         Object {
           "alignItems": "center",
-          "borderBottomWidth": 0.3,
-          "borderColor": "#DFE5EB",
           "flexDirection": "row",
           "height": 56,
           "justifyContent": "space-between",
@@ -107,9 +105,11 @@ exports[`<Select/> Render should match a snapshot 1`] = `
     </Text>
   </View>
   <FlatList
+    ItemSeparatorComponent={[Function]}
     data={Array []}
     disableVirtualization={false}
     extraData={Array []}
+    getItemLayout={[Function]}
     horizontal={false}
     initialNumToRender={10}
     keyExtractor={[Function]}

@@ -36,8 +36,13 @@ export default class SelectItem extends PureComponent<Props, void> {
     return this.getDefaultTitle(item);
   }
 
+  onSelect = () => {
+    const {item, onPress} = this.props;
+    onPress(item);
+  }
+
   render() {
-    const {item, onPress, isSelected} = this.props;
+    const {item, isSelected} = this.props;
 
     if (!item) {
       return null;
@@ -47,7 +52,7 @@ export default class SelectItem extends PureComponent<Props, void> {
       <TouchableOpacity
         key={item.id}
         style={styles.row}
-        onPress={() => onPress(item)}
+        onPress={this.onSelect}
       >
         <View style={styles.selectItemValue}>
           {item.avatarUrl && (
