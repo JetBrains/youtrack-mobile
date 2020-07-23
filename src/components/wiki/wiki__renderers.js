@@ -74,7 +74,7 @@ type RenderImageOptions = {
   onImagePress: string => any
 }
 
-function getUrlParams(url): Object {
+function getUrlParams(url: string): Object {
   const urlParams = url.split('?')[1];
   return (
     urlParams
@@ -86,25 +86,30 @@ function getUrlParams(url): Object {
   );
 }
 
-function findTargetAttach(src: string, attachments: Array<Attachment>): ?Attachment {
-  let attachId: string;
-  let targetAttach: Attachment;
-  const urlFileParam = getUrlParams(src).file;
+function findTargetAttach(src: string = '', attachments: Array<Attachment> = []): ?Attachment {
+  let attachId: ?string;
+  let targetAttach: ?Attachment = null;
 
-  if (urlFileParam) {
-    attachId = urlFileParam;
-    targetAttach = attachments.find(attach => getUrlParams(attach.url).file === attachId) || {};
+  if (!src) {
+    return targetAttach;
+  }
+
+  const targetURL: ?string = getUrlParams(src).file;
+
+  if (targetURL) {
+    attachId = targetURL;
+    targetAttach = !!attachId && attachments.find(attach => getUrlParams(attach.url).file === attachId);
   } else {
     attachId = src.split('?')[0].split('/').pop();
-    targetAttach = attachments.find(it => it.id === attachId) || {};
+    targetAttach = !!attachId && attachments.find((attach: Attachment) => attach.id === attachId);
   }
   return targetAttach;
 }
 
 export function renderImage({node, index, attachments, imageHeaders, onImagePress}: RenderImageOptions) {
-  const targetAttach: Attachment = findTargetAttach(node.attribs.src || '', attachments);
+  const targetAttach: Attachment = findTargetAttach(node?.attribs?.src, attachments);
 
-  if (targetAttach && !hasMimeType.svg(targetAttach)) {
+  if (targetAttach?.url && !hasMimeType.svg(targetAttach)) {
     //TODO(investigation): for some reason SVG is not rendered here
     const source = Object.assign({uri: targetAttach.url, headers: imageHeaders}, targetAttach);
 
