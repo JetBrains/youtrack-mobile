@@ -108,7 +108,7 @@ describe('app-actions', () => {
 
         await store.dispatch(actions.subscribeToPushNotifications());
 
-        expect(Notification.notifyError).toHaveBeenCalledWith(CUSTOM_ERROR_MESSAGE.PUSH_NOTIFICATION_REGISTRATION, registrationErrorMock);
+        expect(Notification.notify).toHaveBeenCalledWith(CUSTOM_ERROR_MESSAGE.PUSH_NOTIFICATION_REGISTRATION, registrationErrorMock);
       });
 
       it('should not initialize if a registration service returns error', async () => {

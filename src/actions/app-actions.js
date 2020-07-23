@@ -22,7 +22,7 @@ import {Linking} from 'react-native';
 import UrlParse from 'url-parse';
 import openByUrlDetector, {isOneOfServers} from '../components/open-url-handler/open-url-handler';
 import usage from '../components/usage/usage';
-import {notifyError} from '../components/notification/notification';
+import {notify, notifyError} from '../components/notification/notification';
 import {loadConfig} from '../components/config/config';
 import Auth from '../components/auth/auth';
 import {loadAgileProfile} from '../views/agile-board/board-actions';
@@ -583,7 +583,8 @@ export function subscribeToPushNotifications() {
         return log.warn(UNSUPPORTED_ERRORS.PUSH_NOTIFICATION_NOT_SUPPORTED);
       }
 
-      notifyError(CUSTOM_ERROR_MESSAGE.PUSH_NOTIFICATION_REGISTRATION, err);
+      log.warn(CUSTOM_ERROR_MESSAGE.PUSH_NOTIFICATION_REGISTRATION);
+      notify(CUSTOM_ERROR_MESSAGE.PUSH_NOTIFICATION_REGISTRATION, err);
     }
   };
 }
