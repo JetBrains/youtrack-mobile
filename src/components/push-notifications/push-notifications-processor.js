@@ -25,7 +25,6 @@ export default class PushNotificationsProcessor {
 
   static setDeviceToken(token: string) {
     PushNotificationsProcessor.deviceToken = token;
-    log.debug(`${PushNotificationsProcessor.logPrefix}(setDeviceToken): ${token}`);
   }
 
   static async getDeviceToken(): Promise<string | null> {
