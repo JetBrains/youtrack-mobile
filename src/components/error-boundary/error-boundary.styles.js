@@ -7,6 +7,7 @@ import {
   COLOR_ICON_MEDIUM_GREY
 } from '../variables/variables';
 import {link} from '../common-styles/button';
+import {HEADER_FONT_SIZE} from '../common-styles/typography';
 
 const alignCenter = {
   justifyContent: 'center',
@@ -89,5 +90,10 @@ export default StyleSheet.create({
   extendedReportModalTextLink: {
     ...link,
     marginBottom: UNIT * 2
+  },
+  restartLink: {
+    ...link,
+    ...HEADER_FONT_SIZE,
+    marginTop: UNIT * 5
   }
 });

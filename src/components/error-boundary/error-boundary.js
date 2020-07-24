@@ -1,8 +1,10 @@
 /* @flow */
 import React, {Component} from 'react';
+
 import {View, Text, TouchableOpacity, Linking} from 'react-native';
+import RNRestart from 'react-native-restart';
+
 import usage from '../usage/usage';
-import styles from './error-boundary.styles';
 import {connect} from 'react-redux';
 import {openDebugView} from '../../actions/app-actions';
 import log from '../log/log';
@@ -14,6 +16,9 @@ import IconFA from 'react-native-vector-icons/FontAwesome';
 import {COLOR_ICON_MEDIUM_GREY, COLOR_MEDIUM_GRAY, COLOR_PINK} from '../variables/variables';
 import Popup from '../popup/popup';
 import ReporterBugsnag from './reporter-bugsnag';
+
+import {HIT_SLOP} from '../common-styles/button';
+import styles from './error-boundary.styles';
 
 import type {ReportErrorData} from '../error/error-reporter';
 
@@ -132,6 +137,15 @@ class ErrorBoundary extends Component<Props, State> {
               color={COLOR_ICON_MEDIUM_GREY}
             />
             <Text style={styles.title}>{this.ERROR_TITLE}</Text>
+
+            <TouchableOpacity
+              hitSlop={HIT_SLOP}
+              disabled={isReporting}
+              style={styles.restartLink}
+              onPress={() => RNRestart.Restart()}
+            >
+              <Text style={styles.buttonText}>Restart</Text>
+            </TouchableOpacity>
           </View>
 
           <View style={styles.sendReport}>

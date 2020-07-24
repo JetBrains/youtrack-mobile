@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.wix.reactnativenotifications.RNNotificationsPackage;
+import com.reactnativerestart.RestartPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -48,7 +49,8 @@ public class MainApplication extends Application implements ReactApplication {
             new LinearGradientPackage(),
             new RNEventSourcePackage(),
             new RNDeviceInfo(),
-            new RNNotificationsPackage(MainApplication.this)
+            new RNNotificationsPackage(MainApplication.this),
+            new RestartPackage()
       );
     }
 
