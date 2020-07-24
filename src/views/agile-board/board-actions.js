@@ -402,6 +402,7 @@ export function openBoardSelect() {
     const {sprint, agile} = getState().agile;
     trackEvent('Open board select');
 
+    dispatch(setError(null));
     dispatch({
       type: types.OPEN_AGILE_SELECT,
       selectProps: {
