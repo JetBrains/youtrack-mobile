@@ -7,12 +7,10 @@ import Select from '../../components/select/select';
 import styles from './agile-board.styles';
 import log from '../../components/log/log';
 import BoardHeader from './board-header';
-import BoardRow from '../../components/agile-row/agile-row';
-import AgileCard from '../../components/agile-card/agile-card';
 import BoardScroller from '../../components/board-scroller/board-scroller';
 import Router from '../../components/router/router';
 import Auth from '../../components/auth/auth';
-import {Draggable, DragContainer} from '../../components/draggable/';
+import {DragContainer} from '../../components/draggable/';
 import Api from '../../components/api/api';
 import {
   COLOR_PINK,
@@ -20,9 +18,6 @@ import {
   UNIT
 } from '../../components/variables/variables';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
-import type {SprintFull, Board, AgileBoardRow, AgileColumn, BoardColumn} from '../../flow/Agile';
-import type {IssueOnList} from '../../flow/Issue';
-import type {AgilePageState} from './board-reducers';
 
 import * as boardActions from './board-actions';
 import {connect} from 'react-redux';
@@ -37,7 +32,11 @@ import ErrorMessage from '../../components/error-message/error-message';
 import {notify} from '../../components/notification/notification';
 import isEqual from 'react-fast-compare';
 import {getScrollableWidth} from '../../components/board-scroller/board-scroller__math';
+import AgileBoardSprint from './agile-board__sprint';
 
+import type {SprintFull, AgileBoardRow, AgileColumn, BoardColumn} from '../../flow/Agile';
+import type {AnyIssue, IssueOnList} from '../../flow/Issue';
+import type {AgilePageState} from './board-reducers';
 import type {CustomError} from '../../flow/Error';
 
 const CATEGORY_NAME = 'Agile board';
@@ -325,62 +324,24 @@ class AgileBoard extends Component<Props, State> {
     }
   }
 
-  renderSprint(sprint: SprintFull) {
-    const board: Board = sprint?.board;
+  canRunCommand = (issue: AnyIssue): boolean => {
+    return this.props.issuePermissions.canRunCommand(issue);
+  }
 
-    if (!sprint || !board) {
-      return null;
-    }
+  renderSprint = () => {
+    const {sprint, createCardForCell, onRowCollapseToggle} = this.props;
 
-    const commonRowProps = {
-      collapsedColumnIds: (board.columns || []).filter(col => col.collapsed).map(col => col.id),
-      onTapIssue: this._onTapIssue,
-      onTapCreateIssue: this.props.createCardForCell,
-      onCollapseToggle: this.props.onRowCollapseToggle,
-      renderIssueCard: (issue: IssueOnList) => {
-        const canDrag = sprint.agile.isUpdatable || this.props.issuePermissions.canRunCommand(issue);
-        return (
-          <Draggable
-            key={issue.id}
-            data={issue.id}
-            onPress={() => this._onTapIssue(issue)}
-            disabled={!canDrag}
-          >
-            <AgileCard
-              issue={issue}
-              estimationField={sprint.agile.estimationField}
-              zoomedIn={this.state.zoomedIn}
-            />
-          </Draggable>
-        );
-      }
-    };
-
-    const orphan = (<BoardRow
-      key="orphan"
-      row={board.orphanRow}
-      zoomedIn={this.state.zoomedIn}
-      columns={board.columns}
-      {...commonRowProps}
-    />);
-
-    return [
-      sprint.agile.orphansAtTheTop && orphan,
-
-      board.trimmedSwimlanes.map((swimlane: Object & { id: string }) => {
-        return (
-          <BoardRow
-            key={swimlane.id}
-            row={swimlane}
-            zoomedIn={this.state.zoomedIn}
-            columns={board.columns}
-            {...commonRowProps}
-          />
-        );
-      }),
-
-      !sprint.agile.orphansAtTheTop && orphan,
-    ];
+    return (
+      <AgileBoardSprint
+        testID="agileBoardSprint"
+        sprint={sprint}
+        zoomedIn={this.state.zoomedIn}
+        canRunCommand={this.canRunCommand}
+        onTapIssue={this._onTapIssue}
+        onTapCreateIssue={createCardForCell}
+        onCollapseToggle={onRowCollapseToggle}
+      />
+    );
   }
 
   onDragStart() {
@@ -448,7 +409,7 @@ class AgileBoard extends Component<Props, State> {
 
         >
 
-          {this.renderSprint(sprint)}
+          {this.renderSprint()}
           {isLoadingMore && <ActivityIndicator color={COLOR_PINK} style={styles.loadingMoreIndicator}/>}
 
         </BoardScroller>
