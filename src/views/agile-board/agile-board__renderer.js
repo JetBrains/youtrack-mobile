@@ -1,79 +1,84 @@
 /* @flow */
 
 import React from 'react';
-import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
+import {Text, TouchableOpacity, View, StyleSheet, ActivityIndicator} from 'react-native';
 
 import {IconAngleDown} from '../../components/icon/icon';
-import {COLOR_BLACK, COLOR_DARK, COLOR_FONT_GRAY, UNIT} from '../../components/variables/variables';
+import {COLOR_BLACK, COLOR_DARK, COLOR_FONT_GRAY, COLOR_PINK, UNIT} from '../../components/variables/variables';
 import {mainText} from '../../components/common-styles/typography';
 import {elevation1} from '../../components/common-styles/shadow';
 
 import type {TextStyleProp, ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 
-export function renderNavigationItem(item: {
+export function renderSelector(params: {
   key: string,
   label: string,
   onPress: () => any,
   style?: ViewStyleProp,
   textStyle?: TextStyleProp,
   showBottomBorder?: boolean,
-  isLoading: boolean
+  isLoading: boolean,
+  showLoader?: boolean
 }) {
 
   return (
     <View style={[
-      styles.navigationItem,
-      item.style,
-      item.showBottomBorder ? styles.navigationItemBorder : null
+      styles.selector,
+      params.style,
+      params.showBottomBorder ? styles.selectorBorder : null
     ]}>
       <TouchableOpacity
-        key={item.key}
-        style={styles.navigationItemButton}
-        disabled={item.isLoading}
-        onPress={item.onPress}
+        key={params.key}
+        style={styles.selectorButton}
+        disabled={params.isLoading}
+        onPress={params.onPress}
       >
         <Text
           style={[
-            styles.navigationItemButtonText,
-            item.textStyle,
-            item.isLoading ? styles.navigationItemButtonTextDisabled : null
+            styles.selectorButtonText,
+            params.textStyle,
+            params.isLoading ? styles.selectorButtonTextDisabled : null
           ]}
           numberOfLines={1}
         >
-          {`${item.label} `}
+          {`${params.label} `}
         </Text>
-        <IconAngleDown
+        {((params.showLoader && !params.isLoading) || (!params.showLoader)) && <IconAngleDown
           size={17}
-          style={{lineHeight: 20}}
-          color={item.isLoading ? COLOR_FONT_GRAY : COLOR_BLACK}
-        />
+          style={styles.selectorIcon}
+          color={params.isLoading ? COLOR_FONT_GRAY : COLOR_BLACK}
+        />}
+        {params.showLoader && params.isLoading && <ActivityIndicator color={COLOR_PINK}/>}
       </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  navigationItem: {
+  selector: {
     alignItems: 'flex-start',
     justifyContent: 'space-between'
   },
-  navigationItemBorder: {
+  selectorBorder: {
     ...elevation1
   },
-  navigationItemButton: {
+  selectorButton: {
     flexDirection: 'row',
     justifyContent: 'center',
     padding: UNIT,
     paddingLeft: 0,
     marginBottom: UNIT,
   },
-  navigationItemButtonText: {
+  selectorButtonText: {
     ...mainText,
     fontWeight: '500',
     color: COLOR_DARK
   },
-  navigationItemButtonTextDisabled: {
+  selectorButtonTextDisabled: {
     color: COLOR_FONT_GRAY
+  },
+  selectorIcon: {
+    lineHeight: 20
   }
 });

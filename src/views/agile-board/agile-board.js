@@ -25,7 +25,7 @@ import type IssuePermissions from '../../components/issue-permissions/issue-perm
 import ModalView from '../../components/modal-view/modal-view';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconException, IconMagnifyZoom} from '../../components/icon/icon';
-import {renderNavigationItem} from './agile-board__renderer';
+import {renderSelector} from './agile-board__renderer';
 import {View as AnimatedView} from 'react-native-animatable';
 import {routeMap} from '../../app-routes';
 import ErrorMessage from '../../components/error-message/error-message';
@@ -141,7 +141,7 @@ class AgileBoard extends Component<Props, State> {
 
   _renderRefreshControl() {
     return <RefreshControl
-      refreshing={this.props.isLoading}
+      refreshing={false}
       tintColor={this.props.isLoadingAgile ? COLOR_FONT_ON_BLACK : COLOR_PINK}
       onRefresh={() => this.props.onLoadBoard()}
     />;
@@ -169,14 +169,15 @@ class AgileBoard extends Component<Props, State> {
   renderAgileSelector() {
     const {agile, onOpenBoardSelect, isLoading} = this.props;
     if (agile) {
-      return renderNavigationItem({
+      return renderSelector({
         key: agile.id,
         label: agile.name,
         onPress: onOpenBoardSelect,
         style: styles.agileSelector,
         textStyle: styles.agileSelectorText,
         isLoading,
-        showBottomBorder: this.state.stickElement.agile
+        showBottomBorder: this.state.stickElement.agile,
+        showLoader: true
       });
     }
     return <View style={styles.agileSelector}/>;
@@ -185,7 +186,7 @@ class AgileBoard extends Component<Props, State> {
   renderSprintSelector() {
     const {sprint, onOpenSprintSelect, isLoading} = this.props;
     if (sprint) {
-      return renderNavigationItem({
+      return renderSelector({
         key: sprint.id,
         label: sprint.name,
         onPress: onOpenSprintSelect,
