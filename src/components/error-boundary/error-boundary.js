@@ -160,7 +160,7 @@ class ErrorBoundary extends Component<Props, State> {
                   styles.buttonSendReportText
                 ]}
               >
-                {`${isReporting ? 'Sending' : 'Send'}  crash report${isReporting ? '...' : ''}`}
+                {`${isReporting ? 'Sending' : 'Send'} crash report${isReporting ? '...' : ''}`}
               </Text>
             </TouchableOpacity>
 
