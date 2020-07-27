@@ -202,7 +202,13 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
                   linkedIssue.resolved && {color: COLOR_FONT_GRAY},
                   linkedIssue.resolved && styles.activityRemoved
                 ]}>
-                  {`${readableIssueId} ${linkedIssue.summary}`}
+                  {readableIssueId}
+                </Text>
+                <Text style={[
+                  styles.linkText,
+                  linkedIssue.resolved && {color: COLOR_FONT_GRAY},
+                ]}>
+                  {` ${linkedIssue.summary}`}
                 </Text>
               </Text>
             );
