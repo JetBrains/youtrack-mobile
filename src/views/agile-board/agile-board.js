@@ -17,7 +17,7 @@ import {
   COLOR_FONT_ON_BLACK,
   UNIT
 } from '../../components/variables/variables';
-import {getStorageState, flushStoragePart} from '../../components/storage/storage';
+import {flushStoragePart} from '../../components/storage/storage';
 
 import * as boardActions from './board-actions';
 import {connect} from 'react-redux';
@@ -73,8 +73,9 @@ class AgileBoard extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
+    this.updateZoomedInStorageState(true);
     this.state = {
-      zoomedIn: getStorageState().agileZoomedIn ?? true,
+      zoomedIn: true,
       stickElement: {
         agile: false,
         boardHeader: false
@@ -361,10 +362,14 @@ class AgileBoard extends Component<Props, State> {
     });
   };
 
+  updateZoomedInStorageState(agileZoomedIn: boolean) {
+    flushStoragePart({agileZoomedIn});
+  }
+
   toggleZoom = () => {
     const zoomedIn = !this.state.zoomedIn;
     this.setState({zoomedIn});
-    flushStoragePart({agileZoomedIn: zoomedIn});
+    this.updateZoomedInStorageState(zoomedIn);
   };
 
   renderBoard() {
