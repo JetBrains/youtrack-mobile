@@ -5,7 +5,7 @@ import * as types from './single-issue-action-types';
 import {attachmentTypes} from './single-issue__attachment-actions-and-types';
 import {ON_NAVIGATE_BACK} from '../../actions/action-types';
 
-import type {IssueFull, CommandSuggestionResponse} from '../../flow/Issue';
+import type {IssueFull, CommandSuggestionResponse, AnyIssue} from '../../flow/Issue';
 import type {CustomField, FieldValue, IssueProject} from '../../flow/CustomFields';
 import type {User} from '../../flow/User';
 import type {Visibility} from '../../flow/Visibility';
@@ -141,6 +141,15 @@ export default createReducer(initialState, {
       issueLoadingError: null,
       issue: {
         ...action.issue,
+      }
+    };
+  },
+  [types.RECEIVE_ISSUE_LINKS]: (state: State, action: { issueLinks: Array<AnyIssue> }): State => {
+    return {
+      ...state,
+      issue: {
+        ...state.issue,
+        links: action.issueLinks
       }
     };
   },

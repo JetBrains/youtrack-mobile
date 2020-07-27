@@ -3,6 +3,8 @@
 import {Text, View, ScrollView, TouchableOpacity} from 'react-native';
 import React, {Component} from 'react';
 
+import {View as AnimatedView} from 'react-native-animatable';
+
 import {getApi} from '../../components/api/api__instance';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import LinkedIssues from '../../components/linked-issues/linked-issues';
@@ -83,12 +85,17 @@ export default class IssueDetails extends Component<Props, void> {
     return false;
   }
 
-  renderLinks(issue: IssueFull) {
+  renderLinks = (issue: IssueFull) => {
     if (issue.links && issue.links.length) {
       return (
-        <LinkedIssues
-          links={issue.links}
-          onIssueTap={(issue: IssueOnList) => this.props.openNestedIssueView({issue})}/>
+        <AnimatedView
+          animation="fadeIn"
+          duration={500}
+          useNativeDriver>
+          <LinkedIssues
+            links={issue.links}
+            onIssueTap={(issue: IssueOnList) => this.props.openNestedIssueView({issue})}/>
+        </AnimatedView>
       );
     }
   }

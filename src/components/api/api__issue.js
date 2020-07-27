@@ -27,6 +27,14 @@ export default class IssueAPI extends ApiBase {
     return issue;
   }
 
+  async getIssueLinks(id: string): Promise<IssueFull> {
+    const queryString = qs.stringify({
+      fields: issueFields.singleIssueLinks.toString()
+    }, {encode: false});
+
+    return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${id}?${queryString}`);
+  }
+
   async updateVisibility(issueId: string, visibility: Visibility | null) {
     const queryString = qs.stringify({fields: 'id,visibility($type,permittedGroups($type,id,name),permittedUsers($type,id,name))'});
     const url = `${this.youTrackIssueUrl}/${issueId}?${queryString}`;

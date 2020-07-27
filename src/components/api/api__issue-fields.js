@@ -287,6 +287,9 @@ const USER_CONSENT_FIELDS = 'endUserAgreementConsent(accepted,majorVersion,minor
 
 export default {
   issuesOnList: ISSUE_SHORT_FIELDS,
+  singleIssueLinks: toField({
+    links: ISSUE_LINKS_FIELDS
+  }),
   singleIssue: toField([
     'id',
     'idReadable',
@@ -305,7 +308,6 @@ export default {
     {fields: ISSUE_FIELD_FIELDS},
     {tags: ISSUE_TAGS_FIELDS},
     {attachments: ISSUE_ATTACHMENTS_FIELDS},
-    {links: ISSUE_LINKS_FIELDS},
     VISIBILITY_FIELDS
   ]),
   projectOnList: ISSUE_PROJECT_FIELDS,

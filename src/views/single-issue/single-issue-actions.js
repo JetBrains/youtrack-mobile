@@ -167,6 +167,27 @@ export function loadIssue() {
   };
 }
 
+export function loadIssueLinks() {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const issueId = getState().singleIssue.issueId;
+    const api: Api = getApi();
+
+    try {
+      if (!issueId) {
+        throw new Error('Issue ID is required');
+      }
+      log.debug(`Loading "${issueId}" linked issues`);
+      const issue = await api.issue.getIssueLinks(issueId);
+      log.info(`"${issueId}" linked issues loaded`);
+
+      dispatch({type: types.RECEIVE_ISSUE_LINKS, issueLinks: issue.links});
+    } catch (rawError) {
+      const error = await resolveError(rawError);
+      log.warn('Failed to load linked issues', error);
+    }
+  };
+}
+
 export function refreshIssue() {
   return async (dispatch: (any) => any, getState: StateGetter) => {
     dispatch(startIssueRefreshing());

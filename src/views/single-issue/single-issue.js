@@ -98,8 +98,9 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
     }
   }
 
-  loadIssue() {
-    this.props.loadIssue();
+  async loadIssue() {
+    await this.props.loadIssue();
+    this.props.loadIssueLinks();
   }
 
   renderDetailsTab() {
