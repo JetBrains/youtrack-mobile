@@ -27,7 +27,6 @@ import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconException, IconMagnifyZoom} from '../../components/icon/icon';
 import {renderSelector} from './agile-board__renderer';
 import {View as AnimatedView} from 'react-native-animatable';
-import {routeMap} from '../../app-routes';
 import ErrorMessage from '../../components/error-message/error-message';
 import {notify} from '../../components/notification/notification';
 import isEqual from 'react-fast-compare';
@@ -82,7 +81,6 @@ class AgileBoard extends Component<Props, State> {
       },
       offsetY: 0
     };
-    Router.setOnDispatchCallback(this.onBoardLeave);
   }
 
   componentDidMount() {
@@ -96,13 +94,10 @@ class AgileBoard extends Component<Props, State> {
     return !isPropsEqual || !isStateEqual;
   }
 
-  onBoardLeave = (routeName: string, prevRouteName?: string) => {
-    const agileBoardRouteName = routeMap.AgileBoard;
-    if (routeName !== agileBoardRouteName && prevRouteName === agileBoardRouteName) {
-      boardActions.destroySSE();
-      this.props.toggleRefreshPopup(false);
-    }
-  };
+  componentWillUnmount() {
+    this.props.toggleRefreshPopup(false);
+    boardActions.destroySSE();
+  }
 
   onVerticalScroll = (event) => {
     const {nativeEvent} = event;
@@ -230,7 +225,7 @@ class AgileBoard extends Component<Props, State> {
   toggleColumn = (column: BoardColumn) => {
     notify(column.collapsed ? 'Column expanded' : 'Column collapsed');
     this.props.onColumnCollapseToggle(column);
-  }
+  };
 
   renderBoardHeader() {
     const {zoomedIn} = this.state;
@@ -245,6 +240,7 @@ class AgileBoard extends Component<Props, State> {
       </View>
     );
   }
+
   _renderSelect() {
     const {selectProps} = this.props;
     return (
@@ -327,7 +323,7 @@ class AgileBoard extends Component<Props, State> {
 
   canRunCommand = (issue: AnyIssue): boolean => {
     return this.props.issuePermissions.canRunCommand(issue);
-  }
+  };
 
   renderSprint = () => {
     const {sprint, createCardForCell, onRowCollapseToggle} = this.props;
@@ -343,7 +339,7 @@ class AgileBoard extends Component<Props, State> {
         onCollapseToggle={onRowCollapseToggle}
       />
     );
-  }
+  };
 
   onDragStart() {
     usage.trackEvent(CATEGORY_NAME, 'Card drag start');

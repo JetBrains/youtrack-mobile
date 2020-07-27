@@ -608,3 +608,10 @@ export function refreshAgile(agileId: string, sprintId: string) {
     dispatch(loadSprint(agileId, sprintId));
   };
 }
+
+export function reSubscribeSEE() {
+  return async (dispatch: (any) => any) => {
+    destroySSE();
+    dispatch(subscribeServersideUpdates());
+  };
+}
