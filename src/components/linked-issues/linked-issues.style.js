@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_LINK, COLOR_FONT_GRAY} from '../../components/variables/variables';
+import {UNIT, COLOR_FONT_GRAY, COLOR_PINK} from '../variables/variables';
 
 export default StyleSheet.create({
   linkedIssuesContainer: {
@@ -21,6 +21,6 @@ export default StyleSheet.create({
     padding: UNIT / 4
   },
   linkedIssueText: {
-    color: COLOR_LINK
+    color: COLOR_PINK
   }
 });
