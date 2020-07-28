@@ -336,7 +336,7 @@ class Inbox extends Component<Props, State> {
     return text || PARSE_ERROR_NOTIFICATION;
   }
 
-  renderItem(item: Notification | Object & { key: string }) {
+  renderItem = ({item}: Notification | Object & { key: string }) => {
     if (isReactElement(item)) {
       return item;
     }
@@ -351,7 +351,7 @@ class Inbox extends Component<Props, State> {
     }
 
     return renderer;
-  }
+  };
 
   createAvatarUrl(sender: User = {}): string | null {
     if (!sender.avatarUrl || !this.config || !this.config.backendUrl) {
@@ -485,7 +485,7 @@ class Inbox extends Component<Props, State> {
     );
   }
 
-  onScroll(nativeEvent) {
+  onScroll = ({nativeEvent}) => {
     const newY = nativeEvent.contentOffset.y;
     this.setState({
       isTitlePinned: newY >= UNIT
@@ -512,10 +512,10 @@ class Inbox extends Component<Props, State> {
           refreshControl={this.renderRefreshControl()}
           refreshing={loading}
           keyExtractor={(item: Object & { key: string } | Notification) => item.key || item.id}
-          renderItem={(listItem) => this.renderItem(listItem.item)}
+          renderItem={this.renderItem}
           onEndReached={this.onLoadMore}
           onEndReachedThreshold={0.1}
-          onScroll={(params) => this.onScroll(params.nativeEvent)}
+          onScroll={this.onScroll}
           ListFooterComponent={this.renderListMessage}
           scrollEventThrottle={10}
           stickyHeaderIndices={[0]}

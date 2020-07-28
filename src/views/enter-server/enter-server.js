@@ -154,7 +154,7 @@ export class EnterServer extends Component<Props, State> {
             </TouchableWithoutFeedback>
 
             <View testID="enterServerHint">
-              <Text style={styles.title}>Enter YouTrack URL</Text>
+              <Text style={styles.title}>Enter your YouTrack server URL</Text>
             </View>
 
             <TextInput

@@ -138,7 +138,7 @@ export class LogIn extends Component<Props, State> {
             </TouchableWithoutFeedback>
 
             <TouchableOpacity onPress={() => this.changeYouTrackUrl()} testID="youtrack-url">
-              <Text style={styles.title}>Login to YouTrack</Text>
+              <Text style={styles.title}>Log in to YouTrack</Text>
               <Text
                 style={styles.hintText}>{formatYouTrackURL(this.props.auth.config.backendUrl)}</Text>
             </TouchableOpacity>
@@ -205,7 +205,7 @@ export class LogIn extends Component<Props, State> {
             onPress={() => this.logInViaHub()}
           >
             <Text style={styles.action}>
-              Log in via Browser</Text>
+              Log in with Browser</Text>
           </TouchableOpacity>
 
           <KeyboardSpacer/>

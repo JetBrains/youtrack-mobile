@@ -79,7 +79,7 @@ exports[`EnterServer Render should render 1`] = `
             }
           }
         >
-          Enter YouTrack URL
+          Enter your YouTrack server URL
         </Text>
       </View>
       <TextInput

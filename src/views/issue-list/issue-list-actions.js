@@ -158,7 +158,7 @@ export function openIssuesContextSelect() {
       type: types.OPEN_SEARCH_CONTEXT_SELECT,
       selectProps: {
         show: true,
-        placeholder: 'Filter items',
+        placeholder: 'Filter projects, saved searches, and tags',
         dataSource: async () => {
           let folders = [];
           try {

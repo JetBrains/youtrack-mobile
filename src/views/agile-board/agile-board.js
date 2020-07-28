@@ -281,7 +281,7 @@ class AgileBoard extends Component<Props, State> {
       >
         <View style={styles.popupPanel}>
           <Text style={styles.popupText}>
-            The current sprint is out of date. Reload it to avoid data loss or any other inconsistency.
+            There is a new current sprint. To avoid data loss or inconsistent behavior, refresh the board.
           </Text>
 
           <View style={styles.popupButtons}>

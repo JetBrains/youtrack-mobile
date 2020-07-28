@@ -468,7 +468,7 @@ export function applyCommand(command: string) {
         return Router.IssueList();
       }
 
-      notify('Command successfully applied');
+      notify('Command applied');
       await dispatch(loadIssue());
       dispatch(issueUpdated(getState().singleIssue.issue));
     } catch (err) {

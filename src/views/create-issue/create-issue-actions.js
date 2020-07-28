@@ -127,7 +127,7 @@ export function applyCommandForDraft(command: string) {
     try {
       await getApi().applyCommand({issueIds: [draftId], command});
 
-      notify('Command successfully applied');
+      notify('Command applied');
       await dispatch(loadIssueFromDraft(draftId));
     } catch (err) {
       notifyError('Failed to apply command', err);

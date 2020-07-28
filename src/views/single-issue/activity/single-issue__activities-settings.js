@@ -54,7 +54,7 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
     super(props);
 
     this.sortOrderOption = {
-      name: 'Sort: oldest first',
+      name: 'Show oldest activity first',
       isNaturalCommentsOrder: props?.userAppearanceProfile?.naturalCommentsOrder
     };
 
@@ -122,7 +122,7 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
             leftButton={<IconClose size={21} color={COLOR_PINK}/>}
             onBack={this.toggleSettingsDialogVisibility}
           >
-            <Text style={styles.settingsTitle}>Activity setting</Text>
+            <Text style={styles.settingsTitle}>Activity Settings</Text>
           </Header>
 
           {this.renderOrderItem()}

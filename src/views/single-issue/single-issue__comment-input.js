@@ -211,7 +211,7 @@ export default class SingleIssueCommentInput extends PureComponent<Props, State>
           />
         )}
         <Text style={styles.visibilityChangeButtonText}>
-          {isSecured ? IssueVisibility.getVisibilityPresentation(editingComment.visibility) : 'Visible to All Users'}
+          {isSecured ? IssueVisibility.getVisibilityPresentation(editingComment.visibility) : 'Visible to issue readers'}
         </Text>
         <IconAngleDown size={20} color={COLOR_ICON_MEDIUM_GREY}/>
       </TouchableOpacity>
@@ -283,7 +283,7 @@ export default class SingleIssueCommentInput extends PureComponent<Props, State>
             <MultilineInput
               ref={(instance: ?MultilineInput) => instance && (this.editCommentInput = instance)}
               {...this.props}
-              placeholder="Write comment, @mention people"
+              placeholder="Write a comment, @mention people"
               value={commentText}
               editable={!isSaving}
               underlineColorAndroid="transparent"

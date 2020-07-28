@@ -243,7 +243,7 @@ export function copyCommentUrl(comment: IssueComment) {
     const api: Api = getApi();
     const {issue} = getState().singleIssue;
     Clipboard.setString(makeIssueWebUrl(api, issue, comment.id));
-    notify('Comment URL has been copied');
+    notify('Comment URL copied');
   };
 
   function makeIssueWebUrl(api: Api, issue: IssueFull, commentId: ?string) {
@@ -333,7 +333,7 @@ export function onOpenCommentVisibilitySelect(comment: IssueComment) {
     usage.trackEvent(CATEGORY_NAME, 'Open visibility select');
     dispatch(onOpenSelect({
       show: true,
-      placeholder: 'Select user or group',
+      placeholder: 'Filter users, groups, and teams',
       dataSource: async () => {
         const options = await api.issue.getVisibilityOptions(issueId);
         dispatch(receiveCommentVisibilityOptions());
