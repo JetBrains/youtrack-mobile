@@ -16,7 +16,7 @@ import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import {
   getEntityPresentation,
   getReadableID,
-  shortRelativeDate
+  absDate
 } from '../../components/issue-formatter/issue-formatter';
 import Tags from '../../components/tags/tags';
 import {HIT_SLOP} from '../../components/common-styles/button';
@@ -151,15 +151,15 @@ export default class IssueDetails extends Component<Props, void> {
             style={styles.issueTopPanelText}
             selectable={true}
           >
-            Created by {getEntityPresentation(issue.reporter)} {shortRelativeDate(issue?.created) || ''}
+            Created by {getEntityPresentation(issue.reporter)} {absDate(issue?.created) || ''}
           </Text>
 
-          {issue.created !== issue.updated && (
+          {issue?.created !== issue?.updated && (
             <Text
               style={[styles.issueTopPanelText, styles.topPanelUpdatedInformation]}
               selectable={true}
             >
-              Updated by {getEntityPresentation(issue.updater)} {shortRelativeDate(issue?.updated) || ''}
+              Updated by {getEntityPresentation(issue.updater)} {absDate(issue?.updated) || ''}
             </Text>
           )}
         </View>
