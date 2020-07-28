@@ -359,7 +359,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
       return null;
     }
 
-    const allAttachments = this.updateToAbsUrl(comment.attachments).concat(this.props.attachments);
+    const allAttachments = this.updateToAbsUrl(comment.attachments).concat(this.props.attachments || []);
     return (
       <View key={comment.id}>
         {!activityGroup.merged && this._renderUserInfo(activityGroup)}

@@ -68,7 +68,7 @@ export function convertCommentsToActivityPage(comments: Array<IssueComment> = []
 function createActivityItemFrom(comment: IssueComment): ActivityItem {
   return {
     $type: 'CommentActivityItem',
-    added: [comment],
+    added: [Object.assign({}, comment, {attachments: comment?.attachments || []})],
     author: comment.author,
     authorGroup: null,
     category: {id: 'CommentsCategory', $type: 'ActivityCategory'},

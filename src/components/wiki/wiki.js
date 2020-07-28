@@ -118,7 +118,7 @@ export default class Wiki extends PureComponent<Props, void> {
       return renderImage({
         node,
         index,
-        attachments,
+        attachments: attachments.filter(Boolean),
         imageHeaders,
         onImagePress: this.onImagePress
       });
