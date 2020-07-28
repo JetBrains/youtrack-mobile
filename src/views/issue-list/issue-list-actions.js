@@ -127,11 +127,11 @@ export function closeIssuesContextSelect() {
   return {type: types.CLOSE_SEARCH_CONTEXT_SELECT};
 }
 
-export function getSearchQuery(query: string) {
+export function getSearchQuery(query: string = '') {
   return () => {
     const userSearchContext: SavedQuery = getStorageState().searchContext;
     const searchContextQuery = userSearchContext?.query;
-    return `${searchContextQuery} ${query}`;
+    return userSearchContext?.query ? `${searchContextQuery} ${query}` : query;
   };
 }
 
