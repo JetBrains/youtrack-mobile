@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 
 import {
   UNIT,
@@ -31,9 +31,16 @@ export default StyleSheet.create({
   },
   headerIssueId: {
     marginLeft: UNIT * 2,
+    ...link,
     ...mainText,
-    lineHeight: ROW_TEXT_LINE_HEIGHT + 2,
-    ...link
+    ...Platform.select({
+      ios: {
+        lineHeight: ROW_TEXT_LINE_HEIGHT + 2
+      },
+      android: {
+        lineHeight: ROW_TEXT_LINE_HEIGHT
+      }
+    }),
   },
   headerIssueIdZoomedOut: {
     marginLeft: UNIT * 3,
