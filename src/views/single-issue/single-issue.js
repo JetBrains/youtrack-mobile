@@ -259,7 +259,7 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
 
   canUpdateGeneralInfo = (): boolean => {
     const {issue, issuePermissions} = this.props;
-    return !!issue && !!issuePermissions && issuePermissions.canUpdateGeneralInfo(issue);
+    return issue && issuePermissions && issuePermissions.canUpdateGeneralInfo(issue);
   };
 
   renderActionsIcon() {

@@ -273,7 +273,7 @@ export default class IssueDetails extends Component<Props, void> {
 
   onUpdateProject = async (project: IssueProject) => await this.props.updateProject(project);
 
-  renderCustomFieldPanel() {
+  renderCustomFieldPanel = () => {
     const {issuePermissions} = this.props;
     const _issue: AnyIssue = this.getIssue();
 
