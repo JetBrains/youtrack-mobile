@@ -81,11 +81,6 @@ export const IconAccountAlert = (props?: Props) => <DefaultIcon {...{
 
 /* Material icons */
 
-export const IconBell = (props?: Props) => <DefaultIcon {...{
-  name: 'bell',
-  ...props
-}} />;
-
 export const IconMagnify = (props?: Props) => <DefaultIcon {...{
   name: 'magnify',
   ...props
@@ -199,6 +194,12 @@ export const IconBack = (props?: Props) => {
     ...props
   }} />;
 };
+
+export const IconBell = (props?: Props) => <IconYTM {...{
+  ...defaultProps,
+  name: 'bell-filled',
+  ...props
+}} />;
 
 export const IconBoard = (props?: Props) => <IconYTM {...{
   ...defaultProps,

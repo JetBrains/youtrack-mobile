@@ -56,7 +56,7 @@ exports[`<Menu/> Render should match a snapshot 1`] = `
       icon={
         <IconBell
           color="#737577"
-          size={24}
+          size={23}
         />
       }
       isActive={false}
