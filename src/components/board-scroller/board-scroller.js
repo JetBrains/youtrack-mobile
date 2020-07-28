@@ -170,7 +170,7 @@ class BoardScroller extends Component<Props, State> {
         scrollEventThrottle={10}
         onLayout={this.onLayout}
         scrollEnabled={!isDragging}
-        stickyHeaderIndices={[0,2]}
+        stickyHeaderIndices={[0, sprintSelector ? 2 : 1]}
       >
         {agileSelector}
         {sprintSelector}

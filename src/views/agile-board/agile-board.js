@@ -114,7 +114,7 @@ class AgileBoard extends Component<Props, State> {
     this.setState({
       stickElement: {
         agile: newY > UNIT * 2,
-        boardHeader: newY > UNIT * 8
+        boardHeader: newY > UNIT * (this.isSprintDisabled() ? 2 : 8)
       }
     });
   };
@@ -179,9 +179,21 @@ class AgileBoard extends Component<Props, State> {
     return <View style={styles.agileSelector}/>;
   }
 
+  isSprintDisabled(): boolean {
+    const {agile} = this.props;
+    return agile?.sprintsSettings?.disableSprints === true;
+  }
+
   renderSprintSelector() {
-    const {sprint, onOpenSprintSelect, isLoading} = this.props;
-    if (sprint) {
+    const {agile, sprint, onOpenSprintSelect, isLoading} = this.props;
+
+    if (!agile || !sprint) {
+      return null;
+    }
+
+    if (this.isSprintDisabled()) {
+      return null;
+    } if (sprint) {
       return renderSelector({
         key: sprint.id,
         label: sprint.name,
@@ -190,7 +202,6 @@ class AgileBoard extends Component<Props, State> {
         isLoading
       });
     }
-    return <View style={styles.sprintSelector}/>;
   }
 
   renderZoomButton() {
