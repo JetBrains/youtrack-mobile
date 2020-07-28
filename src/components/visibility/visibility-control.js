@@ -150,7 +150,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
     return [
       getEntityPresentation(author),
       IssueVisibility.getVisibilityShortPresentation(visibility)
-    ].join(', ');
+    ].filter(Boolean).join(', ');
   }
 
   renderVisibilityButton() {

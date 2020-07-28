@@ -87,6 +87,6 @@ export default class IssueVisibility {
   static getVisibilityShortPresentation(visibility: Visibility = {}): string {
     const visibilityItems: Array<UserGroup | User> = IssueVisibility.getVisibilityAsArray(visibility);
     const firstItemPresentation: string = getEntityPresentation(visibilityItems[0]);
-    return `${firstItemPresentation} ${visibilityItems.length > 1 ? `+${visibilityItems.length - 1}`: ''}`;
+    return `${firstItemPresentation}${visibilityItems.length > 1 ? ` +${visibilityItems.length - 1}`: ''}`;
   }
 }
