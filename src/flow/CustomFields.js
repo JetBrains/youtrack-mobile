@@ -135,7 +135,7 @@ export type Attachment = {
   name: string,
   url: string,
   mimeType: string,
-  imageDimension: ?ImageDimensions,
+  imageDimensions: ?ImageDimensions,
   thumbnailURL: string,
   visibility?: Visibility
 }

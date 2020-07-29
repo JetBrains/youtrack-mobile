@@ -17,7 +17,8 @@ const ISSUE_ATTACHMENT_FIELDS = toField([
   'mimeType',
   'removed',
   'thumbnailURL',
-  'imageDimension(width,height)'
+  'imageDimension(width,height)',
+  'imageDimensions(width,height)'
 ]);
 
 const ISSUE_PROJECT_FIELDS = toField([

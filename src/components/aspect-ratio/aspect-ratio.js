@@ -4,7 +4,7 @@ import {UNIT} from '../variables/variables';
 import type {ImageDimensions} from '../../flow/CustomFields';
 
 export default function calculateAspectRatio(dimensions: ImageDimensions = {}): ImageDimensions {
-  const maxWidth = Dimensions.get('window').width - UNIT * 10;
+  const maxWidth = Dimensions.get('window').width - UNIT * 4;
   const maxHeight = 300;
 
   if (!dimensions.width || !dimensions.height || dimensions.width < 0 || dimensions.height < 0) {

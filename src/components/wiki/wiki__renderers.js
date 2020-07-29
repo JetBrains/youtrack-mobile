@@ -6,7 +6,6 @@ import entities from 'entities';
 import {COLOR_GRAY, COLOR_LIGHT_GRAY, UNIT} from '../variables/variables';
 import Router from '../router/router';
 import {showMoreText} from '../text-view/text-view';
-import type {Attachment} from '../../flow/CustomFields';
 import {hasMimeType} from '../mime-type/mime-type';
 import calculateAspectRatio from '../../components/aspect-ratio/aspect-ratio';
 import {isAndroidPlatform} from '../../util/util';
@@ -16,10 +15,7 @@ import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from '../common-styles/typography';
 
 import styles from './wiki.styles';
 
-type ImageDimensions = {
-  width: number,
-  height: number
-};
+import type {Attachment, ImageDimensions} from '../../flow/CustomFields';
 
 const DIMENSION_WIDTH = Dimensions.get('window').width;
 const IMAGE_WIDTH = Math.floor(DIMENSION_WIDTH - UNIT * 4);
@@ -113,10 +109,10 @@ export function renderImage({node, index, attachments, imageHeaders, onImagePres
     //TODO(investigation): for some reason SVG is not rendered here
     const source = Object.assign({uri: targetAttach.url, headers: imageHeaders}, targetAttach);
 
-    //TODO(investigation): fix inconsistency with  W,H
-    const dimensions: ImageDimensions = (isAndroid
-      ? {width: IMAGE_WIDTH, height: IMAGE_HEIGHT}
-      : calculateAspectRatio(targetAttach.imageDimension));
+    const dimensions: ImageDimensions = calculateAspectRatio(
+      targetAttach.imageDimensions ||
+      {width: IMAGE_WIDTH, height: IMAGE_HEIGHT}
+    );
 
     return (
       <Text
@@ -126,9 +122,7 @@ export function renderImage({node, index, attachments, imageHeaders, onImagePres
         <Image
           source={source}
           style={{
-            marginTop: UNIT * 2,
-            width: dimensions.width,
-            height: dimensions.height,
+            ...dimensions,
             resizeMode: 'contain'
           }}
         />

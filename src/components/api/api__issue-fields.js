@@ -148,7 +148,8 @@ const ISSUE_ATTACHMENTS_FIELDS = toField([
   'url',
   'thumbnailURL',
   'mimeType',
-  'imageDimension(width,height)'
+  'imageDimension(width,height)',
+  'imageDimensions(width,height)'
 ]);
 
 const USER_GROUP_FIELDS = toField([
@@ -206,7 +207,7 @@ const ISSUE_COMMENTS_WITH_ATTACHMENT_FIELDS = toField([
     attachments: [
       'url',
       'mimeType',
-      'imageDimension(width,height)'
+      'imageDimensions(width,height)'
     ]
   }
 ]);
