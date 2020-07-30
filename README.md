@@ -1,5 +1,5 @@
 
-# YouTrack Mobile ![](http://jb.gg/badges/team-flat-square.svg)
+# YouTrack Mobile ![](http://jb.gg/badges/official-flat-square.svg)
 
 YouTrack Mobile helps you access your YouTrack issues from anywhere, create a new issue on the fly, or quickly update an existing one.
 
