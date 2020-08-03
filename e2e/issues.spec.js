@@ -28,16 +28,16 @@ describe('Issues list', () => {
       await expect(element(by.id('issue-row-summary'))).toHaveText('Wiki examples');
     });
 
-    it('should show "no issues found"', async () => {
-      await issuesPage.search('100%notexistingquery');
+    it('should show `No issues found` error', async () => {
+      await issuesPage.search('"Find not existing issues"');
 
-      await expect(element(by.id('no-issues'))).toExist();
+      await expect(element(by.id('error-message'))).toHaveText('No issues found');
     });
 
-    it('should show search error message', async () => {
+    it('should show `Invalid query` error', async () => {
       await issuesPage.search('#{broken search}');
 
-      await expect(element(by.id('error-message'))).toExist();
+      await expect(element(by.id('error-message'))).toHaveText('Invalid query');
     });
   });
 });

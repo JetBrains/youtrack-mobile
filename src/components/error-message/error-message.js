@@ -18,7 +18,8 @@ type Props = {
   error?: CustomError,
   errorMessageData?: ErrorMessageData,
   onTryAgain?: Function,
-  style?: ViewStyleProp
+  style?: ViewStyleProp,
+  testID?: string,
 };
 
 type State = {
@@ -48,7 +49,7 @@ export default class ErrorMessage extends PureComponent<Props, State> {
 
   render() {
     const {errorMessageData} = this.state;
-    const {onTryAgain, style} = this.props;
+    const {onTryAgain, style, testID} = this.props;
 
     if (!errorMessageData) {
       return null;
@@ -58,11 +59,19 @@ export default class ErrorMessage extends PureComponent<Props, State> {
     const iconSize = errorMessageData.iconSize || 80;
 
     return (
-      <View style={[styles.errorContainer, style]}>
+      <View
+        testID={testID || 'error'}
+        style={[styles.errorContainer, style]}
+      >
 
         <Icon size={iconSize} color={COLOR_ICON_MEDIUM_GREY}/>
 
-        <Text style={styles.errorTitle} testID="error-message">{errorMessageData?.title}</Text>
+        <Text
+          testID="error-message"
+          style={styles.errorTitle}
+        >
+          {errorMessageData?.title}
+        </Text>
         {Boolean(errorMessageData.description) && (
           <View>
             <Text style={styles.errorDescription}>{errorMessageData.description}</Text>
