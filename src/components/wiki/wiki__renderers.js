@@ -8,7 +8,7 @@ import Router from '../router/router';
 import {showMoreText} from '../text-view/text-view';
 import {hasMimeType} from '../mime-type/mime-type';
 import calculateAspectRatio from '../../components/aspect-ratio/aspect-ratio';
-import {isAndroidPlatform} from '../../util/util';
+import {isAndroidPlatform, isIOSPlatform} from '../../util/util';
 
 import {codeHighlightStyle} from './code-highlight-styles';
 import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from '../common-styles/typography';
@@ -109,10 +109,11 @@ export function renderImage({node, index, attachments, imageHeaders, onImagePres
     //TODO(investigation): for some reason SVG is not rendered here
     const source = Object.assign({uri: targetAttach.url, headers: imageHeaders}, targetAttach);
 
-    const dimensions: ImageDimensions = calculateAspectRatio(
+    const defaultDimensions = {width: IMAGE_WIDTH, height: IMAGE_HEIGHT};
+    const dimensions: ImageDimensions = isIOSPlatform() ? calculateAspectRatio(
       targetAttach.imageDimensions ||
-      {width: IMAGE_WIDTH, height: IMAGE_HEIGHT}
-    );
+      defaultDimensions
+    ) : defaultDimensions;
 
     return (
       <Text
