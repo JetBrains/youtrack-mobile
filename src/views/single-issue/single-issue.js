@@ -297,7 +297,7 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
 
 
   renderHeaderIssueTitle() {
-    const {issue, issuePlaceholder} = this.props;
+    const {issue, issuePlaceholder, issueLoadingError} = this.props;
     const _issue: AnyIssue = issue || issuePlaceholder;
     const readableID: ?string = getReadableID(_issue);
     if (readableID) {
@@ -312,7 +312,7 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
       );
     }
 
-    return this.isIssueLoaded() ? null : <Skeleton width={120}/>;
+    return this.isIssueLoaded() ? null : !issueLoadingError && <Skeleton width={120}/>;
   }
 
   _renderHeader() {
