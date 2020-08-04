@@ -217,6 +217,7 @@ class AgileBoard extends Component<Props, State> {
           style={styles.zoomButton}
         >
           <TouchableOpacity
+            hitSlop={HIT_SLOP}
             onPress={this.toggleZoom}
           >
             <IconMagnifyZoom zoomedIn={zoomedIn} size={24}/>
