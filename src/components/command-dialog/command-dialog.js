@@ -135,7 +135,7 @@ export default class CommandDialog extends Component<Props, State> {
         item={suggestion}
         titleRenderer={() => (
           <View style={styles.suggestion}>
-            <Text style={styles.suggestionDescription}>{suggestion.description}</Text>
+            <Text numberOfLines={2} style={styles.suggestionDescription}>{suggestion.description}</Text>
             <Text style={styles.suggestionText}>{suggestion.option}</Text>
           </View>
         )}

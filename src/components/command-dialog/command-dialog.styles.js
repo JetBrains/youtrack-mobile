@@ -34,7 +34,7 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   suggestionDescription: {
-    flex: 0.5,
+    flex: 1,
     marginRight: UNIT,
     ...mainText
   },
