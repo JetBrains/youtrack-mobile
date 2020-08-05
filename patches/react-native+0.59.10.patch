@@ -1,0 +1,23 @@
+diff --git a/node_modules/react-native/React/Modules/RCTStatusBarManager.m b/node_modules/react-native/React/Modules/RCTStatusBarManager.m
+index 5136b36..403a14e 100644
+--- a/node_modules/react-native/React/Modules/RCTStatusBarManager.m
++++ b/node_modules/react-native/React/Modules/RCTStatusBarManager.m
+@@ -14,12 +14,17 @@
+ #if !TARGET_OS_TV
+ @implementation RCTConvert (UIStatusBar)
+
++#pragma clang diagnostic push
++#pragma clang diagnostic ignored "-Wunguarded-availability"
++
+ RCT_ENUM_CONVERTER(UIStatusBarStyle, (@{
+   @"default": @(UIStatusBarStyleDefault),
+   @"light-content": @(UIStatusBarStyleLightContent),
+-  @"dark-content": @(UIStatusBarStyleDefault),
++  @"dark-content": (@available(iOS 13.0, *)) ? @(UIStatusBarStyleDarkContent) : @(UIStatusBarStyleDefault),
+ }), UIStatusBarStyleDefault, integerValue);
+
++#pragma clang diagnostic pop
++
+ RCT_ENUM_CONVERTER(UIStatusBarAnimation, (@{
+   @"none": @(UIStatusBarAnimationNone),
+   @"fade": @(UIStatusBarAnimationFade),
