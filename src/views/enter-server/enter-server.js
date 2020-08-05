@@ -14,6 +14,8 @@ import {
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {logo, IconBack} from '../../components/icon/icon';
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import Popup from '../../components/popup/popup';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import usage from '../../components/usage/usage';
 import {VERSION_DETECT_FALLBACK_URL} from '../../components/config/config';
@@ -27,10 +29,12 @@ import {NETWORK_PROBLEM_TIPS} from '../../components/error-message/error-text-me
 
 import ErrorMessageInline from '../../components/error-message/error-message-inline';
 import {View as AnimatedView} from 'react-native-animatable';
-import {UNIT} from '../../components/variables/variables';
+import {COLOR_MEDIUM_GRAY, UNIT} from '../../components/variables/variables';
 
-import styles from './enter-server.styles';
+import {mainText} from '../../components/common-styles/typography';
+import {HIT_SLOP} from '../../components/common-styles/button';
 import {formStyles} from '../../components/common-styles/form';
+import styles from './enter-server.styles';
 
 const CATEGORY_NAME = 'Choose server';
 const protocolRegExp = /^https?:/i;
@@ -46,7 +50,8 @@ type Props = {
 type State = {
   serverUrl: string,
   connecting: boolean,
-  error: ?string
+  error: ?string,
+  isErrorInfoModalVisible: boolean
 };
 
 const hitSlop = {top: UNIT, bottom: UNIT, left: UNIT, right: UNIT};
@@ -57,7 +62,8 @@ export class EnterServer extends Component<Props, State> {
     this.state = {
       serverUrl: props.serverUrl,
       connecting: false,
-      error: null
+      error: null,
+      isErrorInfoModalVisible: false
     };
 
     usage.trackScreenView(CATEGORY_NAME);
@@ -123,9 +129,25 @@ export class EnterServer extends Component<Props, State> {
     }, 500)();
   }
 
+  renderErrorInfoModalContent() {
+    return (
+      <React.Fragment>
+        {NETWORK_PROBLEM_TIPS.map((tip: string, index: number) => {
+          return <Text key={`errorInfoTips-${index}`} style={mainText}>{`${tip}\n`}</Text>;
+        })}
+      </React.Fragment>
+    );
+  }
+
+  toggleErrorInfoModalVisibility = () => {
+    const {isErrorInfoModalVisible} = this.state;
+    this.setState({isErrorInfoModalVisible: !isErrorInfoModalVisible});
+  };
+
   render() {
     const {onShowDebugView, onCancel} = this.props;
-    const isDisabled = this.state.connecting || !this.isValidInput();
+    const {error, connecting, serverUrl, isErrorInfoModalVisible} = this.state;
+    const isDisabled = connecting || !this.isValidInput();
 
     return (
       <ScrollView
@@ -169,20 +191,34 @@ export class EnterServer extends Component<Props, State> {
               keyboardType="url"
               underlineColorAndroid="transparent"
               onSubmitEditing={() => this.onApplyServerUrlChange()}
-              value={this.state.serverUrl}
+              value={serverUrl}
               onChangeText={(serverUrl) => this.setState({serverUrl})}/>
 
-            {Boolean(this.state.error) && (
+            {Boolean(error) && (
               <AnimatedView
-                animation="slideInDown"
+                animation="fadeIn"
                 duration={500}
                 useNativeDriver
               >
-                <ErrorMessageInline
-                  testID="enterServerError"
-                  error={this.state.error}
-                  tips={NETWORK_PROBLEM_TIPS}
-                />
+                <View style={styles.errorContainer}>
+                  <ErrorMessageInline
+                    style={styles.errorText}
+                    testID="enterServerError"
+                    error={error}
+                  />
+
+                  <TouchableOpacity
+                    style={styles.infoIcon}
+                    hitSlop={HIT_SLOP}
+                    onPress={this.toggleErrorInfoModalVisibility}
+                  >
+                    <IconMaterial
+                      name="information"
+                      size={24}
+                      color={COLOR_MEDIUM_GRAY}
+                    />
+                  </TouchableOpacity>
+                </View>
               </AnimatedView>
             )}
 
@@ -192,7 +228,7 @@ export class EnterServer extends Component<Props, State> {
               testID="next"
               onPress={() => this.onApplyServerUrlChange()}>
               <Text style={formStyles.buttonText}>Next</Text>
-              {this.state.connecting && <ActivityIndicator style={styles.progressIndicator}/>}
+              {connecting && <ActivityIndicator style={styles.progressIndicator}/>}
             </TouchableOpacity>
 
           </View>
@@ -208,6 +244,13 @@ export class EnterServer extends Component<Props, State> {
               <Text style={formStyles.link}>Contact support</Text>
             </TouchableOpacity>
           </View>
+
+          {isErrorInfoModalVisible && (
+            <Popup
+              childrenRenderer={this.renderErrorInfoModalContent}
+              onHide={this.toggleErrorInfoModalVisibility}
+            />
+          )}
 
           <KeyboardSpacer/>
         </View>

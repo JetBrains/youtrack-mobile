@@ -11,5 +11,17 @@ export default StyleSheet.create({
     marginTop: UNIT * 3,
     marginBottom: UNIT * 2,
     ...formStyles.input
+  },
+  errorContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-start'
+  },
+  errorText: {
+    flexGrow: 1
+  },
+  infoIcon: {
+    flexGrow: 0,
+    marginTop: UNIT / 2,
+    marginLeft: UNIT * 2
   }
 });
