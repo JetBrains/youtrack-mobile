@@ -366,9 +366,19 @@ export function completeInitialization(issueId: ?string = null) {
 
 function loadUser(userId: string = 'me') {
   return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
-    const user: User = await getApi().user.getUser(userId);
+    const USER_DEFAULT_PROFILES: UserGeneralProfile & UserAppearanceProfile = {
+      general: {searchContext: null},
+      appearance: {naturalCommentsOrder: true}
+    };
 
-    if (user.profiles.general.searchContext === null) {
+    let user: User = await getApi().user.getUser(userId);
+    user = Object.assign(
+      {},
+      user,
+      {profiles: user.profiles || USER_DEFAULT_PROFILES}
+    );
+
+    if (!user.profiles.general?.searchContext) {
       user.profiles.general.searchContext = EVERYTHING_CONTEXT;
     }
 
