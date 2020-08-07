@@ -44,7 +44,6 @@ export default class PushNotificationsProcessor {
   }
 
   static async init() {
-    const logMsgPrefix: string = `${PushNotificationsProcessor.logPrefix}(init): `;
     let resolveToken: TokenHandler = () => {};
     let rejectToken: TokenHandler = () => {};
 
@@ -66,14 +65,12 @@ export default class PushNotificationsProcessor {
 
     Notifications.events().registerNotificationReceivedForeground(
       (notification: Notification, completion: (response: NotificationCompletion) => void) => {
-        PushNotificationsProcessor.logData(`${logMsgPrefix}Foreground notification:`, notification);
         completion({alert: false, sound: false, badge: false});
       }
     );
 
     Notifications.events().registerNotificationReceivedBackground(
       (notification: Notification, completion: (response: NotificationCompletion) => void) => {
-        PushNotificationsProcessor.logData(`${logMsgPrefix}Background notification:`, notification);
         completion({alert: true, sound: true, badge: false});
       }
     );
@@ -82,7 +79,6 @@ export default class PushNotificationsProcessor {
   static subscribeOnNotificationOpen() {
     Notifications.events().registerNotificationOpened(
       (notification: Notification, completion: () => void) => {
-        PushNotificationsProcessor.logData(`${PushNotificationsProcessor.logPrefix}(open):`, notification);
 
         PushNotificationsProcessor.onNotification(
           PushNotificationsProcessor.getIssueId(notification)
