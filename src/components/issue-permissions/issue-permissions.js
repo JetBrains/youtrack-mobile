@@ -48,39 +48,37 @@ export default class IssuePermissions {
     return this.getRingId(entity.project);
   }
 
-  hasPermissionFor(issue: AnyIssue, permissionName: string): boolean {
+  hasPermissionFor = (issue: AnyIssue, permissionName: string): boolean => {
     const projectRingId = IssuePermissions.getIssueProjectRingId(issue);
     return !!projectRingId && this.permissionsStore.has(permissionName, projectRingId);
-  }
+  };
 
-  isCurrentUser(user: User): boolean {
+  isCurrentUser = (user: User): boolean => {
     if (!user || !user.ringId || !this.currentUser || !this.currentUser.id) {
       return false;
     }
 
     return user.ringId === this.currentUser.id;
-  }
+  };
 
-  canUpdateGeneralInfo(issue: ?AnyIssue): boolean {
+  canUpdateGeneralInfo = (issue: ?AnyIssue): boolean => {
     if (this.isCurrentUser(issue?.reporter) && this.hasPermissionFor(issue, CREATE_ISSUE)) {
       return true;
     }
     const projectRingId = IssuePermissions.getIssueProjectRingId(issue);
     return !!projectRingId && this.permissionsStore.hasEvery([READ_ISSUE, UPDATE_ISSUE], projectRingId);
-  }
+  };
 
-  _canUpdatePublicField(issue: ?AnyIssue): boolean {
+  _canUpdatePublicField = (issue: ?AnyIssue): boolean => {
     if (this.isCurrentUser(issue?.reporter) && this.hasPermissionFor(issue, CREATE_ISSUE)) {
       return true;
     }
     return this.hasPermissionFor(issue, UPDATE_ISSUE);
-  }
+  };
 
-  _canUpdatePrivateField(issue: AnyIssue): boolean {
-    return this.hasPermissionFor(issue, PRIVATE_UPDATE_ISSUE);
-  }
+  _canUpdatePrivateField = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, PRIVATE_UPDATE_ISSUE);
 
-  _isBlockedByTimeTracking(issue: AnyIssue, field: CustomField): boolean {
+  _isBlockedByTimeTracking = (issue: AnyIssue, field: CustomField): boolean => {
     if (!issue.project || !issue.project.plugins) {
       return false;
     }
@@ -96,9 +94,9 @@ export default class IssuePermissions {
     const isSpentTime = timeTrackingSettings.timeSpent.field.id === field.projectCustomField.field.id;
 
     return isSpentTime; // Spent Time field is always disabled to edit – calculating automatically
-  }
+  };
 
-  canUpdateField(issue: AnyIssue, field: CustomField): boolean {
+  canUpdateField = (issue: AnyIssue, field: CustomField): boolean => {
     if (this._isBlockedByTimeTracking(issue, field)) {
       return false;
     }
@@ -106,55 +104,43 @@ export default class IssuePermissions {
       return this._canUpdatePublicField(issue);
     }
     return this._canUpdatePrivateField(issue);
-  }
+  };
 
-  canCommentOn(issue: AnyIssue): boolean {
-    return this.hasPermissionFor(issue, CAN_CREATE_COMMENT);
-  }
+  canCommentOn = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_CREATE_COMMENT);
 
-  canUpdateComment(issue: AnyIssue, comment: IssueComment): boolean {
+  canUpdateComment = (issue: AnyIssue, comment: IssueComment): boolean => {
     if (this.isCurrentUser(comment.author)) {
       return this.hasPermissionFor(issue, CAN_UPDATE_COMMENT);
     }
     return this.hasPermissionFor(issue, CAN_UPDATE_NOT_OWN_COMMENT);
-  }
+  };
 
-  canDeleteNotOwnComment(issue: AnyIssue): boolean {
-    return this.hasPermissionFor(issue, CAN_DELETE_NOT_OWN_COMMENT);
-  }
+  canDeleteNotOwnComment = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_DELETE_NOT_OWN_COMMENT);
 
-  canDeleteComment(issue: AnyIssue, comment: IssueComment): boolean {
+  canDeleteComment = (issue: AnyIssue, comment: IssueComment): boolean => {
     if (this.isCurrentUser(comment.author)) {
       return this.hasPermissionFor(issue, CAN_DELETE_COMMENT);
     }
     return this.canDeleteNotOwnComment(issue);
-  }
+  };
 
-  canRestoreComment(issue: AnyIssue, comment: IssueComment): boolean {
+  canRestoreComment = (issue: AnyIssue, comment: IssueComment): boolean => {
     return this.canDeleteComment(issue, comment) || this.canUpdateComment(issue, comment);
-  }
+  };
 
-  canDeleteCommentPermanently(issue: AnyIssue): boolean {
-    return this.canDeleteNotOwnComment(issue);
-  }
+  canDeleteCommentPermanently = (issue: AnyIssue): boolean => this.canDeleteNotOwnComment(issue);
 
-  canAddAttachmentTo(issue: AnyIssue): boolean {
-    return this.hasPermissionFor(issue, CAN_ADD_ATTACHMENT);
-  }
+  canAddAttachmentTo = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_ADD_ATTACHMENT);
 
-  canRemoveAttachment(issue: AnyIssue): boolean {
-    return this.hasPermissionFor(issue, CAN_REMOVE_ATTACHMENT);
-  }
+  canRemoveAttachment = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_REMOVE_ATTACHMENT);
 
-  canCreateIssueToProject(project: IssueProject): boolean {
+  canCreateIssueToProject = (project: IssueProject): boolean => {
     return this.hasPermissionFor({project: project}, CAN_CREATE_COMMENT);
-  }
+  };
 
-  canVote(issue: AnyIssue): boolean {
-    return !this.isCurrentUser(issue.reporter);
-  }
+  canVote = (issue: AnyIssue): boolean => !this.isCurrentUser(issue.reporter);
 
-  canRunCommand(issue: AnyIssue): boolean {
+  canRunCommand = (issue: AnyIssue): boolean => {
     const has = (...args) => this.permissionsStore.has(...args);
 
     return this.isCurrentUser(issue.reporter) || hasAnyPermission();
@@ -170,5 +156,5 @@ export default class IssuePermissions {
         has(CAN_UPDATE_WATCH, projectRingId)
       );
     }
-  }
+  };
 }
