@@ -53,7 +53,7 @@ export function logOut() {
     auth.logOut();
     setApi(null);
     dispatch({type: types.LOG_OUT});
-    log.info('User has logged out');
+    log.info('User is logged out');
   };
 }
 
@@ -221,7 +221,7 @@ function applyAccount(config: AppConfigFilled, auth: Auth, authParams: AuthParam
 
 export function addAccount(serverUrl: string = '') {
   return async (dispatch: (any) => any, getState: () => RootState) => {
-    log.info('Adding new account flow started');
+    log.info('Adding new account started');
 
     try {
       const config = await connectToOneMoreServer(serverUrl, () => {
@@ -241,12 +241,13 @@ export function addAccount(serverUrl: string = '') {
       await flushStoragePart({creationTimestamp: Date.now()});
 
       const user = (getStorageState().currentUser || {});
-      log.info(`Successfully added account of "${user.name}" on "${config.backendUrl}"`);
+      log.info(`Successfully added account, user "${user.name}", server "${config.backendUrl}"`);
     } catch (err) {
-      notifyError('Could not add account', err);
+      const errorMsg: string = 'Failed to add an account.';
+      notifyError(errorMsg, err);
       const {otherAccounts} = getState().app;
       if (!getStorageState().config && otherAccounts.length) {
-        log.info('Recovering from add account error');
+        log.info(`${errorMsg} Restoring prev account`);
         await dispatch(changeAccount(otherAccounts[0], true));
       }
       Router.navigateToDefaultRoute();
@@ -339,13 +340,13 @@ export function loadUserPermissions() {
 
     await dispatch(setUserPermissions(permissions));
     appActionsHelper.updateCachedPermissions(permissions);
-    log.debug('Actual permissions cached');
+    log.debug('Permissions stored');
   };
 }
 
 export function completeInitialization(issueId: ?string = null) {
   return async (dispatch: (any) => any) => {
-    log.debug('Complete initialization: loading general stuff');
+    log.debug('Completing initialization');
     await dispatch(loadUser());
     await dispatch(loadUserPermissions());
     await dispatch(loadAgileProfile());
@@ -391,7 +392,7 @@ function loadWorkTimeSettings() {
 
 export function acceptUserAgreement() {
   return async (dispatch: (any) => any, getState: () => Object, getApi: () => Api) => {
-    log.info('User agreement has been accepted');
+    log.info('User agreement accepted');
     usage.trackEvent('EUA is accepted');
     const api: Api = getApi();
 
@@ -404,7 +405,7 @@ export function acceptUserAgreement() {
 
 export function declineUserAgreement() {
   return async (dispatch: (any) => any, getState: () => Object, getApi: () => Api) => {
-    log.info('User agreement has been declined');
+    log.info('User agreement declined');
     usage.trackEvent('EUA is declined');
     dispatch({type: types.HIDE_USER_AGREEMENT});
     dispatch(removeAccountOrLogOut());
@@ -426,17 +427,17 @@ function checkUserAgreement() {
 
     log.debug('Checking user agreement', currentUser);
     if (currentUser && currentUser.endUserAgreementConsent && currentUser.endUserAgreementConsent.accepted) {
-      log.info('The EUA is already accepted, skiping check');
+      log.info('The EUA already accepted, skip check');
       return;
     }
 
     const agreement: ?EndUserAgreement = await api.getUserAgreement();
     if (!agreement) {
-      log.debug('EUA is not supported by backend, skipping check');
+      log.debug('EUA is not supported, skip check');
       return;
     }
     if (!agreement.enabled) {
-      log.debug('EUA is disabled, skipping check');
+      log.debug('EUA is disabled, skip check');
       return;
     }
 
@@ -507,7 +508,7 @@ export function initializeApp(config: AppConfigFilled, issueId: string | null) {
 
       await dispatch(initializeAuth(config));
     } catch (error) {
-      log.log('App failed to initialize auth. Will try to reload config.', error);
+      log.log('App failed to initialize auth. Reloading config...', error);
       let reloadedConfig;
       try {
         reloadedConfig = await loadConfig(config.backendUrl);
@@ -569,7 +570,7 @@ export function setAccount(issueId: string | null) {
 export function subscribeToPushNotifications() {
   return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
     if (DeviceInfo.isEmulator()) {
-      return log.debug('Skip push notifications on a simulator');
+      return;
     }
 
     if (isRegisteredForPush()) {

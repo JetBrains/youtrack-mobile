@@ -92,7 +92,9 @@ class YouTrackMobile extends Component<void, State> {
       const ReactNativeNotifications = await import('react-native-notifications-latest');
       const initialNotification = await ReactNativeNotifications.Notifications.getInitialNotification();
       issueId = initialNotification?.payload?.issueId;
-      log.debug(`app(getNotificationIssueId): found initial notification with issueId: ${issueId}`);
+      if (issueId) {
+        log.debug(`app(getNotificationIssueId): start app to view: ${issueId}`);
+      }
     }
     return issueId;
   }
