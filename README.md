@@ -14,11 +14,6 @@ YouTrack Mobile is written in React Native together with Redux and Flow and avai
 * [Google Play](https://play.google.com/store/apps/details?id=com.jetbrains.youtrack.mobile.app)
 * [Apple AppStore](https://itunes.apple.com/us/app/youtrack/id1028024655?ls=1&mt=8)
 
-<img src="https://drive.google.com/uc?export=&id=0B6BBCd1L_wXaZnlSaUphb0t6bVk" alt="YouTrack Mobile list" width="200">
-<img src="https://drive.google.com/uc?export=&id=0B6BBCd1L_wXaZkdpQURabEY1SEk" alt="YouTrack Mobile search" width="200">
-<img src="https://drive.google.com/uc?export=&id=0B6BBCd1L_wXaM3M5MzBXVExRUFU" alt="YouTrack Mobile issue view" width="200">
-<img src="https://drive.google.com/uc?export=&id=0B6BBCd1L_wXadk8zMUVtWXZiWFU" alt="YouTrack Mobile issue creation" width="200">
-
 ## Bug and Issue Tracker
 Should you have and problems, report them to the [YouTrack Mobile issue tracker](https://youtrack.jetbrains.com/newissue?project=YTM&clearDraft=true).
 
