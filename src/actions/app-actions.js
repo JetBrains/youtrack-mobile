@@ -50,7 +50,9 @@ export function logOut() {
     clearCachesAndDrafts();
     const auth = getState().app.auth;
     Router.EnterServer({serverUrl: auth?.config?.backendUrl});
-    auth.logOut();
+    if (auth) {
+      auth.logOut();
+    }
     setApi(null);
     dispatch({type: types.LOG_OUT});
     log.info('User is logged out');
