@@ -1,4 +1,5 @@
 /* @flow */
+
 import React, {Component} from 'react';
 
 import {View, Text, TouchableOpacity, Linking} from 'react-native';
@@ -111,6 +112,14 @@ class ErrorBoundary extends Component<Props, State> {
     this.setState({isExtendedReportInfoVisible: !isExtendedReportInfoVisible});
   };
 
+  restart = () => {
+    try {
+      RNRestart.Restart();
+    } catch (err) {
+      notify('Failed to restart the app automatically. Try restart it manually.');
+    }
+  };
+
   render() {
     const {error, isReporting, isExtendedReportEnabled, isExtendedReportInfoVisible} = this.state;
     const {openDebugView} = this.props;
@@ -142,7 +151,7 @@ class ErrorBoundary extends Component<Props, State> {
               hitSlop={HIT_SLOP}
               disabled={isReporting}
               style={styles.restartLink}
-              onPress={() => RNRestart.Restart()}
+              onPress={this.restart}
             >
               <Text style={styles.buttonText}>Restart</Text>
             </TouchableOpacity>
