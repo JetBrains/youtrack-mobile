@@ -5,7 +5,6 @@ import {
   Text,
   FlatList,
   RefreshControl,
-  AppState,
   TouchableOpacity
 } from 'react-native';
 import React, {Component} from 'react';
@@ -65,20 +64,8 @@ export class IssueList extends Component<Props, State> {
     usage.trackScreenView('Issue list');
   }
 
-  _handleAppStateChange = (newState) => {
-    if (newState === 'active') {
-      this.props.refreshIssues();
-    }
-  };
-
   componentDidMount() {
     this.props.initializeIssuesList(this.props.initialSearchQuery);
-
-    AppState.addEventListener('change', this._handleAppStateChange);
-  }
-
-  componentWillUnmount() {
-    AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
   shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
