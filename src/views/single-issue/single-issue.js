@@ -279,7 +279,7 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
     }
   }
 
-  renderStar() {
+  renderStar = () => {
     const {issue, toggleStar} = this.props;
     if (this.isIssueLoaded()) {
       return (

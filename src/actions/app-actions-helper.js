@@ -24,7 +24,7 @@ async function loadPermissions(token_type: ?string, access_token: ?string, permi
       access_token,
       permissionsCacheUrl
     );
-    log.info('PermissionsStore loaded', permissions);
+    log.info('Permissions loaded');
   } catch (error) {
     const errorMessage: string = 'Failed to load permissions. You\'re unable to make any changes.';
     notify(errorMessage, 7000);

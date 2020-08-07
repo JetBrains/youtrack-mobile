@@ -265,16 +265,25 @@ export default class IssueDetails extends Component<Props, void> {
     return this.props.issue || this.props.issuePlaceholder;
   }
 
-  canUpdateField = (field: CustomField) => this.props.issuePermissions.canUpdateField(this.getIssue(), field);
+  getIssuePermissions = (): AnyIssue => {
+    const noop = () => false;
+    return this.props.issuePermissions || {
+      canCreateIssueToProject: noop,
+      canUpdateField: noop,
+      canUpdateGeneralInfo: noop,
+      canEditProject: noop,
+    };
+  }
 
-  canCreateIssueToProject = (project: IssueProject) => this.props.issuePermissions.canCreateIssueToProject(project);
+  canUpdateField = (field: CustomField) => this.getIssuePermissions().canUpdateField(this.getIssue(), field);
+
+  canCreateIssueToProject = (project: IssueProject) => this.getIssuePermissions().canCreateIssueToProject(project);
 
   onFieldUpdate = async (field: CustomField, value: any) => await this.props.updateIssueFieldValue(field, value);
 
   onUpdateProject = async (project: IssueProject) => await this.props.updateProject(project);
 
   renderCustomFieldPanel = () => {
-    const {issuePermissions} = this.props;
     const _issue: AnyIssue = this.getIssue();
 
     return <CustomFieldsPanel
@@ -287,7 +296,7 @@ export default class IssueDetails extends Component<Props, void> {
       hasPermission={{
         canUpdateField: this.canUpdateField,
         canCreateIssueToProject: this.canCreateIssueToProject,
-        canEditProject: issuePermissions.canUpdateGeneralInfo(_issue)
+        canEditProject: this.getIssuePermissions().canUpdateGeneralInfo(_issue)
       }}
 
       onUpdate={this.onFieldUpdate}

@@ -214,7 +214,7 @@ function applyAccount(config: AppConfigFilled, auth: Auth, authParams: AuthParam
     await dispatch(checkUserAgreement());
 
     if (!getState().app.showUserAgreement) {
-      dispatch(completeInitialization());
+      await dispatch(completeInitialization());
     }
   };
 }
@@ -329,12 +329,6 @@ function setUserPermissions(permissions: Array<PermissionCacheItem>) {
 
 export function loadUserPermissions() {
   return async (dispatch: (any) => any, getState: () => Object) => {
-    const cachedPermissions: ?Array<PermissionCacheItem> = appActionsHelper.getCachedPermissions();
-    if (cachedPermissions) {
-      dispatch(setUserPermissions(cachedPermissions));
-      log.debug('Use permissions from cache');
-    }
-
     const auth: Auth = getState().app.auth;
     const authParams: AuthParams = auth.authParams;
     const permissions: Array<PermissionCacheItem> = await appActionsHelper.loadPermissions(
@@ -343,7 +337,7 @@ export function loadUserPermissions() {
       auth.getPermissionsCacheURL()
     );
 
-    dispatch(setUserPermissions(permissions));
+    await dispatch(setUserPermissions(permissions));
     appActionsHelper.updateCachedPermissions(permissions);
     log.debug('Actual permissions cached');
   };
@@ -351,13 +345,13 @@ export function loadUserPermissions() {
 
 export function completeInitialization(issueId: ?string = null) {
   return async (dispatch: (any) => any) => {
-    log.debug('Completing initialization: loading permissions cache');
-    dispatch(loadUserPermissions());
+    log.debug('Complete initialization: loading general stuff');
     await dispatch(loadUser());
-    dispatch(loadAgileProfile());
-    dispatch(loadWorkTimeSettings());
+    await dispatch(loadUserPermissions());
+    await dispatch(loadAgileProfile());
+    await dispatch(loadWorkTimeSettings());
+    log.debug('Initialization completed');
 
-    log.info('Initialization completed');
     Router.navigateToDefaultRoute(issueId ? {issueId} : null);
 
     dispatch(subscribeToPushNotifications());

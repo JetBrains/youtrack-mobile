@@ -218,28 +218,12 @@ describe('app-actions', () => {
       });
     });
 
-    it('should set permissions from cache', async () => {
-      setCachedPermissions(cachedPermissionsMock);
-
-      await store.dispatch(actions.loadUserPermissions());
-
-      const storeAction = store.getActions();
-
-      expect(storeAction).toHaveLength(2);
-
-      expect(storeAction[0]).toEqual({
-        type: types.SET_PERMISSIONS,
-        permissionsStore: new PermissionsStore(cachedPermissionsMock),
-        currentUser: appStateMock.auth.currentUser
-      });
-    });
-
     it('should update permissions', async () => {
       setCachedPermissions(cachedPermissionsMock);
 
       await store.dispatch(actions.loadUserPermissions());
 
-      expect(store.getActions()[1]).toEqual({
+      expect(store.getActions()[0]).toEqual({
         type: types.SET_PERMISSIONS,
         permissionsStore: new PermissionsStore(actualPermissionsMock),
         currentUser: appStateMock.auth.currentUser
