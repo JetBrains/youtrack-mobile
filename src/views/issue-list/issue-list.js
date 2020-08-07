@@ -135,7 +135,7 @@ export class IssueList extends Component<Props, State> {
 
   _renderRefreshControl() {
     return <RefreshControl
-      refreshing={false}
+      refreshing={this.props.isRefreshing}
       onRefresh={this.props.refreshIssues}
       tintColor={COLOR_PINK}
       testID="refresh-control"
@@ -277,7 +277,7 @@ export class IssueList extends Component<Props, State> {
     const contextButton = this.renderContextButton();
     const searchQuery = this.renderSearchQuery();
 
-    if (isRefreshing || !issues) {
+    if (isRefreshing && !issues) {
       return (
         <View style={styles.list}>
           {contextButton}
