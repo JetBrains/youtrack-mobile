@@ -2,7 +2,18 @@
 
 import {LayoutAnimation} from 'react-native';
 
-const defaultConfig = LayoutAnimation.Presets.easeInEaseOut;
+const defaultConfig = {
+  duration: 1300,
+  create:
+    {
+      type: LayoutAnimation.Types.easeInEaseOut,
+      property: LayoutAnimation.Properties.opacity,
+    },
+  update:
+    {
+      type: LayoutAnimation.Types.easeInEaseOut,
+    }
+};
 
 function layoutAnimation(config?: Object) {
   if (!layoutAnimation.layoutAnimationActive) {//https://github.com/facebook/react-native/issues/13984
