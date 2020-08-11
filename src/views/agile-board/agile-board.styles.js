@@ -104,6 +104,7 @@ export default StyleSheet.create({
     minHeight: UNIT * 7,
     paddingTop: UNIT * 1.5,
     paddingLeft: UNIT * 2,
+    marginRight: UNIT * 7,
     backgroundColor: COLOR_FONT_ON_BLACK
   },
   sprintSelector: {

@@ -97,8 +97,9 @@ export default StyleSheet.create({
     ...elevation1
   },
   searchContextButton: {
+    ...rowLine,
     marginTop: UNIT,
-    marginRight: UNIT * 2,
+    marginRight: UNIT * 10,
     marginLeft: UNIT * 2,
     paddingTop: UNIT,
     paddingBottom: UNIT,
