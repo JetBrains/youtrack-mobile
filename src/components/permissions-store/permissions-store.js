@@ -1,17 +1,18 @@
 /* @flow */
 
 import type {PermissionCacheItem} from '../../flow/Permission';
+import type {IssueProject} from '../../flow/CustomFields';
 
 class PermissionsStore {
   permissionsMap: Object;
 
   constructor(permissions: Array<PermissionCacheItem>) {
-    const convertedPermissions = (permissions || []).map(cacheItem => {
-      cacheItem.projectIds = (cacheItem.projects || []).map(project => project.id);
-      return cacheItem;
+    const permissionsWithProjects = (Array.isArray(permissions) ? permissions : []).map((permission: PermissionCacheItem) => {
+      permission.projectIds = (permission.projects || []).map((project: IssueProject) => project.id);
+      return permission;
     });
 
-    this.permissionsMap = new Map(convertedPermissions.map(it => [it.permission.key, it]));
+    this.permissionsMap = new Map(permissionsWithProjects.map(it => [it.permission.key, it]));
   }
 
   has(permissionId: string, projectId: string) {
