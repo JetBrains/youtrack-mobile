@@ -17,6 +17,7 @@ import type Api from '../../components/api/api';
 import type {AgileBoardRow, AgileColumn, BoardOnList, AgileUserProfile, Sprint, Board} from '../../flow/Agile';
 import type {CustomError} from '../../flow/Error';
 import type {IssueFull, IssueOnList} from '../../flow/Issue';
+import {isIOSPlatform} from '../../util/util';
 
 type ApiGetter = () => Api;
 
@@ -62,7 +63,9 @@ function trackEvent(msg: string) {
 }
 
 function animateLayout() {
-  animation.layoutAnimation();
+  if (isIOSPlatform()) {
+    animation.layoutAnimation();
+  }
 }
 
 function getLastVisitedSprint(boardId: string, visitedSprints: ?Array<Sprint>): ?Sprint {
