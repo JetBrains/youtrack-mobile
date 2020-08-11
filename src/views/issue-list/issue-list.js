@@ -161,8 +161,8 @@ export class IssueList extends Component<Props, State> {
             style={styles.contextButtonText}
           >
             {`${searchContext?.name || ''} `}
-            {searchContext && <IconAngleDown color={COLOR_BLACK} size={17}/>}
           </Text>
+          {searchContext && <IconAngleDown color={COLOR_BLACK} size={17}/>}
         </View>
       </TouchableOpacity>
     );
