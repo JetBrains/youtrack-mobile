@@ -303,11 +303,16 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     if (field === this.state.editingField) {
       return this.closeEditor();
     }
-    const {fieldType} = field.projectCustomField.field;
+    const {fieldType} = field.projectCustomField?.field;
+
+    if (!fieldType) {
+      return null;
+    }
 
     this.setState({
       editingField: field,
-      isEditingProject: false, ...initialEditorsState
+      isEditingProject: false,
+      ...initialEditorsState
     });
 
     if (fieldType.valueType === 'date' || fieldType.valueType === DATE_AND_TIME) {
@@ -504,13 +509,17 @@ export default class CustomFieldsPanel extends Component<Props, State> {
             {isSavingProject && <ActivityIndicator style={styles.savingFieldIndicator}/>}
           </View>
 
-          {fields.map((field) => {
+          {fields.map((field: CustomFieldType) => {
+            const isDisabled: boolean = (
+              !hasPermission.canUpdateField(field) ||
+              !field?.projectCustomField?.field?.fieldType
+            );
             return <View key={field.id}>
               <CustomField
                 field={field}
                 onPress={() => this.onEditField(field)}
                 active={editingField === field}
-                disabled={!hasPermission.canUpdateField(field)}/>
+                disabled={isDisabled}/>
 
               {savingField && savingField.id === field.id && <ActivityIndicator style={styles.savingFieldIndicator}/>}
             </View>;
