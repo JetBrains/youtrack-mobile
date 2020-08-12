@@ -140,6 +140,11 @@ export default class IssuePermissions {
 
   canVote = (issue: AnyIssue): boolean => !this.isCurrentUser(issue.reporter);
 
+  canTag = (issue: AnyIssue):boolean => (
+    this.hasPermissionFor(issue, PRIVATE_UPDATE_ISSUE) ||
+    this.hasPermissionFor(issue, CAN_UPDATE_WATCH)
+  )
+
   canRunCommand = (issue: AnyIssue): boolean => {
     const has = (...args) => this.permissionsStore.has(...args);
 
