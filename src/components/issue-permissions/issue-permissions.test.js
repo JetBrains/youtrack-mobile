@@ -136,7 +136,8 @@ describe('IssuePermissions', function () {
 
     it('should allow to edit if user is not reporter but has UPDATE_ISSUE and READ_ISSUE', () => {
       this.issueMock.reporter = {id: 'foo'};
-      this.permissionsMock.hasEvery.withArgs([READ_ISSUE, UPDATE_ISSUE]).returns(true);
+      this.permissionsMock.has.withArgs(READ_ISSUE).returns(true);
+      this.permissionsMock.has.withArgs(UPDATE_ISSUE).returns(true);
 
       this.issuePermissions.canUpdateGeneralInfo(this.issueMock).should.be.true;
     });

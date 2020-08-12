@@ -62,11 +62,15 @@ export default class IssuePermissions {
   };
 
   canUpdateGeneralInfo = (issue: ?AnyIssue): boolean => {
-    if (this.isCurrentUser(issue?.reporter) && this.hasPermissionFor(issue, CREATE_ISSUE)) {
+    if (!issue) {
+      return false;
+    }
+
+    if (this.hasPermissionFor(issue, READ_ISSUE) && this.hasPermissionFor(issue, UPDATE_ISSUE)) {
       return true;
     }
-    const projectRingId = IssuePermissions.getIssueProjectRingId(issue);
-    return !!projectRingId && this.permissionsStore.hasEvery([READ_ISSUE, UPDATE_ISSUE], projectRingId);
+
+    return this.isCurrentUser(issue?.reporter) && this.hasPermissionFor(issue, CREATE_ISSUE);
   };
 
   _canUpdatePublicField = (issue: ?AnyIssue): boolean => {
@@ -97,6 +101,9 @@ export default class IssuePermissions {
   };
 
   canUpdateField = (issue: AnyIssue, field: CustomField): boolean => {
+    if (!issue) {
+      return false;
+    }
     if (this._isBlockedByTimeTracking(issue, field)) {
       return false;
     }
@@ -109,6 +116,9 @@ export default class IssuePermissions {
   canCommentOn = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_CREATE_COMMENT);
 
   canUpdateComment = (issue: AnyIssue, comment: IssueComment): boolean => {
+    if (!issue) {
+      return false;
+    }
     if (this.isCurrentUser(comment.author)) {
       return this.hasPermissionFor(issue, CAN_UPDATE_COMMENT);
     }
@@ -118,6 +128,9 @@ export default class IssuePermissions {
   canDeleteNotOwnComment = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_DELETE_NOT_OWN_COMMENT);
 
   canDeleteComment = (issue: AnyIssue, comment: IssueComment): boolean => {
+    if (!issue) {
+      return false;
+    }
     if (this.isCurrentUser(comment.author)) {
       return this.hasPermissionFor(issue, CAN_DELETE_COMMENT);
     }
