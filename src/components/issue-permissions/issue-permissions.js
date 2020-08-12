@@ -151,7 +151,7 @@ export default class IssuePermissions {
     return this.hasPermissionFor({project: project}, CAN_CREATE_COMMENT);
   };
 
-  canVote = (issue: AnyIssue): boolean => !this.isCurrentUser(issue.reporter);
+  canVote = (issue: AnyIssue): boolean => !!issue && !this.isCurrentUser(issue?.reporter) && !this.currentUser?.guest;
 
   canTag = (issue: AnyIssue):boolean => (
     this.hasPermissionFor(issue, PRIVATE_UPDATE_ISSUE) ||

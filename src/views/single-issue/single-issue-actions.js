@@ -5,7 +5,7 @@ import * as types from './single-issue-action-types';
 import {attachmentTypes, attachmentActions} from './single-issue__attachment-actions-and-types';
 import ApiHelper from '../../components/api/api__helper';
 import {notify, notifyError} from '../../components/notification/notification';
-import {resolveError} from '../../components/error/error-resolver';
+import {resolveError, resolveErrorMessage} from '../../components/error/error-resolver';
 import log from '../../components/log/log';
 import Router from '../../components/router/router';
 import {showActions} from '../../components/action-sheet/action-sheet';
@@ -301,12 +301,12 @@ export function toggleVote(voted: boolean) {
   ) => {
     const api: Api = getApi();
     const {issue} = getState().singleIssue;
-
     dispatch(setVoted(voted));
     try {
       await api.issue.updateIssueVoted(issue.id, voted);
     } catch (err) {
-      notifyError('Cannot update "Voted"', err);
+      const errorMessage: string = await resolveErrorMessage(err);
+      notify(errorMessage || 'Cannot vote');
       dispatch(setVoted(!voted));
     }
   };

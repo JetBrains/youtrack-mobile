@@ -18,8 +18,13 @@ type Props = {
 
 export default class IssueVotes extends PureComponent<Props, void> {
 
+  toggle = () => {
+    const {voted, onVoteToggle} = this.props;
+    onVoteToggle(!voted);
+  }
+
   render() {
-    const {voted, votes, canVote, onVoteToggle} = this.props;
+    const {voted, votes, canVote} = this.props;
 
     if (!canVote) {
       return null;
@@ -29,9 +34,9 @@ export default class IssueVotes extends PureComponent<Props, void> {
       <TouchableOpacity
         hitSlop={HIT_SLOP}
         style={styles.button}
-        onPress={() => onVoteToggle(!voted)}
+        onPress={this.toggle}
       >
-        <Text style={styles.counter}>{votes}</Text>
+        <Text style={styles.counter}>{votes || 0}</Text>
         <IconThumbUp
           isActive={voted}
           size={20}
