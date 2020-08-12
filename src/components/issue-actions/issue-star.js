@@ -16,8 +16,13 @@ type Props = {
 
 export default class IssueStar extends PureComponent<Props, void> {
 
+  toggle = () => {
+    const {starred, onStarToggle} = this.props;
+    onStarToggle(!starred);
+  }
+
   render() {
-    const {starred, canStar, onStarToggle, style} = this.props;
+    const {starred, canStar, style} = this.props;
 
     if (!canStar) {
       return null;
@@ -27,7 +32,7 @@ export default class IssueStar extends PureComponent<Props, void> {
       <TouchableOpacity
         hitSlop={HIT_SLOP}
         style={style}
-        onPress={() => onStarToggle(!starred)}>
+        onPress={this.toggle}>
         {starred ? <IconStar size={22} color={COLOR_PINK}/> : <IconStarOutline size={22} color={COLOR_ICON_MEDIUM_GREY}/>}
       </TouchableOpacity>
     );

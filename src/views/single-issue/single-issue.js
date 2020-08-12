@@ -257,9 +257,9 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
     }
   }
 
-  canUpdateGeneralInfo = (): boolean => {
+  canTag = (): boolean => {
     const {issue, issuePermissions} = this.props;
-    return issue && issuePermissions && issuePermissions.canUpdateGeneralInfo(issue);
+    return issue && issuePermissions && issuePermissions.canTag(issue);
   };
 
   renderActionsIcon() {
@@ -285,7 +285,7 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
       return (
         <IssueStar
           style={styles.issueStar}
-          canStar={this.canUpdateGeneralInfo()}
+          canStar={this.canTag()}
           starred={issue.watchers.hasStar}
           onStarToggle={toggleStar}
         />
@@ -340,7 +340,7 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
                 this.context.actionSheet(),
                 {
                   canAttach: issuePermissions.canAddAttachmentTo(issue),
-                  canEdit: this.canUpdateGeneralInfo(),
+                  canEdit: issuePermissions.canUpdateGeneralInfo(),
                   canApplyCommand: issuePermissions.canRunCommand(issue)
                 },
                 this.switchToDetailsTab,

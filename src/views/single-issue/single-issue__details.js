@@ -129,18 +129,15 @@ export default class IssueDetails extends Component<Props, void> {
   renderIssueVotes() {
     const {issue, issuePermissions, onVoteToggle} = this.props;
 
-    if (issue?.votes && issue?.voters) {
-      return (
-        <IssueVotes
-          canVote={issuePermissions.canVote(issue)}
-          votes={issue.votes}
-          voted={issue.voters.hasVote}
-          onVoteToggle={onVoteToggle}
-        />
-      );
-    }
+    return (
+      <IssueVotes
+        canVote={issuePermissions.canVote(issue)}
+        votes={issue?.votes}
+        voted={issue?.voters?.hasVote}
+        onVoteToggle={onVoteToggle}
+      />
+    );
   }
-
   renderAdditionalInfo() {
     const {issue} = this.props;
 

@@ -341,6 +341,7 @@ export function loadUserPermissions() {
     );
 
     await dispatch(setUserPermissions(permissions));
+    log.info('PermissionsStore created');
     appActionsHelper.updateCachedPermissions(permissions);
     log.debug('Permissions stored');
   };
