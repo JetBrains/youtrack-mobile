@@ -257,9 +257,9 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
     }
   }
 
-  canTag = (): boolean => {
+  canStar = (): boolean => {
     const {issue, issuePermissions} = this.props;
-    return issue && issuePermissions && issuePermissions.canTag(issue);
+    return issue && issuePermissions && issuePermissions.canStar();
   };
 
   renderActionsIcon() {
@@ -285,7 +285,7 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
       return (
         <IssueStar
           style={styles.issueStar}
-          canStar={this.canTag()}
+          canStar={this.canStar()}
           starred={issue.watchers.hasStar}
           onStarToggle={toggleStar}
         />
