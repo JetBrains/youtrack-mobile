@@ -340,7 +340,7 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
                 this.context.actionSheet(),
                 {
                   canAttach: issuePermissions.canAddAttachmentTo(issue),
-                  canEdit: issuePermissions.canUpdateGeneralInfo(),
+                  canEdit: issuePermissions.canUpdateGeneralInfo(issue),
                   canApplyCommand: issuePermissions.canRunCommand(issue)
                 },
                 this.switchToDetailsTab,
