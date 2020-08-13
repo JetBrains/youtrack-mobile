@@ -16,6 +16,7 @@ const OTHER_ACCOUNTS_KEY = 'YT_OTHER_ACCOUNTS_STORAGE_KEY';
 
 export type StorageState = {|
   projectId: ?string,
+  projects: Array<?string>,
   draftId: ?string,
   authParams: ?AuthParams,
   currentUser: ?User,
@@ -40,6 +41,7 @@ type StorageStateKeys = $Exact<$ObjMap<StorageState, () => string>>;
 
 const storageKeys: StorageStateKeys = {
   projectId: 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE',
+  projects: 'YT_PROJECTS_STORAGE',
   draftId: 'DRAFT_ID_STORAGE_KEY',
   authParams: 'yt_mobile_auth',
   currentUser: 'YT_CURRENT_USER_STORAGE_KEY',
@@ -66,6 +68,7 @@ const hasValue = v => v !== null && v !== undefined;
 
 export const initialState: StorageState = Object.freeze({
   projectId: null,
+  projects: [],
   draftId: null,
   authParams: null,
   currentUser: null,
@@ -120,7 +123,8 @@ export async function clearCachesAndDrafts() {
     storageKeys.lastRoute,
     storageKeys.issueActivitiesEnabledTypes,
     storageKeys.permissions,
-    storageKeys.agileDefaultBoard
+    storageKeys.agileDefaultBoard,
+    storageKeys.projects
   ]);
   return populateStorage();
 }

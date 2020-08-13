@@ -62,7 +62,6 @@ export type UserGeneralProfile = {
 export type Folder = {
   $type: string,
   id: ?string,
-  $type: ?string,
   shortName: ?string,
   name: ?string,
   query: ?string,

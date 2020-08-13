@@ -35,6 +35,7 @@ describe('Storage', () => {
     await storage.flushStoragePart({config: {}, query: 'bar'});
     MockedStorage.multiRemove.should.have.been.calledWith([
       'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE',
+      'YT_PROJECTS_STORAGE',
       'DRAFT_ID_STORAGE_KEY',
       'YT_CURRENT_USER_STORAGE_KEY',
       'YT_CREATION_TIMESTAMP_STORAGE_KEY',

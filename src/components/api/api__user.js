@@ -67,8 +67,8 @@ export default class UserAPI extends ApiBase {
     return user;
   }
 
-  async getUserFolders(folderId: string = ''): Promise<User | Tag | SavedQuery> {
-    const queryString = UserAPI.createFieldsQuery(this.USER_FOLDERS_FIELDS);
+  async getUserFolders(folderId: string = '', fields?: Array<string>): Promise<User | Tag | SavedQuery> {
+    const queryString = UserAPI.createFieldsQuery(fields || this.USER_FOLDERS_FIELDS);
 
     return await this.makeAuthorizedRequest(`${this.youTrackApiUrl}/userIssueFolders/${folderId}?${queryString}`);
   }

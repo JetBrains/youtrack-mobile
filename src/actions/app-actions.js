@@ -41,7 +41,7 @@ import type {AppConfigFilled, EndUserAgreement} from '../flow/AppConfig';
 import type {WorkTimeSettings} from '../flow/WorkTimeSettings';
 import type {StorageState} from '../components/storage/storage';
 import type RootState from '../reducers/app-reducer';
-import type {User, UserAppearanceProfile, UserGeneralProfile} from '../flow/User';
+import type {Folder, User, UserAppearanceProfile, UserGeneralProfile} from '../flow/User';
 import type {PermissionCacheItem} from '../flow/Permission';
 
 
@@ -464,6 +464,13 @@ export function applyAuthorization(authParams: AuthParams) {
   };
 }
 
+function storeProjectsShortNames() {
+  return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
+    const userFolders: Array<Folder> = await getApi().user.getUserFolders('', ['shortName']);
+    await flushStoragePart({projects: userFolders.filter(it => it.shortName)});
+  };
+}
+
 function subscribeToURL() {
   return async (dispatch: (any) => any, getState: () => Object) => {
     function isServerConfigured(url: ?string) {
@@ -528,6 +535,7 @@ export function initializeApp(config: AppConfigFilled, issueId: string | null) {
     }
 
     await dispatch(checkUserAgreement());
+    await dispatch(storeProjectsShortNames());
 
     if (!getState().app.showUserAgreement) {
       await dispatch(completeInitialization(issueId));
