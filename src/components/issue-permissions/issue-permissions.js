@@ -158,6 +158,8 @@ export default class IssuePermissions {
     this.hasPermissionFor(issue, CAN_UPDATE_WATCH)
   )
 
+  canStar = ():boolean => !this.currentUser.guest
+
   canRunCommand = (issue: AnyIssue): boolean => {
     const has = (...args) => this.permissionsStore.has(...args);
 
