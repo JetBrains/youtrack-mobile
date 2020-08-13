@@ -7,11 +7,11 @@ import toHtml from 'htmlparser-to-html';
 
 import Router from '../router/router';
 import renderCode from './code-renderer';
-import {renderImage, renderTable, renderTableRow, renderTableCell} from './wiki__renderers';
+import {renderImage, renderTable, renderTableRow, renderTableCell} from './youtrack-wiki__renderers';
 import {getBaseUrl} from '../config/config';
 import {extractId} from '../open-url-handler/open-url-handler';
 import {hasMimeType} from '../mime-type/mime-type';
-import {nodeHasType} from './wiki__node-type';
+import {nodeHasType} from './youtrack-wiki__node-type';
 import {showMoreInlineText} from '../text-view/text-view';
 
 import styles, {htmlViewStyles} from './wiki.styles';
@@ -36,7 +36,7 @@ const HTML_RENDER_NOTHING = null;
 const HTML_RENDER_DEFAULT = undefined;
 const RootComponent = props => <Text {...props} />;
 
-export default class Wiki extends PureComponent<Props, void> {
+export default class YoutrackWiki extends PureComponent<Props, void> {
   static defaultProps: Object = {
     onIssueIdTap: (issueId: string) => {},
     attachments: [],

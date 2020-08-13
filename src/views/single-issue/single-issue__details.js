@@ -31,6 +31,7 @@ import type IssuePermissions from '../../components/issue-permissions/issue-perm
 import type {AnyIssue, IssueFull, IssueOnList} from '../../flow/Issue';
 import type {Attachment, CustomField, FieldValue, IssueProject} from '../../flow/CustomFields';
 import type {Visibility} from '../../flow/Visibility';
+import type {YouTrackWiki} from '../../flow/Wiki';
 
 
 type Props = {
@@ -188,6 +189,20 @@ export default class IssueDetails extends Component<Props, void> {
       return <SkeletonIssueContent/>;
     }
 
+    const ytWikiProps: YouTrackWiki = {
+      youtrackWiki: {
+        style: styles.description,
+        backendUrl: this.backendUrl,
+        attachments: issue.attachments,
+        imageHeaders: this.imageHeaders,
+        onIssueIdTap: issueId => openNestedIssueView({issueId}),
+        title: getReadableID(issue),
+        description: issue.wikifiedDescription,
+      },
+      markdown: issue.usesMarkdown && issue.description,
+      attachments: issue.attachments
+    };
+
     return (
       <View>
         <Text
@@ -209,13 +224,8 @@ export default class IssueDetails extends Component<Props, void> {
         {this.renderLinks(issue)}
 
         <IssueDescription
-          style={styles.description}
-          backendUrl={this.backendUrl}
+          {...ytWikiProps}
           attachments={issue.attachments}
-          imageHeaders={this.imageHeaders}
-          onIssueIdTap={issueId => openNestedIssueView({issueId})}
-          title={getReadableID(issue)}
-          description={issue.wikifiedDescription}
           markdown={issue.usesMarkdown && issue.description}
         />
       </View>

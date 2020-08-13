@@ -4,29 +4,29 @@ import {View, Text} from 'react-native';
 
 import React, {Component} from 'react';
 
-import Wiki from '../../components/wiki/wiki';
+import YoutrackWiki from '../wiki/youtrack-wiki';
 import Avatar from '../avatar/avatar';
-import MarkdownView from '../wiki/markdown';
+import MarkdownView from '../wiki/markdown-view';
 import {relativeDate, getEntityPresentation} from '../issue-formatter/issue-formatter';
 
 import {COLOR_FONT_GRAY,} from '../variables/variables';
 import styles from './comment.styles';
 
 import type {IssueComment, Attachment} from '../../flow/CustomFields';
+import type {YouTrackWiki} from '../../flow/Wiki';
 
 type Props = {
   comment: IssueComment,
   attachments: Array<Attachment>,
-  imageHeaders: ?Object,
-  backendUrl: string,
-  onIssueIdTap: (issueId: string) => any,
+
+  youtrackWiki: YouTrackWiki,
 
   canRestore: boolean,
   onRestore: Function,
   canDeletePermanently: boolean,
   onDeletePermanently: Function,
 
-  activitiesEnabled: ?boolean,
+  activitiesEnabled: ?boolean
 };
 
 export default class Comment extends Component<Props, void> {
@@ -91,16 +91,18 @@ export default class Comment extends Component<Props, void> {
       );
     }
 
+    const {backendUrl, onIssueIdTap, imageHeaders} = this.props.youtrackWiki;
+
     return (
       <View style={styles.commentWikiContainer}>
-        <Wiki
-          backendUrl={this.props.backendUrl}
-          onIssueIdTap={issueId => this.props.onIssueIdTap(issueId)}
+        <YoutrackWiki
+          backendUrl={backendUrl}
+          onIssueIdTap={issueId => onIssueIdTap(issueId)}
           attachments={attachments}
-          imageHeaders={this.props.imageHeaders}
+          imageHeaders={imageHeaders}
         >
-          {comment.textPreview || comment.text}
-        </Wiki>
+          {comment.textPreview}
+        </YoutrackWiki>
       </View>
     );
   }

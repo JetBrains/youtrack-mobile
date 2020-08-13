@@ -1,56 +1,42 @@
 /* @flow */
 
-import React, {PureComponent} from 'react';
+import React from 'react';
 
-import Wiki from '../../components/wiki/wiki';
-import MarkdownView from '../../components/wiki/markdown';
-
+import YoutrackWiki from '../../components/wiki/youtrack-wiki';
+import MarkdownView from '../../components/wiki/markdown-view';
 import type {Attachment} from '../../flow/CustomFields';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-
+import type {YouTrackWiki} from '../../flow/Wiki';
 
 type Props = {
-  backendUrl: string,
-  attachments: Array<Attachment>,
-  imageHeaders: {Authorization: string},
-  onIssueIdTap: () => void,
-  title?: string,
-  description?: string,
+  youtrackWiki: YouTrackWiki,
   markdown?: string,
-  style?: ViewStyleProp,
+  attachments: Array<Attachment>
 }
 
+function IssueDescription(props: Props) {
+  const {youtrackWiki, attachments, markdown} = props;
 
-export default class IssueDescription extends PureComponent<Props, void> {
+  if (!youtrackWiki?.description && !markdown) {
+    return null;
+  }
 
-  render() {
-    const {backendUrl, attachments, imageHeaders, onIssueIdTap, title, description, style, markdown} = this.props;
-
-    if (!description && !markdown) {
-      return null;
-    }
-
-    if (markdown) {
-      return (
-        <MarkdownView
-          attachments={attachments}
-        >
-          {markdown}
-        </MarkdownView>
-      );
-    }
-
+  if (markdown) {
     return (
-      <Wiki
-        style={style}
-        backendUrl={backendUrl}
+      <MarkdownView
         attachments={attachments}
-        imageHeaders={imageHeaders}
-        onIssueIdTap={onIssueIdTap}
-        title={title}
       >
-        {description}
-      </Wiki>
+        {markdown}
+      </MarkdownView>
     );
   }
+
+  return (
+    <YoutrackWiki {
+      ...Object.assign({}, youtrackWiki, attachments)
+    }>
+      {youtrackWiki.description}
+    </YoutrackWiki>
+  );
 }
+
+export default IssueDescription;

@@ -34,6 +34,7 @@ import type {IssueComment} from '../../../flow/CustomFields';
 import type {State as IssueActivityState} from './single-issue-activity__reducers';
 import type {State as IssueCommentActivityState} from './single-issue-activity__comment-reducers';
 import type {User, UserAppearanceProfile} from '../../../flow/User';
+import type {YouTrackWiki} from '../../../flow/Wiki';
 
 type IssueActivityProps = $Shape<IssueActivityState
   & typeof activityActions
@@ -133,6 +134,11 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       deleteCommentPermanently
     } = this.props;
 
+    const youtrackWiki: YouTrackWiki = {
+      backendUrl: this.backendUrl,
+      imageHeaders: this.imageHeaders,
+      onIssueIdTap: issueId => openNestedIssueView({issueId}),
+    };
 
     return (
       <View style={styles.activitiesContainer}>
@@ -142,12 +148,10 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
           issueFields={issue?.fields}
           attachments={issue?.attachments}
 
-          imageHeaders={this.imageHeaders}
-          backendUrl={this.backendUrl}
+          youtrackWiki={youtrackWiki}
 
           onReply={(comment: IssueComment) => startReply(comment.author.login)}
           onCopyCommentLink={copyCommentUrl}
-          onIssueIdTap={issueId => openNestedIssueView({issueId})}
 
           canUpdateComment={comment => issuePermissions.canUpdateComment(issue, comment)}
           onStartEditing={startEditingComment}

@@ -50,6 +50,7 @@ import Diff from '../../../components/diff/diff';
 import {HIT_SLOP} from '../../../components/common-styles/button';
 
 import type IssuePermissions from '../../../components/issue-permissions/issue-permissions';
+import type {YouTrackWiki} from '../../../flow/Wiki';
 
 const CATEGORY_NAME = 'Issue Stream';
 
@@ -57,8 +58,8 @@ type Props = {
   issueFields: Array<Object>,
   activities: Array<IssueActivity> | null,
   attachments: Array<Attachment>,
-  imageHeaders: ?Object,
-  backendUrl: string,
+
+  youtrackWiki: $Shape<YouTrackWiki>,
 
   canUpdateComment: (comment: IssueComment) => boolean,
   onStartEditing: (comment: IssueComment) => any,
@@ -72,7 +73,6 @@ type Props = {
 
   onReply: (comment: IssueComment) => any,
   onCopyCommentLink: (comment: IssueComment) => any,
-  onIssueIdTap: (issueId: string) => any,
 
   workTimeSettings: ?WorkTimeSettings,
 
@@ -220,10 +220,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
 
   updateToAbsUrl(attachments: Array<Attachment> = []): Array<Attachment> {
     if (attachments.length) {
-      ['url', 'thumbnailURL'].forEach(
-        fieldName => (attachments = ApiHelper.convertRelativeUrls(attachments, fieldName, this.props.backendUrl)
-        )
-      );
+      attachments = ApiHelper.convertAttachmentRelativeToAbsURLs(attachments, this.props.youtrackWiki.backendUrl);
     }
     return attachments;
   }
@@ -360,6 +357,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
     }
 
     const allAttachments = this.updateToAbsUrl(comment.attachments).concat(this.props.attachments || []);
+
     return (
       <View key={comment.id}>
         {!activityGroup.merged && this._renderUserInfo(activityGroup)}
@@ -369,9 +367,8 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
           <Comment
             key={comment.id}
             comment={comment}
-            imageHeaders={this.props.imageHeaders}
-            backendUrl={this.props.backendUrl}
-            onIssueIdTap={this.props.onIssueIdTap}
+            youtrackWiki={this.props.youtrackWiki}
+
             attachments={allAttachments}
             canRestore={this.props.canRestoreComment(comment)}
             canDeletePermanently={this.props.canDeleteCommentPermanently(comment)}

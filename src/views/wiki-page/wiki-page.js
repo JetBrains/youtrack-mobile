@@ -11,7 +11,7 @@ import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {getApi} from '../../components/api/api__instance';
 import usage from '../../components/usage/usage';
 import Header from '../../components/header/header';
-import Wiki from '../../components/wiki/wiki';
+import YoutrackWiki from '../../components/wiki/youtrack-wiki';
 import Router from '../../components/router/router';
 
 import styles from './wiki-page.styles';
@@ -68,7 +68,7 @@ export default class WikiPage extends PureComponent<Props, void> {
     const {wikiText, attachments, onIssueIdTap} = this.props;
     const auth = getApi().auth;
 
-    return <Wiki
+    return <YoutrackWiki
       backendUrl={auth.config.backendUrl}
       attachments={attachments}
       imageHeaders={auth.getAuthorizationHeaders()}
@@ -76,7 +76,7 @@ export default class WikiPage extends PureComponent<Props, void> {
       renderFullException={true}
     >
       {wikiText}
-    </Wiki>;
+    </YoutrackWiki>;
   }
 
   _renderPlainText() {

@@ -14,7 +14,7 @@ import {handleRelativeUrl} from '../../components/config/config';
 import {getStorageState} from '../../components/storage/storage';
 import UserInfo from '../../components/user/user-info';
 import Diff from '../../components/diff/diff';
-import Wiki from '../../components/wiki/wiki';
+import YoutrackWiki from '../../components/wiki/youtrack-wiki';
 import CustomFieldChangeDelimiter from '../../components/custom-field/custom-field__change-delimiter';
 import {isReactElement} from '../../util/util';
 import ErrorMessage from '../../components/error-message/error-message';
@@ -309,12 +309,12 @@ class Inbox extends Component<Props, State> {
         <View><Text style={[styles.textPrimary, styles.notificationIssueInfo]}>{`${title}:`}</Text></View>
 
         <View style={[styles.notificationContent, styles.notificationContentWorkflow]}>
-          <Wiki
+          <YoutrackWiki
             backendUrl={this.config.backendUrl}
             onIssueIdTap={(issueId) => Router.SingleIssue({issueId})}
           >
             {text}
-          </Wiki>
+          </YoutrackWiki>
         </View>
 
         {this.renderNotificationReason(workflowMetadata)}
