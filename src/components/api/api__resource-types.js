@@ -2,6 +2,8 @@ export const ResourceTypes = {
   ISSUE: 'jetbrains.charisma.persistent.Issue',
   ISSUE_COMMENT: 'jetbrains.charisma.persistent.IssueComment',
 
+  PROJECT: 'jetbrains.charisma.persistent.Project',
+
   VISIBILITY_LIMITED: 'jetbrains.charisma.persistent.visibility.LimitedVisibility',
   VISIBILITY_UNLIMITED: 'jetbrains.charisma.persistent.visibility.UnlimitedVisibility',
   VISIBILITY_GROUP: 'jetbrains.charisma.persistent.security.VisibilityGroups',
@@ -24,6 +26,7 @@ export const hasType = function(type: string) {
 hasType.comment = hasType(ResourceTypes.ISSUE_COMMENT);
 hasType.user = hasType(ResourceTypes.USER);
 hasType.userGroup = hasType(ResourceTypes.USER_GROUP);
+hasType.project = hasType(ResourceTypes.PROJECT);
 
 
 export const addTypes = function(type: string) {

@@ -12,6 +12,19 @@ export const resolvedTextColor = {
   color: COLOR_FONT_GRAY
 };
 
+export const monospaceFontAndroid = 'monospace';
+export const monospaceFontIOS = 'Menlo';
+export const monospace = {
+  ...Platform.select({
+    ios: {
+      fontFamily: monospaceFontIOS
+    },
+    android: {
+      fontFamily: monospaceFontAndroid
+    }
+  })
+};
+
 export const headerTitle = {
   color: COLOR_DARK,
   fontSize: HEADER_FONT_SIZE,

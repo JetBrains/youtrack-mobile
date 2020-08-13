@@ -301,6 +301,7 @@ export default {
     'votes',
     'updated',
     'wikifiedDescription',
+    'usesMarkdown',
     {watchers: 'hasStar'},
     {voters: 'hasVote'},
     {project: ISSUE_PROJECT_FIELDS},

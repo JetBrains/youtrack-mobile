@@ -216,6 +216,7 @@ export default class IssueDetails extends Component<Props, void> {
           onIssueIdTap={issueId => openNestedIssueView({issueId})}
           title={getReadableID(issue)}
           description={issue.wikifiedDescription}
+          markdown={issue.usesMarkdown && issue.description}
         />
       </View>
     );

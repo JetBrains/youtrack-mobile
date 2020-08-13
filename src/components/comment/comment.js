@@ -1,12 +1,17 @@
 /* @flow */
-import styles from './comment.styles';
-import Wiki from '../../components/wiki/wiki';
-import {COLOR_FONT_GRAY,} from '../../components/variables/variables';
 
 import {View, Text} from 'react-native';
+
 import React, {Component} from 'react';
-import {relativeDate, getEntityPresentation} from '../issue-formatter/issue-formatter';
+
+import Wiki from '../../components/wiki/wiki';
 import Avatar from '../avatar/avatar';
+import MarkdownView from '../wiki/markdown';
+import {relativeDate, getEntityPresentation} from '../issue-formatter/issue-formatter';
+
+import {COLOR_FONT_GRAY,} from '../variables/variables';
+import styles from './comment.styles';
+
 import type {IssueComment, Attachment} from '../../flow/CustomFields';
 
 type Props = {
@@ -75,6 +80,17 @@ export default class Comment extends Component<Props, void> {
     if (comment.deleted) {
       return this._renderDeletedComment();
     }
+
+    if (comment.usesMarkdown) {
+      return (
+        <MarkdownView
+          attachments={attachments}
+        >
+          {comment.text}
+        </MarkdownView>
+      );
+    }
+
     return (
       <View style={styles.commentWikiContainer}>
         <Wiki

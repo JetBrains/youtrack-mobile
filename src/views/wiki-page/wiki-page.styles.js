@@ -1,11 +1,11 @@
 import {StyleSheet} from 'react-native';
-import {COLOR_FONT_ON_BLACK, UNIT, COLOR_FONT} from '../../components/variables/variables';
+import {UNIT, COLOR_BLACK} from '../../components/variables/variables';
+import {headerTitle, monospace, SECONDARY_FONT_SIZE} from '../../components/common-styles/typography';
 
 
 export default StyleSheet.create({
   headerTitle: {
-    color: COLOR_FONT_ON_BLACK,
-    fontSize: 17
+    ...headerTitle
   },
   wiki: {
     paddingTop: UNIT,
@@ -14,6 +14,8 @@ export default StyleSheet.create({
     paddingBottom: UNIT * 9
   },
   plainText: {
-    color: COLOR_FONT
+    color: COLOR_BLACK,
+    fontSize: SECONDARY_FONT_SIZE,
+    ...monospace
   }
 });

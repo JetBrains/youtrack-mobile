@@ -1,19 +1,14 @@
 /* @flow */
+
 import React from 'react';
+
 import {Text, Image, Dimensions} from 'react-native';
-import SyntaxHighlighter from 'react-native-syntax-highlighter';
-import entities from 'entities';
-import {COLOR_GRAY, COLOR_LIGHT_GRAY, UNIT} from '../variables/variables';
-import Router from '../router/router';
-import {showMoreText} from '../text-view/text-view';
+
 import {hasMimeType} from '../mime-type/mime-type';
 import calculateAspectRatio from '../../components/aspect-ratio/aspect-ratio';
 import {isAndroidPlatform, isIOSPlatform} from '../../util/util';
 
-import {codeHighlightStyle} from './code-highlight-styles';
-import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from '../common-styles/typography';
-
-import styles from './wiki.styles';
+import {COLOR_GRAY, COLOR_LIGHT_GRAY, UNIT} from '../variables/variables';
 
 import type {Attachment, ImageDimensions} from '../../flow/CustomFields';
 
@@ -21,46 +16,6 @@ const DIMENSION_WIDTH = Dimensions.get('window').width;
 const IMAGE_WIDTH = Math.floor(DIMENSION_WIDTH - UNIT * 4);
 const IMAGE_HEIGHT = 200;
 const isAndroid: boolean = isAndroidPlatform();
-
-export function renderCode(node: { children: any }, index: number, title?: string, language?: string) {
-  // App is hanging trying to render a huge text https://github.com/facebook/react-native/issues/19453
-  const MAX_CODE_LENGTH = 700;
-  const newLine = <Text>{'\n'}</Text>;
-
-  const code = (node?.children || []).map(it => it.data).join('\n') || '';
-  let trimmedCode = code;
-  const isCodeTrimmed = code.length > MAX_CODE_LENGTH;
-
-  if (isCodeTrimmed) {
-    trimmedCode = `${code.substr(0, MAX_CODE_LENGTH)}\n...`;
-  }
-
-  return <Text key={index}>
-    {newLine}
-    <Text
-      onPress={() => isCodeTrimmed && Router.WikiPage({
-        style: styles.code,
-        title: title,
-        plainText: code
-      })}>
-      <SyntaxHighlighter
-        language={language}
-        PreTag={Text}
-        CodeTag={Text}
-
-        style={codeHighlightStyle}
-        fontSize={!isAndroid ? MAIN_FONT_SIZE : SECONDARY_FONT_SIZE}
-        fontFamily={!isAndroid ? 'Courier' : 'monospace'}
-      >
-        {entities.decodeHTML(trimmedCode)}
-      </SyntaxHighlighter>
-      {isCodeTrimmed && <Text
-        style={styles.codeLink}
-      >{`${showMoreText}\n`}</Text>}
-      {newLine}
-    </Text>
-  </Text>;
-}
 
 type RenderImageOptions = {
   node: Object,

@@ -146,6 +146,7 @@
     "react-native-keyboard-spacer": "0.4.1",
     "react-native-keychain": "1.0.0",
     "react-native-linear-gradient": "2.4.0",
+    "react-native-markdown-display": "^6.1.6",
     "react-native-markdown-view": "1.1.4",
     "react-native-notifications": "1.1.19",
     "react-native-notifications-latest": "git://github.com/anisimov74/react-native-notifications.git#fd47b17",

@@ -6,14 +6,17 @@ import HTMLView from 'react-native-htmlview';
 import toHtml from 'htmlparser-to-html';
 
 import Router from '../router/router';
-import styles, {htmlViewStyles} from './wiki.styles';
-import {COLOR_FONT} from '../variables/variables';
+import renderCode from './code-renderer';
+import {renderImage, renderTable, renderTableRow, renderTableCell} from './wiki__renderers';
 import {getBaseUrl} from '../config/config';
-import {renderCode, renderImage, renderTable, renderTableRow, renderTableCell} from './wiki__renderers';
 import {extractId} from '../open-url-handler/open-url-handler';
-import {showMoreInlineText} from '../text-view/text-view';
 import {hasMimeType} from '../mime-type/mime-type';
 import {nodeHasType} from './wiki__node-type';
+import {showMoreInlineText} from '../text-view/text-view';
+
+import styles, {htmlViewStyles} from './wiki.styles';
+import {COLOR_FONT} from '../variables/variables';
+
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 HTMLView.propTypes.style = Text.propTypes.style;
