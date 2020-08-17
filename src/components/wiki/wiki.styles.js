@@ -5,7 +5,8 @@ import {
   UNIT,
   COLOR_FONT_GRAY,
   COLOR_PINK,
-  COLOR_LIGHT_GRAY, COLOR_BLACK
+  COLOR_LIGHT_GRAY, COLOR_BLACK,
+  COLOR_ICON_MEDIUM_GREY
 } from '../variables/variables';
 import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE, monospace} from '../common-styles/typography';
 import {link} from '../common-styles/button';
@@ -61,6 +62,9 @@ export default StyleSheet.create({
     ...monospace,
     fontSize: SECONDARY_FONT_SIZE,
     fontWeight: '500',
+  },
+  language: {
+    color: COLOR_ICON_MEDIUM_GREY
   },
   inlineCode: {
     ...monospace,

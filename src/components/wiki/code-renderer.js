@@ -5,12 +5,13 @@ import React from 'react';
 import {Text} from 'react-native';
 
 import SyntaxHighlighter from 'react-native-syntax-highlighter';
+import { idea } from 'react-syntax-highlighter/dist/styles/hljs';
+
 import entities from 'entities';
 import Router from '../router/router';
 
 import {isAndroidPlatform} from '../../util/util';
 import {showMoreText} from '../text-view/text-view';
-import {codeHighlightStyle} from './code-highlight-styles';
 import {monospaceFontAndroid, monospaceFontIOS, SECONDARY_FONT_SIZE} from '../common-styles/typography';
 
 import styles from './wiki.styles';
@@ -38,11 +39,12 @@ function renderCode(node: { content?: string, children?: any }, index: number, t
         plainText: code
       })}>
       <SyntaxHighlighter
+        highlighter={'hljs' || 'prism'}
         language={language}
         PreTag={Text}
         CodeTag={Text}
 
-        style={codeHighlightStyle}
+        style={idea}
         fontSize={SECONDARY_FONT_SIZE}
         fontFamily={isAndroid ? monospaceFontAndroid : monospaceFontIOS}
       >

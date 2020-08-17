@@ -158,7 +158,7 @@
     "react-native-swipeout": "2.3.6",
     "react-native-swiper": "git://github.com/huston007/react-native-swiper.git#64c5681",
     "react-native-switch-pro": "^1.0.4",
-    "react-native-syntax-highlighter": "1.2.6",
+    "react-native-syntax-highlighter": "2.1.0",
     "react-native-tab-view": "2.11.0",
     "react-native-vector-icons": "^6.6.0",
     "react-navigation": "^3.11.0",

@@ -18,7 +18,7 @@ import type {Folder} from '../../flow/User';
 function getMarkdownRules(attachments: Array<Attachment> = [], projects: Array<IssueProject> = []) {
   const imageHeaders = getApi().auth.getAuthorizationHeaders();
   const projectIds = (projects).map((it: Folder) => it?.shortName).join('|');
-  const issueId = new RegExp(`${projectIds}-\d+$`);
+  const issueId = new RegExp(`\\b(?:${projectIds})\\b-\\d+$`);
 
   return {
 
@@ -79,7 +79,7 @@ function getMarkdownRules(attachments: Array<Attachment> = [], projects: Array<I
       const language = ['exception', 'stacktrace'].includes(node.sourceInfo) ? null : node.sourceInfo;
       return (
         <Text key={node.key}>
-          {language}
+          <Text style={styles.language}>{language}</Text>
           {renderCode({content}, node.key, node.sourceInfo, language)}
         </Text>
       );
