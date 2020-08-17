@@ -2,7 +2,6 @@ import ReactNative from 'react-native';
 import chai, {should} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import sinonChai from 'sinon-chai';
-import 'babel-polyfill';
 import log from '../src/components/log/log';
 import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
