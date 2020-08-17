@@ -1,15 +1,20 @@
 /* @flow */
+
 import React, {Component} from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Linking } from 'react-native';
-import { MarkdownView } from 'react-native-markdown-view';
 
 import {connect} from 'react-redux';
-import styles, {markdownStyles} from './user-agreement.styles';
+import { View, Text, TouchableOpacity, ScrollView, Linking } from 'react-native';
+import Markdown from 'react-native-markdown-display';
+
+import ModalView from '../modal-view/modal-view';
+
 import {acceptUserAgreement, declineUserAgreement} from '../../actions/app-actions';
 
-import type {EndUserAgreement} from '../../flow/AppConfig';
-import ModalView from '../modal-view/modal-view';
 import {UNIT} from '../variables/variables';
+
+import styles from './user-agreement.styles';
+
+import type {EndUserAgreement} from '../../flow/AppConfig';
 
 type Props = {
   show: boolean,
@@ -26,7 +31,7 @@ export class UserAgreementView extends Component<Props, void> {
 
   render() {
     const {show, agreement, onAccept, onDecline} = this.props;
-    if (!show) {
+    if (!show || !agreement?.text) {
       return null;
     }
 
@@ -40,12 +45,10 @@ export class UserAgreementView extends Component<Props, void> {
           <ScrollView
             contentContainerStyle={styles.markdownScroll}
           >
-            <MarkdownView
-              onLinkPress={this.onLinkPress}
-              styles={markdownStyles}
+            <Markdown
             >
               {agreement.text}
-            </MarkdownView>
+            </Markdown>
           </ScrollView>
           <View style={styles.buttons}>
             <TouchableOpacity
