@@ -116,7 +116,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onLogOut: () => dispatch(AppActions.removeAccountOrLogOut()),
     onAddAccount: () => dispatch(AppActions.addAccount()),
-    onChangeAccount: (account: StorageState) => dispatch(AppActions.changeAccount(account)),
+    onChangeAccount: (account: StorageState) => dispatch(AppActions.switchAccount(account)),
     openDebugView: () => dispatch(AppActions.openDebugView()),
     openFeaturesView: () => dispatch(AppActions.openFeaturesView()),
   };
