@@ -21,8 +21,7 @@ export default StyleSheet.create({
     fontSize: MAIN_FONT_SIZE,
     color: COLOR_FONT,
     textAlign: 'left',
-    writingDirection: 'ltr',
-    backgroundColor: 'lime',
+    writingDirection: 'ltr'
   },
   lineSpace: {
     lineHeight: 30
