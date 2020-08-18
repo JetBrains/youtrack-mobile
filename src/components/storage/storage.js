@@ -4,6 +4,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 
 import log from '../log/log';
+import {notify} from '../notification/notification';
 
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {AuthParams} from '../../flow/Auth';
@@ -190,11 +191,19 @@ export async function flushStorage(newState: StorageState): Promise<StorageState
 }
 
 export async function flushStoragePart(part: Object): Promise<StorageState> {
-  cleanAndLogState('Flushing storage part', part);
-  return flushStorage({
-    ...getStorageState(),
-    ...part
-  });
+  const currentState: StorageState = getStorageState();
+  let newState: Promise<StorageState>;
+  try {
+    cleanAndLogState('Flushing storage part', part);
+    newState = flushStorage({
+      ...currentState,
+      ...part
+    });
+  } catch (error) {
+    newState = new Promise(resolve => resolve(currentState));
+    notify('Your mobile device is running low on available storage space. Some app functionality may be unavailable.', error, 10000);
+  }
+  return newState;
 }
 
 export async function getOtherAccounts(): Promise<Array<StorageState>> {

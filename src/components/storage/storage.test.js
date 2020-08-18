@@ -2,16 +2,20 @@ import * as storage from './storage';
 import MockedStorage from '@react-native-community/async-storage';
 import sinon from 'sinon';
 
+let queryMock;
 describe('Storage', () => {
   let sandbox;
+  queryMock = 'for: me';
 
   beforeEach(async () => {
+    jest.restoreAllMocks();
+
     sandbox = sinon.sandbox.create();
     sandbox.spy(MockedStorage, 'multiSet');
     sandbox.spy(MockedStorage, 'multiRemove');
     sandbox.stub(MockedStorage, 'multiGet').returns(Promise.resolve([
       ['BACKEND_CONFIG_STORAGE_KEY', '{"foo": "bar"}'],
-      ['YT_QUERY_STORAGE', 'for: me'],
+      ['YT_QUERY_STORAGE', queryMock],
       ['yt_mobile_auth', '{"foo": "bar"}']
     ]));
 
@@ -23,12 +27,20 @@ describe('Storage', () => {
   it('should populate storage', async () => {
     storage.getStorageState().config.should.deep.equal({foo: 'bar'});
     storage.getStorageState().authParams.should.deep.equal({foo: 'bar'});
-    storage.getStorageState().query.should.equal('for: me');
+    storage.getStorageState().query.should.equal(queryMock);
   });
 
   it('should update state on full flush', async () => {
     await storage.flushStorage({config: {}, query: 'bar'});
     storage.getStorageState().query.should.equal('bar');
+  });
+
+  it('should return prev state if flush throws', async () => {
+    jest.spyOn(storage, 'flushStorage').mockRejectedValueOnce('Device is running low on available storage space');
+    await storage.flushStorage({query: 'bar'}).catch(() => {
+      storage.getStorageState().query.should.equal(queryMock);
+    });
+
   });
 
   it('should remove empty values from storage on flush', async () => {
