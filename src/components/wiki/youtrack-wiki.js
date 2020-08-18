@@ -28,7 +28,6 @@ type Props = {
   imageHeaders: ?Object,
   backendUrl: string,
   onIssueIdTap: (issueId: string) => any,
-  title?: string,
   renderFullException?: boolean
 };
 
@@ -76,7 +75,6 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
         style={styles.exceptionLink}
         onPress={() => requestAnimationFrame(() => Router.WikiPage({
           wikiText: toHtml(node),
-          title: this.props.title,
           onIssueIdTap: this.handleLinkPress
         }))}
       >
@@ -90,7 +88,7 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
   }
 
   renderNode = (node: Object, index: number, siblings: Array<any>, parent: Object, defaultRenderer: (any, any) => any) => {
-    const {imageHeaders, attachments, renderFullException, title} = this.props;
+    const {imageHeaders, attachments, renderFullException} = this.props;
     const wikiNodeType = nodeHasType(node);
     const getCode = () => (node.children[0] && node.children[0].name === 'code') ? node.children[0] : node;
 
@@ -113,7 +111,6 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
       return renderCode(
         getCode(),
         index,
-        title,
         this.getLanguage(getCode())
       );
 

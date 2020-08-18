@@ -12,10 +12,7 @@ import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE, monospace} from '../common-styles/t
 import {link} from '../common-styles/button';
 
 const showMoreLink = {
-  marginBottom: UNIT * 2,
-  fontFamily: 'System',
   fontSize: SECONDARY_FONT_SIZE,
-  textAlign: 'center',
   color: COLOR_PINK
 };
 
@@ -24,7 +21,8 @@ export default StyleSheet.create({
     fontSize: MAIN_FONT_SIZE,
     color: COLOR_FONT,
     textAlign: 'left',
-    writingDirection: 'ltr'
+    writingDirection: 'ltr',
+    backgroundColor: 'lime',
   },
   lineSpace: {
     lineHeight: 30
@@ -52,7 +50,12 @@ export default StyleSheet.create({
     ...link,
     fontSize: SECONDARY_FONT_SIZE,
   },
-  codeLink: showMoreLink,
+  showMoreLink: {
+    ...showMoreLink,
+    paddingLeft: UNIT,
+    paddingRight: UNIT,
+    fontSize: MAIN_FONT_SIZE,
+  },
   exceptionLink: showMoreLink,
   codeContainer: {
     paddingLeft: UNIT * 2,
@@ -70,7 +73,7 @@ export default StyleSheet.create({
     ...monospace,
     fontSize: SECONDARY_FONT_SIZE,
     color: COLOR_BLACK,
-    lineHeight: SECONDARY_FONT_SIZE * 2,
+    lineHeight: SECONDARY_FONT_SIZE * 1.5,
     backgroundColor: COLOR_LIGHT_GRAY
   },
   exception: {

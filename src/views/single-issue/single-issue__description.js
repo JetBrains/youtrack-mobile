@@ -39,4 +39,4 @@ function IssueDescription(props: Props) {
   );
 }
 
-export default IssueDescription;
+export default React.memo<Props>(IssueDescription);

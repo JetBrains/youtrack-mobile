@@ -41,4 +41,4 @@ function MarkdownView(props: Props) {
   );
 }
 
-export default MarkdownView;
+export default React.memo<Props>(MarkdownView);

@@ -125,6 +125,7 @@
     "lodash.once": "4.1.1",
     "lodash.throttle": "4.1.1",
     "object-walk": "^0.1.1",
+    "program-language-detector": "0.0.12",
     "prop-types": "^15.5.10",
     "qs": "6.7.0",
     "react": "16.8.3",

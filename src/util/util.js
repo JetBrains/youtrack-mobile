@@ -1,10 +1,13 @@
 /* @flow */
 
 import React from 'react';
+
 import {Platform} from 'react-native';
-import {getStorageState} from '../components/storage/storage';
+
 import qs from 'qs';
 import appPackage from '../../package.json'; // eslint-disable-line import/extensions
+import {getStorageState} from '../components/storage/storage';
+import {detect} from 'program-language-detector';
 
 
 import type {StorageState} from '../components/storage/storage';
@@ -33,4 +36,18 @@ export const parseUrlQueryString = (url: string): Object => {
   const match = url.match(/\?(.*)/);
   const query_string = match && match[1];
   return qs.parse(query_string);
+};
+
+export const detectLanguage = (code: string) => {
+  let language;
+
+  switch (true) {
+  case(code.indexOf('java.') !== -1):
+    language = 'java';
+    break;
+  default:
+    language = detect(code);
+  }
+
+  return language;
 };
