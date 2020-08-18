@@ -250,30 +250,44 @@ export function addAccount(serverUrl: string = '') {
       const {otherAccounts} = getState().app;
       if (!getStorageState().config && otherAccounts.length) {
         log.info(`${errorMsg} Restoring prev account`);
-        await dispatch(changeAccount(otherAccounts[0], true));
+        await dispatch(switchAccount(otherAccounts[0], true));
       }
       Router.navigateToDefaultRoute();
     }
   };
 }
 
-export function changeAccount(account: StorageState, dropCurrentAccount: boolean = false) {
+export function switchAccount(account: StorageState, dropCurrentAccount: boolean = false) {
+  return async (dispatch: (any) => any) => {
+    dispatch(changeAccount(account, dropCurrentAccount)).catch(() => {
+      dispatch(changeAccount(getStorageState()));
+    });
+  };
+}
+
+
+export function changeAccount(account: StorageState, removeCurrentAccount: boolean = false) {
   return async (dispatch: (any) => any, getState: () => RootState) => {
-    log.info('Changing account', getState().currentUser, account.currentUser);
+    const state: RootState = getState();
+    const stored: StorageState = getStorageState();
+    log.info(`Changing account URL from: ${stored?.config?.backendUrl || ''} to: ${account?.config?.backendUrl || ''}`);
+
     const {config, authParams} = account;
     if (!authParams) {
-      throw new Error('Account doesn\'t have valid authorization, cannot switch onto it.');
+      const errorMessage: string = 'Account doesn\'t have valid authorization, cannot switch onto it.';
+      notify(errorMessage);
+      throw new Error(errorMessage);
     }
     const auth = new Auth(config);
 
     dispatch(beginAccountChange());
 
     try {
-      const otherAccounts = getState().app.otherAccounts.filter(acc => acc !== account);
-      const currentAccount = dropCurrentAccount ? null : getStorageState();
-      const newOtherAccounts = [...(currentAccount ? [currentAccount] : []), ...otherAccounts];
+      const otherAccounts = state.app.otherAccounts.filter(acc => acc !== account);
+      const current = removeCurrentAccount ? null : stored;
+      const updatedOtherAccounts = [...(current && stored !== account ? [current] : []), ...otherAccounts];
 
-      await storeAccounts(newOtherAccounts);
+      await storeAccounts(updatedOtherAccounts);
       await flushStorage(account);
 
       await auth.storeAuth(authParams);
@@ -281,14 +295,12 @@ export function changeAccount(account: StorageState, dropCurrentAccount: boolean
 
       await dispatch(initializeAuth(config));
       await dispatch(checkUserAgreement());
-      dispatch(receiveOtherAccounts(newOtherAccounts));
+      dispatch(receiveOtherAccounts(updatedOtherAccounts));
 
-      if (!getState().app.showUserAgreement) {
+      if (!state.app.showUserAgreement) {
         dispatch(completeInitialization());
       }
-
-
-      log.info('Account has been changed', account.currentUser);
+      log.info('Account changed, URL:', account?.config?.backendUrl);
     } catch (err) {
       notifyError('Could not change account', err);
     }
@@ -315,7 +327,7 @@ export function removeAccountOrLogOut() {
       return dispatch(logOut());
     }
     log.info('Removing account, choosing another one.');
-    await dispatch(changeAccount(otherAccounts[0], true));
+    await dispatch(switchAccount(otherAccounts[0], true));
   };
 }
 
