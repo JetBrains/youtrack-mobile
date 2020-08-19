@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import {
   COLOR_LINK,
   COLOR_FONT,
@@ -21,7 +21,13 @@ export default StyleSheet.create({
     fontSize: MAIN_FONT_SIZE,
     color: COLOR_FONT,
     textAlign: 'left',
-    writingDirection: 'ltr'
+    writingDirection: 'ltr',
+    ...Platform.select({
+      android: {
+        borderBottomWidth: UNIT,
+        borderColor: 'transparent'
+      }
+    }),
   },
   lineSpace: {
     lineHeight: 30
