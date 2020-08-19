@@ -16,7 +16,7 @@ import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import {
   getEntityPresentation,
   getReadableID,
-  absDate
+  formatDate
 } from '../../components/issue-formatter/issue-formatter';
 import Tags from '../../components/tags/tags';
 import {HIT_SLOP} from '../../components/common-styles/button';
@@ -99,7 +99,7 @@ export default class IssueDetails extends Component<Props, void> {
         </AnimatedView>
       );
     }
-  }
+  };
 
   renderAttachments(attachments: Array<Attachment> | null) {
     if (!attachments || !attachments.length) {
@@ -139,6 +139,7 @@ export default class IssueDetails extends Component<Props, void> {
       />
     );
   }
+
   renderAdditionalInfo() {
     const {issue} = this.props;
 
@@ -149,17 +150,15 @@ export default class IssueDetails extends Component<Props, void> {
             style={styles.issueTopPanelText}
             selectable={true}
           >
-            Created by {getEntityPresentation(issue.reporter)} {absDate(issue?.created) || ''}
+            Created by {getEntityPresentation(issue.reporter)} {formatDate(issue?.created) || ''}
           </Text>
 
-          {issue?.created !== issue?.updated && (
-            <Text
-              style={[styles.issueTopPanelText, styles.topPanelUpdatedInformation]}
-              selectable={true}
-            >
-              Updated by {getEntityPresentation(issue.updater)} {absDate(issue?.updated) || ''}
-            </Text>
-          )}
+          <Text
+            style={[styles.issueTopPanelText, styles.topPanelUpdatedInformation]}
+            selectable={true}
+          >
+            Updated by {getEntityPresentation(issue.updater)} {formatDate(issue?.updated) || ''}
+          </Text>
         </View>
         : <SkeletonIssueInfoLine lines={2}/>
     );
@@ -281,7 +280,7 @@ export default class IssueDetails extends Component<Props, void> {
       canUpdateGeneralInfo: noop,
       canEditProject: noop,
     };
-  }
+  };
 
   canUpdateField = (field: CustomField) => this.getIssuePermissions().canUpdateField(this.getIssue(), field);
 
@@ -310,7 +309,7 @@ export default class IssueDetails extends Component<Props, void> {
       onUpdate={this.onFieldUpdate}
       onUpdateProject={this.onUpdateProject}
     />;
-  }
+  };
 
   render() {
     const {renderRefreshControl, onSwitchToActivity} = this.props;
