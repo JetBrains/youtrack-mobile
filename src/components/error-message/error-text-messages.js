@@ -8,7 +8,7 @@ const NETWORK_PROBLEM_TIPS = [
   'Connections to servers that use self-signed SSL/TLS certificates are not supported.',
 ];
 
-const YT_SUPPORTED_VERSION = `YouTrack Mobile requires YouTrack version 2016.2 or later.`;
+const YT_SUPPORTED_VERSION = `YouTrack Mobile requires YouTrack version 2018+.`;
 
 /* eslint-disable import/no-commonjs */
 module.exports = {
