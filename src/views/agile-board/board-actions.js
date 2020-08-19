@@ -109,11 +109,11 @@ export function loadBoard(board: Board) {
 
     let sprint: Sprint = getLastVisitedSprint(board.id, agileUserProfile?.visitedSprints);
     if (!sprint) {
-      sprint = board.sprints.slice(-1)[0];
+      sprint = (board.sprints || []).slice(-1)[0] || {};
       trackError('Cannot find last visited sprint');
       log.info(`Last visited sprint is undefined. Use the last one of the current board.`);
     }
-    log.info(`Loading: Board ${board.name}, Sprint = ${sprint.name}`);
+    log.info(`Loading: Board ${board?.name}, Sprint = ${sprint?.name}`);
 
     dispatch(loadSprint(board.id, sprint.id));
   };
