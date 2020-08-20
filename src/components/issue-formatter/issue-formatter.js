@@ -44,6 +44,17 @@ function formatDate(date: Date|number) {
   return `${dateObj.toLocaleString([], {year: '2-digit', month: 'short', day: '2-digit', hour: '2-digit', minute:'2-digit'})}`;
 }
 
+function ytDate(date: Date|number) {
+  const dateObj = new Date(date);
+  return `${dateObj.toLocaleString([], {
+    month: 'short',
+    day: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })}`;
+}
+
 function getPostfix(formattedDate: string) {
   return formattedDate === 'just now' ? '' : ' ago';
 }
@@ -122,5 +133,5 @@ function getVisibilityPresentation(entity: Object) {
 
 export {
   getForText, formatDate, relativeDate, shortRelativeDate, getPriotityField, getAssigneeField, getReadableID,
-  getVisibilityPresentation, getEntityPresentation, absDate
+  getVisibilityPresentation, getEntityPresentation, absDate, ytDate
 };

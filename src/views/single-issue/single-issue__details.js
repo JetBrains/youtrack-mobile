@@ -16,7 +16,7 @@ import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import {
   getEntityPresentation,
   getReadableID,
-  formatDate
+  ytDate
 } from '../../components/issue-formatter/issue-formatter';
 import Tags from '../../components/tags/tags';
 import {HIT_SLOP} from '../../components/common-styles/button';
@@ -143,6 +143,10 @@ export default class IssueDetails extends Component<Props, void> {
   renderAdditionalInfo() {
     const {issue} = this.props;
 
+    if (!issue) {
+      return null;
+    }
+
     return (
       issue
         ? <View style={[styles.issueTopPanel, styles.issueAdditionalInfo]}>
@@ -150,14 +154,14 @@ export default class IssueDetails extends Component<Props, void> {
             style={styles.issueTopPanelText}
             selectable={true}
           >
-            Created by {getEntityPresentation(issue.reporter)} {formatDate(issue?.created) || ''}
+            Created by {getEntityPresentation(issue.reporter)} {ytDate(issue?.created) || ''}
           </Text>
 
           <Text
             style={[styles.issueTopPanelText, styles.topPanelUpdatedInformation]}
             selectable={true}
           >
-            Updated by {getEntityPresentation(issue.updater)} {formatDate(issue?.updated) || ''}
+            Updated by {getEntityPresentation(issue.updater)} {ytDate(issue?.updated) || ''}
           </Text>
         </View>
         : <SkeletonIssueInfoLine lines={2}/>
