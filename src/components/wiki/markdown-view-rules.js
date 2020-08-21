@@ -1,11 +1,10 @@
 /* @flow */
 import React from 'react';
 
-import {Image, Text, View} from 'react-native';
+import {Image, ScrollView, Text, View} from 'react-native';
 
 import Router from '../router/router';
 import LongText from './text-renderer';
-import {detectLanguage} from '../../util/util';
 import {hasMimeType} from '../mime-type/mime-type';
 import {getApi} from '../api/api__instance';
 import renderCode from './code-renderer';
@@ -78,17 +77,26 @@ function getMarkdownRules(attachments: Array<Attachment> = [], projects: Array<I
         content = node.content.substring(0, node.content.length - 1);
       }
 
-      const isStacktraceOrException: boolean = ['exception', 'stacktrace'].includes(node.sourceInfo);
-      if (isStacktraceOrException) {
-        return <LongText key={node.key} scrollEnabled={false} style={styles.exception}>{content}</LongText>;
-      }
+      const language: string = node.sourceInfo;
+      const isStacktraceOrException: boolean = !!language && ['exception', 'stacktrace'].includes(language);
 
-      const language: ?string = node.sourceInfo || detectLanguage(content);
       return (
-        <Text key={node.key}>
-          <Text style={styles.language}>{language}</Text>
-          {renderCode({content}, node.key, language)}
-        </Text>
+        <View key={node.key} style={styles.codeContainer}>
+          {!!language && !isStacktraceOrException && <Text style={styles.codeLanguage}>{language}</Text>}
+
+          {<ScrollView
+            scrollEventThrottle={100}
+            style={styles.codeContent}
+          >
+            <ScrollView
+              horizontal={true}
+              scrollEventThrottle={100}
+            >
+              {isStacktraceOrException && <LongText style={[styles.exception, styles.inlineCode]}>{content}</LongText>}
+              {!isStacktraceOrException && <Text key={node.key}>{renderCode({content}, language)}</Text>}
+            </ScrollView>
+          </ScrollView>}
+        </View>
       );
     },
 

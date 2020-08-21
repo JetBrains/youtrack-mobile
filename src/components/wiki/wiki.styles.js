@@ -59,11 +59,15 @@ export default StyleSheet.create({
     ...showMoreLink,
     paddingLeft: UNIT,
     paddingRight: UNIT,
-    fontSize: MAIN_FONT_SIZE,
+    fontSize: SECONDARY_FONT_SIZE,
   },
   exceptionLink: showMoreLink,
   codeContainer: {
-    paddingLeft: UNIT * 2,
+    marginTop: UNIT * 2,
+    marginBottom: UNIT
+  },
+  codeContent: {
+    padding: UNIT / 2,
     backgroundColor: COLOR_LIGHT_GRAY
   },
   code: {
@@ -71,7 +75,8 @@ export default StyleSheet.create({
     fontSize: SECONDARY_FONT_SIZE,
     fontWeight: '500',
   },
-  language: {
+  codeLanguage: {
+    fontSize: SECONDARY_FONT_SIZE,
     color: COLOR_ICON_MEDIUM_GREY
   },
   inlineCode: {

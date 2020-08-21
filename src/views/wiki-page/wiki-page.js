@@ -11,6 +11,7 @@ import usage from '../../components/usage/usage';
 import Header from '../../components/header/header';
 import YoutrackWiki from '../../components/wiki/youtrack-wiki';
 import Router from '../../components/router/router';
+import ModalView from '../../components/modal-view/modal-view';
 import LongText from '../../components/wiki/text-renderer';
 
 import styles from './wiki-page.styles';
@@ -92,7 +93,7 @@ export default class WikiPage extends PureComponent<Props, void> {
     }
 
     return (
-      <View
+      <ModalView
         testID="wikiPage"
         style={styles.container}
       >
@@ -101,14 +102,18 @@ export default class WikiPage extends PureComponent<Props, void> {
         <ScrollView
           scrollEventThrottle={100}
         >
-          <View style={styles.wiki}>
-            {wikiText && this._renderWiki()}
-            {Boolean(!wikiText && plainText) && this._renderPlainText()}
-          </View>
+          <ScrollView
+            horizontal={true}
+            scrollEventThrottle={100}
+          >
+            <View style={styles.wiki}>
+              {wikiText && this._renderWiki()}
+              {Boolean(!wikiText && plainText) && this._renderPlainText()}
+            </View>
 
+          </ScrollView>
         </ScrollView>
-      </View>
-
+      </ModalView>
     );
   }
 }

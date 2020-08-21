@@ -108,11 +108,10 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
       return <Text key={`checkbox-${node.attribs['data-position']}`}>{'checked' in node.attribs ? '✓' : '☐'}</Text>;
 
     case (wikiNodeType.code):
-      return renderCode(
+      return <Text key={index}>{renderCode(
         getCode(),
-        index,
         this.getLanguage(getCode())
-      );
+      )}</Text>;
 
     case (wikiNodeType.image):
       return renderImage({

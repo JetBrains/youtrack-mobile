@@ -17,45 +17,54 @@ import {monospaceFontAndroid, monospaceFontIOS, SECONDARY_FONT_SIZE} from '../co
 import styles from './wiki.styles';
 
 const isAndroid: boolean = isAndroidPlatform();
+const MAX_CODE_LENGTH: number = 700;
 
-function renderCode(node: { content?: string, children?: any }, key: number | string, language?: ?string) {
-  const MAX_CODE_LENGTH = 700;
-  const newLine = <Text>{'\n'}</Text>;
+type Node = { content?: string, children?: any };
 
-  const code = node.content || (node?.children || []).map(it => it.data).join('\n') || '';
-  let trimmedCode = code;
-  const isCodeTrimmed = code.length > MAX_CODE_LENGTH; //https://github.com/facebook/react-native/issues/19453
+function getCodeData(node: Node) {
+  let code = node.content || (node?.children || []).map(it => it.data).join('\n') || '';
+  code = code.replace(/(\n){4,}/g, '\n\n').replace(/[ \t]+$/g, '');
 
-  if (isCodeTrimmed) {
-    trimmedCode = `${code.substr(0, MAX_CODE_LENGTH)}… `;
-  }
+  const isTooLongCode = code.length > MAX_CODE_LENGTH; //https://github.com/facebook/react-native/issues/19453
 
-  return <Text key={key}>
-    {newLine}
+  return {
+    code: isTooLongCode ? `${code.substr(0, MAX_CODE_LENGTH)}… ` : code,
+    fullCode: code,
+    isLongCode: isTooLongCode
+  };
+}
+
+function onShowFullCode(code: string) {
+  Router.WikiPage({
+    plainText: code
+  });
+}
+
+function renderCode(node: Node, language?: ?string) {
+  const codeData = getCodeData(node);
+
+  return (
     <Text
-      onPress={() => isCodeTrimmed && Router.WikiPage({
-        plainText: code
-      })}>
+      onPress={() => codeData.isLongCode && onShowFullCode(codeData.fullCode)}>
       <SyntaxHighlighter
         highlighter={'hljs' || 'prism'}
         language={language}
         PreTag={Text}
         CodeTag={Text}
 
-        style={idea}
+        style={{...idea, ...{hljs: {backgroundColor: 'transparent'}}}}
         fontSize={SECONDARY_FONT_SIZE}
         fontFamily={isAndroid ? monospaceFontAndroid : monospaceFontIOS}
       >
-        {entities.decodeHTML(trimmedCode)}
+        {entities.decodeHTML(codeData.code)}
       </SyntaxHighlighter>
-      {isCodeTrimmed && (
+      {codeData.isLongCode && (
         <Text
           style={styles.showMoreLink}
         >{`${showMoreText} `}</Text>
       )}
-      {newLine}
     </Text>
-  </Text>;
+  );
 }
 
 export default renderCode;

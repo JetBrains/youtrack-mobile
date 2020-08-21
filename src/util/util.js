@@ -7,7 +7,6 @@ import {Platform} from 'react-native';
 import qs from 'qs';
 import appPackage from '../../package.json'; // eslint-disable-line import/extensions
 import {getStorageState} from '../components/storage/storage';
-import {detect} from 'program-language-detector';
 
 
 import type {StorageState} from '../components/storage/storage';
@@ -45,8 +44,11 @@ export const detectLanguage = (code: string) => {
   case(code.indexOf('java.') !== -1):
     language = 'java';
     break;
+  case(code.indexOf('kotlin.') !== -1):
+    language = 'kotlin';
+    break;
   default:
-    language = detect(code);
+    language = '';
   }
 
   return language;
