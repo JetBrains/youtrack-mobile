@@ -24,6 +24,7 @@ import {createActivitiesModel} from '../../../components/activity/activity__crea
 import {groupActivities} from '../../../components/activity/activity__group-activities';
 import {isActivityCategory} from '../../../components/activity/activity__category';
 import {mergeActivities} from '../../../components/activity/activity__merge-activities';
+import {getEntityPresentation} from '../../../components/issue-formatter/issue-formatter';
 
 import styles from './single-issue-activity.styles';
 
@@ -150,7 +151,9 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
           youtrackWiki={youtrackWiki}
 
-          onReply={(comment: IssueComment) => startReply(comment.author.login)}
+          onReply={(comment: IssueComment) => (
+            startReply(comment?.author?.login || getEntityPresentation(comment?.author))
+          )}
           onCopyCommentLink={copyCommentUrl}
 
           canUpdateComment={comment => issuePermissions.canUpdateComment(issue, comment)}
