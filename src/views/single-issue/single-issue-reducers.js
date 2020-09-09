@@ -248,7 +248,7 @@ export default createReducer(initialState, {
       issue: {
         ...issue,
         watchers: {
-          ...issue.watchers,
+          ...issue?.watchers,
           hasStar: starred
         }
       }
