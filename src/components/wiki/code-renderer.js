@@ -44,8 +44,7 @@ function renderCode(node: Node, language?: ?string) {
   const codeData = getCodeData(node);
 
   return (
-    <Text
-      onPress={() => codeData.isLongCode && onShowFullCode(codeData.fullCode)}>
+    <Text>
       <SyntaxHighlighter
         highlighter={'hljs' || 'prism'}
         language={language}
@@ -58,10 +57,12 @@ function renderCode(node: Node, language?: ?string) {
       >
         {entities.decodeHTML(codeData.code)}
       </SyntaxHighlighter>
+
       {codeData.isLongCode && (
         <Text
+          onPress={() => codeData.isLongCode && onShowFullCode(codeData.fullCode)}
           style={styles.showMoreLink}
-        >{`${showMoreText} `}</Text>
+        >{` ${showMoreText} `}</Text>
       )}
     </Text>
   );

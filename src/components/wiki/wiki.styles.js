@@ -57,9 +57,8 @@ export default StyleSheet.create({
   },
   showMoreLink: {
     ...showMoreLink,
-    paddingLeft: UNIT,
-    paddingRight: UNIT,
-    fontSize: SECONDARY_FONT_SIZE,
+    lineHeight: SECONDARY_FONT_SIZE * 2,
+    fontSize: SECONDARY_FONT_SIZE
   },
   exceptionLink: showMoreLink,
   codeContainer: {
@@ -68,6 +67,7 @@ export default StyleSheet.create({
   },
   codeContent: {
     padding: UNIT / 2,
+    paddingBottom: UNIT * 0.75,
     backgroundColor: COLOR_LIGHT_GRAY
   },
   code: {
