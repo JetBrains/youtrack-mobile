@@ -66,9 +66,9 @@ function authorDiffers(item1, item2) {
 function createActivityGroup(params: Object) {
   return {
     events: [],
-    author: params.author || null,
-    authorGroup: params.authorGroup,
-    timestamp: params.timestamp || null
+    author: params?.author || null,
+    authorGroup: params?.authorGroup,
+    timestamp: params?.timestamp || null
   };
 }
 
