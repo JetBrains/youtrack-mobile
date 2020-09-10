@@ -324,7 +324,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
     }
 
     const disabled = activityGroup.merged;
-    const isAuthor = this.props.issuePermissions.isCurrentUser(comment.author);
+    const isAuthor = this.props.issuePermissions.isCurrentUser(comment?.author);
 
     if (!comment.deleted) {
       return <View style={styles.activityCommentActions}>
