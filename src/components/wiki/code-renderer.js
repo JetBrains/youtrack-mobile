@@ -58,6 +58,7 @@ function renderCode(node: Node, language?: ?string) {
         {entities.decodeHTML(codeData.code)}
       </SyntaxHighlighter>
 
+      {codeData.isLongCode && <Text>{'\n'}</Text>}
       {codeData.isLongCode && (
         <Text
           onPress={() => codeData.isLongCode && onShowFullCode(codeData.fullCode)}
