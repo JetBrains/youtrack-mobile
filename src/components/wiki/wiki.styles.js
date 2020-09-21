@@ -66,8 +66,8 @@ export default StyleSheet.create({
     marginBottom: UNIT
   },
   codeContent: {
-    padding: UNIT / 2,
-    paddingBottom: UNIT * 0.75,
+    padding: UNIT,
+    paddingBottom: 0,
     backgroundColor: COLOR_LIGHT_GRAY
   },
   code: {

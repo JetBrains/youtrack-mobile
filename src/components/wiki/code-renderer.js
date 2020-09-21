@@ -42,6 +42,7 @@ function onShowFullCode(code: string) {
 
 function renderCode(node: Node, language?: ?string) {
   const codeData = getCodeData(node);
+  const separator = <Text>{'\n'}</Text>;
 
   return (
     <Text>
@@ -58,13 +59,14 @@ function renderCode(node: Node, language?: ?string) {
         {entities.decodeHTML(codeData.code)}
       </SyntaxHighlighter>
 
-      {codeData.isLongCode && <Text>{'\n'}</Text>}
+      {codeData.isLongCode && separator}
       {codeData.isLongCode && (
         <Text
           onPress={() => codeData.isLongCode && onShowFullCode(codeData.fullCode)}
           style={styles.showMoreLink}
         >{` ${showMoreText} `}</Text>
       )}
+      {codeData.isLongCode && separator}
     </Text>
   );
 }
