@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {PureComponent} from 'react';
-import {TouchableOpacity, ActivityIndicator} from 'react-native';
+import {View, ActivityIndicator} from 'react-native';
 
 import {SvgFromUri} from 'react-native-svg';
 import Gallery from 'react-native-image-gallery';
@@ -9,12 +9,11 @@ import ImageProgress from 'react-native-image-progress';
 
 import once from 'lodash.once';
 import Router from '../../components/router/router';
+import Header from '../../components/header/header';
 import {IconClose} from '../../components/icon/icon';
 import {notify} from '../../components/notification/notification';
 import {hasMimeType} from '../../components/mime-type/mime-type';
-import ModalView from '../../components/modal-view/modal-view';
 import {COLOR_PINK} from '../../components/variables/variables';
-import {HIT_SLOP} from '../../components/common-styles/button';
 
 import styles from './image.styles';
 
@@ -32,6 +31,10 @@ type State = {
 }
 
 export class Image extends PureComponent<Props, State> {
+  closeView = once(function closeView() {
+    return Router.pop(true);
+  });
+
   componentDidMount() {
     const currentPage = this.getCurrentPage(this.props.current);
     this.setState({currentPage});
@@ -62,10 +65,6 @@ export class Image extends PureComponent<Props, State> {
     return this.props.imageAttachments.findIndex(attach => attach.id === current.id);
   }
 
-  closeView = once(function closeView() {
-    return Router.pop();
-  });
-
   onPageSelected = (currentPage: number) => this.setState({currentPage});
 
   render() {
@@ -80,7 +79,12 @@ export class Image extends PureComponent<Props, State> {
     });
 
     return (
-      <ModalView style={styles.container}>
+      <View style={styles.container}>
+        <Header
+          leftButton={<IconClose size={21} color={COLOR_PINK}/>}
+          onBack={this.closeView}
+        />
+
         <Gallery
           style={styles.container}
           images={this.props.imageAttachments.map(createSource)}
@@ -88,14 +92,8 @@ export class Image extends PureComponent<Props, State> {
           imageComponent={this.renderImage}
           onPageSelected={this.onPageSelected}
         />
-        <TouchableOpacity
-          style={styles.closeButton}
-          onPress={this.closeView}
-          hitSlop={HIT_SLOP}
-        >
-          <IconClose size={28} color={COLOR_PINK}/>
-        </TouchableOpacity>
-      </ModalView>
+
+      </View>
     );
   }
 }

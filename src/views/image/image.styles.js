@@ -16,12 +16,6 @@ export default StyleSheet.create({
     bottom: 0
   },
 
-  closeButton: {
-    position: 'absolute',
-    bottom: UNIT * 3,
-    right: UNIT * 3
-  },
-
   removeButton: {
     position: 'absolute',
     bottom: UNIT * 3,
