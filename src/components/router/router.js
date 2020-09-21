@@ -6,8 +6,7 @@ import {
   createStackNavigator,
   createAppContainer,
   StackActions,
-  NavigationActions,
-  StackViewTransitionConfigs
+  NavigationActions
 } from 'react-navigation';
 
 import {getStorageState, flushStoragePart} from '../storage/storage';
@@ -31,6 +30,11 @@ const TransitionSpec = {
 const SlideFromRight = {
   transitionSpec: TransitionSpec,
   screenInterpolator: StackViewStyleInterpolator.forHorizontal
+};
+
+const SlideModal = {
+  transitionSpec: TransitionSpec,
+  screenInterpolator: StackViewStyleInterpolator.forVertical
 };
 
 /**
@@ -64,7 +68,7 @@ class Router {
     const route = this.routes[currentRouteName];
 
     if (route.modal || this._modalTransition) {
-      return StackViewTransitionConfigs.defaultTransitionConfig(null, null, true);
+      return SlideModal;
     }
 
     return SlideFromRight;
@@ -149,11 +153,12 @@ class Router {
     }
   }
 
-  pop() {
+  pop(isModalTransition?: boolean) {
     const routes = this._navigator.state.nav.routes;
     if (routes.length <= 1) {
       return false;
     }
+    this._modalTransition = isModalTransition;
     this.dispatch(NavigationActions.back(), routes[routes.length - 2].routeName, this._currentRoute.routeName);
     return true;
   }

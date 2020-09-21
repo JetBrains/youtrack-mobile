@@ -11,11 +11,12 @@ import usage from '../../components/usage/usage';
 import Header from '../../components/header/header';
 import YoutrackWiki from '../../components/wiki/youtrack-wiki';
 import Router from '../../components/router/router';
-import ModalView from '../../components/modal-view/modal-view';
 import LongText from '../../components/wiki/text-renderer';
+import {IconClose} from '../../components/icon/icon';
 
+import {COLOR_PINK, UNIT} from '../../components/variables/variables';
+import {elevation1} from '../../components/common-styles/shadow';
 import styles from './wiki-page.styles';
-import {IconBack} from '../../components/icon/icon';
 
 const CATEGORY_NAME = 'WikiPage';
 
@@ -34,7 +35,14 @@ type DefaultProps = {
   title: string
 };
 
-export default class WikiPage extends PureComponent<Props, void> {
+type State = {
+  isPinned: boolean
+};
+
+export default class WikiPage extends PureComponent<Props, State> {
+  state = {
+    isPinned: false
+  }
 
   static defaultProps: DefaultProps = {
     onIssueIdTap: () => {},
@@ -45,18 +53,23 @@ export default class WikiPage extends PureComponent<Props, void> {
     usage.trackScreenView(CATEGORY_NAME);
   }
 
-  _onBack() {
-    const prevRoute = Router.pop();
+  onBack() {
+    const prevRoute = Router.pop(true);
     if (!prevRoute) {
       Router.navigateToDefaultRoute();
     }
   }
 
+  onScroll = (nativeEvent: Object) => {
+    this.setState({isPinned: nativeEvent.contentOffset.y >= UNIT});
+  };
+
   _renderHeader() {
     return (
       <Header
-        leftButton={<IconBack/>}
-        onBack={this._onBack}
+        style={this.state.isPinned ? elevation1 : null}
+        leftButton={<IconClose size={21} color={COLOR_PINK}/>}
+        onBack={this.onBack}
       >
         <Text style={styles.headerTitle} selectable={true}>{this.props.title}</Text>
       </Header>
@@ -93,7 +106,7 @@ export default class WikiPage extends PureComponent<Props, void> {
     }
 
     return (
-      <ModalView
+      <View
         testID="wikiPage"
         style={styles.container}
       >
@@ -101,10 +114,13 @@ export default class WikiPage extends PureComponent<Props, void> {
 
         <ScrollView
           scrollEventThrottle={100}
+          onScroll={(params) => this.onScroll(params.nativeEvent)}
+          style={styles.scrollContent}
         >
           <ScrollView
             horizontal={true}
             scrollEventThrottle={100}
+            contentContainerStyle={styles.scrollContent}
           >
             <View style={styles.wiki}>
               {wikiText && this._renderWiki()}
@@ -113,7 +129,7 @@ export default class WikiPage extends PureComponent<Props, void> {
 
           </ScrollView>
         </ScrollView>
-      </ModalView>
+      </View>
     );
   }
 }

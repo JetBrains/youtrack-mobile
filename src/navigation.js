@@ -44,7 +44,8 @@ export default class Navigation extends PureComponent<{}, {isMenuShown: boolean}
         currentRoute.routeName !== routeMap.LogIn &&
         currentRoute.routeName !== routeMap.Image &&
         currentRoute.routeName !== routeMap.AttachmentPreview &&
-        currentRoute.routeName !== routeMap.CreateIssue
+        currentRoute.routeName !== routeMap.CreateIssue &&
+        currentRoute.routeName !== routeMap.WikiPage
       );
       this.setState({isMenuShown});
     };

@@ -157,7 +157,7 @@ class YouTrackMobile extends Component<void, State> {
 
     Router.registerRoute({name: routeMap.Inbox, component: Inbox, type: 'reset'});
 
-    Router.registerRoute({name: routeMap.WikiPage, component: WikiPage});
+    Router.registerRoute({name: routeMap.WikiPage, component: WikiPage, modal: true});
 
     Router.finalizeRoutes(this.routeHomeName);
   }
