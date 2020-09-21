@@ -67,7 +67,6 @@ export default StyleSheet.create({
   },
   codeContent: {
     padding: UNIT,
-    paddingBottom: 0,
     backgroundColor: COLOR_LIGHT_GRAY
   },
   code: {

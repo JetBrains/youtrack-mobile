@@ -66,7 +66,7 @@ function renderCode(node: Node, language?: ?string) {
           style={styles.showMoreLink}
         >{` ${showMoreText} `}</Text>
       )}
-      {codeData.isLongCode && separator}
+      {codeData.isLongCode && isAndroid && separator}
     </Text>
   );
 }
