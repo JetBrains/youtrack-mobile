@@ -25,6 +25,7 @@ import java.util.List;
 
 import com.wix.reactnativenotifications.RNNotificationsPackage;
 import com.reactnativerestart.RestartPackage;
+import io.expo.appearance.RNCAppearancePackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -50,7 +51,8 @@ public class MainApplication extends Application implements ReactApplication {
             new RNEventSourcePackage(),
             new RNDeviceInfo(),
             new RNNotificationsPackage(MainApplication.this),
-            new RestartPackage()
+            new RestartPackage(),
+            new RNCAppearancePackage()
       );
     }
 
