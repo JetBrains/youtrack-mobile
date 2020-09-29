@@ -12,7 +12,6 @@ import {IconCheck, IconClose} from '../icon/icon';
 import VisibilityControl from '../visibility/visibility-control';
 import usage from '../usage/usage';
 
-import {COLOR_GRAY, COLOR_ICON_LIGHT_BLUE, COLOR_PINK} from '../variables/variables';
 import {HIT_SLOP} from '../common-styles/button';
 
 import styles from './attach-file-modal.styles';
@@ -86,9 +85,9 @@ export default class AttachFileDialog extends PureComponent<Props, State> {
         style={styles.container}
       >
         <Header
-          leftButton={<IconClose size={21} color={COLOR_PINK}/>}
+          leftButton={<IconClose size={21} color={uiTheme.colors.$link}/>}
           onBack={this.props.onCancel}
-          rightButton={<IconCheck size={20} color={hasAttach ? COLOR_PINK : COLOR_GRAY}/>}
+          rightButton={<IconCheck size={20} color={hasAttach ? uiTheme.colors.$link : uiTheme.colors.$disabled}/>}
           onRightButtonClick={this.attachFile}>
           <Text style={styles.title}>Attach image</Text>
         </Header>
@@ -129,7 +128,7 @@ export default class AttachFileDialog extends PureComponent<Props, State> {
                   onPress={action.execute}
                   style={styles.button}
                 >
-                  {action.icon && <action.icon size={20} color={COLOR_ICON_LIGHT_BLUE} style={styles.buttonIcon}/>}
+                  {action.icon && <action.icon size={20} color={uiTheme.colors.$iconAccent} style={styles.buttonIcon}/>}
                   <Text style={styles.buttonText}>{action.title}</Text>
                 </TouchableOpacity>
               );

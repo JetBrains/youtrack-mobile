@@ -19,7 +19,7 @@ export default EStyleSheet.create({
   },
   title: {
     ...headerTitle,
-    fontWeight: '500'
+    color: '$text',
   },
   button: {
     flexDirection: 'row',
