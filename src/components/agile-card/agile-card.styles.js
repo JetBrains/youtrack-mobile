@@ -1,22 +1,18 @@
 /* @flow */
 
-import {StyleSheet} from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {
-  UNIT,
-  COLOR_LIGHT_GRAY,
-  COLOR_ICON_LIGHT_BLUE
-} from '../variables/variables';
+import {UNIT} from '../variables/variables';
 import {issueCard} from '../common-styles/issue';
 import {secondaryText} from '../common-styles/typography';
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   card: {
     flexDirection: 'row',
     marginLeft: UNIT * 2,
     borderRadius: UNIT,
     overflow: 'hidden',
-    backgroundColor: COLOR_LIGHT_GRAY
+    backgroundColor: '$boxBackground'
   },
   cardColorCoding: {
     flexShrink: 0,
@@ -50,6 +46,7 @@ export default StyleSheet.create({
   },
   issueSummary: {
     flexGrow: 1,
+    color: '$text'
   },
   ghost: {
     display: 'none'
@@ -58,7 +55,7 @@ export default StyleSheet.create({
     width: '80%',
     transform: [{rotate: '-3deg'}],
     borderWidth: 2,
-    borderColor: COLOR_ICON_LIGHT_BLUE
+    borderColor: '$iconAccent'
   },
   draggingZoomedOut: {
     width: '20%'
@@ -72,7 +69,10 @@ export default StyleSheet.create({
     ...issueCard.issueSummary,
     marginTop: UNIT
   },
-  issueId: issueCard.issueId,
+  issueId: {
+    ...issueCard.issueId,
+    color: '$icon'
+  },
   assignees: {
     flexDirection: 'row',
     alignItems: 'center'

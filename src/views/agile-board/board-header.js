@@ -2,12 +2,11 @@
 
 import React, {PureComponent} from 'react';
 
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 
-import {
-  UNIT,
-  COLOR_PINK
-} from '../../components/variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+
+import {UNIT} from '../../components/variables/variables';
 import {isAllColumnsCollapsed} from './agile-board__helper';
 import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../../components/agile-column/agile-column';
 
@@ -73,7 +72,7 @@ export default class BoardHeader extends PureComponent<Props, void> {
   }
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   tableHeader: {
     flexDirection: 'row',
     marginLeft: UNIT * 2
@@ -98,9 +97,10 @@ const styles = StyleSheet.create({
   },
   columnText: {
     ...secondaryText,
+    color: '$icon',
     textTransform: 'uppercase'
   },
   columnTextCollapsed: {
-    color: COLOR_PINK
+    color: '$link'
   }
 });

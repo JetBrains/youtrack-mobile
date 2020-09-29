@@ -12,11 +12,7 @@ import Router from '../../components/router/router';
 import Auth from '../../components/auth/auth';
 import {DragContainer} from '../../components/draggable/';
 import Api from '../../components/api/api';
-import {
-  COLOR_PINK,
-  COLOR_FONT_ON_BLACK,
-  UNIT
-} from '../../components/variables/variables';
+import {UNIT} from '../../components/variables/variables';
 import {flushStoragePart} from '../../components/storage/storage';
 
 import * as boardActions from './board-actions';
@@ -33,10 +29,13 @@ import isEqual from 'react-fast-compare';
 import {getScrollableWidth} from '../../components/board-scroller/board-scroller__math';
 import AgileBoardSprint from './agile-board__sprint';
 
+import {ThemeContext} from '../../components/theme/theme-context';
+
 import type {SprintFull, AgileBoardRow, AgileColumn, BoardColumn} from '../../flow/Agile';
 import type {AnyIssue, IssueOnList} from '../../flow/Issue';
 import type {AgilePageState} from './board-reducers';
 import type {CustomError} from '../../flow/Error';
+import type {Theme, UITheme} from '../../flow/Theme';
 
 const CATEGORY_NAME = 'Agile board';
 
@@ -135,10 +134,10 @@ class AgileBoard extends Component<Props, State> {
     }
   };
 
-  _renderRefreshControl() {
+  _renderRefreshControl(uiTheme: UITheme) {
     return <RefreshControl
       refreshing={false}
-      tintColor={this.props.isLoadingAgile ? COLOR_FONT_ON_BLACK : COLOR_PINK}
+      tintColor={this.props.isLoadingAgile ? uiTheme.colors.$background : uiTheme.colors.$link}
       onRefresh={() => this.props.onLoadBoard()}
     />;
   }
@@ -162,7 +161,7 @@ class AgileBoard extends Component<Props, State> {
     return getScrollableWidth(sprint.board.columns);
   };
 
-  renderAgileSelector() {
+  renderAgileSelector(uiTheme: UITheme) {
     const {agile, onOpenBoardSelect, isLoading} = this.props;
     if (agile) {
       return renderSelector({
@@ -173,7 +172,8 @@ class AgileBoard extends Component<Props, State> {
         textStyle: styles.agileSelectorText,
         isLoading,
         showBottomBorder: this.state.stickElement.agile,
-        showLoader: true
+        showLoader: true,
+        uiTheme
       });
     }
     return <View style={styles.agileSelector}/>;
@@ -184,7 +184,7 @@ class AgileBoard extends Component<Props, State> {
     return agile?.sprintsSettings?.disableSprints === true;
   }
 
-  renderSprintSelector() {
+  renderSprintSelector(uiTheme: UITheme) {
     const {agile, sprint, onOpenSprintSelect, isLoading} = this.props;
 
     if (!agile || !sprint) {
@@ -199,12 +199,13 @@ class AgileBoard extends Component<Props, State> {
         label: sprint.name,
         onPress: onOpenSprintSelect,
         style: styles.sprintSelector,
-        isLoading
+        isLoading,
+        uiTheme
       });
     }
   }
 
-  renderZoomButton() {
+  renderZoomButton(uiTheme: UITheme) {
     const {isLoading, isLoadingAgile, sprint} = this.props;
     const {zoomedIn, stickElement} = this.state;
 
@@ -220,7 +221,7 @@ class AgileBoard extends Component<Props, State> {
             hitSlop={HIT_SLOP}
             onPress={this.toggleZoom}
           >
-            <IconMagnifyZoom zoomedIn={zoomedIn} size={24}/>
+            <IconMagnifyZoom zoomedIn={zoomedIn} size={24} color={uiTheme.colors.$link}/>
           </TouchableOpacity>
         </AnimatedView>
       );
@@ -338,7 +339,7 @@ class AgileBoard extends Component<Props, State> {
     return this.props.issuePermissions.canRunCommand(issue);
   };
 
-  renderSprint = () => {
+  renderSprint = (uiTheme: UITheme) => {
     const {sprint, createCardForCell, onRowCollapseToggle} = this.props;
 
     return (
@@ -350,6 +351,7 @@ class AgileBoard extends Component<Props, State> {
         onTapIssue={this._onTapIssue}
         onTapCreateIssue={createCardForCell}
         onCollapseToggle={onRowCollapseToggle}
+        uiTheme={uiTheme}
       />
     );
   };
@@ -384,7 +386,7 @@ class AgileBoard extends Component<Props, State> {
     this.updateZoomedInStorageState(zoomedIn);
   };
 
-  renderBoard() {
+  renderBoard(uiTheme: UITheme) {
     const {sprint, isLoadingMore, error} = this.props;
     const {zoomedIn} = this.state;
 
@@ -392,7 +394,7 @@ class AgileBoard extends Component<Props, State> {
       if (error && error.noAgiles) {
         return null;
       }
-      return <View style={styles.agileNoSprint}>{this.renderAgileSelector()}</View>;
+      return <View style={styles.agileNoSprint}>{this.renderAgileSelector(uiTheme)}</View>;
     }
 
     return (
@@ -400,7 +402,7 @@ class AgileBoard extends Component<Props, State> {
         <BoardScroller
           columns={sprint?.board?.columns}
           snap={zoomedIn}
-          refreshControl={this._renderRefreshControl()}
+          refreshControl={this._renderRefreshControl(uiTheme)}
           horizontalScrollProps={{
             contentContainerStyle: {
               display: 'flex',
@@ -417,14 +419,14 @@ class AgileBoard extends Component<Props, State> {
             }
           }}
 
-          agileSelector={this.renderAgileSelector()}
-          sprintSelector={this.renderSprintSelector()}
+          agileSelector={this.renderAgileSelector(uiTheme)}
+          sprintSelector={this.renderSprintSelector(uiTheme)}
           boardHeader={this.renderBoardHeader()}
 
         >
 
-          {this.renderSprint()}
-          {isLoadingMore && <ActivityIndicator color={COLOR_PINK} style={styles.loadingMoreIndicator}/>}
+          {this.renderSprint(uiTheme)}
+          {isLoadingMore && <ActivityIndicator color={'$link'} style={styles.loadingMoreIndicator}/>}
 
         </BoardScroller>
       </DragContainer>
@@ -435,22 +437,29 @@ class AgileBoard extends Component<Props, State> {
     const {isSprintSelectOpen, isOutOfDate} = this.props;
 
     return (
-      <View
-        testID="pageAgile"
-        style={styles.agile}
-      >
+      <ThemeContext.Consumer>
+        {(theme: Theme) => {
+          const uiTheme: UITheme = theme.uiTheme;
+          return (
+            <View
+              testID="pageAgile"
+              style={styles.agile}
+            >
 
-        {this.renderZoomButton()}
+              {this.renderZoomButton(uiTheme)}
 
-        {this.renderBoard()}
+              {this.renderBoard(uiTheme)}
 
-        {this.renderErrors()}
+              {this.renderErrors()}
 
-        {isSprintSelectOpen && this._renderSelect()}
+              {isSprintSelectOpen && this._renderSelect()}
 
-        {isOutOfDate && this.renderRefreshPopup()}
+              {isOutOfDate && this.renderRefreshPopup()}
 
-      </View>
+            </View>
+          );
+        }}
+      </ThemeContext.Consumer>
     );
   }
 }

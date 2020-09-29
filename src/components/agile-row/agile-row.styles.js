@@ -1,21 +1,17 @@
-import {Platform, StyleSheet} from 'react-native';
+import {Platform} from 'react-native';
 
-import {
-  UNIT,
-  COLOR_LIGHT_GRAY,
-  COLOR_GRAY,
-  COLOR_FONT_GRAY
-} from '../variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+
+import {UNIT} from '../variables/variables';
 import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../agile-column/agile-column';
 import {issueIdResolved} from '../common-styles/issue';
 import {headerTitle, MAIN_FONT_SIZE, mainText} from '../common-styles/typography';
-import {link} from '../common-styles/button';
 
 const ROW_TEXT_LINE_HEIGHT = 24;
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   issueResolved: {
-    color: COLOR_FONT_GRAY
+    color: '$border'
   },
   issueIdResolved: issueIdResolved,
 
@@ -33,7 +29,7 @@ export default StyleSheet.create({
   },
   headerIssueId: {
     marginLeft: UNIT * 2,
-    ...link,
+    color: '$link',
     ...mainText,
     ...Platform.select({
       ios: {
@@ -49,11 +45,12 @@ export default StyleSheet.create({
     fontSize: MAIN_FONT_SIZE - 2,
   },
   resolvedIssueText: {
-    color: COLOR_FONT_GRAY,
+    color: '$textSecondary',
     textDecorationLine: 'line-through'
   },
   rowHeaderText: {
     ...headerTitle,
+    color: '$text',
     lineHeight: ROW_TEXT_LINE_HEIGHT,
     marginLeft: UNIT,
     fontWeight: '500'
@@ -64,7 +61,7 @@ export default StyleSheet.create({
   row: {
     flexDirection: 'row',
     borderBottomWidth: 0.5,
-    borderColor: COLOR_GRAY
+    borderColor: '$textSecondary'
   },
   column: {
     flex: 1
@@ -104,7 +101,7 @@ export default StyleSheet.create({
     height: UNIT,
     margin: 2,
     borderWidth: 1,
-    borderColor: 'rgba(0,0,0,0.1)'
+    borderColor: '$boxBackground'
   },
   addCardButton: {
     marginBottom: UNIT * 2,
@@ -113,7 +110,7 @@ export default StyleSheet.create({
     borderRadius: UNIT,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLOR_LIGHT_GRAY
+    backgroundColor: '$boxBackground'
   },
   addCardIcon: {
     height: UNIT * 2.5,

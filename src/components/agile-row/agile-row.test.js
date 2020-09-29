@@ -5,10 +5,13 @@ import toJson from 'enzyme-to-json';
 import mocks from '../../../test/mocks';
 
 import BoardRow from './agile-row';
+import {buildStyles, DEFAULT_THEME} from '../theme/theme';
 
 describe('<BoardRow/>', () => {
   let wrapper;
   let issueMock;
+
+  beforeAll(() => buildStyles());
 
   beforeEach(() => {
     issueMock = mocks.createIssueMock();
@@ -95,7 +98,7 @@ describe('<BoardRow/>', () => {
 
 
   function doShallow(row, zoomedIn: boolean = true, collapsedColumnIds: ?Array<string> = []) {
-    wrapper = shallow(<BoardRow row={row} collapsedColumnIds={collapsedColumnIds} zoomedIn={zoomedIn}/>);
+    wrapper = shallow(<BoardRow row={row} collapsedColumnIds={collapsedColumnIds} zoomedIn={zoomedIn} uiTheme={DEFAULT_THEME}/>);
   }
 
   function findByTestId(testId) {

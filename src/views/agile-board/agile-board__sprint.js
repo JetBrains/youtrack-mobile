@@ -10,6 +10,7 @@ import {Draggable} from '../../components/draggable/';
 
 import type {AnyIssue} from '../../flow/Issue';
 import type {AgileBoardRow, Board, SprintFull} from '../../flow/Agile';
+import type {UITheme} from '../../flow/Theme';
 
 type Props = {
   sprint: SprintFull,
@@ -18,13 +19,18 @@ type Props = {
   onTapIssue: (issue: AnyIssue) => void,
   onTapCreateIssue: (columnId: string, cellId: string) => void,
   onCollapseToggle: (row: AgileBoardRow) => void,
+  uiTheme: UITheme
 };
 
 
 export default class AgileBoardSprint extends Component<Props, void> {
 
   shouldComponentUpdate(nextProps: Props): boolean {
-    return !isEqual(this.props.sprint, nextProps.sprint) || this.props.zoomedIn !== nextProps.zoomedIn;
+    return (
+      !isEqual(this.props.sprint, nextProps.sprint) ||
+      this.props.zoomedIn !== nextProps.zoomedIn ||
+      this.props.uiTheme !== nextProps.uiTheme
+    );
   }
 
   getCollapsedColumnIds = () => {
@@ -32,20 +38,21 @@ export default class AgileBoardSprint extends Component<Props, void> {
   }
 
   createCommonRowProps = () => {
-    const {onTapIssue, onTapCreateIssue, onCollapseToggle} = this.props;
+    const {onTapIssue, onTapCreateIssue, onCollapseToggle, uiTheme} = this.props;
 
     return {
       collapsedColumnIds: this.getCollapsedColumnIds(),
       renderIssueCard: this.renderCard,
       onTapIssue,
       onTapCreateIssue,
-      onCollapseToggle
+      onCollapseToggle,
+      uiTheme
 
     };
   };
 
   renderCard = (issue: AnyIssue) => {
-    const {sprint, zoomedIn, canRunCommand, onTapIssue} = this.props;
+    const {sprint, zoomedIn, canRunCommand, onTapIssue, uiTheme} = this.props;
     const canDrag = sprint.agile.isUpdatable || canRunCommand(issue);
 
     return (
@@ -59,6 +66,7 @@ export default class AgileBoardSprint extends Component<Props, void> {
           issue={issue}
           estimationField={sprint.agile.estimationField}
           zoomedIn={zoomedIn}
+          uiTheme={uiTheme}
         />
       </Draggable>
     );

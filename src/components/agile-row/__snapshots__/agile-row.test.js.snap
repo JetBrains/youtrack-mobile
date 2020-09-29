@@ -39,7 +39,7 @@ exports[`<BoardRow/> Render should render a snapshot 1`] = `
       testID="agileRowCollapseButton"
     >
       <IconAngleDownRight
-        color="#1f2326"
+        color="#000"
         isDown={true}
         size={19}
         style={
@@ -53,6 +53,7 @@ exports[`<BoardRow/> Render should render a snapshot 1`] = `
         style={
           Array [
             Object {
+              "color": "#000",
               "fontSize": 20,
               "fontWeight": "500",
               "letterSpacing": 0.13,
@@ -96,6 +97,28 @@ exports[`<BoardRow/> Render should render a snapshot 1`] = `
       key="id"
       lastColumn={true}
       testID="agileRowColumn"
+      uiTheme={
+        Object {
+          "barStyle": "dark-content",
+          "colors": Object {
+            "$background": "#FFF",
+            "$border": "#888888",
+            "$boxBackground": "rgba(0, 0, 0, 0.04)",
+            "$disabled": "#DFE5EB",
+            "$error": "#dd0000",
+            "$icon": "#737577",
+            "$iconAccent": "#b8d1e5",
+            "$link": "#FE0082",
+            "$linkLight": "rgba(254, 0, 130, 0.3)",
+            "$mask": "#00000057",
+            "$separator": "#DFE5EB",
+            "$text": "#000",
+            "$textSecondary": "#CCC",
+          },
+          "dark": false,
+          "name": "light",
+        }
+      }
     />
   </View>
 </View>

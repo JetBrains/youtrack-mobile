@@ -15,6 +15,7 @@ import styles from './agile-card.styles';
 import type {IssueOnList} from '../../flow/Issue';
 import type {FieldValueShort, CustomFieldShort} from '../../flow/CustomFields';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {UITheme} from '../../flow/Theme';
 
 type Props = {
   style?: any,
@@ -22,7 +23,8 @@ type Props = {
   estimationField: ?{ id: string },
   zoomedIn?: boolean,
   ghost?: boolean, // from <Draggable/>
-  dragging?: boolean // from <DragContainer/>
+  dragging?: boolean, // from <DragContainer/>
+  uiTheme: UITheme
 };
 
 

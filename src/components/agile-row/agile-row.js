@@ -7,7 +7,6 @@ import ApiHelper from '../api/api__helper';
 import {IconAngleDownRight} from '../icon/icon';
 import AgileRowColumn from './agile-row__column';
 import {getPriotityField} from '../issue-formatter/issue-formatter';
-import {COLOR_DARK} from '../variables/variables';
 import {isAllColumnsCollapsed} from '../../views/agile-board/agile-board__helper';
 
 import styles from './agile-row.styles';
@@ -15,6 +14,7 @@ import styles from './agile-row.styles';
 import type {AgileBoardRow, BoardCell, BoardColumn} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {UITheme} from '../../flow/Theme';
 
 type RenderIssueCard = (issue: IssueOnList) => any;
 
@@ -27,7 +27,8 @@ type Props = {
   onCollapseToggle: (row: AgileBoardRow) => any,
   renderIssueCard: RenderIssueCard,
   zoomedIn?: boolean,
-  columns: Array<BoardColumn>
+  columns: Array<BoardColumn>,
+  uiTheme: UITheme
 };
 
 function renderCollapsedCard(issue: IssueOnList) {
@@ -74,7 +75,8 @@ export default function BoardRow(props: Props) {
     onTapCreateIssue,
     renderIssueCard,
     zoomedIn,
-    columns
+    columns,
+    uiTheme
   } = props;
 
   const isResolved = row.issue && row.issue.resolved;
@@ -100,7 +102,7 @@ export default function BoardRow(props: Props) {
             style={styles.collapseButtonIcon}
             isDown={!row.collapsed}
             size={19}
-            color={COLOR_DARK}
+            color={uiTheme.colors.$text}
           />
           <Text style={[
             styles.rowHeaderText,
@@ -145,6 +147,7 @@ export default function BoardRow(props: Props) {
               onTapCreateIssue={onTapCreateIssue}
               lastColumn={lastColumn}
               renderIssueCard={renderIssueCard}
+              uiTheme={uiTheme}
             />
           );
         })}

@@ -1,24 +1,16 @@
-import {StyleSheet} from 'react-native';
-import {
-  UNIT,
-  COLOR_PINK,
-  COLOR_FONT,
-  COLOR_FONT_ON_BLACK,
-  COLOR_FONT_GRAY,
-  COLOR_GRAY,
-  COLOR_BLACK
-} from '../../components/variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+
+import {UNIT} from '../../components/variables/variables';
 import {headerTitle, mainText} from '../../components/common-styles/typography';
-import {link} from '../../components/common-styles/button';
 import {elevationTop} from '../../components/common-styles/shadow';
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   agile: {
     flex: 1,
-    backgroundColor: COLOR_FONT_ON_BLACK
+    backgroundColor: '$background'
   },
   agileNoSprint: {
-    backgroundColor: COLOR_FONT_ON_BLACK
+    backgroundColor: '$background'
   },
   error: {
     marginTop: UNIT * 5,
@@ -26,17 +18,17 @@ export default StyleSheet.create({
   },
   title: {
     fontSize: 17,
-    color: COLOR_BLACK
+    color: '$text'
   },
   headerIconDisabled: {
-    tintColor: COLOR_FONT_GRAY
+    tintColor: '$border'
   },
   boardHeaderContainer: {
     minHeight: UNIT * 5,
     overflow: 'hidden',
-    backgroundColor: COLOR_FONT_ON_BLACK,
+    backgroundColor: '$background',
     borderBottomWidth: 0.5,
-    borderColor: COLOR_GRAY
+    borderColor: '$textSecondary'
   },
   loadingMoreIndicator: {
     padding: UNIT * 2
@@ -55,17 +47,17 @@ export default StyleSheet.create({
   agileBoardSmile: {
     paddingTop: UNIT * 6,
     fontSize: 36,
-    color: COLOR_FONT
+    color: '$text'
   },
   agileBoardMessageText: {
     paddingTop: UNIT,
     fontSize: 18,
-    color: COLOR_FONT
+    color: '$text'
   },
   selectBoardMessage: {
     paddingTop: UNIT * 2,
     fontSize: 18,
-    color: COLOR_PINK
+    color: '$link'
   },
   popupModal: {
     justifyContent: 'flex-end'
@@ -73,11 +65,12 @@ export default StyleSheet.create({
   popupPanel: {
     padding: UNIT * 2,
     paddingBottom: UNIT * 4,
-    backgroundColor: COLOR_FONT_ON_BLACK,
+    backgroundColor: '$background',
     ...elevationTop
   },
   popupText: {
     fontSize: 18,
+    color: '$text'
   },
   popupButtons: {
     flexDirection: 'row',
@@ -89,7 +82,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: UNIT * 2,
-    backgroundColor: COLOR_PINK,
+    backgroundColor: '$link',
     borderRadius: UNIT
   },
   popupButtonText: {
@@ -97,21 +90,23 @@ export default StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     ...mainText,
-    ...link,
-    color: COLOR_FONT_ON_BLACK,
+    color: '$text',
   },
   agileSelector: {
     minHeight: UNIT * 7,
     paddingTop: UNIT * 1.5,
     paddingLeft: UNIT * 2,
     marginRight: UNIT * 7,
-    backgroundColor: COLOR_FONT_ON_BLACK
+    backgroundColor: '$background',
+    color: '$text'
   },
   sprintSelector: {
     minHeight: UNIT * 5,
-    marginLeft: UNIT * 2
+    marginLeft: UNIT * 2,
+    color: '$text'
   },
   agileSelectorText: {
     ...headerTitle,
+    color: '$text'
   }
 });

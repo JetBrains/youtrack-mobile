@@ -2,22 +2,25 @@
 
 import React from 'react';
 import {TouchableOpacity} from 'react-native';
-import styles from './agile-row.styles';
 import { DropZone } from '../draggable';
 import {IconAdd} from '../icon/icon';
+
+import styles from './agile-row.styles';
+
 import type {BoardCell} from '../../flow/Agile';
 import type {IssueOnList} from '../../flow/Issue';
-import {COLOR_PINK} from '../variables/variables';
+import type {UITheme} from '../../flow/Theme';
 
 type ColumnProps = {
   cell: BoardCell,
   onTapCreateIssue: Function,
   lastColumn: boolean,
-  renderIssueCard: (issue: IssueOnList) => any
+  renderIssueCard: (issue: IssueOnList) => any,
+  uiTheme: UITheme
 }
 
 export default function AgileRowColumn(props: ColumnProps) {
-  const {cell} = props;
+  const {cell, uiTheme} = props;
 
   return (
     <DropZone
@@ -30,8 +33,11 @@ export default function AgileRowColumn(props: ColumnProps) {
     >
       {props.cell.issues.map(props.renderIssueCard)}
 
-      <TouchableOpacity onPress={() => props.onTapCreateIssue(cell.column.id, cell.id)} style={styles.addCardButton}>
-        <IconAdd color={COLOR_PINK} size={18}/>
+      <TouchableOpacity
+        onPress={() => props.onTapCreateIssue(cell.column.id, cell.id)}
+        style={styles.addCardButton}
+      >
+        <IconAdd color={uiTheme.colors.$link} size={18}/>
       </TouchableOpacity>
     </DropZone>
   );

@@ -15,7 +15,7 @@ exports[`<AgileCard/> should render snapshot 1`] = `
     style={
       Array [
         Object {
-          "backgroundColor": "#f6f6f6",
+          "backgroundColor": "rgba(0, 0, 0, 0.04)",
           "borderRadius": 8,
           "flexDirection": "row",
           "marginLeft": 16,
@@ -78,6 +78,7 @@ exports[`<AgileCard/> should render snapshot 1`] = `
             style={
               Array [
                 Object {
+                  "color": "#737577",
                   "flexGrow": 0,
                   "flexShrink": 0,
                   "fontSize": 14,
@@ -107,6 +108,7 @@ exports[`<AgileCard/> should render snapshot 1`] = `
           numberOfLines={1}
           style={
             Object {
+              "color": "#000",
               "flexGrow": 1,
             }
           }

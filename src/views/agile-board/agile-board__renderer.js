@@ -1,14 +1,17 @@
 /* @flow */
 
 import React from 'react';
-import {Text, TouchableOpacity, View, StyleSheet, ActivityIndicator} from 'react-native';
+import {Text, TouchableOpacity, View, ActivityIndicator} from 'react-native';
+
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {IconAngleDown} from '../../components/icon/icon';
-import {COLOR_BLACK, COLOR_DARK, COLOR_FONT_GRAY, COLOR_PINK, UNIT} from '../../components/variables/variables';
+import {UNIT} from '../../components/variables/variables';
 import {mainText} from '../../components/common-styles/typography';
 import {elevation1} from '../../components/common-styles/shadow';
 
 import type {TextStyleProp, ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {UITheme} from '../../flow/Theme';
 
 
 export function renderSelector(params: {
@@ -19,7 +22,8 @@ export function renderSelector(params: {
   textStyle?: TextStyleProp,
   showBottomBorder?: boolean,
   isLoading: boolean,
-  showLoader?: boolean
+  showLoader?: boolean,
+  uiTheme: UITheme
 }) {
 
   return (
@@ -47,15 +51,15 @@ export function renderSelector(params: {
         {((params.showLoader && !params.isLoading) || (!params.showLoader)) && <IconAngleDown
           size={17}
           style={styles.selectorIcon}
-          color={params.isLoading ? COLOR_FONT_GRAY : COLOR_BLACK}
+          color={params.isLoading ? params.uiTheme.colors.$border : params.uiTheme.colors.$text}
         />}
-        {params.showLoader && params.isLoading && <ActivityIndicator color={COLOR_PINK}/>}
+        {params.showLoader && params.isLoading && <ActivityIndicator color={params.uiTheme.colors.$link}/>}
       </TouchableOpacity>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   selector: {
     alignItems: 'flex-start',
     justifyContent: 'space-between'
@@ -73,10 +77,10 @@ const styles = StyleSheet.create({
   selectorButtonText: {
     ...mainText,
     fontWeight: '500',
-    color: COLOR_DARK
+    color: '$text'
   },
   selectorButtonTextDisabled: {
-    color: COLOR_FONT_GRAY
+    color: '$border'
   },
   selectorIcon: {
     lineHeight: 20
