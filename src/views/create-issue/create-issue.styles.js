@@ -1,10 +1,8 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {UNIT} from '../../components/variables/variables';
-import {HEADER_FONT_SIZE, mainText} from '../../components/common-styles/typography';
+import {headerTitle, mainText} from '../../components/common-styles/typography';
 import {separator} from '../../components/common-styles/list';
-
-const ATTACHING_IMAGE_ALPHA = '70';
 
 export default EStyleSheet.create({
   container: {
@@ -13,7 +11,7 @@ export default EStyleSheet.create({
   },
   title: {
     paddingLeft: UNIT * 2,
-    fontSize: HEADER_FONT_SIZE,
+    ...headerTitle,
     color: '$text'
   },
   issueSummary: {
@@ -38,7 +36,7 @@ export default EStyleSheet.create({
     marginRight: UNIT * 2
   },
   imageActivityIndicator: {
-    backgroundColor: `#CCCCCC${ATTACHING_IMAGE_ALPHA}`,
+    backgroundColor: '$mask',
     position: 'absolute',
     top: 0,
     left: 0,
