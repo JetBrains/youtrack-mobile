@@ -109,7 +109,7 @@ exports[`<Accounts/> Render should match a snapshot 1`] = `
         numberOfLines={1}
         style={
           Object {
-            "color": "#000",
+            "color": "#737577",
             "fontSize": 14,
             "letterSpacing": -0.17,
           }
@@ -165,7 +165,7 @@ exports[`<Accounts/> Render should match a snapshot 1`] = `
         numberOfLines={1}
         style={
           Object {
-            "color": "#000",
+            "color": "#737577",
             "fontSize": 14,
             "letterSpacing": -0.17,
           }
@@ -221,7 +221,7 @@ exports[`<Accounts/> Render should match a snapshot 1`] = `
         numberOfLines={1}
         style={
           Object {
-            "color": "#000",
+            "color": "#737577",
             "fontSize": 14,
             "letterSpacing": -0.17,
           }

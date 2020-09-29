@@ -27,6 +27,7 @@ export const buildStyles = (mode: string = DEFAULT_SYSTEM_MODE, uiTheme: UITheme
     $resolved: uiTheme.colors.$border,
     $shadowColor: uiTheme.colors.$icon,
     $link: uiTheme.colors.$link,
+    $background: uiTheme.colors.$background,
     ...uiTheme.colors
   });
 };

@@ -6,10 +6,13 @@ import React, {PureComponent} from 'react';
 import Router from '../router/router';
 import {onHeightChange} from './header__top-padding';
 
+import {ThemeContext} from '../theme/theme-context';
+
 import {HIT_SLOP} from '../common-styles/button';
 import styles from './header.styles';
 
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {Theme} from '../../flow/Theme';
 
 type Props = {
   onBack?: () => any,
@@ -52,39 +55,45 @@ export default class Header extends PureComponent<Props, void> {
     const {leftButton, children, extraButton, rightButton, style, title} = this.props;
 
     return (
-      <View
-        testID="header"
-        style={[styles.header, style]}
-      >
-        {!!leftButton && <TouchableOpacity
-          testID="header-back"
-          hitSlop={HIT_SLOP}
-          style={styles.headerButtonLeft}
-          onPress={() => this.onBack()}
-        >
-          {leftButton}
-        </TouchableOpacity>}
+      <ThemeContext.Consumer>
+        {(theme: Theme) => {
+          return (
+            <View
+              testID="header"
+              style={[styles.header, style]}
+            >
+              {!!leftButton && <TouchableOpacity
+                testID="header-back"
+                hitSlop={HIT_SLOP}
+                style={styles.headerButtonLeft}
+                onPress={() => this.onBack()}
+              >
+                {leftButton}
+              </TouchableOpacity>}
 
-        {!!title && (
-          <Text
-            testID="headerTitle"
-            style={styles.headerTitle}>{title}</Text>
-        )}
+              {!!title && (
+                <Text
+                  testID="headerTitle"
+                  style={styles.headerTitle}>{title}</Text>
+              )}
 
-        <View style={styles.headerCenter} testID="header-content">
-          {children}
-        </View>
+              <View style={styles.headerCenter} testID="header-content">
+                {children}
+              </View>
 
-        {extraButton}
+              {extraButton}
 
-        {!!rightButton && <TouchableOpacity
-          testID="header-action"
-          hitSlop={HIT_SLOP}
-          style={styles.headerButtonRight}
-          onPress={() => this.onRightButtonClick()}>
-          <Text style={styles.headerButtonText} numberOfLines={1}>{rightButton}</Text>
-        </TouchableOpacity>}
-      </View>
+              {!!rightButton && <TouchableOpacity
+                testID="header-action"
+                hitSlop={HIT_SLOP}
+                style={styles.headerButtonRight}
+                onPress={() => this.onRightButtonClick()}>
+                <Text style={styles.headerButtonText} numberOfLines={1}>{rightButton}</Text>
+              </TouchableOpacity>}
+            </View>
+          );
+        }}
+      </ThemeContext.Consumer>
     );
   }
 }

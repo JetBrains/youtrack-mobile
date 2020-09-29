@@ -4,6 +4,7 @@ import toJson from 'enzyme-to-json';
 
 import * as storage from '../storage/storage';
 import Accounts from './accounts';
+import {buildStyles, DEFAULT_THEME} from '../theme/theme';
 
 describe('<Accounts/>', () => {
   createAccountMock.id = null;
@@ -14,6 +15,8 @@ describe('<Accounts/>', () => {
   let onChangeAccountMock;
   let onLogOutMock;
   let accountsMock;
+
+  beforeAll(() => buildStyles());
 
   beforeEach(() => {
     onAddAccountMock = jest.fn();
@@ -152,6 +155,7 @@ describe('<Accounts/>', () => {
         onAddAccount={onAddAccount}
         onChangeAccount={onChangeAccount}
         onLogOut={onLogOut}
+        uiTheme={DEFAULT_THEME}
       />
     );
   }

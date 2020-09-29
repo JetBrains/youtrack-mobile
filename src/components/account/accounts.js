@@ -3,23 +3,21 @@
 import {View, Text, TouchableWithoutFeedback, TouchableOpacity, Alert} from 'react-native';
 import React, {PureComponent} from 'react';
 
-import type {StorageState} from '../storage/storage';
-import type {AppConfigFilled} from '../../flow/AppConfig';
-
-import {COLOR_PINK, COLOR_PINK_TRANSPARENT} from '../variables/variables';
-
 import Swiper from 'react-native-swiper';
 import Avatar from '../avatar/avatar';
 import {IconLogout, IconAdd} from '../icon/icon';
 import {formatYouTrackURL} from '../config/config';
 import clicksToShowCounter from '../debug-view/clicks-to-show-counter';
 import {getStorageState} from '../storage/storage';
-import {HIT_SLOP} from '../common-styles/button';
 
+import {HIT_SLOP} from '../common-styles/button';
 import avatarStyles from '../avatar/default-avatar.styles';
 import styles, {SWIPER_HEIGHT} from './accounts.styles';
 
+import type {StorageState} from '../storage/storage';
+import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {UITheme} from '../../flow/Theme';
 
 type Props = {
   otherAccounts: Array<StorageState>,
@@ -31,7 +29,8 @@ type Props = {
   onChangeAccount: (account: StorageState) => any,
 
   openDebugView: () => any,
-  style?: ViewStyleProp
+  style?: ViewStyleProp,
+  uiTheme: UITheme
 };
 
 export default class Accounts extends PureComponent<Props, void> {
@@ -101,7 +100,7 @@ export default class Accounts extends PureComponent<Props, void> {
   }
 
   render() {
-    const {openDebugView, onAddAccount, otherAccounts, isChangingAccount} = this.props;
+    const {openDebugView, onAddAccount, otherAccounts, isChangingAccount, uiTheme} = this.props;
     const storageState = getStorageState();
     const accounts: Array<StorageState> = [].concat(storageState).concat(otherAccounts || [])
       .filter(account => !!account.config) // Do not render if account is not ready
@@ -119,13 +118,13 @@ export default class Accounts extends PureComponent<Props, void> {
           style={styles.accountAction}
           disabled={isChangingAccount}
           onPress={onAddAccount}>
-          <IconAdd size={24} color={COLOR_PINK}/>
+          <IconAdd size={24} color={uiTheme.colors.$link}/>
         </TouchableOpacity>
 
         <Swiper
           height={SWIPER_HEIGHT}
-          dotColor={COLOR_PINK_TRANSPARENT}
-          activeDotColor={COLOR_PINK}
+          dotColor={uiTheme.colors.$linkLight}
+          activeDotColor={uiTheme.colors.$link}
           loop={false}
           scrollEnabled={!isChangingAccount}
           index={accounts.indexOf(storageState)}
@@ -141,7 +140,7 @@ export default class Accounts extends PureComponent<Props, void> {
           style={[styles.accountAction, styles.accountActionLogOut]}
           disabled={isChangingAccount}
           onPress={this._logOut}>
-          <IconLogout size={22} color={COLOR_PINK}/>
+          <IconLogout size={22} color={uiTheme.colors.$link}/>
         </TouchableOpacity>
 
       </View>

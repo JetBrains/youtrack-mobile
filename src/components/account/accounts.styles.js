@@ -1,10 +1,10 @@
-import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_BLACK} from '../variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import {UNIT} from '../variables/variables';
 import {mainText, secondaryText} from '../common-styles/typography';
 
 export const SWIPER_HEIGHT = 200;
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   accountContainer: {
     flexDirection: 'row',
     marginTop: UNIT * 3,
@@ -23,11 +23,11 @@ export default StyleSheet.create({
     marginTop: UNIT * 3,
     marginBottom: UNIT,
     fontWeight: '500',
-    color: COLOR_BLACK,
+    color: '$text',
   },
   accountProfileServerURL: {
     ...secondaryText,
-    color: COLOR_BLACK,
+    color: '$icon',
   },
   accountAction: {
     width: UNIT * 4,

@@ -1,17 +1,18 @@
 /* @flow */
 
-import {StyleSheet} from 'react-native';
-import {COLOR_BLACK, UNIT} from '../../components/variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import {UNIT} from '../../components/variables/variables';
 
 import {mainText, secondaryText} from '../../components/common-styles/typography';
 import {formStyles} from '../../components/common-styles/form';
 
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   ...formStyles,
 
   settings: {
     flex: 1,
+    backgroundColor: '$background'
   },
   settingsContent: {
     flexGrow: 1,
@@ -34,17 +35,18 @@ export default StyleSheet.create({
   },
   settingsFooterTitle: {
     ...mainText,
-    color: COLOR_BLACK,
+    color: '$text',
     fontSize: 18,
     fontWeight: '500'
   },
   settingsFooterLink: {
     ...mainText,
-    ...formStyles.link,
+    color: '$link',
     marginTop: UNIT,
     marginBottom: UNIT,
   },
   settingsFooterBuild: {
-    ...secondaryText
+    ...secondaryText,
+    color: '$icon',
   }
 });
