@@ -1,35 +1,23 @@
-import {StyleSheet} from 'react-native';
-import {
-  COLOR_FONT,
-  UNIT,
-  COLOR_ICON_MEDIUM_GREY,
-  COLOR_MEDIUM_GRAY,
-  COLOR_FONT_ON_BLACK,
-  COLOR_LIGHT_GRAY,
-  COLOR_DARK, COLOR_PLACEHOLDER, COLOR_BLACK
-} from '../../components/variables/variables';
-import {mainText, secondaryText} from '../../components/common-styles/typography';
-import {link} from '../../components/common-styles/button';
+import EStyleSheet from 'react-native-extended-stylesheet';
+
+import {UNIT} from '../../components/variables/variables';
+import {headerTitle, mainText, secondaryText} from '../../components/common-styles/typography';
+import {issueIdResolved} from '../../components/common-styles/issue';
 
 const font = {
   lineHeight: 18,
   fontSize: 14,
 };
 
-const textPrimary = {
-  ...font,
-  color: COLOR_FONT
-};
-
 const textSecondary = {
   ...font,
-  color: COLOR_ICON_MEDIUM_GREY
+  color: '$border'
 };
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLOR_FONT_ON_BLACK
+    backgroundColor: '$background'
   },
   arrowImage: {
     lineHeight: 22
@@ -41,7 +29,7 @@ export default StyleSheet.create({
     marginLeft: UNIT * 6,
     paddingBottom: UNIT * 2,
     paddingRight: UNIT * 2,
-    borderBottomColor: COLOR_MEDIUM_GRAY,
+    borderBottomColor: '$separator',
     borderBottomWidth: 0.5,
   },
   notificationIssue: {
@@ -50,11 +38,12 @@ export default StyleSheet.create({
   notificationIssueInfo: {
     ...mainText,
     fontWeight: '500',
-    color: COLOR_DARK
+    color: '$text'
   },
   reason: {
     ...secondaryText,
-    paddingRight: UNIT
+    paddingRight: UNIT,
+    color: '$icon',
   },
   notificationChange: {
     marginTop: UNIT * 2,
@@ -63,7 +52,7 @@ export default StyleSheet.create({
     padding: UNIT * 1.5,
     paddingRight: UNIT * 2,
     borderRadius: UNIT,
-    backgroundColor: COLOR_LIGHT_GRAY
+    backgroundColor: '$boxBackground'
   },
   notificationContentWorkflow: {
     marginTop: UNIT,
@@ -73,19 +62,22 @@ export default StyleSheet.create({
     marginTop: UNIT,
     paddingTop: UNIT * 1.5
   },
-  textPrimary,
+  textPrimary: {
+    ...font,
+    color: '$icon'
+  },
   textSecondary,
   listMessageSmile: {
     paddingTop: UNIT * 6,
     fontSize: 40,
     fontWeight: '500',
-    color: COLOR_PLACEHOLDER,
+    color: '$icon',
     textAlign: 'center',
     letterSpacing: -2
   },
   listFooterMessage: {
     ...mainText,
-    color: COLOR_BLACK,
+    color: '$text',
     fontSize: 18,
     fontWeight: '500',
     textAlign: 'center',
@@ -105,8 +97,11 @@ export default StyleSheet.create({
     paddingTop: UNIT * 2,
     paddingLeft: UNIT * 2,
     paddingBottom: UNIT * 2,
-    backgroundColor: COLOR_FONT_ON_BLACK,
-    color: 'red'
+    backgroundColor: '$background',
+  },
+  headerTitleText: {
+    ...headerTitle,
+    color: '$text'
   },
   error: {
     flex: 1,
@@ -115,8 +110,10 @@ export default StyleSheet.create({
   },
   link: {
     ...font,
-    ...link,
-    flexWrap: 'wrap'
+    color: '$link'
+  },
+  resolved: {
+    ...issueIdResolved
   }
 
 });

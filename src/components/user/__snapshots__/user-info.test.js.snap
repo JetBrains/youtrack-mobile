@@ -38,7 +38,7 @@ exports[`<UserInfo/> Render should match a snapshot 1`] = `
     <Text
       style={
         Object {
-          "color": "#737577",
+          "color": "#888888",
         }
       }
     >

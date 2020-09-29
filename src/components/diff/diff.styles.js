@@ -1,9 +1,7 @@
-import {StyleSheet} from 'react-native';
-import {COLOR_ICON_MEDIUM_GREY, COLOR_PINK, UNIT} from '../variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import {UNIT} from '../variables/variables';
 
-const toggleColor = COLOR_PINK;
-
-export default StyleSheet.create({
+export default EStyleSheet.create({
   button: {
     flexDirection: 'row'
   },
@@ -13,12 +11,14 @@ export default StyleSheet.create({
   diffDelete: {
     backgroundColor: '#FFE6E6'
   },
-  diffEqual: {},
+  diffEqual: {
+    color: '$icon'
+  },
   title: {
-    color: COLOR_ICON_MEDIUM_GREY
+    color: '$border'
   },
   toggle: {
-    color: toggleColor
+    color: '$link'
   },
   content: {
     paddingTop: UNIT,
@@ -28,6 +28,6 @@ export default StyleSheet.create({
     width: 10,
     height: 10,
     resizeMode: 'contain',
-    tintColor: toggleColor
+    color: '$link'
   }
 });

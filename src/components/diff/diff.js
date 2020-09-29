@@ -2,8 +2,10 @@
 
 import React, {PureComponent} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
+
+import EStyleSheet from 'react-native-extended-stylesheet';
+
 import DiffMatchWord from './diff__match-word';
-import {COLOR_PINK} from '../variables/variables';
 import {IconChevronDownUp} from '../icon/icon';
 
 import styles from './diff.styles';
@@ -57,7 +59,7 @@ export default class Diff extends PureComponent<Props, State> {
     case key === DiffMatchWord.diffPatchType.DIFF_EQUAL:
       diffInfo = {
         id: 'diffEqual',
-        style: styles.diffEqual
+        style: [styles.diffEqual, {color: EStyleSheet.value('$shadowColor')}]
       };
     }
     return diffInfo;
@@ -104,7 +106,7 @@ export default class Diff extends PureComponent<Props, State> {
           </Text>
           <Text style={styles.toggle}>
             {'Details '}
-            <IconChevronDownUp size={13} isDown={collapsed} color={COLOR_PINK}/>
+            <IconChevronDownUp size={13} isDown={collapsed} color={EStyleSheet.value('$link')}/>
           </Text>
         </TouchableOpacity>}
 

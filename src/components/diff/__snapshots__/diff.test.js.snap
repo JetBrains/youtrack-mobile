@@ -26,7 +26,16 @@ exports[`<Diff/> Render should match a snapshot 1`] = `
     </Text>
     <Text
       key="1"
-      style={Object {}}
+      style={
+        Array [
+          Object {
+            "color": "#737577",
+          },
+          Object {
+            "color": "#737577",
+          },
+        ]
+      }
       testID="diffEqual"
     >
       ABC

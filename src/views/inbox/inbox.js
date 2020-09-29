@@ -8,7 +8,6 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as inboxActions from './inbox-actions';
 import Router from '../../components/router/router';
-import {COLOR_PINK, UNIT} from '../../components/variables/variables';
 import log from '../../components/log/log';
 import {handleRelativeUrl} from '../../components/config/config';
 import {getStorageState} from '../../components/storage/storage';
@@ -21,8 +20,10 @@ import ErrorMessage from '../../components/error-message/error-message';
 import {LoadMoreList} from '../../components/progress/load-more-list';
 import {SkeletonIssueActivities} from '../../components/skeleton/skeleton';
 
+import {ThemeContext} from '../../components/theme/theme-context';
+
 import {elevation1} from '../../components/common-styles/shadow';
-import {headerTitle} from '../../components/common-styles/typography';
+import {UNIT} from '../../components/variables/variables';
 import styles from './inbox.styles';
 
 import type {InboxState} from './inbox-reducers';
@@ -30,6 +31,7 @@ import type {User} from '../../flow/User';
 import type {Notification, Metadata, ChangeValue, ChangeEvent, Issue, IssueChange} from '../../flow/Inbox';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {IssueOnList} from '../../flow/Issue';
+import type {Theme, UITheme} from '../../flow/Theme';
 
 const CATEGORY_NAME = 'inbox view';
 
@@ -159,7 +161,7 @@ class Inbox extends Component<Props, State> {
         {hasRemovedChange && <Text style={styles.changeRemoved}>
           {removed}
         </Text>}
-        {this.hasAddedValues(event) && (<Text>
+        {this.hasAddedValues(event) && (<Text style={styles.textPrimary}>
           {hasRemovedChange ? delimiter : ''}
           {added}
         </Text>)}
@@ -460,12 +462,12 @@ class Inbox extends Component<Props, State> {
     return null;
   };
 
-  renderRefreshControl = () => {
+  renderRefreshControl = (uiTheme: UITheme) => {
     return (
       <RefreshControl
         refreshing={false}
         onRefresh={this.refresh}
-        tintColor={COLOR_PINK}
+        tintColor={uiTheme.colors.$link}
         testID="refresh-control"
       />
     );
@@ -480,7 +482,7 @@ class Inbox extends Component<Props, State> {
           this.state.isTitlePinned ? elevation1 : null
         ]}
       >
-        <Text style={headerTitle}>Activity</Text>
+        <Text style={styles.headerTitleText}>Activity</Text>
       </View>
     );
   }
@@ -490,37 +492,43 @@ class Inbox extends Component<Props, State> {
     this.setState({
       isTitlePinned: newY >= UNIT
     });
-  }
+  };
 
   render() {
     const {loading, error, items} = this.props;
     const hasError: boolean = !!error;
-    const data: Array<React$Element<any> | Notification> = [this.renderTitle()].concat(items || []);
-
     return (
-      <View style={styles.container}>
+      <ThemeContext.Consumer>
+        {(theme: Theme) => {
+          const data: Array<React$Element<any> | Notification> = [this.renderTitle()].concat(items || []);
 
-        {hasError && (
-          <View style={styles.error}>
-            <ErrorMessage error={error}/>
-          </View>
-        )}
+          return (
+            <View style={styles.container}>
 
-        {!hasError && <FlatList
-          removeClippedSubviews={false}
-          data={data}
-          refreshControl={this.renderRefreshControl()}
-          refreshing={loading}
-          keyExtractor={(item: Object & { key: string } | Notification) => item.key || item.id}
-          renderItem={this.renderItem}
-          onEndReached={this.onLoadMore}
-          onEndReachedThreshold={0.1}
-          onScroll={this.onScroll}
-          ListFooterComponent={this.renderListMessage}
-          scrollEventThrottle={10}
-          stickyHeaderIndices={[0]}
-        />}
-      </View>
+              {hasError && (
+                <View style={styles.error}>
+                  <ErrorMessage error={error}/>
+                </View>
+              )}
+
+              {!hasError && <FlatList
+                removeClippedSubviews={false}
+                data={data}
+                refreshControl={this.renderRefreshControl(theme.uiTheme)}
+                refreshing={loading}
+                keyExtractor={(item: Object & { key: string } | Notification) => item.key || item.id}
+                renderItem={this.renderItem}
+                onEndReached={this.onLoadMore}
+                onEndReachedThreshold={0.1}
+                onScroll={this.onScroll}
+                ListFooterComponent={this.renderListMessage}
+                scrollEventThrottle={10}
+                stickyHeaderIndices={[0]}
+              />}
+            </View>
+          );
+        }}
+      </ThemeContext.Consumer>
     );
   }
 }

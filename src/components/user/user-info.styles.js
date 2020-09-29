@@ -1,7 +1,7 @@
-import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_ICON_MEDIUM_GREY} from '../../components/variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import {UNIT} from '../variables/variables';
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   user: {
     flexDirection: 'row'
   },
@@ -9,7 +9,7 @@ export default StyleSheet.create({
     flex: 0,
     marginRight: UNIT / 2,
     marginLeft: UNIT * 2,
-    color: COLOR_ICON_MEDIUM_GREY
+    color: '$icon'
   },
   userAvatar: {
     flex: 0,
@@ -21,6 +21,6 @@ export default StyleSheet.create({
     alignItems: 'flex-end',
   },
   timestamp: {
-    color: COLOR_ICON_MEDIUM_GREY,
+    color: '$border',
   },
 });

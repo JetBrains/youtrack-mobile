@@ -21,7 +21,7 @@ export const getUITheme = (themeName: string): UITheme => {
   return DEFAULT_THEME;
 };
 
-export const buildStyles = (mode: string = DEFAULT_SYSTEM_MODE, uiTheme: UITheme) => {
+export const buildStyles = (mode: string = DEFAULT_SYSTEM_MODE, uiTheme: UITheme = DEFAULT_THEME) => {
   EStyleSheet.build({
     $theme: mode,
     $resolved: uiTheme.colors.$border,

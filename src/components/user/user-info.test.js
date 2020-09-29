@@ -6,6 +6,7 @@ import toJson from 'enzyme-to-json';
 import UserInfo from './user-info';
 
 import {User} from '../../flow/User';
+import {buildStyles} from '../theme/theme';
 
 describe('<UserInfo/>', () => {
 
@@ -13,6 +14,8 @@ describe('<UserInfo/>', () => {
   let userMock;
   const avatarURLMock = 'http://example.com/avatarUrl';
   const userFullNameMock = 'userFullName';
+
+  beforeAll(() => buildStyles());
 
   beforeEach(() => {
     userMock = {
