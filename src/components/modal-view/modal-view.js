@@ -8,7 +8,8 @@ import type {ModalOrientation, ModalAnimationType} from '../../flow/ModalView';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 import {Orientation, AnimationType} from '../../flow/ModalView';
-import {APP_BACKGROUND} from '../common-styles/app';
+import type {Theme} from '../../flow/Theme';
+import {ThemeContext} from '../theme/theme-context';
 
 
 type DefaultProps = {
@@ -42,20 +43,29 @@ export default class ModalView extends PureComponent<Props, void> {
 
 
     return (
-      <Modal
-        testID="modalView"
-        visible={visible}
-        transparent={transparent}
-        animationType={animationType}
-        supportedOrientations={supportedOrientations}
-        onRequestClose={onRequestClose}
-      >
-        <SafeAreaView style={[Styles.box, transparent === true ? {} : {backgroundColor: APP_BACKGROUND}]}>
-          <View style={[Styles.box, style]}>
-            {children}
-          </View>
-        </SafeAreaView>
-      </Modal>
+      <ThemeContext.Consumer>
+        {(theme: Theme) => {
+          return (
+            <Modal
+              testID="modalView"
+              visible={visible}
+              transparent={transparent}
+              animationType={animationType}
+              supportedOrientations={supportedOrientations}
+              onRequestClose={onRequestClose}
+            >
+              <SafeAreaView style={[
+                Styles.box,
+                transparent === true ? null : {backgroundColor: theme.uiTheme.colors.$background}
+              ]}>
+                <View style={[Styles.box, style]}>
+                  {children}
+                </View>
+              </SafeAreaView>
+            </Modal>
+          );
+        }}
+      </ThemeContext.Consumer>
     );
   }
 }

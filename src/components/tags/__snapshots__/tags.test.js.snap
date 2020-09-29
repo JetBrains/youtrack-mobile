@@ -4,12 +4,7 @@ exports[`<Tags/> Render should match a snapshot 1`] = `
 <View
   style={
     Array [
-      Object {
-        "alignItems": "center",
-        "flexDirection": "row",
-        "justifyContent": "flex-start",
-        "overflow": "hidden",
-      },
+      undefined,
       null,
       undefined,
     ]
@@ -32,13 +27,7 @@ exports[`<Tags/> Render should match a snapshot 1`] = `
       style={
         Array [
           Array [
-            Object {
-              "marginBottom": 2,
-              "marginRight": 8,
-              "paddingLeft": 4,
-              "paddingRight": 4,
-              "width": null,
-            },
+            undefined,
             null,
           ],
           null,

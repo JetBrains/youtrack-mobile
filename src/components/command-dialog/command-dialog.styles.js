@@ -1,21 +1,15 @@
-import {StyleSheet} from 'react-native';
-import {
-  UNIT,
-  COLOR_FONT_ON_BLACK,
-  COLOR_BLACK,
-  COLOR_MEDIUM_GRAY,
-  COLOR_FONT
-} from '../variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import {UNIT} from '../variables/variables';
 import {mainText} from '../common-styles/typography';
 import {elevation1} from '../common-styles/shadow';
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   inputWrapper: {
     ...elevation1,
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: UNIT * 1.5,
-    backgroundColor: COLOR_FONT_ON_BLACK,
+    backgroundColor: '$background',
   },
   listContainer: {
     flex: 1,
@@ -26,7 +20,7 @@ export default StyleSheet.create({
     flex: 1,
     height: UNIT * 5,
     margin: UNIT,
-    color: COLOR_FONT
+    color: '$text'
   },
   suggestion: {
     flexGrow: 1,
@@ -36,13 +30,14 @@ export default StyleSheet.create({
   suggestionDescription: {
     flex: 1,
     marginRight: UNIT,
-    ...mainText
+    ...mainText,
+    color: '$icon'
   },
   suggestionText: {
     ...mainText,
     flex: 1,
     fontWeight: '500',
-    color: COLOR_BLACK
+    color: '$text'
   },
   commandPreview: {
     paddingTop: UNIT * 2,
@@ -51,14 +46,14 @@ export default StyleSheet.create({
     paddingRight: UNIT * 4,
     marginLeft: -UNIT,
     marginRight: -UNIT,
-    borderBottomColor: COLOR_MEDIUM_GRAY,
+    borderBottomColor: '$disabled',
     borderBottomWidth: 0.5,
   },
   commandDescription: {
-    color: COLOR_BLACK
+    color: '$text'
   },
   commandDescriptionError: {
-    color: 'red'
+    color: '$error'
   },
   applyButton: {
     paddingRight: UNIT

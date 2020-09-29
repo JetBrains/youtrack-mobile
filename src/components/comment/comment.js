@@ -14,6 +14,7 @@ import styles from './comment.styles';
 
 import type {IssueComment, Attachment} from '../../flow/CustomFields';
 import type {YouTrackWiki} from '../../flow/Wiki';
+import type {UITheme} from '../../flow/Theme';
 
 type Props = {
   comment: IssueComment,
@@ -26,7 +27,9 @@ type Props = {
   canDeletePermanently: boolean,
   onDeletePermanently: Function,
 
-  activitiesEnabled: ?boolean
+  activitiesEnabled: ?boolean,
+
+  uiTheme: UITheme
 };
 
 export default class Comment extends Component<Props, void> {
@@ -85,13 +88,14 @@ export default class Comment extends Component<Props, void> {
       return (
         <MarkdownView
           attachments={attachments}
+          uiTheme={this.props.uiTheme}
         >
           {comment.text}
         </MarkdownView>
       );
     }
 
-    const {backendUrl, onIssueIdTap, imageHeaders} = this.props.youtrackWiki;
+    const {backendUrl, onIssueIdTap, imageHeaders, uiTheme} = this.props.youtrackWiki;
 
     return (
       <View style={styles.commentWikiContainer}>
@@ -100,6 +104,7 @@ export default class Comment extends Component<Props, void> {
           onIssueIdTap={issueId => onIssueIdTap(issueId)}
           attachments={attachments}
           imageHeaders={imageHeaders}
+          uiTheme={uiTheme}
         >
           {comment.textPreview}
         </YoutrackWiki>

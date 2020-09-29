@@ -1,5 +1,5 @@
 import {UNIT} from '../variables/variables';
-import {mainText, resolvedTextColor, secondaryText} from './typography';
+import {mainText, secondaryText} from './typography';
 
 
 export const title = {
@@ -24,12 +24,7 @@ export const issueCard = {
   }
 };
 
-export const issueResolved = {
-  ...resolvedTextColor
-};
-
 export const issueIdResolved = {
-  ...resolvedTextColor,
   textDecorationLine: 'line-through'
 };
 

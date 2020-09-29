@@ -1,10 +1,14 @@
 /* @flow */
 
-import {View, ListView, Text, StyleSheet, TouchableOpacity, Platform} from 'react-native';
+import {View, ListView, Text, TouchableOpacity, Platform} from 'react-native';
 import React, {Component} from 'react';
-import {UNIT, COLOR_BLACK} from '../variables/variables';
-import type {TransformedSuggestion, SavedQuery} from '../../flow/Issue';
+
+import EStyleSheet from 'react-native-extended-stylesheet';
+
+import {UNIT} from '../variables/variables';
 import {mainText, secondaryText} from '../common-styles/typography';
+
+import type {TransformedSuggestion, SavedQuery} from '../../flow/Issue';
 
 const SAVED_SEARCHES: string = 'SAVED_SEARCHES';
 const LAST_SEARCHES: string = 'LAST_SEARCHES';
@@ -111,7 +115,7 @@ export default class QueryAssistSuggestionsList extends Component<Props, State> 
   }
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'flex-end',
@@ -141,9 +145,10 @@ const styles = StyleSheet.create({
   searchText: {
     ...mainText,
     fontWeight: '500',
-    color: COLOR_BLACK
+    color: '$text'
   },
   sectionHeaderText: {
-    ...secondaryText
+    ...secondaryText,
+    color: '$icon'
   }
 });

@@ -26,12 +26,14 @@ import IssueVotes from '../../components/issue-actions/issue-votes';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
 import VisibilityControl from '../../components/visibility/visibility-control';
 import {SkeletonIssueContent, SkeletonIssueInfoLine} from '../../components/skeleton/skeleton';
+import {ThemeContext} from '../../components/theme/theme-context';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {AnyIssue, IssueFull, IssueOnList} from '../../flow/Issue';
 import type {Attachment, CustomField, FieldValue, IssueProject} from '../../flow/CustomFields';
 import type {Visibility} from '../../flow/Visibility';
 import type {YouTrackWiki} from '../../flow/Wiki';
+import type {Theme, UITheme} from '../../flow/Theme';
 
 
 type Props = {
@@ -168,7 +170,7 @@ export default class IssueDetails extends Component<Props, void> {
     );
   }
 
-  renderIssueVisibility() {
+  renderIssueVisibility(uiTheme: UITheme) {
     const {issue, onVisibilityChange} = this.props;
 
     if (issue) {
@@ -178,6 +180,7 @@ export default class IssueDetails extends Component<Props, void> {
           issueId={issue.id}
           visibility={issue.visibility}
           onSubmit={onVisibilityChange}
+          uiTheme={uiTheme}
         />
       );
     }
@@ -185,7 +188,7 @@ export default class IssueDetails extends Component<Props, void> {
     return <SkeletonIssueInfoLine/>;
   }
 
-  renderIssueContent() {
+  renderIssueContent(uiTheme: UITheme) {
     const {issue, openIssueListWithSearch, openNestedIssueView} = this.props;
 
     if (!issue) {
@@ -201,6 +204,7 @@ export default class IssueDetails extends Component<Props, void> {
         onIssueIdTap: issueId => openNestedIssueView({issueId}),
         title: getReadableID(issue),
         description: issue.wikifiedDescription,
+        uiTheme: uiTheme
       },
       markdown: issue.usesMarkdown && issue.description,
       attachments: issue.attachments
@@ -230,12 +234,13 @@ export default class IssueDetails extends Component<Props, void> {
           {...ytWikiProps}
           attachments={issue.attachments}
           markdown={issue.usesMarkdown && issue.description}
+          uiTheme={uiTheme}
         />
       </View>
     );
   }
 
-  _renderIssueView() {
+  _renderIssueView(uiTheme: UITheme) {
     const {
       issue,
       editMode,
@@ -247,7 +252,7 @@ export default class IssueDetails extends Component<Props, void> {
     return (
       <View style={styles.issueView}>
 
-        {this.renderIssueVisibility()}
+        {this.renderIssueVisibility(uiTheme)}
 
         <View style={styles.issueAdditionalInfoContainer}>
           {this.renderAdditionalInfo()}
@@ -263,7 +268,7 @@ export default class IssueDetails extends Component<Props, void> {
           onDescriptionChange={this.props.setIssueDescriptionCopy}
         />}
 
-        {!editMode && this.renderIssueContent()}
+        {!editMode && this.renderIssueContent(uiTheme)}
 
         {issue?.attachments && this.renderAttachments(issue.attachments)}
 
@@ -294,7 +299,7 @@ export default class IssueDetails extends Component<Props, void> {
 
   onUpdateProject = async (project: IssueProject) => await this.props.updateProject(project);
 
-  renderCustomFieldPanel = () => {
+  renderCustomFieldPanel = (uiTheme: UITheme) => {
     const _issue: AnyIssue = this.getIssue();
 
     return <CustomFieldsPanel
@@ -312,6 +317,8 @@ export default class IssueDetails extends Component<Props, void> {
 
       onUpdate={this.onFieldUpdate}
       onUpdateProject={this.onUpdateProject}
+
+      uiTheme={uiTheme}
     />;
   };
 
@@ -319,25 +326,30 @@ export default class IssueDetails extends Component<Props, void> {
     const {renderRefreshControl, onSwitchToActivity} = this.props;
 
     return (
-      <ScrollView
-        style={styles.issueContent}
-        refreshControl={renderRefreshControl()}
-        keyboardDismissMode="interactive"
-        keyboardShouldPersistTaps="handled"
-        scrollEventThrottle={16}
-      >
-        {this.renderCustomFieldPanel()}
-        {this._renderIssueView()}
+      <ThemeContext.Consumer>
+        {(theme: Theme) => {
+          return (
+            <ScrollView
+              refreshControl={renderRefreshControl()}
+              keyboardDismissMode="interactive"
+              keyboardShouldPersistTaps="handled"
+              scrollEventThrottle={16}
+            >
+              {this.renderCustomFieldPanel(theme.uiTheme)}
+              {this._renderIssueView(theme.uiTheme)}
 
-        <TouchableOpacity
-          style={styles.switchToActivityButton}
-          hitSlop={HIT_SLOP}
-          onPress={onSwitchToActivity}
-        >
-          <Text style={styles.switchToActivityButtonText}>View comments and other activity</Text>
-        </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.switchToActivityButton}
+                hitSlop={HIT_SLOP}
+                onPress={onSwitchToActivity}
+              >
+                <Text style={styles.switchToActivityButtonText}>View comments and other activity</Text>
+              </TouchableOpacity>
 
-      </ScrollView>
+            </ScrollView>
+          );
+        }}
+      </ThemeContext.Consumer>
     );
   }
 }

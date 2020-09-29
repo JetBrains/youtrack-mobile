@@ -1,10 +1,7 @@
-import {StyleSheet} from 'react-native';
-import {
-  UNIT,
-  COLOR_GRAY
-} from '../variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import {UNIT} from '../variables/variables';
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   tags: {
     overflow: 'hidden',
     flexDirection: 'row',
@@ -26,6 +23,6 @@ export default StyleSheet.create({
   },
   tagNoColor: {
     borderWidth: 0.5,
-    borderColor: COLOR_GRAY
+    borderColor: '$textSecondary'
   }
 });

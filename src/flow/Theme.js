@@ -7,28 +7,34 @@ export type Theme = {
 
 export type BarStyle = 'light-content' | 'dark-content';
 
+export type UIThemeColors = {|
+  $background: string,
+  $boxBackground: string,
+
+  $error: string,
+
+  $text: string,
+  $textSecondary: string,
+
+  $link: string,
+  $linkLight: string,
+
+  $disabled: string,
+  $border: string,
+
+  $icon: string,
+  $iconAccent: string,
+
+  $mask: string,
+
+  $separator: string
+|};
+
 export type UITheme = {
   dark: boolean,
   name: string,
   barStyle: BarStyle,
 
-  colors: {|
-    $background: string,
-    $boxBackground: string,
-
-    $text: string,
-    $textSecondary: string,
-
-    $link: string,
-    $disabled: string,
-    $border: string,
-
-    $icon: string,
-    $iconAccent: string,
-
-    $mask: string,
-
-    $separatorOpacity: number
-  |}
+  colors: UIThemeColors
 }
 

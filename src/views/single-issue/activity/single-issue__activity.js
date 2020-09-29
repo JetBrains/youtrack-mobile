@@ -29,6 +29,7 @@ import {getEntityPresentation} from '../../../components/issue-formatter/issue-f
 import styles from './single-issue-activity.styles';
 
 import PropTypes from 'prop-types';
+import {ThemeContext} from '../../../components/theme/theme-context';
 
 import type {ActivityItem} from '../../../flow/Activity';
 import type {IssueComment} from '../../../flow/CustomFields';
@@ -36,6 +37,7 @@ import type {State as IssueActivityState} from './single-issue-activity__reducer
 import type {State as IssueCommentActivityState} from './single-issue-activity__comment-reducers';
 import type {User, UserAppearanceProfile} from '../../../flow/User';
 import type {YouTrackWiki} from '../../../flow/Wiki';
+import type {Theme, UITheme} from '../../../flow/Theme';
 
 type IssueActivityProps = $Shape<IssueActivityState
   & typeof activityActions
@@ -68,7 +70,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     }
   };
 
-  renderActivitySettings(disabled: boolean) {
+  renderActivitySettings(disabled: boolean, uiTheme: UITheme) {
     const {
       issueActivityTypes,
       issueActivityEnabledTypes,
@@ -87,6 +89,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
         this.loadIssueActivities();
       }}
       userAppearanceProfile={this.getUserAppearanceProfile()}
+      uiTheme={uiTheme}
     />;
   }
 
@@ -122,7 +125,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     ) || [];
   }
 
-  _renderActivities() {
+  _renderActivities(uiTheme: UITheme) {
     const {
       activityPage,
       issue,
@@ -179,6 +182,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
             }
           }
           issuePermissions={issuePermissions}
+          uiTheme={uiTheme}
         />
       </View>
     );
@@ -287,28 +291,33 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     );
 
     return (
-      <View style={styles.activities}>
+      <ThemeContext.Consumer>
+        {(theme: Theme) => {
+          return (
+            <View style={styles.activities}>
 
-        {isSelectOpen && this.renderCommentVisibilitySelect()}
+              {isSelectOpen && this.renderCommentVisibilitySelect()}
 
-        <ScrollView
-          style={styles.issueContent}
-          refreshControl={this.renderRefreshControl()}
-          keyboardDismissMode="interactive"
-          keyboardShouldPersistTaps="handled"
-          scrollEventThrottle={16}
-        >
+              <ScrollView
+                refreshControl={this.renderRefreshControl()}
+                keyboardDismissMode="interactive"
+                keyboardShouldPersistTaps="handled"
+                scrollEventThrottle={16}
+              >
 
-          {!hasError && this.renderActivitySettings(!isActivitySettingEnabled)}
+                {!hasError && this.renderActivitySettings(!isActivitySettingEnabled, theme.uiTheme)}
 
-          {hasError && <ErrorMessage error={activitiesLoadingError}/>}
+                {hasError && <ErrorMessage error={activitiesLoadingError}/>}
 
-          {!hasError && this._renderActivities()}
+                {!hasError && this._renderActivities(theme.uiTheme)}
 
-        </ScrollView>
+              </ScrollView>
 
-        {Boolean(this.canAddComment()) && this.renderEditCommentInput(false)}
-      </View>
+              {Boolean(this.canAddComment()) && this.renderEditCommentInput(false)}
+            </View>
+          );
+        }}
+      </ThemeContext.Consumer>
     );
   }
 }

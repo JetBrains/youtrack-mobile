@@ -19,6 +19,7 @@ import styles from './attach-file-modal.styles';
 
 import type {Attachment, ImageDimensions} from '../../flow/CustomFields';
 import type {Visibility} from '../../flow/Visibility';
+import type {UITheme} from '../../flow/Theme';
 
 type Action = { title: string, execute: () => any, icon?: any };
 
@@ -27,7 +28,8 @@ type Props = {
   actions: Array<Action>,
   attach: Attachment,
   onCancel: () => any,
-  onAttach: (file: Attachment) => any
+  onAttach: (file: Attachment) => any,
+  uiTheme: UITheme
 };
 
 type State = {
@@ -73,7 +75,7 @@ export default class AttachFileDialog extends PureComponent<Props, State> {
   };
 
   render() {
-    const {actions, attach} = this.props;
+    const {actions, attach, uiTheme} = this.props;
     const dimensions: ?ImageDimensions = attach && calculateAspectRatio(attach.dimensions);
     const hasAttach: boolean = !!attach;
 
@@ -113,6 +115,7 @@ export default class AttachFileDialog extends PureComponent<Props, State> {
               style={styles.visibilityButton}
               issueId={this.props.issueId}
               onApply={this.updateAttachVisibility}
+              uiTheme={uiTheme}
             />}
           </View>
 

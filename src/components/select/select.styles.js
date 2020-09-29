@@ -1,11 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {
-  UNIT,
-  COLOR_FONT_GRAY,
-  COLOR_FONT,
-  COLOR_MEDIUM_GRAY,
-  COLOR_BLACK, COLOR_FONT_ON_BLACK
-} from '../variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import {UNIT} from '../variables/variables';
 import {mainText} from '../common-styles/typography';
 import {elevation1} from '../common-styles/shadow';
 
@@ -14,13 +8,13 @@ const minButtonWidth = UNIT * 5;
 export const SELECT_ITEM_HEIGHT = UNIT * 7;
 export const SELECT_ITEM_SEPARATOR_HEIGHT = 1;
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   inputWrapper: {
     ...elevation1,
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: UNIT * 1.5,
-    backgroundColor: COLOR_FONT_ON_BLACK,
+    backgroundColor: '$background',
   },
   cancelButton: {
     minWidth: minButtonWidth
@@ -30,7 +24,7 @@ export default StyleSheet.create({
     flex: 1,
     height: UNIT * 5,
     margin: UNIT,
-    color: COLOR_FONT
+    color: '$text'
   },
   row: {
     position: 'relative',
@@ -43,7 +37,7 @@ export default StyleSheet.create({
   },
   rowSeparator: {
     height: SELECT_ITEM_SEPARATOR_HEIGHT,
-    borderColor: COLOR_MEDIUM_GRAY,
+    borderColor: '$border',
     borderBottomWidth: 0.3,
     marginLeft: UNIT * 2
   },
@@ -51,7 +45,7 @@ export default StyleSheet.create({
     justifyContent: 'center'
   },
   headerText: {
-    color: COLOR_FONT
+    color: '$text'
   },
   selectItemValue: {
     flexDirection: 'row',
@@ -63,11 +57,11 @@ export default StyleSheet.create({
   itemTitle: {
     ...mainText,
     fontWeight: '500',
-    color: COLOR_BLACK
+    color: '$text'
   },
   loadingMessage: {
     paddingLeft: UNIT * 2,
-    color: COLOR_FONT_GRAY
+    color: '$textSecondary'
   },
   selectedMarkIcon: {
     width: UNIT * 3,

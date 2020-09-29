@@ -1,12 +1,7 @@
-import {StyleSheet} from 'react-native';
-import {
-  COLOR_PINK,
-  COLOR_FONT,
-  UNIT,
-} from '../variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import {UNIT} from '../variables/variables';
 import {mainText, secondaryText} from '../common-styles/typography';
 
-const SELECTED_ALPHA_HEX = 20;
 
 const sidePadding = {
   paddingLeft: UNIT,
@@ -17,14 +12,14 @@ const font = {
   fontFamily: 'System'
 };
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   wrapper: {
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center'
   },
   wrapperActive: {
-    backgroundColor: `${COLOR_PINK}${SELECTED_ALPHA_HEX}`
+    backgroundColor: '$linkLight'
   },
   valuesWrapper: {
     flexDirection: 'row',
@@ -40,7 +35,8 @@ export default StyleSheet.create({
   keyText: {
     marginBottom: UNIT / 2,
     ...secondaryText,
-    ...font
+    ...font,
+    color: '$icon'
   },
   value: {
     flexDirection: 'row',
@@ -49,13 +45,13 @@ export default StyleSheet.create({
     marginRight: 0,
     ...mainText,
     ...font,
-    color: COLOR_PINK
+    color: '$link'
   },
   valueTextActive: {
-    color: COLOR_FONT,
+    color: '$text',
   },
   valueTextDisabled: {
-    color: COLOR_FONT
+    color: '$text',
   },
   colorMarker: {
     marginRight: UNIT

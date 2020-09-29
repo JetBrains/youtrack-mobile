@@ -51,6 +51,7 @@ import {HIT_SLOP} from '../../../components/common-styles/button';
 
 import type IssuePermissions from '../../../components/issue-permissions/issue-permissions';
 import type {YouTrackWiki} from '../../../flow/Wiki';
+import type {UITheme} from '../../../flow/Theme';
 
 const CATEGORY_NAME = 'Issue Stream';
 
@@ -77,7 +78,9 @@ type Props = {
   workTimeSettings: ?WorkTimeSettings,
 
   onShowCommentActions: (comment: IssueComment) => any,
-  issuePermissions: IssuePermissions
+  issuePermissions: IssuePermissions,
+
+  uiTheme: UITheme
 };
 
 type DefaultProps = {
@@ -263,10 +266,11 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
   }
 
   renderActivityIcon(activityGroup: Object) {
+    const iconColor: string = this.props.uiTheme.colors.$iconAccent;
     if (activityGroup.work) {
-      return <IconWork size={24} color={COLOR_ICON_LIGHT_BLUE} style={{position: 'relative', top: -2}}/>;
+      return <IconWork size={24} color={iconColor} style={{position: 'relative', top: -2}}/>;
     }
-    return <IconHistory size={26} color={COLOR_ICON_LIGHT_BLUE}/>;
+    return <IconHistory size={26} color={iconColor}/>;
   }
 
   _renderUserAvatar(activityGroup: Object, showAvatar: boolean) {
@@ -375,6 +379,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
             onRestore={() => this.props.onRestoreComment(comment)}
             onDeletePermanently={() => this.props.onDeleteCommentPermanently(comment, activityGroup.comment.id)}
             activitiesEnabled={true}
+            uiTheme={this.props.uiTheme}
           />
 
           {!comment.deleted && IssueVisibility.isSecured(comment.visibility) &&
@@ -497,7 +502,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
               </View>
             );
           })
-          : <Text style={[styles.activityChange, {textAlign: 'center', marginTop: UNIT * 5}]}>No activity yet</Text>}
+          : <Text style={styles.activityNoActivity}>No activity yet</Text>}
       </View>
     );
   }

@@ -12,13 +12,7 @@ import {connect} from 'react-redux';
 import {getApi} from '../../components/api/api__instance';
 import Router from '../../components/router/router';
 import Header from '../../components/header/header';
-import {
-  COLOR_DARK,
-  COLOR_FONT_GRAY,
-  COLOR_GRAY,
-  COLOR_PINK,
-  UNIT
-} from '../../components/variables/variables';
+import {UNIT} from '../../components/variables/variables';
 import usage from '../../components/usage/usage';
 import CommandDialog from '../../components/command-dialog/command-dialog';
 import ErrorMessage from '../../components/error-message/error-message';
@@ -42,6 +36,9 @@ import IssueStar from '../../components/issue-actions/issue-star';
 import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
 import {isIOSPlatform} from '../../util/util';
 import {Skeleton} from '../../components/skeleton/skeleton';
+import {ThemeContext} from '../../components/theme/theme-context';
+
+import type {Theme, UITheme, UIThemeColors} from '../../flow/Theme';
 
 const CATEGORY_NAME = 'Issue';
 const initialWindowDimentions = Dimensions.get('window');
@@ -103,7 +100,7 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
     this.props.loadIssueLinks();
   }
 
-  renderDetailsTab() {
+  renderDetailsTab(uiTheme: UITheme) {
     const {
       loadIssue,
       openNestedIssueView,
@@ -152,7 +149,7 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
         setIssueDescriptionCopy={setIssueDescriptionCopy}
 
         analyticCategory={CATEGORY_NAME}
-        renderRefreshControl={() => this.renderRefreshControl(() => this.loadIssue())}
+        renderRefreshControl={() => this.renderRefreshControl(() => this.loadIssue(), uiTheme)}
 
         onVoteToggle={toggleVote}
         onSwitchToActivity={this.switchToActivityTab}
@@ -164,7 +161,7 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
     );
   }
 
-  renderActivityTab = () => {
+  renderActivityTab = (uiTheme: UITheme) => {
     const {issue, user, issuePermissions, selectProps, updateUserAppearanceProfile, openNestedIssueView} = this.props;
 
     return (
@@ -175,37 +172,40 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
         issuePermissions={issuePermissions}
         selectProps={selectProps}
         updateUserAppearanceProfile={updateUserAppearanceProfile}
-        renderRefreshControl={(loadActivities: () => any) => this.renderRefreshControl(loadActivities)}
+        renderRefreshControl={(loadActivities: () => any) => this.renderRefreshControl(loadActivities, uiTheme)}
       />
     );
   };
 
-  renderTabBar() {
+  renderTabBar(uiTheme: UITheme) {
     const {editMode} = this.props;
 
     return props => (
       <TabBar
         {...props}
-        indicatorStyle={{backgroundColor: editMode ? 'transparent' : COLOR_PINK}}
+        indicatorStyle={{backgroundColor: editMode ? 'transparent' : uiTheme.colors.$link}}
         style={[styles.tabsBar, editMode ? {height: 1} : null]}
-        renderLabel={({route, focused}) => (
-          <Text style={[
-            styles.tabLabel,
-            focused ? styles.tabLabelActive : null,
-            {color: focused && !editMode ? COLOR_PINK : this.isTabChangeEnabled() ? COLOR_DARK : COLOR_FONT_GRAY}
-          ]}>
-            {route.title}
-          </Text>
-        )}
+        renderLabel={({route, focused}) => {
+          const uiThemeColors: UIThemeColors = uiTheme.colors;
+          return (
+            <Text style={[
+              styles.tabLabel,
+              focused ? styles.tabLabelActive : null,
+              {color: focused && !editMode ? uiThemeColors.$link : this.isTabChangeEnabled() ? uiThemeColors.$text : uiThemeColors.$disabled}
+            ]}>
+              {route.title}
+            </Text>
+          );
+        }}
       />
     );
   }
 
-  renderScene = ({route}) => {
+  renderScene = (route, uiTheme: UITheme) => {
     if (route.key === tabRoutes[0].key) {
-      return this.renderDetailsTab();
+      return this.renderDetailsTab(uiTheme);
     }
-    return this.renderActivityTab();
+    return this.renderActivityTab(uiTheme);
   };
 
   isTabChangeEnabled() {
@@ -223,16 +223,16 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
     this.setState({index: 0});
   };
 
-  renderTabs() {
+  renderTabs(uiTheme: UITheme) {
     return (
       <TabView
         testID="issueTabs"
         lazy
         swipeEnabled={this.isTabChangeEnabled()}
         navigationState={this.state}
-        renderScene={this.renderScene}
+        renderScene={({route}) => this.renderScene(route, uiTheme)}
         initialLayout={{width: initialWindowDimentions.width, height: initialWindowDimentions.height}}
-        renderTabBar={this.renderTabBar()}
+        renderTabBar={this.renderTabBar(uiTheme)}
         onIndexChange={index => {
           if (this.isTabChangeEnabled()) {
             this.setState({index});
@@ -315,7 +315,7 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
     return this.isIssueLoaded() ? null : !issueLoadingError && <Skeleton width={120}/> || null;
   }
 
-  _renderHeader() {
+  _renderHeader(uiTheme: UITheme) {
     const {
       issue,
       editMode,
@@ -355,12 +355,12 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
       );
     } else {
       const canSave = Boolean(summaryCopy) && !isSavingEditedIssue;
-      const saveButton = <IconCheck size={20} color={canSave ? COLOR_PINK : COLOR_GRAY}/>;
+      const saveButton = <IconCheck size={20} color={canSave ? uiTheme.colors.$link : uiTheme.colors.$textSecondary}/>;
 
       return (
         <Header
           style={{paddingLeft: UNIT * 2, paddingRight: UNIT * 2}}
-          leftButton={<IconClose size={21} color={isSavingEditedIssue ? COLOR_GRAY : COLOR_PINK}/>}
+          leftButton={<IconClose size={21} color={isSavingEditedIssue ? uiTheme.colors.$link : uiTheme.colors.$textSecondary}/>}
           onBack={stopEditingIssue}
           rightButton={saveButton}
           onRightButtonClick={canSave ? saveIssueSummaryAndDescriptionChange : () => {}}
@@ -369,10 +369,10 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
     }
   }
 
-  _renderRefreshControl(onRefresh?: Function) {
+  _renderRefreshControl(onRefresh?: Function, uiTheme: UITheme) {
     return <RefreshControl
       refreshing={this.props.isRefreshing}
-      tintColor={COLOR_PINK}
+      tintColor={uiTheme.colors.$link}
       onRefresh={() => {
         if (onRefresh) {
           onRefresh();
@@ -403,7 +403,7 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
     />;
   }
 
-  renderAttachFileDialog() {
+  renderAttachFileDialog(uiTheme: UITheme) {
     const {attachingImage, createAttachActions} = this.props;
     return (
       <AttachFileDialog
@@ -412,6 +412,7 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
         actions={createAttachActions()}
         onCancel={this.cancelAddAttach}
         onAttach={this.addAttachment}
+        uiTheme={uiTheme}
       />
     );
   }
@@ -441,18 +442,24 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
     } = this.props;
 
     return (
-      <View style={styles.container} testID="issue-view">
-        {this._renderHeader()}
+      <ThemeContext.Consumer>
+        {(theme: Theme) => {
+          return (
+            <View style={styles.container} testID="issue-view">
+              {this._renderHeader(theme.uiTheme)}
 
-        {issueLoadingError && <View style={styles.error}><ErrorMessage error={issueLoadingError}/></View>}
+              {issueLoadingError && <View style={styles.error}><ErrorMessage error={issueLoadingError}/></View>}
 
 
-        {!issueLoadingError && this.renderTabs()}
+              {!issueLoadingError && this.renderTabs(theme.uiTheme)}
 
-        {this.isIssueLoaded() && showCommandDialog && this._renderCommandDialog()}
+              {this.isIssueLoaded() && showCommandDialog && this._renderCommandDialog()}
 
-        {isAttachFileDialogVisible && this.renderAttachFileDialog()}
-      </View>
+              {isAttachFileDialogVisible && this.renderAttachFileDialog(theme.uiTheme)}
+            </View>
+          );
+        }}
+      </ThemeContext.Consumer>
     );
   }
 }

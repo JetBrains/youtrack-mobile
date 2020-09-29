@@ -5,7 +5,6 @@ import {Calendar} from 'react-native-calendars'; // eslint-disable-line import/n
 import CustomField from '../custom-field/custom-field';
 import Select from '../select/select';
 import Header from '../header/header';
-import {COLOR_PINK, COLOR_PLACEHOLDER} from '../variables/variables';
 import Api from '../api/api';
 import {SkeletonIssueCustomFields} from '../skeleton/skeleton';
 import ModalView from '../modal-view/modal-view';
@@ -17,6 +16,7 @@ import styles, {calendarTheme} from './custom-fields-panel.styles';
 
 import type {IssueProject, CustomField as CustomFieldType, ProjectCustomField} from '../../flow/CustomFields';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {UITheme} from '../../flow/Theme';
 
 type Props = {
   autoFocusSelect?: boolean,
@@ -34,6 +34,8 @@ type Props = {
 
   onUpdate: (field: CustomFieldType, value: null | number | Object | Array<Object>) => Promise<Object>,
   onUpdateProject: (project: IssueProject) => Promise<Object>,
+
+  uiTheme: UITheme
 };
 
 type State = {
@@ -132,7 +134,11 @@ export default class CustomFieldsPanel extends Component<Props, State> {
   }
 
   shouldComponentUpdate(nextProps: Props, prevState: State): boolean {
-    return this.props.fields !== nextProps.fields || this.state !== prevState;
+    return (
+      this.props.uiTheme !== nextProps.uiTheme ||
+      this.props.fields !== nextProps.fields ||
+      this.state !== prevState
+    );
   }
 
   saveUpdatedField(field: CustomFieldType, value: null | number | Object | Array<Object>) {
@@ -178,7 +184,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
         }
       }
     });
-  }
+  };
 
   closeEditor(): Promise<any> {
     return new Promise(resolve => {
@@ -324,7 +330,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     }
 
     return this.editCustomField(field);
-  }
+  };
 
   storeScrollPosition = (event: Object) => {
     const {nativeEvent} = event;
@@ -357,25 +363,25 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     />;
   }
 
-  renderHeader(title: string) {
+  renderHeader(title: string, uiTheme: UITheme) {
     return (
       <Header
         style={styles.customFieldEditorHeader}
-        rightButton={<IconClose size={21} color={COLOR_PINK}/>}
+        rightButton={<IconClose size={21} color={uiTheme.colors.$link}/>}
         onRightButtonClick={() => this.closeEditor()}
         title={title}
       />
     );
   }
 
-  _renderDatePicker() {
+  _renderDatePicker(uiTheme: UITheme) {
     const {datePicker} = this.state;
 
     return (
       <ModalView
         animationType="slide"
       >
-        {this.renderHeader(datePicker.title)}
+        {this.renderHeader(datePicker.title, uiTheme)}
 
         <View style={styles.customFieldDateEditor}>
 
@@ -388,7 +394,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
 
           {datePicker.withTime && (
             <TextInput
-              placeholderTextColor={COLOR_PLACEHOLDER}
+              placeholderTextColor={uiTheme.colors.$icon}
               style={styles.simpleValueInput}
               placeholder="13:00"
               underlineColorAndroid="transparent"
@@ -419,25 +425,25 @@ export default class CustomFieldsPanel extends Component<Props, State> {
               return datePicker.onSelect(new Date(day.timestamp));
             }}
             firstDay={1}
-            theme={calendarTheme}
+            theme={calendarTheme(uiTheme)}
           />
         </View>
       </ModalView>
     );
   }
 
-  _renderSimpleValueInput() {
+  _renderSimpleValueInput(uiTheme: UITheme) {
     const {simpleValue, editingField} = this.state;
 
     return (
       <ModalView
         animationType="slide"
       >
-        {this.renderHeader(editingField?.projectCustomField?.field?.name || '')}
+        {this.renderHeader(editingField?.projectCustomField?.field?.name || '', uiTheme)}
 
         <View style={styles.customFieldSimpleEditor}>
           <TextInput
-            placeholderTextColor={COLOR_PLACEHOLDER}
+            placeholderTextColor={uiTheme.colors.$icon}
             style={styles.simpleValueInput}
             placeholder={simpleValue.placeholder}
             underlineColorAndroid="transparent"
@@ -462,7 +468,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     );
   }
 
-  getIssueProjectField(): {projectCustomField: ProjectCustomField, value: { name: string }} {
+  getIssueProjectField(): { projectCustomField: ProjectCustomField, value: { name: string } } {
     const projectName: string = this.props.issueProject?.name || '';
     const visibleProjectName: string = (
       projectName.length > MAX_PROJECT_NAME_LENGTH
@@ -532,11 +538,12 @@ export default class CustomFieldsPanel extends Component<Props, State> {
   }
 
   render() {
+    const {uiTheme, style} = this.props;
     const {select, datePicker, simpleValue, editingField} = this.state;
 
     return (
       <View
-        style={[styles.container, this.props.style]}
+        style={[styles.container, style]}
       >
 
         {this.renderFields()}
@@ -548,8 +555,8 @@ export default class CustomFieldsPanel extends Component<Props, State> {
           useNativeDriver
         >
           {select.show && this._renderSelect()}
-          {datePicker.show && this._renderDatePicker()}
-          {(simpleValue.show && !!editingField) && this._renderSimpleValueInput()}
+          {datePicker.show && this._renderDatePicker(uiTheme)}
+          {(simpleValue.show && !!editingField) && this._renderSimpleValueInput(uiTheme)}
         </AnimatedView>
 
       </View>

@@ -1,19 +1,13 @@
-import {StyleSheet} from 'react-native';
-import {
-  UNIT,
-  COLOR_PINK,
-  COLOR_GRAY,
-  COLOR_FONT_GRAY,
-  COLOR_FONT_ON_BLACK,
-  COLOR_BLACK,
-  COLOR_MEDIUM_GRAY
-} from '../variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import {UNIT} from '../variables/variables';
 import {formStyles} from '../common-styles/form';
+import {separator} from '../common-styles/list';
+
+import type {UITheme, UIThemeColors} from '../../flow/Theme';
 
 const HEIGHT = UNIT * 12;
-const SAVING_ALPHA = '70';
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   container: {
     position: 'relative',
     zIndex: 1,
@@ -24,9 +18,8 @@ export default StyleSheet.create({
     padding: UNIT * 2
   },
   bottomBorder: {
-    height: 0.5,
-    marginLeft: UNIT * 2,
-    backgroundColor: COLOR_MEDIUM_GRAY
+    ...separator,
+    borderColor: '$separator'
   },
   customFieldsPanel: {
     flexDirection: 'row',
@@ -53,13 +46,15 @@ export default StyleSheet.create({
   clearDate: {
     paddingTop: UNIT,
     paddingBottom: UNIT,
-    color: COLOR_PINK
+    color: '$link'
   },
   simpleValueInput: {
     ...formStyles.input,
+    backgroundColor: '$boxBackground',
+    color: '$text',
   },
   savingFieldIndicator: {
-    backgroundColor: `#CCCCCC${SAVING_ALPHA}`,
+    backgroundColor: '$mask',
     position: 'absolute',
     top: 0,
     left: 0,
@@ -68,16 +63,19 @@ export default StyleSheet.create({
   }
 });
 
-export const calendarTheme = {
-  calendarBackground: COLOR_FONT_ON_BLACK,
-  textSectionTitleColor: COLOR_GRAY,
-  selectedDayBackgroundColor: COLOR_PINK,
-  selectedDayTextColor: COLOR_FONT_ON_BLACK,
-  todayTextColor: COLOR_PINK,
-  dayTextColor: COLOR_BLACK,
-  textDisabledColor: COLOR_FONT_GRAY,
-  dotColor: COLOR_BLACK,
-  selectedDotColor: COLOR_BLACK,
-  arrowColor: COLOR_PINK,
-  monthTextColor: COLOR_BLACK
+export const calendarTheme = (uiTheme: UITheme) => {
+  const uiThemeColors:UIThemeColors = uiTheme.colors;
+  return {
+    calendarBackground: uiThemeColors.$background,
+    textSectionTitleColor: uiThemeColors.$border,
+    selectedDayBackgroundColor: uiThemeColors.$link,
+    selectedDayTextColor: uiThemeColors.$background,
+    todayTextColor: uiThemeColors.$link,
+    dayTextColor: uiThemeColors.$text,
+    textDisabledColor: uiThemeColors.$disabled,
+    dotColor: uiThemeColors.$text,
+    selectedDotColor: uiThemeColors.$text,
+    arrowColor: uiThemeColors.$link,
+    monthTextColor: uiThemeColors.$text
+  };
 };

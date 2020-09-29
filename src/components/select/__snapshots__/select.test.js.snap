@@ -13,34 +13,12 @@ exports[`<Select/> Render should match a snapshot 1`] = `
   testID="select"
   visible={true}
 >
-  <View
-    style={
-      Object {
-        "alignItems": "center",
-        "backgroundColor": "#FFF",
-        "flexDirection": "row",
-        "paddingLeft": 12,
-        "shadowColor": "#717171",
-        "shadowOffset": Object {
-          "height": 1,
-          "width": 0,
-        },
-        "shadowOpacity": 0.25,
-        "shadowRadius": 0.75,
-      }
-    }
-  >
+  <View>
     <TouchableOpacity
       activeOpacity={0.2}
       testID="selectBackButton"
     >
-      <IconBack
-        style={
-          Object {
-            "minWidth": 40,
-          }
-        }
-      />
+      <IconBack />
     </TouchableOpacity>
     <TextInput
       allowFontScaling={true}
@@ -53,17 +31,6 @@ exports[`<Select/> Render should match a snapshot 1`] = `
       placeholderTextColor="#717171"
       rejectResponderTermination={true}
       returnKeyType="search"
-      style={
-        Object {
-          "color": "#444444",
-          "flex": 1,
-          "fontSize": 16,
-          "height": 40,
-          "letterSpacing": -0.19,
-          "lineHeight": 20,
-          "margin": 8,
-        }
-      }
       testID="selectInput"
       underlineColorAndroid="transparent"
       value=""
@@ -72,18 +39,8 @@ exports[`<Select/> Render should match a snapshot 1`] = `
   <View
     style={
       Array [
-        Object {
-          "alignItems": "center",
-          "flexDirection": "row",
-          "height": 56,
-          "justifyContent": "space-between",
-          "marginLeft": 16,
-          "paddingRight": 12,
-          "position": "relative",
-        },
-        Object {
-          "justifyContent": "center",
-        },
+        undefined,
+        undefined,
       ]
     }
   >
@@ -93,14 +50,7 @@ exports[`<Select/> Render should match a snapshot 1`] = `
       hidesWhenStopped={true}
       size="small"
     />
-    <Text
-      style={
-        Object {
-          "color": "#888888",
-          "paddingLeft": 16,
-        }
-      }
-    >
+    <Text>
       Loading values...
     </Text>
   </View>

@@ -11,10 +11,14 @@ const light: UITheme = {
     $background: '#FFF',
     $boxBackground: 'rgba(0, 0, 0, 0.04)',
 
+    $error: '#dd0000',
+
     $text: '#000',
     $textSecondary: '#CCC',
 
     $link: '#FE0082',
+    $linkLight: 'rgba(254, 0, 130, 0.3)',
+
     $disabled: '#DFE5EB',
     $border: '#888888',
 
@@ -23,7 +27,7 @@ const light: UITheme = {
 
     $mask: '#00000057',
 
-    $separatorOpacity: 0.5,
+    $separator: '#DFE5EB'
   },
 };
 

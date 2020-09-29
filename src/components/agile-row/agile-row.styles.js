@@ -7,14 +7,16 @@ import {
   COLOR_FONT_GRAY
 } from '../variables/variables';
 import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../agile-column/agile-column';
-import {issueResolved, issueIdResolved} from '../common-styles/issue';
+import {issueIdResolved} from '../common-styles/issue';
 import {headerTitle, MAIN_FONT_SIZE, mainText} from '../common-styles/typography';
 import {link} from '../common-styles/button';
 
 const ROW_TEXT_LINE_HEIGHT = 24;
 
 export default StyleSheet.create({
-  issueResolved: issueResolved,
+  issueResolved: {
+    color: COLOR_FONT_GRAY
+  },
   issueIdResolved: issueIdResolved,
 
   rowContainer: {},

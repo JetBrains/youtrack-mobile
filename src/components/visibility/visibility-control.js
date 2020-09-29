@@ -12,7 +12,7 @@ import Select from '../select/select';
 import IssueVisibility from './issue-visibility';
 
 import {HIT_SLOP} from '../common-styles/button';
-import {COLOR_ICON_LIGHT_BLUE, COLOR_ICON_MEDIUM_GREY, COLOR_PINK} from '../variables/variables';
+import {DEFAULT_THEME} from '../theme/theme';
 
 import styles from './visibility-control.styles';
 
@@ -20,13 +20,23 @@ import type {User} from '../../flow/User';
 import type {UserGroup} from '../../flow/UserGroup';
 import type {Visibility} from '../../flow/Visibility';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {UITheme} from '../../flow/Theme';
 
 type Props = {
   issueId: string,
   visibility?: Visibility,
   onApply: (visibility: Visibility) => any,
   onSubmit?: ?(visibility: Visibility) => any,
-  style: ?ViewStyleProp
+  style: ?ViewStyleProp,
+  uiTheme: UITheme
+};
+
+type DefaultProps = {
+  issueId: string,
+  visibility: ?Visibility,
+  onApply: (visibility: Visibility) => any,
+  style: null,
+  uiTheme: UITheme
 };
 
 type State = {
@@ -36,11 +46,12 @@ type State = {
 
 
 export default class VisibilityControl extends PureComponent<Props, State> {
-  static defaultProps: Props = {
+  static defaultProps: DefaultProps = {
     issueId: '',
     visibility: null,
     onApply: (visibility: Visibility) => null,
-    style: null
+    style: null,
+    uiTheme: DEFAULT_THEME
   };
 
   constructor(props: Props) {
@@ -173,7 +184,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
             onPress={this.resetVisibility}
             hitSlop={HIT_SLOP}
           >
-            <IconClose size={16} color={COLOR_PINK}/>
+            <IconClose size={16} color={this.props.uiTheme.colors.$link}/>
           </TouchableOpacity>
         )}
 
@@ -186,13 +197,13 @@ export default class VisibilityControl extends PureComponent<Props, State> {
             <IconLock
               style={styles.buttonIcon}
               size={16}
-              color={COLOR_ICON_LIGHT_BLUE}
+              color={this.props.uiTheme.colors.$iconAccent}
             />
           )}
           <Text style={styles.buttonText}>
             {isSecured ? this.getVisibilityPresentation(visibility) : 'Visible to All Users'}
           </Text>
-          <IconAngleDown size={20} color={COLOR_ICON_MEDIUM_GREY}/>
+          <IconAngleDown size={20} color={this.props.uiTheme.colors.$textSecondary}/>
         </TouchableOpacity>
       </View>
     );

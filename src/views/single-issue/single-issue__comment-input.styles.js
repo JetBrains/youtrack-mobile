@@ -1,28 +1,19 @@
-import {StyleSheet} from 'react-native';
-import {
-  UNIT,
-  COLOR_FONT_ON_BLACK,
-  COLOR_FONT_GRAY,
-  COLOR_GRAY,
-  COLOR_PINK,
-  COLOR_MEDIUM_GRAY,
-  COLOR_FONT,
-  COLOR_BLACK, COLOR_LIGHT_GRAY
-} from '../../components/variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import {UNIT} from '../../components/variables/variables';
 import {mainText, secondaryText} from '../../components/common-styles/typography';
 
 const INPUT_BORDER_RADIUS = UNIT;
 const MIN_INPUT_SIZE = UNIT * 4;
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   container: {
     paddingTop: UNIT,
     paddingBottom: UNIT,
     paddingLeft: UNIT * 3,
     paddingRight: UNIT * 3,
-    backgroundColor: COLOR_FONT_ON_BLACK,
+    backgroundColor: '$background',
     elevation: 5,
-    shadowColor: COLOR_BLACK,
+    shadowColor: '$text',
     shadowOpacity: 0.2,
     shadowRadius: 0.5,
     shadowOffset: {
@@ -42,7 +33,7 @@ export default StyleSheet.create({
   },
   suggestionsLoadingMessageText: {
     padding: UNIT,
-    color: COLOR_FONT
+    color: '$text'
   },
   suggestionButton: {
     flexDirection: 'row',
@@ -51,15 +42,15 @@ export default StyleSheet.create({
     paddingTop: UNIT * 1.5,
     paddingBottom: UNIT * 1.5,
     borderBottomWidth: 1,
-    borderColor: COLOR_LIGHT_GRAY
+    borderColor: '$boxBackground'
   },
   suggestionName: {
     flexGrow: 1,
     marginLeft: UNIT,
-    color: COLOR_BLACK
+    color: '$text'
   },
   suggestionLogin: {
-    color: COLOR_FONT_GRAY
+    color: '$textSecondary'
   },
 
   commentHeaderContainer: {
@@ -87,7 +78,7 @@ export default StyleSheet.create({
     padding: 2,
     borderRadius: INPUT_BORDER_RADIUS,
     borderWidth: 1,
-    borderColor: COLOR_MEDIUM_GRAY,
+    borderColor: '$disabled',
   },
   commentInput: {
     flex: 1,
@@ -95,9 +86,9 @@ export default StyleSheet.create({
     padding: 0,
     paddingLeft: UNIT,
     marginRight: UNIT,
-    backgroundColor: COLOR_FONT_ON_BLACK,
+    backgroundColor: '$background',
     ...mainText,
-    color: COLOR_BLACK
+    color: '$text'
   },
   commentSendButton: {
     width: MIN_INPUT_SIZE,
@@ -105,19 +96,19 @@ export default StyleSheet.create({
     borderRadius: INPUT_BORDER_RADIUS - 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLOR_PINK
+    backgroundColor: '$link'
   },
   commentSendButtonText: {
     fontSize: 16,
-    color: COLOR_PINK
+    color: '$link'
   },
   commentSendButtonTextDisabled: {
-    backgroundColor: COLOR_FONT_GRAY
+    backgroundColor: '$textSecondary'
   },
 
   commentListContainer: {
     borderTopWidth: 1,
-    borderColor: COLOR_GRAY,
+    borderColor: '$textSecondary',
     paddingTop: UNIT
   },
 
@@ -131,6 +122,7 @@ export default StyleSheet.create({
   },
   visibilityChangeButtonText: {
     ...secondaryText,
-    marginRight: UNIT
+    marginRight: UNIT,
+    color: '$textSecondary'
   }
 });

@@ -10,13 +10,14 @@ import {getApi} from '../api/api__instance';
 import renderCode from './code-renderer';
 import calculateAspectRatio from '../aspect-ratio/aspect-ratio';
 
-import styles from './wiki.styles';
+import styles from './youtrack-wiki.styles';
 
 import type {Attachment, ImageDimensions, IssueProject} from '../../flow/CustomFields';
 import type {Folder} from '../../flow/User';
+import type {UITheme} from '../../flow/Theme';
 
 
-function getMarkdownRules(attachments: Array<Attachment> = [], projects: Array<IssueProject> = []) {
+function getMarkdownRules(attachments: Array<Attachment> = [], projects: Array<IssueProject> = [], uiTheme: UITheme) {
   const imageHeaders = getApi().auth.getAuthorizationHeaders();
   const projectIds = (projects).map((it: Folder) => it?.shortName).join('|');
   const issueId = new RegExp(`\\b(?:${projectIds})\\b-\\d+$`);
@@ -93,7 +94,7 @@ function getMarkdownRules(attachments: Array<Attachment> = [], projects: Array<I
               scrollEventThrottle={100}
             >
               {isStacktraceOrException && <LongText style={[styles.exception, styles.inlineCode]}>{content}</LongText>}
-              {!isStacktraceOrException && <Text key={node.key}>{renderCode({content}, language)}</Text>}
+              {!isStacktraceOrException && <Text key={node.key}>{renderCode({content}, language, uiTheme)}</Text>}
             </ScrollView>
           </ScrollView>}
         </View>

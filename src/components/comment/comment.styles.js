@@ -1,10 +1,10 @@
-import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_FONT, COLOR_FONT_GRAY} from '../variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import {UNIT} from '../variables/variables';
 
 import {mainText} from '../common-styles/typography';
 import {link} from '../common-styles/button';
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   commentWrapper: {
     flexDirection: 'row',
     marginBottom: UNIT,
@@ -14,7 +14,6 @@ export default StyleSheet.create({
   },
 
   authorName: {
-    color: COLOR_FONT,
     fontWeight: 'bold'
   },
   comment: {
@@ -29,7 +28,7 @@ export default StyleSheet.create({
   },
   deletedCommentText: {
     ...mainText,
-    color: COLOR_FONT_GRAY
+    color: '$textSecondary'
   },
   actions: {
     marginTop: UNIT,

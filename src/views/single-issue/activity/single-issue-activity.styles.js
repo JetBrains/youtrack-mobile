@@ -1,20 +1,10 @@
-import {StyleSheet} from 'react-native';
-import {
-  UNIT,
-  COLOR_FONT,
-  COLOR_PINK,
-  COLOR_ICON_LIGHT_BLUE,
-  COLOR_ICON_MEDIUM_GREY,
-  COLOR_LIGHT_GRAY,
-  COLOR_FONT_ON_BLACK,
-  COLOR_MEDIUM_GRAY
-} from '../../../components/variables/variables';
-import {MAIN_FONT_SIZE, mainText, secondaryText} from '../../../components/common-styles/typography';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import {UNIT} from '../../../components/variables/variables';
+import {HEADER_FONT_SIZE, MAIN_FONT_SIZE, mainText, secondaryText} from '../../../components/common-styles/typography';
 import {link} from '../../../components/common-styles/button';
 import {separator} from '../../../components/common-styles/list';
-import issueStyles from '../single-issue.styles';
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   link: {
     ...mainText,
     ...link
@@ -41,6 +31,7 @@ export default StyleSheet.create({
   },
   activitySeparator: {
     ...separator,
+    borderColor: '$separator',
     margin: UNIT * 2,
     marginLeft: UNIT * 7,
     marginRight: -UNIT
@@ -55,6 +46,7 @@ export default StyleSheet.create({
     paddingTop: UNIT * 3
   },
   activityAuthor: {
+    color: '$textSecondary',
     flexDirection: 'row',
     marginTop: UNIT / 2,
     marginBottom: UNIT
@@ -67,7 +59,7 @@ export default StyleSheet.create({
     flexGrow: 1,
     flexShrink: 0,
     marginRight: UNIT / 2,
-    color: COLOR_FONT,
+    color: '$text',
     fontSize: 18,
     lineHeight: 17,
     fontWeight: '500',
@@ -75,20 +67,21 @@ export default StyleSheet.create({
   },
   activityTimestamp: {
     ...secondaryText,
+    color: '$icon',
     lineHeight: 16
   },
   activityLabel: {
-    color: COLOR_ICON_MEDIUM_GREY
+    color: '$icon'
   },
   activityText: {
-    color: COLOR_ICON_MEDIUM_GREY
+    color: '$icon'
   },
   activityRelatedChanges: {
     flex: 1,
     padding: UNIT * 2,
     paddingTop: UNIT,
     marginTop: UNIT * 2,
-    backgroundColor: COLOR_LIGHT_GRAY,
+    backgroundColor: '$boxBackground',
     borderRadius: UNIT,
     lineHeight: 14
   },
@@ -99,14 +92,13 @@ export default StyleSheet.create({
   activityChange: {
     marginTop: UNIT / 2,
   },
+  activityNoActivity: {
+    marginTop: UNIT * 5,
+    textAlign: 'center',
+    color: '$text'
+  },
   activityRemoved: {
     textDecorationLine: 'line-through'
-  },
-  activityHistoryIcon: {
-    width: 20,
-    height: 20,
-    resizeMode: 'contain',
-    tintColor: COLOR_ICON_LIGHT_BLUE
   },
   activityCommentActions: {
     flexDirection: 'row',
@@ -126,7 +118,8 @@ export default StyleSheet.create({
   },
   settingsButtonText: {
     ...secondaryText,
-    fontWeight: '500'
+    fontWeight: '500',
+    color: '$border'
   },
   settingsSwitchDisabled: {
     opacity: 0.4
@@ -139,7 +132,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
   },
   linkText: {
-    color: COLOR_PINK
+    color: '$link'
   },
 
   workTime: {
@@ -165,12 +158,13 @@ export default StyleSheet.create({
     paddingTop: UNIT,
     paddingBottom: UNIT * 3,
     borderTopWidth: 0.7,
-    borderColor: COLOR_MEDIUM_GRAY,
-    backgroundColor: COLOR_FONT_ON_BLACK
+    borderColor: '$border',
+    backgroundColor: '$background'
   },
   settingsTitle: {
-    ...issueStyles.headerText,
-    marginLeft: UNIT * 2
+    fontSize: HEADER_FONT_SIZE,
+    marginLeft: UNIT * 2,
+    color: '$text'
   },
   settingsItem: {
     flexDirection: 'row',
@@ -185,6 +179,7 @@ export default StyleSheet.create({
     alignItems: 'center'
   },
   settingsName: {
+    color: '$text',
     fontSize: MAIN_FONT_SIZE,
     fontWeight: '500',
     textTransform: 'capitalize'

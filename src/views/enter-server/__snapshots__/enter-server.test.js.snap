@@ -12,16 +12,7 @@ exports[`EnterServer Render should render 1`] = `
   testID="enterServer"
 >
   <View
-    style={
-      Object {
-        "backgroundColor": "#FFF",
-        "flexDirection": "column",
-        "flexGrow": 1,
-        "justifyContent": "space-between",
-        "paddingLeft": 32,
-        "paddingRight": 32,
-      }
-    }
+    style={Object {}}
   >
     <TouchableOpacity
       activeOpacity={0.2}
@@ -72,10 +63,7 @@ exports[`EnterServer Render should render 1`] = `
         <Text
           style={
             Object {
-              "fontSize": 18,
-              "fontWeight": "500",
               "marginTop": 16,
-              "textAlign": "center",
             }
           }
         >
@@ -96,16 +84,8 @@ exports[`EnterServer Render should render 1`] = `
         selectTextOnFocus={true}
         style={
           Object {
-            "backgroundColor": "#f6f6f6",
-            "borderRadius": 8,
-            "color": "#000",
-            "fontSize": 16,
             "marginBottom": 16,
             "marginTop": 24,
-            "padding": 12,
-            "paddingLeft": 8,
-            "paddingRight": 8,
-            "width": "100%",
           }
         }
         testID="server-url"
@@ -118,28 +98,13 @@ exports[`EnterServer Render should render 1`] = `
         onPress={[Function]}
         style={
           Array [
-            Object {
-              "alignItems": "center",
-              "backgroundColor": "#FE0082",
-              "borderRadius": 8,
-              "padding": 12,
-              "width": "100%",
-            },
+            undefined,
             null,
           ]
         }
         testID="next"
       >
-        <Text
-          style={
-            Object {
-              "alignSelf": "center",
-              "color": "#FFF",
-              "fontSize": 16,
-              "textAlign": "center",
-            }
-          }
-        >
+        <Text>
           Next
         </Text>
       </TouchableOpacity>
@@ -166,13 +131,7 @@ exports[`EnterServer Render should render 1`] = `
         }
         onPress={[Function]}
       >
-        <Text
-          style={
-            Object {
-              "color": "#FE0082",
-            }
-          }
-        >
+        <Text>
           Contact support
         </Text>
       </TouchableOpacity>

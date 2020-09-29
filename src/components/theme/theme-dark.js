@@ -11,19 +11,23 @@ const dark: UITheme = {
     $background: '#1c1c1e',
     $boxBackground: '#2c2c2e',
 
+    $error: '#ee0e0e',
+
     $text: '#FFF',
-    $textSecondary: '#CCC',
+    $textSecondary: '#b0b0b0',
 
     $link: '#FE0082',
-    $disabled: '#DFE5EB',
+    $linkLight: 'rgba(254, 0, 130, 0.3)',
+
+    $disabled: '#5d5d5d',
     $border: '#888888',
 
-    $icon: '#737577',
+    $icon: '#a5a5a5',
     $iconAccent: '#b8d1e5',
 
-    $mask: '#00000057',
+    $mask: '#FFFFFF57',
 
-    $separatorOpacity: 0.2,
+    $separator: '#3e3e3e'
   },
 };
 

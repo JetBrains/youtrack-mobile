@@ -14,10 +14,11 @@ import {hasMimeType} from '../mime-type/mime-type';
 import {nodeHasType} from './youtrack-wiki__node-type';
 import {showMoreInlineText} from '../text-view/text-view';
 
-import styles, {htmlViewStyles} from './wiki.styles';
+import styles, {htmlViewStyles} from './youtrack-wiki.styles';
 import {COLOR_FONT} from '../variables/variables';
 
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {UITheme} from '../../flow/Theme';
 
 HTMLView.propTypes.style = Text.propTypes.style;
 
@@ -28,7 +29,8 @@ type Props = {
   imageHeaders: ?Object,
   backendUrl: string,
   onIssueIdTap: (issueId: string) => any,
-  renderFullException?: boolean
+  renderFullException?: boolean,
+  uiTheme: UITheme
 };
 
 const HTML_RENDER_NOTHING = null;
@@ -110,7 +112,8 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
     case (wikiNodeType.code):
       return <Text key={index}>{renderCode(
         getCode(),
-        this.getLanguage(getCode())
+        this.getLanguage(getCode()),
+        this.props.uiTheme
       )}</Text>;
 
     case (wikiNodeType.image):

@@ -15,10 +15,7 @@ exports[`<VisibiltyControl/> Render should match a snapshot 1`] = `
     }
     style={
       Array [
-        Object {
-          "alignItems": "center",
-          "flexDirection": "row",
-        },
+        undefined,
         null,
       ]
     }
@@ -35,26 +32,12 @@ exports[`<VisibiltyControl/> Render should match a snapshot 1`] = `
         }
       }
       onPress={[Function]}
-      style={
-        Object {
-          "alignItems": "center",
-          "flexDirection": "row",
-        }
-      }
     >
-      <Text
-        style={
-          Object {
-            "color": "#737577",
-            "fontSize": 14,
-            "letterSpacing": -0.17,
-          }
-        }
-      >
+      <Text>
         Visible to All Users
       </Text>
       <IconAngleDown
-        color="#737577"
+        color="#CCC"
         size={20}
       />
     </TouchableOpacity>

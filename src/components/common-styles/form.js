@@ -1,19 +1,11 @@
-import {StyleSheet} from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {
-  COLOR_BLACK,
-  COLOR_FONT_GRAY,
-  COLOR_FONT_ON_BLACK,
-  COLOR_GRAY,
-  COLOR_LIGHT_GRAY,
-  COLOR_PINK,
-  UNIT,
-} from '../variables/variables';
+import {UNIT} from '../variables/variables';
 import {MAIN_FONT_SIZE} from './typography';
 
 export const containerPadding = UNIT * 4;
 
-export const formStyles = StyleSheet.create({
+export const formStyles = EStyleSheet.create({
   scrollContainer: {
     flexGrow: 1
   },
@@ -23,7 +15,7 @@ export const formStyles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingLeft: containerPadding,
     paddingRight: containerPadding,
-    backgroundColor: COLOR_FONT_ON_BLACK
+    backgroundColor: '$background'
   },
   input: {
     width: '100%',
@@ -31,8 +23,8 @@ export const formStyles = StyleSheet.create({
     paddingLeft: UNIT,
     paddingRight: UNIT,
     borderRadius: UNIT,
-    backgroundColor: COLOR_LIGHT_GRAY,
-    color: COLOR_BLACK,
+    backgroundColor: '$boxBackground',
+    color: '$text',
     fontSize: MAIN_FONT_SIZE
   },
   button: {
@@ -40,16 +32,16 @@ export const formStyles = StyleSheet.create({
     padding: UNIT * 1.5,
     alignItems: 'center',
     borderRadius: UNIT,
-    backgroundColor: COLOR_PINK,
+    backgroundColor: '$link',
   },
   buttonDisabled: {
-    backgroundColor: COLOR_GRAY
+    backgroundColor: '$textSecondary'
   },
   buttonText: {
     alignSelf: 'center',
     textAlign: 'center',
     fontSize: MAIN_FONT_SIZE,
-    color: COLOR_FONT_ON_BLACK
+    color: '$background'
   },
   title: {
     fontSize: 18,
@@ -58,13 +50,13 @@ export const formStyles = StyleSheet.create({
   },
   hintText: {
     textAlign: 'center',
-    color: COLOR_FONT_GRAY,
+    color: '$textSecondary',
     fontSize: 12
   },
   errorText: {
     color: 'red'
   },
   link: {
-    color: COLOR_PINK
+    color: '$link'
   }
 });

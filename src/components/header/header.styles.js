@@ -1,10 +1,10 @@
-import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_PINK, COLOR_FONT_ON_BLACK} from '../variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import {UNIT} from '../variables/variables';
 import {headerTitle} from '../common-styles/typography';
 
 const minButtonWidth = UNIT * 5;
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   header: {
     paddingTop: 12,
     paddingBottom: 12,
@@ -15,11 +15,12 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: COLOR_FONT_ON_BLACK
+    backgroundColor: '$background'
   },
   headerTitle: {
     ...headerTitle,
-    marginLeft: UNIT
+    marginLeft: UNIT,
+    color: '$text'
   },
   headerButtonLeft: {
     minWidth: minButtonWidth,
@@ -32,7 +33,7 @@ export default StyleSheet.create({
   },
   headerButtonText: {
     fontSize: 17,
-    color: COLOR_PINK
+    color: '$link'
   },
   headerCenter: {
     flex: 1,

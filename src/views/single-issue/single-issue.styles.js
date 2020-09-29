@@ -1,15 +1,11 @@
-import {Platform, StyleSheet} from 'react-native';
-import {
-  UNIT,
-  COLOR_FONT_ON_BLACK,
-  COLOR_FONT_GRAY,
-  COLOR_ICON_MEDIUM_GREY,
-  COLOR_PINK_DARK
-} from '../../components/variables/variables';
+import {Platform} from 'react-native';
+
+import EStyleSheet from 'react-native-extended-stylesheet';
+
+import {UNIT} from '../../components/variables/variables';
 import {headerTitle, mainText, secondaryText} from '../../components/common-styles/typography';
 import {elevation1} from '../../components/common-styles/shadow';
 import {summary} from '../../components/issue-summary/issue-summary.styles';
-import {link} from '../../components/common-styles/button';
 import {separatorBorder} from '../../components/common-styles/list';
 
 const centered = {
@@ -18,16 +14,15 @@ const centered = {
   justifyContent: 'center'
 };
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   secondaryText: secondaryText,
   container: {
-    flex: 1
-  },
-  issueContent: {
-    backgroundColor: COLOR_FONT_ON_BLACK,
+    flex: 1,
+    backgroundColor: '$background',
   },
   headerText: {
     ...headerTitle,
+    color: '$text',
     fontWeight: '500',
     ...Platform.select({
       ios: {
@@ -39,7 +34,7 @@ export default StyleSheet.create({
     })
   },
   headerTextResolved: {
-    color: COLOR_ICON_MEDIUM_GREY,
+    color: '$border',
     textDecorationLine: 'line-through'
   },
   issueStar: {
@@ -60,7 +55,8 @@ export default StyleSheet.create({
     marginBottom: UNIT * 2
   },
   issueTopPanelText: {
-    ...secondaryText
+    ...secondaryText,
+    color: '$icon'
   },
   tags: {
     marginTop: UNIT * 2
@@ -68,28 +64,31 @@ export default StyleSheet.create({
   tagsSeparator: {
     height: UNIT,
     marginRight: -UNIT * 2,
-    ...separatorBorder
+    ...separatorBorder,
+    borderColor: '$separator'
   },
   topPanelUpdatedInformation: {
     marginTop: UNIT * 0.75,
   },
   summary: {
+    ...summary,
     paddingTop: UNIT,
-    ...summary
+    color: '$text'
   },
   description: {
     marginTop: UNIT * 2,
+    color: '$text'
   },
   attachments: {
     marginTop: UNIT * 2,
   },
   loadingActivityError: {
     marginTop: UNIT * 2,
-    color: COLOR_PINK_DARK,
+    color: '$error',
     textAlign: 'center'
   },
   disabledSaveButton: {
-    color: COLOR_FONT_GRAY
+    color: '$border'
   },
 
   row: {
@@ -102,7 +101,7 @@ export default StyleSheet.create({
 
   tabsBar: {
     ...elevation1,
-    backgroundColor: COLOR_FONT_ON_BLACK
+    backgroundColor: '$background'
   },
   tabLabel: {
     ...mainText,
@@ -138,7 +137,7 @@ export default StyleSheet.create({
   },
   switchToActivityButtonText: {
     ...mainText,
-    ...link,
+    color: '$link',
     padding: UNIT,
     marginBottom: UNIT * 3
   },

@@ -1,5 +1,6 @@
-import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_FONT} from '../variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+
+import {UNIT} from '../variables/variables';
 import {mainText} from '../common-styles/typography';
 
 export const summary = {
@@ -9,17 +10,21 @@ export const summary = {
   letterSpacing: -0.19,
 };
 
-export default StyleSheet.create({
-  summary: summary,
+export default EStyleSheet.create({
+  summary: {
+    ...summary,
+    color: '$text'
+  },
   descriptionInput: {
     ...mainText,
     marginTop: UNIT / 2,
-    color: COLOR_FONT
+    color: '$text'
   },
   separator: {
-    height: 0.5,
+    height: 1,
     marginTop: UNIT * 2,
     marginBottom: UNIT,
-    marginRight: -UNIT * 2
+    marginRight: -UNIT * 2,
+    backgroundColor: '$separator'
   },
 });

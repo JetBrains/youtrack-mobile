@@ -9,12 +9,6 @@ import Switch from 'react-native-switch-pro';
 import ModalView from '../../../components/modal-view/modal-view';
 import Header from '../../../components/header/header';
 
-import {
-  COLOR_ICON_LIGHT_BLUE,
-  COLOR_ICON_MEDIUM_GREY,
-  COLOR_PINK,
-  COLOR_PINK_TRANSPARENT
-} from '../../../components/variables/variables';
 import {HIT_SLOP} from '../../../components/common-styles/button';
 
 import styles from './single-issue-activity.styles';
@@ -22,6 +16,7 @@ import styles from './single-issue-activity.styles';
 import type {ActivityType} from '../../../flow/Activity';
 import type {UserAppearanceProfile} from '../../../flow/User';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {UITheme} from '../../../flow/Theme';
 
 type Props = {
   issueActivityTypes: Array<ActivityType>,
@@ -29,7 +24,8 @@ type Props = {
   onApply: Function,
   userAppearanceProfile: UserAppearanceProfile,
   disabled?: boolean,
-  style?: ViewStyleProp
+  style?: ViewStyleProp,
+  uiTheme: UITheme
 };
 
 type State = {
@@ -41,17 +37,19 @@ type SortOrder = { name: string, isNaturalCommentsOrder: boolean };
 
 
 export default class IssueActivitiesSettings extends PureComponent<Props, State> {
-  static switchCommonProps: Object = {
-    width: 40,
-    circleColorActive: COLOR_PINK,
-    circleColorInactive: '#f1f1f1',
-    backgroundActive: COLOR_PINK_TRANSPARENT,
-    backgroundInactive: 'rgba(34, 31, 31, 0.26)'
-  };
+  switchCommonProps: Object;
   sortOrderOption: SortOrder;
 
   constructor(props: Props) {
     super(props);
+
+    this.switchCommonProps = {
+      width: 40,
+      circleColorActive: props.uiTheme.colors.$link,
+      circleColorInactive: props.uiTheme.colors.$border,
+      backgroundActive: props.uiTheme.colors.$linkLight,
+      backgroundInactive: props.uiTheme.colors.$disabled
+    };
 
     this.sortOrderOption = {
       name: 'Show oldest activity first',
@@ -119,7 +117,7 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
       >
         <View style={styles.settingsContent}>
           <Header
-            leftButton={<IconClose size={21} color={COLOR_PINK}/>}
+            leftButton={<IconClose size={21} color={this.props.uiTheme.colors.$link}/>}
             onBack={this.toggleSettingsDialogVisibility}
           >
             <Text style={styles.settingsTitle}>Activity Settings</Text>
@@ -141,7 +139,7 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
         <Text style={styles.settingsName}>{this.sortOrderOption.name}</Text>
         <Switch
           style={disabled ? styles.settingsSwitchDisabled : null}
-          {...IssueActivitiesSettings.switchCommonProps}
+          {...this.switchCommonProps}
           disabled={disabled}
           value={this.props.userAppearanceProfile.naturalCommentsOrder}
           onSyncPress={isNaturalOrder => {
@@ -170,14 +168,14 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
               style={styles.settingsItem}
             >
               <View style={styles.settingsNameContainer}>
-                {!!Icon && <Icon size={22} color={COLOR_ICON_LIGHT_BLUE}/>}
+                {!!Icon && <Icon size={22} color={this.props.uiTheme.colors.$iconAccent}/>}
                 <Text style={styles.settingsName}>
                   {`  ${type.name}`}
                 </Text>
               </View>
               <Switch
                 style={disabled ? styles.settingsSwitchDisabled : null}
-                {...IssueActivitiesSettings.switchCommonProps}
+                {...this.switchCommonProps}
                 value={isEnabled}
                 disabled={disabled}
                 onSyncPress={async (enable: ActivityType) => {
@@ -207,7 +205,7 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
           onPress={this.toggleSettingsDialogVisibility}
         >
           <Text style={styles.settingsButtonText}>{this.getTitle()}</Text>
-          <IconAngleDown size={19} color={COLOR_ICON_MEDIUM_GREY}/>
+          <IconAngleDown size={19} color={this.props.uiTheme.colors.$border}/>
         </TouchableOpacity>
 
         {this.state.visible && this.renderSettingsDialog()}

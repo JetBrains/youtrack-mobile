@@ -1,25 +1,18 @@
-import {Platform, StyleSheet} from 'react-native';
-import {
-  COLOR_LINK,
-  COLOR_FONT,
-  UNIT,
-  COLOR_FONT_GRAY,
-  COLOR_PINK,
-  COLOR_LIGHT_GRAY, COLOR_BLACK,
-  COLOR_ICON_MEDIUM_GREY
-} from '../variables/variables';
+import {Platform} from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import {UNIT} from '../variables/variables';
 import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE, monospace} from '../common-styles/typography';
 import {link} from '../common-styles/button';
 
 const showMoreLink = {
   fontSize: SECONDARY_FONT_SIZE,
-  color: COLOR_PINK
+  color: '$link'
 };
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   htmlView: {
     fontSize: MAIN_FONT_SIZE,
-    color: COLOR_FONT,
+    color: '$text',
     textAlign: 'left',
     writingDirection: 'ltr',
     ...Platform.select({
@@ -39,9 +32,9 @@ export default StyleSheet.create({
     textDecorationLine: 'line-through'
   },
   blockQuote: {
-    color: COLOR_FONT_GRAY,
+    color: '$textSecondary',
     borderLeftWidth: 2,
-    borderLeftColor: COLOR_FONT_GRAY,
+    borderLeftColor: '$textSecondary',
     paddingLeft: UNIT
   },
   unspaced: {
@@ -67,7 +60,7 @@ export default StyleSheet.create({
   },
   codeContent: {
     padding: UNIT,
-    backgroundColor: COLOR_LIGHT_GRAY
+    backgroundColor: '$boxBackground'
   },
   code: {
     ...monospace,
@@ -76,28 +69,28 @@ export default StyleSheet.create({
   },
   codeLanguage: {
     fontSize: SECONDARY_FONT_SIZE,
-    color: COLOR_ICON_MEDIUM_GREY
+    color: '$border'
   },
   inlineCode: {
     ...monospace,
     fontSize: SECONDARY_FONT_SIZE,
-    color: COLOR_BLACK,
+    color: '$text',
     lineHeight: SECONDARY_FONT_SIZE * 1.5,
-    backgroundColor: COLOR_LIGHT_GRAY
+    backgroundColor: '$boxBackground'
   },
   exception: {
     ...monospace,
     marginTop: UNIT,
     marginBottom: UNIT * 3,
     fontSize: SECONDARY_FONT_SIZE,
-    color: COLOR_FONT
+    color: '$text'
   },
 
 });
 
-export const htmlViewStyles = StyleSheet.create({
+export const htmlViewStyles = EStyleSheet.create({
   a: {
-    color: COLOR_LINK,
+    color: '$link',
     textDecorationLine: 'underline'
   }
 });

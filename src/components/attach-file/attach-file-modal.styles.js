@@ -1,10 +1,10 @@
 /* @flow */
 
-import {StyleSheet} from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../variables/variables';
 import {headerTitle, mainText} from '../common-styles/typography';
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   container: {
     paddingBottom: UNIT * 2
   },
@@ -31,7 +31,8 @@ export default StyleSheet.create({
     marginRight: UNIT * 2
   },
   buttonText: {
-    ...mainText
+    ...mainText,
+    color: '$text'
   },
   visibilityButton: {
     margin: UNIT * 3

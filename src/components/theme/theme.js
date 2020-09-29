@@ -24,6 +24,9 @@ export const getUITheme = (themeName: string): UITheme => {
 export const buildStyles = (mode: string = DEFAULT_SYSTEM_MODE, uiTheme: UITheme) => {
   EStyleSheet.build({
     $theme: mode,
+    $resolved: uiTheme.colors.$border,
+    $shadowColor: uiTheme.colors.$icon,
+    $link: uiTheme.colors.$link,
     ...uiTheme.colors
   });
 };
