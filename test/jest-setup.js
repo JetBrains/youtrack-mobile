@@ -49,6 +49,10 @@ jest.mock('react-native-gesture-handler', () => ({}));
 
 jest.mock('react-native-tab-view', () => ({}));
 
+jest.mock('react-native-appearance', () => ({
+  Appearance: {getColorScheme: () => 'light'}
+}));
+
 jest.mock('StatusBarIOS', () => ({
   addListener: jest.fn()
 }));

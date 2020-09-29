@@ -1,6 +1,5 @@
 /* @flow */
 
-import {StyleSheet} from 'react-native';
 import React, {Component} from 'react';
 import {View as AnimatedView} from 'react-native-animatable';
 import Router from '../router/router';
@@ -10,32 +9,32 @@ import {MenuItem} from './menu__item';
 import Feature from '../feature/feature';
 
 import {IconBell, IconBoard, IconSettings, IconTask} from '../icon/icon';
-import {COLOR_FONT_ON_BLACK, COLOR_GRAY, COLOR_ICON_MEDIUM_GREY, COLOR_PINK} from '../variables/variables';
+import {DEFAULT_THEME} from '../theme/theme';
 
 import {menuHeight} from '../common-styles/header';
 import {elevationTop} from '../common-styles/shadow';
 
 import {routeMap} from '../../app-routes';
 
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {UITheme} from '../../flow/Theme';
 
 type Props = {
   isVisible: boolean,
   isDisabled: boolean,
-  style?: ViewStyleProp
+  uiTheme: UITheme
 }
 
 type State = {
   currentRouteName?: string | null
 }
 
-const styles = StyleSheet.create({
+const styles = (uiTheme: UITheme) => ({
   menu: {
     height: menuHeight,
     flexGrow: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: COLOR_FONT_ON_BLACK,
+    backgroundColor: uiTheme.colors.$background,
     ...elevationTop
   }
 });
@@ -45,6 +44,7 @@ class Menu extends Component<Props, State> {
   static defaultProps: Props = {
     isVisible: false,
     isDisabled: false,
+    uiTheme: DEFAULT_THEME
   };
 
   constructor() {
@@ -98,7 +98,7 @@ class Menu extends Component<Props, State> {
   };
 
   render() {
-    const {style, isVisible, isDisabled} = this.props;
+    const {isVisible, isDisabled, uiTheme} = this.props;
 
     if (!isVisible) {
       return null;
@@ -107,8 +107,8 @@ class Menu extends Component<Props, State> {
     const color = (routeName: string) => {
       return (
         isDisabled
-          ? COLOR_GRAY
-          : this.isActiveRoute(routeName) ? COLOR_PINK : COLOR_ICON_MEDIUM_GREY
+          ? uiTheme.colors.$disabled
+          : this.isActiveRoute(routeName) ? uiTheme.colors.$link : uiTheme.colors.$icon
       );
     };
 
@@ -119,10 +119,7 @@ class Menu extends Component<Props, State> {
         animation="fadeIn"
 
         testID="menu"
-        style={[
-          styles.menu,
-          style
-        ]}
+        style={styles(uiTheme).menu}
       >
         <MenuItem
           isActive={this.isActiveRoute(routeMap.IssueList)}

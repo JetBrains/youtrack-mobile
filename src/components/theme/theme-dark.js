@@ -8,22 +8,22 @@ const dark: UITheme = {
   barStyle: 'light-content',
 
   colors: {
-    background: '#000',
+    $background: '#1c1c1e',
+    $boxBackground: '#2c2c2e',
 
-    text: '#FFF',
-    textSecondary: '#CCC',
+    $text: '#FFF',
+    $textSecondary: '#CCC',
 
-    link: '#FE0082',
-    disabled: '#DFE5EB',
-    border: '#888888',
+    $link: '#FE0082',
+    $disabled: '#DFE5EB',
+    $border: '#888888',
 
-    icon: '#737577',
-    iconAccent: '#b8d1e5',
+    $icon: '#737577',
+    $iconAccent: '#b8d1e5',
 
-    placeholder: '#717171',
-    placeholderActive: '#80929D',
+    $mask: '#00000057',
 
-    mask: '#00000057',
+    $separatorOpacity: 0.2,
   },
 };
 

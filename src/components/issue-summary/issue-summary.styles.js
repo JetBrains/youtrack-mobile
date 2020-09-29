@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_FONT, COLOR_MEDIUM_GRAY, COLOR_BLACK} from '../variables/variables';
+import {UNIT, COLOR_FONT} from '../variables/variables';
 import {mainText} from '../common-styles/typography';
 
 export const summary = {
@@ -7,7 +7,6 @@ export const summary = {
   fontWeight: '500',
   lineHeight: 24,
   letterSpacing: -0.19,
-  color: COLOR_BLACK
 };
 
 export default StyleSheet.create({
@@ -21,7 +20,6 @@ export default StyleSheet.create({
     height: 0.5,
     marginTop: UNIT * 2,
     marginBottom: UNIT,
-    marginRight: -UNIT * 2,
-    backgroundColor: COLOR_MEDIUM_GRAY
+    marginRight: -UNIT * 2
   },
 });

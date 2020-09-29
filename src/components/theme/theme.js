@@ -1,6 +1,7 @@
 /* @flow */
 
 import {Appearance} from 'react-native-appearance';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 import lightTheme from './theme-light';
 import darkTheme from './theme-dark';
@@ -18,5 +19,12 @@ export const getUITheme = (themeName: string): UITheme => {
     return themeName === DEFAULT_MODE ? lightTheme : darkTheme;
   }
   return DEFAULT_THEME;
+};
+
+export const buildStyles = (mode: string = DEFAULT_SYSTEM_MODE, uiTheme: UITheme) => {
+  EStyleSheet.build({
+    $theme: mode,
+    ...uiTheme.colors
+  });
 };
 

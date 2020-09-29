@@ -11,7 +11,6 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
-import {COLOR_BLACK, COLOR_PINK, UNIT} from '../../components/variables/variables';
 import {notifyError} from '../../components/notification/notification';
 import usage from '../../components/usage/usage';
 import log from '../../components/log/log';
@@ -38,7 +37,12 @@ import {initialState} from './issue-list-reducers';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
 
+import {ThemeContext} from '../../components/theme/theme-context';
+
+import {UNIT} from '../../components/variables/variables';
 import styles from './issue-list.styles';
+
+import type {Theme, UITheme} from '../../flow/Theme';
 
 type Props = $Shape<IssuesListState & typeof issueActions & {
   auth: Auth,
@@ -89,7 +93,7 @@ export class IssueList extends Component<Props, State> {
     });
   }
 
-  renderCreateIssueButton = (isDisabled: boolean) => {
+  renderCreateIssueButton = (isDisabled: boolean, uiTheme: UITheme) => {
     return (
       <TouchableOpacity
         hitSlop={HIT_SLOP}
@@ -97,7 +101,7 @@ export class IssueList extends Component<Props, State> {
         onPress={() => Router.CreateIssue()}
         disabled={isDisabled}
       >
-        <IconAdd size={20} color={COLOR_PINK}/>
+        <IconAdd size={20} color={uiTheme.colors.$link}/>
       </TouchableOpacity>
     );
   };
@@ -120,11 +124,11 @@ export class IssueList extends Component<Props, State> {
     return `${isReactElement(item) ? item.key : item.id}`;
   };
 
-  _renderRefreshControl() {
+  _renderRefreshControl(uiTheme: UITheme) {
     return <RefreshControl
       refreshing={this.props.isRefreshing}
       onRefresh={this.props.refreshIssues}
-      tintColor={COLOR_PINK}
+      tintColor={uiTheme.colors.$link}
       testID="refresh-control"
     />;
   }
@@ -140,7 +144,7 @@ export class IssueList extends Component<Props, State> {
     this.props.loadMoreIssues();
   };
 
-  renderContextButton = () => {
+  renderContextButton = (uiTheme: UITheme) => {
     const {onOpenContextSelect, isRefreshing, searchContext, isSearchContextPinned} = this.props;
 
     return (
@@ -162,7 +166,7 @@ export class IssueList extends Component<Props, State> {
           >
             {`${searchContext?.name || ''} `}
           </Text>
-          {searchContext && <IconAngleDown color={COLOR_BLACK} size={17}/>}
+          {searchContext && <IconAngleDown color={uiTheme.colors.$text} size={17}/>}
         </View>
       </TouchableOpacity>
     );
@@ -207,7 +211,7 @@ export class IssueList extends Component<Props, State> {
   onSearchQueryPanelFocus = (clearSearchQuery: boolean = false) => {
     this.setEditQueryMode(true);
     this.clearSearchQuery(clearSearchQuery);
-  }
+  };
 
 
   renderSearchPanel = () => {
@@ -257,11 +261,11 @@ export class IssueList extends Component<Props, State> {
       return <LoadMoreList/>;
     }
     return null;
-  }
+  };
 
-  renderIssues() {
+  renderIssues(uiTheme: UITheme) {
     const {issues, isRefreshing} = this.props;
-    const contextButton = this.renderContextButton();
+    const contextButton = this.renderContextButton(uiTheme);
     const searchQuery = this.renderSearchQuery();
 
     if (isRefreshing && !issues) {
@@ -296,9 +300,9 @@ export class IssueList extends Component<Props, State> {
         }}
         ListFooterComponent={this.renderIssuesFooter}
 
-        refreshControl={this._renderRefreshControl()}
+        refreshControl={this._renderRefreshControl(uiTheme)}
         onScroll={(params) => this.onScroll(params.nativeEvent)}
-        tintColor={COLOR_PINK}
+        tintColor={uiTheme.colors.$link}
 
         onEndReached={this.onEndReached}
         onEndReachedThreshold={0.1}
@@ -316,9 +320,7 @@ export class IssueList extends Component<Props, State> {
       {},
       loadingError
         ? {error: loadingError}
-        : issues?.length === 0
-          ? {errorMessageData: ERROR_MESSAGE_DATA.NO_ISSUES_FOUND}
-          : null
+        : (issues?.length === 0 ? {errorMessageData: ERROR_MESSAGE_DATA.NO_ISSUES_FOUND} : null)
     );
 
     if (Object.keys(props).length > 0) {
@@ -331,18 +333,24 @@ export class IssueList extends Component<Props, State> {
   render() {
     const {isIssuesContextOpen, isRefreshing} = this.props;
     return (
-      <View
-        style={styles.listContainer}
-        testID="issue-list-page"
-      >
-        {isIssuesContextOpen && this.renderContextSelect()}
-        {this.state.isEditQuery && this.renderSearchPanel()}
+      <ThemeContext.Consumer>
+        {(theme: Theme) => {
+          return (
+            <View
+              style={styles.listContainer}
+              testID="issue-list-page"
+            >
+              {isIssuesContextOpen && this.renderContextSelect()}
+              {this.state.isEditQuery && this.renderSearchPanel()}
 
-        {this.renderIssues()}
-        {this.renderError()}
+              {this.renderIssues(theme.uiTheme)}
+              {this.renderError()}
 
-        {this.renderCreateIssueButton(isRefreshing)}
-      </View>
+              {this.renderCreateIssueButton(isRefreshing, theme.uiTheme)}
+            </View>
+          );
+        }}
+      </ThemeContext.Consumer>
     );
   }
 }

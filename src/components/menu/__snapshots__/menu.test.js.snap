@@ -10,18 +10,15 @@ exports[`<Menu/> Render should match a snapshot 1`] = `
   onAnimationBegin={[Function]}
   onAnimationEnd={[Function]}
   style={
-    Array [
-      Object {
-        "backgroundColor": "#FFF",
-        "borderColor": "rgba(100, 100, 100, 0.2)",
-        "borderTopWidth": 0.3,
-        "flexDirection": "row",
-        "flexGrow": 1,
-        "height": 64,
-        "justifyContent": "space-between",
-      },
-      undefined,
-    ]
+    Object {
+      "backgroundColor": "#FFF",
+      "borderColor": "rgba(100, 100, 100, 0.2)",
+      "borderTopWidth": 0.3,
+      "flexDirection": "row",
+      "flexGrow": 1,
+      "height": 64,
+      "justifyContent": "space-between",
+    }
   }
   testID="menu"
   useNativeDriver={true}

@@ -1,30 +1,11 @@
-import {StyleSheet} from 'react-native';
-import {
-  UNIT,
-  COLOR_FONT_ON_BLACK,
-  COLOR_BLACK,
-  COLOR_LIGHT_GRAY,
-  COLOR_PLACEHOLDER
-} from '../variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+
+import {UNIT} from '../variables/variables';
 import {elevation1} from '../common-styles/shadow';
 
 const QUERY_ASSIST_HEIGHT = UNIT * 6;
 
-const searchInput = {
-  flex: 1,
-  height: QUERY_ASSIST_HEIGHT,
-  paddingLeft: UNIT / 1.5,
-  marginLeft: UNIT,
-  marginRight: UNIT,
-
-  fontSize: 16,
-  letterSpacing: 0.08,
-  textAlign: 'left',
-  color: COLOR_BLACK
-};
-
-
-export default StyleSheet.create({
+export default EStyleSheet.create({
   placeHolder: {
     height: QUERY_ASSIST_HEIGHT,
     paddingLeft: UNIT * 2,
@@ -47,21 +28,32 @@ export default StyleSheet.create({
     justifyContent: 'flex-start',
     paddingLeft: UNIT,
     borderRadius: UNIT,
-    backgroundColor: COLOR_LIGHT_GRAY
+    backgroundColor: '$boxBackground'
   },
   inputWrapperActive: {
     ...elevation1,
-    backgroundColor: COLOR_FONT_ON_BLACK,
+    backgroundColor: '$background',
     borderRadius: 0,
     borderBottomColor: 'transparent',
   },
-  searchInput: searchInput,
+  searchInput: {
+    flex: 1,
+    height: QUERY_ASSIST_HEIGHT,
+    paddingLeft: UNIT / 1.5,
+    marginLeft: UNIT,
+    marginRight: UNIT,
+
+    fontSize: 16,
+    letterSpacing: 0.08,
+    textAlign: 'left',
+    color: '$text'
+  },
   searchInputHasText: {
-    color: COLOR_BLACK
+    color: '$text'
   },
   searchInputPlaceholder: {
     justifyContent: 'center',
-    color: COLOR_PLACEHOLDER,
+    color: '$icon',
     lineHeight: QUERY_ASSIST_HEIGHT
   },
   searchIcon: {

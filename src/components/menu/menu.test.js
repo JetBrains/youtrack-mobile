@@ -8,6 +8,7 @@ import Router from '../router/router';
 import {rootRoutesList, routeMap} from '../../app-routes';
 
 import Mocks from '../../../test/mocks';
+import {DEFAULT_THEME} from '../theme/theme';
 
 
 let apiMock;
@@ -139,6 +140,7 @@ describe('<Menu/>', () => {
         openFeaturesView={() => {}}
         agileProfile={agileUserProfile}
         issueQuery={''}
+        uiTheme={DEFAULT_THEME}
       >{children}</Menu>
     ).shallow();
   }

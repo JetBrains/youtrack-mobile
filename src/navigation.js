@@ -9,6 +9,8 @@ import {routeMap} from './app-routes';
 
 import {menuHeight} from './components/common-styles/header';
 import {View as AnimatedView} from 'react-native-animatable';
+import type {Theme} from './flow/Theme';
+import {ThemeContext} from './components/theme/theme-context';
 
 const styles = StyleSheet.create({
   flexBox: {
@@ -65,7 +67,10 @@ export default class Navigation extends PureComponent<{}, {isMenuShown: boolean}
             styles.navigation,
             this.state.isMenuShown ? null : styles.navigationHidden
           ]}>
-          <Menu/>
+
+          <ThemeContext.Consumer>
+            {(theme: Theme) => <Menu uiTheme={theme.uiTheme}/>}
+          </ThemeContext.Consumer>
         </AnimatedView>
 
       </View>

@@ -4,11 +4,9 @@ import React, {PureComponent} from 'react';
 import {StyleSheet} from 'react-native';
 
 import {Appearance, AppearanceProvider} from 'react-native-appearance';
-import memoize from 'memoizee';
 
 import {ThemeContext} from './theme-context';
-import {getSystemMode, getUITheme} from './theme';
-import {getComponentDisplayName} from '../../util/util';
+import {buildStyles, getSystemMode, getUITheme} from './theme';
 
 import type {UITheme} from '../../flow/Theme';
 
@@ -49,9 +47,12 @@ class ManageThemeProvider extends PureComponent<Props, State> {
 
   setMode = (colorScheme) => {
     if (this._isMounted) {
+      const uiTheme = getUITheme(colorScheme);
+      buildStyles(colorScheme, uiTheme);
+
       this.setState({
         mode: colorScheme,
-        uiTheme: getUITheme(colorScheme)
+        uiTheme: uiTheme
       });
     }
   };
@@ -61,21 +62,13 @@ class ManageThemeProvider extends PureComponent<Props, State> {
     return StyleSheet.create(styles);
   };
 
-  createStyles = memoize(this.createStylesheet, {
-    normalizer: (args: Array<Object | string>) => {
-      const id = `${getComponentDisplayName(args[1])}-theme-${this.state.mode}`;
-      return id || JSON.stringify(args[0]);
-    }
-  });
-
   render() {
     return (
       <ThemeContext.Provider
         value={{
           mode: this.state.mode,
           uiTheme: this.state.uiTheme,
-          setMode: this.setMode,
-          createStyles: this.createStyles
+          setMode: this.setMode
         }}
       >
         {this.props.children}

@@ -1,11 +1,16 @@
 /* @flow */
 
+import React, {Component} from 'react';
 import {UIManager, StatusBar} from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
-import React, {Component} from 'react';
+
+
 import PropTypes from 'prop-types';
 import store from './store';
 import {Provider} from 'react-redux';
+
+import ThemeProvider from './components/theme/theme-provider';
+import {ThemeContext} from './components/theme/theme-context';
 
 import Router from './components/router/router';
 import DebugView from './components/debug-view/debug-view';
@@ -27,7 +32,6 @@ import Inbox from './views/inbox/inbox';
 import WikiPage from './views/wiki-page/wiki-page';
 import Settings from './views/settings/settings';
 
-import {APP_BACKGROUND} from './components/common-styles/app';
 import ErrorBoundary from './components/error-boundary/error-boundary';
 import {setAccount, onNavigateBack} from './actions/app-actions';
 // $FlowFixMe: cannot typecheck easy-toast module because of mistakes there
@@ -38,6 +42,9 @@ import {routeMap, rootRoutesList} from './app-routes';
 import log from './components/log/log';
 import {isAndroidPlatform} from './util/util';
 import Navigation from './navigation';
+import {buildStyles, getSystemMode, getUITheme} from './components/theme/theme';
+
+import type {Theme} from './flow/Theme';
 
 if (UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -51,11 +58,7 @@ const isAndroid: boolean = isAndroidPlatform();
 */
 // GLOBAL.XMLHttpRequest = GLOBAL.originalXMLHttpRequest || GLOBAL.XMLHttpRequest;
 
-type State = {
-  backgroundColor: string
-}
-
-class YouTrackMobile extends Component<void, State> {
+class YouTrackMobile extends Component<void, void> {
   static childContextTypes = {
     actionSheet: PropTypes.func
   };
@@ -65,7 +68,8 @@ class YouTrackMobile extends Component<void, State> {
   constructor() {
     super();
 
-    this.state = {backgroundColor: APP_BACKGROUND};
+    const systemMode = getSystemMode();
+    buildStyles(systemMode, getUITheme(systemMode));
 
     this.registerRoutes();
     YouTrackMobile.init(YouTrackMobile.getNotificationIssueId);
@@ -172,21 +176,40 @@ class YouTrackMobile extends Component<void, State> {
     return (
       <Provider store={store}>
         <ActionSheet ref={this.actionSheetRef}>
-          <SafeAreaView style={[{flex: 1}, {backgroundColor: this.state.backgroundColor}]}>
+          <ThemeProvider>
+            <ThemeContext.Consumer>
+              {
+                ((theme: Theme) => {
+                  const uiTheme = theme.uiTheme;
+                  const backgroundColor = uiTheme.colors.$background;
 
-            <StatusBar backgroundColor={this.state.backgroundColor} barStyle={'dark-content'} translucent={false}/>
+                  return (
+                    <SafeAreaView
+                      style={[
+                        {flex: 1},
+                        {backgroundColor: backgroundColor}
+                      ]}>
+                      <StatusBar
+                        backgroundColor={backgroundColor}
+                        barStyle={uiTheme.barStyle}
+                        translucent={true}
+                      />
+                      <ErrorBoundary>
+                        <Navigation/>
+                        <UserAgreement/>
+                        <DebugView/>
+                        <FeaturesView/>
+                        <ScanView/>
+                      </ErrorBoundary>
 
-            <ErrorBoundary>
-              <Navigation/>
-              <UserAgreement/>
-              <DebugView/>
-              <FeaturesView/>
-              <ScanView/>
-            </ErrorBoundary>
+                      <Toast ref={toast => toast ? setNotificationComponent(toast) : null}/>
 
-            <Toast ref={toast => toast ? setNotificationComponent(toast) : null}/>
-
-          </SafeAreaView>
+                    </SafeAreaView>
+                  );
+                })
+              }
+            </ThemeContext.Consumer>
+          </ThemeProvider>
         </ActionSheet>
       </Provider>
     );

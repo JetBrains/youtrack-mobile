@@ -1,11 +1,7 @@
-import {StyleSheet, Platform} from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {
-  UNIT,
-  COLOR_FONT_GRAY,
-  COLOR_FONT_ON_BLACK,
-  COLOR_PINK
-} from '../../components/variables/variables';
+import {Platform} from 'react-native';
+import {UNIT} from '../../components/variables/variables';
 import {SIZE as COLOR_FIELD_SIZE} from '../../components/color-field/color-field';
 import {headerTitle, secondaryText} from '../../components/common-styles/typography';
 import {issueCard} from '../../components/common-styles/issue';
@@ -20,10 +16,10 @@ const rowLine = {
 const searchPanelHeight = UNIT * 12;
 const searchContextHeight = UNIT * 7;
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   listContainer: {
     flex: 1,
-    backgroundColor: COLOR_FONT_ON_BLACK
+    backgroundColor: '$background'
   },
   list: {
     flexGrow: 0,
@@ -36,10 +32,10 @@ export default StyleSheet.create({
   },
   tryAgainText: {
     fontSize: 18,
-    color: COLOR_PINK
+    color: '$link'
   },
   headerText: {
-    color: COLOR_FONT_ON_BLACK,
+    color: '$text',
     fontSize: 17
   },
   row: {
@@ -63,7 +59,11 @@ export default StyleSheet.create({
     })
   },
   rowLine: rowLine,
-  separator: separator,
+  separator: {
+    ...separator,
+    borderColor: '$textSecondary',
+    opacity: '$separatorOpacity'
+  },
   secondaryText: {
     ...secondaryText
   },
@@ -76,12 +76,13 @@ export default StyleSheet.create({
     justifyContent: 'flex-end'
   },
   summary: {
-    ...issueCard.issueSummary
+    ...issueCard.issueSummary,
+    color: '$text'
   },
   subtext: {
     paddingTop: 6,
     fontSize: 14,
-    color: COLOR_FONT_GRAY
+    color: '$textSecondary'
   },
   tags: {
     marginTop: UNIT
@@ -91,7 +92,7 @@ export default StyleSheet.create({
   },
   searchContext: {
     height: searchContextHeight,
-    backgroundColor: COLOR_FONT_ON_BLACK
+    backgroundColor: '$background'
   },
   searchContextPinned: {
     ...elevation1
@@ -102,11 +103,12 @@ export default StyleSheet.create({
     marginRight: UNIT * 10,
     marginLeft: UNIT * 2,
     paddingTop: UNIT,
-    paddingBottom: UNIT,
-    backgroundColor: COLOR_FONT_ON_BLACK
+    paddingBottom: UNIT
   },
   contextButtonText: {
     ...headerTitle,
+    color: '$text',
+    backgroundColor: '$background'
   },
   searchPanel: {
     zIndex: -1,

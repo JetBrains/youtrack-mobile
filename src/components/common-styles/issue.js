@@ -1,4 +1,4 @@
-import {COLOR_BLACK, COLOR_DARK, UNIT,} from '../variables/variables';
+import {UNIT} from '../variables/variables';
 import {mainText, resolvedTextColor, secondaryText} from './typography';
 
 
@@ -6,8 +6,7 @@ export const title = {
   fontSize: 18,
   fontWeight: '500',
   lineHeight: 21,
-  letterSpacing: -0.22,
-  color: COLOR_BLACK
+  letterSpacing: -0.22
 };
 
 export const issueCard = {
@@ -21,7 +20,6 @@ export const issueCard = {
     ...mainText,
     flex: 1,
     marginTop: UNIT,
-    color: COLOR_DARK,
     fontWeight: '500',
   }
 };

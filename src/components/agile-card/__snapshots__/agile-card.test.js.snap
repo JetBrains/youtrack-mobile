@@ -116,7 +116,6 @@ exports[`<AgileCard/> should render snapshot 1`] = `
             style={
               Array [
                 Object {
-                  "color": "#1f2326",
                   "flex": 1,
                   "flexGrow": 1,
                   "fontSize": 16,
