@@ -1,24 +1,20 @@
-import {StyleSheet} from 'react-native';
-import {
-  UNIT,
-  COLOR_PINK,
-  COLOR_FONT,
-  COLOR_MEDIUM_GRAY,
-  COLOR_FONT_ON_BLACK
-} from '../../components/variables/variables';
-import issueStyles from '../single-issue/single-issue.styles';
-import {mainText} from '../../components/common-styles/typography';
+import EStyleSheet from 'react-native-extended-stylesheet';
+
+import {UNIT} from '../../components/variables/variables';
+import {HEADER_FONT_SIZE, mainText} from '../../components/common-styles/typography';
+import {separator} from '../../components/common-styles/list';
 
 const ATTACHING_IMAGE_ALPHA = '70';
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLOR_FONT_ON_BLACK
+    backgroundColor: '$background'
   },
   title: {
     paddingLeft: UNIT * 2,
-    ...issueStyles.headerText
+    fontSize: HEADER_FONT_SIZE,
+    color: '$text'
   },
   issueSummary: {
     marginTop: UNIT,
@@ -32,7 +28,8 @@ export default StyleSheet.create({
   },
   separator: {
     height: 1,
-    backgroundColor: COLOR_MEDIUM_GRAY
+    ...separator,
+    borderColor: '$separator'
   },
   attachesContainer: {
     marginTop: UNIT * 2,
@@ -62,7 +59,7 @@ export default StyleSheet.create({
   attachButtonText: {
     ...mainText,
     paddingLeft: UNIT * 2,
-    color: COLOR_PINK
+    color: '$link'
   },
   actionContainer: {
     flexDirection: 'row',
@@ -88,7 +85,7 @@ export default StyleSheet.create({
     flexDirection: 'row'
   },
   selectProjectText: {
-    color: COLOR_FONT,
+    color: '$text',
     fontSize: UNIT * 2,
     flexShrink: 2,
   },

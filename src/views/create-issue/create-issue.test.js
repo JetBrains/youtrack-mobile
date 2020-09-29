@@ -1,9 +1,3 @@
-import React from 'react';
-
-import {shallow} from 'enzyme';
-import toJson from 'enzyme-to-json';
-
-import CreateIssueConnected from './create-issue';
 import * as actions from './create-issue-actions';
 import * as types from './create-issue-action-types';
 
@@ -23,7 +17,6 @@ describe('<CreateIssue/>', () => {
   let ownPropsMock;
   let issueMock;
   let store;
-  let wrapper;
   let storeActions;
 
   beforeEach(async () => {
@@ -31,41 +24,6 @@ describe('<CreateIssue/>', () => {
     issueMock = mocks.createIssueMock({project: {id: PROJECT_ID_MOCK}});
     createStore();
   });
-
-  beforeEach(() => render(issueMock));
-
-  describe('Render', () => {
-
-    describe('Component', () => {
-      it('should match a snapshot', () => {
-        expect(toJson(wrapper)).toMatchSnapshot();
-      });
-
-      it('should render component', () => {
-        expect(findByTestId('createIssue')).toHaveLength(1);
-      });
-
-      it('should render fields', () => {
-        expect(findByTestId('createIssueFields')).toHaveLength(1);
-      });
-
-      it('should render summary', () => {
-        expect(findByTestId('createIssueSummary')).toHaveLength(1);
-      });
-    });
-
-    describe('Render attachments block', () => {
-      it('should render attachments', () => {
-        expect(findByTestId('createIssueAttachmentRow')).toHaveLength(1);
-      });
-
-      it('should render attach file button', () => {
-        expect(findByTestId('createIssueAttachmentButton')).toHaveLength(1);
-      });
-
-    });
-  });
-
 
   describe('Actions', () => {
     it('should read stored draft ID', async () => {
@@ -80,14 +38,6 @@ describe('<CreateIssue/>', () => {
     });
   });
 
-
-  function render(issue) {
-    wrapper = shallow(<CreateIssueConnected store={store} issue={issue}/>).shallow();
-  }
-
-  function findByTestId(testId) {
-    return wrapper && wrapper.find({testID: testId});
-  }
 
   function createStore() {
     apiMock = {

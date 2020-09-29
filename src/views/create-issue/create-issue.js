@@ -15,15 +15,18 @@ import CustomFieldsPanel from '../../components/custom-fields-panel/custom-field
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import IssueSummary from '../../components/issue-summary/issue-summary';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
-import {COLOR_GRAY, COLOR_PINK} from '../../components/variables/variables';
 
 import * as createIssueActions from './create-issue-actions';
 import {attachmentActions} from './create-issue__attachment-actions-and-types';
 
+import {ThemeContext} from '../../components/theme/theme-context';
+
+import PropTypes from 'prop-types';
+
 import type {Attachment, CustomField, IssueProject} from '../../flow/CustomFields';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {CreateIssueState} from './create-issue-reducers';
-import PropTypes from 'prop-types';
+import type {Theme, UITheme, UIThemeColors} from '../../flow/Theme';
 
 import styles from './create-issue.styles';
 
@@ -70,7 +73,7 @@ class CreateIssue extends Component<Props, void> {
     hideAddAttachDialog();
   }
 
-  renderAttachFileDialog() {
+  renderAttachFileDialog(uiTheme: UITheme) {
     const {issue, getAttachActions, attachingImage} = this.props;
 
     if (!issue || !issue.id) {
@@ -84,6 +87,7 @@ class CreateIssue extends Component<Props, void> {
         attach={attachingImage}
         onCancel={this.cancelAddAttach}
         onAttach={this.onAddAttachment}
+        uiTheme={uiTheme}
       />
     );
   }
@@ -96,7 +100,7 @@ class CreateIssue extends Component<Props, void> {
 
   onUpdateProject = async (project: IssueProject) => await this.props.updateProject(project);
 
-  renderCustomFieldPanel() {
+  renderCustomFieldPanel(uiTheme: UITheme) {
     const {issue} = this.props;
 
     return <CustomFieldsPanel
@@ -116,6 +120,8 @@ class CreateIssue extends Component<Props, void> {
 
       onUpdate={this.onFieldUpdate}
       onUpdateProject={this.onUpdateProject}
+
+      uiTheme={uiTheme}
     />;
   }
 
@@ -138,73 +144,82 @@ class CreateIssue extends Component<Props, void> {
     const canCreateIssue = issue.summary && issue?.project?.id && !isProcessing;
 
     return (
-      <View
-        testID="createIssue"
-        style={styles.container}>
-        <Header
-          leftButton={<IconClose size={21} color={COLOR_PINK}/>}
-          onBack={storeDraftAndGoBack}
-          rightButton={<IconCheck size={20} color={canCreateIssue ? COLOR_PINK : COLOR_GRAY}/>}
-          onRightButtonClick={() => canCreateIssue && createIssue()}>
-          <Text style={styles.title}>New Issue</Text>
-        </Header>
+      <ThemeContext.Consumer>
+        {(theme: Theme) => {
+          const uiTheme: UITheme = theme.uiTheme;
+          const uiThemeColors: UIThemeColors = uiTheme.colors;
 
-        <View style={styles.separator}/>
-
-        {this.renderCustomFieldPanel()}
-
-        <ScrollView
-          keyboardShouldPersistTaps="handled"
-          keyboardDismissMode="interactive"
-        >
-          <IssueSummary
-            testID="createIssueSummary"
-            style={styles.issueSummary}
-            showSeparator={true}
-            summary={issue.summary}
-            description={issue.description}
-            editable={!processing}
-            onSummaryChange={setIssueSummary}
-            onDescriptionChange={setIssueDescription}
-          />
-
-          {issue?.project?.id && (
+          return (
             <View
-              testID="createIssueAttachments"
-              style={styles.attachesContainer}>
+              testID="createIssue"
+              style={styles.container}>
+              <Header
+                leftButton={<IconClose size={21} color={uiThemeColors.$link}/>}
+                onBack={storeDraftAndGoBack}
+                rightButton={<IconCheck size={20} color={canCreateIssue ? uiThemeColors.$link : uiThemeColors.$disabled}/>}
+                onRightButtonClick={() => canCreateIssue && createIssue()}>
+                <Text style={styles.title}>New Issue</Text>
+              </Header>
 
-              <AttachmentsRow
-                testID="createIssueAttachmentRow"
-                attachments={issue.attachments}
-                attachingImage={attachingImage}
-                imageHeaders={getApi().auth.getAuthorizationHeaders()}
-                canRemoveAttachment={true}
-                onRemoveImage={removeAttachment}
-              />
+              <View style={styles.separator}/>
 
-              <View style={styles.attachButtonsContainer}>
-                <TouchableOpacity
-                  testID="createIssueAttachmentButton"
-                  disabled={isProcessing}
-                  style={styles.attachButton}
-                  onPress={showAddAttachDialog}
-                >
-                  <IconPaperClip size={24} color={isProcessing ? COLOR_GRAY : COLOR_PINK}/>
-                  <Text style={[styles.attachButtonText, isProcessing ? {color: COLOR_GRAY} : null]}>
-                    Add Attachment
-                  </Text>
-                </TouchableOpacity>
-              </View>
+              {this.renderCustomFieldPanel(uiTheme)}
+
+              <ScrollView
+                keyboardShouldPersistTaps="handled"
+                keyboardDismissMode="interactive"
+              >
+                <IssueSummary
+                  testID="createIssueSummary"
+                  style={styles.issueSummary}
+                  showSeparator={true}
+                  summary={issue.summary}
+                  description={issue.description}
+                  editable={!processing}
+                  onSummaryChange={setIssueSummary}
+                  onDescriptionChange={setIssueDescription}
+                />
+
+                {issue?.project?.id && (
+                  <View
+                    testID="createIssueAttachments"
+                    style={styles.attachesContainer}>
+
+                    <AttachmentsRow
+                      testID="createIssueAttachmentRow"
+                      attachments={issue.attachments}
+                      attachingImage={attachingImage}
+                      imageHeaders={getApi().auth.getAuthorizationHeaders()}
+                      canRemoveAttachment={true}
+                      onRemoveImage={removeAttachment}
+                    />
+
+                    <View style={styles.attachButtonsContainer}>
+                      <TouchableOpacity
+                        testID="createIssueAttachmentButton"
+                        disabled={isProcessing}
+                        style={styles.attachButton}
+                        onPress={showAddAttachDialog}
+                      >
+                        <IconPaperClip size={24} color={isProcessing ? uiThemeColors.$textSecondary : uiThemeColors.$link}/>
+                        <Text style={[styles.attachButtonText, isProcessing ? {color: uiThemeColors.$textSecondary} : null]}>
+                          Add Attachment
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                )}
+
+                <View style={styles.separator}/>
+              </ScrollView>
+
+              <KeyboardSpacerIOS/>
+
+              {isAttachFileDialogVisible && this.renderAttachFileDialog(uiTheme)}
             </View>
-          )}
-
-          <View style={styles.separator}/>
-        </ScrollView>
-
-        <KeyboardSpacerIOS/>
-
-        {isAttachFileDialogVisible && this.renderAttachFileDialog()}
-      </View>
+          );
+        }}
+      </ThemeContext.Consumer>
     );
   }
 }
