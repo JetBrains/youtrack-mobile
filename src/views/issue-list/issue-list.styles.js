@@ -61,19 +61,20 @@ export default EStyleSheet.create({
   rowLine: rowLine,
   separator: {
     ...separator,
-    borderColor: '$textSecondary',
-    opacity: '$separatorOpacity'
+    borderColor: '$separator'
   },
   secondaryText: {
-    ...secondaryText
+    ...secondaryText,
+    color: '$icon'
   },
   headLeft: {
-    ...issueCard.issueId
+    ...issueCard.issueId,
+    color: '$icon'
   },
   headRight: {
     ...rowLine,
     flexGrow: 1,
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
   summary: {
     ...issueCard.issueSummary,

@@ -4,18 +4,31 @@ import {Text} from 'react-native';
 import React, {PureComponent} from 'react';
 
 import {View as AnimatedView} from 'react-native-animatable';
+import {UNIT} from '../../components/variables/variables';
+import {secondaryText} from '../../components/common-styles/typography';
+import type {UITheme} from '../../flow/Theme';
 
-import styles from './issue-list__count.styles';
+const styles = (uiTheme: UITheme) => ({
+  issuesCount: {
+    marginTop: UNIT * 2,
+    marginBottom: UNIT * 2,
+    marginLeft: UNIT * 2,
+    ...secondaryText,
+    color: uiTheme.colors.$icon
+  }
+});
+
 
 type Props = {
-  issuesCount: ?number
+  issuesCount: ?number,
+  uiTheme: UITheme
 };
 
 
 export default class IssuesCount extends PureComponent<Props, void> {
 
   render() {
-    const {issuesCount} = this.props;
+    const {issuesCount, uiTheme} = this.props;
 
     if (!issuesCount) {
       return null;
@@ -28,7 +41,7 @@ export default class IssuesCount extends PureComponent<Props, void> {
         useNativeDriver
         duration={500}
         animation="fadeIn">
-        <Text style={styles.issuesCount}>
+        <Text style={styles(uiTheme).issuesCount}>
           {text}
         </Text>
       </AnimatedView>

@@ -2,8 +2,7 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
-import type {AnyIssue} from '../../flow/Issue';
-import type {BundleValue} from '../../flow/CustomFields';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 import ColorField from '../../components/color-field/color-field';
 import Tags from '../../components/tags/tags';
@@ -19,8 +18,9 @@ import Avatar from '../../components/avatar/avatar';
 import {ThemeContext} from '../../components/theme/theme-context';
 
 import styles from './issue-list.styles';
-import {issueResolved} from '../../components/common-styles/issue';
 
+import type {AnyIssue} from '../../flow/Issue';
+import type {BundleValue} from '../../flow/CustomFields';
 import type {Theme} from '../../flow/Theme';
 
 type Props = {
@@ -88,7 +88,7 @@ export default class IssueRow extends Component<Props, void> {
               <Text
                 style={[
                   styles.summary,
-                  issue.resolved ? issueResolved : null
+                  issue.resolved ? {color: EStyleSheet.value('$resolved')} : null
                 ]}
                 numberOfLines={2}
                 testID="issue-row-summary">

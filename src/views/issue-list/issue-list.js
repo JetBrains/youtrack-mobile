@@ -236,7 +236,7 @@ export class IssueList extends Component<Props, State> {
     );
   };
 
-  renderSearchQuery = () => {
+  renderSearchQuery = (uiTheme: UITheme) => {
     const {query, issuesCount} = this.props;
 
     return (
@@ -250,7 +250,7 @@ export class IssueList extends Component<Props, State> {
           query={query}
           onFocus={this.onSearchQueryPanelFocus}
         />
-        <IssuesCount issuesCount={issuesCount}/>
+        <IssuesCount issuesCount={issuesCount} uiTheme={uiTheme}/>
       </AnimatedView>
     );
   };
@@ -266,7 +266,7 @@ export class IssueList extends Component<Props, State> {
   renderIssues(uiTheme: UITheme) {
     const {issues, isRefreshing} = this.props;
     const contextButton = this.renderContextButton(uiTheme);
-    const searchQuery = this.renderSearchQuery();
+    const searchQuery = this.renderSearchQuery(uiTheme);
 
     if (isRefreshing && !issues) {
       return (
