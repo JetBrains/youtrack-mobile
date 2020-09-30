@@ -29,12 +29,16 @@ import {NETWORK_PROBLEM_TIPS} from '../../components/error-message/error-text-me
 
 import ErrorMessageInline from '../../components/error-message/error-message-inline';
 import {View as AnimatedView} from 'react-native-animatable';
-import {COLOR_MEDIUM_GRAY, UNIT} from '../../components/variables/variables';
 
-import {mainText} from '../../components/common-styles/typography';
+import {ThemeContext} from '../../components/theme/theme-context';
+
+import {UNIT} from '../../components/variables/variables';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {formStyles} from '../../components/common-styles/form';
+
 import styles from './enter-server.styles';
+
+import type {Theme, UIThemeColors} from '../../flow/Theme';
 
 const CATEGORY_NAME = 'Choose server';
 const protocolRegExp = /^https?:/i;
@@ -133,7 +137,7 @@ export class EnterServer extends Component<Props, State> {
     return (
       <React.Fragment>
         {NETWORK_PROBLEM_TIPS.map((tip: string, index: number) => {
-          return <Text key={`errorInfoTips-${index}`} style={mainText}>{`${tip}\n`}</Text>;
+          return <Text key={`errorInfoTips-${index}`} style={styles.text}>{`${tip}\n`}</Text>;
         })}
       </React.Fragment>
     );
@@ -150,111 +154,121 @@ export class EnterServer extends Component<Props, State> {
     const isDisabled = connecting || !this.isValidInput();
 
     return (
-      <ScrollView
-        testID="enterServer"
-        keyboardShouldPersistTaps="handled"
-        keyboardDismissMode="on-drag"
-        contentContainerStyle={styles.scrollContainer}
-      >
-        <View style={styles.container}>
-          {onCancel && (
-            <TouchableOpacity
-              testID="enterServerBackButton"
-              onPress={onCancel}
-              style={styles.backIconButton}
+      <ThemeContext.Consumer>
+        {(theme: Theme) => {
+          const uiThemeColors: UIThemeColors = theme.uiTheme.colors;
+
+          return (
+            <ScrollView
+              testID="enterServer"
+              keyboardShouldPersistTaps="handled"
+              keyboardDismissMode="on-drag"
+              contentContainerStyle={styles.scrollContainer}
             >
-              <IconBack/>
-            </TouchableOpacity>
-          )}
+              <View style={styles.container}>
+                <View style={styles.backIconButtonContainer}>
+                  {onCancel && (
+                    <TouchableOpacity
+                      testID="enterServerBackButton"
+                      onPress={onCancel}
+                      style={styles.backIconButton}
+                    >
+                      <IconBack/>
+                    </TouchableOpacity>
+                  )}
+                </View>
 
-          <View style={styles.formContent}>
-            <TouchableWithoutFeedback
-              testID="enterServerLogo"
-              onPress={() => clicksToShowCounter(onShowDebugView)}
-            >
-              <Image style={styles.logoImage} source={logo}/>
-            </TouchableWithoutFeedback>
+                <View style={styles.formContent}>
+                  <TouchableWithoutFeedback
+                    testID="enterServerLogo"
+                    onPress={() => clicksToShowCounter(onShowDebugView)}
+                  >
+                    <Image style={styles.logoImage} source={logo}/>
+                  </TouchableWithoutFeedback>
 
-            <View testID="enterServerHint">
-              <Text style={styles.title}>Enter your YouTrack server URL</Text>
-            </View>
+                  <View testID="enterServerHint">
+                    <Text style={styles.title}>Enter your YouTrack server URL</Text>
+                  </View>
 
-            <TextInput
-              testID="server-url"
-              style={styles.input}
-              autoCapitalize="none"
-              autoFocus={true}
-              selectTextOnFocus={true}
-              autoCorrect={false}
-              placeholder="youtrack-server.com:PORT"
-              returnKeyType="done"
-              keyboardType="url"
-              underlineColorAndroid="transparent"
-              onSubmitEditing={() => this.onApplyServerUrlChange()}
-              value={serverUrl}
-              onChangeText={(serverUrl) => this.setState({serverUrl})}/>
-
-            {Boolean(error) && (
-              <AnimatedView
-                animation="fadeIn"
-                duration={500}
-                useNativeDriver
-              >
-                <View style={styles.errorContainer}>
-                  <ErrorMessageInline
-                    style={styles.errorText}
-                    testID="enterServerError"
-                    error={error}
-                  />
+                  <TextInput
+                    testID="server-url"
+                    style={styles.input}
+                    autoCapitalize="none"
+                    autoFocus={true}
+                    selectTextOnFocus={true}
+                    autoCorrect={false}
+                    placeholder="youtrack-server.com:PORT"
+                    returnKeyType="done"
+                    keyboardType="url"
+                    underlineColorAndroid="transparent"
+                    onSubmitEditing={() => this.onApplyServerUrlChange()}
+                    value={serverUrl}
+                    onChangeText={(serverUrl) => this.setState({serverUrl})}/>
 
                   <TouchableOpacity
-                    style={styles.infoIcon}
-                    hitSlop={HIT_SLOP}
-                    onPress={this.toggleErrorInfoModalVisibility}
+                    style={[formStyles.button, isDisabled ? formStyles.buttonDisabled : null]}
+                    disabled={isDisabled}
+                    testID="next"
+                    onPress={() => this.onApplyServerUrlChange()}>
+                    <Text style={[formStyles.buttonText, isDisabled && formStyles.buttonTextDisabled]}>Next</Text>
+                    {connecting && <ActivityIndicator style={styles.progressIndicator}/>}
+                  </TouchableOpacity>
+
+                  {Boolean(error) && (
+                    <AnimatedView
+                      animation="fadeIn"
+                      duration={500}
+                      useNativeDriver
+                    >
+                      <View style={styles.errorContainer}>
+                        <ErrorMessageInline
+                          style={styles.errorText}
+                          testID="enterServerError"
+                          error={error}
+                        />
+
+                        <TouchableOpacity
+                          style={styles.infoIcon}
+                          hitSlop={HIT_SLOP}
+                          onPress={this.toggleErrorInfoModalVisibility}
+                        >
+                          <IconMaterial
+                            name="information"
+                            size={24}
+                            color={uiThemeColors.$iconAccent}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    </AnimatedView>
+                  )}
+
+                </View>
+
+                <View
+                  testID="enterServerSupportLink"
+                  style={styles.supportLinkContent}
+                >
+                  <TouchableOpacity
+                    hitSlop={hitSlop}
+                    onPress={() => Linking.openURL('https://youtrack-support.jetbrains.com/hc/en-us/requests/new')}
                   >
-                    <IconMaterial
-                      name="information"
-                      size={24}
-                      color={COLOR_MEDIUM_GRAY}
-                    />
+                    <Text style={formStyles.link}>Contact support</Text>
                   </TouchableOpacity>
                 </View>
-              </AnimatedView>
-            )}
 
-            <TouchableOpacity
-              style={[formStyles.button, isDisabled ? formStyles.buttonDisabled : null]}
-              disabled={isDisabled}
-              testID="next"
-              onPress={() => this.onApplyServerUrlChange()}>
-              <Text style={formStyles.buttonText}>Next</Text>
-              {connecting && <ActivityIndicator style={styles.progressIndicator}/>}
-            </TouchableOpacity>
+                {isErrorInfoModalVisible && (
+                  <Popup
+                    childrenRenderer={this.renderErrorInfoModalContent}
+                    onHide={this.toggleErrorInfoModalVisibility}
+                  />
+                )}
 
-          </View>
-
-          <View
-            testID="enterServerSupportLink"
-            style={styles.supportLinkContent}
-          >
-            <TouchableOpacity
-              hitSlop={hitSlop}
-              onPress={() => Linking.openURL('https://youtrack-support.jetbrains.com/hc/en-us/requests/new')}
-            >
-              <Text style={formStyles.link}>Contact support</Text>
-            </TouchableOpacity>
-          </View>
-
-          {isErrorInfoModalVisible && (
-            <Popup
-              childrenRenderer={this.renderErrorInfoModalContent}
-              onHide={this.toggleErrorInfoModalVisibility}
-            />
-          )}
-
-          <KeyboardSpacer/>
-        </View>
-      </ScrollView>
+                <KeyboardSpacer/>
+              </View>
+            </ScrollView>
+          );
+        }}
+      </ThemeContext.Consumer>
     );
   }
 }

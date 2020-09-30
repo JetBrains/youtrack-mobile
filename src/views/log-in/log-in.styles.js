@@ -1,23 +1,39 @@
-import {StyleSheet} from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../../components/variables/variables';
 import {MAIN_FONT_SIZE} from '../../components/common-styles/typography';
-import {formStyles} from '../../components/common-styles/form';
+import {rowFormStyles} from '../../components/common-styles/form';
 import {loginStylesForm} from '../../components/common-styles/login-form';
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   ...loginStylesForm,
 
+  container: {
+    ...loginStylesForm.container,
+    backgroundColor: '$background'
+  },
+  title: {
+    ...loginStylesForm.title,
+    color: '$text'
+  },
+  hintText: {
+    ...loginStylesForm.hintText,
+    color: '$border'
+  },
   inputUser: {
+    ...rowFormStyles.input,
     marginTop: UNIT * 3,
-    ...formStyles.input
+    color: '$text',
+    backgroundColor: '$boxBackground'
   },
   inputPass: {
+    ...rowFormStyles.input,
     marginTop: UNIT * 2,
     marginBottom: UNIT * 2,
-    ...formStyles.input
+    color: '$text',
+    backgroundColor: '$boxBackground'
   },
   error: {
-    marginTop: UNIT,
+    marginTop: UNIT * 2,
   },
   errorText: {
     marginBottom: UNIT,
@@ -29,7 +45,7 @@ export default StyleSheet.create({
     justifyContent: 'flex-end'
   },
   action: {
-    ...formStyles.link,
+    ...rowFormStyles.link,
     fontSize: MAIN_FONT_SIZE
   }
 });

@@ -6,7 +6,7 @@ import toJson from 'enzyme-to-json';
 
 import {EnterServer} from './enter-server';
 
-describe('EnterServer', () => {
+xdescribe('EnterServer', () => {
   const serverUrl = 'http://example.com';
   let connectToYouTrack;
   let onCancel;

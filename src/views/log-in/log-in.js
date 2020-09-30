@@ -28,11 +28,14 @@ import {LOG_IN_2FA_TIP} from '../../components/error-message/error-text-messages
 import {resolveErrorMessage} from '../../components/error/error-resolver';
 import ErrorMessageInline from '../../components/error-message/error-message-inline';
 
-import styles from './log-in.styles';
+import {ThemeContext} from '../../components/theme/theme-context';
+
 import {formStyles} from '../../components/common-styles/form';
 import {HIT_SLOP} from '../../components/common-styles/button';
+import styles from './log-in.styles';
 
 import type {AuthParams} from '../../flow/Auth';
+import type {Theme, UIThemeColors} from '../../flow/Theme';
 
 type Props = {
   auth: Auth,
@@ -54,6 +57,8 @@ const CATEGORY_NAME = 'Login form';
 
 
 export class LogIn extends Component<Props, State> {
+  passInputRef: any;
+
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -68,14 +73,16 @@ export class LogIn extends Component<Props, State> {
     Keystore.getInternetCredentials(config.auth.serverUri)
       .then(({username, password}) => this.setState({username, password}), noop);
 
+    this.passInputRef = React.createRef();
+
     usage.trackScreenView('Login form');
   }
 
-  focusOnPassword() {
-    this.refs.passInput.focus();
+  focusOnPassword = () => {
+    this.passInputRef.current.focus();
   }
 
-  async logInViaCredentials() {
+  logInViaCredentials = async () => {
     const config = this.props.auth.config;
     this.setState({loggingIn: true});
 
@@ -118,99 +125,124 @@ export class LogIn extends Component<Props, State> {
     const {onShowDebugView} = this.props;
 
     return (
-      <ScrollView
-        contentContainerStyle={styles.scrollContainer}
-        keyboardShouldPersistTaps="handled"
-        keyboardDismissMode="on-drag"
-      >
-        <View style={styles.container}>
-          <TouchableOpacity
-            onPress={() => this.changeYouTrackUrl()}
-            style={styles.backIconButton}
-            testID="back-to-url"
-          >
-            <IconBack/>
-          </TouchableOpacity>
+      <ThemeContext.Consumer>
+        {(theme: Theme) => {
+          const uiThemeColors: UIThemeColors = theme.uiTheme.colors;
+          const hasNoCredentials: boolean = !this.state.username && !this.state.password;
+          return (
+            <ScrollView
+              contentContainerStyle={styles.scrollContainer}
+              keyboardShouldPersistTaps="handled"
+              keyboardDismissMode="on-drag"
+            >
+              <View style={styles.container}>
+                <View style={styles.backIconButtonContainer}>
+                  <TouchableOpacity
+                    onPress={() => this.changeYouTrackUrl()}
+                    style={styles.backIconButton}
+                    testID="back-to-url"
+                  >
+                    <IconBack/>
+                  </TouchableOpacity>
+                </View>
 
-          <View style={styles.formContent}>
-            <TouchableWithoutFeedback onPress={() => clicksToShowCounter(onShowDebugView)}>
-              <Image style={styles.logoImage} source={logo}/>
-            </TouchableWithoutFeedback>
+                <View style={styles.formContent}>
+                  <TouchableWithoutFeedback onPress={() => clicksToShowCounter(onShowDebugView)}>
+                    <Image style={styles.logoImage} source={logo}/>
+                  </TouchableWithoutFeedback>
 
-            <TouchableOpacity onPress={() => this.changeYouTrackUrl()} testID="youtrack-url">
-              <Text style={styles.title}>Log in to YouTrack</Text>
-              <Text
-                style={styles.hintText}>{formatYouTrackURL(this.props.auth.config.backendUrl)}</Text>
-            </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.formContentText}
+                    onPress={() => this.changeYouTrackUrl()}
+                    testID="youtrack-url"
+                  >
+                    <Text style={styles.title}>Log in to YouTrack</Text>
+                    <Text
+                      style={styles.hintText}>{formatYouTrackURL(this.props.auth.config.backendUrl)}</Text>
+                  </TouchableOpacity>
 
-            <TextInput
-              autoCapitalize="none"
-              autoCorrect={false}
-              editable={!this.state.loggingIn}
-              testID="login-input"
-              style={styles.inputUser}
-              placeholder="Username or email"
-              returnKeyType="next"
-              underlineColorAndroid="transparent"
-              onSubmitEditing={() => this.focusOnPassword()}
-              value={this.state.username}
-              onChangeText={(username) => this.setState({username})}/>
-            <TextInput
-              ref="passInput"
-              editable={!this.state.loggingIn}
-              testID="password-input"
-              style={styles.inputPass}
-              placeholder="Password"
-              returnKeyType="done"
-              underlineColorAndroid="transparent"
-              value={this.state.password}
-              onSubmitEditing={() => {
-                this.logInViaCredentials();
-              }}
-              secureTextEntry={true}
-              onChangeText={(password) => this.setState({password})}/>
+                  <TextInput
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    editable={!this.state.loggingIn}
+                    testID="login-input"
+                    style={styles.inputUser}
+                    placeholder="Username or email"
+                    placeholderTextColor={uiThemeColors.$border}
+                    returnKeyType="next"
+                    underlineColorAndroid="transparent"
+                    onSubmitEditing={() => this.focusOnPassword()}
+                    value={this.state.username}
+                    onChangeText={(username) => this.setState({username})}
+                  />
+                  <TextInput
+                    ref={this.passInputRef}
+                    editable={!this.state.loggingIn}
+                    testID="password-input"
+                    style={styles.inputPass}
+                    placeholder="Password"
+                    placeholderTextColor={uiThemeColors.$border}
+                    returnKeyType="done"
+                    underlineColorAndroid="transparent"
+                    value={this.state.password}
+                    onSubmitEditing={() => {
+                      this.logInViaCredentials();
+                    }}
+                    secureTextEntry={true}
+                    onChangeText={(password) => this.setState({password})}/>
 
-            {Boolean(this.state.errorMessage) && (
-              <ErrorMessageInline
-                error={this.state.errorMessage}
-                tips={LOG_IN_2FA_TIP}
-              />
-            )}
+                  <TouchableOpacity
+                    style={[
+                      formStyles.button,
+                      (this.state.loggingIn || hasNoCredentials) && formStyles.buttonDisabled
+                    ]}
+                    disabled={this.state.loggingIn || hasNoCredentials}
+                    testID="log-in"
+                    onPress={this.logInViaCredentials}>
+                    <Text
+                      style={[formStyles.buttonText, hasNoCredentials && formStyles.buttonTextDisabled]}>
+                      Log in
+                    </Text>
+                    {this.state.loggingIn && <ActivityIndicator style={styles.progressIndicator}/>}
+                  </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[formStyles.button, this.state.loggingIn ? formStyles.buttonDisabled : null]}
-              disabled={this.state.loggingIn}
-              testID="log-in"
-              onPress={() => this.logInViaCredentials()}>
-              <Text
-                style={formStyles.buttonText}>Log in</Text>
-              {this.state.loggingIn && <ActivityIndicator style={styles.progressIndicator}/>}
-            </TouchableOpacity>
+                  <Text style={styles.hintText}>
+                    {'You need a YouTrack account to use the app.\n By logging in, you agree to the '}
+                    <Text
+                      style={formStyles.link}
+                      onPress={() => Linking.openURL('https://www.jetbrains.com/company/privacy.html')}>
+                      Privacy Policy
+                    </Text>.
+                  </Text>
 
-            <Text style={styles.hintText}>
-              {'You need a YouTrack account to use the app.\n By logging in, you agree to the '}
-              <Text
-                style={formStyles.link}
-                onPress={() => Linking.openURL('https://www.jetbrains.com/company/privacy.html')}>
-                Privacy Policy
-              </Text>.
-            </Text>
+                  {Boolean(this.state.errorMessage || hasNoCredentials) && (
+                    <View style={styles.error}>
+                      <ErrorMessageInline
+                        error={this.state.errorMessage}
+                        tips={LOG_IN_2FA_TIP}
+                      />
+                    </View>
+                  )}
 
-          </View>
 
-          <TouchableOpacity
-            hitSlop={HIT_SLOP}
-            style={styles.support}
-            testID="log-in-via-browser"
-            onPress={() => this.logInViaHub()}
-          >
-            <Text style={styles.action}>
-              Log in with Browser</Text>
-          </TouchableOpacity>
+                </View>
 
-          <KeyboardSpacer/>
-        </View>
-      </ScrollView>
+                <TouchableOpacity
+                  hitSlop={HIT_SLOP}
+                  style={styles.support}
+                  testID="log-in-via-browser"
+                  onPress={() => this.logInViaHub()}
+                >
+                  <Text style={styles.action}>
+                    Log in with Browser</Text>
+                </TouchableOpacity>
+
+                <KeyboardSpacer/>
+              </View>
+            </ScrollView>
+          );
+        }}
+      </ThemeContext.Consumer>
     );
   }
 }

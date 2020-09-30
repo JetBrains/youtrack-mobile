@@ -6,13 +6,24 @@ export const loginStylesForm = {
     flexGrow: 1
   },
   container: {
-    ...formStyles.container
+    flexGrow: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    paddingTop: containerPadding,
+    paddingLeft: containerPadding,
+    paddingRight: containerPadding,
+  },
+  backIconButtonContainer: {
+    position: 'absolute',
+    top: UNIT * 2,
+    left: UNIT,
+    width: UNIT * 6,
+    height: UNIT * 4
   },
   backIconButton: {
     flexGrow: 0,
-    width: UNIT * 9,
-    padding: UNIT * 2,
-    marginLeft: -containerPadding
+    width: UNIT * 6,
+    height: UNIT * 4
   },
   title: {
     marginTop: UNIT * 2,
@@ -21,8 +32,11 @@ export const loginStylesForm = {
   formContent: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     marginTop: UNIT * 2
+  },
+  formContentText: {
+    alignItems: 'center',
   },
   hintText: {
     marginTop: UNIT * 2,

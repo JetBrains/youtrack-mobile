@@ -15,6 +15,7 @@ const dark: UITheme = {
 
     $text: '#FFF',
     $textSecondary: '#b0b0b0',
+    $textButton: '#FFF',
 
     $link: '#FE0082',
     $linkLight: 'rgba(254, 0, 130, 0.3)',

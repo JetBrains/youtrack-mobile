@@ -1,20 +1,32 @@
-import {StyleSheet} from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../../components/variables/variables';
-import {formStyles} from '../../components/common-styles/form';
+import {rowFormStyles} from '../../components/common-styles/form';
 import {loginStylesForm} from '../../components/common-styles/login-form';
+import {mainText} from '../../components/common-styles/typography';
 
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   ...loginStylesForm,
 
+  container: {
+    ...loginStylesForm.container,
+    backgroundColor: '$background'
+  },
   input: {
+    ...rowFormStyles.input,
     marginTop: UNIT * 3,
     marginBottom: UNIT * 2,
-    ...formStyles.input
+    color: '$text',
+    backgroundColor: '$boxBackground'
+  },
+  title: {
+    ...loginStylesForm.title,
+    color: '$text'
   },
   errorContainer: {
     flexDirection: 'row',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
+    marginTop: UNIT * 2
   },
   errorText: {
     flexGrow: 1
@@ -23,5 +35,9 @@ export default StyleSheet.create({
     flexGrow: 0,
     marginTop: UNIT / 2,
     marginLeft: UNIT * 2
+  },
+  text: {
+    ...mainText,
+    color: '$text'
   }
 });

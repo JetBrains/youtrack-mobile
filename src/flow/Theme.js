@@ -15,6 +15,7 @@ export type UIThemeColors = {|
 
   $text: string,
   $textSecondary: string,
+  $textButton: string,
 
   $link: string,
   $linkLight: string,

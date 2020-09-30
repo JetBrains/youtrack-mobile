@@ -113,6 +113,7 @@ exports[`<BoardRow/> Render should render a snapshot 1`] = `
             "$mask": "#00000057",
             "$separator": "#DFE5EB",
             "$text": "#000",
+            "$textButton": "#FFF",
             "$textSecondary": "#CCC",
           },
           "dark": false,

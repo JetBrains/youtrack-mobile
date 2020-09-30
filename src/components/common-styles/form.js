@@ -5,7 +5,7 @@ import {MAIN_FONT_SIZE} from './typography';
 
 export const containerPadding = UNIT * 4;
 
-export const formStyles = EStyleSheet.create({
+export const rowFormStyles = {
   scrollContainer: {
     flexGrow: 1
   },
@@ -35,13 +35,17 @@ export const formStyles = EStyleSheet.create({
     backgroundColor: '$link',
   },
   buttonDisabled: {
-    backgroundColor: '$textSecondary'
+    backgroundColor: '$textSecondary',
+    opacity: 0.5
   },
   buttonText: {
     alignSelf: 'center',
     textAlign: 'center',
     fontSize: MAIN_FONT_SIZE,
-    color: '$background'
+    color: '$textButton'
+  },
+  buttonTextDisabled: {
+    color: '$border'
   },
   title: {
     fontSize: 18,
@@ -50,7 +54,7 @@ export const formStyles = EStyleSheet.create({
   },
   hintText: {
     textAlign: 'center',
-    color: '$textSecondary',
+    color: '$border',
     fontSize: 12
   },
   errorText: {
@@ -59,4 +63,6 @@ export const formStyles = EStyleSheet.create({
   link: {
     color: '$link'
   }
-});
+};
+
+export const formStyles = EStyleSheet.create(rowFormStyles);

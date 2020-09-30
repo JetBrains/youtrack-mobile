@@ -1,9 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {
-  UNIT,
-  COLOR_FONT_ON_BLACK,
-  COLOR_PINK,
-} from '../variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import {UNIT} from '../variables/variables';
 import {mask} from '../common-styles/app';
 
 const extendedReportModalText = {
@@ -17,11 +13,11 @@ const alignCenter = {
   alignItems: 'center'
 };
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   link: {
     marginTop: UNIT,
     marginBottom: UNIT,
-    color: COLOR_PINK
+    color: '$link'
   },
   modal: {
     ...alignCenter
@@ -35,7 +31,7 @@ export default StyleSheet.create({
     margin: UNIT * 5,
     padding: UNIT * 3,
     paddingBottom: UNIT,
-    backgroundColor: COLOR_FONT_ON_BLACK,
+    backgroundColor: '$background',
     shadowOpacity: 0.6,
     borderRadius: 6,
     shadowOffset: {width: 0, height: 0},
@@ -64,6 +60,6 @@ export default StyleSheet.create({
   },
   buttonText: {
     fontSize: 16,
-    color: COLOR_PINK
+    color: '$link'
   }
 });

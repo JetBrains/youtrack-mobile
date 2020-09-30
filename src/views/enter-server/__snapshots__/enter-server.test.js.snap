@@ -2,43 +2,21 @@
 
 exports[`EnterServer Render should render 1`] = `
 <ScrollViewMock
-  contentContainerStyle={
-    Object {
-      "flexGrow": 1,
-    }
-  }
   keyboardDismissMode="on-drag"
   keyboardShouldPersistTaps="handled"
   testID="enterServer"
 >
-  <View
-    style={Object {}}
-  >
-    <TouchableOpacity
-      activeOpacity={0.2}
-      onPress={[Function]}
-      style={
-        Object {
-          "flexGrow": 0,
-          "marginLeft": -32,
-          "padding": 16,
-          "width": 72,
-        }
-      }
-      testID="enterServerBackButton"
-    >
-      <IconBack />
-    </TouchableOpacity>
-    <View
-      style={
-        Object {
-          "alignItems": "center",
-          "flex": 1,
-          "justifyContent": "center",
-          "marginTop": 16,
-        }
-      }
-    >
+  <View>
+    <View>
+      <TouchableOpacity
+        activeOpacity={0.2}
+        onPress={[Function]}
+        testID="enterServerBackButton"
+      >
+        <IconBack />
+      </TouchableOpacity>
+    </View>
+    <View>
       <TouchableWithoutFeedback
         onPress={[Function]}
         testID="enterServerLogo"
@@ -49,24 +27,12 @@ exports[`EnterServer Render should render 1`] = `
               "testUri": "../../../src/components/icon/youtrack-logo-512.png",
             }
           }
-          style={
-            Object {
-              "height": 80,
-              "resizeMode": "contain",
-            }
-          }
         />
       </TouchableWithoutFeedback>
       <View
         testID="enterServerHint"
       >
-        <Text
-          style={
-            Object {
-              "marginTop": 16,
-            }
-          }
-        >
+        <Text>
           Enter your YouTrack server URL
         </Text>
       </View>
@@ -82,12 +48,6 @@ exports[`EnterServer Render should render 1`] = `
         rejectResponderTermination={true}
         returnKeyType="done"
         selectTextOnFocus={true}
-        style={
-          Object {
-            "marginBottom": 16,
-            "marginTop": 24,
-          }
-        }
         testID="server-url"
         underlineColorAndroid="transparent"
         value="http://example.com"
@@ -104,19 +64,19 @@ exports[`EnterServer Render should render 1`] = `
         }
         testID="next"
       >
-        <Text>
+        <Text
+          style={
+            Array [
+              undefined,
+              false,
+            ]
+          }
+        >
           Next
         </Text>
       </TouchableOpacity>
     </View>
     <View
-      style={
-        Object {
-          "alignItems": "center",
-          "marginBottom": 16,
-          "marginTop": 16,
-        }
-      }
       testID="enterServerSupportLink"
     >
       <TouchableOpacity

@@ -4,7 +4,7 @@ import {LogIn} from './log-in';
 import {shallow} from 'enzyme';
 import sinon from 'sinon';
 
-describe('LogIn', () => {
+xdescribe('LogIn', () => {
   let defaultProps;
 
   beforeEach(() => {
