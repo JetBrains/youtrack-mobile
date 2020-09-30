@@ -1,10 +1,15 @@
 /* @flow */
+
 import {View, Image, Text, TouchableOpacity, ActivityIndicator} from 'react-native';
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {logo, pencil} from '../../components/icon/icon';
 import usage from '../../components/usage/usage';
 import {formatYouTrackURL} from '../../components/config/config';
+import {ThemeContext} from '../../components/theme/theme-context';
+
 import styles from './home.styles';
+
+import type {Theme} from '../../flow/Theme';
 
 type Props = {
   backendUrl: string,
@@ -18,7 +23,7 @@ type State = {
   youTrackBackendUrl: string
 }
 
-export default class Home extends Component<Props, State> {
+export default class Home extends PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -67,21 +72,25 @@ export default class Home extends Component<Props, State> {
   }
 
   render() {
-    return (
-      <View style={styles.container}>
+    return <ThemeContext.Consumer>
+      {(theme: Theme) => {
+        return (
+          <View style={styles.container}>
 
-        <View style={styles.logoContainer}>
-          <Image style={styles.logoImage} source={logo}/>
-        </View>
+            <View style={styles.logoContainer}>
+              <Image style={styles.logoImage} source={logo}/>
+            </View>
 
-        {this._renderUrlButton()}
+            {this._renderUrlButton()}
 
-        <View style={styles.messageContainer}>
-          {this._renderRetryAction()}
-          {this._renderMessage()}
-        </View>
+            <View style={styles.messageContainer}>
+              {this._renderRetryAction()}
+              {this._renderMessage()}
+            </View>
 
-      </View>
-    );
+          </View>
+        );
+      }}
+    </ThemeContext.Consumer>;
   }
 }

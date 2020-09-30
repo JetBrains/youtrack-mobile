@@ -1,12 +1,12 @@
-import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_FONT_GRAY, COLOR_PINK, COLOR_GRAY} from '../../components/variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import {UNIT} from '../../components/variables/variables';
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFF'
+    backgroundColor: '$background'
   },
   logoContainer: {
     flex: 2,
@@ -20,14 +20,15 @@ export default StyleSheet.create({
     textAlign: 'center',
     padding: UNIT,
     fontSize: 17,
-    color: COLOR_PINK
+    color: '$link'
   },
   messageContainer: {
     flex: 1,
     justifyContent: 'flex-end',
   },
   message: {
-    padding: UNIT * 2
+    padding: UNIT * 2,
+    color: '$text'
   },
   urlButton: {
     flex: 0,
@@ -40,18 +41,18 @@ export default StyleSheet.create({
     width: UNIT * 2,
     height: UNIT * 2,
     marginLeft: UNIT,
-    tintColor: COLOR_GRAY
+    tintColor: '$textSecondary'
   },
   url: {
     textAlign: 'center',
     marginTop: UNIT * 2,
-    color: COLOR_FONT_GRAY
+    color: '$icon'
   },
   urlInput: {
     height: UNIT * 5,
     width: 240,
-    backgroundColor: '#FFF',
-    borderBottomColor: COLOR_PINK,
+    backgroundColor: '$background',
+    borderBottomColor: '$link',
     borderBottomWidth: 1
   }
 });
