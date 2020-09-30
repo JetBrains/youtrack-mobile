@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {Component} from 'react';
-import {UIManager, StatusBar} from 'react-native';
+import {UIManager, StatusBar, Platform} from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 
 
@@ -185,10 +185,11 @@ class YouTrackMobile extends Component<void, void> {
 
                   return (
                     <SafeAreaView
-                      style={[
-                        {flex: 1},
-                        {backgroundColor: backgroundColor}
-                      ]}>
+                      style={{
+                        flex: 1,
+                        backgroundColor: backgroundColor,
+                        marginTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight
+                      }}>
                       <StatusBar
                         backgroundColor={backgroundColor}
                         barStyle={uiTheme.barStyle}
