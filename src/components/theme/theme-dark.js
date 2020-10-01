@@ -22,12 +22,13 @@ const dark: UITheme = {
 
     $disabled: '#5d5d5d',
 
-    $icon: '#a5a5a5',
+    $icon: '#9f9f9f',
     $iconAccent: '#b8d1e5',
 
     $mask: '#FFFFFF57',
+    $navigation: '#696969',
 
-    $separator: '#3e3e3e'
+    $separator: '#343333'
   },
 };
 

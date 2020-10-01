@@ -2,6 +2,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {UNIT} from '../variables/variables';
 import {elevation1} from '../common-styles/shadow';
+import {mainText} from '../common-styles/typography';
 
 const QUERY_ASSIST_HEIGHT = UNIT * 6;
 
@@ -43,9 +44,7 @@ export default EStyleSheet.create({
     marginLeft: UNIT,
     marginRight: UNIT,
 
-    fontSize: 16,
-    letterSpacing: 0.08,
-    textAlign: 'left',
+    ...mainText,
     color: '$text'
   },
   searchInputHasText: {

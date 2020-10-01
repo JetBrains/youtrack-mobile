@@ -2,6 +2,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../variables/variables';
 import {mainText} from '../common-styles/typography';
 import {elevation1} from '../common-styles/shadow';
+import {separator} from '../common-styles/list';
 
 const minButtonWidth = UNIT * 5;
 
@@ -36,10 +37,8 @@ export default EStyleSheet.create({
     height: SELECT_ITEM_HEIGHT
   },
   rowSeparator: {
-    height: SELECT_ITEM_SEPARATOR_HEIGHT,
-    borderColor: '$icon',
-    borderBottomWidth: 0.3,
-    marginLeft: UNIT * 2
+    borderColor: '$separator',
+    ...separator,
   },
   loadingRow: {
     justifyContent: 'center'

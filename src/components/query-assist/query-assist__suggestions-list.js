@@ -134,9 +134,10 @@ const styles = EStyleSheet.create({
   },
   searchRow: {
     padding: UNIT * 2,
-    paddingTop: UNIT * 1.5,
-    paddingBottom: UNIT * 1.5,
-    paddingRight: UNIT
+    paddingRight: UNIT,
+    marginLeft: UNIT * 2,
+    borderBottomWidth: 0.5,
+    borderColor: '$disabled'
   },
   sectionHeader: {
     padding: UNIT * 2,

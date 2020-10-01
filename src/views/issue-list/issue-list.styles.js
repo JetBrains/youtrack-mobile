@@ -61,6 +61,7 @@ export default EStyleSheet.create({
   rowLine: rowLine,
   separator: {
     ...separator,
+    borderBottomWidth: 0.75,
     borderColor: '$separator'
   },
   secondaryText: {

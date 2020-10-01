@@ -343,8 +343,8 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
           disabled={disabled}
           onPress={() => this.props.onShowCommentActions(comment)}>
           {isIOSPlatform()
-            ? <IconMoreOptions size={24} color={uiTheme.colors.$icon}/>
-            : <IconDrag size={22} color={uiTheme.colors.$icon}/>}
+            ? <IconMoreOptions size={24} color={uiTheme.colors.$textSecondary}/>
+            : <IconDrag size={22} color={uiTheme.colors.$textSecondary}/>}
         </TouchableOpacity>
       </View>;
     }

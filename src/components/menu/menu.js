@@ -108,7 +108,7 @@ class Menu extends Component<Props, State> {
       return (
         isDisabled
           ? uiTheme.colors.$disabled
-          : this.isActiveRoute(routeName) ? uiTheme.colors.$link : uiTheme.colors.$icon
+          : this.isActiveRoute(routeName) ? uiTheme.colors.$link : uiTheme.colors.$navigation
       );
     };
 

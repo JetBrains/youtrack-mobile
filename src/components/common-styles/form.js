@@ -45,7 +45,7 @@ export const rowFormStyles = {
     color: '$textButton'
   },
   buttonTextDisabled: {
-    color: '$icon'
+    color: '$textButton'
   },
   title: {
     fontSize: 18,

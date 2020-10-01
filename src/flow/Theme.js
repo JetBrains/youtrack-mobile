@@ -26,6 +26,7 @@ export type UIThemeColors = {|
   $iconAccent: string,
 
   $mask: string,
+  $navigation: string,
 
   $separator: string
 |};

@@ -20,12 +20,13 @@ const light: UITheme = {
     $link: '#FE0082',
     $linkLight: 'rgba(254, 0, 130, 0.3)',
 
-    $disabled: '#DFE5EB',
+    $disabled: '#e9e9e9',
 
     $icon: '#737577',
     $iconAccent: '#b8d1e5',
 
     $mask: '#00000057',
+    $navigation: '#737577',
 
     $separator: '#dfe5eb'
   },
