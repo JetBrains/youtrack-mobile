@@ -34,7 +34,7 @@ export default EStyleSheet.create({
     })
   },
   headerTextResolved: {
-    color: '$border',
+    color: '$icon',
     textDecorationLine: 'line-through'
   },
   issueStar: {
@@ -88,7 +88,7 @@ export default EStyleSheet.create({
     textAlign: 'center'
   },
   disabledSaveButton: {
-    color: '$border'
+    color: '$icon'
   },
 
   row: {

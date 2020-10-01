@@ -4,13 +4,6 @@ import {View, Text, ActivityIndicator, ScrollView} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import React, {PureComponent} from 'react';
 import throttle from 'lodash.throttle';
-import {
-  COLOR_FONT_ON_BLACK,
-  COLOR_ICON_LIGHT_BLUE,
-  COLOR_ICON_MEDIUM_GREY,
-  COLOR_PINK,
-  COLOR_PLACEHOLDER
-} from '../../components/variables/variables';
 import MultilineInput from '../../components/multiline-input/multiline-input';
 import Avatar from '../../components/avatar/avatar';
 
@@ -22,6 +15,7 @@ import styles from './single-issue__comment-input.styles';
 
 import type {IssueComment} from '../../flow/CustomFields';
 import type {User} from '../../flow/User';
+import type {UITheme} from '../../flow/Theme';
 
 type Props = {
   initialText: string,
@@ -35,7 +29,8 @@ type Props = {
   isSecured: boolean,
   canAttach: boolean,
   onAttach: () => any,
-  onCancel: () => any
+  onCancel: () => any,
+  uiTheme: UITheme
 };
 
 type State = {
@@ -194,7 +189,7 @@ export default class SingleIssueCommentInput extends PureComponent<Props, State>
   }
 
   renderVisibility() {
-    const {editingComment, onEditCommentVisibility, isSecured} = this.props;
+    const {editingComment, onEditCommentVisibility, isSecured, uiTheme} = this.props;
 
     return (
       <TouchableOpacity
@@ -207,18 +202,19 @@ export default class SingleIssueCommentInput extends PureComponent<Props, State>
           <IconLock
             style={styles.visibilityChangeButtonLockIcon}
             size={16}
-            color={COLOR_ICON_LIGHT_BLUE}
+            color={uiTheme.colors.$iconAccent}
           />
         )}
         <Text style={styles.visibilityChangeButtonText}>
           {isSecured ? IssueVisibility.getVisibilityPresentation(editingComment.visibility) : 'Visible to issue readers'}
         </Text>
-        <IconAngleDown size={20} color={COLOR_ICON_MEDIUM_GREY}/>
+        <IconAngleDown size={20} color={uiTheme.colors.$icon}/>
       </TouchableOpacity>
     );
   }
 
   renderSendButton() {
+    const {uiTheme} = this.props;
     const {isSaving, commentText} = this.state;
 
     return (
@@ -229,16 +225,16 @@ export default class SingleIssueCommentInput extends PureComponent<Props, State>
         {!this.state.isSaving && (
           <IconArrowUp
             size={22}
-            color={COLOR_FONT_ON_BLACK}
+            color={uiTheme.colors.$background}
           />
         )}
-        {this.state.isSaving && <ActivityIndicator color={COLOR_FONT_ON_BLACK}/>}
+        {this.state.isSaving && <ActivityIndicator color={uiTheme.colors.$background}/>}
       </TouchableOpacity>
     );
   }
 
   render() {
-    const {editingComment, onCancel = () => null} = this.props;
+    const {editingComment, onCancel = () => null, uiTheme} = this.props;
     const {isSaving, commentText, commentCaret, showSuggestions} = this.state;
 
     const isEditComment: boolean = !!editingComment;
@@ -259,7 +255,7 @@ export default class SingleIssueCommentInput extends PureComponent<Props, State>
               hitSlop={HIT_SLOP}
               onPress={onCancel}
             >
-              <IconClose size={21} color={COLOR_PINK}/>
+              <IconClose size={21} color={uiTheme.colors.$link}/>
             </TouchableOpacity>
           )}
 
@@ -270,7 +266,7 @@ export default class SingleIssueCommentInput extends PureComponent<Props, State>
               hitSlop={HIT_SLOP}
               onPress={this.updateComment}
             >
-              <IconCheck size={21} color={COLOR_PINK}/>
+              <IconCheck size={21} color={uiTheme.colors.$link}/>
             </TouchableOpacity>
           )}
 
@@ -288,7 +284,7 @@ export default class SingleIssueCommentInput extends PureComponent<Props, State>
               editable={!isSaving}
               underlineColorAndroid="transparent"
               keyboardAppearance="dark"
-              placeholderTextColor={COLOR_PLACEHOLDER}
+              placeholderTextColor={uiTheme.colors.$icon}
               autoCapitalize="sentences"
               onSelectionChange={(event) => {
                 const caret = event.nativeEvent.selection.start;

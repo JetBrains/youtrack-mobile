@@ -46,7 +46,7 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
     this.switchCommonProps = {
       width: 40,
       circleColorActive: props.uiTheme.colors.$link,
-      circleColorInactive: props.uiTheme.colors.$border,
+      circleColorInactive: props.uiTheme.colors.$icon,
       backgroundActive: props.uiTheme.colors.$linkLight,
       backgroundInactive: props.uiTheme.colors.$disabled
     };
@@ -205,7 +205,7 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
           onPress={this.toggleSettingsDialogVisibility}
         >
           <Text style={styles.settingsButtonText}>{this.getTitle()}</Text>
-          <IconAngleDown size={19} color={this.props.uiTheme.colors.$border}/>
+          <IconAngleDown size={19} color={this.props.uiTheme.colors.$icon}/>
         </TouchableOpacity>
 
         {this.state.visible && this.renderSettingsDialog()}

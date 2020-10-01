@@ -40,13 +40,9 @@ import {SkeletonIssueActivities} from '../../../components/skeleton/skeleton';
 import type {WorkTimeSettings} from '../../../flow/WorkTimeSettings';
 import type {ActivityItem, IssueActivity} from '../../../flow/Activity';
 
-import {
-  COLOR_FONT_GRAY,
-  COLOR_ICON_GREY,
-  COLOR_ICON_LIGHT_BLUE,
-  UNIT
-} from '../../../components/variables/variables';
 import Diff from '../../../components/diff/diff';
+
+import {UNIT} from '../../../components/variables/variables';
 import {HIT_SLOP} from '../../../components/common-styles/button';
 
 import type IssuePermissions from '../../../components/issue-permissions/issue-permissions';
@@ -182,7 +178,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
     );
   }
 
-  _renderLinkChange(activity: IssueActivity) {
+  _renderLinkChange(activity: IssueActivity, uiTheme: UITheme) {
     const linkedIssues = [].concat(activity.added).concat(activity.removed);
     return (
       <TouchableOpacity key={activity.id}>
@@ -202,14 +198,14 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
                 onPress={() => Router.SingleIssue({issueId: readableIssueId})}>
                 <Text style={[
                   styles.linkText,
-                  linkedIssue.resolved && {color: COLOR_FONT_GRAY},
+                  linkedIssue.resolved && {color: uiTheme.colors.$icon},
                   linkedIssue.resolved && styles.activityRemoved
                 ]}>
                   {readableIssueId}
                 </Text>
                 <Text style={[
                   styles.linkText,
-                  linkedIssue.resolved && {color: COLOR_FONT_GRAY},
+                  linkedIssue.resolved && {color: uiTheme.colors.$icon},
                 ]}>
                   {` ${linkedIssue.summary}`}
                 </Text>
@@ -251,7 +247,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
             usage.trackEvent(CATEGORY_NAME, type === 'image' ? 'Showing image' : 'Open attachment by URL')
           )}
         />}
-        {addedAndLaterRemoved.length > 0 && addedAndLaterRemoved.map(it => <Text key={it.id}>{it.name}</Text>)}
+        {addedAndLaterRemoved.length > 0 && addedAndLaterRemoved.map(it => <Text style={styles.activityAdded} key={it.id}>{it.name}</Text>)}
 
         {removed.length > 0 &&
         <Text style={hasAddedAttachments && {marginTop: UNIT / 2}}>{activity.removed.map((it, index) =>
@@ -321,7 +317,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
     return activity.added;
   }
 
-  renderCommentActions(activityGroup: Object) {
+  renderCommentActions(activityGroup: Object, uiTheme: UITheme) {
     const comment = this._firstActivityChange(activityGroup.comment);
     if (!comment) {
       return null;
@@ -347,14 +343,14 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
           disabled={disabled}
           onPress={() => this.props.onShowCommentActions(comment)}>
           {isIOSPlatform()
-            ? <IconMoreOptions size={24} color={COLOR_ICON_GREY}/>
-            : <IconDrag size={22} color={COLOR_ICON_GREY}/>}
+            ? <IconMoreOptions size={24} color={uiTheme.colors.$icon}/>
+            : <IconDrag size={22} color={uiTheme.colors.$icon}/>}
         </TouchableOpacity>
       </View>;
     }
   }
 
-  renderCommentActivity(activityGroup: Object) {
+  renderCommentActivity(activityGroup: Object, uiTheme: UITheme) {
     const comment = this._firstActivityChange(activityGroup.comment);
     if (!comment) {
       return null;
@@ -386,7 +382,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
           <CommentVisibility
             style={styles.visibility}
             visibility={IssueVisibility.getVisibilityPresentation(comment.visibility)}
-            color={COLOR_ICON_LIGHT_BLUE}
+            color={uiTheme.colors.$iconAccent}
           />}
 
         </View>
@@ -426,7 +422,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
     );
   }
 
-  _renderActivityByCategory = (activity) => {
+  _renderActivityByCategory = (activity, uiTheme: UITheme) => {
     switch (true) {
     case Boolean(
       isActivityCategory.tag(activity) ||
@@ -438,14 +434,14 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
     ):
       return this.renderTextValueChange(activity, this.props.issueFields);
     case Boolean(isActivityCategory.link(activity)):
-      return this._renderLinkChange(activity);
+      return this._renderLinkChange(activity, uiTheme);
     case Boolean(isActivityCategory.attachment(activity)):
       return this._renderAttachmentChange(activity);
     }
     return null;
   };
 
-  _renderHistoryAndRelatedChanges(activityGroup: Object, isRelatedChange: boolean) {
+  _renderHistoryAndRelatedChanges(activityGroup: Object, isRelatedChange: boolean, uiTheme: UITheme) {
     if (activityGroup.events.length > 0) {
       return (
         <View style={isRelatedChange ? styles.activityRelatedChanges : styles.activityHistoryChanges}>
@@ -454,7 +450,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
 
           {activityGroup.events.map((event) => (
             <View key={event.id} style={styles.activityChange}>
-              {this._renderActivityByCategory(event)}
+              {this._renderActivityByCategory(event, uiTheme)}
             </View>
           ))}
         </View>
@@ -463,7 +459,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
   }
 
   render() {
-    const {activities} = this.props;
+    const {activities, uiTheme} = this.props;
 
     if (!activities) {
       return <SkeletonIssueActivities/>;
@@ -489,13 +485,13 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
                   {this._renderUserAvatar(activityGroup, !!activityGroup.comment)}
 
                   <View style={styles.activityItem}>
-                    {activityGroup.comment && this.renderCommentActivity(activityGroup)}
+                    {activityGroup.comment && this.renderCommentActivity(activityGroup, uiTheme)}
 
                     {activityGroup.work && this._renderWorkActivity(activityGroup)}
 
-                    {this._renderHistoryAndRelatedChanges(activityGroup, !!activityGroup.comment || !!activityGroup.work)}
+                    {this._renderHistoryAndRelatedChanges(activityGroup, !!activityGroup.comment || !!activityGroup.work, uiTheme)}
 
-                    {activityGroup.comment && this.renderCommentActions(activityGroup)}
+                    {activityGroup.comment && this.renderCommentActions(activityGroup, uiTheme)}
                   </View>
 
                 </View>

@@ -216,7 +216,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     return addOrEditComment(comment);
   };
 
-  renderEditCommentInput(focus: boolean) {
+  renderEditCommentInput(focus: boolean, uiTheme: UITheme) {
     const {
       commentText,
       setCommentText,
@@ -251,6 +251,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
         onAttach={() => attachOrTakeImage(this.context.actionSheet())}
 
         onCancel={stopSubmittingComment}
+        uiTheme={uiTheme}
       />
 
       <KeyboardSpacerIOS top={98}/>
@@ -313,7 +314,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
               </ScrollView>
 
-              {Boolean(this.canAddComment()) && this.renderEditCommentInput(false)}
+              {Boolean(this.canAddComment()) && this.renderEditCommentInput(false, theme.uiTheme)}
             </View>
           );
         }}

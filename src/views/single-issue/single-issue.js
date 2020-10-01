@@ -360,7 +360,7 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
       return (
         <Header
           style={{paddingLeft: UNIT * 2, paddingRight: UNIT * 2}}
-          leftButton={<IconClose size={21} color={isSavingEditedIssue ? uiTheme.colors.$link : uiTheme.colors.$textSecondary}/>}
+          leftButton={<IconClose size={21} color={isSavingEditedIssue ? uiTheme.colors.$textSecondary : uiTheme.colors.$link}/>}
           onBack={stopEditingIssue}
           rightButton={saveButton}
           onRightButtonClick={canSave ? saveIssueSummaryAndDescriptionChange : () => {}}

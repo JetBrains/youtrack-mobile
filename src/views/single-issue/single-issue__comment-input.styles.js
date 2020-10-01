@@ -123,6 +123,6 @@ export default EStyleSheet.create({
   visibilityChangeButtonText: {
     ...secondaryText,
     marginRight: UNIT,
-    color: '$textSecondary'
+    color: '$icon'
   }
 });

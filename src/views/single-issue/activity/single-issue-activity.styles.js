@@ -97,8 +97,12 @@ export default EStyleSheet.create({
     textAlign: 'center',
     color: '$text'
   },
+  activityAdded: {
+    color: '$icon'
+  },
   activityRemoved: {
-    textDecorationLine: 'line-through'
+    textDecorationLine: 'line-through',
+    color: '$icon'
   },
   activityCommentActions: {
     flexDirection: 'row',
@@ -118,8 +122,7 @@ export default EStyleSheet.create({
   },
   settingsButtonText: {
     ...secondaryText,
-    fontWeight: '500',
-    color: '$border'
+    color: '$icon'
   },
   settingsSwitchDisabled: {
     opacity: 0.4
@@ -158,7 +161,7 @@ export default EStyleSheet.create({
     paddingTop: UNIT,
     paddingBottom: UNIT * 3,
     borderTopWidth: 0.7,
-    borderColor: '$border',
+    borderColor: '$icon',
     backgroundColor: '$background'
   },
   settingsTitle: {
