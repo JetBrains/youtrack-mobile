@@ -17,9 +17,10 @@ export const SKELETON_HEIGHT: number = 20;
 export const SKELETON_SECONDARY_HEIGHT: number = 14;
 export const SKELETON_DEFAULT_BORDER_RADIUS: number = UNIT / 2;
 
+const cv: number = 200;
 export const skeletonPlaceholderDefaultProps = {
-  backgroundColor: 'rgba(0,0,0,0.02)',
-  highlightColor: 'rgba(0,0,0,0.04)'
+  backgroundColor: `rgba(${cv},${cv},${cv},${0.2})`,
+  highlightColor: `rgba(${cv},${cv},${cv},${0.1})`
 };
 
 const defaultSkeletonProps: SkeletonProps = {

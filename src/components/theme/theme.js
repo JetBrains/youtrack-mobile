@@ -21,7 +21,8 @@ export const buildStyles = (mode: string, uiTheme: UITheme) => {
     $theme: mode,
     $link: uiTheme.colors.$link,
     $resolved: uiTheme.colors.$icon,
-    $shadowColor: uiTheme.colors.$icon,
+    $disabled: uiTheme.colors.$disabled,
+    $icon: uiTheme.colors.$icon,
     ...uiTheme.colors
   });
 };
