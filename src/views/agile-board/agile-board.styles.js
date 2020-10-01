@@ -3,6 +3,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../../components/variables/variables';
 import {headerTitle, mainText} from '../../components/common-styles/typography';
 import {elevationTop} from '../../components/common-styles/shadow';
+import {separatorBorder} from '../../components/common-styles/list';
 
 export default EStyleSheet.create({
   agile: {
@@ -21,14 +22,14 @@ export default EStyleSheet.create({
     color: '$text'
   },
   headerIconDisabled: {
-    tintColor: '$border'
+    tintColor: '$icon'
   },
   boardHeaderContainer: {
     minHeight: UNIT * 5,
     overflow: 'hidden',
     backgroundColor: '$background',
-    borderBottomWidth: 0.5,
-    borderColor: '$textSecondary'
+    ...separatorBorder,
+    borderColor: '$separator'
   },
   loadingMoreIndicator: {
     padding: UNIT * 2

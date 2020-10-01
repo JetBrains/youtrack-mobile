@@ -21,7 +21,6 @@ const dark: UITheme = {
     $linkLight: 'rgba(254, 0, 130, 0.3)',
 
     $disabled: '#5d5d5d',
-    $border: '#888888',
 
     $icon: '#a5a5a5',
     $iconAccent: '#b8d1e5',

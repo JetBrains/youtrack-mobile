@@ -203,7 +203,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
           <Text style={styles.buttonText}>
             {isSecured ? this.getVisibilityPresentation(visibility) : 'Visible to All Users'}
           </Text>
-          <IconAngleDown size={20} color={this.props.uiTheme.colors.$textSecondary}/>
+          <IconAngleDown size={20} color={this.props.uiTheme.colors.$icon}/>
         </TouchableOpacity>
       </View>
     );

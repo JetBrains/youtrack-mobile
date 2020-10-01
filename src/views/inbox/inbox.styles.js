@@ -11,7 +11,7 @@ const font = {
 
 const textSecondary = {
   ...font,
-  color: '$border'
+  color: '$icon'
 };
 
 export default EStyleSheet.create({

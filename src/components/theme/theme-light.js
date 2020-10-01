@@ -21,14 +21,13 @@ const light: UITheme = {
     $linkLight: 'rgba(254, 0, 130, 0.3)',
 
     $disabled: '#DFE5EB',
-    $border: '#888888',
 
     $icon: '#737577',
     $iconAccent: '#b8d1e5',
 
     $mask: '#00000057',
 
-    $separator: '#DFE5EB'
+    $separator: '#dfe5eb'
   },
 };
 

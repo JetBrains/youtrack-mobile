@@ -17,7 +17,7 @@ export default EStyleSheet.create({
   },
   hintText: {
     ...loginStylesForm.hintText,
-    color: '$border'
+    color: '$icon'
   },
   inputUser: {
     ...rowFormStyles.input,

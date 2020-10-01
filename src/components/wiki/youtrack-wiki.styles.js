@@ -69,7 +69,7 @@ export default EStyleSheet.create({
   },
   codeLanguage: {
     fontSize: SECONDARY_FONT_SIZE,
-    color: '$border'
+    color: '$icon'
   },
   inlineCode: {
     ...monospace,

@@ -15,7 +15,7 @@ export default EStyleSheet.create({
     color: '$icon'
   },
   title: {
-    color: '$border'
+    color: '$icon'
   },
   toggle: {
     color: '$link'

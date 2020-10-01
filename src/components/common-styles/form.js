@@ -45,7 +45,7 @@ export const rowFormStyles = {
     color: '$textButton'
   },
   buttonTextDisabled: {
-    color: '$border'
+    color: '$icon'
   },
   title: {
     fontSize: 18,
@@ -54,7 +54,7 @@ export const rowFormStyles = {
   },
   hintText: {
     textAlign: 'center',
-    color: '$border',
+    color: '$icon',
     fontSize: 12
   },
   errorText: {

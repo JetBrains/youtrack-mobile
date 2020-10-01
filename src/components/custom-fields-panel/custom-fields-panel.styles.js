@@ -67,7 +67,7 @@ export const calendarTheme = (uiTheme: UITheme) => {
   const uiThemeColors:UIThemeColors = uiTheme.colors;
   return {
     calendarBackground: uiThemeColors.$background,
-    textSectionTitleColor: uiThemeColors.$border,
+    textSectionTitleColor: uiThemeColors.$icon,
     selectedDayBackgroundColor: uiThemeColors.$link,
     selectedDayTextColor: uiThemeColors.$background,
     todayTextColor: uiThemeColors.$link,

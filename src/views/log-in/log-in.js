@@ -168,7 +168,7 @@ export class LogIn extends Component<Props, State> {
                     testID="login-input"
                     style={styles.inputUser}
                     placeholder="Username or email"
-                    placeholderTextColor={uiThemeColors.$border}
+                    placeholderTextColor={uiThemeColors.$icon}
                     returnKeyType="next"
                     underlineColorAndroid="transparent"
                     onSubmitEditing={() => this.focusOnPassword()}
@@ -181,7 +181,7 @@ export class LogIn extends Component<Props, State> {
                     testID="password-input"
                     style={styles.inputPass}
                     placeholder="Password"
-                    placeholderTextColor={uiThemeColors.$border}
+                    placeholderTextColor={uiThemeColors.$icon}
                     returnKeyType="done"
                     underlineColorAndroid="transparent"
                     value={this.state.password}

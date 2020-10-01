@@ -75,7 +75,7 @@ exports[`<BoardRow/> Render should render a snapshot 1`] = `
     style={
       Object {
         "borderBottomWidth": 0.5,
-        "borderColor": "#CCC",
+        "borderColor": "#dfe5eb",
         "flexDirection": "row",
       }
     }
@@ -102,7 +102,6 @@ exports[`<BoardRow/> Render should render a snapshot 1`] = `
           "barStyle": "dark-content",
           "colors": Object {
             "$background": "#FFF",
-            "$border": "#888888",
             "$boxBackground": "rgba(0, 0, 0, 0.04)",
             "$disabled": "#DFE5EB",
             "$error": "#dd0000",
@@ -111,7 +110,7 @@ exports[`<BoardRow/> Render should render a snapshot 1`] = `
             "$link": "#FE0082",
             "$linkLight": "rgba(254, 0, 130, 0.3)",
             "$mask": "#00000057",
-            "$separator": "#DFE5EB",
+            "$separator": "#dfe5eb",
             "$text": "#000",
             "$textButton": "#FFF",
             "$textSecondary": "#CCC",

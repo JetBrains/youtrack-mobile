@@ -51,7 +51,7 @@ export function renderSelector(params: {
         {((params.showLoader && !params.isLoading) || (!params.showLoader)) && <IconAngleDown
           size={17}
           style={styles.selectorIcon}
-          color={params.isLoading ? params.uiTheme.colors.$border : params.uiTheme.colors.$text}
+          color={params.isLoading ? params.uiTheme.colors.$icon : params.uiTheme.colors.$text}
         />}
         {params.showLoader && params.isLoading && <ActivityIndicator color={params.uiTheme.colors.$link}/>}
       </TouchableOpacity>
@@ -80,7 +80,7 @@ const styles = EStyleSheet.create({
     color: '$text'
   },
   selectorButtonTextDisabled: {
-    color: '$border'
+    color: '$icon'
   },
   selectorIcon: {
     lineHeight: 20

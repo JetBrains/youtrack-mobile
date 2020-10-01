@@ -21,7 +21,6 @@ export type UIThemeColors = {|
   $linkLight: string,
 
   $disabled: string,
-  $border: string,
 
   $icon: string,
   $iconAccent: string,

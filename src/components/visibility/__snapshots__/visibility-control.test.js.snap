@@ -37,7 +37,7 @@ exports[`<VisibiltyControl/> Render should match a snapshot 1`] = `
         Visible to All Users
       </Text>
       <IconAngleDown
-        color="#CCC"
+        color="#737577"
         size={20}
       />
     </TouchableOpacity>

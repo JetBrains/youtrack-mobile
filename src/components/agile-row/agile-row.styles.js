@@ -6,12 +6,13 @@ import {UNIT} from '../variables/variables';
 import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../agile-column/agile-column';
 import {issueIdResolved} from '../common-styles/issue';
 import {headerTitle, MAIN_FONT_SIZE, mainText} from '../common-styles/typography';
+import {separatorBorder} from '../common-styles/list';
 
 const ROW_TEXT_LINE_HEIGHT = 24;
 
 export default EStyleSheet.create({
   issueResolved: {
-    color: '$border'
+    color: '$icon'
   },
   issueIdResolved: issueIdResolved,
 
@@ -60,8 +61,8 @@ export default EStyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    borderBottomWidth: 0.5,
-    borderColor: '$textSecondary'
+    ...separatorBorder,
+    borderColor: '$separator'
   },
   column: {
     flex: 1

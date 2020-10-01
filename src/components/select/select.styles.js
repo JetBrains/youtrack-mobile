@@ -37,7 +37,7 @@ export default EStyleSheet.create({
   },
   rowSeparator: {
     height: SELECT_ITEM_SEPARATOR_HEIGHT,
-    borderColor: '$border',
+    borderColor: '$icon',
     borderBottomWidth: 0.3,
     marginLeft: UNIT * 2
   },

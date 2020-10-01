@@ -21,6 +21,6 @@ export default EStyleSheet.create({
     alignItems: 'flex-end',
   },
   timestamp: {
-    color: '$border',
+    color: '$icon',
   },
 });
