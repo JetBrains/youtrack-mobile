@@ -4,7 +4,8 @@ import type {UITheme} from '../../flow/Theme';
 
 const dark: UITheme = {
   dark: true,
-  name: 'dark',
+  mode: 'ytdark',
+  name: 'Dark',
   barStyle: 'light-content',
 
   colors: {

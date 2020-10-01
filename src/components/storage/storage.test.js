@@ -62,7 +62,8 @@ describe('Storage', () => {
       'YT_CURRENT_APP_VERSION',
       'YT_ISSUE_ACTIVITIES_ENABLED_TYPES',
       'YT_USER_PERMISSIONS',
-      'YT_AGILE_DEFAULT_BOARD'
+      'YT_AGILE_DEFAULT_BOARD',
+      'YT_THEME_MODE',
     ]);
   });
 

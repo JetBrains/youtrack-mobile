@@ -11,7 +11,7 @@ describe('<BoardRow/>', () => {
   let wrapper;
   let issueMock;
 
-  beforeAll(() => buildStyles());
+  beforeAll(() => buildStyles(DEFAULT_THEME.mode, DEFAULT_THEME));
 
   beforeEach(() => {
     issueMock = mocks.createIssueMock();

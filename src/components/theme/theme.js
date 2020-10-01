@@ -9,26 +9,19 @@ import darkTheme from './theme-dark';
 import type {UITheme} from '../../flow/Theme';
 
 export const DEFAULT_THEME: UITheme = lightTheme;
-export const DEFAULT_MODE: string = lightTheme.name;
+export const getSystemThemeMode = () => Appearance.getColorScheme();
+export const themes: Array<UITheme> = [lightTheme, darkTheme];
 
-export const getSystemMode = (): string => Appearance.getColorScheme() || DEFAULT_MODE;
-export const DEFAULT_SYSTEM_MODE: string = getSystemMode();
-
-export const getUITheme = (themeName: string): UITheme => {
-  if ([lightTheme.name, darkTheme.name].includes(themeName)) {
-    return themeName === DEFAULT_MODE ? lightTheme : darkTheme;
-  }
-  return DEFAULT_THEME;
+export const getUITheme = (mode: string): UITheme => {
+  return lightTheme.mode.indexOf(mode) !== -1 ? lightTheme : darkTheme;
 };
 
-export const buildStyles = (mode: string = DEFAULT_SYSTEM_MODE, uiTheme: UITheme = DEFAULT_THEME) => {
+export const buildStyles = (mode: string, uiTheme: UITheme) => {
   EStyleSheet.build({
     $theme: mode,
+    $link: uiTheme.colors.$link,
     $resolved: uiTheme.colors.$icon,
     $shadowColor: uiTheme.colors.$icon,
-    $link: uiTheme.colors.$link,
-    $iconAccent: uiTheme.colors.$iconAccent,
-    $background: uiTheme.colors.$background,
     ...uiTheme.colors
   });
 };

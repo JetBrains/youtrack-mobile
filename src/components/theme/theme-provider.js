@@ -5,38 +5,42 @@ import {StyleSheet} from 'react-native';
 
 import {Appearance, AppearanceProvider} from 'react-native-appearance';
 
+import {flushStoragePart, getStorageState} from '../storage/storage';
+
 import {ThemeContext} from './theme-context';
-import {buildStyles, getSystemMode, getUITheme} from './theme';
+import {buildStyles, getSystemThemeMode, getUITheme, themes} from './theme';
 
 import type {UITheme} from '../../flow/Theme';
 
 type State = {
-  mode: string,
+  mode: ?string,
   uiTheme: UITheme
 };
 
 type Props = {
-  children: any
+  children: any,
+  mode: ?string
 };
 
 class ManageThemeProvider extends PureComponent<Props, State> {
   _isMounted = false;
+  subscription = () => {};
 
-  constructor() {
-    super();
-    const systemMode: string = getSystemMode();
+  constructor(props: Props) {
+    super(props);
+    const _mode = props.mode || getSystemThemeMode();
     this.state = {
-      mode: systemMode,
-      uiTheme: getUITheme(systemMode)
+      mode: _mode,
+      uiTheme: getUITheme(_mode)
     };
   }
-
-  subscription = () => {};
 
   componentDidMount = () => {
     this._isMounted = true;
     this.subscription = Appearance.addChangeListener(
-      (settings: { colorScheme: string }) => this.setMode(settings.colorScheme)
+      (settings: { colorScheme: string }) => {
+        this.setMode(settings.colorScheme);
+      }
     );
   };
 
@@ -45,14 +49,44 @@ class ManageThemeProvider extends PureComponent<Props, State> {
     this._isMounted = false;
   }
 
-  setMode = (colorScheme) => {
-    if (this._isMounted) {
-      const uiTheme = getUITheme(colorScheme);
-      buildStyles(colorScheme, uiTheme);
+  getMode() {
 
+  }
+
+  buildStyles(mode: ?string): UITheme {
+    const _mode = mode || getSystemThemeMode();
+    const uiTheme = getUITheme(_mode);
+    buildStyles(_mode, uiTheme);
+    return uiTheme;
+  }
+
+  isCustomMode(mode: ?string): boolean {
+    return themes.some((theme: UITheme) => theme.mode === mode);
+  }
+
+  shouldChangeMode(mode: string = ''): boolean {
+    const storedThemeName: ?string = getStorageState().themeMode;
+    const customMode: boolean = this.isCustomMode(mode);
+    return customMode || !storedThemeName || (!customMode && !!storedThemeName);
+  }
+
+  setMode = async (mode: ?string, reset: boolean = false) => {
+    if (this._isMounted) {
+      const cm = this.isCustomMode(mode);
+      const storedMode = getStorageState().themeMode;
+
+      let newMode = null;
+      if (cm === true) {
+        newMode = mode;
+      } else if (reset) {
+        newMode = null;
+      } else if (storedMode) {
+        newMode = storedMode;
+      }
+      await flushStoragePart({themeMode: newMode});
       this.setState({
-        mode: colorScheme,
-        uiTheme: uiTheme
+        mode,
+        uiTheme: this.buildStyles(newMode)
       });
     }
   };
@@ -78,9 +112,9 @@ class ManageThemeProvider extends PureComponent<Props, State> {
 
 }
 
-const ThemeProvider = (props: {children: any}) => (
+const ThemeProvider = (props: {children: any, mode: string}) => (
   <AppearanceProvider>
-    <ManageThemeProvider>{props.children}</ManageThemeProvider>
+    <ManageThemeProvider mode={props.mode}>{props.children}</ManageThemeProvider>
   </AppearanceProvider>
 );
 

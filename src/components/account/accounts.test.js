@@ -16,7 +16,7 @@ describe('<Accounts/>', () => {
   let onLogOutMock;
   let accountsMock;
 
-  beforeAll(() => buildStyles());
+  beforeAll(() => buildStyles(DEFAULT_THEME.mode, DEFAULT_THEME));
 
   beforeEach(() => {
     onAddAccountMock = jest.fn();

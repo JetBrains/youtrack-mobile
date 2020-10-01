@@ -117,7 +117,8 @@ exports[`<BoardRow/> Render should render a snapshot 1`] = `
             "$textSecondary": "#CCC",
           },
           "dark": false,
-          "name": "light",
+          "mode": "ytlight",
+          "name": "Light",
         }
       }
     />

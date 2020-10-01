@@ -4,12 +4,12 @@ import toJson from 'enzyme-to-json';
 
 import AgileCard from './agile-card';
 import Mocks from '../../../test/mocks';
-import {buildStyles} from '../theme/theme';
+import {buildStyles, DEFAULT_THEME} from '../theme/theme';
 
 describe('<AgileCard/>', () => {
   let issueMock;
 
-  beforeAll(() => buildStyles());
+  beforeAll(() => buildStyles(DEFAULT_THEME.mode, DEFAULT_THEME));
 
   beforeEach(() => {
     Mocks.setStorage({});

@@ -1,8 +1,9 @@
 /* @flow */
 
 export type Theme = {
-  mode: string,
-  uiTheme: UITheme
+  mode: ?string,
+  uiTheme: UITheme,
+  setMode: (themeName: string, reset: boolean) => any
 }
 
 export type BarStyle = 'light-content' | 'dark-content';
@@ -33,6 +34,7 @@ export type UIThemeColors = {|
 
 export type UITheme = {
   dark: boolean,
+  mode: string,
   name: string,
   barStyle: BarStyle,
 

@@ -14,6 +14,7 @@ import type {Board, Sprint} from '../../flow/Agile';
 import type {PermissionCacheItem} from '../../flow/Permission';
 
 const OTHER_ACCOUNTS_KEY = 'YT_OTHER_ACCOUNTS_STORAGE_KEY';
+export const THEME_MODE_KEY = 'YT_THEME_MODE';
 
 export type StorageState = {|
   projectId: ?string,
@@ -35,7 +36,8 @@ export type StorageState = {|
   lastRoute: ?('IssueList' | 'Inbox' | 'AgileBoard'),
   currentAppVersion: ?string,
   issueActivitiesEnabledTypes: ?Array<Object>,
-  permissions: ?Array<PermissionCacheItem>
+  permissions: ?Array<PermissionCacheItem>,
+  themeMode: ?string
 |}
 
 type StorageStateKeys = $Exact<$ObjMap<StorageState, () => string>>;
@@ -60,7 +62,8 @@ const storageKeys: StorageStateKeys = {
   lastRoute: 'YT_LAST_ROUTE',
   currentAppVersion: 'YT_CURRENT_APP_VERSION',
   issueActivitiesEnabledTypes: 'YT_ISSUE_ACTIVITIES_ENABLED_TYPES',
-  permissions: 'YT_USER_PERMISSIONS'
+  permissions: 'YT_USER_PERMISSIONS',
+  themeMode: THEME_MODE_KEY
 };
 
 let storageState: ?StorageState = null;
@@ -87,7 +90,8 @@ export const initialState: StorageState = Object.freeze({
   currentAppVersion: null,
   issueActivitiesEnabledTypes: null,
   permissions: null,
-  agileDefaultBoard: null
+  agileDefaultBoard: null,
+  themeMode: null
 });
 
 function cleanAndLogState(message, state) {

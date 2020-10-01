@@ -12,12 +12,16 @@ import * as AppActions from '../../actions/app-actions';
 import {AppVersion} from '../../util/util';
 
 import {ThemeContext} from '../../components/theme/theme-context';
+import {getSystemThemeMode, themes} from '../../components/theme/theme';
+
+import {IconCheck} from '../../components/icon/icon';
+import {getStorageState} from '../../components/storage/storage';
 
 import {HIT_SLOP} from '../../components/common-styles/button';
 import styles from './settings.styles';
 
 import type {StorageState} from '../../components/storage/storage';
-import type {Theme} from '../../flow/Theme';
+import type {Theme, UITheme} from '../../flow/Theme';
 
 type Props = {
   onLogOut: () => any,
@@ -34,10 +38,37 @@ const CATEGORY_NAME = 'Settings';
 
 
 class Settings extends Component<Props, void> {
-
   constructor(props) {
     super(props);
     usage.trackScreenView(CATEGORY_NAME);
+  }
+
+  getUserThemeMode(): string {
+    return getStorageState().themeMode || '';
+  }
+
+  renderThemeCheckbox(currentTheme: Theme, uiTheme: Object): any {
+    const userThemeMode: ?string = this.getUserThemeMode();
+    const mode: string = uiTheme.mode;
+    const isChecked = (!userThemeMode && uiTheme.system) || (!uiTheme.system && !!userThemeMode && userThemeMode.indexOf(mode) !== -1);
+
+    return (
+      <TouchableOpacity
+        key={mode}
+        hitSlop={HIT_SLOP}
+        onPress={async () => {
+          currentTheme.setMode(uiTheme.mode, !!uiTheme.system);
+        }}
+      >
+        <View style={styles.settingsItem}>
+          <Text style={styles.settingsItemText}>
+            {`${uiTheme.name} theme`}
+            {uiTheme.system && <Text style={styles.settingsItemTextSecondary}>{` (${uiTheme.mode})`}</Text>}
+          </Text>
+          {isChecked && <IconCheck size={20} color={currentTheme.uiTheme.colors.$link}/>}
+        </View>
+      </TouchableOpacity>
+    );
   }
 
   render() {
@@ -55,6 +86,12 @@ class Settings extends Component<Props, void> {
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
+          const systemTheme: Object = Object.assign(
+            {},
+            {name: 'System', mode: getSystemThemeMode(), system: true}
+          );
+          const uiTheme: UITheme = theme.uiTheme;
+
           return (
             <View
               testID="settings"
@@ -72,15 +109,17 @@ class Settings extends Component<Props, void> {
                   openDebugView={openDebugView}
                   otherAccounts={otherAccounts}
                   isChangingAccount={isChangingAccount}
-                  uiTheme={theme.uiTheme}
+                  uiTheme={uiTheme}
                 />
 
                 <View style={styles.settingsOther}>
+                  {themes.concat(systemTheme).map((it: Object) => this.renderThemeCheckbox(theme, it))}
 
                   <TouchableOpacity
+                    style={styles.settingsTitle}
                     hitSlop={HIT_SLOP}
                     onPress={openDebugView}>
-                    <Text style={styles.settingsFooterLink}>Show logs</Text>
+                    <Text style={styles.settingsFooterLink}>Share logs</Text>
                   </TouchableOpacity>
                 </View>
 

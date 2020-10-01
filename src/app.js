@@ -1,23 +1,14 @@
 /* @flow */
 
 import React, {Component} from 'react';
-import {UIManager, StatusBar, Platform} from 'react-native';
-import SafeAreaView from 'react-native-safe-area-view';
+import {UIManager} from 'react-native';
 
 
 import PropTypes from 'prop-types';
 import store from './store';
 import {Provider} from 'react-redux';
 
-import ThemeProvider from './components/theme/theme-provider';
-import {ThemeContext} from './components/theme/theme-context';
-
 import Router from './components/router/router';
-import DebugView from './components/debug-view/debug-view';
-import FeaturesView from './components/feature/features-view';
-import ScanView from './components/scan/scan-view';
-import UserAgreement from './components/user-agreement/user-agreement';
-import {setNotificationComponent} from './components/notification/notification';
 
 import Home from './views/home/home';
 import EnterServer from './views/enter-server/enter-server';
@@ -32,19 +23,15 @@ import Inbox from './views/inbox/inbox';
 import WikiPage from './views/wiki-page/wiki-page';
 import Settings from './views/settings/settings';
 
-import ErrorBoundary from './components/error-boundary/error-boundary';
 import {setAccount, onNavigateBack} from './actions/app-actions';
 // $FlowFixMe: cannot typecheck easy-toast module because of mistakes there
-import Toast from 'react-native-easy-toast';
 
 import ActionSheet from '@expo/react-native-action-sheet';
 import {routeMap, rootRoutesList} from './app-routes';
 import log from './components/log/log';
 import {isAndroidPlatform} from './util/util';
-import Navigation from './navigation';
-import {buildStyles, getSystemMode, getUITheme} from './components/theme/theme';
 
-import type {Theme} from './flow/Theme';
+import AppProvider from './app-provider';
 
 if (UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -67,9 +54,6 @@ class YouTrackMobile extends Component<void, void> {
 
   constructor() {
     super();
-
-    const systemMode = getSystemMode();
-    buildStyles(systemMode, getUITheme(systemMode));
 
     this.registerRoutes();
     YouTrackMobile.init(YouTrackMobile.getNotificationIssueId);
@@ -176,41 +160,7 @@ class YouTrackMobile extends Component<void, void> {
     return (
       <Provider store={store}>
         <ActionSheet ref={this.actionSheetRef}>
-          <ThemeProvider>
-            <ThemeContext.Consumer>
-              {
-                ((theme: Theme) => {
-                  const uiTheme = theme.uiTheme;
-                  const backgroundColor = uiTheme.colors.$background;
-
-                  return (
-                    <SafeAreaView
-                      style={{
-                        flex: 1,
-                        backgroundColor: backgroundColor,
-                        marginTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight
-                      }}>
-                      <StatusBar
-                        backgroundColor={backgroundColor}
-                        barStyle={uiTheme.barStyle}
-                        translucent={true}
-                      />
-                      <ErrorBoundary>
-                        <Navigation/>
-                        <UserAgreement/>
-                        <DebugView/>
-                        <FeaturesView/>
-                        <ScanView/>
-                      </ErrorBoundary>
-
-                      <Toast ref={toast => toast ? setNotificationComponent(toast) : null}/>
-
-                    </SafeAreaView>
-                  );
-                })
-              }
-            </ThemeContext.Consumer>
-          </ThemeProvider>
+          <AppProvider/>
         </ActionSheet>
       </Provider>
     );

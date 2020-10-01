@@ -4,7 +4,7 @@ import {shallow} from 'enzyme';
 import toJson from 'enzyme-to-json';
 
 import Diff from './diff';
-import {buildStyles} from '../theme/theme';
+import {buildStyles, DEFAULT_THEME} from '../theme/theme';
 
 describe('<Diff/>', () => {
 
@@ -12,7 +12,7 @@ describe('<Diff/>', () => {
   let text1;
   let text2;
 
-  beforeAll(() => buildStyles());
+  beforeAll(() => buildStyles(DEFAULT_THEME.mode, DEFAULT_THEME));
 
   beforeEach(() => {
     text1 = 'ABCy';
@@ -25,7 +25,6 @@ describe('<Diff/>', () => {
     });
 
     it('should match a snapshot', () => {
-      // console.log('>>>>>',wrapper.debugger());
       expect(toJson(wrapper)).toMatchSnapshot();
     });
 

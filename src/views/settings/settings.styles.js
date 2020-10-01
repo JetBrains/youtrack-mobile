@@ -5,6 +5,7 @@ import {UNIT} from '../../components/variables/variables';
 
 import {mainText, secondaryText} from '../../components/common-styles/typography';
 import {formStyles} from '../../components/common-styles/form';
+import {separatorBorder} from '../../components/common-styles/list';
 
 
 export default EStyleSheet.create({
@@ -22,9 +23,35 @@ export default EStyleSheet.create({
   },
   settingsOther: {
     flexGrow: 1,
+    flexDirection: 'column',
     paddingLeft: UNIT,
-    paddingRight: UNIT,
-    alignItems: 'center'
+  },
+  settingsTitle: {
+    ...mainText,
+    color: '$text',
+    fontWeight: '500',
+    marginTop: UNIT,
+    marginBottom: UNIT / 2
+  },
+  settingsItem: {
+    flexGrow: 1,
+    flexDirection: 'row',
+    paddingVertical: UNIT,
+    color: '$text',
+    ...separatorBorder,
+    borderColor: '$separator'
+  },
+  settingsItemText: {
+    ...mainText,
+    flexGrow: 1,
+    color: '$text',
+    textTransform: 'capitalize'
+  },
+  settingsItemTextSecondary: {
+    color: '$icon',
+  },
+  settingsCheckbox: {
+    padding: UNIT
   },
   settingsFooter: {
     flexDirection: 'column',
