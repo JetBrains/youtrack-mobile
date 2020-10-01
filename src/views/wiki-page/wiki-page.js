@@ -14,9 +14,13 @@ import Router from '../../components/router/router';
 import LongText from '../../components/wiki/text-renderer';
 import {IconClose} from '../../components/icon/icon';
 
-import {COLOR_PINK, UNIT} from '../../components/variables/variables';
+import {ThemeContext} from '../../components/theme/theme-context';
+
+import {UNIT} from '../../components/variables/variables';
 import {elevation1} from '../../components/common-styles/shadow';
 import styles from './wiki-page.styles';
+
+import type {Theme, UITheme} from '../../flow/Theme';
 
 const CATEGORY_NAME = 'WikiPage';
 
@@ -64,11 +68,11 @@ export default class WikiPage extends PureComponent<Props, State> {
     this.setState({isPinned: nativeEvent.contentOffset.y >= UNIT});
   };
 
-  _renderHeader() {
+  _renderHeader(uiTheme: UITheme) {
     return (
       <Header
         style={this.state.isPinned ? elevation1 : null}
-        leftButton={<IconClose size={21} color={COLOR_PINK}/>}
+        leftButton={<IconClose size={21} color={uiTheme.colors.$link}/>}
         onBack={this.onBack}
       >
         <Text style={styles.headerTitle} selectable={true}>{this.props.title}</Text>
@@ -106,30 +110,37 @@ export default class WikiPage extends PureComponent<Props, State> {
     }
 
     return (
-      <View
-        testID="wikiPage"
-        style={styles.container}
-      >
-        {this._renderHeader()}
+      <ThemeContext.Consumer>
+        {(theme: Theme) => {
+          return (
+            <View
+              testID="wikiPage"
+              style={styles.container}
+            >
 
-        <ScrollView
-          scrollEventThrottle={100}
-          onScroll={(params) => this.onScroll(params.nativeEvent)}
-          style={styles.scrollContent}
-        >
-          <ScrollView
-            horizontal={true}
-            scrollEventThrottle={100}
-            contentContainerStyle={styles.scrollContent}
-          >
-            <View style={styles.wiki}>
-              {wikiText && this._renderWiki()}
-              {Boolean(!wikiText && plainText) && this._renderPlainText()}
+              {this._renderHeader(theme.uiTheme)}
+
+              <ScrollView
+                scrollEventThrottle={100}
+                onScroll={(params) => this.onScroll(params.nativeEvent)}
+                style={styles.scrollContent}
+              >
+                <ScrollView
+                  horizontal={true}
+                  scrollEventThrottle={100}
+                  contentContainerStyle={styles.scrollContent}
+                >
+                  <View style={styles.wiki}>
+                    {wikiText && this._renderWiki()}
+                    {Boolean(!wikiText && plainText) && this._renderPlainText()}
+                  </View>
+
+                </ScrollView>
+              </ScrollView>
             </View>
-
-          </ScrollView>
-        </ScrollView>
-      </View>
+          );
+        }}
+      </ThemeContext.Consumer>
     );
   }
 }

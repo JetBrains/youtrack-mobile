@@ -1,9 +1,9 @@
-import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_BLACK} from '../../components/variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import {UNIT} from '../../components/variables/variables';
 import {headerTitle, monospace, SECONDARY_FONT_SIZE} from '../../components/common-styles/typography';
 
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   headerTitle: {
     ...headerTitle
   },
@@ -19,7 +19,7 @@ export default StyleSheet.create({
     paddingHorizontal: UNIT * 2
   },
   plainText: {
-    color: COLOR_BLACK,
+    color: '$text',
     fontSize: SECONDARY_FONT_SIZE,
     ...monospace
   }
