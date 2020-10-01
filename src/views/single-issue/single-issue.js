@@ -381,7 +381,7 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
     />;
   }
 
-  _renderCommandDialog() {
+  _renderCommandDialog(uiTheme: UITheme) {
     const {
       issue,
       closeCommandDialog,
@@ -400,6 +400,7 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
       onApply={applyCommand}
       isApplying={commandIsApplying}
       initialCommand={initialCommand}
+      uiTheme={uiTheme}
     />;
   }
 
@@ -444,18 +445,19 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
+          const uiTheme: UITheme = theme.uiTheme;
           return (
             <View style={styles.container} testID="issue-view">
-              {this._renderHeader(theme.uiTheme)}
+              {this._renderHeader(uiTheme)}
 
               {issueLoadingError && <View style={styles.error}><ErrorMessage error={issueLoadingError}/></View>}
 
 
-              {!issueLoadingError && this.renderTabs(theme.uiTheme)}
+              {!issueLoadingError && this.renderTabs(uiTheme)}
 
-              {this.isIssueLoaded() && showCommandDialog && this._renderCommandDialog()}
+              {this.isIssueLoaded() && showCommandDialog && this._renderCommandDialog(uiTheme)}
 
-              {isAttachFileDialogVisible && this.renderAttachFileDialog(theme.uiTheme)}
+              {isAttachFileDialogVisible && this.renderAttachFileDialog(uiTheme)}
             </View>
           );
         }}

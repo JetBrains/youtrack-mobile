@@ -1,17 +1,20 @@
 /* @flow */
+
 import {View, TouchableOpacity, Text, TextInput, FlatList, ActivityIndicator} from 'react-native';
 import React, {Component} from 'react';
-import {COLOR_GRAY, COLOR_PINK, COLOR_PLACEHOLDER} from '../variables/variables';
+
 import throttle from 'lodash.throttle';
+
 import ApiHelper from '../../components/api/api__helper';
 import ModalView from '../modal-view/modal-view';
 import KeyboardSpacerIOS from '../platform/keyboard-spacer.ios';
+import SelectItem from '../select/select__item';
 import {IconBack, IconCheck} from '../icon/icon';
 
 import styles from './command-dialog.styles';
 
 import type {CommandSuggestionResponse, CommandSuggestion, SuggestedCommand} from '../../flow/Issue';
-import SelectItem from '../select/select__item';
+import type {UITheme} from '../../flow/Theme';
 
 type Props = {
   headerContent: string,
@@ -20,7 +23,8 @@ type Props = {
   onApply: (command: string) => any,
   onChange: (command: string, caret: number) => any,
   isApplying: boolean,
-  onCancel: Function
+  onCancel: Function,
+  uiTheme: UITheme
 };
 
 type State = {
@@ -84,12 +88,12 @@ export default class CommandDialog extends Component<Props, State> {
 
   _renderInput() {
     const {input} = this.state;
-    const {isApplying} = this.props;
+    const {isApplying, uiTheme} = this.props;
 
     return (
       <TextInput
         style={styles.searchInput}
-        placeholderTextColor={COLOR_PLACEHOLDER}
+        placeholderTextColor={uiTheme.colors.$icon}
         placeholder="Enter command"
         clearButtonMode="while-editing"
         returnKeyType="done"
@@ -164,7 +168,7 @@ export default class CommandDialog extends Component<Props, State> {
   }
 
   render() {
-    const {isApplying} = this.props;
+    const {isApplying, uiTheme} = this.props;
     const canApply = this.canApplyCommand();
 
     return (
@@ -188,7 +192,7 @@ export default class CommandDialog extends Component<Props, State> {
             style={styles.applyButton}
             onPress={() => this.onApply()}
           >
-            <IconCheck size={20} color={canApply ? COLOR_PINK : COLOR_GRAY}/>
+            <IconCheck size={20} color={canApply ? uiTheme.colors.$link : uiTheme.colors.$disabled}/>
           </TouchableOpacity>
 
         </View>
