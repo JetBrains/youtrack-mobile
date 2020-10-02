@@ -180,25 +180,31 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
   renderTabBar(uiTheme: UITheme) {
     const {editMode} = this.props;
 
-    return props => (
-      <TabBar
-        {...props}
-        indicatorStyle={{backgroundColor: editMode ? 'transparent' : uiTheme.colors.$link}}
-        style={[styles.tabsBar, editMode ? {height: 1} : null]}
-        renderLabel={({route, focused}) => {
-          const uiThemeColors: UIThemeColors = uiTheme.colors;
-          return (
-            <Text style={[
-              styles.tabLabel,
-              focused ? styles.tabLabelActive : null,
-              {color: focused && !editMode ? uiThemeColors.$link : this.isTabChangeEnabled() ? uiThemeColors.$text : uiThemeColors.$disabled}
-            ]}>
-              {route.title}
-            </Text>
-          );
-        }}
-      />
-    );
+    return props => {
+      const uiThemeColors: UIThemeColors = uiTheme.colors;
+      return (
+        <TabBar
+          {...props}
+          indicatorStyle={{backgroundColor: editMode ? 'transparent' : uiThemeColors.$link}}
+          style={[styles.tabsBar, editMode ? {height: 1} : null, {shadowColor: uiThemeColors.$background}]}
+          renderLabel={({route, focused}) => {
+            return (
+              <Text style={[
+                styles.tabLabel,
+                focused ? styles.tabLabelActive : null,
+                {
+                  color: focused && !editMode ? uiThemeColors.$link : (
+                    this.isTabChangeEnabled() ? uiThemeColors.$text : uiThemeColors.$disabled
+                  )
+                }
+              ]}>
+                {route.title}
+              </Text>
+            );
+          }}
+        />
+      );
+    };
   }
 
   renderScene = (route, uiTheme: UITheme) => {
@@ -293,7 +299,7 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
     }
 
     return <Skeleton width={24}/>;
-  }
+  };
 
 
   renderHeaderIssueTitle() {
@@ -359,8 +365,12 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
 
       return (
         <Header
-          style={{paddingLeft: UNIT * 2, paddingRight: UNIT * 2}}
-          leftButton={<IconClose size={21} color={isSavingEditedIssue ? uiTheme.colors.$textSecondary : uiTheme.colors.$link}/>}
+          style={styles.headerLeftButton}
+          leftButton={
+            <IconClose
+              size={21}
+              color={isSavingEditedIssue ? uiTheme.colors.$textSecondary : uiTheme.colors.$link}
+            />}
           onBack={stopEditingIssue}
           rightButton={saveButton}
           onRightButtonClick={canSave ? saveIssueSummaryAndDescriptionChange : () => {}}

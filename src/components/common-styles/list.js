@@ -1,8 +1,16 @@
+import {Platform} from 'react-native';
 import {UNIT} from '../variables/variables';
 
 
 export const separatorBorder = {
-  borderBottomWidth: 0.5,
+  ...Platform.select({
+    ios: {
+      borderBottomWidth: 0.5
+    },
+    android: {
+      borderBottomWidth: 0.8
+    }
+  })
 };
 
 export const separator = {

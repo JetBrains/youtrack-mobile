@@ -29,8 +29,8 @@ const dark: UITheme = {
     $mask: '#FFFFFF57',
     $navigation: '#696969',
 
-    $separator: '#343333'
-  },
+    $separator: 'rgba(210, 254, 254, 0.15)'
+  }
 };
 
 export default dark;

@@ -33,6 +33,9 @@ export default EStyleSheet.create({
       }
     })
   },
+  headerLeftButton: {
+    paddingHorizontal: UNIT * 2
+  },
   headerTextResolved: {
     color: '$icon',
     textDecorationLine: 'line-through'
