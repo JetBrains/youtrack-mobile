@@ -103,7 +103,7 @@ export default class IssueDetails extends Component<Props, void> {
     }
   };
 
-  renderAttachments(attachments: Array<Attachment> | null) {
+  renderAttachments(attachments: Array<Attachment> | null, uiTheme: UITheme) {
     if (!attachments || !attachments.length) {
       return null;
     }
@@ -124,12 +124,15 @@ export default class IssueDetails extends Component<Props, void> {
           onRemoveImage={onRemoveAttachment}
           onOpenAttachment={(type) => usage.trackEvent(
             this.props.analyticCategory,
-            type === 'image' ? 'Showing image' : 'Open attachment by URL')}
-        /></View>
+            type === 'image' ? 'Showing image' : 'Open attachment by URL')
+          }
+          uiTheme={uiTheme}
+        />
+      </View>
     );
   }
 
-  renderIssueVotes() {
+  renderIssueVotes(uiTheme: UITheme) {
     const {issue, issuePermissions, onVoteToggle} = this.props;
 
     return (
@@ -138,6 +141,7 @@ export default class IssueDetails extends Component<Props, void> {
         votes={issue?.votes}
         voted={issue?.voters?.hasVote}
         onVoteToggle={onVoteToggle}
+        uiTheme={uiTheme}
       />
     );
   }
@@ -256,7 +260,7 @@ export default class IssueDetails extends Component<Props, void> {
 
         <View style={styles.issueAdditionalInfoContainer}>
           {this.renderAdditionalInfo()}
-          {this.renderIssueVotes()}
+          {this.renderIssueVotes(uiTheme)}
         </View>
 
         {editMode && <IssueSummary
@@ -270,7 +274,7 @@ export default class IssueDetails extends Component<Props, void> {
 
         {!editMode && this.renderIssueContent(uiTheme)}
 
-        {issue?.attachments && this.renderAttachments(issue.attachments)}
+        {issue?.attachments && this.renderAttachments(issue.attachments, uiTheme)}
 
         {editMode && <KeyboardSpacerIOS/>}
       </View>

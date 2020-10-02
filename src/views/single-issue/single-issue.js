@@ -12,7 +12,6 @@ import {connect} from 'react-redux';
 import {getApi} from '../../components/api/api__instance';
 import Router from '../../components/router/router';
 import Header from '../../components/header/header';
-import {UNIT} from '../../components/variables/variables';
 import usage from '../../components/usage/usage';
 import CommandDialog from '../../components/command-dialog/command-dialog';
 import ErrorMessage from '../../components/error-message/error-message';
@@ -268,7 +267,7 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
     return issue && issuePermissions && issuePermissions.canStar();
   };
 
-  renderActionsIcon() {
+  renderActionsIcon(uiTheme: UITheme) {
     if (!this.isIssueLoaded()) {
       return <Skeleton width={24}/>;
     }
@@ -277,15 +276,15 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
       return (
         <Text>
           {isIOSPlatform()
-            ? <IconMoreOptions size={24}/>
-            : <IconDrag size={22}/>}
+            ? <IconMoreOptions size={24} color={uiTheme.colors.$link}/>
+            : <IconDrag size={22} color={uiTheme.colors.$link}/>}
           <Text>{' '}</Text>
         </Text>
       );
     }
   }
 
-  renderStar = () => {
+  renderStar = (uiTheme: UITheme) => {
     const {issue, toggleStar} = this.props;
     if (this.isIssueLoaded()) {
       return (
@@ -294,6 +293,7 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
           canStar={this.canStar()}
           starred={issue.watchers.hasStar}
           onStarToggle={toggleStar}
+          uiTheme={uiTheme}
         />
       );
     }
@@ -338,8 +338,8 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
       return (
         <Header
           leftButton={this.renderBackIcon()}
-          rightButton={isIssueLoaded ? this.renderActionsIcon() : null}
-          extraButton={isIssueLoaded ? this.renderStar() : null}
+          rightButton={isIssueLoaded ? this.renderActionsIcon(uiTheme) : null}
+          extraButton={isIssueLoaded ? this.renderStar(uiTheme) : null}
           onRightButtonClick={() => {
             if (isIssueLoaded) {
               showIssueActions(

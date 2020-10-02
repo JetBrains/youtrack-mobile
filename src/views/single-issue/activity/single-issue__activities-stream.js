@@ -229,7 +229,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
     return `${title} `;
   }
 
-  _renderAttachmentChange(activity: Object) {
+  _renderAttachmentChange(activity: Object, uiTheme: UITheme) {
     const removed = activity.removed || [];
     const added = activity.added || [];
     const addedAndLaterRemoved = added.filter(it => !it.url);
@@ -246,6 +246,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
           onOpenAttachment={(type) => (
             usage.trackEvent(CATEGORY_NAME, type === 'image' ? 'Showing image' : 'Open attachment by URL')
           )}
+          uiTheme={uiTheme}
         />}
         {addedAndLaterRemoved.length > 0 && addedAndLaterRemoved.map(it => <Text style={styles.activityAdded} key={it.id}>{it.name}</Text>)}
 
@@ -436,7 +437,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
     case Boolean(isActivityCategory.link(activity)):
       return this._renderLinkChange(activity, uiTheme);
     case Boolean(isActivityCategory.attachment(activity)):
-      return this._renderAttachmentChange(activity);
+      return this._renderAttachmentChange(activity, uiTheme);
     }
     return null;
   };
