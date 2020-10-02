@@ -14,7 +14,6 @@ import {notify} from '../notification/notification';
 import {flushStoragePart} from '../storage/storage';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFA from 'react-native-vector-icons/FontAwesome';
-import {COLOR_ICON_MEDIUM_GREY, COLOR_MEDIUM_GRAY, COLOR_PINK} from '../variables/variables';
 import Popup from '../popup/popup';
 import ReporterBugsnag from './reporter-bugsnag';
 
@@ -22,6 +21,8 @@ import {HIT_SLOP} from '../common-styles/button';
 import styles from './error-boundary.styles';
 
 import type {ReportErrorData} from '../error/error-reporter';
+import {ThemeContext} from '../theme/theme-context';
+import type {Theme, UIThemeColors} from '../../flow/Theme';
 
 type Props = {
   openDebugView: any => any,
@@ -124,103 +125,110 @@ class ErrorBoundary extends Component<Props, State> {
     const {error, isReporting, isExtendedReportEnabled, isExtendedReportInfoVisible} = this.state;
     const {openDebugView} = this.props;
 
-    if (error) {
-      const buttonStyle = [styles.button, isReporting ? styles.buttonDisabled : null];
+    return (
+      <ThemeContext.Consumer>
+        {(theme: Theme) => {
+          if (error) {
+            const uiThemeColors: UIThemeColors = theme.uiTheme.colors;
+            const buttonStyle = [styles.button, isReporting ? styles.buttonDisabled : null];
 
-      return (
-        <View style={styles.container}>
-          <View style={styles.header}>
-            <TouchableOpacity
-              style={buttonStyle}
-              disabled={isReporting}
-              onPress={openDebugView}
-            >
-              <Text style={styles.buttonText}>Show logs</Text>
-            </TouchableOpacity>
-          </View>
+            return (
+              <View style={styles.container}>
+                <View style={styles.header}>
+                  <TouchableOpacity
+                    style={buttonStyle}
+                    disabled={isReporting}
+                    onPress={openDebugView}
+                  >
+                    <Text style={styles.buttonText}>Show logs</Text>
+                  </TouchableOpacity>
+                </View>
 
-          <View style={styles.message}>
-            <IconFA
-              name="exclamation-circle"
-              size={64}
-              color={COLOR_ICON_MEDIUM_GREY}
-            />
-            <Text style={styles.title}>{this.ERROR_TITLE}</Text>
+                <View style={styles.message}>
+                  <IconFA
+                    name="exclamation-circle"
+                    size={64}
+                    color={uiThemeColors.$icon}
+                  />
+                  <Text style={styles.title}>{this.ERROR_TITLE}</Text>
 
-            <TouchableOpacity
-              hitSlop={HIT_SLOP}
-              disabled={isReporting}
-              style={styles.restartLink}
-              onPress={this.restart}
-            >
-              <Text style={styles.buttonText}>Restart</Text>
-            </TouchableOpacity>
-          </View>
+                  <TouchableOpacity
+                    hitSlop={HIT_SLOP}
+                    disabled={isReporting}
+                    style={styles.restartLink}
+                    onPress={this.restart}
+                  >
+                    <Text style={styles.buttonText}>Restart</Text>
+                  </TouchableOpacity>
+                </View>
 
-          <View style={styles.sendReport}>
-            <TouchableOpacity
-              style={[styles.buttonSendReport, buttonStyle]}
-              disabled={isReporting}
-              onPress={this.reportCrash}
-            >
-              <Text
-                style={[
-                  styles.buttonText,
-                  styles.buttonSendReportText
-                ]}
-              >
-                {`${isReporting ? 'Sending' : 'Send'} crash report${isReporting ? '...' : ''}`}
-              </Text>
-            </TouchableOpacity>
+                <View style={styles.sendReport}>
+                  <TouchableOpacity
+                    style={[styles.buttonSendReport, buttonStyle]}
+                    disabled={isReporting}
+                    onPress={this.reportCrash}
+                  >
+                    <Text
+                      style={[
+                        styles.buttonText,
+                        styles.buttonSendReportText
+                      ]}
+                    >
+                      {`${isReporting ? 'Sending' : 'Send'} crash report${isReporting ? '...' : ''}`}
+                    </Text>
+                  </TouchableOpacity>
 
-            <View style={styles.row}>
-              <TouchableOpacity
-                style={styles.row}
-                disabled={isReporting}
-                onPress={() => this.setState({isExtendedReportEnabled: !isExtendedReportEnabled})}
-              >
-                <IconMaterial
-                  name={isExtendedReportEnabled ? 'checkbox-marked' : 'checkbox-blank-outline'}
-                  size={24}
-                  color={isReporting ? COLOR_MEDIUM_GRAY : COLOR_PINK}
-                />
-                <Text style={styles.sendReportText}>Send extended report to Bugsnag</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                disabled={isReporting}
-                onPress={this.toggleInfoModalVisibility}
-              >
-                <IconMaterial
-                  name="information"
-                  size={24}
-                  color={COLOR_MEDIUM_GRAY}
-                />
-              </TouchableOpacity>
+                  <View style={styles.row}>
+                    <TouchableOpacity
+                      style={styles.row}
+                      disabled={isReporting}
+                      onPress={() => this.setState({isExtendedReportEnabled: !isExtendedReportEnabled})}
+                    >
+                      <IconMaterial
+                        name={isExtendedReportEnabled ? 'checkbox-marked' : 'checkbox-blank-outline'}
+                        size={24}
+                        color={isReporting ? uiThemeColors.$disabled : uiThemeColors.$link}
+                      />
+                      <Text style={styles.sendReportText}>Send extended report to Bugsnag</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      disabled={isReporting}
+                      onPress={this.toggleInfoModalVisibility}
+                    >
+                      <IconMaterial
+                        name="information"
+                        size={24}
+                        color={uiThemeColors.$icon}
+                      />
+                    </TouchableOpacity>
 
-            </View>
-          </View>
+                  </View>
+                </View>
 
-          <View>
-            <TouchableOpacity
-              disabled={isReporting}
-              style={buttonStyle}
-              onPress={this.contactSupport}
-            >
-              <Text style={styles.buttonText}>Contact support</Text>
-            </TouchableOpacity>
-          </View>
+                <View>
+                  <TouchableOpacity
+                    disabled={isReporting}
+                    style={buttonStyle}
+                    onPress={this.contactSupport}
+                  >
+                    <Text style={styles.buttonText}>Contact support</Text>
+                  </TouchableOpacity>
+                </View>
 
-          {isExtendedReportInfoVisible && (
-            <Popup
-              childrenRenderer={this.renderExtendedReportPopupContent}
-              onHide={this.toggleInfoModalVisibility}
-            />
-          )}
-        </View>
-      );
-    }
+                {isExtendedReportInfoVisible && (
+                  <Popup
+                    childrenRenderer={this.renderExtendedReportPopupContent}
+                    onHide={this.toggleInfoModalVisibility}
+                  />
+                )}
+              </View>
+            );
+          }
 
-    return this.props.children;
+          return this.props.children;
+        }}
+      </ThemeContext.Consumer>
+    );
   }
 }
 

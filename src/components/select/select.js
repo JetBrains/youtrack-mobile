@@ -2,9 +2,10 @@
 import {Text, View, TouchableOpacity, TextInput, ActivityIndicator, FlatList} from 'react-native';
 import React, {Component} from 'react';
 
+import EStyleSheet from 'react-native-extended-stylesheet';
+
 import ColorField from '../color-field/color-field';
 import {notifyError} from '../notification/notification';
-import {COLOR_ICON_GREY, COLOR_PLACEHOLDER} from '../variables/variables';
 import ModalView from '../modal-view/modal-view';
 import {onHeightChange} from '../header/header__top-padding';
 import {IconCheck, IconBack} from '../icon/icon';
@@ -103,7 +104,7 @@ export default class Select extends Component<Props, State> {
         >
           <Text style={styles.itemTitle}>{emptyValue}</Text>
 
-          {this.state.selectedItems.length === 0 && <IconCheck size={20} color={COLOR_ICON_GREY}/>}
+          {this.state.selectedItems.length === 0 && <IconCheck size={20} color={EStyleSheet.value('$icon')}/>}
         </TouchableOpacity>
         {this.renderSeparator()}
       </View>
@@ -243,7 +244,7 @@ export default class Select extends Component<Props, State> {
               testID="selectInput"
               placeholder={placeholder}
               autoFocus={autoFocus}
-              placeholderTextColor={COLOR_PLACEHOLDER}
+              placeholderTextColor={EStyleSheet.value('$icon')}
               returnKeyType={multi ? 'done' : 'search'}
               autoCorrect={false}
               underlineColorAndroid="transparent"

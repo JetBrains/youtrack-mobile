@@ -1,19 +1,23 @@
 /* @flow */
 
 import React, {PureComponent} from 'react';
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {Text, TouchableOpacity} from 'react-native';
+
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {IconThumbUp} from '../icon/icon';
-import {COLOR_ICON_LIGHT_BLUE, UNIT} from '../variables/variables';
+import {UNIT} from '../variables/variables';
 import {HIT_SLOP} from '../common-styles/button';
-
 import {secondaryText} from '../common-styles/typography';
+
+import type {UITheme} from '../../flow/Theme';
 
 type Props = {
   voted: boolean,
   votes: number,
   canVote: boolean,
-  onVoteToggle: (voted: boolean) => any
+  onVoteToggle: (voted: boolean) => any,
+  uiTheme: UITheme
 }
 
 export default class IssueVotes extends PureComponent<Props, void> {
@@ -24,7 +28,7 @@ export default class IssueVotes extends PureComponent<Props, void> {
   }
 
   render() {
-    const {voted, votes, canVote} = this.props;
+    const {voted, votes, canVote, uiTheme} = this.props;
 
     if (!canVote) {
       return null;
@@ -40,14 +44,14 @@ export default class IssueVotes extends PureComponent<Props, void> {
         <IconThumbUp
           isActive={voted}
           size={20}
-          color={COLOR_ICON_LIGHT_BLUE}
+          color={uiTheme.colors.$iconAccent}
         />
       </TouchableOpacity>
     );
   }
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   button: {
     marginLeft: UNIT * 0.75,
     flexDirection: 'row',
@@ -56,6 +60,7 @@ const styles = StyleSheet.create({
   },
   counter: {
     marginRight: UNIT,
-    ...secondaryText
+    ...secondaryText,
+    color: '$icon'
   }
 });

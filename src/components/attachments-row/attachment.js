@@ -13,11 +13,10 @@ import {hasMimeType} from '../mime-type/mime-type';
 import {isAndroidPlatform} from '../../util/util';
 import {IconRemoveFilled} from '../icon/icon';
 
-import {COLOR_LIGHT_GRAY, COLOR_PINK} from '../variables/variables';
-
 import styles from './attachments-row.styles';
 
 import type {Attachment} from '../../flow/CustomFields';
+import type {UITheme} from '../../flow/Theme';
 
 type DefaultProps = {
   imageHeaders: ?Object,
@@ -31,6 +30,7 @@ type Props = DefaultProps & {
   attach: Attachment,
   attachments: Array<Attachment>,
   attachingImage: ?Object,
+  uiTheme: UITheme
 }
 
 type State = {
@@ -194,7 +194,7 @@ export default class Attach extends PureComponent<Props, State> {
   }
 
   render() {
-    const {attach, canRemoveImage} = this.props;
+    const {attach, canRemoveImage, uiTheme} = this.props;
     const isImage = this.isImage();
     const isSvg = this.isSVG();
 
@@ -220,7 +220,10 @@ export default class Attach extends PureComponent<Props, State> {
             testID="attachmentRemove"
             onPress={this.remove}
           >
-            <IconRemoveFilled size={24} color={this.state.isRemoving ? COLOR_LIGHT_GRAY : COLOR_PINK}/>
+            <IconRemoveFilled
+              size={24}
+              color={this.state.isRemoving ? uiTheme.colors.$disabled : uiTheme.colors.$link}
+            />
 
           </TouchableOpacity>
         )}

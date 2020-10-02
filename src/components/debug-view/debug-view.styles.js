@@ -1,7 +1,7 @@
-import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_PINK} from '../variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import {UNIT} from '../variables/variables';
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   container: {
     flex: 1
   },
@@ -14,6 +14,6 @@ export default StyleSheet.create({
     alignItems: 'center'
   },
   closeButtonText: {
-    color: COLOR_PINK
+    color: '$link'
   }
 });

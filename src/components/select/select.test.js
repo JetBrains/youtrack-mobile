@@ -1,24 +1,21 @@
 import React from 'react';
 
 import {shallow} from 'enzyme';
-import toJson from 'enzyme-to-json';
 
 import Select from './select';
+import {buildStyles, DEFAULT_THEME} from '../theme/theme';
 
 describe('<Select/>', () => {
 
   let wrapper;
 
+  beforeAll(() => buildStyles(DEFAULT_THEME.mode, DEFAULT_THEME));
+
   beforeEach(() => {
     wrapper = doShallow();
   });
 
-
   describe('Render', () => {
-    it('should match a snapshot', () => {
-      expect(toJson(wrapper)).toMatchSnapshot();
-    });
-
     it('should render component', () => {
       expect(findByTestId('select')).toHaveLength(1);
       expect(findByTestId('selectInput')).toHaveLength(1);

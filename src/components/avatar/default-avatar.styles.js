@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {COLOR_FONT_ON_BLACK, UNIT} from '../variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import {UNIT} from '../variables/variables';
 
 const defaultSize = 40;
 const commonStyle = {
@@ -7,7 +7,7 @@ const commonStyle = {
   borderRadius: 3
 };
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   common: {
     ...commonStyle,
   },
@@ -26,7 +26,7 @@ export default StyleSheet.create({
   },
   text: {
     fontFamily: 'Arial',
-    color: COLOR_FONT_ON_BLACK,
+    color: '$text',
     fontWeight: '600',
     textAlign: 'center'
   }

@@ -8,9 +8,10 @@ import {hasMimeType} from '../mime-type/mime-type';
 import calculateAspectRatio from '../../components/aspect-ratio/aspect-ratio';
 import {isAndroidPlatform, isIOSPlatform} from '../../util/util';
 
-import {COLOR_GRAY, COLOR_LIGHT_GRAY, UNIT} from '../variables/variables';
+import {UNIT} from '../variables/variables';
 
 import type {Attachment, ImageDimensions} from '../../flow/CustomFields';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 const DIMENSION_WIDTH = Dimensions.get('window').width;
 const IMAGE_WIDTH = Math.floor(DIMENSION_WIDTH - UNIT * 4);
@@ -93,7 +94,7 @@ export function renderTableRow(node: Object, index: number, defaultRenderer: Fun
   return (
     <Text key={index} style={[isBold && {
       fontWeight: 'bold',
-      backgroundColor: COLOR_GRAY
+      backgroundColor: EStyleSheet.value('$textSecondary')
     }]}>
       {''}
       {defaultRenderer(node.children, node.parent)}
@@ -117,7 +118,7 @@ export function renderTableCell(node: Object, index: number, defaultRenderer: Fu
 
 export function renderTable(node: Object, index: number, defaultRenderer: Function) {
   return (
-    <Text key={index} style={{backgroundColor: COLOR_LIGHT_GRAY}}>
+    <Text key={index} style={{backgroundColor: EStyleSheet.value('$boxBackground')}}>
       {defaultRenderer(node.children, node.parent)}
     </Text>
   );

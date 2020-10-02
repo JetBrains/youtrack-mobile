@@ -12,7 +12,7 @@ const showMoreLink = {
 export default EStyleSheet.create({
   htmlView: {
     fontSize: MAIN_FONT_SIZE,
-    color: '$text',
+    // color: '$text',
     textAlign: 'left',
     writingDirection: 'ltr',
     ...Platform.select({

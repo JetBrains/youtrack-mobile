@@ -1,9 +1,7 @@
-import {StyleSheet} from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../variables/variables';
 
-const ATTACHING_IMAGE_ALPHA = '70';
-
-export default StyleSheet.create({
+export default EStyleSheet.create({
   attachesScroll: {
     paddingLeft: UNIT * 2,
     marginLeft: -UNIT * 2,
@@ -12,7 +10,7 @@ export default StyleSheet.create({
   attachmentImage: {
     marginRight: UNIT,
     borderWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.15)',
+    borderColor: '$boxBackground',
     borderRadius: 3,
     width: 120,
     height: UNIT * 8,
@@ -24,7 +22,7 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   imageActivityIndicator: {
-    backgroundColor: `#CCCCCC${ATTACHING_IMAGE_ALPHA}`,
+    backgroundColor: '$mask',
     position: 'absolute',
     top: 0,
     left: 0,

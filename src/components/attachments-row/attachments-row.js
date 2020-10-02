@@ -8,6 +8,7 @@ import type {Attachment} from '../../flow/CustomFields';
 import AttachmentErrorBoundary from './attachment-error-boundary';
 import Attach from './attachment';
 import {View} from 'react-native-animatable';
+import type {UITheme} from '../../flow/Theme';
 
 type DefaultProps = {
   imageHeaders: ?Object,
@@ -19,7 +20,8 @@ type Props = DefaultProps & {
   attachments: Array<Attachment>,
   attachingImage: ?Object,
   canRemoveAttachment?: boolean,
-  onRemoveImage?: (attachment: Attachment) => any
+  onRemoveImage?: (attachment: Attachment) => any,
+  uiTheme: UITheme
 }
 
 
@@ -49,7 +51,7 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
   };
 
   render() {
-    const {attachments, attachingImage, imageHeaders, onOpenAttachment, onRemoveImage, canRemoveAttachment} = this.props;
+    const {attachments, attachingImage, imageHeaders, onOpenAttachment, onRemoveImage, canRemoveAttachment, uiTheme} = this.props;
 
     if (!attachments.length) {
       return null;
@@ -74,6 +76,7 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
               onOpenAttachment={onOpenAttachment}
               canRemoveImage={canRemoveAttachment}
               onRemoveImage={onRemoveImage}
+              uiTheme={uiTheme}
             />
           </AttachmentErrorBoundary>
         </View>

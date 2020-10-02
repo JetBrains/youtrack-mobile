@@ -1,11 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {
-  UNIT,
-  COLOR_FONT_ON_BLACK,
-  COLOR_PINK,
-  COLOR_BLACK,
-  COLOR_ICON_MEDIUM_GREY
-} from '../variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import {UNIT} from '../variables/variables';
 import {link} from '../common-styles/button';
 import {HEADER_FONT_SIZE} from '../common-styles/typography';
 
@@ -20,12 +14,12 @@ const extendedReportModalText = {
   lineHeight: 26,
 };
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
     padding: UNIT * 2,
-    backgroundColor: COLOR_FONT_ON_BLACK
+    backgroundColor: '$background'
   },
   row: {
     flexDirection: 'row',
@@ -44,7 +38,7 @@ export default StyleSheet.create({
   },
 
   title: {
-    color: COLOR_BLACK,
+    color: '$text',
     fontSize: 18,
     fontWeight: '500',
     marginTop: UNIT * 2
@@ -60,21 +54,21 @@ export default StyleSheet.create({
   },
   buttonText: {
     fontSize: 16,
-    color: COLOR_PINK
+    color: '$link'
   },
 
   buttonSendReport: {
     alignSelf: 'stretch',
     marginBottom: UNIT * 2,
-    backgroundColor: COLOR_PINK
+    backgroundColor: '$link'
   },
   buttonSendReportText: {
-    color: COLOR_FONT_ON_BLACK
+    color: '$background'
   },
   sendReportText: {
     marginRight: UNIT * 1.5,
     marginLeft: UNIT * 1.5,
-    color: COLOR_ICON_MEDIUM_GREY
+    color: '$icon'
   },
   extendedReportModalTitle: {
     ...extendedReportModalText,
@@ -85,7 +79,7 @@ export default StyleSheet.create({
   extendedReportModalTextInfo: {
     marginTop: UNIT,
     marginBottom: UNIT * 2,
-    color: COLOR_ICON_MEDIUM_GREY
+    color: '$icon'
   },
   extendedReportModalTextLink: {
     ...link,

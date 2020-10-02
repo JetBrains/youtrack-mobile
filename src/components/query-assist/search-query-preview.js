@@ -3,7 +3,6 @@
 import {Text, View} from 'react-native';
 import React, {PureComponent} from 'react';
 
-import {COLOR_PLACEHOLDER} from '../variables/variables';
 import {IconSearch} from '../icon/icon';
 import {iconClearText} from '../icon/icon-clear-text';
 
@@ -42,7 +41,7 @@ export default class SearchQueryPreview extends PureComponent<Props, void> {
         {(theme: Theme) => (
           <View style={styles.placeHolder}>
             <View style={styles.inputWrapper}>
-              <IconSearch style={styles.searchIcon} size={20} color={COLOR_PLACEHOLDER}/>
+              <IconSearch style={styles.searchIcon} size={20} color={theme.uiTheme.colors.$icon}/>
 
               <Text
                 onPress={this.focus}
@@ -56,7 +55,7 @@ export default class SearchQueryPreview extends PureComponent<Props, void> {
                 {query ? query : 'Enter search request'}
               </Text>
 
-              {!!query && iconClearText(this.focusAndClear)}
+              {!!query && iconClearText(this.focusAndClear, theme.uiTheme)}
 
             </View>
           </View>

@@ -1,6 +1,5 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../variables/variables';
-import {mask} from '../common-styles/app';
 
 const extendedReportModalText = {
   letterSpacing: 0.08,
@@ -24,7 +23,7 @@ export default EStyleSheet.create({
   },
   container: {
     flex: 1,
-    ...mask,
+    backgroundColor: '$mask',
     ...alignCenter
   },
   content: {

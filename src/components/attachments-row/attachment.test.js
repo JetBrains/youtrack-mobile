@@ -1,9 +1,9 @@
 import React from 'react';
 
 import {shallow} from 'enzyme';
-import toJson from 'enzyme-to-json';
 
 import Attachment from './attachment';
+import {DEFAULT_THEME} from '../theme/theme';
 
 describe('<Attachment/>', () => {
 
@@ -19,13 +19,6 @@ describe('<Attachment/>', () => {
       name: attachmentMockName,
       url: attachmentMockUrl
     };
-  });
-
-  describe('Render', () => {
-    it('should match a snapshot', () => {
-      renderImage();
-      expect(toJson(wrapper)).toMatchSnapshot();
-    });
   });
 
 
@@ -126,6 +119,7 @@ describe('<Attachment/>', () => {
       <Attachment
         attach={attachment}
         canRemoveImage={canRemoveImage}
+        uiTheme={DEFAULT_THEME}
       />
     );
   }

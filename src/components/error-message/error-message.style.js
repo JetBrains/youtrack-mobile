@@ -1,9 +1,9 @@
-import {StyleSheet} from 'react-native';
-import {COLOR_PINK, UNIT} from '../variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import {UNIT} from '../variables/variables';
 import {secondaryText} from '../common-styles/typography';
 import {title} from '../common-styles/issue';
 
-export const styles = StyleSheet.create({
+export const styles = EStyleSheet.create({
   errorContainer: {
     padding: UNIT * 2,
     alignItems: 'center',
@@ -11,11 +11,13 @@ export const styles = StyleSheet.create({
   },
   errorTitle: {
     ...title,
+    color: '$text'
   },
   errorDescription: {
     padding: UNIT * 4,
     paddingTop: UNIT * 2,
     ...secondaryText,
+    color: '$icon',
     lineHeight: 20,
   },
   tryAgainButton: {
@@ -24,6 +26,6 @@ export const styles = StyleSheet.create({
   },
   tryAgainText: {
     fontSize: 18,
-    color: COLOR_PINK
+    color: '$link'
   }
 });
