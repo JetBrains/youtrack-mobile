@@ -192,6 +192,7 @@ class CreateIssue extends Component<Props, void> {
                       imageHeaders={getApi().auth.getAuthorizationHeaders()}
                       canRemoveAttachment={true}
                       onRemoveImage={removeAttachment}
+                      uiTheme={theme.uiTheme}
                     />
 
                     <View style={styles.attachButtonsContainer}>
