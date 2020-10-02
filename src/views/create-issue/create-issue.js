@@ -178,6 +178,7 @@ class CreateIssue extends Component<Props, void> {
                   editable={!processing}
                   onSummaryChange={setIssueSummary}
                   onDescriptionChange={setIssueDescription}
+                  uiTheme={uiTheme}
                 />
 
                 {issue?.project?.id && (

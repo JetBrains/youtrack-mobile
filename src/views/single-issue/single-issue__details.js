@@ -207,8 +207,7 @@ export default class IssueDetails extends Component<Props, void> {
         imageHeaders: this.imageHeaders,
         onIssueIdTap: issueId => openNestedIssueView({issueId}),
         title: getReadableID(issue),
-        description: issue.wikifiedDescription,
-        uiTheme: uiTheme
+        description: issue.wikifiedDescription
       },
       markdown: issue.usesMarkdown && issue.description,
       attachments: issue.attachments
@@ -270,6 +269,7 @@ export default class IssueDetails extends Component<Props, void> {
           description={descriptionCopy}
           onSummaryChange={this.props.setIssueSummaryCopy}
           onDescriptionChange={this.props.setIssueDescriptionCopy}
+          uiTheme={uiTheme}
         />}
 
         {!editMode && this.renderIssueContent(uiTheme)}

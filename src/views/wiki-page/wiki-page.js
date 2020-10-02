@@ -80,7 +80,7 @@ export default class WikiPage extends PureComponent<Props, State> {
     );
   }
 
-  _renderWiki() {
+  _renderWiki(uiTheme: UITheme) {
     const {wikiText, attachments, onIssueIdTap} = this.props;
     const auth = getApi().auth;
 
@@ -92,6 +92,7 @@ export default class WikiPage extends PureComponent<Props, State> {
         imageHeaders={auth.getAuthorizationHeaders()}
         onIssueIdTap={onIssueIdTap}
         renderFullException={true}
+        uiTheme={uiTheme}
       >
         {wikiText}
       </YoutrackWiki>
@@ -131,7 +132,7 @@ export default class WikiPage extends PureComponent<Props, State> {
                   contentContainerStyle={styles.scrollContent}
                 >
                   <View style={styles.wiki}>
-                    {wikiText && this._renderWiki()}
+                    {wikiText && this._renderWiki(theme.uiTheme)}
                     {Boolean(!wikiText && plainText) && this._renderPlainText()}
                   </View>
 

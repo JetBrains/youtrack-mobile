@@ -36,7 +36,7 @@ function IssueDescription(props: Props) {
 
   return (
     <YoutrackWiki {
-      ...Object.assign({}, youtrackWiki, attachments)
+      ...Object.assign({uiTheme: uiTheme}, youtrackWiki, attachments)
     }>
       {youtrackWiki.description}
     </YoutrackWiki>
