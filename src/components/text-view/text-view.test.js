@@ -1,23 +1,21 @@
 import React from 'react';
 
 import {shallow} from 'enzyme';
-import toJson from 'enzyme-to-json';
-
 import TextView from './text-view';
+
+import {buildStyles, DEFAULT_THEME} from '../theme/theme';
 
 describe('<TextView/>', () => {
 
   let wrapper;
   let textMock;
 
+  beforeAll(() => buildStyles(DEFAULT_THEME.mode, DEFAULT_THEME));
+
   describe('Render', () => {
     beforeEach(() => {
       textMock = 'A'.repeat(100);
       wrapper = doShallow(textMock);
-    });
-
-    it('should match a snapshot', () => {
-      expect(toJson(wrapper)).toMatchSnapshot();
     });
 
     it('should render content with `Show more...`', () => {

@@ -1,7 +1,6 @@
 import React from 'react';
 
 import {shallow} from 'enzyme';
-import toJson from 'enzyme-to-json';
 
 import {ResourceTypes} from '../api/api__resource-types';
 import CommentVisibility from './comment__visibility';
@@ -26,9 +25,6 @@ describe('<CommentVisibility/>', () => {
 
 
   describe('Render', () => {
-    it('should match a snapshot', () => {
-      expect(toJson(wrapper)).toMatchSnapshot();
-    });
 
     it('should render component', () => {
       expect(findByTestId('commentVisibility')).toHaveLength(1);

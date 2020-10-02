@@ -15,7 +15,6 @@ import {nodeHasType} from './youtrack-wiki__node-type';
 import {showMoreInlineText} from '../text-view/text-view';
 
 import styles, {htmlViewStyles} from './youtrack-wiki.styles';
-import {COLOR_FONT} from '../variables/variables';
 
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {UITheme} from '../../flow/Theme';
@@ -145,7 +144,7 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
       return (
         <Text
           key={index}
-          style={{color: node.attribs.color || COLOR_FONT}}>{defaultRenderer(node.children, parent)}</Text>
+          style={{color: node.attribs.color || this.props.uiTheme.colors.$text}}>{defaultRenderer(node.children, parent)}</Text>
       );
 
     case (wikiNodeType.del):

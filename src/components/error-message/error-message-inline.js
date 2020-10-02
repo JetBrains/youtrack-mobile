@@ -1,9 +1,11 @@
 /* @flow */
 
 import React, {PureComponent} from 'react';
-import {View, Text, Linking, StyleSheet} from 'react-native';
+import {View, Text, Linking} from 'react-native';
 
-import {COLOR_LINK, UNIT} from '../variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+
+import {UNIT} from '../variables/variables';
 
 type Props = {
   error?: ?string,
@@ -50,16 +52,16 @@ export default class ErrorMessageInline extends PureComponent<Props, void> {
   }
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   error: {
     marginTop: UNIT,
     marginBottom: UNIT * 2
   },
   errorText: {
     marginBottom: UNIT,
-    color: 'red'
+    color: '$error'
   },
   link: {
-    color: COLOR_LINK
+    color: '$link'
   }
 });

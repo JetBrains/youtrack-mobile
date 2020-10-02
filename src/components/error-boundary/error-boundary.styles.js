@@ -1,6 +1,5 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../variables/variables';
-import {link} from '../common-styles/button';
 import {HEADER_FONT_SIZE} from '../common-styles/typography';
 
 const alignCenter = {
@@ -82,11 +81,11 @@ export default EStyleSheet.create({
     color: '$icon'
   },
   extendedReportModalTextLink: {
-    ...link,
+    color: '$link',
     marginBottom: UNIT * 2
   },
   restartLink: {
-    ...link,
+    color: '$link',
     ...HEADER_FONT_SIZE,
     marginTop: UNIT * 5
   }

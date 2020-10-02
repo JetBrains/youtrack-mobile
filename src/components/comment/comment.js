@@ -9,7 +9,6 @@ import Avatar from '../avatar/avatar';
 import MarkdownView from '../wiki/markdown-view';
 import {relativeDate, getEntityPresentation} from '../issue-formatter/issue-formatter';
 
-import {COLOR_FONT_GRAY,} from '../variables/variables';
 import styles from './comment.styles';
 
 import type {IssueComment, Attachment} from '../../flow/CustomFields';
@@ -113,7 +112,7 @@ export default class Comment extends Component<Props, void> {
   }
 
   render() {
-    const {comment, attachments} = this.props;
+    const {comment, attachments, uiTheme} = this.props;
 
     return (
       <View>
@@ -130,7 +129,7 @@ export default class Comment extends Component<Props, void> {
                 <Text style={styles.authorName}>
                   {getEntityPresentation(comment.author)}
                 </Text>
-                <Text style={{color: COLOR_FONT_GRAY}}>
+                <Text style={{color: uiTheme.colors.$icon}}>
                   {' '}{relativeDate(comment.created)}
                 </Text>
               </Text>

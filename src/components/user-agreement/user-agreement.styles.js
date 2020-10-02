@@ -1,11 +1,12 @@
-import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_PINK, COLOR_FONT_GRAY, COLOR_FONT_ON_BLACK} from '../variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
-export default StyleSheet.create({
+import {UNIT} from '../variables/variables';
+
+export default EStyleSheet.create({
   container: {
     flex: 1,
     marginTop: UNIT * 2,
-    backgroundColor: COLOR_FONT_ON_BLACK
+    backgroundColor: '$background'
   },
   markdownScroll: {
     paddingTop: 0,
@@ -20,9 +21,9 @@ export default StyleSheet.create({
     alignItems: 'center'
   },
   buttonText: {
-    color: COLOR_PINK
+    color: '$link'
   },
   buttonTextDisabled: {
-    color: COLOR_FONT_GRAY
+    color: '$icon'
   }
 });

@@ -79,5 +79,8 @@ export default EStyleSheet.create({
     minWidth: minButtonWidth,
     padding: UNIT,
     paddingLeft: UNIT * 2
+  },
+  link: {
+    color: '$link'
   }
 });

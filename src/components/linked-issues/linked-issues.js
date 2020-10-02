@@ -1,9 +1,13 @@
 /* @flow */
+
 import {View, Text, TouchableOpacity} from 'react-native';
 import React, {PureComponent} from 'react';
-import styles from './linked-issues.style';
-import {COLOR_FONT_GRAY} from '../variables/variables';
+
+import EStyleSheet from 'react-native-extended-stylesheet';
+
 import {getReadableID} from '../issue-formatter/issue-formatter';
+
+import styles from './linked-issues.style';
 
 import type {IssueLink} from '../../flow/CustomFields';
 import type {IssueOnList} from '../../flow/Issue';
@@ -29,7 +33,7 @@ export default class LinkedIssues extends PureComponent<Props, void> {
   }
 
   _renderLinkedIssue(issue: IssueOnList) {
-    const issueTextStyle = issue.resolved ? {color: COLOR_FONT_GRAY, textDecorationLine: 'line-through'}: null;
+    const issueTextStyle = issue.resolved ? {color: EStyleSheet.value('$resolved'), textDecorationLine: 'line-through'}: null;
 
     return <TouchableOpacity key={issue.id}
       onPress={() => this.props.onIssueTap && this.props.onIssueTap(issue)}

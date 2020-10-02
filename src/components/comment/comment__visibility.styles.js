@@ -1,14 +1,15 @@
-import {StyleSheet} from 'react-native';
-import {COLOR_FONT_GRAY, UNIT} from '../variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
-export default StyleSheet.create({
+import {UNIT} from '../variables/variables';
+
+export default EStyleSheet.create({
   commentVisibility: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center'
   },
   commentVisibilityText: {
-    color: COLOR_FONT_GRAY,
+    color: '$icon',
     marginLeft: UNIT / 1.5,
   }
 });

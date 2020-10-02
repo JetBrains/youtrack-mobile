@@ -1,10 +1,13 @@
 /* @flow */
 import React, {Component} from 'react';
 import {View, TextInput} from 'react-native';
+
 import throttle from 'lodash.throttle';
-import styles from './issue-summary.styles';
+
 import MultilineInput from '../multiline-input/multiline-input';
-import {COLOR_FONT_GRAY} from '../variables/variables';
+
+import styles from './issue-summary.styles';
+import type {UITheme} from '../../flow/Theme';
 
 type Props = {
   editable: boolean,
@@ -12,7 +15,8 @@ type Props = {
   summary: string,
   description: string,
   onSummaryChange: (summary: string) => any,
-  onDescriptionChange: (description: string) => any
+  onDescriptionChange: (description: string) => any,
+  uiTheme: UITheme
 }
 
 const TEXT_UPDATE_DEBOUNCE = 300;
@@ -36,7 +40,7 @@ export default class IssueSummary extends Component<Props, void> {
 
   render() {
     // eslint-disable-next-line no-unused-vars
-    const {editable, showSeparator, summary, description, onDescriptionChange, onSummaryChange, ...rest} = this.props;
+    const {editable, showSeparator, summary, description, onDescriptionChange, onSummaryChange, uiTheme, ...rest} = this.props;
 
     return (
       <View {...rest}>
@@ -46,7 +50,7 @@ export default class IssueSummary extends Component<Props, void> {
           editable={editable}
           autoFocus
           placeholder="Summary"
-          placeholderTextColor={COLOR_FONT_GRAY}
+          placeholderTextColor={uiTheme.colors.$icon}
           underlineColorAndroid="transparent"
           keyboardAppearance="dark"
           returnKeyType="next"
@@ -64,7 +68,7 @@ export default class IssueSummary extends Component<Props, void> {
           scrollEnabled={false}
           editable={editable}
           autoCapitalize="sentences"
-          placeholderTextColor={COLOR_FONT_GRAY}
+          placeholderTextColor={uiTheme.colors.$icon}
           placeholder="Description"
           keyboardAppearance="dark"
           style={styles.descriptionInput}

@@ -1,8 +1,10 @@
 /* @flow */
+
 import React, {PureComponent} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
-import {COLOR_ICON_MEDIUM_GREY} from '../variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+
 import {DEFAULT_ERROR_MESSAGE} from '../error/error-messages';
 import {ERROR_MESSAGE_DATA} from '../error/error-message-data';
 import {HTTP_STATUS} from '../error/error-http-codes';
@@ -64,7 +66,7 @@ export default class ErrorMessage extends PureComponent<Props, State> {
         style={[styles.errorContainer, style]}
       >
 
-        <Icon size={iconSize} color={COLOR_ICON_MEDIUM_GREY}/>
+        <Icon size={iconSize} color={EStyleSheet.value('$navigation')}/>
 
         <Text
           testID="error-message"

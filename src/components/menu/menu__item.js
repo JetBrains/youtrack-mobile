@@ -1,8 +1,11 @@
 /* @flow */
 
-import {TouchableOpacity, Text, View, StyleSheet} from 'react-native';
+import {TouchableOpacity, Text, View} from 'react-native';
 import React from 'react';
-import {COLOR_PINK, UNIT} from '../../components/variables/variables';
+
+import EStyleSheet from 'react-native-extended-stylesheet';
+
+import {UNIT} from '../variables/variables';
 
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
@@ -36,7 +39,7 @@ export const MenuItem = (props: Props) => {
 };
 
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   menuItem: {
     flex: 1,
     flexDirection: 'column',
@@ -53,6 +56,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 20,
     letterSpacing: 0.2,
-    color: COLOR_PINK
+    color: '$link'
   }
 });

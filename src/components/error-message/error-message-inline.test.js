@@ -1,7 +1,6 @@
 import React from 'react';
 
 import {shallow} from 'enzyme';
-import toJson from 'enzyme-to-json';
 
 import ErrorMessageInline from './error-message-inline';
 
@@ -20,11 +19,6 @@ describe('<ErrorMessageInline/>', () => {
 
 
   describe('Render', () => {
-    it('should match a snapshot', () => {
-      render(errorMock);
-      expect(toJson(wrapper)).toMatchSnapshot();
-    });
-
     it('should render error', () => {
       render(errorMock);
 

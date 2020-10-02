@@ -1,13 +1,12 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../../../components/variables/variables';
 import {HEADER_FONT_SIZE, MAIN_FONT_SIZE, mainText, secondaryText} from '../../../components/common-styles/typography';
-import {link} from '../../../components/common-styles/button';
 import {separator} from '../../../components/common-styles/list';
 
 export default EStyleSheet.create({
   link: {
     ...mainText,
-    ...link
+    color: '$link'
   },
 
   container: {

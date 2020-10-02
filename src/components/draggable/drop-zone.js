@@ -6,8 +6,11 @@
 
 import * as React from 'react';
 import {View, LayoutAnimation} from 'react-native';
+
+import EStyleSheet from 'react-native-extended-stylesheet';
+
 import {getAgileCardHeight} from '../agile-card/agile-card';
-import {COLOR_PINK, UNIT} from '../variables/variables';
+import {UNIT} from '../variables/variables';
 import Draggable from './draggable';
 import {DragContext} from './drag-container';
 
@@ -21,7 +24,7 @@ export type ZoneInfo = {
   data: Object,
   placeholderIndex: ?number,
   ref: React.Ref<typeof DropZone>,
-  onMoveOver: ({x: number, y: number}, zone: ZoneInfo) => any,
+  onMoveOver: ({ x: number, y: number }, zone: ZoneInfo) => any,
   onLeave: any => any,
   onDrop: (data: ?Object) => any,
   reportMeasurements: any => any
@@ -38,7 +41,7 @@ type Props = {
   style: any
 }
 
-type PropsWithContext = Props & {dragContext: DragContextType};
+type PropsWithContext = Props & { dragContext: DragContextType };
 
 type State = {
   placeholderIndex: ?number,
@@ -46,6 +49,11 @@ type State = {
 }
 
 class DropZone extends React.Component<PropsWithContext, State> {
+  placeholderStyles = {
+    height: UNIT,
+    marginLeft: UNIT * 2,
+    backgroundColor: EStyleSheet.value('$link')
+  };
   state = {
     placeholderIndex: null,
     active: false
@@ -80,7 +88,7 @@ class DropZone extends React.Component<PropsWithContext, State> {
       };
       dragContext.updateZone(zoneInfo);
     });
-  }
+  };
 
   componentDidMount() {
     this.reportMeasurements();
@@ -123,7 +131,7 @@ class DropZone extends React.Component<PropsWithContext, State> {
       }
       this.setState({active: true});
     }
-  }
+  };
 
   onLeave = () => {
     if (this.props.disabled) {
@@ -135,7 +143,7 @@ class DropZone extends React.Component<PropsWithContext, State> {
       }
       this.setState({active: false, placeholderIndex: null});
     }
-  }
+  };
 
   onDrop = (data: ?Object) => {
     if (this.props.disabled) {
@@ -145,7 +153,7 @@ class DropZone extends React.Component<PropsWithContext, State> {
       this.props.onDrop(data);
     }
     this.setState({active: false, placeholderIndex: null});
-  }
+  };
 
   getChildrenWithPlaceholder(children) {
     const {placeholderIndex} = this.state;
@@ -156,7 +164,10 @@ class DropZone extends React.Component<PropsWithContext, State> {
     const withoutMoving = childs.filter((c: React.Element<typeof Draggable | any>) => this.props.dragContext?.dragging?.data !== c.props.data);
 
     withoutMoving.splice(placeholderIndex, 0, (
-      <View key="placeholder" style={{height: UNIT, marginLeft: UNIT * 2, backgroundColor: COLOR_PINK}}/>
+      <View
+        key="placeholder"
+        style={this.placeholderStyles}
+      />
     ));
     return withoutMoving;
   }
@@ -182,7 +193,7 @@ export default (props: Props) => (
       if (!dragContext) {
         throw new Error('DropZone should be rendered inside <DragContainer />');
       }
-      return <DropZone {...props} dragContext={dragContext} />;
+      return <DropZone {...props} dragContext={dragContext}/>;
     }}
   </DragContext.Consumer>
 );

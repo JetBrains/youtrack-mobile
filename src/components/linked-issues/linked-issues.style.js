@@ -1,7 +1,7 @@
-import {StyleSheet} from 'react-native';
-import {UNIT, COLOR_FONT_GRAY, COLOR_PINK} from '../variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import {UNIT} from '../variables/variables';
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   linkedIssuesContainer: {
     marginTop: UNIT,
     marginBottom: UNIT
@@ -13,7 +13,7 @@ export default StyleSheet.create({
     marginTop: UNIT / 2,
   },
   relationTitle: {
-    color: COLOR_FONT_GRAY
+    color: '$icon'
   },
   linkedIssueContainer: {
     marginTop: UNIT / -4,
@@ -21,6 +21,6 @@ export default StyleSheet.create({
     padding: UNIT / 4
   },
   linkedIssueText: {
-    color: COLOR_PINK
+    color: '$link'
   }
 });

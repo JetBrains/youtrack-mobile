@@ -2,7 +2,6 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../variables/variables';
 
 import {mainText} from '../common-styles/typography';
-import {link} from '../common-styles/button';
 
 export default EStyleSheet.create({
   commentWrapper: {
@@ -35,7 +34,7 @@ export default EStyleSheet.create({
   },
   actionLink: {
     ...mainText,
-    ...link,
+    color: '$link'
   },
 
   swipeButton: {

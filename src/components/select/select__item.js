@@ -6,7 +6,6 @@ import React, {PureComponent} from 'react';
 import Avatar from '../avatar/avatar';
 import {IconCheck} from '../icon/icon';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
-import {COLOR_PINK} from '../variables/variables';
 
 import styles from './select.styles';
 
@@ -67,7 +66,7 @@ export default class SelectItem extends PureComponent<Props, void> {
           {this.renderTitle(item)}
         </View>
 
-        {isSelected && <IconCheck size={20} color={COLOR_PINK}/>}
+        {isSelected && <IconCheck size={20} color={styles.link.color}/>}
       </TouchableOpacity>
     );
   }

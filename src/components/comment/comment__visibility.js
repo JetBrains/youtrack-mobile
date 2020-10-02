@@ -5,12 +5,12 @@ import React, {PureComponent} from 'react';
 import {IconLock} from '../icon/icon';
 
 import styles from './comment__visibility.styles';
+
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import {COLOR_FONT_GRAY} from '../variables/variables';
 
 type Props = {
   visibility: ?string,
-  color?: string,
+  color: string,
   style?: ViewStyleProp
 };
 
@@ -25,7 +25,7 @@ export default class CommentVisibility extends PureComponent<Props, void> {
           <IconLock
             testID="commentVisibilityIcon"
             size={16}
-            color={this.props.color || COLOR_FONT_GRAY}
+            color={this.props.color}
           />
           <Text style={[
             styles.commentVisibilityText,

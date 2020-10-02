@@ -2,7 +2,6 @@ import {Platform} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../variables/variables';
 import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE, monospace} from '../common-styles/typography';
-import {link} from '../common-styles/button';
 
 const showMoreLink = {
   fontSize: SECONDARY_FONT_SIZE,
@@ -43,11 +42,11 @@ export default EStyleSheet.create({
     margin: 0
   },
   link: {
-    ...link,
+    color: '$link',
     fontSize: SECONDARY_FONT_SIZE,
   },
   text: {
-    ...link,
+    color: '$link',
     fontSize: SECONDARY_FONT_SIZE,
   },
   showMoreLink: {

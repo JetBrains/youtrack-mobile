@@ -1,9 +1,10 @@
 // @flow
 
 import React, {PureComponent} from 'react';
-import {StyleSheet, Text} from 'react-native';
+import {Text} from 'react-native';
 
-import {COLOR_LINK} from '../variables/variables';
+import EStyleSheet from 'react-native-extended-stylesheet';
+
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 
@@ -56,7 +57,7 @@ export default class TextView extends PureComponent<Props, State> {
         <Text style={this.props.style}>{`${this._getText()}...`}</Text>
         {this.state.showMore && <Text
           testID='textMoreShowMore'
-          style={styles.more}
+          style={{color: EStyleSheet.value('$link')}}
           onPress={() => this._toggleShowMore()}>
           {showMoreInlineText}
         </Text>}
@@ -64,10 +65,3 @@ export default class TextView extends PureComponent<Props, State> {
     );
   }
 }
-
-
-const styles = StyleSheet.create({
-  more: {
-    color: COLOR_LINK
-  }
-});

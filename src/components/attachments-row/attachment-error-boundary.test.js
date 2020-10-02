@@ -2,7 +2,6 @@ import React from 'react';
 import {Text} from 'react-native';
 
 import {shallow} from 'enzyme';
-import toJson from 'enzyme-to-json';
 
 import AttachmentErrorBoundary from './attachment-error-boundary';
 
@@ -18,10 +17,6 @@ describe('<AttachmentErrorBoundary/>', () => {
   });
 
   describe('Render', () => {
-    it('should match a snapshot', () => {
-      expect(toJson(wrapper)).toMatchSnapshot();
-    });
-
     it('should render children', () => {
       expect(findByTestId(errorPlaceholderTestId)).toHaveLength(0);
       expect(findByTestId(childrenTestId)).toHaveLength(1);
