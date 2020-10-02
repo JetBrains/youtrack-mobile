@@ -13,11 +13,13 @@ import Header from '../../components/header/header';
 import {IconClose} from '../../components/icon/icon';
 import {notify} from '../../components/notification/notification';
 import {hasMimeType} from '../../components/mime-type/mime-type';
-import {COLOR_PINK} from '../../components/variables/variables';
+
+import {ThemeContext} from '../../components/theme/theme-context';
 
 import styles from './image.styles';
 
 import type {Attachment} from '../../flow/CustomFields';
+import type {Theme} from '../../flow/Theme';
 
 type Props = {
   imageAttachments: Array<Attachment>,
@@ -79,21 +81,25 @@ export class Image extends PureComponent<Props, State> {
     });
 
     return (
-      <View style={styles.container}>
-        <Header
-          leftButton={<IconClose size={21} color={COLOR_PINK}/>}
-          onBack={this.closeView}
-        />
+      <ThemeContext.Consumer>
+        {(theme: Theme) => (
+          <View style={styles.container}>
+            <Header
+              leftButton={<IconClose size={21} color={theme.uiTheme.colors.$link}/>}
+              onBack={this.closeView}
+            />
 
-        <Gallery
-          style={styles.container}
-          images={this.props.imageAttachments.map(createSource)}
-          initialPage={currentIndex}
-          imageComponent={this.renderImage}
-          onPageSelected={this.onPageSelected}
-        />
+            <Gallery
+              style={styles.container}
+              images={this.props.imageAttachments.map(createSource)}
+              initialPage={currentIndex}
+              imageComponent={this.renderImage}
+              onPageSelected={this.onPageSelected}
+            />
 
-      </View>
+          </View>
+        )}
+      </ThemeContext.Consumer>
     );
   }
 }

@@ -1,6 +1,9 @@
 /* @flow */
-import {StyleSheet, View, Text, WebView, ActivityIndicator} from 'react-native';
-import {UNIT, COLOR_FONT_ON_BLACK} from '../../components/variables/variables';
+
+import {View, Text, WebView, ActivityIndicator} from 'react-native';
+
+import EStyleSheet from 'react-native-extended-stylesheet';
+import {UNIT} from '../../components/variables/variables';
 import React from 'react';
 import Header from '../../components/header/header';
 import safariView from '../../components/safari-view/safari-view';
@@ -38,13 +41,13 @@ export function AttachmentPreview(props: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF'
   },
   headerText: {
-    color: COLOR_FONT_ON_BLACK,
+    color: '$text',
     fontSize: 17
   },
   loadingIndicator: {

@@ -1,11 +1,12 @@
 /* @flow */
 
-import {StyleSheet} from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../../components/variables/variables';
 
-export default StyleSheet.create({
+export default EStyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '$background'
   },
 
   loader: {
