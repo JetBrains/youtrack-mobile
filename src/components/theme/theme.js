@@ -13,7 +13,8 @@ export const getSystemThemeMode = () => Appearance.getColorScheme();
 export const themes: Array<UITheme> = [lightTheme, darkTheme];
 
 export const getUITheme = (mode: string): UITheme => {
-  return lightTheme.mode.indexOf(mode) !== -1 ? lightTheme : darkTheme;
+  const theme: ?UITheme = themes.reduce((theme: ?UITheme, it: UITheme) => it.mode.includes(mode) ? it : theme, null);
+  return theme || DEFAULT_THEME;
 };
 
 export const buildStyles = (mode: string, uiTheme: UITheme) => {
