@@ -256,9 +256,9 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
     }
   };
 
-  renderBackIcon() {
+  renderBackIcon(uiTheme: UITheme) {
     if (!this.state.isTransitionInProgress) {
-      return <IconBack/>;
+      return <IconBack color={uiTheme.colors.$link}/>;
     }
   }
 
@@ -337,7 +337,7 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
       const isIssueLoaded: boolean = this.isIssueLoaded();
       return (
         <Header
-          leftButton={this.renderBackIcon()}
+          leftButton={this.renderBackIcon(uiTheme)}
           rightButton={isIssueLoaded ? this.renderActionsIcon(uiTheme) : null}
           extraButton={isIssueLoaded ? this.renderStar(uiTheme) : null}
           onRightButtonClick={() => {
