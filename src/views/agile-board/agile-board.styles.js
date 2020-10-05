@@ -94,6 +94,7 @@ export default EStyleSheet.create({
     color: '$text',
   },
   agileSelector: {
+    width: '100%',
     minHeight: UNIT * 7,
     paddingTop: UNIT * 1.5,
     paddingLeft: UNIT * 2,
