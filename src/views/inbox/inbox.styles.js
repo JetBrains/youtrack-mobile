@@ -52,6 +52,7 @@ export default EStyleSheet.create({
     padding: UNIT * 1.5,
     paddingRight: UNIT * 2,
     borderRadius: UNIT,
+    color: '$text',
     backgroundColor: '$boxBackground'
   },
   notificationContentWorkflow: {
@@ -91,6 +92,7 @@ export default EStyleSheet.create({
     marginTop: UNIT
   },
   changeRemoved: {
+    color: '$icon',
     textDecorationLine: 'line-through'
   },
   headerTitle: {
