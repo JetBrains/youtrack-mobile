@@ -21,6 +21,9 @@ export default EStyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  attachmentName: {
+    color: '$icon'
+  },
   imageActivityIndicator: {
     backgroundColor: '$mask',
     position: 'absolute',

@@ -148,7 +148,7 @@ export default class Attach extends PureComponent<Props, State> {
         testID="attachmentFile"
         style={[styles.attachmentImage, styles.attachmentFile]}
       >
-        <Text>{attach.name}</Text>
+        <Text style={styles.attachmentName}>{attach.name}</Text>
       </View>
     );
   }
