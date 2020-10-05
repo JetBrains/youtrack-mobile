@@ -9,7 +9,8 @@ export default EStyleSheet.create({
   },
   container: {
     flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    backgroundColor: '$background'
   },
   scrollContent: {
     flexGrow: 1

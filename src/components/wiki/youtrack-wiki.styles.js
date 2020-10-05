@@ -76,7 +76,8 @@ export default EStyleSheet.create({
     ...monospace,
     fontSize: SECONDARY_FONT_SIZE,
     color: '$text',
-    lineHeight: SECONDARY_FONT_SIZE * 1.5
+    lineHeight: SECONDARY_FONT_SIZE * 1.5,
+    backgroundColor: '$boxBackground'
   },
   exception: {
     ...monospace,
