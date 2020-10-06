@@ -13,7 +13,7 @@ import Auth from '../../components/auth/auth';
 import {DragContainer} from '../../components/draggable/';
 import Api from '../../components/api/api';
 import {UNIT} from '../../components/variables/variables';
-import {flushStoragePart} from '../../components/storage/storage';
+import {flushStoragePart, getStorageState} from '../../components/storage/storage';
 
 import * as boardActions from './board-actions';
 import {connect} from 'react-redux';
@@ -30,6 +30,8 @@ import {getScrollableWidth} from '../../components/board-scroller/board-scroller
 import AgileBoardSprint from './agile-board__sprint';
 
 import {ThemeContext} from '../../components/theme/theme-context';
+
+import QueryAssist from '../../components/query-assist/query-assist-panel';
 
 import type {SprintFull, AgileBoardRow, AgileColumn, BoardColumn} from '../../flow/Agile';
 import type {AnyIssue, IssueOnList} from '../../flow/Issue';
@@ -48,7 +50,7 @@ type Props = AgilePageState & {
   isSprintSelectOpen: boolean,
   selectProps: Object,
   issuePermissions: IssuePermissions,
-  onLoadBoard: () => any,
+  onLoadBoard: (query: ?string) => any,
   onLoadMoreSwimlanes: () => any,
   onRowCollapseToggle: (row: AgileBoardRow) => any,
   onColumnCollapseToggle: (column: AgileColumn) => any,
@@ -57,8 +59,9 @@ type Props = AgilePageState & {
   onCloseSelect: (any) => any,
   createCardForCell: (columnId: string, cellId: string) => any,
   onCardDrop: (any) => any,
-  refreshAgile: (agileId: string, sprintId: string) => any,
-  toggleRefreshPopup: (isOutOfDate: boolean) => any
+  refreshAgile: (agileId: string, sprintId: string, query: ?string) => any,
+  toggleRefreshPopup: (isOutOfDate: boolean) => any,
+  suggestAgileQuery: (query: ?string, caret: number) => any
 };
 
 type State = {
@@ -69,10 +72,13 @@ type State = {
 
 class AgileBoard extends Component<Props, State> {
   boardHeader: ?BoardHeader;
+  query: string;
 
   constructor(props: Props) {
     super(props);
     this.updateZoomedInStorageState(true);
+    this.query = getStorageState().agileQuery || '';
+
     this.state = {
       zoomedIn: true,
       stickElement: {
@@ -85,7 +91,7 @@ class AgileBoard extends Component<Props, State> {
 
   componentDidMount() {
     usage.trackScreenView(CATEGORY_NAME);
-    this.props.onLoadBoard();
+    this.props.onLoadBoard(this.query);
   }
 
   shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
@@ -113,7 +119,7 @@ class AgileBoard extends Component<Props, State> {
     this.setState({
       stickElement: {
         agile: newY > UNIT * 2,
-        boardHeader: newY > UNIT * (this.isSprintDisabled() ? 2 : 8)
+        boardHeader: newY > UNIT * (this.isSprintDisabled() ? 2 : 14)
       }
     });
   };
@@ -386,6 +392,32 @@ class AgileBoard extends Component<Props, State> {
     this.updateZoomedInStorageState(zoomedIn);
   };
 
+  renderSearchPanel = () => {
+    const {suggestAgileQuery, queryAssistSuggestions, refreshAgile, sprint, isLoading} = this.props;
+
+    return (
+      <View style={styles.searchPanel}>
+        <QueryAssist
+          disabled={isLoading}
+          suggestions={queryAssistSuggestions}
+          currentQuery={this.query}
+          onChange={suggestAgileQuery}
+          onApplyQuery={(query: string) => {
+            this.query = query;
+            if (sprint && sprint && sprint.agile) {
+              refreshAgile(sprint.agile.id, sprint.id, query);
+            }
+          }}
+          onClearQuery={() => {
+            this.query = '';
+            return suggestAgileQuery(null, 0);
+          }}
+        />
+
+      </View>
+    );
+  };
+
   renderBoard(uiTheme: UITheme) {
     const {sprint, isLoadingMore, error} = this.props;
     const {zoomedIn} = this.state;
@@ -422,6 +454,7 @@ class AgileBoard extends Component<Props, State> {
           agileSelector={this.renderAgileSelector(uiTheme)}
           sprintSelector={this.renderSprintSelector(uiTheme)}
           boardHeader={this.renderBoardHeader()}
+          boardSearch={this.renderSearchPanel()}
 
         >
 
@@ -474,7 +507,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onLoadBoard: () => dispatch(boardActions.loadDefaultAgileBoard()),
+    onLoadBoard: (query: ?string) => dispatch(boardActions.loadDefaultAgileBoard(query)),
     onLoadMoreSwimlanes: () => dispatch(boardActions.fetchMoreSwimlanes()),
     onRowCollapseToggle: (row) => dispatch(boardActions.rowCollapseToggle(row)),
     onColumnCollapseToggle: (column) => dispatch(boardActions.columnCollapseToggle(column)),
@@ -483,8 +516,9 @@ const mapDispatchToProps = (dispatch) => {
     onCloseSelect: () => dispatch(boardActions.closeSelect()),
     createCardForCell: (...args) => dispatch(boardActions.createCardForCell(...args)),
     onCardDrop: (...args) => dispatch(boardActions.onCardDrop(...args)),
-    refreshAgile: (agileId: string, sprintId: string) => dispatch(boardActions.refreshAgile(agileId, sprintId)),
-    toggleRefreshPopup: (isOutOfDate: boolean) => dispatch(boardActions.setOutOfDate(isOutOfDate))
+    refreshAgile: (agileId: string, sprintId: string, query: ?string) => dispatch(boardActions.refreshAgile(agileId, sprintId, query)),
+    toggleRefreshPopup: (isOutOfDate: boolean) => dispatch(boardActions.setOutOfDate(isOutOfDate)),
+    suggestAgileQuery: (query: string, caret: number) => dispatch(boardActions.suggestAgileQuery(query, caret)),
   };
 };
 

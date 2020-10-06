@@ -21,7 +21,8 @@ type Props = {
   dragContext: DragContextType,
   boardHeader: React$Element<any>,
   sprintSelector: React$Element<any>,
-  agileSelector: React$Element<any>
+  agileSelector: React$Element<any>,
+  boardSearch: React$Element<any>,
 }
 
 type UnamangedState = {
@@ -156,7 +157,9 @@ class BoardScroller extends Component<Props, State> {
       verticalScrollProps,
       boardHeader,
       agileSelector,
-      sprintSelector
+      sprintSelector,
+      boardSearch
+
     } = this.props;
     const {isDragging} = this.state;
 
@@ -170,10 +173,11 @@ class BoardScroller extends Component<Props, State> {
         scrollEventThrottle={10}
         onLayout={this.onLayout}
         scrollEnabled={!isDragging}
-        stickyHeaderIndices={[0, sprintSelector ? 2 : 1]}
+        stickyHeaderIndices={[0, sprintSelector ? 3 : 1]}
       >
         {agileSelector}
         {sprintSelector}
+        {boardSearch}
         {boardHeader}
 
         <ScrollView

@@ -1,4 +1,5 @@
 /* @flow */
+
 import {notifyError, notify} from '../../components/notification/notification';
 import {DEFAULT_ERROR_MESSAGE} from '../../components/error/error-messages';
 import ServersideEvents from '../../components/api/api__serverside-events';
@@ -14,7 +15,14 @@ import {routeMap} from '../../app-routes';
 
 import * as types from './board-action-types';
 import type Api from '../../components/api/api';
-import type {AgileBoardRow, AgileColumn, BoardOnList, AgileUserProfile, Sprint, Board} from '../../flow/Agile';
+import type {
+  AgileBoardRow,
+  AgileColumn,
+  BoardOnList,
+  AgileUserProfile,
+  Sprint,
+  Board
+} from '../../flow/Agile';
 import type {CustomError} from '../../flow/Error';
 import type {IssueFull, IssueOnList} from '../../flow/Issue';
 import {isIOSPlatform} from '../../util/util';
@@ -99,7 +107,7 @@ export function loadAgileWithStatus(agileId: string) {
   };
 }
 
-export function loadBoard(board: Board) {
+export function loadBoard(board: Board, query: ?string) {
   return async (dispatch: (any) => any) => {
     destroySSE();
 
@@ -115,7 +123,7 @@ export function loadBoard(board: Board) {
     }
     log.info(`Loading: Board ${board?.name}, Sprint = ${sprint?.name}`);
 
-    dispatch(loadSprint(board.id, sprint.id));
+    dispatch(loadSprint(board.id, sprint.id, query));
   };
 }
 
@@ -158,19 +166,40 @@ export function cacheSprint(sprint: Sprint) {
   };
 }
 
-export function loadSprint(agileId: string, sprintId: string) {
+export function suggestAgileQuery(query: string, caret: number) {
+  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    try {
+      let suggestions;
+      if (query) {
+        suggestions = await api.getQueryAssistSuggestions(query, caret);
+      } else {
+        const currentUser = getState().app.auth.currentUser;
+        suggestions = await api.getSavedQueries();
+        suggestions = suggestions.filter(s => s.owner.ringId === currentUser.id);
+      }
+      dispatch({type: types.AGILE_SEARCH_SUGGESTS, suggestions});
+    } catch (e) {
+      notifyError('Failed to load suggestions', e);
+      dispatch({type: types.AGILE_SEARCH_SUGGESTS, suggestions: []});
+    }
+  };
+}
+
+export function loadSprint(agileId: string, sprintId: string, query: ?string) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
     dispatch(startSprintLoad());
     destroySSE();
     try {
-      const sprint = await api.agile.getSprint(agileId, sprintId, PAGE_SIZE);
+      const sprint = await api.agile.getSprint(agileId, sprintId, PAGE_SIZE, 0, query);
       animateLayout();
       dispatch(receiveSprint(sprint));
       dispatch(updateAgileUserProfile(sprint.id));
       dispatch(subscribeServersideUpdates());
       log.info(`Sprint ${sprintId} (agileBoardId="${agileId}") has been loaded`);
       dispatch(cacheSprint(sprint));
+      flushStoragePart({agileQuery: query});
     } catch (e) {
       const message: string = 'Could not load requested sprint';
       const error: CustomError = new Error(message);
@@ -200,7 +229,7 @@ export function loadAgileProfile() {
   };
 }
 
-export function loadDefaultAgileBoard() {
+export function loadDefaultAgileBoard(query: ?string) {
   return async (dispatch: (any) => any) => {
     dispatch(setError(null));
     dispatch(receiveSprint(getStorageState().agileLastSprint));
@@ -212,7 +241,7 @@ export function loadDefaultAgileBoard() {
 
     if (board) {
       log.info('Loading Default Agile board', board?.name || board?.id);
-      await dispatch(loadBoard(board));
+      await dispatch(loadBoard(board, query));
     } else {
       dispatch(receiveSprint(null));
       const error: CustomError = new Error('No agile boards found');
@@ -605,10 +634,10 @@ export function onCardDrop(data: { columnId: string, cellId: string, leadingId: 
   };
 }
 
-export function refreshAgile(agileId: string, sprintId: string) {
+export function refreshAgile(agileId: string, sprintId: string, query: ?string) {
   return async (dispatch: (any) => any) => {
     log.info('Refresh agile with popup');
-    dispatch(loadSprint(agileId, sprintId));
+    dispatch(loadSprint(agileId, sprintId, query));
   };
 }
 

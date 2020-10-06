@@ -31,3 +31,5 @@ export const STOP_LOADING_AGILE = 'agile.STOP_LOADING_AGILE';
 export const RECEIVE_AGILE = 'agile.RECEIVE_AGILE';
 
 export const AGILE_ERROR = 'agile.AGILE_ERROR';
+
+export const AGILE_SEARCH_SUGGESTS = 'agile.AGILE_SEARCH_SUGGESTS';

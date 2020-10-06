@@ -58,6 +58,7 @@ describe('Storage', () => {
       'YT_DEVICE_TOKEN',
       'YT_AGILE_ZOOMED_IN',
       'YT_AGILE_LAST_SPRINT',
+      'YT_AGILE_QUERY',
       'YT_LAST_ROUTE',
       'YT_CURRENT_APP_VERSION',
       'YT_ISSUE_ACTIVITIES_ENABLED_TYPES',

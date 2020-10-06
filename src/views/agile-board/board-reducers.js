@@ -16,7 +16,7 @@ import {
 } from './board-updaters';
 
 import type {SprintFull, AgileBoardRow, Board, AgileUserProfile} from '../../flow/Agile';
-import type {IssueOnList, IssueFull} from '../../flow/Issue';
+import type {IssueOnList, IssueFull, ServersideSuggestion} from '../../flow/Issue';
 import type {CustomError} from '../../flow/Error';
 
 type BoardState = Board;
@@ -29,10 +29,11 @@ export type AgilePageState = {
   isOutOfDate: boolean,
   creatingIssueDraftId: ?string,
   creatingIssueDraftCellId: ?string,
-  sprint: ?SprintFull,
+  sprint?: SprintFull,
   selectProps: ?Object,
   agile: ?Board,
-  error?: CustomError | null
+  error?: CustomError | null,
+  queryAssistSuggestions: Array<ServersideSuggestion>
 };
 
 const initialPageState: AgilePageState = {
@@ -46,7 +47,8 @@ const initialPageState: AgilePageState = {
   selectProps: null,
   sprint: null,
   agile: null,
-  error: null
+  error: null,
+  queryAssistSuggestions: []
 };
 
 const boardReducer = createReducer({}, {
@@ -179,6 +181,12 @@ const agilePageReducer = createReducer(initialPageState, {
       error: action.error
     };
   },
+  [types.AGILE_SEARCH_SUGGESTS]: (state: AgilePageState, action: { suggestions: Array<Object> }) => {
+    return {
+      ...state,
+      queryAssistSuggestions: action.suggestions
+    };
+  }
 });
 
 /**

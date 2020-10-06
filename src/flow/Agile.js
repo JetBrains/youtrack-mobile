@@ -78,6 +78,7 @@ export type BoardOnList = {
 }
 
 export type SprintFull = Sprint & {
+  id: string,
   board: Board,
   eventSourceTicket: string,
   agile: {

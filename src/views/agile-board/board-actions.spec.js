@@ -109,7 +109,22 @@ describe('Agile board async actions', () => {
         expect(apiMock.agile.getSprint).toHaveBeenCalledWith(
           defaultAgileMock.id,
           sprintIdMock,
-          actions.PAGE_SIZE
+          actions.PAGE_SIZE,
+          0,
+          undefined
+        );
+      });
+
+      it('should load the last visited sprint with query', async () => {
+        const queryMock = 'for:me';
+        await store.dispatch(actions.loadDefaultAgileBoard(queryMock));
+
+        expect(apiMock.agile.getSprint).toHaveBeenCalledWith(
+          defaultAgileMock.id,
+          sprintIdMock,
+          actions.PAGE_SIZE,
+          0,
+          queryMock
         );
       });
 
@@ -139,7 +154,9 @@ describe('Agile board async actions', () => {
           expect(apiMock.agile.getSprint).toHaveBeenCalledWith(
             targetSprint.agile.id,
             targetSprint.id,
-            actions.PAGE_SIZE
+            actions.PAGE_SIZE,
+            0,
+            undefined
           );
         });
     });
@@ -156,7 +173,9 @@ describe('Agile board async actions', () => {
         expect(apiMock.agile.getSprint).toHaveBeenCalledWith(
           sprintMock.agile.id,
           sprintMock.id,
-          actions.PAGE_SIZE
+          actions.PAGE_SIZE,
+          0,
+          undefined
         );
       });
 
@@ -237,10 +256,11 @@ describe('Agile board async actions', () => {
 });
 
 
-async function setLoadSprintExpectation(sprintId: ?string, agileId: ?string) {
+async function setLoadSprintExpectation(sprintId: ?string, agileId: ?string, query: ?string) {
   await store.dispatch(actions.loadSprint(
     agileId || sprintMock.agile.id,
-    sprintId || sprintMock.id
+    sprintId || sprintMock.id,
+    query
   ));
   storeActions = store.getActions();
   return storeActions;

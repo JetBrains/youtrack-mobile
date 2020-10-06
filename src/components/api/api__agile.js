@@ -1,5 +1,7 @@
 /* @flow */
+
 import qs from 'qs';
+
 import ApiBase from './api__base';
 import agileFields from './api__agile-fields';
 import ApiHelper from './api__helper';
@@ -19,12 +21,14 @@ export default class AgileAPI extends ApiBase {
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${agileId}?${queryString}`);
   }
 
-  async getSprint(boardId: string, sprintId: string, top: number = 100, skip: number = 0): Promise<SprintFull> {
-    const queryString = qs.stringify({
+  async getSprint(boardId: string, sprintId: string, top: number = 100, skip: number = 0, query: ?string = ''): Promise<SprintFull> {
+    const issuesQuery: Object = query ? {issuesQuery: query} : null;
+    const queryData: { fields: string, $topSwimlanes: number, $skipSwimlanes: number, issuesQuery?: string } = Object.assign({
       fields: agileFields.sprint.toString(),
       $topSwimlanes: top,
-      $skipSwimlanes: skip
-    }, {encode: false});
+      $skipSwimlanes: skip,
+    }, issuesQuery);
+    const queryString = qs.stringify(queryData, {encode: false});
     const sprint = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}?${queryString}`);
     return ApiHelper.patchAllRelativeAvatarUrls(sprint, this.config.backendUrl);
   }
