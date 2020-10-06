@@ -27,7 +27,7 @@ type Props = {
   style?: any,
   suggestions: Array<TransformedSuggestion | SavedQuery>,
   onApplySuggestion: (suggestion: TransformedSuggestion) => any,
-  onApplySavedQuery: (savedQuery: SavedQuery) => any
+  onApplySavedQuery: (savedQuery?: SavedQuery) => any
 };
 
 export default class QueryAssistSuggestionsList extends Component<Props, State> {
