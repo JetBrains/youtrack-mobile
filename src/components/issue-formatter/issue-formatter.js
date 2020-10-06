@@ -92,8 +92,8 @@ function findIssueField(issue: AnyIssue, predicate: (field: CustomField) => bool
 
 function getPriotityField(issue: AnyIssue): ?CustomField {
   return findIssueField(issue, field => {
-    const fieldName = field.projectCustomField.field.name;
-    return fieldName.toLowerCase() === 'priority';
+    const fieldName: ?string = field?.projectCustomField?.field?.name;
+    return !!fieldName && fieldName.toLowerCase() === 'priority';
   });
 }
 

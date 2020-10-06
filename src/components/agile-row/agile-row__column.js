@@ -21,6 +21,7 @@ type ColumnProps = {
 
 export default function AgileRowColumn(props: ColumnProps) {
   const {cell, uiTheme} = props;
+  const issues: Array<IssueOnList> = cell.issues || [];
 
   return (
     <DropZone
@@ -28,10 +29,10 @@ export default function AgileRowColumn(props: ColumnProps) {
       data={{
         columnId: cell.column.id,
         cellId: cell.id,
-        issueIds: props.cell.issues.map(issue => issue.id)
+        issueIds: issues.map(issue => issue.id)
       }}
     >
-      {props.cell.issues.map(props.renderIssueCard)}
+      {issues.map(props.renderIssueCard)}
 
       <TouchableOpacity
         onPress={() => props.onTapCreateIssue(cell.column.id, cell.id)}
