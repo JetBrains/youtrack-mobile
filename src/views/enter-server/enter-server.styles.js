@@ -39,5 +39,8 @@ export default EStyleSheet.create({
   text: {
     ...mainText,
     color: '$text'
+  },
+  placeholder: {
+    color: '$icon'
   }
 });
