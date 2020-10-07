@@ -91,6 +91,9 @@ export default EStyleSheet.create({
   activityChange: {
     marginTop: UNIT / 2,
   },
+  activityChangeComment: {
+    marginTop: -UNIT / 1.5,
+  },
   activityNoActivity: {
     marginTop: UNIT * 5,
     textAlign: 'center',

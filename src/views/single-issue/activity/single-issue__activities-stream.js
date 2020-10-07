@@ -363,7 +363,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
       <View key={comment.id}>
         {!activityGroup.merged && this._renderUserInfo(activityGroup)}
 
-        <View style={styles.activityChange}>
+        <View style={styles.activityChangeComment}>
 
           <Comment
             key={comment.id}
