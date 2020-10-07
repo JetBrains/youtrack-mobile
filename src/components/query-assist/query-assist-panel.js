@@ -3,8 +3,6 @@
 import {View, TouchableOpacity, TextInput, Text} from 'react-native';
 import React, {PureComponent} from 'react';
 
-import EStyleSheet from 'react-native-extended-stylesheet';
-
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
 import {IconBack, IconClose, IconSearch} from '../icon/icon';
 import ModalView from '../modal-view/modal-view';
@@ -37,7 +35,7 @@ type State = {
   isSuggestionsVisible: boolean
 }
 
-export default class QueryAssist extends PureComponent<Props, State> {
+export default class QueryAssistPanel extends PureComponent<Props, State> {
   queryAssistContainer: ?Object;
   lastQueryParams: { query: string, caret: number } = {query: '', caret: 0};
   initialState: State = {
@@ -67,6 +65,10 @@ export default class QueryAssist extends PureComponent<Props, State> {
 
   blurInput() {
     this.refs.searchInput.blur();
+  }
+
+  focusInput() {
+    this.refs.searchInput.focus();
   }
 
   cancelSearch() {
@@ -108,12 +110,11 @@ export default class QueryAssist extends PureComponent<Props, State> {
     const newQuery = leftPartAndNewQuery + oldQuery.substring(suggestion.completionEnd);
     this.setState({inputValue: newQuery});
     this.props.onChange(newQuery, leftPartAndNewQuery.length);
-    this.setSuggestsVisibility(false);
+    this.focusInput();
   };
 
-  onApplySavedQuery = (savedQuery?: SavedQuery) => {
+  onApplySavedQuery = () => {
     const {inputValue} = this.state;
-    // this.setState({inputValue});
     this.blurInput();
     this.props.onApplyQuery(inputValue);
     this.setSuggestsVisibility(false);
@@ -126,7 +127,7 @@ export default class QueryAssist extends PureComponent<Props, State> {
         hitSlop={HIT_SLOP}
         style={styles.clearIcon}
       >
-        <IconClose size={21} color={EStyleSheet.value('$link')}/>
+        <IconClose size={21} color={styles.link.color}/>
       </TouchableOpacity>
     );
   }
@@ -189,7 +190,7 @@ export default class QueryAssist extends PureComponent<Props, State> {
       <View
         style={[
           styles.inputWrapper,
-          this.props.disabled ? styles.inputWrapperDisabled : null
+          styles.inputWrapperActive
         ]}
         ref={node => this.queryAssistContainer = node}
       >
@@ -201,7 +202,7 @@ export default class QueryAssist extends PureComponent<Props, State> {
             this.onSubmitEditing();
           }}
         >
-          <IconBack/>
+          <IconBack color={styles.link.color}/>
         </TouchableOpacity>
 
         <TextInput
@@ -210,10 +211,10 @@ export default class QueryAssist extends PureComponent<Props, State> {
           testID="query-assist-input"
           style={styles.searchInput}
 
-          placeholderTextColor={EStyleSheet.value('$resolved')}
+          placeholderTextColor={styles.clearIcon.color}
           placeholder="Enter search request"
 
-          clearButtonMode="always"
+          clearButtonMode="never"
           returnKeyType="search"
           autoFocus={true}
           autoCorrect={false}

@@ -14,6 +14,7 @@ export const ResourceTypes = {
   USER_GENERAL_PROFILE: 'GeneralUserProfile',
 
   EVENT_GROUP: 'jetbrains.youtrack.event.gaprest.ActivityItemGroup',
+  AGILE: 'jetbrains.youtrack.agile.settings.Agile',
 };
 
 
@@ -27,6 +28,7 @@ hasType.comment = hasType(ResourceTypes.ISSUE_COMMENT);
 hasType.user = hasType(ResourceTypes.USER);
 hasType.userGroup = hasType(ResourceTypes.USER_GROUP);
 hasType.project = hasType(ResourceTypes.PROJECT);
+hasType.agile = hasType(ResourceTypes.AGILE);
 
 
 export const addTypes = function(type: string) {

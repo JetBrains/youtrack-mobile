@@ -193,7 +193,6 @@ export function loadSprint(agileId: string, sprintId: string, query: ?string) {
     dispatch(startSprintLoad());
     destroySSE();
     try {
-      flushStoragePart({agileQuery: query});
       const sprint = await api.agile.getSprint(agileId, sprintId, PAGE_SIZE, 0, query);
       const state: AgilePageState = getState();
       if (!state?.agile?.sprint) {
@@ -446,9 +445,9 @@ export function openSprintSelect() {
         },
         selectedItems: [sprint],
         getTitle: sprint => `${sprint.name} ${sprint.archived ? '(archived)' : ''}`,
-        onSelect: selectedSprint => {
+        onSelect: (selectedSprint: Sprint, query: ?string) => {
           dispatch(closeSelect());
-          dispatch(loadSprint(sprint.agile.id, selectedSprint.id));
+          dispatch(loadSprint(sprint.agile.id, selectedSprint.id, query));
           trackEvent('Change sprint');
         }
       }
@@ -487,10 +486,11 @@ export function openBoardSelect() {
           return [].concat(boards.favorites).concat(boards.regular);
         },
         selectedItems: sprint ? [sprint.agile] : agile ? [agile] : [],
-        onSelect: (selectedBoard: BoardOnList) => {
+        onSelect: async (selectedBoard: BoardOnList, query: ?string) => {
           dispatch(closeSelect());
           dispatch(startSprintLoad());
-          dispatch(loadBoard(selectedBoard));
+          await flushStoragePart({agileQuery: null});
+          dispatch(loadBoard(selectedBoard, query));
           trackEvent('Change board');
         }
       }
@@ -665,6 +665,7 @@ export function onCardDrop(data: { columnId: string, cellId: string, leadingId: 
 export function refreshAgile(agileId: string, sprintId: string, query: ?string) {
   return async (dispatch: (any) => any) => {
     log.info('Refresh agile with popup');
+    flushStoragePart({agileQuery: query});
     dispatch(loadSprint(agileId, sprintId, query));
   };
 }

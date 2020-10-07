@@ -29,7 +29,7 @@ export default class AgileAPI extends ApiBase {
       $topSwimlanes: top,
       $skipSwimlanes: skip,
     }, issuesQuery);
-    const queryString = qs.stringify(queryData, {encode: false});
+    const queryString = qs.stringify(queryData, {encode: true});
     const sprint = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}?${queryString}`);
     return ApiHelper.patchAllRelativeAvatarUrls(sprint, this.config.backendUrl);
   }

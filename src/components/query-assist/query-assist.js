@@ -3,8 +3,6 @@
 import {View, TouchableOpacity, TextInput} from 'react-native';
 import React, {Component} from 'react';
 
-import EStyleSheet from 'react-native-extended-stylesheet';
-
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
 import {IconBack, IconClose} from '../icon/icon';
 import ModalView from '../modal-view/modal-view';
@@ -122,7 +120,7 @@ export default class QueryAssist extends Component<Props, State> {
         hitSlop={HIT_SLOP}
         style={styles.clearIcon}
       >
-        <IconClose size={21} color={EStyleSheet.value('$link')}/>
+        <IconClose size={21} color={styles.link.color}/>
       </TouchableOpacity>
     );
   }
@@ -156,7 +154,7 @@ export default class QueryAssist extends Component<Props, State> {
           testID="query-assist-input"
           style={styles.searchInput}
 
-          placeholderTextColor={EStyleSheet.value('$resolved')}
+          placeholderTextColor={styles.clearIcon.color}
           placeholder="Enter search request"
 
           clearButtonMode="never"

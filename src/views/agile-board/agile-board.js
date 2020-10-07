@@ -27,13 +27,14 @@ import ErrorMessage from '../../components/error-message/error-message';
 import {notify} from '../../components/notification/notification';
 import isEqual from 'react-fast-compare';
 import {getScrollableWidth} from '../../components/board-scroller/board-scroller__math';
+import {hasType} from '../../components/api/api__resource-types';
 import AgileBoardSprint from './agile-board__sprint';
 
 import {ThemeContext} from '../../components/theme/theme-context';
 
-import QueryAssist from '../../components/query-assist/query-assist-panel';
+import QueryAssistPanel from '../../components/query-assist/query-assist-panel';
 
-import type {SprintFull, AgileBoardRow, AgileColumn, BoardColumn} from '../../flow/Agile';
+import type {SprintFull, AgileBoardRow, AgileColumn, BoardColumn, BoardOnList, Sprint} from '../../flow/Agile';
 import type {AnyIssue, IssueOnList} from '../../flow/Issue';
 import type {AgilePageState} from './board-reducers';
 import type {CustomError} from '../../flow/Error';
@@ -261,6 +262,10 @@ class AgileBoard extends Component<Props, State> {
     );
   }
 
+  updateQuery = (query: ?string) => {
+    this.query = query || '';
+  }
+
   _renderSelect() {
     const {selectProps} = this.props;
     return (
@@ -268,6 +273,12 @@ class AgileBoard extends Component<Props, State> {
         getTitle={item => item.name}
         onCancel={this.props.onCloseSelect}
         {...selectProps}
+        onSelect={(selected: BoardOnList | Sprint) => {
+          if (hasType.agile(selected)) {
+            this.updateQuery(null);
+          }
+          return selectProps.onSelect(selected, this.query);
+        }}
       />
     );
   }
@@ -392,24 +403,27 @@ class AgileBoard extends Component<Props, State> {
     this.updateZoomedInStorageState(zoomedIn);
   };
 
+  onQueryApply = async (query: string) => {
+    const {refreshAgile, sprint} = this.props;
+    this.updateQuery(query);
+    if (sprint && sprint.agile) {
+      refreshAgile(sprint.agile.id, sprint.id, query);
+    }
+  }
+
   renderSearchPanel = () => {
-    const {suggestAgileQuery, queryAssistSuggestions, refreshAgile, sprint, isLoading} = this.props;
+    const {suggestAgileQuery, queryAssistSuggestions, isLoading} = this.props;
 
     return (
       <View style={styles.searchPanel}>
-        <QueryAssist
+        <QueryAssistPanel
           disabled={isLoading}
           suggestions={queryAssistSuggestions}
           currentQuery={this.query}
           onChange={suggestAgileQuery}
-          onApplyQuery={(query: string) => {
-            this.query = query;
-            if (sprint && sprint && sprint.agile) {
-              refreshAgile(sprint.agile.id, sprint.id, query);
-            }
-          }}
+          onApplyQuery={this.onQueryApply}
           onClearQuery={() => {
-            this.query = '';
+            this.updateQuery(null);
             return suggestAgileQuery(null, 0);
           }}
         />

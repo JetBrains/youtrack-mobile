@@ -2,6 +2,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {UNIT} from '../variables/variables';
 import {mainText} from '../common-styles/typography';
+import {elevation1} from '../common-styles/shadow';
 
 const QUERY_ASSIST_HEIGHT = UNIT * 6;
 
@@ -30,6 +31,12 @@ export default EStyleSheet.create({
     borderRadius: UNIT,
     backgroundColor: '$boxBackground'
   },
+  inputWrapperActive: {
+    ...elevation1,
+    borderRadius: 0,
+    borderBottomColor: 'transparent',
+    backgroundColor: '$background'
+  },
   searchInput: {
     flex: 1,
     height: QUERY_ASSIST_HEIGHT,
@@ -57,5 +64,8 @@ export default EStyleSheet.create({
     marginLeft: UNIT,
     marginRight: UNIT * 2,
     color: '$icon'
+  },
+  link: {
+    color: '$link'
   }
 });
