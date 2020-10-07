@@ -1,6 +1,5 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import toJson from 'enzyme-to-json';
 
 import AgileCard from './agile-card';
 import Mocks from '../../../test/mocks';
@@ -20,12 +19,6 @@ describe('<AgileCard/>', () => {
     const wrapper = shallow(<AgileCard issue={issueMock} />);
 
     expect(wrapper).toBeDefined();
-  });
-
-  it('should render snapshot', () => {
-    const tree = shallow(<AgileCard issue={issueMock} />);
-
-    expect(toJson(tree)).toMatchSnapshot();
   });
 
   it('should show summary', () => {

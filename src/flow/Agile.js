@@ -1,13 +1,13 @@
 /* eslint-disable */
 
-export type Sprint = {
-  id: string,
-  name: string,
-  goal: ?string,
-  archived: boolean,
-  start: ?number,
-  finish: ?number,
-  agile: ?Board
+import type {IssueFull, IssueOnList} from './Issue';
+
+export type Cell = {
+  issues: Array<IssueOnList>
+};
+export type Swimlane = Object & {
+  issue: IssueFull,
+  cells: Array<Cell>
 };
 
 export type AgileUserProfile = {
@@ -76,6 +76,17 @@ export type BoardOnList = {
   sprints: {id: string, name: string},
   creator: {id: string, fullName: string}
 }
+
+export type Sprint = {
+  id: string,
+  name: string,
+  goal: ?string,
+  archived: boolean,
+  start: ?number,
+  finish: ?number,
+  agile: ?Board,
+  board: ?Board,
+};
 
 export type SprintFull = Sprint & {
   id: string,

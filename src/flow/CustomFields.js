@@ -87,14 +87,20 @@ export type ProjectCustomFieldShort = {
 export type FieldValue = {
   $type: string,
   id: string,
-  name: string,
   ringId: string,
+
+  name: string,
+
   fullName: string,
   avatarUrl: string,
   login: string,
+
   minutes: number,
+
   presentation: string,
+
   isResolved: boolean,
+
   color: ColorField
 }
 
@@ -108,19 +114,21 @@ export type FieldValueShort = {
   color: ColorField
 }
 
+export type CustomFieldValue = FieldValue | number | string | Array<any>;
+
 export type CustomField = {
   $type: string,
   id: string,
   name: string,
   hasStateMachine: boolean,
-  value: FieldValue|number,
+  value: CustomFieldValue,
   projectCustomField: ProjectCustomField
 }
 
 export type CustomFieldShort = {
   id: string,
   name: string,
-  value: FieldValueShort | number,
+  value: FieldValue,
   projectCustomField: ProjectCustomFieldShort
 }
 

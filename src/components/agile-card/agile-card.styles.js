@@ -3,7 +3,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {UNIT} from '../variables/variables';
-import {issueCard} from '../common-styles/issue';
+import {issueCard, issueIdResolved} from '../common-styles/issue';
 import {secondaryText} from '../common-styles/typography';
 
 export default EStyleSheet.create({
@@ -62,7 +62,8 @@ export default EStyleSheet.create({
   },
   estimation: {
     marginRight: UNIT,
-    ...secondaryText
+    ...secondaryText,
+    color: '$icon'
   },
   summary: {
     flexGrow: 1,
@@ -72,6 +73,9 @@ export default EStyleSheet.create({
   issueId: {
     ...issueCard.issueId,
     color: '$icon'
+  },
+  issueIdResolved: {
+    ...issueIdResolved
   },
   assignees: {
     flexDirection: 'row',
