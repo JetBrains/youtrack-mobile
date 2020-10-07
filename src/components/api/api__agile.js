@@ -8,6 +8,7 @@ import ApiHelper from './api__helper';
 
 import type Auth from '../auth/auth';
 import type {AgileUserProfile, SprintFull, AgileBoardRow, BoardOnList, Board} from '../../flow/Agile';
+import type {IssueFull} from '../../flow/Issue';
 
 export default class AgileAPI extends ApiBase {
   constructor(auth: Auth) {
@@ -31,6 +32,16 @@ export default class AgileAPI extends ApiBase {
     const queryString = qs.stringify(queryData, {encode: false});
     const sprint = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}?${queryString}`);
     return ApiHelper.patchAllRelativeAvatarUrls(sprint, this.config.backendUrl);
+  }
+
+  async getAgileIssues(issueIds: Array<{ id: string }>): Promise<Array<IssueFull>> {
+    const issues = await this.makeAuthorizedRequest(
+      `${this.youTrackUrl}/api/issuesGetter?fields=${agileFields.sprintIssues}`,
+      'POST',
+      issueIds
+    );
+
+    return ApiHelper.patchAllRelativeAvatarUrls(issues, this.config.backendUrl);
   }
 
   async getSwimlanes(boardId: string, sprintId: string, top: number, skip: number = 0): Promise<Array<AgileBoardRow>> {
@@ -96,9 +107,9 @@ export default class AgileAPI extends ApiBase {
     });
   }
 
-  async getIssueDraftForAgileCell(boardId: string, sprintId: string, columnId: string, cellId: string): Promise<{id: string}> {
+  async getIssueDraftForAgileCell(boardId: string, sprintId: string, columnId: string, cellId: string): Promise<{ id: string }> {
     const queryString = qs.stringify({fields: 'id'});
-    const url =`${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}/board/columns/${columnId}/cells/${cellId}/draftIssue?${queryString}`;
+    const url = `${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}/board/columns/${columnId}/cells/${cellId}/draftIssue?${queryString}`;
     return await this.makeAuthorizedRequest(url, 'POST', {});
   }
 

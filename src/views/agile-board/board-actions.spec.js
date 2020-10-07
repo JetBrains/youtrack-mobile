@@ -1,5 +1,6 @@
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
+
 import {__setStorageState, getStorageState} from '../../components/storage/storage';
 import animation from '../../components/animation/animation';
 
@@ -7,7 +8,8 @@ import * as actions from './board-actions';
 import * as notification from '../../components/notification/notification';
 
 import * as types from './board-action-types';
-import type {AgileUserProfile, Board, Sprint} from '../../flow/Agile';
+
+import mocks from '../../../test/mocks';
 
 let apiMock;
 let store;
@@ -21,6 +23,8 @@ const sprintIdMock = 'sprint-foo';
 const getApi = () => apiMock;
 const middlewares = [thunk.withExtraArgument(getApi)];
 const storeMock = configureMockStore(middlewares);
+
+const issueMock = mocks.createIssueMock();
 
 let cachedSprintMock;
 let cachedSprintIdMock;
@@ -50,6 +54,7 @@ describe('Agile board async actions', () => {
         getAgileUserProfile: jest.fn(() => agileUserProfileMock),
         updateAgileUserProfile: jest.fn(() => sprintMock),
         getAgile: jest.fn(() => agileWithStatusMock),
+        getAgileIssues: jest.fn().mockResolvedValue([{id: 'issueId'}]),
       }
     };
 
@@ -129,6 +134,8 @@ describe('Agile board async actions', () => {
       });
 
       it('should load cached sprint first', async () => {
+        await __setStorageState({agileLastSprint: cachedSprintMock});
+
         await store.dispatch(actions.loadDefaultAgileBoard());
         storeActions = store.getActions();
 
@@ -169,13 +176,19 @@ describe('Agile board async actions', () => {
         await setLoadSprintExpectation();
       });
 
-      it('should fetch sprint', () => {
+      it('should load sprint', () => {
         expect(apiMock.agile.getSprint).toHaveBeenCalledWith(
           sprintMock.agile.id,
           sprintMock.id,
           actions.PAGE_SIZE,
           0,
           undefined
+        );
+      });
+
+      it('should load sprint issues', () => {
+        expect(apiMock.agile.getAgileIssues).toHaveBeenCalledWith(
+          [{id: issueMock.id}]
         );
       });
 
@@ -222,7 +235,7 @@ describe('Agile board async actions', () => {
         });
         expect(storeActions[2]).toEqual({
           type: types.AGILE_ERROR,
-          error: new Error('Could not load requested sprint')
+          error: new Error('Could not load requested sprint issues')
         });
         expect(storeActions[3]).toEqual({
           type: types.STOP_SPRINT_LOADING
@@ -282,6 +295,9 @@ function createSprintMock(id: string, agileSprints: ?Array<Sprint>) {
     agile: {
       id: agileId,
       sprints: sprints
+    },
+    board: {
+      trimmedSwimlanes: [{cells: [{issues: [issueMock]}]}]
     }
   };
 }

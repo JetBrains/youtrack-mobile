@@ -3,7 +3,7 @@
 import {LayoutAnimation} from 'react-native';
 
 const defaultConfig = {
-  duration: 1300,
+  duration: 500,
   create:
     {
       type: LayoutAnimation.Types.easeInEaseOut,

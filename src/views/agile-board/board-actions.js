@@ -1,16 +1,17 @@
 /* @flow */
 
-import {notifyError, notify} from '../../components/notification/notification';
+import {notify, notifyError} from '../../components/notification/notification';
 import {DEFAULT_ERROR_MESSAGE} from '../../components/error/error-messages';
 import ServersideEvents from '../../components/api/api__serverside-events';
 import Router from '../../components/router/router';
 import log from '../../components/log/log';
 import usage from '../../components/usage/usage';
 import {findIssueOnBoard} from './board-updaters';
-import {getGroupedSprints} from './agile-board__helper';
+import {getGroupedSprints, getSprintAllIssues, fillSprintIssues} from './agile-board__helper';
 import animation from '../../components/animation/animation';
 import {sortAlphabetically} from '../../components/search/sorting';
 import {flushStoragePart, getStorageState} from '../../components/storage/storage';
+import {isIOSPlatform} from '../../util/util';
 import {routeMap} from '../../app-routes';
 
 import * as types from './board-action-types';
@@ -18,14 +19,14 @@ import type Api from '../../components/api/api';
 import type {
   AgileBoardRow,
   AgileColumn,
-  BoardOnList,
   AgileUserProfile,
-  Sprint,
-  Board
+  Board,
+  BoardOnList,
+  Sprint
 } from '../../flow/Agile';
 import type {CustomError} from '../../flow/Error';
 import type {IssueFull, IssueOnList} from '../../flow/Issue';
-import {isIOSPlatform} from '../../util/util';
+import type {AgilePageState} from './board-reducers';
 
 type ApiGetter = () => Api;
 
@@ -187,21 +188,48 @@ export function suggestAgileQuery(query: string, caret: number) {
 }
 
 export function loadSprint(agileId: string, sprintId: string, query: ?string) {
-  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+  return async (dispatch: (any) => any, getState: () => AgilePageState, getApi: ApiGetter) => {
     const api: Api = getApi();
     dispatch(startSprintLoad());
     destroySSE();
     try {
-      const sprint = await api.agile.getSprint(agileId, sprintId, PAGE_SIZE, 0, query);
-      animateLayout();
-      dispatch(receiveSprint(sprint));
-      dispatch(updateAgileUserProfile(sprint.id));
-      dispatch(subscribeServersideUpdates());
-      log.info(`Sprint ${sprintId} (agileBoardId="${agileId}") has been loaded`);
-      dispatch(cacheSprint(sprint));
       flushStoragePart({agileQuery: query});
+      const sprint = await api.agile.getSprint(agileId, sprintId, PAGE_SIZE, 0, query);
+      const state: AgilePageState = getState();
+      if (!state?.agile?.sprint) {
+        dispatch(receiveSprint(sprint));
+      }
+      dispatch(loadSprintIssues(sprint));
+      dispatch(updateAgileUserProfile(sprint.id));
+      log.info(`Sprint ${sprintId} (agileBoardId="${agileId}") has been loaded`);
     } catch (e) {
       const message: string = 'Could not load requested sprint';
+      const error: CustomError = new Error(message);
+      error.error_description = 'Check that the sprint exists';
+      dispatch(setError(error));
+      trackError('Load sprint');
+      log.info(message, e);
+    } finally {
+      dispatch(stopSprintLoad());
+      dispatch(setOutOfDate(false));
+    }
+  };
+}
+
+export function loadSprintIssues(sprint: Sprint) {
+  return async (dispatch: (any) => any, getState: () => AgilePageState, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    try {
+      const allIssuesIds = getSprintAllIssues(sprint);
+      const sprintIssues = await api.agile.getAgileIssues(allIssuesIds);
+      const updatedSprint: Sprint = fillSprintIssues(sprint, sprintIssues);
+      dispatch(receiveSprint({timestamp: Date.now(), ...updatedSprint}));
+      animateLayout();
+      dispatch(cacheSprint(updatedSprint));
+      dispatch(subscribeServersideUpdates());
+
+    } catch (e) {
+      const message: string = 'Could not load requested sprint issues';
       const error: CustomError = new Error(message);
       error.error_description = 'Check that the sprint exists';
       dispatch(setError(error));

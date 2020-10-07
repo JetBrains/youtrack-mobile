@@ -56,18 +56,48 @@ const BOARD_COLUMN = toField([
   }
 ]);
 
+const BOARD_ISSUE_BASE_FIELDS = toField([
+  'id',
+  'idReadable',
+]);
+
 const BOARD_ROW = toField([
-  '$type',
   'id',
   'name',
   'collapsed',
-  { issue: IssueFields.issuesOnList },
+  {issue: BOARD_ISSUE_BASE_FIELDS},
   {
     cells: [
       'id',
       'tooManyIssues',
-      { column: 'id' },
-      { issues: IssueFields.issuesOnList }
+      {column: 'id'},
+      {
+        issues: toField([
+          BOARD_ISSUE_BASE_FIELDS,
+          {
+            fields: toField([
+              '$type',
+              'id',
+              {
+                value: [
+                  'id',
+                ]
+              },
+              {
+                projectCustomField: [
+                  {
+                    field: [
+                      'id',
+                      'name'
+                    ]
+                  }
+                ]
+              }
+            ])
+          },
+          {tags: IssueFields.ISSUE_TAGS_FIELDS}
+        ])
+      }
     ]
   }
 ]);
@@ -93,10 +123,16 @@ const BOARD_ON_LIST = toField([
 
 const SPRINT_WITH_BOARD = toField([
   SPRINT,
-  { board: BOARD },
+  {board: BOARD},
   'eventSourceTicket',
   {
-    agile: ['id', 'name', 'orphansAtTheTop', 'isUpdatable', {estimationField: 'id'}]
+    agile: [
+      'id',
+      'name',
+      'orphansAtTheTop',
+      'isUpdatable',
+      {estimationField: 'id'}
+    ]
   }
 ]);
 
@@ -114,10 +150,13 @@ const SPRINT_LIVE_UPDATE = toField([
   }
 ]);
 
+const SPRINT_ISSUES_FIELDS = 'id,idReadable,summary,resolved,tags(name,id,query,color(id,background,foreground)),fields($type,id,name,projectCustomField($type,field(fieldType(isMultiValue,valueType),id,localizedName,name),id,isSpentTime),value($type,archived,avatarUrl,color(id,background),id,isResolved,localizedName,login,name,presentation,ringId,text))';
+
 
 export default {
   agileUserProfile: AGILE_PROFILE,
   sprint: SPRINT_WITH_BOARD,
+  sprintIssues: SPRINT_ISSUES_FIELDS,
   sprintShort: SPRINT,
   row: BOARD_ROW,
   boardOnList: BOARD_ON_LIST,

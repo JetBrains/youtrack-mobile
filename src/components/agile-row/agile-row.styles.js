@@ -102,7 +102,7 @@ export default EStyleSheet.create({
     height: UNIT,
     margin: 2,
     borderWidth: 1,
-    borderColor: '$boxBackground'
+    borderColor: '$mask'
   },
   addCardButton: {
     marginBottom: UNIT * 2,
