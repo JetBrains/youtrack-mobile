@@ -1,6 +1,5 @@
 import React from 'react';
 import {shallow} from 'enzyme';
-import toJson from 'enzyme-to-json';
 
 import * as storage from '../storage/storage';
 import Accounts from './accounts';
@@ -86,10 +85,6 @@ describe('<Accounts/>', () => {
   describe('Render', () => {
     beforeEach(() => {
       wrapper = doShallow({otherAccounts: accountsMock});
-    });
-
-    it('should match a snapshot', () => {
-      expect(toJson(wrapper)).toMatchSnapshot();
     });
 
     it('should render component', () => {

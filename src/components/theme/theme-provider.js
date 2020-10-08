@@ -54,7 +54,7 @@ class ManageThemeProvider extends PureComponent<Props, State> {
     try {
       androidVersion = Number(systemVersion);
     } catch (error) {
-      androidVersion = parseFloat(systemVersion, 10);
+      androidVersion = parseFloat(systemVersion);
     }
     return typeof androidVersion === 'number' && androidVersion >=8;
   }

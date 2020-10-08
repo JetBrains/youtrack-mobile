@@ -1,7 +1,6 @@
 import React from 'react';
 
 import {shallow} from 'enzyme';
-import toJson from 'enzyme-to-json';
 import mocks from '../../../test/mocks';
 
 import BoardRow from './agile-row';
@@ -22,10 +21,6 @@ describe('<BoardRow/>', () => {
 
     beforeEach(() => {
       doShallow(createRowMock(), false);
-    });
-
-    it('should render a snapshot', () => {
-      expect(toJson(wrapper)).toMatchSnapshot();
     });
 
     it('should render a header', () => {
