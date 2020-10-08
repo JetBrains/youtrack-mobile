@@ -2,8 +2,6 @@
 import {Text, View, TouchableOpacity, TextInput, ActivityIndicator, FlatList} from 'react-native';
 import React, {Component} from 'react';
 
-import EStyleSheet from 'react-native-extended-stylesheet';
-
 import ColorField from '../color-field/color-field';
 import {notifyError} from '../notification/notification';
 import ModalView from '../modal-view/modal-view';
@@ -104,7 +102,7 @@ export default class Select extends Component<Props, State> {
         >
           <Text style={styles.itemTitle}>{emptyValue}</Text>
 
-          {this.state.selectedItems.length === 0 && <IconCheck size={20} color={EStyleSheet.value('$icon')}/>}
+          {this.state.selectedItems.length === 0 && <IconCheck size={20} color={styles.link.color}/>}
         </TouchableOpacity>
         {this.renderSeparator()}
       </View>
@@ -237,14 +235,14 @@ export default class Select extends Component<Props, State> {
               testID="selectBackButton"
               onPress={onCancel}
             >
-              <IconBack style={styles.cancelButton}/>
+              <IconBack style={styles.cancelButton} color={styles.cancelButton.color}/>
             </TouchableOpacity>
 
             <TextInput
               testID="selectInput"
               placeholder={placeholder}
               autoFocus={autoFocus}
-              placeholderTextColor={EStyleSheet.value('$icon')}
+              placeholderTextColor={styles.placeholder.color}
               returnKeyType={multi ? 'done' : 'search'}
               autoCorrect={false}
               underlineColorAndroid="transparent"
@@ -262,7 +260,7 @@ export default class Select extends Component<Props, State> {
               style={styles.applyButton}
               onPress={() => this._onSave()}
             >
-              <IconCheck size={20}/>
+              <IconCheck size={20} color={styles.link.color}/>
             </TouchableOpacity>}
 
           </View>

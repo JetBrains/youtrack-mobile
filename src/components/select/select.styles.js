@@ -18,7 +18,8 @@ export default EStyleSheet.create({
     backgroundColor: '$background',
   },
   cancelButton: {
-    minWidth: minButtonWidth
+    minWidth: minButtonWidth,
+    color: '$link'
   },
   searchInput: {
     ...mainText,
@@ -82,5 +83,8 @@ export default EStyleSheet.create({
   },
   link: {
     color: '$link'
+  },
+  placeholder: {
+    color: '$icon'
   }
 });
