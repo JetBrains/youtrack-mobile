@@ -145,7 +145,7 @@ export default class QueryAssist extends Component<Props, State> {
             onClose();
           }}
         >
-          <IconBack/>
+          <IconBack color={styles.link.color}/>
         </TouchableOpacity>
 
         <TextInput
