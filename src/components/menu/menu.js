@@ -10,11 +10,9 @@ import Feature from '../feature/feature';
 
 import {IconBell, IconBoard, IconSettings, IconTask} from '../icon/icon';
 import {DEFAULT_THEME} from '../theme/theme';
-
-import {menuHeight} from '../common-styles/header';
-import {elevationTop} from '../common-styles/shadow';
-
 import {routeMap} from '../../app-routes';
+
+import styles from './menu.styles';
 
 import type {UITheme} from '../../flow/Theme';
 
@@ -27,18 +25,6 @@ type Props = {
 type State = {
   currentRouteName?: string | null
 }
-
-const styles = (uiTheme: UITheme) => ({
-  menu: {
-    height: menuHeight,
-    flexGrow: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: uiTheme.colors.$background,
-    ...elevationTop
-  }
-});
-
 
 class Menu extends Component<Props, State> {
   static defaultProps: Props = {
@@ -119,7 +105,7 @@ class Menu extends Component<Props, State> {
         animation="fadeIn"
 
         testID="menu"
-        style={styles(uiTheme).menu}
+        style={styles.menu}
       >
         <MenuItem
           isActive={this.isActiveRoute(routeMap.IssueList)}

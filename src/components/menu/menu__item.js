@@ -3,9 +3,8 @@
 import {TouchableOpacity, Text, View} from 'react-native';
 import React from 'react';
 
-import EStyleSheet from 'react-native-extended-stylesheet';
-
-import {UNIT} from '../variables/variables';
+import {HIT_SLOP} from '../common-styles/button';
+import styles from './menu.styles';
 
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
@@ -28,6 +27,7 @@ export const MenuItem = (props: Props) => {
       style={[styles.menuItem, style]}
     >
       <TouchableOpacity
+        hitSlop={HIT_SLOP}
         style={[styles.menuItemButton, style]}
         onPress={onPress}
       >
@@ -37,25 +37,3 @@ export const MenuItem = (props: Props) => {
     </View>
   );
 };
-
-
-const styles = EStyleSheet.create({
-  menuItem: {
-    flex: 1,
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  menuItemButton: {
-    minWidth: UNIT * 5,
-    minHeight: UNIT * 5,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  menuItemLabel: {
-    fontSize: 12,
-    lineHeight: 20,
-    letterSpacing: 0.2,
-    color: '$link'
-  }
-});
