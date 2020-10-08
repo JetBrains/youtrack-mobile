@@ -60,18 +60,18 @@ describe('<Tags/>', () => {
   });
 
 
-  describe('_getTagSpecificStyle', () => {
-    it('should return a specific tag style for a tag without a color coding', () => {
+  describe('isDefaultColorCoding', () => {
+    it('should return TRUE', () => {
       expect(
-        instance._getTagSpecificStyle({
+        instance.isDefaultColorCoding({
           color: {id: '0'}
         })
       ).toEqual(styles.tagNoColor);
     });
 
-    it('should return NULL for a tag with a color coding', () => {
+    it('should return NULL', () => {
       expect(
-        instance._getTagSpecificStyle(tagMock)
+        instance.isDefaultColorCoding(tagMock)
       ).toEqual(null);
     });
   });

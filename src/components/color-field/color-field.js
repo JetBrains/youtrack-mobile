@@ -1,29 +1,33 @@
 /* @flow */
 import {View, Text, StyleSheet} from 'react-native';
 import React, {PureComponent} from 'react';
-import {secondaryText} from '../common-styles/typography';
 
-export const SIZE = 20;
-export const NO_COLOR_ID = '0';
-export const INITIAL_COLOR = 'initial';
+import {secondaryText} from '../common-styles/typography';
 
 type Props = {
   text: string,
   color?: Object,
+  defaultColorCoding?: ?Object,
   fullText?: boolean,
   style?: any
 };
 
+export const SIZE = 20;
+export const INITIAL_COLOR = 'initial';
+const NO_COLOR_CODING_ID = '0';
+
 export default class ColorField extends PureComponent<Props, void> {
   _getBackgroundColor() {
-    return this.props.color?.background || INITIAL_COLOR;
+    const {defaultColorCoding, color} = this.props;
+    return defaultColorCoding ? defaultColorCoding.backgroundColor : color?.background || INITIAL_COLOR;
   }
 
   _getForegroundColor() {
-    return this.props.color?.foreground || INITIAL_COLOR;
+    const {defaultColorCoding, color} = this.props;
+    return defaultColorCoding?.color || color?.foreground || INITIAL_COLOR;
   }
 
-  _getFieldLetter() {
+  getText() {
     if (!this.props.text) {
       return null;
     }
@@ -31,14 +35,14 @@ export default class ColorField extends PureComponent<Props, void> {
   }
 
   render() {
-    const {color, fullText, style} = this.props;
-    if (color && color.id === NO_COLOR_ID && !fullText) {
+    const {color, fullText, style, defaultColorCoding} = this.props;
+    if (color && color.id === NO_COLOR_CODING_ID && !fullText) {
       return null;
     }
 
     return (
       <View
-        style={[styles.wrapper, {backgroundColor: this._getBackgroundColor()}, style]}
+        style={[styles.wrapper, {backgroundColor: this._getBackgroundColor()}, style, defaultColorCoding]}
         testID="color-field-value-wrapper"
       >
         <Text
@@ -46,7 +50,7 @@ export default class ColorField extends PureComponent<Props, void> {
           numberOfLines={1}
           testID="color-field-value"
         >
-          {this._getFieldLetter()}
+          {this.getText()}
         </Text>
       </View>
     );

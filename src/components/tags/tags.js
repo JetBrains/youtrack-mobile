@@ -29,6 +29,8 @@ type State = {
   showAllTags: boolean
 }
 
+const NO_COLOR_CODING_ID = '0';
+
 export default class Tags extends PureComponent<Props, State> {
   static defaultProps: DefaultProps = {
     onTagPress: () => {}
@@ -40,10 +42,6 @@ export default class Tags extends PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {showAllTags: false};
-  }
-
-  _getTagSpecificStyle(tag: Tag) {
-    return tag?.color.id === '0' ? styles.tagNoColor : null;
   }
 
   _toggleShowAll() {
@@ -72,6 +70,8 @@ export default class Tags extends PureComponent<Props, State> {
     }
   }
 
+  isDefaultColorCoding = (tag: Tag) => tag?.color.id === NO_COLOR_CODING_ID ? styles.tagNoColor : null;
+
   render() {
     const {tags, multiline, title, style} = this.props;
 
@@ -97,9 +97,10 @@ export default class Tags extends PureComponent<Props, State> {
             >
               <ColorField
                 testID="tagColor"
-                style={[tagStyle, this._getTagSpecificStyle(tag), index === 0 ? {marginLeft: 0} : null]}
+                style={[tagStyle, index === 0 ? {marginLeft: 0} : null]}
                 text={tag.name}
                 color={tag.color}
+                defaultColorCoding={this.isDefaultColorCoding(tag) ? styles.tagNoColor : null}
                 fullText={true}
               />
             </TouchableOpacity>

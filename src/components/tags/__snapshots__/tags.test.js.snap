@@ -23,6 +23,7 @@ exports[`<Tags/> Render should match a snapshot 1`] = `
           "id": 1,
         }
       }
+      defaultColorCoding={null}
       fullText={true}
       style={
         Array [
@@ -30,7 +31,6 @@ exports[`<Tags/> Render should match a snapshot 1`] = `
             undefined,
             null,
           ],
-          null,
           Object {
             "marginLeft": 0,
           },

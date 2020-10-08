@@ -23,6 +23,8 @@ export default EStyleSheet.create({
   },
   tagNoColor: {
     borderWidth: 0.5,
-    borderColor: '$textSecondary'
+    color: '$text',
+    borderColor: '$textSecondary',
+    backgroundColor: '$boxBackground'
   }
 });
