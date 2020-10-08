@@ -139,7 +139,7 @@ class YouTrackMobile extends Component<void, void> {
 
     Router.registerRoute({name: routeMap.AttachmentPreview, component: AttachmentPreview, modal: true});
 
-    Router.registerRoute({name: routeMap.CreateIssue, component: CreateIssue});
+    Router.registerRoute({name: routeMap.CreateIssue, component: CreateIssue, modal: true});
 
     Router.registerRoute({name: routeMap.AgileBoard, component: AgileBoard, type: 'reset'});
 
