@@ -1,3 +1,4 @@
+import {Platform} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {UNIT} from '../../components/variables/variables';
@@ -37,8 +38,15 @@ export default EStyleSheet.create({
   },
   notificationIssueInfo: {
     ...mainText,
-    fontWeight: '500',
-    color: '$text'
+    color: '$text',
+    ...Platform.select({
+      ios: {
+        fontWeight: '500'
+      },
+      android: {
+        fontWeight: '$androidSummaryFontWeight',
+      }
+    })
   },
   reason: {
     ...secondaryText,

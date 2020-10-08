@@ -1,4 +1,3 @@
-import {Platform} from 'react-native';
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 
@@ -9,14 +8,7 @@ export const summary = {
   fontSize: 20,
   lineHeight: 24,
   letterSpacing: -0.19,
-  ...Platform.select({
-    ios: {
-      fontWeight: '500'
-    },
-    android: {
-      fontWeight: '$androidSummaryFontWeight',
-    }
-  })
+  fontWeight: '500'
 };
 
 export default EStyleSheet.create({
