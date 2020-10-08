@@ -92,7 +92,7 @@ class ManageThemeProvider extends PureComponent<Props, State> {
 
   setAndroidNavBarStyle(uiTheme: UITheme) {
     if (this.canChangeAndroidNavBar) {
-      changeNavigationBarColor(uiTheme.colors.$background, !uiTheme.dark);
+      changeNavigationBarColor(uiTheme.colors.$background, !uiTheme.dark, false);
     }
   }
 
