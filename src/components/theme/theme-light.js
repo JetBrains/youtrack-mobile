@@ -7,6 +7,7 @@ const light: UITheme = {
   mode: 'ytlight',
   name: 'Light',
   barStyle: 'dark-content',
+  androidSummaryFontWeight: '500',
 
   colors: {
     $background: '#FFFFFF',

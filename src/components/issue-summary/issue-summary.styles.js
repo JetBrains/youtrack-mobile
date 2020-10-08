@@ -1,3 +1,5 @@
+import {Platform} from 'react-native';
+
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {UNIT} from '../variables/variables';
@@ -5,9 +7,16 @@ import {mainText} from '../common-styles/typography';
 
 export const summary = {
   fontSize: 20,
-  fontWeight: '500',
   lineHeight: 24,
   letterSpacing: -0.19,
+  ...Platform.select({
+    ios: {
+      fontWeight: '500'
+    },
+    android: {
+      fontWeight: '$androidSummaryFontWeight',
+    }
+  })
 };
 
 export default EStyleSheet.create({

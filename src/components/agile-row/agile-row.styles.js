@@ -54,7 +54,16 @@ export default EStyleSheet.create({
     color: '$text',
     lineHeight: ROW_TEXT_LINE_HEIGHT,
     marginLeft: UNIT,
-    fontWeight: '500'
+
+    ...Platform.select({
+      ios: {
+        fontWeight: '500',
+      },
+      android: {
+        fontWeight: '400',
+        fontSize: 20.5
+      }
+    }),
   },
   rowHeaderTextZoomedOut: {
     fontSize: MAIN_FONT_SIZE,

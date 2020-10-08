@@ -37,6 +37,7 @@ export type UITheme = {
   mode: string,
   name: string,
   barStyle: BarStyle,
+  androidSummaryFontWeight: string,
 
   colors: UIThemeColors
 }

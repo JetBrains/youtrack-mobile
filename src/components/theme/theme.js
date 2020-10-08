@@ -20,6 +20,8 @@ export const getUITheme = (mode: string): UITheme => {
 export const buildStyles = (mode: string, uiTheme: UITheme) => {
   EStyleSheet.build({
     $theme: mode,
+    $androidSummaryFontWeight: uiTheme.androidSummaryFontWeight,
+
     $link: uiTheme.colors.$link,
     $resolved: uiTheme.colors.$icon,
     $disabled: uiTheme.colors.$disabled,

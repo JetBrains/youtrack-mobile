@@ -1,5 +1,6 @@
 import {UNIT} from '../variables/variables';
 import {mainText, secondaryText} from './typography';
+import {Platform} from 'react-native';
 
 
 export const title = {
@@ -20,7 +21,14 @@ export const issueCard = {
     ...mainText,
     flex: 1,
     marginTop: UNIT,
-    fontWeight: '500',
+    ...Platform.select({
+      ios: {
+        fontWeight: '500'
+      },
+      android: {
+        fontWeight: '$androidSummaryFontWeight',
+      }
+    })
   }
 };
 
