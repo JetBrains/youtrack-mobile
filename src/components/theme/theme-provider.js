@@ -1,11 +1,14 @@
 /* @flow */
 
 import React, {PureComponent} from 'react';
-import {StyleSheet} from 'react-native';
+
+import DeviceInfo from 'react-native-device-info';
+import changeNavigationBarColor from 'react-native-navigation-bar-color';
 
 import {Appearance, AppearanceProvider} from 'react-native-appearance';
 
 import {flushStoragePart, getStorageState} from '../storage/storage';
+import {isAndroidPlatform} from '../../util/util';
 
 import {ThemeContext} from './theme-context';
 import {buildStyles, getSystemThemeMode, getUITheme, themes} from './theme';
@@ -25,14 +28,35 @@ type Props = {
 class ManageThemeProvider extends PureComponent<Props, State> {
   _isMounted = false;
   subscription = () => {};
+  canChangeAndroidNavBar = false;
 
   constructor(props: Props) {
     super(props);
+
+    this.canChangeAndroidNavBar = this.canStyleAndroidNavBar();
     const _mode = props.mode || getSystemThemeMode();
+    const uiTheme:UITheme = getUITheme(_mode);
+    this.setAndroidNavBarStyle(uiTheme);
     this.state = {
       mode: _mode,
-      uiTheme: getUITheme(_mode)
+      uiTheme: uiTheme
     };
+  }
+
+  canStyleAndroidNavBar = (): boolean => {
+    const isAndroid: boolean = isAndroidPlatform();
+    if (!isAndroid) {
+      return false;
+    }
+
+    let androidVersion: number;
+    const systemVersion: string = DeviceInfo.getSystemVersion();
+    try {
+      androidVersion = Number(systemVersion);
+    } catch (error) {
+      androidVersion = parseFloat(systemVersion, 10);
+    }
+    return typeof androidVersion === 'number' && androidVersion >=8;
   }
 
   componentDidMount = () => {
@@ -47,10 +71,6 @@ class ManageThemeProvider extends PureComponent<Props, State> {
   componentWillUnmount() {
     this.subscription.remove();
     this._isMounted = false;
-  }
-
-  getMode() {
-
   }
 
   buildStyles(mode: ?string): UITheme {
@@ -70,6 +90,12 @@ class ManageThemeProvider extends PureComponent<Props, State> {
     return customMode || !storedThemeName || (!customMode && !!storedThemeName);
   }
 
+  setAndroidNavBarStyle(uiTheme: UITheme) {
+    if (this.canChangeAndroidNavBar) {
+      changeNavigationBarColor(uiTheme.colors.$background, !uiTheme.dark);
+    }
+  }
+
   setMode = async (mode: ?string, reset: boolean = false) => {
     if (this._isMounted) {
       const cm = this.isCustomMode(mode);
@@ -84,16 +110,14 @@ class ManageThemeProvider extends PureComponent<Props, State> {
         newMode = storedMode;
       }
       await flushStoragePart({themeMode: newMode});
+      const uiTheme: UITheme = this.buildStyles(newMode);
       this.setState({
         mode,
-        uiTheme: this.buildStyles(newMode)
+        uiTheme: uiTheme
       });
-    }
-  };
 
-  createStylesheet = (stylesGetter: (uiTheme: UITheme) => Object) => {
-    const styles = stylesGetter(this.state.uiTheme);
-    return StyleSheet.create(styles);
+      this.setAndroidNavBarStyle(uiTheme);
+    }
   };
 
   render() {

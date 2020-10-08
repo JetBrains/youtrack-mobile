@@ -32,3 +32,6 @@ project(':react-native-restart').projectDir = new File(rootProject.projectDir, '
 
 include ':react-native-appearance'
 project(':react-native-appearance').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-appearance/android')
+
+include ':react-native-navigation-bar-color'
+project(':react-native-navigation-bar-color').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-navigation-bar-color/android')

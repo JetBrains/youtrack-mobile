@@ -26,6 +26,7 @@ import java.util.List;
 import com.wix.reactnativenotifications.RNNotificationsPackage;
 import com.reactnativerestart.RestartPackage;
 import io.expo.appearance.RNCAppearancePackage;
+import com.thebylito.navigationbarcolor.NavigationBarColorPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -38,21 +39,22 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-            new MainReactPackage(),
-            new ReanimatedPackage(),
-            BugsnagReactNative.getPackage(),
-            new SvgPackage(),
-            new VectorIconsPackage(),
-            new RNGestureHandlerPackage(),
-            new AsyncStoragePackage(),
-            new RNCameraPackage(),
-            new PickerPackage(),
-            new LinearGradientPackage(),
-            new RNEventSourcePackage(),
-            new RNDeviceInfo(),
-            new RNNotificationsPackage(MainApplication.this),
-            new RestartPackage(),
-            new RNCAppearancePackage()
+          new MainReactPackage(),
+          new ReanimatedPackage(),
+          BugsnagReactNative.getPackage(),
+          new SvgPackage(),
+          new VectorIconsPackage(),
+          new RNGestureHandlerPackage(),
+          new AsyncStoragePackage(),
+          new RNCameraPackage(),
+          new PickerPackage(),
+          new LinearGradientPackage(),
+          new RNEventSourcePackage(),
+          new RNDeviceInfo(),
+          new RNNotificationsPackage(MainApplication.this),
+          new RestartPackage(),
+          new RNCAppearancePackage(),
+          new NavigationBarColorPackage()
       );
     }
 

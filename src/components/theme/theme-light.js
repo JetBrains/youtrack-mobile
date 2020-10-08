@@ -9,12 +9,12 @@ const light: UITheme = {
   barStyle: 'dark-content',
 
   colors: {
-    $background: '#FFF',
+    $background: '#FFFFFF',
     $boxBackground: 'rgba(0, 0, 0, 0.04)',
 
     $error: '#dd0000',
 
-    $text: '#000',
+    $text: '#000000',
     $textSecondary: '#CCC',
     $textButton: '#FFF',
 
