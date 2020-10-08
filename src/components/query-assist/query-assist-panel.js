@@ -199,7 +199,7 @@ export default class QueryAssistPanel extends PureComponent<Props, State> {
           testID="query-assist-cancel"
           onPress={() => {
             this.cancelSearch();
-            this.onSubmitEditing();
+            this.setSuggestsVisibility(false);
           }}
         >
           <IconBack color={styles.link.color}/>
