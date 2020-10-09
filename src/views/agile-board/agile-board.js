@@ -143,7 +143,7 @@ class AgileBoard extends Component<Props, State> {
 
   _renderRefreshControl(uiTheme: UITheme) {
     return <RefreshControl
-      refreshing={false}
+      refreshing={this.props.isLoading}
       tintColor={this.props.isLoadingAgile ? uiTheme.colors.$background : uiTheme.colors.$link}
       onRefresh={() => this.props.onLoadBoard()}
     />;
@@ -169,7 +169,7 @@ class AgileBoard extends Component<Props, State> {
   };
 
   renderAgileSelector(uiTheme: UITheme) {
-    const {agile, onOpenBoardSelect, isLoading} = this.props;
+    const {agile, onOpenBoardSelect} = this.props;
     if (agile) {
       return renderSelector({
         key: agile.id,
@@ -177,7 +177,6 @@ class AgileBoard extends Component<Props, State> {
         onPress: onOpenBoardSelect,
         style: styles.agileSelector,
         textStyle: styles.agileSelectorText,
-        isLoading,
         showBottomBorder: this.state.stickElement.agile,
         showLoader: true,
         uiTheme

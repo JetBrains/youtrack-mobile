@@ -54,7 +54,7 @@ describe('Agile board async actions', () => {
         getAgileUserProfile: jest.fn(() => agileUserProfileMock),
         updateAgileUserProfile: jest.fn(() => sprintMock),
         getAgile: jest.fn(() => agileWithStatusMock),
-        getAgileIssues: jest.fn().mockResolvedValue([{id: 'issueId'}]),
+        getAgileIssues: jest.fn().mockResolvedValueOnce([{id: 'issueId'}]),
       }
     };
 
@@ -171,6 +171,35 @@ describe('Agile board async actions', () => {
 
 
   describe('Load sprint', () => {
+
+    describe('Load sprint issues', () => {
+      beforeEach(async () => {
+        await store.dispatch(actions.loadSprintIssues(sprintMock));
+        storeActions = store.getActions();
+      });
+
+      it('should load sprint issues', () => {
+        expect(apiMock.agile.getAgileIssues).toHaveBeenCalledWith(
+          [{id: issueMock.id}]
+        );
+      });
+
+      it('should stop loading sprint', async () => {
+        expect(storeActions[2]).toEqual({
+          type: types.STOP_SPRINT_LOADING
+        });
+        expect(storeActions[3]).toEqual({
+          isOutOfDate: false,
+          type: types.IS_OUT_OF_DATE
+        });
+      });
+
+      it('should cache a sprint with loaded issues', async () => {
+        await expect(getStorageState().agileLastSprint.id).toEqual(sprintIdMock);
+      });
+    });
+
+
     describe('Success loading', () => {
       beforeEach(async () => {
         await setLoadSprintExpectation();
@@ -186,12 +215,6 @@ describe('Agile board async actions', () => {
         );
       });
 
-      it('should load sprint issues', () => {
-        expect(apiMock.agile.getAgileIssues).toHaveBeenCalledWith(
-          [{id: issueMock.id}]
-        );
-      });
-
       it('should show loading sprint', () => {
         expect(storeActions[0]).toEqual({
           type: types.START_SPRINT_LOADING
@@ -203,20 +226,6 @@ describe('Agile board async actions', () => {
           type: types.RECEIVE_SPRINT,
           sprint: sprintMock
         });
-      });
-
-      it('should hide loading sprint', () => {
-        expect(storeActions[2]).toEqual({
-          type: types.STOP_SPRINT_LOADING
-        });
-        expect(storeActions[3]).toEqual({
-          isOutOfDate: false,
-          type: types.IS_OUT_OF_DATE
-        });
-      });
-
-      it('should cache the last loaded sprint', async () => {
-        await expect(getStorageState().agileLastSprint.id).toEqual(sprintIdMock);
       });
     });
 
@@ -233,11 +242,11 @@ describe('Agile board async actions', () => {
           type: types.RECEIVE_SPRINT,
           sprint: null
         });
-        expect(storeActions[2]).toEqual({
+        expect(storeActions[3]).toEqual({
           type: types.AGILE_ERROR,
           error: new Error('Could not load requested sprint issues')
         });
-        expect(storeActions[3]).toEqual({
+        expect(storeActions[4]).toEqual({
           type: types.STOP_SPRINT_LOADING
         });
       });

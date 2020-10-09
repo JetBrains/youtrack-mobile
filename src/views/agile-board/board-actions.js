@@ -30,7 +30,8 @@ import type {AgilePageState} from './board-reducers';
 
 type ApiGetter = () => Api;
 
-export const PAGE_SIZE = 6;
+export const PAGE_SIZE = 15;
+
 const CATEGORY_NAME = 'Agile board';
 const RECONNECT_TIMEOUT = 60000;
 let serverSideEventsInstance = null;
@@ -187,6 +188,13 @@ export function suggestAgileQuery(query: string, caret: number) {
   };
 }
 
+function onSprintLoadingFinish() {
+  return async (dispatch: (any) => any) => {
+    dispatch(stopSprintLoad());
+    dispatch(setOutOfDate(false));
+  };
+}
+
 export function loadSprint(agileId: string, sprintId: string, query: ?string) {
   return async (dispatch: (any) => any, getState: () => AgilePageState, getApi: ApiGetter) => {
     const api: Api = getApi();
@@ -208,9 +216,8 @@ export function loadSprint(agileId: string, sprintId: string, query: ?string) {
       dispatch(setError(error));
       trackError('Load sprint');
       log.info(message, e);
-    } finally {
-      dispatch(stopSprintLoad());
-      dispatch(setOutOfDate(false));
+
+      dispatch(onSprintLoadingFinish());
     }
   };
 }
@@ -218,12 +225,15 @@ export function loadSprint(agileId: string, sprintId: string, query: ?string) {
 export function loadSprintIssues(sprint: Sprint) {
   return async (dispatch: (any) => any, getState: () => AgilePageState, getApi: ApiGetter) => {
     const api: Api = getApi();
+    dispatch(startSprintLoad());
     try {
       const allIssuesIds = getSprintAllIssues(sprint);
       const sprintIssues = await api.agile.getAgileIssues(allIssuesIds);
       const updatedSprint: Sprint = fillSprintIssues(sprint, sprintIssues);
-      dispatch(receiveSprint({timestamp: Date.now(), ...updatedSprint}));
+      dispatch(receiveSprint(updatedSprint));
+
       animateLayout();
+
       dispatch(cacheSprint(updatedSprint));
       dispatch(subscribeServersideUpdates());
 
@@ -231,12 +241,12 @@ export function loadSprintIssues(sprint: Sprint) {
       const message: string = 'Could not load requested sprint issues';
       const error: CustomError = new Error(message);
       error.error_description = 'Check that the sprint exists';
-      dispatch(setError(error));
       trackError('Load sprint');
+
+      dispatch(setError(error));
       log.info(message, e);
     } finally {
-      dispatch(stopSprintLoad());
-      dispatch(setOutOfDate(false));
+      dispatch(onSprintLoadingFinish());
     }
   };
 }
@@ -338,10 +348,12 @@ export function fetchMoreSwimlanes() {
     dispatch(startSwimlanesLoading());
 
     try {
-      const swimlanes = await api.agile.getSwimlanes(sprint.agile.id,
+      const swimlanes = await api.agile.getSwimlanes(
+        sprint.agile.id,
         sprint.id,
         PAGE_SIZE,
-        sprint.board.trimmedSwimlanes.length);
+        sprint.board.trimmedSwimlanes.length
+      );
       dispatch(receiveSwimlanes(swimlanes));
       log.info(`Loaded ${swimlanes.length} more swimlanes`);
       trackEvent('Load more swimlanes');

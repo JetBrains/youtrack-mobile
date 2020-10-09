@@ -21,7 +21,7 @@ export function renderSelector(params: {
   style?: ViewStyleProp,
   textStyle?: TextStyleProp,
   showBottomBorder?: boolean,
-  isLoading: boolean,
+  isLoading?: boolean,
   showLoader?: boolean,
   uiTheme: UITheme
 }) {
