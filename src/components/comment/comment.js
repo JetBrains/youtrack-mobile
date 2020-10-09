@@ -94,7 +94,7 @@ export default class Comment extends Component<Props, void> {
       );
     }
 
-    const {backendUrl, onIssueIdTap, imageHeaders, uiTheme} = this.props.youtrackWiki;
+    const {backendUrl, onIssueIdTap, imageHeaders} = this.props.youtrackWiki;
 
     return (
       <View style={styles.commentWikiContainer}>
@@ -103,7 +103,7 @@ export default class Comment extends Component<Props, void> {
           onIssueIdTap={issueId => onIssueIdTap(issueId)}
           attachments={attachments}
           imageHeaders={imageHeaders}
-          uiTheme={uiTheme}
+          uiTheme={this.props.uiTheme}
         >
           {comment.textPreview}
         </YoutrackWiki>
