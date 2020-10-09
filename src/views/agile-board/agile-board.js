@@ -145,7 +145,7 @@ class AgileBoard extends Component<Props, State> {
     return <RefreshControl
       refreshing={this.props.isLoading}
       tintColor={uiTheme.colors.$link}
-      onRefresh={() => this.props.onLoadBoard()}
+      onRefresh={this.props.onLoadBoard}
     />;
   }
 
