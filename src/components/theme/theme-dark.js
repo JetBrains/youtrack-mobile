@@ -17,7 +17,7 @@ const dark: UITheme = {
 
     $error: '#ee0e0e',
 
-    $text: '#FFFFFF',
+    $text: '#e1e1e1',
     $textSecondary: '#b0b0b0',
     $textButton: '#FFFFFF',
 
