@@ -12,19 +12,18 @@ type Props = {
   style?: any
 };
 
-export const SIZE = 20;
-export const INITIAL_COLOR = 'initial';
+export const COLOR_FIELD_SIZE = 20;
 const NO_COLOR_CODING_ID = '0';
 
 export default class ColorField extends PureComponent<Props, void> {
   _getBackgroundColor() {
     const {defaultColorCoding, color} = this.props;
-    return defaultColorCoding ? defaultColorCoding.backgroundColor : color?.background || INITIAL_COLOR;
+    return defaultColorCoding ? defaultColorCoding.backgroundColor : color?.background;
   }
 
   _getForegroundColor() {
     const {defaultColorCoding, color} = this.props;
-    return defaultColorCoding?.color || color?.foreground || INITIAL_COLOR;
+    return defaultColorCoding?.color || color?.foreground;
   }
 
   getText() {
@@ -59,8 +58,8 @@ export default class ColorField extends PureComponent<Props, void> {
 
 const styles = StyleSheet.create({
   wrapper: {
-    width: SIZE,
-    height: SIZE,
+    width: COLOR_FIELD_SIZE,
+    height: COLOR_FIELD_SIZE,
     borderRadius: 4,
     justifyContent: 'center'
   },

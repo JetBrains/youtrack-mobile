@@ -1,8 +1,9 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {Platform} from 'react-native';
+
 import {UNIT} from '../../components/variables/variables';
-import {SIZE as COLOR_FIELD_SIZE} from '../../components/color-field/color-field';
+import {COLOR_FIELD_SIZE} from '../../components/color-field/color-field';
 import {headerTitle, secondaryText} from '../../components/common-styles/typography';
 import {issueCard} from '../../components/common-styles/issue';
 import {elevation1} from '../../components/common-styles/shadow';

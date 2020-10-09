@@ -6,7 +6,6 @@ import Avatar from '../avatar/avatar';
 import ApiHelper from '../api/api__helper';
 import {getPriotityField, getAssigneeField} from '../issue-formatter/issue-formatter';
 import Tags from '../tags/tags';
-import {INITIAL_COLOR} from '../color-field/color-field';
 import {UNIT} from '../variables/variables';
 import {getStorageState} from '../storage/storage';
 
@@ -72,7 +71,7 @@ export default class AgileCard extends PureComponent<Props, void> {
   render() {
     const {issue, style, ghost, dragging, zoomedIn} = this.props;
     const priorityField = getPriotityField(issue);
-    const priorityFieldValueBackgroundColor = priorityField?.value?.color?.background || INITIAL_COLOR;
+    const priorityFieldValueBackgroundColor = priorityField?.value?.color?.background;
 
     const zoomedInTextStyle: ?ViewStyleProp = zoomedIn ? null : styles.zoomedInText;
     const agileCardHeight: number = getAgileCardHeight();
