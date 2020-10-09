@@ -136,6 +136,7 @@ class ErrorBoundary extends Component<Props, State> {
               <View style={styles.container}>
                 <View style={styles.header}>
                   <TouchableOpacity
+                    hitSlop={HIT_SLOP}
                     style={buttonStyle}
                     disabled={isReporting}
                     onPress={openDebugView}
@@ -207,6 +208,7 @@ class ErrorBoundary extends Component<Props, State> {
 
                 <View>
                   <TouchableOpacity
+                    hitSlop={HIT_SLOP}
                     disabled={isReporting}
                     style={buttonStyle}
                     onPress={this.contactSupport}

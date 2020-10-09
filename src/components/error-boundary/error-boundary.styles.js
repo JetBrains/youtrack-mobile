@@ -62,7 +62,7 @@ export default EStyleSheet.create({
     backgroundColor: '$link'
   },
   buttonSendReportText: {
-    color: '$background'
+    color: '$textButton'
   },
   sendReportText: {
     marginRight: UNIT * 1.5,
@@ -72,13 +72,14 @@ export default EStyleSheet.create({
   extendedReportModalTitle: {
     ...extendedReportModalText,
     fontWeight: '500',
-    marginBottom: UNIT / 2
+    marginBottom: UNIT / 2,
+    color: '$text'
   },
   extendedReportModalText: extendedReportModalText,
   extendedReportModalTextInfo: {
     marginTop: UNIT,
     marginBottom: UNIT * 2,
-    color: '$icon'
+    color: '$text'
   },
   extendedReportModalTextLink: {
     color: '$link',
