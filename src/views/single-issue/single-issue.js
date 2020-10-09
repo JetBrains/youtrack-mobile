@@ -185,7 +185,7 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
         <TabBar
           {...props}
           indicatorStyle={{backgroundColor: editMode ? 'transparent' : uiThemeColors.$link}}
-          style={[styles.tabsBar, editMode ? {height: 1} : null, {shadowColor: uiThemeColors.$background}]}
+          style={[styles.tabsBar, editMode ? {height: 1} : null, {shadowColor: uiThemeColors.$icon}]}
           renderLabel={({route, focused}) => {
             return (
               <Text style={[

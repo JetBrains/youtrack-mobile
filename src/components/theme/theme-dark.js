@@ -10,6 +10,8 @@ const dark: UITheme = {
   androidSummaryFontWeight: '400',
 
   colors: {
+    $action: 'rgba(0, 0, 0, 0.38)',
+
     $background: '#1c1c1e',
     $boxBackground: '#2c2c2e',
 

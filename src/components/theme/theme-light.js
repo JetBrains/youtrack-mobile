@@ -10,6 +10,8 @@ const light: UITheme = {
   androidSummaryFontWeight: '500',
 
   colors: {
+    $action: 'rgba(0, 0, 0, 0.38)',
+
     $background: '#FFFFFF',
     $boxBackground: 'rgba(0, 0, 0, 0.04)',
 

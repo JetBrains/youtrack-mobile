@@ -48,7 +48,7 @@ export default EStyleSheet.create({
     color: '$textSecondary',
     flexDirection: 'row',
     marginTop: UNIT / 2,
-    marginBottom: UNIT
+    marginBottom: UNIT / 4
   },
   activityItem: {
     flex: 1,
@@ -79,7 +79,8 @@ export default EStyleSheet.create({
     flex: 1,
     padding: UNIT * 2,
     paddingTop: UNIT,
-    marginTop: UNIT * 2,
+    marginTop: UNIT * 1.5,
+    marginBottom: UNIT,
     backgroundColor: '$boxBackground',
     borderRadius: UNIT,
     lineHeight: 14
@@ -90,9 +91,6 @@ export default EStyleSheet.create({
   },
   activityChange: {
     marginTop: UNIT / 2,
-  },
-  activityChangeComment: {
-    marginTop: -UNIT / 1.5,
   },
   activityNoActivity: {
     marginTop: UNIT * 5,
@@ -108,7 +106,7 @@ export default EStyleSheet.create({
   },
   activityCommentActions: {
     flexDirection: 'row',
-    marginTop: UNIT * 2
+    marginTop: UNIT * 1.5
   },
 
   settings: {
