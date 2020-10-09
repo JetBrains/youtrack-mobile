@@ -31,11 +31,11 @@ import type {User} from '../../flow/User';
 import type {Notification, Metadata, ChangeValue, ChangeEvent, Issue, IssueChange} from '../../flow/Inbox';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {IssueOnList} from '../../flow/Issue';
-import type {Theme, UITheme} from '../../flow/Theme';
+import type {Theme} from '../../flow/Theme';
 
 const CATEGORY_NAME = 'inbox view';
 
-type Props = InboxState & typeof inboxActions;
+type Props = InboxState & typeof inboxActions & {theme: Theme};
 
 type State = {
   isTitlePinned: boolean
@@ -59,6 +59,7 @@ class Inbox extends Component<Props, State> {
     workflow: 'Workflow'
   };
   config: AppConfigFilled;
+  theme: Theme;
 
   constructor(props) {
     super(props);
@@ -314,6 +315,7 @@ class Inbox extends Component<Props, State> {
           <YoutrackWiki
             backendUrl={this.config.backendUrl}
             onIssueIdTap={(issueId) => Router.SingleIssue({issueId})}
+            uiTheme={this.theme.uiTheme}
           >
             {text}
           </YoutrackWiki>
@@ -462,12 +464,12 @@ class Inbox extends Component<Props, State> {
     return null;
   };
 
-  renderRefreshControl = (uiTheme: UITheme) => {
+  renderRefreshControl = () => {
     return (
       <RefreshControl
         refreshing={false}
         onRefresh={this.refresh}
-        tintColor={uiTheme.colors.$link}
+        tintColor={this.theme.uiTheme.colors.$link}
         testID="refresh-control"
       />
     );
@@ -500,6 +502,8 @@ class Inbox extends Component<Props, State> {
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
+          this.theme = theme;
+
           const data: Array<React$Element<any> | Notification> = [this.renderTitle()].concat(items || []);
 
           return (
@@ -514,7 +518,7 @@ class Inbox extends Component<Props, State> {
               {!hasError && <FlatList
                 removeClippedSubviews={false}
                 data={data}
-                refreshControl={this.renderRefreshControl(theme.uiTheme)}
+                refreshControl={this.renderRefreshControl()}
                 refreshing={loading}
                 keyExtractor={(item: Object & { key: string } | Notification) => item.key || item.id}
                 renderItem={this.renderItem}
