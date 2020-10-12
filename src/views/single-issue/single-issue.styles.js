@@ -127,12 +127,13 @@ export default EStyleSheet.create({
   tabLazyPlaceholder: {
     ...centered
   },
-  issueAdditionalInfoContainer: {
+  issueTopActions: {
     flexDirection: 'row',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
+    marginBottom: UNIT * 1.5
   },
-  issueAdditionalInfo: {
-    flex: 1
+  issueVote: {
+    minWidth: UNIT * 8
   },
   switchToActivityButton: {
     marginTop: UNIT * 4,
@@ -145,6 +146,6 @@ export default EStyleSheet.create({
     marginBottom: UNIT * 3
   },
   visibility: {
-    marginBottom: UNIT
+    flexGrow: 1
   }
 });

@@ -136,13 +136,15 @@ export default class IssueDetails extends Component<Props, void> {
     const {issue, issuePermissions, onVoteToggle} = this.props;
 
     return (
-      <IssueVotes
-        canVote={issuePermissions.canVote(issue)}
-        votes={issue?.votes}
-        voted={issue?.voters?.hasVote}
-        onVoteToggle={onVoteToggle}
-        uiTheme={uiTheme}
-      />
+      <View style={styles.issueVote}>
+        <IssueVotes
+          canVote={issuePermissions.canVote(issue)}
+          votes={issue?.votes}
+          voted={issue?.voters?.hasVote}
+          onVoteToggle={onVoteToggle}
+          uiTheme={uiTheme}
+        />
+      </View>
     );
   }
 
@@ -155,7 +157,7 @@ export default class IssueDetails extends Component<Props, void> {
 
     return (
       issue
-        ? <View style={[styles.issueTopPanel, styles.issueAdditionalInfo]}>
+        ? <View style={styles.issueTopPanel}>
           <Text
             style={styles.issueTopPanelText}
             selectable={true}
@@ -179,13 +181,14 @@ export default class IssueDetails extends Component<Props, void> {
 
     if (issue) {
       return (
-        <VisibilityControl
-          style={styles.visibility}
-          issueId={issue.id}
-          visibility={issue.visibility}
-          onSubmit={onVisibilityChange}
-          uiTheme={uiTheme}
-        />
+        <View style={styles.visibility}>
+          <VisibilityControl
+            issueId={issue.id}
+            visibility={issue.visibility}
+            onSubmit={onVisibilityChange}
+            uiTheme={uiTheme}
+          />
+        </View>
       );
     }
 
@@ -255,12 +258,11 @@ export default class IssueDetails extends Component<Props, void> {
     return (
       <View style={styles.issueView}>
 
-        {this.renderIssueVisibility(uiTheme)}
-
-        <View style={styles.issueAdditionalInfoContainer}>
-          {this.renderAdditionalInfo()}
+        <View style={styles.issueTopActions}>
+          {this.renderIssueVisibility(uiTheme)}
           {this.renderIssueVotes(uiTheme)}
         </View>
+        {this.renderAdditionalInfo()}
 
         {editMode && <IssueSummary
           editable={!isSavingEditedIssue}
