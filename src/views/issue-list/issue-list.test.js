@@ -1,15 +1,19 @@
+import {flushStoragePart, getStorageState, __setStorageState} from '../../components/storage/storage';
 import * as actions from './issue-list-actions';
-import * as types from './issue-list-action-types';
-import {populateStorage, flushStoragePart, getStorageState} from '../../components/storage/storage';
-import {ISSUE_UPDATED} from '../single-issue/single-issue-action-types';
+
 import sinon from 'sinon';
 import reducer from './issue-list-reducers';
+
+import * as types from './issue-list-action-types';
+import {ISSUE_UPDATED} from '../single-issue/single-issue-action-types';
 
 let dispatch;
 let stateMock;
 let apiMock;
 let issueContextQueryMock;
 let issueListQueryMock;
+let currentUserMock;
+const currentUserIdMock = 'current-user';
 
 describe('Issue list actions', () => {
   let getState;
@@ -21,10 +25,13 @@ describe('Issue list actions', () => {
     issueContextQueryMock = 'project YouTrackMobile';
     issueListQueryMock = 'test-query';
 
+    currentUserMock = {id: currentUserIdMock};
+
     stateMock = {
       app: {
+        user: currentUserMock,
         auth: {
-          currentUser: {id: 'current-user'}
+          currentUser: currentUserMock
         }
       },
       searchContext: {
@@ -37,6 +44,8 @@ describe('Issue list actions', () => {
     dispatch = sinon.spy();
     getState = () => stateMock;
     apiMock = {};
+
+    __setStorageState({});
   });
 
   it('should set issues query', () => {
@@ -46,7 +55,6 @@ describe('Issue list actions', () => {
   });
 
   it('should read stored query', async () => {
-    await populateStorage();
     await flushStoragePart({query: TEST_QUERY});
     await actions.readStoredIssuesQuery()(dispatch);
 
@@ -63,20 +71,19 @@ describe('Issue list actions', () => {
   });
 
   it('should load saved query and last searches if query is empty', async () => {
-    const savedQueries = [
-      {id: 'saved', owner: {ringId: 'current-user'}},
-      {id: 'saved-not-own', owner: {ringId: 'other-user'}}
+    const serverSavedQueryListMock = [
+      {id: 'savedQuery', owner: {id: currentUserIdMock}},
+      {id: 'savedQuery-not-own', owner: {id: 'other-user'}}
     ];
+    const cachedRecentUserQueryMock = ['last-query'];
 
-    flushStoragePart({lastQueries: ['last-query']});
-
-    apiMock.getSavedQueries = () => new Promise(resolve => resolve(savedQueries));
-
+    apiMock.getSavedQueries = () => new Promise(resolve => resolve(serverSavedQueryListMock));
+    await flushStoragePart({lastQueries: cachedRecentUserQueryMock});
     await actions.suggestIssuesQuery('', 0)(dispatch, getState, () => apiMock);
 
     dispatch.should.have.been.calledWith({
       type: types.SUGGEST_QUERY,
-      suggestions: [savedQueries[0], {name: 'last-query', query: 'last-query'}]
+      suggestions: [serverSavedQueryListMock[0], {id: `lastQueries-0`, name: 'last-query', query: 'last-query'}]
     });
   });
 
@@ -87,7 +94,6 @@ describe('Issue list actions', () => {
   });
 
   it('should store query', async () => {
-    await populateStorage();
     actions.storeIssuesQuery('query-update')();
 
     getStorageState().query.should.equal('query-update');

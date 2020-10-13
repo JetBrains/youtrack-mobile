@@ -8,11 +8,13 @@ import {iconClearText} from '../icon/icon-clear-text';
 
 import styles from './query-assist.styles';
 
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   query: string,
   onFocus: (clear?: boolean) => void,
-  onClearText: () => void
+  onClearText: () => void,
+  style?: ViewStyleProp
 };
 
 
@@ -31,10 +33,10 @@ export default class SearchQueryPreview extends PureComponent<Props, void> {
   }
 
   render() {
-    const {query} = this.props;
+    const {query, style} = this.props;
 
     return (
-      <View style={styles.placeHolder}>
+      <View style={[styles.placeHolder, style]}>
         <View style={styles.inputWrapper}>
           <IconSearch style={styles.searchIcon} size={20} color={styles.clearIcon.color}/>
 

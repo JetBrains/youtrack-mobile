@@ -122,6 +122,11 @@ export const IconThumbUp = (props?: Props & { isActive?: boolean }) => <DefaultI
   ...props
 }} />;
 
+export const IconBookmark = (props?: Props) => <DefaultIcon {...{
+  name: 'bookmark',
+  ...props
+}} />;
+
 
 /* FontAwesome icons */
 
@@ -140,12 +145,6 @@ export const IconCamera = (props?: Props) => <DefaultIcon {...{
 export const IconPaperClip = (props?: Props) => <DefaultIcon {...{
   isFontAwesome: true,
   name: 'paperclip',
-  ...props
-}} />;
-
-export const IconTrash = (props?: Props) => <DefaultIcon {...{
-  isFontAwesome: true,
-  name: 'trash',
   ...props
 }} />;
 

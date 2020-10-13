@@ -7,11 +7,16 @@ import {notifyError} from '../../components/notification/notification';
 import log from '../../components/log/log';
 import usage from '../../components/usage/usage';
 
+import {EVERYTHING_CONTEXT} from '../../components/search/search-context';
+import {updateUserGeneralProfile} from '../../actions/app-actions';
+
+import {filterArrayByType} from '../../components/api/api__resource-types';
+import {sortAlphabetically} from '../../components/search/sorting';
+
 import type Api from '../../components/api/api';
 import type {IssueOnList, SavedQuery} from '../../flow/Issue';
 import type {Folder} from '../../flow/User';
-import {updateUserGeneralProfile} from '../../actions/app-actions';
-import {EVERYTHING_CONTEXT} from '../../components/search/search-context';
+import type {IssueProject, Tag} from '../../flow/CustomFields';
 
 const PAGE_SIZE = 10;
 const MAX_STORED_QUERIES = 5;
@@ -21,6 +26,15 @@ type ApiGetter = () => Api;
 
 function trackEvent(msg: string, additionalParam: ?string) {
   usage.trackEvent(CATEGORY_NAME, msg, additionalParam);
+}
+
+export function getCachedUserQueries(): Array<Object> {
+  return (getStorageState().lastQueries || []).map(
+    (query: string, index: number) => ({
+      id: `lastQueries-${index}`,
+      name: query,
+      query
+    }));
 }
 
 export function setIssuesQuery(query: string) {
@@ -45,14 +59,12 @@ export function suggestIssuesQuery(query: string, caret: number) {
       if (query) {
         suggestions = await api.getQueryAssistSuggestions(query, caret);
       } else {
-        const currentUser = getState().app.auth.currentUser;
-        suggestions = await api.getSavedQueries();
-        suggestions = suggestions.filter(s => s.owner.ringId === currentUser.id);
-
-        const lastQueries = (getStorageState().lastQueries || []).map(query => ({name: query, query}));
-        suggestions = [...suggestions, ...lastQueries];
+        const currentUserId: string = getState().app?.user?.id;
+        suggestions = await getApi().getSavedQueries();
+        suggestions = suggestions.filter((s: SavedQuery) => s.owner.id === currentUserId);
+        const cachedUserQueries = getCachedUserQueries();
+        suggestions = [...suggestions, ...cachedUserQueries];
       }
-
       dispatch({type: types.SUGGEST_QUERY, suggestions});
     } catch (e) {
       notifyError('Failed to load suggestions', e);
@@ -123,10 +135,6 @@ export function updateSearchContextPinned(isPinned: boolean) {
   return {type: types.IS_SEARCH_CONTEXT_PINNED, isSearchContextPinned: isPinned};
 }
 
-export function closeIssuesContextSelect() {
-  return {type: types.CLOSE_SEARCH_CONTEXT_SELECT};
-}
-
 export function getSearchQuery(query: string = '') {
   return () => {
     const userSearchContext: SavedQuery = getStorageState().searchContext;
@@ -145,47 +153,91 @@ export function onQueryUpdate(query: string) {
   };
 }
 
-export function openIssuesContextSelect() {
+export function openSavedSearchesSelect() {
   return (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+    trackEvent('Issue saved searches select');
+    const savedSearchesSelectProps = {
+      show: true,
+      placeholder: 'Filter saved searches',
+      dataSource: async () => {
+        let folders: Array<Object> = getCachedUserQueries();
+        try {
+          const issueFolders: Array<IssueProject | SavedQuery | Tag> = await getApi().getIssueFolders(true);
+          folders = filterArrayByType(issueFolders, 'savedSearch').sort(sortAlphabetically).concat(folders);
+        } catch (e) {
+          log.warn('Failed to load user saved searches');
+        }
+        return folders;
+      },
+      selectedItems: [],
+      onCancel: () => dispatch(closeSelect()),
+      onSelect: async (savedQuery: Folder) => {
+        try {
+          dispatch(closeSelect());
+          dispatch(onQueryUpdate(savedQuery.query));
+          dispatch(refreshIssues());
+        } catch (error) {
+          log.warn('Failed to change a context', error);
+        }
+      }
+    };
+
+    dispatch(openSelect(savedSearchesSelectProps));
+  };
+}
+
+export function openContextSelect() {
+  return (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+    trackEvent('Issue list context select');
+
     const api: Api = getApi();
     const currentUser = getState().app?.user;
     const currentUserGeneralProfile = currentUser?.profiles?.general;
     const currentSearchContext = currentUserGeneralProfile?.searchContext || EVERYTHING_CONTEXT;
-
-    trackEvent('Issue list context select');
-
-    dispatch({
-      type: types.OPEN_SEARCH_CONTEXT_SELECT,
-      selectProps: {
-        show: true,
-        placeholder: 'Filter projects, saved searches, and tags',
-        dataSource: async () => {
-          let folders = [];
-          try {
-            folders = await api.user.getUserFolders();
-          } catch (e) {
-            log.warn('Failed to load user folders for the context');
-          }
-          return [EVERYTHING_CONTEXT].concat(folders);
-        },
-        selectedItems: [currentSearchContext],
-        onCancel: () => dispatch(closeIssuesContextSelect()),
-        onSelect: async (selectedContext: Folder) => {
-          try {
-            dispatch(closeIssuesContextSelect());
-
-            await dispatch(storeSearchContext(selectedContext));
-            dispatch(updateUserGeneralProfile({
-              searchContext: selectedContext.id ? selectedContext : null
-            }));
-
-            dispatch(refreshIssues());
-          } catch (error) {
-            log.warn('Failed to change a context', error);
-          }
+    const searchContextSelectProps = {
+      show: true,
+      placeholder: 'Filter projects, saved searches, and tags',
+      dataSource: async () => {
+        let folders = [];
+        try {
+          folders = await api.user.getUserFolders();
+        } catch (e) {
+          log.warn('Failed to load user folders for the context');
+        }
+        return [EVERYTHING_CONTEXT].concat(folders);
+      },
+      selectedItems: [currentSearchContext],
+      onCancel: () => dispatch(closeSelect()),
+      onSelect: async (selectedContext: Folder) => {
+        try {
+          dispatch(closeSelect());
+          await dispatch(storeSearchContext(selectedContext));
+          dispatch(updateUserGeneralProfile({
+            searchContext: selectedContext.id ? selectedContext : null
+          }));
+          dispatch(refreshIssues());
+        } catch (error) {
+          log.warn('Failed to change a context', error);
         }
       }
+    };
+
+    dispatch(openSelect(searchContextSelectProps));
+  };
+}
+
+export function openSelect(selectsProps: Object) {
+  return (dispatch: (any) => any) => {
+    dispatch({
+      type: types.OPEN_SEARCH_CONTEXT_SELECT,
+      selectProps: selectsProps
     });
+  };
+}
+
+export function closeSelect() {
+  return (dispatch: (any) => any) => {
+    dispatch({type: types.CLOSE_SEARCH_CONTEXT_SELECT});
   };
 }
 

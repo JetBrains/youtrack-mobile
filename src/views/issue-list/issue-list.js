@@ -20,16 +20,12 @@ import ErrorMessage from '../../components/error-message/error-message';
 import Router from '../../components/router/router';
 import {View as AnimatedView} from 'react-native-animatable';
 import * as issueActions from './issue-list-actions';
-import type Auth from '../../components/auth/auth';
-import type Api from '../../components/api/api';
-import type {IssuesListState} from './issue-list-reducers';
-import type {IssueOnList} from '../../flow/Issue';
 import Select from '../../components/select/select';
 import SearchPanel from './issue-list__search-panel';
 import SearchQueryPreview from '../../components/query-assist/search-query-preview';
 import IssuesCount from './issue-list__count';
 
-import {IconAdd, IconAngleDown} from '../../components/icon/icon';
+import {IconAdd, IconAngleDown, IconBookmark} from '../../components/icon/icon';
 import {isReactElement} from '../../util/util';
 import {LoadMoreList} from '../../components/progress/load-more-list';
 import {SkeletonIssues} from '../../components/skeleton/skeleton';
@@ -42,6 +38,10 @@ import {ThemeContext} from '../../components/theme/theme-context';
 import {UNIT} from '../../components/variables/variables';
 import styles from './issue-list.styles';
 
+import type Auth from '../../components/auth/auth';
+import type Api from '../../components/api/api';
+import type {IssuesListState} from './issue-list-reducers';
+import type {IssueOnList} from '../../flow/Issue';
 import type {Theme, UITheme} from '../../flow/Theme';
 
 type Props = $Shape<IssuesListState & typeof issueActions & {
@@ -237,7 +237,7 @@ export class IssueList extends Component<Props, State> {
   };
 
   renderSearchQuery = (uiTheme: UITheme) => {
-    const {query, issuesCount} = this.props;
+    const {query, issuesCount, openSavedSearchesSelect} = this.props;
 
     return (
       <AnimatedView
@@ -246,10 +246,21 @@ export class IssueList extends Component<Props, State> {
         animation="fadeIn"
         style={styles.listHeader}
       >
-        <SearchQueryPreview
-          query={query}
-          onFocus={this.onSearchQueryPanelFocus}
-        />
+        <View style={styles.listHeaderTop}>
+          <SearchQueryPreview
+            style={styles.searchPanel}
+            query={query}
+            onFocus={this.onSearchQueryPanelFocus}
+          />
+          <TouchableOpacity
+            style={styles.userSearchQueryButton}
+            onPress={openSavedSearchesSelect}
+          >
+            <IconBookmark size={28} color={uiTheme.colors.$link}/>
+          </TouchableOpacity>
+
+        </View>
+
         <IssuesCount issuesCount={issuesCount} uiTheme={uiTheme}/>
       </AnimatedView>
     );
@@ -368,7 +379,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(issueActions, dispatch),
     onQueryUpdate: (query) => dispatch(issueActions.onQueryUpdate(query)),
-    onOpenContextSelect: () => dispatch(issueActions.openIssuesContextSelect()),
+    onOpenContextSelect: () => dispatch(issueActions.openContextSelect()),
+    openSavedSearchesSelect: () => dispatch(issueActions.openSavedSearchesSelect()),
     updateSearchContextPinned: (isSearchScrolledUp) => dispatch(issueActions.updateSearchContextPinned(isSearchScrolledUp)),
     setIssuesCount: (count: number | null) => dispatch(issueActions.setIssuesCount(count))
   };

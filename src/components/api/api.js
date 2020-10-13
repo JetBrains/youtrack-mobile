@@ -1,5 +1,8 @@
 /* @flow */
+
 import qs from 'qs';
+import urlJoin from 'url-join';
+
 import issueFields from './api__issue-fields';
 import BaseAPI from './api__base';
 import ApiHelper from './api__helper';
@@ -8,14 +11,13 @@ import AgileAPI from './api__agile';
 import IssuesAPI from './api__issues';
 import InboxAPI from './api__inbox';
 import UserAPI from './api__user';
-import urlJoin from 'url-join';
+import UserGroupAPI from './api__user-group';
 
 import type Auth from '../auth/auth';
 import type {EndUserAgreement} from '../../flow/AppConfig';
 import type {TransformedSuggestion, SavedQuery, CommandSuggestionResponse} from '../../flow/Issue';
-import type {IssueProject} from '../../flow/CustomFields';
+import type {IssueProject, Tag} from '../../flow/CustomFields';
 import type {User} from '../../flow/User';
-import UserGroupAPI from './api__user-group';
 
 class API extends BaseAPI {
   youTrackProjectUrl: string;
@@ -158,6 +160,31 @@ class API extends BaseAPI {
   async getSavedQueries(): Promise<Array<SavedQuery>> {
     const queryString = qs.stringify({fields: issueFields.issueFolder.toString()});
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/savedQueries?${queryString}`);
+  }
+
+  async getIssueFolders(pinnedOnly: ?boolean = null): Promise<Array<IssueProject | SavedQuery | Tag>> {
+    const fields = ApiHelper.toField([
+      'id',
+      '$type',
+      'name',
+      'query',
+      'pinned',
+      {
+        owner: ApiHelper.toField([
+          'id',
+          'ringId',
+        ])
+      },
+      {
+        color: ['id']
+      }
+    ]);
+    const queryString = qs.stringify({
+      fields: fields.toString(),
+      pinned: pinnedOnly
+    });
+
+    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/issueFolders?${queryString}`);
   }
 
   async getNotificationsToken(): Promise<string> {

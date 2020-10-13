@@ -14,7 +14,6 @@ const rowLine = {
   alignItems: 'center'
 };
 
-const searchPanelHeight = UNIT * 12;
 const searchContextHeight = UNIT * 7;
 
 export default EStyleSheet.create({
@@ -93,6 +92,18 @@ export default EStyleSheet.create({
   listHeader: {
     minHeight: 105
   },
+  listHeaderTop: {
+    flexDirection: 'row',
+    marginTop: UNIT
+  },
+  userSearchQueryButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: UNIT / 2,
+    padding: UNIT / 2,
+    paddingRight: UNIT,
+    paddingLeft: 0
+  },
   searchContext: {
     height: searchContextHeight,
     backgroundColor: '$background'
@@ -114,16 +125,16 @@ export default EStyleSheet.create({
     backgroundColor: '$background'
   },
   searchPanel: {
-    zIndex: -1,
-    marginBottom: UNIT * 2,
-    height: searchPanelHeight
+    flexGrow: 1,
+    paddingLeft: UNIT * 2,
+    paddingRight: UNIT * 1.5
   },
   createIssueButton: {
     position: 'absolute',
     top: UNIT,
-    right: 0,
+    right: UNIT / 2,
     height: UNIT * 5,
-    width: UNIT * 6,
+    width: UNIT * 5,
     padding: UNIT
   }
 });

@@ -1,4 +1,12 @@
-import type {IssueProject, CustomFieldShort, CustomField, Tag, Attachment, IssueComment, IssueLink} from './CustomFields';
+import type {
+  IssueProject,
+  CustomFieldShort,
+  CustomField,
+  Tag,
+  Attachment,
+  IssueComment,
+  IssueLink
+} from './CustomFields';
 import type {User} from './User';
 
 export type IssueOnList = {
@@ -24,8 +32,8 @@ export type IssueFull = {
   updated: number,
   votes: number,
   wikifiedDescription: string,
-  watchers: {hasStar: boolean},
-  voters: {hasVote: boolean},
+  watchers: { hasStar: boolean },
+  voters: { hasVote: boolean },
   project: IssueProject,
   reporter: User,
   updater: User,
@@ -96,7 +104,11 @@ export type SavedQuery = {
   name: string,
   query: string,
   isUpdatable: boolean,
-  owner: {ringId: string}
+  pinned?: boolean,
+  owner: {
+    id: string,
+    ringId: string
+  }
 }
 
 export type TabRoute = { key: string, title: string }

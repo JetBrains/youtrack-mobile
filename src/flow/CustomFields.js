@@ -33,7 +33,12 @@ export type Tag = {
   id: string,
   name: string,
   query: string,
-  color: ColorField
+  pinned?: boolean,
+  color: ColorField,
+  owner: {
+    id: string,
+    ringId: string
+  },
 }
 
 export type BundleValue = {

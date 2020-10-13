@@ -259,7 +259,7 @@ const ISSUE_FOLDER_FIELDS = toField([
   'name',
   'query',
   'isUpdatable',
-  {owner: ['ringId']}
+  {owner: ['id', 'ringId']}
 ]);
 
 const SUGGESTION_FIELDS = toField([

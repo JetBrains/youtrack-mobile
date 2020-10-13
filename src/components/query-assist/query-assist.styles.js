@@ -8,10 +8,7 @@ const QUERY_ASSIST_HEIGHT = UNIT * 6;
 
 export default EStyleSheet.create({
   placeHolder: {
-    height: QUERY_ASSIST_HEIGHT,
-    paddingLeft: UNIT * 2,
-    paddingRight: UNIT * 2,
-    marginTop: UNIT,
+    height: QUERY_ASSIST_HEIGHT
   },
   modal: {
     flex: 1,
