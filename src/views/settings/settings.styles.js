@@ -8,6 +8,10 @@ import {formStyles} from '../../components/common-styles/form';
 import {separatorBorder} from '../../components/common-styles/list';
 
 
+const hPaddings = {
+  paddingLeft: UNIT * 2,
+  paddingRight: UNIT * 2
+};
 export default EStyleSheet.create({
   ...formStyles,
 
@@ -17,26 +21,19 @@ export default EStyleSheet.create({
   },
   settingsContent: {
     flexGrow: 1,
-    paddingLeft: UNIT * 2,
-    paddingRight: UNIT * 2,
-    flexDirection: 'column'
+    ...hPaddings
   },
-  settingsOther: {
-    flexGrow: 1,
-    flexDirection: 'column',
-    paddingLeft: UNIT,
+  settingsItems: {
+    flex: 1
   },
   settingsTitle: {
-    ...mainText,
-    color: '$text',
-    fontWeight: '500',
     marginTop: UNIT,
     marginBottom: UNIT / 2
   },
   settingsItem: {
-    flexGrow: 1,
     flexDirection: 'row',
-    paddingVertical: UNIT,
+    padding: UNIT * 2,
+    paddingLeft: 0,
     color: '$text',
     ...separatorBorder,
     borderColor: '$separator'
@@ -45,9 +42,10 @@ export default EStyleSheet.create({
     ...mainText,
     flexGrow: 1,
     color: '$text',
+    fontWeight: '500',
     textTransform: 'capitalize'
   },
-  settingsItemTextSecondary: {
+  textSecondary: {
     color: '$icon',
   },
   settingsCheckbox: {
@@ -68,12 +66,21 @@ export default EStyleSheet.create({
   },
   settingsFooterLink: {
     ...mainText,
-    color: '$link',
+    color: '$text',
     marginTop: UNIT,
     marginBottom: UNIT,
   },
   settingsFooterBuild: {
     ...secondaryText,
     color: '$icon',
+  },
+
+  settingsAppearanceHeaderIcon: {
+    marginLeft: UNIT * 1.5
+  },
+  settingsAppearance: {
+    marginTop: UNIT * 2,
+    padding: UNIT * 2.5,
+    paddingRight: 0
   }
 });

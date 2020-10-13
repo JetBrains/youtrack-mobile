@@ -14,10 +14,13 @@ import {AppVersion} from '../../util/util';
 import {ThemeContext} from '../../components/theme/theme-context';
 import {getSystemThemeMode, themes} from '../../components/theme/theme';
 
-import {IconCheck} from '../../components/icon/icon';
+import {IconCheck, IconClose} from '../../components/icon/icon';
 import {getStorageState} from '../../components/storage/storage';
 
+import ModalView from '../../components/modal-view/modal-view';
+
 import {HIT_SLOP} from '../../components/common-styles/button';
+import {elevation1} from '../../components/common-styles/shadow';
 import styles from './settings.styles';
 
 import type {StorageState} from '../../components/storage/storage';
@@ -34,13 +37,23 @@ type Props = {
   isChangingAccount: ?boolean
 };
 
+type State = {
+  appearanceSettingsVisible: boolean
+}
+
 const CATEGORY_NAME = 'Settings';
 
 
-class Settings extends Component<Props, void> {
+class Settings extends Component<Props, State> {
+  state = {appearanceSettingsVisible: false};
+
   constructor(props) {
     super(props);
     usage.trackScreenView(CATEGORY_NAME);
+  }
+
+  setAppearanceSettingsVisibility = (isVisible: boolean = false) => {
+    this.setState({appearanceSettingsVisible: isVisible});
   }
 
   getUserThemeMode(): string {
@@ -63,11 +76,21 @@ class Settings extends Component<Props, void> {
         <View style={styles.settingsItem}>
           <Text style={styles.settingsItemText}>
             {`${uiTheme.name} theme`}
-            {uiTheme.system && <Text style={styles.settingsItemTextSecondary}>{` (${uiTheme.mode})`}</Text>}
+            {uiTheme.system && <Text style={styles.textSecondary}>{` (${uiTheme.mode})`}</Text>}
           </Text>
           {isChecked && <IconCheck size={20} color={currentTheme.uiTheme.colors.$link}/>}
         </View>
       </TouchableOpacity>
+    );
+  }
+
+  renderAppearanceSettings = (theme: Theme) => {
+    const systemTheme: Object = {name: 'System', mode: getSystemThemeMode(), system: true};
+
+    return (
+      <View style={styles.settingsOther}>
+        {[systemTheme].concat(themes).map((it: Object) => this.renderThemeCheckbox(theme, it))}
+      </View>
     );
   }
 
@@ -86,10 +109,6 @@ class Settings extends Component<Props, void> {
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
-          const systemTheme: Object = Object.assign(
-            {},
-            {name: 'System', mode: getSystemThemeMode(), system: true}
-          );
           const uiTheme: UITheme = theme.uiTheme;
 
           return (
@@ -112,8 +131,13 @@ class Settings extends Component<Props, void> {
                   uiTheme={uiTheme}
                 />
 
-                <View style={styles.settingsOther}>
-                  {themes.concat(systemTheme).map((it: Object) => this.renderThemeCheckbox(theme, it))}
+                <View style={styles.settingsItems}>
+                  <TouchableOpacity
+                    style={styles.settingsTitle}
+                    hitSlop={HIT_SLOP}
+                    onPress={() => this.setAppearanceSettingsVisibility(true)}>
+                    <Text style={styles.settingsFooterLink}>Appearance</Text>
+                  </TouchableOpacity>
 
                   <TouchableOpacity
                     style={styles.settingsTitle}
@@ -144,6 +168,25 @@ class Settings extends Component<Props, void> {
               </View>
 
 
+              {this.state.appearanceSettingsVisible && (
+                <ModalView
+                  testID="popup"
+                  animationType="fade"
+                >
+                  <Header
+                    style={elevation1}
+                    title="Appearance"
+                    leftButton={
+                      <IconClose style={styles.settingsAppearanceHeaderIcon} size={21} color={uiTheme.colors.$link}/>
+                    }
+                    onBack={this.setAppearanceSettingsVisibility}
+                  />
+
+                  <View style={styles.settingsAppearance}>
+                    {this.renderAppearanceSettings(theme)}
+                  </View>
+                </ModalView>
+              )}
             </View>
           );
         }}
