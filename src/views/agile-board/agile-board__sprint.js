@@ -102,7 +102,7 @@ export default class AgileBoardSprint extends Component<Props, void> {
       <>
         {isOrphansAtTheTop && orphan}
 
-        {board.trimmedSwimlanes.map((swimlane: Object & { id: string }) => {
+        {(board.trimmedSwimlanes || []).map((swimlane: Object & { id: string }) => {
           return (
             <BoardRow
               testID="agileBoardSprintRow"

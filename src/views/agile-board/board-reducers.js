@@ -53,9 +53,25 @@ const initialPageState: AgilePageState = {
 
 const boardReducer = createReducer({}, {
   [types.RECEIVE_SWIMLANES](state: BoardState, action: Object): BoardState {
+    if (action?.swimlanes?.length <= 0) {
+      return state;
+    }
+    const stateTrimmedSwimlanes = state.trimmedSwimlanes || [];
+    let trimmedSwimlanes = [];
+    if (stateTrimmedSwimlanes.length > 0) {
+      trimmedSwimlanes = (action.swimlanes || []).reduce((list, it) => {
+        if (stateTrimmedSwimlanes.some(s => s.id !== it.id)) {
+          list.push(it);
+        }
+        return list;
+      }, []);
+    } else {
+      trimmedSwimlanes = action.swimlanes;
+    }
+
     return {
       ...state,
-      trimmedSwimlanes: [...state.trimmedSwimlanes, ...action.swimlanes]
+      trimmedSwimlanes: [...stateTrimmedSwimlanes, ...trimmedSwimlanes]
     };
   },
   [types.ROW_COLLAPSE_TOGGLE](state: BoardState, action: { row: AgileBoardRow, newCollapsed: boolean }): BoardState {

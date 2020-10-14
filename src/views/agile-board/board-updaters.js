@@ -11,7 +11,7 @@ export function updateRowCollapsedState(
   collapsed: boolean
 ): Board {
   const isOrphan = row.id === 'orphans';
-  const trimmedSwimlanes = board.trimmedSwimlanes;
+  const trimmedSwimlanes = board.trimmedSwimlanes || [];
 
   return {
     ...board,
