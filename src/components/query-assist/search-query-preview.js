@@ -12,7 +12,7 @@ import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   query: string,
-  onFocus: (clear?: boolean) => void,
+  onFocus: (clear: boolean) => any,
   onClearText: () => void,
   style?: ViewStyleProp
 };

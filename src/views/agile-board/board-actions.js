@@ -109,7 +109,7 @@ export function loadAgileWithStatus(agileId: string) {
   };
 }
 
-export function loadBoard(board: Board, query: ?string) {
+export function loadBoard(board: Board, query: string) {
   return async (dispatch: (any) => any) => {
     destroySSE();
 
@@ -172,14 +172,7 @@ export function suggestAgileQuery(query: string, caret: number) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
     try {
-      let suggestions;
-      if (query) {
-        suggestions = await api.getQueryAssistSuggestions(query, caret);
-      } else {
-        const currentUser = getState().app.auth.currentUser;
-        suggestions = await api.getSavedQueries();
-        suggestions = suggestions.filter(s => s.owner.ringId === currentUser.id);
-      }
+      const suggestions = await api.getQueryAssistSuggestions(query, caret);
       dispatch({type: types.AGILE_SEARCH_SUGGESTS, suggestions});
     } catch (e) {
       notifyError('Failed to load suggestions', e);
@@ -195,7 +188,7 @@ function onSprintLoadingFinish() {
   };
 }
 
-export function loadSprint(agileId: string, sprintId: string, query: ?string) {
+export function loadSprint(agileId: string, sprintId: string, query: string) {
   return async (dispatch: (any) => any, getState: () => AgilePageState, getApi: ApiGetter) => {
     const api: Api = getApi();
     dispatch(startSprintLoad());
@@ -266,7 +259,7 @@ export function loadAgileProfile() {
   };
 }
 
-export function loadDefaultAgileBoard(query: ?string) {
+export function loadDefaultAgileBoard(query: string) {
   return async (dispatch: (any) => any) => {
     dispatch(setError(null));
     dispatch(receiveSprint(getStorageState().agileLastSprint));
@@ -338,7 +331,7 @@ function moveIssue(movedId: string, cellId: string, leadingId: ?string) {
   };
 }
 
-export function fetchMoreSwimlanes() {
+export function fetchMoreSwimlanes(query?: string) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const {sprint, noMoreSwimlanes, isLoadingMore} = getState().agile;
     const api: Api = getApi();
@@ -352,7 +345,8 @@ export function fetchMoreSwimlanes() {
         sprint.agile.id,
         sprint.id,
         PAGE_SIZE,
-        sprint.board.trimmedSwimlanes.length
+        sprint.board.trimmedSwimlanes.length,
+        query
       );
       dispatch(receiveSwimlanes(swimlanes));
       log.info(`Loaded ${swimlanes.length} more swimlanes`);
@@ -457,7 +451,7 @@ export function openSprintSelect() {
         },
         selectedItems: [sprint],
         getTitle: sprint => `${sprint.name} ${sprint.archived ? '(archived)' : ''}`,
-        onSelect: (selectedSprint: Sprint, query: ?string) => {
+        onSelect: (selectedSprint: Sprint, query: string) => {
           dispatch(closeSelect());
           dispatch(loadSprint(sprint.agile.id, selectedSprint.id, query));
           trackEvent('Change sprint');
@@ -498,7 +492,7 @@ export function openBoardSelect() {
           return [].concat(boards.favorites).concat(boards.regular);
         },
         selectedItems: sprint ? [sprint.agile] : agile ? [agile] : [],
-        onSelect: async (selectedBoard: BoardOnList, query: ?string) => {
+        onSelect: async (selectedBoard: BoardOnList, query: string = '') => {
           dispatch(closeSelect());
           dispatch(startSprintLoad());
           await flushStoragePart({agileQuery: null});
@@ -674,7 +668,7 @@ export function onCardDrop(data: { columnId: string, cellId: string, leadingId: 
   };
 }
 
-export function refreshAgile(agileId: string, sprintId: string, query: ?string) {
+export function refreshAgile(agileId: string, sprintId: string, query: string) {
   return async (dispatch: (any) => any) => {
     log.info('Refresh agile with popup');
     flushStoragePart({agileQuery: query});

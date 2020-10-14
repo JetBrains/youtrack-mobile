@@ -22,13 +22,13 @@ export default class AgileAPI extends ApiBase {
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${agileId}?${queryString}`);
   }
 
-  async getSprint(boardId: string, sprintId: string, top: number = 100, skip: number = 0, query: ?string = ''): Promise<SprintFull> {
-    const issuesQuery: Object = query ? {issuesQuery: query} : null;
+  async getSprint(boardId: string, sprintId: string, top: number = 100, skip: number = 0, query: string = ''): Promise<SprintFull> {
     const queryData: { fields: string, $topSwimlanes: number, $skipSwimlanes: number, issuesQuery?: string } = Object.assign({
       fields: agileFields.sprint.toString(),
       $topSwimlanes: top,
       $skipSwimlanes: skip,
-    }, issuesQuery);
+      issuesQuery: query.trim()
+    });
     const queryString = qs.stringify(queryData, {encode: true});
     const sprint = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}?${queryString}`);
     return ApiHelper.patchAllRelativeAvatarUrls(sprint, this.config.backendUrl);
@@ -44,12 +44,13 @@ export default class AgileAPI extends ApiBase {
     return ApiHelper.patchAllRelativeAvatarUrls(issues, this.config.backendUrl);
   }
 
-  async getSwimlanes(boardId: string, sprintId: string, top: number, skip: number = 0): Promise<Array<AgileBoardRow>> {
+  async getSwimlanes(boardId: string, sprintId: string, top: number, skip: number = 0, query: string = ''): Promise<Array<AgileBoardRow>> {
     const queryString = qs.stringify({
       fields: `trimmedSwimlanes(${agileFields.row.toString()})`,
       $topSwimlanes: top,
-      $skipSwimlanes: skip
-    });
+      $skipSwimlanes: skip,
+      issuesQuery: query.trim()
+    }, {encode: true});
 
     const board = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}/board?${queryString}`);
     const swimlanes = board.trimmedSwimlanes;

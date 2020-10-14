@@ -1,43 +1,46 @@
 /* @flow */
 
-import {View, Text, RefreshControl, TouchableOpacity, ActivityIndicator, Dimensions} from 'react-native';
 import React, {Component} from 'react';
-import usage from '../../components/usage/usage';
-import Select from '../../components/select/select';
-import styles from './agile-board.styles';
-import log from '../../components/log/log';
-import BoardHeader from './board-header';
-import BoardScroller from '../../components/board-scroller/board-scroller';
-import Router from '../../components/router/router';
-import Auth from '../../components/auth/auth';
-import {DragContainer} from '../../components/draggable/';
-import Api from '../../components/api/api';
-import {UNIT} from '../../components/variables/variables';
-import {flushStoragePart, getStorageState} from '../../components/storage/storage';
+import {View, Text, RefreshControl, TouchableOpacity, ActivityIndicator, Dimensions} from 'react-native';
 
-import * as boardActions from './board-actions';
 import {connect} from 'react-redux';
-import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
-import ModalView from '../../components/modal-view/modal-view';
-import {HIT_SLOP} from '../../components/common-styles/button';
-import {IconException, IconMagnifyZoom} from '../../components/icon/icon';
-import {renderSelector} from './agile-board__renderer';
-import {View as AnimatedView} from 'react-native-animatable';
-import ErrorMessage from '../../components/error-message/error-message';
-import {notify} from '../../components/notification/notification';
 import isEqual from 'react-fast-compare';
+
+import Api from '../../components/api/api';
+import Auth from '../../components/auth/auth';
+import BoardScroller from '../../components/board-scroller/board-scroller';
+import ErrorMessage from '../../components/error-message/error-message';
+import log from '../../components/log/log';
+import ModalView from '../../components/modal-view/modal-view';
+import QueryAssistPanel from '../../components/query-assist/query-assist-panel';
+import Router from '../../components/router/router';
+import SearchQueryPreview from '../../components/query-assist/search-query-preview';
+import Select from '../../components/select/select';
+import usage from '../../components/usage/usage';
+import {DragContainer} from '../../components/draggable/';
+import {flushStoragePart, getStorageState} from '../../components/storage/storage';
 import {getScrollableWidth} from '../../components/board-scroller/board-scroller__math';
 import {hasType} from '../../components/api/api__resource-types';
-import AgileBoardSprint from './agile-board__sprint';
-
+import {IconException, IconMagnifyZoom} from '../../components/icon/icon';
+import {notify} from '../../components/notification/notification';
 import {ThemeContext} from '../../components/theme/theme-context';
 
-import QueryAssistPanel from '../../components/query-assist/query-assist-panel';
+import * as boardActions from './board-actions';
+import AgileBoardSprint from './agile-board__sprint';
+import BoardHeader from './board-header';
 
-import type {SprintFull, AgileBoardRow, AgileColumn, BoardColumn, BoardOnList, Sprint} from '../../flow/Agile';
-import type {AnyIssue, IssueOnList} from '../../flow/Issue';
+import {renderSelector} from './agile-board__renderer';
+import {View as AnimatedView} from 'react-native-animatable';
+
+import {HIT_SLOP} from '../../components/common-styles/button';
+import {UNIT} from '../../components/variables/variables';
+import styles from './agile-board.styles';
+
+import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {AgilePageState} from './board-reducers';
+import type {AnyIssue, IssueOnList} from '../../flow/Issue';
 import type {CustomError} from '../../flow/Error';
+import type {SprintFull, AgileBoardRow, AgileColumn, BoardColumn, BoardOnList, Sprint} from '../../flow/Agile';
 import type {Theme, UITheme} from '../../flow/Theme';
 
 const CATEGORY_NAME = 'Agile board';
@@ -51,8 +54,8 @@ type Props = AgilePageState & {
   isSprintSelectOpen: boolean,
   selectProps: Object,
   issuePermissions: IssuePermissions,
-  onLoadBoard: (query: ?string) => any,
-  onLoadMoreSwimlanes: () => any,
+  onLoadBoard: (query: string) => any,
+  onLoadMoreSwimlanes: (query?: string) => any,
   onRowCollapseToggle: (row: AgileBoardRow) => any,
   onColumnCollapseToggle: (column: AgileColumn) => any,
   onOpenSprintSelect: (any) => any,
@@ -60,7 +63,7 @@ type Props = AgilePageState & {
   onCloseSelect: (any) => any,
   createCardForCell: (columnId: string, cellId: string) => any,
   onCardDrop: (any) => any,
-  refreshAgile: (agileId: string, sprintId: string, query: ?string) => any,
+  refreshAgile: (agileId: string, sprintId: string, query?: string) => any,
   toggleRefreshPopup: (isOutOfDate: boolean) => any,
   suggestAgileQuery: (query: ?string, caret: number) => any
 };
@@ -68,7 +71,8 @@ type Props = AgilePageState & {
 type State = {
   zoomedIn: boolean,
   stickElement: { agile: boolean, boardHeader: boolean },
-  offsetY: number
+  offsetY: number,
+  showAssist: boolean
 };
 
 class AgileBoard extends Component<Props, State> {
@@ -86,13 +90,14 @@ class AgileBoard extends Component<Props, State> {
         agile: false,
         boardHeader: false
       },
-      offsetY: 0
+      offsetY: 0,
+      showAssist: false
     };
   }
 
   componentDidMount() {
     usage.trackScreenView(CATEGORY_NAME);
-    this.props.onLoadBoard(this.query);
+    this.loadBoard();
   }
 
   shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
@@ -106,6 +111,10 @@ class AgileBoard extends Component<Props, State> {
     boardActions.destroySSE();
   }
 
+  loadBoard = () => {
+    this.props.onLoadBoard(this.query);
+  }
+
   onVerticalScroll = (event) => {
     const {nativeEvent} = event;
     const newY = nativeEvent.contentOffset.y;
@@ -114,7 +123,7 @@ class AgileBoard extends Component<Props, State> {
     const maxY = contentHeight - viewHeight;
 
     if (maxY > 0 && newY > 0 && (maxY - newY) < 40) {
-      this.props.onLoadMoreSwimlanes();
+      this.props.onLoadMoreSwimlanes(this.query);
     }
 
     this.setState({
@@ -128,7 +137,7 @@ class AgileBoard extends Component<Props, State> {
   onContentSizeChange = (width, height) => {
     const windowHeight = Dimensions.get('window').height;
     if (height < windowHeight) {
-      this.props.onLoadMoreSwimlanes();
+      this.props.onLoadMoreSwimlanes(this.query);
     }
   };
 
@@ -141,11 +150,11 @@ class AgileBoard extends Component<Props, State> {
     }
   };
 
-  _renderRefreshControl(uiTheme: UITheme) {
+  _renderRefreshControl = (uiTheme: UITheme) => {
     return <RefreshControl
       refreshing={this.props.isLoading}
       tintColor={uiTheme.colors.$link}
-      onRefresh={this.props.onLoadBoard}
+      onRefresh={this.loadBoard}
     />;
   }
 
@@ -199,7 +208,8 @@ class AgileBoard extends Component<Props, State> {
 
     if (this.isSprintDisabled()) {
       return null;
-    } if (sprint) {
+    }
+    if (sprint) {
       return renderSelector({
         key: sprint.id,
         label: sprint.name,
@@ -263,7 +273,7 @@ class AgileBoard extends Component<Props, State> {
 
   updateQuery = (query: ?string) => {
     this.query = query || '';
-  }
+  };
 
   _renderSelect() {
     const {selectProps} = this.props;
@@ -402,32 +412,47 @@ class AgileBoard extends Component<Props, State> {
     this.updateZoomedInStorageState(zoomedIn);
   };
 
-  onQueryApply = async (query: string) => {
+  toggleQueryAssist = (isAssistVisible: boolean = false) => {
+    this.setState({showAssist: isAssistVisible});
+  };
+
+  onQueryApply = (query: string) => {
     const {refreshAgile, sprint} = this.props;
     this.updateQuery(query);
     if (sprint && sprint.agile) {
       refreshAgile(sprint.agile.id, sprint.id, query);
     }
-  }
+    this.toggleQueryAssist(false);
+  };
+
+  onShowAssist = async (clearQuery: boolean) => {
+    if (clearQuery) {
+      this.query = '';
+    }
+    this.toggleQueryAssist(true);
+  };
 
   renderSearchPanel = () => {
-    const {suggestAgileQuery, queryAssistSuggestions, isLoading} = this.props;
+    const {suggestAgileQuery, queryAssistSuggestions} = this.props;
 
     return (
-      <View style={styles.searchPanel}>
-        <QueryAssistPanel
-          disabled={isLoading}
-          suggestions={queryAssistSuggestions}
-          currentQuery={this.query}
-          onChange={suggestAgileQuery}
-          onApplyQuery={this.onQueryApply}
-          onClearQuery={() => {
-            this.updateQuery(null);
-            return suggestAgileQuery(null, 0);
-          }}
-        />
+      <QueryAssistPanel
+        queryAssistSuggestions={queryAssistSuggestions}
+        query={this.query}
+        suggestIssuesQuery={suggestAgileQuery}
+        onQueryUpdate={this.onQueryApply}
+        onClose={this.toggleQueryAssist}
+        clearButtonMode="always"
+      />
+    );
+  };
 
-      </View>
+  renderSearchPanelPreview = () => {
+    return (
+      <SearchQueryPreview
+        query={this.query}
+        onFocus={this.onShowAssist}
+      />
     );
   };
 
@@ -467,7 +492,7 @@ class AgileBoard extends Component<Props, State> {
           agileSelector={this.renderAgileSelector(uiTheme)}
           sprintSelector={this.renderSprintSelector(uiTheme)}
           boardHeader={this.renderBoardHeader()}
-          boardSearch={this.renderSearchPanel()}
+          boardSearch={this.renderSearchPanelPreview()}
 
         >
 
@@ -502,6 +527,8 @@ class AgileBoard extends Component<Props, State> {
 
               {isOutOfDate && this.renderRefreshPopup()}
 
+              {this.state.showAssist && this.renderSearchPanel()}
+
             </View>
           );
         }}
@@ -520,8 +547,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onLoadBoard: (query: ?string) => dispatch(boardActions.loadDefaultAgileBoard(query)),
-    onLoadMoreSwimlanes: () => dispatch(boardActions.fetchMoreSwimlanes()),
+    onLoadBoard: (query: string) => dispatch(boardActions.loadDefaultAgileBoard(query)),
+    onLoadMoreSwimlanes: (query?: string) => dispatch(boardActions.fetchMoreSwimlanes(query)),
     onRowCollapseToggle: (row) => dispatch(boardActions.rowCollapseToggle(row)),
     onColumnCollapseToggle: (column) => dispatch(boardActions.columnCollapseToggle(column)),
     onOpenSprintSelect: () => dispatch(boardActions.openSprintSelect()),
@@ -529,7 +556,7 @@ const mapDispatchToProps = (dispatch) => {
     onCloseSelect: () => dispatch(boardActions.closeSelect()),
     createCardForCell: (...args) => dispatch(boardActions.createCardForCell(...args)),
     onCardDrop: (...args) => dispatch(boardActions.onCardDrop(...args)),
-    refreshAgile: (agileId: string, sprintId: string, query: ?string) => dispatch(boardActions.refreshAgile(agileId, sprintId, query)),
+    refreshAgile: (agileId: string, sprintId: string, query: string = '') => dispatch(boardActions.refreshAgile(agileId, sprintId, query)),
     toggleRefreshPopup: (isOutOfDate: boolean) => dispatch(boardActions.setOutOfDate(isOutOfDate)),
     suggestAgileQuery: (query: string, caret: number) => dispatch(boardActions.suggestAgileQuery(query, caret)),
   };

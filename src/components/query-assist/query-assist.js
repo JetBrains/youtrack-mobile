@@ -67,6 +67,10 @@ export default class QueryAssist extends Component<Props, State> {
     this.refs.searchInput.blur();
   }
 
+  focusInput() {
+    this.refs.searchInput.focus();
+  }
+
   cancelSearch() {
     this.blurInput();
     this.setState({inputValue: this.state.queryCopy});
@@ -104,6 +108,7 @@ export default class QueryAssist extends Component<Props, State> {
     const leftPartAndNewQuery = oldQuery.substring(0, suggestion.completionStart) + suggestionText;
     const newQuery = leftPartAndNewQuery + oldQuery.substring(suggestion.completionEnd);
     this.setState({inputValue: newQuery});
+    this.focusInput();
     this.props.onChange(newQuery, leftPartAndNewQuery.length);
   };
 
@@ -165,7 +170,6 @@ export default class QueryAssist extends Component<Props, State> {
           autoCapitalize="none"
 
           onFocus={() => this.beginEditing()}
-          onBlur={() => onClose()}
 
           onSubmitEditing={() => this.onSubmitEditing()}
           onChangeText={text => this.setState({inputValue: text})}

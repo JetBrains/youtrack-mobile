@@ -21,7 +21,7 @@ import Router from '../../components/router/router';
 import {View as AnimatedView} from 'react-native-animatable';
 import * as issueActions from './issue-list-actions';
 import Select from '../../components/select/select';
-import SearchPanel from './issue-list__search-panel';
+import QueryAssistPanel from '../../components/query-assist/query-assist-panel';
 import SearchQueryPreview from '../../components/query-assist/search-query-preview';
 import IssuesCount from './issue-list__count';
 
@@ -182,7 +182,7 @@ export class IssueList extends Component<Props, State> {
     );
   }
 
-  searchPanelRef = (instance: ?SearchPanel) => {
+  searchPanelRef = (instance: ?QueryAssistPanel) => {
     if (instance) {
       this.searchPanelNode = instance;
     }
@@ -219,8 +219,8 @@ export class IssueList extends Component<Props, State> {
     const _query = this.state.clearSearchQuery ? '' : query;
 
     return (
-      <SearchPanel
-        key="SearchPanel"
+      <QueryAssistPanel
+        key="QueryAssistPanel"
         ref={this.searchPanelRef}
         queryAssistSuggestions={queryAssistSuggestions}
         query={_query}

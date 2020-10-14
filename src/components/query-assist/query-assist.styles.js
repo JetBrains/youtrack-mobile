@@ -18,7 +18,9 @@ export default EStyleSheet.create({
     flex: 1,
     flexGrow: 1,
     flexShrink: 1,
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
+    position: 'relative',
+    zIndex:1
   },
   inputWrapper: {
     flexDirection: 'row',
