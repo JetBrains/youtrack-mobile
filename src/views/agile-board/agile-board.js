@@ -452,6 +452,7 @@ class AgileBoard extends Component<Props, State> {
   renderSearchPanelPreview = () => {
     return (
       <SearchQueryPreview
+        style={styles.searchQueryPreview}
         query={this.query}
         onFocus={this.onShowAssist}
       />

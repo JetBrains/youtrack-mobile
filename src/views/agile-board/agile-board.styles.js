@@ -110,5 +110,8 @@ export default EStyleSheet.create({
   agileSelectorText: {
     ...headerTitle,
     color: '$text'
+  },
+  searchQueryPreview: {
+    marginHorizontal: UNIT * 2
   }
 });
