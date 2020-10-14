@@ -69,7 +69,6 @@ const BOARD_ROW = toField([
   {
     cells: [
       'id',
-      'tooManyIssues',
       {column: 'id'},
       {
         issues: toField([
@@ -94,8 +93,7 @@ const BOARD_ROW = toField([
                 ]
               }
             ])
-          },
-          {tags: IssueFields.ISSUE_TAGS_FIELDS}
+          }
         ])
       }
     ]
@@ -150,7 +148,45 @@ const SPRINT_LIVE_UPDATE = toField([
   }
 ]);
 
-const SPRINT_ISSUES_FIELDS = 'id,idReadable,summary,resolved,tags(name,id,query,color(id,background,foreground)),fields($type,id,name,projectCustomField($type,field(fieldType(isMultiValue,valueType),id,localizedName,name),id,isSpentTime),value($type,archived,avatarUrl,color(id,background),id,isResolved,localizedName,login,name,presentation,ringId,text))';
+const SPRINT_ISSUES_FIELDS = toField([
+  'id',
+  'idReadable',
+  'summary',
+  'resolved',
+  {tags: IssueFields.ISSUE_TAGS_FIELDS},
+  {
+    fields: [
+      '$type',
+      'id',
+      'name',
+      {
+        value: [
+          'id',
+          '$type',
+          'avatarUrl',
+          'color(id,background)',
+          'presentation',
+        ]
+      },
+      {
+        projectCustomField: [
+          '$type',
+          'id',
+          {
+            field: [
+              'id',
+              'name',
+              {
+                fieldType: [
+                  'isMultiValue',
+                ]
+              }]
+          }
+        ]
+      }
+    ]
+  },
+]);
 
 
 export default {
