@@ -79,7 +79,11 @@ export default function BoardRow(props: Props) {
     uiTheme
   } = props;
 
-  const isResolved = row.issue && row.issue.resolved;
+  if (!row) {
+    return null;
+  }
+
+  const isResolved: boolean = !!row?.issue?.resolved;
 
   return (
     <View
@@ -130,28 +134,36 @@ export default function BoardRow(props: Props) {
 
       </View>
 
-      <View style={styles.row}>
-        {!row.collapsed && row.cells.map((cell, index) => {
-          const isCellCollapsed = collapsedColumnIds.includes(cell.column.id);
-          const lastColumn = index === row.cells.length - 1;
+      {Boolean(!row.collapsed && row.cells) && (
+        <View
+          testID="agileRowCells"
+          style={styles.row}
+        >
+          {row.cells.map((cell, index) => {
+            const isCellCollapsed = collapsedColumnIds.includes(cell.column.id);
+            const lastColumn = index === row.cells.length - 1;
 
-          if (isCellCollapsed) {
-            return renderCollapsedColumn(cell, {firstColumn: index === 0, lastColumn: index === row.cells.length - 1}, isAllColumnsCollapsed(columns));
-          }
+            if (isCellCollapsed) {
+              return renderCollapsedColumn(cell, {
+                firstColumn: index === 0,
+                lastColumn: index === row.cells.length - 1
+              }, isAllColumnsCollapsed(columns));
+            }
 
-          return (
-            <AgileRowColumn
-              testID="agileRowColumn"
-              key={cell.id}
-              cell={cell}
-              onTapCreateIssue={onTapCreateIssue}
-              lastColumn={lastColumn}
-              renderIssueCard={renderIssueCard}
-              uiTheme={uiTheme}
-            />
-          );
-        })}
-      </View>
+            return (
+              <AgileRowColumn
+                testID="agileRowColumn"
+                key={cell.id}
+                cell={cell}
+                onTapCreateIssue={onTapCreateIssue}
+                lastColumn={lastColumn}
+                renderIssueCard={renderIssueCard}
+                uiTheme={uiTheme}
+              />
+            );
+          })}
+        </View>
+      )}
 
     </View>
   );

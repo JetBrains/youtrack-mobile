@@ -6,6 +6,18 @@ import mocks from '../../../test/mocks';
 import BoardRow from './agile-row';
 import {buildStyles, DEFAULT_THEME} from '../theme/theme';
 
+const cellMock = {
+  id: 'id',
+  row: {
+    id: 'orphans',
+  },
+  column: {
+    id: 'id',
+    collapsed: false
+  },
+  issues: []
+};
+
 describe('<BoardRow/>', () => {
   let wrapper;
   let issueMock;
@@ -23,12 +35,31 @@ describe('<BoardRow/>', () => {
       doShallow(createRowMock(), false);
     });
 
+    it('should not render a row', () => {
+      doShallow(null, false);
+      expect(findByTestId('agileRowHeader')).toHaveLength(0);
+    });
+
+    it('should not render empty cells', () => {
+      doShallow({collapsed: false}, false);
+      expect(findByTestId('agileRowCells')).toHaveLength(0);
+    });
+
+    it('should not render cells if collapsed', () => {
+      doShallow({collapsed: true, cells: [cellMock]}, false);
+      expect(findByTestId('agileRowCells')).toHaveLength(0);
+    });
+
     it('should render a header', () => {
       expect(findByTestId('agileRowHeader')).toHaveLength(1);
     });
 
     it('should render a collapse button', () => {
       expect(findByTestId('agileRowCollapseButton')).toHaveLength(1);
+    });
+
+    it('should render cells', () => {
+      expect(findByTestId('agileRowCells')).toHaveLength(1);
     });
 
     describe('Issue id', () => {
@@ -105,17 +136,7 @@ describe('<BoardRow/>', () => {
       id: 'rowMockId',
       name: 'orphans',
       summary: 'summary',
-      cells: [{
-        id: 'id',
-        row: {
-          id: 'orphans',
-        },
-        column: {
-          id: 'id',
-          collapsed: false
-        },
-        issues: []
-      }]
+      cells: [cellMock]
     }, ...args);
   }
 });
