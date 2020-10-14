@@ -15,6 +15,7 @@ import type {PermissionCacheItem} from '../../flow/Permission';
 
 const OTHER_ACCOUNTS_KEY = 'YT_OTHER_ACCOUNTS_STORAGE_KEY';
 export const THEME_MODE_KEY = 'YT_THEME_MODE';
+export const MAX_STORED_QUERIES = 5;
 
 export type StorageState = {|
   projectId: ?string,

@@ -45,6 +45,20 @@ export default class Select extends Component<Props, State> {
     getTitle: (item: Object) => getEntityPresentation(item)
   };
 
+  static getItemLayout(items: ?Array<Object>, index: number) {
+    const height = SELECT_ITEM_HEIGHT;
+    const offset = (SELECT_ITEM_HEIGHT + SELECT_ITEM_SEPARATOR_HEIGHT) * index;
+    return {
+      length: height,
+      offset: offset,
+      index
+    };
+  }
+
+  static renderSeparator() {
+    return <View style={styles.rowSeparator}/>;
+  }
+
   constructor() {
     super();
     this.state = {
@@ -104,7 +118,7 @@ export default class Select extends Component<Props, State> {
 
           {this.state.selectedItems.length === 0 && <IconCheck size={20} color={styles.link.color}/>}
         </TouchableOpacity>
-        {this.renderSeparator()}
+        {Select.renderSeparator()}
       </View>
     );
   }
@@ -173,10 +187,6 @@ export default class Select extends Component<Props, State> {
     return this.props.onSelect(this.state.selectedItems);
   }
 
-  renderSeparator() {
-    return <View style={styles.rowSeparator}/>;
-  }
-
   getItemLayout(items: ?Array<Object>, index: number) {
     return {
       length: SELECT_ITEM_HEIGHT,
@@ -210,8 +220,8 @@ export default class Select extends Component<Props, State> {
         keyExtractor={(item: Object & { id: string }) => item.id}
         renderItem={this.renderItem}
 
-        ItemSeparatorComponent={this.renderSeparator}
-        getItemLayout={this.getItemLayout}
+        ItemSeparatorComponent={Select.renderSeparator}
+        getItemLayout={Select.getItemLayout}
 
         extraData={this.state.selectedItems}
       />

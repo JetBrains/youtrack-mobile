@@ -65,7 +65,8 @@ type Props = AgilePageState & {
   onCardDrop: (any) => any,
   refreshAgile: (agileId: string, sprintId: string, query?: string) => any,
   toggleRefreshPopup: (isOutOfDate: boolean) => any,
-  suggestAgileQuery: (query: ?string, caret: number) => any
+  suggestAgileQuery: (query: ?string, caret: number) => any,
+  storeLastQuery: (query: string) => any
 };
 
 type State = {
@@ -417,8 +418,9 @@ class AgileBoard extends Component<Props, State> {
   };
 
   onQueryApply = (query: string) => {
-    const {refreshAgile, sprint} = this.props;
+    const {refreshAgile, sprint, storeLastQuery} = this.props;
     this.updateQuery(query);
+    storeLastQuery(query);
     if (sprint && sprint.agile) {
       refreshAgile(sprint.agile.id, sprint.id, query);
     }
@@ -497,7 +499,7 @@ class AgileBoard extends Component<Props, State> {
         >
 
           {this.renderSprint(uiTheme)}
-          {isLoadingMore && <ActivityIndicator color={'$link'} style={styles.loadingMoreIndicator}/>}
+          {isLoadingMore && <ActivityIndicator color={uiTheme.colors.$link} style={styles.loadingMoreIndicator}/>}
 
         </BoardScroller>
       </DragContainer>
@@ -559,6 +561,7 @@ const mapDispatchToProps = (dispatch) => {
     refreshAgile: (agileId: string, sprintId: string, query: string = '') => dispatch(boardActions.refreshAgile(agileId, sprintId, query)),
     toggleRefreshPopup: (isOutOfDate: boolean) => dispatch(boardActions.setOutOfDate(isOutOfDate)),
     suggestAgileQuery: (query: string, caret: number) => dispatch(boardActions.suggestAgileQuery(query, caret)),
+    storeLastQuery: (query: string) => dispatch(boardActions.storeLastQuery(query)),
   };
 };
 

@@ -1,27 +1,17 @@
 /* @flow */
 
-import {View, ListView, Text, TouchableOpacity, Platform} from 'react-native';
 import React, {Component} from 'react';
+import {View, Text, TouchableOpacity, Platform, SectionList, ActivityIndicator} from 'react-native';
 
 import EStyleSheet from 'react-native-extended-stylesheet';
+
+import {uuid} from '../../util/util';
+import Select from '../select/select';
 
 import {UNIT} from '../variables/variables';
 import {mainText, secondaryText} from '../common-styles/typography';
 
 import type {TransformedSuggestion, SavedQuery} from '../../flow/Issue';
-
-const SAVED_SEARCHES: string = 'SAVED_SEARCHES';
-const LAST_SEARCHES: string = 'LAST_SEARCHES';
-const SECTION_SPACING: number = 24;
-
-const ds = new ListView.DataSource({
-  rowHasChanged: (r1, r2) => r1 !== r2,
-  sectionHeaderHasChanged: (s1, s2) => s1 !== s2
-});
-
-type State = {
-  dataSource: ListView.DataSource
-};
 
 type Props = {
   style?: any,
@@ -30,85 +20,62 @@ type Props = {
   onApplySavedQuery: (savedQuery?: SavedQuery) => any
 };
 
-export default class QueryAssistSuggestionsList extends Component<Props, State> {
-  state: State = {
-    dataSource: ds.cloneWithRows([])
-  };
 
-  constructor(props: Props) {
-    super(props);
-  }
+export default class QueryAssistSuggestionsList extends Component<Props, void> {
 
-  UNSAFE_componentWillReceiveProps(newProps: Props) {
-    this._prepareDataSource(newProps.suggestions);
-  }
-
-  _prepareDataSource(suggestions) {
-    const isSavedSearches = suggestions.some(s => s.name);
-
-    if (isSavedSearches) {
-      this.setState({dataSource: ds.cloneWithRowsAndSections(this._prepareSectionedMap(suggestions))});
-    } else {
-      this.setState({dataSource: ds.cloneWithRows(suggestions)});
-    }
-  }
-
-  _prepareSectionedMap = (suggestions: Array<TransformedSuggestion>) => {
-    const savedSearches = suggestions.filter(s => s.id);
-    const lastSearches = suggestions.filter(s => !s.id);
-
-    let res = {};
-    res = savedSearches.length ? {[SAVED_SEARCHES]: savedSearches} : res;
-    res = lastSearches.length ? {...res, [LAST_SEARCHES]: lastSearches} : res;
-
-    return res;
-  };
-
-  _onApplySuggestion = (suggestion: TransformedSuggestion | SavedQuery) => {
+  onApplySuggestion = (suggestion: TransformedSuggestion | SavedQuery) => {
     const isSuggestion = suggestion.caret;
     const {onApplySuggestion, onApplySavedQuery} = this.props;
     return isSuggestion ? onApplySuggestion(suggestion) : onApplySavedQuery(suggestion);
   };
 
-  _renderRow = (suggestion: TransformedSuggestion | SavedQuery) => {
-    const isSuggestion = suggestion.caret;
+  renderRow = ({item}: TransformedSuggestion | SavedQuery) => {
+    const isSuggestion = item.caret;
 
     return (
       <TouchableOpacity
         style={styles.searchRow}
-        onPress={() => this._onApplySuggestion(suggestion)}
+        onPress={() => this.onApplySuggestion(item)}
       >
-        <Text style={styles.searchText}>{isSuggestion ? suggestion.option : suggestion.name}</Text>
+        <Text style={styles.searchText}>{isSuggestion ? item.option : item.name}</Text>
       </TouchableOpacity>
     );
   };
 
-  _renderSectionHeader = (sectionData: Array<Object>, category: string) => {
-    const savedSearches = category === SAVED_SEARCHES;
-
-    if (savedSearches || category === LAST_SEARCHES) {
+  renderSectionHeader = ({section}: Object) => {
+    if (section.title) {
       return (
-        <View style={[styles.sectionHeader, !savedSearches && {paddingTop: SECTION_SPACING}]}>
-          <Text style={styles.sectionHeaderText}>{savedSearches ? 'SAVED SEARCHES' : 'RECENT SEARCHES'}</Text>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionHeaderText}>{section.title}</Text>
         </View>
       );
     }
-    return null;
   };
 
-
   render() {
+    const {suggestions, style} = this.props;
+
     return (
-      <View style={[styles.container, this.props.style]}>
-        <ListView
+      <View style={[styles.container, style]}>
+        <SectionList
           contentContainerStyle={styles.list}
 
-          dataSource={this.state.dataSource}
-          enableEmptySections
-          stickySectionHeadersEnabled={false}
-          renderRow={this._renderRow}
-          renderSectionHeader={this._renderSectionHeader}
+          testID="selectItems"
           keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+
+          scrollEventThrottle={10}
+
+          sections={suggestions}
+          keyExtractor={uuid}
+
+          renderItem={this.renderRow}
+          renderSectionHeader={this.renderSectionHeader}
+          ListEmptyComponent={<ActivityIndicator color={styles.link.color}/>}
+
+          ItemSeparatorComponent={Select.renderSeparator}
+
+          getItemLayout={Select.getItemLayout}
         />
       </View>
     );
@@ -149,7 +116,12 @@ const styles = EStyleSheet.create({
     color: '$text'
   },
   sectionHeaderText: {
+    textTransform: 'uppercase',
+    textAlign: 'right',
     ...secondaryText,
     color: '$icon'
+  },
+  link: {
+    color: '$link'
   }
 });

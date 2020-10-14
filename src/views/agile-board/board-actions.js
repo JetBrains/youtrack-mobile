@@ -1,32 +1,28 @@
 /* @flow */
 
-import {notify, notifyError} from '../../components/notification/notification';
-import {DEFAULT_ERROR_MESSAGE} from '../../components/error/error-messages';
-import ServersideEvents from '../../components/api/api__serverside-events';
-import Router from '../../components/router/router';
-import log from '../../components/log/log';
-import usage from '../../components/usage/usage';
-import {findIssueOnBoard} from './board-updaters';
-import {getGroupedSprints, getSprintAllIssues, fillSprintIssues} from './agile-board__helper';
-import animation from '../../components/animation/animation';
-import {sortAlphabetically} from '../../components/search/sorting';
-import {flushStoragePart, getStorageState} from '../../components/storage/storage';
 import {isIOSPlatform} from '../../util/util';
 import {routeMap} from '../../app-routes';
 
+import animation from '../../components/animation/animation';
+import log from '../../components/log/log';
+import Router from '../../components/router/router';
+import ServersideEvents from '../../components/api/api__serverside-events';
+import usage from '../../components/usage/usage';
+import {DEFAULT_ERROR_MESSAGE} from '../../components/error/error-messages';
+import {flushStoragePart, getStorageState, MAX_STORED_QUERIES} from '../../components/storage/storage';
+import {getAssistSuggestions} from '../../components/query-assist/query-assist-helper';
+import {notify, notifyError} from '../../components/notification/notification';
+import {sortAlphabetically} from '../../components/search/sorting';
+
+import {findIssueOnBoard} from './board-updaters';
+import {getGroupedSprints, getSprintAllIssues, fillSprintIssues} from './agile-board__helper';
+
 import * as types from './board-action-types';
 import type Api from '../../components/api/api';
-import type {
-  AgileBoardRow,
-  AgileColumn,
-  AgileUserProfile,
-  Board,
-  BoardOnList,
-  Sprint
-} from '../../flow/Agile';
+import type {AgileBoardRow, AgileColumn, AgileUserProfile, Board, BoardOnList, Sprint} from '../../flow/Agile';
+import type {AgilePageState} from './board-reducers';
 import type {CustomError} from '../../flow/Error';
 import type {IssueFull, IssueOnList} from '../../flow/Issue';
-import type {AgilePageState} from './board-reducers';
 
 type ApiGetter = () => Api;
 
@@ -170,14 +166,8 @@ export function cacheSprint(sprint: Sprint) {
 
 export function suggestAgileQuery(query: string, caret: number) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
-    const api: Api = getApi();
-    try {
-      const suggestions = await api.getQueryAssistSuggestions(query, caret);
-      dispatch({type: types.AGILE_SEARCH_SUGGESTS, suggestions});
-    } catch (e) {
-      notifyError('Failed to load suggestions', e);
-      dispatch({type: types.AGILE_SEARCH_SUGGESTS, suggestions: []});
-    }
+    const suggestions = await getAssistSuggestions(getApi(), query, caret);
+    dispatch({type: types.AGILE_SEARCH_SUGGESTS, suggestions});
   };
 }
 
@@ -680,5 +670,18 @@ export function reSubscribeSEE() {
   return async (dispatch: (any) => any) => {
     destroySSE();
     dispatch(subscribeServersideUpdates());
+  };
+}
+
+export function storeLastQuery(query: string) {
+  return async () => {
+    if (!query) {
+      return;
+    }
+
+    const updatedQueries = [query, ...(getStorageState().lastQueries || [])];
+    const uniqueUpdatedQueries = Array.from(new Set(updatedQueries)).slice(0, MAX_STORED_QUERIES);
+
+    flushStoragePart({lastQueries: uniqueUpdatedQueries});
   };
 }

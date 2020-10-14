@@ -1,40 +1,30 @@
 /* @flow */
 
-import * as types from './issue-list-action-types';
 import ApiHelper from '../../components/api/api__helper';
-import {getStorageState, flushStoragePart} from '../../components/storage/storage';
-import {notifyError} from '../../components/notification/notification';
 import log from '../../components/log/log';
 import usage from '../../components/usage/usage';
-
 import {EVERYTHING_CONTEXT} from '../../components/search/search-context';
+import {filterArrayByType} from '../../components/api/api__resource-types';
+import {flushStoragePart, getStorageState, MAX_STORED_QUERIES} from '../../components/storage/storage';
+import {getAssistSuggestions, getCachedUserQueries} from '../../components/query-assist/query-assist-helper';
+import {notifyError} from '../../components/notification/notification';
+import {sortAlphabetically} from '../../components/search/sorting';
 import {updateUserGeneralProfile} from '../../actions/app-actions';
 
-import {filterArrayByType} from '../../components/api/api__resource-types';
-import {sortAlphabetically} from '../../components/search/sorting';
+import * as types from './issue-list-action-types';
 
 import type Api from '../../components/api/api';
-import type {IssueOnList, SavedQuery} from '../../flow/Issue';
 import type {Folder} from '../../flow/User';
+import type {IssueOnList, SavedQuery} from '../../flow/Issue';
 import type {IssueProject, Tag} from '../../flow/CustomFields';
 
 const PAGE_SIZE = 10;
-const MAX_STORED_QUERIES = 5;
 const CATEGORY_NAME = 'Issue List';
 
 type ApiGetter = () => Api;
 
 function trackEvent(msg: string, additionalParam: ?string) {
   usage.trackEvent(CATEGORY_NAME, msg, additionalParam);
-}
-
-export function getCachedUserQueries(): Array<Object> {
-  return (getStorageState().lastQueries || []).map(
-    (query: string, index: number) => ({
-      id: `lastQueries-${index}`,
-      name: query,
-      query
-    }));
 }
 
 export function setIssuesQuery(query: string) {
@@ -53,23 +43,8 @@ export function readStoredIssuesQuery() {
 
 export function suggestIssuesQuery(query: string, caret: number) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
-    const api: Api = getApi();
-    try {
-      let suggestions;
-      if (query) {
-        suggestions = await api.getQueryAssistSuggestions(query, caret);
-      } else {
-        const currentUserId: string = getState().app?.user?.id;
-        suggestions = await getApi().getSavedQueries();
-        suggestions = suggestions.filter((s: SavedQuery) => s.owner.id === currentUserId);
-        const cachedUserQueries = getCachedUserQueries();
-        suggestions = [...suggestions, ...cachedUserQueries];
-      }
-      dispatch({type: types.SUGGEST_QUERY, suggestions});
-    } catch (e) {
-      notifyError('Failed to load suggestions', e);
-      dispatch({type: types.SUGGEST_QUERY, suggestions: []});
-    }
+    const suggestions = await getAssistSuggestions(getApi(), query, caret);
+    dispatch({type: types.SUGGEST_QUERY, suggestions});
   };
 }
 
@@ -243,13 +218,13 @@ export function closeSelect() {
 
 
 export function cacheIssues(issues: Array<IssueOnList>) {
-  return (dispatch: (any) => any) => {
+  return () => {
     flushStoragePart({issuesCache: issues});
   };
 }
 
 export function readCachedIssues() {
-  return async (dispatch: (any) => any, getState: () => Object) => {
+  return async (dispatch: (any) => any) => {
     const issues = getStorageState().issuesCache;
 
     if (issues && issues.length) {
@@ -301,7 +276,7 @@ export function refreshIssues() {
 }
 
 export function initializeIssuesList(query: ?string) {
-  return async (dispatch: (any) => any, getState: () => Object) => {
+  return async (dispatch: (any) => any) => {
     if (query) {
       dispatch(setIssuesQuery(query));
     } else {

@@ -61,31 +61,43 @@ describe('Issue list actions', () => {
     dispatch.should.have.been.calledWith({type: types.SET_ISSUES_QUERY, query: TEST_QUERY});
   });
 
-  it('should load query assist suggestions if query is not empty', async () => {
-    const suggestions = [{id: 'test'}];
-    apiMock.getQueryAssistSuggestions = () => new Promise(resolve => resolve(suggestions));
 
-    await actions.suggestIssuesQuery(TEST_QUERY, 4)(dispatch, getState, () => apiMock);
-
-    dispatch.should.have.been.calledWith({type: types.SUGGEST_QUERY, suggestions});
-  });
-
-  it('should load saved query and last searches if query is empty', async () => {
-    const serverSavedQueryListMock = [
-      {id: 'savedQuery', owner: {id: currentUserIdMock}},
-      {id: 'savedQuery-not-own', owner: {id: 'other-user'}}
-    ];
-    const cachedRecentUserQueryMock = ['last-query'];
-
-    apiMock.getSavedQueries = () => new Promise(resolve => resolve(serverSavedQueryListMock));
-    await flushStoragePart({lastQueries: cachedRecentUserQueryMock});
-    await actions.suggestIssuesQuery('', 0)(dispatch, getState, () => apiMock);
-
-    dispatch.should.have.been.calledWith({
-      type: types.SUGGEST_QUERY,
-      suggestions: [serverSavedQueryListMock[0], {id: `lastQueries-0`, name: 'last-query', query: 'last-query'}]
+  describe('Suggestions', () => {
+    const assistSuggestions = [{option: 'for: me'}];
+    beforeEach(async () => {
+      apiMock.getQueryAssistSuggestions = () => new Promise(resolve => resolve(assistSuggestions));
     });
+
+    it('should load query assist suggestions', async () => {
+      await doSuggest();
+
+      const suggestions = [{title: null, data: assistSuggestions}];
+      dispatch.should.have.been.calledWith({type: types.SUGGEST_QUERY, suggestions});
+    });
+
+    it('should load query assist suggestions with recent searches', async () => {
+      const cachedRecentUserQueryMock = ['last-query'];
+      await flushStoragePart({lastQueries: cachedRecentUserQueryMock});
+
+      await doSuggest();
+
+      const suggestions = [{title: null, data: assistSuggestions}, {
+        title: 'Recent searches', data: [{
+          id: `lastQueries-0`,
+          name: 'last-query', query: 'last-query'
+        }]
+      }];
+      dispatch.should.have.been.calledWith({
+        type: types.SUGGEST_QUERY,
+        suggestions
+      });
+    });
+
+    async function doSuggest() {
+      await actions.suggestIssuesQuery(TEST_QUERY, 4)(dispatch, getState, () => apiMock);
+    }
   });
+
 
   it('should clear query assist suggestions', () => {
     actions
