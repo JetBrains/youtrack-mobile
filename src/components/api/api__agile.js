@@ -36,7 +36,7 @@ export default class AgileAPI extends ApiBase {
 
   async getAgileIssues(issueIds: Array<{ id: string }>): Promise<Array<IssueFull>> {
     const issues = await this.makeAuthorizedRequest(
-      `${this.youTrackUrl}/api/issuesGetter?fields=${agileFields.sprintIssues}`,
+      `${this.youTrackUrl}/api/issuesGetter?${qs.stringify({fields: agileFields.sprintIssues.toString()})}`,
       'POST',
       issueIds
     );
