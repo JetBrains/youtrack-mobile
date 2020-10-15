@@ -54,5 +54,8 @@ export default EStyleSheet.create({
     backgroundColor: '$background',
     borderBottomColor: '$link',
     borderBottomWidth: 1
+  },
+  editUrlIcon: {
+    marginLeft: UNIT
   }
 });

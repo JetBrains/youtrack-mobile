@@ -1,12 +1,14 @@
 /* @flow */
 
-import {View, Image, Text, TouchableOpacity, ActivityIndicator} from 'react-native';
 import React, {PureComponent} from 'react';
-import {logo, pencil} from '../../components/icon/icon';
+import {View, Image, Text, TouchableOpacity, ActivityIndicator} from 'react-native';
+
 import usage from '../../components/usage/usage';
 import {formatYouTrackURL} from '../../components/config/config';
+import {logo, IconPencil} from '../../components/icon/icon';
 import {ThemeContext} from '../../components/theme/theme-context';
 
+import {HIT_SLOP} from '../../components/common-styles/button';
 import styles from './home.styles';
 
 import type {Theme} from '../../flow/Theme';
@@ -63,10 +65,11 @@ export default class Home extends PureComponent<Props, State> {
 
     return (
       <TouchableOpacity
+        hitSlop={HIT_SLOP}
         style={styles.urlButton}
         onPress={() => this.props.onChangeBackendUrl(backendUrl)}>
         <Text style={styles.url}>{formatYouTrackURL(backendUrl)}</Text>
-        <Image style={styles.urlIcon} source={pencil} />
+        <IconPencil style={styles.editUrlIcon} size={22} color={styles.retry.color}/>
       </TouchableOpacity>
     );
   }
