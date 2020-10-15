@@ -159,6 +159,7 @@ export default function BoardRow(props: Props) {
                 lastColumn={lastColumn}
                 renderIssueCard={renderIssueCard}
                 uiTheme={uiTheme}
+                zoomedIn={zoomedIn}
               />
             );
           })}

@@ -27,7 +27,7 @@ type Props = {
 };
 
 
-const cardBottomMargin: number = UNIT * 1.5;
+export const cardBottomMargin: number = UNIT * 1.5;
 export const getAgileCardHeight = () => ((getStorageState().agileZoomedIn ?? true) ? 110 : 50) + cardBottomMargin;
 
 function getEstimation(estimationField: { id: string }, fields: Array<CustomFieldShort> = []) {

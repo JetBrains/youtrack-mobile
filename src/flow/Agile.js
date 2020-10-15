@@ -3,6 +3,8 @@
 import type {IssueFull, IssueOnList} from './Issue';
 
 export type Cell = {
+  id: string,
+  column: AgileColumn,
   issues: Array<IssueOnList>
 };
 export type Swimlane = Object & {

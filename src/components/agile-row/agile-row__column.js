@@ -1,27 +1,48 @@
 /* @flow */
 
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
+import {FlatList, TouchableOpacity} from 'react-native';
+
 import { DropZone } from '../draggable';
+import {cardBottomMargin, getAgileCardHeight} from '../agile-card/agile-card';
 import {IconAdd} from '../icon/icon';
 
 import styles from './agile-row.styles';
 
 import type {BoardCell} from '../../flow/Agile';
-import type {IssueOnList} from '../../flow/Issue';
+import type {IssueFull} from '../../flow/Issue';
 import type {UITheme} from '../../flow/Theme';
 
 type ColumnProps = {
   cell: BoardCell,
   onTapCreateIssue: Function,
   lastColumn: boolean,
-  renderIssueCard: (issue: IssueOnList) => any,
-  uiTheme: UITheme
+  renderIssueCard: (issue: IssueFull) => any,
+  uiTheme: UITheme,
+  zoomedIn?: boolean
 }
 
 export default function AgileRowColumn(props: ColumnProps) {
-  const {cell, uiTheme} = props;
-  const issues: Array<IssueOnList> = cell.issues || [];
+  const {cell, uiTheme, zoomedIn} = props;
+  const issues: Array<IssueFull> = cell.issues || [];
+
+  function renderCard({item}: IssueFull) {
+    return props.renderIssueCard(item);
+  }
+
+  function getId(issue: IssueFull) {
+    return issue.id;
+  }
+
+  function getItemLayout(items: ?Array<IssueFull>, index: number) {
+    const height = getAgileCardHeight();
+    const offset = (height + cardBottomMargin) * index;
+    return {
+      length: height,
+      offset: offset,
+      index
+    };
+  }
 
   return (
     <DropZone
@@ -32,7 +53,15 @@ export default function AgileRowColumn(props: ColumnProps) {
         issueIds: issues.map(issue => issue.id)
       }}
     >
-      {issues.map(props.renderIssueCard)}
+
+      <FlatList
+        scrollEnabled={false}
+        data={issues}
+        keyExtractor={getId}
+        renderItem={renderCard}
+        getItemLayout={getItemLayout}
+        extraData={zoomedIn}
+      />
 
       <TouchableOpacity
         onPress={() => props.onTapCreateIssue(cell.column.id, cell.id)}
