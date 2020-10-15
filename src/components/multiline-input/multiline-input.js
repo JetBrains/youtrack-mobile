@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {TextInput} from 'react-native';
 import {UNIT} from '../variables/variables';
 import {isIOSPlatform} from '../../util/util';
@@ -12,6 +12,7 @@ const DEFAULT_FONT_SIZE = 16;
 type Props = {
   maxInputHeight: number,
   minInputHeight: number,
+  autoFocus?: boolean,
   style: any
 };
 
@@ -19,7 +20,7 @@ type State = {
   inputHeight: ?number
 };
 
-export default class MultilineInput extends Component<Props, State> {
+export default class MultilineInput extends PureComponent<Props, State> {
   static defaultProps = {
     maxInputHeight: MAX_DEFAULT_HEIGHT,
     minInputHeight: MIN_DEFAULT_HEIGHT,
@@ -35,8 +36,14 @@ export default class MultilineInput extends Component<Props, State> {
     };
   }
 
+  componentDidUpdate(prevProps: Props) {
+    if (!prevProps.autoFocus && this.props.autoFocus === true) {
+      this.focus();
+    }
+  }
+
   focus() {
-    this.input.focus();
+    this.input && this.input.focus();
   }
 
   onContentSizeChange = (event: Object) => {
