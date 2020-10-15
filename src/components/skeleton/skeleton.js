@@ -257,12 +257,11 @@ function skeletonCard(key: string) {
   return (
     <SkeletonPlaceholder.Item
       key={key}
-      marginTop={UNIT * 2}
+      marginTop={UNIT * 1.5}
     >
       {SkeletonLine({
         width: SKELETON_WIDTH * 3,
         height: getAgileCardHeight(),
-        marginTop: UNIT,
         borderRadius: agileCard.borderRadius
       })}
     </SkeletonPlaceholder.Item>
@@ -281,7 +280,8 @@ export const SkeletonAgile = (props: SkeletonProps) => {
     >
       {SkeletonLine({
         height: SKELETON_HEIGHT,
-        marginTop: UNIT * 2
+        marginTop: UNIT * 2,
+        borderRadius: 0
       })}
 
       {SkeletonLine({
@@ -291,11 +291,14 @@ export const SkeletonAgile = (props: SkeletonProps) => {
 
       {SkeletonLine({
         height: SKELETON_HEIGHT,
-        marginTop: UNIT * 1.5
+        marginTop: UNIT * 1.5,
+        borderRadius: 0
       })}
       {SkeletonLine({
         height: SKELETON_HEIGHT * 2,
-        marginTop: UNIT * 3
+        marginTop: UNIT * 3,
+        marginBottom: UNIT * 2,
+        borderRadius: 0
       })}
 
       {Array(3).fill(0).map(((marginTop: number, index) => skeletonCard(`skeletonCard-${index}`)))}
