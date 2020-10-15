@@ -23,6 +23,7 @@ import {getScrollableWidth} from '../../components/board-scroller/board-scroller
 import {hasType} from '../../components/api/api__resource-types';
 import {IconException, IconMagnifyZoom} from '../../components/icon/icon';
 import {notify} from '../../components/notification/notification';
+import {SkeletonAgile} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
 
 import * as boardActions from './board-actions';
@@ -467,7 +468,12 @@ class AgileBoard extends Component<Props, State> {
       if (error && error.noAgiles) {
         return null;
       }
-      return <View style={styles.agileNoSprint}>{this.renderAgileSelector(uiTheme)}</View>;
+      return (
+        <View>
+          <View style={styles.agileNoSprint}>{this.renderAgileSelector(uiTheme)}</View>
+          <SkeletonAgile/>
+        </View>
+      );
     }
 
     return (

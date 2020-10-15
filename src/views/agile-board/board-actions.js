@@ -484,6 +484,7 @@ export function openBoardSelect() {
         selectedItems: sprint ? [sprint.agile] : agile ? [agile] : [],
         onSelect: async (selectedBoard: BoardOnList, query: string = '') => {
           dispatch(closeSelect());
+          dispatch(receiveSprint(null));
           dispatch(startSprintLoad());
           await flushStoragePart({agileQuery: null});
           dispatch(loadBoard(selectedBoard, query));

@@ -6,14 +6,16 @@ import {UNIT} from '../variables/variables';
 import {issueCard, issueIdResolved} from '../common-styles/issue';
 import {secondaryText} from '../common-styles/typography';
 
+export const agileCard = {
+  flexDirection: 'row',
+  marginLeft: UNIT * 2,
+  borderRadius: UNIT,
+  overflow: 'hidden',
+  backgroundColor: '$boxBackground'
+};
+
 export default EStyleSheet.create({
-  card: {
-    flexDirection: 'row',
-    marginLeft: UNIT * 2,
-    borderRadius: UNIT,
-    overflow: 'hidden',
-    backgroundColor: '$boxBackground'
-  },
+  card: agileCard,
   cardColorCoding: {
     flexShrink: 0,
     marginTop: UNIT / 4,

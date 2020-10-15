@@ -4,6 +4,8 @@ import React from 'react';
 
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
+import {agileCard} from '../agile-card/agile-card.styles';
+import {getAgileCardHeight} from '../agile-card/agile-card';
 import {UNIT} from '../variables/variables';
 
 type SkeletonProps = {
@@ -246,6 +248,57 @@ export const SkeletonIssues = (props: SkeletonProps) => {
         Array(5).fill(0)
           .map(((marginTop: number, index) => skeletonIssue(`skeletonIssues-${index}`)))
       }
+    </SkeletonPlaceholder.Item>
+  </SkeletonPlaceholder>;
+};
+
+
+function skeletonCard(key: string) {
+  return (
+    <SkeletonPlaceholder.Item
+      key={key}
+      marginTop={UNIT * 2}
+    >
+      {SkeletonLine({
+        width: SKELETON_WIDTH * 3,
+        height: getAgileCardHeight(),
+        marginTop: UNIT,
+        borderRadius: agileCard.borderRadius
+      })}
+    </SkeletonPlaceholder.Item>
+  );
+}
+
+export const SkeletonAgile = (props: SkeletonProps) => {
+  return <SkeletonPlaceholder
+    {...skeletonPlaceholderDefaultProps}
+    {...props}
+  >
+    <SkeletonPlaceholder.Item
+      fleDirection='column'
+      marginLeft={UNIT * 2}
+      marginRight={UNIT * 2}
+    >
+      {SkeletonLine({
+        height: SKELETON_HEIGHT,
+        marginTop: UNIT * 2
+      })}
+
+      {SkeletonLine({
+        height: SKELETON_HEIGHT * 2.5,
+        marginTop: UNIT * 1.5
+      })}
+
+      {SkeletonLine({
+        height: SKELETON_HEIGHT,
+        marginTop: UNIT * 1.5
+      })}
+      {SkeletonLine({
+        height: SKELETON_HEIGHT * 2,
+        marginTop: UNIT * 3
+      })}
+
+      {Array(3).fill(0).map(((marginTop: number, index) => skeletonCard(`skeletonCard-${index}`)))}
     </SkeletonPlaceholder.Item>
   </SkeletonPlaceholder>;
 };
