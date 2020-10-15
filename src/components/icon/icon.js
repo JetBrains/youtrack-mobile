@@ -9,7 +9,6 @@ import {isAndroidPlatform} from '../../util/util';
 import IconYTM from './youtrack-icon';
 
 export {default as logo} from './youtrack-logo-512.png';
-export {default as qrCode} from './qr-code.png';
 
 
 type Props = {
