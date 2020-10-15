@@ -73,10 +73,10 @@ class Settings extends Component<Props, State> {
           currentTheme.setMode(uiTheme.mode, !!uiTheme.system);
         }}
       >
-        <View style={styles.settingsItem}>
-          <Text style={styles.settingsItemText}>
+        <View style={styles.settingsListItemOption}>
+          <Text style={styles.settingsListItemOptionText}>
             {`${uiTheme.name} theme`}
-            {uiTheme.system && <Text style={styles.textSecondary}>{` (${uiTheme.mode})`}</Text>}
+            {uiTheme.system && <Text style={styles.settingsListItemOptionTextSecondary}>{` (${uiTheme.mode})`}</Text>}
           </Text>
           {isChecked && <IconCheck size={20} color={currentTheme.uiTheme.colors.$link}/>}
         </View>
@@ -131,20 +131,23 @@ class Settings extends Component<Props, State> {
                   uiTheme={uiTheme}
                 />
 
-                <View style={styles.settingsItems}>
-                  <TouchableOpacity
-                    style={styles.settingsTitle}
-                    hitSlop={HIT_SLOP}
-                    onPress={() => this.setAppearanceSettingsVisibility(true)}>
-                    <Text style={styles.settingsFooterLink}>Appearance</Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={styles.settingsTitle}
-                    hitSlop={HIT_SLOP}
-                    onPress={openDebugView}>
-                    <Text style={styles.settingsFooterLink}>Share logs</Text>
-                  </TouchableOpacity>
+                <View style={styles.settingsList}>
+                  <View style={styles.settingsListItem}>
+                    <TouchableOpacity
+                      style={styles.settingsListItemTitle}
+                      hitSlop={HIT_SLOP}
+                      onPress={() => this.setAppearanceSettingsVisibility(true)}>
+                      <Text style={styles.settingsListItemTitleText}>Appearance</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.settingsListItem}>
+                    <TouchableOpacity
+                      style={styles.settingsListItemTitle}
+                      hitSlop={HIT_SLOP}
+                      onPress={openDebugView}>
+                      <Text style={styles.settingsListItemTitleText}>Share logs</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
 
                 <View

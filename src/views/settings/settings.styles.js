@@ -4,7 +4,6 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../../components/variables/variables';
 
 import {mainText, secondaryText} from '../../components/common-styles/typography';
-import {formStyles} from '../../components/common-styles/form';
 import {separatorBorder} from '../../components/common-styles/list';
 
 
@@ -12,9 +11,14 @@ const hPaddings = {
   paddingLeft: UNIT * 2,
   paddingRight: UNIT * 2
 };
-export default EStyleSheet.create({
-  ...formStyles,
+const optionText = {
+  ...mainText,
+  color: '$text',
+  fontWeight: '500',
+  textTransform: 'capitalize'
+};
 
+export default EStyleSheet.create({
   settings: {
     flex: 1,
     backgroundColor: '$background'
@@ -23,14 +27,20 @@ export default EStyleSheet.create({
     flexGrow: 1,
     ...hPaddings
   },
-  settingsItems: {
+  settingsList: {
     flex: 1
   },
-  settingsTitle: {
-    marginTop: UNIT,
-    marginBottom: UNIT / 2
+  settingsListItem: {
+    flexDirection: 'row',
+    marginVertical: UNIT
   },
-  settingsItem: {
+  settingsListItemTitle: {
+    padding: UNIT
+  },
+  settingsListItemTitleText: {
+    ...optionText
+  },
+  settingsListItemOption: {
     flexDirection: 'row',
     padding: UNIT * 2,
     paddingLeft: 0,
@@ -38,18 +48,12 @@ export default EStyleSheet.create({
     ...separatorBorder,
     borderColor: '$separator'
   },
-  settingsItemText: {
-    ...mainText,
+  settingsListItemOptionText: {
     flexGrow: 1,
-    color: '$text',
-    fontWeight: '500',
-    textTransform: 'capitalize'
+    ...optionText
   },
-  textSecondary: {
+  settingsListItemOptionTextSecondary: {
     color: '$icon',
-  },
-  settingsCheckbox: {
-    padding: UNIT
   },
   settingsFooter: {
     flexDirection: 'column',
@@ -66,7 +70,7 @@ export default EStyleSheet.create({
   },
   settingsFooterLink: {
     ...mainText,
-    color: '$text',
+    color: '$link',
     marginTop: UNIT,
     marginBottom: UNIT,
   },
