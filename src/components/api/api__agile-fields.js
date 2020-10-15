@@ -6,11 +6,7 @@ const toField = ApiHelper.toField;
 
 const SPRINT = toField([
   'id',
-  'name',
-  'goal',
-  'archived',
-  'start',
-  'finish'
+  'name'
 ]);
 
 const AGILE_SHORT_WITH_SPRINTS = toField([
@@ -59,6 +55,7 @@ const BOARD_COLUMN = toField([
 const BOARD_ISSUE_BASE_FIELDS = toField([
   'id',
   'idReadable',
+  'summary',
 ]);
 
 const BOARD_ROW = toField([
@@ -150,19 +147,15 @@ const SPRINT_LIVE_UPDATE = toField([
 
 const SPRINT_ISSUES_FIELDS = toField([
   'id',
-  'idReadable',
-  'summary',
   'resolved',
   {tags: IssueFields.ISSUE_TAGS_FIELDS},
   {
     fields: [
-      '$type',
       'id',
       'name',
       {
         value: [
           'id',
-          '$type',
           'avatarUrl',
           'color(id,background)',
           'presentation',
@@ -170,7 +163,6 @@ const SPRINT_ISSUES_FIELDS = toField([
       },
       {
         projectCustomField: [
-          '$type',
           'id',
           {
             field: [
