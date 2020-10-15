@@ -127,6 +127,8 @@
     "lodash.once": "4.1.1",
     "lodash.throttle": "4.1.1",
     "object-walk": "^0.1.1",
+    "patch-package": "^6.2.2",
+    "postinstall-postinstall": "^2.1.0",
     "prop-types": "^15.5.10",
     "qs": "6.7.0",
     "react": "16.8.3",
