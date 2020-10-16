@@ -2,9 +2,6 @@
 
 set -e -x
 
-echo "Applying patches"
-yarn patch-package
-
 echo "Running JETIFIER"
 npx jetifier
 
