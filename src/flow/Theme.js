@@ -9,8 +9,6 @@ export type Theme = {
 export type BarStyle = 'light-content' | 'dark-content';
 
 export type UIThemeColors = {|
-  $action: string,
-
   $background: string,
   $boxBackground: string,
 
