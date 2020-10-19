@@ -8,7 +8,6 @@ import {filterArrayByType} from '../../components/api/api__resource-types';
 import {flushStoragePart, getStorageState, MAX_STORED_QUERIES} from '../../components/storage/storage';
 import {getAssistSuggestions, getCachedUserQueries} from '../../components/query-assist/query-assist-helper';
 import {notifyError} from '../../components/notification/notification';
-import {sortAlphabetically} from '../../components/search/sorting';
 import {updateUserGeneralProfile} from '../../actions/app-actions';
 
 import * as types from './issue-list-action-types';
@@ -132,13 +131,20 @@ export function openSavedSearchesSelect() {
   return (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     trackEvent('Issue saved searches select');
     const savedSearchesSelectProps = {
+      isOwnSearches: true,
       show: true,
       placeholder: 'Filter saved searches',
       dataSource: async () => {
         let folders: Array<Object> = getCachedUserQueries();
         try {
           const issueFolders: Array<IssueProject | SavedQuery | Tag> = await getApi().getIssueFolders(true);
-          folders = filterArrayByType(issueFolders, 'savedSearch').sort(sortAlphabetically).concat(folders);
+          folders = [{
+            title: null,
+            data: filterArrayByType(issueFolders, 'savedSearch')
+          }, {
+            title: 'Recent searches',
+            data: folders
+          }];
         } catch (e) {
           log.warn('Failed to load user saved searches');
         }

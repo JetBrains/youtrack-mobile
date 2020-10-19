@@ -12,7 +12,7 @@ import SelectItem from './select__item';
 
 import styles, {SELECT_ITEM_HEIGHT, SELECT_ITEM_SEPARATOR_HEIGHT} from './select.styles';
 
-export type Props = {
+type SelectProps = {
   dataSource: (query: string) => Promise<Array<Object>>,
   onSelect: (item: ?Object | Array<Object>) => any,
   onChangeSelection: (selectedItems: Array<Object>, current: Object) => any,
@@ -28,7 +28,7 @@ export type Props = {
   noFilter?: boolean
 };
 
-type State = {
+type SelectState = {
   query: string,
   items: ?Array<Object>,
   filteredItems: Array<Object>,
@@ -36,7 +36,7 @@ type State = {
   loaded: boolean
 };
 
-export default class Select extends Component<Props, State> {
+export default class Select extends Component<SelectProps, SelectState> {
   static defaultProps = {
     placeholder: 'Search item',
     autoFocus: false,
@@ -77,7 +77,7 @@ export default class Select extends Component<Props, State> {
     this._loadItems(this.state.query);
   }
 
-  componentDidUpdate(prevProps: Props) {
+  componentDidUpdate(prevProps: SelectProps) {
     if (prevProps.dataSource !== this.props.dataSource) {
       this.setState({
         loaded: false,

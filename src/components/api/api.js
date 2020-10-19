@@ -170,10 +170,10 @@ class API extends BaseAPI {
       'query',
       'pinned',
       {
-        owner: ApiHelper.toField([
+        owner: [
           'id',
           'ringId',
-        ])
+        ]
       },
       {
         color: ['id']
