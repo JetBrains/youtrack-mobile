@@ -101,10 +101,7 @@ const styles = EStyleSheet.create({
   },
   searchRow: {
     padding: UNIT * 2,
-    paddingRight: UNIT,
-    marginLeft: UNIT * 2,
-    borderBottomWidth: 0.5,
-    borderColor: '$disabled'
+    paddingRight: UNIT
   },
   sectionHeader: {
     padding: UNIT * 2,
@@ -117,7 +114,6 @@ const styles = EStyleSheet.create({
   },
   sectionHeaderText: {
     textTransform: 'uppercase',
-    textAlign: 'right',
     ...secondaryText,
     color: '$icon'
   },

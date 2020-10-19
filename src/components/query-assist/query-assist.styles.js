@@ -66,5 +66,10 @@ export default EStyleSheet.create({
   },
   link: {
     color: '$link'
+  },
+  searchPanel: {
+    flexGrow: 1,
+    paddingLeft: UNIT * 2,
+    paddingRight: UNIT * 1.5
   }
 });

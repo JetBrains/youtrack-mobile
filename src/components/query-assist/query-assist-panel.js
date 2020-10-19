@@ -5,7 +5,7 @@ import React, {PureComponent} from 'react';
 
 import QueryAssist from './query-assist';
 
-import styles from '../../views/issue-list/issue-list.styles';
+import styles from './query-assist.styles';
 
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {TransformedSuggestion} from '../../flow/Issue';
