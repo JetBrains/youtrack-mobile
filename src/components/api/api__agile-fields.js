@@ -6,7 +6,9 @@ const toField = ApiHelper.toField;
 
 const SPRINT = toField([
   'id',
-  'name'
+  'name',
+  'start',
+  'finish'
 ]);
 
 const AGILE_SHORT_WITH_SPRINTS = toField([
