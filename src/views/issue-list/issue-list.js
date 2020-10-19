@@ -33,6 +33,7 @@ import {initialState} from './issue-list-reducers';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
 
+import SelectSectioned from '../../components/select/select-sectioned';
 import {ThemeContext} from '../../components/theme/theme-context';
 
 import {UNIT} from '../../components/variables/variables';
@@ -174,10 +175,21 @@ export class IssueList extends Component<Props, State> {
 
 
   renderContextSelect() {
+    const {selectProps} = this.props;
+
+    if (selectProps.isOwnSearches) {
+      return (
+        <SelectSectioned
+          getTitle={item => item.name + (item.shortName ? ` (${item.shortName})` : '')}
+          {...selectProps}
+        />
+      );
+    }
+
     return (
       <Select
         getTitle={item => item.name + (item.shortName ? ` (${item.shortName})` : '')}
-        {...this.props.selectProps}
+        {...selectProps}
       />
     );
   }
