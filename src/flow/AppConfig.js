@@ -19,17 +19,17 @@ export type ConfigAuthFilled = {
 }
 
 export type AppConfig = {
-  backendUrl: ?string;
-  auth: ConfigAuth;
-  statisticsEnabled: ?boolean;
-  version: ?string;
+  backendUrl: ?string,
+  auth: ConfigAuth,
+  statisticsEnabled: ?boolean,
+  version: ?string
 };
 
 export type AppConfigFilled = {
-  backendUrl: string;
-  auth: ConfigAuthFilled;
-  statisticsEnabled: boolean;
-  version: string;
+  backendUrl: string,
+  auth: ConfigAuthFilled,
+  statisticsEnabled: boolean,
+  version: string
 };
 
 export type EndUserAgreement = {

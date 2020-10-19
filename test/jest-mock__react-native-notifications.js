@@ -27,6 +27,7 @@ export const eventsRegistryMock = {
 export default function mockReactNativeNotification() {
   jest.mock('react-native-notifications', () => ({
     addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
     requestPermissions: jest.fn(),
     consumeBackgroundQueue: jest.fn(),
   }));

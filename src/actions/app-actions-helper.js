@@ -1,11 +1,13 @@
 /* @flow */
 
 import log from '../components/log/log';
-import {flushStoragePart, getStorageState} from '../components/storage/storage';
-import {notify} from '../components/notification/notification';
 import PermissionsHelper from '../components/permissions-store/permissions-helper';
+import {flushStoragePart, getOtherAccounts, getStorageState} from '../components/storage/storage';
+import {notify} from '../components/notification/notification';
+import {removeTrailingSlash} from '../util/util';
 
 import type {PermissionCacheItem} from '../flow/Permission';
+import type {StorageState} from '../components/storage/storage';
 
 function updateCachedPermissions(permissions: ?Array<PermissionsHelper>): void {
   flushStoragePart({permissions});
@@ -34,8 +36,27 @@ async function loadPermissions(token_type: ?string, access_token: ?string, permi
   return permissions;
 }
 
+async function targetAccountToSwitchTo(targetBackendUrl: string = '') {
+  if (!targetBackendUrl) {
+    return null;
+  }
+
+  let targetAccount = null;
+  const storageState: StorageState = getStorageState();
+
+  if (targetBackendUrl && removeTrailingSlash(targetBackendUrl) !== removeTrailingSlash(storageState.config?.backendUrl || '')) {
+    const otherAccounts = await getOtherAccounts();
+    targetAccount = otherAccounts.find(
+      (account: StorageState) => removeTrailingSlash(account.config?.backendUrl || '') === removeTrailingSlash(targetBackendUrl)
+    );
+  }
+
+  return targetAccount;
+}
+
 export {
   updateCachedPermissions,
   getCachedPermissions,
   loadPermissions,
+  targetAccountToSwitchTo
 };
