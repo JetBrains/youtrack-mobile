@@ -76,7 +76,7 @@ export function fillSprintIssues(sprint: SprintFull, sprintIssues: Array<{ id: s
 
   (updatedSprint.board?.trimmedSwimlanes || []).forEach((swimlane: Swimlane, index: number, arr0: Array<Swimlane>) => {
     if (swimlane.issue && sprintIssuesMap[swimlane.issue.id]) {
-      arr0[index].issue = sprintIssuesMap[swimlane.issue.id];
+      arr0[index].issue = {...arr0[index].issue, ...sprintIssuesMap[swimlane.issue.id]};
     }
     swimlane.cells.forEach((cell: Cell) => {
       cell.issues.forEach((issue: IssueOnList, index: number, arr1: Array<IssueFull>) => {
