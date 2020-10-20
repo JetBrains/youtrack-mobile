@@ -51,41 +51,43 @@ export function isAllColumnsCollapsed(columns: Array<BoardColumn> = []) {
 
 export const getSprintAllIssues = (sprint: SprintFull) => {
   const trimmedSwimlanes = sprint.board?.trimmedSwimlanes || [];
-  const trimmedSwimlanesCells = trimmedSwimlanes.reduce((cells: Array<Object>, swimlane: Object) => cells.concat(swimlane.cells), []);
+  const trimmedSwimlanesCells = trimmedSwimlanes.reduce(
+    (cells: Array<Object>, swimlane: Object) => cells.concat(swimlane.cells), []
+  );
   const orphanCells = sprint.board?.orphanRow?.cells || [];
-  const cellsIssues = orphanCells.concat(trimmedSwimlanesCells).reduce((list: Array<IssueOnList>, cell: Object) => list.concat(cell.issues), []);
+  const cellsIssues = orphanCells.concat(trimmedSwimlanesCells).reduce(
+    (list: Array<IssueOnList>, cell: Object) => list.concat(cell.issues),
+    []
+  );
   const swimlaneIssues = trimmedSwimlanes.map((swimlane: Object) => swimlane.issue).filter(Boolean);
   return cellsIssues.concat(swimlaneIssues).map((issue: IssueOnList) => ({id: issue.id}));
 };
 
-export function fillSprintIssues(sprint: SprintFull, sprintIssues: Array<{ id: string }>): SprintFull {
-  const sprintIssuesMap: Object = sprintIssues.reduce((map: Object, issue: IssueFull) => {
+export function updateSprintIssues(sprint: SprintFull, sprintIssues: Array<{ id: string }>): SprintFull {
+  const sprintIssuesMap: { key: string, value: IssueFull } = sprintIssues.reduce((map: Object, issue: IssueFull) => {
     map[issue.id] = issue;
     return map;
   }, {});
 
-  const updatedSprint = Object.assign({}, sprint);
+  const updatedSprint: SprintFull = Object.assign({}, sprint);
 
-  (updatedSprint.board?.orphanRow?.cells || []).forEach((cell: Cell) => {
-    cell.issues.forEach((issue: IssueOnList, index, arr: Array<IssueOnList>) => {
-      if (sprintIssuesMap[issue.id]) {
-        arr[index] = {...issue, ...sprintIssuesMap[issue.id]};
+  (updatedSprint.board?.orphanRow?.cells || []).forEach(updateCellIssues);
+
+  (updatedSprint.board?.trimmedSwimlanes || []).forEach(
+    (swimlane: Swimlane, index: number, targetArray: Array<Swimlane>) => {
+      if (swimlane.issue && sprintIssuesMap[swimlane.issue.id]) {
+        targetArray[index].issue = {...targetArray[index].issue, ...sprintIssuesMap[swimlane.issue.id]};
       }
+      swimlane.cells.forEach(updateCellIssues);
     });
-  });
-
-  (updatedSprint.board?.trimmedSwimlanes || []).forEach((swimlane: Swimlane, index: number, arr0: Array<Swimlane>) => {
-    if (swimlane.issue && sprintIssuesMap[swimlane.issue.id]) {
-      arr0[index].issue = {...arr0[index].issue, ...sprintIssuesMap[swimlane.issue.id]};
-    }
-    swimlane.cells.forEach((cell: Cell) => {
-      cell.issues.forEach((issue: IssueOnList, index: number, arr1: Array<IssueFull>) => {
-        if (sprintIssuesMap[issue.id]) {
-          arr1[index] = {...issue, ...sprintIssuesMap[issue.id]};
-        }
-      });
-    });
-  });
 
   return updatedSprint;
+
+  function updateCellIssues(cell: Cell) {
+    cell.issues.forEach((issue: IssueOnList, index: number, targetArray: Array<IssueFull>) => {
+      if (sprintIssuesMap[issue.id]) {
+        targetArray[index] = {...issue, ...sprintIssuesMap[issue.id]};
+      }
+    });
+  }
 }
