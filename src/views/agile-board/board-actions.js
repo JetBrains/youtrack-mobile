@@ -15,7 +15,7 @@ import {notify, notifyError} from '../../components/notification/notification';
 import {sortAlphabetically} from '../../components/search/sorting';
 
 import {findIssueOnBoard} from './board-updaters';
-import {getGroupedSprints, getSprintAllIssues, fillSprintIssues} from './agile-board__helper';
+import {getGroupedSprints, getSprintAllIssues, updateSprintIssues} from './agile-board__helper';
 
 import * as types from './board-action-types';
 import type Api from '../../components/api/api';
@@ -212,7 +212,7 @@ export function loadSprintIssues(sprint: Sprint) {
     try {
       const allIssuesIds = getSprintAllIssues(sprint);
       const sprintIssues = await api.agile.getAgileIssues(allIssuesIds);
-      const updatedSprint: Sprint = fillSprintIssues(sprint, sprintIssues);
+      const updatedSprint: Sprint = updateSprintIssues(sprint, sprintIssues);
       dispatch(receiveSprint(updatedSprint));
 
       animateLayout();
