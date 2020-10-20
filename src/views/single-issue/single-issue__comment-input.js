@@ -1,15 +1,18 @@
 /* @flow */
 
 import {View, Text, ActivityIndicator, ScrollView} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import React, {PureComponent} from 'react';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+
 import throttle from 'lodash.throttle';
-import MultilineInput from '../../components/multiline-input/multiline-input';
+
 import Avatar from '../../components/avatar/avatar';
+import MultilineInput from '../../components/multiline-input/multiline-input';
 
 import IssueVisibility from '../../components/visibility/issue-visibility';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconAngleDown, IconArrowUp, IconCheck, IconClose, IconLock} from '../../components/icon/icon';
+import {visibilityDefaultText} from '../../components/visibility/visibility-strings';
 
 import styles from './single-issue__comment-input.styles';
 
@@ -206,7 +209,7 @@ export default class SingleIssueCommentInput extends PureComponent<Props, State>
           />
         )}
         <Text style={styles.visibilityChangeButtonText}>
-          {isSecured ? IssueVisibility.getVisibilityPresentation(editingComment.visibility) : 'Visible to issue readers'}
+          {isSecured ? IssueVisibility.getVisibilityPresentation(editingComment.visibility) : visibilityDefaultText}
         </Text>
         <IconAngleDown size={20} color={uiTheme.colors.$icon}/>
       </TouchableOpacity>

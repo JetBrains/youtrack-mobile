@@ -34,7 +34,7 @@ exports[`<VisibiltyControl/> Render should match a snapshot 1`] = `
       onPress={[Function]}
     >
       <Text>
-        Visible to All Users
+        Visible to issue readers
       </Text>
       <IconAngleDown
         color="#737577"
