@@ -5,15 +5,11 @@ import Router from '../router/router';
 import log from '../log/log';
 import appPackage from '../../../package.json'; // eslint-disable-line import/extensions
 
-import {targetAccountToSwitchTo} from '../../actions/app-actions-helper';
-
 import type Api from '../api/api';
-import type {StorageState} from '../storage/storage';
 
 const {KONNECTOR_URL} = appPackage.config;
 
 let appleDeviceToken = null;
-let doSwitchAccount: (account: StorageState, issueId: string) => any = async () => {};
 
 NotificationsIOS.addEventListener('remoteNotificationsRegistered', deviceToken => {
   log.info(`Apple device token received: "${deviceToken}"`);
@@ -27,27 +23,15 @@ NotificationsIOS.addEventListener('notificationReceivedForeground', notification
   log.info('PUSH:notification received in foreground', notification);
 });
 
-const onNotificationOpen = async (notification) => {
-  const notificationData: Object = notification.getData();
-  const {ytIssueId, ytUserId} = notificationData;
+NotificationsIOS.addEventListener('notificationOpened', notification => {
+  const {ytIssueId, ytUserId} = notification.getData();
   log.info(`PUSH:notification opened for issue "${ytIssueId}" for user "${ytUserId}"`);
   if (!ytIssueId) {
     return;
   }
 
-  const targetBackendUrl = notificationData?.backendUrl;
-  if (targetBackendUrl) {
-    const targetAccount: ?StorageState = await targetAccountToSwitchTo(targetBackendUrl);
-    if (targetAccount) {
-      await doSwitchAccount(targetAccount, ytIssueId);
-    }
-  } else {
-    Router.SingleIssue({issueId: ytIssueId});
-  }
-};
-
-NotificationsIOS.removeEventListener('notificationOpened', onNotificationOpen);
-NotificationsIOS.addEventListener('notificationOpened', onNotificationOpen);
+  Router.SingleIssue({issueId: ytIssueId});
+});
 
 function register(api: Api): Promise<void> {
   // eslint-disable-next-line no-async-promise-executor
@@ -102,8 +86,7 @@ async function unregister(api: Api): Promise<void> {
   log.info('Successfully unsubscribed from push notifications');
 }
 
-function initialize(api: Api, onSwitchAccount: (account: StorageState, ytIssueId: string) => any) {
-  doSwitchAccount = onSwitchAccount;
+function initialize(api: Api) {
   // $FlowFixMe: error in type annotations of library
   NotificationsIOS.requestPermissions();
   NotificationsIOS.consumeBackgroundQueue();

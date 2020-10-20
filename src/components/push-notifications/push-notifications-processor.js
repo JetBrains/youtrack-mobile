@@ -3,17 +3,14 @@
 import {Notification, Notifications, Registered, RegistrationError} from 'react-native-notifications-latest';
 
 import appPackage from '../../../package.json'; // eslint-disable-line import/extensions
-
 import log from '../log/log';
+
 import Router from '../router/router';
-import {targetAccountToSwitchTo} from '../../actions/app-actions-helper';
 import {UNSUPPORTED_ERRORS} from '../error/error-messages';
 
 import type Api from '../api/api';
-import type EmitterSubscription from 'react-native/Libraries/vendor/emitter/EmitterSubscription';
 import type {CustomError} from '../../flow/Error';
 import type {NotificationCompletion, TokenHandler} from '../../flow/Notification';
-import type {StorageState} from '../storage/storage';
 
 
 export default class PushNotificationsProcessor {
@@ -21,7 +18,6 @@ export default class PushNotificationsProcessor {
   static deviceToken = null;
   static logPrefix = 'PNProcessor';
   static deviceTokenPromise = null;
-  static registrationListeners: Array<Function> = [];
 
   static logData(message: string, data: Object) {
     log.debug(`${message} ${data ? JSON.stringify(data) : 'N/A'}`);
@@ -35,36 +31,61 @@ export default class PushNotificationsProcessor {
     return PushNotificationsProcessor.deviceTokenPromise;
   }
 
+  static onNotification(issueId?: string) {
+    if (issueId) {
+      Router.SingleIssue({issueId});
+    } else {
+      log.warn('No "issueId" param is found in a notification payload');
+    }
+  }
+
   static getIssueId(notification: Object) {
     return notification?.issueId || notification?.payload?.issueId || notification?.data?.issueId;
   }
 
-  static subscribeOnNotificationOpen(onSwitchAccount: (account: StorageState, issueId: string) => any) {
-    if (this.registrationListeners.length > 0) {
-      this.registrationListeners.forEach((it: EmitterSubscription) => it.remove());
-    }
+  static async init() {
+    let resolveToken: TokenHandler = () => {};
+    let rejectToken: TokenHandler = () => {};
 
-    this.registrationListeners.push(
-      Notifications.events().registerNotificationOpened(
-        async (notification: Notification, completion: () => void) => {
+    PushNotificationsProcessor.deviceTokenPromise = new Promise<string>((resolve: TokenHandler, reject: TokenHandler) => {
+      resolveToken = resolve;
+      rejectToken = reject;
+    });
 
-          const issueId: ?string = PushNotificationsProcessor.getIssueId(notification);
-          if (!issueId) {
-            return;
-          }
-
-          const targetBackendUrl = notification?.payload?.backendUrl;
-          const targetAccount = await targetAccountToSwitchTo(targetBackendUrl);
-          if (targetAccount) {
-            await onSwitchAccount(targetAccount, issueId);
-          } else if (issueId) {
-            Router.SingleIssue({issueId});
-          }
-
-          completion();
-        }
-      )
+    Notifications.events().registerRemoteNotificationsRegistered(
+      (event: Registered) => {
+        PushNotificationsProcessor.setDeviceToken(event.deviceToken);
+        resolveToken(event.deviceToken);
+      }
     );
+
+    Notifications.events().registerRemoteNotificationsRegistrationFailed(
+      (error: RegistrationError) => rejectToken(error)
+    );
+
+    Notifications.events().registerNotificationReceivedForeground(
+      (notification: Notification, completion: (response: NotificationCompletion) => void) => {
+        completion({alert: false, sound: false, badge: false});
+      }
+    );
+
+    Notifications.events().registerNotificationReceivedBackground(
+      (notification: Notification, completion: (response: NotificationCompletion) => void) => {
+        completion({alert: true, sound: true, badge: false});
+      }
+    );
+  }
+
+  static subscribeOnNotificationOpen() {
+    Notifications.events().registerNotificationOpened(
+      (notification: Notification, completion: () => void) => {
+
+        PushNotificationsProcessor.onNotification(
+          PushNotificationsProcessor.getIssueId(notification)
+        );
+
+        completion();
+      });
   }
 
   static composeError(error: CustomError) {
@@ -116,38 +137,5 @@ export default class PushNotificationsProcessor {
       log.warn(`${logMsgPrefix}Subscribe to push notifications failed`, err);
       return Promise.reject(error);
     }
-  }
-
-  static async init() {
-    let resolveToken: TokenHandler = () => {};
-    let rejectToken: TokenHandler = () => {};
-
-    PushNotificationsProcessor.deviceTokenPromise = new Promise<string>((resolve: TokenHandler, reject: TokenHandler) => {
-      resolveToken = resolve;
-      rejectToken = reject;
-    });
-
-    Notifications.events().registerRemoteNotificationsRegistered(
-      (event: Registered) => {
-        PushNotificationsProcessor.setDeviceToken(event.deviceToken);
-        resolveToken(event.deviceToken);
-      }
-    );
-
-    Notifications.events().registerRemoteNotificationsRegistrationFailed(
-      (error: RegistrationError) => rejectToken(error)
-    );
-
-    Notifications.events().registerNotificationReceivedForeground(
-      (notification: Notification, completion: (response: NotificationCompletion) => void) => {
-        completion({alert: false, sound: false, badge: false});
-      }
-    );
-
-    Notifications.events().registerNotificationReceivedBackground(
-      (notification: Notification, completion: (response: NotificationCompletion) => void) => {
-        completion({alert: true, sound: true, badge: false});
-      }
-    );
   }
 }

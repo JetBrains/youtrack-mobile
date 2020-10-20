@@ -7,7 +7,6 @@ import {isUnsupportedFeatureError} from '../error/error-resolver';
 import log from '../log/log';
 
 import type Api from '../api/api';
-import type {StorageState} from '../storage/storage';
 import type {Token} from '../../flow/Notification';
 
 const componentLogPrefix: string = 'PNAndroid';
@@ -78,7 +77,7 @@ async function unregister(api: Api) {
   }
 }
 
-async function initialize(api, onSwitchAccount: (account: StorageState, issueId: string) => any) {
+async function initialize(api) {
   const deviceToken: Token = await getDeviceToken();
 
   if (PNHelper.isDeviceTokenChanged(deviceToken)) {
@@ -86,7 +85,7 @@ async function initialize(api, onSwitchAccount: (account: StorageState, issueId:
     await register(api);
   }
 
-  PushNotificationsProcessor.subscribeOnNotificationOpen(onSwitchAccount);
+  PushNotificationsProcessor.subscribeOnNotificationOpen();
 }
 
 export default {

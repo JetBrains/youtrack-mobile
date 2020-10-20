@@ -249,23 +249,20 @@ export function addAccount(serverUrl: string = '') {
   };
 }
 
-export function switchAccount(account: StorageState, dropCurrentAccount: boolean = false, issueId?: string) {
+export function switchAccount(account: StorageState, dropCurrentAccount: boolean = false) {
   return async (dispatch: (any) => any) => {
-    try {
-      await dispatch(changeAccount(account, dropCurrentAccount));
-      if (issueId) {
-        Router.SingleIssue({issueId}, {forceReset: true});
-      }
-    } catch (e) {
-      await dispatch(changeAccount(getStorageState()));
-    }
+    dispatch(changeAccount(account, dropCurrentAccount)).catch(() => {
+      dispatch(changeAccount(getStorageState()));
+    });
   };
 }
 
 
-export function changeAccount(account: StorageState, removeCurrentAccount: boolean = false, issueId?: string) {
+export function changeAccount(account: StorageState, removeCurrentAccount: boolean = false) {
   return async (dispatch: (any) => any, getState: () => RootState) => {
     const state: RootState = getState();
+    const stored: StorageState = getStorageState();
+    log.info(`Changing account URL from: ${stored?.config?.backendUrl || ''} to: ${account?.config?.backendUrl || ''}`);
 
     const {config, authParams} = account;
     if (!authParams) {
@@ -278,15 +275,10 @@ export function changeAccount(account: StorageState, removeCurrentAccount: boole
     dispatch(beginAccountChange());
 
     try {
-      const currentAccount: StorageState = getStorageState();
-      log.info(`Changing account: ${currentAccount?.config?.backendUrl || ''} -> ${account?.config?.backendUrl || ''}`);
+      const otherAccounts = state.app.otherAccounts.filter(acc => acc !== account);
+      const current = removeCurrentAccount ? null : stored;
+      const updatedOtherAccounts = [...(current && stored !== account ? [current] : []), ...otherAccounts];
 
-      const otherAccounts = state.app.otherAccounts.filter((it: StorageState) => it.creationTimestamp !== account.creationTimestamp);
-      const prevAccount = removeCurrentAccount ? null : currentAccount;
-      const updatedOtherAccounts = [
-        ...(prevAccount && currentAccount !== account ? [prevAccount] : []),
-        ...otherAccounts
-      ];
       await storeAccounts(updatedOtherAccounts);
       await flushStorage(account);
 
@@ -513,7 +505,7 @@ function subscribeToURL() {
   };
 }
 
-export function initializeApp(config: AppConfigFilled, issueId: ?string) {
+export function initializeApp(config: AppConfigFilled, issueId: string | null) {
   return async (dispatch: (any) => any, getState: () => Object) => {
     Router._getNavigator() && Router.Home({
       backendUrl: config.backendUrl,
@@ -596,18 +588,14 @@ export function subscribeToPushNotifications() {
       return;
     }
 
-    const onSwitchAccount = async (account: StorageState, issueId: string) => (
-      await dispatch(switchAccount(account, false, issueId))
-    );
-
     if (isRegisteredForPush()) {
       log.info('Device was already registered for push notifications. Initializing.');
-      return PushNotifications.initialize(getApi(), onSwitchAccount);
+      return PushNotifications.initialize(getApi());
     }
 
     try {
       await PushNotifications.register(getApi());
-      PushNotifications.initialize(getApi(), onSwitchAccount);
+      PushNotifications.initialize(getApi());
       setRegisteredForPush(true);
       log.info('Successfully registered for push notifications');
     } catch (err) {
