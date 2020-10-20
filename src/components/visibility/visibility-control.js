@@ -21,6 +21,7 @@ import type {UserGroup} from '../../flow/UserGroup';
 import type {Visibility} from '../../flow/Visibility';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {UITheme} from '../../flow/Theme';
+import {visibilityDefaultText} from './visibility-strings';
 
 type Props = {
   issueId: string,
@@ -201,7 +202,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
             />
           )}
           <Text style={styles.buttonText}>
-            {isSecured ? this.getVisibilityPresentation(visibility) : 'Visible to All Users'}
+            {isSecured ? this.getVisibilityPresentation(visibility) : visibilityDefaultText}
           </Text>
           <IconAngleDown size={20} color={this.props.uiTheme.colors.$icon}/>
         </TouchableOpacity>
