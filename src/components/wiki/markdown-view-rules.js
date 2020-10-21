@@ -93,7 +93,7 @@ function getMarkdownRules(attachments: Array<Attachment> = [], projects: Array<I
               horizontal={true}
               scrollEventThrottle={100}
             >
-              {isStacktraceOrException && <LongText style={[styles.exception, styles.inlineCode]}>{content}</LongText>}
+              {isStacktraceOrException && <LongText style={styles.exception}>{content}</LongText>}
               {!isStacktraceOrException && <Text key={node.key}>{renderCode({content}, language, uiTheme)}</Text>}
             </ScrollView>
           </ScrollView>}

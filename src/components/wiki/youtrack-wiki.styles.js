@@ -74,17 +74,18 @@ export default EStyleSheet.create({
   },
   inlineCode: {
     ...monospace,
-    fontSize: SECONDARY_FONT_SIZE,
+    backgroundColor: '$boxBackground',
     color: '$text',
+    fontSize: SECONDARY_FONT_SIZE,
     lineHeight: SECONDARY_FONT_SIZE * 1.5,
-    backgroundColor: '$boxBackground'
   },
   exception: {
     ...monospace,
-    marginTop: UNIT,
-    marginBottom: UNIT * 3,
+    color: '$text',
     fontSize: SECONDARY_FONT_SIZE,
-    color: '$text'
+    lineHeight: SECONDARY_FONT_SIZE * 1.5,
+    marginBottom: UNIT * 3,
+    marginTop: UNIT,
   },
 
 });
