@@ -281,7 +281,7 @@ export default class SingleIssueCommentInput extends PureComponent<Props, State>
           <View style={styles.commentInputContainer}>
             <MultilineInput
               ref={(instance: ?MultilineInput) => instance && (this.editCommentInput = instance)}
-              {...{...this.props, autoFocus: isEditComment}}
+              {...{...this.props, autoFocus: isEditComment, keyboardAppearance: uiTheme.name}}
               placeholder="Write a comment, @mention people"
               value={commentText}
               editable={!isSaving}
