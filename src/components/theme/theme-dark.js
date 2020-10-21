@@ -5,7 +5,7 @@ import type {UITheme} from '../../flow/Theme';
 const dark: UITheme = {
   dark: true,
   mode: 'ytdark',
-  name: 'Dark',
+  name: 'dark',
   barStyle: 'light-content',
   androidSummaryFontWeight: '400',
 

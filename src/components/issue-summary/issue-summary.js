@@ -70,7 +70,7 @@ export default class IssueSummary extends Component<Props, void> {
           autoCapitalize="sentences"
           placeholderTextColor={uiTheme.colors.$icon}
           placeholder="Description"
-          keyboardAppearance="dark"
+          keyboardAppearance={uiTheme.name}
           style={styles.descriptionInput}
           multiline={true}
           underlineColorAndroid="transparent"
