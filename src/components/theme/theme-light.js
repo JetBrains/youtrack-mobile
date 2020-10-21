@@ -19,7 +19,7 @@ const light: UITheme = {
     $textSecondary: '#CCC',
     $textButton: '#FFF',
 
-    $link: '#FE0082',
+    $link: '#FF008C',
     $linkLight: 'rgba(254, 0, 130, 0.3)',
 
     $disabled: '#e9e9e9',
