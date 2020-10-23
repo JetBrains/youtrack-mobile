@@ -35,22 +35,5 @@ export default EStyleSheet.create({
   actionLink: {
     ...mainText,
     color: '$link'
-  },
-
-  swipeButton: {
-    paddingTop: UNIT,
-    flex: 1,
-    alignItems: 'center'
-  },
-  swipeButtonIcon: {
-    marginTop: 4,
-    width: UNIT * 2,
-    height: UNIT * 2
-  },
-  swipeButtonText: {
-    color: '#FFF',
-    paddingTop: UNIT/2,
-    fontSize: 10,
-    fontFamily: 'System'
   }
 });
