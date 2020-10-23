@@ -14,8 +14,8 @@ import IssueVisibility from '../../../components/visibility/issue-visibility';
 import {
   getEntityPresentation,
   relativeDate,
-  absDate,
-  getReadableID
+  getReadableID,
+  ytDate
 } from '../../../components/issue-formatter/issue-formatter';
 
 import getEventTitle from '../../../components/activity/activity__history-title';
@@ -408,15 +408,15 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
 
         <View style={styles.activityChange}>
 
-          {Boolean(work.text) && <View style={styles.workComment}><Text>{work.text}</Text></View>}
+          {Boolean(work.text) && <View style={styles.workComment}><Text style={styles.secondaryText}>{work.text}</Text></View>}
 
-          {Boolean(work.date) && <Text>{absDate(work.date)}</Text>}
+          {Boolean(work.date) && <Text style={styles.secondaryText}>{ytDate(work.date)}</Text>}
 
-          <View style={styles.row}>
+          <Text>
             <Text style={styles.activityLabel}>Spent time: </Text>
             <Text style={styles.workTime}>{spentTime}</Text>
-            {work.type && <Text>{` ${work.type.name}`}</Text>}
-          </View>
+            {work.type && <Text style={styles.secondaryText}>{` ${work.type.name}`}</Text>}
+          </Text>
 
         </View>
       </View>

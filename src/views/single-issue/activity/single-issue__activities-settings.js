@@ -204,7 +204,7 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
           style={styles.settingsButton}
           onPress={this.toggleSettingsDialogVisibility}
         >
-          <Text style={styles.settingsButtonText}>{this.getTitle()}</Text>
+          <Text style={styles.secondaryText}>{this.getTitle()}</Text>
           <IconAngleDown size={19} color={this.props.uiTheme.colors.$icon}/>
         </TouchableOpacity>
 

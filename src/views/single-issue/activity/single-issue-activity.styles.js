@@ -3,6 +3,10 @@ import {UNIT} from '../../../components/variables/variables';
 import {HEADER_FONT_SIZE, MAIN_FONT_SIZE, mainText, secondaryText} from '../../../components/common-styles/typography';
 import {separator} from '../../../components/common-styles/list';
 
+const secondaryTextColor = {
+  color: '$icon'
+};
+
 export default EStyleSheet.create({
   link: {
     ...mainText,
@@ -58,7 +62,7 @@ export default EStyleSheet.create({
     flexGrow: 1,
     flexShrink: 0,
     marginRight: UNIT / 2,
-    color: '$text',
+    ...secondaryTextColor,
     fontSize: 18,
     lineHeight: 17,
     fontWeight: '500',
@@ -95,7 +99,7 @@ export default EStyleSheet.create({
   activityNoActivity: {
     marginTop: UNIT * 5,
     textAlign: 'center',
-    color: '$text'
+    ...secondaryTextColor
   },
   activityAdded: {
     color: '$icon'
@@ -120,9 +124,9 @@ export default EStyleSheet.create({
     paddingTop: UNIT,
     paddingBottom: UNIT
   },
-  settingsButtonText: {
+  secondaryText: {
     ...secondaryText,
-    color: '$icon'
+    ...secondaryTextColor
   },
   settingsSwitchDisabled: {
     opacity: 0.4
@@ -139,6 +143,7 @@ export default EStyleSheet.create({
   },
 
   workTime: {
+    color: '$icon',
     fontWeight: 'bold'
   },
   workComment: {
@@ -167,7 +172,7 @@ export default EStyleSheet.create({
   settingsTitle: {
     fontSize: HEADER_FONT_SIZE,
     marginLeft: UNIT * 2,
-    color: '$text'
+    ...secondaryTextColor
   },
   settingsItem: {
     flexDirection: 'row',
@@ -182,7 +187,7 @@ export default EStyleSheet.create({
     alignItems: 'center'
   },
   settingsName: {
-    color: '$text',
+    ...secondaryTextColor,
     fontSize: MAIN_FONT_SIZE,
     fontWeight: '500',
     textTransform: 'capitalize'
