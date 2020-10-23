@@ -32,7 +32,6 @@ export default EStyleSheet.create({
     justifyContent: 'flex-end',
   },
   headerButtonText: {
-    fontSize: 17,
     color: '$link'
   },
   headerCenter: {
