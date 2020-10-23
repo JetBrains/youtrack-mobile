@@ -1,12 +1,14 @@
 /* @flow */
 
+import React from 'react';
 import {View, Text, WebView, ActivityIndicator} from 'react-native';
 
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {UNIT} from '../../components/variables/variables';
-import React from 'react';
+
 import Header from '../../components/header/header';
 import safariView from '../../components/safari-view/safari-view';
+import {IconClose} from '../../components/icon/icon';
+import {UNIT} from '../../components/variables/variables';
 
 type Props = {
   name: string,
@@ -23,8 +25,9 @@ export function AttachmentPreview(props: Props) {
 
   return (
     <View style={styles.container}>
-      <Header leftButton={<Text>Close</Text>}
-        rightButton={<Text>Browser</Text>}
+      <Header
+        leftButton={<IconClose size={21} color={styles.link.color}/>}
+        rightButton={<Text style={styles.link}>Browser</Text>}
         onRightButtonClick={() => {
           safariView.show({url});
         }}
@@ -44,11 +47,13 @@ export function AttachmentPreview(props: Props) {
 const styles = EStyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF'
+    backgroundColor: '$background'
   },
   headerText: {
-    color: '$text',
-    fontSize: 17
+    color: '$text'
+  },
+  link: {
+    color: '$link'
   },
   loadingIndicator: {
     padding: UNIT * 2

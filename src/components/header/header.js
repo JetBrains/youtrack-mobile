@@ -88,7 +88,7 @@ export default class Header extends PureComponent<Props, void> {
                 hitSlop={HIT_SLOP}
                 style={styles.headerButtonRight}
                 onPress={() => this.onRightButtonClick()}>
-                <Text style={styles.headerButtonText} numberOfLines={1}>{rightButton}</Text>
+                {rightButton}
               </TouchableOpacity>}
             </View>
           );
