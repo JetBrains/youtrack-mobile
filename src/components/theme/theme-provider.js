@@ -25,6 +25,8 @@ type Props = {
   mode: ?string
 };
 
+const isAndroid: boolean = isAndroidPlatform();
+
 class ManageThemeProvider extends PureComponent<Props, State> {
   _isMounted = false;
   subscription = () => {};
@@ -44,7 +46,6 @@ class ManageThemeProvider extends PureComponent<Props, State> {
   }
 
   canStyleAndroidNavBar = (): boolean => {
-    const isAndroid: boolean = isAndroidPlatform();
     if (!isAndroid) {
       return false;
     }
