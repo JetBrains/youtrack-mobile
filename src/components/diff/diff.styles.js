@@ -6,9 +6,11 @@ export default EStyleSheet.create({
     flexDirection: 'row'
   },
   diffInsert: {
+    color: '$icon',
     backgroundColor: '#E6FFE6'
   },
   diffDelete: {
+    color: '$icon',
     backgroundColor: '#FFE6E6'
   },
   diffEqual: {
