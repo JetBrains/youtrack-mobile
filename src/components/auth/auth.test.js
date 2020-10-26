@@ -10,8 +10,8 @@ describe('Auth', function () {
 
   const getLastRequest = () => requests[requests.length - 1];
 
-  const mockConfigLoading = auth => sinon.stub(auth, 'readAuth').returns(Promise.resolve(authParamsMock));
-  const mockConfigSaving = auth => sinon.stub(auth, 'storeAuth', (authParams) => authParams);
+  const mockConfigLoading = auth => sinon.stub(auth, 'getCachedAuthParams').returns(Promise.resolve(authParamsMock));
+  const mockConfigSaving = auth => sinon.stub(auth, 'cacheAuthParams', (authParams) => authParams);
 
   beforeEach(() => {
     jest.restoreAllMocks();
@@ -64,7 +64,7 @@ describe('Auth', function () {
 
   it('should be imported', () => Auth.should.be.defined);
 
-  it('should create instance', () => {
+  it('should create OAuth instance', () => {
     auth = createAuthMock();
     auth.should.be.defined;
   });
@@ -110,7 +110,7 @@ describe('Auth', function () {
       return promise.should.be.rejected;
     });
 
-    it('should perform token refresh if was expired', () => {
+    it('should perform token refresh if it`s expired', () => {
       const promise = auth.verifyToken(authParamsMock);
       sinon.stub(auth, 'refreshToken').returns(Promise.resolve({}));
 
@@ -167,15 +167,16 @@ describe('Auth', function () {
       request.requestBody.should.equal(`grant_type=password&access_type=offline&username=lo%24g&password=pa%25ss&scope=scope1%20scope2`);
     });
 
-    it('should authorize oAUTH2 code', () => {
-      auth.obtainTokenByOAuthCode('fake-code');
+    it('should authorize OAuth2 code', () => {
+      const oauthCodeMock = 'fake-code';
+      auth.obtainTokenByOAuthCode(oauthCodeMock);
 
       const request = getLastRequest();
 
       request.options.method.should.equal('POST');
       request.url.should.equal(`${configMock.auth.serverUri}/api/rest/oauth2/token`);
       request.options.headers.Authorization.should.equal('Basic Y2xpZW50LWlkOmNsaWVudC1zZWNyZXQ=');
-      request.requestBody.should.equal(`grant_type=authorization_code&code=fake-code&client_id=client-id&client_secret=client-secret&redirect_uri=ytoauth://landing.url`);
+      request.requestBody.should.equal(`grant_type=authorization_code&code=${oauthCodeMock}&client_id=client-id&client_secret=client-secret&redirect_uri=ytoauth://landing.url`);
     });
   });
 

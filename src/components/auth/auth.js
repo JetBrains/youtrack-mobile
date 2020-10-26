@@ -1,11 +1,12 @@
 /* @flow */
 
-import urlJoin from 'url-join';
-import PermissionsStore from '../permissions-store/permissions-store';
-import {flushStoragePart, getStorageState} from '../storage/storage';
-import base64 from 'base64-js';
 import qs from 'qs';
+
 import log from '../log/log';
+import PermissionsStore from '../permissions-store/permissions-store';
+import urlJoin from 'url-join';
+import {createBtoa} from '../../util/util';
+import {flushStoragePart, getStorageState} from '../storage/storage';
 import {USER_AGENT} from '../usage/usage';
 
 import type {AppConfigFilled} from '../../flow/AppConfig';
@@ -15,14 +16,6 @@ import type {User} from '../../flow/User';
 const ACCEPT_HEADER = 'application/json, text/plain, */*';
 const URL_ENCODED_TYPE = 'application/x-www-form-urlencoded';
 
-
-function makeBtoa(str: string) {
-  const byteArray = [];
-  for (let i = 0; i < str.length; i++) {
-    byteArray.push(str.charCodeAt(i));
-  }
-  return base64.fromByteArray(byteArray);
-}
 
 export default class AuthTest {
   config: AppConfigFilled;
@@ -44,8 +37,8 @@ export default class AuthTest {
     this.PERMISSIONS_CACHE_URL = urlJoin(this.config.auth.serverUri, `/api/rest/permissions/cache?${permissionsQueryString}`);
   }
 
-  loadStoredAuthParams(): Promise<void> {
-    return this.readAuth()
+  setAuthParamsFromCache(): Promise<void> {
+    return this.getCachedAuthParams()
       .then((authParams) => this.verifyToken(authParams))
       .then((authParams) => {
         this.authParams = authParams;
@@ -70,7 +63,7 @@ export default class AuthTest {
       headers: {
         'Accept': ACCEPT_HEADER,
         'User-Agent': USER_AGENT,
-        'Authorization': `Basic ${makeBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`,
+        'Authorization': `Basic ${createBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`,
         'Content-Type': URL_ENCODED_TYPE
       },
       body: body
@@ -115,9 +108,9 @@ export default class AuthTest {
     let token;
     const config = this.config;
 
-    return this.readAuth()
+    return this.getCachedAuthParams()
       .then((authParams: AuthParams) => {
-        log.info('Begining token refresh...');
+        log.info('Starting token refresh...');
 
         //store old refresh token
         token = authParams.refresh_token;
@@ -132,7 +125,7 @@ export default class AuthTest {
           headers: {
             'Accept': ACCEPT_HEADER,
             'User-Agent': USER_AGENT,
-            'Authorization': `Basic ${makeBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`,
+            'Authorization': `Basic ${createBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`,
             'Content-Type': URL_ENCODED_TYPE
           }
         });
@@ -151,7 +144,7 @@ export default class AuthTest {
         return authParams;
       })
       .then((authParams) => this.verifyToken(authParams))
-      .then((authParams) => this.storeAuth(authParams))
+      .then((authParams) => this.cacheAuthParams(authParams))
       .then((authParams) => {
         this.authParams = authParams;
         return authParams;
@@ -207,12 +200,12 @@ export default class AuthTest {
       });
   }
 
-  async storeAuth(authParams: AuthParams) {
+  async cacheAuthParams(authParams: AuthParams) {
     await flushStoragePart({authParams});
     return authParams;
   }
 
-  async readAuth(): Promise<AuthParams> {
+  async getCachedAuthParams(): Promise<AuthParams> {
     const authParams: ?AuthParams = getStorageState().authParams;
     if (!authParams) {
       throw new Error('No stored auth params found');

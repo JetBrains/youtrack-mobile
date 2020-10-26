@@ -36,13 +36,13 @@ import {isUnsupportedFeatureError} from '../components/error/error-resolver';
 import * as appActionsHelper from './app-actions-helper';
 import PermissionsStore from '../components/permissions-store/permissions-store';
 
-import type {AuthParams} from '../flow/Auth';
-import type {AppConfigFilled, EndUserAgreement} from '../flow/AppConfig';
-import type {WorkTimeSettings} from '../flow/WorkTimeSettings';
-import type {StorageState} from '../components/storage/storage';
 import type RootState from '../reducers/app-reducer';
+import type {AppConfigFilled, EndUserAgreement} from '../flow/AppConfig';
+import type {AuthParams} from '../flow/Auth';
 import type {Folder, User, UserAppearanceProfile, UserGeneralProfile} from '../flow/User';
 import type {PermissionCacheItem} from '../flow/Permission';
+import type {StorageState} from '../components/storage/storage';
+import type {WorkTimeSettings} from '../flow/WorkTimeSettings';
 
 
 export function logOut() {
@@ -133,7 +133,7 @@ export function updateUserGeneralProfile(userGeneralProfile: UserGeneralProfile)
 export function checkAuthorization() {
   return async (dispatch: (any) => any, getState: () => Object) => {
     const auth = getState().app.auth;
-    await auth.loadStoredAuthParams();
+    await auth.setAuthParamsFromCache();
     await flushStoragePart({currentUser: auth.currentUser});
 
     setApi(new Api(auth));
@@ -201,7 +201,7 @@ function applyAccount(config: AppConfigFilled, auth: Auth, authParams: AuthParam
     dispatch(receiveOtherAccounts(newOtherAccounts));
     await flushStorage(initialState);
 
-    await auth.storeAuth(authParams);
+    await auth.cacheAuthParams(authParams);
     await storeConfig(config);
 
     await dispatch(initializeAuth(config));
@@ -290,7 +290,7 @@ export function changeAccount(account: StorageState, removeCurrentAccount: boole
       await storeAccounts(updatedOtherAccounts);
       await flushStorage(account);
 
-      await auth.storeAuth(authParams);
+      await auth.cacheAuthParams(authParams);
       await storeConfig(config);
 
       await dispatch(initializeAuth(config));
@@ -464,7 +464,7 @@ function checkUserAgreement() {
 export function applyAuthorization(authParams: AuthParams) {
   return async (dispatch: Function, getState: () => Object) => {
     const auth = getState().app.auth;
-    await auth.storeAuth(authParams);
+    await auth.cacheAuthParams(authParams);
     await flushStoragePart({creationTimestamp: Date.now()});
 
     await dispatch(checkAuthorization());
