@@ -34,11 +34,12 @@ import {formStyles} from '../../components/common-styles/form';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import styles from './log-in.styles';
 
+import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {AuthParams} from '../../flow/Auth';
 import type {Theme, UIThemeColors} from '../../flow/Theme';
 
 type Props = {
-  auth: Auth,
+  config: AppConfigFilled,
   onLogIn: (authParams: AuthParams) => any,
   onShowDebugView: Function,
   onChangeServerUrl: (currentUrl: string) => any
@@ -66,10 +67,10 @@ export class LogIn extends Component<Props, State> {
       password: '',
       errorMessage: '',
       loggingIn: false,
-      youTrackBackendUrl: props.auth.config.backendUrl
+      youTrackBackendUrl: props.config.backendUrl
     };
 
-    const config = props.auth.config;
+    const config: AppConfigFilled = props.config;
     Keystore.getInternetCredentials(config.auth.serverUri)
       .then(({username, password}) => this.setState({username, password}), noop);
 
@@ -83,15 +84,17 @@ export class LogIn extends Component<Props, State> {
   }
 
   logInViaCredentials = async () => {
-    const config = this.props.auth.config;
+    const {config, onLogIn} = this.props;
+    const {username, password} = this.state;
+
     this.setState({loggingIn: true});
 
     try {
-      const authParams = await this.props.auth.obtainTokenByCredentials(this.state.username, this.state.password);
-      Keystore.setInternetCredentials(config.auth.serverUri, this.state.username, this.state.password).catch(noop);
+      const authParams: AuthParams = await Auth.obtainTokenByCredentials(username, password, config);
+      Keystore.setInternetCredentials(config.auth.serverUri, username, password).catch(noop);
       usage.trackEvent(CATEGORY_NAME, 'Login via credentials', 'Success');
 
-      return this.props.onLogIn(authParams);
+      return onLogIn(authParams);
     } catch (err) {
       usage.trackEvent(CATEGORY_NAME, 'Login via credentials', 'Error');
       const errorMessage = err.error_description || err.message;
@@ -100,20 +103,20 @@ export class LogIn extends Component<Props, State> {
   }
 
   changeYouTrackUrl() {
-    this.props.onChangeServerUrl(this.props.auth.config.backendUrl);
+    this.props.onChangeServerUrl(this.props.config.backendUrl);
   }
 
   async logInViaHub() {
-    const config = this.props.auth.config;
+    const {config, onLogIn} = this.props;
 
     try {
       const code = await authorizeInHub(config);
       this.setState({loggingIn: true});
 
-      const authParams = await this.props.auth.obtainTokenByOAuthCode(code);
+      const authParams = await Auth.obtainTokenByOAuthCode(code, config);
       usage.trackEvent(CATEGORY_NAME, 'Login via browser', 'Success');
 
-      return this.props.onLogIn(authParams);
+      return onLogIn(authParams);
     } catch (err) {
       usage.trackEvent(CATEGORY_NAME, 'Login via browser', 'Error');
       const errorMessage = await resolveErrorMessage(err);
@@ -122,13 +125,14 @@ export class LogIn extends Component<Props, State> {
   }
 
   render() {
-    const {onShowDebugView} = this.props;
+    const {onShowDebugView, config} = this.props;
+    const {password, username, loggingIn, errorMessage} = this.state;
 
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
           const uiThemeColors: UIThemeColors = theme.uiTheme.colors;
-          const hasNoCredentials: boolean = !this.state.username && !this.state.password;
+          const hasNoCredentials: boolean = !username && !password;
           return (
             <ScrollView
               contentContainerStyle={styles.scrollContainer}
@@ -158,13 +162,13 @@ export class LogIn extends Component<Props, State> {
                   >
                     <Text style={styles.title}>Log in to YouTrack</Text>
                     <Text
-                      style={styles.hintText}>{formatYouTrackURL(this.props.auth.config.backendUrl)}</Text>
+                      style={styles.hintText}>{formatYouTrackURL(config.backendUrl)}</Text>
                   </TouchableOpacity>
 
                   <TextInput
                     autoCapitalize="none"
                     autoCorrect={false}
-                    editable={!this.state.loggingIn}
+                    editable={!loggingIn}
                     testID="login-input"
                     style={styles.inputUser}
                     placeholder="Username or email"
@@ -172,12 +176,12 @@ export class LogIn extends Component<Props, State> {
                     returnKeyType="next"
                     underlineColorAndroid="transparent"
                     onSubmitEditing={() => this.focusOnPassword()}
-                    value={this.state.username}
+                    value={username}
                     onChangeText={(username) => this.setState({username})}
                   />
                   <TextInput
                     ref={this.passInputRef}
-                    editable={!this.state.loggingIn}
+                    editable={!loggingIn}
                     testID="password-input"
                     style={styles.inputPass}
                     placeholder="Password"
@@ -194,9 +198,9 @@ export class LogIn extends Component<Props, State> {
                   <TouchableOpacity
                     style={[
                       formStyles.button,
-                      (this.state.loggingIn || hasNoCredentials) && formStyles.buttonDisabled
+                      (loggingIn || hasNoCredentials) && formStyles.buttonDisabled
                     ]}
-                    disabled={this.state.loggingIn || hasNoCredentials}
+                    disabled={loggingIn || hasNoCredentials}
                     testID="log-in"
                     onPress={this.logInViaCredentials}>
                     <Text
@@ -215,7 +219,7 @@ export class LogIn extends Component<Props, State> {
                     </Text>.
                   </Text>
 
-                  {Boolean(this.state.errorMessage || hasNoCredentials) && (
+                  {Boolean(errorMessage || hasNoCredentials) && (
                     <View style={styles.error}>
                       <ErrorMessageInline
                         error={this.state.errorMessage}
@@ -250,7 +254,6 @@ export class LogIn extends Component<Props, State> {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    auth: state.app.auth,
     ...ownProps
   };
 };

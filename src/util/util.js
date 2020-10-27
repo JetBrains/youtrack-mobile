@@ -4,11 +4,14 @@ import React from 'react';
 
 import {Platform} from 'react-native';
 
-import qs from 'qs';
-import appPackage from '../../package.json'; // eslint-disable-line import/extensions
-import type {StorageState} from '../components/storage/storage';
-import {getStorageState} from '../components/storage/storage';
 import base64 from 'base64-js';
+import qs from 'qs';
+
+import appPackage from '../../package.json'; // eslint-disable-line import/extensions
+import {getStorageState} from '../components/storage/storage';
+
+import type {CustomError} from '../flow/Error';
+import type {StorageState} from '../components/storage/storage';
 
 
 export const AppVersion = appPackage.version.split('-')[0];
@@ -79,4 +82,28 @@ export const createBtoa = (str: string) => {
     byteArray.push(str.charCodeAt(i));
   }
   return base64.fromByteArray(byteArray);
+};
+
+export const until = (promises: Array<Promise<any>>) => {
+  if (!promises) {
+    return Promise.reject(['No promises are provided']);
+  }
+
+  if (Array.isArray(promises)) {
+    return Promise.all(promises)
+      .then((data) => {
+        return [null, data];
+      })
+      .catch((err: CustomError) => {
+        return [err, promises.map<typeof undefined>((p: Promise<any>) => undefined)];
+      });
+  }
+
+  return promises
+    .then((data: any) => {
+      return [null, data];
+    })
+    .catch((err: CustomError) => {
+      return [err];
+    });
 };

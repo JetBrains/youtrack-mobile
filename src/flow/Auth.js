@@ -1,6 +1,6 @@
 export type AuthParams = {
-  refresh_token: string;
-  access_token: string,
-  token_type: string,
-  error_code?: string
+  access_token: string, // for API data fetching
+  error_code?: string,
+  refresh_token: string, // for fetching access_token
+  token_type: string
 };

@@ -11,6 +11,7 @@ import {USER_AGENT} from '../usage/usage';
 
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {AuthParams} from '../../flow/Auth';
+import type {CustomError} from '../../flow/Error';
 import type {User} from '../../flow/User';
 
 const ACCEPT_HEADER = 'application/json, text/plain, */*';
@@ -18,44 +19,34 @@ const URL_ENCODED_TYPE = 'application/x-www-form-urlencoded';
 
 
 export default class AuthTest {
-  config: AppConfigFilled;
-  authParams: ?AuthParams;
-  permissionsStore: PermissionsStore;
-  currentUser: User;
   CHECK_TOKEN_URL: string;
   PERMISSIONS_CACHE_URL: string;
+
+  config: AppConfigFilled;
+  authParams: ?AuthParams;
+
+  permissionsStore: PermissionsStore;
+  currentUser: User;
 
   constructor(config: AppConfigFilled) {
     this.authParams = null;
     this.config = config;
-    this.CHECK_TOKEN_URL = urlJoin(this.config.auth.serverUri, '/api/rest/users/me?fields=id,guest,name,profile/avatar/url,endUserAgreementConsent(accepted,majorVersion,minorVersion)');
+    this.CHECK_TOKEN_URL = urlJoin(
+      this.config.auth.serverUri,
+      '/api/rest/users/me?fields=id,guest,name,profile/avatar/url,endUserAgreementConsent(accepted,majorVersion,minorVersion)'
+    );
 
     const permissionsQueryString = qs.stringify({
       query: `service:{0-0-0-0-0} or service:{${config.auth.youtrackServiceId}}`,
       fields: 'permission/key,global,projects(id)'
     });
-    this.PERMISSIONS_CACHE_URL = urlJoin(this.config.auth.serverUri, `/api/rest/permissions/cache?${permissionsQueryString}`);
+    this.PERMISSIONS_CACHE_URL = urlJoin(
+      this.config.auth.serverUri,
+      `/api/rest/permissions/cache?${permissionsQueryString}`
+    );
   }
 
-  setAuthParamsFromCache(): Promise<void> {
-    return this.getCachedAuthParams()
-      .then((authParams) => this.verifyToken(authParams))
-      .then((authParams) => {
-        this.authParams = authParams;
-      });
-  }
-
-  getPermissionsCacheURL(): string {
-    return this.PERMISSIONS_CACHE_URL;
-  }
-
-  async logOut() {
-    await flushStoragePart({authParams: null});
-    delete this.authParams;
-  }
-
-  obtainToken(body: string) {
-    const config = this.config;
+  static obtainToken(body: string, config: AppConfigFilled) {
     const hubTokenUrl = urlJoin(config.auth.serverUri, '/api/rest/oauth2/token');
 
     return fetch(hubTokenUrl, {
@@ -80,33 +71,63 @@ export default class AuthTest {
       });
   }
 
-  obtainTokenByOAuthCode(code: string) {
-    log.info('Obtaining token for code', code, this.config.auth.serverUri);
+  static obtainTokenByOAuthCode(code: string, config: AppConfigFilled) { //this method returns <AuthParams>
+    log.info('Obtaining token for code', code, config.auth.serverUri);
 
     return this.obtainToken([
       'grant_type=authorization_code',
       `&code=${code}`,
-      `&client_id=${this.config.auth.clientId}`,
-      `&client_secret=${this.config.auth.clientSecret}`,
-      `&redirect_uri=${this.config.auth.landingUrl}`
-    ].join(''));
+      `&client_id=${config.auth.clientId}`,
+      `&client_secret=${config.auth.clientSecret}`,
+      `&redirect_uri=${config.auth.landingUrl}`
+    ].join(''), config);
   }
 
-  obtainTokenByCredentials(login: string, password: string) {
-    log.info(`Obtaining token by credentials on ${this.config.auth.serverUri} for "${login}"`);
-
+  static obtainTokenByCredentials(login: string, password: string, config: AppConfigFilled) { //this method returns <AuthParams>
+    log.info(`Obtaining token by credentials on ${config.auth.serverUri} for "${login}"`);
     return this.obtainToken([
       'grant_type=password',
       '&access_type=offline',
       `&username=${encodeURIComponent(login)}`,
       `&password=${encodeURIComponent(password)}`,
-      `&scope=${encodeURIComponent(this.config.auth.scopes)}`
-    ].join(''));
+      `&scope=${encodeURIComponent(config.auth.scopes)}`
+    ].join(''), config);
+  }
+
+  setAuthParamsFromCache(): Promise<void> {
+    return this.getCachedAuthParams()
+      .then((authParams) => this.verifyToken(authParams))
+      .then((authParams) => {
+        this.authParams = authParams;
+      });
+  }
+
+  getPermissionsCacheURL(): string {
+    return this.PERMISSIONS_CACHE_URL;
+  }
+
+  async logOut() {
+    await flushStoragePart({authParams: null});
+    delete this.authParams;
   }
 
   refreshToken(): Promise<AuthParams> {
     let token;
     const config = this.config;
+    const requestToken = (authParams: AuthParams) => fetch(urlJoin(
+      config.auth.serverUri,
+      `/api/rest/oauth2/token`,
+      '?grant_type=refresh_token',
+      `&refresh_token=${authParams.refresh_token}`
+    ), {
+      method: 'POST',
+      headers: {
+        'Accept': ACCEPT_HEADER,
+        'User-Agent': USER_AGENT,
+        'Authorization': `Basic ${createBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`,
+        'Content-Type': URL_ENCODED_TYPE
+      }
+    });
 
     return this.getCachedAuthParams()
       .then((authParams: AuthParams) => {
@@ -114,21 +135,7 @@ export default class AuthTest {
 
         //store old refresh token
         token = authParams.refresh_token;
-
-        return fetch(urlJoin(
-          config.auth.serverUri,
-          `/api/rest/oauth2/token`,
-          '?grant_type=refresh_token',
-          `&refresh_token=${authParams.refresh_token}`
-        ), {
-          method: 'POST',
-          headers: {
-            'Accept': ACCEPT_HEADER,
-            'User-Agent': USER_AGENT,
-            'Authorization': `Basic ${createBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`,
-            'Content-Type': URL_ENCODED_TYPE
-          }
-        });
+        return requestToken(authParams);
       })
       .then(res => res.json())
       .then(async (authParams: AuthParams) => {
@@ -143,9 +150,9 @@ export default class AuthTest {
         }
         return authParams;
       })
-      .then((authParams) => this.verifyToken(authParams))
-      .then((authParams) => this.cacheAuthParams(authParams))
-      .then((authParams) => {
+      .then((authParams: AuthParams) => this.verifyToken(authParams))
+      .then((authParams: AuthParams) => this.cacheAuthParams(authParams))
+      .then((authParams: AuthParams) => {
         this.authParams = authParams;
         return authParams;
       });
@@ -174,7 +181,7 @@ export default class AuthTest {
         'User-Agent': USER_AGENT,
         ...this.getAuthorizationHeaders(authParams)
       }
-    }).then((res) => {
+    }).then((res: Response) => {
       if (res.status > 400) {
         const errorTitle: string = 'Check token error';
         log.log(errorTitle, res);
@@ -183,18 +190,18 @@ export default class AuthTest {
       log.info('Token has been verified');
       return res.json();
     })
-      .then(currentUser => {
+      .then((currentUser: User) => {
         this.currentUser = currentUser;
         return authParams;
       })
-      .catch((res) => {
-        if (res.status === 401 && authParams.refresh_token) {
-          log.log('Trying to refresh token', res);
+      .catch((error: CustomError) => {
+        if (error.status === 401 && authParams.refresh_token) {
+          log.log('Trying to refresh token', error);
           return this.refreshToken();
         }
-        throw res;
+        throw error;
       })
-      .catch((err) => {
+      .catch((err: CustomError) => {
         log.log('Error during token validation', err);
         throw err;
       });

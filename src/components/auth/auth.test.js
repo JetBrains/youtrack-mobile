@@ -82,7 +82,7 @@ describe('Auth', function () {
       getLastRequest().url.should.contain('api/rest/users/me?fields=');
     });
 
-    it('should pass authorization when trying to verify token', () => {
+    it('should provide authorization params when trying to verify token', () => {
       auth.verifyToken(authParamsMock);
 
       getLastRequest().options.headers.Authorization.should
@@ -99,7 +99,7 @@ describe('Auth', function () {
         })
       });
 
-      return promise;
+      return promise.should.be.fulfilled;
     });
 
     it('should fail verification if hub responded with error', () => {
@@ -150,7 +150,7 @@ describe('Auth', function () {
     });
 
     it('should authorize via login/password', () => {
-      auth.obtainTokenByCredentials('log', 'pass');
+      Auth.obtainTokenByCredentials('log', 'pass', configMock);
 
       const request = getLastRequest();
 
@@ -161,7 +161,7 @@ describe('Auth', function () {
     });
 
     it('should encode params when authorizing via login/password', () => {
-      auth.obtainTokenByCredentials('lo$g', 'pa%ss');
+      Auth.obtainTokenByCredentials('lo$g', 'pa%ss', configMock);
 
       const request = getLastRequest();
       request.requestBody.should.equal(`grant_type=password&access_type=offline&username=lo%24g&password=pa%25ss&scope=scope1%20scope2`);
@@ -169,7 +169,7 @@ describe('Auth', function () {
 
     it('should authorize OAuth2 code', () => {
       const oauthCodeMock = 'fake-code';
-      auth.obtainTokenByOAuthCode(oauthCodeMock);
+      Auth.obtainTokenByOAuthCode(oauthCodeMock, configMock);
 
       const request = getLastRequest();
 

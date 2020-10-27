@@ -181,10 +181,10 @@ async function connectToOneMoreServer(serverUrl: string, onBack: Function): Prom
   });
 }
 
-async function authorizeOnOneMoreServer(auth, onBack: (serverUrl: string) => any) {
+async function authorizeOnOneMoreServer(config: AppConfigFilled, onBack: (serverUrl: string) => any) {
   return new Promise(resolve => {
     Router.LogIn({
-      auth,
+      config,
       onChangeServerUrl: onBack,
       onLogIn: (authParams: AuthParams) => resolve(authParams)
     });
@@ -218,20 +218,20 @@ export function addAccount(serverUrl: string = '') {
     log.info('Adding new account started');
 
     try {
-      const config = await connectToOneMoreServer(serverUrl, () => {
+      const config: AppConfigFilled = await connectToOneMoreServer(serverUrl, () => {
         log.info('Adding new server canceled by user');
         Router.navigateToDefaultRoute();
       });
       log.info(`Config loaded for new server (${config.backendUrl}), logging in...`);
-      // Note: this auth won't be initialized to the end ever. It is just a temporary instance
-      const auth = new Auth(config);
-      const authParams = await authorizeOnOneMoreServer(auth, function onBack(serverUrl: string) {
+
+      const tmpAuthInstance: Auth = new Auth(config); //NB! this temporary instance for Login screen code
+      const authParams: AuthParams = await authorizeOnOneMoreServer(config, function onBack(serverUrl: string) {
         log.info('Authorization canceled by user, going back');
         dispatch(addAccount(serverUrl));
       });
       log.info('Authorized on new server, applying');
 
-      await dispatch(applyAccount(config, auth, authParams));
+      await dispatch(applyAccount(config, tmpAuthInstance, authParams));
       await flushStoragePart({creationTimestamp: Date.now()});
 
       const user = (getStorageState().currentUser || {});
@@ -542,7 +542,7 @@ export function initializeApp(config: AppConfigFilled, issueId: ?string) {
       try {
         await dispatch(initializeAuth(reloadedConfig));
       } catch (e) {
-        return Router.LogIn();
+        return Router.LogIn({config});
       }
     }
 
