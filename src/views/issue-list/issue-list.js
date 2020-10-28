@@ -27,7 +27,6 @@ import IssuesCount from './issue-list__count';
 
 import {IconAdd, IconAngleDown, IconBookmark} from '../../components/icon/icon';
 import {isReactElement} from '../../util/util';
-import {LoadMoreList} from '../../components/progress/load-more-list';
 import {SkeletonIssues} from '../../components/skeleton/skeleton';
 import {initialState} from './issue-list-reducers';
 import {HIT_SLOP} from '../../components/common-styles/button';
@@ -279,9 +278,9 @@ export class IssueList extends Component<Props, State> {
   };
 
   renderIssuesFooter = () => {
-    const {isLoadingMore, isListEndReached} = this.props;
-    if (isLoadingMore && !isListEndReached) {
-      return <LoadMoreList/>;
+    const {isLoadingMore} = this.props;
+    if (isLoadingMore) {
+      return <SkeletonIssues/>;
     }
     return null;
   };
@@ -291,7 +290,7 @@ export class IssueList extends Component<Props, State> {
     const contextButton = this.renderContextButton(uiTheme);
     const searchQuery = this.renderSearchQuery(uiTheme);
 
-    if (isRefreshing && !issues) {
+    if (isRefreshing && (!issues || issues.length === 0)) {
       return (
         <View style={styles.list}>
           {contextButton}
