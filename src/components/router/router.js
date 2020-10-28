@@ -6,12 +6,14 @@ import {
   createStackNavigator,
   createAppContainer,
   StackActions,
-  NavigationActions
+  NavigationActions,
+  NavigationNavigateAction
 } from 'react-navigation';
 
-import {getStorageState, flushStoragePart} from '../storage/storage';
 import log from '../log/log';
+import {getStorageState, flushStoragePart} from '../storage/storage';
 import {routeMap} from '../../app-routes';
+import {uuid} from '../../util/util';
 
 import type {
   NavigationNavigator,
@@ -110,9 +112,9 @@ class Router {
   }
 
   navigate(routeName: string, props: Object, {forceReset} = {}) {
-    log.info(`Navigating to ${routeName}`, {...props, imageHeaders: 'CENSORED'});
+    log.info(`Router(navigate) ${routeName}`, {...props, imageHeaders: 'CENSORED'});
     if (!this._navigator) {
-      throw `Router.navigate: call setNavigator(navigator) first!`;
+      throw `Router(navigate): call setNavigator(navigator) first!`;
     }
 
     if (!this.routes[routeName]) {
@@ -126,17 +128,21 @@ class Router {
     const newRoute = Object.assign({}, this.routes[routeName]);
     newRoute.props = Object.assign({}, newRoute.props, props);
 
-    if (newRoute.type === 'reset' || forceReset) {
-      return this.dispatch(StackActions.reset({
-        index: 0,
-        actions: [NavigationActions.navigate({routeName, params: newRoute.props, key: Math.random().toString()})],
-      }), routeName, this._currentRoute?.routeName);
-    }
-    this.dispatch(NavigationActions.navigate({
+    const prevRouteName: ?string = this._currentRoute?.routeName;
+    const navigationData: NavigationNavigateAction = NavigationActions.navigate({
       routeName,
       params: newRoute.props,
-      key: Math.random().toString()
-    }), routeName, this._currentRoute?.routeName);
+      key: uuid()
+    });
+
+    if (newRoute.type === 'reset' || forceReset) {
+      this.dispatch(StackActions.reset({
+        index: 0,
+        actions: [navigationData],
+      }), routeName, prevRouteName);
+    } else {
+      this.dispatch(navigationData, routeName, prevRouteName);
+    }
   }
 
   navigateToDefaultRoute(props: Object & { issueId: string } = null) {
@@ -147,9 +153,10 @@ class Router {
     } else {
       defaultRoute = this.rootRoutes[0];
     }
-    this.navigate(defaultRoute, props);
-    if (props && props.issueId) {
-      this.navigate(routeMap.SingleIssue, props);
+    if (props?.issueId) {
+      this.navigate(routeMap.SingleIssue, props, {forceReset: true});
+    } else {
+      this.navigate(defaultRoute, props);
     }
   }
 
@@ -171,7 +178,7 @@ class Router {
     return this._currentRoute.routeName;
   }
 
-  onNavigationStateChange = (prevNav, nav, action, onRoute) => {
+  onNavigationStateChange = (prevNav, nav, action, onRoute: (currentRoute: NavigationJumpToActionPayload) => any) => {
     this._currentRoute = nav.routes[nav.index];
     onRoute(this._currentRoute);
     if (action.type === NavigationActions.BACK) {

@@ -21,7 +21,8 @@ export default class PushNotificationsProcessor {
   static deviceToken = null;
   static logPrefix = 'PNProcessor';
   static deviceTokenPromise = null;
-  static registrationListeners: Array<Function> = [];
+  static registerNotificationOpenListener: ?EmitterSubscription = null;
+  static notificationEventEmitter: Object = Notifications.events();
 
   static logData(message: string, data: Object) {
     log.debug(`${message} ${data ? JSON.stringify(data) : 'N/A'}`);
@@ -40,30 +41,29 @@ export default class PushNotificationsProcessor {
   }
 
   static subscribeOnNotificationOpen(onSwitchAccount: (account: StorageState, issueId: string) => any) {
-    if (this.registrationListeners.length > 0) {
-      this.registrationListeners.forEach((it: EmitterSubscription) => it.remove());
+    if (this.registerNotificationOpenListener) {
+      this.registerNotificationOpenListener.remove && this.registerNotificationOpenListener.remove();
+      this.registerNotificationOpenListener = null;
     }
 
-    this.registrationListeners.push(
-      Notifications.events().registerNotificationOpened(
-        async (notification: Notification, completion: () => void) => {
+    this.registerNotificationOpenListener = this.notificationEventEmitter.registerNotificationOpened(
+      async (notification: Notification, completion: () => void) => {
 
-          const issueId: ?string = PushNotificationsProcessor.getIssueId(notification);
-          if (!issueId) {
-            return;
-          }
-
-          const targetBackendUrl = notification?.payload?.backendUrl;
-          const targetAccount = await targetAccountToSwitchTo(targetBackendUrl);
-          if (targetAccount) {
-            await onSwitchAccount(targetAccount, issueId);
-          } else if (issueId) {
-            Router.SingleIssue({issueId});
-          }
-
-          completion();
+        const issueId: ?string = PushNotificationsProcessor.getIssueId(notification);
+        if (!issueId) {
+          return;
         }
-      )
+
+        const targetBackendUrl = notification?.payload?.backendUrl;
+        const targetAccount = await targetAccountToSwitchTo(targetBackendUrl);
+        if (targetAccount) {
+          await onSwitchAccount(targetAccount, issueId);
+        } else if (issueId) {
+          Router.SingleIssue({issueId});
+        }
+
+        completion();
+      }
     );
   }
 
@@ -127,24 +127,24 @@ export default class PushNotificationsProcessor {
       rejectToken = reject;
     });
 
-    Notifications.events().registerRemoteNotificationsRegistered(
+    this.notificationEventEmitter.registerRemoteNotificationsRegistered(
       (event: Registered) => {
         PushNotificationsProcessor.setDeviceToken(event.deviceToken);
         resolveToken(event.deviceToken);
       }
     );
 
-    Notifications.events().registerRemoteNotificationsRegistrationFailed(
+    this.notificationEventEmitter.registerRemoteNotificationsRegistrationFailed(
       (error: RegistrationError) => rejectToken(error)
     );
 
-    Notifications.events().registerNotificationReceivedForeground(
+    this.notificationEventEmitter.registerNotificationReceivedForeground(
       (notification: Notification, completion: (response: NotificationCompletion) => void) => {
         completion({alert: false, sound: false, badge: false});
       }
     );
 
-    Notifications.events().registerNotificationReceivedBackground(
+    this.notificationEventEmitter.registerNotificationReceivedBackground(
       (notification: Notification, completion: (response: NotificationCompletion) => void) => {
         completion({alert: true, sound: true, badge: false});
       }

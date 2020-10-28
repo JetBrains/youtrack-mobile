@@ -40,6 +40,7 @@ import type RootState from '../reducers/app-reducer';
 import type {AppConfigFilled, EndUserAgreement} from '../flow/AppConfig';
 import type {AuthParams} from '../flow/Auth';
 import type {Folder, User, UserAppearanceProfile, UserGeneralProfile} from '../flow/User';
+import type {NotificationRouteData} from '../flow/Notification';
 import type {PermissionCacheItem} from '../flow/Permission';
 import type {StorageState} from '../components/storage/storage';
 import type {WorkTimeSettings} from '../flow/WorkTimeSettings';
@@ -252,21 +253,39 @@ export function addAccount(serverUrl: string = '') {
 export function switchAccount(account: StorageState, dropCurrentAccount: boolean = false, issueId?: string) {
   return async (dispatch: (any) => any) => {
     try {
-      await dispatch(changeAccount(account, dropCurrentAccount));
-      if (issueId) {
-        Router.SingleIssue({issueId}, {forceReset: true});
-      }
+      await dispatch(changeAccount(account, dropCurrentAccount, issueId));
     } catch (e) {
       await dispatch(changeAccount(getStorageState()));
     }
   };
 }
 
-
-export function changeAccount(account: StorageState, removeCurrentAccount: boolean = false, issueId?: string) {
+export function updateOtherAccounts(account: StorageState, removeCurrentAccount: boolean = false) {
   return async (dispatch: (any) => any, getState: () => RootState) => {
     const state: RootState = getState();
 
+    const currentAccount: StorageState = getStorageState();
+    log.info(`Changing account: ${currentAccount?.config?.backendUrl || ''} -> ${account?.config?.backendUrl || ''}`);
+
+    const otherAccounts = state.app.otherAccounts.filter(
+      (it: StorageState) => it.creationTimestamp !== account.creationTimestamp
+    );
+    const prevAccount = removeCurrentAccount ? null : currentAccount;
+    const updatedOtherAccounts = [
+      ...(prevAccount && currentAccount !== account ? [prevAccount] : []),
+      ...otherAccounts
+    ];
+    await storeAccounts(updatedOtherAccounts);
+    await flushStorage(account);
+
+    dispatch(receiveOtherAccounts(updatedOtherAccounts));
+    return otherAccounts;
+  };
+}
+
+export function changeAccount(account: StorageState, removeCurrentAccount?: boolean, issueId: ?string) {
+  return async (dispatch: (any) => any, getState: () => RootState) => {
+    const state: RootState = getState();
     const {config, authParams} = account;
     if (!authParams) {
       const errorMessage: string = 'Account doesn\'t have valid authorization, cannot switch onto it.';
@@ -278,27 +297,16 @@ export function changeAccount(account: StorageState, removeCurrentAccount: boole
     dispatch(beginAccountChange());
 
     try {
-      const currentAccount: StorageState = getStorageState();
-      log.info(`Changing account: ${currentAccount?.config?.backendUrl || ''} -> ${account?.config?.backendUrl || ''}`);
-
-      const otherAccounts = state.app.otherAccounts.filter((it: StorageState) => it.creationTimestamp !== account.creationTimestamp);
-      const prevAccount = removeCurrentAccount ? null : currentAccount;
-      const updatedOtherAccounts = [
-        ...(prevAccount && currentAccount !== account ? [prevAccount] : []),
-        ...otherAccounts
-      ];
-      await storeAccounts(updatedOtherAccounts);
-      await flushStorage(account);
+      await dispatch(updateOtherAccounts(account, removeCurrentAccount));
 
       await auth.cacheAuthParams(authParams);
       await storeConfig(config);
 
       await dispatch(initializeAuth(config));
       await dispatch(checkUserAgreement());
-      dispatch(receiveOtherAccounts(updatedOtherAccounts));
 
       if (!state.app.showUserAgreement) {
-        dispatch(completeInitialization());
+        dispatch(completeInitialization(issueId));
       }
       log.info('Account changed, URL:', account?.config?.backendUrl);
     } catch (err) {
@@ -562,17 +570,27 @@ export function connectToNewYoutrack(newURL: string) {
     const config = await loadConfig(newURL);
     await storeConfig(config);
     dispatch(setAuth(config));
-    Router.LogIn();
+    Router.LogIn({config});
   };
 }
 
-export function setAccount(issueId: string | null) {
+export function setAccount(notificationRouteData: NotificationRouteData) {
   return async (dispatch: (any) => any) => {
     const state: StorageState = await populateStorage();
-    dispatch(populateAccounts());
+    await dispatch(populateAccounts());
 
-    if (state.config) {
-      return dispatch(initializeApp(state.config, issueId));
+    const notificationBackendUrl: ?string = notificationRouteData.backendUrl;
+    if (notificationBackendUrl && state?.config && notificationBackendUrl !== state.config?.backendUrl) {
+      const notificationIssueAccount: ?StorageState = await appActionsHelper.targetAccountToSwitchTo(notificationBackendUrl);
+      if (notificationIssueAccount) {
+        await dispatch(updateOtherAccounts(notificationIssueAccount));
+        flushStoragePart({config: notificationIssueAccount.config});
+      }
+    }
+
+    const targetConfig = getStorageState().config;
+    if (targetConfig) {
+      return dispatch(initializeApp(targetConfig, notificationRouteData.issueId));
     }
 
     log.info('App is not configured, entering server URL');

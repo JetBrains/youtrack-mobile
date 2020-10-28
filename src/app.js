@@ -23,15 +23,16 @@ import Inbox from './views/inbox/inbox';
 import WikiPage from './views/wiki-page/wiki-page';
 import Settings from './views/settings/settings';
 
-import {setAccount, onNavigateBack} from './actions/app-actions';
-// $FlowFixMe: cannot typecheck easy-toast module because of mistakes there
-
-import ActionSheet from '@expo/react-native-action-sheet';
-import {routeMap, rootRoutesList} from './app-routes';
-import log from './components/log/log';
 import {isAndroidPlatform} from './util/util';
+import {onNavigateBack, setAccount} from './actions/app-actions';
+import {rootRoutesList, routeMap} from './app-routes';
+
+// $FlowFixMe: cannot typecheck easy-toast module because of mistakes there
+import ActionSheet from '@expo/react-native-action-sheet';
 
 import AppProvider from './app-provider';
+
+import type {NotificationRouteData} from './flow/Notification';
 
 if (UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -56,7 +57,7 @@ class YouTrackMobile extends Component<void, void> {
     super();
 
     this.registerRoutes();
-    YouTrackMobile.init(YouTrackMobile.getNotificationIssueId);
+    YouTrackMobile.init(YouTrackMobile.getNotificationData);
 
     Router.onBack = (closingView) => {
       store.dispatch(onNavigateBack(closingView));
@@ -74,25 +75,26 @@ class YouTrackMobile extends Component<void, void> {
     }
   }
 
-  static async getNotificationIssueId() {
-    let issueId: string | null = null;
+  static async getNotificationData() {
+    let notificationData: NotificationRouteData = {};
     if (isAndroid) {
       const ReactNativeNotifications = await import('react-native-notifications-latest');
       const initialNotification = await ReactNativeNotifications.Notifications.getInitialNotification();
-      issueId = initialNotification?.payload?.issueId;
-      if (issueId) {
-        log.debug(`app(getNotificationIssueId): start app to view: ${issueId}`);
-      }
+      const notificationPayload = initialNotification?.payload;
+      notificationData = {
+        issueId: notificationPayload?.issueId,
+        backendUrl: notificationPayload?.backendUrl
+      };
     }
-    return issueId;
+    return notificationData;
   }
 
-  static async init(getRouteIssueId: () => Promise<string | null>) {
-    let issueId = null;
-    if (getRouteIssueId) {
-      issueId = await getRouteIssueId();
+  static async init(getNotificationRouteData: () => Promise<NotificationRouteData>) {
+    let notificationRouteData = {};
+    if (getNotificationRouteData) {
+      notificationRouteData = await getNotificationRouteData();
     }
-    store.dispatch(setAccount(issueId));
+    store.dispatch(setAccount(notificationRouteData));
   }
 
   getChildContext() {
