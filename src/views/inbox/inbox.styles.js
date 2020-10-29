@@ -123,7 +123,8 @@ export default EStyleSheet.create({
     color: '$link'
   },
   resolved: {
-    ...issueIdResolved
+    ...issueIdResolved,
+    color: '$icon'
   }
 
 });

@@ -215,7 +215,10 @@ class Inbox extends Component<Props, State> {
           <TouchableOpacity key={`${event.entityId}_${issue.entityId}`}>
             <Text onPress={() => Router.SingleIssue({issueId: issue.id})}>
               <Text style={styles.link}>
-                {`${issue.id} ${issue.summary}`}
+                <Text style={[styles.link, issue.resolved ? styles.resolved : null]}>
+                  {issue.id}
+                </Text>
+                {` ${issue.summary}`}
               </Text>
             </Text>
           </TouchableOpacity>
@@ -417,7 +420,12 @@ class Inbox extends Component<Props, State> {
             onPress={onPress}
           >
             <Text>
-              {!!issue.id && <Text style={styles.notificationIssueInfo}>{issue.id}</Text>}
+              {!!issue.id && (
+                <Text style={[
+                  styles.notificationIssueInfo,
+                  issue.resolved ? styles.resolved : null
+                ]}>{issue.id}</Text>
+              )}
               {!!issue.summary && (
                 <Text numberOfLines={2} style={styles.notificationIssueInfo}>{` ${issue.summary}`}</Text>
               )}
