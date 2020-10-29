@@ -1,6 +1,6 @@
 /* @flow */
 
-import {ScrollView, View, Text, TouchableOpacity} from 'react-native';
+import {ScrollView, View, Text, TouchableOpacity, ActivityIndicator} from 'react-native';
 import React, {Component} from 'react';
 
 import {bindActionCreators} from 'redux';
@@ -157,6 +157,11 @@ class CreateIssue extends Component<Props, void> {
           const uiThemeColors: UIThemeColors = uiTheme.colors;
           const hasProject: boolean = !!issue?.project?.id;
 
+          const rightButton = (
+            processing
+              ? <ActivityIndicator color={uiThemeColors.$link}/>
+              : <IconCheck size={20} color={canCreateIssue ? uiThemeColors.$link : uiThemeColors.$disabled}/>
+          );
           return (
             <View
               testID="createIssue"
@@ -165,12 +170,7 @@ class CreateIssue extends Component<Props, void> {
               <Header
                 leftButton={<IconClose size={21} color={uiThemeColors.$link}/>}
                 onBack={storeDraftAndGoBack}
-                rightButton={
-                  <IconCheck
-                    size={20}
-                    color={canCreateIssue ? uiThemeColors.$link : uiThemeColors.$disabled}
-                  />
-                }
+                rightButton={rightButton}
                 onRightButtonClick={() => canCreateIssue && createIssue()}>
                 <Text style={styles.title}>New Issue</Text>
               </Header>
