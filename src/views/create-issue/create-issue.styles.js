@@ -1,7 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {UNIT} from '../../components/variables/variables';
-import {headerTitle, mainText} from '../../components/common-styles/typography';
+import {headerTitle} from '../../components/common-styles/typography';
 import {separator} from '../../components/common-styles/list';
 
 export default EStyleSheet.create({
@@ -45,22 +45,6 @@ export default EStyleSheet.create({
     left: 0,
     right: UNIT,
     bottom: 0
-  },
-  attachButtonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: UNIT,
-    marginRight: UNIT
-  },
-  attachButton: {
-    paddingTop: UNIT,
-    paddingBottom: UNIT,
-    flexDirection: 'row'
-  },
-  attachButtonText: {
-    ...mainText,
-    paddingLeft: UNIT * 2,
-    color: '$link'
   },
   selectProjectButton: {
     paddingTop: UNIT * 2,

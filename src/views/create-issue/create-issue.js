@@ -1,6 +1,6 @@
 /* @flow */
 
-import {ScrollView, View, Text, TouchableOpacity, ActivityIndicator} from 'react-native';
+import {ScrollView, View, Text, ActivityIndicator} from 'react-native';
 import React, {Component} from 'react';
 
 import {bindActionCreators} from 'redux';
@@ -10,7 +10,7 @@ import usage from '../../components/usage/usage';
 import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
 import Header from '../../components/header/header';
 import {getApi} from '../../components/api/api__instance';
-import {IconCheck, IconClose, IconPaperClip} from '../../components/icon/icon';
+import {IconCheck, IconClose} from '../../components/icon/icon';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import IssueSummary from '../../components/issue-summary/issue-summary';
@@ -21,6 +21,9 @@ import {attachmentActions} from './create-issue__attachment-actions-and-types';
 
 import {ThemeContext} from '../../components/theme/theme-context';
 
+import VisibilityControl from '../../components/visibility/visibility-control';
+import AttachmentAddPanel from '../../components/attachments-row/attachments-add-panel';
+
 import PropTypes from 'prop-types';
 
 import type {Attachment, CustomField, IssueProject} from '../../flow/CustomFields';
@@ -29,7 +32,6 @@ import type {CreateIssueState} from './create-issue-reducers';
 import type {Theme, UITheme, UIThemeColors} from '../../flow/Theme';
 
 import styles from './create-issue.styles';
-import VisibilityControl from '../../components/visibility/visibility-control';
 
 const CATEGORY_NAME = 'Create issue view';
 
@@ -212,23 +214,11 @@ class CreateIssue extends Component<Props, void> {
                       uiTheme={theme.uiTheme}
                     />
 
-                    <View style={styles.attachButtonsContainer}>
-                      <TouchableOpacity
-                        testID="createIssueAttachmentButton"
-                        disabled={isProcessing}
-                        style={styles.attachButton}
-                        onPress={showAddAttachDialog}
-                      >
-                        <IconPaperClip
-                          size={24}
-                          color={isProcessing ? uiThemeColors.$textSecondary : uiThemeColors.$link}
-                        />
-                        <Text
-                          style={[styles.attachButtonText, isProcessing ? {color: uiThemeColors.$textSecondary} : null]}>
-                          Add Attachment
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
+                    <AttachmentAddPanel
+                      isDisabled={processing}
+                      showAddAttachDialog={showAddAttachDialog}
+                      uiTheme={uiTheme}
+                    />
                   </View>
                 )}
 
