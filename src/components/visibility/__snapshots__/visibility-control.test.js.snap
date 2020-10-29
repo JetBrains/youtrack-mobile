@@ -5,14 +5,6 @@ exports[`<VisibiltyControl/> Render should match a snapshot 1`] = `
   testID="visibilityControl"
 >
   <View
-    hitSlop={
-      Object {
-        "bottom": 8,
-        "left": 8,
-        "right": 8,
-        "top": 8,
-      }
-    }
     style={
       Array [
         undefined,

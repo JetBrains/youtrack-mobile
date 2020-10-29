@@ -129,10 +129,11 @@ export default EStyleSheet.create({
   },
   issueTopActions: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    justifyContent: 'space-between',
     marginBottom: UNIT * 1.5
   },
   issueVote: {
+    flexShrink: 0,
     minWidth: UNIT * 8
   },
   switchToActivityButton: {
@@ -146,6 +147,7 @@ export default EStyleSheet.create({
     marginBottom: UNIT * 3
   },
   visibility: {
-    flexGrow: 1
+    flexShrink: 1,
+    flex: 1
   }
 });

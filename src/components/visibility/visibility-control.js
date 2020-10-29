@@ -177,7 +177,6 @@ export default class VisibilityControl extends PureComponent<Props, State> {
           styles.container,
           this.props.style
         ]}
-        hitSlop={HIT_SLOP}
       >
         {!onSubmit && isSecured && (
           <TouchableOpacity
