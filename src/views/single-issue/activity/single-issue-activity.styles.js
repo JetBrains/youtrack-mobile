@@ -67,6 +67,7 @@ export default EStyleSheet.create({
     lineHeight: 17,
     fontWeight: '500',
     letterSpacing: -0.22,
+    color: '$text'
   },
   activityTimestamp: {
     ...secondaryText,
