@@ -9,6 +9,9 @@ export default EStyleSheet.create({
     flex: 1,
     backgroundColor: '$background'
   },
+  content: {
+    paddingLeft: UNIT
+  },
   title: {
     paddingLeft: UNIT * 2,
     ...headerTitle,
@@ -59,26 +62,11 @@ export default EStyleSheet.create({
     paddingLeft: UNIT * 2,
     color: '$link'
   },
-  actionContainer: {
-    flexDirection: 'row',
-    margin: UNIT,
-    marginLeft: UNIT * 2,
-    marginRight: UNIT * 2
-  },
-  actionContent: {
-    marginLeft: UNIT * 2,
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  actionIcon: {
-    width: UNIT * 2,
-    height: UNIT * 2
-  },
   selectProjectButton: {
-    paddingTop: UNIT*2,
-    paddingBottom: UNIT*2,
-    marginLeft: UNIT*2,
-    marginRight: UNIT*2,
+    paddingTop: UNIT * 2,
+    paddingBottom: UNIT * 2,
+    marginLeft: UNIT * 2,
+    marginRight: UNIT * 2,
     justifyContent: 'space-between',
     flexDirection: 'row'
   },
@@ -93,4 +81,9 @@ export default EStyleSheet.create({
     width: UNIT * 2,
     height: UNIT * 2
   },
+  visibility: {
+    marginTop: UNIT * 3,
+    marginLeft: UNIT * 2,
+    marginBottom: UNIT * 2,
+  }
 });

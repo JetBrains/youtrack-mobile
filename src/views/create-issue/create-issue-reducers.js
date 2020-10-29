@@ -19,14 +19,7 @@ export type CreateIssueState = {
   processing: boolean,
   attachingImage: ?Object,
   predefinedDraftId: ?string,
-  issue: {
-    id: string,
-    summary: string,
-    description: string,
-    attachments: Array<Object>,
-    fields: Array<CustomField>,
-    project: Object
-  },
+  issue: IssueFull,
   isAttachFileDialogVisible: boolean
 };
 

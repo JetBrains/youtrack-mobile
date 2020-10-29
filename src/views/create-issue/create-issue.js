@@ -29,6 +29,7 @@ import type {CreateIssueState} from './create-issue-reducers';
 import type {Theme, UITheme, UIThemeColors} from '../../flow/Theme';
 
 import styles from './create-issue.styles';
+import VisibilityControl from '../../components/visibility/visibility-control';
 
 const CATEGORY_NAME = 'Create issue view';
 
@@ -44,7 +45,6 @@ class CreateIssue extends Component<Props, void> {
   static contextTypes = {
     actionSheet: PropTypes.func
   };
-  fieldsPanel: Object;
 
   constructor(props) {
     super(props);
@@ -55,23 +55,17 @@ class CreateIssue extends Component<Props, void> {
     this.props.initializeWithDraftOrProject(this.props.predefinedDraftId);
   }
 
-  fieldsPanelRef = (instance: ?CustomFieldsPanel) => {
-    if (instance) {
-      this.fieldsPanel = instance;
-    }
-  };
-
   onAddAttachment = async (attach: Attachment) => {
     const {uploadAttach, loadAttachments} = this.props;
     await uploadAttach(attach);
     loadAttachments();
-  }
+  };
 
   cancelAddAttach = () => {
     const {cancelAddAttach, hideAddAttachDialog, attachingImage} = this.props;
     cancelAddAttach(attachingImage);
     hideAddAttachDialog();
-  }
+  };
 
   renderAttachFileDialog(uiTheme: UITheme) {
     const {issue, getAttachActions, attachingImage} = this.props;
@@ -106,7 +100,6 @@ class CreateIssue extends Component<Props, void> {
     return <CustomFieldsPanel
       autoFocusSelect
       testID="createIssueFields"
-      ref={this.fieldsPanelRef}
 
       issueId={issue.id}
       issueProject={issue.project}
@@ -123,6 +116,20 @@ class CreateIssue extends Component<Props, void> {
 
       uiTheme={uiTheme}
     />;
+  }
+
+  renderIssueVisibility(uiTheme: UITheme) {
+    const {issue, updateVisibility} = this.props;
+    return (
+      <View style={styles.visibility}>
+        <VisibilityControl
+          issueId={issue.id}
+          visibility={issue.visibility}
+          onSubmit={updateVisibility}
+          uiTheme={uiTheme}
+        />
+      </View>
+    );
   }
 
   render() {
@@ -148,15 +155,22 @@ class CreateIssue extends Component<Props, void> {
         {(theme: Theme) => {
           const uiTheme: UITheme = theme.uiTheme;
           const uiThemeColors: UIThemeColors = uiTheme.colors;
+          const hasProject: boolean = !!issue?.project?.id;
 
           return (
             <View
               testID="createIssue"
-              style={styles.container}>
+              style={styles.container}
+            >
               <Header
                 leftButton={<IconClose size={21} color={uiThemeColors.$link}/>}
                 onBack={storeDraftAndGoBack}
-                rightButton={<IconCheck size={20} color={canCreateIssue ? uiThemeColors.$link : uiThemeColors.$disabled}/>}
+                rightButton={
+                  <IconCheck
+                    size={20}
+                    color={canCreateIssue ? uiThemeColors.$link : uiThemeColors.$disabled}
+                  />
+                }
                 onRightButtonClick={() => canCreateIssue && createIssue()}>
                 <Text style={styles.title}>New Issue</Text>
               </Header>
@@ -164,6 +178,8 @@ class CreateIssue extends Component<Props, void> {
               <View style={styles.separator}/>
 
               {this.renderCustomFieldPanel(uiTheme)}
+
+              {hasProject && this.renderIssueVisibility(uiTheme)}
 
               <ScrollView
                 keyboardShouldPersistTaps="handled"
@@ -181,7 +197,7 @@ class CreateIssue extends Component<Props, void> {
                   uiTheme={uiTheme}
                 />
 
-                {issue?.project?.id && (
+                {hasProject && (
                   <View
                     testID="createIssueAttachments"
                     style={styles.attachesContainer}>
@@ -203,8 +219,12 @@ class CreateIssue extends Component<Props, void> {
                         style={styles.attachButton}
                         onPress={showAddAttachDialog}
                       >
-                        <IconPaperClip size={24} color={isProcessing ? uiThemeColors.$textSecondary : uiThemeColors.$link}/>
-                        <Text style={[styles.attachButtonText, isProcessing ? {color: uiThemeColors.$textSecondary} : null]}>
+                        <IconPaperClip
+                          size={24}
+                          color={isProcessing ? uiThemeColors.$textSecondary : uiThemeColors.$link}
+                        />
+                        <Text
+                          style={[styles.attachButtonText, isProcessing ? {color: uiThemeColors.$textSecondary} : null]}>
                           Add Attachment
                         </Text>
                       </TouchableOpacity>

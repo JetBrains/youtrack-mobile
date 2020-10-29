@@ -15,6 +15,7 @@ import {attachmentActions} from './create-issue__attachment-actions-and-types';
 import type Api from '../../components/api/api';
 import type {CustomField, FieldValue, Attachment} from '../../flow/CustomFields';
 import type {IssueFull} from '../../flow/Issue';
+import type {Visibility} from '../../flow/Visibility';
 
 type ApiGetter = () => Api;
 
@@ -291,5 +292,23 @@ export function removeAttachment(attach: Attachment) {
   return async (dispatch: (any) => any, getState: () => Object) => {
     const draftId = getState().creation.issue.id;
     dispatch(attachmentActions.removeAttachment(attach, draftId));
+  };
+}
+
+export function updateVisibility(visibility: Visibility) {
+  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+    const draftIssue = getState().creation.issue;
+    const draftIssueCopy = {...draftIssue};
+
+    try {
+      const draftWithVisibility: Visibility = await getApi().issue.updateVisibility(draftIssue.id, visibility);
+      dispatch(setIssueDraft(draftWithVisibility));
+
+    } catch (err) {
+      dispatch(setIssueDraft(draftIssueCopy));
+      const message: string = 'Cannot update draft visibility';
+      notify(message, err);
+      log.warn(message, err);
+    }
   };
 }
