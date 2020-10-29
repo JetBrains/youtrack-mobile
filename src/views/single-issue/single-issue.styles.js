@@ -7,6 +7,7 @@ import {headerTitle, mainText, secondaryText} from '../../components/common-styl
 import {elevation1} from '../../components/common-styles/shadow';
 import {summary} from '../../components/issue-summary/issue-summary.styles';
 import {separatorBorder} from '../../components/common-styles/list';
+import {issueIdResolved} from '../../components/common-styles/issue';
 
 const centered = {
   flex: 1,
@@ -37,8 +38,8 @@ export default EStyleSheet.create({
     paddingHorizontal: UNIT * 2
   },
   headerTextResolved: {
-    color: '$icon',
-    textDecorationLine: 'line-through'
+    ...issueIdResolved,
+    color: '$icon'
   },
   issueStar: {
     marginLeft: UNIT * 2,
