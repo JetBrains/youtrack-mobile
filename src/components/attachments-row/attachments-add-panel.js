@@ -12,7 +12,7 @@ import styles from './attachment-add-panel.styles';
 import type {UITheme} from '../../flow/Theme';
 
 type Props = {
-  isDisabled: boolean,
+  isDisabled?: boolean,
   showAddAttachDialog: () => any,
   uiTheme: UITheme
 }

@@ -503,9 +503,9 @@ export function loadAttachments() {
   };
 }
 
-export function hideAddAttachDialog() {
+export function toggleVisibleAddAttachDialog(isVisible: boolean) {
   return async (dispatch: (any) => any) => {
-    dispatch(attachmentActions.toggleAttachFileDialog(false));
+    dispatch(attachmentActions.toggleAttachFileDialog(isVisible));
   };
 }
 

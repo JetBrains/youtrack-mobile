@@ -120,7 +120,9 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
       toggleVote,
 
       removeAttachment,
-      updateIssueVisibility
+      updateIssueVisibility,
+
+      toggleVisibleAddAttachDialog
     } = this.props;
 
     return (
@@ -156,6 +158,8 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
         onRemoveAttachment={removeAttachment}
 
         onVisibilityChange={updateIssueVisibility}
+
+        onAttach={toggleVisibleAddAttachDialog}
       />
     );
   }
@@ -430,9 +434,9 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
   }
 
   cancelAddAttach = () => {
-    const {cancelAddAttach, hideAddAttachDialog, attachingImage} = this.props;
+    const {cancelAddAttach, toggleVisibleAddAttachDialog, attachingImage} = this.props;
     cancelAddAttach(attachingImage);
-    hideAddAttachDialog();
+    toggleVisibleAddAttachDialog(false);
   };
 
   addAttachment = async (attach: Attachment) => {

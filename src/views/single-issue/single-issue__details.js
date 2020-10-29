@@ -34,6 +34,7 @@ import type {Attachment, CustomField, FieldValue, IssueProject} from '../../flow
 import type {Visibility} from '../../flow/Visibility';
 import type {YouTrackWiki} from '../../flow/Wiki';
 import type {Theme, UITheme} from '../../flow/Theme';
+import AttachmentAddPanel from '../../components/attachments-row/attachments-add-panel';
 
 
 type Props = {
@@ -68,7 +69,8 @@ type Props = {
 
   onRemoveAttachment: () => any,
 
-  onVisibilityChange: (visibility: Visibility) => any
+  onVisibilityChange: (visibility: Visibility) => any,
+  onAttach: (isVisible: boolean) => any
 }
 
 export default class IssueDetails extends Component<Props, void> {
@@ -253,6 +255,7 @@ export default class IssueDetails extends Component<Props, void> {
       isSavingEditedIssue,
       summaryCopy,
       descriptionCopy,
+      onAttach
     } = this.props;
 
     return (
@@ -275,6 +278,13 @@ export default class IssueDetails extends Component<Props, void> {
         />}
 
         {!editMode && this.renderIssueContent(uiTheme)}
+
+        {editMode && (
+          <AttachmentAddPanel
+            showAddAttachDialog={() => onAttach(true)}
+            uiTheme={uiTheme}
+          />
+        )}
 
         {issue?.attachments && this.renderAttachments(issue.attachments, uiTheme)}
 
