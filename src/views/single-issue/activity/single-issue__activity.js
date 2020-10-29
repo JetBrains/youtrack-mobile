@@ -245,7 +245,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
         onRequestCommentSuggestions={loadCommentSuggestions}
         suggestionsAreLoading={suggestionsAreLoading}
-        suggestions={commentSuggestions}
+        mentions={commentSuggestions}
 
         canAttach={issuePermissions.canAddAttachmentTo(issue)}
         onAttach={() => attachOrTakeImage(this.context.actionSheet())}

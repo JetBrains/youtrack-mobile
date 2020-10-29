@@ -27,7 +27,7 @@ type Props = {
   editingComment: IssueComment,
   suggestionsAreLoading: boolean,
   onRequestCommentSuggestions: (query: string) => any,
-  suggestions: ?{ users: Array<User> },
+  mentions: ?{ users: Array<User> },
   onEditCommentVisibility: (commentId: string) => any,
   isSecured: boolean,
   canAttach: boolean,
@@ -42,7 +42,7 @@ type State = {
   showSuggestions: boolean,
   suggestionsQuery: string,
   commentCaret: number,
-  inputFocus: boolean,
+  showVisibility: boolean
 };
 
 
@@ -64,7 +64,7 @@ export default class SingleIssueCommentInput extends PureComponent<Props, State>
       suggestionsQuery: '',
       suggestedUsers: [],
       commentCaret: 0,
-      inputFocus: false
+      showVisibility: false
     };
   }
 
@@ -82,6 +82,10 @@ export default class SingleIssueCommentInput extends PureComponent<Props, State>
     this.isUnmounted = true;
   }
 
+  focus = () => {
+    this.editCommentInput.focus();
+  }
+
   updateComment = () => {
     this.setState({isSaving: true});
     const comment = {
@@ -96,7 +100,7 @@ export default class SingleIssueCommentInput extends PureComponent<Props, State>
       if (!this.isUnmounted) {
         this.setState({
           commentText: '',
-          inputFocus: false
+          showVisibility: false
         });
       }
     }).finally(() => {
@@ -144,13 +148,17 @@ export default class SingleIssueCommentInput extends PureComponent<Props, State>
       this.setState({
         commentText: newText,
         showSuggestions: false,
-        inputFocus: true
+        showVisibility: true
       });
     }
   }
 
-  renderSuggestions() {
-    const {suggestions, suggestionsAreLoading} = this.props;
+  toggleVisibility = (showVisibility: boolean) => {
+    this.setState({showVisibility});
+  };
+
+  renderUserMentions() {
+    const {mentions, suggestionsAreLoading} = this.props;
 
     return (
       <ScrollView
@@ -158,17 +166,20 @@ export default class SingleIssueCommentInput extends PureComponent<Props, State>
         keyboardShouldPersistTaps="handled">
 
         <View style={styles.suggestionsLoadingMessage}>
-          {suggestionsAreLoading && <Text style={styles.suggestionsLoadingMessageText}>Loading suggestions... </Text>}
+          {suggestionsAreLoading && !mentions && <ActivityIndicator color={styles.link.color}/>}
         </View>
 
         <View>
-          {suggestions
-            ? suggestions.users.map(user => {
+          {mentions
+            ? mentions.users.map(user => {
               return (
                 <TouchableOpacity
                   key={user.id}
                   style={styles.suggestionButton}
-                  onPress={() => this.applySuggestion(user)}
+                  onPress={() => {
+                    this.applySuggestion(user);
+                    setTimeout(this.focus, 150);
+                  }}
                 >
                   <Avatar
                     userName={user.fullName}
@@ -219,11 +230,15 @@ export default class SingleIssueCommentInput extends PureComponent<Props, State>
   renderSendButton() {
     const {uiTheme} = this.props;
     const {isSaving, commentText} = this.state;
+    const isDisabled: boolean = !(commentText || '').trim() || isSaving;
 
     return (
       <TouchableOpacity
-        style={styles.commentSendButton}
-        disabled={!(commentText || '').trim() || isSaving}
+        style={[
+          styles.commentSendButton,
+          isDisabled ? styles.commentSendButtonDisabled : null
+        ]}
+        disabled={isDisabled}
         onPress={this.updateComment}>
         {!this.state.isSaving && (
           <IconArrowUp
@@ -236,20 +251,22 @@ export default class SingleIssueCommentInput extends PureComponent<Props, State>
     );
   }
 
+  setInputRef = (instance: ?MultilineInput) => instance && (this.editCommentInput = instance);
+
   render() {
     const {editingComment, onCancel = () => null, uiTheme} = this.props;
     const {isSaving, commentText, commentCaret, showSuggestions} = this.state;
 
     const isEditComment: boolean = !!editingComment;
-    const isAddComment: boolean = !showSuggestions && (this.state.inputFocus || !!commentText);
+    const showVisibility: boolean = !showSuggestions && (this.state.showVisibility || !!commentText);
 
     return (
       <View style={styles.container}>
-        {showSuggestions && this.renderSuggestions()}
+        {showSuggestions && this.renderUserMentions()}
 
         <View style={[
           styles.commentHeaderContainer,
-          isAddComment ? styles.commentHeaderContainerCreate : null,
+          showVisibility ? styles.commentHeaderContainerCreate : null,
           isEditComment ? styles.commentHeaderContainerEdit : null
         ]}>
 
@@ -262,7 +279,7 @@ export default class SingleIssueCommentInput extends PureComponent<Props, State>
             </TouchableOpacity>
           )}
 
-          {isAddComment && this.renderVisibility()}
+          {showVisibility && this.renderVisibility()}
 
           {isEditComment && (
             <TouchableOpacity
@@ -280,7 +297,7 @@ export default class SingleIssueCommentInput extends PureComponent<Props, State>
 
           <View style={styles.commentInputContainer}>
             <MultilineInput
-              ref={(instance: ?MultilineInput) => instance && (this.editCommentInput = instance)}
+              ref={this.setInputRef}
               {...{...this.props, autoFocus: isEditComment, keyboardAppearance: uiTheme.name}}
               placeholder="Write a comment, @mention people"
               value={commentText}
@@ -298,12 +315,12 @@ export default class SingleIssueCommentInput extends PureComponent<Props, State>
                 this.suggestionsNeededDetector(text, commentCaret);
                 this.debouncedOnChange(text);
               }}
-              onFocus={() => this.setState({inputFocus: true})}
-              onBlur={() => this.setState({inputFocus: false})}
+              onFocus={() => this.toggleVisibility(true)}
+              onBlur={() => this.toggleVisibility(false)}
               style={styles.commentInput}
             />
 
-            {isAddComment && !isEditComment && this.renderSendButton()}
+            {showVisibility && !isEditComment && this.renderSendButton()}
           </View>
         </View>
       </View>

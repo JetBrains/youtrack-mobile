@@ -31,9 +31,8 @@ export default EStyleSheet.create({
     flexGrow: 1,
     alignItems: 'center',
   },
-  suggestionsLoadingMessageText: {
-    padding: UNIT,
-    color: '$text'
+  link: {
+    color: '$link'
   },
   suggestionButton: {
     flexDirection: 'row',
@@ -98,12 +97,12 @@ export default EStyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '$link'
   },
+  commentSendButtonDisabled: {
+    backgroundColor: '$textSecondary',
+  },
   commentSendButtonText: {
     fontSize: 16,
     color: '$link'
-  },
-  commentSendButtonTextDisabled: {
-    backgroundColor: '$textSecondary'
   },
 
   commentListContainer: {
