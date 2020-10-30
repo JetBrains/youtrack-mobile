@@ -36,7 +36,7 @@ export default EStyleSheet.create({
     position: 'absolute',
     top: 0,
     right: UNIT,
-    padding: UNIT
+    padding: UNIT / 2
   },
   removingAttach: {
     opacity: .3
