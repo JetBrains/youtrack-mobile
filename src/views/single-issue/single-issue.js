@@ -439,9 +439,10 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
     toggleVisibleAddAttachDialog(false);
   };
 
-  addAttachment = async (attach: Attachment) => {
+  addAttachment = async (attach: Attachment, onAttachingFinish: () => any) => {
     const {uploadAttach, loadAttachments} = this.props;
     await uploadAttach(attach);
+    onAttachingFinish();
     loadAttachments();
   };
 

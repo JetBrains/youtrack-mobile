@@ -57,9 +57,10 @@ class CreateIssue extends Component<Props, void> {
     this.props.initializeWithDraftOrProject(this.props.predefinedDraftId);
   }
 
-  onAddAttachment = async (attach: Attachment) => {
+  onAddAttachment = async (attach: Attachment, onAttachingFinish: () => any) => {
     const {uploadAttach, loadAttachments} = this.props;
     await uploadAttach(attach);
+    onAttachingFinish();
     loadAttachments();
   };
 

@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {PureComponent} from 'react';
-import {View, Text, Image, TouchableOpacity} from 'react-native';
+import {View, Text, Image, TouchableOpacity, ActivityIndicator} from 'react-native';
 
 import Header from '../header/header';
 import ModalView from '../modal-view/modal-view';
@@ -27,18 +27,20 @@ type Props = {
   actions: Array<Action>,
   attach: Attachment,
   onCancel: () => any,
-  onAttach: (file: Attachment) => any,
+  onAttach: (file: Attachment, onAttachingFinish: () => any) => any,
   uiTheme: UITheme
 };
 
 type State = {
-  attach: Attachment
+  attach: Attachment,
+  isAttaching: boolean
 }
 
 const CATEGORY_NAME = 'Attach file modal';
 
 
 export default class AttachFileDialog extends PureComponent<Props, State> {
+  _isMounted: boolean = false;
   headers: { Authorization: string } = getApi().auth.getAuthorizationHeaders();
 
   constructor(props: Props) {
@@ -46,8 +48,17 @@ export default class AttachFileDialog extends PureComponent<Props, State> {
     usage.trackScreenView(CATEGORY_NAME);
 
     this.state = {
-      attach: props.attach
+      attach: props.attach,
+      isAttaching: false
     };
+  }
+
+  componentDidMount() {
+    this._isMounted = true;
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -58,9 +69,16 @@ export default class AttachFileDialog extends PureComponent<Props, State> {
     }
   }
 
+  toggleAttachingProgress = (isAttaching: boolean) => {
+    if (this._isMounted) {
+      this.setState({isAttaching});
+    }
+  };
+
   attachFile = () => {
     if (this.state.attach) {
-      this.props.onAttach(this.state.attach);
+      this.toggleAttachingProgress(true);
+      this.props.onAttach(this.state.attach, () => this.toggleAttachingProgress(false));
     }
   };
 
@@ -72,6 +90,10 @@ export default class AttachFileDialog extends PureComponent<Props, State> {
       }
     });
   };
+
+  onCancel = () => {
+    !this.state.isAttaching && this.props.onCancel();
+  }
 
   render() {
     const {actions, attach, uiTheme} = this.props;
@@ -85,9 +107,14 @@ export default class AttachFileDialog extends PureComponent<Props, State> {
         style={styles.container}
       >
         <Header
-          leftButton={<IconClose size={21} color={uiTheme.colors.$link}/>}
-          onBack={this.props.onCancel}
-          rightButton={<IconCheck size={20} color={hasAttach ? uiTheme.colors.$link : uiTheme.colors.$disabled}/>}
+          leftButton={
+            <IconClose size={21} color={this.state.isAttaching ? uiTheme.colors.$disabled : uiTheme.colors.$link}/>
+          }
+          onBack={this.onCancel}
+          rightButton={(
+            this.state.isAttaching ? <ActivityIndicator color={uiTheme.colors.$link}/> :
+              <IconCheck size={20} color={hasAttach ? uiTheme.colors.$link : uiTheme.colors.$disabled}/>
+          )}
           onRightButtonClick={this.attachFile}>
           <Text style={styles.title}>Attach image</Text>
         </Header>
