@@ -1,3 +1,5 @@
+import type {Reaction} from './Reaction';
+import type {User} from './User';
 import type {Visibility} from './Visibility';
 
 export type TimeTrackingFieldInfo = {
@@ -162,7 +164,9 @@ export type IssueComment = {
   text: string,
   usesMarkdown: boolean,
   author: User,
-  visibility: Visibility
+  visibility: Visibility,
+  reactionOrder?: string,
+  reactions?: Array<Reaction>
 }
 
 export type IssueLinkType = {

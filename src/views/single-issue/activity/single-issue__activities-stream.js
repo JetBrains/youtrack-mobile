@@ -1,53 +1,47 @@
 /* @flow */
-import styles from './single-issue-activity.styles';
-import Comment from '../../../components/comment/comment';
-import type {Attachment, IssueComment} from '../../../flow/CustomFields';
 
-import {View, Text, TouchableOpacity} from 'react-native';
 import React, {PureComponent} from 'react';
 
-import {isActivityCategory} from '../../../components/activity/activity__category';
+import {View, Text, TouchableOpacity} from 'react-native';
 
+import ApiHelper from '../../../components/api/api__helper';
+import AttachmentsRow from '../../../components/attachments-row/attachments-row';
+import Avatar from '../../../components/avatar/avatar';
+import Comment from '../../../components/comment/comment';
 import CommentVisibility from '../../../components/comment/comment__visibility';
+import CustomFieldChangeDelimiter from '../../../components/custom-field/custom-field__change-delimiter';
+import Diff from '../../../components/diff/diff';
+import getEventTitle from '../../../components/activity/activity__history-title';
 import IssueVisibility from '../../../components/visibility/issue-visibility';
-
+import log from '../../../components/log/log';
+import {Reactions} from '../../../components/reactions/reactions';
+import Router from '../../../components/router/router';
+import usage from '../../../components/usage/usage';
 import {
   getEntityPresentation,
   relativeDate,
   getReadableID,
   ytDate
 } from '../../../components/issue-formatter/issue-formatter';
-
-import getEventTitle from '../../../components/activity/activity__history-title';
-import {getTextValueChange} from '../../../components/activity/activity__history-value';
-import {minutesAndHoursFor} from '../../../components/time-tracking/time-tracking';
-
-import Avatar from '../../../components/avatar/avatar';
-
-import Router from '../../../components/router/router';
-
-import {IconDrag, IconHistory, IconMoreOptions, IconWork} from '../../../components/icon/icon';
-
-import usage from '../../../components/usage/usage';
-import log from '../../../components/log/log';
 import {getApi} from '../../../components/api/api__instance';
-import AttachmentsRow from '../../../components/attachments-row/attachments-row';
-import ApiHelper from '../../../components/api/api__helper';
-import CustomFieldChangeDelimiter from '../../../components/custom-field/custom-field__change-delimiter';
+import {getTextValueChange} from '../../../components/activity/activity__history-value';
+import {IconDrag, IconHistory, IconMoreOptions, IconWork} from '../../../components/icon/icon';
+import {isActivityCategory} from '../../../components/activity/activity__category';
 import {isIOSPlatform} from '../../../util/util';
+import {minutesAndHoursFor} from '../../../components/time-tracking/time-tracking';
 import {SkeletonIssueActivities} from '../../../components/skeleton/skeleton';
 
-import type {WorkTimeSettings} from '../../../flow/WorkTimeSettings';
-import type {ActivityItem, IssueActivity} from '../../../flow/Activity';
-
-import Diff from '../../../components/diff/diff';
-
-import {UNIT} from '../../../components/variables/variables';
 import {HIT_SLOP} from '../../../components/common-styles/button';
+import {UNIT} from '../../../components/variables/variables';
+
+import styles from './single-issue-activity.styles';
 
 import type IssuePermissions from '../../../components/issue-permissions/issue-permissions';
-import type {YouTrackWiki} from '../../../flow/Wiki';
+import type {ActivityItem, IssueActivity} from '../../../flow/Activity';
+import type {Attachment, IssueComment} from '../../../flow/CustomFields';
 import type {UITheme} from '../../../flow/Theme';
+import type {WorkTimeSettings} from '../../../flow/WorkTimeSettings';
+import type {YouTrackWiki} from '../../../flow/Wiki';
 
 const CATEGORY_NAME = 'Issue Stream';
 
@@ -248,7 +242,9 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
           )}
           uiTheme={uiTheme}
         />}
-        {addedAndLaterRemoved.length > 0 && addedAndLaterRemoved.map(it => <Text style={styles.activityAdded} key={it.id}>{it.name}</Text>)}
+        {addedAndLaterRemoved.length > 0 && addedAndLaterRemoved.map(
+          it => <Text style={styles.activityAdded} key={it.id}>{it.name}</Text>
+        )}
 
         {removed.length > 0 &&
         <Text style={hasAddedAttachments && {marginTop: UNIT / 2}}>{activity.removed.map((it, index) =>
@@ -352,7 +348,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
   }
 
   renderCommentActivity(activityGroup: Object, uiTheme: UITheme) {
-    const comment = this._firstActivityChange(activityGroup.comment);
+    const comment: ActivityItem = this._firstActivityChange(activityGroup.comment);
     if (!comment) {
       return null;
     }
@@ -385,6 +381,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
             visibility={IssueVisibility.getVisibilityPresentation(comment.visibility)}
             color={uiTheme.colors.$iconAccent}
           />}
+          {<Reactions reactions={comment.reactions} reactionOrder={comment.reactionOrder} />}
 
         </View>
       </View>
@@ -408,7 +405,9 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
 
         <View style={styles.activityChange}>
 
-          {Boolean(work.text) && <View style={styles.workComment}><Text style={styles.secondaryText}>{work.text}</Text></View>}
+          {Boolean(work.text) && (
+            <View style={styles.workComment}><Text style={styles.secondaryText}>{work.text}</Text></View>
+          )}
 
           {Boolean(work.date) && <Text style={styles.secondaryText}>{ytDate(work.date)}</Text>}
 

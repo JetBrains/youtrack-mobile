@@ -71,6 +71,15 @@ const ISSUE_ACTIVITIES_FIELDS = toField([
       IssueFields.ISSUE_XSHORT_FIELDS,
 
       ISSUE_WORK_ITEMS_FIELDS,
+
+      'reactionOrder',
+      {
+        reactions: [
+          'id',
+          'reaction',
+          'author(id,fullName)'
+        ]
+      }
     ],
     removed: [
       ISSUE_PROJECT_FIELDS,
