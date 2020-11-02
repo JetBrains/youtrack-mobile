@@ -1,5 +1,9 @@
 import React from 'react';
 
+import {UNIT} from '../variables/variables';
+
+const iconSize: number = UNIT * 2;
+
 //TODO: get rid of importing each SVG
 const ReactionIcon = ({name, ...rest}) => {
   let Icon = null;
@@ -175,7 +179,7 @@ const ReactionIcon = ({name, ...rest}) => {
     break;
   }
 
-  return Icon ? <Icon {...{width: 16, rest}} /> : null;
+  return Icon ? <Icon {...{width: iconSize, height: iconSize, rest}} /> : null;
 };
 
 
