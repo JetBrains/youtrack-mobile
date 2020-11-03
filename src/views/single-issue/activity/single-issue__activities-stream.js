@@ -143,7 +143,7 @@ function SingleIssueActivities(props: Props) {
     );
   };
 
-  const renderLinkChange = (activity: IssueActivity, uiTheme: UITheme) => {
+  const renderLinkChange = (activity: IssueActivity) => {
     const linkedIssues = [].concat(activity.added).concat(activity.removed);
     return (
       <TouchableOpacity key={activity.id}>
@@ -163,14 +163,14 @@ function SingleIssueActivities(props: Props) {
                 onPress={() => Router.SingleIssue({issueId: readableIssueId})}>
                 <Text style={[
                   styles.linkText,
-                  linkedIssue.resolved && {color: uiTheme.colors.$icon},
+                  linkedIssue.resolved && styles.secondaryTextColor.color,
                   linkedIssue.resolved && styles.activityRemoved
                 ]}>
                   {readableIssueId}
                 </Text>
                 <Text style={[
                   styles.linkText,
-                  linkedIssue.resolved && {color: uiTheme.colors.$icon},
+                  linkedIssue.resolved && styles.secondaryTextColor.color
                 ]}>
                   {` ${linkedIssue.summary}`}
                 </Text>
@@ -285,7 +285,7 @@ function SingleIssueActivities(props: Props) {
     return activity.added;
   };
 
-  const renderCommentActions = (activityGroup: Object, uiTheme: UITheme) => {
+  const renderCommentActions = (activityGroup: Object) => {
     const comment = firstActivityChange(activityGroup.comment);
     if (!comment) {
       return null;
@@ -313,14 +313,14 @@ function SingleIssueActivities(props: Props) {
           disabled={disabled}
           onPress={() => props.commentActions.onShowCommentActions(comment)}>
           {isIOSPlatform()
-            ? <IconMoreOptions size={24} color={uiTheme.colors.$icon}/>
-            : <IconDrag size={22} color={uiTheme.colors.$icon}/>}
+            ? <IconMoreOptions size={24} color={styles.secondaryTextColor.color}/>
+            : <IconDrag size={22} color={styles.secondaryTextColor.color}/>}
         </TouchableOpacity>
       </View>;
     }
   };
 
-  const renderCommentActivity = (activityGroup: Object, uiTheme: UITheme) => {
+  const renderCommentActivity = (activityGroup: Object) => {
     const comment: ActivityItem = firstActivityChange(activityGroup.comment);
     if (!comment) {
       return null;
@@ -350,14 +350,13 @@ function SingleIssueActivities(props: Props) {
           <CommentVisibility
             style={styles.visibility}
             visibility={IssueVisibility.getVisibilityPresentation(comment.visibility)}
-            color={uiTheme.colors.$iconAccent}
+            color={styles.iconAccent.color}
           />}
           {<Reactions reactions={comment.reactions} reactionOrder={comment.reactionOrder}/>}
 
         </View>
       </View>
     );
-
   };
 
   const renderWorkActivity = (activityGroup) => {
@@ -405,7 +404,7 @@ function SingleIssueActivities(props: Props) {
     ):
       return renderTextValueChange(activity, props.issueFields);
     case Boolean(isActivityCategory.link(activity)):
-      return renderLinkChange(activity, uiTheme);
+      return renderLinkChange(activity);
     case Boolean(isActivityCategory.attachment(activity)):
       return renderAttachmentChange(activity, uiTheme);
     }
@@ -455,13 +454,13 @@ function SingleIssueActivities(props: Props) {
                 {renderUserAvatar(activityGroup, !!activityGroup.comment)}
 
                 <View style={styles.activityItem}>
-                  {activityGroup.comment && renderCommentActivity(activityGroup, uiTheme)}
+                  {activityGroup.comment && renderCommentActivity(activityGroup)}
 
                   {activityGroup.work && renderWorkActivity(activityGroup)}
 
                   {renderHistoryAndRelatedChanges(activityGroup, !!activityGroup.comment || !!activityGroup.work, uiTheme)}
 
-                  {activityGroup.comment && renderCommentActions(activityGroup, uiTheme)}
+                  {activityGroup.comment && renderCommentActions(activityGroup)}
                 </View>
 
               </View>

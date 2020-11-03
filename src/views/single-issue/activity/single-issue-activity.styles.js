@@ -194,4 +194,8 @@ export default EStyleSheet.create({
     fontWeight: '500',
     textTransform: 'capitalize'
   },
+  secondaryTextColor: secondaryTextColor,
+  iconAccent: {
+    color: '$iconAccent'
+  }
 });
