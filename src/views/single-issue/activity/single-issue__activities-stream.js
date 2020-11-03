@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {PureComponent} from 'react';
+import React from 'react';
 
 import {View, Text, TouchableOpacity} from 'react-native';
 
@@ -27,7 +27,7 @@ import {getApi} from '../../../components/api/api__instance';
 import {getTextValueChange} from '../../../components/activity/activity__history-value';
 import {IconDrag, IconHistory, IconMoreOptions, IconWork} from '../../../components/icon/icon';
 import {isActivityCategory} from '../../../components/activity/activity__category';
-import {isIOSPlatform} from '../../../util/util';
+import {isIOSPlatform, uuid} from '../../../util/util';
 import {minutesAndHoursFor} from '../../../components/time-tracking/time-tracking';
 import {SkeletonIssueActivities} from '../../../components/skeleton/skeleton';
 
@@ -63,7 +63,6 @@ type Props = {
   onDeleteCommentPermanently: (comment: IssueComment, activityId?: string) => any,
 
   onReply: (comment: IssueComment) => any,
-  onCopyCommentLink: (comment: IssueComment) => any,
 
   workTimeSettings: ?WorkTimeSettings,
 
@@ -73,25 +72,15 @@ type Props = {
   uiTheme: UITheme
 };
 
-type DefaultProps = {
-  onCopyCommentLink: Function,
-  onReply: Function,
-  workTimeSettings: WorkTimeSettings
-};
-
 type Change = {
   added: ActivityItem,
   removed: ActivityItem
 };
 
-export default class SingleIssueActivities extends PureComponent<Props, void> {
-  static defaultProps: DefaultProps = {
-    onReply: () => {},
-    onCopyCommentLink: () => {},
-    workTimeSettings: {},
-  };
 
-  _isMultiValueActivity(activity: Object) {
+function SingleIssueActivities(props: Props) {
+
+  const isMultiValueActivity = (activity: Object) => {
     if (isActivityCategory.customField(activity)) {
       const field = activity.field;
       if (!field) {
@@ -100,18 +89,18 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
       return field.customField && field.customField.fieldType && field.customField.fieldType.isMultiValue;
     }
 
-    if (activity.added && activity.added.length > 1 || activity.removed && activity.removed.length > 1) {
+    if (activity.added?.length > 1 || activity.removed?.length > 1) {
       return true;
     }
 
     return false;
-  }
+  };
 
-  getTextChange(activity: IssueActivity, issueFields: Array<Object>): Change {
+  const getTextChange = (activity: IssueActivity, issueFields: Array<Object>): Change => {
     const getParams = (isRemovedValue) => ({
       activity,
       issueFields,
-      workTimeSettings: this.props.workTimeSettings,
+      workTimeSettings: props.workTimeSettings || {},
       isRemovedValue: isRemovedValue
     });
 
@@ -119,21 +108,21 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
       added: getTextValueChange(getParams(false)),
       removed: getTextValueChange(getParams(true))
     };
-  }
+  };
 
-  renderTextDiff(activity: IssueActivity, textChange: Change) {
+  const renderTextDiff = (activity: IssueActivity, textChange: Change) => {
     return <Diff
       title={getEventTitle(activity, true)}
       text1={textChange.removed}
       text2={textChange.added}
     />;
-  }
+  };
 
-  renderTextChange(activity: IssueActivity, textChange: Change) {
-    const isMultiValue = this._isMultiValueActivity(activity);
+  const renderTextChange = (activity: IssueActivity, textChange: Change) => {
+    const isMultiValue = isMultiValueActivity(activity);
     return (
       <Text>
-        <Text style={styles.activityLabel}>{this.getActivityEventTitle(activity)}</Text>
+        <Text style={styles.activityLabel}>{getActivityEventTitle(activity)}</Text>
 
         <Text
           style={[
@@ -153,10 +142,10 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
         <Text style={styles.activityText}>{textChange.added}</Text>
       </Text>
     );
-  }
+  };
 
-  renderTextValueChange(activity: IssueActivity, issueFields: Array<Object>) {
-    const textChange = this.getTextChange(activity, issueFields);
+  const renderTextValueChange = (activity: IssueActivity, issueFields: Array<Object>) => {
+    const textChange = getTextChange(activity, issueFields);
     const isTextDiff = (
       isActivityCategory.description(activity) ||
       isActivityCategory.summary(activity)
@@ -165,19 +154,19 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
     return (
       <View style={styles.row}>
         <View style={{flexGrow: 2}}>
-          {isTextDiff && this.renderTextDiff(activity, textChange)}
-          {!isTextDiff && this.renderTextChange(activity, textChange)}
+          {isTextDiff && renderTextDiff(activity, textChange)}
+          {!isTextDiff && renderTextChange(activity, textChange)}
         </View>
       </View>
     );
-  }
+  };
 
-  _renderLinkChange(activity: IssueActivity, uiTheme: UITheme) {
+  const renderLinkChange = (activity: IssueActivity, uiTheme: UITheme) => {
     const linkedIssues = [].concat(activity.added).concat(activity.removed);
     return (
       <TouchableOpacity key={activity.id}>
         <View style={styles.row}>
-          <Text style={styles.activityLabel}>{this.getActivityEventTitle(activity)}</Text>
+          <Text style={styles.activityLabel}>{getActivityEventTitle(activity)}</Text>
         </View>
         {
           linkedIssues.map((linkedIssue) => {
@@ -209,25 +198,25 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
         }
       </TouchableOpacity>
     );
-  }
+  };
 
-  updateToAbsUrl(attachments: Array<Attachment> = []): Array<Attachment> {
+  const updateToAbsUrl = (attachments: Array<Attachment> = []): Array<Attachment> => {
     if (attachments.length) {
-      attachments = ApiHelper.convertAttachmentRelativeToAbsURLs(attachments, this.props.youtrackWiki.backendUrl);
+      attachments = ApiHelper.convertAttachmentRelativeToAbsURLs(attachments, props.youtrackWiki.backendUrl);
     }
     return attachments;
-  }
+  };
 
-  getActivityEventTitle(activity: IssueActivity) {
+  const getActivityEventTitle = (activity: IssueActivity) => {
     const title = getEventTitle(activity) || '';
     return `${title} `;
-  }
+  };
 
-  _renderAttachmentChange(activity: Object, uiTheme: UITheme) {
+  const renderAttachmentChange = (activity: Object, uiTheme: UITheme) => {
     const removed = activity.removed || [];
     const added = activity.added || [];
     const addedAndLaterRemoved = added.filter(it => !it.url);
-    const addedAndAvailable = this.updateToAbsUrl(added.filter(it => it.url));
+    const addedAndAvailable = updateToAbsUrl(added.filter(it => it.url));
     const hasAddedAttachments = addedAndAvailable.length > 0;
 
     return (
@@ -256,17 +245,17 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
         </Text>}
       </View>
     );
-  }
+  };
 
-  renderActivityIcon(activityGroup: Object) {
-    const iconColor: string = this.props.uiTheme.colors.$iconAccent;
+  const renderActivityIcon = (activityGroup: Object) => {
+    const iconColor: string = props.uiTheme.colors.$iconAccent;
     if (activityGroup.work) {
       return <IconWork size={24} color={iconColor} style={{position: 'relative', top: -2}}/>;
     }
     return <IconHistory size={26} color={iconColor}/>;
-  }
+  };
 
-  _renderUserAvatar(activityGroup: Object, showAvatar: boolean) {
+  const renderUserAvatar = (activityGroup: Object, showAvatar: boolean) => {
     const shouldRenderIcon: boolean = Boolean(!activityGroup.merged && !showAvatar);
 
     return (
@@ -278,12 +267,12 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
             source={{uri: activityGroup.author.avatarUrl}}
           />
         )}
-        {shouldRenderIcon && this.renderActivityIcon(activityGroup)}
+        {shouldRenderIcon && renderActivityIcon(activityGroup)}
       </View>
     );
-  }
+  };
 
-  _renderTimestamp(timestamp, style) {
+  const renderTimestamp = (timestamp, style) => {
     if (timestamp) {
       return (
         <Text style={[styles.activityTimestamp, style]}>
@@ -291,20 +280,20 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
         </Text>
       );
     }
-  }
+  };
 
-  _renderUserInfo(activityGroup: Object, noTimestamp?: boolean) {
+  const renderUserInfo = (activityGroup: Object, noTimestamp?: boolean) => {
     return (
       <View style={styles.activityAuthor}>
         <Text style={styles.activityAuthorName}>
           {getEntityPresentation(activityGroup.author)}
         </Text>
-        {!noTimestamp && <Text>{this._renderTimestamp(activityGroup.timestamp)}</Text>}
+        {!noTimestamp && <Text>{renderTimestamp(activityGroup.timestamp)}</Text>}
       </View>
     );
-  }
+  };
 
-  _firstActivityChange(activity): any {
+  const firstActivityChange = (activity): any => {
     if (!activity.added) {
       return null;
     }
@@ -312,23 +301,23 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
       return activity.added[0];
     }
     return activity.added;
-  }
+  };
 
-  renderCommentActions(activityGroup: Object, uiTheme: UITheme) {
-    const comment = this._firstActivityChange(activityGroup.comment);
+  const renderCommentActions = (activityGroup: Object, uiTheme: UITheme) => {
+    const comment = firstActivityChange(activityGroup.comment);
     if (!comment) {
       return null;
     }
 
     const disabled = activityGroup.merged;
-    const isAuthor = this.props.issuePermissions.isCurrentUser(comment?.author);
+    const isAuthor = props.issuePermissions.isCurrentUser(comment?.author);
 
     if (!comment.deleted) {
       return <View style={styles.activityCommentActions}>
         <TouchableOpacity
           hitSlop={HIT_SLOP}
           disabled={disabled}
-          onPress={() => isAuthor ? this.props.onStartEditing(comment) : this.props.onReply(comment)}>
+          onPress={() => isAuthor ? props.onStartEditing(comment) : props.onReply(comment)}>
           <Text style={styles.link}>
             {isAuthor ? 'Edit' : 'Reply'}
           </Text>
@@ -336,41 +325,41 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
         <TouchableOpacity
           hitSlop={HIT_SLOP}
           disabled={disabled}
-          onPress={() => this.props.onShowCommentActions(comment)}>
+          onPress={() => props.onShowCommentActions(comment)}>
           {isIOSPlatform()
             ? <IconMoreOptions size={24} color={uiTheme.colors.$icon}/>
             : <IconDrag size={22} color={uiTheme.colors.$icon}/>}
         </TouchableOpacity>
       </View>;
     }
-  }
+  };
 
-  renderCommentActivity(activityGroup: Object, uiTheme: UITheme) {
-    const comment: ActivityItem = this._firstActivityChange(activityGroup.comment);
+  const renderCommentActivity = (activityGroup: Object, uiTheme: UITheme) => {
+    const comment: ActivityItem = firstActivityChange(activityGroup.comment);
     if (!comment) {
       return null;
     }
 
-    const allAttachments = this.updateToAbsUrl(comment.attachments).concat(this.props.attachments || []);
+    const allAttachments = updateToAbsUrl(comment.attachments).concat(props.attachments || []);
 
     return (
       <View key={comment.id}>
-        {!activityGroup.merged && this._renderUserInfo(activityGroup)}
+        {!activityGroup.merged && renderUserInfo(activityGroup)}
 
         <View>
 
           <Comment
             key={comment.id}
             comment={comment}
-            youtrackWiki={this.props.youtrackWiki}
+            youtrackWiki={props.youtrackWiki}
 
             attachments={allAttachments}
-            canRestore={this.props.canRestoreComment(comment)}
-            canDeletePermanently={this.props.canDeleteCommentPermanently(comment)}
-            onRestore={() => this.props.onRestoreComment(comment)}
-            onDeletePermanently={() => this.props.onDeleteCommentPermanently(comment, activityGroup.comment.id)}
+            canRestore={props.canRestoreComment(comment)}
+            canDeletePermanently={props.canDeleteCommentPermanently(comment)}
+            onRestore={() => props.onRestoreComment(comment)}
+            onDeletePermanently={() => props.onDeleteCommentPermanently(comment, activityGroup.comment.id)}
             activitiesEnabled={true}
-            uiTheme={this.props.uiTheme}
+            uiTheme={props.uiTheme}
           />
 
           {!comment.deleted && IssueVisibility.isSecured(comment.visibility) &&
@@ -379,16 +368,16 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
             visibility={IssueVisibility.getVisibilityPresentation(comment.visibility)}
             color={uiTheme.colors.$iconAccent}
           />}
-          {<Reactions reactions={comment.reactions} reactionOrder={comment.reactionOrder} />}
+          {<Reactions reactions={comment.reactions} reactionOrder={comment.reactionOrder}/>}
 
         </View>
       </View>
     );
 
-  }
+  };
 
-  _renderWorkActivity(activityGroup) {
-    const work = this._firstActivityChange(activityGroup.work);
+  const renderWorkActivity = (activityGroup) => {
+    const work = firstActivityChange(activityGroup.work);
 
     if (!work) {
       return null;
@@ -399,7 +388,7 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
 
     return (
       <View>
-        {!activityGroup.merged && this._renderUserInfo(activityGroup)}
+        {!activityGroup.merged && renderUserInfo(activityGroup)}
 
         <View style={styles.activityChange}>
 
@@ -418,9 +407,9 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
         </View>
       </View>
     );
-  }
+  };
 
-  _renderActivityByCategory = (activity, uiTheme: UITheme) => {
+  const renderActivityByCategory = (activity, uiTheme: UITheme) => {
     switch (true) {
     case Boolean(
       isActivityCategory.tag(activity) ||
@@ -430,74 +419,75 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
       isActivityCategory.description(activity) ||
       isActivityCategory.summary(activity)
     ):
-      return this.renderTextValueChange(activity, this.props.issueFields);
+      return renderTextValueChange(activity, props.issueFields);
     case Boolean(isActivityCategory.link(activity)):
-      return this._renderLinkChange(activity, uiTheme);
+      return renderLinkChange(activity, uiTheme);
     case Boolean(isActivityCategory.attachment(activity)):
-      return this._renderAttachmentChange(activity, uiTheme);
+      return renderAttachmentChange(activity, uiTheme);
     }
     return null;
   };
 
-  _renderHistoryAndRelatedChanges(activityGroup: Object, isRelatedChange: boolean, uiTheme: UITheme) {
+  const renderHistoryAndRelatedChanges = (activityGroup: Object, isRelatedChange: boolean, uiTheme: UITheme) => {
     if (activityGroup.events.length > 0) {
       return (
         <View style={isRelatedChange ? styles.activityRelatedChanges : styles.activityHistoryChanges}>
-          {Boolean(!activityGroup.merged && !isRelatedChange) && this._renderUserInfo(activityGroup)}
-          {activityGroup.merged && this._renderTimestamp(activityGroup.timestamp)}
+          {Boolean(!activityGroup.merged && !isRelatedChange) && renderUserInfo(activityGroup)}
+          {activityGroup.merged && renderTimestamp(activityGroup.timestamp)}
 
           {activityGroup.events.map((event) => (
             <View key={event.id} style={styles.activityChange}>
-              {this._renderActivityByCategory(event, uiTheme)}
+              {renderActivityByCategory(event, uiTheme)}
             </View>
           ))}
         </View>
       );
     }
+  };
+
+  const {activities, uiTheme} = props;
+
+  if (!activities) {
+    return <SkeletonIssueActivities/>;
   }
 
-  render() {
-    const {activities, uiTheme} = this.props;
+  return (
+    <View>
+      {activities.length > 0
+        ? activities.map((activityGroup, index) => {
+          if (activityGroup.hidden) {
+            return null;
+          }
 
-    if (!activities) {
-      return <SkeletonIssueActivities/>;
-    }
+          return (
+            <View key={uuid()}>
+              {index > 0 && !activityGroup.merged && <View style={styles.activitySeparator}/>}
 
-    return (
-      <View>
-        {activities.length > 0
-          ? activities.map((activityGroup, index) => {
-            if (activityGroup.hidden) {
-              return null;
-            }
+              <View style={[
+                styles.activity,
+                activityGroup.merged ? styles.mergedActivity : null
+              ]}>
 
-            return (
-              <View key={`${activityGroup.timestamp}-${index}`}>
-                {index > 0 && !activityGroup.merged && <View style={styles.activitySeparator}/>}
+                {renderUserAvatar(activityGroup, !!activityGroup.comment)}
 
-                <View style={[
-                  styles.activity,
-                  activityGroup.merged ? styles.mergedActivity : null
-                ]}>
+                <View style={styles.activityItem}>
+                  {activityGroup.comment && renderCommentActivity(activityGroup, uiTheme)}
 
-                  {this._renderUserAvatar(activityGroup, !!activityGroup.comment)}
+                  {activityGroup.work && renderWorkActivity(activityGroup)}
 
-                  <View style={styles.activityItem}>
-                    {activityGroup.comment && this.renderCommentActivity(activityGroup, uiTheme)}
+                  {renderHistoryAndRelatedChanges(activityGroup, !!activityGroup.comment || !!activityGroup.work, uiTheme)}
 
-                    {activityGroup.work && this._renderWorkActivity(activityGroup)}
-
-                    {this._renderHistoryAndRelatedChanges(activityGroup, !!activityGroup.comment || !!activityGroup.work, uiTheme)}
-
-                    {activityGroup.comment && this.renderCommentActions(activityGroup, uiTheme)}
-                  </View>
-
+                  {activityGroup.comment && renderCommentActions(activityGroup, uiTheme)}
                 </View>
+
               </View>
-            );
-          })
-          : <Text style={styles.activityNoActivity}>No activity yet</Text>}
-      </View>
-    );
-  }
+            </View>
+          );
+        })
+        : <Text style={styles.activityNoActivity}>No activity yet</Text>}
+    </View>
+  );
 }
+
+
+export default React.memo<Props>(SingleIssueActivities);
