@@ -167,7 +167,7 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
               key={type.id}
               style={styles.settingsItem}
             >
-              <View style={styles.settingsNameContainer}>
+              <View style={styles.rowContainer}>
                 {!!Icon && <Icon size={22} color={this.props.uiTheme.colors.$iconAccent}/>}
                 <Text style={styles.settingsName}>
                   {`  ${type.name}`}

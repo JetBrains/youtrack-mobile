@@ -131,7 +131,8 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       issue,
       copyCommentUrl, openNestedIssueView, issuePermissions,
       startEditingComment,
-      workTimeSettings, showIssueCommentActions,
+      workTimeSettings,
+      showIssueCommentActions,
       startReply,
       deleteComment,
       restoreComment,
@@ -144,45 +145,41 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       onIssueIdTap: issueId => openNestedIssueView({issueId}),
     };
 
+    const canUpdateComment = (comment: IssueComment) => issuePermissions.canUpdateComment(issue, comment);
+    const canDeleteComment = (comment: IssueComment) => issuePermissions.canDeleteComment(issue, comment);
+    const commentActions = {
+      canCommentOn: issuePermissions.canCommentOn(issue),
+      canUpdateComment: canUpdateComment,
+      canDeleteComment: canDeleteComment,
+      canDeleteCommentPermanently: issuePermissions.canDeleteCommentPermanently(issue),
+      canRestoreComment: (comment: IssueComment) => issuePermissions.canRestoreComment(issue, comment),
+      onReply: (comment: IssueComment) => (
+        startReply(comment?.author?.login || getEntityPresentation(comment?.author))
+      ),
+      onCopyCommentLink: copyCommentUrl,
+      onDeleteCommentPermanently: deleteCommentPermanently,
+      onDeleteComment: deleteComment,
+      onRestoreComment: restoreComment,
+      onStartEditing: startEditingComment,
+      onShowCommentActions: (comment: IssueComment) => showIssueCommentActions(
+        this.context.actionSheet(),
+        comment,
+        canUpdateComment(comment),
+        canDeleteComment(comment)
+      ),
+      isAuthor: (comment: IssueComment) => issuePermissions.isCurrentUser(comment?.author)
+    };
+
     return (
       <View style={styles.activitiesContainer}>
         <SingleIssueActivities
           activities={this.createActivityModel(activityPage)}
-
-          issueFields={issue?.fields}
           attachments={issue?.attachments}
-
-          youtrackWiki={youtrackWiki}
-
-          onReply={(comment: IssueComment) => (
-            startReply(comment?.author?.login || getEntityPresentation(comment?.author))
-          )}
-          onCopyCommentLink={copyCommentUrl}
-
-          canUpdateComment={comment => issuePermissions.canUpdateComment(issue, comment)}
-          onStartEditing={startEditingComment}
-
-          canDeleteComment={comment => issuePermissions.canDeleteComment(issue, comment)}
-
-          canDeleteCommentPermanently={() => issuePermissions.canDeleteCommentPermanently(issue)}
-          onDeleteComment={deleteComment}
-          onDeleteCommentPermanently={deleteCommentPermanently}
-
-          canRestoreComment={comment => issuePermissions.canRestoreComment(issue, comment)}
-          onRestoreComment={restoreComment}
-
-          workTimeSettings={workTimeSettings}
-
-          onShowCommentActions={
-            (comment) => {
-              showIssueCommentActions(
-                this.context.actionSheet(),
-                comment
-              );
-            }
-          }
-          issuePermissions={issuePermissions}
+          commentActions={commentActions}
+          issueFields={issue?.fields}
           uiTheme={uiTheme}
+          workTimeSettings={workTimeSettings}
+          youtrackWiki={youtrackWiki}
         />
       </View>
     );

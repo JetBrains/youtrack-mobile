@@ -26,7 +26,7 @@ type Props = {
   canDeletePermanently: boolean,
   onDeletePermanently: Function,
 
-  activitiesEnabled: ?boolean,
+  activitiesEnabled?: boolean,
 
   uiTheme: UITheme
 };

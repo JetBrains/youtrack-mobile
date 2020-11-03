@@ -184,7 +184,7 @@ export default EStyleSheet.create({
     marginTop: UNIT,
     marginBottom: UNIT,
   },
-  settingsNameContainer: {
+  rowContainer: {
     flexDirection: 'row',
     alignItems: 'center'
   },

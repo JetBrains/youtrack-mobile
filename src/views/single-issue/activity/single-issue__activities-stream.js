@@ -36,9 +36,8 @@ import {UNIT} from '../../../components/variables/variables';
 
 import styles from './single-issue-activity.styles';
 
-import type IssuePermissions from '../../../components/issue-permissions/issue-permissions';
 import type {ActivityItem, IssueActivity} from '../../../flow/Activity';
-import type {Attachment, IssueComment} from '../../../flow/CustomFields';
+import type {Attachment} from '../../../flow/CustomFields';
 import type {UITheme} from '../../../flow/Theme';
 import type {WorkTimeSettings} from '../../../flow/WorkTimeSettings';
 import type {YouTrackWiki} from '../../../flow/Wiki';
@@ -46,30 +45,13 @@ import type {YouTrackWiki} from '../../../flow/Wiki';
 const CATEGORY_NAME = 'Issue Stream';
 
 type Props = {
-  issueFields: Array<Object>,
   activities: Array<IssueActivity> | null,
   attachments: Array<Attachment>,
-
-  youtrackWiki: $Shape<YouTrackWiki>,
-
-  canUpdateComment: (comment: IssueComment) => boolean,
-  onStartEditing: (comment: IssueComment) => any,
-
-  canDeleteComment: (comment: IssueComment) => any,
-  canRestoreComment: (comment: IssueComment) => any,
-  canDeleteCommentPermanently: (comment: IssueComment) => any,
-  onDeleteComment: (comment: IssueComment) => any,
-  onRestoreComment: (comment: IssueComment) => any,
-  onDeleteCommentPermanently: (comment: IssueComment, activityId?: string) => any,
-
-  onReply: (comment: IssueComment) => any,
-
+  commentActions: Object,
+  issueFields: Array<Object>,
+  uiTheme: UITheme,
   workTimeSettings: ?WorkTimeSettings,
-
-  onShowCommentActions: (comment: IssueComment) => any,
-  issuePermissions: IssuePermissions,
-
-  uiTheme: UITheme
+  youtrackWiki: $Shape<YouTrackWiki>,
 };
 
 type Change = {
@@ -310,22 +292,26 @@ function SingleIssueActivities(props: Props) {
     }
 
     const disabled = activityGroup.merged;
-    const isAuthor = props.issuePermissions.isCurrentUser(comment?.author);
+    const isAuthor = props.commentActions.isAuthor(comment?.author);
+
+    const canComment: boolean = props.commentActions.canCommentOn;
+    const canUpdate: boolean = props.commentActions.canUpdateComment(comment);
+    const mainAction = (canUpdate || canComment) ? <TouchableOpacity
+      hitSlop={HIT_SLOP}
+      disabled={disabled}
+      onPress={() => isAuthor ? props.commentActions.onStartEditing(comment) : props.commentActions.onReply(comment)}>
+      <Text style={styles.link}>
+        {isAuthor ? 'Edit' : 'Reply'}
+      </Text>
+    </TouchableOpacity> : <View/>;
 
     if (!comment.deleted) {
       return <View style={styles.activityCommentActions}>
+        {mainAction}
         <TouchableOpacity
           hitSlop={HIT_SLOP}
           disabled={disabled}
-          onPress={() => isAuthor ? props.onStartEditing(comment) : props.onReply(comment)}>
-          <Text style={styles.link}>
-            {isAuthor ? 'Edit' : 'Reply'}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          hitSlop={HIT_SLOP}
-          disabled={disabled}
-          onPress={() => props.onShowCommentActions(comment)}>
+          onPress={() => props.commentActions.onShowCommentActions(comment)}>
           {isIOSPlatform()
             ? <IconMoreOptions size={24} color={uiTheme.colors.$icon}/>
             : <IconDrag size={22} color={uiTheme.colors.$icon}/>}
@@ -349,17 +335,15 @@ function SingleIssueActivities(props: Props) {
         <View>
 
           <Comment
-            key={comment.id}
-            comment={comment}
-            youtrackWiki={props.youtrackWiki}
-
             attachments={allAttachments}
-            canRestore={props.canRestoreComment(comment)}
-            canDeletePermanently={props.canDeleteCommentPermanently(comment)}
-            onRestore={() => props.onRestoreComment(comment)}
-            onDeletePermanently={() => props.onDeleteCommentPermanently(comment, activityGroup.comment.id)}
-            activitiesEnabled={true}
+            canDeletePermanently={props.commentActions.canDeleteCommentPermanently}
+            canRestore={props.commentActions.canRestoreComment(comment)}
+            comment={comment}
+            key={comment.id}
+            onDeletePermanently={() => props.commentActions.onDeleteCommentPermanently(comment, activityGroup.comment.id)}
+            onRestore={() => props.commentActions.onRestoreComment(comment)}
             uiTheme={props.uiTheme}
+            youtrackWiki={props.youtrackWiki}
           />
 
           {!comment.deleted && IssueVisibility.isSecured(comment.visibility) &&
@@ -409,7 +393,7 @@ function SingleIssueActivities(props: Props) {
     );
   };
 
-  const renderActivityByCategory = (activity, uiTheme: UITheme) => {
+  const renderActivityByCategory = (activity: IssueActivity, uiTheme: UITheme) => {
     switch (true) {
     case Boolean(
       isActivityCategory.tag(activity) ||

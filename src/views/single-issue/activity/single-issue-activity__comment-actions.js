@@ -252,9 +252,8 @@ export function copyCommentUrl(comment: IssueComment) {
   }
 }
 
-export function showIssueCommentActions(actionSheet: Object, comment: IssueComment) {
+export function showIssueCommentActions(actionSheet: Object, comment: IssueComment, canUpdateComment: boolean, canDeleteComment: boolean) {
   return async (dispatch: (any) => any) => {
-
     const actions = [
       {
         title: 'Copy link',
@@ -263,22 +262,26 @@ export function showIssueCommentActions(actionSheet: Object, comment: IssueComme
           usage.trackEvent(CATEGORY_NAME, 'Copy comment URL');
         }
       },
-      {
+    ];
+    if (canUpdateComment) {
+      actions.push({
         title: 'Edit',
         execute: () => {
           usage.trackEvent(CATEGORY_NAME, 'Edit comment');
           dispatch(startEditingComment(comment));
         }
-      },
-      {
+      });
+    }
+    if (canDeleteComment) {
+      actions.push({
         title: 'Delete',
         execute: () => {
           usage.trackEvent(CATEGORY_NAME, 'Delete comment');
           dispatch(deleteComment(comment));
         }
-      },
-      {title: 'Cancel'}
-    ];
+      });
+    }
+    actions.push({title: 'Cancel'});
 
     const selectedAction = await showActions(actions, actionSheet);
 
