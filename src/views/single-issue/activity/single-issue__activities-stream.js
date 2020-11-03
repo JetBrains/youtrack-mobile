@@ -325,16 +325,14 @@ export default class SingleIssueActivities extends PureComponent<Props, void> {
 
     if (!comment.deleted) {
       return <View style={styles.activityCommentActions}>
-        <View style={styles.container}>
-          <TouchableOpacity
-            hitSlop={HIT_SLOP}
-            disabled={disabled}
-            onPress={() => isAuthor ? this.props.onStartEditing(comment) : this.props.onReply(comment)}>
-            <Text style={styles.link}>
-              {isAuthor ? 'Edit' : 'Reply'}
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+          hitSlop={HIT_SLOP}
+          disabled={disabled}
+          onPress={() => isAuthor ? this.props.onStartEditing(comment) : this.props.onReply(comment)}>
+          <Text style={styles.link}>
+            {isAuthor ? 'Edit' : 'Reply'}
+          </Text>
+        </TouchableOpacity>
         <TouchableOpacity
           hitSlop={HIT_SLOP}
           disabled={disabled}

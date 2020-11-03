@@ -111,6 +111,7 @@ export default EStyleSheet.create({
   },
   activityCommentActions: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     marginTop: UNIT * 1.5
   },
 
