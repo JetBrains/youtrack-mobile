@@ -2,18 +2,18 @@
 
 import {View, Text} from 'react-native';
 
-import React, {Component} from 'react';
+import React from 'react';
 
-import YoutrackWiki from '../wiki/youtrack-wiki';
 import Avatar from '../avatar/avatar';
 import MarkdownView from '../wiki/markdown-view';
+import YoutrackWiki from '../wiki/youtrack-wiki';
 import {relativeDate, getEntityPresentation} from '../issue-formatter/issue-formatter';
 
 import styles from './comment.styles';
 
 import type {IssueComment, Attachment} from '../../flow/CustomFields';
-import type {YouTrackWiki} from '../../flow/Wiki';
 import type {UITheme} from '../../flow/Theme';
+import type {YouTrackWiki} from '../../flow/Wiki';
 
 type Props = {
   comment: IssueComment,
@@ -31,24 +31,12 @@ type Props = {
   uiTheme: UITheme
 };
 
-export default class Comment extends Component<Props, void> {
-  static defaultProps = {
-    onReply: () => {},
-    onCopyCommentLink: () => {},
-    onEdit: () => {},
-    activitiesEnabled: false
-  };
+function Comment(props: Props) {
 
-  _renderDeletedComment() {
-    const {
-      onRestore,
-      onDeletePermanently,
-      canRestore,
-      canDeletePermanently
-    } = this.props;
-
+  const renderDeletedComment = () => {
+    const {onRestore, onDeletePermanently, canRestore, canDeletePermanently} = props;
     return (
-      <View>
+      <>
         <View><Text style={styles.deletedCommentText}>Comment was deleted.</Text></View>
 
         {Boolean(canRestore || canDeletePermanently) && (
@@ -73,29 +61,12 @@ export default class Comment extends Component<Props, void> {
             </Text>
           </View>
         )}
-
-      </View>
+      </>
     );
-  }
+  };
 
-  _renderComment(comment, attachments) {
-    if (comment.deleted) {
-      return this._renderDeletedComment();
-    }
-
-    if (comment.usesMarkdown) {
-      return (
-        <MarkdownView
-          attachments={attachments}
-          uiTheme={this.props.uiTheme}
-        >
-          {comment.text}
-        </MarkdownView>
-      );
-    }
-
-    const {backendUrl, onIssueIdTap, imageHeaders} = this.props.youtrackWiki;
-
+  const renderYoutrackWiki = () => {
+    const {backendUrl, onIssueIdTap, imageHeaders} = props.youtrackWiki;
     return (
       <View style={styles.commentWikiContainer}>
         <YoutrackWiki
@@ -103,43 +74,72 @@ export default class Comment extends Component<Props, void> {
           onIssueIdTap={issueId => onIssueIdTap(issueId)}
           attachments={attachments}
           imageHeaders={imageHeaders}
-          uiTheme={this.props.uiTheme}
+          uiTheme={props.uiTheme}
         >
           {comment.textPreview}
         </YoutrackWiki>
       </View>
     );
-  }
+  };
 
-  render() {
-    const {comment, attachments, uiTheme} = this.props;
-
+  const renderMarkdown = () => {
     return (
-      <View>
-        {this.props.activitiesEnabled
-          ? this._renderComment(comment, attachments)
-          : <View style={styles.commentWrapper}>
-            <Avatar
-              userName={getEntityPresentation(comment.author)}
-              size={40}
-              source={{uri: comment.author.avatarUrl}}
-            />
-            <View style={styles.comment}>
-              <Text>
-                <Text style={styles.authorName}>
-                  {getEntityPresentation(comment.author)}
-                </Text>
-                <Text style={{color: uiTheme.colors.$icon}}>
-                  {' '}{relativeDate(comment.created)}
-                </Text>
-              </Text>
-              <View style={styles.commentText}>
-                {this._renderComment(comment, attachments)}
-              </View>
-            </View>
-          </View>
-        }
+      <MarkdownView
+        testID="commentMarkdown"
+        attachments={props.attachments}
+        uiTheme={props.uiTheme}
+      >
+        {props.comment.text}
+      </MarkdownView>
+    );
+  };
+
+  const renderComment = () => {
+    const {comment} = props;
+    const usesMarkdown: boolean = comment.usesMarkdown;
+    const testID: string = comment.deleted ? 'commentDeleted' : usesMarkdown ? 'commentMarkdown' : 'commentYTWiki';
+    return (
+      <View testID={testID}>
+        {comment.deleted && renderDeletedComment()}
+        {!comment.deleted && usesMarkdown && renderMarkdown()}
+        {!comment.deleted && !usesMarkdown && renderYoutrackWiki()}
       </View>
     );
+  };
+
+
+  const {comment, attachments, uiTheme, activitiesEnabled = true} = props;
+
+  if (activitiesEnabled) {
+    return renderComment();
   }
+
+  const userPresentation: string = getEntityPresentation(comment.author);
+  return (
+    <View
+      testID="commentLegacy"
+      style={styles.commentWrapper}
+    >
+      <Avatar
+        userName={userPresentation}
+        size={40}
+        source={{uri: comment.author.avatarUrl}}
+      />
+      <View style={styles.comment}>
+        <Text>
+          <Text testID="commentLegacyAuthor" style={styles.authorName}>
+            {userPresentation}
+          </Text>
+          <Text style={{color: uiTheme.colors.$icon}}>
+            {' '}{relativeDate(comment.created)}
+          </Text>
+        </Text>
+        <View style={styles.commentText}>
+          {renderComment()}
+        </View>
+      </View>
+    </View>
+  );
 }
+
+export default React.memo<Props>(Comment);

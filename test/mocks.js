@@ -4,6 +4,7 @@ import sinon from 'sinon';
 import type {StorageState} from '../src/components/storage/storage';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
+import {ResourceTypes} from '../src/components/api/api__resource-types';
 
 const sandbox = sinon.sandbox.create();
 
@@ -72,6 +73,93 @@ const navigatorMock = {
   updater: jest.fn()
 };
 
+function createUserMock(data = {}) {
+  return Object.assign({
+    $type: ResourceTypes.USER,
+    id: uuid(),
+    ringId: uuid(),
+    fullName: randomWord(),
+    name: randomWord(),
+    login: randomWord(),
+    avatarUrl: 'https://unsplash.it/32/32',
+    guest: false,
+    profiles: {
+      general: {
+        useMarkup: true
+      },
+      notifications: {},
+      appearance: {},
+      issuesList: {},
+      timetracking: {}
+    },
+    userPermissions: {
+      has: () => true
+    }
+  }, data);
+}
+
+function createProjectMock(data) {
+  return Object.assign({
+    shortName: uuid().toString().toUpperCase(),
+    name: uuid(),
+    ringId: uuid(),
+    iconUrl: null,
+    archived: false,
+    id: uuid(),
+    $type: ResourceTypes.PROJECT,
+    plugins: {
+      timeTrackingSettings: {
+        enabled: true
+      }
+    }
+  }, data);
+}
+
+
+function createCommentMock(data = {}) {
+  return Object.assign(
+    {
+      $type: ResourceTypes.ISSUE_COMMENT,
+      id: uuid(),
+      usesMarkdown: true,
+      text: randomSentence(3),
+      author: createUserMock(),
+      deleted: false,
+      created: getPastTime(),
+      draftComment: {
+        text: randomWord()
+      },
+      issue: {
+        project: createProjectMock()
+      }
+
+    },
+    data
+  );
+}
+
+function getRecentTime() {
+  return Date.now();
+}
+
+function getPastTime() {
+  const date = getRecentTime();
+  return date - 1000;
+}
+
+function uuid() {
+  uuid.id = (uuid.id || 1);
+  return `${uuid.id++}`;
+}
+
+function randomWord() {
+  return `A${uuid()}`;
+}
+
+function randomSentence(n) {
+  const word = randomWord();
+  return n ? word.repeat(n) : word;
+}
 
 export default {
   sandbox,
@@ -82,5 +170,8 @@ export default {
   createIssueFieldMock: createIssuePriorityFieldMock,
   createMockStore,
 
-  navigatorMock
+  navigatorMock,
+  createCommentMock,
+
+  randomSentence
 };

@@ -27,7 +27,7 @@ export default EStyleSheet.create({
   },
   deletedCommentText: {
     ...mainText,
-    color: '$textSecondary'
+    color: '$icon'
   },
   actions: {
     marginTop: UNIT,

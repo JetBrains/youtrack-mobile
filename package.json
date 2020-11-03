@@ -77,7 +77,8 @@
       "^[./a-zA-Z0-9$_-]+\\.(bmp|gif|jpg|jpeg|png|psd|svg|webp)$": "<rootDir>/node_modules/react-native/jest/assetFileTransformer.js"
     },
     "setupFilesAfterEnv": [
-      "./test/jest-setup.js"
+      "./test/jest-setup.js",
+      "@testing-library/jest-native/extend-expect"
     ],
     "testResultsProcessor": "jest-teamcity-reporter",
     "coverageReporters": [
@@ -180,6 +181,8 @@
   "devDependencies": {
     "@babel/core": "^7.4.5",
     "@babel/runtime": "^7.4.5",
+    "@testing-library/jest-native": "^3.4.3",
+    "@testing-library/react-native": "^7.1.0",
     "babel-eslint": "9.0.0",
     "babel-jest": "24.8.0",
     "chai": "3.5.0",
