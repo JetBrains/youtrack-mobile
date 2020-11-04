@@ -25,7 +25,7 @@ const dark: UITheme = {
     $disabled: '#5d5d5d',
 
     $icon: '#9f9f9f',
-    $iconAccent: '#b8d1e5',
+    $iconAccent: '#577996',
 
     $mask: '#FFFFFF57',
     $navigation: '#696969',
