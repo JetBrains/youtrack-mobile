@@ -20,7 +20,7 @@ type Props = {
   leftButton?: ?React$Element<any> | null,
   rightButton?: ?React$Element<any> | null,
   extraButton?: ?React$Element<any> | null,
-  children?: ?React$Element<any>,
+  children?: any,
   style?: ViewStyleProp,
   title?: string
 }

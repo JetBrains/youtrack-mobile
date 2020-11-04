@@ -11,9 +11,11 @@ import ReactionIcon from '../../../components/reactions/reaction-icon';
 import {HIT_SLOP} from '../../../components/common-styles/button';
 import styles from './single-issue-activity.styles';
 
+import type {Reaction} from '../../../flow/Reaction';
+
 type Props = {
   onHide: () => void,
-  onSelect: (reactionName: string) => void,
+  onSelect: (reaction: Reaction) => void,
 }
 
 const ReactionsPanel = (props: Props) => {
@@ -34,7 +36,7 @@ const ReactionsPanel = (props: Props) => {
                 <TouchableOpacity
                   style={styles.reactionButton}
                   hitSlop={HIT_SLOP}
-                  onPress={() => props.onSelect(reactionName)}>
+                  onPress={() => props.onSelect({reaction: reactionName})}>
                   <ReactionIcon width={21} name={reactionName}/>
                 </TouchableOpacity>
               </View>

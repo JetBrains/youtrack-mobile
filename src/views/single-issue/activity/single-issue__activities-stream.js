@@ -40,11 +40,12 @@ import {UNIT} from '../../../components/variables/variables';
 import styles from './single-issue-activity.styles';
 
 import type {ActivityItem, IssueActivity} from '../../../flow/Activity';
-import type {Attachment} from '../../../flow/CustomFields';
+import type {Attachment, IssueComment} from '../../../flow/CustomFields';
+import type {Reaction} from '../../../flow/Reaction';
 import type {UITheme} from '../../../flow/Theme';
+import type {User} from '../../../flow/User';
 import type {WorkTimeSettings} from '../../../flow/WorkTimeSettings';
 import type {YouTrackWiki} from '../../../flow/Wiki';
-import type {User} from '../../../flow/User';
 
 const CATEGORY_NAME = 'Issue Stream';
 
@@ -352,6 +353,10 @@ function SingleIssueActivities(props: Props) {
     }
   };
 
+  const selectReaction = (comment: IssueComment, reaction: Reaction) => {
+    props.onReactionSelect(props.issueId, comment, reaction);
+  };
+
   const renderCommentActivity = (activityGroup: Object) => {
     const comment: ActivityItem = firstActivityChange(activityGroup.comment);
     if (!comment) {
@@ -385,9 +390,9 @@ function SingleIssueActivities(props: Props) {
             color={styles.iconAccent.color}
           />}
           {<CommentReactions
-            reactions={comment.reactions}
-            reactionOrder={comment.reactionOrder}
+            comment={comment}
             currentUser={props.currentUser}
+            onReactionSelect={selectReaction}
           />}
 
         </View>
@@ -513,9 +518,9 @@ function SingleIssueActivities(props: Props) {
 
       {reactionState.isReactionsPanelVisible && (
         <ReactionsPanel
-          onSelect={(reactionId: string) => {
+          onSelect={(reaction: Reaction) => {
             hideReactionsPanel();
-            props.onReactionSelect(props.issueId, reactionState.currentComment.id, reactionId);
+            selectReaction(reactionState.currentComment, reaction);
           }}
           onHide={hideReactionsPanel}
         />

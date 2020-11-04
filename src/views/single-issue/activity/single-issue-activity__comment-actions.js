@@ -20,9 +20,12 @@ import {
 
 import * as activityHelper from './single-issue-activity__helper';
 
+import type IssueAPI from '../../../components/api/api__issue';
 import type {IssueActivity} from '../../../flow/Activity';
+import type {Reaction} from '../../../flow/Reaction';
 import type {State as IssueActivityState} from './single-issue-activity__reducers';
 import type {State as IssueCommentActivityState} from './single-issue-activity__comment-reducers';
+import type {User} from '../../../flow/User';
 
 const CATEGORY_NAME = 'Issue';
 
@@ -356,15 +359,27 @@ export function onOpenCommentVisibilitySelect(comment: IssueComment) {
   };
 }
 
-export function onReactionSelect(issueId: string, commentId: string, reactionId: string) {
+export function onReactionSelect(issueId: string, comment: IssueComment, reaction: Reaction) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const api: Api = getApi();
-    usage.trackEvent(CATEGORY_NAME, 'Open Comment Reactions');
+    const issueApi: IssueAPI = getApi().issue;
+    //$FlowFixMe
+    const currentUser: User = getState().app.user;
+    usage.trackEvent(CATEGORY_NAME, 'Reaction select');
     try {
-      await api.issue.addCommentReaction(issueId, commentId, reactionId);
+      const existReaction: boolean = comment.reactions.some((it: Reaction) => {
+        return (
+          (it.reaction === reaction.reaction || it.id === reaction.id) &&
+          reaction.author.id === currentUser.id
+        );
+      });
+      if (existReaction) {
+        await issueApi.removeCommentReaction(issueId, comment.id, reaction.id);
+      } else {
+        await issueApi.addCommentReaction(issueId, comment.id, reaction.reaction);
+      }
       dispatch(loadActivity(true));
     } catch (error) {
-      const errorMsg: string = `Failed to add a reaction ${reactionId}`;
+      const errorMsg: string = `Failed to update a reaction ${reaction?.reaction}`;
       log.warn(errorMsg, error);
       notify(errorMsg, error);
     }

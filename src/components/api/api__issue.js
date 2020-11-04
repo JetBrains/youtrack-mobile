@@ -120,12 +120,17 @@ export default class IssueAPI extends ApiBase {
     return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/comments/${commentId}`, 'DELETE', null, {parseJson: false});
   }
 
-  async addCommentReaction(issueId: string, commentId: string, reactionId: string) {
+  async addCommentReaction(issueId: string, commentId: string, reactionName: string) {
     const queryString = qs.stringify({
       fields: issueFields.reaction.toString()
     });
     const url: string = `${this.youTrackIssueUrl}/${issueId}/comments/${commentId}/reactions?${queryString}`;
-    return this.makeAuthorizedRequest(url, 'POST', {reaction: reactionId});
+    return this.makeAuthorizedRequest(url, 'POST', {reaction: reactionName});
+  }
+
+  async removeCommentReaction(issueId: string, commentId: string, reactionId: string) {
+    const url: string = `${this.youTrackIssueUrl}/${issueId}/comments/${commentId}/reactions/${reactionId}`;
+    return this.makeAuthorizedRequest(url, 'DELETE', null, {parseJson: false});
   }
 
   async getIssueAttachments(issueId: string): Promise<Array<Attachment>> {
