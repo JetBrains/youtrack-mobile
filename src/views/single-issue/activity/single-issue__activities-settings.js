@@ -3,20 +3,20 @@
 import React, {PureComponent} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
-import {getIssueActivityIcon, toggleIssueActivityEnabledType} from './single-issue-activity__helper';
-import {IconAngleDown, IconClose} from '../../../components/icon/icon';
 import Switch from 'react-native-switch-pro';
-import ModalView from '../../../components/modal-view/modal-view';
-import Header from '../../../components/header/header';
+
+import ModalPanelBottom from '../../../components/modal-panel-bottom/modal-panel-bottom';
+import {getIssueActivityIcon, toggleIssueActivityEnabledType} from './single-issue-activity__helper';
+import {IconAngleDown} from '../../../components/icon/icon';
 
 import {HIT_SLOP} from '../../../components/common-styles/button';
 
 import styles from './single-issue-activity.styles';
 
 import type {ActivityType} from '../../../flow/Activity';
+import type {UITheme} from '../../../flow/Theme';
 import type {UserAppearanceProfile} from '../../../flow/User';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import type {UITheme} from '../../../flow/Theme';
 
 type Props = {
   issueActivityTypes: Array<ActivityType>,
@@ -109,24 +109,16 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
 
   renderSettingsDialog() {
     return (
-      <ModalView
-        transparent={true}
-        animationType="slide"
+      <ModalPanelBottom
         testID="activitySettingsDialog"
-        style={styles.settingsContainer}
+        title="Activity Settings"
+        onHide={this.toggleSettingsDialogVisibility}
       >
-        <View style={styles.settingsContent}>
-          <Header
-            leftButton={<IconClose size={21} color={this.props.uiTheme.colors.$link}/>}
-            onBack={this.toggleSettingsDialogVisibility}
-          >
-            <Text style={styles.settingsTitle}>Activity Settings</Text>
-          </Header>
-
+        <>
           {this.renderOrderItem()}
           {this.renderTypesList()}
-        </View>
-      </ModalView>
+        </>
+      </ModalPanelBottom>
     );
   }
 

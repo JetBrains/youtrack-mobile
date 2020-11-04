@@ -1,54 +1,62 @@
-import React, {Suspense} from 'react';
+import {lazy} from 'react';
 
-import {Text, View} from 'react-native';
-
-import ReactionIcon from './reaction-icon';
-import reactionNames from './reactions-name-list';
-
-import {styles} from './reactions.style';
-
-import type {Reaction} from '../../flow/Reaction';
-
-type ReactionsType = {
-  reactions: Array<Reaction>,
-  reactionOrder: string
-}
-
-
-const Reactions = (props: ReactionsType) => {
-  if (!props.reactionOrder || props.reactions?.length === 0) {
-    return null;
-  }
-
-  const reactionsMap = {};
-  props.reactions.map((reaction: Reaction) => reactionsMap[reaction.reaction] = reaction);
-
-  return (
-    <Suspense
-      fallback={null}
-    >
-      <View style={styles.container}>
-        {props.reactionOrder.split('|').map((reactionName: string) => {
-          if (!reactionNames.includes(reactionName)) {
-            return null;
-          }
-
-          const count: number = props.reactions.filter((it: Reaction) => it.reaction === reactionName).length;
-          return (
-            <View
-              key={reactionsMap[reactionName].id}
-              style={styles.reaction}
-            >
-              <ReactionIcon name={reactionName}/>
-              {count > 1 && <Text style={styles.reactionCount}>{count}</Text>}
-            </View>
-          );
-        })}
-      </View>
-    </Suspense>
-  );
+const reactionsMap = {
+  yes: lazy(() => import('./assets/yes.svg')),
+  thanks: lazy(() => import('./assets/thanks.svg')),
+  'thumbs-up': lazy(() => import('./assets/thumbs-up.svg')),
+  'thumbs-down': lazy(() => import('./assets/thumbs-down.svg')),
+  strong: lazy(() => import('./assets/strong.svg')),
+  clapping: lazy(() => import('./assets/clapping.svg')),
+  ok: lazy(() => import('./assets/ok.svg')),
+  congratulations: lazy(() => import('./assets/congratulations.svg')),
+  glad: lazy(() => import('./assets/glad.svg')),
+  worry: lazy(() => import('./assets/worry.svg')),
+  grimacing: lazy(() => import('./assets/grimacing.svg')),
+  grinning: lazy(() => import('./assets/grinning.svg')),
+  joy: lazy(() => import('./assets/joy.svg')),
+  'tongue-out': lazy(() => import('./assets/tongue-out.svg')),
+  saint: lazy(() => import('./assets/saint.svg')),
+  cool: lazy(() => import('./assets/cool.svg')),
+  surprised: lazy(() => import('./assets/surprised.svg')),
+  sleepy: lazy(() => import('./assets/sleepy.svg')),
+  relieved: lazy(() => import('./assets/relieved.svg')),
+  scared: lazy(() => import('./assets/scared.svg')),
+  sick: lazy(() => import('./assets/sick.svg')),
+  tired: lazy(() => import('./assets/tired.svg')),
+  tears: lazy(() => import('./assets/tears.svg')),
+  wink: lazy(() => import('./assets/wink.svg')),
+  nerd: lazy(() => import('./assets/nerd.svg')),
+  'crossed-fingers': lazy(() => import('./assets/crossed-fingers.svg')),
+  waiting: lazy(() => import('./assets/waiting.svg')),
+  'thank-you': lazy(() => import('./assets/thank-you.svg')),
+  fist: lazy(() => import('./assets/fist.svg')),
+  'raised-hand': lazy(() => import('./assets/raised-hand.svg')),
+  wave: lazy(() => import('./assets/wave.svg')),
+  rock: lazy(() => import('./assets/rock.svg')),
+  'mind-blown': lazy(() => import('./assets/mind-blown.svg')),
+  'cat-in-love': lazy(() => import('./assets/cat-in-love.svg')),
+  'scared-cat': lazy(() => import('./assets/scared-cat.svg')),
+  rocket: lazy(() => import('./assets/rocket.svg')),
+  teddybear: lazy(() => import('./assets/teddybear.svg')),
+  'red-heart': lazy(() => import('./assets/red-heart.svg')),
+  no: lazy(() => import('./assets/no.svg')),
+  question: lazy(() => import('./assets/question.svg')),
+  '100': lazy(() => import('./assets/100.svg')),
+  eyes: lazy(() => import('./assets/eyes.svg')),
+  'plus-one': lazy(() => import('./assets/plus-one.svg')),
+  'minus-one': lazy(() => import('./assets/minus-one.svg')),
+  comment: lazy(() => import('./assets/comment.svg')),
+  okay: lazy(() => import('./assets/okay.svg')),
+  zero: lazy(() => import('./assets/zero.svg')),
+  one: lazy(() => import(`./assets/one.svg`)),
+  two: lazy(() => import('./assets/two.svg')),
+  three: lazy(() => import('./assets/three.svg')),
+  four: lazy(() => import('./assets/four.svg')),
+  five: lazy(() => import('./assets/five.svg')),
+  six: lazy(() => import('./assets/six.svg')),
+  seven: lazy(() => import('./assets/seven.svg')),
+  eight: lazy(() => import('./assets/eight.svg')),
+  nine: lazy(() => import('./assets/nine.svg'))
 };
 
-export {
-  Reactions
-};
+export default reactionsMap;

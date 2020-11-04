@@ -1,6 +1,6 @@
 /* @flow */
 
-import React from 'react';
+import React, {useState} from 'react';
 
 import {View, Text, TouchableOpacity} from 'react-native';
 
@@ -11,10 +11,13 @@ import Comment from '../../../components/comment/comment';
 import CommentVisibility from '../../../components/comment/comment__visibility';
 import CustomFieldChangeDelimiter from '../../../components/custom-field/custom-field__change-delimiter';
 import Diff from '../../../components/diff/diff';
+import Feature from '../../../components/feature/feature';
 import getEventTitle from '../../../components/activity/activity__history-title';
 import IssueVisibility from '../../../components/visibility/issue-visibility';
 import log from '../../../components/log/log';
-import {Reactions} from '../../../components/reactions/reactions';
+import {CommentReactions} from '../../../components/comment/comment-reactions';
+import ReactionAddIcon from '../../../components/reactions/new-reaction.svg';
+import ReactionsPanel from './single-issue__activities-reactions-dialog';
 import Router from '../../../components/router/router';
 import usage from '../../../components/usage/usage';
 import {
@@ -41,6 +44,7 @@ import type {Attachment} from '../../../flow/CustomFields';
 import type {UITheme} from '../../../flow/Theme';
 import type {WorkTimeSettings} from '../../../flow/WorkTimeSettings';
 import type {YouTrackWiki} from '../../../flow/Wiki';
+import type {User} from '../../../flow/User';
 
 const CATEGORY_NAME = 'Issue Stream';
 
@@ -49,9 +53,12 @@ type Props = {
   attachments: Array<Attachment>,
   commentActions: Object,
   issueFields: Array<Object>,
+  issueId: string,
   uiTheme: UITheme,
   workTimeSettings: ?WorkTimeSettings,
   youtrackWiki: $Shape<YouTrackWiki>,
+  onReactionSelect: (issueId: string, commentId: string, reactionId: string) => any,
+  currentUser: User
 };
 
 type Change = {
@@ -61,6 +68,10 @@ type Change = {
 
 
 function SingleIssueActivities(props: Props) {
+  const [reactionState, setReactionState] = useState({
+    isReactionsPanelVisible: false,
+    currentComment: null
+  });
 
   const isMultiValueActivity = (activity: Object) => {
     if (isActivityCategory.customField(activity)) {
@@ -296,27 +307,48 @@ function SingleIssueActivities(props: Props) {
 
     const canComment: boolean = props.commentActions.canCommentOn;
     const canUpdate: boolean = props.commentActions.canUpdateComment(comment);
-    const mainAction = (canUpdate || canComment) ? <TouchableOpacity
-      hitSlop={HIT_SLOP}
-      disabled={disabled}
-      onPress={() => isAuthor ? props.commentActions.onStartEditing(comment) : props.commentActions.onReply(comment)}>
-      <Text style={styles.link}>
-        {isAuthor ? 'Edit' : 'Reply'}
-      </Text>
-    </TouchableOpacity> : <View/>;
 
     if (!comment.deleted) {
-      return <View style={styles.activityCommentActions}>
-        {mainAction}
-        <TouchableOpacity
-          hitSlop={HIT_SLOP}
-          disabled={disabled}
-          onPress={() => props.commentActions.onShowCommentActions(comment)}>
-          {isIOSPlatform()
-            ? <IconMoreOptions size={24} color={styles.secondaryTextColor.color}/>
-            : <IconDrag size={22} color={styles.secondaryTextColor.color}/>}
-        </TouchableOpacity>
-      </View>;
+      // $FlowFixMe
+      const reactionAddIcon: string = <ReactionAddIcon style={styles.activityCommentActionsAddReaction}/>;
+      return (
+        <View style={styles.activityCommentActions}>
+          <View style={styles.activityCommentActionsMain}>
+            {(canUpdate || canComment) && (
+              <TouchableOpacity
+                hitSlop={HIT_SLOP}
+                disabled={disabled}
+                onPress={() => isAuthor ? props.commentActions.onStartEditing(comment) : props.commentActions.onReply(comment)}>
+                <Text style={styles.link}>
+                  {isAuthor ? 'Edit' : 'Reply'}
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
+
+          <Feature version={'2020.1'}>
+            <TouchableOpacity
+              hitSlop={HIT_SLOP}
+              disabled={disabled}
+              onPress={() => setReactionState({
+                isReactionsPanelVisible: true,
+                currentComment: comment
+              })}
+            >
+              {reactionAddIcon}
+            </TouchableOpacity>
+          </Feature>
+
+          <TouchableOpacity
+            hitSlop={HIT_SLOP}
+            disabled={disabled}
+            onPress={() => props.commentActions.onShowCommentActions(comment)}>
+            {isIOSPlatform()
+              ? <IconMoreOptions size={24} color={styles.activityCommentActionsOther.color}/>
+              : <IconDrag size={22} color={styles.activityCommentActionsOther.color}/>}
+          </TouchableOpacity>
+        </View>
+      );
     }
   };
 
@@ -352,7 +384,11 @@ function SingleIssueActivities(props: Props) {
             visibility={IssueVisibility.getVisibilityPresentation(comment.visibility)}
             color={styles.iconAccent.color}
           />}
-          {<Reactions reactions={comment.reactions} reactionOrder={comment.reactionOrder}/>}
+          {<CommentReactions
+            reactions={comment.reactions}
+            reactionOrder={comment.reactionOrder}
+            currentUser={props.currentUser}
+          />}
 
         </View>
       </View>
@@ -428,16 +464,18 @@ function SingleIssueActivities(props: Props) {
     }
   };
 
-  const {activities, uiTheme} = props;
+  const hideReactionsPanel = () => setReactionState({isReactionsPanelVisible: false, currentComment: null});
 
-  if (!activities) {
+
+  if (!props.activities) {
     return <SkeletonIssueActivities/>;
   }
 
+
   return (
     <View>
-      {activities.length > 0
-        ? activities.map((activityGroup, index) => {
+      {props.activities.length > 0
+        ? props.activities.map((activityGroup, index) => {
           if (activityGroup.hidden) {
             return null;
           }
@@ -458,7 +496,11 @@ function SingleIssueActivities(props: Props) {
 
                   {activityGroup.work && renderWorkActivity(activityGroup)}
 
-                  {renderHistoryAndRelatedChanges(activityGroup, !!activityGroup.comment || !!activityGroup.work, uiTheme)}
+                  {renderHistoryAndRelatedChanges(
+                    activityGroup,
+                    !!activityGroup.comment || !!activityGroup.work,
+                    props.uiTheme
+                  )}
 
                   {activityGroup.comment && renderCommentActions(activityGroup)}
                 </View>
@@ -468,6 +510,16 @@ function SingleIssueActivities(props: Props) {
           );
         })
         : <Text style={styles.activityNoActivity}>No activity yet</Text>}
+
+      {reactionState.isReactionsPanelVisible && (
+        <ReactionsPanel
+          onSelect={(reactionId: string) => {
+            hideReactionsPanel();
+            props.onReactionSelect(props.issueId, reactionState.currentComment.id, reactionId);
+          }}
+          onHide={hideReactionsPanel}
+        />
+      )}
     </View>
   );
 }

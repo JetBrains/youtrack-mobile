@@ -136,7 +136,9 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       startReply,
       deleteComment,
       restoreComment,
-      deleteCommentPermanently
+      deleteCommentPermanently,
+      onReactionSelect,
+      user
     } = this.props;
 
     const youtrackWiki: YouTrackWiki = {
@@ -177,9 +179,12 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
           attachments={issue?.attachments}
           commentActions={commentActions}
           issueFields={issue?.fields}
+          issueId={issue?.id}
           uiTheme={uiTheme}
           workTimeSettings={workTimeSettings}
           youtrackWiki={youtrackWiki}
+          onReactionSelect={onReactionSelect}
+          currentUser={user}
         />
       </View>
     );

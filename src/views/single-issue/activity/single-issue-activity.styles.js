@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../../../components/variables/variables';
-import {HEADER_FONT_SIZE, MAIN_FONT_SIZE, mainText, secondaryText} from '../../../components/common-styles/typography';
+import {MAIN_FONT_SIZE, mainText, secondaryText} from '../../../components/common-styles/typography';
 import {separator} from '../../../components/common-styles/list';
 
 const secondaryTextColor = {
@@ -111,8 +111,19 @@ export default EStyleSheet.create({
   },
   activityCommentActions: {
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
     marginTop: UNIT * 1.5
+  },
+  activityCommentActionsMain: {
+    flexGrow: 1
+  },
+  activityCommentActionsAddReaction: {
+    color: '$iconAccent',
+    marginRight: UNIT * 2
+  },
+  activityCommentActionsOther: {
+    color: '$mask'
   },
 
   settings: {
@@ -159,23 +170,6 @@ export default EStyleSheet.create({
   loadingIndicator: {
     marginTop: UNIT * 1.5
   },
-  settingsContainer: {
-    flex: 1,
-    justifyContent: 'flex-end'
-  },
-  settingsContent: {
-    padding: UNIT * 2,
-    paddingTop: UNIT,
-    paddingBottom: UNIT * 3,
-    borderTopWidth: 0.7,
-    borderColor: '$icon',
-    backgroundColor: '$background'
-  },
-  settingsTitle: {
-    fontSize: HEADER_FONT_SIZE,
-    marginLeft: UNIT * 2,
-    ...secondaryTextColor
-  },
   settingsItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -197,5 +191,23 @@ export default EStyleSheet.create({
   secondaryTextColor: secondaryTextColor,
   iconAccent: {
     color: '$iconAccent'
+  },
+
+  reactionContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+    marginLeft: -UNIT
+  },
+  reactionItem: {
+    flex: 1,
+    flexBasis: '11.5%',
+    margin: '1%',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: UNIT
+  },
+  reactionButton: {
+    paddingHorizontal: UNIT / 2
   }
 });

@@ -355,3 +355,18 @@ export function onOpenCommentVisibilitySelect(comment: IssueComment) {
     }));
   };
 }
+
+export function onReactionSelect(issueId: string, commentId: string, reactionId: string) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    usage.trackEvent(CATEGORY_NAME, 'Open Comment Reactions');
+    try {
+      await api.issue.addCommentReaction(issueId, commentId, reactionId);
+      dispatch(loadActivity(true));
+    } catch (error) {
+      const errorMsg: string = `Failed to add a reaction ${reactionId}`;
+      log.warn(errorMsg, error);
+      notify(errorMsg, error);
+    }
+  };
+}

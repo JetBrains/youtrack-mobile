@@ -1,7 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../variables/variables';
 
-import {mainText} from '../common-styles/typography';
+import {mainText, secondaryText} from '../common-styles/typography';
 
 export default EStyleSheet.create({
   commentWrapper: {
@@ -35,5 +35,34 @@ export default EStyleSheet.create({
   actionLink: {
     ...mainText,
     color: '$link'
+  },
+
+  reactionsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: UNIT / 2.5,
+  },
+  reactionsReaction: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: 26,
+    height: 24,
+    marginBottom: UNIT,
+    marginRight: UNIT,
+    paddingVertical: UNIT / 2,
+    paddingHorizontal: UNIT / 2,
+    borderRadius: UNIT / 2,
+    backgroundColor: '$boxBackground',
+    borderWidth: 1,
+    borderColor: 'transparent',
+  },
+  reactionsReactionSelected: {
+    borderColor: '$iconAccent',
+  },
+  reactionsReactionCount: {
+    ...secondaryText,
+    marginLeft: UNIT / 2,
+    color: '$icon'
   }
 });

@@ -22,12 +22,15 @@ const ISSUE_PROJECT_FIELDS = toField([
   }
 ]);
 
-const ISSUE_USER_FIELDS = toField([
-  'login',
+const ISSUE_USER_BASE_FIELDS = toField([
   'id',
+  'fullName'
+]);
+const ISSUE_USER_FIELDS = toField([
+  ISSUE_USER_BASE_FIELDS,
+  'login',
   'ringId',
   'avatarUrl',
-  'fullName'
 ]);
 
 const BUNDLE_VALUE = toField([
@@ -286,6 +289,12 @@ const COMMAND_SUGGESTION_FIELDS = toField([
 const USER_AGREEMENT_FIELDS = 'endUserAgreement(enabled,text,majorVersion,minorVersion)';
 const USER_CONSENT_FIELDS = 'endUserAgreementConsent(accepted,majorVersion,minorVersion)';
 
+const REACTION = toField([
+  'id',
+  'reaction',
+  {author: ISSUE_USER_BASE_FIELDS}
+]);
+
 export default {
   issuesOnList: ISSUE_SHORT_FIELDS,
   singleIssueLinks: toField({
@@ -346,5 +355,7 @@ export default {
 
   VISIBILITY: VISIBILITY_FIELDS,
 
-  ISSUE_TAGS_FIELDS: ISSUE_TAGS_FIELDS
+  ISSUE_TAGS_FIELDS: ISSUE_TAGS_FIELDS,
+
+  reaction: REACTION
 };
