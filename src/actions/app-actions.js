@@ -28,7 +28,7 @@ import Auth from '../components/auth/auth';
 import {loadAgileProfile} from '../views/agile-board/board-actions';
 import PushNotifications from '../components/push-notifications/push-notifications';
 import {EVERYTHING_CONTEXT} from '../components/search/search-context';
-import {storeSearchContext} from '../views/issue-list/issue-list-actions';
+import {storeSearchContext} from '../views/issues/issues-actions';
 import {isIOSPlatform} from '../util/util';
 import {CUSTOM_ERROR_MESSAGE, UNSUPPORTED_ERRORS} from '../components/error/error-messages';
 import {isUnsupportedFeatureError} from '../components/error/error-resolver';
@@ -516,7 +516,7 @@ function subscribeToURL() {
           return;
         }
         usage.trackEvent('app', 'Open issues query in app by URL');
-        Router.IssueList({query: issuesQuery});
+        Router.Issues({query: issuesQuery});
       });
   };
 }

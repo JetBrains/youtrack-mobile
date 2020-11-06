@@ -257,7 +257,7 @@ class Issue extends PureComponent<IssueProps, TabsState> {
     this.setState({isTransitionInProgress: true});
     const returned = Router.pop();
     if (!returned) {
-      Router.IssueList();
+      Router.Issues();
     }
   };
 

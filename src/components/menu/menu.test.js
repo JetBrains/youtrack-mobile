@@ -82,7 +82,7 @@ describe('<Menu/>', () => {
     });
 
     it('should not redirect to the same route ', () => {
-      instance.setCurrentRouteName(routeMap.IssueList);
+      instance.setCurrentRouteName(routeMap.Issues);
       instance.openIssueList();
 
       expect(Router.navigate).not.toHaveBeenCalled();
@@ -94,7 +94,7 @@ describe('<Menu/>', () => {
         instance.setCurrentRouteName(routeMap.AgileBoard);
         instance.openIssueList();
 
-        expect(Router.navigate).toHaveBeenCalledWith(routeMap.IssueList);
+        expect(Router.navigate).toHaveBeenCalledWith(routeMap.Issues);
       });
     });
 

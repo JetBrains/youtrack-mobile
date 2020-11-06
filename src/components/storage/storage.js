@@ -1,10 +1,10 @@
 /* @flow */
-'use strict';
 
 import AsyncStorage from '@react-native-community/async-storage';
 
 import log from '../log/log';
 import {notify} from '../notification/notification';
+import {routeMap} from '../../app-routes';
 
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {AuthParams} from '../../flow/Auth';
@@ -35,7 +35,7 @@ export type StorageState = {|
   agileLastSprint: ?Sprint,
   agileDefaultBoard: ?Board,
   agileQuery: ?string,
-  lastRoute: ?('IssueList' | 'Inbox' | 'AgileBoard'),
+  lastRoute: ?(typeof routeMap.Issues | typeof routeMap.Inbox | typeof routeMap.AgileBoard),
   currentAppVersion: ?string,
   issueActivitiesEnabledTypes: ?Array<Object>,
   permissions: ?Array<PermissionCacheItem>,

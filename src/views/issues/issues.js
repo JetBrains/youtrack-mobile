@@ -15,20 +15,20 @@ import {notifyError} from '../../components/notification/notification';
 import usage from '../../components/usage/usage';
 import log from '../../components/log/log';
 
-import IssueRow from './issue-list__row';
+import IssueRow from './issues__row';
 import ErrorMessage from '../../components/error-message/error-message';
 import Router from '../../components/router/router';
 import {View as AnimatedView} from 'react-native-animatable';
-import * as issueActions from './issue-list-actions';
+import * as issueActions from './issues-actions';
 import Select from '../../components/select/select';
 import QueryAssistPanel from '../../components/query-assist/query-assist-panel';
 import SearchQueryPreview from '../../components/query-assist/search-query-preview';
-import IssuesCount from './issue-list__count';
+import IssuesCount from './issues__count';
 
 import {IconAdd, IconAngleDown, IconBookmark} from '../../components/icon/icon';
 import {isReactElement} from '../../util/util';
 import {SkeletonIssues} from '../../components/skeleton/skeleton';
-import {initialState} from './issue-list-reducers';
+import {initialState} from './issues-reducers';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
 
@@ -36,15 +36,15 @@ import SelectSectioned from '../../components/select/select-sectioned';
 import {ThemeContext} from '../../components/theme/theme-context';
 
 import {UNIT} from '../../components/variables/variables';
-import styles from './issue-list.styles';
+import styles from './issues.styles';
 
 import type Auth from '../../components/auth/auth';
 import type Api from '../../components/api/api';
-import type {IssuesListState} from './issue-list-reducers';
+import type {IssuesState} from './issues-reducers';
 import type {IssueOnList} from '../../flow/Issue';
 import type {Theme, UITheme} from '../../flow/Theme';
 
-type Props = $Shape<IssuesListState & typeof issueActions & {
+type Props = $Shape<IssuesState & typeof issueActions & {
   auth: Auth,
   api: Api,
   initialSearchQuery: ?string,
@@ -56,7 +56,7 @@ type State = {
   clearSearchQuery: boolean
 }
 
-export class IssueList extends Component<Props, State> {
+export class Issues extends Component<Props, State> {
   searchPanelNode: Object;
 
   constructor() {
@@ -116,7 +116,7 @@ export class IssueList extends Component<Props, State> {
         key={item.id}
         issue={item}
         onClick={(issue) => this.goToIssue(issue)}
-        onTagPress={(query) => Router.IssueList({query})}/>
+        onTagPress={(query) => Router.Issues({query})}/>
     );
   };
 
@@ -397,4 +397,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(IssueList);
+export default connect(mapStateToProps, mapDispatchToProps)(Issues);

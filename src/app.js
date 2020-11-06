@@ -13,7 +13,7 @@ import Router from './components/router/router';
 import Home from './views/home/home';
 import EnterServer from './views/enter-server/enter-server';
 import LoginForm from './views/log-in/log-in';
-import IssueList from './views/issue-list/issue-list';
+import Issues from './views/issues/issues';
 import Issue from './views/issue/issue';
 import CreateIssue from './views/create-issue/create-issue';
 import Image from './views/image/image';
@@ -128,8 +128,8 @@ class YouTrackMobile extends Component<void, void> {
     });
 
     Router.registerRoute({
-      name: routeMap.IssueList,
-      component: IssueList,
+      name: routeMap.Issues,
+      component: Issues,
       type: 'reset'
     });
 

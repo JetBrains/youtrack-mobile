@@ -7,7 +7,7 @@ export const routeMap = {
   EnterServer: 'EnterServer',
   Home: 'Home',
   Inbox: 'Inbox',
-  IssueList: 'IssueList',
+  Issues: 'Issues',
   LogIn: 'LogIn',
   Settings: 'Settings',
   Image: 'Image',
@@ -15,4 +15,4 @@ export const routeMap = {
   WikiPage: 'WikiPage'
 };
 
-export const rootRoutesList = [routeMap.IssueList, routeMap.AgileBoard, routeMap.Inbox, routeMap.Settings];
+export const rootRoutesList = [routeMap.Issues, routeMap.AgileBoard, routeMap.Inbox, routeMap.Settings];

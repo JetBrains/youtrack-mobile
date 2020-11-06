@@ -10,7 +10,7 @@ import {getAssistSuggestions, getCachedUserQueries} from '../../components/query
 import {notifyError} from '../../components/notification/notification';
 import {updateUserGeneralProfile} from '../../actions/app-actions';
 
-import * as types from './issue-list-action-types';
+import * as types from './issues-action-types';
 
 import type Api from '../../components/api/api';
 import type {Folder} from '../../flow/User';

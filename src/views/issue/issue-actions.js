@@ -433,7 +433,7 @@ export function unloadIssueIfExist() {
 
 export function openIssueListWithSearch(query: string) {
   return () => {
-    Router.IssueList({query});
+    Router.Issues({query});
   };
 }
 
@@ -465,7 +465,7 @@ export function applyCommand(command: string) {
 
       if (command.trim() === 'delete') {
         notify('Issue deleted');
-        return Router.IssueList();
+        return Router.Issues();
       }
 
       notify('Command applied');

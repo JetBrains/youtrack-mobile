@@ -17,7 +17,7 @@ import Avatar from '../../components/avatar/avatar';
 
 import {ThemeContext} from '../../components/theme/theme-context';
 
-import styles from './issue-list.styles';
+import styles from './issues.styles';
 
 import type {AnyIssue} from '../../flow/Issue';
 import type {BundleValue} from '../../flow/CustomFields';

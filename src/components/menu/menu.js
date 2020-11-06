@@ -59,8 +59,8 @@ class Menu extends Component<Props, State> {
   };
 
   openIssueList = () => {
-    if (this.canNavigateTo(routeMap.IssueList)) {
-      Router.IssueList();
+    if (this.canNavigateTo(routeMap.Issues)) {
+      Router.Issues();
     }
   };
 
@@ -107,8 +107,8 @@ class Menu extends Component<Props, State> {
         style={styles.menu}
       >
         <MenuItem
-          isActive={this.isActiveRoute(routeMap.IssueList)}
-          icon={<IconTask size={24} color={color(routeMap.IssueList)}/>}
+          isActive={this.isActiveRoute(routeMap.Issues)}
+          icon={<IconTask size={24} color={color(routeMap.Issues)}/>}
           label={'Issues'}
           onPress={this.openIssueList}
         />

@@ -1,10 +1,10 @@
 import {flushStoragePart, getStorageState, __setStorageState} from '../../components/storage/storage';
-import * as actions from './issue-list-actions';
+import * as actions from './issues-actions';
 
 import sinon from 'sinon';
-import reducer from './issue-list-reducers';
+import reducer from './issues-reducers';
 
-import * as types from './issue-list-action-types';
+import * as types from './issues-action-types';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
 
 let dispatch;
