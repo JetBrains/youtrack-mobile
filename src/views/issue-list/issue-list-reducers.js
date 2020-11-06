@@ -3,7 +3,7 @@ import {createReducer} from 'redux-create-reducer';
 import * as types from './issue-list-action-types';
 import {LOG_OUT} from '../../actions/action-types';
 import {ISSUE_CREATED} from '../create-issue/create-issue-action-types';
-import {ISSUE_UPDATED} from '../single-issue/single-issue-action-types';
+import {ISSUE_UPDATED} from '../issue/issue-action-types';
 import type {IssueOnList, IssueFull, TransformedSuggestions} from '../../flow/Issue';
 import type {Folder} from '../../flow/User';
 

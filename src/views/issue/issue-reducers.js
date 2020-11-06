@@ -1,9 +1,10 @@
 /* @flow */
 
 import {createReducer} from 'redux-create-reducer';
-import * as types from './single-issue-action-types';
-import {attachmentTypes} from './single-issue__attachment-actions-and-types';
+import * as types from './issue-action-types';
+import {attachmentTypes} from './issue__attachment-actions-and-types';
 import {ON_NAVIGATE_BACK} from '../../actions/action-types';
+import {routeMap} from '../../app-routes';
 
 import type {IssueFull, CommandSuggestionResponse, AnyIssue} from '../../flow/Issue';
 import type {CustomField, FieldValue, IssueProject} from '../../flow/CustomFields';
@@ -116,7 +117,7 @@ export default createReducer(initialState, {
   ...attachReducers,
 
   [ON_NAVIGATE_BACK]: (state: State, action: { closingView: { routeName: string, params: { issueId?: string } } }): State => {
-    const isIssueView = action.closingView.routeName === 'SingleIssue';
+    const isIssueView = action.closingView.routeName === routeMap.Issue;
 
     const previousIssueState = state.unloadedIssueState ? state.unloadedIssueState : initialState;
 

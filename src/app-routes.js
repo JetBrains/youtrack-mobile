@@ -11,7 +11,7 @@ export const routeMap = {
   LogIn: 'LogIn',
   Settings: 'Settings',
   Image: 'Image',
-  SingleIssue: 'SingleIssue',
+  Issue: 'Issue',
   WikiPage: 'WikiPage'
 };
 

@@ -14,7 +14,7 @@ import Home from './views/home/home';
 import EnterServer from './views/enter-server/enter-server';
 import LoginForm from './views/log-in/log-in';
 import IssueList from './views/issue-list/issue-list';
-import SingleIssue from './views/single-issue/single-issue';
+import Issue from './views/issue/issue';
 import CreateIssue from './views/create-issue/create-issue';
 import Image from './views/image/image';
 import AttachmentPreview from './views/attachment-preview/attachment-preview';
@@ -135,7 +135,7 @@ class YouTrackMobile extends Component<void, void> {
 
     Router.registerRoute({name: routeMap.Settings, component: Settings, type: 'reset'});
 
-    Router.registerRoute({name: routeMap.SingleIssue, component: SingleIssue});
+    Router.registerRoute({name: routeMap.Issue, component: Issue});
 
     Router.registerRoute({name: routeMap.Image, component: Image, modal: true});
 

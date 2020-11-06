@@ -1,8 +1,8 @@
 /* @flow */
 
 import {Clipboard, Share} from 'react-native';
-import * as types from './single-issue-action-types';
-import {attachmentTypes, attachmentActions} from './single-issue__attachment-actions-and-types';
+import * as types from './issue-action-types';
+import {attachmentTypes, attachmentActions} from './issue__attachment-actions-and-types';
 import ApiHelper from '../../components/api/api__helper';
 import {notify, notifyError} from '../../components/notification/notification';
 import {resolveError, resolveErrorMessage} from '../../components/error/error-resolver';
@@ -10,7 +10,7 @@ import log from '../../components/log/log';
 import Router from '../../components/router/router';
 import {showActions} from '../../components/action-sheet/action-sheet';
 import usage from '../../components/usage/usage';
-import {initialState} from './single-issue-reducers';
+import {initialState} from './issue-reducers';
 import {isIOSPlatform} from '../../util/util';
 import {receiveUserAppearanceProfile} from '../../actions/app-actions';
 
@@ -18,14 +18,14 @@ import type ActionSheet from '@expo/react-native-action-sheet/ActionSheet.ios';
 import type {IssueFull, CommandSuggestionResponse, OpenNestedViewParams} from '../../flow/Issue';
 import type {CustomField, IssueProject, FieldValue, Attachment} from '../../flow/CustomFields';
 import type Api from '../../components/api/api';
-import type {State as SingleIssueState} from './single-issue-reducers';
+import type {State as IssueState} from './issue-reducers';
 import type {UserAppearanceProfile} from '../../flow/User';
 import type {Visibility} from '../../flow/Visibility';
 
 const CATEGORY_NAME = 'Issue';
 
 type ApiGetter = () => Api;
-type StateGetter = () => { singleIssue: SingleIssueState };
+type StateGetter = () => { singleIssue: IssueState };
 
 export function setIssueId(issueId: string) {
   return {type: types.SET_ISSUE_ID, issueId};
@@ -412,10 +412,10 @@ export function showIssueActions(
 export function openNestedIssueView(params: OpenNestedViewParams) {
   return () => {
     if (!params.issue) {
-      return Router.SingleIssue({issueId: params.issueId});
+      return Router.Issue({issueId: params.issueId});
     }
 
-    Router.SingleIssue({
+    Router.Issue({
       issuePlaceholder: {...params.issue, ...{fieldHash: ApiHelper.makeFieldHash(params.issue)}},
       issueId: params.issue?.id
     });

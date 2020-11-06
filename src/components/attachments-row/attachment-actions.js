@@ -11,12 +11,12 @@ import {createAttachmentTypes} from './attachment-types';
 // import * as types from './attachment-types';
 import type Api from '../api/api';
 import type {Attachment} from '../../flow/CustomFields';
-import type {State as SingleIssueState} from '../../views/single-issue/single-issue-reducers';
+import type {State as IssueState} from '../../views/issue/issue-reducers';
 
 const CATEGORY_NAME = 'Issue';
 
 type ApiGetter = () => Api;
-type StateGetter = () => { singleIssue: SingleIssueState };
+type StateGetter = () => { singleIssue: IssueState };
 
 const attachFileMethod: Object = {
   openCamera: 'openCamera',

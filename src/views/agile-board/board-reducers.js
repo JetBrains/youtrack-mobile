@@ -2,7 +2,7 @@
 import * as types from './board-action-types';
 import {LOG_OUT} from '../../actions/action-types';
 import {ISSUE_CREATED} from '../create-issue/create-issue-action-types';
-import {ISSUE_UPDATED} from '../single-issue/single-issue-action-types';
+import {ISSUE_UPDATED} from '../issue/issue-action-types';
 import {createReducer} from 'redux-create-reducer';
 import {
   updateRowCollapsedState,

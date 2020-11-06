@@ -1,7 +1,7 @@
 /* @flow */
 
 import {createReducer} from 'redux-create-reducer';
-import * as types from '../single-issue-action-types';
+import * as types from '../issue-action-types';
 import type {IssueComment} from '../../../flow/CustomFields';
 
 export type State = {

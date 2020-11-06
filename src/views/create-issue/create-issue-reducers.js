@@ -8,7 +8,7 @@ import {attachmentTypes} from './create-issue__attachment-actions-and-types';
 
 import type {CustomField, FieldValue} from '../../flow/CustomFields';
 import type {IssueFull} from '../../flow/Issue';
-import type {State} from '../single-issue/single-issue-reducers';
+import type {State} from '../issue/issue-reducers';
 
 const notSelectedProject = {
   id: null,

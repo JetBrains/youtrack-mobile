@@ -15,22 +15,22 @@ import Header from '../../components/header/header';
 import usage from '../../components/usage/usage';
 import CommandDialog from '../../components/command-dialog/command-dialog';
 import ErrorMessage from '../../components/error-message/error-message';
-import styles from './single-issue.styles';
+import styles from './issue.styles';
 import {getReadableID} from '../../components/issue-formatter/issue-formatter';
-import * as issueActions from './single-issue-actions';
-import {attachmentActions} from './single-issue__attachment-actions-and-types';
+import * as issueActions from './issue-actions';
+import {attachmentActions} from './issue__attachment-actions-and-types';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
-import type {State as SingleIssueState} from './single-issue-reducers';
+import type {State as IssueState} from './issue-reducers';
 import type {AnyIssue, TabRoute} from '../../flow/Issue';
 import type {Attachment} from '../../flow/CustomFields';
 
 // $FlowFixMe: module throws on type check
 import {TabView, TabBar} from 'react-native-tab-view';
-import IssueDetails from './single-issue__details';
+import IssueDetails from './issue__details';
 
 import {IconBack, IconCheck, IconClose, IconMoreOptions, IconDrag} from '../../components/icon/icon';
-import IssueActivity from './activity/single-issue__activity';
+import IssueActivity from './activity/issue__activity';
 import IssueStar from '../../components/issue-actions/issue-star';
 import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
 import {isIOSPlatform} from '../../util/util';
@@ -59,14 +59,14 @@ type AdditionalProps = {
   removeAttachment: (attach: Attachment) => any
 };
 
-type SingleIssueProps = SingleIssueState & typeof issueActions & AdditionalProps;
+type IssueProps = IssueState & typeof issueActions & AdditionalProps;
 type TabsState = {
   index: number,
   routes: Array<TabRoute>,
   isTransitionInProgress: boolean
 };
 
-class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
+class Issue extends PureComponent<IssueProps, TabsState> {
   static contextTypes = {
     actionSheet: PropTypes.func
   };
@@ -88,7 +88,7 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
     this.loadIssue();
   }
 
-  componentDidUpdate(prevProps: $Shape<SingleIssueProps>): void {
+  componentDidUpdate(prevProps: $Shape<IssueProps>): void {
     if (this.props.editMode === true && !prevProps.editMode && this.state.index === 1) {
       this.switchToDetailsTab();
     }
@@ -482,7 +482,7 @@ class SingeIssueView extends PureComponent<SingleIssueProps, TabsState> {
   }
 }
 
-const mapStateToProps = (state: { app: Object, singleIssue: SingleIssueState }, ownProps): SingleIssueState => {
+const mapStateToProps = (state: { app: Object, singleIssue: IssueState }, ownProps): IssueState => {
   return {
     issuePermissions: state.app.issuePermissions,
     ...state.singleIssue,
@@ -499,4 +499,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SingeIssueView);
+export default connect(mapStateToProps, mapDispatchToProps)(Issue);

@@ -1,12 +1,12 @@
 /* @flow */
 
-import * as activityHelper from './single-issue-activity__helper';
-import * as types from '../single-issue-action-types';
+import * as activityHelper from './issue-activity__helper';
+import * as types from '../issue-action-types';
 
 import log from '../../../components/log/log';
 import type {IssueActivity} from '../../../flow/Activity';
 import type Api from '../../../components/api/api';
-import type {State as SingleIssueState} from '../single-issue-reducers';
+import type {State as SingleIssueState} from '../issue-reducers';
 
 type ApiGetter = () => Api;
 type StateGetter = () => { singleIssue: SingleIssueState };

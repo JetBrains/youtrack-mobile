@@ -14,7 +14,7 @@ import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconAngleDown, IconArrowUp, IconCheck, IconClose, IconLock} from '../../components/icon/icon';
 import {visibilityDefaultText} from '../../components/visibility/visibility-strings';
 
-import styles from './single-issue__comment-input.styles';
+import styles from './issue__comment-input.styles';
 
 import type {IssueComment} from '../../flow/CustomFields';
 import type {User} from '../../flow/User';
@@ -46,7 +46,7 @@ type State = {
 };
 
 
-export default class SingleIssueCommentInput extends PureComponent<Props, State> {
+export default class IssueCommentInput extends PureComponent<Props, State> {
   isUnmounted: boolean;
   editCommentInput: MultilineInput;
   SUGGESTION_AVATAR_SIZE = 24;

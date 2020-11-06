@@ -5,7 +5,7 @@ import sinon from 'sinon';
 import reducer from './issue-list-reducers';
 
 import * as types from './issue-list-action-types';
-import {ISSUE_UPDATED} from '../single-issue/single-issue-action-types';
+import {ISSUE_UPDATED} from '../issue/issue-action-types';
 
 let dispatch;
 let stateMock;

@@ -11,7 +11,7 @@ import LinkedIssues from '../../components/linked-issues/linked-issues';
 import usage from '../../components/usage/usage';
 import log from '../../components/log/log';
 import IssueSummary from '../../components/issue-summary/issue-summary';
-import styles from './single-issue.styles';
+import styles from './issue.styles';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import {
   getEntityPresentation,
@@ -21,7 +21,7 @@ import {
 import Tags from '../../components/tags/tags';
 import {HIT_SLOP} from '../../components/common-styles/button';
 
-import IssueDescription from './single-issue__description';
+import IssueDescription from './issue__description';
 import IssueVotes from '../../components/issue-actions/issue-votes';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
 import VisibilityControl from '../../components/visibility/visibility-control';

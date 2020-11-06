@@ -17,7 +17,7 @@ import IssueVisibility from '../../../components/visibility/issue-visibility';
 import log from '../../../components/log/log';
 import {CommentReactions} from '../../../components/comment/comment-reactions';
 import ReactionAddIcon from '../../../components/reactions/new-reaction.svg';
-import ReactionsPanel from './single-issue__activities-reactions-dialog';
+import ReactionsPanel from './issue__activities-reactions-dialog';
 import Router from '../../../components/router/router';
 import usage from '../../../components/usage/usage';
 import {
@@ -37,7 +37,7 @@ import {SkeletonIssueActivities} from '../../../components/skeleton/skeleton';
 import {HIT_SLOP} from '../../../components/common-styles/button';
 import {UNIT} from '../../../components/variables/variables';
 
-import styles from './single-issue-activity.styles';
+import styles from './issue-activity.styles';
 
 import type {ActivityItem, IssueActivity} from '../../../flow/Activity';
 import type {Attachment, IssueComment} from '../../../flow/CustomFields';
@@ -172,7 +172,7 @@ function SingleIssueActivities(props: Props) {
                   lineHeight: UNIT * 2.5,
                   marginTop: UNIT / 4
                 }}
-                onPress={() => Router.SingleIssue({issueId: readableIssueId})}>
+                onPress={() => Router.Issue({issueId: readableIssueId})}>
                 <Text style={[
                   styles.linkText,
                   linkedIssue.resolved && styles.secondaryTextColor.color,

@@ -59,7 +59,7 @@ export default class PushNotificationsProcessor {
         if (targetAccount) {
           await onSwitchAccount(targetAccount, issueId);
         } else if (issueId) {
-          Router.SingleIssue({issueId});
+          Router.Issue({issueId});
         }
 
         completion();

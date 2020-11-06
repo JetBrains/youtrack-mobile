@@ -154,7 +154,7 @@ class Router {
       defaultRoute = this.rootRoutes[0];
     }
     if (props?.issueId) {
-      this.navigate(routeMap.SingleIssue, props, {forceReset: true});
+      this.navigate(routeMap.Issue, props, {forceReset: true});
     } else {
       this.navigate(defaultRoute, props);
     }

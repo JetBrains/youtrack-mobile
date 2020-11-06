@@ -163,7 +163,7 @@ class AgileBoard extends Component<Props, State> {
   _onTapIssue = (issue: IssueOnList) => {
     log.debug(`Opening issue "${issue.id}" from Agile Board`);
     usage.trackEvent(CATEGORY_NAME, 'Open issue');
-    Router.SingleIssue({
+    Router.Issue({
       issuePlaceholder: issue,
       issueId: issue.id
     });

@@ -106,7 +106,7 @@ function getMarkdownRules(attachments: Array<Attachment> = [], projects: Array<I
         return (
           <Text
             key={node.key}
-            onPress={() => Router.SingleIssue({issueId: node.content})}
+            onPress={() => Router.Issue({issueId: node.content})}
             style={[inheritedStyles, style.text, styles.link]}>
             {node.content}
           </Text>

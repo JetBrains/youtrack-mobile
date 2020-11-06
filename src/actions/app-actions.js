@@ -508,7 +508,7 @@ function subscribeToURL() {
           return;
         }
         usage.trackEvent('app', 'Open issue in app by URL');
-        Router.SingleIssue({issueId}, {forceReset: true});
+        Router.Issue({issueId}, {forceReset: true});
       },
       (url, issuesQuery) => {
         if (!getIsAuthorized(getState().app) || !isServerConfigured(url)) {

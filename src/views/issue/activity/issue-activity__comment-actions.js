@@ -1,7 +1,7 @@
 /* @flow */
 
 import {Clipboard, Alert} from 'react-native';
-import * as types from '../single-issue-action-types';
+import * as types from '../issue-action-types';
 import {notify} from '../../../components/notification/notification';
 import log from '../../../components/log/log';
 import {showActions} from '../../../components/action-sheet/action-sheet';
@@ -9,22 +9,22 @@ import usage from '../../../components/usage/usage';
 import type {IssueFull} from '../../../flow/Issue';
 import type {IssueComment} from '../../../flow/CustomFields';
 import type Api from '../../../components/api/api';
-import type {State as SingleIssueState} from '../single-issue-reducers';
+import type {State as SingleIssueState} from '../issue-reducers';
 import {getEntityPresentation} from '../../../components/issue-formatter/issue-formatter';
 import IssueVisibility from '../../../components/visibility/issue-visibility';
 import {
   loadActivitiesPage,
   receiveActivityAPIAvailability, receiveActivityEnabledTypes,
   receiveActivityPage
-} from './single-issue-activity__actions';
+} from './issue-activity__actions';
 
-import * as activityHelper from './single-issue-activity__helper';
+import * as activityHelper from './issue-activity__helper';
 
 import type IssueAPI from '../../../components/api/api__issue';
 import type {IssueActivity} from '../../../flow/Activity';
 import type {Reaction} from '../../../flow/Reaction';
-import type {State as IssueActivityState} from './single-issue-activity__reducers';
-import type {State as IssueCommentActivityState} from './single-issue-activity__comment-reducers';
+import type {State as IssueActivityState} from './issue-activity__reducers';
+import type {State as IssueCommentActivityState} from './issue-activity__comment-reducers';
 import type {User} from '../../../flow/User';
 
 const CATEGORY_NAME = 'Issue';

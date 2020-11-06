@@ -9,7 +9,7 @@ import ModalPanelBottom from '../../../components/modal-panel-bottom/modal-panel
 import ReactionIcon from '../../../components/reactions/reaction-icon';
 
 import {HIT_SLOP} from '../../../components/common-styles/button';
-import styles from './single-issue-activity.styles';
+import styles from './issue-activity.styles';
 
 import type {Reaction} from '../../../flow/Reaction';
 

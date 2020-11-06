@@ -4,11 +4,11 @@ import sinon from 'sinon';
 
 import * as Mocks from '../../../test/mocks';
 
-import * as actions from './single-issue-actions';
-import * as activityCommentActions from './activity/single-issue-activity__comment-actions';
-import * as types from './single-issue-action-types';
+import * as actions from './issue-actions';
+import * as activityCommentActions from './activity/issue-activity__comment-actions';
+import * as types from './issue-action-types';
 
-import * as activityHelper from './activity/single-issue-activity__helper';
+import * as activityHelper from './activity/issue-activity__helper';
 
 let fakeApi;
 const getApi = () => fakeApi;

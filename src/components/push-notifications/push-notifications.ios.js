@@ -42,7 +42,7 @@ const onNotificationOpen = async (notification) => {
       await doSwitchAccount(targetAccount, ytIssueId);
     }
   } else {
-    Router.SingleIssue({issueId: ytIssueId});
+    Router.Issue({issueId: ytIssueId});
   }
 };
 

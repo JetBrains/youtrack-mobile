@@ -87,7 +87,7 @@ export class IssueList extends Component<Props, State> {
       notifyError('Can\'t open issue', new Error('Attempt to open issue without ID'));
       return;
     }
-    Router.SingleIssue({
+    Router.Issue({
       issuePlaceholder: issue,
       issueId: issue.id
     });

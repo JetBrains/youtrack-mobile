@@ -2,7 +2,7 @@
 
 import {createReducer} from 'redux-create-reducer';
 import IssuePermissions from '../../../components/issue-permissions/issue-permissions';
-import * as types from '../single-issue-action-types';
+import * as types from '../issue-action-types';
 
 import type {ActivityItem, IssueActivity} from '../../../flow/Activity';
 import type {CustomError} from '../../../flow/Error';

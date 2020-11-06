@@ -9,32 +9,32 @@ import {connect} from 'react-redux';
 import IssueVisibility from '../../../components/visibility/issue-visibility';
 import KeyboardSpacerIOS from '../../../components/platform/keyboard-spacer.ios';
 import Select from '../../../components/select/select';
-import SingleIssueActivities from './single-issue__activities-stream';
-import IssueActivitiesSettings from './single-issue__activities-settings';
-import SingleIssueCommentInput from '../single-issue__comment-input';
+import SingleIssueActivities from './issue__activities-stream';
+import IssueActivitiesSettings from './issue__activities-settings';
+import IssueCommentInput from '../issue__comment-input';
 import ErrorMessage from '../../../components/error-message/error-message';
 
-import * as activityActions from './single-issue-activity__actions';
-import * as activityCommentActions from './single-issue-activity__comment-actions';
-import {attachmentActions} from '../single-issue__attachment-actions-and-types';
+import * as activityActions from './issue-activity__actions';
+import * as activityCommentActions from './issue-activity__comment-actions';
+import {attachmentActions} from '../issue__attachment-actions-and-types';
 
 import {getApi} from '../../../components/api/api__instance';
-import {isActivitiesAPIEnabled, convertCommentsToActivityPage} from './single-issue-activity__helper';
+import {isActivitiesAPIEnabled, convertCommentsToActivityPage} from './issue-activity__helper';
 import {createActivitiesModel} from '../../../components/activity/activity__create-model';
 import {groupActivities} from '../../../components/activity/activity__group-activities';
 import {isActivityCategory} from '../../../components/activity/activity__category';
 import {mergeActivities} from '../../../components/activity/activity__merge-activities';
 import {getEntityPresentation} from '../../../components/issue-formatter/issue-formatter';
 
-import styles from './single-issue-activity.styles';
+import styles from './issue-activity.styles';
 
 import PropTypes from 'prop-types';
 import {ThemeContext} from '../../../components/theme/theme-context';
 
 import type {ActivityItem} from '../../../flow/Activity';
 import type {IssueComment} from '../../../flow/CustomFields';
-import type {State as IssueActivityState} from './single-issue-activity__reducers';
-import type {State as IssueCommentActivityState} from './single-issue-activity__comment-reducers';
+import type {State as IssueActivityState} from './issue-activity__reducers';
+import type {State as IssueCommentActivityState} from './issue-activity__comment-reducers';
 import type {User, UserAppearanceProfile} from '../../../flow/User';
 import type {YouTrackWiki} from '../../../flow/Wiki';
 import type {Theme, UITheme} from '../../../flow/Theme';
@@ -235,7 +235,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     const isSecured = !!editingComment && IssueVisibility.isSecured(editingComment.visibility);
 
     return <View>
-      <SingleIssueCommentInput
+      <IssueCommentInput
         autoFocus={focus}
         initialText={commentText}
         onChangeText={setCommentText}

@@ -2,11 +2,11 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import * as Mocks from '../../../../test/mocks';
 
-import * as activityActions from './single-issue-activity__actions';
-import * as issueCommentActions from './single-issue-activity__comment-actions';
+import * as activityActions from './issue-activity__actions';
+import * as issueCommentActions from './issue-activity__comment-actions';
 
-import * as types from '../single-issue-action-types';
-import * as activityHelper from './single-issue-activity__helper';
+import * as types from '../issue-action-types';
+import * as activityHelper from './issue-activity__helper';
 
 let APIMock;
 const getApi = () => APIMock;

@@ -89,7 +89,7 @@ class Inbox extends Component<Props, State> {
     }
 
     log.debug(`Opening issue "${issue.id}" from notifications`);
-    Router.SingleIssue({
+    Router.Issue({
       issuePlaceholder: {
         id: issue.id,
         summary: issue?.summary,
@@ -220,7 +220,7 @@ class Inbox extends Component<Props, State> {
       issues.map((issue: IssueOnList) => {
         return (
           <TouchableOpacity key={guid()}>
-            <Text onPress={() => Router.SingleIssue({issueId: issue.id})}>
+            <Text onPress={() => Router.Issue({issueId: issue.id})}>
               <Text style={styles.link}>
                 <Text style={[styles.link, issue.resolved ? styles.resolved : null]}>
                   {issue.id}
@@ -323,7 +323,7 @@ class Inbox extends Component<Props, State> {
         <View style={[styles.notificationContent, styles.notificationContentWorkflow]}>
           <YoutrackWiki
             backendUrl={this.config.backendUrl}
-            onIssueIdTap={(issueId) => Router.SingleIssue({issueId})}
+            onIssueIdTap={(issueId) => Router.Issue({issueId})}
             uiTheme={this.theme.uiTheme}
           >
             {text}
