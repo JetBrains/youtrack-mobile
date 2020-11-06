@@ -30,13 +30,10 @@ export default class IssueVotes extends PureComponent<Props, void> {
   render() {
     const {voted, votes, canVote, uiTheme} = this.props;
 
-    if (!canVote) {
-      return null;
-    }
-
     return (
       <TouchableOpacity
         hitSlop={HIT_SLOP}
+        disabled={!canVote}
         style={styles.button}
         onPress={this.toggle}
       >
@@ -44,7 +41,7 @@ export default class IssueVotes extends PureComponent<Props, void> {
         <IconThumbUp
           isActive={voted}
           size={20}
-          color={uiTheme.colors.$iconAccent}
+          color={canVote ? uiTheme.colors.$iconAccent : uiTheme.colors.$disabled}
         />
       </TouchableOpacity>
     );
