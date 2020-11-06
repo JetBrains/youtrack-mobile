@@ -72,6 +72,10 @@ export const uuid = () => {
   });
 };
 
+export const guid = () => {
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+};
+
 export const removeTrailingSlash = (str: string): string => {
   return str.replace(/\/$/, '');
 };
