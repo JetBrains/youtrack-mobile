@@ -3,10 +3,6 @@ import {NativeModules} from 'react-native';
 
 const YTSafariViewController = NativeModules.YTSafariViewController;
 
-/**
- * High-level docs for the SafariViewManager iOS API can be written here.
- */
-
 type Options = {
   url: string
 }
