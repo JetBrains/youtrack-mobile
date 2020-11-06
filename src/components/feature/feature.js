@@ -1,9 +1,10 @@
 /* @flow */
 /*global __DEV__*/
 
-import {PureComponent} from 'react';
-import {getApi} from '../api/api__instance';
 import {connect} from 'react-redux';
+
+import featureList from './features-list';
+import {getApi} from '../api/api__instance';
 
 type Props = {
   devOnly?: boolean,
@@ -32,30 +33,27 @@ export const checkVersion = (version?: string) => {
     } else {
       return true;
     }
-  } catch(e) {
+  } catch (e) {
     return false;
   }
 };
 
 export const checkDev = () => __DEV__;
 
-class Feature extends PureComponent<Props, void> {
-  check() {
-    const {name, features, version, devOnly} = this.props;
+export const FEATURES = featureList;
 
+const Feature = (props: Props) => {
+  const check = () => {
+    const {name, features, version, devOnly} = props;
     const featureEnabled = name ? features.indexOf(name) !== -1 : true;
-
     return featureEnabled && checkVersion(version) && (devOnly ? checkDev() : true);
-  }
+  };
 
-  render() {
-    const {fallbackComponent, children} = this.props;
+  const {fallbackComponent, children} = props;
+  const fallback = fallbackComponent ? fallbackComponent : null;
+  return check() ? children : fallback;
+};
 
-    const fallback = fallbackComponent ? fallbackComponent : null;
-
-    return this.check() ? children : fallback;
-  }
-}
 
 const mapStateToProps = (state, ownProps) => {
   return {
