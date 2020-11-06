@@ -1,3 +1,4 @@
+import type {IssueFull} from './Issue';
 import type {Reaction} from './Reaction';
 import type {User} from './User';
 import type {Visibility} from './Visibility';
@@ -166,7 +167,8 @@ export type IssueComment = {
   author: User,
   visibility: Visibility,
   reactionOrder?: string,
-  reactions?: Array<Reaction>
+  reactions?: Array<Reaction>,
+  issue?: IssueFull
 }
 
 export type IssueLinkType = {

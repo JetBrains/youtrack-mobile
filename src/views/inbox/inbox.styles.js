@@ -125,6 +125,23 @@ export default EStyleSheet.create({
   resolved: {
     ...issueIdResolved,
     color: '$icon'
+  },
+  reactionComment: {
+    color: '$icon'
+  },
+  reactionIcon: {
+    width: UNIT * 4,
+    height: UNIT * 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '$boxBackground',
+    borderRadius: UNIT / 2
+  },
+  reactionIconRemoved: {
+    position: 'absolute',
+    width: 2,
+    height: UNIT * 4,
+    backgroundColor: '$error',
+    transform: [{rotate: '45deg'}]
   }
-
 });

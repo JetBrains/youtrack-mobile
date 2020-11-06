@@ -6,10 +6,9 @@ import Router from '../router/router';
 import {connect} from 'react-redux';
 import {MenuItem} from './menu__item';
 
-import Feature from '../feature/feature';
-
-import {IconBell, IconBoard, IconSettings, IconTask} from '../icon/icon';
+import Feature, {FEATURES} from '../feature/feature';
 import {DEFAULT_THEME} from '../theme/theme';
+import {IconBell, IconBoard, IconSettings, IconTask} from '../icon/icon';
 import {routeMap} from '../../app-routes';
 
 import styles from './menu.styles';
@@ -122,7 +121,7 @@ class Menu extends Component<Props, State> {
           onPress={this.openAgileBoard}
         />
 
-        <Feature version={'2018.3'}>
+        <Feature version={FEATURES.inbox}>
           <MenuItem
             isActive={this.isActiveRoute(routeMap.Inbox)}
             icon={<IconBell size={23} color={color(routeMap.Inbox)}/>}

@@ -8,14 +8,16 @@ import {handleRelativeUrl} from '../config/config';
 import {ResourceTypes} from './api__resource-types';
 
 import type Auth from '../auth/auth';
+import type {IssueComment, Tag} from '../../flow/CustomFields';
+import type {Reaction} from '../../flow/Reaction';
 import type {SavedQuery} from '../../flow/Issue';
-import type {Tag} from '../../flow/CustomFields';
 import type {User, UserAppearanceProfile, UserGeneralProfile} from '../../flow/User';
 
 
 export default class UserAPI extends ApiBase {
 
   adminApiUrl: string;
+  apiUrl: string;
   SEARCH_CONTEXT_FIELDS: Array<string> = [
     'id',
     'name',
@@ -42,6 +44,7 @@ export default class UserAPI extends ApiBase {
 
   constructor(auth: Auth) {
     super(auth);
+    this.apiUrl = `${this.youTrackApiUrl}/users`;
     this.adminApiUrl = `${this.youTrackApiUrl}/admin/users`;
   }
 
@@ -92,6 +95,15 @@ export default class UserAPI extends ApiBase {
       `${this.adminApiUrl}/${userId}/profiles/general?${queryString}`,
       'POST',
       Object.assign({$type: ResourceTypes.USER_GENERAL_PROFILE}, generalProfile)
+    );
+  }
+
+  async reactionsFeed(skip: number = 0, top: number = 10): Promise<{ $type: string, added: boolean, comment: IssueComment, id: string, reaction: Reaction, timestamp: number }> {
+    const queryString = `$skip=${skip}&$top=${top}&ignoreLicenseErrors=true&fields=added,comment(created,deleted,id,issue(id,idReadable,resolved,summary),reactionOrder,reactions(author(fullName,id,isLocked),id,reaction),text),id,reaction(author(fullName,id,isLocked),reaction),timestamp`;
+
+    return await this.makeAuthorizedRequest(
+      `${this.apiUrl}/me/reactionsFeed?${queryString}`,
+      'GET',
     );
   }
 

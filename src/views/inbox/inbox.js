@@ -3,39 +3,46 @@
 import {FlatList, View, Text, RefreshControl, TouchableOpacity} from 'react-native';
 import React, {Component} from 'react';
 
-import usage from '../../components/usage/usage';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+
 import * as inboxActions from './inbox-actions';
-import Router from '../../components/router/router';
-import log from '../../components/log/log';
-import {handleRelativeUrl} from '../../components/config/config';
-import {getStorageState} from '../../components/storage/storage';
-import UserInfo from '../../components/user/user-info';
-import Diff from '../../components/diff/diff';
-import YoutrackWiki from '../../components/wiki/youtrack-wiki';
 import CustomFieldChangeDelimiter from '../../components/custom-field/custom-field__change-delimiter';
-import {isReactElement} from '../../util/util';
+import Diff from '../../components/diff/diff';
 import ErrorMessage from '../../components/error-message/error-message';
+import log from '../../components/log/log';
+import ReactionIcon from '../../components/reactions/reaction-icon';
+import Router from '../../components/router/router';
+import usage from '../../components/usage/usage';
+import UserInfo from '../../components/user/user-info';
+import YoutrackWiki from '../../components/wiki/youtrack-wiki';
+import {CommentReactions} from '../../components/comment/comment-reactions';
+import {getReadableID} from '../../components/issue-formatter/issue-formatter';
+import {getStorageState} from '../../components/storage/storage';
+import {handleRelativeUrl} from '../../components/config/config';
+import {hasType} from '../../components/api/api__resource-types';
+import {guid, isReactElement} from '../../util/util';
 import {LoadMoreList} from '../../components/progress/load-more-list';
 import {SkeletonIssueActivities} from '../../components/skeleton/skeleton';
-
 import {ThemeContext} from '../../components/theme/theme-context';
 
 import {elevation1} from '../../components/common-styles/shadow';
 import {UNIT} from '../../components/variables/variables';
+
 import styles from './inbox.styles';
 
-import type {InboxState} from './inbox-reducers';
-import type {User} from '../../flow/User';
-import type {Notification, Metadata, ChangeValue, ChangeEvent, Issue, IssueChange} from '../../flow/Inbox';
 import type {AppConfigFilled} from '../../flow/AppConfig';
+import type {InboxState} from './inbox-reducers';
+import type {IssueComment} from '../../flow/CustomFields';
 import type {IssueOnList} from '../../flow/Issue';
+import type {Notification, Metadata, ChangeValue, ChangeEvent, Issue, IssueChange} from '../../flow/Inbox';
+import type {Reaction} from '../../flow/Reaction';
 import type {Theme} from '../../flow/Theme';
+import type {User} from '../../flow/User';
 
 const CATEGORY_NAME = 'inbox view';
 
-type Props = InboxState & typeof inboxActions & {theme: Theme};
+type Props = InboxState & typeof inboxActions;
 
 type State = {
   isTitlePinned: boolean
@@ -46,7 +53,7 @@ const Category: Object = {
   LINKS: 'LINKS',
   COMMENT: 'COMMENT',
   SUMMARY: 'SUMMARY',
-  DESCRIPTION: 'DESCRIPTION',
+  DESCRIPTION: 'DESCRIPTION'
 };
 
 const MAX_TEXT_CHANGE_LENGTH: number = 5000;
@@ -212,7 +219,7 @@ class Inbox extends Component<Props, State> {
     return (
       issues.map((issue: IssueOnList) => {
         return (
-          <TouchableOpacity key={`${event.entityId}_${issue.entityId}`}>
+          <TouchableOpacity key={guid()}>
             <Text onPress={() => Router.SingleIssue({issueId: issue.id})}>
               <Text style={styles.link}>
                 <Text style={[styles.link, issue.resolved ? styles.resolved : null]}>
@@ -236,7 +243,6 @@ class Inbox extends Component<Props, State> {
     }
 
     switch (true) {
-
     case event.category === Category.COMMENT: //TODO(xi-eye): filter out text update events
       return (
         <View style={styles.change}>
@@ -351,7 +357,9 @@ class Inbox extends Component<Props, State> {
     const metadata: Metadata = item?.metadata;
     let renderer = null;
 
-    if (metadata && this.isIssueDigestChange(metadata)) {
+    if (hasType.commentReaction(item)) {
+      renderer = this.renderReactionChange(item);
+    } else if (metadata && this.isIssueDigestChange(metadata)) {
       renderer = metadata.issue ? this.renderIssueChange(metadata, item.sender) : null;
     } else if (metadata && this.isWorkflowNotification(metadata)) {
       renderer = this.renderWorkflowNotification(this.getWorkflowNotificationText(metadata));
@@ -396,6 +404,69 @@ class Inbox extends Component<Props, State> {
     }
   }
 
+  renderIssue(issue: IssueOnList) {
+    const readableID = getReadableID(issue);
+    return (
+      <TouchableOpacity
+        style={styles.notificationIssue}
+        onPress={() => this.goToIssue(issue)}
+      >
+        <Text>
+          {!!readableID && (
+            <Text style={[
+              styles.notificationIssueInfo,
+              issue.resolved ? styles.resolved : null
+            ]}>{readableID}</Text>
+          )}
+          {!!issue.summary && (
+            <Text numberOfLines={2} style={styles.notificationIssueInfo}>{` ${issue.summary}`}</Text>
+          )}
+        </Text>
+      </TouchableOpacity>
+    );
+  }
+
+  renderReactionChange = (reactionData: {
+    $type: string,
+    id: string,
+    added: boolean,
+    comment: IssueComment,
+    reaction: Reaction,
+    timestamp: number
+  }) => {
+    const {added, comment, timestamp, reaction} = reactionData;
+    const issue: IssueOnList = comment.issue;
+
+    return (
+      <View style={styles.notification}>
+        <UserInfo
+          avatar={
+            <View style={styles.reactionIcon}>
+              <ReactionIcon name={reaction.reaction} size={24}/>
+              {!added && <View style={styles.reactionIconRemoved}/>}
+            </View>
+          }
+          additionalInfo={`\n${reactionData.added ? 'added a reaction' : 'removed a reaction'}`}
+          style={{...styles.userInfo, marginBottom: 16}}
+          timestamp={timestamp}
+          user={reaction.author}
+        />
+
+        <View style={styles.notificationContent}>
+          {this.renderIssue(issue)}
+          <View style={styles.notificationChange}>
+            <Text style={styles.reactionComment}>{comment.text}</Text>
+            <CommentReactions
+              comment={comment}
+              currentUser={this.props.currentUser}
+            />
+          </View>
+        </View>
+      </View>
+    );
+  }
+
+
   renderIssueChange(metadata: Metadata, sender: User = {}) {
     const {issue, change} = metadata;
 
@@ -403,7 +474,6 @@ class Inbox extends Component<Props, State> {
       return null;
     }
 
-    const onPress = () => this.goToIssue(issue);
     const events: Array<ChangeEvent> = (change?.events || []).filter((event) => !this.isCreateCategory(event));
     const avatarURL: string | null = this.createAvatarUrl(sender);
     if (avatarURL) {
@@ -415,23 +485,7 @@ class Inbox extends Component<Props, State> {
         <UserInfo style={styles.userInfo} user={sender} timestamp={change?.endTimestamp}/>
 
         <View style={styles.notificationContent}>
-          <TouchableOpacity
-            style={styles.notificationIssue}
-            onPress={onPress}
-          >
-            <Text>
-              {!!issue.id && (
-                <Text style={[
-                  styles.notificationIssueInfo,
-                  issue.resolved ? styles.resolved : null
-                ]}>{issue.id}</Text>
-              )}
-              {!!issue.summary && (
-                <Text numberOfLines={2} style={styles.notificationIssueInfo}>{` ${issue.summary}`}</Text>
-              )}
-            </Text>
-          </TouchableOpacity>
-
+          {this.renderIssue(issue)}
           {events.length > 0 && (
             <View style={styles.notificationChange}>
               {this.renderEvents(events)}
@@ -528,7 +582,9 @@ class Inbox extends Component<Props, State> {
                 data={data}
                 refreshControl={this.renderRefreshControl()}
                 refreshing={loading}
-                keyExtractor={(item: Object & { key: string } | Notification) => item.key || item.id}
+                keyExtractor={(item: Object & { key: string } | Notification, index: number) => {
+                  return `${(item.key || item.id)}-${index}`;
+                }}
                 renderItem={this.renderItem}
                 onEndReached={this.onLoadMore}
                 onEndReachedThreshold={0.1}
@@ -546,7 +602,11 @@ class Inbox extends Component<Props, State> {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  return {...state.inbox, ...ownProps};
+  return {
+    ...state.inbox,
+    ...ownProps,
+    currentUser: state.app.user
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {

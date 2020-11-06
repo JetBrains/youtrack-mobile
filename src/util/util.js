@@ -88,7 +88,7 @@ export const createBtoa = (str: string) => {
   return base64.fromByteArray(byteArray);
 };
 
-export const until = (promises: Array<Promise<any>>) => {
+export const until = (promises: Array<Promise<any>>): Promise<[?CustomError, any]> => {
   if (!promises) {
     return Promise.reject(['No promises are provided']);
   }
@@ -99,7 +99,7 @@ export const until = (promises: Array<Promise<any>>) => {
         return [null, data];
       })
       .catch((err: CustomError) => {
-        return [err, promises.map<typeof undefined>((p: Promise<any>) => undefined)];
+        return [err, promises.map<typeof undefined>(() => undefined)];
       });
   }
 

@@ -13,7 +13,7 @@ export default EStyleSheet.create({
   },
   userAvatar: {
     flex: 0,
-    borderRadius: 4
+    borderRadius: UNIT / 2
   },
   timestampContainer: {
     flexGrow: 1,

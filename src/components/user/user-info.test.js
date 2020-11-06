@@ -1,11 +1,11 @@
 import React from 'react';
+import {View} from 'react-native';
 
 import {shallow} from 'enzyme';
 import toJson from 'enzyme-to-json';
 
 import UserInfo from './user-info';
 
-import {User} from '../../flow/User';
 import {buildStyles, DEFAULT_THEME} from '../theme/theme';
 
 describe('<UserInfo/>', () => {
@@ -54,6 +54,14 @@ describe('<UserInfo/>', () => {
       });
     });
 
+    describe('Additional info', () => {
+      it('should render additional info after the user name', () => {
+        const additionalInfoMock = 'additional text';
+        render(userMock, undefined, additionalInfoMock);
+        expect(findByTestId('UserAdditionalInfo')).toHaveLength(1);
+      });
+    });
+
     describe('Avatar', () => {
       it('should not render user`s avatar', () => {
         render(userMock);
@@ -64,23 +72,32 @@ describe('<UserInfo/>', () => {
         render({...userMock, ...{avatarUrl: avatarURLMock}});
         expect(findByTestId('UserInfoAvatar')).toHaveLength(1);
       });
+
+      it('should render custom avatar', () => {
+        const testId = 'customAvatar';
+        render({...userMock, ...{avatar: <View testID={testId}/>}});
+
+        expect(wrapper.shallow().find({testID: 'UserInfoAvatar'})).toHaveLength(0);
+        expect(findByTestId(testId)).toHaveLength(0);
+      });
     });
   });
 
 
-  function render(user: User, timestamp: ?Number) {
-    wrapper = doShallow(user, timestamp);
+  function render(user, timestamp, additionalInfo) {
+    wrapper = doShallow(user, timestamp, additionalInfo);
   }
 
   function findByTestId(testId) {
     return wrapper && wrapper.find({testID: testId});
   }
 
-  function doShallow(user: User = {}, timestamp: Number = Date.now()) {
+  function doShallow(user = {}, timestamp = Date.now(), additionalInfo = null) {
     return shallow(
       <UserInfo
         user={user}
         timestamp={timestamp}
+        additionalInfo={additionalInfo}
       />
     );
   }

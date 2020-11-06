@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {Suspense} from 'react';
+import React from 'react';
 
 import {TouchableOpacity, View} from 'react-native';
 
@@ -26,27 +26,19 @@ const ReactionsPanel = (props: Props) => {
       onHide={props.onHide}
     >
       <View style={styles.reactionContainer}>
-        <Suspense
-          fallback={null}
-        >
-
-          {availableReactionNames.map((reactionName: string) => {
-            return (
-              <View key={reactionName} style={styles.reactionItem}>
-                <TouchableOpacity
-                  style={styles.reactionButton}
-                  hitSlop={HIT_SLOP}
-                  onPress={() => props.onSelect({reaction: reactionName})}>
-                  <ReactionIcon width={21} name={reactionName}/>
-                </TouchableOpacity>
-              </View>
-            );
-
-          })}
-
-        </Suspense>
+        {availableReactionNames.map((reactionName: string) => {
+          return (
+            <View key={reactionName} style={styles.reactionItem}>
+              <TouchableOpacity
+                style={styles.reactionButton}
+                hitSlop={HIT_SLOP}
+                onPress={() => props.onSelect({reaction: reactionName})}>
+                <ReactionIcon size={21} name={reactionName}/>
+              </TouchableOpacity>
+            </View>
+          );
+        })}
       </View>
-
     </ModalPanelBottom>
   );
 };

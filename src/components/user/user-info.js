@@ -12,15 +12,17 @@ import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import Avatar from '../avatar/avatar';
 
 type Props = {
-  user: User,
-  timestamp: number,
+  additionalInfo?: string,
+  avatar?: React$Element<any>,
   style?: ViewStyleProp,
+  timestamp: number,
+  user: User
 };
 
 export default class UserInfo extends PureComponent<Props, void> {
 
   render() {
-    const {user, style, timestamp} = this.props;
+    const {user, style, timestamp, avatar, additionalInfo} = this.props;
     const userName: string = getEntityPresentation(user);
 
     return (
@@ -28,7 +30,7 @@ export default class UserInfo extends PureComponent<Props, void> {
         style={[styles.user, style]}
         testID="UserInfo"
       >
-        {Boolean(user.avatarUrl) && <Avatar
+        {Boolean(user.avatarUrl) && !avatar && <Avatar
           testID="UserInfoAvatar"
           userName={userName}
           size={32}
@@ -36,11 +38,18 @@ export default class UserInfo extends PureComponent<Props, void> {
           source={{uri: user.avatarUrl}}
         />}
 
+        {!!avatar && (
+          <View style={styles.userAvatar}>
+            {avatar}
+          </View>
+        )}
+
         {Boolean(userName) && <Text
           style={styles.userName}
           testID="UserInfoName"
         >
           {userName}
+          {!!additionalInfo && <Text testID="UserAdditionalInfo">{additionalInfo}</Text>}
         </Text>}
 
         <View

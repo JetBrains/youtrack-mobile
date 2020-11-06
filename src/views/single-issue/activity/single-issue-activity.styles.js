@@ -193,6 +193,9 @@ export default EStyleSheet.create({
     color: '$iconAccent'
   },
 
+  commentReactions: {
+    marginTop: -UNIT / 1.5
+  },
   reactionContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',

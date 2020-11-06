@@ -11,7 +11,7 @@ import Comment from '../../../components/comment/comment';
 import CommentVisibility from '../../../components/comment/comment__visibility';
 import CustomFieldChangeDelimiter from '../../../components/custom-field/custom-field__change-delimiter';
 import Diff from '../../../components/diff/diff';
-import Feature from '../../../components/feature/feature';
+import Feature, {FEATURES} from '../../../components/feature/feature';
 import getEventTitle from '../../../components/activity/activity__history-title';
 import IssueVisibility from '../../../components/visibility/issue-visibility';
 import log from '../../../components/log/log';
@@ -327,7 +327,7 @@ function SingleIssueActivities(props: Props) {
             )}
           </View>
 
-          <Feature version={'2020.1'}>
+          <Feature version={FEATURES.reactions}>
             <TouchableOpacity
               hitSlop={HIT_SLOP}
               disabled={disabled}
@@ -389,11 +389,12 @@ function SingleIssueActivities(props: Props) {
             visibility={IssueVisibility.getVisibilityPresentation(comment.visibility)}
             color={styles.iconAccent.color}
           />}
-          {<CommentReactions
+          <CommentReactions
+            style={styles.commentReactions}
             comment={comment}
             currentUser={props.currentUser}
             onReactionSelect={selectReaction}
-          />}
+          />
 
         </View>
       </View>

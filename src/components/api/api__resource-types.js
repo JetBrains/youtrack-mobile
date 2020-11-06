@@ -20,6 +20,8 @@ export const ResourceTypes = {
 
   EVENT_GROUP: 'jetbrains.youtrack.event.gaprest.ActivityItemGroup',
   AGILE: 'jetbrains.youtrack.agile.settings.Agile',
+
+  COMMENT_REACTIONS_FEED_ITEM: 'CommentReactionsFeedItem',
 };
 
 type HasMethodName = 'comment' | 'user' | 'userGroup' | 'project' | 'savedSearch' | 'tag' | 'agile';
@@ -38,6 +40,7 @@ hasType.project = hasType(ResourceTypes.PROJECT);
 hasType.savedSearch = hasType(ResourceTypes.ISSUE_FOLDER_SAVED_QUERY);
 hasType.tag = hasType(ResourceTypes.ISSUE_FOLDER_TAG);
 hasType.agile = hasType(ResourceTypes.ISSUE_FOLDER_TAG);
+hasType.commentReaction = hasType(ResourceTypes.COMMENT_REACTIONS_FEED_ITEM);
 
 
 export function filterArrayByType(array: Array<Entity>, methodName: HasMethodName): Array<Entity> {
