@@ -32,7 +32,7 @@ export const MenuItem = (props: Props) => {
         onPress={onPress}
       >
         {icon}
-        {isActive && <Text style={styles.menuItemLabel}>{label}</Text>}
+        {isActive && <Text style={styles.menuItemLabel} numberOfLines={1}>{label}</Text>}
       </TouchableOpacity>
     </View>
   );
