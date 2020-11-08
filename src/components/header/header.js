@@ -45,7 +45,7 @@ export default class Header extends PureComponent<Props, void> {
     return Router.pop();
   }
 
-  onRightButtonClick() {
+  onRightButtonClick = () => {
     if (this.props.onRightButtonClick) {
       return this.props.onRightButtonClick();
     }
@@ -87,7 +87,7 @@ export default class Header extends PureComponent<Props, void> {
                 testID="header-action"
                 hitSlop={HIT_SLOP}
                 style={styles.headerButtonRight}
-                onPress={() => this.onRightButtonClick()}>
+                onPress={this.onRightButtonClick}>
                 {rightButton}
               </TouchableOpacity>}
             </View>
