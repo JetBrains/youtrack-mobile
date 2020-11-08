@@ -4,11 +4,10 @@ import {UNIT} from '../variables/variables';
 import {mainText} from '../common-styles/typography';
 import {elevation1} from '../common-styles/shadow';
 
-const QUERY_ASSIST_HEIGHT = UNIT * 6;
 
 export default EStyleSheet.create({
   placeHolder: {
-    height: QUERY_ASSIST_HEIGHT
+    height: UNIT * 6,
   },
   modal: {
     flex: 1,
@@ -38,8 +37,8 @@ export default EStyleSheet.create({
   },
   searchInput: {
     flex: 1,
-    height: QUERY_ASSIST_HEIGHT,
     paddingLeft: UNIT / 1.5,
+    paddingVertical: UNIT * 1.6,
     marginLeft: UNIT,
     marginRight: UNIT,
 
@@ -52,7 +51,6 @@ export default EStyleSheet.create({
   searchInputPlaceholder: {
     justifyContent: 'center',
     color: '$icon',
-    lineHeight: QUERY_ASSIST_HEIGHT
   },
   searchIcon: {
     marginTop: UNIT / 2,

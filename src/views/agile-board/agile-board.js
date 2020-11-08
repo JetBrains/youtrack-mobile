@@ -14,7 +14,7 @@ import log from '../../components/log/log';
 import ModalView from '../../components/modal-view/modal-view';
 import QueryAssistPanel from '../../components/query-assist/query-assist-panel';
 import Router from '../../components/router/router';
-import SearchQueryPreview from '../../components/query-assist/search-query-preview';
+import QueryPreview from '../../components/query-assist/query-preview';
 import Select from '../../components/select/select';
 import usage from '../../components/usage/usage';
 import {DragContainer} from '../../components/draggable/';
@@ -452,7 +452,7 @@ class AgileBoard extends Component<Props, State> {
 
   renderSearchPanelPreview = () => {
     return (
-      <SearchQueryPreview
+      <QueryPreview
         style={styles.searchQueryPreview}
         query={this.query}
         onFocus={this.onShowAssist}

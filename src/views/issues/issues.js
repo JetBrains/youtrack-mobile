@@ -22,7 +22,7 @@ import {View as AnimatedView} from 'react-native-animatable';
 import * as issueActions from './issues-actions';
 import Select from '../../components/select/select';
 import QueryAssistPanel from '../../components/query-assist/query-assist-panel';
-import SearchQueryPreview from '../../components/query-assist/search-query-preview';
+import QueryPreview from '../../components/query-assist/query-preview';
 import IssuesCount from './issues__count';
 
 import {IconAdd, IconAngleDown, IconBookmark} from '../../components/icon/icon';
@@ -258,7 +258,7 @@ export class Issues extends Component<Props, State> {
         style={styles.listHeader}
       >
         <View style={styles.listHeaderTop}>
-          <SearchQueryPreview
+          <QueryPreview
             style={styles.searchPanel}
             query={query}
             onFocus={this.onSearchQueryPanelFocus}

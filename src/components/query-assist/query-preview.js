@@ -18,7 +18,7 @@ type Props = {
 };
 
 
-export default class SearchQueryPreview extends PureComponent<Props, void> {
+export default class QueryPreview extends PureComponent<Props, void> {
   static defaultProps = {
     onFocus: () => {},
     onClearText: () => {}

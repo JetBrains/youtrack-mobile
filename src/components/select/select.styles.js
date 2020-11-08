@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../variables/variables';
-import {mainText} from '../common-styles/typography';
+import {MAIN_FONT_SIZE} from '../common-styles/typography';
 import {elevation1} from '../common-styles/shadow';
 import {separator} from '../common-styles/list';
 
@@ -22,10 +22,10 @@ export default EStyleSheet.create({
     color: '$link'
   },
   searchInput: {
-    ...mainText,
     flex: 1,
-    height: UNIT * 5,
+    paddingVertical: UNIT * 1.5,
     margin: UNIT,
+    fontSize: MAIN_FONT_SIZE,
     color: '$text'
   },
   row: {
@@ -55,8 +55,7 @@ export default EStyleSheet.create({
     marginRight: UNIT * 2
   },
   itemTitle: {
-    ...mainText,
-    fontWeight: '500',
+    fontSize: MAIN_FONT_SIZE,
     color: '$text'
   },
   loadingMessage: {
