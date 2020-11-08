@@ -56,7 +56,7 @@ export class Image extends PureComponent<Props, State> {
 
     return (
       <ImageProgress
-        renderIndicator={() => <ActivityIndicator style={styles.loader} size="large"/>}
+        renderIndicator={() => <ActivityIndicator color={styles.loader.color} style={styles.loader} size="large"/>}
         onError={error => notify('Failed to load image')}
         {...imageProps}
       />

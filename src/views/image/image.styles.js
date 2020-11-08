@@ -14,7 +14,8 @@ export default EStyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0
+    bottom: 0,
+    color: '$link'
   },
 
   removeButton: {
