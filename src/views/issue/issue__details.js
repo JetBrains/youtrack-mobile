@@ -248,7 +248,7 @@ export default class IssueDetails extends Component<Props, void> {
     );
   }
 
-  _renderIssueView(uiTheme: UITheme) {
+  renderIssueView(uiTheme: UITheme) {
     const {
       issue,
       editMode,
@@ -352,7 +352,7 @@ export default class IssueDetails extends Component<Props, void> {
               scrollEventThrottle={16}
             >
               {this.renderCustomFieldPanel(theme.uiTheme)}
-              {this._renderIssueView(theme.uiTheme)}
+              {this.renderIssueView(theme.uiTheme)}
 
               <TouchableOpacity
                 style={styles.switchToActivityButton}
