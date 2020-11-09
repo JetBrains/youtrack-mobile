@@ -15,9 +15,8 @@ import Feature, {FEATURES} from '../../../components/feature/feature';
 import getEventTitle from '../../../components/activity/activity__history-title';
 import IssueVisibility from '../../../components/visibility/issue-visibility';
 import log from '../../../components/log/log';
-import {CommentReactions} from '../../../components/comment/comment-reactions';
 import ReactionAddIcon from '../../../components/reactions/new-reaction.svg';
-import ReactionsPanel from './issue__activities-reactions-dialog';
+import ReactionsPanel from './issue__activity-reactions-dialog';
 import Router from '../../../components/router/router';
 import usage from '../../../components/usage/usage';
 import {
@@ -26,6 +25,7 @@ import {
   getReadableID,
   ytDate
 } from '../../../components/issue-formatter/issue-formatter';
+import {CommentReactions} from '../../../components/comment/comment-reactions';
 import {getApi} from '../../../components/api/api__instance';
 import {getTextValueChange} from '../../../components/activity/activity__history-value';
 import {IconDrag, IconHistory, IconMoreOptions, IconWork} from '../../../components/icon/icon';
@@ -68,7 +68,7 @@ type Change = {
 };
 
 
-function SingleIssueActivities(props: Props) {
+function IssueActivityStream(props: Props) {
   const [reactionState, setReactionState] = useState({
     isReactionsPanelVisible: false,
     currentComment: null
@@ -531,4 +531,4 @@ function SingleIssueActivities(props: Props) {
 }
 
 
-export default React.memo<Props>(SingleIssueActivities);
+export default React.memo<Props>(IssueActivityStream);

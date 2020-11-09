@@ -9,8 +9,8 @@ import {connect} from 'react-redux';
 import IssueVisibility from '../../../components/visibility/issue-visibility';
 import KeyboardSpacerIOS from '../../../components/platform/keyboard-spacer.ios';
 import Select from '../../../components/select/select';
-import SingleIssueActivities from './issue__activities-stream';
-import IssueActivitiesSettings from './issue__activities-settings';
+import IssueActivityStream from './issue__activity-stream';
+import IssueActivitiesSettings from './issue__activity-settings';
 import IssueCommentInput from '../issue__comment-input';
 import ErrorMessage from '../../../components/error-message/error-message';
 
@@ -174,7 +174,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
     return (
       <View style={styles.activitiesContainer}>
-        <SingleIssueActivities
+        <IssueActivityStream
           activities={this.createActivityModel(activityPage)}
           attachments={issue?.attachments}
           commentActions={commentActions}
