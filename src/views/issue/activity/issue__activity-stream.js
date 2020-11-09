@@ -46,6 +46,7 @@ import type {UITheme} from '../../../flow/Theme';
 import type {User} from '../../../flow/User';
 import type {WorkTimeSettings} from '../../../flow/WorkTimeSettings';
 import type {YouTrackWiki} from '../../../flow/Wiki';
+import type {IssueFull} from '../../../flow/Issue';
 
 const CATEGORY_NAME = 'Issue Stream';
 
@@ -156,22 +157,22 @@ function IssueActivityStream(props: Props) {
   };
 
   const renderLinkChange = (activity: IssueActivity) => {
-    const linkedIssues = [].concat(activity.added).concat(activity.removed);
+    const linkedIssues = [].concat(activity.added).concat(
+      activity.removed.map((link: IssueFull) => ({...link, isRemoved: true}))
+    );
+
     return (
       <TouchableOpacity key={activity.id}>
         <View style={styles.row}>
           <Text style={styles.activityLabel}>{getActivityEventTitle(activity)}</Text>
         </View>
         {
-          linkedIssues.map((linkedIssue) => {
-            const readableIssueId = getReadableID(linkedIssue);
+          linkedIssues.map((linkedIssue: IssueFull & {isRemoved?: boolean}) => {
+            const readableIssueId: string = getReadableID(linkedIssue);
             return (
               <Text
                 key={linkedIssue.id}
-                style={{
-                  lineHeight: UNIT * 2.5,
-                  marginTop: UNIT / 4
-                }}
+                style={{...styles.linkedIssue, ...(linkedIssue.isRemoved ? styles.activityRemoved : {})}}
                 onPress={() => Router.Issue({issueId: readableIssueId})}>
                 <Text style={[
                   styles.linkText,

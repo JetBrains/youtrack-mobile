@@ -149,7 +149,8 @@ export default EStyleSheet.create({
     marginTop: UNIT * 1.5
   },
   linkedIssue: {
-    flexDirection: 'row',
+    lineHeight: UNIT * 2.5,
+    marginTop: UNIT / 4
   },
   linkText: {
     color: '$link'
