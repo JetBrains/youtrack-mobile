@@ -8,6 +8,8 @@ import IssuePermissions, {
 } from './issue-permissions';
 import sinon from 'sinon';
 
+import mocks from '../../../test/mocks';
+
 describe('IssuePermissions', function () {
   const USER_ID = 'some-user-id';
   const PROJECT_ID = 'some-project-id';
@@ -261,6 +263,39 @@ describe('IssuePermissions', function () {
       expect(issuePermissions.canStar()).toEqual(false);
     });
 
+  });
+
+  describe('canVote', () => {
+    let issueMock;
+    beforeEach(() => {
+      issueMock = mocks.createIssueMock();
+      issuePermissions = createInstance(permissionsMock, {currentUserMock, ...{guest: true}});
+    });
+
+    it('should return FALSE if issue param is not provided', () => {
+      expect(issuePermissions.canVote()).toEqual(false);
+    });
+
+    it('should return FALSE if user is Guest', () => {
+      expect(issuePermissions.canVote(issueMock)).toEqual(false);
+    });
+
+    it('should return FALSE if CurrentUser is not set', () => {
+      issuePermissions = createInstance(permissionsMock, null);
+      expect(issuePermissions.canVote(issueMock)).toEqual(false);
+    });
+
+    it('should return FALSE if user is Author', () => {
+      issuePermissions = createInstance(permissionsMock, {currentUserMock, ...{guest: true}});
+
+      expect(issuePermissions.canVote({author: currentUserMock})).toEqual(false);
+    });
+
+    it('should return TRUE if user is not the Author and is not Guest', () => {
+      issuePermissions = createInstance(permissionsMock, {currentUserMock, ...{guest: false}});
+
+      expect(issuePermissions.canVote(issueMock)).toEqual(true);
+    });
   });
 
 
