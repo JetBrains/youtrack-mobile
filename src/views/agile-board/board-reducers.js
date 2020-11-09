@@ -101,8 +101,10 @@ const boardReducer = createReducer({}, {
       creatingIssueDraftCellId: null
     };
   },
-  [ISSUE_UPDATED](state: BoardState, action: { issue: IssueFull }): BoardState {
-    return updateCardOnBoard(state, action.issue);
+  [ISSUE_UPDATED](state: BoardState, action: { issue: IssueFull, onUpdate: (board: Board) => any }): BoardState {
+    const updatedBoard: BoardState = updateCardOnBoard(state, action.issue);
+    action.onUpdate && action.onUpdate(updatedBoard);
+    return updatedBoard;
   },
   [types.REMOVE_ISSUE_FROM_BOARD](state: BoardState, action: { issueId: string }): BoardState {
     return removeIssueFromBoard(state, action.issueId);

@@ -6,15 +6,18 @@ import {View, Text, RefreshControl, TouchableOpacity, ActivityIndicator, Dimensi
 import {connect} from 'react-redux';
 import isEqual from 'react-fast-compare';
 
+import * as boardActions from './board-actions';
+import AgileBoardSprint from './agile-board__sprint';
 import Api from '../../components/api/api';
 import Auth from '../../components/auth/auth';
+import BoardHeader from './board-header';
 import BoardScroller from '../../components/board-scroller/board-scroller';
 import ErrorMessage from '../../components/error-message/error-message';
 import log from '../../components/log/log';
 import ModalView from '../../components/modal-view/modal-view';
 import QueryAssistPanel from '../../components/query-assist/query-assist-panel';
-import Router from '../../components/router/router';
 import QueryPreview from '../../components/query-assist/query-preview';
+import Router from '../../components/router/router';
 import Select from '../../components/select/select';
 import usage from '../../components/usage/usage';
 import {DragContainer} from '../../components/draggable/';
@@ -23,14 +26,10 @@ import {getScrollableWidth} from '../../components/board-scroller/board-scroller
 import {hasType} from '../../components/api/api__resource-types';
 import {IconException, IconMagnifyZoom} from '../../components/icon/icon';
 import {notify} from '../../components/notification/notification';
+import {renderSelector} from './agile-board__renderer';
+import {routeMap} from '../../app-routes';
 import {SkeletonAgile} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
-
-import * as boardActions from './board-actions';
-import AgileBoardSprint from './agile-board__sprint';
-import BoardHeader from './board-header';
-
-import {renderSelector} from './agile-board__renderer';
 import {View as AnimatedView} from 'react-native-animatable';
 
 import {HIT_SLOP} from '../../components/common-styles/button';
@@ -67,7 +66,8 @@ type Props = AgilePageState & {
   refreshAgile: (agileId: string, sprintId: string, query?: string) => any,
   toggleRefreshPopup: (isOutOfDate: boolean) => any,
   suggestAgileQuery: (query: ?string, caret: number) => any,
-  storeLastQuery: (query: string) => any
+  storeLastQuery: (query: string) => any,
+  updateIssue: (issueId: string, sprint?: SprintFull) => any
 };
 
 type State = {
@@ -95,6 +95,12 @@ class AgileBoard extends Component<Props, State> {
       offsetY: 0,
       showAssist: false
     };
+
+    Router.setOnDispatchCallback((routeName: string, prevRouteName: string, options: Object) => {
+      if (routeName === routeMap.AgileBoard && prevRouteName === routeMap.Issue && options?.issueId) {
+        options.issueId && this.props.updateIssue(options.issueId, this.props?.sprint);
+      }
+    });
   }
 
   componentDidMount() {
@@ -569,6 +575,7 @@ const mapDispatchToProps = (dispatch) => {
     toggleRefreshPopup: (isOutOfDate: boolean) => dispatch(boardActions.setOutOfDate(isOutOfDate)),
     suggestAgileQuery: (query: string, caret: number) => dispatch(boardActions.suggestAgileQuery(query, caret)),
     storeLastQuery: (query: string) => dispatch(boardActions.storeLastQuery(query)),
+    updateIssue: (issueId: string, sprint?: SprintFull) => dispatch(boardActions.updateIssue(issueId, sprint)),
   };
 };
 

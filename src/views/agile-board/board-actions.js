@@ -1,8 +1,9 @@
 /* @flow */
 
-import {isIOSPlatform} from '../../util/util';
-import {routeMap} from '../../app-routes';
+import * as types from './board-action-types';
+import {findIssueOnBoard} from './board-updaters';
 
+import * as issueUpdater from '../../components/issue-actions/issue-updater';
 import animation from '../../components/animation/animation';
 import log from '../../components/log/log';
 import Router from '../../components/router/router';
@@ -11,15 +12,23 @@ import usage from '../../components/usage/usage';
 import {DEFAULT_ERROR_MESSAGE} from '../../components/error/error-messages';
 import {flushStoragePart, getStorageState, MAX_STORED_QUERIES} from '../../components/storage/storage';
 import {getAssistSuggestions} from '../../components/query-assist/query-assist-helper';
+import {getGroupedSprints, getSprintAllIssues, updateSprintIssues} from './agile-board__helper';
+import {isIOSPlatform} from '../../util/util';
+import {ISSUE_UPDATED} from '../issue/issue-action-types';
 import {notify, notifyError} from '../../components/notification/notification';
+import {routeMap} from '../../app-routes';
 import {sortAlphabetically} from '../../components/search/sorting';
 
-import {findIssueOnBoard} from './board-updaters';
-import {getGroupedSprints, getSprintAllIssues, updateSprintIssues} from './agile-board__helper';
-
-import * as types from './board-action-types';
 import type Api from '../../components/api/api';
-import type {AgileBoardRow, AgileColumn, AgileUserProfile, Board, BoardOnList, Sprint} from '../../flow/Agile';
+import type {
+  AgileBoardRow,
+  AgileColumn,
+  AgileUserProfile,
+  Board,
+  BoardOnList,
+  Sprint,
+  SprintFull
+} from '../../flow/Agile';
 import type {AgilePageState} from './board-reducers';
 import type {CustomError} from '../../flow/Error';
 import type {IssueFull, IssueOnList} from '../../flow/Issue';
@@ -684,5 +693,19 @@ export function storeLastQuery(query: string) {
     const uniqueUpdatedQueries = Array.from(new Set(updatedQueries)).slice(0, MAX_STORED_QUERIES);
 
     flushStoragePart({lastQueries: uniqueUpdatedQueries});
+  };
+}
+
+export function updateIssue(issueId: string, sprint?: SprintFull) {
+  return async (dispatch: (any) => any) => {
+    const issue: IssueFull = await issueUpdater.loadIssue(issueId);
+
+    dispatch({
+      type: ISSUE_UPDATED,
+      issue,
+      onUpdate(board) {
+        !!sprint && dispatch(cacheSprint(Object.assign({}, sprint, {board})));
+      }
+    });
   };
 }

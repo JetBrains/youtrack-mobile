@@ -1,5 +1,7 @@
 /* @flow */
 
+import * as issueUpdater from '../../components/issue-actions/issue-updater';
+import * as types from './issues-action-types';
 import ApiHelper from '../../components/api/api__helper';
 import log from '../../components/log/log';
 import usage from '../../components/usage/usage';
@@ -10,11 +12,9 @@ import {getAssistSuggestions, getCachedUserQueries} from '../../components/query
 import {notifyError} from '../../components/notification/notification';
 import {updateUserGeneralProfile} from '../../actions/app-actions';
 
-import * as types from './issues-action-types';
-
 import type Api from '../../components/api/api';
 import type {Folder} from '../../flow/User';
-import type {IssueOnList, SavedQuery} from '../../flow/Issue';
+import type {IssueFull, IssueOnList, SavedQuery} from '../../flow/Issue';
 import type {IssueProject, Tag} from '../../flow/CustomFields';
 
 const PAGE_SIZE = 10;
@@ -272,32 +272,12 @@ export function loadIssues(query: string) {
 }
 
 export function updateIssue(issueId: string) {
-  return async (dispatch: (any) => any) => {
-    const issueToUpdate = await dispatch(loadIssue(issueId));
-    dispatch(updateIssueInIssues(issueToUpdate));
-  };
-}
-
-export function loadIssue(issueId: string) {
-  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
-    const api: Api = getApi();
-    log.info(`Updating issue ${issueId}`);
-    try {
-      const issue: Array<IssueOnList> = await api.issue.getIssue(issueId);
-      return ApiHelper.fillIssuesFieldHash([issue])[0];
-    } catch (e) {
-      log.info(`Failed to load issue ${issueId}`);
-      return null;
-    }
-  };
-}
-
-export function updateIssueInIssues(issueToUpdate: IssueOnList) {
   return async (dispatch: (any) => any, getState: () => Object) => {
-    const currentIssues = getState().issueList.issues;
-    const updatedIssues = currentIssues.reduce((issues: Array<IssueOnList>, issue: IssueOnList) => {
-      return issues.concat(issue.id === issueToUpdate.id ? issueToUpdate : issue);
-    }, []);
+    const currentIssues: Array<IssueOnList> = getState().issueList.issues;
+
+    const issueToUpdate: IssueFull = await issueUpdater.loadIssue(issueId);
+    const updatedIssues: Array<IssueFull | IssueOnList> = issueUpdater.updateIssueInIssues(issueToUpdate, currentIssues);
+
     dispatch(receiveIssues(updatedIssues));
     dispatch(cacheIssues(updatedIssues));
   };
