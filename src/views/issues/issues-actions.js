@@ -271,6 +271,38 @@ export function loadIssues(query: string) {
   };
 }
 
+export function updateIssue(issueId: string) {
+  return async (dispatch: (any) => any) => {
+    const issueToUpdate = await dispatch(loadIssue(issueId));
+    dispatch(updateIssueInIssues(issueToUpdate));
+  };
+}
+
+export function loadIssue(issueId: string) {
+  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    log.info(`Updating issue ${issueId}`);
+    try {
+      const issue: Array<IssueOnList> = await api.issue.getIssue(issueId);
+      return ApiHelper.fillIssuesFieldHash([issue])[0];
+    } catch (e) {
+      log.info(`Failed to load issue ${issueId}`);
+      return null;
+    }
+  };
+}
+
+export function updateIssueInIssues(issueToUpdate: IssueOnList) {
+  return async (dispatch: (any) => any, getState: () => Object) => {
+    const currentIssues = getState().issueList.issues;
+    const updatedIssues = currentIssues.reduce((issues: Array<IssueOnList>, issue: IssueOnList) => {
+      return issues.concat(issue.id === issueToUpdate.id ? issueToUpdate : issue);
+    }, []);
+    dispatch(receiveIssues(updatedIssues));
+    dispatch(cacheIssues(updatedIssues));
+  };
+}
+
 export function refreshIssues() {
   return async (dispatch: (any) => any, getState: () => Object) => {
     const userQuery: string = getState().issueList.query;

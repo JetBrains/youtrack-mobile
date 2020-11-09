@@ -16,7 +16,7 @@ import {receiveUserAppearanceProfile} from '../../actions/app-actions';
 
 import type ActionSheet from '@expo/react-native-action-sheet/ActionSheet.ios';
 import type {IssueFull, CommandSuggestionResponse, OpenNestedViewParams} from '../../flow/Issue';
-import type {CustomField, IssueProject, FieldValue, Attachment} from '../../flow/CustomFields';
+import type {CustomField, IssueProject, FieldValue, Attachment, Tag} from '../../flow/CustomFields';
 import type Api from '../../components/api/api';
 import type {State as IssueState} from './issue-reducers';
 import type {UserAppearanceProfile} from '../../flow/User';
@@ -436,6 +436,24 @@ export function openIssueListWithSearch(query: string) {
     Router.Issues({query});
   };
 }
+
+export function onTagRemove(tagId: string) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const issue = getState().singleIssue.issue;
+    const api: Api = getApi();
+
+    try {
+      await api.issue.removeTag(issue.id, tagId);
+      const updatedIssue: IssueFull = {...issue, tags: issue.tags.filter((tag: Tag) => tag.id !== tagId)};
+      dispatch(receiveIssue(updatedIssue));
+    } catch (err) {
+      const errorMsg: string = 'Failed to remove tag';
+      log.warn(errorMsg, err);
+      notify(errorMsg, err);
+    }
+  };
+}
+
 
 export function loadCommandSuggestions(command: string, caret: number) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {

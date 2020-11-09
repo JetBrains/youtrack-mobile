@@ -122,7 +122,8 @@ class Issue extends PureComponent<IssueProps, TabsState> {
       removeAttachment,
       updateIssueVisibility,
 
-      toggleVisibleAddAttachDialog
+      toggleVisibleAddAttachDialog,
+      onTagRemove
     } = this.props;
 
     return (
@@ -160,6 +161,7 @@ class Issue extends PureComponent<IssueProps, TabsState> {
         onVisibilityChange={updateIssueVisibility}
 
         onAttach={toggleVisibleAddAttachDialog}
+        onTagRemove={onTagRemove}
       />
     );
   }
@@ -255,7 +257,7 @@ class Issue extends PureComponent<IssueProps, TabsState> {
 
   handleOnBack = () => {
     this.setState({isTransitionInProgress: true});
-    const returned = Router.pop();
+    const returned = Router.pop(false, {issueId: this.props.issue.id});
     if (!returned) {
       Router.Issues();
     }

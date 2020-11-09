@@ -5,36 +5,32 @@ import React, {Component} from 'react';
 
 import {View as AnimatedView} from 'react-native-animatable';
 
-import {getApi} from '../../components/api/api__instance';
-import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
-import LinkedIssues from '../../components/linked-issues/linked-issues';
-import usage from '../../components/usage/usage';
-import log from '../../components/log/log';
-import IssueSummary from '../../components/issue-summary/issue-summary';
-import styles from './issue.styles';
+import AttachmentAddPanel from '../../components/attachments-row/attachments-add-panel';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
-import {
-  getEntityPresentation,
-  getReadableID,
-  ytDate
-} from '../../components/issue-formatter/issue-formatter';
-import Tags from '../../components/tags/tags';
-import {HIT_SLOP} from '../../components/common-styles/button';
-
+import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import IssueDescription from './issue__description';
+import IssueSummary from '../../components/issue-summary/issue-summary';
 import IssueVotes from '../../components/issue-actions/issue-votes';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
+import LinkedIssues from '../../components/linked-issues/linked-issues';
+import log from '../../components/log/log';
+import Tags from '../../components/tags/tags';
+import usage from '../../components/usage/usage';
 import VisibilityControl from '../../components/visibility/visibility-control';
+import {getEntityPresentation, getReadableID, ytDate} from '../../components/issue-formatter/issue-formatter';
+import {getApi} from '../../components/api/api__instance';
 import {SkeletonIssueContent, SkeletonIssueInfoLine} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
+
+import {HIT_SLOP} from '../../components/common-styles/button';
+import styles from './issue.styles';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {AnyIssue, IssueFull, IssueOnList} from '../../flow/Issue';
 import type {Attachment, CustomField, FieldValue, IssueProject} from '../../flow/CustomFields';
+import type {Theme, UITheme} from '../../flow/Theme';
 import type {Visibility} from '../../flow/Visibility';
 import type {YouTrackWiki} from '../../flow/Wiki';
-import type {Theme, UITheme} from '../../flow/Theme';
-import AttachmentAddPanel from '../../components/attachments-row/attachments-add-panel';
 
 
 type Props = {
@@ -56,6 +52,7 @@ type Props = {
   summaryCopy: string,
   descriptionCopy: string,
   openIssueListWithSearch: (query: string) => any,
+  onTagRemove: (tagId: string) => any,
   setIssueSummaryCopy: (summary: string) => any,
   setIssueDescriptionCopy: (description: string) => any,
 
@@ -198,7 +195,7 @@ export default class IssueDetails extends Component<Props, void> {
   }
 
   renderIssueContent(uiTheme: UITheme) {
-    const {issue, openIssueListWithSearch, openNestedIssueView} = this.props;
+    const {issue, openIssueListWithSearch, openNestedIssueView, onTagRemove} = this.props;
 
     if (!issue) {
       return <SkeletonIssueContent/>;
@@ -232,6 +229,7 @@ export default class IssueDetails extends Component<Props, void> {
           multiline={true}
           tags={issue?.tags}
           onTagPress={openIssueListWithSearch}
+          onTagRemove={onTagRemove}
         />
 
         {Boolean(issue?.tags?.length > 0) && <View style={styles.tagsSeparator}/>}

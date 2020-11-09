@@ -33,6 +33,7 @@ import {HIT_SLOP} from '../../components/common-styles/button';
 import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
 
 import SelectSectioned from '../../components/select/select-sectioned';
+import {routeMap} from '../../app-routes';
 import {ThemeContext} from '../../components/theme/theme-context';
 
 import {UNIT} from '../../components/variables/variables';
@@ -59,13 +60,18 @@ type State = {
 export class Issues extends Component<Props, State> {
   searchPanelNode: Object;
 
-  constructor() {
-    super();
+  constructor(props: Props) {
+    super(props);
     this.state = {
       isEditQuery: false,
       clearSearchQuery: false
     };
     usage.trackScreenView('Issue list');
+    Router.setOnDispatchCallback((routeName: string, prevRouteName: string, options: Object) => {
+      if (prevRouteName === routeMap.Issue && options?.issueId) {
+        this.props.updateIssue(options.issueId);
+      }
+    });
   }
 
   componentDidMount() {
@@ -393,7 +399,8 @@ const mapDispatchToProps = (dispatch) => {
     onOpenContextSelect: () => dispatch(issueActions.openContextSelect()),
     openSavedSearchesSelect: () => dispatch(issueActions.openSavedSearchesSelect()),
     updateSearchContextPinned: (isSearchScrolledUp) => dispatch(issueActions.updateSearchContextPinned(isSearchScrolledUp)),
-    setIssuesCount: (count: number | null) => dispatch(issueActions.setIssuesCount(count))
+    setIssuesCount: (count: number | null) => dispatch(issueActions.setIssuesCount(count)),
+    updateIssue: (issueId: string) => dispatch(issueActions.updateIssue(issueId))
   };
 };
 
