@@ -237,7 +237,20 @@ export default class IssueAPI extends ApiBase {
     return response.activities;
   }
 
+  removeIssueEntity(resourceName: string, issueId: string, entityId: string) {
+    return this.makeAuthorizedRequest(
+      `${this.youTrackIssueUrl}/${issueId}/${resourceName}/${entityId}`,
+      'DELETE',
+      null,
+      {parseJson: false}
+    );
+  }
+
+  removeTag(issueId: string, tagId: string) {
+    return this.removeIssueEntity('tags', issueId, tagId);
+  }
+
   removeAttachment(issueId: string, attachmentId: string) {
-    return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/attachments/${attachmentId}`, 'DELETE', null, {parseJson: false});
+    return this.removeIssueEntity('attachments', issueId, attachmentId);
   }
 }
