@@ -90,6 +90,7 @@ describe('Router', () => {
       const routeNameMock = 'mainROOT';
       const routeNameMock2 = 'mainROOT';
       const prevRouteNameMock = undefined;
+      const options = undefined;
 
       Router.registerRoute({name: routeNameMock});
       Router.registerRoute({name: routeNameMock2});
@@ -97,7 +98,8 @@ describe('Router', () => {
 
       expect(callback).toHaveBeenCalledWith(
         routeNameMock,
-        prevRouteNameMock
+        prevRouteNameMock,
+        options
       );
     });
   });

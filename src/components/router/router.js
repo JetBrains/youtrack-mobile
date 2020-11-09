@@ -106,9 +106,9 @@ class Router {
     this.onDispatchCallbacks.push(onDispatch);
   }
 
-  dispatch(data: NavigationResetActionPayload, routeName?: string, prevRouteName?: string) {
+  dispatch(data: NavigationResetActionPayload, routeName?: string, prevRouteName?: string, options?: Object) {
     this._navigator.dispatch(data);
-    this.onDispatchCallbacks.forEach(onDispatch => onDispatch(routeName, prevRouteName));
+    this.onDispatchCallbacks.forEach(onDispatch => onDispatch(routeName, prevRouteName, options));
   }
 
   navigate(routeName: string, props: Object, {forceReset} = {}) {
@@ -160,13 +160,13 @@ class Router {
     }
   }
 
-  pop(isModalTransition?: boolean) {
+  pop(isModalTransition?: boolean, options?: Object) {
     const routes = this._navigator.state.nav.routes;
     if (routes.length <= 1) {
       return false;
     }
     this._modalTransition = isModalTransition;
-    this.dispatch(NavigationActions.back(), routes[routes.length - 2].routeName, this._currentRoute.routeName);
+    this.dispatch(NavigationActions.back(), routes[routes.length - 2].routeName, this._currentRoute.routeName, options);
     return true;
   }
 
