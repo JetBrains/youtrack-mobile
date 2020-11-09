@@ -6,9 +6,10 @@ import React, {Component} from 'react';
 import throttle from 'lodash.throttle';
 
 import ApiHelper from '../../components/api/api__helper';
-import ModalView from '../modal-view/modal-view';
 import KeyboardSpacerIOS from '../platform/keyboard-spacer.ios';
+import ModalView from '../modal-view/modal-view';
 import SelectItem from '../select/select__item';
+import {guid} from '../../util/util';
 import {IconBack, IconCheck} from '../icon/icon';
 
 import styles from './command-dialog.styles';
@@ -149,8 +150,6 @@ export default class CommandDialog extends Component<Props, State> {
     );
   };
 
-  _extractKey = (item: CommandSuggestion) => item.id + item.option + item.description;
-
   _renderSuggestions() {
     const {suggestions} = this.props;
     return (
@@ -158,7 +157,7 @@ export default class CommandDialog extends Component<Props, State> {
         {suggestions && (
           <FlatList
             data={suggestions.suggestions}
-            keyExtractor={this._extractKey}
+            keyExtractor={guid}
             renderItem={(listItem) => this._renderSuggestion(listItem.item)}
             keyboardShouldPersistTaps="handled"
           />
@@ -192,7 +191,12 @@ export default class CommandDialog extends Component<Props, State> {
             style={styles.applyButton}
             onPress={() => this.onApply()}
           >
-            <IconCheck size={20} color={canApply ? uiTheme.colors.$link : uiTheme.colors.$disabled}/>
+            {isApplying ? <ActivityIndicator color={uiTheme.colors.$link}/> : (
+              <IconCheck
+                size={20}
+                color={canApply ? uiTheme.colors.$link : uiTheme.colors.$disabled}
+              />
+            )}
           </TouchableOpacity>
 
         </View>
@@ -200,8 +204,6 @@ export default class CommandDialog extends Component<Props, State> {
         {this._renderCommandPreview()}
 
         {this._renderSuggestions()}
-
-        {isApplying && <ActivityIndicator/>}
 
         {<KeyboardSpacerIOS/>}
       </ModalView>
