@@ -5,15 +5,11 @@ import Router from '../router/router';
 import log from '../log/log';
 import appPackage from '../../../package.json'; // eslint-disable-line import/extensions
 
-import {targetAccountToSwitchTo} from '../../actions/app-actions-helper';
-
 import type Api from '../api/api';
-import type {StorageState} from '../storage/storage';
 
 const {KONNECTOR_URL} = appPackage.config;
 
 let appleDeviceToken = null;
-let doSwitchAccount: (account: StorageState, issueId: string) => any = async () => {};
 
 NotificationsIOS.addEventListener('remoteNotificationsRegistered', deviceToken => {
   log.info(`Apple device token received: "${deviceToken}"`);
@@ -34,16 +30,7 @@ const onNotificationOpen = async (notification) => {
   if (!ytIssueId) {
     return;
   }
-
-  const targetBackendUrl = notificationData?.backendUrl;
-  if (targetBackendUrl) {
-    const targetAccount: ?StorageState = await targetAccountToSwitchTo(targetBackendUrl);
-    if (targetAccount) {
-      await doSwitchAccount(targetAccount, ytIssueId);
-    }
-  } else {
-    Router.Issue({issueId: ytIssueId});
-  }
+  Router.Issue({issueId: ytIssueId});
 };
 
 NotificationsIOS.removeEventListener('notificationOpened', onNotificationOpen);
@@ -102,8 +89,7 @@ async function unregister(api: Api): Promise<void> {
   log.info('Successfully unsubscribed from push notifications');
 }
 
-function initialize(api: Api, onSwitchAccount: (account: StorageState, ytIssueId: string) => any) {
-  doSwitchAccount = onSwitchAccount;
+function initialize() {
   // $FlowFixMe: error in type annotations of library
   NotificationsIOS.requestPermissions();
   NotificationsIOS.consumeBackgroundQueue();

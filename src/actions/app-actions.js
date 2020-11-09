@@ -620,11 +620,13 @@ export function subscribeToPushNotifications() {
 
     if (isRegisteredForPush()) {
       log.info('Device was already registered for push notifications. Initializing.');
+      // $FlowFixMe: should be implemented for iOS
       return PushNotifications.initialize(getApi(), onSwitchAccount);
     }
 
     try {
       await PushNotifications.register(getApi());
+      // $FlowFixMe: should be implemented for iOS
       PushNotifications.initialize(getApi(), onSwitchAccount);
       setRegisteredForPush(true);
       log.info('Successfully registered for push notifications');
