@@ -37,25 +37,14 @@ describe('<Tags/>', () => {
   });
 
 
-  describe('_showActions', () => {
+  describe('showContextActions', () => {
     it('should invoke prop`s `onTagPress` fn', async () => {
-      instance._getSelectedActions = jest.fn(() => instance._getContextActions(tagMock)[0]);
+      instance.getSelectedActions = jest.fn(() => instance.getContextActions(tagMock)[0]);
       instance.forceUpdate();
 
-      await instance._showActions(tagMock);
+      await instance.showContextActions(tagMock);
 
       expect(instance.props.onTagPress).toHaveBeenCalledWith(tagMock.query);
-    });
-  });
-
-
-  describe('_toggleShowAll', () => {
-    it('should toggle `showAllTags` state', () => {
-      instance._toggleShowAll();
-      expect(instance.state.showAllTags).toEqual(true);
-
-      instance._toggleShowAll();
-      expect(instance.state.showAllTags).toEqual(false);
     });
   });
 

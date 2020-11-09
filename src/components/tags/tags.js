@@ -4,8 +4,8 @@ import {View, TouchableOpacity} from 'react-native';
 import React, {PureComponent} from 'react';
 
 import ColorField from '../../components/color-field/color-field';
-import {showActions} from '../action-sheet/action-sheet';
 import PropTypes from 'prop-types';
+import {showActions} from '../action-sheet/action-sheet';
 
 import styles from './tags.styles';
 
@@ -15,7 +15,8 @@ import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   tags: Array<Tag>,
-  onTagPress: (query: string) => any,
+  onTagPress: (query: string) => void,
+  onTagRemove?: (id: string) => void,
   style?: ViewStyleProp,
   title?: React$Element<any>,
   multiline?: boolean
@@ -25,13 +26,9 @@ type DefaultProps = {
   onTagPress: () => any,
 }
 
-type State = {
-  showAllTags: boolean
-}
-
 const NO_COLOR_CODING_ID = '0';
 
-export default class Tags extends PureComponent<Props, State> {
+export default class Tags extends PureComponent<Props, void> {
   static defaultProps: DefaultProps = {
     onTagPress: () => {}
   };
@@ -39,31 +36,32 @@ export default class Tags extends PureComponent<Props, State> {
     actionSheet: PropTypes.func
   };
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {showAllTags: false};
+  getContextActions(tag: Tag) {
+    const actions: Array<{ title: string, execute?: () => any }> = [
+      {
+        title: `Show all issues tagged with "${tag.name}"...`,
+        execute: () => this.props.onTagPress(tag.query)
+      }
+    ];
+    if (this.props.onTagRemove) {
+      actions.push({
+        title: 'Remove tag',
+        execute: () => this.props.onTagRemove && this.props.onTagRemove(tag.id)
+      });
+    }
+    actions.push({title: 'Cancel'});
+    return actions;
   }
 
-  _toggleShowAll() {
-    this.setState({showAllTags: !this.state.showAllTags});
-  }
-
-  _getContextActions(tag: Tag) {
-    return [{
-      title: `Show all issues tagged with "${tag.name}"...`,
-      execute: () => this.props.onTagPress(tag.query)
-    }, {title: 'Cancel'}];
-  }
-
-  _getSelectedActions(tag: Tag) {
+  getSelectedActions(tag: Tag) {
     return showActions(
-      this._getContextActions(tag),
+      this.getContextActions(tag),
       this.context.actionSheet()
     );
   }
 
-  async _showActions(tag: Tag) {
-    const selectedAction = await this._getSelectedActions(tag);
+  async showContextActions(tag: Tag) {
+    const selectedAction = await this.getSelectedActions(tag);
 
     if (selectedAction && selectedAction.execute) {
       selectedAction.execute();
@@ -92,7 +90,7 @@ export default class Tags extends PureComponent<Props, State> {
           return (
             <TouchableOpacity
               testID="tagsListTag"
-              onPress={() => this._showActions(tag)}
+              onPress={() => this.showContextActions(tag)}
               key={`${tag.id}_button`}
             >
               <ColorField
