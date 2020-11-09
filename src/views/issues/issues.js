@@ -68,7 +68,7 @@ export class Issues extends Component<Props, State> {
     };
     usage.trackScreenView('Issue list');
     Router.setOnDispatchCallback((routeName: string, prevRouteName: string, options: Object) => {
-      if (prevRouteName === routeMap.Issue && options?.issueId) {
+      if (routeName === routeMap.Issues && prevRouteName === routeMap.Issue && options?.issueId) {
         this.props.updateIssue(options.issueId);
       }
     });
