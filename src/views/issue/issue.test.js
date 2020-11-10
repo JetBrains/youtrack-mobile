@@ -35,7 +35,7 @@ describe('Issue view actions', () => {
       }
     };
     store = mockStore({
-      singleIssue: {issueId: ISSUE_ID, issue: fakeIssue},
+      issueState: {issueId: ISSUE_ID, issue: fakeIssue},
       issueActivity: {
         activityPage: []
       }

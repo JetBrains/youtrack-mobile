@@ -33,7 +33,7 @@ type ApiGetter = () => Api;
 type StateGetter = () => {
   issueActivity: IssueActivityState,
   issueCommentActivity: IssueCommentActivityState,
-  singleIssue: SingleIssueState,
+  issueState: SingleIssueState,
 };
 
 export function receiveComments(comments: Array<IssueComment>) {
@@ -78,7 +78,7 @@ export function receiveCommentSuggestions(suggestions: Object) {
 
 export function loadIssueCommentsAsActivityPage() {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issueId = getState().singleIssue.issueId;
+    const issueId = getState().issueState.issueId;
     const api: Api = getApi();
 
     try {
@@ -107,7 +107,7 @@ export function loadActivity(doNotReset: boolean = false) {
 
 export function addComment(comment: IssueComment) {
   return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issueId = getState().singleIssue.issue.id;
+    const issueId = getState().issueState.issue.id;
     const activityPage: ?Array<IssueActivity> = getState().issueActivity.activityPage;
     dispatch(startSubmittingComment());
 
@@ -143,7 +143,7 @@ export function stopEditingComment() {
 
 export function submitEditedComment(comment: IssueComment) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issueId = getState().singleIssue.issueId;
+    const issueId = getState().issueState.issueId;
     dispatch(startSubmittingComment());
 
     try {
@@ -182,7 +182,7 @@ export function addOrEditComment(comment: IssueComment | null) {
 
 function toggleCommentDeleted(comment: IssueComment, deleted: boolean) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issueId = getState().singleIssue.issueId;
+    const issueId = getState().issueState.issueId;
     try {
       dispatch(
         updateComment({...comment, deleted})
@@ -210,7 +210,7 @@ export function restoreComment(comment: IssueComment) {
 
 export function deleteCommentPermanently(comment: IssueComment, activityId?: string) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issueId = getState().singleIssue.issueId;
+    const issueId = getState().issueState.issueId;
 
     try {
       await new Promise((resolve, reject) => {
@@ -244,7 +244,7 @@ export function deleteCommentPermanently(comment: IssueComment, activityId?: str
 export function copyCommentUrl(comment: IssueComment) {
   return (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
-    const {issue} = getState().singleIssue;
+    const {issue} = getState().issueState;
     Clipboard.setString(makeIssueWebUrl(api, issue, comment.id));
     notify('Comment URL copied');
   };
@@ -297,7 +297,7 @@ export function showIssueCommentActions(actionSheet: Object, comment: IssueComme
 export function loadCommentSuggestions(query: string) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
-    const issue: IssueFull = getState().singleIssue.issue;
+    const issue: IssueFull = getState().issueState.issue;
     dispatch(startLoadingCommentSuggestions());
 
     try {
@@ -330,7 +330,7 @@ export function updateCommentWithVisibility(comment: IssueComment) {
 export function onOpenCommentVisibilitySelect(comment: IssueComment) {
   return (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
-    const issueId: IssueFull = getState().singleIssue.issue.id;
+    const issueId: IssueFull = getState().issueState.issue.id;
     const selectedItems = [
       ...(comment?.visibility?.permittedGroups || []),
       ...(comment?.visibility?.permittedUsers || [])

@@ -35,7 +35,7 @@ describe('Issue activity', () => {
     };
 
     store = mockStore({
-      singleIssue: {issueId: ISSUE_ID, issue: issueMock}
+      issueState: {issueId: ISSUE_ID, issue: issueMock}
     });
   });
 

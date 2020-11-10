@@ -16,7 +16,7 @@ import type {State as IssueState} from '../../views/issue/issue-reducers';
 const CATEGORY_NAME = 'Issue';
 
 type ApiGetter = () => Api;
-type StateGetter = () => { singleIssue: IssueState };
+type StateGetter = () => { issueState: IssueState };
 
 const attachFileMethod: Object = {
   openCamera: 'openCamera',

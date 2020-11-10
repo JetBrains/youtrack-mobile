@@ -9,7 +9,7 @@ import type Api from '../../../components/api/api';
 import type {State as SingleIssueState} from '../issue-reducers';
 
 type ApiGetter = () => Api;
-type StateGetter = () => { singleIssue: SingleIssueState };
+type StateGetter = () => { issueState: SingleIssueState };
 
 
 export function receiveActivityAPIAvailability(activitiesEnabled: boolean) {
@@ -34,7 +34,7 @@ export function receiveActivityEnabledTypes() {
 
 export function loadActivitiesPage(doNotReset: boolean = false) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issueId = getState().singleIssue.issueId;
+    const issueId = getState().issueState.issueId;
     const api: Api = getApi();
 
     dispatch(receiveActivityEnabledTypes());

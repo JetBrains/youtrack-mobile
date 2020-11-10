@@ -484,10 +484,10 @@ class Issue extends PureComponent<IssueProps, TabsState> {
   }
 }
 
-const mapStateToProps = (state: { app: Object, singleIssue: IssueState }, ownProps): IssueState => {
+const mapStateToProps = (state: { app: Object, issueState: IssueState }, ownProps): IssueState => {
   return {
     issuePermissions: state.app.issuePermissions,
-    ...state.singleIssue,
+    ...state.issueState,
     issuePlaceholder: ownProps.issuePlaceholder,
     issueId: ownProps.issueId,
     user: state.app.user

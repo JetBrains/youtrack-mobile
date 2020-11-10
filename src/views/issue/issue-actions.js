@@ -25,7 +25,7 @@ import type {Visibility} from '../../flow/Visibility';
 const CATEGORY_NAME = 'Issue';
 
 type ApiGetter = () => Api;
-type StateGetter = () => { singleIssue: IssueState };
+type StateGetter = () => { issueState: IssueState };
 
 export function setIssueId(issueId: string) {
   return {type: types.SET_ISSUE_ID, issueId};
@@ -125,7 +125,7 @@ export function receiveIssueVisibility(visibility: Visibility) {
 
 export function loadIssueAttachments() {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issueId = getState().singleIssue.issueId;
+    const issueId = getState().issueState.issueId;
     if (!issueId) {
       return;
     }
@@ -144,7 +144,7 @@ export function loadIssueAttachments() {
 
 export function loadIssue() {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issueId = getState().singleIssue.issueId;
+    const issueId = getState().issueState.issueId;
     const api: Api = getApi();
 
     try {
@@ -169,7 +169,7 @@ export function loadIssue() {
 
 export function loadIssueLinks() {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issueId = getState().singleIssue.issueId;
+    const issueId = getState().issueState.issueId;
     const api: Api = getApi();
 
     try {
@@ -195,7 +195,7 @@ export function refreshIssue() {
       const successMessage = 'Issue updated';
       await dispatch(loadIssue());
       notify(successMessage);
-      log.debug(`${successMessage} "${getState().singleIssue.issueId}" loaded`);
+      log.debug(`${successMessage} "${getState().issueState.issueId}" loaded`);
     } catch (error) {
       const errorMessage = 'Cannot update issue';
       notify(errorMessage, error);
@@ -208,20 +208,20 @@ export function refreshIssue() {
 export function saveIssueSummaryAndDescriptionChange() {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
-    const {summaryCopy, descriptionCopy} = getState().singleIssue;
+    const {summaryCopy, descriptionCopy} = getState().issueState;
 
     dispatch(setIssueSummaryAndDescription(summaryCopy, descriptionCopy));
     dispatch(startSavingEditedIssue());
 
     try {
-      const {issue} = getState().singleIssue;
+      const {issue} = getState().issueState;
       await api.issue.updateIssueSummaryDescription(issue);
       log.info(`Issue (${issue.id}) summary/description has been updated`);
       usage.trackEvent(CATEGORY_NAME, 'Update issue', 'Success');
 
       await dispatch(loadIssue());
       dispatch(stopEditingIssue());
-      dispatch(issueUpdated(getState().singleIssue.issue));
+      dispatch(issueUpdated(getState().issueState.issue));
     } catch (err) {
       await dispatch(loadIssue());
       notifyError('Failed to update issue', err);
@@ -238,7 +238,7 @@ export function updateIssueFieldValue(field: CustomField, value: FieldValue) {
     getApi: ApiGetter
   ) => {
     const api: Api = getApi();
-    const {issue} = getState().singleIssue;
+    const {issue} = getState().issueState;
 
     usage.trackEvent(CATEGORY_NAME, 'Update field value');
 
@@ -254,7 +254,7 @@ export function updateIssueFieldValue(field: CustomField, value: FieldValue) {
       await updateMethod(issue.id, field.id, value);
       log.info('Field value updated', field, value);
       await dispatch(loadIssue());
-      dispatch(issueUpdated(getState().singleIssue.issue));
+      dispatch(issueUpdated(getState().issueState.issue));
     } catch (err) {
       const error = await resolveError(err);
 
@@ -278,14 +278,14 @@ export function updateProject(project: IssueProject) {
     usage.trackEvent(CATEGORY_NAME, 'Update project');
 
     const api: Api = getApi();
-    const {issue} = getState().singleIssue;
+    const {issue} = getState().issueState;
     dispatch(setProject(project));
 
     try {
       await api.issue.updateProject(issue, project);
       log.info('Project updated');
       await dispatch(loadIssue());
-      dispatch(issueUpdated(getState().singleIssue.issue));
+      dispatch(issueUpdated(getState().issueState.issue));
     } catch (err) {
       notifyError('Failed to update issue project', err);
       dispatch(loadIssue());
@@ -300,7 +300,7 @@ export function toggleVote(voted: boolean) {
     getApi: ApiGetter
   ) => {
     const api: Api = getApi();
-    const {issue} = getState().singleIssue;
+    const {issue} = getState().issueState;
     dispatch(setVoted(voted));
     try {
       await api.issue.updateIssueVoted(issue.id, voted);
@@ -319,7 +319,7 @@ export function toggleStar(starred: boolean) {
     getApi: ApiGetter
   ) => {
     const api: Api = getApi();
-    const {issue} = getState().singleIssue;
+    const {issue} = getState().issueState;
 
     dispatch(setStarred(starred));
     try {
@@ -343,7 +343,7 @@ export function showIssueActions(
 ) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
-    const {issue} = getState().singleIssue;
+    const {issue} = getState().issueState;
 
     const actions = [
       {
@@ -424,7 +424,7 @@ export function openNestedIssueView(params: OpenNestedViewParams) {
 
 export function unloadIssueIfExist() {
   return async (dispatch: (any) => any, getState: StateGetter) => {
-    const state = getState().singleIssue;
+    const state = getState().issueState;
     if (state !== initialState) {
       dispatch(unloadActiveIssueView());
     }
@@ -439,7 +439,7 @@ export function openIssueListWithSearch(query: string) {
 
 export function onTagRemove(tagId: string) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issue = getState().singleIssue.issue;
+    const issue = getState().issueState.issue;
     const api: Api = getApi();
 
     try {
@@ -457,7 +457,7 @@ export function onTagRemove(tagId: string) {
 
 export function loadCommandSuggestions(command: string, caret: number) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issueId = getState().singleIssue.issueId;
+    const issueId = getState().issueState.issueId;
     const api: Api = getApi();
 
     try {
@@ -472,7 +472,7 @@ export function loadCommandSuggestions(command: string, caret: number) {
 
 export function applyCommand(command: string) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issueId = getState().singleIssue.issueId;
+    const issueId = getState().issueState.issueId;
 
     try {
       dispatch(startApplyingCommand());
@@ -488,7 +488,7 @@ export function applyCommand(command: string) {
 
       notify('Command applied');
       await dispatch(loadIssue());
-      dispatch(issueUpdated(getState().singleIssue.issue));
+      dispatch(issueUpdated(getState().issueState.issue));
     } catch (err) {
       notifyError('Failed to apply command', err);
     } finally {
@@ -505,7 +505,7 @@ export function updateUserAppearanceProfile(userAppearanceProfile: UserAppearanc
 
 export function uploadAttach(attach: Attachment) {
   return async (dispatch: (any) => any, getState: StateGetter) => {
-    await dispatch(attachmentActions.uploadFile(attach, getState().singleIssue.issueId));
+    await dispatch(attachmentActions.uploadFile(attach, getState().issueState.issueId));
   };
 }
 
@@ -517,7 +517,7 @@ export function cancelAddAttach(attach: Attachment) {
 
 export function loadAttachments() {
   return async (dispatch: (any) => any, getState: StateGetter) => {
-    dispatch(attachmentActions.loadIssueAttachments(getState().singleIssue.issueId));
+    dispatch(attachmentActions.loadIssueAttachments(getState().issueState.issueId));
   };
 }
 
@@ -529,17 +529,17 @@ export function toggleVisibleAddAttachDialog(isVisible: boolean) {
 
 export function removeAttachment(attach: Attachment) {
   return async (dispatch: (any) => any, getState: StateGetter) => {
-    await dispatch(attachmentActions.removeAttachment(attach, getState().singleIssue.issueId));
+    await dispatch(attachmentActions.removeAttachment(attach, getState().issueState.issueId));
   };
 }
 
 export function updateIssueVisibility(visibility: Visibility) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const singleIssue: IssueFull = getState().singleIssue;
-    const prevVisibility: Visibility = singleIssue.issue.visibility;
+    const issueState: IssueFull = getState().issueState;
+    const prevVisibility: Visibility = issueState.issue.visibility;
 
     try {
-      const issueWithUpdatedVisibility: Visibility = await getApi().issue.updateVisibility(singleIssue.issueId, visibility);
+      const issueWithUpdatedVisibility: Visibility = await getApi().issue.updateVisibility(issueState.issueId, visibility);
       dispatch(receiveIssueVisibility(issueWithUpdatedVisibility.visibility));
 
     } catch (err) {
