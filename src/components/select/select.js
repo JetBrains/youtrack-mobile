@@ -18,6 +18,7 @@ type SelectProps = {
   onChangeSelection: (selectedItems: Array<Object>, current: Object) => any,
   onCancel: () => any,
   getTitle: (item: Object) => string,
+  titleRenderer?: (item: Object) => any,
   getValue?: (item: Object) => string,
   selectedItems: Array<Object>,
   placeholder?: string,
@@ -201,7 +202,7 @@ export default class Select extends Component<SelectProps, SelectState> {
         item={item}
         isSelected={this.state.selectedItems.some(selectedItem => item.id === selectedItem.id)}
         onPress={() => this._onTouchItem(item)}
-        titleRenderer={() => this._renderTitle(item)}
+        titleRenderer={() => this.props.titleRenderer ? this.props.titleRenderer(item) : this._renderTitle(item)}
       />
     );
   };

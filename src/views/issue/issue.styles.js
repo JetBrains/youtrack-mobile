@@ -150,5 +150,9 @@ export default EStyleSheet.create({
   visibility: {
     flexShrink: 1,
     flex: 1
+  },
+  issueTagSelectItem: {
+    paddingHorizontal: UNIT / 2,
+    paddingVertical: UNIT / 4
   }
 });

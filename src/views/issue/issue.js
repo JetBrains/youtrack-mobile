@@ -1,42 +1,41 @@
 /* @flow */
-import {
-  Text,
-  View,
-  RefreshControl,
-  Dimensions
-} from 'react-native';
+
 import React, {PureComponent} from 'react';
+import {Text, View, RefreshControl, Dimensions} from 'react-native';
+
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {getApi} from '../../components/api/api__instance';
-import Router from '../../components/router/router';
-import Header from '../../components/header/header';
-import usage from '../../components/usage/usage';
-import CommandDialog from '../../components/command-dialog/command-dialog';
-import ErrorMessage from '../../components/error-message/error-message';
-import styles from './issue.styles';
-import {getReadableID} from '../../components/issue-formatter/issue-formatter';
-import * as issueActions from './issue-actions';
-import {attachmentActions} from './issue__attachment-actions-and-types';
-
-import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
-import type {State as IssueState} from './issue-reducers';
-import type {AnyIssue, TabRoute} from '../../flow/Issue';
-import type {Attachment} from '../../flow/CustomFields';
 
 // $FlowFixMe: module throws on type check
 import {TabView, TabBar} from 'react-native-tab-view';
-import IssueDetails from './issue__details';
 
-import {IconBack, IconCheck, IconClose, IconMoreOptions, IconDrag} from '../../components/icon/icon';
-import IssueActivity from './activity/issue__activity';
-import IssueStar from '../../components/issue-actions/issue-star';
+import * as issueActions from './issue-actions';
 import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
+import ColorField from '../../components/color-field/color-field';
+import CommandDialog from '../../components/command-dialog/command-dialog';
+import ErrorMessage from '../../components/error-message/error-message';
+import Header from '../../components/header/header';
+import IssueActivity from './activity/issue__activity';
+import IssueDetails from './issue__details';
+import IssueStar from '../../components/issue-actions/issue-star';
+import Router from '../../components/router/router';
+import Select from '../../components/select/select';
+import usage from '../../components/usage/usage';
+import {attachmentActions} from './issue__attachment-actions-and-types';
+import {getApi} from '../../components/api/api__instance';
+import {getReadableID} from '../../components/issue-formatter/issue-formatter';
+import {IconBack, IconCheck, IconClose, IconMoreOptions, IconDrag} from '../../components/icon/icon';
 import {isIOSPlatform} from '../../util/util';
 import {Skeleton} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
 
+import styles from './issue.styles';
+
+import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
+import type {AnyIssue, TabRoute} from '../../flow/Issue';
+import type {Attachment, Tag} from '../../flow/CustomFields';
+import type {State as IssueState} from './issue-reducers';
 import type {Theme, UITheme, UIThemeColors} from '../../flow/Theme';
 
 const CATEGORY_NAME = 'Issue';
@@ -56,7 +55,8 @@ type AdditionalProps = {
   loadAttachments: () => any,
   hideAddAttachDialog: () => any,
   createAttachActions: () => any,
-  removeAttachment: (attach: Attachment) => any
+  removeAttachment: (attach: Attachment) => any,
+  isTagsSelectVisible: boolean
 };
 
 type IssueProps = IssueState & typeof issueActions & AdditionalProps;
@@ -354,7 +354,8 @@ class Issue extends PureComponent<IssueProps, TabsState> {
                 {
                   canAttach: issuePermissions.canAddAttachmentTo(issue),
                   canEdit: issuePermissions.canUpdateGeneralInfo(issue),
-                  canApplyCommand: issuePermissions.canRunCommand(issue)
+                  canApplyCommand: issuePermissions.canRunCommand(issue),
+                  canTag: issuePermissions.canTag(issue)
                 },
                 this.switchToDetailsTab,
               );
@@ -453,11 +454,31 @@ class Issue extends PureComponent<IssueProps, TabsState> {
     return Boolean(issueLoaded && !issueLoadingError);
   };
 
+  renderTagsSelect() {
+    const {selectProps} = this.props;
+    return (
+      <Select
+        {...selectProps}
+        titleRenderer={(tag: Tag) => {
+          return (
+            <ColorField
+              fullText={true}
+              text={tag.name}
+              color={tag.color}
+              style={styles.issueTagSelectItem}
+            />
+          );
+        }}
+      />
+    );
+  }
+
   render() {
     const {
       issueLoadingError,
       showCommandDialog,
-      isAttachFileDialogVisible
+      isAttachFileDialogVisible,
+      isTagsSelectVisible
     } = this.props;
 
     return (
@@ -476,6 +497,8 @@ class Issue extends PureComponent<IssueProps, TabsState> {
               {this.isIssueLoaded() && showCommandDialog && this._renderCommandDialog(uiTheme)}
 
               {isAttachFileDialogVisible && this.renderAttachFileDialog(uiTheme)}
+
+              {isTagsSelectVisible && this.renderTagsSelect()}
             </View>
           );
         }}

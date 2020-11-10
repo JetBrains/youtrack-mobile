@@ -1,23 +1,25 @@
 /* @flow */
 
 import {Clipboard, Share} from 'react-native';
+
 import * as types from './issue-action-types';
-import {attachmentTypes, attachmentActions} from './issue__attachment-actions-and-types';
 import ApiHelper from '../../components/api/api__helper';
-import {notify, notifyError} from '../../components/notification/notification';
-import {resolveError, resolveErrorMessage} from '../../components/error/error-resolver';
 import log from '../../components/log/log';
 import Router from '../../components/router/router';
-import {showActions} from '../../components/action-sheet/action-sheet';
 import usage from '../../components/usage/usage';
+import {attachmentTypes, attachmentActions} from './issue__attachment-actions-and-types';
+import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
 import {initialState} from './issue-reducers';
-import {isIOSPlatform} from '../../util/util';
+import {isIOSPlatform, until} from '../../util/util';
+import {notify, notifyError} from '../../components/notification/notification';
 import {receiveUserAppearanceProfile} from '../../actions/app-actions';
+import {resolveError, resolveErrorMessage} from '../../components/error/error-resolver';
+import {showActions} from '../../components/action-sheet/action-sheet';
 
 import type ActionSheet from '@expo/react-native-action-sheet/ActionSheet.ios';
-import type {IssueFull, CommandSuggestionResponse, OpenNestedViewParams} from '../../flow/Issue';
-import type {CustomField, IssueProject, FieldValue, Attachment, Tag} from '../../flow/CustomFields';
 import type Api from '../../components/api/api';
+import type {CustomField, IssueProject, FieldValue, Attachment, Tag} from '../../flow/CustomFields';
+import type {IssueFull, CommandSuggestionResponse, OpenNestedViewParams} from '../../flow/Issue';
 import type {State as IssueState} from './issue-reducers';
 import type {UserAppearanceProfile} from '../../flow/User';
 import type {Visibility} from '../../flow/Visibility';
@@ -338,7 +340,7 @@ function makeIssueWebUrl(api: Api, issue: IssueFull, commentId: ?string) {
 
 export function showIssueActions(
   actionSheet: ActionSheet,
-  permissions: { canAttach: boolean, canEdit: boolean, canApplyCommand: boolean },
+  permissions: { canAttach: boolean, canEdit: boolean, canApplyCommand: boolean, canTag: boolean },
   switchToDetailsTab: () => any
 ) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
@@ -373,6 +375,16 @@ export function showIssueActions(
         title: 'Edit',
         execute: () => {
           dispatch(startEditingIssue());
+          usage.trackEvent(CATEGORY_NAME, 'Edit issue');
+        }
+      });
+    }
+
+    if (permissions.canTag) {
+      actions.push({
+        title: 'Add tag',
+        execute: () => {
+          dispatch(onOpenTagsSelect());
           usage.trackEvent(CATEGORY_NAME, 'Edit issue');
         }
       });
@@ -548,5 +560,55 @@ export function updateIssueVisibility(visibility: Visibility) {
       notify(message, err);
       log.warn(message, err);
     }
+  };
+}
+
+export function onCloseTagsSelect() {
+  return (dispatch: (any) => any) => {
+
+    dispatch({
+      type: types.CLOSE_ISSUE_SELECT,
+      selectProps: null,
+      isTagsSelectVisible: false
+    });
+  };
+}
+
+export function onOpenTagsSelect() {
+  return (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const issue: IssueFull = getState().issueState.issue;
+    usage.trackEvent(CATEGORY_NAME, 'Open Tags select');
+
+    dispatch({
+      type: types.OPEN_ISSUE_SELECT,
+      selectProps: {
+        show: true,
+        placeholder: 'Filter tags',
+        dataSource: async () => {
+          const issueProjectId: string = issue.project.id;
+          const [error, relevantProjectTags] = await until(api.issueFolder.getProjectRelevantTags(issueProjectId));
+          if (error) {
+            return [];
+          }
+          return relevantProjectTags;
+        },
+
+        selectedItems: [],
+        getTitle: item => getEntityPresentation(item),
+        onCancel: () => dispatch(onCloseTagsSelect()),
+        onSelect: async (tag: Tag) => {
+          const [error] = await until(api.issue.addTag(issue.id, tag.id));
+          dispatch(receiveIssue(Object.assign({}, issue, {tags: [].concat(issue?.tags || []).concat(tag)})));
+          dispatch(onCloseTagsSelect());
+          if (error) {
+            dispatch(receiveIssue(issue));
+            notify('Failed to add a tag');
+          }
+
+        }
+      },
+      isTagsSelectVisible: true
+    });
   };
 }

@@ -51,14 +51,16 @@ describe('<ColorField/>', () => {
   describe('Colorize', () => {
     it('should set background color', () => {
       const container = doShallow().find({testID: 'color-field-value-wrapper'});
-      const backgroundColor = container.props().style[1].backgroundColor;
+      const values = Object.values(container.props().style);
+      const backgroundColor = values[0];
 
       backgroundColor.should.equal(backgroundColor);
     });
 
     it('should set foreground color', () => {
       const container = doShallow().find({testID: 'color-field-value'});
-      const foregroundColor = container.props().style[1].color;
+      const values = Object.values(container.props().style);
+      const foregroundColor = values[0];
 
       foregroundColor.should.equal(fieldForegroundColorMock);
     });

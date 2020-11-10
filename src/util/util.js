@@ -88,7 +88,7 @@ export const createBtoa = (str: string) => {
   return base64.fromByteArray(byteArray);
 };
 
-export const until = (promises: Array<Promise<any>>): Promise<[?CustomError, any]> => {
+export const until = (promises: any): Promise<[?CustomError, any]> => {
   if (!promises) {
     return Promise.reject(['No promises are provided']);
   }

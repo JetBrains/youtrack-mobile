@@ -27,8 +27,8 @@ export type State = {
   initialCommand: string,
   commandSuggestions: ?CommandSuggestionResponse,
   commandIsApplying: boolean,
-  isSelectOpen: boolean,
-  selectProps: Object,
+  isVisibilitySelectShown: boolean,
+  selectProps: ?Object,
   user: User,
   updateUserAppearanceProfile: Function,
 
@@ -52,8 +52,8 @@ export const initialState: State = {
   initialCommand: '',
   commandSuggestions: null,
   commandIsApplying: false,
-  isSelectOpen: false,
-  selectProps: {},
+  isVisibilitySelectShown: false,
+  selectProps: null,
   user: null,
   updateUserAppearanceProfile: null,
 
@@ -255,7 +255,7 @@ export default createReducer(initialState, {
       }
     };
   },
-  [types.UNLOAD_ACTIVE_ISSUE_VIEW]: (state: State, action: { starred: boolean }): State => {
+  [types.UNLOAD_ACTIVE_ISSUE_VIEW]: (state: State): State => {
     return {...initialState, unloadedIssueState: state};
   },
   [types.OPEN_COMMAND_DIALOG]: (state: State, action: { initialCommand: string }): State => {
@@ -279,15 +279,13 @@ export default createReducer(initialState, {
   [types.OPEN_ISSUE_SELECT]: (state: State, action: Object) => {
     return {
       ...state,
-      isSelectOpen: true,
-      selectProps: action.selectProps
+      ...action
     };
   },
-  [types.CLOSE_ISSUE_SELECT]: (state: State) => {
+  [types.CLOSE_ISSUE_SELECT]: (state: State, action: Object) => {
     return {
       ...state,
-      isSelectOpen: false,
-      selectProps: null
+      ...action
     };
   }
 });

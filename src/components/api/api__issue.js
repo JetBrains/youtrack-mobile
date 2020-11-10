@@ -253,4 +253,12 @@ export default class IssueAPI extends ApiBase {
   removeAttachment(issueId: string, attachmentId: string) {
     return this.removeIssueEntity('attachments', issueId, attachmentId);
   }
+
+  addTag(issueId: string, tagId: string) {
+    return this.makeAuthorizedRequest(
+      `${this.youTrackIssueUrl}/${issueId}/tags?fields=id`,
+      'POST',
+      {id: tagId}
+    );
+  }
 }

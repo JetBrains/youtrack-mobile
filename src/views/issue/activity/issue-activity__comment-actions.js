@@ -315,12 +315,12 @@ export function receiveCommentVisibilityOptions() {
   return {type: types.RECEIVE_VISIBILITY_OPTIONS};
 }
 
-export function onOpenSelect(selectProps: Object) {
-  return {type: types.OPEN_ISSUE_SELECT, selectProps};
+export function onOpenSelect(selectProps: Object, isVisibilitySelectShown: boolean) {
+  return {type: types.OPEN_ISSUE_SELECT, selectProps, isVisibilitySelectShown};
 }
 
-export function onCloseSelect() {
-  return {type: types.CLOSE_ISSUE_SELECT};
+export function onCloseSelect(isVisibilitySelectShown: boolean) {
+  return {type: types.CLOSE_ISSUE_SELECT, undefined, isVisibilitySelectShown};
 }
 
 export function updateCommentWithVisibility(comment: IssueComment) {
@@ -353,9 +353,9 @@ export function onOpenCommentVisibilitySelect(comment: IssueComment) {
         comment = comment || {};
         comment.visibility = IssueVisibility.toggleOption(comment.visibility, selectedOption);
         dispatch(updateCommentWithVisibility(comment));
-        dispatch(onCloseSelect());
+        dispatch(onCloseSelect(false));
       }
-    }));
+    }, true));
   };
 }
 

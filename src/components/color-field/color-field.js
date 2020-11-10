@@ -1,8 +1,10 @@
 /* @flow */
-import {View, Text, StyleSheet} from 'react-native';
+
 import React, {PureComponent} from 'react';
+import {View, Text, StyleSheet} from 'react-native';
 
 import {secondaryText} from '../common-styles/typography';
+import {UNIT} from '../variables/variables';
 
 type Props = {
   text: string,
@@ -41,11 +43,17 @@ export default class ColorField extends PureComponent<Props, void> {
 
     return (
       <View
-        style={[styles.wrapper, {backgroundColor: this._getBackgroundColor()}, style, defaultColorCoding]}
+        style={Object.assign(
+          {backgroundColor: this._getBackgroundColor()},
+          styles.wrapper,
+          !this.props.fullText ? styles.wrapperOneChar : null,
+          style,
+          defaultColorCoding
+        )}
         testID="color-field-value-wrapper"
       >
         <Text
-          style={[styles.text, {color: this._getForegroundColor()}]}
+          style={Object.assign({color: this._getForegroundColor()}, styles.text)}
           numberOfLines={1}
           testID="color-field-value"
         >
@@ -58,10 +66,14 @@ export default class ColorField extends PureComponent<Props, void> {
 
 const styles = StyleSheet.create({
   wrapper: {
+    justifyContent: 'center',
+    paddingVertical: UNIT / 4,
+    paddingHorizontal: UNIT / 2,
+    borderRadius: UNIT / 2,
+  },
+  wrapperOneChar: {
     width: COLOR_FIELD_SIZE,
-    height: COLOR_FIELD_SIZE,
-    borderRadius: 4,
-    justifyContent: 'center'
+    height: COLOR_FIELD_SIZE
   },
   text: {
     ...secondaryText,

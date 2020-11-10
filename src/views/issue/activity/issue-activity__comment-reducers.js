@@ -9,7 +9,7 @@ export type State = {
   commentSuggestions: ?Object,
   commentText: string,
   editingComment: ?IssueComment,
-  isSelectOpen: boolean,
+  isVisibilitySelectShown: boolean,
   submittingComment: boolean,
   suggestionsAreLoading: boolean,
   tmpIssueComments: ?Array<IssueComment>,
@@ -21,7 +21,7 @@ export const initialState: State = {
   commentSuggestions: null,
   commentText: '',
   editingComment: null,
-  isSelectOpen: false,
+  isVisibilitySelectShown: false,
   submittingComment: false,
   suggestionsAreLoading: false,
   tmpIssueComments: null,
@@ -65,14 +65,14 @@ export default createReducer(initialState, {
   [types.OPEN_ISSUE_SELECT]: (state: State, action: Object) => {
     return {
       ...state,
-      isSelectOpen: true,
+      isVisibilitySelectShown: true,
       selectProps: action.selectProps
     };
   },
   [types.CLOSE_ISSUE_SELECT]: (state: State) => {
     return {
       ...state,
-      isSelectOpen: false,
+      isVisibilitySelectShown: false,
       selectProps: null
     };
   },

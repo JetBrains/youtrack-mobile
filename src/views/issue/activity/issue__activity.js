@@ -284,7 +284,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
   };
 
   render() {
-    const {isSelectOpen, activitiesLoadingError} = this.props;
+    const {isVisibilitySelectShown, activitiesLoadingError} = this.props;
     const activitiesApiEnabled: boolean = isActivitiesAPIEnabled();
     const hasError: boolean = this.hasLoadingError();
     const activityLoaded: boolean = this.isActivityLoaded();
@@ -299,7 +299,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
           return (
             <View style={styles.activities}>
 
-              {isSelectOpen && this.renderCommentVisibilitySelect()}
+              {isVisibilitySelectShown && this.renderCommentVisibilitySelect()}
 
               <ScrollView
                 refreshControl={this.renderRefreshControl()}

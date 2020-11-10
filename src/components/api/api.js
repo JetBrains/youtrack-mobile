@@ -3,40 +3,43 @@
 import qs from 'qs';
 import urlJoin from 'url-join';
 
-import issueFields from './api__issue-fields';
-import BaseAPI from './api__base';
-import ApiHelper from './api__helper';
-import IssueAPI from './api__issue';
 import AgileAPI from './api__agile';
-import IssuesAPI from './api__issues';
+import ApiHelper from './api__helper';
+import BaseAPI from './api__base';
 import InboxAPI from './api__inbox';
+import IssueAPI from './api__issue';
+import issueFields from './api__issue-fields';
+import IssueFolderAPI from './api__issue-folder';
+import IssuesAPI from './api__issues';
 import UserAPI from './api__user';
 import UserGroupAPI from './api__user-group';
 
 import type Auth from '../auth/auth';
 import type {EndUserAgreement} from '../../flow/AppConfig';
-import type {TransformedSuggestion, SavedQuery, CommandSuggestionResponse} from '../../flow/Issue';
 import type {IssueProject, Tag} from '../../flow/CustomFields';
+import type {TransformedSuggestion, SavedQuery, CommandSuggestionResponse} from '../../flow/Issue';
 import type {User} from '../../flow/User';
 
 class API extends BaseAPI {
   youTrackProjectUrl: string;
   youtTrackFieldBundleUrl: string;
 
-  issue: IssueAPI;
-  issues: IssuesAPI;
   agile: AgileAPI;
   inbox: InboxAPI;
+  issue: IssueAPI;
+  issueFolder: IssueFolderAPI
+  issues: IssuesAPI;
   user: UserAPI;
   userGroup: UserGroupAPI;
 
   constructor(auth: Auth) {
     super(auth);
 
-    this.issues = new IssuesAPI(auth);
-    this.issue = new IssueAPI(auth);
     this.agile = new AgileAPI(auth);
     this.inbox = new InboxAPI(auth);
+    this.issue = new IssueAPI(auth);
+    this.issueFolder = new IssueFolderAPI(auth);
+    this.issues = new IssuesAPI(auth);
     this.user = new UserAPI(auth);
     this.userGroup = new UserGroupAPI(auth);
 
