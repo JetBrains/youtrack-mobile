@@ -167,10 +167,8 @@ export function loadAgile(agileId: string) {
   };
 }
 
-export function cacheSprint(sprint: Sprint) {
-  return async () => {
-    await flushStoragePart({agileLastSprint: sprint});
-  };
+export async function cacheSprint(sprint: Sprint) {
+  return flushStoragePart({agileLastSprint: sprint});
 }
 
 export function suggestAgileQuery(query: string, caret: number) {
@@ -219,7 +217,7 @@ export function loadSprintIssues(sprint: Sprint) {
 
       animateLayout();
 
-      dispatch(cacheSprint(updatedSprint));
+      cacheSprint(updatedSprint);
       dispatch(subscribeServersideUpdates());
 
     } catch (e) {
@@ -555,9 +553,9 @@ export function createCardForCell(columnId: string, cellId: string) {
 export function subscribeServersideUpdates() {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const {sprint} = getState().agile;
-    const api: Api = getApi();
+    const updateCache = () => cacheSprint(getState().agile.sprint);
 
-    serverSideEventsInstance = new ServersideEvents(api.config.backendUrl);
+    serverSideEventsInstance = new ServersideEvents(getApi().config.backendUrl);
     serverSideEventsInstance.subscribeAgileBoardUpdates(sprint.eventSourceTicket);
 
     serverSideEventsInstance.listenTo('error', () => {
@@ -576,21 +574,25 @@ export function subscribeServersideUpdates() {
     serverSideEventsInstance.listenTo('sprintCellUpdate', data => {
       animateLayout();
       dispatch(addOrUpdateCellOnBoard(data.issue, data.row.id, data.column.id));
+      updateCache();
     });
 
     serverSideEventsInstance.listenTo('sprintSwimlaneUpdate', data => {
       animateLayout();
       dispatch(updateSwimlane(data.swimlane));
+      updateCache();
     });
 
     serverSideEventsInstance.listenTo('sprintIssueRemove', data => {
       animateLayout();
       dispatch(removeIssueFromBoard(data.removedIssue.id));
+      updateCache();
     });
 
     serverSideEventsInstance.listenTo('sprintIssueHide', data => {
       animateLayout();
       dispatch(removeIssueFromBoard(data.removedIssue.id));
+      updateCache();
     });
 
     serverSideEventsInstance.listenTo('sprintIssueMessage', function (data) {
@@ -603,6 +605,7 @@ export function subscribeServersideUpdates() {
         const leadingId = reorder.leading ? reorder.leading.id : null;
         dispatch(reorderSwimlanesOrCells(leadingId, reorder.moved.id));
       });
+      updateCache();
     });
 
     setSSEInstance(serverSideEventsInstance);
@@ -688,7 +691,7 @@ export function updateIssue(issueId: string, sprint?: SprintFull) {
       type: ISSUE_UPDATED,
       issue,
       onUpdate(board) {
-        !!sprint && dispatch(cacheSprint(Object.assign({}, sprint, {board})));
+        !!sprint && cacheSprint(Object.assign({}, sprint, {board}));
       }
     });
   };
