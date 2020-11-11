@@ -18,7 +18,6 @@ type Props = {
   onTagPress: (query: string) => void,
   onTagRemove?: (id: string) => void,
   style?: ViewStyleProp,
-  title?: React$Element<any>,
   multiline?: boolean
 }
 
@@ -71,31 +70,27 @@ export default class Tags extends PureComponent<Props, void> {
   isDefaultColorCoding = (tag: Tag) => tag?.color.id === NO_COLOR_CODING_ID ? styles.tagNoColor : null;
 
   render() {
-    const {tags, multiline, title, style} = this.props;
+    const {tags, multiline, style} = this.props;
 
-    if (!tags || !tags.length) {
+    if (tags?.length === 0) {
       return null;
     }
-
-    const tagStyle = [styles.tag, multiline ? styles.tagMultiline : null];
 
     return (
       <View
         testID="tagsList"
         style={[styles.tags, multiline ? styles.tagsMultiline : null, style]}
       >
-        {title}
-
-        {tags.map((tag, index) => {
+        {tags.map((tag: Tag) => {
           return (
             <TouchableOpacity
+              style={[styles.tag, multiline ? styles.tagMultiline : null]}
               testID="tagsListTag"
               onPress={() => this.showContextActions(tag)}
-              key={`${tag.id}_button`}
+              key={tag.id}
             >
               <ColorField
                 testID="tagColor"
-                style={[tagStyle, index === 0 ? {marginLeft: 0} : null]}
                 text={tag.name}
                 color={tag.color}
                 defaultColorCoding={this.isDefaultColorCoding(tag) ? styles.tagNoColor : null}

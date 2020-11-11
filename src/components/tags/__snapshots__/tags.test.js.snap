@@ -13,8 +13,13 @@ exports[`<Tags/> Render should match a snapshot 1`] = `
 >
   <TouchableOpacity
     activeOpacity={0.2}
-    key="undefined_button"
     onPress={[Function]}
+    style={
+      Array [
+        undefined,
+        null,
+      ]
+    }
     testID="tagsListTag"
   >
     <ColorField
@@ -25,17 +30,6 @@ exports[`<Tags/> Render should match a snapshot 1`] = `
       }
       defaultColorCoding={null}
       fullText={true}
-      style={
-        Array [
-          Array [
-            undefined,
-            null,
-          ],
-          Object {
-            "marginLeft": 0,
-          },
-        ]
-      }
       testID="tagColor"
     />
   </TouchableOpacity>
