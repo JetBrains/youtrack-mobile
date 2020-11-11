@@ -1,8 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {UNIT} from '../../components/variables/variables';
-import {headerTitle, mainText} from '../../components/common-styles/typography';
-import {elevationTop} from '../../components/common-styles/shadow';
+import {headerTitle} from '../../components/common-styles/typography';
 import {separatorBorder} from '../../components/common-styles/list';
 
 export default EStyleSheet.create({
@@ -59,39 +58,6 @@ export default EStyleSheet.create({
     paddingTop: UNIT * 2,
     fontSize: 18,
     color: '$link'
-  },
-  popupModal: {
-    justifyContent: 'flex-end'
-  },
-  popupPanel: {
-    padding: UNIT * 2,
-    paddingBottom: UNIT * 4,
-    backgroundColor: '$background',
-    ...elevationTop
-  },
-  popupText: {
-    fontSize: 18,
-    color: '$text'
-  },
-  popupButtons: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between'
-  },
-  popupButton: {
-    flexGrow: 0.46,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: UNIT * 2,
-    backgroundColor: '$link',
-    borderRadius: UNIT
-  },
-  popupButtonText: {
-    padding: UNIT,
-    fontSize: 20,
-    textAlign: 'center',
-    ...mainText,
-    color: '$text',
   },
   agileSelector: {
     width: '100%',

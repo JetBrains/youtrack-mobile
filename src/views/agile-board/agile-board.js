@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {Component} from 'react';
-import {View, Text, RefreshControl, TouchableOpacity, ActivityIndicator, Dimensions} from 'react-native';
+import {View, RefreshControl, TouchableOpacity, ActivityIndicator, Dimensions} from 'react-native';
 
 import {connect} from 'react-redux';
 import isEqual from 'react-fast-compare';
@@ -14,7 +14,6 @@ import BoardHeader from './board-header';
 import BoardScroller from '../../components/board-scroller/board-scroller';
 import ErrorMessage from '../../components/error-message/error-message';
 import log from '../../components/log/log';
-import ModalView from '../../components/modal-view/modal-view';
 import QueryAssistPanel from '../../components/query-assist/query-assist-panel';
 import QueryPreview from '../../components/query-assist/query-preview';
 import Router from '../../components/router/router';
@@ -64,7 +63,6 @@ type Props = AgilePageState & {
   createCardForCell: (columnId: string, cellId: string) => any,
   onCardDrop: (any) => any,
   refreshAgile: (agileId: string, sprintId: string, query?: string) => any,
-  toggleRefreshPopup: (isOutOfDate: boolean) => any,
   suggestAgileQuery: (query: ?string, caret: number) => any,
   storeLastQuery: (query: string) => any,
   updateIssue: (issueId: string, sprint?: SprintFull) => any
@@ -115,7 +113,6 @@ class AgileBoard extends Component<Props, State> {
   }
 
   componentWillUnmount() {
-    this.props.toggleRefreshPopup(false);
     boardActions.destroySSE();
   }
 
@@ -300,46 +297,6 @@ class AgileBoard extends Component<Props, State> {
     );
   }
 
-  renderRefreshPopup() {
-    const {sprint, refreshAgile, toggleRefreshPopup} = this.props;
-
-    if (!sprint || !sprint.agile) {
-      return null;
-    }
-
-    return (
-      <ModalView
-        transparent={true}
-        style={styles.popupModal}
-        visible
-        animationType="slide"
-        onRequestClose={() => true}
-      >
-        <View style={styles.popupPanel}>
-          <Text style={styles.popupText}>
-            There is a new current sprint. To avoid data loss or inconsistent behavior, refresh the board.
-          </Text>
-
-          <View style={styles.popupButtons}>
-            <TouchableOpacity
-              hitSlop={HIT_SLOP}
-              style={styles.popupButton}
-              onPress={() => refreshAgile(sprint.agile.id, sprint.id)}>
-              <Text style={styles.popupButtonText}>Refresh</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              hitSlop={HIT_SLOP}
-              style={styles.popupButton}
-              onPress={() => toggleRefreshPopup(false)}>
-              <Text style={styles.popupButtonText}>Cancel</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ModalView>
-    );
-  }
-
   getError(): CustomError | null {
     return this.props.error;
   }
@@ -520,7 +477,7 @@ class AgileBoard extends Component<Props, State> {
   }
 
   render() {
-    const {isSprintSelectOpen, isOutOfDate} = this.props;
+    const {isSprintSelectOpen} = this.props;
 
     return (
       <ThemeContext.Consumer>
@@ -539,8 +496,6 @@ class AgileBoard extends Component<Props, State> {
               {this.renderErrors()}
 
               {isSprintSelectOpen && this._renderSelect()}
-
-              {isOutOfDate && this.renderRefreshPopup()}
 
               {this.state.showAssist && this.renderSearchPanel()}
 
@@ -572,7 +527,6 @@ const mapDispatchToProps = (dispatch) => {
     createCardForCell: (...args) => dispatch(boardActions.createCardForCell(...args)),
     onCardDrop: (...args) => dispatch(boardActions.onCardDrop(...args)),
     refreshAgile: (agileId: string, sprintId: string, query: string = '') => dispatch(boardActions.refreshAgile(agileId, sprintId, query)),
-    toggleRefreshPopup: (isOutOfDate: boolean) => dispatch(boardActions.setOutOfDate(isOutOfDate)),
     suggestAgileQuery: (query: string, caret: number) => dispatch(boardActions.suggestAgileQuery(query, caret)),
     storeLastQuery: (query: string) => dispatch(boardActions.storeLastQuery(query)),
     updateIssue: (issueId: string, sprint?: SprintFull) => dispatch(boardActions.updateIssue(issueId, sprint)),

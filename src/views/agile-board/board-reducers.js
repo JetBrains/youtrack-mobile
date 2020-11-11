@@ -26,7 +26,6 @@ export type AgilePageState = {
   isLoadingAgile: boolean,
   profile: ?AgileUserProfile,
   isSprintSelectOpen: boolean,
-  isOutOfDate: boolean,
   creatingIssueDraftId: ?string,
   creatingIssueDraftCellId: ?string,
   sprint?: SprintFull,
@@ -41,7 +40,6 @@ const initialPageState: AgilePageState = {
   isLoadingAgile: false,
   profile: null,
   isSprintSelectOpen: false,
-  isOutOfDate: false,
   creatingIssueDraftId: null,
   creatingIssueDraftCellId: null,
   selectProps: null,
@@ -164,12 +162,6 @@ const agilePageReducer = createReducer(initialPageState, {
       ...state,
       selectProps: null,
       isSprintSelectOpen: false
-    };
-  },
-  [types.IS_OUT_OF_DATE](state: AgilePageState, action: { isOutOfDate: boolean }): AgilePageState {
-    return {
-      ...state,
-      isOutOfDate: action.isOutOfDate
     };
   },
   [types.START_LOADING_AGILE](state: AgilePageState): AgilePageState {

@@ -15,7 +15,7 @@ import {getAssistSuggestions} from '../../components/query-assist/query-assist-h
 import {getGroupedSprints, getSprintAllIssues, updateSprintIssues} from './agile-board__helper';
 import {isIOSPlatform} from '../../util/util';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
-import {notify, notifyError} from '../../components/notification/notification';
+import {notify} from '../../components/notification/notification';
 import {routeMap} from '../../app-routes';
 import {sortAlphabetically} from '../../components/search/sorting';
 
@@ -180,16 +180,10 @@ export function suggestAgileQuery(query: string, caret: number) {
   };
 }
 
-function onSprintLoadingFinish() {
-  return async (dispatch: (any) => any) => {
-    dispatch(stopSprintLoad());
-    dispatch(setOutOfDate(false));
-  };
-}
-
 export function loadSprint(agileId: string, sprintId: string, query: string) {
   return async (dispatch: (any) => any, getState: () => AgilePageState, getApi: ApiGetter) => {
     const api: Api = getApi();
+    dispatch(setError(null));
     dispatch(startSprintLoad());
     destroySSE();
     try {
@@ -208,8 +202,7 @@ export function loadSprint(agileId: string, sprintId: string, query: string) {
       dispatch(setError(error));
       trackError('Load sprint');
       log.info(message, e);
-
-      dispatch(onSprintLoadingFinish());
+      dispatch(stopSprintLoad());
     }
   };
 }
@@ -238,7 +231,7 @@ export function loadSprintIssues(sprint: Sprint) {
       dispatch(setError(error));
       log.info(message, e);
     } finally {
-      dispatch(onSprintLoadingFinish());
+      dispatch(stopSprintLoad());
     }
   };
 }
@@ -351,7 +344,7 @@ export function fetchMoreSwimlanes(query?: string) {
       log.info(`Loaded ${swimlanes.length} more swimlanes`);
       trackEvent('Load more swimlanes');
     } catch (e) {
-      notifyError('Could not load swimlanes', e);
+      notify('Could not load swimlanes', e);
     } finally {
       dispatch(stopSwimlanesLoading());
     }
@@ -387,7 +380,7 @@ export function rowCollapseToggle(row: AgileBoardRow) {
       trackEvent('Toggle row collapsing');
     } catch (e) {
       dispatch(updateRowCollapsedState(row, oldCollapsed));
-      notifyError('Could not update row', e);
+      notify('Could not update row', e);
     }
   };
 }
@@ -421,7 +414,7 @@ export function columnCollapseToggle(column: AgileColumn) {
       trackEvent('Toggle column collapsing');
     } catch (e) {
       dispatch(updateColumnCollapsedState(column, oldCollapsed));
-      notifyError('Could not update column', e);
+      notify('Could not update column', e);
     }
   };
 }
@@ -544,13 +537,6 @@ export function storeCreatingIssueDraft(draftId: string, cellId: string) {
   };
 }
 
-export function setOutOfDate(isOutOfDate: boolean) {
-  return {
-    type: types.IS_OUT_OF_DATE,
-    isOutOfDate
-  };
-}
-
 export function createCardForCell(columnId: string, cellId: string) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const {sprint} = getState().agile;
@@ -561,7 +547,7 @@ export function createCardForCell(columnId: string, cellId: string) {
       Router.CreateIssue({predefinedDraftId: draft.id});
       trackEvent('Open create card for cell');
     } catch (err) {
-      notifyError('Could not create card', err);
+      notify('Could not create card', err);
     }
   };
 }
@@ -580,10 +566,9 @@ export function subscribeServersideUpdates() {
       serverSideEventsInstanceErrorTimer = setTimeout(() => {
         log.info('Reloading sprint and reconnecting to LiveUpdate...');
         if (Router.getCurrentRouteName() !== routeMap.AgileBoard) {
-          dispatch(setOutOfDate(false));
-          destroySSE();
+          destroySSE(); //TODO: remove after implementing lazy screens loading
         } else if (serverSideEventsInstanceErrorTimer && serverSideEventsInstance) {
-          dispatch(setOutOfDate(true));
+          dispatch(loadSprintIssues(sprint));
         }
       }, RECONNECT_TIMEOUT);
     });
@@ -662,7 +647,6 @@ export function onCardDrop(data: { columnId: string, cellId: string, leadingId: 
       trackEvent('Card drop');
     } catch (err) {
       dispatch(moveIssue(data.movedId, issueOnBoard.cell.id, currentLeading?.id));
-      dispatch(setOutOfDate(true));
       log.warn('Could not move card', err);
     }
   };
