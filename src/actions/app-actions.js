@@ -382,14 +382,14 @@ export function completeInitialization(issueId: ?string = null) {
   };
 }
 
-function loadUser(userId: string = 'me') {
+function loadUser() {
   return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
     const USER_DEFAULT_PROFILES: UserGeneralProfile & UserAppearanceProfile = {
       general: {searchContext: null},
       appearance: {naturalCommentsOrder: true}
     };
 
-    let user: User = await getApi().user.getUser(userId);
+    let user: User = await getApi().user.getUser();
     user = Object.assign(
       {},
       user,
@@ -555,12 +555,12 @@ export function initializeApp(config: AppConfigFilled, issueId: ?string) {
     }
 
     await dispatch(checkUserAgreement());
-    await dispatch(storeProjectsShortNames());
 
     if (!getState().app.showUserAgreement) {
       await dispatch(completeInitialization(issueId));
     }
 
+    await dispatch(storeProjectsShortNames());
     dispatch(subscribeToURL());
   };
 }
