@@ -24,9 +24,10 @@ type Props = {
   uiTheme: UITheme
 };
 
-function MarkdownView(props: Props) {
-  const markdownItInstance: MarkdownIt = MarkdownIt({typographer: true, breaks: true});
+const markdownItInstance: MarkdownIt = MarkdownIt({typographer: true, breaks: true, linkify: true});
+markdownItInstance.linkify.set({fuzzyEmail: false, fuzzyLink: true});
 
+function MarkdownView(props: Props) {
   const {children, attachments = [], uiTheme} = props;
   const projects = (getStorageState().projects || []).map((it: Folder) => hasType.project(it) && it);
 
