@@ -28,6 +28,7 @@ export default EStyleSheet.create({
     flexGrow: 1,
     flexDirection: 'column',
     padding: UNIT * 1.75,
+    paddingTop: UNIT * 1.5,
   },
   cardContainerNotZoomed: {
     padding: UNIT,
@@ -88,7 +89,9 @@ export default EStyleSheet.create({
   },
   tags: {
     flexGrow: 0,
-    marginTop: UNIT
+    overflow: 'hidden',
+    height: UNIT * 3.5,
+    marginTop: UNIT / 2
   },
   zoomedInText: {
     fontSize: 11
