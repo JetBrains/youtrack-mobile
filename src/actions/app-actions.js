@@ -25,7 +25,6 @@ import usage from '../components/usage/usage';
 import {notify, notifyError} from '../components/notification/notification';
 import {loadConfig} from '../components/config/config';
 import Auth from '../components/auth/auth';
-import {loadAgileProfile} from '../views/agile-board/board-actions';
 import PushNotifications from '../components/push-notifications/push-notifications';
 import {EVERYTHING_CONTEXT} from '../components/search/search-context';
 import {storeSearchContext} from '../views/issues/issues-actions';
@@ -372,12 +371,11 @@ export function completeInitialization(issueId: ?string = null) {
     log.debug('Completing initialization');
     await dispatch(loadUser());
     await dispatch(loadUserPermissions());
-    await dispatch(loadAgileProfile());
-    await dispatch(loadWorkTimeSettings());
     log.debug('Initialization completed');
 
     Router.navigateToDefaultRoute(issueId ? {issueId} : null);
 
+    dispatch(loadWorkTimeSettings());
     dispatch(subscribeToPushNotifications());
   };
 }
