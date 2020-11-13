@@ -61,14 +61,15 @@ export default function AgileRowColumn(props: ColumnProps) {
         renderItem={renderCard}
         getItemLayout={getItemLayout}
         extraData={zoomedIn}
+        ListFooterComponent={
+          <TouchableOpacity
+            onPress={() => props.onTapCreateIssue(cell.column.id, cell.id)}
+            style={styles.addCardButton}
+          >
+            <IconAdd color={uiTheme.colors.$link} size={18}/>
+          </TouchableOpacity>
+        }
       />
-
-      <TouchableOpacity
-        onPress={() => props.onTapCreateIssue(cell.column.id, cell.id)}
-        style={styles.addCardButton}
-      >
-        <IconAdd color={uiTheme.colors.$link} size={18}/>
-      </TouchableOpacity>
     </DropZone>
   );
 }
