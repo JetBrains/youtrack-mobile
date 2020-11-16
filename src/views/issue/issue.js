@@ -257,7 +257,7 @@ class Issue extends PureComponent<IssueProps, TabsState> {
 
   handleOnBack = () => {
     this.setState({isTransitionInProgress: true});
-    const returned = Router.pop(false, {issueId: this.props.issue.id});
+    const returned = Router.pop(false, {issueId: this.props?.issue?.id});
     if (!returned) {
       Router.Issues();
     }
@@ -426,7 +426,7 @@ class Issue extends PureComponent<IssueProps, TabsState> {
     const {attachingImage, createAttachActions} = this.props;
     return (
       <AttachFileDialog
-        issueId={this.props.issue.id}
+        issueId={this.props?.issue?.id}
         attach={attachingImage}
         actions={createAttachActions()}
         onCancel={this.cancelAddAttach}
