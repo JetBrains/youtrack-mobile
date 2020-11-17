@@ -32,6 +32,7 @@ export default EStyleSheet.create({
   },
   cardContainerNotZoomed: {
     padding: UNIT,
+    paddingTop: UNIT,
   },
   cardContent: {
     flexDirection: 'column'
