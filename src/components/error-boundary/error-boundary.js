@@ -9,7 +9,7 @@ import usage from '../usage/usage';
 import {connect} from 'react-redux';
 import {openDebugView} from '../../actions/app-actions';
 import log from '../log/log';
-import {sendErrorReport, createReportErrorData} from '../error/error-reporter';
+import {sendReport, createReportErrorData} from '../error/error-reporter';
 import {notify} from '../notification/notification';
 import {flushStoragePart} from '../storage/storage';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -71,8 +71,8 @@ class ErrorBoundary extends Component<Props, State> {
         ReporterBugsnag.notify(error);
       }
 
-      const reportedId = await sendErrorReport(`Render crash report: ${errorData.summary}`, errorData.description);
-      if (reportedId) {
+      const reportedIssueId: ?string = await sendReport(`Render crash report: ${errorData.summary}`, errorData.description);
+      if (reportedIssueId) {
         notify(`Crash has been reported`);
       }
     } catch (err) {

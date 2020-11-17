@@ -3,8 +3,9 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../../components/variables/variables';
 
-import {mainText, secondaryText} from '../../components/common-styles/typography';
+import {MAIN_FONT_SIZE, mainText, SECONDARY_FONT_SIZE, secondaryText} from '../../components/common-styles/typography';
 import {separatorBorder} from '../../components/common-styles/list';
+import {rowFormStyles} from '../../components/common-styles/form';
 
 
 const hPaddings = {
@@ -86,5 +87,49 @@ export default EStyleSheet.create({
     marginTop: UNIT * 2,
     padding: UNIT * 2.5,
     paddingRight: 0
-  }
+  },
+
+  feedbackContainer: {
+    flexGrow: 1,
+    flexDirection: 'column',
+    paddingHorizontal: UNIT
+  },
+  feedbackForm: {
+    flexGrow: 1,
+    paddingHorizontal: UNIT
+  },
+  feedbackFormType: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  feedbackFormDescription: {
+    flexGrow: 1,
+    paddingBottom: UNIT * 3
+  },
+  feedbackFormText: {
+    fontSize: MAIN_FONT_SIZE,
+    color: '$text'
+  },
+  feedbackFormTextSup: {
+    position: 'absolute',
+    top: UNIT / 4,
+    left: UNIT,
+    fontSize: SECONDARY_FONT_SIZE - 2,
+    color: '$textSecondary'
+  },
+  feedbackFormInput: {
+    ...rowFormStyles.input,
+    paddingVertical: UNIT * 2,
+    marginTop: UNIT * 2,
+    color: '$text',
+    backgroundColor: '$boxBackground'
+  },
+  feedbackFormInputDescription: {
+    ...rowFormStyles.input,
+    flexGrow: 1,
+    marginTop: UNIT * 2,
+    color: '$text',
+    backgroundColor: '$boxBackground'
+  },
 });
