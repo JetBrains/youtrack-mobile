@@ -12,20 +12,21 @@ import {
   TextInput
 } from 'react-native';
 
-import KeyboardSpacer from 'react-native-keyboard-spacer';
+import InputScrollView from 'react-native-input-scroll-view';
 
 import * as AppActions from '../../actions/app-actions';
 import Accounts from '../../components/account/accounts';
 import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
 import Header from '../../components/header/header';
 import ModalView from '../../components/modal-view/modal-view';
-import MultilineInput from '../../components/multiline-input/multiline-input';
 import usage, {VERSION_STRING} from '../../components/usage/usage';
 import {AppVersion, until} from '../../util/util';
+import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
+import {feedbackLogsOptions, feedbackTypeOptions, sendFeedback} from './settings-helper';
 import {getStorageState} from '../../components/storage/storage';
 import {getSystemThemeMode, themes} from '../../components/theme/theme';
 import {IconAngleRight, IconCheck, IconClose} from '../../components/icon/icon';
-import {feedbackLogsOptions, feedbackTypeOptions, sendFeedback} from './settings-helper';
+import {notify} from '../../components/notification/notification';
 import {showActions} from '../../components/action-sheet/action-sheet';
 import {ThemeContext} from '../../components/theme/theme-context';
 
@@ -38,8 +39,6 @@ import PropTypes from 'prop-types';
 import type {FeedbackLogs, FeedbackType} from './settings-helper';
 import type {StorageState} from '../../components/storage/storage';
 import type {Theme, UITheme, UIThemeColors} from '../../flow/Theme';
-import {notify} from '../../components/notification/notification';
-import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Feedback = {
@@ -204,32 +203,37 @@ class Settings extends PureComponent<Props, State> {
       <ModalView
         animationType="slide"
       >
-        <View style={styles.feedbackContainer}>
-          <Header
-            title="Send Feedback"
-            leftButton={
-              <IconClose
-                size={21}
-                color={isFeedbackFormSending ? uiThemeColors.$disabled : uiThemeColors.$link}
-              />
-            }
-            onBack={() => !isFeedbackFormSending && this.setShareFeedbackVisibility(false)}
-            extraButton={(
-              <TouchableOpacity
-                hitSlop={HIT_SLOP}
-                disabled={isSummaryEmpty || isFeedbackFormSending}
-                onPress={this.onSendFeedback}
-              >
-                {isFeedbackFormSending
-                  ? <ActivityIndicator color={uiThemeColors.$link}/>
-                  : (<IconCheck
-                    size={20}
-                    color={isSummaryEmpty ? uiThemeColors.$disabled : uiThemeColors.$link}
-                  />)}
-              </TouchableOpacity>
-            )}
-          />
+        <Header
+          style={elevation1}
+          title="Send Feedback"
+          leftButton={
+            <IconClose
+              size={21}
+              color={isFeedbackFormSending ? uiThemeColors.$disabled : uiThemeColors.$link}
+            />
+          }
+          onBack={() => !isFeedbackFormSending && this.setShareFeedbackVisibility(false)}
+          extraButton={(
+            <TouchableOpacity
+              hitSlop={HIT_SLOP}
+              disabled={isSummaryEmpty || isFeedbackFormSending}
+              onPress={this.onSendFeedback}
+            >
+              {isFeedbackFormSending
+                ? <ActivityIndicator color={uiThemeColors.$link}/>
+                : (<IconCheck
+                  size={20}
+                  color={isSummaryEmpty ? uiThemeColors.$disabled : uiThemeColors.$link}
+                />)}
+            </TouchableOpacity>
+          )}
+        />
 
+        <InputScrollView
+          topOffset={styles.feedbackFormBottomIndent.height}
+          multilineInputStyle={styles.feedbackFormText}
+          style={styles.feedbackContainer}
+        >
           <View style={styles.feedbackForm}>
             <TouchableOpacity
               style={buttonStyle}
@@ -249,7 +253,7 @@ class Settings extends PureComponent<Props, State> {
               <Text style={styles.feedbackFormTextSup}>Logs</Text>
               <Text
                 testID="settingsFeedbackLogs"
-                style={styles.feedbackFormText}
+                style={[styles.feedbackFormText, styles.feedbackFormTextMain]}
               >{feedback.logs.title}</Text>
               {iconAngleRight}
             </TouchableOpacity>
@@ -273,19 +277,19 @@ class Settings extends PureComponent<Props, State> {
               onChangeText={(value: string) => update({summary: value})}
             />
 
-            <View style={styles.feedbackFormDescription}>
-              <MultilineInput
-                testID="settingsFeedbackDescription"
-                {...commonInputProps}
-                style={[styles.feedbackFormInputDescription]}
-                placeholder="Description"
-                onChangeText={(value: string) => update({description: value})}
-              />
-            </View>
+            <TextInput
+              multiline
+              textAlignVertical="top"
+              testID="settingsFeedbackDescription"
+              {...commonInputProps}
+              style={[styles.feedbackFormInputDescription]}
+              placeholder="Description"
+              onChangeText={(value: string) => update({description: value})}
+            />
 
-            <KeyboardSpacer/>
+            <View style={styles.feedbackFormBottomIndent}/>
           </View>
-        </View>
+        </InputScrollView>
       </ModalView>
     );
   };

@@ -92,7 +92,8 @@ export default EStyleSheet.create({
   feedbackContainer: {
     flexGrow: 1,
     flexDirection: 'column',
-    paddingHorizontal: UNIT
+    paddingHorizontal: UNIT,
+    paddingBottom: UNIT * 5
   },
   feedbackForm: {
     flexGrow: 1,
@@ -113,23 +114,29 @@ export default EStyleSheet.create({
   },
   feedbackFormTextSup: {
     position: 'absolute',
-    top: UNIT / 4,
+    top: UNIT / 2,
     left: UNIT,
     fontSize: SECONDARY_FONT_SIZE - 2,
-    color: '$textSecondary'
+    color: '$icon'
+  },
+  feedbackFormTextMain: {
+    marginBottom: -UNIT * 1.5
   },
   feedbackFormInput: {
     ...rowFormStyles.input,
-    paddingVertical: UNIT * 2,
     marginTop: UNIT * 2,
     color: '$text',
     backgroundColor: '$boxBackground'
   },
   feedbackFormInputDescription: {
     ...rowFormStyles.input,
+    height: UNIT * 29,
     flexGrow: 1,
     marginTop: UNIT * 2,
     color: '$text',
     backgroundColor: '$boxBackground'
   },
+  feedbackFormBottomIndent: {
+    height: UNIT * 8
+  }
 });
