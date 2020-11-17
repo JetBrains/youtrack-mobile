@@ -154,5 +154,9 @@ export default EStyleSheet.create({
   issueTagSelectItem: {
     paddingHorizontal: UNIT / 2,
     paddingVertical: UNIT / 4
+  },
+  iconMore: {
+    position: 'absolute',
+    top: -10
   }
 });

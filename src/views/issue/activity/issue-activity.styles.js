@@ -123,7 +123,7 @@ export default EStyleSheet.create({
     marginRight: UNIT * 2
   },
   activityCommentActionsOther: {
-    color: '$mask'
+    color: '$iconAccent'
   },
 
   settings: {

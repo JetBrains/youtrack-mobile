@@ -346,8 +346,8 @@ function IssueActivityStream(props: Props) {
             disabled={disabled}
             onPress={() => props.commentActions.onShowCommentActions(comment)}>
             {isIOSPlatform()
-              ? <IconMoreOptions size={24} color={styles.activityCommentActionsOther.color}/>
-              : <IconDrag size={22} color={styles.activityCommentActionsOther.color}/>}
+              ? <IconMoreOptions size={18} color={styles.activityCommentActionsOther.color}/>
+              : <IconDrag size={18} color={styles.activityCommentActionsOther.color}/>}
           </TouchableOpacity>
         </View>
       );

@@ -46,6 +46,7 @@ const tabRoutes: Array<TabRoute> = [
   {key: 'activity', title: 'Activity'}
 ];
 
+const isIOS: boolean = isIOSPlatform();
 
 type AdditionalProps = {
   issuePermissions: IssuePermissions,
@@ -281,10 +282,11 @@ class Issue extends PureComponent<IssueProps, TabsState> {
 
     if (!this.state.isTransitionInProgress) {
       return (
-        <Text>
-          {isIOSPlatform()
-            ? <IconMoreOptions size={24} color={uiTheme.colors.$link}/>
-            : <IconDrag size={22} color={uiTheme.colors.$link}/>}
+        <Text style={styles.iconMore}>
+          {isIOS
+            ? <IconMoreOptions size={18} color={uiTheme.colors.$link}/>
+            : <Text><IconDrag size={18} color={uiTheme.colors.$link}/></Text>
+          }
           <Text>{' '}</Text>
         </Text>
       );
