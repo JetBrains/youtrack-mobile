@@ -86,9 +86,8 @@ export default EStyleSheet.create({
     flex: 0,
     width: AGILE_COLLAPSED_COLUMN_WIDTH,
     minWidth: AGILE_COLLAPSED_COLUMN_WIDTH,
-    paddingTop: UNIT - 2,
-    paddingLeft: 2,
-    paddingRight: 2,
+    paddingLeft: UNIT / 4,
+    paddingRight: UNIT / 4,
     flexDirection: 'row',
     flexWrap: 'wrap'
   },
