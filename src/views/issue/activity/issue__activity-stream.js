@@ -366,7 +366,7 @@ const Stream = (
     }
 
     const disabled = activityGroup.merged;
-    const isAuthor = props.commentActions.isAuthor(comment?.author);
+    const isAuthor = props.commentActions.isAuthor(comment);
 
     const canComment: boolean = props.commentActions.canCommentOn;
     const canUpdate: boolean = props.commentActions.canUpdateComment(comment);
