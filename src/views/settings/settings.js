@@ -7,7 +7,7 @@ import {connect} from 'react-redux';
 import * as AppActions from '../../actions/app-actions';
 import Accounts from '../../components/account/accounts';
 import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
-import FeedbackForm from './feedback-form';
+import SettingsFeedbackForm from './settings__feedback-form';
 import Header from '../../components/header/header';
 import Router from '../../components/router/router';
 import SettingsAppearance from './settings__appearance';
@@ -71,7 +71,7 @@ class Settings extends PureComponent<Props, State> {
             onPress: openDebugView
           }, {
             title: 'Send feedback',
-            onPress: () => Router.Page({children: <FeedbackForm uiTheme={uiTheme}/>})
+            onPress: () => Router.Page({children: <SettingsFeedbackForm uiTheme={uiTheme}/>})
           }];
 
           return (

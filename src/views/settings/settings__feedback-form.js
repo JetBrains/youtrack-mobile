@@ -23,7 +23,7 @@ import {until} from '../../util/util';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {elevation1} from '../../components/common-styles/shadow';
 
-import styles from './feedback-form.styles';
+import styles from './settings__feedback-form.styles';
 
 import PropTypes from 'prop-types';
 
@@ -51,7 +51,7 @@ type State = {
 }
 
 
-export default class FeedbackForm extends PureComponent<Props, State> {
+export default class SettingsFeedbackForm extends PureComponent<Props, State> {
   static contextTypes = {
     actionSheet: PropTypes.func
   };
@@ -132,7 +132,7 @@ export default class FeedbackForm extends PureComponent<Props, State> {
     });
 
     return (
-      <View>
+      <>
         <Header
           style={elevation1}
           title="Send Feedback"
@@ -211,7 +211,7 @@ export default class FeedbackForm extends PureComponent<Props, State> {
             <View style={styles.feedbackFormBottomIndent}/>
           </View>
         </InputScrollView>
-      </View>
+      </>
     );
   }
 }
