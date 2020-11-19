@@ -23,7 +23,7 @@ import {until} from '../../util/util';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {elevation1} from '../../components/common-styles/shadow';
 
-import styles from './settings.styles';
+import styles from './feedback-form.styles';
 
 import PropTypes from 'prop-types';
 
