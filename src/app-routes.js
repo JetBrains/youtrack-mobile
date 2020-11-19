@@ -9,6 +9,7 @@ export const routeMap = {
   Inbox: 'Inbox',
   Issues: 'Issues',
   LogIn: 'LogIn',
+  Page: 'Page',
   Settings: 'Settings',
   Image: 'Image',
   Issue: 'Issue',

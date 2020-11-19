@@ -22,6 +22,7 @@ import Inbox from './views/inbox/inbox';
 import Issue from './views/issue/issue';
 import Issues from './views/issues/issues';
 import LoginForm from './views/log-in/log-in';
+import Page from './views/page/page';
 import Settings from './views/settings/settings';
 import WikiPage from './views/wiki-page/wiki-page';
 
@@ -137,6 +138,8 @@ class YouTrackMobile extends Component<void, void> {
     Router.registerRoute({name: routeMap.Inbox, component: Inbox, type: 'reset'});
 
     Router.registerRoute({name: routeMap.WikiPage, component: WikiPage, modal: true});
+
+    Router.registerRoute({name: routeMap.Page, component: Page});
 
     Router.finalizeRoutes(this.routeHomeName);
   }
