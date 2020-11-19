@@ -145,9 +145,10 @@ class Settings extends PureComponent<Props, State> {
                   {settingItems.map(it => (
                     <View
                       key={it.title}
-                      style={styles.settingsListItemTitle}
+                      style={styles.settingsListItem}
                     >
                       <TouchableOpacity
+                        style={styles.settingsListItemTitle}
                         hitSlop={HIT_SLOP}
                         onPress={it.onPress}>
                         <Text style={styles.settingsListItemTitleText}>{it.title}</Text>
