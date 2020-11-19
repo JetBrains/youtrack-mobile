@@ -3,6 +3,8 @@
 import React from 'react';
 import {View} from 'react-native';
 
+import styles from './page.style';
+
 type Props = {
   children: any,
 };
@@ -10,7 +12,10 @@ type Props = {
 export default function (props: Props) {
 
   return (
-    <View testID="page">
+    <View
+      style={styles.container}
+      testID="page"
+    >
       {props.children}
     </View>
   );
