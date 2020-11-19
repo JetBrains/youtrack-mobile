@@ -16,7 +16,7 @@ import {receiveUserAppearanceProfile} from '../../actions/app-actions';
 import {resolveError, resolveErrorMessage} from '../../components/error/error-resolver';
 import {showActions} from '../../components/action-sheet/action-sheet';
 
-import type ActionSheet from '@expo/react-native-action-sheet/ActionSheet.ios';
+import type ActionSheet from '@expo/react-native-action-sheet';
 import type Api from '../../components/api/api';
 import type {CustomField, IssueProject, FieldValue, Attachment, Tag} from '../../flow/CustomFields';
 import type {IssueFull, CommandSuggestionResponse, OpenNestedViewParams} from '../../flow/Issue';

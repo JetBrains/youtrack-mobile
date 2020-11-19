@@ -3,36 +3,35 @@
 import React, {Component} from 'react';
 import {UIManager} from 'react-native';
 
-
 import PropTypes from 'prop-types';
-import store from './store';
 import {Provider} from 'react-redux';
 
 import Router from './components/router/router';
-
-import Home from './views/home/home';
-import EnterServer from './views/enter-server/enter-server';
-import LoginForm from './views/log-in/log-in';
-import Issues from './views/issues/issues';
-import Issue from './views/issue/issue';
-import CreateIssue from './views/create-issue/create-issue';
-import Image from './views/image/image';
-import AttachmentPreview from './views/attachment-preview/attachment-preview';
-import AgileBoard from './views/agile-board/agile-board';
-import Inbox from './views/inbox/inbox';
-import WikiPage from './views/wiki-page/wiki-page';
-import Settings from './views/settings/settings';
-
+import store from './store';
 import {isAndroidPlatform} from './util/util';
 import {onNavigateBack, setAccount} from './actions/app-actions';
 import {rootRoutesList, routeMap} from './app-routes';
 
-// $FlowFixMe: cannot typecheck easy-toast module because of mistakes there
-import ActionSheet from '@expo/react-native-action-sheet';
+import AgileBoard from './views/agile-board/agile-board';
+import AttachmentPreview from './views/attachment-preview/attachment-preview';
+import CreateIssue from './views/create-issue/create-issue';
+import EnterServer from './views/enter-server/enter-server';
+import Home from './views/home/home';
+import Image from './views/image/image';
+import Inbox from './views/inbox/inbox';
+import Issue from './views/issue/issue';
+import Issues from './views/issues/issues';
+import LoginForm from './views/log-in/log-in';
+import Settings from './views/settings/settings';
+import WikiPage from './views/wiki-page/wiki-page';
+
+
+import {ActionSheetProvider, connectActionSheet} from '@expo/react-native-action-sheet';
 
 import AppProvider from './app-provider';
 
 import type {NotificationRouteData} from './flow/Notification';
+import type {Ref} from 'react';
 
 if (UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -47,10 +46,6 @@ const isAndroid: boolean = isAndroidPlatform();
 // GLOBAL.XMLHttpRequest = GLOBAL.originalXMLHttpRequest || GLOBAL.XMLHttpRequest;
 
 class YouTrackMobile extends Component<void, void> {
-  static childContextTypes = {
-    actionSheet: PropTypes.func
-  };
-  _actionSheetRef: ?Object;
   routeHomeName = 'Home';
 
   constructor() {
@@ -95,12 +90,6 @@ class YouTrackMobile extends Component<void, void> {
       notificationRouteData = await getNotificationRouteData();
     }
     store.dispatch(setAccount(notificationRouteData));
-  }
-
-  getChildContext() {
-    return {
-      actionSheet: () => this._actionSheetRef
-    };
   }
 
   registerRoutes() {
@@ -152,21 +141,44 @@ class YouTrackMobile extends Component<void, void> {
     Router.finalizeRoutes(this.routeHomeName);
   }
 
-  actionSheetRef = (component: ?React$Element<any>) => {
-    if (component) {
-      this._actionSheetRef = component;
-    }
-  };
-
   render() {
     return (
       <Provider store={store}>
-        <ActionSheet ref={this.actionSheetRef}>
-          <AppProvider/>
-        </ActionSheet>
+        <AppProvider/>
       </Provider>
     );
   }
 }
 
-module.exports = YouTrackMobile; //eslint-disable-line import/no-commonjs
+const AppActionSheetConnected = connectActionSheet<{}>(YouTrackMobile);
+
+class AppContainer extends Component<void, void> {
+  static childContextTypes = {
+    actionSheet: PropTypes.func
+  };
+
+  actionSheetRef: Ref<ActionSheetProvider>;
+
+  getChildContext() {
+    return {
+      actionSheet: () => this.actionSheetRef,
+    };
+  }
+
+  setActionSheetRef = (component: Ref<ActionSheetProvider>) => {
+    if (component) {
+      this.actionSheetRef = component;
+    }
+  };
+
+  render() {
+    return (
+      //$FlowFixMe
+      <ActionSheetProvider ref={this.setActionSheetRef} useModal={true}>
+        <AppActionSheetConnected/>
+      </ActionSheetProvider>
+    );
+  }
+}
+
+module.exports = AppContainer; //eslint-disable-line import/no-commonjs
