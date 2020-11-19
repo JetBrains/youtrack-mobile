@@ -9,17 +9,13 @@ import Accounts from '../../components/account/accounts';
 import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
 import FeedbackForm from './feedback-form';
 import Header from '../../components/header/header';
-import ModalView from '../../components/modal-view/modal-view';
 import Router from '../../components/router/router';
+import SettingsAppearance from './settings__appearance';
 import usage, {VERSION_STRING} from '../../components/usage/usage';
 import {AppVersion} from '../../util/util';
-import {getStorageState} from '../../components/storage/storage';
-import {getSystemThemeMode, themes} from '../../components/theme/theme';
-import {IconCheck, IconClose} from '../../components/icon/icon';
 import {ThemeContext} from '../../components/theme/theme-context';
 
 import {HIT_SLOP} from '../../components/common-styles/button';
-import {elevation1} from '../../components/common-styles/shadow';
 import styles from './settings.styles';
 
 import type {StorageState} from '../../components/storage/storage';
@@ -51,49 +47,6 @@ class Settings extends PureComponent<Props, State> {
     usage.trackScreenView(this.CATEGORY_NAME);
   }
 
-  setAppearanceSettingsVisibility = (isVisible: boolean = false) => {
-    this.setState({appearanceSettingsVisible: isVisible});
-  };
-
-  getUserThemeMode(): string {
-    return getStorageState().themeMode || '';
-  }
-
-  renderThemeCheckbox(currentTheme: Theme, uiTheme: Object): any {
-    const userThemeMode: ?string = this.getUserThemeMode();
-    const mode: string = uiTheme.mode;
-    const isChecked = (!userThemeMode && uiTheme.system) || (!uiTheme.system && !!userThemeMode && userThemeMode.indexOf(
-      mode) !== -1);
-
-    return (
-      <TouchableOpacity
-        key={mode}
-        hitSlop={HIT_SLOP}
-        onPress={async () => {
-          currentTheme.setMode(uiTheme.mode, !!uiTheme.system);
-        }}
-      >
-        <View style={styles.settingsListItemOption}>
-          <Text style={styles.settingsListItemOptionText}>
-            {`${uiTheme.name} theme`}
-            {uiTheme.system && <Text style={styles.settingsListItemOptionTextSecondary}>{` (${uiTheme.mode})`}</Text>}
-          </Text>
-          {isChecked && <IconCheck size={20} color={currentTheme.uiTheme.colors.$link}/>}
-        </View>
-      </TouchableOpacity>
-    );
-  }
-
-  renderAppearanceSettings = (theme: Theme) => {
-    const systemTheme: Object = {name: 'System', mode: getSystemThemeMode(), system: true};
-
-    return (
-      <View>
-        {[systemTheme].concat(themes).map((it: Object) => this.renderThemeCheckbox(theme, it))}
-      </View>
-    );
-  };
-
   render() {
     const {
       onAddAccount,
@@ -112,7 +65,7 @@ class Settings extends PureComponent<Props, State> {
           const uiTheme: UITheme = theme.uiTheme;
           const settingItems: Array<{ title: string, onPress: Function}> = [{
             title: 'Appearance',
-            onPress: () => this.setAppearanceSettingsVisibility(true)
+            onPress: () => Router.Page({children: <SettingsAppearance/> })
           }, {
             title: 'Share logs',
             onPress: openDebugView
@@ -176,27 +129,6 @@ class Settings extends PureComponent<Props, State> {
 
                 </View>
               </View>
-
-
-              {this.state.appearanceSettingsVisible && (
-                <ModalView
-                  testID="popup"
-                  animationType="fade"
-                >
-                  <Header
-                    style={elevation1}
-                    title="Appearance"
-                    leftButton={
-                      <IconClose style={styles.settingsAppearanceHeaderIcon} size={21} color={uiTheme.colors.$link}/>
-                    }
-                    onBack={this.setAppearanceSettingsVisibility}
-                  />
-
-                  <View style={styles.settingsAppearance}>
-                    {this.renderAppearanceSettings(theme)}
-                  </View>
-                </ModalView>
-              )}
             </View>
           );
         }}
