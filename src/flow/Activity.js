@@ -1,4 +1,5 @@
-import type {IssueComment} from './CustomFields';
+import type {IssueComment, IssueProject} from './CustomFields';
+import type {User} from './User';
 
 type EventBase = {
   id: string,
@@ -23,14 +24,14 @@ type ActivityIssue = EventBase & {
   project: IssueProject,
 }
 
-type ActivityWorkItem = EventBase & {
+type ActivityWork = EventBase & {
   $type: string;
   date: number;
   type: {name: string},
   duration: {minutes: number}
 }
 
-export type ActivityItem = IssueProject | IssueComment | ActivityAttachment | ActivityIssue | ActivityWorkItem | string | null;
+export type ActivityItem = IssueProject | IssueComment | ActivityAttachment | ActivityIssue | ActivityWork | string | null;
 
 export type IssueActivity = {
   id: string;

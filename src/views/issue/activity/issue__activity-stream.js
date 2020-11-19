@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import {View, Text, TouchableOpacity} from 'react-native';
 
@@ -10,6 +10,7 @@ import Avatar from '../../../components/avatar/avatar';
 import Comment from '../../../components/comment/comment';
 import CommentVisibility from '../../../components/comment/comment__visibility';
 import CustomFieldChangeDelimiter from '../../../components/custom-field/custom-field__change-delimiter';
+import CommentReactions from '../../../components/comment/comment-reactions';
 import Diff from '../../../components/diff/diff';
 import Feature, {FEATURES} from '../../../components/feature/feature';
 import getEventTitle from '../../../components/activity/activity__history-title';
@@ -25,7 +26,6 @@ import {
   getReadableID,
   ytDate
 } from '../../../components/issue-formatter/issue-formatter';
-import {CommentReactions} from '../../../components/comment/comment-reactions';
 import {getApi} from '../../../components/api/api__instance';
 import {getTextValueChange} from '../../../components/activity/activity__history-value';
 import {IconDrag, IconHistory, IconMoreOptions, IconWork} from '../../../components/icon/icon';
@@ -47,6 +47,7 @@ import type {User} from '../../../flow/User';
 import type {WorkTimeSettings} from '../../../flow/WorkTimeSettings';
 import type {YouTrackWiki} from '../../../flow/Wiki';
 import type {IssueFull} from '../../../flow/Issue';
+import type {CustomError} from '../../../flow/Error';
 
 const CATEGORY_NAME = 'Issue Stream';
 
@@ -59,7 +60,13 @@ type Props = {
   uiTheme: UITheme,
   workTimeSettings: ?WorkTimeSettings,
   youtrackWiki: $Shape<YouTrackWiki>,
-  onReactionSelect: (issueId: string, commentId: string, reactionId: string) => any,
+  onReactionSelect: (
+    issueId: string,
+    comment: IssueComment,
+    reaction: Reaction,
+    activities: Array<ActivityItem>,
+    onReactionUpdate: (activities: Array<ActivityItem>, error?: CustomError) => void
+  ) => any,
   currentUser: User
 };
 
@@ -69,12 +76,66 @@ type Change = {
 };
 
 
-function IssueActivityStream(props: Props) {
+const IssueActivityStream = (props: Props) => {
   const [reactionState, setReactionState] = useState({
     isReactionsPanelVisible: false,
     currentComment: null
   });
 
+  const [activities, setActivities] = useState(null);
+  useEffect(() => {
+    setActivities(props.activities);
+  });
+
+  const selectReaction = (comment: IssueComment, reaction: Reaction) => {
+    hideReactionsPanel();
+    // $FlowFixMe
+    return props.onReactionSelect(props.issueId, comment, reaction, props.activities, (activities, error) => {
+      if (!error) {
+        setActivities(activities);
+      }
+    });
+  };
+
+  const hideReactionsPanel = () => setReactionState({isReactionsPanelVisible: false, currentComment: null});
+
+  if (!props.activities) {
+    return <SkeletonIssueActivities/>;
+  }
+  return (
+    <View>
+      <ActivityStream
+        {...props}
+        activities={activities}
+        onReactionPanelOpen={(comment) => {
+          setReactionState({
+            isReactionsPanelVisible: true,
+            currentComment: comment
+          });
+        }}
+        onSelectReaction={selectReaction}
+      />
+
+      {reactionState.isReactionsPanelVisible && (
+        <ReactionsPanel
+          onSelect={(reaction: Reaction) => {
+            selectReaction(reactionState.currentComment, reaction);
+          }}
+          onHide={hideReactionsPanel}
+        />
+      )}
+    </View>
+  );
+};
+
+const Stream = (
+  props: Props & {
+    onReactionPanelOpen: (comment: IssueComment) => any, onSelectReaction: (
+      comment: IssueComment,
+      reaction: Reaction
+    ) => any
+  }
+) => {
   const isMultiValueActivity = (activity: Object) => {
     if (isActivityCategory.customField(activity)) {
       const field = activity.field;
@@ -167,7 +228,7 @@ function IssueActivityStream(props: Props) {
           <Text style={styles.activityLabel}>{getActivityEventTitle(activity)}</Text>
         </View>
         {
-          linkedIssues.map((linkedIssue: IssueFull & {isRemoved?: boolean}) => {
+          linkedIssues.map((linkedIssue: IssueFull & { isRemoved?: boolean }) => {
             const readableIssueId: string = getReadableID(linkedIssue);
             return (
               <Text
@@ -320,7 +381,8 @@ function IssueActivityStream(props: Props) {
               <TouchableOpacity
                 hitSlop={HIT_SLOP}
                 disabled={disabled}
-                onPress={() => isAuthor ? props.commentActions.onStartEditing(comment) : props.commentActions.onReply(comment)}>
+                onPress={() => isAuthor ? props.commentActions.onStartEditing(comment) : props.commentActions.onReply(
+                  comment)}>
                 <Text style={styles.link}>
                   {isAuthor ? 'Edit' : 'Reply'}
                 </Text>
@@ -332,10 +394,7 @@ function IssueActivityStream(props: Props) {
             <TouchableOpacity
               hitSlop={HIT_SLOP}
               disabled={disabled}
-              onPress={() => setReactionState({
-                isReactionsPanelVisible: true,
-                currentComment: comment
-              })}
+              onPress={() => props.onReactionPanelOpen(comment)}
             >
               {reactionAddIcon}
             </TouchableOpacity>
@@ -352,10 +411,6 @@ function IssueActivityStream(props: Props) {
         </View>
       );
     }
-  };
-
-  const selectReaction = (comment: IssueComment, reaction: Reaction) => {
-    props.onReactionSelect(props.issueId, comment, reaction);
   };
 
   const renderCommentActivity = (activityGroup: Object) => {
@@ -378,7 +433,8 @@ function IssueActivityStream(props: Props) {
             canRestore={props.commentActions.canRestoreComment(comment)}
             comment={comment}
             key={comment.id}
-            onDeletePermanently={() => props.commentActions.onDeleteCommentPermanently(comment, activityGroup.comment.id)}
+            onDeletePermanently={() => props.commentActions.onDeleteCommentPermanently(
+              comment, activityGroup.comment.id)}
             onRestore={() => props.commentActions.onRestoreComment(comment)}
             uiTheme={props.uiTheme}
             youtrackWiki={props.youtrackWiki}
@@ -394,7 +450,7 @@ function IssueActivityStream(props: Props) {
             style={styles.commentReactions}
             comment={comment}
             currentUser={props.currentUser}
-            onReactionSelect={selectReaction}
+            onReactionSelect={props.onSelectReaction}
           />
 
         </View>
@@ -471,17 +527,13 @@ function IssueActivityStream(props: Props) {
     }
   };
 
-  const hideReactionsPanel = () => setReactionState({isReactionsPanelVisible: false, currentComment: null});
-
 
   if (!props.activities) {
     return <SkeletonIssueActivities/>;
   }
-
-
   return (
-    <View>
-      {props.activities.length > 0
+    <>
+      {props.activities?.length > 0
         ? props.activities.map((activityGroup, index) => {
           if (activityGroup.hidden) {
             return null;
@@ -516,20 +568,16 @@ function IssueActivityStream(props: Props) {
             </View>
           );
         })
-        : <Text style={styles.activityNoActivity}>No activity yet</Text>}
-
-      {reactionState.isReactionsPanelVisible && (
-        <ReactionsPanel
-          onSelect={(reaction: Reaction) => {
-            hideReactionsPanel();
-            selectReaction(reactionState.currentComment, reaction);
-          }}
-          onHide={hideReactionsPanel}
-        />
-      )}
-    </View>
+        : !!props.activities && <Text style={styles.activityNoActivity}>No activity yet</Text>
+      }
+    </>
   );
-}
+};
 
+const isActivitiesEqual = (prev, next) => {
+  return prev && next && prev.activities === next.activities;
+};
 
-export default React.memo<Props>(IssueActivityStream);
+const ActivityStream = React.memo(Stream, isActivitiesEqual);
+export default React.memo<Props>(IssueActivityStream, isActivitiesEqual);
+

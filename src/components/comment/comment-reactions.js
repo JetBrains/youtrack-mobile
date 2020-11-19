@@ -21,15 +21,16 @@ type ReactionsType = {
   style?: ViewStyleProp
 }
 
+type ReactionsMap = { key: string, value: Reaction };
+
 
 const CommentReactions = (props: ReactionsType) => {
-  if (!props?.comment || !props.comment.reactionOrder || props.comment.reactions?.length === 0) {
+  if (!props.comment || !props.comment.reactionOrder || props.comment?.reactions?.length === 0) {
     return null;
   }
 
-  const reactionsMap = {};
+  const reactionsMap: ReactionsMap = {};
   props.comment.reactions.map((reaction: Reaction) => reactionsMap[reaction.reaction] = reaction);
-
   const {comment, onReactionSelect, size = UNIT * 2, style} = props;
 
   return (
@@ -63,6 +64,4 @@ const CommentReactions = (props: ReactionsType) => {
   );
 };
 
-export {
-  CommentReactions
-};
+export default React.memo(CommentReactions);

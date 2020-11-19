@@ -1,30 +1,36 @@
 /* @flow */
 
-import {Clipboard, Alert} from 'react-native';
-import * as types from '../issue-action-types';
-import {notify} from '../../../components/notification/notification';
-import log from '../../../components/log/log';
-import {showActions} from '../../../components/action-sheet/action-sheet';
-import usage from '../../../components/usage/usage';
-import type {IssueFull} from '../../../flow/Issue';
-import type {IssueComment} from '../../../flow/CustomFields';
-import type Api from '../../../components/api/api';
-import type {State as SingleIssueState} from '../issue-reducers';
-import {getEntityPresentation} from '../../../components/issue-formatter/issue-formatter';
-import IssueVisibility from '../../../components/visibility/issue-visibility';
-import {
-  loadActivitiesPage,
-  receiveActivityAPIAvailability, receiveActivityEnabledTypes,
-  receiveActivityPage
-} from './issue-activity__actions';
+import {Alert, Clipboard} from 'react-native';
 
 import * as activityHelper from './issue-activity__helper';
+import IssueVisibility from '../../../components/visibility/issue-visibility';
+import log from '../../../components/log/log';
+import usage from '../../../components/usage/usage';
+import {
+  loadActivitiesPage,
+  receiveActivityAPIAvailability,
+  receiveActivityEnabledTypes,
+  receiveActivityPage
+} from './issue-activity__actions';
+import {COMMENT_REACTIONS_SEPARATOR} from '../../../components/reactions/reactions';
+import {getEntityPresentation} from '../../../components/issue-formatter/issue-formatter';
+import {notify} from '../../../components/notification/notification';
+import {showActions} from '../../../components/action-sheet/action-sheet';
+import {until} from '../../../util/util';
 
+
+import * as types from '../issue-action-types';
+import type Api from '../../../components/api/api';
 import type IssueAPI from '../../../components/api/api__issue';
-import type {IssueActivity} from '../../../flow/Activity';
+import type {ActivityItem, IssueActivity} from '../../../flow/Activity';
+import type {ActivityPositionData} from './issue-activity__helper';
+import type {CustomError} from '../../../flow/Error';
+import type {IssueComment} from '../../../flow/CustomFields';
+import type {IssueFull} from '../../../flow/Issue';
 import type {Reaction} from '../../../flow/Reaction';
 import type {State as IssueActivityState} from './issue-activity__reducers';
 import type {State as IssueCommentActivityState} from './issue-activity__comment-reducers';
+import type {State as SingleIssueState} from '../issue-reducers';
 import type {User} from '../../../flow/User';
 
 const CATEGORY_NAME = 'Issue';
@@ -255,7 +261,12 @@ export function copyCommentUrl(comment: IssueComment) {
   }
 }
 
-export function showIssueCommentActions(actionSheet: Object, comment: IssueComment, canUpdateComment: boolean, canDeleteComment: boolean) {
+export function showIssueCommentActions(
+  actionSheet: Object,
+  comment: IssueComment,
+  canUpdateComment: boolean,
+  canDeleteComment: boolean
+) {
   return async (dispatch: (any) => any) => {
     const actions = [
       {
@@ -359,29 +370,70 @@ export function onOpenCommentVisibilitySelect(comment: IssueComment) {
   };
 }
 
-export function onReactionSelect(issueId: string, comment: IssueComment, reaction: Reaction) {
+export function onReactionSelect(
+  issueId: string,
+  comment: IssueComment,
+  reaction: Reaction,
+  activities: Array<ActivityItem>,
+  onReactionUpdate: (activities: Array<ActivityItem>, error?: CustomError) => void
+) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueApi: IssueAPI = getApi().issue;
     //$FlowFixMe
     const currentUser: User = getState().app.user;
     usage.trackEvent(CATEGORY_NAME, 'Reaction select');
-    try {
-      const existReaction: boolean = comment.reactions.some((it: Reaction) => {
-        return (
-          (it.reaction === reaction.reaction || it.id === reaction.id) &&
-          reaction.author.id === currentUser.id
-        );
-      });
-      if (existReaction) {
-        await issueApi.removeCommentReaction(issueId, comment.id, reaction.id);
-      } else {
-        await issueApi.addCommentReaction(issueId, comment.id, reaction.reaction);
-      }
-      dispatch(loadActivity(true));
-    } catch (error) {
+
+    const reactionName: string = reaction.reaction;
+    const existReaction: Reaction = comment.reactions.filter(
+      it => it.reaction === reactionName && it.author.id === currentUser.id)[0];
+
+    const [error, commentReaction] = await until(
+      existReaction
+        ? issueApi.removeCommentReaction(issueId, comment.id, existReaction.id)
+        : issueApi.addCommentReaction(issueId, comment.id, reactionName)
+    );
+
+    if (error) {
       const errorMsg: string = `Failed to update a reaction ${reaction?.reaction}`;
-      log.warn(errorMsg, error);
-      notify(errorMsg, error);
+      log.warn(errorMsg);
+      onReactionUpdate(activities, error);
+      notify(errorMsg);
+      return;
+    }
+
+    const targetActivityData: ?ActivityPositionData = activityHelper.findActivityInGroupedActivities(
+      activities, comment.id
+    );
+    if (targetActivityData) {
+      onReactionUpdate(updateActivities());
+    }
+
+    function updateActivities() {
+      const targetComment: IssueComment = targetActivityData?.activity?.comment.added[0];
+      if (existReaction) {
+        const selectedReactionEntity: Reaction = targetComment.reactions.find(
+          (it: Reaction) => it.reaction === reactionName && it.author.id === currentUser.id);
+        targetComment.reactions = targetComment.reactions.filter(
+          (it: Reaction) => it.id !== selectedReactionEntity.id && selectedReactionEntity.author.id === currentUser.id);
+
+        if (!targetComment.reactions.some((it: Reaction) => it.reaction === reactionName)) {
+          targetComment.reactionOrder = (targetComment.reactionOrder
+            .split(COMMENT_REACTIONS_SEPARATOR)
+            .filter((name: string) => name !== reactionName)
+            .join(COMMENT_REACTIONS_SEPARATOR));
+        }
+      } else {
+        targetComment.reactions.push(commentReaction);
+        if (!targetComment.reactionOrder.split(COMMENT_REACTIONS_SEPARATOR).some((it: string) => it === reactionName)) {
+          targetComment.reactionOrder = `${targetComment.reactionOrder}|${reactionName}`;
+        }
+      }
+
+      const newActivities: Array<ActivityItem> = activities.slice(0);
+      const targetIndex: ?number = targetActivityData?.index;
+      const targetActivity = targetIndex && newActivities[targetIndex];
+      targetActivity && (targetActivity.comment.added[0] = targetComment);
+      return newActivities;
     }
   };
 }

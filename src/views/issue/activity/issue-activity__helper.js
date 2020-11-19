@@ -6,7 +6,7 @@ import {Activity} from '../../../components/activity/activity__category';
 
 import {IconComment, IconHistory, IconHourGlass} from '../../../components/icon/icon';
 
-import type {ActivityType, ActivityItem} from '../../../flow/Activity';
+import type {ActivityItem, ActivityType, IssueActivity} from '../../../flow/Activity';
 import type {IssueComment} from '../../../flow/CustomFields';
 import type {StorageState} from '../../../components/storage/storage';
 
@@ -79,4 +79,19 @@ function createActivityItemFrom(comment: IssueComment): ActivityItem {
     targetMember: null,
     timestamp: comment.created
   };
+}
+
+export type ActivityPositionData = { activity: IssueActivity, index: number };
+
+export function findActivityInGroupedActivities(groupedActivities: Array<IssueActivity>, targetId: string): ActivityPositionData | null {
+  for (let index = 0; index < groupedActivities.length; index++) {
+    const activity: IssueActivity = groupedActivities[index];
+    if (activity?.target?.id === targetId) {
+      return {
+        activity,
+        index
+      };
+    }
+  }
+  return null;
 }

@@ -16,7 +16,7 @@ import Router from '../../components/router/router';
 import usage from '../../components/usage/usage';
 import UserInfo from '../../components/user/user-info';
 import YoutrackWiki from '../../components/wiki/youtrack-wiki';
-import {CommentReactions} from '../../components/comment/comment-reactions';
+import CommentReactions from '../../components/comment/comment-reactions';
 import {getReadableID} from '../../components/issue-formatter/issue-formatter';
 import {getStorageState} from '../../components/storage/storage';
 import {handleRelativeUrl} from '../../components/config/config';

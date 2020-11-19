@@ -26,7 +26,8 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []) => {
         work: null,
         key: '',
         comment: null,
-        vcs: null
+        vcs: null,
+        target: null
       };
 
       switch (true) {
@@ -36,6 +37,7 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []) => {
         break;
       case isActivityCategory.comment(event):
         streamGroup.comment = event;
+        streamGroup.target = event?.target;
         streamGroup.key = Activity.Source.COMMENT;
         break;
       default:

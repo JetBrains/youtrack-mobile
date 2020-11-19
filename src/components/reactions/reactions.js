@@ -57,4 +57,5 @@ const reactionsMap = {
   nine: require('./assets/nine.svg').default
 };
 
+export const COMMENT_REACTIONS_SEPARATOR: string = '|';
 export default reactionsMap;
