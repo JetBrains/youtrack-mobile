@@ -424,7 +424,8 @@ export function onReactionSelect(
         }
       } else {
         targetComment.reactions.push(commentReaction);
-        if (!targetComment.reactionOrder.split(COMMENT_REACTIONS_SEPARATOR).some((it: string) => it === reactionName)) {
+        targetComment.reactionOrder = targetComment.reactionOrder || '';
+        if (!(targetComment.reactionOrder).split(COMMENT_REACTIONS_SEPARATOR).some((it: string) => it === reactionName)) {
           targetComment.reactionOrder = `${targetComment.reactionOrder}|${reactionName}`;
         }
       }
