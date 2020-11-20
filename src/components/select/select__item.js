@@ -9,12 +9,14 @@ import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 
 import styles from './select.styles';
 
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 export type Props = {
   item: Object,
   isSelected: boolean,
   onPress: (item: Object) => any,
-  titleRenderer?: (item: Object) => any
+  titleRenderer?: (item: Object) => any,
+  style?: ViewStyleProp
 };
 
 export default class SelectItem extends PureComponent<Props, void> {
@@ -41,7 +43,7 @@ export default class SelectItem extends PureComponent<Props, void> {
   }
 
   render() {
-    const {item, isSelected} = this.props;
+    const {item, isSelected, style} = this.props;
 
     if (!item) {
       return null;
@@ -50,7 +52,7 @@ export default class SelectItem extends PureComponent<Props, void> {
     return (
       <TouchableOpacity
         key={item.id}
-        style={styles.row}
+        style={[styles.row, style]}
         onPress={this.onSelect}
       >
         <View style={styles.selectItemValue}>

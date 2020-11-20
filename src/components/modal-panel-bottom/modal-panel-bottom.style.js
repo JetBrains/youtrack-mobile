@@ -10,7 +10,7 @@ export default EStyleSheet.create({
     marginTop: -UNIT * 6
   },
   content: {
-    padding: UNIT * 2,
+    paddingHorizontal: UNIT,
     paddingTop: UNIT,
     paddingBottom: UNIT * 3,
     backgroundColor: '$background',

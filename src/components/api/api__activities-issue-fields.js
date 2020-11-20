@@ -77,7 +77,7 @@ const ISSUE_ACTIVITIES_FIELDS = toField([
         reactions: [
           'id',
           'reaction',
-          'author(id,fullName)'
+          'author(id,fullName,avatarUrl)'
         ]
       }
     ],

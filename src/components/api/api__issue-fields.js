@@ -292,7 +292,7 @@ const USER_CONSENT_FIELDS = 'endUserAgreementConsent(accepted,majorVersion,minor
 const REACTION = toField([
   'id',
   'reaction',
-  {author: ISSUE_USER_BASE_FIELDS}
+  {author: ISSUE_USER_FIELDS}
 ]);
 
 export default {

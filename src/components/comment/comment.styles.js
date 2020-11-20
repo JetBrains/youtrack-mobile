@@ -64,5 +64,14 @@ export default EStyleSheet.create({
     ...secondaryText,
     marginLeft: UNIT / 2,
     color: '$icon'
+  },
+  reactionAuthor: {
+    marginLeft: UNIT
+  },
+  reactionAuthorText: {
+    color: '$text'
+  },
+  reactionTitle: {
+    textTransform: 'capitalize'
   }
 });

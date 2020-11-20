@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import {Text, View, TouchableOpacity} from 'react-native';
 
+import ModalPanelBottom from '../modal-panel-bottom/modal-panel-bottom';
 import ReactionIcon from '../reactions/reaction-icon';
 import reactionNames from '../reactions/reactions-name-list';
+import SelectItem from '../select/select__item';
 
 import {UNIT} from '../variables/variables';
 import styles from './comment.styles';
@@ -29,38 +31,59 @@ const CommentReactions = (props: ReactionsType) => {
     return null;
   }
 
+  const [selectedReaction, setSelectedReaction] = useState(null);
+
   const reactionsMap: ReactionsMap = {};
   props.comment.reactions.map((reaction: Reaction) => reactionsMap[reaction.reaction] = reaction);
   const {comment, onReactionSelect, size = UNIT * 2, style} = props;
 
   return (
-    <View style={{...styles.reactionsContainer, ...style}}>
-      {comment.reactionOrder.split('|').map((reactionName: string) => {
-        if (!reactionNames.includes(reactionName)) {
-          return null;
-        }
+    <>
+      <View style={{...styles.reactionsContainer, ...style}}>
+        {comment.reactionOrder.split('|').map((reactionName: string) => {
+          if (!reactionNames.includes(reactionName)) {
+            return null;
+          }
 
-        const count: number = comment.reactions.filter((it: Reaction) => it.reaction === reactionName).length;
-        const reaction: ?Reaction = reactionsMap[reactionName];
-        if (reaction) {
-          const isUserReacted: boolean = reaction.author.id === props.currentUser.id;
-          return (
-            <TouchableOpacity
-              key={reaction.id}
-              disabled={!onReactionSelect}
-              style={{
-                ...styles.reactionsReaction,
-                ...(isUserReacted ? styles.reactionsReactionSelected: null)
-              }}
-              onPress={() => onReactionSelect(props.comment, reaction)}
-            >
-              <ReactionIcon name={reactionName} size={size}/>
-              {count > 1 && <Text style={styles.reactionsReactionCount}>{count}</Text>}
-            </TouchableOpacity>
-          );
-        }
-      })}
-    </View>
+          const count: number = comment.reactions.filter((it: Reaction) => it.reaction === reactionName).length;
+          const reaction: ?Reaction = reactionsMap[reactionName];
+          if (reaction) {
+            const isUserReacted: boolean = reaction.author.id === props.currentUser.id;
+            return (
+              <TouchableOpacity
+                key={reaction.id}
+                disabled={!onReactionSelect}
+                style={{
+                  ...styles.reactionsReaction,
+                  ...(isUserReacted ? styles.reactionsReactionSelected : null)
+                }}
+                onPress={() => onReactionSelect(props.comment, reaction)}
+                onLongPress={() => {
+                  setSelectedReaction(reaction);
+                }}
+              >
+                <ReactionIcon name={reactionName} size={size}/>
+                {count > 1 && <Text style={styles.reactionsReactionCount}>{count}</Text>}
+              </TouchableOpacity>
+            );
+          }
+
+        })}
+      </View>
+      {selectedReaction && (
+        <ModalPanelBottom
+          title={<Text style={styles.reactionTitle}>{selectedReaction.reaction}</Text>}
+          onHide={() => setSelectedReaction(null)}
+        >
+          {comment.reactions.filter((it: Reaction) => it.reaction === selectedReaction.reaction).map((it: Reaction) => {
+            return <SelectItem style={styles.reactionAuthor} key={it.id} item={it.author} titleRenderer={() => (
+              <Text style={styles.reactionAuthorText}>{it.author.fullName}</Text>
+            )}/>;
+          })}
+        </ModalPanelBottom>
+      )}
+
+    </>
   );
 };
 
