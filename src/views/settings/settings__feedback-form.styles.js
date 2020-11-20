@@ -21,7 +21,8 @@ export default EStyleSheet.create({
   feedbackFormType: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    paddingVertical: UNIT * 1.5
   },
   feedbackFormDescription: {
     flexGrow: 1,
