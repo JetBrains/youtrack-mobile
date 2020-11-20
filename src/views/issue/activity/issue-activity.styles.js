@@ -184,7 +184,7 @@ export default EStyleSheet.create({
     alignItems: 'center'
   },
   settingsName: {
-    ...secondaryTextColor,
+    color: '$text',
     fontSize: MAIN_FONT_SIZE,
     fontWeight: '500',
     textTransform: 'capitalize'
