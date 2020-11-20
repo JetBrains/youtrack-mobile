@@ -47,7 +47,7 @@ export default EStyleSheet.create({
   },
   resolvedIssueText: {
     color: '$textSecondary',
-    textDecorationLine: 'line-through'
+    ...issueIdResolved
   },
   rowHeaderText: {
     ...headerTitle,

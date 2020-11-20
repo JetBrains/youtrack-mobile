@@ -79,6 +79,9 @@ export default EStyleSheet.create({
     paddingTop: UNIT,
     color: '$text'
   },
+  summaryResolved: {
+    color: '$icon'
+  },
   description: {
     marginTop: UNIT * 2,
     color: '$text'

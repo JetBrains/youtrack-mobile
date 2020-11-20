@@ -126,7 +126,7 @@ export default EStyleSheet.create({
     ...issueIdResolved,
     color: '$icon'
   },
-  reactionComment: {
+  secondaryText: {
     color: '$icon'
   },
   reactionIcon: {

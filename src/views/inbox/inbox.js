@@ -405,7 +405,7 @@ class Inbox extends Component<Props, State> {
   }
 
   renderIssue(issue: IssueOnList) {
-    const readableID = getReadableID(issue);
+    const readableID: string = getReadableID(issue);
     return (
       <TouchableOpacity
         style={styles.notificationIssue}
@@ -419,7 +419,9 @@ class Inbox extends Component<Props, State> {
             ]}>{readableID}</Text>
           )}
           {!!issue.summary && (
-            <Text numberOfLines={2} style={styles.notificationIssueInfo}>{` ${issue.summary}`}</Text>
+            <Text numberOfLines={2} style={[styles.notificationIssueInfo, issue.resolved && styles.secondaryText]}>
+              {` ${issue.summary}`}
+            </Text>
           )}
         </Text>
       </TouchableOpacity>
@@ -455,7 +457,7 @@ class Inbox extends Component<Props, State> {
         <View style={styles.notificationContent}>
           {this.renderIssue(issue)}
           <View style={styles.notificationChange}>
-            <Text style={styles.reactionComment}>{comment.text}</Text>
+            <Text style={styles.secondaryText}>{comment.text}</Text>
             <CommentReactions
               comment={comment}
               currentUser={this.props.currentUser}
