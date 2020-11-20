@@ -546,7 +546,7 @@ class Inbox extends Component<Props, State> {
           this.state.isTitlePinned ? elevation1 : null
         ]}
       >
-        <Text style={styles.headerTitleText}>Activity</Text>
+        <Text style={styles.headerTitleText}>Notifications</Text>
       </View>
     );
   }

@@ -125,7 +125,7 @@ class Menu extends Component<Props, State> {
           <MenuItem
             isActive={this.isActiveRoute(routeMap.Inbox)}
             icon={<IconBell size={23} color={color(routeMap.Inbox)}/>}
-            label={'Activity'}
+            label={'Notifications'}
             onPress={this.openInbox}
           />
         </Feature>
