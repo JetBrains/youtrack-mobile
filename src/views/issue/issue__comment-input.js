@@ -243,7 +243,7 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
         {!this.state.isSaving && (
           <IconArrowUp
             size={22}
-            color={uiTheme.colors.$background}
+            color={uiTheme.colors.$textButton}
           />
         )}
         {this.state.isSaving && <ActivityIndicator color={uiTheme.colors.$background}/>}
