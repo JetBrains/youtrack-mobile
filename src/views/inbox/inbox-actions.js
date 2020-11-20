@@ -50,7 +50,13 @@ export function loadInbox(skip: number = 0, top: number = 10) {
       const notifications = (
         notificationAndReactions[0]
           .filter(item => item.metadata)
-          .map(it => (Object.assign({}, it, {timestamp: it.metadata.change.startTimestamp})))
+          .map(it => (
+            Object.assign(
+              {},
+              it,
+              it?.metadata?.change?.startTimestamp ? {timestamp: it.metadata.change.startTimestamp} : {}
+            )
+          ))
       );
       const reactions = isReactionsAvailable ? notificationAndReactions[1] : [];
       const sortedByTimestampItems = notifications.concat(reactions).sort(sortByTimestampReverse);
