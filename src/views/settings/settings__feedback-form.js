@@ -184,7 +184,7 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
               testID="settingsFeedbackEmail"
               {...commonInputProps}
               style={styles.feedbackFormInput}
-              placeholder="Contact me with an email address (optional)"
+              placeholder="Email address for follow-up (optional)"
               value={feedback.email}
               onChangeText={(value: string) => update({email: value})}
             />

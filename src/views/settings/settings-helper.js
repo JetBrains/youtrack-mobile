@@ -20,12 +20,15 @@ export const feedbackTypeOptions: Array<FeedbackType> = [
   {title: 'Other', marker: feedbackTypeMarker}
 ];
 export const feedbackLogsOptions: Array<FeedbackLogs> = [
-  {title: 'Do no send logs', value: false},
+  {title: 'Don\'t send logs', value: false},
   {title: 'Send logs', value: true}
 ];
 
 export const sendFeedback = async (feedbackData: FeedbackData) => {
-  let description: string = `##### ${feedbackData.type.marker}::${feedbackData.type.title}\n##### email: ${feedbackData?.email || ''}\n\n${feedbackData?.description || ''}`;
+  let description: string = `
+  ##### ${feedbackData.type.marker}::${feedbackData.type.title}
+  ##### email: ${feedbackData?.email || ''}
+  ${feedbackData?.description || ''}`;
   if (feedbackData.logs.value) {
     const deviceLogs = await getDeviceLogs();
     description = `${description}\n\n\`\`\`${deviceLogs}\`\`\``;
