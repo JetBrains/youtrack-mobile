@@ -41,6 +41,7 @@ export default class QueryPreview extends PureComponent<Props, void> {
           <IconSearch style={styles.searchIcon} size={20} color={styles.clearIcon.color}/>
 
           <Text
+            numberOfLines={1}
             onPress={this.focus}
             testID="query-assist-input"
             style={[
