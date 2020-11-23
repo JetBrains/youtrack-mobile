@@ -12,7 +12,6 @@ import {ThemeContext} from '../../components/theme/theme-context';
 
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {elevation1} from '../../components/common-styles/shadow';
-import {UNIT} from '../../components/variables/variables';
 import styles from './settings.styles';
 
 import type {Theme} from '../../flow/Theme';
@@ -47,7 +46,7 @@ const SettingsAppearance = () => {
   return (
     <ThemeContext.Consumer>
       {(theme: Theme) => (
-        <>
+        <View style={styles.settings}>
           <Header
             style={elevation1}
             title="Appearance"
@@ -57,10 +56,10 @@ const SettingsAppearance = () => {
             onBack={() => Router.pop()}
           />
 
-          <View style={{padding: UNIT * 2}}>
+          <View style={styles.settingsAppearance}>
             {[systemTheme].concat(themes).map((it: Object) => renderThemeCheckbox(theme, it))}
           </View>
-        </>
+        </View>
       )}
     </ThemeContext.Consumer>
   );

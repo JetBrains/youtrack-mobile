@@ -83,8 +83,6 @@ export default EStyleSheet.create({
     marginLeft: UNIT * 1.5
   },
   settingsAppearance: {
-    marginTop: UNIT * 2,
-    padding: UNIT * 2.5,
-    paddingRight: 0
+    padding: UNIT * 2,
   }
 });
