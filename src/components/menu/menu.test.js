@@ -81,11 +81,32 @@ describe('<Menu/>', () => {
       jest.restoreAllMocks();
     });
 
-    it('should not redirect to the same route ', () => {
-      instance.setCurrentRouteName(routeMap.Issues);
+    it('should not redirect to the same route', () => {
+      instance.setCurrentRouteName(routeMap.Issues, routeMap.Issues);
       instance.openIssueList();
 
       expect(Router.navigate).not.toHaveBeenCalled();
+    });
+
+    it('should redirect to Issues route if user was on issue screen', () => {
+      instance.setCurrentRouteName(routeMap.Issue, routeMap.Issue);
+      instance.openIssueList();
+
+      expect(Router.navigate).toHaveBeenCalled();
+    });
+
+    it('should redirect to Agile route if user was on issue screen', () => {
+      instance.setCurrentRouteName(routeMap.AgileBoard, routeMap.Issue);
+      instance.openIssueList();
+
+      expect(Router.navigate).toHaveBeenCalled();
+    });
+
+    it('should redirect to Notifications route if user was on issue screen', () => {
+      instance.setCurrentRouteName(routeMap.Inbox, routeMap.Issue);
+      instance.openIssueList();
+
+      expect(Router.navigate).toHaveBeenCalled();
     });
 
     describe('openIssueList', () => {

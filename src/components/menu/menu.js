@@ -2,13 +2,13 @@
 
 import React, {Component} from 'react';
 import {View as AnimatedView} from 'react-native-animatable';
-import Router from '../router/router';
 import {connect} from 'react-redux';
-import {MenuItem} from './menu__item';
 
 import Feature, {FEATURES} from '../feature/feature';
+import Router from '../router/router';
 import {DEFAULT_THEME} from '../theme/theme';
 import {IconBell, IconBoard, IconSettings, IconTask} from '../icon/icon';
+import {MenuItem} from './menu__item';
 import {routeMap} from '../../app-routes';
 
 import styles from './menu.styles';
@@ -22,7 +22,8 @@ type Props = {
 }
 
 type State = {
-  currentRouteName?: string | null
+  prevRouteName: ?string,
+  currentRouteName: ?string
 }
 
 class Menu extends Component<Props, State> {
@@ -36,26 +37,37 @@ class Menu extends Component<Props, State> {
     super();
 
     this.state = {
+      prevRouteName: null,
       currentRouteName: null
     };
 
-    Router.setOnDispatchCallback((routeName) => {
-      this.setCurrentRouteName(routeName);
+    Router.setOnDispatchCallback((routeName: ?string, prevRouteName: ?string) => {
+      this.setCurrentRouteName(routeName, prevRouteName);
     });
   }
 
 
-  setCurrentRouteName = (routeName) => this.setState({
+  setCurrentRouteName = (routeName: ?string, prevRouteName: ?string) => this.setState({
+    prevRouteName: prevRouteName,
     currentRouteName: routeName
   });
 
   isActiveRoute = (routeName: string) => {
-    const currentRouteName = this.state.currentRouteName;
-    return currentRouteName === routeName;
+    if (this.state.currentRouteName === routeMap.Issue) {
+      return this.state.prevRouteName === routeName;
+    }
+    return this.state.currentRouteName === routeName;
   };
 
   canNavigateTo = (routeName: string) => {
-    return !this.props.isDisabled && !this.isActiveRoute(routeName);
+    if (this.props.isDisabled) {
+      return false;
+    }
+    if (this.state.currentRouteName === routeMap.Issue) {
+      return true;
+    }
+
+    return !this.isActiveRoute(routeName);
   };
 
   openIssueList = () => {
