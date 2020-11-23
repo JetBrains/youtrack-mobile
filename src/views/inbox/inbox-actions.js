@@ -7,6 +7,7 @@ import {sortByTimestampReverse} from '../../components/search/sorting';
 import {until} from '../../util/util';
 
 import type Api from '../../components/api/api';
+import type {CustomError} from '../../flow/Error';
 
 type ApiGetter = () => Api;
 
@@ -37,44 +38,45 @@ export function loadInbox(skip: number = 0, top: number = 10) {
     dispatch(setError(null));
     dispatch(setLoading(true));
 
-    try {
-      const promises = [api.inbox.getInbox(skip, top)];
-      const isReactionsAvailable: boolean = checkVersion('2020.1');
-      if (isReactionsAvailable) {
-        promises.push(api.user.reactionsFeed(skip, top));
-      }
+    const loadingErrorMessage: string = 'Cannot load Inbox.';
+    const promises = [api.inbox.getInbox(skip, top)];
+    const isReactionsAvailable: boolean = checkVersion('2020.1');
+    if (isReactionsAvailable) {
+      promises.push(api.user.reactionsFeed(skip, top));
+    }
 
-      // eslint-disable-next-line no-unused-vars
-      const [error, notificationAndReactions] = await until(promises);
+    const [error, notificationAndReactions] = await until(promises);
 
-      const notifications = (
-        notificationAndReactions[0]
-          .filter(item => item.metadata)
-          .map(it => (
-            Object.assign(
-              {},
-              it,
-              it?.metadata?.change?.startTimestamp ? {timestamp: it.metadata.change.startTimestamp} : {}
-            )
-          ))
-      );
-      const reactions = isReactionsAvailable ? notificationAndReactions[1] : [];
-      const sortedByTimestampItems = notifications.concat(reactions).sort(sortByTimestampReverse);
+    if (error || notificationAndReactions.filter(Boolean).length === 0) {
+      const err: CustomError = error || new Error(loadingErrorMessage);
+      log.warn(loadingErrorMessage, err);
+      return dispatch(setError(err));
+    }
 
-      if (!skip) {
-        dispatch(resetItems());
-      }
+    const notifications = (
+      (notificationAndReactions[0] || [])
+        .filter(item => item.metadata)
+        .map(it => (
+          Object.assign(
+            {},
+            it,
+            it?.metadata?.change?.startTimestamp ? {timestamp: it.metadata.change.startTimestamp} : {}
+          )
+        ))
+    );
+    const reactions = isReactionsAvailable ? notificationAndReactions && notificationAndReactions[0] : [];
+    const sortedByTimestampItems = notifications.concat(reactions).sort(sortByTimestampReverse);
 
-      dispatch(
-        addItems(sortedByTimestampItems, notificationAndReactions[0].length > 0)
-      );
+    if (!skip) {
+      dispatch(resetItems());
+    }
 
-      if (notificationAndReactions[0].length < top) {
-        dispatch(listEndReached());
-      }
-    } catch (error) {
-      log.warn('Cannot load Inbox.', error);
-      dispatch(setError(error));
+    dispatch(
+      addItems(sortedByTimestampItems, notificationAndReactions[0].length > 0)
+    );
+
+    if (notificationAndReactions[0].length < top) {
+      dispatch(listEndReached());
     }
 
     dispatch(setLoading(false));
