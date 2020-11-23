@@ -229,17 +229,22 @@ export default createReducer(initialState, {
   [types.SET_VOTED]: (state: State, action: { voted: boolean }): State => {
     const {issue} = state;
     const {voted} = action;
-    return {
-      ...state,
-      issue: {
-        ...issue,
-        votes: voted ? issue.votes + 1 : issue.votes - 1,
-        voters: {
-          ...state.issue.voters,
-          hasVote: voted
+    const votes: number = (issue?.votes || 0) + (voted ? 1 : - 1);
+    if (votes >=0 ) {
+      return {
+        ...state,
+        issue: {
+          ...issue,
+          votes,
+          voters: {
+            ...state.issue.voters,
+            hasVote: voted
+          }
         }
-      }
-    };
+      };
+    } else {
+      return state;
+    }
   },
   [types.SET_STARRED]: (state: State, action: { starred: boolean }): State => {
     const {issue} = state;
