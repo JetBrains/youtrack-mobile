@@ -10,7 +10,6 @@ export default EStyleSheet.create({
     flexGrow: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '$background',
     ...elevationTop
   },
   menuItem: {
@@ -27,7 +26,7 @@ export default EStyleSheet.create({
     justifyContent: 'center',
   },
   menuItemLabel: {
-    fontSize: 12,
+    fontSize: 11,
     lineHeight: 20,
     letterSpacing: 0.2,
     color: '$link'
