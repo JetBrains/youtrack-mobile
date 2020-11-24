@@ -70,7 +70,7 @@ export function storeIssuesQuery(query: string) {
 }
 
 export function storeSearchContext(searchContext: Folder) {
-  return () => flushStoragePart({searchContext});
+  return async () => await flushStoragePart({searchContext});
 }
 
 export function listEndReached() {
@@ -109,9 +109,13 @@ export function updateSearchContextPinned(isPinned: boolean) {
   return {type: types.IS_SEARCH_CONTEXT_PINNED, isSearchContextPinned: isPinned};
 }
 
+function getSearchContext() {
+  return getStorageState().searchContext;
+}
+
 export function getSearchQuery(query: string = '') {
   return () => {
-    const userSearchContext: SavedQuery = getStorageState().searchContext;
+    const userSearchContext: SavedQuery = getSearchContext();
     const searchContextQuery = userSearchContext?.query;
     return userSearchContext?.query ? `${searchContextQuery} ${query}` : query;
   };
@@ -288,8 +292,9 @@ export function refreshIssues() {
     const userQuery: string = getState().issueList.query;
     const searchQuery: string = await dispatch(getSearchQuery(userQuery));
 
+    dispatch(setIssuesCount(null));
     dispatch(loadIssues(searchQuery));
-    dispatch(loadIssuesCount(searchQuery));
+    dispatch(loadIssuesCount(searchQuery, getSearchContext()));
   };
 }
 
@@ -343,12 +348,10 @@ export function loadMoreIssues() {
   };
 }
 
-export function loadIssuesCount(query: string = '') {
+export function loadIssuesCount(query: ?string, folder: Folder) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
-
-    const count = await api.issues.getIssuesCount(query);
-
+    const count = await api.issues.getIssuesCount(query, folder);
     dispatch(setIssuesCount(count));
   };
 }

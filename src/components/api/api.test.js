@@ -2,14 +2,16 @@ import Api from './api';
 import fetchMock from 'fetch-mock';
 import sinon from 'sinon';
 
+import * as feature from '../feature/feature';
+
 describe('API', () => {
   const serverUrl = 'http://foo.bar';
 
-  let fakeAuth;
-  const createInstance = (auth = fakeAuth) => new Api(auth);
+  let authMock;
+  const createApiInstance = (auth = authMock) => new Api(auth);
 
   beforeEach(() => {
-    fakeAuth = {
+    authMock = {
       refreshToken: sinon.spy(),
       authParams: {
         token_type: 'token type',
@@ -25,20 +27,20 @@ describe('API', () => {
   afterEach(() => fetchMock.restore());
 
   it('should create instance', () => {
-    createInstance().should.be.defined;
+    createApiInstance().should.be.defined;
   });
 
   it('should store config', () => {
-    createInstance().config.should.equal(fakeAuth.config);
+    createApiInstance().config.should.equal(authMock.config);
   });
 
   it('should construct issue URL', () => {
-    createInstance().youTrackIssueUrl.should.equal('http://foo.bar/api/issues');
+    createApiInstance().youTrackIssueUrl.should.equal('http://foo.bar/api/issues');
   });
 
   it('should make request', async () => {
     fetchMock.get(`${serverUrl}?$top=-1`, {foo: 'bar'});
-    const res = await createInstance().makeAuthorizedRequest(serverUrl);
+    const res = await createApiInstance().makeAuthorizedRequest(serverUrl);
     res.foo.should.equal('bar');
   });
 
@@ -56,16 +58,16 @@ describe('API', () => {
       return {foo: 'bar'};
     });
 
-    const res = await createInstance().makeAuthorizedRequest(serverUrl);
+    const res = await createApiInstance().makeAuthorizedRequest(serverUrl);
 
     res.foo.should.equal('bar');
-    fakeAuth.refreshToken.should.have.been.called;
+    authMock.refreshToken.should.have.been.called;
     callSpy.should.have.been.called.twice;
   });
 
   it('should load issue', async () => {
     fetchMock.mock(`^${serverUrl}/api/issues/test-id`, {id: 'issue-id', comments: [{author: {avatarUrl: 'http://foo.bar'}}]});
-    const res = await createInstance().issue.getIssue('test-id');
+    const res = await createApiInstance().issue.getIssue('test-id');
 
     res.id.should.equal('issue-id');
   });
@@ -77,7 +79,7 @@ describe('API', () => {
         url: '/persistent/123'
       }
     ]});
-    const res = await createInstance().issue.getIssue('test-id');
+    const res = await createApiInstance().issue.getIssue('test-id');
 
     res.attachments[0].url.should.equal(`${serverUrl}/persistent/123`);
   });
@@ -93,7 +95,7 @@ describe('API', () => {
       }
     ]);
 
-    const comments = await createInstance().issue.getIssueComments('test-id');
+    const comments = await createApiInstance().issue.getIssueComments('test-id');
 
     comments[0].author.avatarUrl.should.equal(`${serverUrl}${relativeUrl}`);
   });
@@ -104,7 +106,7 @@ describe('API', () => {
       {avatarUrl: relativeUrl}
     ]);
 
-    const res = await createInstance().getCustomFieldUserValues('test-id');
+    const res = await createApiInstance().getCustomFieldUserValues('test-id');
 
     res[0].avatarUrl.should.equal(`${serverUrl}${relativeUrl}`);
   });
@@ -116,7 +118,7 @@ describe('API', () => {
         avatarUrl: 'http://foo.bar'
       }
     });
-    const res = await createInstance().issue.submitComment('test-issue-id', {text: 'test comment text'});
+    const res = await createApiInstance().issue.submitComment('test-issue-id', {text: 'test comment text'});
 
     res.id.should.equal('test-comment');
   });
@@ -128,7 +130,7 @@ describe('API', () => {
         avatarUrl: 'http://foo.bar'
       }
     });
-    const res = await createInstance().issue.submitComment('test-issue-id', {text: 'test comment text', id: '123'});
+    const res = await createApiInstance().issue.submitComment('test-issue-id', {text: 'test comment text', id: '123'});
 
     res.id.should.equal('test-comment');
   });
@@ -142,8 +144,40 @@ describe('API', () => {
         avatarUrl: relativeUrl
       }
     });
-    const res = await createInstance().issue.submitComment('test-issue-id', {text: 'test comment text'});
+    const res = await createApiInstance().issue.submitComment('test-issue-id', {text: 'test comment text'});
 
     res.author.avatarUrl.should.equal(`${serverUrl}${relativeUrl}`);
   });
+
+
+  describe('Get issues count', () => {
+    let issuesApi;
+    let response;
+    beforeEach(() => {
+      issuesApi = createApiInstance().issues;
+      jest.spyOn(feature, 'checkVersion');
+    });
+
+    it('should get issues count using legacy REST endpoint', async () => {
+      const responseMock = {value: 1};
+
+      feature.checkVersion.mockReturnValueOnce(false);
+
+      fetchMock.get(`^${serverUrl}/rest/issue/count?sync=false&filter=`, responseMock);
+      response = await issuesApi.getIssuesCount();
+
+      expect(response).toEqual(responseMock.value);
+    });
+
+    it('should get issues count using actual REST endpoint', async () => {
+      feature.checkVersion.mockReturnValueOnce(true);
+
+      const responseMock = {count: 1};
+      fetchMock.post(`^${serverUrl}/api/issuesGetter/count?fields=count`, responseMock);
+      response = await issuesApi.getIssuesCount();
+
+      expect(response).toEqual(responseMock.count);
+    });
+  });
+
 });

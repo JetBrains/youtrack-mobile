@@ -139,9 +139,10 @@ describe('Issue list actions', () => {
         getIssuesCount: jest.fn()
       };
 
-      await actions.loadIssuesCount(issueContextQueryMock)(dispatch, () => stateMock, () => apiMock);
+      const folderMock = {id: 'contextId'};
+      await actions.loadIssuesCount(issueContextQueryMock, folderMock)(dispatch, () => stateMock, () => apiMock);
 
-      expect(apiMock.issues.getIssuesCount).toHaveBeenCalledWith(issueContextQueryMock);
+      expect(apiMock.issues.getIssuesCount).toHaveBeenCalledWith(issueContextQueryMock, folderMock);
     });
   });
 });
