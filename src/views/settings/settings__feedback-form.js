@@ -21,7 +21,6 @@ import {showActions} from '../../components/action-sheet/action-sheet';
 import {until} from '../../util/util';
 
 import {HIT_SLOP} from '../../components/common-styles/button';
-import {elevation1} from '../../components/common-styles/shadow';
 
 import styles from './settings__feedback-form.styles';
 
@@ -134,7 +133,7 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
     return (
       <>
         <Header
-          style={elevation1}
+          style={styles.elevation1}
           title="Send Feedback"
           leftButton={<IconBack color={isFeedbackFormSending ? uiThemeColors.$disabled : uiThemeColors.$link}/>}
           onBack={() => !isFeedbackFormSending && this.close()}

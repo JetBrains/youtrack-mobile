@@ -4,6 +4,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../../components/variables/variables';
 import {headerTitle, mainText, secondaryText} from '../../components/common-styles/typography';
 import {issueIdResolved} from '../../components/common-styles/issue';
+import {elevation1} from '../../components/common-styles/shadow';
 
 const font = {
   lineHeight: 18,
@@ -143,5 +144,6 @@ export default EStyleSheet.create({
     height: UNIT * 4,
     backgroundColor: '$error',
     transform: [{rotate: '45deg'}]
-  }
+  },
+  titleShadow: elevation1
 });

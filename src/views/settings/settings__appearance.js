@@ -11,7 +11,6 @@ import {IconBack, IconCheck} from '../../components/icon/icon';
 import {ThemeContext} from '../../components/theme/theme-context';
 
 import {HIT_SLOP} from '../../components/common-styles/button';
-import {elevation1} from '../../components/common-styles/shadow';
 import styles from './settings.styles';
 
 import type {Theme} from '../../flow/Theme';
@@ -48,7 +47,7 @@ const SettingsAppearance = () => {
       {(theme: Theme) => (
         <View style={styles.settings}>
           <Header
-            style={elevation1}
+            style={styles.elevation1}
             title="Appearance"
             leftButton={
               <IconBack color={theme.uiTheme.colors.$link}/>

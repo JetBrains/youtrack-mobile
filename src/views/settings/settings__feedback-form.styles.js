@@ -5,6 +5,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from '../../components/common-styles/typography';
 import {rowFormStyles} from '../../components/common-styles/form';
 import {UNIT} from '../../components/variables/variables';
+import {elevation1} from '../../components/common-styles/shadow';
 
 
 export default EStyleSheet.create({
@@ -58,5 +59,6 @@ export default EStyleSheet.create({
   },
   feedbackFormBottomIndent: {
     height: UNIT * 8
-  }
+  },
+  elevation1: elevation1
 });

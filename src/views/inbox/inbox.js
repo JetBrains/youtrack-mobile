@@ -26,7 +26,6 @@ import {LoadMoreList} from '../../components/progress/load-more-list';
 import {SkeletonIssueActivities} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
 
-import {elevation1} from '../../components/common-styles/shadow';
 import {UNIT} from '../../components/variables/variables';
 
 import styles from './inbox.styles';
@@ -545,7 +544,7 @@ class Inbox extends Component<Props, State> {
         key="activityHeaderTitle"
         style={[
           styles.headerTitle,
-          this.state.isTitlePinned ? elevation1 : null
+          this.state.isTitlePinned ? styles.titleShadow : null
         ]}
       >
         <Text style={styles.headerTitleText}>Notifications</Text>

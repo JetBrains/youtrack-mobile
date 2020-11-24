@@ -193,7 +193,7 @@ class Issue extends PureComponent<IssueProps, TabsState> {
           {...props}
           pressColor={uiThemeColors.$disabled}
           indicatorStyle={{backgroundColor: editMode ? 'transparent' : uiThemeColors.$link}}
-          style={[styles.tabsBar, editMode ? {height: 1} : null, {shadowColor: uiThemeColors.$icon}]}
+          style={[styles.tabsBar, editMode ? {height: 1} : null, {shadowColor: uiThemeColors.$separator}]}
           renderLabel={({route, focused}) => {
             return (
               <Text style={[
