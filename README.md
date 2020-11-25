@@ -3,23 +3,23 @@
 
 YouTrack Mobile app lets you stay on track with your tasks while you're on the go:
 
-* Easily work with your projects and tasks from anywhere. You can create, view, and update them, in addition to adding images and other files.
+* Easily work with your projects and tasks no matter where you are. You can create, view, and update issues, as well as attach images and other files.
 * Stay on track with real-time notifications about activity in your tasks and projects.
-* Contact team members and collaborate directly with them; just use @ to mention your colleagues in the issue’s comments.
-* View and organize your boards.
+* Alert members of your team regarding changes that require their attention. Use the @ sign to mention a colleague in an issue comment.
+* View and organize your issues on agile boards.
 
-YouTrack Mobile is written in React Native together with Redux and Flow and available for iOS and Android platforms.
+YouTrack Mobile is written in React Native together with Redux and Flow. The app is available for iOS and Android platforms.
 
 ## Installation
 * [Google Play](https://play.google.com/store/apps/details?id=com.jetbrains.youtrack.mobile.app)
 * [Apple AppStore](https://itunes.apple.com/us/app/youtrack/id1028024655?ls=1&mt=8)
 
 ## Bug and Issue Tracker
-Should you have and problems, report them to the [YouTrack Mobile issue tracker](https://youtrack.jetbrains.com/newissue?project=YTM&clearDraft=true).
+Should you have any problems, report them to the [YouTrack Mobile issue tracker](https://youtrack.jetbrains.com/newissue?project=YTM&clearDraft=true).
 
 ## Contributing
 
-YouTrack Mobile is an open source project and we are very happy to accept community contributions.
+YouTrack Mobile is an open-source project. We are very happy to accept community contributions.
 
 ### Prerequisites
 Before submitting PR's, read:
