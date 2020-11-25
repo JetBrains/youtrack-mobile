@@ -412,9 +412,10 @@ export function onReactionSelect(
       const targetComment: IssueComment = targetActivityData?.activity?.comment.added[0];
       if (existReaction) {
         const selectedReactionEntity: Reaction = targetComment.reactions.find(
-          (it: Reaction) => it.reaction === reactionName && it.author.id === currentUser.id);
+          (it: Reaction) => it.reaction === reactionName && it?.author?.id === currentUser?.id
+        );
         targetComment.reactions = targetComment.reactions.filter(
-          (it: Reaction) => it.id !== selectedReactionEntity.id && selectedReactionEntity.author.id === currentUser.id);
+          (it: Reaction) => it?.id !== selectedReactionEntity?.id && selectedReactionEntity?.author?.id === currentUser?.id);
 
         if (!targetComment.reactions.some((it: Reaction) => it.reaction === reactionName)) {
           targetComment.reactionOrder = (targetComment.reactionOrder
