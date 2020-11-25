@@ -72,7 +72,7 @@ export default class Tags extends PureComponent<Props, void> {
   render() {
     const {tags, multiline, style} = this.props;
 
-    if (tags?.length === 0) {
+    if (!tags || tags?.length === 0) {
       return null;
     }
 
@@ -81,7 +81,7 @@ export default class Tags extends PureComponent<Props, void> {
         testID="tagsList"
         style={[styles.tags, multiline ? styles.tagsMultiline : null, style]}
       >
-        {tags.map((tag: Tag) => {
+        {(tags || []).map((tag: Tag) => {
           return (
             <TouchableOpacity
               style={[styles.tag, multiline ? styles.tagMultiline : null]}
