@@ -119,6 +119,7 @@ class Menu extends Component<Props, State> {
         style={styles.menu}
       >
         <MenuItem
+          testID="menuIssues"
           isActive={this.isActiveRoute(routeMap.Issues)}
           icon={<IconTask size={24} color={color(routeMap.Issues)}/>}
           label={'Issues'}
@@ -126,6 +127,7 @@ class Menu extends Component<Props, State> {
         />
 
         <MenuItem
+          testID="menuAgileBoards"
           isActive={this.isActiveRoute(routeMap.AgileBoard)}
           icon={<IconBoard size={28} color={color(routeMap.AgileBoard)}/>}
           label={'Agile Boards'}
@@ -135,6 +137,7 @@ class Menu extends Component<Props, State> {
 
         <Feature version={FEATURES.inbox}>
           <MenuItem
+            testID="menuNotifications"
             isActive={this.isActiveRoute(routeMap.Inbox)}
             icon={<IconBell size={23} color={color(routeMap.Inbox)}/>}
             label={'Notifications'}
@@ -143,6 +146,7 @@ class Menu extends Component<Props, State> {
         </Feature>
 
         <MenuItem
+          testID="menuSettings"
           isActive={this.isActiveRoute(routeMap.Settings)}
           icon={<IconSettings size={22} color={color(routeMap.Settings)}/>}
           label={'Settings'}

@@ -1,31 +1,33 @@
 import React from 'react';
 
-import {shallow} from 'enzyme';
-import toJson from 'enzyme-to-json';
+import {Provider} from 'react-redux';
+import {render, cleanup, fireEvent} from '@testing-library/react-native';
 
+import * as api from '../api/api__instance';
 import Menu from './menu';
+import mocks from '../../../test/mocks';
 import Router from '../router/router';
+import {buildStyles, DEFAULT_THEME} from '../theme/theme';
 import {rootRoutesList, routeMap} from '../../app-routes';
-
-import Mocks from '../../../test/mocks';
-import {DEFAULT_THEME} from '../theme/theme';
 
 
 let apiMock;
 const getApi = () => apiMock;
-const createStoreMock = Mocks.createMockStore(getApi);
+const createStoreMock = mocks.createMockStore(getApi);
 const rootTestID = 'menu';
 
 describe('<Menu/>', () => {
 
-  let wrapper;
-  let instance;
   let storeMock;
   let stateMock;
   let ownPropsMock;
   let router;
 
+  beforeAll(() => buildStyles(DEFAULT_THEME.mode, DEFAULT_THEME));
+
   beforeEach(() => {
+    jest.restoreAllMocks();
+
     stateMock = {
       app: {
         otherAccounts: [],
@@ -39,130 +41,160 @@ describe('<Menu/>', () => {
     router = Router;
   });
 
+  afterEach(cleanup);
+
 
   describe('Render', () => {
 
-    it('should match a snapshot', () => {
-      render({auth: {}, agileUserProfile: {}});
+    it('should render component', () => {
+      const {queryByTestId} = doRender();
 
-      expect(toJson(wrapper)).toMatchSnapshot();
+      const queryByTestId1 = queryByTestId(rootTestID);
+      expect(queryByTestId1).toBeTruthy();
     });
 
-    it('should render component', () => {
-      render({auth: {}, agileUserProfile: {}});
+    it('should render menu `Issue` item', async () => {
+      const {getByTestId} = doRender();
 
-      expect(findByTestId(rootTestID)).toHaveLength(1);
+      expect(getByTestId('menuIssues')).toBeTruthy();
+    });
+
+    it('should render menu `Agile Boards` item', async () => {
+      const {getByTestId} = doRender();
+
+      expect(getByTestId('menuAgileBoards')).toBeTruthy();
+    });
+
+    describe('Notifications', () => {
+      beforeEach(() => {
+        jest.spyOn(api, 'getApi');
+      });
+
+      it('should render menu `Notifications` item', async () => {
+        api.getApi.mockReturnValueOnce({
+          config: {
+            version: '2018.4'
+          }
+        });
+        const {getByTestId} = doRender();
+
+        expect(getByTestId('menuNotifications')).toBeTruthy();
+      });
+
+      it('should not render menu `Notifications` item', async () => {
+        api.getApi.mockReturnValueOnce({
+          config: {
+            version: '2018.2'
+          }
+        });
+        const {queryByTestId} = doRender();
+
+        expect(queryByTestId('menuNotifications')).toBeNull();
+      });
+    });
+
+
+    it('should render menu `Settings` item', async () => {
+      const {getByTestId} = doRender({auth: {}, agileUserProfile: {}});
+
+      expect(getByTestId('menuSettings')).toBeTruthy();
     });
 
     it('should not render menu container if `auth` is not provided', () => {
-      render({});
+      stateMock.app.auth = null;
+      storeMock = createStoreMock(stateMock, ownPropsMock);
+      const {queryByTestId} = doRender();
 
-      expect(findByTestId(rootTestID)).toHaveLength(1);
+      expect(queryByTestId('menu')).toBeNull();
+    });
+
+    it('should not render menu container if `user` is not provided', () => {
+      stateMock.app.user = null;
+      storeMock = createStoreMock(stateMock, ownPropsMock);
+      const {queryByTestId} = doRender();
+
+      expect(queryByTestId('menu')).toBeNull();
     });
   });
 
 
-  describe('Navigate to views', () => {
+  describe('Navigation', () => {
     beforeEach(() => {
-      renderWithAuth();
-      Router.setNavigator(Mocks.navigatorMock);
+      Router.setNavigator(mocks.navigatorMock);
 
       rootRoutesList
         .map(routeName => {
           Router.registerRoute({name: routeName, component: null});
           return routeName;
         });
+      Router.registerRoute({name: routeMap.Issue, component: null});
 
       jest.spyOn(router, 'navigate');
 
     });
 
-    afterEach(() => {
-      jest.restoreAllMocks();
+    it('should not navigate if `Menu` disabled', () => {
+      stateMock.app.isChangingAccount = true;
+      storeMock = createStoreMock(stateMock, ownPropsMock);
+
+      const {getByTestId} = doRender();
+      fireEvent.press(getByTestId('menuAgileBoardsButton'));
+
+      expect(Router.navigate).toHaveBeenCalledTimes(0);
     });
 
-    it('should not redirect to the same route', () => {
-      instance.setCurrentRouteName(routeMap.Issues, routeMap.Issues);
-      instance.openIssueList();
+    it('should navigate to the root route', async () => {
+      const {getByTestId} = doRender();
+      fireEvent.press(getByTestId('menuIssuesButton'));
+      fireEvent.press(getByTestId('menuAgileBoardsButton'));
 
-      expect(Router.navigate).not.toHaveBeenCalled();
+      expect(Router.navigate).toHaveBeenCalledTimes(2);
     });
 
-    it('should redirect to Issues route if user was on issue screen', () => {
-      instance.setCurrentRouteName(routeMap.Issue, routeMap.Issue);
-      instance.openIssueList();
+    it('should not navigate to the same root route', async () => {
+      const {getByTestId} = doRender();
 
-      expect(Router.navigate).toHaveBeenCalled();
+      fireEvent.press(getByTestId('menuIssuesButton'));
+      fireEvent.press(getByTestId('menuIssuesButton'));
+
+      expect(Router.navigate).toHaveBeenCalledTimes(1);
     });
 
-    it('should redirect to Agile route if user was on issue screen', () => {
-      instance.setCurrentRouteName(routeMap.AgileBoard, routeMap.Issue);
-      instance.openIssueList();
+    it('should navigate to a root route if current route is `Issue`', async () => {
+      const {getByTestId} = doRender();
 
-      expect(Router.navigate).toHaveBeenCalled();
+      fireEvent.press(getByTestId('menuIssuesButton'));
+      Router.Issue();
+      fireEvent.press(getByTestId('menuIssuesButton'));
+
+      expect(Router.navigate).toHaveBeenCalledTimes(3);
     });
 
-    it('should redirect to Notifications route if user was on issue screen', () => {
-      instance.setCurrentRouteName(routeMap.Inbox, routeMap.Issue);
-      instance.openIssueList();
+    it('should activate pressed root route', async () => {
+      const {getByTestId, getByText} = doRender();
 
-      expect(Router.navigate).toHaveBeenCalled();
-    });
+      fireEvent.press(getByTestId('menuIssuesButton'));
+      expect(getByText('Issues')).toBeTruthy();
 
-    describe('openIssueList', () => {
-
-      it('should redirect to Issue list', () => {
-        instance.setCurrentRouteName(routeMap.AgileBoard);
-        instance.openIssueList();
-
-        expect(Router.navigate).toHaveBeenCalledWith(routeMap.Issues);
-      });
-    });
-
-    describe('openAgileBoard', () => {
-      it('should redirect to Agile board', () => {
-        instance.openAgileBoard();
-
-        expect(Router.navigate).toHaveBeenCalledWith(routeMap.AgileBoard);
-      });
-    });
-
-    describe('openInbox', () => {
-      it('should redirect to Inbox', () => {
-        instance.openInbox();
-
-        expect(Router.navigate).toHaveBeenCalledWith(routeMap.Inbox);
-      });
+      fireEvent.press(getByTestId('menuAgileBoardsButton'));
+      expect(getByText('Agile Boards')).toBeTruthy();
     });
   });
 
 
-  function render({auth, agileUserProfile, children}) {
-    wrapper = doShallow(auth, agileUserProfile, children);
-    instance = wrapper.instance();
-  }
-
-  function renderWithAuth(agileUserProfile) {
-    return render({auth: {}, agileUserProfile});
-  }
-
-  function findByTestId(testId) {
-    return wrapper && wrapper.find({testID: testId});
-  }
-
-  function doShallow(auth, agileUserProfile, children) {
-    return shallow(
-      <Menu
-        store={storeMock}
-        auth={auth}
-        show={true}
-        onOpen={() => {}}
-        onClose={() => {}}
-        openFeaturesView={() => {}}
-        agileProfile={agileUserProfile}
-        issueQuery={''}
-        uiTheme={DEFAULT_THEME}
-      >{children}</Menu>
-    ).shallow();
+  function doRender(agileUserProfile = {}) {
+    return render(
+      <Provider store={storeMock}>
+        <Menu
+          show={true}
+          onOpen={() => {}}
+          onClose={() => {}}
+          openFeaturesView={() => {}}
+          agileProfile={agileUserProfile}
+          issueQuery={''}
+          uiTheme={DEFAULT_THEME}
+        />
+      </Provider>
+    );
   }
 });

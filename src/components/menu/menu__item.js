@@ -14,19 +14,20 @@ type Props = {
   label: string,
   onPress: () => any,
   style?: ViewStyleProp,
-  testId?: string,
+  testID?: string,
 }
 
 
 export const MenuItem = (props: Props) => {
-  const {icon, isActive = false, onPress, style, testId, label} = props;
+  const {icon, isActive = false, onPress, style, testID, label} = props;
 
   return (
     <View
-      testID={testId}
+      testID={testID}
       style={[styles.menuItem, style]}
     >
       <TouchableOpacity
+        testID={testID ? `${testID}Button` : null}
         hitSlop={HIT_SLOP}
         style={[styles.menuItemButton, style]}
         onPress={onPress}
