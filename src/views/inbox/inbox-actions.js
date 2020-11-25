@@ -64,7 +64,7 @@ export function loadInbox(skip: number = 0, top: number = 10) {
           )
         ))
     );
-    const reactions = isReactionsAvailable ? notificationAndReactions && notificationAndReactions[0] : [];
+    const reactions = isReactionsAvailable ? notificationAndReactions && notificationAndReactions[1] : [];
     const sortedByTimestampItems = notifications.concat(reactions).sort(sortByTimestampReverse);
 
     if (!skip) {
