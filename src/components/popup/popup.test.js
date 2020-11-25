@@ -2,7 +2,6 @@ import React from 'react';
 import {Text} from 'react-native';
 
 import {shallow} from 'enzyme';
-import toJson from 'enzyme-to-json';
 
 import Popup from './popup';
 
@@ -20,9 +19,6 @@ describe('<Popup/>', () => {
 
 
   describe('Render', () => {
-    it('should match a snapshot', () => {
-      expect(toJson(wrapper)).toMatchSnapshot();
-    });
 
     it('should render children', () => {
       expect(findByTestId('popupChildren')).toHaveLength(1);

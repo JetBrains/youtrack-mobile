@@ -1,7 +1,6 @@
 import React from 'react';
 
 import {shallow} from 'enzyme';
-import toJson from 'enzyme-to-json';
 
 import Tags from './tags';
 import styles from './tags.styles';
@@ -27,9 +26,6 @@ describe('<Tags/>', () => {
 
 
   describe('Render', () => {
-    it('should match a snapshot', () => {
-      expect(toJson(wrapper)).toMatchSnapshot();
-    });
 
     it('should render component', () => {
       expect(findByTestId('tagsList')).toHaveLength(1);

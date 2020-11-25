@@ -1,7 +1,6 @@
 import React from 'react';
 
 import {shallow} from 'enzyme';
-import toJson from 'enzyme-to-json';
 
 import Diff from './diff';
 import {buildStyles, DEFAULT_THEME} from '../theme/theme';
@@ -22,10 +21,6 @@ describe('<Diff/>', () => {
   describe('Render', () => {
     beforeEach(() => {
       wrapper = doShallow(text1, text2);
-    });
-
-    it('should match a snapshot', () => {
-      expect(toJson(wrapper)).toMatchSnapshot();
     });
 
     it('should render component', () => {

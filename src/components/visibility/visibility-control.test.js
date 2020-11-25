@@ -1,12 +1,11 @@
 import React from 'react';
 
 import {shallow} from 'enzyme';
-import toJson from 'enzyme-to-json';
 
 import {ResourceTypes} from '../api/api__resource-types';
 import VisibilityControl from './visibility-control';
 
-describe('<VisibiltyControl/>', () => {
+describe('<VisibilityControl/>', () => {
 
   let wrapper;
   let instance;
@@ -22,10 +21,6 @@ describe('<VisibiltyControl/>', () => {
 
 
   describe('Render', () => {
-    it('should match a snapshot', () => {
-      expect(toJson(wrapper)).toMatchSnapshot();
-    });
-
     it('should initialize state', () => {
       expect(findByTestId('visibilityControl')).toHaveLength(1);
       expect(findByTestId('visibilityControlButton')).toHaveLength(1);

@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<UserInfo/> Render should match a snapshot 1`] = `
-<View
+<Component
   style={
     Array [
       Object {
@@ -12,7 +12,7 @@ exports[`<UserInfo/> Render should match a snapshot 1`] = `
   }
   testID="UserInfo"
 >
-  <Text
+  <Component
     style={
       Object {
         "color": "#737577",
@@ -24,8 +24,8 @@ exports[`<UserInfo/> Render should match a snapshot 1`] = `
     testID="UserInfoName"
   >
     userFullName
-  </Text>
-  <View
+  </Component>
+  <Component
     style={
       Object {
         "alignItems": "flex-end",
@@ -35,7 +35,7 @@ exports[`<UserInfo/> Render should match a snapshot 1`] = `
     }
     testID="UserInfoTimestamp"
   >
-    <Text
+    <Component
       style={
         Object {
           "color": "#737577",
@@ -43,7 +43,7 @@ exports[`<UserInfo/> Render should match a snapshot 1`] = `
       }
     >
       just now
-    </Text>
-  </View>
-</View>
+    </Component>
+  </Component>
+</Component>
 `;
