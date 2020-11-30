@@ -36,12 +36,7 @@ export default class FeaturesView extends Component<Props, void> {
   };
 
   render() {
-    const {onHide, features, setFeatures, uiTheme} = this.props;
-    const switchProps = {
-      width: 40,
-      thumbColor: uiTheme.colors.$link,
-      trackColor: uiTheme.colors.$linkLight,
-    };
+    const {onHide, features, setFeatures} = this.props;
 
     return (
       <ModalView
@@ -75,9 +70,13 @@ export default class FeaturesView extends Component<Props, void> {
                   key={featureKey}
                   style={styles.featuresListItem}
                 >
-                  <Text style={styles.featuresListItemText} numberOfLines={2}>{featureName}</Text>
+                  <Text
+                    style={styles.featuresListItemText}
+                    numberOfLines={2}
+                  >
+                    {featureName}
+                  </Text>
                   <Switch
-                    {...switchProps}
                     value={features.indexOf(featureKey) !== -1}
                     onValueChange={onValueChange}
                   />
