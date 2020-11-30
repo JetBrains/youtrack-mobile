@@ -9,7 +9,6 @@ import ThemeProvider from './components/theme/theme-provider';
 import {ThemeContext} from './components/theme/theme-context';
 
 import DebugView from './components/debug-view/debug-view';
-import FeaturesView from './components/feature/features-view';
 import UserAgreement from './components/user-agreement/user-agreement';
 import {setNotificationComponent} from './components/notification/notification';
 
@@ -65,7 +64,6 @@ export default class AppProvider extends Component<{ }, { mode: string }> {
                     <Navigation/>
                     <UserAgreement/>
                     <DebugView/>
-                    <FeaturesView/>
                   </ErrorBoundary>
 
                   <Toast ref={toast => toast ? setNotificationComponent(toast) : null}/>

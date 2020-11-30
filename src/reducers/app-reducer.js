@@ -27,7 +27,6 @@ const initialState: RootState = {
   auth: null,
   showMenu: false,
   showDebugView: false,
-  showFeaturesView: false,
   showUserAgreement: false,
   endUserAgreement: null,
   otherAccounts: null,
@@ -74,18 +73,6 @@ export default createReducer(initialState, {
     return {
       ...state,
       showDebugView: false
-    };
-  },
-  [types.OPEN_FEATURES_VIEW](state: RootState) {
-    return {
-      ...state,
-      showFeaturesView: true
-    };
-  },
-  [types.CLOSE_FEATURES_VIEW](state: RootState) {
-    return {
-      ...state,
-      showFeaturesView: false
     };
   },
   [types.SET_FEATURES](state: RootState, action: {features: EndUserAgreement}) {

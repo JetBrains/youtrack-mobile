@@ -67,14 +67,6 @@ export function closeDebugView() {
   return {type: types.CLOSE_DEBUG_VIEW};
 }
 
-export function openFeaturesView() {
-  return {type: types.OPEN_FEATURES_VIEW};
-}
-
-export function closeFeaturesView() {
-  return {type: types.CLOSE_FEATURES_VIEW};
-}
-
 export function setEnabledFeatures(features: Array<string>) {
   return {type: types.SET_FEATURES, features};
 }
@@ -484,7 +476,7 @@ export function applyAuthorization(authParams: AuthParams) {
 
 function storeProjectsShortNames() {
   return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
-    const userFolders: Array<Folder> = await getApi().user.getUserFolders('', ['shortName']);
+    const userFolders: Array<Folder> = await getApi().user.getUserFolders('', ['id,shortName,name,pinned']);
     await flushStoragePart({projects: userFolders.filter(it => it.shortName)});
   };
 }
