@@ -31,7 +31,8 @@ type Props = {
   otherAccounts: Array<StorageState>,
   isChangingAccount: ?boolean,
 
-  features: Array<Object>
+  features: Array<Object>,
+  setFeatures: Function
 };
 
 type State = {
