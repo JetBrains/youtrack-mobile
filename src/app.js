@@ -14,6 +14,7 @@ import {rootRoutesList, routeMap} from './app-routes';
 
 import AgileBoard from './views/agile-board/agile-board';
 import AttachmentPreview from './views/attachment-preview/attachment-preview';
+import Articles from './views/articles/articles';
 import CreateIssue from './views/create-issue/create-issue';
 import EnterServer from './views/enter-server/enter-server';
 import Home from './views/home/home';
@@ -140,6 +141,8 @@ class YouTrackMobile extends Component<void, void> {
     Router.registerRoute({name: routeMap.WikiPage, component: WikiPage, modal: true});
 
     Router.registerRoute({name: routeMap.Page, component: Page});
+
+    Router.registerRoute({name: routeMap.Articles, component: Articles, type: 'reset'});
 
     Router.finalizeRoutes(this.routeHomeName);
   }

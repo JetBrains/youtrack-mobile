@@ -7,7 +7,7 @@ import {connect} from 'react-redux';
 import Feature, {FEATURES} from '../feature/feature';
 import Router from '../router/router';
 import {DEFAULT_THEME} from '../theme/theme';
-import {IconBell, IconBoard, IconSettings, IconTask} from '../icon/icon';
+import {IconBell, IconBoard, IconBook, IconSettings, IconTask} from '../icon/icon';
 import {MenuItem} from './menu__item';
 import {routeMap} from '../../app-routes';
 
@@ -94,6 +94,12 @@ class Menu extends Component<Props, State> {
     }
   };
 
+  openArticles = () => {
+    if (this.canNavigateTo(routeMap.Articles)) {
+      Router.Articles();
+    }
+  };
+
   render() {
     const {isVisible, isDisabled, uiTheme} = this.props;
 
@@ -144,6 +150,14 @@ class Menu extends Component<Props, State> {
             onPress={this.openInbox}
           />
         </Feature>
+
+        <MenuItem
+          testID="menuArticles"
+          isActive={this.isActiveRoute(routeMap.Articles)}
+          icon={<IconBook size={23} color={color(routeMap.Articles)}/>}
+          label={'Articles'}
+          onPress={this.openArticles}
+        />
 
         <MenuItem
           testID="menuSettings"

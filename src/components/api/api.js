@@ -5,6 +5,7 @@ import urlJoin from 'url-join';
 
 import AgileAPI from './api__agile';
 import ApiHelper from './api__helper';
+import ArticlesAPI from './api__articles';
 import BaseAPI from './api__base';
 import InboxAPI from './api__inbox';
 import IssueAPI from './api__issue';
@@ -25,6 +26,7 @@ class API extends BaseAPI {
   youtTrackFieldBundleUrl: string;
 
   agile: AgileAPI;
+  articles: ArticlesAPI;
   inbox: InboxAPI;
   issue: IssueAPI;
   issueFolder: IssueFolderAPI
@@ -36,6 +38,7 @@ class API extends BaseAPI {
     super(auth);
 
     this.agile = new AgileAPI(auth);
+    this.articles = new ArticlesAPI(auth);
     this.inbox = new InboxAPI(auth);
     this.issue = new IssueAPI(auth);
     this.issueFolder = new IssueFolderAPI(auth);

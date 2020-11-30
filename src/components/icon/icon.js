@@ -93,6 +93,12 @@ export const IconBookmark = (props?: Props) => <DefaultIcon {...{
   ...props
 }} />;
 
+export const IconBook = (props?: Props) => <DefaultIcon {...{
+  isFontAwesome: true,
+  name: 'book',
+  ...props
+}} />;
+
 export const IconPaperClip = (props?: Props) => <DefaultIcon {...{
   name: 'paperclip',
   ...props
@@ -110,6 +116,12 @@ export const IconAngleRight = (props?: Props) => <DefaultIcon {...{
 export const IconCamera = (props?: Props) => <DefaultIcon {...{
   isFontAwesome: true,
   name: 'camera',
+  ...props
+}} />;
+
+export const IconClone = (props?: Props) => <DefaultIcon {...{
+  isFontAwesome: true,
+  name: 'clone',
   ...props
 }} />;
 
