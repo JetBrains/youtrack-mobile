@@ -1,18 +1,32 @@
-import type {IssueProject} from './CustomFields';
+import type {Attachment, IssueProject} from './CustomFields';
+import type {IssueOnList} from './Issue';
+import type {User} from './User';
+import IssueVisibility from '../components/visibility/issue-visibility';
 
 export type Article = {
+  attachments: Array<Attachment>,
+  content: string,
+  created: number,
+  hasStar: boolean,
+  hasUnpublishedChanges: boolean,
   id: string,
   idReadable: string,
-  summary: string,
+  mentionedArticles: Article,
+  mentionedIssues: IssueOnList,
+  mentionedUsers: User,
+  ordinal: number,
+  parentArticle: Article,
   project: IssueProject,
-  parentArticle: {
-    id: string
-  }
+  reporter: User,
+  summary: string,
+  updated: number,
+  updatedBy: User,
+  visibility: IssueVisibility
 }
 
 export type ArticleTreeItem = {
-  data: Article & { parentId: string | null },
-  children: Array<Article>
+  children: Array<Article>,
+  data: Article & { parentId: string | null }
 }
 
 export type ArticleTree = Array<ArticleTreeItem>;

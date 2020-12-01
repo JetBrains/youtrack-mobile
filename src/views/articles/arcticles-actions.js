@@ -2,18 +2,17 @@
 
 import {arrayToTree} from 'performant-array-to-tree';
 
-import log from '../../components/log/log';
-import usage from '../../components/usage/usage';
+import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
 import {getStorageState} from '../../components/storage/storage';
 import {groupByFavoritesAlphabetically, sortByOrdinal} from '../../components/search/sorting';
+import {logEvent} from '../../components/log/log-helper';
+import {setError, setLoading, setTree} from './articles-reducers';
 import {until} from '../../util/util';
-
-import {setLoading, setError, setTree} from './articles-reducers';
 
 import type Api from '../../components/api/api';
 import type {ArticlesState} from './articles-reducers';
-import type {Folder} from '../../flow/User';
 import type {Article} from '../../flow/Article';
+import type {Folder} from '../../flow/User';
 import type {IssueProject} from '../../flow/CustomFields';
 
 type ApiGetter = () => Api;
@@ -22,12 +21,6 @@ type Tree = Array<{
   data: Array<Article>
 }>;
 
-export const ARTICLE_ANALYTICS_ID = 'Articles';
-
-const logEvent = ({message, isError, useAnalytics}: { message: string, isError?: boolean, useAnalytics?: boolean }): void => {
-  log[isError ? 'warn' : 'log'](message);
-  useAnalytics && usage.trackEvent(ARTICLE_ANALYTICS_ID, message);
-};
 
 const getGroupedProjects = (): Array<Folder> => {
   const projects: Array<Folder> = getStorageState().projects;
@@ -39,7 +32,7 @@ const loadArticles = (projectId: string, query: string | null, $top?: number, $s
   return async (dispatch: (any) => any, getState: () => ArticlesState, getApi: ApiGetter) => {
     const api: Api = getApi();
 
-    logEvent({message: 'Loading articles', useAnalytics: true});
+    logEvent({message: 'Loading articles', analyticsId: ANALYTICS_ARTICLES_PAGE});
 
     dispatch(setLoading(true));
     const [error, articles] = await until(api.articles.get(query, $top, $skip));

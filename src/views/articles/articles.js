@@ -1,15 +1,17 @@
 /* @flow */
 
 import React, {Component} from 'react';
-import {View, Text, SectionList, TouchableOpacity} from 'react-native';
+import {SectionList, Text, TouchableOpacity, View} from 'react-native';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import * as articlesActions from './arcticles-actions';
 import ErrorMessage from '../../components/error-message/error-message';
+import Router from '../../components/router/router';
 import Select from '../../components/select/select';
 import usage from '../../components/usage/usage';
+import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
 import {guid} from '../../util/util';
 import {IconAngleRight, IconClone} from '../../components/icon/icon';
 import {SkeletonIssues} from '../../components/skeleton/skeleton';
@@ -34,7 +36,7 @@ export class Articles extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {isTitlePinned: false};
-    usage.trackScreenView(articlesActions.ARTICLE_ANALYTICS_ID);
+    usage.trackScreenView(ANALYTICS_ARTICLES_PAGE);
   }
 
   componentDidMount() {
@@ -58,7 +60,7 @@ export class Articles extends Component<Props, State> {
       <View style={[styles.row, styles.item]}>
         <TouchableOpacity
           style={styles.row}
-          onPress={() => {}}
+          onPress={() => Router.Article({article: article})}
         >
           {item.children.length > 0 && (
             <Text>

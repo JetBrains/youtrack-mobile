@@ -296,6 +296,7 @@ const REACTION = toField([
 ]);
 
 export default {
+  attachments: ISSUE_ATTACHMENTS_FIELDS,
   issuesOnList: ISSUE_SHORT_FIELDS,
   singleIssueLinks: toField({
     links: ISSUE_LINKS_FIELDS

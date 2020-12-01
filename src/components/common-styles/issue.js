@@ -1,5 +1,5 @@
 import {UNIT} from '../variables/variables';
-import {mainText, secondaryText} from './typography';
+import {HEADER_FONT_SIZE, mainText, secondaryText} from './typography';
 import {Platform} from 'react-native';
 
 
@@ -34,5 +34,23 @@ export const issueCard = {
 
 export const issueIdResolved = {
   textDecorationLine: 'line-through'
+};
+
+export const summaryTitle = {
+  flex: 1,
+  marginTop: UNIT,
+
+  fontSize: HEADER_FONT_SIZE,
+  lineHeight: 24,
+  letterSpacing: -0.19,
+
+  ...Platform.select({
+    ios: {
+      fontWeight: '500'
+    },
+    android: {
+      fontWeight: '$androidSummaryFontWeight',
+    }
+  })
 };
 
