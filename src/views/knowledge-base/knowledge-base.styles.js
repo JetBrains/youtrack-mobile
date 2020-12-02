@@ -1,8 +1,9 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {HEADER_FONT_SIZE, headerTitle, mainText} from '../../components/common-styles/typography';
-import {UNIT} from '../../components/variables/variables';
 import {elevation1} from '../../components/common-styles/shadow';
+import {headerTitle, mainText} from '../../components/common-styles/typography';
+import {UNIT} from '../../components/variables/variables';
+import {Platform} from 'react-native';
 
 const headerHeight = UNIT * 7;
 
@@ -11,20 +12,19 @@ export default EStyleSheet.create({
     flex: 1,
     backgroundColor: '$background'
   },
-  articlesContainer: {
+  content: {
     flexGrow: 1,
     paddingBottom: headerHeight + UNIT
   },
   headerTitle: {
     height: headerHeight,
+    marginBottom: 2,
     paddingLeft: UNIT * 2,
     alignItems: 'flex-start',
     justifyContent: 'center',
-
-    marginBottom: UNIT,
-    ...elevation1,
     backgroundColor: '$background',
   },
+  headerTitleShadow: elevation1,
   headerTitleText: {
     ...headerTitle,
     color: '$text'
@@ -35,36 +35,46 @@ export default EStyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
-  item: {
-    padding: UNIT * 2,
-    paddingHorizontal: UNIT * 2,
-    backgroundColor: '$background',
+  separator: {
+    marginLeft: UNIT * 3
   },
-  itemContent: {
-    paddingRight: 0,
-    backgroundColor: 'pink',
+  item: {
+    padding: UNIT,
+    backgroundColor: '$background'
+  },
+  itemArticle: {
+    paddingLeft: 0,
   },
   itemButton: {
     alignItems: 'center',
     width: UNIT * 6,
-    marginRight: -UNIT * 2,
-    paddingVertical: UNIT
+    marginRight: -UNIT,
+    marginLeft: UNIT * 2,
+    paddingVertical: UNIT,
+    borderLeftWidth: 1,
+    borderColor: '$boxBackground'
   },
   itemProject: {
-    backgroundColor: '$boxBackground'
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingBottom: UNIT * 2,
   },
   articleTitle: {
     ...mainText,
+    marginLeft: UNIT * 4,
     color: '$text'
   },
   projectTitle: {
-    fontSize: HEADER_FONT_SIZE,
-    color: '$text'
-  },
-  iconHasChildren: {
-    color: '$mask',
-  },
-  iconNavigate: {
-    color: '$icon',
+    marginLeft: UNIT,
+    ...headerTitle,
+    color: '$text',
+    ...Platform.select({
+      ios: {
+        fontWeight: '600'
+      },
+      android: {
+        fontWeight: '400'
+      }
+    })
   }
 });
