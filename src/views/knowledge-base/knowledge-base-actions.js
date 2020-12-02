@@ -6,11 +6,11 @@ import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids'
 import {getStorageState} from '../../components/storage/storage';
 import {groupByFavoritesAlphabetically, sortByOrdinal} from '../../components/search/sorting';
 import {logEvent} from '../../components/log/log-helper';
-import {setError, setLoading, setTree} from './articles-reducers';
+import {setError, setLoading, setTree} from './knowledge-base-reducers';
 import {until} from '../../util/util';
 
 import type Api from '../../components/api/api';
-import type {ArticlesState} from './articles-reducers';
+import type {KnowledgeBaseState} from './knowledge-base-reducers';
 import type {Article} from '../../flow/Article';
 import type {Folder} from '../../flow/User';
 import type {IssueProject} from '../../flow/CustomFields';
@@ -29,7 +29,7 @@ const getGroupedProjects = (): Array<Folder> => {
 
 
 const loadArticles = (projectId: string, query: string | null, $top?: number, $skip?: number) => {
-  return async (dispatch: (any) => any, getState: () => ArticlesState, getApi: ApiGetter) => {
+  return async (dispatch: (any) => any, getState: () => KnowledgeBaseState, getApi: ApiGetter) => {
     const api: Api = getApi();
 
     logEvent({message: 'Loading articles', analyticsId: ANALYTICS_ARTICLES_PAGE});

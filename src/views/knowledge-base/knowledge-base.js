@@ -6,7 +6,7 @@ import {SectionList, Text, TouchableOpacity, View} from 'react-native';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
-import * as articlesActions from './arcticles-actions';
+import * as knowledgeBaseActioins from './knowledge-base-actions';
 import ErrorMessage from '../../components/error-message/error-message';
 import Router from '../../components/router/router';
 import Select from '../../components/select/select';
@@ -17,13 +17,13 @@ import {IconAngleRight, IconClone} from '../../components/icon/icon';
 import {SkeletonIssues} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
 
-import styles from './articles.styles';
+import styles from './knowledge-base.styles';
 
-import type {ArticlesState} from './articles-reducers';
+import type {KnowledgeBaseState} from './knowledge-base-reducers';
 import type {ArticleTreeItem} from '../../flow/Article';
 import type {Theme} from '../../flow/Theme';
 
-type Props = ArticlesState & {
+type Props = KnowledgeBaseState & {
   loadArticles: () => void
 };
 
@@ -32,7 +32,7 @@ type State = {
 };
 
 
-export class Articles extends Component<Props, State> {
+export class KnowledgeBase extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {isTitlePinned: false};
@@ -150,8 +150,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    ...bindActionCreators(articlesActions, dispatch)
+    ...bindActionCreators(knowledgeBaseActioins, dispatch)
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Articles);
+export default connect(mapStateToProps, mapDispatchToProps)(KnowledgeBase);

@@ -6,13 +6,13 @@ import type {Article, ArticleTree} from '../../flow/Article';
 import type {IssueProject} from '../../flow/CustomFields';
 import type {CustomError} from '../../flow/Error';
 
-export type ArticlesState = {
+export type KnowledgeBaseState = {
   articlesTree: ArticleTree,
   isLoading: boolean,
   error: CustomError
 };
 
-const articlesInitialState: ArticlesState = {
+const articlesInitialState: KnowledgeBaseState = {
   articlesTree: [],
   isLoading: false,
   error: null
@@ -20,16 +20,16 @@ const articlesInitialState: ArticlesState = {
 
 
 const {reducer, actions} = createSlice({
-  name: 'articles',
+  name: 'knowledgeBase',
   initialState: articlesInitialState,
   reducers: {
-    setLoading(state: ArticlesState, action: PayloadAction<boolean>) {
+    setLoading(state: KnowledgeBaseState, action: PayloadAction<boolean>) {
       state.isLoading = action.payload;
     },
-    setError(state: ArticlesState, action: PayloadAction<boolean>) {
+    setError(state: KnowledgeBaseState, action: PayloadAction<boolean>) {
       state.error = action.payload;
     },
-    setTree(state: ArticlesState, action: PayloadAction<Array<{ title: IssueProject, data: Array<Article> }>>) {
+    setTree(state: KnowledgeBaseState, action: PayloadAction<Array<{ title: IssueProject, data: Array<Article> }>>) {
       state.articlesTree = action.payload;
     }
   }

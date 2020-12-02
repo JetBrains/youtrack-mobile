@@ -5,7 +5,7 @@ import {combineReducers} from 'redux';
 import agile from '../views/agile-board/board-reducers';
 import app from './app-reducer';
 import article from '../views/article/article-reducers';
-import articles from '../views/articles/articles-reducers';
+import articles from '../views/knowledge-base/knowledge-base-reducers';
 import creation from '../views/create-issue/create-issue-reducers';
 import inbox from '../views/inbox/inbox-reducers';
 import issueActivity from '../views/issue/activity/issue-activity__reducers';

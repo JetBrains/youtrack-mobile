@@ -13,9 +13,8 @@ import {onNavigateBack, setAccount} from './actions/app-actions';
 import {rootRoutesList, routeMap} from './app-routes';
 
 import AgileBoard from './views/agile-board/agile-board';
-import AttachmentPreview from './views/attachment-preview/attachment-preview';
 import Article from './views/article/article';
-import Articles from './views/articles/articles';
+import AttachmentPreview from './views/attachment-preview/attachment-preview';
 import CreateIssue from './views/create-issue/create-issue';
 import EnterServer from './views/enter-server/enter-server';
 import Home from './views/home/home';
@@ -23,6 +22,7 @@ import Image from './views/image/image';
 import Inbox from './views/inbox/inbox';
 import Issue from './views/issue/issue';
 import Issues from './views/issues/issues';
+import KnowledgeBase from './views/knowledge-base/knowledge-base';
 import LoginForm from './views/log-in/log-in';
 import Page from './views/page/page';
 import Settings from './views/settings/settings';
@@ -125,27 +125,17 @@ class YouTrackMobile extends Component<void, void> {
       type: 'reset'
     });
 
-    Router.registerRoute({name: routeMap.Settings, component: Settings, type: 'reset'});
-
-    Router.registerRoute({name: routeMap.Issue, component: Issue});
-
-    Router.registerRoute({name: routeMap.Image, component: Image, modal: true});
-
-    Router.registerRoute({name: routeMap.AttachmentPreview, component: AttachmentPreview, modal: true});
-
-    Router.registerRoute({name: routeMap.CreateIssue, component: CreateIssue, modal: true});
-
     Router.registerRoute({name: routeMap.AgileBoard, component: AgileBoard, type: 'reset'});
-
-    Router.registerRoute({name: routeMap.Inbox, component: Inbox, type: 'reset'});
-
-    Router.registerRoute({name: routeMap.WikiPage, component: WikiPage, modal: true});
-
-    Router.registerRoute({name: routeMap.Page, component: Page});
-
-    Router.registerRoute({name: routeMap.KnowledgeBase, component: Articles, type: 'reset'});
-
     Router.registerRoute({name: routeMap.Article, component: Article});
+    Router.registerRoute({name: routeMap.AttachmentPreview, component: AttachmentPreview, modal: true});
+    Router.registerRoute({name: routeMap.CreateIssue, component: CreateIssue, modal: true});
+    Router.registerRoute({name: routeMap.Image, component: Image, modal: true});
+    Router.registerRoute({name: routeMap.Inbox, component: Inbox, type: 'reset'});
+    Router.registerRoute({name: routeMap.Issue, component: Issue});
+    Router.registerRoute({name: routeMap.KnowledgeBase, component: KnowledgeBase, type: 'reset'});
+    Router.registerRoute({name: routeMap.Page, component: Page});
+    Router.registerRoute({name: routeMap.Settings, component: Settings, type: 'reset'});
+    Router.registerRoute({name: routeMap.WikiPage, component: WikiPage, modal: true});
 
     Router.finalizeRoutes(this.routeHomeName);
   }
