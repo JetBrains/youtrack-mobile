@@ -24,11 +24,5 @@ export default EStyleSheet.create({
     paddingHorizontal: UNIT,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  menuItemLabel: {
-    fontSize: 11,
-    lineHeight: 20,
-    letterSpacing: 0.2,
-    color: '$link'
   }
 });

@@ -93,12 +93,6 @@ export const IconBookmark = (props?: Props) => <DefaultIcon {...{
   ...props
 }} />;
 
-export const IconBook = (props?: Props) => <DefaultIcon {...{
-  isFontAwesome: true,
-  name: 'book',
-  ...props
-}} />;
-
 export const IconPaperClip = (props?: Props) => <DefaultIcon {...{
   name: 'paperclip',
   ...props
@@ -223,6 +217,12 @@ export const IconHistory = (props?: Props) => <IconYTM {...{
 export const IconHourGlass = (props?: Props) => <IconYTM {...{
   ...defaultProps(),
   name: 'hourglass',
+  ...props
+}} />;
+
+export const IconKnowledgeBase = (props?: Props) => <IconYTM {...{
+  ...defaultProps(),
+  name: 'knowledge-base',
   ...props
 }} />;
 

@@ -65,6 +65,12 @@ describe('<Menu/>', () => {
       expect(getByTestId('menuAgileBoards')).toBeTruthy();
     });
 
+    it('should render menu `Knowledge Base` item', async () => {
+      const {getByTestId} = doRender();
+
+      expect(getByTestId('menuKnowledgeBase')).toBeTruthy();
+    });
+
     describe('Notifications', () => {
       beforeEach(() => {
         jest.spyOn(api, 'getApi');
@@ -171,13 +177,13 @@ describe('<Menu/>', () => {
     });
 
     it('should activate pressed root route', async () => {
-      const {getByTestId, getByText} = doRender();
+      const {getByTestId} = doRender();
 
       fireEvent.press(getByTestId('menuIssuesButton'));
-      expect(getByText('Issues')).toBeTruthy();
+      expect(getByTestId('menuIssuesIcon')).toHaveProp('isActive', true);
 
       fireEvent.press(getByTestId('menuAgileBoardsButton'));
-      expect(getByText('Agile Boards')).toBeTruthy();
+      expect(getByTestId('menuIssuesIcon')).toHaveProp('isActive', false);
     });
   });
 

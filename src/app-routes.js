@@ -3,7 +3,7 @@
 export const routeMap = {
   AgileBoard: 'AgileBoard',
   Article: 'Article',
-  Articles: 'Articles',
+  KnowledgeBase: 'KnowledgeBase',
   AttachmentPreview: 'AttachmentPreview',
   CreateIssue: 'CreateIssue',
   EnterServer: 'EnterServer',
@@ -18,4 +18,4 @@ export const routeMap = {
   WikiPage: 'WikiPage'
 };
 
-export const rootRoutesList = [routeMap.Issues, routeMap.AgileBoard, routeMap.Inbox, routeMap.Settings, routeMap.Articles];
+export const rootRoutesList = [routeMap.Issues, routeMap.AgileBoard, routeMap.Inbox, routeMap.Settings, routeMap.KnowledgeBase];

@@ -7,7 +7,7 @@ import {connect} from 'react-redux';
 import Feature, {FEATURES} from '../feature/feature';
 import Router from '../router/router';
 import {DEFAULT_THEME} from '../theme/theme';
-import {IconBell, IconBoard, IconBook, IconSettings, IconTask} from '../icon/icon';
+import {IconBell, IconBoard, IconSettings, IconTask, IconKnowledgeBase} from '../icon/icon';
 import {MenuItem} from './menu__item';
 import {routeMap} from '../../app-routes';
 
@@ -94,9 +94,9 @@ class Menu extends Component<Props, State> {
     }
   };
 
-  openArticles = () => {
-    if (this.canNavigateTo(routeMap.Articles)) {
-      Router.Articles();
+  openKnowledgeBase = () => {
+    if (this.canNavigateTo(routeMap.KnowledgeBase)) {
+      Router.KnowledgeBase();
     }
   };
 
@@ -126,17 +126,18 @@ class Menu extends Component<Props, State> {
       >
         <MenuItem
           testID="menuIssues"
-          isActive={this.isActiveRoute(routeMap.Issues)}
-          icon={<IconTask size={24} color={color(routeMap.Issues)}/>}
-          label={'Issues'}
+          icon={<IconTask
+            testID="menuIssuesIcon"
+            isActive={this.isActiveRoute(routeMap.Issues)}
+            size={23}
+            color={color(routeMap.Issues)}
+          />}
           onPress={this.openIssueList}
         />
 
         <MenuItem
           testID="menuAgileBoards"
-          isActive={this.isActiveRoute(routeMap.AgileBoard)}
           icon={<IconBoard size={28} color={color(routeMap.AgileBoard)}/>}
-          label={'Agile Boards'}
           testId="pageAgileBoards"
           onPress={this.openAgileBoard}
         />
@@ -144,26 +145,20 @@ class Menu extends Component<Props, State> {
         <Feature version={FEATURES.inbox}>
           <MenuItem
             testID="menuNotifications"
-            isActive={this.isActiveRoute(routeMap.Inbox)}
-            icon={<IconBell size={23} color={color(routeMap.Inbox)}/>}
-            label={'Notifications'}
+            icon={<IconBell size={22} color={color(routeMap.Inbox)}/>}
             onPress={this.openInbox}
           />
         </Feature>
 
         <MenuItem
-          testID="menuArticles"
-          isActive={this.isActiveRoute(routeMap.Articles)}
-          icon={<IconBook size={23} color={color(routeMap.Articles)}/>}
-          label={'Articles'}
-          onPress={this.openArticles}
+          testID="menuKnowledgeBase"
+          icon={<IconKnowledgeBase size={22} color={color(routeMap.KnowledgeBase)}/>}
+          onPress={this.openKnowledgeBase}
         />
 
         <MenuItem
           testID="menuSettings"
-          isActive={this.isActiveRoute(routeMap.Settings)}
-          icon={<IconSettings size={22} color={color(routeMap.Settings)}/>}
-          label={'Settings'}
+          icon={<IconSettings size={21} color={color(routeMap.Settings)}/>}
           onPress={this.openSettings}
         />
 
