@@ -6,24 +6,26 @@ import {SectionList, Text, TouchableOpacity, View} from 'react-native';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
-import * as knowledgeBaseActioins from './knowledge-base-actions';
+import * as knowledgeBaseActions from './knowledge-base-actions';
 import ErrorMessage from '../../components/error-message/error-message';
 import Router from '../../components/router/router';
 import Select from '../../components/select/select';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
+import {findNodeById} from './knowledge-base-helper';
 import {guid} from '../../util/util';
-import {IconAngleDown, IconAngleRight} from '../../components/icon/icon';
+import {IconAngleDown, IconAngleRight, IconBack} from '../../components/icon/icon';
 import {SkeletonIssues} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
 
 import {UNIT} from '../../components/variables/variables';
 import styles from './knowledge-base.styles';
 
-import type {Article, ArticleTreeItem} from '../../flow/Article';
+import type {Article, ArticlesList, ArticlesListItem, ArticleNode} from '../../flow/Article';
 import type {KnowledgeBaseState} from './knowledge-base-reducers';
 import type {Theme, UITheme} from '../../flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {IssueProject} from '../../flow/CustomFields';
 
 type Props = KnowledgeBaseState & {
   loadArticles: () => void
@@ -47,13 +49,14 @@ export class KnowledgeBase extends Component<Props, State> {
     this.props.loadArticles();
   }
 
-  renderProject = ({section}: Object) => {
-    if (section.title) {
+  renderProject = ({section}: ArticlesListItem) => {
+    const title: IssueProject | Article = section.title;
+    if (title) {
       return (
         <>
           <View style={[styles.item, styles.itemProject]}>
             <IconAngleDown size={24} color={this.uiTheme.colors.$text}/>
-            <Text style={styles.projectTitle}>{section.title.name}</Text>
+            <Text style={styles.projectTitle}>{title.name || title.summary}</Text>
           </View>
           {this.renderSeparator()}
         </>
@@ -61,7 +64,7 @@ export class KnowledgeBase extends Component<Props, State> {
     }
   };
 
-  renderArticle = ({item}: ArticleTreeItem) => {
+  renderArticle = ({item}: ArticleNode) => {
     const article: Article = item.data;
     const style: ViewStyleProp = {...styles.row, ...styles.item};
 
@@ -76,7 +79,7 @@ export class KnowledgeBase extends Component<Props, State> {
 
         {item.children.length > 0 && <TouchableOpacity
           style={styles.itemButton}
-          onPress={() => {}}
+          onPress={() => this.renderSubArticles(article)}
         >
           {item.children.length > 0 && <IconAngleRight size={22} color={this.uiTheme.colors.$iconAccent}/>}
         </TouchableOpacity>}
@@ -84,7 +87,33 @@ export class KnowledgeBase extends Component<Props, State> {
     );
   };
 
-  renderTitle() {
+  renderSubArticles = (article: Article) => {
+    const {articlesTree} = this.props;
+    const targetProjectRootArticles: ArticlesListItem = articlesTree.find(
+      (it: ArticlesListItem) => it.title.id === article.project.id
+    );
+    const node: ?ArticleNode = targetProjectRootArticles && findNodeById(targetProjectRootArticles.data, article.id);
+
+    if (node) {
+      const title = this.renderTitle(
+        node.data.summary,
+        <TouchableOpacity
+          style={styles.headerTitleButton}
+          onPress={() => Router.pop()}
+        >
+          <IconBack color={this.uiTheme.colors.$link}/>
+        </TouchableOpacity>
+      );
+      const tree: ArticlesList = this.renderArticlesTree([{
+        title: null,
+        data: node.children
+      }]);
+
+      Router.Page({children: <>{title}{tree}</>});
+    }
+  };
+
+  renderTitle = (title: string, leftButton?: React$Element<any>) => {
     return (
       <View
         key="articlesHeader"
@@ -93,7 +122,8 @@ export class KnowledgeBase extends Component<Props, State> {
           this.state.isTitlePinned ? styles.headerTitleShadow : null
         ]}
       >
-        <Text style={styles.headerTitleText}>Knowledge Base</Text>
+        {leftButton}
+        <Text numberOfLines={5} style={styles.headerTitleText}>{title}</Text>
       </View>
     );
   }
@@ -106,8 +136,27 @@ export class KnowledgeBase extends Component<Props, State> {
     this.setState({isTitlePinned: nativeEvent.contentOffset.y >= UNIT * 7});
   };
 
+  renderArticlesTree = (articleTree: ArticlesList) => {
+    return (
+      <SectionList
+        testID="articles"
+        style={styles.list}
+        sections={articleTree}
+        scrollEventThrottle={10}
+        onScroll={this.onScroll}
+        keyExtractor={guid}
+        getItemLayout={Select.getItemLayout}
+        renderItem={this.renderArticle}
+        renderSectionHeader={this.renderProject}
+        ItemSeparatorComponent={this.renderSeparator}
+        ListEmptyComponent={() => <Text>No articles found</Text>}
+      />
+    );
+  };
+
   render() {
     const {isLoading, articlesTree, error} = this.props;
+
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
@@ -118,7 +167,7 @@ export class KnowledgeBase extends Component<Props, State> {
               style={styles.container}
               testID="articles"
             >
-              {this.renderTitle()}
+              {this.renderTitle('Knowledge Base')}
               <View
                 style={styles.content}
               >
@@ -127,22 +176,8 @@ export class KnowledgeBase extends Component<Props, State> {
 
                 {isLoading && !error && <SkeletonIssues/>}
 
-                {!isLoading && !error && <SectionList
-                  testID="articles"
-                  style={styles.list}
-                  sections={articlesTree}
-                  scrollEventThrottle={10}
-                  onScroll={this.onScroll}
+                {!isLoading && !error && this.renderArticlesTree(articlesTree)}
 
-                  keyExtractor={guid}
-                  getItemLayout={Select.getItemLayout}
-                  renderItem={this.renderArticle}
-                  renderSectionHeader={this.renderProject}
-                  ItemSeparatorComponent={this.renderSeparator}
-                  ListEmptyComponent={() => {
-                    return <Text>No articles found</Text>;
-                  }}
-                />}
               </View>
             </View>
           );
@@ -161,7 +196,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    ...bindActionCreators(knowledgeBaseActioins, dispatch)
+    ...bindActionCreators(knowledgeBaseActions, dispatch)
   };
 };
 

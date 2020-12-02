@@ -2,12 +2,12 @@
 
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import type {Article, ArticleTree} from '../../flow/Article';
+import type {Article, ArticlesList} from '../../flow/Article';
 import type {IssueProject} from '../../flow/CustomFields';
 import type {CustomError} from '../../flow/Error';
 
 export type KnowledgeBaseState = {
-  articlesTree: ArticleTree,
+  articlesTree: ArticlesList,
   isLoading: boolean,
   error: CustomError
 };

@@ -24,9 +24,14 @@ export type Article = {
   visibility: IssueVisibility
 }
 
-export type ArticleTreeItem = {
+export type ArticleNode = {
   children: Array<Article>,
   data: Article & { parentId: string | null }
 }
 
-export type ArticleTree = Array<ArticleTreeItem>;
+export type ArticlesListItem = {
+  title: IssueProject,
+  data: Array<ArticleNode>
+};
+
+export type ArticlesList = Array<ArticlesListItem>;

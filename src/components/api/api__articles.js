@@ -9,7 +9,7 @@ import type {Article} from '../../flow/Article';
 
 export default class ArticlesAPI extends ApiBase {
 
-  get(query: string | null = null, $top: number = 100, $skip: number = 0): Promise<Array<Article>> {
+  get(query: string | null = null, $top: number = 10000, $skip: number = 0): Promise<Array<Article>> {
     const fields: string = ApiBase.createFieldsQuery(
       ['id,idReadable,summary,parentArticle(id),project(id,name),ordinal'],
       {

@@ -16,19 +16,26 @@ export default EStyleSheet.create({
     flexGrow: 1,
     paddingBottom: headerHeight + UNIT
   },
+
   headerTitle: {
-    height: headerHeight,
-    marginBottom: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    minHeight: headerHeight,
+    marginBottom: UNIT / 4,
     paddingLeft: UNIT * 2,
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    backgroundColor: '$background',
+    paddingRight: UNIT * 4,
+    backgroundColor: '$background'
   },
   headerTitleShadow: elevation1,
+  headerTitleButton: {
+    marginLeft: -UNIT * 2,
+    marginRight: UNIT * 1.5,
+  },
   headerTitleText: {
     ...headerTitle,
     color: '$text'
   },
+
   row: {
     flex: 1,
     flexDirection: 'row',
@@ -60,6 +67,7 @@ export default EStyleSheet.create({
     alignItems: 'center',
     paddingBottom: UNIT * 2,
   },
+
   articleTitle: {
     ...mainText,
     marginLeft: UNIT * 4,
