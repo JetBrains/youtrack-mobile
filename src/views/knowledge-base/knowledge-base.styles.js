@@ -36,10 +36,11 @@ export default EStyleSheet.create({
     justifyContent: 'flex-start',
   },
   separator: {
-    marginLeft: UNIT * 3
+    marginLeft: UNIT * 3.5
   },
   item: {
     padding: UNIT,
+    paddingLeft: UNIT * 1.5,
     backgroundColor: '$background'
   },
   itemArticle: {
