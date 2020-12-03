@@ -96,7 +96,7 @@ export class KnowledgeBase extends Component<Props, State> {
     const node: ?ArticleNode = targetProjectRootArticles && findNodeById(targetProjectRootArticles.data, article.id);
 
     if (node) {
-      const title = this.renderTitle(
+      const title = this.renderHeader(
         node.data.summary,
         <TouchableOpacity
           style={styles.headerTitleButton}
@@ -114,7 +114,7 @@ export class KnowledgeBase extends Component<Props, State> {
     }
   };
 
-  renderTitle = (title: string, leftButton?: React$Element<any>) => {
+  renderHeader = (title: string, leftButton?: React$Element<any>) => {
     return (
       <View
         key="articlesHeader"
@@ -169,7 +169,7 @@ export class KnowledgeBase extends Component<Props, State> {
               style={styles.container}
               testID="articles"
             >
-              {this.renderTitle('Knowledge Base')}
+              {this.renderHeader('Knowledge Base')}
               <View
                 style={styles.content}
               >
