@@ -58,3 +58,5 @@ export type ActivityType = {
   id: string,
   name: string
 }
+
+export type ActivityPositionData = { activity: IssueActivity, index: number };

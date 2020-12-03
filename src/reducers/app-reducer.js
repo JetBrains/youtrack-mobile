@@ -10,7 +10,7 @@ import type {EndUserAgreement} from '../flow/AppConfig';
 import type {WorkTimeSettings} from '../flow/WorkTimeSettings';
 import type {User, UserAppearanceProfile, UserGeneralProfile} from '../flow/User';
 
-declare type RootState = {
+export type RootState = {
   auth: ?Auth,
   showMenu: boolean,
   showDebugView: boolean,
@@ -21,6 +21,7 @@ declare type RootState = {
   features: Array<string>,
   workTimeSettings: ?WorkTimeSettings,
   user?: User,
+  issuePermissions: ?IssuePermissions
 };
 
 const initialState: RootState = {
@@ -34,6 +35,7 @@ const initialState: RootState = {
   features: [],
   workTimeSettings: {},
   user: null,
+  issuePermissions: null
 };
 
 export default createReducer(initialState, {

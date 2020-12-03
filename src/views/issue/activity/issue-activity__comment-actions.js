@@ -17,13 +17,15 @@ import {getEntityPresentation} from '../../../components/issue-formatter/issue-f
 import {notify} from '../../../components/notification/notification';
 import {showActions} from '../../../components/action-sheet/action-sheet';
 import {until} from '../../../util/util';
-
+import {
+  convertCommentsToActivityPage,
+  findActivityInGroupedActivities
+} from '../../../components/activity/activity-helper';
 
 import * as types from '../issue-action-types';
 import type Api from '../../../components/api/api';
 import type IssueAPI from '../../../components/api/api__issue';
-import type {ActivityItem, IssueActivity} from '../../../flow/Activity';
-import type {ActivityPositionData} from './issue-activity__helper';
+import type {ActivityItem, ActivityPositionData, IssueActivity} from '../../../flow/Activity';
 import type {CustomError} from '../../../flow/Error';
 import type {IssueComment} from '../../../flow/CustomFields';
 import type {IssueFull} from '../../../flow/Issue';
@@ -91,7 +93,7 @@ export function loadIssueCommentsAsActivityPage() {
       const comments = await api.issue.getIssueComments(issueId);
       log.info(`Loaded ${comments.length} comments for ${issueId} issue`);
       dispatch(receiveActivityAPIAvailability(false));
-      const activityPage = activityHelper.convertCommentsToActivityPage(comments);
+      const activityPage = convertCommentsToActivityPage(comments);
       dispatch(receiveActivityEnabledTypes());
       dispatch(receiveActivityPage(activityPage));
     } catch (error) {
@@ -103,7 +105,7 @@ export function loadIssueCommentsAsActivityPage() {
 
 export function loadActivity(doNotReset: boolean = false) {
   return async (dispatch: any => any) => {
-    if (activityHelper.isActivitiesAPIEnabled()) {
+    if (activityHelper.isIssueActivitiesAPIEnabled()) {
       dispatch(loadActivitiesPage(doNotReset));
     } else {
       dispatch(loadIssueCommentsAsActivityPage());
@@ -401,7 +403,7 @@ export function onReactionSelect(
       return;
     }
 
-    const targetActivityData: ?ActivityPositionData = activityHelper.findActivityInGroupedActivities(
+    const targetActivityData: ?ActivityPositionData = findActivityInGroupedActivities(
       activities, comment.id
     );
     if (targetActivityData) {

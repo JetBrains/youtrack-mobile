@@ -18,20 +18,16 @@ import * as activityActions from './issue-activity__actions';
 import * as activityCommentActions from './issue-activity__comment-actions';
 import {attachmentActions} from '../issue__attachment-actions-and-types';
 
+import {convertCommentsToActivityPage, createActivityModel} from '../../../components/activity/activity-helper';
 import {getApi} from '../../../components/api/api__instance';
-import {isActivitiesAPIEnabled, convertCommentsToActivityPage} from './issue-activity__helper';
-import {createActivitiesModel} from '../../../components/activity/activity__create-model';
-import {groupActivities} from '../../../components/activity/activity__group-activities';
-import {isActivityCategory} from '../../../components/activity/activity__category';
-import {mergeActivities} from '../../../components/activity/activity__merge-activities';
 import {getEntityPresentation} from '../../../components/issue-formatter/issue-formatter';
+import {isIssueActivitiesAPIEnabled} from './issue-activity__helper';
 
 import styles from './issue-activity.styles';
 
 import PropTypes from 'prop-types';
 import {ThemeContext} from '../../../components/theme/theme-context';
 
-import type {ActivityItem} from '../../../flow/Activity';
 import type {IssueComment} from '../../../flow/CustomFields';
 import type {State as IssueActivityState} from './issue-activity__reducers';
 import type {State as IssueCommentActivityState} from './issue-activity__comment-reducers';
@@ -63,7 +59,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
   }
 
   loadIssueActivities = () => {
-    if (isActivitiesAPIEnabled()) {
+    if (isIssueActivitiesAPIEnabled()) {
       this.props.loadActivitiesPage();
     } else {
       this.props.loadIssueCommentsAsActivityPage();
@@ -97,32 +93,6 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     const DEFAULT_USER_APPEARANCE_PROFILE = {naturalCommentsOrder: true};
     const {user} = this.props;
     return user?.profiles?.appearance || DEFAULT_USER_APPEARANCE_PROFILE;
-  }
-
-  getGroupedActivity(activityPage: Array<IssueActivity> = []) {
-    return groupActivities(activityPage, {
-      onAddActivityToGroup: (group, activity: IssueActivity) => {
-        if (isActivityCategory.issueCreated(activity)) {
-          group.hidden = true;
-        }
-      },
-      onCompleteGroup: (group: Object) => {
-        group.events = mergeActivities(group.events);
-      }
-    });
-  }
-
-  createActivityModel(activityPage: Array<ActivityItem> | null) {
-    if (!activityPage) {
-      return null;
-    }
-
-    const naturalCommentsOrder = this.getUserAppearanceProfile().naturalCommentsOrder;
-    const groupedActivities = this.getGroupedActivity(activityPage);
-
-    return createActivitiesModel(
-      naturalCommentsOrder ? groupedActivities.reverse() : groupedActivities
-    ) || [];
   }
 
   _renderActivities(uiTheme: UITheme) {
@@ -175,7 +145,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     return (
       <View style={styles.activitiesContainer}>
         <IssueActivityStream
-          activities={this.createActivityModel(activityPage)}
+          activities={createActivityModel(activityPage, this.getUserAppearanceProfile().naturalCommentsOrder)}
           attachments={issue?.attachments}
           commentActions={commentActions}
           issueFields={issue?.fields}
@@ -205,7 +175,8 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
         tmp: true,
         timestamp: Date.now(),
         author: currentUser,
-      })];
+      }
+    )];
 
     let newActivityPage = [].concat(activityPage);
     if (currentUser?.profiles?.appearance?.naturalCommentsOrder) {
@@ -285,7 +256,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
   render() {
     const {isVisibilitySelectShown, activitiesLoadingError} = this.props;
-    const activitiesApiEnabled: boolean = isActivitiesAPIEnabled();
+    const activitiesApiEnabled: boolean = isIssueActivitiesAPIEnabled();
     const hasError: boolean = this.hasLoadingError();
     const activityLoaded: boolean = this.isActivityLoaded();
     const showLoading: boolean = !activityLoaded && !hasError;

@@ -6,13 +6,17 @@ import * as activityActions from './issue-activity__actions';
 import * as issueCommentActions from './issue-activity__comment-actions';
 
 import * as types from '../issue-action-types';
-import * as activityHelper from './issue-activity__helper';
+import {
+  convertCommentsToActivityPage,
+  getActivityCategories,
+  getActivityAllTypes
+} from '../../../components/activity/activity-helper';
 
 let APIMock;
 const getApi = () => APIMock;
 const ISSUE_ID = 'test-id';
 
-const issueActivityAllTypes = activityHelper.getIssueActivityAllTypes();
+const issueActivityAllTypes = getActivityAllTypes();
 
 const mockStore = configureMockStore([thunk.withExtraArgument(getApi)]);
 
@@ -65,7 +69,7 @@ describe('Issue activity', () => {
 
       expect(dispatched[2]).toEqual({
         type: types.RECEIVE_ACTIVITY_PAGE,
-        activityPage: activityHelper.convertCommentsToActivityPage([commentMock])
+        activityPage: convertCommentsToActivityPage([commentMock])
       });
     });
 
@@ -73,7 +77,7 @@ describe('Issue activity', () => {
 
 
   describe('Load Activities', function () {
-    const categories = activityHelper.getActivityCategories(issueActivityAllTypes);
+    const categories = getActivityCategories(issueActivityAllTypes);
 
     it('should load issue activity page', async () => {
       await store.dispatch(activityActions.loadActivitiesPage());

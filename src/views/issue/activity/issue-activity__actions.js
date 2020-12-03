@@ -2,10 +2,11 @@
 
 import * as activityHelper from './issue-activity__helper';
 import * as types from '../issue-action-types';
-
 import log from '../../../components/log/log';
-import type {IssueActivity} from '../../../flow/Activity';
+import {getActivityCategories, getActivityAllTypes} from '../../../components/activity/activity-helper';
+
 import type Api from '../../../components/api/api';
+import type {IssueActivity} from '../../../flow/Activity';
 import type {State as SingleIssueState} from '../issue-reducers';
 
 type ApiGetter = () => Api;
@@ -27,7 +28,7 @@ export function receiveActivityPageError(error: Error) {
 export function receiveActivityEnabledTypes() {
   return {
     type: types.RECEIVE_ACTIVITY_CATEGORIES,
-    issueActivityTypes: activityHelper.getIssueActivityAllTypes(),
+    issueActivityTypes: getActivityAllTypes(),
     issueActivityEnabledTypes: activityHelper.getIssueActivitiesEnabledTypes()
   };
 }
@@ -38,7 +39,7 @@ export function loadActivitiesPage(doNotReset: boolean = false) {
     const api: Api = getApi();
 
     dispatch(receiveActivityEnabledTypes());
-    const activityCategories = activityHelper.getActivityCategories(
+    const activityCategories = getActivityCategories(
       activityHelper.getIssueActivitiesEnabledTypes()
     );
 

@@ -10,6 +10,8 @@ import * as types from './issue-action-types';
 
 import * as activityHelper from './activity/issue-activity__helper';
 
+import {convertCommentsToActivityPage} from '../../components/activity/activity-helper';
+
 let fakeApi;
 const getApi = () => fakeApi;
 const ISSUE_ID = 'test-id';
@@ -65,7 +67,7 @@ describe('Issue view actions', () => {
     expect(dispatched[2]).toEqual({type: types.RECEIVE_ACTIVITY_API_AVAILABILITY, activitiesEnabled: false});
     expect(dispatched[4]).toEqual({
       type: types.RECEIVE_ACTIVITY_PAGE,
-      activityPage: activityHelper.convertCommentsToActivityPage([fakeComment])
+      activityPage: convertCommentsToActivityPage([fakeComment])
     });
   });
 
@@ -80,7 +82,7 @@ describe('Issue view actions', () => {
     let getIssueActivitiesEnabledTypes;
 
     beforeEach(() => {
-      actionsIsActivitiesAPIEnabled = sinon.stub(activityHelper, 'isActivitiesAPIEnabled').returns(true);
+      actionsIsActivitiesAPIEnabled = sinon.stub(activityHelper, 'isIssueActivitiesAPIEnabled').returns(true);
       getIssueActivitiesEnabledTypes = sinon.stub(activityHelper, 'getIssueActivitiesEnabledTypes').returns(issueActivityEnabledTypesMock);
     });
 

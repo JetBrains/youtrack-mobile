@@ -1,29 +1,20 @@
 /* @flow */
 
-import {flushStoragePart, getStorageState} from '../../../components/storage/storage';
 import {checkVersion} from '../../../components/feature/feature';
-import {Activity} from '../../../components/activity/activity__category';
+import {flushStoragePart, getStorageState} from '../../../components/storage/storage';
+import {getActivityAllTypes} from '../../../components/activity/activity-helper';
 
-import {IconComment, IconHistory, IconHourGlass} from '../../../components/icon/icon';
-
-import type {ActivityItem, ActivityType, IssueActivity} from '../../../flow/Activity';
-import type {IssueComment} from '../../../flow/CustomFields';
+import type {ActivityType} from '../../../flow/Activity';
 import type {StorageState} from '../../../components/storage/storage';
 
-const activityIconMap = {
-  [Activity.Source.COMMENT]: IconComment,
-  [Activity.Source.HISTORY]: IconHistory,
-  [Activity.Source.WORK_ITEM]: IconHourGlass
-};
-
-export function isActivitiesAPIEnabled() {
+export function isIssueActivitiesAPIEnabled() {
   return checkVersion('2018.3');
 }
 
 export function getIssueActivitiesEnabledTypes(): Array<ActivityType> {
   let enabledTypes = getStorageState().issueActivitiesEnabledTypes || [];
   if (!enabledTypes.length) {
-    enabledTypes = getIssueActivityAllTypes();
+    enabledTypes = getActivityAllTypes();
     saveIssueActivityEnabledTypes(enabledTypes);
   }
   return enabledTypes;
@@ -45,53 +36,3 @@ export async function toggleIssueActivityEnabledType(type: ActivityType, enable:
   return flushStoragePart({issueActivitiesEnabledTypes: enabledTypes});
 }
 
-export function getIssueActivityIcon(activityTypeName: string): React$Component<any> {
-  return activityIconMap[activityTypeName];
-}
-
-export function getIssueActivityAllTypes(): Array<ActivityType> {
-  return Object.keys(Activity.ActivityCategories).map(
-    (key) => Object.assign({id: key, name: Activity.CategoryPresentation[key]})
-  );
-}
-
-export function getActivityCategories(categoryTypes: Array<ActivityType> = []): Array<string> {
-  return categoryTypes.reduce(
-    (list: Array<string>, category: ActivityType) => list.concat(Activity.ActivityCategories[category.id]), []
-  );
-}
-
-export function convertCommentsToActivityPage(comments: Array<IssueComment> = []): Array<ActivityItem> {
-  return comments.map((comment: IssueComment) => createActivityItemFrom(comment));
-}
-
-function createActivityItemFrom(comment: IssueComment): ActivityItem {
-  return {
-    $type: 'CommentActivityItem',
-    added: [Object.assign({}, comment, {attachments: comment?.attachments || []})],
-    author: comment.author,
-    authorGroup: null,
-    category: {id: 'CommentsCategory', $type: 'ActivityCategory'},
-    field: {$type: 'PredefinedFilterField', presentation: 'comments', id: 'comments'},
-    id: `${comment.id}.0-0`,
-    removed: [],
-    target: {$type: 'IssueComment', created: comment.created, id: comment.id, usesMarkdown: comment.usesMarkdown},
-    targetMember: null,
-    timestamp: comment.created
-  };
-}
-
-export type ActivityPositionData = { activity: IssueActivity, index: number };
-
-export function findActivityInGroupedActivities(groupedActivities: Array<IssueActivity>, targetId: string): ActivityPositionData | null {
-  for (let index = 0; index < groupedActivities.length; index++) {
-    const activity: IssueActivity = groupedActivities[index];
-    if (activity?.target?.id === targetId) {
-      return {
-        activity,
-        index
-      };
-    }
-  }
-  return null;
-}
