@@ -46,6 +46,7 @@ describe('Storage', () => {
   it('should remove empty values from storage on flush', async () => {
     await storage.flushStoragePart({config: {}, query: 'bar'});
     MockedStorage.multiRemove.should.have.been.calledWith([
+      'YT_ARTICLES_LIST',
       'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE',
       'YT_PROJECTS_STORAGE',
       'DRAFT_ID_STORAGE_KEY',

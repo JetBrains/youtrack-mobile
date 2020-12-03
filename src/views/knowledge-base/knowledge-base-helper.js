@@ -40,12 +40,12 @@ export const flattenTree = (nodes: Array<ArticleNode> = []): Array<Article> => {
   return resultArray;
 };
 
-export const findNodeById = (articleList: Array<ArticleNode>, id: string): ArticleNode => {
-  for (let i = 0, l = articleList.length; i < l; i++) {
-    if (articleList[i].data.id === id) {
-      return articleList[i];
-    } else if (articleList[i].children) {
-      const node = findNodeById(articleList[i].children, id);
+export const findNodeById = (articlesList: Array<ArticleNode>, id: string): ArticleNode => {
+  for (let i = 0, l = articlesList.length; i < l; i++) {
+    if (articlesList[i].data.id === id) {
+      return articlesList[i];
+    } else if (articlesList[i].children) {
+      const node = findNodeById(articlesList[i].children, id);
       if (node) {
         return node;
       }

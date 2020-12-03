@@ -2,8 +2,9 @@
 
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
 import {createTree} from './knowledge-base-helper';
+import {flushStoragePart, getStorageState} from '../../components/storage/storage';
 import {logEvent} from '../../components/log/log-helper';
-import {setError, setLoading, setTree} from './knowledge-base-reducers';
+import {setError, setLoading, setList} from './knowledge-base-reducers';
 import {until} from '../../util/util';
 
 import type Api from '../../components/api/api';
@@ -13,7 +14,21 @@ import type {KnowledgeBaseState} from './knowledge-base-reducers';
 type ApiGetter = () => Api;
 
 
-const loadArticles = (projectId: string, query: string | null, $top?: number, $skip?: number) => {
+const setArticlesListCache = (articlesList: ArticlesList) => {
+  flushStoragePart({articlesList});
+};
+
+const loadArticlesListFromCache = () => {
+  return async (dispatch: (any) => any) => {
+    const cachedArticlesList: ArticlesList = getStorageState().articlesList;
+    if (cachedArticlesList?.length > 0) {
+      dispatch(setList(cachedArticlesList));
+      logEvent({message: 'Set articles list from cache'});
+    }
+  };
+};
+
+const loadArticlesList = (projectId: string, query: string | null, $top?: number, $skip?: number) => {
   return async (dispatch: (any) => any, getState: () => KnowledgeBaseState, getApi: ApiGetter) => {
     const api: Api = getApi();
 
@@ -29,11 +44,13 @@ const loadArticles = (projectId: string, query: string | null, $top?: number, $s
     } else {
       const tree: Array<ArticleNode> = createTree(articles);
       const articlesTree: ArticlesList = tree.filter(it => it.data.length > 0);
-      dispatch(setTree(articlesTree));
+      dispatch(setList(articlesTree));
+      setArticlesListCache(articlesTree);
     }
   };
 };
 
 export {
-  loadArticles
+  loadArticlesList,
+  loadArticlesListFromCache
 };

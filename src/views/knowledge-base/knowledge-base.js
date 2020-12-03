@@ -28,7 +28,8 @@ import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {IssueProject} from '../../flow/CustomFields';
 
 type Props = KnowledgeBaseState & {
-  loadArticles: () => void
+  loadArticlesListFromCache: (any) => void,
+  loadArticlesList: (any) => void
 };
 
 type State = {
@@ -46,7 +47,8 @@ export class KnowledgeBase extends Component<Props, State> {
   }
 
   componentDidMount() {
-    this.props.loadArticles();
+    this.props.loadArticlesListFromCache();
+    this.props.loadArticlesList();
   }
 
   renderProject = ({section}: ArticlesListItem) => {
@@ -88,8 +90,7 @@ export class KnowledgeBase extends Component<Props, State> {
   };
 
   renderSubArticles = (article: Article) => {
-    const {articlesTree} = this.props;
-    const targetProjectRootArticles: ArticlesListItem = articlesTree.find(
+    const targetProjectRootArticles: ArticlesListItem = this.props.articlesList.find(
       (it: ArticlesListItem) => it.title.id === article.project.id
     );
     const node: ?ArticleNode = targetProjectRootArticles && findNodeById(targetProjectRootArticles.data, article.id);
@@ -104,7 +105,7 @@ export class KnowledgeBase extends Component<Props, State> {
           <IconBack color={this.uiTheme.colors.$link}/>
         </TouchableOpacity>
       );
-      const tree: ArticlesList = this.renderArticlesTree([{
+      const tree: ArticlesList = this.renderArticlesList([{
         title: null,
         data: node.children
       }]);
@@ -136,12 +137,12 @@ export class KnowledgeBase extends Component<Props, State> {
     this.setState({isTitlePinned: nativeEvent.contentOffset.y >= UNIT * 7});
   };
 
-  renderArticlesTree = (articleTree: ArticlesList) => {
+  renderArticlesList = (articlesList: ArticlesList) => {
     return (
       <SectionList
         testID="articles"
         style={styles.list}
-        sections={articleTree}
+        sections={articlesList}
         scrollEventThrottle={10}
         onScroll={this.onScroll}
         keyExtractor={guid}
@@ -156,7 +157,7 @@ export class KnowledgeBase extends Component<Props, State> {
   };
 
   render() {
-    const {isLoading, articlesTree, error} = this.props;
+    const {isLoading, articlesList, error} = this.props;
 
     return (
       <ThemeContext.Consumer>
@@ -175,9 +176,9 @@ export class KnowledgeBase extends Component<Props, State> {
 
                 {error && <ErrorMessage testID="articleError" error={error}/>}
 
-                {isLoading && !error && <SkeletonIssues/>}
+                {isLoading && !articlesList && !error && <SkeletonIssues/>}
 
-                {!isLoading && !error && this.renderArticlesTree(articlesTree)}
+                {articlesList && !error && this.renderArticlesList(articlesList)}
 
               </View>
             </View>
