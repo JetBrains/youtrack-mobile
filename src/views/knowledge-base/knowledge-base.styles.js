@@ -74,7 +74,6 @@ export default EStyleSheet.create({
     color: '$text'
   },
   projectTitle: {
-    marginLeft: UNIT,
     ...headerTitle,
     color: '$text',
     ...Platform.select({

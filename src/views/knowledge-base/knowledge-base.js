@@ -103,6 +103,12 @@ export class KnowledgeBase extends Component<Props, State> {
           onPress={() => Router.pop()}
         >
           <IconBack color={this.uiTheme.colors.$link}/>
+        </TouchableOpacity>,
+        <TouchableOpacity
+          style={[styles.item, styles.itemArticle]}
+          onPress={() => Router.Article({article: article})}
+        >
+          <Text numberOfLines={2} style={styles.projectTitle}>{article.summary}</Text>
         </TouchableOpacity>
       );
       const tree: ArticlesList = this.renderArticlesList([{
@@ -114,17 +120,19 @@ export class KnowledgeBase extends Component<Props, State> {
     }
   };
 
-  renderHeader = (title: string, leftButton?: React$Element<any>) => {
+  renderHeader = (title: string, leftButton?: React$Element<any>, customTitleComponent?: React$Element<any>) => {
     return (
       <View
         key="articlesHeader"
         style={[
           styles.headerTitle,
-          this.state.isTitlePinned ? styles.headerTitleShadow : null
+          this.state.isTitlePinned || customTitleComponent ? styles.headerTitleShadow : null
         ]}
       >
         {leftButton}
-        <Text numberOfLines={5} style={styles.headerTitleText}>{title}</Text>
+        {customTitleComponent
+          ? customTitleComponent
+          : <Text numberOfLines={5} style={styles.headerTitleText}>{title}</Text>}
       </View>
     );
   }
