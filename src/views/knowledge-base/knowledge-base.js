@@ -150,6 +150,7 @@ export class KnowledgeBase extends Component<Props, State> {
         renderSectionHeader={this.renderProject}
         ItemSeparatorComponent={this.renderSeparator}
         ListEmptyComponent={() => <Text>No articles found</Text>}
+        stickySectionHeadersEnabled={true}
       />
     );
   };
