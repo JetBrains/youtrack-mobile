@@ -101,8 +101,8 @@ function Comment(props: Props) {
     return (
       <View testID={testID}>
         {comment.deleted && renderDeletedComment()}
-        {!comment.deleted && usesMarkdown && renderMarkdown()}
-        {!comment.deleted && !usesMarkdown && renderYoutrackWiki()}
+        {!comment.deleted && (usesMarkdown || !comment.textPreview) && renderMarkdown()}
+        {!comment.deleted && !usesMarkdown && !!comment.textPreview && renderYoutrackWiki()}
       </View>
     );
   };

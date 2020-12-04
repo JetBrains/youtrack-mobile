@@ -9,13 +9,17 @@ import {SkeletonIssueContent} from '../../components/skeleton/skeleton';
 
 import styles from './article.styles';
 
-import type {ArticleState} from './article-reducers';
 import type {UITheme} from '../../flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {Article} from '../../flow/Article';
+import type {CustomError} from '../../flow/Error';
 
-type Props = ArticleState & {
-  style: ViewStyleProp,
-  uiTheme: UITheme
+type Props = {
+  article: Article,
+  error: CustomError,
+  isLoading: boolean,
+  style?: ViewStyleProp,
+  uiTheme: UITheme,
 };
 
 
@@ -24,7 +28,7 @@ const ArticleDetails = (props: Props) => {
 
   return (
     <ScrollView
-      style={[styles.container, style]}
+      style={style}
       testID="articleDetails"
     >
 

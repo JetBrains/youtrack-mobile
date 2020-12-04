@@ -5,14 +5,13 @@ import qs from 'qs';
 import ApiBase from './api__base';
 import issueActivityPageFields from './api__activities-issue-fields';
 import issueFields from './api__issue-fields';
+import {activityArticleCategory} from '../activity/activity__category';
 
 import type {Article} from '../../flow/Article';
-import type {IssueActivity} from '../../flow/Activity';
+import type {Activity} from '../../flow/Activity';
 
 export default class ArticlesAPI extends ApiBase {
-  categories = [
-    'ArticleCreatedCategory', 'ArticleSummaryCategory', 'ArticleDescriptionCategory', 'ArticleProjectCategory', 'ArticleAttachmentsCategory', 'ArticleVisibilityCategory', 'ArticleCommentsCategory'
-  ];
+  categories: Array<string> = Object.keys(activityArticleCategory).map((key: string) => activityArticleCategory[key]);
 
   async get(query: string | null = null, $top: number = 10000, $skip: number = 0): Promise<Array<Article>> {
     const fields: string = ApiBase.createFieldsQuery(
@@ -54,7 +53,7 @@ export default class ArticlesAPI extends ApiBase {
     );
   }
 
-  async getActivitiesPage(articleId: string): Promise<Array<IssueActivity>> {
+  async getActivitiesPage(articleId: string): Promise<Array<Activity>> {
     const categoryKey = '&categories=';
     const categories = `${categoryKey}${(this.categories).join(categoryKey)}`;
     const queryString = qs.stringify({
@@ -63,9 +62,8 @@ export default class ArticlesAPI extends ApiBase {
       fields: issueActivityPageFields.toString()
     });
 
-    const activityPage = await this.makeAuthorizedRequest(
+    return this.makeAuthorizedRequest(
       `${this.youTrackApiUrl}/articles/${articleId}/activitiesPage?${queryString}${categories}`);
-    return activityPage.activities;
   }
 
 }

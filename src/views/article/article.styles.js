@@ -23,4 +23,9 @@ export default EStyleSheet.create({
     ...summaryTitle,
     color: '$text'
   },
+
+  articleActivities: {
+    paddingHorizontal: UNIT,
+    paddingVertical: UNIT * 2,
+  }
 });

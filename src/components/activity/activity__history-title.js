@@ -28,6 +28,9 @@ function getTitle(event) {
   case eventField.id === 'attachments':
     label = countAllEventEntities(event) > 1 ? 'Attachments' : 'Attachment';
     break;
+  case eventField.id === 'visible to':
+    label = 'Visibility';
+    break;
   default:
     label = eventField.presentation;
   }

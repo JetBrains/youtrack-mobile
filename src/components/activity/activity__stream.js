@@ -42,10 +42,27 @@ import type {YouTrackWiki} from '../../flow/Wiki';
 import type {CustomError} from '../../flow/Error';
 import type {User} from '../../flow/User';
 
+type CommentAction = (comment: IssueComment) => boolean;
+type ActivityStreamCommentActions = {
+  canCommentOn: boolean,
+  canDeleteComment: CommentAction,
+  canDeleteCommentPermanently: boolean,
+  canRestoreComment: CommentAction,
+  canUpdateComment: CommentAction,
+  isAuthor: CommentAction,
+  onCopyCommentLink: (comment: IssueComment) => Function,
+  onDeleteComment: (comment: IssueComment) => Function,
+  onDeleteCommentPermanently: (comment: IssueComment, activityId?: string) => Function,
+  onReply: (comment: IssueComment) => any,
+  onRestoreComment: (comment: IssueComment) => Function,
+  onShowCommentActions: (comment: IssueComment) => Function,
+  onStartEditing: (comment: IssueComment) => Function
+}
+
 export type ActivityStreamProps = {
   activities: Array<Activity> | null,
   attachments: Array<Attachment>,
-  commentActions?: Object,
+  commentActions?: ActivityStreamCommentActions,
   currentUser: User,
   issueFields: Array<Object>,
   onReactionSelect: (
@@ -61,8 +78,8 @@ export type ActivityStreamProps = {
 };
 
 export type ActivityStreamPropsReaction = {
-  onReactionPanelOpen: (comment: IssueComment) => void,
-  onSelectReaction: (comment: IssueComment, reaction: Reaction) => void
+  onReactionPanelOpen?: (comment: IssueComment) => void,
+  onSelectReaction?: (comment: IssueComment, reaction: Reaction) => void
 }
 
 export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsReaction) => {
@@ -299,8 +316,8 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
     const commentActions = props.commentActions;
     const isAuthor = commentActions && commentActions.isAuthor(comment);
 
-    const canComment: boolean = commentActions?.canCommentOn;
-    const canUpdate: boolean = commentActions && commentActions.canUpdateComment(comment);
+    const canComment: boolean = !!commentActions?.canCommentOn;
+    const canUpdate: boolean = !!commentActions && commentActions.canUpdateComment(comment);
 
     if (!comment.deleted) {
       // $FlowFixMe
@@ -312,7 +329,8 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
               <TouchableOpacity
                 hitSlop={HIT_SLOP}
                 disabled={disabled}
-                onPress={() => isAuthor ? commentActions && commentActions.onStartEditing(comment) : commentActions && commentActions.onReply(
+                onPress={() => isAuthor ? commentActions && commentActions.onStartEditing(
+                  comment) : commentActions && commentActions.onReply(
                   comment)}>
                 <Text style={styles.link}>
                   {isAuthor ? 'Edit' : 'Reply'}
@@ -325,8 +343,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
             <TouchableOpacity
               hitSlop={HIT_SLOP}
               disabled={disabled}
-              //
-              onPress={() => props.onReactionPanelOpen(comment)}
+              onPress={() => {if (props.onReactionPanelOpen) props.onReactionPanelOpen(comment);}}
             >
               {reactionAddIcon}
             </TouchableOpacity>
@@ -352,6 +369,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
     }
 
     const allAttachments = updateToAbsUrl(comment.attachments).concat(props.attachments || []);
+    const commentActions: ActivityStreamCommentActions = props.commentActions || {};
 
     return (
       <View key={comment.id}>
@@ -361,13 +379,16 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
 
           <Comment
             attachments={allAttachments}
-            canDeletePermanently={props.commentActions.canDeleteCommentPermanently}
-            canRestore={props.commentActions.canRestoreComment(comment)}
+            canDeletePermanently={!!commentActions?.canDeleteCommentPermanently}
+            canRestore={commentActions?.canRestoreComment ? commentActions.canRestoreComment(comment) : false}
             comment={comment}
             key={comment.id}
-            onDeletePermanently={() => props.commentActions.onDeleteCommentPermanently(
-              comment, activityGroup.comment.id)}
-            onRestore={() => props.commentActions.onRestoreComment(comment)}
+            onDeletePermanently={() => {
+              if (commentActions.onDeleteCommentPermanently) {
+                commentActions.onDeleteCommentPermanently(comment, activityGroup.comment.id);
+              }
+            }}
+            onRestore={() => { if (commentActions.onRestoreComment) commentActions.onRestoreComment(comment); }}
             uiTheme={props.uiTheme}
             youtrackWiki={props.youtrackWiki}
           />
@@ -378,12 +399,12 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
             visibility={IssueVisibility.getVisibilityPresentation(comment.visibility)}
             color={props.uiTheme.colors.$iconAccent}
           />}
-          <CommentReactions
-            style={styles.activityCommentReactions}
+          {!!props.onSelectReaction && <CommentReactions
+            style={styles.commentReactions}
             comment={comment}
             currentUser={props.currentUser}
             onReactionSelect={props.onSelectReaction}
-          />
+          />}
 
         </View>
       </View>
@@ -423,6 +444,11 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
     );
   };
 
+  const renderVisibilityActivity = (activity) => {
+    const textChange = getTextChange(activity, []);
+    return renderTextChange(activity, textChange);
+  };
+
   const renderActivityByCategory = (activity: Activity, uiTheme: UITheme) => {
     switch (true) {
     case Boolean(
@@ -438,6 +464,8 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
       return renderLinkChange(activity);
     case Boolean(isActivityCategory.attachment(activity)):
       return renderAttachmentChange(activity, uiTheme);
+    case Boolean(isActivityCategory.visibility(activity)):
+      return renderVisibilityActivity(activity);
     }
     return null;
   };

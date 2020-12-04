@@ -7,6 +7,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import * as articleActions from './arcticle-action';
+import ArticleActivities from './article__activities';
 import ArticleDetails from './article__details';
 import Header from '../../components/header/header';
 import IssueTabbed from '../../components/issue-tabbed/issue-tabbed';
@@ -17,8 +18,8 @@ import {ThemeContext} from '../../components/theme/theme-context';
 import styles from './article.styles';
 
 import type {ArticleState} from './article-reducers';
-import type {Theme, UITheme} from '../../flow/Theme';
 import type {IssueTabbedState} from '../../components/issue-tabbed/issue-tabbed';
+import type {Theme, UITheme} from '../../flow/Theme';
 
 type Props = ArticleState & { articlePlaceholder: Article } & typeof (articleActions);
 type State = IssueTabbedState;
@@ -44,8 +45,14 @@ class Article extends IssueTabbed<Props, State> {
     );
   };
 
-  renderActivity = () => {
-    return null;
+  renderActivity = (uiTheme: UITheme) => {
+    return (
+      <ArticleActivities
+        style={styles.articleActivities}
+        article={this.props.article}
+        uiTheme={uiTheme}
+      />
+    );
   };
 
   isTabChangeEnabled = () => {
@@ -86,7 +93,7 @@ class Article extends IssueTabbed<Props, State> {
 const mapStateToProps = (state: { article: ArticleState }, ownProps: Props): ArticleState => {
   return {
     articlePlaceholder: ownProps.article,
-    ...state.article,
+    ...state.article
   };
 };
 const mapDispatchToProps = (dispatch) => {

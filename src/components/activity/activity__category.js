@@ -40,6 +40,16 @@ export const activityCategory = {
   VISIBILITY: 'PermittedGroupCategory',
 };
 
+export const activityArticleCategory = {
+  ATTACHMENTS:'ArticleAttachmentsCategory',
+  COMMENT: 'ArticleCommentsCategory',
+  CREATED: 'ArticleCreatedCategory',
+  DESCRIPTION: 'ArticleDescriptionCategory',
+  PROJECT: 'ArticleProjectCategory',
+  SUMMARY: 'ArticleSummaryCategory',
+  VISIBILITY: 'ArticleVisibilityCategory'
+};
+
 
 export const ActivityCategory = [
   ['COMMENT', 'IssueComments', [
@@ -91,9 +101,9 @@ export const isActivityCategories = function(categoryIds: Array<string>) {
   };
 };
 
-isActivityCategory.comment = isActivityCategory(activityCategory.COMMENT);
-isActivityCategory.attachment = isActivityCategory(activityCategory.ATTACHMENTS);
-isActivityCategory.issueCreated = isActivityCategory(activityCategory.ISSUE_CREATED);
+isActivityCategory.comment = isActivityCategories([activityCategory.COMMENT, activityArticleCategory.COMMENT]);
+isActivityCategory.attachment = isActivityCategories([activityCategory.ATTACHMENTS, activityArticleCategory.ATTACHMENTS]);
+isActivityCategory.issueCreated = isActivityCategories([activityCategory.ISSUE_CREATED, activityArticleCategory.CREATED]);
 isActivityCategory.work = isActivityCategory(activityCategory.WORK_ITEM);
 isActivityCategory.voters = isActivityCategory(activityCategory.VOTERS);
 isActivityCategory.totalVotes = isActivityCategory(activityCategory.TOTAL_VOTES);
@@ -102,10 +112,10 @@ isActivityCategory.customField = isActivityCategory(activityCategory.CUSTOM_FIEL
 isActivityCategory.date = isActivityCategory(activityCategory.ISSUE_RESOLVED);
 isActivityCategory.link = isActivityCategory(activityCategory.LINKS);
 isActivityCategory.tag = isActivityCategory(activityCategory.TAGS);
-isActivityCategory.summary = isActivityCategory(activityCategory.SUMMARY);
-isActivityCategory.description = isActivityCategory(activityCategory.DESCRIPTION);
+isActivityCategory.summary = isActivityCategories([activityCategory.SUMMARY, activityArticleCategory.SUMMARY]);
+isActivityCategory.description = isActivityCategories([activityCategory.DESCRIPTION, activityArticleCategory.DESCRIPTION]);
 isActivityCategory.sprint = isActivityCategory(activityCategory.SPRINT);
-isActivityCategory.project = isActivityCategory(activityCategory.PROJECT);
-isActivityCategory.visibility = isActivityCategory(activityCategory.VISIBILITY);
+isActivityCategory.project = isActivityCategories([activityCategory.PROJECT, activityArticleCategory.PROJECT]);
+isActivityCategory.visibility = isActivityCategories([activityCategory.VISIBILITY, activityArticleCategory.VISIBILITY]);
 
 

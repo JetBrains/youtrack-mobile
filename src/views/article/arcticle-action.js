@@ -2,7 +2,7 @@
 
 import {ANALYTICS_ARTICLE_PAGE} from '../../components/analytics/analytics-ids';
 import {logEvent} from '../../components/log/log-helper';
-import {setArticle, setError, setLoading} from './article-reducers';
+import {setArticle, setError, setLoading, setActivityPage} from './article-reducers';
 import {until} from '../../util/util';
 
 import type Api from '../../components/api/api';
@@ -30,6 +30,29 @@ const loadArticle = (articleId: string) => {
   };
 };
 
+const loadActivitiesPage = (articleId: string, reset: boolean = false) => {
+  return async (dispatch: (any) => any, getState: () => ArticleState, getApi: ApiGetter) => {
+    const api: Api = getApi();
+
+    if (reset) {
+      dispatch(setActivityPage(null));
+    }
+    dispatch(setLoading(true));
+    const [error, activityPage] = await until(api.articles.getActivitiesPage(articleId));
+    dispatch(setLoading(false));
+
+    if (error) {
+      dispatch(setError(error));
+      logEvent({message: 'Failed to load articles activities', isError: true});
+    } else {
+      dispatch(setActivityPage(activityPage.activities));
+      logEvent({message: 'Articles activity page loaded'});
+    }
+  };
+};
+
+
 export {
-  loadArticle
+  loadArticle,
+  loadActivitiesPage
 };
