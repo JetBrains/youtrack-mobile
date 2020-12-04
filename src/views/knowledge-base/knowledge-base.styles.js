@@ -55,7 +55,7 @@ export default EStyleSheet.create({
   },
   itemButton: {
     alignItems: 'center',
-    width: UNIT * 6,
+    width: UNIT * 7,
     marginRight: -UNIT,
     marginLeft: UNIT * 2,
     paddingVertical: UNIT,
