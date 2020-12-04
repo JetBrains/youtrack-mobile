@@ -1,4 +1,5 @@
-import type {IssueComment, IssueProject} from './CustomFields';
+import type {Attachment, IssueComment, IssueProject} from './CustomFields';
+import type {IssueFull} from './Issue';
 import type {User} from './User';
 
 type EventBase = {
@@ -8,22 +9,6 @@ type EventBase = {
   color: {id: string}
 }
 
-type ActivityAttachment = EventBase & {
-  url: string,
-  mimeType: string,
-  removed: boolean,
-  thumbnailURL: string
-}
-
-type ActivityIssue = EventBase & {
-  idReadable: string,
-  summary: string,
-  resolved: boolean,
-  created: number,
-  updated: number,
-  project: IssueProject,
-}
-
 type ActivityWork = EventBase & {
   $type: string;
   date: number;
@@ -31,9 +16,9 @@ type ActivityWork = EventBase & {
   duration: {minutes: number}
 }
 
-export type ActivityItem = IssueProject | IssueComment | ActivityAttachment | ActivityIssue | ActivityWork | string | null;
+export type ActivityItem = IssueProject | IssueComment | Attachment | IssueFull | ActivityWork | string | null;
 
-export type IssueActivity = {
+export type Activity = {
   id: string;
   category: {id: string},
   timestamp: number,
@@ -59,4 +44,9 @@ export type ActivityType = {
   name: string
 }
 
-export type ActivityPositionData = { activity: IssueActivity, index: number };
+export type ActivityPositionData = { activity: Activity, index: number };
+
+export type ActivityChange = {
+  added: ActivityItem,
+  removed: ActivityItem
+};

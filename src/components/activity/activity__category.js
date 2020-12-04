@@ -41,7 +41,7 @@ export const activityCategory = {
 };
 
 
-export const Activity = [
+export const ActivityCategory = [
   ['COMMENT', 'IssueComments', [
     activityCategory.COMMENT
   ], 'Comments'],
@@ -83,6 +83,11 @@ export const Activity = [
 export const isActivityCategory = function(categoryId: string) {
   return function(activity: Object) {
     return activity ? activity.category.id === categoryId : false;
+  };
+};
+export const isActivityCategories = function(categoryIds: Array<string>) {
+  return function(activity: Object) {
+    return activity ? categoryIds.some((categoryId: string) => categoryId === activity.category.id) : false;
   };
 };
 

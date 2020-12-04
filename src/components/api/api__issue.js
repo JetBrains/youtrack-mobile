@@ -7,9 +7,9 @@ import {handleRelativeUrl} from '../config/config';
 import issueActivityPageFields, {ISSUE_ATTACHMENT_FIELDS} from './api__activities-issue-fields';
 
 import type Auth from '../auth/auth';
+import type {Activity} from '../../flow/Activity';
 import type {Attachment, FieldValue, IssueComment, IssueProject} from '../../flow/CustomFields';
 import type {IssueOnList, IssueFull} from '../../flow/Issue';
-import type {IssueActivity} from '../../flow/Activity';
 import type {Visibility} from '../../flow/Visibility';
 
 export default class IssueAPI extends ApiBase {
@@ -224,7 +224,7 @@ export default class IssueAPI extends ApiBase {
     return ApiHelper.patchAllRelativeAvatarUrls(suggestions, this.config.backendUrl);
   }
 
-  async getActivitiesPage(issueId: string, sources: Array<string>): Promise<Array<IssueActivity>> {
+  async getActivitiesPage(issueId: string, sources: Array<string>): Promise<Array<Activity>> {
     const categoryKey = '&categories=';
     const categories = `${categoryKey}${(sources || []).join(categoryKey)}`;
     const queryString = qs.stringify({

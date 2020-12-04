@@ -1,6 +1,6 @@
 /* @flow */
 import {ResourceTypes, hasType} from '../api/api__resource-types';
-import {Activity, isActivityCategory} from './activity__category';
+import {ActivityCategory, isActivityCategory} from './activity__category';
 
 export const createActivitiesModel = (activityGroups: Array<Object> = []) => {
 
@@ -33,15 +33,15 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []) => {
       switch (true) {
       case isActivityCategory.work(event):
         streamGroup.work = event;
-        streamGroup.key = Activity.Source.WORK_ITEM;
+        streamGroup.key = ActivityCategory.Source.WORK_ITEM;
         break;
       case isActivityCategory.comment(event):
         streamGroup.comment = event;
         streamGroup.target = event?.target;
-        streamGroup.key = Activity.Source.COMMENT;
+        streamGroup.key = ActivityCategory.Source.COMMENT;
         break;
       default:
-        streamGroup.key = Activity.Source.HISTORY;
+        streamGroup.key = ActivityCategory.Source.HISTORY;
       }
 
       return streamGroup;

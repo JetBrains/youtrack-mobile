@@ -4,7 +4,7 @@ import {createReducer} from 'redux-create-reducer';
 import IssuePermissions from '../../../components/issue-permissions/issue-permissions';
 import * as types from '../issue-action-types';
 
-import type {ActivityItem, IssueActivity} from '../../../flow/Activity';
+import type {ActivityItem, Activity} from '../../../flow/Activity';
 import type {CustomError} from '../../../flow/Error';
 import type {IssueComment} from '../../../flow/CustomFields';
 import type {IssueFull, OpenNestedViewParams} from '../../../flow/Issue';
@@ -53,7 +53,7 @@ export const initialState: State = {
 };
 
 export default createReducer(initialState, {
-  [types.RECEIVE_ACTIVITY_PAGE]: (state: State, action: { activityPage: Array<IssueActivity> }): State => {
+  [types.RECEIVE_ACTIVITY_PAGE]: (state: State, action: { activityPage: Array<Activity> }): State => {
     const {activityPage} = action;
     return {
       ...state,

@@ -6,7 +6,7 @@ import log from '../../../components/log/log';
 import {getActivityCategories, getActivityAllTypes} from '../../../components/activity/activity-helper';
 
 import type Api from '../../../components/api/api';
-import type {IssueActivity} from '../../../flow/Activity';
+import type {Activity} from '../../../flow/Activity';
 import type {State as SingleIssueState} from '../issue-reducers';
 
 type ApiGetter = () => Api;
@@ -17,7 +17,7 @@ export function receiveActivityAPIAvailability(activitiesEnabled: boolean) {
   return {type: types.RECEIVE_ACTIVITY_API_AVAILABILITY, activitiesEnabled};
 }
 
-export function receiveActivityPage(activityPage: Array<IssueActivity> | null) {
+export function receiveActivityPage(activityPage: Array<Activity> | null) {
   return {type: types.RECEIVE_ACTIVITY_PAGE, activityPage};
 }
 
@@ -50,7 +50,7 @@ export function loadActivitiesPage(doNotReset: boolean = false) {
 
     try {
       log.info('Loading activities...');
-      const activityPage: Array<IssueActivity> = await api.issue.getActivitiesPage(issueId, activityCategories);
+      const activityPage: Array<Activity> = await api.issue.getActivitiesPage(issueId, activityCategories);
       dispatch(receiveActivityPage(activityPage));
       log.info('Received activities', activityPage);
     } catch (error) {

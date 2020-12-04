@@ -25,7 +25,7 @@ import {
 import * as types from '../issue-action-types';
 import type Api from '../../../components/api/api';
 import type IssueAPI from '../../../components/api/api__issue';
-import type {ActivityItem, ActivityPositionData, IssueActivity} from '../../../flow/Activity';
+import type {ActivityItem, ActivityPositionData, Activity} from '../../../flow/Activity';
 import type {CustomError} from '../../../flow/Error';
 import type {IssueComment} from '../../../flow/CustomFields';
 import type {IssueFull} from '../../../flow/Issue';
@@ -116,7 +116,7 @@ export function loadActivity(doNotReset: boolean = false) {
 export function addComment(comment: IssueComment) {
   return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().issueState.issue.id;
-    const activityPage: ?Array<IssueActivity> = getState().issueActivity.activityPage;
+    const activityPage: ?Array<Activity> = getState().issueActivity.activityPage;
     dispatch(startSubmittingComment());
 
     try {
