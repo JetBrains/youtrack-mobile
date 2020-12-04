@@ -160,7 +160,7 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
               key={type.id}
               style={styles.settingsItem}
             >
-              <View style={styles.rowContainer}>
+              <View style={styles.settingsItemLabel}>
                 {!!Icon && <Icon size={22} color={this.props.uiTheme.colors.$iconAccent}/>}
                 <Text style={styles.settingsName}>
                   {`  ${type.name}`}
@@ -197,7 +197,7 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
           style={styles.settingsButton}
           onPress={this.toggleSettingsDialogVisibility}
         >
-          <Text style={styles.secondaryText}>{this.getTitle()}</Text>
+          <Text style={styles.settingsButtonText}>{this.getTitle()}</Text>
           <IconAngleDown size={19} color={this.props.uiTheme.colors.$icon}/>
         </TouchableOpacity>
 

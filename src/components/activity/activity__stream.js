@@ -30,7 +30,7 @@ import {SkeletonIssueActivities} from '../skeleton/skeleton';
 
 import {HIT_SLOP} from '../common-styles/button';
 import {UNIT} from '../variables/variables';
-import styles from '../../views/issue/activity/issue-activity.styles';
+import styles from './activity__stream.styles';
 
 import type {Attachment, IssueComment} from '../../flow/CustomFields';
 import type {Reaction} from '../../flow/Reaction';
@@ -45,7 +45,7 @@ import type {User} from '../../flow/User';
 export type ActivityStreamProps = {
   activities: Array<Activity> | null,
   attachments: Array<Attachment>,
-  commentActions: Object,
+  commentActions?: Object,
   currentUser: User,
   issueFields: Array<Object>,
   onReactionSelect: (
@@ -138,11 +138,9 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
     );
 
     return (
-      <View style={styles.row}>
-        <View style={{flexGrow: 2}}>
-          {isTextDiff && renderTextDiff(activity, textChange)}
-          {!isTextDiff && renderTextChange(activity, textChange)}
-        </View>
+      <View style={styles.activityTextValueChange}>
+        {isTextDiff && renderTextDiff(activity, textChange)}
+        {!isTextDiff && renderTextChange(activity, textChange)}
       </View>
     );
   };
@@ -154,7 +152,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
 
     return (
       <TouchableOpacity key={activity.id}>
-        <View style={styles.row}>
+        <View>
           <Text style={styles.activityLabel}>{getActivityEventTitle(activity)}</Text>
         </View>
         {
@@ -167,14 +165,14 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
                 onPress={() => Router.Issue({issueId: readableIssueId})}>
                 <Text style={[
                   styles.linkText,
-                  linkedIssue.resolved && styles.secondaryTextColor.color,
+                  linkedIssue.resolved && styles.secondaryTextColorColor.color,
                   linkedIssue.resolved && styles.activityRemoved
                 ]}>
                   {readableIssueId}
                 </Text>
                 <Text style={[
                   styles.linkText,
-                  linkedIssue.resolved && styles.secondaryTextColor.color
+                  linkedIssue.resolved && styles.secondaryTextColorColor.color
                 ]}>
                   {` ${linkedIssue.summary}`}
                 </Text>
@@ -298,10 +296,11 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
     }
 
     const disabled = activityGroup.merged;
-    const isAuthor = props.commentActions.isAuthor(comment);
+    const commentActions = props.commentActions;
+    const isAuthor = commentActions && commentActions.isAuthor(comment);
 
-    const canComment: boolean = props.commentActions.canCommentOn;
-    const canUpdate: boolean = props.commentActions.canUpdateComment(comment);
+    const canComment: boolean = commentActions?.canCommentOn;
+    const canUpdate: boolean = commentActions && commentActions.canUpdateComment(comment);
 
     if (!comment.deleted) {
       // $FlowFixMe
@@ -313,7 +312,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
               <TouchableOpacity
                 hitSlop={HIT_SLOP}
                 disabled={disabled}
-                onPress={() => isAuthor ? props.commentActions.onStartEditing(comment) : props.commentActions.onReply(
+                onPress={() => isAuthor ? commentActions && commentActions.onStartEditing(comment) : commentActions && commentActions.onReply(
                   comment)}>
                 <Text style={styles.link}>
                   {isAuthor ? 'Edit' : 'Reply'}
@@ -322,7 +321,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
             )}
           </View>
 
-          <Feature version={FEATURES.reactions}>
+          {!!props.onReactionPanelOpen && <Feature version={FEATURES.reactions}>
             <TouchableOpacity
               hitSlop={HIT_SLOP}
               disabled={disabled}
@@ -331,16 +330,16 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
             >
               {reactionAddIcon}
             </TouchableOpacity>
-          </Feature>
+          </Feature>}
 
-          <TouchableOpacity
+          {!!commentActions && <TouchableOpacity
             hitSlop={HIT_SLOP}
             disabled={disabled}
-            onPress={() => props.commentActions.onShowCommentActions(comment)}>
+            onPress={() => commentActions && commentActions.onShowCommentActions(comment)}>
             {isIOSPlatform()
               ? <IconMoreOptions size={18} color={styles.activityCommentActionsOther.color}/>
               : <IconDrag size={18} color={styles.activityCommentActionsOther.color}/>}
-          </TouchableOpacity>
+          </TouchableOpacity>}
         </View>
       );
     }
@@ -375,12 +374,12 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
 
           {!comment.deleted && IssueVisibility.isSecured(comment.visibility) &&
           <CommentVisibility
-            style={styles.visibility}
+            style={styles.activityVisibility}
             visibility={IssueVisibility.getVisibilityPresentation(comment.visibility)}
-            color={styles.iconAccent.color}
+            color={props.uiTheme.colors.$iconAccent}
           />}
           <CommentReactions
-            style={styles.commentReactions}
+            style={styles.activityCommentReactions}
             comment={comment}
             currentUser={props.currentUser}
             onReactionSelect={props.onSelectReaction}
@@ -408,15 +407,15 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
         <View style={styles.activityChange}>
 
           {Boolean(work.text) && (
-            <View style={styles.workComment}><Text style={styles.secondaryText}>{work.text}</Text></View>
+            <View style={styles.activityWorkComment}><Text style={styles.secondaryTextColor}>{work.text}</Text></View>
           )}
 
-          {Boolean(work.date) && <Text style={styles.secondaryText}>{ytDate(work.date)}</Text>}
+          {Boolean(work.date) && <Text style={styles.secondaryTextColor}>{ytDate(work.date)}</Text>}
 
           <Text>
             <Text style={styles.activityLabel}>Spent time: </Text>
-            <Text style={styles.workTime}>{spentTime}</Text>
-            {work.type && <Text style={styles.secondaryText}>{` ${work.type.name}`}</Text>}
+            <Text style={styles.activityWorkTime}>{spentTime}</Text>
+            {work.type && <Text style={styles.secondaryTextColor}>{` ${work.type.name}`}</Text>}
           </Text>
 
         </View>
@@ -478,7 +477,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
 
               <View style={[
                 styles.activity,
-                activityGroup.merged ? styles.mergedActivity : null
+                activityGroup.merged ? styles.activityMerged : null
               ]}>
 
                 {renderUserAvatar(activityGroup, !!activityGroup.comment)}
