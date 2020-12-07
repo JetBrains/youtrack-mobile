@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {Component} from 'react';
-import {SectionList, Text, TouchableOpacity, View} from 'react-native';
+import {RefreshControl, SectionList, Text, TouchableOpacity, View} from 'react-native';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -47,8 +47,10 @@ export class KnowledgeBase extends Component<Props, State> {
 
   componentDidMount() {
     this.props.loadArticlesListFromCache();
-    this.props.loadArticlesList();
+    this.loadArticlesList();
   }
+
+  loadArticlesList = () => this.props.loadArticlesList()
 
   renderProject = ({section}: ArticlesListItem) => {
     const title: IssueProject | Article = section.title;
@@ -143,6 +145,14 @@ export class KnowledgeBase extends Component<Props, State> {
     this.setState({isTitlePinned: nativeEvent.contentOffset.y >= UNIT * 7});
   };
 
+  renderRefreshControl = () => {
+    return <RefreshControl
+      refreshing={this.props.isLoading}
+      tintColor={this.uiTheme.colors.$link}
+      onRefresh={this.loadArticlesList}
+    />;
+  }
+
   getListItemKey= (item: ArticleNode, index: number) => item.data.id || index;
 
   renderArticlesList = (articlesList: ArticlesList) => {
@@ -152,6 +162,7 @@ export class KnowledgeBase extends Component<Props, State> {
         sections={articlesList}
         scrollEventThrottle={10}
         onScroll={this.onScroll}
+        refreshControl={this.renderRefreshControl()}
         keyExtractor={this.getListItemKey}
         getItemLayout={Select.getItemLayout}
         renderItem={this.renderArticle}
