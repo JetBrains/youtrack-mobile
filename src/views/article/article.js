@@ -45,7 +45,7 @@ class Article extends IssueTabbed<Props, State> {
 
   renderRefreshControl = (onRefresh: Function = this.refresh) => {
     return <RefreshControl
-      refreshing={this.props.isLoading}
+      refreshing={false}
       tintColor={this.uiTheme.colors.$link}
       onRefresh={onRefresh}
     />;
