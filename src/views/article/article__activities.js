@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {useEffect} from 'react';
-import {ScrollView, View} from 'react-native';
+import {ScrollView} from 'react-native';
 
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -10,10 +10,10 @@ import {ActivityStream} from '../../components/activity/activity__stream';
 import {createActivityModel} from '../../components/activity/activity-helper';
 import {getApi} from '../../components/api/api__instance';
 import {loadActivitiesPage} from './arcticle-action';
-import {SkeletonIssueActivities} from '../../components/skeleton/skeleton';
+
+import styles from './article.styles';
 
 import type {User, UserAppearanceProfile} from '../../flow/User';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {UITheme} from '../../flow/Theme';
 import type {WorkTimeSettings} from '../../flow/WorkTimeSettings';
 import type {YouTrackWiki} from '../../flow/Wiki';
@@ -22,7 +22,6 @@ import type {ActivityItem} from '../../flow/Activity';
 
 type Props = {
   article: Article,
-  style: ViewStyleProp,
   uiTheme: UITheme,
 };
 
@@ -40,7 +39,6 @@ const ArticleActivities = (props: Props) => {
   const dispatch: Function = useDispatch();
 
   const activityPage: Array<ActivityItem> = useSelector(store => store.article.activityPage);
-  const isLoading: boolean = useSelector(store => store.article.isLoading);
   const user: User = useSelector(store => store.app.user);
   const workTimeSettings: WorkTimeSettings = useSelector(store => store.app.workTimeSettings);
 
@@ -49,18 +47,15 @@ const ArticleActivities = (props: Props) => {
   }, []);
 
 
-  if (isLoading) {
-    return <View style={props.style}><SkeletonIssueActivities/></View>;
-  }
-
   const userAppearanceProfile: ?UserAppearanceProfile = user?.profiles?.appearance;
   const naturalCommentsOrder: boolean = userAppearanceProfile ? userAppearanceProfile.naturalCommentsOrder : true;
-  const activities = createActivityModel(activityPage, naturalCommentsOrder);
 
   return (
-    <ScrollView style={props.style}>
+    <ScrollView
+      contentContainerStyle={styles.articleActivities}
+    >
       <ActivityStream
-        activities={activities}
+        activities={createActivityModel(activityPage, naturalCommentsOrder)}
         attachments={article?.attachments}
         uiTheme={uiTheme}
         workTimeSettings={workTimeSettings}

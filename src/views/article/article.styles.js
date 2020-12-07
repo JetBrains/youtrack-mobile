@@ -9,8 +9,13 @@ export default EStyleSheet.create({
     flex: 1,
     backgroundColor: '$background'
   },
-  content: {
+  articleDetails: {
     padding: UNIT * 2,
+    paddingTop: UNIT
+  },
+  articleActivities: {
+    padding: UNIT * 2,
+    paddingLeft: UNIT
   },
   description: {
     ...mainText,
@@ -22,10 +27,5 @@ export default EStyleSheet.create({
   summaryText: {
     ...summaryTitle,
     color: '$text'
-  },
-
-  articleActivities: {
-    paddingHorizontal: UNIT,
-    paddingVertical: UNIT * 2,
   }
 });

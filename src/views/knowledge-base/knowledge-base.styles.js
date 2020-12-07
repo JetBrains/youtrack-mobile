@@ -4,8 +4,7 @@ import {elevation1} from '../../components/common-styles/shadow';
 import {headerTitle, mainText} from '../../components/common-styles/typography';
 import {UNIT} from '../../components/variables/variables';
 import {Platform} from 'react-native';
-
-const headerHeight = UNIT * 7;
+import {SELECT_ITEM_HEIGHT} from '../../components/select/select.styles';
 
 export default EStyleSheet.create({
   container: {
@@ -13,18 +12,15 @@ export default EStyleSheet.create({
     backgroundColor: '$background'
   },
   content: {
-    flexGrow: 1,
-    paddingBottom: headerHeight + UNIT
+    flex: 1
   },
-
   headerTitle: {
     flexDirection: 'row',
     alignItems: 'center',
-    minHeight: headerHeight,
-    marginBottom: UNIT / 4,
+    height: SELECT_ITEM_HEIGHT,
+    paddingBottom: UNIT / 4,
     paddingLeft: UNIT * 2,
-    paddingRight: UNIT * 4,
-    backgroundColor: '$background'
+    paddingRight: UNIT * 4
   },
   headerTitleShadow: elevation1,
   headerTitleButton: {
@@ -45,21 +41,21 @@ export default EStyleSheet.create({
     marginLeft: UNIT * 3.5
   },
   item: {
-    padding: UNIT,
+    height: SELECT_ITEM_HEIGHT,
     paddingLeft: UNIT * 1.5,
     backgroundColor: '$background'
   },
   itemButton: {
-    alignItems: 'center',
     width: UNIT * 7,
-    paddingVertical: UNIT,
+    height: SELECT_ITEM_HEIGHT - UNIT * 2.5,
+    alignItems: 'center',
+    justifyContent: 'center',
     borderLeftWidth: 1,
     borderColor: '$boxBackground'
   },
   itemProject: {
     flexDirection: 'row',
-    alignItems: 'center',
-    paddingBottom: UNIT * 2
+    alignItems: 'center'
   },
 
   articleTitle: {

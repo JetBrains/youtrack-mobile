@@ -45,7 +45,6 @@ class Article extends IssueTabbed<Props, State> {
     }
     return (
       <ArticleDetails
-        style={styles.content}
         article={article || articlePlaceholder}
         error={error}
         isLoading={isLoading}
@@ -61,7 +60,6 @@ class Article extends IssueTabbed<Props, State> {
     }
     return (
       <ArticleActivities
-        style={styles.articleActivities}
         article={article}
         uiTheme={uiTheme}
       />

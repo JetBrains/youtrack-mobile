@@ -13,7 +13,6 @@ import Select from '../../components/select/select';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
 import {findNodeById} from './knowledge-base-helper';
-import {guid} from '../../util/util';
 import {IconAngleDown, IconAngleRight, IconBack} from '../../components/icon/icon';
 import {SkeletonIssues} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
@@ -144,15 +143,16 @@ export class KnowledgeBase extends Component<Props, State> {
     this.setState({isTitlePinned: nativeEvent.contentOffset.y >= UNIT * 7});
   };
 
+  getListItemKey= (item: ArticleNode, index: number) => item.data.id || index;
+
   renderArticlesList = (articlesList: ArticlesList) => {
     return (
       <SectionList
         testID="articles"
-        style={styles.list}
         sections={articlesList}
         scrollEventThrottle={10}
         onScroll={this.onScroll}
-        keyExtractor={guid}
+        keyExtractor={this.getListItemKey}
         getItemLayout={Select.getItemLayout}
         renderItem={this.renderArticle}
         renderSectionHeader={this.renderProject}
