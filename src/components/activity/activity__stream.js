@@ -182,14 +182,14 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
                 onPress={() => Router.Issue({issueId: readableIssueId})}>
                 <Text style={[
                   styles.linkText,
-                  linkedIssue.resolved && styles.secondaryTextColorColor.color,
+                  linkedIssue.resolved && styles.secondaryTextColor.color,
                   linkedIssue.resolved && styles.activityRemoved
                 ]}>
                   {readableIssueId}
                 </Text>
                 <Text style={[
                   styles.linkText,
-                  linkedIssue.resolved && styles.secondaryTextColorColor.color
+                  linkedIssue.resolved && styles.secondaryTextColor.color
                 ]}>
                   {` ${linkedIssue.summary}`}
                 </Text>
