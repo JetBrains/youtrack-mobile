@@ -30,13 +30,11 @@ const loadArticle = (articleId: string) => {
   };
 };
 
-const loadActivitiesPage = (articleId: string, reset: boolean = false) => {
+const loadActivitiesPage = (articleId: string) => {
   return async (dispatch: (any) => any, getState: () => ArticleState, getApi: ApiGetter) => {
     const api: Api = getApi();
 
-    if (reset) {
-      dispatch(setActivityPage(null));
-    }
+    dispatch(setActivityPage(null));
     dispatch(setLoading(true));
     const [error, activityPage] = await until(api.articles.getActivitiesPage(articleId));
     dispatch(setLoading(false));

@@ -9,6 +9,7 @@ import {connect} from 'react-redux';
 import * as articleActions from './arcticle-action';
 import ArticleActivities from './article__activities';
 import ArticleDetails from './article__details';
+import ErrorMessage from '../../components/error-message/error-message';
 import Header from '../../components/header/header';
 import IssueTabbed from '../../components/issue-tabbed/issue-tabbed';
 import Router from '../../components/router/router';
@@ -18,6 +19,7 @@ import {ThemeContext} from '../../components/theme/theme-context';
 import styles from './article.styles';
 
 import type {ArticleState} from './article-reducers';
+import type {CustomError} from '../../flow/Error';
 import type {IssueTabbedState} from '../../components/issue-tabbed/issue-tabbed';
 import type {Theme, UITheme} from '../../flow/Theme';
 
@@ -32,8 +34,15 @@ class Article extends IssueTabbed<Props, State> {
     this.props.loadArticle(this.props.articlePlaceholder.id);
   }
 
+  renderError = (error: CustomError) => {
+    return <ErrorMessage error={error}/>;
+  }
+
   renderDetails = (uiTheme: UITheme) => {
     const {article, articlePlaceholder, error, isLoading} = this.props;
+    if (error) {
+      return this.renderError(error);
+    }
     return (
       <ArticleDetails
         style={styles.content}
@@ -46,10 +55,14 @@ class Article extends IssueTabbed<Props, State> {
   };
 
   renderActivity = (uiTheme: UITheme) => {
+    const {article, error} = this.props;
+    if (error) {
+      return this.renderError(error);
+    }
     return (
       <ArticleActivities
         style={styles.articleActivities}
-        article={this.props.article}
+        article={article}
         uiTheme={uiTheme}
       />
     );
