@@ -28,8 +28,7 @@ export default EStyleSheet.create({
   },
   headerTitleShadow: elevation1,
   headerTitleButton: {
-    marginLeft: -UNIT * 2,
-    marginRight: UNIT * 1.5,
+    marginLeft: -UNIT,
   },
   headerTitleText: {
     ...headerTitle,
@@ -50,14 +49,9 @@ export default EStyleSheet.create({
     paddingLeft: UNIT * 1.5,
     backgroundColor: '$background'
   },
-  itemArticle: {
-    paddingLeft: 0,
-  },
   itemButton: {
     alignItems: 'center',
     width: UNIT * 7,
-    marginRight: -UNIT,
-    marginLeft: UNIT * 2,
     paddingVertical: UNIT,
     borderLeftWidth: 1,
     borderColor: '$boxBackground'
@@ -65,16 +59,16 @@ export default EStyleSheet.create({
   itemProject: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingBottom: UNIT * 2,
+    paddingBottom: UNIT * 2
   },
 
   articleTitle: {
     ...mainText,
-    marginLeft: UNIT * 4,
+    marginLeft: UNIT * 2.5,
     color: '$text'
   },
   projectTitle: {
-    marginLeft: UNIT,
+    paddingLeft: UNIT,
     ...headerTitle,
     color: '$text',
     ...Platform.select({

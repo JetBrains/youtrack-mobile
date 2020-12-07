@@ -105,7 +105,6 @@ export class KnowledgeBase extends Component<Props, State> {
           <IconBack color={this.uiTheme.colors.$link}/>
         </TouchableOpacity>,
         <TouchableOpacity
-          style={[styles.item, styles.itemArticle]}
           onPress={() => Router.Article({article: article})}
         >
           <Text numberOfLines={2} style={styles.projectTitle}>{article.summary}</Text>
