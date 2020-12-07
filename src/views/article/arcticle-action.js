@@ -11,13 +11,15 @@ import type {ArticleState} from './article-reducers';
 type ApiGetter = () => Api;
 
 
-const loadArticle = (articleId: string) => {
+const loadArticle = (articleId: string, reset: boolean = true) => {
   return async (dispatch: (any) => any, getState: () => ArticleState, getApi: ApiGetter) => {
     const api: Api = getApi();
 
     logEvent({message: 'Loading articles', analyticsId: ANALYTICS_ARTICLE_PAGE});
 
-    dispatch(setLoading(true));
+    if (reset) {
+      dispatch(setLoading(true));
+    }
     const [error, article] = await until(api.articles.getArticle(articleId));
     dispatch(setLoading(false));
 
@@ -30,12 +32,14 @@ const loadArticle = (articleId: string) => {
   };
 };
 
-const loadActivitiesPage = (articleId: string) => {
+const loadActivitiesPage = (articleId: string, reset: boolean = true) => {
   return async (dispatch: (any) => any, getState: () => ArticleState, getApi: ApiGetter) => {
     const api: Api = getApi();
 
-    dispatch(setActivityPage(null));
-    dispatch(setLoading(true));
+    if (reset) {
+      dispatch(setActivityPage(null));
+      dispatch(setLoading(true));
+    }
     const [error, activityPage] = await until(api.articles.getActivitiesPage(articleId));
     dispatch(setLoading(false));
 

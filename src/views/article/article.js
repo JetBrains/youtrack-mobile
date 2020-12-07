@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import {View} from 'react-native';
+import {RefreshControl, View} from 'react-native';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -29,13 +29,26 @@ type State = IssueTabbedState;
 //$FlowFixMe
 class Article extends IssueTabbed<Props, State> {
   props: Props;
+  uiTheme: UITheme;
 
   componentDidMount() {
-    this.props.loadArticle(this.props.articlePlaceholder.id);
+    this.loadArticle();
   }
+
+  loadArticle = (reset?: boolean) => this.props.loadArticle(this.props.articlePlaceholder.id, reset);
+
+  refresh = () => this.loadArticle(false);
 
   renderError = (error: CustomError) => {
     return <ErrorMessage error={error}/>;
+  }
+
+  renderRefreshControl = (onRefresh: Function = this.refresh) => {
+    return <RefreshControl
+      refreshing={this.props.isLoading}
+      tintColor={this.uiTheme.colors.$link}
+      onRefresh={onRefresh}
+    />;
   }
 
   renderDetails = (uiTheme: UITheme) => {
@@ -48,6 +61,7 @@ class Article extends IssueTabbed<Props, State> {
         article={article || articlePlaceholder}
         error={error}
         isLoading={isLoading}
+        renderRefreshControl={this.renderRefreshControl}
         uiTheme={uiTheme}
       />
     );
@@ -61,6 +75,7 @@ class Article extends IssueTabbed<Props, State> {
     return (
       <ArticleActivities
         article={article}
+        renderRefreshControl={this.renderRefreshControl}
         uiTheme={uiTheme}
       />
     );
@@ -70,11 +85,11 @@ class Article extends IssueTabbed<Props, State> {
     return true;
   };
 
-  renderHeader(uiTheme: UITheme) {
+  renderHeader() {
     return (
       <Header
         title={this.props.articlePlaceholder.idReadable}
-        leftButton={<IconBack color={uiTheme.colors.$link}/>}
+        leftButton={<IconBack color={this.uiTheme.colors.$link}/>}
         onBack={() => Router.pop()}
       />
     );
@@ -84,15 +99,16 @@ class Article extends IssueTabbed<Props, State> {
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
-          const uiTheme: UITheme = theme.uiTheme;
+          this.uiTheme = theme.uiTheme;
+
           return (
             <View
               testID="article"
               style={styles.container}
             >
-              {this.renderHeader(uiTheme)}
+              {this.renderHeader()}
 
-              {this.renderTabs(uiTheme)}
+              {this.renderTabs(this.uiTheme)}
             </View>
           );
         }}

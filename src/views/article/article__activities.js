@@ -22,7 +22,8 @@ import type {ActivityItem} from '../../flow/Activity';
 
 type Props = {
   article: Article,
-  uiTheme: UITheme,
+  renderRefreshControl: (Function) => React$Element<any>,
+  uiTheme: UITheme
 };
 
 
@@ -35,16 +36,20 @@ const getYoutrackWikiProps = (): YouTrackWiki => {
 };
 
 const ArticleActivities = (props: Props) => {
-  const {article, uiTheme} = props;
+  const {article, uiTheme, renderRefreshControl} = props;
   const dispatch: Function = useDispatch();
 
   const activityPage: Array<ActivityItem> = useSelector(store => store.article.activityPage);
   const user: User = useSelector(store => store.app.user);
   const workTimeSettings: WorkTimeSettings = useSelector(store => store.app.workTimeSettings);
 
-  useEffect(() => {
-    dispatch(loadActivitiesPage(article.idReadable));
-  }, []);
+  const loadActivities: Function = (reset: boolean) => {
+    if (article?.idReadable) {
+      dispatch(loadActivitiesPage(article.idReadable, reset));
+    }
+  };
+
+  useEffect(loadActivities, []);
 
 
   const userAppearanceProfile: ?UserAppearanceProfile = user?.profiles?.appearance;
@@ -52,6 +57,7 @@ const ArticleActivities = (props: Props) => {
 
   return (
     <ScrollView
+      refreshControl={renderRefreshControl(() => loadActivities(false))}
       contentContainerStyle={styles.articleActivities}
     >
       <ActivityStream

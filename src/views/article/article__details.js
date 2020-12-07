@@ -17,15 +17,17 @@ type Props = {
   article: Article,
   error: CustomError,
   isLoading: boolean,
+  renderRefreshControl: () => React$Element<any>,
   uiTheme: UITheme,
 };
 
 
 const ArticleDetails = (props: Props) => {
-  const {article, isLoading, error, uiTheme} = props;
+  const {article, isLoading, error, uiTheme, renderRefreshControl} = props;
 
   return (
     <ScrollView
+      refreshControl={renderRefreshControl()}
       contentContainerStyle={styles.articleDetails}
       testID="articleDetails"
     >
