@@ -15,12 +15,15 @@ export default EStyleSheet.create({
     flex: 1
   },
   headerTitle: {
+    position: 'relative',
+    zIndex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     height: SELECT_ITEM_HEIGHT,
     paddingBottom: UNIT / 4,
     paddingLeft: UNIT * 2,
-    paddingRight: UNIT * 4
+    paddingRight: UNIT * 4,
+    backgroundColor: '$background',
   },
   headerTitleShadow: elevation1,
   headerTitleButton: {
