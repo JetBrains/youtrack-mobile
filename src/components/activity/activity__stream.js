@@ -64,7 +64,7 @@ export type ActivityStreamProps = {
   attachments: Array<Attachment>,
   commentActions?: ActivityStreamCommentActions,
   currentUser: User,
-  issueFields: Array<Object>,
+  issueFields?: Array<Object>,
   onReactionSelect: (
     issueId: string,
     comment: IssueComment,
@@ -99,10 +99,10 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
     return false;
   };
 
-  const getTextChange = (activity: Activity, issueFields: Array<Object>): ActivityChange => {
-    const getParams = (isRemovedValue) => ({
+  const getTextChange = (activity: Activity, issueFields: ?Array<Object>): ActivityChange => {
+    const getParams = (isRemovedValue: boolean) => ({
       activity,
-      issueFields,
+      issueFields: issueFields,
       workTimeSettings: props.workTimeSettings || {},
       isRemovedValue: isRemovedValue
     });
@@ -147,7 +147,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
     );
   };
 
-  const renderTextValueChange = (activity: Activity, issueFields: Array<Object>) => {
+  const renderTextValueChange = (activity: Activity, issueFields?: Array<Object>) => {
     const textChange = getTextChange(activity, issueFields);
     const isTextDiff = (
       isActivityCategory.description(activity) ||
@@ -459,7 +459,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
       isActivityCategory.description(activity) ||
       isActivityCategory.summary(activity)
     ):
-      return renderTextValueChange(activity, props.issueFields);
+      return renderTextValueChange(activity);
     case Boolean(isActivityCategory.link(activity)):
       return renderLinkChange(activity);
     case Boolean(isActivityCategory.attachment(activity)):

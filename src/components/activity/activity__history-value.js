@@ -7,7 +7,7 @@ import type {WorkTimeSettings} from '../../flow/WorkTimeSettings';
 
 type TextValueChangeParams = {
   activity: Object,
-  issueFields: Array<Object>,
+  issueFields: ?Array<Object>,
   workTimeSettings: WorkTimeSettings,
   isRemovedValue: boolean
 };
