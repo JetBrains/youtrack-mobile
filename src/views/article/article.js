@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import {RefreshControl, View} from 'react-native';
+import {RefreshControl, View, ActivityIndicator} from 'react-native';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -9,25 +9,40 @@ import {connect} from 'react-redux';
 import * as articleActions from './arcticle-action';
 import ArticleActivities from './article__activities';
 import ArticleDetails from './article__details';
+import ArticleDetailsEdit from './article__details-edit';
 import ErrorMessage from '../../components/error-message/error-message';
 import Header from '../../components/header/header';
 import IssueTabbed from '../../components/issue-tabbed/issue-tabbed';
+import PropTypes from 'prop-types';
 import Router from '../../components/router/router';
-import {IconBack} from '../../components/icon/icon';
+import {isIOSPlatform} from '../../util/util';
+import {
+  IconBack,
+  IconCheck,
+  IconClose,
+  IconDrag,
+  IconMoreOptions,
+} from '../../components/icon/icon';
 import {ThemeContext} from '../../components/theme/theme-context';
 
 import styles from './article.styles';
 
 import type {ArticleState} from './article-reducers';
 import type {CustomError} from '../../flow/Error';
+import type {HeaderProps} from '../../components/header/header';
 import type {IssueTabbedState} from '../../components/issue-tabbed/issue-tabbed';
-import type {Theme, UITheme} from '../../flow/Theme';
+import type {RootState} from '../../reducers/app-reducer';
+import type {Theme, UITheme, UIThemeColors} from '../../flow/Theme';
 
 type Props = ArticleState & { articlePlaceholder: Article } & typeof (articleActions);
 type State = IssueTabbedState;
 
 //$FlowFixMe
 class Article extends IssueTabbed<Props, State> {
+  static contextTypes = {
+    actionSheet: PropTypes.func
+  };
+
   props: Props;
   uiTheme: UITheme;
 
@@ -41,7 +56,7 @@ class Article extends IssueTabbed<Props, State> {
 
   renderError = (error: CustomError) => {
     return <ErrorMessage error={error}/>;
-  }
+  };
 
   renderRefreshControl = (onRefresh: Function = this.refresh) => {
     return <RefreshControl
@@ -49,13 +64,33 @@ class Article extends IssueTabbed<Props, State> {
       tintColor={this.uiTheme.colors.$link}
       onRefresh={onRefresh}
     />;
-  }
+  };
+
+  renderEditForm = () => {
+    const {article, articleDraft, updateArticleDraft} = this.props;
+
+    if (articleDraft) {
+      return (
+        <ArticleDetailsEdit
+          article={article}
+          articleDraft={articleDraft}
+          updateArticleDraft={updateArticleDraft}
+          uiTheme={this.uiTheme}
+        />
+      );
+    }
+  };
 
   renderDetails = (uiTheme: UITheme) => {
-    const {article, articlePlaceholder, error, isLoading} = this.props;
+    const {article, articlePlaceholder, error, isLoading, editMode} = this.props;
     if (error) {
       return this.renderError(error);
     }
+
+    if (editMode) {
+      return this.renderEditForm();
+    }
+
     return (
       <ArticleDetails
         article={article || articlePlaceholder}
@@ -81,19 +116,59 @@ class Article extends IssueTabbed<Props, State> {
     );
   };
 
-  isTabChangeEnabled = () => {
-    return true;
+  isTabChangeEnabled = () => true;
+
+  canEditArticle = (): boolean => {
+    const {issuePermissions} = this.props;
+    return !!issuePermissions && issuePermissions.canUpdateArticle(this.props.article);
   };
 
-  renderHeader() {
+  renderContextActionsIcon = () => {
+    const color: string = this.uiTheme.colors.$link;
     return (
-      <Header
-        title={this.props.articlePlaceholder.idReadable}
-        leftButton={<IconBack color={this.uiTheme.colors.$link}/>}
-        onBack={() => Router.pop()}
-      />
+      isIOSPlatform()
+        ? <IconMoreOptions size={18} color={color}/>
+        : <IconDrag size={18} color={color}/>
     );
-  }
+  };
+
+  renderHeader = () => {
+    const {articlePlaceholder, editMode, updateEditMode, showArticleActions, publishArticleDraft, isProcessing} = this.props;
+    const uiThemeColors: UIThemeColors = this.uiTheme.colors;
+    const linkColor: string = uiThemeColors.$link;
+
+    const props: HeaderProps = {
+      title: articlePlaceholder.idReadable,
+
+      leftButton: (
+        editMode
+          ? <IconClose size={21} color={isProcessing ? uiThemeColors.$textSecondary : linkColor}/>
+          : <IconBack color={linkColor}/>
+      ),
+      onBack: (
+        editMode
+          ? () => updateEditMode(false)
+          : () => Router.pop()
+      ),
+
+      rightButton: (
+        editMode
+          ? (
+            isProcessing
+              ? <ActivityIndicator color={linkColor}/>
+              : <IconCheck size={20} color={linkColor}/>
+          )
+          : this.renderContextActionsIcon()
+      ),
+      onRightButtonClick: (
+        editMode
+          ? publishArticleDraft
+          : () => showArticleActions(this.context.actionSheet(), this.canEditArticle())
+      ),
+    };
+
+    return <Header {...props} />;
+  };
 
   render() {
     return (
@@ -117,10 +192,11 @@ class Article extends IssueTabbed<Props, State> {
   }
 }
 
-const mapStateToProps = (state: { article: ArticleState }, ownProps: Props): ArticleState => {
+const mapStateToProps = (state: { article: ArticleState, app: RootState }, ownProps: Props): ArticleState => {
   return {
     articlePlaceholder: ownProps.article,
-    ...state.article
+    ...state.article,
+    issuePermissions: state.app.issuePermissions
   };
 };
 const mapDispatchToProps = (dispatch) => {

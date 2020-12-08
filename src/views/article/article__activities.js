@@ -45,7 +45,7 @@ const ArticleActivities = (props: Props) => {
 
   const loadActivities: Function = (reset: boolean) => {
     if (article?.idReadable) {
-      dispatch(loadActivitiesPage(article.idReadable, reset));
+      dispatch(loadActivitiesPage(reset));
     }
   };
 

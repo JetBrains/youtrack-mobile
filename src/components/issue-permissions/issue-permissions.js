@@ -3,6 +3,7 @@
  * https://confluence.jetbrains.com/display/TSYS/Issue+access+rights
  */
 import type {AnyIssue} from '../../flow/Issue';
+import type {Article} from '../../flow/Article';
 import type {PermissionsStore} from '../permissions-store/permissions-store';
 import type {User} from '../../flow/User';
 import type {
@@ -24,6 +25,8 @@ export const CAN_DELETE_COMMENT = 'JetBrains.YouTrack.DELETE_COMMENT';
 export const CAN_DELETE_NOT_OWN_COMMENT = 'JetBrains.YouTrack.DELETE_NOT_OWN_COMMENT';
 export const CAN_LINK_ISSUE = 'JetBrains.YouTrack.LINK_ISSUE';
 export const CAN_UPDATE_WATCH = 'JetBrains.YouTrack.UPDATE_WATCH_FOLDER';
+
+export const CAN_UPDATE_ARTICLE = 'JetBrains.YouTrack.DELETE_ARTICLE';
 
 export default class IssuePermissions {
   permissionsStore: PermissionsStore;
@@ -123,6 +126,16 @@ export default class IssuePermissions {
       return this.hasPermissionFor(issue, CAN_UPDATE_COMMENT);
     }
     return this.hasPermissionFor(issue, CAN_UPDATE_NOT_OWN_COMMENT);
+  };
+
+  canUpdateArticle = (article: Article): boolean => {
+    if (!article) {
+      return false;
+    }
+    if (this.isCurrentUser(article.reporter)) {
+      return true;
+    }
+    return this.hasPermissionFor(article, CAN_UPDATE_ARTICLE);
   };
 
   canDeleteNotOwnComment = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_DELETE_NOT_OWN_COMMENT);

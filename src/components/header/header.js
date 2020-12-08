@@ -14,7 +14,7 @@ import styles from './header.styles';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {Theme} from '../../flow/Theme';
 
-type Props = {
+export type HeaderProps = {
   onBack?: () => any,
   onRightButtonClick?: Function,
   leftButton?: ?React$Element<any> | null,
@@ -29,7 +29,7 @@ type DefaultProps = {
   onRightButtonClick: Function
 }
 
-export default class Header extends PureComponent<Props, void> {
+export default class Header extends PureComponent<HeaderProps, void> {
   static defaultProps: DefaultProps = {
     onRightButtonClick: () => undefined
   };
