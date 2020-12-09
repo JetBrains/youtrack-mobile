@@ -81,10 +81,10 @@ export class KnowledgeBase extends Component<Props, State> {
         </TouchableOpacity>
 
         {item.children.length > 0 && <TouchableOpacity
-          style={styles.itemButton}
+          style={styles.itemButtonContainer}
           onPress={() => this.renderSubArticles(article)}
         >
-          {item.children.length > 0 && <IconAngleRight size={22} color={this.uiTheme.colors.$iconAccent}/>}
+          <View style={styles.itemButton}><IconAngleRight size={22} color={this.uiTheme.colors.$iconAccent}/></View>
         </TouchableOpacity>}
       </View>
     );

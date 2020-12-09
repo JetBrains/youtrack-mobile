@@ -48,13 +48,16 @@ export default EStyleSheet.create({
     paddingLeft: UNIT * 1.5,
     backgroundColor: '$background'
   },
+  itemButtonContainer: {
+    paddingRight: UNIT * 1.5
+  },
   itemButton: {
-    width: UNIT * 7,
-    height: SELECT_ITEM_HEIGHT - UNIT * 2.5,
+    width: UNIT * 4,
+    height: UNIT * 4,
+    borderRadius: UNIT,
     alignItems: 'center',
     justifyContent: 'center',
-    borderLeftWidth: 1,
-    borderColor: '$boxBackground'
+    backgroundColor: '$boxBackground'
   },
   itemProject: {
     flexDirection: 'row',
@@ -64,6 +67,7 @@ export default EStyleSheet.create({
   articleTitle: {
     ...mainText,
     marginLeft: UNIT * 2.5,
+    minWidth: UNIT * 15,
     color: '$text'
   },
   projectTitle: {
