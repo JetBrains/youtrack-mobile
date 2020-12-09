@@ -204,7 +204,7 @@ export default class IssueAPI extends ApiBase {
     return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issue.id}`, 'POST', body);
   }
 
-  async getVisibilityOptions(issueId: string): Promise<any> {
+  getVisibilityOptions = async (issueId: string): Promise<any> => {
     const queryString = qs.stringify({
       $top: 50,
       fields: issueFields.getVisibility.toString()

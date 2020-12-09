@@ -3,7 +3,6 @@
 import React, {PureComponent} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
-import {getApi} from '../api/api__instance';
 import {sortAlphabetically} from '../search/sorting';
 import {hasType} from '../api/api__resource-types';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
@@ -24,19 +23,12 @@ import type {UITheme} from '../../flow/Theme';
 import {visibilityDefaultText} from './visibility-strings';
 
 type Props = {
-  issueId: string,
+  entityId: string,
   visibility?: Visibility,
   onApply: (visibility: Visibility) => any,
+  getOptions: (entityId: string) => Array<any>,
   onSubmit?: ?(visibility: Visibility) => any,
   style: ?ViewStyleProp,
-  uiTheme: UITheme
-};
-
-type DefaultProps = {
-  issueId: string,
-  visibility: ?Visibility,
-  onApply: (visibility: Visibility) => any,
-  style: null,
   uiTheme: UITheme
 };
 
@@ -47,10 +39,11 @@ type State = {
 
 
 export default class VisibilityControl extends PureComponent<Props, State> {
-  static defaultProps: DefaultProps = {
-    issueId: '',
+  static defaultProps: $Shape<Props> = {
+    entityId: '',
     visibility: null,
     onApply: (visibility: Visibility) => null,
+    getOptions: () => [],
     style: null,
     uiTheme: DEFAULT_THEME
   };
@@ -83,7 +76,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
 
   getVisibilityOptions = async () => {
     try {
-      return getApi().issue.getVisibilityOptions(this.props.issueId);
+      return this.props.getOptions(this.props.entityId);
     } catch (e) {
       return {};
     }
