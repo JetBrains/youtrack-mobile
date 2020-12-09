@@ -9,6 +9,7 @@ import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import {IconAngleDown, IconClose, IconLock} from '../icon/icon';
 import Select from '../select/select';
 import IssueVisibility from './issue-visibility';
+import {visibilityDefaultText} from './visibility-strings';
 
 import {HIT_SLOP} from '../common-styles/button';
 import {DEFAULT_THEME} from '../theme/theme';
@@ -20,7 +21,6 @@ import type {UserGroup} from '../../flow/UserGroup';
 import type {Visibility} from '../../flow/Visibility';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {UITheme} from '../../flow/Theme';
-import {visibilityDefaultText} from './visibility-strings';
 
 type Props = {
   entityId: string,
@@ -29,7 +29,8 @@ type Props = {
   getOptions: (entityId: string) => Array<any>,
   onSubmit?: ?(visibility: Visibility) => any,
   style: ?ViewStyleProp,
-  uiTheme: UITheme
+  uiTheme: UITheme,
+  visibilityDefaultLabel?: string
 };
 
 type State = {
@@ -45,7 +46,8 @@ export default class VisibilityControl extends PureComponent<Props, State> {
     onApply: (visibility: Visibility) => null,
     getOptions: () => [],
     style: null,
-    uiTheme: DEFAULT_THEME
+    uiTheme: DEFAULT_THEME,
+    visibilityDefaultLabel: visibilityDefaultText
   };
 
   constructor(props: Props) {
@@ -159,7 +161,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
   }
 
   renderVisibilityButton() {
-    const {onSubmit} = this.props;
+    const {onSubmit, visibilityDefaultLabel} = this.props;
     const {visibility} = this.state;
     const isSecured: boolean = IssueVisibility.isSecured(visibility);
 
@@ -194,7 +196,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
             />
           )}
           <Text style={styles.buttonText}>
-            {isSecured ? this.getVisibilityPresentation(visibility) : visibilityDefaultText}
+            {isSecured ? this.getVisibilityPresentation(visibility) : visibilityDefaultLabel}
           </Text>
           <IconAngleDown size={20} color={this.props.uiTheme.colors.$icon}/>
         </TouchableOpacity>

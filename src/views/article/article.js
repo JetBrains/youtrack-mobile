@@ -16,6 +16,7 @@ import Header from '../../components/header/header';
 import IssueTabbed from '../../components/issue-tabbed/issue-tabbed';
 import PropTypes from 'prop-types';
 import Router from '../../components/router/router';
+import {getApi} from '../../components/api/api__instance';
 import {isIOSPlatform} from '../../util/util';
 import {
   IconBack,
@@ -25,6 +26,7 @@ import {
   IconMoreOptions,
 } from '../../components/icon/icon';
 import {ThemeContext} from '../../components/theme/theme-context';
+import VisibilityControl from '../../components/visibility/visibility-control';
 
 import styles from './article.styles';
 
@@ -34,6 +36,7 @@ import type {HeaderProps} from '../../components/header/header';
 import type {IssueTabbedState} from '../../components/issue-tabbed/issue-tabbed';
 import type {RootState} from '../../reducers/app-reducer';
 import type {Theme, UITheme, UIThemeColors} from '../../flow/Theme';
+import type {Visibility} from '../../flow/Visibility';
 
 type Props = ArticleState & { articlePlaceholder: Article } & typeof (articleActions);
 type State = IssueTabbedState;
@@ -73,16 +76,26 @@ class Article extends IssueTabbed<Props, State> {
       return this.renderError(error);
     }
 
+    const articleData: ?Article = article || articlePlaceholder;
     return (
       <>
-        {!!article?.reporter && (
-          <CreateUpdateInfo
-            style={styles.articleUsers}
-            reporter={article.reporter}
-            updater={article.updatedBy}
-            created={article.created}
-            updated={article.updated}
-          />
+        {!!articleData && (
+          <View style={styles.articleGeneralInfo}>
+            <VisibilityControl
+              entityId={articleData.idReadable}
+              visibility={articleData.visibility}
+              onSubmit={(visibility: Visibility) => getApi().articles.updateArticle(articleData.id, {visibility})}
+              uiTheme={this.uiTheme}
+              getOptions={getApi().articles.getVisibilityOptions}
+              visibilityDefaultLabel="Visible to article readers"
+            />
+            <CreateUpdateInfo
+              reporter={articleData.reporter}
+              updater={articleData.updatedBy}
+              created={articleData.created}
+              updated={articleData.updated}
+            />
+          </View>
         )}
         {articleDraft && (
           <ArticleDetailsEdit
@@ -93,7 +106,7 @@ class Article extends IssueTabbed<Props, State> {
         )}
         {!articleDraft && (
           <ArticleDetails
-            article={article || articlePlaceholder}
+            article={articleData}
             error={error}
             isLoading={isLoading}
             renderRefreshControl={this.renderRefreshControl}

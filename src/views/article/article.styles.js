@@ -11,8 +11,8 @@ export default EStyleSheet.create({
     flex: 1,
     backgroundColor: '$background'
   },
-  articleUsers: {
-    marginTop: UNIT * 2,
+  articleGeneralInfo: {
+    marginTop: UNIT * 3,
     paddingHorizontal: UNIT * 2,
   },
   articleDetails: {
