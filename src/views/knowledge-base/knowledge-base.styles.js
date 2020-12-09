@@ -99,5 +99,8 @@ export default EStyleSheet.create({
         fontWeight: '400'
       }
     })
+  },
+  noArticlesIcon: {
+    marginBottom: UNIT * 2
   }
 });

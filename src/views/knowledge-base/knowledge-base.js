@@ -8,6 +8,7 @@ import {connect} from 'react-redux';
 
 import * as knowledgeBaseActions from './knowledge-base-actions';
 import ErrorMessage from '../../components/error-message/error-message';
+import IconSearchEmpty from '../../components/icon/search-empty.svg';
 import Router from '../../components/router/router';
 import Select from '../../components/select/select';
 import usage from '../../components/usage/usage';
@@ -187,7 +188,13 @@ export class KnowledgeBase extends Component<Props, State> {
         renderItem={this.renderArticle}
         renderSectionHeader={this.renderProject}
         ItemSeparatorComponent={this.renderSeparator}
-        ListEmptyComponent={() => <Text>No articles found</Text>}
+        ListEmptyComponent={() => <ErrorMessage errorMessageData={{
+          title: 'No articles yet',
+          description: '',
+          //$FlowFixMe
+          icon: () => <IconSearchEmpty style={[styles.noArticlesIcon, {fill: this.uiTheme.colors.$icon}]}/>,
+          iconSize: 48
+        }}/>}
         stickySectionHeadersEnabled={true}
       />
     );
