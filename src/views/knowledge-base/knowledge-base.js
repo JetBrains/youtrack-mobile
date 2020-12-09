@@ -13,7 +13,7 @@ import Select from '../../components/select/select';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
 import {findNodeById} from './knowledge-base-helper';
-import {IconAngleDown, IconAngleRight, IconBack} from '../../components/icon/icon';
+import {IconAngleDown, IconAngleRight, IconBack, IconLock} from '../../components/icon/icon';
 import {SkeletonIssues} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
 
@@ -25,6 +25,7 @@ import type {KnowledgeBaseState} from './knowledge-base-reducers';
 import type {Theme, UITheme} from '../../flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {IssueProject} from '../../flow/CustomFields';
+import {hasType} from '../../components/api/api__resource-types';
 
 type Props = KnowledgeBaseState & {
   loadArticlesListFromCache: (any) => void,
@@ -72,19 +73,30 @@ export class KnowledgeBase extends Component<Props, State> {
     const style: ViewStyleProp = {...styles.row, ...styles.item};
 
     return (
-      <View style={style}>
+      <View style={[styles.itemArticle, style]}>
         <TouchableOpacity
-          style={[style, styles.itemArticle]}
+          style={style}
           onPress={() => Router.Article({article: article})}
         >
           <Text numberOfLines={1} style={styles.articleTitle}>{article.summary}</Text>
+          <View style={styles.itemArticleIcon}>
+            {hasType.visibilityLimited(article?.visibility) && (
+              <IconLock
+                size={16}
+                color={this.uiTheme.colors.$iconAccent}
+              />
+            )}
+          </View>
         </TouchableOpacity>
 
         {item.children.length > 0 && <TouchableOpacity
           style={styles.itemButtonContainer}
           onPress={() => this.renderSubArticles(article)}
         >
-          <View style={styles.itemButton}><IconAngleRight size={22} color={this.uiTheme.colors.$iconAccent}/></View>
+          <View style={styles.itemButton}>
+            <Text style={styles.itemButtonText}>{item.children.length}</Text>
+            <IconAngleRight style={styles.itemButtonIcon} size={22} color={this.uiTheme.colors.$icon}/>
+          </View>
         </TouchableOpacity>}
       </View>
     );

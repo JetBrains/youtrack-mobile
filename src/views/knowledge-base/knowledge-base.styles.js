@@ -37,8 +37,7 @@ export default EStyleSheet.create({
   row: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    alignItems: 'center'
   },
   separator: {
     marginLeft: UNIT * 3.5
@@ -48,16 +47,34 @@ export default EStyleSheet.create({
     paddingLeft: UNIT * 1.5,
     backgroundColor: '$background'
   },
+  itemArticle: {
+    justifyContent: 'space-between'
+  },
+  itemArticleIcon: {
+    alignItems: 'flex-end',
+    paddingHorizontal: UNIT / 1.5
+  },
   itemButtonContainer: {
+    marginLeft: UNIT * 2,
     paddingRight: UNIT * 1.5
   },
   itemButton: {
-    width: UNIT * 4,
-    height: UNIT * 4,
-    borderRadius: UNIT,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    minWidth: UNIT * 5,
+    height: UNIT * 4,
+    paddingHorizontal: UNIT,
+    borderRadius: UNIT,
     backgroundColor: '$boxBackground'
+  },
+  itemButtonText: {
+    ...mainText,
+    paddingRight: UNIT,
+    color: '$icon'
+  },
+  itemButtonIcon: {
+    marginTop: -1
   },
   itemProject: {
     flexDirection: 'row',
@@ -67,7 +84,7 @@ export default EStyleSheet.create({
   articleTitle: {
     ...mainText,
     marginLeft: UNIT * 2.5,
-    minWidth: UNIT * 15,
+    maxWidth: '87%',
     color: '$text'
   },
   projectTitle: {

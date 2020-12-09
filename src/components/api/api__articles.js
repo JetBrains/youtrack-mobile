@@ -15,7 +15,7 @@ export default class ArticlesAPI extends ApiBase {
 
   async get(query: string | null = null, $top: number = 10000, $skip: number = 0): Promise<Array<Article>> {
     const fields: string = ApiBase.createFieldsQuery(
-      ['id,idReadable,summary,parentArticle(id),project(id,name),ordinal'],
+      ['id,idReadable,summary,parentArticle(id),project(id,name),ordinal,visibility($type)'],
       {
         ...{$top},
         ...{$skip},

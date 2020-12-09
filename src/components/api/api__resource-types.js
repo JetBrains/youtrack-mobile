@@ -44,6 +44,7 @@ hasType.savedSearch = hasType(ResourceTypes.ISSUE_FOLDER_SAVED_QUERY);
 hasType.tag = hasType(ResourceTypes.ISSUE_FOLDER_TAG);
 hasType.user = hasType(ResourceTypes.USER);
 hasType.userGroup = hasType(ResourceTypes.USER_GROUP);
+hasType.visibilityLimited = hasType(ResourceTypes.VISIBILITY_LIMITED);
 
 
 export function filterArrayByType(array: Array<Entity>, methodName: HasMethodName): Array<Entity> {
