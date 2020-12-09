@@ -9,7 +9,7 @@ import API from '../../components/api/api';
 import {ActivityStream} from '../../components/activity/activity__stream';
 import {createActivityModel} from '../../components/activity/activity-helper';
 import {getApi} from '../../components/api/api__instance';
-import {loadActivitiesPage} from './arcticle-action';
+import {loadActivitiesPage} from './arcticle-actions';
 
 import styles from './article.styles';
 

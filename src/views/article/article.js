@@ -6,7 +6,7 @@ import {RefreshControl, View, ActivityIndicator} from 'react-native';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
-import * as articleActions from './arcticle-action';
+import * as articleActions from './arcticle-actions';
 import ArticleActivities from './article__activities';
 import ArticleDetails from './article__details';
 import ArticleDetailsEdit from './article__details-edit';
