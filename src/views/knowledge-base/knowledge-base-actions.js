@@ -28,14 +28,16 @@ const loadArticlesListFromCache = () => {
   };
 };
 
-const loadArticlesList = (projectId: string, query: string | null, $top?: number, $skip?: number) => {
+const loadArticlesList = (reset: boolean = true) => {
   return async (dispatch: (any) => any, getState: () => KnowledgeBaseState, getApi: ApiGetter) => {
     const api: Api = getApi();
 
     logEvent({message: 'Loading articles', analyticsId: ANALYTICS_ARTICLES_PAGE});
 
-    dispatch(setLoading(true));
-    const [error, articles] = await until(api.articles.get(query, $top, $skip));
+    if (reset) {
+      dispatch(setLoading(true));
+    }
+    const [error, articles] = await until(api.articles.get());
     dispatch(setLoading(false));
 
     if (error) {

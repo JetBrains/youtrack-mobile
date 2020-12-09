@@ -26,6 +26,7 @@ import type {Theme, UITheme} from '../../flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {IssueProject} from '../../flow/CustomFields';
 import {hasType} from '../../components/api/api__resource-types';
+import {routeMap} from '../../app-routes';
 
 type Props = KnowledgeBaseState & {
   loadArticlesListFromCache: (any) => void,
@@ -44,6 +45,12 @@ export class KnowledgeBase extends Component<Props, State> {
     super(props);
     this.state = {isTitlePinned: false};
     usage.trackScreenView(ANALYTICS_ARTICLES_PAGE);
+
+    Router.setOnDispatchCallback((routeName: string, prevRouteName: string) => {
+      if (routeName === routeMap.KnowledgeBase && prevRouteName === routeMap.Article) {
+        this.loadArticlesList(false);
+      }
+    });
   }
 
   componentDidMount() {
@@ -51,7 +58,7 @@ export class KnowledgeBase extends Component<Props, State> {
     this.loadArticlesList();
   }
 
-  loadArticlesList = () => this.props.loadArticlesList()
+  loadArticlesList = (reset?: boolean) => this.props.loadArticlesList(reset)
 
   renderProject = ({section}: ArticlesListItem) => {
     const title: IssueProject | Article = section.title;
