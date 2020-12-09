@@ -18,14 +18,13 @@ import {showActions} from '../../components/action-sheet/action-sheet';
 import type ActionSheet from '@expo/react-native-action-sheet';
 import type Api from '../../components/api/api';
 import type {AppState} from '../../reducers';
-import type {ArticleState} from './article-reducers';
 import type {Article} from '../../flow/Article';
 
 type ApiGetter = () => Api;
 
 
 const loadArticle = (articleId: string, reset: boolean = true) => {
-  return async (dispatch: (any) => any, getState: () => ArticleState, getApi: ApiGetter) => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
 
     logEvent({message: 'Loading article', analyticsId: ANALYTICS_ARTICLE_PAGE});
@@ -68,7 +67,7 @@ const loadActivitiesPage = (reset: boolean = true) => {
 };
 
 const showArticleActions = (actionSheet: ActionSheet, canUpdate: boolean) => {
-  return async (dispatch: (any) => any, getState: () => ArticleState, getApi: ApiGetter) => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {article} = getState().article;
     const url: string = `${api.config.backendUrl}/articles/${article.idReadable}`;
