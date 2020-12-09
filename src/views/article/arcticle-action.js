@@ -5,7 +5,14 @@ import {Clipboard, Share} from 'react-native';
 import {isIOSPlatform, until} from '../../util/util';
 import {logEvent} from '../../components/log/log-helper';
 import {notify} from '../../components/notification/notification';
-import {setArticle, setError, setLoading, setActivityPage, setProcessing, setEditMode, setArticleDraft} from './article-reducers';
+import {
+  setArticle,
+  setError,
+  setLoading,
+  setActivityPage,
+  setProcessing,
+  setArticleDraft
+} from './article-reducers';
 import {showActions} from '../../components/action-sheet/action-sheet';
 
 import type ActionSheet from '@expo/react-native-action-sheet';
@@ -60,12 +67,6 @@ const loadActivitiesPage = (reset: boolean = true) => {
   };
 };
 
-const updateEditMode = (editMode: boolean) => {
-  return async (dispatch: (any) => any) => {
-    dispatch(setEditMode(editMode));
-  };
-};
-
 const showArticleActions = (actionSheet: ActionSheet, canUpdate: boolean) => {
   return async (dispatch: (any) => any, getState: () => ArticleState, getApi: ApiGetter) => {
     const api: Api = getApi();
@@ -99,7 +100,6 @@ const showArticleActions = (actionSheet: ActionSheet, canUpdate: boolean) => {
         title: 'Edit',
         execute: async () => {
           logEvent({message: 'Edit article', analyticsId: ANALYTICS_ARTICLE_PAGE});
-          dispatch(updateEditMode(true));
 
           let articleDraft: Article = (await dispatch(getArticleDrafts()))[0];
           if (!articleDraft) {
@@ -107,9 +107,7 @@ const showArticleActions = (actionSheet: ActionSheet, canUpdate: boolean) => {
           }
 
           if (articleDraft) {
-            dispatch(setArticleDraft(articleDraft));
-          } else {
-            dispatch(updateEditMode(false));
+            dispatch(setDraft(articleDraft));
           }
         }
       });
@@ -188,23 +186,27 @@ const publishArticleDraft = () => {
       logEvent({message: errorMsg, isError: true});
       notify(errorMsg, error);
     } else {
-      dispatch(updateEditMode(false));
-      dispatch(setArticleDraft(null));
+      dispatch(setDraft(null));
       dispatch(setProcessing(false));
       dispatch(loadArticle(article.id, false));
     }
   };
 };
 
+const setDraft = (articleDraft: Article | null) => {
+  return async (dispatch: (any) => any) => {
+    dispatch(setArticleDraft(articleDraft));
+  };
+};
 
 export {
   loadArticle,
   loadActivitiesPage,
   showArticleActions,
-  updateEditMode,
 
   getArticleDrafts,
   updateArticleDraft,
   createArticleDraft,
-  publishArticleDraft
+  publishArticleDraft,
+  setDraft
 };

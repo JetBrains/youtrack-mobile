@@ -10,6 +10,7 @@ import * as articleActions from './arcticle-action';
 import ArticleActivities from './article__activities';
 import ArticleDetails from './article__details';
 import ArticleDetailsEdit from './article__details-edit';
+import CreateUpdateInfo from '../../components/issue-tabbed/issue-tabbed__created-updated';
 import ErrorMessage from '../../components/error-message/error-message';
 import Header from '../../components/header/header';
 import IssueTabbed from '../../components/issue-tabbed/issue-tabbed';
@@ -66,39 +67,40 @@ class Article extends IssueTabbed<Props, State> {
     />;
   };
 
-  renderEditForm = () => {
-    const {article, articleDraft, updateArticleDraft} = this.props;
-
-    if (articleDraft) {
-      return (
-        <ArticleDetailsEdit
-          article={article}
-          articleDraft={articleDraft}
-          updateArticleDraft={updateArticleDraft}
-          uiTheme={this.uiTheme}
-        />
-      );
-    }
-  };
-
   renderDetails = (uiTheme: UITheme) => {
-    const {article, articlePlaceholder, error, isLoading, editMode} = this.props;
+    const {article, articlePlaceholder, articleDraft, updateArticleDraft, error, isLoading} = this.props;
     if (error) {
       return this.renderError(error);
     }
 
-    if (editMode) {
-      return this.renderEditForm();
-    }
-
     return (
-      <ArticleDetails
-        article={article || articlePlaceholder}
-        error={error}
-        isLoading={isLoading}
-        renderRefreshControl={this.renderRefreshControl}
-        uiTheme={uiTheme}
-      />
+      <>
+        {!!article?.reporter && (
+          <CreateUpdateInfo
+            style={styles.articleUsers}
+            reporter={article.reporter}
+            updater={article.updatedBy}
+            created={article.created}
+            updated={article.updated}
+          />
+        )}
+        {articleDraft && (
+          <ArticleDetailsEdit
+            articleDraft={articleDraft}
+            updateArticleDraft={updateArticleDraft}
+            uiTheme={this.uiTheme}
+          />
+        )}
+        {!articleDraft && (
+          <ArticleDetails
+            article={article || articlePlaceholder}
+            error={error}
+            isLoading={isLoading}
+            renderRefreshControl={this.renderRefreshControl}
+            uiTheme={uiTheme}
+          />
+        )}
+      </>
     );
   };
 
@@ -133,26 +135,27 @@ class Article extends IssueTabbed<Props, State> {
   };
 
   renderHeader = () => {
-    const {articlePlaceholder, editMode, updateEditMode, showArticleActions, publishArticleDraft, isProcessing} = this.props;
+    const {articlePlaceholder, articleDraft, showArticleActions, publishArticleDraft, isProcessing, setDraft} = this.props;
     const uiThemeColors: UIThemeColors = this.uiTheme.colors;
     const linkColor: string = uiThemeColors.$link;
+    const isEditMode: boolean = !!articleDraft;
 
     const props: HeaderProps = {
       title: articlePlaceholder.idReadable,
 
       leftButton: (
-        editMode
+        isEditMode
           ? <IconClose size={21} color={isProcessing ? uiThemeColors.$textSecondary : linkColor}/>
           : <IconBack color={linkColor}/>
       ),
       onBack: (
-        editMode
-          ? () => updateEditMode(false)
+        isEditMode
+          ? () => setDraft(null)
           : () => Router.pop()
       ),
 
       rightButton: (
-        editMode
+        isEditMode
           ? (
             isProcessing
               ? <ActivityIndicator color={linkColor}/>
@@ -161,7 +164,7 @@ class Article extends IssueTabbed<Props, State> {
           : this.renderContextActionsIcon()
       ),
       onRightButtonClick: (
-        editMode
+        isEditMode
           ? publishArticleDraft
           : () => showArticleActions(this.context.actionSheet(), this.canEditArticle())
       ),

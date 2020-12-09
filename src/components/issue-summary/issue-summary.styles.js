@@ -14,6 +14,8 @@ export const summary = {
 export default EStyleSheet.create({
   summary: {
     ...summary,
+    padding: 0,
+    paddingTop: 5,
     color: '$text'
   },
   descriptionInput: {

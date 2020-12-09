@@ -3,7 +3,6 @@
 import React from 'react';
 import {View, Text, ScrollView} from 'react-native';
 
-import CreateUpdateInfo from '../../components/issue-tabbed/issue-tabbed__created-updated';
 import MarkdownView from '../../components/wiki/markdown-view';
 import {SkeletonIssueContent} from '../../components/skeleton/skeleton';
 
@@ -32,27 +31,17 @@ const ArticleDetails = (props: Props) => {
       testID="articleDetails"
     >
 
-      {!!article.reporter && <CreateUpdateInfo
-        reporter={article.reporter}
-        updater={article.updatedBy}
-        created={article.created}
-        updated={article.updated}
-      />}
-
-      {!!article.summary && (
-        <View style={styles.summary}>
-          <Text style={styles.summaryText}>{article.summary}</Text>
-        </View>
-      )}
+      {!!article.summary && <Text style={styles.summaryText}>{article.summary}</Text>}
 
       {!!article.content && (
-        <MarkdownView
-          style={styles.description}
-          attachments={article.attachments}
-          uiTheme={uiTheme}
-        >
-          {article.content}
-        </MarkdownView>
+        <View style={styles.description}>
+          <MarkdownView
+            attachments={article.attachments}
+            uiTheme={uiTheme}
+          >
+            {article.content}
+          </MarkdownView>
+        </View>
       )}
 
       {isLoading && !error && <SkeletonIssueContent/>}

@@ -8,13 +8,14 @@ import {getEntityPresentation, ytDate} from '../issue-formatter/issue-formatter'
 import styles from './issue-tabbed.style';
 
 import type {User} from '../../flow/User';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
-type Props = { reporter: User, updater: User, created: number, updated: number };
+type Props = { reporter: User, updater: User, created: number, updated: number, style?: ViewStyleProp };
 
 
 const CreateUpdateInfo = (props: Props) => {
   return (
-    <View style={styles.createUpdateInfoPanel}>
+    <View style={[styles.createUpdateInfoPanel, props.style]}>
       {!!props.reporter && <Text
         style={styles.createUpdateInfoText}
         selectable={true}

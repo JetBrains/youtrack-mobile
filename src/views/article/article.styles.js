@@ -1,3 +1,5 @@
+import {Platform} from 'react-native';
+
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {summaryTitle} from '../../components/common-styles/issue';
@@ -9,6 +11,10 @@ export default EStyleSheet.create({
     flex: 1,
     backgroundColor: '$background'
   },
+  articleUsers: {
+    marginTop: UNIT * 2,
+    paddingHorizontal: UNIT * 2,
+  },
   articleDetails: {
     padding: UNIT * 2,
     paddingTop: UNIT
@@ -19,10 +25,17 @@ export default EStyleSheet.create({
   },
   description: {
     ...mainText,
-    marginTop: UNIT * 2,
+    marginTop: UNIT
   },
-  summary: {
-    marginTop: UNIT,
+  summaryEdit: {
+    ...Platform.select({
+      ios: {
+        marginTop: 3
+      },
+      android: {
+        marginTop: 1
+      }
+    })
   },
   summaryText: {
     ...summaryTitle,

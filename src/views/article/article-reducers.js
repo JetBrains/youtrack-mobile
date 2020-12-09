@@ -11,7 +11,6 @@ export type ArticleState = {
   activityPage: Array<ActivityItem> | null,
   article: Article,
   articleDraft: Article,
-  editMode: boolean,
   error: CustomError,
   isLoading: boolean,
   isProcessing: boolean,
@@ -22,7 +21,6 @@ const articleInitialState: ArticleState = {
   activityPage: null,
   article: null,
   articleDraft: null,
-  editMode: false,
   error: null,
   isLoading: false,
   isProcessing: false,
@@ -48,15 +46,12 @@ const {reducer, actions} = createSlice({
     setActivityPage(state: ArticleState, action: PayloadAction<Array<ActivityItem>>) {
       state.activityPage = action.payload;
     },
-    setEditMode(state: ArticleState, action: PayloadAction<boolean>) {
-      state.editMode = action.payload;
-    },
     setArticleDraft(state: ArticleState, action: PayloadAction<Article>) {
-      state.articleDraft = {...action.payload};
+      state.articleDraft = action.payload;
     },
   }
 });
 
 
-export const {setLoading, setError, setArticle, setActivityPage, setProcessing, setEditMode, setArticleDraft} = actions;
+export const {setLoading, setError, setArticle, setActivityPage, setProcessing, setArticleDraft} = actions;
 export default reducer;
