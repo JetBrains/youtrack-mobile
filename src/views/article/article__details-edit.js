@@ -26,7 +26,7 @@ const ArticleDetailsEdit = (props: Props) => {
 
   return (
     <View
-      style={[styles.articleDetails, styles.summaryEdit]}
+      style={styles.summaryEdit}
     >
       <IssueSummary
         editable={true}
