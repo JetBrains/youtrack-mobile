@@ -34,6 +34,7 @@ import type {ArticleState} from './article-reducers';
 import type {CustomError} from '../../flow/Error';
 import type {HeaderProps} from '../../components/header/header';
 import type {IssueTabbedState} from '../../components/issue-tabbed/issue-tabbed';
+import type {KnowledgeBaseState} from '../knowledge-base/knowledge-base-reducers';
 import type {RootState} from '../../reducers/app-reducer';
 import type {Theme, UITheme, UIThemeColors} from '../../flow/Theme';
 import type {Visibility} from '../../flow/Visibility';
@@ -137,7 +138,9 @@ class Article extends IssueTabbed<Props, State> {
     );
   };
 
-  isTabChangeEnabled = () => true;
+  isTabChangeEnabled = () => {
+    return !this.props.isProcessing;
+  };
 
   canEditArticle = (): boolean => {
     const {issuePermissions} = this.props;
@@ -157,6 +160,7 @@ class Article extends IssueTabbed<Props, State> {
     const {articlePlaceholder, articleDraft, showArticleActions, publishArticleDraft, isProcessing, setDraft} = this.props;
     const uiThemeColors: UIThemeColors = this.uiTheme.colors;
     const linkColor: string = uiThemeColors.$link;
+    const textSecondaryColor: string = uiThemeColors.$textSecondary;
     const isEditMode: boolean = !!articleDraft;
 
     const props: HeaderProps = {
@@ -164,13 +168,13 @@ class Article extends IssueTabbed<Props, State> {
 
       leftButton: (
         isEditMode
-          ? <IconClose size={21} color={isProcessing ? uiThemeColors.$textSecondary : linkColor}/>
-          : <IconBack color={linkColor}/>
+          ? <IconClose size={21} color={isProcessing ? textSecondaryColor : linkColor}/>
+          : <IconBack color={isProcessing ? textSecondaryColor : linkColor}/>
       ),
       onBack: (
         isEditMode
           ? () => setDraft(null)
-          : () => Router.pop()
+          : () => !isProcessing && Router.pop()
       ),
 
       rightButton: (
@@ -214,11 +218,15 @@ class Article extends IssueTabbed<Props, State> {
   }
 }
 
-const mapStateToProps = (state: { article: ArticleState, app: RootState }, ownProps: Props): ArticleState => {
+const mapStateToProps = (
+  state: { article: ArticleState, app: RootState, articles: KnowledgeBaseState },
+  ownProps: Props
+): ArticleState => {
   return {
     articlePlaceholder: ownProps.article,
     ...state.article,
-    issuePermissions: state.app.issuePermissions
+    issuePermissions: state.app.issuePermissions,
+    articlesList: state.articles.articlesList,
   };
 };
 const mapDispatchToProps = (dispatch) => {
