@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import {View, Text, ScrollView} from 'react-native';
+import {View, Text} from 'react-native';
 
 import MarkdownView from '../../components/wiki/markdown-view';
 import {SkeletonIssueContent} from '../../components/skeleton/skeleton';
@@ -16,20 +16,15 @@ type Props = {
   article: Article,
   error: CustomError,
   isLoading: boolean,
-  renderRefreshControl: () => React$Element<any>,
   uiTheme: UITheme,
 };
 
 
 const ArticleDetails = (props: Props) => {
-  const {article, isLoading, error, uiTheme, renderRefreshControl} = props;
+  const {article, isLoading, error, uiTheme} = props;
 
   return (
-    <ScrollView
-      refreshControl={renderRefreshControl()}
-      contentContainerStyle={styles.articleDetails}
-      testID="articleDetails"
-    >
+    <>
 
       {!!article.summary && <Text style={styles.summaryText}>{article.summary}</Text>}
 
@@ -46,7 +41,7 @@ const ArticleDetails = (props: Props) => {
 
       {isLoading && !error && <SkeletonIssueContent/>}
 
-    </ScrollView>
+    </>
   );
 };
 

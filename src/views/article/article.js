@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import {RefreshControl, View, ActivityIndicator} from 'react-native';
+import {RefreshControl, View, ActivityIndicator, ScrollView} from 'react-native';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -77,10 +77,17 @@ class Article extends IssueTabbed<Props, State> {
     }
 
     const articleData: ?Article = article || articlePlaceholder;
+    const isEditMode: boolean = !articleDraft;
+
     return (
-      <>
+      <ScrollView
+        testID="articleDetails"
+        contentContainerStyle={styles.articleDetails}
+        refreshControl={this.renderRefreshControl()}
+      >
+
         {!!articleData && (
-          <View style={styles.articleGeneralInfo}>
+          <>
             <VisibilityControl
               entityId={articleData.idReadable}
               visibility={articleData.visibility}
@@ -95,25 +102,24 @@ class Article extends IssueTabbed<Props, State> {
               created={articleData.created}
               updated={articleData.updated}
             />
-          </View>
+          </>
         )}
-        {articleDraft && (
+        {!isEditMode && (
           <ArticleDetailsEdit
             articleDraft={articleDraft}
             updateArticleDraft={updateArticleDraft}
             uiTheme={this.uiTheme}
           />
         )}
-        {!articleDraft && (
+        {isEditMode && (
           <ArticleDetails
             article={articleData}
             error={error}
             isLoading={isLoading}
-            renderRefreshControl={this.renderRefreshControl}
             uiTheme={uiTheme}
           />
         )}
-      </>
+      </ScrollView>
     );
   };
 
