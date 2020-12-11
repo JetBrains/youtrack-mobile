@@ -40,7 +40,7 @@ export function sortByOrdinal(a: Object & { ordinal: number }, b: Object & { ord
 }
 
 export function groupByFavoritesAlphabetically(list: Array<Object>, favoriteFiledName: string): Array<Object> {
-  const map: { favorites: Array<Object>, others: Array<Object> } = list.sort(sortAlphabetically).reduce(
+  const map: { favorites: Array<Object>, others: Array<Object> } = (list || []).sort(sortAlphabetically).reduce(
     (list, item) => {
       if (item[favoriteFiledName]) {
         list.favorites.push(item);
