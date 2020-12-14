@@ -24,6 +24,6 @@ export const updateIssueInIssues = (
   currentIssues: Array<IssueOnList | IssueFull>
 ): Array<IssueFull | IssueOnList> => {
   return (currentIssues || []).reduce((issues: Array<IssueOnList>, issue: IssueOnList) => {
-    return issues.concat([issue.id === issueToUpdate.id ? issueToUpdate : issue]);
+    return issues.concat([issue?.id === issueToUpdate?.id ? issueToUpdate : issue]);
   }, []);
 };
