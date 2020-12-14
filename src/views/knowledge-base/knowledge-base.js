@@ -13,7 +13,7 @@ import Router from '../../components/router/router';
 import Select from '../../components/select/select';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
-import {findNodeById} from './knowledge-base-helper';
+import {findProjectNode} from './knowledge-base-helper';
 import {IconAngleDown, IconAngleRight, IconBack, IconLock} from '../../components/icon/icon';
 import {SkeletonIssues} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
@@ -84,7 +84,7 @@ export class KnowledgeBase extends Component<Props, State> {
       <View style={[styles.itemArticle, style]}>
         <TouchableOpacity
           style={style}
-          onPress={() => Router.Article({article: article})}
+          onPress={() => Router.Article({articlePlaceholder: article})}
         >
           <Text numberOfLines={1} style={styles.articleTitle}>{article.summary}</Text>
           <View style={styles.itemArticleIcon}>
@@ -111,10 +111,8 @@ export class KnowledgeBase extends Component<Props, State> {
   };
 
   renderSubArticles = (article: Article) => {
-    const targetProjectRootArticles: ArticlesListItem = this.props.articlesList.find(
-      (it: ArticlesListItem) => it.title.id === article.project.id
-    );
-    const node: ?ArticleNode = targetProjectRootArticles && findNodeById(targetProjectRootArticles.data, article.id);
+    const {articlesList} = this.props;
+    const node: ?ArticleNode = articlesList && findProjectNode(articlesList, article.project.id, article.id);
 
     if (node) {
       const title = this.renderHeader(
@@ -126,7 +124,7 @@ export class KnowledgeBase extends Component<Props, State> {
           <IconBack color={this.uiTheme.colors.$link}/>
         </TouchableOpacity>,
         <TouchableOpacity
-          onPress={() => Router.Article({article: article})}
+          onPress={() => Router.Article({articlePlaceholder: article})}
         >
           <Text numberOfLines={2} style={styles.projectTitle}>{article.summary}</Text>
         </TouchableOpacity>
@@ -188,7 +186,7 @@ export class KnowledgeBase extends Component<Props, State> {
         renderItem={this.renderArticle}
         renderSectionHeader={this.renderProject}
         ItemSeparatorComponent={this.renderSeparator}
-        ListEmptyComponent={() => <ErrorMessage errorMessageData={{
+        ListEmptyComponent={() => !this.props.isLoading && <ErrorMessage errorMessageData={{
           title: 'No articles yet',
           description: '',
           //$FlowFixMe

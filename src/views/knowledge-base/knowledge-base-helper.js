@@ -53,3 +53,10 @@ export const findNodeById = (articlesList: Array<ArticleNode>, id: string): Arti
   }
   return null;
 };
+
+export const findProjectNode = (articlesList: Array<ArticleNode>, projectId: string, nodeId: string): ArticleNode | null => {
+  const articleProject: ArticlesListItem = articlesList.find(
+    (it: ArticlesListItem) => it.title.id === projectId
+  );
+  return articleProject ? findNodeById(articleProject.data, nodeId) : null;
+};

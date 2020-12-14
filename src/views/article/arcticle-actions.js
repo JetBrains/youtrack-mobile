@@ -11,7 +11,8 @@ import {
   setLoading,
   setActivityPage,
   setProcessing,
-  setArticleDraft
+  setArticleDraft,
+  setPrevArticle
 } from './article-reducers';
 import {showActions} from '../../components/action-sheet/action-sheet';
 
@@ -19,6 +20,7 @@ import type ActionSheet from '@expo/react-native-action-sheet';
 import type Api from '../../components/api/api';
 import type {AppState} from '../../reducers';
 import type {Article} from '../../flow/Article';
+import type {ArticleState} from './article-reducers';
 
 type ApiGetter = () => Api;
 
@@ -198,10 +200,18 @@ const setDraft = (articleDraft: Article | null) => {
   };
 };
 
+const updatePrevArticle = () => {
+  return async (dispatch: (any) => any, getState: () => AppState) => {
+    const currentArticleState: ArticleState = getState().article;
+    dispatch(setPrevArticle(currentArticleState));
+  };
+};
+
 export {
   loadArticle,
   loadActivitiesPage,
   showArticleActions,
+  updatePrevArticle,
 
   getArticleDrafts,
   updateArticleDraft,

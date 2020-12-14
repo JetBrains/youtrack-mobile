@@ -16,6 +16,7 @@ import Header from '../../components/header/header';
 import IssueTabbed from '../../components/issue-tabbed/issue-tabbed';
 import PropTypes from 'prop-types';
 import Router from '../../components/router/router';
+import {findProjectNode} from '../knowledge-base/knowledge-base-helper';
 import {getApi} from '../../components/api/api__instance';
 import {isIOSPlatform} from '../../util/util';
 import {
@@ -30,6 +31,7 @@ import VisibilityControl from '../../components/visibility/visibility-control';
 
 import styles from './article.styles';
 
+import type {ArticleNode} from '../../flow/Article';
 import type {ArticleState} from './article-reducers';
 import type {CustomError} from '../../flow/Error';
 import type {HeaderProps} from '../../components/header/header';
@@ -52,12 +54,12 @@ class Article extends IssueTabbed<Props, State> {
   uiTheme: UITheme;
 
   componentDidMount() {
-    this.loadArticle();
+    this.loadArticle(this.props.articlePlaceholder.id, true);
   }
 
-  loadArticle = (reset?: boolean) => this.props.loadArticle(this.props.articlePlaceholder.id, reset);
+  loadArticle = (articleId: string, reset: boolean) => this.props.loadArticle(articleId, reset);
 
-  refresh = () => this.loadArticle(false);
+  refresh = () => this.loadArticle(this.props.article.id, false);
 
   renderError = (error: CustomError) => {
     return <ErrorMessage error={error}/>;
@@ -72,13 +74,15 @@ class Article extends IssueTabbed<Props, State> {
   };
 
   renderDetails = (uiTheme: UITheme) => {
-    const {article, articlePlaceholder, articleDraft, updateArticleDraft, error, isLoading} = this.props;
+    const {article, articlesList, articlePlaceholder, articleDraft, updateArticleDraft, error, isLoading} = this.props;
     if (error) {
       return this.renderError(error);
     }
 
     const articleData: ?Article = article || articlePlaceholder;
-    const isEditMode: boolean = !articleDraft;
+    const isEditMode: boolean = !!articleDraft;
+    const articleNode: ?ArticleNode = article && findProjectNode(articlesList, article.project.id, article.id);
+    const subArticles: Array<Article> = (articleNode?.children || []).map((it: ArticleNode) => it.data);
 
     return (
       <ScrollView
@@ -105,18 +109,20 @@ class Article extends IssueTabbed<Props, State> {
             />
           </>
         )}
-        {!isEditMode && (
+        {isEditMode && (
           <ArticleDetailsEdit
             articleDraft={articleDraft}
             updateArticleDraft={updateArticleDraft}
             uiTheme={this.uiTheme}
           />
         )}
-        {isEditMode && (
+        {!isEditMode && (
           <ArticleDetails
-            article={articleData}
+            article={article}
+            articlePlaceholder={articlePlaceholder}
             error={error}
             isLoading={isLoading}
+            subArticles={subArticles}
             uiTheme={uiTheme}
           />
         )}
@@ -157,14 +163,14 @@ class Article extends IssueTabbed<Props, State> {
   };
 
   renderHeader = () => {
-    const {articlePlaceholder, articleDraft, showArticleActions, publishArticleDraft, isProcessing, setDraft} = this.props;
+    const {articlePlaceholder, article, articleDraft, showArticleActions, publishArticleDraft, isProcessing, setDraft} = this.props;
     const uiThemeColors: UIThemeColors = this.uiTheme.colors;
     const linkColor: string = uiThemeColors.$link;
     const textSecondaryColor: string = uiThemeColors.$textSecondary;
     const isEditMode: boolean = !!articleDraft;
 
     const props: HeaderProps = {
-      title: articlePlaceholder.idReadable,
+      title: (article || articlePlaceholder)?.idReadable,
 
       leftButton: (
         isEditMode
@@ -223,10 +229,10 @@ const mapStateToProps = (
   ownProps: Props
 ): ArticleState => {
   return {
-    articlePlaceholder: ownProps.article,
     ...state.article,
+    articlePlaceholder: ownProps.articlePlaceholder,
     issuePermissions: state.app.issuePermissions,
-    articlesList: state.articles.articlesList,
+    articlesList: state.articles.articlesList
   };
 };
 const mapDispatchToProps = (dispatch) => {
