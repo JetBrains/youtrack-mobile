@@ -116,10 +116,10 @@ export function updateCardOnBoard(board: Board, sourceIssue: IssueFull): Board {
   function updateIssueInRowIfNeeded(row: AgileBoardRow) {
     return {
       ...row,
-      issue: row.issue && row.issue.id === sourceIssue.id ? fillIssueFromAnotherIssue(row.issue, sourceIssue) : row.issue,
-      cells: updateCellsIssuesIfNeeded(row.cells, sourceIssue.id, issues =>
+      issue: row.issue && row.issue.id === sourceIssue?.id ? fillIssueFromAnotherIssue(row.issue, sourceIssue) : row.issue,
+      cells: updateCellsIssuesIfNeeded(row.cells, sourceIssue?.id, issues =>
         issues.map(
-          issue => issue.id === sourceIssue.id ? fillIssueFromAnotherIssue(issue, sourceIssue) : issue
+          issue => issue.id === sourceIssue?.id ? fillIssueFromAnotherIssue(issue, sourceIssue) : issue
         ))
     };
   }
