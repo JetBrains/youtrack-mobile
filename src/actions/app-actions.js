@@ -470,7 +470,9 @@ function checkUserAgreement() {
 export function applyAuthorization(authParams: AuthParams) {
   return async (dispatch: Function, getState: () => Object) => {
     const auth = getState().app.auth;
-    await auth.cacheAuthParams(authParams);
+    if (auth && authParams) {
+      await auth.cacheAuthParams(authParams);
+    }
     await flushStoragePart({creationTimestamp: Date.now()});
 
     await dispatch(checkAuthorization());
