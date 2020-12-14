@@ -131,17 +131,18 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
     }
   }
 
-  applySuggestion(user: User) {
+  applySuggestion = (user: User) => {
     function replaceRange(source, start, end, substitute) {
       return source.substring(0, start) + substitute + source.substring(end);
     }
 
-    const match = /[\S\@]+$/.exec(this.state.commentText.slice(0, this.state.commentCaret));
+    const commentText: string = this.state?.commentText || '';
+    const match = /[\S\@]+$/.exec(commentText.slice(0, this.state.commentCaret));
     const currentWord = match && match[0];
 
     if (currentWord) {
-      const startIndex = this.state.commentText.slice(0, this.state.commentCaret).lastIndexOf(currentWord);
-      const newText = replaceRange(this.state.commentText,
+      const startIndex = commentText.slice(0, this.state.commentCaret).lastIndexOf(currentWord);
+      const newText = replaceRange(commentText,
         startIndex,
         startIndex + currentWord.length,
         `@${user.login}`);
