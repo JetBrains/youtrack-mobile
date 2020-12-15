@@ -56,6 +56,20 @@ class Menu extends Component<Props, State> {
     if (this.state.currentRouteName === routeMap.Issue) {
       return this.state.prevRouteName === routeName;
     }
+
+    if (this.state.currentRouteName === routeMap.Article) {
+      return (
+        this.state.prevRouteName === routeName ||
+        (this.state.prevRouteName === routeMap.Page && routeMap.KnowledgeBase === routeName)
+      );
+    }
+    if (this.state.currentRouteName === routeMap.Page) {
+      return routeMap.KnowledgeBase === routeName && (
+        this.state.prevRouteName === routeMap.Article ||
+        this.state.prevRouteName === routeMap.KnowledgeBase
+      );
+    }
+
     return this.state.currentRouteName === routeName;
   };
 
@@ -63,7 +77,11 @@ class Menu extends Component<Props, State> {
     if (this.props.isDisabled) {
       return false;
     }
-    if (this.state.currentRouteName === routeMap.Issue) {
+    if (
+      this.state.currentRouteName === routeMap.Issue ||
+      this.state.currentRouteName === routeMap.Page ||
+      this.state.currentRouteName === routeMap.Article
+    ) {
       return true;
     }
 
