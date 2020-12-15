@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 import {View as AnimatedView} from 'react-native-animatable';
 import {connect} from 'react-redux';
 
-import Feature, {FEATURES} from '../feature/feature';
+import Feature, {FEATURE_VERSION} from '../feature/feature';
 import Router from '../router/router';
 import {DEFAULT_THEME} from '../theme/theme';
 import {IconBell, IconBoard, IconSettings, IconTask, IconKnowledgeBase} from '../icon/icon';
@@ -45,7 +45,6 @@ class Menu extends Component<Props, State> {
       this.setCurrentRouteName(routeName, prevRouteName);
     });
   }
-
 
   setCurrentRouteName = (routeName: ?string, prevRouteName: ?string) => this.setState({
     prevRouteName: prevRouteName,
@@ -160,7 +159,7 @@ class Menu extends Component<Props, State> {
           onPress={this.openAgileBoard}
         />
 
-        <Feature version={FEATURES.inbox}>
+        <Feature version={FEATURE_VERSION.inbox}>
           <MenuItem
             testID="menuNotifications"
             icon={<IconBell size={22} color={color(routeMap.Inbox)}/>}
@@ -168,11 +167,13 @@ class Menu extends Component<Props, State> {
           />
         </Feature>
 
-        <MenuItem
-          testID="menuKnowledgeBase"
-          icon={<IconKnowledgeBase size={22} color={color(routeMap.KnowledgeBase)}/>}
-          onPress={this.openKnowledgeBase}
-        />
+        <Feature version={FEATURE_VERSION.knowledgeBase}>
+          <MenuItem
+            testID="menuKnowledgeBase"
+            icon={<IconKnowledgeBase size={22} color={color(routeMap.KnowledgeBase)}/>}
+            onPress={this.openKnowledgeBase}
+          />
+        </Feature>
 
         <MenuItem
           testID="menuSettings"

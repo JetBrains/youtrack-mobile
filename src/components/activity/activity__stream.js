@@ -11,7 +11,7 @@ import CommentReactions from '../comment/comment-reactions';
 import CommentVisibility from '../comment/comment__visibility';
 import CustomFieldChangeDelimiter from '../custom-field/custom-field__change-delimiter';
 import Diff from '../diff/diff';
-import Feature, {FEATURES} from '../feature/feature';
+import Feature, {FEATURE_VERSION} from '../feature/feature';
 import getEventTitle from './activity__history-title';
 import IssueVisibility from '../visibility/issue-visibility';
 import log from '../log/log';
@@ -339,7 +339,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
             )}
           </View>
 
-          {!!props.onReactionPanelOpen && <Feature version={FEATURES.reactions}>
+          {!!props.onReactionPanelOpen && <Feature version={FEATURE_VERSION.reactions}>
             <TouchableOpacity
               hitSlop={HIT_SLOP}
               disabled={disabled}

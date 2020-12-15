@@ -65,16 +65,25 @@ describe('<Menu/>', () => {
       expect(getByTestId('menuAgileBoards')).toBeTruthy();
     });
 
-    it('should render menu `Knowledge Base` item', async () => {
-      const {getByTestId} = doRender();
 
-      expect(getByTestId('menuKnowledgeBase')).toBeTruthy();
+    xdescribe('Knowledge Base', () => {
+      beforeEach(() => jest.spyOn(api, 'getApi'));
+
+      it('should render menu `Knowledge Base` item', async () => {
+        api.getApi.mockReturnValueOnce({
+          config: {
+            version: '2020.2'
+          }
+        });
+        const {getByTestId} = doRender();
+
+        expect(getByTestId('menuKnowledgeBase')).toBeTruthy();
+      });
     });
 
+
     describe('Notifications', () => {
-      beforeEach(() => {
-        jest.spyOn(api, 'getApi');
-      });
+      beforeEach(() => jest.spyOn(api, 'getApi'));
 
       it('should render menu `Notifications` item', async () => {
         api.getApi.mockReturnValueOnce({

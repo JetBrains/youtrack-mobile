@@ -1,19 +1,17 @@
 /* @flow */
 /*global __DEV__*/
 
-import {connect} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import featureList from './features-list';
 import {getApi} from '../api/api__instance';
 
 type Props = {
-  devOnly?: boolean,
-  name?: string,
-  version?: string,
-  fallbackComponent?: Object,
-
   children: any,
-  features: Array<string>
+  devOnly?: boolean,
+  fallbackComponent?: React$Element<any>,
+  featureName?: string,
+  version?: string,
 };
 
 function convertToNumber(semverVersion: string) {
@@ -40,26 +38,16 @@ export const checkVersion = (version?: string) => {
 
 export const checkDev = () => __DEV__;
 
-export const FEATURES = featureList;
+export const FEATURE_VERSION = featureList;
 
 const Feature = (props: Props) => {
-  const check = () => {
-    const {name, features, version, devOnly} = props;
-    const featureEnabled = name ? features.indexOf(name) !== -1 : true;
-    return featureEnabled && checkVersion(version) && (devOnly ? checkDev() : true);
-  };
+  const {fallbackComponent = null, children, featureName, version, devOnly} = props;
+  const features: Array<string> = useSelector(state => state.app.features);
 
-  const {fallbackComponent, children} = props;
-  const fallback = fallbackComponent ? fallbackComponent : null;
-  return check() ? children : fallback;
+  const isFeatureEnabled: boolean = featureName ? features.indexOf(featureName) !== -1 : true;
+  const isShown: boolean = isFeatureEnabled && checkVersion(version) && (devOnly ? checkDev() : true);
+  return isShown ? children : fallbackComponent;
 };
 
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    features: state.app.features,
-    ...ownProps
-  };
-};
-
-export default connect(mapStateToProps)(Feature);
+export default Feature;
