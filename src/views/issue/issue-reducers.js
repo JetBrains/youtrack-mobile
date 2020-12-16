@@ -117,11 +117,10 @@ export default createReducer(initialState, {
   ...attachReducers,
 
   [ON_NAVIGATE_BACK]: (state: State, action: { closingView: { routeName: string, params: { issueId?: string } } }): State => {
-    const isIssueView = action.closingView.routeName === routeMap.Issue;
-
-    const previousIssueState = state.unloadedIssueState ? state.unloadedIssueState : initialState;
-
-    return isIssueView ? previousIssueState : state;
+    if (action.closingView.routeName === routeMap.Issue) {
+      return state.unloadedIssueState ? state.unloadedIssueState : initialState;
+    }
+    return state;
   },
   [types.SET_ISSUE_ID]: (state: State, action: { issueId: string }): State => {
     return {...state, issueId: action.issueId};

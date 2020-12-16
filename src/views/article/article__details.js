@@ -3,15 +3,12 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, FlatList} from 'react-native';
 
-import {useDispatch} from 'react-redux';
-
 import Header from '../../components/header/header';
 import MarkdownView from '../../components/wiki/markdown-view';
 import Router from '../../components/router/router';
 import Select from '../../components/select/select';
 import {IconAngleRight, IconBack} from '../../components/icon/icon';
 import {SkeletonIssueContent} from '../../components/skeleton/skeleton';
-import {updatePrevArticle} from './arcticle-actions';
 
 import styles from './article.styles';
 
@@ -29,7 +26,7 @@ type Props = {
 };
 
 
-const renderSubArticles = (article: Article, subArticles: Array<Article>, uiTheme: UITheme, dispatch: Function) => {
+const renderSubArticles = (article: Article, subArticles: Array<Article>, uiTheme: UITheme) => {
   return (
     <>
       <Header
@@ -46,8 +43,7 @@ const renderSubArticles = (article: Article, subArticles: Array<Article>, uiThem
           <TouchableOpacity
             style={styles.subArticleItem}
             onPress={async () => {
-              dispatch(updatePrevArticle());
-              Router.Article({articlePlaceholder: item});
+              Router.Article({articlePlaceholder: item, storePrevArticle: true});
             }}
           ><Text style={{color: uiTheme.colors.$link}}>{item.summary}</Text></TouchableOpacity>}
         ItemSeparatorComponent={Select.renderSeparator}
@@ -58,7 +54,6 @@ const renderSubArticles = (article: Article, subArticles: Array<Article>, uiThem
 
 const ArticleDetails = (props: Props) => {
   const {article, articlePlaceholder, isLoading, error, uiTheme, subArticles = []} = props;
-  const dispatch = useDispatch();
 
   if (!article && !articlePlaceholder) {
     return null;
@@ -77,7 +72,7 @@ const ArticleDetails = (props: Props) => {
             attachments={article.attachments}
             mentions={{
               articles: article.mentionedArticles,
-              issues: article.mentionedIssues,
+              issues: article.mentionedIssues
             }}
             uiTheme={uiTheme}
           >
@@ -87,7 +82,7 @@ const ArticleDetails = (props: Props) => {
           {subArticles?.length > 0 && (
             <TouchableOpacity
               onPress={() => Router.Page({
-                children: renderSubArticles(article, subArticles, uiTheme, dispatch)
+                children: renderSubArticles(article, subArticles, uiTheme)
               })}
               style={styles.subArticles}
             >

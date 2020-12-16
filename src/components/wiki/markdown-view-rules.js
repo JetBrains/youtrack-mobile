@@ -10,22 +10,39 @@ import Router from '../router/router';
 import {getApi} from '../api/api__instance';
 import {guid} from '../../util/util';
 import {hasMimeType} from '../mime-type/mime-type';
-import {hasType} from '../api/api__resource-types';
+import {ResourceTypes} from '../api/api__resource-types';
 
 import styles from './youtrack-wiki.styles';
 
+import type {Article} from '../../flow/Article';
 import type {Attachment, ImageDimensions, IssueProject} from '../../flow/CustomFields';
 import type {Folder} from '../../flow/User';
-import type {UITheme} from '../../flow/Theme';
-import type {Article} from '../../flow/Article';
 import type {IssueFull} from '../../flow/Issue';
+import type {UITheme} from '../../flow/Theme';
+
+export type Mentions = {
+  articles: Array<Article>,
+  issues: Array<IssueFull>
+}
+
+type TextData = {
+  text: string,
+  type: null | number | typeof ResourceTypes.ARTICLE | typeof ResourceTypes.ISSUE
+};
+
+type MarkdownNode = {
+  attributes: Object,
+  content: string,
+  key: string,
+  sourceInfo: string,
+};
 
 
 function getMarkdownRules(
   attachments: Array<Attachment> = [],
   projects: Array<IssueProject> = [],
   uiTheme: UITheme,
-  mentions?: { articles: Array<string>, issues: Array<string> }
+  mentions?: Mentions
 ) {
 
   const imageHeaders = getApi().auth.getAuthorizationHeaders();
@@ -34,13 +51,13 @@ function getMarkdownRules(
 
   return {
 
-    blockquote: (node: Object, children: Object) => (
+    blockquote: (node: MarkdownNode, children: Object) => (
       <View key={node.key} style={styles.blockQuote}>
         {children}
       </View>
     ),
 
-    image: (node: Object) => {
+    image: (node: MarkdownNode) => {
       const {src, alt} = node.attributes;
       const targetAttach: ?Attachment = attachments.find(it => it.name === src);
 
@@ -70,7 +87,7 @@ function getMarkdownRules(
       return <Image {...imageProps} />;
     },
 
-    code_inline: (node: Object, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
+    code_inline: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
       return (
         <Text key={node.key} style={[inheritedStyles, styles.inlineCode]}>
           {` ${node.content} `}
@@ -78,7 +95,7 @@ function getMarkdownRules(
       );
     },
 
-    fence: (node: Object) => {
+    fence: (node: MarkdownNode) => {
       let content = node.content;
 
       if (
@@ -111,12 +128,11 @@ function getMarkdownRules(
       );
     },
 
-    text: (node: Object, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
+    text: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
       const text: string = node.content;
-      const combinedMentions: ?Array<Article | IssueFull> = mentions && mentions.articles.concat(mentions.issues);
 
-      if (combinedMentions && combinedMentions.length > 0) {
-        return renderArticleMentions(node, combinedMentions, uiTheme);
+      if (mentions && mentions.articles.concat(mentions.issues).length > 0) {
+        return renderArticleMentions(node, mentions, uiTheme);
       }
 
       if (issueId.test(text)) {
@@ -151,86 +167,87 @@ function createMentionRegExp(mention: string) {
   return new RegExp(`${prefix}${mention}${suffix}`, 'ig');
 }
 
-function renderArticleMentions(node, combinedMentions, uiTheme: UITheme) {
+function renderArticleMentions(
+  node: MarkdownNode,
+  mentions: Mentions,
+  uiTheme: UITheme
+) {
+  const PLAIN_TEXT_TYPE: string = '-=TEXT=-';
+  const textData: Array<TextData> = [];
   const tokens: Array<string> = node.content.split(' ');
-  const textData: Array<{ text: string, type: 0 | 1 | 2 }> = [];
+  const combinedMentions: Array<Article | IssueFull> = mentions.articles.concat(mentions.issues);
 
-  parseTokens:
+  parseNodeContent:
   for (let i = 0; i < tokens.length; i++) {
     const token: string = tokens[i];
-    const current = {
+    const tokenTextData: TextData = {
       text: token,
       type: null
     };
 
     for (let j = 0; j < combinedMentions.length; j++) {
       const entity: Article | IssueFull = combinedMentions[j];
-      if (createMentionRegExp(entity.idReadable).test(token)) {
-        const type: number = hasType.article(entity) ? 1 : 2;
-        if (token === entity.idReadable) {
-          textData.push({
-            text: entity.idReadable,
-            $type: entity.$type,
-            type: type
-          });
-        } else {
-          token.split(entity.idReadable).forEach((str: string) => {
-            if (str) {
-              textData.push({
-                text: str,
-                type: 0
-              });
-            } else {
-              textData.push({
-                text: entity.idReadable,
-                $type: entity.$type,
-                type: type
-              });
-            }
-          });
-        }
-        continue parseTokens;
+      if (!createMentionRegExp(entity.idReadable).test(token)) {
+        continue;
       }
+      if (token === entity.idReadable) {
+        textData.push({
+          text: entity.idReadable,
+          type: entity.$type
+        });
+      } else {
+        token.split(entity.idReadable).forEach((str: string) => {
+          textData.push({
+            text: str ? str : entity.idReadable,
+            type: str ? PLAIN_TEXT_TYPE : entity.$type
+          });
+        });
+      }
+      continue parseNodeContent;
     }
 
-    if (!current.type) {
-      current.type = 0;
-      textData.push(current);
+    if (!tokenTextData.type) {
+      tokenTextData.type = PLAIN_TEXT_TYPE;
+      textData.push(tokenTextData);
     }
   }
 
   if (textData.length > 0) {
-    let index = -1;
-    let text = [];
-    const composed = [];
+    let index: number = -1;
+    let textTokensToJoin: Array<string> = [];
+    const composed: Array<React$Element<any>> = [];
+
     while (index < textData.length - 1) {
       index++;
-      const item = textData[index];
-      const type = item.type;
-      if (type === 0) {
-        text.push(item.text);
+      const td: TextData = textData[index];
+
+      if (td.type === PLAIN_TEXT_TYPE) {
+        textTokensToJoin.push(td.text);
         continue;
       }
-      if (type === 1 || type === 2) {
+
+      if (td.type !== PLAIN_TEXT_TYPE) {
         composed.push(
           <Text key={guid()}>
-            {text.length > 0 && <Text>{`${text.join(' ')} `}</Text>}
-            <Text style={{color: uiTheme.colors.$link}} onPress={
-              () => (
-                type === 1
-                  ? Router.Article({placeholder: {id: item.text}})
-                  : Router.Issue({issueId: item.text})
-              )}
-            >{item.text}</Text>
+            {textTokensToJoin.length > 0 && <Text>{`${textTokensToJoin.join(' ')} `}</Text>}
+            <Text
+              style={{color: uiTheme.colors.$link}}
+              onPress={
+                () => (
+                  td.type === ResourceTypes.ARTICLE
+                    ? Router.Article({articlePlaceholder: {idReadable: td.text}, storePrevArticle: true})
+                    : Router.Issue({issueId: td.text})
+                )}
+            >{td.text}</Text>
           </Text>
         );
-        text = [];
+        textTokensToJoin = [];
       }
     }
 
-    if (text.length) {
+    if (textTokensToJoin.length > 0) {
       composed.push(
-        <Text key={guid()}>{text.join(' ')}</Text>
+        <Text key={guid()}>{textTokensToJoin.join(' ')}</Text>
       );
     }
 

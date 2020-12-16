@@ -22,7 +22,7 @@ export type ArticleState = {
   prevArticleState: ?ArticleState
 };
 
-const articleInitialState: ArticleState = {
+export const articleInitialState: ArticleState = {
   activityPage: null,
   article: null,
   articlesList: [],
@@ -65,9 +65,10 @@ const {reducer, actions} = createSlice({
       state: ArticleState,
       action: { closingView: { routeName: string, params: { articlePlaceholder: Article } } }
     ): ArticleState => {
-      const isArticle: boolean = action.closingView.routeName === routeMap.Article;
-      const prevArticleState: ArticleState = state.prevArticleState ? state.prevArticleState : articleInitialState;
-      return isArticle ? prevArticleState : state;
+      if (action.closingView.routeName === routeMap.Article) {
+        return state.prevArticleState ? state.prevArticleState : articleInitialState;
+      }
+      return state;
     }
   }
 });

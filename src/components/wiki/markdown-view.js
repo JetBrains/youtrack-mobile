@@ -11,17 +11,18 @@ import {getApi} from '../api/api__instance';
 import {hasType} from '../api/api__resource-types';
 import {getStorageState} from '../storage/storage';
 
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {Attachment} from '../../flow/CustomFields';
 import type {Folder} from '../../flow/User';
+import type {Mentions} from './markdown-view-rules';
 import type {UITheme} from '../../flow/Theme';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 
 type Props = {
   style?: ViewStyleProp,
   attachments?: Array<Attachment>,
   children: string,
-  mentions?: { articles: Array<string>, issues: Array<string> },
+  mentions?: Mentions,
   uiTheme: UITheme
 };
 

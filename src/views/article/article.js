@@ -41,7 +41,7 @@ import type {RootState} from '../../reducers/app-reducer';
 import type {Theme, UITheme, UIThemeColors} from '../../flow/Theme';
 import type {Visibility} from '../../flow/Visibility';
 
-type Props = ArticleState & { articlePlaceholder: Article } & typeof (articleActions);
+type Props = ArticleState & { articlePlaceholder: Article, storePrevArticle?: boolean } & typeof (articleActions);
 type State = IssueTabbedState;
 
 //$FlowFixMe
@@ -54,12 +54,18 @@ class Article extends IssueTabbed<Props, State> {
   uiTheme: UITheme;
 
   componentDidMount() {
-    this.loadArticle(this.props.articlePlaceholder.id, true);
+    const {articlePlaceholder, storePrevArticle} = this.props;
+    if (storePrevArticle) {
+      this.props.setPreviousArticle();
+    }
+    this.loadArticle(articlePlaceholder.id || articlePlaceholder.idReadable, true);
   }
 
   loadArticle = (articleId: string, reset: boolean) => this.props.loadArticle(articleId, reset);
 
-  refresh = () => this.loadArticle(this.props.article.id, false);
+  refresh = () => {
+    this.loadArticle(this.props.article.id, false);
+  };
 
   renderError = (error: CustomError) => {
     return <ErrorMessage error={error}/>;

@@ -33,6 +33,7 @@ const loadArticle = (articleId: string, reset: boolean = true) => {
 
     if (reset) {
       dispatch(setLoading(true));
+      dispatch(setArticle(null));
     }
     const [error, article] = await until(api.articles.getArticle(articleId));
     dispatch(setLoading(false));
@@ -200,10 +201,10 @@ const setDraft = (articleDraft: Article | null) => {
   };
 };
 
-const updatePrevArticle = () => {
+const setPreviousArticle = () => {
   return async (dispatch: (any) => any, getState: () => AppState) => {
-    const currentArticleState: ArticleState = getState().article;
-    dispatch(setPrevArticle(currentArticleState));
+    const articleState: ArticleState = getState().article;
+    dispatch(setPrevArticle(articleState));
   };
 };
 
@@ -211,7 +212,7 @@ export {
   loadArticle,
   loadActivitiesPage,
   showArticleActions,
-  updatePrevArticle,
+  setPreviousArticle,
 
   getArticleDrafts,
   updateArticleDraft,
