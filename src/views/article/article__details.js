@@ -39,13 +39,14 @@ const renderSubArticles = (article: Article, subArticles: Array<Article>, uiThem
       <FlatList
         data={subArticles}
         keyExtractor={(item: Article) => item.id}
+        getItemLayout={Select.getItemLayout}
         renderItem={({item}: Article) =>
           <TouchableOpacity
             style={styles.subArticleItem}
             onPress={async () => {
               Router.Article({articlePlaceholder: item, storePrevArticle: true});
             }}
-          ><Text style={{color: uiTheme.colors.$link}}>{item.summary}</Text></TouchableOpacity>}
+          ><Text numberOfLines={5} style={styles.subArticleItemText}>{item.summary}</Text></TouchableOpacity>}
         ItemSeparatorComponent={Select.renderSeparator}
       />
     </>

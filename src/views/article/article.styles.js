@@ -64,6 +64,10 @@ export default EStyleSheet.create({
     ...elevation1
   },
   subArticleItem: {
-    padding: UNIT * 2
+    padding: UNIT * 2,
+    paddingLeft: UNIT * 7
+  },
+  subArticleItemText: {
+    ...mainText
   },
 });
