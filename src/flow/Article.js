@@ -4,6 +4,7 @@ import type {User} from './User';
 import IssueVisibility from '../components/visibility/issue-visibility';
 
 export type Article = {
+  $type: string,
   attachments: Array<Attachment>,
   content: string,
   created: number,

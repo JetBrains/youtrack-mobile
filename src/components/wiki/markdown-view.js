@@ -21,6 +21,7 @@ type Props = {
   style?: ViewStyleProp,
   attachments?: Array<Attachment>,
   children: string,
+  mentions?: { articles: Array<string>, issues: Array<string> },
   uiTheme: UITheme
 };
 
@@ -28,7 +29,7 @@ const markdownItInstance: MarkdownIt = MarkdownIt({typographer: true, breaks: tr
 markdownItInstance.linkify.set({fuzzyEmail: false, fuzzyLink: true});
 
 function MarkdownView(props: Props) {
-  const {children, attachments = [], uiTheme} = props;
+  const {children, attachments = [], uiTheme, mentions} = props;
   const projects = (getStorageState().projects || []).map((it: Folder) => hasType.project(it) && it);
 
   const attaches: Array<Attachment> = apiHelper.convertAttachmentRelativeToAbsURLs(attachments, getApi().config.backendUrl);
@@ -37,7 +38,7 @@ function MarkdownView(props: Props) {
     <Markdown
       style={markdownStyles(uiTheme)}
       markdownit={markdownItInstance}
-      rules={getMarkdownRules(attaches, projects, uiTheme)}
+      rules={getMarkdownRules(attaches, projects, uiTheme, mentions)}
       ui
     >
       {children}

@@ -39,6 +39,7 @@ hasType.agile = hasType(ResourceTypes.ISSUE_FOLDER_TAG);
 hasType.article = hasType(ResourceTypes.ARTICLE);
 hasType.comment = hasType(ResourceTypes.ISSUE_COMMENT);
 hasType.commentReaction = hasType(ResourceTypes.COMMENT_REACTIONS_FEED_ITEM);
+hasType.issue = hasType(ResourceTypes.ISSUE);
 hasType.project = hasType(ResourceTypes.PROJECT);
 hasType.savedSearch = hasType(ResourceTypes.ISSUE_FOLDER_SAVED_QUERY);
 hasType.tag = hasType(ResourceTypes.ISSUE_FOLDER_TAG);

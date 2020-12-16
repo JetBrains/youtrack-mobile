@@ -75,6 +75,10 @@ const ArticleDetails = (props: Props) => {
         <View style={styles.description}>
           <MarkdownView
             attachments={article.attachments}
+            mentions={{
+              articles: article.mentionedArticles,
+              issues: article.mentionedIssues,
+            }}
             uiTheme={uiTheme}
           >
             {article.content}

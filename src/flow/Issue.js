@@ -23,6 +23,7 @@ export type IssueOnList = {
 }
 
 export type IssueFull = {
+  $type: string,
   id: string,
   idReadable: string,
   summary: string,
