@@ -86,7 +86,7 @@ export class KnowledgeBase extends Component<Props, State> {
           style={style}
           onPress={() => Router.Article({articlePlaceholder: article})}
         >
-          <Text numberOfLines={1} style={styles.articleTitle}>{article.summary}</Text>
+          <Text numberOfLines={2} style={styles.articleTitle}>{article.summary}</Text>
           <View style={styles.itemArticleIcon}>
             {hasType.visibilityLimited(article?.visibility) && (
               <IconLock
