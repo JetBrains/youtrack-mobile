@@ -67,6 +67,21 @@ const ArticleDetails = (props: Props) => {
 
       {isLoading && !error && !article?.content && <SkeletonIssueContent/>}
 
+      {subArticles?.length > 0 && (
+        <TouchableOpacity
+          onPress={() => Router.Page({
+            children: renderSubArticles(article, subArticles, uiTheme)
+          })}
+          style={styles.subArticles}
+        >
+          <Text style={styles.subArticlesTitle}>Sub-articles</Text>
+          <View style={styles.subArticlesContent}>
+            <Text>{`${subArticles.length} ${subArticles.length > 1 ? 'articles' : 'article'}`}</Text>
+            <IconAngleRight size={18} color={uiTheme.colors.$text} style={styles.subArticlesIcon}/>
+          </View>
+        </TouchableOpacity>
+      )}
+
       {!!article?.content && (
         <View style={styles.description}>
           <MarkdownView
@@ -79,22 +94,6 @@ const ArticleDetails = (props: Props) => {
           >
             {article.content}
           </MarkdownView>
-
-          {subArticles?.length > 0 && (
-            <TouchableOpacity
-              onPress={() => Router.Page({
-                children: renderSubArticles(article, subArticles, uiTheme)
-              })}
-              style={styles.subArticles}
-            >
-              <Text style={styles.subArticlesTitle}>Sub-articles</Text>
-              <View style={styles.subArticlesContent}>
-                <Text>{`${subArticles.length} ${subArticles.length > 1 ? 'articles' : 'article'}`}</Text>
-                <IconAngleRight size={18} color={uiTheme.colors.$text} style={styles.subArticlesIcon}/>
-              </View>
-            </TouchableOpacity>
-          )}
-
         </View>
       )}
     </>

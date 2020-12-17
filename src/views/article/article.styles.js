@@ -21,8 +21,7 @@ export default EStyleSheet.create({
     paddingLeft: UNIT
   },
   description: {
-    ...mainText,
-    marginTop: UNIT
+    ...mainText
   },
   summaryEdit: {
     ...Platform.select({
@@ -42,7 +41,7 @@ export default EStyleSheet.create({
     borderTopWidth: 0.4,
     borderBottomWidth: 0.4,
     marginVertical: UNIT,
-    marginTop: UNIT * 1.5,
+    marginTop: UNIT * 2,
     marginRight: -UNIT * 2,
     paddingVertical: UNIT * 2,
     paddingRight: UNIT * 2,
