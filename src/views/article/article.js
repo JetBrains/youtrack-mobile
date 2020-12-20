@@ -8,6 +8,7 @@ import {connect} from 'react-redux';
 
 import * as articleActions from './arcticle-actions';
 import ArticleActivities from './article__activities';
+import ArticleAddComment from './article__add-comment';
 import ArticleDetails from './article__details';
 import ArticleDetailsEdit from './article__details-edit';
 import CreateUpdateInfo from '../../components/issue-tabbed/issue-tabbed__created-updated';
@@ -16,18 +17,12 @@ import Header from '../../components/header/header';
 import IssueTabbed from '../../components/issue-tabbed/issue-tabbed';
 import PropTypes from 'prop-types';
 import Router from '../../components/router/router';
+import VisibilityControl from '../../components/visibility/visibility-control';
 import {findProjectNode} from '../knowledge-base/knowledge-base-helper';
 import {getApi} from '../../components/api/api__instance';
+import {IconBack, IconCheck, IconClose, IconDrag, IconMoreOptions,} from '../../components/icon/icon';
 import {isIOSPlatform} from '../../util/util';
-import {
-  IconBack,
-  IconCheck,
-  IconClose,
-  IconDrag,
-  IconMoreOptions,
-} from '../../components/icon/icon';
 import {ThemeContext} from '../../components/theme/theme-context';
-import VisibilityControl from '../../components/visibility/visibility-control';
 
 import styles from './article.styles';
 
@@ -142,11 +137,16 @@ class Article extends IssueTabbed<Props, State> {
       return this.renderError(error);
     }
     return (
-      <ArticleActivities
-        article={article}
-        renderRefreshControl={this.renderRefreshControl}
-        uiTheme={uiTheme}
-      />
+      <>
+        <ArticleActivities
+          article={article}
+          renderRefreshControl={this.renderRefreshControl}
+          uiTheme={uiTheme}
+        />
+        <ArticleAddComment
+          uiTheme={this.uiTheme}
+        />
+      </>
     );
   };
 

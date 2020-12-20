@@ -13,6 +13,7 @@ import type {CustomError} from '../../flow/Error';
 export type ArticleState = {
   activityPage: Array<ActivityItem> | null,
   article: Article,
+  articleCommentDraft: Comment | null,
   articleDraft: Article,
   articlesList: ArticlesList,
   error: CustomError,
@@ -25,6 +26,7 @@ export type ArticleState = {
 export const articleInitialState: ArticleState = {
   activityPage: null,
   article: null,
+  articleCommentDraft: null,
   articlesList: [],
   articleDraft: null,
   error: null,
@@ -58,7 +60,10 @@ const {reducer, actions} = createSlice({
     },
     setPrevArticle(state: ArticleState, action: PayloadAction<ArticleState>) {
       state.prevArticleState = action.payload;
-    }
+    },
+    setArticleCommentDraft(state: ArticleState, action: PayloadAction<Article>) {
+      state.articleCommentDraft = action.payload;
+    },
   },
   extraReducers: {
     [ON_NAVIGATE_BACK]: (
@@ -74,5 +79,15 @@ const {reducer, actions} = createSlice({
 });
 
 
-export const {setLoading, setError, setArticle, setActivityPage, setProcessing, setArticleDraft, setPrevArticle} = actions;
+export const {
+  setLoading,
+  setError,
+  setArticle,
+  setActivityPage,
+  setProcessing,
+  setArticleDraft,
+  setPrevArticle,
+  setArticleCommentDraft
+} = actions;
+
 export default reducer;

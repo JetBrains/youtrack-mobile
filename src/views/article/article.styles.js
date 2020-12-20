@@ -4,8 +4,11 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {summaryTitle} from '../../components/common-styles/issue';
 import {UNIT} from '../../components/variables/variables';
-import {mainText} from '../../components/common-styles/typography';
+import {MAIN_FONT_SIZE, mainText} from '../../components/common-styles/typography';
 import {elevation1} from '../../components/common-styles/shadow';
+
+const INPUT_BORDER_RADIUS = UNIT;
+const MIN_INPUT_SIZE = UNIT * 4;
 
 export default EStyleSheet.create({
   container: {
@@ -68,5 +71,48 @@ export default EStyleSheet.create({
   },
   subArticleItemText: {
     ...mainText
+  },
+
+  commentContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: UNIT,
+    paddingBottom: UNIT / 2,
+    borderTopWidth: 1,
+    borderColor: '$disabled',
+  },
+  commentInputContainer: {
+    flexDirection: 'row',
+    flex: 1,
+    padding: UNIT / 4,
+    marginHorizontal: UNIT,
+    borderRadius: INPUT_BORDER_RADIUS,
+    borderWidth: 1,
+    borderColor: '$disabled'
+  },
+  commentInput: {
+    flex: 1,
+    minHeight: MIN_INPUT_SIZE,
+    padding: 0,
+    paddingHorizontal: UNIT,
+    backgroundColor: '$background',
+    ...mainText,
+    color: '$text'
+  },
+  commentSendButton: {
+    width: MIN_INPUT_SIZE,
+    height: MIN_INPUT_SIZE,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: INPUT_BORDER_RADIUS - 1,
+    backgroundColor: '$link'
+  },
+  commentSendButtonDisabled: {
+    backgroundColor: '$textSecondary',
+  },
+  commentSendButtonText: {
+    fontSize: MAIN_FONT_SIZE,
+    color: '$link'
   },
 });

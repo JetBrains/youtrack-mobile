@@ -2,6 +2,7 @@
 
 import {ANALYTICS_ARTICLE_PAGE} from '../../components/analytics/analytics-ids';
 import {Clipboard, Share} from 'react-native';
+import {getApi} from '../../components/api/api__instance';
 import {isIOSPlatform, until} from '../../util/util';
 import {logEvent} from '../../components/log/log-helper';
 import {notify} from '../../components/notification/notification';
@@ -12,7 +13,8 @@ import {
   setActivityPage,
   setProcessing,
   setArticleDraft,
-  setPrevArticle
+  setPrevArticle,
+  setArticleCommentDraft
 } from './article-reducers';
 import {showActions} from '../../components/action-sheet/action-sheet';
 
@@ -21,6 +23,7 @@ import type Api from '../../components/api/api';
 import type {AppState} from '../../reducers';
 import type {Article} from '../../flow/Article';
 import type {ArticleState} from './article-reducers';
+import type {IssueComment} from '../../flow/CustomFields';
 
 type ApiGetter = () => Api;
 
@@ -208,6 +211,70 @@ const setPreviousArticle = () => {
   };
 };
 
+const createArticleCommentDraft = (commentDraftText: string) => {
+  return async (dispatch: (any) => any, getState: () => AppState) => {
+    const api: Api = getApi();
+    const {article}: Article = getState().article;
+
+    const [error, commentDraft] = await until(api.articles.createCommentDraft(article.id, commentDraftText));
+    if (error) {
+      notify('Failed to create a comment draft', error);
+      return null;
+    } else {
+      await dispatch(setArticleCommentDraft(commentDraft));
+      return commentDraft;
+    }
+  };
+};
+
+const getArticleCommentDraft = () => {
+  return async (dispatch: (any) => any, getState: () => AppState) => {
+    const api: Api = getApi();
+    const {article}: Article = getState().article;
+
+    const [error, articleDraftCommentResponse] = await until(api.articles.getCommentDraft(article.id));
+    if (!error && articleDraftCommentResponse.draftComment) {
+      dispatch(setArticleCommentDraft(articleDraftCommentResponse.draftComment));
+    }
+  };
+};
+
+const updateArticleCommentDraft = (commentDraftText: string) => {
+  return async (dispatch: (any) => any, getState: () => AppState) => {
+    const api: Api = getApi();
+    const {article}: Article = getState().article;
+    const articleCommentDraft: ?Comment = getState().article.articleCommentDraft;
+
+    if (!articleCommentDraft) {
+      await dispatch(createArticleCommentDraft(commentDraftText));
+    }
+
+    const [error, updatedCommentDraft] = await until(api.articles.updateCommentDraft(article.id, commentDraftText));
+    if (error) {
+      notify('Failed to update a comment draft', error);
+    } else {
+      dispatch(setArticleCommentDraft(updatedCommentDraft));
+    }
+  };
+};
+
+const submitArticleCommentDraft = (commentDraftText: string) => {
+  return async (dispatch: (any) => any, getState: () => AppState) => {
+    const api: Api = getApi();
+    const {article}: Article = getState().article;
+    const articleCommentDraft: IssueComment = getState().article.articleCommentDraft;
+
+    await dispatch(updateArticleCommentDraft(commentDraftText));
+    const [error] = await until(api.articles.submitCommentDraft(article.id, articleCommentDraft.id));
+    if (error) {
+      notify('Failed to update a comment draft', error);
+    } else {
+      logEvent({message: 'Article comment added', analyticsId: ANALYTICS_ARTICLE_PAGE});
+      dispatch(setArticleCommentDraft(null));
+    }
+  };
+};
+
 export {
   loadArticle,
   loadActivitiesPage,
@@ -218,5 +285,9 @@ export {
   updateArticleDraft,
   createArticleDraft,
   publishArticleDraft,
-  setDraft
+  setDraft,
+
+  getArticleCommentDraft,
+  updateArticleCommentDraft,
+  submitArticleCommentDraft
 };

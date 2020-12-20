@@ -73,4 +73,4 @@ const ArticleActivities = (props: Props) => {
   );
 };
 
-export default ArticleActivities;
+export default React.memo<Props>(ArticleActivities);
