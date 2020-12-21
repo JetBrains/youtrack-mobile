@@ -165,7 +165,7 @@ export class KnowledgeBase extends Component<Props, State> {
 
   renderRefreshControl = () => {
     return <RefreshControl
-      refreshing={this.props.isLoading}
+      refreshing={false}
       tintColor={this.uiTheme.colors.$link}
       onRefresh={this.loadArticlesList}
     />;
@@ -218,9 +218,9 @@ export class KnowledgeBase extends Component<Props, State> {
 
                 {error && <ErrorMessage testID="articleError" error={error}/>}
 
-                {isLoading && !articlesList && !error && <SkeletonIssues/>}
+                {!error && !articlesList && isLoading && <SkeletonIssues/>}
 
-                {articlesList && !error && this.renderArticlesList(articlesList)}
+                {!error && articlesList && this.renderArticlesList(articlesList)}
 
               </View>
             </View>

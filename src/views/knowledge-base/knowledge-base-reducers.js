@@ -13,7 +13,7 @@ export type KnowledgeBaseState = {
 };
 
 const articlesInitialState: KnowledgeBaseState = {
-  articlesList: [],
+  articlesList: null,
   isLoading: false,
   error: null
 };
