@@ -1,3 +1,5 @@
+import type {Article} from './Article';
+
 export type User = {
   $type: string,
   avatarUrl?: string,
@@ -9,7 +11,7 @@ export type User = {
   id: string,
   issueRelatedGroup?: IssueRelatedGroup,
   login?: string,
-  profiles?: Array<UserProfile | UserGeneralProfile | UserAppearanceProfile>,
+  profiles?: UserProfile,
   ringId?: string,
   endUserAgreementConsent?: {
     accepted: boolean,
@@ -33,6 +35,7 @@ export type FeatureFlags = {
 export type UserProfile = {
   $type: string,
   appearance?: UserAppearanceProfile,
+  articles?: UserArticlesProfile,
   general?: UserGeneralProfile,
   issuesList?: Object,
   notifications?: Object,
@@ -51,6 +54,13 @@ export type UserAppearanceProfile = {
   showSimilarIssues?: boolean,
   uiTheme?: string,
   useAbsoluteDates?: boolean
+}
+
+export type UserArticlesProfile = {
+  $type: string,
+  lastVisitedArticle?: Article,
+  showComment?: boolean,
+  showHistory?: boolean
 }
 
 export type UserGeneralProfile = {

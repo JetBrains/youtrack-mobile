@@ -7,8 +7,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import * as articleActions from './arcticle-actions';
-import ArticleActivities from './article__activities';
-import ArticleAddComment from './article__add-comment';
+import ArticleActivities from './article__activity';
 import ArticleDetails from './article__details';
 import ArticleDetailsEdit from './article__details-edit';
 import CreateUpdateInfo from '../../components/issue-tabbed/issue-tabbed__created-updated';
@@ -137,16 +136,11 @@ class Article extends IssueTabbed<Props, State> {
       return this.renderError(error);
     }
     return (
-      <>
-        <ArticleActivities
-          article={article}
-          renderRefreshControl={this.renderRefreshControl}
-          uiTheme={uiTheme}
-        />
-        <ArticleAddComment
-          uiTheme={this.uiTheme}
-        />
-      </>
+      <ArticleActivities
+        article={article}
+        renderRefreshControl={this.renderRefreshControl}
+        uiTheme={uiTheme}
+      />
     );
   };
 

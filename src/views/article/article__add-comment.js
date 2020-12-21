@@ -13,16 +13,17 @@ import {updateArticleCommentDraft, getArticleCommentDraft, submitArticleCommentD
 
 import styles from './article.styles';
 
-import type {UITheme} from '../../flow/Theme';
 import type {AppState} from '../../reducers';
+import type {UITheme} from '../../flow/Theme';
 
 type Props = {
+  onAdd: () => void,
   uiTheme: UITheme
 };
 
 
 const ArticleAddComment = (props: Props) => {
-  const {uiTheme} = props;
+  const {uiTheme, onAdd} = props;
 
   const commentDraft: ?Comment = useSelector((state: AppState) => state.article.articleCommentDraft);
   const isLoading: boolean = useSelector((state: AppState) => state.article.isLoading);
@@ -35,6 +36,7 @@ const ArticleAddComment = (props: Props) => {
     if (commentText) {
       updateSubmitting(true);
       await dispatch(submitArticleCommentDraft(commentText));
+      onAdd();
       updateSubmitting(false);
     } else {
       notify('Can\'t create an empty comment');
@@ -59,6 +61,7 @@ const ArticleAddComment = (props: Props) => {
     dispatch(updateArticleCommentDraft(commentText))
   ), 500);
 
+  const isDisabled: boolean = !commentText || isLoading || isSubmitting;
   return (
     <View style={styles.commentContainer}>
       <View
@@ -85,9 +88,9 @@ const ArticleAddComment = (props: Props) => {
           <TouchableOpacity
             style={[
               styles.commentSendButton,
-              isSubmitting ? styles.commentSendButtonDisabled : null
+              isDisabled ? styles.commentSendButtonDisabled : null
             ]}
-            disabled={!commentText || isLoading || isSubmitting}
+            disabled={isDisabled}
             onPress={submitDraftComment}>
             {!isSubmitting && (
               <IconArrowUp
