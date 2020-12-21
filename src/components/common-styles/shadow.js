@@ -19,6 +19,18 @@ export const elevation1 = {
   })
 };
 
+export const elevationBottom = {
+  backgroundColor: '$background',
+  elevation: 5,
+  shadowColor: '$text',
+  shadowOpacity: 0.2,
+  shadowRadius: 0.5,
+  shadowOffset: {
+    height: -0.5,
+    width: 0
+  }
+};
+
 export const elevationTop = {
   borderTopWidth: 0.6,
   borderColor: '$separator'

@@ -1,25 +1,16 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../../components/variables/variables';
 import {mainText, secondaryText} from '../../components/common-styles/typography';
+import {elevationBottom} from '../../components/common-styles/shadow';
 
 const INPUT_BORDER_RADIUS = UNIT;
 const MIN_INPUT_SIZE = UNIT * 4;
 
 export default EStyleSheet.create({
   container: {
-    paddingTop: UNIT,
-    paddingBottom: UNIT,
-    paddingLeft: UNIT * 3,
-    paddingRight: UNIT * 3,
-    backgroundColor: '$background',
-    elevation: 5,
-    shadowColor: '$text',
-    shadowOpacity: 0.2,
-    shadowRadius: 0.5,
-    shadowOffset: {
-      height: -0.5,
-      width: 0
-    }
+    paddingVertical: UNIT,
+    paddingHorizontal: UNIT * 3,
+    ...elevationBottom
   },
 
   suggestionsContainer: {

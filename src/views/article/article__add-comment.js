@@ -60,45 +60,46 @@ const ArticleAddComment = (props: Props) => {
   ), 500);
 
   return (
-    <View
-      style={styles.commentContainer}
-    >
-      <View style={styles.commentInputContainer}>
+    <View style={styles.commentContainer}>
+      <View
+        style={styles.commentContent}
+      >
+        <View style={styles.commentInputContainer}>
 
-        <MultilineInput
-          style={styles.commentInput}
-          autoFocus={false}
-          placeholder="Write a comment, @mention people"
-          value={commentText}
-          editable={!isLoading && !isSubmitting}
-          underlineColorAndroid="transparent"
-          keyboardAppearance={uiTheme.name}
-          placeholderTextColor={uiTheme.colors.$icon}
-          autoCapitalize="sentences"
-          onChangeText={(text) => {
-            updateCommentText(text);
-            debouncedOnChange(text);
-          }}
-        />
+          <MultilineInput
+            style={styles.commentInput}
+            autoFocus={false}
+            placeholder="Write a comment, @mention people"
+            value={commentText}
+            editable={!isLoading && !isSubmitting}
+            underlineColorAndroid="transparent"
+            keyboardAppearance={uiTheme.name}
+            placeholderTextColor={uiTheme.colors.$icon}
+            autoCapitalize="sentences"
+            onChangeText={(text) => {
+              updateCommentText(text);
+              debouncedOnChange(text);
+            }}
+          />
 
-        <TouchableOpacity
-          style={[
-            styles.commentSendButton,
-            isSubmitting ? styles.commentSendButtonDisabled : null
-          ]}
-          disabled={!commentText || isLoading || isSubmitting}
-          onPress={submitDraftComment}>
-          {!isSubmitting && (
-            <IconArrowUp
-              size={22}
-              color={uiTheme.colors.$textButton}
-            />
-          )}
-          {isSubmitting && <ActivityIndicator color={uiTheme.colors.$background}/>}
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.commentSendButton,
+              isSubmitting ? styles.commentSendButtonDisabled : null
+            ]}
+            disabled={!commentText || isLoading || isSubmitting}
+            onPress={submitDraftComment}>
+            {!isSubmitting && (
+              <IconArrowUp
+                size={22}
+                color={uiTheme.colors.$textButton}
+              />
+            )}
+            {isSubmitting && <ActivityIndicator color={uiTheme.colors.$background}/>}
+          </TouchableOpacity>
+
+        </View>
       </View>
-
-
     </View>
   );
 };

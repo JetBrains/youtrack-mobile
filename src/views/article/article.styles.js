@@ -5,7 +5,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {summaryTitle} from '../../components/common-styles/issue';
 import {UNIT} from '../../components/variables/variables';
 import {MAIN_FONT_SIZE, mainText} from '../../components/common-styles/typography';
-import {elevation1} from '../../components/common-styles/shadow';
+import {elevation1, elevationBottom} from '../../components/common-styles/shadow';
 
 const INPUT_BORDER_RADIUS = UNIT;
 const MIN_INPUT_SIZE = UNIT * 4;
@@ -74,13 +74,14 @@ export default EStyleSheet.create({
   },
 
   commentContainer: {
+    paddingVertical: UNIT,
+    paddingHorizontal: UNIT * 2,
+    ...elevationBottom
+  },
+  commentContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: UNIT,
-    paddingBottom: UNIT / 2,
-    borderTopWidth: 1,
-    borderColor: '$disabled',
+    justifyContent: 'center'
   },
   commentInputContainer: {
     flexDirection: 'row',
