@@ -131,13 +131,14 @@ class Article extends IssueTabbed<Props, State> {
   };
 
   renderActivity = (uiTheme: UITheme) => {
-    const {article, error} = this.props;
+    const {article, error, issuePermissions} = this.props;
     if (error) {
       return this.renderError(error);
     }
     return (
       <ArticleActivities
         article={article}
+        issuePermissions={issuePermissions}
         renderRefreshControl={this.renderRefreshControl}
         uiTheme={uiTheme}
       />

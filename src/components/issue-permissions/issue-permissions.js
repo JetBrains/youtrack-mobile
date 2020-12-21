@@ -26,7 +26,13 @@ export const CAN_DELETE_NOT_OWN_COMMENT = 'JetBrains.YouTrack.DELETE_NOT_OWN_COM
 export const CAN_LINK_ISSUE = 'JetBrains.YouTrack.LINK_ISSUE';
 export const CAN_UPDATE_WATCH = 'JetBrains.YouTrack.UPDATE_WATCH_FOLDER';
 
-export const CAN_UPDATE_ARTICLE = 'JetBrains.YouTrack.DELETE_ARTICLE';
+export const CREATE_ARTICLE = 'JetBrains.YouTrack.CREATE_ARTICLE';
+export const UPDATE_ARTICLE = 'JetBrains.YouTrack.UPDATE_ARTICLE';
+export const DELETE_ARTICLE = 'JetBrains.YouTrack.DELETE_ARTICLE';
+export const READ_ARTICLE_COMMENT = 'JetBrains.YouTrack.READ_ARTICLE_COMMENT';
+export const CREATE_ARTICLE_COMMENT = 'JetBrains.YouTrack.CREATE_ARTICLE_COMMENT';
+export const UPDATE_ARTICLE_COMMENT = 'JetBrains.YouTrack.UPDATE_ARTICLE_COMMENT';
+export const DELETE_ARTICLE_COMMENT = 'JetBrains.YouTrack.DELETE_ARTICLE_COMMENT';
 
 export default class IssuePermissions {
   permissionsStore: PermissionsStore;
@@ -51,8 +57,8 @@ export default class IssuePermissions {
     return this.getRingId(entity.project);
   }
 
-  hasPermissionFor = (issue: AnyIssue, permissionName: string): boolean => {
-    const projectRingId = IssuePermissions.getIssueProjectRingId(issue);
+  hasPermissionFor = (entity: AnyIssue | Article, permissionName: string): boolean => {
+    const projectRingId = IssuePermissions.getIssueProjectRingId(entity);
     return !!projectRingId && this.permissionsStore.has(permissionName, projectRingId);
   };
 
@@ -128,16 +134,6 @@ export default class IssuePermissions {
     return this.hasPermissionFor(issue, CAN_UPDATE_NOT_OWN_COMMENT);
   };
 
-  canUpdateArticle = (article: Article): boolean => {
-    if (!article) {
-      return false;
-    }
-    if (this.isCurrentUser(article.reporter)) {
-      return true;
-    }
-    return this.hasPermissionFor(article, CAN_UPDATE_ARTICLE);
-  };
-
   canDeleteNotOwnComment = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_DELETE_NOT_OWN_COMMENT);
 
   canDeleteComment = (issue: AnyIssue, comment: IssueComment): boolean => {
@@ -168,12 +164,12 @@ export default class IssuePermissions {
     !!issue && !!this.currentUser && !this.isCurrentUser(issue?.reporter) && !this.currentUser.guest
   );
 
-  canTag = (issue: AnyIssue):boolean => (
+  canTag = (issue: AnyIssue): boolean => (
     this.hasPermissionFor(issue, PRIVATE_UPDATE_ISSUE) ||
     this.hasPermissionFor(issue, CAN_UPDATE_WATCH)
-  )
+  );
 
-  canStar = ():boolean => !this.currentUser?.guest
+  canStar = (): boolean => !this.currentUser?.guest;
 
   canRunCommand = (issue: AnyIssue): boolean => {
     const has = (...args) => this.permissionsStore.has(...args);
@@ -192,4 +188,19 @@ export default class IssuePermissions {
       );
     }
   };
+
+  /*
+   Articles
+   */
+  canUpdateArticle = (article: Article): boolean => {
+    if (!article) {
+      return false;
+    }
+    if (this.isCurrentUser(article.reporter)) {
+      return true;
+    }
+    return this.hasPermissionFor(article, UPDATE_ARTICLE);
+  };
+
+  articleCanCommentOn = (article: Article): boolean => this.hasPermissionFor(article, CREATE_ARTICLE_COMMENT);
 }

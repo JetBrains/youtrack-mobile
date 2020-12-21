@@ -16,16 +16,18 @@ import type {ActivityItem} from '../../flow/Activity';
 import type {Article} from '../../flow/Article';
 import type {UITheme} from '../../flow/Theme';
 import type {User, UserAppearanceProfile} from '../../flow/User';
+import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 
 type Props = {
   article: Article,
+  issuePermissions: ?IssuePermissions,
   renderRefreshControl: (Function) => React$Element<any>,
   uiTheme: UITheme
 };
 
 
 const ArticleActivities = (props: Props) => {
-  const {article, uiTheme, renderRefreshControl} = props;
+  const {article, uiTheme, renderRefreshControl, issuePermissions} = props;
 
   const dispatch: Function = useDispatch();
 
@@ -39,6 +41,8 @@ const ArticleActivities = (props: Props) => {
       dispatch(loadActivitiesPage(reset));
     }
   };
+
+  const canComment = (): boolean => !!issuePermissions && issuePermissions.articleCanCommentOn(article);
 
   useEffect(loadActivities, []);
 
@@ -64,10 +68,13 @@ const ArticleActivities = (props: Props) => {
           user={user}
         />
       </ScrollView>
-      <ArticleAddComment
-        onAdd={() => loadActivities(false)}
-        uiTheme={uiTheme}
-      />
+      {canComment() && (
+        <ArticleAddComment
+          issuePermissions={issuePermissions}
+          onAdd={() => loadActivities(false)}
+          uiTheme={uiTheme}
+        />
+      )}
     </>
   );
 };
