@@ -76,7 +76,7 @@ const ArticleDetails = (props: Props) => {
         >
           <Text style={styles.subArticlesTitle}>Sub-articles</Text>
           <View style={styles.subArticlesContent}>
-            <Text>{`${subArticles.length} ${subArticles.length > 1 ? 'articles' : 'article'}`}</Text>
+            <Text style={styles.subArticleItemText}>{`${subArticles.length} ${subArticles.length > 1 ? 'articles' : 'article'}`}</Text>
             <IconAngleRight size={18} color={uiTheme.colors.$text} style={styles.subArticlesIcon}/>
           </View>
         </TouchableOpacity>

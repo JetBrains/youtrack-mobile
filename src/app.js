@@ -134,6 +134,7 @@ class YouTrackMobile extends Component<void, void> {
     Router.registerRoute({name: routeMap.Issue, component: Issue});
     Router.registerRoute({name: routeMap.KnowledgeBase, component: KnowledgeBase, type: 'reset'});
     Router.registerRoute({name: routeMap.Page, component: Page});
+    Router.registerRoute({name: routeMap.PageModal, component: Page, modal: true});
     Router.registerRoute({name: routeMap.Settings, component: Settings, type: 'reset'});
     Router.registerRoute({name: routeMap.WikiPage, component: WikiPage, modal: true});
 

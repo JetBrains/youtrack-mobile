@@ -190,7 +190,9 @@ const markdownStyles = (uiTheme: UITheme) => {
     },
 
     // Text Output
-    text: {},
+    text: {
+      color: uiThemeColors.$text
+    },
     textgroup: {},
     paragraph: {
       marginTop: UNIT,

@@ -4,11 +4,12 @@ import qs from 'qs';
 
 import ApiBase from './api__base';
 import issueActivityPageFields from './api__activities-issue-fields';
+import issueFields from './api__issue-fields';
 import {activityArticleCategory} from '../activity/activity__category';
 
 import type {Article} from '../../flow/Article';
 import type {Activity} from '../../flow/Activity';
-import issueFields from './api__issue-fields';
+import type {IssueComment} from '../../flow/CustomFields';
 
 export default class ArticlesAPI extends ApiBase {
   articleFields = 'fields=hasStar,content,created,updated,updatedBy(@permittedUsers),mentionedUsers(@permittedUsers),mentionedArticles(id,idReadable,reporter(@permittedUsers),summary,project(@project),parentArticle(idReadable),ordinal,visibility(@visibility),hasUnpublishedChanges),mentionedIssues(id,reporter(@permittedUsers),resolved,updated,created,fields(value(id,name,localizedName,color(@color),minutes,presentation,text,ringId,login,fullName,avatarUrl,allUsersGroup,icon),id,$type,hasStateMachine,isUpdatable,projectCustomField($type,id,field(id,name,aliases,localizedName,fieldType(valueType,isMultiValue)),bundle(id),canBeEmpty,emptyFieldText,isSpentTime)),project(@project),visibility(@visibility),tags(id,name,query,issuesUrl,color(@color),isDeletable,isShareable,isUpdatable,isUsable,owner(@permittedUsers),readSharingSettings(@updateSharingSettings),tagSharingSettings(@updateSharingSettings),updateSharingSettings(@updateSharingSettings)),watchers(hasStar),idReadable,summary),attachments(id,name,author(ringId),mimeType,url,size,visibility(@visibility),imageDimensions(width,height)),id,idReadable,reporter(@permittedUsers),summary,project(@project),parentArticle(idReadable),ordinal,visibility(@visibility),hasUnpublishedChanges;@visibility:$type,implicitPermittedUsers(@permittedUsers),permittedGroups(@permittedGroups),permittedUsers(@permittedUsers);@updateSharingSettings:permittedGroups(@permittedGroups),permittedUsers(@permittedUsers);@project:id,ringId,name,shortName,iconUrl,template,pinned,archived,isDemo;@permittedUsers:id,ringId,name,login,fullName,avatarUrl;@permittedGroups:id,name,ringId,allUsersGroup,icon;@color:id,background,foreground';
@@ -126,19 +127,31 @@ export default class ArticlesAPI extends ApiBase {
     );
   }
 
-  async createCommentDraft(articleId: string, commentText: string): Promise<Comment> {
+  async createCommentDraft(articleId: string, commentText: string): Promise<IssueComment> {
     return this.doUpdateCommentDraft(articleId, commentText, 'PUT');
   }
 
-  async updateCommentDraft(articleId: string, commentText: string): Promise<Comment> {
+  async updateCommentDraft(articleId: string, commentText: string): Promise<IssueComment> {
     return this.doUpdateCommentDraft(articleId, commentText, 'POST');
   }
 
-  async submitCommentDraft(articleId: string, articleCommentDraftId: string): Promise<Comment> {
+  async submitCommentDraft(articleId: string, articleCommentDraftId: string): Promise<IssueComment> {
     return this.makeAuthorizedRequest(
       `${this.youTrackApiUrl}/articles/${articleId}/comments?draftId=${articleCommentDraftId}&${this.articleCommentFieldsQuery}`,
       'POST',
       {}
+    );
+  }
+
+  async updateComment(articleId: string, comment: IssueComment): Promise<IssueComment> {
+    return this.makeAuthorizedRequest(
+      `${this.youTrackApiUrl}/articles/${articleId}/comments/${comment.id}?${this.articleCommentFieldsQuery}`,
+      'POST',
+      {
+        text: comment.text,
+        usesMarkdown: true,
+        visibility: comment.visibility || null
+      }
     );
   }
 

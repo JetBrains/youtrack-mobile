@@ -2,18 +2,23 @@
 
 import React, {PureComponent} from 'react';
 import {TextInput} from 'react-native';
-import {UNIT} from '../variables/variables';
-import {isIOSPlatform} from '../../util/util';
 
+import {isIOSPlatform} from '../../util/util';
+import {UNIT} from '../variables/variables';
+
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+
+const iOSPlatform: boolean = isIOSPlatform();
 const MAX_DEFAULT_HEIGHT = 200;
 const MIN_DEFAULT_HEIGHT = UNIT * 4;
 const DEFAULT_FONT_SIZE = 16;
 
 type Props = {
+  adaptive?: boolean,
   maxInputHeight: number,
   minInputHeight: number,
   autoFocus?: boolean,
-  style: any
+  style?: ViewStyleProp
 };
 
 type State = {
@@ -22,9 +27,10 @@ type State = {
 
 export default class MultilineInput extends PureComponent<Props, State> {
   static defaultProps = {
+    adaptive: true,
     maxInputHeight: MAX_DEFAULT_HEIGHT,
     minInputHeight: MIN_DEFAULT_HEIGHT,
-    returnKeyType: isIOSPlatform() ? 'default' : 'none'
+    returnKeyType: iOSPlatform ? 'default' : 'none'
   };
 
   input: TextInput;
@@ -47,7 +53,10 @@ export default class MultilineInput extends PureComponent<Props, State> {
   }
 
   onContentSizeChange = (event: Object) => {
-    const {maxInputHeight, minInputHeight} = this.props;
+    const {maxInputHeight, minInputHeight, adaptive} = this.props;
+    if (!adaptive) {
+      return;
+    }
 
     let newHeight = event.nativeEvent.contentSize.height + UNIT;
 
@@ -66,7 +75,7 @@ export default class MultilineInput extends PureComponent<Props, State> {
 
   render() {
     // eslint-disable-next-line no-unused-vars
-    const {style, maxInputHeight, minInputHeight, ...rest} = this.props;
+    const {style, maxInputHeight, minInputHeight, adaptive, ...rest} = this.props;
 
     return (
       <TextInput
@@ -77,7 +86,7 @@ export default class MultilineInput extends PureComponent<Props, State> {
         style={[
           {fontSize: DEFAULT_FONT_SIZE},
           style,
-          {height: this.state.inputHeight}
+          adaptive ? {height: this.state.inputHeight} : null
         ]}
       />
     );

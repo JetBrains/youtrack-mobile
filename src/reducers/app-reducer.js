@@ -1,7 +1,9 @@
 /* @flow */
+
 import * as types from '../actions/action-types';
-import {createReducer} from 'redux-create-reducer';
 import IssuePermissions from '../components/issue-permissions/issue-permissions';
+import {createReducer} from 'redux-create-reducer';
+import {issuePermissionsNull} from '../components/issue-permissions/issue-permissions-helper';
 
 import type Auth from '../components/auth/auth';
 import type {PermissionsStore} from '../components/permissions-store/permissions-store';
@@ -21,7 +23,7 @@ export type RootState = {
   features: Array<string>,
   workTimeSettings: ?WorkTimeSettings,
   user?: User,
-  issuePermissions: ?IssuePermissions
+  issuePermissions: IssuePermissions
 };
 
 const initialState: RootState = {
@@ -35,7 +37,7 @@ const initialState: RootState = {
   features: [],
   workTimeSettings: {},
   user: null,
-  issuePermissions: null
+  issuePermissions: issuePermissionsNull
 };
 
 export default createReducer(initialState, {

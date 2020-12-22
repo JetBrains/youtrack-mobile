@@ -4,11 +4,13 @@ import IssuePermissions, {
   UPDATE_ISSUE,
   CAN_UPDATE_COMMENT,
   PRIVATE_UPDATE_ISSUE,
-  CAN_UPDATE_NOT_OWN_COMMENT
+  CAN_UPDATE_NOT_OWN_COMMENT,
+  UPDATE_ARTICLE_COMMENT
 } from './issue-permissions';
 import sinon from 'sinon';
 
 import mocks from '../../../test/mocks';
+import {issuePermissionsNull} from './issue-permissions-helper';
 
 describe('IssuePermissions', function () {
   const USER_ID = 'some-user-id';
@@ -60,6 +62,11 @@ describe('IssuePermissions', function () {
 
   it('should init', () => {
     issuePermissions.should.be.defined;
+  });
+
+  it('should create dummy `IssuePermissions` instance', () => {
+    expect(issuePermissionsNull).toBeTruthy();
+    expect(() => issuePermissionsNull.hasPermissionFor()).not.toThrow();
   });
 
 
@@ -296,6 +303,40 @@ describe('IssuePermissions', function () {
 
       expect(issuePermissions.canVote(issueMock)).toEqual(true);
     });
+  });
+
+
+  describe('articleCanCommentOn', () => {
+    it('should allow to update own comment if has update permission', () => {
+      mockPermissionsHas(UPDATE_ARTICLE_COMMENT, true);
+
+      expect(
+        issuePermissions.articleUpdateComment(issueMock, commentMock)
+      ).toEqual(true);
+    });
+
+    it('should not allow to update not own comment if don`t have UPDATE-NOT-OWN permission', () => {
+      mockPermissionsHas(UPDATE_ARTICLE_COMMENT, true);
+      commentMock.author = {id: 'foo'};
+
+      expect(
+        issuePermissions.articleUpdateComment(issueMock, commentMock)
+      ).toEqual(false);
+    });
+
+    it('should allow to update not own comment if user has UPDATE-NOT-OWN permission', () => {
+      mockPermissionsHas(UPDATE_ARTICLE_COMMENT, false);
+      mockPermissionsHas(CAN_UPDATE_NOT_OWN_COMMENT, true);
+      commentMock.author = {id: 'foo'};
+
+      expect(
+        issuePermissions.articleUpdateComment(issueMock, commentMock)
+      ).toEqual(true);
+    });
+
+    function mockPermissionsHas(permission, value) {
+      permissionsMock.has.withArgs(permission).returns(value);
+    }
   });
 
 

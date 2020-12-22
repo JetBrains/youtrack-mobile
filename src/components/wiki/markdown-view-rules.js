@@ -135,7 +135,7 @@ function getMarkdownRules(
       const text: string = node.content;
 
       if (mentions && mentions.articles.concat(mentions.issues).length > 0) {
-        return renderArticleMentions(node, mentions, uiTheme);
+        return renderArticleMentions(node, mentions, uiTheme, style);
       }
 
       if (issueId.test(text)) {
@@ -173,7 +173,8 @@ function createMentionRegExp(mention: string) {
 function renderArticleMentions(
   node: MarkdownNode,
   mentions: Mentions,
-  uiTheme: UITheme
+  uiTheme: UITheme,
+  style: Object
 ) {
   const PLAIN_TEXT_TYPE: string = '-=TEXT=-';
   const textData: Array<TextData> = [];
@@ -232,7 +233,7 @@ function renderArticleMentions(
       if (td.type !== PLAIN_TEXT_TYPE) {
         composed.push(
           <Text key={guid()}>
-            {textTokensToJoin.length > 0 && <Text>{`${textTokensToJoin.join(' ')} `}</Text>}
+            {textTokensToJoin.length > 0 && <Text style={style.text}>{`${textTokensToJoin.join(' ')} `}</Text>}
             <Text
               style={{color: uiTheme.colors.$link}}
               onPress={
@@ -250,7 +251,11 @@ function renderArticleMentions(
 
     if (textTokensToJoin.length > 0) {
       composed.push(
-        <Text key={guid()}>{textTokensToJoin.join(' ')}</Text>
+        <Text
+          style={style.text}
+          key={guid()}
+        >{textTokensToJoin.join(' ')}
+        </Text>
       );
     }
 

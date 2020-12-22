@@ -3,15 +3,14 @@ import {UNIT} from '../variables/variables';
 import {headerTitle} from '../common-styles/typography';
 
 const minButtonWidth = UNIT * 5;
+export const headerMinHeight = UNIT * 8;
 
 export default EStyleSheet.create({
   header: {
-    paddingTop: 12,
-    paddingBottom: 12,
-    paddingLeft: UNIT,
-    paddingRight: UNIT,
+    paddingVertical: UNIT * 1.5,
+    paddingHorizontal: UNIT,
     flex: 0,
-    minHeight: 56,
+    minHeight: headerMinHeight,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

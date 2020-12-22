@@ -124,14 +124,18 @@ export default class IssuePermissions {
 
   canCommentOn = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_CREATE_COMMENT);
 
-  canUpdateComment = (issue: AnyIssue, comment: IssueComment): boolean => {
-    if (!issue) {
+  canUpdateComment = (
+    entity: AnyIssue | Article,
+    comment: IssueComment,
+    canUpdateCommentPermissionName: string = CAN_UPDATE_COMMENT
+  ): boolean => {
+    if (!entity) {
       return false;
     }
     if (this.isCurrentUser(comment.author)) {
-      return this.hasPermissionFor(issue, CAN_UPDATE_COMMENT);
+      return this.hasPermissionFor(entity, canUpdateCommentPermissionName);
     }
-    return this.hasPermissionFor(issue, CAN_UPDATE_NOT_OWN_COMMENT);
+    return this.hasPermissionFor(entity, CAN_UPDATE_NOT_OWN_COMMENT);
   };
 
   canDeleteNotOwnComment = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_DELETE_NOT_OWN_COMMENT);
@@ -203,4 +207,8 @@ export default class IssuePermissions {
   };
 
   articleCanCommentOn = (article: Article): boolean => this.hasPermissionFor(article, CREATE_ARTICLE_COMMENT);
+
+  articleUpdateComment = (article: Article, comment: IssueComment): boolean => {
+    return this.canUpdateComment(article, comment, UPDATE_ARTICLE_COMMENT);
+  };
 }

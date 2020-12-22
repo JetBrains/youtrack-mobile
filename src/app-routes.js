@@ -12,6 +12,7 @@ export const routeMap = {
   Issues: 'Issues',
   LogIn: 'LogIn',
   Page: 'Page',
+  PageModal: 'PageModal',
   Settings: 'Settings',
   Image: 'Image',
   Issue: 'Issue',

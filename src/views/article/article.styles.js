@@ -2,10 +2,11 @@ import {Platform} from 'react-native';
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 
+import {elevation1, elevationBottom} from '../../components/common-styles/shadow';
+import {headerMinHeight} from '../../components/header/header.styles';
+import {MAIN_FONT_SIZE, mainText} from '../../components/common-styles/typography';
 import {summaryTitle} from '../../components/common-styles/issue';
 import {UNIT} from '../../components/variables/variables';
-import {MAIN_FONT_SIZE, mainText} from '../../components/common-styles/typography';
-import {elevation1, elevationBottom} from '../../components/common-styles/shadow';
 
 const INPUT_BORDER_RADIUS = UNIT;
 const MIN_INPUT_SIZE = UNIT * 4;
@@ -24,7 +25,8 @@ export default EStyleSheet.create({
     paddingLeft: UNIT
   },
   description: {
-    ...mainText
+    ...mainText,
+    color: '$text'
   },
   summaryEdit: {
     ...Platform.select({
@@ -70,7 +72,8 @@ export default EStyleSheet.create({
     paddingLeft: UNIT * 7
   },
   subArticleItemText: {
-    ...mainText
+    ...mainText,
+    color: '$text'
   },
 
   commentContainer: {
@@ -116,4 +119,15 @@ export default EStyleSheet.create({
     fontSize: MAIN_FONT_SIZE,
     color: '$link'
   },
+  commentEditHeader: {
+    ...elevation1
+  },
+  commentEditContainer: {
+    paddingHorizontal: UNIT * 2,
+    paddingBottom: UNIT * 2,
+    marginBottom: headerMinHeight
+  },
+  commentEditInput: {
+    padding: 0
+  }
 });

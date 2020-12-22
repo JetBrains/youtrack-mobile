@@ -2,10 +2,11 @@
 
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
+import IssuePermissions from '../../components/issue-permissions/issue-permissions';
+import {issuePermissionsNull} from '../../components/issue-permissions/issue-permissions-helper';
 import {ON_NAVIGATE_BACK} from '../../actions/action-types';
 import {routeMap} from '../../app-routes';
 
-import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {ActivityItem} from '../../flow/Activity';
 import type {Article, ArticlesList} from '../../flow/Article';
 import type {CustomError} from '../../flow/Error';
@@ -19,7 +20,7 @@ export type ArticleState = {
   error: CustomError,
   isLoading: boolean,
   isProcessing: boolean,
-  issuePermissions: ?IssuePermissions,
+  issuePermissions: IssuePermissions,
   prevArticleState: ?ArticleState
 };
 
@@ -32,7 +33,7 @@ export const articleInitialState: ArticleState = {
   error: null,
   isLoading: false,
   isProcessing: false,
-  issuePermissions: null,
+  issuePermissions: issuePermissionsNull,
   prevArticleState: null
 };
 

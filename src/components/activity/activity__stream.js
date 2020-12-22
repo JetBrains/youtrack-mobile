@@ -34,7 +34,7 @@ import styles from './activity__stream.styles';
 
 import type {Attachment, IssueComment} from '../../flow/CustomFields';
 import type {Reaction} from '../../flow/Reaction';
-import type {ActivityItem, ActivityChange, Activity} from '../../flow/Activity';
+import type {Activity, ActivityChange, ActivityItem, ActivityStreamCommentActions} from '../../flow/Activity';
 import type {IssueFull} from '../../flow/Issue';
 import type {UITheme} from '../../flow/Theme';
 import type {WorkTimeSettings} from '../../flow/WorkTimeSettings';
@@ -42,22 +42,6 @@ import type {YouTrackWiki} from '../../flow/Wiki';
 import type {CustomError} from '../../flow/Error';
 import type {User} from '../../flow/User';
 
-type CommentAction = (comment: IssueComment) => boolean;
-type ActivityStreamCommentActions = {
-  canCommentOn: boolean,
-  canDeleteComment: CommentAction,
-  canDeleteCommentPermanently: boolean,
-  canRestoreComment: CommentAction,
-  canUpdateComment: CommentAction,
-  isAuthor: CommentAction,
-  onCopyCommentLink: (comment: IssueComment) => Function,
-  onDeleteComment: (comment: IssueComment) => Function,
-  onDeleteCommentPermanently: (comment: IssueComment, activityId?: string) => Function,
-  onReply: (comment: IssueComment) => any,
-  onRestoreComment: (comment: IssueComment) => Function,
-  onShowCommentActions: (comment: IssueComment) => Function,
-  onStartEditing: (comment: IssueComment) => Function
-}
 
 export type ActivityStreamProps = {
   activities: Array<Activity> | null,
@@ -349,7 +333,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
             </TouchableOpacity>
           </Feature>}
 
-          {!!commentActions && <TouchableOpacity
+          {Boolean(commentActions && commentActions.onShowCommentActions) && <TouchableOpacity
             hitSlop={HIT_SLOP}
             disabled={disabled}
             onPress={() => commentActions && commentActions.onShowCommentActions(comment)}>

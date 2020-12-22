@@ -20,7 +20,7 @@ export default EStyleSheet.create({
   },
   descriptionInput: {
     ...mainText,
-    marginTop: UNIT / 2,
+    textAlignVertical: 'top',
     color: '$text'
   },
   separator: {

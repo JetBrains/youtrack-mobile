@@ -275,6 +275,21 @@ const submitArticleCommentDraft = (commentDraftText: string) => {
   };
 };
 
+const updateArticleComment = (comment: IssueComment) => {
+  return async (dispatch: (any) => any, getState: () => AppState) => {
+    const api: Api = getApi();
+    const {article}: Article = getState().article;
+
+    const [error] = await until(api.articles.updateComment(article.id, comment));
+    if (error) {
+      notify('Failed to update a comment', error);
+    } else {
+      logEvent({message: 'Article comment updated', analyticsId: ANALYTICS_ARTICLE_PAGE});
+      dispatch(loadActivitiesPage());
+    }
+  };
+};
+
 export {
   loadArticle,
   loadActivitiesPage,
@@ -289,5 +304,7 @@ export {
 
   getArticleCommentDraft,
   updateArticleCommentDraft,
-  submitArticleCommentDraft
+  submitArticleCommentDraft,
+
+  updateArticleComment
 };

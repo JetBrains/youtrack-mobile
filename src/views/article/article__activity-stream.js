@@ -8,18 +8,19 @@ import API from '../../components/api/api';
 import {ActivityStream} from '../../components/activity/activity__stream';
 import {getApi} from '../../components/api/api__instance';
 
-import type {User} from '../../flow/User';
+import type {ActivityItem, ActivityStreamCommentActions} from '../../flow/Activity';
+import type {Attachment} from '../../flow/CustomFields';
 import type {UITheme} from '../../flow/Theme';
+import type {User} from '../../flow/User';
 import type {WorkTimeSettings} from '../../flow/WorkTimeSettings';
 import type {YouTrackWiki} from '../../flow/Wiki';
-import type {ActivityItem} from '../../flow/Activity';
-import type {Attachment} from '../../flow/CustomFields';
 
 type Props = {
   activities: Array<ActivityItem> | null,
   attachments: Array<Attachment>,
   uiTheme: UITheme,
-  user: User
+  user: User,
+  commentActions: ActivityStreamCommentActions
 };
 
 
@@ -32,7 +33,7 @@ const getYoutrackWikiProps = (): YouTrackWiki => {
 };
 
 const ArticleActivityStream = (props: Props) => {
-  const {activities, attachments, uiTheme, user} = props;
+  const {activities, attachments, uiTheme, user, commentActions} = props;
 
   const workTimeSettings: WorkTimeSettings = useSelector(store => store.app.workTimeSettings);
 
@@ -45,6 +46,7 @@ const ArticleActivityStream = (props: Props) => {
       youtrackWiki={getYoutrackWikiProps()}
       onReactionSelect={() => {}}
       currentUser={user}
+      commentActions={commentActions}
     />
   );
 };
