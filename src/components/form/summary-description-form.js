@@ -6,7 +6,7 @@ import throttle from 'lodash.throttle';
 
 import MultilineInput from '../multiline-input/multiline-input';
 
-import styles from './issue-summary.styles';
+import styles from './summary-description-form.style';
 import type {UITheme} from '../../flow/Theme';
 
 type Props = {
@@ -21,7 +21,7 @@ type Props = {
 
 const TEXT_UPDATE_DEBOUNCE = 300;
 
-export default class IssueSummary extends Component<Props, void> {
+export default class SummaryDescriptionForm extends Component<Props, void> {
   descriptionInput: MultilineInput;
 
   descriptionInputRef = (instance: ?MultilineInput) => {

@@ -9,16 +9,16 @@ import AttachmentAddPanel from '../../components/attachments-row/attachments-add
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import IssueDescription from './issue__description';
-import IssueSummary from '../../components/issue-summary/issue-summary';
 import IssueVotes from '../../components/issue-actions/issue-votes';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
 import LinkedIssues from '../../components/linked-issues/linked-issues';
 import log from '../../components/log/log';
+import SummaryDescriptionForm from '../../components/form/summary-description-form';
 import Tags from '../../components/tags/tags';
 import usage from '../../components/usage/usage';
 import VisibilityControl from '../../components/visibility/visibility-control';
-import {getEntityPresentation, getReadableID, ytDate} from '../../components/issue-formatter/issue-formatter';
 import {getApi} from '../../components/api/api__instance';
+import {getEntityPresentation, getReadableID, ytDate} from '../../components/issue-formatter/issue-formatter';
 import {SkeletonIssueContent, SkeletonIssueInfoLine} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
 
@@ -266,7 +266,7 @@ export default class IssueDetails extends Component<Props, void> {
         </View>
         {this.renderAdditionalInfo()}
 
-        {editMode && <IssueSummary
+        {editMode && <SummaryDescriptionForm
           editable={!isSavingEditedIssue}
           summary={summaryCopy}
           showSeparator={false}

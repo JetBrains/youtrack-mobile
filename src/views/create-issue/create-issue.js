@@ -7,22 +7,19 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import usage from '../../components/usage/usage';
 
+import * as createIssueActions from './create-issue-actions';
 import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
+import AttachmentAddPanel from '../../components/attachments-row/attachments-add-panel';
+import AttachmentsRow from '../../components/attachments-row/attachments-row';
+import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import Header from '../../components/header/header';
+import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
+import SummaryDescriptionForm from '../../components/form/summary-description-form';
+import VisibilityControl from '../../components/visibility/visibility-control';
+import {attachmentActions} from './create-issue__attachment-actions-and-types';
 import {getApi} from '../../components/api/api__instance';
 import {IconCheck, IconClose} from '../../components/icon/icon';
-import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
-import AttachmentsRow from '../../components/attachments-row/attachments-row';
-import IssueSummary from '../../components/issue-summary/issue-summary';
-import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
-
-import * as createIssueActions from './create-issue-actions';
-import {attachmentActions} from './create-issue__attachment-actions-and-types';
-
 import {ThemeContext} from '../../components/theme/theme-context';
-
-import VisibilityControl from '../../components/visibility/visibility-control';
-import AttachmentAddPanel from '../../components/attachments-row/attachments-add-panel';
 
 import PropTypes from 'prop-types';
 
@@ -189,7 +186,7 @@ class CreateIssue extends Component<Props, void> {
                 keyboardShouldPersistTaps="handled"
                 keyboardDismissMode="interactive"
               >
-                <IssueSummary
+                <SummaryDescriptionForm
                   testID="createIssueSummary"
                   style={styles.issueSummary}
                   showSeparator={true}

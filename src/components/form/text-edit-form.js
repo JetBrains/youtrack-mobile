@@ -6,7 +6,7 @@ import throttle from 'lodash.throttle';
 
 import MultilineInput from '../multiline-input/multiline-input';
 
-import styles from './issue-summary.styles';
+import styles from './summary-description-form.style';
 
 import type {UITheme} from '../../flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';

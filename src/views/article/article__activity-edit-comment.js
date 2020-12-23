@@ -7,7 +7,7 @@ import {useDispatch} from 'react-redux';
 
 import Header from '../../components/header/header';
 import Router from '../../components/router/router';
-import TextEditForm from '../../components/issue-summary/text-edit-form';
+import TextEditForm from '../../components/form/text-edit-form';
 import {IconCheck, IconClose} from '../../components/icon/icon';
 import {updateArticleComment} from './arcticle-actions';
 

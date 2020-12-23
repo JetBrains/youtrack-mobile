@@ -2,12 +2,12 @@ import {Platform} from 'react-native';
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {UNIT} from '../../components/variables/variables';
-import {headerTitle, mainText, secondaryText} from '../../components/common-styles/typography';
 import {elevation1} from '../../components/common-styles/shadow';
-import {summary} from '../../components/issue-summary/issue-summary.styles';
-import {separatorBorder} from '../../components/common-styles/list';
+import {headerTitle, mainText, secondaryText} from '../../components/common-styles/typography';
 import {issueIdResolved} from '../../components/common-styles/issue';
+import {separatorBorder} from '../../components/common-styles/list';
+import {summary} from '../../components/form/summary-description-form.style';
+import {UNIT} from '../../components/variables/variables';
 
 const centered = {
   flex: 1,

@@ -5,7 +5,7 @@ import {View} from 'react-native';
 
 import throttle from 'lodash.throttle';
 
-import IssueSummary from '../../components/issue-summary/issue-summary';
+import SummaryDescriptionForm from '../../components/form/summary-description-form';
 
 import styles from './article.styles';
 
@@ -28,7 +28,7 @@ const ArticleDetailsEdit = (props: Props) => {
     <View
       style={styles.summaryEdit}
     >
-      <IssueSummary
+      <SummaryDescriptionForm
         editable={true}
         summary={articleDraft.summary}
         showSeparator={true}
