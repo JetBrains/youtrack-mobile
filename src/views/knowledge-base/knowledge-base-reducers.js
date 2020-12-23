@@ -7,7 +7,7 @@ import type {IssueProject} from '../../flow/CustomFields';
 import type {CustomError} from '../../flow/Error';
 
 export type KnowledgeBaseState = {
-  articlesList: ArticlesList,
+  articlesList: ArticlesList | null,
   isLoading: boolean,
   error: CustomError
 };
