@@ -363,6 +363,7 @@ export function completeInitialization(issueId: ?string = null) {
     log.debug('Completing initialization');
     await dispatch(loadUser());
     await dispatch(loadUserPermissions());
+    await dispatch(storeProjectsShortNames());
     log.debug('Initialization completed');
 
     Router.navigateToDefaultRoute(issueId ? {issueId} : null);
@@ -552,7 +553,6 @@ export function initializeApp(config: AppConfigFilled, issueId: ?string) {
       await dispatch(completeInitialization(issueId));
     }
 
-    await dispatch(storeProjectsShortNames());
     dispatch(subscribeToURL());
   };
 }
