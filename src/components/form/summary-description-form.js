@@ -5,8 +5,10 @@ import {View, TextInput} from 'react-native';
 import throttle from 'lodash.throttle';
 
 import MultilineInput from '../multiline-input/multiline-input';
+import TextEditForm from './text-edit-form';
 
 import styles from './summary-description-form.style';
+
 import type {UITheme} from '../../flow/Theme';
 
 type Props = {
@@ -62,20 +64,14 @@ export default class SummaryDescriptionForm extends Component<Props, void> {
 
         <View style={styles.separator} />
 
-        <MultilineInput
-          ref={this.descriptionInputRef}
-          maxInputHeight={0}
-          scrollEnabled={false}
+        <TextEditForm
+          autoFocus={true}
           editable={editable}
-          autoCapitalize="sentences"
-          placeholderTextColor={uiTheme.colors.$icon}
-          placeholder="Description"
-          keyboardAppearance={uiTheme.name}
-          style={styles.descriptionInput}
+          description={description}
+          placeholderText="Description"
           multiline={true}
-          underlineColorAndroid="transparent"
-          defaultValue={description}
-          onChangeText={this.onDescriptionChange}
+          onDescriptionChange={this.onDescriptionChange}
+          uiTheme={uiTheme}
         />
       </View>
     );
