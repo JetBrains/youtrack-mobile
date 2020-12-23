@@ -64,6 +64,6 @@ export type ActivityStreamCommentActions = {
   onDeleteCommentPermanently?: (comment: IssueComment, activityId?: string) => Function,
   onReply?: (comment: IssueComment) => any,
   onRestoreComment?: (comment: IssueComment) => Function,
-  onShowCommentActions?: (comment: IssueComment) => Function,
+  onShowCommentActions?: (comment: IssueComment, activityId: string) => Function,
   onStartEditing?: (comment: IssueComment) => Function
 }

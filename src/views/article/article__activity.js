@@ -4,6 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {ScrollView} from 'react-native';
 
 import {useDispatch, useSelector} from 'react-redux';
+import {useActionSheet} from '@expo/react-native-action-sheet';
 
 import ArticleActivityStream from './article__activity-stream';
 import ArticleAddComment from './article__add-comment';
@@ -11,11 +12,11 @@ import ArticleEditComment from './article__activity-edit-comment';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import Router from '../../components/router/router';
 import {createActivityModel} from '../../components/activity/activity-helper';
-import {loadActivitiesPage} from './arcticle-actions';
+import {loadActivitiesPage, showArticleCommentActions} from './arcticle-actions';
 
 import styles from './article.styles';
 
-import type {ActivityItem} from '../../flow/Activity';
+import type {ActivityItem, ActivityStreamCommentActions} from '../../flow/Activity';
 import type {Article} from '../../flow/Article';
 import type {IssueComment} from '../../flow/CustomFields';
 import type {UITheme} from '../../flow/Theme';
@@ -33,12 +34,11 @@ const ArticleActivities = (props: Props) => {
   const {article, uiTheme, renderRefreshControl, issuePermissions} = props;
 
   const dispatch: Function = useDispatch();
+  const {showActionSheetWithOptions} = useActionSheet();
+  const [activities, updateActivityModel] = useState(null);
 
   const activityPage: Array<ActivityItem> = useSelector(store => store.article.activityPage);
   const user: User = useSelector(store => store.app.user);
-
-  const [activities, updateActivityModel] = useState(null);
-
   const loadActivities: Function = (reset: boolean) => {
     if (article?.idReadable) {
       dispatch(loadActivitiesPage(reset));
@@ -56,6 +56,24 @@ const ArticleActivities = (props: Props) => {
   }, [activityPage]);
 
 
+  const createCommentActions = (): ActivityStreamCommentActions => ({
+    isAuthor: (comment: IssueComment) => issuePermissions.isCurrentUser(comment.author),
+    canUpdateComment: (comment: IssueComment) => issuePermissions.articleUpdateComment(article, comment),
+    onStartEditing: (comment: Comment) => {
+      Router.PageModal({
+        children: (
+          <ArticleEditComment
+            comment={comment}
+            uiTheme={uiTheme}
+          />
+        )
+      });
+    },
+    onShowCommentActions: async (comment: IssueComment, activityId: string) => dispatch(
+      showArticleCommentActions(showActionSheetWithOptions, comment, activityId)
+    )
+  });
+
   return (
     <>
       <ScrollView
@@ -68,20 +86,7 @@ const ArticleActivities = (props: Props) => {
           uiTheme={uiTheme}
           user={user}
           issuePermissions={issuePermissions}
-          commentActions={{
-            isAuthor: (comment: IssueComment) => issuePermissions.isCurrentUser(comment.author),
-            canUpdateComment: (comment: IssueComment) => issuePermissions.articleUpdateComment(article, comment),
-            onStartEditing: (comment: Comment) => {
-              Router.PageModal({
-                children: (
-                  <ArticleEditComment
-                    comment={comment}
-                    uiTheme={uiTheme}
-                  />
-                )
-              });
-            }
-          }}
+          commentActions={createCommentActions()}
         />
       </ScrollView>
       {issuePermissions.articleCanCommentOn(article) && (

@@ -336,7 +336,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
           {Boolean(commentActions && commentActions.onShowCommentActions) && <TouchableOpacity
             hitSlop={HIT_SLOP}
             disabled={disabled}
-            onPress={() => commentActions && commentActions.onShowCommentActions(comment)}>
+            onPress={() => commentActions && commentActions.onShowCommentActions(comment, activityGroup.comment.id)}>
             {isIOSPlatform()
               ? <IconMoreOptions size={18} color={styles.activityCommentActionsOther.color}/>
               : <IconDrag size={18} color={styles.activityCommentActionsOther.color}/>}

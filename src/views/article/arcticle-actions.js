@@ -2,6 +2,7 @@
 
 import {ANALYTICS_ARTICLE_PAGE} from '../../components/analytics/analytics-ids';
 import {Clipboard, Share} from 'react-native';
+
 import {getApi} from '../../components/api/api__instance';
 import {isIOSPlatform, until} from '../../util/util';
 import {logEvent} from '../../components/log/log-helper';
@@ -16,14 +17,15 @@ import {
   setPrevArticle,
   setArticleCommentDraft
 } from './article-reducers';
-import {showActions} from '../../components/action-sheet/action-sheet';
+import {showActions, showActionSheet} from '../../components/action-sheet/action-sheet';
 
-import type ActionSheet from '@expo/react-native-action-sheet';
+import type ActionSheet, {ActionSheetOptions} from '@expo/react-native-action-sheet';
 import type Api from '../../components/api/api';
 import type {AppState} from '../../reducers';
 import type {Article} from '../../flow/Article';
 import type {ArticleState} from './article-reducers';
 import type {IssueComment} from '../../flow/CustomFields';
+import type {ShowActionSheetWithOptions} from '../../components/action-sheet/action-sheet';
 
 type ApiGetter = () => Api;
 
@@ -125,6 +127,53 @@ const showArticleActions = (actionSheet: ActionSheet, canUpdate: boolean, onBefo
 
     if (selectedAction && selectedAction.execute) {
       selectedAction.execute();
+    }
+  };
+};
+
+const showArticleCommentActions = (
+  showActionSheetWithOptions: ShowActionSheetWithOptions,
+  comment: IssueComment,
+  activityId: string
+) => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const {article} = getState().article;
+
+    const url: string = `${api.config.backendUrl}/articles/${article.idReadable}#comment${activityId}`;
+    const options: Array<ActionSheetOptions> = [
+      {
+        title: 'Share…',
+        execute: function (): string {
+          const params: Object = {};
+          const isIOS: boolean = isIOSPlatform();
+
+          if (isIOS) {
+            params.url = url;
+          } else {
+            params.title = comment.text;
+            params.message = url;
+          }
+          Share.share(params, {dialogTitle: 'Share URL'});
+          return this.title;
+        }
+      },
+      {
+        title: 'Copy URL',
+        execute: function (): string {
+          Clipboard.setString(url);
+          return this.title;
+        }
+      },
+      {
+        title: 'Cancel'
+      }
+    ];
+
+    const selectedAction = await showActionSheet(options, showActionSheetWithOptions, 'Article comment');
+    if (selectedAction && selectedAction.execute) {
+      const actionTitle: string = selectedAction.execute();
+      logEvent({message: `Article comment: ${actionTitle}`, analyticsId: ANALYTICS_ARTICLE_PAGE});
     }
   };
 };
@@ -307,5 +356,7 @@ export {
   updateArticleCommentDraft,
   submitArticleCommentDraft,
 
-  updateArticleComment
+  updateArticleComment,
+
+  showArticleCommentActions
 };

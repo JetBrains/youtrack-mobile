@@ -1,25 +1,44 @@
 /* @flow */
 
-import type {ActionSheetProvider} from '@expo/react-native-action-sheet';
+import type {ActionSheetProvider, ActionSheetOptions} from '@expo/react-native-action-sheet';
 
-type Action = {title: string, execute?: Function}
+export type ActionSheetOption = { title: string, execute?: Function }
+export type ShowActionSheetWithOptions = (options: ActionSheetOptions, callback: (i: number) => void) => void;
 
-export function showActions(actions: Array<Action>, actionSheetInstance: ActionSheetProvider): Promise<?Action> {
-  const cancelIndex = actions.length - 1;
+function doShowActions(options: Array<ActionSheetOption>, showActionSheetWithOptions: ShowActionSheetWithOptions, message?: string) {
+  const cancelIndex: number = options.length - 1;
 
   return new Promise((resolve: Function) => {
-    actionSheetInstance.getContext().showActionSheetWithOptions({
-      options: actions.map(action => action.title),
-      cancelButtonIndex: actions.length - 1
-    }, (actionIndex) => {
-      const action = actions[actionIndex];
-
-      if (actionIndex === cancelIndex) {
-        return resolve(null);
+    showActionSheetWithOptions(
+      {
+        message,
+        options: options.map(action => action.title),
+        cancelButtonIndex: cancelIndex
+      },
+      (actionIndex) => {
+        const action = options[actionIndex];
+        if (actionIndex === cancelIndex) {
+          return resolve(null);
+        }
+        return resolve(action);
       }
-
-      return resolve(action);
-    });
+    );
 
   });
+}
+
+export function showActions(
+  options: Array<ActionSheetOption>,
+  actionSheetInstance: ActionSheetProvider,
+  message?: string
+): Promise<?ActionSheetOption> {
+  return doShowActions(options, actionSheetInstance.getContext().showActionSheetWithOptions, message);
+}
+
+export function showActionSheet(
+  options: Array<ActionSheetOption>,
+  showActionSheetWithOptions: ShowActionSheetWithOptions,
+  message?: string
+): Promise<?ActionSheetOption> {
+  return doShowActions(options, showActionSheetWithOptions, message);
 }
