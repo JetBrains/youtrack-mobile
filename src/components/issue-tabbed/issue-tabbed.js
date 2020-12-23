@@ -33,6 +33,10 @@ export default class IssueTabbed extends PureComponent<void, IssueTabbedState> {
 
   isTabChangeEnabled = () => true;
 
+  switchToDetailsTab = () => this.setState({index: 0});
+
+  switchToActivityTab = () => this.setState({index: 1});
+
   renderTabBar(uiTheme: UITheme, editMode: boolean = false) {
     return (props: Object) => {
       const uiThemeColors: UIThemeColors = uiTheme.colors;

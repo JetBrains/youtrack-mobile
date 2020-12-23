@@ -72,7 +72,7 @@ const loadActivitiesPage = (reset: boolean = true) => {
   };
 };
 
-const showArticleActions = (actionSheet: ActionSheet, canUpdate: boolean) => {
+const showArticleActions = (actionSheet: ActionSheet, canUpdate: boolean, onBeforeEdit: () => void) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {article} = getState().article;
@@ -106,6 +106,7 @@ const showArticleActions = (actionSheet: ActionSheet, canUpdate: boolean) => {
         execute: async () => {
           logEvent({message: 'Edit article', analyticsId: ANALYTICS_ARTICLE_PAGE});
 
+          onBeforeEdit();
           let articleDraft: Article = (await dispatch(getArticleDrafts()))[0];
           if (!articleDraft) {
             articleDraft = await dispatch(createArticleDraft());

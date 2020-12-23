@@ -150,8 +150,8 @@ class Article extends IssueTabbed<Props, State> {
   };
 
   canEditArticle = (): boolean => {
-    const {issuePermissions} = this.props;
-    return !!issuePermissions && issuePermissions.canUpdateArticle(this.props.article);
+    const {article, issuePermissions} = this.props;
+    return issuePermissions.canUpdateArticle(article);
   };
 
   renderContextActionsIcon = () => {
@@ -164,7 +164,15 @@ class Article extends IssueTabbed<Props, State> {
   };
 
   renderHeader = () => {
-    const {articlePlaceholder, article, articleDraft, showArticleActions, publishArticleDraft, isProcessing, setDraft} = this.props;
+    const {
+      article,
+      articleDraft,
+      articlePlaceholder,
+      isProcessing,
+      publishArticleDraft,
+      setDraft,
+      showArticleActions
+    } = this.props;
     const uiThemeColors: UIThemeColors = this.uiTheme.colors;
     const linkColor: string = uiThemeColors.$link;
     const textSecondaryColor: string = uiThemeColors.$textSecondary;
@@ -196,7 +204,7 @@ class Article extends IssueTabbed<Props, State> {
       onRightButtonClick: (
         isEditMode
           ? publishArticleDraft
-          : () => showArticleActions(this.context.actionSheet(), this.canEditArticle())
+          : () => showArticleActions(this.context.actionSheet(), this.canEditArticle(), this.switchToDetailsTab)
       ),
     };
 
