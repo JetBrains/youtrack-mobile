@@ -41,7 +41,7 @@ const ArticleEditComment = (props: Props) => {
     <View style={styles.container}>
       <Header
         style={styles.commentEditHeader}
-        title="Edit"
+        title="Edit comment"
         leftButton={<IconClose size={21} color={isSubmitting ? uiTheme.colors.$disabled : linkColor}/>}
         onBack={() => !isSubmitting && Router.pop(true)}
         rightButton={isSubmitting
