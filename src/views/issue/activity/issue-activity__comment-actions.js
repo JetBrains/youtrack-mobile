@@ -299,7 +299,12 @@ export function showIssueCommentActions(
     }
     actions.push({title: 'Cancel'});
 
-    const selectedAction = await showActions(actions, actionSheet);
+    const selectedAction = await showActions(
+      actions,
+      actionSheet,
+      comment?.author ? getEntityPresentation(comment.author) : null,
+      comment.text.length > 155 ? `${comment.text.substr(0, 153)}…` : comment.text
+    );
 
     if (selectedAction && selectedAction.execute) {
       selectedAction.execute();

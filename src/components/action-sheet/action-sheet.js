@@ -49,7 +49,7 @@ export function showActions(
   title?: string | null,
   message?: string | null
 ): Promise<?ActionSheetOption> {
-  return doShowActions(options, actionSheetInstance.getContext().showActionSheetWithOptions, message);
+  return doShowActions(options, actionSheetInstance.getContext().showActionSheetWithOptions, title, message);
 }
 
 export function showActionSheet(
