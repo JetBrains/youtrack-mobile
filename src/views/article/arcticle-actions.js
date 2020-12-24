@@ -376,12 +376,11 @@ const showArticleCommentActions = (
 
     options.push({title: 'Cancel'});
 
-    const message: string = commentText.length > 155 ? `${commentText.substr(0, 153)}…` : commentText;
     const selectedAction = await showActionSheet(
       options,
       showActionSheetWithOptions,
       comment?.author ? getEntityPresentation(comment.author) : null,
-      message
+      commentText.length > 155 ? `${commentText.substr(0, 153)}…` : commentText
     );
     if (selectedAction && selectedAction.execute) {
       const actionTitle: string = selectedAction.execute();
