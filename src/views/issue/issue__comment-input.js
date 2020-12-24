@@ -1,15 +1,14 @@
 /* @flow */
 
-import {View, Text, ActivityIndicator, ScrollView} from 'react-native';
+import {View, Text, ActivityIndicator} from 'react-native';
 import React, {PureComponent} from 'react';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import throttle from 'lodash.throttle';
-
-import Avatar from '../../components/avatar/avatar';
-import MultilineInput from '../../components/multiline-input/multiline-input';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import IssueVisibility from '../../components/visibility/issue-visibility';
+import Mentions from '../../components/mentions/mentions';
+import MultilineInput from '../../components/multiline-input/multiline-input';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconAngleDown, IconArrowUp, IconCheck, IconClose, IconLock} from '../../components/icon/icon';
 import {visibilityDefaultText} from '../../components/visibility/visibility-strings';
@@ -17,8 +16,8 @@ import {visibilityDefaultText} from '../../components/visibility/visibility-stri
 import styles from './issue__comment-input.styles';
 
 import type {IssueComment} from '../../flow/CustomFields';
-import type {User} from '../../flow/User';
 import type {UITheme} from '../../flow/Theme';
+import type {User} from '../../flow/User';
 
 type Props = {
   initialText: string,
@@ -49,7 +48,6 @@ type State = {
 export default class IssueCommentInput extends PureComponent<Props, State> {
   isUnmounted: boolean;
   editCommentInput: MultilineInput;
-  SUGGESTION_AVATAR_SIZE = 24;
   debouncedOnChange = throttle((text: string) => (
     this.props.onChangeText && this.props.onChangeText(text)
   ), 300);
@@ -162,44 +160,14 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
     const {mentions, suggestionsAreLoading} = this.props;
 
     return (
-      <ScrollView
-        contentContainerStyle={styles.suggestionsContainer}
-        keyboardShouldPersistTaps="handled">
-
-        <View style={styles.suggestionsLoadingMessage}>
-          {suggestionsAreLoading && !mentions && <ActivityIndicator color={styles.link.color}/>}
-        </View>
-
-        <View>
-          {mentions
-            ? mentions.users.map(user => {
-              return (
-                <TouchableOpacity
-                  key={user.id}
-                  style={styles.suggestionButton}
-                  onPress={() => {
-                    this.applySuggestion(user);
-                    setTimeout(this.focus, 150);
-                  }}
-                >
-                  <Avatar
-                    userName={user.fullName}
-                    size={this.SUGGESTION_AVATAR_SIZE}
-                    source={{uri: user.avatarUrl}}
-                    style={{
-                      width: this.SUGGESTION_AVATAR_SIZE,
-                      height: this.SUGGESTION_AVATAR_SIZE
-                    }}/>
-                  <Text style={styles.suggestionName}>{user.login}</Text>
-                  <Text style={styles.suggestionLogin}> {user.fullName}</Text>
-                </TouchableOpacity>
-              );
-            })
-            : null}
-
-        </View>
-
-      </ScrollView>
+      <Mentions
+        isLoading={suggestionsAreLoading}
+        mentions={mentions}
+        onApply={(user: User) => {
+          this.applySuggestion(user);
+          setTimeout(this.focus, 150);
+        }}
+      />
     );
   }
 
