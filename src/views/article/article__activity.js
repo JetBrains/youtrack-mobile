@@ -56,9 +56,12 @@ const ArticleActivities = (props: Props) => {
   }, [activityPage]);
 
 
+  const canDeleteComment = (comment: IssueComment): boolean => issuePermissions.articleCanDeleteComment(
+    article, comment
+  );
   const createCommentActions = (): ActivityStreamCommentActions => ({
     isAuthor: (comment: IssueComment) => issuePermissions.isCurrentUser(comment.author),
-    canUpdateComment: (comment: IssueComment) => issuePermissions.articleUpdateComment(article, comment),
+    canUpdateComment: (comment: IssueComment) => issuePermissions.articleCanUpdateComment(article, comment),
     onStartEditing: (comment: Comment) => {
       Router.PageModal({
         children: (
@@ -70,8 +73,14 @@ const ArticleActivities = (props: Props) => {
       });
     },
     onShowCommentActions: async (comment: IssueComment, activityId: string) => dispatch(
-      showArticleCommentActions(showActionSheetWithOptions, comment, activityId)
-    )
+      showArticleCommentActions(
+        showActionSheetWithOptions,
+        comment,
+        activityId,
+        canDeleteComment(comment)
+      )
+    ),
+    canDeleteComment: canDeleteComment
   });
 
   return (

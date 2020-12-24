@@ -1,21 +1,21 @@
 /* @flow */
 
 import {ANALYTICS_ARTICLE_PAGE} from '../../components/analytics/analytics-ids';
-import {Clipboard, Share} from 'react-native';
+import {Alert, Clipboard, Share} from 'react-native';
 
 import {getApi} from '../../components/api/api__instance';
 import {isIOSPlatform, until} from '../../util/util';
 import {logEvent} from '../../components/log/log-helper';
 import {notify} from '../../components/notification/notification';
 import {
+  setActivityPage,
   setArticle,
+  setArticleCommentDraft,
+  setArticleDraft,
   setError,
   setLoading,
-  setActivityPage,
-  setProcessing,
-  setArticleDraft,
   setPrevArticle,
-  setArticleCommentDraft
+  setProcessing,
 } from './article-reducers';
 import {showActions, showActionSheet} from '../../components/action-sheet/action-sheet';
 
@@ -26,9 +26,11 @@ import type {Article} from '../../flow/Article';
 import type {ArticleState} from './article-reducers';
 import type {IssueComment} from '../../flow/CustomFields';
 import type {ShowActionSheetWithOptions} from '../../components/action-sheet/action-sheet';
+import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
 
 type ApiGetter = () => Api;
 
+const articleLogMessagePrefix: string = `Article:`;
 
 const loadArticle = (articleId: string, reset: boolean = true) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
@@ -106,7 +108,7 @@ const showArticleActions = (actionSheet: ActionSheet, canUpdate: boolean, onBefo
       actions.push({
         title: 'Edit',
         execute: async () => {
-          logEvent({message: 'Edit article', analyticsId: ANALYTICS_ARTICLE_PAGE});
+          logEvent({message: `${articleLogMessagePrefix} Edit article`, analyticsId: ANALYTICS_ARTICLE_PAGE});
 
           onBeforeEdit();
           let articleDraft: Article = (await dispatch(getArticleDrafts()))[0];
@@ -127,53 +129,6 @@ const showArticleActions = (actionSheet: ActionSheet, canUpdate: boolean, onBefo
 
     if (selectedAction && selectedAction.execute) {
       selectedAction.execute();
-    }
-  };
-};
-
-const showArticleCommentActions = (
-  showActionSheetWithOptions: ShowActionSheetWithOptions,
-  comment: IssueComment,
-  activityId: string
-) => {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
-    const api: Api = getApi();
-    const {article} = getState().article;
-
-    const url: string = `${api.config.backendUrl}/articles/${article.idReadable}#comment${activityId}`;
-    const options: Array<ActionSheetOptions> = [
-      {
-        title: 'Share…',
-        execute: function (): string {
-          const params: Object = {};
-          const isIOS: boolean = isIOSPlatform();
-
-          if (isIOS) {
-            params.url = url;
-          } else {
-            params.title = comment.text;
-            params.message = url;
-          }
-          Share.share(params, {dialogTitle: 'Share URL'});
-          return this.title;
-        }
-      },
-      {
-        title: 'Copy URL',
-        execute: function (): string {
-          Clipboard.setString(url);
-          return this.title;
-        }
-      },
-      {
-        title: 'Cancel'
-      }
-    ];
-
-    const selectedAction = await showActionSheet(options, showActionSheetWithOptions, 'Article comment');
-    if (selectedAction && selectedAction.execute) {
-      const actionTitle: string = selectedAction.execute();
-      logEvent({message: `Article comment: ${actionTitle}`, analyticsId: ANALYTICS_ARTICLE_PAGE});
     }
   };
 };
@@ -219,7 +174,7 @@ const createArticleDraft = () => {
     if (error) {
       const errorMsg: string = 'Failed to load article draft';
       logEvent({message: errorMsg, isError: true});
-      notify(errorMsg, error);
+      notify(articleLogMessagePrefix + errorMsg, error);
       return null;
     } else {
       return articleDraft;
@@ -319,7 +274,7 @@ const submitArticleCommentDraft = (commentDraftText: string) => {
     if (error) {
       notify('Failed to update a comment draft', error);
     } else {
-      logEvent({message: 'Article comment added', analyticsId: ANALYTICS_ARTICLE_PAGE});
+      logEvent({message: `${articleLogMessagePrefix} comment added`, analyticsId: ANALYTICS_ARTICLE_PAGE});
       dispatch(setArticleCommentDraft(null));
     }
   };
@@ -334,11 +289,107 @@ const updateArticleComment = (comment: IssueComment) => {
     if (error) {
       notify('Failed to update a comment', error);
     } else {
-      logEvent({message: 'Article comment updated', analyticsId: ANALYTICS_ARTICLE_PAGE});
+      logEvent({message: `${articleLogMessagePrefix} comment updated`, analyticsId: ANALYTICS_ARTICLE_PAGE});
       dispatch(loadActivitiesPage());
     }
   };
 };
+
+const deleteArticleComment = (commentId: string) => {
+  return async (dispatch: (any) => any, getState: () => AppState) => {
+    const api: Api = getApi();
+    const {article}: Article = getState().article;
+
+    try {
+      await new Promise((resolve: Function, reject: Function) => {
+        Alert.alert(
+          'Are you sure you want to delete comment?',
+          null,
+          [
+            {text: 'Cancel', style: 'cancel', onPress: reject},
+            {text: 'Delete', onPress: resolve}
+          ],
+          {cancelable: true}
+        );
+      });
+
+      const [error] = await until(api.articles.deleteComment(article.id, commentId));
+      if (error) {
+        notify('Failed to delete a comment', error);
+      } else {
+        logEvent({message: `${articleLogMessagePrefix} comment deleted`, analyticsId: ANALYTICS_ARTICLE_PAGE});
+        dispatch(loadActivitiesPage());
+      }
+    } catch (error) {
+      //
+    }
+  };
+};
+
+const showArticleCommentActions = (
+  showActionSheetWithOptions: ShowActionSheetWithOptions,
+  comment: IssueComment,
+  activityId: string,
+  canDeleteComment: boolean
+) => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const {article} = getState().article;
+
+    const url: string = `${api.config.backendUrl}/articles/${article.idReadable}#comment${activityId}`;
+    const commentText = comment.text;
+    const options: Array<ActionSheetOptions> = [
+      {
+        title: 'Share…',
+        execute: function (): string {
+          const params: Object = {};
+          const isIOS: boolean = isIOSPlatform();
+
+          if (isIOS) {
+            params.url = url;
+          } else {
+            params.title = commentText;
+            params.message = url;
+          }
+          Share.share(params, {dialogTitle: 'Share URL'});
+          return this.title;
+        }
+      },
+      {
+        title: 'Copy URL',
+        execute: function (): string {
+          Clipboard.setString(url);
+          return this.title;
+        }
+      }
+    ];
+
+    if (canDeleteComment) {
+      options.push({
+        title: 'Delete',
+        execute: function () {
+          dispatch(deleteArticleComment(comment.id));
+          return this.title;
+        }
+      });
+    }
+
+    options.push({title: 'Cancel'});
+
+    const message: string = commentText.length > 155 ? `${commentText.substr(0, 153)}…` : commentText;
+    const selectedAction = await showActionSheet(
+      options,
+      showActionSheetWithOptions,
+      comment?.author ? getEntityPresentation(comment.author) : null,
+      message
+    );
+    if (selectedAction && selectedAction.execute) {
+      const actionTitle: string = selectedAction.execute();
+      logEvent({message: `${articleLogMessagePrefix} comment ${actionTitle}`, analyticsId: ANALYTICS_ARTICLE_PAGE});
+    }
+  };
+};
+
 
 export {
   loadArticle,
@@ -358,5 +409,6 @@ export {
 
   updateArticleComment,
 
-  showArticleCommentActions
+  showArticleCommentActions,
+  deleteArticleComment
 };

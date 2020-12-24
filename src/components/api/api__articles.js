@@ -155,4 +155,13 @@ export default class ArticlesAPI extends ApiBase {
     );
   }
 
+  async deleteComment(articleId: string, commentId: string): Promise<IssueComment> {
+    return this.makeAuthorizedRequest(
+      `${this.youTrackApiUrl}/articles/${articleId}/comments/${commentId}`,
+      'DELETE',
+      null,
+      {parseJson: false}
+    );
+  }
+
 }

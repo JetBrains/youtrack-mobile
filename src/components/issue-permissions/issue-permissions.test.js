@@ -311,7 +311,7 @@ describe('IssuePermissions', function () {
       mockPermissionsHas(UPDATE_ARTICLE_COMMENT, true);
 
       expect(
-        issuePermissions.articleUpdateComment(issueMock, commentMock)
+        issuePermissions.articleCanUpdateComment(issueMock, commentMock)
       ).toEqual(true);
     });
 
@@ -320,7 +320,7 @@ describe('IssuePermissions', function () {
       commentMock.author = {id: 'foo'};
 
       expect(
-        issuePermissions.articleUpdateComment(issueMock, commentMock)
+        issuePermissions.articleCanUpdateComment(issueMock, commentMock)
       ).toEqual(false);
     });
 
@@ -330,7 +330,7 @@ describe('IssuePermissions', function () {
       commentMock.author = {id: 'foo'};
 
       expect(
-        issuePermissions.articleUpdateComment(issueMock, commentMock)
+        issuePermissions.articleCanUpdateComment(issueMock, commentMock)
       ).toEqual(true);
     });
 
