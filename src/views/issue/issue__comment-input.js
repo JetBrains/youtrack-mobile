@@ -12,6 +12,7 @@ import MultilineInput from '../../components/multiline-input/multiline-input';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconAngleDown, IconArrowUp, IconCheck, IconClose, IconLock} from '../../components/icon/icon';
 import {visibilityDefaultText} from '../../components/visibility/visibility-strings';
+import {getSuggestWord, composeSuggestionText} from '../../components/mentions/mension-helper';
 
 import styles from './issue__comment-input.styles';
 
@@ -109,41 +110,28 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
   };
 
   suggestionsNeededDetector(text: string, caret: number) {
-    const match = /[\S\@]+$/.exec(text.slice(0, caret));
-    let currentWord = match && match[0];
-    if (!currentWord) {
+    let word: ?string = getSuggestWord(text, caret);
+    if (!word) {
       return this.setState({
         showSuggestions: false,
         suggestionsQuery: ''
       });
     }
 
-    if (currentWord[0] === '@') {
-      currentWord = currentWord.slice(1);
+    if (word[0] === '@') {
+      word = word.slice(1);
       this.setState({
         showSuggestions: true,
-        suggestionsQuery: currentWord
+        suggestionsQuery: word
       });
 
-      this.props.onRequestCommentSuggestions(currentWord);
+      this.props.onRequestCommentSuggestions(word);
     }
   }
 
   applySuggestion = (user: User) => {
-    function replaceRange(source, start, end, substitute) {
-      return source.substring(0, start) + substitute + source.substring(end);
-    }
-
-    const commentText: string = this.state?.commentText || '';
-    const match = /[\S\@]+$/.exec(commentText.slice(0, this.state.commentCaret));
-    const currentWord = match && match[0];
-
-    if (currentWord) {
-      const startIndex = commentText.slice(0, this.state.commentCaret).lastIndexOf(currentWord);
-      const newText = replaceRange(commentText,
-        startIndex,
-        startIndex + currentWord.length,
-        `@${user.login}`);
+    const newText: ?string = composeSuggestionText(user, this.state?.commentText, this.state.commentCaret);
+    if (newText) {
       this.setState({
         commentText: newText,
         showSuggestions: false,
