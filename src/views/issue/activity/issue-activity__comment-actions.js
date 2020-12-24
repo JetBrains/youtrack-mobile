@@ -272,7 +272,7 @@ export function showIssueCommentActions(
   return async (dispatch: (any) => any) => {
     const actions = [
       {
-        title: 'Copy link',
+        title: 'Copy URL',
         execute: () => {
           dispatch(copyCommentUrl(comment));
           usage.trackEvent(CATEGORY_NAME, 'Copy comment URL');

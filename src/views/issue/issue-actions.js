@@ -355,17 +355,17 @@ export function showIssueActions(
           if (isIOSPlatform()) {
             Share.share({url});
           } else {
-            Share.share({title: issue.summary, message: url}, {dialogTitle: 'Share issue URL'});
+            Share.share({title: issue.summary, message: url}, {dialogTitle: 'Share URL'});
           }
           usage.trackEvent(CATEGORY_NAME, 'Copy issue URL');
         }
       },
       {
-        title: 'Copy issue URL',
+        title: 'Copy URL',
         execute: () => {
           usage.trackEvent(CATEGORY_NAME, 'Open in browser');
           Clipboard.setString(makeIssueWebUrl(api, issue));
-          notify('Issue URL copied');
+          notify('URL copied');
         }
       }
     ];
@@ -413,7 +413,12 @@ export function showIssueActions(
 
     actions.push({title: 'Cancel'});
 
-    const selectedAction = await showActions(actions, actionSheet);
+    const selectedAction = await showActions(
+      actions,
+      actionSheet,
+      issue.idReadable,
+      issue.summary.length > 155 ? `${issue.summary.substr(0, 153)}…` : issue.summary
+    );
 
     if (selectedAction && selectedAction.execute) {
       selectedAction.execute();
