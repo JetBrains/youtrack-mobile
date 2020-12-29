@@ -8,6 +8,7 @@ const MIN_INPUT_SIZE = UNIT * 4;
 
 export default EStyleSheet.create({
   container: {
+    maxHeight: '100%',
     paddingVertical: UNIT,
     paddingHorizontal: UNIT * 3,
     ...elevationBottom

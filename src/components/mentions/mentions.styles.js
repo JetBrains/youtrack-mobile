@@ -8,12 +8,14 @@ export default EStyleSheet.create({
   suggestionsContainer: {
     flexGrow: 1,
     flexDirection: 'column',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    minHeight: UNIT * 4
   },
   suggestionsLoadingMessage: {
-    flexGrow: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
+    position: 'absolute',
+    alignSelf: 'center',
+    height: UNIT * 4,
+    backgroundColor: '$background'
   },
   suggestionItem: {
     flexDirection: 'row',

@@ -77,6 +77,7 @@ export default EStyleSheet.create({
   },
 
   commentContainer: {
+    maxHeight: '100%',
     paddingVertical: UNIT,
     paddingHorizontal: UNIT * 2,
     ...elevationBottom

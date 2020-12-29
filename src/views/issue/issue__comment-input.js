@@ -273,7 +273,10 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
                 this.debouncedOnChange(text);
               }}
               onFocus={() => this.toggleVisibility(true)}
-              onBlur={() => this.toggleVisibility(false)}
+              onBlur={() => {
+                this.setState({showSuggestions: false});
+                this.toggleVisibility(false);
+              }}
               style={styles.commentInput}
             />
 

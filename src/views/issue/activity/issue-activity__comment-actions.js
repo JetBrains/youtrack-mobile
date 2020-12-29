@@ -319,7 +319,7 @@ export function loadCommentSuggestions(query: string) {
     dispatch(startLoadingCommentSuggestions());
 
     try {
-      const suggestions = await api.mentions.getMentions(query, [issue.id]);
+      const suggestions = await api.mentions.getMentions(query, {issues: [{id: issue.id}]});
       dispatch(receiveCommentSuggestions(suggestions));
     } catch (error) {
       notify('Failed to load comment suggestions', error);

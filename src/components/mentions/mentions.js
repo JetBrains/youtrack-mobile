@@ -11,27 +11,26 @@ import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import styles from './mentions.styles';
 
 import type {User} from '../../flow/User';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   isLoading: boolean,
   mentions: ?{ users: Array<User> },
-  onApply: (user: User) => any
+  onApply: (user: User) => any,
+  style?: ViewStyleProp
 };
 
 
 export default function Mentions(props: Props) {
   const AVATAR_SIZE: number = 24;
-  const {mentions, isLoading, onApply} = props;
+  const {mentions, isLoading, onApply, style} = props;
 
   return (
     <ScrollView
+      style={style}
       contentContainerStyle={styles.suggestionsContainer}
       keyboardShouldPersistTaps="handled"
     >
-
-      <View style={styles.suggestionsLoadingMessage}>
-        {isLoading && !mentions && <ActivityIndicator color={styles.link.color}/>}
-      </View>
 
       <>
         {(mentions?.users || []).map(user => {
@@ -55,8 +54,11 @@ export default function Mentions(props: Props) {
           );
         })
         }
-
       </>
+
+      {isLoading && <View style={styles.suggestionsLoadingMessage}>
+        <ActivityIndicator color={styles.link.color}/>
+      </View>}
 
     </ScrollView>
   );

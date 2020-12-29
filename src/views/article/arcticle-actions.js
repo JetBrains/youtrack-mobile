@@ -389,6 +389,19 @@ const showArticleCommentActions = (
   };
 };
 
+const getMentions = (query: string) => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const {article} = getState().article;
+    const [error, mentions] = await until(api.mentions.getMentions(query, {containers: [{$type: article.$type ,id: article.id}]}));
+    if (error) {
+      notify('Failed to load user mentions', error);
+      return null;
+    }
+    return mentions;
+  };
+};
+
 
 export {
   loadArticle,
@@ -409,5 +422,7 @@ export {
   updateArticleComment,
 
   showArticleCommentActions,
-  deleteArticleComment
+  deleteArticleComment,
+
+  getMentions
 };
