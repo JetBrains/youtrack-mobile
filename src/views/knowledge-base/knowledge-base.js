@@ -61,7 +61,7 @@ export class KnowledgeBase extends Component<Props, State> {
   renderProject = ({section}: ArticlesListItem) => {
     const project: ?ArticleProject = section.title;
     if (project) {
-      const isCollapsed: boolean = project.articles.collapsed;
+      const isCollapsed: boolean = project?.articles?.collapsed;
       const Icon = isCollapsed ? IconAngleRight : IconAngleDown;
       return (
         <>
