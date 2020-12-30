@@ -1,15 +1,15 @@
 /* @flow */
 
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
-import {createTree} from '../../components/articles/articles-helper';
+import {createTree, toggleArticleProjectListItem} from '../../components/articles/articles-helper';
 import {flushStoragePart, getStorageState} from '../../components/storage/storage';
 import {logEvent} from '../../components/log/log-helper';
 import {setError, setLoading, setList} from './knowledge-base-reducers';
 import {until} from '../../util/util';
 
 import type Api from '../../components/api/api';
-import type {ArticleNode, ArticlesList} from '../../flow/Article';
-import type {KnowledgeBaseState} from './knowledge-base-reducers';
+import type {AppState} from '../../reducers';
+import type {ArticleNode, ArticleProject, ArticlesList, ArticlesListItem} from '../../flow/Article';
 
 type ApiGetter = () => Api;
 
@@ -29,7 +29,7 @@ const loadArticlesListFromCache = () => {
 };
 
 const loadArticlesList = (reset: boolean = true) => {
-  return async (dispatch: (any) => any, getState: () => KnowledgeBaseState, getApi: ApiGetter) => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
 
     logEvent({message: 'Loading articles', analyticsId: ANALYTICS_ARTICLES_PAGE});
@@ -44,15 +44,48 @@ const loadArticlesList = (reset: boolean = true) => {
       dispatch(setError(error));
       logEvent({message: 'Failed to load articles', isError: true});
     } else {
-      const tree: Array<ArticleNode> = createTree(articles);
-      const articlesTree: ArticlesList = tree.filter(it => it.data.length > 0);
-      dispatch(setList(articlesTree));
-      setArticlesListCache(articlesTree);
+      const tree: Array<ArticleNode> = createTree(articles, getStorageState().articlesList);
+      const articlesList: ArticlesList = tree.filter(it => it.data?.length > 0 || it.dataCollapsed?.length > 0);
+      dispatch(setList(articlesList));
+      setArticlesListCache(articlesList);
     }
   };
 };
 
+const toggleProjectArticlesVisibility = (section: ArticlesListItem) => {
+  return async (dispatch: (any) => any, getState: () => AppState) => {
+    logEvent({message: 'Toggle project articles visibility', analyticsId: ANALYTICS_ARTICLES_PAGE});
+
+    const state: AppState = getState();
+    const {articlesList} = state.articles;
+
+    if (articlesList) {
+      const updatedArticlesList: ArticlesList = articlesList.reduce((list: ArticlesList, item: ArticlesListItem) => {
+        const project: ArticleProject = item.title;
+        let i: ArticlesListItem | null;
+
+        if (project.id === section.title.id) {
+          i = toggleArticleProjectListItem(section);
+        } else {
+          i = item;
+        }
+        return list.concat(i);
+      }, []);
+
+      dispatch(setList(updatedArticlesList));
+      setArticlesListCache(updatedArticlesList);
+    }
+  };
+};
+
+export type KnowledgeBaseActions = {
+  loadArticlesList: typeof loadArticlesList,
+  loadArticlesListFromCache: typeof loadArticlesListFromCache,
+  toggleProjectArticlesVisibility: typeof toggleProjectArticlesVisibility
+};
+
 export {
   loadArticlesList,
-  loadArticlesListFromCache
+  loadArticlesListFromCache,
+  toggleProjectArticlesVisibility
 };

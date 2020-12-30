@@ -30,9 +30,18 @@ export type ArticleNode = {
   data: Article & { parentId: string | null }
 }
 
+export type ArticleNodeList = Array<ArticleNode>;
+
 export type ArticlesListItem = {
   title: IssueProject,
-  data: Array<ArticleNode>
+  data: ArticleNodeList,
+  dataCollapsed: ArticleNodeList | null
 };
 
 export type ArticlesList = Array<ArticlesListItem>;
+
+export type ArticleProject = $Shape<IssueProject> & {
+  articles: {
+    collapsed: boolean
+  }
+};

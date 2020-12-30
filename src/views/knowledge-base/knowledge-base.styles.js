@@ -80,6 +80,11 @@ export default EStyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
+  itemProjectIcon: {
+    width: UNIT * 3,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
 
   articleTitle: {
     ...mainText,

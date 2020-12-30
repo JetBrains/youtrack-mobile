@@ -14,25 +14,22 @@ import Select from '../../components/select/select';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
 import {findArticleNode} from '../../components/articles/articles-helper';
+import {hasType} from '../../components/api/api__resource-types';
 import {IconAngleDown, IconAngleRight, IconBack, IconLock} from '../../components/icon/icon';
+import {routeMap} from '../../app-routes';
 import {SkeletonIssues} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
-
 import {UNIT} from '../../components/variables/variables';
+
 import styles from './knowledge-base.styles';
 
-import type {Article, ArticlesList, ArticlesListItem, ArticleNode} from '../../flow/Article';
+import type {Article, ArticlesList, ArticlesListItem, ArticleNode, ArticleProject} from '../../flow/Article';
+import type {KnowledgeBaseActions} from './knowledge-base-actions';
 import type {KnowledgeBaseState} from './knowledge-base-reducers';
 import type {Theme, UITheme} from '../../flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import type {IssueProject} from '../../flow/CustomFields';
-import {hasType} from '../../components/api/api__resource-types';
-import {routeMap} from '../../app-routes';
 
-type Props = KnowledgeBaseState & {
-  loadArticlesListFromCache: (any) => void,
-  loadArticlesList: (any) => void
-};
+type Props = KnowledgeBaseActions & KnowledgeBaseState;
 
 type State = {
   isTitlePinned: boolean
@@ -59,17 +56,21 @@ export class KnowledgeBase extends Component<Props, State> {
     this.loadArticlesList();
   }
 
-  loadArticlesList = (reset?: boolean) => this.props.loadArticlesList(reset)
+  loadArticlesList = (reset?: boolean) => this.props.loadArticlesList(reset);
 
   renderProject = ({section}: ArticlesListItem) => {
-    const title: IssueProject | Article = section.title;
-    if (title) {
+    const project: ?ArticleProject = section.title;
+    if (project) {
+      const Icon = project.articles.collapsed ? IconAngleRight : IconAngleDown;
       return (
         <>
-          <View style={[styles.item, styles.itemProject]}>
-            <IconAngleDown size={24} color={this.uiTheme.colors.$text}/>
-            <Text style={styles.projectTitle}>{title.name || title.summary}</Text>
-          </View>
+          <TouchableOpacity
+            style={[styles.item, styles.itemProject]}
+            onPress={() => this.props.toggleProjectArticlesVisibility(section)}
+          >
+            <View style={styles.itemProjectIcon}><Icon size={24} color={this.uiTheme.colors.$text}/></View>
+            <Text style={styles.projectTitle}>{project.name}</Text>
+          </TouchableOpacity>
           {this.renderSeparator()}
         </>
       );
@@ -153,7 +154,7 @@ export class KnowledgeBase extends Component<Props, State> {
           : <Text numberOfLines={5} style={styles.headerTitleText}>{title}</Text>}
       </View>
     );
-  }
+  };
 
   renderSeparator() {
     return <View style={styles.separator}>{Select.renderSeparator()}</View>;
@@ -169,9 +170,9 @@ export class KnowledgeBase extends Component<Props, State> {
       tintColor={this.uiTheme.colors.$link}
       onRefresh={this.loadArticlesList}
     />;
-  }
+  };
 
-  getListItemKey= (item: ArticleNode, index: number) => item.data.id || index;
+  getListItemKey = (item: ArticleNode, index: number) => item.data.id || index;
 
   renderArticlesList = (articlesList: ArticlesList) => {
     return (
