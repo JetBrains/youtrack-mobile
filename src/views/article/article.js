@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import {RefreshControl, View, ActivityIndicator, ScrollView} from 'react-native';
+import {RefreshControl, View, ActivityIndicator, ScrollView, TouchableOpacity, Text} from 'react-native';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -17,7 +17,7 @@ import IssueTabbed from '../../components/issue-tabbed/issue-tabbed';
 import PropTypes from 'prop-types';
 import Router from '../../components/router/router';
 import VisibilityControl from '../../components/visibility/visibility-control';
-import {findProjectNode} from '../knowledge-base/knowledge-base-helper';
+import {createBreadCrumbs, findArticleNode} from '../../components/articles/articles-helper';
 import {getApi} from '../../components/api/api__instance';
 import {IconBack, IconCheck, IconClose, IconDrag, IconMoreOptions,} from '../../components/icon/icon';
 import {isIOSPlatform} from '../../util/util';
@@ -29,6 +29,7 @@ import type {ArticleNode} from '../../flow/Article';
 import type {ArticleState} from './article-reducers';
 import type {CustomError} from '../../flow/Error';
 import type {HeaderProps} from '../../components/header/header';
+import type {IssueProject} from '../../flow/CustomFields';
 import type {IssueTabbedState} from '../../components/issue-tabbed/issue-tabbed';
 import type {KnowledgeBaseState} from '../knowledge-base/knowledge-base-reducers';
 import type {RootState} from '../../reducers/app-reducer';
@@ -36,10 +37,11 @@ import type {Theme, UITheme, UIThemeColors} from '../../flow/Theme';
 import type {Visibility} from '../../flow/Visibility';
 
 type Props = ArticleState & { articlePlaceholder: Article, storePrevArticle?: boolean } & typeof (articleActions);
-type State = IssueTabbedState;
+
+const maxBreadcrumbTextLength: number = 24;
 
 //$FlowFixMe
-class Article extends IssueTabbed<Props, State> {
+class Article extends IssueTabbed<Props, IssueTabbedState> {
   static contextTypes = {
     actionSheet: PropTypes.func
   };
@@ -73,6 +75,44 @@ class Article extends IssueTabbed<Props, State> {
     />;
   };
 
+  renderBreadCrumbs = () => {
+    const {article, articlesList} = this.props;
+    const breadCrumbs: Array<Article | IssueProject> = createBreadCrumbs(article, articlesList);
+
+    if (breadCrumbs.length === 0) {
+      return null;
+    }
+
+    return (
+      <View style={styles.breadCrumbs}>
+        <ScrollView
+          horizontal={true}
+          contentContainerStyle={styles.breadCrumbsContent}
+        >
+          {breadCrumbs.map((it: Article | IssueProject, index: number) => {
+            const breadcrumbText: string = it.name || it.summary;
+            return (
+              <View key={it.id}>
+                <View style={styles.commentContent}>
+                  {index > 0 && <Text style={styles.breadCrumbsButtonTextSeparator}>/</Text>}
+                  <TouchableOpacity
+                    style={styles.breadCrumbsButton}
+                    onPress={() => Router.backTo(breadCrumbs.length - index)}
+                  >
+                    <Text style={styles.breadCrumbsButtonText}>
+                      {breadcrumbText.substr(0, maxBreadcrumbTextLength)}
+                      {breadcrumbText.length > maxBreadcrumbTextLength && '…'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            );
+          })}
+        </ScrollView>
+        <View style={styles.breadCrumbsSeparator}/>
+      </View>
+    );
+  };
   renderDetails = (uiTheme: UITheme) => {
     const {article, articlesList, articlePlaceholder, articleDraft, updateArticleDraft, error, isLoading} = this.props;
     if (error) {
@@ -81,8 +121,9 @@ class Article extends IssueTabbed<Props, State> {
 
     const articleData: ?Article = article || articlePlaceholder;
     const isEditMode: boolean = !!articleDraft;
-    const articleNode: ?ArticleNode = article && findProjectNode(articlesList, article.project.id, article.id);
+    const articleNode: ?ArticleNode = article && findArticleNode(articlesList, article.project.id, article.id);
     const subArticles: Array<Article> = (articleNode?.children || []).map((it: ArticleNode) => it.data);
+    const breadCrumbsElement = article ? this.renderBreadCrumbs() : null;
 
     return (
       <ScrollView
@@ -90,10 +131,11 @@ class Article extends IssueTabbed<Props, State> {
         contentContainerStyle={styles.articleDetails}
         refreshControl={this.renderRefreshControl()}
       >
-
+        {breadCrumbsElement}
         {!!articleData && (
           <>
             <VisibilityControl
+              style={breadCrumbsElement ? null : styles.visibility}
               entityId={articleData.idReadable}
               visibility={articleData.visibility}
               onSubmit={(visibility: Visibility) => getApi().articles.updateArticle(articleData.id, {visibility})}

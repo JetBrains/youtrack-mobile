@@ -7,7 +7,8 @@ import {
   createAppContainer,
   StackActions,
   NavigationActions,
-  NavigationNavigateAction
+  NavigationNavigateAction,
+  NavigationRoute
 } from 'react-navigation';
 
 import log from '../log/log';
@@ -160,13 +161,29 @@ class Router {
     }
   }
 
+  getRoutes: Array<NavigationRoute> = () => this._navigator.state.nav.routes;
+
+  hasNoParentRoute: Array<NavigationRoute> = () => this.getRoutes().length <= 1;
+
   pop(isModalTransition?: boolean, options?: Object) {
-    const routes = this._navigator.state.nav.routes;
-    if (routes.length <= 1) {
+    if (this.hasNoParentRoute()) {
       return false;
     }
     this._modalTransition = isModalTransition;
-    this.dispatch(NavigationActions.back(), routes[routes.length - 2].routeName, this._currentRoute.routeName, options);
+    const routes: Array<NavigationRoute> = this.getRoutes();
+    this.dispatch(NavigationActions.back(), routes[routes.length - 2].routeName, this.getCurrentRouteName(), options);
+    return true;
+  }
+
+  backTo(index: number) {
+    let count = index;
+    while (count > 0) {
+      if (this.hasNoParentRoute()) {
+        return false;
+      }
+      this.pop();
+      count--;
+    }
     return true;
   }
 

@@ -5,11 +5,13 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {elevation1, elevationBottom} from '../../components/common-styles/shadow';
 import {headerMinHeight} from '../../components/header/header.styles';
 import {MAIN_FONT_SIZE, mainText} from '../../components/common-styles/typography';
+import {separator} from '../../components/common-styles/list';
 import {summaryTitle} from '../../components/common-styles/issue';
 import {UNIT} from '../../components/variables/variables';
 
 const INPUT_BORDER_RADIUS = UNIT;
 const MIN_INPUT_SIZE = UNIT * 4;
+const detailsHorizontalPadding = UNIT * 2;
 
 export default EStyleSheet.create({
   container: {
@@ -17,8 +19,8 @@ export default EStyleSheet.create({
     backgroundColor: '$background'
   },
   articleDetails: {
-    padding: UNIT * 2,
-    paddingTop: UNIT * 3
+    padding: detailsHorizontalPadding,
+    paddingTop: 0,
   },
   articleActivities: {
     padding: UNIT * 2,
@@ -27,6 +29,9 @@ export default EStyleSheet.create({
   description: {
     ...mainText,
     color: '$text'
+  },
+  visibility: {
+    marginTop: UNIT * 3
   },
   summaryEdit: {
     ...Platform.select({
@@ -130,5 +135,31 @@ export default EStyleSheet.create({
   },
   commentEditInput: {
     padding: 0
-  }
+  },
+
+  breadCrumbs: {
+    height: UNIT * 9,
+    marginBottom: UNIT * 2,
+    marginHorizontal: -detailsHorizontalPadding
+  },
+  breadCrumbsContent: {
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingHorizontal: detailsHorizontalPadding / 2
+  },
+  breadCrumbsButton: {
+    paddingVertical: UNIT
+  },
+  breadCrumbsButtonText: {
+    ...mainText,
+    marginHorizontal: UNIT,
+    color: '$link'
+  },
+  breadCrumbsButtonTextSeparator: {
+    color: '$icon'
+  },
+  breadCrumbsSeparator: {
+    ...separator,
+    borderColor: '$separator'
+  },
 });

@@ -13,7 +13,7 @@ import Router from '../../components/router/router';
 import Select from '../../components/select/select';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
-import {findProjectNode} from './knowledge-base-helper';
+import {findArticleNode} from '../../components/articles/articles-helper';
 import {IconAngleDown, IconAngleRight, IconBack, IconLock} from '../../components/icon/icon';
 import {SkeletonIssues} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
@@ -99,7 +99,7 @@ export class KnowledgeBase extends Component<Props, State> {
 
         {item.children.length > 0 && <TouchableOpacity
           style={styles.itemButtonContainer}
-          onPress={() => this.renderSubArticles(article)}
+          onPress={() => this.renderSubArticlesPage(article)}
         >
           <View style={styles.itemButton}>
             <Text style={styles.itemButtonText}>{item.children.length}</Text>
@@ -110,9 +110,9 @@ export class KnowledgeBase extends Component<Props, State> {
     );
   };
 
-  renderSubArticles = (article: Article) => {
+  renderSubArticlesPage = (article: Article) => {
     const {articlesList} = this.props;
-    const node: ?ArticleNode = articlesList && findProjectNode(articlesList, article.project.id, article.id);
+    const node: ?ArticleNode = articlesList && findArticleNode(articlesList, article.project.id, article.id);
 
     if (node) {
       const title = this.renderHeader(

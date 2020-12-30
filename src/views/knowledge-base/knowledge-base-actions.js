@@ -1,7 +1,7 @@
 /* @flow */
 
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
-import {createTree} from './knowledge-base-helper';
+import {createTree} from '../../components/articles/articles-helper';
 import {flushStoragePart, getStorageState} from '../../components/storage/storage';
 import {logEvent} from '../../components/log/log-helper';
 import {setError, setLoading, setList} from './knowledge-base-reducers';
