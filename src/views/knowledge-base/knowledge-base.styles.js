@@ -85,6 +85,9 @@ export default EStyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  itemProjectIconCollapsed: {
+    marginTop: -UNIT / 4
+  },
 
   articleTitle: {
     ...mainText,

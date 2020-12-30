@@ -61,14 +61,24 @@ export class KnowledgeBase extends Component<Props, State> {
   renderProject = ({section}: ArticlesListItem) => {
     const project: ?ArticleProject = section.title;
     if (project) {
-      const Icon = project.articles.collapsed ? IconAngleRight : IconAngleDown;
+      const isCollapsed: boolean = project.articles.collapsed;
+      const Icon = isCollapsed ? IconAngleRight : IconAngleDown;
       return (
         <>
           <TouchableOpacity
             style={[styles.item, styles.itemProject]}
             onPress={() => this.props.toggleProjectArticlesVisibility(section)}
           >
-            <View style={styles.itemProjectIcon}><Icon size={24} color={this.uiTheme.colors.$text}/></View>
+            <View style={[
+              styles.itemProjectIcon,
+              isCollapsed && styles.itemProjectIconCollapsed
+            ]}
+            >
+              <Icon
+                size={24}
+                color={this.uiTheme.colors.$text}
+              />
+            </View>
             <Text style={styles.projectTitle}>{project.name}</Text>
           </TouchableOpacity>
           {this.renderSeparator()}
