@@ -28,6 +28,7 @@ export default EStyleSheet.create({
   headerTitleShadow: elevation1,
   headerTitleButton: {
     marginLeft: -UNIT,
+    marginRight: UNIT,
   },
   headerTitleText: {
     ...headerTitle,
@@ -91,7 +92,7 @@ export default EStyleSheet.create({
 
   articleTitle: {
     ...mainText,
-    marginLeft: UNIT * 2.5,
+    marginLeft: UNIT * 3.5,
     maxWidth: '87%',
     color: '$text'
   },
