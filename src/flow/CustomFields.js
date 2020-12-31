@@ -18,6 +18,7 @@ export type IssueProject = {
   shortName: string,
   archived: boolean,
   ringId: string,
+  pinned: boolean,
   plugins?: {
     timeTrackingSettings: {
       enabled: boolean,

@@ -8,22 +8,22 @@ import {HIT_SLOP} from '../common-styles/button';
 import type {UITheme} from '../../flow/Theme';
 
 type Props = {
-  style?: any,
-  starred: boolean,
   canStar: boolean,
+  hasStar: boolean,
   onStarToggle: (starred: boolean) => any,
+  style?: any,
   uiTheme: UITheme
 }
 
-export default class IssueStar extends PureComponent<Props, void> {
+export default class Star extends PureComponent<Props, void> {
 
   toggle = () => {
-    const {starred, onStarToggle} = this.props;
-    onStarToggle(!starred);
+    const {hasStar, onStarToggle} = this.props;
+    onStarToggle(!hasStar);
   }
 
   render() {
-    const {starred, canStar, style, uiTheme} = this.props;
+    const {hasStar, canStar, style, uiTheme} = this.props;
 
     if (!canStar) {
       return null;
@@ -34,7 +34,7 @@ export default class IssueStar extends PureComponent<Props, void> {
         hitSlop={HIT_SLOP}
         style={style}
         onPress={this.toggle}>
-        {starred ? <IconStar size={22} color={uiTheme.colors.$link}/> : <IconStarOutline size={22} color={uiTheme.colors.$navigation}/>}
+        {hasStar ? <IconStar size={22} color={uiTheme.colors.$link}/> : <IconStarOutline size={22} color={uiTheme.colors.$navigation}/>}
       </TouchableOpacity>
     );
   }

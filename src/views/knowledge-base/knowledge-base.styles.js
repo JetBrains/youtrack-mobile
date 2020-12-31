@@ -44,12 +44,18 @@ export default EStyleSheet.create({
     marginLeft: UNIT * 3.5
   },
   item: {
+    flexDirection: 'row',
     height: SELECT_ITEM_HEIGHT,
-    paddingLeft: UNIT * 1.5,
+    paddingLeft: UNIT,
     backgroundColor: '$background'
   },
-  itemArticle: {
-    justifyContent: 'space-between'
+  itemSubArticle: {
+    marginLeft: UNIT * 1.5
+  },
+  itemStar: {
+    paddingHorizontal: UNIT * 1.5,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   itemArticleIcon: {
     alignItems: 'flex-end',
@@ -78,7 +84,9 @@ export default EStyleSheet.create({
     marginTop: -1
   },
   itemProject: {
+    flexGrow: 1,
     flexDirection: 'row',
+    paddingLeft: UNIT / 2,
     alignItems: 'center'
   },
   itemProjectIcon: {
@@ -90,13 +98,13 @@ export default EStyleSheet.create({
     marginTop: -UNIT / 4
   },
 
-  articleTitle: {
+  articleTitleText: {
     ...mainText,
     marginLeft: UNIT * 3.5,
     maxWidth: '87%',
     color: '$text'
   },
-  projectTitle: {
+  projectTitleText: {
     paddingLeft: UNIT,
     ...headerTitle,
     color: '$text',

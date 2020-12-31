@@ -11,6 +11,7 @@ import ErrorMessage from '../../components/error-message/error-message';
 import IconSearchEmpty from '../../components/icon/search-empty.svg';
 import Router from '../../components/router/router';
 import Select from '../../components/select/select';
+import Star from '../../components/star/star';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
 import {findArticleNode} from '../../components/articles/articles-helper';
@@ -65,22 +66,33 @@ export class KnowledgeBase extends Component<Props, State> {
       const Icon = isCollapsed ? IconAngleRight : IconAngleDown;
       return (
         <>
-          <TouchableOpacity
-            style={[styles.item, styles.itemProject]}
-            onPress={() => this.props.toggleProjectArticlesVisibility(section)}
-          >
-            <View style={[
-              styles.itemProjectIcon,
-              isCollapsed && styles.itemProjectIconCollapsed
-            ]}
-            >
-              <Icon
-                size={24}
-                color={this.uiTheme.colors.$text}
-              />
-            </View>
-            <Text style={styles.projectTitle}>{project.name}</Text>
-          </TouchableOpacity>
+          <View style={styles.item}>
+            <>
+              <TouchableOpacity
+                style={styles.itemProject}
+                onPress={() => this.props.toggleProjectArticlesVisibility(section)}
+              >
+                <View style={[
+                  styles.itemProjectIcon,
+                  isCollapsed && styles.itemProjectIconCollapsed
+                ]}
+                >
+                  <Icon
+                    size={24}
+                    color={this.uiTheme.colors.$text}
+                  />
+                </View>
+                <Text style={styles.projectTitleText}>{project.name}</Text>
+              </TouchableOpacity>
+            </>
+            <Star
+              style={styles.itemStar}
+              hasStar={project.pinned}
+              canStar={true}
+              onStarToggle={() => this.props.toggleProjectArticlesFavorite(project)}
+              uiTheme={this.uiTheme}
+            />
+          </View>
           {this.renderSeparator()}
         </>
       );
@@ -92,12 +104,12 @@ export class KnowledgeBase extends Component<Props, State> {
     const style: ViewStyleProp = {...styles.row, ...styles.item};
 
     return (
-      <View style={[styles.itemArticle, style]}>
+      <View style={style}>
         <TouchableOpacity
           style={style}
           onPress={() => Router.Article({articlePlaceholder: article})}
         >
-          <Text numberOfLines={2} style={styles.articleTitle}>{article.summary}</Text>
+          <Text numberOfLines={2} style={styles.articleTitleText}>{article.summary}</Text>
           <View style={styles.itemArticleIcon}>
             {hasType.visibilityLimited(article?.visibility) && (
               <IconLock
@@ -137,7 +149,7 @@ export class KnowledgeBase extends Component<Props, State> {
         <TouchableOpacity
           onPress={() => Router.Article({articlePlaceholder: article})}
         >
-          <Text numberOfLines={2} style={styles.projectTitle}>{article.summary}</Text>
+          <Text numberOfLines={2} style={styles.projectTitleText}>{article.summary}</Text>
         </TouchableOpacity>
       );
       const tree: ArticlesList = this.renderArticlesList([{
@@ -145,7 +157,7 @@ export class KnowledgeBase extends Component<Props, State> {
         data: node.children
       }]);
 
-      Router.Page({children: <>{title}{tree}</>});
+      Router.Page({children: <>{title}<View style={styles.itemSubArticle}>{tree}</View></>});
     }
   };
 

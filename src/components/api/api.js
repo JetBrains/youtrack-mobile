@@ -13,6 +13,7 @@ import issueFields from './api__issue-fields';
 import IssueFolderAPI from './api__issue-folder';
 import IssuesAPI from './api__issues';
 import MentionsAPI from './api__mention';
+import ProjectsAPI from './api__projects';
 import UserAPI from './api__user';
 import UserGroupAPI from './api__user-group';
 
@@ -33,6 +34,7 @@ class API extends BaseAPI {
   issueFolder: IssueFolderAPI
   issues: IssuesAPI;
   mentions: MentionsAPI;
+  projects: ProjectsAPI;
   user: UserAPI;
   userGroup: UserGroupAPI;
 
@@ -46,6 +48,7 @@ class API extends BaseAPI {
     this.issueFolder = new IssueFolderAPI(auth);
     this.issues = new IssuesAPI(auth);
     this.mentions = new MentionsAPI(auth);
+    this.projects = new ProjectsAPI(auth);
     this.user = new UserAPI(auth);
     this.userGroup = new UserGroupAPI(auth);
 

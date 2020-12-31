@@ -18,7 +18,7 @@ import ErrorMessage from '../../components/error-message/error-message';
 import Header from '../../components/header/header';
 import IssueActivity from './activity/issue__activity';
 import IssueDetails from './issue__details';
-import IssueStar from '../../components/issue-actions/issue-star';
+import Star from '../../components/star/star';
 import Router from '../../components/router/router';
 import Select from '../../components/select/select';
 import usage from '../../components/usage/usage';
@@ -297,10 +297,10 @@ class Issue extends PureComponent<IssueProps, TabsState> {
     const {issue, toggleStar} = this.props;
     if (this.isIssueLoaded()) {
       return (
-        <IssueStar
+        <Star
           style={styles.issueStar}
           canStar={this.canStar()}
-          starred={issue.watchers.hasStar}
+          hasStar={issue.watchers.hasStar}
           onStarToggle={toggleStar}
           uiTheme={uiTheme}
         />

@@ -4,12 +4,14 @@ import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids'
 import {createTree, toggleArticleProjectListItem} from '../../components/articles/articles-helper';
 import {flushStoragePart, getStorageState} from '../../components/storage/storage';
 import {logEvent} from '../../components/log/log-helper';
+import {notify} from '../../components/notification/notification';
 import {setError, setLoading, setList} from './knowledge-base-reducers';
 import {until} from '../../util/util';
 
 import type Api from '../../components/api/api';
 import type {AppState} from '../../reducers';
 import type {ArticleNode, ArticleProject, ArticlesList, ArticlesListItem} from '../../flow/Article';
+import type {IssueProject} from '../../flow/CustomFields';
 
 type ApiGetter = () => Api;
 
@@ -78,14 +80,37 @@ const toggleProjectArticlesVisibility = (section: ArticlesListItem) => {
   };
 };
 
+const toggleProjectArticlesFavorite = (project: ArticleProject) => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    logEvent({message: 'Toggle project articles favorite', analyticsId: ANALYTICS_ARTICLES_PAGE});
+    const api: Api = getApi();
+    const [error] = await until(api.projects.toggleFavorite(project.id, project.pinned));
+    if (error) {
+      notify('Failed to toggle favorite for the project', error);
+    } else {
+      const updatedProjects = getStorageState().projects.reduce((list: Array<IssueProject>, it: IssueProject) => {
+        if (it.id === project.id) {
+          it.pinned = !project.pinned;
+        }
+        return list.concat(it);
+      }, []);
+
+      await flushStoragePart({projects: updatedProjects});
+      dispatch(loadArticlesList(false));
+    }
+  };
+};
+
 export type KnowledgeBaseActions = {
   loadArticlesList: typeof loadArticlesList,
   loadArticlesListFromCache: typeof loadArticlesListFromCache,
-  toggleProjectArticlesVisibility: typeof toggleProjectArticlesVisibility
+  toggleProjectArticlesVisibility: typeof toggleProjectArticlesVisibility,
+  toggleProjectArticlesFavorite: typeof toggleProjectArticlesFavorite
 };
 
 export {
   loadArticlesList,
   loadArticlesListFromCache,
-  toggleProjectArticlesVisibility
+  toggleProjectArticlesVisibility,
+  toggleProjectArticlesFavorite
 };
