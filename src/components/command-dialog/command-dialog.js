@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 
 import throttle from 'lodash.throttle';
 
-import ApiHelper from '../../components/api/api__helper';
+import ApiHelper from '../api/api__helper';
 import KeyboardSpacerIOS from '../platform/keyboard-spacer.ios';
 import ModalView from '../modal-view/modal-view';
 import SelectItem from '../select/select__item';
