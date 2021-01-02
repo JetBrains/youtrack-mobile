@@ -1,5 +1,6 @@
 /* @flow */
 
+import animation from '../../components/animation/animation';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
 import {createTree, toggleArticleProjectListItem} from '../../components/articles/articles-helper';
 import {flushStoragePart, getStorageState} from '../../components/storage/storage';
@@ -88,6 +89,7 @@ const toggleProjectArticlesFavorite = (project: ArticleProject) => {
     if (error) {
       notify('Failed to toggle favorite for the project', error);
     } else {
+      animation.layoutAnimation();
       const updatedProjects = getStorageState().projects.reduce((list: Array<IssueProject>, it: IssueProject) => {
         if (it.id === project.id) {
           it.pinned = !project.pinned;
