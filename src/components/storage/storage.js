@@ -20,6 +20,7 @@ export const MAX_STORED_QUERIES = 5;
 
 export type StorageState = {|
   articlesList: ArticlesList,
+  articlesListPinnedOnly: boolean,
   projectId: ?string,
   projects: Array<?string>,
   draftId: ?string,
@@ -48,6 +49,7 @@ type StorageStateKeys = $Exact<$ObjMap<StorageState, () => string>>;
 
 const storageKeys: StorageStateKeys = {
   articlesList: 'YT_ARTICLES_LIST',
+  articlesListPinnedOnly: 'YT_ARTICLES_LIST_PINNED_ONLY',
   projectId: 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE',
   projects: 'YT_PROJECTS_STORAGE',
   draftId: 'DRAFT_ID_STORAGE_KEY',
@@ -78,6 +80,7 @@ const hasValue = v => v !== null && v !== undefined;
 
 export const initialState: StorageState = Object.freeze({
   articlesList: null,
+  articlesListPinnedOnly: false,
   projectId: null,
   projects: [],
   draftId: null,
@@ -125,6 +128,7 @@ export async function clearCachesAndDrafts() {
   log.debug('Storage drafts has been cleared');
   await AsyncStorage.multiRemove([
     storageKeys.articlesList,
+    storageKeys.articlesListPinnedOnly,
     storageKeys.projectId,
     storageKeys.draftId,
     storageKeys.query,

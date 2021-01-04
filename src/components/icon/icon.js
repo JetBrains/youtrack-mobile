@@ -166,6 +166,23 @@ export const IconBack = (props?: Props) => {
   }} />;
 };
 
+export const IconContextActions = (props?: Props) => {
+  if (isAndroid) {
+    return <IconYTM {...{
+      ...defaultProps(),
+      name: 'drag',
+      size: 18,
+      ...props
+    }} />;
+  }
+  return <IconYTM {...{
+    ...defaultProps(),
+    name: 'more-options',
+    size: 18,
+    ...props
+  }} />;
+};
+
 export const IconBell = (props?: Props) => <IconYTM {...{
   ...defaultProps(),
   name: 'bell-filled',

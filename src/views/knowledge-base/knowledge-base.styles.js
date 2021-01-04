@@ -14,25 +14,35 @@ export default EStyleSheet.create({
   content: {
     flex: 1
   },
-  headerTitle: {
+
+  header: {
     position: 'relative',
     zIndex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     height: SELECT_ITEM_HEIGHT,
     paddingBottom: UNIT / 4,
-    paddingLeft: UNIT * 2,
-    paddingRight: UNIT * 4,
+    paddingHorizontal: UNIT * 2,
     backgroundColor: '$background',
   },
-  headerTitleShadow: elevation1,
-  headerTitleButton: {
-    marginLeft: -UNIT,
-    marginRight: UNIT,
+  headerShadow: elevation1,
+  headerTitle: {
+    flex: 1
   },
   headerTitleText: {
     ...headerTitle,
     color: '$text'
+  },
+  headerButton: {
+    flexGrow: 0
+  },
+  headerLeftButton: {
+    marginLeft: -UNIT,
+    marginRight: UNIT,
+  },
+  headerRightButton: {
+    marginLeft: UNIT,
+    marginRight: -UNIT / 2
   },
 
   row: {
@@ -50,7 +60,7 @@ export default EStyleSheet.create({
     backgroundColor: '$background'
   },
   itemSubArticle: {
-    marginLeft: UNIT * 1.5
+    marginLeft: UNIT
   },
   itemStar: {
     paddingHorizontal: UNIT * 1.5,
@@ -119,5 +129,13 @@ export default EStyleSheet.create({
   },
   noArticlesIcon: {
     marginBottom: UNIT * 2
+  },
+  listFooter: {
+    marginTop: UNIT * 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  listFooterText: {
+    color: '$link'
   }
 });

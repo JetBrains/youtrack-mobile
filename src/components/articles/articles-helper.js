@@ -61,9 +61,10 @@ export const createTree = (articles: Array<Article>, cachedArticlesList: Article
   }, []);
 };
 
-export const toggleArticleProjectListItem = (item: ArticlesListItem): ArticlesListItem => {
+export const toggleArticleProjectListItem = (item: ArticlesListItem, isCollapsed?: boolean): ArticlesListItem => {
   const project: ArticleProject = item.title;
-  return createArticlesListItem(project, item.dataCollapsed || item.data, !project.articles.collapsed);
+  const collapsed: boolean = typeof isCollapsed === 'boolean' ? isCollapsed : !project.articles.collapsed;
+  return createArticlesListItem(project, item.dataCollapsed || item.data, collapsed);
 };
 
 export const flattenTree = (nodes: ArticleNodeList = []): Array<Article> => {

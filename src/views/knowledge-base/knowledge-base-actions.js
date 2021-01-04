@@ -1,11 +1,14 @@
 /* @flow */
 
+import type ActionSheet from '@expo/react-native-action-sheet';
+
 import animation from '../../components/animation/animation';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
 import {createTree, toggleArticleProjectListItem} from '../../components/articles/articles-helper';
 import {flushStoragePart, getStorageState} from '../../components/storage/storage';
 import {logEvent} from '../../components/log/log-helper';
 import {notify} from '../../components/notification/notification';
+import {showActions} from '../../components/action-sheet/action-sheet';
 import {setError, setLoading, setList} from './knowledge-base-reducers';
 import {until} from '../../util/util';
 
@@ -108,16 +111,69 @@ const toggleProjectArticlesFavorite = (project: ArticleProject) => {
   };
 };
 
+const toggleNonFavoriteProjectsVisibility = () => {
+  return async (dispatch: (any) => any) => {
+    const isPinnedOnly: boolean = getStorageState().articlesListPinnedOnly;
+    await flushStoragePart({articlesListPinnedOnly: !isPinnedOnly});
+    dispatch(loadArticlesList(true));
+  };
+};
+
+const showKBActions = (actionSheet: ActionSheet) => {
+  return async (dispatch: (any) => any, getState: () => AppState) => {
+    const state: AppState = getState();
+    const {articlesList} = state.articles;
+    const toggle = (collapse: boolean) => {
+      logEvent({message: `${collapse ? 'Collapse' : 'Expand'} all Knowledge base projects`, analyticsId: ANALYTICS_ARTICLES_PAGE});
+      if (articlesList) {
+        const updatedArticlesList: ArticlesList = articlesList.reduce((list: ArticlesList, item: ArticlesListItem) => {
+          return list.concat(toggleArticleProjectListItem(item, collapse));
+        }, []);
+
+        dispatch(setList(updatedArticlesList));
+        setArticlesListCache(updatedArticlesList);
+      }
+    };
+
+    const actions = [
+      {
+        title: 'Collapse all projects',
+        execute: () => toggle(true)
+      },
+      {
+        title: 'Expand all projects',
+        execute: () => toggle(false)
+      },
+      {
+        title: 'Hide/show non-favorite',
+        execute: () => dispatch(toggleNonFavoriteProjectsVisibility())
+      },
+      {title: 'Cancel'}
+    ];
+
+    const selectedAction = await showActions(actions, actionSheet);
+
+    if (selectedAction && selectedAction.execute) {
+      selectedAction.execute();
+    }
+  };
+};
+
+
 export type KnowledgeBaseActions = {
   loadArticlesList: typeof loadArticlesList,
   loadArticlesListFromCache: typeof loadArticlesListFromCache,
+  toggleNonFavoriteProjectsVisibility: typeof toggleNonFavoriteProjectsVisibility,
   toggleProjectArticlesVisibility: typeof toggleProjectArticlesVisibility,
-  toggleProjectArticlesFavorite: typeof toggleProjectArticlesFavorite
+  toggleProjectArticlesFavorite: typeof toggleProjectArticlesFavorite,
+  showKBActions: typeof showKBActions
 };
 
 export {
   loadArticlesList,
   loadArticlesListFromCache,
+  toggleNonFavoriteProjectsVisibility,
   toggleProjectArticlesVisibility,
-  toggleProjectArticlesFavorite
+  toggleProjectArticlesFavorite,
+  showKBActions
 };

@@ -10,13 +10,20 @@ import * as knowledgeBaseActions from './knowledge-base-actions';
 import ErrorMessage from '../../components/error-message/error-message';
 import IconSearchEmpty from '../../components/icon/search-empty.svg';
 import Router from '../../components/router/router';
+import PropTypes from 'prop-types';
 import Select from '../../components/select/select';
 import Star from '../../components/star/star';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
 import {findArticleNode} from '../../components/articles/articles-helper';
 import {hasType} from '../../components/api/api__resource-types';
-import {IconAngleDown, IconAngleRight, IconBack, IconLock} from '../../components/icon/icon';
+import {
+  IconAngleDown,
+  IconAngleRight,
+  IconBack,
+  IconContextActions,
+  IconLock
+} from '../../components/icon/icon';
 import {routeMap} from '../../app-routes';
 import {SkeletonIssues} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
@@ -29,21 +36,27 @@ import type {KnowledgeBaseActions} from './knowledge-base-actions';
 import type {KnowledgeBaseState} from './knowledge-base-reducers';
 import type {Theme, UITheme} from '../../flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import {HIT_SLOP} from '../../components/common-styles/button';
+import {getStorageState} from '../../components/storage/storage';
 
 type Props = KnowledgeBaseActions & KnowledgeBaseState;
 
 type State = {
-  isTitlePinned: boolean
+  isHeaderPinned: boolean
 };
 
 
 export class KnowledgeBase extends Component<Props, State> {
-  articlesList: Object
+  static contextTypes = {
+    actionSheet: PropTypes.func
+  };
+
+  articlesList: Object;
   uiTheme: UITheme;
 
   constructor(props: Props) {
     super(props);
-    this.state = {isTitlePinned: false};
+    this.state = {isHeaderPinned: false};
     usage.trackScreenView(ANALYTICS_ARTICLES_PAGE);
 
     Router.setOnDispatchCallback((routeName: string, prevRouteName: string) => {
@@ -63,6 +76,9 @@ export class KnowledgeBase extends Component<Props, State> {
   renderProject = ({section}: ArticlesListItem) => {
     const project: ?ArticleProject = section.title;
     if (project) {
+      if (getStorageState().articlesListPinnedOnly && !project.pinned) {
+        return null;
+      }
       const isCollapsed: boolean = project?.articles?.collapsed;
       const Icon = isCollapsed ? IconAngleRight : IconAngleDown;
       return (
@@ -142,20 +158,23 @@ export class KnowledgeBase extends Component<Props, State> {
     const node: ?ArticleNode = articlesList && findArticleNode(articlesList, article.project.id, article.id);
 
     if (node) {
-      const title = this.renderHeader(
-        node.data.summary,
-        <TouchableOpacity
-          style={styles.headerTitleButton}
-          onPress={() => Router.pop()}
-        >
-          <IconBack color={this.uiTheme.colors.$link}/>
-        </TouchableOpacity>,
-        <TouchableOpacity
-          onPress={() => Router.Article({articlePlaceholder: article})}
-        >
-          <Text numberOfLines={2} style={styles.projectTitleText}>{article.summary}</Text>
-        </TouchableOpacity>
-      );
+      const title = this.renderHeader({
+        leftButton: (
+          <TouchableOpacity
+            onPress={() => Router.pop()}
+          >
+            <IconBack color={this.uiTheme.colors.$link}/>
+          </TouchableOpacity>
+        ),
+        title: node.data.summary,
+        customTitleComponent: (
+          <TouchableOpacity
+            onPress={() => Router.Article({articlePlaceholder: article})}
+          >
+            <Text numberOfLines={2} style={styles.projectTitleText}>{article.summary}</Text>
+          </TouchableOpacity>
+        )
+      });
       const tree: ArticlesList = this.renderArticlesList([{
         title: null,
         data: node.children
@@ -165,19 +184,29 @@ export class KnowledgeBase extends Component<Props, State> {
     }
   };
 
-  renderHeader = (title: string, leftButton?: React$Element<any>, customTitleComponent?: React$Element<any>) => {
+  renderHeader = (
+    {leftButton, title, customTitleComponent, rightButton}: {
+      leftButton?: React$Element<any>,
+      title: string,
+      customTitleComponent?: React$Element<any>,
+      rightButton?: React$Element<any>
+    }
+  ) => {
     return (
       <View
         key="articlesHeader"
         style={[
-          styles.headerTitle,
-          this.state.isTitlePinned || customTitleComponent ? styles.headerTitleShadow : null
+          styles.header,
+          this.state.isHeaderPinned || customTitleComponent ? styles.headerShadow : null
         ]}
       >
-        {leftButton}
-        {customTitleComponent
-          ? customTitleComponent
-          : <Text numberOfLines={5} style={styles.headerTitleText}>{title}</Text>}
+        {leftButton && <View style={[styles.headerButton, styles.headerLeftButton]}>{leftButton}</View>}
+        <View style={styles.headerTitle}>
+          {customTitleComponent
+            ? customTitleComponent
+            : <Text numberOfLines={5} style={styles.headerTitleText}>{title}</Text>}
+        </View>
+        {rightButton && <View style={[styles.headerButton, styles.headerRightButton]}>{rightButton}</View>}
       </View>
     );
   };
@@ -187,7 +216,7 @@ export class KnowledgeBase extends Component<Props, State> {
   }
 
   onScroll = ({nativeEvent}: Object) => {
-    this.setState({isTitlePinned: nativeEvent.contentOffset.y >= UNIT * 7});
+    this.setState({isHeaderPinned: nativeEvent.contentOffset.y >= UNIT * 7});
   };
 
   renderRefreshControl = () => {
@@ -221,13 +250,23 @@ export class KnowledgeBase extends Component<Props, State> {
           icon: () => <IconSearchEmpty style={[styles.noArticlesIcon, {fill: this.uiTheme.colors.$icon}]}/>,
           iconSize: 48
         }}/>}
+        ListFooterComponent={() =>
+          getStorageState().articlesListPinnedOnly &&
+          <View style={styles.listFooter}>
+            <TouchableOpacity
+              hitSlop={HIT_SLOP}
+              onPress={() => this.props.toggleNonFavoriteProjectsVisibility()}
+            >
+              <Text style={styles.listFooterText}>Show non-favorite projects</Text>
+            </TouchableOpacity>
+          </View>}
         stickySectionHeadersEnabled={true}
       />
     );
   };
 
   render() {
-    const {isLoading, articlesList, error} = this.props;
+    const {isLoading, articlesList, error, showKBActions} = this.props;
 
     return (
       <ThemeContext.Consumer>
@@ -239,7 +278,21 @@ export class KnowledgeBase extends Component<Props, State> {
               style={styles.container}
               testID="articles"
             >
-              {this.renderHeader('Knowledge Base')}
+              {
+                this.renderHeader({
+                  title: 'Knowledge Base',
+                  rightButton: (
+                    <TouchableOpacity
+                      hitSlop={HIT_SLOP}
+                      onPress={() => {
+                        showKBActions(this.context.actionSheet());
+                      }}
+                    >
+                      <IconContextActions color={this.uiTheme.colors.$link}/>
+                    </TouchableOpacity>
+                  )
+                })
+              }
               <View
                 style={styles.content}
               >
