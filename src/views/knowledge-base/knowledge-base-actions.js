@@ -116,6 +116,7 @@ const toggleNonFavoriteProjectsVisibility = () => {
     const isPinnedOnly: boolean = getStorageState().articlesListPinnedOnly;
     await flushStoragePart({articlesListPinnedOnly: !isPinnedOnly});
     dispatch(loadArticlesList(true));
+    notify(`${!isPinnedOnly ? 'Non-favorite projects are hidden' : 'Non-favorite projects are shown'}`);
   };
 };
 
@@ -132,6 +133,7 @@ const showKBActions = (actionSheet: ActionSheet) => {
 
         dispatch(setList(updatedArticlesList));
         setArticlesListCache(updatedArticlesList);
+        notify(`${collapse ? 'Projects collapsed' : 'Projects expanded'}`);
       }
     };
 
@@ -145,7 +147,7 @@ const showKBActions = (actionSheet: ActionSheet) => {
         execute: () => toggle(false)
       },
       {
-        title: 'Hide/show non-favorite',
+        title: 'Hide/show non-favorite projects',
         execute: () => dispatch(toggleNonFavoriteProjectsVisibility())
       },
       {title: 'Cancel'}

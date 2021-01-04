@@ -76,9 +76,6 @@ export class KnowledgeBase extends Component<Props, State> {
   renderProject = ({section}: ArticlesListItem) => {
     const project: ?ArticleProject = section.title;
     if (project) {
-      if (getStorageState().articlesListPinnedOnly && !project.pinned) {
-        return null;
-      }
       const isCollapsed: boolean = project?.articles?.collapsed;
       const Icon = isCollapsed ? IconAngleRight : IconAngleDown;
       return (
@@ -230,11 +227,16 @@ export class KnowledgeBase extends Component<Props, State> {
   getListItemKey = (item: ArticleNode, index: number) => item.data.id || index;
 
   renderArticlesList = (articlesList: ArticlesList) => {
+    const list: ArticlesList = (
+      getStorageState().articlesListPinnedOnly
+        ? articlesList.filter((it: ArticlesListItem) => it.title.pinned)
+        : articlesList
+    );
     return (
       <SectionList
         testID="articles"
         ref={(ref: Object) => ref && (this.articlesList = ref)}
-        sections={articlesList}
+        sections={list}
         scrollEventThrottle={10}
         onScroll={this.onScroll}
         refreshControl={this.renderRefreshControl()}
