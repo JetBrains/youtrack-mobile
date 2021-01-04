@@ -38,6 +38,7 @@ type State = {
 
 
 export class KnowledgeBase extends Component<Props, State> {
+  articlesList: Object
   uiTheme: UITheme;
 
   constructor(props: Props) {
@@ -89,7 +90,10 @@ export class KnowledgeBase extends Component<Props, State> {
               style={styles.itemStar}
               hasStar={project.pinned}
               canStar={true}
-              onStarToggle={() => this.props.toggleProjectArticlesFavorite(project)}
+              onStarToggle={async () => {
+                await this.props.toggleProjectArticlesFavorite(project);
+                this.articlesList.scrollToLocation({itemIndex: 0});
+              }}
               uiTheme={this.uiTheme}
             />
           </View>
@@ -200,6 +204,7 @@ export class KnowledgeBase extends Component<Props, State> {
     return (
       <SectionList
         testID="articles"
+        ref={(ref: Object) => ref && (this.articlesList = ref)}
         sections={articlesList}
         scrollEventThrottle={10}
         onScroll={this.onScroll}

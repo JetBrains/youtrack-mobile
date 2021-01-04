@@ -85,11 +85,16 @@ const toggleProjectArticlesFavorite = (project: ArticleProject) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     logEvent({message: 'Toggle project articles favorite', analyticsId: ANALYTICS_ARTICLES_PAGE});
     const api: Api = getApi();
+
+    animation.layoutAnimation();
+    update();
     const [error] = await until(api.projects.toggleFavorite(project.id, project.pinned));
     if (error) {
       notify('Failed to toggle favorite for the project', error);
-    } else {
-      animation.layoutAnimation();
+      update();
+    }
+
+    async function update() {
       const updatedProjects = getStorageState().projects.reduce((list: Array<IssueProject>, it: IssueProject) => {
         if (it.id === project.id) {
           it.pinned = !project.pinned;
