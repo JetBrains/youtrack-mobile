@@ -54,7 +54,7 @@ export default class SummaryDescriptionForm extends Component<Props, void> {
           placeholder="Summary"
           placeholderTextColor={uiTheme.colors.$icon}
           underlineColorAndroid="transparent"
-          keyboardAppearance="dark"
+          keyboardAppearance={uiTheme.name}
           returnKeyType="next"
           autoCapitalize="sentences"
           defaultValue={summary}

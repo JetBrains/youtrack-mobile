@@ -32,10 +32,12 @@ export type UIThemeColors = {|
   $separator: string
 |};
 
+export type UIThemeName = 'light' | 'dark';
+
 export type UITheme = {
   dark: boolean,
   mode: string,
-  name: string,
+  name: UIThemeName,
   barStyle: BarStyle,
   androidSummaryFontWeight: string,
 

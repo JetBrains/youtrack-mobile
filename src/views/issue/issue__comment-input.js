@@ -255,12 +255,12 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
           <View style={styles.commentInputContainer}>
             <MultilineInput
               ref={this.setInputRef}
-              {...{...this.props, autoFocus: isEditComment, keyboardAppearance: uiTheme.name}}
+              {...{...this.props, autoFocus: isEditComment}}
               placeholder="Write a comment, @mention people"
               value={commentText}
               editable={!isSaving}
               underlineColorAndroid="transparent"
-              keyboardAppearance="dark"
+              keyboardAppearance={uiTheme.name}
               placeholderTextColor={uiTheme.colors.$icon}
               autoCapitalize="sentences"
               onSelectionChange={(event) => {
