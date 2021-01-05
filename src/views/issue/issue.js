@@ -18,9 +18,9 @@ import ErrorMessage from '../../components/error-message/error-message';
 import Header from '../../components/header/header';
 import IssueActivity from './activity/issue__activity';
 import IssueDetails from './issue__details';
-import Star from '../../components/star/star';
 import Router from '../../components/router/router';
 import Select from '../../components/select/select';
+import Star from '../../components/star/star';
 import usage from '../../components/usage/usage';
 import {attachmentActions} from './issue__attachment-actions-and-types';
 import {getApi} from '../../components/api/api__instance';
@@ -342,6 +342,7 @@ class Issue extends PureComponent<IssueProps, TabsState> {
       issuePermissions
     } = this.props;
 
+    const issueIdReadable = this.renderHeaderIssueTitle();
     if (!editMode) {
       const isIssueLoaded: boolean = this.isIssueLoaded();
       return (
@@ -366,25 +367,28 @@ class Issue extends PureComponent<IssueProps, TabsState> {
           }
           onBack={this.handleOnBack}
         >
-          {this.renderHeaderIssueTitle()}
+          {issueIdReadable}
         </Header>
       );
     } else {
-      const canSave = Boolean(summaryCopy) && !isSavingEditedIssue;
-      const saveButton = <IconCheck size={20} color={canSave ? uiTheme.colors.$link : uiTheme.colors.$textSecondary}/>;
+      const canSave: boolean = Boolean(summaryCopy) && !isSavingEditedIssue;
+      const linkColor: string = uiTheme.colors.$link;
+      const textSecondaryColor: string = uiTheme.colors.$textSecondary;
 
       return (
         <Header
-          style={styles.headerLeftButton}
+          style={styles.header}
           leftButton={
             <IconClose
               size={21}
-              color={isSavingEditedIssue ? uiTheme.colors.$textSecondary : uiTheme.colors.$link}
+              color={isSavingEditedIssue ? textSecondaryColor : linkColor}
             />}
           onBack={stopEditingIssue}
-          rightButton={saveButton}
+          rightButton={<IconCheck size={20} color={canSave ? linkColor : textSecondaryColor}/>}
           onRightButtonClick={canSave ? saveIssueSummaryAndDescriptionChange : () => {}}
-        />
+        >
+          {issueIdReadable}
+        </Header>
       );
     }
   }

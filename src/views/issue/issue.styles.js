@@ -21,6 +21,9 @@ export default EStyleSheet.create({
     flex: 1,
     backgroundColor: '$background',
   },
+  header: {
+    paddingHorizontal: UNIT * 2
+  },
   headerText: {
     ...headerTitle,
     color: '$text',
@@ -33,9 +36,6 @@ export default EStyleSheet.create({
         marginLeft: UNIT * 1.3,
       }
     })
-  },
-  headerLeftButton: {
-    paddingHorizontal: UNIT * 2
   },
   headerTextResolved: {
     ...issueIdResolved,
