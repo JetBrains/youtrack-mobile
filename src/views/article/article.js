@@ -117,6 +117,12 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
       </View>
     );
   };
+
+  renderTabBar(uiTheme: UITheme, editMode: boolean = !!this.props.articleDraft) {
+    //$FlowFixMe
+    return super.renderTabBar(this.uiTheme, editMode);
+  }
+
   renderDetails = (uiTheme: UITheme) => {
     const {article, articlesList, articlePlaceholder, articleDraft, updateArticleDraft, error, isLoading} = this.props;
     if (error) {
