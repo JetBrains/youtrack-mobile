@@ -19,8 +19,12 @@ import Router from '../../components/router/router';
 import VisibilityControl from '../../components/visibility/visibility-control';
 import {createBreadCrumbs, findArticleNode} from '../../components/articles/articles-helper';
 import {getApi} from '../../components/api/api__instance';
-import {IconBack, IconCheck, IconClose, IconDrag, IconMoreOptions,} from '../../components/icon/icon';
-import {isIOSPlatform} from '../../util/util';
+import {
+  IconBack,
+  IconCheck,
+  IconClose,
+  IconContextActions
+} from '../../components/icon/icon';
 import {ThemeContext} from '../../components/theme/theme-context';
 
 import styles from './article.styles';
@@ -196,15 +200,6 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     return issuePermissions.canUpdateArticle(article);
   };
 
-  renderContextActionsIcon = () => {
-    const color: string = this.uiTheme.colors.$link;
-    return (
-      isIOSPlatform()
-        ? <IconMoreOptions size={18} color={color}/>
-        : <IconDrag size={18} color={color}/>
-    );
-  };
-
   renderHeader = () => {
     const {
       article,
@@ -241,7 +236,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
               ? <ActivityIndicator color={linkColor}/>
               : <IconCheck size={20} color={linkColor}/>
           )
-          : this.renderContextActionsIcon()
+          : <IconContextActions size={18} color={linkColor}/>
       ),
       onRightButtonClick: (
         isEditMode
