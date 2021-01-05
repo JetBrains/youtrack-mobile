@@ -229,7 +229,12 @@ export class KnowledgeBase extends Component<Props, State> {
   renderArticlesList = (articlesList: ArticlesList) => {
     const list: ArticlesList = (
       getStorageState().articlesListPinnedOnly
-        ? articlesList.filter((it: ArticlesListItem) => it.title.pinned)
+        ? articlesList.filter((it: ArticlesListItem) => {
+          if (it.title) {
+            return it.title.pinned;
+          }
+          return it;
+        })
         : articlesList
     );
     return (
