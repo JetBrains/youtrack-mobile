@@ -7,7 +7,7 @@ import Header from '../../components/header/header';
 import MarkdownView from '../../components/wiki/markdown-view';
 import Router from '../../components/router/router';
 import Select from '../../components/select/select';
-import {IconAngleRight, IconBack} from '../../components/icon/icon';
+import {IconAngleRight, IconBack, IconLock} from '../../components/icon/icon';
 import {SkeletonIssueContent} from '../../components/skeleton/skeleton';
 
 import styles from './article.styles';
@@ -15,6 +15,7 @@ import styles from './article.styles';
 import type {Article} from '../../flow/Article';
 import type {CustomError} from '../../flow/Error';
 import type {UITheme} from '../../flow/Theme';
+import {hasType} from '../../components/api/api__resource-types';
 
 type Props = {
   article: Article,
@@ -46,7 +47,17 @@ const renderSubArticles = (article: Article, subArticles: Array<Article>, uiThem
             onPress={async () => {
               Router.Article({articlePlaceholder: item, storePrevArticle: true});
             }}
-          ><Text numberOfLines={5} style={styles.subArticleItemText}>{item.summary}</Text></TouchableOpacity>}
+          >
+            <Text numberOfLines={5} style={styles.subArticleItemText}>{item.summary}</Text>
+            {hasType.visibilityLimited(article?.visibility) && (
+              <View style={styles.subArticleItemIcon}>
+                <IconLock
+                  size={16}
+                  color={uiTheme.colors.$iconAccent}
+                />
+              </View>
+            )}
+          </TouchableOpacity>}
         ItemSeparatorComponent={Select.renderSeparator}
       />
     </>
