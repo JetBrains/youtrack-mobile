@@ -60,7 +60,7 @@ export default EStyleSheet.create({
     backgroundColor: '$background'
   },
   itemSubArticle: {
-    marginLeft: UNIT
+    marginLeft: UNIT * 1.2
   },
   itemStar: {
     paddingHorizontal: UNIT * 1.5,
