@@ -58,31 +58,31 @@ export default class ArticlesAPI extends ApiBase {
       `${this.youTrackApiUrl}/articles/${articleId}/activitiesPage?${queryString}${categories}`);
   }
 
-  async getArticleDrafts(articleIdReadable: string): Promise<Article> {
-    return this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/admin/users/me/articleDrafts/?${this.articleFields}&original=${articleIdReadable}`,
-      'GET'
-    );
+  async getArticleDrafts(articleIdReadable?: string): Promise<Article> {
+    const url: string = `${this.youTrackApiUrl}/admin/users/me/articleDrafts/?${this.articleFields}${articleIdReadable ? `&original=${articleIdReadable}` : ''}`;
+    return this.makeAuthorizedRequest(url, 'GET');
   }
 
-  async createArticleDraft(articleId: string): Promise<Article> {
+  async createArticleDraft(articleId?: string): Promise<Article> {
     return this.makeAuthorizedRequest(
       `${this.youTrackApiUrl}/admin/users/me/articleDrafts?${this.articleFields}`,
       'POST',
-      {originalArticle: {id: articleId}}
+      (articleId
+        ? {originalArticle: {id: articleId}}
+        : {project: null, parentArticle: null, summary: '', content: ''})
     );
   }
 
-  async updateArticleDraft(article: Article): Promise<Article> {
+  async updateArticleDraft(articleDraft: Article): Promise<Article> {
     return this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/admin/users/me/articleDrafts/${article.id}?${this.articleFields}`,
+      `${this.youTrackApiUrl}/admin/users/me/articleDrafts/${articleDraft.id}?${this.articleFields}`,
       'POST',
       {
-        content: article.content,
-        parentArticle: article.parentArticle,
-        project: article.project,
-        summary: article.summary,
-        visibility: article.visibility
+        content: articleDraft.content,
+        parentArticle: articleDraft.parentArticle,
+        project: articleDraft.project,
+        summary: articleDraft.summary,
+        visibility: articleDraft.visibility
       }
     );
   }
@@ -95,16 +95,22 @@ export default class ArticlesAPI extends ApiBase {
     );
   }
 
-  getVisibilityOptions = async (articleId: string): Promise<Article> => {
+  getVisibilityOptions = async (articleId: string, url?: string): Promise<Article> => {
     const queryString = ApiBase.createFieldsQuery(
       issueFields.getVisibility.toString(),
       {$visibilityTop: 50, $visibilitySkip: 0},
     );
+    const requestURL: string = url || `${this.youTrackApiUrl}/articles/${articleId}/visibilityOptions`;
     return await this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/articles/${articleId}/visibilityOptions/?${queryString}`,
+      `${requestURL}?${queryString}`,
       'GET',
     );
   };
+
+  getDraftVisibilityOptions = async (articleId: string, ): Promise<Article> => (
+    this.getVisibilityOptions(
+      articleId, `${this.youTrackApiUrl}/admin/users/me/articleDrafts/${articleId}/visibilityOptions`)
+  );
 
   async getCommentDraft(articleId: string): Promise<Comment> {
     const fields: string = ApiBase.createFieldsQuery(

@@ -13,8 +13,28 @@ export const separatorBorder = {
   })
 };
 
-export const separator = {
+export const separatorTopBorder = {
+  ...Platform.select({
+    ios: {
+      borderTopWidth: 0.5
+    },
+    android: {
+      borderTopWidth: 0.8
+    }
+  })
+};
+
+const separatorCommon = {
   height: 1,
-  marginLeft: UNIT * 2,
+  marginLeft: UNIT * 2
+};
+
+export const separator = {
+  ...separatorCommon,
   ...separatorBorder
+};
+
+export const separatorTop = {
+  ...separatorCommon,
+  ...separatorTopBorder
 };

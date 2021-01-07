@@ -3,13 +3,14 @@
 import type ActionSheet from '@expo/react-native-action-sheet';
 
 import animation from '../../components/animation/animation';
+import Router from '../../components/router/router';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
 import {createTree, toggleArticleProjectListItem} from '../../components/articles/articles-helper';
 import {flushStoragePart, getStorageState} from '../../components/storage/storage';
 import {logEvent} from '../../components/log/log-helper';
 import {notify} from '../../components/notification/notification';
-import {showActions} from '../../components/action-sheet/action-sheet';
 import {setError, setLoading, setList} from './knowledge-base-reducers';
+import {showActions} from '../../components/action-sheet/action-sheet';
 import {until} from '../../util/util';
 
 import type Api from '../../components/api/api';
@@ -120,7 +121,7 @@ const toggleNonFavoriteProjectsVisibility = () => {
   };
 };
 
-const showKBActions = (actionSheet: ActionSheet) => {
+const showKBActions = (actionSheet: ActionSheet, canCreateArticle: boolean) => {
   return async (dispatch: (any) => any, getState: () => AppState) => {
     const state: AppState = getState();
     const {articlesList} = state.articles;
@@ -152,6 +153,13 @@ const showKBActions = (actionSheet: ActionSheet) => {
       },
       {title: 'Cancel'}
     ];
+
+    if (canCreateArticle) {
+      actions.unshift({
+        title: 'Create article',
+        execute: () => Router.ArticleCreate()
+      });
+    }
 
     const selectedAction = await showActions(actions, actionSheet);
 

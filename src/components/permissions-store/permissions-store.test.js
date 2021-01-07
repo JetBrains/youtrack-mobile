@@ -1,5 +1,10 @@
 import PermissionsStore from './permissions-store';
 
+const PER_PROJECT_PERMISSION = 'per-project-permission';
+const GLOBAL_PERMISSION = 'global-permission';
+const GLOBAL_PERMISSION_TWO = 'global-permission-two';
+const PERMITTED_PROJECT_ID = 'permitted-project';
+
 describe('PermissionsStore', () => {
 
   beforeEach(() => {
@@ -11,7 +16,7 @@ describe('PermissionsStore', () => {
   });
 
   it('should map project ids', () => {
-    this.permissionsStore.permissionsMap.get('per-project-permission').projectIds[0].should.equal('permitted-project');
+    this.permissionsStore.permissionsMap.get(PER_PROJECT_PERMISSION).projectIds[0].should.equal(PERMITTED_PROJECT_ID);
   });
 
   it('should return false if user has no such permission at all', () => {
@@ -19,31 +24,35 @@ describe('PermissionsStore', () => {
   });
 
   it('should return true if user has global permission', () => {
-    this.permissionsStore.has('global-permission').should.be.true;
+    this.permissionsStore.has(GLOBAL_PERMISSION).should.be.true;
   });
 
   it('should return false if user has permission but not in specified project', () => {
-    this.permissionsStore.has('per-project-permission', 'non-exist-project').should.be.false;
+    this.permissionsStore.has(PER_PROJECT_PERMISSION, 'non-exist-project').should.be.false;
   });
 
   it('should return true if user has permission in specified project', () => {
-    this.permissionsStore.has('per-project-permission', 'permitted-project').should.be.true;
+    this.permissionsStore.has(PER_PROJECT_PERMISSION, PERMITTED_PROJECT_ID).should.be.true;
   });
 
-  it('should return false if permission is not global and project is not specified', () => {
-    this.permissionsStore.has('per-project-permission').should.be.false;
+  it('should return TRUE if permission is not global, but at least one project contains it', () => {
+    this.permissionsStore.has(PER_PROJECT_PERMISSION).should.be.true;
+  });
+
+  it('should return FALSE if permission is not global, and no projects that contain it', () => {
+    this.permissionsStore.has('other-project-permission').should.be.false;
   });
 
   it('should return true if has every permission', () => {
-    this.permissionsStore.hasEvery(['global-permission', 'global-permission-two']).should.be.true;
+    this.permissionsStore.hasEvery([GLOBAL_PERMISSION, GLOBAL_PERMISSION_TWO]).should.be.true;
   });
 
   it('should return false if has not every permission', () => {
-    this.permissionsStore.hasEvery(['global-permission', 'non-exist']).should.be.false;
+    this.permissionsStore.hasEvery([GLOBAL_PERMISSION, 'non-exist']).should.be.false;
   });
 
   it('should return true if has some permission', () => {
-    this.permissionsStore.hasSome(['global-permission', 'non-exist']).should.be.true;
+    this.permissionsStore.hasSome([GLOBAL_PERMISSION, 'non-exist']).should.be.true;
   });
 
   it('should return fasle if has not some permission', () => {
@@ -57,19 +66,19 @@ function createPermissions() {
     {
       global: true,
       permission: {
-        key: 'global-permission'
+        key: GLOBAL_PERMISSION
       }
     }, {
       global: true,
       permission: {
-        key: 'global-permission-two'
+        key: GLOBAL_PERMISSION_TWO
       }
     }, {
       permission: {
-        key: 'per-project-permission'
+        key: PER_PROJECT_PERMISSION
       },
       projects: [
-        {id: 'permitted-project'}
+        {id: PERMITTED_PROJECT_ID}
       ]
     }
   ];

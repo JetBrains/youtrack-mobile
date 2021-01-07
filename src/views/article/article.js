@@ -146,11 +146,10 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
           <>
             <VisibilityControl
               style={breadCrumbsElement ? null : styles.visibility}
-              entityId={articleData.idReadable}
               visibility={articleData.visibility}
               onSubmit={(visibility: Visibility) => getApi().articles.updateArticle(articleData.id, {visibility})}
               uiTheme={this.uiTheme}
-              getOptions={getApi().articles.getVisibilityOptions}
+              getOptions={() => getApi().articles.getVisibilityOptions(articleData.idReadable)}
               visibilityDefaultLabel="Visible to article readers"
             />
             <CreateUpdateInfo

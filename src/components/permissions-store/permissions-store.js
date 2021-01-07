@@ -15,7 +15,7 @@ class PermissionsStore {
     this.permissionsMap = new Map(permissionsWithProjects.map(it => [it.permission.key, it]));
   }
 
-  has(permissionId: string, projectId: string) {
+  has(permissionId: string, projectId?: string) {
     const permission: PermissionCacheItem = this.permissionsMap.get(permissionId);
     if (!permission) {
       return false;
@@ -25,7 +25,11 @@ class PermissionsStore {
       return true;
     }
 
-    return permission.projectIds.indexOf(projectId) !== -1;
+    if (projectId) {
+      return permission.projectIds.includes(projectId);
+    }
+
+    return permission.projectIds.length > 0;
   }
 
   hasEvery(permissionIds: Array<string>, projectId: string) {

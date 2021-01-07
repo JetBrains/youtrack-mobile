@@ -218,4 +218,8 @@ export default class IssuePermissions {
   articleCanDeleteComment = (article: Article, comment: IssueComment): boolean => {
     return this.canDeleteComment(article, comment, DELETE_ARTICLE_COMMENT);
   };
+
+  articleCanCreateArticle = (projectRingId?: string) => (
+    this.permissionsStore.has(CREATE_ARTICLE, projectRingId)
+  )
 }

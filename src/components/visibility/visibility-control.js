@@ -23,10 +23,9 @@ import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {UITheme} from '../../flow/Theme';
 
 type Props = {
-  entityId: string,
   visibility?: Visibility,
   onApply: (visibility: Visibility) => any,
-  getOptions: (entityId: string) => Array<any>,
+  getOptions: () => Array<any>,
   onSubmit?: ?(visibility: Visibility) => any,
   style: ?ViewStyleProp,
   uiTheme: UITheme,
@@ -41,7 +40,6 @@ type State = {
 
 export default class VisibilityControl extends PureComponent<Props, State> {
   static defaultProps: $Shape<Props> = {
-    entityId: '',
     visibility: null,
     onApply: (visibility: Visibility) => null,
     getOptions: () => [],
@@ -78,7 +76,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
 
   getVisibilityOptions = async () => {
     try {
-      return this.props.getOptions(this.props.entityId);
+      return this.props.getOptions();
     } catch (e) {
       return {};
     }

@@ -139,10 +139,9 @@ export default class AttachFileDialog extends PureComponent<Props, State> {
             }
             {attach && <VisibilityControl
               style={styles.visibilityButton}
-              entityId={this.props.issueId}
               onApply={this.updateAttachVisibility}
               uiTheme={uiTheme}
-              getOptions={getApi().issue.getVisibilityOptions}
+              getOptions={() => getApi().issue.getVisibilityOptions(this.props.issueId)}
             />}
           </View>
 

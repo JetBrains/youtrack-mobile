@@ -182,11 +182,10 @@ export default class IssueDetails extends Component<Props, void> {
       return (
         <View style={styles.visibility}>
           <VisibilityControl
-            entityId={issue.id}
             visibility={issue.visibility}
             onSubmit={onVisibilityChange}
             uiTheme={uiTheme}
-            getOptions={getApi().issue.getVisibilityOptions}
+            getOptions={() => getApi().issue.getVisibilityOptions(issue.id)}
           />
         </View>
       );

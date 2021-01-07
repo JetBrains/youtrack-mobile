@@ -123,11 +123,10 @@ class CreateIssue extends Component<Props, void> {
     return (
       <View style={styles.visibility}>
         <VisibilityControl
-          entityId={issue.id}
           visibility={issue.visibility}
           onSubmit={updateVisibility}
           uiTheme={uiTheme}
-          getOptions={getApi().issue.getVisibilityOptions}
+          getOptions={() => getApi().issue.getVisibilityOptions(issue.id)}
         />
       </View>
     );

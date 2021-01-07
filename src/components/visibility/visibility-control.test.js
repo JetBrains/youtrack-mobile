@@ -92,10 +92,10 @@ describe('<VisibilityControl/>', () => {
   function doShallow(visibility, onApply = () => {}, onSubmit = () => {}) {
     return shallow(
       <VisibilityControl
-        issueId={'issueID'}
         visibility={visibility}
         onApply={onApply}
         onSubmit={onSubmit}
+        getOptions={() => []}
       />
     );
   }

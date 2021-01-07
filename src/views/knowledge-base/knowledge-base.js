@@ -9,21 +9,17 @@ import {connect} from 'react-redux';
 import * as knowledgeBaseActions from './knowledge-base-actions';
 import ErrorMessage from '../../components/error-message/error-message';
 import IconSearchEmpty from '../../components/icon/search-empty.svg';
-import Router from '../../components/router/router';
 import PropTypes from 'prop-types';
+import Router from '../../components/router/router';
 import Select from '../../components/select/select';
 import Star from '../../components/star/star';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
 import {findArticleNode} from '../../components/articles/articles-helper';
 import {hasType} from '../../components/api/api__resource-types';
-import {
-  IconAngleDown,
-  IconAngleRight,
-  IconBack,
-  IconContextActions,
-  IconLock
-} from '../../components/icon/icon';
+import {HIT_SLOP} from '../../components/common-styles/button';
+import {IconAngleDown, IconAngleRight, IconBack, IconContextActions, IconLock} from '../../components/icon/icon';
+import {getStorageState} from '../../components/storage/storage';
 import {routeMap} from '../../app-routes';
 import {SkeletonIssues} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
@@ -31,15 +27,14 @@ import {UNIT} from '../../components/variables/variables';
 
 import styles from './knowledge-base.styles';
 
+import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {Article, ArticlesList, ArticlesListItem, ArticleNode, ArticleProject} from '../../flow/Article';
 import type {KnowledgeBaseActions} from './knowledge-base-actions';
 import type {KnowledgeBaseState} from './knowledge-base-reducers';
 import type {Theme, UITheme} from '../../flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import {HIT_SLOP} from '../../components/common-styles/button';
-import {getStorageState} from '../../components/storage/storage';
 
-type Props = KnowledgeBaseActions & KnowledgeBaseState;
+type Props = KnowledgeBaseActions & KnowledgeBaseState & {issuePermissions: IssuePermissions};
 
 type State = {
   isHeaderPinned: boolean
@@ -60,7 +55,10 @@ export class KnowledgeBase extends Component<Props, State> {
     usage.trackScreenView(ANALYTICS_ARTICLES_PAGE);
 
     Router.setOnDispatchCallback((routeName: string, prevRouteName: string) => {
-      if (routeName === routeMap.KnowledgeBase && prevRouteName === routeMap.Article) {
+      if (routeName === routeMap.KnowledgeBase && (
+        prevRouteName === routeMap.Article ||
+        prevRouteName === routeMap.ArticleCreate
+      )) {
         this.loadArticlesList(false);
       }
     });
@@ -273,7 +271,7 @@ export class KnowledgeBase extends Component<Props, State> {
   };
 
   render() {
-    const {isLoading, articlesList, error, showKBActions} = this.props;
+    const {isLoading, articlesList, error, showKBActions, issuePermissions} = this.props;
 
     return (
       <ThemeContext.Consumer>
@@ -292,7 +290,7 @@ export class KnowledgeBase extends Component<Props, State> {
                     <TouchableOpacity
                       hitSlop={HIT_SLOP}
                       onPress={() => {
-                        showKBActions(this.context.actionSheet());
+                        showKBActions(this.context.actionSheet(), issuePermissions.articleCanCreateArticle());
                       }}
                     >
                       <IconContextActions color={this.uiTheme.colors.$link}/>
@@ -323,6 +321,7 @@ const mapStateToProps = (state) => {
   return {
     ...state.app,
     ...state.articles,
+    issuePermissions: state.app.issuePermissions
   };
 };
 

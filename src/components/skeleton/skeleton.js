@@ -305,3 +305,35 @@ export const SkeletonAgile = (props: SkeletonProps) => {
     </SkeletonPlaceholder.Item>
   </SkeletonPlaceholder>;
 };
+
+export const SkeletonCreateArticle = () => {
+  return <SkeletonPlaceholder
+    {...skeletonPlaceholderDefaultProps}
+  >
+    <SkeletonPlaceholder.Item
+      fleDirection='column'
+    >
+      {SkeletonLine({
+        width: SKELETON_WIDTH * 1.5,
+        height: SKELETON_HEIGHT,
+        marginTop: UNIT * 2,
+      })}
+
+      {SkeletonLine({
+        width: SKELETON_WIDTH * 2.5,
+        height: SKELETON_HEIGHT,
+        marginTop: UNIT * 2,
+      })}
+
+      {SkeletonLine({
+        height: SKELETON_HEIGHT * 2,
+        marginTop: UNIT * 2,
+        marginBottom: UNIT * 2,
+      })}
+
+      {SkeletonLine({
+        height: SKELETON_HEIGHT * 5
+      })}
+    </SkeletonPlaceholder.Item>
+  </SkeletonPlaceholder>;
+};
