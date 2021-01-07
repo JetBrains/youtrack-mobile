@@ -28,14 +28,6 @@ export default EStyleSheet.create({
     ...headerTitle,
     color: '$text',
     fontWeight: '500',
-    ...Platform.select({
-      ios: {
-        marginLeft: UNIT / 2,
-      },
-      android: {
-        marginLeft: UNIT * 1.3,
-      }
-    })
   },
   headerTextResolved: {
     ...issueIdResolved,

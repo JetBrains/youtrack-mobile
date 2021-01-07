@@ -1,6 +1,6 @@
 /* @flow */
 
-import {ScrollView, View, Text, ActivityIndicator} from 'react-native';
+import {ScrollView, View, ActivityIndicator} from 'react-native';
 import React, {Component} from 'react';
 
 import {bindActionCreators} from 'redux';
@@ -168,14 +168,12 @@ class CreateIssue extends Component<Props, void> {
               style={styles.container}
             >
               <Header
+                title="New Issue"
+                showShadow={true}
                 leftButton={<IconClose size={21} color={uiThemeColors.$link}/>}
                 onBack={storeDraftAndGoBack}
                 rightButton={rightButton}
-                onRightButtonClick={() => canCreateIssue && createIssue()}>
-                <Text style={styles.title}>New Issue</Text>
-              </Header>
-
-              <View style={styles.separator}/>
+                onRightButtonClick={() => canCreateIssue && createIssue()}/>
 
               {this.renderCustomFieldPanel(uiTheme)}
 

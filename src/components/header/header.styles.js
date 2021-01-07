@@ -1,6 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../variables/variables';
 import {headerTitle} from '../common-styles/typography';
+import {elevation1} from '../common-styles/shadow';
 
 const minButtonWidth = UNIT * 5;
 export const headerMinHeight = UNIT * 8;
@@ -16,6 +17,7 @@ export default EStyleSheet.create({
     alignItems: 'center',
     backgroundColor: '$background'
   },
+  headerShadow: elevation1,
   headerTitle: {
     ...headerTitle,
     marginLeft: UNIT,

@@ -29,6 +29,7 @@ export default EStyleSheet.create({
   },
   separator: {
     height: 1,
+    marginTop: UNIT * 2,
     ...separator,
     borderColor: '$separator'
   },

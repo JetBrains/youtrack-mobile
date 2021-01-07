@@ -22,7 +22,8 @@ export type HeaderProps = {
   extraButton?: ?React$Element<any> | null,
   children?: any,
   style?: ViewStyleProp,
-  title?: string
+  title?: string,
+  showShadow?: boolean,
 }
 
 type DefaultProps = {
@@ -31,7 +32,8 @@ type DefaultProps = {
 
 export default class Header extends PureComponent<HeaderProps, void> {
   static defaultProps: DefaultProps = {
-    onRightButtonClick: () => undefined
+    onRightButtonClick: () => undefined,
+    showShadow: false
   };
 
   componentDidMount() {
@@ -52,7 +54,7 @@ export default class Header extends PureComponent<HeaderProps, void> {
   }
 
   render() {
-    const {leftButton, children, extraButton, rightButton, style, title} = this.props;
+    const {leftButton, children, extraButton, rightButton, style, title, showShadow} = this.props;
 
     return (
       <ThemeContext.Consumer>
@@ -60,7 +62,11 @@ export default class Header extends PureComponent<HeaderProps, void> {
           return (
             <View
               testID="header"
-              style={[styles.header, style]}
+              style={[
+                styles.header,
+                showShadow ? styles.headerShadow : null,
+                style
+              ]}
             >
               {!!leftButton && <TouchableOpacity
                 testID="header-back"
