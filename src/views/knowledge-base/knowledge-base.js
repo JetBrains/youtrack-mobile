@@ -101,10 +101,7 @@ export class KnowledgeBase extends Component<Props, State> {
               style={styles.itemStar}
               hasStar={project.pinned}
               canStar={true}
-              onStarToggle={async () => {
-                await this.props.toggleProjectArticlesFavorite(project);
-                this.articlesList.scrollToLocation({itemIndex: 0});
-              }}
+              onStarToggle={async () => this.props.toggleProjectArticlesFavorite(project)}
               uiTheme={this.uiTheme}
             />
           </View>
