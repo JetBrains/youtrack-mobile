@@ -5,7 +5,7 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 
 import API from '../../components/api/api';
-import {ActivityStream} from '../../components/activity/activity__stream';
+import {ActivityStream} from '../../components/activity-stream/activity__stream';
 import {getApi} from '../../components/api/api__instance';
 
 import type {ActivityItem, ActivityStreamCommentActions} from '../../flow/Activity';

@@ -12,7 +12,7 @@ import CommentVisibility from '../comment/comment__visibility';
 import CustomFieldChangeDelimiter from '../custom-field/custom-field__change-delimiter';
 import Diff from '../diff/diff';
 import Feature, {FEATURE_VERSION} from '../feature/feature';
-import getEventTitle from './activity__history-title';
+import getEventTitle from '../activity/activity__history-title';
 import IssueVisibility from '../visibility/issue-visibility';
 import log from '../log/log';
 import ReactionAddIcon from '../reactions/new-reaction.svg';
@@ -21,9 +21,9 @@ import usage from '../usage/usage';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from '../analytics/analytics-ids';
 import {getApi} from '../api/api__instance';
 import {getEntityPresentation, getReadableID, relativeDate, ytDate} from '../issue-formatter/issue-formatter';
-import {getTextValueChange} from './activity__history-value';
+import {getTextValueChange} from '../activity/activity__history-value';
 import {IconDrag, IconHistory, IconMoreOptions, IconWork} from '../icon/icon';
-import {isActivityCategory} from './activity__category';
+import {isActivityCategory} from '../activity/activity__category';
 import {isIOSPlatform, uuid} from '../../util/util';
 import {minutesAndHoursFor} from '../time-tracking/time-tracking';
 import {SkeletonIssueActivities} from '../skeleton/skeleton';
@@ -165,14 +165,14 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
                 style={{...styles.linkedIssue, ...(linkedIssue.isRemoved ? styles.activityRemoved : {})}}
                 onPress={() => Router.Issue({issueId: readableIssueId})}>
                 <Text style={[
-                  styles.linkText,
+                  styles.link,
                   linkedIssue.resolved && styles.secondaryTextColor.color,
                   linkedIssue.resolved && styles.activityRemoved
                 ]}>
                   {readableIssueId}
                 </Text>
                 <Text style={[
-                  styles.linkText,
+                  styles.link,
                   linkedIssue.resolved && styles.secondaryTextColor.color
                 ]}>
                   {` ${linkedIssue.summary}`}

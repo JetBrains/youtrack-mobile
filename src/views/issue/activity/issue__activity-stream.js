@@ -3,10 +3,10 @@
 import React, {useEffect, useState} from 'react';
 
 import ReactionsPanel from './issue__activity-reactions-dialog';
-import {ActivityStream} from '../../../components/activity/activity__stream';
+import {ActivityStream} from '../../../components/activity-stream/activity__stream';
 import {SkeletonIssueActivities} from '../../../components/skeleton/skeleton';
 
-import type {ActivityStreamProps, ActivityStreamPropsReaction} from '../../../components/activity/activity__stream';
+import type {ActivityStreamProps, ActivityStreamPropsReaction} from '../../../components/activity-stream/activity__stream';
 import type {IssueComment} from '../../../flow/CustomFields';
 import type {Reaction} from '../../../flow/Reaction';
 
