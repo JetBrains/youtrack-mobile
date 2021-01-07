@@ -15,7 +15,7 @@ import Select from '../../components/select/select';
 import Star from '../../components/star/star';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
-import {findArticleNode} from '../../components/articles/articles-helper';
+import {findArticleNode} from '../../components/articles/articles-tree-helper';
 import {hasType} from '../../components/api/api__resource-types';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconAngleDown, IconAngleRight, IconBack, IconContextActions, IconLock} from '../../components/icon/icon';

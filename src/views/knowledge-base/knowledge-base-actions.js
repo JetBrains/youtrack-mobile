@@ -5,7 +5,7 @@ import type ActionSheet from '@expo/react-native-action-sheet';
 import animation from '../../components/animation/animation';
 import Router from '../../components/router/router';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
-import {createTree, toggleArticleProjectListItem} from '../../components/articles/articles-helper';
+import {createTree, toggleArticleProjectListItem} from '../../components/articles/articles-tree-helper';
 import {flushStoragePart, getStorageState} from '../../components/storage/storage';
 import {logEvent} from '../../components/log/log-helper';
 import {notify} from '../../components/notification/notification';

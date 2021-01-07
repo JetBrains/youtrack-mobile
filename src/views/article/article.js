@@ -17,7 +17,7 @@ import IssueTabbed from '../../components/issue-tabbed/issue-tabbed';
 import PropTypes from 'prop-types';
 import Router from '../../components/router/router';
 import VisibilityControl from '../../components/visibility/visibility-control';
-import {createBreadCrumbs, findArticleNode} from '../../components/articles/articles-helper';
+import {createBreadCrumbs, findArticleNode} from '../../components/articles/articles-tree-helper';
 import {getApi} from '../../components/api/api__instance';
 import {
   IconBack,
