@@ -59,16 +59,13 @@ function getMarkdownRules(
 
     image: (node: MarkdownNode) => {
       const {src, alt} = node.attributes;
-      const targetAttach: ?Attachment = attachments.find(it => it.name === src);
+      const targetAttach: ?Attachment = attachments.find(it => it.name.includes(src));
 
-      let source: Object = {uri: src};
-      if (!mentions) {
-        if (!targetAttach || !targetAttach.url || hasMimeType.svg(targetAttach)) {
-          return null;
-        }
-        source = Object.assign({uri: targetAttach.url, headers: imageHeaders}, targetAttach);
+      if (!targetAttach || !targetAttach.url || hasMimeType.svg(targetAttach)) {
+        return null;
       }
 
+      const source: Object = Object.assign({uri: targetAttach.url, headers: imageHeaders}, targetAttach);
       const dimensions: ImageDimensions = calculateAspectRatio(
         targetAttach?.imageDimensions ||
         {width: 250, height: 300}
