@@ -149,7 +149,7 @@ const getArticleDrafts = () => {
     const api: Api = getApi();
     const {article}: Article = getState().article;
 
-    const [error, articleDrafts] = await until(api.articles.getArticleDrafts(article.idReadable));
+    const [error, articleDrafts] = await until(api.articles.getArticleDrafts(null, article.idReadable));
 
     if (error) {
       const errorMsg: string = 'Failed to load article drafts';

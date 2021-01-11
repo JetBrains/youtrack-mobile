@@ -62,9 +62,10 @@ export default class ArticlesAPI extends ApiBase {
       `${this.youTrackApiUrl}/articles/${articleId}/activitiesPage?${queryString}${categories}`);
   }
 
-  async getArticleDrafts(draftId: string = '', original?: string): Promise<Article> {
-    const originalParam: string = `&original=${original || 'null'}`;
-    const url: string = `${this.youTrackApiUrl}/admin/users/me/articleDrafts/${draftId}?${this.articleFields}${originalParam}`;
+  async getArticleDrafts(draftId: ?string, original?: string): Promise<Article> {
+    const originalParam: string = original ? `&original=${original}` : '';
+    const articleDraftId: string = draftId || '';
+    const url: string = `${this.youTrackApiUrl}/admin/users/me/articleDrafts/${articleDraftId}?${this.articleFields}${originalParam}`;
     return this.makeAuthorizedRequest(url, 'GET');
   }
 
