@@ -57,7 +57,8 @@ const ArticleCreate = (props: Props) => {
       dispatch(setDraft(props.articleDraft));
       updateArticleDraftData({
         ...articleDraftDataInitial,
-        ...props.articleDraft
+        ...props.articleDraft,
+        project: props.articleDraft?.project || articleDraftDataInitial.project
       });
     } else {
       dispatch(createArticleDraft());
