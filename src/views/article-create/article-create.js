@@ -53,12 +53,14 @@ const ArticleCreate = (props: Props) => {
   const [articleDraftData, updateArticleDraftData] = useState(articleDraftDataInitial);
 
   useEffect(() => {
-    if (props.articleDraft) {
-      dispatch(setDraft(props.articleDraft));
+    const {articleDraft} = props;
+    if (articleDraft) {
+      dispatch(setDraft(articleDraft));
       updateArticleDraftData({
-        ...articleDraftDataInitial,
-        ...props.articleDraft,
-        project: props.articleDraft?.project || articleDraftDataInitial.project
+        summary: articleDraft?.summary || articleDraftDataInitial.summary,
+        content: articleDraft?.content || articleDraftDataInitial.content,
+        project: articleDraft?.project || articleDraftDataInitial.project,
+        visibility: articleDraft.visibility
       });
     } else {
       dispatch(createArticleDraft());
