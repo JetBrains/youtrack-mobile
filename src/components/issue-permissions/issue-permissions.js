@@ -222,4 +222,8 @@ export default class IssuePermissions {
   articleCanCreateArticle = (projectRingId?: string) => (
     this.permissionsStore.has(CREATE_ARTICLE, projectRingId)
   )
+
+  articleCanDeleteArticle = (projectRingId?: string) => (
+    this.permissionsStore.has(DELETE_ARTICLE, projectRingId)
+  )
 }

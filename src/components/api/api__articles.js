@@ -100,6 +100,15 @@ export default class ArticlesAPI extends ApiBase {
     );
   }
 
+  async deleteArticle(articleId: string): Promise<any> {
+    return this.makeAuthorizedRequest(
+      `${this.youTrackApiUrl}/articles/${articleId}`,
+      'DELETE',
+      null,
+      {parseJson: false}
+    );
+  }
+
   getVisibilityOptions = async (articleId: string, url?: string): Promise<Article> => {
     const queryString = ApiBase.createFieldsQuery(
       issueFields.getVisibility.toString(),

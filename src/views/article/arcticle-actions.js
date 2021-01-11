@@ -3,6 +3,7 @@
 import {ANALYTICS_ARTICLE_PAGE} from '../../components/analytics/analytics-ids';
 import {Alert, Clipboard, Share} from 'react-native';
 
+import Router from '../../components/router/router';
 import {getApi} from '../../components/api/api__instance';
 import {isIOSPlatform, until} from '../../util/util';
 import {logEvent} from '../../components/log/log-helper';
@@ -76,7 +77,7 @@ const loadActivitiesPage = (reset: boolean = true) => {
   };
 };
 
-const showArticleActions = (actionSheet: ActionSheet, canUpdate: boolean, onBeforeEdit: () => void) => {
+const showArticleActions = (actionSheet: ActionSheet, canUpdate: boolean, onBeforeEdit: () => void, canDelete: boolean) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {article} = getState().article;
@@ -119,6 +120,16 @@ const showArticleActions = (actionSheet: ActionSheet, canUpdate: boolean, onBefo
           if (articleDraft) {
             dispatch(setDraft(articleDraft));
           }
+        }
+      });
+    }
+
+    if (canDelete) {
+      actions.push({
+        title: 'Delete',
+        execute: async () => {
+          logEvent({message: `${articleLogMessagePrefix} Delete article`, analyticsId: ANALYTICS_ARTICLE_PAGE});
+          dispatch(deleteArticle(article.id));
         }
       });
     }
@@ -190,6 +201,7 @@ const publishArticleDraft = () => {
     dispatch(setProcessing(true));
     await updateArticleDraft(articleDraft);
     const [error] = await until(api.articles.publishArticleDraft(articleDraft.id));
+    dispatch(setProcessing(false));
 
     if (error) {
       const errorMsg: string = 'Failed to publish article draft';
@@ -197,8 +209,25 @@ const publishArticleDraft = () => {
       notify(errorMsg, error);
     } else {
       dispatch(setDraft(null));
-      dispatch(setProcessing(false));
       dispatch(loadArticle(article.id, false));
+    }
+  };
+};
+
+const deleteArticle = (articleId: string) => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const api: Api = getApi();
+
+    dispatch(setProcessing(true));
+    const [error] = await until(api.articles.deleteArticle(articleId));
+    dispatch(setProcessing(false));
+
+    if (error) {
+      const errorMsg: string = 'Failed to delete article';
+      logEvent({message: errorMsg, isError: true});
+      notify(errorMsg, error);
+    } else {
+      Router.KnowledgeBase();
     }
   };
 };
@@ -408,6 +437,7 @@ export {
   loadActivitiesPage,
   showArticleActions,
   setPreviousArticle,
+  deleteArticle,
 
   getArticleDrafts,
   updateArticleDraft,

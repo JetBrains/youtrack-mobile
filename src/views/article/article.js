@@ -205,6 +205,11 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     return issuePermissions.canUpdateArticle(article);
   };
 
+  canDeleteArticle = (): boolean => {
+    const {article, issuePermissions} = this.props;
+    return issuePermissions.articleCanDeleteArticle(article.project.ringId);
+  };
+
   renderHeader = () => {
     const {
       article,
@@ -246,7 +251,14 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
       onRightButtonClick: (
         isEditMode
           ? publishArticleDraft
-          : () => showArticleActions(this.context.actionSheet(), this.canEditArticle(), this.switchToDetailsTab)
+          : () => (
+            showArticleActions(
+              this.context.actionSheet(),
+              this.canEditArticle(),
+              this.switchToDetailsTab,
+              this.canDeleteArticle()
+            )
+          )
       ),
     };
 
