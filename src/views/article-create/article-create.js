@@ -30,8 +30,11 @@ import type {Visibility} from '../../flow/Visibility';
 
 type ArticleDraftData = { summary: string, content: string, project: IssueProject, visibility: Visibility };
 
+type Props = {
+  articleDraft?: Article
+}
 
-const ArticleCreate = () => {
+const ArticleCreate = (props: Props) => {
   const articleDraftDataInitial: ArticleDraftData = {
     summary: '',
     content: '',
@@ -50,7 +53,15 @@ const ArticleCreate = () => {
   const [articleDraftData, updateArticleDraftData] = useState(articleDraftDataInitial);
 
   useEffect(() => {
-    dispatch(createArticleDraft());
+    if (props.articleDraft) {
+      dispatch(setDraft(props.articleDraft));
+      updateArticleDraftData({
+        ...articleDraftDataInitial,
+        ...props.articleDraft
+      });
+    } else {
+      dispatch(createArticleDraft());
+    }
   }, []);
 
   const debouncedUpdate = useDebouncedCallback(

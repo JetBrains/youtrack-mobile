@@ -5,33 +5,71 @@ import type ActionSheet from '@expo/react-native-action-sheet';
 import animation from '../../components/animation/animation';
 import Router from '../../components/router/router';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
-import {createTree, toggleArticleProjectListItem} from '../../components/articles/articles-tree-helper';
+import {arrayToTree} from 'performant-array-to-tree';
+import {
+  createArticlesListItem,
+  createTree,
+  toggleArticleProjectListItem
+} from '../../components/articles/articles-tree-helper';
 import {flushStoragePart, getStorageState} from '../../components/storage/storage';
 import {logEvent} from '../../components/log/log-helper';
 import {notify} from '../../components/notification/notification';
 import {setError, setLoading, setList} from './knowledge-base-reducers';
 import {showActions} from '../../components/action-sheet/action-sheet';
+import {sortByUpdatedReverse} from '../../components/search/sorting';
 import {until} from '../../util/util';
 
 import type Api from '../../components/api/api';
 import type {AppState} from '../../reducers';
-import type {ArticleNode, ArticleProject, ArticlesList, ArticlesListItem} from '../../flow/Article';
+import type {
+  Article,
+  ArticleNode,
+  ArticleNodeList,
+  ArticleProject,
+  ArticlesList,
+  ArticlesListItem,
+  ArticlesListItemTitle
+} from '../../flow/Article';
 import type {IssueProject} from '../../flow/CustomFields';
 
 type ApiGetter = () => Api;
 
+const DRAFTS_TITLE: ArticlesListItemTitle = {name: 'Drafts', isDrafts: true, articles: {collapsed: true}};
 
 const setArticlesListCache = (articlesList: ArticlesList) => {
   flushStoragePart({articlesList});
 };
 
+const getArticlesListCache = (): ArticlesList => getStorageState().articlesList || [];
+
 const loadArticlesListFromCache = () => {
   return async (dispatch: (any) => any) => {
-    const cachedArticlesList: ArticlesList = getStorageState().articlesList;
+    const cachedArticlesList: ArticlesList = getArticlesListCache();
     if (cachedArticlesList?.length > 0) {
       dispatch(setList(cachedArticlesList));
       logEvent({message: 'Set articles list from cache'});
     }
+  };
+};
+
+const createArticleListDrafts = (project: ArticleProject, data: ArticleNodeList = []): ArticlesListItem => {
+  return createArticlesListItem(
+    project,
+    arrayToTree(data),
+    !!project?.articles?.collapsed
+  );
+};
+
+const createArticleList = (articles: Array<Article>): ArticlesList => {
+  const cachedArticlesList: ArticlesList = getArticlesListCache();
+  const tree: Array<ArticleNode> = createTree(articles, cachedArticlesList);
+  return tree.filter(it => it.data?.length > 0 || it.dataCollapsed?.length > 0);
+};
+
+const updateArticlesList = (articlesList: ArticlesList) => {
+  return async (dispatch: (any) => any) => {
+    dispatch(setList(articlesList));
+    setArticlesListCache(articlesList);
   };
 };
 
@@ -51,11 +89,51 @@ const loadArticlesList = (reset: boolean = true) => {
       dispatch(setError(error));
       logEvent({message: 'Failed to load articles', isError: true});
     } else {
-      const tree: Array<ArticleNode> = createTree(articles, getStorageState().articlesList);
-      const articlesList: ArticlesList = tree.filter(it => it.data?.length > 0 || it.dataCollapsed?.length > 0);
-      dispatch(setList(articlesList));
-      setArticlesListCache(articlesList);
+      const articlesList: ArticlesList = createArticleList(articles);
+      const cachedDraftSection: ?ArticlesListItem = getArticlesListCache().find((it: ArticlesListItem) => it.title.isDrafts);
+      if (cachedDraftSection) {
+        articlesList.unshift(cachedDraftSection);
+      }
+      dispatch(updateArticlesList(articlesList));
     }
+  };
+};
+
+const loadArticlesDrafts = () => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const state: AppState = getState();
+    const articlesList: Array<Article> = state.articles.articlesList || [];
+
+    const api: Api = getApi();
+
+    const [error, articlesDrafts] = await until(api.articles.getArticleDrafts());
+
+    if (error) {
+      logEvent({message: 'Failed to load articles drafts', isError: true});
+    } else {
+      let updatedArticlesList: ArticlesList = articlesList.slice(0);
+
+      if (articlesDrafts.length === 0) {
+        updatedArticlesList = updatedArticlesList.reduce((list: Array<ArticlesListItem>, item: ArticlesListItem) => {
+          if (!item.title.isDrafts) {
+            return list.concat(item);
+          }
+        }, []);
+      } else {
+        let draftsSection: ?ArticlesListItem = articlesList.find((it: ArticlesListItem) => it.title.isDrafts);
+        if (!draftsSection) {
+          draftsSection = createArticleListDrafts(DRAFTS_TITLE);
+          updatedArticlesList.unshift(draftsSection);
+        }
+        updatedArticlesList[0] = createArticleListDrafts(
+          updatedArticlesList[0].title,
+          articlesDrafts.sort(sortByUpdatedReverse)
+        );
+      }
+
+      dispatch(updateArticlesList(updatedArticlesList));
+    }
+
   };
 };
 
@@ -79,8 +157,7 @@ const toggleProjectArticlesVisibility = (section: ArticlesListItem) => {
         return list.concat(i);
       }, []);
 
-      dispatch(setList(updatedArticlesList));
-      setArticlesListCache(updatedArticlesList);
+      dispatch(updateArticlesList(updatedArticlesList));
     }
   };
 };
@@ -126,7 +203,10 @@ const showKBActions = (actionSheet: ActionSheet, canCreateArticle: boolean) => {
     const state: AppState = getState();
     const {articlesList} = state.articles;
     const toggle = (collapse: boolean) => {
-      logEvent({message: `${collapse ? 'Collapse' : 'Expand'} all Knowledge base projects`, analyticsId: ANALYTICS_ARTICLES_PAGE});
+      logEvent({
+        message: `${collapse ? 'Collapse' : 'Expand'} all Knowledge base projects`,
+        analyticsId: ANALYTICS_ARTICLES_PAGE
+      });
       if (articlesList) {
         const updatedArticlesList: ArticlesList = articlesList.reduce((list: ArticlesList, item: ArticlesListItem) => {
           return list.concat(toggleArticleProjectListItem(item, collapse));
@@ -171,19 +251,21 @@ const showKBActions = (actionSheet: ActionSheet, canCreateArticle: boolean) => {
 
 
 export type KnowledgeBaseActions = {
+  loadArticlesDrafts: typeof loadArticlesDrafts,
   loadArticlesList: typeof loadArticlesList,
   loadArticlesListFromCache: typeof loadArticlesListFromCache,
+  showKBActions: typeof showKBActions,
   toggleNonFavoriteProjectsVisibility: typeof toggleNonFavoriteProjectsVisibility,
-  toggleProjectArticlesVisibility: typeof toggleProjectArticlesVisibility,
   toggleProjectArticlesFavorite: typeof toggleProjectArticlesFavorite,
-  showKBActions: typeof showKBActions
+  toggleProjectArticlesVisibility: typeof toggleProjectArticlesVisibility,
 };
 
 export {
+  loadArticlesDrafts,
   loadArticlesList,
   loadArticlesListFromCache,
+  showKBActions,
   toggleNonFavoriteProjectsVisibility,
-  toggleProjectArticlesVisibility,
   toggleProjectArticlesFavorite,
-  showKBActions
+  toggleProjectArticlesVisibility,
 };

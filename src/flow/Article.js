@@ -32,8 +32,10 @@ export type ArticleNode = {
 
 export type ArticleNodeList = Array<ArticleNode>;
 
+export type ArticlesListItemTitle = ArticleProject & { isDrafts: boolean };
+
 export type ArticlesListItem = {
-  title: IssueProject,
+  title: ArticlesListItemTitle,
   data: ArticleNodeList,
   dataCollapsed: ArticleNodeList | null
 };

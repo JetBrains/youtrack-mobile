@@ -77,7 +77,7 @@ export default class IssueTabbed extends PureComponent<void, IssueTabbedState> {
     return (
       <TabView
         lazy
-        swipeEnabled={true}
+        swipeEnabled={this.isTabChangeEnabled()}
         navigationState={this.state}
         renderScene={({route}) => this.renderScene(route, uiTheme)}
         initialLayout={this.initialWindowDimensions}

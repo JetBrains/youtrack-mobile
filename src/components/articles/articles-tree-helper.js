@@ -16,7 +16,7 @@ import type {Folder} from '../../flow/User';
 import type {IssueProject} from '../../flow/CustomFields';
 
 
-const createArticlesListItem = (
+export const createArticlesListItem = (
   project: ArticleProject,
   data: ArticleNodeList,
   isCollapsed: boolean
@@ -46,7 +46,7 @@ export const createTree = (articles: Array<Article>, cachedArticlesList: Article
     );
 
     let isProjectCollapsed: boolean = false;
-    if (cachedArticlesList && projectArticles.length > 0) {
+    if (projectArticles?.length > 0) {
       const cachedArticlesListProjectListItem = findArticleProjectListItem(
         cachedArticlesList,
         projectArticles[0].project.id

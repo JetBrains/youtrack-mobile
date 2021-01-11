@@ -4,6 +4,7 @@ export const ResourceTypes = {
   AGILE: 'jetbrains.youtrack.agile.settings.Agile',
 
   ARTICLE: 'Article',
+  ARTICLE_DRAFT: 'ArticleDraft',
 
   COMMENT_REACTIONS_FEED_ITEM: 'CommentReactionsFeedItem',
 
@@ -37,6 +38,7 @@ export const hasType: Object = function (type: string) {
 
 hasType.agile = hasType(ResourceTypes.ISSUE_FOLDER_TAG);
 hasType.article = hasType(ResourceTypes.ARTICLE);
+hasType.articleDraft = hasType(ResourceTypes.ARTICLE_DRAFT);
 hasType.comment = hasType(ResourceTypes.ISSUE_COMMENT);
 hasType.commentReaction = hasType(ResourceTypes.COMMENT_REACTIONS_FEED_ITEM);
 hasType.issue = hasType(ResourceTypes.ISSUE);

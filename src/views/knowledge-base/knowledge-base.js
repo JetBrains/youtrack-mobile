@@ -16,10 +16,10 @@ import Star from '../../components/star/star';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
 import {findArticleNode} from '../../components/articles/articles-tree-helper';
+import {getStorageState} from '../../components/storage/storage';
 import {hasType} from '../../components/api/api__resource-types';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconAngleDown, IconAngleRight, IconBack, IconContextActions, IconLock} from '../../components/icon/icon';
-import {getStorageState} from '../../components/storage/storage';
 import {routeMap} from '../../app-routes';
 import {SkeletonIssues} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
@@ -34,7 +34,7 @@ import type {KnowledgeBaseState} from './knowledge-base-reducers';
 import type {Theme, UITheme} from '../../flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
-type Props = KnowledgeBaseActions & KnowledgeBaseState & {issuePermissions: IssuePermissions};
+type Props = KnowledgeBaseActions & KnowledgeBaseState & { issuePermissions: IssuePermissions };
 
 type State = {
   isHeaderPinned: boolean
@@ -69,7 +69,10 @@ export class KnowledgeBase extends Component<Props, State> {
     this.loadArticlesList();
   }
 
-  loadArticlesList = (reset?: boolean) => this.props.loadArticlesList(reset);
+  loadArticlesList = async (reset?: boolean) => {
+    await this.props.loadArticlesList(reset);
+    this.props.loadArticlesDrafts();
+  };
 
   renderProject = ({section}: ArticlesListItem) => {
     const project: ?ArticleProject = section.title;
@@ -97,13 +100,13 @@ export class KnowledgeBase extends Component<Props, State> {
                 <Text style={styles.projectTitleText}>{project.name}</Text>
               </TouchableOpacity>
             </>
-            <Star
+            {!!project?.id && <Star
               style={styles.itemStar}
               hasStar={project.pinned}
               canStar={true}
               onStarToggle={async () => this.props.toggleProjectArticlesFavorite(project)}
               uiTheme={this.uiTheme}
-            />
+            />}
           </View>
           {this.renderSeparator()}
         </>
@@ -111,38 +114,48 @@ export class KnowledgeBase extends Component<Props, State> {
     }
   };
 
+  openArticle = (article: Article) => {
+    if (hasType.articleDraft(article)) {
+      Router.ArticleCreate({articleDraft: article});
+    } else {
+      Router.Article({articlePlaceholder: article});
+    }
+  };
+
   renderArticle = ({item}: ArticleNode) => {
     const article: Article = item.data;
     const style: ViewStyleProp = {...styles.row, ...styles.item};
 
-    return (
-      <View style={style}>
-        <TouchableOpacity
-          style={style}
-          onPress={() => Router.Article({articlePlaceholder: article})}
-        >
-          <Text numberOfLines={2} style={styles.articleTitleText}>{article.summary}</Text>
-          <View style={styles.itemArticleIcon}>
-            {hasType.visibilityLimited(article?.visibility) && (
-              <IconLock
-                size={16}
-                color={this.uiTheme.colors.$iconAccent}
-              />
-            )}
-          </View>
-        </TouchableOpacity>
+    if (article) {
+      return (
+        <View style={style}>
+          <TouchableOpacity
+            style={style}
+            onPress={() => this.openArticle(article)}
+          >
+            <Text numberOfLines={2} style={styles.articleTitleText}>{article.summary || 'Untitled'}</Text>
+            <View style={styles.itemArticleIcon}>
+              {hasType.visibilityLimited(article?.visibility) && (
+                <IconLock
+                  size={16}
+                  color={this.uiTheme.colors.$iconAccent}
+                />
+              )}
+            </View>
+          </TouchableOpacity>
 
-        {item.children.length > 0 && <TouchableOpacity
-          style={styles.itemButtonContainer}
-          onPress={() => this.renderSubArticlesPage(article)}
-        >
-          <View style={styles.itemButton}>
-            <Text style={styles.itemButtonText}>{item.children.length}</Text>
-            <IconAngleRight style={styles.itemButtonIcon} size={22} color={this.uiTheme.colors.$icon}/>
-          </View>
-        </TouchableOpacity>}
-      </View>
-    );
+          {item.children.length > 0 && <TouchableOpacity
+            style={styles.itemButtonContainer}
+            onPress={() => this.renderSubArticlesPage(article)}
+          >
+            <View style={styles.itemButton}>
+              <Text style={styles.itemButtonText}>{item.children.length}</Text>
+              <IconAngleRight style={styles.itemButtonIcon} size={22} color={this.uiTheme.colors.$icon}/>
+            </View>
+          </TouchableOpacity>}
+        </View>
+      );
+    }
   };
 
   renderSubArticlesPage = (article: Article) => {
@@ -160,9 +173,7 @@ export class KnowledgeBase extends Component<Props, State> {
         ),
         title: node.data.summary,
         customTitleComponent: (
-          <TouchableOpacity
-            onPress={() => Router.Article({articlePlaceholder: article})}
-          >
+          <TouchableOpacity onPress={() => this.openArticle(article)}>
             <Text numberOfLines={2} style={styles.projectTitleText}>{article.summary}</Text>
           </TouchableOpacity>
         )
@@ -213,20 +224,20 @@ export class KnowledgeBase extends Component<Props, State> {
 
   renderRefreshControl = () => {
     return <RefreshControl
-      refreshing={false}
+      refreshing={this.props.isLoading}
       tintColor={this.uiTheme.colors.$link}
       onRefresh={this.loadArticlesList}
     />;
   };
 
-  getListItemKey = (item: ArticleNode, index: number) => item.data.id || index;
+  getListItemKey = (item: ArticleNode, index: number) => item?.data?.id || index;
 
   renderArticlesList = (articlesList: ArticlesList) => {
     const list: ArticlesList = (
       getStorageState().articlesListPinnedOnly
         ? articlesList.filter((it: ArticlesListItem) => {
           if (it.title) {
-            return it.title.pinned;
+            return it.title.pinned || it.title.isDrafts;
           }
           return it;
         })
