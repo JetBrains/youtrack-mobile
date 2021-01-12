@@ -179,10 +179,13 @@ export class KnowledgeBase extends Component<Props, State> {
           </TouchableOpacity>
         )
       });
-      const tree: ArticlesList = this.renderArticlesList([{
-        title: null,
-        data: node.children
-      }]);
+      const tree: ArticlesList = this.renderArticlesList(
+        [{
+          title: null,
+          data: node.children
+        }],
+        true
+      );
 
       Router.Page({children: <>{title}<View style={styles.itemSubArticle}>{tree}</View></>});
     }
@@ -220,7 +223,7 @@ export class KnowledgeBase extends Component<Props, State> {
   }
 
   onScroll = ({nativeEvent}: Object) => {
-    this.setState({isHeaderPinned: nativeEvent.contentOffset.y >= UNIT * 7});
+    this.setState({isHeaderPinned: nativeEvent.contentOffset.y >= UNIT * 2});
   };
 
   renderRefreshControl = () => {
@@ -233,7 +236,7 @@ export class KnowledgeBase extends Component<Props, State> {
 
   getListItemKey = (item: ArticleNode, index: number) => item?.data?.id || index;
 
-  renderArticlesList = (articlesList: ArticlesList) => {
+  renderArticlesList = (articlesList: ArticlesList, hideSearchPanel: boolean = false) => {
     const list: ArticlesList = (
       getStorageState().articlesListPinnedOnly
         ? articlesList.filter((it: ArticlesListItem) => {
@@ -275,7 +278,7 @@ export class KnowledgeBase extends Component<Props, State> {
             </TouchableOpacity>
           </View>}
         stickySectionHeadersEnabled={true}
-        ListHeaderComponent={this.renderSearchPanel()}
+        ListHeaderComponent={hideSearchPanel ? null : this.renderSearchPanel()}
       />
     );
   };
