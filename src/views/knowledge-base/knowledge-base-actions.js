@@ -8,13 +8,15 @@ import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids'
 import {arrayToTree} from 'performant-array-to-tree';
 import {
   createArticlesListItem,
-  createTree,
+  createArticleList,
+  filterArticles,
   toggleArticleProjectListItem
 } from '../../components/articles/articles-tree-helper';
 import {flushStoragePart, getStorageState} from '../../components/storage/storage';
+import {hasType} from '../../components/api/api__resource-types';
 import {logEvent} from '../../components/log/log-helper';
 import {notify} from '../../components/notification/notification';
-import {setError, setLoading, setList} from './knowledge-base-reducers';
+import {setError, setList, setLoading} from './knowledge-base-reducers';
 import {showActions} from '../../components/action-sheet/action-sheet';
 import {sortByUpdatedReverse} from '../../components/search/sorting';
 import {until} from '../../util/util';
@@ -23,7 +25,6 @@ import type Api from '../../components/api/api';
 import type {AppState} from '../../reducers';
 import type {
   Article,
-  ArticleNode,
   ArticleNodeList,
   ArticleProject,
   ArticlesList,
@@ -52,18 +53,24 @@ const loadArticlesListFromCache = () => {
   };
 };
 
-const createArticleListDrafts = (project: ArticleProject, data: ArticleNodeList = []): ArticlesListItem => {
+const createArticleListDrafts = (
+  project: ArticleProject,
+  data: ArticleNodeList = [],
+  isCollapsed?: boolean
+): ArticlesListItem => {
   return createArticlesListItem(
     project,
     arrayToTree(data),
-    !!project?.articles?.collapsed
+    typeof isCollapsed === 'boolean' ? isCollapsed : !!project?.articles?.collapsed
   );
 };
 
-const createArticleList = (articles: Array<Article>): ArticlesList => {
-  const cachedArticlesList: ArticlesList = getArticlesListCache();
-  const tree: Array<ArticleNode> = createTree(articles, cachedArticlesList);
-  return tree.filter(it => it.data?.length > 0 || it.dataCollapsed?.length > 0);
+const createList = (
+  articles: Array<Article>,
+  cachedArticlesList: ArticlesList | null,
+  flat?: boolean
+): ArticlesList => {
+  return createArticleList(articles, cachedArticlesList, flat);
 };
 
 const updateArticlesList = (articlesList: ArticlesList) => {
@@ -89,12 +96,41 @@ const loadArticlesList = (reset: boolean = true) => {
       dispatch(setError(error));
       logEvent({message: 'Failed to load articles', isError: true});
     } else {
-      const articlesList: ArticlesList = createArticleList(articles);
-      const cachedDraftSection: ?ArticlesListItem = getArticlesListCache().find((it: ArticlesListItem) => it.title.isDrafts);
+      const articlesList: ArticlesList = createList(articles, getArticlesListCache());
+      const cachedDraftSection: ?ArticlesListItem = getArticlesListCache().find(
+        (it: ArticlesListItem) => it.title.isDrafts);
       if (cachedDraftSection) {
         articlesList.unshift(cachedDraftSection);
       }
       dispatch(updateArticlesList(articlesList));
+    }
+  };
+};
+
+const filterArticlesList = (query: string) => {
+  return async (dispatch: (any) => any) => {
+    if (query) {
+      const filteredArticlesAndDrafts: Array<Article> = filterArticles(getArticlesListCache(), query);
+      const articles: Array<Article> = [];
+      const drafts: Array<Article> = [];
+
+      filteredArticlesAndDrafts.forEach((it: Article) => {
+        if (hasType.articleDraft(it)) {
+          drafts.push(it);
+        } else {
+          articles.push(it);
+        }
+      });
+
+      const filteredArticlesList: ArticlesList = createList(articles, null, true);
+      if (drafts.length > 0) {
+        const draftsSection = createArticleListDrafts(DRAFTS_TITLE, drafts, false);
+        filteredArticlesList.unshift(draftsSection);
+      }
+
+      dispatch(setList(filteredArticlesList));
+    } else {
+      dispatch(setList(getArticlesListCache()));
     }
   };
 };
@@ -251,6 +287,7 @@ const showKBActions = (actionSheet: ActionSheet, canCreateArticle: boolean) => {
 
 
 export type KnowledgeBaseActions = {
+  filterArticlesList: typeof filterArticlesList,
   loadArticlesDrafts: typeof loadArticlesDrafts,
   loadArticlesList: typeof loadArticlesList,
   loadArticlesListFromCache: typeof loadArticlesListFromCache,
@@ -261,6 +298,7 @@ export type KnowledgeBaseActions = {
 };
 
 export {
+  filterArticlesList,
   loadArticlesDrafts,
   loadArticlesList,
   loadArticlesListFromCache,

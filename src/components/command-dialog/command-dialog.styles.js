@@ -2,13 +2,12 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../variables/variables';
 import {mainText} from '../common-styles/typography';
 import {elevation1} from '../common-styles/shadow';
+import {inputWrapper, searchInput} from '../common-styles/search';
 
 export default EStyleSheet.create({
   inputWrapper: {
+    ...inputWrapper,
     ...elevation1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingLeft: UNIT * 1.5,
     backgroundColor: '$background',
   },
   listContainer: {
@@ -16,11 +15,7 @@ export default EStyleSheet.create({
     flexDirection: 'row'
   },
   searchInput: {
-    ...mainText,
-    flex: 1,
-    height: UNIT * 5,
-    margin: UNIT,
-    color: '$text'
+    ...searchInput
   },
   suggestion: {
     flexGrow: 1,

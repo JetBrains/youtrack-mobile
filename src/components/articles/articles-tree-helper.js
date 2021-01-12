@@ -36,29 +36,42 @@ export const getGroupedProjects = (): Array<Folder> => {
   return groupByFavoritesAlphabetically(projects, 'pinned');
 };
 
-export const createTree = (articles: Array<Article>, cachedArticlesList: ArticlesList | null): ArticlesList => {
+export const createArticleList = (
+  articles: Array<Article>,
+  cachedArticlesList: ArticlesList | null,
+  flat: boolean = false
+): ArticlesList => {
   return getGroupedProjects().reduce((list: ArticlesList, project: ArticleProject) => {
     const projectArticles: Array<Article> = (
       articles
-        .filter((it: Article) => it.project.id === project.id)
+        .filter((it: Article) => it?.project?.id === project.id)
         .sort(sortByOrdinal)
-        .map((it: Article) => ({...it, parentId: it?.parentArticle?.id}))
+        .map((it: Article) => {
+          const parentId = flat ? null : it?.parentArticle?.id;
+          return {...it, ...{parentId}};
+        })
     );
 
     let isProjectCollapsed: boolean = false;
     if (projectArticles?.length > 0) {
       const cachedArticlesListProjectListItem = findArticleProjectListItem(
-        cachedArticlesList,
+        cachedArticlesList || [],
         projectArticles[0].project.id
       );
       isProjectCollapsed = !!cachedArticlesListProjectListItem?.title?.articles?.collapsed;
     }
 
-    const data: ArticleNodeList = arrayToTree(projectArticles);
     project.articles = project.articles || {collapsed: isProjectCollapsed};
 
-    return list.concat(createArticlesListItem(project, data, isProjectCollapsed));
-  }, []);
+    return list.concat(
+      createArticlesListItem(project, arrayToTree(projectArticles), isProjectCollapsed)
+    );
+  }, []).filter(it => it.data?.length > 0 || it.dataCollapsed?.length > 0);
+};
+
+export const filterArticles = (articlesList: ArticlesList, query: string = ''): Array<Article> => {
+  const articles: Array<Article> = flattenArticleList(articlesList);
+  return articles.filter((it: Article) => (it?.summary || '').toLowerCase().includes(query.toLowerCase()));
 };
 
 export const toggleArticleProjectListItem = (item: ArticlesListItem, isCollapsed?: boolean): ArticlesListItem => {
@@ -67,14 +80,26 @@ export const toggleArticleProjectListItem = (item: ArticlesListItem, isCollapsed
   return createArticlesListItem(project, item.dataCollapsed || item.data, collapsed);
 };
 
-export const flattenTree = (nodes: ArticleNodeList = []): Array<Article> => {
-  let resultArray: Array<Article> = [];
+export const flattenArticleListChildren = (nodes: ArticleNodeList = []): Array<Article> => {
+  let list: Array<Article> = [];
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i];
-    resultArray.push(node.data);
-    resultArray = [...resultArray, ...flattenTree(node.children)];
+    list.push(node.data);
+    list = [...list, ...flattenArticleListChildren(node.children)];
   }
-  return resultArray;
+  return list;
+};
+
+export const flattenArticleList = (articleList: ArticlesList = []): ArticlesList => {
+  return articleList.reduce((list: ArticlesList, item: ArticlesListItem) => {
+    return list.concat(
+      flattenArticleListChildren(
+        item.title.articles.collapsed
+          ? item.dataCollapsed
+          : item.data
+      )
+    );
+  }, []);
 };
 
 export const findNodeById = (articlesList: ArticleNodeList, id: string): ArticleNode => {
@@ -91,7 +116,10 @@ export const findNodeById = (articlesList: ArticleNodeList, id: string): Article
   return null;
 };
 
-export const findArticleProjectListItem = (articlesList: ArticleNodeList, projectId: string): ArticleNode | null => {
+export const findArticleProjectListItem = (
+  articlesList: ArticleNodeList = [],
+  projectId: string
+): ArticleNode | null => {
   return articlesList.find((it: ArticlesListItem) => it.title.id === projectId);
 };
 
@@ -111,7 +139,7 @@ export const createBreadCrumbs = (article: Article, articlesList: ArticlesList):
 
   const breadCrumbs: Array<Article | IssueProject> = [];
   const projectNode: ArticleNode = findArticleProjectListItem(articlesList, article.project.id);
-  const projectArticles: Array<Article> = flattenTree(projectNode.data);
+  const projectArticles: Array<Article> = flattenArticleListChildren(projectNode.data);
 
   let parentId: string | null = article?.parentArticle?.id;
   while (parentId) {

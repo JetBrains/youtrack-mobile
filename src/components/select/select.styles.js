@@ -1,8 +1,10 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {UNIT} from '../variables/variables';
-import {MAIN_FONT_SIZE} from '../common-styles/typography';
+
 import {elevation1} from '../common-styles/shadow';
+import {inputWrapper} from '../common-styles/search';
+import {MAIN_FONT_SIZE} from '../common-styles/typography';
 import {separator} from '../common-styles/list';
+import {UNIT} from '../variables/variables';
 
 const minButtonWidth = UNIT * 5;
 
@@ -11,10 +13,8 @@ export const SELECT_ITEM_SEPARATOR_HEIGHT = 1;
 
 export default EStyleSheet.create({
   inputWrapper: {
+    ...inputWrapper,
     ...elevation1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingLeft: UNIT * 1.5,
     backgroundColor: '$background',
   },
   cancelButton: {

@@ -1,10 +1,11 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
+import {clearIcon, inputWrapper, searchInput} from '../../components/common-styles/search';
 import {elevation1} from '../../components/common-styles/shadow';
 import {headerTitle, mainText} from '../../components/common-styles/typography';
-import {UNIT} from '../../components/variables/variables';
 import {Platform} from 'react-native';
 import {SELECT_ITEM_HEIGHT} from '../../components/select/select.styles';
+import {UNIT} from '../../components/variables/variables';
 
 export default EStyleSheet.create({
   container: {
@@ -137,5 +138,12 @@ export default EStyleSheet.create({
   },
   listFooterText: {
     color: '$link'
-  }
+  },
+
+  inputWrapper: {
+    marginHorizontal: UNIT * 2,
+    ...inputWrapper
+  },
+  searchInput: searchInput,
+  clearIcon: clearIcon
 });

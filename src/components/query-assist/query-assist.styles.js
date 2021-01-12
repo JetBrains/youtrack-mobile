@@ -1,8 +1,8 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {UNIT} from '../variables/variables';
-import {mainText} from '../common-styles/typography';
+import {clearIcon, inputWrapper, searchInput} from '../common-styles/search';
 import {elevation1} from '../common-styles/shadow';
+import {UNIT} from '../variables/variables';
 
 
 export default EStyleSheet.create({
@@ -21,30 +21,14 @@ export default EStyleSheet.create({
     position: 'relative',
     zIndex:1
   },
-  inputWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingLeft: UNIT,
-    borderRadius: UNIT,
-    backgroundColor: '$boxBackground'
-  },
+  inputWrapper: inputWrapper,
   inputWrapperActive: {
     ...elevation1,
     borderRadius: 0,
     borderBottomColor: 'transparent',
     backgroundColor: '$background'
   },
-  searchInput: {
-    flex: 1,
-    paddingLeft: UNIT / 1.5,
-    paddingVertical: UNIT * 1.6,
-    marginLeft: UNIT,
-    marginRight: UNIT,
-
-    ...mainText,
-    color: '$text'
-  },
+  searchInput: searchInput,
   searchInputHasText: {
     color: '$text'
   },
@@ -57,11 +41,7 @@ export default EStyleSheet.create({
     marginLeft: UNIT / 2,
     color: '$icon'
   },
-  clearIcon: {
-    marginLeft: UNIT,
-    marginRight: UNIT * 2,
-    color: '$icon'
-  },
+  clearIcon: clearIcon,
   link: {
     color: '$link'
   },

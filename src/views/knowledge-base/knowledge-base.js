@@ -9,6 +9,7 @@ import {connect} from 'react-redux';
 import * as knowledgeBaseActions from './knowledge-base-actions';
 import ErrorMessage from '../../components/error-message/error-message';
 import IconSearchEmpty from '../../components/icon/search-empty.svg';
+import KnowledgeBaseSearchPanel from './knowledge-base__search';
 import PropTypes from 'prop-types';
 import Router from '../../components/router/router';
 import Select from '../../components/select/select';
@@ -274,9 +275,18 @@ export class KnowledgeBase extends Component<Props, State> {
             </TouchableOpacity>
           </View>}
         stickySectionHeadersEnabled={true}
+        ListHeaderComponent={this.renderSearchPanel()}
       />
     );
   };
+
+  renderSearchPanel = () => (
+    <KnowledgeBaseSearchPanel
+      onSearch={(query: string) => {
+        this.props.filterArticlesList(query);
+      }}
+    />
+  );
 
   render() {
     const {isLoading, articlesList, error, showKBActions, issuePermissions} = this.props;
