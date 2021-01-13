@@ -138,10 +138,15 @@ export const createBreadCrumbs = (article: Article, articlesList: ArticlesList):
   }
 
   const breadCrumbs: Array<Article | IssueProject> = [];
+
   const projectNode: ArticleNode = findArticleProjectListItem(articlesList, article.project.id);
-  const projectArticles: Array<Article> = flattenArticleListChildren(projectNode.data);
+  if (!projectNode || !projectNode.data) {
+    return [];
+  }
 
   let parentId: string | null = article?.parentArticle?.id;
+  const projectArticles: Array<Article> = flattenArticleListChildren(projectNode.data);
+
   while (parentId) {
     const parentArticle: ?Article = projectArticles.find((it: Article) => it.id === parentId);
     if (parentArticle) {

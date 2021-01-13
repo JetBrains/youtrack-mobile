@@ -5,6 +5,7 @@ import {Alert, Clipboard, Share} from 'react-native';
 
 import Router from '../../components/router/router';
 import {getApi} from '../../components/api/api__instance';
+import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
 import {isIOSPlatform, until} from '../../util/util';
 import {logEvent} from '../../components/log/log-helper';
 import {notify} from '../../components/notification/notification';
@@ -12,7 +13,6 @@ import {
   setActivityPage,
   setArticle,
   setArticleCommentDraft,
-  setArticleDraft,
   setError,
   setLoading,
   setPrevArticle,
@@ -27,7 +27,6 @@ import type {Article} from '../../flow/Article';
 import type {ArticleState} from './article-reducers';
 import type {IssueComment} from '../../flow/CustomFields';
 import type {ShowActionSheetWithOptions} from '../../components/action-sheet/action-sheet';
-import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
 
 type ApiGetter = () => Api;
 
@@ -77,7 +76,7 @@ const loadActivitiesPage = (reset: boolean = true) => {
   };
 };
 
-const showArticleActions = (actionSheet: ActionSheet, canUpdate: boolean, onBeforeEdit: () => void, canDelete: boolean) => {
+const showArticleActions = (actionSheet: ActionSheet, canUpdate: boolean, canDelete: boolean) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {article} = getState().article;
@@ -110,15 +109,9 @@ const showArticleActions = (actionSheet: ActionSheet, canUpdate: boolean, onBefo
         title: 'Edit',
         execute: async () => {
           logEvent({message: `${articleLogMessagePrefix} Edit article`, analyticsId: ANALYTICS_ARTICLE_PAGE});
-
-          onBeforeEdit();
-          let articleDraft: Article = (await dispatch(getArticleDrafts()))[0];
-          if (!articleDraft) {
-            articleDraft = await dispatch(createArticleDraft());
-          }
-
+          const articleDraft: Article | null = await getArticleDraft(api, article);
           if (articleDraft) {
-            dispatch(setDraft(articleDraft));
+            Router.ArticleCreate({articleDraft});
           }
         }
       });
@@ -144,6 +137,38 @@ const showArticleActions = (actionSheet: ActionSheet, canUpdate: boolean, onBefo
   };
 };
 
+const getArticleDraft = async (api: Api, article: Article): Promise<Article | null> => {
+  let articleDraft: Article | null = null;
+
+  const [error, articleDrafts] = await until(api.articles.getArticleDrafts(null, article.id));
+
+  if (error) {
+    logEvent({message: `Failed to load ${article.idReadable} article drafts`, isError: true});
+  } else {
+    if (articleDrafts.length === 0) {
+      articleDraft = await createArticleDraft(api, article);
+    } else {
+      articleDraft = articleDrafts[0];
+    }
+  }
+
+  return articleDraft;
+};
+
+const createArticleDraft = async (api: Api, article: Article): Promise<Article | null> => {
+  let articleDraft: Article | null = null;
+
+  const [createDraftError, draft] = await until(api.articles.createArticleDraft(article.id));
+  if (createDraftError) {
+    logEvent({message: `Failed to create a draft for the article ${article.idReadable}`, isError: true});
+  } else {
+    articleDraft = draft;
+  }
+
+  return articleDraft;
+};
+
+
 const getArticleDrafts = () => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
@@ -157,59 +182,6 @@ const getArticleDrafts = () => {
       return [];
     } else {
       return articleDrafts;
-    }
-  };
-};
-
-const updateArticleDraft = (articleDraft: Article) => {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
-    const api: Api = getApi();
-
-    const [error] = await until(api.articles.updateArticleDraft(articleDraft));
-
-    if (error) {
-      const errorMsg: string = 'Failed to update article draft';
-      logEvent({message: errorMsg, isError: true});
-      notify(errorMsg, error);
-    }
-  };
-};
-
-const createArticleDraft = () => {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
-    const api: Api = getApi();
-    const {article}: Article = getState().article;
-
-    const [error, articleDraft] = await until(api.articles.createArticleDraft(article.id));
-
-    if (error) {
-      const errorMsg: string = 'Failed to load article draft';
-      logEvent({message: errorMsg, isError: true});
-      notify(articleLogMessagePrefix + errorMsg, error);
-      return null;
-    } else {
-      return articleDraft;
-    }
-  };
-};
-
-const publishArticleDraft = () => {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
-    const api: Api = getApi();
-    const {articleDraft, article}: Article = getState().article;
-
-    dispatch(setProcessing(true));
-    await updateArticleDraft(articleDraft);
-    const [error] = await until(api.articles.publishArticleDraft(articleDraft.id));
-    dispatch(setProcessing(false));
-
-    if (error) {
-      const errorMsg: string = 'Failed to publish article draft';
-      logEvent({message: errorMsg, isError: true});
-      notify(errorMsg, error);
-    } else {
-      dispatch(setDraft(null));
-      dispatch(loadArticle(article.id, false));
     }
   };
 };
@@ -229,12 +201,6 @@ const deleteArticle = (articleId: string) => {
     } else {
       Router.KnowledgeBase();
     }
-  };
-};
-
-const setDraft = (articleDraft: Article | null) => {
-  return async (dispatch: (any) => any) => {
-    dispatch(setArticleDraft(articleDraft));
   };
 };
 
@@ -422,7 +388,8 @@ const getMentions = (query: string) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {article} = getState().article;
-    const [error, mentions] = await until(api.mentions.getMentions(query, {containers: [{$type: article.$type ,id: article.id}]}));
+    const [error, mentions] = await until(
+      api.mentions.getMentions(query, {containers: [{$type: article.$type, id: article.id}]}));
     if (error) {
       notify('Failed to load user mentions', error);
       return null;
@@ -440,10 +407,6 @@ export {
   deleteArticle,
 
   getArticleDrafts,
-  updateArticleDraft,
-  createArticleDraft,
-  publishArticleDraft,
-  setDraft,
 
   getArticleCommentDraft,
   updateArticleCommentDraft,

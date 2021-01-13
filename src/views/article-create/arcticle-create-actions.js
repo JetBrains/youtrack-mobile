@@ -20,24 +20,22 @@ const updateArticleDraft = (articleDraft: Article) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
 
-    const [error, updatedDraft] = await until(api.articles.updateArticleDraft(articleDraft));
+    const [error] = await until(api.articles.updateArticleDraft(articleDraft));
 
     if (error) {
       const errorMsg: string = 'Failed to update article draft';
       logEvent({message: errorMsg, isError: true});
       notify(errorMsg, error);
-    } else {
-      logEvent({message: `Article draft updated: ${updatedDraft}`});
     }
   };
 };
 
-const createArticleDraft = () => {
+const createArticleDraft = (articleId?: string) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
 
     dispatch(setProcessing(true));
-    const [error, articleDraft] = await until(api.articles.createArticleDraft());
+    const [error, articleDraft] = await until(api.articles.createArticleDraft(articleId));
     dispatch(setProcessing(false));
 
     if (error) {

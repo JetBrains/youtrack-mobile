@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import {RefreshControl, View, ActivityIndicator, ScrollView, TouchableOpacity, Text} from 'react-native';
+import {RefreshControl, View, ScrollView, TouchableOpacity, Text} from 'react-native';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -9,7 +9,6 @@ import {connect} from 'react-redux';
 import * as articleActions from './arcticle-actions';
 import ArticleActivities from './article__activity';
 import ArticleDetails from './article__details';
-import ArticleDetailsEdit from './article__details-edit';
 import CreateUpdateInfo from '../../components/issue-tabbed/issue-tabbed__created-updated';
 import ErrorMessage from '../../components/error-message/error-message';
 import Header from '../../components/header/header';
@@ -19,12 +18,8 @@ import Router from '../../components/router/router';
 import VisibilityControl from '../../components/visibility/visibility-control';
 import {createBreadCrumbs, findArticleNode} from '../../components/articles/articles-tree-helper';
 import {getApi} from '../../components/api/api__instance';
-import {
-  IconBack,
-  IconCheck,
-  IconClose,
-  IconContextActions
-} from '../../components/icon/icon';
+import {IconBack, IconContextActions} from '../../components/icon/icon';
+import {routeMap} from '../../app-routes';
 import {ThemeContext} from '../../components/theme/theme-context';
 
 import styles from './article.styles';
@@ -53,6 +48,17 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
   props: Props;
   uiTheme: UITheme;
 
+  constructor(props: Props) {
+    //$FlowFixMe
+    super(props);
+
+    Router.setOnDispatchCallback((routeName: string, prevRouteName: string) => {
+      if (routeName === routeMap.Article && prevRouteName === routeMap.ArticleCreate) {
+        this.refresh();
+      }
+    });
+  }
+
   componentDidMount() {
     const {articlePlaceholder, storePrevArticle} = this.props;
     if (storePrevArticle) {
@@ -64,7 +70,11 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
   loadArticle = (articleId: string, reset: boolean) => this.props.loadArticle(articleId, reset);
 
   refresh = () => {
-    this.loadArticle(this.props.article.id, false);
+    const {articlePlaceholder, article} = this.props;
+    const articleId: ?string = article?.id || articlePlaceholder?.id;
+    if (articleId) {
+      this.loadArticle(articleId, false);
+    }
   };
 
   renderError = (error: CustomError) => {
@@ -118,19 +128,13 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     );
   };
 
-  renderTabBar(uiTheme: UITheme, editMode: boolean = !!this.props.articleDraft) {
-    //$FlowFixMe
-    return super.renderTabBar(this.uiTheme, editMode);
-  }
-
   renderDetails = (uiTheme: UITheme) => {
-    const {article, articlesList, articlePlaceholder, articleDraft, updateArticleDraft, error, isLoading} = this.props;
+    const {article, articlesList, articlePlaceholder, error, isLoading} = this.props;
     if (error) {
       return this.renderError(error);
     }
 
     const articleData: ?Article = article || articlePlaceholder;
-    const isEditMode: boolean = !!articleDraft;
     const articleNode: ?ArticleNode = article && findArticleNode(articlesList, article.project.id, article.id);
     const subArticles: Array<Article> = (articleNode?.children || []).map((it: ArticleNode) => it.data);
     const breadCrumbsElement = article ? this.renderBreadCrumbs() : null;
@@ -160,23 +164,15 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
             />
           </>
         )}
-        {isEditMode && (
-          <ArticleDetailsEdit
-            articleDraft={articleDraft}
-            updateArticleDraft={updateArticleDraft}
-            uiTheme={this.uiTheme}
-          />
-        )}
-        {!isEditMode && (
-          <ArticleDetails
-            article={article}
-            articlePlaceholder={articlePlaceholder}
-            error={error}
-            isLoading={isLoading}
-            subArticles={subArticles}
-            uiTheme={uiTheme}
-          />
-        )}
+
+        <ArticleDetails
+          article={article}
+          articlePlaceholder={articlePlaceholder}
+          error={error}
+          isLoading={isLoading}
+          subArticles={subArticles}
+          uiTheme={uiTheme}
+        />
       </ScrollView>
     );
   };
@@ -196,9 +192,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     );
   };
 
-  isTabChangeEnabled = () => {
-    return !this.props.isProcessing;
-  };
+  isTabChangeEnabled = () => !this.props.isProcessing;
 
   canEditArticle = (): boolean => {
     const {article, issuePermissions} = this.props;
@@ -213,52 +207,23 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
   renderHeader = () => {
     const {
       article,
-      articleDraft,
       articlePlaceholder,
       isProcessing,
-      publishArticleDraft,
-      setDraft,
       showArticleActions
     } = this.props;
     const uiThemeColors: UIThemeColors = this.uiTheme.colors;
     const linkColor: string = uiThemeColors.$link;
     const textSecondaryColor: string = uiThemeColors.$textSecondary;
-    const isEditMode: boolean = !!articleDraft;
 
     const props: HeaderProps = {
       title: (article || articlePlaceholder)?.idReadable,
-
-      leftButton: (
-        isEditMode
-          ? <IconClose size={21} color={isProcessing ? textSecondaryColor : linkColor}/>
-          : <IconBack color={isProcessing ? textSecondaryColor : linkColor}/>
-      ),
-      onBack: (
-        isEditMode
-          ? () => setDraft(null)
-          : () => !isProcessing && Router.pop()
-      ),
-
-      rightButton: (
-        isEditMode
-          ? (
-            isProcessing
-              ? <ActivityIndicator color={linkColor}/>
-              : <IconCheck size={20} color={linkColor}/>
-          )
-          : <IconContextActions size={18} color={linkColor}/>
-      ),
-      onRightButtonClick: (
-        isEditMode
-          ? publishArticleDraft
-          : () => (
-            showArticleActions(
-              this.context.actionSheet(),
-              this.canEditArticle(),
-              this.switchToDetailsTab,
-              this.canDeleteArticle()
-            )
-          )
+      leftButton: <IconBack color={isProcessing ? textSecondaryColor : linkColor}/>,
+      onBack: () => !isProcessing && Router.pop(),
+      rightButton: <IconContextActions size={18} color={linkColor}/>,
+      onRightButtonClick: () => showArticleActions(
+        this.context.actionSheet(),
+        this.canEditArticle(),
+        this.canDeleteArticle()
       ),
     };
 
