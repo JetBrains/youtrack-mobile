@@ -15,6 +15,7 @@ import Header from '../../components/header/header';
 import IssueTabbed from '../../components/issue-tabbed/issue-tabbed';
 import PropTypes from 'prop-types';
 import Router from '../../components/router/router';
+import Star from '../../components/star/star';
 import VisibilityControl from '../../components/visibility/visibility-control';
 import {createBreadCrumbs, findArticleNode} from '../../components/articles/articles-tree-helper';
 import {getApi} from '../../components/api/api__instance';
@@ -24,7 +25,7 @@ import {ThemeContext} from '../../components/theme/theme-context';
 
 import styles from './article.styles';
 
-import type {ArticleNode} from '../../flow/Article';
+import type {Article as ArticleEntity, ArticleNode} from '../../flow/Article';
 import type {ArticleState} from './article-reducers';
 import type {CustomError} from '../../flow/Error';
 import type {HeaderProps} from '../../components/header/header';
@@ -35,7 +36,7 @@ import type {RootState} from '../../reducers/app-reducer';
 import type {Theme, UITheme, UIThemeColors} from '../../flow/Theme';
 import type {Visibility} from '../../flow/Visibility';
 
-type Props = ArticleState & { articlePlaceholder: Article, storePrevArticle?: boolean } & typeof (articleActions);
+type Props = ArticleState & { articlePlaceholder: ArticleEntity, storePrevArticle?: boolean } & typeof (articleActions);
 
 const maxBreadcrumbTextLength: number = 24;
 
@@ -91,7 +92,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
 
   renderBreadCrumbs = () => {
     const {article, articlesList} = this.props;
-    const breadCrumbs: Array<Article | IssueProject> = createBreadCrumbs(article, articlesList);
+    const breadCrumbs: Array<ArticleEntity | IssueProject> = createBreadCrumbs(article, articlesList);
 
     if (breadCrumbs.length === 0) {
       return null;
@@ -103,7 +104,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
           horizontal={true}
           contentContainerStyle={styles.breadCrumbsContent}
         >
-          {breadCrumbs.map((it: Article | IssueProject, index: number) => {
+          {breadCrumbs.map((it: ArticleEntity | IssueProject, index: number) => {
             const breadcrumbText: string = it.name || it.summary;
             return (
               <View key={it.id}>
@@ -134,9 +135,9 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
       return this.renderError(error);
     }
 
-    const articleData: ?Article = article || articlePlaceholder;
+    const articleData: ?ArticleEntity = article || articlePlaceholder;
     const articleNode: ?ArticleNode = article && findArticleNode(articlesList, article.project.id, article.id);
-    const subArticles: Array<Article> = (articleNode?.children || []).map((it: ArticleNode) => it.data);
+    const subArticles: Array<ArticleEntity> = (articleNode?.children || []).map((it: ArticleNode) => it.data);
     const breadCrumbsElement = article ? this.renderBreadCrumbs() : null;
 
     return (
@@ -209,22 +210,33 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
       article,
       articlePlaceholder,
       isProcessing,
-      showArticleActions
+      showArticleActions,
+      issuePermissions
     } = this.props;
     const uiThemeColors: UIThemeColors = this.uiTheme.colors;
     const linkColor: string = uiThemeColors.$link;
     const textSecondaryColor: string = uiThemeColors.$textSecondary;
+    const articleData: $Shape<ArticleEntity> = article || articlePlaceholder;
+    const isArticleLoaded: boolean = !!article;
 
     const props: HeaderProps = {
-      title: (article || articlePlaceholder)?.idReadable,
+      title: articleData.idReadable,
       leftButton: <IconBack color={isProcessing ? textSecondaryColor : linkColor}/>,
       onBack: () => !isProcessing && Router.pop(),
-      rightButton: <IconContextActions size={18} color={linkColor}/>,
+      rightButton: isArticleLoaded ? <IconContextActions size={18} color={linkColor}/> : null,
       onRightButtonClick: () => showArticleActions(
         this.context.actionSheet(),
         this.canEditArticle(),
         this.canDeleteArticle()
       ),
+      extraButton: (
+        isArticleLoaded ? <Star
+          canStar={issuePermissions.canStar()}
+          hasStar={articleData.hasStar}
+          onStarToggle={this.props.toggleFavorite}
+          uiTheme={this.uiTheme}
+        /> : null
+      )
     };
 
     return <Header {...props} />;

@@ -14,6 +14,7 @@ const articleFields = toField([
   'ordinal',
   'summary',
   'updated',
+  'hasStar',
   {attachments: issueFields.attachments},
   {
     mentionedArticles: [

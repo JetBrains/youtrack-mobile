@@ -398,6 +398,22 @@ const getMentions = (query: string) => {
   };
 };
 
+const toggleFavorite = () => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const {article} = getState().article;
+
+    const prev: boolean = article.hasStar;
+    dispatch(setArticle({...article, hasStar: !prev}));
+
+    const [error] = await until(api.articles.updateArticle(article.id, {hasStar: !prev}));
+    if (error) {
+      notify('Failed to update the article', error);
+      dispatch(setArticle({...article, hasStar: prev}));
+    }
+  };
+};
+
 
 export {
   loadArticle,
@@ -417,5 +433,6 @@ export {
   showArticleCommentActions,
   deleteArticleComment,
 
-  getMentions
+  getMentions,
+  toggleFavorite
 };
