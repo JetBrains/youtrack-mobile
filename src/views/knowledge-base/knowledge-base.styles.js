@@ -141,7 +141,7 @@ export default EStyleSheet.create({
   },
 
   inputWrapper: {
-    marginTop: UNIT,
+    marginVertical: UNIT,
     marginHorizontal: UNIT * 2,
     ...inputWrapper
   },

@@ -223,7 +223,7 @@ export class KnowledgeBase extends Component<Props, State> {
   }
 
   onScroll = ({nativeEvent}: Object) => {
-    this.setState({isHeaderPinned: nativeEvent.contentOffset.y >= UNIT * 2});
+    this.setState({isHeaderPinned: nativeEvent.contentOffset.y >= UNIT});
   };
 
   renderRefreshControl = () => {
