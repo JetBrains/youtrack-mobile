@@ -174,6 +174,7 @@ const ArticleCreate = (props: Props) => {
             </TouchableOpacity>
 
             <VisibilityControl
+              style={styles.visibilitySelector}
               visibility={articleDraftData.visibility}
               onSubmit={(visibility: Visibility) => updateDraft({visibility})}
               uiTheme={theme.uiTheme}

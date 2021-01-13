@@ -316,18 +316,18 @@ export const SkeletonCreateArticle = () => {
       {SkeletonLine({
         width: SKELETON_WIDTH * 1.5,
         height: SKELETON_HEIGHT,
-        marginTop: UNIT * 2,
+        marginTop: UNIT * 2.5,
       })}
 
       {SkeletonLine({
         width: SKELETON_WIDTH * 2.5,
         height: SKELETON_HEIGHT,
-        marginTop: UNIT * 2,
+        marginTop: UNIT * 2.5,
       })}
 
       {SkeletonLine({
         height: SKELETON_HEIGHT * 2,
-        marginTop: UNIT * 2,
+        marginTop: UNIT * 4,
         marginBottom: UNIT * 2,
       })}
 

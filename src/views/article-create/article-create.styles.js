@@ -22,11 +22,14 @@ export default EStyleSheet.create({
   },
   projectSelector: {
     flexDirection: 'row',
-    marginVertical: UNIT * 2,
-    alignItems: 'center',
+    marginVertical: UNIT * 2.5,
+    alignItems: 'center'
   },
   projectSelectorText: {
     marginRight: UNIT / 2,
     color: '$link'
+  },
+  visibilitySelector: {
+    marginBottom: UNIT * 1.5
   }
 });
