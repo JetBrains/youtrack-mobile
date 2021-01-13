@@ -3,6 +3,7 @@
 import qs from 'qs';
 
 import ApiBase from './api__base';
+import articleFields from './api__articles-fields';
 import issueActivityPageFields from './api__activities-issue-fields';
 import issueFields from './api__issue-fields';
 import {activityArticleCategory} from '../activity/activity__category';
@@ -12,11 +13,7 @@ import type {Activity} from '../../flow/Activity';
 import type {IssueComment} from '../../flow/CustomFields';
 
 export default class ArticlesAPI extends ApiBase {
-  articleFields = 'fields=hasStar,content,created,updated,updatedBy(@permittedUsers),' +
-    'mentionedUsers(@permittedUsers),' +
-    'mentionedArticles(id,idReadable,reporter(@permittedUsers),summary,project(@project),parentArticle(idReadable),ordinal,visibility(@visibility),hasUnpublishedChanges),mentionedIssues(id,reporter(@permittedUsers),resolved,updated,created,fields(value(id,name,localizedName,color(@color),minutes,presentation,text,ringId,login,fullName,avatarUrl,allUsersGroup,icon),id,$type,hasStateMachine,isUpdatable,projectCustomField($type,id,field(id,name,aliases,localizedName,fieldType(valueType,isMultiValue)),bundle(id),canBeEmpty,emptyFieldText,isSpentTime)),project(@project),visibility(@visibility),tags(id,name,query,issuesUrl,color(@color),isDeletable,isShareable,isUpdatable,isUsable,owner(@permittedUsers),readSharingSettings(@updateSharingSettings),tagSharingSettings(@updateSharingSettings),updateSharingSettings(@updateSharingSettings)),' +
-    'watchers(hasStar),idReadable,summary),attachments(id,name,author(ringId),mimeType,url,size,visibility(@visibility),imageDimensions(width,height)),id,idReadable,reporter(@permittedUsers),summary,project(@project),parentArticle(id,idReadable),ordinal,visibility(@visibility),hasUnpublishedChanges' +
-    ';@visibility:$type,implicitPermittedUsers(@permittedUsers),permittedGroups(@permittedGroups),permittedUsers(@permittedUsers);@updateSharingSettings:permittedGroups(@permittedGroups),permittedUsers(@permittedUsers);@project:id,ringId,name,shortName,iconUrl,template,pinned,archived,isDemo;@permittedUsers:id,ringId,name,login,fullName,avatarUrl;@permittedGroups:id,name,ringId,allUsersGroup,icon;@color:id,background,foreground';
+  articleFieldsQuery: string = ApiBase.createFieldsQuery(articleFields);
   categories: Array<string> = Object.keys(activityArticleCategory).map((key: string) => activityArticleCategory[key]);
   commentFields: string = issueFields.issueComment.toString();
   articleCommentFieldsQuery: string = ApiBase.createFieldsQuery(this.commentFields);
@@ -37,13 +34,13 @@ export default class ArticlesAPI extends ApiBase {
 
   async getArticle(articleId: string): Promise<Article> {
     return this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/articles/${articleId}?${this.articleFields}`
+      `${this.youTrackApiUrl}/articles/${articleId}?${this.articleFieldsQuery}`
     );
   }
 
   async updateArticle(articleId: string, data: Object | null = null): Promise<Article> {
     return this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/articles/${articleId}?${this.articleFields}`,
+      `${this.youTrackApiUrl}/articles/${articleId}?${this.articleFieldsQuery}`,
       'POST',
       data
     );
@@ -65,13 +62,13 @@ export default class ArticlesAPI extends ApiBase {
   async getArticleDrafts(draftId: ?string, original?: string): Promise<Article> {
     const originalParam: string = original ? `&original=${original}` : '';
     const articleDraftId: string = draftId || '';
-    const url: string = `${this.youTrackApiUrl}/admin/users/me/articleDrafts/${articleDraftId}?${this.articleFields}${originalParam}`;
+    const url: string = `${this.youTrackApiUrl}/admin/users/me/articleDrafts/${articleDraftId}?${this.articleFieldsQuery}${originalParam}`;
     return this.makeAuthorizedRequest(url, 'GET');
   }
 
   async createArticleDraft(articleId?: string): Promise<Article> {
     return this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/admin/users/me/articleDrafts?${this.articleFields}`,
+      `${this.youTrackApiUrl}/admin/users/me/articleDrafts?${this.articleFieldsQuery}`,
       'POST',
       (articleId
         ? {originalArticle: {id: articleId}}
@@ -81,7 +78,7 @@ export default class ArticlesAPI extends ApiBase {
 
   async updateArticleDraft(articleDraft: Article): Promise<Article> {
     return this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/admin/users/me/articleDrafts/${articleDraft.id}?${this.articleFields}`,
+      `${this.youTrackApiUrl}/admin/users/me/articleDrafts/${articleDraft.id}?${this.articleFieldsQuery}`,
       'POST',
       {
         content: articleDraft.content,
