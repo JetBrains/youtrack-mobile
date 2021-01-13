@@ -1,8 +1,11 @@
 /* @flow */
 
-import {isActivityCategory} from './activity__category';
-import {relativeDate, getReadableID, formatDate, getEntityPresentation} from '../issue-formatter/issue-formatter';
 import {getPeriodPresentationFor} from '../time-tracking/time-tracking';
+import {hasType} from '../api/api__resource-types';
+import {isActivityCategory} from './activity__category';
+import {relativeDate, formatDate, getEntityPresentation} from '../issue-formatter/issue-formatter';
+
+import type {IssueProject} from '../../flow/CustomFields';
 import type {WorkTimeSettings} from '../../flow/WorkTimeSettings';
 
 type TextValueChangeParams = {
@@ -110,12 +113,8 @@ function getEmptyFieldValue(activity, issueFields) {
   return NO_VALUE;
 }
 
-function getProjectPresentation(value: Object) {
-  const LOST_PROJECT_NAME = '[Lost project]';
-  const issuePresentation = getReadableID(value);
-  if (issuePresentation) {
-    const projectName = value.project && value.project.name ? value.project.name : LOST_PROJECT_NAME;
-    return `${projectName }, ${ issuePresentation}`;
-  }
-  return '';
+function getProjectPresentation(value: Object): string {
+  const LOST_PROJECT_NAME: string = '[Lost project]';
+  const project: IssueProject | null = hasType.project(value) ? value : hasType.project(value?.project) ? value.project : null;
+  return project?.name || LOST_PROJECT_NAME;
 }

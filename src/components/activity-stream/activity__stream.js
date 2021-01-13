@@ -441,7 +441,8 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
       isActivityCategory.sprint(activity) ||
       isActivityCategory.work(activity) ||
       isActivityCategory.description(activity) ||
-      isActivityCategory.summary(activity)
+      isActivityCategory.summary(activity) ||
+      isActivityCategory.project(activity)
     ):
       return renderTextValueChange(activity);
     case Boolean(isActivityCategory.link(activity)):
