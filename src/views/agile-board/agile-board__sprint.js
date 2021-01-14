@@ -96,7 +96,8 @@ export default class AgileBoardSprint extends Component<Props, void> {
     }
 
     const isOrphansAtTheTop: boolean = sprint.agile.orphansAtTheTop;
-    const orphan: AgileBoardRow = this.renderOrphan(board);
+    const hideOrphansSwimlane: boolean = sprint.agile?.hideOrphansSwimlane;
+    const orphan: AgileBoardRow = !hideOrphansSwimlane && this.renderOrphan(board);
 
     return (
       <>

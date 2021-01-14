@@ -331,12 +331,15 @@ class AgileBoard extends Component<Props, State> {
   };
 
   renderSprint = (uiTheme: UITheme) => {
-    const {sprint, createCardForCell, onRowCollapseToggle} = this.props;
+    const {sprint, createCardForCell, onRowCollapseToggle, agile} = this.props;
 
     return (
       <AgileBoardSprint
         testID="agileBoardSprint"
-        sprint={sprint}
+        sprint={{
+          ...sprint,
+          agile: sprint?.agile ? {...sprint?.agile, hideOrphansSwimlane: agile?.hideOrphansSwimlane} : agile
+        }}
         zoomedIn={this.state.zoomedIn}
         canRunCommand={this.canRunCommand}
         onTapIssue={this._onTapIssue}
