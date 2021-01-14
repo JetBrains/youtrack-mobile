@@ -62,6 +62,7 @@ export class Issues extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
+    Router.Issue({issueId: 'bdp-677'});
     this.state = {
       isEditQuery: false,
       clearSearchQuery: false
@@ -398,7 +399,8 @@ const mapDispatchToProps = (dispatch) => {
     onQueryUpdate: (query) => dispatch(issueActions.onQueryUpdate(query)),
     onOpenContextSelect: () => dispatch(issueActions.openContextSelect()),
     openSavedSearchesSelect: () => dispatch(issueActions.openSavedSearchesSelect()),
-    updateSearchContextPinned: (isSearchScrolledUp) => dispatch(issueActions.updateSearchContextPinned(isSearchScrolledUp)),
+    updateSearchContextPinned: (isSearchScrolledUp) => dispatch(
+      issueActions.updateSearchContextPinned(isSearchScrolledUp)),
     setIssuesCount: (count: number | null) => dispatch(issueActions.setIssuesCount(count)),
     updateIssue: (issueId: string) => dispatch(issueActions.updateIssue(issueId))
   };

@@ -1,14 +1,11 @@
 /* @flow */
 
-import React, {PureComponent} from 'react';
-import {Text, View, RefreshControl, Dimensions} from 'react-native';
+import React from 'react';
+import {Text, View, RefreshControl} from 'react-native';
 
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-
-// $FlowFixMe: module throws on type check
-import {TabView, TabBar} from 'react-native-tab-view';
 
 import * as issueActions from './issue-actions';
 import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
@@ -18,6 +15,7 @@ import ErrorMessage from '../../components/error-message/error-message';
 import Header from '../../components/header/header';
 import IssueActivity from './activity/issue__activity';
 import IssueDetails from './issue__details';
+import IssueTabbed from '../../components/issue-tabbed/issue-tabbed';
 import Router from '../../components/router/router';
 import Select from '../../components/select/select';
 import Star from '../../components/star/star';
@@ -33,18 +31,13 @@ import {ThemeContext} from '../../components/theme/theme-context';
 import styles from './issue.styles';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
-import type {AnyIssue, TabRoute} from '../../flow/Issue';
+import type {AnyIssue} from '../../flow/Issue';
 import type {Attachment, Tag} from '../../flow/CustomFields';
+import type {IssueTabbedState} from '../../components/issue-tabbed/issue-tabbed';
 import type {State as IssueState} from './issue-reducers';
-import type {Theme, UITheme, UIThemeColors} from '../../flow/Theme';
+import type {Theme, UITheme} from '../../flow/Theme';
 
 const CATEGORY_NAME = 'Issue';
-const initialWindowDimentions = Dimensions.get('window');
-
-const tabRoutes: Array<TabRoute> = [
-  {key: 'details', title: 'Details'},
-  {key: 'activity', title: 'Activity'}
-];
 
 const isIOS: boolean = isIOSPlatform();
 
@@ -61,24 +54,15 @@ type AdditionalProps = {
 };
 
 type IssueProps = IssueState & typeof issueActions & AdditionalProps;
-type TabsState = {
-  index: number,
-  routes: Array<TabRoute>,
-  isTransitionInProgress: boolean
-};
 
-class Issue extends PureComponent<IssueProps, TabsState> {
+//$FlowFixMe
+class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   static contextTypes = {
     actionSheet: PropTypes.func
   };
 
   imageHeaders = getApi().auth.getAuthorizationHeaders();
   backendUrl = getApi().config.backendUrl;
-  state = {
-    index: 0,
-    routes: tabRoutes,
-    isTransitionInProgress: false
-  };
   renderRefreshControl = this._renderRefreshControl.bind(this);
 
 
@@ -100,7 +84,7 @@ class Issue extends PureComponent<IssueProps, TabsState> {
     this.props.loadIssueLinks();
   }
 
-  renderDetailsTab(uiTheme: UITheme) {
+  renderDetails = (uiTheme: UITheme) => {
     const {
       loadIssue,
       openNestedIssueView,
@@ -167,7 +151,7 @@ class Issue extends PureComponent<IssueProps, TabsState> {
     );
   }
 
-  renderActivityTab = (uiTheme: UITheme) => {
+  renderActivity = (uiTheme: UITheme) => {
     const {issue, user, issuePermissions, selectProps, updateUserAppearanceProfile, openNestedIssueView} = this.props;
 
     return (
@@ -183,81 +167,12 @@ class Issue extends PureComponent<IssueProps, TabsState> {
     );
   };
 
-  renderTabBar(uiTheme: UITheme) {
-    const {editMode} = this.props;
-
-    return props => {
-      const uiThemeColors: UIThemeColors = uiTheme.colors;
-      return (
-        <TabBar
-          {...props}
-          pressColor={uiThemeColors.$disabled}
-          indicatorStyle={{backgroundColor: editMode ? 'transparent' : uiThemeColors.$link}}
-          style={[styles.tabsBar, editMode ? {height: 1} : null, {shadowColor: uiThemeColors.$separator}]}
-          renderLabel={({route, focused}) => {
-            return (
-              <Text style={[
-                styles.tabLabel,
-                focused ? styles.tabLabelActive : null,
-                {
-                  color: focused && !editMode ? uiThemeColors.$link : (
-                    this.isTabChangeEnabled() ? uiThemeColors.$text : uiThemeColors.$disabled
-                  )
-                }
-              ]}>
-                {route.title}
-              </Text>
-            );
-          }}
-        />
-      );
-    };
-  }
-
-  renderScene = (route, uiTheme: UITheme) => {
-    if (route.key === tabRoutes[0].key) {
-      return this.renderDetailsTab(uiTheme);
-    }
-    return this.renderActivityTab(uiTheme);
-  };
-
   isTabChangeEnabled() {
     const {editMode, isSavingEditedIssue, isRefreshing, attachingImage} = this.props;
-    return (
-      !editMode && !isSavingEditedIssue && !isRefreshing && !attachingImage
-    );
+    return !editMode && !isSavingEditedIssue && !isRefreshing && !attachingImage;
   }
-
-  switchToActivityTab = () => {
-    this.setState({index: 1});
-  };
-
-  switchToDetailsTab = () => {
-    this.setState({index: 0});
-  };
-
-  renderTabs(uiTheme: UITheme) {
-    return (
-      <TabView
-        testID="issueTabs"
-        lazy
-        swipeEnabled={this.isTabChangeEnabled()}
-        navigationState={this.state}
-        renderScene={({route}) => this.renderScene(route, uiTheme)}
-        initialLayout={{width: initialWindowDimentions.width, height: initialWindowDimentions.height}}
-        renderTabBar={this.renderTabBar(uiTheme)}
-        onIndexChange={index => {
-          if (this.isTabChangeEnabled()) {
-            this.setState({index});
-          }
-        }}
-      />
-    );
-  }
-
 
   handleOnBack = () => {
-    this.setState({isTransitionInProgress: true});
     const returned = Router.pop(false, {issueId: this.props?.issue?.id});
     if (!returned) {
       Router.Issues();
@@ -265,9 +180,7 @@ class Issue extends PureComponent<IssueProps, TabsState> {
   };
 
   renderBackIcon(uiTheme: UITheme) {
-    if (!this.state.isTransitionInProgress) {
-      return <IconBack color={uiTheme.colors.$link}/>;
-    }
+    return <IconBack color={uiTheme.colors.$link}/>;
   }
 
   canStar = (): boolean => {
@@ -279,20 +192,16 @@ class Issue extends PureComponent<IssueProps, TabsState> {
     if (!this.isIssueLoaded()) {
       return <Skeleton width={24}/>;
     }
-
-    if (!this.state.isTransitionInProgress) {
-      return (
-        <Text style={styles.iconMore}>
-          {isIOS
-            ? <IconMoreOptions size={18} color={uiTheme.colors.$link}/>
-            : <Text><IconDrag size={18} color={uiTheme.colors.$link}/></Text>
-          }
-          <Text>{' '}</Text>
-        </Text>
-      );
-    }
+    return (
+      <Text style={styles.iconMore}>
+        {isIOS
+          ? <IconMoreOptions size={18} color={uiTheme.colors.$link}/>
+          : <Text><IconDrag size={18} color={uiTheme.colors.$link}/></Text>
+        }
+        <Text>{' '}</Text>
+      </Text>
+    );
   }
-
   renderStar = (uiTheme: UITheme) => {
     const {issue, toggleStar} = this.props;
     if (this.isIssueLoaded()) {
@@ -330,7 +239,7 @@ class Issue extends PureComponent<IssueProps, TabsState> {
     return this.isIssueLoaded() ? null : !issueLoadingError && <Skeleton width={120}/> || null;
   }
 
-  _renderHeader(uiTheme: UITheme) {
+  _renderHeader() {
     const {
       issue,
       editMode,
@@ -347,9 +256,9 @@ class Issue extends PureComponent<IssueProps, TabsState> {
       const isIssueLoaded: boolean = this.isIssueLoaded();
       return (
         <Header
-          leftButton={this.renderBackIcon(uiTheme)}
-          rightButton={isIssueLoaded ? this.renderActionsIcon(uiTheme) : null}
-          extraButton={isIssueLoaded ? this.renderStar(uiTheme) : null}
+          leftButton={this.renderBackIcon(this.uiTheme)}
+          rightButton={isIssueLoaded ? this.renderActionsIcon(this.uiTheme) : null}
+          extraButton={isIssueLoaded ? this.renderStar(this.uiTheme) : null}
           onRightButtonClick={() => {
             if (isIssueLoaded) {
               showIssueActions(
@@ -372,8 +281,8 @@ class Issue extends PureComponent<IssueProps, TabsState> {
       );
     } else {
       const canSave: boolean = Boolean(summaryCopy) && !isSavingEditedIssue;
-      const linkColor: string = uiTheme.colors.$link;
-      const textSecondaryColor: string = uiTheme.colors.$textSecondary;
+      const linkColor: string = this.uiTheme.colors.$link;
+      const textSecondaryColor: string = this.uiTheme.colors.$textSecondary;
 
       return (
         <Header
@@ -405,7 +314,7 @@ class Issue extends PureComponent<IssueProps, TabsState> {
     />;
   }
 
-  _renderCommandDialog(uiTheme: UITheme) {
+  _renderCommandDialog() {
     const {
       issue,
       closeCommandDialog,
@@ -424,11 +333,11 @@ class Issue extends PureComponent<IssueProps, TabsState> {
       onApply={applyCommand}
       isApplying={commandIsApplying}
       initialCommand={initialCommand}
-      uiTheme={uiTheme}
+      uiTheme={this.uiTheme}
     />;
   }
 
-  renderAttachFileDialog(uiTheme: UITheme) {
+  renderAttachFileDialog() {
     const {attachingImage, createAttachActions} = this.props;
     return (
       <AttachFileDialog
@@ -437,7 +346,7 @@ class Issue extends PureComponent<IssueProps, TabsState> {
         actions={createAttachActions()}
         onCancel={this.cancelAddAttach}
         onAttach={this.addAttachment}
-        uiTheme={uiTheme}
+        uiTheme={this.uiTheme}
       />
     );
   }
@@ -490,19 +399,18 @@ class Issue extends PureComponent<IssueProps, TabsState> {
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
-          const uiTheme: UITheme = theme.uiTheme;
+          this.uiTheme = theme.uiTheme;
           return (
             <View style={styles.container} testID="issue-view">
-              {this._renderHeader(uiTheme)}
+              {this._renderHeader()}
 
               {issueLoadingError && <View style={styles.error}><ErrorMessage error={issueLoadingError}/></View>}
 
+              {!issueLoadingError && this.renderTabs(this.uiTheme)}
 
-              {!issueLoadingError && this.renderTabs(uiTheme)}
+              {this.isIssueLoaded() && showCommandDialog && this._renderCommandDialog()}
 
-              {this.isIssueLoaded() && showCommandDialog && this._renderCommandDialog(uiTheme)}
-
-              {isAttachFileDialogVisible && this.renderAttachFileDialog(uiTheme)}
+              {isAttachFileDialogVisible && this.renderAttachFileDialog()}
 
               {isTagsSelectVisible && this.renderTagsSelect()}
             </View>
