@@ -19,8 +19,8 @@ export default EStyleSheet.create({
   },
   issueSummary: {
     marginTop: UNIT,
-    marginLeft: UNIT * 2,
-    marginRight: UNIT * 2
+    marginHorizontal: UNIT * 2,
+    paddingBottom: UNIT * 5
   },
   creatingIndicator: {
     paddingTop: 4,
@@ -29,12 +29,11 @@ export default EStyleSheet.create({
   },
   separator: {
     height: 1,
-    marginTop: UNIT * 2,
+    marginVertical: UNIT * 1.5,
     ...separator,
     borderColor: '$separator'
   },
   additionalData: {
-    marginTop: UNIT * 3,
     marginHorizontal: UNIT * 2
   },
   imageActivityIndicator: {

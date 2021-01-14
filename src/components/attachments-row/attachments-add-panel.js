@@ -29,7 +29,7 @@ const AttachmentAddPanel = (props: Props) => {
       >
         <IconPaperClip
           style={styles.attachButtonIcon}
-          size={24}
+          size={18}
           color={props.isDisabled ? props.uiTheme.colors.$textSecondary : props.uiTheme.colors.$link}
         />
         <Text

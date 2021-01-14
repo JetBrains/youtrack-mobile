@@ -16,7 +16,7 @@ type Props = {
 
 const TagAddPanel = (props: Props) => {
   //$FlowFixMe
-  const iconTag = <IconTag style={styles.tagIcon} width={20} height={22} fill={styles.buttonText.color}/>;
+  const iconTag = <IconTag style={styles.tagIcon} width={16} height={16} fill={styles.buttonText.color}/>;
   return (
     <TouchableOpacity
       style={styles.button}

@@ -4,11 +4,13 @@ import React, {PureComponent} from 'react';
 import {ScrollView} from 'react-native';
 import styles from './attachments-row.styles';
 
-import type {Attachment} from '../../flow/CustomFields';
-import AttachmentErrorBoundary from './attachment-error-boundary';
 import Attach from './attachment';
+import AttachmentErrorBoundary from './attachment-error-boundary';
 import {View} from 'react-native-animatable';
+
+import type {Attachment} from '../../flow/CustomFields';
 import type {UITheme} from '../../flow/Theme';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type DefaultProps = {
   imageHeaders: ?Object,
@@ -21,7 +23,8 @@ type Props = DefaultProps & {
   attachingImage: ?Object,
   canRemoveAttachment?: boolean,
   onRemoveImage?: (attachment: Attachment) => any,
-  uiTheme: UITheme
+  uiTheme: UITheme,
+  style?: ViewStyleProp
 }
 
 
@@ -51,7 +54,7 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
   };
 
   render() {
-    const {attachments, attachingImage, imageHeaders, onOpenAttachment, onRemoveImage, canRemoveAttachment, uiTheme} = this.props;
+    const {attachments, attachingImage, imageHeaders, onOpenAttachment, onRemoveImage, canRemoveAttachment, uiTheme, style} = this.props;
 
     if (!attachments.length) {
       return null;
@@ -59,7 +62,7 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
 
     return <ScrollView
       ref={this.setScrollRef}
-      style={styles.attachesScroll}
+      style={[styles.attachesScroll, style]}
       horizontal={true}
     >
 

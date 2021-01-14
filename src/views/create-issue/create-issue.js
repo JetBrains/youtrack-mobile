@@ -206,6 +206,7 @@ class CreateIssue extends Component<Props, State> {
                     style={styles.additionalData}
                   >
                     <AttachmentsRow
+                      style={{marginBottom: 16}}
                       testID="createIssueAttachmentRow"
                       attachments={issue.attachments}
                       attachingImage={attachingImage}
@@ -214,6 +215,14 @@ class CreateIssue extends Component<Props, State> {
                       onRemoveImage={removeAttachment}
                       uiTheme={theme.uiTheme}
                     />
+                  </View>
+                )}
+
+                {hasProject && (
+                  <View
+                    testID="createIssueAttachments"
+                    style={styles.additionalData}
+                  >
                     <AttachmentAddPanel
                       isDisabled={processing}
                       showAddAttachDialog={showAddAttachDialog}
@@ -221,6 +230,8 @@ class CreateIssue extends Component<Props, State> {
                     />
                   </View>
                 )}
+
+                <View style={styles.separator}/>
 
                 {hasProject && (
                   <View

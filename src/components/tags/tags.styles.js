@@ -28,11 +28,11 @@ export default EStyleSheet.create({
   },
   button: {
     flexDirection: 'row',
-    paddingVertical: UNIT
+    paddingVertical: UNIT * 1.5
   },
   buttonText: {
     ...mainText,
-    marginLeft: UNIT,
+    marginLeft: UNIT * 1.8,
     color: '$link'
   },
   secondaryText: {
