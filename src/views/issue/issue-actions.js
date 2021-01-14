@@ -588,7 +588,7 @@ export function onOpenTagsSelect() {
     dispatch({
       type: types.OPEN_ISSUE_SELECT,
       selectProps: {
-        show: true,
+        multi: true,
         placeholder: 'Filter tags',
         dataSource: async () => {
           const issueProjectId: string = issue.project.id;
@@ -599,12 +599,12 @@ export function onOpenTagsSelect() {
           return relevantProjectTags;
         },
 
-        selectedItems: [],
+        selectedItems: issue?.tags || [],
         getTitle: item => getEntityPresentation(item),
         onCancel: () => dispatch(onCloseTagsSelect()),
-        onSelect: async (tag: Tag) => {
-          const [error] = await until(api.issue.addTag(issue.id, tag.id));
-          dispatch(receiveIssue(Object.assign({}, issue, {tags: [].concat(issue?.tags || []).concat(tag)})));
+        onSelect: async (tags: Array<Tag>) => {
+          const [error, issueWithTags] = await until(api.issue.addTags(issue.id, tags));
+          dispatch(receiveIssue({...issue, tags: issueWithTags.tags}));
           dispatch(onCloseTagsSelect());
           if (error) {
             dispatch(receiveIssue(issue));

@@ -8,7 +8,7 @@ import issueActivityPageFields, {ISSUE_ATTACHMENT_FIELDS} from './api__activitie
 
 import type Auth from '../auth/auth';
 import type {Activity} from '../../flow/Activity';
-import type {Attachment, FieldValue, IssueComment, IssueProject} from '../../flow/CustomFields';
+import type {Attachment, FieldValue, IssueComment, IssueProject, Tag} from '../../flow/CustomFields';
 import type {IssueOnList, IssueFull} from '../../flow/Issue';
 import type {Visibility} from '../../flow/Visibility';
 
@@ -254,11 +254,11 @@ export default class IssueAPI extends ApiBase {
     return this.removeIssueEntity('attachments', issueId, attachmentId);
   }
 
-  addTag(issueId: string, tagId: string) {
+  addTags(issueId: string, tags: Array<Tag>) {
     return this.makeAuthorizedRequest(
-      `${this.youTrackIssueUrl}/${issueId}/tags?fields=id`,
+      `${this.youTrackIssueUrl}/${issueId}?${ApiBase.createFieldsQuery({tags: issueFields.ISSUE_TAGS_FIELDS})}`,
       'POST',
-      {id: tagId}
+      {tags}
     );
   }
 }
