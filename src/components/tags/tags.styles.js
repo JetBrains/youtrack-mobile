@@ -1,4 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
+
+import {mainText} from '../common-styles/typography';
 import {UNIT} from '../variables/variables';
 
 export default EStyleSheet.create({
@@ -23,5 +25,25 @@ export default EStyleSheet.create({
     color: '$text',
     borderColor: '$textSecondary',
     backgroundColor: '$boxBackground'
+  },
+  button: {
+    flexDirection: 'row',
+    paddingVertical: UNIT
+  },
+  buttonText: {
+    ...mainText,
+    marginLeft: UNIT,
+    color: '$link'
+  },
+  secondaryText: {
+    color: '$textSecondary'
+  },
+
+  tagIcon: {
+    marginLeft: 3
+  },
+  tagSelectItem: {
+    paddingHorizontal: UNIT / 2,
+    paddingVertical: UNIT / 4
   }
 });

@@ -33,11 +33,9 @@ export default EStyleSheet.create({
     ...separator,
     borderColor: '$separator'
   },
-  attachesContainer: {
-    marginTop: UNIT * 2,
-    marginBottom: UNIT,
-    marginLeft: UNIT * 2,
-    marginRight: UNIT * 2
+  additionalData: {
+    marginTop: UNIT * 3,
+    marginHorizontal: UNIT * 2
   },
   imageActivityIndicator: {
     backgroundColor: '$mask',

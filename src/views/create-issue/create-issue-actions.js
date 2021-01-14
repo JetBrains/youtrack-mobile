@@ -136,7 +136,7 @@ export function applyCommandForDraft(command: string) {
   };
 }
 
-export function updateIssueDraft(ignoreFields: boolean = false) {
+export function updateIssueDraft(ignoreFields: boolean = false, draftData?: Object) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {issue} = getState().creation;
@@ -149,7 +149,8 @@ export function updateIssueDraft(ignoreFields: boolean = false) {
       id: issue.id,
       summary: issue.summary,
       description: issue.description,
-      project: issue.project
+      project: issue.project,
+      ...draftData
     };
 
     try {

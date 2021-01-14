@@ -23,8 +23,8 @@ type SelectProps = {
   selectedItems: Array<Object>,
   placeholder?: string,
   multi: boolean,
-  autoFocus: boolean,
-  emptyValue: ?string,
+  autoFocus?: boolean,
+  emptyValue?: ?string,
   style?: any,
   noFilter?: boolean
 };

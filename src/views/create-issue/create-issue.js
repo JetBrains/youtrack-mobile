@@ -1,11 +1,10 @@
 /* @flow */
 
-import {ScrollView, View, ActivityIndicator} from 'react-native';
 import React, {Component} from 'react';
+import {ScrollView, View, ActivityIndicator} from 'react-native';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import usage from '../../components/usage/usage';
 
 import * as createIssueActions from './create-issue-actions';
 import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
@@ -15,16 +14,18 @@ import CustomFieldsPanel from '../../components/custom-fields-panel/custom-field
 import Header from '../../components/header/header';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
 import SummaryDescriptionForm from '../../components/form/summary-description-form';
+import TagAddPanel from '../../components/tags/tag-add-panel';
+import TagAddSelect from '../../components/tags/tag-add-select';
+import Tags from '../../components/tags/tags';
+import usage from '../../components/usage/usage';
 import VisibilityControl from '../../components/visibility/visibility-control';
 import {attachmentActions} from './create-issue__attachment-actions-and-types';
 import {getApi} from '../../components/api/api__instance';
 import {IconCheck, IconClose} from '../../components/icon/icon';
 import {ThemeContext} from '../../components/theme/theme-context';
 
-import PropTypes from 'prop-types';
-
-import type {Attachment, CustomField, IssueProject} from '../../flow/CustomFields';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
+import type {Attachment, CustomField, IssueProject, Tag} from '../../flow/CustomFields';
 import type {CreateIssueState} from './create-issue-reducers';
 import type {Theme, UITheme, UIThemeColors} from '../../flow/Theme';
 
@@ -40,10 +41,12 @@ type AdditionalProps = {
 
 type Props = CreateIssueState & typeof createIssueActions & typeof attachmentActions & AdditionalProps;
 
-class CreateIssue extends Component<Props, void> {
-  static contextTypes = {
-    actionSheet: PropTypes.func
-  };
+type State = {
+  showAddTagSelect: boolean
+};
+
+class CreateIssue extends Component<Props, State> {
+  state = {showAddTagSelect: false};
 
   constructor(props) {
     super(props);
@@ -195,11 +198,13 @@ class CreateIssue extends Component<Props, void> {
                   uiTheme={uiTheme}
                 />
 
+                <View style={styles.separator}/>
+
                 {hasProject && (
                   <View
                     testID="createIssueAttachments"
-                    style={styles.attachesContainer}>
-
+                    style={styles.additionalData}
+                  >
                     <AttachmentsRow
                       testID="createIssueAttachmentRow"
                       attachments={issue.attachments}
@@ -209,7 +214,6 @@ class CreateIssue extends Component<Props, void> {
                       onRemoveImage={removeAttachment}
                       uiTheme={theme.uiTheme}
                     />
-
                     <AttachmentAddPanel
                       isDisabled={processing}
                       showAddAttachDialog={showAddAttachDialog}
@@ -218,7 +222,29 @@ class CreateIssue extends Component<Props, void> {
                   </View>
                 )}
 
-                <View style={styles.separator}/>
+                {hasProject && (
+                  <View
+                    testID="createIssueAttachments"
+                    style={styles.additionalData}
+                  >
+                    {!!issue.tags && (
+                      <Tags
+                        tags={issue.tags}
+                        multiline={true}
+                      />
+                    )}
+                    {!!issue.project?.id && (
+                      <TagAddPanel onAdd={() => this.setState({showAddTagSelect: true})}/>
+                    )}
+                    {this.state.showAddTagSelect && <TagAddSelect
+                      existed={issue?.tags}
+                      projectId={issue.project?.id}
+                      onAdd={(tags: Array<Tag>) => this.props.onAddTags(tags)}
+                      onHide={() => this.setState({showAddTagSelect: false})}
+                    />}
+                  </View>
+                )}
+
               </ScrollView>
 
               <KeyboardSpacerIOS/>
@@ -243,7 +269,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(createIssueActions, dispatch),
-    getAttachActions: () => attachmentActions.createAttachActions(dispatch)
+    getAttachActions: () => attachmentActions.createAttachActions(dispatch),
+    onAddTags: (tags: Array<Tag>) => dispatch(createIssueActions.updateIssueDraft(true, {tags}))
   };
 };
 
