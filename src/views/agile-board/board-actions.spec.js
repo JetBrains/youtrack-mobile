@@ -52,7 +52,7 @@ describe('Agile board async actions', () => {
       agile: {
         getSprint: jest.fn(() => sprintMock),
         getAgileUserProfile: jest.fn(() => agileUserProfileMock),
-        updateAgileUserProfile: jest.fn(() => sprintMock),
+        updateAgileUserProfile: jest.fn(),
         getAgile: jest.fn(() => agileWithStatusMock),
         getAgileIssues: jest.fn().mockResolvedValueOnce([{id: 'issueId'}]),
       }
@@ -78,10 +78,18 @@ describe('Agile board async actions', () => {
       });
     });
 
-    it('should update Agile user profile', async () => {
+    it('should update Agile user profile visited sprints on sprint change', async () => {
       await setLoadSprintExpectation();
 
-      expect(apiMock.agile.updateAgileUserProfile).toHaveBeenCalledWith(sprintMock.id);
+      expect(apiMock.agile.updateAgileUserProfile).toHaveBeenCalledWith({visitedSprints: [{id: sprintMock.id}]});
+    });
+
+    it('should update Agile user profile default agile on agile change', async () => {
+      await store.dispatch(actions.loadBoard(sprintMock.agile));
+
+      expect(apiMock.agile.updateAgileUserProfile.mock.calls[0][0]).toEqual(
+        {defaultAgile: {id: sprintMock.agile.id}}
+      );
     });
   });
 
@@ -145,7 +153,8 @@ describe('Agile board async actions', () => {
         });
       });
 
-      it('should load the default agile board`s sprint if there is no matching items from `visitedSprints`',
+      it(
+        'should load the default agile board`s sprint if there is no matching items from `visitedSprints`',
         async () => {
           updateStore({
             agile: {
@@ -155,6 +164,8 @@ describe('Agile board async actions', () => {
               }
             }
           });
+          await __setStorageState({agileLastSprint: null});
+
           await store.dispatch(actions.loadDefaultAgileBoard());
 
           const targetSprint = defaultAgileMock.sprints[defaultAgileMock.sprints.length - 1];
@@ -165,7 +176,34 @@ describe('Agile board async actions', () => {
             0,
             undefined
           );
-        });
+        }
+      );
+
+      it(
+        'should load cached sprint if it matches the board and if there is no matching items from `visitedSprints`',
+        async () => {
+          updateStore({
+            agile: {
+              profile: {
+                defaultAgile: defaultAgileMock,
+                visitedSprints: []
+              }
+            }
+          });
+          await __setStorageState({agileLastSprint: defaultAgileMock.sprints[0]});
+
+          await store.dispatch(actions.loadDefaultAgileBoard());
+
+          const targetSprint = defaultAgileMock.sprints[defaultAgileMock.sprints.length - 1];
+          expect(apiMock.agile.getSprint).toHaveBeenCalledWith(
+            targetSprint.agile.id,
+            defaultAgileMock.sprints[0].id,
+            actions.PAGE_SIZE,
+            0,
+            undefined
+          );
+        }
+      );
     });
   });
 

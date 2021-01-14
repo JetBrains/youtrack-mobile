@@ -22,15 +22,23 @@ export default class AgileAPI extends ApiBase {
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${agileId}?${queryString}`);
   }
 
-  async getSprint(boardId: string, sprintId: string, top: number = 100, skip: number = 0, query: string = ''): Promise<SprintFull> {
-    const queryData: { fields: string, $topSwimlanes: number, $skipSwimlanes: number, issuesQuery?: string } = Object.assign({
-      fields: agileFields.sprint.toString(),
-      $topSwimlanes: top,
-      $skipSwimlanes: skip,
-      issuesQuery: query.trim()
-    });
+  async getSprint(
+    boardId: string,
+    sprintId: string,
+    top: number = 100,
+    skip: number = 0,
+    query: string = ''
+  ): Promise<SprintFull> {
+    const queryData: { fields: string, $topSwimlanes: number, $skipSwimlanes: number, issuesQuery?: string } = Object.assign(
+      {
+        fields: agileFields.sprint.toString(),
+        $topSwimlanes: top,
+        $skipSwimlanes: skip,
+        issuesQuery: query.trim()
+      });
     const queryString = qs.stringify(queryData, {encode: true});
-    const sprint = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}?${queryString}`);
+    const sprint = await this.makeAuthorizedRequest(
+      `${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}?${queryString}`);
     return ApiHelper.patchAllRelativeAvatarUrls(sprint, this.config.backendUrl);
   }
 
@@ -44,7 +52,13 @@ export default class AgileAPI extends ApiBase {
     return ApiHelper.patchAllRelativeAvatarUrls(issues, this.config.backendUrl);
   }
 
-  async getSwimlanes(boardId: string, sprintId: string, top: number, skip: number = 0, query: string = ''): Promise<Array<AgileBoardRow>> {
+  async getSwimlanes(
+    boardId: string,
+    sprintId: string,
+    top: number,
+    skip: number = 0,
+    query: string = ''
+  ): Promise<Array<AgileBoardRow>> {
     const queryString = qs.stringify({
       fields: `trimmedSwimlanes(${agileFields.row.toString()})`,
       $topSwimlanes: top,
@@ -52,7 +66,8 @@ export default class AgileAPI extends ApiBase {
       issuesQuery: query.trim()
     }, {encode: true});
 
-    const board = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}/board?${queryString}`);
+    const board = await this.makeAuthorizedRequest(
+      `${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}/board?${queryString}`);
     const swimlanes = board.trimmedSwimlanes;
     return ApiHelper.patchAllRelativeAvatarUrls(swimlanes, this.config.backendUrl);
   }
@@ -71,11 +86,13 @@ export default class AgileAPI extends ApiBase {
   }
 
   async updateColumnCollapsedState(boardId: string, sprintId: string, column: Object): Promise<Object> {
-    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}/board/columns/${column.id}`,
+    return await this.makeAuthorizedRequest(
+      `${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}/board/columns/${column.id}`,
       'POST',
       {
         collapsed: column.collapsed
-      });
+      }
+    );
   }
 
   async getSprintList(boardId: string): Promise<Object> {
@@ -99,16 +116,23 @@ export default class AgileAPI extends ApiBase {
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agileUserProfile?${queryString}`);
   }
 
-  async updateAgileUserProfile(sprintId: string): Promise<AgileUserProfile> {
+  async updateAgileUserProfile(requestBody: Object | null): Promise<AgileUserProfile> {
     const queryString = qs.stringify({
       fields: agileFields.agileUserProfile.toString()
     });
-    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agileUserProfile?${queryString}`, 'POST', {
-      visitedSprints: [{id: sprintId}]
-    });
+    return await this.makeAuthorizedRequest(
+      `${this.youTrackUrl}/api/agileUserProfile?${queryString}`,
+      'POST',
+      requestBody
+    );
   }
 
-  async getIssueDraftForAgileCell(boardId: string, sprintId: string, columnId: string, cellId: string): Promise<{ id: string }> {
+  async getIssueDraftForAgileCell(
+    boardId: string,
+    sprintId: string,
+    columnId: string,
+    cellId: string
+  ): Promise<{ id: string }> {
     const queryString = qs.stringify({fields: 'id'});
     const url = `${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}/board/columns/${columnId}/cells/${cellId}/draftIssue?${queryString}`;
     return await this.makeAuthorizedRequest(url, 'POST', {});

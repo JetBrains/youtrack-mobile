@@ -13,7 +13,7 @@ import {DEFAULT_ERROR_MESSAGE} from '../../components/error/error-messages';
 import {flushStoragePart, getStorageState, MAX_STORED_QUERIES} from '../../components/storage/storage';
 import {getAssistSuggestions} from '../../components/query-assist/query-assist-helper';
 import {getGroupedSprints, getSprintAllIssues, updateSprintIssues} from './agile-board__helper';
-import {isIOSPlatform} from '../../util/util';
+import {isIOSPlatform, until} from '../../util/util';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
 import {notify} from '../../components/notification/notification';
 import {routeMap} from '../../app-routes';
@@ -117,12 +117,16 @@ export function loadAgileWithStatus(agileId: string) {
 export function loadBoard(board: Board, query: string) {
   return async (dispatch: (any) => any) => {
     destroySSE();
+    dispatch(updateAgileUserProfileLastVisitedAgile(board.id));
 
     dispatch(loadAgileWithStatus(board.id));
 
     const agileUserProfile: AgileUserProfile = await dispatch(getAgileUserProfile());
 
-    let sprint: Sprint = getLastVisitedSprint(board.id, agileUserProfile?.visitedSprints);
+    const cachedAgileLastSprint: Sprint = getStorageState().agileLastSprint;
+    let sprint: Sprint = getLastVisitedSprint(board.id, agileUserProfile?.visitedSprints) || (
+      cachedAgileLastSprint?.agile?.id === board.id ? cachedAgileLastSprint : null
+    );
     if (!sprint) {
       sprint = (board.sprints || []).slice(-1)[0] || {};
       trackError('Cannot find last visited sprint');
@@ -134,13 +138,31 @@ export function loadBoard(board: Board, query: string) {
   };
 }
 
-function updateAgileUserProfile(sprintId) {
+function updateAgileUserProfile(requestBody: Object) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
-    const profile: AgileUserProfile = await getApi().agile.updateAgileUserProfile(sprintId);
-    dispatch({
-      type: types.RECEIVE_AGILE_PROFILE,
-      profile
-    });
+    const [error, profile] = await until(getApi().agile.updateAgileUserProfile(requestBody));
+    if (!error) {
+      dispatch({
+        type: types.RECEIVE_AGILE_PROFILE,
+        profile
+      });
+    }
+  };
+}
+
+function updateAgileUserProfileLastVisitedSprint(sprintId: string) {
+  return async (dispatch: (any) => any) => {
+    dispatch(updateAgileUserProfile({
+      visitedSprints: [{id: sprintId}]
+    }));
+  };
+}
+
+function updateAgileUserProfileLastVisitedAgile(agileId: string) {
+  return async (dispatch: (any) => any) => {
+    dispatch(updateAgileUserProfile({
+      defaultAgile: {id: agileId}
+    }));
   };
 }
 
@@ -191,7 +213,7 @@ export function loadSprint(agileId: string, sprintId: string, query: string) {
         dispatch(receiveSprint(sprint));
       }
       dispatch(loadSprintIssues(sprint));
-      dispatch(updateAgileUserProfile(sprint.id));
+      dispatch(updateAgileUserProfileLastVisitedSprint(sprint.id));
       log.info(`Sprint ${sprintId} (agileBoardId="${agileId}") has been loaded`);
     } catch (e) {
       const message: string = 'Could not load requested sprint';
