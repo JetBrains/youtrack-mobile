@@ -59,7 +59,7 @@ function getMarkdownRules(
 
     image: (node: MarkdownNode) => {
       const {src, alt} = node.attributes;
-      const targetAttach: ?Attachment = attachments.find(it => it.name.includes(src));
+      const targetAttach: ?Attachment = attachments.find(it => (it.name || '').includes(src));
 
       if (!targetAttach || !targetAttach.url || hasMimeType.svg(targetAttach)) {
         return null;
