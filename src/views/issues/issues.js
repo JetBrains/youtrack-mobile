@@ -62,7 +62,6 @@ export class Issues extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    Router.Issue({issueId: 'bdp-677'});
     this.state = {
       isEditQuery: false,
       clearSearchQuery: false
