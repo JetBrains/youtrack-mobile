@@ -103,6 +103,7 @@ export class KnowledgeBase extends Component<Props, State> {
             </>
             {!!project?.id && <Star
               style={styles.itemStar}
+              size={19}
               hasStar={project.pinned}
               canStar={true}
               onStarToggle={async () => this.props.toggleProjectArticlesFavorite(project)}

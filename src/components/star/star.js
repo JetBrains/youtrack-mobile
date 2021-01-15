@@ -12,6 +12,7 @@ type Props = {
   hasStar: boolean,
   onStarToggle: (starred: boolean) => any,
   style?: any,
+  size?: number,
   uiTheme: UITheme
 }
 
@@ -20,10 +21,10 @@ export default class Star extends PureComponent<Props, void> {
   toggle = () => {
     const {hasStar, onStarToggle} = this.props;
     onStarToggle(!hasStar);
-  }
+  };
 
   render() {
-    const {hasStar, canStar, style, uiTheme} = this.props;
+    const {hasStar, canStar, style, uiTheme, size = 22} = this.props;
 
     if (!canStar) {
       return null;
@@ -34,7 +35,10 @@ export default class Star extends PureComponent<Props, void> {
         hitSlop={HIT_SLOP}
         style={style}
         onPress={this.toggle}>
-        {hasStar ? <IconStar size={22} color={uiTheme.colors.$link}/> : <IconStarOutline size={22} color={uiTheme.colors.$navigation}/>}
+        {hasStar
+          ? <IconStar size={size} color={uiTheme.colors.$link}/>
+          : <IconStarOutline size={size} color={uiTheme.colors.$navigation}/>
+        }
       </TouchableOpacity>
     );
   }
