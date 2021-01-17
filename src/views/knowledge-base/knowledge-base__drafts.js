@@ -10,6 +10,7 @@ import Header from '../../components/header/header';
 import KnowledgeBaseArticle from './knowledge-base__article';
 import Router from '../../components/router/router';
 import Select from '../../components/select/select';
+import {deleteArticle} from '../article/arcticle-actions';
 import {loadArticlesDrafts} from './knowledge-base-actions';
 import {routeMap} from '../../app-routes';
 import {SkeletonList} from '../../components/skeleton/skeleton';
@@ -50,6 +51,7 @@ const KnowledgeBaseDrafts = () => {
         style={styles.itemDraft}
         articleNode={{data: item}}
         onArticlePress={(article: Article) => Router.ArticleCreate({articleDraft: article})}
+        onDelete={(article: Article) => dispatch(deleteArticle(article, loadDrafts))}
       />
     );
   };
@@ -71,7 +73,7 @@ const KnowledgeBaseDrafts = () => {
         title={'Drafts'}
       />
 
-      {isLoading && <SkeletonList/>}
+      {isLoading && !drafts && <SkeletonList/>}
       {!isLoading && drafts && drafts.length === 0 && (
         <View style={styles.noDrafts}>
           <ErrorMessage errorMessageData={{

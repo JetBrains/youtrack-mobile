@@ -6,6 +6,7 @@ import {Alert, Clipboard, Share} from 'react-native';
 import Router from '../../components/router/router';
 import {getApi} from '../../components/api/api__instance';
 import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
+import {hasType} from '../../components/api/api__resource-types';
 import {isIOSPlatform, until} from '../../util/util';
 import {logEvent} from '../../components/log/log-helper';
 import {notify} from '../../components/notification/notification';
@@ -122,7 +123,7 @@ const showArticleActions = (actionSheet: ActionSheet, canUpdate: boolean, canDel
         title: 'Delete',
         execute: async () => {
           logEvent({message: `${articleLogMessagePrefix} Delete article`, analyticsId: ANALYTICS_ARTICLE_PAGE});
-          dispatch(deleteArticle(article.id));
+          dispatch(deleteArticle(article, () => Router.KnowledgeBase()));
         }
       });
     }
@@ -186,20 +187,40 @@ const getArticleDrafts = () => {
   };
 };
 
-const deleteArticle = (articleId: string) => {
+const deleteArticle = (article: Article, onAfterDelete?: () => any) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
+    const isDraft: boolean = hasType.articleDraft(article);
+    const confirmationTitle: string = isDraft
+      ? 'Are you sure you want to delete this draft?'
+      : 'Are you sure you want to delete this article?';
+
+    await new Promise((resolve, reject) => {
+      Alert.alert(
+        confirmationTitle,
+        '',
+        [
+          {text: 'Cancel', style: 'cancel', onPress: reject},
+          {text: 'Delete', onPress: resolve}
+        ],
+        {cancelable: true}
+      );
+    });
 
     dispatch(setProcessing(true));
-    const [error] = await until(api.articles.deleteArticle(articleId));
+    const [error] = await until(
+      isDraft
+        ? api.articles.deleteDraft(article.id)
+        : api.articles.deleteArticle(article.id)
+    );
     dispatch(setProcessing(false));
 
     if (error) {
       const errorMsg: string = 'Failed to delete article';
       logEvent({message: errorMsg, isError: true});
       notify(errorMsg, error);
-    } else {
-      Router.KnowledgeBase();
+    } else if (onAfterDelete) {
+      onAfterDelete();
     }
   };
 };

@@ -20,12 +20,7 @@ import {until} from '../../util/util';
 
 import type Api from '../../components/api/api';
 import type {AppState} from '../../reducers';
-import type {
-  Article,
-  ArticleProject,
-  ArticlesList,
-  ArticlesListItem
-} from '../../flow/Article';
+import type {Article, ArticleProject, ArticlesList, ArticlesListItem} from '../../flow/Article';
 import type {IssueProject} from '../../flow/CustomFields';
 
 type ApiGetter = () => Api;

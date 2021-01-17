@@ -3,6 +3,8 @@
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
+import IconTrash from '@jetbrains/icons/trash.svg';
+
 import {hasType} from '../../components/api/api__resource-types';
 import {IconAngleRight, IconLock} from '../../components/icon/icon';
 
@@ -15,12 +17,13 @@ type Props = {
   articleNode: ArticleNode,
   onArticlePress: (article: Article) => void,
   onShowSubArticles?: (article: Article) => void,
+  onDelete?: (article: Article) => void,
   style?: ViewStyleProp
 };
 
 
 const KnowledgeBaseArticle = (props: Props) => {
-  const {articleNode, onArticlePress, onShowSubArticles, style} = props;
+  const {articleNode, onArticlePress, onShowSubArticles, style, onDelete} = props;
   const article: Article = articleNode.data;
 
   if (article) {
@@ -40,6 +43,16 @@ const KnowledgeBaseArticle = (props: Props) => {
             )}
           </View>
         </TouchableOpacity>
+
+        {onDelete && <TouchableOpacity
+          style={styles.iconTrash}
+          onPress={() => onDelete(article)}
+        >
+          <IconTrash
+            fill={styles.iconTrash.color}
+            size={16}
+          />
+        </TouchableOpacity>}
 
         {articleNode?.children?.length > 0 && <TouchableOpacity
           style={styles.itemButtonContainer}

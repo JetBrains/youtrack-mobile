@@ -167,6 +167,11 @@ export default EStyleSheet.create({
   icon: {
     color: '$icon'
   },
+  iconTrash: {
+    color: '$iconAccent',
+    marginRight: UNIT,
+    padding: UNIT
+  },
   actionBar: {
     flexDirection: 'row',
     ...wrapper,

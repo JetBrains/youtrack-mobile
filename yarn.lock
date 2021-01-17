@@ -1218,6 +1218,11 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
+"@jetbrains/icons@^3.12.0":
+  version "3.12.0"
+  resolved "https://registry.yarnpkg.com/@jetbrains/icons/-/icons-3.12.0.tgz#002ec3d67cbf51447a918cc8d16118c64b9496a3"
+  integrity sha512-d/PkE3Xc3m/1oOUL87aTvhhtOOke6vYvM9jjDOw+dLIcR7venO385K3ey6HjDaf6H74TuEr6eviEZGxjGXuW+Q==
+
 "@react-native-community/async-storage@^1.4.0":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@react-native-community/async-storage/-/async-storage-1.4.0.tgz#11864c8ff61b7f8c7062cb8f5c3a721f6a648ede"
