@@ -5,15 +5,12 @@ import type ActionSheet from '@expo/react-native-action-sheet';
 import animation from '../../components/animation/animation';
 import Router from '../../components/router/router';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
-import {arrayToTree} from 'performant-array-to-tree';
 import {
-  createArticlesListItem,
   createArticleList,
   filterArticles,
   toggleArticleProjectListItem
 } from '../../components/articles/articles-tree-helper';
 import {flushStoragePart, getStorageState} from '../../components/storage/storage';
-import {hasType} from '../../components/api/api__resource-types';
 import {logEvent} from '../../components/log/log-helper';
 import {notify} from '../../components/notification/notification';
 import {setError, setList, setLoading} from './knowledge-base-reducers';
@@ -25,17 +22,14 @@ import type Api from '../../components/api/api';
 import type {AppState} from '../../reducers';
 import type {
   Article,
-  ArticleNodeList,
   ArticleProject,
   ArticlesList,
-  ArticlesListItem,
-  ArticlesListItemTitle
+  ArticlesListItem
 } from '../../flow/Article';
 import type {IssueProject} from '../../flow/CustomFields';
 
 type ApiGetter = () => Api;
 
-const DRAFTS_TITLE: ArticlesListItemTitle = {name: 'Drafts', isDrafts: true, articles: {collapsed: true}};
 
 const setArticlesListCache = (articlesList: ArticlesList) => {
   flushStoragePart({articlesList});
@@ -51,18 +45,6 @@ const loadArticlesListFromCache = () => {
       logEvent({message: 'Set articles list from cache'});
     }
   };
-};
-
-const createArticleListDrafts = (
-  project: ArticleProject,
-  data: ArticleNodeList = [],
-  isCollapsed?: boolean
-): ArticlesListItem => {
-  return createArticlesListItem(
-    project,
-    arrayToTree(data),
-    typeof isCollapsed === 'boolean' ? isCollapsed : !!project?.articles?.collapsed
-  );
 };
 
 const createList = (
@@ -110,24 +92,8 @@ const loadArticlesList = (reset: boolean = true) => {
 const filterArticlesList = (query: string) => {
   return async (dispatch: (any) => any) => {
     if (query) {
-      const filteredArticlesAndDrafts: Array<Article> = filterArticles(getArticlesListCache(), query);
-      const articles: Array<Article> = [];
-      const drafts: Array<Article> = [];
-
-      filteredArticlesAndDrafts.forEach((it: Article) => {
-        if (hasType.articleDraft(it)) {
-          drafts.push(it);
-        } else {
-          articles.push(it);
-        }
-      });
-
-      const filteredArticlesList: ArticlesList = createList(articles, null, true);
-      if (drafts.length > 0) {
-        const draftsSection = createArticleListDrafts(DRAFTS_TITLE, drafts, false);
-        filteredArticlesList.unshift(draftsSection);
-      }
-
+      const filteredArticles: Array<Article> = filterArticles(getArticlesListCache(), query);
+      const filteredArticlesList: ArticlesList = createList(filteredArticles, null, true);
       dispatch(setList(filteredArticlesList));
     } else {
       dispatch(setList(getArticlesListCache()));
@@ -137,39 +103,16 @@ const filterArticlesList = (query: string) => {
 
 const loadArticlesDrafts = () => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
-    const state: AppState = getState();
-    const articlesList: Array<Article> = state.articles.articlesList || [];
-
     const api: Api = getApi();
 
     const [error, articlesDrafts] = await until(api.articles.getArticleDrafts());
 
     if (error) {
       logEvent({message: 'Failed to load articles drafts', isError: true});
+      return [];
     } else {
-      let updatedArticlesList: ArticlesList = articlesList.slice(0);
-
-      if (articlesDrafts.length === 0) {
-        updatedArticlesList = updatedArticlesList.reduce((list: Array<ArticlesListItem>, item: ArticlesListItem) => {
-          if (!item.title.isDrafts) {
-            return list.concat(item);
-          }
-        }, []);
-      } else {
-        let draftsSection: ?ArticlesListItem = articlesList.find((it: ArticlesListItem) => it.title.isDrafts);
-        if (!draftsSection) {
-          draftsSection = createArticleListDrafts(DRAFTS_TITLE);
-          updatedArticlesList.unshift(draftsSection);
-        }
-        updatedArticlesList[0] = createArticleListDrafts(
-          updatedArticlesList[0].title,
-          articlesDrafts.sort(sortByUpdatedReverse)
-        );
-      }
-
-      dispatch(updateArticlesList(updatedArticlesList));
+      return articlesDrafts.sort(sortByUpdatedReverse);
     }
-
   };
 };
 

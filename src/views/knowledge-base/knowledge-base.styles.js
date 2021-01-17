@@ -2,10 +2,15 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {clearIcon, inputWrapper, searchInput} from '../../components/common-styles/search';
 import {elevation1} from '../../components/common-styles/shadow';
-import {headerTitle, mainText} from '../../components/common-styles/typography';
+import {headerTitle, mainText, secondaryText} from '../../components/common-styles/typography';
 import {Platform} from 'react-native';
 import {SELECT_ITEM_HEIGHT} from '../../components/select/select.styles';
 import {UNIT} from '../../components/variables/variables';
+
+const wrapper = {
+  marginHorizontal: UNIT * 2,
+  marginVertical: UNIT
+};
 
 export default EStyleSheet.create({
   container: {
@@ -52,16 +57,15 @@ export default EStyleSheet.create({
     alignItems: 'center'
   },
   separator: {
-    marginLeft: UNIT * 3.5
+    marginLeft: UNIT * 3
   },
   item: {
     flexDirection: 'row',
     height: SELECT_ITEM_HEIGHT,
-    paddingLeft: UNIT,
     backgroundColor: '$background'
   },
-  itemSubArticle: {
-    marginLeft: UNIT * 1.2
+  itemChild: {
+    marginLeft: -UNIT * 3
   },
   itemStar: {
     paddingHorizontal: UNIT * 1.5,
@@ -82,7 +86,6 @@ export default EStyleSheet.create({
     justifyContent: 'center',
     minWidth: UNIT * 5,
     height: UNIT * 4,
-    paddingHorizontal: UNIT,
     borderRadius: UNIT,
     backgroundColor: '$boxBackground'
   },
@@ -97,13 +100,21 @@ export default EStyleSheet.create({
   itemProject: {
     flexGrow: 1,
     flexDirection: 'row',
-    paddingLeft: UNIT / 2,
+    paddingLeft: UNIT * 2,
     alignItems: 'center'
+  },
+  itemArticle: {
+    paddingLeft: UNIT * 5
+  },
+  itemDraft: {
+    paddingLeft: UNIT * 2
   },
   itemProjectIcon: {
     width: UNIT * 3,
+    marginLeft: -UNIT,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    color: '$text'
   },
   itemProjectIconCollapsed: {
     marginTop: -UNIT / 4
@@ -111,7 +122,6 @@ export default EStyleSheet.create({
 
   articleTitleText: {
     ...mainText,
-    marginLeft: UNIT * 3.5,
     maxWidth: '87%',
     color: '$text'
   },
@@ -140,11 +150,39 @@ export default EStyleSheet.create({
     color: '$link'
   },
 
-  inputWrapper: {
+  searchPanelContainer: {
     marginVertical: UNIT,
-    marginHorizontal: UNIT * 2,
+    ...wrapper,
     ...inputWrapper
   },
   searchInput: searchInput,
-  clearIcon: clearIcon
+  clearIcon: clearIcon,
+
+  link: {
+    color: '$link'
+  },
+  lockIcon: {
+    color: '$iconAccent'
+  },
+  icon: {
+    color: '$icon'
+  },
+  actionBar: {
+    flexDirection: 'row',
+    ...wrapper,
+    height: UNIT * 4,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  actionBarButton: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  actionBarButtonText: {
+    position: 'relative',
+    top: 1,
+    marginRight: UNIT,
+    ...secondaryText,
+    color: '$icon'
+  },
 });

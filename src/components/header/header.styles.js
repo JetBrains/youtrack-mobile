@@ -8,7 +8,8 @@ export const headerMinHeight = UNIT * 8;
 
 export default EStyleSheet.create({
   header: {
-    paddingVertical: UNIT * 1.5,
+    position: 'relative',
+    zIndex: 1,
     paddingHorizontal: UNIT,
     flex: 0,
     minHeight: headerMinHeight,

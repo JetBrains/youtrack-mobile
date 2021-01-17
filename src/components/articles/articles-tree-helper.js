@@ -22,10 +22,10 @@ export const createArticlesListItem = (
   isCollapsed: boolean
 ): ArticlesListItem => {
   return {
-    title: {
+    title: project ? {
       ...project,
       articles: {...project.articles, collapsed: isCollapsed}
-    },
+    } : null,
     data: isCollapsed ? [] : data,
     dataCollapsed: isCollapsed ? data : null
   };

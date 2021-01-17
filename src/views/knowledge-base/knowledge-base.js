@@ -9,6 +9,8 @@ import {connect} from 'react-redux';
 import * as knowledgeBaseActions from './knowledge-base-actions';
 import ErrorMessage from '../../components/error-message/error-message';
 import IconSearchEmpty from '../../components/icon/search-empty.svg';
+import KnowledgeBaseArticle from './knowledge-base__article';
+import KnowledgeBaseDrafts from './knowledge-base__drafts';
 import KnowledgeBaseSearchPanel from './knowledge-base__search';
 import PropTypes from 'prop-types';
 import Router from '../../components/router/router';
@@ -18,9 +20,8 @@ import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
 import {findArticleNode} from '../../components/articles/articles-tree-helper';
 import {getStorageState} from '../../components/storage/storage';
-import {hasType} from '../../components/api/api__resource-types';
 import {HIT_SLOP} from '../../components/common-styles/button';
-import {IconAngleDown, IconAngleRight, IconBack, IconContextActions, IconLock} from '../../components/icon/icon';
+import {IconAngleDown, IconAngleRight, IconBack, IconContextActions} from '../../components/icon/icon';
 import {routeMap} from '../../app-routes';
 import {SkeletonIssues} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
@@ -33,7 +34,6 @@ import type {Article, ArticlesList, ArticlesListItem, ArticleNode, ArticleProjec
 import type {KnowledgeBaseActions} from './knowledge-base-actions';
 import type {KnowledgeBaseState} from './knowledge-base-reducers';
 import type {Theme, UITheme} from '../../flow/Theme';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = KnowledgeBaseActions & KnowledgeBaseState & { issuePermissions: IssuePermissions };
 
@@ -47,7 +47,6 @@ export class KnowledgeBase extends Component<Props, State> {
     actionSheet: PropTypes.func
   };
 
-  articlesList: Object;
   uiTheme: UITheme;
 
   constructor(props: Props) {
@@ -70,10 +69,7 @@ export class KnowledgeBase extends Component<Props, State> {
     this.loadArticlesList();
   }
 
-  loadArticlesList = async (reset?: boolean) => {
-    await this.props.loadArticlesList(reset);
-    this.props.loadArticlesDrafts();
-  };
+  loadArticlesList = async (reset?: boolean) => this.props.loadArticlesList(reset);
 
   renderProject = ({section}: ArticlesListItem) => {
     const project: ?ArticleProject = section.title;
@@ -95,7 +91,7 @@ export class KnowledgeBase extends Component<Props, State> {
                 >
                   <Icon
                     size={24}
-                    color={this.uiTheme.colors.$text}
+                    color={styles.itemProjectIcon.color}
                   />
                 </View>
                 <Text style={styles.projectTitleText}>{project.name}</Text>
@@ -116,49 +112,14 @@ export class KnowledgeBase extends Component<Props, State> {
     }
   };
 
-  openArticle = (article: Article) => {
-    if (hasType.articleDraft(article)) {
-      Router.ArticleCreate({articleDraft: article});
-    } else {
-      Router.Article({articlePlaceholder: article});
-    }
-  };
-
-  renderArticle = ({item}: ArticleNode) => {
-    const article: Article = item.data;
-    const style: ViewStyleProp = {...styles.row, ...styles.item};
-
-    if (article) {
-      return (
-        <View style={style}>
-          <TouchableOpacity
-            style={style}
-            onPress={() => this.openArticle(article)}
-          >
-            <Text numberOfLines={2} style={styles.articleTitleText}>{article.summary || 'Untitled'}</Text>
-            <View style={styles.itemArticleIcon}>
-              {hasType.visibilityLimited(article?.visibility) && (
-                <IconLock
-                  size={16}
-                  color={this.uiTheme.colors.$iconAccent}
-                />
-              )}
-            </View>
-          </TouchableOpacity>
-
-          {item.children.length > 0 && <TouchableOpacity
-            style={styles.itemButtonContainer}
-            onPress={() => this.renderSubArticlesPage(article)}
-          >
-            <View style={styles.itemButton}>
-              <Text style={styles.itemButtonText}>{item.children.length}</Text>
-              <IconAngleRight style={styles.itemButtonIcon} size={22} color={this.uiTheme.colors.$icon}/>
-            </View>
-          </TouchableOpacity>}
-        </View>
-      );
-    }
-  };
+  renderArticle = ({item}: ArticleNode) => (
+    <KnowledgeBaseArticle
+      style={styles.itemArticle}
+      articleNode={item}
+      onArticlePress={(article: Article) => Router.Article({articlePlaceholder: article})}
+      onShowSubArticles={(article: Article) => this.renderSubArticlesPage(article)}
+    />
+  );
 
   renderSubArticlesPage = (article: Article) => {
     const {articlesList} = this.props;
@@ -170,12 +131,12 @@ export class KnowledgeBase extends Component<Props, State> {
           <TouchableOpacity
             onPress={() => Router.pop()}
           >
-            <IconBack color={this.uiTheme.colors.$link}/>
+            <IconBack color={styles.link.color}/>
           </TouchableOpacity>
         ),
         title: node.data.summary,
         customTitleComponent: (
-          <TouchableOpacity onPress={() => this.openArticle(article)}>
+          <TouchableOpacity onPress={() => Router.Article({articlePlaceholder: article})}>
             <Text numberOfLines={2} style={styles.projectTitleText}>{article.summary}</Text>
           </TouchableOpacity>
         )
@@ -188,7 +149,7 @@ export class KnowledgeBase extends Component<Props, State> {
         true
       );
 
-      Router.Page({children: <>{title}<View style={styles.itemSubArticle}>{tree}</View></>});
+      Router.Page({children: <>{title}<View style={styles.itemChild}>{tree}</View></>});
     }
   };
 
@@ -230,7 +191,7 @@ export class KnowledgeBase extends Component<Props, State> {
   renderRefreshControl = () => {
     return <RefreshControl
       refreshing={this.props.isLoading}
-      tintColor={this.uiTheme.colors.$link}
+      tintColor={styles.link.color}
       onRefresh={this.loadArticlesList}
     />;
   };
@@ -251,7 +212,6 @@ export class KnowledgeBase extends Component<Props, State> {
     return (
       <SectionList
         testID="articles"
-        ref={(ref: Object) => ref && (this.articlesList = ref)}
         sections={list}
         scrollEventThrottle={10}
         onScroll={this.onScroll}
@@ -264,8 +224,9 @@ export class KnowledgeBase extends Component<Props, State> {
         ListEmptyComponent={() => !this.props.isLoading && <ErrorMessage errorMessageData={{
           title: 'No articles yet',
           description: '',
-          //$FlowFixMe
-          icon: () => <IconSearchEmpty style={[styles.noArticlesIcon, {fill: this.uiTheme.colors.$icon}]}/>,
+          icon: () =>
+            //$FlowFixMe
+            <IconSearchEmpty fill={styles.icon.color} style={styles.noArticlesIcon}/>,
           iconSize: 48
         }}/>}
         ListFooterComponent={() =>
@@ -279,7 +240,16 @@ export class KnowledgeBase extends Component<Props, State> {
             </TouchableOpacity>
           </View>}
         stickySectionHeadersEnabled={true}
-        ListHeaderComponent={hideSearchPanel ? null : this.renderSearchPanel()}
+        ListHeaderComponent={
+          hideSearchPanel
+            ? null
+            : (
+              <>
+                {this.renderSearchPanel()}
+                {this.renderActionsBar()}
+              </>
+            )
+        }
       />
     );
   };
@@ -290,6 +260,21 @@ export class KnowledgeBase extends Component<Props, State> {
         this.props.filterArticlesList(query);
       }}
     />
+  );
+
+  renderActionsBar = () => (
+    <View style={styles.actionBar}>
+      <View/>
+      <TouchableOpacity
+        style={styles.actionBarButton}
+        onPress={() => Router.Page({
+          children: <KnowledgeBaseDrafts/>
+        })}
+      >
+        <Text style={styles.actionBarButtonText}>Drafts</Text>
+        <IconAngleRight size={20} color={styles.actionBarButtonText.color}/>
+      </TouchableOpacity>
+    </View>
   );
 
   render() {
@@ -315,7 +300,7 @@ export class KnowledgeBase extends Component<Props, State> {
                         showKBActions(this.context.actionSheet(), issuePermissions.articleCanCreateArticle());
                       }}
                     >
-                      <IconContextActions color={this.uiTheme.colors.$link}/>
+                      <IconContextActions color={styles.link.color}/>
                     </TouchableOpacity>
                   )
                 })

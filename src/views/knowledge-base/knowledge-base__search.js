@@ -22,9 +22,9 @@ const KnowledgeBaseSearchPanel = (props: Props) => {
   const focusInput = () => searchInput && searchInput.focus && searchInput.focus();
 
   return (
-    <View style={styles.inputWrapper}>
+    <View style={styles.searchPanelContainer}>
       {Boolean(!focus && !query) &&
-      <IconSearch style={styles.searchIcon} size={20} color={styles.clearIcon.color}/>
+      <IconSearch size={20} color={styles.icon.color}/>
       }
 
       <TextInput
