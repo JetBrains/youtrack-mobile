@@ -185,4 +185,17 @@ export default EStyleSheet.create({
     ...secondaryText,
     color: '$icon'
   },
+
+  noDrafts: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  noDraftsButton: {
+    marginTop: UNIT * 3
+  },
+  noDraftsButtonText: {
+    ...mainText,
+    color: '$link'
+  },
 });

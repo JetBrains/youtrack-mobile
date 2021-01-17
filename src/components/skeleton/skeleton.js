@@ -60,6 +60,24 @@ export const SkeletonLine = (props: SkeletonProps) => {
   />;
 };
 
+
+export const SkeletonList = (props: SkeletonProps) => {
+  return <SkeletonPlaceholder
+    {...skeletonPlaceholderDefaultProps}
+    {...props}
+  >
+    <SkeletonPlaceholder.Item
+      fleDirection='column'
+      marginLeft={UNIT * 2}
+      marginRight={UNIT * 2}
+    >
+      {Array(6).fill(0).map(((marginTop: number, index) => SkeletonLine(
+        {key: index, height: SKELETON_HEIGHT * 1.5, marginTop: UNIT * 2.5})))}
+    </SkeletonPlaceholder.Item>
+  </SkeletonPlaceholder>;
+};
+
+
 function skeletonUserInfo() {
   return <SkeletonPlaceholder.Item flexGrow={1}>
     <SkeletonPlaceholder.Item

@@ -60,7 +60,7 @@ export default class ArticlesAPI extends ApiBase {
   }
 
   async getArticleDrafts(draftId: ?string, original?: string): Promise<Article> {
-    const originalParam: string = original ? `&original=${original}` : '';
+    const originalParam: string = `&original=${original || 'null'}`;
     const articleDraftId: string = draftId || '';
     const url: string = `${this.youTrackApiUrl}/admin/users/me/articleDrafts/${articleDraftId}?${this.articleFieldsQuery}${originalParam}`;
     return this.makeAuthorizedRequest(url, 'GET');

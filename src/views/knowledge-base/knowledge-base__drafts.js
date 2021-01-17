@@ -1,18 +1,18 @@
 /* @flow */
 
 import React, {useEffect, useState} from 'react';
-import {TouchableOpacity, View, FlatList, RefreshControl} from 'react-native';
+import {TouchableOpacity, View, FlatList, RefreshControl, Text} from 'react-native';
 
-import {IconBack} from '../../components/icon/icon';
+import {IconBack, IconKnowledgeBase} from '../../components/icon/icon';
 
 import ErrorMessage from '../../components/error-message/error-message';
 import Header from '../../components/header/header';
-import IconSearchEmpty from '../../components/icon/search-empty.svg';
 import KnowledgeBaseArticle from './knowledge-base__article';
 import Router from '../../components/router/router';
 import Select from '../../components/select/select';
 import {loadArticlesDrafts} from './knowledge-base-actions';
 import {routeMap} from '../../app-routes';
+import {SkeletonList} from '../../components/skeleton/skeleton';
 import {useDispatch} from 'react-redux';
 
 import styles from './knowledge-base.styles';
@@ -23,9 +23,12 @@ import type {Article, ArticleNode} from '../../flow/Article';
 const KnowledgeBaseDrafts = () => {
   const dispatch = useDispatch();
   const [drafts, updateDrafts] = useState(null);
+  const [isLoading, updateLoading] = useState(false);
 
   const loadDrafts = async () => {
+    updateLoading(true);
     const drafts = await dispatch(loadArticlesDrafts());
+    updateLoading(false);
     updateDrafts(drafts);
   };
 
@@ -68,7 +71,25 @@ const KnowledgeBaseDrafts = () => {
         title={'Drafts'}
       />
 
-      <FlatList
+      {isLoading && <SkeletonList/>}
+      {!isLoading && drafts && drafts.length === 0 && (
+        <View style={styles.noDrafts}>
+          <ErrorMessage errorMessageData={{
+            title: 'No drafts yet',
+            icon: () => <IconKnowledgeBase size={81}/>,
+            iconSize: 48
+          }}/>
+
+          <TouchableOpacity
+            style={styles.noDraftsButton}
+            onPress={() => Router.ArticleCreate()}
+          >
+            <Text style={styles.noDraftsButtonText}>Start a new article</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      {<FlatList
         testID="articleDrafts"
         data={drafts}
         refreshControl={<RefreshControl
@@ -80,14 +101,7 @@ const KnowledgeBaseDrafts = () => {
         getItemLayout={Select.getItemLayout}
         renderItem={renderArticle}
         ItemSeparatorComponent={Select.renderSeparator}
-        ListEmptyComponent={() => <ErrorMessage errorMessageData={{
-          title: 'No drafts yet',
-          description: '',
-          //$FlowFixMe
-          icon: () => <IconSearchEmpty fill={styles.icon.color} style={styles.noArticlesIcon}/>,
-          iconSize: 48
-        }}/>}
-      />
+      />}
     </View>
   );
 };

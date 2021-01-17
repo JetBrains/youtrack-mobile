@@ -10,6 +10,7 @@ export const styles = EStyleSheet.create({
     justifyContent: 'center',
   },
   errorTitle: {
+    marginTop: UNIT * 1.5,
     ...title,
     color: '$text'
   },
