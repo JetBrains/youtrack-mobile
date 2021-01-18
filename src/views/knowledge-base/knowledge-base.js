@@ -198,17 +198,16 @@ export class KnowledgeBase extends Component<Props, State> {
 
   getListItemKey = (item: ArticleNode, index: number) => item?.data?.id || index;
 
-  createArticlesList: ArticlesList = () => {
-    const list: ArticlesList = this.props.articlesList || [];
+  createFilteredArticlesList: ArticlesList = (articlesList: ArticlesList = []) => {
     return (
       getStorageState().articlesListPinnedOnly
-        ? list.filter((it: ArticlesListItem) => {
+        ? articlesList.filter((it: ArticlesListItem) => {
           if (it.title) {
             return it.title.pinned || it.title.isDrafts;
           }
           return it;
         })
-        : list
+        : articlesList
     );
   };
 
@@ -216,7 +215,7 @@ export class KnowledgeBase extends Component<Props, State> {
     return (
       <SectionList
         testID="articles"
-        sections={this.createArticlesList()}
+        sections={this.createFilteredArticlesList(articlesList)}
         scrollEventThrottle={10}
         onScroll={this.onScroll}
         refreshControl={this.renderRefreshControl()}
@@ -267,7 +266,7 @@ export class KnowledgeBase extends Component<Props, State> {
   );
 
   renderActionsBar = () => {
-    const isSomeProjectExpanded = this.createArticlesList()
+    const isSomeProjectExpanded = this.createFilteredArticlesList(this.props.articlesList)
       .map((it: ArticlesListItem) => it.title.articles.collapsed)
       .some((it: boolean) => it !== true);
 
