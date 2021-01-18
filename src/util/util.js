@@ -11,6 +11,7 @@ import appPackage from '../../package.json'; // eslint-disable-line import/exten
 import {getStorageState} from '../components/storage/storage';
 
 import type {CustomError} from '../flow/Error';
+import type {ProjectCustomField} from '../flow/CustomFields';
 import type {StorageState} from '../components/storage/storage';
 
 
@@ -111,3 +112,20 @@ export const until = (promises: any): Promise<[?CustomError, any]> => {
       return [err];
     });
 };
+
+export const createNullProjectCustomField = (
+  projectName: string,
+  maxLength: number = 20
+): { projectCustomField: ProjectCustomField, value: { name: string } } => {
+  const visibleProjectName: string = (
+    projectName.length > maxLength
+      ? `${projectName.substring(0, maxLength - 3)}…`
+      : projectName
+  );
+
+  return {
+    projectCustomField: {field: {name: 'Project'}},
+    value: {name: visibleProjectName}
+  };
+};
+

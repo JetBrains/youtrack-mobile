@@ -1,20 +1,24 @@
 /* @flow */
 
 import React, {useContext, useEffect, useState} from 'react';
-import {ActivityIndicator, Text, TouchableOpacity, ScrollView, View} from 'react-native';
+import {ActivityIndicator, ScrollView, View} from 'react-native';
 
 import {useDebouncedCallback} from 'use-debounce';
 import {useDispatch, useSelector} from 'react-redux';
 
+import CustomField from '../../components/custom-field/custom-field';
 import Header from '../../components/header/header';
+import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import Router from '../../components/router/router';
 import Select from '../../components/select/select';
 import SummaryDescriptionForm from '../../components/form/summary-description-form';
 import VisibilityControl from '../../components/visibility/visibility-control';
 import {createArticleDraft, publishArticleDraft, setDraft, updateArticleDraft} from './arcticle-create-actions';
+import {createNullProjectCustomField} from '../../util/util';
 import {getApi} from '../../components/api/api__instance';
 import {getStorageState} from '../../components/storage/storage';
-import {IconAngleDown, IconCheck, IconClose} from '../../components/icon/icon';
+import {IconCheck, IconClose} from '../../components/icon/icon';
+import {PanelWithSeparator} from '../../components/panel/panel-with-separator';
 import {SkeletonCreateArticle} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
 
@@ -22,7 +26,7 @@ import styles from './article-create.styles';
 
 import type {AppState} from '../../reducers';
 import type {ArticleCreateState} from './article-create-reducers';
-import type {Article} from '../../flow/Article';
+import type {Article, ArticleProject} from '../../flow/Article';
 import type {CustomError} from '../../flow/Error';
 import type {IssueProject} from '../../flow/CustomFields';
 import type {Theme, UIThemeColors} from '../../flow/Theme';
@@ -48,6 +52,7 @@ const ArticleCreate = (props: Props) => {
   const articleDraft: Article = useSelector((state: AppState) => state.articleCreate.articleDraft);
   const error: CustomError | null = useSelector((state: AppState) => state.articleCreate.error);
   const isProcessing: boolean = useSelector((state: AppState) => state.articleCreate.isProcessing);
+  const issuePermissions: IssuePermissions = useSelector((state: AppState) => state.app.issuePermissions);
 
   const [isProjectSelectVisible, updateProjectSelectVisibility] = useState(false);
   const [articleDraftData, updateArticleDraftData] = useState(articleDraftDataInitial);
@@ -89,7 +94,9 @@ const ArticleCreate = (props: Props) => {
         selectedItems: selectedItems,
         emptyValue: null,
         placeholder: 'Filter projects',
-        dataSource: () => Promise.resolve(getStorageState().projects),
+        dataSource: () => Promise.resolve(getStorageState().projects.filter(
+          (it: ArticleProject) => issuePermissions.articleCanCreateArticle(it.ringId)
+        )),
         onSelect: (project: IssueProject) => {
           updateDraft({project});
           hideSelect();
@@ -107,8 +114,7 @@ const ArticleCreate = (props: Props) => {
     const isSubmitDisabled: boolean = (
       isProcessing ||
       !articleDraftData.project.id ||
-      articleDraftData.summary.length === 0 ||
-      articleDraftData.content.length === 0
+      articleDraftData.summary.length === 0
     );
     const closeCreateArticleScreen = () => {
       if (!isProcessing) {
@@ -120,7 +126,7 @@ const ArticleCreate = (props: Props) => {
     return (
       <Header
         style={styles.header}
-        title="New Article"
+        title={articleDraft?.idReadable || 'New Article'}
         leftButton={<IconClose size={21} color={isProcessing ? uiThemeColors.$disabled : linkColor}/>}
         onBack={closeCreateArticleScreen}
         rightButton={(
@@ -154,25 +160,29 @@ const ArticleCreate = (props: Props) => {
     >
       {renderHeader()}
 
-      <View style={styles.content}>
-        {!hasArticleDraft && <SkeletonCreateArticle/>}
+      {!hasArticleDraft && <SkeletonCreateArticle/>}
+      {hasArticleDraft && renderProjectSelect()}
 
-        {hasArticleDraft && <>
-          {renderProjectSelect()}
+      <ScrollView
+        scrollEnabled={hasArticleDraft}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="interactive"
+      >
+        {hasArticleDraft && (
+          <PanelWithSeparator>
+            <View>
+              <CustomField
+                disabled={false}
+                onPress={() => updateProjectSelectVisibility(true)}
+                active={false}
+                field={createNullProjectCustomField(articleDraftData.project.name)}
+              />
+            </View>
+          </PanelWithSeparator>
+        )}
 
-          <ScrollView
-            keyboardShouldPersistTaps="handled"
-            keyboardDismissMode="interactive"
-          >
-            <TouchableOpacity
-              style={styles.projectSelector}
-              disabled={isProcessing}
-              onPress={() => updateProjectSelectVisibility(true)}
-            >
-              <Text style={styles.projectSelectorText}>{articleDraftData.project.name}</Text>
-              <IconAngleDown size={20} color={linkColor}/>
-            </TouchableOpacity>
-
+        {hasArticleDraft && (
+          <View style={styles.content}>
             <VisibilityControl
               style={styles.visibilitySelector}
               visibility={articleDraftData.visibility}
@@ -183,23 +193,18 @@ const ArticleCreate = (props: Props) => {
 
             <SummaryDescriptionForm
               testID="createIssueSummary"
-              style={styles.form}
               showSeparator={true}
               summary={articleDraftData.summary}
               description={articleDraftData.content}
               editable={!isProcessing && !!articleDraft}
-              onSummaryChange={(summary: string) => {
-                updateDraft({summary});
-              }}
-              onDescriptionChange={(content: string) => {
-                updateDraft({content});
-              }}
+              onSummaryChange={(summary: string) => updateDraft({summary})}
+              onDescriptionChange={(content: string) => updateDraft({content})}
               uiTheme={theme.uiTheme}
             />
-          </ScrollView>
-        </>
-        }
-      </View>
+          </View>
+        )}
+
+      </ScrollView>
     </View>
   );
 

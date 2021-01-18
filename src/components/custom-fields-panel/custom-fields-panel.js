@@ -1,23 +1,25 @@
 /* @flow */
-import {View, ScrollView, Text, TouchableOpacity, TextInput, ActivityIndicator} from 'react-native';
-import React, {Component} from 'react';
-import {Calendar} from 'react-native-calendars'; // eslint-disable-line import/named
-import CustomField from '../custom-field/custom-field';
-import Select from '../select/select';
-import Header from '../header/header';
+
 import Api from '../api/api';
-import {SkeletonIssueCustomFields} from '../skeleton/skeleton';
+import CustomField from '../custom-field/custom-field';
+import Header from '../header/header';
 import ModalView from '../modal-view/modal-view';
-import {View as AnimatedView} from 'react-native-animatable';
-import {IconClose} from '../icon/icon';
+import React, {Component} from 'react';
+import Select from '../select/select';
+import {Calendar} from 'react-native-calendars'; // eslint-disable-line import/named
+import {createNullProjectCustomField} from '../../util/util';
 import {getApi} from '../api/api__instance';
+import {IconClose} from '../icon/icon';
+import {PanelWithSeparator} from '../panel/panel-with-separator';
+import {SkeletonIssueCustomFields} from '../skeleton/skeleton';
+import {View as AnimatedView} from 'react-native-animatable';
+import {View, ScrollView, Text, TouchableOpacity, TextInput, ActivityIndicator} from 'react-native';
 
 import styles, {calendarTheme} from './custom-fields-panel.styles';
 
-import type {IssueProject, CustomField as CustomFieldType, ProjectCustomField} from '../../flow/CustomFields';
+import type {IssueProject, CustomField as CustomFieldType} from '../../flow/CustomFields';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {UITheme} from '../../flow/Theme';
-import {PanelWithSeparator} from '../panel/panel-with-separator';
 
 type Props = {
   autoFocusSelect?: boolean,
@@ -104,7 +106,6 @@ const initialEditorsState = {
   }
 };
 
-const MAX_PROJECT_NAME_LENGTH = 20;
 const DATE_AND_TIME = 'date and time';
 
 export default class CustomFieldsPanel extends Component<Props, State> {
@@ -471,22 +472,8 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     );
   }
 
-  getIssueProjectField(): { projectCustomField: ProjectCustomField, value: { name: string } } {
-    const projectName: string = this.props.issueProject?.name || '';
-    const visibleProjectName: string = (
-      projectName.length > MAX_PROJECT_NAME_LENGTH
-        ? `${projectName.substring(0, MAX_PROJECT_NAME_LENGTH - 3)}…`
-        : projectName
-    );
-
-    return {
-      projectCustomField: {field: {name: 'Project'}},
-      value: {name: visibleProjectName}
-    };
-  }
-
   renderFields() {
-    const {hasPermission, fields} = this.props;
+    const {hasPermission, fields, issueProject = {name: ''}} = this.props;
     const {savingField, editingField, isEditingProject, isSavingProject} = this.state;
 
     return (
@@ -513,7 +500,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
                 disabled={!hasPermission.canEditProject}
                 onPress={this.onSelectProject}
                 active={isEditingProject}
-                field={this.getIssueProjectField()}
+                field={createNullProjectCustomField(issueProject.name)}
               />
               {isSavingProject && <ActivityIndicator style={styles.savingFieldIndicator}/>}
             </View>

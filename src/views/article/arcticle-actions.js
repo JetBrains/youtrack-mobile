@@ -113,7 +113,7 @@ const showArticleActions = (actionSheet: ActionSheet, canUpdate: boolean, canDel
           logEvent({message: `${articleLogMessagePrefix} Edit article`, analyticsId: ANALYTICS_ARTICLE_PAGE});
           const articleDraft: Article | null = await getArticleDraft(api, article);
           if (articleDraft) {
-            Router.ArticleCreate({articleDraft});
+            Router.ArticleCreate({articleDraft: {...articleDraft, idReadable: article.idReadable}});
           }
         }
       });
