@@ -1,30 +1,14 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../variables/variables';
 import {formStyles} from '../common-styles/form';
-import {separator} from '../common-styles/list';
 
 import type {UITheme, UIThemeColors} from '../../flow/Theme';
 
-const HEIGHT = UNIT * 12;
 
 export default EStyleSheet.create({
-  container: {
-    position: 'relative',
-    zIndex: 1,
-    height: HEIGHT,
-  },
   customFieldDateEditor: {
     flex: 1,
     padding: UNIT * 2
-  },
-  bottomBorder: {
-    ...separator,
-    borderColor: '$separator'
-  },
-  customFieldsPanel: {
-    flexDirection: 'row',
-    height: HEIGHT,
-    paddingLeft: UNIT,
   },
   customFieldEditorHeader: {
     paddingLeft: UNIT * 2

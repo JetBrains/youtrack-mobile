@@ -17,6 +17,7 @@ import styles, {calendarTheme} from './custom-fields-panel.styles';
 import type {IssueProject, CustomField as CustomFieldType, ProjectCustomField} from '../../flow/CustomFields';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {UITheme} from '../../flow/Theme';
+import {PanelWithSeparator} from '../panel/panel-with-separator';
 
 type Props = {
   autoFocusSelect?: boolean,
@@ -202,11 +203,13 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       datePicker: {
         show: true,
         withTime,
-        time: field.value ? new Date(field.value).toLocaleTimeString([],
+        time: field.value ? new Date(field.value).toLocaleTimeString(
+          [],
           {
             hour: '2-digit',
             minute: '2-digit'
-          }) : null,
+          }
+        ) : null,
         title: field.projectCustomField.field.name,
         value: field.value ? new Date(field.value) : new Date(),
         emptyValueName: field.projectCustomField.canBeEmpty ? field.projectCustomField.emptyFieldText : null,
@@ -487,53 +490,52 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     const {savingField, editingField, isEditingProject, isSavingProject} = this.state;
 
     return (
-      <View>
-
+      <>
         {!fields && <View style={styles.customFieldsPanel}>
           <SkeletonIssueCustomFields/>
         </View>}
 
-        {!!fields && <ScrollView
-          ref={this.restoreScrollPosition}
-          onScroll={this.storeScrollPosition}
-          contentOffset={{
-            x: this.currentScrollX,
-            y: 0
-          }}
-          scrollEventThrottle={100}
-          horizontal={true}
-          style={styles.customFieldsPanel}
-          keyboardShouldPersistTaps="always"
-        >
-          <View key="Project">
-            <CustomField
-              disabled={!hasPermission.canEditProject}
-              onPress={this.onSelectProject}
-              active={isEditingProject}
-              field={this.getIssueProjectField()}
-            />
-            {isSavingProject && <ActivityIndicator style={styles.savingFieldIndicator}/>}
-          </View>
-
-          {fields.map((field: CustomFieldType) => {
-            const isDisabled: boolean = (
-              !hasPermission.canUpdateField(field) ||
-              !field?.projectCustomField?.field?.fieldType
-            );
-            return <View key={field.id}>
+        {!!fields && <PanelWithSeparator>
+          <ScrollView
+            ref={this.restoreScrollPosition}
+            onScroll={this.storeScrollPosition}
+            contentOffset={{
+              x: this.currentScrollX,
+              y: 0
+            }}
+            scrollEventThrottle={100}
+            horizontal={true}
+            style={styles.customFieldsPanel}
+            keyboardShouldPersistTaps="always"
+          >
+            <View key="Project">
               <CustomField
-                field={field}
-                onPress={() => this.onEditField(field)}
-                active={editingField === field}
-                disabled={isDisabled}/>
+                disabled={!hasPermission.canEditProject}
+                onPress={this.onSelectProject}
+                active={isEditingProject}
+                field={this.getIssueProjectField()}
+              />
+              {isSavingProject && <ActivityIndicator style={styles.savingFieldIndicator}/>}
+            </View>
 
-              {savingField && savingField.id === field.id && <ActivityIndicator style={styles.savingFieldIndicator}/>}
-            </View>;
-          })}
-        </ScrollView>}
+            {fields.map((field: CustomFieldType) => {
+              const isDisabled: boolean = (
+                !hasPermission.canUpdateField(field) ||
+                !field?.projectCustomField?.field?.fieldType
+              );
+              return <View key={field.id}>
+                <CustomField
+                  field={field}
+                  onPress={() => this.onEditField(field)}
+                  active={editingField === field}
+                  disabled={isDisabled}/>
 
-        <View style={styles.bottomBorder}/>
-      </View>
+                {savingField && savingField.id === field.id && <ActivityIndicator style={styles.savingFieldIndicator}/>}
+              </View>;
+            })}
+          </ScrollView>
+        </PanelWithSeparator>}
+      </>
     );
   }
 
