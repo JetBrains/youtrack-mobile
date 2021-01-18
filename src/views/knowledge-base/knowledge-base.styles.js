@@ -72,7 +72,7 @@ export default EStyleSheet.create({
     marginLeft: -UNIT * 3
   },
   itemStar: {
-    marginRight: UNIT / 2,
+    marginRight: UNIT * 0.75,
     paddingHorizontal: UNIT * 1.5,
     alignItems: 'center',
     justifyContent: 'center'
@@ -184,6 +184,7 @@ export default EStyleSheet.create({
     flexDirection: 'row',
     ...wrapper,
     height: UNIT * 4,
+    paddingRight: UNIT * 0.75,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
