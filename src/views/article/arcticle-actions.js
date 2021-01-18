@@ -4,6 +4,7 @@ import {ANALYTICS_ARTICLE_PAGE} from '../../components/analytics/analytics-ids';
 import {Alert, Clipboard, Share} from 'react-native';
 
 import Router from '../../components/router/router';
+import {confirmation} from '../../components/confirmation/confirmation';
 import {getApi} from '../../components/api/api__instance';
 import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
 import {hasType} from '../../components/api/api__resource-types';
@@ -123,6 +124,7 @@ const showArticleActions = (actionSheet: ActionSheet, canUpdate: boolean, canDel
         title: 'Delete',
         execute: async () => {
           logEvent({message: `${articleLogMessagePrefix} Delete article`, analyticsId: ANALYTICS_ARTICLE_PAGE});
+          await confirmation('Are you sure you want to delete this article?', 'Delete');
           dispatch(deleteArticle(article, () => Router.KnowledgeBase()));
         }
       });
@@ -191,21 +193,6 @@ const deleteArticle = (article: Article, onAfterDelete?: () => any) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const isDraft: boolean = hasType.articleDraft(article);
-    const confirmationTitle: string = isDraft
-      ? 'Are you sure you want to delete this draft?'
-      : 'Are you sure you want to delete this article?';
-
-    await new Promise((resolve, reject) => {
-      Alert.alert(
-        confirmationTitle,
-        '',
-        [
-          {text: 'Cancel', style: 'cancel', onPress: reject},
-          {text: 'Delete', onPress: resolve}
-        ],
-        {cancelable: true}
-      );
-    });
 
     dispatch(setProcessing(true));
     const [error] = await until(

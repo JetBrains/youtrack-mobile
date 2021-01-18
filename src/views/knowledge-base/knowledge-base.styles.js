@@ -107,7 +107,11 @@ export default EStyleSheet.create({
     paddingLeft: UNIT * 5
   },
   itemDraft: {
+    marginRight: UNIT,
     paddingLeft: UNIT * 2
+  },
+  itemDraftDisabled: {
+    opacity: 0.5
   },
   itemProjectIcon: {
     width: UNIT * 3,
@@ -169,7 +173,6 @@ export default EStyleSheet.create({
   },
   iconTrash: {
     color: '$iconAccent',
-    marginRight: UNIT,
     padding: UNIT
   },
   actionBar: {
@@ -192,9 +195,9 @@ export default EStyleSheet.create({
   },
 
   noDrafts: {
-    flexGrow: 1,
+    flexGrow: 4,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   noDraftsButton: {
     marginTop: UNIT * 3

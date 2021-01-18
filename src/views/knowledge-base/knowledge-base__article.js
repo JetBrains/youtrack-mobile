@@ -17,7 +17,7 @@ type Props = {
   articleNode: ArticleNode,
   onArticlePress: (article: Article) => void,
   onShowSubArticles?: (article: Article) => void,
-  onDelete?: (article: Article) => void,
+  onDelete?: (article: Article) => any,
   style?: ViewStyleProp
 };
 
@@ -50,7 +50,8 @@ const KnowledgeBaseArticle = (props: Props) => {
         >
           <IconTrash
             fill={styles.iconTrash.color}
-            size={16}
+            width={19}
+            height={19}
           />
         </TouchableOpacity>}
 
