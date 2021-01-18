@@ -277,7 +277,7 @@ export class KnowledgeBase extends Component<Props, State> {
           onPress={() => this.props.toggleAllProjects(isSomeProjectExpanded)}
         >
           <Text style={styles.actionBarButtonText}>
-            {isSomeProjectExpanded ? 'Collapse' : 'Expand'}
+            {isSomeProjectExpanded ? 'Collapse all' : 'Expand all'}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
