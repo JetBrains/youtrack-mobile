@@ -26,12 +26,15 @@ export default EStyleSheet.create({
     padding: UNIT * 2,
     paddingLeft: UNIT
   },
+  articleDetailsHeader: {
+    marginTop: UNIT * 3,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   description: {
     ...mainText,
     color: '$text'
-  },
-  visibility: {
-    marginTop: UNIT * 3
   },
   summaryEdit: {
     ...Platform.select({
@@ -167,5 +170,13 @@ export default EStyleSheet.create({
   breadCrumbsSeparator: {
     ...separator,
     borderColor: '$separator'
+  },
+  inRevisionTag: {
+    paddingHorizontal: UNIT / 2,
+    fontSize: 13,
+    color: '#1b8833',
+    borderWidth: 1,
+    borderColor: '$disabled',
+    borderRadius: UNIT / 2
   },
 });

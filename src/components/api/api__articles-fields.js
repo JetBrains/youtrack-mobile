@@ -15,6 +15,7 @@ const articleFields = toField([
   'summary',
   'updated',
   'hasStar',
+  'hasUnpublishedChanges',
   {attachments: issueFields.attachments},
   {
     mentionedArticles: [

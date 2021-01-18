@@ -149,14 +149,20 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
         {breadCrumbsElement}
         {!!articleData && (
           <>
-            <VisibilityControl
-              style={breadCrumbsElement ? null : styles.visibility}
-              visibility={articleData.visibility}
-              onSubmit={(visibility: Visibility) => getApi().articles.updateArticle(articleData.id, {visibility})}
-              uiTheme={this.uiTheme}
-              getOptions={() => getApi().articles.getVisibilityOptions(articleData.idReadable)}
-              visibilityDefaultLabel="Visible to article readers"
-            />
+            <View style={styles.articleDetailsHeader}>
+              <VisibilityControl
+                style={breadCrumbsElement ? null : styles.visibility}
+                visibility={articleData.visibility}
+                onSubmit={(visibility: Visibility) => getApi().articles.updateArticle(articleData.id, {visibility})}
+                uiTheme={this.uiTheme}
+                getOptions={() => getApi().articles.getVisibilityOptions(articleData.idReadable)}
+                visibilityDefaultLabel="Visible to article readers"
+              />
+              {articleData.hasUnpublishedChanges && (
+                <Text style={styles.inRevisionTag}>in revision</Text>
+              )}
+            </View>
+
             <CreateUpdateInfo
               reporter={articleData.reporter}
               updater={articleData.updatedBy}
