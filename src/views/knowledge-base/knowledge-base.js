@@ -198,21 +198,25 @@ export class KnowledgeBase extends Component<Props, State> {
 
   getListItemKey = (item: ArticleNode, index: number) => item?.data?.id || index;
 
-  renderArticlesList = (articlesList: ArticlesList, hideSearchPanel: boolean = false) => {
-    const list: ArticlesList = (
+  createArticlesList: ArticlesList = () => {
+    const list: ArticlesList = this.props.articlesList || [];
+    return (
       getStorageState().articlesListPinnedOnly
-        ? articlesList.filter((it: ArticlesListItem) => {
+        ? list.filter((it: ArticlesListItem) => {
           if (it.title) {
             return it.title.pinned || it.title.isDrafts;
           }
           return it;
         })
-        : articlesList
+        : list
     );
+  };
+
+  renderArticlesList = (articlesList: ArticlesList, hideSearchPanel: boolean = false) => {
     return (
       <SectionList
         testID="articles"
-        sections={list}
+        sections={this.createArticlesList()}
         scrollEventThrottle={10}
         onScroll={this.onScroll}
         refreshControl={this.renderRefreshControl()}
@@ -262,23 +266,36 @@ export class KnowledgeBase extends Component<Props, State> {
     />
   );
 
-  renderActionsBar = () => (
-    <View style={styles.actionBar}>
-      <View/>
-      <TouchableOpacity
-        style={styles.actionBarButton}
-        onPress={() => Router.Page({
-          children: <KnowledgeBaseDrafts/>
-        })}
-      >
-        <Text style={styles.actionBarButtonText}>Drafts</Text>
-        <IconAngleRight size={20} color={styles.actionBarButtonText.color}/>
-      </TouchableOpacity>
-    </View>
-  );
+  renderActionsBar = () => {
+    const isSomeProjectExpanded = this.createArticlesList()
+      .map((it: ArticlesListItem) => it.title.articles.collapsed)
+      .some((it: boolean) => it !== true);
+
+    return (
+      <View style={styles.actionBar}>
+        <TouchableOpacity
+          hitSlop={HIT_SLOP}
+          onPress={() => this.props.toggleAllProjects(isSomeProjectExpanded)}
+        >
+          <Text style={styles.actionBarButtonText}>
+            {isSomeProjectExpanded ? 'Collapse' : 'Expand'}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.actionBarButton}
+          onPress={() => Router.Page({
+            children: <KnowledgeBaseDrafts/>
+          })}
+        >
+          <Text style={styles.actionBarButtonText}>Drafts</Text>
+          <IconAngleRight size={20} color={styles.actionBarButtonText.color}/>
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
   render() {
-    const {isLoading, articlesList, error, showKBActions, issuePermissions} = this.props;
+    const {isLoading, articlesList, error, showContextActions, issuePermissions} = this.props;
 
     return (
       <ThemeContext.Consumer>
@@ -297,7 +314,7 @@ export class KnowledgeBase extends Component<Props, State> {
                     <TouchableOpacity
                       hitSlop={HIT_SLOP}
                       onPress={() => {
-                        showKBActions(this.context.actionSheet(), issuePermissions.articleCanCreateArticle());
+                        showContextActions(this.context.actionSheet(), issuePermissions.articleCanCreateArticle());
                       }}
                     >
                       <IconContextActions color={styles.link.color}/>

@@ -155,9 +155,9 @@ export default EStyleSheet.create({
   },
 
   searchPanelContainer: {
-    marginVertical: UNIT,
     ...wrapper,
-    ...inputWrapper
+    ...inputWrapper,
+    marginBottom: 0
   },
   searchInput: searchInput,
   clearIcon: clearIcon,

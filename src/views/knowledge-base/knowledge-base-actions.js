@@ -19,6 +19,7 @@ import {sortByUpdatedReverse} from '../../components/search/sorting';
 import {until} from '../../util/util';
 
 import type Api from '../../components/api/api';
+import type {ActionSheetOption} from '../../components/action-sheet/action-sheet';
 import type {AppState} from '../../reducers';
 import type {Article, ArticleProject, ArticlesList, ArticlesListItem} from '../../flow/Article';
 import type {IssueProject} from '../../flow/CustomFields';
@@ -172,35 +173,9 @@ const toggleNonFavoriteProjectsVisibility = () => {
   };
 };
 
-const showKBActions = (actionSheet: ActionSheet, canCreateArticle: boolean) => {
-  return async (dispatch: (any) => any, getState: () => AppState) => {
-    const state: AppState = getState();
-    const {articlesList} = state.articles;
-    const toggle = (collapse: boolean) => {
-      logEvent({
-        message: `${collapse ? 'Collapse' : 'Expand'} all Knowledge base projects`,
-        analyticsId: ANALYTICS_ARTICLES_PAGE
-      });
-      if (articlesList) {
-        const updatedArticlesList: ArticlesList = articlesList.reduce((list: ArticlesList, item: ArticlesListItem) => {
-          return list.concat(toggleArticleProjectListItem(item, collapse));
-        }, []);
-
-        dispatch(setList(updatedArticlesList));
-        setArticlesListCache(updatedArticlesList);
-        notify(`${collapse ? 'Projects collapsed' : 'Projects expanded'}`);
-      }
-    };
-
-    const actions = [
-      {
-        title: 'Collapse all projects',
-        execute: () => toggle(true)
-      },
-      {
-        title: 'Expand all projects',
-        execute: () => toggle(false)
-      },
+const showContextActions = (actionSheet: ActionSheet, canCreateArticle: boolean) => {
+  return async (dispatch: (any) => any) => {
+    const actions: Array<ActionSheetOption> = [
       {
         title: 'Hide/show non-favorite projects',
         execute: () => dispatch(toggleNonFavoriteProjectsVisibility())
@@ -215,7 +190,7 @@ const showKBActions = (actionSheet: ActionSheet, canCreateArticle: boolean) => {
       });
     }
 
-    const selectedAction = await showActions(actions, actionSheet);
+    const selectedAction: ?ActionSheetOption = await showActions(actions, actionSheet);
 
     if (selectedAction && selectedAction.execute) {
       selectedAction.execute();
@@ -223,13 +198,34 @@ const showKBActions = (actionSheet: ActionSheet, canCreateArticle: boolean) => {
   };
 };
 
+const toggleAllProjects = (collapse: boolean) => {
+  return async (dispatch: (any) => any, getState: () => AppState) => {
+    const state: AppState = getState();
+    const {articlesList} = state.articles;
+    logEvent({
+      message: `${collapse ? 'Collapse' : 'Expand'} all Knowledge base projects`,
+      analyticsId: ANALYTICS_ARTICLES_PAGE
+    });
+    if (articlesList) {
+      const updatedArticlesList: ArticlesList = articlesList.reduce((list: ArticlesList, item: ArticlesListItem) => {
+        return list.concat(toggleArticleProjectListItem(item, collapse));
+      }, []);
+
+      dispatch(setList(updatedArticlesList));
+      setArticlesListCache(updatedArticlesList);
+      notify(`${collapse ? 'Projects collapsed' : 'Projects expanded'}`);
+    }
+
+  };
+};
 
 export type KnowledgeBaseActions = {
   filterArticlesList: typeof filterArticlesList,
   loadArticlesDrafts: typeof loadArticlesDrafts,
   loadArticlesList: typeof loadArticlesList,
   loadArticlesListFromCache: typeof loadArticlesListFromCache,
-  showKBActions: typeof showKBActions,
+  showContextActions: typeof showContextActions,
+  toggleAllProjects: typeof toggleAllProjects,
   toggleNonFavoriteProjectsVisibility: typeof toggleNonFavoriteProjectsVisibility,
   toggleProjectArticlesFavorite: typeof toggleProjectArticlesFavorite,
   toggleProjectArticlesVisibility: typeof toggleProjectArticlesVisibility,
@@ -240,7 +236,8 @@ export {
   loadArticlesDrafts,
   loadArticlesList,
   loadArticlesListFromCache,
-  showKBActions,
+  showContextActions,
+  toggleAllProjects,
   toggleNonFavoriteProjectsVisibility,
   toggleProjectArticlesFavorite,
   toggleProjectArticlesVisibility,
