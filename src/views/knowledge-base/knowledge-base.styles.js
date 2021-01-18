@@ -48,7 +48,11 @@ export default EStyleSheet.create({
   },
   headerRightButton: {
     marginLeft: UNIT,
-    marginRight: -UNIT / 2
+    ...Platform.select({
+      android: {
+        marginRight: -UNIT / 2,
+      }
+    })
   },
 
   row: {
@@ -68,6 +72,7 @@ export default EStyleSheet.create({
     marginLeft: -UNIT * 3
   },
   itemStar: {
+    marginRight: UNIT / 2,
     paddingHorizontal: UNIT * 1.5,
     alignItems: 'center',
     justifyContent: 'center'
