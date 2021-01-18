@@ -110,18 +110,19 @@ const ArticleCreate = (props: Props) => {
     }
   };
 
+  const closeCreateArticleScreen = () => {
+    if (!isProcessing) {
+      dispatch(setDraft(null));
+      Router.pop(true);
+    }
+  };
+
   const renderHeader = () => {
     const isSubmitDisabled: boolean = (
       isProcessing ||
       !articleDraftData.project.id ||
       articleDraftData.summary.length === 0
     );
-    const closeCreateArticleScreen = () => {
-      if (!isProcessing) {
-        dispatch(setDraft(null));
-        Router.pop(true);
-      }
-    };
 
     return (
       <Header
@@ -172,12 +173,29 @@ const ArticleCreate = (props: Props) => {
           <PanelWithSeparator>
             <View>
               <CustomField
+                active={false}
                 disabled={false}
                 onPress={() => updateProjectSelectVisibility(true)}
-                active={false}
                 field={createNullProjectCustomField(articleDraftData.project.name)}
               />
             </View>
+            {!!articleDraft.parentArticle && (
+              <View>
+                <CustomField
+                  active={false}
+                  disabled={false}
+                  onPress={() => {
+                    closeCreateArticleScreen();
+                    Router.Article({articlePlaceholder: articleDraft.parentArticle, storePrevArticle: true});
+                  }}
+                  field={createNullProjectCustomField(
+                    articleDraft.parentArticle.summary,
+                    26,
+                    'Parent article'
+                  )}
+                />
+              </View>
+            )}
           </PanelWithSeparator>
         )}
 

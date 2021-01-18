@@ -35,6 +35,7 @@ const articleFields = toField([
     parentArticle: [
       'id',
       'idReadable',
+      'summary'
     ]
   },
   {
