@@ -170,13 +170,5 @@ export default EStyleSheet.create({
   breadCrumbsSeparator: {
     ...separator,
     borderColor: '$separator'
-  },
-  inRevisionTag: {
-    paddingHorizontal: UNIT / 2,
-    fontSize: 13,
-    color: '#1b8833',
-    borderWidth: 1,
-    borderColor: '$disabled',
-    borderRadius: UNIT / 2
-  },
+  }
 });

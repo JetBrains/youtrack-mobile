@@ -9,6 +9,7 @@ import {connect} from 'react-redux';
 import * as articleActions from './arcticle-actions';
 import ArticleActivities from './article__activity';
 import ArticleDetails from './article__details';
+import Badge from '../../components/badge/badge';
 import CreateUpdateInfo from '../../components/issue-tabbed/issue-tabbed__created-updated';
 import ErrorMessage from '../../components/error-message/error-message';
 import Header from '../../components/header/header';
@@ -158,9 +159,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
                 getOptions={() => getApi().articles.getVisibilityOptions(articleData.idReadable)}
                 visibilityDefaultLabel="Visible to article readers"
               />
-              {articleData.hasUnpublishedChanges && (
-                <Text style={styles.inRevisionTag}>in revision</Text>
-              )}
+              {articleData?.hasUnpublishedChanges && <Badge valid={true} text='in revision'/>}
             </View>
 
             <CreateUpdateInfo

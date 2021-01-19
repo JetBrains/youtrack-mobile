@@ -6,6 +6,7 @@ import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {useDebouncedCallback} from 'use-debounce';
 import {useDispatch, useSelector} from 'react-redux';
 
+import Badge from '../../components/badge/badge';
 import CustomField from '../../components/custom-field/custom-field';
 import Header from '../../components/header/header';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
@@ -26,7 +27,7 @@ import styles from './article-create.styles';
 
 import type {AppState} from '../../reducers';
 import type {ArticleCreateState} from './article-create-reducers';
-import type {Article, ArticleProject} from '../../flow/Article';
+import type {Article, ArticleDraft, ArticleProject} from '../../flow/Article';
 import type {CustomError} from '../../flow/Error';
 import type {IssueProject} from '../../flow/CustomFields';
 import type {Theme, UIThemeColors} from '../../flow/Theme';
@@ -49,7 +50,7 @@ const ArticleCreate = (props: Props) => {
   const dispatch = useDispatch();
   const theme: Theme = useContext(ThemeContext);
 
-  const articleDraft: Article = useSelector((state: AppState) => state.articleCreate.articleDraft);
+  const articleDraft: ArticleDraft = useSelector((state: AppState) => state.articleCreate.articleDraft);
   const error: CustomError | null = useSelector((state: AppState) => state.articleCreate.error);
   const isProcessing: boolean = useSelector((state: AppState) => state.articleCreate.isProcessing);
   const issuePermissions: IssuePermissions = useSelector((state: AppState) => state.app.issuePermissions);
@@ -201,13 +202,17 @@ const ArticleCreate = (props: Props) => {
 
         {hasArticleDraft && (
           <View style={styles.content}>
-            <VisibilityControl
-              style={styles.visibilitySelector}
-              visibility={articleDraftData.visibility}
-              onSubmit={(visibility: Visibility) => updateDraft({visibility})}
-              uiTheme={theme.uiTheme}
-              getOptions={() => getApi().articles.getDraftVisibilityOptions(articleDraft.id)}
-            />
+            <View style={styles.formHeader}>
+              <VisibilityControl
+                style={styles.visibilitySelector}
+                visibility={articleDraftData.visibility}
+                onSubmit={(visibility: Visibility) => updateDraft({visibility})}
+                uiTheme={theme.uiTheme}
+                getOptions={() => getApi().articles.getDraftVisibilityOptions(articleDraft.id)}
+              />
+
+              {articleDraft.$isUnpublishedDraft && <Badge text='unpublished changes'/>}
+            </View>
 
             <SummaryDescriptionForm
               testID="createIssueSummary"

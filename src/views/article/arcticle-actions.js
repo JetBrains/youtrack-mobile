@@ -25,7 +25,7 @@ import {showActions, showActionSheet} from '../../components/action-sheet/action
 import type ActionSheet, {ActionSheetOptions} from '@expo/react-native-action-sheet';
 import type Api from '../../components/api/api';
 import type {AppState} from '../../reducers';
-import type {Article} from '../../flow/Article';
+import type {Article, ArticleDraft} from '../../flow/Article';
 import type {ArticleState} from './article-reducers';
 import type {IssueComment} from '../../flow/CustomFields';
 import type {ShowActionSheetWithOptions} from '../../components/action-sheet/action-sheet';
@@ -140,8 +140,8 @@ const showArticleActions = (actionSheet: ActionSheet, canUpdate: boolean, canDel
   };
 };
 
-const getArticleDraft = async (api: Api, article: Article): Promise<Article | null> => {
-  let articleDraft: Article | null = null;
+const getArticleDraft = async (api: Api, article: Article): Promise<ArticleDraft | null> => {
+  let articleDraft: ArticleDraft | null = null;
 
   const [error, articleDrafts] = await until(api.articles.getArticleDrafts(null, article.id));
 
@@ -152,13 +152,14 @@ const getArticleDraft = async (api: Api, article: Article): Promise<Article | nu
       articleDraft = await createArticleDraft(api, article);
     } else {
       articleDraft = articleDrafts[0];
+      articleDraft.$isUnpublishedDraft = true;
     }
   }
 
   return articleDraft;
 };
 
-const createArticleDraft = async (api: Api, article: Article): Promise<Article | null> => {
+const createArticleDraft = async (api: Api, article: Article): Promise<ArticleDraft | null> => {
   let articleDraft: Article | null = null;
 
   const [createDraftError, draft] = await until(api.articles.createArticleDraft(article.id));
@@ -169,24 +170,6 @@ const createArticleDraft = async (api: Api, article: Article): Promise<Article |
   }
 
   return articleDraft;
-};
-
-
-const getArticleDrafts = () => {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
-    const api: Api = getApi();
-    const {article}: Article = getState().article;
-
-    const [error, articleDrafts] = await until(api.articles.getArticleDrafts(null, article.idReadable));
-
-    if (error) {
-      const errorMsg: string = 'Failed to load article drafts';
-      logEvent({message: errorMsg, isError: true});
-      return [];
-    } else {
-      return articleDrafts;
-    }
-  };
 };
 
 const deleteArticle = (article: Article, onAfterDelete?: () => any) => {
@@ -429,8 +412,6 @@ export {
   showArticleActions,
   setPreviousArticle,
   deleteArticle,
-
-  getArticleDrafts,
 
   getArticleCommentDraft,
   updateArticleCommentDraft,

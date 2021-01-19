@@ -25,6 +25,8 @@ export type Article = {
   visibility: IssueVisibility
 }
 
+export type ArticleDraft = Article & {$isUnpublishedDraft?: boolean}
+
 export type ArticleNode = {
   children: Array<Article>,
   data: Article & { parentId: string | null }

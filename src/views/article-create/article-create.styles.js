@@ -13,7 +13,10 @@ export default EStyleSheet.create({
     flex: 1,
     paddingHorizontal: UNIT * 2,
   },
-  visibilitySelector: {
+  formHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     marginTop: UNIT * 2.5,
     marginBottom: UNIT * 1.5
   }
