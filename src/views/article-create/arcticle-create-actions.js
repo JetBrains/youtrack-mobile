@@ -1,6 +1,7 @@
 /* @flow */
 
 import {ANALYTICS_ARTICLE_CREATE} from '../../components/analytics/analytics-ids';
+import {attachmentActions} from './article-create__attachment-actions-and-types';
 import {logEvent} from '../../components/log/log-helper';
 import {notify} from '../../components/notification/notification';
 import {until} from '../../util/util';
@@ -9,10 +10,12 @@ import {
   setError,
   setProcessing
 } from './article-create-reducers';
+import usage from '../../components/usage/usage';
 
 import type Api from '../../components/api/api';
 import type {AppState} from '../../reducers';
-import type {Article} from '../../flow/Article';
+import type {Article, ArticleDraft} from '../../flow/Article';
+import type {Attachment} from '../../flow/CustomFields';
 
 type ApiGetter = () => Api;
 
@@ -76,10 +79,69 @@ const setDraft = (articleDraft: Article | null) => {
   };
 };
 
+const showAddAttachDialog = () => {
+  return async (dispatch: (any) => any) => {
+    dispatch(attachmentActions.toggleAttachFileDialog(true));
+  };
+};
+
+const cancelAddAttach = (attach: Attachment) => {
+  return async (dispatch: (any) => any) => {
+    await dispatch(attachmentActions.cancelImageAttaching(attach));
+  };
+};
+const hideAddAttachDialog = () => {
+  return async (dispatch: (any) => any) => {
+    dispatch(attachmentActions.toggleAttachFileDialog(false));
+  };
+};
+
+const uploadFile = (attach: Attachment) => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const articleDraft: ArticleDraft = getState().articleCreate.articleDraft || {};
+
+    const [error, updatedDraft] = await until(api.articles.attachFile(articleDraft.id, attach.url, attach.name));
+    if (error) {
+      const message: string = 'Failed to attach file';
+      logEvent({message: message, isError: true});
+      notify(message, error);
+    } else {
+      logEvent({message: `Image attached to article ${updatedDraft.id}`});
+      usage.trackEvent(ANALYTICS_ARTICLE_CREATE, 'Attach image', 'Success');
+
+      dispatch(attachmentActions.stopImageAttaching());
+      dispatch(attachmentActions.toggleAttachFileDialog(false));
+    }
+  };
+};
+
+const loadAttachments = () => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const articleDraft: ArticleDraft = getState().articleCreate.articleDraft || {};
+
+    const [error, draftAttachments] = await until(api.articles.getAttachments(articleDraft.id));
+    if (error) {
+      const message: string = 'Failed to load article attachments';
+      logEvent({message: message, isError: true});
+      notify(message, error);
+    } else {
+      dispatch(setDraft({...articleDraft, attachments: draftAttachments}));
+    }
+  };
+};
+
 
 export {
   updateArticleDraft,
   createArticleDraft,
   publishArticleDraft,
-  setDraft
+  setDraft,
+
+  cancelAddAttach,
+  hideAddAttachDialog,
+  loadAttachments,
+  showAddAttachDialog,
+  uploadFile
 };

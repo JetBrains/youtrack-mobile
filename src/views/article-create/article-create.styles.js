@@ -19,5 +19,9 @@ export default EStyleSheet.create({
     justifyContent: 'space-between',
     marginTop: UNIT * 2.5,
     marginBottom: UNIT * 1.5
+  },
+  attachments: {
+    marginTop: UNIT * 3,
+    paddingHorizontal: UNIT * 2
   }
 });

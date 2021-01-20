@@ -3,20 +3,25 @@
 import qs from 'qs';
 
 import ApiBase from './api__base';
+import ApiHelper from './api__helper';
 import articleFields from './api__articles-fields';
-import issueActivityPageFields from './api__activities-issue-fields';
+import issueActivityPageFields, {ISSUE_ATTACHMENT_FIELDS} from './api__activities-issue-fields';
 import issueFields from './api__issue-fields';
 import {activityArticleCategory} from '../activity/activity__category';
 
-import type {Article} from '../../flow/Article';
 import type {Activity} from '../../flow/Activity';
-import type {IssueComment} from '../../flow/CustomFields';
+import type {Article, ArticleDraft} from '../../flow/Article';
+import type {Attachment, IssueComment} from '../../flow/CustomFields';
 
 export default class ArticlesAPI extends ApiBase {
   articleFieldsQuery: string = ApiBase.createFieldsQuery(articleFields);
   categories: Array<string> = Object.keys(activityArticleCategory).map((key: string) => activityArticleCategory[key]);
   commentFields: string = issueFields.issueComment.toString();
   articleCommentFieldsQuery: string = ApiBase.createFieldsQuery(this.commentFields);
+
+  convertAttachmentsURL(attachments: Array<Attachment>): Array<Attachment> {
+    return ApiHelper.convertAttachmentRelativeToAbsURLs(attachments, this.config.backendUrl);
+  }
 
   async get(query: string | null = null, $top: number = 10000, $skip: number = 0): Promise<Array<Article>> {
     const fields: string = ApiBase.createFieldsQuery(
@@ -33,9 +38,11 @@ export default class ArticlesAPI extends ApiBase {
   }
 
   async getArticle(articleId: string): Promise<Article> {
-    return this.makeAuthorizedRequest(
+    const article = await this.makeAuthorizedRequest(
       `${this.youTrackApiUrl}/articles/${articleId}?${this.articleFieldsQuery}`
     );
+    article.attachments = this.convertAttachmentsURL(article.attachments);
+    return article;
   }
 
   async updateArticle(articleId: string, data: Object | null = null): Promise<Article> {
@@ -63,7 +70,11 @@ export default class ArticlesAPI extends ApiBase {
     const originalParam: string = `&original=${original || 'null'}`;
     const articleDraftId: string = draftId || '';
     const url: string = `${this.youTrackApiUrl}/admin/users/me/articleDrafts/${articleDraftId}?${this.articleFieldsQuery}${originalParam}`;
-    return this.makeAuthorizedRequest(url, 'GET');
+    const articleDrafts: Array<ArticleDraft> = await this.makeAuthorizedRequest(url, 'GET');
+    return articleDrafts.map((it: ArticleDraft) => {
+      it.attachments = this.convertAttachmentsURL(it.attachments);
+      return it;
+    });
   }
 
   async createArticleDraft(articleId?: string): Promise<Article> {
@@ -85,7 +96,8 @@ export default class ArticlesAPI extends ApiBase {
         parentArticle: articleDraft.parentArticle,
         project: articleDraft.project,
         summary: articleDraft.summary,
-        visibility: articleDraft.visibility
+        visibility: articleDraft.visibility,
+        attachments: articleDraft.attachments
       }
     );
   }
@@ -128,7 +140,7 @@ export default class ArticlesAPI extends ApiBase {
     );
   };
 
-  getDraftVisibilityOptions = async (articleId: string, ): Promise<Article> => (
+  getDraftVisibilityOptions = async (articleId: string,): Promise<Article> => (
     this.getVisibilityOptions(
       articleId, `${this.youTrackApiUrl}/admin/users/me/articleDrafts/${articleId}/visibilityOptions`)
   );
@@ -190,5 +202,37 @@ export default class ArticlesAPI extends ApiBase {
       {parseJson: false}
     );
   }
+
+  async getAttachments(articleId: string): Promise<Array<Attachment>> {
+    const queryString = ApiBase.createFieldsQuery(ISSUE_ATTACHMENT_FIELDS);
+    const attachments: Array<Attachment> = await this.makeAuthorizedRequest(
+      `${this.youTrackApiUrl}/admin/users/me/articleDrafts/${articleId}/attachments?${queryString}`
+    );
+    return this.convertAttachmentsURL(attachments);
+  }
+
+  async attachFile(articleId: string, fileUri: string, fileName: string): Promise<XMLHttpRequest> {
+    const url = `${this.youTrackApiUrl}/admin/users/me/articleDrafts/${articleId}/attachments?fields=id,name`;
+    const headers = this.auth.getAuthorizationHeaders();
+    const formData = new FormData(); //eslint-disable-line no-undef
+    // $FlowFixMe
+    formData.append('photo', {
+      uri: fileUri,
+      name: fileName,
+      type: 'image/binary'
+    });
+
+    const response = await fetch(
+      url,
+      {
+        method: 'POST',
+        body: formData,
+        headers: headers,
+      }
+    );
+
+    return await response.json();
+  }
+
 
 }

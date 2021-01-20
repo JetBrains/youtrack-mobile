@@ -24,6 +24,7 @@ type Action = { title: string, execute: () => any, icon?: any };
 
 type Props = {
   issueId: string,
+  hideVisibility?: boolean,
   actions: Array<Action>,
   attach: Attachment,
   onCancel: () => any,
@@ -96,7 +97,7 @@ export default class AttachFileDialog extends PureComponent<Props, State> {
   }
 
   render() {
-    const {actions, attach, uiTheme} = this.props;
+    const {actions, attach, uiTheme, hideVisibility} = this.props;
     const dimensions: ?ImageDimensions = attach && calculateAspectRatio(attach.dimensions);
     const hasAttach: boolean = !!attach;
 
@@ -137,7 +138,7 @@ export default class AttachFileDialog extends PureComponent<Props, State> {
               </AttachmentErrorBoundary>
             )
             }
-            {attach && <VisibilityControl
+            {!hideVisibility && attach && <VisibilityControl
               style={styles.visibilityButton}
               onApply={this.updateAttachVisibility}
               uiTheme={uiTheme}
