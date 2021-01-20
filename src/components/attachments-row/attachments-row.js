@@ -6,6 +6,8 @@ import styles from './attachments-row.styles';
 
 import Attach from './attachment';
 import AttachmentErrorBoundary from './attachment-error-boundary';
+import API from '../api/api';
+import {getApi} from '../api/api__instance';
 import {View} from 'react-native-animatable';
 
 import type {Attachment} from '../../flow/CustomFields';
@@ -39,13 +41,19 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
     onRemoveImage: () => {}
   };
 
-  constructor(...args: Array<any>) {
-    super(...args);
-  }
-
   UNSAFE_componentWillReceiveProps(props: Props) {
     if (props.attachingImage && props.attachingImage !== this.props.attachingImage) {
       setTimeout(() => this.scrollView && this.scrollView.scrollToEnd());
+    }
+  }
+
+  getHeaders = () => {
+    if (this.props.imageHeaders) {
+      return this.props.imageHeaders;
+    }
+    const api: API = getApi();
+    if (api?.auth?.getAuthorizationHeaders) {
+      api.auth.getAuthorizationHeaders();
     }
   }
 
@@ -54,7 +62,7 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
   };
 
   render() {
-    const {attachments, attachingImage, imageHeaders, onOpenAttachment, onRemoveImage, canRemoveAttachment, uiTheme, style} = this.props;
+    const {attachments, attachingImage, onOpenAttachment, onRemoveImage, canRemoveAttachment, uiTheme, style} = this.props;
 
     if (!attachments.length) {
       return null;
@@ -75,7 +83,7 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
               attach={attach}
               attachments={attachments}
               attachingImage={attachingImage}
-              imageHeaders={imageHeaders}
+              imageHeaders={this.getHeaders()}
               onOpenAttachment={onOpenAttachment}
               canRemoveImage={canRemoveAttachment}
               onRemoveImage={onRemoveImage}
