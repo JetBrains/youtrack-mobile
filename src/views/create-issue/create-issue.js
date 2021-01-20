@@ -226,7 +226,6 @@ class CreateIssue extends Component<Props, State> {
                     <AttachmentAddPanel
                       isDisabled={processing}
                       showAddAttachDialog={showAddAttachDialog}
-                      uiTheme={uiTheme}
                     />
                   </View>
                 )}

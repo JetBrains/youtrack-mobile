@@ -17,6 +17,9 @@ export default EStyleSheet.create({
     marginLeft: UNIT * 2,
     color: '$link'
   },
+  attachButtonTextDisabled: {
+    color: '$textSecondary'
+  },
   attachButtonIcon: {
     transform: [{rotate: '-40deg'}]
   }

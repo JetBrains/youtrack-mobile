@@ -280,7 +280,6 @@ export default class IssueDetails extends Component<Props, void> {
         {editMode && (
           <AttachmentAddPanel
             showAddAttachDialog={() => onAttach(true)}
-            uiTheme={uiTheme}
           />
         )}
 

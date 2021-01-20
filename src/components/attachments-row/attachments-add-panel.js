@@ -9,12 +9,9 @@ import {IconPaperClip} from '../icon/icon';
 
 import styles from './attachment-add-panel.styles';
 
-import type {UITheme} from '../../flow/Theme';
-
 type Props = {
   isDisabled?: boolean,
-  showAddAttachDialog: () => any,
-  uiTheme: UITheme
+  showAddAttachDialog: () => any
 }
 
 
@@ -30,12 +27,12 @@ const AttachmentAddPanel = (props: Props) => {
         <IconPaperClip
           style={styles.attachButtonIcon}
           size={18}
-          color={props.isDisabled ? props.uiTheme.colors.$textSecondary : props.uiTheme.colors.$link}
+          color={props.isDisabled ? styles.attachButtonTextDisabled.color : styles.attachButtonText.color}
         />
         <Text
           style={[
             styles.attachButtonText,
-            props.isDisabled ? {color: props.uiTheme.colors.$textSecondary} : null
+            props.isDisabled ? styles.attachButtonTextDisabled : null
           ]}>
           Add Attachment
         </Text>
