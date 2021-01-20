@@ -131,7 +131,7 @@ export default class Attach extends PureComponent<Props, State> {
           style={styles.attachmentImage}
           renderIndicator={() => <ActivityIndicator/>}
           source={{
-            uri: attach.thumbnailURL || attach.url,
+            uri: attach.thumbnailURL || (`${attach.url}&w=126&h=80`),
             headers: imageHeaders
           }}
           onError={this.handleLoadError}
