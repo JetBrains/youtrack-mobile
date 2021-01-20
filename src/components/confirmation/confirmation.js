@@ -2,10 +2,8 @@
 
 import {Alert} from 'react-native';
 
-import {until} from '../../util/util';
-
 export const confirmation = async (title: string, actionButtonTitle: string, message?: string) => {
-  await until(new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     Alert.alert(
       title,
       message,
@@ -15,5 +13,5 @@ export const confirmation = async (title: string, actionButtonTitle: string, mes
       ],
       {cancelable: true}
     );
-  }));
+  });
 };

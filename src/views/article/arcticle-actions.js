@@ -124,8 +124,9 @@ const showArticleActions = (actionSheet: ActionSheet, canUpdate: boolean, canDel
         title: 'Delete',
         execute: async () => {
           logEvent({message: `${articleLogMessagePrefix} Delete article`, analyticsId: ANALYTICS_ARTICLE_PAGE});
-          await confirmation('Are you sure you want to delete this article?', 'Delete');
-          dispatch(deleteArticle(article, () => Router.KnowledgeBase()));
+          confirmation('Are you sure you want to delete this article?', 'Delete')
+            .then(() => dispatch(deleteArticle(article, () => Router.KnowledgeBase())))
+            .catch(() => {});
         }
       });
     }

@@ -1,11 +1,12 @@
 /* @flow */
 
-import {Alert, Clipboard} from 'react-native';
+import {Clipboard} from 'react-native';
 
 import * as activityHelper from './issue-activity__helper';
 import IssueVisibility from '../../../components/visibility/issue-visibility';
 import log from '../../../components/log/log';
 import usage from '../../../components/usage/usage';
+import {confirmation} from '../../../components/confirmation/confirmation';
 import {
   loadActivitiesPage,
   receiveActivityAPIAvailability,
@@ -220,31 +221,19 @@ export function deleteCommentPermanently(comment: IssueComment, activityId?: str
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().issueState.issueId;
 
-    try {
-      await new Promise((resolve, reject) => {
-        Alert.alert(
-          'Confirmation',
-          'Delete comment permanently?',
-          [
-            {text: 'Cancel', style: 'cancel', onPress: reject},
-            {text: 'OK', onPress: resolve}
-          ],
-          {cancelable: true}
-        );
-      });
-    } catch (error) {
-      log.log('Deletion confirmation declined', error);
-    }
-
-    try {
-      await getApi().issue.deleteCommentPermanently(issueId, comment.id);
-      log.info(`Comment ${comment.id} deleted forever`);
-      dispatch(deleteCommentFromList(comment, activityId));
-      dispatch(loadActivity());
-    } catch (error) {
-      dispatch(loadActivity());
-      notify(`Failed to delete comment. Refresh`, error);
-    }
+    confirmation('Delete comment permanently?', 'Delete')
+      .then(async () => {
+        try {
+          await getApi().issue.deleteCommentPermanently(issueId, comment.id);
+          log.info(`Comment ${comment.id} deleted forever`);
+          dispatch(deleteCommentFromList(comment, activityId));
+          dispatch(loadActivity());
+        } catch (error) {
+          dispatch(loadActivity());
+          notify(`Failed to delete comment. Refresh`, error);
+        }
+      })
+      .catch(() => {});
   };
 }
 

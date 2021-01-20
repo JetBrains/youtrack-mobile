@@ -37,26 +37,22 @@ const KnowledgeBaseDrafts = () => {
     updateDrafts(drafts);
   };
 
-  const confirmDelete = async (
-    title: string = 'Are you sure you want to delete this draft?',
-    message?: string
-  ) => await confirmation(
-    title,
-    'Delete',
-    message
+  const confirmDelete = (title: string = 'Are you sure you want to delete this draft?', message?: string) => (
+    confirmation(title, 'Delete', message)
   );
 
   const deleteAllDrafts = async () => {
     if (drafts && drafts.length > 0) {
-      await confirmDelete(
+      confirmDelete(
         'Delete all drafts?',
         'This action deletes all drafts, including unpublished sub-articles'
-      );
-      updateDeleting(true);
-      await until(drafts.map((draft: Article) => dispatch(deleteArticle(draft))));
-      updateDrafts([]);
-      updateDeleting(false);
-      loadDrafts();
+      ).then(async () => {
+        updateDeleting(true);
+        await until(drafts.map((draft: Article) => dispatch(deleteArticle(draft))));
+        updateDrafts([]);
+        updateDeleting(false);
+        loadDrafts();
+      });
     }
   };
 
@@ -83,8 +79,7 @@ const KnowledgeBaseDrafts = () => {
         onArticlePress={(article: Article) => Router.ArticleCreate({articleDraft: article})}
         onDelete={async (article: Article) => {
           if (!isDeleting) {
-            await confirmDelete();
-            dispatch(deleteArticle(article, loadDrafts));
+            confirmDelete().then(() => dispatch(deleteArticle(article, loadDrafts))).catch(() => {});
           }
         }}
       />
