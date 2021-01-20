@@ -132,14 +132,34 @@ const loadAttachments = () => {
   };
 };
 
+const deleteDraftAttachment = (attachmentId: string) => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const articleDraft: ArticleDraft = getState().articleCreate.articleDraft;
+
+    const [error] = await until(api.articles.deleteDraftAttachment(articleDraft.id, attachmentId));
+    if (error) {
+      const message = 'Failed to delete attachment';
+      notify(message, error);
+      logEvent({message: message, isError: true});
+    } else {
+      logEvent({message: 'Attachment deleted', analyticsId: ANALYTICS_ARTICLE_CREATE});
+      dispatch(setDraft(
+        {
+          ...articleDraft, attachments: articleDraft.attachments.filter((it: Attachment) => it.id !== attachmentId)
+        }));
+    }
+  };
+};
 
 export {
-  updateArticleDraft,
   createArticleDraft,
   publishArticleDraft,
   setDraft,
+  updateArticleDraft,
 
   cancelAddAttach,
+  deleteDraftAttachment,
   hideAddAttachDialog,
   loadAttachments,
   showAddAttachDialog,

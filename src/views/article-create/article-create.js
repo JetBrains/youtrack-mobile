@@ -27,7 +27,8 @@ import {
   setDraft,
   showAddAttachDialog,
   updateArticleDraft,
-  uploadFile
+  uploadFile,
+  deleteDraftAttachment
 } from './arcticle-create-actions';
 import {createNullProjectCustomField} from '../../util/util';
 import {getApi} from '../../components/api/api__instance';
@@ -284,8 +285,8 @@ const ArticleCreate = (props: Props) => {
                 attachments={articleDraft.attachments}
                 attachingImage={attachingImage}
                 imageHeaders={getApi().auth.getAuthorizationHeaders()}
-                canRemoveAttachment={false}
-                onRemoveImage={(attachment: Attachment) => null}
+                canRemoveAttachment={true}
+                onRemoveImage={(attachment: Attachment) => dispatch(deleteDraftAttachment(attachment.id))}
                 uiTheme={theme.uiTheme}
               />
             </View>
