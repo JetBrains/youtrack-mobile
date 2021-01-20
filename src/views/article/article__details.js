@@ -19,6 +19,7 @@ import {SkeletonIssueContent} from '../../components/skeleton/skeleton';
 import styles from './article.styles';
 
 import type {Article} from '../../flow/Article';
+import type {Attachment} from '../../flow/CustomFields';
 import type {CustomError} from '../../flow/Error';
 import type {UITheme} from '../../flow/Theme';
 
@@ -28,6 +29,7 @@ type Props = {
   error: CustomError,
   isLoading: boolean,
   subArticles: Array<Article>,
+  onRemoveAttach: ?(attachment: Attachment) => any,
   uiTheme: UITheme
 };
 
@@ -70,7 +72,7 @@ const renderSubArticles = (article: Article, subArticles: Array<Article>, uiThem
 };
 
 const ArticleDetails = (props: Props) => {
-  const {article, articlePlaceholder, isLoading, error, uiTheme, subArticles = []} = props;
+  const {article, articlePlaceholder, isLoading, error, uiTheme, subArticles = [], onRemoveAttach} = props;
 
   if (!article && !articlePlaceholder) {
     return null;
@@ -123,8 +125,8 @@ const ArticleDetails = (props: Props) => {
               onImageLoadingError={
                 (err: Object) => logEvent({message: err.nativeEvent, isError: true})
               }
-              canRemoveAttachment={false}
-              onRemoveImage={() => null}
+              canRemoveAttachment={!!onRemoveAttach}
+              onRemoveImage={onRemoveAttach || undefined}
               onOpenAttachment={(type) => usage.trackEvent(
                 ANALYTICS_ARTICLE_PAGE,
                 type === 'image' ? 'Showing image' : 'Open attachment by URL')

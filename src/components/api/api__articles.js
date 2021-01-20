@@ -203,6 +203,20 @@ export default class ArticlesAPI extends ApiBase {
     );
   }
 
+  async deleteAttachment(articleId: string, attachmentId: string, url?: string): Promise<IssueComment> {
+    return this.makeAuthorizedRequest(
+      url || `${this.youTrackApiUrl}/articles/${articleId}/attachments/${attachmentId}`,
+      'DELETE',
+      null,
+      {parseJson: false}
+    );
+  }
+
+  async deleteDraftAttachment(articleId: string, attachmentId: string): Promise<IssueComment> {
+    const url: string = `${this.youTrackApiUrl}/admin/users/me/articleDrafts/${articleId}/attachments/${attachmentId}`;
+    return this.deleteAttachment(articleId, attachmentId, url);
+  }
+
   async getAttachments(articleId: string): Promise<Array<Attachment>> {
     const queryString = ApiBase.createFieldsQuery(ISSUE_ATTACHMENT_FIELDS);
     const attachments: Array<Attachment> = await this.makeAuthorizedRequest(

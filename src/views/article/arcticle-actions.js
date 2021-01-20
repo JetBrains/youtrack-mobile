@@ -27,7 +27,7 @@ import type Api from '../../components/api/api';
 import type {AppState} from '../../reducers';
 import type {Article, ArticleDraft} from '../../flow/Article';
 import type {ArticleState} from './article-reducers';
-import type {IssueComment} from '../../flow/CustomFields';
+import type {Attachment, IssueComment} from '../../flow/CustomFields';
 import type {ShowActionSheetWithOptions} from '../../components/action-sheet/action-sheet';
 
 type ApiGetter = () => Api;
@@ -405,6 +405,26 @@ const toggleFavorite = () => {
   };
 };
 
+const deleteAttachment = (attachmentId: string) => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const {article} = getState().article;
+
+    const [error] = await until(api.articles.deleteAttachment(article.id, attachmentId));
+    if (error) {
+      const message = 'Failed to delete attachment';
+      notify(message, error);
+      logEvent({message: message, isError: true});
+    } else {
+      logEvent({message: 'Attachment deleted', analyticsId: ANALYTICS_ARTICLE_PAGE});
+      dispatch(setArticle(
+        {
+          ...article, attachments: article.attachments.filter((it: Attachment) => it.id !== attachmentId)
+        }));
+    }
+  };
+};
+
 
 export {
   loadArticle,
@@ -423,5 +443,7 @@ export {
   deleteArticleComment,
 
   getMentions,
-  toggleFavorite
+  toggleFavorite,
+
+  deleteAttachment
 };

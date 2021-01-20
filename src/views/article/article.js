@@ -30,7 +30,7 @@ import type {Article as ArticleEntity, ArticleNode} from '../../flow/Article';
 import type {ArticleState} from './article-reducers';
 import type {CustomError} from '../../flow/Error';
 import type {HeaderProps} from '../../components/header/header';
-import type {IssueProject} from '../../flow/CustomFields';
+import type {Attachment, IssueProject} from '../../flow/CustomFields';
 import type {IssueTabbedState} from '../../components/issue-tabbed/issue-tabbed';
 import type {KnowledgeBaseState} from '../knowledge-base/knowledge-base-reducers';
 import type {RootState} from '../../reducers/app-reducer';
@@ -131,7 +131,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
   };
 
   renderDetails = (uiTheme: UITheme) => {
-    const {article, articlesList, articlePlaceholder, error, isLoading} = this.props;
+    const {article, articlesList, articlePlaceholder, error, isLoading, deleteAttachment, issuePermissions} = this.props;
     if (error) {
       return this.renderError(error);
     }
@@ -174,6 +174,11 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
         <ArticleDetails
           article={article}
           articlePlaceholder={articlePlaceholder}
+          onRemoveAttach={
+            issuePermissions.canUpdateArticle(article)
+              ? (attachment: Attachment) => deleteAttachment(attachment.id)
+              : undefined
+          }
           error={error}
           isLoading={isLoading}
           subArticles={subArticles}
@@ -281,7 +286,10 @@ const mapStateToProps = (
   };
 };
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(articleActions, dispatch);
+  return {
+    ...bindActionCreators(articleActions, dispatch),
+    deleteAttachment: (attachmentId: string) => dispatch(articleActions.deleteAttachment(attachmentId))
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Article);
