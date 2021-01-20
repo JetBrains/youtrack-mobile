@@ -233,7 +233,7 @@ export class KnowledgeBase extends Component<Props, State> {
           iconSize: 48
         }}/>}
         ListFooterComponent={() =>
-          getStorageState().articlesListPinnedOnly &&
+          !hideSearchPanel && getStorageState().articlesListPinnedOnly &&
           <View style={styles.listFooter}>
             <TouchableOpacity
               hitSlop={HIT_SLOP}
