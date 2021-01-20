@@ -69,6 +69,7 @@ export default EStyleSheet.create({
     backgroundColor: '$background'
   },
   itemChild: {
+    marginTop: UNIT,
     marginLeft: -UNIT * 3
   },
   itemStar: {
