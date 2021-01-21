@@ -49,17 +49,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
 
   props: Props;
   uiTheme: UITheme;
-
-  constructor(props: Props) {
-    //$FlowFixMe
-    super(props);
-
-    Router.setOnDispatchCallback((routeName: string, prevRouteName: string) => {
-      if (routeName === routeMap.Article && prevRouteName === routeMap.ArticleCreate) {
-        this.refresh();
-      }
-    });
-  }
+  unsubscribeOnDispatch: Function
 
   componentDidMount() {
     const {articlePlaceholder, storePrevArticle} = this.props;
@@ -67,6 +57,16 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
       this.props.setPreviousArticle();
     }
     this.loadArticle(articlePlaceholder.id || articlePlaceholder.idReadable, true);
+
+    this.unsubscribeOnDispatch = Router.setOnDispatchCallback((routeName: string, prevRouteName: string) => {
+      if (routeName === routeMap.Article && prevRouteName === routeMap.ArticleCreate) {
+        this.refresh();
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeOnDispatch();
   }
 
   loadArticle = (articleId: string, reset: boolean) => this.props.loadArticle(articleId, reset);

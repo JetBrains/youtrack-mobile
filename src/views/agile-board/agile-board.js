@@ -78,6 +78,7 @@ type State = {
 class AgileBoard extends Component<Props, State> {
   boardHeader: ?BoardHeader;
   query: string;
+  unsubscribeOnDispatch: Function
 
   constructor(props: Props) {
     super(props);
@@ -93,17 +94,17 @@ class AgileBoard extends Component<Props, State> {
       offsetY: 0,
       showAssist: false
     };
-
-    Router.setOnDispatchCallback((routeName: string, prevRouteName: string, options: Object) => {
-      if (routeName === routeMap.AgileBoard && prevRouteName === routeMap.Issue && options?.issueId) {
-        options.issueId && this.props.updateIssue(options.issueId, this.props?.sprint);
-      }
-    });
   }
 
   componentDidMount() {
     usage.trackScreenView(CATEGORY_NAME);
     this.loadBoard();
+
+    this.unsubscribeOnDispatch = Router.setOnDispatchCallback((routeName: string, prevRouteName: string, options: Object) => {
+      if (routeName === routeMap.AgileBoard && prevRouteName === routeMap.Issue && options?.issueId) {
+        options.issueId && this.props.updateIssue(options.issueId, this.props?.sprint);
+      }
+    });
   }
 
   shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
@@ -114,6 +115,7 @@ class AgileBoard extends Component<Props, State> {
 
   componentWillUnmount() {
     boardActions.destroySSE();
+    this.unsubscribeOnDispatch();
   }
 
   loadBoard = () => {

@@ -13,7 +13,6 @@ import {confirmation} from '../../components/confirmation/confirmation';
 import {deleteArticle} from '../article/arcticle-actions';
 import {IconBack, IconKnowledgeBase} from '../../components/icon/icon';
 import {loadArticlesDrafts} from './knowledge-base-actions';
-import {routeMap} from '../../app-routes';
 import {SkeletonList} from '../../components/skeleton/skeleton';
 import {until} from '../../util/util';
 import {useDispatch} from 'react-redux';
@@ -56,16 +55,8 @@ const KnowledgeBaseDrafts = () => {
     }
   };
 
-  let onRouteChange = (routeName: string, prevRouteName: string) => {
-    if (routeName === routeMap.Page && prevRouteName === routeMap.ArticleCreate) {
-      loadDrafts();
-    }
-  };
-
   useEffect(() => {
     loadDrafts();
-    Router.setOnDispatchCallback(onRouteChange);
-    return () => onRouteChange = () => {};
   }, []);
 
   const renderArticle = ({item}) => {

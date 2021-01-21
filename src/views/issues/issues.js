@@ -59,6 +59,7 @@ type State = {
 
 export class Issues extends Component<Props, State> {
   searchPanelNode: Object;
+  unsubscribeOnDispatch: Function;
 
   constructor(props: Props) {
     super(props);
@@ -67,15 +68,20 @@ export class Issues extends Component<Props, State> {
       clearSearchQuery: false
     };
     usage.trackScreenView('Issue list');
-    Router.setOnDispatchCallback((routeName: string, prevRouteName: string, options: Object) => {
+  }
+
+  componentDidMount() {
+    this.props.initializeIssuesList(this.props.initialSearchQuery);
+
+    this.unsubscribeOnDispatch = Router.setOnDispatchCallback((routeName: string, prevRouteName: string, options: Object) => {
       if (routeName === routeMap.Issues && prevRouteName === routeMap.Issue && options?.issueId) {
         this.props.updateIssue(options.issueId);
       }
     });
   }
 
-  componentDidMount() {
-    this.props.initializeIssuesList(this.props.initialSearchQuery);
+  componentWillUnmount() {
+    this.unsubscribeOnDispatch();
   }
 
   shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
