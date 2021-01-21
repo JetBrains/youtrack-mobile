@@ -75,11 +75,6 @@ const loadArticlesList = (reset: boolean = true) => {
       logEvent({message: 'Failed to load articles', isError: true});
     } else {
       const articlesList: ArticlesList = createList(articles, getArticlesListCache());
-      const cachedDraftSection: ?ArticlesListItem = getArticlesListCache().find(
-        (it: ArticlesListItem) => it.title.isDrafts);
-      if (cachedDraftSection) {
-        articlesList.unshift(cachedDraftSection);
-      }
       dispatch(updateArticlesList(articlesList));
     }
   };
