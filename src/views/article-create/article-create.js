@@ -146,7 +146,7 @@ const ArticleCreate = (props: Props) => {
     return (
       <Header
         style={styles.header}
-        title={articleDraft?.idReadable || 'New Article'}
+        title={articleDraft?.original ? 'Draft' : 'New Article'}
         leftButton={<IconClose size={21} color={isProcessing ? uiThemeColors.$disabled : linkColor}/>}
         onBack={closeCreateArticleScreen}
         rightButton={(
