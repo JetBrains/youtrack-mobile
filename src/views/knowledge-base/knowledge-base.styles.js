@@ -152,7 +152,7 @@ export default EStyleSheet.create({
     marginBottom: UNIT * 2
   },
   listFooter: {
-    marginTop: UNIT * 5,
+    marginVertical: UNIT * 2,
     alignItems: 'center',
     justifyContent: 'center',
   },
