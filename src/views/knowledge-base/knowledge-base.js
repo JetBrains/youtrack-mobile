@@ -48,25 +48,31 @@ export class KnowledgeBase extends Component<Props, State> {
   };
 
   uiTheme: UITheme;
+  unsubscribe: Function
 
   constructor(props: Props) {
     super(props);
     this.state = {isHeaderPinned: false};
     usage.trackScreenView(ANALYTICS_ARTICLES_PAGE);
+  }
 
-    Router.setOnDispatchCallback((routeName: string, prevRouteName: string) => {
-      if (routeName === routeMap.KnowledgeBase && (
-        prevRouteName === routeMap.Article ||
-        prevRouteName === routeMap.ArticleCreate
-      )) {
-        this.loadArticlesList(false);
-      }
-    });
+  componentWillUnmount() {
+    this.unsubscribe();
   }
 
   componentDidMount() {
     this.props.loadArticlesListFromCache();
     this.loadArticlesList();
+
+    this.unsubscribe = Router.setOnDispatchCallback((routeName: string, prevRouteName: string) => {
+      if (routeName === routeMap.KnowledgeBase && (
+        prevRouteName === routeMap.Article ||
+        prevRouteName === routeMap.ArticleCreate ||
+        prevRouteName === routeMap.Page
+      )) {
+        this.loadArticlesList(false);
+      }
+    });
   }
 
   loadArticlesList = async (reset?: boolean) => this.props.loadArticlesList(reset);
