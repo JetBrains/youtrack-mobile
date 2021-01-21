@@ -105,6 +105,10 @@ class Router {
 
   setOnDispatchCallback(onDispatch: Function<Object, ?string>) {
     this.onDispatchCallbacks.push(onDispatch);
+    return () => {
+      const index: number = this.onDispatchCallbacks.indexOf(onDispatch);
+      this.onDispatchCallbacks.splice(index, 1);
+    };
   }
 
   dispatch(data: NavigationResetActionPayload, routeName?: string, prevRouteName?: string, options?: Object) {
