@@ -11,6 +11,7 @@ import {guid} from '../../util/util';
 
 export type ArticleCreateState = {
   articleDraft: ArticleDraft | null,
+  breadCrumbs: React$Element<any> | null,
   error: CustomError,
   isProcessing: boolean,
   isAttachFileDialogVisible: boolean,
@@ -19,6 +20,7 @@ export type ArticleCreateState = {
 
 export const articleCreateInitialState: ArticleCreateState = {
   articleDraft: null,
+  breadCrumbs: null,
   error: null,
   isProcessing: false,
   isAttachFileDialogVisible: false,

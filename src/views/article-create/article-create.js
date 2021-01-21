@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {useContext, useEffect, useState} from 'react';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {ActivityIndicator, ScrollView, View, Text, TouchableOpacity} from 'react-native';
 
 import {useDebouncedCallback} from 'use-debounce';
 import {useDispatch, useSelector} from 'react-redux';
@@ -10,7 +10,6 @@ import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import AttachmentAddPanel from '../../components/attachments-row/attachments-add-panel';
 import Badge from '../../components/badge/badge';
-import CustomField from '../../components/custom-field/custom-field';
 import Header from '../../components/header/header';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import Router from '../../components/router/router';
@@ -30,10 +29,9 @@ import {
   uploadFile,
   deleteDraftAttachment
 } from './arcticle-create-actions';
-import {createNullProjectCustomField} from '../../util/util';
 import {getApi} from '../../components/api/api__instance';
 import {getStorageState} from '../../components/storage/storage';
-import {IconCheck, IconClose} from '../../components/icon/icon';
+import {IconAngleDown, IconCheck, IconClose} from '../../components/icon/icon';
 import {PanelWithSeparator} from '../../components/panel/panel-with-separator';
 import {SkeletonCreateArticle} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
@@ -51,7 +49,8 @@ import type {Visibility} from '../../flow/Visibility';
 type ArticleDraftData = { summary: string, content: string, project: IssueProject, visibility: Visibility };
 
 type Props = {
-  articleDraft?: Article
+  articleDraft?: Article,
+  breadCrumbs?: React$Element<any> | null
 }
 
 const ArticleCreate = (props: Props) => {
@@ -210,38 +209,20 @@ const ArticleCreate = (props: Props) => {
       {!hasArticleDraft && <SkeletonCreateArticle/>}
       {hasArticleDraft && renderProjectSelect()}
 
-      <ScrollView
-        scrollEnabled={hasArticleDraft}
-        keyboardShouldPersistTaps="handled"
-        keyboardDismissMode="interactive"
-      >
+      <ScrollView scrollEnabled={hasArticleDraft}>
         {hasArticleDraft && (
           <PanelWithSeparator>
-            <View>
-              <CustomField
-                active={false}
-                disabled={false}
+            <View style={styles.projectContainer}>
+              <TouchableOpacity
+                style={styles.projectSelector}
+                disabled={isProcessing}
                 onPress={() => updateProjectSelectVisibility(true)}
-                field={createNullProjectCustomField(articleDraftData.project.name)}
-              />
+              >
+                <Text style={styles.projectSelectorText}>{articleDraftData.project.name}</Text>
+                <IconAngleDown size={20} color={linkColor}/>
+              </TouchableOpacity>
+              {props.breadCrumbs}
             </View>
-            {!!articleDraft.parentArticle && (
-              <View>
-                <CustomField
-                  active={false}
-                  disabled={false}
-                  onPress={() => {
-                    closeCreateArticleScreen();
-                    Router.Article({articlePlaceholder: articleDraft.parentArticle, storePrevArticle: true});
-                  }}
-                  field={createNullProjectCustomField(
-                    articleDraft.parentArticle.summary,
-                    26,
-                    'Parent article'
-                  )}
-                />
-              </View>
-            )}
           </PanelWithSeparator>
         )}
 

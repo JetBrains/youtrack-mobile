@@ -132,7 +132,11 @@ export const findArticleNode = (
   return articleProject ? findNodeById(articleProject.data, nodeId) : null;
 };
 
-export const createBreadCrumbs = (article: Article, articlesList: ArticlesList): Array<Article | IssueProject> => {
+export const createBreadCrumbs = (
+  article: Article,
+  articlesList: ArticlesList,
+  excludeProject: boolean = false
+): Array<Article | IssueProject> => {
   if (!article?.project?.id) {
     return [];
   }
@@ -159,6 +163,9 @@ export const createBreadCrumbs = (article: Article, articlesList: ArticlesList):
     return [];
   }
 
-  breadCrumbs.reverse().unshift(article.project);
+  breadCrumbs.reverse();
+  if (!excludeProject) {
+    breadCrumbs.unshift(article.project);
+  }
   return breadCrumbs;
 };

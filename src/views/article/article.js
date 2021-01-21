@@ -1,13 +1,14 @@
 /* @flow */
 
 import React from 'react';
-import {RefreshControl, View, ScrollView, TouchableOpacity, Text} from 'react-native';
+import {RefreshControl, View, ScrollView} from 'react-native';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import * as articleActions from './arcticle-actions';
 import ArticleActivities from './article__activity';
+import ArticleBreadCrumbs from './article__breadcrumbs';
 import ArticleDetails from './article__details';
 import Badge from '../../components/badge/badge';
 import CreateUpdateInfo from '../../components/issue-tabbed/issue-tabbed__created-updated';
@@ -18,7 +19,7 @@ import PropTypes from 'prop-types';
 import Router from '../../components/router/router';
 import Star from '../../components/star/star';
 import VisibilityControl from '../../components/visibility/visibility-control';
-import {createBreadCrumbs, findArticleNode} from '../../components/articles/articles-tree-helper';
+import {findArticleNode} from '../../components/articles/articles-tree-helper';
 import {getApi} from '../../components/api/api__instance';
 import {IconBack, IconContextActions} from '../../components/icon/icon';
 import {routeMap} from '../../app-routes';
@@ -30,16 +31,15 @@ import type {Article as ArticleEntity, ArticleNode} from '../../flow/Article';
 import type {ArticleState} from './article-reducers';
 import type {CustomError} from '../../flow/Error';
 import type {HeaderProps} from '../../components/header/header';
-import type {Attachment, IssueProject} from '../../flow/CustomFields';
+import type {Attachment} from '../../flow/CustomFields';
 import type {IssueTabbedState} from '../../components/issue-tabbed/issue-tabbed';
 import type {KnowledgeBaseState} from '../knowledge-base/knowledge-base-reducers';
 import type {RootState} from '../../reducers/app-reducer';
 import type {Theme, UITheme, UIThemeColors} from '../../flow/Theme';
 import type {Visibility} from '../../flow/Visibility';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = ArticleState & { articlePlaceholder: ArticleEntity, storePrevArticle?: boolean } & typeof (articleActions);
-
-const maxBreadcrumbTextLength: number = 24;
 
 //$FlowFixMe
 class Article extends IssueTabbed<Props, IssueTabbedState> {
@@ -49,7 +49,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
 
   props: Props;
   uiTheme: UITheme;
-  unsubscribeOnDispatch: Function
+  unsubscribeOnDispatch: Function;
 
   componentDidMount() {
     const {articlePlaceholder, storePrevArticle} = this.props;
@@ -91,47 +91,35 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     />;
   };
 
-  renderBreadCrumbs = () => {
+  renderBreadCrumbs = (
+    style?: ViewStyleProp,
+    extraDepth?: number,
+    withSeparator?: boolean,
+    excludeProject?: boolean
+  ) => {
     const {article, articlesList} = this.props;
-    const breadCrumbs: Array<ArticleEntity | IssueProject> = createBreadCrumbs(article, articlesList);
-
-    if (breadCrumbs.length === 0) {
-      return null;
-    }
-
     return (
-      <View style={styles.breadCrumbs}>
-        <ScrollView
-          horizontal={true}
-          contentContainerStyle={styles.breadCrumbsContent}
-        >
-          {breadCrumbs.map((it: ArticleEntity | IssueProject, index: number) => {
-            const breadcrumbText: string = it.name || it.summary;
-            return (
-              <View key={it.id}>
-                <View style={styles.commentContent}>
-                  {index > 0 && <Text style={styles.breadCrumbsButtonTextSeparator}>/</Text>}
-                  <TouchableOpacity
-                    style={styles.breadCrumbsButton}
-                    onPress={() => Router.backTo(breadCrumbs.length - index)}
-                  >
-                    <Text style={styles.breadCrumbsButtonText}>
-                      {breadcrumbText.substr(0, maxBreadcrumbTextLength)}
-                      {breadcrumbText.length > maxBreadcrumbTextLength && '…'}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            );
-          })}
-        </ScrollView>
-        <View style={styles.breadCrumbsSeparator}/>
-      </View>
+      <ArticleBreadCrumbs
+        styles={style}
+        article={article}
+        articlesList={articlesList}
+        extraDepth={extraDepth}
+        excludeProject={excludeProject}
+        withSeparator={withSeparator}
+      />
     );
   };
 
   renderDetails = (uiTheme: UITheme) => {
-    const {article, articlesList, articlePlaceholder, error, isLoading, deleteAttachment, issuePermissions} = this.props;
+    const {
+      article,
+      articlesList,
+      articlePlaceholder,
+      error,
+      isLoading,
+      deleteAttachment,
+      issuePermissions
+    } = this.props;
     if (error) {
       return this.renderError(error);
     }
@@ -237,7 +225,13 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
       onRightButtonClick: () => showArticleActions(
         this.context.actionSheet(),
         this.canEditArticle(),
-        this.canDeleteArticle()
+        this.canDeleteArticle(),
+        () => this.renderBreadCrumbs(
+          styles.breadCrumbsCompact,
+          1,
+          false,
+          true
+        )
       ),
       extraButton: (
         isArticleLoaded ? <Star

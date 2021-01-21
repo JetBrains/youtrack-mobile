@@ -78,7 +78,12 @@ const loadActivitiesPage = (reset: boolean = true) => {
   };
 };
 
-const showArticleActions = (actionSheet: ActionSheet, canUpdate: boolean, canDelete: boolean) => {
+const showArticleActions = (
+  actionSheet: ActionSheet,
+  canUpdate: boolean,
+  canDelete: boolean,
+  renderBreadCrumbs: Function
+) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {article} = getState().article;
@@ -113,7 +118,10 @@ const showArticleActions = (actionSheet: ActionSheet, canUpdate: boolean, canDel
           logEvent({message: `${articleLogMessagePrefix} Edit article`, analyticsId: ANALYTICS_ARTICLE_PAGE});
           const articleDraft: Article | null = await getArticleDraft(api, article);
           if (articleDraft) {
-            Router.ArticleCreate({articleDraft: {...articleDraft, original: article.id}});
+            Router.ArticleCreate({
+              articleDraft: {...articleDraft, original: article.id},
+              breadCrumbs: renderBreadCrumbs()
+            });
           }
         }
       });

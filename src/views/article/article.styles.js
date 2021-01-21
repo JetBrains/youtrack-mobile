@@ -148,8 +148,10 @@ export default EStyleSheet.create({
 
   breadCrumbs: {
     height: UNIT * 9,
-    marginBottom: UNIT * 2,
     marginHorizontal: -detailsHorizontalPadding
+  },
+  breadCrumbsCompact: {
+    height: UNIT * 6
   },
   breadCrumbsContent: {
     alignItems: 'center',
