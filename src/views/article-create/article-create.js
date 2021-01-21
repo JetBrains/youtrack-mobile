@@ -196,7 +196,7 @@ const ArticleCreate = (props: Props) => {
     >
       {renderHeader()}
 
-      {!hasArticleDraft && <SkeletonCreateArticle/>}
+      {!hasArticleDraft && <View style={styles.content}><SkeletonCreateArticle/></View>}
       {hasArticleDraft && renderProjectSelect()}
 
       <ScrollView scrollEnabled={hasArticleDraft}>
