@@ -38,6 +38,8 @@ import type {RootState} from '../../reducers/app-reducer';
 import type {Theme, UITheme, UIThemeColors} from '../../flow/Theme';
 import type {Visibility} from '../../flow/Visibility';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import {logEvent} from '../../components/log/log-helper';
+import {ANALYTICS_ARTICLE_PAGE} from '../../components/analytics/analytics-ids';
 
 type Props = ArticleState & { articlePlaceholder: ArticleEntity, storePrevArticle?: boolean } & typeof (articleActions);
 
@@ -50,6 +52,12 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
   props: Props;
   uiTheme: UITheme;
   unsubscribeOnDispatch: Function;
+
+  constructor() {
+    //$FlowFixMe
+    super();
+    logEvent({message: 'Navigate to article', analyticsId: ANALYTICS_ARTICLE_PAGE});
+  }
 
   componentDidMount() {
     const {articlePlaceholder, storePrevArticle} = this.props;

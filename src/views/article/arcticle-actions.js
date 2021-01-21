@@ -32,13 +32,12 @@ import type {ShowActionSheetWithOptions} from '../../components/action-sheet/act
 
 type ApiGetter = () => Api;
 
-const articleLogMessagePrefix: string = `Article:`;
 
 const loadArticle = (articleId: string, reset: boolean = true) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
 
-    logEvent({message: 'Loading article', analyticsId: ANALYTICS_ARTICLE_PAGE});
+    logEvent({message: 'Loading article'});
 
     if (reset) {
       dispatch(setLoading(true));
@@ -115,7 +114,10 @@ const showArticleActions = (
       actions.push({
         title: 'Edit',
         execute: async () => {
-          logEvent({message: `${articleLogMessagePrefix} Edit article`, analyticsId: ANALYTICS_ARTICLE_PAGE});
+          logEvent({
+            message: 'Edit article',
+            analyticsId: ANALYTICS_ARTICLE_PAGE
+          });
           const articleDraft: Article | null = await getArticleDraft(api, article);
           if (articleDraft) {
             Router.ArticleCreate({
@@ -131,7 +133,10 @@ const showArticleActions = (
       actions.push({
         title: 'Delete',
         execute: async () => {
-          logEvent({message: `${articleLogMessagePrefix} Delete article`, analyticsId: ANALYTICS_ARTICLE_PAGE});
+          logEvent({
+            message: 'Delete article',
+            analyticsId: ANALYTICS_ARTICLE_PAGE
+          });
           confirmation('Are you sure you want to delete this article?', 'Delete')
             .then(() => dispatch(deleteArticle(article, () => Router.KnowledgeBase())))
             .catch(() => {});
@@ -269,7 +274,7 @@ const submitArticleCommentDraft = (commentDraftText: string) => {
     if (error) {
       notify('Failed to update a comment draft', error);
     } else {
-      logEvent({message: `${articleLogMessagePrefix} comment added`, analyticsId: ANALYTICS_ARTICLE_PAGE});
+      logEvent({message: 'Comment added', analyticsId: ANALYTICS_ARTICLE_PAGE});
       dispatch(setArticleCommentDraft(null));
     }
   };
@@ -284,7 +289,7 @@ const updateArticleComment = (comment: IssueComment) => {
     if (error) {
       notify('Failed to update a comment', error);
     } else {
-      logEvent({message: `${articleLogMessagePrefix} comment updated`, analyticsId: ANALYTICS_ARTICLE_PAGE});
+      logEvent({message: 'Comment updated', analyticsId: ANALYTICS_ARTICLE_PAGE});
       dispatch(loadActivitiesPage());
     }
   };
@@ -312,7 +317,6 @@ const deleteArticleComment = (commentId: string) => {
       if (error) {
         notify('Failed to delete a comment', error);
       } else {
-        logEvent({message: `${articleLogMessagePrefix} comment deleted`, analyticsId: ANALYTICS_ARTICLE_PAGE});
         dispatch(loadActivitiesPage());
       }
     } catch (error) {
@@ -347,12 +351,14 @@ const showArticleCommentActions = (
             params.message = url;
           }
           Share.share(params, {dialogTitle: 'Share URL'});
+          logEvent({message: 'Share article', analyticsId: ANALYTICS_ARTICLE_PAGE});
           return this.title;
         }
       },
       {
         title: 'Copy URL',
         execute: function (): string {
+          logEvent({message: 'Copy article URL', analyticsId: ANALYTICS_ARTICLE_PAGE});
           Clipboard.setString(url);
           return this.title;
         }
@@ -363,6 +369,7 @@ const showArticleCommentActions = (
       options.push({
         title: 'Delete',
         execute: function () {
+          logEvent({message: 'Delete article', analyticsId: ANALYTICS_ARTICLE_PAGE});
           dispatch(deleteArticleComment(comment.id));
           return this.title;
         }
@@ -379,7 +386,7 @@ const showArticleCommentActions = (
     );
     if (selectedAction && selectedAction.execute) {
       const actionTitle: string = selectedAction.execute();
-      logEvent({message: `${articleLogMessagePrefix} comment ${actionTitle}`, analyticsId: ANALYTICS_ARTICLE_PAGE});
+      logEvent({message: `comment ${actionTitle}`, analyticsId: ANALYTICS_ARTICLE_PAGE});
     }
   };
 };
