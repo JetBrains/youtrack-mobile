@@ -25,18 +25,42 @@ export default EStyleSheet.create({
     marginTop: UNIT * 3,
     paddingHorizontal: UNIT * 2
   },
+  projectPanel: {
+    alignItems: 'center',
+    height: 'auto',
+    minHeight: UNIT * 7,
+    marginLeft: UNIT,
+    padding: UNIT
+  },
   projectContainer: {
-    paddingLeft: UNIT,
-    justifyContent: 'center',
+    flexGrow: 1,
+    justifyContent: 'center'
   },
   projectSelector: {
+    minHeight: UNIT * 4,
     flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: UNIT
+    alignItems: 'center'
   },
   projectSelectorText: {
     ...mainText,
     marginRight: UNIT / 2,
     color: '$link'
-  }
+  },
+  discard: {
+    marginTop: UNIT * 2,
+    marginLeft: UNIT * 2,
+  },
+  discardButton: {
+    marginRight: UNIT * 2,
+    marginBottom: UNIT * 2,
+    padding: UNIT * 2,
+    borderColor: '$separator',
+    borderRadius: UNIT,
+    borderWidth: 1
+  },
+  discardButtonText: {
+    ...mainText,
+    color: '$link',
+    textAlign: 'center'
+  },
 });

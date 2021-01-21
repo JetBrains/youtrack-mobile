@@ -9,7 +9,7 @@ import IconTrash from '@jetbrains/icons/trash.svg';
 import KnowledgeBaseArticle from './knowledge-base__article';
 import Router from '../../components/router/router';
 import Select from '../../components/select/select';
-import {confirmation} from '../../components/confirmation/confirmation';
+import {confirmDeleteAllDrafts, confirmDeleteArticleDraft} from '../article/arcticle-helper';
 import {deleteArticle} from '../article/arcticle-actions';
 import {IconBack, IconKnowledgeBase} from '../../components/icon/icon';
 import {loadArticlesDrafts} from './knowledge-base-actions';
@@ -36,22 +36,16 @@ const KnowledgeBaseDrafts = () => {
     updateDrafts(drafts);
   };
 
-  const confirmDelete = (title: string = 'Are you sure you want to delete this draft?', message?: string) => (
-    confirmation(title, 'Delete', message)
-  );
-
   const deleteAllDrafts = async () => {
     if (drafts && drafts.length > 0) {
-      confirmDelete(
-        'Delete all drafts?',
-        'This action deletes all drafts, including unpublished sub-articles'
-      ).then(async () => {
-        updateDeleting(true);
-        await until(drafts.map((draft: Article) => dispatch(deleteArticle(draft))));
-        updateDrafts([]);
-        updateDeleting(false);
-        loadDrafts();
-      });
+      confirmDeleteAllDrafts()
+        .then(async () => {
+          updateDeleting(true);
+          await until(drafts.map((draft: Article) => dispatch(deleteArticle(draft))));
+          updateDrafts([]);
+          updateDeleting(false);
+          loadDrafts();
+        });
     }
   };
 
@@ -70,7 +64,8 @@ const KnowledgeBaseDrafts = () => {
         onArticlePress={(article: Article) => Router.ArticleCreate({articleDraft: article})}
         onDelete={async (article: Article) => {
           if (!isDeleting) {
-            confirmDelete().then(() => dispatch(deleteArticle(article, loadDrafts))).catch(() => {});
+            confirmDeleteArticleDraft()
+              .then(() => dispatch(deleteArticle(article, loadDrafts))).catch(() => {});
           }
         }}
       />

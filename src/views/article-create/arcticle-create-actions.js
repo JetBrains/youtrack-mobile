@@ -1,7 +1,11 @@
 /* @flow */
 
+import Router from '../../components/router/router';
+
 import {ANALYTICS_ARTICLE_CREATE} from '../../components/analytics/analytics-ids';
 import {attachmentActions} from './article-create__attachment-actions-and-types';
+import {confirmDeleteArticleDraft} from '../article/arcticle-helper';
+import {deleteArticle} from '../article/arcticle-actions';
 import {logEvent} from '../../components/log/log-helper';
 import {notify} from '../../components/notification/notification';
 import {until} from '../../util/util';
@@ -152,8 +156,22 @@ const deleteDraftAttachment = (attachmentId: string) => {
   };
 };
 
+const deleteDraft = () => {
+  return async (dispatch: (any) => any, getState: () => AppState) => {
+    const articleDraft: ArticleDraft = getState().articleCreate.articleDraft;
+
+    confirmDeleteArticleDraft().then(async () => {
+      dispatch(setProcessing(true));
+      await dispatch(deleteArticle(articleDraft));
+      dispatch(setProcessing(false));
+      Router.pop();
+    });
+  };
+};
+
 export {
   createArticleDraft,
+  deleteDraft,
   publishArticleDraft,
   setDraft,
   updateArticleDraft,

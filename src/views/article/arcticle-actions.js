@@ -4,7 +4,7 @@ import {ANALYTICS_ARTICLE_PAGE} from '../../components/analytics/analytics-ids';
 import {Alert, Clipboard, Share} from 'react-native';
 
 import Router from '../../components/router/router';
-import {confirmation} from '../../components/confirmation/confirmation';
+import {confirmDeleteArticle} from './arcticle-helper';
 import {getApi} from '../../components/api/api__instance';
 import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
 import {hasType} from '../../components/api/api__resource-types';
@@ -137,7 +137,8 @@ const showArticleActions = (
             message: 'Delete article',
             analyticsId: ANALYTICS_ARTICLE_PAGE
           });
-          confirmation('Are you sure you want to delete this article?', 'Delete')
+
+          confirmDeleteArticle()
             .then(() => dispatch(deleteArticle(article, () => Router.KnowledgeBase())))
             .catch(() => {});
         }

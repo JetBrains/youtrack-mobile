@@ -6,6 +6,7 @@ import {ActivityIndicator, ScrollView, View, Text, TouchableOpacity} from 'react
 import {useDebouncedCallback} from 'use-debounce';
 import {useDispatch, useSelector} from 'react-redux';
 
+import * as articleCreateActions from './arcticle-create-actions';
 import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import AttachmentAddPanel from '../../components/attachments-row/attachments-add-panel';
@@ -18,17 +19,6 @@ import Separator from '../../components/separator/separator';
 import SummaryDescriptionForm from '../../components/form/summary-description-form';
 import VisibilityControl from '../../components/visibility/visibility-control';
 import {attachmentActions} from './article-create__attachment-actions-and-types';
-import {
-  cancelAddAttach,
-  createArticleDraft,
-  hideAddAttachDialog, loadAttachments,
-  publishArticleDraft,
-  setDraft,
-  showAddAttachDialog,
-  updateArticleDraft,
-  uploadFile,
-  deleteDraftAttachment
-} from './arcticle-create-actions';
 import {getApi} from '../../components/api/api__instance';
 import {getStorageState} from '../../components/storage/storage';
 import {IconAngleDown, IconCheck, IconClose} from '../../components/icon/icon';
@@ -78,7 +68,7 @@ const ArticleCreate = (props: Props) => {
   useEffect(() => {
     const {articleDraft} = props;
     if (articleDraft) {
-      dispatch(setDraft(articleDraft));
+      dispatch(articleCreateActions.setDraft(articleDraft));
       updateArticleDraftData({
         summary: articleDraft?.summary || articleDraftDataInitial.summary,
         content: articleDraft?.content || articleDraftDataInitial.content,
@@ -86,13 +76,13 @@ const ArticleCreate = (props: Props) => {
         visibility: articleDraft.visibility
       });
     } else {
-      dispatch(createArticleDraft());
+      dispatch(articleCreateActions.createArticleDraft());
     }
   }, []);
 
   const debouncedUpdate = useDebouncedCallback(
     (articleDraft: Article) => {
-      dispatch(updateArticleDraft(articleDraft));
+      dispatch(articleCreateActions.updateArticleDraft(articleDraft));
     },
     350
   );
@@ -130,7 +120,7 @@ const ArticleCreate = (props: Props) => {
 
   const closeCreateArticleScreen = () => {
     if (!isProcessing) {
-      dispatch(setDraft(null));
+      dispatch(articleCreateActions.setDraft(null));
       Router.pop(true);
     }
   };
@@ -158,7 +148,7 @@ const ArticleCreate = (props: Props) => {
         )}
         onRightButtonClick={async () => {
           if (!isSubmitDisabled) {
-            await dispatch(publishArticleDraft({...articleDraft, ...articleDraftData}));
+            await dispatch(articleCreateActions.publishArticleDraft({...articleDraft, ...articleDraftData}));
             if (!error) {
               closeCreateArticleScreen();
             }
@@ -168,9 +158,9 @@ const ArticleCreate = (props: Props) => {
   };
 
   const onAddAttachment = async (attach: Attachment, onAttachingFinish: () => any) => {
-    await dispatch(uploadFile(attach));
+    await dispatch(articleCreateActions.uploadFile(attach));
     onAttachingFinish();
-    dispatch(loadAttachments());
+    dispatch(articleCreateActions.loadAttachments());
   };
 
   const renderAttachFileDialog = () => {
@@ -185,8 +175,8 @@ const ArticleCreate = (props: Props) => {
         actions={attachmentActions.createAttachActions(dispatch)}
         attach={attachingImage}
         onCancel={() => {
-          dispatch(cancelAddAttach(attachingImage));
-          dispatch(hideAddAttachDialog());
+          dispatch(articleCreateActions.cancelAddAttach(attachingImage));
+          dispatch(articleCreateActions.hideAddAttachDialog());
         }}
         onAttach={onAddAttachment}
         uiTheme={theme.uiTheme}
@@ -210,8 +200,21 @@ const ArticleCreate = (props: Props) => {
       {hasArticleDraft && renderProjectSelect()}
 
       <ScrollView scrollEnabled={hasArticleDraft}>
+        {articleDraft?.original && (
+          <View style={styles.discard}>
+            <TouchableOpacity
+              style={styles.discardButton}
+              disabled={isProcessing}
+              onPress={() => dispatch(articleCreateActions.deleteDraft())}
+            >
+              <Text style={styles.discardButtonText}>Discard unpublished changes</Text>
+            </TouchableOpacity>
+            <Separator/>
+          </View>
+        )}
+
         {hasArticleDraft && (
-          <PanelWithSeparator>
+          <PanelWithSeparator style={styles.projectPanel}>
             <View style={styles.projectContainer}>
               <TouchableOpacity
                 style={styles.projectSelector}
@@ -260,14 +263,14 @@ const ArticleCreate = (props: Props) => {
             <View style={styles.attachments}>
               <AttachmentAddPanel
                 isDisabled={isProcessing}
-                showAddAttachDialog={() => dispatch(showAddAttachDialog())}
+                showAddAttachDialog={() => dispatch(articleCreateActions.showAddAttachDialog())}
               />
               <AttachmentsRow
                 attachments={articleDraft.attachments}
                 attachingImage={attachingImage}
                 imageHeaders={getApi().auth.getAuthorizationHeaders()}
                 canRemoveAttachment={true}
-                onRemoveImage={(attachment: Attachment) => dispatch(deleteDraftAttachment(attachment.id))}
+                onRemoveImage={(attachment: Attachment) => dispatch(articleCreateActions.deleteDraftAttachment(attachment.id))}
                 uiTheme={theme.uiTheme}
               />
             </View>
