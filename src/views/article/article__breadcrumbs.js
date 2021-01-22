@@ -24,7 +24,12 @@ type Props = {
 const maxBreadcrumbTextLength: number = 24;
 const renderSeparator = () => <Text style={styles.breadCrumbsButtonTextSeparator}>/</Text>;
 
-export const ArticleBreadCrumbsItem = (props: { article: Article, onPress: Function, noSeparator?: boolean }) => {
+type ArticleBreadCrumbsItemProps = {
+  article: Article,
+  onPress?: Function,
+  noSeparator?: boolean
+};
+export const ArticleBreadCrumbsItem = (props: ArticleBreadCrumbsItemProps) => {
   const breadcrumbText: string = props.article.name || props.article.summary;
   return (
     <View
@@ -32,10 +37,11 @@ export const ArticleBreadCrumbsItem = (props: { article: Article, onPress: Funct
     >
       {!props.noSeparator && renderSeparator()}
       <TouchableOpacity
+        disabled={!props.onPress}
         style={styles.breadCrumbsButton}
         onPress={props.onPress}
       >
-        <Text style={styles.breadCrumbsButtonText}>
+        <Text style={[styles.breadCrumbsButtonText, !props.onPress && styles.breadCrumbsButtonTextDisabled]}>
           {breadcrumbText.substr(0, maxBreadcrumbTextLength)}
           {breadcrumbText.length > maxBreadcrumbTextLength && '…'}
         </Text>
@@ -64,7 +70,7 @@ const ArticleBreadCrumbs = (props: Props) => {
             key={it.id}
             noSeparator={index === 0}
             article={it}
-            onPress={() => Router.backTo(breadCrumbs.length - index + extraDepth)}
+            onPress={excludeProject ? undefined : () => Router.backTo(breadCrumbs.length - index + extraDepth)}
           />
         )}
       </ScrollView>

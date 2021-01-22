@@ -179,6 +179,9 @@ export default EStyleSheet.create({
     marginHorizontal: UNIT,
     color: '$link'
   },
+  breadCrumbsButtonTextDisabled: {
+    color: '$text'
+  },
   breadCrumbsButtonTextSeparator: {
     color: '$icon'
   },

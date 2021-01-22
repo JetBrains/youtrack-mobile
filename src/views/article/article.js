@@ -196,7 +196,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
               ? () => createSubArticle(() =>
                 <View style={styles.breadCrumbsItem}>
                   {this.renderBreadCrumbs(styles.breadCrumbsCompact, 1, false, true)}
-                  <ArticleBreadCrumbsItem article={article} onPress={() => Router.pop()}/>
+                  <ArticleBreadCrumbsItem article={article}/>
                 </View>
               )
               : undefined
