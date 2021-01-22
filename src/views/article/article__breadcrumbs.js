@@ -17,6 +17,7 @@ type Props = {
   articlesList: ArticlesList,
   extraDepth?: number,
   withSeparator?: boolean,
+  withLast?: boolean,
   excludeProject?: boolean,
   styles?: ViewStyleProp
 };
@@ -27,13 +28,14 @@ const renderSeparator = () => <Text style={styles.breadCrumbsButtonTextSeparator
 type ArticleBreadCrumbsItemProps = {
   article: Article,
   onPress?: Function,
-  noSeparator?: boolean
+  noSeparator?: boolean,
+  style?: ViewStyleProp
 };
 export const ArticleBreadCrumbsItem = (props: ArticleBreadCrumbsItemProps) => {
   const breadcrumbText: string = props.article.name || props.article.summary;
   return (
     <View
-      style={styles.breadCrumbsItem}
+      style={[styles.breadCrumbsItem, props.style]}
     >
       {!props.noSeparator && renderSeparator()}
       <TouchableOpacity
@@ -51,7 +53,7 @@ export const ArticleBreadCrumbsItem = (props: ArticleBreadCrumbsItemProps) => {
 };
 
 const ArticleBreadCrumbs = (props: Props) => {
-  const {article, articlesList, extraDepth = 0, withSeparator = true, excludeProject} = props;
+  const {article, articlesList, extraDepth = 0, withSeparator = true, excludeProject, withLast} = props;
   const breadCrumbs: Array<ArticleEntity | IssueProject> = createBreadCrumbs(article, articlesList, excludeProject);
 
   if (breadCrumbs.length === 0) {
@@ -73,6 +75,7 @@ const ArticleBreadCrumbs = (props: Props) => {
             onPress={excludeProject ? undefined : () => Router.backTo(breadCrumbs.length - index + extraDepth)}
           />
         )}
+        {withLast && <ArticleBreadCrumbsItem article={article}/>}
       </ScrollView>
       {withSeparator && <View style={styles.breadCrumbsSeparator}/>}
     </View>

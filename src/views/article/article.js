@@ -104,7 +104,8 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     style?: ViewStyleProp,
     extraDepth?: number,
     withSeparator?: boolean,
-    excludeProject?: boolean
+    excludeProject?: boolean,
+    withLast?: boolean,
   ) => {
     const {article, articlesList} = this.props;
     return (
@@ -115,6 +116,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
         extraDepth={extraDepth}
         excludeProject={excludeProject}
         withSeparator={withSeparator}
+        withLast={withLast}
       />
     );
   };
@@ -186,8 +188,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
             issuePermissions.canUpdateArticle(article)
               ? () => createSubArticle(() =>
                 <View style={styles.breadCrumbsItem}>
-                  {this.renderBreadCrumbs(styles.breadCrumbsCompact, 1, false, true)}
-                  <ArticleBreadCrumbsItem article={article}/>
+                  {this.renderBreadCrumbs(styles.breadCrumbsCompact, 1, false, true, true)}
                 </View>
               )
               : undefined

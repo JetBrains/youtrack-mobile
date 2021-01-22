@@ -171,6 +171,9 @@ export default EStyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
+  breadCrumbsItemLast: {
+    marginLeft: UNIT
+  },
   breadCrumbsButton: {
     paddingVertical: UNIT
   },
