@@ -185,6 +185,39 @@ const ArticleCreate = (props: Props) => {
     );
   };
 
+  const renderDiscardButton = () => (
+    articleDraft?.original && (
+      <View style={styles.discard}>
+        <TouchableOpacity
+          style={styles.discardButton}
+          disabled={isProcessing}
+          onPress={() => dispatch(articleCreateActions.deleteDraft())}
+        >
+          <Text style={styles.discardButtonText}>Discard unpublished changes</Text>
+        </TouchableOpacity>
+        <Separator/>
+      </View>
+    )
+  );
+
+  const renderProjectPanel = () => (
+    hasArticleDraft && (
+      <PanelWithSeparator style={styles.projectPanel}>
+        <View style={styles.projectContainer}>
+          <TouchableOpacity
+            style={styles.projectSelector}
+            disabled={isProcessing}
+            onPress={() => updateProjectSelectVisibility(true)}
+          >
+            <Text style={styles.projectSelectorText}>{articleDraftData.project.name}</Text>
+            <IconAngleDown size={20} color={linkColor}/>
+          </TouchableOpacity>
+          {props.breadCrumbs}
+        </View>
+      </PanelWithSeparator>
+    )
+  );
+
 
   const uiThemeColors: UIThemeColors = theme.uiTheme.colors;
   const linkColor: string = uiThemeColors.$link;
@@ -201,34 +234,8 @@ const ArticleCreate = (props: Props) => {
       {hasArticleDraft && renderProjectSelect()}
 
       <ScrollView scrollEnabled={hasArticleDraft}>
-        {articleDraft?.original && (
-          <View style={styles.discard}>
-            <TouchableOpacity
-              style={styles.discardButton}
-              disabled={isProcessing}
-              onPress={() => dispatch(articleCreateActions.deleteDraft())}
-            >
-              <Text style={styles.discardButtonText}>Discard unpublished changes</Text>
-            </TouchableOpacity>
-            <Separator/>
-          </View>
-        )}
-
-        {hasArticleDraft && (
-          <PanelWithSeparator style={styles.projectPanel}>
-            <View style={styles.projectContainer}>
-              <TouchableOpacity
-                style={styles.projectSelector}
-                disabled={isProcessing}
-                onPress={() => updateProjectSelectVisibility(true)}
-              >
-                <Text style={styles.projectSelectorText}>{articleDraftData.project.name}</Text>
-                <IconAngleDown size={20} color={linkColor}/>
-              </TouchableOpacity>
-              {props.breadCrumbs}
-            </View>
-          </PanelWithSeparator>
-        )}
+        {renderDiscardButton()}
+        {renderProjectPanel()}
 
         {hasArticleDraft && (
           <View style={styles.content}>
@@ -271,7 +278,8 @@ const ArticleCreate = (props: Props) => {
                 attachingImage={attachingImage}
                 imageHeaders={getApi().auth.getAuthorizationHeaders()}
                 canRemoveAttachment={true}
-                onRemoveImage={(attachment: Attachment) => dispatch(articleCreateActions.deleteDraftAttachment(attachment.id))}
+                onRemoveImage={(attachment: Attachment) => dispatch(
+                  articleCreateActions.deleteDraftAttachment(attachment.id))}
                 uiTheme={theme.uiTheme}
               />
             </View>
