@@ -8,7 +8,7 @@ import {connect} from 'react-redux';
 
 import * as articleActions from './arcticle-actions';
 import ArticleActivities from './article__activity';
-import ArticleBreadCrumbs, {ArticleBreadCrumbsItem} from './article__breadcrumbs';
+import ArticleBreadCrumbs from './article__breadcrumbs';
 import ArticleDetails from './article__details';
 import Badge from '../../components/badge/badge';
 import CreateUpdateInfo from '../../components/issue-tabbed/issue-tabbed__created-updated';
