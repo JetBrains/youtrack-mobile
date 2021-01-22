@@ -23,7 +23,6 @@ import {ANALYTICS_ARTICLE_PAGE} from '../../components/analytics/analytics-ids';
 import {findArticleNode} from '../../components/articles/articles-tree-helper';
 import {getApi} from '../../components/api/api__instance';
 import {IconBack, IconContextActions} from '../../components/icon/icon';
-import {loadArticlesList} from '../knowledge-base/knowledge-base-actions';
 import {logEvent} from '../../components/log/log-helper';
 import {routeMap} from '../../app-routes';
 import {ThemeContext} from '../../components/theme/theme-context';
@@ -58,13 +57,9 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
   uiTheme: UITheme;
   unsubscribeOnDispatch: Function;
 
-  constructor() {
-    //$FlowFixMe
-    super();
-    logEvent({message: 'Navigate to article', analyticsId: ANALYTICS_ARTICLE_PAGE});
-  }
-
   componentDidMount() {
+    logEvent({message: 'Navigate to article', analyticsId: ANALYTICS_ARTICLE_PAGE});
+
     const {articlePlaceholder, storePrevArticle} = this.props;
     if (storePrevArticle) {
       this.props.setPreviousArticle();
@@ -72,13 +67,9 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     this.loadArticle(articlePlaceholder.id || articlePlaceholder.idReadable, true);
 
     this.unsubscribeOnDispatch = Router.setOnDispatchCallback(
-      (routeName: string, prevRouteName: string, options: ArticleEntity) => {
+      (routeName: string, prevRouteName: string) => {
         if (routeName === routeMap.Article && prevRouteName === routeMap.ArticleCreate) {
           this.refresh();
-        }
-
-        if (options && this.props.article && options?.parentArticle?.id === this.props.article.id) {
-          this.props.updateArticlesList();
         }
       });
   }
@@ -89,11 +80,11 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
 
   loadArticle = (articleId: string, reset: boolean) => this.props.loadArticle(articleId, reset);
 
-  refresh = async () => {
+  refresh = () => {
     const {articlePlaceholder, article} = this.props;
     const articleId: ?string = article?.id || articlePlaceholder?.id;
     if (articleId) {
-      await this.loadArticle(articleId, false);
+      this.loadArticle(articleId, false);
     }
   };
 
@@ -317,7 +308,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(articleActions, dispatch),
     deleteAttachment: (attachmentId: string) => dispatch(articleActions.deleteAttachment(attachmentId)),
-    updateArticlesList: () => dispatch(loadArticlesList(false))
   };
 };
 

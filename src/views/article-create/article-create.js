@@ -22,6 +22,7 @@ import {attachmentActions} from './article-create__attachment-actions-and-types'
 import {getApi} from '../../components/api/api__instance';
 import {getStorageState} from '../../components/storage/storage';
 import {IconAngleDown, IconCheck, IconClose} from '../../components/icon/icon';
+import {loadArticlesList} from '../knowledge-base/knowledge-base-actions';
 import {PanelWithSeparator} from '../../components/panel/panel-with-separator';
 import {SkeletonCreateArticle} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
@@ -118,10 +119,10 @@ const ArticleCreate = (props: Props) => {
     }
   };
 
-  const closeCreateArticleScreen = (draft: ArticleDraft) => {
+  const closeCreateArticleScreen = () => {
     if (!isProcessing) {
       dispatch(articleCreateActions.setDraft(null));
-      Router.pop(true, draft);
+      Router.pop(true);
     }
   };
 
@@ -148,10 +149,10 @@ const ArticleCreate = (props: Props) => {
         )}
         onRightButtonClick={async () => {
           if (!isSubmitDisabled) {
-            const draft: ArticleDraft = {...articleDraft, ...articleDraftData};
-            await dispatch(articleCreateActions.publishArticleDraft(draft));
+            await dispatch(articleCreateActions.publishArticleDraft({...articleDraft, ...articleDraftData}));
             if (!error) {
-              closeCreateArticleScreen(draft);
+              dispatch(loadArticlesList(false));
+              closeCreateArticleScreen();
             }
           }
         }}/>
