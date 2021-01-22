@@ -51,14 +51,14 @@ export default EStyleSheet.create({
     color: '$text'
   },
   subArticles: {
-    borderTopWidth: 0.4,
-    borderBottomWidth: 0.4,
     marginVertical: UNIT,
     marginTop: UNIT * 2,
     marginRight: -UNIT * 2,
     paddingVertical: UNIT * 2,
     paddingRight: UNIT * 2,
-    borderColor: '$textSecondary'
+    borderTopWidth: 0.75,
+    borderBottomWidth: 0.74,
+    borderColor: '$separator'
   },
   subArticlesContent: {
     flexDirection: 'row',
