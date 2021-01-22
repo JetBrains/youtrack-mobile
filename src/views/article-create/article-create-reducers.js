@@ -28,8 +28,7 @@ export const articleCreateInitialState: ArticleCreateState = {
 };
 
 const attachmentReducers = {
-  //$FlowFixMe
-  [attachmentTypes.ATTACH_START_ADDING](state: ArticleCreateState, action: {attachingImage: Object}): ArticleCreateState {
+  [attachmentTypes.ATTACH_START_ADDING](state: ArticleCreateState, action: {attachingImage: Object}) {
     const {attachingImage} = action;
     const attachments: Array<Attachment> = state?.articleDraft?.attachments || [];
     state.articleDraft = {
@@ -38,19 +37,21 @@ const attachmentReducers = {
     };
     state.attachingImage = {...attachingImage, id: guid()};
   },
-  //$FlowFixMe
-  [attachmentTypes.ATTACH_CANCEL_ADDING](state: ArticleCreateState, action: {attachingImage: Object}): ArticleCreateState {
+  [attachmentTypes.ATTACH_CANCEL_ADDING](state: ArticleCreateState, action: {attachingImage: Object}) {
     const {attachingImage} = action;
     state.articleDraft = {
       ...state.articleDraft,
       attachments: (state?.articleDraft?.attachments || []).filter(
-        (attachment: Attachment) => attachment.url !== attachingImage.url && attachment.name !== attachingImage.name
+        (attachment: Attachment) => (
+          attachingImage &&
+          attachment.url !== attachingImage.url &&
+          attachment.name !== attachingImage.name
+        )
       ),
     };
     state.attachingImage = null;
   },
-  //$FlowFixMe
-  [attachmentTypes.ATTACH_REMOVE](state: ArticleCreateState, action: {attachmentId: string}): ArticleCreateState {
+  [attachmentTypes.ATTACH_REMOVE](state: ArticleCreateState, action: { attachmentId: string }) {
     const attachments: Array<Attachment> = state?.articleDraft?.attachments || [];
     return {
       ...state,
@@ -60,16 +61,13 @@ const attachmentReducers = {
       }
     };
   },
-  //$FlowFixMe
-  [attachmentTypes.ATTACH_STOP_ADDING](state: ArticleCreateState): ArticleCreateState {
+  [attachmentTypes.ATTACH_STOP_ADDING](state: ArticleCreateState) {
     state.attachingImage = null;
   },
-  //$FlowFixMe
-  [attachmentTypes.ATTACH_TOGGLE_ADD_FILE_DIALOG](state: ArticleCreateState, action: {isAttachFileDialogVisible: boolean}): ArticleCreateState {
+  [attachmentTypes.ATTACH_TOGGLE_ADD_FILE_DIALOG](state: ArticleCreateState, action: {isAttachFileDialogVisible: boolean}) {
     state.isAttachFileDialogVisible = action.isAttachFileDialogVisible;
   },
-  //$FlowFixMe
-  [attachmentTypes.ATTACH_RECEIVE_ALL_ATTACHMENTS](state: ArticleCreateState, action: {attachments: boolean}): ArticleCreateState {
+  [attachmentTypes.ATTACH_RECEIVE_ALL_ATTACHMENTS](state: ArticleCreateState, action: {attachments: boolean}) {
     state.articleDraft = {
       ...state.articleDraft,
       attachments: action.attachments,
