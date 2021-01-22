@@ -22,6 +22,27 @@ type Props = {
 };
 
 const maxBreadcrumbTextLength: number = 24;
+const renderSeparator = () => <Text style={styles.breadCrumbsButtonTextSeparator}>/</Text>;
+
+export const ArticleBreadCrumbsItem = (props: { article: Article, onPress: Function, noSeparator?: boolean }) => {
+  const breadcrumbText: string = props.article.name || props.article.summary;
+  return (
+    <View
+      style={styles.breadCrumbsItem}
+    >
+      {!props.noSeparator && renderSeparator()}
+      <TouchableOpacity
+        style={styles.breadCrumbsButton}
+        onPress={props.onPress}
+      >
+        <Text style={styles.breadCrumbsButtonText}>
+          {breadcrumbText.substr(0, maxBreadcrumbTextLength)}
+          {breadcrumbText.length > maxBreadcrumbTextLength && '…'}
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 const ArticleBreadCrumbs = (props: Props) => {
   const {article, articlesList, extraDepth = 0, withSeparator = true, excludeProject} = props;
@@ -37,25 +58,15 @@ const ArticleBreadCrumbs = (props: Props) => {
         horizontal={true}
         contentContainerStyle={styles.breadCrumbsContent}
       >
-        {breadCrumbs.map((it: ArticleEntity | IssueProject, index: number) => {
-          const breadcrumbText: string = it.name || it.summary;
-          return (
-            <View key={it.id}>
-              <View style={styles.commentContent}>
-                {index > 0 && <Text style={styles.breadCrumbsButtonTextSeparator}>/</Text>}
-                <TouchableOpacity
-                  style={styles.breadCrumbsButton}
-                  onPress={() => Router.backTo(breadCrumbs.length - index + extraDepth)}
-                >
-                  <Text style={styles.breadCrumbsButtonText}>
-                    {breadcrumbText.substr(0, maxBreadcrumbTextLength)}
-                    {breadcrumbText.length > maxBreadcrumbTextLength && '…'}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          );
-        })}
+        {excludeProject && <View style={styles.breadCrumbsItem}>{renderSeparator()}</View>}
+        {breadCrumbs.map((it: ArticleEntity | IssueProject, index: number) =>
+          <ArticleBreadCrumbsItem
+            key={it.id}
+            noSeparator={index === 0}
+            article={it}
+            onPress={() => Router.backTo(breadCrumbs.length - index + extraDepth)}
+          />
+        )}
       </ScrollView>
       {withSeparator && <View style={styles.breadCrumbsSeparator}/>}
     </View>

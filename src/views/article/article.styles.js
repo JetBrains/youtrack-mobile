@@ -68,7 +68,7 @@ export default EStyleSheet.create({
   subArticlesTitle: {
     color: '$icon'
   },
-  subArticlesIcon: {
+  subArticlesNavigateIcon: {
     position: 'relative',
     top: -UNIT
   },
@@ -79,8 +79,7 @@ export default EStyleSheet.create({
     maxWidth: '95%',
     flexDirection: 'row',
     alignItems: 'center',
-    padding: UNIT * 2,
-    paddingLeft: UNIT * 7
+    padding: UNIT * 2
   },
   subArticleItemIcon: {
     paddingHorizontal: UNIT / 1.5
@@ -88,6 +87,15 @@ export default EStyleSheet.create({
   subArticleItemText: {
     ...mainText,
     color: '$text'
+  },
+  subArticlesCreate: {
+    marginHorizontal: UNIT
+  },
+  subArticlesCreateIcon: {
+    position: 'absolute',
+    top: -UNIT * 2.1,
+    padding: UNIT,
+    color: '$iconAccent'
   },
 
   commentContainer: {
@@ -151,12 +159,17 @@ export default EStyleSheet.create({
     marginHorizontal: -detailsHorizontalPadding
   },
   breadCrumbsCompact: {
-    height: UNIT * 6
+    height: UNIT * 6,
+    marginLeft: -detailsHorizontalPadding / 2
   },
   breadCrumbsContent: {
     alignItems: 'center',
     justifyContent: 'flex-start',
     paddingHorizontal: detailsHorizontalPadding / 2
+  },
+  breadCrumbsItem: {
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   breadCrumbsButton: {
     paddingVertical: UNIT

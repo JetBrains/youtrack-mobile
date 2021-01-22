@@ -92,6 +92,7 @@ export default EStyleSheet.create({
     justifyContent: 'center',
     minWidth: UNIT * 5,
     height: UNIT * 4,
+    paddingHorizontal: UNIT / 1.5,
     borderRadius: UNIT,
     backgroundColor: '$boxBackground'
   },

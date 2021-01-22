@@ -86,6 +86,19 @@ export default class ArticlesAPI extends ApiBase {
         : {project: null, parentArticle: null, summary: '', content: ''})
     );
   }
+  async createSubArticleDraft(article: Article): Promise<Article> {
+    return this.makeAuthorizedRequest(
+      `${this.youTrackApiUrl}/admin/users/me/articleDrafts?${this.articleFieldsQuery}`,
+      'POST',
+      {
+        content: '',
+        summary: '',
+        parentArticle: {id: article.id},
+        project: article.project,
+        visibility: article.visibility
+      }
+    );
+  }
 
   async updateArticleDraft(articleDraft: Article): Promise<Article> {
     return this.makeAuthorizedRequest(

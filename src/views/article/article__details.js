@@ -12,7 +12,7 @@ import Separator from '../../components/separator/separator';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLE_PAGE} from '../../components/analytics/analytics-ids';
 import {hasType} from '../../components/api/api__resource-types';
-import {IconAngleRight, IconBack, IconLock} from '../../components/icon/icon';
+import {IconAdd, IconAngleRight, IconBack, IconLock} from '../../components/icon/icon';
 import {logEvent} from '../../components/log/log-helper';
 import {SkeletonIssueContent} from '../../components/skeleton/skeleton';
 
@@ -30,6 +30,7 @@ type Props = {
   isLoading: boolean,
   subArticles: Array<Article>,
   onRemoveAttach: ?(attachment: Attachment) => any,
+  onCreateArticle: ?() => any,
   uiTheme: UITheme
 };
 
@@ -51,9 +52,7 @@ const renderSubArticles = (article: Article, subArticles: Array<Article>, uiThem
         renderItem={({item}: Article) =>
           <TouchableOpacity
             style={styles.subArticleItem}
-            onPress={async () => {
-              Router.Article({articlePlaceholder: item, storePrevArticle: true});
-            }}
+            onPress={() => Router.Article({articlePlaceholder: item, storePrevArticle: true})}
           >
             <Text numberOfLines={5} style={styles.subArticleItemText}>{item.summary}</Text>
             {hasType.visibilityLimited(article?.visibility) && (
@@ -72,7 +71,16 @@ const renderSubArticles = (article: Article, subArticles: Array<Article>, uiThem
 };
 
 const ArticleDetails = (props: Props) => {
-  const {article, articlePlaceholder, isLoading, error, uiTheme, subArticles = [], onRemoveAttach} = props;
+  const {
+    article,
+    articlePlaceholder,
+    isLoading,
+    error,
+    uiTheme,
+    subArticles = [],
+    onRemoveAttach,
+    onCreateArticle
+  } = props;
 
   if (!article && !articlePlaceholder) {
     return null;
@@ -85,20 +93,39 @@ const ArticleDetails = (props: Props) => {
 
       {isLoading && !error && !article?.content && <SkeletonIssueContent/>}
 
-      {subArticles?.length > 0 && (
-        <TouchableOpacity
-          onPress={() => Router.Page({
-            children: renderSubArticles(article, subArticles, uiTheme)
-          })}
-          style={styles.subArticles}
-        >
+      <TouchableOpacity
+        onPress={() => Router.Page({
+          children: renderSubArticles(article, subArticles, uiTheme)
+        })}
+        style={styles.subArticles}
+      >
+        <View style={styles.breadCrumbsItem}>
           <Text style={styles.subArticlesTitle}>Sub-articles</Text>
-          <View style={styles.subArticlesContent}>
-            <Text style={styles.subArticleItemText}>{`${subArticles.length} ${subArticles.length > 1 ? 'articles' : 'article'}`}</Text>
-            <IconAngleRight size={18} color={uiTheme.colors.$text} style={styles.subArticlesIcon}/>
-          </View>
-        </TouchableOpacity>
-      )}
+          {!!onCreateArticle && (
+            <View style={styles.subArticlesCreate}>
+              <TouchableOpacity
+                onPress={onCreateArticle}
+                style={styles.subArticlesCreateIcon}
+              >
+                <IconAdd size={18} color={styles.subArticlesCreateIcon.color}/>
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
+        <View style={styles.subArticlesContent}>
+          {subArticles?.length > 0 && <Text
+            style={styles.subArticleItemText}>
+            {`${subArticles.length} ${subArticles.length > 1 ? 'articles' : 'article'}`}
+          </Text>}
+          {subArticles?.length > 0 && (
+            <IconAngleRight
+              size={18}
+              color={uiTheme.colors.$text}
+              style={styles.subArticlesNavigateIcon}
+            />
+          )}
+        </View>
+      </TouchableOpacity>
 
       {!!article?.content && (
         <View style={styles.description}>
@@ -129,8 +156,8 @@ const ArticleDetails = (props: Props) => {
               onRemoveImage={onRemoveAttach || undefined}
               onOpenAttachment={(type) => usage.trackEvent(
                 ANALYTICS_ARTICLE_PAGE,
-                type === 'image' ? 'Showing image' : 'Open attachment by URL')
-              }
+                type === 'image' ? 'Showing image' : 'Open attachment by URL'
+              )}
               uiTheme={uiTheme}
             />
           </View>

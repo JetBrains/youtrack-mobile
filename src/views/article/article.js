@@ -8,7 +8,7 @@ import {connect} from 'react-redux';
 
 import * as articleActions from './arcticle-actions';
 import ArticleActivities from './article__activity';
-import ArticleBreadCrumbs from './article__breadcrumbs';
+import ArticleBreadCrumbs, {ArticleBreadCrumbsItem} from './article__breadcrumbs';
 import ArticleDetails from './article__details';
 import Badge from '../../components/badge/badge';
 import CreateUpdateInfo from '../../components/issue-tabbed/issue-tabbed__created-updated';
@@ -19,9 +19,12 @@ import PropTypes from 'prop-types';
 import Router from '../../components/router/router';
 import Star from '../../components/star/star';
 import VisibilityControl from '../../components/visibility/visibility-control';
+import {ANALYTICS_ARTICLE_PAGE} from '../../components/analytics/analytics-ids';
 import {findArticleNode} from '../../components/articles/articles-tree-helper';
 import {getApi} from '../../components/api/api__instance';
 import {IconBack, IconContextActions} from '../../components/icon/icon';
+import {loadArticlesList} from '../knowledge-base/knowledge-base-actions';
+import {logEvent} from '../../components/log/log-helper';
 import {routeMap} from '../../app-routes';
 import {ThemeContext} from '../../components/theme/theme-context';
 
@@ -38,10 +41,12 @@ import type {RootState} from '../../reducers/app-reducer';
 import type {Theme, UITheme, UIThemeColors} from '../../flow/Theme';
 import type {Visibility} from '../../flow/Visibility';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import {logEvent} from '../../components/log/log-helper';
-import {ANALYTICS_ARTICLE_PAGE} from '../../components/analytics/analytics-ids';
 
-type Props = ArticleState & { articlePlaceholder: ArticleEntity, storePrevArticle?: boolean } & typeof (articleActions);
+type Props = ArticleState & {
+  articlePlaceholder: ArticleEntity,
+  storePrevArticle?: boolean,
+  updateArticlesList: () => Function
+} & typeof articleActions;
 
 //$FlowFixMe
 class Article extends IssueTabbed<Props, IssueTabbedState> {
@@ -66,11 +71,16 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     }
     this.loadArticle(articlePlaceholder.id || articlePlaceholder.idReadable, true);
 
-    this.unsubscribeOnDispatch = Router.setOnDispatchCallback((routeName: string, prevRouteName: string) => {
-      if (routeName === routeMap.Article && prevRouteName === routeMap.ArticleCreate) {
-        this.refresh();
-      }
-    });
+    this.unsubscribeOnDispatch = Router.setOnDispatchCallback(
+      (routeName: string, prevRouteName: string, options: ArticleEntity) => {
+        if (routeName === routeMap.Article && prevRouteName === routeMap.ArticleCreate) {
+          this.refresh();
+        }
+
+        if (options && this.props.article && options?.parentArticle?.id === this.props.article.id) {
+          this.props.updateArticlesList();
+        }
+      });
   }
 
   componentWillUnmount() {
@@ -79,11 +89,11 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
 
   loadArticle = (articleId: string, reset: boolean) => this.props.loadArticle(articleId, reset);
 
-  refresh = () => {
+  refresh = async () => {
     const {articlePlaceholder, article} = this.props;
     const articleId: ?string = article?.id || articlePlaceholder?.id;
     if (articleId) {
-      this.loadArticle(articleId, false);
+      await this.loadArticle(articleId, false);
     }
   };
 
@@ -118,23 +128,29 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     );
   };
 
+  createSubArticles = (): Array<ArticleEntity> => {
+    const {article, articlesList} = this.props;
+    const articleNode: ?ArticleNode = article && findArticleNode(articlesList, article.project.id, article.id);
+    return (articleNode?.children || []).map((it: ArticleNode) => it.data);
+  };
+
   renderDetails = (uiTheme: UITheme) => {
     const {
       article,
-      articlesList,
       articlePlaceholder,
       error,
       isLoading,
       deleteAttachment,
-      issuePermissions
+      issuePermissions,
+      createSubArticle
     } = this.props;
+
     if (error) {
       return this.renderError(error);
     }
 
     const articleData: ?ArticleEntity = article || articlePlaceholder;
-    const articleNode: ?ArticleNode = article && findArticleNode(articlesList, article.project.id, article.id);
-    const subArticles: Array<ArticleEntity> = (articleNode?.children || []).map((it: ArticleNode) => it.data);
+    const subArticles: Array<ArticleEntity> = this.createSubArticles();
     const breadCrumbsElement = article ? this.renderBreadCrumbs() : null;
 
     return (
@@ -173,6 +189,16 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
           onRemoveAttach={
             issuePermissions.canUpdateArticle(article)
               ? (attachment: Attachment) => deleteAttachment(attachment.id)
+              : undefined
+          }
+          onCreateArticle={
+            issuePermissions.canUpdateArticle(article)
+              ? () => createSubArticle(() =>
+                <View style={styles.breadCrumbsItem}>
+                  {this.renderBreadCrumbs(styles.breadCrumbsCompact, 1, false, true)}
+                  <ArticleBreadCrumbsItem article={article} onPress={() => Router.pop()}/>
+                </View>
+              )
               : undefined
           }
           error={error}
@@ -290,7 +316,8 @@ const mapStateToProps = (
 const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(articleActions, dispatch),
-    deleteAttachment: (attachmentId: string) => dispatch(articleActions.deleteAttachment(attachmentId))
+    deleteAttachment: (attachmentId: string) => dispatch(articleActions.deleteAttachment(attachmentId)),
+    updateArticlesList: () => dispatch(loadArticlesList(false))
   };
 };
 

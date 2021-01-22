@@ -118,10 +118,10 @@ const ArticleCreate = (props: Props) => {
     }
   };
 
-  const closeCreateArticleScreen = () => {
+  const closeCreateArticleScreen = (draft: ArticleDraft) => {
     if (!isProcessing) {
       dispatch(articleCreateActions.setDraft(null));
-      Router.pop(true);
+      Router.pop(true, draft);
     }
   };
 
@@ -148,9 +148,10 @@ const ArticleCreate = (props: Props) => {
         )}
         onRightButtonClick={async () => {
           if (!isSubmitDisabled) {
-            await dispatch(articleCreateActions.publishArticleDraft({...articleDraft, ...articleDraftData}));
+            const draft: ArticleDraft = {...articleDraft, ...articleDraftData};
+            await dispatch(articleCreateActions.publishArticleDraft(draft));
             if (!error) {
-              closeCreateArticleScreen();
+              closeCreateArticleScreen(draft);
             }
           }
         }}/>

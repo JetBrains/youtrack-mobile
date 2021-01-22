@@ -174,10 +174,14 @@ const getArticleDraft = async (api: Api, article: Article): Promise<ArticleDraft
   return articleDraft;
 };
 
-const createArticleDraft = async (api: Api, article: Article): Promise<ArticleDraft | null> => {
+export const createArticleDraft = async (api: Api, article: Article, createSubArticle: boolean = false): Promise<ArticleDraft | null> => {
   let articleDraft: Article | null = null;
 
-  const [createDraftError, draft] = await until(api.articles.createArticleDraft(article.id));
+  const [createDraftError, draft] = await until(
+    createSubArticle
+      ? api.articles.createSubArticleDraft(article)
+      : api.articles.createArticleDraft(article.id)
+  );
   if (createDraftError) {
     logEvent({message: `Failed to create a draft for the article ${article.idReadable}`, isError: true});
   } else {
@@ -442,8 +446,24 @@ const deleteAttachment = (attachmentId: string) => {
   };
 };
 
+const createSubArticle = (renderBreadCrumbs: Function) => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const {article} = getState().article;
+
+    logEvent({message: 'Create sub-article', analyticsId: ANALYTICS_ARTICLE_PAGE});
+    const draft: ArticleDraft = await createArticleDraft(api, article, true);
+    if (draft) {
+      Router.ArticleCreate({
+        articleDraft: draft,
+        breadCrumbs: renderBreadCrumbs()
+      });
+    }
+  };
+};
 
 export {
+  createSubArticle,
   loadArticle,
   loadActivitiesPage,
   showArticleActions,
