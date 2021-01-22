@@ -62,6 +62,11 @@ class Menu extends Component<Props, State> {
         (this.state.prevRouteName === routeMap.Page && routeMap.KnowledgeBase === routeName)
       );
     }
+
+    if (this.state.currentRouteName === routeMap.ArticleCreate) {
+      return routeMap.KnowledgeBase === routeName;
+    }
+
     if (this.state.currentRouteName === routeMap.Page) {
       return routeMap.KnowledgeBase === routeName && (
         this.state.prevRouteName === routeMap.Article ||
