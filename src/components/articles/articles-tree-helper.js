@@ -67,13 +67,15 @@ export const createArticleList = (
       }
     });
 
-    let isProjectCollapsed: boolean = false;
+    let isProjectCollapsed: boolean = true;
     if (projectArticles?.length > 0) {
-      const cachedArticlesListProjectListItem = findArticleProjectListItem(
+      const cachedArticlesListProjectListItem: ?ArticlesListItem = findArticleProjectListItem(
         cachedArticlesList || [],
         projectArticles[0].project.id
       );
-      isProjectCollapsed = !!cachedArticlesListProjectListItem?.title?.articles?.collapsed;
+      if (cachedArticlesListProjectListItem) {
+        isProjectCollapsed = cachedArticlesListProjectListItem.title.articles.collapsed;
+      }
     }
 
     project.articles = project.articles || {collapsed: isProjectCollapsed};
