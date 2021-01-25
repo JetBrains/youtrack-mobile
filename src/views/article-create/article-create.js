@@ -22,7 +22,6 @@ import {attachmentActions} from './article-create__attachment-actions-and-types'
 import {getApi} from '../../components/api/api__instance';
 import {getStorageState} from '../../components/storage/storage';
 import {IconAngleDown, IconCheck, IconClose} from '../../components/icon/icon';
-import {loadArticlesList} from '../knowledge-base/knowledge-base-actions';
 import {PanelWithSeparator} from '../../components/panel/panel-with-separator';
 import {SkeletonCreateArticle} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
@@ -119,10 +118,12 @@ const ArticleCreate = (props: Props) => {
     }
   };
 
-  const closeCreateArticleScreen = () => {
+  const closeCreateArticleScreen = (skipBack: boolean = false) => {
     if (!isProcessing) {
       dispatch(articleCreateActions.setDraft(null));
-      Router.pop(true);
+      if (!skipBack) {
+        Router.pop(true);
+      }
     }
   };
 
@@ -149,10 +150,12 @@ const ArticleCreate = (props: Props) => {
         )}
         onRightButtonClick={async () => {
           if (!isSubmitDisabled) {
-            await dispatch(articleCreateActions.publishArticleDraft({...articleDraft, ...articleDraftData}));
+            const createdArticle: ?Article = await dispatch(
+              articleCreateActions.publishArticleDraft({...articleDraft, ...articleDraftData})
+            );
             if (!error) {
-              dispatch(loadArticlesList(false));
-              closeCreateArticleScreen();
+              closeCreateArticleScreen(true);
+              Router.ArticleSingle({articlePlaceholder: createdArticle});
             }
           }
         }}/>

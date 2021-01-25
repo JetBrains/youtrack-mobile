@@ -3,6 +3,7 @@
 export const routeMap = {
   AgileBoard: 'AgileBoard',
   Article: 'Article',
+  ArticleSingle: 'ArticleSingle',
   ArticleCreate: 'ArticleCreate',
   KnowledgeBase: 'KnowledgeBase',
   AttachmentPreview: 'AttachmentPreview',

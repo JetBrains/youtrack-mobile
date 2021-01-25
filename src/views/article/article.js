@@ -255,7 +255,14 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     const props: HeaderProps = {
       title: articleData.idReadable,
       leftButton: <IconBack color={isProcessing ? textSecondaryColor : linkColor}/>,
-      onBack: () => !isProcessing && Router.pop(),
+      onBack: () => {
+        if (!isProcessing) {
+          const hasParent:boolean = Router.pop();
+          if (!hasParent) {
+            Router.KnowledgeBase();
+          }
+        }
+      },
       rightButton: isArticleLoaded ? <IconContextActions size={18} color={linkColor}/> : null,
       onRightButtonClick: () => showArticleActions(
         this.context.actionSheet(),

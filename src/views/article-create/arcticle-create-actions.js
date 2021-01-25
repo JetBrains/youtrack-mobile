@@ -62,7 +62,7 @@ const publishArticleDraft = (articleDraft: Article) => {
 
     dispatch(setProcessing(true));
     await dispatch(updateArticleDraft(articleDraft));
-    const [error] = await until(api.articles.publishArticleDraft(articleDraft.id));
+    const [error, article] = await until(api.articles.publishArticleDraft(articleDraft.id));
     dispatch(setProcessing(false));
 
     if (error) {
@@ -73,6 +73,7 @@ const publishArticleDraft = (articleDraft: Article) => {
     } else {
       dispatch(setDraft(null));
       notify('Article published');
+      return article;
     }
   };
 };
