@@ -55,7 +55,7 @@ const renderSubArticles = (article: Article, subArticles: Array<Article>, uiThem
             onPress={() => Router.Article({articlePlaceholder: item, storePrevArticle: true})}
           >
             <Text numberOfLines={5} style={styles.subArticleItemText}>{item.summary}</Text>
-            {hasType.visibilityLimited(article?.visibility) && (
+            {hasType.visibilityLimited(item?.visibility) && (
               <View style={styles.subArticleItemIcon}>
                 <IconLock
                   size={16}
