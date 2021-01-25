@@ -159,9 +159,15 @@ export default class VisibilityControl extends PureComponent<Props, State> {
   }
 
   renderVisibilityButton() {
-    const {onSubmit, visibilityDefaultLabel} = this.props;
+    const {onSubmit, visibilityDefaultLabel = ''} = this.props;
     const {visibility} = this.state;
+
     const isSecured: boolean = IssueVisibility.isSecured(visibility);
+    const label: string = (
+      visibility?.inherited
+        ? 'Inherited restrictions'
+        : isSecured ? this.getVisibilityPresentation(visibility) : visibilityDefaultLabel
+    );
 
     return (
       <View
@@ -186,7 +192,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
           onPress={this.openSelect}
           hitSlop={HIT_SLOP}
         >
-          {isSecured && (
+          {(isSecured || visibility?.inherited) && (
             <IconLock
               style={styles.buttonIcon}
               size={16}
@@ -194,7 +200,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
             />
           )}
           <Text style={styles.buttonText}>
-            {isSecured ? this.getVisibilityPresentation(visibility) : visibilityDefaultLabel}
+            {label}
           </Text>
           <IconAngleDown size={20} color={this.props.uiTheme.colors.$icon}/>
         </TouchableOpacity>

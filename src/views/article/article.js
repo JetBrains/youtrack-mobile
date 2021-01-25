@@ -130,6 +130,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
   renderDetails = (uiTheme: UITheme) => {
     const {
       article,
+      articlesList,
       articlePlaceholder,
       error,
       isLoading,
@@ -142,9 +143,17 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
       return this.renderError(error);
     }
 
-    const articleData: ?ArticleEntity = article || articlePlaceholder;
+    const articleData: ArticleEntity = article || articlePlaceholder;
     const subArticles: Array<ArticleEntity> = this.createSubArticles();
     const breadCrumbsElement = article ? this.renderBreadCrumbs() : null;
+
+    let visibility: Visibility = articleData.visibility;
+    if (articleData.visibility) {
+      const articleNode: ?ArticleNode = articleData?.project && findArticleNode(
+        articlesList, articleData.project.id, articleData?.id
+      );
+      visibility = {...articleNode?.data?.visibility, ...articleData?.visibility};
+    }
 
     return (
       <ScrollView
@@ -158,7 +167,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
             <View style={styles.articleDetailsHeader}>
               <VisibilityControl
                 style={breadCrumbsElement ? null : styles.visibility}
-                visibility={articleData.visibility}
+                visibility={visibility}
                 onSubmit={(visibility: Visibility) => getApi().articles.updateArticle(articleData.id, {visibility})}
                 uiTheme={this.uiTheme}
                 getOptions={() => getApi().articles.getVisibilityOptions(articleData.idReadable)}

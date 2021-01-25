@@ -5,7 +5,7 @@ import issueFields from './api__issue-fields';
 
 const toField = ApiHelper.toField;
 
-const articleFields = toField([
+export const articleFields = toField([
   '$type',
   'content',
   'created',
@@ -52,5 +52,18 @@ const articleFields = toField([
   issueFields.VISIBILITY
 ]);
 
+export const articlesFields = toField([
+  'id',
+  'idReadable',
+  'summary',
+  'ordinal',
+  'project(id,name)',
+  {
+    parentArticle: [
+      'id',
+      'visibility($type)'
+    ]
+  },
+  'visibility($type)'
+]);
 
-export default articleFields;

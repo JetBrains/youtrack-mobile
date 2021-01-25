@@ -4,7 +4,7 @@ import qs from 'qs';
 
 import ApiBase from './api__base';
 import ApiHelper from './api__helper';
-import articleFields from './api__articles-fields';
+import {articleFields, articlesFields} from './api__articles-fields';
 import issueActivityPageFields, {ISSUE_ATTACHMENT_FIELDS} from './api__activities-issue-fields';
 import issueFields from './api__issue-fields';
 import {activityArticleCategory} from '../activity/activity__category';
@@ -25,7 +25,7 @@ export default class ArticlesAPI extends ApiBase {
 
   async get(query: string | null = null, $top: number = 10000, $skip: number = 0): Promise<Array<Article>> {
     const fields: string = ApiBase.createFieldsQuery(
-      ['id,idReadable,summary,parentArticle(id),project(id,name),ordinal,visibility($type)'],
+      articlesFields,
       {
         ...{$top},
         ...{$skip},

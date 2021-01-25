@@ -14,6 +14,7 @@ import type {
 } from '../../flow/Article';
 import type {Folder} from '../../flow/User';
 import type {IssueProject} from '../../flow/CustomFields';
+import {hasType} from '../api/api__resource-types';
 
 
 export const createArticlesListItem = (
@@ -51,6 +52,20 @@ export const createArticleList = (
           return {...it, ...{parentId}};
         })
     );
+
+    projectArticles.forEach((article: Article) => {
+      if (hasType.visibilityLimited(article.visibility) || !article.parentArticle) {
+        return;
+      }
+      let parent = article.parentArticle;
+      while (parent) {
+        if (hasType.visibilityLimited(parent.visibility)) {
+          article.visibility.inherited = parent.visibility;
+          return;
+        }
+        parent = parent.parentArticle;
+      }
+    });
 
     let isProjectCollapsed: boolean = false;
     if (projectArticles?.length > 0) {
