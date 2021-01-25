@@ -119,6 +119,14 @@ export default class Attach extends PureComponent<Props, State> {
     const {attachingImage, imageHeaders, attach} = this.props;
     const isAttachingImage = attachingImage === attach;
 
+    const source = {
+      uri: attach?.thumbnailURL || (attach?.url ? `${attach.url}&w=126&h=80` : ''),
+      headers: imageHeaders
+    };
+    if (!source.uri) {
+      return null;
+    }
+
     return (
       <AnimatedView
         testID="attachmentImage"
@@ -130,10 +138,7 @@ export default class Attach extends PureComponent<Props, State> {
         <ImageProgress
           style={styles.attachmentImage}
           renderIndicator={() => <ActivityIndicator/>}
-          source={{
-            uri: attach.thumbnailURL || (`${attach.url}&w=126&h=80`),
-            headers: imageHeaders
-          }}
+          source={source}
           onError={this.handleLoadError}
         />
         {isAttachingImage && <ActivityIndicator size="large" style={styles.imageActivityIndicator}/>}

@@ -53,7 +53,7 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
     }
     const api: API = getApi();
     if (api?.auth?.getAuthorizationHeaders) {
-      api.auth.getAuthorizationHeaders();
+      return api.auth.getAuthorizationHeaders();
     }
   }
 
