@@ -31,6 +31,7 @@ import type {Attachment, CustomField, FieldValue, IssueProject} from '../../flow
 import type {Theme, UITheme} from '../../flow/Theme';
 import type {Visibility} from '../../flow/Visibility';
 import type {YouTrackWiki} from '../../flow/Wiki';
+import Separator from '../../components/separator/separator';
 
 
 type Props = {
@@ -278,9 +279,12 @@ export default class IssueDetails extends Component<Props, void> {
         {!editMode && this.renderIssueContent(uiTheme)}
 
         {editMode && (
-          <AttachmentAddPanel
-            showAddAttachDialog={() => onAttach(true)}
-          />
+          <>
+            <Separator fitWindow indent/>
+            <AttachmentAddPanel
+              showAddAttachDialog={() => onAttach(true)}
+            />
+          </>
         )}
 
         {issue?.attachments && this.renderAttachments(issue.attachments, uiTheme)}
