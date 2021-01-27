@@ -17,6 +17,7 @@ import {
   submitArticleCommentDraft,
   getMentions
 } from './arcticle-actions';
+import {commentPlaceholderText} from '../../app-text';
 
 import styles from './article.styles';
 
@@ -122,7 +123,7 @@ const ArticleAddComment = (props: Props) => {
             ref={(instance: ?MultilineInput) => instance && (input = instance)}
             style={styles.commentInput}
             autoFocus={false}
-            placeholder="Write a comment, @mention people"
+            placeholder={commentPlaceholderText}
             value={commentText}
             editable={!isLoading && !isSubmitting}
             underlineColorAndroid="transparent"

@@ -13,6 +13,7 @@ import MultilineInput from '../../components/multiline-input/multiline-input';
 import {getSuggestWord, composeSuggestionText} from '../../components/mentions/mension-helper';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconAngleDown, IconArrowUp, IconCheck, IconClose, IconLock} from '../../components/icon/icon';
+import {commentPlaceholderText} from '../../app-text';
 import {visibilityDefaultText} from '../../components/visibility/visibility-strings';
 
 import styles from './issue__comment-input.styles';
@@ -269,7 +270,7 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
             <MultilineInput
               ref={this.setInputRef}
               {...{...this.props, autoFocus: isEditComment}}
-              placeholder="Write a comment, @mention people"
+              placeholder={commentPlaceholderText}
               value={commentText}
               editable={!isSaving}
               underlineColorAndroid="transparent"

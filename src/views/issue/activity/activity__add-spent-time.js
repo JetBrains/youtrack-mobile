@@ -15,6 +15,7 @@ import {confirmation} from '../../../components/confirmation/confirmation';
 import {getEntityPresentation, ytDate} from '../../../components/issue-formatter/issue-formatter';
 import {HIT_SLOP} from '../../../components/common-styles/button';
 import {IconAngleRight, IconCheck, IconClose} from '../../../components/icon/icon';
+import {commentPlaceholderText} from '../../../app-text';
 import {ThemeContext} from '../../../components/theme/theme-context';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -265,7 +266,7 @@ const AddSpentTimeForm = (props: Props) => {
               updateSelectVisibility(true);
             }}
           >
-            <Text style={styles.feedbackFormTextSup}>Select type</Text>
+            <Text style={styles.feedbackFormTextSup}>Type</Text>
             <Text
               style={[styles.feedbackFormText, styles.feedbackFormTextMain]}
             >{draftWorkItem?.type?.name}</Text>
@@ -277,7 +278,7 @@ const AddSpentTimeForm = (props: Props) => {
             multiline
             textAlignVertical="top"
             style={[styles.feedbackFormInputDescription]}
-            placeholder="Write a comment, @mention people"
+            placeholder={commentPlaceholderText}
             value={draftWorkItem.text}
             onChangeText={(comment: string) => update({
               draftWorkItem: {
