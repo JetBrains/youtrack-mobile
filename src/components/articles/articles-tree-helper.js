@@ -74,7 +74,8 @@ export const createArticleList = (
         projectArticles[0].project.id
       );
       if (cachedArticlesListProjectListItem) {
-        isProjectCollapsed = cachedArticlesListProjectListItem?.title?.articles?.collapsed;
+        const cachedProjectCollapsed: ?boolean = cachedArticlesListProjectListItem?.title?.articles?.collapsed;
+        isProjectCollapsed = typeof cachedProjectCollapsed === 'boolean' ? cachedProjectCollapsed : isProjectCollapsed;
       }
     }
 
