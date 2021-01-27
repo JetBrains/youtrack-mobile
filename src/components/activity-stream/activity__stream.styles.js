@@ -129,7 +129,7 @@ export default EStyleSheet.create({
     fontWeight: 'bold'
   },
   activityWorkComment: {
-    marginBottom: UNIT,
+    marginTop: UNIT,
   },
 
 });

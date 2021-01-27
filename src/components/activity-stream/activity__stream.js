@@ -411,10 +411,6 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
 
         <View style={styles.activityChange}>
 
-          {Boolean(work.text) && (
-            <View style={styles.activityWorkComment}><Text style={styles.secondaryTextColor}>{work.text}</Text></View>
-          )}
-
           {Boolean(work.date) && <Text style={styles.secondaryTextColor}>{ytDate(work.date)}</Text>}
 
           <Text>
@@ -422,6 +418,10 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
             <Text style={styles.activityWorkTime}>{spentTime}</Text>
             {work.type && <Text style={styles.secondaryTextColor}>{` ${work.type.name}`}</Text>}
           </Text>
+
+          {!!work.text && (
+            <View style={styles.activityWorkComment}><Text style={styles.secondaryTextColor}>{work.text}</Text></View>
+          )}
 
         </View>
       </View>
