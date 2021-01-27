@@ -21,7 +21,7 @@ const feedbackFormStyles = {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: UNIT * 1.5
+    minHeight: UNIT * 6.5
   },
   feedbackFormDescription: {
     flexGrow: 1,
@@ -39,7 +39,7 @@ const feedbackFormStyles = {
     color: '$icon'
   },
   feedbackFormTextMain: {
-    marginBottom: -UNIT * 1.5
+    marginBottom: -UNIT
   },
   feedbackFormInput: {
     ...rowFormStyles.input,
