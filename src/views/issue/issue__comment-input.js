@@ -6,13 +6,14 @@ import React, {PureComponent} from 'react';
 import throttle from 'lodash.throttle';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
+import IconHourGlass from '@jetbrains/icons/hourglass.svg';
 import IssueVisibility from '../../components/visibility/issue-visibility';
 import Mentions from '../../components/mentions/mentions';
 import MultilineInput from '../../components/multiline-input/multiline-input';
+import {getSuggestWord, composeSuggestionText} from '../../components/mentions/mension-helper';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconAngleDown, IconArrowUp, IconCheck, IconClose, IconLock} from '../../components/icon/icon';
 import {visibilityDefaultText} from '../../components/visibility/visibility-strings';
-import {getSuggestWord, composeSuggestionText} from '../../components/mentions/mension-helper';
 
 import styles from './issue__comment-input.styles';
 
@@ -31,6 +32,7 @@ type Props = {
   onEditCommentVisibility: (commentId: string) => any,
   isSecured: boolean,
   canAttach: boolean,
+  onAddSpentTime: () => any,
   onAttach: () => any,
   onCancel: () => any,
   uiTheme: UITheme
@@ -83,7 +85,7 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
 
   focus = () => {
     this.editCommentInput.focus();
-  }
+  };
 
   updateComment = () => {
     this.setState({isSaving: true});
@@ -138,7 +140,7 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
         showVisibility: true
       });
     }
-  }
+  };
 
   toggleVisibility = (showVisibility: boolean) => {
     this.setState({showVisibility});
@@ -211,7 +213,7 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
   setInputRef = (instance: ?MultilineInput) => instance && (this.editCommentInput = instance);
 
   render() {
-    const {editingComment, onCancel = () => null, uiTheme} = this.props;
+    const {editingComment, onCancel = () => null, uiTheme, onAddSpentTime} = this.props;
     const {isSaving, commentText, commentCaret, showSuggestions} = this.state;
 
     const isEditComment: boolean = !!editingComment;
@@ -249,8 +251,19 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
 
         </View>
 
-
         <View style={styles.commentContainer}>
+          <View style={styles.actionsContainer}>
+            <TouchableOpacity
+              onPress={onAddSpentTime}
+            >
+              <IconHourGlass
+                style={styles.actionsContainerIcon}
+                fill={styles.actionsContainerIcon.color}
+                width={26}
+                height={26}
+              />
+            </TouchableOpacity>
+          </View>
 
           <View style={styles.commentInputContainer}>
             <MultilineInput

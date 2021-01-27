@@ -115,5 +115,16 @@ export default EStyleSheet.create({
     ...secondaryText,
     marginRight: UNIT,
     color: '$icon'
+  },
+
+  actionsContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: UNIT * 4,
+    minWidth: UNIT * 4,
+    marginRight: UNIT,
+  },
+  actionsContainerIcon: {
+    color: '$iconAccent'
   }
 });

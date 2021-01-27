@@ -6,7 +6,7 @@ import {isActivityCategory} from './activity__category';
 import {relativeDate, formatDate, getEntityPresentation} from '../issue-formatter/issue-formatter';
 
 import type {IssueProject} from '../../flow/CustomFields';
-import type {WorkTimeSettings} from '../../flow/WorkTimeSettings';
+import type {WorkTimeSettings} from '../../flow/Work';
 
 type TextValueChangeParams = {
   activity: Object,

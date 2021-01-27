@@ -44,15 +44,20 @@ function formatDate(date: Date|number) {
   return `${dateObj.toLocaleString([], {year: '2-digit', month: 'short', day: '2-digit', hour: '2-digit', minute:'2-digit'})}`;
 }
 
-function ytDate(date: Date|number) {
+function ytDate(date: Date | number, noTime: boolean = false) {
   const dateObj = new Date(date);
-  return `${dateObj.toLocaleString([], {
-    month: 'short',
-    day: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  })}`;
+  //$FlowFixMe
+  return `${dateObj.toLocaleString([], Object.assign(
+    {
+      month: 'short',
+      day: '2-digit',
+      year: 'numeric'
+    },
+    noTime ? {} : {
+      hour: '2-digit',
+      minute: '2-digit'
+    }
+  ))}`;
 }
 
 function getPostfix(formattedDate: string) {

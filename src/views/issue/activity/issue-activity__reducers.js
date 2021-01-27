@@ -9,7 +9,7 @@ import type {CustomError} from '../../../flow/Error';
 import type {IssueComment} from '../../../flow/CustomFields';
 import type {IssueFull, OpenNestedViewParams} from '../../../flow/Issue';
 import type {User, UserAppearanceProfile} from '../../../flow/User';
-import type {WorkTimeSettings} from '../../../flow/WorkTimeSettings';
+import type {WorkTimeSettings} from '../../../flow/Work';
 
 type ActivityPage = Array<ActivityItem> | null;
 

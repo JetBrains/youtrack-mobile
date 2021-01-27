@@ -6,18 +6,18 @@ import {View, ScrollView} from 'react-native';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
-import IssueVisibility from '../../../components/visibility/issue-visibility';
-import KeyboardSpacerIOS from '../../../components/platform/keyboard-spacer.ios';
-import Select from '../../../components/select/select';
-import IssueActivityStream from './issue__activity-stream';
-import IssueActivitiesSettings from './issue__activity-settings';
-import IssueCommentInput from '../issue__comment-input';
-import ErrorMessage from '../../../components/error-message/error-message';
-
 import * as activityActions from './issue-activity__actions';
 import * as activityCommentActions from './issue-activity__comment-actions';
+import AddSpentTimeForm from './activity__add-spent-time';
+import ErrorMessage from '../../../components/error-message/error-message';
+import IssueActivitiesSettings from './issue__activity-settings';
+import IssueActivityStream from './issue__activity-stream';
+import IssueCommentInput from '../issue__comment-input';
+import IssueVisibility from '../../../components/visibility/issue-visibility';
+import KeyboardSpacerIOS from '../../../components/platform/keyboard-spacer.ios';
+import Router from '../../../components/router/router';
+import Select from '../../../components/select/select';
 import {attachmentActions} from '../issue__attachment-actions-and-types';
-
 import {convertCommentsToActivityPage, createActivityModel} from '../../../components/activity/activity-helper';
 import {getApi} from '../../../components/api/api__instance';
 import {getEntityPresentation} from '../../../components/issue-formatter/issue-formatter';
@@ -58,9 +58,9 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     this.loadIssueActivities();
   }
 
-  loadIssueActivities = () => {
+  loadIssueActivities = (doNotReset?: boolean) => {
     if (isIssueActivitiesAPIEnabled()) {
-      this.props.loadActivitiesPage();
+      this.props.loadActivitiesPage(doNotReset);
     } else {
       this.props.loadIssueCommentsAsActivityPage();
     }
@@ -225,11 +225,17 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
         onCancel={stopSubmittingComment}
         uiTheme={uiTheme}
+
+        onAddSpentTime={this.renderAddSpentTimePage}
       />
 
       <KeyboardSpacerIOS top={98}/>
     </View>;
   }
+
+  renderAddSpentTimePage = () => Router.PageModal({
+    children: <AddSpentTimeForm onAdd={() => this.loadIssueActivities(true)}/>
+  });
 
   renderCommentVisibilitySelect() {
     const {selectProps, onCloseSelect} = this.props;

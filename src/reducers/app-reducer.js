@@ -9,7 +9,7 @@ import type Auth from '../components/auth/auth';
 import type {PermissionsStore} from '../components/permissions-store/permissions-store';
 import type {StorageState} from '../components/storage/storage';
 import type {EndUserAgreement} from '../flow/AppConfig';
-import type {WorkTimeSettings} from '../flow/WorkTimeSettings';
+import type {WorkTimeSettings} from '../flow/Work';
 import type {User, UserAppearanceProfile, UserGeneralProfile} from '../flow/User';
 
 export type RootState = {

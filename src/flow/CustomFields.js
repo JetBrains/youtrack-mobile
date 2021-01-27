@@ -2,6 +2,7 @@ import type {IssueFull} from './Issue';
 import type {Reaction} from './Reaction';
 import type {User} from './User';
 import type {Visibility} from './Visibility';
+import type {WorkItemType} from './Work';
 
 export type TimeTrackingFieldInfo = {
   id: string,
@@ -22,7 +23,8 @@ export type IssueProject = {
   plugins?: {
     timeTrackingSettings: {
       enabled: boolean,
-      timeSpent: ?TimeTrackingFieldInfo
+      timeSpent: ?TimeTrackingFieldInfo,
+      workItemTypes: Array<WorkItemType>
     }
   }
 }

@@ -107,4 +107,16 @@ export default class UserAPI extends ApiBase {
     );
   }
 
+  async getProjectUsers(projectId: string, query?: string, permissionName?: string): Promise<Array<User>> {
+    const permissionQuery: string = permissionName ? `&permission=${permissionName}` : '';
+    const searchQuery: string = query ? `&query=${query}` : '';
+    return this.makeAuthorizedRequest(
+      `${this.apiUrl}?projectId=${projectId}${permissionQuery}${searchQuery}&${UserAPI.createFieldsQuery([
+        'id',
+        'fullName'
+      ])}`,
+      'GET'
+    );
+  }
+
 }

@@ -11,6 +11,7 @@ import type {Activity} from '../../flow/Activity';
 import type {Attachment, FieldValue, IssueComment, IssueProject, Tag} from '../../flow/CustomFields';
 import type {IssueOnList, IssueFull} from '../../flow/Issue';
 import type {Visibility} from '../../flow/Visibility';
+import type {WorkItem} from '../../flow/Work';
 
 export default class IssueAPI extends ApiBase {
   constructor(auth: Auth) {
@@ -259,6 +260,38 @@ export default class IssueAPI extends ApiBase {
       `${this.youTrackIssueUrl}/${issueId}?${ApiBase.createFieldsQuery({tags: issueFields.ISSUE_TAGS_FIELDS})}`,
       'POST',
       {tags}
+    );
+  }
+
+  async timeTracking(issueId: string) {
+    return this.makeAuthorizedRequest(
+      `${this.youTrackIssueUrl}/${issueId}/timeTracking?${ApiBase.createFieldsQuery(issueFields.timeTracking)}`,
+      'GET'
+    );
+  }
+
+  async updateDraftWorkItem(issueId: string, draft: WorkItem) {
+    return this.makeAuthorizedRequest(
+      `${this.youTrackIssueUrl}/${issueId}/timeTracking/draftWorkItem?${ApiBase.createFieldsQuery(issueFields.workItems)}`,
+      'PUT',
+      draft
+    );
+  }
+
+  async createWorkItem(issueId: string, draft: WorkItem) {
+    return this.makeAuthorizedRequest(
+      `${this.youTrackIssueUrl}/${issueId}/timeTracking/workItems?${ApiBase.createFieldsQuery(issueFields.workItems)}`,
+      'POST',
+      draft
+    );
+  }
+
+  async deleteDraftWorkItem(issueId: string) {
+    return this.makeAuthorizedRequest(
+      `${this.youTrackIssueUrl}/${issueId}/timeTracking/draftWorkItem`,
+      'DELETE',
+      null,
+      {parseJson: false}
     );
   }
 }

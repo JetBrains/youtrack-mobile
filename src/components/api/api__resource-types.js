@@ -25,6 +25,9 @@ export const ResourceTypes = {
   VISIBILITY_GROUP: 'jetbrains.charisma.persistent.security.VisibilityGroups',
   VISIBILITY_LIMITED: 'jetbrains.charisma.persistent.visibility.LimitedVisibility',
   VISIBILITY_UNLIMITED: 'jetbrains.charisma.persistent.visibility.UnlimitedVisibility',
+
+  WORK_ITEM_CREATE: 'JetBrains.YouTrack.CREATE_WORK_ITEM',
+  WORK_ITEM_UPDATE: 'JetBrains.YouTrack.UPDATE_WORK_ITEM',
 };
 
 type HasMethodName = 'comment' | 'user' | 'userGroup' | 'project' | 'savedSearch' | 'tag' | 'agile';

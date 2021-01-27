@@ -12,7 +12,7 @@ import type {ActivityItem, ActivityStreamCommentActions} from '../../flow/Activi
 import type {Attachment} from '../../flow/CustomFields';
 import type {UITheme} from '../../flow/Theme';
 import type {User} from '../../flow/User';
-import type {WorkTimeSettings} from '../../flow/WorkTimeSettings';
+import type {WorkTimeSettings} from '../../flow/Work';
 import type {YouTrackWiki} from '../../flow/Wiki';
 
 type Props = {

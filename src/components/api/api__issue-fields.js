@@ -295,6 +295,54 @@ const REACTION = toField([
   {author: ISSUE_USER_FIELDS}
 ]);
 
+const ISSUE_WORK_ITEMS_DURATION_FIELDS = toField([
+  'id',
+  'minutes',
+  'presentation'
+]);
+
+const ISSUE_WORK_ITEMS_FIELDS = toField([
+  'id',
+  'text',
+  'name',
+  'date',
+  'usesMarkdown',
+  {
+    type: ['name', 'id'],
+    duration: ISSUE_WORK_ITEMS_DURATION_FIELDS,
+    creator: ISSUE_USER_FIELDS,
+    author: ISSUE_USER_FIELDS
+  }
+]);
+
+const ISSUE_WORK_ITEM_TEMPLATE = toField([
+  {
+    workItemTemplate: toField([
+      'date',
+      {
+        type: ['name', 'id'],
+        duration: ['presentation'],
+        creator: ISSUE_USER_FIELDS,
+        author: ISSUE_USER_FIELDS
+      }
+    ])
+  }]);
+
+const ISSUE_TIME_TRACKING_WITH_DRAFT_FIELDS = toField([
+  'enabled',
+  {
+    draftWorkItem: ISSUE_WORK_ITEMS_FIELDS
+  },
+  ISSUE_WORK_ITEM_TEMPLATE
+]);
+
+const ISSUE_TIME_TRACKING_FIELDS = toField([
+  'enabled',
+  {
+    workItems: ISSUE_WORK_ITEMS_FIELDS
+  }
+]);
+
 export default {
   attachments: ISSUE_ATTACHMENTS_FIELDS,
   issuesOnList: ISSUE_SHORT_FIELDS,
@@ -358,5 +406,8 @@ export default {
 
   ISSUE_TAGS_FIELDS: ISSUE_TAGS_FIELDS,
 
-  reaction: REACTION
+  reaction: REACTION,
+
+  timeTracking: ISSUE_TIME_TRACKING_WITH_DRAFT_FIELDS,
+  workItems: ISSUE_TIME_TRACKING_FIELDS
 };

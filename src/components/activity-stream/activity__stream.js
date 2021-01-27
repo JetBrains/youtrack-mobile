@@ -37,7 +37,7 @@ import type {Reaction} from '../../flow/Reaction';
 import type {Activity, ActivityChange, ActivityItem, ActivityStreamCommentActions} from '../../flow/Activity';
 import type {IssueFull} from '../../flow/Issue';
 import type {UITheme} from '../../flow/Theme';
-import type {WorkTimeSettings} from '../../flow/WorkTimeSettings';
+import type {WorkTimeSettings} from '../../flow/Work';
 import type {YouTrackWiki} from '../../flow/Wiki';
 import type {CustomError} from '../../flow/Error';
 import type {User} from '../../flow/User';

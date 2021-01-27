@@ -3,11 +3,19 @@
 import * as activityHelper from './issue-activity__helper';
 import * as types from '../issue-action-types';
 import log from '../../../components/log/log';
+import {ANALYTICS_ISSUE_STREAM_SECTION} from '../../../components/analytics/analytics-ids';
 import {getActivityCategories, getActivityAllTypes} from '../../../components/activity/activity-helper';
+import {logEvent} from '../../../components/log/log-helper';
+import {notify} from '../../../components/notification/notification';
+import {ResourceTypes} from '../../../components/api/api__resource-types';
+import {sortAlphabetically, sortByOrdinal} from '../../../components/search/sorting';
+import {until} from '../../../util/util';
 
 import type Api from '../../../components/api/api';
 import type {Activity} from '../../../flow/Activity';
 import type {State as SingleIssueState} from '../issue-reducers';
+import type {User} from '../../../flow/User';
+import type {WorkItem} from '../../../flow/Work';
 
 type ApiGetter = () => Api;
 type StateGetter = () => { issueState: SingleIssueState };
@@ -61,3 +69,108 @@ export function loadActivitiesPage(doNotReset: boolean = false) {
   };
 }
 
+export function getTimeTracking() {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const issueId = getState().issueState.issueId;
+    const api: Api = getApi();
+
+    logEvent({
+      message: 'Add spent time',
+      analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+    });
+    const [error, timeTracking] = await until(api.issue.timeTracking(issueId));
+    if (error) {
+      const msg: string = 'Failed to load time tracking';
+      notify(msg, error);
+      logEvent({message: msg, isError: true});
+      return null;
+    }
+    return timeTracking;
+  };
+}
+
+export function updateWorkItemDraft(draft: WorkItem) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const issueId = getState().issueState.issueId;
+
+    const [error, updatedDraft] = await until(api.issue.updateDraftWorkItem(issueId, draft));
+    if (error) {
+      const msg: string = 'Failed to update work item draft';
+      notify(msg, error);
+      logEvent({message: msg, isError: true});
+      return [];
+    }
+    return updatedDraft;
+  };
+}
+
+export function createWorkItem(draft: WorkItem) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const issueId = getState().issueState.issueId;
+
+    logEvent({
+      message: 'Create work item',
+      analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+    });
+    const [error, updatedDraft] = await until(api.issue.createWorkItem(issueId, draft));
+    if (error) {
+      const msg: string = 'Failed to create work item';
+      notify(msg, error);
+      logEvent({message: msg, isError: true});
+    }
+    return updatedDraft;
+  };
+}
+
+export function deleteWorkItemDraft() {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const issueId = getState().issueState.issueId;
+
+    const [error] = await until(api.issue.deleteDraftWorkItem(issueId));
+    if (error) {
+      const msg: string = 'Failed to delete work item draft';
+      notify(msg, error);
+      logEvent({message: msg, isError: true});
+    }
+  };
+}
+
+export function getWorkItemAuthors() {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const projectId: string = getState().issueState.issue.project.id;
+
+    const promises: Array<Promise<User>> = [
+      ResourceTypes.WORK_ITEM_UPDATE,
+      ResourceTypes.WORK_ITEM_CREATE
+    ].map((permissionName: string) => api.user.getProjectUsers(projectId, undefined, permissionName));
+    const [error, users] = await until(promises, true);
+    if (error) {
+      const msg: string = 'Failed to load work item authors';
+      notify(msg, error);
+      logEvent({message: msg, isError: true});
+      return [];
+    }
+    return users.reduce((list: Array<User>, user: User) => list.some(
+      (it: User) => it.id === user.id) ? list : list.concat(user), []).sort(sortAlphabetically);
+  };
+}
+
+export function getWorkItemTypes() {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const projectId: string = getState().issueState.issue.project.id;
+
+    const [error, projectTimeTrackingSettings] = await until(api.projects.getTimeTrackingSettings(projectId));
+    if (error) {
+      const msg: string = 'Failed to load project time tracking settings';
+      notify(msg, error);
+      logEvent({message: msg, isError: true});
+      return {};
+    }
+    return projectTimeTrackingSettings.workItemTypes.sort(sortByOrdinal);
+  };
+}

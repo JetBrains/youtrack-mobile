@@ -89,7 +89,7 @@ export const createBtoa = (str: string) => {
   return base64.fromByteArray(byteArray);
 };
 
-export const until = (promises: any): Promise<[?CustomError, any]> => {
+export const until = (promises: any, combine: boolean = false): Promise<[?CustomError, any]> => {
   if (!promises) {
     return Promise.reject(['No promises are provided']);
   }
@@ -97,6 +97,9 @@ export const until = (promises: any): Promise<[?CustomError, any]> => {
   if (Array.isArray(promises)) {
     return Promise.all(promises)
       .then((data) => {
+        if (combine) {
+          return [null, data.reduce((list: Array<any>, it: any) => list.concat(it))];
+        }
         return [null, data];
       })
       .catch((err: CustomError) => {

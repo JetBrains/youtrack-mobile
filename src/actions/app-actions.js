@@ -42,7 +42,7 @@ import type {Folder, User, UserAppearanceProfile, UserGeneralProfile} from '../f
 import type {NotificationRouteData} from '../flow/Notification';
 import type {PermissionCacheItem} from '../flow/Permission';
 import type {StorageState} from '../components/storage/storage';
-import type {WorkTimeSettings} from '../flow/WorkTimeSettings';
+import type {WorkTimeSettings} from '../flow/Work';
 
 
 export function logOut() {

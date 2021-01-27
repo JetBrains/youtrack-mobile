@@ -6,6 +6,7 @@ import type Auth from '../auth/auth';
 import type {IssueProject} from '../../flow/CustomFields';
 
 export default class ProjectsAPI extends ApiBase {
+  projectsURL: string = `${this.youTrackApiUrl}/admin/projects`;
   pinProjectURL: string = `${this.youTrackApiUrl}/admin/users/me/pinnedProjects`;
 
   constructor(auth: Auth) {
@@ -27,4 +28,13 @@ export default class ProjectsAPI extends ApiBase {
       return this.addFavorite(projectId);
     }
   }
+
+  async getTimeTrackingSettings(projectId: string): Promise<IssueProject> {
+    const fields: string = 'enabled,workItemTypes(id,name,ordinal,url)';
+    return this.makeAuthorizedRequest(
+      `${this.projectsURL}/${projectId}/timeTrackingSettings/?fields=${fields}`,
+      'GET'
+    );
+  }
+
 }
