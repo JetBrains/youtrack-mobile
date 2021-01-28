@@ -110,7 +110,7 @@ export default createReducer(initialState, {
         }, {});
     }
 
-    const issues = state.issues.map(issue => issue.id === sourceIssue.id ? updateIssue(issue) : issue);
+    const issues = state.issues.map(issue => issue.id === sourceIssue?.id ? updateIssue(issue) : issue);
 
     return {...state, issues};
   },
