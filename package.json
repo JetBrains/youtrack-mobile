@@ -9,7 +9,7 @@
   "config": {
     "ANALYTICS_ID": "",
     "EXCEPTION_REPORTER_TOKEN": "",
-    "KONNECTOR_URL": "https://konnector-staging.services.jetbrains.com"
+    "KONNECTOR_URL": ""
   },
   "bugsnag": {
     "version": "0.1.0",
