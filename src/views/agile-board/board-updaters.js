@@ -118,7 +118,7 @@ export function updateCardOnBoard(board: Board, sourceIssue: IssueFull): Board {
       ...row,
       issue: row.issue && row.issue.id === sourceIssue?.id ? fillIssueFromAnotherIssue(row.issue, sourceIssue) : row.issue,
       cells: updateCellsIssuesIfNeeded(row.cells, sourceIssue?.id, issues =>
-        issues.map(
+        (issues || []).map(
           issue => issue.id === sourceIssue?.id ? fillIssueFromAnotherIssue(issue, sourceIssue) : issue
         ))
     };
