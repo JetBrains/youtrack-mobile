@@ -75,12 +75,11 @@ class Inbox extends Component<Props, State> {
   }
 
   componentDidMount() {
+    this.props.loadInboxCache();
     this.refresh();
   }
 
-  refresh = () => {
-    this.props.loadInbox();
-  };
+  refresh = () => this.props.loadInbox();
 
   goToIssue(issue: Issue) {
     if (!issue?.id) {
@@ -528,9 +527,10 @@ class Inbox extends Component<Props, State> {
   };
 
   renderRefreshControl = () => {
+    const {loading, items} = this.props;
     return (
       <RefreshControl
-        refreshing={false}
+        refreshing={items.length === 0 && loading ? false : loading}
         onRefresh={this.refresh}
         tintColor={this.theme.uiTheme.colors.$link}
         testID="refresh-control"

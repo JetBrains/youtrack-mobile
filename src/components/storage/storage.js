@@ -12,6 +12,7 @@ import type {AuthParams} from '../../flow/Auth';
 import type {Folder, User} from '../../flow/User';
 import type {IssueOnList} from '../../flow/Issue';
 import type {Board, Sprint} from '../../flow/Agile';
+import type {Notification} from '../../flow/Inbox';
 import type {PermissionCacheItem} from '../../flow/Permission';
 
 const OTHER_ACCOUNTS_KEY = 'YT_OTHER_ACCOUNTS_STORAGE_KEY';
@@ -32,6 +33,7 @@ export type StorageState = {|
   searchContext: ?Folder,
   lastQueries: ?Array<string>,
   issuesCache: ?Array<IssueOnList>,
+  inboxCache: Array<Notification> | null,
   isRegisteredForPush: boolean,
   deviceToken: ?string,
   agileZoomedIn: ?boolean,
@@ -61,6 +63,7 @@ const storageKeys: StorageStateKeys = {
   searchContext: 'YT_SEARCH_CONTEXT_STORAGE',
   lastQueries: 'YT_LAST_QUERIES_STORAGE_KEY',
   issuesCache: 'yt_mobile_issues_cache',
+  inboxCache: 'YT_INBOX_CACHE',
   isRegisteredForPush: 'YT_IS_REGISTERED_FOR_PUSH',
   deviceToken: 'YT_DEVICE_TOKEN',
   agileZoomedIn: 'YT_AGILE_ZOOMED_IN',
@@ -92,6 +95,7 @@ export const initialState: StorageState = Object.freeze({
   searchContext: null,
   lastQueries: null,
   issuesCache: null,
+  inboxCache: null,
   isRegisteredForPush: false,
   deviceToken: null,
   agileZoomedIn: null,
@@ -120,6 +124,15 @@ function cleanAndLogState(message, state) {
   if (forLog.issuesCache) {
     forLog.issuesCache = CENSORED;
   }
+  if (forLog.inboxCache) {
+    forLog.inboxCache = CENSORED;
+  }
+  if (forLog.inboxCache) {
+    forLog.inboxCache = CENSORED;
+  }
+  if (forLog.projects) {
+    forLog.projects = CENSORED;
+  }
 
   log.debug(message, forLog);
 }
@@ -134,6 +147,7 @@ export async function clearCachesAndDrafts() {
     storageKeys.query,
     storageKeys.lastQueries,
     storageKeys.issuesCache,
+    storageKeys.inboxCache,
     storageKeys.isRegisteredForPush,
     storageKeys.deviceToken,
     storageKeys.agileZoomedIn,

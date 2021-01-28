@@ -3,11 +3,13 @@ import * as types from './inbox-action-types';
 import log from '../../components/log/log';
 
 import {checkVersion} from '../../components/feature/feature';
+import {flushStoragePart, getStorageState} from '../../components/storage/storage';
 import {sortByTimestampReverse} from '../../components/search/sorting';
 import {until} from '../../util/util';
 
 import type Api from '../../components/api/api';
 import type {CustomError} from '../../flow/Error';
+import type {Notification} from '../../flow/Inbox';
 
 type ApiGetter = () => Api;
 
@@ -29,6 +31,15 @@ export function listEndReached() {
 
 export function setError(error: ?Error) {
   return {type: types.ERROR, error};
+}
+
+export function loadInboxCache() {
+  return async (dispatch: (any) => any) => {
+    const inboxCache: Array<Notification> | null = getStorageState().inboxCache;
+    if (inboxCache) {
+      dispatch(addItems(inboxCache, false));
+    }
+  };
 }
 
 export function loadInbox(skip: number = 0, top: number = 10) {
@@ -74,6 +85,7 @@ export function loadInbox(skip: number = 0, top: number = 10) {
     dispatch(
       addItems(sortedByTimestampItems, notificationAndReactions[0].length > 0)
     );
+    flushStoragePart({inboxCache: sortedByTimestampItems});
 
     if (notificationAndReactions[0].length < top) {
       dispatch(listEndReached());
