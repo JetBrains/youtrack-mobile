@@ -15,7 +15,7 @@ function hasAnalyticsId() {
 }
 
 function hasKonnektorData() {
-  return pkg.config.KONNECTOR_URL !== 'https://konnector-staging.services.jetbrains.com';
+  return isNotEmpty(pkg.config.KONNECTOR_URL);
 }
 
 function hasBugsnagData() {
