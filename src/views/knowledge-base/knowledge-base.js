@@ -108,7 +108,7 @@ export class KnowledgeBase extends Component<Props, State> {
               size={19}
               hasStar={project.pinned}
               canStar={true}
-              onStarToggle={async () => this.props.toggleProjectArticlesFavorite(project)}
+              onStarToggle={() => this.props.toggleProjectArticlesFavorite(project)}
               uiTheme={this.uiTheme}
             />}
           </View>

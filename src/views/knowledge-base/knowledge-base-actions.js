@@ -8,6 +8,7 @@ import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids'
 import {
   createArticleList,
   filterArticles,
+  flattenArticleList,
   toggleArticleProjectListItem
 } from '../../components/articles/articles-tree-helper';
 import {flushStoragePart, getStorageState} from '../../components/storage/storage';
@@ -154,7 +155,9 @@ const toggleProjectArticlesFavorite = (project: ArticleProject) => {
       }, []);
 
       await flushStoragePart({projects: updatedProjects});
-      dispatch(loadArticlesList(false));
+      const articlesList: ArticlesList = getState().articles.articlesList || [];
+      const articles: Array<Article> = flattenArticleList(articlesList);
+      dispatch(updateArticlesList(createList(articles, getArticlesListCache())));
     }
   };
 };
