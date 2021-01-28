@@ -118,7 +118,9 @@ const showArticleActions = (
             message: 'Edit article',
             analyticsId: ANALYTICS_ARTICLE_PAGE
           });
+          setProcessing(true);
           const articleDraft: Article | null = await getArticleDraft(api, article);
+          setProcessing(false);
           if (articleDraft) {
             Router.ArticleCreate({
               articleDraft: {...articleDraft, original: article.id},
