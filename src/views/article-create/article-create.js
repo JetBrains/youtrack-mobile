@@ -80,12 +80,8 @@ const ArticleCreate = (props: Props) => {
     }
   }, []);
 
-  const debouncedUpdate = useDebouncedCallback(
-    (articleDraft: Article) => {
-      dispatch(articleCreateActions.updateArticleDraft(articleDraft));
-    },
-    350
-  );
+  const doUpdate = (articleDraft: Article): Function => dispatch(articleCreateActions.updateArticleDraft(articleDraft));
+  const debouncedUpdate = useDebouncedCallback(doUpdate, 350);
 
   const updateDraft = (data: $Shape<ArticleDraftData>) => {
     updateArticleDraftData({...articleDraftData, ...data});
@@ -139,7 +135,14 @@ const ArticleCreate = (props: Props) => {
         style={styles.header}
         title={articleDraft?.original ? 'Draft' : 'New Article'}
         leftButton={<IconClose size={21} color={isProcessing ? uiThemeColors.$disabled : linkColor}/>}
-        onBack={closeCreateArticleScreen}
+        onBack={() => {
+          const draft: ArticleDraft = {...articleDraft, ...articleDraftData};
+          if (!draft.project.id) {
+            draft.project = null;
+          }
+          doUpdate(draft);
+          closeCreateArticleScreen();
+        }}
         rightButton={(
           isProcessing && articleDraft
             ? articleDraft && <ActivityIndicator color={theme.uiTheme.colors.$link}/>
