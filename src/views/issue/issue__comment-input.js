@@ -33,7 +33,7 @@ type Props = {
   onEditCommentVisibility: (commentId: string) => any,
   isSecured: boolean,
   canAttach: boolean,
-  onAddSpentTime: () => any,
+  onAddSpentTime: (() => any) | null,
   onAttach: () => any,
   onCancel: () => any,
   uiTheme: UITheme
@@ -253,7 +253,7 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
         </View>
 
         <View style={styles.commentContainer}>
-          <View style={styles.actionsContainer}>
+          {!!onAddSpentTime && <View style={styles.actionsContainer}>
             <TouchableOpacity
               onPress={onAddSpentTime}
             >
@@ -264,7 +264,7 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
                 height={26}
               />
             </TouchableOpacity>
-          </View>
+          </View>}
 
           <View style={styles.commentInputContainer}>
             <MultilineInput

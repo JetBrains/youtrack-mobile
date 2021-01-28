@@ -203,7 +203,11 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       attachOrTakeImage,
       stopSubmittingComment
     } = this.props;
-    const isSecured = !!editingComment && IssueVisibility.isSecured(editingComment.visibility);
+    const isSecured: boolean = !!editingComment && IssueVisibility.isSecured(editingComment.visibility);
+    const canAddWork: boolean = (
+      issue.project.plugins.timeTrackingSettings.enabled &&
+      issuePermissions.canCreateWork(issue)
+    );
 
     return <View>
       <IssueCommentInput
@@ -226,7 +230,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
         onCancel={stopSubmittingComment}
         uiTheme={uiTheme}
 
-        onAddSpentTime={this.renderAddSpentTimePage}
+        onAddSpentTime={canAddWork ? this.renderAddSpentTimePage : null}
       />
 
       <KeyboardSpacerIOS top={98}/>

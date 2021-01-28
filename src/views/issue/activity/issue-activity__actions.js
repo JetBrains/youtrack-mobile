@@ -7,9 +7,9 @@ import {ANALYTICS_ISSUE_STREAM_SECTION} from '../../../components/analytics/anal
 import {getActivityCategories, getActivityAllTypes} from '../../../components/activity/activity-helper';
 import {logEvent} from '../../../components/log/log-helper';
 import {notify} from '../../../components/notification/notification';
-import {ResourceTypes} from '../../../components/api/api__resource-types';
 import {sortAlphabetically, sortByOrdinal} from '../../../components/search/sorting';
 import {until} from '../../../util/util';
+import {WORK_ITEM_CREATE, WORK_ITEM_UPDATE} from '../../../components/issue-permissions/issue-permissions';
 
 import type Api from '../../../components/api/api';
 import type {Activity} from '../../../flow/Activity';
@@ -144,8 +144,8 @@ export function getWorkItemAuthors() {
     const projectId: string = getState().issueState.issue.project.id;
 
     const promises: Array<Promise<User>> = [
-      ResourceTypes.WORK_ITEM_UPDATE,
-      ResourceTypes.WORK_ITEM_CREATE
+      WORK_ITEM_UPDATE,
+      WORK_ITEM_CREATE
     ].map((permissionName: string) => api.user.getProjectUsers(projectId, undefined, permissionName));
     const [error, users] = await until(promises, true);
     if (error) {

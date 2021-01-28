@@ -6,11 +6,7 @@ import type {AnyIssue} from '../../flow/Issue';
 import type {Article} from '../../flow/Article';
 import type {PermissionsStore} from '../permissions-store/permissions-store';
 import type {User} from '../../flow/User';
-import type {
-  CustomField,
-  IssueComment,
-  IssueProject
-} from '../../flow/CustomFields';
+import type {CustomField, IssueComment, IssueProject} from '../../flow/CustomFields';
 
 export const CREATE_ISSUE = 'JetBrains.YouTrack.CREATE_ISSUE';
 export const READ_ISSUE = 'JetBrains.YouTrack.READ_ISSUE';
@@ -33,6 +29,10 @@ export const READ_ARTICLE_COMMENT = 'JetBrains.YouTrack.READ_ARTICLE_COMMENT';
 export const CREATE_ARTICLE_COMMENT = 'JetBrains.YouTrack.CREATE_ARTICLE_COMMENT';
 export const UPDATE_ARTICLE_COMMENT = 'JetBrains.YouTrack.UPDATE_ARTICLE_COMMENT';
 export const DELETE_ARTICLE_COMMENT = 'JetBrains.YouTrack.DELETE_ARTICLE_COMMENT';
+
+export const WORK_ITEM_CREATE = 'JetBrains.YouTrack.CREATE_WORK_ITEM';
+export const WORK_ITEM_UPDATE = 'JetBrains.YouTrack.UPDATE_WORK_ITEM';
+
 
 export default class IssuePermissions {
   permissionsStore: PermissionsStore;
@@ -195,6 +195,11 @@ export default class IssuePermissions {
       );
     }
   };
+
+  canCreateWork = (entity: AnyIssue): boolean => (
+    this.hasPermissionFor(entity, WORK_ITEM_UPDATE) ||
+    this.hasPermissionFor(entity, WORK_ITEM_CREATE)
+  );
 
   /*
    Articles
