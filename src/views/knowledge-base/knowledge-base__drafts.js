@@ -45,7 +45,7 @@ const KnowledgeBaseDrafts = () => {
           updateDrafts([]);
           updateDeleting(false);
           loadDrafts();
-        });
+        }).catch(() => {});
     }
   };
 
