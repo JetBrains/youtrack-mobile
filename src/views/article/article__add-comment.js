@@ -6,7 +6,7 @@ import {View, TouchableOpacity, ActivityIndicator} from 'react-native';
 import throttle from 'lodash.throttle';
 import {useDispatch, useSelector} from 'react-redux';
 
-import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer';
+import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
 import Mentions from '../../components/mentions/mentions';
 import MultilineInput from '../../components/multiline-input/multiline-input';
 import {composeSuggestionText, getSuggestWord} from '../../components/mentions/mension-helper';
