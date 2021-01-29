@@ -3,6 +3,8 @@
 import React, {useEffect, useState} from 'react';
 import {TouchableOpacity, View, FlatList, RefreshControl, Text, ActivityIndicator} from 'react-native';
 
+import {useDispatch} from 'react-redux';
+
 import ArticleWithChildren from '../../components/articles/article-item-with-children';
 import ErrorMessage from '../../components/error-message/error-message';
 import Header from '../../components/header/header';
@@ -13,9 +15,9 @@ import {confirmDeleteAllDrafts, confirmDeleteArticleDraft} from '../article/arct
 import {deleteArticle} from '../article/arcticle-actions';
 import {IconBack, IconKnowledgeBase} from '../../components/icon/icon';
 import {loadArticlesDrafts} from './knowledge-base-actions';
+import {routeMap} from '../../app-routes';
 import {SkeletonList} from '../../components/skeleton/skeleton';
 import {until} from '../../util/util';
-import {useDispatch} from 'react-redux';
 import {View as AnimatedView} from 'react-native-animatable';
 
 import styles from './knowledge-base.styles';
@@ -51,6 +53,11 @@ const KnowledgeBaseDrafts = () => {
 
   useEffect(() => {
     loadDrafts();
+    return Router.setOnDispatchCallback((routeName: string, prevRouteName: string) => {
+      if (routeName === routeMap.Page && prevRouteName === routeMap.ArticleCreate) {
+        loadDrafts();
+      }
+    });
   }, []);
 
   const renderArticle = ({item}) => {
