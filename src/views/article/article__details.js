@@ -87,13 +87,15 @@ const ArticleDetails = (props: Props) => {
   }
 
   const summary: string = (article || articlePlaceholder).summary;
+  const hasSubArticles: boolean = subArticles?.length > 0;
   return (
     <>
       {!!summary && <Text style={styles.summaryText}>{summary}</Text>}
 
       {isLoading && !error && !article?.content && <SkeletonIssueContent/>}
 
-      <TouchableOpacity
+      {(!!onCreateArticle || hasSubArticles) && <TouchableOpacity
+        disabled={!hasSubArticles}
         onPress={() => Router.Page({
           children: renderSubArticles(article, subArticles, uiTheme)
         })}
@@ -112,20 +114,18 @@ const ArticleDetails = (props: Props) => {
             </View>
           )}
         </View>
-        <View style={styles.subArticlesContent}>
-          {subArticles?.length > 0 && <Text
+        {hasSubArticles && <View style={styles.subArticlesContent}>
+          <Text
             style={styles.subArticleItemText}>
             {`${subArticles.length} ${subArticles.length > 1 ? 'articles' : 'article'}`}
-          </Text>}
-          {subArticles?.length > 0 && (
-            <IconAngleRight
-              size={18}
-              color={uiTheme.colors.$text}
-              style={styles.subArticlesNavigateIcon}
-            />
-          )}
-        </View>
-      </TouchableOpacity>
+          </Text>
+          <IconAngleRight
+            size={18}
+            color={uiTheme.colors.$text}
+            style={styles.subArticlesNavigateIcon}
+          />
+        </View>}
+      </TouchableOpacity>}
 
       {!!article?.content && (
         <View style={styles.description}>
