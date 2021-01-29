@@ -60,7 +60,10 @@ export default class UserAPI extends ApiBase {
             star: ['id'],
             searchContext: this.SEARCH_CONTEXT_FIELDS,
           },
-          appearance: ['naturalCommentsOrder']
+          appearance: ['naturalCommentsOrder'],
+          articles: {
+            lastVisitedArticle: ['id,idReadable,summary,project(id,ringId)']
+          }
         }
       }
     ]);
@@ -85,6 +88,14 @@ export default class UserAPI extends ApiBase {
       appearanceProfile.$type
         ? appearanceProfile
         : Object.assign({}, appearanceProfile, {$type: ResourceTypes.USER_APPEARANCE_PROFILE})
+    );
+  }
+
+  async updateLastVisitedArticle(articleId: string | null): Promise<User> {
+    return await this.makeAuthorizedRequest(
+      `${this.adminApiUrl}/me/profiles/articles?${UserAPI.createFieldsQuery(['lastVisitedArticle(id)'])}`,
+      'POST',
+      {lastVisitedArticle: articleId ? {id: articleId} : null}
     );
   }
 

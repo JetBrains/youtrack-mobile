@@ -44,7 +44,8 @@ import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 type Props = ArticleState & {
   articlePlaceholder: ArticleEntity,
   storePrevArticle?: boolean,
-  updateArticlesList: () => Function
+  updateArticlesList: () => Function,
+  root?: boolean
 } & typeof articleActions;
 
 //$FlowFixMe
@@ -136,7 +137,8 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
       isLoading,
       deleteAttachment,
       issuePermissions,
-      createSubArticle
+      createSubArticle,
+      root
     } = this.props;
 
     if (error) {
@@ -145,7 +147,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
 
     const articleData: ArticleEntity = article || articlePlaceholder;
     const subArticles: Array<ArticleEntity> = this.createSubArticles();
-    const breadCrumbsElement = article ? this.renderBreadCrumbs() : null;
+    const breadCrumbsElement = article && !root ? this.renderBreadCrumbs() : null;
 
     let visibility: Visibility = articleData.visibility;
     if (articleData.visibility) {
@@ -244,7 +246,8 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
       articlePlaceholder,
       isProcessing,
       showArticleActions,
-      issuePermissions
+      issuePermissions,
+      root
     } = this.props;
     const uiThemeColors: UIThemeColors = this.uiTheme.colors;
     const linkColor: string = uiThemeColors.$link;
@@ -256,11 +259,14 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
       title: articleData.idReadable,
       leftButton: <IconBack color={isProcessing ? textSecondaryColor : linkColor}/>,
       onBack: () => {
-        if (!isProcessing) {
-          const hasParent:boolean = Router.pop();
-          if (!hasParent) {
-            Router.KnowledgeBase();
-          }
+        if (isProcessing) {
+          return;
+        }
+        if (root) {
+          Router.KnowledgeBase();
+        } else {
+          const hasParent: boolean = Router.pop();
+          !hasParent && Router.KnowledgeBase();
         }
       },
       rightButton: isArticleLoaded && ! isProcessing ? <IconContextActions size={18} color={linkColor}/> : null,

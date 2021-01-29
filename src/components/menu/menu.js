@@ -13,11 +13,13 @@ import {routeMap} from '../../app-routes';
 
 import styles from './menu.styles';
 
+import type {Article} from '../../flow/Article';
 import type {UITheme} from '../../flow/Theme';
 
 type Props = {
   isVisible: boolean,
   isDisabled: boolean,
+  lastVisitedArticle?: Article,
   uiTheme: UITheme
 }
 
@@ -33,6 +35,8 @@ class Menu extends Component<Props, State> {
     uiTheme: DEFAULT_THEME
   };
 
+  unsubscribeOnDispatch: Function;
+
   constructor() {
     super();
 
@@ -41,9 +45,13 @@ class Menu extends Component<Props, State> {
       currentRouteName: null
     };
 
-    Router.setOnDispatchCallback((routeName: ?string, prevRouteName: ?string) => {
+    this.unsubscribeOnDispatch = Router.setOnDispatchCallback((routeName: ?string, prevRouteName: ?string) => {
       this.setCurrentRouteName(routeName, prevRouteName);
     });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeOnDispatch();
   }
 
   setCurrentRouteName = (routeName: ?string, prevRouteName: ?string) => this.setState({
@@ -126,7 +134,11 @@ class Menu extends Component<Props, State> {
 
   openKnowledgeBase = () => {
     if (this.canNavigateTo(routeMap.KnowledgeBase)) {
-      Router.KnowledgeBase();
+      if (this.props.lastVisitedArticle) {
+        Router.ArticleSingle({root: true, articlePlaceholder: this.props.lastVisitedArticle});
+      } else {
+        Router.KnowledgeBase();
+      }
     }
   };
 
@@ -202,7 +214,8 @@ class Menu extends Component<Props, State> {
 const mapStateToProps = (state) => {
   return {
     isVisible: state.app.auth && state.app.user,
-    isDisabled: state.app.isChangingAccount
+    isDisabled: state.app.isChangingAccount,
+    lastVisitedArticle: state.app?.user?.profiles?.articles?.lastVisitedArticle
   };
 };
 

@@ -10,7 +10,7 @@ import type {PermissionsStore} from '../components/permissions-store/permissions
 import type {StorageState} from '../components/storage/storage';
 import type {EndUserAgreement} from '../flow/AppConfig';
 import type {WorkTimeSettings} from '../flow/Work';
-import type {User, UserAppearanceProfile, UserGeneralProfile} from '../flow/User';
+import type {User, UserAppearanceProfile, UserArticlesProfile, UserGeneralProfile} from '../flow/User';
 
 export type RootState = {
   auth: ?Auth,
@@ -121,6 +121,16 @@ export default createReducer(initialState, {
     const {user} = state;
     const _user = user || {profiles: {}};
     const updatedProfiles = Object.assign({}, _user.profiles || {}, {appearance: action.appearance});
+    const updatedUser = {...state.user, ...{profiles: updatedProfiles}};
+    return {
+      ...state,
+      ...{user: updatedUser}
+    };
+  },
+  [types.RECEIVE_USER_ARTICLES_PROFILE](state: RootState, action: {articles: UserArticlesProfile}) {
+    const {user} = state;
+    const _user = user || {profiles: {}};
+    const updatedProfiles = Object.assign({}, _user.profiles || {}, {articles: action.articles});
     const updatedUser = {...state.user, ...{profiles: updatedProfiles}};
     return {
       ...state,

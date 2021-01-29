@@ -1,13 +1,24 @@
 /* @flow */
 
-import * as types from './action-types';
-import {getIsAuthorized} from '../reducers/app-reducer';
-import {setApi} from '../components/api/api__instance';
-import Api from '../components/api/api';
-import packageJson from '../../package.json'; // eslint-disable-line import/extensions
-import Router from '../components/router/router';
-import log from '../components/log/log';
+import {Linking} from 'react-native';
+
 import DeviceInfo from 'react-native-device-info';
+
+import * as appActionsHelper from './app-actions-helper';
+import * as types from './action-types';
+import Api from '../components/api/api';
+import Auth from '../components/auth/auth';
+import log from '../components/log/log';
+import openByUrlDetector, {isOneOfServers} from '../components/open-url-handler/open-url-handler';
+import packageJson from '../../package.json'; // eslint-disable-line import/extensions
+import PermissionsStore from '../components/permissions-store/permissions-store';
+import PushNotifications from '../components/push-notifications/push-notifications';
+import Router from '../components/router/router';
+import UrlParse from 'url-parse';
+import usage from '../components/usage/usage';
+import {CUSTOM_ERROR_MESSAGE, UNSUPPORTED_ERRORS} from '../components/error/error-messages';
+import {EVERYTHING_CONTEXT} from '../components/search/search-context';
+import {getIsAuthorized} from '../reducers/app-reducer';
 import {
   initialState,
   clearCachesAndDrafts,
@@ -18,25 +29,17 @@ import {
   getOtherAccounts,
   storeAccounts
 } from '../components/storage/storage';
-import {Linking} from 'react-native';
-import UrlParse from 'url-parse';
-import openByUrlDetector, {isOneOfServers} from '../components/open-url-handler/open-url-handler';
-import usage from '../components/usage/usage';
-import {notify, notifyError} from '../components/notification/notification';
-import {loadConfig} from '../components/config/config';
-import Auth from '../components/auth/auth';
-import PushNotifications from '../components/push-notifications/push-notifications';
-import {EVERYTHING_CONTEXT} from '../components/search/search-context';
-import {storeSearchContext} from '../views/issues/issues-actions';
-import {isIOSPlatform} from '../util/util';
-import {CUSTOM_ERROR_MESSAGE, UNSUPPORTED_ERRORS} from '../components/error/error-messages';
+import {isIOSPlatform, until} from '../util/util';
 import {isUnsupportedFeatureError} from '../components/error/error-resolver';
-
-import * as appActionsHelper from './app-actions-helper';
-import PermissionsStore from '../components/permissions-store/permissions-store';
+import {loadConfig} from '../components/config/config';
+import {logEvent} from '../components/log/log-helper';
+import {notify, notifyError} from '../components/notification/notification';
+import {setApi} from '../components/api/api__instance';
+import {storeSearchContext} from '../views/issues/issues-actions';
 
 import type RootState from '../reducers/app-reducer';
 import type {AppConfigFilled, EndUserAgreement} from '../flow/AppConfig';
+import type {AppState} from '../reducers';
 import type {AuthParams} from '../flow/Auth';
 import type {Folder, User, UserAppearanceProfile, UserGeneralProfile} from '../flow/User';
 import type {NotificationRouteData} from '../flow/Notification';
@@ -106,7 +109,9 @@ export function receiveUserAppearanceProfile(userAppearanceProfile?: UserAppeara
 export function updateUserGeneralProfile(userGeneralProfile: UserGeneralProfile) {
   return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
     try {
-      const updatedUserGeneralProfile: UserGeneralProfile = await getApi().user.updateUserGeneralProfile(userGeneralProfile);
+      const updatedUserGeneralProfile: UserGeneralProfile = await getApi().user.updateUserGeneralProfile(
+        userGeneralProfile
+      );
 
       if (updatedUserGeneralProfile.searchContext === null) {
         updatedUserGeneralProfile.searchContext = EVERYTHING_CONTEXT;
@@ -121,6 +126,24 @@ export function updateUserGeneralProfile(userGeneralProfile: UserGeneralProfile)
     }
   };
 }
+
+export const setUserLastVisitedArticle = (articleId: string | null) => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+    const api: Api = getApi();
+    const [error, articlesProfile] = await until(api.user.updateLastVisitedArticle(articleId));
+    if (error) {
+      logEvent({
+        message: 'Failed to update last visited article in a user profile',
+        isError: true
+      });
+    } else {
+      dispatch({
+        type: types.RECEIVE_USER_ARTICLES_PROFILE,
+        ...{articles: articlesProfile}
+      });
+    }
+  };
+};
 
 export function checkAuthorization() {
   return async (dispatch: (any) => any, getState: () => Object) => {

@@ -98,9 +98,9 @@ export const toggleArticleProjectListItem = (item: ArticlesListItem, isCollapsed
   return createArticlesListItem(project, item.dataCollapsed || item.data, collapsed);
 };
 
-export const flattenArticleListChildren = (nodes: ArticleNodeList = []): Array<Article> => {
+export const flattenArticleListChildren = (nodes: ArticleNodeList): Array<Article> => {
   let list: Array<Article> = [];
-  for (let i = 0; i < nodes.length; i++) {
+  for (let i = 0; i < (nodes || []).length; i++) {
     const node = nodes[i];
     list.push(node.data);
     list = [...list, ...flattenArticleListChildren(node.children)];
@@ -121,7 +121,7 @@ export const flattenArticleList = (articleList: ArticlesList = []): ArticlesList
 };
 
 export const findNodeById = (articlesList: ArticleNodeList, id: string): ArticleNode => {
-  for (let i = 0, l = articlesList.length; i < l; i++) {
+  for (let i = 0, l = (articlesList || []).length; i < l; i++) {
     if (articlesList[i].data.id === id) {
       return articlesList[i];
     } else if (articlesList[i].children) {
@@ -135,10 +135,10 @@ export const findNodeById = (articlesList: ArticleNodeList, id: string): Article
 };
 
 export const findArticleProjectListItem = (
-  articlesList: ArticleNodeList = [],
+  articlesList: ArticleNodeList,
   projectId: string
 ): ArticleNode | null => {
-  return articlesList.find((it: ArticlesListItem) => it.title.id === projectId);
+  return (articlesList || []).find((it: ArticlesListItem) => it.title.id === projectId);
 };
 
 export const findArticleNode = (

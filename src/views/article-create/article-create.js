@@ -158,7 +158,7 @@ const ArticleCreate = (props: Props) => {
             );
             if (!error) {
               closeCreateArticleScreen(true);
-              Router.ArticleSingle({articlePlaceholder: createdArticle});
+              Router.ArticleSingle({root: true, articlePlaceholder: createdArticle});
             }
           }
         }}/>

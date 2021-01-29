@@ -20,6 +20,7 @@ import {
   setPrevArticle,
   setProcessing,
 } from './article-reducers';
+import {setUserLastVisitedArticle} from '../../actions/app-actions';
 import {showActions, showActionSheet} from '../../components/action-sheet/action-sheet';
 
 import type ActionSheet, {ActionSheetOptions} from '@expo/react-native-action-sheet';
@@ -50,6 +51,7 @@ const loadArticle = (articleId: string, reset: boolean = true) => {
       dispatch(setError(error));
       logEvent({message: 'Failed to load articles', isError: true});
     } else {
+      dispatch(setUserLastVisitedArticle(articleId));
       dispatch(setArticle(article));
     }
   };
@@ -176,7 +178,11 @@ const getArticleDraft = async (api: Api, article: Article): Promise<ArticleDraft
   return articleDraft;
 };
 
-export const createArticleDraft = async (api: Api, article: Article, createSubArticle: boolean = false): Promise<ArticleDraft | null> => {
+export const createArticleDraft = async (
+  api: Api,
+  article: Article,
+  createSubArticle: boolean = false
+): Promise<ArticleDraft | null> => {
   let articleDraft: Article | null = null;
 
   const [createDraftError, draft] = await until(

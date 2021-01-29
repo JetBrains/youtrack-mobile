@@ -15,6 +15,7 @@ import {flushStoragePart, getStorageState} from '../../components/storage/storag
 import {logEvent} from '../../components/log/log-helper';
 import {notify} from '../../components/notification/notification';
 import {setError, setList, setLoading} from './knowledge-base-reducers';
+import {setUserLastVisitedArticle} from '../../actions/app-actions';
 import {showActions} from '../../components/action-sheet/action-sheet';
 import {sortByUpdatedReverse} from '../../components/search/sorting';
 import {until} from '../../util/util';
@@ -62,6 +63,8 @@ const updateArticlesList = (articlesList: ArticlesList) => {
 const loadArticlesList = (reset: boolean = true) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
+
+    dispatch(setUserLastVisitedArticle(null));
 
     logEvent({message: 'Loading articles', analyticsId: ANALYTICS_ARTICLES_PAGE});
 
