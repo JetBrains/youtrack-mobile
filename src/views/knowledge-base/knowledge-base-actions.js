@@ -39,7 +39,7 @@ const loadArticlesListFromCache = () => {
     const cachedArticlesList: ArticlesList = getArticlesListCache();
     if (cachedArticlesList?.length > 0) {
       dispatch(setList(cachedArticlesList));
-      logEvent({message: 'Set articles list from cache'});
+      logEvent({message: 'Set article list from cache'});
     }
   };
 };
@@ -100,7 +100,7 @@ const loadArticlesDrafts = () => {
     const [error, articlesDrafts] = await until(api.articles.getArticleDrafts());
 
     if (error) {
-      logEvent({message: 'Failed to load articles drafts', isError: true});
+      logEvent({message: 'Failed to load article drafts', isError: true});
       return [];
     } else {
       return articlesDrafts.sort(sortByUpdatedReverse);
@@ -110,7 +110,7 @@ const loadArticlesDrafts = () => {
 
 const toggleProjectArticlesVisibility = (section: ArticlesListItem) => {
   return async (dispatch: (any) => any, getState: () => AppState) => {
-    logEvent({message: 'Toggle project articles visibility', analyticsId: ANALYTICS_ARTICLES_PAGE});
+    logEvent({message: 'Toggle project article visibility', analyticsId: ANALYTICS_ARTICLES_PAGE});
 
     const state: AppState = getState();
     const {articlesList} = state.articles;
@@ -135,7 +135,7 @@ const toggleProjectArticlesVisibility = (section: ArticlesListItem) => {
 
 const toggleProjectArticlesFavorite = (project: ArticleProject) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
-    logEvent({message: 'Toggle project articles favorite', analyticsId: ANALYTICS_ARTICLES_PAGE});
+    logEvent({message: 'Toggle project article favorite', analyticsId: ANALYTICS_ARTICLES_PAGE});
     const api: Api = getApi();
 
     animation.layoutAnimation();
@@ -167,7 +167,7 @@ const toggleNonFavoriteProjectsVisibility = () => {
     const isPinnedOnly: boolean = getStorageState().articlesListPinnedOnly;
     await flushStoragePart({articlesListPinnedOnly: !isPinnedOnly});
     dispatch(loadArticlesList(true));
-    notify(`${!isPinnedOnly ? 'Non-favorite projects are hidden' : 'Non-favorite projects are shown'}`);
+    notify(`${!isPinnedOnly ? 'Showing only favorite projects' : 'Showing all projects'}`);
   };
 };
 
@@ -175,7 +175,7 @@ const showContextActions = (actionSheet: ActionSheet, canCreateArticle: boolean)
   return async (dispatch: (any) => any) => {
     const actions: Array<ActionSheetOption> = [
       {
-        title: 'Hide/show non-favorite projects',
+        title: 'Show/Hide More Projects',
         execute: () => dispatch(toggleNonFavoriteProjectsVisibility())
       },
       {title: 'Cancel'}
@@ -183,7 +183,7 @@ const showContextActions = (actionSheet: ActionSheet, canCreateArticle: boolean)
 
     if (canCreateArticle) {
       actions.unshift({
-        title: 'Create article',
+        title: 'New Article',
         execute: () => Router.ArticleCreate()
       });
     }

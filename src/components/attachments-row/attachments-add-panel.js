@@ -34,7 +34,7 @@ const AttachmentAddPanel = (props: Props) => {
             styles.attachButtonText,
             props.isDisabled ? styles.attachButtonTextDisabled : null
           ]}>
-          Add Attachment
+          Attach image
         </Text>
       </TouchableOpacity>
     </View>

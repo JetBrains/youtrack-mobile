@@ -245,7 +245,7 @@ export class KnowledgeBase extends Component<Props, State> {
               hitSlop={HIT_SLOP}
               onPress={() => this.props.toggleNonFavoriteProjectsVisibility()}
             >
-              <Text style={styles.listFooterText}>Show non-favorite projects</Text>
+              <Text style={styles.listFooterText}>Show all projects</Text>
             </TouchableOpacity>
           </View>}
         stickySectionHeadersEnabled={true}
@@ -283,7 +283,7 @@ export class KnowledgeBase extends Component<Props, State> {
           onPress={() => this.props.toggleAllProjects(isSomeProjectExpanded)}
         >
           <Text style={styles.actionBarButtonText}>
-            {isSomeProjectExpanded ? 'Collapse all' : 'Expand all'}
+            {isSomeProjectExpanded ? 'Collapse projects' : 'Expand projects'}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity

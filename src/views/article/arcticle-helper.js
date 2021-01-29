@@ -13,7 +13,7 @@ export const confirmDeleteArticleDraft = (message?: string) => (
 
 export const confirmDeleteAllDrafts = () => (
   confirmation(
-    'Delete all drafts?',
+    'Are you sure you want to delete all article drafts?',
     'Delete',
     'This action deletes all drafts, including unpublished sub-articles'
   )

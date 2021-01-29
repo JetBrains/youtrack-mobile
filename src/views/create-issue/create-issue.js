@@ -189,7 +189,6 @@ class CreateIssue extends Component<Props, State> {
                 <SummaryDescriptionForm
                   testID="createIssueSummary"
                   style={styles.issueSummary}
-                  showSeparator={true}
                   summary={issue.summary}
                   description={issue.description}
                   editable={!processing}

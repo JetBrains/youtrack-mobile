@@ -260,13 +260,14 @@ const ArticleCreate = (props: Props) => {
 
             <SummaryDescriptionForm
               testID="createIssueSummary"
-              showSeparator={true}
               summary={articleDraftData.summary}
               description={articleDraftData.content}
               editable={!isProcessing && !!articleDraft}
               onSummaryChange={(summary: string) => updateDraft({summary})}
               onDescriptionChange={(content: string) => updateDraft({content})}
               uiTheme={theme.uiTheme}
+              summaryPlaceholder='Title'
+              descriptionPlaceholder='Article content'
             />
           </View>
         )}

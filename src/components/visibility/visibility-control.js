@@ -141,6 +141,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
       <Select
         multi={true}
         emptyValue={null}
+        placeholder='Filter users, groups, and teams'
         selectedItems={this.getVisibilitySelectedItems()}
         getTitle={this.getItemTitle}
         dataSource={this.getVisibilitySelectItems}

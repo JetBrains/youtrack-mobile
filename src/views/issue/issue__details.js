@@ -269,7 +269,6 @@ export default class IssueDetails extends Component<Props, void> {
         {editMode && <SummaryDescriptionForm
           editable={!isSavingEditedIssue}
           summary={summaryCopy}
-          showSeparator={false}
           description={descriptionCopy}
           onSummaryChange={this.props.setIssueSummaryCopy}
           onDescriptionChange={this.props.setIssueDescriptionCopy}

@@ -310,7 +310,7 @@ const deleteArticleComment = (commentId: string) => {
     try {
       await new Promise((resolve: Function, reject: Function) => {
         Alert.alert(
-          'Are you sure you want to delete comment?',
+          'Are you sure you want to delete this comment?',
           null,
           [
             {text: 'Cancel', style: 'cancel', onPress: reject},

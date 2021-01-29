@@ -39,7 +39,7 @@ type SelectState = {
 
 export default class Select extends Component<SelectProps, SelectState> {
   static defaultProps = {
-    placeholder: 'Search item',
+    placeholder: 'Filter item',
     autoFocus: false,
     onChangeSelection: (items: Array<Object>) => null,
     noFilter: false,
