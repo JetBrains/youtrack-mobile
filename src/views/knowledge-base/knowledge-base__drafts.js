@@ -3,10 +3,10 @@
 import React, {useEffect, useState} from 'react';
 import {TouchableOpacity, View, FlatList, RefreshControl, Text, ActivityIndicator} from 'react-native';
 
+import ArticleWithChildren from '../../components/articles/article-item-with-children';
 import ErrorMessage from '../../components/error-message/error-message';
 import Header from '../../components/header/header';
 import IconTrash from '@jetbrains/icons/trash.svg';
-import KnowledgeBaseArticle from './knowledge-base__article';
 import Router from '../../components/router/router';
 import Select from '../../components/select/select';
 import {confirmDeleteAllDrafts, confirmDeleteArticleDraft} from '../article/arcticle-helper';
@@ -55,7 +55,7 @@ const KnowledgeBaseDrafts = () => {
 
   const renderArticle = ({item}) => {
     return (
-      <KnowledgeBaseArticle
+      <ArticleWithChildren
         style={[
           styles.itemDraft,
           isDeleting ? styles.itemDraftDisabled : null

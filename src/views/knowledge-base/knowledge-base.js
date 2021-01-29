@@ -7,9 +7,9 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import * as knowledgeBaseActions from './knowledge-base-actions';
+import ArticleWithChildren from '../../components/articles/article-item-with-children';
 import ErrorMessage from '../../components/error-message/error-message';
 import IconSearchEmpty from '../../components/icon/search-empty.svg';
-import KnowledgeBaseArticle from './knowledge-base__article';
 import KnowledgeBaseDrafts from './knowledge-base__drafts';
 import KnowledgeBaseSearchPanel from './knowledge-base__search';
 import PropTypes from 'prop-types';
@@ -119,7 +119,7 @@ export class KnowledgeBase extends Component<Props, State> {
   };
 
   renderArticle = ({item}: ArticleNode) => (
-    <KnowledgeBaseArticle
+    <ArticleWithChildren
       style={styles.itemArticle}
       articleNode={item}
       onArticlePress={(article: Article) => Router.Article({articlePlaceholder: article})}

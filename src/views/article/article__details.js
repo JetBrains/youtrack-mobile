@@ -3,6 +3,9 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, FlatList} from 'react-native';
 
+import {useSelector} from 'react-redux';
+
+import ArticleWithChildren from '../../components/articles/article-item-with-children';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import Header from '../../components/header/header';
 import MarkdownView from '../../components/wiki/markdown-view';
@@ -11,14 +14,15 @@ import Select from '../../components/select/select';
 import Separator from '../../components/separator/separator';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLE_PAGE} from '../../components/analytics/analytics-ids';
-import {hasType} from '../../components/api/api__resource-types';
-import {IconAdd, IconAngleRight, IconBack, IconLock} from '../../components/icon/icon';
+import {findArticleNode} from '../../components/articles/articles-tree-helper';
+import {IconAdd, IconAngleRight, IconBack} from '../../components/icon/icon';
 import {logEvent} from '../../components/log/log-helper';
 import {SkeletonIssueContent} from '../../components/skeleton/skeleton';
 
 import styles from './article.styles';
 
-import type {Article} from '../../flow/Article';
+import type {AppState} from '../../reducers';
+import type {Article, ArticleNode, ArticlesList} from '../../flow/Article';
 import type {Attachment} from '../../flow/CustomFields';
 import type {CustomError} from '../../flow/Error';
 import type {UITheme} from '../../flow/Theme';
@@ -34,43 +38,86 @@ type Props = {
   uiTheme: UITheme
 };
 
+const ArticleDetails = (props: Props) => {
+  const articlesList: ArticlesList = useSelector((state: AppState) => state.articles.articlesList);
 
-const renderSubArticles = (article: Article, subArticles: Array<Article>, uiTheme: UITheme) => {
-  return (
-    <>
-      <Header
-        style={styles.subArticlesHeader}
-        title={article.idReadable}
-        leftButton={<IconBack color={uiTheme.colors.$link}/>}
-        onBack={() => Router.pop()}
+  const navigateToSubArticlePage = (article: Article) => (
+    Router.Page({
+      children: renderSubArticles(article, props.uiTheme)
+    })
+  );
+
+  const renderSubArticles = (article: Article, uiTheme: UITheme) => {
+    const articleNode: ?ArticleNode = articlesList && findArticleNode(articlesList, article.project.id, article.id);
+    const subArticles: Array<ArticleNode> = articleNode?.children || [];
+
+    const renderArticleNode = ({item}: { item: Article }) => (
+      <ArticleWithChildren
+        style={styles.subArticleItem}
+        articleNode={item}
+        onArticlePress={(article: Article) => Router.Article({articlePlaceholder: article, storePrevArticle: true})}
+        onShowSubArticles={navigateToSubArticlePage}
       />
+    );
 
-      <FlatList
-        data={subArticles}
-        keyExtractor={(item: Article) => item.id}
-        getItemLayout={Select.getItemLayout}
-        renderItem={({item}: Article) =>
-          <TouchableOpacity
-            style={styles.subArticleItem}
-            onPress={() => Router.Article({articlePlaceholder: item, storePrevArticle: true})}
-          >
-            <Text numberOfLines={5} style={styles.subArticleItemText}>{item.summary}</Text>
-            {hasType.visibilityLimited(item?.visibility) && (
-              <View style={styles.subArticleItemIcon}>
-                <IconLock
-                  size={16}
-                  color={uiTheme.colors.$iconAccent}
-                />
+    return (
+      <>
+        <Header
+          style={styles.subArticlesHeader}
+          title={article.idReadable}
+          leftButton={<IconBack color={uiTheme.colors.$link}/>}
+          onBack={() => Router.pop()}
+        />
+
+        <FlatList
+          data={subArticles}
+          keyExtractor={(item: ArticleNode) => item.data.id}
+          getItemLayout={Select.getItemLayout}
+          renderItem={renderArticleNode}
+          ItemSeparatorComponent={Select.renderSeparator}
+        />
+      </>
+    );
+  };
+
+  const renderSubArticlesButton = () => {
+    const hasSubArticles: boolean = subArticles?.length > 0;
+    if (!!onCreateArticle || hasSubArticles) {
+      return (
+        <TouchableOpacity
+          disabled={!hasSubArticles}
+          onPress={() => navigateToSubArticlePage(props.article)}
+          style={styles.subArticles}
+        >
+          <View style={styles.breadCrumbsItem}>
+            <Text style={styles.subArticlesTitle}>Sub-articles</Text>
+            {!!onCreateArticle && (
+              <View style={styles.subArticlesCreate}>
+                <TouchableOpacity
+                  onPress={onCreateArticle}
+                  style={styles.subArticlesCreateIcon}
+                >
+                  <IconAdd size={18} color={styles.subArticlesCreateIcon.color}/>
+                </TouchableOpacity>
               </View>
             )}
-          </TouchableOpacity>}
-        ItemSeparatorComponent={Select.renderSeparator}
-      />
-    </>
-  );
-};
+          </View>
+          {hasSubArticles && <View style={styles.subArticlesContent}>
+            <Text
+              style={styles.subArticleItemText}>
+              {`${subArticles.length} ${subArticles.length > 1 ? 'articles' : 'article'}`}
+            </Text>
+            <IconAngleRight
+              size={18}
+              color={uiTheme.colors.$text}
+              style={styles.subArticlesNavigateIcon}
+            />
+          </View>}
+        </TouchableOpacity>
+      );
+    }
+  };
 
-const ArticleDetails = (props: Props) => {
   const {
     article,
     articlePlaceholder,
@@ -87,45 +134,13 @@ const ArticleDetails = (props: Props) => {
   }
 
   const summary: string = (article || articlePlaceholder).summary;
-  const hasSubArticles: boolean = subArticles?.length > 0;
   return (
     <>
       {!!summary && <Text style={styles.summaryText}>{summary}</Text>}
 
       {isLoading && !error && !article?.content && <SkeletonIssueContent/>}
 
-      {(!!onCreateArticle || hasSubArticles) && <TouchableOpacity
-        disabled={!hasSubArticles}
-        onPress={() => Router.Page({
-          children: renderSubArticles(article, subArticles, uiTheme)
-        })}
-        style={styles.subArticles}
-      >
-        <View style={styles.breadCrumbsItem}>
-          <Text style={styles.subArticlesTitle}>Sub-articles</Text>
-          {!!onCreateArticle && (
-            <View style={styles.subArticlesCreate}>
-              <TouchableOpacity
-                onPress={onCreateArticle}
-                style={styles.subArticlesCreateIcon}
-              >
-                <IconAdd size={18} color={styles.subArticlesCreateIcon.color}/>
-              </TouchableOpacity>
-            </View>
-          )}
-        </View>
-        {hasSubArticles && <View style={styles.subArticlesContent}>
-          <Text
-            style={styles.subArticleItemText}>
-            {`${subArticles.length} ${subArticles.length > 1 ? 'articles' : 'article'}`}
-          </Text>
-          <IconAngleRight
-            size={18}
-            color={uiTheme.colors.$text}
-            style={styles.subArticlesNavigateIcon}
-          />
-        </View>}
-      </TouchableOpacity>}
+      {renderSubArticlesButton()}
 
       {!!article?.content && (
         <View style={styles.description}>

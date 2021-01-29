@@ -76,13 +76,7 @@ export default EStyleSheet.create({
     ...elevation1
   },
   subArticleItem: {
-    maxWidth: '95%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: UNIT * 2
-  },
-  subArticleItemIcon: {
-    paddingHorizontal: UNIT / 1.5
+    marginLeft: UNIT * 2
   },
   subArticleItemText: {
     ...mainText,
