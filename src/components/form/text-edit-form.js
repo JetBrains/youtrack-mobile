@@ -13,7 +13,7 @@ import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   adaptive?: boolean,
-  autoFocus: boolean,
+  autoFocus?: boolean,
   editable: boolean,
   description: string,
   placeholderText?: string,
@@ -26,13 +26,6 @@ type Props = {
 const TEXT_UPDATE_DEBOUNCE = 300;
 
 export default class TextEditForm extends PureComponent<Props, void> {
-  descriptionInput: MultilineInput;
-
-  descriptionInputRef = (instance: ?MultilineInput) => {
-    if (instance) {
-      this.descriptionInput = instance;
-    }
-  };
 
   onDescriptionChange = throttle((text: string) => {
     const {onDescriptionChange} = this.props;
@@ -54,7 +47,6 @@ export default class TextEditForm extends PureComponent<Props, void> {
     return (
       <MultilineInput
         style={[styles.descriptionInput, style]}
-        ref={this.descriptionInputRef}
         adaptive={adaptive}
         autoFocus={autoFocus}
         multiline={multiline}
