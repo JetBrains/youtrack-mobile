@@ -45,7 +45,8 @@ type Props = ArticleState & {
   articlePlaceholder: ArticleEntity,
   storePrevArticle?: boolean,
   updateArticlesList: () => Function,
-  root?: boolean
+  root?: boolean,
+  lastVisitedArticle: ?Article
 } & typeof articleActions;
 
 //$FlowFixMe
@@ -61,11 +62,13 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
   componentDidMount() {
     logEvent({message: 'Navigate to article', analyticsId: ANALYTICS_ARTICLE_PAGE});
 
-    const {articlePlaceholder, storePrevArticle} = this.props;
+    const {storePrevArticle} = this.props;
     if (storePrevArticle) {
       this.props.setPreviousArticle();
     }
-    this.loadArticle(articlePlaceholder.id || articlePlaceholder.idReadable, true);
+
+    const currentArticle: Article = this.getArticle();
+    this.loadArticle(currentArticle.id || currentArticle.idReadable, true);
 
     this.unsubscribeOnDispatch = Router.setOnDispatchCallback(
       (routeName: string, prevRouteName: string) => {
@@ -81,9 +84,14 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
 
   loadArticle = (articleId: string, reset: boolean) => this.props.loadArticle(articleId, reset);
 
+  getArticle = (): Article => {
+    const {article, articlePlaceholder, lastVisitedArticle} = this.props;
+    return article || articlePlaceholder || lastVisitedArticle;
+  };
+
   refresh = () => {
-    const {articlePlaceholder, article} = this.props;
-    const articleId: ?string = article?.id || articlePlaceholder?.id;
+    const article: ?Article = this.getArticle();
+    const articleId: ?string = article?.id;
     if (articleId) {
       this.loadArticle(articleId, false);
     }
@@ -149,8 +157,8 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     const subArticles: Array<ArticleEntity> = this.createSubArticles();
     const breadCrumbsElement = article && !root ? this.renderBreadCrumbs() : null;
 
-    let visibility: Visibility = articleData.visibility;
-    if (articleData.visibility) {
+    let visibility: ?Visibility = articleData?.visibility;
+    if (articleData?.visibility) {
       const articleNode: ?ArticleNode = articleData?.project && findArticleNode(
         articlesList, articleData.project.id, articleData?.id
       );
@@ -249,10 +257,14 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
       issuePermissions,
       root
     } = this.props;
+    const articleData: $Shape<ArticleEntity> = article || articlePlaceholder;
+    if (!articleData) {
+      return null;
+    }
+
     const uiThemeColors: UIThemeColors = this.uiTheme.colors;
     const linkColor: string = uiThemeColors.$link;
     const textSecondaryColor: string = uiThemeColors.$textSecondary;
-    const articleData: $Shape<ArticleEntity> = article || articlePlaceholder;
     const isArticleLoaded: boolean = !!article;
 
     const props: HeaderProps = {
@@ -324,7 +336,7 @@ const mapStateToProps = (
     ...state.article,
     articlePlaceholder: ownProps.articlePlaceholder,
     issuePermissions: state.app.issuePermissions,
-    articlesList: state.articles.articlesList
+    lastVisitedArticle: state.app?.user?.profiles?.articles?.lastVisitedArticle
   };
 };
 const mapDispatchToProps = (dispatch) => {
