@@ -63,7 +63,8 @@ export default EStyleSheet.create({
   },
   itemChild: {
     marginTop: UNIT,
-    marginLeft: -UNIT * 3
+    marginLeft: -UNIT * 3,
+    marginBottom: SELECT_ITEM_HEIGHT
   },
   itemStar: {
     marginRight: UNIT * 0.75,
