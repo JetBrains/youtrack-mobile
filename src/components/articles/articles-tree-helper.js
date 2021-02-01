@@ -40,7 +40,8 @@ export const getGroupedProjects = (): Array<Folder> => {
 export const createArticleList = (
   articles: Array<Article>,
   cachedArticlesList: ArticlesList | null,
-  flat: boolean = false
+  flat: boolean = false,
+  isCollapsed?: boolean
 ): ArticlesList => {
   return getGroupedProjects().reduce((list: ArticlesList, project: ArticleProject) => {
     const projectArticles: Array<Article> = (
@@ -67,7 +68,7 @@ export const createArticleList = (
       }
     });
 
-    let isProjectCollapsed: boolean = true;
+    let isProjectCollapsed: boolean = typeof isCollapsed === 'boolean' ? isCollapsed : true;
     if (projectArticles?.length > 0) {
       const cachedArticlesListProjectListItem: ?ArticlesListItem = findArticleProjectListItem(
         cachedArticlesList || [],

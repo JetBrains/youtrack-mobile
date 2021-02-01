@@ -51,8 +51,9 @@ const loadArticle = (articleId: string, reset: boolean = true) => {
       dispatch(setError(error));
       logEvent({message: 'Failed to load articles', isError: true});
     } else {
-      dispatch(setUserLastVisitedArticle(articleId));
+      logEvent({message: 'Article loaded'});
       dispatch(setArticle(article));
+      dispatch(setUserLastVisitedArticle(articleId));
     }
   };
 };

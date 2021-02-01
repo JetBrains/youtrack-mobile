@@ -9,21 +9,22 @@ import {iconClearText} from '../../components/icon/icon-clear-text';
 import styles from './knowledge-base.styles';
 
 type Props = {
-  onSearch: (query: string) => void
+  onSearch: (query: string) => void,
+  query: ?string
 };
 
 
 const KnowledgeBaseSearchPanel = (props: Props) => {
   let searchInput: Object | null = null;
 
-  const [query, updateQuery] = useState('');
+  const [searchQuery, updateQuery] = useState(props.query || '');
   const [focus, updateFocus] = useState(false);
 
   const focusInput = () => searchInput && searchInput.focus && searchInput.focus();
 
   return (
     <View style={styles.searchPanelContainer}>
-      {Boolean(!focus && !query) &&
+      {Boolean(!focus && !searchQuery) &&
       <IconSearch size={20} color={styles.icon.color}/>
       }
 
@@ -45,12 +46,12 @@ const KnowledgeBaseSearchPanel = (props: Props) => {
         onFocus={() => updateFocus(true)}
         onBlur={() => updateFocus(false)}
 
-        onSubmitEditing={() => props.onSearch(query)}
+        onSubmitEditing={() => props.onSearch(searchQuery)}
         onChangeText={(q: string) => updateQuery(q)}
-        value={query}
+        value={searchQuery}
       />
 
-      {!!query && iconClearText(
+      {!!searchQuery && iconClearText(
         () => {
           updateQuery('');
           focusInput();

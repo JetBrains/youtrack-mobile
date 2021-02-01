@@ -22,6 +22,7 @@ export const MAX_STORED_QUERIES = 5;
 export type StorageState = {|
   articlesList: ArticlesList,
   articlesListPinnedOnly: boolean,
+  articlesQuery: string | null,
   projectId: ?string,
   projects: Array<?string>,
   draftId: ?string,
@@ -52,6 +53,7 @@ type StorageStateKeys = $Exact<$ObjMap<StorageState, () => string>>;
 const storageKeys: StorageStateKeys = {
   articlesList: 'YT_ARTICLES_LIST',
   articlesListPinnedOnly: 'YT_ARTICLES_LIST_PINNED_ONLY',
+  articlesQuery: 'YT_ARTICLES_QUERY',
   projectId: 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE',
   projects: 'YT_PROJECTS_STORAGE',
   draftId: 'DRAFT_ID_STORAGE_KEY',
@@ -84,6 +86,7 @@ const hasValue = v => v !== null && v !== undefined;
 export const initialState: StorageState = Object.freeze({
   articlesList: null,
   articlesListPinnedOnly: false,
+  articlesQuery: null,
   projectId: null,
   projects: [],
   draftId: null,
@@ -142,6 +145,7 @@ export async function clearCachesAndDrafts() {
   await AsyncStorage.multiRemove([
     storageKeys.articlesList,
     storageKeys.articlesListPinnedOnly,
+    storageKeys.articlesQuery,
     storageKeys.projectId,
     storageKeys.draftId,
     storageKeys.query,
@@ -211,7 +215,7 @@ export async function flushStorage(newState: StorageState): Promise<StorageState
     .filter(([key, value]) => value !== null && value !== undefined);
 
   if (pairsToWrite.length === 0) {
-    log.debug('Storage state is empty, no actuall write has been done');
+    log.debug('Storage state is empty, no actual write has been done');
     return newState;
   }
 

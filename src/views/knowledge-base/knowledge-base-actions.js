@@ -29,8 +29,8 @@ import type {IssueProject} from '../../flow/CustomFields';
 type ApiGetter = () => Api;
 
 
-const setArticlesListCache = (articlesList: ArticlesList) => {
-  flushStoragePart({articlesList});
+const setArticlesListCache = async (articlesList: ArticlesList) => {
+  await flushStoragePart({articlesList});
 };
 
 const getArticlesListCache = (): ArticlesList => getStorageState().articlesList || [];
@@ -39,7 +39,12 @@ const loadArticlesListFromCache = () => {
   return async (dispatch: (any) => any) => {
     const cachedArticlesList: ArticlesList = getArticlesListCache();
     if (cachedArticlesList?.length > 0) {
-      dispatch(setList(cachedArticlesList));
+      const query: string | null = getArticlesQuery();
+      if (query) {
+        dispatch(filterArticlesList(query));
+      } else {
+        dispatch(setList(cachedArticlesList));
+      }
       logEvent({message: 'Set article list from cache'});
     }
   };
@@ -48,9 +53,10 @@ const loadArticlesListFromCache = () => {
 const createList = (
   articles: Array<Article>,
   cachedArticlesList: ArticlesList | null,
-  flat?: boolean
+  flat?: boolean,
+  isCollapsed?: boolean
 ): ArticlesList => {
-  return createArticleList(articles, cachedArticlesList, flat);
+  return createArticleList(articles, cachedArticlesList, flat, isCollapsed);
 };
 
 const updateArticlesList = (articlesList: ArticlesList) => {
@@ -79,7 +85,13 @@ const loadArticlesList = (reset: boolean = true) => {
       logEvent({message: 'Failed to load articles', isError: true});
     } else {
       const articlesList: ArticlesList = createList(articles, getArticlesListCache());
-      dispatch(updateArticlesList(articlesList));
+      const query: string | null = getArticlesQuery();
+      if (query) {
+        await setArticlesListCache(articlesList);
+        dispatch(filterArticlesList(query));
+      } else {
+        dispatch(updateArticlesList(articlesList));
+      }
     }
   };
 };
@@ -88,13 +100,16 @@ const filterArticlesList = (query: string) => {
   return async (dispatch: (any) => any) => {
     if (query) {
       const filteredArticles: Array<Article> = filterArticles(getArticlesListCache(), query);
-      const filteredArticlesList: ArticlesList = createList(filteredArticles, null, true);
+      const filteredArticlesList: ArticlesList = createList(filteredArticles, null, true, false);
       dispatch(setList(filteredArticlesList));
     } else {
       dispatch(setList(getArticlesListCache()));
     }
+    flushStoragePart({articlesQuery: query ? query : null});
   };
 };
+
+const getArticlesQuery = (): string | null => getStorageState().articlesQuery;
 
 const loadArticlesDrafts = () => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
@@ -221,6 +236,7 @@ const toggleAllProjects = (collapse: boolean) => {
 };
 
 export type KnowledgeBaseActions = {
+  getArticlesQuery: typeof getArticlesQuery,
   filterArticlesList: typeof filterArticlesList,
   loadArticlesDrafts: typeof loadArticlesDrafts,
   loadArticlesList: typeof loadArticlesList,
@@ -233,6 +249,7 @@ export type KnowledgeBaseActions = {
 };
 
 export {
+  getArticlesQuery,
   filterArticlesList,
   loadArticlesDrafts,
   loadArticlesList,

@@ -48,6 +48,7 @@ describe('Storage', () => {
     MockedStorage.multiRemove.should.have.been.calledWith([
       'YT_ARTICLES_LIST',
       'YT_ARTICLES_LIST_PINNED_ONLY',
+      'YT_ARTICLES_QUERY',
       'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE',
       'YT_PROJECTS_STORAGE',
       'DRAFT_ID_STORAGE_KEY',

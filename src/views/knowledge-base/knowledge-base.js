@@ -265,6 +265,7 @@ export class KnowledgeBase extends Component<Props, State> {
 
   renderSearchPanel = () => (
     <KnowledgeBaseSearchPanel
+      query={knowledgeBaseActions.getArticlesQuery()}
       onSearch={(query: string) => {
         this.props.filterArticlesList(query);
       }}
