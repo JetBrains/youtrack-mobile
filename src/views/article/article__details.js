@@ -3,8 +3,6 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, FlatList} from 'react-native';
 
-import {useSelector} from 'react-redux';
-
 import ArticleWithChildren from '../../components/articles/article-item-with-children';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import Header from '../../components/header/header';
@@ -14,63 +12,59 @@ import Select from '../../components/select/select';
 import Separator from '../../components/separator/separator';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLE_PAGE} from '../../components/analytics/analytics-ids';
-import {findArticleNode} from '../../components/articles/articles-tree-helper';
 import {IconAdd, IconAngleRight, IconBack} from '../../components/icon/icon';
 import {logEvent} from '../../components/log/log-helper';
 import {SkeletonIssueContent} from '../../components/skeleton/skeleton';
 
 import styles from './article.styles';
 
-import type {AppState} from '../../reducers';
-import type {Article, ArticleNode, ArticlesList} from '../../flow/Article';
+import type {Article, ArticleNode} from '../../flow/Article';
 import type {Attachment} from '../../flow/CustomFields';
 import type {CustomError} from '../../flow/Error';
 import type {UITheme} from '../../flow/Theme';
 
 type Props = {
-  article: Article,
+  articleNode: ArticleNode,
   articlePlaceholder: Article,
   error: CustomError,
   isLoading: boolean,
-  subArticles: Array<Article>,
   onRemoveAttach: ?(attachment: Attachment) => any,
   onCreateArticle: ?() => any,
   uiTheme: UITheme
 };
 
 const ArticleDetails = (props: Props) => {
-  const articlesList: ArticlesList = useSelector((state: AppState) => state.articles.articlesList);
 
-  const navigateToSubArticlePage = (article: Article) => (
+  function navigateToSubArticlePage(articleNode: ArticleNode) {
     Router.Page({
-      children: renderSubArticles(article, props.uiTheme)
-    })
-  );
+      children: renderSubArticles(articleNode)
+    });
+  }
 
-  const renderSubArticles = (article: Article, uiTheme: UITheme) => {
-    const articleNode: ?ArticleNode = articlesList && findArticleNode(articlesList, article.project.id, article.id);
-    const subArticles: Array<ArticleNode> = articleNode?.children || [];
-
-    const renderArticleNode = ({item}: { item: Article }) => (
-      <ArticleWithChildren
-        style={styles.subArticleItem}
-        articleNode={item}
-        onArticlePress={(article: Article) => Router.Article({articlePlaceholder: article, storePrevArticle: true})}
-        onShowSubArticles={navigateToSubArticlePage}
-      />
-    );
+  function renderSubArticles(articleNode: ArticleNode) {
+    const renderArticleNode = ({item}: { item: Article }) => {
+      return (
+        <ArticleWithChildren
+          style={styles.subArticleItem}
+          articleNode={item}
+          onArticlePress={(article: Article) => Router.Article({articlePlaceholder: article, storePrevArticle: true})}
+          onShowSubArticles={(childArticleNode: ArticleNode) => navigateToSubArticlePage(childArticleNode)}
+        />
+      );
+    };
 
     return (
       <>
         <Header
           style={styles.subArticlesHeader}
-          title={article.idReadable}
-          leftButton={<IconBack color={uiTheme.colors.$link}/>}
+          leftButton={<IconBack color={styles.link.color}/>}
           onBack={() => Router.pop()}
-        />
+        >
+          <Text numberOfLines={2} style={styles.subArticlesHeaderText}>{articleNode.data.summary}</Text>
+        </Header>
 
         <FlatList
-          data={subArticles}
+          data={articleNode.children}
           keyExtractor={(item: ArticleNode) => item.data.id}
           getItemLayout={Select.getItemLayout}
           renderItem={renderArticleNode}
@@ -78,15 +72,17 @@ const ArticleDetails = (props: Props) => {
         />
       </>
     );
-  };
+  }
 
   const renderSubArticlesButton = () => {
-    const hasSubArticles: boolean = subArticles?.length > 0;
+    const subArticles: Array<ArticleNode> = props?.articleNode?.children || [];
+    const hasSubArticles: boolean = subArticles.length > 0;
+
     if (!!onCreateArticle || hasSubArticles) {
       return (
         <TouchableOpacity
           disabled={!hasSubArticles}
-          onPress={() => navigateToSubArticlePage(props.article)}
+          onPress={() => navigateToSubArticlePage(props.articleNode)}
           style={styles.subArticles}
         >
           <View style={styles.breadCrumbsItem}>
@@ -119,24 +115,23 @@ const ArticleDetails = (props: Props) => {
   };
 
   const {
-    article,
+    articleNode,
     articlePlaceholder,
     isLoading,
     error,
     uiTheme,
-    subArticles = [],
     onRemoveAttach,
     onCreateArticle
   } = props;
 
-  if (!article && !articlePlaceholder) {
+  if (!articleNode && !articlePlaceholder) {
     return null;
   }
 
-  const summary: string = (article || articlePlaceholder).summary;
+  const article: Article = articleNode?.data || articlePlaceholder;
   return (
     <>
-      {!!summary && <Text style={styles.summaryText}>{summary}</Text>}
+      {!!article.summary && <Text style={styles.summaryText}>{article.summary}</Text>}
 
       {isLoading && !error && !article?.content && <SkeletonIssueContent/>}
 

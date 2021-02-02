@@ -20,6 +20,7 @@ import Router from '../../components/router/router';
 import Star from '../../components/star/star';
 import VisibilityControl from '../../components/visibility/visibility-control';
 import {ANALYTICS_ARTICLE_PAGE} from '../../components/analytics/analytics-ids';
+import {createArticleList} from '../knowledge-base/knowledge-base-actions';
 import {findArticleNode} from '../../components/articles/articles-tree-helper';
 import {getApi} from '../../components/api/api__instance';
 import {IconBack, IconContextActions} from '../../components/icon/icon';
@@ -85,8 +86,8 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
   loadArticle = (articleId: string, reset: boolean) => this.props.loadArticle(articleId, reset);
 
   getArticle = (): Article => {
-    const {article, articlePlaceholder, lastVisitedArticle} = this.props;
-    return article || articlePlaceholder || lastVisitedArticle;
+    const {articlePlaceholder, lastVisitedArticle} = this.props;
+    return articlePlaceholder || lastVisitedArticle;
   };
 
   refresh = () => {
@@ -130,12 +131,6 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     );
   };
 
-  createSubArticles = (): Array<ArticleEntity> => {
-    const {article, articlesList} = this.props;
-    const articleNode: ?ArticleNode = article && findArticleNode(articlesList, article.project.id, article.id);
-    return (articleNode?.children || []).map((it: ArticleNode) => it.data);
-  };
-
   renderDetails = (uiTheme: UITheme) => {
     const {
       article,
@@ -154,14 +149,13 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     }
 
     const articleData: ArticleEntity = article || articlePlaceholder;
-    const subArticles: Array<ArticleEntity> = this.createSubArticles();
     const breadCrumbsElement = article && !root ? this.renderBreadCrumbs() : null;
 
+    const articleNode: ?ArticleNode = articleData?.project && findArticleNode(
+      articlesList, articleData.project.id, articleData?.id
+    );
     let visibility: ?Visibility = articleData?.visibility;
     if (articleData?.visibility) {
-      const articleNode: ?ArticleNode = articleData?.project && findArticleNode(
-        articlesList, articleData.project.id, articleData?.id
-      );
       visibility = {...articleNode?.data?.visibility, ...articleData?.visibility};
     }
 
@@ -214,7 +208,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
           }
           error={error}
           isLoading={isLoading}
-          subArticles={subArticles}
+          articleNode={articleNode}
           uiTheme={uiTheme}
         />
       </ScrollView>
@@ -336,7 +330,8 @@ const mapStateToProps = (
     ...state.article,
     articlePlaceholder: ownProps.articlePlaceholder,
     issuePermissions: state.app.issuePermissions,
-    lastVisitedArticle: state.app?.user?.profiles?.articles?.lastVisitedArticle
+    lastVisitedArticle: state.app?.user?.profiles?.articles?.lastVisitedArticle,
+    articlesList: createArticleList(state.articles.articles || [])
   };
 };
 const mapDispatchToProps = (dispatch) => {

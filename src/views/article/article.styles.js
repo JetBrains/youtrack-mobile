@@ -4,7 +4,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {elevation1, elevationBottom} from '../../components/common-styles/shadow';
 import {headerMinHeight} from '../../components/header/header.styles';
-import {MAIN_FONT_SIZE, mainText} from '../../components/common-styles/typography';
+import {headerTitle, MAIN_FONT_SIZE, mainText} from '../../components/common-styles/typography';
 import {separator} from '../../components/common-styles/list';
 import {summaryTitle} from '../../components/common-styles/issue';
 import {UNIT} from '../../components/variables/variables';
@@ -75,6 +75,7 @@ export default EStyleSheet.create({
   subArticlesHeader: {
     ...elevation1
   },
+  subArticlesHeaderText: headerTitle,
   subArticleItem: {
     marginLeft: UNIT * 2
   },
@@ -185,5 +186,8 @@ export default EStyleSheet.create({
   breadCrumbsSeparator: {
     ...separator,
     borderColor: '$separator'
+  },
+  link: {
+    color: '$link'
   }
 });

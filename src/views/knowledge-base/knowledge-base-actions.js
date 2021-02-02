@@ -2,15 +2,10 @@
 
 import type ActionSheet from '@expo/react-native-action-sheet';
 
+import * as articleTreeHelper from '../../components/articles/articles-tree-helper';
 import animation from '../../components/animation/animation';
 import Router from '../../components/router/router';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
-import {
-  createArticleList,
-  doFilterArticles,
-  flattenArticleList,
-  toggleArticleProjectListItem
-} from '../../components/articles/articles-tree-helper';
 import {flushStoragePart, getStorageState} from '../../components/storage/storage';
 import {logEvent} from '../../components/log/log-helper';
 import {notify} from '../../components/notification/notification';
@@ -49,13 +44,13 @@ const loadArticlesListFromCache = () => {
   };
 };
 
-const createList = (
+const createArticleList = (
   articles: Array<Article>,
   cachedArticlesList: ArticlesList | null,
   flat?: boolean,
   isCollapsed?: boolean
 ): ArticlesList => {
-  return createArticleList(articles, cachedArticlesList, flat, isCollapsed);
+  return articleTreeHelper.createArticleList(articles, cachedArticlesList, flat, isCollapsed);
 };
 
 const updateArticlesList = (articlesList: ArticlesList) => {
@@ -100,10 +95,10 @@ const loadArticlesList = (reset: boolean = true) => {
 const createFilteredArticlesList = (articles: Array<Article>, query: string | null): ArticlesList => {
   let filteredArticlesList: ArticlesList;
   if (query) {
-    const filteredArticles: Array<Article> = doFilterArticles(articles, query);
-    filteredArticlesList = createList(filteredArticles, null, true, false);
+    const filteredArticles: Array<Article> = articleTreeHelper.doFilterArticles(articles, query);
+    filteredArticlesList = createArticleList(filteredArticles, null, true, false);
   } else {
-    filteredArticlesList = createList(articles, getCachedArticleList());
+    filteredArticlesList = createArticleList(articles, getCachedArticleList());
   }
   return filteredArticlesList;
 };
@@ -148,7 +143,7 @@ const toggleProjectArticlesVisibility = (section: ArticlesListItem) => {
         let i: ArticlesListItem | null;
 
         if (project.id === section.title.id) {
-          i = toggleArticleProjectListItem(section);
+          i = articleTreeHelper.toggleArticleProjectListItem(section);
         } else {
           i = item;
         }
@@ -183,8 +178,8 @@ const toggleProjectArticlesFavorite = (project: ArticleProject) => {
 
       await flushStoragePart({projects: updatedProjects});
       const articlesList: ArticlesList = getState().articles.articlesList || [];
-      const articles: Array<Article> = flattenArticleList(articlesList);
-      dispatch(updateArticlesList(createList(articles, getCachedArticleList())));
+      const articles: Array<Article> = articleTreeHelper.flattenArticleList(articlesList);
+      dispatch(updateArticlesList(createArticleList(articles, getCachedArticleList())));
     }
   };
 };
@@ -233,7 +228,7 @@ const toggleAllProjects = (collapse: boolean) => {
     });
     if (articlesList) {
       const updatedArticlesList: ArticlesList = articlesList.reduce((list: ArticlesList, item: ArticlesListItem) => {
-        return list.concat(toggleArticleProjectListItem(item, collapse));
+        return list.concat(articleTreeHelper.toggleArticleProjectListItem(item, collapse));
       }, []);
 
       dispatch(setList(updatedArticlesList));
@@ -245,6 +240,7 @@ const toggleAllProjects = (collapse: boolean) => {
 };
 
 export type KnowledgeBaseActions = {
+  createList: typeof createArticleList,
   getArticlesQuery: typeof getArticlesQuery,
   filterArticles: typeof filterArticles,
   loadArticlesDrafts: typeof loadArticlesDrafts,
@@ -258,6 +254,7 @@ export type KnowledgeBaseActions = {
 };
 
 export {
+  createArticleList,
   getArticlesQuery,
   filterArticles,
   loadArticlesDrafts,

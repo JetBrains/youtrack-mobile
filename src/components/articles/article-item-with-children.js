@@ -60,7 +60,7 @@ const ArticleItemWithChildren = (props: Props) => {
 
       {articleNode?.children?.length > 0 && <TouchableOpacity
         style={styles.itemButtonContainer}
-        onPress={() => onShowSubArticles && onShowSubArticles(article)}
+        onPress={() => onShowSubArticles && onShowSubArticles(articleNode)}
       >
         <View style={styles.itemButton}>
           <Text style={styles.itemButtonText}>{articleNode.children.length}</Text>

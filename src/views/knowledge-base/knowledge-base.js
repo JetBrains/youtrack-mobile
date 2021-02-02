@@ -18,7 +18,6 @@ import Select from '../../components/select/select';
 import Star from '../../components/star/star';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
-import {findArticleNode} from '../../components/articles/articles-tree-helper';
 import {getStorageState} from '../../components/storage/storage';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconAngleDown, IconAngleRight, IconBack, IconContextActions} from '../../components/icon/icon';
@@ -48,7 +47,7 @@ export class KnowledgeBase extends Component<Props, State> {
   };
 
   uiTheme: UITheme;
-  unsubscribe: Function
+  unsubscribe: Function;
 
   constructor(props: Props) {
     super(props);
@@ -123,15 +122,12 @@ export class KnowledgeBase extends Component<Props, State> {
       style={styles.itemArticle}
       articleNode={item}
       onArticlePress={(article: Article) => Router.Article({articlePlaceholder: article})}
-      onShowSubArticles={(article: Article) => this.renderSubArticlesPage(article)}
+      onShowSubArticles={(articleNode: ArticleNode) => this.renderSubArticlesPage(articleNode)}
     />
   );
 
-  renderSubArticlesPage = (article: Article) => {
-    const {articlesList} = this.props;
-    const node: ?ArticleNode = articlesList && findArticleNode(articlesList, article.project.id, article.id);
-
-    if (node) {
+  renderSubArticlesPage = (articleNode: ArticleNode) => {
+    if (articleNode) {
       const title = this.renderHeader({
         leftButton: (
           <TouchableOpacity
@@ -140,17 +136,17 @@ export class KnowledgeBase extends Component<Props, State> {
             <IconBack color={styles.link.color}/>
           </TouchableOpacity>
         ),
-        title: node.data.summary,
+        title: articleNode.data.summary,
         customTitleComponent: (
-          <TouchableOpacity onPress={() => Router.Article({articlePlaceholder: article})}>
-            <Text numberOfLines={2} style={styles.projectTitleText}>{article.summary}</Text>
+          <TouchableOpacity onPress={() => Router.Article({articlePlaceholder: articleNode.data})}>
+            <Text numberOfLines={2} style={styles.projectTitleText}>{articleNode.data.summary}</Text>
           </TouchableOpacity>
         )
       });
       const tree: ArticlesList = this.renderArticlesList(
         [{
           title: null,
-          data: node.children
+          data: articleNode.children
         }],
         true
       );
