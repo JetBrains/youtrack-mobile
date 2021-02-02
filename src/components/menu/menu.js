@@ -104,7 +104,8 @@ class Menu extends Component<Props, State> {
     if (
       this.state.currentRouteName === routeMap.Issue ||
       this.state.currentRouteName === routeMap.Page ||
-      this.state.currentRouteName === routeMap.Article
+      this.state.currentRouteName === routeMap.Article ||
+      this.state.currentRouteName === routeMap.ArticleSingle
     ) {
       return true;
     }
@@ -137,8 +138,9 @@ class Menu extends Component<Props, State> {
   };
 
   openKnowledgeBase = () => {
+    const isNotSingleArticleView: boolean = this.state.currentRouteName !== routeMap.ArticleSingle;
     if (this.canNavigateTo(routeMap.KnowledgeBase)) {
-      if (this.props.lastVisitedArticle) {
+      if (this.props.lastVisitedArticle && isNotSingleArticleView) {
         Router.ArticleSingle({root: true, articlePlaceholder: this.props.lastVisitedArticle});
       } else {
         Router.KnowledgeBase();

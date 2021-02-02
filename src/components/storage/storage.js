@@ -42,7 +42,7 @@ export type StorageState = {|
   agileLastSprint: ?Sprint,
   agileDefaultBoard: ?Board,
   agileQuery: ?string,
-  lastRoute: ?(typeof routeMap.Issues | typeof routeMap.Inbox | typeof routeMap.AgileBoard),
+  lastRoute: ?(typeof routeMap.Issues | typeof routeMap.Inbox | typeof routeMap.AgileBoard | typeof routeMap.KnowledgeBase | typeof routeMap.ArticleSingle),
   currentAppVersion: ?string,
   issueActivitiesEnabledTypes: ?Array<Object>,
   permissions: ?Array<PermissionCacheItem>,
