@@ -190,8 +190,8 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
         )}
 
         <ArticleDetails
-          article={article}
-          articlePlaceholder={articlePlaceholder}
+          article={article || articlePlaceholder}
+          articleNode={articleNode}
           onRemoveAttach={
             issuePermissions.canUpdateArticle(article)
               ? (attachment: Attachment) => deleteAttachment(attachment.id)
@@ -208,7 +208,6 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
           }
           error={error}
           isLoading={isLoading}
-          articleNode={articleNode}
           uiTheme={uiTheme}
         />
       </ScrollView>

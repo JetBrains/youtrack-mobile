@@ -24,8 +24,8 @@ import type {CustomError} from '../../flow/Error';
 import type {UITheme} from '../../flow/Theme';
 
 type Props = {
+  article: Article,
   articleNode: ArticleNode,
-  articlePlaceholder: Article,
   error: CustomError,
   isLoading: boolean,
   onRemoveAttach: ?(attachment: Attachment) => any,
@@ -115,8 +115,8 @@ const ArticleDetails = (props: Props) => {
   };
 
   const {
+    article,
     articleNode,
-    articlePlaceholder,
     isLoading,
     error,
     uiTheme,
@@ -124,14 +124,14 @@ const ArticleDetails = (props: Props) => {
     onCreateArticle
   } = props;
 
-  if (!articleNode && !articlePlaceholder) {
+  if (!article && !articleNode) {
     return null;
   }
 
-  const article: Article = articleNode?.data || articlePlaceholder;
+  const _article: Article = article || articleNode?.data;
   return (
     <>
-      {!!article.summary && <Text style={styles.summaryText}>{article.summary}</Text>}
+      {!!_article.summary && <Text style={styles.summaryText}>{_article.summary}</Text>}
 
       {isLoading && !error && !article?.content && <SkeletonIssueContent/>}
 
@@ -140,14 +140,14 @@ const ArticleDetails = (props: Props) => {
       {!!article?.content && (
         <View style={styles.description}>
           <MarkdownView
-            attachments={article.attachments}
+            attachments={_article.attachments}
             mentions={{
-              articles: article.mentionedArticles,
-              issues: article.mentionedIssues
+              articles: _article.mentionedArticles,
+              issues: _article.mentionedIssues
             }}
             uiTheme={uiTheme}
           >
-            {article.content}
+            {_article.content}
           </MarkdownView>
         </View>
       )}
@@ -157,7 +157,7 @@ const ArticleDetails = (props: Props) => {
           <Separator fitWindow indent/>
           <View style={styles.articleDetailsHeader}>
             <AttachmentsRow
-              attachments={article.attachments}
+              attachments={_article.attachments}
               attachingImage={null}
               onImageLoadingError={
                 (err: Object) => logEvent({message: err.nativeEvent, isError: true})
