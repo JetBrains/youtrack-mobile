@@ -7,7 +7,7 @@ import {notify} from '../notification/notification';
 import {routeMap} from '../../app-routes';
 
 import type {AppConfigFilled} from '../../flow/AppConfig';
-import type {ArticlesList} from '../../flow/Article';
+import type {Article, ArticlesList} from '../../flow/Article';
 import type {AuthParams} from '../../flow/Auth';
 import type {Folder, User} from '../../flow/User';
 import type {IssueOnList} from '../../flow/Issue';
@@ -20,6 +20,7 @@ export const THEME_MODE_KEY = 'YT_THEME_MODE';
 export const MAX_STORED_QUERIES = 5;
 
 export type StorageState = {|
+  articles: ?Array<Article>,
   articlesList: ArticlesList,
   articlesListPinnedOnly: boolean,
   articlesQuery: string | null,
@@ -51,6 +52,7 @@ export type StorageState = {|
 type StorageStateKeys = $Exact<$ObjMap<StorageState, () => string>>;
 
 const storageKeys: StorageStateKeys = {
+  articles: 'YT_ARTICLES',
   articlesList: 'YT_ARTICLES_LIST',
   articlesListPinnedOnly: 'YT_ARTICLES_LIST_PINNED_ONLY',
   articlesQuery: 'YT_ARTICLES_QUERY',
@@ -84,6 +86,7 @@ let storageState: ?StorageState = null;
 const hasValue = v => v !== null && v !== undefined;
 
 export const initialState: StorageState = Object.freeze({
+  articles: null,
   articlesList: null,
   articlesListPinnedOnly: false,
   articlesQuery: null,
@@ -143,6 +146,7 @@ function cleanAndLogState(message, state) {
 export async function clearCachesAndDrafts() {
   log.debug('Storage drafts has been cleared');
   await AsyncStorage.multiRemove([
+    storageKeys.articles,
     storageKeys.articlesList,
     storageKeys.articlesListPinnedOnly,
     storageKeys.articlesQuery,

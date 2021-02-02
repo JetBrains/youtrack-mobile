@@ -7,14 +7,14 @@ import Router from '../../components/router/router';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
 import {
   createArticleList,
-  filterArticles,
+  doFilterArticles,
   flattenArticleList,
   toggleArticleProjectListItem
 } from '../../components/articles/articles-tree-helper';
 import {flushStoragePart, getStorageState} from '../../components/storage/storage';
 import {logEvent} from '../../components/log/log-helper';
 import {notify} from '../../components/notification/notification';
-import {setError, setList, setLoading} from './knowledge-base-reducers';
+import {setArticles, setError, setList, setLoading} from './knowledge-base-reducers';
 import {setUserLastVisitedArticle} from '../../actions/app-actions';
 import {showActions} from '../../components/action-sheet/action-sheet';
 import {sortByUpdatedReverse} from '../../components/search/sorting';
@@ -29,22 +29,21 @@ import type {IssueProject} from '../../flow/CustomFields';
 type ApiGetter = () => Api;
 
 
+const setArticlesCache = async (articles: Array<Article>) => {
+  flushStoragePart({articles});
+};
+
 const setArticlesListCache = async (articlesList: ArticlesList) => {
   await flushStoragePart({articlesList});
 };
 
-const getArticlesListCache = (): ArticlesList => getStorageState().articlesList || [];
+const getCachedArticleList = (): ArticlesList => getStorageState().articlesList || [];
 
 const loadArticlesListFromCache = () => {
   return async (dispatch: (any) => any) => {
-    const cachedArticlesList: ArticlesList = getArticlesListCache();
+    const cachedArticlesList: ArticlesList = getCachedArticleList();
     if (cachedArticlesList?.length > 0) {
-      const query: string | null = getArticlesQuery();
-      if (query) {
-        dispatch(filterArticlesList(query));
-      } else {
-        dispatch(setList(cachedArticlesList));
-      }
+      dispatch(setList(cachedArticlesList));
       logEvent({message: 'Set article list from cache'});
     }
   };
@@ -66,46 +65,56 @@ const updateArticlesList = (articlesList: ArticlesList) => {
   };
 };
 
+const updateArticles = (articles: Array<Article>) => {
+  return async (dispatch: (any) => any) => {
+    dispatch(setArticles(articles));
+    setArticlesCache(articles);
+  };
+};
+
 const loadArticlesList = (reset: boolean = true) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
-    const api: Api = getApi();
-
     dispatch(setUserLastVisitedArticle(null));
-
-    logEvent({message: 'Loading articles', analyticsId: ANALYTICS_ARTICLES_PAGE});
 
     if (reset) {
       dispatch(setLoading(true));
     }
-    const [error, articles] = await until(api.articles.get());
+
+    logEvent({message: 'Loading articles', analyticsId: ANALYTICS_ARTICLES_PAGE});
+    const [error, articles] = await until(getApi().articles.get());
     dispatch(setLoading(false));
 
     if (error) {
-      dispatch(setError(error));
       logEvent({message: 'Failed to load articles', isError: true});
+      dispatch(setError(error));
     } else {
-      const articlesList: ArticlesList = createList(articles, getArticlesListCache());
-      const query: string | null = getArticlesQuery();
-      if (query) {
-        await setArticlesListCache(articlesList);
-        dispatch(filterArticlesList(query));
-      } else {
-        dispatch(updateArticlesList(articlesList));
-      }
+      logEvent({message: 'Articles loaded'});
+      dispatch(updateArticles(articles));
+
+      const articlesList: ArticlesList = createFilteredArticlesList(articles, getArticlesQuery());
+      dispatch(updateArticlesList(articlesList));
     }
   };
 };
 
-const filterArticlesList = (query: string) => {
-  return async (dispatch: (any) => any) => {
-    if (query) {
-      const filteredArticles: Array<Article> = filterArticles(getArticlesListCache(), query);
-      const filteredArticlesList: ArticlesList = createList(filteredArticles, null, true, false);
-      dispatch(setList(filteredArticlesList));
-    } else {
-      dispatch(setList(getArticlesListCache()));
-    }
+const createFilteredArticlesList = (articles: Array<Article>, query: string | null): ArticlesList => {
+  let filteredArticlesList: ArticlesList;
+  if (query) {
+    const filteredArticles: Array<Article> = doFilterArticles(articles, query);
+    filteredArticlesList = createList(filteredArticles, null, true, false);
+  } else {
+    filteredArticlesList = createList(articles, getCachedArticleList());
+  }
+  return filteredArticlesList;
+};
+
+const filterArticles = (query: string) => {
+  return async (dispatch: (any) => any, getState: () => AppState) => {
+    const articles: Array<Article> = getState().articles.articles || [];
     flushStoragePart({articlesQuery: query ? query : null});
+
+    const articlesList: ArticlesList = createFilteredArticlesList(articles, query);
+    dispatch(setList(articlesList));
   };
 };
 
@@ -175,7 +184,7 @@ const toggleProjectArticlesFavorite = (project: ArticleProject) => {
       await flushStoragePart({projects: updatedProjects});
       const articlesList: ArticlesList = getState().articles.articlesList || [];
       const articles: Array<Article> = flattenArticleList(articlesList);
-      dispatch(updateArticlesList(createList(articles, getArticlesListCache())));
+      dispatch(updateArticlesList(createList(articles, getCachedArticleList())));
     }
   };
 };
@@ -237,7 +246,7 @@ const toggleAllProjects = (collapse: boolean) => {
 
 export type KnowledgeBaseActions = {
   getArticlesQuery: typeof getArticlesQuery,
-  filterArticlesList: typeof filterArticlesList,
+  filterArticles: typeof filterArticles,
   loadArticlesDrafts: typeof loadArticlesDrafts,
   loadArticlesList: typeof loadArticlesList,
   loadArticlesListFromCache: typeof loadArticlesListFromCache,
@@ -250,7 +259,7 @@ export type KnowledgeBaseActions = {
 
 export {
   getArticlesQuery,
-  filterArticlesList,
+  filterArticles,
   loadArticlesDrafts,
   loadArticlesList,
   loadArticlesListFromCache,

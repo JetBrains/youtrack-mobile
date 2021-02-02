@@ -10,7 +10,7 @@ import styles from './knowledge-base.styles';
 
 type Props = {
   onSearch: (query: string) => void,
-  query: ?string
+  query: string | null
 };
 
 

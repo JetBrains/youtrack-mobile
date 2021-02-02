@@ -88,8 +88,7 @@ export const createArticleList = (
   }, []).filter(it => it.data?.length > 0 || it.dataCollapsed?.length > 0);
 };
 
-export const filterArticles = (articlesList: ArticlesList, query: string = ''): Array<Article> => {
-  const articles: Array<Article> = flattenArticleList(articlesList);
+export const doFilterArticles = (articles: Array<Article>, query: string = ''): Array<Article> => {
   return articles.filter((it: Article) => (it?.summary || '').toLowerCase().includes(query.toLowerCase()));
 };
 
@@ -138,9 +137,15 @@ export const findNodeById = (articlesList: ArticleNodeList, id: string): Article
 export const findArticleProjectListItem = (
   articlesList: ArticleNodeList,
   projectId: string
-): ArticleNode | null => {
+): ArticlesListItem | null => {
   return (articlesList || []).find((it: ArticlesListItem) => it.title.id === projectId);
 };
+
+const getProjectNodeData = (projectNode): ArticleNodeList => (
+  projectNode.dataCollapsed?.length > 0
+    ? projectNode.dataCollapsed
+    : projectNode.data
+);
 
 export const findArticleNode = (
   articlesList: Array<ArticleNode>,
@@ -148,7 +153,7 @@ export const findArticleNode = (
   nodeId: string
 ): ArticleNode | null => {
   const articleProject: ArticlesListItem = findArticleProjectListItem(articlesList, projectId);
-  return articleProject ? findNodeById(articleProject.data, nodeId) : null;
+  return articleProject ? findNodeById(getProjectNodeData(articleProject), nodeId) : null;
 };
 
 export const createBreadCrumbs = (
@@ -162,13 +167,15 @@ export const createBreadCrumbs = (
 
   const breadCrumbs: Array<Article | IssueProject> = [];
 
-  const projectNode: ArticleNode = findArticleProjectListItem(articlesList, article.project.id);
-  if (!projectNode || !projectNode.data) {
+  const projectNode: ArticlesListItem = findArticleProjectListItem(articlesList, article.project.id);
+  if (!projectNode || (!projectNode?.data && !projectNode?.dataCollapsed)) {
     return [];
   }
 
   let parentId: string | null = article?.parentArticle?.id;
-  const projectArticles: Array<Article> = flattenArticleListChildren(projectNode.data);
+  const projectArticles: Array<Article> = flattenArticleListChildren(
+    getProjectNodeData(projectNode)
+  );
 
   while (parentId) {
     const parentArticle: ?Article = projectArticles.find((it: Article) => it.id === parentId);

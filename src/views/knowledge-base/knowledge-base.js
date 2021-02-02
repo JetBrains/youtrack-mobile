@@ -204,16 +204,16 @@ export class KnowledgeBase extends Component<Props, State> {
 
   getListItemKey = (item: ArticleNode, index: number) => item?.data?.id || index;
 
-  createFilteredArticlesList: ArticlesList = (articlesList: ArticlesList = []) => {
+  createFilteredArticlesList: ArticlesList = (articlesList: ArticlesList) => {
     return (
       getStorageState().articlesListPinnedOnly
-        ? articlesList.filter((it: ArticlesListItem) => {
+        ? (articlesList || []).filter((it: ArticlesListItem) => {
           if (it.title) {
             return it.title.pinned || it.title.isDrafts;
           }
           return it;
         })
-        : articlesList
+        : (articlesList || [])
     );
   };
 
@@ -263,11 +263,13 @@ export class KnowledgeBase extends Component<Props, State> {
     );
   };
 
+  getSearchQuery = (): string | null => knowledgeBaseActions.getArticlesQuery();
+
   renderSearchPanel = () => (
     <KnowledgeBaseSearchPanel
-      query={knowledgeBaseActions.getArticlesQuery()}
+      query={this.getSearchQuery()}
       onSearch={(query: string) => {
-        this.props.filterArticlesList(query);
+        this.props.filterArticles(query);
       }}
     />
   );
