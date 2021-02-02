@@ -72,7 +72,13 @@ const ArticleBreadCrumbs = (props: Props) => {
             key={it.id}
             noSeparator={index === 0}
             article={it}
-            onPress={excludeProject ? undefined : () => Router.backTo(breadCrumbs.length - index + extraDepth)}
+            onPress={excludeProject ? undefined : () => {
+              if (!excludeProject && index === 0) {
+                Router.KnowledgeBase();
+              } else {
+                Router.backTo(breadCrumbs.length - index + extraDepth);
+              }
+            }}
           />
         )}
         {withLast && <ArticleBreadCrumbsItem article={article}/>}
