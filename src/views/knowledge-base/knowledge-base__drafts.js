@@ -68,7 +68,7 @@ const KnowledgeBaseDrafts = () => {
           isDeleting ? styles.itemDraftDisabled : null
         ]}
         articleNode={{data: item}}
-        onArticlePress={(articleNode: ArticleNode) => Router.ArticleCreate({articleDraft: articleNode.data})}
+        onArticlePress={(article: Article) => Router.ArticleCreate({articleDraft: article})}
         onDelete={async (article: Article) => {
           if (!isDeleting) {
             confirmDeleteArticleDraft()
