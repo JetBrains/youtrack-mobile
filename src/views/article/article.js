@@ -275,7 +275,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
           !hasParent && Router.KnowledgeBase();
         }
       },
-      rightButton: isArticleLoaded && ! isProcessing ? <IconContextActions size={18} color={linkColor}/> : null,
+      rightButton: isArticleLoaded && !isProcessing ? <IconContextActions size={18} color={linkColor}/> : null,
       onRightButtonClick: () => showArticleActions(
         this.context.actionSheet(),
         this.canEditArticle(),
