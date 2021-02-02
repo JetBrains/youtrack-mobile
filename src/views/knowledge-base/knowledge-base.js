@@ -9,7 +9,6 @@ import {connect} from 'react-redux';
 import * as knowledgeBaseActions from './knowledge-base-actions';
 import ArticleWithChildren from '../../components/articles/article-item-with-children';
 import ErrorMessage from '../../components/error-message/error-message';
-import IconSearchEmpty from '../../components/icon/search-empty.svg';
 import KnowledgeBaseDrafts from './knowledge-base__drafts';
 import KnowledgeBaseSearchPanel from './knowledge-base__search';
 import PropTypes from 'prop-types';
@@ -20,7 +19,13 @@ import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
 import {getStorageState} from '../../components/storage/storage';
 import {HIT_SLOP} from '../../components/common-styles/button';
-import {IconAngleDown, IconAngleRight, IconBack, IconContextActions} from '../../components/icon/icon';
+import {
+  IconAngleDown,
+  IconAngleRight,
+  IconBack,
+  IconContextActions,
+  IconKnowledgeBase
+} from '../../components/icon/icon';
 import {routeMap} from '../../app-routes';
 import {SkeletonIssues} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
@@ -227,12 +232,9 @@ export class KnowledgeBase extends Component<Props, State> {
         renderSectionHeader={this.renderProject}
         ItemSeparatorComponent={this.renderSeparator}
         ListEmptyComponent={() => !this.props.isLoading && <ErrorMessage errorMessageData={{
-          title: 'No articles yet',
+          title: 'No articles found',
           description: '',
-          icon: () =>
-            //$FlowFixMe
-            <IconSearchEmpty fill={styles.icon.color} style={styles.noArticlesIcon}/>,
-          iconSize: 48
+          icon: () => <IconKnowledgeBase color={styles.actionBarButtonText.color} size={81}/>
         }}/>}
         ListFooterComponent={() =>
           !hideSearchPanel && getStorageState().articlesListPinnedOnly &&
@@ -271,20 +273,21 @@ export class KnowledgeBase extends Component<Props, State> {
   );
 
   renderActionsBar = () => {
+    const {isLoading, articlesList} = this.props;
     const isSomeProjectExpanded = this.createFilteredArticlesList(this.props.articlesList)
       .map((it: ArticlesListItem) => it.title.articles.collapsed)
       .some((it: boolean) => it !== true);
 
     return (
       <View style={styles.actionBar}>
-        <TouchableOpacity
+        {!isLoading && (articlesList || []).length > 0 && <TouchableOpacity
           hitSlop={HIT_SLOP}
           onPress={() => this.props.toggleAllProjects(isSomeProjectExpanded)}
         >
           <Text style={styles.actionBarButtonText}>
             {isSomeProjectExpanded ? 'Collapse projects' : 'Expand projects'}
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity>}
         <TouchableOpacity
           style={styles.actionBarButton}
           onPress={() => Router.Page({

@@ -116,7 +116,7 @@ const KnowledgeBaseDrafts = () => {
         >
           <ErrorMessage errorMessageData={{
             title: 'No drafts yet',
-            icon: () => <IconKnowledgeBase size={81}/>
+            icon: () => <IconKnowledgeBase color={styles.actionBarButtonText.color} size={81}/>
           }}/>
 
           <TouchableOpacity
