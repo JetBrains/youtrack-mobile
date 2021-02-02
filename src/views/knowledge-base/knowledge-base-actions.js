@@ -85,9 +85,7 @@ const loadArticlesList = (reset: boolean = true) => {
     } else {
       logEvent({message: 'Articles loaded'});
       dispatch(updateArticles(articles));
-
-      const articlesList: ArticlesList = createFilteredArticlesList(articles, getArticlesQuery());
-      dispatch(updateArticlesList(articlesList));
+      dispatch(filterArticles(getArticlesQuery()));
     }
   };
 };
@@ -103,13 +101,17 @@ const createFilteredArticlesList = (articles: Array<Article>, query: string | nu
   return filteredArticlesList;
 };
 
-const filterArticles = (query: string) => {
+const filterArticles = (query: string | null) => {
   return async (dispatch: (any) => any, getState: () => AppState) => {
     const articles: Array<Article> = getState().articles.articles || [];
     flushStoragePart({articlesQuery: query ? query : null});
 
     const articlesList: ArticlesList = createFilteredArticlesList(articles, query);
-    dispatch(setList(articlesList));
+    if (query) {
+      dispatch(setList(articlesList));
+    } else {
+      dispatch(updateArticlesList(articlesList));
+    }
   };
 };
 

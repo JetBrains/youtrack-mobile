@@ -68,7 +68,8 @@ export const createArticleList = (
       }
     });
 
-    let isProjectCollapsed: boolean = typeof isCollapsed === 'boolean' ? isCollapsed : true;
+    const hasCollapsed: boolean = typeof isCollapsed === 'boolean';
+    let isProjectCollapsed: boolean = hasCollapsed ? !!isCollapsed : true;
     if (projectArticles?.length > 0) {
       const cachedArticlesListProjectListItem: ?ArticlesListItem = findArticleProjectListItem(
         cachedArticlesList || [],
@@ -76,7 +77,11 @@ export const createArticleList = (
       );
       if (cachedArticlesListProjectListItem) {
         const cachedProjectCollapsed: ?boolean = cachedArticlesListProjectListItem?.title?.articles?.collapsed;
-        isProjectCollapsed = typeof cachedProjectCollapsed === 'boolean' ? cachedProjectCollapsed : isProjectCollapsed;
+        isProjectCollapsed = (
+          !hasCollapsed && typeof cachedProjectCollapsed === 'boolean'
+            ? cachedProjectCollapsed
+            : isProjectCollapsed
+        );
       }
     }
 
