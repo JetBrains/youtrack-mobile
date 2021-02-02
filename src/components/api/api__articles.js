@@ -117,7 +117,7 @@ export default class ArticlesAPI extends ApiBase {
 
   async publishArticleDraft(articleDraftId: string): Promise<Article> {
     return this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/articles/?draftId=${articleDraftId}`,
+      `${this.youTrackApiUrl}/articles/?draftId=${articleDraftId}&${this.articleFieldsQuery}`,
       'POST',
       {}
     );
