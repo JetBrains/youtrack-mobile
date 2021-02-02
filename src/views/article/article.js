@@ -25,7 +25,6 @@ import {findArticleNode} from '../../components/articles/articles-tree-helper';
 import {getApi} from '../../components/api/api__instance';
 import {IconBack, IconContextActions} from '../../components/icon/icon';
 import {logEvent} from '../../components/log/log-helper';
-import {routeMap} from '../../app-routes';
 import {ThemeContext} from '../../components/theme/theme-context';
 
 import styles from './article.styles';
@@ -58,7 +57,6 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
 
   props: Props;
   uiTheme: UITheme;
-  unsubscribeOnDispatch: Function;
 
   componentDidMount() {
     logEvent({message: 'Navigate to article', analyticsId: ANALYTICS_ARTICLE_PAGE});
@@ -70,17 +68,6 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
 
     const currentArticle: Article = this.getArticle();
     this.loadArticle(currentArticle.id || currentArticle.idReadable, true);
-
-    this.unsubscribeOnDispatch = Router.setOnDispatchCallback(
-      (routeName: string, prevRouteName: string) => {
-        if (routeName === routeMap.Article && prevRouteName === routeMap.ArticleCreate) {
-          this.refresh();
-        }
-      });
-  }
-
-  componentWillUnmount() {
-    this.unsubscribeOnDispatch();
   }
 
   loadArticle = (articleId: string, reset: boolean) => this.props.loadArticle(articleId, reset);
