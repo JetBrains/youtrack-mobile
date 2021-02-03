@@ -24,6 +24,7 @@ export const articleItemWithChildrenStyles = {
     color: '$icon'
   },
   lockIcon: {
+    marginLeft: UNIT / 2,
     color: '$iconAccent'
   },
   iconTrash: {

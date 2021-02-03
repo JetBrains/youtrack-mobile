@@ -40,6 +40,7 @@ const ArticleItemWithChildren = (props: Props) => {
         <View style={styles.itemArticleIcon}>
           {hasType.visibilityLimited(article?.visibility) && (
             <IconLock
+              style={styles.lockIcon}
               size={16}
               color={styles.lockIcon.color}
             />
