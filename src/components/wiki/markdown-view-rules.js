@@ -1,8 +1,9 @@
 /* @flow */
 
 import React from 'react';
-
 import {Image, ScrollView, Text, View} from 'react-native';
+
+import UrlParse from 'url-parse';
 
 import calculateAspectRatio from '../aspect-ratio/aspect-ratio';
 import LongText from './text-renderer';
@@ -80,18 +81,20 @@ function getMarkdownRules(
     ),
 
     image: (node: MarkdownNode) => {
-      const {src, alt} = node.attributes;
-      const targetAttach: ?Attachment = attachments.find(it => (it.name || '').includes(src));
+      const {src = '', alt} = node.attributes;
+      const targetAttach: ?Attachment = attachments.find((it: Attachment) => it.name && it.name.includes(src));
 
-      if (!targetAttach || !targetAttach.url || hasMimeType.svg(targetAttach)) {
+      const parsedURL = UrlParse(src);
+      const url: ?string = parsedURL?.protocol && parsedURL?.origin ? src : targetAttach?.url;
+      if (!url || hasMimeType.svg(targetAttach)) {
         return null;
       }
 
       return markdownImage({
         key: node.key,
-        uri: targetAttach.url,
+        uri: url,
         alt: alt,
-        imageDimensions: targetAttach.imageDimensions
+        imageDimensions: targetAttach?.imageDimensions
       });
     },
 
@@ -145,7 +148,7 @@ function getMarkdownRules(
 
       if (node.content.match(imageEmbedRegExp)) {
         const attach: Attachment = attachments.find((it: Attachment) => it.name && node.content.includes(it.name));
-        if (attach && attach.url && (hasMimeType.image(attach) || hasMimeType.svg(attach))) {
+        if (attach && attach.url && hasMimeType.image(attach)) {
           return markdownImage({
             key: node.key,
             uri: attach.url,
