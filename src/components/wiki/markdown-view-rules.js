@@ -143,11 +143,11 @@ function getMarkdownRules(
       const text: string = node.content;
 
       if (mentions && mentions.articles.concat(mentions.issues).length > 0) {
-        return renderArticleMentions(node, mentions, uiTheme, style);
+        return renderArticleMentions(node, mentions, uiTheme, style, inheritedStyles);
       }
 
       if (node.content.match(imageEmbedRegExp)) {
-        const attach: Attachment = attachments.find((it: Attachment) => it.name && node.content.includes(it.name));
+        const attach: Attachment = attachments.find((it: Attachment) => it.name && text.includes(it.name));
         if (attach && attach.url && hasMimeType.image(attach)) {
           return markdownImage({
             key: node.key,
@@ -194,7 +194,8 @@ function renderArticleMentions(
   node: MarkdownNode,
   mentions: Mentions,
   uiTheme: UITheme,
-  style: Object
+  style: Object,
+  inheritedStyles: Object,
 ) {
   const PLAIN_TEXT_TYPE: string = '-=TEXT=-';
   const textData: Array<TextData> = [];
@@ -272,7 +273,7 @@ function renderArticleMentions(
     if (textTokensToJoin.length > 0) {
       composed.push(
         <Text
-          style={style.text}
+          style={[inheritedStyles, style.text]}
           key={guid()}
         >{textTokensToJoin.join(' ')}
         </Text>
