@@ -18,7 +18,7 @@ import styles from './youtrack-wiki.styles';
 import type {UITheme} from '../../flow/Theme';
 
 const isAndroid: boolean = isAndroidPlatform();
-const MAX_CODE_LENGTH: number = 700;
+const MAX_CODE_LENGTH: number = 630;
 
 type Node = { content?: string, children?: any };
 
