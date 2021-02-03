@@ -289,6 +289,7 @@ export class KnowledgeBase extends Component<Props, State> {
           </Text>
         </TouchableOpacity>}
         <TouchableOpacity
+          hitSlop={HIT_SLOP}
           style={styles.actionBarButton}
           onPress={() => Router.Page({
             children: <KnowledgeBaseDrafts/>
