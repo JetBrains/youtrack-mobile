@@ -75,7 +75,10 @@ export default EStyleSheet.create({
   subArticlesHeader: {
     ...elevation1
   },
-  subArticlesHeaderText: headerTitle,
+  subArticlesHeaderText: {
+    ...headerTitle,
+    color: '$text'
+  },
   subArticleItem: {
     marginLeft: UNIT * 2
   },
