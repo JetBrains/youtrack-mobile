@@ -1,4 +1,5 @@
 /* @flow */
+
 import React from 'react';
 
 import {Image, ScrollView, Text, View} from 'react-native';
@@ -48,6 +49,27 @@ function getMarkdownRules(
   const imageHeaders = getApi().auth.getAuthorizationHeaders();
   const projectIds = (projects).map((it: Folder) => it?.shortName).join('|');
   const issueId = new RegExp(`\\b(?:${projectIds})\\b-\\d+$`);
+  const imageEmbedRegExp = /!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g;
+
+  const markdownImage = ({key, uri, alt, imageDimensions}) => {
+    const dimensions: ImageDimensions = calculateAspectRatio(
+      imageDimensions ||
+      {width: 250, height: 300}
+    );
+
+    const imageProps: Object = {
+      key,
+      style: dimensions,
+      source: {uri, headers: imageHeaders}
+    };
+
+    if (alt) {
+      imageProps.accessible = true;
+      imageProps.accessibilityLabel = alt;
+    }
+
+    return <Image {...imageProps} />;
+  };
 
   return {
 
@@ -65,26 +87,12 @@ function getMarkdownRules(
         return null;
       }
 
-      const source: Object = Object.assign({uri: targetAttach.url, headers: imageHeaders}, targetAttach);
-      const dimensions: ImageDimensions = calculateAspectRatio(
-        targetAttach?.imageDimensions ||
-        {width: 250, height: 300}
-      );
-
-      const imageProps: Object = {
+      return markdownImage({
         key: node.key,
-        style: {
-          ...dimensions
-        },
-        source
-      };
-
-      if (alt) {
-        imageProps.accessible = true;
-        imageProps.accessibilityLabel = alt;
-      }
-
-      return <Image {...imageProps} />;
+        uri: targetAttach.url,
+        alt: alt,
+        imageDimensions: targetAttach.imageDimensions
+      });
     },
 
     code_inline: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
@@ -133,6 +141,18 @@ function getMarkdownRules(
 
       if (mentions && mentions.articles.concat(mentions.issues).length > 0) {
         return renderArticleMentions(node, mentions, uiTheme, style);
+      }
+
+      if (node.content.match(imageEmbedRegExp)) {
+        const attach: Attachment = attachments.find((it: Attachment) => it.name && node.content.includes(it.name));
+        if (attach && attach.url && (hasMimeType.image(attach) || hasMimeType.svg(attach))) {
+          return markdownImage({
+            key: node.key,
+            uri: attach.url,
+            alt: node?.attributes?.alt,
+            imageDimensions: attach.imageDimensions
+          });
+        }
       }
 
       if (issueId.test(text)) {
