@@ -14,6 +14,7 @@ import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLE_PAGE} from '../../components/analytics/analytics-ids';
 import {IconAdd, IconAngleRight, IconBack} from '../../components/icon/icon';
 import {logEvent} from '../../components/log/log-helper';
+import {routeMap} from '../../app-routes';
 import {SkeletonIssueContent} from '../../components/skeleton/skeleton';
 
 import styles from './article.styles';
@@ -47,7 +48,12 @@ const ArticleDetails = (props: Props) => {
         <ArticleWithChildren
           style={styles.subArticleItem}
           articleNode={item}
-          onArticlePress={(article: Article) => Router.Article({articlePlaceholder: article, storePrevArticle: true})}
+          onArticlePress={(article: Article) => Router.Article({
+            articlePlaceholder: article,
+            storePrevArticle: true,
+            store: true,
+            storeRouteName: routeMap.ArticleSingle
+          })}
           onShowSubArticles={(childArticleNode: ArticleNode) => navigateToSubArticlePage(childArticleNode)}
         />
       );

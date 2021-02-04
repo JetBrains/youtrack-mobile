@@ -126,8 +126,8 @@ class Router {
       throw `no such route ${routeName}`;
     }
 
-    if (this.rootRoutes.includes(routeName)) {
-      flushStoragePart({lastRoute: routeName});
+    if (this.rootRoutes.includes(routeName) || props?.store === true) {
+      flushStoragePart({lastRoute: props?.storeRouteName || routeName});
     }
 
     const newRoute = Object.assign({}, this.routes[routeName]);

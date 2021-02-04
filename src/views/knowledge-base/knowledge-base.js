@@ -126,7 +126,11 @@ export class KnowledgeBase extends Component<Props, State> {
     <ArticleWithChildren
       style={styles.itemArticle}
       articleNode={item}
-      onArticlePress={(article: Article) => Router.Article({articlePlaceholder: article})}
+      onArticlePress={(article: Article) => Router.Article({
+        articlePlaceholder: article,
+        store: true,
+        storeRouteName: routeMap.ArticleSingle
+      })}
       onShowSubArticles={(articleNode: ArticleNode) => this.renderSubArticlesPage(articleNode)}
     />
   );
@@ -143,7 +147,11 @@ export class KnowledgeBase extends Component<Props, State> {
         ),
         title: articleNode.data.summary,
         customTitleComponent: (
-          <TouchableOpacity onPress={() => Router.Article({articlePlaceholder: articleNode.data})}>
+          <TouchableOpacity onPress={() => Router.Article({
+            articlePlaceholder: articleNode.data,
+            store: true,
+            storeRouteName: routeMap.ArticleSingle
+          })}>
             <Text numberOfLines={2} style={styles.projectTitleText}>{articleNode.data.summary}</Text>
           </TouchableOpacity>
         )
