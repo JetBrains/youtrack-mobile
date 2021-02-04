@@ -117,7 +117,7 @@ export const flattenArticleList = (articleList: ArticlesList = []): ArticlesList
   return articleList.reduce((list: ArticlesList, item: ArticlesListItem) => {
     return list.concat(
       flattenArticleListChildren(
-        item.title.articles.collapsed
+        item?.title?.articles?.collapsed
           ? item.dataCollapsed
           : item.data
       )

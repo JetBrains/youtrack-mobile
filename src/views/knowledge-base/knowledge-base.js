@@ -284,7 +284,7 @@ export class KnowledgeBase extends Component<Props, State> {
     const {isLoading, articlesList} = this.props;
     const isToggleButtonEnabled: boolean = !isLoading && (articlesList || []).length > 0;
     const isSomeProjectExpanded = this.createFilteredArticlesList(this.props.articlesList)
-      .map((it: ArticlesListItem) => it.title.articles.collapsed)
+      .map((it: ArticlesListItem) => it?.title?.articles?.collapsed)
       .some((it: boolean) => it !== true);
 
     return (
