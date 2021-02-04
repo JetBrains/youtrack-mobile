@@ -284,7 +284,7 @@ export class Issues extends Component<Props, State> {
 
         </View>
 
-        <IssuesCount issuesCount={issuesCount} uiTheme={uiTheme}/>
+        <IssuesCount issuesCount={issuesCount}/>
       </AnimatedView>
     );
   };

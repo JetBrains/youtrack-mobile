@@ -136,5 +136,12 @@ export default EStyleSheet.create({
     height: UNIT * 5,
     width: UNIT * 5,
     padding: UNIT
+  },
+  issuesCount: {
+    marginTop: UNIT * 2,
+    marginBottom: UNIT * 2,
+    marginLeft: UNIT * 2,
+    ...secondaryText,
+    color: '$icon'
   }
 });
