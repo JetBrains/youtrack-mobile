@@ -35,6 +35,9 @@ export default EStyleSheet.create({
     marginLeft: UNIT * 1.8,
     color: '$link'
   },
+  buttonTextDisabled: {
+    color: '$icon'
+  },
   secondaryText: {
     color: '$textSecondary'
   },

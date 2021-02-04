@@ -243,7 +243,10 @@ class CreateIssue extends Component<Props, State> {
                       />
                     )}
                     {!!issue.project?.id && (
-                      <TagAddPanel onAdd={() => this.setState({showAddTagSelect: true})}/>
+                      <TagAddPanel
+                        disabled={processing}
+                        onAdd={() => this.setState({showAddTagSelect: true})}
+                      />
                     )}
                     {this.state.showAddTagSelect && <TagAddSelect
                       existed={issue?.tags}
