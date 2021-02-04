@@ -282,21 +282,24 @@ export class KnowledgeBase extends Component<Props, State> {
 
   renderActionsBar = () => {
     const {isLoading, articlesList} = this.props;
+    const isToggleButtonEnabled: boolean = !isLoading && (articlesList || []).length > 0;
     const isSomeProjectExpanded = this.createFilteredArticlesList(this.props.articlesList)
       .map((it: ArticlesListItem) => it.title.articles.collapsed)
       .some((it: boolean) => it !== true);
 
     return (
       <View style={styles.actionBar}>
-        {!isLoading && (articlesList || []).length > 0 && <TouchableOpacity
+        <TouchableOpacity
+          disabled={!isToggleButtonEnabled}
           hitSlop={HIT_SLOP}
           onPress={() => this.props.toggleAllProjects(isSomeProjectExpanded)}
         >
           <Text style={styles.actionBarButtonText}>
             {isSomeProjectExpanded ? 'Collapse projects' : 'Expand projects'}
           </Text>
-        </TouchableOpacity>}
+        </TouchableOpacity>
         <TouchableOpacity
+          disabled={isLoading}
           hitSlop={HIT_SLOP}
           style={styles.actionBarButton}
           onPress={() => Router.Page({
