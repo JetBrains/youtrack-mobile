@@ -208,7 +208,7 @@ const showContextActions = (actionSheet: ActionSheet, canCreateArticle: boolean)
     if (canCreateArticle) {
       actions.unshift({
         title: 'New Article',
-        execute: () => Router.ArticleCreate()
+        execute: () => Router.ArticleCreate({isNew: true})
       });
     }
 

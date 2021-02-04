@@ -25,6 +25,7 @@ import {IconAngleDown, IconCheck, IconClose} from '../../components/icon/icon';
 import {PanelWithSeparator} from '../../components/panel/panel-with-separator';
 import {SkeletonCreateArticle} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
+import {View as AnimatedView} from 'react-native-animatable';
 
 import styles from './article-create.styles';
 
@@ -40,6 +41,8 @@ type ArticleDraftData = { summary: string, content: string, project: IssueProjec
 
 type Props = {
   articleDraft?: Article,
+  isNew?: boolean,
+  originalArticleId?: string,
   breadCrumbs?: React$Element<any> | null
 }
 
@@ -48,7 +51,8 @@ const ArticleCreate = (props: Props) => {
     summary: '',
     content: '',
     project: {id: null, name: 'Select project'},
-    visibility: null
+    visibility: null,
+    attachments: []
   };
 
   const dispatch = useDispatch();
@@ -65,22 +69,34 @@ const ArticleCreate = (props: Props) => {
   const [isProjectSelectVisible, updateProjectSelectVisibility] = useState(false);
   const [articleDraftData, updateArticleDraftData] = useState(articleDraftDataInitial);
 
+  const createArticleDraft = async (articleId?: string) => await dispatch(
+    articleCreateActions.createArticleDraft(articleId)
+  );
+
   useEffect(() => {
     const {articleDraft} = props;
     if (articleDraft) {
       dispatch(articleCreateActions.setDraft(articleDraft));
       updateArticleDraftData({
+        attachments: articleDraft.attachments,
         summary: articleDraft?.summary || articleDraftDataInitial.summary,
         content: articleDraft?.content || articleDraftDataInitial.content,
         project: articleDraft?.project || articleDraftDataInitial.project,
         visibility: articleDraft.visibility
       });
     } else {
-      dispatch(articleCreateActions.createArticleDraft());
+      createArticleDraft();
     }
   }, []);
 
-  const doUpdate = (articleDraft: Article): Function => dispatch(articleCreateActions.updateArticleDraft(articleDraft));
+  const doUpdate = async (articleDraft: ArticleDraft): Function => {
+    let draft: ArticleDraft = articleDraft;
+    if (props.originalArticleId && !draft.id) {
+      const createdArticleDraft: ArticleDraft = await createArticleDraft(props.originalArticleId);
+      draft = {...createdArticleDraft, ...articleDraft};
+    }
+    return dispatch(articleCreateActions.updateArticleDraft(draft));
+  };
   const debouncedUpdate = useDebouncedCallback(doUpdate, 350);
 
   const updateDraft = (data: $Shape<ArticleDraftData>) => {
@@ -133,14 +149,16 @@ const ArticleCreate = (props: Props) => {
     return (
       <Header
         style={styles.header}
-        title={articleDraft?.original ? 'Draft' : 'New Article'}
+        title={props.isNew ? 'New Article' : 'Draft'}
         leftButton={<IconClose size={21} color={isProcessing ? uiThemeColors.$disabled : linkColor}/>}
         onBack={() => {
           const draft: ArticleDraft = {...articleDraft, ...articleDraftData};
-          if (!draft.project.id) {
-            draft.project = null;
+          if (draft.id) {
+            if (!draft.project.id) {
+              draft.project = null;
+            }
+            doUpdate(draft);
           }
-          doUpdate(draft);
           closeCreateArticleScreen();
         }}
         rightButton={(
@@ -193,17 +211,23 @@ const ArticleCreate = (props: Props) => {
   };
 
   const renderDiscardButton = () => (
-    articleDraft?.original && (
-      <View style={styles.discard}>
+    articleDraft?.id && (
+      <AnimatedView
+        useNativeDriver
+        duration={500}
+        animation="fadeIn"
+        style={styles.discard}>
         <TouchableOpacity
           style={styles.discardButton}
           disabled={isProcessing}
           onPress={() => dispatch(articleCreateActions.deleteDraft())}
         >
-          <Text style={styles.discardButtonText}>Discard unpublished changes</Text>
+          <Text style={styles.discardButtonText}>
+            {props.isNew ? 'Delete draft' : 'Discard unpublished changes'}
+          </Text>
         </TouchableOpacity>
         <Separator/>
-      </View>
+      </AnimatedView>
     )
   );
 
@@ -255,7 +279,7 @@ const ArticleCreate = (props: Props) => {
                 getOptions={() => getApi().articles.getDraftVisibilityOptions(articleDraft.id)}
               />
 
-              {articleDraft.$isUnpublishedDraft && <Badge text='unpublished changes'/>}
+              {articleDraft?.id && !props.isNew && <Badge text='unpublished changes'/>}
             </View>
 
             <SummaryDescriptionForm

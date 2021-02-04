@@ -52,6 +52,7 @@ const createArticleDraft = (articleId?: string) => {
     } else {
       logEvent({message: 'Create article draft', analyticsId: ANALYTICS_ARTICLE_CREATE});
       dispatch(setDraft(articleDraft));
+      return articleDraft;
     }
   };
 };

@@ -121,15 +121,15 @@ const showArticleActions = (
             message: 'Edit article',
             analyticsId: ANALYTICS_ARTICLE_PAGE
           });
+
           setProcessing(true);
-          const articleDraft: Article | null = await getArticleDraft(api, article);
+          const articleDrafts: Article | null = await getUnpublishedArticleDraft(api, article);
           setProcessing(false);
-          if (articleDraft) {
-            Router.ArticleCreate({
-              articleDraft: {...articleDraft, original: article.id},
-              breadCrumbs: renderBreadCrumbs()
-            });
-          }
+          Router.ArticleCreate({
+            originalArticleId: article.id,
+            articleDraft: Array.isArray(articleDrafts) ? articleDrafts[0] : articleDrafts,
+            breadCrumbs: renderBreadCrumbs()
+          });
         }
       });
     }
@@ -160,19 +160,24 @@ const showArticleActions = (
   };
 };
 
-const getArticleDraft = async (api: Api, article: Article): Promise<ArticleDraft | null> => {
+const getUnpublishedArticleDraft = async (api: Api, article: Article): Promise<ArticleDraft | null> => {
   let articleDraft: ArticleDraft | null = null;
 
-  const [error, articleDrafts] = await until(api.articles.getArticleDrafts(null, article.id));
+  const [error, articleDrafts] = await until(api.articles.getArticleDrafts(article.id));
 
   if (error) {
     logEvent({message: `Failed to load ${article.idReadable} article drafts`, isError: true});
   } else {
-    if (articleDrafts.length === 0) {
-      articleDraft = await createArticleDraft(api, article);
-    } else {
+    if (articleDrafts && articleDrafts[0]) {
       articleDraft = articleDrafts[0];
-      articleDraft.$isUnpublishedDraft = true;
+    } else {
+      articleDraft = {
+        attachments: article.attachments,
+        summary: article.summary,
+        content: article.content,
+        project: article.project,
+        visibility: article.visibility,
+      };
     }
   }
 

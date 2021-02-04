@@ -15,7 +15,9 @@ export type ArticleCreateState = {
   error: CustomError,
   isProcessing: boolean,
   isAttachFileDialogVisible: boolean,
-  attachingImage: Attachment | null
+  attachingImage: Attachment | null,
+  isNew?: boolean,
+  originalArticleId?: string
 };
 
 export const articleCreateInitialState: ArticleCreateState = {
@@ -24,7 +26,7 @@ export const articleCreateInitialState: ArticleCreateState = {
   error: null,
   isProcessing: false,
   isAttachFileDialogVisible: false,
-  attachingImage: null
+  attachingImage: null,
 };
 
 const attachmentReducers = {

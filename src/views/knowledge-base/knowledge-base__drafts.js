@@ -121,7 +121,7 @@ const KnowledgeBaseDrafts = () => {
 
           <TouchableOpacity
             style={styles.noDraftsButton}
-            onPress={() => Router.ArticleCreate()}
+            onPress={() => Router.ArticleCreate({isNew: true})}
           >
             <Text style={styles.noDraftsButtonText}>Start a new article</Text>
           </TouchableOpacity>
