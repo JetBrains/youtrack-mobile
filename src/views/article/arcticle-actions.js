@@ -469,6 +469,7 @@ const createSubArticle = (renderBreadCrumbs: Function) => {
     const draft: ArticleDraft = await createArticleDraft(api, article, true);
     if (draft) {
       Router.ArticleCreate({
+        isNew: true,
         articleDraft: draft,
         breadCrumbs: renderBreadCrumbs()
       });
