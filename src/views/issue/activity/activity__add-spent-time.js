@@ -246,18 +246,21 @@ const AddSpentTimeForm = (props: Props) => {
             {iconAngleRight}
           </TouchableOpacity>
 
-          <TextInput
-            {...commonInputProps}
-            style={styles.feedbackFormInput}
-            placeholder="Spent time"
-            value={draftWorkItem?.duration?.presentation}
-            onChangeText={(periodValue: string) => update({
-              draftWorkItem: {
-                ...draftWorkItem,
-                duration: {presentation: periodValue}
-              }
-            })}
-          />
+          <View style={buttonStyle}>
+            <Text style={styles.feedbackFormTextSup}>Date</Text>
+            <TextInput
+              {...commonInputProps}
+              style={[styles.feedbackInput, styles.feedbackFormTextMain]}
+              placeholder="Spent time"
+              value={draftWorkItem?.duration?.presentation}
+              onChangeText={(periodValue: string) => update({
+                draftWorkItem: {
+                  ...draftWorkItem,
+                  duration: {presentation: periodValue}
+                }
+              })}
+            />
+          </View>
 
           <TouchableOpacity
             style={buttonStyle}

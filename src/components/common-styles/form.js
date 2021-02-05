@@ -19,9 +19,8 @@ export const rowFormStyles = {
   },
   input: {
     width: '100%',
-    padding: UNIT * 1.5,
-    paddingLeft: UNIT,
-    paddingRight: UNIT,
+    paddingVertical: UNIT * 1.5,
+    paddingHorizontal: UNIT,
     borderRadius: UNIT,
     backgroundColor: '$boxBackground',
     color: '$text',

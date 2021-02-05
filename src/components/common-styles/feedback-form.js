@@ -41,6 +41,12 @@ const feedbackFormStyles = {
   feedbackFormTextMain: {
     marginBottom: -UNIT
   },
+  feedbackInput: {
+    ...rowFormStyles.input,
+    position: 'absolute',
+    top: UNIT,
+    backgroundColor: 'transparent',
+  },
   feedbackFormInput: {
     ...rowFormStyles.input,
     marginTop: UNIT * 2,
