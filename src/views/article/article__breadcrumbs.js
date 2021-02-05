@@ -15,14 +15,14 @@ import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 type Props = {
   article: Article,
   articlesList: ArticlesList,
-  extraDepth?: number,
   withSeparator?: boolean,
   withLast?: boolean,
   excludeProject?: boolean,
-  styles?: ViewStyleProp
+  styles?: ViewStyleProp,
+  root?: boolean
 };
 
-const maxBreadcrumbTextLength: number = 24;
+const MAX_BREADCRUMB_TEXT_LENGTH: number = 24;
 const renderSeparator = () => <Text style={styles.breadCrumbsButtonTextSeparator}>/</Text>;
 
 type ArticleBreadCrumbsItemProps = {
@@ -44,8 +44,8 @@ export const ArticleBreadCrumbsItem = (props: ArticleBreadCrumbsItemProps) => {
         onPress={props.onPress}
       >
         <Text style={[styles.breadCrumbsButtonText, !props.onPress && styles.breadCrumbsButtonTextDisabled]}>
-          {breadcrumbText.substr(0, maxBreadcrumbTextLength)}
-          {breadcrumbText.length > maxBreadcrumbTextLength && '…'}
+          {breadcrumbText.substr(0, MAX_BREADCRUMB_TEXT_LENGTH)}
+          {breadcrumbText.length > MAX_BREADCRUMB_TEXT_LENGTH && '…'}
         </Text>
       </TouchableOpacity>
     </View>
@@ -53,7 +53,7 @@ export const ArticleBreadCrumbsItem = (props: ArticleBreadCrumbsItemProps) => {
 };
 
 const ArticleBreadCrumbs = (props: Props) => {
-  const {article, articlesList, extraDepth = 0, withSeparator = true, excludeProject, withLast} = props;
+  const {article, articlesList, withSeparator = true, excludeProject, withLast} = props;
   const breadCrumbs: Array<ArticleEntity | IssueProject> = createBreadCrumbs(article, articlesList, excludeProject);
 
   if (breadCrumbs.length === 0) {
@@ -67,18 +67,12 @@ const ArticleBreadCrumbs = (props: Props) => {
         contentContainerStyle={styles.breadCrumbsContent}
       >
         {excludeProject && <View style={styles.breadCrumbsItem}>{renderSeparator()}</View>}
-        {breadCrumbs.map((it: ArticleEntity | IssueProject, index: number) =>
+        {breadCrumbs.map((article: ArticleEntity | IssueProject, index: number) =>
           <ArticleBreadCrumbsItem
-            key={it.id}
+            key={article.id}
             noSeparator={index === 0}
-            article={it}
-            onPress={excludeProject ? undefined : () => {
-              if (!excludeProject && index === 0) {
-                Router.KnowledgeBase();
-              } else {
-                Router.backTo(breadCrumbs.length - index + extraDepth);
-              }
-            }}
+            article={article}
+            onPress={() => Router.Article({articlePlaceholder: article, storePrevArticle: true})}
           />
         )}
         {withLast && <ArticleBreadCrumbsItem article={article}/>}

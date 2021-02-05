@@ -23,6 +23,7 @@ import {ANALYTICS_ARTICLE_PAGE} from '../../components/analytics/analytics-ids';
 import {createArticleList} from '../knowledge-base/knowledge-base-actions';
 import {findArticleNode} from '../../components/articles/articles-tree-helper';
 import {getApi} from '../../components/api/api__instance';
+import {getStorageState} from '../../components/storage/storage';
 import {IconBack, IconContextActions} from '../../components/icon/icon';
 import {logEvent} from '../../components/log/log-helper';
 import {routeMap} from '../../app-routes';
@@ -58,7 +59,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
 
   props: Props;
   uiTheme: UITheme;
-  unsubscribe: Function
+  unsubscribe: Function;
 
   componentWillUnmount() {
     this.unsubscribe();
@@ -109,23 +110,23 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     />;
   };
 
-  renderBreadCrumbs = (
+  renderBreadCrumbs = ({style, withSeparator, excludeProject, withLast, root}: {
     style?: ViewStyleProp,
-    extraDepth?: number,
     withSeparator?: boolean,
     excludeProject?: boolean,
     withLast?: boolean,
-  ) => {
+    root?: boolean
+  }) => {
     const {article, articlesList} = this.props;
     return (
       <ArticleBreadCrumbs
         styles={style}
         article={article}
         articlesList={articlesList}
-        extraDepth={extraDepth}
         excludeProject={excludeProject}
         withSeparator={withSeparator}
         withLast={withLast}
+        root={root}
       />
     );
   };
@@ -148,7 +149,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     }
 
     const articleData: ArticleEntity = article || articlePlaceholder;
-    const breadCrumbsElement = article && !root ? this.renderBreadCrumbs() : null;
+    const breadCrumbsElement = article ? this.renderBreadCrumbs({root}) : null;
 
     const articleNode: ?ArticleNode = articleData?.project && findArticleNode(
       articlesList, articleData.project.id, articleData?.id
@@ -200,7 +201,11 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
             issuePermissions.canUpdateArticle(article)
               ? () => createSubArticle(() =>
                 <View style={styles.breadCrumbsItem}>
-                  {this.renderBreadCrumbs(styles.breadCrumbsCompact, 1, false, true, true)}
+                  {this.renderBreadCrumbs({
+                    style: styles.breadCrumbsCompact,
+                    withSeparator: true,
+                    withLast: true
+                  })}
                 </View>
               )
               : undefined
@@ -278,12 +283,10 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
         this.context.actionSheet(),
         this.canEditArticle(),
         this.canDeleteArticle(),
-        () => this.renderBreadCrumbs(
-          styles.breadCrumbsCompact,
-          1,
-          false,
-          true
-        )
+        () => this.renderBreadCrumbs({
+          styles: styles.breadCrumbsCompact,
+          excludeProject: true
+        })
       ),
       extraButton: (
         isArticleLoaded ? <Star
@@ -329,7 +332,7 @@ const mapStateToProps = (
     articlePlaceholder: ownProps.articlePlaceholder,
     issuePermissions: state.app.issuePermissions,
     lastVisitedArticle: state.app?.user?.profiles?.articles?.lastVisitedArticle,
-    articlesList: createArticleList(state.articles.articles || [])
+    articlesList: createArticleList(state.articles.articles || getStorageState().articles || [])
   };
 };
 const mapDispatchToProps = (dispatch) => {
