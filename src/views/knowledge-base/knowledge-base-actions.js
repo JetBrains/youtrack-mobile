@@ -6,6 +6,7 @@ import * as articleTreeHelper from '../../components/articles/articles-tree-help
 import animation from '../../components/animation/animation';
 import Router from '../../components/router/router';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
+import {arrayToTree} from 'performant-array-to-tree';
 import {flushStoragePart, getStorageState} from '../../components/storage/storage';
 import {logEvent} from '../../components/log/log-helper';
 import {notify} from '../../components/notification/notification';
@@ -86,6 +87,21 @@ const loadArticlesList = (reset: boolean = true) => {
       logEvent({message: 'Articles loaded'});
       dispatch(updateArticles(articles));
       dispatch(filterArticles(getArticlesQuery()));
+    }
+  };
+};
+
+const getArticleChildren = (articleId: string): ArticlesList => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    logEvent({message: 'Loading article children', analyticsId: ANALYTICS_ARTICLES_PAGE});
+    const [error, articleWithChildren] = await until(getApi().articles.getArticleChildren(articleId));
+
+    if (error) {
+      logEvent({message: 'Failed to load article children', isError: true});
+      return arrayToTree([]);
+    } else {
+      logEvent({message: 'Article children loaded'});
+      return arrayToTree(articleWithChildren.childArticles);
     }
   };
 };
@@ -245,6 +261,7 @@ export type KnowledgeBaseActions = {
   createList: typeof createArticleList,
   getArticlesQuery: typeof getArticlesQuery,
   filterArticles: typeof filterArticles,
+  getArticleChildren: typeof getArticleChildren,
   loadArticlesDrafts: typeof loadArticlesDrafts,
   loadArticlesList: typeof loadArticlesList,
   loadArticlesListFromCache: typeof loadArticlesListFromCache,
@@ -259,6 +276,7 @@ export {
   createArticleList,
   getArticlesQuery,
   filterArticles,
+  getArticleChildren,
   loadArticlesDrafts,
   loadArticlesList,
   loadArticlesListFromCache,

@@ -61,9 +61,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
   uiTheme: UITheme;
   unsubscribe: Function;
 
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
+  componentWillUnmount = () => this.unsubscribe()
 
   componentDidMount() {
     logEvent({message: 'Navigate to article', analyticsId: ANALYTICS_ARTICLE_PAGE});
@@ -74,6 +72,10 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     }
 
     const currentArticle: Article = this.getArticle();
+    if (!currentArticle || !currentArticle.id || !currentArticle.idReadable) {
+      return Router.KnowledgeBase();
+    }
+
     this.loadArticle(currentArticle.id || currentArticle.idReadable, true);
 
     this.unsubscribe = Router.setOnDispatchCallback((routeName: string, prevRouteName: string) => {
@@ -191,7 +193,6 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
 
         <ArticleDetails
           article={article || articlePlaceholder}
-          articleNode={articleNode}
           onRemoveAttach={
             issuePermissions.canUpdateArticle(article)
               ? (attachment: Attachment) => deleteAttachment(attachment.id)

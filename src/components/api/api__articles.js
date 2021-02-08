@@ -4,7 +4,7 @@ import qs from 'qs';
 
 import ApiBase from './api__base';
 import ApiHelper from './api__helper';
-import {articleFields, articlesFields} from './api__articles-fields';
+import {articleChildrenAndSubChildren, articleFields, articlesFields} from './api__articles-fields';
 import issueActivityPageFields, {ISSUE_ATTACHMENT_FIELDS} from './api__activities-issue-fields';
 import issueFields from './api__issue-fields';
 import {activityArticleCategory} from '../activity/activity__category';
@@ -43,6 +43,12 @@ export default class ArticlesAPI extends ApiBase {
     );
     article.attachments = this.convertAttachmentsURL(article.attachments);
     return article;
+  }
+
+  async getArticleChildren(articleId: string): Promise<Article> {
+    return this.makeAuthorizedRequest(
+      `${this.youTrackApiUrl}/articles/${articleId}?${ApiBase.createFieldsQuery(articleChildrenAndSubChildren)}`
+    );
   }
 
   async updateArticle(articleId: string, data: Object | null = null): Promise<Article> {

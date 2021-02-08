@@ -1,7 +1,7 @@
 /* @flow */
 
-import React from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import React, {useState} from 'react';
+import {ActivityIndicator, Text, TouchableOpacity, View} from 'react-native';
 
 import IconTrash from '@jetbrains/icons/trash.svg';
 
@@ -10,21 +10,22 @@ import {IconAngleRight, IconLock} from '../icon/icon';
 
 import styles from './article-item-with-children.styles';
 
-import type {Article, ArticleNode} from '../../flow/Article';
+import type {Article} from '../../flow/Article';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
-  articleNode: ArticleNode,
+  article: Article,
   onArticlePress: (article: Article) => void,
-  onShowSubArticles?: (article: Article) => void,
+  onShowSubArticles?: (article: Article) => any,
   onDelete?: (article: Article) => any,
   style?: ViewStyleProp
 };
 
 
 const ArticleItemWithChildren = (props: Props) => {
-  const {articleNode, onArticlePress, onShowSubArticles, style, onDelete} = props;
-  const article: ?Article = articleNode.data;
+  const [isLoadingSubArticles, updateIsLoadingSubArticles] = useState(false);
+
+  const {article, onArticlePress, onShowSubArticles, style, onDelete} = props;
 
   if (!article) {
     return null;
@@ -59,13 +60,22 @@ const ArticleItemWithChildren = (props: Props) => {
         />
       </TouchableOpacity>}
 
-      {articleNode?.children?.length > 0 && <TouchableOpacity
+      {article?.childArticles?.length > 0 && <TouchableOpacity
         style={styles.itemButtonContainer}
-        onPress={() => onShowSubArticles && onShowSubArticles(articleNode)}
+        onPress={async () => {
+          if (onShowSubArticles) {
+            updateIsLoadingSubArticles(true);
+            await onShowSubArticles(article);
+            updateIsLoadingSubArticles(false);
+          }
+        }}
       >
         <View style={styles.itemButton}>
-          <Text style={styles.itemButtonText}>{articleNode.children.length}</Text>
-          <IconAngleRight style={styles.itemButtonIcon} size={22} color={styles.icon.color}/>
+          {isLoadingSubArticles && <ActivityIndicator color={styles.icon.color} />}
+          {!isLoadingSubArticles && <>
+            <Text style={styles.itemButtonText}>{article.childArticles.length}</Text>
+            <IconAngleRight style={styles.itemButtonIcon} size={22} color={styles.icon.color}/>
+          </>}
         </View>
       </TouchableOpacity>}
     </View>

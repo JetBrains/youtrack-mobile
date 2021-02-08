@@ -125,47 +125,45 @@ export class KnowledgeBase extends Component<Props, State> {
   renderArticle = ({item}: ArticleNode) => (
     <ArticleWithChildren
       style={styles.itemArticle}
-      articleNode={item}
+      article={item.data}
       onArticlePress={(article: Article) => Router.Article({
         articlePlaceholder: article,
         store: true,
         storeRouteName: routeMap.ArticleSingle
       })}
-      onShowSubArticles={(articleNode: ArticleNode) => this.renderSubArticlesPage(articleNode)}
+      onShowSubArticles={(article: Article) => this.renderSubArticlesPage(article)}
     />
   );
 
-  renderSubArticlesPage = (articleNode: ArticleNode) => {
-    if (articleNode) {
-      const title = this.renderHeader({
-        leftButton: (
-          <TouchableOpacity
-            onPress={() => Router.pop()}
-          >
-            <IconBack color={styles.link.color}/>
-          </TouchableOpacity>
-        ),
-        title: articleNode.data.summary,
-        customTitleComponent: (
-          <TouchableOpacity onPress={() => Router.Article({
-            articlePlaceholder: articleNode.data,
-            store: true,
-            storeRouteName: routeMap.ArticleSingle
-          })}>
-            <Text numberOfLines={2} style={styles.projectTitleText}>{articleNode.data.summary}</Text>
-          </TouchableOpacity>
-        )
-      });
-      const tree: ArticlesList = this.renderArticlesList(
-        [{
-          title: null,
-          data: articleNode.children
-        }],
-        true
-      );
-
-      Router.Page({children: <>{title}<View style={styles.itemChild}>{tree}</View></>});
-    }
+  renderSubArticlesPage = async (article: Article) => {
+    const childrenData: ArticlesList = await this.props.getArticleChildren(article.id);
+    const title = this.renderHeader({
+      leftButton: (
+        <TouchableOpacity
+          onPress={() => Router.pop()}
+        >
+          <IconBack color={styles.link.color}/>
+        </TouchableOpacity>
+      ),
+      title: article.summary,
+      customTitleComponent: (
+        <TouchableOpacity onPress={() => Router.Article({
+          articlePlaceholder: article,
+          store: true,
+          storeRouteName: routeMap.ArticleSingle
+        })}>
+          <Text numberOfLines={2} style={styles.projectTitleText}>{article.summary}</Text>
+        </TouchableOpacity>
+      )
+    });
+    const tree: ArticlesList = this.renderArticlesList(
+      [{
+        title: null,
+        data: childrenData
+      }],
+      true
+    );
+    Router.Page({children: <>{title}<View style={styles.itemChild}>{tree}</View></>});
   };
 
   renderHeader = (

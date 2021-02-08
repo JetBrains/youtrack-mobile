@@ -5,6 +5,20 @@ import issueFields from './api__issue-fields';
 
 const toField = ApiHelper.toField;
 
+const childArticlesFields: Array<string> = [
+  'id',
+  'idReadable',
+  'summary'
+];
+
+export const articleChildrenAndSubChildren = toField([
+  {
+    childArticles: childArticlesFields.concat({
+      childArticles: childArticlesFields
+    })
+  }
+]);
+
 export const articleFields = toField([
   '$type',
   'content',
@@ -16,6 +30,7 @@ export const articleFields = toField([
   'updated',
   'hasStar',
   'hasUnpublishedChanges',
+  articleChildrenAndSubChildren,
   {attachments: issueFields.attachments},
   {
     mentionedArticles: [
@@ -58,6 +73,9 @@ export const articlesFields = toField([
   'summary',
   'ordinal',
   'project(id,name)',
+  {
+    childArticles: childArticlesFields
+  },
   {
     parentArticle: [
       'id',

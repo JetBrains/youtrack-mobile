@@ -6,6 +6,7 @@ import IssueVisibility from '../components/visibility/issue-visibility';
 export type Article = {
   $type: string,
   attachments: Array<Attachment>,
+  childArticles: Array<Article>,
   content: string,
   created: number,
   hasStar: boolean,

@@ -19,14 +19,13 @@ import {SkeletonIssueContent} from '../../components/skeleton/skeleton';
 
 import styles from './article.styles';
 
-import type {Article, ArticleNode} from '../../flow/Article';
+import type {Article} from '../../flow/Article';
 import type {Attachment} from '../../flow/CustomFields';
 import type {CustomError} from '../../flow/Error';
 import type {UITheme} from '../../flow/Theme';
 
 type Props = {
   article: Article,
-  articleNode: ArticleNode,
   error: CustomError,
   isLoading: boolean,
   onRemoveAttach: ?(attachment: Attachment) => any,
@@ -36,25 +35,24 @@ type Props = {
 
 const ArticleDetails = (props: Props) => {
 
-  function navigateToSubArticlePage(articleNode: ArticleNode) {
-    Router.Page({
-      children: renderSubArticles(articleNode)
-    });
+  function navigateToSubArticlePage(article: Article) {
+    Router.Page({children: renderSubArticles(article)});
   }
 
-  function renderSubArticles(articleNode: ArticleNode) {
-    const renderArticleNode = ({item}: { item: Article }) => {
+  function renderSubArticles(article: Article) {
+
+    const renderArticle = ({item}: { item: Article }) => {
       return (
         <ArticleWithChildren
           style={styles.subArticleItem}
-          articleNode={item}
+          article={item}
           onArticlePress={(article: Article) => Router.Article({
             articlePlaceholder: article,
             storePrevArticle: true,
             store: true,
             storeRouteName: routeMap.ArticleSingle
           })}
-          onShowSubArticles={(childArticleNode: ArticleNode) => navigateToSubArticlePage(childArticleNode)}
+          onShowSubArticles={(childArticle: Article) => navigateToSubArticlePage(childArticle)}
         />
       );
     };
@@ -66,14 +64,14 @@ const ArticleDetails = (props: Props) => {
           leftButton={<IconBack color={styles.link.color}/>}
           onBack={() => Router.pop()}
         >
-          <Text numberOfLines={2} style={styles.subArticlesHeaderText}>{articleNode.data.summary}</Text>
+          <Text numberOfLines={2} style={styles.subArticlesHeaderText}>{article.summary}</Text>
         </Header>
 
         <FlatList
-          data={articleNode.children}
-          keyExtractor={(item: ArticleNode) => item.data.id}
+          data={article.childArticles}
+          keyExtractor={(it: Article) => it.id}
           getItemLayout={Select.getItemLayout}
-          renderItem={renderArticleNode}
+          renderItem={renderArticle}
           ItemSeparatorComponent={Select.renderSeparator}
         />
       </>
@@ -81,14 +79,13 @@ const ArticleDetails = (props: Props) => {
   }
 
   const renderSubArticlesButton = () => {
-    const subArticles: Array<ArticleNode> = props?.articleNode?.children || [];
-    const hasSubArticles: boolean = subArticles.length > 0;
+    const hasSubArticles: boolean = article?.childArticles?.length > 0;
 
     if (!!onCreateArticle || hasSubArticles) {
       return (
         <TouchableOpacity
           disabled={!hasSubArticles}
-          onPress={() => navigateToSubArticlePage(props.articleNode)}
+          onPress={() => navigateToSubArticlePage(props.article)}
           style={styles.subArticles}
         >
           <View style={styles.breadCrumbsItem}>
@@ -107,7 +104,7 @@ const ArticleDetails = (props: Props) => {
           {hasSubArticles && <View style={styles.subArticlesContent}>
             <Text
               style={styles.subArticleItemText}>
-              {`${subArticles.length} ${subArticles.length > 1 ? 'articles' : 'article'}`}
+              {`${article?.childArticles?.length} ${article?.childArticles?.length > 1 ? 'articles' : 'article'}`}
             </Text>
             <IconAngleRight
               size={18}
@@ -122,7 +119,6 @@ const ArticleDetails = (props: Props) => {
 
   const {
     article,
-    articleNode,
     isLoading,
     error,
     uiTheme,
@@ -130,14 +126,12 @@ const ArticleDetails = (props: Props) => {
     onCreateArticle
   } = props;
 
-  if (!article && !articleNode) {
+  if (!article) {
     return null;
   }
-
-  const _article: Article = article || articleNode?.data;
   return (
     <>
-      {!!_article.summary && <Text style={styles.summaryText}>{_article.summary}</Text>}
+      {!!article.summary && <Text style={styles.summaryText}>{article.summary}</Text>}
 
       {isLoading && !error && !article?.content && <SkeletonIssueContent/>}
 
@@ -146,14 +140,14 @@ const ArticleDetails = (props: Props) => {
       {!!article?.content && (
         <View style={styles.description}>
           <MarkdownView
-            attachments={_article.attachments}
+            attachments={article.attachments}
             mentions={{
-              articles: _article.mentionedArticles,
-              issues: _article.mentionedIssues
+              articles: article.mentionedArticles,
+              issues: article.mentionedIssues
             }}
             uiTheme={uiTheme}
           >
-            {_article.content}
+            {article.content}
           </MarkdownView>
         </View>
       )}
@@ -163,7 +157,7 @@ const ArticleDetails = (props: Props) => {
           <Separator fitWindow indent/>
           <View style={styles.articleDetailsHeader}>
             <AttachmentsRow
-              attachments={_article.attachments}
+              attachments={article.attachments}
               attachingImage={null}
               onImageLoadingError={
                 (err: Object) => logEvent({message: err.nativeEvent, isError: true})
