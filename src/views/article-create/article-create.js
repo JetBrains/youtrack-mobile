@@ -176,7 +176,7 @@ const ArticleCreate = (props: Props) => {
             );
             if (!error) {
               closeCreateArticleScreen(true);
-              Router.ArticleSingle({root: true, articlePlaceholder: createdArticle});
+              Router.ArticleSingle({articlePlaceholder: createdArticle});
             }
           }
         }}/>
@@ -243,7 +243,6 @@ const ArticleCreate = (props: Props) => {
             <Text style={styles.projectSelectorText}>{articleDraftData.project.name}</Text>
             <IconAngleDown size={20} color={linkColor}/>
           </TouchableOpacity>
-          {props.breadCrumbs}
         </View>
       </PanelWithSeparator>
     )
@@ -267,6 +266,7 @@ const ArticleCreate = (props: Props) => {
       <ScrollView scrollEnabled={hasArticleDraft}>
         {renderDiscardButton()}
         {renderProjectPanel()}
+        {props.breadCrumbs}
 
         {hasArticleDraft && (
           <View style={styles.content}>

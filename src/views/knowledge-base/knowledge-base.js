@@ -39,7 +39,11 @@ import type {KnowledgeBaseActions} from './knowledge-base-actions';
 import type {KnowledgeBaseState} from './knowledge-base-reducers';
 import type {Theme, UITheme} from '../../flow/Theme';
 
-type Props = KnowledgeBaseActions & KnowledgeBaseState & { issuePermissions: IssuePermissions };
+type Props = KnowledgeBaseActions & KnowledgeBaseState & {
+  issuePermissions: IssuePermissions,
+  project?: ArticleProject,
+  preventReload?: boolean
+};
 
 type State = {
   isHeaderPinned: boolean
@@ -51,6 +55,7 @@ export class KnowledgeBase extends Component<Props, State> {
     actionSheet: PropTypes.func
   };
 
+  listRef: ?Object;
   uiTheme: UITheme;
   unsubscribe: Function;
 
@@ -64,10 +69,7 @@ export class KnowledgeBase extends Component<Props, State> {
     this.unsubscribe();
   }
 
-  componentDidMount() {
-    this.props.loadArticlesListFromCache();
-    this.loadArticlesList();
-
+  async componentDidMount() {
     this.unsubscribe = Router.setOnDispatchCallback((routeName: string, prevRouteName: string) => {
       if (routeName === routeMap.KnowledgeBase && (
         prevRouteName === routeMap.Article ||
@@ -77,9 +79,32 @@ export class KnowledgeBase extends Component<Props, State> {
         this.loadArticlesList(false);
       }
     });
+
+    this.props.loadArticlesListFromCache();
+    if (!this.props.preventReload) {
+      await this.loadArticlesList();
+    }
+
+    if (this.props.project) {
+      this.scrollToProject(this.props.project);
+    }
   }
 
   loadArticlesList = async (reset?: boolean) => this.props.loadArticlesList(reset);
+
+  scrollToProject = (project: ArticleProject) => {
+    const {articlesList} = this.props;
+    if (project && articlesList) {
+      const index: number = articlesList.findIndex((listItem: ArticlesListItem) => listItem.title.id === project.id);
+      if (index > 0) {
+        setTimeout(() => this.listRef && this.listRef.scrollToLocation({
+          animated: true,
+          itemIndex: 0,
+          sectionIndex: index
+        }), 0);
+      }
+    }
+  };
 
   renderProject = ({section}: ArticlesListItem) => {
     const project: ?ArticleProject = section.title;
@@ -224,10 +249,17 @@ export class KnowledgeBase extends Component<Props, State> {
     );
   };
 
+  setListRef = (listRef?: Object) => {
+    if (listRef) {
+      this.listRef = listRef;
+    }
+  };
+
   renderArticlesList = (articlesList: ArticlesList, hideSearchPanel: boolean = false) => {
     return (
       <SectionList
         testID="articles"
+        ref={this.setListRef}
         sections={this.createFilteredArticlesList(articlesList)}
         scrollEventThrottle={10}
         onScroll={this.onScroll}

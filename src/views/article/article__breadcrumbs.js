@@ -4,12 +4,12 @@ import React from 'react';
 
 import Router from '../../components/router/router';
 import {createBreadCrumbs} from '../../components/articles/articles-tree-helper';
+import {hasType} from '../../components/api/api__resource-types';
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 
 import styles from './article.styles';
 
-import type {Article, Article as ArticleEntity, ArticlesList} from '../../flow/Article';
-import type {IssueProject} from '../../flow/CustomFields';
+import type {Article, Article as ArticleEntity, ArticleProject, ArticlesList} from '../../flow/Article';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
@@ -18,8 +18,7 @@ type Props = {
   withSeparator?: boolean,
   withLast?: boolean,
   excludeProject?: boolean,
-  styles?: ViewStyleProp,
-  root?: boolean
+  styles?: ViewStyleProp
 };
 
 const MAX_BREADCRUMB_TEXT_LENGTH: number = 24;
@@ -54,7 +53,12 @@ export const ArticleBreadCrumbsItem = (props: ArticleBreadCrumbsItemProps) => {
 
 const ArticleBreadCrumbs = (props: Props) => {
   const {article, articlesList, withSeparator = true, excludeProject, withLast} = props;
-  const breadCrumbs: Array<ArticleEntity | IssueProject> = createBreadCrumbs(article, articlesList, excludeProject);
+
+  if (!articlesList) {
+    return null;
+  }
+
+  const breadCrumbs: Array<ArticleEntity | ArticleProject> = createBreadCrumbs(article, articlesList, excludeProject);
 
   if (breadCrumbs.length === 0) {
     return null;
@@ -67,12 +71,18 @@ const ArticleBreadCrumbs = (props: Props) => {
         contentContainerStyle={styles.breadCrumbsContent}
       >
         {excludeProject && <View style={styles.breadCrumbsItem}>{renderSeparator()}</View>}
-        {breadCrumbs.map((article: ArticleEntity | IssueProject, index: number) =>
+        {breadCrumbs.map((it: ArticleEntity | ArticleProject, index: number) =>
           <ArticleBreadCrumbsItem
-            key={article.id}
+            key={it.id}
             noSeparator={index === 0}
-            article={article}
-            onPress={() => Router.Article({articlePlaceholder: article, storePrevArticle: true})}
+            article={it}
+            onPress={() => {
+              if (hasType.project(it)) {
+                Router.KnowledgeBase({project: it, preventReload: true});
+              } else {
+                Router.Article({articlePlaceholder: it, storePrevArticle: true});
+              }
+            }}
           />
         )}
         {withLast && <ArticleBreadCrumbsItem article={article}/>}

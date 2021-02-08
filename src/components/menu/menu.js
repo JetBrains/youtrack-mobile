@@ -144,7 +144,7 @@ class Menu extends Component<Props, State> {
     );
     if (this.canNavigateTo(routeMap.KnowledgeBase)) {
       if (this.props.lastVisitedArticle && isNotArticleView) {
-        Router.ArticleSingle({root: true, articlePlaceholder: this.props.lastVisitedArticle});
+        Router.ArticleSingle({articlePlaceholder: this.props.lastVisitedArticle});
       } else {
         Router.KnowledgeBase();
       }

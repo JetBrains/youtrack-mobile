@@ -190,10 +190,6 @@ export const createBreadCrumbs = (
     }
   }
 
-  if (breadCrumbs.length === 0) {
-    return [];
-  }
-
   breadCrumbs.reverse();
   if (!excludeProject) {
     breadCrumbs.unshift(article.project);

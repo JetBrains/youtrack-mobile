@@ -47,7 +47,6 @@ type Props = ArticleState & {
   articlePlaceholder: ArticleEntity,
   storePrevArticle?: boolean,
   updateArticlesList: () => Function,
-  root?: boolean,
   lastVisitedArticle: ?Article
 } & typeof articleActions;
 
@@ -112,13 +111,12 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     />;
   };
 
-  renderBreadCrumbs = ({style, withSeparator, excludeProject, withLast, root}: {
+  renderBreadCrumbs = ({style, withSeparator, excludeProject, withLast}: {
     style?: ViewStyleProp,
     withSeparator?: boolean,
     excludeProject?: boolean,
-    withLast?: boolean,
-    root?: boolean
-  }) => {
+    withLast?: boolean
+  } = {}) => {
     const {article, articlesList} = this.props;
     return (
       <ArticleBreadCrumbs
@@ -128,7 +126,6 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
         excludeProject={excludeProject}
         withSeparator={withSeparator}
         withLast={withLast}
-        root={root}
       />
     );
   };
@@ -143,7 +140,6 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
       deleteAttachment,
       issuePermissions,
       createSubArticle,
-      root
     } = this.props;
 
     if (error) {
@@ -151,7 +147,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     }
 
     const articleData: ArticleEntity = article || articlePlaceholder;
-    const breadCrumbsElement = article ? this.renderBreadCrumbs({root}) : null;
+    const breadCrumbsElement = article ? this.renderBreadCrumbs() : null;
 
     const articleNode: ?ArticleNode = articleData?.project && findArticleNode(
       articlesList, articleData.project.id, articleData?.id
@@ -253,7 +249,6 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
       isProcessing,
       showArticleActions,
       issuePermissions,
-      root
     } = this.props;
     const articleData: $Shape<ArticleEntity> = article || articlePlaceholder;
     if (!articleData) {
@@ -272,12 +267,8 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
         if (isProcessing) {
           return;
         }
-        if (root) {
-          Router.KnowledgeBase();
-        } else {
-          const hasParent: boolean = Router.pop();
-          !hasParent && Router.KnowledgeBase();
-        }
+        const hasParent: boolean = Router.pop();
+        !hasParent && Router.KnowledgeBase();
       },
       rightButton: isArticleLoaded && !isProcessing ? <IconContextActions size={18} color={linkColor}/> : null,
       onRightButtonClick: () => showArticleActions(
