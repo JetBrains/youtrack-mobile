@@ -26,25 +26,22 @@ import type {SelectProps} from '../../../components/select/select';
 import type {Theme} from '../../../flow/Theme';
 import type {User} from '../../../flow/User';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import type {WorkItem, TimeTracking, WorkItemTemplate, WorkItemType} from '../../../flow/Work';
+import type {WorkItem, TimeTracking, WorkItemType} from '../../../flow/Work';
 
 type Props = {
   onAdd: () => any
 }
 
 const AddSpentTimeForm = (props: Props) => {
-  const workItemTemplateDefault: WorkItemTemplate = {
+  const draftDefault: WorkItem = {
     date: new Date(),
+    author: {
+      name: 'Select author'
+    },
     type: {
-      name: '-'
+      name: 'Select type'
     },
     text: null
-  };
-
-  const timeTrackingDefault: TimeTracking = {
-    enabled: true,
-    draftWorkItem: workItemTemplateDefault,
-    workItemTemplate: null
   };
 
   const theme: Theme = useContext(ThemeContext);
@@ -53,39 +50,46 @@ const AddSpentTimeForm = (props: Props) => {
 
   const [isProgress, updateProgress] = useState(false);
   const [isSelectVisible, updateSelectVisibility] = useState(false);
-  const [timeTracking, updateTimeTracking] = useState(timeTrackingDefault);
+  const [draft, updateDraftWorkItem] = useState(draftDefault);
   const [selectProps, updateSelectProps] = useState(null);
 
-  const updateDraft = (draft: WorkItem) => dispatch(issueActivityItems.updateWorkItemDraft(draft));
+  const updateDraft = async (draft: WorkItem) => {
+    const updatedDraft: WorkItem = await dispatch(issueActivityItems.updateWorkItemDraft(draft));
+    if (updatedDraft) {
+      updateDraftWorkItem({
+        ...updatedDraft,
+        duration: draft.duration,
+        date: draft.date,
+        $type: undefined
+      });
+    }
+  };
+
   const debouncedUpdate = throttle(updateDraft, 350);
 
   useEffect(() => {
     async function loadTimeTracking() {
-      const tt: TimeTracking = await dispatch(issueActivityItems.getTimeTracking());
-      tt.draftWorkItem = {...tt.workItemTemplate, ...tt.draftWorkItem};
-      updateTimeTracking(tt);
+      const timeTracking: TimeTracking = await dispatch(issueActivityItems.getTimeTracking());
+      const {author, date, duration} = timeTracking.workItemTemplate;
+      updateDraftWorkItem({
+        ...{author},
+        ...{date},
+        ...{duration},
+        ...timeTracking.draftWorkItem,
+        usesMarkdown: true
+      });
     }
     loadTimeTracking();
   }, []);
 
 
-  const createDraft = (draft: WorkItem): WorkItem => ({
-    author: {id: draft.author ? draft.author.id : currentUser.id},
-    creator: {id: draft.creator ? draft.creator.id : draft.author.id},
-    date: draft.date,
-    text: draft.text,
-    type: {id: draft.type.id},
-    duration: draft.duration,
-    usesMarkdown: true
-  });
-
   const update = (data: $Shape<TimeTracking>) => {
-    const updatedTimeTracking: TimeTracking = {
-      ...timeTracking,
+    const updatedDraft: WorkItem = {
+      ...draft,
       ...data
     };
-    updateTimeTracking(updatedTimeTracking);
-    debouncedUpdate(createDraft(updatedTimeTracking.draftWorkItem));
+    updateDraftWorkItem(updatedDraft);
+    debouncedUpdate(updatedDraft);
   };
 
   const renderSelect = (selectProps: SelectProps) => {
@@ -105,13 +109,8 @@ const AddSpentTimeForm = (props: Props) => {
   const getUserSelectProps = (): $Shape<SelectProps> => {
     return {
       dataSource: async () => await dispatch(issueActivityItems.getWorkItemAuthors()),
-      onSelect: (user: User) => {
-        update({
-          draftWorkItem: {
-            ...draftWorkItem,
-            author: user
-          }
-        });
+      onSelect: (author: User) => {
+        update({author});
         updateSelectVisibility(false);
       }
     };
@@ -121,24 +120,38 @@ const AddSpentTimeForm = (props: Props) => {
     return {
       dataSource: async () => await dispatch(issueActivityItems.getWorkItemTypes()),
       onSelect: async (type: WorkItemType) => {
-        update({
-          draftWorkItem: {
-            ...draftWorkItem,
-            ...{type}
-          }
-        });
+        update({type});
         updateSelectVisibility(false);
       }
     };
   };
 
-  const closeForm = () => {
+  const close = () => Router.pop(true);
+
+  const onClose = () => {
     dispatch(issueActivityItems.deleteWorkItemDraft());
-    Router.pop(true);
+    close();
+  };
+
+  const onCreate = async () => {
+    const {onAdd = () => {}} = props;
+    updateProgress(true);
+    await dispatch(issueActivityItems.createWorkItem(draft));
+    onAdd();
+    updateProgress(false);
+    close();
   };
 
   const renderHeader = () => {
-    const {onAdd = () => {}} = props;
+    const isSubmitDisabled: boolean = (
+      !draft.date ||
+      !draft.duration ||
+      !draft.author
+    );
+    const submitIcon = (isProgress
+      ? <ActivityIndicator color={styles.link.color}/>
+      : <IconCheck size={20} color={isSubmitDisabled ? styles.disabled.color : styles.link.color}/>);
+
     return (
       <Header
         style={styles.elevation1}
@@ -148,24 +161,18 @@ const AddSpentTimeForm = (props: Props) => {
           if (isProgress) {
             return;
           }
-          if (timeTracking.draftWorkItem.text) {
+          if (draft.text) {
             confirmation('Discard draft and close?', 'Discard and close')
-              .then(closeForm).catch(() => null);
+              .then(onClose).catch(() => null);
           } else {
-            closeForm();
+            onClose();
           }
         }}
         extraButton={(
           <TouchableOpacity
             hitSlop={HIT_SLOP}
             disabled={isSubmitDisabled}
-            onPress={async () => {
-              updateProgress(true);
-              await dispatch(issueActivityItems.createWorkItem(createDraft(timeTracking.draftWorkItem)));
-              onAdd();
-              updateProgress(false);
-              Router.pop(true);
-            }}
+            onPress={onCreate}
           >
             {submitIcon}
           </TouchableOpacity>
@@ -176,16 +183,7 @@ const AddSpentTimeForm = (props: Props) => {
 
   const buttonStyle: Array<ViewStyleProp> = [styles.feedbackFormInput, styles.feedbackFormType];
   const iconAngleRight = <IconAngleRight size={20} color={styles.icon.color}/>;
-  const draftWorkItem: WorkItem = timeTracking.draftWorkItem;
-  const author: ?User = draftWorkItem.author || currentUser || {name: '-'};
-  const isSubmitDisabled: boolean = (
-    !draftWorkItem.date ||
-    !draftWorkItem.duration ||
-    !draftWorkItem.author
-  );
-  const submitIcon = (isProgress
-    ? <ActivityIndicator color={styles.link.color}/>
-    : <IconCheck size={20} color={isSubmitDisabled ? styles.disabled.color : styles.link.color}/>);
+  const author: ?User = draft.author || currentUser;
 
   const commonInputProps: Object = {
     autoCapitalize: 'none',
@@ -225,13 +223,8 @@ const AddSpentTimeForm = (props: Props) => {
             onPress={
               () => Router.PageModal({
                 children: <DatePicker onDateSelect={(date: Date) => {
-                  update({
-                    draftWorkItem: {
-                      ...draftWorkItem,
-                      date: date.getTime()
-                    }
-                  });
-                  Router.pop(true);
+                  update({date: date.getTime()});
+                  close();
                 }}
                 />
               })
@@ -241,7 +234,7 @@ const AddSpentTimeForm = (props: Props) => {
             <Text
               style={[styles.feedbackFormText, styles.feedbackFormTextMain]}
             >
-              {ytDate(draftWorkItem.date, true)}
+              {ytDate(draft.date, true)}
             </Text>
             {iconAngleRight}
           </TouchableOpacity>
@@ -252,13 +245,8 @@ const AddSpentTimeForm = (props: Props) => {
               {...commonInputProps}
               style={[styles.feedbackInput, styles.feedbackFormTextMain]}
               placeholder="Spent time"
-              value={draftWorkItem?.duration?.presentation}
-              onChangeText={(periodValue: string) => update({
-                draftWorkItem: {
-                  ...draftWorkItem,
-                  duration: {presentation: periodValue}
-                }
-              })}
+              value={draft?.duration?.presentation}
+              onChangeText={(periodValue: string) => update({duration: {presentation: periodValue}})}
             />
           </View>
 
@@ -272,7 +260,7 @@ const AddSpentTimeForm = (props: Props) => {
             <Text style={styles.feedbackFormTextSup}>Type</Text>
             <Text
               style={[styles.feedbackFormText, styles.feedbackFormTextMain]}
-            >{draftWorkItem?.type?.name}</Text>
+            >{draft?.type?.name || draftDefault.type.name}</Text>
             {iconAngleRight}
           </TouchableOpacity>
 
@@ -282,13 +270,8 @@ const AddSpentTimeForm = (props: Props) => {
             textAlignVertical="top"
             style={[styles.feedbackFormInputDescription]}
             placeholder={commentPlaceholderText}
-            value={draftWorkItem.text}
-            onChangeText={(comment: string) => update({
-              draftWorkItem: {
-                ...draftWorkItem,
-                text: comment
-              }
-            })}
+            value={draft.text}
+            onChangeText={(comment: string) => update({text: comment})}
           />
 
           <View style={styles.feedbackFormBottomIndent}/>

@@ -273,14 +273,17 @@ export default class IssueAPI extends ApiBase {
   async updateDraftWorkItem(issueId: string, draft: WorkItem) {
     return this.makeAuthorizedRequest(
       `${this.youTrackIssueUrl}/${issueId}/timeTracking/draftWorkItem?${ApiBase.createFieldsQuery(issueFields.workItems)}`,
-      'PUT',
+      draft.id ? 'POST' : 'PUT',
       draft
     );
   }
 
   async createWorkItem(issueId: string, draft: WorkItem) {
     return this.makeAuthorizedRequest(
-      `${this.youTrackIssueUrl}/${issueId}/timeTracking/workItems?${ApiBase.createFieldsQuery(issueFields.workItems)}`,
+      `${this.youTrackIssueUrl}/${issueId}/timeTracking/workItems?${ApiBase.createFieldsQuery(
+        issueFields.workItems,
+        {draftId: draft.id}
+      )}`,
       'POST',
       draft
     );

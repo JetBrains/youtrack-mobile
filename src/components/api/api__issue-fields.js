@@ -336,13 +336,6 @@ const ISSUE_TIME_TRACKING_WITH_DRAFT_FIELDS = toField([
   ISSUE_WORK_ITEM_TEMPLATE
 ]);
 
-const ISSUE_TIME_TRACKING_FIELDS = toField([
-  'enabled',
-  {
-    workItems: ISSUE_WORK_ITEMS_FIELDS
-  }
-]);
-
 export default {
   attachments: ISSUE_ATTACHMENTS_FIELDS,
   issuesOnList: ISSUE_SHORT_FIELDS,
@@ -409,5 +402,5 @@ export default {
   reaction: REACTION,
 
   timeTracking: ISSUE_TIME_TRACKING_WITH_DRAFT_FIELDS,
-  workItems: ISSUE_TIME_TRACKING_FIELDS
+  workItems: ISSUE_WORK_ITEMS_FIELDS
 };

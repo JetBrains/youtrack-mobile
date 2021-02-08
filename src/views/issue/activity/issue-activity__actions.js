@@ -99,7 +99,7 @@ export function updateWorkItemDraft(draft: WorkItem) {
       const msg: string = 'Failed to update work item draft';
       notify(msg, error);
       logEvent({message: msg, isError: true});
-      return [];
+      return null;
     }
     return updatedDraft;
   };
