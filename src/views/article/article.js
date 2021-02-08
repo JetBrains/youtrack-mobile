@@ -61,7 +61,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
   uiTheme: UITheme;
   unsubscribe: Function;
 
-  componentWillUnmount = () => this.unsubscribe()
+  componentWillUnmount = () => this.unsubscribe && this.unsubscribe()
 
   componentDidMount() {
     logEvent({message: 'Navigate to article', analyticsId: ANALYTICS_ARTICLE_PAGE});
