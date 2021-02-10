@@ -48,9 +48,7 @@ const createArticleList = (articles: Array<Article>, isExpanded?: boolean): Arti
 export const getPinnedProjects = async (api: Api): Promise<Array<Folder>> => {
   const [error, pinnedFolders]: [?CustomError, Folder] = await until(api.issueFolder.getPinnedIssueFolder());
   if (error) {
-    const msg: string = 'Unable to load favorite projects';
-    notify(msg);
-    logEvent({message: msg, isError: true});
+    notify('Unable to load favorite projects', error);
     return [];
   } else {
     return pinnedFolders.filter(hasType.project);
@@ -76,19 +74,18 @@ const loadArticleList = (reset: boolean = true, doNotCache: boolean = false) =>
 
     const query: string | null = getArticlesQuery();
     const pinnedProjects: Array<Folder> = await getPinnedProjects(api);
-    const sortedProjects: Array<ArticleProject> = helper.createSortedProjects(
-      pinnedProjects,
-      getCachedArticleList(),
-      !!query
-    );
-
-    if (sortedProjects.length === 0) {
+    if (pinnedProjects.length === 0) {
       dispatch(setLoading(false));
       dispatch(setAndCacheArticlesList(null));
       dispatch(setError({noFavoriteProjects: true}));
     } else {
+      const sortedProjects: Array<ArticleProject> = helper.createSortedProjects(
+        pinnedProjects,
+        getCachedArticleList(),
+        !!query
+      );
       const [error, projectData]: [?CustomError, ProjectArticlesData] = await until(
-        sortedProjects.map((project: Folder) => fetchProjectData(api, project, query)),
+        getProjectDataPromises(api, sortedProjects)
       );
       dispatch(setLoading(false));
 
@@ -142,7 +139,7 @@ const loadArticlesDrafts = () => async (dispatch: (any) => any, getState: () => 
   const [error, articlesDrafts] = await until(api.articles.getArticleDrafts());
 
   if (error) {
-    logEvent({message: 'Failed to load article drafts', isError: true});
+    notify('Unable to load article drafts', error);
     return [];
   } else {
     return articlesDrafts.sort(sortByUpdatedReverse);
@@ -196,10 +193,24 @@ const toggleProjectVisibility = (item: ArticlesListItem) =>
     }
 
     async function getUpdatedProjectData(): ProjectArticlesData | null {
-      const data: ProjectArticlesData | null = await getProjectArticles(api, project, getArticlesQuery());
-      return data ? helper.replaceProjectData(articles, data) : null;
-    }
+      const [error, projectData] = await until(
+        getProjectDataPromises(
+          api,
+          [{
+            ...project,
+            articles: {
+              ...project.articles,
+              collapsed: false
+            }
+          }]
+        )
+      );
 
+      if (error) {
+        notify('Unable to load project articles', error);
+      }
+      return projectData && projectData[0] ? helper.replaceProjectData(articles, projectData[0]) : null;
+    }
   };
 
 const toggleProjectFavorite = (item: ArticlesListItem) =>
@@ -323,36 +334,21 @@ function setAndCacheProjectArticlesData(projectArticlesData: Array<ProjectArticl
   };
 }
 
-async function fetchProjectData(api: Api, project: ArticleProject, query: string | null): Promise<ProjectArticlesData> {
-  const collapsed: ?boolean = project?.articles?.collapsed;
-  return {
-    ...{project},
-    articles: collapsed === true || collapsed === undefined ? [] : await api.articles.getArticles(query, project.id)
-  };
-}
-
-async function getProjectArticles(
-  api: Api,
-  project: ArticleProject,
-  query: string | null
-): Promise<ProjectArticlesData | null> {
-  const expandedProject = {
-    ...project,
-    articles: {
-      ...project.articles,
-      collapsed: false
+function getProjectDataPromises(api: Api, projects: Array<ArticleProject>): Array<Promise<ProjectArticlesData>> {
+  return projects.map(async (project: ArticleProject) => {
+    if (project.articles.collapsed === true) {
+      return {
+        ...{project},
+        articles: []
+      };
     }
-  };
-  const [error, projectData]: [?CustomError, ProjectArticlesData] = await until(
-    fetchProjectData(api, expandedProject, query)
-  );
 
-  if (error) {
-    const msg: string = 'Unable to load project articles';
-    logEvent({message: msg, isError: true, analyticsId: ANALYTICS_ARTICLES_PAGE});
-    notify(msg);
-    return null;
-  } else {
-    return projectData;
-  }
+    const [error, articles]: [?CustomError, ProjectArticlesData] = await until(
+      api.articles.getArticles(getArticlesQuery(), project.id)
+    );
+    return {
+      ...{project},
+      articles: error ? [] : articles
+    };
+  });
 }
