@@ -1,8 +1,8 @@
 /* @flow */
 
 import {arrayToTree} from 'performant-array-to-tree';
-import {getStorageState} from '../storage/storage';
-import {groupByFavoritesAlphabetically, sortByOrdinal} from '../search/sorting';
+import {hasType} from '../api/api__resource-types';
+import {sortByOrdinal} from '../search/sorting';
 
 import type {
   Article,
@@ -10,11 +10,10 @@ import type {
   ArticleNodeList,
   ArticleProject,
   ArticlesList,
-  ArticlesListItem
+  ArticlesListItem,
+  ProjectArticlesData
 } from '../../flow/Article';
-import type {Folder} from '../../flow/User';
 import type {IssueProject} from '../../flow/CustomFields';
-import {hasType} from '../api/api__resource-types';
 
 
 export const createArticlesListItem = (
@@ -28,33 +27,22 @@ export const createArticlesListItem = (
       articles: {...project.articles, collapsed: isCollapsed}
     } : null,
     data: isCollapsed ? [] : data,
-    dataCollapsed: isCollapsed ? data : null
+    dataCollapsed: isCollapsed && data.length > 0 ? data : null
   };
 };
 
-export const getGroupedProjects = (): Array<Folder> => {
-  const projects: Array<Folder> = getStorageState().projects;
-  return groupByFavoritesAlphabetically(projects, 'pinned');
-};
-
-export const createArticleList = (
-  articles: Array<Article>,
-  cachedArticlesList: ArticlesList | null,
-  flat: boolean = false,
-  isCollapsed?: boolean
-): ArticlesList => {
-  return getGroupedProjects().reduce((list: ArticlesList, project: ArticleProject) => {
-    const projectArticles: Array<Article> = (
-      articles
-        .filter((it: Article) => it?.project?.id === project.id)
-        .sort(sortByOrdinal)
+export const createArticleList = (projectData: Array<ProjectArticlesData>, isExpanded?: boolean): ArticlesList => {
+  return projectData.reduce((list: ArticlesList, item: ProjectArticlesData) => {
+    const articles: Array<Article> = (
+      item.articles
         .map((it: Article) => {
-          const parentId = flat ? null : it?.parentArticle?.id;
+          const parentId = isExpanded === true ? null : it?.parentArticle?.id;
           return {...it, ...{parentId}};
         })
+        .sort(sortByOrdinal)
     );
 
-    projectArticles.forEach((article: Article) => {
+    articles.forEach((article: Article) => {
       if (hasType.visibilityLimited(article.visibility) || !article.parentArticle) {
         return;
       }
@@ -68,39 +56,19 @@ export const createArticleList = (
       }
     });
 
-    const hasCollapsed: boolean = typeof isCollapsed === 'boolean';
-    let isProjectCollapsed: boolean = hasCollapsed ? !!isCollapsed : true;
-    if (projectArticles?.length > 0) {
-      const cachedArticlesListProjectListItem: ?ArticlesListItem = findArticleProjectListItem(
-        cachedArticlesList || [],
-        projectArticles[0].project.id
-      );
-      if (cachedArticlesListProjectListItem) {
-        const cachedProjectCollapsed: ?boolean = cachedArticlesListProjectListItem?.title?.articles?.collapsed;
-        isProjectCollapsed = (
-          !hasCollapsed && typeof cachedProjectCollapsed === 'boolean'
-            ? cachedProjectCollapsed
-            : isProjectCollapsed
-        );
-      }
-    }
-
-    project.articles = project.articles || {collapsed: isProjectCollapsed};
-
     return list.concat(
-      createArticlesListItem(project, arrayToTree(projectArticles), isProjectCollapsed)
+      createArticlesListItem(
+        item.project,
+        arrayToTree(articles),
+        isExpanded === true ? false : !!item?.project?.articles?.collapsed
+      )
     );
-  }, []).filter(it => it.data?.length > 0 || it.dataCollapsed?.length > 0);
+  }, []);
 };
 
-export const doFilterArticles = (articles: Array<Article>, query: string = ''): Array<Article> => {
-  return articles.filter((it: Article) => (it?.summary || '').toLowerCase().includes(query.toLowerCase()));
-};
-
-export const toggleArticleProjectListItem = (item: ArticlesListItem, isCollapsed?: boolean): ArticlesListItem => {
+export const toggleProject = (item: ArticlesListItem, isCollapsed: boolean): ArticlesListItem => {
   const project: ArticleProject = item.title;
-  const collapsed: boolean = typeof isCollapsed === 'boolean' ? isCollapsed : !project.articles.collapsed;
-  return createArticlesListItem(project, item.dataCollapsed || item.data, collapsed);
+  return createArticlesListItem(project, item.dataCollapsed || item.data, isCollapsed);
 };
 
 export const flattenArticleListChildren = (nodes: ArticleNodeList): Array<Article> => {

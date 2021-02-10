@@ -2,12 +2,12 @@
 
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import type {Article, ArticlesList} from '../../flow/Article';
+import type {ArticlesList, ProjectArticlesData} from '../../flow/Article';
 import type {IssueProject} from '../../flow/CustomFields';
 import type {CustomError} from '../../flow/Error';
 
 export type KnowledgeBaseState = {
-  articles: ArticlesList | null,
+  articles: Array<ProjectArticlesData> | null,
   articlesList: ArticlesList | null,
   isLoading: boolean,
   error: CustomError
@@ -34,7 +34,7 @@ const {reducer, actions} = createSlice({
     setList(state: KnowledgeBaseState, action: PayloadAction<Array<{ title: IssueProject, data: ArticlesList }>>) {
       state.articlesList = action.payload;
     },
-    setArticles(state: KnowledgeBaseState, action: PayloadAction<Array<{ title: IssueProject, data: Array<Article> }>>) {
+    setArticles(state: KnowledgeBaseState, action: PayloadAction<Array<{ title: IssueProject, data: Array<ProjectArticlesData> }>>) {
       state.articles = action.payload;
     }
   }

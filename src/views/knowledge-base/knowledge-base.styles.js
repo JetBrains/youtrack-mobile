@@ -158,6 +158,9 @@ export default EStyleSheet.create({
     ...secondaryText,
     color: '$icon'
   },
+  actionBarButtonTextDisabled: {
+    opacity: 0.5
+  },
 
   noDrafts: {
     flexGrow: 4,

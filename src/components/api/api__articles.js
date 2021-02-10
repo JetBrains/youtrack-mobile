@@ -23,12 +23,18 @@ export default class ArticlesAPI extends ApiBase {
     return ApiHelper.convertAttachmentRelativeToAbsURLs(attachments, this.config.backendUrl);
   }
 
-  async get(query: string | null = null, $top: number = 10000, $skip: number = 0): Promise<Array<Article>> {
+  async getArticles(
+    query: string | null = null,
+    folder: string,
+    $top: number = 101,
+    $skip: number = 0
+  ): Promise<Array<Article>> {
     const fields: string = ApiBase.createFieldsQuery(
       articlesFields,
       {
         ...{$top},
         ...{$skip},
+        ...{folder},
         ...{query}
       }
     );

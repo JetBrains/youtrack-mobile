@@ -50,3 +50,5 @@ export type ArticleProject = $Shape<IssueProject> & {
     collapsed: boolean
   }
 };
+
+export type ProjectArticlesData = { project: ArticleProject, articles: Array<Article> };

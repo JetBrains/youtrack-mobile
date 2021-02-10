@@ -17,7 +17,6 @@ import Select from '../../components/select/select';
 import Star from '../../components/star/star';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
-import {getStorageState} from '../../components/storage/storage';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {
   IconAngleDown,
@@ -49,6 +48,15 @@ type State = {
   isHeaderPinned: boolean
 };
 
+const ERROR_MESSAGE_DATA: Object = {
+  noFavoriteProjects: {
+    title: 'No favorites projects found',
+    description: 'Add some project to favorites',
+  },
+  noArticlesFound: {
+    title: 'No articles found'
+  }
+};
 
 export class KnowledgeBase extends Component<Props, State> {
   static contextTypes = {
@@ -80,7 +88,7 @@ export class KnowledgeBase extends Component<Props, State> {
       }
     });
 
-    this.props.loadArticlesListFromCache();
+    this.props.loadCachedArticleList();
     if (!this.props.preventReload) {
       await this.loadArticlesList();
     }
@@ -90,7 +98,7 @@ export class KnowledgeBase extends Component<Props, State> {
     }
   }
 
-  loadArticlesList = async (reset?: boolean) => this.props.loadArticlesList(reset);
+  loadArticlesList = async (reset?: boolean) => this.props.loadArticleList(reset);
 
   scrollToProject = (project: ArticleProject) => {
     const {articlesList} = this.props;
@@ -117,7 +125,7 @@ export class KnowledgeBase extends Component<Props, State> {
             <>
               <TouchableOpacity
                 style={styles.itemProject}
-                onPress={() => this.props.toggleProjectArticlesVisibility(section)}
+                onPress={() => this.props.toggleProjectVisibility(section)}
               >
                 <View style={[
                   styles.itemProjectIcon,
@@ -137,7 +145,7 @@ export class KnowledgeBase extends Component<Props, State> {
               size={19}
               hasStar={project.pinned}
               canStar={true}
-              onStarToggle={() => this.props.toggleProjectArticlesFavorite(project)}
+              onStarToggle={() => this.props.toggleProjectFavorite(section)}
               uiTheme={this.uiTheme}
             />}
           </View>
@@ -236,19 +244,6 @@ export class KnowledgeBase extends Component<Props, State> {
 
   getListItemKey = (item: ArticleNode, index: number) => item?.data?.id || index;
 
-  createFilteredArticlesList: ArticlesList = (articlesList: ArticlesList) => {
-    return (
-      getStorageState().articlesListPinnedOnly
-        ? (articlesList || []).filter((it: ArticlesListItem) => {
-          if (it.title) {
-            return it.title.pinned || it.title.isDrafts;
-          }
-          return it;
-        })
-        : (articlesList || [])
-    );
-  };
-
   setListRef = (listRef?: Object) => {
     if (listRef) {
       this.listRef = listRef;
@@ -256,11 +251,13 @@ export class KnowledgeBase extends Component<Props, State> {
   };
 
   renderArticlesList = (articlesList: ArticlesList, hideSearchPanel: boolean = false) => {
+    const {isLoading} = this.props;
+
     return (
       <SectionList
         testID="articles"
         ref={this.setListRef}
-        sections={this.createFilteredArticlesList(articlesList)}
+        sections={articlesList}
         scrollEventThrottle={10}
         onScroll={this.onScroll}
         refreshControl={this.renderRefreshControl()}
@@ -269,21 +266,6 @@ export class KnowledgeBase extends Component<Props, State> {
         renderItem={this.renderArticle}
         renderSectionHeader={this.renderProject}
         ItemSeparatorComponent={this.renderSeparator}
-        ListEmptyComponent={() => !this.props.isLoading && <ErrorMessage errorMessageData={{
-          title: 'No articles found',
-          description: '',
-          icon: () => <IconKnowledgeBase color={styles.actionBarButtonText.color} size={81}/>
-        }}/>}
-        ListFooterComponent={() =>
-          !hideSearchPanel && getStorageState().articlesListPinnedOnly &&
-          <View style={styles.listFooter}>
-            <TouchableOpacity
-              hitSlop={HIT_SLOP}
-              onPress={() => this.props.toggleNonFavoriteProjectsVisibility()}
-            >
-              <Text style={styles.listFooterText}>Show all projects</Text>
-            </TouchableOpacity>
-          </View>}
         stickySectionHeadersEnabled={true}
         ListHeaderComponent={
           hideSearchPanel
@@ -295,6 +277,19 @@ export class KnowledgeBase extends Component<Props, State> {
               </>
             )
         }
+        ListFooterComponent={() =>
+          !isLoading && <View style={styles.listFooter}>
+            <TouchableOpacity
+              hitSlop={HIT_SLOP}
+              onPress={() => {}}
+            >
+              <Text style={styles.listFooterText}>Show more projects</Text>
+            </TouchableOpacity>
+          </View>}
+        ListEmptyComponent={() => !isLoading && <ErrorMessage errorMessageData={{
+          ...(articlesList === null ? ERROR_MESSAGE_DATA.noFavoriteProjects : ERROR_MESSAGE_DATA.noArticlesFound),
+          icon: () => <IconKnowledgeBase color={styles.actionBarButtonText.color} size={81}/>
+        }}/>}
       />
     );
   };
@@ -312,20 +307,25 @@ export class KnowledgeBase extends Component<Props, State> {
 
   renderActionsBar = () => {
     const {isLoading, articlesList} = this.props;
-    const isToggleButtonEnabled: boolean = !isLoading && (articlesList || []).length > 0;
-    const isSomeProjectExpanded = this.createFilteredArticlesList(this.props.articlesList)
-      .map((it: ArticlesListItem) => it?.title?.articles?.collapsed)
-      .some((it: boolean) => it !== true);
+    const list: ArticlesList = articlesList || [];
+    const isToggleButtonEnabled: boolean = (
+      !isLoading &&
+      list.length > 0 &&
+      list.some((it: ArticlesListItem) => !it.title?.articles?.collapsed)
+    );
 
     return (
       <View style={styles.actionBar}>
         <TouchableOpacity
           disabled={!isToggleButtonEnabled}
           hitSlop={HIT_SLOP}
-          onPress={() => this.props.toggleAllProjects(isSomeProjectExpanded)}
+          onPress={() => this.props.toggleAllProjects()}
         >
-          <Text style={styles.actionBarButtonText}>
-            {isSomeProjectExpanded ? 'Collapse projects' : 'Expand projects'}
+          <Text style={[
+            styles.actionBarButtonText,
+            !isToggleButtonEnabled && styles.actionBarButtonTextDisabled
+          ]}>
+            Collapse projects
           </Text>
         </TouchableOpacity>
         <TouchableOpacity

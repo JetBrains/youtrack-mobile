@@ -1,13 +1,17 @@
 /* @flow */
 
+import {arrayToTree} from 'performant-array-to-tree';
+
 import type ActionSheet from '@expo/react-native-action-sheet';
 
-import * as articleTreeHelper from '../../components/articles/articles-tree-helper';
+import * as helper from './knowledge-base-helper';
+import * as treeHelper from '../../components/articles/articles-tree-helper';
 import animation from '../../components/animation/animation';
 import Router from '../../components/router/router';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
-import {arrayToTree} from 'performant-array-to-tree';
+import {confirmation} from '../../components/confirmation/confirmation';
 import {flushStoragePart, getStorageState} from '../../components/storage/storage';
+import {hasType} from '../../components/api/api__resource-types';
 import {logEvent} from '../../components/log/log-helper';
 import {notify} from '../../components/notification/notification';
 import {setArticles, setError, setList, setLoading} from './knowledge-base-reducers';
@@ -19,80 +23,102 @@ import {until} from '../../util/util';
 import type Api from '../../components/api/api';
 import type {ActionSheetOption} from '../../components/action-sheet/action-sheet';
 import type {AppState} from '../../reducers';
-import type {Article, ArticleProject, ArticlesList, ArticlesListItem} from '../../flow/Article';
-import type {IssueProject} from '../../flow/CustomFields';
+import type {Article, ArticleProject, ArticlesList, ArticlesListItem, ProjectArticlesData} from '../../flow/Article';
+import type {CustomError} from '../../flow/Error';
+import type {Folder} from '../../flow/User';
 
 type ApiGetter = () => Api;
 
+export const getCachedArticleList = (): ArticlesList => getStorageState().articlesList || [];
 
-const setArticlesCache = async (articles: Array<Article>) => {
-  flushStoragePart({articles});
+const loadCachedArticleList = () => async (dispatch: (any) => any) => {
+  const cachedArticlesList: ArticlesList = getCachedArticleList();
+  if (cachedArticlesList?.length > 0) {
+    dispatch(setList(cachedArticlesList));
+    logEvent({message: 'Set article list from cache'});
+  }
 };
 
-const setArticlesListCache = async (articlesList: ArticlesList) => {
-  await flushStoragePart({articlesList});
+const getArticlesQuery = (): string | null => getStorageState().articlesQuery;
+
+const createArticleList = (articles: Array<Article>, isExpanded?: boolean): ArticlesList => (
+  treeHelper.createArticleList(articles, isExpanded)
+);
+
+export const getPinnedProjects = async (api: Api): Promise<Array<Folder>> => {
+  const [error, pinnedFolders]: [?CustomError, Folder] = await until(api.issueFolder.getPinnedIssueFolder());
+  if (error) {
+    const msg: string = 'Unable to load favorite projects';
+    notify(msg);
+    logEvent({message: msg, isError: true});
+    return [];
+  } else {
+    return pinnedFolders.filter(hasType.project);
+  }
 };
 
-const getCachedArticleList = (): ArticlesList => getStorageState().articlesList || [];
 
-const loadArticlesListFromCache = () => {
-  return async (dispatch: (any) => any) => {
-    const cachedArticlesList: ArticlesList = getCachedArticleList();
-    if (cachedArticlesList?.length > 0) {
-      dispatch(setList(cachedArticlesList));
-      logEvent({message: 'Set article list from cache'});
-    }
-  };
-};
+const loadArticleList = (reset: boolean = true, doNotCache: boolean = false) =>
+  async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const api: Api = getApi();
 
-const createArticleList = (
-  articles: Array<Article>,
-  cachedArticlesList: ArticlesList | null,
-  flat?: boolean,
-  isCollapsed?: boolean
-): ArticlesList => {
-  return articleTreeHelper.createArticleList(articles, cachedArticlesList, flat, isCollapsed);
-};
+    logEvent({
+      message: 'Loading articles per project',
+      analyticsId: ANALYTICS_ARTICLES_PAGE
+    });
 
-const updateArticlesList = (articlesList: ArticlesList) => {
-  return async (dispatch: (any) => any) => {
-    dispatch(setList(articlesList));
-    setArticlesListCache(articlesList);
-  };
-};
-
-const updateArticles = (articles: Array<Article>) => {
-  return async (dispatch: (any) => any) => {
-    dispatch(setArticles(articles));
-    setArticlesCache(articles);
-  };
-};
-
-const loadArticlesList = (reset: boolean = true) => {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    setError(null);
     dispatch(setUserLastVisitedArticle(null));
 
     if (reset) {
       dispatch(setLoading(true));
     }
 
-    logEvent({message: 'Loading articles', analyticsId: ANALYTICS_ARTICLES_PAGE});
-    const [error, articles] = await until(getApi().articles.get());
-    dispatch(setLoading(false));
+    const query: string | null = getArticlesQuery();
+    const pinnedProjects: Array<Folder> = await getPinnedProjects(api);
+    const sortedProjects: Array<ArticleProject> = helper.createSortedProjects(
+      pinnedProjects,
+      getCachedArticleList(),
+      !!query
+    );
 
-    if (error) {
-      logEvent({message: 'Failed to load articles', isError: true});
-      dispatch(setError(error));
+    if (sortedProjects.length === 0) {
+      dispatch(setLoading(false));
+      dispatch(setAndCacheArticlesList(null));
+      dispatch(setError({noFavoriteProjects: true}));
     } else {
-      logEvent({message: 'Articles loaded'});
-      dispatch(updateArticles(articles));
-      dispatch(filterArticles(getArticlesQuery()));
+      const [error, projectData]: [?CustomError, ProjectArticlesData] = await until(
+        sortedProjects.map((project: Folder) => fetchProjectData(api, project, query)),
+      );
+      dispatch(setLoading(false));
+
+      if (error) {
+        dispatch(setError(error));
+        const msg: string = 'Unable to load favorite projects articles';
+        notify(msg, error);
+        logEvent({message: msg, isError: true});
+      } else {
+        logEvent({message: 'Pinned projects articles loaded'});
+
+        let sortedProjectData: Array<ProjectArticlesData> = projectData;
+        if (query) {
+          sortedProjectData = projectData.filter((it: ProjectArticlesData) => it.articles.length > 0);
+        }
+        const articlesList: ArticlesList = createArticleList(sortedProjectData, !!query);
+
+        if (doNotCache) {
+          dispatch(setArticles(sortedProjectData));
+          dispatch(setList(articlesList));
+        } else {
+          dispatch(setAndCacheProjectArticlesData(sortedProjectData));
+          dispatch(setAndCacheArticlesList(articlesList));
+        }
+      }
     }
   };
-};
 
-const getArticleChildren = (articleId: string): ArticlesList => {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+const getArticleChildren = (articleId: string): ArticlesList =>
+  async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     logEvent({message: 'Loading article children', analyticsId: ANALYTICS_ARTICLES_PAGE});
     const [error, articleWithChildren] = await until(getApi().articles.getArticleChildren(articleId));
 
@@ -104,119 +130,111 @@ const getArticleChildren = (articleId: string): ArticlesList => {
       return arrayToTree(articleWithChildren.childArticles);
     }
   };
+
+const filterArticles = (query: string | null) => async (dispatch: (any) => any) => {
+  await flushStoragePart({articlesQuery: query ? query : null});
+  dispatch(loadArticleList(true, !!query));
 };
 
-const createFilteredArticlesList = (articles: Array<Article>, query: string | null): ArticlesList => {
-  let filteredArticlesList: ArticlesList;
-  if (query) {
-    const filteredArticles: Array<Article> = articleTreeHelper.doFilterArticles(articles, query);
-    filteredArticlesList = createArticleList(filteredArticles, null, true, false);
+const loadArticlesDrafts = () => async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+  const api: Api = getApi();
+
+  const [error, articlesDrafts] = await until(api.articles.getArticleDrafts());
+
+  if (error) {
+    logEvent({message: 'Failed to load article drafts', isError: true});
+    return [];
   } else {
-    filteredArticlesList = createArticleList(articles, getCachedArticleList());
+    return articlesDrafts.sort(sortByUpdatedReverse);
   }
-  return filteredArticlesList;
 };
 
-const filterArticles = (query: string | null) => {
-  return async (dispatch: (any) => any, getState: () => AppState) => {
-    const articles: Array<Article> = getState().articles.articles || [];
-    flushStoragePart({articlesQuery: query ? query : null});
-
-    const articlesList: ArticlesList = createFilteredArticlesList(articles, query);
-    if (query) {
-      dispatch(setList(articlesList));
-    } else {
-      dispatch(updateArticlesList(articlesList));
-    }
-  };
-};
-
-const getArticlesQuery = (): string | null => getStorageState().articlesQuery;
-
-const loadArticlesDrafts = () => {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+const toggleProjectVisibility = (item: ArticlesListItem) =>
+  async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
+    const {articlesList, articles}: {
+      articlesList: ArticlesList,
+      articles: Array<ProjectArticlesData> | null
+    } = getState().articles;
 
-    const [error, articlesDrafts] = await until(api.articles.getArticleDrafts());
+    logEvent({
+      message: 'Toggle project article visibility',
+      analyticsId: ANALYTICS_ARTICLES_PAGE
+    });
 
-    if (error) {
-      logEvent({message: 'Failed to load article drafts', isError: true});
-      return [];
-    } else {
-      return articlesDrafts.sort(sortByUpdatedReverse);
+    if (!articlesList || !articles) {
+      return;
     }
+
+    setError(null);
+    let updatedArticlesList: ArticlesList = articlesList.slice();
+    const project: ArticleProject = item.title;
+
+    if (project.articles.collapsed === false) {
+      return toggleProject(item, updatedArticlesList, true);
+    }
+
+    if (item.dataCollapsed) {
+      toggleProject(item, updatedArticlesList, false);
+    }
+    const updatedProjectData: ProjectArticlesData | null = await getUpdatedProjectData();
+    if (updatedProjectData) {
+      setAndCacheProjectArticlesData(updatedProjectData);
+      updatedArticlesList = createArticleList(updatedProjectData);
+    }
+    dispatch(setAndCacheArticlesList(updatedArticlesList));
+
+
+    function toggleProject(listItem: ArticlesListItem, updatedArticlesList: ArticlesList, isCollapsed: boolean) {
+      const index: number = updatedArticlesList.findIndex(
+        (it: ArticlesListItem) => it.title.id === listItem.title.id
+      );
+      if (index >= 0) {
+        updatedArticlesList.splice(index, 1, treeHelper.toggleProject(listItem, isCollapsed));
+      }
+      dispatch(setAndCacheArticlesList(updatedArticlesList));
+    }
+
+    async function getUpdatedProjectData(): ProjectArticlesData | null {
+      const data: ProjectArticlesData | null = await getProjectArticles(api, project, getArticlesQuery());
+      return data ? helper.replaceProjectData(articles, data) : null;
+    }
+
   };
-};
 
-const toggleProjectArticlesVisibility = (section: ArticlesListItem) => {
-  return async (dispatch: (any) => any, getState: () => AppState) => {
-    logEvent({message: 'Toggle project article visibility', analyticsId: ANALYTICS_ARTICLES_PAGE});
+const toggleProjectFavorite = (item: ArticlesListItem) =>
+  async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    logEvent({
+      message: 'Toggle project article favorite',
+      analyticsId: ANALYTICS_ARTICLES_PAGE
+    });
+    confirmation('Remove project from the list?', 'Remove')
+      .then(async () => {
+        const api: Api = getApi();
+        const articles: Array<ProjectArticlesData> = getState().articles.articles || [];
+        const prevArticles: Array<ProjectArticlesData> = articles.slice();
 
-    const state: AppState = getState();
-    const {articlesList} = state.articles;
+        animation.layoutAnimation();
+        const updatedData: Array<ProjectArticlesData> = helper.removeProjectData(articles, item.title);
+        dispatch(setAndCacheProjectArticlesData(updatedData));
+        dispatch(setAndCacheArticlesList(createArticleList(updatedData)));
 
-    if (articlesList) {
-      const updatedArticlesList: ArticlesList = articlesList.reduce((list: ArticlesList, item: ArticlesListItem) => {
-        const project: ArticleProject = item.title;
-        let i: ArticlesListItem | null;
-
-        if (project.id === section.title.id) {
-          i = articleTreeHelper.toggleArticleProjectListItem(section);
-        } else {
-          i = item;
+        const [error] = await until(api.projects.toggleFavorite(item.title.id, item.title.pinned));
+        if (error) {
+          notify('Failed to toggle favorite for the project', error);
+          dispatch(setAndCacheProjectArticlesData(prevArticles));
+          dispatch(setAndCacheArticlesList(createArticleList(prevArticles)));
         }
-        return list.concat(i);
-      }, []);
+      }).catch(() => {});
 
-      dispatch(updateArticlesList(updatedArticlesList));
-    }
   };
-};
 
-const toggleProjectArticlesFavorite = (project: ArticleProject) => {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
-    logEvent({message: 'Toggle project article favorite', analyticsId: ANALYTICS_ARTICLES_PAGE});
-    const api: Api = getApi();
-
-    animation.layoutAnimation();
-    update();
-    const [error] = await until(api.projects.toggleFavorite(project.id, project.pinned));
-    if (error) {
-      notify('Failed to toggle favorite for the project', error);
-      update();
-    }
-
-    async function update() {
-      const updatedProjects = getStorageState().projects.reduce((list: Array<IssueProject>, it: IssueProject) => {
-        if (it.id === project.id) {
-          it.pinned = !project.pinned;
-        }
-        return list.concat(it);
-      }, []);
-
-      await flushStoragePart({projects: updatedProjects});
-      const articlesList: ArticlesList = getState().articles.articlesList || [];
-      const articles: Array<Article> = articleTreeHelper.flattenArticleList(articlesList);
-      dispatch(updateArticlesList(createArticleList(articles, getCachedArticleList())));
-    }
-  };
-};
-
-const toggleNonFavoriteProjectsVisibility = () => {
-  return async (dispatch: (any) => any) => {
-    const isPinnedOnly: boolean = getStorageState().articlesListPinnedOnly;
-    await flushStoragePart({articlesListPinnedOnly: !isPinnedOnly});
-    dispatch(loadArticlesList(true));
-    notify(`${!isPinnedOnly ? 'Showing only favorite projects' : 'Showing all projects'}`);
-  };
-};
-
-const showContextActions = (actionSheet: ActionSheet, canCreateArticle: boolean) => {
-  return async (dispatch: (any) => any) => {
+const showContextActions = (actionSheet: ActionSheet, canCreateArticle: boolean) =>
+  async (dispatch: (any) => any) => {
     const actions: Array<ActionSheetOption> = [
       {
         title: 'Show/Hide More Projects',
-        execute: () => dispatch(toggleNonFavoriteProjectsVisibility())
+        execute: () => null
       },
       {title: 'Cancel'}
     ];
@@ -234,10 +252,9 @@ const showContextActions = (actionSheet: ActionSheet, canCreateArticle: boolean)
       selectedAction.execute();
     }
   };
-};
 
-const toggleAllProjects = (collapse: boolean) => {
-  return async (dispatch: (any) => any, getState: () => AppState) => {
+const toggleAllProjects = (collapse: boolean = true) =>
+  async (dispatch: (any) => any, getState: () => AppState) => {
     const state: AppState = getState();
     const {articlesList} = state.articles;
     logEvent({
@@ -246,43 +263,96 @@ const toggleAllProjects = (collapse: boolean) => {
     });
     if (articlesList) {
       const updatedArticlesList: ArticlesList = articlesList.reduce((list: ArticlesList, item: ArticlesListItem) => {
-        return list.concat(articleTreeHelper.toggleArticleProjectListItem(item, collapse));
+        return list.concat(treeHelper.toggleProject(item, collapse));
       }, []);
 
-      dispatch(setList(updatedArticlesList));
-      setArticlesListCache(updatedArticlesList);
+      dispatch(setAndCacheArticlesList(updatedArticlesList));
       notify(`${collapse ? 'Projects collapsed' : 'Projects expanded'}`);
     }
 
   };
-};
 
 export type KnowledgeBaseActions = {
   createList: typeof createArticleList,
-  getArticlesQuery: typeof getArticlesQuery,
   filterArticles: typeof filterArticles,
   getArticleChildren: typeof getArticleChildren,
+  loadArticleList: typeof loadArticleList,
   loadArticlesDrafts: typeof loadArticlesDrafts,
-  loadArticlesList: typeof loadArticlesList,
-  loadArticlesListFromCache: typeof loadArticlesListFromCache,
+  getArticlesQuery: typeof getArticlesQuery,
+  loadCachedArticleList: typeof loadCachedArticleList,
   showContextActions: typeof showContextActions,
   toggleAllProjects: typeof toggleAllProjects,
-  toggleNonFavoriteProjectsVisibility: typeof toggleNonFavoriteProjectsVisibility,
-  toggleProjectArticlesFavorite: typeof toggleProjectArticlesFavorite,
-  toggleProjectArticlesVisibility: typeof toggleProjectArticlesVisibility,
+  toggleProjectFavorite: typeof toggleProjectFavorite,
+  toggleProjectVisibility: typeof toggleProjectVisibility,
 };
 
 export {
   createArticleList,
-  getArticlesQuery,
   filterArticles,
   getArticleChildren,
+  loadArticleList,
   loadArticlesDrafts,
-  loadArticlesList,
-  loadArticlesListFromCache,
+  getArticlesQuery,
+  loadCachedArticleList,
   showContextActions,
   toggleAllProjects,
-  toggleNonFavoriteProjectsVisibility,
-  toggleProjectArticlesFavorite,
-  toggleProjectArticlesVisibility,
+  toggleProjectFavorite,
+  toggleProjectVisibility,
 };
+
+async function setArticlesCache(articles: Array<ProjectArticlesData>) {
+  flushStoragePart({articles});
+}
+
+async function setArticlesListCache(articlesList: ArticlesList) {
+  await flushStoragePart({articlesList});
+}
+
+
+function setAndCacheArticlesList(articlesList: ArticlesList) {
+  return async (dispatch: (any) => any) => {
+    dispatch(setList(articlesList));
+    setArticlesListCache(articlesList);
+  };
+}
+
+function setAndCacheProjectArticlesData(projectArticlesData: Array<ProjectArticlesData>) {
+  return async (dispatch: (any) => any) => {
+    dispatch(setArticles(projectArticlesData));
+    setArticlesCache(projectArticlesData);
+  };
+}
+
+async function fetchProjectData(api: Api, project: ArticleProject, query: string | null): Promise<ProjectArticlesData> {
+  const collapsed: ?boolean = project?.articles?.collapsed;
+  return {
+    ...{project},
+    articles: collapsed === true || collapsed === undefined ? [] : await api.articles.getArticles(query, project.id)
+  };
+}
+
+async function getProjectArticles(
+  api: Api,
+  project: ArticleProject,
+  query: string | null
+): Promise<ProjectArticlesData | null> {
+  const expandedProject = {
+    ...project,
+    articles: {
+      ...project.articles,
+      collapsed: false
+    }
+  };
+  const [error, projectData]: [?CustomError, ProjectArticlesData] = await until(
+    fetchProjectData(api, expandedProject, query)
+  );
+
+  if (error) {
+    const msg: string = 'Unable to load project articles';
+    logEvent({message: msg, isError: true, analyticsId: ANALYTICS_ARTICLES_PAGE});
+    notify(msg);
+    return null;
+  } else {
+    return projectData;
+  }
+}
