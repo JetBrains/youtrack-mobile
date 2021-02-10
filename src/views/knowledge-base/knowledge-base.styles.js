@@ -156,10 +156,10 @@ export default EStyleSheet.create({
     top: 1,
     marginRight: UNIT,
     ...secondaryText,
-    color: '$icon'
+    color: '$link'
   },
   actionBarButtonTextDisabled: {
-    opacity: 0.5
+    color: '$disabled'
   },
 
   noDrafts: {

@@ -325,7 +325,7 @@ export class KnowledgeBase extends Component<Props, State> {
             styles.actionBarButtonText,
             !isToggleButtonEnabled && styles.actionBarButtonTextDisabled
           ]}>
-            Collapse projects
+            Collapse all
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
