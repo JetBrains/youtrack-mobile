@@ -13,17 +13,21 @@ import KnowledgeBaseDrafts from './knowledge-base__drafts';
 import KnowledgeBaseSearchPanel from './knowledge-base__search';
 import PropTypes from 'prop-types';
 import Router from '../../components/router/router';
-import Select from '../../components/select/select';
+import SelectSectioned from '../../components/select/select-sectioned';
 import Star from '../../components/star/star';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
 import {HIT_SLOP} from '../../components/common-styles/button';
+import {getGroupedByFieldNameAlphabetically} from '../../components/search/sorting';
+import {getStorageState} from '../../components/storage/storage';
 import {
   IconAngleDown,
   IconAngleRight,
   IconBack,
   IconContextActions,
-  IconKnowledgeBase, IconNoProjectFound, IconNoProjectFoundDark
+  IconKnowledgeBase,
+  IconNoProjectFound,
+  IconNoProjectFoundDark
 } from '../../components/icon/icon';
 import {routeMap} from '../../app-routes';
 import {SkeletonIssues} from '../../components/skeleton/skeleton';
@@ -37,6 +41,7 @@ import type IssuePermissions from '../../components/issue-permissions/issue-perm
 import type {Article, ArticlesList, ArticlesListItem, ArticleNode, ArticleProject} from '../../flow/Article';
 import type {KnowledgeBaseActions} from './knowledge-base-actions';
 import type {KnowledgeBaseState} from './knowledge-base-reducers';
+import type {SelectProps} from '../../components/select/select';
 import type {Theme, UITheme} from '../../flow/Theme';
 
 type Props = KnowledgeBaseActions & KnowledgeBaseState & {
@@ -46,7 +51,8 @@ type Props = KnowledgeBaseActions & KnowledgeBaseState & {
 };
 
 type State = {
-  isHeaderPinned: boolean
+  isHeaderPinned: boolean,
+  isSelectVisible: boolean
 };
 
 const ERROR_MESSAGE_DATA: Object = {
@@ -70,7 +76,10 @@ export class KnowledgeBase extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    this.state = {isHeaderPinned: false};
+    this.state = {
+      isHeaderPinned: false,
+      isSelectVisible: false
+    };
     usage.trackScreenView(ANALYTICS_ARTICLES_PAGE);
   }
 
@@ -228,7 +237,7 @@ export class KnowledgeBase extends Component<Props, State> {
   };
 
   renderSeparator() {
-    return <View style={styles.separator}>{Select.renderSeparator()}</View>;
+    return <View style={styles.separator}>{SelectSectioned.renderSeparator()}</View>;
   }
 
   onScroll = ({nativeEvent}: Object) => {
@@ -263,7 +272,7 @@ export class KnowledgeBase extends Component<Props, State> {
         onScroll={this.onScroll}
         refreshControl={this.renderRefreshControl()}
         keyExtractor={this.getListItemKey}
-        getItemLayout={Select.getItemLayout}
+        getItemLayout={SelectSectioned.getItemLayout}
         renderItem={this.renderArticle}
         renderSectionHeader={this.renderProject}
         ItemSeparatorComponent={this.renderSeparator}
@@ -282,9 +291,9 @@ export class KnowledgeBase extends Component<Props, State> {
           !isLoading && <View style={styles.listFooter}>
             <TouchableOpacity
               hitSlop={HIT_SLOP}
-              onPress={() => {}}
+              onPress={this.openProjectSelect}
             >
-              <Text style={styles.listFooterText}>Show more projects</Text>
+              <Text style={styles.link}>Manage Favorite Projects</Text>
             </TouchableOpacity>
           </View>}
         ListEmptyComponent={() => !isLoading && <ErrorMessage errorMessageData={{
@@ -344,6 +353,61 @@ export class KnowledgeBase extends Component<Props, State> {
     );
   };
 
+  closeProjectSelect = () => this.setState({isSelectVisible: false});
+
+  openProjectSelect = () => this.setState({isSelectVisible: true});
+
+  renderProjectSelect = () => {
+    const {updateProjectsFavorites} = this.props;
+    const projects: Array<ArticleProject> = getStorageState().projects;
+    const prevPinnedProjects: Array<ArticleProject> = projects.filter((it: ArticleProject) => it.pinned);
+    const selectProps: SelectProps = {
+      placeholder: 'Filter projects',
+      multi: true,
+      header: () => (
+        <Text style={styles.manageFavoriteProjectsNote}>
+          To view articles in the knowledge base for a specific project, mark it as a favorite
+        </Text>
+      ),
+      dataSource: () => {
+        const sortedProjects = getGroupedByFieldNameAlphabetically(projects, 'pinned');
+        return Promise.resolve([{
+          title: 'Favorites',
+          data: sortedProjects.favorites
+        }, {
+          title: 'Projects',
+          data: sortedProjects.others
+        }]);
+      },
+      selectedItems: prevPinnedProjects,
+      getTitle: (it: ArticleProject) => it.name,
+      onCancel: this.closeProjectSelect,
+      onChangeSelection: () => null,
+      onSelect: async (selectedProjects: ?Array<ArticleProject>) => {
+        const pinnedProjects: Array<ArticleProject> = (
+          (selectedProjects || [])
+            .map((it: ArticleProject) => it.pinned ? null : {...it, pinned: true})
+            .filter(Boolean)
+        );
+        const unpinnedProjects: Array<ArticleProject> = prevPinnedProjects.filter(
+          (it: ArticleProject) => !(selectedProjects || []).includes(it)).map(
+          (it: ArticleProject) => ({
+            ...it,
+            pinned: false
+          })
+        );
+        this.closeProjectSelect();
+        await updateProjectsFavorites(pinnedProjects, unpinnedProjects, selectedProjects?.length === 0);
+        if ((selectedProjects || []).length === 0) {
+          this.props.setNoFavoriteProjects();
+        } else {
+          this.loadArticlesList(true);
+        }
+      }
+    };
+    return <SelectSectioned {...selectProps}/>;
+  };
+
   renderNoFavouriteProjects = () => {
     const IconNoProjects = (
       //$FlowFixMe
@@ -357,20 +421,20 @@ export class KnowledgeBase extends Component<Props, State> {
           style={styles.noProjectsIcon}
         />
         <Text style={styles.noProjectsMessage}>
-          There should be a list of articles from your favorite projects, but you haven't selected any.
+          Here you'll see a list of articles from your favorite projects
         </Text>
         <TouchableOpacity
           style={styles.noProjectsButton}
           hitSlop={HIT_SLOP}
-          onPress={() => {}}
+          onPress={this.openProjectSelect}
         >
           <Text style={styles.noProjectsButtonText}>
-            Select projects
+            Find favorite projects
           </Text>
         </TouchableOpacity>
       </View>
     );
-  }
+  };
 
   render() {
     const {isLoading, articlesList, error, showContextActions, issuePermissions} = this.props;
@@ -392,7 +456,11 @@ export class KnowledgeBase extends Component<Props, State> {
                     <TouchableOpacity
                       hitSlop={HIT_SLOP}
                       onPress={() => {
-                        showContextActions(this.context.actionSheet(), issuePermissions.articleCanCreateArticle());
+                        showContextActions(
+                          this.context.actionSheet(),
+                          issuePermissions.articleCanCreateArticle(),
+                          this.openProjectSelect
+                        );
                       }}
                     >
                       <IconContextActions color={styles.link.color}/>
@@ -413,6 +481,8 @@ export class KnowledgeBase extends Component<Props, State> {
                 {!error && articlesList && this.renderArticlesList(articlesList)}
 
               </View>
+
+              {this.state.isSelectVisible && this.renderProjectSelect()}
             </View>
           );
         }}

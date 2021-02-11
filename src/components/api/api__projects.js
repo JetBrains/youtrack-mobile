@@ -14,11 +14,20 @@ export default class ProjectsAPI extends ApiBase {
   }
 
   async addFavorite(projectId: string): Promise<IssueProject> {
-    return this.makeAuthorizedRequest(this.pinProjectURL, 'POST', {id: projectId});
+    return this.makeAuthorizedRequest(
+      `${this.pinProjectURL}?fields=id,pinned`,
+      'POST',
+      {id: projectId}
+    );
   }
 
   async removeFavorite(projectId: string): Promise<IssueProject> {
-    return this.makeAuthorizedRequest(`${this.pinProjectURL}/${projectId}`, 'DELETE', null, {parseJson: false});
+    return this.makeAuthorizedRequest(
+      `${this.pinProjectURL}/${projectId}`,
+      'DELETE',
+      null,
+      {parseJson: false}
+    );
   }
 
   async toggleFavorite(projectId: string, pinned: boolean): Promise<IssueProject> {

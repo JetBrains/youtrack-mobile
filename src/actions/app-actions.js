@@ -29,6 +29,7 @@ import {
   getOtherAccounts,
   storeAccounts
 } from '../components/storage/storage';
+import {hasType} from '../components/api/api__resource-types';
 import {isIOSPlatform, until} from '../util/util';
 import {isUnsupportedFeatureError} from '../components/error/error-resolver';
 import {loadConfig} from '../components/config/config';
@@ -386,7 +387,7 @@ export function completeInitialization(issueId: ?string = null) {
     log.debug('Completing initialization');
     await dispatch(loadUser());
     await dispatch(loadUserPermissions());
-    await dispatch(storeProjectsShortNames());
+    await dispatch(cacheProjects());
     log.debug('Initialization completed');
 
     Router.navigateToDefaultRoute(issueId ? {issueId} : null);
@@ -500,10 +501,13 @@ export function applyAuthorization(authParams: AuthParams) {
   };
 }
 
-function storeProjectsShortNames() {
+export function cacheProjects() {
   return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
-    const userFolders: Array<Folder> = await getApi().user.getUserFolders('', ['id,shortName,name,pinned']);
-    await flushStoragePart({projects: userFolders.filter(it => it.shortName)});
+    const userFolders: Array<Folder> = await getApi().user.getUserFolders(
+      '',
+      ['$type,id,shortName,name,pinned']
+    );
+    await flushStoragePart({projects: userFolders.filter((it: Folder) => hasType.project(it))});
   };
 }
 

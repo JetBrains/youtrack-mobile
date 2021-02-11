@@ -15,7 +15,7 @@ import {hasType} from '../../components/api/api__resource-types';
 import {logEvent} from '../../components/log/log-helper';
 import {notify} from '../../components/notification/notification';
 import {setArticles, setError, setList, setLoading} from './knowledge-base-reducers';
-import {setUserLastVisitedArticle} from '../../actions/app-actions';
+import {cacheProjects, setUserLastVisitedArticle} from '../../actions/app-actions';
 import {showActions} from '../../components/action-sheet/action-sheet';
 import {sortByUpdatedReverse} from '../../components/search/sorting';
 import {until} from '../../util/util';
@@ -242,7 +242,10 @@ const toggleProjectFavorite = (item: ArticlesListItem) =>
       message: 'Toggle project article favorite',
       analyticsId: ANALYTICS_ARTICLES_PAGE
     });
-    confirmation('Remove project from the list?', 'Remove')
+    confirmation(
+      'Remove project from favorites?',
+      'Remove',
+    )
       .then(async () => {
         const api: Api = getApi();
         const articles: Array<ProjectArticlesData> = getState().articles.articles || [];
@@ -263,12 +266,48 @@ const toggleProjectFavorite = (item: ArticlesListItem) =>
 
   };
 
-const showContextActions = (actionSheet: ActionSheet, canCreateArticle: boolean) =>
+const updateProjectsFavorites = (
+  pinnedProjects: Array<ArticleProject>,
+  unpinnedProjects: Array<ArticleProject>,
+  hasNoFavorites: boolean
+) =>
+  async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    logEvent({
+      message: 'Manage favorite projects',
+      analyticsId: ANALYTICS_ARTICLES_PAGE
+    });
+
+    dispatch(setError(null));
+    dispatch(setLoading(true));
+
+    const [error] = await until(
+      pinnedProjects.map((it: ArticleProject) => api.projects.addFavorite(it.id))
+        .concat(
+          unpinnedProjects.map((it: ArticleProject) => api.projects.removeFavorite(it.id))
+        )
+    );
+    if (error) {
+      notify(`Failed to change favorites`, error);
+    }
+    if (hasNoFavorites) {
+      setAndCacheProjectArticlesData(null);
+      setAndCacheArticlesList(null);
+    }
+    dispatch(cacheProjects());
+  };
+
+const setNoFavoriteProjects = () => async (dispatch: (any) => any) => {
+  dispatch(setLoading(false));
+  dispatch(setError({noFavoriteProjects: true}));
+};
+
+const showContextActions = (actionSheet: ActionSheet, canCreateArticle: boolean, onShowMoreProjects: Function) =>
   async (dispatch: (any) => any) => {
     const actions: Array<ActionSheetOption> = [
       {
-        title: 'Show/Hide More Projects',
-        execute: () => null
+        title: 'Manage Favorite Projects',
+        execute: onShowMoreProjects
       },
       {title: 'Cancel'}
     ];
@@ -307,6 +346,7 @@ const toggleAllProjects = (collapse: boolean = true) =>
   };
 
 export type KnowledgeBaseActions = {
+  updateProjectsFavorites: typeof updateProjectsFavorites,
   createList: typeof createArticleList,
   filterArticles: typeof filterArticles,
   getArticleChildren: typeof getArticleChildren,
@@ -314,6 +354,7 @@ export type KnowledgeBaseActions = {
   loadArticlesDrafts: typeof loadArticlesDrafts,
   getArticlesQuery: typeof getArticlesQuery,
   loadCachedArticleList: typeof loadCachedArticleList,
+  setNoFavoriteProjects: typeof setNoFavoriteProjects,
   showContextActions: typeof showContextActions,
   toggleAllProjects: typeof toggleAllProjects,
   toggleProjectFavorite: typeof toggleProjectFavorite,
@@ -321,6 +362,7 @@ export type KnowledgeBaseActions = {
 };
 
 export {
+  updateProjectsFavorites,
   createArticleList,
   filterArticles,
   getArticleChildren,
@@ -328,13 +370,14 @@ export {
   loadArticlesDrafts,
   getArticlesQuery,
   loadCachedArticleList,
+  setNoFavoriteProjects,
   showContextActions,
   toggleAllProjects,
   toggleProjectFavorite,
   toggleProjectVisibility,
 };
 
-async function setArticlesCache(articles: Array<ProjectArticlesData>) {
+async function setArticlesCache(articles: ?Array<ProjectArticlesData>) {
   flushStoragePart({articles});
 }
 
@@ -350,7 +393,7 @@ function setAndCacheArticlesList(articlesList: ArticlesList) {
   };
 }
 
-function setAndCacheProjectArticlesData(projectArticlesData: Array<ProjectArticlesData>) {
+function setAndCacheProjectArticlesData(projectArticlesData: Array<ProjectArticlesData> | null) {
   return async (dispatch: (any) => any) => {
     dispatch(setArticles(projectArticlesData));
     setArticlesCache(projectArticlesData);

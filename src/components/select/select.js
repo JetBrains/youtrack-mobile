@@ -18,6 +18,7 @@ export type SelectProps = {
   onChangeSelection: (selectedItems: Array<Object>, current: Object) => any,
   onCancel: () => any,
   getTitle: (item: Object) => string,
+  header?: () => any,
   titleRenderer?: (item: Object) => any,
   getValue?: (item: Object) => string,
   selectedItems: Array<Object>,
@@ -43,7 +44,8 @@ export default class Select extends Component<SelectProps, SelectState> {
     autoFocus: false,
     onChangeSelection: (items: Array<Object>) => null,
     noFilter: false,
-    getTitle: (item: Object) => getEntityPresentation(item)
+    getTitle: (item: Object) => getEntityPresentation(item),
+    header: () => null
   };
 
   static getItemLayout(items: ?Array<Object>, index: number) {

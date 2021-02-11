@@ -122,12 +122,9 @@ export default EStyleSheet.create({
     marginBottom: UNIT * 2
   },
   listFooter: {
-    marginVertical: UNIT * 2,
+    marginVertical: UNIT * 4,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  listFooterText: {
-    color: '$link'
   },
 
   searchPanelContainer: {
@@ -199,5 +196,11 @@ export default EStyleSheet.create({
   noProjectsButtonText: {
     ...mainText,
     color: '$link'
+  },
+
+  manageFavoriteProjectsNote: {
+    padding: UNIT * 2,
+    textAlign: 'center',
+    color: '$icon'
   }
 });

@@ -18,7 +18,7 @@ function doSortBy(
 }
 
 export function sortAlphabetically(item1: Object, item2: Object) {
-  const name1: string = getEntityPresentation(item1).toLowerCase() ;
+  const name1: string = getEntityPresentation(item1).toLowerCase();
   const name2: string = getEntityPresentation(item2).toLowerCase();
 
   if (name1 > name2) {
@@ -42,10 +42,13 @@ export function sortByOrdinal(a: Object & { ordinal: number }, b: Object & { ord
   return a.ordinal - b.ordinal;
 }
 
-export function groupByFavoritesAlphabetically(list: Array<Object>, favoriteFiledName: string): Array<Object> {
-  const map: { favorites: Array<Object>, others: Array<Object> } = (list || []).sort(sortAlphabetically).reduce(
+export function getGroupedByFieldNameAlphabetically(
+  list: Array<Object>,
+  fieldName: string
+): { favorites: Array<Object>, others: Array<Object> } {
+  return (list || []).sort(sortAlphabetically).reduce(
     (list, item) => {
-      if (item[favoriteFiledName]) {
+      if (item[fieldName]) {
         list.favorites.push(item);
       } else {
         list.others.push(item);
@@ -57,5 +60,4 @@ export function groupByFavoritesAlphabetically(list: Array<Object>, favoriteFile
       others: []
     }
   );
-  return [...map.favorites, ...map.others];
 }

@@ -43,7 +43,7 @@ export default class SelectSectioned extends Select {
   }
 
   renderItems() {
-    const {style} = this.props;
+    const {style, header = () => null} = this.props;
     return (
       <View style={style}>
         <SectionList
@@ -60,7 +60,9 @@ export default class SelectSectioned extends Select {
 
           renderItem={this.renderItem}
           renderSectionHeader={this.renderSectionHeader}
+
           ListEmptyComponent={null}
+          ListHeaderComponent={header()}
 
           ItemSeparatorComponent={Select.renderSeparator}
 
@@ -74,7 +76,8 @@ export default class SelectSectioned extends Select {
 const styles = EStyleSheet.create({
   sectionHeader: {
     padding: UNIT * 2,
-    paddingBottom: UNIT
+    paddingBottom: UNIT,
+    backgroundColor: '$background'
   },
   searchText: {
     ...mainText,
