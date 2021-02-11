@@ -281,6 +281,11 @@ export default class Select extends Component<SelectProps, SelectState> {
           <ActivityIndicator/>
           <Text style={styles.loadingMessage}>Loading values...</Text>
         </View>}
+        {this.state.loaded && this.state?.items?.length === 0 && (
+          <View style={[styles.row, styles.loadingRow]}>
+            <Text style={styles.loadingMessage}>No items</Text>
+          </View>
+        )}
 
         {this.renderItems()}
 
