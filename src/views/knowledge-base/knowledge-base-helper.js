@@ -2,14 +2,14 @@
 
 import {sortAlphabetically} from '../../components/search/sorting';
 
-import type {ArticleProject, ArticlesList, ArticlesListItem, ProjectArticlesData} from '../../flow/Article';
+import type {Article, ArticleProject, ArticlesList, ArticlesListItem, ProjectArticlesData} from '../../flow/Article';
 import type {Folder} from '../../flow/User';
 
 
 export const createSortedProjects = (
   projects: Array<Folder>,
   cachedArticleList: ArticlesList,
-  expandAll: boolean
+  expandAll?: boolean
 ): Array<ArticleProject> => {
   const cachedExpandedProjects: { key: string, value: ArticleProject } = (
     !expandAll && projects.length > 0 && cachedArticleList
@@ -56,4 +56,25 @@ export const removeProjectData = (
   const updatedArticles = articles.slice();
   updatedArticles.splice(index, 1);
   return updatedArticles;
+};
+
+export const createProjectDataFromArticles = (articles: Array<ProjectArticlesData>): Array<ProjectArticlesData> => {
+  const projectDataObj: Object = articles.reduce(
+    (data: Object, article: Article) => {
+      if (!data[article.project.id]) {
+        data[article.project.id] = {
+          project: article.project,
+          articles: []
+        };
+      }
+      data[article.project.id].articles.push(article);
+      return data;
+    },
+    {}
+  );
+
+  return Object.keys(projectDataObj).reduce(
+    (list: Array<ProjectArticlesData>, key: string) => (list.concat(projectDataObj[key])),
+    []
+  );
 };

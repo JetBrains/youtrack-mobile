@@ -25,7 +25,7 @@ export default class ArticlesAPI extends ApiBase {
 
   async getArticles(
     query: string | null = null,
-    folder: string,
+    folder?: string,
     $top: number = 101,
     $skip: number = 0
   ): Promise<Array<Article>> {
@@ -34,7 +34,7 @@ export default class ArticlesAPI extends ApiBase {
       {
         ...{$top},
         ...{$skip},
-        ...{folder},
+        ...(folder ? {folder} : {}),
         ...{query}
       }
     );

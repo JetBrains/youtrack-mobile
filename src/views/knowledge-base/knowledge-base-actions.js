@@ -55,8 +55,16 @@ export const getPinnedProjects = async (api: Api): Promise<Array<Folder>> => {
   }
 };
 
+const loadArticleList = (reset: boolean = true) => async (dispatch: (any) => any) => {
+  const query: string | null = getArticlesQuery();
+  if (query) {
+    dispatch(filterArticles(query));
+  } else {
+    dispatch(getArticleList(reset));
+  }
+};
 
-const loadArticleList = (reset: boolean = true, doNotCache: boolean = false) =>
+const getArticleList = (reset: boolean = true) =>
   async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
 
@@ -72,7 +80,6 @@ const loadArticleList = (reset: boolean = true, doNotCache: boolean = false) =>
       dispatch(setLoading(true));
     }
 
-    const query: string | null = getArticlesQuery();
     const pinnedProjects: Array<Folder> = await getPinnedProjects(api);
     if (pinnedProjects.length === 0) {
       dispatch(setLoading(false));
@@ -81,8 +88,7 @@ const loadArticleList = (reset: boolean = true, doNotCache: boolean = false) =>
     } else {
       const sortedProjects: Array<ArticleProject> = helper.createSortedProjects(
         pinnedProjects,
-        getCachedArticleList(),
-        !!query
+        getCachedArticleList()
       );
       const [error, projectData]: [?CustomError, ProjectArticlesData] = await until(
         getProjectDataPromises(api, sortedProjects)
@@ -97,19 +103,9 @@ const loadArticleList = (reset: boolean = true, doNotCache: boolean = false) =>
       } else {
         logEvent({message: 'Pinned projects articles loaded'});
 
-        let sortedProjectData: Array<ProjectArticlesData> = projectData;
-        if (query) {
-          sortedProjectData = projectData.filter((it: ProjectArticlesData) => it.articles.length > 0);
-        }
-        const articlesList: ArticlesList = createArticleList(sortedProjectData, !!query);
-
-        if (doNotCache) {
-          dispatch(setArticles(sortedProjectData));
-          dispatch(setList(articlesList));
-        } else {
-          dispatch(setAndCacheProjectArticlesData(sortedProjectData));
-          dispatch(setAndCacheArticlesList(articlesList));
-        }
+        const articlesList: ArticlesList = createArticleList(projectData);
+        dispatch(setAndCacheProjectArticlesData(projectData));
+        dispatch(setAndCacheArticlesList(articlesList));
       }
     }
   };
@@ -128,10 +124,37 @@ const getArticleChildren = (articleId: string): ArticlesList =>
     }
   };
 
-const filterArticles = (query: string | null) => async (dispatch: (any) => any) => {
-  await flushStoragePart({articlesQuery: query ? query : null});
-  dispatch(loadArticleList(true, !!query));
-};
+const filterArticles = (query: string | null) =>
+  async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    logEvent({
+      message: 'Filter articles',
+      analyticsId: ANALYTICS_ARTICLES_PAGE
+    });
+
+    flushStoragePart({articlesQuery: query ? query : null});
+
+    if (!query) {
+      return dispatch(loadArticleList(true));
+    }
+
+    setError(null);
+    dispatch(setUserLastVisitedArticle(null));
+    dispatch(setLoading(true));
+
+    const [error, articles]: [?CustomError, Array<Article>] = await until(
+      getApi().articles.getArticles(query)
+    );
+    dispatch(setLoading(false));
+
+    if (error) {
+      notify('Unable to filter articles', error);
+      return;
+    }
+
+    const projectData: Array<ProjectArticlesData> = helper.createProjectDataFromArticles(articles);
+    const articlesList: ArticlesList = createArticleList(projectData, true);
+    dispatch(setList(articlesList));
+  };
 
 const loadArticlesDrafts = () => async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
   const api: Api = getApi();

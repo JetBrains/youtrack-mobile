@@ -34,7 +34,7 @@ const KnowledgeBaseSearchPanel = (props: Props) => {
         style={styles.searchInput}
 
         placeholderTextColor={styles.clearIcon.color}
-        placeholder="Filter articles by title"
+        placeholder="Search articles"
 
         clearButtonMode="never"
         returnKeyType="search"

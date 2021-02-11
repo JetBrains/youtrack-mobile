@@ -72,7 +72,7 @@ export const articlesFields = toField([
   'idReadable',
   'summary',
   'ordinal',
-  'project(id,name)',
+  'project(id,name,pinned)',
   {
     childArticles: childArticlesFields
   },
