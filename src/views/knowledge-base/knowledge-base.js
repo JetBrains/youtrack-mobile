@@ -23,14 +23,15 @@ import {
   IconAngleRight,
   IconBack,
   IconContextActions,
-  IconKnowledgeBase
+  IconKnowledgeBase, IconNoProjectFound, IconNoProjectFoundDark
 } from '../../components/icon/icon';
 import {routeMap} from '../../app-routes';
 import {SkeletonIssues} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
 import {UNIT} from '../../components/variables/variables';
 
-import styles from './knowledge-base.styles';
+
+import styles, {noProjectsIconSize} from './knowledge-base.styles';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {Article, ArticlesList, ArticlesListItem, ArticleNode, ArticleProject} from '../../flow/Article';
@@ -343,6 +344,34 @@ export class KnowledgeBase extends Component<Props, State> {
     );
   };
 
+  renderNoFavouriteProjects = () => {
+    const IconNoProjects = (
+      //$FlowFixMe
+      this.props.error?.noFavoriteProjects ? (this.uiTheme.dark ? IconNoProjectFoundDark : IconNoProjectFound) : null
+    );
+    return (
+      <View style={styles.noProjects}>
+        <IconNoProjects
+          width={noProjectsIconSize}
+          height={noProjectsIconSize}
+          style={styles.noProjectsIcon}
+        />
+        <Text style={styles.noProjectsMessage}>
+          There should be a list of articles from your favorite projects, but you haven't selected any.
+        </Text>
+        <TouchableOpacity
+          style={styles.noProjectsButton}
+          hitSlop={HIT_SLOP}
+          onPress={() => {}}
+        >
+          <Text style={styles.noProjectsButtonText}>
+            Select projects
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   render() {
     const {isLoading, articlesList, error, showContextActions, issuePermissions} = this.props;
 
@@ -375,7 +404,9 @@ export class KnowledgeBase extends Component<Props, State> {
                 style={styles.content}
               >
 
-                {error && <ErrorMessage testID="articleError" error={error}/>}
+                {error && !error.noFavoriteProjects && <ErrorMessage testID="articleError" error={error}/>}
+
+                {error && error.noFavoriteProjects && this.renderNoFavouriteProjects()}
 
                 {!error && !articlesList && isLoading && <SkeletonIssues/>}
 

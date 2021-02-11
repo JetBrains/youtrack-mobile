@@ -13,6 +13,8 @@ const wrapper = {
   marginVertical: UNIT
 };
 
+export const noProjectsIconSize = 240;
+
 export default EStyleSheet.create({
   ...articleItemWithChildrenStyles,
 
@@ -174,4 +176,28 @@ export default EStyleSheet.create({
     ...mainText,
     color: '$link'
   },
+  noProjects: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: UNIT * 4
+  },
+  noProjectsIcon: {
+    marginTop: -noProjectsIconSize / 2,
+    marginLeft: -UNIT * 4,
+    marginBottom: UNIT * 2
+  },
+  noProjectsMessage: {
+    color: '$text',
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: '500'
+  },
+  noProjectsButton: {
+    marginTop: UNIT * 4
+  },
+  noProjectsButtonText: {
+    ...mainText,
+    color: '$link'
+  }
 });
