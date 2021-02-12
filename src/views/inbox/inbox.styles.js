@@ -77,21 +77,19 @@ export default EStyleSheet.create({
     color: '$icon'
   },
   textSecondary,
-  listMessageSmile: {
-    paddingTop: UNIT * 6,
-    fontSize: 40,
-    fontWeight: '500',
-    color: '$icon',
-    textAlign: 'center',
-    letterSpacing: -2
-  },
   listFooterMessage: {
-    ...mainText,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  listFooterMessageIcon: {
+    marginLeft: -UNIT * 2
+  },
+  listFooterMessageText: {
     color: '$text',
-    fontSize: 18,
-    fontWeight: '500',
     textAlign: 'center',
-    marginTop: UNIT * 4
+    fontSize: 18,
+    fontWeight: '500'
   },
   change: {
     flexDirection: 'row',

@@ -26,6 +26,7 @@ import QueryPreview from '../../components/query-assist/query-preview';
 import IssuesCount from './issues__count';
 
 import {IconAdd, IconAngleDown, IconBookmark} from '../../components/icon/icon';
+import {IconNothingFound} from '../../components/icon/icon-no-found';
 import {isReactElement} from '../../util/util';
 import {SkeletonIssues} from '../../components/skeleton/skeleton';
 import {initialState} from './issues-reducers';
@@ -37,7 +38,7 @@ import {routeMap} from '../../app-routes';
 import {ThemeContext} from '../../components/theme/theme-context';
 
 import {UNIT} from '../../components/variables/variables';
-import styles from './issues.styles';
+import styles, {noIssuesFoundIconSize} from './issues.styles';
 
 import type Auth from '../../components/auth/auth';
 import type Api from '../../components/api/api';
@@ -354,7 +355,12 @@ export class Issues extends Component<Props, State> {
       {},
       loadingError
         ? {error: loadingError}
-        : (issues?.length === 0 ? {errorMessageData: ERROR_MESSAGE_DATA.NO_ISSUES_FOUND} : null)
+        : (issues?.length === 0 ? {
+          errorMessageData: {
+            ...ERROR_MESSAGE_DATA.NO_ISSUES_FOUND,
+            icon: () => <IconNothingFound size={noIssuesFoundIconSize} style={styles.noIssuesFoundIcon} />
+          }
+        } : null)
     );
 
     if (Object.keys(props).length > 0) {

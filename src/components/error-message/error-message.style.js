@@ -20,6 +20,7 @@ export const styles = EStyleSheet.create({
     ...secondaryText,
     color: '$icon',
     lineHeight: 20,
+    textAlign: 'center'
   },
   tryAgainButton: {
     alignSelf: 'center',

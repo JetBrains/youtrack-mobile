@@ -1,12 +1,13 @@
 /* @flow */
 
-import {FlatList, View, Text, RefreshControl, TouchableOpacity} from 'react-native';
 import React, {Component} from 'react';
+import {FlatList, View, Text, RefreshControl, TouchableOpacity, Dimensions} from 'react-native';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import * as inboxActions from './inbox-actions';
+import CommentReactions from '../../components/comment/comment-reactions';
 import CustomFieldChangeDelimiter from '../../components/custom-field/custom-field__change-delimiter';
 import Diff from '../../components/diff/diff';
 import ErrorMessage from '../../components/error-message/error-message';
@@ -16,16 +17,15 @@ import Router from '../../components/router/router';
 import usage from '../../components/usage/usage';
 import UserInfo from '../../components/user/user-info';
 import YoutrackWiki from '../../components/wiki/youtrack-wiki';
-import CommentReactions from '../../components/comment/comment-reactions';
 import {getReadableID} from '../../components/issue-formatter/issue-formatter';
 import {getStorageState} from '../../components/storage/storage';
+import {guid, isReactElement} from '../../util/util';
 import {handleRelativeUrl} from '../../components/config/config';
 import {hasType} from '../../components/api/api__resource-types';
-import {guid, isReactElement} from '../../util/util';
+import {IconNothingFound} from '../../components/icon/icon-no-found';
 import {LoadMoreList} from '../../components/progress/load-more-list';
 import {SkeletonIssueActivities} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
-
 import {UNIT} from '../../components/variables/variables';
 
 import styles from './inbox.styles';
@@ -507,10 +507,10 @@ class Inbox extends Component<Props, State> {
 
     if (!loading && items.length === 0) {
       return (
-        <View>
-          <Text style={styles.listMessageSmile}>(・_・)</Text>
+        <View style={[styles.listFooterMessage, { height: Dimensions.get('window').height * 0.5 }]}>
+          <IconNothingFound style={styles.listFooterMessageIcon}/>
           <Text
-            style={styles.listFooterMessage}
+            style={styles.listFooterMessageText}
             testID="no-notifications"
           >
             You have no notifications

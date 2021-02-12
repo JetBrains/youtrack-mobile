@@ -9,8 +9,7 @@ import {isAndroidPlatform} from '../../util/util';
 import IconYTM from './youtrack-icon';
 
 export {default as logo} from './youtrack-logo-512.png';
-export {default as IconNoProjectFound} from '../../assets/no-project-found.svg';
-export {default as IconNoProjectFoundDark} from '../../assets/no-project-found-dark.svg';
+
 
 type Props = {
   name?: string,

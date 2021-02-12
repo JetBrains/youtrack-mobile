@@ -25,17 +25,16 @@ import {
   IconAngleRight,
   IconBack,
   IconContextActions,
-  IconKnowledgeBase,
-  IconNoProjectFound,
-  IconNoProjectFoundDark
+  IconKnowledgeBase
 } from '../../components/icon/icon';
+import {IconNoProjectFound} from '../../components/icon/icon-no-found';
 import {routeMap} from '../../app-routes';
 import {SkeletonIssues} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
 import {UNIT} from '../../components/variables/variables';
 
 
-import styles, {noProjectsIconSize} from './knowledge-base.styles';
+import styles from './knowledge-base.styles';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {Article, ArticlesList, ArticlesListItem, ArticleNode, ArticleProject} from '../../flow/Article';
@@ -415,17 +414,9 @@ export class KnowledgeBase extends Component<Props, State> {
   };
 
   renderNoFavouriteProjects = () => {
-    const IconNoProjects = (
-      //$FlowFixMe
-      this.props.error?.noFavoriteProjects ? (this.uiTheme.dark ? IconNoProjectFoundDark : IconNoProjectFound) : null
-    );
     return (
       <View style={styles.noProjects}>
-        <IconNoProjects
-          width={noProjectsIconSize}
-          height={noProjectsIconSize}
-          style={styles.noProjectsIcon}
-        />
+        <IconNoProjectFound style={styles.noProjectsIcon}/>
         <Text style={styles.noProjectsMessage}>
           Here you'll see a list of articles from your favorite projects
         </Text>

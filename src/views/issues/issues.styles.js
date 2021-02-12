@@ -4,6 +4,7 @@ import {Platform} from 'react-native';
 
 import {UNIT} from '../../components/variables/variables';
 import {COLOR_FIELD_SIZE} from '../../components/color-field/color-field';
+import {ICON_NOT_FOUND_DEFAULT_SIZE} from '../../components/icon/icon-no-found';
 import {headerTitle, secondaryText} from '../../components/common-styles/typography';
 import {issueCard} from '../../components/common-styles/issue';
 import {elevation1} from '../../components/common-styles/shadow';
@@ -15,6 +16,7 @@ const rowLine = {
 };
 
 const searchContextHeight = UNIT * 7;
+export const noIssuesFoundIconSize = ICON_NOT_FOUND_DEFAULT_SIZE;
 
 export default EStyleSheet.create({
   listContainer: {
@@ -143,5 +145,10 @@ export default EStyleSheet.create({
     marginLeft: UNIT * 2,
     ...secondaryText,
     color: '$icon'
+  },
+  noIssuesFoundIcon: {
+    marginTop: -noIssuesFoundIconSize / 3,
+    marginLeft: -UNIT * 4,
+    marginBottom: -UNIT * 2
   }
 });
