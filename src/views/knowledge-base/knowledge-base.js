@@ -129,6 +129,7 @@ export class KnowledgeBase extends Component<Props, State> {
     if (project) {
       const isCollapsed: boolean = project?.articles?.collapsed;
       const Icon = isCollapsed ? IconAngleRight : IconAngleDown;
+      const hasHoArticles: boolean = section.title.articles.collapsed === false && section.data?.length === 0;
       return (
         <>
           <View style={styles.item}>
@@ -158,6 +159,16 @@ export class KnowledgeBase extends Component<Props, State> {
             />}
           </View>
           {this.renderSeparator()}
+          {hasHoArticles && (
+            <View>
+              <View style={[styles.itemArticle, styles.itemNoArticle]}>
+                <Text style={styles.itemNoArticleText}>
+                  No articles
+                </Text>
+              </View>
+              {this.renderSeparator()}
+            </View>
+          )}
         </>
       );
     }

@@ -61,7 +61,8 @@ export default EStyleSheet.create({
   },
 
   separator: {
-    marginLeft: UNIT * 3
+    marginLeft: UNIT * 3,
+    backgroundColor: '$background',
   },
   itemChild: {
     marginTop: UNIT,
@@ -86,6 +87,14 @@ export default EStyleSheet.create({
   },
   itemArticle: {
     paddingLeft: UNIT * 5
+  },
+  itemNoArticle: {
+    justifyContent: 'center',
+    height: SELECT_ITEM_HEIGHT,
+    backgroundColor: '$background',
+  },
+  itemNoArticleText: {
+    color: '$icon'
   },
   itemDraft: {
     marginRight: UNIT,
