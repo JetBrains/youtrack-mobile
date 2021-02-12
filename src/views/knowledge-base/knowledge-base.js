@@ -340,10 +340,7 @@ export class KnowledgeBase extends Component<Props, State> {
           hitSlop={HIT_SLOP}
           onPress={() => this.props.toggleAllProjects()}
         >
-          <Text style={[
-            styles.actionBarButtonText,
-            !isToggleButtonEnabled && styles.actionBarButtonTextDisabled
-          ]}>
+          <Text style={styles.actionBarButtonText}>
             Collapse all
           </Text>
         </TouchableOpacity>

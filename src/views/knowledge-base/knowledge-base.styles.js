@@ -169,9 +169,6 @@ export default EStyleSheet.create({
     ...secondaryText,
     color: '$link'
   },
-  actionBarButtonTextDisabled: {
-    color: '$disabled'
-  },
 
   noDrafts: {
     flexGrow: 4,
