@@ -104,7 +104,7 @@ const getArticleList = (reset: boolean = true) =>
         logEvent({message: 'Pinned projects articles loaded'});
 
         const articlesList: ArticlesList = createArticleList(projectData);
-        dispatch(setAndCacheProjectArticlesData(projectData));
+        dispatch(setAndCacheProjectData(projectData));
         dispatch(setAndCacheArticlesList(articlesList));
       }
     }
@@ -172,10 +172,9 @@ const loadArticlesDrafts = () => async (dispatch: (any) => any, getState: () => 
 const toggleProjectVisibility = (item: ArticlesListItem) =>
   async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
-    const {articlesList, articles}: {
-      articlesList: ArticlesList,
-      articles: Array<ProjectArticlesData> | null
-    } = getState().articles;
+
+    const articles = getState().articles.articles;
+    const articlesList = getState().articles.articlesList;
 
     logEvent({
       message: 'Toggle project article visibility',
@@ -199,9 +198,10 @@ const toggleProjectVisibility = (item: ArticlesListItem) =>
     }
     const updatedProjectData: ProjectArticlesData | null = await getUpdatedProjectData();
     if (updatedProjectData) {
-      setAndCacheProjectArticlesData(updatedProjectData);
+      dispatch(setAndCacheProjectData(updatedProjectData));
       updatedArticlesList = createArticleList(updatedProjectData);
     }
+
     dispatch(setAndCacheArticlesList(updatedArticlesList));
 
 
@@ -253,13 +253,13 @@ const toggleProjectFavorite = (item: ArticlesListItem) =>
 
         animation.layoutAnimation();
         const updatedData: Array<ProjectArticlesData> = helper.removeProjectData(articles, item.title);
-        dispatch(setAndCacheProjectArticlesData(updatedData));
+        dispatch(setAndCacheProjectData(updatedData));
         dispatch(setAndCacheArticlesList(createArticleList(updatedData)));
 
         const [error] = await until(api.projects.toggleFavorite(item.title.id, item.title.pinned));
         if (error) {
           notify('Failed to toggle favorite for the project', error);
-          dispatch(setAndCacheProjectArticlesData(prevArticles));
+          dispatch(setAndCacheProjectData(prevArticles));
           dispatch(setAndCacheArticlesList(createArticleList(prevArticles)));
         }
       }).catch(() => {});
@@ -291,7 +291,7 @@ const updateProjectsFavorites = (
       notify(`Failed to change favorites`, error);
     }
     if (hasNoFavorites) {
-      setAndCacheProjectArticlesData(null);
+      setAndCacheProjectData(null);
       setAndCacheArticlesList(null);
     }
     dispatch(cacheProjects());
@@ -393,7 +393,7 @@ function setAndCacheArticlesList(articlesList: ArticlesList) {
   };
 }
 
-function setAndCacheProjectArticlesData(projectArticlesData: Array<ProjectArticlesData> | null) {
+function setAndCacheProjectData(projectArticlesData: Array<ProjectArticlesData> | null) {
   return async (dispatch: (any) => any) => {
     dispatch(setArticles(projectArticlesData));
     setArticlesCache(projectArticlesData);
