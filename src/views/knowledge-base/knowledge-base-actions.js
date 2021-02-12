@@ -261,6 +261,14 @@ const toggleProjectFavorite = (item: ArticlesListItem) =>
           notify('Failed to toggle favorite for the project', error);
           dispatch(setAndCacheProjectData(prevArticles));
           dispatch(setAndCacheArticlesList(createArticleList(prevArticles)));
+        } else {
+          const projects: Array<ArticleProject> = await dispatch(cacheProjects());
+          const hasPinned: boolean = projects.some((it: ArticleProject) => it.pinned);
+          if (!hasPinned) {
+            dispatch(setAndCacheProjectData(null));
+            dispatch(setAndCacheArticlesList(null));
+            dispatch(setNoFavoriteProjects());
+          }
         }
       }).catch(() => {});
 

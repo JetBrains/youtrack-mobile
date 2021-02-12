@@ -507,7 +507,9 @@ export function cacheProjects() {
       '',
       ['$type,id,shortName,name,pinned']
     );
-    await flushStoragePart({projects: userFolders.filter((it: Folder) => hasType.project(it))});
+    const projects: Array<Folder> = userFolders.filter((it: Folder) => hasType.project(it));
+    await flushStoragePart({projects: projects});
+    return projects;
   };
 }
 
