@@ -132,24 +132,22 @@ export class KnowledgeBase extends Component<Props, State> {
       return (
         <>
           <View style={styles.item}>
-            <>
-              <TouchableOpacity
-                style={styles.itemProject}
-                onPress={() => this.props.toggleProjectVisibility(section)}
+            <TouchableOpacity
+              style={styles.itemProject}
+              onPress={() => this.props.toggleProjectVisibility(section)}
+            >
+              <View style={[
+                styles.itemProjectIcon,
+                isCollapsed && styles.itemProjectIconCollapsed
+              ]}
               >
-                <View style={[
-                  styles.itemProjectIcon,
-                  isCollapsed && styles.itemProjectIconCollapsed
-                ]}
-                >
-                  <Icon
-                    size={24}
-                    color={styles.itemProjectIcon.color}
-                  />
-                </View>
-                <Text style={styles.projectTitleText}>{project.name}</Text>
-              </TouchableOpacity>
-            </>
+                <Icon
+                  size={24}
+                  color={styles.itemProjectIcon.color}
+                />
+              </View>
+              <Text numberOfLines={2} style={styles.projectTitleText}>{project.name}</Text>
+            </TouchableOpacity>
             {!!project?.id && <Star
               style={styles.itemStar}
               size={19}

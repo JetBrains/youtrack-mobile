@@ -79,9 +79,9 @@ export default EStyleSheet.create({
     paddingHorizontal: UNIT / 1.5
   },
   itemProject: {
-    flexGrow: 1,
+    flex: 1,
     flexDirection: 'row',
-    paddingLeft: UNIT * 2,
+    paddingHorizontal: UNIT * 2,
     alignItems: 'center'
   },
   itemArticle: {
@@ -108,6 +108,8 @@ export default EStyleSheet.create({
   projectTitleText: {
     paddingLeft: UNIT,
     ...headerTitle,
+    fontSize: 19,
+    lineHeight: 20,
     color: '$text',
     ...Platform.select({
       ios: {
@@ -139,9 +141,10 @@ export default EStyleSheet.create({
     color: '$link'
   },
   actionBar: {
-    flexDirection: 'row',
     ...wrapper,
+    flexDirection: 'row',
     height: UNIT * 4,
+    paddingLeft: UNIT / 4,
     paddingRight: UNIT * 0.75,
     alignItems: 'center',
     justifyContent: 'space-between',
