@@ -20,14 +20,8 @@ import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids'
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {getGroupedByFieldNameAlphabetically} from '../../components/search/sorting';
 import {getStorageState} from '../../components/storage/storage';
-import {
-  IconAngleDown,
-  IconAngleRight,
-  IconBack,
-  IconContextActions,
-  IconKnowledgeBase
-} from '../../components/icon/icon';
-import {IconNoProjectFound} from '../../components/icon/icon-no-found';
+import {IconAngleDown, IconAngleRight, IconBack, IconContextActions} from '../../components/icon/icon';
+import {IconNoProjectFound, IconNothingFound} from '../../components/icon/icon-no-found';
 import {routeMap} from '../../app-routes';
 import {SkeletonIssues} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
@@ -305,8 +299,8 @@ export class KnowledgeBase extends Component<Props, State> {
             </TouchableOpacity>
           </View>}
         ListEmptyComponent={() => !isLoading && <ErrorMessage errorMessageData={{
-          ...(articlesList === null ? ERROR_MESSAGE_DATA.noFavoriteProjects : ERROR_MESSAGE_DATA.noArticlesFound),
-          icon: () => <IconKnowledgeBase color={styles.actionBarButtonText.color} size={81}/>
+          ...ERROR_MESSAGE_DATA.noArticlesFound,
+          icon: () => <IconNothingFound style={styles.noArticlesErrorIcon}/>
         }}/>}
       />
     );

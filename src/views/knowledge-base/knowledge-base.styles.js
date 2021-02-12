@@ -206,6 +206,10 @@ export default EStyleSheet.create({
     ...mainText,
     color: '$link'
   },
+  noArticlesErrorIcon: {
+    marginLeft: -UNIT * 4,
+    marginBottom: -UNIT * 2
+  },
 
   manageFavoriteProjectsNote: {
     padding: UNIT * 2,
