@@ -48,6 +48,7 @@ export default EStyleSheet.create({
     color: '$text'
   },
   selectItemValue: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center'
   },

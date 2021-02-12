@@ -217,7 +217,7 @@ export default class Select extends Component<SelectProps, SelectState> {
         keyboardDismissMode="on-drag"
 
         ListHeaderComponent={this.renderEmptyValueItem()}
-        scrollEventThrottle={10}
+        scrollEventThrottle={50}
 
         data={this.state.filteredItems}
         keyExtractor={(item: Object & { id: string }) => item.id}
