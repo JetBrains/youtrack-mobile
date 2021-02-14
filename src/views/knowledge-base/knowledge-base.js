@@ -290,7 +290,7 @@ export class KnowledgeBase extends Component<Props, State> {
             )
         }
         ListFooterComponent={() =>
-          !isLoading && <View style={styles.listFooter}>
+          !isLoading && !hideSearchPanel && <View style={styles.listFooter}>
             <TouchableOpacity
               hitSlop={HIT_SLOP}
               onPress={this.openProjectSelect}
