@@ -5,7 +5,6 @@ import {SectionList, Text, View} from 'react-native';
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {uuid} from '../../util/util';
 import {UNIT} from '../variables/variables';
 
 import Select from './select';
@@ -56,7 +55,7 @@ export default class SelectSectioned extends Select {
           scrollEventThrottle={10}
 
           sections={this.state.filteredItems}
-          keyExtractor={uuid}
+          keyExtractor={(i: Object) => i.key || i.id}
 
           renderItem={this.renderItem}
           renderSectionHeader={this.renderSectionHeader}
