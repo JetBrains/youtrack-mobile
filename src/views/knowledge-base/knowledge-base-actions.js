@@ -253,25 +253,30 @@ const toggleProjectFavorite = (item: ArticlesListItem) =>
 
         animation.layoutAnimation();
         const updatedData: Array<ProjectArticlesData> = helper.removeProjectData(articles, item.title);
-        dispatch(setAndCacheProjectData(updatedData));
-        dispatch(setAndCacheArticlesList(createArticleList(updatedData)));
+        update(updatedData);
 
         const [error] = await until(api.projects.toggleFavorite(item.title.id, item.title.pinned));
         if (error) {
           notify('Failed to toggle favorite for the project', error);
-          dispatch(setAndCacheProjectData(prevArticles));
-          dispatch(setAndCacheArticlesList(createArticleList(prevArticles)));
+          update(prevArticles);
         } else {
           const projects: Array<ArticleProject> = await dispatch(cacheProjects());
           const hasPinned: boolean = projects.some((it: ArticleProject) => it.pinned);
           if (!hasPinned) {
-            dispatch(setAndCacheProjectData(null));
-            dispatch(setAndCacheArticlesList(null));
-            dispatch(setNoFavoriteProjects());
+            update(null);
           }
         }
       }).catch(() => {});
 
+
+    function update(data: Array<ProjectArticlesData> | null) {
+      const hasData: boolean = data !== null && data?.length > 0;
+      dispatch(setAndCacheProjectData(hasData ? data : null));
+      dispatch(setAndCacheArticlesList(hasData ? data && createArticleList(data) : null));
+      if (!hasData) {
+        dispatch(setNoFavoriteProjects());
+      }
+    }
   };
 
 const updateProjectsFavorites = (
