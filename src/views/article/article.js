@@ -71,17 +71,17 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     }
 
     const currentArticle: Article = this.getArticle();
-    if (!currentArticle || !currentArticle.id || !currentArticle.idReadable) {
+    if (currentArticle && (currentArticle.id || currentArticle.idReadable)) {
+      this.loadArticle(currentArticle.id || currentArticle.idReadable, true);
+
+      this.unsubscribe = Router.setOnDispatchCallback((routeName: string, prevRouteName: string) => {
+        if (routeName === routeMap.ArticleSingle && prevRouteName === routeMap.ArticleCreate) {
+          this.loadArticle(currentArticle.id, false);
+        }
+      });
+    } else {
       return Router.KnowledgeBase();
     }
-
-    this.loadArticle(currentArticle.id || currentArticle.idReadable, true);
-
-    this.unsubscribe = Router.setOnDispatchCallback((routeName: string, prevRouteName: string) => {
-      if (routeName === routeMap.ArticleSingle && prevRouteName === routeMap.ArticleCreate) {
-        this.loadArticle(currentArticle.id, false);
-      }
-    });
   }
 
   loadArticle = (articleId: string, reset: boolean) => this.props.loadArticle(articleId, reset);
