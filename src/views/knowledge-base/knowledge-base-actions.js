@@ -83,7 +83,7 @@ const getArticleList = (reset: boolean = true) =>
     const pinnedProjects: Array<Folder> = await getPinnedProjects(api);
     if (pinnedProjects.length === 0) {
       dispatch(setLoading(false));
-      dispatch(setAndCacheArticlesList(null));
+      dispatch(storeArticlesList(null));
       dispatch(setError({noFavoriteProjects: true}));
     } else {
       const sortedProjects: Array<ArticleProject> = helper.createSortedProjects(
@@ -104,8 +104,8 @@ const getArticleList = (reset: boolean = true) =>
         logEvent({message: 'Pinned projects articles loaded'});
 
         const articlesList: ArticlesList = createArticleList(projectData);
-        dispatch(setAndCacheProjectData(projectData));
-        dispatch(setAndCacheArticlesList(articlesList));
+        dispatch(storeProjectData(projectData));
+        dispatch(storeArticlesList(articlesList));
       }
     }
   };
@@ -172,9 +172,7 @@ const loadArticlesDrafts = () => async (dispatch: (any) => any, getState: () => 
 const toggleProjectVisibility = (item: ArticlesListItem) =>
   async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
-
-    const articles = getState().articles.articles;
-    const articlesList = getState().articles.articlesList;
+    const {articles, articlesList} = getState().articles;
 
     logEvent({
       message: 'Toggle project article visibility',
@@ -198,11 +196,11 @@ const toggleProjectVisibility = (item: ArticlesListItem) =>
     }
     const updatedProjectData: ProjectArticlesData | null = await getUpdatedProjectData();
     if (updatedProjectData) {
-      dispatch(setAndCacheProjectData(updatedProjectData));
+      dispatch(storeProjectData(updatedProjectData));
       updatedArticlesList = createArticleList(updatedProjectData);
     }
 
-    dispatch(setAndCacheArticlesList(updatedArticlesList));
+    dispatch(storeArticlesList(updatedArticlesList));
 
 
     function toggleProject(listItem: ArticlesListItem, updatedArticlesList: ArticlesList, isCollapsed: boolean) {
@@ -212,7 +210,14 @@ const toggleProjectVisibility = (item: ArticlesListItem) =>
       if (index >= 0) {
         updatedArticlesList.splice(index, 1, treeHelper.toggleProject(listItem, isCollapsed));
       }
-      dispatch(setAndCacheArticlesList(updatedArticlesList));
+      dispatch(storeArticlesList(updatedArticlesList));
+
+      const updatedProjectData: ArticlesList = articles.reduce(
+        (list: Array<ProjectArticlesData>, it: ProjectArticlesData) => list.concat(
+          it.project.id === listItem.title.id ? toggleProjectDataItem(it, isCollapsed) : it),
+        []
+      );
+      dispatch(storeProjectData(updatedProjectData));
     }
 
     async function getUpdatedProjectData(): ProjectArticlesData | null {
@@ -271,8 +276,8 @@ const toggleProjectFavorite = (item: ArticlesListItem) =>
 
     function update(data: Array<ProjectArticlesData> | null) {
       const hasData: boolean = data !== null && data?.length > 0;
-      dispatch(setAndCacheProjectData(hasData ? data : null));
-      dispatch(setAndCacheArticlesList(hasData ? data && createArticleList(data) : null));
+      dispatch(storeProjectData(hasData ? data : null));
+      dispatch(storeArticlesList(hasData ? data && createArticleList(data) : null));
       if (!hasData) {
         dispatch(setNoFavoriteProjects());
       }
@@ -304,8 +309,8 @@ const updateProjectsFavorites = (
       notify(`Failed to change favorites`, error);
     }
     if (hasNoFavorites) {
-      setAndCacheProjectData(null);
-      setAndCacheArticlesList(null);
+      storeProjectData(null);
+      storeArticlesList(null);
     }
     dispatch(cacheProjects());
   };
@@ -316,7 +321,7 @@ const setNoFavoriteProjects = () => async (dispatch: (any) => any) => {
 };
 
 const showContextActions = (actionSheet: ActionSheet, canCreateArticle: boolean, onShowMoreProjects: Function) =>
-  async (dispatch: (any) => any) => {
+  async () => {
     const actions: Array<ActionSheetOption> = [
       {
         title: 'Manage Favorite Projects',
@@ -341,21 +346,22 @@ const showContextActions = (actionSheet: ActionSheet, canCreateArticle: boolean,
 
 const toggleAllProjects = (collapse: boolean = true) =>
   async (dispatch: (any) => any, getState: () => AppState) => {
-    const state: AppState = getState();
-    const {articlesList} = state.articles;
+    const {articles, articlesList} = getState().articles;
     logEvent({
       message: `${collapse ? 'Collapse' : 'Expand'} all Knowledge base projects`,
       analyticsId: ANALYTICS_ARTICLES_PAGE
     });
-    if (articlesList) {
-      const updatedArticlesList: ArticlesList = articlesList.reduce((list: ArticlesList, item: ArticlesListItem) => {
-        return list.concat(treeHelper.toggleProject(item, collapse));
-      }, []);
+    const updatedProjectData: ArticlesList = (articles || []).reduce(
+      (list: Array<ProjectArticlesData>, item: ProjectArticlesData) => (
+        list.concat(toggleProjectDataItem(item, true))
+      ), []);
+    dispatch(storeProjectData(updatedProjectData));
 
-      dispatch(setAndCacheArticlesList(updatedArticlesList));
-      notify(`${collapse ? 'Projects collapsed' : 'Projects expanded'}`);
-    }
-
+    const updatedArticlesList: ArticlesList = (articlesList || []).reduce((list: ArticlesList, item: ArticlesListItem) => (
+      list.concat(treeHelper.toggleProject(item, collapse))
+    ), []);
+    dispatch(storeArticlesList(updatedArticlesList));
+    notify(`${collapse ? 'Projects collapsed' : 'Projects expanded'}`);
   };
 
 export type KnowledgeBaseActions = {
@@ -391,7 +397,7 @@ export {
 };
 
 async function setArticlesCache(articles: ?Array<ProjectArticlesData>) {
-  flushStoragePart({articles});
+  await flushStoragePart({articles});
 }
 
 async function setArticlesListCache(articlesList: ArticlesList) {
@@ -399,17 +405,17 @@ async function setArticlesListCache(articlesList: ArticlesList) {
 }
 
 
-function setAndCacheArticlesList(articlesList: ArticlesList) {
+function storeArticlesList(articlesList: ArticlesList) {
   return async (dispatch: (any) => any) => {
     dispatch(setList(articlesList));
     setArticlesListCache(articlesList);
   };
 }
 
-function setAndCacheProjectData(projectArticlesData: Array<ProjectArticlesData> | null) {
+function storeProjectData(projectArticlesData: Array<ProjectArticlesData> | null) {
   return async (dispatch: (any) => any) => {
     dispatch(setArticles(projectArticlesData));
-    setArticlesCache(projectArticlesData);
+    await setArticlesCache(projectArticlesData);
   };
 }
 
@@ -430,4 +436,17 @@ function getProjectDataPromises(api: Api, projects: Array<ArticleProject>): Arra
       articles: error ? [] : articles
     };
   });
+}
+
+function toggleProjectDataItem(item:ProjectArticlesData, isCollapsed: boolean) {
+  return {
+    ...item,
+    project: {
+      ...item.project,
+      articles: {
+        ...item.project.articles,
+        collapsed: isCollapsed
+      }
+    }
+  };
 }
