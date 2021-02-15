@@ -54,7 +54,7 @@ export const ArticleBreadCrumbsItem = (props: ArticleBreadCrumbsItemProps) => {
 const ArticleBreadCrumbs = (props: Props) => {
   const {article, articlesList, withSeparator = true, excludeProject, withLast} = props;
 
-  if (!articlesList) {
+  if (!articlesList || !article) {
     return null;
   }
 
