@@ -196,9 +196,11 @@ export default class IssuePermissions {
     }
   };
 
+  canUpdateWork = (entity: AnyIssue): boolean => this.hasPermissionFor(entity, WORK_ITEM_UPDATE);
+
   canCreateWork = (entity: AnyIssue): boolean => (
-    this.hasPermissionFor(entity, WORK_ITEM_UPDATE) ||
-    this.hasPermissionFor(entity, WORK_ITEM_CREATE)
+    this.hasPermissionFor(entity, WORK_ITEM_CREATE) ||
+    this.canUpdateWork(entity)
   );
 
   /*

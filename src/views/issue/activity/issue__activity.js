@@ -3,6 +3,7 @@
 import React, {PureComponent} from 'react';
 import {View, ScrollView} from 'react-native';
 
+import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
@@ -22,18 +23,18 @@ import {convertCommentsToActivityPage, createActivityModel} from '../../../compo
 import {getApi} from '../../../components/api/api__instance';
 import {getEntityPresentation} from '../../../components/issue-formatter/issue-formatter';
 import {isIssueActivitiesAPIEnabled} from './issue-activity__helper';
+import {ThemeContext} from '../../../components/theme/theme-context';
 
 import styles from './issue-activity.styles';
 
-import PropTypes from 'prop-types';
-import {ThemeContext} from '../../../components/theme/theme-context';
 
 import type {IssueComment} from '../../../flow/CustomFields';
+import type {IssueFull} from '../../../flow/Issue';
 import type {State as IssueActivityState} from './issue-activity__reducers';
 import type {State as IssueCommentActivityState} from './issue-activity__comment-reducers';
+import type {Theme, UITheme} from '../../../flow/Theme';
 import type {User, UserAppearanceProfile} from '../../../flow/User';
 import type {YouTrackWiki} from '../../../flow/Wiki';
-import type {Theme, UITheme} from '../../../flow/Theme';
 
 type IssueActivityProps = $Shape<IssueActivityState
   & typeof activityActions
@@ -155,6 +156,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
           youtrackWiki={youtrackWiki}
           onReactionSelect={onReactionSelect}
           currentUser={user}
+          canUpdateWork={(issue: IssueFull) => issuePermissions.canUpdateWork(issue)}
         />
       </View>
     );

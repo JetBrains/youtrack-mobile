@@ -16,26 +16,29 @@ import getEventTitle from '../activity/activity__history-title';
 import IssueVisibility from '../visibility/issue-visibility';
 import log from '../log/log';
 import ReactionAddIcon from '../reactions/new-reaction.svg';
-import Router from '../router/router';
+import StreamLink from './activity__stream-link';
+import StreamTimestamp from './activity__stream-timestamp';
+import StreamUserInfo from './activity__stream-user-info';
+import StreamWork from './activity__stream-work';
 import usage from '../usage/usage';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from '../analytics/analytics-ids';
 import {getApi} from '../api/api__instance';
-import {getEntityPresentation, getReadableID, relativeDate, ytDate} from '../issue-formatter/issue-formatter';
+import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import {getTextValueChange} from '../activity/activity__history-value';
+import {firstActivityChange, getActivityEventTitle} from './activity__stream-helper';
 import {IconDrag, IconHistory, IconMoreOptions, IconWork} from '../icon/icon';
 import {isActivityCategory} from '../activity/activity__category';
 import {isIOSPlatform, uuid} from '../../util/util';
-import {minutesAndHoursFor} from '../time-tracking/time-tracking';
 import {SkeletonIssueActivities} from '../skeleton/skeleton';
 
 import {HIT_SLOP} from '../common-styles/button';
 import {UNIT} from '../variables/variables';
+
 import styles from './activity__stream.styles';
 
 import type {Attachment, IssueComment} from '../../flow/CustomFields';
 import type {Reaction} from '../../flow/Reaction';
 import type {Activity, ActivityChange, ActivityItem, ActivityStreamCommentActions} from '../../flow/Activity';
-import type {IssueFull} from '../../flow/Issue';
 import type {UITheme} from '../../flow/Theme';
 import type {WorkTimeSettings} from '../../flow/Work';
 import type {YouTrackWiki} from '../../flow/Wiki';
@@ -146,55 +149,13 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
     );
   };
 
-  const renderLinkChange = (activity: Activity) => {
-    const linkedIssues = [].concat(activity.added).concat(
-      activity.removed.map((link: IssueFull) => ({...link, isRemoved: true}))
-    );
-
-    return (
-      <TouchableOpacity key={activity.id}>
-        <View>
-          <Text style={styles.activityLabel}>{getActivityEventTitle(activity)}</Text>
-        </View>
-        {
-          linkedIssues.map((linkedIssue: IssueFull & { isRemoved?: boolean }) => {
-            const readableIssueId: string = getReadableID(linkedIssue);
-            return (
-              <Text
-                key={linkedIssue.id}
-                style={{...styles.linkedIssue, ...(linkedIssue.isRemoved ? styles.activityRemoved : {})}}
-                onPress={() => Router.Issue({issueId: readableIssueId})}>
-                <Text style={[
-                  styles.link,
-                  linkedIssue.resolved && styles.secondaryTextColor.color,
-                  linkedIssue.resolved && styles.activityRemoved
-                ]}>
-                  {readableIssueId}
-                </Text>
-                <Text style={[
-                  styles.link,
-                  linkedIssue.resolved && styles.secondaryTextColor.color
-                ]}>
-                  {` ${linkedIssue.summary}`}
-                </Text>
-              </Text>
-            );
-          })
-        }
-      </TouchableOpacity>
-    );
-  };
+  const renderLinkChange = (activity: Activity) => <StreamLink activity={activity}/>;
 
   const updateToAbsUrl = (attachments: Array<Attachment> = []): Array<Attachment> => {
     if (attachments.length) {
       attachments = ApiHelper.convertAttachmentRelativeToAbsURLs(attachments, props.youtrackWiki.backendUrl);
     }
     return attachments;
-  };
-
-  const getActivityEventTitle = (activity: Activity) => {
-    const title = getEventTitle(activity) || '';
-    return `${title} `;
   };
 
   const renderAttachmentChange = (activity: Object, uiTheme: UITheme) => {
@@ -259,36 +220,11 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
     );
   };
 
-  const renderTimestamp = (timestamp, style) => {
-    if (timestamp) {
-      return (
-        <Text style={[styles.activityTimestamp, style]}>
-          {relativeDate(timestamp)}
-        </Text>
-      );
-    }
-  };
+  const renderTimestamp = (timestamp, style) => <StreamTimestamp timestamp={timestamp} style={style}/>;
 
-  const renderUserInfo = (activityGroup: Object, noTimestamp?: boolean) => {
-    return (
-      <View style={styles.activityAuthor}>
-        <Text style={styles.activityAuthorName}>
-          {getEntityPresentation(activityGroup.author)}
-        </Text>
-        {!noTimestamp && <Text>{renderTimestamp(activityGroup.timestamp)}</Text>}
-      </View>
-    );
-  };
-
-  const firstActivityChange = (activity): any => {
-    if (!activity.added) {
-      return null;
-    }
-    if (Array.isArray(activity.added)) {
-      return activity.added[0];
-    }
-    return activity.added;
-  };
+  const renderUserInfo = (activityGroup: Object, noTimestamp?: boolean) => (
+    <StreamUserInfo activityGroup={activityGroup} noTimestamp={noTimestamp}/>
+  );
 
   const renderCommentActions = (activityGroup: Object) => {
     const comment = firstActivityChange(activityGroup.comment);
@@ -395,38 +331,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
     );
   };
 
-  const renderWorkActivity = (activityGroup) => {
-    const work = firstActivityChange(activityGroup.work);
-
-    if (!work) {
-      return null;
-    }
-
-    const duration = minutesAndHoursFor(work.duration);
-    const spentTime = [duration.hours(), duration.minutes()].join(' ');
-
-    return (
-      <View>
-        {!activityGroup.merged && renderUserInfo(activityGroup)}
-
-        <View style={styles.activityChange}>
-
-          {Boolean(work.date) && <Text style={styles.secondaryTextColor}>{ytDate(work.date)}</Text>}
-
-          <Text>
-            <Text style={styles.activityLabel}>Spent time: </Text>
-            <Text style={styles.activityWorkTime}>{spentTime}</Text>
-            {work.type && <Text style={styles.secondaryTextColor}>{` ${work.type.name}`}</Text>}
-          </Text>
-
-          {!!work.text && (
-            <View style={styles.activityWorkComment}><Text style={styles.secondaryTextColor}>{work.text}</Text></View>
-          )}
-
-        </View>
-      </View>
-    );
-  };
+  const renderWorkActivity = (activityGroup) => <StreamWork activityGroup={activityGroup}/>;
 
   const renderVisibilityActivity = (activity) => {
     const textChange = getTextChange(activity, []);

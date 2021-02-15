@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {mainText, secondaryText} from '../common-styles/typography';
+import {secondaryText} from '../common-styles/typography';
 import {separator} from '../common-styles/list';
 import {UNIT} from '../variables/variables';
 
@@ -116,7 +116,7 @@ export default EStyleSheet.create({
     marginTop: -UNIT / 1.5
   },
   link: {
-    ...mainText,
+    ...secondaryText,
     color: '$link'
   },
   secondaryTextColor: secondaryTextColor,
