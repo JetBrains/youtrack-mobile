@@ -14,7 +14,7 @@ export const createSortedProjects = (
   const cachedExpandedProjects: { key: string, value: ArticleProject } = (
     !expandAll && projects.length > 0 && cachedArticleList
       ? (
-        cachedArticleList
+        (cachedArticleList || [])
           .filter((listItem: ArticlesListItem) => !listItem.title.articles.collapsed)
           .reduce((cachedProjects: { key: string, value: ArticleProject }, listItem: ArticlesListItem) => {
             cachedProjects[listItem.title.id] = listItem.title;
@@ -59,7 +59,7 @@ export const removeProjectData = (
 };
 
 export const createProjectDataFromArticles = (articles: Array<ProjectArticlesData>): Array<ProjectArticlesData> => {
-  const projectDataObj: Object = articles.reduce(
+  const projectDataObj: Object = (articles || []).reduce(
     (data: Object, article: Article) => {
       if (!data[article.project.id]) {
         data[article.project.id] = {
