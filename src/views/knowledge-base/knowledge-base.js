@@ -400,7 +400,7 @@ export class KnowledgeBase extends Component<Props, State> {
         if ((selectedProjects || []).length === 0) {
           this.props.setNoFavoriteProjects();
         } else {
-          this.loadArticlesList(true);
+          this.loadArticlesList(false);
         }
       }
     };
