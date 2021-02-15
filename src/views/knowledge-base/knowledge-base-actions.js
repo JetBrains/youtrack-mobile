@@ -307,8 +307,7 @@ const updateProjectsFavorites = (
     );
     if (error) {
       notify(`Failed to change favorites`, error);
-    }
-    if (hasNoFavorites) {
+    } else if (hasNoFavorites) {
       storeProjectData(null);
       storeArticlesList(null);
     }
