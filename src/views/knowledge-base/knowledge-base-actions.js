@@ -329,7 +329,7 @@ const showContextActions = (actionSheet: ActionSheet, canCreateArticle: boolean,
       {title: 'Cancel'}
     ];
 
-    if (canCreateArticle) {
+    if (canCreateArticle && getStorageState().projects.some((it:ArticleProject) => it.pinned)) {
       actions.unshift({
         title: 'New Article',
         execute: () => Router.ArticleCreate({isNew: true})
