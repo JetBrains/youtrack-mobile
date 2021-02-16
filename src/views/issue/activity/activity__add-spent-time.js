@@ -32,7 +32,8 @@ import type {WorkItem, TimeTracking, WorkItemType} from '../../../flow/Work';
 
 type Props = {
   workItem?: WorkItem,
-  onAdd?: () => any
+  onAdd?: () => any,
+  canCreateNotOwn?: boolean
 }
 
 const AddSpentTimeForm = (props: Props) => {
@@ -248,6 +249,7 @@ const AddSpentTimeForm = (props: Props) => {
         <View style={styles.feedbackForm}>
           <TouchableOpacity
             style={buttonStyle}
+            disabled={!props.canCreateNotOwn}
             onPress={() => {
               updateSelectProps(getUserSelectProps());
               updateSelectVisibility(true);
@@ -259,7 +261,7 @@ const AddSpentTimeForm = (props: Props) => {
             >
               {getEntityPresentation(author)}
             </Text>
-            {iconAngleRight}
+            {props.canCreateNotOwn && iconAngleRight}
           </TouchableOpacity>
 
           <TouchableOpacity

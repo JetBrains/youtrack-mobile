@@ -32,7 +32,7 @@ type Props = {
   onUpdate?: () => any
 }
 
-type WorkPermissions = { canUpdate: boolean, canDelete: boolean };
+type WorkPermissions = { canUpdate: boolean, canDelete: boolean, canCreateNotOwn: boolean };
 
 
 const StreamWork = (props: Props) => {
@@ -83,7 +83,8 @@ const StreamWork = (props: Props) => {
   function canChangeWork(workItem: WorkItem): WorkPermissions {
     const canUpdate: boolean = issuePermissions.canUpdateWork(issue, workItem);
     const canDelete: boolean = issuePermissions.canDeleteWork(issue, workItem);
-    return {...{canUpdate}, ...{canDelete}};
+    const canCreateNotOwn: boolean = issuePermissions.canCreateWorkNotOwn(issue);
+    return {...{canUpdate}, ...{canDelete}, ...{canCreateNotOwn}};
   }
 
   async function showContextActions() {
@@ -100,6 +101,7 @@ const StreamWork = (props: Props) => {
           Router.PageModal({
             children: (
               <AddSpentTimeForm
+                canCreateNotOwn={workPermissions.canCreateNotOwn}
                 workItem={work}
                 onAdd={props.onUpdate}
               />

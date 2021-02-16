@@ -246,9 +246,15 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     </View>;
   }
 
-  renderAddSpentTimePage = () => Router.PageModal({
-    children: <AddSpentTimeForm onAdd={() => this.loadIssueActivities(true)}/>
-  });
+  renderAddSpentTimePage = () => {
+    const {issue, issuePermissions} = this.props;
+    return Router.PageModal({
+      children: <AddSpentTimeForm
+        canCreateNotOwn={issuePermissions.canCreateWorkNotOwn(issue)}
+        onAdd={() => this.loadIssueActivities(true)}
+      />
+    });
+  };
 
   renderCommentVisibilitySelect() {
     const {selectProps, onCloseSelect} = this.props;

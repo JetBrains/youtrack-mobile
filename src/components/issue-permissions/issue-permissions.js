@@ -206,9 +206,11 @@ export default class IssuePermissions {
     return this.hasPermissionFor(entity, WORK_ITEM_UPDATE_NOT_OWN);
   };
 
+  canCreateWorkNotOwn = (entity: AnyIssue): boolean => this.hasPermissionFor(entity, WORK_ITEM_CREATE_NOT_OWN);
+
   canCreateWork = (entity: AnyIssue): boolean => (
     this.hasPermissionFor(entity, WORK_ITEM_CREATE) ||
-    this.hasPermissionFor(entity, WORK_ITEM_CREATE_NOT_OWN)
+    this.canCreateWorkNotOwn(entity)
   );
 
   canDeleteWork = (entity: AnyIssue, workItem: WorkItem) => this.canUpdateWork(entity, workItem)
