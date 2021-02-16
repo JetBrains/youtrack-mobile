@@ -55,7 +55,7 @@ export default class SelectSectioned extends Select {
           scrollEventThrottle={10}
 
           sections={this.state.filteredItems}
-          keyExtractor={(i: Object) => i.key || i.id}
+          keyExtractor={(i: Object) => i.key || i.ringId || i.id}
 
           renderItem={this.renderItem}
           renderSectionHeader={this.renderSectionHeader}

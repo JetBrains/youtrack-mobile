@@ -220,7 +220,7 @@ export default class Select extends Component<SelectProps, SelectState> {
         scrollEventThrottle={50}
 
         data={this.state.filteredItems}
-        keyExtractor={(item: Object & { id: string }) => item.id}
+        keyExtractor={(item: Object) => item.key || item.ringId || item.id}
         renderItem={this.renderItem}
 
         ItemSeparatorComponent={Select.renderSeparator}
