@@ -89,7 +89,7 @@ function getSimpleCustomFieldType(customField) {
 
 function getEmptyFieldValue(activity, issueFields) {
   const NO_VALUE = {
-    presentation: 'None'
+    presentation: '?'
   };
   const LOST_EMPTY_VALUE = {
     presentation: '[Empty value]'
