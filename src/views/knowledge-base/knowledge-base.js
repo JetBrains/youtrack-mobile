@@ -125,10 +125,12 @@ export class KnowledgeBase extends Component<Props, State> {
       const isCollapsed: boolean = project?.articles?.collapsed;
       const Icon = isCollapsed ? IconAngleRight : IconAngleDown;
       const hasHoArticles: boolean = section.title.articles.collapsed === false && section.data?.length === 0;
+      const hasSearchQuery: boolean = !!this.getSearchQuery();
       return (
         <>
           <View style={styles.item}>
             <TouchableOpacity
+              disabled={hasSearchQuery}
               style={styles.itemProject}
               onPress={() => this.props.toggleProjectVisibility(section)}
             >
@@ -144,7 +146,7 @@ export class KnowledgeBase extends Component<Props, State> {
               </View>
               <Text numberOfLines={2} style={styles.projectTitleText}>{project.name}</Text>
             </TouchableOpacity>
-            {!!project?.id && <Star
+            {!hasSearchQuery && !!project?.id && <Star
               style={styles.itemStar}
               disabled={isProjectExpanding}
               size={19}
