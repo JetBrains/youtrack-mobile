@@ -328,6 +328,7 @@ export class KnowledgeBase extends Component<Props, State> {
     const list: ArticlesList = articlesList || [];
     const isToggleButtonEnabled: boolean = (
       !isLoading &&
+      !this.getSearchQuery() &&
       list.length > 0 &&
       list.some((it: ArticlesListItem) => !it.title?.articles?.collapsed)
     );
