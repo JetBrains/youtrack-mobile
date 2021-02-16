@@ -5,6 +5,7 @@ import * as types from '../issue-action-types';
 import log from '../../../components/log/log';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from '../../../components/analytics/analytics-ids';
 import {confirmation} from '../../../components/confirmation/confirmation';
+import {extractErrorMessage, resolveError} from '../../../components/error/error-resolver';
 import {getActivityCategories, getActivityAllTypes} from '../../../components/activity/activity-helper';
 import {logEvent} from '../../../components/log/log-helper';
 import {notify} from '../../../components/notification/notification';
@@ -124,7 +125,7 @@ export function createWorkItem(draft: WorkItem) {
     });
     const [error, updatedDraft] = await until(api.issue.createWorkItem(issueId, draft));
     if (error) {
-      const msg: string = 'Failed to create work item';
+      const msg: string = (extractErrorMessage(await resolveError(error), true));
       notify(msg, error);
       logEvent({message: msg, isError: true});
     }

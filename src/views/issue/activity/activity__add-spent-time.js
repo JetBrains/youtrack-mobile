@@ -174,13 +174,15 @@ const AddSpentTimeForm = (props: Props) => {
     });
     updateProgress(true);
     const updatedDraft: WorkItem = getDraft(draft);
-    await dispatch(issueActivityItems.createWorkItem({
+    const item: ?WorkItem = await dispatch(issueActivityItems.createWorkItem({
       ...updatedDraft,
       $type: props.workItem ? updatedDraft.$type : undefined
     }));
-    onAdd();
     updateProgress(false);
-    close();
+    if (item) {
+      onAdd();
+      close();
+    }
   };
 
   const renderHeader = () => {
