@@ -7,6 +7,7 @@ import type {Article} from '../../flow/Article';
 import type {PermissionsStore} from '../permissions-store/permissions-store';
 import type {User} from '../../flow/User';
 import type {CustomField, IssueComment, IssueProject} from '../../flow/CustomFields';
+import type {WorkItem} from '../../flow/Work';
 
 export const CREATE_ISSUE = 'JetBrains.YouTrack.CREATE_ISSUE';
 export const READ_ISSUE = 'JetBrains.YouTrack.READ_ISSUE';
@@ -31,7 +32,9 @@ export const UPDATE_ARTICLE_COMMENT = 'JetBrains.YouTrack.UPDATE_ARTICLE_COMMENT
 export const DELETE_ARTICLE_COMMENT = 'JetBrains.YouTrack.DELETE_ARTICLE_COMMENT';
 
 export const WORK_ITEM_CREATE = 'JetBrains.YouTrack.CREATE_WORK_ITEM';
+export const WORK_ITEM_CREATE_NOT_OWN = 'JetBrains.YouTrack.CREATE_NOT_OWN_WORK_ITEM';
 export const WORK_ITEM_UPDATE = 'JetBrains.YouTrack.UPDATE_WORK_ITEM';
+export const WORK_ITEM_UPDATE_NOT_OWN = 'JetBrains.YouTrack.UPDATE_NOT_OWN_WORK_ITEM';
 
 
 export default class IssuePermissions {
@@ -196,12 +199,19 @@ export default class IssuePermissions {
     }
   };
 
-  canUpdateWork = (entity: AnyIssue): boolean => this.hasPermissionFor(entity, WORK_ITEM_UPDATE);
+  canUpdateWork = (entity: AnyIssue, workItem?: WorkItem): boolean => {
+    if (workItem && workItem.author && this.isCurrentUser(workItem.author)) {
+      return this.hasPermissionFor(entity, WORK_ITEM_UPDATE);
+    }
+    return this.hasPermissionFor(entity, WORK_ITEM_UPDATE_NOT_OWN);
+  };
 
   canCreateWork = (entity: AnyIssue): boolean => (
     this.hasPermissionFor(entity, WORK_ITEM_CREATE) ||
-    this.canUpdateWork(entity)
+    this.hasPermissionFor(entity, WORK_ITEM_CREATE_NOT_OWN)
   );
+
+  canDeleteWork = (entity: AnyIssue, workItem: WorkItem) => this.canUpdateWork(entity, workItem)
 
   /*
    Articles

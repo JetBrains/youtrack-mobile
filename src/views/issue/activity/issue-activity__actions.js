@@ -4,6 +4,7 @@ import * as activityHelper from './issue-activity__helper';
 import * as types from '../issue-action-types';
 import log from '../../../components/log/log';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from '../../../components/analytics/analytics-ids';
+import {confirmation} from '../../../components/confirmation/confirmation';
 import {getActivityCategories, getActivityAllTypes} from '../../../components/activity/activity-helper';
 import {logEvent} from '../../../components/log/log-helper';
 import {notify} from '../../../components/notification/notification';
@@ -149,7 +150,10 @@ export function getWorkItemAuthors() {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
     const project: Folder = getState().issueState.issue.project;
-
+    logEvent({
+      message: 'SpentTime: form:get-authors',
+      analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+    });
     const promises: Array<Promise<User>> = [
       WORK_ITEM_UPDATE,
       WORK_ITEM_CREATE
@@ -172,7 +176,10 @@ export function getWorkItemTypes() {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
     const projectId: string = getState().issueState.issue.project.id;
-
+    logEvent({
+      message: 'SpentTime: form:get-work-types',
+      analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+    });
     const [error, projectTimeTrackingSettings] = await until(api.projects.getTimeTrackingSettings(projectId));
     if (error) {
       const msg: string = 'Failed to load project time tracking settings';
@@ -181,5 +188,27 @@ export function getWorkItemTypes() {
       return {};
     }
     return projectTimeTrackingSettings.workItemTypes.sort(sortByOrdinal);
+  };
+}
+
+export function deleteWorkItem(workItem: WorkItem) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const issueId: string = getState().issueState.issueId;
+
+    return confirmation(
+      'Are you sure you want to delete work item?',
+      'Delete'
+    ).then(async () => {
+      const [error] = await until(api.issue.deleteWorkItem(issueId, workItem.id));
+      if (error) {
+        const msg: string = 'Failed to delete work item ';
+        notify(msg, error);
+        logEvent({message: msg, isError: true});
+        return false;
+      }
+      return true;
+    });
+
   };
 }

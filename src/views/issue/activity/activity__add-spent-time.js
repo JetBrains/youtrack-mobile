@@ -11,11 +11,13 @@ import DatePicker from '../../../components/date-picker/date-picker';
 import Header from '../../../components/header/header';
 import Router from '../../../components/router/router';
 import Select from '../../../components/select/select';
+import {ANALYTICS_ISSUE_STREAM_SECTION} from '../../../components/analytics/analytics-ids';
+import {commentPlaceholderText} from '../../../app-text';
 import {confirmation} from '../../../components/confirmation/confirmation';
 import {getEntityPresentation, ytDate} from '../../../components/issue-formatter/issue-formatter';
 import {HIT_SLOP} from '../../../components/common-styles/button';
 import {IconAngleRight, IconCheck, IconClose} from '../../../components/icon/icon';
-import {commentPlaceholderText} from '../../../app-text';
+import {logEvent} from '../../../components/log/log-helper';
 import {ThemeContext} from '../../../components/theme/theme-context';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -130,6 +132,10 @@ const AddSpentTimeForm = (props: Props) => {
     return {
       dataSource: async () => await dispatch(issueActivityItems.getWorkItemAuthors()),
       onSelect: (author: User) => {
+        logEvent({
+          message: 'SpentTime: form:set-author',
+          analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+        });
         update({author});
         updateSelectVisibility(false);
       }
@@ -143,6 +149,10 @@ const AddSpentTimeForm = (props: Props) => {
         return [draftDefault.type].concat(types);
       },
       onSelect: async (type: WorkItemType) => {
+        logEvent({
+          message: 'SpentTime: form:set-work-type',
+          analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+        });
         update({type});
         updateSelectVisibility(false);
       }
@@ -158,6 +168,10 @@ const AddSpentTimeForm = (props: Props) => {
 
   const onCreate = async () => {
     const {onAdd = () => {}} = props;
+    logEvent({
+      message: 'SpentTime: form:submit',
+      analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+    });
     updateProgress(true);
     const updatedDraft: WorkItem = getDraft(draft);
     await dispatch(issueActivityItems.createWorkItem({
@@ -187,7 +201,13 @@ const AddSpentTimeForm = (props: Props) => {
         onBack={() => {
           if (!isProgress) {
             confirmation('Discard draft and close?', 'Discard and close')
-              .then(onClose).catch(() => null);
+              .then(() => {
+                logEvent({
+                  message: 'SpentTime: form:cancel',
+                  analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+                });
+                onClose();
+              }).catch(() => null);
           }
         }}
         extraButton={(

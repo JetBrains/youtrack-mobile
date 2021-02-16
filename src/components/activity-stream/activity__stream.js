@@ -62,8 +62,8 @@ export type ActivityStreamProps = {
   uiTheme: UITheme,
   workTimeSettings: ?WorkTimeSettings,
   youtrackWiki: $Shape<YouTrackWiki>,
-  canUpdateWork?: boolean,
-  onWorkUpdate?: () => any
+  onWorkDelete?: () => any,
+  onWorkUpdate?: () => void
 };
 
 export type ActivityStreamPropsReaction = {
@@ -336,7 +336,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
   const renderWorkActivity = (activityGroup: Activity) => (
     <StreamWork
       activityGroup={activityGroup}
-      canUpdate={props.canUpdateWork}
+      onDelete={props.onWorkDelete}
       onUpdate={props.onWorkUpdate}
     />
   );

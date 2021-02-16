@@ -27,13 +27,13 @@ import {ThemeContext} from '../../../components/theme/theme-context';
 
 import styles from './issue-activity.styles';
 
-
 import type {IssueComment} from '../../../flow/CustomFields';
 import type {State as IssueActivityState} from './issue-activity__reducers';
 import type {State as IssueCommentActivityState} from './issue-activity__comment-reducers';
 import type {Theme, UITheme} from '../../../flow/Theme';
 import type {User, UserAppearanceProfile} from '../../../flow/User';
 import type {YouTrackWiki} from '../../../flow/Wiki';
+import type {WorkItem} from '../../../flow/Work';
 
 type IssueActivityProps = $Shape<IssueActivityState
   & typeof activityActions
@@ -108,7 +108,8 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       restoreComment,
       deleteCommentPermanently,
       onReactionSelect,
-      user
+      user,
+      deleteWorkItem
     } = this.props;
 
     const youtrackWiki: YouTrackWiki = {
@@ -141,6 +142,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       ),
       isAuthor: (comment: IssueComment) => issuePermissions.isCurrentUser(comment?.author)
     };
+    const onWorkUpdate = () => this.loadIssueActivities(true);
 
     return (
       <View style={styles.activitiesContainer}>
@@ -155,8 +157,13 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
           youtrackWiki={youtrackWiki}
           onReactionSelect={onReactionSelect}
           currentUser={user}
-          canUpdateWork={issuePermissions.canUpdateWork(issue)}
-          onWorkUpdate={() => this.loadIssueActivities(true)}
+          onWorkUpdate={onWorkUpdate}
+          onWorkDelete={async (workItem: WorkItem) => {
+            const isDeleted = await deleteWorkItem(workItem);
+            if (isDeleted) {
+              onWorkUpdate();
+            }
+          }}
         />
       </View>
     );
