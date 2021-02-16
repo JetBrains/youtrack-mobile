@@ -72,6 +72,7 @@ export type UserGeneralProfile = {
 export type Folder = {
   $type: string,
   id: ?string,
+  ringId: ?string,
   shortName: ?string,
   name: ?string,
   query: ?string,

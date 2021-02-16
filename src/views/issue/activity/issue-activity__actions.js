@@ -13,8 +13,8 @@ import {WORK_ITEM_CREATE, WORK_ITEM_UPDATE} from '../../../components/issue-perm
 
 import type Api from '../../../components/api/api';
 import type {Activity} from '../../../flow/Activity';
+import type {Folder, User} from '../../../flow/User';
 import type {State as SingleIssueState} from '../issue-reducers';
-import type {User} from '../../../flow/User';
 import type {WorkItem} from '../../../flow/Work';
 
 type ApiGetter = () => Api;
@@ -75,7 +75,7 @@ export function getTimeTracking() {
     const api: Api = getApi();
 
     logEvent({
-      message: 'Add spent time',
+      message: 'Create spent time',
       analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
     });
     const [error, timeTracking] = await until(api.issue.timeTracking(issueId));
@@ -103,6 +103,13 @@ export function updateWorkItemDraft(draft: WorkItem) {
     }
     return updatedDraft;
   };
+}
+
+export function updateWorkItem() {
+  logEvent({
+    message: 'Update spent time',
+    analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+  });
 }
 
 export function createWorkItem(draft: WorkItem) {
@@ -141,12 +148,14 @@ export function deleteWorkItemDraft() {
 export function getWorkItemAuthors() {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
-    const projectId: string = getState().issueState.issue.project.id;
+    const project: Folder = getState().issueState.issue.project;
 
     const promises: Array<Promise<User>> = [
       WORK_ITEM_UPDATE,
       WORK_ITEM_CREATE
-    ].map((permissionName: string) => api.user.getProjectUsers(projectId, undefined, permissionName));
+    ].map((permissionName: string) => {
+      return api.user.getHubProjectUsers(encodeURIComponent(`access(project:${project.ringId},with:{${permissionName}})`));
+    });
     const [error, users] = await until(promises, true);
     if (error) {
       const msg: string = 'Failed to load work item authors';
@@ -155,7 +164,7 @@ export function getWorkItemAuthors() {
       return [];
     }
     return users.reduce((list: Array<User>, user: User) => list.some(
-      (it: User) => it.id === user.id) ? list : list.concat(user), []).sort(sortAlphabetically);
+      (it: User) => it.ringId === user.ringId) ? list : list.concat(user), []).sort(sortAlphabetically);
   };
 }
 

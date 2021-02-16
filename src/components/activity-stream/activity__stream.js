@@ -36,14 +36,14 @@ import {UNIT} from '../variables/variables';
 
 import styles from './activity__stream.styles';
 
-import type {Attachment, IssueComment} from '../../flow/CustomFields';
-import type {Reaction} from '../../flow/Reaction';
 import type {Activity, ActivityChange, ActivityItem, ActivityStreamCommentActions} from '../../flow/Activity';
+import type {Attachment, IssueComment} from '../../flow/CustomFields';
+import type {CustomError} from '../../flow/Error';
+import type {Reaction} from '../../flow/Reaction';
 import type {UITheme} from '../../flow/Theme';
+import type {User} from '../../flow/User';
 import type {WorkTimeSettings} from '../../flow/Work';
 import type {YouTrackWiki} from '../../flow/Wiki';
-import type {CustomError} from '../../flow/Error';
-import type {User} from '../../flow/User';
 
 
 export type ActivityStreamProps = {
@@ -61,7 +61,9 @@ export type ActivityStreamProps = {
   ) => any,
   uiTheme: UITheme,
   workTimeSettings: ?WorkTimeSettings,
-  youtrackWiki: $Shape<YouTrackWiki>
+  youtrackWiki: $Shape<YouTrackWiki>,
+  canUpdateWork?: boolean,
+  onWorkUpdate?: () => any
 };
 
 export type ActivityStreamPropsReaction = {
@@ -331,7 +333,13 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
     );
   };
 
-  const renderWorkActivity = (activityGroup) => <StreamWork activityGroup={activityGroup}/>;
+  const renderWorkActivity = (activityGroup: Activity) => (
+    <StreamWork
+      activityGroup={activityGroup}
+      canUpdate={props.canUpdateWork}
+      onUpdate={props.onWorkUpdate}
+    />
+  );
 
   const renderVisibilityActivity = (activity) => {
     const textChange = getTextChange(activity, []);

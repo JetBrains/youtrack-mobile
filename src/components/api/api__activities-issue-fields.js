@@ -29,8 +29,8 @@ const ISSUE_WORK_ITEMS_FIELDS = toField([
   '$type',
   'date',
   {
-    type: ['name'],
-    duration: ['minutes']
+    type: ['id,name'],
+    duration: ['presentation']
   }
 ]);
 

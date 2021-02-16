@@ -22,9 +22,10 @@ export type WorkItemTemplate = {
 };
 
 export type WorkItem = WorkItemTemplate & {
+  $type?: string,
   creator: User,
   id?: string,
-  text: string,
+  text?: string,
   usesMarkdown: boolean
 };
 

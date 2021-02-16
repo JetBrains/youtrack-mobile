@@ -1,11 +1,14 @@
 /* @flow */
 
 import React from 'react';
-import {Text, View} from 'react-native';
+import {Text, View, TouchableOpacity} from 'react-native';
 
+import AddSpentTimeForm from '../../views/issue/activity/activity__add-spent-time';
+import Router from '../router/router';
 import StreamUserInfo from './activity__stream-user-info';
-import {firstActivityChange} from './activity__stream-helper';
-import {minutesAndHoursFor} from '../time-tracking/time-tracking';
+import {firstActivityChange, getDurationPresentation} from './activity__stream-helper';
+import {HIT_SLOP} from '../common-styles/button';
+import {IconPencil} from '../icon/icon';
 import {ytDate} from '../issue-formatter/issue-formatter';
 
 import styles from './activity__stream.styles';
@@ -13,7 +16,9 @@ import styles from './activity__stream.styles';
 import type {Activity} from '../../flow/Activity';
 
 type Props = {
-  activityGroup: Activity
+  activityGroup: Activity,
+  canUpdate?: boolean,
+  onUpdate?: () => any
 }
 
 const StreamWork = (props: Props) => {
@@ -23,9 +28,6 @@ const StreamWork = (props: Props) => {
     return null;
   }
 
-  const duration = minutesAndHoursFor(work.duration);
-  const spentTime = [duration.hours(), duration.minutes()].join(' ');
-
   return (
     <View>
       {!props.activityGroup.merged && <StreamUserInfo activityGroup={props.activityGroup}/>}
@@ -34,11 +36,31 @@ const StreamWork = (props: Props) => {
 
         {Boolean(work.date) && <Text style={styles.secondaryTextColor}>{ytDate(work.date)}</Text>}
 
-        <Text>
-          <Text style={styles.activityLabel}>Spent time: </Text>
-          <Text style={styles.activityWorkTime}>{spentTime}</Text>
-          {work.type && <Text style={styles.secondaryTextColor}>{` ${work.type.name}`}</Text>}
-        </Text>
+        <View style={styles.activityWork}>
+          <Text>
+            <Text style={styles.activityLabel}>Spent time: </Text>
+            <Text style={styles.activityWorkTime}>{getDurationPresentation(work.duration)}</Text>
+            {work.type && <Text style={styles.secondaryTextColor}>{`, ${work.type.name}`}</Text>}
+          </Text>
+          {props.canUpdate && (
+            <TouchableOpacity
+              hitSlop={HIT_SLOP}
+              style={styles.activityWorkEditIcon}
+              onPress={() => {
+                Router.PageModal({
+                  children: (
+                    <AddSpentTimeForm
+                      workItem={props.activityGroup.work.added[0]}
+                      onAdd={props.onUpdate}
+                    />
+                  )
+                });
+              }}
+            >
+              <IconPencil size={18} color={styles.activityCommentActionsAddReaction.color}/>
+            </TouchableOpacity>
+          )}
+        </View>
 
         {!!work.text && (
           <View style={styles.activityWorkComment}><Text style={styles.secondaryTextColor}>{work.text}</Text></View>

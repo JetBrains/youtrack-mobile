@@ -1,9 +1,6 @@
 /* @flow */
 
-import qs from 'qs';
-
 import ApiBase from './api__base';
-import ApiHelper from './api__helper';
 import {handleRelativeUrl} from '../config/config';
 import {ResourceTypes} from './api__resource-types';
 
@@ -35,13 +32,6 @@ export default class UserAPI extends ApiBase {
     'shortName'
   ];
 
-
-  static createFieldsQuery(fields: Object|Array<Object|string>): string {
-    return qs.stringify({
-      fields: ApiHelper.toField(fields).toString()
-    });
-  }
-
   constructor(auth: Auth) {
     super(auth);
     this.apiUrl = `${this.youTrackApiUrl}/users`;
@@ -49,7 +39,7 @@ export default class UserAPI extends ApiBase {
   }
 
   async getUser(userId: string = 'me'): Promise<User> {
-    const queryString = UserAPI.createFieldsQuery([
+    const queryString = ApiBase.createFieldsQuery([
       'id',
       'avatarUrl',
       'login',
@@ -74,13 +64,13 @@ export default class UserAPI extends ApiBase {
   }
 
   async getUserFolders(folderId: string = '', fields?: Array<string>): Promise<User | Tag | SavedQuery> {
-    const queryString = UserAPI.createFieldsQuery(fields || this.USER_FOLDERS_FIELDS);
+    const queryString = ApiBase.createFieldsQuery(fields || this.USER_FOLDERS_FIELDS);
 
     return await this.makeAuthorizedRequest(`${this.youTrackApiUrl}/userIssueFolders/${folderId}?${queryString}`);
   }
 
   async updateUserAppearanceProfile(userId: string = 'me', appearanceProfile: UserAppearanceProfile): Promise<User> {
-    const queryString = UserAPI.createFieldsQuery(['naturalCommentsOrder']);
+    const queryString = ApiBase.createFieldsQuery(['naturalCommentsOrder']);
 
     return await this.makeAuthorizedRequest(
       `${this.adminApiUrl}/${userId}/profiles/appearance?${queryString}`,
@@ -93,14 +83,14 @@ export default class UserAPI extends ApiBase {
 
   async updateLastVisitedArticle(articleId: string | null): Promise<User> {
     return await this.makeAuthorizedRequest(
-      `${this.adminApiUrl}/me/profiles/articles?${UserAPI.createFieldsQuery(['lastVisitedArticle(id)'])}`,
+      `${this.adminApiUrl}/me/profiles/articles?${ApiBase.createFieldsQuery(['lastVisitedArticle(id)'])}`,
       'POST',
       {lastVisitedArticle: articleId ? {id: articleId} : null}
     );
   }
 
   async updateUserGeneralProfile(generalProfile: UserGeneralProfile, userId: string = 'me'): Promise<User> {
-    const queryString = UserAPI.createFieldsQuery({searchContext: this.SEARCH_CONTEXT_FIELDS});
+    const queryString = ApiBase.createFieldsQuery({searchContext: this.SEARCH_CONTEXT_FIELDS});
 
     return await this.makeAuthorizedRequest(
       `${this.adminApiUrl}/${userId}/profiles/general?${queryString}`,
@@ -118,16 +108,19 @@ export default class UserAPI extends ApiBase {
     );
   }
 
-  async getProjectUsers(projectId: string, query?: string, permissionName?: string): Promise<Array<User>> {
-    const permissionQuery: string = permissionName ? `&permission=${permissionName}` : '';
-    const searchQuery: string = query ? `&query=${query}` : '';
-    return this.makeAuthorizedRequest(
-      `${this.apiUrl}?projectId=${projectId}${permissionQuery}${searchQuery}&${UserAPI.createFieldsQuery([
+  async getHubProjectUsers(query?: string): Promise<Array<User>> {
+    const searchQuery: string = query ? `query=${query}` : '';
+    const response: { skip: number, total: number, users: Array<User> } = await this.makeAuthorizedRequest(
+      `${this.config.auth.serverUri}/api/rest/users?${searchQuery}&${ApiBase.createFieldsQuery([
         'id',
-        'fullName'
+        'name'
       ])}`,
       'GET'
     );
+    return response.users.map((hubUser: User) => ({
+      ringId: hubUser.id,
+      name: hubUser.name
+    }));
   }
 
 }

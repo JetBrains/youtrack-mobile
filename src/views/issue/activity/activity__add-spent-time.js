@@ -29,38 +29,49 @@ import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {WorkItem, TimeTracking, WorkItemType} from '../../../flow/Work';
 
 type Props = {
-  onAdd: () => any
+  workItem?: WorkItem,
+  onAdd?: () => any
 }
 
 const AddSpentTimeForm = (props: Props) => {
+  const theme: Theme = useContext(ThemeContext);
+  const dispatch = useDispatch();
+  const currentUser: User = useSelector((state: AppState) => state.app.user);
+
   const draftDefault: WorkItem = {
-    date: new Date(),
-    author: {
-      name: 'Select author'
+    date: new Date().getTime(),
+    author: currentUser,
+    duration: {
+      presentation: '1d'
     },
     type: {
-      name: 'Select type'
+      id: null,
+      key: 'no-work-type',
+      name: 'No type'
     },
     text: null
   };
 
-  const theme: Theme = useContext(ThemeContext);
-  const dispatch = useDispatch();
-  const currentUser: User = useSelector((state: AppState) => state.issueState.user);
-
   const [isProgress, updateProgress] = useState(false);
   const [isSelectVisible, updateSelectVisibility] = useState(false);
-  const [draft, updateDraftWorkItem] = useState(draftDefault);
+  const [draft, updateDraftWorkItem] = useState(props.workItem || draftDefault);
   const [selectProps, updateSelectProps] = useState(null);
 
-  const updateDraft = async (draft: WorkItem) => {
-    const updatedDraft: WorkItem = await dispatch(issueActivityItems.updateWorkItemDraft(draft));
+  const getDraft = (draftItem: WorkItem) => ({
+    ...draftItem,
+    type: !draftItem.type || draftItem.type?.id === null ? null : draftItem.type
+  });
+
+  const updateDraft = async (draftItem: WorkItem) => {
+    const draftWithType: WorkItem = getDraft(draftItem);
+    const updatedDraft: WorkItem = await dispatch(
+      issueActivityItems.updateWorkItemDraft(draftWithType)
+    );
     if (updatedDraft) {
       updateDraftWorkItem({
-        ...updatedDraft,
-        duration: draft.duration,
-        date: draft.date,
-        $type: undefined
+        ...draftItem,
+        $type: updatedDraft.$type,
+        id: updatedDraft.id
       });
     }
   };
@@ -68,18 +79,25 @@ const AddSpentTimeForm = (props: Props) => {
   const debouncedUpdate = throttle(updateDraft, 350);
 
   useEffect(() => {
-    async function loadTimeTracking() {
-      const timeTracking: TimeTracking = await dispatch(issueActivityItems.getTimeTracking());
-      const {author, date, duration} = timeTracking.workItemTemplate;
-      updateDraftWorkItem({
-        ...{author},
-        ...{date},
-        ...{duration},
-        ...timeTracking.draftWorkItem,
-        usesMarkdown: true
-      });
+    if (props.workItem) {
+      updateDraftWorkItem(props.workItem);
+      issueActivityItems.updateWorkItem();
+    } else {
+      loadTimeTracking();
     }
-    loadTimeTracking();
+
+    async function loadTimeTracking() {
+      updateProgress(true);
+      const timeTracking: TimeTracking = await dispatch(issueActivityItems.getTimeTracking());
+      updateDraftWorkItem({
+        ...draftDefault,
+        ...timeTracking?.workItemTemplate,
+        ...timeTracking?.draftWorkItem,
+        usesMarkdown: true,
+        $type: undefined
+      });
+      updateProgress(false);
+    }
   }, []);
 
 
@@ -89,7 +107,9 @@ const AddSpentTimeForm = (props: Props) => {
       ...data
     };
     updateDraftWorkItem(updatedDraft);
-    debouncedUpdate(updatedDraft);
+    if (!props.workItem) {
+      debouncedUpdate(updatedDraft);
+    }
   };
 
   const renderSelect = (selectProps: SelectProps) => {
@@ -118,7 +138,10 @@ const AddSpentTimeForm = (props: Props) => {
 
   const getWorkTypeSelectProps = (): $Shape<SelectProps> => {
     return {
-      dataSource: async () => await dispatch(issueActivityItems.getWorkItemTypes()),
+      dataSource: async () => {
+        const types: Array<WorkItemType> = await dispatch(issueActivityItems.getWorkItemTypes());
+        return [draftDefault.type].concat(types);
+      },
       onSelect: async (type: WorkItemType) => {
         update({type});
         updateSelectVisibility(false);
@@ -136,7 +159,11 @@ const AddSpentTimeForm = (props: Props) => {
   const onCreate = async () => {
     const {onAdd = () => {}} = props;
     updateProgress(true);
-    await dispatch(issueActivityItems.createWorkItem(draft));
+    const updatedDraft: WorkItem = getDraft(draft);
+    await dispatch(issueActivityItems.createWorkItem({
+      ...updatedDraft,
+      $type: props.workItem ? updatedDraft.$type : undefined
+    }));
     onAdd();
     updateProgress(false);
     close();
@@ -158,14 +185,9 @@ const AddSpentTimeForm = (props: Props) => {
         title="Spent time"
         leftButton={<IconClose size={21} color={isProgress ? styles.disabled.color : styles.link.color}/>}
         onBack={() => {
-          if (isProgress) {
-            return;
-          }
-          if (draft.text) {
+          if (!isProgress) {
             confirmation('Discard draft and close?', 'Discard and close')
               .then(onClose).catch(() => null);
-          } else {
-            onClose();
           }
         }}
         extraButton={(
@@ -240,7 +262,7 @@ const AddSpentTimeForm = (props: Props) => {
           </TouchableOpacity>
 
           <View style={buttonStyle}>
-            <Text style={styles.feedbackFormTextSup}>Date</Text>
+            <Text style={styles.feedbackFormTextSup}>Spent time</Text>
             <TextInput
               {...commonInputProps}
               style={[styles.feedbackInput, styles.feedbackFormTextMain]}
@@ -260,6 +282,7 @@ const AddSpentTimeForm = (props: Props) => {
             <Text style={styles.feedbackFormTextSup}>Type</Text>
             <Text
               style={[styles.feedbackFormText, styles.feedbackFormTextMain]}
+              numberOfLines={1}
             >{draft?.type?.name || draftDefault.type.name}</Text>
             {iconAngleRight}
           </TouchableOpacity>
@@ -270,7 +293,7 @@ const AddSpentTimeForm = (props: Props) => {
             textAlignVertical="top"
             style={[styles.feedbackFormInputDescription]}
             placeholder={commentPlaceholderText}
-            value={draft.text}
+            value={draft?.text}
             onChangeText={(comment: string) => update({text: comment})}
           />
 

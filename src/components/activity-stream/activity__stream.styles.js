@@ -124,6 +124,10 @@ export default EStyleSheet.create({
     marginTop: UNIT,
     marginBottom: UNIT
   },
+
+  activityWork: {
+    flexDirection: 'row'
+  },
   activityWorkTime: {
     color: '$icon',
     fontWeight: 'bold'
@@ -131,5 +135,8 @@ export default EStyleSheet.create({
   activityWorkComment: {
     marginTop: UNIT,
   },
-
+  activityWorkEditIcon: {
+    position: 'absolute',
+    right: 0
+  },
 });

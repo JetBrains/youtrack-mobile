@@ -18,8 +18,11 @@ const getActivityEventTitle = (activity: Activity) => {
   return `${getEventTitle(activity) || ''} `;
 };
 
+const getDurationPresentation = (duration: {presentation: string}): string => duration?.presentation || '';
+
 
 export {
   firstActivityChange,
-  getActivityEventTitle
+  getActivityEventTitle,
+  getDurationPresentation
 };
