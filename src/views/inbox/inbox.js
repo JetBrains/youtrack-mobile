@@ -52,7 +52,8 @@ const Category: Object = {
   LINKS: 'LINKS',
   COMMENT: 'COMMENT',
   SUMMARY: 'SUMMARY',
-  DESCRIPTION: 'DESCRIPTION'
+  DESCRIPTION: 'DESCRIPTION',
+  WORK: 'TIME_TRACKING'
 };
 
 const MAX_TEXT_CHANGE_LENGTH: number = 5000;
@@ -236,7 +237,7 @@ class Inbox extends Component<Props, State> {
     const textChangeEventName = (event: ChangeEvent) => `${event.name} changed`;
     const renderEventName = (event: ChangeEvent) => <Text style={styles.textSecondary}>{event.name}: </Text>;
 
-    if (!this.hasAddedValues(event) && !this.hasRemovedValues(event)) {
+    if (!this.hasAddedValues(event) && !this.hasRemovedValues(event) || event.category === Category.WORK) {
       return null;
     }
 
