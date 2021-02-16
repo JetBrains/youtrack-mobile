@@ -37,7 +37,7 @@ import type {CustomError} from '../../flow/Error';
 import type {Theme, UIThemeColors} from '../../flow/Theme';
 import type {Visibility} from '../../flow/Visibility';
 
-type ArticleDraftData = { summary: string, content: string, project: IssueProject, visibility: Visibility };
+type ArticleDraftData = $Shape<Article>;
 
 type Props = {
   articleDraft?: Article,
@@ -118,7 +118,11 @@ const ArticleCreate = (props: Props) => {
           (it: ArticleProject) => issuePermissions.articleCanCreateArticle(it.ringId)
         )),
         onSelect: (project: IssueProject) => {
-          updateDraft({project});
+          updateDraft({
+            project: project,
+            parentArticle: null,
+            visibility: null
+          });
           hideSelect();
         },
         onCancel: hideSelect
