@@ -10,6 +10,7 @@ export type KnowledgeBaseState = {
   articles: Array<ProjectArticlesData> | null,
   articlesList: ArticlesList | null,
   isLoading: boolean,
+  expandingProjectId: string | null,
   error: CustomError
 };
 
@@ -17,6 +18,7 @@ const articlesInitialState: KnowledgeBaseState = {
   articles: null,
   articlesList: null,
   isLoading: false,
+  expandingProjectId: null,
   error: null
 };
 
@@ -27,6 +29,9 @@ const {reducer, actions} = createSlice({
   reducers: {
     setLoading(state: KnowledgeBaseState, action: PayloadAction<boolean>) {
       state.isLoading = action.payload;
+    },
+    setExpandingProjectId(state: KnowledgeBaseState, action: PayloadAction<boolean>) {
+      state.expandingProjectId = action.payload;
     },
     setError(state: KnowledgeBaseState, action: PayloadAction<boolean>) {
       state.error = action.payload;
@@ -40,5 +45,5 @@ const {reducer, actions} = createSlice({
   }
 });
 
-export const {setLoading, setError, setList, setArticles} = actions;
+export const {setLoading, setError, setList, setArticles, setExpandingProjectId} = actions;
 export default reducer;

@@ -14,7 +14,7 @@ import {flushStoragePart, getStorageState} from '../../components/storage/storag
 import {hasType} from '../../components/api/api__resource-types';
 import {logEvent} from '../../components/log/log-helper';
 import {notify} from '../../components/notification/notification';
-import {setArticles, setError, setList, setLoading} from './knowledge-base-reducers';
+import {setArticles, setError, setExpandingProjectId, setList, setLoading} from './knowledge-base-reducers';
 import {cacheProjects, setUserLastVisitedArticle} from '../../actions/app-actions';
 import {showActions} from '../../components/action-sheet/action-sheet';
 import {sortByUpdatedReverse} from '../../components/search/sorting';
@@ -193,8 +193,11 @@ const toggleProjectVisibility = (item: ArticlesListItem) =>
 
     if (item.dataCollapsed) {
       toggleProject(item, updatedArticlesList, false);
+    } else {
+      dispatch(setExpandingProjectId(item.title.id));
     }
     const updatedProjectData: ProjectArticlesData | null = await getUpdatedProjectData();
+    dispatch(setExpandingProjectId(null));
     if (updatedProjectData) {
       dispatch(storeProjectData(updatedProjectData));
       updatedArticlesList = createArticleList(updatedProjectData);

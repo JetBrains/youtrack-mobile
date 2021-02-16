@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {Component} from 'react';
-import {RefreshControl, SectionList, Text, TouchableOpacity, View} from 'react-native';
+import {RefreshControl, SectionList, Text, TouchableOpacity, View, ActivityIndicator} from 'react-native';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -120,6 +120,8 @@ export class KnowledgeBase extends Component<Props, State> {
   renderProject = ({section}: ArticlesListItem) => {
     const project: ?ArticleProject = section.title;
     if (project) {
+      const {expandingProjectId} = this.props;
+      const isProjectExpanding: boolean = expandingProjectId === project.id;
       const isCollapsed: boolean = project?.articles?.collapsed;
       const Icon = isCollapsed ? IconAngleRight : IconAngleDown;
       const hasHoArticles: boolean = section.title.articles.collapsed === false && section.data?.length === 0;
@@ -144,6 +146,7 @@ export class KnowledgeBase extends Component<Props, State> {
             </TouchableOpacity>
             {!!project?.id && <Star
               style={styles.itemStar}
+              disabled={isProjectExpanding}
               size={19}
               hasStar={project.pinned}
               canStar={true}
@@ -152,12 +155,13 @@ export class KnowledgeBase extends Component<Props, State> {
             />}
           </View>
           {this.renderSeparator()}
-          {hasHoArticles && (
+          {(hasHoArticles || isProjectExpanding) && (
             <View>
               <View style={[styles.itemArticle, styles.itemNoArticle]}>
-                <Text style={styles.itemNoArticleText}>
+                {isProjectExpanding && <ActivityIndicator color={styles.link.color}/>}
+                {hasHoArticles && <Text style={styles.itemNoArticleText}>
                   No articles
-                </Text>
+                </Text>}
               </View>
               {this.renderSeparator()}
             </View>

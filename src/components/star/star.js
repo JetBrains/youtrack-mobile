@@ -8,6 +8,7 @@ import {HIT_SLOP} from '../common-styles/button';
 import type {UITheme} from '../../flow/Theme';
 
 type Props = {
+  disabled?: boolean,
   canStar: boolean,
   hasStar: boolean,
   onStarToggle: (starred: boolean) => any,
@@ -24,7 +25,7 @@ export default class Star extends PureComponent<Props, void> {
   };
 
   render() {
-    const {hasStar, canStar, style, uiTheme, size = 22} = this.props;
+    const {hasStar, canStar, style, uiTheme, size = 22, disabled = false} = this.props;
 
     if (!canStar) {
       return null;
@@ -32,6 +33,7 @@ export default class Star extends PureComponent<Props, void> {
 
     return (
       <TouchableOpacity
+        disabled={disabled}
         hitSlop={HIT_SLOP}
         style={style}
         onPress={this.toggle}>
