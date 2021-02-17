@@ -3,6 +3,7 @@ import {shallow} from 'enzyme';
 
 import CustomField from './custom-field';
 import {__setStorageState} from '../storage/storage';
+import {ytDate} from '../issue-formatter/issue-formatter';
 
 describe('<CustomField/>', () => {
   let fakeField;
@@ -73,7 +74,7 @@ describe('<CustomField/>', () => {
 
     const wrapper = shallow(<CustomField field={fakeField}/>);
     const value = wrapper.find({testID: 'value'});
-    value.children().should.have.text(new Date(timestamp).toLocaleDateString());
+    value.children().should.have.text(ytDate(timestamp, true));
   });
 
   it('should render value of type integer', () => {

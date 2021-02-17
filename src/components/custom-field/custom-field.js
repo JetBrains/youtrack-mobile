@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 import {TouchableOpacity, View, Text} from 'react-native';
 
 import ColorField from '../color-field/color-field';
-import {getEntityPresentation} from '../issue-formatter/issue-formatter';
+import {getEntityPresentation, ytDate} from '../issue-formatter/issue-formatter';
 import {getHUBUrl} from '../../util/util';
 import Avatar from '../avatar/avatar';
 import ApiHelper from '../api/api__helper';
@@ -36,16 +36,10 @@ export default class CustomField extends Component<Props, void> {
 
     if (value) {
       if (fieldType === 'date') {
-        return new Date(value).toLocaleDateString();
+        return ytDate(value, true);
       }
       if (fieldType === 'date and time') {
-        const date = new Date(value).toLocaleDateString();
-        const time = new Date(value).toLocaleTimeString([],
-          {
-            hour: '2-digit',
-            minute: '2-digit'
-          });
-        return `${date} ${time}`;
+        return ytDate(value);
       }
       if (fieldType === 'integer' || fieldType === 'string' || fieldType === 'float') {
         return value;
