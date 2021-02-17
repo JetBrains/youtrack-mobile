@@ -12,7 +12,7 @@ import {
 } from 'react-navigation';
 
 import log from '../log/log';
-import {getStorageState, flushStoragePart} from '../storage/storage';
+import {flushStoragePart} from '../storage/storage';
 import {routeMap} from '../../app-routes';
 import {uuid} from '../../util/util';
 
@@ -151,13 +151,7 @@ class Router {
   }
 
   navigateToDefaultRoute(props: Object & { issueId: string } = null) {
-    const lastRoute: string = getStorageState().lastRoute;
-    let defaultRoute: string;
-    if (this.rootRoutes.includes(lastRoute)) {
-      defaultRoute = lastRoute;
-    } else {
-      defaultRoute = this.rootRoutes[0];
-    }
+    const defaultRoute: string = this.rootRoutes[0];
     if (props?.issueId) {
       this.navigate(routeMap.Issue, props, {forceReset: true});
     } else {
