@@ -134,14 +134,7 @@ const ArticleCreate = (props: Props) => {
     }
   };
 
-  const closeCreateArticleScreen = (skipBack: boolean = false) => {
-    if (!isProcessing) {
-      dispatch(articleCreateActions.setDraft(null));
-      if (!skipBack) {
-        Router.pop(true);
-      }
-    }
-  };
+  const closeCreateArticleScreen = () => !isProcessing && Router.pop(true);
 
   const renderHeader = () => {
     const isSubmitDisabled: boolean = (
@@ -179,8 +172,8 @@ const ArticleCreate = (props: Props) => {
               articleCreateActions.publishArticleDraft({...articleDraft, ...articleDraftData})
             );
             if (!error) {
-              closeCreateArticleScreen(true);
-              Router.ArticleSingle({articlePlaceholder: createdArticle});
+              Router.KnowledgeBase(); //TODO: it's a hack. To prevent hanging after creating 2nd sub-article YTM-12655
+              Router.Article({articlePlaceholder: createdArticle});
             }
           }
         }}/>
