@@ -17,7 +17,7 @@ import Router from '../../components/router/router';
 import usage from '../../components/usage/usage';
 import UserInfo from '../../components/user/user-info';
 import YoutrackWiki from '../../components/wiki/youtrack-wiki';
-import {getReadableID} from '../../components/issue-formatter/issue-formatter';
+import {getReadableID, ytDate} from '../../components/issue-formatter/issue-formatter';
 import {getStorageState} from '../../components/storage/storage';
 import {guid, isReactElement} from '../../util/util';
 import {handleRelativeUrl} from '../../components/config/config';
@@ -127,6 +127,14 @@ class Inbox extends Component<Props, State> {
   }
 
   getChangeValue(change): string {
+    if (change?.typeName === 'date and time') {
+      return change.value ? ytDate(parseInt(change.value, 10)) : change.name;
+    }
+
+    if (change?.typeName === 'date') {
+      return change.value ? ytDate(parseInt(change.value, 10), true) : change.name;
+    }
+
     if (change.category === Category.LINKS) {
       return change.id;
     }
@@ -134,7 +142,6 @@ class Inbox extends Component<Props, State> {
     if (typeof change.name === 'string' && change.name.length > MAX_TEXT_CHANGE_LENGTH) {
       return `${change.name.substr(0, MAX_TEXT_CHANGE_LENGTH)}...`;
     }
-
     return change.name;
   }
 
