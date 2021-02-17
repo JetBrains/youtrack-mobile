@@ -1,3 +1,5 @@
+import DeviceInfo from 'react-native-device-info';
+
 import {getEntityPresentation, getVisibilityPresentation, absDate, getReadableID} from './issue-formatter';
 import sinon from 'sinon';
 
@@ -112,9 +114,13 @@ describe('absDate', function () {
     dateMock.toLocaleTimeString.should.have.been.calledWith([localeString], formatDateParams);
   });
   it('should return absolute date with no locale string', () => {
+    const getDeviceLocale = DeviceInfo.getDeviceLocale;
+    const deviceLocale = 'en-EN';
+    sinon.stub(DeviceInfo, 'getDeviceLocale').returns(deviceLocale);
     absDate(dateInMillis);
 
-    dateMock.toLocaleTimeString.should.have.been.calledWith([], formatDateParams);
+    dateMock.toLocaleTimeString.should.have.been.calledWith(deviceLocale, formatDateParams);
+    DeviceInfo.getDeviceLocale = getDeviceLocale;
   });
 
 

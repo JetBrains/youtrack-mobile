@@ -1,4 +1,6 @@
 /* @flow */
+
+import DeviceInfo from 'react-native-device-info';
 import fromNow from 'from-now';
 
 import type {CustomField} from '../../flow/CustomFields';
@@ -42,13 +44,13 @@ function makeDatePast(date: Date|number) {
 
 function formatDate(date: Date|number) {
   const dateObj = new Date(date);
-  return `${dateObj.toLocaleString([], {year: '2-digit', month: 'short', day: '2-digit', hour: '2-digit', minute:'2-digit'})}`;
+  return `${dateObj.toLocaleString(DeviceInfo.getDeviceLocale(), {year: '2-digit', month: 'short', day: '2-digit', hour: '2-digit', minute:'2-digit'})}`;
 }
 
 function ytDate(date: Date | number, noTime: boolean = false) {
   const dateObj = new Date(date);
   //$FlowFixMe
-  return `${dateObj.toLocaleString('default', Object.assign(
+  return `${dateObj.toLocaleString(DeviceInfo.getDeviceLocale(), Object.assign(
     {
       month: 'short',
       day: '2-digit',
@@ -73,7 +75,7 @@ function relativeDate(date: Date|number) {
 
 function absDate(date: Date|number, localeString: ?string) {
   const utcDate = new Date(date);
-  const _locales = localeString ? [localeString] : [];
+  const _locales = localeString ? [localeString] : DeviceInfo.getDeviceLocale();
   return utcDate.toLocaleTimeString(_locales, {day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'});
 }
 
