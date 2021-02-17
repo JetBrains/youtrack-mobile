@@ -275,7 +275,7 @@ const AddSpentTimeForm = (props: Props) => {
             style={buttonStyle}
             onPress={
               () => Router.PageModal({
-                children: <DatePicker onDateSelect={(date: Date) => {
+                children: <DatePicker current={draft.date} onDateSelect={(date: Date) => {
                   update({date: date.getTime()});
                   close();
                 }}

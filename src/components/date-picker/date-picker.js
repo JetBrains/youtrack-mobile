@@ -13,13 +13,14 @@ import type {Theme} from '../../flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
+  current?: Date,
   onDateSelect: (date: Date) => any,
   style?: ViewStyleProp,
 };
 
 
 const DatePicker = (props: Props) => {
-  const [date, updateDate] = useState(new Date());
+  const [date, updateDate] = useState(props.current || new Date());
   const theme: Theme = useContext(ThemeContext);
 
   return (
