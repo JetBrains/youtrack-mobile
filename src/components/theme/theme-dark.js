@@ -13,7 +13,7 @@ const dark: UITheme = {
     $background: '#1c1c1e',
     $boxBackground: '#2c2c2e',
 
-    $error: '#ee0e0e',
+    $error: '#C22731',
 
     $text: '#e1e1e1',
     $textSecondary: '#b0b0b0',

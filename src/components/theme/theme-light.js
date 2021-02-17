@@ -13,7 +13,7 @@ const light: UITheme = {
     $background: '#FFFFFF',
     $boxBackground: '#f3f3f3',
 
-    $error: '#dd0000',
+    $error: '#C22731',
 
     $text: '#000000',
     $textSecondary: '#CCC',
