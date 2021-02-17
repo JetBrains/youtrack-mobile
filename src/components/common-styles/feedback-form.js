@@ -41,11 +41,20 @@ const feedbackFormStyles = {
   feedbackFormTextMain: {
     marginBottom: -UNIT
   },
+  feedbackFormTextError: {
+    color: '$error'
+  },
   feedbackInput: {
     ...rowFormStyles.input,
     position: 'absolute',
     top: UNIT,
     backgroundColor: 'transparent',
+  },
+  feedbackInputError: rowFormStyles.inputError,
+  feedbackInputErrorHint: {
+    margin: UNIT,
+    fontSize: SECONDARY_FONT_SIZE - 2,
+    color: '$error',
   },
   feedbackFormInput: {
     ...rowFormStyles.input,
@@ -55,7 +64,7 @@ const feedbackFormStyles = {
   },
   feedbackFormInputDescription: {
     ...rowFormStyles.input,
-    minHeight: UNIT * 29,
+    minHeight: UNIT * 12,
     flexGrow: 1,
     marginTop: UNIT * 2,
     color: '$text',

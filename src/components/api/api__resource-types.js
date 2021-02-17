@@ -26,6 +26,7 @@ export const ResourceTypes = {
   VISIBILITY_LIMITED: 'jetbrains.charisma.persistent.visibility.LimitedVisibility',
   VISIBILITY_UNLIMITED: 'jetbrains.charisma.persistent.visibility.UnlimitedVisibility',
 
+  WORK_ITEM: 'IssueWorkItem',
   DRAFT_WORK_ITEM: 'DraftWorkItem'
 };
 
@@ -50,6 +51,7 @@ hasType.tag = hasType(ResourceTypes.ISSUE_FOLDER_TAG);
 hasType.user = hasType(ResourceTypes.USER);
 hasType.userGroup = hasType(ResourceTypes.USER_GROUP);
 hasType.visibilityLimited = hasType(ResourceTypes.VISIBILITY_LIMITED);
+hasType.work = hasType(ResourceTypes.WORK_ITEM);
 
 
 export function filterArrayByType(array: Array<Entity>, methodName: HasMethodName): Array<Entity> {

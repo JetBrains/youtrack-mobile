@@ -128,6 +128,7 @@ export function createWorkItem(draft: WorkItem) {
       const msg: string = (extractErrorMessage(await resolveError(error), true));
       notify(msg, error);
       logEvent({message: msg, isError: true});
+      return error;
     }
     return updatedDraft;
   };

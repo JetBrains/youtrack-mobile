@@ -24,7 +24,12 @@ export const rowFormStyles = {
     borderRadius: UNIT,
     backgroundColor: '$boxBackground',
     color: '$text',
-    fontSize: MAIN_FONT_SIZE
+    fontSize: MAIN_FONT_SIZE,
+    borderWidth: 1,
+    borderColor: 'transparent'
+  },
+  inputError: {
+    borderColor: '$error'
   },
   button: {
     width: '100%',

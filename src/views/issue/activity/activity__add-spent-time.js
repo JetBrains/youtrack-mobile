@@ -15,6 +15,7 @@ import {ANALYTICS_ISSUE_STREAM_SECTION} from '../../../components/analytics/anal
 import {commentPlaceholderText} from '../../../app-text';
 import {confirmation} from '../../../components/confirmation/confirmation';
 import {getEntityPresentation, ytDate} from '../../../components/issue-formatter/issue-formatter';
+import {hasType} from '../../../components/api/api__resource-types';
 import {HIT_SLOP} from '../../../components/common-styles/button';
 import {IconAngleRight, IconCheck, IconClose} from '../../../components/icon/icon';
 import {logEvent} from '../../../components/log/log-helper';
@@ -59,6 +60,7 @@ const AddSpentTimeForm = (props: Props) => {
   const [isSelectVisible, updateSelectVisibility] = useState(false);
   const [draft, updateDraftWorkItem] = useState(props.workItem || draftDefault);
   const [selectProps, updateSelectProps] = useState(null);
+  const [error, updateError] = useState(false);
 
   const getDraft = (draftItem: WorkItem) => ({
     ...draftItem,
@@ -105,6 +107,7 @@ const AddSpentTimeForm = (props: Props) => {
 
 
   const update = (data: $Shape<TimeTracking>) => {
+    updateError(false);
     const updatedDraft: WorkItem = {
       ...draft,
       ...data
@@ -180,9 +183,12 @@ const AddSpentTimeForm = (props: Props) => {
       $type: props.workItem ? updatedDraft.$type : undefined
     }));
     updateProgress(false);
-    if (item) {
+    const isWorkItem = hasType.work(item);
+    if (isWorkItem) {
       onAdd();
       close();
+    } else {
+      updateError(true);
     }
   };
 
@@ -190,7 +196,8 @@ const AddSpentTimeForm = (props: Props) => {
     const isSubmitDisabled: boolean = (
       !draft.date ||
       !draft.duration ||
-      !draft.author
+      !draft.author ||
+      !draft?.duration?.presentation
     );
     const submitIcon = (isProgress
       ? <ActivityIndicator color={styles.link.color}/>
@@ -286,15 +293,19 @@ const AddSpentTimeForm = (props: Props) => {
           </TouchableOpacity>
 
           <View style={buttonStyle}>
-            <Text style={styles.feedbackFormTextSup}>Spent time</Text>
+            <Text style={[
+              styles.feedbackFormTextSup,
+              error && styles.feedbackFormTextError
+            ]}>Spent time</Text>
             <TextInput
               {...commonInputProps}
               style={[styles.feedbackInput, styles.feedbackFormTextMain]}
-              placeholder="Spent time"
+              placeholder="1w 1d 1h 1m"
               value={draft?.duration?.presentation}
               onChangeText={(periodValue: string) => update({duration: {presentation: periodValue}})}
             />
           </View>
+          {error && <Text style={styles.feedbackInputErrorHint}>1w 1d 1h 1m</Text>}
 
           <TouchableOpacity
             style={buttonStyle}
