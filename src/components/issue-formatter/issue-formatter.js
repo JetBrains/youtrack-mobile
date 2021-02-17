@@ -1,5 +1,6 @@
 /* @flow */
 import fromNow from 'from-now';
+
 import type {CustomField} from '../../flow/CustomFields';
 import type {User} from '../../flow/User';
 import type {AnyIssue} from '../../flow/Issue';
@@ -47,7 +48,7 @@ function formatDate(date: Date|number) {
 function ytDate(date: Date | number, noTime: boolean = false) {
   const dateObj = new Date(date);
   //$FlowFixMe
-  return `${dateObj.toLocaleString([], Object.assign(
+  return `${dateObj.toLocaleString('default', Object.assign(
     {
       month: 'short',
       day: '2-digit',
