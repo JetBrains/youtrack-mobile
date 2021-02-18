@@ -158,6 +158,7 @@ const SPRINT_ISSUES_FIELDS = toField([
       {
         value: [
           'id',
+          'name',
           'avatarUrl',
           'color(id,background)',
           'presentation',
