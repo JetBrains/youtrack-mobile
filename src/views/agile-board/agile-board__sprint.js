@@ -2,8 +2,6 @@
 
 import React, {Component} from 'react';
 
-import isEqual from 'react-fast-compare';
-
 import AgileCard from '../../components/agile-card/agile-card';
 import BoardRow from '../../components/agile-row/agile-row';
 import {Draggable} from '../../components/draggable/';
@@ -27,7 +25,7 @@ export default class AgileBoardSprint extends Component<Props, void> {
 
   shouldComponentUpdate(nextProps: Props): boolean {
     return (
-      !isEqual(this.props.sprint, nextProps.sprint) ||
+      this.props.sprint !== nextProps.sprint ||
       this.props.zoomedIn !== nextProps.zoomedIn ||
       this.props.uiTheme !== nextProps.uiTheme
     );
