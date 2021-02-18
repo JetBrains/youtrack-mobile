@@ -10,6 +10,7 @@ import {UNIT} from '../variables/variables';
 import Select from './select';
 
 import {mainText, secondaryText} from '../common-styles/typography';
+import ModalView from '../modal-view/modal-view';
 
 //$FlowFixMe
 export default class SelectSectioned extends Select {
@@ -44,7 +45,12 @@ export default class SelectSectioned extends Select {
   renderItems() {
     const {style, header = () => null} = this.props;
     return (
-      <View style={style}>
+      <ModalView
+        testID="selectSectioned"
+        visible={true}
+        animationType="slide"
+        style={style}
+      >
         <SectionList
           contentContainerStyle={styles.list}
 
@@ -67,7 +73,7 @@ export default class SelectSectioned extends Select {
 
           getItemLayout={Select.getItemLayout}
         />
-      </View>
+      </ModalView>
     );
   }
 }
@@ -90,5 +96,8 @@ const styles = EStyleSheet.create({
   },
   link: {
     color: '$link'
+  },
+  list: {
+    paddingBottom: UNIT * 4
   }
 });
