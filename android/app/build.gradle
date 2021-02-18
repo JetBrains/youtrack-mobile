@@ -113,11 +113,6 @@ def appVersion = envVersion != null ? envVersion : devVersion
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    packagingOptions {
-      pickFirst '**/libjsc.so'
-      pickFirst '**/libc++_shared.so'
-    }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -172,7 +167,6 @@ android {
 }
 
 dependencies {
-    implementation "org.webkit:android-jsc-intl:r241213"
     implementation 'com.facebook.fresco:fresco:1.+'
     implementation 'com.facebook.fresco:animated-gif:1.+'
     implementation project(':react-native-navigation-bar-color')
