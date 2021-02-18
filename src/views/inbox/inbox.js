@@ -34,7 +34,7 @@ import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {InboxState} from './inbox-reducers';
 import type {IssueComment} from '../../flow/CustomFields';
 import type {IssueOnList} from '../../flow/Issue';
-import type {Notification, Metadata, ChangeValue, ChangeEvent, Issue, IssueChange} from '../../flow/Inbox';
+import type {Notification, Metadata, ChangeValue, ChangeEvent, Issue, IssueChange, Reason} from '../../flow/Inbox';
 import type {Reaction} from '../../flow/Reaction';
 import type {Theme} from '../../flow/Theme';
 import type {User} from '../../flow/User';
@@ -382,21 +382,25 @@ class Inbox extends Component<Props, State> {
   }
 
   renderNotificationReason(metadata: Metadata) {
-    const _reasons = Object.keys(metadata.reason || []).reduce((reasons, key) => {
-      if (metadata.reason[key].length) {
-        return reasons.concat(
-          {
-            title: Inbox.notificationReasons[key] ? `${Inbox.notificationReasons[key]} ` : '',
-            value: metadata.reason[key].map((it: Object) => it.name).join(', ')
-          }
-        );
-      }
-      return reasons;
-    }, []);
+    const reasons: Array<Reason> = Object.keys(metadata.reason || []).reduce(
+      (list: Array<Reason>, key: string) => {
+        const names: Array<string> = (metadata.reason[key] || []).map((it: Reason) => it.name);
+        if (names.length) {
+          return list.concat(
+            {
+              title: Inbox.notificationReasons[key] ? `${Inbox.notificationReasons[key]} ` : '',
+              value: [...new Set(names)].join(', ')
+            }
+          );
+        }
+        return list;
+      },
+      []
+    );
 
-    if (_reasons?.length) {
-      const reasonsPresentation: string = _reasons.map(
-        (it) => it.title.trim() + it.value.trim()
+    if (reasons?.length > 0) {
+      const reasonsPresentation: string = reasons.map(
+        (it: Reason) => it.title.trim() + it.value.trim()
       ).filter(Boolean).join(', ');
 
       if (reasonsPresentation.length > 0) {
@@ -472,7 +476,7 @@ class Inbox extends Component<Props, State> {
         </View>
       </View>
     );
-  }
+  };
 
 
   renderIssueChange(metadata: Metadata, sender: User = {}) {
@@ -515,7 +519,7 @@ class Inbox extends Component<Props, State> {
 
     if (!loading && items.length === 0) {
       return (
-        <View style={[styles.listFooterMessage, { height: Dimensions.get('window').height * 0.5 }]}>
+        <View style={[styles.listFooterMessage, {height: Dimensions.get('window').height * 0.5}]}>
           <IconNothingFound style={styles.listFooterMessageIcon}/>
           <Text
             style={styles.listFooterMessageText}
