@@ -255,10 +255,11 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
         <View style={styles.commentContainer}>
           {!!onAddSpentTime && <View style={styles.actionsContainer}>
             <TouchableOpacity
+              style={styles.actionsContainerIcon}
+              hitSlop={HIT_SLOP}
               onPress={onAddSpentTime}
             >
               <IconHourGlass
-                style={styles.actionsContainerIcon}
                 fill={styles.actionsContainerIcon.color}
                 width={26}
                 height={26}
