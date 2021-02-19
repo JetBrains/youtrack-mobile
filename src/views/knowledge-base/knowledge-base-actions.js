@@ -94,6 +94,7 @@ const getArticleList = (reset: boolean = true) =>
         getProjectDataPromises(api, sortedProjects)
       );
       dispatch(setLoading(false));
+      dispatch(setError(error || null));
 
       if (error) {
         dispatch(setError(error));
