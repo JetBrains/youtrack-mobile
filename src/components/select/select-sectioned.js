@@ -5,12 +5,12 @@ import {SectionList, Text, View} from 'react-native';
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {UNIT} from '../variables/variables';
-
 import Select from './select';
 
-import {mainText, secondaryText} from '../common-styles/typography';
 import ModalView from '../modal-view/modal-view';
+import {isAndroidPlatform} from '../../util/util';
+import {mainText, secondaryText} from '../common-styles/typography';
+import {UNIT} from '../variables/variables';
 
 //$FlowFixMe
 export default class SelectSectioned extends Select {
@@ -44,13 +44,18 @@ export default class SelectSectioned extends Select {
 
   renderItems() {
     const {style, header = () => null} = this.props;
+    const isAndroid: boolean = isAndroidPlatform();
+    const Container = isAndroid ? View : ModalView;
+    const selectProps: Object = {
+      testID: 'selectSectioned',
+      style: style
+    };
+    if (!isAndroid) {
+      selectProps.visible = true;
+      selectProps.animationType='slide';
+    }
     return (
-      <ModalView
-        testID="selectSectioned"
-        visible={true}
-        animationType="slide"
-        style={style}
-      >
+      <Container {...selectProps}>
         <SectionList
           contentContainerStyle={styles.list}
 
@@ -73,7 +78,7 @@ export default class SelectSectioned extends Select {
 
           getItemLayout={Select.getItemLayout}
         />
-      </ModalView>
+      </Container>
     );
   }
 }
