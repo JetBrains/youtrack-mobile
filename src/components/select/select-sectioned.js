@@ -7,8 +7,6 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 
 import Select from './select';
 
-import ModalView from '../modal-view/modal-view';
-import {isAndroidPlatform} from '../../util/util';
 import {mainText, secondaryText} from '../common-styles/typography';
 import {UNIT} from '../variables/variables';
 
@@ -42,46 +40,35 @@ export default class SelectSectioned extends Select {
     this.setState({filteredItems});
   }
 
-  renderItems() {
-    const {style, header = () => null} = this.props;
-    const isAndroid: boolean = isAndroidPlatform();
-    const Container = isAndroid ? View : ModalView;
-    const selectProps: Object = {
-      testID: 'selectSectioned',
-      style: style
-    };
-    if (!isAndroid) {
-      selectProps.visible = true;
-      selectProps.animationType='slide';
-    }
+  renderItems(): any {
+    const {header = () => null} = this.props;
     return (
-      <Container {...selectProps}>
-        <SectionList
-          contentContainerStyle={styles.list}
+      <SectionList
+        contentContainerStyle={styles.list}
 
-          testID="selectItems"
-          keyboardShouldPersistTaps="handled"
-          keyboardDismissMode="on-drag"
+        testID="selectItems"
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
 
-          scrollEventThrottle={10}
+        scrollEventThrottle={10}
 
-          sections={this.state.filteredItems}
-          keyExtractor={(i: Object) => i.key || i.ringId || i.id}
+        sections={this.state.filteredItems}
+        keyExtractor={(item: Object) => item.key || item.ringId || item.id}
 
-          renderItem={this.renderItem}
-          renderSectionHeader={this.renderSectionHeader}
+        renderItem={this.renderItem}
+        renderSectionHeader={this.renderSectionHeader}
 
-          ListEmptyComponent={null}
-          ListHeaderComponent={header()}
+        ListEmptyComponent={null}
+        ListHeaderComponent={header()}
 
-          ItemSeparatorComponent={Select.renderSeparator}
+        ItemSeparatorComponent={Select.renderSeparator}
 
-          getItemLayout={Select.getItemLayout}
-        />
-      </Container>
+        getItemLayout={Select.getItemLayout}
+      />
     );
   }
 }
+
 
 const styles = EStyleSheet.create({
   sectionHeader: {
