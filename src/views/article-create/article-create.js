@@ -137,7 +137,9 @@ const ArticleCreate = (props: Props) => {
   const closeCreateArticleScreen = () => !isProcessing && Router.pop(true);
 
   const renderHeader = () => {
+    const draft: ArticleDraft = {...articleDraft, ...articleDraftData};
     const isSubmitDisabled: boolean = (
+      !draft.id ||
       isProcessing ||
       !articleDraftData.project.id ||
       articleDraftData.summary.length === 0
@@ -149,7 +151,6 @@ const ArticleCreate = (props: Props) => {
         title={props.isNew ? 'New Article' : 'Draft'}
         leftButton={<IconClose size={21} color={isProcessing ? uiThemeColors.$disabled : linkColor}/>}
         onBack={() => {
-          const draft: ArticleDraft = {...articleDraft, ...articleDraftData};
           if (draft.id) {
             if (!draft.project.id) {
               draft.project = null;
@@ -169,7 +170,7 @@ const ArticleCreate = (props: Props) => {
         onRightButtonClick={async () => {
           if (!isSubmitDisabled) {
             const createdArticle: ?Article = await dispatch(
-              articleCreateActions.publishArticleDraft({...articleDraft, ...articleDraftData})
+              articleCreateActions.publishArticleDraft(draft)
             );
             if (!error) {
               Router.KnowledgeBase(); //TODO: it's a hack. To prevent hanging after creating 2nd sub-article YTM-12655
