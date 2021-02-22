@@ -173,7 +173,7 @@ const ArticleCreate = (props: Props) => {
               articleCreateActions.publishArticleDraft(draft)
             );
             if (!error) {
-              Router.KnowledgeBase(); //TODO: it's a hack. To prevent hanging after creating 2nd sub-article YTM-12655
+              Router.KnowledgeBase({preventReload: true}); //TODO #YTM-12710. It fixes hanging after creating 2nd sub-article #YTM-12655
               Router.Article({articlePlaceholder: createdArticle});
             }
           }

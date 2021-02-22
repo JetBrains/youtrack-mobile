@@ -65,7 +65,7 @@ export class KnowledgeBase extends Component<Props, State> {
 
   listRef: ?Object;
   uiTheme: UITheme;
-  unsubscribe: Function;
+  unsubscribe: Function = () => null;
 
   constructor(props: Props) {
     super(props);
@@ -82,7 +82,7 @@ export class KnowledgeBase extends Component<Props, State> {
 
   async componentDidMount() {
     this.unsubscribe = Router.setOnDispatchCallback((routeName: string, prevRouteName: string) => {
-      if (routeName === routeMap.KnowledgeBase && (
+      if (!this.props.preventReload && routeName === routeMap.KnowledgeBase && (
         prevRouteName === routeMap.Article ||
         prevRouteName === routeMap.ArticleCreate ||
         prevRouteName === routeMap.Page
