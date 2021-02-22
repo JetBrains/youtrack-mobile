@@ -283,7 +283,7 @@ const ArticleCreate = (props: Props) => {
               testID="createIssueSummary"
               summary={articleDraftData.summary}
               description={articleDraftData.content}
-              editable={!isProcessing && !!articleDraft}
+              editable={!!articleDraft}
               onSummaryChange={(summary: string) => updateDraft({summary})}
               onDescriptionChange={(content: string) => updateDraft({content})}
               uiTheme={theme.uiTheme}
