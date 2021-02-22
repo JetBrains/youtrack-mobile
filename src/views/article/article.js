@@ -17,7 +17,6 @@ import Header from '../../components/header/header';
 import IssueTabbed from '../../components/issue-tabbed/issue-tabbed';
 import PropTypes from 'prop-types';
 import Router from '../../components/router/router';
-import Star from '../../components/star/star';
 import VisibilityControl from '../../components/visibility/visibility-control';
 import {ANALYTICS_ARTICLE_PAGE} from '../../components/analytics/analytics-ids';
 import {createArticleList} from '../knowledge-base/knowledge-base-actions';
@@ -278,15 +277,9 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
         () => this.renderBreadCrumbs({
           styles: styles.breadCrumbsCompact,
           excludeProject: true
-        })
-      ),
-      extraButton: (
-        isArticleLoaded ? <Star
-          canStar={issuePermissions.canStar()}
-          hasStar={articleData.hasStar}
-          onStarToggle={this.props.toggleFavorite}
-          uiTheme={this.uiTheme}
-        /> : null
+        }),
+        issuePermissions.canStar(),
+        articleData.hasStar
       )
     };
 

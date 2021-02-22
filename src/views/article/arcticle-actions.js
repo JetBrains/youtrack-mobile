@@ -84,7 +84,9 @@ const showArticleActions = (
   actionSheet: ActionSheet,
   canUpdate: boolean,
   canDelete: boolean,
-  renderBreadCrumbs: Function
+  renderBreadCrumbs: Function,
+  canStar: boolean,
+  hasStar: boolean
 ) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
@@ -112,6 +114,25 @@ const showArticleActions = (
         }
       }
     ];
+
+    if (canStar) {
+      const title: string = hasStar ? 'Unsubscribe from updates' : 'Subscribe for updates';
+      actions.push({
+        title: title,
+        execute: async () => {
+          logEvent({
+            message: `Article: ${title}`,
+            analyticsId: ANALYTICS_ARTICLE_PAGE
+          });
+          notify(
+            hasStar
+              ? 'You\'ve been unsubscribed from updates'
+              : 'You\'ve been subscribed for updates'
+          );
+          dispatch(toggleFavorite());
+        }
+      });
+    }
 
     if (canUpdate) {
       actions.push({
