@@ -81,14 +81,6 @@ export default class UserAPI extends ApiBase {
     );
   }
 
-  async updateLastVisitedArticle(articleId: string | null): Promise<User> {
-    return await this.makeAuthorizedRequest(
-      `${this.adminApiUrl}/me/profiles/articles?${ApiBase.createFieldsQuery(['lastVisitedArticle(id)'])}`,
-      'POST',
-      {lastVisitedArticle: articleId ? {id: articleId} : null}
-    );
-  }
-
   async updateUserGeneralProfile(generalProfile: UserGeneralProfile, userId: string = 'me'): Promise<User> {
     const queryString = ApiBase.createFieldsQuery({searchContext: this.SEARCH_CONTEXT_FIELDS});
 

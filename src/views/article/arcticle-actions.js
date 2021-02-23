@@ -21,7 +21,7 @@ import {
   setPrevArticle,
   setProcessing,
 } from './article-reducers';
-import {cacheUserLastVisitedArticle, saveUserLastVisitedArticle} from '../../actions/app-actions';
+import {cacheUserLastVisitedArticle} from '../../actions/app-actions';
 import {showActions, showActionSheet} from '../../components/action-sheet/action-sheet';
 
 import type ActionSheet, {ActionSheetOptions} from '@expo/react-native-action-sheet';
@@ -75,7 +75,6 @@ const loadArticle = (articleId: string, reset: boolean = true) => {
       logEvent({message: 'Article loaded'});
       dispatch(setArticle(article));
 
-      dispatch(saveUserLastVisitedArticle(articleId));
       cacheUserLastVisitedArticle(article);
     }
   };

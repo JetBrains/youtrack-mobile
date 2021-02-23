@@ -30,7 +30,7 @@ import {
   storeAccounts
 } from '../components/storage/storage';
 import {hasType} from '../components/api/api__resource-types';
-import {isIOSPlatform, until} from '../util/util';
+import {isIOSPlatform} from '../util/util';
 import {isUnsupportedFeatureError} from '../components/error/error-resolver';
 import {loadConfig} from '../components/config/config';
 import {logEvent} from '../components/log/log-helper';
@@ -41,7 +41,6 @@ import {storeSearchContext} from '../views/issues/issues-actions';
 import type RootState from '../reducers/app-reducer';
 import type {Activity} from '../flow/Activity';
 import type {AppConfigFilled, EndUserAgreement} from '../flow/AppConfig';
-import type {AppState} from '../reducers';
 import type {Article} from '../flow/Article';
 import type {AuthParams} from '../flow/Auth';
 import type {Folder, User, UserAppearanceProfile, UserArticlesProfile, UserGeneralProfile} from '../flow/User';
@@ -140,21 +139,6 @@ export const updateUserArticlesProfile = (articlesProfile: UserArticlesProfile) 
 
 export const resetUserArticlesProfile = () => async (dispatch: (any) => any) => {
   dispatch(updateUserArticlesProfile({lastVisitedArticle: null}));
-};
-
-export const saveUserLastVisitedArticle = (articleId: string | null) => {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
-    const api: Api = getApi();
-    const [error, articlesProfile] = await until(api.user.updateLastVisitedArticle(articleId));
-    if (error) {
-      logEvent({
-        message: 'Failed to update last visited article in a user profile',
-        isError: true
-      });
-    } else {
-      dispatch(updateUserArticlesProfile(articlesProfile));
-    }
-  };
 };
 
 export const cacheUserLastVisitedArticle = (article: Article | null, activities?: Array<Activity>) => {

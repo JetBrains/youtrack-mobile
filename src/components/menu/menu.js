@@ -7,6 +7,7 @@ import {connect} from 'react-redux';
 import Feature, {FEATURE_VERSION} from '../feature/feature';
 import Router from '../router/router';
 import {DEFAULT_THEME} from '../theme/theme';
+import {getStorageState} from '../storage/storage';
 import {IconBell, IconBoard, IconSettings, IconTask, IconKnowledgeBase} from '../icon/icon';
 import {MenuItem} from './menu__item';
 import {routeMap} from '../../app-routes';
@@ -143,8 +144,10 @@ class Menu extends Component<Props, State> {
       this.state.currentRouteName !== routeMap.Article
     );
     if (this.canNavigateTo(routeMap.KnowledgeBase)) {
-      if (this.props.lastVisitedArticle && isNotArticleView) {
-        Router.ArticleSingle({articlePlaceholder: this.props.lastVisitedArticle});
+      const articleLastVisited = getStorageState().articleLastVisited;
+      const article: ?Article = articleLastVisited && articleLastVisited.article;
+      if (article && isNotArticleView) {
+        Router.ArticleSingle({articlePlaceholder: article});
       } else {
         Router.KnowledgeBase();
       }
@@ -223,8 +226,7 @@ class Menu extends Component<Props, State> {
 const mapStateToProps = (state) => {
   return {
     isVisible: state.app.auth && state.app.user,
-    isDisabled: state.app.isChangingAccount,
-    lastVisitedArticle: state.app?.user?.profiles?.articles?.lastVisitedArticle
+    isDisabled: state.app.isChangingAccount
   };
 };
 
