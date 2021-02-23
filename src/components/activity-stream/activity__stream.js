@@ -28,7 +28,7 @@ import {getTextValueChange} from '../activity/activity__history-value';
 import {firstActivityChange, getActivityEventTitle} from './activity__stream-helper';
 import {IconDrag, IconHistory, IconMoreOptions, IconWork} from '../icon/icon';
 import {isActivityCategory} from '../activity/activity__category';
-import {isIOSPlatform, uuid} from '../../util/util';
+import {guid, isIOSPlatform} from '../../util/util';
 import {SkeletonIssueActivities} from '../skeleton/skeleton';
 
 import {HIT_SLOP} from '../common-styles/button';
@@ -398,7 +398,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
           }
 
           return (
-            <View key={uuid()}>
+            <View key={activityGroup.timestamp ? `${activityGroup.timestamp}_${index}` : guid()}>
               {index > 0 && !activityGroup.merged && <View style={styles.activitySeparator}/>}
 
               <View style={[

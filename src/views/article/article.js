@@ -69,9 +69,10 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
       this.props.setPreviousArticle();
     }
 
+    this.props.loadArticleFromCache();
     const currentArticle: Article = this.getArticle();
     if (currentArticle && (currentArticle.id || currentArticle.idReadable)) {
-      this.loadArticle(currentArticle.id || currentArticle.idReadable, true);
+      this.loadArticle(currentArticle.id || currentArticle.idReadable, false);
 
       this.unsubscribe = Router.setOnDispatchCallback((routeName: string, prevRouteName: string) => {
         if (routeName === routeMap.ArticleSingle && prevRouteName === routeMap.ArticleCreate) {
@@ -102,9 +103,9 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     return <ErrorMessage error={error}/>;
   };
 
-  renderRefreshControl = (onRefresh: Function = this.refresh) => {
+  renderRefreshControl = (onRefresh: Function = this.refresh, showActivityIndicator: boolean = true) => {
     return <RefreshControl
-      refreshing={false}
+      refreshing={showActivityIndicator && this.props.isLoading}
       tintColor={this.uiTheme.colors.$link}
       onRefresh={onRefresh}
     />;
@@ -187,7 +188,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
         )}
 
         <ArticleDetails
-          article={article || articlePlaceholder}
+          article={articleData}
           onRemoveAttach={
             issuePermissions.canUpdateArticle(article)
               ? (attachment: Attachment) => deleteAttachment(attachment.id)

@@ -12,7 +12,7 @@ import ArticleEditComment from './article__activity-edit-comment';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import Router from '../../components/router/router';
 import {createActivityModel} from '../../components/activity/activity-helper';
-import {loadActivitiesPage, showArticleCommentActions} from './arcticle-actions';
+import {loadActivitiesPage, loadCachedActivitiesPage, showArticleCommentActions} from './arcticle-actions';
 
 import styles from './article.styles';
 
@@ -25,7 +25,7 @@ import type {User, UserAppearanceProfile} from '../../flow/User';
 type Props = {
   article: Article,
   issuePermissions: IssuePermissions,
-  renderRefreshControl: (Function) => React$Element<any>,
+  renderRefreshControl: (onRefresh: Function, showActivityIndicator: boolean) => React$Element<any>,
   uiTheme: UITheme
 };
 
@@ -41,11 +41,14 @@ const ArticleActivities = (props: Props) => {
   const user: User = useSelector(store => store.app.user);
   const loadActivities: Function = (reset: boolean) => {
     if (article?.idReadable) {
+      dispatch(loadCachedActivitiesPage());
       dispatch(loadActivitiesPage(reset));
     }
   };
 
-  useEffect(loadActivities, []);
+  useEffect(() => {
+    loadActivities(false);
+  }, []);
 
   useEffect(() => {
     if (activityPage) {
@@ -86,7 +89,7 @@ const ArticleActivities = (props: Props) => {
   return (
     <>
       <ScrollView
-        refreshControl={renderRefreshControl(() => loadActivities(false))}
+        refreshControl={renderRefreshControl(() => loadActivities(false), !activities)}
         contentContainerStyle={styles.articleActivities}
       >
         <ArticleActivityStream

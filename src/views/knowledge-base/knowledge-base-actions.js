@@ -15,7 +15,7 @@ import {hasType} from '../../components/api/api__resource-types';
 import {logEvent} from '../../components/log/log-helper';
 import {notify} from '../../components/notification/notification';
 import {setArticles, setError, setExpandingProjectId, setList, setLoading} from './knowledge-base-reducers';
-import {cacheProjects, setUserLastVisitedArticle} from '../../actions/app-actions';
+import {cacheProjects, cacheUserLastVisitedArticle, saveUserLastVisitedArticle} from '../../actions/app-actions';
 import {showActions} from '../../components/action-sheet/action-sheet';
 import {sortByUpdatedReverse} from '../../components/search/sorting';
 import {until} from '../../util/util';
@@ -55,6 +55,11 @@ export const getPinnedProjects = async (api: Api): Promise<Array<Folder>> => {
   }
 };
 
+const clearUserLastVisitedArticle = () => async (dispatch: (any) => any) => {
+  dispatch(saveUserLastVisitedArticle(null));
+  cacheUserLastVisitedArticle(null);
+};
+
 const loadArticleList = (reset: boolean = true) => async (dispatch: (any) => any) => {
   const query: string | null = getArticlesQuery();
   if (query) {
@@ -74,7 +79,7 @@ const getArticleList = (reset: boolean = true) =>
     });
 
     setError(null);
-    dispatch(setUserLastVisitedArticle(null));
+    dispatch(clearUserLastVisitedArticle());
 
     if (reset) {
       dispatch(setLoading(true));
@@ -139,7 +144,7 @@ const filterArticles = (query: string | null) =>
     }
 
     setError(null);
-    dispatch(setUserLastVisitedArticle(null));
+    dispatch(clearUserLastVisitedArticle());
     dispatch(setLoading(true));
 
     const [error, articles]: [?CustomError, Array<Article>] = await until(

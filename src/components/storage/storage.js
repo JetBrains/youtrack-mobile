@@ -6,6 +6,7 @@ import log from '../log/log';
 import {notify} from '../notification/notification';
 import {routeMap} from '../../app-routes';
 
+import type {Activity} from '../../flow/Activity';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {Article, ArticlesList} from '../../flow/Article';
 import type {AuthParams} from '../../flow/Auth';
@@ -23,6 +24,7 @@ export type StorageState = {|
   articles: ?Array<Article>,
   articlesList: ArticlesList,
   articlesQuery: string | null,
+  articleLastVisited: {article?: Article, activities?: Array<Activity>} | null,
   projectId: ?string,
   projects: Array<?string>,
   draftId: ?string,
@@ -54,6 +56,7 @@ const storageKeys: StorageStateKeys = {
   articles: 'YT_ARTICLES',
   articlesList: 'YT_ARTICLES_LIST',
   articlesQuery: 'YT_ARTICLES_QUERY',
+  articleLastVisited: 'YT_ARTICLE_LAST_VISITED',
   projectId: 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE',
   projects: 'YT_PROJECTS_STORAGE',
   draftId: 'DRAFT_ID_STORAGE_KEY',
@@ -87,6 +90,7 @@ export const initialState: StorageState = Object.freeze({
   articles: null,
   articlesList: null,
   articlesQuery: null,
+  articleLastVisited: null,
   projectId: null,
   projects: [],
   draftId: null,
@@ -146,6 +150,7 @@ export async function clearCachesAndDrafts() {
     storageKeys.articles,
     storageKeys.articlesList,
     storageKeys.articlesQuery,
+    storageKeys.articleLastVisited,
     storageKeys.projectId,
     storageKeys.draftId,
     storageKeys.query,

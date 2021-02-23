@@ -39,8 +39,10 @@ import {setApi} from '../components/api/api__instance';
 import {storeSearchContext} from '../views/issues/issues-actions';
 
 import type RootState from '../reducers/app-reducer';
+import type {Activity} from '../flow/Activity';
 import type {AppConfigFilled, EndUserAgreement} from '../flow/AppConfig';
 import type {AppState} from '../reducers';
+import type {Article} from '../flow/Article';
 import type {AuthParams} from '../flow/Auth';
 import type {Folder, User, UserAppearanceProfile, UserGeneralProfile} from '../flow/User';
 import type {NotificationRouteData} from '../flow/Notification';
@@ -128,7 +130,7 @@ export function updateUserGeneralProfile(userGeneralProfile: UserGeneralProfile)
   };
 }
 
-export const setUserLastVisitedArticle = (articleId: string | null) => {
+export const saveUserLastVisitedArticle = (articleId: string | null) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const api: Api = getApi();
     const [error, articlesProfile] = await until(api.user.updateLastVisitedArticle(articleId));
@@ -144,6 +146,30 @@ export const setUserLastVisitedArticle = (articleId: string | null) => {
       });
     }
   };
+};
+
+export const cacheUserLastVisitedArticle = (article: Article | null, activities?: Array<Activity>) => {
+  try {
+    if (!article || !article.id) {
+      flushStoragePart({articleLastVisited: null});
+    } else {
+      const articleLastVisited: {
+        article?: Article,
+        activities?: Array<Activity>
+      } | null = getStorageState().articleLastVisited;
+
+      flushStoragePart({
+        articleLastVisited: {
+          ...{article},
+          activities: activities || (
+            articleLastVisited?.article?.id === article.id ? articleLastVisited?.activities : null
+          )
+        }
+      });
+    }
+  } catch (e) {
+    logEvent({message: 'Failed to store locally the last visited article', isError: true});
+  }
 };
 
 export function checkAuthorization() {

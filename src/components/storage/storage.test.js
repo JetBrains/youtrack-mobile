@@ -49,6 +49,7 @@ describe('Storage', () => {
       'YT_ARTICLES',
       'YT_ARTICLES_LIST',
       'YT_ARTICLES_QUERY',
+      'YT_ARTICLE_LAST_VISITED',
       'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE',
       'YT_PROJECTS_STORAGE',
       'DRAFT_ID_STORAGE_KEY',

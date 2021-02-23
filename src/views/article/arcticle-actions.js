@@ -5,6 +5,7 @@ import {Alert, Clipboard, Share} from 'react-native';
 
 import Router from '../../components/router/router';
 import {confirmDeleteArticle} from './arcticle-helper';
+import {getStorageState} from '../../components/storage/storage';
 import {getApi} from '../../components/api/api__instance';
 import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
 import {hasType} from '../../components/api/api__resource-types';
@@ -20,11 +21,12 @@ import {
   setPrevArticle,
   setProcessing,
 } from './article-reducers';
-import {setUserLastVisitedArticle} from '../../actions/app-actions';
+import {cacheUserLastVisitedArticle, saveUserLastVisitedArticle} from '../../actions/app-actions';
 import {showActions, showActionSheet} from '../../components/action-sheet/action-sheet';
 
 import type ActionSheet, {ActionSheetOptions} from '@expo/react-native-action-sheet';
 import type Api from '../../components/api/api';
+import type {Activity} from '../../flow/Activity';
 import type {AppState} from '../../reducers';
 import type {Article, ArticleDraft} from '../../flow/Article';
 import type {ArticleState} from './article-reducers';
@@ -34,14 +36,26 @@ import type {ShowActionSheetWithOptions} from '../../components/action-sheet/act
 type ApiGetter = () => Api;
 
 
+const loadArticleFromCache = () => {
+  return async (dispatch: (any) => any) => {
+    const cachedArticleLastVisited: {
+      article?: Article,
+      activities?: Array<Activity>
+    } | null = getStorageState().articleLastVisited;
+    if (cachedArticleLastVisited && cachedArticleLastVisited.article) {
+      dispatch(setArticle(cachedArticleLastVisited.article));
+    }
+  };
+};
+
 const loadArticle = (articleId: string, reset: boolean = true) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
 
     logEvent({message: 'Loading article'});
 
+    dispatch(setLoading(true));
     if (reset) {
-      dispatch(setLoading(true));
       dispatch(setArticle(null));
     }
     const [error, article] = await until(api.articles.getArticle(articleId));
@@ -53,7 +67,21 @@ const loadArticle = (articleId: string, reset: boolean = true) => {
     } else {
       logEvent({message: 'Article loaded'});
       dispatch(setArticle(article));
-      dispatch(setUserLastVisitedArticle(articleId));
+
+      dispatch(saveUserLastVisitedArticle(articleId));
+      cacheUserLastVisitedArticle(article);
+    }
+  };
+};
+
+const loadCachedActivitiesPage = () => {
+  return async (dispatch: (any) => any) => {
+    const cachedArticleLastVisited: {
+      article?: Article,
+      activities?: Array<Activity>
+    } | null = getStorageState().articleLastVisited;
+    if (cachedArticleLastVisited && cachedArticleLastVisited.activities) {
+      dispatch(setActivityPage(cachedArticleLastVisited.activities));
     }
   };
 };
@@ -63,9 +91,9 @@ const loadActivitiesPage = (reset: boolean = true) => {
     const api: Api = getApi();
     const {article}: Article = getState().article;
 
+    dispatch(setLoading(true));
     if (reset) {
       dispatch(setActivityPage(null));
-      dispatch(setLoading(true));
     }
     const [error, activityPage] = await until(api.articles.getActivitiesPage(article.id));
     dispatch(setLoading(false));
@@ -75,6 +103,7 @@ const loadActivitiesPage = (reset: boolean = true) => {
       logEvent({message: 'Failed to load articles activities', isError: true});
     } else {
       dispatch(setActivityPage(activityPage.activities));
+      cacheUserLastVisitedArticle(article, activityPage.activities);
       logEvent({message: 'Articles activity page loaded'});
     }
   };
@@ -502,6 +531,8 @@ export {
   createSubArticle,
   loadArticle,
   loadActivitiesPage,
+  loadCachedActivitiesPage,
+  loadArticleFromCache,
   showArticleActions,
   setPreviousArticle,
   deleteArticle,
