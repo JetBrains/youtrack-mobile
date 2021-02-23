@@ -44,7 +44,7 @@ import type {AppConfigFilled, EndUserAgreement} from '../flow/AppConfig';
 import type {AppState} from '../reducers';
 import type {Article} from '../flow/Article';
 import type {AuthParams} from '../flow/Auth';
-import type {Folder, User, UserAppearanceProfile, UserGeneralProfile} from '../flow/User';
+import type {Folder, User, UserAppearanceProfile, UserArticlesProfile, UserGeneralProfile} from '../flow/User';
 import type {NotificationRouteData} from '../flow/Notification';
 import type {PermissionCacheItem} from '../flow/Permission';
 import type {StorageState} from '../components/storage/storage';
@@ -130,6 +130,14 @@ export function updateUserGeneralProfile(userGeneralProfile: UserGeneralProfile)
   };
 }
 
+export const updateUserArticlesProfile = (articlesProfile: UserArticlesProfile) =>
+  async (dispatch: (any) => any) => {
+    dispatch({
+      type: types.RECEIVE_USER_ARTICLES_PROFILE,
+      ...{articles: articlesProfile}
+    });
+  };
+
 export const saveUserLastVisitedArticle = (articleId: string | null) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const api: Api = getApi();
@@ -140,10 +148,7 @@ export const saveUserLastVisitedArticle = (articleId: string | null) => {
         isError: true
       });
     } else {
-      dispatch({
-        type: types.RECEIVE_USER_ARTICLES_PROFILE,
-        ...{articles: articlesProfile}
-      });
+      dispatch(updateUserArticlesProfile(articlesProfile));
     }
   };
 };
@@ -293,6 +298,8 @@ export function addAccount(serverUrl: string = '') {
 
 export function switchAccount(account: StorageState, dropCurrentAccount: boolean = false, issueId?: string) {
   return async (dispatch: (any) => any) => {
+    dispatch(updateUserArticlesProfile({lastVisitedArticle: null}));
+    cacheUserLastVisitedArticle(null);
     try {
       await dispatch(changeAccount(account, dropCurrentAccount, issueId));
     } catch (e) {
