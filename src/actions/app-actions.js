@@ -138,6 +138,10 @@ export const updateUserArticlesProfile = (articlesProfile: UserArticlesProfile) 
     });
   };
 
+export const resetUserArticlesProfile = () => async (dispatch: (any) => any) => {
+  dispatch(updateUserArticlesProfile({lastVisitedArticle: null}));
+};
+
 export const saveUserLastVisitedArticle = (articleId: string | null) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const api: Api = getApi();
@@ -298,7 +302,7 @@ export function addAccount(serverUrl: string = '') {
 
 export function switchAccount(account: StorageState, dropCurrentAccount: boolean = false, issueId?: string) {
   return async (dispatch: (any) => any) => {
-    dispatch(updateUserArticlesProfile({lastVisitedArticle: null}));
+    dispatch(resetUserArticlesProfile());
     cacheUserLastVisitedArticle(null);
     try {
       await dispatch(changeAccount(account, dropCurrentAccount, issueId));

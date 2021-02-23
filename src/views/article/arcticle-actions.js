@@ -36,13 +36,20 @@ import type {ShowActionSheetWithOptions} from '../../components/action-sheet/act
 type ApiGetter = () => Api;
 
 
-const loadArticleFromCache = () => {
+const clearArticle = () => async (dispatch: (any) => any) => dispatch(setArticle(null));
+
+const loadArticleFromCache = (article: Article) => {
   return async (dispatch: (any) => any) => {
     const cachedArticleLastVisited: {
       article?: Article,
       activities?: Array<Activity>
     } | null = getStorageState().articleLastVisited;
-    if (cachedArticleLastVisited && cachedArticleLastVisited.article) {
+    if (!cachedArticleLastVisited || !cachedArticleLastVisited.article || !article) {
+      return;
+    }
+    if (article?.id === cachedArticleLastVisited.article?.id ||
+      article?.idReadable === cachedArticleLastVisited.article?.idReadable
+    ) {
       dispatch(setArticle(cachedArticleLastVisited.article));
     }
   };
@@ -528,6 +535,7 @@ const createSubArticle = (renderBreadCrumbs: Function) => {
 };
 
 export {
+  clearArticle,
   createSubArticle,
   loadArticle,
   loadActivitiesPage,

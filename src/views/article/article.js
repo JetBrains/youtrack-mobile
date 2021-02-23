@@ -59,7 +59,10 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
   uiTheme: UITheme;
   unsubscribe: Function;
 
-  componentWillUnmount = () => this.unsubscribe && this.unsubscribe()
+  componentWillUnmount = () => {
+    this.unsubscribe && this.unsubscribe();
+    this.props.clearArticle();
+  }
 
   componentDidMount() {
     logEvent({message: 'Navigate to article', analyticsId: ANALYTICS_ARTICLE_PAGE});
@@ -69,9 +72,9 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
       this.props.setPreviousArticle();
     }
 
-    this.props.loadArticleFromCache();
     const currentArticle: Article = this.getArticle();
     if (currentArticle && (currentArticle.id || currentArticle.idReadable)) {
+      this.props.loadArticleFromCache(currentArticle);
       this.loadArticle(currentArticle.id || currentArticle.idReadable, false);
 
       this.unsubscribe = Router.setOnDispatchCallback((routeName: string, prevRouteName: string) => {
@@ -161,7 +164,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
       <ScrollView
         testID="articleDetails"
         contentContainerStyle={styles.articleDetails}
-        refreshControl={this.renderRefreshControl()}
+        refreshControl={this.renderRefreshControl(this.refresh, !!articleData?.content)}
       >
         {breadCrumbsElement}
         {!!articleData && (
