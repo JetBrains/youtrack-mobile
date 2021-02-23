@@ -91,6 +91,7 @@ export class KnowledgeBase extends Component<Props, State> {
       }
     });
 
+    this.props.clearUserLastVisitedArticle();
     this.props.loadCachedArticleList();
     if (!this.props.preventReload) {
       await this.loadArticlesList();

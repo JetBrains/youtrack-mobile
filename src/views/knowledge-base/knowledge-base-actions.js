@@ -66,8 +66,6 @@ const clearUserLastVisitedArticle = () => async (dispatch: (any) => any) => {
 
 const loadArticleList = (reset: boolean = true) => async (dispatch: (any) => any) => {
   const query: string | null = getArticlesQuery();
-  dispatch(clearUserLastVisitedArticle());
-
   if (query) {
     dispatch(filterArticles(query));
   } else {
@@ -377,6 +375,7 @@ const toggleAllProjects = (collapse: boolean = true) =>
   };
 
 export type KnowledgeBaseActions = {
+  clearUserLastVisitedArticle: typeof clearUserLastVisitedArticle,
   updateProjectsFavorites: typeof updateProjectsFavorites,
   createList: typeof createArticleList,
   filterArticles: typeof filterArticles,
@@ -393,6 +392,7 @@ export type KnowledgeBaseActions = {
 };
 
 export {
+  clearUserLastVisitedArticle,
   updateProjectsFavorites,
   createArticleList,
   filterArticles,
