@@ -3,10 +3,10 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, FlatList} from 'react-native';
 
+import ArticleContent from './article__details-content';
 import ArticleWithChildren from '../../components/articles/article-item-with-children';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import Header from '../../components/header/header';
-import MarkdownView from '../../components/wiki/markdown-view';
 import Router from '../../components/router/router';
 import Select from '../../components/select/select';
 import Separator from '../../components/separator/separator';
@@ -137,20 +137,13 @@ const ArticleDetails = (props: Props) => {
 
       {renderSubArticlesButton()}
 
-      {!!article?.content && (
-        <View style={styles.description}>
-          <MarkdownView
-            attachments={article.attachments}
-            mentions={{
-              articles: article.mentionedArticles,
-              issues: article.mentionedIssues
-            }}
-            uiTheme={uiTheme}
-          >
-            {article.content}
-          </MarkdownView>
-        </View>
-      )}
+      <ArticleContent
+        attachments={article?.attachments}
+        mentionedArticles={article?.mentionedArticles}
+        mentionedIssues={article?.mentionedIssues}
+        uiTheme={uiTheme}
+        articleContent={article?.content}
+      />
 
       {article?.attachments?.length > 0 && (
         <>
@@ -177,4 +170,4 @@ const ArticleDetails = (props: Props) => {
   );
 };
 
-export default ArticleDetails;
+export default React.memo<Props>(ArticleDetails);
