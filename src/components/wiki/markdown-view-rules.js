@@ -20,6 +20,7 @@ import type {Article} from '../../flow/Article';
 import type {Attachment, ImageDimensions, IssueProject} from '../../flow/CustomFields';
 import type {Folder} from '../../flow/User';
 import type {IssueFull} from '../../flow/Issue';
+import type {MarkdownNode} from '../../flow/Markdown';
 import type {UITheme} from '../../flow/Theme';
 
 export type Mentions = {
@@ -32,20 +33,13 @@ type TextData = {
   type: null | number | typeof ResourceTypes.ARTICLE | typeof ResourceTypes.ISSUE
 };
 
-type MarkdownNode = {
-  attributes: Object,
-  content: string,
-  key: string,
-  sourceInfo: string,
-};
-
 
 function getMarkdownRules(
   attachments: Array<Attachment> = [],
   projects: Array<IssueProject> = [],
   uiTheme: UITheme,
   mentions?: Mentions
-) {
+): Object {
 
   const imageHeaders = getApi().auth.getAuthorizationHeaders();
   const projectIds = (projects).map((it: Folder) => it?.shortName).join('|');
