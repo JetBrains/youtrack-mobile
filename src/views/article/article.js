@@ -61,14 +61,15 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
 
   componentWillUnmount = () => {
     this.unsubscribe && this.unsubscribe();
-    this.props.clearArticle();
+    if (!this.props.storePrevArticle) {
+      this.props.clearArticle();
+    }
   }
 
   componentDidMount() {
     logEvent({message: 'Navigate to article', analyticsId: ANALYTICS_ARTICLE_PAGE});
 
-    const {storePrevArticle} = this.props;
-    if (storePrevArticle) {
+    if (this.props.storePrevArticle) {
       this.props.setPreviousArticle();
     }
 
