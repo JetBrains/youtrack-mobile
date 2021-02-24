@@ -2,14 +2,15 @@
 
 import React from 'react';
 
-import Markdown, {MarkdownIt} from 'react-native-markdown-display';
-import getMarkdownRules from './markdown-view-rules';
-import markdownStyles from './markdown-view-styles';
+import Markdown from 'react-native-markdown-display';
 
 import apiHelper from '../api/api__helper';
+import getMarkdownRules from './markdown-view-rules';
+import MarkdownItInstance from './markdown-instance';
+import markdownStyles from './markdown-view-styles';
 import {getApi} from '../api/api__instance';
-import {hasType} from '../api/api__resource-types';
 import {getStorageState} from '../storage/storage';
+import {hasType} from '../api/api__resource-types';
 
 import type {Attachment} from '../../flow/CustomFields';
 import type {Folder} from '../../flow/User';
@@ -26,9 +27,6 @@ type Props = {
   uiTheme: UITheme
 };
 
-const markdownItInstance: MarkdownIt = MarkdownIt({typographer: true, breaks: true, linkify: true});
-markdownItInstance.linkify.set({fuzzyEmail: false, fuzzyLink: true});
-
 function MarkdownView(props: Props) {
   const {children, attachments = [], uiTheme, mentions} = props;
   const projects = (getStorageState().projects || []).map((it: Folder) => hasType.project(it) && it);
@@ -38,7 +36,7 @@ function MarkdownView(props: Props) {
   return (
     <Markdown
       style={markdownStyles(uiTheme)}
-      markdownit={markdownItInstance}
+      markdownit={MarkdownItInstance}
       rules={getMarkdownRules(attaches, projects, uiTheme, mentions)}
       ui
     >
