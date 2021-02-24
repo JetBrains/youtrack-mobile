@@ -3,7 +3,7 @@
 import React from 'react';
 import {View} from 'react-native';
 
-import MarkdownView from '../../components/wiki/markdown-view';
+import MarkdownViewChunks from '../../components/wiki/markdown-view-chunks';
 
 import styles from './article.styles';
 
@@ -17,30 +17,31 @@ type Props = {
   mentionedArticles: Array<Article>,
   mentionedIssues: Array<IssueOnList>,
   uiTheme: UITheme,
-  articleContent: string
+  articleContent: string,
+  scrollData: Object
 };
 
 const ArticleContent = (props: Props) => {
-
-  const {articleContent, attachments, mentionedArticles, mentionedIssues, uiTheme} = props;
+  const {articleContent, attachments, mentionedArticles, mentionedIssues, scrollData, uiTheme} = props;
 
   if (!articleContent) {
     return null;
   }
+
   return (
     <View style={styles.description}>
-      <MarkdownView
+      <MarkdownViewChunks
+        scrollData={scrollData}
         attachments={attachments}
-        mentions={{
-          articles: mentionedArticles,
-          issues: mentionedIssues
-        }}
+        mentionedArticles={mentionedArticles}
+        mentionedIssues={mentionedIssues}
         uiTheme={uiTheme}
       >
         {articleContent}
-      </MarkdownView>
+      </MarkdownViewChunks>
     </View>
   );
+
 };
 
 export default React.memo<Props>(ArticleContent);

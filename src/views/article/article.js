@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import {RefreshControl, View, ScrollView} from 'react-native';
+import {RefreshControl, View, FlatList} from 'react-native';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -133,23 +133,16 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     );
   };
 
-  renderDetails = (uiTheme: UITheme) => {
+  createArticleDetails = (articleData: Article, scrollData: Object) => {
     const {
       article,
       articlesList,
-      articlePlaceholder,
       error,
       isLoading,
       deleteAttachment,
       issuePermissions,
       createSubArticle,
     } = this.props;
-
-    if (error) {
-      return this.renderError(error);
-    }
-
-    const articleData: ArticleEntity = article || articlePlaceholder;
     const breadCrumbsElement = article ? this.renderBreadCrumbs() : null;
 
     const articleNode: ?ArticleNode = articleData?.project && findArticleNode(
@@ -159,13 +152,8 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     if (articleData?.visibility) {
       visibility = {...articleNode?.data?.visibility, ...articleData?.visibility};
     }
-
     return (
-      <ScrollView
-        testID="articleDetails"
-        contentContainerStyle={styles.articleDetails}
-        refreshControl={this.renderRefreshControl(this.refresh, !!articleData?.content)}
-      >
+      <View style={styles.articleDetails}>
         {breadCrumbsElement}
         {!!articleData && (
           <>
@@ -191,6 +179,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
         )}
 
         <ArticleDetails
+          scrollData={scrollData}
           article={articleData}
           onRemoveAttach={
             issuePermissions.canUpdateArticle(article)
@@ -212,9 +201,33 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
           }
           error={error}
           isLoading={isLoading}
-          uiTheme={uiTheme}
+          uiTheme={this.uiTheme}
         />
-      </ScrollView>
+      </View>
+    );
+  };
+
+  renderDetails = (uiTheme: UITheme) => {
+    const {article, articlePlaceholder, error} = this.props;
+
+    if (error) {
+      return this.renderError(error);
+    }
+
+    const articleData: ArticleEntity = article || articlePlaceholder;
+    const scrollData: {loadMore: Function} = {loadMore: () => null};
+    return (
+      <FlatList
+        testID="articleDetails"
+        data={[0]}
+        removeClippedSubviews={false}
+        refreshControl={this.renderRefreshControl(this.refresh, !!articleData?.content)}
+        keyExtractor={() => 'article-details'}
+        renderItem={() => this.createArticleDetails(articleData, scrollData)}
+
+        onEndReached={() => scrollData.loadMore && scrollData.loadMore()}
+        onEndReachedThreshold={0.8}
+      />
     );
   };
 

@@ -30,7 +30,8 @@ type Props = {
   isLoading: boolean,
   onRemoveAttach: ?(attachment: Attachment) => any,
   onCreateArticle: ?() => any,
-  uiTheme: UITheme
+  uiTheme: UITheme,
+  scrollData: Object
 };
 
 const ArticleDetails = (props: Props) => {
@@ -123,7 +124,8 @@ const ArticleDetails = (props: Props) => {
     error,
     uiTheme,
     onRemoveAttach,
-    onCreateArticle
+    onCreateArticle,
+    scrollData
   } = props;
 
   if (!article) {
@@ -138,6 +140,7 @@ const ArticleDetails = (props: Props) => {
       {renderSubArticlesButton()}
 
       <ArticleContent
+        scrollData={scrollData}
         attachments={article?.attachments}
         mentionedArticles={article?.mentionedArticles}
         mentionedIssues={article?.mentionedIssues}
