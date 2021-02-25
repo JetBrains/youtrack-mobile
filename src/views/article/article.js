@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import {RefreshControl, View, FlatList} from 'react-native';
+import {RefreshControl, View, FlatList, Text, TouchableOpacity} from 'react-native';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -58,6 +58,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
   props: Props;
   uiTheme: UITheme;
   unsubscribe: Function;
+  articleDetailsList: Object;
 
   componentWillUnmount = () => {
     this.unsubscribe && this.unsubscribe();
@@ -221,6 +222,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
       <FlatList
         testID="articleDetails"
         data={[0]}
+        ref={(instance: ?Object) => instance && (this.articleDetailsList = instance)}
         removeClippedSubviews={false}
         refreshControl={this.renderRefreshControl(this.refresh, !!articleData?.content)}
         keyExtractor={() => 'article-details'}
@@ -278,7 +280,6 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     const isArticleLoaded: boolean = !!article;
 
     const props: HeaderProps = {
-      title: articleData.idReadable,
       leftButton: <IconBack color={isProcessing ? textSecondaryColor : linkColor}/>,
       onBack: () => {
         if (isProcessing) {
@@ -301,7 +302,18 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
       )
     };
 
-    return <Header {...props} />;
+    return <Header {...props}>
+      <TouchableOpacity
+        onPress={() => {
+          this.articleDetailsList && this.articleDetailsList.scrollToOffset({
+            animated: true,
+            offset: 0
+          });
+        }}
+      >
+        <Text style={styles.articlesHeaderText}>{articleData.idReadable}</Text>
+      </TouchableOpacity>
+    </Header>;
   };
 
   render() {

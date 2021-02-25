@@ -65,7 +65,7 @@ const ArticleDetails = (props: Props) => {
           leftButton={<IconBack color={styles.link.color}/>}
           onBack={() => Router.pop()}
         >
-          <Text numberOfLines={2} style={styles.subArticlesHeaderText}>{article.summary}</Text>
+          <Text numberOfLines={2} style={styles.articlesHeaderText}>{article.summary}</Text>
         </Header>
 
         <FlatList
