@@ -1,8 +1,9 @@
 /* @flow */
 
 import React from 'react';
-import {Image, ScrollView, Text, View} from 'react-native';
+import {Image, ScrollView, Text, View, Linking} from 'react-native';
 
+import Hyperlink from 'react-native-hyperlink';
 import UrlParse from 'url-parse';
 
 import calculateAspectRatio from '../aspect-ratio/aspect-ratio';
@@ -133,6 +134,20 @@ function getMarkdownRules(
       );
     },
 
+    link: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
+      const child: ?Object = node?.children[0];
+      const content: string = (child && child.content) || children;
+      return (
+        <Text
+          key={node.key}
+          style={[inheritedStyles, style.text, styles.link]}
+          onPress={() => Linking.openURL(node.attributes.href)}
+        >
+          {content}
+        </Text>
+      );
+    },
+
     text: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
       const text: string = node.content;
 
@@ -164,12 +179,14 @@ function getMarkdownRules(
       }
 
       return (
-        <Text
+        <Hyperlink
           key={node.key}
-          style={[inheritedStyles, style.text]}
-        >
-          {text}
-        </Text>
+          linkStyle={style.link}
+          linkDefault={true}>
+          <Text style={[inheritedStyles, style.text]}>
+            {text}
+          </Text>
+        </Hyperlink>
       );
     }
   };
