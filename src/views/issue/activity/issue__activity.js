@@ -214,7 +214,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     } = this.props;
     const isSecured: boolean = !!editingComment && IssueVisibility.isSecured(editingComment.visibility);
     const canAddWork: boolean = (
-      issue.project.plugins.timeTrackingSettings.enabled &&
+      issue?.project?.plugins?.timeTrackingSettings?.enabled &&
       issuePermissions.canCreateWork(issue)
     );
 
