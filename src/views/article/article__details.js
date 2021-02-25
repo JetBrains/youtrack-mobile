@@ -28,8 +28,8 @@ type Props = {
   article: Article,
   error: CustomError,
   isLoading: boolean,
-  onRemoveAttach: ?(attachment: Attachment) => any,
-  onCreateArticle: ?() => any,
+  onRemoveAttach?: (attachment: Attachment) => any,
+  onCreateArticle?: () => any,
   uiTheme: UITheme,
   scrollData: Object
 };
