@@ -1,6 +1,6 @@
 /* @flow */
 
-import {getDeviceLogs, sendReport} from '../../components/error/error-reporter';
+import {getAppAndDeviceData, getDeviceLogs, sendReport} from '../../components/error/error-reporter';
 
 export type FeedbackType = { title: string, marker: string };
 export type FeedbackLogs = { title: string, value: boolean };
@@ -28,7 +28,11 @@ export const sendFeedback = async (feedbackData: FeedbackData) => {
   let description: string = `
   ##### ${feedbackData.type.marker}::${feedbackData.type.title}
   ##### email: ${feedbackData?.email || ''}
+  \n\n
+  ${getAppAndDeviceData()}
+  \n\n
   ${feedbackData?.description || ''}`;
+
   if (feedbackData.logs.value) {
     const deviceLogs = await getDeviceLogs();
     description = `${description}\n\n\`\`\`${deviceLogs}\`\`\``;
