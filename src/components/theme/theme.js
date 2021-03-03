@@ -3,8 +3,10 @@
 import {Appearance} from 'react-native-appearance';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import lightTheme from './theme-light';
+import AsyncStorage from '@react-native-community/async-storage';
 import darkTheme from './theme-dark';
+import lightTheme from './theme-light';
+import {THEME_MODE_KEY} from '../storage/storage';
 
 import type {UITheme} from '../../flow/Theme';
 
@@ -30,3 +32,13 @@ export const buildStyles = (mode: string, uiTheme: UITheme) => {
   });
 };
 
+export const getThemeMode = async () => {
+  let mode: string;
+  try {
+    const storedMode: ?string = JSON.parse(await AsyncStorage.getItem(THEME_MODE_KEY));
+    mode = storedMode || getSystemThemeMode();
+  } catch (e) {
+    mode = DEFAULT_THEME.mode;
+  }
+  return mode;
+};

@@ -3,7 +3,6 @@
 import React, {Component} from 'react';
 import {StatusBar, Platform} from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
-import AsyncStorage from '@react-native-community/async-storage';
 
 import ThemeProvider from './components/theme/theme-provider';
 import {ThemeContext} from './components/theme/theme-context';
@@ -18,9 +17,8 @@ import ErrorBoundary from './components/error-boundary/error-boundary';
 import Toast from 'react-native-easy-toast';
 
 import Navigation from './navigation';
-import {buildStyles, DEFAULT_THEME, getUITheme, getSystemThemeMode} from './components/theme/theme';
+import {buildStyles, DEFAULT_THEME, getUITheme, getThemeMode} from './components/theme/theme';
 
-import {THEME_MODE_KEY} from './components/storage/storage';
 
 import type {Theme} from './flow/Theme';
 
@@ -28,9 +26,7 @@ export default class AppProvider extends Component<{ }, { mode: string }> {
   state = {};
 
   async UNSAFE_componentWillMount() {
-    const storedMode = JSON.parse(await AsyncStorage.getItem(THEME_MODE_KEY));
-    const mode = typeof storedMode === 'string' ? storedMode : null;
-    const themeMode: string = mode || getSystemThemeMode();
+    const themeMode: string = await getThemeMode();
     buildStyles(themeMode, getUITheme(themeMode));
     this.setState({mode: themeMode});
   }

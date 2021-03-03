@@ -1,20 +1,22 @@
 /* @flow */
 
-import {DEFAULT_THEME} from '../theme/theme';
+import {getThemeMode, getUITheme} from '../theme/theme';
 
 import type {ActionSheetProvider, ActionSheetOptions} from '@expo/react-native-action-sheet';
-
+import type {UIThemeColors} from '../../flow/Theme';
 
 export type ActionSheetOption = { title: string, execute?: Function }
 export type ShowActionSheetWithOptions = (options: ActionSheetOptions, callback: (i: number) => void) => void;
 
-function doShowActions(
+async function doShowActions(
   options: Array<ActionSheetOption>,
   showActionSheetWithOptions: ShowActionSheetWithOptions,
   title?: string | null,
   message?: string | null,
 ) {
   const cancelIndex: number = options.length - 1;
+  const themeMode: string = await getThemeMode();
+  const uiThemeColors: UIThemeColors = getUITheme(themeMode).colors;
 
   return new Promise((resolve: Function) => {
     showActionSheetWithOptions(
@@ -24,10 +26,19 @@ function doShowActions(
         options: options.map(action => action.title),
         cancelButtonIndex: cancelIndex,
         titleTextStyle: {
-          color: DEFAULT_THEME.colors.$text
+          color: uiThemeColors.$icon
+        },
+        messageTextStyle: {
+          color: uiThemeColors.$icon
         },
         separatorStyle: {
-          backgroundColor: DEFAULT_THEME.colors.$boxBackground
+          backgroundColor: uiThemeColors.$boxBackground
+        },
+        containerStyle: {
+          backgroundColor: uiThemeColors.$background
+        },
+        textStyle: {
+          color: uiThemeColors.$text
         },
         showSeparators: true
       },
