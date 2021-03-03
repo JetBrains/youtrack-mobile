@@ -45,15 +45,28 @@ function renderCode(node: Node, language?: ?string, uiTheme: UITheme) {
   const codeData = getCodeData(node);
   const separator = <Text>{'\n'}</Text>;
   const codeStyle = uiTheme.dark ? darcula : idea;
+
+  for (const i in codeStyle) { // eslint-disable-line no-unused-vars
+    codeStyle[i].lineHeight = '1.25em';
+  }
+
   return (
     <Text>
       <SyntaxHighlighter
-        highlighter={'hljs' || 'prism'}
+        highlighter='hljs'
         language={language}
         PreTag={Text}
         CodeTag={Text}
 
-        style={{...codeStyle, ...{hljs: {backgroundColor: 'transparent', color: uiTheme.colors.$text}}}}
+        style={{
+          ...codeStyle,
+          ...{
+            hljs: {
+              backgroundColor: 'transparent',
+              color: uiTheme.colors.$text
+            }
+          }
+        }}
         fontSize={SECONDARY_FONT_SIZE}
         fontFamily={isAndroid ? monospaceFontAndroid : monospaceFontIOS}
       >
@@ -67,7 +80,6 @@ function renderCode(node: Node, language?: ?string, uiTheme: UITheme) {
           style={styles.showMoreLink}
         >{` ${showMoreText} `}</Text>
       )}
-      {codeData.isLongCode && isAndroid && separator}
     </Text>
   );
 }
