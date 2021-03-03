@@ -15,6 +15,13 @@ const vSpace = {
 // Source: 'react-native-markdown-display/src/lib/styles'
 const markdownStyles = (uiTheme: UITheme) => {
   const uiThemeColors: UIThemeColors = uiTheme.colors;
+  const code = {
+    borderWidth: 0,
+    backgroundColor: uiThemeColors.$boxBackground,
+    padding: UNIT,
+    borderRadius: 4
+  };
+
   return {
     // The main container
     body: {
@@ -133,22 +140,13 @@ const markdownStyles = (uiTheme: UITheme) => {
 
     // Code
     code_inline: {
-      borderWidth: 1,
-      borderColor: uiThemeColors.$textSecondary,
-      padding: 10,
-      borderRadius: 4,
+      ...code
     },
     code_block: {
-      borderWidth: 1,
-      borderColor: uiThemeColors.$textSecondary,
-      padding: 10,
-      borderRadius: 4,
+      ...code
     },
     fence: {
-      borderWidth: 1,
-      borderColor: uiThemeColors.$textSecondary,
-      padding: 10,
-      borderRadius: 4,
+      ...code
     },
 
     // Tables

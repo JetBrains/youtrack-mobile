@@ -1,7 +1,7 @@
 import {Platform} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../variables/variables';
-import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE, monospace} from '../common-styles/typography';
+import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE, monospace, mainText} from '../common-styles/typography';
 
 const showMoreLink = {
   fontSize: SECONDARY_FONT_SIZE,
@@ -77,15 +77,14 @@ export default EStyleSheet.create({
     backgroundColor: '$boxBackground',
     color: '$text',
     fontSize: SECONDARY_FONT_SIZE,
-    lineHeight: SECONDARY_FONT_SIZE * 1.5,
+    lineHeight: mainText.lineHeight,
   },
   exception: {
     ...monospace,
+    padding: 0,
     color: '$text',
     fontSize: SECONDARY_FONT_SIZE,
-    lineHeight: SECONDARY_FONT_SIZE * 1.5,
-    marginBottom: UNIT * 3,
-    marginTop: UNIT,
+    lineHeight: mainText.lineHeight,
   },
 
 });
