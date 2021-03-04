@@ -447,9 +447,9 @@ export default class CustomFieldsPanel extends Component<Props, State> {
 
         <View style={styles.customFieldSimpleEditor}>
           <TextInput
-            placeholderTextColor={uiTheme.colors.$icon}
             style={styles.simpleValueInput}
             placeholder={simpleValue.placeholder}
+            placeholderTextColor={uiTheme.colors.$icon}
             underlineColorAndroid="transparent"
             clearButtonMode="always"
             returnKeyType="done"

@@ -1,6 +1,8 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
+
+import {elevation1} from '../common-styles/shadow';
+import {rowFormStyles} from '../common-styles/form';
 import {UNIT} from '../variables/variables';
-import {formStyles} from '../common-styles/form';
 
 import type {UITheme, UIThemeColors} from '../../flow/Theme';
 
@@ -11,7 +13,7 @@ export default EStyleSheet.create({
     padding: UNIT * 2
   },
   customFieldEditorHeader: {
-    paddingLeft: UNIT * 2
+    ...elevation1
   },
   customFieldSimpleEditor: {
     flex: 1,
@@ -33,7 +35,7 @@ export default EStyleSheet.create({
     color: '$link'
   },
   simpleValueInput: {
-    ...formStyles.input,
+    ...rowFormStyles.input,
     backgroundColor: '$boxBackground',
     color: '$text',
   },
