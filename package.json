@@ -70,47 +70,6 @@
     "ios-export-ipa": "xcodebuild -exportArchive -allowProvisioningUpdates -archivePath ios/build/YouTrackMobile[Release].xcarchive -exportPath ios/build -exportOptionsPlist script/export.plist"
   },
   "tmp": ".tmp",
-  "jest": {
-    "preset": "react-native",
-    "transform": {
-      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js",
-      "^[./a-zA-Z0-9$_-]+\\.(bmp|gif|jpg|jpeg|png|psd|svg|webp)$": "<rootDir>/node_modules/react-native/jest/assetFileTransformer.js"
-    },
-    "setupFilesAfterEnv": [
-      "./test/jest-setup.js",
-      "@testing-library/jest-native/extend-expect"
-    ],
-    "testResultsProcessor": "jest-teamcity-reporter",
-    "coverageReporters": [
-      "teamcity"
-    ],
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/e2e/"
-    ],
-    "transformIgnorePatterns": [
-      "node_modules/(?!(jest-)?react-native|@react-native-community|react-navigation|@huston007.*)"
-    ]
-  },
-  "detox": {
-    "test-runner": "jest",
-    "specs": "./e2e",
-    "runner-config": "./e2e/config.json",
-    "configurations": {
-      "ios.sim.debug": {
-        "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/YouTrackMobile.app",
-        "build": "set -o pipefail && export RCT_NO_LAUNCH_PACKAGER=true RN_SRC_EXT=e2e.js xcodebuild -UseNewBuildSystem=NO -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile[Release] -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
-        "type": "ios.simulator",
-        "name": "iPhone 11"
-      },
-      "ios.sim.release": {
-        "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/YouTrackMobile.app",
-        "build": "set -o pipefail && RCT_NO_LAUNCH_PACKAGER=true RN_SRC_EXT=e2e.js xcodebuild -UseNewBuildSystem=NO -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile[Release] -configuration Release -sdk iphonesimulator -derivedDataPath ios/build",
-        "type": "ios.simulator",
-        "name": "iPhone 11"
-      }
-    }
-  },
   "resolutions": {
     "uglify-es": "3.1.10"
   },
