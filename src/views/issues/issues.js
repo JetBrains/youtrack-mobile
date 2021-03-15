@@ -8,42 +8,42 @@ import {
   TouchableOpacity
 } from 'react-native';
 import React, {Component} from 'react';
+
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
-import {notifyError} from '../../components/notification/notification';
-import usage from '../../components/usage/usage';
-import log from '../../components/log/log';
-
-import IssueRow from './issues__row';
-import ErrorMessage from '../../components/error-message/error-message';
-import Router from '../../components/router/router';
-import {View as AnimatedView} from 'react-native-animatable';
 import * as issueActions from './issues-actions';
-import Select from '../../components/select/select';
+import ErrorMessage from '../../components/error-message/error-message';
+import IssueRow from './issues__row';
+import IssuesCount from './issues__count';
+import log from '../../components/log/log';
 import QueryAssistPanel from '../../components/query-assist/query-assist-panel';
 import QueryPreview from '../../components/query-assist/query-preview';
-import IssuesCount from './issues__count';
-
+import Router from '../../components/router/router';
+import Select from '../../components/select/select';
+import SelectSectioned from '../../components/select/select-sectioned';
+import usage from '../../components/usage/usage';
+import {ANALYTICS_ISSUES_PAGE} from '../../components/analytics/analytics-ids';
+import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
+import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconAdd, IconAngleDown, IconBookmark} from '../../components/icon/icon';
 import {IconNothingFound} from '../../components/icon/icon-no-found';
-import {isReactElement} from '../../util/util';
-import {SkeletonIssues} from '../../components/skeleton/skeleton';
 import {initialState} from './issues-reducers';
-import {HIT_SLOP} from '../../components/common-styles/button';
-import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
-
-import SelectSectioned from '../../components/select/select-sectioned';
+import {isReactElement} from '../../util/util';
+import {logEvent} from '../../components/log/log-helper';
+import {notifyError} from '../../components/notification/notification';
 import {routeMap} from '../../app-routes';
+import {SkeletonIssues} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
-
 import {UNIT} from '../../components/variables/variables';
+import {View as AnimatedView} from 'react-native-animatable';
+
 import styles, {noIssuesFoundIconSize} from './issues.styles';
 
-import type Auth from '../../components/auth/auth';
 import type Api from '../../components/api/api';
-import type {IssuesState} from './issues-reducers';
+import type Auth from '../../components/auth/auth';
 import type {IssueOnList} from '../../flow/Issue';
+import type {IssuesState} from './issues-reducers';
 import type {Theme, UITheme} from '../../flow/Theme';
 
 type Props = $Shape<IssuesState & typeof issueActions & {
@@ -233,6 +233,10 @@ export class Issues extends Component<Props, State> {
   }
 
   onSearchQueryPanelFocus = (clearSearchQuery: boolean = false) => {
+    logEvent({
+      message: 'Focus search panel',
+      analyticsId: ANALYTICS_ISSUES_PAGE
+    });
     this.setEditQueryMode(true);
     this.clearSearchQuery(clearSearchQuery);
   };
@@ -250,6 +254,10 @@ export class Issues extends Component<Props, State> {
         query={_query}
         suggestIssuesQuery={suggestIssuesQuery}
         onQueryUpdate={(query: string) => {
+          logEvent({
+            message: 'Apply search',
+            analyticsId: ANALYTICS_ISSUES_PAGE
+          });
           this.setEditQueryMode(false);
           setIssuesCount(null);
           onQueryUpdate(query);

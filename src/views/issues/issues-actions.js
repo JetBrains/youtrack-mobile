@@ -5,6 +5,7 @@ import * as types from './issues-action-types';
 import ApiHelper from '../../components/api/api__helper';
 import log from '../../components/log/log';
 import usage from '../../components/usage/usage';
+import {ANALYTICS_ISSUES_PAGE} from '../../components/analytics/analytics-ids';
 import {EVERYTHING_CONTEXT} from '../../components/search/search-context';
 import {filterArrayByType} from '../../components/api/api__resource-types';
 import {flushStoragePart, getStorageState, MAX_STORED_QUERIES} from '../../components/storage/storage';
@@ -18,12 +19,11 @@ import type {IssueFull, IssueOnList, SavedQuery} from '../../flow/Issue';
 import type {IssueProject, Tag} from '../../flow/CustomFields';
 
 const PAGE_SIZE = 10;
-const CATEGORY_NAME = 'Issue List';
 
 type ApiGetter = () => Api;
 
 function trackEvent(msg: string, additionalParam: ?string) {
-  usage.trackEvent(CATEGORY_NAME, msg, additionalParam);
+  usage.trackEvent(ANALYTICS_ISSUES_PAGE, msg, additionalParam);
 }
 
 export function setIssuesQuery(query: string) {
