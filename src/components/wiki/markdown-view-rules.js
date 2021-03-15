@@ -96,7 +96,7 @@ function getMarkdownRules(
     code_inline: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
       return (
         <Text key={node.key} style={[inheritedStyles, styles.inlineCode]}>
-          {` ${node.content} `}
+          {node.content}
         </Text>
       );
     },
