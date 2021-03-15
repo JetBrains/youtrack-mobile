@@ -62,9 +62,9 @@ export function getBaseUrl(url: string) {
   return UrlParse(url).origin;
 }
 
-function handleRelativeUrl(hubUrl: string, ytUrl: string) {
+function handleRelativeUrl(hubUrl: string | null = null, ytUrl: string) {
   ytUrl = getBaseUrl(ytUrl);
-  return hubUrl[0] === '/' ? ytUrl + hubUrl : hubUrl;
+  return hubUrl && hubUrl[0] && hubUrl[0] === '/' ? ytUrl + hubUrl : hubUrl;
 }
 
 function formatYouTrackURL(url: string) {
