@@ -73,7 +73,7 @@ class BoardScroller extends Component<Props, State> {
 
     const GAP_WIDTH = Dimensions.get('window').width * ((1 - COLUMN_VIEWPORT_WIDTH_FACTOR) / 2);
     const snapX = getSnapToX(event, columns);
-    if (typeof snapX === 'number' && GAP_WIDTH === 'number') {
+    if (typeof snapX === 'number' && typeof GAP_WIDTH === 'number') {
       this.horizontalScroll.scrollTo({x: snapX <= AGILE_COLLAPSED_COLUMN_WIDTH ? 0 : (snapX - GAP_WIDTH)});
     }
   };
