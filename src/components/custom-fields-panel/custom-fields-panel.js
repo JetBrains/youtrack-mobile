@@ -6,6 +6,7 @@ import Header from '../header/header';
 import ModalView from '../modal-view/modal-view';
 import React, {Component} from 'react';
 import Select from '../select/select';
+import usage from '../usage/usage';
 import {Calendar} from 'react-native-calendars'; // eslint-disable-line import/named
 import {createNullProjectCustomField} from '../../util/util';
 import {getApi} from '../api/api__instance';
@@ -38,7 +39,9 @@ type Props = {
   onUpdate: (field: CustomFieldType, value: null | number | Object | Array<Object>) => Promise<Object>,
   onUpdateProject: (project: IssueProject) => Promise<Object>,
 
-  uiTheme: UITheme
+  uiTheme: UITheme,
+
+  analyticsId?: string
 };
 
 type State = {
@@ -143,6 +146,12 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     );
   }
 
+  trackEvent = (message: string) => {
+    if (this.props.analyticsId) {
+      usage.trackEvent(this.props.analyticsId, message);
+    }
+  }
+
   saveUpdatedField(field: CustomFieldType, value: null | number | Object | Array<Object>) {
     const updateSavingState = (value) => this.isComponentMounted && this.setState({savingField: value});
     this.closeEditor();
@@ -157,6 +166,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
   }
 
   onSelectProject = () => {
+    this.trackEvent('Update project: start');
     if (this.state.isEditingProject) {
       return this.closeEditor();
     }
@@ -180,6 +190,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
         placeholder: 'Search for the project',
         selectedItems: [this.props.issueProject],
         onSelect: (project: IssueProject) => {
+          this.trackEvent('Update project: updated');
           this.closeEditor();
           this.setState({isSavingProject: true});
           return this.props.onUpdateProject(project).then(() => this.setState({isSavingProject: false}));
@@ -199,6 +210,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
   }
 
   editDateField(field: CustomFieldType) {
+    this.trackEvent('Edit date field');
     const withTime = field.projectCustomField.field.fieldType.valueType === DATE_AND_TIME;
     return this.setState({
       datePicker: {
@@ -237,6 +249,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
   }
 
   editSimpleValueField(field: CustomFieldType, type: string) {
+    this.trackEvent('Edit simple value field');
     const placeholders = {
       integer: '-12 or 34',
       string: 'Type value',
@@ -272,6 +285,9 @@ export default class CustomFieldsPanel extends Component<Props, State> {
 
   editCustomField(field: CustomFieldType) {
     const projectCustomField = field.projectCustomField;
+    const projectCustomFieldName: ?string = projectCustomField?.field?.name;
+    this.trackEvent(`Edit custom field: ${projectCustomFieldName ? projectCustomFieldName.toLowerCase() : ''}`);
+
     const isMultiValue = projectCustomField.field.fieldType.isMultiValue;
     let selectedItems;
 

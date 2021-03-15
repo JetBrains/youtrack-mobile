@@ -19,6 +19,7 @@ import TagAddSelect from '../../components/tags/tag-add-select';
 import Tags from '../../components/tags/tags';
 import usage from '../../components/usage/usage';
 import VisibilityControl from '../../components/visibility/visibility-control';
+import {ANALYTICS_ISSUE_CREATE_PAGE} from '../../components/analytics/analytics-ids';
 import {attachmentActions} from './create-issue__attachment-actions-and-types';
 import {getApi} from '../../components/api/api__instance';
 import {IconCheck, IconClose} from '../../components/icon/icon';
@@ -31,7 +32,6 @@ import type {Theme, UITheme, UIThemeColors} from '../../flow/Theme';
 
 import styles from './create-issue.styles';
 
-const CATEGORY_NAME = 'Create issue view';
 
 type AdditionalProps = {
   issuePermissions: IssuePermissions,
@@ -50,7 +50,7 @@ class CreateIssue extends Component<Props, State> {
 
   constructor(props) {
     super(props);
-    usage.trackScreenView(CATEGORY_NAME);
+    usage.trackScreenView(ANALYTICS_ISSUE_CREATE_PAGE);
   }
 
   UNSAFE_componentWillMount() {
@@ -101,6 +101,7 @@ class CreateIssue extends Component<Props, State> {
     const {issue} = this.props;
 
     return <CustomFieldsPanel
+      analyticsId={ANALYTICS_ISSUE_CREATE_PAGE}
       autoFocusSelect
       testID="createIssueFields"
 

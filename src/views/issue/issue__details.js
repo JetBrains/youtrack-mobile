@@ -13,10 +13,12 @@ import IssueVotes from '../../components/issue-actions/issue-votes';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
 import LinkedIssues from '../../components/linked-issues/linked-issues';
 import log from '../../components/log/log';
+import Separator from '../../components/separator/separator';
 import SummaryDescriptionForm from '../../components/form/summary-description-form';
 import Tags from '../../components/tags/tags';
 import usage from '../../components/usage/usage';
 import VisibilityControl from '../../components/visibility/visibility-control';
+import {ANALYTICS_ISSUE_PAGE} from '../../components/analytics/analytics-ids';
 import {getApi} from '../../components/api/api__instance';
 import {getEntityPresentation, getReadableID, ytDate} from '../../components/issue-formatter/issue-formatter';
 import {SkeletonIssueContent, SkeletonIssueInfoLine} from '../../components/skeleton/skeleton';
@@ -31,7 +33,6 @@ import type {Attachment, CustomField, FieldValue, IssueProject} from '../../flow
 import type {Theme, UITheme} from '../../flow/Theme';
 import type {Visibility} from '../../flow/Visibility';
 import type {YouTrackWiki} from '../../flow/Wiki';
-import Separator from '../../components/separator/separator';
 
 
 type Props = {
@@ -319,6 +320,7 @@ export default class IssueDetails extends Component<Props, void> {
     const _issue: AnyIssue = this.getIssue();
 
     return <CustomFieldsPanel
+      analyticsId={ANALYTICS_ISSUE_PAGE}
       autoFocusSelect
 
       issueId={_issue?.id}

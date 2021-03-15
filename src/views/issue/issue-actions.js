@@ -7,6 +7,7 @@ import ApiHelper from '../../components/api/api__helper';
 import log from '../../components/log/log';
 import Router from '../../components/router/router';
 import usage from '../../components/usage/usage';
+import {ANALYTICS_ISSUE_PAGE} from '../../components/analytics/analytics-ids';
 import {attachmentTypes, attachmentActions} from './issue__attachment-actions-and-types';
 import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
 import {initialState} from './issue-reducers';
@@ -23,8 +24,6 @@ import type {IssueFull, CommandSuggestionResponse, OpenNestedViewParams} from '.
 import type {State as IssueState} from './issue-reducers';
 import type {UserAppearanceProfile} from '../../flow/User';
 import type {Visibility} from '../../flow/Visibility';
-
-const CATEGORY_NAME = 'Issue';
 
 type ApiGetter = () => Api;
 type StateGetter = () => { issueState: IssueState };
@@ -219,7 +218,7 @@ export function saveIssueSummaryAndDescriptionChange() {
       const {issue} = getState().issueState;
       await api.issue.updateIssueSummaryDescription(issue);
       log.info(`Issue (${issue.id}) summary/description has been updated`);
-      usage.trackEvent(CATEGORY_NAME, 'Update issue', 'Success');
+      usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update issue', 'Success');
 
       await dispatch(loadIssue());
       dispatch(stopEditingIssue());
@@ -242,7 +241,7 @@ export function updateIssueFieldValue(field: CustomField, value: FieldValue) {
     const api: Api = getApi();
     const {issue} = getState().issueState;
 
-    usage.trackEvent(CATEGORY_NAME, 'Update field value');
+    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update field value');
 
     dispatch(setIssueFieldValue(field, value));
     const updateMethod = (...args) => {
@@ -277,7 +276,7 @@ export function updateProject(project: IssueProject) {
     getState: StateGetter,
     getApi: ApiGetter
   ) => {
-    usage.trackEvent(CATEGORY_NAME, 'Update project');
+    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update project');
 
     const api: Api = getApi();
     const {issue} = getState().issueState;
@@ -357,13 +356,13 @@ export function showIssueActions(
           } else {
             Share.share({title: issue.summary, message: url}, {dialogTitle: 'Share URL'});
           }
-          usage.trackEvent(CATEGORY_NAME, 'Copy issue URL');
+          usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Share URL');
         }
       },
       {
         title: 'Copy URL',
         execute: () => {
-          usage.trackEvent(CATEGORY_NAME, 'Open in browser');
+          usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy URL');
           Clipboard.setString(makeIssueWebUrl(api, issue));
           notify('URL copied');
         }
@@ -375,7 +374,7 @@ export function showIssueActions(
         title: 'Edit',
         execute: () => {
           dispatch(startEditingIssue());
-          usage.trackEvent(CATEGORY_NAME, 'Edit issue');
+          usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Edit issue');
         }
       });
     }
@@ -385,7 +384,7 @@ export function showIssueActions(
         title: 'Add tag',
         execute: () => {
           dispatch(onOpenTagsSelect());
-          usage.trackEvent(CATEGORY_NAME, 'Edit issue');
+          usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Add tag');
         }
       });
     }
@@ -396,7 +395,7 @@ export function showIssueActions(
         execute: () => {
           switchToDetailsTab();
           dispatch(attachmentActions.toggleAttachFileDialog(true));
-          usage.trackEvent(CATEGORY_NAME, 'Attach file');
+          usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Attach file');
         }
       });
     }
@@ -406,7 +405,7 @@ export function showIssueActions(
         title: 'Apply command…',
         execute: () => {
           dispatch(openCommandDialog());
-          usage.trackEvent(CATEGORY_NAME, 'Apply command');
+          usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Apply command');
         }
       });
     }
@@ -583,7 +582,7 @@ export function onOpenTagsSelect() {
   return (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
     const issue: IssueFull = getState().issueState.issue;
-    usage.trackEvent(CATEGORY_NAME, 'Open Tags select');
+    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Open Tags select');
 
     dispatch({
       type: types.OPEN_ISSUE_SELECT,
