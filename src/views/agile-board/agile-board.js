@@ -19,6 +19,7 @@ import QueryPreview from '../../components/query-assist/query-preview';
 import Router from '../../components/router/router';
 import Select from '../../components/select/select';
 import usage from '../../components/usage/usage';
+import {ANALYTICS_AGILE_PAGE} from '../../components/analytics/analytics-ids';
 import {DragContainer} from '../../components/draggable/';
 import {flushStoragePart, getStorageState} from '../../components/storage/storage';
 import {getScrollableWidth} from '../../components/board-scroller/board-scroller__math';
@@ -377,9 +378,10 @@ class AgileBoard extends Component<Props, State> {
   }
 
   toggleZoom = () => {
-    const zoomedIn = !this.state.zoomedIn;
+    const zoomedIn: boolean = !this.state.zoomedIn;
     this.setState({zoomedIn});
     this.updateZoomedInStorageState(zoomedIn);
+    usage.trackEvent(ANALYTICS_AGILE_PAGE, `Toggle zoom-in: ${zoomedIn.toString()}`);
   };
 
   toggleQueryAssist = (isAssistVisible: boolean = false) => {
@@ -388,6 +390,7 @@ class AgileBoard extends Component<Props, State> {
 
   onQueryApply = (query: string) => {
     const {refreshAgile, sprint, storeLastQuery} = this.props;
+    usage.trackEvent(ANALYTICS_AGILE_PAGE, 'Apply search');
     this.updateQuery(query);
     storeLastQuery(query);
     if (sprint && sprint.agile) {

@@ -1,5 +1,7 @@
 /* @flow */
 
+export const ANALYTICS_AGILE_PAGE: string = 'Agile board';
+
 export const ANALYTICS_ARTICLE_CREATE_PAGE: string = 'ArticleCreate';
 
 export const ANALYTICS_ARTICLE_PAGE: string = 'Article';

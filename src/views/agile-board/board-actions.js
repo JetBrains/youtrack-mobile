@@ -9,6 +9,7 @@ import log from '../../components/log/log';
 import Router from '../../components/router/router';
 import ServersideEvents from '../../components/api/api__serverside-events';
 import usage from '../../components/usage/usage';
+import {ANALYTICS_AGILE_PAGE} from '../../components/analytics/analytics-ids';
 import {DEFAULT_ERROR_MESSAGE} from '../../components/error/error-messages';
 import {flushStoragePart, getStorageState, MAX_STORED_QUERIES} from '../../components/storage/storage';
 import {getAssistSuggestions} from '../../components/query-assist/query-assist-helper';
@@ -37,7 +38,6 @@ type ApiGetter = () => Api;
 
 export const PAGE_SIZE = 15;
 
-const CATEGORY_NAME = 'Agile board';
 const RECONNECT_TIMEOUT = 60000;
 let serverSideEventsInstance = null;
 let serverSideEventsInstanceErrorTimer = null;
@@ -66,7 +66,7 @@ function setError(error: CustomError) {
 }
 
 function track(msg: string, additionalParam: ?string) {
-  usage.trackEvent(CATEGORY_NAME, msg, additionalParam);
+  usage.trackEvent(ANALYTICS_AGILE_PAGE, msg, additionalParam);
 }
 
 function trackError(msg: string) {
