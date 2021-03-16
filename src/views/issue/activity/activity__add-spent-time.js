@@ -30,6 +30,7 @@ import type {Theme} from '../../../flow/Theme';
 import type {User} from '../../../flow/User';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {WorkItem, TimeTracking, WorkItemType} from '../../../flow/Work';
+import usage from '../../../components/usage/usage';
 
 type Props = {
   workItem?: WorkItem,
@@ -127,7 +128,10 @@ const AddSpentTimeForm = (props: Props) => {
       getTitle: (it: Object) => getEntityPresentation(it),
       onCancel: () => updateSelectVisibility(false),
       onChangeSelection: () => null,
-      onSelect: () => updateSelectVisibility(false)
+      onSelect: () => {
+        usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'SpentTime: visibility update');
+        updateSelectVisibility(false);
+      }
     };
     return <Select {...Object.assign({}, defaultSelectProps, selectProps)}/>;
   };

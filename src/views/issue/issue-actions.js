@@ -428,6 +428,7 @@ export function showIssueActions(
 
 export function openNestedIssueView(params: OpenNestedViewParams) {
   return () => {
+    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Navigate to linked issue');
     if (!params.issue) {
       return Router.Issue({issueId: params.issueId});
     }
@@ -458,7 +459,7 @@ export function onTagRemove(tagId: string) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issue = getState().issueState.issue;
     const api: Api = getApi();
-
+    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Remove tag');
     try {
       await api.issue.removeTag(issue.id, tagId);
       const updatedIssue: IssueFull = {...issue, tags: issue.tags.filter((tag: Tag) => tag.id !== tagId)};
@@ -554,6 +555,7 @@ export function updateIssueVisibility(visibility: Visibility) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueState: IssueFull = getState().issueState;
     const prevVisibility: Visibility = issueState.issue.visibility;
+    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update visibility');
 
     try {
       const issueWithUpdatedVisibility: Visibility = await getApi().issue.updateVisibility(issueState.issueId, visibility);

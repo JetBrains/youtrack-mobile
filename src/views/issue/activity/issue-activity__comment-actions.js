@@ -214,6 +214,7 @@ export function deleteComment(comment: IssueComment) {
 
 export function restoreComment(comment: IssueComment) {
   return async (dispatch: (any) => any) => {
+    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Restore comment');
     return dispatch(toggleCommentDeleted(comment, false));
   };
 }
@@ -344,7 +345,7 @@ export function onOpenCommentVisibilitySelect(comment: IssueComment) {
       ...(comment?.visibility?.permittedUsers || [])
     ];
 
-    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Open visibility select');
+    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Open comment visibility select');
     dispatch(onOpenSelect({
       show: true,
       placeholder: 'Filter users, groups, and teams',
@@ -357,7 +358,7 @@ export function onOpenCommentVisibilitySelect(comment: IssueComment) {
       selectedItems: selectedItems,
       getTitle: item => getEntityPresentation(item),
       onSelect: (selectedOption) => {
-        usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Visibility changed');
+        usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Comment visibility update');
         comment = comment || {};
         comment.visibility = IssueVisibility.toggleOption(comment.visibility, selectedOption);
         dispatch(updateCommentWithVisibility(comment));
