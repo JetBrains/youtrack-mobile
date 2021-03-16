@@ -2,6 +2,8 @@
 import * as types from './inbox-action-types';
 import log from '../../components/log/log';
 
+import usage from '../../components/usage/usage';
+import {ANALYTICS_NOTIFICATIONS_PAGE} from '../../components/analytics/analytics-ids';
 import {checkVersion} from '../../components/feature/feature';
 import {flushStoragePart, getStorageState} from '../../components/storage/storage';
 import {sortByTimestampReverse} from '../../components/search/sorting';
@@ -53,6 +55,7 @@ export function loadInbox(skip: number = 0, top: number = 10) {
     const promises = [api.inbox.getInbox(skip, top)];
     const isReactionsAvailable: boolean = checkVersion('2020.1');
     if (isReactionsAvailable) {
+      usage.trackEvent(ANALYTICS_NOTIFICATIONS_PAGE, 'Loading reaction feed');
       promises.push(api.user.reactionsFeed(skip, top));
     }
 

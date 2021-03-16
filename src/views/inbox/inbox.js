@@ -17,9 +17,10 @@ import Router from '../../components/router/router';
 import usage from '../../components/usage/usage';
 import UserInfo from '../../components/user/user-info';
 import YoutrackWiki from '../../components/wiki/youtrack-wiki';
+import {ANALYTICS_NOTIFICATIONS_PAGE} from '../../components/analytics/analytics-ids';
 import {getReadableID, ytDate} from '../../components/issue-formatter/issue-formatter';
 import {getStorageState} from '../../components/storage/storage';
-import {guid, isReactElement} from '../../util/util';
+import {isReactElement} from '../../util/util';
 import {handleRelativeUrl} from '../../components/config/config';
 import {hasType} from '../../components/api/api__resource-types';
 import {IconNothingFound} from '../../components/icon/icon-no-found';
@@ -39,7 +40,6 @@ import type {Reaction} from '../../flow/Reaction';
 import type {Theme} from '../../flow/Theme';
 import type {User} from '../../flow/User';
 
-const CATEGORY_NAME = 'inbox view';
 
 type Props = InboxState & typeof inboxActions;
 
@@ -72,7 +72,7 @@ class Inbox extends Component<Props, State> {
     super(props);
     this.state = {isTitlePinned: false};
     this.config = getStorageState().config;
-    usage.trackScreenView(CATEGORY_NAME);
+    usage.trackScreenView(ANALYTICS_NOTIFICATIONS_PAGE);
   }
 
   componentDidMount() {
@@ -83,6 +83,7 @@ class Inbox extends Component<Props, State> {
   refresh = () => this.props.loadInbox();
 
   goToIssue(issue: Issue) {
+    usage.trackEvent(ANALYTICS_NOTIFICATIONS_PAGE, 'Navigate to issue');
     if (!issue?.id) {
       return;
     }
@@ -223,10 +224,13 @@ class Inbox extends Component<Props, State> {
     const issues = [].concat(event.addedValues).concat(event.removedValues);
 
     return (
-      issues.map((issue: IssueOnList) => {
+      issues.map((issue: IssueOnList, index: number) => {
         return (
-          <TouchableOpacity key={guid()}>
-            <Text onPress={() => Router.Issue({issueId: issue.id})}>
+          <TouchableOpacity key={`${event?.entityId}_${issue.id}_${index}`}>
+            <Text onPress={() => {
+              usage.trackEvent(ANALYTICS_NOTIFICATIONS_PAGE, 'Navigate to linked issue');
+              Router.Issue({issueId: issue.id});
+            }}>
               <Text style={styles.link}>
                 <Text style={[styles.link, issue.resolved ? styles.resolved : null]}>
                   {issue.id}
