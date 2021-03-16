@@ -18,6 +18,7 @@ import Select from '../../components/select/select';
 import Separator from '../../components/separator/separator';
 import SummaryDescriptionForm from '../../components/form/summary-description-form';
 import VisibilityControl from '../../components/visibility/visibility-control';
+import {ANALYTICS_ARTICLE_CREATE_PAGE} from '../../components/analytics/analytics-ids';
 import {attachmentActions} from './article-create__attachment-actions-and-types';
 import {getApi} from '../../components/api/api__instance';
 import {getStorageState} from '../../components/storage/storage';
@@ -281,6 +282,7 @@ const ArticleCreate = (props: Props) => {
             </View>
 
             <SummaryDescriptionForm
+              analyticsId={ANALYTICS_ARTICLE_CREATE_PAGE}
               testID="createIssueSummary"
               summary={articleDraftData.summary}
               description={articleDraftData.content}

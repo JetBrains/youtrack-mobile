@@ -2,7 +2,7 @@
 
 import Router from '../../components/router/router';
 
-import {ANALYTICS_ARTICLE_CREATE} from '../../components/analytics/analytics-ids';
+import {ANALYTICS_ARTICLE_CREATE_PAGE} from '../../components/analytics/analytics-ids';
 import {attachmentActions} from './article-create__attachment-actions-and-types';
 import {confirmDeleteArticleDraft} from '../article/arcticle-helper';
 import {deleteArticle} from '../article/arcticle-actions';
@@ -50,7 +50,7 @@ const createArticleDraft = (articleId?: string) => {
       logEvent({message: errorMsg, isError: true});
       notify(errorMsg, error);
     } else {
-      logEvent({message: 'Create article draft', analyticsId: ANALYTICS_ARTICLE_CREATE});
+      logEvent({message: 'Create article draft', analyticsId: ANALYTICS_ARTICLE_CREATE_PAGE});
       dispatch(setDraft(articleDraft));
       return articleDraft;
     }
@@ -114,7 +114,7 @@ const uploadFile = (attach: Attachment) => {
       notify(message, error);
     } else {
       logEvent({message: `Image attached to article ${updatedDraft.id}`});
-      usage.trackEvent(ANALYTICS_ARTICLE_CREATE, 'Attach image', 'Success');
+      usage.trackEvent(ANALYTICS_ARTICLE_CREATE_PAGE, 'Attach image', 'Success');
 
       dispatch(attachmentActions.stopImageAttaching());
       dispatch(attachmentActions.toggleAttachFileDialog(false));
@@ -149,7 +149,7 @@ const deleteDraftAttachment = (attachmentId: string) => {
       notify(message, error);
       logEvent({message: message, isError: true});
     } else {
-      logEvent({message: 'Attachment deleted', analyticsId: ANALYTICS_ARTICLE_CREATE});
+      logEvent({message: 'Attachment deleted', analyticsId: ANALYTICS_ARTICLE_CREATE_PAGE});
       dispatch(setDraft(
         {
           ...articleDraft, attachments: articleDraft.attachments.filter((it: Attachment) => it.id !== attachmentId)

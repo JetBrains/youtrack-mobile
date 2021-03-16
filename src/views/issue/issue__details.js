@@ -268,6 +268,7 @@ export default class IssueDetails extends Component<Props, void> {
         {this.renderAdditionalInfo()}
 
         {editMode && <SummaryDescriptionForm
+          analyticsId={ANALYTICS_ISSUE_PAGE}
           editable={!isSavingEditedIssue}
           summary={summaryCopy}
           description={descriptionCopy}

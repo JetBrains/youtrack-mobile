@@ -303,6 +303,7 @@ export function toggleVote(voted: boolean) {
     const api: Api = getApi();
     const {issue} = getState().issueState;
     dispatch(setVoted(voted));
+    usage.trackEvent(ANALYTICS_ISSUE_PAGE, `Vote: ${voted ? 'voted' : 'unvoted'}`);
     try {
       await api.issue.updateIssueVoted(issue.id, voted);
     } catch (err) {

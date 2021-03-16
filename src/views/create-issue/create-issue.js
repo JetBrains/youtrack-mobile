@@ -188,6 +188,7 @@ class CreateIssue extends Component<Props, State> {
                 keyboardDismissMode="interactive"
               >
                 <SummaryDescriptionForm
+                  analyticsId={ANALYTICS_ISSUE_CREATE_PAGE}
                   testID="createIssueSummary"
                   style={styles.issueSummary}
                   summary={issue.summary}

@@ -3,7 +3,9 @@
 import React, {useEffect, useState} from 'react';
 
 import ReactionsPanel from './issue__activity-reactions-dialog';
+import usage from '../../../components/usage/usage';
 import {ActivityStream} from '../../../components/activity-stream/activity__stream';
+import {ANALYTICS_ISSUE_STREAM_SECTION} from '../../../components/analytics/analytics-ids';
 import {SkeletonIssueActivities} from '../../../components/skeleton/skeleton';
 
 import type {ActivityStreamProps, ActivityStreamPropsReaction} from '../../../components/activity-stream/activity__stream';
@@ -27,6 +29,7 @@ const IssueActivityStream = (props: Props) => {
   });
 
   const selectReaction = (comment: IssueComment, reaction: Reaction) => {
+    usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'Add reaction to comment');
     hideReactionsPanel();
     // $FlowFixMe
     return props.onReactionSelect(props.issueId, comment, reaction, props.activities, (activities, error) => {

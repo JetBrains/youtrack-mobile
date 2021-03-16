@@ -1,6 +1,6 @@
 /* @flow */
 
-export const ANALYTICS_ARTICLE_CREATE: string = 'ArticleCreate';
+export const ANALYTICS_ARTICLE_CREATE_PAGE: string = 'ArticleCreate';
 
 export const ANALYTICS_ARTICLE_PAGE: string = 'Article';
 

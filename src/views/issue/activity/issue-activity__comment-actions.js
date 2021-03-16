@@ -6,6 +6,7 @@ import * as activityHelper from './issue-activity__helper';
 import IssueVisibility from '../../../components/visibility/issue-visibility';
 import log from '../../../components/log/log';
 import usage from '../../../components/usage/usage';
+import {ANALYTICS_ISSUE_PAGE} from '../../../components/analytics/analytics-ids';
 import {confirmation} from '../../../components/confirmation/confirmation';
 import {
   loadActivitiesPage,
@@ -36,7 +37,6 @@ import type {State as IssueCommentActivityState} from './issue-activity__comment
 import type {State as SingleIssueState} from '../issue-reducers';
 import type {User} from '../../../flow/User';
 
-const CATEGORY_NAME = 'Issue';
 
 type ApiGetter = () => Api;
 type StateGetter = () => {
@@ -122,7 +122,7 @@ export function addComment(comment: IssueComment) {
 
     try {
       await getApi().issue.submitComment(issueId, comment);
-      usage.trackEvent(CATEGORY_NAME, 'Add comment', 'Success');
+      usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Add comment', 'Success');
       log.info(`Comment created in issue ${issueId}. Reloading...`);
       dispatch(loadActivity(true));
     } catch (error) {
@@ -153,6 +153,7 @@ export function stopEditingComment() {
 export function submitEditedComment(comment: IssueComment) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().issueState.issueId;
+    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update comment');
     dispatch(startSubmittingComment());
 
     try {
@@ -264,7 +265,7 @@ export function showIssueCommentActions(
         title: 'Copy URL',
         execute: () => {
           dispatch(copyCommentUrl(comment));
-          usage.trackEvent(CATEGORY_NAME, 'Copy comment URL');
+          usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy comment URL');
         }
       },
     ];
@@ -272,7 +273,7 @@ export function showIssueCommentActions(
       actions.push({
         title: 'Edit',
         execute: () => {
-          usage.trackEvent(CATEGORY_NAME, 'Edit comment');
+          usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Edit comment');
           dispatch(startEditingComment(comment));
         }
       });
@@ -281,7 +282,7 @@ export function showIssueCommentActions(
       actions.push({
         title: 'Delete',
         execute: () => {
-          usage.trackEvent(CATEGORY_NAME, 'Delete comment');
+          usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Delete comment');
           dispatch(deleteComment(comment));
         }
       });
@@ -343,7 +344,7 @@ export function onOpenCommentVisibilitySelect(comment: IssueComment) {
       ...(comment?.visibility?.permittedUsers || [])
     ];
 
-    usage.trackEvent(CATEGORY_NAME, 'Open visibility select');
+    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Open visibility select');
     dispatch(onOpenSelect({
       show: true,
       placeholder: 'Filter users, groups, and teams',
@@ -356,7 +357,7 @@ export function onOpenCommentVisibilitySelect(comment: IssueComment) {
       selectedItems: selectedItems,
       getTitle: item => getEntityPresentation(item),
       onSelect: (selectedOption) => {
-        usage.trackEvent(CATEGORY_NAME, 'Visibility changed');
+        usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Visibility changed');
         comment = comment || {};
         comment.visibility = IssueVisibility.toggleOption(comment.visibility, selectedOption);
         dispatch(updateCommentWithVisibility(comment));
@@ -377,7 +378,7 @@ export function onReactionSelect(
     const issueApi: IssueAPI = getApi().issue;
     //$FlowFixMe
     const currentUser: User = getState().app.user;
-    usage.trackEvent(CATEGORY_NAME, 'Reaction select');
+    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Reaction select');
 
     const reactionName: string = reaction.reaction;
     const existReaction: Reaction = comment.reactions.filter(
