@@ -4,4 +4,8 @@ module.exports = {
   rules: {
     'prettier/prettier': 0,
   },
+  'env': {
+    'jest/globals': true,
+    'jasmine': true,
+  },
 };
