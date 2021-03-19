@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-commonjs
 module.exports = {
   'preset': 'react-native',
   'transform': {
@@ -18,7 +17,7 @@ module.exports = {
     '/e2e/'
   ],
   'transformIgnorePatterns': [
-    'node_modules/(?!(jest-)?react-native|@react-native-community|react-navigation|@huston007.*)'
+    'node_modules/(?!(jest-)?react-native|@react-native-community|react-navigation|@gpsgate.*)'
   ]
 };
 

@@ -1,0 +1,589 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model modelUID="r:86573f08-cce6-4630-a41e-bb34cb9bf22a(jetbrains-youtrack-pomodoroTimer)">
+  <persistence version="7" />
+  <language namespace="355b8814-6452-42a9-99ba-bf48a86484df(jetbrains.youtrack.workflow)" />
+  <language namespace="134b6ab8-1e5e-498b-8109-fed3af0973ea(jetbrains.youtrack.workflow.localization)" />
+  <import index="qfu0" modelUID="f:java_stub#jetbrains.youtrack.workflow.customFieldsSchema(jetbrains.youtrack.workflow.customFieldsSchema@java_stub)" version="-1" />
+  <import index="tpck" modelUID="r:00000000-0000-4000-0000-011c89590288(jetbrains.mps.lang.core.structure)" version="0" implicit="yes" />
+  <import index="ih53" modelUID="r:913dafeb-4d10-46a5-9806-7d085c6ccd01(jetbrains.youtrack.workflow.structure)" version="11" implicit="yes" />
+  <import index="tp6y" modelUID="r:00000000-0000-4000-0000-011c895903d6(jetbrains.mps.baseLanguage.dates.accessories)" version="-1" implicit="yes" />
+  <import index="fk9a" modelUID="r:687126b3-ce00-4b38-98b6-dd0302c57bc6(jetbrains.youtrack.workflow.operators)" version="-1" implicit="yes" />
+  <import index="5c7v" modelUID="r:85cdbc88-0b2a-4b6f-a140-2103e0523bff(jetbrains.youtrack.workflow.localization.structure)" version="-1" implicit="yes" />
+  <roots>
+    <node type="ih53.StatelessRule" typeId="ih53.2793979439244446838" id="2676198140064743691">
+      <property name="name" nameId="tpck.1169194664001" value="Don't change reason manually" />
+    </node>
+    <node type="ih53.ScheduleRule" typeId="ih53.5131699771561510683" id="2676198140064743726">
+      <property name="name" nameId="tpck.1169194664001" value="Pomodoro countdown" />
+    </node>
+    <node type="ih53.StatemachineRule" typeId="ih53.4706762660756292821" id="2676198140064743759">
+      <property name="name" nameId="tpck.1169194664001" value="Pomodoro states" />
+      <link role="stateField" roleId="ih53.4706762660756292828" targetNodeId="qfu0.~Issue%dPomodoro state" resolveInfo="Pomodoro state" />
+    </node>
+  </roots>
+  <root id="2676198140064743691">
+    <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="2676198140064743692">
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YLineCommentStatement" typeId="ih53.3324563261546047707" id="2676198140064745455">
+        <property name="text" nameId="ih53.3324563261546047712" value="The Pomodoro technique is a time management method created by Francesco Cirillo in the 1980s. For details visit http://www.pomodorotechnique.com/" />
+      </node>
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YVariableDeclarationStatement" typeId="ih53.6635134117811900048" id="2676198140064743694">
+        <node role="declaration" roleId="ih53.6635134117811900049" type="ih53.YVariableDeclaration" typeId="ih53.9181025866980780791" id="2676198140064743695">
+          <property name="name" nameId="tpck.1169194664001" value="causes" />
+        </node>
+        <node role="initializer" roleId="ih53.6635134117811930190" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743696">
+          <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366088" resolveInfo="||" />
+          <node role="left" roleId="ih53.4549928255927184281" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743697">
+            <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366099" resolveInfo="==" />
+            <node role="right" roleId="ih53.4549928255927184282" type="ih53.YEnumReference" typeId="ih53.8948056580237963425" id="2676198140064743698">
+              <property name="name" nameId="tpck.1169194664001" value="Boss interrupted" />
+            </node>
+            <node role="left" roleId="ih53.4549928255927184281" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743699">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="3919839132585314841">
+                <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dPomodoro interruption" resolveInfo="Pomodoro interruption" />
+              </node>
+            </node>
+          </node>
+          <node role="right" roleId="ih53.4549928255927184282" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743701">
+            <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366088" resolveInfo="||" />
+            <node role="left" roleId="ih53.4549928255927184281" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743702">
+              <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366099" resolveInfo="==" />
+              <node role="right" roleId="ih53.4549928255927184282" type="ih53.YEnumReference" typeId="ih53.8948056580237963425" id="2676198140064743703">
+                <property name="name" nameId="tpck.1169194664001" value="Facebook chat" />
+              </node>
+              <node role="left" roleId="ih53.4549928255927184281" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743704">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="3919839132585314844">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dPomodoro interruption" resolveInfo="Pomodoro interruption" />
+                </node>
+              </node>
+            </node>
+            <node role="right" roleId="ih53.4549928255927184282" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743706">
+              <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366088" resolveInfo="||" />
+              <node role="left" roleId="ih53.4549928255927184281" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743707">
+                <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366099" resolveInfo="==" />
+                <node role="right" roleId="ih53.4549928255927184282" type="ih53.YEnumReference" typeId="ih53.8948056580237963425" id="2676198140064743708">
+                  <property name="name" nameId="tpck.1169194664001" value="Phone call" />
+                </node>
+                <node role="left" roleId="ih53.4549928255927184281" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743709">
+                  <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="3919839132585314845">
+                    <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dPomodoro interruption" resolveInfo="Pomodoro interruption" />
+                  </node>
+                </node>
+              </node>
+              <node role="right" roleId="ih53.4549928255927184282" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743711">
+                <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366099" resolveInfo="==" />
+                <node role="right" roleId="ih53.4549928255927184282" type="ih53.YEnumReference" typeId="ih53.8948056580237963425" id="2676198140064743712">
+                  <property name="name" nameId="tpck.1169194664001" value="Urgent email" />
+                </node>
+                <node role="left" roleId="ih53.4549928255927184281" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743713">
+                  <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="3919839132585314846">
+                    <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dPomodoro interruption" resolveInfo="Pomodoro interruption" />
+                  </node>
+                </node>
+              </node>
+            </node>
+          </node>
+        </node>
+      </node>
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YStatement" typeId="ih53.4549928255926912355" id="2676198140064743715" />
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YAssertStatement" typeId="ih53.7229228457870671120" id="2676198140064743716">
+        <node role="condition" roleId="ih53.7229228457870671122" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="2676198140064743717">
+          <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YIsChangedOperation" typeId="ih53.9181025866980600314" id="2676198140064743718" />
+          <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743719">
+            <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="3919839132585314847">
+              <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dPomodoro state" resolveInfo="Pomodoro state" />
+            </node>
+          </node>
+        </node>
+        <node role="message" roleId="ih53.7229228457870671123" type="5c7v.LocalizableExpression" typeId="5c7v.86376404488921782" id="1382459627240385780">
+          <property name="id" nameId="5c7v.86376404488956388" value="Don_t_change_reason_manually.Cannot_change_the_interruption_cause_without_changing_the_timer_state" />
+          <node role="parts" roleId="5c7v.86376404488956389" type="5c7v.TextPart" typeId="5c7v.86376404488921792" id="1382459627240385781">
+            <property name="text" nameId="5c7v.86376404488921799" value="Cannot change the interruption cause without changing the timer state." />
+          </node>
+        </node>
+      </node>
+    </node>
+    <node role="guard" roleId="ih53.4549928255927007153" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="2676198140064743722">
+      <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YIsChangedOperation" typeId="ih53.9181025866980600314" id="2676198140064743723" />
+      <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743724">
+        <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="3919839132585314840">
+          <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dPomodoro interruption" resolveInfo="Pomodoro interruption" />
+        </node>
+      </node>
+    </node>
+  </root>
+  <root id="2676198140064743726">
+    <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="2676198140064743727">
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YLineCommentStatement" typeId="ih53.3324563261546047707" id="2676198140064745453">
+        <property name="text" nameId="ih53.3324563261546047712" value="The Pomodoro technique is a time management method created by Francesco Cirillo in the 1980s. For details visit http://www.pomodorotechnique.com/" />
+      </node>
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YIfStatement" typeId="ih53.5610598278601646193" id="2676198140064743729">
+        <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="2676198140064743730">
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="2676198140064743731">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743732">
+              <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366192" resolveInfo="=" />
+              <node role="right" roleId="ih53.4549928255927184282" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743733">
+                <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366156" resolveInfo="-" />
+                <node role="right" roleId="ih53.4549928255927184282" type="ih53.YIntegerLiteral" typeId="ih53.4549928255927416728" id="2676198140064743734">
+                  <property name="value" nameId="ih53.4549928255927416738" value="1" />
+                </node>
+                <node role="left" roleId="ih53.4549928255927184281" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743735">
+                  <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="3919839132585314835">
+                    <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dPomodoro countdown" resolveInfo="Pomodoro countdown" />
+                  </node>
+                </node>
+              </node>
+              <node role="left" roleId="ih53.4549928255927184281" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743737">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="3919839132585314834">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dPomodoro countdown" resolveInfo="Pomodoro countdown" />
+                </node>
+              </node>
+            </node>
+          </node>
+        </node>
+        <node role="condition" roleId="ih53.5610598278601646232" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743739">
+          <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366088" resolveInfo="||" />
+          <node role="right" roleId="ih53.4549928255927184282" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743740">
+            <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366099" resolveInfo="==" />
+            <node role="right" roleId="ih53.4549928255927184282" type="ih53.YEnumReference" typeId="ih53.8948056580237963425" id="3919839132585314833">
+              <property name="name" nameId="tpck.1169194664001" value="On a break" />
+            </node>
+            <node role="left" roleId="ih53.4549928255927184281" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743742">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="3919839132585314839">
+                <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dPomodoro state" resolveInfo="Pomodoro state" />
+              </node>
+            </node>
+          </node>
+          <node role="left" roleId="ih53.4549928255927184281" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743744">
+            <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366099" resolveInfo="==" />
+            <node role="right" roleId="ih53.4549928255927184282" type="ih53.YEnumReference" typeId="ih53.8948056580237963425" id="3919839132585314830">
+              <property name="name" nameId="tpck.1169194664001" value="Timer’s running" />
+            </node>
+            <node role="left" roleId="ih53.4549928255927184281" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743746">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="3919839132585314838">
+                <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dPomodoro state" resolveInfo="Pomodoro state" />
+              </node>
+            </node>
+          </node>
+        </node>
+      </node>
+    </node>
+    <node role="schedule" roleId="ih53.5131699771561525074" type="ih53.PeriodScheduleLiteral" typeId="ih53.4008452559574654287" id="2676198140064743748">
+      <link role="schedulePeriod" roleId="ih53.1194007702067" targetNodeId="tp6y.1194007170385" resolveInfo="every minute" />
+    </node>
+    <node role="guard" roleId="ih53.8670367864092221867" type="ih53.YClosure" typeId="ih53.1519158185935514179" id="2676198140064743749">
+      <node role="expression" roleId="ih53.1519158185935514180" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743750">
+        <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366094" resolveInfo="&amp;&amp;" />
+        <node role="right" roleId="ih53.4549928255927184282" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743751">
+          <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366102" resolveInfo="!=" />
+          <node role="right" roleId="ih53.4549928255927184282" type="ih53.YIntegerLiteral" typeId="ih53.4549928255927416728" id="2676198140064743752">
+            <property name="value" nameId="ih53.4549928255927416738" value="0" />
+          </node>
+          <node role="left" roleId="ih53.4549928255927184281" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743753">
+            <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="3919839132585314837">
+              <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dPomodoro countdown" resolveInfo="Pomodoro countdown" />
+            </node>
+          </node>
+        </node>
+        <node role="left" roleId="ih53.4549928255927184281" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743755">
+          <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366102" resolveInfo="!=" />
+          <node role="right" roleId="ih53.4549928255927184282" type="ih53.YNullLiteral" typeId="ih53.9181025866980780792" id="2676198140064743756" />
+          <node role="left" roleId="ih53.4549928255927184281" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743757">
+            <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="3919839132585314836">
+              <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dPomodoro countdown" resolveInfo="Pomodoro countdown" />
+            </node>
+          </node>
+        </node>
+      </node>
+    </node>
+  </root>
+  <root id="2676198140064743759">
+    <node role="state" roleId="ih53.3972957960593021462" type="ih53.State" typeId="ih53.659756766078159426" id="2676198140064743760">
+      <property name="name" nameId="tpck.1169194664001" value="Not set" />
+      <node role="element" roleId="ih53.4822842069656394005" type="ih53.Transition" typeId="ih53.659756766078198207" id="2676198140064743761">
+        <node role="trigger" roleId="ih53.677959992131405909" type="ih53.EventTrigger" typeId="ih53.3972957960592985107" id="2676198140064743762">
+          <property name="event" nameId="ih53.8296249755736904827" value="start" />
+        </node>
+        <node role="action" roleId="ih53.659756766078198231" type="ih53.OutgoingTransitionAction" typeId="ih53.659756766078467296" id="2676198140064743763">
+          <link role="transitionEnd" roleId="ih53.659756766078467297" targetNodeId="2676198140064743766" resolveInfo="Timer’s running" />
+          <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="2676198140064743764">
+            <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YLineCommentStatement" typeId="ih53.3324563261546047707" id="2676198140064745447">
+              <property name="text" nameId="ih53.3324563261546047712" value="The Pomodoro technique is a time management method created by Francesco Cirillo in the 1980s. For details visit http://www.pomodorotechnique.com/" />
+            </node>
+          </node>
+        </node>
+      </node>
+    </node>
+    <node role="state" roleId="ih53.3972957960593021462" type="ih53.State" typeId="ih53.659756766078159426" id="2676198140064743766">
+      <property name="name" nameId="tpck.1169194664001" value="Timer’s running" />
+      <node role="element" roleId="ih53.4822842069656394005" type="ih53.EnterAction" typeId="ih53.8336746780183887329" id="2676198140064743767">
+        <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="2676198140064743768">
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="2676198140064743769">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743770">
+              <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366192" resolveInfo="=" />
+              <node role="right" roleId="ih53.4549928255927184282" type="ih53.YNullLiteral" typeId="ih53.9181025866980780792" id="2676198140064743771" />
+              <node role="left" roleId="ih53.4549928255927184281" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743772">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="3919839132585314848">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dPomodoro interruption" resolveInfo="Pomodoro interruption" />
+                </node>
+              </node>
+            </node>
+          </node>
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YMessageStatement" typeId="ih53.1609108022041326982" id="2676198140064743774">
+            <node role="message" roleId="ih53.1609108022041326983" type="5c7v.LocalizableExpression" typeId="5c7v.86376404488921782" id="1382459627240385782">
+              <property name="id" nameId="5c7v.86376404488956388" value="Pomodoro_states.25_minutes_pomodoro_is_started" />
+              <node role="parts" roleId="5c7v.86376404488956389" type="5c7v.TextPart" typeId="5c7v.86376404488921792" id="1382459627240385783">
+                <property name="text" nameId="5c7v.86376404488921799" value="25 minutes pomodoro is started." />
+              </node>
+            </node>
+          </node>
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="2676198140064743776">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743777">
+              <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366192" resolveInfo="=" />
+              <node role="left" roleId="ih53.4549928255927184281" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743778">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="3919839132585314849">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dPomodoro countdown" resolveInfo="Pomodoro countdown" />
+                </node>
+              </node>
+              <node role="right" roleId="ih53.4549928255927184282" type="ih53.YIntegerLiteral" typeId="ih53.4549928255927416728" id="2676198140064743780">
+                <property name="value" nameId="ih53.4549928255927416738" value="25" />
+              </node>
+            </node>
+          </node>
+        </node>
+      </node>
+      <node role="element" roleId="ih53.4822842069656394005" type="ih53.Transition" typeId="ih53.659756766078198207" id="2676198140064743781">
+        <node role="trigger" roleId="ih53.677959992131405909" type="ih53.EventTrigger" typeId="ih53.3972957960592985107" id="2676198140064743782">
+          <property name="event" nameId="ih53.8296249755736904827" value="interrupt" />
+        </node>
+        <node role="action" roleId="ih53.659756766078198231" type="ih53.OutgoingTransitionAction" typeId="ih53.659756766078467296" id="2676198140064743783">
+          <link role="transitionEnd" roleId="ih53.659756766078467297" targetNodeId="2676198140064743760" resolveInfo="Not set" />
+          <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="2676198140064743784">
+            <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="2676198140064743785">
+              <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="2676198140064743786">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRequireFieldOperation" typeId="ih53.7254795645054147883" id="2676198140064743787">
+                  <node role="message" roleId="ih53.7254795645054170840" type="5c7v.LocalizableExpression" typeId="5c7v.86376404488921782" id="1382459627240385784">
+                    <property name="id" nameId="5c7v.86376404488956388" value="Pomodoro_states.Please_specify_the_interruption_cause" />
+                    <node role="parts" roleId="5c7v.86376404488956389" type="5c7v.TextPart" typeId="5c7v.86376404488921792" id="1382459627240385785">
+                      <property name="text" nameId="5c7v.86376404488921799" value="Please specify the interruption cause." />
+                    </node>
+                  </node>
+                </node>
+                <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743789">
+                  <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="3919839132585314850">
+                    <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dPomodoro interruption" resolveInfo="Pomodoro interruption" />
+                  </node>
+                </node>
+              </node>
+            </node>
+            <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="2676198140064743791">
+              <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743792">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YInstanceMethodCall" typeId="ih53.4549928255927079324" id="2676198140064743793">
+                  <link role="methodDeclaration" roleId="ih53.4549928255927079326" targetNodeId="qfu0.~IssueapplyCommand(string, )%cvoid" resolveInfo="applyCommand" />
+                  <node role="actualArgument" roleId="ih53.5770537243328039947" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743794">
+                    <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366141" resolveInfo="+" />
+                    <node role="right" roleId="ih53.4549928255927184282" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743795">
+                      <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366141" resolveInfo="+" />
+                      <node role="right" roleId="ih53.4549928255927184282" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743796">
+                        <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366141" resolveInfo="+" />
+                        <node role="right" roleId="ih53.4549928255927184282" type="ih53.YStringLiteral" typeId="ih53.4549928255927136609" id="2676198140064743797">
+                          <property name="value" nameId="ih53.4549928255927136610" value="'." />
+                        </node>
+                        <node role="left" roleId="ih53.4549928255927184281" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="2676198140064743798">
+                          <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="2676198140064743799">
+                            <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~EnumField%dname" resolveInfo="name" />
+                          </node>
+                          <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743800">
+                            <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="3919839132585314852">
+                              <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dPomodoro interruption" resolveInfo="Pomodoro interruption" />
+                            </node>
+                          </node>
+                        </node>
+                      </node>
+                      <node role="left" roleId="ih53.4549928255927184281" type="5c7v.LocalizableExpression" typeId="5c7v.86376404488921782" id="1382459627240385786">
+                        <property name="id" nameId="5c7v.86376404488956388" value="Pomodoro_states._Pomodoro_was_interrupted_The_cause" />
+                        <node role="parts" roleId="5c7v.86376404488956389" type="5c7v.TextPart" typeId="5c7v.86376404488921792" id="1382459627240385787">
+                          <property name="text" nameId="5c7v.86376404488921799" value="Pomodoro was interrupted. The cause: '" />
+                        </node>
+                      </node>
+                    </node>
+                    <node role="left" roleId="ih53.4549928255927184281" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743803">
+                      <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366141" resolveInfo="+" />
+                      <node role="right" roleId="ih53.4549928255927184282" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743804">
+                        <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366141" resolveInfo="+" />
+                        <node role="right" roleId="ih53.4549928255927184282" type="ih53.YStringLiteral" typeId="ih53.4549928255927136609" id="2676198140064743805">
+                          <property name="value" nameId="ih53.4549928255927136610" value="m " />
+                        </node>
+                        <node role="left" roleId="ih53.4549928255927184281" type="ih53.YParenExpression" typeId="ih53.4549928255927235095" id="2676198140064743806">
+                          <node role="expression" roleId="ih53.4549928255927235100" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743807">
+                            <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366156" resolveInfo="-" />
+                            <node role="right" roleId="ih53.4549928255927184282" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743808">
+                              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="3919839132585314851">
+                                <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dPomodoro countdown" resolveInfo="Pomodoro countdown" />
+                              </node>
+                            </node>
+                            <node role="left" roleId="ih53.4549928255927184281" type="ih53.YIntegerLiteral" typeId="ih53.4549928255927416728" id="2676198140064743810">
+                              <property name="value" nameId="ih53.4549928255927416738" value="25" />
+                            </node>
+                          </node>
+                        </node>
+                      </node>
+                      <node role="left" roleId="ih53.4549928255927184281" type="ih53.YStringLiteral" typeId="ih53.4549928255927136609" id="2676198140064743811">
+                        <property name="value" nameId="ih53.4549928255927136610" value="add work Today " />
+                      </node>
+                    </node>
+                  </node>
+                </node>
+              </node>
+            </node>
+            <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="2676198140064743812">
+              <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743813">
+                <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366192" resolveInfo="=" />
+                <node role="right" roleId="ih53.4549928255927184282" type="ih53.YNullLiteral" typeId="ih53.9181025866980780792" id="2676198140064743814" />
+                <node role="left" roleId="ih53.4549928255927184281" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743815">
+                  <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="3919839132585314853">
+                    <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dPomodoro countdown" resolveInfo="Pomodoro countdown" />
+                  </node>
+                </node>
+              </node>
+            </node>
+          </node>
+        </node>
+      </node>
+      <node role="element" roleId="ih53.4822842069656394005" type="ih53.Transition" typeId="ih53.659756766078198207" id="2676198140064743817">
+        <node role="trigger" roleId="ih53.677959992131405909" type="ih53.TimeTrigger" typeId="ih53.677959992131499411" id="2676198140064743818">
+          <node role="period" roleId="ih53.3928172733718817193" type="ih53.YPeriodLiteral" typeId="ih53.5020714558669854575" id="2676198140064743819">
+            <link role="dateTimeProperty" roleId="ih53.3928172733718624135" targetNodeId="tp6y.1172074618358" resolveInfo="minute" />
+            <node role="count" roleId="ih53.3928172733718821184" type="ih53.YIntegerLiteral" typeId="ih53.4549928255927416728" id="2676198140064743820">
+              <property name="value" nameId="ih53.4549928255927416738" value="25" />
+            </node>
+          </node>
+        </node>
+        <node role="action" roleId="ih53.659756766078198231" type="ih53.OutgoingTransitionAction" typeId="ih53.659756766078467296" id="2676198140064743821">
+          <link role="transitionEnd" roleId="ih53.659756766078467297" targetNodeId="2676198140064743823" resolveInfo="Timer finished" />
+          <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="2676198140064743822" />
+        </node>
+      </node>
+    </node>
+    <node role="state" roleId="ih53.3972957960593021462" type="ih53.State" typeId="ih53.659756766078159426" id="2676198140064743823">
+      <property name="name" nameId="tpck.1169194664001" value="Timer finished" />
+      <node role="element" roleId="ih53.4822842069656394005" type="ih53.Transition" typeId="ih53.659756766078198207" id="2676198140064743824">
+        <node role="trigger" roleId="ih53.677959992131405909" type="ih53.EventTrigger" typeId="ih53.3972957960592985107" id="2676198140064743825">
+          <property name="event" nameId="ih53.8296249755736904827" value="take a break" />
+        </node>
+        <node role="action" roleId="ih53.659756766078198231" type="ih53.OutgoingTransitionAction" typeId="ih53.659756766078467296" id="2676198140064743826">
+          <link role="transitionEnd" roleId="ih53.659756766078467297" targetNodeId="2676198140064743871" resolveInfo="On a break" />
+          <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="2676198140064743827">
+            <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YMessageStatement" typeId="ih53.1609108022041326982" id="2676198140064743828">
+              <node role="message" roleId="ih53.1609108022041326983" type="5c7v.LocalizableExpression" typeId="5c7v.86376404488921782" id="8923096255588359575">
+                <property name="id" nameId="5c7v.86376404488956388" value="Pomodoro_states._5_minutes_break" />
+                <node role="parts" roleId="5c7v.86376404488956389" type="5c7v.TextPart" typeId="5c7v.86376404488921792" id="8923096255588359576">
+                  <property name="text" nameId="5c7v.86376404488921799" value="5 minutes break." />
+                </node>
+              </node>
+            </node>
+            <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="2676198140064743830">
+              <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743831">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YInstanceMethodCall" typeId="ih53.4549928255927079324" id="2676198140064743832">
+                  <link role="methodDeclaration" roleId="ih53.4549928255927079326" targetNodeId="qfu0.~IssueapplyCommand(string, )%cvoid" resolveInfo="applyCommand" />
+                  <node role="actualArgument" roleId="ih53.5770537243328039947" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743833">
+                    <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366141" resolveInfo="+" />
+                    <node role="right" roleId="ih53.4549928255927184282" type="ih53.YStringLiteral" typeId="ih53.4549928255927136609" id="2676198140064743834">
+                      <property name="value" nameId="ih53.4549928255927136610" value=" +1 pomodoro." />
+                    </node>
+                    <node role="left" roleId="ih53.4549928255927184281" type="ih53.YStringLiteral" typeId="ih53.4549928255927136609" id="2676198140064743835">
+                      <property name="value" nameId="ih53.4549928255927136610" value="add work Today 25m" />
+                    </node>
+                  </node>
+                </node>
+              </node>
+            </node>
+            <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="2676198140064743836">
+              <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743837">
+                <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366192" resolveInfo="=" />
+                <node role="left" roleId="ih53.4549928255927184281" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743838">
+                  <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="3919839132585314854">
+                    <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dPomodoro countdown" resolveInfo="Pomodoro countdown" />
+                  </node>
+                </node>
+                <node role="right" roleId="ih53.4549928255927184282" type="ih53.YIntegerLiteral" typeId="ih53.4549928255927416728" id="2676198140064743840">
+                  <property name="value" nameId="ih53.4549928255927416738" value="5" />
+                </node>
+              </node>
+            </node>
+          </node>
+        </node>
+      </node>
+      <node role="element" roleId="ih53.4822842069656394005" type="ih53.Transition" typeId="ih53.659756766078198207" id="2676198140064743841">
+        <node role="trigger" roleId="ih53.677959992131405909" type="ih53.EventTrigger" typeId="ih53.3972957960592985107" id="2676198140064743842">
+          <property name="event" nameId="ih53.8296249755736904827" value="discard" />
+        </node>
+        <node role="action" roleId="ih53.659756766078198231" type="ih53.OutgoingTransitionAction" typeId="ih53.659756766078467296" id="2676198140064743843">
+          <link role="transitionEnd" roleId="ih53.659756766078467297" targetNodeId="2676198140064743760" resolveInfo="Not set" />
+          <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="2676198140064743844">
+            <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="8923096255588359577">
+              <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8923096255588359578">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRequireFieldOperation" typeId="ih53.7254795645054147883" id="8923096255588359579">
+                  <node role="message" roleId="ih53.7254795645054170840" type="5c7v.LocalizableExpression" typeId="5c7v.86376404488921782" id="8923096255588359583">
+                    <property name="id" nameId="5c7v.86376404488956388" value="Pomodoro_states._Please_specify_the_interruption_cause" />
+                    <node role="parts" roleId="5c7v.86376404488956389" type="5c7v.TextPart" typeId="5c7v.86376404488921792" id="8923096255588359584">
+                      <property name="text" nameId="5c7v.86376404488921799" value="Please specify the interruption cause." />
+                    </node>
+                  </node>
+                </node>
+                <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8923096255588359581">
+                  <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="3919839132585314855">
+                    <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dPomodoro interruption" resolveInfo="Pomodoro interruption" />
+                  </node>
+                </node>
+              </node>
+            </node>
+            <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="2676198140064743851">
+              <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743852">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YInstanceMethodCall" typeId="ih53.4549928255927079324" id="2676198140064743853">
+                  <link role="methodDeclaration" roleId="ih53.4549928255927079326" targetNodeId="qfu0.~IssueapplyCommand(string, )%cvoid" resolveInfo="applyCommand" />
+                  <node role="actualArgument" roleId="ih53.5770537243328039947" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743854">
+                    <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366141" resolveInfo="+" />
+                    <node role="right" roleId="ih53.4549928255927184282" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743855">
+                      <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366141" resolveInfo="+" />
+                      <node role="right" roleId="ih53.4549928255927184282" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743856">
+                        <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366141" resolveInfo="+" />
+                        <node role="right" roleId="ih53.4549928255927184282" type="ih53.YStringLiteral" typeId="ih53.4549928255927136609" id="2676198140064743857">
+                          <property name="value" nameId="ih53.4549928255927136610" value="'." />
+                        </node>
+                        <node role="left" roleId="ih53.4549928255927184281" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="2676198140064743858">
+                          <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="2676198140064743859">
+                            <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~EnumField%dname" resolveInfo="name" />
+                          </node>
+                          <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743860">
+                            <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="3919839132585314856">
+                              <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dPomodoro interruption" resolveInfo="Pomodoro interruption" />
+                            </node>
+                          </node>
+                        </node>
+                      </node>
+                      <node role="left" roleId="ih53.4549928255927184281" type="5c7v.LocalizableExpression" typeId="5c7v.86376404488921782" id="8923096255588359595">
+                        <property name="id" nameId="5c7v.86376404488956388" value="Pomodoro_states._Pomodoro_was_discarded_The_cause" />
+                        <node role="parts" roleId="5c7v.86376404488956389" type="5c7v.TextPart" typeId="5c7v.86376404488921792" id="8923096255588359596">
+                          <property name="text" nameId="5c7v.86376404488921799" value="Pomodoro was discarded. The cause: '" />
+                        </node>
+                      </node>
+                    </node>
+                    <node role="left" roleId="ih53.4549928255927184281" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743863">
+                      <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366141" resolveInfo="+" />
+                      <node role="right" roleId="ih53.4549928255927184282" type="ih53.YStringLiteral" typeId="ih53.4549928255927136609" id="2676198140064743864">
+                        <property name="value" nameId="ih53.4549928255927136610" value="25m " />
+                      </node>
+                      <node role="left" roleId="ih53.4549928255927184281" type="ih53.YStringLiteral" typeId="ih53.4549928255927136609" id="2676198140064743865">
+                        <property name="value" nameId="ih53.4549928255927136610" value="add work Today " />
+                      </node>
+                    </node>
+                  </node>
+                </node>
+              </node>
+            </node>
+            <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="2676198140064743866">
+              <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743867">
+                <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366192" resolveInfo="=" />
+                <node role="right" roleId="ih53.4549928255927184282" type="ih53.YNullLiteral" typeId="ih53.9181025866980780792" id="2676198140064743868" />
+                <node role="left" roleId="ih53.4549928255927184281" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743869">
+                  <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="3919839132585314857">
+                    <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dPomodoro countdown" resolveInfo="Pomodoro countdown" />
+                  </node>
+                </node>
+              </node>
+            </node>
+          </node>
+        </node>
+      </node>
+    </node>
+    <node role="state" roleId="ih53.3972957960593021462" type="ih53.State" typeId="ih53.659756766078159426" id="2676198140064743871">
+      <property name="name" nameId="tpck.1169194664001" value="On a break" />
+      <node role="element" roleId="ih53.4822842069656394005" type="ih53.Transition" typeId="ih53.659756766078198207" id="2676198140064743872">
+        <node role="trigger" roleId="ih53.677959992131405909" type="ih53.EventTrigger" typeId="ih53.3972957960592985107" id="2676198140064743873">
+          <property name="event" nameId="ih53.8296249755736904827" value="start" />
+        </node>
+        <node role="action" roleId="ih53.659756766078198231" type="ih53.OutgoingTransitionAction" typeId="ih53.659756766078467296" id="2676198140064743874">
+          <link role="transitionEnd" roleId="ih53.659756766078467297" targetNodeId="2676198140064743766" resolveInfo="Timer’s running" />
+          <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="2676198140064743875">
+            <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="2676198140064743876">
+              <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743877">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YInstanceMethodCall" typeId="ih53.4549928255927079324" id="2676198140064743878">
+                  <link role="methodDeclaration" roleId="ih53.4549928255927079326" targetNodeId="qfu0.~IssueapplyCommand(string, )%cvoid" resolveInfo="applyCommand" />
+                  <node role="actualArgument" roleId="ih53.5770537243328039947" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743879">
+                    <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366141" resolveInfo="+" />
+                    <node role="right" roleId="ih53.4549928255927184282" type="5c7v.LocalizableExpression" typeId="5c7v.86376404488921782" id="8923096255588359604">
+                      <property name="id" nameId="5c7v.86376404488956388" value="Pomodoro_states._1_short_break" />
+                      <node role="parts" roleId="5c7v.86376404488956389" type="5c7v.TextPart" typeId="5c7v.86376404488921792" id="8923096255588359605">
+                        <property name="text" nameId="5c7v.86376404488921799" value="+1 short break." />
+                      </node>
+                    </node>
+                    <node role="left" roleId="ih53.4549928255927184281" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743881">
+                      <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366141" resolveInfo="+" />
+                      <node role="right" roleId="ih53.4549928255927184282" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743882">
+                        <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366141" resolveInfo="+" />
+                        <node role="right" roleId="ih53.4549928255927184282" type="ih53.YStringLiteral" typeId="ih53.4549928255927136609" id="2676198140064743883">
+                          <property name="value" nameId="ih53.4549928255927136610" value="m " />
+                        </node>
+                        <node role="left" roleId="ih53.4549928255927184281" type="ih53.YParenExpression" typeId="ih53.4549928255927235095" id="2676198140064743884">
+                          <node role="expression" roleId="ih53.4549928255927235100" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743885">
+                            <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366156" resolveInfo="-" />
+                            <node role="right" roleId="ih53.4549928255927184282" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743886">
+                              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="3919839132585314858">
+                                <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dPomodoro countdown" resolveInfo="Pomodoro countdown" />
+                              </node>
+                            </node>
+                            <node role="left" roleId="ih53.4549928255927184281" type="ih53.YIntegerLiteral" typeId="ih53.4549928255927416728" id="2676198140064743888">
+                              <property name="value" nameId="ih53.4549928255927416738" value="5" />
+                            </node>
+                          </node>
+                        </node>
+                      </node>
+                      <node role="left" roleId="ih53.4549928255927184281" type="ih53.YStringLiteral" typeId="ih53.4549928255927136609" id="2676198140064743889">
+                        <property name="value" nameId="ih53.4549928255927136610" value="add work Today " />
+                      </node>
+                    </node>
+                  </node>
+                </node>
+              </node>
+            </node>
+          </node>
+        </node>
+      </node>
+      <node role="element" roleId="ih53.4822842069656394005" type="ih53.Transition" typeId="ih53.659756766078198207" id="2676198140064743890">
+        <node role="trigger" roleId="ih53.677959992131405909" type="ih53.TimeTrigger" typeId="ih53.677959992131499411" id="2676198140064743891">
+          <node role="period" roleId="ih53.3928172733718817193" type="ih53.YPeriodLiteral" typeId="ih53.5020714558669854575" id="2676198140064743892">
+            <link role="dateTimeProperty" roleId="ih53.3928172733718624135" targetNodeId="tp6y.1172074618358" resolveInfo="minute" />
+            <node role="count" roleId="ih53.3928172733718821184" type="ih53.YIntegerLiteral" typeId="ih53.4549928255927416728" id="2676198140064743893">
+              <property name="value" nameId="ih53.4549928255927416738" value="5" />
+            </node>
+          </node>
+        </node>
+        <node role="action" roleId="ih53.659756766078198231" type="ih53.OutgoingTransitionAction" typeId="ih53.659756766078467296" id="2676198140064743894">
+          <link role="transitionEnd" roleId="ih53.659756766078467297" targetNodeId="2676198140064743760" resolveInfo="Not set" />
+          <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="2676198140064743895">
+            <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="2676198140064743896">
+              <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064743897">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YInstanceMethodCall" typeId="ih53.4549928255927079324" id="2676198140064743898">
+                  <link role="methodDeclaration" roleId="ih53.4549928255927079326" targetNodeId="qfu0.~IssueapplyCommand(string, )%cvoid" resolveInfo="applyCommand" />
+                  <node role="actualArgument" roleId="ih53.5770537243328039947" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2676198140064743899">
+                    <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366141" resolveInfo="+" />
+                    <node role="right" roleId="ih53.4549928255927184282" type="5c7v.LocalizableExpression" typeId="5c7v.86376404488921782" id="8923096255588359613">
+                      <property name="id" nameId="5c7v.86376404488956388" value="Pomodoro_states._1_break" />
+                      <node role="parts" roleId="5c7v.86376404488956389" type="5c7v.TextPart" typeId="5c7v.86376404488921792" id="8923096255588359614">
+                        <property name="text" nameId="5c7v.86376404488921799" value="+1 break." />
+                      </node>
+                    </node>
+                    <node role="left" roleId="ih53.4549928255927184281" type="ih53.YStringLiteral" typeId="ih53.4549928255927136609" id="2676198140064743901">
+                      <property name="value" nameId="ih53.4549928255927136610" value="add work Today 5m " />
+                    </node>
+                  </node>
+                </node>
+              </node>
+            </node>
+          </node>
+        </node>
+      </node>
+    </node>
+  </root>
+</model>
+

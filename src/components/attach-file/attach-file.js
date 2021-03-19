@@ -44,7 +44,7 @@ async function pickPhoto(method: string): Promise<NormalizedAttachment> {
   };
 }
 
-export default async function attachFile(method: 'openCamera'|'openPicker' = 'openPicker'): Promise<?NormalizedAttachment> {
+export default async function attachFile(method: 'openCamera' | 'openPicker' = 'openPicker'): Promise<?NormalizedAttachment> {
   try {
     return await pickPhoto(method);
   } catch (err) {

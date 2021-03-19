@@ -1,92 +1,94 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.jetbrains.youtrack.mobile.app"
-    android:versionCode="1"
-    android:versionName="1.0">
+    package="com.jetbrains.youtrack.mobile.app">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
-    <uses-feature android:name="android.hardware.camera" android:required="false"/>
-    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
 
     <application
-      android:name=".MainApplication"
-      android:allowBackup="false"
-      android:usesCleartextTraffic="true"
-      android:label="@string/app_name"
-      android:icon="@mipmap/yt_logo"
-      android:theme="@style/AppTheme"
-      android:requestLegacyExternalStorage="true">
-
-      <meta-data
-          android:name="com.google.firebase.messaging.default_notification_icon"
-          android:resource="@drawable/notification_icon"/>
-
-      <meta-data
-          android:name="com.google.firebase.messaging.default_notification_color"
-          android:resource="@color/notification_icon_color"/>
-
-      <activity
-        android:name=".SplashActivity"
+        android:name=".MainApplication"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/SplashTheme"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
-        android:windowSoftInputMode="adjustResize">
-        <intent-filter>
-          <action android:name="android.intent.action.MAIN" />
-          <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-      </activity>
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
 
-      <activity
-        android:name=".MainActivity"
-        android:label="@string/app_name"
-        android:launchMode="singleTask"
-        android:windowSoftInputMode="adjustResize"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
-        <intent-filter android:label="YouTrack Mobile Authorization">
-            <action android:name="android.intent.action.VIEW"/>
-            <category android:name="android.intent.category.DEFAULT"/>
-            <category android:name="android.intent.category.BROWSABLE"/>
-            <data android:scheme="ytoauth" android:host="landing.url"/>
-        </intent-filter>
-        <intent-filter android:label="Universal links">
-          <action android:name="android.intent.action.VIEW"/>
-          <category android:name="android.intent.category.DEFAULT"/>
-          <category android:name="android.intent.category.BROWSABLE"/>
-          <data android:scheme="youtrack"/>
-        </intent-filter>
-        <intent-filter android:label="YouTrack Mobile">
-          <action android:name="android.intent.action.VIEW"/>
-          <category android:name="android.intent.category.DEFAULT"/>
-          <category android:name="android.intent.category.BROWSABLE"/>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/notification_icon"/>
 
-          <data android:scheme="https" android:host="*" android:pathPattern="/.*issue/.*"/>
-          <data android:scheme="http" android:host="*" android:pathPattern="/.*issue/.*"/>
-          <data android:scheme="https" android:host="*" android:pathPattern="/.*oauth.*"/>
-          <data android:scheme="http" android:host="*" android:pathPattern="/.*oauth.*"/>
-          <data android:scheme="http" android:host="*" android:pathPattern="/.*issue/.*"/>
-          <data android:scheme="https" android:host="*" android:pathPattern="/.*youtrack/issues"/>
-          <data android:scheme="http" android:host="*" android:pathPattern="/.*youtrack/issues"/>
-          <data android:scheme="https" android:host="*" android:pathPattern="/.*youtrack/oauth.*"/>
-          <data android:scheme="http" android:host="*" android:pathPattern="/.*youtrack/oauth.*"/>
-          <data android:scheme="https" android:host="*" android:pathPattern="/.*issueMobile/.*"/>
-          <data android:scheme="http" android:host="*" android:pathPattern="/.*issueMobile/.*"/>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/notification_icon_color"/>
 
-          <data android:scheme="https" android:host="*.jetbrains.com" android:pathPattern="/.*issues"/>
-          <data android:scheme="http" android:host="*.jetbrains.com" android:pathPattern="/.*issues"/>
-          <data android:scheme="https" android:host="*.jetbrains.com" android:pathPattern="/.*oauth.*"/>
-          <data android:scheme="http" android:host="*.jetbrains.com" android:pathPattern="/.*oauth.*"/>
+        <activity
+            android:name=".SplashActivity"
+            android:label="@string/app_name"
+            android:theme="@style/SplashTheme"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
-          <data android:scheme="https" android:host="*.myjetbrains.com" android:pathPattern="/.*issues"/>
-          <data android:scheme="http" android:host="*.myjetbrains.com" android:pathPattern="/.*issues"/>
-          <data android:scheme="https" android:host="*.myjetbrains.com" android:pathPattern="/.*oauth.*"/>
-          <data android:scheme="http" android:host="*.myjetbrains.com" android:pathPattern="/.*oauth.*"/>
-        </intent-filter>
-      </activity>
-      <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+            <intent-filter android:label="YouTrack Mobile Authorization">
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="ytoauth" android:host="landing.url"/>
+            </intent-filter>
+            <intent-filter android:label="Universal links">
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="youtrack"/>
+            </intent-filter>
+            <intent-filter android:label="YouTrack Mobile">
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data android:scheme="https" android:host="*" android:pathPattern="/.*issue/.*"/>
+                <data android:scheme="http" android:host="*" android:pathPattern="/.*issue/.*"/>
+                <data android:scheme="https" android:host="*" android:pathPattern="/.*oauth.*"/>
+                <data android:scheme="http" android:host="*" android:pathPattern="/.*oauth.*"/>
+                <data android:scheme="http" android:host="*" android:pathPattern="/.*issue/.*"/>
+                <data android:scheme="https" android:host="*" android:pathPattern="/.*youtrack/issues"/>
+                <data android:scheme="http" android:host="*" android:pathPattern="/.*youtrack/issues"/>
+                <data android:scheme="https" android:host="*" android:pathPattern="/.*youtrack/oauth.*"/>
+                <data android:scheme="http" android:host="*" android:pathPattern="/.*youtrack/oauth.*"/>
+                <data android:scheme="https" android:host="*" android:pathPattern="/.*issueMobile/.*"/>
+                <data android:scheme="http" android:host="*" android:pathPattern="/.*issueMobile/.*"/>
+
+                <data android:scheme="https" android:host="*.jetbrains.com" android:pathPattern="/.*issues"/>
+                <data android:scheme="http" android:host="*.jetbrains.com" android:pathPattern="/.*issues"/>
+                <data android:scheme="https" android:host="*.jetbrains.com" android:pathPattern="/.*oauth.*"/>
+                <data android:scheme="http" android:host="*.jetbrains.com" android:pathPattern="/.*oauth.*"/>
+
+                <data android:scheme="https" android:host="*.myjetbrains.com" android:pathPattern="/.*issues"/>
+                <data android:scheme="http" android:host="*.myjetbrains.com" android:pathPattern="/.*issues"/>
+                <data android:scheme="https" android:host="*.myjetbrains.com" android:pathPattern="/.*oauth.*"/>
+                <data android:scheme="http" android:host="*.myjetbrains.com" android:pathPattern="/.*oauth.*"/>
+            </intent-filter>
+        </activity>
+
     </application>
-
 </manifest>

@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model modelUID="r:4a690715-956e-436c-9c46-4fc922d3a8a7(jetbrains-youtrack-replaceLinks)">
+  <persistence version="7" />
+  <language namespace="355b8814-6452-42a9-99ba-bf48a86484df(jetbrains.youtrack.workflow)" />
+  <import index="qfu0" modelUID="f:java_stub#jetbrains.youtrack.workflow.customFieldsSchema(jetbrains.youtrack.workflow.customFieldsSchema@java_stub)" version="-1" />
+  <import index="tpck" modelUID="r:00000000-0000-4000-0000-011c89590288(jetbrains.mps.lang.core.structure)" version="0" implicit="yes" />
+  <import index="ih53" modelUID="r:913dafeb-4d10-46a5-9806-7d085c6ccd01(jetbrains.youtrack.workflow.structure)" version="11" implicit="yes" />
+  <import index="fk9a" modelUID="r:687126b3-ce00-4b38-98b6-dd0302c57bc6(jetbrains.youtrack.workflow.operators)" version="-1" implicit="yes" />
+  <roots>
+    <node type="ih53.StatelessRule" typeId="ih53.2793979439244446838" id="8440185642624018924">
+      <property name="name" nameId="tpck.1169194664001" value="Replace existing link with adding link if both have similar ends" />
+    </node>
+  </roots>
+  <root id="8440185642624018924">
+    <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="8440185642624018925">
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YStatement" typeId="ih53.4549928255926912355" id="8440185642624026459" />
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YForeachStatement" typeId="ih53.9181025866980780787" id="8440185642624021029">
+        <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="8440185642624021030">
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="8440185642624021031">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624021032">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRemoveOperation" typeId="ih53.5610598278601569113" id="8440185642624021033">
+                <node role="element" roleId="ih53.5610598278601566038" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="8440185642624021034">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="8440185642624021053" resolveInfo="duplicate" />
+                </node>
+              </node>
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624021035">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624021036">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%drelates to" resolveInfo="relates to" />
+                </node>
+              </node>
+            </node>
+          </node>
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="8440185642624021037">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624021038">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRemoveOperation" typeId="ih53.5610598278601569113" id="8440185642624021039">
+                <node role="element" roleId="ih53.5610598278601566038" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="8440185642624021040">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="8440185642624021053" resolveInfo="duplicate" />
+                </node>
+              </node>
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624021041">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624021042">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%ddepends on" resolveInfo="depends on" />
+                </node>
+              </node>
+            </node>
+          </node>
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="8440185642624023136">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624023141">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRemoveOperation" typeId="ih53.5610598278601569113" id="8440185642624023144">
+                <node role="element" roleId="ih53.5610598278601566038" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="8440185642624023146">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="8440185642624021053" resolveInfo="duplicate" />
+                </node>
+              </node>
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624023137">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624023138">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dis required for" resolveInfo="is required for" />
+                </node>
+              </node>
+            </node>
+          </node>
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="8440185642624021043">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624021044">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRemoveOperation" typeId="ih53.5610598278601569113" id="8440185642624021045">
+                <node role="element" roleId="ih53.5610598278601566038" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="8440185642624021046">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="8440185642624021053" resolveInfo="duplicate" />
+                </node>
+              </node>
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624021047">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624021048">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dsubtask of" resolveInfo="subtask of" />
+                </node>
+              </node>
+            </node>
+          </node>
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="8440185642624023149">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624023154">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRemoveOperation" typeId="ih53.5610598278601569113" id="8440185642624023157">
+                <node role="element" roleId="ih53.5610598278601566038" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="8440185642624023159">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="8440185642624021053" resolveInfo="duplicate" />
+                </node>
+              </node>
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624023150">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624023151">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dparent for" resolveInfo="parent for" />
+                </node>
+              </node>
+            </node>
+          </node>
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="2676198140064619958">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="2676198140064693432">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRemoveOperation" typeId="ih53.5610598278601569113" id="2676198140064693435">
+                <node role="element" roleId="ih53.5610598278601566038" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="2676198140064693437">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="8440185642624021053" resolveInfo="duplicate" />
+                </node>
+              </node>
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064619959">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="2676198140064693429">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dis duplicated by" resolveInfo="is duplicated by" />
+                </node>
+              </node>
+            </node>
+          </node>
+        </node>
+        <node role="sequence" roleId="ih53.9181025866980780789" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624021049">
+          <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YAddedOperation" typeId="ih53.9181025866980722492" id="8440185642624021050" />
+          <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624021051">
+            <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624021052">
+              <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dduplicates" resolveInfo="duplicates" />
+            </node>
+          </node>
+        </node>
+        <node role="variableDeclaration" roleId="ih53.9181025866980780790" type="ih53.YVariableDeclaration" typeId="ih53.9181025866980780791" id="8440185642624021053">
+          <property name="name" nameId="tpck.1169194664001" value="duplicate" />
+        </node>
+      </node>
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YStatement" typeId="ih53.4549928255926912355" id="8440185642624021055" />
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YForeachStatement" typeId="ih53.9181025866980780787" id="8440185642624021057">
+        <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="8440185642624021058">
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="8440185642624021059">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624021060">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRemoveOperation" typeId="ih53.5610598278601569113" id="8440185642624021061">
+                <node role="element" roleId="ih53.5610598278601566038" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="8440185642624021062">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="8440185642624021081" resolveInfo="related" />
+                </node>
+              </node>
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624021063">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624021083">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dduplicates" resolveInfo="duplicates" />
+                </node>
+              </node>
+            </node>
+          </node>
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="2676198140064693439">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="2676198140064693444">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRemoveOperation" typeId="ih53.5610598278601569113" id="2676198140064693447">
+                <node role="element" roleId="ih53.5610598278601566038" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="2676198140064693449">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="8440185642624021081" resolveInfo="related" />
+                </node>
+              </node>
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064693440">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="2676198140064693441">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dis duplicated by" resolveInfo="is duplicated by" />
+                </node>
+              </node>
+            </node>
+          </node>
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="8440185642624021065">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624021066">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRemoveOperation" typeId="ih53.5610598278601569113" id="8440185642624021067">
+                <node role="element" roleId="ih53.5610598278601566038" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="8440185642624021068">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="8440185642624021081" resolveInfo="related" />
+                </node>
+              </node>
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624021069">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624021070">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%ddepends on" resolveInfo="depends on" />
+                </node>
+              </node>
+            </node>
+          </node>
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="8440185642624027570">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624027571">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRemoveOperation" typeId="ih53.5610598278601569113" id="8440185642624027572">
+                <node role="element" roleId="ih53.5610598278601566038" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="8440185642624027573">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="8440185642624021081" resolveInfo="related" />
+                </node>
+              </node>
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624027574">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624027576">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dis required for" resolveInfo="is required for" />
+                </node>
+              </node>
+            </node>
+          </node>
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="8440185642624021071">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624021072">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRemoveOperation" typeId="ih53.5610598278601569113" id="8440185642624021073">
+                <node role="element" roleId="ih53.5610598278601566038" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="8440185642624021074">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="8440185642624021081" resolveInfo="related" />
+                </node>
+              </node>
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624021075">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624021076">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dsubtask of" resolveInfo="subtask of" />
+                </node>
+              </node>
+            </node>
+          </node>
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="8440185642624027577">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624027578">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRemoveOperation" typeId="ih53.5610598278601569113" id="8440185642624027579">
+                <node role="element" roleId="ih53.5610598278601566038" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="8440185642624027580">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="8440185642624021081" resolveInfo="related" />
+                </node>
+              </node>
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624027581">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624027583">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dparent for" resolveInfo="parent for" />
+                </node>
+              </node>
+            </node>
+          </node>
+        </node>
+        <node role="sequence" roleId="ih53.9181025866980780789" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624021077">
+          <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YAddedOperation" typeId="ih53.9181025866980722492" id="8440185642624021078" />
+          <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624021079">
+            <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624021082">
+              <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%drelates to" resolveInfo="relates to" />
+            </node>
+          </node>
+        </node>
+        <node role="variableDeclaration" roleId="ih53.9181025866980780790" type="ih53.YVariableDeclaration" typeId="ih53.9181025866980780791" id="8440185642624021081">
+          <property name="name" nameId="tpck.1169194664001" value="related" />
+        </node>
+      </node>
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YStatement" typeId="ih53.4549928255926912355" id="8440185642624021109" />
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YForeachStatement" typeId="ih53.9181025866980780787" id="8440185642624021084">
+        <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="8440185642624021085">
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="8440185642624021086">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624021087">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRemoveOperation" typeId="ih53.5610598278601569113" id="8440185642624021088">
+                <node role="element" roleId="ih53.5610598278601566038" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="8440185642624021089">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="8440185642624021108" resolveInfo="subtask" />
+                </node>
+              </node>
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624021090">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624021091">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%drelates to" resolveInfo="relates to" />
+                </node>
+              </node>
+            </node>
+          </node>
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="8440185642624021092">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624021093">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRemoveOperation" typeId="ih53.5610598278601569113" id="8440185642624021094">
+                <node role="element" roleId="ih53.5610598278601566038" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="8440185642624021095">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="8440185642624021108" resolveInfo="subtask" />
+                </node>
+              </node>
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624021096">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624021097">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%ddepends on" resolveInfo="depends on" />
+                </node>
+              </node>
+            </node>
+          </node>
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="8440185642624027584">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624027585">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRemoveOperation" typeId="ih53.5610598278601569113" id="8440185642624027586">
+                <node role="element" roleId="ih53.5610598278601566038" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="8440185642624027587">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="8440185642624021108" resolveInfo="subtask" />
+                </node>
+              </node>
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624027588">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624027590">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dis required for" resolveInfo="is required for" />
+                </node>
+              </node>
+            </node>
+          </node>
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="8440185642624021098">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624021099">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRemoveOperation" typeId="ih53.5610598278601569113" id="8440185642624021100">
+                <node role="element" roleId="ih53.5610598278601566038" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="8440185642624021101">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="8440185642624021108" resolveInfo="subtask" />
+                </node>
+              </node>
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624021102">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624021111">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dduplicates" resolveInfo="duplicates" />
+                </node>
+              </node>
+            </node>
+          </node>
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="8440185642624027591">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624027592">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRemoveOperation" typeId="ih53.5610598278601569113" id="8440185642624027593">
+                <node role="element" roleId="ih53.5610598278601566038" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="8440185642624027594">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="8440185642624021108" resolveInfo="subtask" />
+                </node>
+              </node>
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624027595">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624027597">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dis duplicated by" resolveInfo="is duplicated by" />
+                </node>
+              </node>
+            </node>
+          </node>
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="2676198140064693451">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="2676198140064693456">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRemoveOperation" typeId="ih53.5610598278601569113" id="2676198140064693459">
+                <node role="element" roleId="ih53.5610598278601566038" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="2676198140064693461">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="8440185642624021108" resolveInfo="subtask" />
+                </node>
+              </node>
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064693452">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="2676198140064693453">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dparent for" resolveInfo="parent for" />
+                </node>
+              </node>
+            </node>
+          </node>
+        </node>
+        <node role="sequence" roleId="ih53.9181025866980780789" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624021104">
+          <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YAddedOperation" typeId="ih53.9181025866980722492" id="8440185642624021105" />
+          <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624021106">
+            <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624021110">
+              <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dsubtask of" resolveInfo="subtask of" />
+            </node>
+          </node>
+        </node>
+        <node role="variableDeclaration" roleId="ih53.9181025866980780790" type="ih53.YVariableDeclaration" typeId="ih53.9181025866980780791" id="8440185642624021108">
+          <property name="name" nameId="tpck.1169194664001" value="subtask" />
+        </node>
+      </node>
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YStatement" typeId="ih53.4549928255926912355" id="8440185642624021138" />
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YForeachStatement" typeId="ih53.9181025866980780787" id="8440185642624021112">
+        <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="8440185642624021113">
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="8440185642624021114">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624021115">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRemoveOperation" typeId="ih53.5610598278601569113" id="8440185642624021116">
+                <node role="element" roleId="ih53.5610598278601566038" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="8440185642624021117">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="8440185642624021136" resolveInfo="depended" />
+                </node>
+              </node>
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624021118">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624021119">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%drelates to" resolveInfo="relates to" />
+                </node>
+              </node>
+            </node>
+          </node>
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="8440185642624021120">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624021121">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRemoveOperation" typeId="ih53.5610598278601569113" id="8440185642624021122">
+                <node role="element" roleId="ih53.5610598278601566038" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="8440185642624021123">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="8440185642624021136" resolveInfo="depended" />
+                </node>
+              </node>
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624021124">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624021140">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dduplicates" resolveInfo="duplicates" />
+                </node>
+              </node>
+            </node>
+          </node>
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="8440185642624027598">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624027599">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRemoveOperation" typeId="ih53.5610598278601569113" id="8440185642624027600">
+                <node role="element" roleId="ih53.5610598278601566038" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="8440185642624027601">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="8440185642624021136" resolveInfo="depended" />
+                </node>
+              </node>
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624027602">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624027604">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dis duplicated by" resolveInfo="is duplicated by" />
+                </node>
+              </node>
+            </node>
+          </node>
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="8440185642624021126">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624021127">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRemoveOperation" typeId="ih53.5610598278601569113" id="8440185642624021128">
+                <node role="element" roleId="ih53.5610598278601566038" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="8440185642624021129">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="8440185642624021136" resolveInfo="depended" />
+                </node>
+              </node>
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624021130">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624021131">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dsubtask of" resolveInfo="subtask of" />
+                </node>
+              </node>
+            </node>
+          </node>
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="8440185642624027605">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624027606">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRemoveOperation" typeId="ih53.5610598278601569113" id="8440185642624027607">
+                <node role="element" roleId="ih53.5610598278601566038" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="8440185642624027608">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="8440185642624021136" resolveInfo="depended" />
+                </node>
+              </node>
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624027609">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624027611">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dparent for" resolveInfo="parent for" />
+                </node>
+              </node>
+            </node>
+          </node>
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="2676198140064693463">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="2676198140064693468">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRemoveOperation" typeId="ih53.5610598278601569113" id="2676198140064693471">
+                <node role="element" roleId="ih53.5610598278601566038" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="2676198140064693473">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="8440185642624021136" resolveInfo="depended" />
+                </node>
+              </node>
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="2676198140064693464">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="2676198140064693465">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dis required for" resolveInfo="is required for" />
+                </node>
+              </node>
+            </node>
+          </node>
+        </node>
+        <node role="sequence" roleId="ih53.9181025866980780789" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624021132">
+          <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YAddedOperation" typeId="ih53.9181025866980722492" id="8440185642624021133" />
+          <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624021134">
+            <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624021139">
+              <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%ddepends on" resolveInfo="depends on" />
+            </node>
+          </node>
+        </node>
+        <node role="variableDeclaration" roleId="ih53.9181025866980780790" type="ih53.YVariableDeclaration" typeId="ih53.9181025866980780791" id="8440185642624021136">
+          <property name="name" nameId="tpck.1169194664001" value="depended" />
+        </node>
+      </node>
+    </node>
+    <node role="guard" roleId="ih53.4549928255927007153" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="8440185642624018944">
+      <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366088" resolveInfo="||" />
+      <node role="right" roleId="ih53.4549928255927184282" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="8440185642624018965">
+        <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366088" resolveInfo="||" />
+        <node role="right" roleId="ih53.4549928255927184282" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="8440185642624018996">
+          <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366088" resolveInfo="||" />
+          <node role="right" roleId="ih53.4549928255927184282" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624019021">
+            <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YNotEmptyOperation" typeId="ih53.5610598278601569140" id="8440185642624019024" />
+            <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624019009">
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624018999">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624019000">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dsubtask of" resolveInfo="subtask of" />
+                </node>
+              </node>
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YAddedOperation" typeId="ih53.9181025866980722492" id="8440185642624019012" />
+            </node>
+          </node>
+          <node role="left" roleId="ih53.4549928255927184281" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624018986">
+            <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YNotEmptyOperation" typeId="ih53.5610598278601569140" id="8440185642624018989" />
+            <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624018976">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YAddedOperation" typeId="ih53.9181025866980722492" id="8440185642624018979" />
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624018968">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624018969">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%ddepends on" resolveInfo="depends on" />
+                </node>
+              </node>
+            </node>
+          </node>
+        </node>
+        <node role="left" roleId="ih53.4549928255927184281" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624018961">
+          <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YNotEmptyOperation" typeId="ih53.5610598278601569140" id="8440185642624018964" />
+          <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624018953">
+            <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YAddedOperation" typeId="ih53.9181025866980722492" id="8440185642624018956" />
+            <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624018947">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624018948">
+                <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%drelates to" resolveInfo="relates to" />
+              </node>
+            </node>
+          </node>
+        </node>
+      </node>
+      <node role="left" roleId="ih53.4549928255927184281" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624018938">
+        <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YNotEmptyOperation" typeId="ih53.5610598278601569140" id="8440185642624018941" />
+        <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="8440185642624018930">
+          <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YAddedOperation" typeId="ih53.9181025866980722492" id="8440185642624018935" />
+          <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="8440185642624018926">
+            <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="8440185642624018927">
+              <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dduplicates" resolveInfo="duplicates" />
+            </node>
+          </node>
+        </node>
+      </node>
+    </node>
+  </root>
+</model>
+

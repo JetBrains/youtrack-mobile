@@ -29,7 +29,6 @@ import Page from './views/page/page';
 import Settings from './views/settings/settings';
 import WikiPage from './views/wiki-page/wiki-page';
 
-
 import {ActionSheetProvider, connectActionSheet} from '@expo/react-native-action-sheet';
 
 import AppProvider from './app-provider';
@@ -77,7 +76,7 @@ class YouTrackMobile extends Component<void, void> {
   static async getNotificationData() {
     let notificationData: NotificationRouteData = {};
     if (isAndroid) {
-      const ReactNativeNotifications = await import('react-native-notifications-latest');
+      const ReactNativeNotifications = await import('react-native-notifications');
       const initialNotification = await ReactNativeNotifications.Notifications.getInitialNotification();
       const notificationPayload = initialNotification?.payload;
       notificationData = {

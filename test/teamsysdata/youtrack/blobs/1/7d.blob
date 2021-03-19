@@ -1,0 +1,612 @@
+Oýconst dateTime = require('@jetbrains/youtrack-scripting-api/date-time');
+const http = require('@jetbrains/youtrack-scripting-api/http');
+const mUtils = require('./utils');
+
+MantisIssues = function (context) {
+
+    const params = context.parameters;
+    //mantis pages starts from 1 !!!
+    var page = 1;
+
+    var mantisPageSize = 50;
+    let url = params.loadValue('url');
+    const sslKeyName = params.loadValue('sslKeyName');
+    const token = params.loadValue('password');
+    const connection = new http.Connection(url, sslKeyName)
+        .addHeader('Authorization', token)
+        .addHeader('Accept', 'application/json');
+
+    const client = {};
+
+    const getTimestampFormats = () => {
+        return ["yyyy-MM-dd'T'HH:mm:ssXXX", "EEE, d MMM yyyy HH:mm:ss z", "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
+    };
+
+    const headersToMap = (headers) => {
+        const result = {};
+        for (let key in headers) {
+            if (!headers.hasOwnProperty(key)) {
+                continue;
+            }
+            result[headers[key].name.toLowerCase()] = headers[key].value;
+        }
+        return result;
+    };
+
+    const getServerInfo = () => {
+        const response = connection.getSync('/api/rest/config');
+        const headers = headersToMap(response.headers);
+        return {
+            version: headers['x-mantis-version'] || 'mock',
+            time: headers['last-modified'] || new Date().toISOString()
+        };
+    };
+
+    const getProjects = () => {
+        const mProjects = loadJson('/api/rest/projects');
+        return mProjects.projects.map(project => {
+            return {
+                id: project.id,
+                key: mUtils.normalizeProjectKey(project.name),
+                name: project.name,
+            }
+        });
+    };
+
+    const projectFieldSchema = {};
+
+    const getProject = (projectKey) => {
+        const project = loadJson('/api/rest/projects/' + projectKey.id).projects[0];
+
+        let import_project = {
+            id: project.id,
+            name: project.name,
+            key: mUtils.normalizeProjectKey(project.name),
+            description: project.description,
+            lead: {
+                login: project.access_level.name,
+                name: project.access_level.label
+            }
+        };
+
+        const predefinedFields = [
+            {
+                'id': 'summary',
+                'name': 'summary',
+                'type': 'string',
+                'multiValue': false,
+            },
+            {
+                'id': 'description',
+                'name': 'description',
+                'type': 'string',
+                'multiValue': false,
+            }
+        ];
+
+        const defaultFields = [
+            {
+                id: 'steps_to_reproduce',
+                name: 'STR',
+                type: 'text'
+            },
+            {
+                id: 'platform',
+                name: 'platform',
+                type: 'string'
+            },
+            {
+                id: 'os',
+                name: 'os',
+                type: 'string'
+            },
+            {
+                id: 'os_build',
+                name: 'os_build',
+                type: 'string'
+            },
+            {
+                id: 'additional_information',
+                name: 'Additional_Information',
+                type: 'text'
+            },
+            {
+                id: 'priority',
+                name: 'Priority',
+                type: 'enum',
+                values: [
+                    {
+                        name: 'none'
+                    },
+                    {
+                        name: 'low'
+                    },
+                    {
+                        name: 'normal'
+                    },
+                    {
+                        name: 'high'
+                    },
+                    {
+                        name: 'urgent'
+                    },
+                    {
+                        name: 'immediate'
+                    }
+                ]
+
+            },
+            {
+                id: 'status',
+                name: 'Status',
+                multiValue: false,
+                type: 'enum',
+                values: [
+                    {
+                        name: 'new'
+                    },
+                    {
+                        name: 'feedback'
+                    },
+                    {
+                        name: 'acknowledged'
+                    },
+                    {
+                        name: 'confirmed'
+                    },
+                    {
+                        name: 'assigned'
+                    },
+                    {
+                        name: 'resolved'
+                    },
+                    {
+                        name: 'closed'
+                    }
+                ]
+            },
+            {
+                id: 'resolution',
+                name: 'Resolution',
+                multiValue: false,
+                type: 'state',
+                values: [
+                    {
+                        name: 'open',
+                        isResolved: false
+                    },
+                    {
+                        name: 'fixed',
+                        isResolved: true
+                    },
+                    {
+                        name: 'reopened',
+                        isResolved: false
+                    },
+                    {
+                        name: 'unable to reproduce',
+                        isResolved: false
+                    },
+                    {
+                        name: 'not fixable',
+                        isResolved: true
+                    },
+                    {
+                        name: 'duplicate',
+                        isResolved: false
+                    },
+                    {
+                        name: 'no change required',
+                        isResolved: true
+                    },
+                    {
+                        name: 'suspended',
+                        isResolved: true
+                    },
+                    {
+                        name: 'won\'t fix',
+                        isResolved: true
+                    },
+                ]
+            },
+            {
+                id: 'severity',
+                name: 'Severity',
+                multiValue: false,
+                type: 'enum',
+                values: [
+                    {
+                        name: 'feature'
+                    },
+                    {
+                        name: 'trivial'
+                    },
+                    {
+                        name: 'text'
+                    },
+                    {
+                        name: 'tweak'
+                    },
+                    {
+                        name: 'minor'
+                    },
+                    {
+                        name: 'major'
+                    },
+                    {
+                        name: 'crash'
+                    },
+                    {
+                        name: 'block'
+                    },
+                ]
+            },
+            {
+                id: 'reproducibility',
+                name: 'Reproducibility',
+                multiValue: false,
+                type: 'enum',
+                values: [
+                    {
+                        name: 'always'
+                    },
+                    {
+                        name: 'sometimes'
+                    },
+                    {
+                        name: 'random'
+                    },
+                    {
+                        name: 'have not tried'
+                    },
+                    {
+                        name: 'unable to reproduce'
+                    },
+                    {
+                        name: 'N/A'
+                    },
+                ]
+            },
+            {
+                id: 'handler',
+                name: 'assignee',
+                type: 'user'
+            },
+        ];
+
+        const customFields = [];
+        if (project.custom_fields && project.custom_fields.length) {
+            project.custom_fields.forEach(field => {
+                customFields.push({
+                    id: project.id + '.custom_' + field.id,
+                    name: field.name,
+                    type: mUtils.convertType(field.type),
+                    values: fieldValues(field.possible_values)
+                });
+            });
+        }
+
+        const versionFields = [];
+        if (project.versions && project.versions.length) {
+            versionFields.push(
+                {
+                    id: 'version',
+                    name: 'version',
+                    multiValue: false,
+                    type: 'version',
+                    values: versionValues(project.versions)
+                },
+                {
+                    id: 'fixed_in_version',
+                    name: 'fixed_in_version',
+                    multiValue: false,
+                    type: 'version',
+                    values: versionValues(project.versions)
+                },
+                {
+                    id: 'target_version',
+                    name: 'target_version',
+                    multiValue: false,
+                    type: 'version',
+                    values: versionValues(project.versions)
+                }
+            )
+        }
+
+        const categoryFields = [];
+        if (project.categories && project.categories.length) {
+            categoryFields.push(
+                {
+                    id: 'categories',
+                    name: 'category',
+                    type: 'ownedField',
+                    multiValue: false,
+                    values: categoriesValues(project.categories)
+                }
+            )
+        }
+
+        import_project.fields = defaultFields
+            .concat(customFields)
+            .concat(versionFields)
+            .concat(categoryFields);
+
+        customFields.forEach(field => projectFieldSchema[field.name] = field);
+        // all following fields override custom ones in case of name collision
+        predefinedFields.forEach(field => projectFieldSchema[field.id] = field);
+        defaultFields.forEach(field => projectFieldSchema[field.id] = field);
+        versionFields.forEach(field => projectFieldSchema[field.id] = field);
+        categoryFields.forEach(field => projectFieldSchema[field.name] = field);
+
+        return import_project
+    };
+
+    const categoriesValues = (categories) => {
+        return categories.map(cat => {
+            return {
+                id: cat.id,
+                name: cat.name
+            }
+        })
+    };
+
+    const versionValues = (versions) => {
+        return versions.map(version => {
+            return {
+                id: version.id,
+                name: version.name,
+                description: version.description,
+                released: version.released,
+                archived: version.obsolete,
+                releaseDate: version.timestamp
+            }
+        })
+    };
+
+    const fieldValues = (values_string) => {
+        return values_string.split('|').filter(function (el) {
+            return el !== '';
+        }).map(value => {
+            return {
+                name: value
+            }
+        });
+    };
+
+    const getIssues = (project, from, top) => {
+        let count = 1;
+        let mantisIssues = [];
+        mantisPageSize = top;
+        let query = {
+            'page_size': mantisPageSize + '',
+            'project_id': project.id + '',
+            'page': page + ''
+        };
+        let issues = [];
+        issues = loadJson('/api/rest/issues', query).issues || [];
+        issues.forEach(function (issue) {
+            mantisIssues.push(issue);
+            count++;
+        });
+
+        if (issues.length === mantisPageSize) {
+            page = page + 1;
+        } else {
+            page = 1;
+        }
+
+        console.log('Loaded ' + count + ' issues ' + 'project ' + project.name);
+        return mantisIssues.map(convertMantisIssue);
+    };
+
+
+    const convertMantisIssue = function (issue) {
+        const mantisFields = convertMantisCFs(issue);
+        const mantisHistory = convertMantisHistory(issue);
+        console.log("testhistiry: " + JSON.stringify(mantisHistory));
+        const mantisAddFields = convertMantisAddFields(issue);
+        console.log('issue = ' + issue.id + ' mantisHistory ' + JSON.stringify(mantisHistory));
+        const defaultFields = {
+            summary: issue.summary,
+            description: issue.description,
+            STR: issue.steps_to_reproduce,
+            platform: issue.platform,
+            os: issue.os,
+            os_build: issue.os_build,
+            Additional_Information: issue.additional_information,
+            created: issue.created_at,
+            updated: issue.updated_at,
+            Priority: issue.priority.name,
+            Status: issue.status.name,
+            Resolution: issue.resolution.name,
+            Severity: issue.severity.name,
+            attachments: issue.attachments && issue.attachments.map(convertMantisAttachments(issue.id)),
+            tags: issue.tags && issue.tags.map(tag => {
+                return {
+                    id: tag.id,
+                    name: tag.name,
+                    type: 'tag',
+                    visibleToGroups: [
+                        'All Users'
+                    ]
+                }
+            }),
+            links: issue.relationships && issue.relationships.map(rel => {
+                return {
+                    linkName: mUtils.convertRelations(rel.type.name),
+                    target: rel.issue.id + '',
+                }
+            }),
+            watchers: issue.monitors && issue.monitors.map(watcher => {
+                return {
+                    id: watcher.id,
+                    login: watcher.name,
+                    name: watcher.real_name ? watcher.real_name : watcher.name,
+                    email: watcher.email,
+                    type: 'user'
+                }
+            }),
+            visibleToGroups: mUtils.setVisible(issue.view_state.name, issue.project.name),
+            comments: issue.notes && issue.notes.map(convertMantisComment(issue.project.name)),
+            author: {
+                id: issue.reporter.id,
+                login: issue.reporter.name ? issue.reporter.name : "unknown_user_" + issue.reporter.id,
+                name: issue.reporter.name ? issue.reporter.name : "unknown_user_" + issue.reporter.id,
+                email: issue.reporter.email,
+                type: 'user'
+            },
+            assignee: issue.handler && {
+                id: issue.handler.id,
+                login: issue.handler.name ? issue.handler.name : "unknown_user_" + issue.handler.id,
+                name: issue.handler.name ? issue.handler.name : "unknown_user_" + issue.handler.id,
+                email: issue.handler.email,
+                type: 'user'
+            }
+        };
+
+        return {
+            id: issue.id,
+            key: issue.id + '',
+            fields: Object.assign({}, defaultFields, mantisFields, mantisAddFields),
+            history: mantisHistory
+        };
+    };
+
+    const convertMantisHistory = function (issue) {
+        let id = 0;
+        let res = [];
+        if (issue.history) {
+            issue.history.map((history, index) => {
+                if (history.type.name === "field-updated") {
+                    const schemaField = projectFieldSchema[history.field.name];
+                    if (schemaField) {
+                        id = issue.id + '.history_' + index;
+                        const ret = {
+                            id: id + '',
+                            timestamp: history.created_at,
+                            author: {
+                                id: history.user.id,
+                                login: history.user.name ? history.user.name : "unknown_user_" + history.user.id,
+                                name: history.user.name ? history.user.name : "unknown_user_" + history.user.id,
+                                email: history.user.email,
+                                type: 'user'
+                            },
+                            fieldChanges: {}
+                        };
+                        ret.fieldChanges[schemaField.name] = {
+                            removedValues: mUtils.convertHistoryEvent(history.old_value, schemaField.type),
+                            addedValues: mUtils.convertHistoryEvent(history.new_value, schemaField.type)
+                        };
+                        res.push(ret)
+                    }
+                }
+            });
+        }
+        return res;
+    };
+
+    const convertMantisAttachments = function (issueID) {
+        return (attachment) => {
+            return {
+                id: attachment.id + '-' + issueID,
+                created: attachment.created_at,
+                filename: attachment.filename,
+                mimeType: attachment.content_type.split(';')[0],
+                charset: attachment.content_type.split('charset=')[1],
+                author: {
+                    id: attachment.reporter.id,
+                    login: attachment.reporter.name ? attachment.reporter.name : "unknown_user_" + attachment.reporter.id,
+                    name: attachment.reporter.name ? attachment.reporter.name : "unknown_user_" + attachment.reporter.id,
+                    email: attachment.reporter.email,
+                    type: 'user'
+                }
+            };
+        };
+    };
+
+    const getContent = (issueID, attachID) => {
+        const mAttachment = loadJson('/api/rest/issues/' + issueID + '/files/' + attachID);
+        return mAttachment.files[0].content || ''
+    };
+
+
+    const convertMantisCFs = function (issue) {
+        const result = {};
+        if (issue.custom_fields !== undefined) {
+            issue.custom_fields.forEach(field => {
+                if (field.value !== '') {
+                    result[field.field.name] = field.value;
+                }
+            });
+        }
+        return result;
+    };
+
+    const additionalFields = ["category", "version", "fixed_in_version", "target_version"];
+    const convertMantisAddFields = function (issue) {
+        const res = {};
+        additionalFields.forEach(field => {
+            if (issue[field]) {
+                if (issue[field].name !== '') {
+                    res[field] = issue[field].name;
+                }
+            }
+        });
+        return res;
+    };
+
+    const convertMantisComment = function (projectName) {
+        return (comment) => {
+            return {
+                id: comment.id + '',
+                text: comment.text, //todo use convertCommentText
+                visibleToGroups: mUtils.setVisible(comment.view_state.name, projectName),
+                author: {
+                    id: comment.reporter.id,
+                    login: comment.reporter.name ? comment.reporter.name : "unknown_user_" + comment.reporter.id,
+                    name: comment.reporter.name ? comment.reporter.name : "unknown_user_" + comment.reporter.id,
+                    email: comment.reporter.email,
+                    type: 'user'
+                },
+                updated: comment.updated_at,
+                created: comment.created_at
+            };
+        };
+    };
+
+    const loadJson = (uri, queryParams) => {
+        const result = connection.getSync(uri, queryParams);
+        if (!result.isSuccess) {
+            console.log('Failed to load data from URL ' + uri);
+            throw 'Failed to load data from URL ' + uri + ' with code ' + result.code;
+        } else {
+            return JSON.parse(result.response);
+        }
+    };
+
+    const getUsers = function () {
+        return [];
+    };
+
+    const getAttachmentContent = function (project, issue, attachment) {
+        const attachID = attachment.id.split("-")[0];
+        const issueID = attachment.id.split("-")[1];
+        return {
+            data: getContent(issueID, attachID)
+        }
+    };
+
+    Object.assign(client, {
+        getProjects: getProjects.bind(this), // api
+        getProject: getProject.bind(this), // api
+        getLinkTypes: () => [],
+        getServerInfo: getServerInfo.bind(this), // api
+        getAttachmentContent: getAttachmentContent.bind(this),
+        getUsers: getUsers.bind(this),
+        getIssues: getIssues.bind(this), // api
+        getTimestampFormats: getTimestampFormats.bind(this) // api
+    });
+    return client;
+
+};
+exports.Client = MantisIssues;

@@ -213,6 +213,18 @@ class API extends BaseAPI {
     });
   }
 
+  async subscribeToIOSNotifications(konnectorURL: string, youtrackToken: string, deviceToken: string): Promise<string> {
+    const url = `${konnectorURL}/ring/pushNotifications`;
+    return await this.makeAuthorizedRequest(
+      url,
+      'POST',
+      {
+        token: youtrackToken,
+        appleDeviceId: deviceToken,
+      }
+      );
+  }
+
   async getWorkTimeSettings(): Promise<Object> {
     const fields = `id,daysAWeek,workDays,minutesADay`;
     const url = `${this.youTrackUrl}/api/admin/timeTrackingSettings/workTimeSettings?fields=${fields}`;

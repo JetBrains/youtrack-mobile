@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model modelUID="r:e8ac219e-1686-4052-8a21-802fbca61ff4(jetbrains-youtrack-notifyReporterToApproveFix)">
+  <persistence version="7" />
+  <language namespace="355b8814-6452-42a9-99ba-bf48a86484df(jetbrains.youtrack.workflow)" />
+  <language namespace="134b6ab8-1e5e-498b-8109-fed3af0973ea(jetbrains.youtrack.workflow.localization)" />
+  <import index="qfu0" modelUID="f:java_stub#jetbrains.youtrack.workflow.customFieldsSchema(jetbrains.youtrack.workflow.customFieldsSchema@java_stub)" version="-1" />
+  <import index="ih53" modelUID="r:913dafeb-4d10-46a5-9806-7d085c6ccd01(jetbrains.youtrack.workflow.structure)" version="11" implicit="yes" />
+  <import index="tpck" modelUID="r:00000000-0000-4000-0000-011c89590288(jetbrains.mps.lang.core.structure)" version="-1" implicit="yes" />
+  <import index="fk9a" modelUID="r:687126b3-ce00-4b38-98b6-dd0302c57bc6(jetbrains.youtrack.workflow.operators)" version="-1" implicit="yes" />
+  <import index="5c7v" modelUID="r:85cdbc88-0b2a-4b6f-a140-2103e0523bff(jetbrains.youtrack.workflow.localization.structure)" version="-1" implicit="yes" />
+  <roots>
+    <node type="ih53.StatelessRule" typeId="ih53.2793979439244446838" id="4969713822865761555">
+      <property name="name" nameId="tpck.1169194664001" value="Send specific notification to reporter to approve fix" />
+    </node>
+    <node type="ih53.StatemachineRule" typeId="ih53.4706762660756292821" id="4969713822865763343">
+      <property name="name" nameId="tpck.1169194664001" value="State lifecycle with verification by reporter" />
+      <link role="stateField" roleId="ih53.4706762660756292828" targetNodeId="qfu0.~Issue%dState" resolveInfo="State" />
+    </node>
+  </roots>
+  <root id="4969713822865761555">
+    <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="4969713822865761556">
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="4969713822865762909">
+        <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="4969713822865762912">
+          <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YInstanceMethodCall" typeId="ih53.4549928255927079324" id="4969713822865762915">
+            <link role="methodDeclaration" roleId="ih53.4549928255927079326" targetNodeId="qfu0.~Usernotify(string, string, )%cvoid" resolveInfo="notify" />
+            <node role="actualArgument" roleId="ih53.5770537243328039947" type="5c7v.LocalizableExpression" typeId="5c7v.86376404488921782" id="1382459627240385106">
+              <property name="id" nameId="5c7v.86376404488956388" value="Send_specific_notification_to_reporter_to_approve_fix.Please_approve_fix_for_the_issue{0}" />
+              <node role="parts" roleId="5c7v.86376404488956389" type="5c7v.TextPart" typeId="5c7v.86376404488921792" id="1382459627240385107">
+                <property name="text" nameId="5c7v.86376404488921799" value="Please approve fix for the issue" />
+              </node>
+              <node role="parts" roleId="5c7v.86376404488956389" type="5c7v.ExpressionParameter" typeId="5c7v.86376404488957752" id="1382459627240385110">
+                <node role="expression" roleId="5c7v.86376404488957754" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="1382459627240385112">
+                  <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YInstanceMethodCall" typeId="ih53.4549928255927079324" id="1382459627240385113">
+                    <link role="methodDeclaration" roleId="ih53.4549928255927079326" targetNodeId="qfu0.~IssuegetId()%cstring" resolveInfo="getId" />
+                  </node>
+                </node>
+              </node>
+            </node>
+            <node role="actualArgument" roleId="ih53.5770537243328039947" type="5c7v.LocalizableExpression" typeId="5c7v.86376404488921782" id="1382459627240385114">
+              <property name="id" nameId="5c7v.86376404488956388" value="Send_specific_notification_to_reporter_to_approve_fix.You_have_reported_issue{0}Please_verify_the_applied_fix_for_the_issue_and_set_the_appropriate_state" />
+              <node role="parts" roleId="5c7v.86376404488956389" type="5c7v.TextPart" typeId="5c7v.86376404488921792" id="1382459627240385115">
+                <property name="text" nameId="5c7v.86376404488921799" value="You have reported issue" />
+              </node>
+              <node role="parts" roleId="5c7v.86376404488956389" type="5c7v.ExpressionParameter" typeId="5c7v.86376404488957752" id="1382459627240385117">
+                <node role="expression" roleId="5c7v.86376404488957754" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="1382459627240385119">
+                  <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YInstanceMethodCall" typeId="ih53.4549928255927079324" id="1382459627240385120">
+                    <link role="methodDeclaration" roleId="ih53.4549928255927079326" targetNodeId="qfu0.~IssuegetId()%cstring" resolveInfo="getId" />
+                  </node>
+                </node>
+              </node>
+              <node role="parts" roleId="5c7v.86376404488956389" type="5c7v.TextPart" typeId="5c7v.86376404488921792" id="1382459627240385122">
+                <property name="text" nameId="5c7v.86376404488921799" value=". Please verify the applied fix for the issue and set the appropriate state." />
+              </node>
+            </node>
+          </node>
+          <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="4969713822865762910">
+            <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="4969713822865762911">
+              <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dreporter" resolveInfo="reporter" />
+            </node>
+          </node>
+        </node>
+      </node>
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="4969713822865762930">
+        <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="4969713822865762933">
+          <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366192" resolveInfo="=" />
+          <node role="right" roleId="ih53.4549928255927184282" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="4969713822865762936">
+            <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="4969713822865762937">
+              <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dreporter" resolveInfo="reporter" />
+            </node>
+          </node>
+          <node role="left" roleId="ih53.4549928255927184281" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="4969713822865762931">
+            <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="4969713822865762932">
+              <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dAssignee" resolveInfo="Assignee" />
+            </node>
+          </node>
+        </node>
+      </node>
+    </node>
+    <node role="guard" roleId="ih53.4549928255927007153" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="4969713822865764674">
+      <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YBecomesOperation" typeId="ih53.9181025866980600333" id="4969713822865764677">
+        <node role="actualArgument" roleId="ih53.5770537243328039947" type="ih53.YEnumReference" typeId="ih53.8948056580237963425" id="4969713822865764679">
+          <property name="name" nameId="tpck.1169194664001" value="Pending verification" />
+        </node>
+      </node>
+      <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="4969713822865762885">
+        <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="4969713822865764673">
+          <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dState" resolveInfo="State" />
+        </node>
+      </node>
+    </node>
+  </root>
+  <root id="4969713822865763343">
+    <node role="state" roleId="ih53.3972957960593021462" type="ih53.State" typeId="ih53.659756766078159426" id="4969713822865764212">
+      <property name="name" nameId="tpck.1169194664001" value="Submitted" />
+      <node role="element" roleId="ih53.4822842069656394005" type="ih53.Transition" typeId="ih53.659756766078198207" id="4969713822865764213">
+        <node role="trigger" roleId="ih53.677959992131405909" type="ih53.EventTrigger" typeId="ih53.3972957960592985107" id="4969713822865764214">
+          <property name="event" nameId="ih53.8296249755736904827" value="Open " />
+        </node>
+        <node role="action" roleId="ih53.659756766078198231" type="ih53.OutgoingTransitionAction" typeId="ih53.659756766078467296" id="4969713822865764221">
+          <link role="transitionEnd" roleId="ih53.659756766078467297" targetNodeId="4969713822865764224" resolveInfo="Open" />
+          <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="4969713822865764220" />
+        </node>
+      </node>
+    </node>
+    <node role="state" roleId="ih53.3972957960593021462" type="ih53.State" typeId="ih53.659756766078159426" id="4969713822865764224">
+      <property name="name" nameId="tpck.1169194664001" value="Open" />
+      <node role="element" roleId="ih53.4822842069656394005" type="ih53.Transition" typeId="ih53.659756766078198207" id="4969713822865764246">
+        <node role="trigger" roleId="ih53.677959992131405909" type="ih53.EventTrigger" typeId="ih53.3972957960592985107" id="4969713822865764247">
+          <property name="event" nameId="ih53.8296249755736904827" value=" Fix " />
+        </node>
+        <node role="action" roleId="ih53.659756766078198231" type="ih53.OutgoingTransitionAction" typeId="ih53.659756766078467296" id="4969713822865764248">
+          <link role="transitionEnd" roleId="ih53.659756766078467297" targetNodeId="4969713822865764234" resolveInfo="Fixed" />
+          <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="4969713822865764249" />
+        </node>
+      </node>
+    </node>
+    <node role="state" roleId="ih53.3972957960593021462" type="ih53.State" typeId="ih53.659756766078159426" id="4969713822865764234">
+      <property name="name" nameId="tpck.1169194664001" value="Fixed" />
+      <node role="element" roleId="ih53.4822842069656394005" type="ih53.EnterAction" typeId="ih53.8336746780183887329" id="4969713822865764324">
+        <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="4969713822865764325">
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="4969713822865764326">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="4969713822865764329">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YRequireFieldOperation" typeId="ih53.7254795645054147883" id="4969713822865764332">
+                <node role="message" roleId="ih53.7254795645054170840" type="5c7v.LocalizableExpression" typeId="5c7v.86376404488921782" id="1382459627240385123">
+                  <property name="id" nameId="5c7v.86376404488956388" value="State_lifecycle_with_verification_by_reporter.Please_set_Fixed_in_build_value" />
+                  <node role="parts" roleId="5c7v.86376404488956389" type="5c7v.TextPart" typeId="5c7v.86376404488921792" id="1382459627240385124">
+                    <property name="text" nameId="5c7v.86376404488921799" value="Please set 'Fixed in build' value." />
+                  </node>
+                </node>
+              </node>
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="4969713822865764327">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="4969713822865764328">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dFixed in build" resolveInfo="Fixed in build" />
+                </node>
+              </node>
+            </node>
+          </node>
+        </node>
+      </node>
+      <node role="element" roleId="ih53.4822842069656394005" type="ih53.Transition" typeId="ih53.659756766078198207" id="4969713822865764260">
+        <node role="trigger" roleId="ih53.677959992131405909" type="ih53.EventTrigger" typeId="ih53.3972957960592985107" id="4969713822865764261">
+          <property name="event" nameId="ih53.8296249755736904827" value="Send for verification " />
+        </node>
+        <node role="action" roleId="ih53.659756766078198231" type="ih53.OutgoingTransitionAction" typeId="ih53.659756766078467296" id="4969713822865764263">
+          <link role="transitionEnd" roleId="ih53.659756766078467297" targetNodeId="4969713822865764262" resolveInfo="Pending verification" />
+          <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="4969713822865764264" />
+        </node>
+      </node>
+    </node>
+    <node role="state" roleId="ih53.3972957960593021462" type="ih53.State" typeId="ih53.659756766078159426" id="4969713822865764262">
+      <property name="name" nameId="tpck.1169194664001" value="Pending verification" />
+      <node role="element" roleId="ih53.4822842069656394005" type="ih53.EnterAction" typeId="ih53.8336746780183887329" id="4969713822865764272">
+        <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="4969713822865764273">
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="4969713822865764274">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="4969713822865764277">
+              <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366192" resolveInfo="=" />
+              <node role="left" roleId="ih53.4549928255927184281" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="4969713822865764275">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="4969713822865764276">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dAssignee" resolveInfo="Assignee" />
+                </node>
+              </node>
+              <node role="right" roleId="ih53.4549928255927184282" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="4969713822865764280">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="4969713822865764281">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dreporter" resolveInfo="reporter" />
+                </node>
+              </node>
+            </node>
+          </node>
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="4969713822865764283">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="4969713822865764286">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YInstanceMethodCall" typeId="ih53.4549928255927079324" id="4969713822865764287">
+                <link role="methodDeclaration" roleId="ih53.4549928255927079326" targetNodeId="qfu0.~Usernotify(string, string, )%cvoid" resolveInfo="notify" />
+                <node role="actualArgument" roleId="ih53.5770537243328039947" type="5c7v.LocalizableExpression" typeId="5c7v.86376404488921782" id="1382459627240385125">
+                  <property name="id" nameId="5c7v.86376404488956388" value="State_lifecycle_with_verification_by_reporter.Please_approve_fix_for_the_issue_{0}" />
+                  <node role="parts" roleId="5c7v.86376404488956389" type="5c7v.TextPart" typeId="5c7v.86376404488921792" id="1382459627240385126">
+                    <property name="text" nameId="5c7v.86376404488921799" value="Please approve fix for the issue " />
+                  </node>
+                  <node role="parts" roleId="5c7v.86376404488956389" type="5c7v.ExpressionParameter" typeId="5c7v.86376404488957752" id="1382459627240385128">
+                    <node role="expression" roleId="5c7v.86376404488957754" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="1382459627240385130">
+                      <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YInstanceMethodCall" typeId="ih53.4549928255927079324" id="1382459627240385131">
+                        <link role="methodDeclaration" roleId="ih53.4549928255927079326" targetNodeId="qfu0.~IssuegetId()%cstring" resolveInfo="getId" />
+                      </node>
+                    </node>
+                  </node>
+                </node>
+                <node role="actualArgument" roleId="ih53.5770537243328039947" type="5c7v.LocalizableExpression" typeId="5c7v.86376404488921782" id="1382459627240385132">
+                  <property name="id" nameId="5c7v.86376404488956388" value="State_lifecycle_with_verification_by_reporter.You_have_reported_issue" />
+                  <node role="parts" roleId="5c7v.86376404488956389" type="5c7v.TextPart" typeId="5c7v.86376404488921792" id="1382459627240385133">
+                    <property name="text" nameId="5c7v.86376404488921799" value="You have reported issue " />
+                  </node>
+                  <node role="parts" roleId="5c7v.86376404488956389" type="5c7v.ExpressionParameter" typeId="5c7v.86376404488957752" id="1382459627240385135">
+                    <node role="expression" roleId="5c7v.86376404488957754" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="1382459627240385137">
+                      <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YInstanceMethodCall" typeId="ih53.4549928255927079324" id="1382459627240385138">
+                        <link role="methodDeclaration" roleId="ih53.4549928255927079326" targetNodeId="qfu0.~IssuegetId()%cstring" resolveInfo="getId" />
+                      </node>
+                    </node>
+                  </node>
+                  <node role="parts" roleId="5c7v.86376404488956389" type="5c7v.TextPart" typeId="5c7v.86376404488921792" id="1382459627240385140">
+                    <property name="text" nameId="5c7v.86376404488921799" value=". Please verify the applied fix for the issue and set the appropriate state." />
+                  </node>
+                </node>
+              </node>
+              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="4969713822865764300">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="4969713822865764301">
+                  <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dreporter" resolveInfo="reporter" />
+                </node>
+              </node>
+            </node>
+          </node>
+        </node>
+      </node>
+      <node role="element" roleId="ih53.4822842069656394005" type="ih53.Transition" typeId="ih53.659756766078198207" id="4969713822865764305">
+        <node role="trigger" roleId="ih53.677959992131405909" type="ih53.EventTrigger" typeId="ih53.3972957960592985107" id="4969713822865764306">
+          <property name="event" nameId="ih53.8296249755736904827" value="Approve " />
+        </node>
+        <node role="action" roleId="ih53.659756766078198231" type="ih53.OutgoingTransitionAction" typeId="ih53.659756766078467296" id="4969713822865764308">
+          <link role="transitionEnd" roleId="ih53.659756766078467297" targetNodeId="4969713822865764307" resolveInfo="Verified" />
+          <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="4969713822865764309" />
+        </node>
+      </node>
+      <node role="element" roleId="ih53.4822842069656394005" type="ih53.Transition" typeId="ih53.659756766078198207" id="4969713822865764311">
+        <node role="trigger" roleId="ih53.677959992131405909" type="ih53.EventTrigger" typeId="ih53.3972957960592985107" id="4969713822865764312">
+          <property name="event" nameId="ih53.8296249755736904827" value="Re-open " />
+        </node>
+        <node role="action" roleId="ih53.659756766078198231" type="ih53.OutgoingTransitionAction" typeId="ih53.659756766078467296" id="4969713822865764313">
+          <link role="transitionEnd" roleId="ih53.659756766078467297" targetNodeId="4969713822865764224" resolveInfo="Open" />
+          <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="4969713822865764314" />
+        </node>
+      </node>
+    </node>
+    <node role="state" roleId="ih53.3972957960593021462" type="ih53.State" typeId="ih53.659756766078159426" id="4969713822865764307">
+      <property name="name" nameId="tpck.1169194664001" value="Verified" />
+      <node role="element" roleId="ih53.4822842069656394005" type="ih53.Transition" typeId="ih53.659756766078198207" id="6001611439597728811">
+        <node role="trigger" roleId="ih53.677959992131405909" type="ih53.EventTrigger" typeId="ih53.3972957960592985107" id="6001611439597728812">
+          <property name="event" nameId="ih53.8296249755736904827" value="Re-open" />
+        </node>
+        <node role="action" roleId="ih53.659756766078198231" type="ih53.OutgoingTransitionAction" typeId="ih53.659756766078467296" id="6001611439597728813">
+          <link role="transitionEnd" roleId="ih53.659756766078467297" targetNodeId="4969713822865764224" resolveInfo="Open" />
+          <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="6001611439597728814" />
+        </node>
+      </node>
+    </node>
+  </root>
+</model>
+

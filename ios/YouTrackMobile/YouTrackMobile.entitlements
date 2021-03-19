@@ -7,7 +7,7 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>applinks:youtrack.jetbrains.com</string>
-		<string>applinks:*.myjetbrains.com</string>
+		<string>webcredentials:example.com</string>
 	</array>
 	<key>keychain-access-groups</key>
 	<array>

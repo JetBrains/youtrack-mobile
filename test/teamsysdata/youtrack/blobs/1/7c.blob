@@ -1,0 +1,581 @@
+Ue/*
+ Copyright 2017 JetBrains s.r.o.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
+
+/**
+ * Contains definitions for objects and classes that exchange and transfer data over HTTP. The main class is {@link Connection}.
+ *
+ * @module @jetbrains/youtrack-scripting-api/http
+ */
+
+var oah = Packages.org.apache.http;
+var sandbox = Packages.jetbrains.youtrack.scripts.sandbox;
+
+var getAuthHeader = function (login, password) {
+  return {name: 'Authorization', value: 'Basic ' + sandbox.Base64.encode(login + ':' + password)};
+};
+
+var getAbsoluteUrl = function (url, uri) {
+  if (!url) {
+    return uri;
+  }
+  if (url.lastIndexOf('/') !== url.length - 1 && uri && uri.indexOf('/') !== 0) {
+    url = url + '/';
+  }
+  return uri ? url + uri : url;
+};
+
+var traceResponseToLog = function(headers, body) {
+  console.trace('Response headers:');
+  console.trace(headers);
+  if (body) {
+    console.trace('Response body:');
+    console.trace(body);
+  }
+}
+
+/**
+ * @typedef REQUEST_TYPES
+ *
+ * @classdesc A collection of supported HTTP request types. Note that instead of passing a proper
+ * request type to the {@link Connection}.doSync method, there are dedicated methods that correspond to each
+ * request type that you can call directly. For example, getSync or postSync.
+ *
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods|HTTP request methods on MDN}
+ *
+ * @type {object}
+ */
+var REQUEST_TYPES = {
+  /**
+   * @type {string}
+   * @memberOf REQUEST_TYPES
+   * @readonly
+   * @description Requests data from the target resource.
+   */
+  GET: 'GET',
+  /**
+   * @type {string}
+   * @memberOf REQUEST_TYPES
+   * @readonly
+   * @description Same as GET, but the response only contains headers and no data.
+   */
+  HEAD: 'HEAD',
+  /**
+   * @type {string}
+   * @memberOf REQUEST_TYPES
+   * @readonly
+   * @description Submits data to the target resource.
+   */
+  POST: 'POST',
+  /**
+   * @type {string}
+   * @memberOf REQUEST_TYPES
+   * @readonly
+   * @description Replaces all current representations of the target resource.
+   */
+  PUT: 'PUT',
+  /**
+   * @type {string}
+   * @memberOf REQUEST_TYPES
+   * @readonly
+   * @description Applies partial modifications to the target resource.
+   */
+  PATCH: 'PATCH',
+  /**
+   * @type {string}
+   * @memberOf REQUEST_TYPES
+   * @readonly
+   * @description Deletes the target resource.
+   */
+  DELETE: 'DELETE',
+  /**
+   * @type {string}
+   * @memberOf REQUEST_TYPES
+   * @readonly
+   * @description Establishes a tunnel to the server identified by the target resource.
+   */
+  CONNECT: 'CONNECT',
+  /**
+   * @type {string}
+   * @memberOf REQUEST_TYPES
+   * @readonly
+   * @description Describes the communication options for the target resource.
+   */
+  OPTIONS: 'OPTIONS'
+};
+
+ResponseWrapper = function (response) {
+  this.response = response;
+};
+ResponseWrapper.prototype.getResponseAsString = function () {
+  var responseEntity = this.response.getEntity();
+  return sandbox.Utils.readString(responseEntity.getContent(),
+    responseEntity.getContentEncoding() ? responseEntity.getContentEncoding().getValue() : 'UTF-8');
+};
+ResponseWrapper.prototype.getResponseAsStream = function () {
+  return this.response.getEntity().getContent();
+};
+ResponseWrapper.prototype.getHeaders = function () {
+  return this.response.getAllHeaders();
+};
+ResponseWrapper.prototype.getStatusCode = function () {
+  return this.response.getStatusLine() && this.response.getStatusLine().getStatusCode();
+};
+
+/**
+ * @typedef {Object} Connection
+ *
+ * @classdesc Main class that is used to establish a connection and send requests to target sites.
+ *
+ * @property {string} [url] The URL of the target site for the connection.
+ * Can be empty, as you can specify the URI as a parameter for any request method.
+ * @property {Array<{name: String, value: String}>} [headers] A list of headers.
+ *
+ * @example
+ * // Gets the content of a PasteBin paste, assuming that we have received its key (`pasteBinKey`) in a prior request.
+ * var connection = new http.Connection('http://pastebin.com/raw/');
+ * connection.addHeader({name: ‘Content-Type’, value: ‘text/plain’});
+ * var response = connection.getSync(pasteBinKey, '');
+ * if (response && response.code === 200) {
+ *   var text = '';
+ *   response.headers.forEach(function(header) {
+ *     text += header.name + ': ' + header.value + '\n';
+ *   });
+ *   text += '\n' + response.response;
+ *   issue.addComment(text);
+ * }
+ */
+
+/**
+ * Creates an object that lets you establish a connection with a target site.
+ * @param {string} [url] The URL of the target site for the connection.
+ * Can be empty, as you can specify the URI as a parameter for any request method.
+ * @param {string} [sslKeyName] Optional name of the SSL key that is used to establish a secure connection.
+ * @param {int} [timeout] Optional parameter that specifies the read timeout for outgoing HTTP requests.
+ * @constructor Connection
+ *
+ * @see doSync
+ */
+Connection = function (url, sslKeyName, timeout) {
+  this.url = url;
+  this.httpClient = new sandbox.ClientFactory.getHttpClient(sslKeyName, timeout ? timeout : 0);
+  this.headers = [];
+};
+
+/**
+ * Adds a new header to the current connection.
+ * @param {Object|string} header A header object with the structure {name: string, value: string}.
+ * If the value parameter is specified separately, the provided string is used as the name of the header.
+ * @param {string} [value] The value that is assigned to the header.
+ * Only considered when the first parameter is specified as a string.
+ * @returns {Connection} The current connection object.
+ */
+Connection.prototype.addHeader = function (header, value) {
+  if (typeof header === 'string') {
+    header = {name: header, value: value};
+  }
+  this.headers.push(header);
+  return this;
+};
+
+/**
+ * Adds an authorization header with the value returned by the Base64.encode(login + ':' + password) function.
+ * @param {String} login The login to use for the authorization request.
+ * @param {String} password The password to use for the authorization request..
+ * @returns {Connection} The current connection object.
+ */
+Connection.prototype.basicAuth = function (login, password) {
+  this.addHeader(getAuthHeader(login, password));
+  return this;
+};
+
+/**
+ * @private WARNING! do not use this function, it's NOT considered a part of a public API and will be removed in the future.
+ */
+Object.defineProperty(Connection.prototype, 'request', {enumerable: false, writable: false, value: function (requestType, uri, queryParams, payload, success, failure) {
+  if (!REQUEST_TYPES.hasOwnProperty(requestType.toUpperCase())) {
+    throw 'Request type \'' + requestType + '\' is not allowed. Allowed types are ' + Object.keys(REQUEST_TYPES).join(', ') + ' (case insensitive)';
+  }
+  if (queryParams && !Array.isArray(queryParams) && (typeof queryParams !== 'object')) {
+    throw 'queryParams should be an array of objects {name: \'paramName\', value: \'paramValue\'} or an object. In the later case keys are treated as parameters names';
+  }
+  if (queryParams && !Array.isArray(queryParams) && (typeof queryParams === 'object')) {
+    var qp = [];
+    Object.keys(queryParams).forEach(function (key) {
+      var value = queryParams[key];
+      if (typeof value === 'string') {
+        qp.push({name: key, value: value});
+      } else if (!Array.isArray(value)) {
+        value.forEach(function (singleValue) {
+          qp.push({name: key, value: singleValue});
+        })
+      } else {
+        throw 'Can not correctly handle ' + key + 'query parameter. It should be either a string for a single value, or an array for multiple values';
+      }
+    });
+    queryParams = qp;
+  }
+  queryParams = queryParams || [];
+  console.trace('Initiated a connection. Base url: ' + this.url + ', uri: ' + uri);
+
+  var url = this.url;
+  var processResponse = function (response, exc, chain) { // chain of responsibilities
+    if (exc || !response || !response.getStatusCode() || response.getStatusCode() < 200 || response.getStatusCode() >= 400) {
+      console.debug(' Connection failed ' + url + ', uri: ' + uri +
+        (response ? '. Resp. status code : ' + response.getStatusCode() : ''));
+      chain.failure(response, exc);
+    } else {
+      console.trace(' Connection succeeded ' + url + ', uri: ' + uri);
+      chain.success(response);
+    }
+  };
+  var exc = null;
+  var response;
+  var request;
+  try {
+    var name = requestType.toLowerCase();
+    var requestBuilder = oah.client.methods.RequestBuilder[name](getAbsoluteUrl(this.url, uri));
+    queryParams.forEach(function (p) {
+      requestBuilder.addParameter(p.name, p.value);
+    });
+    this.headers.forEach(function (elem) {
+      requestBuilder.addHeader(elem.name, elem.value);
+    });
+    console.trace('Request query parameters:');
+    console.trace(queryParams);
+    console.trace('Request headers:');
+    console.trace(this.headers.map(function(header) {
+      if (header.name === 'Authorization') {
+        return {name: 'Authorization', value: '***'}
+      } else {
+        return header;
+      }
+    }));
+    if (payload) {
+      if (typeof payload === 'string') {
+        console.trace('Request body:');
+        console.trace(payload);
+        requestBuilder.setEntity(new oah.entity.StringEntity(payload, 'UTF-8'));
+      } else if (Array.isArray(payload)) {
+        console.trace('Request body is an array');
+        var pairs = payload.map(function (entry) {
+          return new oah.message.BasicNameValuePair(entry.name, entry.value);
+        });
+        requestBuilder.setEntity(new oah.client.entity.UrlEncodedFormEntity(pairs, 'UTF-8'));
+      } else {
+        const stringified = JSON.stringify(payload);
+        console.trace('Request body:');
+        console.trace(stringified);
+        requestBuilder.setEntity(new oah.entity.StringEntity(stringified, 'UTF-8'));
+      }
+    }
+    request = requestBuilder.build();
+    response = this.httpClient.execute(request);
+  } catch (e) {
+    exc = e;
+  }
+  var responseWrapper = response ? new ResponseWrapper(response) : null;
+  var chain = {
+    'success': success,
+    'failure': failure,
+    'process': processResponse
+  };
+  try {
+    processResponse(responseWrapper, exc, chain);
+  } finally {
+    if (request) {
+      request.releaseConnection();
+    }
+  }
+}});
+
+/**
+ * @typedef {Object} Response
+ *
+ * @classdesc A class that creates a definition for an HTTP response.
+ * If an exception occurs during processing, most of the properties in the response object are empty.
+ *
+ * @property {string} [response] The response body. If an exception occurs during processing, the response body is empty (null).
+ *
+ * @property {Object} [responseAsStream] A byte stream representation of the response body.
+ * If an exception occurs during processing, the property is empty (null).
+ *
+ * @property {Array<{name: String, value: String}>} [headers] A collection of response headers.
+ * If an exception occurs during processing, the collection is empty.
+ *
+ * @property {number} [code] The HTTP status code that is assigned to the response.
+ * If an exception occurs during processing, the property is empty.
+ *
+ * @property {Object} [exception] The exception that occurred during processing.
+ *
+ * @property {boolean} [isSuccess] An indication of the success or failure for the request.
+ * If the HTTP status code is between 200 (inclusive) and 400 (exclusive), this property is set to 'true'.
+ *
+ * @example
+ * // Gets the content of a PasteBin paste, assuming that we have received its key (`pasteBinKey`) in a prior request.
+ * var connection = new http.Connection('http://pastebin.com/raw/');
+ * connection.addHeader({name: ‘Content-Type’, value: ‘text/plain’});
+ * var response = connection.getSync(pasteBinKey, '');
+ * if (response && response.code === 200) {
+ *   var text = '';
+ *   response.headers.forEach(function(header) {
+ *     text += header.name + ': ' + header.value + '\n';
+ *   });
+ *   text += '\n' + response.response;
+ *   issue.addComment(text);
+ * }
+ */
+
+/**
+ * Sends a synchronous HTTP request. Note that instead of passing a proper
+ * request type with this method, there are dedicated methods that correspond to each
+ * request type that you can call directly. For example, getSync or postSync.
+ *
+ * @param {string} requestType A valid HTTP request type. For a list of supported request types, see {@link REQUEST_TYPES}.
+ *
+ * @param {string} [uri] A relative URI.
+ * The complete URL is a concatenation of the string that is passed to the URL parameter in the Connection constructor and this string.
+ * If the URL parameter in the Connection constructor is empty, specify the absolute URL of the target site.
+ *
+ * @param {Array<{name: String, value: String}>} [queryParams] The query parameters.
+ *
+ * @param {string|Array|Object} [payload] The payload to be sent in the request.
+ *
+ * @return {Response} An object that represents the HTTP response.
+ */
+Connection.prototype.doSync = function (requestType, uri, queryParams, payload) {
+  var response = null;
+  var responseString = null;
+  var responseStream = null;
+  var headers = [];
+  var e = null;
+  var encoding = null;
+  var code = null;
+
+  uri = uri || '';
+
+  var findHeader = function(name) {
+    var filtered = headers.filter(function (header) {
+      return header.name === name;
+    });
+    return filtered.length > 0 ? filtered[0] : null;
+  };
+
+  var receiver = function (resp, exc) {
+    response = resp;
+    response && response.getHeaders().forEach(function (apacheHeader) {
+      headers.push({
+        name: apacheHeader.getName(),
+        value: apacheHeader.getName() === 'Set-Cookie' ? '*****' : apacheHeader.getValue()
+      });
+    });
+    var contentEncodingHeader = findHeader('Content-Encoding');
+    encoding = contentEncodingHeader && contentEncodingHeader.value || 'UTF-8';
+    responseStream = response && sandbox.Utils.bufferStream(response.getResponseAsStream());
+    code = response && response.getStatusCode();
+    e = exc;
+  };
+
+  this.request(requestType, uri, queryParams, payload, receiver, receiver);
+  return Object.defineProperties({}, {
+    response: {
+      get: function () {
+        const body = response && (responseString || (responseString = sandbox.Utils.readString(responseStream, encoding)));
+        traceResponseToLog(headers, body);
+        return body;
+      },
+      enumerable: true
+    },
+    responseAsStream: {
+      get: function () {
+        traceResponseToLog(headers, 'Byte stream response');
+        return responseStream;
+      },
+      enumerable: true
+    },
+    headers: {
+      value: headers,
+      enumerable: true
+    },
+    code: {
+      value: code,
+      enumerable: true
+    },
+    exception: {
+      value: e,
+      enumerable: true
+    },
+    isSuccess: {
+      get: function () {
+        return !this.exception && this.code >= 200 && this.code < 400;
+      },
+      enumerable: true
+    },
+    toString: {
+      value: function () {
+        if (this.exception) {
+          return 'Failed to execute the request. Exception is\n' + this.exception;
+        }
+        var codeString = 'Response code: ' + this.code + '\n';
+        var headersString = headers ? 'Response headers:\n' : '';
+        headers && headers.forEach(function (header) {
+          headersString += header.name + ': ' + header.value + '\n';
+        });
+        return codeString + headersString + 'Response body:\n' + this.response;
+      },
+      enumerable: true
+    }
+  });
+};
+
+/**
+ * Executes a synchronous GET request.
+ *
+ * @param {String} [uri] The request URI.
+ * The complete URL is a concatenation of the string that is passed to the URL parameter in the Connection constructor and this string.
+ * If the URL parameter in the Connection constructor is empty, specify the absolute URL of the target site.
+ *
+ * @param {Array<{name: String, value: String}>|Object} [queryParams] The query parameters.
+ * If an object is passed, its keys are considered to be parameter names.
+ *
+ * @return {Response} An object that represents an HTTP response.
+ */
+Connection.prototype.getSync = function (uri, queryParams) {
+  return this.doSync(REQUEST_TYPES.GET, uri, queryParams);
+};
+
+
+/**
+ * Executes a synchronous HEAD request.
+ *
+ * @param {string} [uri] The request URI.
+ * The complete URL is a concatenation of the string that is passed to the URL parameter in the Connection constructor and this string.
+ * If the URL parameter in the Connection constructor is empty, specify the absolute URL of the target site.
+ *
+ * @param {Array<{name: String, value: String}>|Object} [queryParams] The query parameters.
+ * If an object is passed, its keys are considered to be parameter names.
+ *
+ * @return {Response} An object that represents an HTTP response.
+ */
+Connection.prototype.headSync = function (uri, queryParams) {
+  return this.doSync(REQUEST_TYPES.HEAD, uri, queryParams);
+};
+
+/**
+ * Executes a synchronous POST request.
+ *
+ * @param {string} [uri] The request URI.
+ * The complete URL is a concatenation of the string that is passed to the URL parameter in the Connection constructor and this string.
+ * If the URL parameter in the Connection constructor is empty, specify the absolute URL of the target site.
+ *
+ * @param {Array<{name: String, value: String}>|Object} [queryParams] The query parameters.
+ * If an object is passed, its keys are considered to be parameter names.
+ * If the payload parameter is empty, the query parameters are passed as a form entity.
+ *
+ * @param {string} [payload] The payload to be sent in the request.
+ *
+ * @return {Response} An object that represents an HTTP response.
+ */
+Connection.prototype.postSync = function (uri, queryParams, payload) {
+  return this.doSync(REQUEST_TYPES.POST, uri, queryParams, payload);
+};
+
+/**
+ * Executes a synchronous PUT request.
+ *
+ * @param {string} [uri] The request URI.
+ * The complete URL is a concatenation of the string that is passed to the URL parameter in the Connection constructor and this string.
+ * If the URL parameter in the Connection constructor is empty, specify the absolute URL of the target site.
+ *
+ * @param {Array<{name: String, value: String}>|Object} [queryParams] The query parameters.
+ * If an object is passed, its keys are considered to be parameter names.
+ * If the payload parameter is empty, the query parameters are passed as a form entity.
+ *
+ * @param {string} [payload] The payload to be sent in the request.
+ *
+ * @return {Response} An object that represents an HTTP response.
+ */
+Connection.prototype.putSync = function (uri, queryParams, payload) {
+  return this.doSync(REQUEST_TYPES.PUT, uri, queryParams, payload);
+};
+
+/**
+ * Executes a synchronous PATCH request.
+ *
+ * @param {string} [uri] The request URI.
+ * The complete URL is a concatenation of the string that is passed to the URL parameter in the Connection constructor and this string.
+ * If the URL parameter in the Connection constructor is empty, specify the absolute URL of the target site.
+ *
+ * @param {Array<{name: String, value: String}>|Object} [queryParams] The query parameters.
+ * If an object is passed, its keys are considered to be parameter names.
+ *
+ * @param {string} [payload] The payload to be sent in the request.
+ *
+ * @return {Response} An object that represents an HTTP response.
+ */
+Connection.prototype.patchSync = function (uri, queryParams, payload) {
+  return this.doSync(REQUEST_TYPES.PATCH, uri, queryParams, payload);
+};
+
+/**
+ * Executes a synchronous DELETE request.
+ *
+ * @param {string} [uri] The request URI.
+ * The complete URL is a concatenation of the string that is passed to the URL parameter in the Connection constructor and this string.
+ * If the URL parameter in the Connection constructor is empty, specify the absolute URL of the target site.
+ *
+ * @param {Array<{name: String, value: String}>|Object} [queryParams] The query parameters.
+ * If an object is passed, its keys are considered to be parameter names.
+ *
+ * @return {Response} An object that represents an HTTP response.
+ */
+Connection.prototype.deleteSync = function (uri, queryParams) {
+  return this.doSync(REQUEST_TYPES.DELETE, uri, queryParams);
+};
+
+/**
+ * Executes a synchronous CONNECT request.
+ *
+ * @param {string} [uri] request URI.
+ * The complete URL is a concatenation of the string that is passed to the URL parameter in the Connection constructor and this string.
+ * If the URL parameter in the Connection constructor is empty, specify the absolute URL of the target site.
+ *
+ * @param {Array<{name: String, value: String}>|Object} [queryParams] The query parameters.
+ * If an object is passed, its keys are considered to be parameter names.
+ *
+ * @return {Response} An object that represents an HTTP response.
+ */
+Connection.prototype.connectSync = function (uri, queryParams) {
+  return this.doSync(REQUEST_TYPES.CONNECT, uri, queryParams);
+};
+
+/**
+ * Executes a synchronous OPTIONS request.
+ *
+ * @param {string} [uri] request URI.
+ * The complete URL is a concatenation of the string that is passed to the URL parameter in the Connection constructor and this string.
+ * If the URL parameter in the Connection constructor is empty, specify the absolute URL of the target site.
+ *
+ * @param {Array<{name: String, value: String}>|Object} [queryParams] The query parameters.
+ * If an object is passed, its keys are considered to be parameter names.
+ *
+ * @return {Response} An object that represents an HTTP response.
+ */
+Connection.prototype.optionsSync = function (uri, que �ryParams) {
+  return this.doSync(REQUEST_TYPES.OPTIONS, uri, queryParams);
+};
+
+exports.Connection = Connection;
+exports.REQUEST_TYPES = REQUEST_TYPES;

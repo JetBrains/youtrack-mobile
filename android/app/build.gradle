@@ -4,7 +4,6 @@ apply from: 'versioning.gradle'
 project.ext.vectoricons = [
     iconFontNames: [ 'MaterialCommunityIcons.ttf', 'FontAwesome.ttf' ]
 ]
-
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 import com.android.build.OutputFile
@@ -22,8 +21,13 @@ import com.android.build.OutputFile
  *   // the name of the generated asset file containing your JS bundle
  *   bundleAssetName: "index.android.bundle",
  *
- *   // the entry file for bundle generation
+ *   // the entry file for bundle generation. If none specified and
+ *   // "index.android.js" exists, it will be used. Otherwise "index.js" is
+ *   // default. Can be overridden with ENTRY_FILE environment variable.
  *   entryFile: "index.android.js",
+ *
+ *   // https://reactnative.dev/docs/performance#enable-the-ram-format
+ *   bundleCommand: "ram-bundle",
  *
  *   // whether to bundle JS and assets in debug mode
  *   bundleInDebug: false,
@@ -72,7 +76,7 @@ import com.android.build.OutputFile
  *   inputExcludes: ["android/**", "ios/**"],
  *
  *   // override which node gets called and with what additional arguments
- *   nodeExecutableAndArgs: ["node"]
+ *   nodeExecutableAndArgs: ["node"],
  *
  *   // supply additional arguments to the packager
  *   extraPackagerArgs: []
@@ -80,14 +84,7 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-    entryFile: "index.js",
-    // whether to bundle JS and assets in debug mode
-    bundleInDebug: false,
-    // whether to bundle JS and assets in release mode
-    bundleInRelease: true,
-
-    // the root of your RN project, i.e. where "package.json" lives
-    root: "../../"
+    enableHermes: false,  // clean and rebuild if changing
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -106,11 +103,35 @@ def enableSeparateBuildPerCPUArchitecture = false
  * Run Proguard to shrink the Java bytecode in release builds.
  */
 def enableProguardInReleaseBuilds = false
+
+/**
+ * The preferred build flavor of JavaScriptCore.
+ *
+ * For example, to use the international variant, you can use:
+ * `def jscFlavor = 'org.webkit:android-jsc-intl:+'`
+ *
+ * The international variant includes ICU i18n library and necessary data
+ * allowing to use e.g. `Date.toLocaleString` and `String.localeCompare` that
+ * give correct results when using with locales other than en-US.  Note that
+ * this variant is about 6MiB larger per architecture than default.
+ */
+def jscFlavor = 'org.webkit:android-jsc:+'
+
+/**
+ * Whether to enable the Hermes VM.
+ *
+ * This should be set on project.ext.react and mirrored here.  If it is not set
+ * on project.ext.react, JavaScript will not be compiled to Hermes Bytecode
+ * and the benefits of using Hermes will therefore be sharply reduced.
+ */
+def enableHermes = project.ext.react.get("enableHermes", false);
+
 def envVersion = System.getenv('YT_MOBILE_VERSION')
 def devVersion = "2019.0.0-1"
 def appVersion = envVersion != null ? envVersion : devVersion
 
 android {
+    ndkVersion rootProject.ext.ndkVersion
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     compileOptions {
@@ -125,11 +146,6 @@ android {
         versionCode buildVersionCode(appVersion)
         versionName buildVersionName(appVersion)
         vectorDrawables.useSupportLibrary = true
-        ndk {
-            abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
-        }
-        multiDexEnabled true
-        missingDimensionStrategy 'react-native-camera', 'general'
         missingDimensionStrategy "RNNotifications.reactNativeVersion", "reactNative60"
     }
     splits {
@@ -140,8 +156,22 @@ android {
             include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
     }
+    signingConfigs {
+        debug {
+            storeFile file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+    }
     buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
         release {
+            // Caution! In production, you need to generate your own keystore file.
+            // see https://reactnative.dev/docs/signed-apk-android.
+            signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
@@ -150,53 +180,59 @@ android {
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
             // For each separate APK per architecture, set a unique version code as described here:
-            // http://tools.android.com/tech-docs/new-build-system/user-guide/apk-splits
-            def versionCodes = ["armeabi-v7a":1, "x86":2, "arm64-v8a": 3, "x86_64": 4]
+            // https://developer.android.com/studio/build/configure-apk-splits.html
+            // Example: versionCode 1 will generate 1001 for armeabi-v7a, 1002 for x86, etc.
+            def versionCodes = ["armeabi-v7a": 1, "x86": 2, "arm64-v8a": 3, "x86_64": 4]
             def abi = output.getFilter(OutputFile.ABI)
             if (abi != null) {  // null for the universal-debug, universal-release variants
                 output.versionCodeOverride =
-                        versionCodes.get(abi) * 1048576 + defaultConfig.versionCode
+                        defaultConfig.versionCode * 1000 + versionCodes.get(abi)
             }
-        }
-    }
 
-    lintOptions {
-        checkReleaseBuilds false
-        abortOnError false
+        }
     }
 }
 
 dependencies {
-    implementation 'com.facebook.fresco:fresco:1.+'
-    implementation 'com.facebook.fresco:animated-gif:1.+'
-    implementation project(':react-native-navigation-bar-color')
-    implementation project(':react-native-appearance')
-    implementation project(':react-native-restart')
-    implementation project(':bugsnag-react-native')
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    //noinspection GradleDynamicVersion
+    implementation "com.facebook.react:react-native:+"  // From node_modules
+
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+
     implementation project(':react-native-notifications')
     implementation 'com.google.firebase:firebase-core:16.0.0'
-    implementation project(':react-native-reanimated')
-    implementation project(':react-native-svg')
-    implementation project(':react-native-vector-icons')
-    implementation project(':react-native-gesture-handler')
-    implementation project(':@react-native-community_async-storage')
-    implementation project(':react-native-camera')
-    implementation project(':react-native-image-crop-picker')
-    implementation project(':react-native-linear-gradient')
-    implementation project(':react-native-eventsource')
-    implementation project(':react-native-device-info')
-    implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'androidx.appcompat:appcompat:1.0.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.media:media:1.0.0'
-    implementation "com.facebook.react:react-native:+"  // From node_modules
+
+//    implementation project(':react-native-eventsource')
+
+    debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
+      exclude group:'com.facebook.fbjni'
+    }
+
+    debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
+        exclude group:'com.facebook.flipper'
+        exclude group:'com.squareup.okhttp3', module:'okhttp'
+    }
+
+    debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}") {
+        exclude group:'com.facebook.flipper'
+    }
+
+    if (enableHermes) {
+        def hermesPath = "../../node_modules/hermes-engine/android/";
+        debugImplementation files(hermesPath + "hermes-debug.aar")
+        releaseImplementation files(hermesPath + "hermes-release.aar")
+    } else {
+        implementation jscFlavor
+    }
 }
 
 // Run this once to be able to run the application with BUCK
 // puts all compile dependencies into folder libs for BUCK to use
 task copyDownloadableDepsToLibs(type: Copy) {
-  from configurations.compile
-  into 'libs'
+    from configurations.compile
+    into 'libs'
 }
 
+apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 apply plugin: 'com.google.gms.google-services'

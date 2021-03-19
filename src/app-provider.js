@@ -1,8 +1,7 @@
 /* @flow */
 
 import React, {Component} from 'react';
-import {StatusBar, Platform} from 'react-native';
-import SafeAreaView from 'react-native-safe-area-view';
+import {StatusBar, Platform, SafeAreaView} from 'react-native';
 
 import ThemeProvider from './components/theme/theme-provider';
 import {ThemeContext} from './components/theme/theme-context';

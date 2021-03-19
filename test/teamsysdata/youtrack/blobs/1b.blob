@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model modelUID="r:9b5c6099-decf-49ed-a304-6fc7dbd66a25(jetbrains-youtrack-spamBlacklist)">
+  <persistence version="7" />
+  <language namespace="355b8814-6452-42a9-99ba-bf48a86484df(jetbrains.youtrack.workflow)" />
+  <language namespace="134b6ab8-1e5e-498b-8109-fed3af0973ea(jetbrains.youtrack.workflow.localization)" />
+  <import index="qfu0" modelUID="f:java_stub#jetbrains.youtrack.workflow.customFieldsSchema(jetbrains.youtrack.workflow.customFieldsSchema@java_stub)" version="-1" />
+  <import index="tpck" modelUID="r:00000000-0000-4000-0000-011c89590288(jetbrains.mps.lang.core.structure)" version="0" implicit="yes" />
+  <import index="ih53" modelUID="r:913dafeb-4d10-46a5-9806-7d085c6ccd01(jetbrains.youtrack.workflow.structure)" version="11" implicit="yes" />
+  <import index="fk9a" modelUID="r:687126b3-ce00-4b38-98b6-dd0302c57bc6(jetbrains.youtrack.workflow.operators)" version="-1" implicit="yes" />
+  <import index="5c7v" modelUID="r:85cdbc88-0b2a-4b6f-a140-2103e0523bff(jetbrains.youtrack.workflow.localization.structure)" version="-1" implicit="yes" />
+  <roots>
+    <node type="ih53.StatelessRule" typeId="ih53.2793979439244446838" id="4251026549853587424">
+      <property name="name" nameId="tpck.1169194664001" value="Prevent to sumbit description/comment if it contains stop word" />
+    </node>
+  </roots>
+  <root id="4251026549853587424">
+    <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="4251026549853587425">
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YVariableDeclarationStatement" typeId="ih53.6635134117811900048" id="4251026549853587457">
+        <node role="declaration" roleId="ih53.6635134117811900049" type="ih53.YVariableDeclaration" typeId="ih53.9181025866980780791" id="4251026549853587458">
+          <property name="name" nameId="tpck.1169194664001" value="blacklist" />
+        </node>
+        <node role="initializer" roleId="ih53.6635134117811930190" type="5c7v.LocalizableExpression" typeId="5c7v.86376404488921782" id="1382459627240398237">
+          <property name="id" nameId="5c7v.86376404488956388" value="Prevent_to_sumbit_description/comment_if_it_contains_stop_word.ahole_anus_ash0le_ash0les_asholes_ass_Ass_Monkey_Assface_assh0le_assh0lez_asshole_assholes_assholz_asswipe_azzhole_bassterds_bastard_bastards_bastardz_basterds_basterdz_Biatch_bitch_bitches_Blow_Job_boffing_butthole_buttwipe_c0ck_c0cks_c0k_Carpet_Muncher_cawk_cawks_Clit_cnts_cntz_cock_cockhead_cock-head_cocks_CockSucker_cock-sucker_crap_cum_cunt_cunts_cuntz_dick_dild0_dild0s_dildo_dildos_dilld0_dilld0s_dominatricks_dominatrics_dominatrix_dyke_enema_f_u_c_k_f_u_c_k_e_r_fag_fag1t_faget_fagg1t_faggit_faggot_fagit_fags_fagz_faig_faigs_fart_flipping_the_bird_fuck_fucker_fuckin_fucking_fucks_Fudge_Packer_fuk_Fukah_Fuken_fuker_Fukin_Fukk_Fukkah_Fukken_Fukker_Fukkin_g00k_gay_gayboy_gaygirl_gays_gayz_God-damned_h00r_h0ar_h0re_hells_hoar_hoor_hoore_jackoff_jap_japs_jerk-off_jisim_jiss_jizm_jizz_knob_knobs_knobz_kunt_kunts_kuntz_Lesbian_Lezzian_Lipshits_Lipshitz_masochist_masokist_massterbait_masstrbait_masstrbate_masterbaiter_masterbate_masterbates_Motha_Fucker_Motha_Fuker_Motha_Fukkah_Motha_Fukker_Mother_Fucker_Mother_Fukah_Mother_Fuker_Mother_Fukkah_Mother_Fukker_mother-fucker_Mutha_Fucker_Mutha_Fukah_Mutha_Fuker_Mutha_Fukkah_Mutha_Fukker_n1gr_nastt_nigger;_nigur;_niiger;_niigr;_orafis_orgasim;_orgasm_orgasum_oriface_orifice_orifiss_packi_packie_packy_paki_pakie_paky_pecker_peeenus_peeenusss_peenus_peinus_pen1s_penas_penis_penis-breath_penus_penuus_Phuc_Phuck_Phuk_Phuker_Phukker_polac_polack_polak_Poonani_pr1c_pr1ck_pr1k_pusse_pussee_pussy_puuke_puuker_queer_queers_queerz_qweers_qweerz_qweir_recktum_rectum_retard_sadist_scank_schlong_screwing_semen_sex_sexy_Sh_t_sh1t_sh1ter_sh1ts_sh1tter_sh1tz_shit_shits_shitter_Shitty_Shity_shitz_Shyt_Shyte_Shytty_Shyty_skanck_skank_skankee_skankey_skanks_Skanky_slut_sluts_Slutty_slutz_son-of-a-bitch_tit_turd_va1jina_vag1na_vagiina_vagina_vaj1na_vajina_vullva_vulva_w0p_wh00r_wh0re_whore_xrated_xxx_b_ch_bitch_blowjob_clit_arschloch_fuck_shit_ass_asshole_b_tch_b17ch_b1tch_bastard_bi_ch_boiolas_buceta_c0ck_cawk_chink_cipa_clits_cock_cum_cunt_dildo_dirsa_ejakulate_fatass_fcuk_fuk_fux0r_hoer_hore_jism_kawk_l3itch_l3i_ch_lesbian_masturbate_masterbat_masterbat3_motherfucker_s_o_b_mofo_nazi_nigga_nigger_nutsack_phuck_pimpis_pusse_pussy_scrotum_sh_t_shemale_shi_sh_slut_smut_teets_tits_boobs_b00bs_teez_testical_testicle_titt_w00se_jackoff_wank_whoar_whore_damn_dyke_fuck_shit_@$$_amcik_andskota_arse_assrammer_ayir_bi7ch_bitch_bollock_breasts_butt-pirate_cabron_cazzo_chraa_chuj_Cock_cunt_d4mn_daygo_dego_dick_dike_dupa_dziwka_ejackulate_Ekrem_Ekto_enculer_faen_fag_fanculo_fanny_feces_feg_Felcher_ficken_fitt_Flikker_foreskin_Fotze_Fu_fuk_futkretzn_gay_gook_guiena_h0r_h4x0r_hell_helvete_hoer_honkey_Huevon_hui_injun_jizz_kanker_kike_klootzak_kraut_knulle_kuk_kuksuger_Kurac_kurwa_kusi_kyrpa_lesbo_mamhoon_masturbat_merd_mibun_monkleigh_mouliewop_muie_mulkku_muschi_nazis_nepesaurio_nigger_orospu_paska_perse_picka_pierdol_pillu_pimmel_piss_pizda_poontsee_poop_porn_p0rn_pr0n_preteen_pula_pule_puta_puto_qahbeh_queef_rautenberg_schaffer_scheiss_schlampe_schmuck_screw_sh_t_sharmuta_sharmute_shipal_shiz_skribz_skurwysyn_sphencter_spic_spierdalaj_splooge_suka_b00b_testicle_titt_twat_vittu_wank_wetback_wichser_wop_yed_zabourah" />
+          <node role="parts" roleId="5c7v.86376404488956389" type="5c7v.TextPart" typeId="5c7v.86376404488921792" id="1382459627240398238">
+            <property name="text" nameId="5c7v.86376404488921799" value="ahole, anus, ash0le, ash0les, asholes, ass, Ass Monkey, Assface, assh0le, assh0lez, asshole, assholes, assholz, asswipe, azzhole, bassterds, bastard, bastards, bastardz, basterds, basterdz, Biatch, bitch, bitches, Blow Job, boffing, butthole, buttwipe, c0ck, c0cks, c0k, Carpet Muncher, cawk, cawks, Clit, cnts, cntz, cock, cockhead, cock-head, cocks, CockSucker, cock-sucker, crap, cum, cunt, cunts, cuntz, dick, dild0, dild0s, dildo, dildos, dilld0, dilld0s, dominatricks, dominatrics, dominatrix, dyke, enema, f u c k, f u c k e r, fag, fag1t, faget, fagg1t, faggit, faggot, fagit, fags, fagz, faig, faigs, fart, flipping the bird, fuck, fucker, fuckin, fucking, fucks, Fudge Packer, fuk, Fukah, Fuken, fuker, Fukin, Fukk, Fukkah, Fukken, Fukker, Fukkin, g00k, gay, gayboy, gaygirl, gays, gayz, God-damned, h00r, h0ar, h0re, hells, hoar, hoor, hoore, jackoff, jap, japs, jerk-off, jisim, jiss, jizm, jizz, knob, knobs, knobz, kunt, kunts, kuntz, Lesbian, Lezzian, Lipshits, Lipshitz, masochist, masokist, massterbait, masstrbait, masstrbate, masterbaiter, masterbate, masterbates, Motha Fucker, Motha Fuker, Motha Fukkah, Motha Fukker, Mother Fucker, Mother Fukah, Mother Fuker, Mother Fukkah, Mother Fukker, mother-fucker, Mutha Fucker, Mutha Fukah, Mutha Fuker, Mutha Fukkah, Mutha Fukker, n1gr, nastt, nigger;, nigur;, niiger;, niigr;, orafis, orgasim;, orgasm, orgasum, oriface, orifice, orifiss, packi, packie, packy, paki, pakie, paky, pecker, peeenus, peeenusss, peenus, peinus, pen1s, penas, penis, penis-breath, penus, penuus, Phuc, Phuck, Phuk, Phuker, Phukker, polac, polack, polak, Poonani, pr1c, pr1ck, pr1k, pusse, pussee, pussy, puuke, puuker, queer, queers, queerz, qweers, qweerz, qweir, recktum, rectum, retard, sadist, scank, schlong, screwing, semen, sex, sexy, Sh!t, sh1t, sh1ter, sh1ts, sh1tter, sh1tz, shit, shits, shitter, Shitty, Shity, shitz, Shyt, Shyte, Shytty, Shyty, skanck, skank, skankee, skankey, skanks, Skanky, slut, sluts, Slutty, slutz, son-of-a-bitch, tit, turd, va1jina, vag1na, vagiina, vagina, vaj1na, vajina, vullva, vulva, w0p, wh00r, wh0re, whore, xrated, xxx, b!+ch, bitch, blowjob, clit, arschloch, fuck, shit, ass, asshole, b!tch, b17ch, b1tch, bastard, bi+ch, boiolas, buceta, c0ck, cawk, chink, cipa, clits, cock, cum, cunt, dildo, dirsa, ejakulate, fatass, fcuk, fuk, fux0r, hoer, hore, jism, kawk, l3itch, l3i+ch, lesbian, masturbate, masterbat, masterbat3, motherfucker, s.o.b., mofo, nazi, nigga, nigger, nutsack, phuck, pimpis, pusse, pussy, scrotum, sh!t, shemale, shi+, sh!+, slut, smut, teets, tits, boobs, b00bs, teez, testical, testicle, titt, w00se, jackoff, wank, whoar, whore, damn, dyke, fuck, shit, @$$, amcik, andskota, arse, assrammer, ayir, bi7ch, bitch, bollock, breasts, butt-pirate, cabron, cazzo, chraa, chuj, Cock, cunt, d4mn, daygo, dego, dick, dike, dupa, dziwka, ejackulate, Ekrem, Ekto, enculer, faen, fag, fanculo, fanny, feces, feg, Felcher, ficken, fitt, Flikker, foreskin, Fotze, Fu(, fuk, futkretzn, gay, gook, guiena, h0r, h4x0r, hell, helvete, hoer, honkey, Huevon, hui, injun, jizz, kanker, kike, klootzak, kraut, knulle, kuk, kuksuger, Kurac, kurwa, kusi, kyrpa, lesbo, mamhoon, masturbat, merd, mibun, monkleigh, mouliewop, muie, mulkku, muschi, nazis, nepesaurio, nigger, orospu, paska, perse, picka, pierdol, pillu, pimmel, piss, pizda, poontsee, poop, porn, p0rn, pr0n, preteen, pula, pule, puta, puto, qahbeh, queef, rautenberg, schaffer, scheiss, schlampe, schmuck, screw, sh!t, sharmuta, sharmute, shipal, shiz, skribz, skurwysyn, sphencter, spic, spierdalaj, splooge, suka, b00b, testicle, titt, twat, vittu, wank, wetback, wichser, wop, yed, zabourah" />
+          </node>
+        </node>
+      </node>
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YVariableDeclarationStatement" typeId="ih53.6635134117811900048" id="4251026549853662437">
+        <node role="declaration" roleId="ih53.6635134117811900049" type="ih53.YVariableDeclaration" typeId="ih53.9181025866980780791" id="4251026549853662438">
+          <property name="name" nameId="tpck.1169194664001" value="separators" />
+        </node>
+        <node role="initializer" roleId="ih53.6635134117811930190" type="ih53.YStringLiteral" typeId="ih53.4549928255927136609" id="4251026549853662439">
+          <property name="value" nameId="ih53.4549928255927136610" value="~`!@#$%^&amp;*()-_+=[]{}:;'\&quot;\\|,&lt;.&gt;/? \n\r\t" />
+        </node>
+      </node>
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YStatement" typeId="ih53.4549928255926912355" id="1934758187714962549" />
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YVariableDeclarationStatement" typeId="ih53.6635134117811900048" id="4251026549853587610">
+        <node role="declaration" roleId="ih53.6635134117811900049" type="ih53.YVariableDeclaration" typeId="ih53.9181025866980780791" id="4251026549853587611">
+          <property name="name" nameId="tpck.1169194664001" value="text" />
+        </node>
+        <node role="initializer" roleId="ih53.6635134117811930190" type="ih53.YStringLiteral" typeId="ih53.4549928255927136609" id="4251026549853587613">
+          <property name="value" nameId="ih53.4549928255927136610" value="" />
+        </node>
+      </node>
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YForeachStatement" typeId="ih53.9181025866980780787" id="1934758187714962537">
+        <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="1934758187714962538">
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="1934758187714962552">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="1934758187714962554">
+              <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366192" resolveInfo="=" />
+              <node role="left" roleId="ih53.4549928255927184281" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1934758187714962553">
+                <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="4251026549853587611" resolveInfo="text" />
+              </node>
+              <node role="right" roleId="ih53.4549928255927184282" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="1934758187714962562">
+                <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366141" resolveInfo="+" />
+                <node role="right" roleId="ih53.4549928255927184282" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="1934758187714962572">
+                  <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366141" resolveInfo="+" />
+                  <node role="right" roleId="ih53.4549928255927184282" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="1934758187714962584">
+                    <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="1934758187714962587">
+                      <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~IssueComment%dtext" resolveInfo="text" />
+                    </node>
+                    <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1934758187714962575">
+                      <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="1934758187714962540" resolveInfo="comment" />
+                    </node>
+                  </node>
+                  <node role="left" roleId="ih53.4549928255927184281" type="ih53.YStringLiteral" typeId="ih53.4549928255927136609" id="1934758187714962565">
+                    <property name="value" nameId="ih53.4549928255927136610" value=" " />
+                  </node>
+                </node>
+                <node role="left" roleId="ih53.4549928255927184281" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1934758187714962557">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="4251026549853587611" resolveInfo="text" />
+                </node>
+              </node>
+            </node>
+          </node>
+        </node>
+        <node role="sequence" roleId="ih53.9181025866980780789" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="1934758187714962545">
+          <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YAddedOperation" typeId="ih53.9181025866980722492" id="1934758187714962548" />
+          <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="1934758187714962541">
+            <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="1934758187714962542">
+              <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dcomments" resolveInfo="comments" />
+            </node>
+          </node>
+        </node>
+        <node role="variableDeclaration" roleId="ih53.9181025866980780790" type="ih53.YVariableDeclaration" typeId="ih53.9181025866980780791" id="1934758187714962540">
+          <property name="name" nameId="tpck.1169194664001" value="comment" />
+        </node>
+      </node>
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YIfStatement" typeId="ih53.5610598278601646193" id="1934758187714962598">
+        <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="1934758187714962599">
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="4251026549853587630">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="4251026549853587634">
+              <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366192" resolveInfo="=" />
+              <node role="right" roleId="ih53.4549928255927184282" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="1934758187714962592">
+                <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366141" resolveInfo="+" />
+                <node role="left" roleId="ih53.4549928255927184281" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="1934758187714962624">
+                  <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366141" resolveInfo="+" />
+                  <node role="right" roleId="ih53.4549928255927184282" type="ih53.YStringLiteral" typeId="ih53.4549928255927136609" id="1934758187714962627">
+                    <property name="value" nameId="ih53.4549928255927136610" value=" " />
+                  </node>
+                  <node role="left" roleId="ih53.4549928255927184281" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1934758187714962595">
+                    <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="4251026549853587611" resolveInfo="text" />
+                  </node>
+                </node>
+                <node role="right" roleId="ih53.4549928255927184282" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="4251026549853587637">
+                  <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="4251026549853587638">
+                    <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%ddescription" resolveInfo="description" />
+                  </node>
+                </node>
+              </node>
+              <node role="left" roleId="ih53.4549928255927184281" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="4251026549853587631">
+                <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="4251026549853587611" resolveInfo="text" />
+              </node>
+            </node>
+          </node>
+        </node>
+        <node role="condition" roleId="ih53.5610598278601646232" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="1934758187714963325">
+          <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366088" resolveInfo="||" />
+          <node role="right" roleId="ih53.4549928255927184282" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="1934758187714963326">
+            <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YInstanceMethodCall" typeId="ih53.4549928255927079324" id="1934758187714963327">
+              <link role="methodDeclaration" roleId="ih53.4549928255927079326" targetNodeId="qfu0.~IssuebecomesReported()%cboolean" resolveInfo="becomesReported" />
+            </node>
+          </node>
+          <node role="left" roleId="ih53.4549928255927184281" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="1934758187714963328">
+            <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YIsChangedOperation" typeId="ih53.9181025866980600314" id="1934758187714963329" />
+            <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="1934758187714963330">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="1934758187714963331">
+                <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%ddescription" resolveInfo="description" />
+              </node>
+            </node>
+          </node>
+        </node>
+      </node>
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YIfStatement" typeId="ih53.5610598278601646193" id="1934758187714963344">
+        <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="1934758187714963345">
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="1934758187714963333">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="1934758187714963334">
+              <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366192" resolveInfo="=" />
+              <node role="right" roleId="ih53.4549928255927184282" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="1934758187714963335">
+                <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366141" resolveInfo="+" />
+                <node role="left" roleId="ih53.4549928255927184281" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="1934758187714963336">
+                  <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366141" resolveInfo="+" />
+                  <node role="right" roleId="ih53.4549928255927184282" type="ih53.YStringLiteral" typeId="ih53.4549928255927136609" id="1934758187714963337">
+                    <property name="value" nameId="ih53.4549928255927136610" value=" " />
+                  </node>
+                  <node role="left" roleId="ih53.4549928255927184281" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1934758187714963338">
+                    <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="4251026549853587611" resolveInfo="text" />
+                  </node>
+                </node>
+                <node role="right" roleId="ih53.4549928255927184282" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="1934758187714963339">
+                  <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="1934758187714963342">
+                    <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dsummary" resolveInfo="summary" />
+                  </node>
+                </node>
+              </node>
+              <node role="left" roleId="ih53.4549928255927184281" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1934758187714963341">
+                <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="4251026549853587611" resolveInfo="text" />
+              </node>
+            </node>
+          </node>
+        </node>
+        <node role="condition" roleId="ih53.5610598278601646232" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="1934758187714963351">
+          <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366088" resolveInfo="||" />
+          <node role="left" roleId="ih53.4549928255927184281" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="1934758187714963360">
+            <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YIsChangedOperation" typeId="ih53.9181025866980600314" id="1934758187714963363" />
+            <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="1934758187714963354">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="1934758187714963355">
+                <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dsummary" resolveInfo="summary" />
+              </node>
+            </node>
+          </node>
+          <node role="right" roleId="ih53.4549928255927184282" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="1934758187714963347">
+            <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YInstanceMethodCall" typeId="ih53.4549928255927079324" id="1934758187714963348">
+              <link role="methodDeclaration" roleId="ih53.4549928255927079326" targetNodeId="qfu0.~IssuebecomesReported()%cboolean" resolveInfo="becomesReported" />
+            </node>
+          </node>
+        </node>
+      </node>
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="1934758187714950021">
+        <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="1934758187714950023">
+          <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366192" resolveInfo="=" />
+          <node role="right" roleId="ih53.4549928255927184282" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="1934758187714950031">
+            <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366141" resolveInfo="+" />
+            <node role="right" roleId="ih53.4549928255927184282" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="1934758187714950041">
+              <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366141" resolveInfo="+" />
+              <node role="right" roleId="ih53.4549928255927184282" type="ih53.YStringLiteral" typeId="ih53.4549928255927136609" id="1934758187714950044">
+                <property name="value" nameId="ih53.4549928255927136610" value=" " />
+              </node>
+              <node role="left" roleId="ih53.4549928255927184281" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="7097289676945055960">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YStringOperation" typeId="ih53.826182557008669302" id="7097289676945055963">
+                  <link role="operator" roleId="ih53.826182557009732292" targetNodeId="fk9a.826182557009732141" resolveInfo="lowerCase" />
+                </node>
+                <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1934758187714950034">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="4251026549853587611" resolveInfo="text" />
+                </node>
+              </node>
+            </node>
+            <node role="left" roleId="ih53.4549928255927184281" type="ih53.YStringLiteral" typeId="ih53.4549928255927136609" id="1934758187714950026">
+              <property name="value" nameId="ih53.4549928255927136610" value=" " />
+            </node>
+          </node>
+          <node role="left" roleId="ih53.4549928255927184281" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1934758187714950022">
+            <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="4251026549853587611" resolveInfo="text" />
+          </node>
+        </node>
+      </node>
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YStatement" typeId="ih53.4549928255926912355" id="1934758187714962550" />
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YVariableDeclarationStatement" typeId="ih53.6635134117811900048" id="1934758187714942453">
+        <node role="declaration" roleId="ih53.6635134117811900049" type="ih53.YVariableDeclaration" typeId="ih53.9181025866980780791" id="1934758187714942454">
+          <property name="name" nameId="tpck.1169194664001" value="index" />
+        </node>
+      </node>
+      <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YForeachStatement" typeId="ih53.9181025866980780787" id="4251026549853587463">
+        <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="4251026549853587464">
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="1934758187714953836">
+            <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="1934758187714953837">
+              <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366192" resolveInfo="=" />
+              <node role="right" roleId="ih53.4549928255927184282" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="1934758187714953838">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YStringOperation" typeId="ih53.826182557008669302" id="1934758187714953839">
+                  <link role="operator" roleId="ih53.826182557009732292" targetNodeId="fk9a.826182557009598381" resolveInfo="indexOf" />
+                  <node role="actualArgument" roleId="ih53.5770537243328039947" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="7097289676945083268">
+                    <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YStringOperation" typeId="ih53.826182557008669302" id="7097289676945083271">
+                      <link role="operator" roleId="ih53.826182557009732292" targetNodeId="fk9a.826182557009732141" resolveInfo="lowerCase" />
+                    </node>
+                    <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1934758187714953840">
+                      <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="4251026549853587466" resolveInfo="badWord" />
+                    </node>
+                  </node>
+                </node>
+                <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1934758187714953841">
+                  <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="4251026549853587611" resolveInfo="text" />
+                </node>
+              </node>
+              <node role="left" roleId="ih53.4549928255927184281" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1934758187714953842">
+                <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="1934758187714942454" resolveInfo="index" />
+              </node>
+            </node>
+          </node>
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YStatement" typeId="ih53.4549928255926912355" id="1934758187714962535" />
+          <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YWhileStatement" typeId="ih53.9181025866980740055" id="1207501534239736869">
+            <node role="body" roleId="ih53.7229228457869975589" type="ih53.YStatementList" typeId="ih53.4549928255926916151" id="1207501534239736870">
+              <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YVariableDeclarationStatement" typeId="ih53.6635134117811900048" id="1934758187714962515">
+                <node role="declaration" roleId="ih53.6635134117811900049" type="ih53.YVariableDeclaration" typeId="ih53.9181025866980780791" id="1934758187714962516">
+                  <property name="name" nameId="tpck.1169194664001" value="sepBefore" />
+                </node>
+                <node role="initializer" roleId="ih53.6635134117811930190" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="1934758187714962518">
+                  <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YStringOperation" typeId="ih53.826182557008669302" id="1934758187714962519">
+                    <link role="operator" roleId="ih53.826182557009732292" targetNodeId="fk9a.826182557008638107" resolveInfo="contains" />
+                    <node role="actualArgument" roleId="ih53.5770537243328039947" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="1934758187714962520">
+                      <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YStringOperation" typeId="ih53.826182557008669302" id="1934758187714962521">
+                        <link role="operator" roleId="ih53.826182557009732292" targetNodeId="fk9a.787944825036339357" resolveInfo="substring" />
+                        <node role="actualArgument" roleId="ih53.5770537243328039947" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="1934758187714962522">
+                          <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366156" resolveInfo="-" />
+                          <node role="right" roleId="ih53.4549928255927184282" type="ih53.YIntegerLiteral" typeId="ih53.4549928255927416728" id="1934758187714962523">
+                            <property name="value" nameId="ih53.4549928255927416738" value="1" />
+                          </node>
+                          <node role="left" roleId="ih53.4549928255927184281" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1934758187714962524">
+                            <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="1934758187714942454" resolveInfo="index" />
+                          </node>
+                        </node>
+                        <node role="actualArgument" roleId="ih53.5770537243328039947" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1934758187714962525">
+                          <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="1934758187714942454" resolveInfo="index" />
+                        </node>
+                      </node>
+                      <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1934758187714962526">
+                        <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="4251026549853587611" resolveInfo="text" />
+                      </node>
+                    </node>
+                    <node role="option" roleId="ih53.826182557009732383" type="ih53.YStringOperationFlagOption" typeId="ih53.826182557009732460" id="1934758187714962527">
+                      <link role="option" roleId="ih53.826182557009732459" targetNodeId="fk9a.826182557009396036" resolveInfo="ignoreCase" />
+                    </node>
+                  </node>
+                  <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1934758187714962528">
+                    <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="4251026549853662438" resolveInfo="separators" />
+                  </node>
+                </node>
+              </node>
+              <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YVariableDeclarationStatement" typeId="ih53.6635134117811900048" id="1934758187714962510">
+                <node role="declaration" roleId="ih53.6635134117811900049" type="ih53.YVariableDeclaration" typeId="ih53.9181025866980780791" id="1934758187714962511">
+                  <property name="name" nameId="tpck.1169194664001" value="sepAfter" />
+                </node>
+                <node role="initializer" roleId="ih53.6635134117811930190" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="1934758187714953045">
+                  <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YStringOperation" typeId="ih53.826182557008669302" id="1934758187714953046">
+                    <link role="operator" roleId="ih53.826182557009732292" targetNodeId="fk9a.826182557008638107" resolveInfo="contains" />
+                    <node role="actualArgument" roleId="ih53.5770537243328039947" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="1934758187714953047">
+                      <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YStringOperation" typeId="ih53.826182557008669302" id="1934758187714953048">
+                        <link role="operator" roleId="ih53.826182557009732292" targetNodeId="fk9a.787944825036339357" resolveInfo="substring" />
+                        <node role="actualArgument" roleId="ih53.5770537243328039947" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="1934758187714953049">
+                          <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366141" resolveInfo="+" />
+                          <node role="left" roleId="ih53.4549928255927184281" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1934758187714953050">
+                            <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="1934758187714942454" resolveInfo="index" />
+                          </node>
+                          <node role="right" roleId="ih53.4549928255927184282" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="1934758187714953051">
+                            <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YStringOperation" typeId="ih53.826182557008669302" id="1934758187714953052">
+                              <link role="operator" roleId="ih53.826182557009732292" targetNodeId="fk9a.826182557009732110" resolveInfo="length" />
+                            </node>
+                            <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1934758187714953053">
+                              <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="4251026549853587466" resolveInfo="badWord" />
+                            </node>
+                          </node>
+                        </node>
+                        <node role="actualArgument" roleId="ih53.5770537243328039947" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="1934758187714953054">
+                          <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366141" resolveInfo="+" />
+                          <node role="right" roleId="ih53.4549928255927184282" type="ih53.YIntegerLiteral" typeId="ih53.4549928255927416728" id="1934758187714953055">
+                            <property name="value" nameId="ih53.4549928255927416738" value="1" />
+                          </node>
+                          <node role="left" roleId="ih53.4549928255927184281" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="1934758187714953056">
+                            <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366141" resolveInfo="+" />
+                            <node role="left" roleId="ih53.4549928255927184281" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1934758187714953057">
+                              <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="1934758187714942454" resolveInfo="index" />
+                            </node>
+                            <node role="right" roleId="ih53.4549928255927184282" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="1934758187714953058">
+                              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YStringOperation" typeId="ih53.826182557008669302" id="1934758187714953059">
+                                <link role="operator" roleId="ih53.826182557009732292" targetNodeId="fk9a.826182557009732110" resolveInfo="length" />
+                              </node>
+                              <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1934758187714953060">
+                                <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="4251026549853587466" resolveInfo="badWord" />
+                              </node>
+                            </node>
+                          </node>
+                        </node>
+                      </node>
+                      <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1934758187714953061">
+                        <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="4251026549853587611" resolveInfo="text" />
+                      </node>
+                    </node>
+                    <node role="option" roleId="ih53.826182557009732383" type="ih53.YStringOperationFlagOption" typeId="ih53.826182557009732460" id="1934758187714953062">
+                      <link role="option" roleId="ih53.826182557009732459" targetNodeId="fk9a.826182557009396036" resolveInfo="ignoreCase" />
+                    </node>
+                  </node>
+                  <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1934758187714953063">
+                    <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="4251026549853662438" resolveInfo="separators" />
+                  </node>
+                </node>
+              </node>
+              <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YStatement" typeId="ih53.4549928255926912355" id="1934758187714962531" />
+              <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YAssertStatement" typeId="ih53.7229228457870671120" id="1934758187714953041">
+                <node role="condition" roleId="ih53.7229228457870671122" type="ih53.YUnaryOperation" typeId="ih53.4071490806870997250" id="1934758187714954611">
+                  <link role="operator" roleId="ih53.4071490806870997251" targetNodeId="fk9a.4071490806871030007" resolveInfo="!" />
+                  <node role="argument" roleId="ih53.4071490806870997252" type="ih53.YParenExpression" typeId="ih53.4549928255927235095" id="1934758187714954612">
+                    <node role="expression" roleId="ih53.4549928255927235100" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="1934758187714953044">
+                      <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366094" resolveInfo="&amp;&amp;" />
+                      <node role="left" roleId="ih53.4549928255927184281" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1934758187714962530">
+                        <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="1934758187714962516" resolveInfo="sepBefore" />
+                      </node>
+                      <node role="right" roleId="ih53.4549928255927184282" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1934758187714962513">
+                        <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="1934758187714962511" resolveInfo="sepAfter" />
+                      </node>
+                    </node>
+                  </node>
+                </node>
+                <node role="message" roleId="ih53.7229228457870671123" type="5c7v.LocalizableExpression" typeId="5c7v.86376404488921782" id="1382459627240398239">
+                  <property name="id" nameId="5c7v.86376404488956388" value="Prevent_to_sumbit_description/comment_if_it_contains_stop_word.Prohibited_to_put_the_word_{0}" />
+                  <node role="parts" roleId="5c7v.86376404488956389" type="5c7v.TextPart" typeId="5c7v.86376404488921792" id="1382459627240398240">
+                    <property name="text" nameId="5c7v.86376404488921799" value="Prohibited to put the word '" />
+                  </node>
+                  <node role="parts" roleId="5c7v.86376404488956389" type="5c7v.ExpressionParameter" typeId="5c7v.86376404488957752" id="1382459627240398243">
+                    <node role="expression" roleId="5c7v.86376404488957754" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1382459627240398245">
+                      <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="4251026549853587466" resolveInfo="badWord" />
+                    </node>
+                  </node>
+                  <node role="parts" roleId="5c7v.86376404488956389" type="5c7v.TextPart" typeId="5c7v.86376404488921792" id="1382459627240398247">
+                    <property name="text" nameId="5c7v.86376404488921799" value="." />
+                  </node>
+                </node>
+              </node>
+              <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YStatement" typeId="ih53.4549928255926912355" id="1207501534239736875" />
+              <node role="statement" roleId="ih53.4549928255926916152" type="ih53.YExpressionStatement" typeId="ih53.4549928255926953442" id="1207501534239736877">
+                <node role="expression" roleId="ih53.4549928255926953443" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2443894702606155490">
+                  <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366192" resolveInfo="=" />
+                  <node role="right" roleId="ih53.4549928255927184282" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="2443894702606196697">
+                    <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YStringOperation" typeId="ih53.826182557008669302" id="2443894702606196700">
+                      <link role="operator" roleId="ih53.826182557009732292" targetNodeId="fk9a.826182557009598381" resolveInfo="indexOf" />
+                      <node role="actualArgument" roleId="ih53.5770537243328039947" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="7097289676945083274">
+                        <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YStringOperation" typeId="ih53.826182557008669302" id="7097289676945083277">
+                          <link role="operator" roleId="ih53.826182557009732292" targetNodeId="fk9a.826182557009732141" resolveInfo="lowerCase" />
+                        </node>
+                        <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1207501534239736885">
+                          <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="4251026549853587466" resolveInfo="badWord" />
+                        </node>
+                      </node>
+                      <node role="actualArgument" roleId="ih53.5770537243328039947" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="2443894702606196723">
+                        <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366141" resolveInfo="+" />
+                        <node role="left" roleId="ih53.4549928255927184281" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="2443894702606196720">
+                          <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="1934758187714942454" resolveInfo="index" />
+                        </node>
+                        <node role="right" roleId="ih53.4549928255927184282" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="2443894702606196732">
+                          <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YStringOperation" typeId="ih53.826182557008669302" id="2443894702606196735">
+                            <link role="operator" roleId="ih53.826182557009732292" targetNodeId="fk9a.826182557009732110" resolveInfo="length" />
+                          </node>
+                          <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1207501534239736888">
+                            <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="4251026549853587466" resolveInfo="badWord" />
+                          </node>
+                        </node>
+                      </node>
+                    </node>
+                    <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="2443894702606155493">
+                      <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="4251026549853587611" resolveInfo="text" />
+                    </node>
+                  </node>
+                  <node role="left" roleId="ih53.4549928255927184281" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="2443894702606155489">
+                    <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="1934758187714942454" resolveInfo="index" />
+                  </node>
+                </node>
+              </node>
+            </node>
+            <node role="condition" roleId="ih53.9181025866980740056" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="1207501534239736872">
+              <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366102" resolveInfo="!=" />
+              <node role="right" roleId="ih53.4549928255927184282" type="ih53.YIntegerLiteral" typeId="ih53.4549928255927416728" id="1207501534239736873">
+                <property name="value" nameId="ih53.4549928255927416738" value="-1" />
+              </node>
+              <node role="left" roleId="ih53.4549928255927184281" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="1207501534239736874">
+                <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="1934758187714942454" resolveInfo="index" />
+              </node>
+            </node>
+          </node>
+        </node>
+        <node role="sequence" roleId="ih53.9181025866980780789" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="4251026549853587470">
+          <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YStringOperation" typeId="ih53.826182557008669302" id="4251026549853587473">
+            <link role="operator" roleId="ih53.826182557009732292" targetNodeId="fk9a.826182557009731933" resolveInfo="split" />
+            <node role="actualArgument" roleId="ih53.5770537243328039947" type="ih53.YStringLiteral" typeId="ih53.4549928255927136609" id="4251026549853587474">
+              <property name="value" nameId="ih53.4549928255927136610" value=", " />
+            </node>
+          </node>
+          <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YVariableReference" typeId="ih53.9181025866980853743" id="4251026549853587467">
+            <link role="declaration" roleId="ih53.9181025866980853744" targetNodeId="4251026549853587458" resolveInfo="blacklist" />
+          </node>
+        </node>
+        <node role="variableDeclaration" roleId="ih53.9181025866980780790" type="ih53.YVariableDeclaration" typeId="ih53.9181025866980780791" id="4251026549853587466">
+          <property name="name" nameId="tpck.1169194664001" value="badWord" />
+        </node>
+      </node>
+    </node>
+    <node role="guard" roleId="ih53.4549928255927007153" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="4251026549853587436">
+      <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366088" resolveInfo="||" />
+      <node role="right" roleId="ih53.4549928255927184282" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="4251026549853587453">
+        <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YNotEmptyOperation" typeId="ih53.5610598278601569140" id="4251026549853587456" />
+        <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="4251026549853587445">
+          <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YAddedOperation" typeId="ih53.9181025866980722492" id="4251026549853587448" />
+          <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="4251026549853587439">
+            <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="4251026549853587440">
+              <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dcomments" resolveInfo="comments" />
+            </node>
+          </node>
+        </node>
+      </node>
+      <node role="left" roleId="ih53.4549928255927184281" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="1934758187714963319">
+        <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366088" resolveInfo="||" />
+        <node role="right" roleId="ih53.4549928255927184282" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="1934758187714963322">
+          <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YInstanceMethodCall" typeId="ih53.4549928255927079324" id="1934758187714963324">
+            <link role="methodDeclaration" roleId="ih53.4549928255927079326" targetNodeId="qfu0.~IssuebecomesReported()%cboolean" resolveInfo="becomesReported" />
+          </node>
+        </node>
+        <node role="left" roleId="ih53.4549928255927184281" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="1934758187714963366">
+          <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366088" resolveInfo="||" />
+          <node role="right" roleId="ih53.4549928255927184282" type="ih53.YParenExpression" typeId="ih53.4549928255927235095" id="1934758187714963379">
+            <node role="expression" roleId="ih53.4549928255927235100" type="ih53.YBinaryOperation" typeId="ih53.4549928255927184280" id="1934758187714963386">
+              <link role="operator" roleId="ih53.4549928255927184283" targetNodeId="fk9a.4549928255927366094" resolveInfo="&amp;&amp;" />
+              <node role="right" roleId="ih53.4549928255927184282" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="1934758187714963391">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YInstanceMethodCall" typeId="ih53.4549928255927079324" id="1934758187714963392">
+                  <link role="methodDeclaration" roleId="ih53.4549928255927079326" targetNodeId="qfu0.~IssueisReported()%cboolean" resolveInfo="isReported" />
+                </node>
+              </node>
+              <node role="left" roleId="ih53.4549928255927184281" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="1934758187714963375">
+                <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YIsChangedOperation" typeId="ih53.9181025866980600314" id="1934758187714963378" />
+                <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="1934758187714963369">
+                  <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="1934758187714963370">
+                    <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%dsummary" resolveInfo="summary" />
+                  </node>
+                </node>
+              </node>
+            </node>
+          </node>
+          <node role="left" roleId="ih53.4549928255927184281" type="ih53.YDotExpression" typeId="ih53.4549928255926984860" id="4251026549853587430">
+            <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YIsChangedOperation" typeId="ih53.9181025866980600314" id="4251026549853587433" />
+            <node role="operand" roleId="ih53.4549928255926987274" type="ih53.YLocalOperationExpression" typeId="ih53.7451506201604596085" id="4251026549853587426">
+              <node role="operation" roleId="ih53.3892942819404325179" type="ih53.YFieldReference" typeId="ih53.4549928255927047442" id="4251026549853587427">
+                <link role="fieldDeclaration" roleId="ih53.4549928255927047447" targetNodeId="qfu0.~Issue%ddescription" resolveInfo="description" />
+              </node>
+            </node>
+          </node>
+        </node>
+      </node>
+    </node>
+  </root>
+</model>
+

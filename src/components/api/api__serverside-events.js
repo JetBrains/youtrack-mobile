@@ -1,9 +1,10 @@
 /* @flow */
-import RNEventSource from '@huston007/react-native-eventsource';
+import RNEventSource from '@gpsgate/react-native-eventsource';
 import qs from 'qs';
 import log from '../../components/log/log';
 import agileFields from './api__agile-fields';
 import apiHelper from './api__helper';
+import {logEvent} from '../log/log-helper';
 
 export default class ServersideEvents {
   backendUrl: string;
@@ -25,6 +26,11 @@ export default class ServersideEvents {
 
     this.eventSource = new RNEventSource(`${this.backendUrl}/api/eventSourceBus?${queryString}`);
 
+    if (!this.eventSource) {
+      logEvent({message: 'Unable to establish SSE connection'});
+      return;
+    }
+
     this.eventSource.addEventListener('open', () => log.info('SSE connection opened'));
 
     this.eventSource.addEventListener('error', () => log.info('SSE connection closed'));
@@ -33,7 +39,7 @@ export default class ServersideEvents {
   }
 
   listenTo(eventName: string, callback: any => any) {
-    this.eventSource.addEventListener(eventName, event => {
+    this.eventSource && this.eventSource.addEventListener(eventName, event => {
       const data = event.data ? JSON.parse(event.data) : event;
 
       if (event.data) {
@@ -45,9 +51,11 @@ export default class ServersideEvents {
   }
 
   close() {
-    if (this.eventSource._unregisterEvents) {
-      this.eventSource._unregisterEvents();
+    if (this?.eventSource) {
+      if (this.eventSource?._unregisterEvents) {
+        this.eventSource._unregisterEvents();
+      }
+      this.eventSource.close();
     }
-    this.eventSource.close();
   }
 }

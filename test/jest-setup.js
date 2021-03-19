@@ -53,7 +53,7 @@ jest.mock('react-native-appearance', () => ({
   Appearance: {getColorScheme: () => 'light'}
 }));
 
-jest.mock('StatusBarIOS', () => ({
+jest.mock('StatusBar', () => ({
   addListener: jest.fn()
 }));
 

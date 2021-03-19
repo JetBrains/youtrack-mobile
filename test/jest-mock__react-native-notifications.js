@@ -33,7 +33,7 @@ export default function mockReactNativeNotification() {
   }));
 
 
-  jest.mock('react-native-notifications-latest', () => {
+  jest.mock('react-native-notifications', () => {
     return {
       Notifications: {
         getInitialNotification: jest.fn().mockReturnValue(Promise.resolve()),

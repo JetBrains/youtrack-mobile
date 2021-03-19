@@ -1,0 +1,361 @@
+2š/*
+ Copyright 2017 JetBrains s.r.o.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
+
+const jiraUtils = require('./utils');
+
+const fieldIdsMapping = {
+  'Link': 'links',
+  'Parent': 'links',
+  'Epic Link': 'links',
+  'Epic Child': 'links',
+};
+
+const fieldAliases = {
+  'Fix Version': 'fixVersions',
+  'Link': 'issuelinks',
+  'Parent': 'parent'
+};
+
+const treatAsNames = modify => names => {
+  const namedValues = names.map(name => ({name: name}));
+  return modify ? modify(namedValues) : namedValues;
+};
+
+const createChange = function (from, to, modify) {
+  return {
+    from: modify ? modify(from ? from : null) : (from ? from : null),
+    to: modify ? modify(to ? to : null) : (to ? to : null)
+  };
+};
+
+const extractFromId = modify => change => createChange(change.from, change.to, modify);
+
+const extractFromString = modify => change => createChange(change.fromString, change.toString, modify);
+
+const toArray = object => {
+  return (object !== undefined && object !== null) ? [object] : [];
+};
+
+const wrapToArray = modify => object => {
+  const array = toArray(object);
+  return modify ? modify(array) : array;
+};
+
+const splitToArray = modify => s => {
+  return splitToArrayBy(',', modify)(s)
+};
+
+const splitToArrayBy = (separator, modify) => s => {
+  if (!s) {
+    return [];
+  }
+
+  separator = separator || ',';
+  const array = s.split(separator)
+      .filter(str => str && str.length > 0)
+      .map(str => str.trim());
+  return modify ? modify(array) : array;
+};
+
+const stripBrackets = modify => s => {
+  const stripped = s ? s.slice(1, -1) : s;
+  return modify ? modify(stripped) : stripped;
+};
+
+const printEventJson = (object, depth) => {
+  const restrictions = {
+    author: 0,
+    fieldChanges: 5
+  };
+  const str = jiraUtils.toJsonDebug(object, depth || 3, restrictions, 0, false);
+  console.trace('EVENT: ' + str)
+};
+
+const Events = function (client, context) {
+
+  const attachEvent = function (jiraIssue, eventId, fieldId, author, timestamp, removed, added) {
+    const transformedAuthor = client.$private.fields.user(author); // there's an array returned
+    const event = {
+      id: eventId,
+      fieldId: fieldId,
+      author: transformedAuthor && transformedAuthor[0],
+      timestamp: timestamp
+    };
+    event.fieldChanges = {};
+    event.fieldChanges[fieldId] = {
+      removedValues: removed,
+      addedValues: added
+    };
+    jiraIssue.history.push(event);
+    return event;
+  };
+
+  const getSchema = () => {
+    return jiraUtils.getObject(context, "fieldSchema")
+  };
+
+  const requestIssue = issueKey => {
+    const targetIssue = issueKey && client.getIssue(issueKey,
+        client.getSkippingFailureHandler([403, 404]), true
+    );
+    if (!targetIssue || !targetIssue.id) {
+      throw ('Cannot retrieve linked issue id by key ' + issueKey);
+    }
+    return targetIssue;
+  };
+
+  const createLink = (targetIssue, linkName) => {
+    if (!targetIssue || !linkName) return null;
+    return {
+      linkName: linkName,
+      target: {
+        id: targetIssue.id,
+        key: targetIssue.key
+      }
+    };
+  };
+
+  const extractFromLink = modify => change => {
+    const toIssueLink = (targetIssueKey, linkDescription) => {
+      if (!targetIssueKey || !linkDescription) return null;
+      const prefix = 'This issue ';
+      const suffix = ' ' + targetIssueKey;
+      const linkName = linkDescription
+          && linkDescription.startsWith(prefix)
+          && linkDescription.endsWith(suffix)
+          && linkDescription.substring(prefix.length, linkDescription.length - suffix.length);
+      if (!linkName) {
+        throw ('Cannot parse link name from the link description: ' + linkDescription);
+      }
+      const targetIssue = requestIssue(targetIssueKey);
+
+      return createLink(targetIssue, linkName)
+    };
+    try {
+      return {
+        from: modify(toIssueLink(change.from, change.fromString)),
+        to: modify(toIssueLink(change.to, change.toString))
+      };
+    } catch (e) {
+      return { error: e };
+    }
+  };
+
+  const createMiniIssue = (id, key) => id && { id: id, key: key};
+
+  const extractFromParent = modify => change => {
+    return {
+      from: modify(createMiniIssue(change.from, change.fromString)),
+      to: modify(createMiniIssue(change.to, change.toString))
+    };
+  };
+
+  const extractFromEpicLink = modify => change => {
+    return {
+      from: modify(createLink(createMiniIssue(change.from, change.fromString), 'subtask of')),
+      to: modify(createLink(createMiniIssue(change.to, change.toString), 'subtask of'))
+    };
+  }
+
+  const extractFromEpicChild = modify => change => {
+    return {
+      from: modify(createLink(createMiniIssue(change.from, change.fromString), 'parent for')),
+      to: modify(createLink(createMiniIssue(change.to, change.toString), 'parent for'))
+    };
+  }
+
+  const ignore = what => change => ({ error: what + 'is ignored' });
+
+  const convertBy = type => value => findFieldConverter(type).convert(value);
+
+  const perFieldNameTransformers = {
+    'Parent': extractFromParent(wrapToArray(convertBy('parent'))),
+    'Link': extractFromLink(wrapToArray()),
+    'Epic Link': extractFromEpicLink(wrapToArray()),
+    'Epic Child': extractFromEpicChild(wrapToArray())
+  }
+
+  const perFieldIdTransformers = {
+    'reporter': ignore('field=reporter'),
+    'tags': extractFromString(splitToArrayBy(' ', convertBy('tags'))),
+    'resolved': extractFromString(wrapToArray()),
+    'summary': extractFromString(wrapToArray())
+  };
+
+  const perTypeTransformers = {
+    'any': ignore('type=any'),
+    'string': extractFromString(wrapToArray()),
+    'text': extractFromString(wrapToArray()),
+    'number': extractFromString(wrapToArray()),
+    'integer': extractFromString(wrapToArray()),
+    'datetime': extractFromString(wrapToArray()),
+    'date': extractFromString(wrapToArray()),
+    'period': extractFromId(wrapToArray(convertBy('period'))),
+    'user': extractFromId(wrapToArray(treatAsNames(convertBy('user')))),
+    'user[*]': extractFromId(stripBrackets(splitToArray(treatAsNames(convertBy('user'))))),
+    'group': extractFromString(stripBrackets(wrapToArray(treatAsNames(convertBy('group'))))),
+    'group[*]': extractFromString(stripBrackets(splitToArray(treatAsNames(convertBy('group'))))),
+    'enum': extractFromString(wrapToArray(treatAsNames(convertBy('enum')))),
+    'enum[*]': extractFromString(splitToArray(treatAsNames(convertBy('enum')))),
+    'ownedField': extractFromString(wrapToArray(treatAsNames(convertBy('ownedField')))),
+    'ownedField[*]': extractFromString(splitToArray(treatAsNames(convertBy('ownedField')))),
+    'version': extractFromString(wrapToArray(treatAsNames(convertBy('version')))),
+    'version[*]': extractFromString(splitToArray(treatAsNames(convertBy('version')))),
+    'state': extractFromString(wrapToArray(treatAsNames(convertBy('state')))),
+    'resolution': extractFromString(wrapToArray(treatAsNames(convertBy('resolution')))),
+    //gh-epic-link is covered by 'Epic Link' and 'Epic Child' field transformers
+    'com.pyxis.greenhopper.jira:gh-epic-link': ignore('com.pyxis.greenhopper.jira:gh-epic-link')
+  };
+
+  const addResolutionEvents = jiraIssue => {
+    let resolvedTimestamp = null;
+    jiraIssue.history.forEach(event => {
+      const eventFieldId = event.fieldId;
+      if ('resolution' === eventFieldId) {
+        const change = event.fieldChanges[eventFieldId];
+        const from = change.removedValues.length ? resolvedTimestamp : null;
+        const to = change.addedValues.length ? event.timestamp : null;
+        const eventId = event.id + '-r';
+        const eventInfo = jiraIssue.key + ':' + eventId + ':resolved';
+        if (from === null && to === null) {
+          console.debug(eventInfo + ': skipped event -X null to null change');
+        } else {
+          attachEvent(jiraIssue, eventId, 'resolved', event.author, event.timestamp, toArray(from), toArray(to));
+          console.debug(eventInfo + ': added event -> created from Resolution');
+        }
+        resolvedTimestamp = to;
+      }
+    });
+    jiraIssue.fields['resolved'] = resolvedTimestamp || jiraIssue.fields.resolutiondate;
+  };
+
+  const findPerTypeTransformer = (prototype) => {
+    let transformer;
+    if (prototype) {
+      const typeId = prototype.type + (prototype.multiValue ? '[*]' : '');
+      const transform = perTypeTransformers[typeId]
+      transformer = transform && {
+        id: 'field type=' + typeId,
+        transform: transform
+      }
+    }
+    return transformer;
+  }
+
+  const findPerFieldTransformer = (fieldId) => {
+    const transform = perFieldIdTransformers[fieldId];
+    return transform && {
+      id: 'field id=' + fieldId,
+      transform: transform
+    };
+  }
+
+  const findPerEventFieldIdTransformer = (jiraEventFieldId) => {
+    const transform = perFieldNameTransformers[jiraEventFieldId];
+    return transform && {
+      id: 'event field id=' + jiraEventFieldId,
+      transform: transform
+    };
+  }
+
+  const findTransformer = (jiraFieldId, jiraEventFieldId, prototype) => {
+    return  findPerEventFieldIdTransformer(jiraEventFieldId)
+      || findPerFieldTransformer(jiraFieldId)
+      || findPerTypeTransformer(prototype);
+  };
+
+  const findFieldConverter = (type) => {
+    const convert = type && client.$private.fields[type];
+    if (!convert) {
+      throw "Cannot find field converter for <" + type + ">";
+    }
+    return {
+      id: type,
+      convert: convert
+    };
+  }
+
+  const composeFieldInfo = (jiraEventFieldId, prototype) => {
+    const type = prototype && prototype.type;
+    const prototypeInfo = prototype ? (prototype.id + '<' + (type ? type : '?') + '>') : '?';
+    return jiraEventFieldId + '#' + prototypeInfo;
+  }
+
+  function composeEventInfo(jiraIssue, eventFieldInfo, eventId) {
+    return jiraIssue.key + ':' + eventId + ':' + eventFieldInfo;
+  }
+
+  const transformEvents = (jiraIssue, failureHandler) => {
+    if (!jiraIssue.changelog && !jiraIssue.history) { // see JT-37375
+      jiraIssue.changelog = client.getIssueChangelog(jiraIssue.key, failureHandler).changelog;
+      if (!jiraIssue.changelog) { // still no changelog for some unknown reason
+        console.warn(jiraIssue.key  + ': No change log is available for issue');
+      }
+    }
+    jiraIssue.changelog && jiraIssue.changelog.histories && jiraIssue.changelog.histories.forEach(change => {
+      change.items.forEach((item, index) => {
+        const jiraEventFieldId = item.field;
+        const jiraFieldId = fieldAliases[jiraEventFieldId] || jiraEventFieldId;
+        const prototype = jiraFieldId && getSchema().findField(jiraFieldId, jiraFieldId)
+        const eventFieldInfo = composeFieldInfo(jiraEventFieldId, prototype)
+        const eventId = change.id + '-' + index;
+        const eventInfo = composeEventInfo(jiraIssue, eventFieldInfo, eventId);
+        console.debug(eventInfo + ': processing event');
+        if (!jiraEventFieldId) {
+          console.debug(eventInfo + ': event skipped -X field ' + eventFieldInfo + ' is not in the schema');
+          return;
+        }
+
+        if (item.from === item.to && item.fromString === item.toString) {
+          console.debug(eventInfo + ': event skipped -X empty change, `from` and `to` are identical');
+          return;
+        }
+
+        const emptyThing = fieldRep => ( !fieldRep || (Array.isArray(fieldRep) && fieldRep.length === 0) );
+        if (!item.fromString && !item.toString && emptyThing(item.from) && emptyThing(item.to)) {
+          console.debug(eventInfo + ': event skipped -X empty change, `from` and `to` are empty');
+          return;
+        }
+
+        const transformer = findTransformer(jiraFieldId, jiraEventFieldId, prototype);
+        if (!transformer) {
+          console.debug(eventInfo + ': event skipped -X field ' + eventFieldInfo + ' has no transformer');
+          return;
+        }
+
+        const transformed = transformer.transform(item)
+        if (!transformed.error) {
+          const fieldId = fieldIdsMapping[jiraEventFieldId]
+            || prototype && prototype.id
+            || prototype && prototype.name
+            || jiraEventFieldId;
+          attachEvent(jiraIssue, eventId, fieldId, change.author, change.created, transformed.from, transformed.to);
+          console.debug(eventInfo + ': event added -> transformed by ' + transformer.id);
+        } else {
+          console.debug(eventInfo + ': event skipped -X ' + transformed.error);
+        }
+      });
+    });
+
+    addResolutionEvents(jiraIssue);
+  };
+
+  return {
+    transformEvents: transformEvents
+  };
+};
+
+module.exports = Events;

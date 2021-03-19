@@ -1,11 +1,12 @@
 /* @flow */
 
-import {Notification, Notifications, Registered, RegistrationError} from 'react-native-notifications-latest';
+import {Notification, Notifications, Registered, RegistrationError} from 'react-native-notifications';
 
-import appPackage from '../../../package.json'; // eslint-disable-line import/extensions
+import appPackage from '../../../package.json';
 
 import log from '../log/log';
 import Router from '../router/router';
+import {isAndroidPlatform} from '../../util/util';
 import {targetAccountToSwitchTo} from '../../actions/app-actions-helper';
 import {UNSUPPORTED_ERRORS} from '../error/error-messages';
 
@@ -15,6 +16,7 @@ import type {CustomError} from '../../flow/Error';
 import type {NotificationCompletion, TokenHandler} from '../../flow/Notification';
 import type {StorageState} from '../storage/storage';
 
+const isAndroid: boolean = isAndroidPlatform();
 
 export default class PushNotificationsProcessor {
   static KONNECTOR_URL = appPackage.config.KONNECTOR_URL;
@@ -101,10 +103,35 @@ export default class PushNotificationsProcessor {
   }
 
   static async subscribe(api: Api, deviceToken: string, youtrackToken: string): Promise<any> {
+    if (isAndroid) {
+      return PushNotificationsProcessor.subscribeAndroid(api, deviceToken, youtrackToken);
+    }
+    return PushNotificationsProcessor.subscribeIOS(api, deviceToken, youtrackToken);
+  }
+
+  static async subscribeAndroid(api: Api, deviceToken: string, youtrackToken: string): Promise<any> {
     const logMsgPrefix: string = `${PushNotificationsProcessor.logPrefix}(subscribe): `;
     try {
       log.info(`${logMsgPrefix}Subscribing to push notifications...`);
       const response = await api.subscribeToFCMNotifications(
+        PushNotificationsProcessor.KONNECTOR_URL,
+        youtrackToken,
+        deviceToken
+      );
+      log.info(`${logMsgPrefix}Subscribed to push notifications`);
+      return response;
+    } catch (error) {
+      const err = PushNotificationsProcessor.composeError(error);
+      log.warn(`${logMsgPrefix}Subscribe to push notifications failed`, err);
+      return Promise.reject(error);
+    }
+  }
+
+  static async subscribeIOS(api: Api, deviceToken: string, youtrackToken: string): Promise<any> {
+    const logMsgPrefix: string = `${PushNotificationsProcessor.logPrefix}(subscribe): `;
+    try {
+      log.info(`${logMsgPrefix}Subscribing to push notifications...`);
+      const response = await api.subscribeToIOSNotifications(
         PushNotificationsProcessor.KONNECTOR_URL,
         youtrackToken,
         deviceToken
