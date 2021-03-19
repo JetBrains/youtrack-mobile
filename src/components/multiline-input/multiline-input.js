@@ -74,7 +74,6 @@ export default class MultilineInput extends PureComponent<Props, State> {
   };
 
   render() {
-    // eslint-disable-next-line no-unused-vars
     const {style, maxInputHeight, minInputHeight, adaptive, ...rest} = this.props;
 
     return (

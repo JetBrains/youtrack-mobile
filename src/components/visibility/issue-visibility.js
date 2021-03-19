@@ -52,7 +52,6 @@ export default class IssueVisibility {
       {type: addTypes(ResourceTypes.USER_GROUP), key: 'permittedGroups'},
     ];
 
-    // eslint-disable-next-line no-unused-vars
     for (const item of visibilityTypes) {
       const hasVisibilityType = item.type.some((it) => it === option.$type);
       if (hasVisibilityType) {

@@ -82,10 +82,9 @@ function fillIssueFromAnotherIssue(issue: IssueOnList, sourceIssue: IssueFull) {
 export function findIssueOnBoard(board: Board, issueId: string): ?{cell: BoardCell, row: AgileBoardRow, issue: IssueOnList, column: AgileColumn} {
   const rows = [...board.trimmedSwimlanes, board.orphanRow];
 
-  // eslint-disable-next-line no-unused-vars
   for (const rowIndex in rows) {
     const row = rows[rowIndex];
-    // eslint-disable-next-line no-unused-vars
+
     for (const cellIndex in row.cells) {
       const cell = row.cells[cellIndex];
       const foundIssue = cell.issues.filter(issue => issue.id === issueId)[0];
