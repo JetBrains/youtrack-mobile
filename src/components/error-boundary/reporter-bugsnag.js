@@ -2,7 +2,7 @@
 
 import {Client, Configuration} from 'bugsnag-react-native';
 import log from '../log/log';
-import appPackage from '../../../package.json'; // eslint-disable-line import/extensions
+import appPackage from '../../../package.json';
 import {getStorageState} from '../storage/storage';
 
 import type {AppConfig} from '../../flow/AppConfig';

@@ -1,6 +1,6 @@
 /* @flow */
 
-import appPackage from '../../../package.json'; // eslint-disable-line import/extensions
+import appPackage from '../../../package.json';
 
 import PushNotificationsProcessor from './push-notifications-processor';
 

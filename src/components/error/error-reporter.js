@@ -2,7 +2,7 @@
 
 import DeviceInfo from 'react-native-device-info';
 
-import appPackage from '../../../package.json'; // eslint-disable-line import/extensions
+import appPackage from '../../../package.json';
 import log, {getLogs} from '../log/log';
 import {getStorageState} from '../storage/storage';
 import {resolveErrorMessage} from './error-resolver';

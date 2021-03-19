@@ -7,7 +7,7 @@ import {Platform} from 'react-native';
 import base64 from 'base64-js';
 import qs from 'qs';
 
-import appPackage from '../../package.json'; // eslint-disable-line import/extensions
+import appPackage from '../../package.json';
 import {getStorageState} from '../components/storage/storage';
 
 import type {CustomError} from '../flow/Error';

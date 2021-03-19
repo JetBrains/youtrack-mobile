@@ -1,7 +1,7 @@
 /* @flow */
 import DeviceInfo from 'react-native-device-info';
 import {Analytics, Hits as GAHits} from 'react-native-google-analytics';
-import appPackage from '../../../package.json'; // eslint-disable-line import/extensions
+import appPackage from '../../../package.json';
 
 const splitRegExp = /[\.-]/i;
 const VERSION = appPackage.version || 'dev.dev.dev-dev';

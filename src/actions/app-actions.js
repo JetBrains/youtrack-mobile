@@ -10,7 +10,7 @@ import Api from '../components/api/api';
 import Auth from '../components/auth/auth';
 import log from '../components/log/log';
 import openByUrlDetector, {isOneOfServers} from '../components/open-url-handler/open-url-handler';
-import packageJson from '../../package.json'; // eslint-disable-line import/extensions
+import packageJson from '../../package.json';
 import PermissionsStore from '../components/permissions-store/permissions-store';
 import PushNotifications from '../components/push-notifications/push-notifications';
 import Router from '../components/router/router';
