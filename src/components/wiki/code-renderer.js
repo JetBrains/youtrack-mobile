@@ -46,7 +46,7 @@ function renderCode(node: Node, language?: ?string, uiTheme: UITheme) {
   const separator = <Text>{'\n'}</Text>;
   const codeStyle = uiTheme.dark ? darcula : idea;
 
-  for (const i in codeStyle) { // eslint-disable-line no-unused-vars
+  for (const i in codeStyle) {
     codeStyle[i].lineHeight = '1.25em';
   }
 
