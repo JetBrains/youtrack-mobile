@@ -9,7 +9,7 @@ import type {UITheme, UIThemeColors} from '../../flow/Theme';
 
 const vSpace = {
   marginTop: UNIT * 2,
-  marginBottom: UNIT
+  marginBottom: UNIT,
 };
 
 // Source: 'react-native-markdown-display/src/lib/styles'
@@ -19,7 +19,7 @@ const markdownStyles = (uiTheme: UITheme) => {
     borderWidth: 0,
     backgroundColor: uiThemeColors.$boxBackground,
     padding: UNIT,
-    borderRadius: 4
+    borderRadius: 4,
   };
 
   return {
@@ -33,32 +33,32 @@ const markdownStyles = (uiTheme: UITheme) => {
     heading1: {
       flexDirection: 'row',
       fontSize: 32,
-      ...vSpace
+      ...vSpace,
     },
     heading2: {
       flexDirection: 'row',
       fontSize: 24,
-      ...vSpace
+      ...vSpace,
     },
     heading3: {
       flexDirection: 'row',
       fontSize: 18,
-      ...vSpace
+      ...vSpace,
     },
     heading4: {
       flexDirection: 'row',
       fontSize: 16,
-      ...vSpace
+      ...vSpace,
     },
     heading5: {
       flexDirection: 'row',
       fontSize: 13,
-      ...vSpace
+      ...vSpace,
     },
     heading6: {
       flexDirection: 'row',
       fontSize: 11,
-      ...vSpace
+      ...vSpace,
     },
 
     // Horizontal Rule
@@ -140,13 +140,13 @@ const markdownStyles = (uiTheme: UITheme) => {
 
     // Code
     code_inline: {
-      ...code
+      ...code,
     },
     code_block: {
-      ...code
+      ...code,
     },
     fence: {
-      ...code
+      ...code,
     },
 
     // Tables
@@ -174,7 +174,7 @@ const markdownStyles = (uiTheme: UITheme) => {
     // Links
     link: {
       textDecorationLine: 'none',
-      color: uiThemeColors.$link
+      color: uiThemeColors.$link,
     },
     blocklink: {
       flex: 1,
@@ -189,7 +189,7 @@ const markdownStyles = (uiTheme: UITheme) => {
 
     // Text Output
     text: {
-      color: uiThemeColors.$text
+      color: uiThemeColors.$text,
     },
     textgroup: {},
     paragraph: {

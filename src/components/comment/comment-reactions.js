@@ -55,7 +55,7 @@ const CommentReactions = (props: ReactionsType) => {
                 disabled={!onReactionSelect}
                 style={{
                   ...styles.reactionsReaction,
-                  ...(isUserReacted ? styles.reactionsReactionSelected : null)
+                  ...(isUserReacted ? styles.reactionsReactionSelected : null),
                 }}
                 onPress={() => onReactionSelect(props.comment, reaction)}
                 onLongPress={() => {

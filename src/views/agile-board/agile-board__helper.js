@@ -34,7 +34,7 @@ export function getGroupedSprints(sprints: Array<Sprint>): Array<Sprint> {
     },
     {
       active: [],
-      archived: []
+      archived: [],
     }
   );
 

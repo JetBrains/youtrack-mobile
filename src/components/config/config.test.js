@@ -16,18 +16,18 @@ describe('Config', () => {
       responseJson = {
         ring: {
           url: 'http://hub.com',
-          serviceId: 'fake-service-id'
+          serviceId: 'fake-service-id',
         },
         mobile: {
           serviceId: 'fake-mobile-id',
-          serviceSecret: 'fake-service-secret'
+          serviceSecret: 'fake-service-secret',
         },
         statisticsEnabled: true,
-        version: '7.0'
+        version: '7.0',
       };
       response = {
         status: 200,
-        json: () => Promise.resolve(responseJson)
+        json: () => Promise.resolve(responseJson),
       };
 
       fetch = global.fetch = sinon.stub();
@@ -49,11 +49,11 @@ describe('Config', () => {
           landingUrl: 'ytoauth://landing.url',
           scopes: 'Hub YouTrack',
           serverUri: 'http://hub.com',
-          youtrackServiceId: 'fake-service-id'
+          youtrackServiceId: 'fake-service-id',
         },
         backendUrl: 'http://fake.backend',
         statisticsEnabled: true,
-        version: '7.0'
+        version: '7.0',
       });
     });
 
@@ -75,8 +75,8 @@ describe('Config', () => {
         method: 'GET',
         headers: {
           'Accept': 'application/json, text/plain, */*',
-          'User-Agent': 'YouTrackMobile/0.1 (undefined undefined undefined)'
-        }
+          'User-Agent': 'YouTrackMobile/0.1 (undefined undefined undefined)',
+        },
       });
     });
 

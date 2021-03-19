@@ -8,7 +8,7 @@ describe('BoardScroller', () => {
       {collapsed: false},
       {collapsed: false},
       {collapsed: false},
-      {collapsed: false}
+      {collapsed: false},
     ];
   });
 
@@ -49,7 +49,7 @@ describe('BoardScroller', () => {
       event = {
         nativeEvent: {
           contentOffset: {x: 0},
-          velocity: {x: 0}
+          velocity: {x: 0},
         },
       };
     });

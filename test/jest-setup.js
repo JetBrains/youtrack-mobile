@@ -26,18 +26,18 @@ should();
 // RNDeviceInfo mock
 ReactNative.NativeModules.RNDeviceInfo = {
   uniqueId: 'unique-id',
-  userAgent: 'user-agent'
+  userAgent: 'user-agent',
 };
 
 ReactNative.NativeModules.RNKeychainManager = {
   getInternetCredentialsForServer: jest.fn(),
-  setInternetCredentialsForServer: jest.fn()
+  setInternetCredentialsForServer: jest.fn(),
 };
 
 jest.mock('bugsnag-react-native', () => {
   return {
     Client: jest.fn(() => ({notify: jest.fn()})),
-    Configuration: jest.fn()
+    Configuration: jest.fn(),
   };
 });
 
@@ -50,11 +50,11 @@ jest.mock('react-native-gesture-handler', () => ({}));
 jest.mock('react-native-tab-view', () => ({}));
 
 jest.mock('react-native-appearance', () => ({
-  Appearance: {getColorScheme: () => 'light'}
+  Appearance: {getColorScheme: () => 'light'},
 }));
 
 jest.mock('StatusBar', () => ({
-  addListener: jest.fn()
+  addListener: jest.fn(),
 }));
 
 // react-native-notification mock

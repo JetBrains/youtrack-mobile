@@ -40,7 +40,7 @@ export default function AgileRowColumn(props: ColumnProps) {
     return {
       length: height,
       offset: offset,
-      index
+      index,
     };
   }
 
@@ -50,7 +50,7 @@ export default function AgileRowColumn(props: ColumnProps) {
       data={{
         columnId: cell.column.id,
         cellId: cell.id,
-        issueIds: issues.map(issue => issue.id)
+        issueIds: issues.map(issue => issue.id),
       }}
     >
 

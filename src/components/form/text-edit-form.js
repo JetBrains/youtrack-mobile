@@ -41,7 +41,7 @@ export default class TextEditForm extends PureComponent<Props, void> {
       multiline = true,
       placeholderText = 'Description',
       style,
-      uiTheme
+      uiTheme,
     } = this.props;
 
     return (

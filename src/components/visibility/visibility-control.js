@@ -45,7 +45,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
     getOptions: () => [],
     style: null,
     uiTheme: DEFAULT_THEME,
-    visibilityDefaultLabel: visibilityDefaultText
+    visibilityDefaultLabel: visibilityDefaultText,
   };
 
   constructor(props: Props) {
@@ -53,14 +53,14 @@ export default class VisibilityControl extends PureComponent<Props, State> {
 
     this.state = {
       visibility: props.visibility,
-      isSelectVisible: false
+      isSelectVisible: false,
     };
   }
 
   componentDidUpdate(prevProps: Props) {
     if (prevProps.visibility !== this.props.visibility) {
       this.setState({
-        visibility: this.props.visibility
+        visibility: this.props.visibility,
       });
     }
   }
@@ -114,7 +114,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
   onSelect = (selectedItems: ?Array<User | UserGroup>) => {
     const visibility: Visibility = IssueVisibility.visibility({
       permittedGroups: (selectedItems || []).filter(it => hasType.userGroup(it)),
-      permittedUsers: (selectedItems || []).filter(it => hasType.user(it))
+      permittedUsers: (selectedItems || []).filter(it => hasType.user(it)),
     });
 
     this.updateVisibility(visibility);
@@ -141,7 +141,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
       <Select
         multi={true}
         emptyValue={null}
-        placeholder='Filter users, groups, and teams'
+        placeholder="Filter users, groups, and teams"
         selectedItems={this.getVisibilitySelectedItems()}
         getTitle={this.getItemTitle}
         dataSource={this.getVisibilitySelectItems}
@@ -155,7 +155,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
     const author: ?User = visibility?.implicitPermittedUsers && visibility.implicitPermittedUsers[0];
     return [
       getEntityPresentation(author),
-      IssueVisibility.getVisibilityShortPresentation(visibility)
+      IssueVisibility.getVisibilityShortPresentation(visibility),
     ].filter(Boolean).join(', ');
   }
 
@@ -175,7 +175,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
         testID="visibilityControlButton"
         style={[
           styles.container,
-          this.props.style
+          this.props.style,
         ]}
       >
         {!onSubmit && isSecured && (

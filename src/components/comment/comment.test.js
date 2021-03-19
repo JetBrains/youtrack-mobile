@@ -21,8 +21,8 @@ describe('<Comment/>', () => {
     setApi({
       auth: {getAuthorizationHeaders: jest.fn()},
       config: {
-        backendUrl: backendUrlMock
-      }
+        backendUrl: backendUrlMock,
+      },
     });
   });
 

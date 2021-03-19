@@ -7,16 +7,16 @@ export const elevation1 = {
       shadowColor: '$separator',
       shadowOffset: {
         width: 0,
-        height: 1
+        height: 1,
       },
       shadowOpacity: 0.9,
     },
     android: {
       elevation: 2,
       borderBottomWidth: 0.3,
-      borderColor: '$separator'
+      borderColor: '$separator',
     },
-  })
+  }),
 };
 
 export const elevationBottom = {
@@ -27,11 +27,11 @@ export const elevationBottom = {
   shadowRadius: 0.5,
   shadowOffset: {
     height: -0.5,
-    width: 0
-  }
+    width: 0,
+  },
 };
 
 export const elevationTop = {
   borderTopWidth: 0.6,
-  borderColor: '$separator'
+  borderColor: '$separator',
 };

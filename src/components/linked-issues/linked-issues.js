@@ -22,7 +22,7 @@ type Props = {
 export default class LinkedIssues extends PureComponent<Props, void> {
   static defaultProps: Props = {
     onIssueTap: (issue: IssueOnList) => {},
-    links: []
+    links: [],
   };
 
   _getLinkTitle(link: IssueLink) {
@@ -33,7 +33,7 @@ export default class LinkedIssues extends PureComponent<Props, void> {
   }
 
   _renderLinkedIssue(issue: IssueOnList) {
-    const issueTextStyle = issue.resolved ? {color: EStyleSheet.value('$resolved'), textDecorationLine: 'line-through'}: null;
+    const issueTextStyle = issue.resolved ? {color: EStyleSheet.value('$resolved'), textDecorationLine: 'line-through'} : null;
 
     return <TouchableOpacity key={issue.id}
       onPress={() => this.props.onIssueTap && this.props.onIssueTap(issue)}

@@ -29,7 +29,7 @@ const KnowledgeBaseSearchPanel = (props: Props) => {
       }
 
       <TextInput
-        ref={(instance: ?Object) => {if (instance) searchInput = instance;}}
+        ref={(instance: ?Object) => {if (instance) {searchInput = instance;}}}
 
         style={styles.searchInput}
 

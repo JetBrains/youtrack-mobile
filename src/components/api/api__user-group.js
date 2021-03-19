@@ -22,7 +22,7 @@ export default class UserGroupAPI extends ApiBase {
       'ringId',
       'name',
       'icon',
-      'usersCount'
+      'usersCount',
     ]);
 
     return await this.makeAuthorizedRequest(`${this.url}?${queryString}`);

@@ -24,5 +24,5 @@ const getDurationPresentation = (duration: {presentation: string}): string => du
 export {
   firstActivityChange,
   getActivityEventTitle,
-  getDurationPresentation
+  getDurationPresentation,
 };

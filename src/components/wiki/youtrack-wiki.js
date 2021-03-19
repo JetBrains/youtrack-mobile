@@ -40,7 +40,7 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
   static defaultProps: Object = {
     onIssueIdTap: (issueId: string) => {},
     attachments: [],
-    imageHeaders: null
+    imageHeaders: null,
   };
 
   parser: (rawWiki: string, options: Object) => Object;
@@ -65,7 +65,7 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
     return Router.Image({
       current: source,
       imageAttachments: this.props.attachments.filter(attach => hasMimeType.previewable(attach)),
-      imageHeaders: this.props.imageHeaders
+      imageHeaders: this.props.imageHeaders,
     });
   };
 
@@ -76,7 +76,7 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
         style={styles.exceptionLink}
         onPress={() => requestAnimationFrame(() => Router.WikiPage({
           wikiText: toHtml(node),
-          onIssueIdTap: this.handleLinkPress
+          onIssueIdTap: this.handleLinkPress,
         }))}
       >
         {showMoreInlineText}
@@ -121,7 +121,7 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
         index,
         attachments: attachments.filter(Boolean),
         imageHeaders,
-        onImagePress: this.onImagePress
+        onImagePress: this.onImagePress,
       });
 
     case (wikiNodeType.p):

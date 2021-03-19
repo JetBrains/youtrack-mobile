@@ -7,7 +7,7 @@ export default EStyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-end',
-    marginTop: -UNIT * 6
+    marginTop: -UNIT * 6,
   },
   content: {
     paddingHorizontal: UNIT,
@@ -15,13 +15,13 @@ export default EStyleSheet.create({
     paddingBottom: UNIT * 3,
     backgroundColor: '$background',
     borderColor: '$boxBackground',
-    borderTopWidth: 1.5
+    borderTopWidth: 1.5,
   },
   title: {
     fontSize: HEADER_FONT_SIZE,
-    color: '$text'
+    color: '$text',
   },
   link: {
-    color: '$link'
-  }
+    color: '$link',
+  },
 });

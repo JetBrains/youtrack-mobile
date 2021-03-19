@@ -5,7 +5,7 @@ import type {
   Tag,
   Attachment,
   IssueComment,
-  IssueLink
+  IssueLink,
 } from './CustomFields';
 import type {User} from './User';
 

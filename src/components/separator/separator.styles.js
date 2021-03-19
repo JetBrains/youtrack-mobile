@@ -6,19 +6,19 @@ import {UNIT} from '../variables/variables';
 const rowSeparator = {
   height: 1,
   borderColor: '$separator',
-  ...separatorBorder
+  ...separatorBorder,
 };
 
 const rowSeparatorFit = {
   ...rowSeparator,
-  marginRight: -UNIT * 2
+  marginRight: -UNIT * 2,
 };
 
 export default EStyleSheet.create({
   ...{rowSeparator},
   ...{rowSeparatorFit},
   indent: {
-    marginTop: UNIT * 3
-  }
+    marginTop: UNIT * 3,
+  },
 });
 

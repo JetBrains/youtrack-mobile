@@ -27,7 +27,7 @@ export const ResourceTypes = {
   VISIBILITY_UNLIMITED: 'jetbrains.charisma.persistent.visibility.UnlimitedVisibility',
 
   WORK_ITEM: 'jetbrains.youtrack.timetracking.gaprest.IssueWorkItem',
-  DRAFT_WORK_ITEM: 'DraftWorkItem'
+  DRAFT_WORK_ITEM: 'DraftWorkItem',
 };
 
 type HasMethodName = 'comment' | 'user' | 'userGroup' | 'project' | 'savedSearch' | 'tag' | 'agile';

@@ -33,7 +33,7 @@ describe('<CreateIssue/>', () => {
 
       expect(storeActions[0]).toEqual({
         type: types.SET_DRAFT_PROJECT_ID,
-        projectId: PROJECT_ID_MOCK
+        projectId: PROJECT_ID_MOCK,
       });
     });
   });
@@ -41,19 +41,19 @@ describe('<CreateIssue/>', () => {
 
   function createStore() {
     apiMock = {
-      auth: {getAuthorizationHeaders: jest.fn()}
+      auth: {getAuthorizationHeaders: jest.fn()},
     };
     setApi(apiMock);
     stateMock = {
       app: {
-        issuePermissions: {}
+        issuePermissions: {},
       },
       creation: {
         processing: false,
         attachingImage: null,
         predefinedDraftId: null,
-        issue: issueMock
-      }
+        issue: issueMock,
+      },
     };
     ownPropsMock = {};
     store = createStoreMock(stateMock, ownPropsMock);

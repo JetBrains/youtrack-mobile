@@ -18,6 +18,6 @@ const styles = EStyleSheet.create({
     padding: UNIT * 2,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '$boxBackground'
-  }
+    backgroundColor: '$boxBackground',
+  },
 });

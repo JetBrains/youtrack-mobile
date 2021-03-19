@@ -7,15 +7,15 @@ export default EStyleSheet.create({
   ...feedbackFormStyles,
 
   container: {
-    flex: 1
+    flex: 1,
   },
   link: {
-    color: '$link'
+    color: '$link',
   },
   disabled: {
-    color: '$disabled'
+    color: '$disabled',
   },
   icon: {
-    color: '$icon'
-  }
+    color: '$icon',
+  },
 });

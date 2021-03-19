@@ -5,23 +5,23 @@ import {headerTitle, monospace, SECONDARY_FONT_SIZE} from '../../components/comm
 
 export default EStyleSheet.create({
   headerTitle: {
-    ...headerTitle
+    ...headerTitle,
   },
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '$background'
+    backgroundColor: '$background',
   },
   scrollContent: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   wiki: {
     paddingVertical: UNIT,
-    paddingHorizontal: UNIT * 2
+    paddingHorizontal: UNIT * 2,
   },
   plainText: {
     color: '$text',
     fontSize: SECONDARY_FONT_SIZE,
-    ...monospace
-  }
+    ...monospace,
+  },
 });

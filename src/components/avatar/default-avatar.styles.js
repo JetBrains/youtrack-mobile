@@ -4,7 +4,7 @@ import {UNIT} from '../variables/variables';
 const defaultSize = 40;
 const commonStyle = {
   justifyContent: 'center',
-  borderRadius: 3
+  borderRadius: 3,
 };
 
 export default EStyleSheet.create({
@@ -14,20 +14,20 @@ export default EStyleSheet.create({
   size80: {
     width: defaultSize * 2,
     height: defaultSize * 2,
-    borderRadius: UNIT
+    borderRadius: UNIT,
   },
   size40: {
     width: defaultSize,
-    height: defaultSize
+    height: defaultSize,
   },
   size20: {
     width: defaultSize / 2,
-    height: defaultSize / 2
+    height: defaultSize / 2,
   },
   text: {
     fontFamily: 'Arial',
     color: '$text',
     fontWeight: '600',
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 });

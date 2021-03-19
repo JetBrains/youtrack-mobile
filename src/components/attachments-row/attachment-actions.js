@@ -20,7 +20,7 @@ type StateGetter = () => { issueState: IssueState };
 
 const attachFileMethod: Object = {
   openCamera: 'openCamera',
-  openPicker: 'openPicker'
+  openPicker: 'openPicker',
 };
 
 export const getAttachmentActions = (prefix: string) => {
@@ -101,13 +101,13 @@ export const getAttachmentActions = (prefix: string) => {
         {
           title: 'Choose from library…',
           icon: IconAttachment,
-          execute: () => dispatch(actions.showAttachImageDialog(attachFileMethod.openPicker))
+          execute: () => dispatch(actions.showAttachImageDialog(attachFileMethod.openPicker)),
         },
         {
           title: 'Take a picture…',
           icon: IconCamera,
-          execute: () => dispatch(actions.showAttachImageDialog(attachFileMethod.openCamera))
-        }
+          execute: () => dispatch(actions.showAttachImageDialog(attachFileMethod.openCamera)),
+        },
       ];
     },
 
@@ -132,13 +132,13 @@ export const getAttachmentActions = (prefix: string) => {
           const attachments = await getApi().issue.getIssueAttachments(issueId);
           dispatch({
             type: types.ATTACH_RECEIVE_ALL_ATTACHMENTS,
-            attachments
+            attachments,
           });
         } catch (error) {
           log.warn('Failed to load issue attachments', error);
         }
       };
-    }
+    },
 
   };
 

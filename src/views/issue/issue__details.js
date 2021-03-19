@@ -211,10 +211,10 @@ export default class IssueDetails extends Component<Props, void> {
         imageHeaders: this.imageHeaders,
         onIssueIdTap: issueId => openNestedIssueView({issueId}),
         title: getReadableID(issue),
-        description: issue.wikifiedDescription
+        description: issue.wikifiedDescription,
       },
       markdown: issue.usesMarkdown && issue.description,
-      attachments: issue.attachments
+      attachments: issue.attachments,
     };
 
     return (
@@ -255,7 +255,7 @@ export default class IssueDetails extends Component<Props, void> {
       isSavingEditedIssue,
       summaryCopy,
       descriptionCopy,
-      onAttach
+      onAttach,
     } = this.props;
 
     return (
@@ -331,7 +331,7 @@ export default class IssueDetails extends Component<Props, void> {
       hasPermission={{
         canUpdateField: this.canUpdateField,
         canCreateIssueToProject: this.canCreateIssueToProject,
-        canEditProject: this.getIssuePermissions().canUpdateGeneralInfo(_issue)
+        canEditProject: this.getIssuePermissions().canUpdateGeneralInfo(_issue),
       }}
 
       onUpdate={this.onFieldUpdate}

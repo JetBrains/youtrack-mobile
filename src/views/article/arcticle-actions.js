@@ -139,15 +139,15 @@ const showArticleActions = (
             Share.share({title: article.summary, message: url}, {dialogTitle: msg});
           }
           logEvent({message: msg, analyticsId: ANALYTICS_ARTICLE_PAGE});
-        }
+        },
       },
       {
         title: 'Copy article URL',
         execute: () => {
           Clipboard.setString(url);
           logEvent({message: 'Copy article URL', analyticsId: ANALYTICS_ARTICLE_PAGE});
-        }
-      }
+        },
+      },
     ];
 
     if (canStar) {
@@ -157,7 +157,7 @@ const showArticleActions = (
         execute: async () => {
           logEvent({
             message: `Article: ${title}`,
-            analyticsId: ANALYTICS_ARTICLE_PAGE
+            analyticsId: ANALYTICS_ARTICLE_PAGE,
           });
           notify(
             hasStar
@@ -165,7 +165,7 @@ const showArticleActions = (
               : 'You\'ve been subscribed for updates'
           );
           dispatch(toggleFavorite());
-        }
+        },
       });
     }
 
@@ -175,7 +175,7 @@ const showArticleActions = (
         execute: async () => {
           logEvent({
             message: 'Edit article',
-            analyticsId: ANALYTICS_ARTICLE_PAGE
+            analyticsId: ANALYTICS_ARTICLE_PAGE,
           });
 
           setProcessing(true);
@@ -184,9 +184,9 @@ const showArticleActions = (
           Router.ArticleCreate({
             originalArticleId: article.id,
             articleDraft: Array.isArray(articleDrafts) ? articleDrafts[0] : articleDrafts,
-            breadCrumbs: renderBreadCrumbs()
+            breadCrumbs: renderBreadCrumbs(),
           });
-        }
+        },
       });
     }
 
@@ -196,13 +196,13 @@ const showArticleActions = (
         execute: async () => {
           logEvent({
             message: 'Delete article',
-            analyticsId: ANALYTICS_ARTICLE_PAGE
+            analyticsId: ANALYTICS_ARTICLE_PAGE,
           });
 
           confirmDeleteArticle()
             .then(() => dispatch(deleteArticle(article, () => Router.KnowledgeBase())))
             .catch(() => {});
-        }
+        },
       });
     }
 
@@ -382,7 +382,7 @@ const deleteArticleComment = (commentId: string) => {
           null,
           [
             {text: 'Cancel', style: 'cancel', onPress: reject},
-            {text: 'Delete', onPress: resolve}
+            {text: 'Delete', onPress: resolve},
           ],
           {cancelable: true}
         );
@@ -428,7 +428,7 @@ const showArticleCommentActions = (
           Share.share(params, {dialogTitle: 'Share URL'});
           logEvent({message: 'Share article', analyticsId: ANALYTICS_ARTICLE_PAGE});
           return this.title;
-        }
+        },
       },
       {
         title: 'Copy URL',
@@ -436,8 +436,8 @@ const showArticleCommentActions = (
           logEvent({message: 'Copy article URL', analyticsId: ANALYTICS_ARTICLE_PAGE});
           Clipboard.setString(url);
           return this.title;
-        }
-      }
+        },
+      },
     ];
 
     if (canDeleteComment) {
@@ -447,7 +447,7 @@ const showArticleCommentActions = (
           logEvent({message: 'Delete article', analyticsId: ANALYTICS_ARTICLE_PAGE});
           dispatch(deleteArticleComment(comment.id));
           return this.title;
-        }
+        },
       });
     }
 
@@ -510,7 +510,7 @@ const deleteAttachment = (attachmentId: string) => {
       logEvent({message: 'Attachment deleted', analyticsId: ANALYTICS_ARTICLE_PAGE});
       dispatch(setArticle(
         {
-          ...article, attachments: article.attachments.filter((it: Attachment) => it.id !== attachmentId)
+          ...article, attachments: article.attachments.filter((it: Attachment) => it.id !== attachmentId),
         }));
     }
   };
@@ -527,7 +527,7 @@ const createSubArticle = (renderBreadCrumbs: Function) => {
       Router.ArticleCreate({
         isNew: true,
         articleDraft: draft,
-        breadCrumbs: renderBreadCrumbs()
+        breadCrumbs: renderBreadCrumbs(),
       });
     }
   };
@@ -556,5 +556,5 @@ export {
   getMentions,
   toggleFavorite,
 
-  deleteAttachment
+  deleteAttachment,
 };

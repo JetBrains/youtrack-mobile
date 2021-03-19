@@ -42,12 +42,12 @@ const SEARCH_THROTTLE = 30;
 
 export default class CommandDialog extends Component<Props, State> {
   static defaultProps: DefaultProps = {
-    onChange: () => {}
+    onChange: () => {},
   };
   state: State = {
     displayCancelSearch: false,
     input: '',
-    caret: 0
+    caret: 0,
   };
   lastUsedParams: { command: ?string, caret: number } = {command: null, caret: 0};
   onSearch = throttle((command: string, caret: number) => {

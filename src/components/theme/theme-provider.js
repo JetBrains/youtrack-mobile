@@ -41,7 +41,7 @@ class ManageThemeProvider extends PureComponent<Props, State> {
     this.setAndroidNavBarStyle(uiTheme);
     this.state = {
       mode: _mode,
-      uiTheme: uiTheme
+      uiTheme: uiTheme,
     };
   }
 
@@ -57,7 +57,7 @@ class ManageThemeProvider extends PureComponent<Props, State> {
     } catch (error) {
       androidVersion = parseFloat(systemVersion);
     }
-    return typeof androidVersion === 'number' && androidVersion >=8;
+    return typeof androidVersion === 'number' && androidVersion >= 8;
   }
 
   componentDidMount = () => {
@@ -118,7 +118,7 @@ class ManageThemeProvider extends PureComponent<Props, State> {
       const uiTheme: UITheme = this.buildStyles(newMode);
       this.setState({
         mode,
-        uiTheme: uiTheme
+        uiTheme: uiTheme,
       });
 
       this.setAndroidNavBarStyle(uiTheme);
@@ -131,7 +131,7 @@ class ManageThemeProvider extends PureComponent<Props, State> {
         value={{
           mode: this.state.mode,
           uiTheme: this.state.uiTheme,
-          setMode: this.setMode
+          setMode: this.setMode,
         }}
       >
         {this.props.children}

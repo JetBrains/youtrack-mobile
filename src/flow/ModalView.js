@@ -3,13 +3,13 @@ export const Orientation = Object.freeze({
   PORTRAIT_UPSIDE_DOWN: 'portrait-upside-down',
   LANDSCAPE: 'landscape',
   LANDSCAPE_LEFT: 'landscape-left',
-  LANDSCAPE_RIGHT: 'landscape-right'
+  LANDSCAPE_RIGHT: 'landscape-right',
 });
 
 export const AnimationType = Object.freeze({
   NONE: 'none',
   SLIDE: 'slide',
-  FADE: 'fade'
+  FADE: 'fade',
 });
 
 export type ModalOrientation = $Values<typeof Orientation>

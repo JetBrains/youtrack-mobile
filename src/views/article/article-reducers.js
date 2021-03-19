@@ -32,7 +32,7 @@ export const articleInitialState: ArticleState = {
   isLoading: false,
   isProcessing: false,
   issuePermissions: issuePermissionsNull,
-  prevArticleState: null
+  prevArticleState: null,
 };
 
 const {reducer, actions} = createSlice({
@@ -70,8 +70,8 @@ const {reducer, actions} = createSlice({
         return state.prevArticleState ? state.prevArticleState : articleInitialState;
       }
       return state;
-    }
-  }
+    },
+  },
 });
 
 
@@ -82,7 +82,7 @@ export const {
   setActivityPage,
   setProcessing,
   setPrevArticle,
-  setArticleCommentDraft
+  setArticleCommentDraft,
 } = actions;
 
 export default reducer;

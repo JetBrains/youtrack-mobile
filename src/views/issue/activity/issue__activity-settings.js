@@ -49,17 +49,17 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
       circleColorActive: props.uiTheme.colors.$link,
       circleColorInactive: props.uiTheme.colors.$icon,
       backgroundActive: props.uiTheme.colors.$linkLight,
-      backgroundInactive: props.uiTheme.colors.$disabled
+      backgroundInactive: props.uiTheme.colors.$disabled,
     };
 
     this.sortOrderOption = {
       name: 'Show oldest activity first',
-      isNaturalCommentsOrder: props?.userAppearanceProfile?.naturalCommentsOrder
+      isNaturalCommentsOrder: props?.userAppearanceProfile?.naturalCommentsOrder,
     };
 
     this.state = {
       visible: false,
-      settings: []
+      settings: [],
     };
   }
 
@@ -80,7 +80,7 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
         issueActivityTypes,
         issueActivityEnabledTypes,
         userAppearanceProfile.naturalCommentsOrder
-      )
+      ),
     });
   }
 
@@ -138,7 +138,7 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
           onSyncPress={isNaturalOrder => {
             onApply({
               ...userAppearanceProfile,
-              ...{naturalCommentsOrder: isNaturalOrder}
+              ...{naturalCommentsOrder: isNaturalOrder},
             });
           }}
         />

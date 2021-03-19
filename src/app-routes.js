@@ -19,7 +19,7 @@ export const routeMap = {
   Image: 'Image',
   Issue: 'Issue',
   Issue2: 'Issue2',
-  WikiPage: 'WikiPage'
+  WikiPage: 'WikiPage',
 };
 
 export const rootRoutesList = [
@@ -28,5 +28,5 @@ export const rootRoutesList = [
   routeMap.Inbox,
   routeMap.Settings,
   routeMap.KnowledgeBase,
-  routeMap.ArticleSingle
+  routeMap.ArticleSingle,
 ];

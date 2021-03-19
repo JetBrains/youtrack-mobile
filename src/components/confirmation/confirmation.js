@@ -9,7 +9,7 @@ export const confirmation = async (title: string, actionButtonTitle: string, mes
       message,
       [
         {text: 'Cancel', style: 'cancel', onPress: reject},
-        {text: actionButtonTitle, onPress: resolve}
+        {text: actionButtonTitle, onPress: resolve},
       ],
       {cancelable: true}
     );

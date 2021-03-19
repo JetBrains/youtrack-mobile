@@ -33,7 +33,7 @@ type DefaultProps = {
 export default class Header extends PureComponent<HeaderProps, void> {
   static defaultProps: DefaultProps = {
     onRightButtonClick: () => undefined,
-    showShadow: false
+    showShadow: false,
   };
 
   componentDidMount() {
@@ -65,7 +65,7 @@ export default class Header extends PureComponent<HeaderProps, void> {
               style={[
                 styles.header,
                 showShadow ? styles.headerShadow : null,
-                style
+                style,
               ]}
             >
               {!!leftButton && <TouchableOpacity

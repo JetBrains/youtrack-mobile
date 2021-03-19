@@ -5,7 +5,7 @@ import IssuePermissions, {
   CAN_UPDATE_COMMENT,
   PRIVATE_UPDATE_ISSUE,
   CAN_UPDATE_NOT_OWN_COMMENT,
-  UPDATE_ARTICLE_COMMENT
+  UPDATE_ARTICLE_COMMENT,
 } from './issue-permissions';
 import sinon from 'sinon';
 
@@ -25,7 +25,7 @@ describe('IssuePermissions', function () {
   beforeEach(() => {
     permissionsMock = {
       has: sinon.stub().returns(false),
-      hasEvery: sinon.stub().returns(false)
+      hasEvery: sinon.stub().returns(false),
     };
 
     issueMock = {
@@ -35,16 +35,16 @@ describe('IssuePermissions', function () {
         plugins: {
           timeTrackingSettings: {
             enabled: false,
-            spentTime: undefined
-          }
-        }
-      }
+            spentTime: undefined,
+          },
+        },
+      },
     };
 
     commentMock = {
       author: {
-        ringId: USER_ID
-      }
+        ringId: USER_ID,
+      },
     };
 
     fieldMock = {
@@ -52,8 +52,8 @@ describe('IssuePermissions', function () {
         isPublic: true,
         field: {
           id: 'some-field',
-        }
-      }
+        },
+      },
     };
 
     currentUserMock = {id: USER_ID, guest: false};
@@ -235,7 +235,7 @@ describe('IssuePermissions', function () {
       const {timeTrackingSettings} = issueMock.project.plugins;
       timeTrackingSettings.enabled = true;
       timeTrackingSettings.timeSpent = {
-        field: {id: fieldMock.projectCustomField.field.id}
+        field: {id: fieldMock.projectCustomField.field.id},
       };
 
       issuePermissions.canUpdateField(issueMock, fieldMock).should.be.false;
@@ -252,7 +252,7 @@ describe('IssuePermissions', function () {
       const {timeTrackingSettings} = issueMock.project.plugins;
       timeTrackingSettings.enabled = true;
       timeTrackingSettings.timeSpent = {
-        field: {id: 'some-another-field'}
+        field: {id: 'some-another-field'},
       };
 
       issuePermissions.canUpdateField(issueMock, fieldMock).should.be.true;

@@ -4,6 +4,6 @@ export default EStyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '$background',
-    color: '$text'
-  }
+    color: '$text',
+  },
 });

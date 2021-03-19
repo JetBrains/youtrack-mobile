@@ -19,5 +19,5 @@ module.exports = {
     await element(by.id(PASS_INPUT)).tap();
     await element(by.id(PASS_INPUT)).replaceText(pass);
     await element(by.id('log-in')).tap();
-  }
+  },
 };

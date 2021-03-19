@@ -29,7 +29,7 @@ function trackEvent(msg: string, additionalParam: ?string) {
 export function setIssuesQuery(query: string) {
   return {
     type: types.SET_ISSUES_QUERY,
-    query
+    query,
   };
 }
 
@@ -144,10 +144,10 @@ export function openSavedSearchesSelect() {
           const issueFolders: Array<IssueProject | SavedQuery | Tag> = await getApi().getIssueFolders(true);
           folders = [{
             title: null,
-            data: filterArrayByType(issueFolders, 'savedSearch')
+            data: filterArrayByType(issueFolders, 'savedSearch'),
           }, {
             title: 'Recent searches',
-            data: folders
+            data: folders,
           }];
         } catch (e) {
           log.warn('Failed to load user saved searches');
@@ -164,7 +164,7 @@ export function openSavedSearchesSelect() {
         } catch (error) {
           log.warn('Failed to change a context', error);
         }
-      }
+      },
     };
 
     dispatch(openSelect(savedSearchesSelectProps));
@@ -198,13 +198,13 @@ export function openContextSelect() {
           dispatch(closeSelect());
           await dispatch(storeSearchContext(selectedContext));
           dispatch(updateUserGeneralProfile({
-            searchContext: selectedContext.id ? selectedContext : null
+            searchContext: selectedContext.id ? selectedContext : null,
           }));
           dispatch(refreshIssues());
         } catch (error) {
           log.warn('Failed to change a context', error);
         }
-      }
+      },
     };
 
     dispatch(openSelect(searchContextSelectProps));
@@ -215,7 +215,7 @@ export function openSelect(selectsProps: Object) {
   return (dispatch: (any) => any) => {
     dispatch({
       type: types.OPEN_SEARCH_CONTEXT_SELECT,
-      selectProps: selectsProps
+      selectProps: selectsProps,
     });
   };
 }

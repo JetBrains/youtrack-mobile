@@ -9,38 +9,38 @@ export default EStyleSheet.create({
     marginBottom: UNIT,
     marginTop: UNIT,
     paddingLeft: UNIT,
-    paddingRight: UNIT
+    paddingRight: UNIT,
   },
 
   authorName: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   comment: {
     marginLeft: UNIT,
-    flex: 1
+    flex: 1,
   },
   commentWikiContainer: {
     minHeight: UNIT * 3,
   },
   commentText: {
-    marginTop: UNIT
+    marginTop: UNIT,
   },
   deletedCommentText: {
     ...mainText,
-    color: '$icon'
+    color: '$icon',
   },
   actions: {
     marginTop: UNIT,
   },
   actionLink: {
     ...mainText,
-    color: '$link'
+    color: '$link',
   },
 
   reactionsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: UNIT / 2.5
+    marginTop: UNIT / 2.5,
   },
   reactionsReaction: {
     flexDirection: 'row',
@@ -63,15 +63,15 @@ export default EStyleSheet.create({
   reactionsReactionCount: {
     ...secondaryText,
     marginLeft: UNIT / 2,
-    color: '$icon'
+    color: '$icon',
   },
   reactionAuthor: {
-    marginLeft: UNIT
+    marginLeft: UNIT,
   },
   reactionAuthorText: {
-    color: '$text'
+    color: '$text',
   },
   reactionTitle: {
-    textTransform: 'capitalize'
-  }
+    textTransform: 'capitalize',
+  },
 });

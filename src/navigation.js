@@ -14,18 +14,18 @@ import {ThemeContext} from './components/theme/theme-context';
 
 const styles = StyleSheet.create({
   flexBox: {
-    flex: 1
+    flex: 1,
   },
   view: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   navigation: {
-    height: menuHeight
+    height: menuHeight,
   },
   navigationHidden: {
     position: 'absolute',
-    bottom: -100
-  }
+    bottom: -100,
+  },
 });
 
 
@@ -34,7 +34,7 @@ export default class Navigation extends PureComponent<{}, {isMenuShown: boolean}
     super();
 
     this.state = {
-      isMenuShown: false
+      isMenuShown: false,
     };
   }
 
@@ -65,7 +65,7 @@ export default class Navigation extends PureComponent<{}, {isMenuShown: boolean}
           useNativeDriver
           style={[
             styles.navigation,
-            this.state.isMenuShown ? null : styles.navigationHidden
+            this.state.isMenuShown ? null : styles.navigationHidden,
           ]}>
 
           <ThemeContext.Consumer>

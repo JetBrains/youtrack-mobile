@@ -10,7 +10,7 @@ export default function calculateAspectRatio(dimensions: ImageDimensions = {}): 
   if (!dimensions.width || !dimensions.height || dimensions.width < 0 || dimensions.height < 0) {
     return {
       width: maxWidth,
-      height: maxHeight
+      height: maxHeight,
     };
   }
 
@@ -20,6 +20,6 @@ export default function calculateAspectRatio(dimensions: ImageDimensions = {}): 
 
   return {
     width: Math.round(dimensions.width * ratio),
-    height: Math.round(dimensions.height * ratio)
+    height: Math.round(dimensions.height * ratio),
   };
 }

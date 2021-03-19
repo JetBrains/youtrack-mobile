@@ -53,7 +53,7 @@ const ArticleCreate = (props: Props) => {
     content: '',
     project: {id: null, name: 'Select project'},
     visibility: null,
-    attachments: []
+    attachments: [],
   };
 
   const dispatch = useDispatch();
@@ -83,7 +83,7 @@ const ArticleCreate = (props: Props) => {
         summary: articleDraft?.summary || articleDraftDataInitial.summary,
         content: articleDraft?.content || articleDraftDataInitial.content,
         project: articleDraft?.project || articleDraftDataInitial.project,
-        visibility: articleDraft.visibility
+        visibility: articleDraft.visibility,
       });
     } else {
       createArticleDraft();
@@ -122,11 +122,11 @@ const ArticleCreate = (props: Props) => {
           updateDraft({
             project: project,
             parentArticle: null,
-            visibility: null
+            visibility: null,
           });
           hideSelect();
         },
-        onCancel: hideSelect
+        onCancel: hideSelect,
       };
 
       return (
@@ -278,7 +278,7 @@ const ArticleCreate = (props: Props) => {
                 getOptions={() => getApi().articles.getDraftVisibilityOptions(articleDraft.id)}
               />
 
-              {articleDraft?.id && !props.isNew && <Badge text='unpublished changes'/>}
+              {articleDraft?.id && !props.isNew && <Badge text="unpublished changes"/>}
             </View>
 
             <SummaryDescriptionForm
@@ -290,8 +290,8 @@ const ArticleCreate = (props: Props) => {
               onSummaryChange={(summary: string) => updateDraft({summary})}
               onDescriptionChange={(content: string) => updateDraft({content})}
               uiTheme={theme.uiTheme}
-              summaryPlaceholder='Title'
-              descriptionPlaceholder='Article content'
+              summaryPlaceholder="Title"
+              descriptionPlaceholder="Article content"
             />
           </View>
         )}
@@ -315,8 +315,7 @@ const ArticleCreate = (props: Props) => {
                 uiTheme={theme.uiTheme}
               />
             </View>
-            <View style={styles.attachments}>
-            </View>
+            <View style={styles.attachments} />
           </>
         )}
 

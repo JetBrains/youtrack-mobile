@@ -58,5 +58,5 @@ export {
   updateCachedPermissions,
   getCachedPermissions,
   loadPermissions,
-  targetAccountToSwitchTo
+  targetAccountToSwitchTo,
 };

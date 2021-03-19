@@ -9,7 +9,7 @@ import {
   ScrollView,
   ActivityIndicator,
   Linking,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
 } from 'react-native';
 import React, {Component} from 'react';
 import Auth from '../../components/auth/auth';
@@ -67,7 +67,7 @@ export class LogIn extends Component<Props, State> {
       password: '',
       errorMessage: '',
       loggingIn: false,
-      youTrackBackendUrl: props.config.backendUrl
+      youTrackBackendUrl: props.config.backendUrl,
     };
 
     const config: AppConfigFilled = props.config;
@@ -198,7 +198,7 @@ export class LogIn extends Component<Props, State> {
                   <TouchableOpacity
                     style={[
                       formStyles.button,
-                      (loggingIn || hasNoCredentials) && formStyles.buttonDisabled
+                      (loggingIn || hasNoCredentials) && formStyles.buttonDisabled,
                     ]}
                     disabled={loggingIn || hasNoCredentials}
                     testID="log-in"
@@ -254,7 +254,7 @@ export class LogIn extends Component<Props, State> {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    ...ownProps
+    ...ownProps,
   };
 };
 
@@ -267,7 +267,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       Router.EnterServer({serverUrl: youtrackUrl});
     },
     onLogIn: authParams => dispatch(applyAuthorization(authParams)),
-    onShowDebugView: () => dispatch(openDebugView())
+    onShowDebugView: () => dispatch(openDebugView()),
   };
 };
 
@@ -275,7 +275,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 const mergeProps = (stateProps, dispatchProps) => {
   return {
     ...dispatchProps,
-    ...stateProps
+    ...stateProps,
   };
 };
 

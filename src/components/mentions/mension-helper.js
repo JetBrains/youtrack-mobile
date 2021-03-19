@@ -28,5 +28,5 @@ function replaceRange(source: string, start: number, end: number, substitute: st
 
 export {
   composeSuggestionText,
-  getSuggestWord
+  getSuggestWord,
 };

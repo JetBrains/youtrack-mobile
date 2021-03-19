@@ -21,7 +21,7 @@ function calculateWidthData(): WidthData {
   const windowWidth = Dimensions.get('window').width;
   return {
     windowWidth,
-    cardWidth: windowWidth * COLUMN_VIEWPORT_WIDTH_FACTOR
+    cardWidth: windowWidth * COLUMN_VIEWPORT_WIDTH_FACTOR,
   };
 }
 
@@ -57,7 +57,7 @@ export function getSnapPoints(columns: Array<BoardColumn>): Array<number> {
     .map(collapsed => {
       return {
         collapsed,
-        width: collapsed ? AGILE_COLLAPSED_COLUMN_WIDTH : widthData.cardWidth
+        width: collapsed ? AGILE_COLLAPSED_COLUMN_WIDTH : widthData.cardWidth,
       };
     })
 
@@ -68,8 +68,8 @@ export function getSnapPoints(columns: Array<BoardColumn>): Array<number> {
         {
           width,
           collapsed,
-          start: (prev?.start + prev?.width) || 0
-        }
+          start: (prev?.start + prev?.width) || 0,
+        },
       ];
     }, [])
     .filter(item => !item.collapsed || item.start === 0)

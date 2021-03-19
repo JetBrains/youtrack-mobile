@@ -150,7 +150,7 @@ export function updateIssueDraft(ignoreFields: boolean = false, draftData?: Obje
       summary: issue.summary,
       description: issue.description,
       project: issue.project,
-      ...draftData
+      ...draftData,
     };
 
     try {
@@ -169,7 +169,7 @@ export function updateIssueDraft(ignoreFields: boolean = false, draftData?: Obje
       const error = await resolveError(err) || new Error(DEFAULT_ERROR_MESSAGE);
       const {error_description} = error;
       if (
-        (error_description && error_description.indexOf(`Can't find entity with id`) !== -1) ||
+        (error_description && error_description.indexOf('Can\'t find entity with id') !== -1) ||
         error && (error.error === 'bad_request' || error.error === 'Bad Request')
       ) {
         flushStoragePart({projectId: null});
@@ -247,7 +247,7 @@ export function updateFieldValue(field: CustomField, value: FieldValue) {
     try {
       await dispatch(updateIssueDraft(true)); // Update summary/description first
       await api.issue.updateIssueDraftFieldValue(issue.id, field.id, value);
-      log.info(`Issue field value updated`);
+      log.info('Issue field value updated');
 
       dispatch(loadIssueFromDraft(issue.id));
     } catch (err) {

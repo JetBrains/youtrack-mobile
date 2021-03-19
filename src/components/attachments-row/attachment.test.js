@@ -17,7 +17,7 @@ describe('<Attachment/>', () => {
     attachmentMock = {
       id: 'attachId',
       name: attachmentMockName,
-      url: attachmentMockUrl
+      url: attachmentMockUrl,
     };
   });
 
@@ -101,7 +101,7 @@ describe('<Attachment/>', () => {
 
   function renderWithMimeType(mimeType: string, canRemoveImage: boolean) {
     render({
-      mimeType: mimeType
+      mimeType: mimeType,
     }, canRemoveImage);
   }
 

@@ -28,7 +28,7 @@ import type {
   Board,
   BoardOnList,
   Sprint,
-  SprintFull
+  SprintFull,
 } from '../../flow/Agile';
 import type {AgilePageState} from './board-reducers';
 import type {CustomError} from '../../flow/Error';
@@ -54,14 +54,14 @@ function stopSprintLoad() {
 function receiveSprint(sprint) {
   return {
     type: types.RECEIVE_SPRINT,
-    sprint
+    sprint,
   };
 }
 
 function setError(error: CustomError) {
   return {
     type: types.AGILE_ERROR,
-    error
+    error,
   };
 }
 
@@ -130,7 +130,7 @@ export function loadBoard(board: Board, query: string) {
     if (!sprint) {
       sprint = (board.sprints || []).slice(-1)[0] || {};
       trackError('Cannot find last visited sprint');
-      log.info(`Last visited sprint is undefined. Use the last one of the current board.`);
+      log.info('Last visited sprint is undefined. Use the last one of the current board.');
     }
     log.info(`Loading: Board ${board?.name}, Sprint = ${sprint?.name}`);
 
@@ -144,7 +144,7 @@ function updateAgileUserProfile(requestBody: Object) {
     if (!error) {
       dispatch({
         type: types.RECEIVE_AGILE_PROFILE,
-        profile
+        profile,
       });
     }
   };
@@ -153,7 +153,7 @@ function updateAgileUserProfile(requestBody: Object) {
 function updateAgileUserProfileLastVisitedSprint(sprintId: string) {
   return async (dispatch: (any) => any) => {
     dispatch(updateAgileUserProfile({
-      visitedSprints: [{id: sprintId}]
+      visitedSprints: [{id: sprintId}],
     }));
   };
 }
@@ -161,7 +161,7 @@ function updateAgileUserProfileLastVisitedSprint(sprintId: string) {
 function updateAgileUserProfileLastVisitedAgile(agileId: string) {
   return async (dispatch: (any) => any) => {
     dispatch(updateAgileUserProfile({
-      defaultAgile: {id: agileId}
+      defaultAgile: {id: agileId},
     }));
   };
 }
@@ -169,7 +169,7 @@ function updateAgileUserProfileLastVisitedAgile(agileId: string) {
 function receiveAgile(agile: Board) {
   return {
     type: types.RECEIVE_AGILE,
-    agile
+    agile,
   };
 }
 
@@ -263,7 +263,7 @@ export function loadAgileProfile() {
       profile = await getApi().agile.getAgileUserProfile();
       dispatch({
         type: types.RECEIVE_AGILE_PROFILE,
-        profile
+        profile,
       });
     } catch (error) {
       dispatch(setError(error));
@@ -287,7 +287,7 @@ export function loadDefaultAgileBoard(query: string) {
     } else {
       dispatch(receiveSprint(null));
       const error: CustomError = new Error('No agile boards found');
-      error.error_description = `Create an agile board first`;
+      error.error_description = 'Create an agile board first';
       error.noAgiles = true;
       dispatch(setError(error));
       trackError('Default board is unknown');
@@ -307,7 +307,7 @@ function receiveSwimlanes(swimlanes) {
   return {
     type: types.RECEIVE_SWIMLANES,
     PAGE_SIZE,
-    swimlanes
+    swimlanes,
   };
 }
 
@@ -330,7 +330,7 @@ export function destroySSE() {
 function removeIssueFromBoard(issueId: string) {
   return {
     type: types.REMOVE_ISSUE_FROM_BOARD,
-    issueId
+    issueId,
   };
 }
 
@@ -339,7 +339,7 @@ function moveIssue(movedId: string, cellId: string, leadingId: ?string) {
     type: types.MOVE_ISSUE,
     movedId,
     cellId,
-    leadingId
+    leadingId,
   };
 }
 
@@ -376,7 +376,7 @@ function updateRowCollapsedState(row, newCollapsed: boolean) {
   return {
     type: types.ROW_COLLAPSE_TOGGLE,
     row,
-    newCollapsed
+    newCollapsed,
   };
 }
 
@@ -394,7 +394,7 @@ export function rowCollapseToggle(row: AgileBoardRow) {
     try {
       await api.agile.updateRowCollapsedState(sprint.agile.id, sprint.id, {
         ...row,
-        collapsed: !row.collapsed
+        collapsed: !row.collapsed,
       });
       log.info(`Collapse state successfully updated for row ${row.id}, new state = ${!row.collapsed}`);
       trackEvent('Toggle row collapsing');
@@ -410,7 +410,7 @@ function updateColumnCollapsedState(column, newCollapsed: boolean) {
   return {
     type: types.COLUMN_COLLAPSE_TOGGLE,
     column,
-    newCollapsed
+    newCollapsed,
   };
 }
 
@@ -428,7 +428,7 @@ export function columnCollapseToggle(column: AgileColumn) {
     try {
       await api.agile.updateColumnCollapsedState(sprint.agile.id, sprint.id, {
         ...column,
-        collapsed: !column.collapsed
+        collapsed: !column.collapsed,
       });
       log.info(`Collapse state successfully updated for column ${column.id}, new state = ${!column.collapsed}`);
       trackEvent('Toggle column collapsing');
@@ -467,8 +467,8 @@ export function openSprintSelect() {
           dispatch(closeSelect());
           dispatch(loadSprint(sprint.agile.id, selectedSprint.id, query));
           trackEvent('Change sprint');
-        }
-      }
+        },
+      },
     });
   };
 }
@@ -498,7 +498,7 @@ export function openBoardSelect() {
             },
             {
               favorites: [],
-              regular: []
+              regular: [],
             }
           );
           return [].concat(boards.favorites).concat(boards.regular);
@@ -511,8 +511,8 @@ export function openBoardSelect() {
           await flushStoragePart({agileQuery: null});
           dispatch(loadBoard(selectedBoard, query));
           trackEvent('Change board');
-        }
-      }
+        },
+      },
     });
   };
 }
@@ -521,7 +521,7 @@ export function addCardToCell(cellId: string, issue: IssueFull) {
   return {
     type: types.ADD_CARD_TO_CELL,
     cellId,
-    issue
+    issue,
   };
 }
 
@@ -529,7 +529,7 @@ export function reorderSwimlanesOrCells(leadingId: ?string, movedId: string) {
   return {
     type: types.REORDER_SWIMLANES_OR_CELLS,
     leadingId,
-    movedId
+    movedId,
   };
 }
 
@@ -538,14 +538,14 @@ export function addOrUpdateCellOnBoard(issue: IssueOnList, rowId: string, column
     type: types.ADD_OR_UPDATE_CELL_ON_BOARD,
     issue,
     rowId,
-    columnId
+    columnId,
   };
 }
 
 export function updateSwimlane(swimlane: AgileBoardRow) {
   return {
     type: types.UPDATE_SWIMLANE,
-    swimlane
+    swimlane,
   };
 }
 
@@ -553,7 +553,7 @@ export function storeCreatingIssueDraft(draftId: string, cellId: string) {
   return {
     type: types.STORE_CREATING_ISSUE_DRAFT,
     draftId,
-    cellId
+    cellId,
   };
 }
 
@@ -714,7 +714,7 @@ export function updateIssue(issueId: string, sprint?: SprintFull) {
       issue,
       onUpdate(board) {
         !!sprint && cacheSprint(Object.assign({}, sprint, {board}));
-      }
+      },
     });
   };
 }

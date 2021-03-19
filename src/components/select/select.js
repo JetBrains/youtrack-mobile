@@ -45,7 +45,7 @@ export default class Select extends Component<SelectProps, SelectState> {
     onChangeSelection: (items: Array<Object>) => null,
     noFilter: false,
     getTitle: (item: Object) => getEntityPresentation(item),
-    header: () => null
+    header: () => null,
   };
 
   static getItemLayout(items: ?Array<Object>, index: number) {
@@ -54,7 +54,7 @@ export default class Select extends Component<SelectProps, SelectState> {
     return {
       length: height,
       offset: offset,
-      index
+      index,
     };
   }
 
@@ -69,7 +69,7 @@ export default class Select extends Component<SelectProps, SelectState> {
       items: null,
       filteredItems: [],
       selectedItems: [],
-      loaded: false
+      loaded: false,
     };
   }
 
@@ -86,7 +86,7 @@ export default class Select extends Component<SelectProps, SelectState> {
         loaded: false,
         filteredItems: [],
         items: null,
-        selectedItems: this.props.selectedItems || []
+        selectedItems: this.props.selectedItems || [],
       });
       this._loadItems(this.state.query);
     }
@@ -194,7 +194,7 @@ export default class Select extends Component<SelectProps, SelectState> {
     return {
       length: SELECT_ITEM_HEIGHT,
       offset: (SELECT_ITEM_HEIGHT + SELECT_ITEM_SEPARATOR_HEIGHT) * index,
-      index
+      index,
     };
   }
 

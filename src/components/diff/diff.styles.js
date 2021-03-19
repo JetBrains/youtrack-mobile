@@ -3,33 +3,33 @@ import {UNIT} from '../variables/variables';
 
 export default EStyleSheet.create({
   button: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   diffInsert: {
     color: '$icon',
-    backgroundColor: '#E6FFE6'
+    backgroundColor: '#E6FFE6',
   },
   diffDelete: {
     color: '$icon',
-    backgroundColor: '#FFE6E6'
+    backgroundColor: '#FFE6E6',
   },
   diffEqual: {
-    color: '$icon'
+    color: '$icon',
   },
   title: {
-    color: '$icon'
+    color: '$icon',
   },
   toggle: {
-    color: '$link'
+    color: '$link',
   },
   content: {
     paddingTop: UNIT,
-    paddingBottom: UNIT
+    paddingBottom: UNIT,
   },
   icon: {
     width: 10,
     height: 10,
     resizeMode: 'contain',
-    color: '$link'
-  }
+    color: '$link',
+  },
 });

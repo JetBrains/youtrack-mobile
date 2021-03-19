@@ -23,9 +23,9 @@ export function getDefaultConfig(): AppConfig {
       clientId: null,
       clientSecret: null,
       youtrackServiceId: null,
-      scopes: `Hub YouTrack`,
-      landingUrl: 'ytoauth://landing.url'
-    }
+      scopes: 'Hub YouTrack',
+      landingUrl: 'ytoauth://landing.url',
+    },
   };
 }
 
@@ -79,8 +79,8 @@ async function loadConfig(ytUrl: string) {
     method: 'GET',
     headers: {
       'User-Agent': USER_AGENT,
-      'Accept': 'application/json, text/plain, */*'
-    }
+      'Accept': 'application/json, text/plain, */*',
+    },
   })
     .then(res => {
       log.log(`Got result from ${ytUrl}: ${res && res.status}`);
@@ -99,7 +99,7 @@ async function loadConfig(ytUrl: string) {
         serverUri: handleRelativeUrl(res.ring.url, ytUrl),
         youtrackServiceId: res.ring.serviceId,
         clientId: res.mobile.serviceId,
-        clientSecret: res.mobile.serviceSecret
+        clientSecret: res.mobile.serviceSecret,
       });
 
       return config;

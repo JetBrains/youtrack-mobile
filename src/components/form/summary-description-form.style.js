@@ -8,7 +8,7 @@ export const summary = {
   fontSize: 20,
   lineHeight: 24,
   letterSpacing: -0.19,
-  fontWeight: '500'
+  fontWeight: '500',
 };
 
 export default EStyleSheet.create({
@@ -16,18 +16,18 @@ export default EStyleSheet.create({
     ...summary,
     padding: 0,
     paddingTop: 5,
-    color: '$text'
+    color: '$text',
   },
   descriptionInput: {
     ...mainText,
     textAlignVertical: 'top',
-    color: '$text'
+    color: '$text',
   },
   separator: {
     height: 1,
     marginTop: UNIT * 2,
     marginBottom: UNIT,
     marginRight: -UNIT * 2,
-    backgroundColor: '$separator'
+    backgroundColor: '$separator',
   },
 });

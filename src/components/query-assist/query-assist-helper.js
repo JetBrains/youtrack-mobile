@@ -9,7 +9,7 @@ export function getCachedUserQueries(): Array<Object> {
     (query: string, index: number) => ({
       id: `lastQueries-${index}`,
       name: query,
-      query
+      query,
     }));
 }
 
@@ -20,13 +20,13 @@ export const getAssistSuggestions = async (api: Api, query: string, caret: numbe
     const cachedUserQueries = getCachedUserQueries();
     suggestions = [{
       title: null,
-      data: assistSuggestions
+      data: assistSuggestions,
     }];
 
     if (cachedUserQueries.length) {
       suggestions.push({
         title: 'Recent searches',
-        data: cachedUserQueries
+        data: cachedUserQueries,
       });
     }
   } catch (e) {

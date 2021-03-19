@@ -31,15 +31,15 @@ describe('Issue list actions', () => {
       app: {
         user: currentUserMock,
         auth: {
-          currentUser: currentUserMock
-        }
+          currentUser: currentUserMock,
+        },
       },
       searchContext: {
-        query: issueContextQueryMock
+        query: issueContextQueryMock,
       },
       issueList: {
-        query: issueListQueryMock
-      }
+        query: issueListQueryMock,
+      },
     };
     dispatch = sinon.spy();
     getState = () => stateMock;
@@ -83,13 +83,13 @@ describe('Issue list actions', () => {
 
       const suggestions = [{title: null, data: assistSuggestions}, {
         title: 'Recent searches', data: [{
-          id: `lastQueries-0`,
-          name: 'last-query', query: 'last-query'
-        }]
+          id: 'lastQueries-0',
+          name: 'last-query', query: 'last-query',
+        }],
       }];
       dispatch.should.have.been.calledWith({
         type: types.SUGGEST_QUERY,
-        suggestions
+        suggestions,
       });
     });
 
@@ -123,20 +123,20 @@ describe('Issue list actions', () => {
     it('should set issues count', async () => {
       const countMock = 12;
       apiMock.issues = {
-        getIssuesCount: jest.fn().mockResolvedValueOnce(countMock)
+        getIssuesCount: jest.fn().mockResolvedValueOnce(countMock),
       };
 
       await actions.loadIssuesCount()(dispatch, () => stateMock, () => apiMock);
 
       dispatch.should.have.been.calledWith({
         type: types.SET_ISSUES_COUNT,
-        count: countMock
+        count: countMock,
       });
     });
 
     it('should retrieve issues count', async () => {
       apiMock.issues = {
-        getIssuesCount: jest.fn()
+        getIssuesCount: jest.fn(),
       };
 
       const folderMock = {id: 'contextId'};
@@ -166,7 +166,7 @@ describe('Issue list reducers', () => {
       loadingError: null,
       isListEndReached: false,
       isRefreshing: true,
-      skip: 0
+      skip: 0,
     });
   });
 
@@ -198,7 +198,7 @@ describe('Issue list reducers', () => {
         isInitialized: true,
         isListEndReached: true,
         loadingError: error,
-        issues: []
+        issues: [],
       }
     );
   });
@@ -217,18 +217,18 @@ describe('Issue list reducers', () => {
     const state = {
       issues: [
         {id: 'test', summary: 'before update'},
-        {id: 'another-issue', summary: 'another'}
-      ]
+        {id: 'another-issue', summary: 'another'},
+      ],
     };
     const updatedIssue = {id: 'test', summary: 'after update', foo: 'bar'};
     const newState = reducer(state, {
       type: ISSUE_UPDATED,
-      issue: updatedIssue
+      issue: updatedIssue,
     });
 
     newState.issues.should.deep.equal([
       {id: 'test', summary: 'after update'},
-      {id: 'another-issue', summary: 'another'}
+      {id: 'another-issue', summary: 'another'},
     ]);
   });
 

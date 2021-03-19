@@ -13,9 +13,9 @@ const cellMock = {
   },
   column: {
     id: 'id',
-    collapsed: false
+    collapsed: false,
   },
-  issues: []
+  issues: [],
 };
 
 describe('<BoardRow/>', () => {
@@ -91,9 +91,9 @@ describe('<BoardRow/>', () => {
               issues: [issueMock],
               column: {
                 id: collapsedColumnIdMock,
-                collapsed: true
-              }
-            }]
+                collapsed: true,
+              },
+            }],
           });
           doShallow(rowMock, true, [collapsedColumnIdMock]);
         });
@@ -136,7 +136,7 @@ describe('<BoardRow/>', () => {
       id: 'rowMockId',
       name: 'orphans',
       summary: 'summary',
-      cells: [cellMock]
+      cells: [cellMock],
     }, ...args);
   }
 });

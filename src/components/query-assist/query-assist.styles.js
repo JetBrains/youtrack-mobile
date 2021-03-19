@@ -11,7 +11,7 @@ export default EStyleSheet.create({
   },
   modal: {
     flex: 1,
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
   },
   suggestContainer: {
     flex: 1,
@@ -19,18 +19,18 @@ export default EStyleSheet.create({
     flexShrink: 1,
     justifyContent: 'flex-start',
     position: 'relative',
-    zIndex:1
+    zIndex:1,
   },
   inputWrapper: inputWrapper,
   inputWrapperActive: {
     ...elevation1,
     borderRadius: 0,
     borderBottomColor: 'transparent',
-    backgroundColor: '$background'
+    backgroundColor: '$background',
   },
   searchInput: searchInput,
   searchInputHasText: {
-    color: '$text'
+    color: '$text',
   },
   searchInputPlaceholder: {
     justifyContent: 'center',
@@ -39,15 +39,15 @@ export default EStyleSheet.create({
   searchIcon: {
     marginTop: UNIT / 2,
     marginLeft: UNIT / 2,
-    color: '$icon'
+    color: '$icon',
   },
   clearIcon: clearIcon,
   link: {
-    color: '$link'
+    color: '$link',
   },
   searchPanel: {
     flexGrow: 1,
     paddingLeft: UNIT * 2,
-    paddingRight: UNIT * 1.5
-  }
+    paddingRight: UNIT * 1.5,
+  },
 });

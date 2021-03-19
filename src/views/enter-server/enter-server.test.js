@@ -125,7 +125,7 @@ xdescribe('EnterServer', () => {
     const incompatibleYoutrackMsg = 'Incompatible youtrack';
     connectPromise = Promise.reject({
       isIncompatibleYouTrackError: true,
-      message: incompatibleYoutrackMsg
+      message: incompatibleYoutrackMsg,
     });
 
     wrapper.find({testID: 'next'}).simulate('press');

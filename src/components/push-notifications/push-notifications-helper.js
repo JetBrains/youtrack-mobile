@@ -7,7 +7,7 @@ import type {Token} from '../../flow/Notification';
 
 const messageDefaultButton: Object = {
   text: 'Close',
-  onPress: () => {}
+  onPress: () => {},
 };
 
 
@@ -38,5 +38,5 @@ export default {
   storeDeviceToken,
   getStoredDeviceToken,
   isDeviceTokenChanged,
-  showInfoMessage
+  showInfoMessage,
 };

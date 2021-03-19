@@ -5,21 +5,21 @@ import {UNIT} from '../../../components/variables/variables';
 
 export default EStyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
 
   activities: {
     flexDirection: 'column',
-    flex: 1
+    flex: 1,
   },
   activitiesContainer: {
     paddingLeft: UNIT,
     paddingBottom: UNIT * 3,
-    paddingRight: UNIT
+    paddingRight: UNIT,
   },
 
   settings: {
-    margin: UNIT * 1.5
+    margin: UNIT * 1.5,
   },
   settingsButton: {
     flexDirection: 'row',
@@ -27,13 +27,13 @@ export default EStyleSheet.create({
     alignItems: 'center',
     marginTop: UNIT,
     paddingTop: UNIT,
-    paddingBottom: UNIT
+    paddingBottom: UNIT,
   },
   settingsButtonText: {
     color: '$icon',
   },
   settingsSwitchDisabled: {
-    opacity: 0.4
+    opacity: 0.4,
   },
   settingsItem: {
     flexDirection: 'row',
@@ -45,20 +45,20 @@ export default EStyleSheet.create({
   },
   settingsItemLabel: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   settingsName: {
     color: '$text',
     fontSize: MAIN_FONT_SIZE,
     fontWeight: '500',
-    textTransform: 'capitalize'
+    textTransform: 'capitalize',
   },
 
   reactionContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'flex-start',
-    marginLeft: -UNIT
+    marginLeft: -UNIT,
   },
   reactionItem: {
     flex: 1,
@@ -66,9 +66,9 @@ export default EStyleSheet.create({
     margin: '1%',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: UNIT
+    marginBottom: UNIT,
   },
   reactionButton: {
-    paddingHorizontal: UNIT / 2
-  }
+    paddingHorizontal: UNIT / 2,
+  },
 });

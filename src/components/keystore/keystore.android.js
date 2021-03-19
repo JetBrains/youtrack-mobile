@@ -7,5 +7,5 @@ export default {
   setInternetCredentials() {
     //TODO: not implemented
     return Promise.reject();
-  }
+  },
 };

@@ -12,7 +12,7 @@ import {
   reorderEntitiesOnBoard,
   addOrUpdateCell,
   updateSwimlane,
-  moveIssueOnBoard
+  moveIssueOnBoard,
 } from './board-updaters';
 
 import type {SprintFull, AgileBoardRow, Board, AgileUserProfile} from '../../flow/Agile';
@@ -46,7 +46,7 @@ const initialPageState: AgilePageState = {
   sprint: null,
   agile: null,
   error: null,
-  queryAssistSuggestions: []
+  queryAssistSuggestions: [],
 };
 
 const boardReducer = createReducer({}, {
@@ -69,7 +69,7 @@ const boardReducer = createReducer({}, {
 
     return {
       ...state,
-      trimmedSwimlanes: [...stateTrimmedSwimlanes, ...trimmedSwimlanes]
+      trimmedSwimlanes: [...stateTrimmedSwimlanes, ...trimmedSwimlanes],
     };
   },
   [types.ROW_COLLAPSE_TOGGLE](state: BoardState, action: { row: AgileBoardRow, newCollapsed: boolean }): BoardState {
@@ -80,7 +80,7 @@ const boardReducer = createReducer({}, {
       ...state,
       columns: (state.columns || []).map(it => {
         return it === action.column ? {...action.column, collapsed: action.newCollapsed} : it;
-      })
+      }),
     };
   },
   [types.ADD_CARD_TO_CELL](state: BoardState, action: { cellId: string, issue: IssueFull }): BoardState {
@@ -96,7 +96,7 @@ const boardReducer = createReducer({}, {
     return {
       ...addCardToBoard(state, state.creatingIssueDraftCellId, action.issue),
       creatingIssueDraftId: null,
-      creatingIssueDraftCellId: null
+      creatingIssueDraftCellId: null,
     };
   },
   [ISSUE_UPDATED](state: BoardState, action: { issue: IssueFull, onUpdate: (board: Board) => any }): BoardState {
@@ -118,7 +118,7 @@ const boardReducer = createReducer({}, {
   },
   [types.MOVE_ISSUE](state: BoardState, action: { movedId: string, cellId: string, leadingId: ?string }): BoardState {
     return moveIssueOnBoard(state, action.movedId, action.cellId, action.leadingId);
-  }
+  },
 });
 
 
@@ -147,33 +147,33 @@ const agilePageReducer = createReducer(initialPageState, {
   [types.RECEIVE_SWIMLANES](state: AgilePageState, action: Object): AgilePageState {
     return {
       ...state,
-      noMoreSwimlanes: action.swimlanes.length < action.PAGE_SIZE
+      noMoreSwimlanes: action.swimlanes.length < action.PAGE_SIZE,
     };
   },
   [types.OPEN_AGILE_SELECT](state: AgilePageState, action: Object): AgilePageState {
     return {
       ...state,
       isSprintSelectOpen: true,
-      selectProps: action.selectProps
+      selectProps: action.selectProps,
     };
   },
   [types.CLOSE_AGILE_SELECT](state: AgilePageState): AgilePageState {
     return {
       ...state,
       selectProps: null,
-      isSprintSelectOpen: false
+      isSprintSelectOpen: false,
     };
   },
   [types.START_LOADING_AGILE](state: AgilePageState): AgilePageState {
     return {
       ...state,
-      isLoadingAgile: true
+      isLoadingAgile: true,
     };
   },
   [types.STOP_LOADING_AGILE](state: AgilePageState): AgilePageState {
     return {
       ...state,
-      isLoadingAgile: false
+      isLoadingAgile: false,
     };
   },
   [types.RECEIVE_AGILE](state: AgilePageState, action: { agile: Board }): AgilePageState {
@@ -181,22 +181,22 @@ const agilePageReducer = createReducer(initialPageState, {
       ...state,
       agile: {
         ...state.agile,
-        ...action.agile
-      }
+        ...action.agile,
+      },
     };
   },
   [types.AGILE_ERROR](state: AgilePageState, action: { error: Error }): AgilePageState {
     return {
       ...state,
-      error: action.error
+      error: action.error,
     };
   },
   [types.AGILE_SEARCH_SUGGESTS]: (state: AgilePageState, action: { suggestions: Array<Object> }) => {
     return {
       ...state,
-      queryAssistSuggestions: action.suggestions
+      queryAssistSuggestions: action.suggestions,
     };
-  }
+  },
 });
 
 /**
@@ -211,7 +211,7 @@ export default function reducer(state: AgilePageState, action: Object): AgilePag
     ...newState,
     sprint: {
       ...newState.sprint,
-      board: boardReducer(newState.sprint.board, action)
-    }
+      board: boardReducer(newState.sprint.board, action),
+    },
   };
 }

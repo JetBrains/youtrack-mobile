@@ -13,16 +13,16 @@ const font = {
 
 const textSecondary = {
   ...font,
-  color: '$icon'
+  color: '$icon',
 };
 
 export default EStyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '$background'
+    backgroundColor: '$background',
   },
   arrowImage: {
-    lineHeight: 22
+    lineHeight: 22,
   },
   notification: {
     paddingLeft: UNIT * 2,
@@ -42,12 +42,12 @@ export default EStyleSheet.create({
     color: '$text',
     ...Platform.select({
       ios: {
-        fontWeight: '500'
+        fontWeight: '500',
       },
       android: {
         fontWeight: '$androidSummaryFontWeight',
-      }
-    })
+      },
+    }),
   },
   reason: {
     ...secondaryText,
@@ -62,19 +62,19 @@ export default EStyleSheet.create({
     paddingRight: UNIT * 2,
     borderRadius: UNIT,
     color: '$text',
-    backgroundColor: '$boxBackground'
+    backgroundColor: '$boxBackground',
   },
   notificationContentWorkflow: {
     marginTop: UNIT,
-    marginLeft: 0
+    marginLeft: 0,
   },
   userInfo: {
     marginTop: UNIT,
-    paddingTop: UNIT * 1.5
+    paddingTop: UNIT * 1.5,
   },
   textPrimary: {
     ...font,
-    color: '$icon'
+    color: '$icon',
   },
   textSecondary,
   listFooterMessage: {
@@ -83,24 +83,24 @@ export default EStyleSheet.create({
     justifyContent: 'center',
   },
   listFooterMessageIcon: {
-    marginLeft: -UNIT * 2
+    marginLeft: -UNIT * 2,
   },
   listFooterMessageText: {
     color: '$text',
     textAlign: 'center',
     fontSize: 18,
-    fontWeight: '500'
+    fontWeight: '500',
   },
   change: {
     flexDirection: 'row',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   changeItem: {
-    marginTop: UNIT
+    marginTop: UNIT,
   },
   changeRemoved: {
     color: '$icon',
-    textDecorationLine: 'line-through'
+    textDecorationLine: 'line-through',
   },
   headerTitle: {
     paddingTop: UNIT * 2,
@@ -110,23 +110,23 @@ export default EStyleSheet.create({
   },
   headerTitleText: {
     ...headerTitle,
-    color: '$text'
+    color: '$text',
   },
   error: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   link: {
     ...font,
-    color: '$link'
+    color: '$link',
   },
   resolved: {
     ...issueIdResolved,
-    color: '$icon'
+    color: '$icon',
   },
   secondaryText: {
-    color: '$icon'
+    color: '$icon',
   },
   reactionIcon: {
     width: UNIT * 4,
@@ -134,14 +134,14 @@ export default EStyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '$boxBackground',
-    borderRadius: UNIT / 2
+    borderRadius: UNIT / 2,
   },
   reactionIconRemoved: {
     position: 'absolute',
     width: 2,
     height: UNIT * 4,
     backgroundColor: '$error',
-    transform: [{rotate: '45deg'}]
+    transform: [{rotate: '45deg'}],
   },
-  titleShadow: elevation1
+  titleShadow: elevation1,
 });

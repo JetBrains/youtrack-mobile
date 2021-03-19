@@ -93,12 +93,12 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
       activity,
       issueFields: issueFields,
       workTimeSettings: props.workTimeSettings || {},
-      isRemovedValue: isRemovedValue
+      isRemovedValue: isRemovedValue,
     });
 
     return {
       added: getTextValueChange(getParams(false)),
-      removed: getTextValueChange(getParams(true))
+      removed: getTextValueChange(getParams(true)),
     };
   };
 
@@ -119,7 +119,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
         <Text
           style={[
             styles.activityText,
-            isMultiValue || textChange.removed && !textChange.added ? styles.activityRemoved : null
+            isMultiValue || textChange.removed && !textChange.added ? styles.activityRemoved : null,
           ]}
         >
           {textChange.removed}
@@ -265,7 +265,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
             <TouchableOpacity
               hitSlop={HIT_SLOP}
               disabled={disabled}
-              onPress={() => {if (props.onReactionPanelOpen) props.onReactionPanelOpen(comment);}}
+              onPress={() => {if (props.onReactionPanelOpen) {props.onReactionPanelOpen(comment);}}}
             >
               {reactionAddIcon}
             </TouchableOpacity>
@@ -310,7 +310,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
                 commentActions.onDeleteCommentPermanently(comment, activityGroup.comment.id);
               }
             }}
-            onRestore={() => { if (commentActions.onRestoreComment) commentActions.onRestoreComment(comment); }}
+            onRestore={() => { if (commentActions.onRestoreComment) {commentActions.onRestoreComment(comment);} }}
             uiTheme={props.uiTheme}
             youtrackWiki={props.youtrackWiki}
           />
@@ -403,7 +403,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
 
               <View style={[
                 styles.activity,
-                activityGroup.merged ? styles.activityMerged : null
+                activityGroup.merged ? styles.activityMerged : null,
               ]}>
 
                 {renderUserAvatar(activityGroup, !!activityGroup.comment)}

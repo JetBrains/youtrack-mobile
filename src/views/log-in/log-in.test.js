@@ -12,17 +12,17 @@ xdescribe('LogIn', () => {
       config: {
         backendUrl: 'http://ytbackend',
         auth: {
-          serverUri: 'http://hub'
-        }
+          serverUri: 'http://hub',
+        },
       },
       obtainTokenByCredentials: sinon.spy(),
-      obtainTokenByOAuthCode: sinon.spy()
+      obtainTokenByOAuthCode: sinon.spy(),
     };
 
     defaultProps = {
       auth: fakeAuth,
       onLogIn: sinon.spy(),
-      onChangeServerUrl: sinon.spy()
+      onChangeServerUrl: sinon.spy(),
     };
 
     NativeModules.RNKeychainManager.getInternetCredentialsForServer = sinon.stub().returns(Promise.resolve({username: 'foo', password: 'bar'}));

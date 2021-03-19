@@ -24,7 +24,7 @@ const defaultProps = () => ({
   name: '',
   size: 26,
   color: EStyleSheet.value('$link'),
-  isFontAwesome: false
+  isFontAwesome: false,
 });
 
 class DefaultIcon extends PureComponent<Props, void> {
@@ -43,59 +43,59 @@ class DefaultIcon extends PureComponent<Props, void> {
 
 export const IconAccountAlert = (props?: Props) => <DefaultIcon {...{
   name: 'account-alert',
-  ...props
+  ...props,
 }} />;
 
 /* Material icons */
 
 export const IconMagnify = (props?: Props) => <DefaultIcon {...{
   name: 'magnify',
-  ...props
+  ...props,
 }} />;
 
 export const IconMagnifyZoom = (props?: Props & {zoomedIn?: boolean}) => <DefaultIcon {...{
   name: props.zoomedIn ? 'magnify-minus-outline' : 'magnify-plus-outline',
-  ...props
+  ...props,
 }} />;
 
 export const IconLogout = (props?: Props) => <DefaultIcon {...{
   name: 'logout',
-  ...props
+  ...props,
 }} />;
 
 export const IconLock = (props?: Props) => <DefaultIcon {...{
   name: 'lock',
-  ...props
+  ...props,
 }} />;
 
 export const IconArrowUp = (props?: Props) => <DefaultIcon {...{
   name: 'arrow-up',
-  ...props
+  ...props,
 }} />;
 
 export const IconPlus = (props?: Props) => <DefaultIcon {...{
   name: 'plus',
-  ...props
+  ...props,
 }} />;
 
 export const IconActions = (props?: Props) => <DefaultIcon {...{
   name: 'dots-horizontal',
-  ...props
+  ...props,
 }} />;
 
 export const IconThumbUp = (props?: Props & { isActive?: boolean }) => <DefaultIcon {...{
   name: props.isActive ? 'thumb-up' : 'thumb-up-outline',
-  ...props
+  ...props,
 }} />;
 
 export const IconBookmark = (props?: Props) => <DefaultIcon {...{
   name: 'bookmark',
-  ...props
+  ...props,
 }} />;
 
 export const IconPaperClip = (props?: Props) => <DefaultIcon {...{
   name: 'paperclip',
-  ...props
+  ...props,
 }} />;
 
 
@@ -104,49 +104,49 @@ export const IconPaperClip = (props?: Props) => <DefaultIcon {...{
 export const IconAngleRight = (props?: Props) => <DefaultIcon {...{
   isFontAwesome: true,
   name: 'angle-right',
-  ...props
+  ...props,
 }} />;
 
 export const IconCamera = (props?: Props) => <DefaultIcon {...{
   isFontAwesome: true,
   name: 'camera',
-  ...props
+  ...props,
 }} />;
 
 export const IconClone = (props?: Props) => <DefaultIcon {...{
   isFontAwesome: true,
   name: 'clone',
-  ...props
+  ...props,
 }} />;
 
 // JetBrains RingUI custom icons
 
 export const IconAdd = (props?: Props) => <IconYTM {...{
   name: 'add',
-  ...props
+  ...props,
 }} />;
 
 export const IconAngleDown = (props?: Props) => <IconYTM {...{
   ...defaultProps(),
   name: 'chevron-down',
-  ...props
+  ...props,
 }} />;
 
 export const IconAngleDownRight = (props?: Props & { isDown?: boolean }) => <IconYTM {...{
   ...defaultProps(),
   name: props.isDown ? 'chevron-down' : 'chevron-right',
-  ...props
+  ...props,
 }}/>;
 
 export const IconChevronDownUp = (props?: Props & { isDown?: boolean }) => <IconYTM {...{
   ...defaultProps(),
   name: props.isDown ? 'chevron-down' : 'chevron-up',
-  ...props
+  ...props,
 }}/>;
 
 export const IconAttachment = (props?: Props) => <IconYTM {...{
   name: 'attachment',
-  ...props
+  ...props,
 }} />;
 
 
@@ -155,14 +155,14 @@ export const IconBack = (props?: Props) => {
     return <DefaultIcon {...{
       name: 'arrow-left',
       size: 24,
-      ...props
+      ...props,
     }} />;
   }
   return <IconYTM {...{
     ...defaultProps(),
     name: 'chevron-left',
     size: 30,
-    ...props
+    ...props,
   }} />;
 };
 
@@ -172,127 +172,127 @@ export const IconContextActions = (props?: Props) => {
       ...defaultProps(),
       name: 'drag',
       size: 18,
-      ...props
+      ...props,
     }} />;
   }
   return <IconYTM {...{
     ...defaultProps(),
     name: 'more-options',
     size: 18,
-    ...props
+    ...props,
   }} />;
 };
 
 export const IconBell = (props?: Props) => <IconYTM {...{
   ...defaultProps(),
   name: 'bell-filled',
-  ...props
+  ...props,
 }} />;
 
 export const IconBoard = (props?: Props) => <IconYTM {...{
   ...defaultProps(),
   name: 'board',
-  ...props
+  ...props,
 }} />;
 
 export const IconCheck = (props?: Props) => <IconYTM {...{
   ...defaultProps(),
   name: 'checkmark',
-  ...props
+  ...props,
 }} />;
 
 export const IconClose = (props?: Props) => <IconYTM {...{
   ...defaultProps(),
   name: 'close',
-  ...props
+  ...props,
 }} />;
 
 export const IconComment = (props?: Props) => <IconYTM {...{
   ...defaultProps(),
   name: 'comment',
-  ...props
+  ...props,
 }} />;
 
 export const IconDrag = (props?: Props) => <IconYTM {...{
   ...defaultProps(),
   name: 'drag',
-  ...props
+  ...props,
 }} />;
 
 export const IconException = (props?: Props) => <IconYTM {...{
   ...defaultProps(),
   name: 'exception',
-  ...props
+  ...props,
 }} />;
 
 export const IconHistory = (props?: Props) => <IconYTM {...{
   ...defaultProps(),
   name: 'history',
-  ...props
+  ...props,
 }} />;
 
 export const IconHourGlass = (props?: Props) => <IconYTM {...{
   ...defaultProps(),
   name: 'hourglass',
-  ...props
+  ...props,
 }} />;
 
 export const IconKnowledgeBase = (props?: Props) => <IconYTM {...{
   ...defaultProps(),
   name: 'knowledge-base',
-  ...props
+  ...props,
 }} />;
 
 export const IconMoreOptions = (props?: Props) => <IconYTM {...{
   ...defaultProps(),
   name: 'more-options',
-  ...props
+  ...props,
 }} />;
 
 export const IconPencil = (props?: Props) => <IconYTM {...{
   ...defaultProps(),
   name: 'pencil',
-  ...props
+  ...props,
 }} />;
 
 export const IconRemoveFilled = (props?: Props) => <IconYTM {...{
   ...defaultProps(),
   name: 'remove-filled',
-  ...props
+  ...props,
 }} />;
 
 export const IconTask = (props?: Props) => <IconYTM {...{
   ...defaultProps(),
   name: 'task',
-  ...props
+  ...props,
 }} />;
 
 export const IconSearch = (props?: Props) => <IconYTM {...{
   ...defaultProps(),
   name: 'search',
-  ...props
+  ...props,
 }} />;
 
 export const IconSettings = (props?: Props) => <IconYTM {...{
   ...defaultProps(),
   name: 'settings-20px',
-  ...props
+  ...props,
 }} />;
 
 export const IconStar = (props?: Props) => <IconYTM {...{
   ...defaultProps(),
   name: 'star-filled',
-  ...props
+  ...props,
 }} />;
 
 export const IconStarOutline = (props?: Props) => <IconYTM {...{
   ...defaultProps(),
   name: 'star-empty',
-  ...props
+  ...props,
 }} />;
 
 export const IconWork = (props?: Props) => <IconYTM {...{
   ...defaultProps(),
   name: 'hourglass-20px',
-  ...props
+  ...props,
 }} />;

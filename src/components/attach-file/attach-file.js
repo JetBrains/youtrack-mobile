@@ -27,7 +27,7 @@ async function pickPhoto(method: string): Promise<NormalizedAttachment> {
     mediaType: 'photo',
     cropping: true,
     freeStyleCropEnabled: true,
-    avoidEmptySpaceAroundImage: false
+    avoidEmptySpaceAroundImage: false,
   });
 
   const filePath = image.path || '';
@@ -39,8 +39,8 @@ async function pickPhoto(method: string): Promise<NormalizedAttachment> {
     mimeType: image.mime,
     dimensions: {
       width: image.width,
-      height: image.height
-    }
+      height: image.height,
+    },
   };
 }
 

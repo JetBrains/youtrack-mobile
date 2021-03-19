@@ -44,10 +44,10 @@ export const detectLanguage = (code: string) => {
   let language;
 
   switch (true) {
-  case(code.indexOf('java.') !== -1):
+  case (code.indexOf('java.') !== -1):
     language = 'java';
     break;
-  case(code.indexOf('kotlin.') !== -1):
+  case (code.indexOf('kotlin.') !== -1):
     language = 'kotlin';
     break;
   default:
@@ -129,7 +129,7 @@ export const createNullProjectCustomField = (
 
   return {
     projectCustomField: {field: {name}},
-    value: {name: visibleProjectName}
+    value: {name: visibleProjectName},
   };
 };
 

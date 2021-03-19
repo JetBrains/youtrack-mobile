@@ -6,21 +6,21 @@ export default EStyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '$background'
+    backgroundColor: '$background',
   },
   logoContainer: {
     flex: 2,
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
   logoImage: {
     height: UNIT * 20,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   retry: {
     textAlign: 'center',
     padding: UNIT,
     fontSize: 17,
-    color: '$link'
+    color: '$link',
   },
   messageContainer: {
     flex: 1,
@@ -28,34 +28,34 @@ export default EStyleSheet.create({
   },
   message: {
     padding: UNIT * 2,
-    color: '$text'
+    color: '$text',
   },
   urlButton: {
     flex: 0,
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'flex-start',
-    height: 46
+    height: 46,
   },
   urlIcon: {
     width: UNIT * 2,
     height: UNIT * 2,
     marginLeft: UNIT,
-    tintColor: '$textSecondary'
+    tintColor: '$textSecondary',
   },
   url: {
     textAlign: 'center',
     marginTop: UNIT * 2,
-    color: '$icon'
+    color: '$icon',
   },
   urlInput: {
     height: UNIT * 5,
     width: 240,
     backgroundColor: '$background',
     borderBottomColor: '$link',
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
   },
   editUrlIcon: {
-    marginLeft: UNIT
-  }
+    marginLeft: UNIT,
+  },
 });

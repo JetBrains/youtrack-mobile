@@ -9,43 +9,43 @@ export default EStyleSheet.create({
 
   container: {
     ...loginStylesForm.container,
-    backgroundColor: '$background'
+    backgroundColor: '$background',
   },
   title: {
     ...loginStylesForm.title,
-    color: '$text'
+    color: '$text',
   },
   hintText: {
     ...loginStylesForm.hintText,
-    color: '$icon'
+    color: '$icon',
   },
   inputUser: {
     ...rowFormStyles.input,
     marginTop: UNIT * 3,
     color: '$text',
-    backgroundColor: '$boxBackground'
+    backgroundColor: '$boxBackground',
   },
   inputPass: {
     ...rowFormStyles.input,
     marginTop: UNIT * 2,
     marginBottom: UNIT * 2,
     color: '$text',
-    backgroundColor: '$boxBackground'
+    backgroundColor: '$boxBackground',
   },
   error: {
     marginTop: UNIT * 2,
   },
   errorText: {
     marginBottom: UNIT,
-    color: 'red'
+    color: 'red',
   },
   support: {
     marginBottom: UNIT * 2,
     alignItems: 'center',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
   action: {
     ...rowFormStyles.link,
-    fontSize: MAIN_FONT_SIZE
-  }
+    fontSize: MAIN_FONT_SIZE,
+  },
 });

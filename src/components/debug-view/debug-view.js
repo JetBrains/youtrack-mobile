@@ -52,13 +52,13 @@ export class DebugView extends PureComponent<Props, void> {
 const mapStateToProps = (state, ownProps) => {
   return {
     show: state.app.showDebugView,
-    ...ownProps
+    ...ownProps,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onHide: () => dispatch(closeDebugView())
+    onHide: () => dispatch(closeDebugView()),
   };
 };
 

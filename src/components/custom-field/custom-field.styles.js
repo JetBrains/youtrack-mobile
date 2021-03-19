@@ -9,34 +9,34 @@ const sidePadding = {
 };
 
 const font = {
-  fontFamily: 'System'
+  fontFamily: 'System',
 };
 
 export default EStyleSheet.create({
   wrapper: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   wrapperActive: {
-    backgroundColor: '$linkLight'
+    backgroundColor: '$linkLight',
   },
   valuesWrapper: {
     flexDirection: 'row',
     flexWrap: 'nowrap',
     alignItems: 'center',
-    ...sidePadding
+    ...sidePadding,
   },
   keyWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    ...sidePadding
+    ...sidePadding,
   },
   keyText: {
     marginBottom: UNIT / 2,
     ...secondaryText,
     ...font,
-    color: '$icon'
+    color: '$icon',
   },
   value: {
     flexDirection: 'row',
@@ -45,7 +45,7 @@ export default EStyleSheet.create({
     marginRight: 0,
     ...mainText,
     ...font,
-    color: '$link'
+    color: '$link',
   },
   valueTextActive: {
     color: '$text',
@@ -54,6 +54,6 @@ export default EStyleSheet.create({
     color: '$text',
   },
   colorMarker: {
-    marginRight: UNIT
-  }
+    marginRight: UNIT,
+  },
 });

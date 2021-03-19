@@ -18,7 +18,7 @@ describe('<Tags/>', () => {
     onPressMock = jest.fn();
     tagMock = {
       color: {id: 1},
-      query: tagQueryMock
+      query: tagQueryMock,
     };
     wrapper = doShallow([tagMock], onPressMock);
     instance = wrapper.instance();
@@ -49,7 +49,7 @@ describe('<Tags/>', () => {
     it('should return TRUE', () => {
       expect(
         instance.isDefaultColorCoding({
-          color: {id: '0'}
+          color: {id: '0'},
         })
       ).toEqual(styles.tagNoColor);
     });

@@ -42,7 +42,7 @@ class ErrorBoundary extends Component<Props, State> {
     error: null,
     isReporting: false,
     isExtendedReportEnabled: true,
-    isExtendedReportInfoVisible: false
+    isExtendedReportInfoVisible: false,
   };
 
   componentDidCatch(error: Error, info: Object) {
@@ -73,7 +73,7 @@ class ErrorBoundary extends Component<Props, State> {
 
       const reportedIssueId: ?string = await sendReport(`Render crash report: ${errorData.summary}`, errorData.description);
       if (reportedIssueId) {
-        notify(`Crash has been reported`);
+        notify('Crash has been reported');
       }
     } catch (err) {
       const errorMsg: string = 'Failed to report the crash.';
@@ -172,7 +172,7 @@ class ErrorBoundary extends Component<Props, State> {
                     <Text
                       style={[
                         styles.buttonText,
-                        styles.buttonSendReportText
+                        styles.buttonSendReportText,
                       ]}
                     >
                       {`${isReporting ? 'Sending' : 'Send'} crash report${isReporting ? '...' : ''}`}
@@ -236,7 +236,7 @@ class ErrorBoundary extends Component<Props, State> {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    openDebugView: () => dispatch(openDebugView())
+    openDebugView: () => dispatch(openDebugView()),
   };
 };
 

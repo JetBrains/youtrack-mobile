@@ -8,14 +8,14 @@ export default EStyleSheet.create({
     overflow: 'hidden',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
   },
   tagsMultiline: {
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   tag: {
     marginBottom: UNIT / 4,
-    marginRight: UNIT
+    marginRight: UNIT,
   },
   tagMultiline: {
     marginBottom: UNIT,
@@ -24,29 +24,29 @@ export default EStyleSheet.create({
     borderWidth: 0.5,
     color: '$text',
     borderColor: '$textSecondary',
-    backgroundColor: '$boxBackground'
+    backgroundColor: '$boxBackground',
   },
   button: {
     flexDirection: 'row',
-    paddingVertical: UNIT * 1.5
+    paddingVertical: UNIT * 1.5,
   },
   buttonText: {
     ...mainText,
     marginLeft: UNIT * 1.8,
-    color: '$link'
+    color: '$link',
   },
   buttonTextDisabled: {
-    color: '$icon'
+    color: '$icon',
   },
   secondaryText: {
-    color: '$textSecondary'
+    color: '$textSecondary',
   },
 
   tagIcon: {
-    marginLeft: 3
+    marginLeft: 3,
   },
   tagSelectItem: {
     paddingHorizontal: UNIT / 2,
-    paddingVertical: UNIT / 4
-  }
+    paddingVertical: UNIT / 4,
+  },
 });

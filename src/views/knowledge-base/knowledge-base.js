@@ -54,13 +54,13 @@ const ERROR_MESSAGE_DATA: Object = {
     description: 'Add some project to favorites',
   },
   noArticlesFound: {
-    title: 'No articles found'
-  }
+    title: 'No articles found',
+  },
 };
 
 export class KnowledgeBase extends Component<Props, State> {
   static contextTypes = {
-    actionSheet: PropTypes.func
+    actionSheet: PropTypes.func,
   };
 
   listRef: ?Object;
@@ -71,7 +71,7 @@ export class KnowledgeBase extends Component<Props, State> {
     super(props);
     this.state = {
       isHeaderPinned: false,
-      isSelectVisible: false
+      isSelectVisible: false,
     };
     usage.trackScreenView(ANALYTICS_ARTICLES_PAGE);
   }
@@ -112,7 +112,7 @@ export class KnowledgeBase extends Component<Props, State> {
         setTimeout(() => this.listRef && this.listRef.scrollToLocation({
           animated: true,
           itemIndex: 0,
-          sectionIndex: index
+          sectionIndex: index,
         }), 0);
       }
     }
@@ -137,7 +137,7 @@ export class KnowledgeBase extends Component<Props, State> {
             >
               <View style={[
                 styles.itemProjectIcon,
-                isCollapsed && styles.itemProjectIconCollapsed
+                isCollapsed && styles.itemProjectIconCollapsed,
               ]}
               >
                 <Icon
@@ -181,7 +181,7 @@ export class KnowledgeBase extends Component<Props, State> {
       onArticlePress={(article: Article) => Router.Article({
         articlePlaceholder: article,
         store: true,
-        storeRouteName: routeMap.ArticleSingle
+        storeRouteName: routeMap.ArticleSingle,
       })}
       onShowSubArticles={(article: Article) => this.renderSubArticlesPage(article)}
     />
@@ -202,16 +202,16 @@ export class KnowledgeBase extends Component<Props, State> {
         <TouchableOpacity onPress={() => Router.Article({
           articlePlaceholder: article,
           store: true,
-          storeRouteName: routeMap.ArticleSingle
+          storeRouteName: routeMap.ArticleSingle,
         })}>
           <Text numberOfLines={2} style={styles.projectTitleText}>{article.summary}</Text>
         </TouchableOpacity>
-      )
+      ),
     });
     const tree: ArticlesList = this.renderArticlesList(
       [{
         title: null,
-        data: childrenData
+        data: childrenData,
       }],
       true
     );
@@ -231,7 +231,7 @@ export class KnowledgeBase extends Component<Props, State> {
         key="articlesHeader"
         style={[
           styles.header,
-          this.state.isHeaderPinned || customTitleComponent ? styles.headerShadow : null
+          this.state.isHeaderPinned || customTitleComponent ? styles.headerShadow : null,
         ]}
       >
         {leftButton && <View style={[styles.headerButton, styles.headerLeftButton]}>{leftButton}</View>}
@@ -307,7 +307,7 @@ export class KnowledgeBase extends Component<Props, State> {
           </View>}
         ListEmptyComponent={() => !isLoading && <ErrorMessage errorMessageData={{
           ...ERROR_MESSAGE_DATA.noArticlesFound,
-          icon: () => <IconNothingFound style={styles.noArticlesErrorIcon}/>
+          icon: () => <IconNothingFound style={styles.noArticlesErrorIcon}/>,
         }}/>}
       />
     );
@@ -350,7 +350,7 @@ export class KnowledgeBase extends Component<Props, State> {
           hitSlop={HIT_SLOP}
           style={styles.actionBarButton}
           onPress={() => Router.Page({
-            children: <KnowledgeBaseDrafts/>
+            children: <KnowledgeBaseDrafts/>,
           })}
         >
           <Text style={styles.actionBarButtonText}>Drafts</Text>
@@ -380,10 +380,10 @@ export class KnowledgeBase extends Component<Props, State> {
         const sortedProjects = getGroupedByFieldNameAlphabetically(projects, 'pinned');
         return Promise.resolve([{
           title: 'Favorites',
-          data: sortedProjects.favorites
+          data: sortedProjects.favorites,
         }, {
           title: 'Projects',
-          data: sortedProjects.others
+          data: sortedProjects.others,
         }]);
       },
       selectedItems: prevPinnedProjects,
@@ -400,7 +400,7 @@ export class KnowledgeBase extends Component<Props, State> {
           (it: ArticleProject) => !(selectedProjects || []).includes(it)).map(
           (it: ArticleProject) => ({
             ...it,
-            pinned: false
+            pinned: false,
           })
         );
         this.closeProjectSelect();
@@ -410,7 +410,7 @@ export class KnowledgeBase extends Component<Props, State> {
         } else {
           this.loadArticlesList(false);
         }
-      }
+      },
     };
     return <SelectSectioned {...selectProps}/>;
   };
@@ -464,7 +464,7 @@ export class KnowledgeBase extends Component<Props, State> {
                     >
                       <IconContextActions color={styles.link.color}/>
                     </TouchableOpacity>
-                  )
+                  ),
                 })
               }
               <View
@@ -494,13 +494,13 @@ const mapStateToProps = (state) => {
   return {
     ...state.app,
     ...state.articles,
-    issuePermissions: state.app.issuePermissions
+    issuePermissions: state.app.issuePermissions,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    ...bindActionCreators(knowledgeBaseActions, dispatch)
+    ...bindActionCreators(knowledgeBaseActions, dispatch),
   };
 };
 

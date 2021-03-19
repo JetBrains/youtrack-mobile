@@ -57,7 +57,7 @@ export function getGroupedByFieldNameAlphabetically(
     },
     {
       favorites: [],
-      others: []
+      others: [],
     }
   );
 }

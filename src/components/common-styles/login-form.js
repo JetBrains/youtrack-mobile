@@ -3,7 +3,7 @@ import {formStyles, containerPadding} from './form';
 
 export const loginStylesForm = {
   scrollContainer: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   container: {
     flexGrow: 1,
@@ -18,42 +18,42 @@ export const loginStylesForm = {
     top: UNIT * 2,
     left: UNIT,
     width: UNIT * 6,
-    height: UNIT * 4
+    height: UNIT * 4,
   },
   backIconButton: {
     flexGrow: 0,
     width: UNIT * 6,
-    height: UNIT * 4
+    height: UNIT * 4,
   },
   title: {
     marginTop: UNIT * 2,
-    ...formStyles.title
+    ...formStyles.title,
   },
   formContent: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    marginTop: UNIT * 2
+    marginTop: UNIT * 2,
   },
   formContentText: {
     alignItems: 'center',
   },
   hintText: {
     marginTop: UNIT * 2,
-    ...formStyles.hintText
+    ...formStyles.hintText,
   },
   progressIndicator: {
     position: 'absolute',
     right: UNIT * 2,
-    top: 12
+    top: 12,
   },
   logoImage: {
     height: UNIT * 10,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   supportLinkContent: {
     marginTop: UNIT * 2,
     marginBottom: UNIT * 2,
-    alignItems: 'center'
-  }
+    alignItems: 'center',
+  },
 };

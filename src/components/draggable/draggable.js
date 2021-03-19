@@ -26,15 +26,15 @@ type PropsWithContext = Props & {dragContext: DragContextType};
 class Draggable extends React.Component<PropsWithContext, void> {
   _initiateDrag = () => {
     if (!this.props.disabled)
-      this.props.dragContext.onInitiateDrag(
+      {this.props.dragContext.onInitiateDrag(
         this.refs.wrapper,
         this.props.children,
         this.props.data
-      );
+      );}
   }
 
   static defaultProps = {
-    dragOn: 'onLongPress'
+    dragOn: 'onLongPress',
   };
 
   render() {

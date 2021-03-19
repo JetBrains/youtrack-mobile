@@ -12,7 +12,7 @@ function getTitle(event) {
   const eventField = event.field;
   let label;
 
-  switch(true) {
+  switch (true) {
   case !eventField:
     label = '[Removed field]';
     break;

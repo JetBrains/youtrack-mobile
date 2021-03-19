@@ -45,7 +45,7 @@ export default class Accounts extends PureComponent<Props, void> {
       [
         {
           text: 'Cancel',
-          style: 'cancel'
+          style: 'cancel',
         },
         {
           text: 'Yes',
@@ -54,8 +54,8 @@ export default class Accounts extends PureComponent<Props, void> {
             if (!hasOtherAccounts) {
               onClose();
             }
-          }
-        }
+          },
+        },
       ],
       {cancelable: true}
     );

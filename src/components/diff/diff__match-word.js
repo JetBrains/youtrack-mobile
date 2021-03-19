@@ -9,7 +9,7 @@ class DiffMatchWord {
   diffPatchType = {
     DIFF_INSERT: DiffMatchPatch.DIFF_INSERT,
     DIFF_DELETE: DiffMatchPatch.DIFF_DELETE,
-    DIFF_EQUAL: DiffMatchPatch.DIFF_EQUAL
+    DIFF_EQUAL: DiffMatchPatch.DIFF_EQUAL,
   };
 
 
@@ -92,7 +92,7 @@ class DiffMatchWord {
     return {
       chars1: chars1,
       chars2: chars2,
-      lineArray: wordArray
+      lineArray: wordArray,
     };
   }
 

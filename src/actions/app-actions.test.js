@@ -41,11 +41,11 @@ describe('app-actions', () => {
         getPermissionsCacheURL: jest.fn(() => permissionsCacheURLMock),
         authParams: {
           token_type: 'token_type',
-          access_token: 'access_token'
+          access_token: 'access_token',
         },
         config: {
           backendUrl: backendURLMock,
-          serverUri: `${backendURLMock}/hub`
+          serverUri: `${backendURLMock}/hub`,
         },
       },
     };
@@ -135,7 +135,7 @@ describe('app-actions', () => {
 
       function setRegistrationServiceReturnError() {
         jest.spyOn(PushNotifications, 'register').mockReturnValue(Promise.reject({
-          message: errorMessageMock
+          message: errorMessageMock,
         }));
       }
     });
@@ -185,7 +185,7 @@ describe('app-actions', () => {
       cachedPermissionsMock = [permissionItemMock];
       actualPermissionsMock = [
         permissionItemMock,
-        permissionItemMock
+        permissionItemMock,
       ];
 
       createStore();
@@ -214,7 +214,7 @@ describe('app-actions', () => {
       expect(storeAction[0]).toEqual({
         type: types.SET_PERMISSIONS,
         permissionsStore: new PermissionsStore(actualPermissionsMock),
-        currentUser: appStateMock.auth.currentUser
+        currentUser: appStateMock.auth.currentUser,
       });
     });
 
@@ -226,7 +226,7 @@ describe('app-actions', () => {
       expect(store.getActions()[0]).toEqual({
         type: types.SET_PERMISSIONS,
         permissionsStore: new PermissionsStore(actualPermissionsMock),
-        currentUser: appStateMock.auth.currentUser
+        currentUser: appStateMock.auth.currentUser,
       });
     });
 
@@ -240,7 +240,7 @@ describe('app-actions', () => {
 
     function setCachedPermissions(permissions) {
       __setStorageState({
-        permissions: permissions
+        permissions: permissions,
       });
     }
   });

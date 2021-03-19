@@ -38,8 +38,8 @@ const IconNothingFound = (props: Props) =>
     ...props,
     icon: {
       dark: NothingFoundDark,
-      default: NothingFound
-    }
+      default: NothingFound,
+    },
   }} />;
 
 const IconNoProjectFound = (props: Props) =>
@@ -47,11 +47,11 @@ const IconNoProjectFound = (props: Props) =>
     ...props,
     icon: {
       dark: NoProjectFoundDark,
-      default: NoProjectFound
-    }
+      default: NoProjectFound,
+    },
   }} />;
 
 export {
   IconNothingFound,
-  IconNoProjectFound
+  IconNoProjectFound,
 };

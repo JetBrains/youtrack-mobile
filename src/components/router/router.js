@@ -8,7 +8,7 @@ import {
   StackActions,
   NavigationActions,
   NavigationNavigateAction,
-  NavigationRoute
+  NavigationRoute,
 } from 'react-navigation';
 
 import log from '../log/log';
@@ -21,23 +21,23 @@ import type {
   NavigationResetActionPayload,
   NavigationJumpToActionPayload,
   NavigationState,
-  NavigationResetAction
+  NavigationResetAction,
 } from 'react-navigation';
 
 const TransitionSpec = {
   duration: 500,
   easing: Easing.bezier(0.2833, 0.99, 0.31833, 0.99),
-  timing: Animated.timing
+  timing: Animated.timing,
 };
 
 const SlideFromRight = {
   transitionSpec: TransitionSpec,
-  screenInterpolator: StackViewStyleInterpolator.forHorizontal
+  screenInterpolator: StackViewStyleInterpolator.forHorizontal,
 };
 
 const SlideModal = {
   transitionSpec: TransitionSpec,
-  screenInterpolator: StackViewStyleInterpolator.forVertical
+  screenInterpolator: StackViewStyleInterpolator.forVertical,
 };
 
 /**
@@ -84,8 +84,8 @@ class Router {
       props,
       modal,
       defaultNavigationOptions: {
-        gesturesEnabled: true
-      }
+        gesturesEnabled: true,
+      },
     };
 
     if (!this[name]) {
@@ -119,7 +119,7 @@ class Router {
   navigate(routeName: string, props: Object, {forceReset} = {}) {
     log.info(`Router(navigate) ${routeName}`, {...props, imageHeaders: 'CENSORED'});
     if (!this._navigator) {
-      throw `Router(navigate): call setNavigator(navigator) first!`;
+      throw 'Router(navigate): call setNavigator(navigator) first!';
     }
 
     if (!this.routes[routeName]) {
@@ -137,7 +137,7 @@ class Router {
     const navigationData: NavigationNavigateAction = NavigationActions.navigate({
       routeName,
       params: newRoute.props,
-      key: uuid()
+      key: uuid(),
     });
 
     if (newRoute.type === 'reset' || forceReset) {

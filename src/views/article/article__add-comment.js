@@ -16,7 +16,7 @@ import {
   updateArticleCommentDraft,
   getArticleCommentDraft,
   submitArticleCommentDraft,
-  getMentions
+  getMentions,
 } from './arcticle-actions';
 import {commentPlaceholderText} from '../../app-text';
 
@@ -144,7 +144,7 @@ const ArticleAddComment = (props: Props) => {
           <TouchableOpacity
             style={[
               styles.commentSendButton,
-              isDisabled ? styles.commentSendButtonDisabled : null
+              isDisabled ? styles.commentSendButtonDisabled : null,
             ]}
             disabled={isDisabled}
             onPress={submitDraftComment}>

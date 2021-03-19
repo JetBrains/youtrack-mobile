@@ -3,17 +3,17 @@ import {UNIT} from '../variables/variables';
 
 export default EStyleSheet.create({
   user: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   userName: {
     flex: 0,
     marginRight: UNIT / 2,
     marginLeft: UNIT * 2,
-    color: '$icon'
+    color: '$icon',
   },
   userAvatar: {
     flex: 0,
-    borderRadius: UNIT / 2
+    borderRadius: UNIT / 2,
   },
   timestampContainer: {
     flexGrow: 1,

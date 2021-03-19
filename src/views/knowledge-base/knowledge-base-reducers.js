@@ -19,7 +19,7 @@ const articlesInitialState: KnowledgeBaseState = {
   articlesList: null,
   isLoading: false,
   expandingProjectId: null,
-  error: null
+  error: null,
 };
 
 
@@ -41,8 +41,8 @@ const {reducer, actions} = createSlice({
     },
     setArticles(state: KnowledgeBaseState, action: PayloadAction<Array<{ title: IssueProject, data: Array<ProjectArticlesData> }>>) {
       state.articles = action.payload;
-    }
-  }
+    },
+  },
 });
 
 export const {setLoading, setError, setList, setArticles, setExpandingProjectId} = actions;

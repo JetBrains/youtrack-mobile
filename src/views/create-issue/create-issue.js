@@ -112,7 +112,7 @@ class CreateIssue extends Component<Props, State> {
       hasPermission={{
         canUpdateField: this.canUpdateField,
         canCreateIssueToProject: this.canCreateIssueToProject,
-        canEditProject: true
+        canEditProject: true,
       }}
 
       onUpdate={this.onFieldUpdate}
@@ -147,7 +147,7 @@ class CreateIssue extends Component<Props, State> {
       processing,
       removeAttachment,
       showAddAttachDialog,
-      isAttachFileDialogVisible
+      isAttachFileDialogVisible,
     } = this.props;
 
     const isAttaching = attachingImage !== null;
@@ -276,7 +276,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     ...state.creation,
     predefinedDraftId: ownProps.predefinedDraftId,
-    issuePermissions: state.app.issuePermissions
+    issuePermissions: state.app.issuePermissions,
   };
 };
 
@@ -284,7 +284,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(createIssueActions, dispatch),
     getAttachActions: () => attachmentActions.createAttachActions(dispatch),
-    onAddTags: (tags: Array<Tag>) => dispatch(createIssueActions.updateIssueDraft(true, {tags}))
+    onAddTags: (tags: Array<Tag>) => dispatch(createIssueActions.updateIssueDraft(true, {tags})),
   };
 };
 

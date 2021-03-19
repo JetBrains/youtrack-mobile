@@ -65,7 +65,7 @@ const KnowledgeBaseDrafts = () => {
       <ArticleWithChildren
         style={[
           styles.itemDraft,
-          isDeleting ? styles.itemDraftDisabled : null
+          isDeleting ? styles.itemDraftDisabled : null,
         ]}
         article={item}
         onArticlePress={(article: Article) => Router.ArticleCreate({articleDraft: article})}
@@ -116,7 +116,7 @@ const KnowledgeBaseDrafts = () => {
         >
           <ErrorMessage errorMessageData={{
             title: 'No drafts yet',
-            icon: () => <IconKnowledgeBase color={styles.actionBarButtonText.color} size={81}/>
+            icon: () => <IconKnowledgeBase color={styles.actionBarButtonText.color} size={81}/>,
           }}/>
 
           <TouchableOpacity

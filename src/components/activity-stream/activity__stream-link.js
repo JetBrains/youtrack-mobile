@@ -37,13 +37,13 @@ const StreamLink = (props: Props) => {
               <Text style={[
                 styles.link,
                 linkedIssue.resolved && styles.secondaryTextColor.color,
-                linkedIssue.resolved && styles.activityRemoved
+                linkedIssue.resolved && styles.activityRemoved,
               ]}>
                 {readableIssueId}
               </Text>
               <Text style={[
                 styles.link,
-                linkedIssue.resolved && styles.secondaryTextColor.color
+                linkedIssue.resolved && styles.secondaryTextColor.color,
               ]}>
                 {` ${linkedIssue.summary}`}
               </Text>

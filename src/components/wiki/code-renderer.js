@@ -31,13 +31,13 @@ function getCodeData(node: Node) {
   return {
     code: isTooLongCode ? `${code.substr(0, MAX_CODE_LENGTH)}… ` : code,
     fullCode: code,
-    isLongCode: isTooLongCode
+    isLongCode: isTooLongCode,
   };
 }
 
 function onShowFullCode(code: string) {
   Router.WikiPage({
-    plainText: code
+    plainText: code,
   });
 }
 
@@ -53,7 +53,7 @@ function renderCode(node: Node, language?: ?string, uiTheme: UITheme) {
   return (
     <Text>
       <SyntaxHighlighter
-        highlighter='hljs'
+        highlighter="hljs"
         language={language}
         PreTag={Text}
         CodeTag={Text}
@@ -63,9 +63,9 @@ function renderCode(node: Node, language?: ?string, uiTheme: UITheme) {
           ...{
             hljs: {
               backgroundColor: 'transparent',
-              color: uiTheme.colors.$text
-            }
-          }
+              color: uiTheme.colors.$text,
+            },
+          },
         }}
         fontSize={SECONDARY_FONT_SIZE}
         fontFamily={isAndroid ? monospaceFontAndroid : monospaceFontIOS}

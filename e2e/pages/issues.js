@@ -10,5 +10,5 @@ module.exports = {
     await element(by.id('query-assist-input')).tap();
     await element(by.id('query-assist-input')).replaceText(query);
     await element(by.id('query-assist-input')).typeText('\n');
-  }
+  },
 };

@@ -39,14 +39,14 @@ class BoardScroller extends Component<Props, State> {
   horizontalScroll: ScrollView;
   verticalScroll: ScrollView;
   state: State = {
-    isDragging: false
+    isDragging: false,
   };
 
   // This state is not intended to affect render function
   unmanagedState: UnamangedState = {
     layout: {top: 0, width: 0, height: 0},
     autoScroll: {dx: 0, dy: 0, active: false},
-    scrollPositions: {offsetX: 0, maxX: 10000, offsetY: 0, maxY: 10000}
+    scrollPositions: {offsetX: 0, maxX: 10000, offsetY: 0, maxY: 10000},
   };
   reportZonesMeasurements = throttle(() => {
     this.props.dragContext.dropZones.forEach(zone => zone.reportMeasurements());
@@ -160,7 +160,7 @@ class BoardScroller extends Component<Props, State> {
       boardHeader,
       agileSelector,
       sprintSelector,
-      boardSearch
+      boardSearch,
 
     } = this.props;
     const {isDragging} = this.state;

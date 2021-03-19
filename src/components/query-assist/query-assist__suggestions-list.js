@@ -88,36 +88,36 @@ const styles = EStyleSheet.create({
     alignItems: 'flex-end',
     ...Platform.select({
       ios: {
-        marginBottom: UNIT * 5
+        marginBottom: UNIT * 5,
       },
       android: {
-        marginBottom: UNIT * 2
-      }
-    })
+        marginBottom: UNIT * 2,
+      },
+    }),
   },
   list: {
     overflow: 'visible',
-    paddingTop: UNIT * 2
+    paddingTop: UNIT * 2,
   },
   searchRow: {
     padding: UNIT * 2,
-    paddingRight: UNIT
+    paddingRight: UNIT,
   },
   sectionHeader: {
     padding: UNIT * 2,
-    paddingBottom: UNIT
+    paddingBottom: UNIT,
   },
   searchText: {
     ...mainText,
     fontWeight: '500',
-    color: '$text'
+    color: '$text',
   },
   sectionHeaderText: {
     textTransform: 'uppercase',
     ...secondaryText,
-    color: '$icon'
+    color: '$icon',
   },
   link: {
-    color: '$link'
-  }
+    color: '$link',
+  },
 });

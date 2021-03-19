@@ -32,7 +32,7 @@ const AttachmentAddPanel = (props: Props) => {
         <Text
           style={[
             styles.attachButtonText,
-            props.isDisabled ? styles.attachButtonTextDisabled : null
+            props.isDisabled ? styles.attachButtonTextDisabled : null,
           ]}>
           Attach image
         </Text>

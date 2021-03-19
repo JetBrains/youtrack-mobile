@@ -33,7 +33,7 @@ const API = {
         matchingEnd: suggestion.me,
         caret: suggestion.cp,
         completionStart: suggestion.cs,
-        completionEnd: suggestion.ce
+        completionEnd: suggestion.ce,
       };
     });
   },
@@ -45,7 +45,7 @@ const API = {
       }
       return {
         ...item,
-        [urlField]: handleRelativeUrl(item[urlField], backendUrl)
+        [urlField]: handleRelativeUrl(item[urlField], backendUrl),
       };
     });
   },
@@ -100,7 +100,7 @@ const API = {
       constructor: toFieldConstructor,
       toString: function () {
         return fieldsString;
-      }
+      },
     };
   },
 
@@ -139,7 +139,7 @@ const API = {
 
     return _a.length === _b.length && _a.every((value, index) => value === _b[index]);
 
-  }
+  },
 
 };
 

@@ -16,7 +16,7 @@ describe('Storage', () => {
     sandbox.stub(MockedStorage, 'multiGet').returns(Promise.resolve([
       ['BACKEND_CONFIG_STORAGE_KEY', '{"foo": "bar"}'],
       ['YT_QUERY_STORAGE', queryMock],
-      ['yt_mobile_auth', '{"foo": "bar"}']
+      ['yt_mobile_auth', '{"foo": "bar"}'],
     ]));
 
     await storage.populateStorage();

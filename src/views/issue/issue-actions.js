@@ -135,7 +135,7 @@ export function loadIssueAttachments() {
       const attachments = await getApi().issue.getIssueAttachments(issueId);
       dispatch({
         type: attachmentTypes.ATTACH_RECEIVE_ALL_ATTACHMENTS,
-        attachments
+        attachments,
       });
     } catch (error) {
       log.warn('Failed to load issue attachments', error);
@@ -358,7 +358,7 @@ export function showIssueActions(
             Share.share({title: issue.summary, message: url}, {dialogTitle: 'Share URL'});
           }
           usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Share URL');
-        }
+        },
       },
       {
         title: 'Copy URL',
@@ -366,8 +366,8 @@ export function showIssueActions(
           usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy URL');
           Clipboard.setString(makeIssueWebUrl(api, issue));
           notify('URL copied');
-        }
-      }
+        },
+      },
     ];
 
     if (permissions.canEdit) {
@@ -376,7 +376,7 @@ export function showIssueActions(
         execute: () => {
           dispatch(startEditingIssue());
           usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Edit issue');
-        }
+        },
       });
     }
 
@@ -386,7 +386,7 @@ export function showIssueActions(
         execute: () => {
           dispatch(onOpenTagsSelect());
           usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Add tag');
-        }
+        },
       });
     }
 
@@ -397,7 +397,7 @@ export function showIssueActions(
           switchToDetailsTab();
           dispatch(attachmentActions.toggleAttachFileDialog(true));
           usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Attach file');
-        }
+        },
       });
     }
 
@@ -407,7 +407,7 @@ export function showIssueActions(
         execute: () => {
           dispatch(openCommandDialog());
           usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Apply command');
-        }
+        },
       });
     }
 
@@ -435,7 +435,7 @@ export function openNestedIssueView(params: OpenNestedViewParams) {
 
     Router.Issue({
       issuePlaceholder: {...params.issue, ...{fieldHash: ApiHelper.makeFieldHash(params.issue)}},
-      issueId: params.issue?.id
+      issueId: params.issue?.id,
     });
   };
 }
@@ -576,7 +576,7 @@ export function onCloseTagsSelect() {
     dispatch({
       type: types.CLOSE_ISSUE_SELECT,
       selectProps: null,
-      isTagsSelectVisible: false
+      isTagsSelectVisible: false,
     });
   };
 }
@@ -613,9 +613,9 @@ export function onOpenTagsSelect() {
             notify('Failed to add a tag');
           }
 
-        }
+        },
       },
-      isTagsSelectVisible: true
+      isTagsSelectVisible: true,
     });
   };
 }

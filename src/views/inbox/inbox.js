@@ -53,7 +53,7 @@ const Category: Object = {
   COMMENT: 'COMMENT',
   SUMMARY: 'SUMMARY',
   DESCRIPTION: 'DESCRIPTION',
-  WORK: 'TIME_TRACKING'
+  WORK: 'TIME_TRACKING',
 };
 
 const MAX_TEXT_CHANGE_LENGTH: number = 5000;
@@ -63,7 +63,7 @@ class Inbox extends Component<Props, State> {
     mentionReasons: 'Mention',
     tagReasons: '',
     savedSearchReasons: '',
-    workflow: 'Workflow'
+    workflow: 'Workflow',
   };
   config: AppConfigFilled;
   theme: Theme;
@@ -94,9 +94,9 @@ class Inbox extends Component<Props, State> {
         id: issue.id,
         summary: issue?.summary,
         description: issue?.description,
-        created: issue?.created
+        created: issue?.created,
       },
-      issueId: issue.id
+      issueId: issue.id,
     });
   }
 
@@ -322,8 +322,8 @@ class Inbox extends Component<Props, State> {
     const title: string = Inbox.notificationReasons.workflow;
     const workflowMetadata: Metadata = {
       reason: {
-        [title]: [{title}]
-      }
+        [title]: [{title}],
+      },
     };
 
     return (
@@ -393,7 +393,7 @@ class Inbox extends Component<Props, State> {
           return list.concat(
             {
               title: Inbox.notificationReasons[key] ? `${Inbox.notificationReasons[key]} ` : '',
-              value: [...new Set(names)].join(', ')
+              value: [...new Set(names)].join(', '),
             }
           );
         }
@@ -429,7 +429,7 @@ class Inbox extends Component<Props, State> {
           {!!readableID && (
             <Text style={[
               styles.notificationIssueInfo,
-              issue.resolved ? styles.resolved : null
+              issue.resolved ? styles.resolved : null,
             ]}>{readableID}</Text>
           )}
           {!!issue.summary && (
@@ -560,7 +560,7 @@ class Inbox extends Component<Props, State> {
         key="activityHeaderTitle"
         style={[
           styles.headerTitle,
-          this.state.isTitlePinned ? styles.titleShadow : null
+          this.state.isTitlePinned ? styles.titleShadow : null,
         ]}
       >
         <Text style={styles.headerTitleText}>Notifications</Text>
@@ -571,7 +571,7 @@ class Inbox extends Component<Props, State> {
   onScroll = ({nativeEvent}) => {
     const newY = nativeEvent.contentOffset.y;
     this.setState({
-      isTitlePinned: newY >= UNIT
+      isTitlePinned: newY >= UNIT,
     });
   };
 
@@ -622,13 +622,13 @@ const mapStateToProps = (state, ownProps) => {
   return {
     ...state.inbox,
     ...ownProps,
-    currentUser: state.app.user
+    currentUser: state.app.user,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    ...bindActionCreators(inboxActions, dispatch)
+    ...bindActionCreators(inboxActions, dispatch),
   };
 };
 

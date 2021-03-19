@@ -15,7 +15,7 @@ const shortRelativeFormat = {
   'days': ['d', 'd'],
   'weeks': ['w', 'w'],
   'months': ['mon', 'mon'],
-  'years': ['y', 'y']
+  'years': ['y', 'y'],
 };
 
 function getForText(assignee: User | Array<User>) {
@@ -54,11 +54,11 @@ function ytDate(date: Date | number, noTime: boolean = false) {
     {
       month: 'short',
       day: '2-digit',
-      year: 'numeric'
+      year: 'numeric',
     },
     noTime ? {} : {
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     }
   ))}`;
 }
@@ -141,5 +141,5 @@ function getVisibilityPresentation(entity: Object) {
 
 export {
   getForText, formatDate, relativeDate, shortRelativeDate, getPriotityField, getAssigneeField, getReadableID,
-  getVisibilityPresentation, getEntityPresentation, absDate, ytDate
+  getVisibilityPresentation, getEntityPresentation, absDate, ytDate,
 };

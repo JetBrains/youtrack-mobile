@@ -6,8 +6,8 @@ const version = '2019.1';
 beforeEach(() => {
   setApi({
     config: {
-      version
-    }
+      version,
+    },
   });
 });
 

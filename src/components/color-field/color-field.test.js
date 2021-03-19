@@ -17,8 +17,8 @@ describe('<ColorField/>', () => {
       color: {
         id: 4,
         background: fieldBackgroundColorMock,
-        foreground: fieldForegroundColorMock
-      }
+        foreground: fieldForegroundColorMock,
+      },
     };
   });
 

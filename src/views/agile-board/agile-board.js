@@ -90,10 +90,10 @@ class AgileBoard extends Component<Props, State> {
       zoomedIn: true,
       stickElement: {
         agile: false,
-        boardHeader: false
+        boardHeader: false,
       },
       offsetY: 0,
-      showAssist: false
+      showAssist: false,
     };
   }
 
@@ -137,8 +137,8 @@ class AgileBoard extends Component<Props, State> {
     this.setState({
       stickElement: {
         agile: newY > UNIT * 2,
-        boardHeader: newY > UNIT * (this.isSprintDisabled() ? 2 : 14)
-      }
+        boardHeader: newY > UNIT * (this.isSprintDisabled() ? 2 : 14),
+      },
     });
   };
 
@@ -153,7 +153,7 @@ class AgileBoard extends Component<Props, State> {
     const {nativeEvent} = event;
     if (this.boardHeader) {
       this.boardHeader.setNativeProps({
-        style: {left: -nativeEvent.contentOffset.x}
+        style: {left: -nativeEvent.contentOffset.x},
       });
     }
   };
@@ -171,7 +171,7 @@ class AgileBoard extends Component<Props, State> {
     usage.trackEvent(CATEGORY_NAME, 'Open issue');
     Router.Issue({
       issuePlaceholder: issue,
-      issueId: issue.id
+      issueId: issue.id,
     });
   };
 
@@ -196,7 +196,7 @@ class AgileBoard extends Component<Props, State> {
         textStyle: styles.agileSelectorText,
         showBottomBorder: this.state.stickElement.agile,
         showLoader: true,
-        uiTheme
+        uiTheme,
       });
     }
     return <View style={styles.agileSelector}/>;
@@ -224,7 +224,7 @@ class AgileBoard extends Component<Props, State> {
         onPress: onOpenSprintSelect,
         style: styles.sprintSelector,
         isLoading,
-        uiTheme
+        uiTheme,
       });
     }
   }
@@ -324,7 +324,7 @@ class AgileBoard extends Component<Props, State> {
           title: 'Configuration errors',
           description: agileErrors,
           icon: IconException,
-          iconSize: 56
+          iconSize: 56,
         }}/>;
     }
   }
@@ -341,7 +341,7 @@ class AgileBoard extends Component<Props, State> {
         testID="agileBoardSprint"
         sprint={{
           ...sprint,
-          agile: sprint?.agile ? {...sprint?.agile, hideOrphansSwimlane: agile?.hideOrphansSwimlane} : agile
+          agile: sprint?.agile ? {...sprint?.agile, hideOrphansSwimlane: agile?.hideOrphansSwimlane} : agile,
         }}
         zoomedIn={this.state.zoomedIn}
         canRunCommand={this.canRunCommand}
@@ -369,7 +369,7 @@ class AgileBoard extends Component<Props, State> {
       cellId: dropZone.data.cellId,
       leadingId: dropZone.data.issueIds
         .filter(id => id !== movedId)[dropZone.placeholderIndex - 1],
-      movedId
+      movedId,
     });
   };
 
@@ -457,16 +457,16 @@ class AgileBoard extends Component<Props, State> {
             contentContainerStyle: {
               display: 'flex',
               flexDirection: 'column',
-              width: zoomedIn ? this._getScrollableWidth() : '100%'
+              width: zoomedIn ? this._getScrollableWidth() : '100%',
             },
-            onScroll: this.syncHeaderPosition
+            onScroll: this.syncHeaderPosition,
           }}
           verticalScrollProps={{
             onScroll: this.onVerticalScroll,
             onContentSizeChange: this.onContentSizeChange,
             contentContainerStyle: {
-              minHeight: '100%'
-            }
+              minHeight: '100%',
+            },
           }}
 
           agileSelector={this.renderAgileSelector(uiTheme)}
@@ -519,7 +519,7 @@ class AgileBoard extends Component<Props, State> {
 const mapStateToProps = (state, ownProps) => {
   return {
     ...state.agile,
-    ...state.app
+    ...state.app,
   };
 };
 

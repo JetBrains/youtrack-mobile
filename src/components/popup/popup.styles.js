@@ -9,22 +9,22 @@ const extendedReportModalText = {
 
 const alignCenter = {
   justifyContent: 'center',
-  alignItems: 'center'
+  alignItems: 'center',
 };
 
 export default EStyleSheet.create({
   link: {
     marginTop: UNIT,
     marginBottom: UNIT,
-    color: '$link'
+    color: '$link',
   },
   modal: {
-    ...alignCenter
+    ...alignCenter,
   },
   container: {
     flex: 1,
     backgroundColor: '$mask',
-    ...alignCenter
+    ...alignCenter,
   },
   content: {
     margin: UNIT * 5,
@@ -35,12 +35,12 @@ export default EStyleSheet.create({
     borderRadius: 6,
     shadowOffset: {width: 0, height: 0},
     shadowColor: 'rgba(0, 0, 0, 0.6)',
-    shadowRadius: UNIT * 2
+    shadowRadius: UNIT * 2,
   },
   title: {
     ...extendedReportModalText,
     fontWeight: '500',
-    marginBottom: UNIT / 2
+    marginBottom: UNIT / 2,
   },
   buttons: {
     position: 'relative',
@@ -59,6 +59,6 @@ export default EStyleSheet.create({
   },
   buttonText: {
     fontSize: 16,
-    color: '$link'
-  }
+    color: '$link',
+  },
 });

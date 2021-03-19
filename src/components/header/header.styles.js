@@ -16,17 +16,17 @@ export default EStyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '$background'
+    backgroundColor: '$background',
   },
   headerShadow: elevation1,
   headerTitle: {
     ...headerTitle,
     marginLeft: UNIT,
-    color: '$text'
+    color: '$text',
   },
   headerButtonLeft: {
     minWidth: minButtonWidth,
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
   },
   headerButtonRight: {
     minWidth: minButtonWidth,
@@ -34,7 +34,7 @@ export default EStyleSheet.create({
     justifyContent: 'flex-end',
   },
   headerButtonText: {
-    color: '$link'
+    color: '$link',
   },
   headerCenter: {
     flex: 1,
@@ -42,5 +42,5 @@ export default EStyleSheet.create({
     flexShrink: 1,
     padding: 0,
     paddingLeft: UNIT * 2,
-  }
+  },
 });

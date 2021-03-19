@@ -12,7 +12,7 @@ import {separator} from '../../components/common-styles/list';
 
 const rowLine = {
   flexDirection: 'row',
-  alignItems: 'center'
+  alignItems: 'center',
 };
 
 const searchContextHeight = UNIT * 7;
@@ -21,24 +21,24 @@ export const noIssuesFoundIconSize = ICON_NOT_FOUND_DEFAULT_SIZE;
 export default EStyleSheet.create({
   listContainer: {
     flex: 1,
-    backgroundColor: '$background'
+    backgroundColor: '$background',
   },
   list: {
     flexGrow: 0,
     minHeight: 160,
-    paddingBottom: UNIT * 4
+    paddingBottom: UNIT * 4,
   },
   tryAgainButton: {
     alignSelf: 'center',
-    paddingTop: UNIT * 2
+    paddingTop: UNIT * 2,
   },
   tryAgainText: {
     fontSize: 18,
-    color: '$link'
+    color: '$link',
   },
   headerText: {
     color: '$text',
-    fontSize: 17
+    fontSize: 17,
   },
   row: {
     flexDirection: 'column',
@@ -46,33 +46,33 @@ export default EStyleSheet.create({
     paddingLeft: UNIT * 2,
     paddingRight: UNIT * 2,
     paddingTop: 13,
-    paddingBottom: UNIT * 1.5
+    paddingBottom: UNIT * 1.5,
   },
   priorityPlaceholder: {
     width: COLOR_FIELD_SIZE,
-    height: COLOR_FIELD_SIZE
+    height: COLOR_FIELD_SIZE,
   },
   priorityWrapper: {
     marginRight: UNIT,
     ...Platform.select({
       android: {
-        marginTop: UNIT / 4
-      }
-    })
+        marginTop: UNIT / 4,
+      },
+    }),
   },
   rowLine: rowLine,
   separator: {
     ...separator,
     borderBottomWidth: 0.75,
-    borderColor: '$separator'
+    borderColor: '$separator',
   },
   secondaryText: {
     ...secondaryText,
-    color: '$icon'
+    color: '$icon',
   },
   headLeft: {
     ...issueCard.issueId,
-    color: '$icon'
+    color: '$icon',
   },
   headRight: {
     ...rowLine,
@@ -81,22 +81,22 @@ export default EStyleSheet.create({
   },
   summary: {
     ...issueCard.issueSummary,
-    color: '$text'
+    color: '$text',
   },
   subtext: {
     paddingTop: 6,
     fontSize: 14,
-    color: '$textSecondary'
+    color: '$textSecondary',
   },
   tags: {
-    marginTop: UNIT
+    marginTop: UNIT,
   },
   listHeader: {
-    minHeight: 105
+    minHeight: 105,
   },
   listHeaderTop: {
     flexDirection: 'row',
-    marginTop: UNIT
+    marginTop: UNIT,
   },
   userSearchQueryButton: {
     alignItems: 'center',
@@ -104,14 +104,14 @@ export default EStyleSheet.create({
     marginRight: UNIT / 2,
     padding: UNIT / 2,
     paddingRight: UNIT,
-    paddingLeft: 0
+    paddingLeft: 0,
   },
   searchContext: {
     height: searchContextHeight,
-    backgroundColor: '$background'
+    backgroundColor: '$background',
   },
   searchContextPinned: {
-    ...elevation1
+    ...elevation1,
   },
   searchContextButton: {
     ...rowLine,
@@ -119,17 +119,17 @@ export default EStyleSheet.create({
     marginRight: UNIT * 10,
     marginLeft: UNIT * 2,
     paddingTop: UNIT,
-    paddingBottom: UNIT
+    paddingBottom: UNIT,
   },
   contextButtonText: {
     ...headerTitle,
     color: '$text',
-    backgroundColor: '$background'
+    backgroundColor: '$background',
   },
   searchPanel: {
     flexGrow: 1,
     paddingLeft: UNIT * 2,
-    paddingRight: UNIT * 1.5
+    paddingRight: UNIT * 1.5,
   },
   createIssueButton: {
     position: 'absolute',
@@ -137,18 +137,18 @@ export default EStyleSheet.create({
     right: UNIT / 2,
     height: UNIT * 5,
     width: UNIT * 5,
-    padding: UNIT
+    padding: UNIT,
   },
   issuesCount: {
     marginTop: UNIT * 2,
     marginBottom: UNIT * 2,
     marginLeft: UNIT * 2,
     ...secondaryText,
-    color: '$icon'
+    color: '$icon',
   },
   noIssuesFoundIcon: {
     marginTop: -noIssuesFoundIconSize / 3,
     marginLeft: -UNIT * 4,
-    marginBottom: -UNIT * 2
-  }
+    marginBottom: -UNIT * 2,
+  },
 });

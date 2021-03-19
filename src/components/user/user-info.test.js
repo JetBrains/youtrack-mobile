@@ -20,7 +20,7 @@ describe('<UserInfo/>', () => {
   beforeEach(() => {
     userMock = {
       id: 'userEntityId',
-      fullName: userFullNameMock
+      fullName: userFullNameMock,
     };
 
     render(userMock);

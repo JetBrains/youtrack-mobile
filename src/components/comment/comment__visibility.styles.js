@@ -6,10 +6,10 @@ export default EStyleSheet.create({
   commentVisibility: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   commentVisibilityText: {
     color: '$icon',
     marginLeft: UNIT / 1.5,
-  }
+  },
 });

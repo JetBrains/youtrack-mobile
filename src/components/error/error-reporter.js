@@ -30,7 +30,7 @@ export async function sendReport(summary: string, description: string): Promise<
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json, text/plain, */*',
-      Authorization: `Bearer ${EXCEPTION_REPORTER_TOKEN}`
+      Authorization: `Bearer ${EXCEPTION_REPORTER_TOKEN}`,
     },
     body: JSON.stringify({
       summary,
@@ -38,9 +38,9 @@ export async function sendReport(summary: string, description: string): Promise<
       project: {id: YOUTRACK_MOBILE_PROJECT_ID},
       visibility: {
         $type: getShortEntityType(ResourceTypes.VISIBILITY_LIMITED),
-        permittedGroups: [{id: YOUTRACK_MOBILE_TEAM_ID}]
-      }
-    })
+        permittedGroups: [{id: YOUTRACK_MOBILE_TEAM_ID}],
+      },
+    }),
   });
 
   const parsedResponse: { idReadable: string } = await response.json();
@@ -95,7 +95,7 @@ export async function createReportErrorData(error: Error | string, isCrashReport
       `;
   return {
     summary,
-    description
+    description,
   };
 }
 

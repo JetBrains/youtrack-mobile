@@ -21,7 +21,7 @@ type Props = {
 export default class QueryPreview extends PureComponent<Props, void> {
   static defaultProps = {
     onFocus: () => {},
-    onClearText: () => {}
+    onClearText: () => {},
   };
 
   focusAndClear = () => {
@@ -47,7 +47,7 @@ export default class QueryPreview extends PureComponent<Props, void> {
             style={[
               styles.searchInput,
               styles.searchInputPlaceholder,
-              query ? styles.searchInputHasText : null
+              query ? styles.searchInputHasText : null,
             ]}
           >
             {query ? query : 'Enter search request'}

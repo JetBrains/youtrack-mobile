@@ -11,38 +11,38 @@ const feedbackFormStyles = {
     flexGrow: 1,
     flexDirection: 'column',
     paddingHorizontal: UNIT,
-    paddingBottom: UNIT * 5
+    paddingBottom: UNIT * 5,
   },
   feedbackForm: {
     flexGrow: 1,
-    paddingHorizontal: UNIT
+    paddingHorizontal: UNIT,
   },
   feedbackFormType: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    minHeight: UNIT * 6.5
+    minHeight: UNIT * 6.5,
   },
   feedbackFormDescription: {
     flexGrow: 1,
-    paddingBottom: UNIT * 3
+    paddingBottom: UNIT * 3,
   },
   feedbackFormText: {
     fontSize: MAIN_FONT_SIZE,
-    color: '$text'
+    color: '$text',
   },
   feedbackFormTextSup: {
     position: 'absolute',
     top: UNIT / 2,
     left: UNIT,
     fontSize: SECONDARY_FONT_SIZE - 2,
-    color: '$icon'
+    color: '$icon',
   },
   feedbackFormTextMain: {
-    marginBottom: -UNIT
+    marginBottom: -UNIT,
   },
   feedbackFormTextError: {
-    color: '$error'
+    color: '$error',
   },
   feedbackInput: {
     ...rowFormStyles.input,
@@ -60,7 +60,7 @@ const feedbackFormStyles = {
     ...rowFormStyles.input,
     marginTop: UNIT * 2,
     color: '$text',
-    backgroundColor: '$boxBackground'
+    backgroundColor: '$boxBackground',
   },
   feedbackFormInputDescription: {
     ...rowFormStyles.input,
@@ -68,12 +68,12 @@ const feedbackFormStyles = {
     flexGrow: 1,
     marginTop: UNIT * 2,
     color: '$text',
-    backgroundColor: '$boxBackground'
+    backgroundColor: '$boxBackground',
   },
   feedbackFormBottomIndent: {
-    height: UNIT * 8
+    height: UNIT * 8,
   },
-  elevation1: elevation1
+  elevation1: elevation1,
 };
 
 export default feedbackFormStyles;

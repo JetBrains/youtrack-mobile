@@ -7,7 +7,7 @@ export const title = {
   fontSize: 18,
   fontWeight: '500',
   lineHeight: 21,
-  letterSpacing: -0.22
+  letterSpacing: -0.22,
 };
 
 export const issueCard = {
@@ -23,17 +23,17 @@ export const issueCard = {
     marginTop: UNIT,
     ...Platform.select({
       ios: {
-        fontWeight: '500'
+        fontWeight: '500',
       },
       android: {
         fontWeight: '$androidSummaryFontWeight',
-      }
-    })
-  }
+      },
+    }),
+  },
 };
 
 export const issueIdResolved = {
-  textDecorationLine: 'line-through'
+  textDecorationLine: 'line-through',
 };
 
 export const summaryTitle = {
@@ -46,11 +46,11 @@ export const summaryTitle = {
 
   ...Platform.select({
     ios: {
-      fontWeight: '500'
+      fontWeight: '500',
     },
     android: {
       fontWeight: '$androidSummaryFontWeight',
-    }
-  })
+    },
+  }),
 };
 

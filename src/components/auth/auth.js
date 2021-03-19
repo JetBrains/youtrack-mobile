@@ -38,7 +38,7 @@ export default class AuthTest {
 
     const permissionsQueryString = qs.stringify({
       query: `service:{0-0-0-0-0} or service:{${config.auth.youtrackServiceId}}`,
-      fields: 'permission/key,global,projects(id)'
+      fields: 'permission/key,global,projects(id)',
     });
     this.PERMISSIONS_CACHE_URL = urlJoin(
       this.config.auth.serverUri,
@@ -55,9 +55,9 @@ export default class AuthTest {
         'Accept': ACCEPT_HEADER,
         'User-Agent': USER_AGENT,
         'Authorization': `Basic ${createBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`,
-        'Content-Type': URL_ENCODED_TYPE
+        'Content-Type': URL_ENCODED_TYPE,
       },
-      body: body
+      body: body,
     }).then(async res => {
       log.log(`Got result from ${hubTokenUrl}: ${res && res.status}`);
       log.log(`Response body: ${res && res._bodyText}`);
@@ -79,7 +79,7 @@ export default class AuthTest {
       `&code=${code}`,
       `&client_id=${config.auth.clientId}`,
       `&client_secret=${config.auth.clientSecret}`,
-      `&redirect_uri=${config.auth.landingUrl}`
+      `&redirect_uri=${config.auth.landingUrl}`,
     ].join(''), config);
   }
 
@@ -90,7 +90,7 @@ export default class AuthTest {
       '&access_type=offline',
       `&username=${encodeURIComponent(login)}`,
       `&password=${encodeURIComponent(password)}`,
-      `&scope=${encodeURIComponent(config.auth.scopes)}`
+      `&scope=${encodeURIComponent(config.auth.scopes)}`,
     ].join(''), config);
   }
 
@@ -116,7 +116,7 @@ export default class AuthTest {
     const config = this.config;
     const requestToken = (authParams: AuthParams) => fetch(urlJoin(
       config.auth.serverUri,
-      `/api/rest/oauth2/token`,
+      '/api/rest/oauth2/token',
       '?grant_type=refresh_token',
       `&refresh_token=${authParams.refresh_token}`
     ), {
@@ -125,8 +125,8 @@ export default class AuthTest {
         'Accept': ACCEPT_HEADER,
         'User-Agent': USER_AGENT,
         'Authorization': `Basic ${createBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`,
-        'Content-Type': URL_ENCODED_TYPE
-      }
+        'Content-Type': URL_ENCODED_TYPE,
+      },
     });
 
     return this.getCachedAuthParams()
@@ -164,7 +164,7 @@ export default class AuthTest {
     }
     return {
       'Authorization': `${authParams.token_type} ${authParams.access_token}`,
-      'User-Agent': USER_AGENT
+      'User-Agent': USER_AGENT,
     };
   }
 
@@ -179,8 +179,8 @@ export default class AuthTest {
         'Accept': ACCEPT_HEADER,
         'Hub-API-Version': 2,
         'User-Agent': USER_AGENT,
-        ...this.getAuthorizationHeaders(authParams)
-      }
+        ...this.getAuthorizationHeaders(authParams),
+      },
     }).then((res: Response) => {
       if (res.status > 400) {
         const errorTitle: string = 'Check token error';

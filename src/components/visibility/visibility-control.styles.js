@@ -7,16 +7,16 @@ import {secondaryText} from '../common-styles/typography';
 export default EStyleSheet.create({
   container: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   resetButton: {
-    marginRight: UNIT * 2
+    marginRight: UNIT * 2,
   },
   buttonIcon: {
-    marginRight: UNIT
+    marginRight: UNIT,
   },
   buttonText: {
     ...secondaryText,
-    color: '$icon'
-  }
+    color: '$icon',
+  },
 });

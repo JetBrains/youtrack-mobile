@@ -22,7 +22,7 @@ export function minutesAndHoursFor(duration: Object) {
     hours: () => {
       const hours = Math.floor(totalMinutes(duration) / 60);
       return hours ? hours + TIME_IDENTIFIERS.hours : '';
-    }
+    },
   };
 }
 
@@ -65,7 +65,7 @@ function minutesToPeriod(minutes: number, workTimeSettings: WorkTimeSettings) {
       days: days,
       hours: hours,
       minutes: minutes,
-      asArray: [weeks, days, hours, minutes]
+      asArray: [weeks, days, hours, minutes],
     };
   }
 }

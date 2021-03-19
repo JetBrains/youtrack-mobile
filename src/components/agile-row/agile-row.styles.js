@@ -12,7 +12,7 @@ const ROW_TEXT_LINE_HEIGHT = 24;
 
 export default EStyleSheet.create({
   issueResolved: {
-    color: '$icon'
+    color: '$icon',
   },
   issueIdResolved: issueIdResolved,
 
@@ -23,10 +23,10 @@ export default EStyleSheet.create({
     paddingTop: UNIT * 2,
     paddingRight: UNIT,
     paddingBottom: UNIT * 2,
-    paddingLeft: UNIT
+    paddingLeft: UNIT,
   },
   rowHeaderZoomedOut: {
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   headerIssueId: {
     marginLeft: UNIT * 2,
@@ -34,11 +34,11 @@ export default EStyleSheet.create({
     ...mainText,
     ...Platform.select({
       ios: {
-        lineHeight: ROW_TEXT_LINE_HEIGHT + 2
+        lineHeight: ROW_TEXT_LINE_HEIGHT + 2,
       },
       android: {
-        lineHeight: ROW_TEXT_LINE_HEIGHT
-      }
+        lineHeight: ROW_TEXT_LINE_HEIGHT,
+      },
     }),
   },
   headerIssueIdZoomedOut: {
@@ -47,7 +47,7 @@ export default EStyleSheet.create({
   },
   resolvedIssueText: {
     color: '$textSecondary',
-    ...issueIdResolved
+    ...issueIdResolved,
   },
   rowHeaderText: {
     ...headerTitle,
@@ -61,8 +61,8 @@ export default EStyleSheet.create({
       },
       android: {
         fontWeight: '400',
-        fontSize: 20.5
-      }
+        fontSize: 20.5,
+      },
     }),
   },
   rowHeaderTextZoomedOut: {
@@ -71,16 +71,16 @@ export default EStyleSheet.create({
   row: {
     flexDirection: 'row',
     ...separatorBorder,
-    borderColor: '$separator'
+    borderColor: '$separator',
   },
   column: {
-    flex: 1
+    flex: 1,
   },
   columnWithoutBorder: {
-    borderRightWidth: 0
+    borderRightWidth: 0,
   },
   columnFirst: {
-    marginLeft: UNIT
+    marginLeft: UNIT,
   },
   columnCollapsed: {
     flex: 0,
@@ -89,28 +89,28 @@ export default EStyleSheet.create({
     paddingLeft: UNIT / 4,
     paddingRight: UNIT / 4,
     flexDirection: 'row',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   columnCollapsedAll: {
     width: null,
-    flex: 1
+    flex: 1,
   },
   card: {
-    marginBottom: UNIT * 2
+    marginBottom: UNIT * 2,
   },
   collapseButton: {
     flexDirection: 'row',
   },
   collapseButtonIcon: {
     marginTop: UNIT / 4,
-    width: UNIT * 2
+    width: UNIT * 2,
   },
   issueSquare: {
     width: UNIT,
     height: UNIT,
     margin: 2,
     borderWidth: 1,
-    borderColor: '$mask'
+    borderColor: '$mask',
   },
   addCardButton: {
     marginBottom: UNIT * 2,
@@ -119,11 +119,11 @@ export default EStyleSheet.create({
     borderRadius: UNIT,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '$boxBackground'
+    backgroundColor: '$boxBackground',
   },
   addCardIcon: {
     height: UNIT * 2.5,
     width: UNIT * 2.5,
-    resizeMode: 'contain'
-  }
+    resizeMode: 'contain',
+  },
 });

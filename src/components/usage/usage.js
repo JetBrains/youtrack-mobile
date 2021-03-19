@@ -45,13 +45,13 @@ const usage = {
   trackError(error: any, additionalMessage: ?string) {
     //We are not allowed to gather error itself because of Privacy Policy
     return usage.trackEvent('exception', JSON.stringify({
-      'exDescription': additionalMessage
+      'exDescription': additionalMessage,
     }));
   },
 
   onGlobalError(error: any, isFatal: boolean) {
     return usage.trackError(error, `Global error happened, isFatal:${isFatal.toString()}`);
-  }
+  },
 };
 
 const originalHandler = global.ErrorUtils.getGlobalHandler();

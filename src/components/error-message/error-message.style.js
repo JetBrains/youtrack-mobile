@@ -12,7 +12,7 @@ export const styles = EStyleSheet.create({
   errorTitle: {
     marginTop: UNIT * 1.5,
     ...title,
-    color: '$text'
+    color: '$text',
   },
   errorDescription: {
     padding: UNIT * 4,
@@ -20,14 +20,14 @@ export const styles = EStyleSheet.create({
     ...secondaryText,
     color: '$icon',
     lineHeight: 20,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   tryAgainButton: {
     alignSelf: 'center',
-    paddingTop: UNIT * 2
+    paddingTop: UNIT * 2,
   },
   tryAgainText: {
     fontSize: 18,
-    color: '$link'
-  }
+    color: '$link',
+  },
 });

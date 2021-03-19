@@ -50,17 +50,17 @@ export function AttachmentPreview(props: Props) {
 const styles = EStyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '$background'
+    backgroundColor: '$background',
   },
   headerText: {
-    color: '$text'
+    color: '$text',
   },
   link: {
-    color: '$link'
+    color: '$link',
   },
   loadingIndicator: {
-    padding: UNIT * 2
-  }
+    padding: UNIT * 2,
+  },
 });
 
 export default AttachmentPreview;

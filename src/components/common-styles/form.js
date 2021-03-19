@@ -7,7 +7,7 @@ export const containerPadding = UNIT * 4;
 
 export const rowFormStyles = {
   scrollContainer: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   container: {
     flexGrow: 1,
@@ -15,7 +15,7 @@ export const rowFormStyles = {
     justifyContent: 'space-between',
     paddingLeft: containerPadding,
     paddingRight: containerPadding,
-    backgroundColor: '$background'
+    backgroundColor: '$background',
   },
   input: {
     width: '100%',
@@ -26,10 +26,10 @@ export const rowFormStyles = {
     color: '$text',
     fontSize: MAIN_FONT_SIZE,
     borderWidth: 1,
-    borderColor: 'transparent'
+    borderColor: 'transparent',
   },
   inputError: {
-    borderColor: '$error'
+    borderColor: '$error',
   },
   button: {
     width: '100%',
@@ -40,33 +40,33 @@ export const rowFormStyles = {
   },
   buttonDisabled: {
     backgroundColor: '$textSecondary',
-    opacity: 0.5
+    opacity: 0.5,
   },
   buttonText: {
     alignSelf: 'center',
     textAlign: 'center',
     fontSize: MAIN_FONT_SIZE,
-    color: '$textButton'
+    color: '$textButton',
   },
   buttonTextDisabled: {
-    color: '$textButton'
+    color: '$textButton',
   },
   title: {
     fontSize: 18,
     fontWeight: '500',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   hintText: {
     textAlign: 'center',
     color: '$icon',
-    fontSize: 12
+    fontSize: 12,
   },
   errorText: {
-    color: 'red'
+    color: 'red',
   },
   link: {
-    color: '$link'
-  }
+    color: '$link',
+  },
 };
 
 export const formStyles = EStyleSheet.create(rowFormStyles);

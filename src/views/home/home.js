@@ -29,7 +29,7 @@ export default class Home extends PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      youTrackBackendUrl: props.backendUrl
+      youTrackBackendUrl: props.backendUrl,
     };
     usage.trackScreenView('Loading');
   }

@@ -15,12 +15,12 @@ describe('API', () => {
       refreshToken: sinon.spy(),
       authParams: {
         token_type: 'token type',
-        access_token: 'fake token'
+        access_token: 'fake token',
       },
       getAuthorizationHeaders: () => ({Authorization: 'token type fake token'}),
       config: {
-        backendUrl: serverUrl
-      }
+        backendUrl: serverUrl,
+      },
     };
   });
 
@@ -76,8 +76,8 @@ describe('API', () => {
     fetchMock.mock(`^${serverUrl}/api/issues/test-id`, {id: 'issue-id', comments: [], attachments: [
       {
         id: 'foo',
-        url: '/persistent/123'
-      }
+        url: '/persistent/123',
+      },
     ]});
     const res = await createApiInstance().issue.getIssue('test-id');
 
@@ -90,9 +90,9 @@ describe('API', () => {
       {
         id: 'foo',
         author: {
-          avatarUrl: relativeUrl
-        }
-      }
+          avatarUrl: relativeUrl,
+        },
+      },
     ]);
 
     const comments = await createApiInstance().issue.getIssueComments('test-id');
@@ -103,7 +103,7 @@ describe('API', () => {
   it('should handle relative avatar url in custom field possible values', async () => {
     const relativeUrl = '/hub/users/123';
     fetchMock.mock(`^${serverUrl}/api/admin/customFieldSettings/bundles`, [
-      {avatarUrl: relativeUrl}
+      {avatarUrl: relativeUrl},
     ]);
 
     const res = await createApiInstance().getCustomFieldUserValues('test-id');
@@ -115,8 +115,8 @@ describe('API', () => {
     fetchMock.post(`^${serverUrl}/api/issues/test-issue-id/comments`, {
       id: 'test-comment',
       author: {
-        avatarUrl: 'http://foo.bar'
-      }
+        avatarUrl: 'http://foo.bar',
+      },
     });
     const res = await createApiInstance().issue.submitComment('test-issue-id', {text: 'test comment text'});
 
@@ -127,8 +127,8 @@ describe('API', () => {
     fetchMock.post(`^${serverUrl}/api/issues/test-issue-id/comments/123`, {
       id: 'test-comment',
       author: {
-        avatarUrl: 'http://foo.bar'
-      }
+        avatarUrl: 'http://foo.bar',
+      },
     });
     const res = await createApiInstance().issue.submitComment('test-issue-id', {text: 'test comment text', id: '123'});
 
@@ -141,8 +141,8 @@ describe('API', () => {
     fetchMock.post(`^${serverUrl}/api/issues/test-issue-id/comments`, {
       id: 'test-comment',
       author: {
-        avatarUrl: relativeUrl
-      }
+        avatarUrl: relativeUrl,
+      },
     });
     const res = await createApiInstance().issue.submitComment('test-issue-id', {text: 'test comment text'});
 

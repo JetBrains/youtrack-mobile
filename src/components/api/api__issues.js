@@ -16,7 +16,7 @@ export default class IssuesAPI extends ApiBase {
   async getIssues(query: string = '', $top: number, $skip: number = 0): Promise<IssueOnList> {
     const queryString = qs.stringify({
       query, $top, $skip,
-      fields: issueFields.issuesOnList.toString()
+      fields: issueFields.issuesOnList.toString(),
     });
 
     const issues = await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`);
@@ -50,7 +50,7 @@ export default class IssuesAPI extends ApiBase {
       {
         folder: folder?.id ? {$type: folder.$type, id: folder.id} : null,
         query: query ? query.trim() : null,
-        unresolvedOnly
+        unresolvedOnly,
       }
     );
   }

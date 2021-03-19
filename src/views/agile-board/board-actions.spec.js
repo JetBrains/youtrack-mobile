@@ -43,7 +43,7 @@ describe('Agile board async actions', () => {
 
     agileUserProfileMock = {
       defaultAgile: defaultAgileMock,
-      visitedSprints: [createSprintMock('sprint-baz'), createSprintMock('sprint-boo'), sprintMock]
+      visitedSprints: [createSprintMock('sprint-baz'), createSprintMock('sprint-boo'), sprintMock],
     };
 
     agileWithStatusMock = {status: {valid: true, errors: []}};
@@ -55,13 +55,13 @@ describe('Agile board async actions', () => {
         updateAgileUserProfile: jest.fn(),
         getAgile: jest.fn(() => agileWithStatusMock),
         getAgileIssues: jest.fn().mockResolvedValueOnce([{id: 'issueId'}]),
-      }
+      },
     };
 
     updateStore({agile: {profile: agileUserProfileMock}});
 
     await __setStorageState({
-      agileLastSprint: cachedSprintMock
+      agileLastSprint: cachedSprintMock,
     });
   });
 
@@ -74,7 +74,7 @@ describe('Agile board async actions', () => {
 
       expect(storeActions[0]).toEqual({
         type: types.RECEIVE_AGILE_PROFILE,
-        profile: agileUserProfileMock
+        profile: agileUserProfileMock,
       });
     });
 
@@ -149,7 +149,7 @@ describe('Agile board async actions', () => {
 
         expect(storeActions[1]).toEqual({
           type: types.RECEIVE_SPRINT,
-          sprint: cachedSprintMock
+          sprint: cachedSprintMock,
         });
       });
 
@@ -160,9 +160,9 @@ describe('Agile board async actions', () => {
             agile: {
               profile: {
                 defaultAgile: defaultAgileMock,
-                visitedSprints: []
-              }
-            }
+                visitedSprints: [],
+              },
+            },
           });
           await __setStorageState({agileLastSprint: null});
 
@@ -186,9 +186,9 @@ describe('Agile board async actions', () => {
             agile: {
               profile: {
                 defaultAgile: defaultAgileMock,
-                visitedSprints: []
-              }
-            }
+                visitedSprints: [],
+              },
+            },
           });
           await __setStorageState({agileLastSprint: defaultAgileMock.sprints[0]});
 
@@ -224,7 +224,7 @@ describe('Agile board async actions', () => {
 
       it('should stop loading sprint', async () => {
         expect(storeActions[2]).toEqual({
-          type: types.STOP_SPRINT_LOADING
+          type: types.STOP_SPRINT_LOADING,
         });
       });
 
@@ -251,14 +251,14 @@ describe('Agile board async actions', () => {
 
       it('should show loading sprint', () => {
         expect(storeActions[1]).toEqual({
-          type: types.START_SPRINT_LOADING
+          type: types.START_SPRINT_LOADING,
         });
       });
 
       it('should receive sprint', () => {
         expect(storeActions[2]).toEqual({
           type: types.RECEIVE_SPRINT,
-          sprint: sprintMock
+          sprint: sprintMock,
         });
       });
     });
@@ -271,24 +271,24 @@ describe('Agile board async actions', () => {
 
         expect(storeActions[0]).toEqual({
           type: types.AGILE_ERROR,
-          error: null
+          error: null,
         });
         expect(storeActions[1]).toEqual({
-          type: types.START_SPRINT_LOADING
+          type: types.START_SPRINT_LOADING,
         });
         expect(storeActions[2]).toEqual({
           type: types.RECEIVE_SPRINT,
-          sprint: null
+          sprint: null,
         });
         expect(storeActions[3]).toEqual({//loading sprint issues
-          type: types.START_SPRINT_LOADING
+          type: types.START_SPRINT_LOADING,
         });
         expect(storeActions[4]).toEqual({
           type: types.AGILE_ERROR,
-          error: new Error('Could not load requested sprint issues')
+          error: new Error('Could not load requested sprint issues'),
         });
         expect(storeActions[5]).toEqual({
-          type: types.STOP_SPRINT_LOADING
+          type: types.STOP_SPRINT_LOADING,
         });
       });
     });
@@ -304,7 +304,7 @@ describe('Agile board async actions', () => {
 
     it('should not throw if agile profile is missing in a store', async () => {
       updateStore({
-        agile: {profile: null}
+        agile: {profile: null},
       });
       const agileUserProfile = await store.dispatch(actions.getAgileUserProfile());
       expect(agileUserProfile).toEqual(NULL_AGILE_STATE);
@@ -344,10 +344,10 @@ function createSprintMock(id: string, agileSprints: ?Array<Sprint>) {
     id: id,
     agile: {
       id: agileId,
-      sprints: sprints
+      sprints: sprints,
     },
     board: {
-      trimmedSwimlanes: [{cells: [{issues: [issueMock]}]}]
-    }
+      trimmedSwimlanes: [{cells: [{issues: [issueMock]}]}],
+    },
   };
 }

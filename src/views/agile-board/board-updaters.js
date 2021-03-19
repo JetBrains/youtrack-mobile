@@ -18,7 +18,7 @@ export function updateRowCollapsedState(
     trimmedSwimlanes: isOrphan ? trimmedSwimlanes : trimmedSwimlanes.map(swimlane => {
       return swimlane.id === row.id ? {...row, collapsed} : swimlane;
     }),
-    orphanRow: isOrphan ? {...board.orphanRow, collapsed} : board.orphanRow
+    orphanRow: isOrphan ? {...board.orphanRow, collapsed} : board.orphanRow,
   };
 }
 
@@ -36,7 +36,7 @@ function updateCellsIssuesIfNeeded(
     if (cell.issues.some((issue: IssueOnList) => issue.id === issueId)) {
       return {
         ...cell,
-        issues: updateIssues(cell.issues)
+        issues: updateIssues(cell.issues),
       };
     }
     return cell;
@@ -61,14 +61,14 @@ export function addCardToBoard(
 
     return {
       ...row,
-      cells: row.cells.map(cell => cell.id === cellId ? {...cell, issues: cell.issues.concat(issue)} : cell)
+      cells: row.cells.map(cell => cell.id === cellId ? {...cell, issues: cell.issues.concat(issue)} : cell),
     };
   }
 
   return {
     ...board,
     orphanRow: addCardToRowIfNeeded(board.orphanRow),
-    trimmedSwimlanes: board.trimmedSwimlanes.map(addCardToRowIfNeeded)
+    trimmedSwimlanes: board.trimmedSwimlanes.map(addCardToRowIfNeeded),
   };
 }
 
@@ -95,7 +95,7 @@ export function findIssueOnBoard(board: Board, issueId: string): ?{cell: BoardCe
           cell: cell,
           row: row,
           issue: foundIssue,
-          column: (board.columns || [])[cellIndex]
+          column: (board.columns || [])[cellIndex],
         };
       }
     }
@@ -120,7 +120,7 @@ export function updateCardOnBoard(board: Board, sourceIssue: IssueFull): Board {
       cells: updateCellsIssuesIfNeeded(row.cells, sourceIssue?.id, issues =>
         (issues || []).map(
           issue => issue.id === sourceIssue?.id ? fillIssueFromAnotherIssue(issue, sourceIssue) : issue
-        ))
+        )),
     };
   }
 
@@ -128,14 +128,14 @@ export function updateCardOnBoard(board: Board, sourceIssue: IssueFull): Board {
   return {
     ...board,
     orphanRow: updateIssueInRowIfNeeded(board.orphanRow),
-    trimmedSwimlanes: board.trimmedSwimlanes.map(updateIssueInRowIfNeeded)
+    trimmedSwimlanes: board.trimmedSwimlanes.map(updateIssueInRowIfNeeded),
   };
 }
 
 function removeSwimlaneFromBoard(board: Board, rowId: string): Board {
   return {
     ...board,
-    trimmedSwimlanes: board.trimmedSwimlanes.filter((row: AgileBoardRow) => row.id !== rowId)
+    trimmedSwimlanes: board.trimmedSwimlanes.filter((row: AgileBoardRow) => row.id !== rowId),
   };
 }
 
@@ -150,14 +150,14 @@ export function removeIssueFromBoard(board: Board, issueId: string): Board {
   function removeIssueInRow(row: AgileBoardRow) {
     return {
       ...row,
-      cells: updateCellsIssuesIfNeeded(row.cells, issueId, issues => issues.filter(issue => issue.id !== issueId))
+      cells: updateCellsIssuesIfNeeded(row.cells, issueId, issues => issues.filter(issue => issue.id !== issueId)),
     };
   }
 
   return {
     ...board,
     orphanRow: removeIssueInRow(board.orphanRow),
-    trimmedSwimlanes: board.trimmedSwimlanes.map(removeIssueInRow)
+    trimmedSwimlanes: board.trimmedSwimlanes.map(removeIssueInRow),
   };
 }
 
@@ -172,7 +172,7 @@ function reorderCollection(colection: Array<{id: string}>, leadingId: ?string, m
 function reorderCardsInRow(row: AgileBoardRow, leadingId: ?string, movedId: string) {
   return {
     ...row,
-    cells: updateCellsIssuesIfNeeded(row.cells, movedId, issues => reorderCollection(issues, leadingId, movedId))
+    cells: updateCellsIssuesIfNeeded(row.cells, movedId, issues => reorderCollection(issues, leadingId, movedId)),
   };
 }
 
@@ -188,7 +188,7 @@ export function reorderEntitiesOnBoard(board: Board, leadingId: ?string, movedId
   return {
     ...board,
     orphanRow: reorderCardsInRow(board.orphanRow, leadingId, movedId),
-    trimmedSwimlanes: board.trimmedSwimlanes.map(row => reorderCardsInRow(row, leadingId, movedId))
+    trimmedSwimlanes: board.trimmedSwimlanes.map(row => reorderCardsInRow(row, leadingId, movedId)),
   };
 }
 
@@ -202,11 +202,11 @@ export function addOrUpdateCell(board: Board, issue: IssueOnList, rowId: string,
 
   const targetCell = targetRow.cells.filter((cell: BoardCell) => cell.column.id === columnId)[0];
   if (!targetCell) {
-    notify(`Agile board settings have been changed. Reload the board.`);
+    notify('Agile board settings have been changed. Reload the board.');
     return {
       ...board,
       orphanRow: board.orphanRow,
-      trimmedSwimlanes: board.trimmedSwimlanes
+      trimmedSwimlanes: board.trimmedSwimlanes,
     };
   }
 
@@ -233,14 +233,14 @@ export function updateSwimlane(board: Board, swimlane: AgileBoardRow) {
     }
     return {
       ...board,
-      trimmedSwimlanes: board.trimmedSwimlanes.map(row => row.id === swimlane.id ? swimlane : row)
+      trimmedSwimlanes: board.trimmedSwimlanes.map(row => row.id === swimlane.id ? swimlane : row),
     };
   } else {
     removeIssueFromBoard(board, swimlane.issue.id); // Card could be turn info swimlane
     removeAllSwimlaneCardsFromBoard(board, swimlane); // Swimlane was added to board
     return {
       ...board,
-      trimmedSwimlanes: [...board.trimmedSwimlanes, swimlane]
+      trimmedSwimlanes: [...board.trimmedSwimlanes, swimlane],
     };
   }
 }

@@ -8,32 +8,32 @@ export const articleItemWithChildrenStyles = {
   row: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   item: {
     flexDirection: 'row',
     height: SELECT_ITEM_HEIGHT,
-    backgroundColor: '$background'
+    backgroundColor: '$background',
   },
   articleTitleText: {
     ...mainText,
     maxWidth: '87%',
-    color: '$text'
+    color: '$text',
   },
   icon: {
-    color: '$icon'
+    color: '$icon',
   },
   lockIcon: {
     marginLeft: UNIT / 2,
-    color: '$iconAccent'
+    color: '$iconAccent',
   },
   iconTrash: {
     color: '$iconAccent',
-    padding: UNIT
+    padding: UNIT,
   },
   itemButtonContainer: {
     marginLeft: UNIT * 2,
-    paddingRight: UNIT * 1.5
+    paddingRight: UNIT * 1.5,
   },
   itemButton: {
     flexDirection: 'row',
@@ -43,16 +43,16 @@ export const articleItemWithChildrenStyles = {
     height: UNIT * 4,
     paddingHorizontal: UNIT / 1.5,
     borderRadius: UNIT,
-    backgroundColor: '$boxBackground'
+    backgroundColor: '$boxBackground',
   },
   itemButtonText: {
     ...mainText,
     paddingRight: UNIT,
-    color: '$icon'
+    color: '$icon',
   },
   itemButtonIcon: {
-    marginTop: -1
-  }
+    marginTop: -1,
+  },
 };
 
 export default EStyleSheet.create(articleItemWithChildrenStyles);

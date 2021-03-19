@@ -19,7 +19,7 @@ export default class UserAPI extends ApiBase {
     'id',
     'name',
     'shortName',
-    'query'
+    'query',
   ];
   USER_FOLDERS_FIELDS = [
     'id',
@@ -29,7 +29,7 @@ export default class UserAPI extends ApiBase {
     'query',
     'pinned',
     'star(id)',
-    'shortName'
+    'shortName',
   ];
 
   constructor(auth: Auth) {
@@ -52,10 +52,10 @@ export default class UserAPI extends ApiBase {
           },
           appearance: ['naturalCommentsOrder'],
           articles: {
-            lastVisitedArticle: ['id,idReadable,summary,project(id,ringId)']
-          }
-        }
-      }
+            lastVisitedArticle: ['id,idReadable,summary,project(id,ringId)'],
+          },
+        },
+      },
     ]);
 
     const user: User = await this.makeAuthorizedRequest(`${this.adminApiUrl}/${userId}?${queryString}`);
@@ -105,13 +105,13 @@ export default class UserAPI extends ApiBase {
     const response: { skip: number, total: number, users: Array<User> } = await this.makeAuthorizedRequest(
       `${this.config.auth.serverUri}/api/rest/users?${searchQuery}&${ApiBase.createFieldsQuery([
         'id',
-        'name'
+        'name',
       ])}`,
       'GET'
     );
     return response.users.map((hubUser: User) => ({
       ringId: hubUser.id,
-      name: hubUser.name
+      name: hubUser.name,
     }));
   }
 

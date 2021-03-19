@@ -10,10 +10,10 @@ import {formStyles} from '../common-styles/form';
 export default EStyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '$background'
+    backgroundColor: '$background',
   },
   featuresList: {
-    paddingHorizontal: UNIT * 2
+    paddingHorizontal: UNIT * 2,
   },
   featuresListItem: {
     flexDirection: 'row',
@@ -21,7 +21,7 @@ export default EStyleSheet.create({
     justifyContent: 'space-between',
     padding: UNIT * 2,
     ...separatorBorder,
-    borderColor: '$separator'
+    borderColor: '$separator',
   },
   featuresListItemText: {
     flexGrow: 1,
@@ -29,10 +29,10 @@ export default EStyleSheet.create({
     color: '$text',
   },
   closeButton: {
-    ...formStyles.button
+    ...formStyles.button,
   },
   elevation1: elevation1,
   link: {
-    color: '$link'
-  }
+    color: '$link',
+  },
 });

@@ -24,7 +24,7 @@ export default class IssueTabbed extends PureComponent<void, IssueTabbedState> {
   state = {
     index: 0,
     routes: this.tabRoutes,
-    isTransitionInProgress: false
+    isTransitionInProgress: false,
   };
 
   renderDetails = (uiTheme: UITheme) => null;
@@ -54,8 +54,8 @@ export default class IssueTabbed extends PureComponent<void, IssueTabbedState> {
                 {
                   color: focused && !editMode
                     ? uiThemeColors.$link
-                    : this.isTabChangeEnabled() ? uiThemeColors.$text : uiThemeColors.$disabled
-                }
+                    : this.isTabChangeEnabled() ? uiThemeColors.$text : uiThemeColors.$disabled,
+                },
               ]}>
                 {route.title}
               </Text>

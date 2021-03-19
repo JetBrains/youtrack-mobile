@@ -18,7 +18,7 @@ describe('<CommentVisibility/>', () => {
     visibilityMock = {
       $type: ResourceTypes.VISIBILITY_UNLIMITED,
       permittedUsers: [],
-      permittedGroups: []
+      permittedGroups: [],
     };
     wrapper = doShallow(visibilityMock);
   });

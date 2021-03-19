@@ -39,7 +39,7 @@ export function receiveActivityEnabledTypes() {
   return {
     type: types.RECEIVE_ACTIVITY_CATEGORIES,
     issueActivityTypes: getActivityAllTypes(),
-    issueActivityEnabledTypes: activityHelper.getIssueActivitiesEnabledTypes()
+    issueActivityEnabledTypes: activityHelper.getIssueActivitiesEnabledTypes(),
   };
 }
 
@@ -78,7 +78,7 @@ export function getTimeTracking() {
 
     logEvent({
       message: 'Create spent time',
-      analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+      analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
     });
     const [error, timeTracking] = await until(api.issue.timeTracking(issueId));
     if (error) {
@@ -110,7 +110,7 @@ export function updateWorkItemDraft(draft: WorkItem) {
 export function updateWorkItem() {
   logEvent({
     message: 'Update spent time',
-    analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+    analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
   });
 }
 
@@ -121,7 +121,7 @@ export function createWorkItem(draft: WorkItem) {
 
     logEvent({
       message: 'Create work item',
-      analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+      analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
     });
     const [error, updatedDraft] = await until(api.issue.createWorkItem(issueId, draft));
     if (error) {
@@ -154,11 +154,11 @@ export function getWorkItemAuthors() {
     const project: Folder = getState().issueState.issue.project;
     logEvent({
       message: 'SpentTime: form:get-authors',
-      analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+      analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
     });
     const promises: Array<Promise<User>> = [
       WORK_ITEM_UPDATE,
-      WORK_ITEM_CREATE
+      WORK_ITEM_CREATE,
     ].map((permissionName: string) => {
       return api.user.getHubProjectUsers(encodeURIComponent(`access(project:${project.ringId},with:{${permissionName}})`));
     });
@@ -180,7 +180,7 @@ export function getWorkItemTypes() {
     const projectId: string = getState().issueState.issue.project.id;
     logEvent({
       message: 'SpentTime: form:get-work-types',
-      analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+      analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
     });
     const [error, projectTimeTrackingSettings] = await until(api.projects.getTimeTrackingSettings(projectId));
     if (error) {

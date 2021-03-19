@@ -30,14 +30,14 @@ describe('Auth', function () {
         clientSecret: 'client-secret',
         youtrackServiceId: 'yt-service-id',
         scopes: 'scope1 scope2',
-        landingUrl: 'ytoauth://landing.url'
-      }
+        landingUrl: 'ytoauth://landing.url',
+      },
     };
 
     authParamsMock = {
       access_token: 'fake-access-token',
       refresh_token: 'fake-refresh-token',
-      token_type: 'bearer'
+      token_type: 'bearer',
     };
 
     global.fetch = sinon.spy(function (url, options) {
@@ -47,7 +47,7 @@ describe('Auth', function () {
           options: options,
           requestBody: options.body,
           resolve: resolve,
-          reject: reject
+          reject: reject,
         };
         global.fetch.onRequest(request);
         requests.push(request);
@@ -95,8 +95,8 @@ describe('Auth', function () {
       getLastRequest().resolve({
         status: 200,
         json: () => ({
-          id: 'fake-user'
-        })
+          id: 'fake-user',
+        }),
       });
 
       return promise.should.be.fulfilled;
@@ -155,7 +155,7 @@ describe('Auth', function () {
       const request = getLastRequest();
 
       request.url.should.equal(`${configMock.auth.serverUri}/api/rest/oauth2/token`);
-      request.requestBody.should.equal(`grant_type=password&access_type=offline&username=log&password=pass&scope=scope1%20scope2`);
+      request.requestBody.should.equal('grant_type=password&access_type=offline&username=log&password=pass&scope=scope1%20scope2');
       request.options.headers.Authorization.should.equal('Basic Y2xpZW50LWlkOmNsaWVudC1zZWNyZXQ=');
       request.options.headers['Content-Type'].should.equal('application/x-www-form-urlencoded');
     });
@@ -164,7 +164,7 @@ describe('Auth', function () {
       Auth.obtainTokenByCredentials('lo$g', 'pa%ss', configMock);
 
       const request = getLastRequest();
-      request.requestBody.should.equal(`grant_type=password&access_type=offline&username=lo%24g&password=pa%25ss&scope=scope1%20scope2`);
+      request.requestBody.should.equal('grant_type=password&access_type=offline&username=lo%24g&password=pa%25ss&scope=scope1%20scope2');
     });
 
     it('should authorize OAuth2 code', () => {

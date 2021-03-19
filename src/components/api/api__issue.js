@@ -20,7 +20,7 @@ export default class IssueAPI extends ApiBase {
 
   async getIssue(id: string): Promise<IssueFull> {
     const queryString = qs.stringify({
-      fields: issueFields.singleIssue.toString()
+      fields: issueFields.singleIssue.toString(),
     }, {encode: false});
 
     const issue = await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${id}?${queryString}`);
@@ -30,7 +30,7 @@ export default class IssueAPI extends ApiBase {
 
   async getIssueLinks(id: string): Promise<IssueFull> {
     const queryString = qs.stringify({
-      fields: issueFields.singleIssueLinks.toString()
+      fields: issueFields.singleIssueLinks.toString(),
     }, {encode: false});
 
     return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${id}?${queryString}`);
@@ -49,7 +49,7 @@ export default class IssueAPI extends ApiBase {
 
   async getIssueComments(issueId: string): Promise<Array<IssueComment>> {
     const queryString = qs.stringify({
-      fields: issueFields.issueComment.toString()
+      fields: issueFields.issueComment.toString(),
     });
 
     const comments = await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/comments?${queryString}`);
@@ -64,7 +64,7 @@ export default class IssueAPI extends ApiBase {
   async createIssue(issueDraft: IssueOnList) {
     const queryString = qs.stringify({
       draftId: issueDraft.id,
-      fields: issueFields.issuesOnList.toString()
+      fields: issueFields.issuesOnList.toString(),
     });
     return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`, 'POST', {});
   }
@@ -123,7 +123,7 @@ export default class IssueAPI extends ApiBase {
 
   async addCommentReaction(issueId: string, commentId: string, reactionName: string) {
     const queryString = qs.stringify({
-      fields: issueFields.reaction.toString()
+      fields: issueFields.reaction.toString(),
     });
     const url: string = `${this.youTrackIssueUrl}/${issueId}/comments/${commentId}/reactions?${queryString}`;
     return this.makeAuthorizedRequest(url, 'POST', {reaction: reactionName});
@@ -148,7 +148,7 @@ export default class IssueAPI extends ApiBase {
     formData.append('photo', {
       uri: fileUri,
       name: fileName,
-      type: 'image/binary'
+      type: 'image/binary',
     });
 
     const response = await fetch(
@@ -200,7 +200,7 @@ export default class IssueAPI extends ApiBase {
   async updateProject(issue: IssueOnList, project: IssueProject) {
     const body = {
       id: issue.id,
-      project: project
+      project: project,
     };
     return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issue.id}`, 'POST', body);
   }
@@ -208,7 +208,7 @@ export default class IssueAPI extends ApiBase {
   getVisibilityOptions = async (issueId: string): Promise<any> => {
     const queryString = qs.stringify({
       $top: 50,
-      fields: issueFields.getVisibility.toString()
+      fields: issueFields.getVisibility.toString(),
     });
     const url = `${this.youTrackUrl}/api/visibilityGroups?${queryString}`;
     const visibilityOptions = await this.makeAuthorizedRequest(url, 'POST', {issues: [{id: issueId}]});
@@ -231,7 +231,7 @@ export default class IssueAPI extends ApiBase {
     const queryString = qs.stringify({
       $top: 100,
       reverse: true,
-      fields: issueActivityPageFields.toString()
+      fields: issueActivityPageFields.toString(),
     });
 
     const response = await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/activitiesPage?${queryString}${categories}`);

@@ -6,24 +6,24 @@ export default EStyleSheet.create({
   container: {
     flex: 1,
     marginTop: UNIT * 2,
-    backgroundColor: '$background'
+    backgroundColor: '$background',
   },
   markdownScroll: {
     paddingTop: 0,
-    padding: UNIT * 2
+    padding: UNIT * 2,
   },
   buttons: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   button: {
     padding: UNIT * 2,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   buttonText: {
-    color: '$link'
+    color: '$link',
   },
   buttonTextDisabled: {
-    color: '$icon'
-  }
+    color: '$icon',
+  },
 });

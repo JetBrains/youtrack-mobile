@@ -53,7 +53,7 @@ const MarkdownViewChunks = (props: Props) => {
     );
     rules = getMarkdownRules(attaches, projects, props.uiTheme, {
       articles: mentionedArticles,
-      issues: mentionedIssues
+      issues: mentionedIssues,
     });
     return () => {
       chunks = [];

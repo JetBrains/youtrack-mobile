@@ -44,7 +44,7 @@ describe('IssueVisibility', function () {
       const visibilityMock = {
         $type: ResourceTypes.VISIBILITY_UNLIMITED,
         permittedUsers: [itemMock],
-        permittedGroups: [itemMock, itemMock]
+        permittedGroups: [itemMock, itemMock],
       };
 
       const updatedVisibility = IssueVisibility.visibility(visibilityMock, true);
@@ -63,7 +63,7 @@ describe('IssueVisibility', function () {
       const userMock1 = {id: 'bar'};
       const userMock2 = {$type: ResourceTypes.USER, id: 'foo'};
       const visibilityMock = {
-        permittedUsers: [userMock1, userMock2]
+        permittedUsers: [userMock1, userMock2],
       };
 
       const updatedVisibility = IssueVisibility.toggleOption(visibilityMock, userMock2);
@@ -77,7 +77,7 @@ describe('IssueVisibility', function () {
       const userMock1 = {id: 'bar'};
       const userMock2 = {$type: ResourceTypes.USER, id: 'foo'};
       const visibilityMock = {
-        permittedUsers: [userMock1, userMock2]
+        permittedUsers: [userMock1, userMock2],
       };
 
       const updatedVisibility = IssueVisibility.toggleOption(
@@ -93,7 +93,7 @@ describe('IssueVisibility', function () {
     it('should add an item to `permittedUsers`', () => {
       const userMock = {$type: ResourceTypes.USER, id: 'foo'};
       const visibilityMock = {
-        permittedUsers: []
+        permittedUsers: [],
       };
 
       const updatedVisibility = IssueVisibility.toggleOption(visibilityMock, userMock);
@@ -108,7 +108,7 @@ describe('IssueVisibility', function () {
       const userMock1 = {id: 'bar'};
       const userMock2 = {$type: ResourceTypes.USER_GROUP, id: 'foo'};
       const visibilityMock = {
-        permittedGroups: [userMock1, userMock2]
+        permittedGroups: [userMock1, userMock2],
       };
 
       const updatedVisibility = IssueVisibility.toggleOption(visibilityMock, userMock2);
@@ -124,8 +124,8 @@ describe('IssueVisibility', function () {
       const visibilityMock = {
         permittedGroups: [
           userMock1,
-          Object.assign({}, userMock2, {$type: getShortEntityType(ResourceTypes.USER_GROUP)})
-        ]
+          Object.assign({}, userMock2, {$type: getShortEntityType(ResourceTypes.USER_GROUP)}),
+        ],
       };
 
       const updatedVisibility = IssueVisibility.toggleOption(visibilityMock, userMock2);
@@ -138,7 +138,7 @@ describe('IssueVisibility', function () {
     it('should add an item to `permittedGroup`', () => {
       const userMock = {$type: ResourceTypes.USER_GROUP, id: 'foo'};
       const visibilityMock = {
-        permittedGroups: []
+        permittedGroups: [],
       };
 
       const updatedVisibility = IssueVisibility.toggleOption(visibilityMock, userMock);
@@ -167,14 +167,14 @@ describe('IssueVisibility', function () {
     it('should return true if it has users and groups', () => {
       const visibilityMock = {
         permittedUsers: [{}],
-        permittedGroups: [{}]
+        permittedGroups: [{}],
       };
 
       IssueVisibility.hasUsersOrGroups(visibilityMock).should.be.true;
     });
 
     it('should return false if it has no users and groups', () => {
-      const visibilityMock = {$type: ResourceTypes.VISIBILITY_LIMITED,};
+      const visibilityMock = {$type: ResourceTypes.VISIBILITY_LIMITED};
 
       IssueVisibility.hasUsersOrGroups(visibilityMock).should.be.false;
     });

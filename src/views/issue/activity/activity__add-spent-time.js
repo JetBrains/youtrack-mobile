@@ -47,14 +47,14 @@ const AddSpentTimeForm = (props: Props) => {
     date: new Date().getTime(),
     author: currentUser,
     duration: {
-      presentation: '1d'
+      presentation: '1d',
     },
     type: {
       id: null,
       key: 'no-work-type',
-      name: 'No type'
+      name: 'No type',
     },
-    text: null
+    text: null,
   };
 
   const [isProgress, updateProgress] = useState(false);
@@ -65,7 +65,7 @@ const AddSpentTimeForm = (props: Props) => {
 
   const getDraft = (draftItem: WorkItem) => ({
     ...draftItem,
-    type: !draftItem.type || draftItem.type?.id === null ? null : draftItem.type
+    type: !draftItem.type || draftItem.type?.id === null ? null : draftItem.type,
   });
 
   const updateDraft = async (draftItem: WorkItem) => {
@@ -77,7 +77,7 @@ const AddSpentTimeForm = (props: Props) => {
       updateDraftWorkItem({
         ...draftItem,
         $type: updatedDraft.$type,
-        id: updatedDraft.id
+        id: updatedDraft.id,
       });
     }
   };
@@ -100,7 +100,7 @@ const AddSpentTimeForm = (props: Props) => {
         ...timeTracking?.workItemTemplate,
         ...timeTracking?.draftWorkItem,
         usesMarkdown: true,
-        $type: undefined
+        $type: undefined,
       });
       updateProgress(false);
     }
@@ -111,7 +111,7 @@ const AddSpentTimeForm = (props: Props) => {
     updateError(false);
     const updatedDraft: WorkItem = {
       ...draft,
-      ...data
+      ...data,
     };
     updateDraftWorkItem(updatedDraft);
     if (!props.workItem) {
@@ -131,7 +131,7 @@ const AddSpentTimeForm = (props: Props) => {
       onSelect: () => {
         usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'SpentTime: visibility update');
         updateSelectVisibility(false);
-      }
+      },
     };
     return <Select {...Object.assign({}, defaultSelectProps, selectProps)}/>;
   };
@@ -142,11 +142,11 @@ const AddSpentTimeForm = (props: Props) => {
       onSelect: (author: User) => {
         logEvent({
           message: 'SpentTime: form:set-author',
-          analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+          analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
         });
         update({author});
         updateSelectVisibility(false);
-      }
+      },
     };
   };
 
@@ -159,11 +159,11 @@ const AddSpentTimeForm = (props: Props) => {
       onSelect: async (type: WorkItemType) => {
         logEvent({
           message: 'SpentTime: form:set-work-type',
-          analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+          analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
         });
         update({type});
         updateSelectVisibility(false);
-      }
+      },
     };
   };
 
@@ -178,13 +178,13 @@ const AddSpentTimeForm = (props: Props) => {
     const {onAdd = () => {}} = props;
     logEvent({
       message: 'SpentTime: form:submit',
-      analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+      analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
     });
     updateProgress(true);
     const updatedDraft: WorkItem = getDraft(draft);
     const item: ?WorkItem = await dispatch(issueActivityItems.createWorkItem({
       ...updatedDraft,
-      $type: props.workItem ? updatedDraft.$type : undefined
+      $type: props.workItem ? updatedDraft.$type : undefined,
     }));
     updateProgress(false);
     const isWorkItem = hasType.work(item);
@@ -218,7 +218,7 @@ const AddSpentTimeForm = (props: Props) => {
               .then(() => {
                 logEvent({
                   message: 'SpentTime: form:cancel',
-                  analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+                  analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
                 });
                 onClose();
               }).catch(() => null);
@@ -246,7 +246,7 @@ const AddSpentTimeForm = (props: Props) => {
     selectTextOnFocus: true,
     autoCorrect: false,
     placeholderTextColor: styles.icon.color,
-    keyboardAppearance: theme.uiTheme.name
+    keyboardAppearance: theme.uiTheme.name,
   };
   return (
     <View style={styles.container}>
@@ -283,7 +283,7 @@ const AddSpentTimeForm = (props: Props) => {
                   update({date: date.getTime()});
                   close();
                 }}
-                />
+                />,
               })
             }
           >
@@ -299,7 +299,7 @@ const AddSpentTimeForm = (props: Props) => {
           <View style={buttonStyle}>
             <Text style={[
               styles.feedbackFormTextSup,
-              error && styles.feedbackFormTextError
+              error && styles.feedbackFormTextError,
             ]}>Spent time</Text>
             <TextInput
               {...commonInputProps}

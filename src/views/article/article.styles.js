@@ -17,7 +17,7 @@ const detailsHorizontalPadding = UNIT * 2;
 export default EStyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '$background'
+    backgroundColor: '$background',
   },
   articleDetails: {
     padding: detailsHorizontalPadding,
@@ -25,7 +25,7 @@ export default EStyleSheet.create({
   },
   articleActivities: {
     padding: UNIT * 2,
-    paddingLeft: UNIT
+    paddingLeft: UNIT,
   },
   articleDetailsHeader: {
     marginTop: UNIT * 3,
@@ -35,21 +35,21 @@ export default EStyleSheet.create({
   },
   description: {
     ...mainText,
-    color: '$text'
+    color: '$text',
   },
   summaryEdit: {
     ...Platform.select({
       ios: {
-        marginTop: 3
+        marginTop: 3,
       },
       android: {
-        marginTop: 1
-      }
-    })
+        marginTop: 1,
+      },
+    }),
   },
   summaryText: {
     ...summaryTitle,
-    color: '$text'
+    color: '$text',
   },
   subArticles: {
     marginVertical: UNIT,
@@ -59,7 +59,7 @@ export default EStyleSheet.create({
     paddingRight: UNIT * 2,
     borderTopWidth: 0.75,
     borderBottomWidth: 0.74,
-    borderColor: '$separator'
+    borderColor: '$separator',
   },
   subArticlesContent: {
     flexDirection: 'row',
@@ -67,43 +67,43 @@ export default EStyleSheet.create({
     justifyContent: 'space-between',
   },
   subArticlesTitle: {
-    color: '$icon'
+    color: '$icon',
   },
   subArticlesNavigateIcon: {
     position: 'relative',
-    top: -UNIT
+    top: -UNIT,
   },
   subArticlesHeader: {
-    ...elevation1
+    ...elevation1,
   },
   articlesHeaderText: headerTitleText,
   subArticleItem: {
-    marginLeft: UNIT * 2
+    marginLeft: UNIT * 2,
   },
   subArticleItemText: {
     ...mainText,
-    color: '$text'
+    color: '$text',
   },
   subArticlesCreate: {
-    marginHorizontal: UNIT
+    marginHorizontal: UNIT,
   },
   subArticlesCreateIcon: {
     position: 'absolute',
     top: -UNIT * 2.1,
     padding: UNIT,
-    color: '$iconAccent'
+    color: '$iconAccent',
   },
 
   commentContainer: {
     maxHeight: '100%',
     paddingVertical: UNIT,
     paddingHorizontal: UNIT * 2,
-    ...elevationBottom
+    ...elevationBottom,
   },
   commentContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   commentInputContainer: {
     flexDirection: 'row',
@@ -112,7 +112,7 @@ export default EStyleSheet.create({
     marginHorizontal: UNIT,
     borderRadius: INPUT_BORDER_RADIUS,
     borderWidth: 1,
-    borderColor: '$disabled'
+    borderColor: '$disabled',
   },
   commentInput: {
     flex: 1,
@@ -121,7 +121,7 @@ export default EStyleSheet.create({
     paddingHorizontal: UNIT,
     backgroundColor: '$background',
     ...mainText,
-    color: '$text'
+    color: '$text',
   },
   commentSendButton: {
     width: MIN_INPUT_SIZE,
@@ -129,65 +129,65 @@ export default EStyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: INPUT_BORDER_RADIUS - 1,
-    backgroundColor: '$link'
+    backgroundColor: '$link',
   },
   commentSendButtonDisabled: {
     backgroundColor: '$textSecondary',
   },
   commentSendButtonText: {
     fontSize: MAIN_FONT_SIZE,
-    color: '$link'
+    color: '$link',
   },
   commentEditHeader: {
-    ...elevation1
+    ...elevation1,
   },
   commentEditContainer: {
     paddingHorizontal: UNIT * 2,
     paddingBottom: UNIT * 2,
-    marginBottom: headerMinHeight
+    marginBottom: headerMinHeight,
   },
   commentEditInput: {
-    padding: 0
+    padding: 0,
   },
 
   breadCrumbs: {
     height: UNIT * 7,
-    marginHorizontal: -detailsHorizontalPadding
+    marginHorizontal: -detailsHorizontalPadding,
   },
   breadCrumbsCompact: {
-    marginLeft: 0
+    marginLeft: 0,
   },
   breadCrumbsContent: {
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingHorizontal: detailsHorizontalPadding / 2
+    paddingHorizontal: detailsHorizontalPadding / 2,
   },
   breadCrumbsItem: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   breadCrumbsItemLast: {
-    marginLeft: UNIT
+    marginLeft: UNIT,
   },
   breadCrumbsButton: {
-    paddingVertical: UNIT
+    paddingVertical: UNIT,
   },
   breadCrumbsButtonText: {
     ...mainText,
     marginHorizontal: UNIT,
-    color: '$link'
+    color: '$link',
   },
   breadCrumbsButtonTextDisabled: {
-    color: '$text'
+    color: '$text',
   },
   breadCrumbsButtonTextSeparator: {
-    color: '$icon'
+    color: '$icon',
   },
   breadCrumbsSeparator: {
     ...separator,
-    borderColor: '$separator'
+    borderColor: '$separator',
   },
   link: {
-    color: '$link'
-  }
+    color: '$link',
+  },
 });

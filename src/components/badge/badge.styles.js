@@ -10,9 +10,9 @@ export default EStyleSheet.create({
     color: '$icon',
     borderWidth: 1,
     borderColor: '$disabled',
-    borderRadius: UNIT / 2
+    borderRadius: UNIT / 2,
   },
   badgeValid: {
-    color: '#1b8833'
-  }
+    color: '#1b8833',
+  },
 });

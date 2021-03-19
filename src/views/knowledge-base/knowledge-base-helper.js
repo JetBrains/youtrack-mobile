@@ -64,7 +64,7 @@ export const createProjectDataFromArticles = (articles: Array<ProjectArticlesDat
       if (!data[article.project.id]) {
         data[article.project.id] = {
           project: article.project,
-          articles: []
+          articles: [],
         };
       }
       data[article.project.id].articles.push(article);

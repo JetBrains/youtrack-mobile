@@ -74,14 +74,14 @@ const mapStateToProps = (state, ownProps) => {
   return {
     show: state.app.showUserAgreement,
     agreement: state.app.endUserAgreement,
-    ...ownProps
+    ...ownProps,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     onAccept: () => dispatch(acceptUserAgreement()),
-    onDecline: () => dispatch(declineUserAgreement())
+    onDecline: () => dispatch(declineUserAgreement()),
   };
 };
 

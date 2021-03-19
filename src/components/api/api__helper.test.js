@@ -12,7 +12,7 @@ describe('Api helper', () => {
       ApiHelper.toField({
         id: null,
         type: null,
-        name: null
+        name: null,
       }).toString().should.equal('id,type,name');
     });
 
@@ -27,9 +27,9 @@ describe('Api helper', () => {
           'first',
           {
             bar: {
-              foobar: ['test']
-            }
-          }]
+              foobar: ['test'],
+            },
+          }],
       }]);
       fields.toString().should.equal('foo(first,bar(foobar(test)))');
     });
@@ -37,8 +37,8 @@ describe('Api helper', () => {
     it('should support nested toField objects', () => {
       const fields = ApiHelper.toField([{
         foo: {
-          bar: ApiHelper.toField(['first', 'second'])
-        }
+          bar: ApiHelper.toField(['first', 'second']),
+        },
       }]);
       fields.toString().should.equal('foo(bar(first,second))');
     });
@@ -52,12 +52,12 @@ describe('Api helper', () => {
           {
             projectCustomField: {
               field: {
-                name: 'testField'
-              }
+                name: 'testField',
+              },
             },
-            value: {foo: 'bar'}
-          }
-        ]
+            value: {foo: 'bar'},
+          },
+        ],
       };
     });
 
@@ -77,8 +77,8 @@ describe('Api helper', () => {
     it('should convert relative urls to absolute', () => {
       const items = [
         {
-          url: '/bar'
-        }
+          url: '/bar',
+        },
       ];
       const fixedItems = ApiHelper.convertRelativeUrls(items, 'url', 'http://test.com');
 
@@ -88,8 +88,8 @@ describe('Api helper', () => {
     it('should not touch absolute urls', () => {
       const items = [
         {
-          url: 'https://youtrack/bar'
-        }
+          url: 'https://youtrack/bar',
+        },
       ];
       const fixedItems = ApiHelper.convertRelativeUrls(items, 'url', 'http://test.com');
 
@@ -99,7 +99,7 @@ describe('Api helper', () => {
     it('should patch all possible avatar field values', () => {
       const res = ApiHelper.patchAllRelativeAvatarUrls({
         val: 'foo',
-        avatarUrl: '/hub/api/rest/avatar/123'
+        avatarUrl: '/hub/api/rest/avatar/123',
       }, 'http://test.com');
 
       res.val.should.equal('foo');
@@ -110,8 +110,8 @@ describe('Api helper', () => {
       const res = ApiHelper.patchAllRelativeAvatarUrls({
         val: 'foo',
         test: {
-          avatarUrl: '/hub/api/rest/avatar/123'
-        }
+          avatarUrl: '/hub/api/rest/avatar/123',
+        },
       }, 'http://test.com');
 
       res.val.should.equal('foo');
@@ -132,13 +132,13 @@ describe('Api helper', () => {
       beforeEach(() => {
         items = [{
           name: 'John',
-          id: 1
+          id: 1,
         }, {
           name: 'Anna',
-          id: 2
+          id: 2,
         }, {
           name: 'John',
-          id: 3
+          id: 3,
         }];
       });
 

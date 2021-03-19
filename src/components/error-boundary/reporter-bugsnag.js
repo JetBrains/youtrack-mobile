@@ -24,7 +24,7 @@ class ReporterBugsnag {
     this.config.appVersion = appPackage.bugsnag.version;
     this.config.notifyReleaseStages = ['production'];
     this.exceptionReporter = new Client(this.config);
-    log.info(`Bugsnag exception reporter instance created`);
+    log.info('Bugsnag exception reporter instance created');
   }
 
   hasToken(): ?string {
@@ -49,7 +49,7 @@ class ReporterBugsnag {
       err = new Error(typeof error !== 'string' ? JSON.stringify(error) : error);
     }
 
-    log.debug(`Reporting Bugsnag exception...`, err);
+    log.debug('Reporting Bugsnag exception...', err);
 
     let config: AppConfig | Object = {};
     try {
@@ -66,11 +66,11 @@ class ReporterBugsnag {
             'buildNumber': this.buildNumber,
           },
           'YouTrack': {
-            'version': config?.version
+            'version': config?.version,
           },
         };
       });
-      log.debug(`Bugsnag exception reported`, err);
+      log.debug('Bugsnag exception reported', err);
     } catch (e) {
       //
     }

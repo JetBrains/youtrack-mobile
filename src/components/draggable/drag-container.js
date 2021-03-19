@@ -10,7 +10,7 @@ import {
   Modal,
   Easing,
   Animated,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
 } from 'react-native';
 
 import typeof Draggable from './draggable';
@@ -78,7 +78,7 @@ class DragContainer extends React.Component<Props, State> {
 
   state = {
     location: new Animated.ValueXY(),
-    draggingComponent: null
+    draggingComponent: null,
   };
 
   dropZones: Array<Object> = [];
@@ -91,7 +91,7 @@ class DragContainer extends React.Component<Props, State> {
   }
 
   componentWillUnmount() {
-    if (this._listener) this.state.location.removeListener(this._listener);
+    if (this._listener) {this.state.location.removeListener(this._listener);}
   }
 
   reportOnDragStart: Function = () => {};
@@ -107,7 +107,7 @@ class DragContainer extends React.Component<Props, State> {
       removeZone: this.removeZone,
       registerOnDragStart: this.registerOnDragStart,
       registerOnDrag: this.registerOnDrag,
-      registerOnDrop: this.registerOnDrop
+      registerOnDrop: this.registerOnDrop,
     };
   }
 
@@ -153,7 +153,7 @@ class DragContainer extends React.Component<Props, State> {
     const {startPosition} = this.state.draggingComponent;
     return {
       x: cornerPoint.x + startPosition.width / 2,
-      y: cornerPoint.y + startPosition.height / 2
+      y: cornerPoint.y + startPosition.height / 2,
     };
   }
 
@@ -201,12 +201,12 @@ class DragContainer extends React.Component<Props, State> {
         easing: Easing.elastic(1),
         toValue: {
           x: 0, //this._offset.x - x,
-          y: 0 //his._offset.y - y
-        }
+          y: 0, //his._offset.y - y
+        },
       }).start(() => {
         this._locked = false;
         this.setState({
-          draggingComponent: null
+          draggingComponent: null,
         });
       });
     }
@@ -231,15 +231,15 @@ class DragContainer extends React.Component<Props, State> {
           null,
           {
             dx: this.state.location.x, // x,y are Animated.Value
-            dy: this.state.location.y
-          }
+            dy: this.state.location.y,
+          },
         ]).apply(this, args),
       onPanResponderTerminationRequest: (evt, gestureState) => true,
       onPanResponderRelease: (evt, gestureState) => {
-        if (!this.state.draggingComponent) return;
+        if (!this.state.draggingComponent) {return;}
         //Ensures we exit all of the active drop zones
         this._handleDrop();
-      }
+      },
     });
   }
 
@@ -276,9 +276,9 @@ class DragContainer extends React.Component<Props, State> {
               x: pageX,
               y: pageY,
               width,
-              height
-            }
-          }
+              height,
+            },
+          },
         },
         () => {
           if (this.props.onDragStart){

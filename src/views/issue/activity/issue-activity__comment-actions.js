@@ -12,7 +12,7 @@ import {
   loadActivitiesPage,
   receiveActivityAPIAvailability,
   receiveActivityEnabledTypes,
-  receiveActivityPage
+  receiveActivityPage,
 } from './issue-activity__actions';
 import {COMMENT_REACTIONS_SEPARATOR} from '../../../components/reactions/reactions';
 import {getEntityPresentation} from '../../../components/issue-formatter/issue-formatter';
@@ -21,7 +21,7 @@ import {showActions} from '../../../components/action-sheet/action-sheet';
 import {until} from '../../../util/util';
 import {
   convertCommentsToActivityPage,
-  findActivityInGroupedActivities
+  findActivityInGroupedActivities,
 } from '../../../components/activity/activity-helper';
 
 import * as types from '../issue-action-types';
@@ -232,7 +232,7 @@ export function deleteCommentPermanently(comment: IssueComment, activityId?: str
           dispatch(loadActivity());
         } catch (error) {
           dispatch(loadActivity());
-          notify(`Failed to delete comment. Refresh`, error);
+          notify('Failed to delete comment. Refresh', error);
         }
       })
       .catch(() => {});
@@ -267,7 +267,7 @@ export function showIssueCommentActions(
         execute: () => {
           dispatch(copyCommentUrl(comment));
           usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy comment URL');
-        }
+        },
       },
     ];
     if (canUpdateComment) {
@@ -276,7 +276,7 @@ export function showIssueCommentActions(
         execute: () => {
           usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Edit comment');
           dispatch(startEditingComment(comment));
-        }
+        },
       });
     }
     if (canDeleteComment) {
@@ -285,7 +285,7 @@ export function showIssueCommentActions(
         execute: () => {
           usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Delete comment');
           dispatch(deleteComment(comment));
-        }
+        },
       });
     }
     actions.push({title: 'Cancel'});
@@ -342,7 +342,7 @@ export function onOpenCommentVisibilitySelect(comment: IssueComment) {
     const issueId: IssueFull = getState().issueState.issue.id;
     const selectedItems = [
       ...(comment?.visibility?.permittedGroups || []),
-      ...(comment?.visibility?.permittedUsers || [])
+      ...(comment?.visibility?.permittedUsers || []),
     ];
 
     usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Open comment visibility select');
@@ -363,7 +363,7 @@ export function onOpenCommentVisibilitySelect(comment: IssueComment) {
         comment.visibility = IssueVisibility.toggleOption(comment.visibility, selectedOption);
         dispatch(updateCommentWithVisibility(comment));
         dispatch(onCloseSelect(false));
-      }
+      },
     }, true));
   };
 }

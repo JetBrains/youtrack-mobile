@@ -24,5 +24,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginLeft: UNIT,
     marginRight: UNIT,
-  }
+  },
 });

@@ -55,13 +55,13 @@ export default class ErrorMessageInline extends PureComponent<Props, void> {
 const styles = EStyleSheet.create({
   error: {
     marginTop: UNIT,
-    marginBottom: UNIT * 2
+    marginBottom: UNIT * 2,
   },
   errorText: {
     marginBottom: UNIT,
-    color: '$error'
+    color: '$error',
   },
   link: {
-    color: '$link'
-  }
+    color: '$link',
+  },
 });

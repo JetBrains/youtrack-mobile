@@ -56,7 +56,7 @@ function getMarkdownRules(
     const imageProps: Object = {
       key,
       style: dimensions,
-      source: {uri, headers: imageHeaders}
+      source: {uri, headers: imageHeaders},
     };
 
     if (alt) {
@@ -89,7 +89,7 @@ function getMarkdownRules(
         key: node.key,
         uri: url,
         alt: alt,
-        imageDimensions: targetAttach?.imageDimensions
+        imageDimensions: targetAttach?.imageDimensions,
       });
     },
 
@@ -162,7 +162,7 @@ function getMarkdownRules(
             key: node.key,
             uri: attach.url,
             alt: node?.attributes?.alt,
-            imageDimensions: attach.imageDimensions
+            imageDimensions: attach.imageDimensions,
           });
         }
       }
@@ -188,7 +188,7 @@ function getMarkdownRules(
           </Text>
         </Hyperlink>
       );
-    }
+    },
   };
 }
 
@@ -218,7 +218,7 @@ function renderArticleMentions(
     const token: string = tokens[i];
     const tokenTextData: TextData = {
       text: token,
-      type: null
+      type: null,
     };
 
     for (let j = 0; j < combinedMentions.length; j++) {
@@ -229,13 +229,13 @@ function renderArticleMentions(
       if (token === entity.idReadable) {
         textData.push({
           text: entity.idReadable,
-          type: entity.$type
+          type: entity.$type,
         });
       } else {
         token.split(entity.idReadable).forEach((str: string) => {
           textData.push({
             text: str ? str : entity.idReadable,
-            type: str ? PLAIN_TEXT_TYPE : entity.$type
+            type: str ? PLAIN_TEXT_TYPE : entity.$type,
           });
         });
       }

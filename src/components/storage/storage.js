@@ -79,7 +79,7 @@ const storageKeys: StorageStateKeys = {
   currentAppVersion: 'YT_CURRENT_APP_VERSION',
   issueActivitiesEnabledTypes: 'YT_ISSUE_ACTIVITIES_ENABLED_TYPES',
   permissions: 'YT_USER_PERMISSIONS',
-  themeMode: THEME_MODE_KEY
+  themeMode: THEME_MODE_KEY,
 };
 
 let storageState: ?StorageState = null;
@@ -113,7 +113,7 @@ export const initialState: StorageState = Object.freeze({
   issueActivitiesEnabledTypes: null,
   permissions: null,
   agileDefaultBoard: null,
-  themeMode: null
+  themeMode: null,
 });
 
 function cleanAndLogState(message, state) {
@@ -166,7 +166,7 @@ export async function clearCachesAndDrafts() {
     storageKeys.issueActivitiesEnabledTypes,
     storageKeys.permissions,
     storageKeys.agileDefaultBoard,
-    storageKeys.projects
+    storageKeys.projects,
   ]);
   return populateStorage();
 }
@@ -238,7 +238,7 @@ export async function flushStoragePart(part: Object): Promise<StorageState> {
     cleanAndLogState('Flushing storage part', part);
     newState = flushStorage({
       ...currentState,
-      ...part
+      ...part,
     });
   } catch (error) {
     newState = new Promise(resolve => resolve(currentState));

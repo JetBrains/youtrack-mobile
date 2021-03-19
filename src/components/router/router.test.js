@@ -5,7 +5,7 @@ describe('Router', () => {
 
   beforeEach(() => {
     navigatorMock = {
-      dispatch: jest.fn()
+      dispatch: jest.fn(),
     };
     Router.setNavigator(navigatorMock);
   });
@@ -40,7 +40,7 @@ describe('Router', () => {
         name: routeNameMock,
         component: {barr: componentNameMock},
         modal: modalParamMock,
-        props: {[propNameMock]: propsMock}
+        props: {[propNameMock]: propsMock},
       });
 
       expect(Router.routes.foo.screen).toBeDefined();
@@ -53,7 +53,7 @@ describe('Router', () => {
         Router.registerRoute({
           name: routeNameMock,
           component: {barr: componentNameMock},
-          animation: 'fake-animation'
+          animation: 'fake-animation',
         });
 
         Router.foo();
@@ -63,7 +63,7 @@ describe('Router', () => {
 
       it('should navigate', () => {
         Router.registerRoute({
-          name: routeNameMock
+          name: routeNameMock,
         });
 
         Router.navigate(routeNameMock);

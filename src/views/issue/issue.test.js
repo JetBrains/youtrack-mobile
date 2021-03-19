@@ -25,7 +25,7 @@ describe('Issue view actions', () => {
 
   beforeEach(() => {
     fakeIssue = {
-      id: ISSUE_ID
+      id: ISSUE_ID,
     };
     fakeComment = {id: 'fake-comment', text: 'fake-text'};
     fakeApi = {
@@ -33,14 +33,14 @@ describe('Issue view actions', () => {
         getIssue: sinon.stub().returns(fakeIssue),
         getIssueComments: sinon.stub().returns([fakeComment]),
         submitComment: sinon.stub().returns(fakeComment),
-        getActivitiesPage: sinon.stub().returns([])
-      }
+        getActivitiesPage: sinon.stub().returns([]),
+      },
     };
     store = mockStore({
       issueState: {issueId: ISSUE_ID, issue: fakeIssue},
       issueActivity: {
-        activityPage: []
-      }
+        activityPage: [],
+      },
     });
   });
 
@@ -67,7 +67,7 @@ describe('Issue view actions', () => {
     expect(dispatched[2]).toEqual({type: types.RECEIVE_ACTIVITY_API_AVAILABILITY, activitiesEnabled: false});
     expect(dispatched[4]).toEqual({
       type: types.RECEIVE_ACTIVITY_PAGE,
-      activityPage: convertCommentsToActivityPage([fakeComment])
+      activityPage: convertCommentsToActivityPage([fakeComment]),
     });
   });
 
@@ -76,7 +76,7 @@ describe('Issue view actions', () => {
     const issueCommentsSelectedTypeMock = 'IssueComments';
     const issueActivityEnabledTypesMock = [{
       id: issueCommentsSelectedTypeMock,
-      name: 'Show comments'
+      name: 'Show comments',
     }];
     let actionsIsActivitiesAPIEnabled;
     let getIssueActivitiesEnabledTypes;

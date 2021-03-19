@@ -40,7 +40,7 @@ export default class QueryAssist extends Component<Props, State> {
     inputValue: '',
     caret: 0,
     queryCopy: '',
-    suggestionsListTop: 0
+    suggestionsListTop: 0,
   };
 
   constructor(props: Props) {
@@ -81,7 +81,7 @@ export default class QueryAssist extends Component<Props, State> {
     inputValue = inputValue || '';
     this.setState({
       queryCopy: inputValue,
-      suggestionsListTop: 0
+      suggestionsListTop: 0,
     });
 
     this.props.onChange(inputValue, inputValue.length);
@@ -138,7 +138,7 @@ export default class QueryAssist extends Component<Props, State> {
       <View
         style={[
           styles.inputWrapper,
-          styles.inputWrapperActive
+          styles.inputWrapperActive,
         ]}
         ref={node => this.queryAssistContainer = node}
       >

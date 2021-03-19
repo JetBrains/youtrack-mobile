@@ -12,7 +12,7 @@ import {until} from '../../util/util';
 import {
   setArticleDraft,
   setError,
-  setProcessing
+  setProcessing,
 } from './article-create-reducers';
 import usage from '../../components/usage/usage';
 
@@ -152,7 +152,7 @@ const deleteDraftAttachment = (attachmentId: string) => {
       logEvent({message: 'Attachment deleted', analyticsId: ANALYTICS_ARTICLE_CREATE_PAGE});
       dispatch(setDraft(
         {
-          ...articleDraft, attachments: articleDraft.attachments.filter((it: Attachment) => it.id !== attachmentId)
+          ...articleDraft, attachments: articleDraft.attachments.filter((it: Attachment) => it.id !== attachmentId),
         }));
     }
   };
@@ -183,5 +183,5 @@ export {
   hideAddAttachDialog,
   loadAttachments,
   showAddAttachDialog,
-  uploadFile
+  uploadFile,
 };

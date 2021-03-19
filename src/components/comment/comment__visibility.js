@@ -29,7 +29,7 @@ export default class CommentVisibility extends PureComponent<Props, void> {
           />
           <Text style={[
             styles.commentVisibilityText,
-            this.props.color ? {color: this.props.color} : null
+            this.props.color ? {color: this.props.color} : null,
           ]}>
             {this.props.visibility}
           </Text>

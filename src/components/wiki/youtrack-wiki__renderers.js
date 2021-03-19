@@ -80,7 +80,7 @@ export function renderImage({node, index, attachments, imageHeaders, onImagePres
           source={source}
           style={{
             ...dimensions,
-            resizeMode: 'contain'
+            resizeMode: 'contain',
           }}
         />
         {isAndroid && '\n\n\n\n\n\n'}
@@ -94,7 +94,7 @@ export function renderTableRow(node: Object, index: number, defaultRenderer: Fun
   return (
     <Text key={index} style={[isBold && {
       fontWeight: 'bold',
-      backgroundColor: EStyleSheet.value('$textSecondary')
+      backgroundColor: EStyleSheet.value('$textSecondary'),
     }]}>
       {''}
       {defaultRenderer(node.children, node.parent)}
@@ -107,7 +107,7 @@ export function renderTableCell(node: Object, index: number, defaultRenderer: Fu
   return (
     <Text numberOfLines={1} key={index} style={{
       width: 40,
-      flex: 1
+      flex: 1,
     }}>
       {' | '}
       {defaultRenderer(node.children, node.parent)}

@@ -58,7 +58,7 @@ export const initialState: State = {
   updateUserAppearanceProfile: null,
 
   attachingImage: null,
-  isAttachFileDialogVisible: false
+  isAttachFileDialogVisible: false,
 };
 
 const attachReducers = {
@@ -70,7 +70,7 @@ const attachReducers = {
         ...state.issue,
         attachments: [...state.issue.attachments, attachingImage],
       },
-      attachingImage
+      attachingImage,
     };
   },
   [attachmentTypes.ATTACH_CANCEL_ADDING](state: State, action: {attachingImage: Object}): State {
@@ -81,7 +81,7 @@ const attachReducers = {
         ...state.issue,
         attachments: state.issue.attachments.filter(attachment => attachment !== attachingImage),
       },
-      attachingImage: null
+      attachingImage: null,
     };
   },
   [attachmentTypes.ATTACH_REMOVE](state: State, action: {attachmentId: string}): State {
@@ -90,7 +90,7 @@ const attachReducers = {
       issue: {
         ...state.issue,
         attachments: state.issue.attachments.filter(attach => attach.id !== action.attachmentId),
-      }
+      },
     };
   },
   [attachmentTypes.ATTACH_STOP_ADDING](state: State): State {
@@ -99,7 +99,7 @@ const attachReducers = {
   [attachmentTypes.ATTACH_TOGGLE_ADD_FILE_DIALOG](state: State, action: {isAttachFileDialogVisible: boolean}): State {
     return {
       ...state,
-      isAttachFileDialogVisible: action.isAttachFileDialogVisible
+      isAttachFileDialogVisible: action.isAttachFileDialogVisible,
     };
   },
   [attachmentTypes.ATTACH_RECEIVE_ALL_ATTACHMENTS](state: State, action: {attachments: boolean}): State {
@@ -108,7 +108,7 @@ const attachReducers = {
       issue: {
         ...state.issue,
         attachments: action.attachments,
-      }
+      },
     };
   },
 };
@@ -141,7 +141,7 @@ export default createReducer(initialState, {
       issueLoadingError: null,
       issue: {
         ...action.issue,
-      }
+      },
     };
   },
   [types.RECEIVE_ISSUE_LINKS]: (state: State, action: { issueLinks: Array<AnyIssue> }): State => {
@@ -149,8 +149,8 @@ export default createReducer(initialState, {
       ...state,
       issue: {
         ...state.issue,
-        links: action.issueLinks
-      }
+        links: action.issueLinks,
+      },
     };
   },
   [types.RECEIVE_ISSUE_VISIBILITY]: (state: State, action: { visibility: Visibility }): State => {
@@ -158,8 +158,8 @@ export default createReducer(initialState, {
       ...state,
       issue: {
         ...state.issue,
-        visibility: action.visibility
-      }
+        visibility: action.visibility,
+      },
     };
   },
   [types.RECEIVE_ISSUE_ERROR]: (state: State, action: { error: Error }): State => {
@@ -170,7 +170,7 @@ export default createReducer(initialState, {
       ...state,
       summaryCopy: state.issue.summary,
       descriptionCopy: state.issue.description,
-      editMode: true
+      editMode: true,
     };
   },
   [types.STOP_EDITING_ISSUE]: (state: State): State => {
@@ -182,20 +182,20 @@ export default createReducer(initialState, {
       issue: {
         ...state.issue,
         summary: action.summary,
-        description: action.description
-      }
+        description: action.description,
+      },
     };
   },
   [types.SET_ISSUE_SUMMARY_COPY]: (state: State, action: { summary: string }): State => {
     return {
       ...state,
-      summaryCopy: action.summary
+      summaryCopy: action.summary,
     };
   },
   [types.SET_ISSUE_DESCRIPTION_COPY]: (state: State, action: { description: string }): State => {
     return {
       ...state,
-      descriptionCopy: action.description
+      descriptionCopy: action.description,
     };
   },
   [types.START_SAVING_EDITED_ISSUE]: (state: State,): State => {
@@ -212,8 +212,8 @@ export default createReducer(initialState, {
         ...state.issue,
         fields: [...state.issue.fields].map(it => {
           return it === field ? {...it, value} : it;
-        })
-      }
+        }),
+      },
     };
   },
   [types.SET_PROJECT]: (state: State, action: { project: IssueProject }): State => {
@@ -221,15 +221,15 @@ export default createReducer(initialState, {
       ...state,
       issue: {
         ...state.issue,
-        project: action.project
-      }
+        project: action.project,
+      },
     };
   },
   [types.SET_VOTED]: (state: State, action: { voted: boolean }): State => {
     const {issue} = state;
     const {voted} = action;
-    const votes: number = (issue?.votes || 0) + (voted ? 1 : - 1);
-    if (votes >=0 ) {
+    const votes: number = (issue?.votes || 0) + (voted ? 1 : -1);
+    if (votes >= 0 ) {
       return {
         ...state,
         issue: {
@@ -237,9 +237,9 @@ export default createReducer(initialState, {
           votes,
           voters: {
             ...state.issue.voters,
-            hasVote: voted
-          }
-        }
+            hasVote: voted,
+          },
+        },
       };
     } else {
       return state;
@@ -254,9 +254,9 @@ export default createReducer(initialState, {
         ...issue,
         watchers: {
           ...issue?.watchers,
-          hasStar: starred
-        }
-      }
+          hasStar: starred,
+        },
+      },
     };
   },
   [types.UNLOAD_ACTIVE_ISSUE_VIEW]: (state: State): State => {
@@ -283,13 +283,13 @@ export default createReducer(initialState, {
   [types.OPEN_ISSUE_SELECT]: (state: State, action: Object) => {
     return {
       ...state,
-      ...action
+      ...action,
     };
   },
   [types.CLOSE_ISSUE_SELECT]: (state: State, action: Object) => {
     return {
       ...state,
-      ...action
+      ...action,
     };
-  }
+  },
 });

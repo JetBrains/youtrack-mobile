@@ -48,12 +48,12 @@ const COLOR_PARIS = [
   ['#D50F6B', '#E73AE8'],
   ['#ED5502', '#E73AE8'],
   ['#ED358C', '#DBED18'],
-  ['#ED358C', '#F9902E']
+  ['#ED358C', '#F9902E'],
 ];
 
 function hashCode(value) {
   let hash = 0, i, chr;
-  if (value.length === 0) return hash;
+  if (value.length === 0) {return hash;}
   for (i = 0; i < value.length; i++) {
     chr = value.charCodeAt(i);
     hash = ((hash << 5) - hash) + chr;
@@ -73,7 +73,7 @@ export default class DefaultAvatar extends PureComponent<Props, void> {
     const colors = COLOR_PARIS[Math.abs(hashCode(text.toLowerCase()) % COLOR_PARIS.length)];
     const textStyle = [styles.text, {
       fontSize: size / 2,
-      lineHeight: size / 2
+      lineHeight: size / 2,
     }];
 
     return (
@@ -83,7 +83,7 @@ export default class DefaultAvatar extends PureComponent<Props, void> {
           [
             styles.common,
             style,
-            size ? {width: size, height: size,} : styles.size40
+            size ? {width: size, height: size} : styles.size40,
           ]
         }
       >

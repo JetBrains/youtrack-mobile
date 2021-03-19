@@ -52,7 +52,7 @@ type Props = ArticleState & {
 //$FlowFixMe
 class Article extends IssueTabbed<Props, IssueTabbedState> {
   static contextTypes = {
-    actionSheet: PropTypes.func
+    actionSheet: PropTypes.func,
   };
 
   props: Props;
@@ -168,7 +168,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
                 getOptions={() => getApi().articles.getVisibilityOptions(articleData.idReadable)}
                 visibilityDefaultLabel="Visible to article readers"
               />
-              {articleData?.hasUnpublishedChanges && <Badge valid={true} text='in revision'/>}
+              {articleData?.hasUnpublishedChanges && <Badge valid={true} text="in revision"/>}
             </View>
 
             <CreateUpdateInfo
@@ -195,7 +195,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
                   {this.renderBreadCrumbs({
                     style: styles.breadCrumbsCompact,
                     withSeparator: true,
-                    withLast: true
+                    withLast: true,
                   })}
                 </View>
               )
@@ -295,11 +295,11 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
         this.canDeleteArticle(),
         () => this.renderBreadCrumbs({
           styles: styles.breadCrumbsCompact,
-          excludeProject: true
+          excludeProject: true,
         }),
         issuePermissions.canStar(),
         articleData.hasStar
-      )
+      ),
     };
 
     return <Header {...props}>
@@ -307,7 +307,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
         onPress={() => {
           this.articleDetailsList && this.articleDetailsList.scrollToOffset({
             animated: true,
-            offset: 0
+            offset: 0,
           });
         }}
       >
@@ -347,7 +347,7 @@ const mapStateToProps = (
     articlePlaceholder: ownProps.articlePlaceholder,
     issuePermissions: state.app.issuePermissions,
     lastVisitedArticle: state.app?.user?.profiles?.articles?.lastVisitedArticle,
-    articlesList: createArticleList(state.articles.articles || getStorageState().articles || [])
+    articlesList: createArticleList(state.articles.articles || getStorageState().articles || []),
   };
 };
 const mapDispatchToProps = (dispatch) => {

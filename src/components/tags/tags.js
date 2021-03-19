@@ -29,23 +29,23 @@ const NO_COLOR_CODING_ID = '0';
 
 export default class Tags extends PureComponent<Props, void> {
   static defaultProps: DefaultProps = {
-    onTagPress: () => {}
+    onTagPress: () => {},
   };
   static contextTypes = {
-    actionSheet: PropTypes.func
+    actionSheet: PropTypes.func,
   };
 
   getContextActions(tag: Tag) {
     const actions: Array<{ title: string, execute?: () => any }> = [
       {
         title: `Show all issues tagged with "${tag.name}"...`,
-        execute: () => this.props.onTagPress(tag.query)
-      }
+        execute: () => this.props.onTagPress(tag.query),
+      },
     ];
     if (this.props.onTagRemove) {
       actions.push({
         title: 'Remove tag',
-        execute: () => this.props.onTagRemove && this.props.onTagRemove(tag.id)
+        execute: () => this.props.onTagRemove && this.props.onTagRemove(tag.id),
       });
     }
     actions.push({title: 'Cancel'});

@@ -8,5 +8,5 @@ export default {
 
   setInternetCredentials(server: string, username: string, password: string) {
     return setInternetCredentials(server, username, password);
-  }
+  },
 };

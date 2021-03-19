@@ -11,6 +11,6 @@ module.exports = {
     element: true,
     device: true,
     by: true,
-    waitFor: true
-  }
+    waitFor: true,
+  },
 };

@@ -88,7 +88,7 @@ const initialEditorsState = {
     onChangeSelection: items => {},
     onSelect: () => {},
     multi: false,
-    selectedItems: []
+    selectedItems: [],
   },
 
   datePicker: {
@@ -98,15 +98,15 @@ const initialEditorsState = {
     withTime: false,
     value: new Date(),
     onSelect: () => {
-    }
+    },
   },
 
   simpleValue: {
     show: false,
     value: '',
     placeholder: '',
-    onApply: () => {}
-  }
+    onApply: () => {},
+  },
 };
 
 const DATE_AND_TIME = 'date and time';
@@ -126,7 +126,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       savingField: null,
       isEditingProject: false,
       isSavingProject: false,
-      ...initialEditorsState
+      ...initialEditorsState,
     };
   }
 
@@ -194,8 +194,8 @@ export default class CustomFieldsPanel extends Component<Props, State> {
           this.closeEditor();
           this.setState({isSavingProject: true});
           return this.props.onUpdateProject(project).then(() => this.setState({isSavingProject: false}));
-        }
-      }
+        },
+      },
     });
   };
 
@@ -204,7 +204,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       this.setState({
         editingField: null,
         isEditingProject: false,
-        ...initialEditorsState
+        ...initialEditorsState,
       }, resolve);
     });
   }
@@ -220,7 +220,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
           [],
           {
             hour: '2-digit',
-            minute: '2-digit'
+            minute: '2-digit',
           }
         ) : null,
         title: field.projectCustomField.field.name,
@@ -243,8 +243,8 @@ export default class CustomFieldsPanel extends Component<Props, State> {
           }
 
           this.saveUpdatedField(field, date.getTime());
-        }
-      }
+        },
+      },
     });
   }
 
@@ -255,7 +255,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       string: 'Type value',
       text: 'Type text value',
       float: 'Type float value',
-      default: '1w 1d 1h 1m'
+      default: '1w 1d 1h 1m',
     };
 
     const valueFormatters = {
@@ -263,7 +263,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       float: value => parseFloat(value),
       string: value => value,
       text: value => ({text: value}),
-      default: value => ({presentation: value})
+      default: value => ({presentation: value}),
     };
 
     const placeholder = placeholders[type] || placeholders.default;
@@ -278,8 +278,8 @@ export default class CustomFieldsPanel extends Component<Props, State> {
         show: true,
         placeholder,
         value,
-        onApply: (value) => this.saveUpdatedField(field, valueFormatter(value))
-      }
+        onApply: (value) => this.saveUpdatedField(field, valueFormatter(value)),
+      },
     });
   }
 
@@ -317,11 +317,11 @@ export default class CustomFieldsPanel extends Component<Props, State> {
         onChangeSelection: selectedItems => this.setState({
           select: {
             ...this.state.select,
-            selectedItems
-          }
+            selectedItems,
+          },
         }),
-        onSelect: (value) => this.saveUpdatedField(field, value)
-      }
+        onSelect: (value) => this.saveUpdatedField(field, value),
+      },
     });
   }
 
@@ -338,7 +338,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     this.setState({
       editingField: field,
       isEditingProject: false,
-      ...initialEditorsState
+      ...initialEditorsState,
     });
 
     if (fieldType.valueType === 'date' || fieldType.valueType === DATE_AND_TIME) {
@@ -365,7 +365,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     scrollNode.scrollTo({
       x: this.currentScrollX,
       y: 0,
-      animated: false
+      animated: false,
     });
 
     // Android doesn't get first scrollTo call https://youtrack.jetbrains.com/issue/YTM-402
@@ -430,8 +430,8 @@ export default class CustomFieldsPanel extends Component<Props, State> {
                 this.setState({
                   datePicker: {
                     ...datePicker,
-                    time: text
-                  }
+                    time: text,
+                  },
                 });
               }}
             />
@@ -476,8 +476,8 @@ export default class CustomFieldsPanel extends Component<Props, State> {
               this.setState({
                 simpleValue: {
                   ...this.state.simpleValue,
-                  value
-                }
+                  value,
+                },
               });
             }}
             onSubmitEditing={() => simpleValue.onApply(simpleValue.value)}
@@ -504,7 +504,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
             onScroll={this.storeScrollPosition}
             contentOffset={{
               x: this.currentScrollX,
-              y: 0
+              y: 0,
             }}
             scrollEventThrottle={100}
             horizontal={true}

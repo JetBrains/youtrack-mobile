@@ -12,7 +12,7 @@ export default class IssueVisibility {
     const _visibility: Visibility = Object.assign(
       {
         permittedUsers: [],
-        permittedGroups: []
+        permittedGroups: [],
       },
       visibility
     );
@@ -49,7 +49,7 @@ export default class IssueVisibility {
     const _visibility = this.visibility(visibility);
     const visibilityTypes = [
       {type: addTypes(ResourceTypes.USER), key: 'permittedUsers'},
-      {type: addTypes(ResourceTypes.USER_GROUP), key: 'permittedGroups'}
+      {type: addTypes(ResourceTypes.USER_GROUP), key: 'permittedGroups'},
     ];
 
     // eslint-disable-next-line no-unused-vars
@@ -87,6 +87,6 @@ export default class IssueVisibility {
   static getVisibilityShortPresentation(visibility: Visibility = {}): string {
     const visibilityItems: Array<UserGroup | User> = IssueVisibility.getVisibilityAsArray(visibility);
     const firstItemPresentation: string = getEntityPresentation(visibilityItems[0]);
-    return `${firstItemPresentation}${visibilityItems.length > 1 ? ` +${visibilityItems.length - 1}`: ''}`;
+    return `${firstItemPresentation}${visibilityItems.length > 1 ? ` +${visibilityItems.length - 1}` : ''}`;
   }
 }

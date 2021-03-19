@@ -19,7 +19,7 @@ export default class ServersideEvents {
     const queryString = qs.stringify(
       {
         ticket,
-        fields: agileFields.liveUpdate.toString()
+        fields: agileFields.liveUpdate.toString(),
       },
       {encode: false}
     );

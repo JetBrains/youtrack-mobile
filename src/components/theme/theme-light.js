@@ -30,7 +30,7 @@ const light: UITheme = {
     $mask: '#00000057',
     $navigation: '#737577',
 
-    $separator: '#dfe5eb'
+    $separator: '#dfe5eb',
   },
 };
 

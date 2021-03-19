@@ -38,8 +38,8 @@ export default function mockReactNativeNotification() {
       Notifications: {
         getInitialNotification: jest.fn().mockReturnValue(Promise.resolve()),
         registerRemoteNotifications: jest.fn(),
-        events: () => eventsRegistryMock
-      }
+        events: () => eventsRegistryMock,
+      },
     };
   });
 }

@@ -55,7 +55,7 @@ export default class BoardHeader extends PureComponent<Props, void> {
                 styles.tableHeaderItem,
                 index === columns.length - 1 ? styles.tableHeaderItemWithoutBorder : null,
                 col.collapsed && styles.collapsedHeaderItem,
-                isAllColumnsCollapsed(columns) && styles.collapsedHeaderItemAllCollapsed
+                isAllColumnsCollapsed(columns) && styles.collapsedHeaderItemAllCollapsed,
               ]}
               key={col.id}
               onPress={() => onCollapseToggle(col)}
@@ -75,7 +75,7 @@ export default class BoardHeader extends PureComponent<Props, void> {
 const styles = EStyleSheet.create({
   tableHeader: {
     flexDirection: 'row',
-    marginLeft: UNIT * 2
+    marginLeft: UNIT * 2,
   },
   tableHeaderItem: {
     flex: 1,
@@ -84,23 +84,23 @@ const styles = EStyleSheet.create({
     paddingRight: UNIT / 2,
   },
   tableHeaderItemWithoutBorder: {
-    borderRightWidth: 0
+    borderRightWidth: 0,
   },
   collapsedHeaderItem: {
     flex: 0,
     width: AGILE_COLLAPSED_COLUMN_WIDTH,
-    minWidth: AGILE_COLLAPSED_COLUMN_WIDTH
+    minWidth: AGILE_COLLAPSED_COLUMN_WIDTH,
   },
   collapsedHeaderItemAllCollapsed: {
     flex: 1,
-    width: null
+    width: null,
   },
   columnText: {
     ...secondaryText,
     color: '$icon',
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
   },
   columnTextCollapsed: {
-    color: '$link'
-  }
+    color: '$link',
+  },
 });

@@ -96,7 +96,7 @@ const StreamWork = (props: Props) => {
         execute: () => {
           logEvent({
             message: 'SpentTime: actions:update',
-            analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+            analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
           });
           Router.PageModal({
             children: (
@@ -105,9 +105,9 @@ const StreamWork = (props: Props) => {
                 workItem={work}
                 onAdd={props.onUpdate}
               />
-            )
+            ),
           });
-        }
+        },
       });
     }
     if (workPermissions.canDelete) {
@@ -116,12 +116,12 @@ const StreamWork = (props: Props) => {
         execute: () => {
           logEvent({
             message: 'SpentTime: actions:delete',
-            analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+            analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
           });
           if (props.onDelete) {
             props.onDelete(work);
           }
-        }
+        },
       });
     }
 

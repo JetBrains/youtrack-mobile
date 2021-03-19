@@ -12,10 +12,10 @@ export default EStyleSheet.create({
   },
   listContainer: {
     flex: 1,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   searchInput: {
-    ...searchInput
+    ...searchInput,
   },
   suggestion: {
     flexGrow: 1,
@@ -26,13 +26,13 @@ export default EStyleSheet.create({
     flex: 1,
     marginRight: UNIT,
     ...mainText,
-    color: '$icon'
+    color: '$icon',
   },
   suggestionText: {
     ...mainText,
     flex: 1,
     fontWeight: '500',
-    color: '$text'
+    color: '$text',
   },
   commandPreview: {
     paddingTop: UNIT * 2,
@@ -45,12 +45,12 @@ export default EStyleSheet.create({
     borderBottomWidth: 0.5,
   },
   commandDescription: {
-    color: '$text'
+    color: '$text',
   },
   commandDescriptionError: {
-    color: '$error'
+    color: '$error',
   },
   applyButton: {
-    paddingRight: UNIT
-  }
+    paddingRight: UNIT,
+  },
 });

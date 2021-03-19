@@ -10,29 +10,29 @@ import type {UITheme, UIThemeColors} from '../../flow/Theme';
 export default EStyleSheet.create({
   customFieldDateEditor: {
     flex: 1,
-    padding: UNIT * 2
+    padding: UNIT * 2,
   },
   customFieldEditorHeader: {
-    ...elevation1
+    ...elevation1,
   },
   customFieldSimpleEditor: {
     flex: 1,
-    padding: UNIT * 2
+    padding: UNIT * 2,
   },
   editorViewContainer: {
     flex: 1,
-    flexShrink: 1
+    flexShrink: 1,
   },
   customFieldDateEditorValue: {
-    marginBottom: UNIT * 2
+    marginBottom: UNIT * 2,
   },
   customFieldDateEditorCalendar: {
-    marginTop: UNIT * 2
+    marginTop: UNIT * 2,
   },
   clearDate: {
     paddingTop: UNIT,
     paddingBottom: UNIT,
-    color: '$link'
+    color: '$link',
   },
   simpleValueInput: {
     ...rowFormStyles.input,
@@ -45,8 +45,8 @@ export default EStyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0
-  }
+    bottom: 0,
+  },
 });
 
 export const calendarTheme = (uiTheme: UITheme) => {
@@ -62,6 +62,6 @@ export const calendarTheme = (uiTheme: UITheme) => {
     dotColor: uiThemeColors.$text,
     selectedDotColor: uiThemeColors.$text,
     arrowColor: uiThemeColors.$link,
-    monthTextColor: uiThemeColors.$text
+    monthTextColor: uiThemeColors.$text,
   };
 };

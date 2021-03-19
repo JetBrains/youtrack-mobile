@@ -18,7 +18,7 @@ import {setArticles, setError, setExpandingProjectId, setList, setLoading} from 
 import {
   cacheProjects,
   cacheUserLastVisitedArticle,
-  resetUserArticlesProfile
+  resetUserArticlesProfile,
 } from '../../actions/app-actions';
 import {showActions} from '../../components/action-sheet/action-sheet';
 import {sortByUpdatedReverse} from '../../components/search/sorting';
@@ -79,7 +79,7 @@ const getArticleList = (reset: boolean = true) =>
 
     logEvent({
       message: 'Loading articles per project',
-      analyticsId: ANALYTICS_ARTICLES_PAGE
+      analyticsId: ANALYTICS_ARTICLES_PAGE,
     });
 
     setError(null);
@@ -137,7 +137,7 @@ const filterArticles = (query: string | null) =>
   async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     logEvent({
       message: 'Filter articles',
-      analyticsId: ANALYTICS_ARTICLES_PAGE
+      analyticsId: ANALYTICS_ARTICLES_PAGE,
     });
 
     flushStoragePart({articlesQuery: query ? query : null});
@@ -184,7 +184,7 @@ const toggleProjectVisibility = (item: ArticlesListItem) =>
 
     logEvent({
       message: 'Toggle project article visibility',
-      analyticsId: ANALYTICS_ARTICLES_PAGE
+      analyticsId: ANALYTICS_ARTICLES_PAGE,
     });
 
     if (!articlesList || !articles) {
@@ -239,8 +239,8 @@ const toggleProjectVisibility = (item: ArticlesListItem) =>
             ...project,
             articles: {
               ...project.articles,
-              collapsed: false
-            }
+              collapsed: false,
+            },
           }]
         )
       );
@@ -256,7 +256,7 @@ const toggleProjectFavorite = (item: ArticlesListItem) =>
   async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     logEvent({
       message: 'Toggle project article favorite',
-      analyticsId: ANALYTICS_ARTICLES_PAGE
+      analyticsId: ANALYTICS_ARTICLES_PAGE,
     });
     confirmation(
       'Remove project from favorites?',
@@ -304,7 +304,7 @@ const updateProjectsFavorites = (
     const api: Api = getApi();
     logEvent({
       message: 'Manage favorite projects',
-      analyticsId: ANALYTICS_ARTICLES_PAGE
+      analyticsId: ANALYTICS_ARTICLES_PAGE,
     });
 
     dispatch(setError(null));
@@ -317,7 +317,7 @@ const updateProjectsFavorites = (
         )
     );
     if (error) {
-      notify(`Failed to change favorites`, error);
+      notify('Failed to change favorites', error);
     } else if (hasNoFavorites) {
       storeProjectData(null);
       storeArticlesList(null);
@@ -335,15 +335,15 @@ const showContextActions = (actionSheet: ActionSheet, canCreateArticle: boolean,
     const actions: Array<ActionSheetOption> = [
       {
         title: 'Manage Favorite Projects',
-        execute: onShowMoreProjects
+        execute: onShowMoreProjects,
       },
-      {title: 'Cancel'}
+      {title: 'Cancel'},
     ];
 
     if (canCreateArticle && getStorageState().projects.some((it:ArticleProject) => it.pinned)) {
       actions.unshift({
         title: 'New Article',
-        execute: () => Router.ArticleCreate({isNew: true})
+        execute: () => Router.ArticleCreate({isNew: true}),
       });
     }
 
@@ -359,7 +359,7 @@ const toggleAllProjects = (collapse: boolean = true) =>
     const {articles, articlesList} = getState().articles;
     logEvent({
       message: `${collapse ? 'Collapse' : 'Expand'} all Knowledge base projects`,
-      analyticsId: ANALYTICS_ARTICLES_PAGE
+      analyticsId: ANALYTICS_ARTICLES_PAGE,
     });
     const updatedProjectData: ArticlesList = (articles || []).reduce(
       (list: Array<ProjectArticlesData>, item: ProjectArticlesData) => (
@@ -436,7 +436,7 @@ function getProjectDataPromises(api: Api, projects: Array<ArticleProject>): Arra
     if (project.articles.collapsed === true) {
       return {
         ...{project},
-        articles: []
+        articles: [],
       };
     }
 
@@ -445,7 +445,7 @@ function getProjectDataPromises(api: Api, projects: Array<ArticleProject>): Arra
     );
     return {
       ...{project},
-      articles: error ? [] : articles
+      articles: error ? [] : articles,
     };
   });
 }
@@ -457,8 +457,8 @@ function toggleProjectDataItem(item:ProjectArticlesData, isCollapsed: boolean) {
       ...item.project,
       articles: {
         ...item.project.articles,
-        collapsed: isCollapsed
-      }
-    }
+        collapsed: isCollapsed,
+      },
+    },
   };
 }

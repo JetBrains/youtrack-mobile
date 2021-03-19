@@ -72,7 +72,7 @@ const ArticleActivities = (props: Props) => {
             comment={comment}
             uiTheme={uiTheme}
           />
-        )
+        ),
       });
     },
     onShowCommentActions: async (comment: IssueComment, activityId: string) => dispatch(
@@ -83,7 +83,7 @@ const ArticleActivities = (props: Props) => {
         canDeleteComment(comment)
       )
     ),
-    canDeleteComment: canDeleteComment
+    canDeleteComment: canDeleteComment,
   });
 
   return (

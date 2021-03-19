@@ -13,7 +13,7 @@ describe('<VisibilityControl/>', () => {
 
   beforeEach(() => {
     visibilityMock = {
-      $type: ResourceTypes.VISIBILITY_UNLIMITED
+      $type: ResourceTypes.VISIBILITY_UNLIMITED,
     };
 
     render();
@@ -44,7 +44,7 @@ describe('<VisibilityControl/>', () => {
     beforeEach(() => {
       restrictedVisibilityMock = {
         $type: ResourceTypes.VISIBILITY_LIMITED,
-        permittedGroups: [{}]
+        permittedGroups: [{}],
       };
       onApplyMock = jest.fn();
       onSubmitMock = jest.fn();

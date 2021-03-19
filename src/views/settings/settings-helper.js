@@ -17,11 +17,11 @@ const feedbackTypeMarker: string = '[InAppFeedback]';
 export const feedbackTypeOptions: Array<FeedbackType> = [
   {title: 'Problem', marker: feedbackTypeMarker},
   {title: 'Feature request', marker: feedbackTypeMarker},
-  {title: 'Other', marker: feedbackTypeMarker}
+  {title: 'Other', marker: feedbackTypeMarker},
 ];
 export const feedbackLogsOptions: Array<FeedbackLogs> = [
   {title: 'Don\'t send logs', value: false},
-  {title: 'Send logs', value: true}
+  {title: 'Send logs', value: true},
 ];
 
 export const sendFeedback = async (feedbackData: FeedbackData) => {

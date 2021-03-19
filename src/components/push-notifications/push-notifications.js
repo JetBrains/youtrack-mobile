@@ -92,5 +92,5 @@ async function initialize(api, onSwitchAccount: (account: StorageState, issueId:
 export default {
   register,
   unregister,
-  initialize
+  initialize,
 };

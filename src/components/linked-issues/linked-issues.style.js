@@ -4,7 +4,7 @@ import {UNIT} from '../variables/variables';
 export default EStyleSheet.create({
   linkedIssuesContainer: {
     marginTop: UNIT,
-    marginBottom: UNIT
+    marginBottom: UNIT,
   },
   linkedIssuesSection: {
     flexDirection: 'row',
@@ -13,14 +13,14 @@ export default EStyleSheet.create({
     marginTop: UNIT / 2,
   },
   relationTitle: {
-    color: '$icon'
+    color: '$icon',
   },
   linkedIssueContainer: {
     marginTop: UNIT / -4,
     marginLeft: UNIT,
-    padding: UNIT / 4
+    padding: UNIT / 4,
   },
   linkedIssueText: {
-    color: '$link'
-  }
+    color: '$link',
+  },
 });

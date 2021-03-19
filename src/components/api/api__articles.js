@@ -35,7 +35,7 @@ export default class ArticlesAPI extends ApiBase {
         ...{$top},
         ...{$skip},
         ...(folder ? {folder} : {}),
-        ...{query}
+        ...{query},
       }
     );
     return this.makeAuthorizedRequest(
@@ -71,7 +71,7 @@ export default class ArticlesAPI extends ApiBase {
     const queryString = qs.stringify({
       $top: 100,
       reverse: true,
-      fields: issueActivityPageFields.toString()
+      fields: issueActivityPageFields.toString(),
     });
 
     return this.makeAuthorizedRequest(
@@ -106,7 +106,7 @@ export default class ArticlesAPI extends ApiBase {
         summary: '',
         parentArticle: {id: article.id},
         project: article.project,
-        visibility: article.visibility
+        visibility: article.visibility,
       }
     );
   }
@@ -121,7 +121,7 @@ export default class ArticlesAPI extends ApiBase {
         project: articleDraft.project,
         summary: articleDraft.summary,
         visibility: articleDraft.visibility,
-        attachments: articleDraft.attachments
+        attachments: articleDraft.attachments,
       }
     );
   }
@@ -185,7 +185,7 @@ export default class ArticlesAPI extends ApiBase {
       method,
       {
         text: commentText,
-        usesMarkdown: true
+        usesMarkdown: true,
       }
     );
   }
@@ -213,7 +213,7 @@ export default class ArticlesAPI extends ApiBase {
       {
         text: comment.text,
         usesMarkdown: true,
-        visibility: comment.visibility || null
+        visibility: comment.visibility || null,
       }
     );
   }
@@ -257,7 +257,7 @@ export default class ArticlesAPI extends ApiBase {
     formData.append('photo', {
       uri: fileUri,
       name: fileName,
-      type: 'image/binary'
+      type: 'image/binary',
     });
 
     const response = await fetch(

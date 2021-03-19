@@ -55,7 +55,7 @@ function renderCollapsedColumn(cell: BoardCell, columnPositionData: Object, isAl
           styles.columnCollapsed,
           isAllCollapsed ? styles.columnCollapsedAll : null,
           columnPositionData.firstColumn ? styles.columnFirst : null,
-          columnPositionData.lastColumn ? styles.columnWithoutBorder : null
+          columnPositionData.lastColumn ? styles.columnWithoutBorder : null,
         ]}>
         <View style={styles.columnCollapsed}>
           {cell.issues.map(renderCollapsedCard)}
@@ -76,7 +76,7 @@ export default function BoardRow(props: Props) {
     renderIssueCard,
     zoomedIn,
     columns,
-    uiTheme
+    uiTheme,
   } = props;
 
   if (!row) {
@@ -111,7 +111,7 @@ export default function BoardRow(props: Props) {
           <Text style={[
             styles.rowHeaderText,
             !zoomedIn ? styles.rowHeaderTextZoomedOut : null,
-            isResolved && styles.issueIdResolved
+            isResolved && styles.issueIdResolved,
           ]}>
             {row.id === 'orphans' ? 'Uncategorized Cards' : (row.issue && row.issue.summary || row.name)}
           </Text>
@@ -146,7 +146,7 @@ export default function BoardRow(props: Props) {
             if (isCellCollapsed) {
               return renderCollapsedColumn(cell, {
                 firstColumn: index === 0,
-                lastColumn: index === row.cells.length - 1
+                lastColumn: index === row.cells.length - 1,
               }, isAllColumnsCollapsed(columns));
             }
 

@@ -20,11 +20,11 @@ export const styles = EStyleSheet.create({
     paddingVertical: UNIT / 2,
     paddingHorizontal: UNIT / 2,
     borderRadius: UNIT / 2,
-    backgroundColor: '$boxBackground'
+    backgroundColor: '$boxBackground',
   },
   reactionCount: {
     ...secondaryText,
     marginLeft: UNIT / 2,
-    color: '$icon'
-  }
+    color: '$icon',
+  },
 });

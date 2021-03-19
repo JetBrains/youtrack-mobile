@@ -10,7 +10,7 @@ export default EStyleSheet.create({
     flexGrow: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    ...elevationTop
+    ...elevationTop,
   },
   menuItem: {
     flex: 1,
@@ -24,5 +24,5 @@ export default EStyleSheet.create({
     paddingHorizontal: UNIT,
     alignItems: 'center',
     justifyContent: 'center',
-  }
+  },
 });

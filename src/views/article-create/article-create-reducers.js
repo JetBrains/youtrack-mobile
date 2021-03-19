@@ -60,7 +60,7 @@ const attachmentReducers = {
       articleDraft: {
         ...state.articleDraft,
         attachments: attachments.filter(attach => attach.id !== action.attachmentId),
-      }
+      },
     };
   },
   [attachmentTypes.ATTACH_STOP_ADDING](state: ArticleCreateState) {
@@ -74,7 +74,7 @@ const attachmentReducers = {
       ...state.articleDraft,
       attachments: action.attachments,
     };
-  }
+  },
 };
 
 const {reducer, actions} = createSlice({
@@ -91,7 +91,7 @@ const {reducer, actions} = createSlice({
       state.articleDraft = action.payload;
     },
   },
-  extraReducers: attachmentReducers
+  extraReducers: attachmentReducers,
 });
 
 

@@ -15,6 +15,6 @@ export default EStyleSheet.create({
   },
   separator: {
     ...separator,
-    borderColor: '$separator'
-  }
+    borderColor: '$separator',
+  },
 });

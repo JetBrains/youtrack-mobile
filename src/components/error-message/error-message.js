@@ -40,12 +40,12 @@ export default class ErrorMessage extends PureComponent<Props, State> {
       const error: CustomError = await resolveError(this.props.error);
       errorMessage = {
         title: ERROR_MESSAGE_DATA[error.status || error.error]?.title || error.message || error.error_message || '',
-        description: extractErrorMessage(error, true)
+        description: extractErrorMessage(error, true),
       };
     }
 
     this.setState({
-      errorMessageData: errorMessage
+      errorMessageData: errorMessage,
     });
   }
 
@@ -107,7 +107,7 @@ function getErrorMessageData(error: CustomError) {
   const errorMessage = extractErrorMessage(error, true);
   return {
     title: error.error || error.error_message || error.message || DEFAULT_ERROR_MESSAGE,
-    description: errorMessage
+    description: errorMessage,
   };
 }
 

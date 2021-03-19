@@ -25,7 +25,7 @@ type SearchPanelProps = {
 
 export default class QueryAssistPanel extends PureComponent<SearchPanelProps, void> {
   static defaultProps = {
-    onClose: () => null
+    onClose: () => null,
   }
 
   node: Object;

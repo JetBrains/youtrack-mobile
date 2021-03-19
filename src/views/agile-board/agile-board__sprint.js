@@ -44,7 +44,7 @@ export default class AgileBoardSprint extends Component<Props, void> {
       onTapIssue,
       onTapCreateIssue,
       onCollapseToggle,
-      uiTheme
+      uiTheme,
 
     };
   };

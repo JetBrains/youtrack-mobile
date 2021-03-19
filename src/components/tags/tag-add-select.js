@@ -49,7 +49,7 @@ const TagAddSelect = (props: Props) => {
           style={styles.tagSelectItem}
         />
       );
-    }
+    },
   };
 
   return <Select {...selectProps} />;

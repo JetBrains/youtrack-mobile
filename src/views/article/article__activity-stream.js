@@ -28,7 +28,7 @@ const getYoutrackWikiProps = (): YouTrackWiki => {
   const api: API = getApi();
   return {
     backendUrl: api.config.backendUrl,
-    imageHeaders: api.auth.getAuthorizationHeaders()
+    imageHeaders: api.auth.getAuthorizationHeaders(),
   };
 };
 

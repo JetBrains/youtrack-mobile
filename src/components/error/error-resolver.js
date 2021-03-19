@@ -25,7 +25,7 @@ export const extractErrorMessage = function (err: Object | string, isDescription
       err.message,
       err.body,
       err.bodyText,
-      err._bodyText
+      err._bodyText,
     ]);
   }
 

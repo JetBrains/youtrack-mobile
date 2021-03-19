@@ -22,7 +22,7 @@ export type Props = {
 export default class SelectItem extends PureComponent<Props, void> {
   static defaultProps = {
     isSelected: false,
-    onPress: (item: Object) => {}
+    onPress: (item: Object) => {},
   };
 
   getDefaultTitle(item: Object): string {

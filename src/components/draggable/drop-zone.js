@@ -52,11 +52,11 @@ class DropZone extends React.Component<PropsWithContext, State> {
   placeholderStyles = {
     height: UNIT,
     marginLeft: UNIT * 2,
-    backgroundColor: EStyleSheet.value('$link')
+    backgroundColor: EStyleSheet.value('$link'),
   };
   state = {
     placeholderIndex: null,
-    active: false
+    active: false,
   };
 
   reportMeasurements = () => {
@@ -84,7 +84,7 @@ class DropZone extends React.Component<PropsWithContext, State> {
         onMoveOver: this.onMoveOver,
         onLeave: this.onLeave,
         onDrop: this.onDrop,
-        reportMeasurements: this.reportMeasurements
+        reportMeasurements: this.reportMeasurements,
       };
       dragContext.updateZone(zoneInfo);
     });

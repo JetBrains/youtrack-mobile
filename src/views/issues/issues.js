@@ -5,7 +5,7 @@ import {
   Text,
   FlatList,
   RefreshControl,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
 import React, {Component} from 'react';
 
@@ -66,7 +66,7 @@ export class Issues extends Component<Props, State> {
     super(props);
     this.state = {
       isEditQuery: false,
-      clearSearchQuery: false
+      clearSearchQuery: false,
     };
     usage.trackScreenView('Issue list');
   }
@@ -102,7 +102,7 @@ export class Issues extends Component<Props, State> {
     }
     Router.Issue({
       issuePlaceholder: issue,
-      issueId: issue.id
+      issueId: issue.id,
     });
   }
 
@@ -165,7 +165,7 @@ export class Issues extends Component<Props, State> {
         key="issueListContext"
         style={[
           styles.searchContext,
-          isSearchContextPinned ? styles.searchContextPinned : null
+          isSearchContextPinned ? styles.searchContextPinned : null,
         ]}
         disabled={isRefreshing || !searchContext}
         onPress={onOpenContextSelect}
@@ -222,20 +222,20 @@ export class Issues extends Component<Props, State> {
 
   setEditQueryMode(isEditQuery: boolean) {
     this.setState({
-      isEditQuery: isEditQuery
+      isEditQuery: isEditQuery,
     });
   }
 
   clearSearchQuery(clearSearchQuery: boolean) {
     this.setState({
-      clearSearchQuery: clearSearchQuery
+      clearSearchQuery: clearSearchQuery,
     });
   }
 
   onSearchQueryPanelFocus = (clearSearchQuery: boolean = false) => {
     logEvent({
       message: 'Focus search panel',
-      analyticsId: ANALYTICS_ISSUES_PAGE
+      analyticsId: ANALYTICS_ISSUES_PAGE,
     });
     this.setEditQueryMode(true);
     this.clearSearchQuery(clearSearchQuery);
@@ -256,7 +256,7 @@ export class Issues extends Component<Props, State> {
         onQueryUpdate={(query: string) => {
           logEvent({
             message: 'Apply search',
-            analyticsId: ANALYTICS_ISSUES_PAGE
+            analyticsId: ANALYTICS_ISSUES_PAGE,
           });
           this.setEditQueryMode(false);
           setIssuesCount(null);
@@ -324,7 +324,7 @@ export class Issues extends Component<Props, State> {
 
     const listData: Array<Object> = [
       contextButton,
-      searchQuery
+      searchQuery,
     ].concat(issues || []);
 
     return (
@@ -366,8 +366,8 @@ export class Issues extends Component<Props, State> {
         : (issues?.length === 0 ? {
           errorMessageData: {
             ...ERROR_MESSAGE_DATA.NO_ISSUES_FOUND,
-            icon: () => <IconNothingFound size={noIssuesFoundIconSize} style={styles.noIssuesFoundIcon} />
-          }
+            icon: () => <IconNothingFound size={noIssuesFoundIconSize} style={styles.noIssuesFoundIcon} />,
+          },
         } : null)
     );
 
@@ -408,7 +408,7 @@ const mapStateToProps = (state, ownProps) => {
     ...state.issueList,
     ...state.app,
     initialSearchQuery: ownProps.query,
-    searchContext: state.app?.user?.profiles?.general?.searchContext
+    searchContext: state.app?.user?.profiles?.general?.searchContext,
   };
 };
 
@@ -421,7 +421,7 @@ const mapDispatchToProps = (dispatch) => {
     updateSearchContextPinned: (isSearchScrolledUp) => dispatch(
       issueActions.updateSearchContextPinned(isSearchScrolledUp)),
     setIssuesCount: (count: number | null) => dispatch(issueActions.setIssuesCount(count)),
-    updateIssue: (issueId: string) => dispatch(issueActions.updateIssue(issueId))
+    updateIssue: (issueId: string) => dispatch(issueActions.updateIssue(issueId)),
   };
 };
 

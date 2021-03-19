@@ -10,37 +10,37 @@ export default EStyleSheet.create({
 
   container: {
     ...loginStylesForm.container,
-    backgroundColor: '$background'
+    backgroundColor: '$background',
   },
   input: {
     ...rowFormStyles.input,
     marginTop: UNIT * 3,
     marginBottom: UNIT * 2,
     color: '$text',
-    backgroundColor: '$boxBackground'
+    backgroundColor: '$boxBackground',
   },
   title: {
     ...loginStylesForm.title,
-    color: '$text'
+    color: '$text',
   },
   errorContainer: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginTop: UNIT * 2
+    marginTop: UNIT * 2,
   },
   errorText: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   infoIcon: {
     flexGrow: 0,
     marginTop: UNIT / 2,
-    marginLeft: UNIT * 2
+    marginLeft: UNIT * 2,
   },
   text: {
     ...mainText,
-    color: '$text'
+    color: '$text',
   },
   placeholder: {
-    color: '$icon'
-  }
+    color: '$icon',
+  },
 });

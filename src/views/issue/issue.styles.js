@@ -13,7 +13,7 @@ import {UNIT} from '../../components/variables/variables';
 const centered = {
   flex: 1,
   alignItems: 'center',
-  justifyContent: 'center'
+  justifyContent: 'center',
 };
 
 export default EStyleSheet.create({
@@ -23,42 +23,42 @@ export default EStyleSheet.create({
     backgroundColor: '$background',
   },
   header: {
-    paddingHorizontal: UNIT * 2
+    paddingHorizontal: UNIT * 2,
   },
   headerText: headerTitleText,
   headerTextResolved: {
     ...issueIdResolved,
-    color: '$icon'
+    color: '$icon',
   },
   issueStar: {
     marginLeft: UNIT * 2,
-    marginRight: UNIT * 2
+    marginRight: UNIT * 2,
   },
   savingIndicator: {
     paddingTop: 4,
     width: 30,
-    height: 20
+    height: 20,
   },
   issueView: {
     marginTop: UNIT,
-    padding: UNIT * 2
+    padding: UNIT * 2,
   },
   issueTopPanel: {
     paddingTop: UNIT / 4,
-    marginBottom: UNIT * 2
+    marginBottom: UNIT * 2,
   },
   issueTopPanelText: {
     ...secondaryText,
-    color: '$icon'
+    color: '$icon',
   },
   tags: {
-    marginTop: UNIT * 2
+    marginTop: UNIT * 2,
   },
   tagsSeparator: {
     height: UNIT,
     marginRight: -UNIT * 2,
     ...separatorBorder,
-    borderColor: '$separator'
+    borderColor: '$separator',
   },
   topPanelUpdatedInformation: {
     marginTop: UNIT * 0.75,
@@ -66,14 +66,14 @@ export default EStyleSheet.create({
   summary: {
     ...summary,
     paddingTop: UNIT,
-    color: '$text'
+    color: '$text',
   },
   summaryResolved: {
-    color: '$icon'
+    color: '$icon',
   },
   description: {
     marginTop: UNIT * 2,
-    color: '$text'
+    color: '$text',
   },
   attachments: {
     marginTop: UNIT * 2,
@@ -81,23 +81,23 @@ export default EStyleSheet.create({
   loadingActivityError: {
     marginTop: UNIT * 2,
     color: '$error',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   disabledSaveButton: {
-    color: '$icon'
+    color: '$icon',
   },
 
   row: {
     flexDirection: 'row',
-    flex: 1
+    flex: 1,
   },
   alignedRight: {
-    marginRight: UNIT
+    marginRight: UNIT,
   },
 
   tabsBar: {
     ...elevation1,
-    backgroundColor: '$background'
+    backgroundColor: '$background',
   },
   tabLabel: {
     ...mainText,
@@ -111,23 +111,23 @@ export default EStyleSheet.create({
       android: {
         fontSize: 18,
         fontWeight: '400',
-      }
-    })
+      },
+    }),
   },
   tabLabelActive: {
     fontWeight: '400',
   },
   tabLazyPlaceholder: {
-    ...centered
+    ...centered,
   },
   issueTopActions: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: UNIT * 1.5
+    marginBottom: UNIT * 1.5,
   },
   issueVote: {
     flexShrink: 0,
-    minWidth: UNIT * 8
+    minWidth: UNIT * 8,
   },
   switchToActivityButton: {
     marginTop: UNIT * 4,
@@ -137,18 +137,18 @@ export default EStyleSheet.create({
     ...mainText,
     color: '$link',
     padding: UNIT,
-    marginBottom: UNIT * 3
+    marginBottom: UNIT * 3,
   },
   visibility: {
     flexShrink: 1,
-    flex: 1
+    flex: 1,
   },
   issueTagSelectItem: {
     paddingHorizontal: UNIT / 2,
-    paddingVertical: UNIT / 4
+    paddingVertical: UNIT / 4,
   },
   iconMore: {
     position: 'absolute',
-    top: -10
-  }
+    top: -10,
+  },
 });

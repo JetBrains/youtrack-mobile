@@ -45,12 +45,12 @@ type State = {
 
 export default class WikiPage extends PureComponent<Props, State> {
   state = {
-    isPinned: false
+    isPinned: false,
   }
 
   static defaultProps: DefaultProps = {
     onIssueIdTap: () => {},
-    title: ''
+    title: '',
   };
 
   async componentDidMount() {

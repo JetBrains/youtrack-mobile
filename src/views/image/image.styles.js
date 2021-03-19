@@ -6,7 +6,7 @@ import {UNIT} from '../../components/variables/variables';
 export default EStyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '$background'
+    backgroundColor: '$background',
   },
 
   loader: {
@@ -15,25 +15,25 @@ export default EStyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    color: '$link'
+    color: '$link',
   },
 
   removeButton: {
     position: 'absolute',
     bottom: UNIT * 3,
-    left: UNIT * 3
+    left: UNIT * 3,
   },
 
   closeIcon: {
     width: 30,
     height: 30,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
 
   removeIcon: {
     width: 30,
     height: 30,
     resizeMode: 'contain',
-    opacity: 0.4
-  }
+    opacity: 0.4,
+  },
 });

@@ -22,13 +22,13 @@ export const SKELETON_DEFAULT_BORDER_RADIUS: number = UNIT / 2;
 const cv: number = 200;
 export const skeletonPlaceholderDefaultProps = {
   backgroundColor: `rgba(${cv},${cv},${cv},${0.2})`,
-  highlightColor: `rgba(${cv},${cv},${cv},${0.1})`
+  highlightColor: `rgba(${cv},${cv},${cv},${0.1})`,
 };
 
 const defaultSkeletonProps: SkeletonProps = {
   width: SKELETON_WIDTH,
   height: SKELETON_HEIGHT,
-  borderRadius: SKELETON_DEFAULT_BORDER_RADIUS
+  borderRadius: SKELETON_DEFAULT_BORDER_RADIUS,
 };
 
 export const Skeleton = (props: SkeletonProps) => {
@@ -67,7 +67,7 @@ export const SkeletonList = (props: SkeletonProps) => {
     {...props}
   >
     <SkeletonPlaceholder.Item
-      fleDirection='column'
+      fleDirection="column"
       marginLeft={UNIT * 2}
       marginRight={UNIT * 2}
     >
@@ -101,7 +101,7 @@ function skeletonActivityLine(width?: number) {
   return SkeletonSecondaryLine({
     width: width,
     marginLeft: UNIT * 6,
-    marginTop: UNIT
+    marginTop: UNIT,
   });
 }
 
@@ -142,13 +142,13 @@ export const SkeletonIssueCustomFields = () => {
     borderRadius: SKELETON_DEFAULT_BORDER_RADIUS,
     marginTop: UNIT / 2,
     marginLeft: UNIT,
-    marginRight: UNIT
+    marginRight: UNIT,
   };
   return (
     <SkeletonPlaceholder {...skeletonPlaceholderDefaultProps}>
       <SkeletonPlaceholder.Item
-        flexDirection='row'
-        justifyContent='space-between'
+        flexDirection="row"
+        justifyContent="space-between"
         marginTop={UNIT * 3}
       >
         {Array(4).fill(0).map((it: number, index: number) => <SkeletonPlaceholder.Item
@@ -161,13 +161,13 @@ export const SkeletonIssueInfoLine = (props: { lines?: number }) => {
   return (
     <SkeletonPlaceholder {...skeletonPlaceholderDefaultProps}>
       <SkeletonPlaceholder.Item
-        flexDirection='column'
+        flexDirection="column"
       >
         {Array(props.lines || 1).fill(0).map((it: number, index: number) =>
           SkeletonSecondaryLine({
             key: `issueAddInfo-${index}`,
             width: 200,
-            marginTop: UNIT
+            marginTop: UNIT,
           }))}
       </SkeletonPlaceholder.Item>
     </SkeletonPlaceholder>
@@ -190,9 +190,9 @@ function skeletonIssueActivity(marginTop: number = 0, key: string) {
       marginRight={UNIT}
     >
       <SkeletonPlaceholder.Item
-        flexDirection='row'
-        alignItems='center'
-        justifyContent='space-between'
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="space-between"
         marginTop={UNIT}
         marginLeft={UNIT}
       >
@@ -232,7 +232,7 @@ function skeletonIssue(key: string) {
         width: 80,
         marginTop: UNIT,
         borderRadius: 10,
-        height: SKELETON_HEIGHT
+        height: SKELETON_HEIGHT,
       })}
       {SkeletonSecondaryLine({
         marginTop: UNIT,
@@ -246,7 +246,7 @@ function skeletonIssue(key: string) {
         width: 160,
         marginTop: UNIT,
         borderRadius: 10,
-        height: SKELETON_HEIGHT
+        height: SKELETON_HEIGHT,
       })}
     </SkeletonPlaceholder.Item>
   );
@@ -258,7 +258,7 @@ export const SkeletonIssues = (props: SkeletonProps) => {
     {...props}
   >
     <SkeletonPlaceholder.Item
-      fleDirection='column'
+      fleDirection="column"
       marginLeft={UNIT * 2}
       marginRight={UNIT * 2}
     >
@@ -280,7 +280,7 @@ function skeletonCard(key: string) {
       {SkeletonLine({
         width: SKELETON_WIDTH * 3,
         height: getAgileCardHeight(),
-        borderRadius: agileCard.borderRadius
+        borderRadius: agileCard.borderRadius,
       })}
     </SkeletonPlaceholder.Item>
   );
@@ -292,31 +292,31 @@ export const SkeletonAgile = (props: SkeletonProps) => {
     {...props}
   >
     <SkeletonPlaceholder.Item
-      fleDirection='column'
+      fleDirection="column"
       marginLeft={UNIT * 2}
       marginRight={UNIT * 2}
     >
       {SkeletonLine({
         height: SKELETON_HEIGHT,
         marginTop: UNIT * 2,
-        borderRadius: 0
+        borderRadius: 0,
       })}
 
       {SkeletonLine({
         height: SKELETON_HEIGHT * 2.5,
-        marginTop: UNIT * 1.5
+        marginTop: UNIT * 1.5,
       })}
 
       {SkeletonLine({
         height: SKELETON_HEIGHT,
         marginTop: UNIT * 1.5,
-        borderRadius: 0
+        borderRadius: 0,
       })}
       {SkeletonLine({
         height: SKELETON_HEIGHT * 2,
         marginTop: UNIT * 3,
         marginBottom: UNIT * 2,
-        borderRadius: 0
+        borderRadius: 0,
       })}
 
       {Array(3).fill(0).map(((marginTop: number, index) => skeletonCard(`skeletonCard-${index}`)))}
@@ -329,7 +329,7 @@ export const SkeletonCreateArticle = () => {
     {...skeletonPlaceholderDefaultProps}
   >
     <SkeletonPlaceholder.Item
-      fleDirection='column'
+      fleDirection="column"
     >
       {SkeletonLine({
         width: SKELETON_WIDTH * 1.5,
@@ -350,7 +350,7 @@ export const SkeletonCreateArticle = () => {
       })}
 
       {SkeletonLine({
-        height: SKELETON_HEIGHT * 5
+        height: SKELETON_HEIGHT * 5,
       })}
     </SkeletonPlaceholder.Item>
   </SkeletonPlaceholder>;

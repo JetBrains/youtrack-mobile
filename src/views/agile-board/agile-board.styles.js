@@ -7,57 +7,57 @@ import {separatorBorder} from '../../components/common-styles/list';
 export default EStyleSheet.create({
   agile: {
     flex: 1,
-    backgroundColor: '$background'
+    backgroundColor: '$background',
   },
   agileNoSprint: {
-    backgroundColor: '$background'
+    backgroundColor: '$background',
   },
   error: {
     marginTop: UNIT * 5,
-    marginLeft: -UNIT * 2
+    marginLeft: -UNIT * 2,
   },
   title: {
     fontSize: 17,
-    color: '$text'
+    color: '$text',
   },
   headerIconDisabled: {
-    tintColor: '$icon'
+    tintColor: '$icon',
   },
   boardHeaderContainer: {
     minHeight: UNIT * 5,
     overflow: 'hidden',
     backgroundColor: '$background',
     ...separatorBorder,
-    borderColor: '$separator'
+    borderColor: '$separator',
   },
   loadingMoreIndicator: {
-    padding: UNIT * 2
+    padding: UNIT * 2,
   },
   zoomButton: {
     position: 'absolute',
     zIndex: 1,
     top: UNIT * 2,
-    right: UNIT * 2
+    right: UNIT * 2,
   },
   zoomButtonIcon: {
     resizeMode: 'contain',
     width: UNIT * 2,
-    height: UNIT * 2
+    height: UNIT * 2,
   },
   agileBoardSmile: {
     paddingTop: UNIT * 6,
     fontSize: 36,
-    color: '$text'
+    color: '$text',
   },
   agileBoardMessageText: {
     paddingTop: UNIT,
     fontSize: 18,
-    color: '$text'
+    color: '$text',
   },
   selectBoardMessage: {
     paddingTop: UNIT * 2,
     fontSize: 18,
-    color: '$link'
+    color: '$link',
   },
   agileSelector: {
     width: '100%',
@@ -66,18 +66,18 @@ export default EStyleSheet.create({
     paddingLeft: UNIT * 2,
     marginRight: UNIT * 7,
     backgroundColor: '$background',
-    color: '$text'
+    color: '$text',
   },
   sprintSelector: {
     minHeight: UNIT * 5,
     marginLeft: UNIT * 2,
-    color: '$text'
+    color: '$text',
   },
   agileSelectorText: {
     ...headerTitle,
-    color: '$text'
+    color: '$text',
   },
   searchQueryPreview: {
-    marginHorizontal: UNIT * 2
-  }
+    marginHorizontal: UNIT * 2,
+  },
 });

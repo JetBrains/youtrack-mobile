@@ -11,7 +11,7 @@ export default EStyleSheet.create({
     maxHeight: '100%',
     paddingVertical: UNIT,
     paddingHorizontal: UNIT * 3,
-    ...elevationBottom
+    ...elevationBottom,
   },
 
   suggestionsContainer: {
@@ -24,7 +24,7 @@ export default EStyleSheet.create({
     alignItems: 'center',
   },
   link: {
-    color: '$link'
+    color: '$link',
   },
   suggestionButton: {
     flexDirection: 'row',
@@ -33,15 +33,15 @@ export default EStyleSheet.create({
     paddingTop: UNIT * 1.5,
     paddingBottom: UNIT * 1.5,
     borderBottomWidth: 1,
-    borderColor: '$boxBackground'
+    borderColor: '$boxBackground',
   },
   suggestionName: {
     flexGrow: 1,
     marginLeft: UNIT,
-    color: '$text'
+    color: '$text',
   },
   suggestionLogin: {
-    color: '$textSecondary'
+    color: '$textSecondary',
   },
 
   commentHeaderContainer: {
@@ -62,7 +62,7 @@ export default EStyleSheet.create({
   commentContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   commentInputContainer: {
     flexDirection: 'row',
@@ -79,7 +79,7 @@ export default EStyleSheet.create({
     marginRight: UNIT,
     backgroundColor: '$background',
     ...mainText,
-    color: '$text'
+    color: '$text',
   },
   commentSendButton: {
     width: MIN_INPUT_SIZE,
@@ -87,34 +87,34 @@ export default EStyleSheet.create({
     borderRadius: INPUT_BORDER_RADIUS - 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '$link'
+    backgroundColor: '$link',
   },
   commentSendButtonDisabled: {
     backgroundColor: '$textSecondary',
   },
   commentSendButtonText: {
     fontSize: 16,
-    color: '$link'
+    color: '$link',
   },
 
   commentListContainer: {
     borderTopWidth: 1,
     borderColor: '$textSecondary',
-    paddingTop: UNIT
+    paddingTop: UNIT,
   },
 
   visibilityChangeButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   visibilityChangeButtonLockIcon: {
-    marginRight: UNIT
+    marginRight: UNIT,
   },
   visibilityChangeButtonText: {
     ...secondaryText,
     marginRight: UNIT,
-    color: '$icon'
+    color: '$icon',
   },
 
   actionsContainer: {
@@ -125,6 +125,6 @@ export default EStyleSheet.create({
     marginRight: UNIT,
   },
   actionsContainerIcon: {
-    color: '$iconAccent'
-  }
+    color: '$iconAccent',
+  },
 });

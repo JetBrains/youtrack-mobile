@@ -14,7 +14,7 @@ type RequestOptions = {
 };
 
 const defaultRequestOptions: RequestOptions = {
-  parseJson: true
+  parseJson: true,
 };
 
 function updateQueryStringParameter(uri, key, value) {
@@ -69,7 +69,7 @@ export default class BaseAPI {
     return qs.stringify(
       Object.assign({
         ...restParams,
-        ...{fields: ApiHelper.toField(fields).toString()}
+        ...{fields: ApiHelper.toField(fields).toString()},
       })
     );
   }
@@ -85,9 +85,9 @@ export default class BaseAPI {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json, text/plain, */*',
-          ...this.auth.getAuthorizationHeaders()
+          ...this.auth.getAuthorizationHeaders(),
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
       });
     };
 

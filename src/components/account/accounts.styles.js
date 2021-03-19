@@ -8,14 +8,14 @@ export default EStyleSheet.create({
   accountContainer: {
     flexDirection: 'row',
     marginTop: UNIT * 3,
-    minHeight: SWIPER_HEIGHT
+    minHeight: SWIPER_HEIGHT,
   },
   accountProfile: {
     flexDirection: 'column',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   accountProfileAvatar: {
-    borderRadius: UNIT
+    borderRadius: UNIT,
   },
   accountProfileName: {
     ...mainText,
@@ -31,9 +31,9 @@ export default EStyleSheet.create({
   },
   accountAction: {
     width: UNIT * 4,
-    height: UNIT * 6
+    height: UNIT * 6,
   },
   accountActionLogOut: {
-    alignItems: 'flex-end'
-  }
+    alignItems: 'flex-end',
+  },
 });

@@ -10,7 +10,7 @@ import {UNIT} from '../../components/variables/variables';
 
 const wrapper = {
   marginHorizontal: UNIT * 2,
-  marginVertical: UNIT
+  marginVertical: UNIT,
 };
 
 export const noProjectsIconSize = 240;
@@ -20,10 +20,10 @@ export default EStyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: '$background'
+    backgroundColor: '$background',
   },
   content: {
-    flex: 1
+    flex: 1,
   },
 
   header: {
@@ -38,14 +38,14 @@ export default EStyleSheet.create({
   },
   headerShadow: elevation1,
   headerTitle: {
-    flex: 1
+    flex: 1,
   },
   headerTitleText: {
     ...headerTitle,
-    color: '$text'
+    color: '$text',
   },
   headerButton: {
-    flexGrow: 0
+    flexGrow: 0,
   },
   headerLeftButton: {
     marginLeft: -UNIT,
@@ -56,8 +56,8 @@ export default EStyleSheet.create({
     ...Platform.select({
       android: {
         marginRight: -UNIT / 2,
-      }
-    })
+      },
+    }),
   },
 
   separator: {
@@ -67,26 +67,26 @@ export default EStyleSheet.create({
   itemChild: {
     marginTop: UNIT,
     marginLeft: -UNIT * 3,
-    marginBottom: SELECT_ITEM_HEIGHT
+    marginBottom: SELECT_ITEM_HEIGHT,
   },
   itemStar: {
     marginRight: UNIT * 0.75,
     paddingHorizontal: UNIT * 1.5,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   itemArticleIcon: {
     alignItems: 'flex-end',
-    paddingHorizontal: UNIT / 1.5
+    paddingHorizontal: UNIT / 1.5,
   },
   itemProject: {
     flex: 1,
     flexDirection: 'row',
     paddingHorizontal: UNIT * 2,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   itemArticle: {
-    paddingLeft: UNIT * 5
+    paddingLeft: UNIT * 5,
   },
   itemNoArticle: {
     justifyContent: 'center',
@@ -94,24 +94,24 @@ export default EStyleSheet.create({
     backgroundColor: '$background',
   },
   itemNoArticleText: {
-    color: '$icon'
+    color: '$icon',
   },
   itemDraft: {
     marginRight: UNIT,
-    paddingLeft: UNIT * 2
+    paddingLeft: UNIT * 2,
   },
   itemDraftDisabled: {
-    opacity: 0.5
+    opacity: 0.5,
   },
   itemProjectIcon: {
     width: UNIT * 3,
     marginLeft: -UNIT,
     alignItems: 'center',
     justifyContent: 'center',
-    color: '$text'
+    color: '$text',
   },
   itemProjectIconCollapsed: {
-    marginTop: -UNIT / 4
+    marginTop: -UNIT / 4,
   },
 
   projectTitleText: {
@@ -122,15 +122,15 @@ export default EStyleSheet.create({
     color: '$text',
     ...Platform.select({
       ios: {
-        fontWeight: '600'
+        fontWeight: '600',
       },
       android: {
-        fontWeight: '400'
-      }
-    })
+        fontWeight: '400',
+      },
+    }),
   },
   noArticlesIcon: {
-    marginBottom: UNIT * 2
+    marginBottom: UNIT * 2,
   },
   listFooter: {
     marginVertical: UNIT * 4,
@@ -141,13 +141,13 @@ export default EStyleSheet.create({
   searchPanelContainer: {
     ...wrapper,
     ...inputWrapper,
-    marginBottom: 0
+    marginBottom: 0,
   },
   searchInput: searchInput,
   clearIcon: clearIcon,
 
   link: {
-    color: '$link'
+    color: '$link',
   },
   actionBar: {
     ...wrapper,
@@ -160,60 +160,60 @@ export default EStyleSheet.create({
   },
   actionBarButton: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   actionBarButtonText: {
     position: 'relative',
     top: 1,
     marginRight: UNIT,
     ...secondaryText,
-    color: '$link'
+    color: '$link',
   },
 
   noDrafts: {
     flexGrow: 4,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   noDraftsButton: {
-    marginTop: UNIT * 3
+    marginTop: UNIT * 3,
   },
   noDraftsButtonText: {
     ...mainText,
-    color: '$link'
+    color: '$link',
   },
   noProjects: {
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: UNIT * 4
+    padding: UNIT * 4,
   },
   noProjectsIcon: {
     marginTop: -noProjectsIconSize / 2,
     marginLeft: -UNIT * 4,
-    marginBottom: UNIT * 2
+    marginBottom: UNIT * 2,
   },
   noProjectsMessage: {
     color: '$text',
     textAlign: 'center',
     fontSize: 18,
-    fontWeight: '500'
+    fontWeight: '500',
   },
   noProjectsButton: {
-    marginTop: UNIT * 4
+    marginTop: UNIT * 4,
   },
   noProjectsButtonText: {
     ...mainText,
-    color: '$link'
+    color: '$link',
   },
   noArticlesErrorIcon: {
     marginLeft: -UNIT * 4,
-    marginBottom: -UNIT * 2
+    marginBottom: -UNIT * 2,
   },
 
   manageFavoriteProjectsNote: {
     padding: UNIT * 2,
     textAlign: 'center',
-    color: '$icon'
-  }
+    color: '$icon',
+  },
 });

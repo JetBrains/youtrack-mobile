@@ -27,7 +27,7 @@ import {
   flushStorage,
   flushStoragePart,
   getOtherAccounts,
-  storeAccounts
+  storeAccounts,
 } from '../components/storage/storage';
 import {hasType} from '../components/api/api__resource-types';
 import {isIOSPlatform} from '../util/util';
@@ -100,7 +100,7 @@ export function receiveUserAppearanceProfile(userAppearanceProfile?: UserAppeara
       );
       dispatch({
         type: types.RECEIVE_USER_APPEARANCE_PROFILE,
-        ...{appearance: appearanceProfile}
+        ...{appearance: appearanceProfile},
       });
     } catch (error) {
       log.info('Can\'t update user appearance profile.');
@@ -121,7 +121,7 @@ export function updateUserGeneralProfile(userGeneralProfile: UserGeneralProfile)
 
       dispatch({
         type: types.RECEIVE_USER_GENERAL_PROFILE,
-        ...{general: updatedUserGeneralProfile}
+        ...{general: updatedUserGeneralProfile},
       });
     } catch (e) {
       log.info('Cannot update your profile');
@@ -133,7 +133,7 @@ export const updateUserArticlesProfile = (articlesProfile: UserArticlesProfile) 
   async (dispatch: (any) => any) => {
     dispatch({
       type: types.RECEIVE_USER_ARTICLES_PROFILE,
-      ...{articles: articlesProfile}
+      ...{articles: articlesProfile},
     });
   };
 
@@ -156,8 +156,8 @@ export const cacheUserLastVisitedArticle = (article: Article | null, activities?
           ...{article},
           activities: activities || (
             articleLastVisited?.article?.id === article.id ? articleLastVisited?.activities : null
-          )
-        }
+          ),
+        },
       });
     }
   } catch (e) {
@@ -211,7 +211,7 @@ async function connectToOneMoreServer(serverUrl: string, onBack: Function): Prom
     Router.EnterServer({
       onCancel: onBack,
       serverUrl,
-      connectToYoutrack: async (newURL) => resolve(await loadConfig(newURL))
+      connectToYoutrack: async (newURL) => resolve(await loadConfig(newURL)),
     });
   });
 }
@@ -221,7 +221,7 @@ async function authorizeOnOneMoreServer(config: AppConfigFilled, onBack: (server
     Router.LogIn({
       config,
       onChangeServerUrl: onBack,
-      onLogIn: (authParams: AuthParams) => resolve(authParams)
+      onLogIn: (authParams: AuthParams) => resolve(authParams),
     });
   });
 }
@@ -309,7 +309,7 @@ export function updateOtherAccounts(account: StorageState, removeCurrentAccount:
     const prevAccount = removeCurrentAccount ? null : currentAccount;
     const updatedOtherAccounts = [
       ...(prevAccount && currentAccount !== account ? [prevAccount] : []),
-      ...otherAccounts
+      ...otherAccounts,
     ];
     await storeAccounts(updatedOtherAccounts);
     await flushStorage(account);
@@ -381,7 +381,7 @@ function setUserPermissions(permissions: Array<PermissionCacheItem>) {
     dispatch({
       type: types.SET_PERMISSIONS,
       permissionsStore: new PermissionsStore(permissions),
-      currentUser: auth.currentUser
+      currentUser: auth.currentUser,
     });
   };
 }
@@ -422,7 +422,7 @@ function loadUser() {
   return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
     const USER_DEFAULT_PROFILES: UserGeneralProfile & UserAppearanceProfile = {
       general: {searchContext: null},
-      appearance: {naturalCommentsOrder: true}
+      appearance: {naturalCommentsOrder: true},
     };
 
     let user: User = await getApi().user.getUser();
@@ -569,7 +569,7 @@ export function initializeApp(config: AppConfigFilled, issueId: ?string) {
     Router._getNavigator() && Router.Home({
       backendUrl: config.backendUrl,
       error: null,
-      message: 'Connecting to YouTrack...'
+      message: 'Connecting to YouTrack...',
     });
 
     try {

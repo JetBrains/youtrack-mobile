@@ -27,7 +27,7 @@ describe('<Accounts/>', () => {
     );
     accountsMock = [
       createAccountMock(),
-      createAccountMock()
+      createAccountMock(),
     ];
   });
 
@@ -120,11 +120,11 @@ describe('<Accounts/>', () => {
     return {
       creationTimestamp: ++createAccountMock.id,
       config: {
-        backendUrl: backendUrl
+        backendUrl: backendUrl,
       },
       currentUser: {
-        id: 'user'
-      }
+        id: 'user',
+      },
     };
   }
 
@@ -139,7 +139,7 @@ describe('<Accounts/>', () => {
       otherAccounts = [],
       onAddAccount = onAddAccountMock,
       onChangeAccount = onChangeAccountMock,
-      onLogOut = onLogOutMock
+      onLogOut = onLogOutMock,
     } = {}
   ) {
     return shallow(

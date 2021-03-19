@@ -76,7 +76,7 @@ export default class CustomField extends Component<Props, void> {
     const textStyle = [
       styles.valueText,
       active && styles.valueTextActive,
-      disabled && styles.valueTextDisabled
+      disabled && styles.valueTextDisabled,
     ];
 
     const render = (val: Object | null) => {
@@ -101,7 +101,7 @@ export default class CustomField extends Component<Props, void> {
           render(val),
           <Text style={textStyle} key={val}>
             {ind === value.length - 1 ? ' ' : ', '}
-          </Text>
+          </Text>,
         ];
       });
     }

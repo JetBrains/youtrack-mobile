@@ -7,6 +7,6 @@ export const issuePermissionsNull: IssuePermissions = new IssuePermissions(
   new PermissionsStore([]),
   {
     id: null,
-    ringId: null
+    ringId: null,
   }
 );

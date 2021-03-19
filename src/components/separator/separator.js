@@ -24,7 +24,7 @@ const Separator = (props: Props) => {
           ? separatorStyles.rowSeparatorFit
           : separatorStyles.rowSeparator,
         indent && separatorStyles.indent,
-        styles
+        styles,
       ]}
     />
   );

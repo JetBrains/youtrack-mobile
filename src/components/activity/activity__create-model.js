@@ -27,7 +27,7 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []) => {
         key: '',
         comment: null,
         vcs: null,
-        target: null
+        target: null,
       };
 
       switch (true) {

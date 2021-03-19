@@ -47,7 +47,7 @@ type IssueActivityProps = $Shape<IssueActivityState
 
 export class IssueActivity extends PureComponent<IssueActivityProps, void> {
   static contextTypes = {
-    actionSheet: PropTypes.func
+    actionSheet: PropTypes.func,
   };
 
   backendUrl = getApi().config.backendUrl;
@@ -109,7 +109,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       deleteCommentPermanently,
       onReactionSelect,
       user,
-      deleteWorkItem
+      deleteWorkItem,
     } = this.props;
 
     const youtrackWiki: YouTrackWiki = {
@@ -140,7 +140,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
         canUpdateComment(comment),
         canDeleteComment(comment)
       ),
-      isAuthor: (comment: IssueComment) => issuePermissions.isCurrentUser(comment?.author)
+      isAuthor: (comment: IssueComment) => issuePermissions.isCurrentUser(comment?.author),
     };
     const onWorkUpdate = () => this.loadIssueActivities(true);
 
@@ -210,7 +210,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       issuePermissions,
       issue,
       attachOrTakeImage,
-      stopSubmittingComment
+      stopSubmittingComment,
     } = this.props;
     const isSecured: boolean = !!editingComment && IssueVisibility.isSecured(editingComment.visibility);
     const canAddWork: boolean = (
@@ -252,7 +252,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       children: <AddSpentTimeForm
         canCreateNotOwn={issuePermissions.canCreateWorkNotOwn(issue)}
         onAdd={() => this.loadIssueActivities(true)}
-      />
+      />,
     });
   };
 
@@ -344,7 +344,7 @@ const mapDispatchToProps = (dispatch) => {
     ...bindActionCreators(activityCommentActions, dispatch),
     ...bindActionCreators(attachmentActions, dispatch),
     stopSubmittingComment: () => dispatch(activityCommentActions.stopEditingComment()),
-    updateOptimisticallyActivityPage: (activityPage) => dispatch(activityActions.receiveActivityPage(activityPage))
+    updateOptimisticallyActivityPage: (activityPage) => dispatch(activityActions.receiveActivityPage(activityPage)),
   };
 };
 

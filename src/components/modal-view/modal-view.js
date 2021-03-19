@@ -32,9 +32,9 @@ export default class ModalView extends PureComponent<Props, void> {
     onRequestClose: () => {},
     supportedOrientations: [
       Orientation.PORTRAIT,
-      Orientation.LANDSCAPE
+      Orientation.LANDSCAPE,
     ],
-    animationType: AnimationType.NONE
+    animationType: AnimationType.NONE,
   };
 
   render() {
@@ -55,7 +55,7 @@ export default class ModalView extends PureComponent<Props, void> {
             >
               <SafeAreaView style={[
                 Styles.box,
-                transparent === true ? null : {backgroundColor: theme.uiTheme.colors.$background}
+                transparent === true ? null : {backgroundColor: theme.uiTheme.colors.$background},
               ]}>
                 <View style={[Styles.box, style]}>
                   {children}
@@ -71,6 +71,6 @@ export default class ModalView extends PureComponent<Props, void> {
 
 const Styles = StyleSheet.create({
   box: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });

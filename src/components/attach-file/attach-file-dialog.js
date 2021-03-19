@@ -50,7 +50,7 @@ export default class AttachFileDialog extends PureComponent<Props, State> {
 
     this.state = {
       attach: props.attach,
-      isAttaching: false
+      isAttaching: false,
     };
   }
 
@@ -65,7 +65,7 @@ export default class AttachFileDialog extends PureComponent<Props, State> {
   componentDidUpdate(prevProps: Props) {
     if (prevProps.attach !== this.props.attach) {
       this.setState({
-        attach: this.props.attach
+        attach: this.props.attach,
       });
     }
   }
@@ -87,8 +87,8 @@ export default class AttachFileDialog extends PureComponent<Props, State> {
     this.setState({
       attach: {
         ...this.state.attach,
-        visibility
-      }
+        visibility,
+      },
     });
   };
 

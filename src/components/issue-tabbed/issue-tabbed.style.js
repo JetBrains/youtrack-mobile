@@ -9,7 +9,7 @@ import {mainText, secondaryText} from '../common-styles/typography';
 export default EStyleSheet.create({
   tabsBar: {
     ...elevation1,
-    backgroundColor: '$background'
+    backgroundColor: '$background',
   },
   tabLabel: {
     ...mainText,
@@ -23,21 +23,21 @@ export default EStyleSheet.create({
       android: {
         fontSize: 18,
         fontWeight: '400',
-      }
-    })
+      },
+    }),
   },
 
   createUpdateInfoPanel: {
-    marginVertical: UNIT
+    marginVertical: UNIT,
   },
   createUpdateInfoText: {
     paddingTop: UNIT * 0.75,
     ...secondaryText,
-    color: '$icon'
+    color: '$icon',
   },
 
   visibility: {
     flexShrink: 1,
-    flex: 1
+    flex: 1,
   },
 });

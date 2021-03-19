@@ -46,7 +46,7 @@ export default function Mentions(props: Props) {
                 source={{uri: user.avatarUrl}}
                 style={{
                   width: AVATAR_SIZE,
-                  height: AVATAR_SIZE
+                  height: AVATAR_SIZE,
                 }}/>
               <Text style={styles.suggestionName}>{user.login}</Text>
               <Text style={styles.suggestionDescription}> {getEntityPresentation(user)}</Text>

@@ -5,7 +5,7 @@ import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE, monospace, mainText} from '../commo
 
 const showMoreLink = {
   fontSize: SECONDARY_FONT_SIZE,
-  color: '$link'
+  color: '$link',
 };
 
 export default EStyleSheet.create({
@@ -16,30 +16,30 @@ export default EStyleSheet.create({
     ...Platform.select({
       android: {
         borderBottomWidth: UNIT,
-        borderColor: 'transparent'
+        borderColor: 'transparent',
       },
       ios: {
         fontSize: MAIN_FONT_SIZE,
-      }
-    })
+      },
+    }),
   },
   lineSpace: {
-    lineHeight: 30
+    lineHeight: 30,
   },
   monospace: {
-    ...monospace
+    ...monospace,
   },
   deleted: {
-    textDecorationLine: 'line-through'
+    textDecorationLine: 'line-through',
   },
   blockQuote: {
     color: '$textSecondary',
     borderLeftWidth: 2,
     borderLeftColor: '$textSecondary',
-    paddingLeft: UNIT
+    paddingLeft: UNIT,
   },
   unspaced: {
-    margin: 0
+    margin: 0,
   },
   link: {
     color: '$link',
@@ -52,16 +52,16 @@ export default EStyleSheet.create({
   showMoreLink: {
     ...showMoreLink,
     lineHeight: SECONDARY_FONT_SIZE * 2,
-    fontSize: SECONDARY_FONT_SIZE
+    fontSize: SECONDARY_FONT_SIZE,
   },
   exceptionLink: showMoreLink,
   codeContainer: {
     marginTop: UNIT * 2,
-    marginBottom: UNIT
+    marginBottom: UNIT,
   },
   codeContent: {
     padding: UNIT,
-    backgroundColor: '$boxBackground'
+    backgroundColor: '$boxBackground',
   },
   code: {
     ...monospace,
@@ -70,7 +70,7 @@ export default EStyleSheet.create({
   },
   codeLanguage: {
     fontSize: SECONDARY_FONT_SIZE,
-    color: '$icon'
+    color: '$icon',
   },
   inlineCode: {
     ...monospace,
@@ -92,6 +92,6 @@ export default EStyleSheet.create({
 export const htmlViewStyles = EStyleSheet.create({
   a: {
     color: '$link',
-    textDecorationLine: 'underline'
-  }
+    textDecorationLine: 'underline',
+  },
 });

@@ -26,21 +26,21 @@ async function doShowActions(
         options: options.map(action => action.title),
         cancelButtonIndex: cancelIndex,
         titleTextStyle: {
-          color: uiThemeColors.$icon
+          color: uiThemeColors.$icon,
         },
         messageTextStyle: {
-          color: uiThemeColors.$icon
+          color: uiThemeColors.$icon,
         },
         separatorStyle: {
-          backgroundColor: uiThemeColors.$boxBackground
+          backgroundColor: uiThemeColors.$boxBackground,
         },
         containerStyle: {
-          backgroundColor: uiThemeColors.$background
+          backgroundColor: uiThemeColors.$background,
         },
         textStyle: {
-          color: uiThemeColors.$text
+          color: uiThemeColors.$text,
         },
-        showSeparators: true
+        showSeparators: true,
       },
       (actionIndex) => {
         const action = options[actionIndex];

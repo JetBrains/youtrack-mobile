@@ -51,7 +51,7 @@ const ArticleDetails = (props: Props) => {
             articlePlaceholder: article,
             storePrevArticle: true,
             store: true,
-            storeRouteName: routeMap.ArticleSingle
+            storeRouteName: routeMap.ArticleSingle,
           })}
           onShowSubArticles={(childArticle: Article) => navigateToSubArticlePage(childArticle)}
         />
@@ -125,7 +125,7 @@ const ArticleDetails = (props: Props) => {
     uiTheme,
     onRemoveAttach,
     onCreateArticle,
-    scrollData
+    scrollData,
   } = props;
 
   if (!article) {

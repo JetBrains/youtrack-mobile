@@ -28,7 +28,7 @@ export function getTextValueChange(params: TextValueChangeParams): string {
 
   const eventField = params.activity.field;
   const value = {
-    presentation: eventValue
+    presentation: eventValue,
   };
 
   switch (true) {
@@ -62,7 +62,7 @@ export function getTextValueChange(params: TextValueChangeParams): string {
       string: 'string',
       date: 'date',
       period: 'period',
-      dateTime: 'date and time'
+      dateTime: 'date and time',
     };
 
     switch (simpleCustomFieldType) {
@@ -89,10 +89,10 @@ function getSimpleCustomFieldType(customField) {
 
 function getEmptyFieldValue(activity, issueFields) {
   const NO_VALUE = {
-    presentation: '?'
+    presentation: '?',
   };
   const LOST_EMPTY_VALUE = {
-    presentation: '[Empty value]'
+    presentation: '[Empty value]',
   };
   if (!activity.field) {
     return LOST_EMPTY_VALUE;
@@ -107,7 +107,7 @@ function getEmptyFieldValue(activity, issueFields) {
   );
   if (foundFields.length && foundFields[0].projectCustomField.emptyFieldText) {
     return {
-      presentation: foundFields[0].projectCustomField.emptyFieldText
+      presentation: foundFields[0].projectCustomField.emptyFieldText,
     };
   }
   return NO_VALUE;

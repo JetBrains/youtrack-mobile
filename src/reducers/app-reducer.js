@@ -37,7 +37,7 @@ const initialState: RootState = {
   features: [],
   workTimeSettings: {},
   user: null,
-  issuePermissions: issuePermissionsNull
+  issuePermissions: issuePermissionsNull,
 };
 
 export default createReducer(initialState, {
@@ -49,7 +49,7 @@ export default createReducer(initialState, {
     const {permissionsStore, currentUser} = action;
     return {
       ...state,
-      issuePermissions: new IssuePermissions(permissionsStore, currentUser)
+      issuePermissions: new IssuePermissions(permissionsStore, currentUser),
     };
   },
   [types.LOG_OUT](state: RootState, action: Object = {}) {
@@ -58,45 +58,45 @@ export default createReducer(initialState, {
   [types.OPEN_MENU](state: RootState) {
     return {
       ...state,
-      showMenu: true
+      showMenu: true,
     };
   },
   [types.CLOSE_MENU](state: RootState) {
     return {
       ...state,
-      showMenu: false
+      showMenu: false,
     };
   },
   [types.OPEN_DEBUG_VIEW](state: RootState) {
     return {
       ...state,
-      showDebugView: true
+      showDebugView: true,
     };
   },
   [types.CLOSE_DEBUG_VIEW](state: RootState) {
     return {
       ...state,
-      showDebugView: false
+      showDebugView: false,
     };
   },
   [types.SET_FEATURES](state: RootState, action: {features: EndUserAgreement}) {
     return {
       ...state,
-      features: action.features
+      features: action.features,
     };
   },
   [types.SHOW_USER_AGREEMENT](state: RootState, action: {agreement: EndUserAgreement}) {
     return {
       ...state,
       showUserAgreement: true,
-      endUserAgreement: action.agreement
+      endUserAgreement: action.agreement,
     };
   },
   [types.HIDE_USER_AGREEMENT](state: RootState) {
     return {
       ...state,
       showUserAgreement: false,
-      endUserAgreement: null
+      endUserAgreement: null,
     };
   },
   [types.RECEIVE_OTHER_ACCOUNTS](state: RootState, action: {otherAccounts: Array<StorageState>}) {
@@ -114,7 +114,7 @@ export default createReducer(initialState, {
   [types.RECEIVE_USER](state: RootState, action: {user: User}) {
     return {
       ...state,
-      ...{user: action.user}
+      ...{user: action.user},
     };
   },
   [types.RECEIVE_USER_APPEARANCE_PROFILE](state: RootState, action: {appearance: UserAppearanceProfile}) {
@@ -124,7 +124,7 @@ export default createReducer(initialState, {
     const updatedUser = {...state.user, ...{profiles: updatedProfiles}};
     return {
       ...state,
-      ...{user: updatedUser}
+      ...{user: updatedUser},
     };
   },
   [types.RECEIVE_USER_ARTICLES_PROFILE](state: RootState, action: {articles: UserArticlesProfile}) {
@@ -134,16 +134,16 @@ export default createReducer(initialState, {
     const updatedUser = {...state.user, ...{profiles: updatedProfiles}};
     return {
       ...state,
-      ...{user: updatedUser}
+      ...{user: updatedUser},
     };
   },
   [types.RECEIVE_USER_GENERAL_PROFILE](state: RootState, action: {general: UserGeneralProfile}) {
     const updatedUser = mergeUserProfile(state, 'general', action.general);
     return {
       ...state,
-      ...{user: updatedUser}
+      ...{user: updatedUser},
     };
-  }
+  },
 });
 
 export function getIsAuthorized(state: RootState) {

@@ -34,7 +34,7 @@ describe('<Menu/>', () => {
         isChangingAccount: false,
         auth: {},
         user: {},
-      }
+      },
     };
     ownPropsMock = {};
     storeMock = createStoreMock(stateMock, ownPropsMock);
@@ -72,8 +72,8 @@ describe('<Menu/>', () => {
       it('should render menu `Knowledge Base` item', async () => {
         api.getApi.mockReturnValueOnce({
           config: {
-            version: '2020.2'
-          }
+            version: '2020.2',
+          },
         });
         const {getByTestId} = doRender();
 
@@ -88,8 +88,8 @@ describe('<Menu/>', () => {
       it('should render menu `Notifications` item', async () => {
         api.getApi.mockReturnValueOnce({
           config: {
-            version: '2018.4'
-          }
+            version: '2018.4',
+          },
         });
         const {getByTestId} = doRender();
 
@@ -99,8 +99,8 @@ describe('<Menu/>', () => {
       it('should not render menu `Notifications` item', async () => {
         api.getApi.mockReturnValueOnce({
           config: {
-            version: '2018.2'
-          }
+            version: '2018.2',
+          },
         });
         const {queryByTestId} = doRender();
 

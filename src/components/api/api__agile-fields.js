@@ -8,15 +8,15 @@ const SPRINT = toField([
   'id',
   'name',
   'start',
-  'finish'
+  'finish',
 ]);
 
 const AGILE_SHORT_WITH_SPRINTS = toField([
   'id',
   'name',
   {
-    sprints: SPRINT
-  }
+    sprints: SPRINT,
+  },
 ]);
 
 const AGILE_PROFILE = toField([
@@ -26,10 +26,10 @@ const AGILE_PROFILE = toField([
       'id',
       'name',
       {
-        agile: 'id'
-      }
-    ]
-  }
+        agile: 'id',
+      },
+    ],
+  },
 ]);
 
 const AGILE_COLUMN_FIELD_VALUE = toField([
@@ -42,16 +42,16 @@ const AGILE_COLUMN = toField([
   'collapsed',
   'isVisible',
   {
-    fieldValues: AGILE_COLUMN_FIELD_VALUE
-  }
+    fieldValues: AGILE_COLUMN_FIELD_VALUE,
+  },
 ]);
 
 const BOARD_COLUMN = toField([
   'id',
   'collapsed',
   {
-    agileColumn: AGILE_COLUMN
-  }
+    agileColumn: AGILE_COLUMN,
+  },
 ]);
 
 const BOARD_ISSUE_BASE_FIELDS = toField([
@@ -79,43 +79,43 @@ const BOARD_ROW = toField([
               {
                 value: [
                   'id',
-                ]
+                ],
               },
               {
                 projectCustomField: [
                   {
                     field: [
                       'id',
-                      'name'
-                    ]
-                  }
-                ]
-              }
-            ])
-          }
-        ])
-      }
-    ]
-  }
+                      'name',
+                    ],
+                  },
+                ],
+              },
+            ]),
+          },
+        ]),
+      },
+    ],
+  },
 ]);
 
 const BOARD = toField([
   'id',
   'name',
   {
-    columns: BOARD_COLUMN
+    columns: BOARD_COLUMN,
   },
   {
-    orphanRow: BOARD_ROW
+    orphanRow: BOARD_ROW,
   },
-  {trimmedSwimlanes: BOARD_ROW}
+  {trimmedSwimlanes: BOARD_ROW},
 ]);
 
 const BOARD_ON_LIST = toField([
   'id',
   'name',
   'favorite',
-  {sprints: ['id', 'name']}
+  {sprints: ['id', 'name']},
 ]);
 
 const SPRINT_WITH_BOARD = toField([
@@ -128,9 +128,9 @@ const SPRINT_WITH_BOARD = toField([
       'name',
       'orphansAtTheTop',
       'isUpdatable',
-      {estimationField: 'id'}
-    ]
-  }
+      {estimationField: 'id'},
+    ],
+  },
 ]);
 
 const SPRINT_LIVE_UPDATE = toField([
@@ -143,8 +143,8 @@ const SPRINT_LIVE_UPDATE = toField([
   'messages',
   {reorders: [{leading: 'id'}, {moved: 'id'}]},
   {
-    changedIssue: ['id']
-  }
+    changedIssue: ['id'],
+  },
 ]);
 
 const SPRINT_ISSUES_FIELDS = toField([
@@ -162,7 +162,7 @@ const SPRINT_ISSUES_FIELDS = toField([
           'avatarUrl',
           'color(id,background)',
           'presentation',
-        ]
+        ],
       },
       {
         projectCustomField: [
@@ -174,12 +174,12 @@ const SPRINT_ISSUES_FIELDS = toField([
               {
                 fieldType: [
                   'isMultiValue',
-                ]
-              }]
-          }
-        ]
-      }
-    ]
+                ],
+              }],
+          },
+        ],
+      },
+    ],
   },
 ]);
 
@@ -191,5 +191,5 @@ export default {
   sprintShort: SPRINT,
   row: BOARD_ROW,
   boardOnList: BOARD_ON_LIST,
-  liveUpdate: SPRINT_LIVE_UPDATE
+  liveUpdate: SPRINT_LIVE_UPDATE,
 };

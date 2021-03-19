@@ -58,6 +58,6 @@ const styles = EStyleSheet.create({
   counter: {
     marginRight: UNIT,
     ...secondaryText,
-    color: '$icon'
-  }
+    color: '$icon',
+  },
 });

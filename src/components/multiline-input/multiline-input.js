@@ -30,7 +30,7 @@ export default class MultilineInput extends PureComponent<Props, State> {
     adaptive: true,
     maxInputHeight: MAX_DEFAULT_HEIGHT,
     minInputHeight: MIN_DEFAULT_HEIGHT,
-    returnKeyType: iOSPlatform ? 'default' : 'none'
+    returnKeyType: iOSPlatform ? 'default' : 'none',
   };
 
   input: TextInput;
@@ -86,7 +86,7 @@ export default class MultilineInput extends PureComponent<Props, State> {
         style={[
           {fontSize: DEFAULT_FONT_SIZE},
           style,
-          adaptive ? {height: this.state.inputHeight} : null
+          adaptive ? {height: this.state.inputHeight} : null,
         ]}
       />
     );

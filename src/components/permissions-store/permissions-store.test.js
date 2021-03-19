@@ -66,20 +66,20 @@ function createPermissions() {
     {
       global: true,
       permission: {
-        key: GLOBAL_PERMISSION
-      }
+        key: GLOBAL_PERMISSION,
+      },
     }, {
       global: true,
       permission: {
-        key: GLOBAL_PERMISSION_TWO
-      }
+        key: GLOBAL_PERMISSION_TWO,
+      },
     }, {
       permission: {
-        key: PER_PROJECT_PERMISSION
+        key: PER_PROJECT_PERMISSION,
       },
       projects: [
-        {id: PERMITTED_PROJECT_ID}
-      ]
-    }
+        {id: PERMITTED_PROJECT_ID},
+      ],
+    },
   ];
 }

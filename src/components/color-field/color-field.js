@@ -73,12 +73,12 @@ const styles = StyleSheet.create({
   },
   wrapperOneChar: {
     width: COLOR_FIELD_SIZE,
-    height: COLOR_FIELD_SIZE
+    height: COLOR_FIELD_SIZE,
   },
   text: {
     ...secondaryText,
     fontSize: 13,
     lineHeight: 15,
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 });

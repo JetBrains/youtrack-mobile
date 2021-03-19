@@ -48,7 +48,7 @@ export default class AppProvider extends Component<{ }, { mode: string }> {
                   style={{
                     flex: 1,
                     backgroundColor: backgroundColor,
-                    marginTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight
+                    marginTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight,
                   }}>
                   <StatusBar
                     backgroundColor={backgroundColor}

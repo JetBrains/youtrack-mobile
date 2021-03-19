@@ -78,7 +78,7 @@ export default class Attach extends PureComponent<Props, State> {
       imageAttachments: attachments.filter(attach => hasMimeType.previewable(attach)),
       current: attach,
       imageHeaders,
-      ...(onRemoveImage ? {onRemoveImage: (currentPage: number) => onRemoveImage(attachments[currentPage])} : {})
+      ...(onRemoveImage ? {onRemoveImage: (currentPage: number) => onRemoveImage(attachments[currentPage])} : {}),
     });
   }
 
@@ -91,7 +91,7 @@ export default class Attach extends PureComponent<Props, State> {
       Router.AttachmentPreview({
         url,
         name,
-        headers: this.props.imageHeaders
+        headers: this.props.imageHeaders,
       });
     } else {
       if (!isAndroid) {
@@ -121,7 +121,7 @@ export default class Attach extends PureComponent<Props, State> {
 
     const source = {
       uri: attach?.thumbnailURL || (attach?.url ? `${attach.url}&w=126&h=80` : ''),
-      headers: imageHeaders
+      headers: imageHeaders,
     };
     if (!source.uri) {
       return null;
@@ -165,7 +165,7 @@ export default class Attach extends PureComponent<Props, State> {
       'This action deletes the attachment permanently and cannot be undone.',
       [
         {
-          text: 'Cancel'
+          text: 'Cancel',
         },
         {
           text: 'Delete',
@@ -175,8 +175,8 @@ export default class Attach extends PureComponent<Props, State> {
             if (!this._isUnmounted) {
               this.setState({isRemoving: false});
             }
-          }
-        }
+          },
+        },
       ],
       {cancelable: true}
     );

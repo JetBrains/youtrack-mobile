@@ -95,7 +95,7 @@ export default class AgileCard extends PureComponent<Props, void> {
 
           <View style={[
             styles.cardContainer,
-            zoomedIn ? null : styles.cardContainerNotZoomed
+            zoomedIn ? null : styles.cardContainerNotZoomed,
           ]}>
             <View style={styles.issueHeader}>
               <View style={styles.issueHeaderLeft}>
@@ -103,7 +103,7 @@ export default class AgileCard extends PureComponent<Props, void> {
                   style={[
                     styles.issueId,
                     issue.resolved ? styles.issueIdResolved : null,
-                    zoomedInTextStyle
+                    zoomedInTextStyle,
                   ]}
                   testID="card-simple-issue-id"
                 >

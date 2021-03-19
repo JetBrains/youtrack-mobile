@@ -12,7 +12,7 @@ import type {IssueComment} from '../../flow/CustomFields';
 const activityIconMap = {
   [ActivityCategory.Source.COMMENT]: IconComment,
   [ActivityCategory.Source.HISTORY]: IconHistory,
-  [ActivityCategory.Source.WORK_ITEM]: IconHourGlass
+  [ActivityCategory.Source.WORK_ITEM]: IconHourGlass,
 };
 
 const getActivityAllTypes = (): Array<ActivityType> => {
@@ -43,7 +43,7 @@ function createActivityFromComment(comment: IssueComment): ActivityItem {
     removed: [],
     target: {$type: 'IssueComment', created: comment.created, id: comment.id, usesMarkdown: comment.usesMarkdown},
     targetMember: null,
-    timestamp: comment.created
+    timestamp: comment.created,
   };
 }
 
@@ -60,7 +60,7 @@ const findActivityInGroupedActivities = (
     if (activity?.target?.id === targetId) {
       return {
         activity,
-        index
+        index,
       };
     }
   }
@@ -77,7 +77,7 @@ const getGroupedActivity = (activityPage: Array<Activity> = []) => {
     },
     onCompleteGroup: (group: Object) => {
       group.events = mergeActivities(group.events);
-    }
+    },
   });
 };
 

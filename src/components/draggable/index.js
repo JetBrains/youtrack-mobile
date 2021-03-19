@@ -5,5 +5,5 @@ import DropZone from './drop-zone';
 export {
   DragContainer,
   Draggable,
-  DropZone
+  DropZone,
 };

@@ -58,13 +58,13 @@ export default createReducer(initialState, {
     return {
       ...state,
       activityPage,
-      activitiesLoadingError: null
+      activitiesLoadingError: null,
     };
   },
   [types.RECEIVE_ACTIVITY_ERROR]: (state: State, action: { error: CustomError }): State => {
     return {
       ...state,
-      activitiesLoadingError: action.error
+      activitiesLoadingError: action.error,
     };
   },
   [types.RECEIVE_ACTIVITY_API_AVAILABILITY]: (state: State, action: Object): State => {
@@ -74,13 +74,13 @@ export default createReducer(initialState, {
     return {
       ...state,
       issueActivityTypes: action.issueActivityTypes,
-      issueActivityEnabledTypes: action.issueActivityEnabledTypes
+      issueActivityEnabledTypes: action.issueActivityEnabledTypes,
     };
   },
   [types.RECEIVE_WORK_TIME_SETTINGS]: (state: State, action: { workTimeSettings: WorkTimeSettings }): State => {
     return {
       ...state,
-      workTimeSettings: action.workTimeSettings
+      workTimeSettings: action.workTimeSettings,
     };
   },
 

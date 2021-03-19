@@ -30,7 +30,7 @@ export function renderSelector(params: {
     <View style={[
       styles.selector,
       params.style,
-      params.showBottomBorder ? styles.selectorBorder : null
+      params.showBottomBorder ? styles.selectorBorder : null,
     ]}>
       <TouchableOpacity
         key={params.key}
@@ -42,7 +42,7 @@ export function renderSelector(params: {
           style={[
             styles.selectorButtonText,
             params.textStyle,
-            params.isLoading ? styles.selectorButtonTextDisabled : null
+            params.isLoading ? styles.selectorButtonTextDisabled : null,
           ]}
           numberOfLines={1}
         >
@@ -62,10 +62,10 @@ export function renderSelector(params: {
 const styles = EStyleSheet.create({
   selector: {
     alignItems: 'flex-start',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   selectorBorder: {
-    ...elevation1
+    ...elevation1,
   },
   selectorButton: {
     flexDirection: 'row',
@@ -77,12 +77,12 @@ const styles = EStyleSheet.create({
   selectorButtonText: {
     ...mainText,
     fontWeight: '500',
-    color: '$text'
+    color: '$text',
   },
   selectorButtonTextDisabled: {
-    color: '$icon'
+    color: '$icon',
   },
   selectorIcon: {
-    lineHeight: 20
-  }
+    lineHeight: 20,
+  },
 });

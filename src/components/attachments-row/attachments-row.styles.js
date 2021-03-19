@@ -5,7 +5,7 @@ export default EStyleSheet.create({
   attachesScroll: {
     paddingLeft: UNIT * 2,
     marginLeft: -UNIT * 2,
-    marginRight: -UNIT * 2
+    marginRight: -UNIT * 2,
   },
   attachmentImage: {
     marginRight: UNIT,
@@ -14,7 +14,7 @@ export default EStyleSheet.create({
     borderRadius: 3,
     width: 120,
     height: UNIT * 8,
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   attachmentFile: {
     marginRight: UNIT * 2,
@@ -22,7 +22,7 @@ export default EStyleSheet.create({
     alignItems: 'center',
   },
   attachmentName: {
-    color: '$icon'
+    color: '$icon',
   },
   imageActivityIndicator: {
     backgroundColor: '$mask',
@@ -30,15 +30,15 @@ export default EStyleSheet.create({
     top: 0,
     left: 0,
     right: UNIT,
-    bottom: 0
+    bottom: 0,
   },
   removeButton: {
     position: 'absolute',
     top: 0,
     right: UNIT,
-    padding: UNIT / 2
+    padding: UNIT / 2,
   },
   removingAttach: {
-    opacity: .3
-  }
+    opacity: 0.3,
+  },
 });

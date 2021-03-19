@@ -9,7 +9,7 @@ import * as types from '../issue-action-types';
 import {
   convertCommentsToActivityPage,
   getActivityCategories,
-  getActivityAllTypes
+  getActivityAllTypes,
 } from '../../../components/activity/activity-helper';
 
 let APIMock;
@@ -34,12 +34,12 @@ describe('Issue activity', () => {
     APIMock = {
       issue: {
         getIssueComments: jest.fn(() => [commentMock]),
-        getActivitiesPage: jest.fn(() => activityPageMock)
-      }
+        getActivitiesPage: jest.fn(() => activityPageMock),
+      },
     };
 
     store = mockStore({
-      issueState: {issueId: ISSUE_ID, issue: issueMock}
+      issueState: {issueId: ISSUE_ID, issue: issueMock},
     });
   });
 
@@ -58,18 +58,18 @@ describe('Issue activity', () => {
 
       expect(dispatched[0]).toEqual({
         type: types.RECEIVE_ACTIVITY_API_AVAILABILITY,
-        activitiesEnabled: false
+        activitiesEnabled: false,
       });
 
       expect(dispatched[1]).toEqual({
         type: types.RECEIVE_ACTIVITY_CATEGORIES,
         issueActivityTypes: issueActivityAllTypes,
-        issueActivityEnabledTypes: issueActivityAllTypes
+        issueActivityEnabledTypes: issueActivityAllTypes,
       });
 
       expect(dispatched[2]).toEqual({
         type: types.RECEIVE_ACTIVITY_PAGE,
-        activityPage: convertCommentsToActivityPage([commentMock])
+        activityPage: convertCommentsToActivityPage([commentMock]),
       });
     });
 
@@ -88,22 +88,22 @@ describe('Issue activity', () => {
       expect(dispatched[0]).toEqual({
         type: types.RECEIVE_ACTIVITY_CATEGORIES,
         issueActivityTypes: issueActivityAllTypes,
-        issueActivityEnabledTypes: issueActivityAllTypes
+        issueActivityEnabledTypes: issueActivityAllTypes,
       });
 
       expect(dispatched[1]).toEqual({
         type: types.RECEIVE_ACTIVITY_PAGE,
-        activityPage: null
+        activityPage: null,
       });
 
       expect(dispatched[2]).toEqual({
         type: types.RECEIVE_ACTIVITY_API_AVAILABILITY,
-        activitiesEnabled: true
+        activitiesEnabled: true,
       });
 
       expect(dispatched[3]).toEqual({
         type: types.RECEIVE_ACTIVITY_PAGE,
-        activityPage: activityPageMock
+        activityPage: activityPageMock,
       });
     });
   });

@@ -66,7 +66,7 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
       suggestionsQuery: '',
       suggestedUsers: [],
       commentCaret: 0,
-      showVisibility: false
+      showVisibility: false,
     };
   }
 
@@ -94,15 +94,15 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
       ...this.props.editingComment,
       ...{
         usesMarkdown: true,
-        text: this.state.commentText
-      }
+        text: this.state.commentText,
+      },
     };
 
     this.props.onSubmitComment(comment).then(() => {
       if (!this.isUnmounted) {
         this.setState({
           commentText: '',
-          showVisibility: false
+          showVisibility: false,
         });
       }
     }).finally(() => {
@@ -117,7 +117,7 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
     if (!word) {
       return this.setState({
         showSuggestions: false,
-        suggestionsQuery: ''
+        suggestionsQuery: '',
       });
     }
 
@@ -125,7 +125,7 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
       word = word.slice(1);
       this.setState({
         showSuggestions: true,
-        suggestionsQuery: word
+        suggestionsQuery: word,
       });
 
       this.props.onRequestCommentSuggestions(word);
@@ -138,7 +138,7 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
       this.setState({
         commentText: newText,
         showSuggestions: false,
-        showVisibility: true
+        showVisibility: true,
       });
     }
   };
@@ -196,7 +196,7 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
       <TouchableOpacity
         style={[
           styles.commentSendButton,
-          isDisabled ? styles.commentSendButtonDisabled : null
+          isDisabled ? styles.commentSendButtonDisabled : null,
         ]}
         disabled={isDisabled}
         onPress={this.updateComment}>
@@ -227,7 +227,7 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
         <View style={[
           styles.commentHeaderContainer,
           showVisibility ? styles.commentHeaderContainerCreate : null,
-          isEditComment ? styles.commentHeaderContainerEdit : null
+          isEditComment ? styles.commentHeaderContainerEdit : null,
         ]}>
 
           {isEditComment && (

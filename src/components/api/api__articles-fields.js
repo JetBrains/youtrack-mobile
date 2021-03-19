@@ -8,15 +8,15 @@ const toField = ApiHelper.toField;
 const childArticlesFields: Array<string> = [
   'id',
   'idReadable',
-  'summary'
+  'summary',
 ];
 
 export const articleChildrenAndSubChildren = toField([
   {
     childArticles: childArticlesFields.concat({
-      childArticles: childArticlesFields
-    })
-  }
+      childArticles: childArticlesFields,
+    }),
+  },
 ]);
 
 export const articleFields = toField([
@@ -35,36 +35,36 @@ export const articleFields = toField([
   {
     mentionedArticles: [
       '$type',
-      'idReadable'
-    ]
+      'idReadable',
+    ],
   },
   {
     mentionedIssues: [
       '$type',
       'id',
       'idReadable',
-      'resolved'
-    ]
+      'resolved',
+    ],
   },
   {mentionedUsers: issueFields.user},
   {
     parentArticle: [
       'id',
       'idReadable',
-      'summary'
-    ]
+      'summary',
+    ],
   },
   {
     project: [
       'id',
       'name',
-      'ringId'
-    ]
+      'ringId',
+    ],
   },
   {reporter: issueFields.user},
   {updatedBy: issueFields.user},
 
-  issueFields.VISIBILITY
+  issueFields.VISIBILITY,
 ]);
 
 export const articlesFields = toField([
@@ -74,14 +74,14 @@ export const articlesFields = toField([
   'ordinal',
   'project(id,name,pinned)',
   {
-    childArticles: childArticlesFields
+    childArticles: childArticlesFields,
   },
   {
     parentArticle: [
       'id',
-      'visibility($type)'
-    ]
+      'visibility($type)',
+    ],
   },
-  'visibility($type)'
+  'visibility($type)',
 ]);
 

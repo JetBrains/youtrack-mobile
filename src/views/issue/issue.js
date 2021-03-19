@@ -58,7 +58,7 @@ type IssueProps = IssueState & typeof issueActions & AdditionalProps;
 //$FlowFixMe
 class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   static contextTypes = {
-    actionSheet: PropTypes.func
+    actionSheet: PropTypes.func,
   };
 
   imageHeaders = getApi().auth.getAuthorizationHeaders();
@@ -108,7 +108,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       updateIssueVisibility,
 
       toggleVisibleAddAttachDialog,
-      onTagRemove
+      onTagRemove,
     } = this.props;
 
     return (
@@ -248,7 +248,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       saveIssueSummaryAndDescriptionChange,
       showIssueActions,
       stopEditingIssue,
-      issuePermissions
+      issuePermissions,
     } = this.props;
 
     const issueIdReadable = this.renderHeaderIssueTitle();
@@ -267,7 +267,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
                   canAttach: issuePermissions.canAddAttachmentTo(issue),
                   canEdit: issuePermissions.canUpdateGeneralInfo(issue),
                   canApplyCommand: issuePermissions.canRunCommand(issue),
-                  canTag: issuePermissions.canTag(issue)
+                  canTag: issuePermissions.canTag(issue),
                 },
                 this.switchToDetailsTab,
               );
@@ -393,7 +393,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       issueLoadingError,
       showCommandDialog,
       isAttachFileDialogVisible,
-      isTagsSelectVisible
+      isTagsSelectVisible,
     } = this.props;
 
     return (
@@ -427,14 +427,14 @@ const mapStateToProps = (state: { app: Object, issueState: IssueState }, ownProp
     ...state.issueState,
     issuePlaceholder: ownProps.issuePlaceholder,
     issueId: ownProps.issueId,
-    user: state.app.user
+    user: state.app.user,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(issueActions, dispatch),
-    createAttachActions: () => attachmentActions.createAttachActions(dispatch)
+    createAttachActions: () => attachmentActions.createAttachActions(dispatch),
   };
 };
 

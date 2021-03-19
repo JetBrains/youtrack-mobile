@@ -22,7 +22,7 @@ const initialState: InboxState = {
   items: [],
   error: null,
   theme: null,
-  currentUser: null
+  currentUser: null,
 };
 
 export default createReducer(initialState, {
@@ -45,7 +45,7 @@ export default createReducer(initialState, {
   [types.ERROR](state, {error}): InboxState {
     return {
       ...state,
-      error
+      error,
     };
-  }
+  },
 });

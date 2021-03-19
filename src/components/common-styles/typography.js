@@ -12,12 +12,12 @@ export const monospaceFontIOS = 'Menlo';
 export const monospace = {
   ...Platform.select({
     ios: {
-      fontFamily: monospaceFontIOS
+      fontFamily: monospaceFontIOS,
     },
     android: {
-      fontFamily: monospaceFontAndroid
-    }
-  })
+      fontFamily: monospaceFontAndroid,
+    },
+  }),
 };
 
 export const headerTitle = {
@@ -26,21 +26,21 @@ export const headerTitle = {
 
   ...Platform.select({
     ios: {
-      fontWeight: '700'
+      fontWeight: '700',
     },
     android: {
-      fontWeight: '500'
-    }
+      fontWeight: '500',
+    },
   }),
 };
 
 export const secondaryText = {
   fontSize: SECONDARY_FONT_SIZE,
-  letterSpacing: -0.17
+  letterSpacing: -0.17,
 };
 
 export const mainText = {
   fontSize: MAIN_FONT_SIZE,
   lineHeight: 20,
-  letterSpacing: -0.19
+  letterSpacing: -0.19,
 };

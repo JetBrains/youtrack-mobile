@@ -47,13 +47,13 @@ export const activityArticleCategory = {
   DESCRIPTION: 'ArticleDescriptionCategory',
   PROJECT: 'ArticleProjectCategory',
   SUMMARY: 'ArticleSummaryCategory',
-  VISIBILITY: 'ArticleVisibilityCategory'
+  VISIBILITY: 'ArticleVisibilityCategory',
 };
 
 
 export const ActivityCategory = [
   ['COMMENT', 'IssueComments', [
-    activityCategory.COMMENT
+    activityCategory.COMMENT,
   ], 'Comments'],
   ['HISTORY', 'IssueHistory', [
     activityCategory.ATTACHMENTS,
@@ -67,11 +67,11 @@ export const ActivityCategory = [
     activityCategory.PERMITTED_GROUP,
     activityCategory.SPRINT,
     activityCategory.SUMMARY,
-    activityCategory.TAGS
+    activityCategory.TAGS,
   ], 'History'],
   ['WORK_ITEM', 'TimeTracking', [
-    activityCategory.WORK_ITEM
-  ], 'Work']
+    activityCategory.WORK_ITEM,
+  ], 'Work'],
 ].reduce(function(Activity, source) {
   const sourceName = source[0];
   const sourceKey = source[1];
@@ -86,7 +86,7 @@ export const ActivityCategory = [
 }, {
   Source: {},
   ActivityCategories: {},
-  CategoryPresentation: {}
+  CategoryPresentation: {},
 });
 
 

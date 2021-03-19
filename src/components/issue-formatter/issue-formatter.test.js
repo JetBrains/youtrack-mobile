@@ -24,7 +24,7 @@ describe('getEntityPresentation', function() {
   it('should return `localizedName`', () => {
     const item = {
       name: 'name',
-      localizedName: 'localizedName'
+      localizedName: 'localizedName',
     };
 
     getEntityPresentation(item).should.equal(item.localizedName);
@@ -50,7 +50,7 @@ describe('getEntityPresentation', function() {
 
   it('should return `presentation`', () => {
     const item = {
-      presentation: 'presentation'
+      presentation: 'presentation',
     };
 
     getEntityPresentation(item).should.equal(item.presentation);
@@ -71,17 +71,17 @@ describe('getVisibilityPresentation', function() {
 
   it('should return combined `permittedGroups` and `permittedUsers` presentation separated by comma', () => {
     const permittedUsers = [{
-      login: 'userLogin'
+      login: 'userLogin',
     }];
     const permittedGroups = [{
-      name: 'groupName'
+      name: 'groupName',
     }];
 
     const visibilityPresentation = getVisibilityPresentation({
       visibility: {
         permittedGroups: permittedGroups,
-        permittedUsers: permittedUsers
-      }
+        permittedUsers: permittedUsers,
+      },
     });
 
     visibilityPresentation.should.equal(`${permittedGroups[0].name}, ${permittedUsers[0].login}`);

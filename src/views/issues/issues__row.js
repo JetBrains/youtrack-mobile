@@ -10,7 +10,7 @@ import {
   getPriotityField,
   getEntityPresentation,
   relativeDate,
-  getReadableID
+  getReadableID,
 } from '../../components/issue-formatter/issue-formatter';
 
 import Avatar from '../../components/avatar/avatar';
@@ -88,7 +88,7 @@ export default class IssueRow extends Component<Props, void> {
               <Text
                 style={[
                   styles.summary,
-                  issue.resolved ? {color: EStyleSheet.value('$resolved')} : null
+                  issue.resolved ? {color: EStyleSheet.value('$resolved')} : null,
                 ]}
                 numberOfLines={2}
                 testID="issue-row-summary">

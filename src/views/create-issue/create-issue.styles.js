@@ -7,34 +7,34 @@ import {separator} from '../../components/common-styles/list';
 export default EStyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '$background'
+    backgroundColor: '$background',
   },
   content: {
-    paddingLeft: UNIT
+    paddingLeft: UNIT,
   },
   title: {
     paddingLeft: UNIT * 2,
     ...headerTitle,
-    color: '$text'
+    color: '$text',
   },
   issueSummary: {
     marginTop: UNIT,
     marginHorizontal: UNIT * 2,
-    paddingBottom: UNIT * 5
+    paddingBottom: UNIT * 5,
   },
   creatingIndicator: {
     paddingTop: 4,
     width: 30,
-    height: 20
+    height: 20,
   },
   separator: {
     height: 1,
     marginVertical: UNIT * 1.5,
     ...separator,
-    borderColor: '$separator'
+    borderColor: '$separator',
   },
   additionalData: {
-    marginHorizontal: UNIT * 2
+    marginHorizontal: UNIT * 2,
   },
   imageActivityIndicator: {
     backgroundColor: '$mask',
@@ -42,7 +42,7 @@ export default EStyleSheet.create({
     top: 0,
     left: 0,
     right: UNIT,
-    bottom: 0
+    bottom: 0,
   },
   selectProjectButton: {
     paddingTop: UNIT * 2,
@@ -50,7 +50,7 @@ export default EStyleSheet.create({
     marginLeft: UNIT * 2,
     marginRight: UNIT * 2,
     justifyContent: 'space-between',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   selectProjectText: {
     color: '$text',
@@ -61,11 +61,11 @@ export default EStyleSheet.create({
     alignSelf: 'flex-end',
     marginLeft: UNIT,
     width: UNIT * 2,
-    height: UNIT * 2
+    height: UNIT * 2,
   },
   visibility: {
     marginTop: UNIT * 3,
     marginLeft: UNIT * 2,
     marginBottom: UNIT * 2,
-  }
+  },
 });

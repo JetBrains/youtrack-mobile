@@ -3,17 +3,17 @@ import {UNIT} from '../variables/variables';
 
 export default EStyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   buttons: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   closeButton: {
     padding: UNIT * 2,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   closeButtonText: {
-    color: '$link'
-  }
+    color: '$link',
+  },
 });

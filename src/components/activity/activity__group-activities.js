@@ -69,7 +69,7 @@ function createActivityGroup(params: Object) {
     events: [],
     author: params?.author || null,
     authorGroup: params?.authorGroup,
-    timestamp: params?.timestamp || null
+    timestamp: params?.timestamp || null,
   };
 }
 

@@ -11,7 +11,7 @@ import type {
   ArticleProject,
   ArticlesList,
   ArticlesListItem,
-  ProjectArticlesData
+  ProjectArticlesData,
 } from '../../flow/Article';
 import type {IssueProject} from '../../flow/CustomFields';
 
@@ -24,10 +24,10 @@ export const createArticlesListItem = (
   return {
     title: project ? {
       ...project,
-      articles: {...project.articles, collapsed: isCollapsed}
+      articles: {...project.articles, collapsed: isCollapsed},
     } : null,
     data: isCollapsed ? [] : data,
-    dataCollapsed: isCollapsed && data.length > 0 ? data : null
+    dataCollapsed: isCollapsed && data.length > 0 ? data : null,
   };
 };
 

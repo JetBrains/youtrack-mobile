@@ -8,8 +8,8 @@ import {MAIN_FONT_SIZE} from '../common-styles/typography';
 export default EStyleSheet.create({
   container: {
     flex: 1,
-    minHeight: UNIT * 42
-  }
+    minHeight: UNIT * 42,
+  },
 });
 
 export const calendarTheme = (uiTheme: UITheme) => {
@@ -36,6 +36,6 @@ export const calendarTheme = (uiTheme: UITheme) => {
     textDayFontSize: MAIN_FONT_SIZE,
     textDayFontWeight: '400',
 
-    todayTextColor: uiThemeColors.$link
+    todayTextColor: uiThemeColors.$link,
   };
 };

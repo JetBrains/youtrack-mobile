@@ -9,7 +9,7 @@ import {
   TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  View
+  View,
 } from 'react-native';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
@@ -67,7 +67,7 @@ export class EnterServer extends Component<Props, State> {
       serverUrl: props.serverUrl,
       connecting: false,
       error: null,
-      isErrorInfoModalVisible: false
+      isErrorInfoModalVisible: false,
     };
 
     usage.trackScreenView(CATEGORY_NAME);
@@ -88,7 +88,7 @@ export class EnterServer extends Component<Props, State> {
       `https://${enteredUrl}/youtrack`,
       `http://${enteredUrl}`,
       `http://${enteredUrl}/youtrack`,
-      `http://${enteredUrl}${VERSION_DETECT_FALLBACK_URL}`
+      `http://${enteredUrl}${VERSION_DETECT_FALLBACK_URL}`,
     ];
   }
 
@@ -281,7 +281,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     connectToYoutrack: newURL => dispatch(connectToNewYoutrack(newURL)),
-    onShowDebugView: () => dispatch(openDebugView())
+    onShowDebugView: () => dispatch(openDebugView()),
   };
 };
 
@@ -289,7 +289,7 @@ const mapDispatchToProps = (dispatch) => {
 const mergeProps = (stateProps, dispatchProps) => {
   return {
     ...dispatchProps,
-    ...stateProps
+    ...stateProps,
   };
 };
 

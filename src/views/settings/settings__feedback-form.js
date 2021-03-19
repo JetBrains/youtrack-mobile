@@ -6,7 +6,7 @@ import {
   Text,
   TouchableOpacity,
   ActivityIndicator,
-  TextInput
+  TextInput,
 } from 'react-native';
 
 import InputScrollView from 'react-native-input-scroll-view';
@@ -52,7 +52,7 @@ type State = {
 
 export default class SettingsFeedbackForm extends PureComponent<Props, State> {
   static contextTypes = {
-    actionSheet: PropTypes.func
+    actionSheet: PropTypes.func,
   };
 
   initialState = {
@@ -65,7 +65,7 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
       type: feedbackTypeOptions[0],
       logs: feedbackLogsOptions[0],
       description: null,
-    }
+    },
   };
   state = this.initialState;
 
@@ -81,9 +81,9 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
         execute: () => this.setState({
           feedback: {
             ...this.state.feedback,
-            [isType ? 'type' : 'logs']: action
-          }
-        })
+            [isType ? 'type' : 'logs']: action,
+          },
+        }),
       }
     )).concat({title: 'Cancel'});
   };
@@ -118,7 +118,7 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
       selectTextOnFocus: true,
       autoCorrect: false,
       placeholderTextColor: uiThemeColors.$icon,
-      keyboardAppearance: uiTheme.name
+      keyboardAppearance: uiTheme.name,
     };
     const buttonStyle: Array<ViewStyleProp> = [styles.feedbackFormInput, styles.feedbackFormType];
     const iconAngleRight = <IconAngleRight size={20} color={uiThemeColors.$icon}/>;
@@ -126,8 +126,8 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
     const update: ($Shape<Feedback>) => void = (feedbackPartial: Object) => this.setState({
       feedback: {
         ...feedback,
-        ...feedbackPartial
-      }
+        ...feedbackPartial,
+      },
     });
 
     return (

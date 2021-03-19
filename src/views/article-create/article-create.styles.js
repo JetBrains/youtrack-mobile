@@ -7,7 +7,7 @@ import {mainText} from '../../components/common-styles/typography';
 export default EStyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '$background'
+    backgroundColor: '$background',
   },
   header: elevation1,
   content: {
@@ -19,32 +19,32 @@ export default EStyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginTop: UNIT * 2.5,
-    marginBottom: UNIT * 1.5
+    marginBottom: UNIT * 1.5,
   },
   attachments: {
     marginTop: UNIT * 3,
-    paddingHorizontal: UNIT * 2
+    paddingHorizontal: UNIT * 2,
   },
   projectPanel: {
     alignItems: 'center',
     height: 'auto',
     minHeight: UNIT * 7,
     marginLeft: UNIT,
-    padding: UNIT
+    padding: UNIT,
   },
   projectContainer: {
     flexGrow: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   projectSelector: {
     minHeight: UNIT * 4,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   projectSelectorText: {
     ...mainText,
     marginRight: UNIT / 2,
-    color: '$link'
+    color: '$link',
   },
   discard: {
     marginTop: UNIT * 2,
@@ -56,11 +56,11 @@ export default EStyleSheet.create({
     padding: UNIT * 2,
     borderColor: '$separator',
     borderRadius: UNIT,
-    borderWidth: 1
+    borderWidth: 1,
   },
   discardButtonText: {
     ...mainText,
     color: '$link',
-    textAlign: 'center'
+    textAlign: 'center',
   },
 });

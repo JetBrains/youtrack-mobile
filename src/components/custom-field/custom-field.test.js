@@ -15,14 +15,14 @@ describe('<CustomField/>', () => {
         field: {
           name: 'Test custom field',
           fieldType: {
-            valueType: 'some-type'
-          }
-        }
+            valueType: 'some-type',
+          },
+        },
       },
       value: {
-        name: 'Test value'
+        name: 'Test value',
       },
-      color: {id: 4}
+      color: {id: 4},
     };
   });
 
@@ -51,14 +51,14 @@ describe('<CustomField/>', () => {
       projectCustomField: {
         field: {
           fieldType: {
-            valueType: 'user'
-          }
-        }
+            valueType: 'user',
+          },
+        },
       },
       value: {
         fullName: 'Full Name',
-        avatarUrl: '/userAvatarUrl'
-      }
+        avatarUrl: '/userAvatarUrl',
+      },
     };
 
     const wrapper = shallow(<CustomField field={userFieldMock}/>);

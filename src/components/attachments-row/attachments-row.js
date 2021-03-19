@@ -38,7 +38,7 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
     canRemoveAttachment: false,
     onOpenAttachment: () => {},
     onImageLoadingError: () => {},
-    onRemoveImage: () => {}
+    onRemoveImage: () => {},
   };
 
   UNSAFE_componentWillReceiveProps(props: Props) {

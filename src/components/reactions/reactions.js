@@ -46,7 +46,7 @@ const reactionsMap = {
   comment: require('./assets/comment.svg').default,
   okay: require('./assets/okay.svg').default,
   zero: require('./assets/zero.svg').default,
-  one: require(`./assets/one.svg`).default,
+  one: require('./assets/one.svg').default,
   two: require('./assets/two.svg').default,
   three: require('./assets/three.svg').default,
   four: require('./assets/four.svg').default,
@@ -54,7 +54,7 @@ const reactionsMap = {
   six: require('./assets/six.svg').default,
   seven: require('./assets/seven.svg').default,
   eight: require('./assets/eight.svg').default,
-  nine: require('./assets/nine.svg').default
+  nine: require('./assets/nine.svg').default,
 };
 
 export const COMMENT_REACTIONS_SEPARATOR: string = '|';

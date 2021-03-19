@@ -9,7 +9,7 @@ deviceLog.init(new InMemoryAdapter(), {
   logRNErrors : true,
   rowInsertDebounceMs: 0,
   maxNumberToRender : 2000,
-  maxNumberToPersist : 2000
+  maxNumberToPersist : 2000,
 });
 
 export default {
@@ -32,7 +32,7 @@ export default {
   },
   disableLog() {
     deviceLog.options.logToConsole = false;
-  }
+  },
 };
 
 export async function getLogs() {

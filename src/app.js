@@ -81,7 +81,7 @@ class YouTrackMobile extends Component<void, void> {
       const notificationPayload = initialNotification?.payload;
       notificationData = {
         issueId: notificationPayload?.issueId,
-        backendUrl: notificationPayload?.backendUrl
+        backendUrl: notificationPayload?.backendUrl,
       };
     }
     return notificationData;
@@ -101,28 +101,28 @@ class YouTrackMobile extends Component<void, void> {
       component: Home,
       type: 'reset',
       props: {
-        message: `Loading configuration...`,
+        message: 'Loading configuration...',
         onChangeBackendUrl: oldUrl => Router.EnterServer({serverUrl: oldUrl}),
-        onRetry: YouTrackMobile.init
-      }
+        onRetry: YouTrackMobile.init,
+      },
     });
 
     Router.registerRoute({
       name: routeMap.EnterServer,
       component: EnterServer,
-      type: 'reset'
+      type: 'reset',
     });
 
     Router.registerRoute({
       name: routeMap.LogIn,
       component: LoginForm,
-      type: 'reset'
+      type: 'reset',
     });
 
     Router.registerRoute({
       name: routeMap.Issues,
       component: Issues,
-      type: 'reset'
+      type: 'reset',
     });
 
     Router.registerRoute({name: routeMap.AgileBoard, component: AgileBoard, type: 'reset'});
@@ -156,7 +156,7 @@ const AppActionSheetConnected = connectActionSheet<{}>(YouTrackMobile);
 
 class AppContainer extends Component<void, void> {
   static childContextTypes = {
-    actionSheet: PropTypes.func
+    actionSheet: PropTypes.func,
   };
 
   actionSheetRef: Ref<ActionSheetProvider>;

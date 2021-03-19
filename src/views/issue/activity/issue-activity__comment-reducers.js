@@ -25,7 +25,7 @@ export const initialState: State = {
   submittingComment: false,
   suggestionsAreLoading: false,
   tmpIssueComments: null,
-  updateUserAppearanceProfile: null
+  updateUserAppearanceProfile: null,
 };
 
 export default createReducer(initialState, {
@@ -66,14 +66,14 @@ export default createReducer(initialState, {
     return {
       ...state,
       isVisibilitySelectShown: true,
-      selectProps: action.selectProps
+      selectProps: action.selectProps,
     };
   },
   [types.CLOSE_ISSUE_SELECT]: (state: State) => {
     return {
       ...state,
       isVisibilitySelectShown: false,
-      selectProps: null
+      selectProps: null,
     };
   },
   [types.SET_COMMENT_VISIBILITY]: (state: State, action: Object) => {

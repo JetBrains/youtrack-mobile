@@ -33,7 +33,7 @@ export default class SelectSectioned extends Select {
       });
       filteredSections.push({
         title: section.title,
-        data: selectedItems
+        data: selectedItems,
       });
       return filteredSections;
     }, []);
@@ -74,22 +74,22 @@ const styles = EStyleSheet.create({
   sectionHeader: {
     padding: UNIT * 2,
     paddingBottom: UNIT,
-    backgroundColor: '$background'
+    backgroundColor: '$background',
   },
   searchText: {
     ...mainText,
     fontWeight: '500',
-    color: '$text'
+    color: '$text',
   },
   sectionHeaderText: {
     textTransform: 'uppercase',
     ...secondaryText,
-    color: '$icon'
+    color: '$icon',
   },
   link: {
-    color: '$link'
+    color: '$link',
   },
   list: {
-    paddingBottom: UNIT * 4
-  }
+    paddingBottom: UNIT * 4,
+  },
 });

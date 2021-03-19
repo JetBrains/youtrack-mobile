@@ -12,7 +12,7 @@ const defaultConfig = {
   update:
     {
       type: LayoutAnimation.Types.easeInEaseOut,
-    }
+    },
 };
 
 function layoutAnimation(config?: Object) {
@@ -27,5 +27,5 @@ function layoutAnimation(config?: Object) {
 
 export default {
   layoutAnimation,
-  LayoutAnimation
+  LayoutAnimation,
 };

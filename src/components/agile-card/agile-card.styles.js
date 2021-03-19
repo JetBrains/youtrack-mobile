@@ -11,7 +11,7 @@ export const agileCard = {
   marginLeft: UNIT * 2,
   borderRadius: UNIT,
   overflow: 'hidden',
-  backgroundColor: '$boxBackground'
+  backgroundColor: '$boxBackground',
 };
 
 export default EStyleSheet.create({
@@ -22,7 +22,7 @@ export default EStyleSheet.create({
     marginBottom: UNIT / 4,
     width: UNIT / 2,
     borderTopLeftRadius: UNIT,
-    borderBottomLeftRadius: UNIT
+    borderBottomLeftRadius: UNIT,
   },
   cardContainer: {
     flexGrow: 1,
@@ -35,10 +35,10 @@ export default EStyleSheet.create({
     paddingTop: UNIT,
   },
   cardContent: {
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   issueHeader: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   issueHeaderLeft: {
     flexGrow: 1,
@@ -46,55 +46,55 @@ export default EStyleSheet.create({
   issueContent: {
     flexGrow: 1,
     flexDirection: 'column',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   issueSummary: {
     flexGrow: 1,
-    color: '$text'
+    color: '$text',
   },
   ghost: {
-    display: 'none'
+    display: 'none',
   },
   dragging: {
     width: '80%',
     transform: [{rotate: '-3deg'}],
     borderWidth: 2,
-    borderColor: '$iconAccent'
+    borderColor: '$iconAccent',
   },
   draggingZoomedOut: {
-    width: '20%'
+    width: '20%',
   },
   estimation: {
     marginRight: UNIT,
     ...secondaryText,
-    color: '$icon'
+    color: '$icon',
   },
   summary: {
     flexGrow: 1,
     ...issueCard.issueSummary,
-    marginTop: UNIT
+    marginTop: UNIT,
   },
   issueId: {
     ...issueCard.issueId,
-    color: '$icon'
+    color: '$icon',
   },
   issueIdResolved: {
-    ...issueIdResolved
+    ...issueIdResolved,
   },
   assignees: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   assignee: {
-    marginLeft: UNIT / 2
+    marginLeft: UNIT / 2,
   },
   tags: {
     flexGrow: 0,
     overflow: 'hidden',
     height: UNIT * 3.5,
-    marginTop: UNIT / 2
+    marginTop: UNIT / 2,
   },
   zoomedInText: {
-    fontSize: 11
-  }
+    fontSize: 11,
+  },
 });

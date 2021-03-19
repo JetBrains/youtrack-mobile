@@ -19,14 +19,14 @@ export default EStyleSheet.create({
   },
   cancelButton: {
     minWidth: minButtonWidth,
-    color: '$link'
+    color: '$link',
   },
   searchInput: {
     flex: 1,
     paddingVertical: UNIT * 1.5,
     margin: UNIT,
     fontSize: MAIN_FONT_SIZE,
-    color: '$text'
+    color: '$text',
   },
   row: {
     position: 'relative',
@@ -35,56 +35,56 @@ export default EStyleSheet.create({
     alignItems: 'center',
     marginLeft: UNIT * 2,
     paddingRight: UNIT * 1.5,
-    height: SELECT_ITEM_HEIGHT
+    height: SELECT_ITEM_HEIGHT,
   },
   rowSeparator: {
     borderColor: '$separator',
     ...separator,
   },
   loadingRow: {
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   headerText: {
-    color: '$text'
+    color: '$text',
   },
   selectItemValue: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   itemIcon: {
-    marginRight: UNIT * 2
+    marginRight: UNIT * 2,
   },
   itemTitle: {
     fontSize: MAIN_FONT_SIZE,
-    color: '$text'
+    color: '$text',
   },
   loadingMessage: {
     paddingLeft: UNIT * 2,
-    color: '$textSecondary'
+    color: '$textSecondary',
   },
   selectedMarkIcon: {
     width: UNIT * 3,
     height: UNIT * 3,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   colorFieldItemWrapper: {
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   colorField: {
-    marginRight: UNIT * 2
+    marginRight: UNIT * 2,
   },
   applyButton: {
     minWidth: minButtonWidth,
     padding: UNIT,
-    paddingLeft: UNIT * 2
+    paddingLeft: UNIT * 2,
   },
   link: {
-    color: '$link'
+    color: '$link',
   },
   placeholder: {
-    color: '$icon'
-  }
+    color: '$icon',
+  },
 });

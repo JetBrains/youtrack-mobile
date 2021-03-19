@@ -76,8 +76,8 @@ export class Image extends PureComponent<Props, State> {
         id: attach.id,
         uri: attach.url,
         headers: this.props.imageHeaders,
-        mimeType: attach.mimeType
-      }
+        mimeType: attach.mimeType,
+      },
     });
 
     return (

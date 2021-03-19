@@ -12,7 +12,7 @@ import type {State} from '../issue/issue-reducers';
 
 const notSelectedProject = {
   id: null,
-  name: 'Not selected'
+  name: 'Not selected',
 };
 
 export type CreateIssueState = {
@@ -33,9 +33,9 @@ const initialState: CreateIssueState = {
     description: '',
     attachments: [],
     fields: [],
-    project: notSelectedProject
+    project: notSelectedProject,
   },
-  isAttachFileDialogVisible: false
+  isAttachFileDialogVisible: false,
 };
 
 const attachReducers = {
@@ -48,7 +48,7 @@ const attachReducers = {
         ...state.issue,
         attachments: [...state.issue.attachments, attachingImage],
       },
-      attachingImage
+      attachingImage,
     };
   },
   //$FlowFixMe
@@ -60,7 +60,7 @@ const attachReducers = {
         ...state.issue,
         attachments: state.issue.attachments.filter(attachment => attachment !== attachingImage),
       },
-      attachingImage: null
+      attachingImage: null,
     };
   },
   //$FlowFixMe
@@ -70,7 +70,7 @@ const attachReducers = {
       issue: {
         ...state.issue,
         attachments: state.issue.attachments.filter(attach => attach.id !== action.attachmentId),
-      }
+      },
     };
   },
   //$FlowFixMe
@@ -81,7 +81,7 @@ const attachReducers = {
   [attachmentTypes.ATTACH_TOGGLE_ADD_FILE_DIALOG](state: CreateIssueState, action: {isAttachFileDialogVisible: boolean}): State {
     return {
       ...state,
-      isAttachFileDialogVisible: action.isAttachFileDialogVisible
+      isAttachFileDialogVisible: action.isAttachFileDialogVisible,
     };
   },
   //$FlowFixMe
@@ -91,9 +91,9 @@ const attachReducers = {
       issue: {
         ...state.issue,
         attachments: action.attachments,
-      }
+      },
     };
-  }
+  },
 };
 
 export default createReducer(initialState, {
@@ -113,8 +113,8 @@ export default createReducer(initialState, {
       ...state,
       issue: {
         ...state.issue,
-        id: ''
-      }
+        id: '',
+      },
     };
   },
   [types.SET_ISSUE_PROJECT](state: CreateIssueState, action: {project: Object}): CreateIssueState {
@@ -128,9 +128,9 @@ export default createReducer(initialState, {
         ...state.issue,
         project: {
           ...state.issue.project,
-          id: action.projectId
-        }
-      }
+          id: action.projectId,
+        },
+      },
     };
   },
   [types.CLEAR_DRAFT_PROJECT](state: CreateIssueState): CreateIssueState {
@@ -138,8 +138,8 @@ export default createReducer(initialState, {
       ...state,
       issue: {
         ...state.issue,
-        project: notSelectedProject
-      }
+        project: notSelectedProject,
+      },
     };
   },
   [types.SET_ISSUE_SUMMARY](state: CreateIssueState, action: {summary: string}): CreateIssueState {
@@ -170,8 +170,8 @@ export default createReducer(initialState, {
         ...state.issue,
         fields: [...state.issue.fields].map(it => {
           return it === field ? {...it, value} : it;
-        })
-      }
+        }),
+      },
     };
-  }
+  },
 });

@@ -22,23 +22,23 @@ function createIssuePriorityFieldMock(...args) {
   return Object.assign({
     projectCustomField: {
       field: {
-        name: 'priority'
+        name: 'priority',
       },
       bundle: {
         id: '',
-        $type: 'EnumBundle'
+        $type: 'EnumBundle',
       },
       ordinal: 2,
-      canBeEmpty: false
+      canBeEmpty: false,
     },
     value: {
       localizedName: null,
       color: {
         id: '17',
-        $type: 'FieldStyle'
+        $type: 'FieldStyle',
       },
       archived: false,
-      name: 'Normal'
+      name: 'Normal',
     },
     localizedName: null,
     color: {id: '17', $type: 'FieldStyle'},
@@ -52,7 +52,7 @@ function createIssueMock(...args) {
       id: '00-00',
       summary: 'Issue test summary',
       description: 'Issue test description',
-      fields: [createIssuePriorityFieldMock()]
+      fields: [createIssuePriorityFieldMock()],
     },
     ...args
   );
@@ -70,7 +70,7 @@ const navigatorMock = {
   refs: {},
   state: {nav: {}},
   subs: {remove: jest.fn()},
-  updater: jest.fn()
+  updater: jest.fn(),
 };
 
 function createUserMock(data = {}) {
@@ -85,16 +85,16 @@ function createUserMock(data = {}) {
     guest: false,
     profiles: {
       general: {
-        useMarkup: true
+        useMarkup: true,
       },
       notifications: {},
       appearance: {},
       issuesList: {},
-      timetracking: {}
+      timetracking: {},
     },
     userPermissions: {
-      has: () => true
-    }
+      has: () => true,
+    },
   }, data);
 }
 
@@ -109,9 +109,9 @@ function createProjectMock(data) {
     $type: ResourceTypes.PROJECT,
     plugins: {
       timeTrackingSettings: {
-        enabled: true
-      }
-    }
+        enabled: true,
+      },
+    },
   }, data);
 }
 
@@ -127,11 +127,11 @@ function createCommentMock(data = {}) {
       deleted: false,
       created: getPastTime(),
       draftComment: {
-        text: randomWord()
+        text: randomWord(),
       },
       issue: {
-        project: createProjectMock()
-      }
+        project: createProjectMock(),
+      },
 
     },
     data
@@ -173,5 +173,5 @@ export default {
   navigatorMock,
   createCommentMock,
 
-  randomSentence
+  randomSentence,
 };

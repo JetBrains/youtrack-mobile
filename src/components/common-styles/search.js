@@ -7,7 +7,7 @@ export const inputWrapper = {
   justifyContent: 'flex-start',
   paddingLeft: UNIT,
   borderRadius: UNIT,
-  backgroundColor: '$boxBackground'
+  backgroundColor: '$boxBackground',
 };
 
 export const searchInput = {
@@ -16,12 +16,12 @@ export const searchInput = {
   paddingVertical: UNIT * 1.6,
   marginHorizontal: UNIT,
   ...mainText,
-  color: '$text'
+  color: '$text',
 };
 
 export const clearIcon = {
   marginLeft: UNIT,
   marginRight: UNIT * 2,
-  color: '$icon'
+  color: '$icon',
 };
 

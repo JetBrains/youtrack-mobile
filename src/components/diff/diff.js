@@ -38,26 +38,26 @@ export default class Diff extends PureComponent<Props, State> {
   getDiffInfo(key: string): DiffInfo {
     let diffInfo = {
       id: 'diffNull',
-      style: null
+      style: null,
     };
 
     switch (true) {
     case key === DiffMatchWord.diffPatchType.DIFF_INSERT:
       diffInfo = {
         id: 'diffInsert',
-        style: styles.diffInsert
+        style: styles.diffInsert,
       };
       break;
     case key === DiffMatchWord.diffPatchType.DIFF_DELETE:
       diffInfo = {
         id: 'diffDelete',
-        style: styles.diffDelete
+        style: styles.diffDelete,
       };
       break;
     case key === DiffMatchWord.diffPatchType.DIFF_EQUAL:
       diffInfo = {
         id: 'diffEqual',
-        style: styles.diffEqual
+        style: styles.diffEqual,
       };
     }
     return diffInfo;

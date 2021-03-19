@@ -18,11 +18,11 @@ const ISSUE_ATTACHMENT_FIELDS = toField([
   'removed',
   'thumbnailURL',
   'imageDimension(width,height)',
-  'imageDimensions(width,height)'
+  'imageDimensions(width,height)',
 ]);
 
 const ISSUE_PROJECT_FIELDS = toField([
-  'shortName'
+  'shortName',
 ]);
 
 const ISSUE_WORK_ITEMS_FIELDS = toField([
@@ -30,8 +30,8 @@ const ISSUE_WORK_ITEMS_FIELDS = toField([
   'date',
   {
     type: ['id,name'],
-    duration: ['presentation']
-  }
+    duration: ['presentation'],
+  },
 ]);
 
 
@@ -55,11 +55,11 @@ const ISSUE_ACTIVITIES_FIELDS = toField([
           {
             fieldType: [
               'isMultiValue',
-              'valueType'
-            ]
-          }
-        ]
-      }
+              'valueType',
+            ],
+          },
+        ],
+      },
     ],
     added: [
       ISSUE_PROJECT_FIELDS,
@@ -77,9 +77,9 @@ const ISSUE_ACTIVITIES_FIELDS = toField([
         reactions: [
           'id',
           'reaction',
-          'author(id,fullName,avatarUrl)'
-        ]
-      }
+          'author(id,fullName,avatarUrl)',
+        ],
+      },
     ],
     removed: [
       ISSUE_PROJECT_FIELDS,
@@ -87,20 +87,20 @@ const ISSUE_ACTIVITIES_FIELDS = toField([
       ISSUE_ACTIVITIES_EVENT_BASE,
       IssueFields.ISSUE_COMMENTS_REMOVED_FIELDS,
 
-      IssueFields.ISSUE_XSHORT_FIELDS
-    ]
-  }
+      IssueFields.ISSUE_XSHORT_FIELDS,
+    ],
+  },
 ]);
 
 
 export {
-  ISSUE_ATTACHMENT_FIELDS
+  ISSUE_ATTACHMENT_FIELDS,
 };
 
 export default toField([
   'cursor',
   'till',
   {
-    activities: ISSUE_ACTIVITIES_FIELDS
-  }
+    activities: ISSUE_ACTIVITIES_FIELDS,
+  },
 ]);

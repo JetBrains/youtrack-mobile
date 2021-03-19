@@ -33,7 +33,7 @@ class Menu extends Component<Props, State> {
   static defaultProps: Props = {
     isVisible: false,
     isDisabled: false,
-    uiTheme: DEFAULT_THEME
+    uiTheme: DEFAULT_THEME,
   };
 
   unsubscribeOnDispatch: Function;
@@ -43,7 +43,7 @@ class Menu extends Component<Props, State> {
 
     this.state = {
       prevRouteName: null,
-      currentRouteName: null
+      currentRouteName: null,
     };
 
     this.unsubscribeOnDispatch = Router.setOnDispatchCallback((routeName: ?string, prevRouteName: ?string) => {
@@ -57,7 +57,7 @@ class Menu extends Component<Props, State> {
 
   setCurrentRouteName = (routeName: ?string, prevRouteName: ?string) => this.setState({
     prevRouteName: prevRouteName,
-    currentRouteName: routeName
+    currentRouteName: routeName,
   });
 
   isActiveRoute = (routeName: string) => {
@@ -226,7 +226,7 @@ class Menu extends Component<Props, State> {
 const mapStateToProps = (state) => {
   return {
     isVisible: state.app.auth && state.app.user,
-    isDisabled: state.app.isChangingAccount
+    isDisabled: state.app.isChangingAccount,
   };
 };
 

@@ -13,7 +13,7 @@ const Badge = (props: Props) => (
   <Text style={[
     styles.badge,
     props.valid && styles.badgeValid,
-    props.style
+    props.style,
   ]}>{props.text}</Text>
 );
 

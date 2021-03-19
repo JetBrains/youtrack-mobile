@@ -44,7 +44,7 @@ class Settings extends PureComponent<Props, State> {
   CATEGORY_NAME: string = 'Settings';
   state = {
     appearanceSettingsVisible: false,
-    featuresSettingsVisible: false
+    featuresSettingsVisible: false,
   };
 
   constructor(props) {
@@ -61,7 +61,7 @@ class Settings extends PureComponent<Props, State> {
       setFeatures,
       features,
       otherAccounts,
-      isChangingAccount
+      isChangingAccount,
     } = this.props;
 
     return (
@@ -70,13 +70,13 @@ class Settings extends PureComponent<Props, State> {
           const uiTheme: UITheme = theme.uiTheme;
           const settingItems: Array<{ title: string, onPress: Function }> = [{
             title: 'Appearance',
-            onPress: () => Router.Page({children: <SettingsAppearance/>})
+            onPress: () => Router.Page({children: <SettingsAppearance/>}),
           }, {
             title: 'Share logs',
-            onPress: openDebugView
+            onPress: openDebugView,
           }, {
             title: 'Send feedback',
-            onPress: () => Router.Page({children: <SettingsFeedbackForm uiTheme={uiTheme}/>})
+            onPress: () => Router.Page({children: <SettingsFeedbackForm uiTheme={uiTheme}/>}),
           }];
 
           return (
@@ -169,7 +169,7 @@ const mapDispatchToProps = (dispatch) => {
     onAddAccount: () => dispatch(AppActions.addAccount()),
     onChangeAccount: (account: StorageState) => dispatch(AppActions.switchAccount(account)),
     openDebugView: () => dispatch(AppActions.openDebugView()),
-    setFeatures: newFeatures => dispatch(AppActions.setEnabledFeatures(newFeatures))
+    setFeatures: newFeatures => dispatch(AppActions.setEnabledFeatures(newFeatures)),
   };
 };
 

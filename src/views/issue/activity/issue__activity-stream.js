@@ -20,7 +20,7 @@ type Props = ActivityStreamProps & {
 const IssueActivityStream = (props: Props) => {
   const [reactionState, setReactionState] = useState({
     isReactionsPanelVisible: false,
-    currentComment: null
+    currentComment: null,
   });
 
   const [activities, setActivities] = useState(null);
@@ -52,7 +52,7 @@ const IssueActivityStream = (props: Props) => {
         onReactionPanelOpen={(comment: IssueComment) => {
           setReactionState({
             isReactionsPanelVisible: true,
-            currentComment: comment
+            currentComment: comment,
           });
         }}
         onSelectReaction={selectReaction}

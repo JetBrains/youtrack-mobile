@@ -6,7 +6,7 @@ import {Platform} from 'react-native';
 export const tabsStyles = {
   tabsBar: {
     ...elevation1,
-    backgroundColor: '$background'
+    backgroundColor: '$background',
   },
   tabLabel: {
     ...mainText,
@@ -20,8 +20,8 @@ export const tabsStyles = {
       android: {
         fontSize: 18,
         fontWeight: '400',
-      }
-    })
+      },
+    }),
   },
   tabLabelActive: {
     fontWeight: '400',
@@ -29,6 +29,6 @@ export const tabsStyles = {
   tabLazyPlaceholder: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
-  }
+    justifyContent: 'center',
+  },
 };

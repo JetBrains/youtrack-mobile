@@ -69,7 +69,7 @@ class API extends BaseAPI {
   async acceptUserAgreement(): Promise<Object> {
     const body = {fields: issueFields.userConsent};
     return await this.makeAuthorizedRequest(
-      urlJoin(this.auth.config.auth.serverUri, `/api/rest/users/endUserAgreementConsent`),
+      urlJoin(this.auth.config.auth.serverUri, '/api/rest/users/endUserAgreementConsent'),
       'POST',
       {body}
     );
@@ -85,14 +85,14 @@ class API extends BaseAPI {
   async getProjects(query: string): Promise<Array<IssueProject>> {
     const queryString = qs.stringify({
       fields: issueFields.projectOnList.toString(),
-      query: query
+      query: query,
     });
     return await this.makeAuthorizedRequest(`${this.youTrackProjectUrl}?${queryString}`);
   }
 
   async getProject(projectId: string) {
     const queryString = qs.stringify({
-      fields: issueFields.project.toString()
+      fields: issueFields.project.toString(),
     });
     return await this.makeAuthorizedRequest(`${this.youTrackProjectUrl}/${projectId}?${queryString}`);
   }
@@ -101,7 +101,7 @@ class API extends BaseAPI {
     const queryString = qs.stringify({
       banned: false,
       sort: true,
-      fields: issueFields.user.toString()
+      fields: issueFields.user.toString(),
     });
 
     const values = await this.makeAuthorizedRequest(
@@ -124,7 +124,7 @@ class API extends BaseAPI {
       issueFields.bundleValues,
       {
         $includeArchived: false,
-        sort: true
+        sort: true,
       });
     return await this.makeAuthorizedRequest(
       `${this.youtTrackFieldBundleUrl}/${fieldValueType}/${bundleId}/values?${queryString}`
@@ -145,7 +145,7 @@ class API extends BaseAPI {
       {
         query,
         caret,
-        issues: issueIds.map(id => ({id}))
+        issues: issueIds.map(id => ({id})),
       }
     );
   }
@@ -154,7 +154,7 @@ class API extends BaseAPI {
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/commands`, 'POST', {
       query: options.command,
       comment: options.comment,
-      issues: options.issueIds.map(id => ({id}))
+      issues: options.issueIds.map(id => ({id})),
     });
   }
 
@@ -162,7 +162,7 @@ class API extends BaseAPI {
   async getQueryAssistSuggestions(query: string, caret: number): Promise<Array<TransformedSuggestion>> {
     const queryString = qs.stringify({
       query,
-      caret
+      caret,
     });
     const result = await this.makeAuthorizedRequest(`${this.youTrackUrl}/rest/search/underlineAndSuggest?${queryString}`);
 
@@ -185,15 +185,15 @@ class API extends BaseAPI {
         owner: [
           'id',
           'ringId',
-        ]
+        ],
       },
       {
-        color: ['id']
-      }
+        color: ['id'],
+      },
     ]);
     const queryString = qs.stringify({
       fields: fields.toString(),
-      pinned: pinnedOnly
+      pinned: pinnedOnly,
     });
 
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/issueFolders?${queryString}`);
@@ -209,7 +209,7 @@ class API extends BaseAPI {
     const url = `${konnectorURL}/ring/fcmPushNotifications`;
     return await this.makeAuthorizedRequest(url, 'POST', {
       youtrackToken: youtrackToken,
-      deviceToken: deviceToken
+      deviceToken: deviceToken,
     });
   }
 
@@ -226,7 +226,7 @@ class API extends BaseAPI {
   }
 
   async getWorkTimeSettings(): Promise<Object> {
-    const fields = `id,daysAWeek,workDays,minutesADay`;
+    const fields = 'id,daysAWeek,workDays,minutesADay';
     const url = `${this.youTrackUrl}/api/admin/timeTrackingSettings/workTimeSettings?fields=${fields}`;
     return await this.makeAuthorizedRequest(url, 'GET');
   }

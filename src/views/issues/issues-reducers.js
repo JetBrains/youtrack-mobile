@@ -43,7 +43,7 @@ export const initialState: IssuesState = {
 
   selectProps: null,
   searchContext: null,
-  isSearchContextPinned: false
+  isSearchContextPinned: false,
 };
 
 export default createReducer(initialState, {
@@ -64,7 +64,7 @@ export default createReducer(initialState, {
   },
   [types.START_ISSUES_LOADING]: (state: IssuesState, action: Object) => {
     return {
-      ...state, loadingError: null, isListEndReached: false, isRefreshing: true, skip: 0
+      ...state, loadingError: null, isListEndReached: false, isRefreshing: true, skip: 0,
     };
   },
   [types.STOP_ISSUES_LOADING]: (state: IssuesState, action: Object) => {
@@ -80,7 +80,7 @@ export default createReducer(initialState, {
     return {
       ...state,
       issues: action.issues,
-      isInitialized: true
+      isInitialized: true,
     };
   },
   [types.LOADING_ISSUES_ERROR]: (state: IssuesState, action: {error: Object}) => {
@@ -89,7 +89,7 @@ export default createReducer(initialState, {
       isInitialized: true,
       isListEndReached: true,
       loadingError: action.error,
-      issues: []
+      issues: [],
     };
   },
   [types.LIST_END_REACHED]: (state: IssuesState, action: {error: Object}) => {
@@ -118,20 +118,20 @@ export default createReducer(initialState, {
     return {
       ...state,
       selectProps: action.selectProps,
-      isIssuesContextOpen: true
+      isIssuesContextOpen: true,
     };
   },
   [types.CLOSE_SEARCH_CONTEXT_SELECT](state: IssuesState): IssuesState {
     return {
       ...state,
       selectProps: null,
-      isIssuesContextOpen: false
+      isIssuesContextOpen: false,
     };
   },
   [types.IS_SEARCH_CONTEXT_PINNED](state: IssuesState, action: Object): IssuesState {
     return {
       ...state,
-      isSearchContextPinned: action.isSearchContextPinned
+      isSearchContextPinned: action.isSearchContextPinned,
     };
   },
 });

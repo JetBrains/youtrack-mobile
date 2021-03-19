@@ -6,21 +6,21 @@ import {mainText} from '../common-styles/typography';
 export default EStyleSheet.create({
   attachButtonsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   attachButton: {
     flexDirection: 'row',
-    paddingVertical: UNIT * 1.5
+    paddingVertical: UNIT * 1.5,
   },
   attachButtonText: {
     ...mainText,
     marginLeft: UNIT * 2,
-    color: '$link'
+    color: '$link',
   },
   attachButtonTextDisabled: {
-    color: '$textSecondary'
+    color: '$textSecondary',
   },
   attachButtonIcon: {
-    transform: [{rotate: '-40deg'}]
-  }
+    transform: [{rotate: '-40deg'}],
+  },
 });
