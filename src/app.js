@@ -183,4 +183,4 @@ class AppContainer extends Component<void, void> {
   }
 }
 
-module.exports = AppContainer; //eslint-disable-line import/no-commonjs
+module.exports = AppContainer;

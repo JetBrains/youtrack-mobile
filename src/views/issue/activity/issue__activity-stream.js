@@ -24,9 +24,10 @@ const IssueActivityStream = (props: Props) => {
   });
 
   const [activities, setActivities] = useState(null);
+
   useEffect(() => {
     setActivities(props.activities);
-  });
+  }, [props.activities]);
 
   const selectReaction = (comment: IssueComment, reaction: Reaction) => {
     usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'Add reaction to comment');

@@ -43,7 +43,7 @@ const AddSpentTimeForm = (props: Props) => {
   const dispatch = useDispatch();
   const currentUser: User = useSelector((state: AppState) => state.app.user);
 
-  const draftDefault: WorkItem = {
+  const draftDefault: WorkItem = Object.freeze({
     date: new Date().getTime(),
     author: currentUser,
     duration: {
@@ -55,7 +55,7 @@ const AddSpentTimeForm = (props: Props) => {
       name: 'No type',
     },
     text: null,
-  };
+  });
 
   const [isProgress, updateProgress] = useState(false);
   const [isSelectVisible, updateSelectVisibility] = useState(false);
@@ -104,7 +104,8 @@ const AddSpentTimeForm = (props: Props) => {
       });
       updateProgress(false);
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.workItem, dispatch]);
 
 
   const update = (data: $Shape<TimeTracking>) => {

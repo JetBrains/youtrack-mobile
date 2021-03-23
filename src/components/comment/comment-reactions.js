@@ -27,11 +27,11 @@ type ReactionsMap = { key: string, value: Reaction };
 
 
 const CommentReactions = (props: ReactionsType) => {
+  const [selectedReaction, setSelectedReaction] = useState(null);
+
   if (!props.comment || !props.comment.reactionOrder || props.comment?.reactions?.length === 0) {
     return null;
   }
-
-  const [selectedReaction, setSelectedReaction] = useState(null);
 
   const reactionsMap: ReactionsMap = {};
   props.comment.reactions.map((reaction: Reaction) => reactionsMap[reaction.reaction] = reaction);

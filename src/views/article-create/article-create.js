@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {ActivityIndicator, ScrollView, View, Text, TouchableOpacity} from 'react-native';
 
 import {useDebouncedCallback} from 'use-debounce';
@@ -48,13 +48,13 @@ type Props = {
 }
 
 const ArticleCreate = (props: Props) => {
-  const articleDraftDataInitial: ArticleDraftData = {
+  const articleDraftDataInitial: ArticleDraftData = Object.freeze({
     summary: '',
     content: '',
     project: {id: null, name: 'Select project'},
     visibility: null,
     attachments: [],
-  };
+  });
 
   const dispatch = useDispatch();
   const theme: Theme = useContext(ThemeContext);
@@ -70,25 +70,25 @@ const ArticleCreate = (props: Props) => {
   const [isProjectSelectVisible, updateProjectSelectVisibility] = useState(false);
   const [articleDraftData, updateArticleDraftData] = useState(articleDraftDataInitial);
 
-  const createArticleDraft = async (articleId?: string) => await dispatch(
+  const createArticleDraft = useCallback(async (articleId?: string) => await dispatch(
     articleCreateActions.createArticleDraft(articleId)
-  );
+  ), [dispatch]);
 
   useEffect(() => {
-    const {articleDraft} = props;
-    if (articleDraft) {
-      dispatch(articleCreateActions.setDraft(articleDraft));
+    if (props.articleDraft) {
+      dispatch(articleCreateActions.setDraft(props.articleDraft));
       updateArticleDraftData({
-        attachments: articleDraft.attachments,
-        summary: articleDraft?.summary || articleDraftDataInitial.summary,
-        content: articleDraft?.content || articleDraftDataInitial.content,
-        project: articleDraft?.project || articleDraftDataInitial.project,
-        visibility: articleDraft.visibility,
+        attachments: props.articleDraft.attachments,
+        summary: props.articleDraft?.summary || articleDraftDataInitial.summary,
+        content: props.articleDraft?.content || articleDraftDataInitial.content,
+        project: props.articleDraft?.project || articleDraftDataInitial.project,
+        visibility: props.articleDraft.visibility,
       });
     } else {
       createArticleDraft();
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, createArticleDraft]);
 
   const doUpdate = async (articleDraft: ArticleDraft): Function => {
     let draft: ArticleDraft = articleDraft;

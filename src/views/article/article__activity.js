@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {ScrollView} from 'react-native';
 
 import {useDispatch, useSelector} from 'react-redux';
@@ -39,16 +39,16 @@ const ArticleActivities = (props: Props) => {
 
   const activityPage: Array<ActivityItem> = useSelector(store => store.article.activityPage);
   const user: User = useSelector(store => store.app.user);
-  const loadActivities: Function = (reset: boolean) => {
+  const loadActivities = useCallback((reset: boolean) => {
     if (article?.idReadable) {
       dispatch(loadCachedActivitiesPage());
       dispatch(loadActivitiesPage(reset));
     }
-  };
+  }, [dispatch, article?.idReadable]);
 
   useEffect(() => {
     loadActivities(false);
-  }, []);
+  }, [loadActivities]);
 
   useEffect(() => {
     if (activityPage) {
@@ -56,7 +56,7 @@ const ArticleActivities = (props: Props) => {
       const naturalCommentsOrder: boolean = userAppearanceProfile ? userAppearanceProfile.naturalCommentsOrder : true;
       updateActivityModel(createActivityModel(activityPage, naturalCommentsOrder));
     }
-  }, [activityPage]);
+  }, [activityPage, user?.profiles?.appearance]);
 
 
   const canDeleteComment = (comment: IssueComment): boolean => issuePermissions.articleCanDeleteComment(

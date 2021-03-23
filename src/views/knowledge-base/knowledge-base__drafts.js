@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {TouchableOpacity, View, FlatList, RefreshControl, Text, ActivityIndicator} from 'react-native';
 
 import {useDispatch} from 'react-redux';
@@ -22,7 +22,7 @@ import {View as AnimatedView} from 'react-native-animatable';
 
 import styles from './knowledge-base.styles';
 
-import type {Article, ArticleNode} from '../../flow/Article';
+import type {Article, ArticleDraft, ArticleNode} from '../../flow/Article';
 
 
 const KnowledgeBaseDrafts = () => {
@@ -31,19 +31,19 @@ const KnowledgeBaseDrafts = () => {
   const [isLoading, updateLoading] = useState(false);
   const [isDeleting, updateDeleting] = useState(false);
 
-  const loadDrafts = async () => {
+  const loadDrafts = useCallback(async () => {
     updateLoading(true);
-    const drafts = await dispatch(loadArticlesDrafts());
+    const articleDrafts: Array<ArticleDraft> = await dispatch(loadArticlesDrafts());
     updateLoading(false);
-    updateDrafts(drafts);
-  };
+    updateDrafts(articleDrafts);
+  }, [dispatch]);
 
   const deleteAllDrafts = async () => {
     if (drafts && drafts.length > 0) {
       confirmDeleteAllDrafts()
         .then(async () => {
           updateDeleting(true);
-          await until(drafts.map((draft: Article) => dispatch(deleteArticle(draft))));
+          await until(drafts.map((draft: ArticleDraft) => dispatch(deleteArticle(draft))));
           updateDrafts([]);
           updateDeleting(false);
           loadDrafts();
@@ -58,7 +58,7 @@ const KnowledgeBaseDrafts = () => {
         loadDrafts();
       }
     });
-  }, []);
+  }, [loadDrafts]);
 
   const renderArticle = ({item}) => {
     return (

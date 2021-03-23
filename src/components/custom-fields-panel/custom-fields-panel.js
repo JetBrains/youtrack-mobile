@@ -7,7 +7,7 @@ import ModalView from '../modal-view/modal-view';
 import React, {Component} from 'react';
 import Select from '../select/select';
 import usage from '../usage/usage';
-import {Calendar} from 'react-native-calendars'; // eslint-disable-line import/named
+import {Calendar} from 'react-native-calendars';
 import {createNullProjectCustomField} from '../../util/util';
 import {getApi} from '../api/api__instance';
 import {IconClose} from '../icon/icon';

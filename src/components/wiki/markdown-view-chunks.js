@@ -37,16 +37,12 @@ let rules: Object = {};
 const MarkdownViewChunks = (props: Props) => {
   const {children, scrollData = {}, mentionedArticles = [], mentionedIssues = []} = props;
 
-  if (!children) {
-    return null;
-  }
-
   const [chunksToRender, updateChunksToRender] = useState(1);
   const [astToRender, updateAstToRender] = useState([]);
+  const projects: Array<Folder> = (getStorageState().projects || []).map((it: Folder) => hasType.project(it) && it);
 
 
   useEffect(() => {
-    const projects: Array<Folder> = (getStorageState().projects || []).map((it: Folder) => hasType.project(it) && it);
     const attaches: Array<Attachment> = apiHelper.convertAttachmentRelativeToAbsURLs(
       props.attachments || [],
       getApi().config.backendUrl
@@ -59,6 +55,7 @@ const MarkdownViewChunks = (props: Props) => {
       chunks = [];
       rules = {};
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
 
@@ -66,10 +63,10 @@ const MarkdownViewChunks = (props: Props) => {
     const ast: Array<MarkdownNode> = tokensToAST(stringToTokens(children, MarkdownItInstance));
     chunks = createChunks(ast, props.chunkSize);
     updateAstToRender(chunks);
-  }, [children]);
+  }, [children, props.chunkSize]);
 
 
-  if (astToRender?.length === 0) {
+  if (!children || astToRender?.length === 0) {
     return null;
   }
 

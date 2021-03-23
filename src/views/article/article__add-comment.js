@@ -48,11 +48,9 @@ const ArticleAddComment = (props: Props) => {
 
   const dispatch = useDispatch();
 
-  const loadDraftComment = () => dispatch(getArticleCommentDraft());
-
   useEffect(() => {
-    loadDraftComment();
-  }, []);
+    dispatch(getArticleCommentDraft());
+  }, [dispatch]);
 
   useEffect(() => {
     if (commentDraft === null) {
@@ -73,14 +71,14 @@ const ArticleAddComment = (props: Props) => {
     }
   };
 
-  const onChange = useCallback(async (commentText: string) => {
-    dispatch(updateArticleCommentDraft(commentText));
+  const onChange = useCallback(async (text: string) => {
+    dispatch(updateArticleCommentDraft(text));
 
-    if (!commentText) {
+    if (!text) {
       return updateMentions(null);
     }
 
-    const word: ?string = getSuggestWord(commentText, commentText.length);
+    const word: ?string = getSuggestWord(text, text.length);
     if (!word) {
       return updateMentions(null);
     }
@@ -91,7 +89,7 @@ const ArticleAddComment = (props: Props) => {
       updateSuggestionsLoading(false);
       updateMentions(_mentions);
     }
-  }, [commentText]);
+  }, [dispatch]);
 
   const debouncedOnChange = throttle(onChange, 350);
 
