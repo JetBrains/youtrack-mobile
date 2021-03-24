@@ -16,8 +16,6 @@ import type {CustomError} from '../../flow/Error';
 import type {NotificationCompletion, TokenHandler} from '../../flow/Notification';
 import type {StorageState} from '../storage/storage';
 
-const isAndroid: boolean = isAndroidPlatform();
-
 export default class PushNotificationsProcessor {
   static KONNECTOR_URL = appPackage.config.KONNECTOR_URL;
   static deviceToken = null;
@@ -103,7 +101,8 @@ export default class PushNotificationsProcessor {
   }
 
   static async subscribe(api: Api, deviceToken: string, youtrackToken: string): Promise<any> {
-    if (isAndroid) {
+    console.log('>>>>>>>>>isAndroid',isAndroidPlatform());
+    if (isAndroidPlatform()) {
       return PushNotificationsProcessor.subscribeAndroid(api, deviceToken, youtrackToken);
     }
     return PushNotificationsProcessor.subscribeIOS(api, deviceToken, youtrackToken);

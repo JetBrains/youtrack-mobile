@@ -5,7 +5,6 @@ import React, {Component} from 'react';
 import ColorField from '../color-field/color-field';
 import {notifyError} from '../notification/notification';
 import ModalView from '../modal-view/modal-view';
-import {onHeightChange} from '../header/header__top-padding';
 import {IconCheck, IconBack} from '../icon/icon';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import SelectItem from './select__item';
@@ -74,7 +73,6 @@ export default class Select extends Component<SelectProps, SelectState> {
   }
 
   componentDidMount() {
-    onHeightChange(() => this.forceUpdate());
     const selectedItems = this.props.selectedItems ? this.props.selectedItems : [];
     this.setState({selectedItems});
     this._loadItems(this.state.query);

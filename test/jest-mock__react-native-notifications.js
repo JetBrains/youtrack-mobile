@@ -9,7 +9,8 @@ const notificationMock = {payload: payloadMock};
 const onNotificationMock = jest.fn(
   (notification = notificationMock, completion = jest.fn()) => completion()
 );
-export const eventsRegistryMock = {
+
+export const mockEventsRegistry = {
   deviceTokenMock: deviceTokenMock,
   errorMock: errorMock,
 
@@ -24,22 +25,17 @@ export const eventsRegistryMock = {
   registerNotificationOpened: onNotificationMock,
 };
 
-export default function mockReactNativeNotification() {
-  jest.mock('react-native-notifications', () => ({
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    requestPermissions: jest.fn(),
-    consumeBackgroundQueue: jest.fn(),
-  }));
-
-
+const mockReactNativeNotification = () => {
   jest.mock('react-native-notifications', () => {
     return {
       Notifications: {
         getInitialNotification: jest.fn().mockReturnValue(Promise.resolve()),
         registerRemoteNotifications: jest.fn(),
-        events: () => eventsRegistryMock,
+        events: () => mockEventsRegistry,
       },
     };
   });
-}
+};
+
+
+export default mockReactNativeNotification;

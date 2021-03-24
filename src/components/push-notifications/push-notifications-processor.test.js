@@ -4,7 +4,7 @@ import appPackage from '../../../package.json';
 
 import PushNotificationsProcessor from './push-notifications-processor';
 
-import {eventsRegistryMock} from '../../../test/jest-mock__react-native-notifications';
+import {mockEventsRegistry} from '../../../test/jest-mock__react-native-notifications';
 
 import type API from '../api/api';
 
@@ -21,21 +21,21 @@ describe('PushNotificationsProcessor', () => {
     it('should subscribe to registration success event', async () => {
       PushNotificationsProcessor.init();
 
-      expect(eventsRegistryMock.registerRemoteNotificationsRegistered).toHaveBeenCalled();
+      expect(mockEventsRegistry.registerRemoteNotificationsRegistered).toHaveBeenCalled();
     });
 
     it('should subscribe to registration fail event', () => {
       PushNotificationsProcessor.init();
 
-      expect(eventsRegistryMock.registerRemoteNotificationsRegistrationFailed).toHaveBeenCalled();
+      expect(mockEventsRegistry.registerRemoteNotificationsRegistrationFailed).toHaveBeenCalled();
     });
 
     it('should register notification events', () => {
       PushNotificationsProcessor.init();
 
-      expect(eventsRegistryMock.registerNotificationReceivedForeground).toHaveBeenCalled();
-      expect(eventsRegistryMock.registerNotificationReceivedBackground).toHaveBeenCalled();
-      expect(eventsRegistryMock.registerNotificationOpened).toHaveBeenCalled();
+      expect(mockEventsRegistry.registerNotificationReceivedForeground).toHaveBeenCalled();
+      expect(mockEventsRegistry.registerNotificationReceivedBackground).toHaveBeenCalled();
+      expect(mockEventsRegistry.registerNotificationOpened).toHaveBeenCalled();
     });
   });
 
@@ -50,6 +50,7 @@ describe('PushNotificationsProcessor', () => {
       apiMock = {
         getNotificationsToken: jest.fn().mockResolvedValue(youTrackTokenMock),
         subscribeToFCMNotifications: jest.fn().mockResolvedValue(subscriptionSuccessResultMock),
+        subscribeToIOSNotifications: jest.fn().mockResolvedValue(subscriptionSuccessResultMock),
       };
     });
 
@@ -70,6 +71,15 @@ describe('PushNotificationsProcessor', () => {
 
 
     describe('subscribe', () => {
+      beforeEach(() => {
+        jest.mock('react-native/Libraries/Utilities/Platform', () => ({
+          OS: 'android', // or 'ios'
+          select: () => null,
+        }));
+      });
+
+      afterEach(() => jest.restoreAllMocks());
+
       it('should receive a YouTrack first', async () => {
         await PushNotificationsProcessor.getYouTrackToken(apiMock);
 
@@ -77,12 +87,12 @@ describe('PushNotificationsProcessor', () => {
       });
 
       it('should subscribe in YouTrack', async () => {
-        await PushNotificationsProcessor.subscribe(apiMock, eventsRegistryMock.deviceTokenMock, youTrackTokenMock);
+        await PushNotificationsProcessor.subscribe(apiMock, mockEventsRegistry.deviceTokenMock, youTrackTokenMock);
 
         expect(apiMock.subscribeToFCMNotifications).toHaveBeenCalledWith(
           PushNotificationsProcessor.KONNECTOR_URL,
           youTrackTokenMock,
-          eventsRegistryMock.deviceTokenMock
+          mockEventsRegistry.deviceTokenMock
         );
       });
 
@@ -91,7 +101,7 @@ describe('PushNotificationsProcessor', () => {
         apiMock.subscribeToFCMNotifications.mockImplementationOnce(() => {throw subscriptionErrorMock;});
 
         await expect(
-          PushNotificationsProcessor.subscribe(apiMock, eventsRegistryMock.deviceTokenMock, youTrackTokenMock)
+          PushNotificationsProcessor.subscribe(apiMock, mockEventsRegistry.deviceTokenMock, youTrackTokenMock)
         ).rejects.toEqual(subscriptionErrorMock);
       });
     });

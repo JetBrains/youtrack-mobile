@@ -4,7 +4,6 @@ import {Text, View, TouchableOpacity} from 'react-native';
 import React, {PureComponent} from 'react';
 
 import Router from '../router/router';
-import {onHeightChange} from './header__top-padding';
 
 import {ThemeContext} from '../theme/theme-context';
 
@@ -35,10 +34,6 @@ export default class Header extends PureComponent<HeaderProps, void> {
     onRightButtonClick: () => undefined,
     showShadow: false,
   };
-
-  componentDidMount() {
-    onHeightChange(() => this.forceUpdate());
-  }
 
   onBack() {
     if (this.props.onBack) {

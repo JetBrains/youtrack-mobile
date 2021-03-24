@@ -1,4 +1,5 @@
-import ReactNative from 'react-native';
+import {NativeModules} from 'react-native';
+
 import chai, {should} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import sinonChai from 'sinon-chai';
@@ -23,13 +24,23 @@ should();
 
 // Modules mocks
 
+jest.mock('react-native-device-log', () => ({
+  init: jest.fn(),
+  InMemoryAdapter: jest.fn(),
+  log: jest.fn(),
+  info: jest.fn(),
+  debug: jest.fn(),
+  error: jest.fn(),
+  options: {logToConsole: false},
+}));
+
 // RNDeviceInfo mock
-ReactNative.NativeModules.RNDeviceInfo = {
+NativeModules.RNDeviceInfo = {
   uniqueId: 'unique-id',
   userAgent: 'user-agent',
 };
 
-ReactNative.NativeModules.RNKeychainManager = {
+NativeModules.RNKeychainManager = {
   getInternetCredentialsForServer: jest.fn(),
   setInternetCredentialsForServer: jest.fn(),
 };
@@ -53,9 +64,4 @@ jest.mock('react-native-appearance', () => ({
   Appearance: {getColorScheme: () => 'light'},
 }));
 
-jest.mock('StatusBar', () => ({
-  addListener: jest.fn(),
-}));
-
-// react-native-notification mock
 mockReactNativeNotification();
