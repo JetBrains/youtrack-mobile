@@ -1,3 +1,5 @@
+/* @flow */
+
 export type CustomError = Error & {
   json: Object,
   status: string,

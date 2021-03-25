@@ -1,3 +1,5 @@
+/* @flow */
+
 import {ReactElement} from 'react';
 
 export type MarkdownNode = {

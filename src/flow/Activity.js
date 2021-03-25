@@ -1,3 +1,5 @@
+/* @flow */
+
 import type {Attachment, IssueComment, IssueProject} from './CustomFields';
 import type {IssueFull} from './Issue';
 import type {User} from './User';

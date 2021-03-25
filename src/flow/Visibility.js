@@ -1,3 +1,5 @@
+/* @flow */
+
 import type {User} from './User';
 import type {UserGroup} from './UserGroup';
 

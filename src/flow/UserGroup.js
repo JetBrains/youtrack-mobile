@@ -1,3 +1,5 @@
+/* @flow */
+
 export type UserGroup = {
   $type: string,
   icon?: string,

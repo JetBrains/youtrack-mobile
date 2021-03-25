@@ -1,3 +1,5 @@
+/* @flow */
+
 export type AuthParams = {
   access_token: string, // for API data fetching
   error_code?: string,

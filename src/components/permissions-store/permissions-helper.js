@@ -1,3 +1,5 @@
+/* @flow */
+
 import type {AuthParams} from '../../flow/Auth';
 import type {PermissionCacheItem} from '../../flow/Permission';
 

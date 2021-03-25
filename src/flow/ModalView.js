@@ -1,3 +1,5 @@
+/* @flow */
+
 export const Orientation = Object.freeze({
   PORTRAIT: 'portrait',
   PORTRAIT_UPSIDE_DOWN: 'portrait-upside-down',

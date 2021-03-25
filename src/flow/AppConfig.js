@@ -1,3 +1,5 @@
+/* @flow */
+
 export type ConfigAuth = {
   serverUri: ?string,
   clientId: ?string,

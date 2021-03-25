@@ -1,3 +1,5 @@
+/* @flow */
+
 import type {IssueFull} from './Issue';
 import type {Reaction} from './Reaction';
 import type {User} from './User';

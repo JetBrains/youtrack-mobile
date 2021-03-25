@@ -1,4 +1,5 @@
-/* eslint-disable */
+/* @flow */
+
 
 import type {IssueFull, IssueOnList} from './Issue';
 

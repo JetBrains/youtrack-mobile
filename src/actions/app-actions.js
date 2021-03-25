@@ -38,7 +38,7 @@ import {notify, notifyError} from '../components/notification/notification';
 import {setApi} from '../components/api/api__instance';
 import {storeSearchContext} from '../views/issues/issues-actions';
 
-import type RootState from '../reducers/app-reducer';
+import type {RootState} from '../reducers/app-reducer';
 import type {Activity} from '../flow/Activity';
 import type {AppConfigFilled, EndUserAgreement} from '../flow/AppConfig';
 import type {Article} from '../flow/Article';

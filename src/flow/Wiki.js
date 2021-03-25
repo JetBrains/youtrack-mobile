@@ -1,3 +1,5 @@
+/* @flow */
+
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 export type YouTrackWiki = {
