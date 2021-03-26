@@ -62,7 +62,7 @@ describe('<Menu/>', () => {
     it('should render menu `Agile Boards` item', async () => {
       const {getByTestId} = doRender();
 
-      expect(getByTestId('menuAgileBoards')).toBeTruthy();
+      expect(getByTestId('menuAgile')).toBeTruthy();
     });
 
 
@@ -153,15 +153,15 @@ describe('<Menu/>', () => {
       storeMock = createStoreMock(stateMock, ownPropsMock);
 
       const {getByTestId} = doRender();
-      fireEvent.press(getByTestId('menuAgileBoardsButton'));
+      fireEvent.press(getByTestId('menuAgile'));
 
       expect(Router.navigate).toHaveBeenCalledTimes(0);
     });
 
     it('should navigate to the root route', async () => {
       const {getByTestId} = doRender();
-      fireEvent.press(getByTestId('menuIssuesButton'));
-      fireEvent.press(getByTestId('menuAgileBoardsButton'));
+      fireEvent.press(getByTestId('menuIssues'));
+      fireEvent.press(getByTestId('menuAgile'));
 
       expect(Router.navigate).toHaveBeenCalledTimes(2);
     });
@@ -169,8 +169,8 @@ describe('<Menu/>', () => {
     it('should not navigate to the same root route', async () => {
       const {getByTestId} = doRender();
 
-      fireEvent.press(getByTestId('menuIssuesButton'));
-      fireEvent.press(getByTestId('menuIssuesButton'));
+      fireEvent.press(getByTestId('menuIssues'));
+      fireEvent.press(getByTestId('menuIssues'));
 
       expect(Router.navigate).toHaveBeenCalledTimes(1);
     });
@@ -178,9 +178,9 @@ describe('<Menu/>', () => {
     it('should navigate to a root route if current route is `Issue`', async () => {
       const {getByTestId} = doRender();
 
-      fireEvent.press(getByTestId('menuIssuesButton'));
+      fireEvent.press(getByTestId('menuIssues'));
       Router.Issue();
-      fireEvent.press(getByTestId('menuIssuesButton'));
+      fireEvent.press(getByTestId('menuIssues'));
 
       expect(Router.navigate).toHaveBeenCalledTimes(3);
     });
@@ -188,10 +188,10 @@ describe('<Menu/>', () => {
     it('should activate pressed root route', async () => {
       const {getByTestId} = doRender();
 
-      fireEvent.press(getByTestId('menuIssuesButton'));
+      fireEvent.press(getByTestId('menuIssues'));
       expect(getByTestId('menuIssuesIcon')).toHaveProp('isActive', true);
 
-      fireEvent.press(getByTestId('menuAgileBoardsButton'));
+      fireEvent.press(getByTestId('menuAgile'));
       expect(getByTestId('menuIssuesIcon')).toHaveProp('isActive', false);
     });
   });
