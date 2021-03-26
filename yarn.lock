@@ -743,9 +743,9 @@
     "@types/hoist-non-react-statics" "^3.3.1"
     hoist-non-react-statics "^3.3.0"
 
-"@gpsgate/react-native-eventsource@git://github.com/ExpandoPakistan/react-native-eventsource.git":
+"@gpsgate/react-native-eventsource@ExpandoPakistan/react-native-eventsource.git":
   version "0.0.1"
-  resolved "git://github.com/ExpandoPakistan/react-native-eventsource.git#2f05c307ee3b1f5cfb8f949f0d7fbf0c81f64500"
+  resolved "https://codeload.github.com/ExpandoPakistan/react-native-eventsource/tar.gz/2f05c307ee3b1f5cfb8f949f0d7fbf0c81f64500"
 
 "@hapi/address@^4.0.1":
   version "4.1.0"
@@ -4844,7 +4844,7 @@ jest-changed-files@^26.6.2:
     execa "^4.0.0"
     throat "^5.0.0"
 
-jest-circus@26.6.3:
+jest-circus@^26.6.3:
   version "26.6.3"
   resolved "https://registry.yarnpkg.com/jest-circus/-/jest-circus-26.6.3.tgz#3cc7ef2a6a3787e5d7bfbe2c72d83262154053e7"
   integrity sha512-ACrpWZGcQMpbv13XbzRzpytEJlilP/Su0JtNCi5r/xLpOUhnaIJr8leYYpLEMgPFURZISEHrnnpmB54Q/UziPw==
@@ -7144,9 +7144,9 @@ react-native-device-info@1.6.2:
   resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-1.6.2.tgz#3c867e7be55f59636ebc91cb28e5151dfe5ed352"
   integrity sha512-Ihhqg/rTeFPkMKnyXRi1rg0TDfTaSmyNS6h1ckKORCb3w5jAtZkqmuJ5zezHFsXr0WCJz1pfmfwUZs8YAF7dcA==
 
-"react-native-device-log@git://github.com/Trihydro/react-native-device-log":
+react-native-device-log@Trihydro/react-native-device-log:
   version "1.0.3"
-  resolved "git://github.com/Trihydro/react-native-device-log#0a5cc45f97a44193e4c9bc3293b5b80c92244988"
+  resolved "https://codeload.github.com/Trihydro/react-native-device-log/tar.gz/0a5cc45f97a44193e4c9bc3293b5b80c92244988"
   dependencies:
     "@react-native-community/netinfo" "^5.3.3"
     debounce "^1.0.2"
@@ -7201,9 +7201,9 @@ react-native-htmlview@0.13.0:
     entities "^1.1.1"
     htmlparser2-without-node-native "^3.9.2"
 
-"react-native-hyperlink@git://github.com/anisimov74/react-native-hyperlink.git#f89bab7":
+react-native-hyperlink@anisimov74/react-native-hyperlink.git#f89bab7:
   version "0.0.19"
-  resolved "git://github.com/anisimov74/react-native-hyperlink.git#f89bab72a4536339255c852f443c060ec39feee5"
+  resolved "https://codeload.github.com/anisimov74/react-native-hyperlink/tar.gz/f89bab72a4536339255c852f443c060ec39feee5"
   dependencies:
     linkify-it "^2.2.0"
     mdurl "^1.0.0"
@@ -7213,9 +7213,9 @@ react-native-image-crop-picker@0.36.0:
   resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.36.0.tgz#adf5a5677c3ae0e0bdaa18c73d880db2190e3023"
   integrity sha512-1S8+0EZJmUMWMcdo2tTadqIIsJo7aPxPed0P7Cop3DhBqEeYrAWfgdrJq9VoTXI+cIrOOcTAxn4NZPz+DQEn7g==
 
-"react-native-image-gallery@git://github.com/Elvenisboy/react-native-image-gallery.git#9282a87":
+react-native-image-gallery@Elvenisboy/react-native-image-gallery.git#9282a87:
   version "2.1.5"
-  resolved "git://github.com/Elvenisboy/react-native-image-gallery.git#9282a87c75239eae0650bd4d28528032c9dabab6"
+  resolved "https://codeload.github.com/Elvenisboy/react-native-image-gallery/tar.gz/9282a87c75239eae0650bd4d28528032c9dabab6"
   dependencies:
     prop-types "^15.6.0"
     react-mixin "^3.0.5"
