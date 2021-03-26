@@ -24,8 +24,6 @@ import {HIT_SLOP} from '../../components/common-styles/button';
 
 import styles from './settings__feedback-form.styles';
 
-import PropTypes from 'prop-types';
-
 import type {FeedbackLogs, FeedbackType} from './settings-helper';
 import type {UITheme, UIThemeColors} from '../../flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
@@ -52,7 +50,7 @@ type State = {
 
 export default class SettingsFeedbackForm extends PureComponent<Props, State> {
   static contextTypes = {
-    actionSheet: PropTypes.func,
+    actionSheet: Function,
   };
 
   initialState = {

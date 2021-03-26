@@ -3,7 +3,6 @@
 import React, {PureComponent} from 'react';
 import {View, ScrollView} from 'react-native';
 
-import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
@@ -47,7 +46,7 @@ type IssueActivityProps = $Shape<IssueActivityState
 
 export class IssueActivity extends PureComponent<IssueActivityProps, void> {
   static contextTypes = {
-    actionSheet: PropTypes.func,
+    actionSheet: Function,
   };
 
   backendUrl = getApi().config.backendUrl;

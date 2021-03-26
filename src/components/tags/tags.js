@@ -4,7 +4,6 @@ import {View, TouchableOpacity} from 'react-native';
 import React, {PureComponent} from 'react';
 
 import ColorField from '../../components/color-field/color-field';
-import PropTypes from 'prop-types';
 import {showActions} from '../action-sheet/action-sheet';
 
 import styles from './tags.styles';
@@ -32,7 +31,7 @@ export default class Tags extends PureComponent<Props, void> {
     onTagPress: () => {},
   };
   static contextTypes = {
-    actionSheet: PropTypes.func,
+    actionSheet: Function,
   };
 
   getContextActions(tag: Tag) {

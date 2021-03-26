@@ -3,7 +3,6 @@
 import React from 'react';
 import {Text, View, RefreshControl} from 'react-native';
 
-import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
@@ -58,7 +57,7 @@ type IssueProps = IssueState & typeof issueActions & AdditionalProps;
 //$FlowFixMe
 class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   static contextTypes = {
-    actionSheet: PropTypes.func,
+    actionSheet: Function,
   };
 
   imageHeaders = getApi().auth.getAuthorizationHeaders();

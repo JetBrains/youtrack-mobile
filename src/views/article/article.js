@@ -15,7 +15,6 @@ import CreateUpdateInfo from '../../components/issue-tabbed/issue-tabbed__create
 import ErrorMessage from '../../components/error-message/error-message';
 import Header from '../../components/header/header';
 import IssueTabbed from '../../components/issue-tabbed/issue-tabbed';
-import PropTypes from 'prop-types';
 import Router from '../../components/router/router';
 import VisibilityControl from '../../components/visibility/visibility-control';
 import {ANALYTICS_ARTICLE_PAGE} from '../../components/analytics/analytics-ids';
@@ -52,7 +51,7 @@ type Props = ArticleState & {
 //$FlowFixMe
 class Article extends IssueTabbed<Props, IssueTabbedState> {
   static contextTypes = {
-    actionSheet: PropTypes.func,
+    actionSheet: Function,
   };
 
   props: Props;

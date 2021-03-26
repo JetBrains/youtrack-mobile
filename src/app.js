@@ -3,7 +3,6 @@
 import React, {Component} from 'react';
 import {UIManager} from 'react-native';
 
-import PropTypes from 'prop-types';
 import {Provider} from 'react-redux';
 
 import Router from './components/router/router';
@@ -156,7 +155,7 @@ const AppActionSheetConnected = connectActionSheet<{}>(YouTrackMobile);
 
 class AppContainer extends Component<void, void> {
   static childContextTypes = {
-    actionSheet: PropTypes.func,
+    actionSheet: Function,
   };
 
   actionSheetRef: Ref<ActionSheetProvider>;

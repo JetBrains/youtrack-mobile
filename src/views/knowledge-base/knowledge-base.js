@@ -11,7 +11,6 @@ import ArticleWithChildren from '../../components/articles/article-item-with-chi
 import ErrorMessage from '../../components/error-message/error-message';
 import KnowledgeBaseDrafts from './knowledge-base__drafts';
 import KnowledgeBaseSearchPanel from './knowledge-base__search';
-import PropTypes from 'prop-types';
 import Router from '../../components/router/router';
 import SelectSectioned from '../../components/select/select-sectioned';
 import Star from '../../components/star/star';
@@ -60,7 +59,7 @@ const ERROR_MESSAGE_DATA: Object = {
 
 export class KnowledgeBase extends Component<Props, State> {
   static contextTypes = {
-    actionSheet: PropTypes.func,
+    actionSheet: Function,
   };
 
   listRef: ?Object;
