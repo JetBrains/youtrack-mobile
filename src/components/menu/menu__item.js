@@ -12,20 +12,18 @@ type Props = {
   icon: React$Element<any>,
   onPress: () => any,
   style?: ViewStyleProp,
-  testID?: string,
+  testId?: string,
 }
 
 
 export const MenuItem = (props: Props) => {
-  const {icon, onPress, style, testID} = props;
-
+  const {icon, onPress, style, testId} = props;
   return (
     <View
-      testID={testID}
       style={[styles.menuItem, style]}
     >
       <TouchableOpacity
-        testID={testID ? `${testID}Button` : null}
+        testID={testId}
         hitSlop={HIT_SLOP}
         style={[styles.menuItemButton, style]}
         onPress={onPress}

@@ -19,9 +19,9 @@ export default EStyleSheet.create({
     justifyContent: 'center',
   },
   menuItemButton: {
+    flexGrow: 0.5,
     minWidth: UNIT * 5,
-    minHeight: UNIT * 5,
-    paddingHorizontal: UNIT,
+    height: UNIT * 5,
     alignItems: 'center',
     justifyContent: 'center',
   },

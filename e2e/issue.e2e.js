@@ -1,11 +1,7 @@
-const issuesPage = require('./pages/issues');
-const loginPage = require('./pages/login');
+import issuesPage from './pages/issues';
+import loginPage from './pages/login';
 
 describe('Issues view', () => {
-  beforeAll(async () => {
-    await device.launchApp({delete: true});
-  });
-
   beforeAll(async () => {
     await loginPage.connectToServer();
     await loginPage.logIn();

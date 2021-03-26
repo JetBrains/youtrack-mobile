@@ -1,11 +1,7 @@
-const issuesPage = require('./pages/issues');
-const loginPage = require('./pages/login');
+import issuesPage from './pages/issues';
+import loginPage from './pages/login';
 
 describe('Issues list', () => {
-  beforeAll(async () => {
-    await device.launchApp({delete: true});
-  });
-
   beforeAll(async () => {
     await loginPage.connectToServer();
     await loginPage.logIn();
@@ -18,20 +14,18 @@ describe('Issues list', () => {
   });
 
   describe('search', () => {
-    afterEach(async () => {
-      await issuesPage.search('');
-    });
-
-    it('should search for TP-7', async () => {
-      await issuesPage.search('issue id: TP-7');
-
-      await expect(element(by.id('issue-row-summary'))).toHaveText('Wiki examples');
-    });
+    beforeAll(async () => await issuesPage.search());
 
     it('should show `No issues found` error', async () => {
       await issuesPage.search('"Find not existing issues"');
 
       await expect(element(by.id('error-message'))).toHaveText('No issues found');
+    });
+
+    it('should search for TP-7', async () => {
+      await issuesPage.search('#TP-7');
+
+      await expect(element(by.id('issue-row-summary'))).toHaveText('Wiki examples');
     });
 
     it('should show `Invalid query` error', async () => {
@@ -40,4 +34,5 @@ describe('Issues list', () => {
       await expect(element(by.id('error-message'))).toHaveText('Invalid query');
     });
   });
+
 });
