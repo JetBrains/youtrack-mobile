@@ -101,7 +101,6 @@ export default class PushNotificationsProcessor {
   }
 
   static async subscribe(api: Api, deviceToken: string, youtrackToken: string): Promise<any> {
-    console.log('>>>>>>>>>isAndroid',isAndroidPlatform());
     if (isAndroidPlatform()) {
       return PushNotificationsProcessor.subscribeAndroid(api, deviceToken, youtrackToken);
     }
