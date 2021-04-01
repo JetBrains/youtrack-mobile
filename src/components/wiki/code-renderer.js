@@ -5,7 +5,7 @@ import React from 'react';
 import {Text} from 'react-native';
 
 import SyntaxHighlighter from 'react-native-syntax-highlighter';
-import { idea, darcula } from 'react-syntax-highlighter/styles/hljs';
+import { idea, darcula } from 'react-syntax-highlighter/dist/styles';
 
 import entities from 'entities';
 import Router from '../router/router';
