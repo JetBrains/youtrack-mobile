@@ -60,3 +60,4 @@ buck-out/
 /ios/Pods/
 
 test/teamsysdata
+out*.txt
