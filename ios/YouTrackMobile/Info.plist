@@ -30,7 +30,6 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>ytoauth</string>
-				<string>youtrack</string>
 			</array>
 		</dict>
 	</array>
