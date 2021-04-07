@@ -35,7 +35,7 @@ function createActivityFromComment(comment: IssueComment): ActivityItem {
   return {
     $type: 'CommentActivityItem',
     added: [Object.assign({}, comment, {attachments: comment?.attachments || []})],
-    author: comment.author,
+    author: comment?.author,
     authorGroup: null,
     category: {id: 'CommentsCategory', $type: 'ActivityCategory'},
     field: {$type: 'PredefinedFilterField', presentation: 'comments', id: 'comments'},

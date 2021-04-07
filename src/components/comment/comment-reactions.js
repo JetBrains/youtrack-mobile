@@ -76,7 +76,7 @@ const CommentReactions = (props: ReactionsType) => {
           onHide={() => setSelectedReaction(null)}
         >
           {comment.reactions.filter((it: Reaction) => it.reaction === selectedReaction.reaction).map((it: Reaction) => {
-            return <SelectItem style={styles.reactionAuthor} key={it.id} item={it.author} titleRenderer={() => (
+            return <SelectItem style={styles.reactionAuthor} key={it.id} item={it?.author} titleRenderer={() => (
               <Text style={styles.reactionAuthorText}>{it.author.fullName}</Text>
             )}/>;
           })}
