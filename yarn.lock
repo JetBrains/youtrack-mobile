@@ -7895,9 +7895,9 @@ react-native-device-log@1.0.2:
     react-native-invertible-scroll-view "^1.0.0"
     stacktrace-parser "^0.1.4"
 
-"react-native-easy-toast@git://github.com/huston007/react-native-easy-toast.git#6eb50ef":
+react-native-easy-toast@huston007/react-native-easy-toast.git#6eb50ef:
   version "1.0.7"
-  resolved "git://github.com/huston007/react-native-easy-toast.git#6eb50effb97abb8f7dcc36a39904999ca04a28b6"
+  resolved "https://codeload.github.com/huston007/react-native-easy-toast/tar.gz/6eb50effb97abb8f7dcc36a39904999ca04a28b6"
   dependencies:
     prop-types "^15.5.10"
 
@@ -7938,9 +7938,9 @@ react-native-htmlview@0.13.0:
     entities "^1.1.1"
     htmlparser2-without-node-native "^3.9.2"
 
-"react-native-hyperlink@git://github.com/anisimov74/react-native-hyperlink.git#f89bab7":
+react-native-hyperlink@anisimov74/react-native-hyperlink.git#f89bab7:
   version "0.0.19"
-  resolved "git://github.com/anisimov74/react-native-hyperlink.git#f89bab72a4536339255c852f443c060ec39feee5"
+  resolved "https://codeload.github.com/anisimov74/react-native-hyperlink/tar.gz/f89bab72a4536339255c852f443c060ec39feee5"
   dependencies:
     linkify-it "^2.2.0"
     mdurl "^1.0.0"
@@ -7950,9 +7950,9 @@ react-native-image-crop-picker@0.21.2:
   resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.21.2.tgz#f0e7ad4615f1f7c79ba25e2e7708042e306d258e"
   integrity sha512-dJwEe4piQUklAOATGefFCh4GvIYnLSrnQxeADbHXHyzVCuP6YuTxXxxsvYLTLrnTOvnif58TQ+s4fZVQIScSSw==
 
-"react-native-image-gallery@git://github.com/Elvenisboy/react-native-image-gallery.git#9282a87":
+react-native-image-gallery@Elvenisboy/react-native-image-gallery.git#9282a87:
   version "2.1.5"
-  resolved "git://github.com/Elvenisboy/react-native-image-gallery.git#9282a87c75239eae0650bd4d28528032c9dabab6"
+  resolved "https://codeload.github.com/Elvenisboy/react-native-image-gallery/tar.gz/9282a87c75239eae0650bd4d28528032c9dabab6"
   dependencies:
     prop-types "^15.6.0"
     react-mixin "^3.0.5"
@@ -8014,9 +8014,9 @@ react-native-navigation-bar-color@^2.0.1:
   resolved "https://registry.yarnpkg.com/react-native-navigation-bar-color/-/react-native-navigation-bar-color-2.0.1.tgz#ee2be25cc37105f7da355717b0a9a32c9c059ae6"
   integrity sha512-1kE/oxWt+HYjRxdZdvke9tJ365xaee5n3+euOQA1En8zQuSbOxiE4SYEGM7TeaWnmLJ0l37mRnPHaB2H4mGh0A==
 
-"react-native-notifications-latest@git://github.com/anisimov74/react-native-notifications.git#fd47b17":
+react-native-notifications-latest@anisimov74/react-native-notifications.git#fd47b17:
   version "3.1.4"
-  resolved "git://github.com/anisimov74/react-native-notifications.git#fd47b17436a22e619afef8bc094f5cefe45d5b79"
+  resolved "https://codeload.github.com/anisimov74/react-native-notifications/tar.gz/fd47b17436a22e619afef8bc094f5cefe45d5b79"
 
 react-native-notifications@1.1.19:
   version "1.1.19"
@@ -8078,9 +8078,9 @@ react-native-svg@^9.13.3:
     css-select "^2.0.2"
     css-tree "^1.0.0-alpha.37"
 
-"react-native-swiper@git://github.com/huston007/react-native-swiper.git#64c5681":
+react-native-swiper@huston007/react-native-swiper.git#64c5681:
   version "1.5.13"
-  resolved "git://github.com/huston007/react-native-swiper.git#64c56814f49cc6c711004d12b125c29e1c6d9ee9"
+  resolved "https://codeload.github.com/huston007/react-native-swiper/tar.gz/64c56814f49cc6c711004d12b125c29e1c6d9ee9"
   dependencies:
     prop-types "^15.5.10"
 
