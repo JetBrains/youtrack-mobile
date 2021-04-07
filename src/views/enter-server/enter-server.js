@@ -80,14 +80,16 @@ export class EnterServer extends Component<Props, State> {
         enteredUrl = enteredUrl.replace('http:', 'https:');
         log.info('HTTP protocol was replaced for cloud instance', enteredUrl);
       }
-      return [enteredUrl, `${enteredUrl}/youtrack`, `${enteredUrl}${VERSION_DETECT_FALLBACK_URL}`];
+      return [`${enteredUrl}/youtrack`, enteredUrl, `${enteredUrl}${VERSION_DETECT_FALLBACK_URL}`];
     }
 
     return [
-      `https://${enteredUrl}`,
       `https://${enteredUrl}/youtrack`,
-      `http://${enteredUrl}`,
+      `https://${enteredUrl}`,
+
       `http://${enteredUrl}/youtrack`,
+      `http://${enteredUrl}`,
+
       `http://${enteredUrl}${VERSION_DETECT_FALLBACK_URL}`
     ];
   }
