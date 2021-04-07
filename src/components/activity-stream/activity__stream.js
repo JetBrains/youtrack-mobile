@@ -236,10 +236,10 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
 
     const disabled = activityGroup.merged;
     const commentActions = props.commentActions;
-    const isAuthor = commentActions && commentActions.isAuthor(comment);
+    const isAuthor = commentActions && commentActions.isAuthor && commentActions.isAuthor(comment);
 
     const canComment: boolean = !!commentActions?.canCommentOn;
-    const canUpdate: boolean = !!commentActions && commentActions.canUpdateComment(comment);
+    const canUpdate: boolean = !!commentActions && !!commentActions.canUpdateComment && commentActions.canUpdateComment(comment);
 
     if (!comment.deleted) {
       // $FlowFixMe
@@ -251,9 +251,11 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
               <TouchableOpacity
                 hitSlop={HIT_SLOP}
                 disabled={disabled}
-                onPress={() => isAuthor ? commentActions && commentActions.onStartEditing(
-                  comment) : commentActions && commentActions.onReply(
-                  comment)}>
+                onPress={() => (
+                  isAuthor
+                    ? commentActions && commentActions.onStartEditing && commentActions.onStartEditing(comment)
+                    : commentActions && commentActions.onReply && commentActions.onReply(comment)
+                )}>
                 <Text style={styles.link}>
                   {isAuthor ? 'Edit' : 'Reply'}
                 </Text>
