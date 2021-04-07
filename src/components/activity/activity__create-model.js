@@ -22,7 +22,7 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []) => {
         timestamp: timestamp,
         events: [],
         authorGroup: authorGroup,
-        author: event.author,
+        author: event?.author,
         work: null,
         key: '',
         comment: null,

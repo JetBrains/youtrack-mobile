@@ -135,7 +135,7 @@ export default class IssuePermissions {
     if (!entity) {
       return false;
     }
-    if (this.isCurrentUser(comment.author)) {
+    if (this.isCurrentUser(comment?.author)) {
       return this.hasPermissionFor(entity, canUpdateCommentPermissionName);
     }
     return this.hasPermissionFor(entity, CAN_UPDATE_NOT_OWN_COMMENT);
@@ -150,7 +150,7 @@ export default class IssuePermissions {
     if (!entity) {
       return false;
     }
-    if (this.isCurrentUser(comment.author)) {
+    if (this.isCurrentUser(comment?.author)) {
       return this.hasPermissionFor(entity, canDeleteCommentPermissionName);
     }
     return this.canDeleteNotOwnComment(entity);

@@ -114,7 +114,7 @@ function Comment(props: Props) {
     return renderComment();
   }
 
-  const userPresentation: string = getEntityPresentation(comment.author);
+  const userPresentation: string = getEntityPresentation(comment?.author);
   return (
     <View
       testID="commentLegacy"

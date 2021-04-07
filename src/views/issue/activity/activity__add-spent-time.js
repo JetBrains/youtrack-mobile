@@ -240,7 +240,7 @@ const AddSpentTimeForm = (props: Props) => {
 
   const buttonStyle: Array<ViewStyleProp> = [styles.feedbackFormInput, styles.feedbackFormType];
   const iconAngleRight = <IconAngleRight size={20} color={styles.icon.color}/>;
-  const author: ?User = draft.author || currentUser;
+  const author: ?User = draft?.author || currentUser;
 
   const commonInputProps: Object = {
     autoCapitalize: 'none',
