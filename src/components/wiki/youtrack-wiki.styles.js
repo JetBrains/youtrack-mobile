@@ -86,6 +86,30 @@ export default EStyleSheet.create({
     fontSize: SECONDARY_FONT_SIZE,
     lineHeight: mainText.lineHeight,
   },
+  checkboxRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    minWidth: UNIT * 5,
+    marginVertical: -UNIT / 2,
+  },
+  checkboxIcon: {
+    color: '$link',
+    padding: UNIT / 2,
+    ...Platform.select({
+      ios: {
+        marginTop: -UNIT / 4,
+      },
+      android: {
+        marginTop: 0,
+      }
+    }),
+  },
+  checkboxIconBlank: {
+    color: '$icon',
+  },
+  checkboxLabel: {
+    marginLeft: -UNIT / 4,
+  },
 
 });
 

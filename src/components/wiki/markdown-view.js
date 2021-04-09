@@ -24,11 +24,12 @@ type Props = {
   attachments?: Array<Attachment>,
   children: string,
   mentions?: Mentions,
-  uiTheme: UITheme
+  uiTheme: UITheme,
+  onCheckboxUpdate?: (checked: boolean, position: number) => void,
 };
 
 function MarkdownView(props: Props) {
-  const {children, attachments = [], uiTheme, mentions} = props;
+  const {children, attachments = [], uiTheme, mentions, onCheckboxUpdate = () => {}} = props;
   const projects = (getStorageState().projects || []).map((it: Folder) => hasType.project(it) && it);
 
   const attaches: Array<Attachment> = apiHelper.convertAttachmentRelativeToAbsURLs(attachments, getApi().config.backendUrl);
@@ -37,7 +38,7 @@ function MarkdownView(props: Props) {
     <Markdown
       style={markdownStyles(uiTheme)}
       markdownit={MarkdownItInstance}
-      rules={getMarkdownRules(attaches, projects, uiTheme, mentions)}
+      rules={getMarkdownRules(attaches, projects, uiTheme, mentions, onCheckboxUpdate)}
       ui
     >
       {children}
