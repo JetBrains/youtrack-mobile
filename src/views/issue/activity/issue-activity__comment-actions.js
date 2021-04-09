@@ -437,3 +437,17 @@ export function onReactionSelect(
     }
   };
 }
+
+export function onCheckboxUpdate(checked: boolean, position: number, comment: IssueComment) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const {issue} = getState().issueState;
+    const [error, response] = await until(api.issue.updateCommentCheckbox(issue.id, checked, position, comment));
+    if (!error && response) {
+      dispatch(updateComment({
+        ...comment,
+        text: response.text
+      }));
+    }
+  };
+}

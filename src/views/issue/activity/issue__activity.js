@@ -109,6 +109,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       onReactionSelect,
       user,
       deleteWorkItem,
+      onCheckboxUpdate
     } = this.props;
 
     const youtrackWiki: YouTrackWiki = {
@@ -163,6 +164,9 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
               onWorkUpdate();
             }
           }}
+          onCheckboxUpdate={(checked: boolean, position: number, comment: IssueComment) => (
+            onCheckboxUpdate(checked, position, comment)
+          )}
         />
       </View>
     );

@@ -63,7 +63,8 @@ export type ActivityStreamProps = {
   workTimeSettings: ?WorkTimeSettings,
   youtrackWiki: $Shape<YouTrackWiki>,
   onWorkDelete?: () => any,
-  onWorkUpdate?: () => void
+  onWorkUpdate?: () => void,
+  onCheckboxUpdate?: (checked: boolean, position: number, comment: IssueComment) => Function,
 };
 
 export type ActivityStreamPropsReaction = {
@@ -315,6 +316,11 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
             onRestore={() => { if (commentActions.onRestoreComment) {commentActions.onRestoreComment(comment);} }}
             uiTheme={props.uiTheme}
             youtrackWiki={props.youtrackWiki}
+            onCheckboxUpdate={
+              (checked: boolean, position: number, comment: IssueComment) => (
+                props.onCheckboxUpdate && comment && props.onCheckboxUpdate(checked, position, comment)
+              )
+            }
           />
 
           {!comment.deleted && IssueVisibility.isSecured(comment.visibility) &&

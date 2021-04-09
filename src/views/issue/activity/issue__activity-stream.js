@@ -57,6 +57,9 @@ const IssueActivityStream = (props: Props) => {
           });
         }}
         onSelectReaction={selectReaction}
+        onCheckboxUpdate={(checked: boolean, position: number, comment: IssueComment) => (
+          props.onCheckboxUpdate && props.onCheckboxUpdate(checked, position, comment)
+        )}
       />
 
       {reactionState.isReactionsPanelVisible && (

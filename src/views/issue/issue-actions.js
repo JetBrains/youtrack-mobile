@@ -236,7 +236,7 @@ export function onCheckboxUpdate(checked: boolean, position: number) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {issue} = getState().issueState;
-    const [error, response] = await until(api.issue.updateCheckbox(issue.id, checked, position, issue.description));
+    const [error, response] = await until(api.issue.updateDescriptionCheckbox(issue.id, checked, position, issue.description));
     if (!error && response) {
       dispatch(setIssueSummaryAndDescription(issue.summary, response.description));
     }

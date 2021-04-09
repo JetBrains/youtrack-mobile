@@ -28,7 +28,8 @@ type Props = {
 
   activitiesEnabled?: boolean,
 
-  uiTheme: UITheme
+  uiTheme: UITheme,
+  onCheckboxUpdate?: (checked: boolean, position: number, comment: IssueComment) => void,
 };
 
 function Comment(props: Props) {
@@ -88,6 +89,9 @@ function Comment(props: Props) {
         testID="commentMarkdown"
         attachments={props.attachments}
         uiTheme={props.uiTheme}
+        onCheckboxUpdate={(checked: boolean, position: number) => (
+          props.onCheckboxUpdate && props.onCheckboxUpdate(checked, position, props.comment)
+        )}
       >
         {props.comment.text}
       </MarkdownView>
