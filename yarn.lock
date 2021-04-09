@@ -7938,9 +7938,9 @@ react-native-htmlview@0.13.0:
     entities "^1.1.1"
     htmlparser2-without-node-native "^3.9.2"
 
-react-native-hyperlink@anisimov74/react-native-hyperlink.git#f89bab7:
+react-native-hyperlink@anisimov74/react-native-hyperlink.git#aaa91f8:
   version "0.0.19"
-  resolved "https://codeload.github.com/anisimov74/react-native-hyperlink/tar.gz/f89bab72a4536339255c852f443c060ec39feee5"
+  resolved "https://codeload.github.com/anisimov74/react-native-hyperlink/tar.gz/aaa91f81a522fb6de80e40667cb681b76fa792f8"
   dependencies:
     linkify-it "^2.2.0"
     mdurl "^1.0.0"
