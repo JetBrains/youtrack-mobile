@@ -69,7 +69,9 @@ type Props = {
   onRemoveAttachment: () => any,
 
   onVisibilityChange: (visibility: Visibility) => any,
-  onAttach: (isVisible: boolean) => any
+  onAttach: (isVisible: boolean) => any,
+
+  onCheckboxUpdate: (checked: boolean, position: number) => void,
 }
 
 export default class IssueDetails extends Component<Props, void> {
@@ -197,7 +199,7 @@ export default class IssueDetails extends Component<Props, void> {
   }
 
   renderIssueContent(uiTheme: UITheme) {
-    const {issue, openIssueListWithSearch, openNestedIssueView, onTagRemove} = this.props;
+    const {issue, openIssueListWithSearch, openNestedIssueView, onTagRemove, onCheckboxUpdate} = this.props;
 
     if (!issue) {
       return <SkeletonIssueContent/>;
@@ -243,6 +245,7 @@ export default class IssueDetails extends Component<Props, void> {
           attachments={issue.attachments}
           markdown={issue.usesMarkdown && issue.description}
           uiTheme={uiTheme}
+          onCheckboxUpdate={(checked: boolean, position: number) => onCheckboxUpdate(checked, position)}
         />
       </View>
     );

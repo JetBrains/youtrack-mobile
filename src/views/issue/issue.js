@@ -108,7 +108,9 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       updateIssueVisibility,
 
       toggleVisibleAddAttachDialog,
-      onTagRemove
+      onTagRemove,
+
+      onCheckboxUpdate
     } = this.props;
 
     return (
@@ -147,6 +149,8 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
 
         onAttach={toggleVisibleAddAttachDialog}
         onTagRemove={onTagRemove}
+
+        onCheckboxUpdate={(checked: boolean, position: number) => onCheckboxUpdate(checked, position)}
       />
     );
   }

@@ -13,11 +13,12 @@ type Props = {
   youtrackWiki: YouTrackWiki,
   markdown?: string,
   attachments: Array<Attachment>,
-  uiTheme: UITheme
+  uiTheme: UITheme,
+  onCheckboxUpdate: (checked: boolean, position: number) => void,
 }
 
 function IssueDescription(props: Props) {
-  const {youtrackWiki, attachments, markdown, uiTheme} = props;
+  const {youtrackWiki, attachments, markdown, uiTheme, onCheckboxUpdate} = props;
 
   if (!youtrackWiki?.description && !markdown) {
     return null;
@@ -28,6 +29,7 @@ function IssueDescription(props: Props) {
       <MarkdownView
         attachments={attachments}
         uiTheme={uiTheme}
+        onCheckboxUpdate={(checked: boolean, position: number) => onCheckboxUpdate(checked, position)}
       >
         {markdown}
       </MarkdownView>
