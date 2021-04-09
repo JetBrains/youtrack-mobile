@@ -6521,6 +6521,12 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
+markdown-it-checkbox@anisimov74/markdown-it-checkbox.git#0c2bbd3:
+  version "1.1.1"
+  resolved "https://codeload.github.com/anisimov74/markdown-it-checkbox/tar.gz/0c2bbd3f3fc0767a9eb379b22ac2faae8469b303"
+  dependencies:
+    underscore "^1.8.2"
+
 markdown-it@^10.0.0:
   version "10.0.0"
   resolved "https://registry.yarnpkg.com/markdown-it/-/markdown-it-10.0.0.tgz#abfc64f141b1722d663402044e43927f1f50a8dc"
@@ -9743,6 +9749,11 @@ unbox-primitive@^1.0.0:
     has-bigints "^1.0.0"
     has-symbols "^1.0.0"
     which-boxed-primitive "^1.0.1"
+
+underscore@^1.8.2:
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.13.0.tgz#3ccdcbb824230fc6bf234ad0ddcd83dff4eafe5f"
+  integrity sha512-sCs4H3pCytsb5K7i072FAEC9YlSYFIbosvM0tAKAlpSSUgD7yC1iXSEGdl5XrDKQ1YUB+p/HDzYrSG2H2Vl36g==
 
 unicode-canonical-property-names-ecmascript@^1.0.4:
   version "1.0.4"

@@ -1,9 +1,10 @@
 /* @flow */
 
 import React from 'react';
-import {Image, ScrollView, Text, View, Linking} from 'react-native';
+import {Image, ScrollView, Text, View, Linking, TouchableOpacity} from 'react-native';
 
 import Hyperlink from 'react-native-hyperlink';
+import renderRules from 'react-native-markdown-display/src/lib/renderRules';
 import UrlParse from 'url-parse';
 
 import calculateAspectRatio from '../aspect-ratio/aspect-ratio';
@@ -13,6 +14,7 @@ import Router from '../router/router';
 import {getApi} from '../api/api__instance';
 import {guid} from '../../util/util';
 import {hasMimeType} from '../mime-type/mime-type';
+import {IconCheckboxBlank, IconCheckboxChecked} from '../icon/icon';
 import {ResourceTypes} from '../api/api__resource-types';
 
 import styles from './youtrack-wiki.styles';
@@ -39,7 +41,8 @@ function getMarkdownRules(
   attachments: Array<Attachment> = [],
   projects: Array<IssueProject> = [],
   uiTheme: UITheme,
-  mentions?: Mentions
+  mentions?: Mentions,
+  onCheckboxUpdate?: (checked: boolean, position: number) => void,
 ): Object {
 
   const imageHeaders = getApi().auth.getAuthorizationHeaders();
@@ -66,6 +69,62 @@ function getMarkdownRules(
 
     return <Image {...imageProps} />;
   };
+
+  const isNodeHasCheckbox = (node: MarkdownNode): boolean => {
+    let hasCheckbox: boolean = false;
+    let nodeChildren: Array<MarkdownNode> = node.children || [];
+    while (nodeChildren?.length > 0) {
+      hasCheckbox = nodeChildren.some((it) => it.type === 'checkbox');
+      if (hasCheckbox) {
+        break;
+      }
+      nodeChildren = nodeChildren[0] && nodeChildren[0].children;
+    }
+    return hasCheckbox;
+  };
+
+  const textRenderer = (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}): any => {
+    const text: string = node.content;
+
+    if (mentions && mentions.articles.concat(mentions.issues).length > 0) {
+      return renderArticleMentions(node, mentions, uiTheme, style, inheritedStyles);
+    }
+
+    if (node.content.match(imageEmbedRegExp)) {
+      const attach: Attachment = attachments.find((it: Attachment) => it.name && text.includes(it.name));
+      if (attach && attach.url && hasMimeType.image(attach)) {
+        return markdownImage({
+          key: node.key,
+          uri: attach.url,
+          alt: node?.attributes?.alt,
+          imageDimensions: attach.imageDimensions
+        });
+      }
+    }
+
+    if (issueId.test(text)) {
+      return (
+        <Text
+          key={node.key}
+          onPress={() => Router.Issue({issueId: text})}
+          style={[inheritedStyles, style.text, styles.link]}>
+          {text}
+        </Text>
+      );
+    }
+
+    return (
+      <Hyperlink
+        key={node.key}
+        linkStyle={style.link}
+        linkDefault={true}>
+        <Text style={[inheritedStyles, style.text]}>
+          {text}
+        </Text>
+      </Hyperlink>
+    );
+  };
+
 
   return {
 
@@ -148,47 +207,63 @@ function getMarkdownRules(
       );
     },
 
-    text: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
-      const text: string = node.content;
-
-      if (mentions && mentions.articles.concat(mentions.issues).length > 0) {
-        return renderArticleMentions(node, mentions, uiTheme, style, inheritedStyles);
-      }
-
-      if (node.content.match(imageEmbedRegExp)) {
-        const attach: Attachment = attachments.find((it: Attachment) => it.name && text.includes(it.name));
-        if (attach && attach.url && hasMimeType.image(attach)) {
-          return markdownImage({
-            key: node.key,
-            uri: attach.url,
-            alt: node?.attributes?.alt,
-            imageDimensions: attach.imageDimensions,
-          });
-        }
-      }
-
-      if (issueId.test(text)) {
-        return (
-          <Text
-            key={node.key}
-            onPress={() => Router.Issue({issueId: text})}
-            style={[inheritedStyles, style.text, styles.link]}>
-            {text}
-          </Text>
-        );
-      }
-
-      return (
-        <Hyperlink
-          key={node.key}
-          linkStyle={style.link}
-          linkDefault={true}>
-          <Text style={[inheritedStyles, style.text]}>
-            {text}
-          </Text>
-        </Hyperlink>
+    list_item: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
+      const hasCheckbox: boolean = isNodeHasCheckbox(node);
+      return renderRules.list_item(
+        node,
+        children,
+        parent,
+        (hasCheckbox ? {
+          ...style,
+          bullet_list_icon: {
+            ...style.bullet_list_icon,
+            ...style.bullet_list_icon_checkbox
+          }
+        } : style),
+        inheritedStyles
       );
     },
+
+    textgroup: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
+      const hasCheckbox: boolean = isNodeHasCheckbox(node);
+      return hasCheckbox ? (
+        <View key={node.key} style={[inheritedStyles, style.textgroup]}>
+          {children}
+        </View>
+      ) : (renderRules.textgroup(
+        node,
+        children,
+        parent,
+        style,
+        inheritedStyles
+      ));
+    },
+
+    checkbox: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
+      if (!onCheckboxUpdate) {
+        return textRenderer(node, children, parent, style, inheritedStyles);
+      }
+
+      const isChecked: boolean = node.attributes.checked === true;
+      const position: number = node.attributes.position;
+      const CheckboxIcon: Object = isChecked ? IconCheckboxChecked : IconCheckboxBlank;
+      return (
+        <TouchableOpacity
+          key={node.key}
+          style={[inheritedStyles, styles.checkboxRow]}
+          onPress={() => onCheckboxUpdate && onCheckboxUpdate(!isChecked, position)}
+        >
+          <CheckboxIcon
+            size={18}
+            color={uiTheme.colors.$icon}
+            style={[styles.checkboxIcon, !isChecked && styles.checkboxIconBlank]}
+          />
+          <Text style={[inheritedStyles, style.text, styles.checkboxLabel]}>{node.content}</Text>
+        </TouchableOpacity>
+      );
+    },
+
+    text: textRenderer,
   };
 }
 
