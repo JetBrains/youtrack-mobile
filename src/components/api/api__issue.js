@@ -309,7 +309,7 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
-  async updateCheckbox(issueId: string, checked: boolean, position: number, text: string) {
+  async updateDescriptionCheckbox(issueId: string, checked: boolean, position: number, text: string) {
     return this.makeAuthorizedRequest(
       `${this.youTrackIssueUrl}/${issueId}?${ApiBase.createFieldsQuery(['text', 'updated', 'description'])}`,
       'POST',
@@ -319,6 +319,20 @@ export default class IssueAPI extends ApiBase {
           position
         }],
         text
+      }
+    );
+  }
+
+  async updateCommentCheckbox(issueId: string, checked: boolean, position: number, comment: IssueComment) {
+    return this.makeAuthorizedRequest(
+      `${this.youTrackIssueUrl}/${issueId}/comments/${comment.id}?${ApiBase.createFieldsQuery(['text', 'updated', 'description'])}`,
+      'POST',
+      {
+        checkboxes: [{
+          checked,
+          position
+        }],
+        text: comment.text
       }
     );
   }
