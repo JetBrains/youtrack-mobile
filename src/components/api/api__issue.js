@@ -308,4 +308,18 @@ export default class IssueAPI extends ApiBase {
       {parseJson: false}
     );
   }
+
+  async updateCheckbox(issueId: string, checked: boolean, position: number, text: string) {
+    return this.makeAuthorizedRequest(
+      `${this.youTrackIssueUrl}/${issueId}?${ApiBase.createFieldsQuery(['text', 'updated', 'description'])}`,
+      'POST',
+      {
+        checkboxes: [{
+          checked,
+          position
+        }],
+        text
+      }
+    );
+  }
 }
