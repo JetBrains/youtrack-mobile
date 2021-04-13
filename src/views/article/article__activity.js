@@ -12,7 +12,12 @@ import ArticleEditComment from './article__activity-edit-comment';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import Router from '../../components/router/router';
 import {createActivityModel} from '../../components/activity/activity-helper';
-import {loadActivitiesPage, loadCachedActivitiesPage, showArticleCommentActions} from './arcticle-actions';
+import {
+  loadActivitiesPage,
+  loadCachedActivitiesPage,
+  showArticleCommentActions,
+  updateArticleComment
+} from './arcticle-actions';
 
 import styles from './article.styles';
 
@@ -26,7 +31,8 @@ type Props = {
   article: Article,
   issuePermissions: IssuePermissions,
   renderRefreshControl: (onRefresh: Function, showActivityIndicator: boolean) => React$Element<any>,
-  uiTheme: UITheme
+  uiTheme: UITheme,
+  onCheckboxUpdate?: (articleContent: string) => Function,
 };
 
 
@@ -99,6 +105,9 @@ const ArticleActivities = (props: Props) => {
           user={user}
           issuePermissions={issuePermissions}
           commentActions={createCommentActions()}
+          onCheckboxUpdate={(checked: boolean, position: number, comment: IssueComment) => (
+            dispatch(updateArticleComment(comment))
+          )}
         />
       </ScrollView>
       {issuePermissions.articleCanCommentOn(article) && (

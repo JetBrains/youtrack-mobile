@@ -29,7 +29,7 @@ type Props = {
   activitiesEnabled?: boolean,
 
   uiTheme: UITheme,
-  onCheckboxUpdate?: (checked: boolean, position: number, comment: IssueComment) => void,
+  onCheckboxUpdate?: (checked: boolean, position: number) => void,
 };
 
 function Comment(props: Props) {
@@ -90,7 +90,7 @@ function Comment(props: Props) {
         attachments={props.attachments}
         uiTheme={props.uiTheme}
         onCheckboxUpdate={(checked: boolean, position: number) => (
-          props.onCheckboxUpdate && props.onCheckboxUpdate(checked, position, props.comment)
+          props.onCheckboxUpdate && props.onCheckboxUpdate(checked, position)
         )}
       >
         {props.comment.text}
