@@ -57,9 +57,9 @@ export default class ArticlesAPI extends ApiBase {
     );
   }
 
-  async updateArticle(articleId: string, data: Object | null = null): Promise<Article> {
+  async updateArticle(articleId: string, data: Object | null = null, fields?: string): Promise<Article> {
     return this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/articles/${articleId}?${this.articleFieldsQuery}`,
+      `${this.youTrackApiUrl}/articles/${articleId}?${fields ? ApiBase.createFieldsQuery([fields]) : this.articleFieldsQuery}`,
       'POST',
       data
     );

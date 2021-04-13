@@ -65,7 +65,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     if (!this.props.storePrevArticle) {
       this.props.clearArticle();
     }
-  }
+  };
 
   componentDidMount() {
     logEvent({message: 'Navigate to article', analyticsId: ANALYTICS_ARTICLE_PAGE});
@@ -144,6 +144,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
       deleteAttachment,
       issuePermissions,
       createSubArticle,
+      onCheckboxUpdate
     } = this.props;
     const breadCrumbsElement = article ? this.renderBreadCrumbs() : null;
 
@@ -204,6 +205,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
           error={error}
           isLoading={isLoading}
           uiTheme={this.uiTheme}
+          onCheckboxUpdate={(articleContent: string) => onCheckboxUpdate(articleContent)}
         />
       </View>
     );
@@ -217,7 +219,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     }
 
     const articleData: ArticleEntity = article || articlePlaceholder;
-    const scrollData: {loadMore: Function} = {loadMore: () => null};
+    const scrollData: { loadMore: Function } = {loadMore: () => null};
     return (
       <FlatList
         testID="articleDetails"
@@ -354,6 +356,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(articleActions, dispatch),
     deleteAttachment: (attachmentId: string) => dispatch(articleActions.deleteAttachment(attachmentId)),
+    onCheckboxUpdate: (articleContent: string) => dispatch(articleActions.onCheckboxUpdate(articleContent)),
   };
 };
 

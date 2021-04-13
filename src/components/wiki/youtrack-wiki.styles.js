@@ -89,12 +89,13 @@ export default EStyleSheet.create({
   checkboxRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    minWidth: UNIT * 5,
     marginVertical: -UNIT / 2,
   },
   checkboxIcon: {
+    flexGrow: 0,
     color: '$link',
     padding: UNIT / 2,
+    marginRight: UNIT / 2,
     ...Platform.select({
       ios: {
         marginTop: -UNIT / 4,
@@ -106,9 +107,6 @@ export default EStyleSheet.create({
   },
   checkboxIconBlank: {
     color: '$icon',
-  },
-  checkboxLabel: {
-    marginLeft: -UNIT / 4,
   },
 
 });

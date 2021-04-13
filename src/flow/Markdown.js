@@ -1,9 +1,3 @@
-import {ReactElement} from 'react';
+import type {ASTNode} from 'react-native-markdown-display';
 
-export type MarkdownNode = {
-  attributes: Object,
-  content: string,
-  children: Array<ReactElement>,
-  key: string,
-  sourceInfo: string,
-};
+export type MarkdownNode = ASTNode;

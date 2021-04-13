@@ -70,7 +70,7 @@ function getMarkdownRules(
     return <Image {...imageProps} />;
   };
 
-  const isNodeHasCheckbox = (node: MarkdownNode): boolean => {
+  const isNodeContainsCheckbox = (node: MarkdownNode): boolean => {
     let hasCheckbox: boolean = false;
     let nodeChildren: Array<MarkdownNode> = node.children || [];
     while (nodeChildren?.length > 0) {
@@ -208,7 +208,7 @@ function getMarkdownRules(
     },
 
     list_item: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
-      const hasCheckbox: boolean = isNodeHasCheckbox(node);
+      const hasCheckbox: boolean = isNodeContainsCheckbox(node);
       return renderRules.list_item(
         node,
         children,
@@ -224,9 +224,22 @@ function getMarkdownRules(
       );
     },
 
+    inline: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
+      return isNodeContainsCheckbox(node) ? (
+        <View key={node.key} style={[inheritedStyles, style.inline, styles.checkboxRow]}>
+          {children}
+        </View>
+      ) : (renderRules.inline(
+        node,
+        children,
+        parent,
+        style,
+        inheritedStyles
+      ));
+    },
+
     textgroup: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
-      const hasCheckbox: boolean = isNodeHasCheckbox(node);
-      return hasCheckbox ? (
+      return isNodeContainsCheckbox(node) ? (
         <View key={node.key} style={[inheritedStyles, style.textgroup]}>
           {children}
         </View>
@@ -240,10 +253,6 @@ function getMarkdownRules(
     },
 
     checkbox: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
-      if (!onCheckboxUpdate) {
-        return textRenderer(node, children, parent, style, inheritedStyles);
-      }
-
       const isChecked: boolean = node.attributes.checked === true;
       const position: number = node.attributes.position;
       const CheckboxIcon: Object = isChecked ? IconCheckboxChecked : IconCheckboxBlank;
@@ -258,7 +267,7 @@ function getMarkdownRules(
             color={uiTheme.colors.$icon}
             style={[styles.checkboxIcon, !isChecked && styles.checkboxIconBlank]}
           />
-          <Text style={[inheritedStyles, style.text, styles.checkboxLabel]}>{node.content}</Text>
+          <Text style={[inheritedStyles, style.text]}>{node.content}</Text>
         </TouchableOpacity>
       );
     },

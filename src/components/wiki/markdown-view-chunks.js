@@ -5,12 +5,14 @@ import React, {useEffect, useState} from 'react';
 import {stringToTokens, tokensToAST} from 'react-native-markdown-display';
 
 import apiHelper from '../../components/api/api__helper';
+import getMarkdownRules from './markdown-view-rules';
 import MarkdownAST from '../../components/wiki/markdown-ast';
 import MarkdownItInstance from './markdown-instance';
 import {getApi} from '../api/api__instance';
-import getMarkdownRules from './markdown-view-rules';
 import {getStorageState} from '../storage/storage';
 import {hasType} from '../api/api__resource-types';
+import {SkeletonIssueContent} from '../skeleton/skeleton';
+import {updateMarkdownCheckbox} from './markdown-helper';
 
 import type {Article} from '../../flow/Article';
 import type {Attachment} from '../../flow/CustomFields';
@@ -18,7 +20,6 @@ import type {Folder} from '../../flow/User';
 import type {IssueOnList} from '../../flow/Issue';
 import type {MarkdownNode} from '../../flow/Markdown';
 import type {UITheme} from '../../flow/Theme';
-import {SkeletonIssueContent} from '../skeleton/skeleton';
 
 type Props = {
   attachments?: Array<Attachment>,
@@ -27,15 +28,24 @@ type Props = {
   mentionedArticles?: Array<Article>,
   mentionedIssues?: Array<IssueOnList>,
   uiTheme: UITheme,
-  scrollData?: Object
+  scrollData?: Object,
+  onCheckboxUpdate?: (articleContent: string) => Function,
 };
 
 
 let chunks: Array<Array<MarkdownNode>> = [];
 let rules: Object = {};
+let tokens: Array<MarkdownNode> = [];
+let md: string | null = null;
 
 const MarkdownViewChunks = (props: Props) => {
-  const {children, scrollData = {}, mentionedArticles = [], mentionedIssues = []} = props;
+  const {
+    children,
+    scrollData = {},
+    mentionedArticles = [],
+    mentionedIssues = [],
+    onCheckboxUpdate = (articleContent: string) => {}
+  } = props;
 
   if (!children) {
     return null;
@@ -44,28 +54,47 @@ const MarkdownViewChunks = (props: Props) => {
   const [chunksToRender, updateChunksToRender] = useState(1);
   const [astToRender, updateAstToRender] = useState([]);
 
+  const createMarkdown = (markdown: string): void => {
+    tokens = stringToTokens(markdown, MarkdownItInstance);
+    chunks = createChunks(tokensToAST(tokens), props.chunkSize);
+    updateAstToRender(chunks);
+  };
 
-  useEffect(() => {
+  const onCheckboxPress = (checked: boolean, position: number): void => {
+    if (md) {
+      onCheckboxUpdate(updateMarkdownCheckbox(md, position, checked));
+    }
+  };
+
+  const createRules = (): Object => {
     const projects: Array<Folder> = (getStorageState().projects || []).map((it: Folder) => hasType.project(it) && it);
     const attaches: Array<Attachment> = apiHelper.convertAttachmentRelativeToAbsURLs(
       props.attachments || [],
       getApi().config.backendUrl
     );
-    rules = getMarkdownRules(attaches, projects, props.uiTheme, {
-      articles: mentionedArticles,
-      issues: mentionedIssues
-    });
+    return getMarkdownRules(
+      attaches,
+      projects,
+      props.uiTheme, {
+        articles: mentionedArticles,
+        issues: mentionedIssues
+      },
+      onCheckboxPress
+    );
+  };
+
+  useEffect(() => {
+    rules = createRules();
     return () => {
-      chunks = [];
+      tokens = [];
       rules = {};
+      md = null;
     };
   }, []);
 
-
   useEffect(() => {
-    const ast: Array<MarkdownNode> = tokensToAST(stringToTokens(children, MarkdownItInstance));
-    chunks = createChunks(ast, props.chunkSize);
-    updateAstToRender(chunks);
+    createMarkdown(children);
+    md = children;
   }, [children]);
 
 

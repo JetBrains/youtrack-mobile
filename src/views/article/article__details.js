@@ -31,7 +31,8 @@ type Props = {
   onRemoveAttach?: (attachment: Attachment) => any,
   onCreateArticle?: () => any,
   uiTheme: UITheme,
-  scrollData: Object
+  scrollData: Object,
+  onCheckboxUpdate?: (articleContent: string) => Function,
 };
 
 const ArticleDetails = (props: Props) => {
@@ -125,7 +126,8 @@ const ArticleDetails = (props: Props) => {
     uiTheme,
     onRemoveAttach,
     onCreateArticle,
-    scrollData
+    scrollData,
+    onCheckboxUpdate
   } = props;
 
   if (!article) {
@@ -146,6 +148,7 @@ const ArticleDetails = (props: Props) => {
         mentionedIssues={article?.mentionedIssues}
         uiTheme={uiTheme}
         articleContent={article?.content}
+        onCheckboxUpdate={(articleContent: string) => onCheckboxUpdate && onCheckboxUpdate(articleContent)}
       />
 
       {article?.attachments?.length > 0 && (
