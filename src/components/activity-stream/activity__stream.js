@@ -317,7 +317,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
             uiTheme={props.uiTheme}
             youtrackWiki={props.youtrackWiki}
             onCheckboxUpdate={
-              (checked: boolean, position: number, comment: IssueComment) => (
+              (checked: boolean, position: number) => (
                 props.onCheckboxUpdate && comment && props.onCheckboxUpdate(checked, position, comment)
               )
             }
