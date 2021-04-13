@@ -533,6 +533,24 @@ const createSubArticle = (renderBreadCrumbs: Function) => {
   };
 };
 
+const onCheckboxUpdate = (articleContent: string): Function =>
+  async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const {article} = getState().article;
+    const [error, response] = await until(api.articles.updateArticle(
+      article.id, {content: articleContent}, 'content')
+    );
+    if (error) {
+      notify('Failed to update a checkbox', error);
+      await dispatch(setArticle(article));
+    } else {
+      const updatedArticle: Article = {...article, content: response.content};
+      dispatch(setArticle(updatedArticle));
+      cacheUserLastVisitedArticle(updatedArticle);
+    }
+  };
+
+
 export {
   clearArticle,
   createSubArticle,
@@ -557,4 +575,6 @@ export {
   toggleFavorite,
 
   deleteAttachment,
+
+  onCheckboxUpdate
 };
