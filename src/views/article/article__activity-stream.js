@@ -54,7 +54,7 @@ const ArticleActivityStream = (props: Props) => {
           const updatedCommentText: string = updateMarkdownCheckbox(comment.text, position, checked);
           onCheckboxUpdate(checked, position, {
             ...comment,
-            text: updatedCommentText
+            text: updatedCommentText,
           });
         }
       }}

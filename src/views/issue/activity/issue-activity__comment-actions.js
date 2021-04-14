@@ -446,7 +446,7 @@ export function onCheckboxUpdate(checked: boolean, position: number, comment: Is
     if (!error && response) {
       dispatch(updateComment({
         ...comment,
-        text: response.text
+        text: response.text,
       }));
     }
   };

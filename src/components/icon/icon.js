@@ -115,12 +115,12 @@ export const IconCamera = (props?: Props) => <DefaultIcon {...{
 
 export const IconCheckboxBlank = (props?: Props) => <DefaultIcon {...{
   name: 'checkbox-blank-outline',
-  ...props
+  ...props,
 }} />;
 
 export const IconCheckboxChecked = (props?: Props) => <DefaultIcon {...{
   name: 'checkbox-marked',
-  ...props
+  ...props,
 }} />;
 
 export const IconClone = (props?: Props) => <DefaultIcon {...{

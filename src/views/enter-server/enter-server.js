@@ -90,7 +90,7 @@ export class EnterServer extends Component<Props, State> {
       `http://${enteredUrl}/youtrack`,
       `http://${enteredUrl}`,
 
-      `http://${enteredUrl}${VERSION_DETECT_FALLBACK_URL}`
+      `http://${enteredUrl}${VERSION_DETECT_FALLBACK_URL}`,
     ];
   }
 

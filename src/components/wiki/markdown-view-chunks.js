@@ -44,7 +44,7 @@ const MarkdownViewChunks = (props: Props) => {
     scrollData = {},
     mentionedArticles = [],
     mentionedIssues = [],
-    onCheckboxUpdate = (articleContent: string) => {}
+    onCheckboxUpdate = (articleContent: string) => {},
   } = props;
 
   const [chunksToRender, updateChunksToRender] = useState(1);
@@ -73,7 +73,7 @@ const MarkdownViewChunks = (props: Props) => {
       projects,
       props.uiTheme, {
         articles: mentionedArticles,
-        issues: mentionedIssues
+        issues: mentionedIssues,
       },
       onCheckboxPress
     );

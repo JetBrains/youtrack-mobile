@@ -97,7 +97,7 @@ function getMarkdownRules(
           key: node.key,
           uri: attach.url,
           alt: node?.attributes?.alt,
-          imageDimensions: attach.imageDimensions
+          imageDimensions: attach.imageDimensions,
         });
       }
     }
@@ -217,8 +217,8 @@ function getMarkdownRules(
           ...style,
           bullet_list_icon: {
             ...style.bullet_list_icon,
-            ...style.bullet_list_icon_checkbox
-          }
+            ...style.bullet_list_icon_checkbox,
+          },
         } : style),
         inheritedStyles
       );

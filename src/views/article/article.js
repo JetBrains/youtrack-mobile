@@ -143,7 +143,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
       deleteAttachment,
       issuePermissions,
       createSubArticle,
-      onCheckboxUpdate
+      onCheckboxUpdate,
     } = this.props;
     const breadCrumbsElement = article ? this.renderBreadCrumbs() : null;
 

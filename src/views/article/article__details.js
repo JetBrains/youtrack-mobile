@@ -127,7 +127,7 @@ const ArticleDetails = (props: Props) => {
     onRemoveAttach,
     onCreateArticle,
     scrollData,
-    onCheckboxUpdate
+    onCheckboxUpdate,
   } = props;
 
   if (!article) {

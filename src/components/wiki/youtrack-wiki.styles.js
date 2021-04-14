@@ -102,7 +102,7 @@ export default EStyleSheet.create({
       },
       android: {
         marginTop: 0,
-      }
+      },
     }),
   },
   checkboxIconBlank: {

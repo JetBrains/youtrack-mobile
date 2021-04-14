@@ -109,7 +109,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       toggleVisibleAddAttachDialog,
       onTagRemove,
 
-      onCheckboxUpdate
+      onCheckboxUpdate,
     } = this.props;
 
     return (

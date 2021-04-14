@@ -316,9 +316,9 @@ export default class IssueAPI extends ApiBase {
       {
         checkboxes: [{
           checked,
-          position
+          position,
         }],
-        text
+        text,
       }
     );
   }
@@ -330,9 +330,9 @@ export default class IssueAPI extends ApiBase {
       {
         checkboxes: [{
           checked,
-          position
+          position,
         }],
-        text: comment.text
+        text: comment.text,
       }
     );
   }

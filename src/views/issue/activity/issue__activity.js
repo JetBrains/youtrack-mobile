@@ -109,7 +109,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       onReactionSelect,
       user,
       deleteWorkItem,
-      onCheckboxUpdate
+      onCheckboxUpdate,
     } = this.props;
 
     const youtrackWiki: YouTrackWiki = {

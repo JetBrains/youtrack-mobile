@@ -16,7 +16,7 @@ import {
   loadActivitiesPage,
   loadCachedActivitiesPage,
   showArticleCommentActions,
-  updateArticleComment
+  updateArticleComment,
 } from './arcticle-actions';
 
 import styles from './article.styles';

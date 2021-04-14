@@ -112,7 +112,7 @@ const markdownStyles = (uiTheme: UITheme) => {
       }),
     },
     bullet_list_icon_checkbox: {
-      color: 'transparent'
+      color: 'transparent',
     },
     // @pseudo class, does not have a unique render rule
     bullet_list_content: {

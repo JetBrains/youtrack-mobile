@@ -576,5 +576,5 @@ export {
 
   deleteAttachment,
 
-  onCheckboxUpdate
+  onCheckboxUpdate,
 };
