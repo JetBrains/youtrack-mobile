@@ -1,7 +1,9 @@
 /* @flow */
 
 import React, {PureComponent} from 'react';
-import {Modal, StyleSheet, View, SafeAreaView} from 'react-native';
+import {Modal, StyleSheet, View} from 'react-native';
+
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import type {ModalOrientation, ModalAnimationType} from '../../flow/ModalView';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
