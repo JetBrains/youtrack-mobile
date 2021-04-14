@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 
 import {stringToTokens, tokensToAST} from 'react-native-markdown-display';
 
@@ -50,11 +50,11 @@ const MarkdownViewChunks = (props: Props) => {
   const [chunksToRender, updateChunksToRender] = useState(1);
   const [astToRender, updateAstToRender] = useState([]);
 
-  const createMarkdown = (markdown: string): void => {
+  const createMarkdown = useCallback((markdown: string): void => {
     tokens = stringToTokens(markdown, MarkdownItInstance);
     chunks = createChunks(tokensToAST(tokens), props.chunkSize);
     updateAstToRender(chunks);
-  };
+  }, [props.chunkSize]);
 
   const onCheckboxPress = (checked: boolean, position: number): void => {
     if (md) {
@@ -92,7 +92,7 @@ const MarkdownViewChunks = (props: Props) => {
   useEffect(() => {
     createMarkdown(children);
     md = children;
-  }, [children]);
+  }, [children, createMarkdown]);
 
 
   if (!children || astToRender?.length === 0) {
