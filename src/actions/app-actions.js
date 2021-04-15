@@ -38,9 +38,9 @@ import {notify, notifyError} from '../components/notification/notification';
 import {setApi} from '../components/api/api__instance';
 import {storeSearchContext} from '../views/issues/issues-actions';
 
-import type {RootState} from '../reducers/app-reducer';
 import type {Activity} from '../flow/Activity';
 import type {AppConfigFilled, EndUserAgreement} from '../flow/AppConfig';
+import type {AppState} from '../reducers';
 import type {Article} from '../flow/Article';
 import type {AuthParams} from '../flow/Auth';
 import type {Folder, User, UserAppearanceProfile, UserArticlesProfile, UserGeneralProfile} from '../flow/User';
@@ -49,9 +49,14 @@ import type {PermissionCacheItem} from '../flow/Permission';
 import type {StorageState} from '../components/storage/storage';
 import type {WorkTimeSettings} from '../flow/Work';
 
+type Action = (
+  (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) =>
+    Promise<void> | Promise<mixed> | undefined
+  );
 
-export function logOut() {
-  return async (dispatch: (any) => any, getState: () => Object, getApi: () => Api) => {
+
+export function logOut(): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     clearCachesAndDrafts();
     const auth = getState().app.auth;
     Router.EnterServer({serverUrl: auth?.config?.backendUrl});
@@ -64,32 +69,32 @@ export function logOut() {
   };
 }
 
-export function openDebugView() {
+export function openDebugView(): {type: string} {
   return {type: types.OPEN_DEBUG_VIEW};
 }
 
-export function closeDebugView() {
+export function closeDebugView(): {type: string} {
   return {type: types.CLOSE_DEBUG_VIEW};
 }
 
-export function setEnabledFeatures(features: Array<string>) {
+export function setEnabledFeatures(features: Array<string>): {features: Array<string>, type: string} {
   return {type: types.SET_FEATURES, features};
 }
 
-export function onNavigateBack(closingView: Object) {
+export function onNavigateBack(closingView: Object): {closingView: any, type: string} {
   return {type: types.ON_NAVIGATE_BACK, closingView};
 }
 
-export function receiveOtherAccounts(otherAccounts: Array<StorageState>) {
+export function receiveOtherAccounts(otherAccounts: Array<StorageState>): {otherAccounts: Array<StorageState>, type: string} {
   return {type: types.RECEIVE_OTHER_ACCOUNTS, otherAccounts};
 }
 
-export function receiveUser(user: User) {
+export function receiveUser(user: User): {type: string, user: User} {
   return {type: types.RECEIVE_USER, user};
 }
 
-export function receiveUserAppearanceProfile(userAppearanceProfile?: UserAppearanceProfile) {
-  return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
+export function receiveUserAppearanceProfile(userAppearanceProfile?: UserAppearanceProfile): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     if (!userAppearanceProfile) {
       return;
     }
@@ -108,8 +113,8 @@ export function receiveUserAppearanceProfile(userAppearanceProfile?: UserAppeara
   };
 }
 
-export function updateUserGeneralProfile(userGeneralProfile: UserGeneralProfile) {
-  return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
+export function updateUserGeneralProfile(userGeneralProfile: UserGeneralProfile): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     try {
       const updatedUserGeneralProfile: UserGeneralProfile = await getApi().user.updateUserGeneralProfile(
         userGeneralProfile
@@ -129,15 +134,15 @@ export function updateUserGeneralProfile(userGeneralProfile: UserGeneralProfile)
   };
 }
 
-export const updateUserArticlesProfile = (articlesProfile: UserArticlesProfile) =>
-  async (dispatch: (any) => any) => {
+export const updateUserArticlesProfile = (articlesProfile: UserArticlesProfile): Action =>
+  async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     dispatch({
       type: types.RECEIVE_USER_ARTICLES_PROFILE,
       ...{articles: articlesProfile},
     });
   };
 
-export const resetUserArticlesProfile = () => async (dispatch: (any) => any) => {
+export const resetUserArticlesProfile = (): Action => async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
   dispatch(updateUserArticlesProfile({lastVisitedArticle: null}));
 };
 
@@ -165,9 +170,9 @@ export const cacheUserLastVisitedArticle = (article: Article | null, activities?
   }
 };
 
-export function checkAuthorization() {
-  return async (dispatch: (any) => any, getState: () => Object) => {
-    const auth = getState().app.auth;
+export function checkAuthorization(): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+    const auth: Auth = getState().app.auth;
     await auth.setAuthParamsFromCache();
     await flushStoragePart({currentUser: auth.currentUser});
 
@@ -175,8 +180,8 @@ export function checkAuthorization() {
   };
 }
 
-export function setAuth(config: AppConfigFilled) {
-  const auth = new Auth(config);
+export function setAuth(config: AppConfigFilled): {auth: Auth, type: string} {
+  const auth: Auth = new Auth(config);
   usage.init(config.statisticsEnabled);
 
   return {type: types.INITIALIZE_AUTH, auth};
@@ -192,8 +197,8 @@ async function storeConfig(config: AppConfigFilled) {
 }
 
 function populateAccounts() {
-  return async (dispatch: (any) => any, getState: () => Object) => {
-    const otherAccounts = await getOtherAccounts();
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+    const otherAccounts: Array<StorageState> = await getOtherAccounts();
     dispatch(receiveOtherAccounts(otherAccounts));
   };
 }
@@ -226,11 +231,11 @@ async function authorizeOnOneMoreServer(config: AppConfigFilled, onBack: (server
   });
 }
 
-function applyAccount(config: AppConfigFilled, auth: Auth, authParams: AuthParams) {
-  return async (dispatch: (any) => any, getState: () => RootState) => {
-    const otherAccounts = getState().app.otherAccounts;
-    const currentAccount = getStorageState();
-    const newOtherAccounts = [currentAccount, ...otherAccounts];
+function applyAccount(config: AppConfigFilled, auth: Auth, authParams: AuthParams): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+    const otherAccounts: Array<StorageState> = getState().app.otherAccounts || [];
+    const currentAccount: StorageState = getStorageState();
+    const newOtherAccounts: Array<StorageState> = [currentAccount, ...otherAccounts];
 
     await storeAccounts(newOtherAccounts);
     dispatch(receiveOtherAccounts(newOtherAccounts));
@@ -248,8 +253,8 @@ function applyAccount(config: AppConfigFilled, auth: Auth, authParams: AuthParam
   };
 }
 
-export function addAccount(serverUrl: string = '') {
-  return async (dispatch: (any) => any, getState: () => RootState) => {
+export function addAccount(serverUrl: string = ''): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     log.info('Adding new account started');
 
     try {
@@ -269,13 +274,13 @@ export function addAccount(serverUrl: string = '') {
       await dispatch(applyAccount(config, tmpAuthInstance, authParams));
       await flushStoragePart({creationTimestamp: Date.now()});
 
-      const user = (getStorageState().currentUser || {});
+      const user: $Shape<User> = (getStorageState().currentUser || {name: ''});
       log.info(`Successfully added account, user "${user.name}", server "${config.backendUrl}"`);
     } catch (err) {
       const errorMsg: string = 'Failed to add an account.';
       notifyError(errorMsg, err);
       const {otherAccounts} = getState().app;
-      if (!getStorageState().config && otherAccounts.length) {
+      if (!getStorageState().config && otherAccounts?.length) {
         log.info(`${errorMsg} Restoring prev account`);
         await dispatch(switchAccount(otherAccounts[0], true));
       }
@@ -284,8 +289,8 @@ export function addAccount(serverUrl: string = '') {
   };
 }
 
-export function switchAccount(account: StorageState, dropCurrentAccount: boolean = false, issueId?: string) {
-  return async (dispatch: (any) => any) => {
+export function switchAccount(account: StorageState, dropCurrentAccount: boolean = false, issueId?: string): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     dispatch(resetUserArticlesProfile());
     cacheUserLastVisitedArticle(null);
     try {
@@ -296,14 +301,14 @@ export function switchAccount(account: StorageState, dropCurrentAccount: boolean
   };
 }
 
-export function updateOtherAccounts(account: StorageState, removeCurrentAccount: boolean = false) {
-  return async (dispatch: (any) => any, getState: () => RootState) => {
-    const state: RootState = getState();
+export function updateOtherAccounts(account: StorageState, removeCurrentAccount: boolean = false): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+    const state: AppState = getState();
 
     const currentAccount: StorageState = getStorageState();
     log.info(`Changing account: ${currentAccount?.config?.backendUrl || ''} -> ${account?.config?.backendUrl || ''}`);
 
-    const otherAccounts = state.app.otherAccounts.filter(
+    const otherAccounts = (state.app.otherAccounts || []).filter(
       (it: StorageState) => it.creationTimestamp !== account.creationTimestamp
     );
     const prevAccount = removeCurrentAccount ? null : currentAccount;
@@ -319,9 +324,9 @@ export function updateOtherAccounts(account: StorageState, removeCurrentAccount:
   };
 }
 
-export function changeAccount(account: StorageState, removeCurrentAccount?: boolean, issueId: ?string) {
-  return async (dispatch: (any) => any, getState: () => RootState) => {
-    const state: RootState = getState();
+export function changeAccount(account: StorageState, removeCurrentAccount?: boolean, issueId: ?string): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+    const state: AppState = getState();
     const {config, authParams} = account;
     if (!authParams) {
       const errorMessage: string = 'Account doesn\'t have valid authorization, cannot switch onto it.';
@@ -353,9 +358,9 @@ export function changeAccount(account: StorageState, removeCurrentAccount?: bool
   };
 }
 
-export function removeAccountOrLogOut() {
-  return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
-    const otherAccounts: Array<StorageState> = getState().app.otherAccounts;
+export function removeAccountOrLogOut(): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+    const otherAccounts: Array<StorageState> = getState().app.otherAccounts || [];
 
     if (isRegisteredForPush()) {
       setRegisteredForPush(false);
@@ -368,15 +373,16 @@ export function removeAccountOrLogOut() {
 
     if (otherAccounts.length === 0) {
       log.info('No more accounts left, logging out.');
-      return dispatch(logOut());
+      dispatch(logOut());
+    } else {
+      log.info('Removing account, choosing another one.');
+      await dispatch(switchAccount(otherAccounts[0], true));
     }
-    log.info('Removing account, choosing another one.');
-    await dispatch(switchAccount(otherAccounts[0], true));
   };
 }
 
-function setUserPermissions(permissions: Array<PermissionCacheItem>) {
-  return async (dispatch: (any) => any, getState: () => RootState) => {
+function setUserPermissions(permissions: Array<PermissionCacheItem>): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const auth: Auth = getState().app.auth;
     dispatch({
       type: types.SET_PERMISSIONS,
@@ -386,10 +392,10 @@ function setUserPermissions(permissions: Array<PermissionCacheItem>) {
   };
 }
 
-export function loadUserPermissions() {
-  return async (dispatch: (any) => any, getState: () => Object) => {
+export function loadUserPermissions(): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const auth: Auth = getState().app.auth;
-    const authParams: AuthParams = auth.authParams;
+    const authParams: ?AuthParams = auth.authParams;
     const permissions: Array<PermissionCacheItem> = await appActionsHelper.loadPermissions(
       authParams?.token_type,
       authParams?.access_token,
@@ -403,8 +409,8 @@ export function loadUserPermissions() {
   };
 }
 
-export function completeInitialization(issueId: ?string = null) {
-  return async (dispatch: (any) => any) => {
+export function completeInitialization(issueId: ?string = null): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     log.debug('Completing initialization');
     await dispatch(loadUser());
     await dispatch(loadUserPermissions());
@@ -418,22 +424,23 @@ export function completeInitialization(issueId: ?string = null) {
   };
 }
 
-function loadUser() {
-  return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
-    const USER_DEFAULT_PROFILES: UserGeneralProfile & UserAppearanceProfile = {
-      general: {searchContext: null},
-      appearance: {naturalCommentsOrder: true},
-    };
-
+function loadUser(): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     let user: User = await getApi().user.getUser();
     user = Object.assign(
       {},
       user,
-      {profiles: user.profiles || USER_DEFAULT_PROFILES}
+      {profiles: user.profiles || {
+          general: {searchContext: null},
+          appearance: {naturalCommentsOrder: true},
+        }}
     );
 
-    if (!user.profiles.general?.searchContext) {
-      user.profiles.general.searchContext = EVERYTHING_CONTEXT;
+    if (!user.profiles?.general?.searchContext) {
+      user.profiles.general = {
+        ...user.profiles.general,
+        searchContext: EVERYTHING_CONTEXT,
+      };
     }
 
     await dispatch(storeSearchContext(user.profiles.general.searchContext));
@@ -442,15 +449,15 @@ function loadUser() {
   };
 }
 
-function loadWorkTimeSettings() {
-  return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
+function loadWorkTimeSettings(): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const workTimeSettings: WorkTimeSettings = await getApi().getWorkTimeSettings();
     await dispatch({type: types.RECEIVE_WORK_TIME_SETTINGS, workTimeSettings});
   };
 }
 
-export function acceptUserAgreement() {
-  return async (dispatch: (any) => any, getState: () => Object, getApi: () => Api) => {
+export function acceptUserAgreement(): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     log.info('User agreement accepted');
     usage.trackEvent('EUA is accepted');
     const api: Api = getApi();
@@ -462,8 +469,8 @@ export function acceptUserAgreement() {
   };
 }
 
-export function declineUserAgreement() {
-  return async (dispatch: (any) => any, getState: () => Object, getApi: () => Api) => {
+export function declineUserAgreement(): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     log.info('User agreement declined');
     usage.trackEvent('EUA is declined');
     dispatch({type: types.HIDE_USER_AGREEMENT});
@@ -471,15 +478,15 @@ export function declineUserAgreement() {
   };
 }
 
-export function initializeAuth(config: AppConfigFilled) {
-  return async (dispatch: (any) => any, getState: () => Object) => {
+export function initializeAuth(config: AppConfigFilled): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     dispatch(setAuth(config));
     await dispatch(checkAuthorization());
   };
 }
 
-function checkUserAgreement() {
-  return async (dispatch: (any) => any, getState: () => Object, getApi: () => Api) => {
+function checkUserAgreement(): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const api: Api = getApi();
     const auth = getState().app.auth;
     const {currentUser} = auth;
@@ -505,8 +512,8 @@ function checkUserAgreement() {
   };
 }
 
-export function applyAuthorization(authParams: AuthParams) {
-  return async (dispatch: Function, getState: () => Object) => {
+export function applyAuthorization(authParams: AuthParams): Action {
+  return async (dispatch: Function, getState: () => AppState) => {
     const auth = getState().app.auth;
     if (auth && authParams) {
       await auth.cacheAuthParams(authParams);
@@ -522,8 +529,8 @@ export function applyAuthorization(authParams: AuthParams) {
   };
 }
 
-export function cacheProjects() {
-  return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
+export function cacheProjects(): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const userFolders: Array<Folder> = await getApi().user.getUserFolders(
       '',
       ['$type,id,shortName,name,pinned']
@@ -534,8 +541,8 @@ export function cacheProjects() {
   };
 }
 
-function subscribeToURL() {
-  return async (dispatch: (any) => any, getState: () => Object) => {
+function subscribeToURL(): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     function isServerConfigured(url: ?string) {
       if (!isOneOfServers(url || '', [(getStorageState().config || {}).backendUrl])) {
         notifyError('Open URL error', {message: `"${url || ''}" doesn't match the configured server`});
@@ -564,8 +571,8 @@ function subscribeToURL() {
   };
 }
 
-export function initializeApp(config: AppConfigFilled, issueId: ?string) {
-  return async (dispatch: (any) => any, getState: () => Object) => {
+export function initializeApp(config: AppConfigFilled, issueId: ?string): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): any => {
     Router._getNavigator() && Router.Home({
       backendUrl: config.backendUrl,
       error: null,
@@ -586,14 +593,16 @@ export function initializeApp(config: AppConfigFilled, issueId: ?string) {
       try {
         reloadedConfig = await loadConfig(config.backendUrl);
         await storeConfig(reloadedConfig);
-      } catch (error) {
-        return Router.Home({backendUrl: config.backendUrl, error});
+      } catch (err) {
+        Router.Home({backendUrl: config.backendUrl, err});
+        return;
       }
 
       try {
         await dispatch(initializeAuth(reloadedConfig));
       } catch (e) {
-        return Router.LogIn({config});
+        Router.LogIn({config});
+        return;
       }
     }
 
@@ -607,8 +616,8 @@ export function initializeApp(config: AppConfigFilled, issueId: ?string) {
   };
 }
 
-export function connectToNewYoutrack(newURL: string) {
-  return async (dispatch: (any) => any) => {
+export function connectToNewYoutrack(newURL: string): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const config = await loadConfig(newURL);
     await storeConfig(config);
     dispatch(setAuth(config));
@@ -616,8 +625,8 @@ export function connectToNewYoutrack(newURL: string) {
   };
 }
 
-export function setAccount(notificationRouteData: NotificationRouteData) {
-  return async (dispatch: (any) => any) => {
+export function setAccount(notificationRouteData: NotificationRouteData | Object): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const state: StorageState = await populateStorage();
     await dispatch(populateAccounts());
 
@@ -650,8 +659,8 @@ export function setAccount(notificationRouteData: NotificationRouteData) {
   };
 }
 
-export function subscribeToPushNotifications() {
-  return async (dispatch: (any) => any, getState: () => RootState, getApi: () => Api) => {
+export function subscribeToPushNotifications(): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     if (DeviceInfo.isEmulator()) {
       return;
     }
@@ -663,7 +672,8 @@ export function subscribeToPushNotifications() {
     if (isRegisteredForPush()) {
       log.info('Device was already registered for push notifications. Initializing.');
       // $FlowFixMe: should be implemented for iOS
-      return PushNotifications.initialize(getApi(), onSwitchAccount);
+      PushNotifications.initialize(getApi(), onSwitchAccount);
+      return;
     }
 
     try {
@@ -674,7 +684,8 @@ export function subscribeToPushNotifications() {
       log.info('Successfully registered for push notifications');
     } catch (err) {
       if (isUnsupportedFeatureError(err)) {
-        return log.warn(UNSUPPORTED_ERRORS.PUSH_NOTIFICATION_NOT_SUPPORTED);
+        log.warn(UNSUPPORTED_ERRORS.PUSH_NOTIFICATION_NOT_SUPPORTED);
+        return;
       }
 
       log.warn(CUSTOM_ERROR_MESSAGE.PUSH_NOTIFICATION_REGISTRATION);
@@ -689,7 +700,7 @@ function isRegisteredForPush(): boolean { //TODO: YTM-1267
   return isIOSPlatform() ? storageState.isRegisteredForPush : Boolean(storageState.deviceToken);
 }
 
-async function setRegisteredForPush(isRegistered: boolean) {
+function setRegisteredForPush(isRegistered: boolean) {
   if (isIOSPlatform()) { //TODO: also use device token
     flushStoragePart({isRegisteredForPush: isRegistered});
   }
