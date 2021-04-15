@@ -34,61 +34,32 @@ export default class Home extends PureComponent<Props, State> {
     usage.trackScreenView('Loading');
   }
 
-  _renderRetryAction() {
-    if (!this.props.error) {
-      return null;
-    }
-    return <TouchableOpacity
-      onPress={() => this.props.onRetry()}>
-      <Text style={styles.retry}>Retry</Text>
-    </TouchableOpacity>;
-  }
-
-  _renderMessage() {
-    const {error, message} = this.props;
-    if (error) {
-      // $FlowFixMe
-      const message: string = error.message || error;
-      return <Text style={[styles.message, {color: 'red'}]}>{message}</Text>;
-    }
-
-    if (message) {
-      return <Text style={styles.message}>{message}</Text>;
-    }
-  }
-
-  _renderUrlButton() {
-    const {backendUrl} = this.props;
-    if (!backendUrl) {
-      return <ActivityIndicator style={styles.urlButton}/>;
-    }
-
-    return (
-      <TouchableOpacity
-        hitSlop={HIT_SLOP}
-        style={styles.urlButton}
-        onPress={() => this.props.onChangeBackendUrl(backendUrl)}>
-        <Text style={styles.url}>{formatYouTrackURL(backendUrl)}</Text>
-        <IconPencil style={styles.editUrlIcon} size={22} color={styles.retry.color}/>
-      </TouchableOpacity>
-    );
-  }
-
   render() {
+    const {backendUrl, onChangeBackendUrl, error, message, onRetry} = this.props;
     return <ThemeContext.Consumer>
       {(theme: Theme) => {
         return (
           <View style={styles.container}>
-
-            <View style={styles.logoContainer}>
-              <Image style={styles.logoImage} source={logo}/>
-            </View>
-
-            {this._renderUrlButton()}
-
-            <View style={styles.messageContainer}>
-              {this._renderRetryAction()}
-              {this._renderMessage()}
+            <Image style={styles.logoImage} source={logo}/>
+            <View style={styles.info}>
+              {Boolean(error || message) && (
+                <Text style={[styles.message, error && styles.messageError]}>{error?.message || message}</Text>
+              )}
+              {Boolean(backendUrl) && (
+                <TouchableOpacity
+                  hitSlop={HIT_SLOP}
+                  style={styles.urlButton}
+                  onPress={() => onChangeBackendUrl(backendUrl)}>
+                  <Text style={styles.url}>{formatYouTrackURL(backendUrl)}</Text>
+                  <IconPencil style={styles.editUrlIcon} size={22} color={styles.retry.color}/>
+                </TouchableOpacity>
+              )}
+              {Boolean(error) && (
+                <TouchableOpacity
+                  onPress={onRetry}>
+                  <Text style={styles.retry}>Retry</Text>
+                </TouchableOpacity>
+              )}
             </View>
 
           </View>

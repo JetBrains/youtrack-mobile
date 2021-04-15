@@ -5,5 +5,11 @@ module.exports = {
         android: null,
       },
     },
+    'react-native-splash-screen': {
+      platforms: {
+        android: null,
+        ios: null,
+      },
+    },
   },
 };

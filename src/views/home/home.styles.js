@@ -8,9 +8,9 @@ export default EStyleSheet.create({
     alignItems: 'center',
     backgroundColor: '$background',
   },
-  logoContainer: {
-    flex: 2,
-    justifyContent: 'flex-end',
+  info: {
+    position: 'absolute',
+    top: '64%',
   },
   logoImage: {
     height: UNIT * 20,
@@ -22,20 +22,17 @@ export default EStyleSheet.create({
     fontSize: 17,
     color: '$link',
   },
-  messageContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-  },
   message: {
-    padding: UNIT * 2,
+    textAlign: 'center',
     color: '$text',
+  },
+  messageError: {
+    color: '$error',
   },
   urlButton: {
     flex: 0,
     flexDirection: 'row',
     alignItems: 'flex-end',
-    justifyContent: 'flex-start',
-    height: 46,
   },
   urlIcon: {
     width: UNIT * 2,

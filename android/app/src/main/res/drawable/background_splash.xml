@@ -4,7 +4,8 @@
   <item
     android:drawable="?android:attr/colorBackground"/>
 
-  <item>
+  <item
+    android:top="-22dp">
     <bitmap
       android:gravity="center"
       android:src="@mipmap/ic_launcher"/>
