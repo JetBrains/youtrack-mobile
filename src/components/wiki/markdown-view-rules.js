@@ -263,7 +263,7 @@ function getMarkdownRules(
           onPress={() => onCheckboxUpdate && onCheckboxUpdate(!isChecked, position)}
         >
           <CheckboxIcon
-            size={18}
+            size={24}
             color={uiTheme.colors.$icon}
             style={[styles.checkboxIcon, !isChecked && styles.checkboxIconBlank]}
           />
