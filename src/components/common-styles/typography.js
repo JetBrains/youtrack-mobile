@@ -23,15 +23,7 @@ export const monospace = {
 export const headerTitle = {
   fontSize: HEADER_FONT_SIZE,
   letterSpacing: 0.13,
-
-  ...Platform.select({
-    ios: {
-      fontWeight: '700',
-    },
-    android: {
-      fontWeight: '500',
-    },
-  }),
+  fontWeight: '700',
 };
 
 export const secondaryText = {
