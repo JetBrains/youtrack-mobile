@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import {Image, ScrollView, Text, View, Linking, TouchableOpacity} from 'react-native';
+import {Image, Linking, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 
 import Hyperlink from 'react-native-hyperlink';
 import renderRules from 'react-native-markdown-display/src/lib/renderRules';
@@ -240,7 +240,7 @@ function getMarkdownRules(
 
     textgroup: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
       return isNodeContainsCheckbox(node) ? (
-        <View key={node.key} style={[inheritedStyles, style.textgroup]}>
+        <View key={node.key} style={[inheritedStyles, style.textgroup, styles.checkboxTextGroup]}>
           {children}
         </View>
       ) : (renderRules.textgroup(

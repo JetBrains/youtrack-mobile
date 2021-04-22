@@ -1,7 +1,7 @@
 import {Platform} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../variables/variables';
-import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE, monospace, mainText} from '../common-styles/typography';
+import {MAIN_FONT_SIZE, mainText, monospace, SECONDARY_FONT_SIZE} from '../common-styles/typography';
 
 const showMoreLink = {
   fontSize: SECONDARY_FONT_SIZE,
@@ -44,6 +44,7 @@ export default EStyleSheet.create({
   link: {
     color: '$link',
     fontSize: SECONDARY_FONT_SIZE,
+    marginTop: UNIT / 4
   },
   text: {
     color: '$link',
@@ -109,7 +110,11 @@ export default EStyleSheet.create({
     color: '$icon',
   },
   checkboxLabel: {
-    marginTop: 6
+    marginTop: 6,
+  },
+  checkboxTextGroup: {
+    flexDirection: 'row',
+    maxWidth: '75%',
   },
 
 });
