@@ -88,7 +88,7 @@ export default EStyleSheet.create({
   },
   checkboxRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginVertical: -UNIT / 2,
   },
   checkboxIcon: {
@@ -107,6 +107,9 @@ export default EStyleSheet.create({
   },
   checkboxIconBlank: {
     color: '$icon',
+  },
+  checkboxLabel: {
+    marginTop: 6
   },
 
 });

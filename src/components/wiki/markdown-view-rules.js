@@ -267,7 +267,7 @@ function getMarkdownRules(
             color={uiTheme.colors.$icon}
             style={[styles.checkboxIcon, !isChecked && styles.checkboxIconBlank]}
           />
-          <Text style={[inheritedStyles, style.text]}>{node.content}</Text>
+          <Text style={[inheritedStyles, style.text, styles.checkboxLabel]}>{node.content}</Text>
         </TouchableOpacity>
       );
     },
