@@ -12,6 +12,7 @@ import {hasType} from '../../components/api/api__resource-types';
 import {isIOSPlatform, until} from '../../util/util';
 import {logEvent} from '../../components/log/log-helper';
 import {notify} from '../../components/notification/notification';
+import type {ArticleState} from './article-reducers';
 import {
   setActivityPage,
   setArticle,
@@ -22,6 +23,7 @@ import {
   setProcessing,
 } from './article-reducers';
 import {cacheUserLastVisitedArticle} from '../../actions/app-actions';
+import type {ShowActionSheetWithOptions} from '../../components/action-sheet/action-sheet';
 import {showActions, showActionSheet} from '../../components/action-sheet/action-sheet';
 
 import type ActionSheet, {ActionSheetOptions} from '@expo/react-native-action-sheet';
@@ -29,9 +31,7 @@ import type Api from '../../components/api/api';
 import type {Activity} from '../../flow/Activity';
 import type {AppState} from '../../reducers';
 import type {Article, ArticleDraft} from '../../flow/Article';
-import type {ArticleState} from './article-reducers';
 import type {Attachment, IssueComment} from '../../flow/CustomFields';
-import type {ShowActionSheetWithOptions} from '../../components/action-sheet/action-sheet';
 
 type ApiGetter = () => Api;
 
@@ -127,7 +127,7 @@ const showArticleActions = (
     const api: Api = getApi();
     const {article} = getState().article;
     const url: string = `${api.config.backendUrl}/articles/${article.idReadable}`;
-
+    logEvent({message: 'Show article actions', analyticsId: ANALYTICS_ARTICLE_PAGE});
     const actions = [
       {
         title: 'Share…',
@@ -265,7 +265,7 @@ const deleteArticle = (article: Article, onAfterDelete?: () => any) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const isDraft: boolean = hasType.articleDraft(article);
-
+    logEvent({message: 'Delete article', analyticsId: ANALYTICS_ARTICLE_PAGE});
     dispatch(setProcessing(true));
     const [error] = await until(
       isDraft
@@ -343,7 +343,7 @@ const submitArticleCommentDraft = (commentDraftText: string) => {
     const api: Api = getApi();
     const {article}: Article = getState().article;
     const articleCommentDraft: IssueComment = getState().article.articleCommentDraft;
-
+    logEvent({message: 'Submit article draft', analyticsId: ANALYTICS_ARTICLE_PAGE});
     await dispatch(updateArticleCommentDraft(commentDraftText));
     const [error] = await until(api.articles.submitCommentDraft(article.id, articleCommentDraft.id));
     if (error) {
@@ -359,7 +359,7 @@ const updateArticleComment = (comment: IssueComment) => {
   return async (dispatch: (any) => any, getState: () => AppState) => {
     const api: Api = getApi();
     const {article}: Article = getState().article;
-
+    logEvent({message: 'Update article comment', analyticsId: ANALYTICS_ARTICLE_PAGE});
     const [error] = await until(api.articles.updateComment(article.id, comment));
     if (error) {
       notify('Failed to update a comment', error);
@@ -374,7 +374,7 @@ const deleteArticleComment = (commentId: string) => {
   return async (dispatch: (any) => any, getState: () => AppState) => {
     const api: Api = getApi();
     const {article}: Article = getState().article;
-
+    logEvent({message: 'Delete article comment', analyticsId: ANALYTICS_ARTICLE_PAGE});
     try {
       await new Promise((resolve: Function, reject: Function) => {
         Alert.alert(
@@ -409,7 +409,7 @@ const showArticleCommentActions = (
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {article} = getState().article;
-
+    logEvent({message: 'Show article\'s comment actions', analyticsId: ANALYTICS_ARTICLE_PAGE});
     const url: string = `${api.config.backendUrl}/articles/${article.idReadable}#comment${activityId}`;
     const commentText = comment.text;
     const options: Array<ActionSheetOptions> = [
@@ -470,6 +470,7 @@ const getMentions = (query: string) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {article} = getState().article;
+    logEvent({message: 'Get article mentions', analyticsId: ANALYTICS_ARTICLE_PAGE});
     const [error, mentions] = await until(
       api.mentions.getMentions(query, {containers: [{$type: article.$type, id: article.id}]}));
     if (error) {
@@ -484,7 +485,7 @@ const toggleFavorite = () => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {article} = getState().article;
-
+    logEvent({message: 'Toggle article star', analyticsId: ANALYTICS_ARTICLE_PAGE});
     const prev: boolean = article.hasStar;
     dispatch(setArticle({...article, hasStar: !prev}));
 
@@ -500,7 +501,7 @@ const deleteAttachment = (attachmentId: string) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {article} = getState().article;
-
+    logEvent({message: 'Delete article attachment', analyticsId: ANALYTICS_ARTICLE_PAGE});
     const [error] = await until(api.articles.deleteAttachment(article.id, attachmentId));
     if (error) {
       const message = 'Failed to delete attachment';
@@ -537,15 +538,16 @@ const onCheckboxUpdate = (articleContent: string): Function =>
   async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {article} = getState().article;
-    const [error, response] = await until(api.articles.updateArticle(
+    const updatedArticle: Article = {...article, content: articleContent};
+    dispatch(setArticle({...article, content: articleContent}));
+    logEvent({message: 'Checkbox updated', analyticsId: ANALYTICS_ARTICLE_PAGE});
+    const [error] = await until(api.articles.updateArticle(
       article.id, {content: articleContent}, 'content')
     );
     if (error) {
       notify('Failed to update a checkbox', error);
       await dispatch(setArticle(article));
     } else {
-      const updatedArticle: Article = {...article, content: response.content};
-      dispatch(setArticle(updatedArticle));
       cacheUserLastVisitedArticle(updatedArticle);
     }
   };
