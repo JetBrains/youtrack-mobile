@@ -5,17 +5,18 @@ import React from 'react';
 import Markdown from 'react-native-markdown-display';
 
 import apiHelper from '../api/api__helper';
+import type {Mentions} from './markdown-view-rules';
 import getMarkdownRules from './markdown-view-rules';
 import MarkdownItInstance from './markdown-instance';
 import markdownStyles from './markdown-view-styles';
 import {getApi} from '../api/api__instance';
 import {getStorageState} from '../storage/storage';
 import {hasType} from '../api/api__resource-types';
+import {ThemeContext} from '../theme/theme-context';
 
 import type {Attachment} from '../../flow/CustomFields';
 import type {Folder} from '../../flow/User';
-import type {Mentions} from './markdown-view-rules';
-import type {UITheme} from '../../flow/Theme';
+import type {Theme, UITheme} from '../../flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 
@@ -24,7 +25,7 @@ type Props = {
   attachments?: Array<Attachment>,
   children: string,
   mentions?: Mentions,
-  uiTheme: UITheme,
+  uiTheme?: UITheme,
   onCheckboxUpdate?: (checked: boolean, position: number) => void,
 };
 
@@ -35,14 +36,17 @@ function MarkdownView(props: Props) {
   const attaches: Array<Attachment> = apiHelper.convertAttachmentRelativeToAbsURLs(attachments, getApi().config.backendUrl);
 
   return (
-    <Markdown
-      style={markdownStyles(uiTheme)}
-      markdownit={MarkdownItInstance}
-      rules={getMarkdownRules(attaches, projects, uiTheme, mentions, onCheckboxUpdate)}
-      ui
-    >
-      {children}
-    </Markdown>
+    <ThemeContext.Consumer>
+      {(theme: Theme) =>
+        <Markdown
+          style={markdownStyles(uiTheme || theme.uiTheme)}
+          markdownit={MarkdownItInstance}
+          rules={getMarkdownRules(attaches, projects, uiTheme || theme.uiTheme, mentions, onCheckboxUpdate)}
+          ui
+        >
+          {children}
+        </Markdown>}
+    </ThemeContext.Consumer>
   );
 }
 
