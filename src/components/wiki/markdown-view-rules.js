@@ -46,9 +46,10 @@ function getMarkdownRules(
 ): Object {
 
   const imageHeaders = getApi().auth.getAuthorizationHeaders();
-  const projectIds = (projects).map((it: Folder) => it?.shortName).join('|');
+  const projectIds: string = (projects).map((it: Folder) => it?.shortName).join('|');
   const issueId = new RegExp(`\\b(?:${projectIds})\\b-\\d+$`);
-  const imageEmbedRegExp = /!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g;
+  const imageEmbedRegExp: RegExp = /!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g;
+  const isURLPattern: RegExp = /^(http(s?)):\/\/|(www.)/i;
 
   const markdownImage = ({key, uri, alt, imageDimensions}) => {
     const dimensions: ImageDimensions = calculateAspectRatio(
@@ -83,6 +84,17 @@ function getMarkdownRules(
     return hasCheckbox;
   };
 
+  const renderIssueIdLink = (issueId: string, styles: Array<Object>, key: string) => {
+    return (
+      <Text
+        key={key}
+        onPress={() => Router.Issue({issueId: issueId.trim()})}
+        style={styles}>
+        {issueId}
+      </Text>
+    );
+  };
+
   const textRenderer = (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}): any => {
     const text: string = node.content;
 
@@ -102,15 +114,8 @@ function getMarkdownRules(
       }
     }
 
-    if (issueId.test(text)) {
-      return (
-        <Text
-          key={node.key}
-          onPress={() => Router.Issue({issueId: text})}
-          style={[inheritedStyles, style.text, styles.link]}>
-          {text}
-        </Text>
-      );
+    if (issueId.test(text) && !isURLPattern.test(text)) {
+      return renderIssueIdLink(text, [inheritedStyles, style.text, styles.link], node.key);
     }
 
     return (
@@ -256,6 +261,7 @@ function getMarkdownRules(
       const isChecked: boolean = node.attributes.checked === true;
       const position: number = node.attributes.position;
       const CheckboxIcon: Object = isChecked ? IconCheckboxChecked : IconCheckboxBlank;
+      const text: string = node.content.trim();
       return (
         <TouchableOpacity
           key={node.key}
@@ -267,7 +273,11 @@ function getMarkdownRules(
             color={uiTheme.colors.$icon}
             style={[styles.checkboxIcon, !isChecked && styles.checkboxIconBlank]}
           />
-          <Text style={[inheritedStyles, style.text, styles.checkboxLabel]}>{node.content}</Text>
+          <Text style={[inheritedStyles, style.text, styles.checkboxLabel]}>
+            {issueId.test(text)
+              ? renderIssueIdLink(text, [inheritedStyles, style.text, styles.link], node.key)
+              : text}
+          </Text>
         </TouchableOpacity>
       );
     },
