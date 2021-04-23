@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {PureComponent} from 'react';
-import {View, ScrollView} from 'react-native';
+import {ScrollView, View} from 'react-native';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -110,6 +110,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       user,
       deleteWorkItem,
       onCheckboxUpdate,
+      doUpdateWorkItem
     } = this.props;
 
     const youtrackWiki: YouTrackWiki = {
@@ -142,7 +143,12 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       ),
       isAuthor: (comment: IssueComment) => issuePermissions.isCurrentUser(comment?.author),
     };
-    const onWorkUpdate = () => this.loadIssueActivities(true);
+    const onWorkUpdate = async (workItem?: WorkItem): Function => {
+      if (workItem) {
+        await doUpdateWorkItem(workItem);
+      }
+      this.loadIssueActivities(true);
+    };
 
     return (
       <View style={styles.activitiesContainer}>

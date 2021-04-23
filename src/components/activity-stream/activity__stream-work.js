@@ -30,7 +30,7 @@ import type {WorkItem} from '../../flow/Work';
 type Props = {
   activityGroup: Activity,
   onDelete?: (workItem: WorkItem) => any,
-  onUpdate?: () => any
+  onUpdate?: (workItem?: WorkItem) => any
 }
 
 type WorkPermissions = { canUpdate: boolean, canDelete: boolean, canCreateNotOwn: boolean };
@@ -75,7 +75,16 @@ const StreamWork = (props: Props) => {
 
         {!!work.text && (
           <View style={styles.activityWorkComment}>
-            <MarkdownView>
+            <MarkdownView
+              onCheckboxUpdate={(checked: boolean, position: number, workItemText: string): void => {
+                if (props.onUpdate) {
+                  props.onUpdate({
+                    ...work,
+                    text: workItemText
+                  });
+                }
+              }}
+            >
               {work.text}
             </MarkdownView>
           </View>

@@ -6,7 +6,7 @@ import log from '../../../components/log/log';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from '../../../components/analytics/analytics-ids';
 import {confirmation} from '../../../components/confirmation/confirmation';
 import {extractErrorMessage, resolveError} from '../../../components/error/error-resolver';
-import {getActivityCategories, getActivityAllTypes} from '../../../components/activity/activity-helper';
+import {getActivityAllTypes, getActivityCategories} from '../../../components/activity/activity-helper';
 import {logEvent} from '../../../components/log/log-helper';
 import {notify} from '../../../components/notification/notification';
 import {sortAlphabetically, sortByOrdinal} from '../../../components/search/sorting';
@@ -104,6 +104,24 @@ export function updateWorkItemDraft(draft: WorkItem) {
       return null;
     }
     return updatedDraft;
+  };
+}
+
+export function doUpdateWorkItem(workItem: WorkItem): Function {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const issueId = getState().issueState.issueId;
+    const [error] = await until(api.issue.createWorkItem(issueId, workItem));
+    if (error) {
+      const message: string = 'Failed to update work item';
+      notify(message, error);
+      logEvent({message, isError: true});
+    } else {
+      logEvent({
+        message: 'Work item checkbox updated',
+        analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+      });
+    }
   };
 }
 

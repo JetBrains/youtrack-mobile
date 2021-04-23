@@ -42,7 +42,7 @@ import type {CustomError} from '../../flow/Error';
 import type {Reaction} from '../../flow/Reaction';
 import type {UITheme} from '../../flow/Theme';
 import type {User} from '../../flow/User';
-import type {WorkTimeSettings} from '../../flow/Work';
+import type {WorkItem, WorkTimeSettings} from '../../flow/Work';
 import type {YouTrackWiki} from '../../flow/Wiki';
 
 
@@ -63,7 +63,7 @@ export type ActivityStreamProps = {
   workTimeSettings: ?WorkTimeSettings,
   youtrackWiki: $Shape<YouTrackWiki>,
   onWorkDelete?: () => any,
-  onWorkUpdate?: () => void,
+  onWorkUpdate?: (workItem?: WorkItem) => void,
   onCheckboxUpdate?: (checked: boolean, position: number, comment: IssueComment) => Function,
 };
 
