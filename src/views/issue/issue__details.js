@@ -1,6 +1,6 @@
 /* @flow */
 
-import {Text, View, ScrollView, TouchableOpacity} from 'react-native';
+import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import React, {Component} from 'react';
 
 import {View as AnimatedView} from 'react-native-animatable';
@@ -71,7 +71,7 @@ type Props = {
   onVisibilityChange: (visibility: Visibility) => any,
   onAttach: (isVisible: boolean) => any,
 
-  onCheckboxUpdate: (checked: boolean, position: number) => void,
+  onCheckboxUpdate: (checked: boolean, position: number, description: string) => void,
 }
 
 export default class IssueDetails extends Component<Props, void> {
@@ -245,7 +245,7 @@ export default class IssueDetails extends Component<Props, void> {
           attachments={issue.attachments}
           markdown={issue.usesMarkdown && issue.description}
           uiTheme={uiTheme}
-          onCheckboxUpdate={(checked: boolean, position: number) => onCheckboxUpdate(checked, position)}
+          onCheckboxUpdate={(checked: boolean, position: number, description: string) => onCheckboxUpdate(checked, position, description)}
         />
       </View>
     );

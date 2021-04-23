@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import {Text, View, RefreshControl} from 'react-native';
+import {RefreshControl, Text, View} from 'react-native';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -14,6 +14,7 @@ import ErrorMessage from '../../components/error-message/error-message';
 import Header from '../../components/header/header';
 import IssueActivity from './activity/issue__activity';
 import IssueDetails from './issue__details';
+import type {IssueTabbedState} from '../../components/issue-tabbed/issue-tabbed';
 import IssueTabbed from '../../components/issue-tabbed/issue-tabbed';
 import Router from '../../components/router/router';
 import Select from '../../components/select/select';
@@ -22,7 +23,7 @@ import usage from '../../components/usage/usage';
 import {attachmentActions} from './issue__attachment-actions-and-types';
 import {getApi} from '../../components/api/api__instance';
 import {getReadableID} from '../../components/issue-formatter/issue-formatter';
-import {IconBack, IconCheck, IconClose, IconMoreOptions, IconDrag} from '../../components/icon/icon';
+import {IconBack, IconCheck, IconClose, IconDrag, IconMoreOptions} from '../../components/icon/icon';
 import {isIOSPlatform} from '../../util/util';
 import {Skeleton} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
@@ -32,7 +33,6 @@ import styles from './issue.styles';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {AnyIssue} from '../../flow/Issue';
 import type {Attachment, Tag} from '../../flow/CustomFields';
-import type {IssueTabbedState} from '../../components/issue-tabbed/issue-tabbed';
 import type {State as IssueState} from './issue-reducers';
 import type {Theme, UITheme} from '../../flow/Theme';
 
@@ -149,7 +149,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
         onAttach={toggleVisibleAddAttachDialog}
         onTagRemove={onTagRemove}
 
-        onCheckboxUpdate={(checked: boolean, position: number) => onCheckboxUpdate(checked, position)}
+        onCheckboxUpdate={(checked: boolean, position: number, description: string) => onCheckboxUpdate(checked, position, description)}
       />
     );
   }

@@ -9,7 +9,7 @@ import issueActivityPageFields, {ISSUE_ATTACHMENT_FIELDS} from './api__activitie
 import type Auth from '../auth/auth';
 import type {Activity} from '../../flow/Activity';
 import type {Attachment, FieldValue, IssueComment, IssueProject, Tag} from '../../flow/CustomFields';
-import type {IssueOnList, IssueFull} from '../../flow/Issue';
+import type {IssueFull, IssueOnList} from '../../flow/Issue';
 import type {Visibility} from '../../flow/Visibility';
 import type {WorkItem} from '../../flow/Work';
 
@@ -171,7 +171,7 @@ export default class IssueAPI extends ApiBase {
   }
 
   async updateIssueSummaryDescription(issue: IssueFull) {
-    const queryString = qs.stringify({fields: 'id,value'});
+    const queryString = qs.stringify({fields: 'id,value,summary,description'});
     const body = {summary: issue.summary, description: issue.description};
 
     return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issue.id}?${queryString}`, 'POST', body);

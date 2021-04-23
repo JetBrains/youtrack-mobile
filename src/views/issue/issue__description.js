@@ -14,7 +14,7 @@ type Props = {
   markdown?: string,
   attachments: Array<Attachment>,
   uiTheme: UITheme,
-  onCheckboxUpdate: (checked: boolean, position: number) => void,
+  onCheckboxUpdate: (checked: boolean, position: number, description: string) => void,
 }
 
 function IssueDescription(props: Props) {
@@ -29,7 +29,9 @@ function IssueDescription(props: Props) {
       <MarkdownView
         attachments={attachments}
         uiTheme={uiTheme}
-        onCheckboxUpdate={(checked: boolean, position: number) => onCheckboxUpdate(checked, position)}
+        onCheckboxUpdate={
+          (checked: boolean, position: number, description: string) => onCheckboxUpdate(checked, position, description)
+        }
       >
         {markdown}
       </MarkdownView>
