@@ -96,6 +96,7 @@ export default EStyleSheet.create({
     flexGrow: 0,
     color: '$link',
     padding: UNIT / 2,
+    paddingRight: UNIT / 4,
     marginRight: UNIT / 2,
     ...Platform.select({
       ios: {
