@@ -29,7 +29,7 @@ type Props = {
   mentionedIssues?: Array<IssueOnList>,
   uiTheme: UITheme,
   scrollData?: Object,
-  onCheckboxUpdate?: (articleContent: string) => Function,
+  onCheckboxUpdate?: (markdown: string) => Function,
 };
 
 
@@ -44,7 +44,7 @@ const MarkdownViewChunks = (props: Props) => {
     scrollData = {},
     mentionedArticles = [],
     mentionedIssues = [],
-    onCheckboxUpdate = (articleContent: string) => {}
+    onCheckboxUpdate = (markdown: string) => {}
   } = props;
 
   if (!children) {
