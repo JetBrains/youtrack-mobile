@@ -8,10 +8,12 @@ import log from '../../components/log/log';
 import Router from '../../components/router/router';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ISSUE_PAGE} from '../../components/analytics/analytics-ids';
-import {attachmentTypes, attachmentActions} from './issue__attachment-actions-and-types';
+import {attachmentActions, attachmentTypes} from './issue__attachment-actions-and-types';
 import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
+import type {State as IssueState} from './issue-reducers';
 import {initialState} from './issue-reducers';
 import {isIOSPlatform, until} from '../../util/util';
+import {logEvent} from '../../components/log/log-helper';
 import {notify, notifyError} from '../../components/notification/notification';
 import {receiveUserAppearanceProfile} from '../../actions/app-actions';
 import {resolveError, resolveErrorMessage} from '../../components/error/error-resolver';
@@ -19,9 +21,8 @@ import {showActions} from '../../components/action-sheet/action-sheet';
 
 import type ActionSheet from '@expo/react-native-action-sheet';
 import type Api from '../../components/api/api';
-import type {CustomField, IssueProject, FieldValue, Attachment, Tag} from '../../flow/CustomFields';
-import type {IssueFull, CommandSuggestionResponse, OpenNestedViewParams} from '../../flow/Issue';
-import type {State as IssueState} from './issue-reducers';
+import type {Attachment, CustomField, FieldValue, IssueProject, Tag} from '../../flow/CustomFields';
+import type {CommandSuggestionResponse, IssueFull, OpenNestedViewParams} from '../../flow/Issue';
 import type {UserAppearanceProfile} from '../../flow/User';
 import type {Visibility} from '../../flow/Visibility';
 
@@ -232,13 +233,24 @@ export function saveIssueSummaryAndDescriptionChange() {
   };
 }
 
-export function onCheckboxUpdate(checked: boolean, position: number) {
+export function onCheckboxUpdate(checked: boolean, position: number, description: string) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {issue} = getState().issueState;
-    const [error, response] = await until(api.issue.updateDescriptionCheckbox(issue.id, checked, position, issue.description));
-    if (!error && response) {
-      dispatch(setIssueSummaryAndDescription(issue.summary, response.description));
+    const preIssueDescription: string = issue.description;
+    dispatch(setIssueSummaryAndDescription(issue.summary, description));
+    const [error] = await until(api.issue.updateIssueSummaryDescription({...issue, description}));
+    if (error) {
+      dispatch(setIssueSummaryAndDescription(issue.summary, preIssueDescription));
+      const message: string = 'Failed to update a checkbox';
+      notify(message);
+      logEvent({
+        message,
+        isError: true,
+        analyticsId: ANALYTICS_ISSUE_PAGE
+      });
+    } else {
+      usage.trackEvent(ANALYTICS_ISSUE_PAGE, `Checkbox: ${checked ? 'checked' : 'unchecked'}`);
     }
   };
 }
