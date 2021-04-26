@@ -97,7 +97,7 @@ export default EStyleSheet.create({
     color: '$link',
     padding: UNIT / 2,
     paddingRight: UNIT / 4,
-    marginRight: UNIT / 2,
+    marginRight: UNIT,
     ...Platform.select({
       ios: {
         marginTop: -UNIT / 4,
