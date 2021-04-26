@@ -95,7 +95,7 @@ const markdownStyles = (uiTheme: UITheme) => {
     // @pseudo class, does not have a unique render rule
     bullet_list_icon: {
       marginLeft: UNIT * 3,
-      marginRight: UNIT,
+      marginRight: UNIT * 1.5,
       ...Platform.select({
         ios: {
           fontSize: 30,
@@ -113,7 +113,7 @@ const markdownStyles = (uiTheme: UITheme) => {
     },
     bullet_list_icon_checkbox: {
       color: 'transparent',
-      marginLeft: -UNIT * 1.5,
+      marginLeft: -14,
     },
     // @pseudo class, does not have a unique render rule
     bullet_list_content: {
@@ -123,7 +123,7 @@ const markdownStyles = (uiTheme: UITheme) => {
     // @pseudo class, does not have a unique render rule
     ordered_list_icon: {
       marginLeft: UNIT,
-      marginRight: UNIT / 2,
+      marginRight: UNIT,
       ...Platform.select({
         android: {
           lineHeight: 27,
