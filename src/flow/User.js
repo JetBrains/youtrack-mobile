@@ -4,7 +4,7 @@ import type {Article} from './Article';
 
 export type User = {
   $type: string,
-  avatarUrl?: string,
+  avatarUrl: string | null,
   email?: string,
   featureFlags?: Array<FeatureFlags>,
   fullName?: string,
