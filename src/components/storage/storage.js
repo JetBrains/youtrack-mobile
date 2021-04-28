@@ -1,6 +1,7 @@
 /* @flow */
 
 import AsyncStorage from '@react-native-community/async-storage';
+import EncryptedStorage from 'react-native-encrypted-storage';
 
 import log from '../log/log';
 import {notify} from '../notification/notification';
@@ -16,6 +17,7 @@ import type {Board, Sprint} from '../../flow/Agile';
 import type {Notification} from '../../flow/Inbox';
 import type {PermissionCacheItem} from '../../flow/Permission';
 
+export const STORAGE_AUTH_PARAMS_KEY: string = 'yt_mobile_auth';
 const OTHER_ACCOUNTS_KEY = 'YT_OTHER_ACCOUNTS_STORAGE_KEY';
 export const THEME_MODE_KEY = 'YT_THEME_MODE';
 export const MAX_STORED_QUERIES = 5;
@@ -28,7 +30,6 @@ export type StorageState = {|
   projectId: ?string,
   projects: Array<?string>,
   draftId: ?string,
-  authParams: ?AuthParams,
   currentUser: ?User,
   creationTimestamp: ?number,
   config: ?AppConfigFilled,
@@ -60,7 +61,6 @@ const storageKeys: StorageStateKeys = {
   projectId: 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE',
   projects: 'YT_PROJECTS_STORAGE',
   draftId: 'DRAFT_ID_STORAGE_KEY',
-  authParams: 'yt_mobile_auth',
   currentUser: 'YT_CURRENT_USER_STORAGE_KEY',
   config: 'BACKEND_CONFIG_STORAGE_KEY',
   creationTimestamp: 'YT_CREATION_TIMESTAMP_STORAGE_KEY',
@@ -94,7 +94,6 @@ export const initialState: StorageState = Object.freeze({
   projectId: null,
   projects: [],
   draftId: null,
-  authParams: null,
   currentUser: null,
   creationTimestamp: null,
   config: null,
@@ -171,6 +170,17 @@ export async function clearCachesAndDrafts() {
   return populateStorage();
 }
 
+async function moveAuthParamsIntoEncryptedStorage(): Promise<void> {
+  const cachedAuthParams: AuthParams = await AsyncStorage.getItem(STORAGE_AUTH_PARAMS_KEY);
+  if (cachedAuthParams) {
+    await EncryptedStorage.setItem(
+      STORAGE_AUTH_PARAMS_KEY,
+      typeof cachedAuthParams === 'string' ? cachedAuthParams : JSON.stringify(cachedAuthParams)
+    );
+    AsyncStorage.removeItem(STORAGE_AUTH_PARAMS_KEY);
+  }
+}
+
 export async function populateStorage(): Promise<StorageState> {
   const PAIR_KEY = 0;
   const PAIR_VALUE = 1;
@@ -197,7 +207,7 @@ export async function populateStorage(): Promise<StorageState> {
     }, initialStateCopy);
 
   cleanAndLogState('Storage populated', storageState);
-
+  await moveAuthParamsIntoEncryptedStorage();
   return storageState;
 }
 

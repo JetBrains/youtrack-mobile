@@ -269,6 +269,8 @@ PODS:
     - React
   - react-native-camera/RN (1.4.3):
     - React
+  - react-native-encrypted-storage (4.0.2):
+    - React-Core
   - react-native-eventsource (0.0.1):
     - React
   - react-native-netinfo (6.0.0):
@@ -443,6 +445,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-appearance (from `../node_modules/react-native-appearance`)
   - react-native-camera (from `../node_modules/react-native-camera`)
+  - react-native-encrypted-storage (from `../node_modules/react-native-encrypted-storage`)
   - "react-native-eventsource (from `../node_modules/@gpsgate/react-native-eventsource`)"
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-notifications (from `../node_modules/react-native-notifications`)
@@ -527,6 +530,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-appearance"
   react-native-camera:
     :path: "../node_modules/react-native-camera"
+  react-native-encrypted-storage:
+    :path: "../node_modules/react-native-encrypted-storage"
   react-native-eventsource:
     :path: "../node_modules/@gpsgate/react-native-eventsource"
   react-native-netinfo:
@@ -615,6 +620,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 0ae35a37b20d5e031eb020a69cc5afdbd6406301
   react-native-appearance: 0f0e5fc2fcef70e03d48c8fe6b00b9158c2ba8aa
   react-native-camera: ac4eee8a3d739c25ef620b6779c0e3712de4b941
+  react-native-encrypted-storage: e78d848ce0fb663c2ce306e37921d026809322e6
   react-native-eventsource: fea4e2c2505d19660b312406ce45dbb3fe68fd35
   react-native-netinfo: e849fc21ca2f4128a5726c801a82fc6f4a6db50d
   react-native-notifications: 51ed8167f70f01c5000ba81a4465ea98b4612e23

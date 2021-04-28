@@ -1,17 +1,18 @@
 /* @flow */
 
+import EncryptedStorage from 'react-native-encrypted-storage';
 import qs from 'qs';
 
 import log from '../log/log';
 import PermissionsStore from '../permissions-store/permissions-store';
 import urlJoin from 'url-join';
 import {createBtoa} from '../../util/util';
-import {flushStoragePart, getStorageState} from '../storage/storage';
+import {STORAGE_AUTH_PARAMS_KEY} from '../storage/storage';
 import {USER_AGENT} from '../usage/usage';
 
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {AuthParams} from '../../flow/Auth';
-import type {CustomError} from '../../flow/Error';
+import type {CustomError, HTTPResponse} from '../../flow/Error';
 import type {User} from '../../flow/User';
 
 const ACCEPT_HEADER = 'application/json, text/plain, */*';
@@ -46,7 +47,7 @@ export default class AuthTest {
     );
   }
 
-  static obtainToken(body: string, config: AppConfigFilled) {
+  static obtainToken(body: string, config: AppConfigFilled): AuthParams {
     const hubTokenUrl = urlJoin(config.auth.serverUri, '/api/rest/oauth2/token');
 
     return fetch(hubTokenUrl, {
@@ -71,7 +72,7 @@ export default class AuthTest {
       });
   }
 
-  static obtainTokenByOAuthCode(code: string, config: AppConfigFilled) { //this method returns <AuthParams>
+  static obtainTokenByOAuthCode(code: string, config: AppConfigFilled): AuthParams {
     log.info('Obtaining token for code', code, config.auth.serverUri);
 
     return this.obtainToken([
@@ -83,7 +84,7 @@ export default class AuthTest {
     ].join(''), config);
   }
 
-  static obtainTokenByCredentials(login: string, password: string, config: AppConfigFilled) { //this method returns <AuthParams>
+  static obtainTokenByCredentials(login: string, password: string, config: AppConfigFilled): AuthParams {
     log.info(`Obtaining token by credentials on ${config.auth.serverUri} for "${login}"`);
     return this.obtainToken([
       'grant_type=password',
@@ -107,7 +108,9 @@ export default class AuthTest {
   }
 
   async logOut() {
-    await flushStoragePart({authParams: null});
+    await EncryptedStorage.removeItem(STORAGE_AUTH_PARAMS_KEY, () => {
+      EncryptedStorage.setItem(STORAGE_AUTH_PARAMS_KEY, '');
+    });
     delete this.authParams;
   }
 
@@ -158,7 +161,10 @@ export default class AuthTest {
       });
   }
 
-  getAuthorizationHeaders(authParams: ?AuthParams = this.authParams): { Authorization: string } {
+  getAuthorizationHeaders(authParams: ?AuthParams = this.authParams): {
+    'Authorization': string,
+    'User-Agent': string,
+  } {
     if (!authParams) {
       throw new Error('Auth: getAuthorizationHeaders called before authParams initialization');
     }
@@ -181,7 +187,7 @@ export default class AuthTest {
         'User-Agent': USER_AGENT,
         ...this.getAuthorizationHeaders(authParams),
       },
-    }).then((res: Response) => {
+    }).then((res: HTTPResponse | CustomError) => {
       if (res.status > 400) {
         const errorTitle: string = 'Check token error';
         log.log(errorTitle, res);
@@ -207,16 +213,16 @@ export default class AuthTest {
       });
   }
 
-  async cacheAuthParams(authParams: AuthParams) {
-    await flushStoragePart({authParams});
+  async cacheAuthParams(authParams: AuthParams): Promise<AuthParams> {
+    await EncryptedStorage.setItem(STORAGE_AUTH_PARAMS_KEY, JSON.stringify(authParams));
     return authParams;
   }
 
   async getCachedAuthParams(): Promise<AuthParams> {
-    const authParams: ?AuthParams = getStorageState().authParams;
+    const authParams: ?string = await EncryptedStorage.getItem(STORAGE_AUTH_PARAMS_KEY);
     if (!authParams) {
       throw new Error('No stored auth params found');
     }
-    return authParams;
+    return JSON.parse(authParams);
   }
 }

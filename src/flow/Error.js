@@ -2,7 +2,7 @@
 
 export type CustomError = Error & {
   json: Object,
-  status: string,
+  status: number,
   error_message: string,
   error_description: string,
   error_children: Array<{ error: string }>,
@@ -21,7 +21,8 @@ export type HTTPResponse = {
   type: string,
   url: string,
   _bodyInit?: string,
-  _bodyText: string
+  _bodyText: string,
+  json: () => Object,
 }
 
 export type HTTPHeaders = {

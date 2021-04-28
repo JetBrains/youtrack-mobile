@@ -1,14 +1,18 @@
-import * as storage from './storage';
 import MockedStorage from '@react-native-community/async-storage';
 import sinon from 'sinon';
 
-let queryMock;
-describe('Storage', () => {
-  let sandbox;
-  queryMock = 'for: me';
+import * as storage from './storage';
 
+let queryMock;
+let sandbox;
+let configMock;
+
+describe('Storage', () => {
   beforeEach(async () => {
     jest.restoreAllMocks();
+
+    queryMock = 'for: me';
+    configMock = {foo: 'bar'};
 
     sandbox = sinon.sandbox.create();
     sandbox.spy(MockedStorage, 'multiSet');
@@ -16,7 +20,6 @@ describe('Storage', () => {
     sandbox.stub(MockedStorage, 'multiGet').returns(Promise.resolve([
       ['BACKEND_CONFIG_STORAGE_KEY', '{"foo": "bar"}'],
       ['YT_QUERY_STORAGE', queryMock],
-      ['yt_mobile_auth', '{"foo": "bar"}'],
     ]));
 
     await storage.populateStorage();
@@ -25,8 +28,7 @@ describe('Storage', () => {
   afterEach(() => sandbox.restore());
 
   it('should populate storage', async () => {
-    storage.getStorageState().config.should.deep.equal({foo: 'bar'});
-    storage.getStorageState().authParams.should.deep.equal({foo: 'bar'});
+    storage.getStorageState().config.should.deep.equal(configMock);
     storage.getStorageState().query.should.equal(queryMock);
   });
 
@@ -45,7 +47,8 @@ describe('Storage', () => {
 
   it('should remove empty values from storage on flush', async () => {
     await storage.flushStoragePart({config: {}, query: 'bar'});
-    MockedStorage.multiRemove.should.have.been.calledWith([
+
+    expect(MockedStorage.multiRemove).toHaveBeenLastCalledWith([
       'YT_ARTICLES',
       'YT_ARTICLES_LIST',
       'YT_ARTICLES_QUERY',
