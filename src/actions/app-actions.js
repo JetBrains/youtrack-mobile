@@ -28,6 +28,7 @@ import {
   flushStoragePart,
   getOtherAccounts,
   storeAccounts,
+  getCachedAuthParams,
 } from '../components/storage/storage';
 import {hasType} from '../components/api/api__resource-types';
 import {isIOSPlatform} from '../util/util';
@@ -51,7 +52,7 @@ import type {WorkTimeSettings} from '../flow/Work';
 
 type Action = (
   (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) =>
-    Promise<void> | Promise<mixed> | undefined
+    Promise<void> | Promise<mixed> | typeof undefined
   );
 
 
@@ -89,26 +90,21 @@ export function receiveOtherAccounts(otherAccounts: Array<StorageState>): { othe
   return {type: types.RECEIVE_OTHER_ACCOUNTS, otherAccounts};
 }
 
-export function receiveUser(user: User): {type: string, user: User} {
-  return {type: types.RECEIVE_USER, user};
-}
-
 export function receiveUserAppearanceProfile(userAppearanceProfile?: UserAppearanceProfile): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
-    if (!userAppearanceProfile) {
-      return;
-    }
-    try {
-      const appearanceProfile: UserAppearanceProfile = await getApi().user.updateUserAppearanceProfile(
-        'me',
-        userAppearanceProfile
-      );
-      dispatch({
-        type: types.RECEIVE_USER_APPEARANCE_PROFILE,
-        ...{appearance: appearanceProfile},
-      });
-    } catch (error) {
-      log.info('Can\'t update user appearance profile.');
+    if (userAppearanceProfile) {
+      try {
+        const appearanceProfile: UserAppearanceProfile = await getApi().user.updateUserAppearanceProfile(
+          'me',
+          userAppearanceProfile
+        );
+        dispatch({
+          type: types.RECEIVE_USER_APPEARANCE_PROFILE,
+          ...{appearance: appearanceProfile},
+        });
+      } catch (error) {
+        log.info('Can\'t update user appearance profile.');
+      }
     }
   };
 }
@@ -176,7 +172,7 @@ export const cacheUserLastVisitedArticle = (article: Article | null, activities?
 
 export function checkAuthorization(): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
-    const auth: Auth = getState().app.auth;
+    const auth: Auth = ((getState().app.auth: any): Auth);
     await auth.setAuthParamsFromCache();
     await flushStoragePart({currentUser: auth.currentUser});
 
@@ -278,8 +274,9 @@ export function addAccount(serverUrl: string = ''): Action {
       await dispatch(applyAccount(config, tmpAuthInstance, authParams));
       await flushStoragePart({creationTimestamp: Date.now()});
 
-      const user: $Shape<User> = (getStorageState().currentUser || {name: ''});
-      log.info(`Successfully added account, user "${user.name}", server "${config.backendUrl}"`);
+      const user: ?User = getStorageState().currentUser;
+      const userName: string = user?.name || '';
+      log.info(`Successfully added account, user "${userName}", server "${config.backendUrl}"`);
     } catch (err) {
       const errorMsg: string = 'Failed to add an account.';
       notifyError(errorMsg, err);
@@ -334,7 +331,8 @@ export function updateOtherAccounts(
 export function changeAccount(account: StorageState, removeCurrentAccount?: boolean, issueId: ?string): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const state: AppState = getState();
-    const {config, authParams} = account;
+    const config: AppConfigFilled = ((account.config: any): AppConfigFilled);
+    const authParams: ?AuthParams = await getCachedAuthParams();
     if (!authParams) {
       const errorMessage: string = 'Account doesn\'t have valid authorization, cannot switch onto it.';
       notify(errorMessage);
@@ -433,25 +431,14 @@ export function completeInitialization(issueId: ?string = null): Action {
 
 function loadUser(): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
-    let user: User = await getApi().user.getUser();
-    user = Object.assign(
-      {},
-      user,
-      {profiles: user.profiles || {
-          general: {searchContext: null},
-          appearance: {naturalCommentsOrder: true},
-        }}
-    );
-
-    if (!user.profiles?.general?.searchContext) {
-      user.profiles.general = {
-        ...user.profiles.general,
-        searchContext: EVERYTHING_CONTEXT,
-      };
-    }
-
+    const user: User = await getApi().user.getUser();
+    const DEFAULT_USER_PROFILES: { general: $Shape<UserGeneralProfile>, appearance: $Shape<UserAppearanceProfile> } = {
+      general: {searchContext: EVERYTHING_CONTEXT},
+      appearance: {naturalCommentsOrder: true},
+    };
+    user.profiles = Object.assign({}, DEFAULT_USER_PROFILES, user.profiles);
+    user.profiles.general.searchContext = user.profiles.general.searchContext || EVERYTHING_CONTEXT;
     await dispatch(storeSearchContext(user.profiles.general.searchContext));
-
     dispatch({type: types.RECEIVE_USER, user});
   };
 }
@@ -574,7 +561,8 @@ function subscribeToURL(): Action {
         }
         usage.trackEvent('app', 'Open issues query in app by URL');
         Router.Issues({query: issuesQuery});
-      });
+      }
+    );
   };
 }
 
@@ -588,7 +576,9 @@ export function initializeApp(config: AppConfigFilled, issueId: ?string): Action
 
     try {
       if (packageJson.version !== getStorageState().currentAppVersion) {
-        log.info(`App upgraded from ${getStorageState().currentAppVersion || 'NOTHING'} to "${packageJson.version}"; reloading config`);
+        log.info(
+          `App upgraded from ${getStorageState().currentAppVersion || 'NOTHING'} to "${packageJson.version}"; reloading config`
+        );
         config = await loadConfig(config.backendUrl);
         await flushStoragePart({config, currentAppVersion: packageJson.version});
       }
@@ -639,7 +629,9 @@ export function setAccount(notificationRouteData: NotificationRouteData | Object
 
     const notificationBackendUrl: ?string = notificationRouteData.backendUrl;
     if (notificationBackendUrl && state?.config && notificationBackendUrl !== state.config?.backendUrl) {
-      const notificationIssueAccount: ?StorageState = await appActionsHelper.targetAccountToSwitchTo(notificationBackendUrl);
+      const notificationIssueAccount: ?StorageState = await appActionsHelper.targetAccountToSwitchTo(
+        notificationBackendUrl
+      );
       if (notificationIssueAccount) {
         await dispatch(updateOtherAccounts(notificationIssueAccount));
         flushStoragePart({config: notificationIssueAccount.config});

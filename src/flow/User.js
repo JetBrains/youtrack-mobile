@@ -19,6 +19,9 @@ export type User = {
     accepted: boolean,
     majorVersion: string,
     minorVersion: string
+  },
+  star: {
+    id: string
   }
 };
 
@@ -37,8 +40,8 @@ export type FeatureFlags = {
 export type UserProfile = {
   $type: string,
   appearance?: UserAppearanceProfile,
-  articles?: UserArticlesProfile,
-  general?: UserGeneralProfile,
+  articles: UserArticlesProfile,
+  general: UserGeneralProfile,
   issuesList?: Object,
   notifications?: Object,
   teamcity?: Object,
@@ -59,8 +62,8 @@ export type UserAppearanceProfile = {
 }
 
 export type UserArticlesProfile = {
-  $type: string,
-  lastVisitedArticle?: Article,
+  $type?: string,
+  lastVisitedArticle?: $Shape<Article>,
   showComment?: boolean,
   showHistory?: boolean
 }
