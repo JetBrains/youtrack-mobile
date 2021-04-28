@@ -67,5 +67,6 @@ jest.mock('react-native-appearance', () => ({
 mockReactNativeNotification();
 
 NativeModules.RNEncryptedStorage = {
+  getItem: jest.fn(() => Promise.resolve()),
   setItem: jest.fn(() => Promise.resolve()),
 };
