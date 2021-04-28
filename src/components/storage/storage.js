@@ -51,7 +51,7 @@ export type StorageState = {|
   themeMode: ?string
 |}
 
-type StorageStateKeys = $Exact<$ObjMap<StorageState, () => string>>;
+type StorageStateKeys = $Shape<$ObjMap<StorageState, () => string>>;
 
 const storageKeys: StorageStateKeys = {
   articles: 'YT_ARTICLES',
@@ -84,7 +84,7 @@ const storageKeys: StorageStateKeys = {
 
 let storageState: ?StorageState = null;
 
-const hasValue = v => v !== null && v !== undefined;
+const hasValue = (v: any): boolean => v !== null && v !== undefined;
 
 export const initialState: StorageState = Object.freeze({
   articles: null,
@@ -116,34 +116,16 @@ export const initialState: StorageState = Object.freeze({
 });
 
 function cleanAndLogState(message, state) {
-  const CENSORED = 'CENSORED';
-  const forLog = {...state};
-
-  if (forLog.authParams) {
-    forLog.authParams = {
-      ...forLog.authParams,
-      access_token: CENSORED,
-      refresh_token: CENSORED,
-    };
-  }
-
-  if (forLog.issuesCache) {
-    forLog.issuesCache = CENSORED;
-  }
-  if (forLog.inboxCache) {
-    forLog.inboxCache = CENSORED;
-  }
-  if (forLog.inboxCache) {
-    forLog.inboxCache = CENSORED;
-  }
-  if (forLog.projects) {
-    forLog.projects = CENSORED;
-  }
-
-  log.debug(message, forLog);
+  const CENSORED: string = 'CENSORED';
+  log.debug(message, {
+    ...state,
+    issuesCache: CENSORED,
+    inboxCache: CENSORED,
+    projects: CENSORED,
+  });
 }
 
-export async function clearCachesAndDrafts() {
+export async function clearCachesAndDrafts(): Promise<StorageState> {
   log.debug('Storage drafts has been cleared');
   await AsyncStorage.multiRemove([
     storageKeys.articles,
@@ -185,7 +167,7 @@ export async function populateStorage(): Promise<StorageState> {
   const PAIR_KEY = 0;
   const PAIR_VALUE = 1;
 
-  const pairs = await AsyncStorage.multiGet(Object.values(storageKeys));
+  const pairs = await AsyncStorage.multiGet(((Object.values(storageKeys): any): Array<string>));
   const values = pairs.reduce((acc, pair) => {
     acc[pair[PAIR_KEY]] = pair[PAIR_VALUE];
     return acc;
@@ -196,7 +178,7 @@ export async function populateStorage(): Promise<StorageState> {
   const initialStateCopy: StorageState = {...initialState};
 
   storageState = Object.entries(storageKeys)
-    .reduce((state, [key, storageKey]) => {
+    .reduce((state: StorageState, [key: string, storageKey: string]) => {
       const value = values[storageKey];
       try {
         state[key] = value ? JSON.parse(value) : value;
@@ -234,8 +216,12 @@ export async function flushStorage(newState: StorageState): Promise<StorageState
     return newState;
   }
 
-  const pairs = pairsToWrite
-    .map(([key, value]) => [storageKeys[key], hasValue(value) ? JSON.stringify(value) : value]);
+  const pairs: Array<Array<string>> = pairsToWrite.map(
+    ([key, value]) => [
+      storageKeys[key],
+      hasValue(value) ? JSON.stringify((value: any)) : (value: any),
+    ]
+  );
   await AsyncStorage.multiSet(pairs);
 
   return storageState;
