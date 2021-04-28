@@ -69,7 +69,7 @@ export default class UserAPI extends ApiBase {
     return await this.makeAuthorizedRequest(`${this.youTrackApiUrl}/userIssueFolders/${folderId}?${queryString}`);
   }
 
-  async updateUserAppearanceProfile(userId: string = 'me', appearanceProfile: UserAppearanceProfile): Promise<User> {
+  async updateUserAppearanceProfile(userId: string = 'me', appearanceProfile: UserAppearanceProfile): Promise<UserAppearanceProfile> {
     const queryString = ApiBase.createFieldsQuery(['naturalCommentsOrder']);
 
     return await this.makeAuthorizedRequest(
@@ -81,13 +81,13 @@ export default class UserAPI extends ApiBase {
     );
   }
 
-  async updateUserGeneralProfile(generalProfile: UserGeneralProfile, userId: string = 'me'): Promise<User> {
+  async updateUserGeneralProfile(generalProfile: UserGeneralProfile, userId: string = 'me'): Promise<UserGeneralProfile> {
     const queryString = ApiBase.createFieldsQuery({searchContext: this.SEARCH_CONTEXT_FIELDS});
 
     return await this.makeAuthorizedRequest(
       `${this.adminApiUrl}/${userId}/profiles/general?${queryString}`,
       'POST',
-      Object.assign({$type: ResourceTypes.USER_GENERAL_PROFILE}, generalProfile)
+      {...generalProfile, $type: ResourceTypes.USER_GENERAL_PROFILE},
     );
   }
 
@@ -100,7 +100,7 @@ export default class UserAPI extends ApiBase {
     );
   }
 
-  async getHubProjectUsers(query?: string): Promise<Array<User>> {
+  async getHubProjectUsers(query?: string): Promise<Array<$Shape<User>>> {
     const searchQuery: string = query ? `query=${query}` : '';
     const response: { skip: number, total: number, users: Array<User> } = await this.makeAuthorizedRequest(
       `${this.config.auth.serverUri}/api/rest/users?${searchQuery}&${ApiBase.createFieldsQuery([
