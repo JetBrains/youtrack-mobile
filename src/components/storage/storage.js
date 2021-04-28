@@ -209,7 +209,7 @@ export async function flushStorage(newState: StorageState): Promise<StorageState
   await AsyncStorage.multiRemove(pairsToRemove.map((([key]) => storageKeys[key])));
 
   const pairsToWrite = Object.entries(storageState)
-    .filter(([key, value]) => value !== null && value !== undefined);
+    .filter(([key, value]) => hasValue(value));
 
   if (pairsToWrite.length === 0) {
     log.debug('Storage state is empty, no actual write has been done');
