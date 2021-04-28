@@ -256,3 +256,13 @@ export async function storeAccounts(accounts: Array<StorageState>) {
 export async function __setStorageState(state: StorageState) {
   storageState = state;
 }
+
+export async function cacheAuthParams(authParams: AuthParams): Promise<AuthParams>  {
+  await EncryptedStorage.setItem(STORAGE_AUTH_PARAMS_KEY, JSON.stringify(authParams));
+  return authParams;
+}
+
+export async function getCachedAuthParams(): Promise<AuthParams | null>  {
+  const authParams: ?string = await EncryptedStorage.getItem(STORAGE_AUTH_PARAMS_KEY);
+  return typeof authParams === 'string' ? JSON.parse(authParams) : null;
+}

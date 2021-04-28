@@ -3,7 +3,7 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import Auth from './auth';
 import sinon from 'sinon';
 
-import {STORAGE_AUTH_PARAMS_KEY} from '../storage/storage';
+import * as Storage from '../storage/storage';
 
 let configMock;
 let authParamsMock;
@@ -177,29 +177,36 @@ describe('Auth', function () {
     beforeEach(() => {
       authParamsMock = createAuthParamsMock();
       auth = createAuthMock(createConfigMock());
-      jest.spyOn(EncryptedStorage, 'setItem');
-      jest.spyOn(EncryptedStorage, 'getItem').mockResolvedValueOnce(JSON.stringify(authParamsMock));
     });
 
     describe('cacheAuthParams', () => {
       it('should cache encrypted auth params', async () => {
+      jest.spyOn(Storage, 'cacheAuthParams');
         const cachedAuthParams = await auth.cacheAuthParams(authParamsMock);
 
-        await expect(EncryptedStorage.setItem).toHaveBeenCalledWith(
-          STORAGE_AUTH_PARAMS_KEY,
-          JSON.stringify(authParamsMock)
-        );
+        await expect(Storage.cacheAuthParams).toHaveBeenCalledWith(authParamsMock);
         await expect(cachedAuthParams).toEqual(authParamsMock);
       });
     });
 
 
     describe('getCachedAuthParams', () => {
-      it('should get encrypted auth parameters', async () => {
-        const cachedParams = await auth.getCachedAuthParams(authParamsMock);
+      beforeEach(() => {
+        jest.spyOn(Storage, 'getCachedAuthParams');
+      });
 
-        await expect(EncryptedStorage.getItem).toHaveBeenCalledWith(STORAGE_AUTH_PARAMS_KEY);
-        await expect(cachedParams).toEqual(authParamsMock);
+      it('should throw if there is no cached auth parameters', async () =>  {
+        await expect(auth.getCachedAuthParams())
+          .rejects
+          .toThrow('No stored auth params found');
+      });
+
+      it('should get auth parameters', async () => {
+        jest.spyOn(EncryptedStorage, 'getItem').mockResolvedValueOnce(JSON.stringify(authParamsMock));
+        const cachedAuthParams = await auth.getCachedAuthParams();
+
+        await expect(Storage.getCachedAuthParams).toHaveBeenCalled();
+        await expect(cachedAuthParams).toEqual(authParamsMock);
       });
     });
   });
