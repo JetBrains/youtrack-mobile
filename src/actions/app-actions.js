@@ -69,23 +69,23 @@ export function logOut(): Action {
   };
 }
 
-export function openDebugView(): {type: string} {
+export function openDebugView(): { type: string } {
   return {type: types.OPEN_DEBUG_VIEW};
 }
 
-export function closeDebugView(): {type: string} {
+export function closeDebugView(): { type: string } {
   return {type: types.CLOSE_DEBUG_VIEW};
 }
 
-export function setEnabledFeatures(features: Array<string>): {features: Array<string>, type: string} {
+export function setEnabledFeatures(features: Array<string>): { features: Array<string>, type: string } {
   return {type: types.SET_FEATURES, features};
 }
 
-export function onNavigateBack(closingView: Object): {closingView: any, type: string} {
+export function onNavigateBack(closingView: Object): { closingView: any, type: string } {
   return {type: types.ON_NAVIGATE_BACK, closingView};
 }
 
-export function receiveOtherAccounts(otherAccounts: Array<StorageState>): {otherAccounts: Array<StorageState>, type: string} {
+export function receiveOtherAccounts(otherAccounts: Array<StorageState>): { otherAccounts: Array<StorageState>, type: string } {
   return {type: types.RECEIVE_OTHER_ACCOUNTS, otherAccounts};
 }
 
@@ -134,7 +134,7 @@ export function updateUserGeneralProfile(userGeneralProfile: UserGeneralProfile)
   };
 }
 
-export const updateUserArticlesProfile = (articlesProfile: UserArticlesProfile): Action =>
+export const updateUserArticlesProfile = (articlesProfile: UserArticlesProfile | { lastVisitedArticle: null }): Action =>
   async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     dispatch({
       type: types.RECEIVE_USER_ARTICLES_PROFILE,
@@ -142,7 +142,11 @@ export const updateUserArticlesProfile = (articlesProfile: UserArticlesProfile):
     });
   };
 
-export const resetUserArticlesProfile = (): Action => async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+export const resetUserArticlesProfile = (): Action => async (
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: () => Api
+) => {
   dispatch(updateUserArticlesProfile({lastVisitedArticle: null}));
 };
 
@@ -180,7 +184,7 @@ export function checkAuthorization(): Action {
   };
 }
 
-export function setAuth(config: AppConfigFilled): {auth: Auth, type: string} {
+export function setAuth(config: AppConfigFilled): { auth: Auth, type: string } {
   const auth: Auth = new Auth(config);
   usage.init(config.statisticsEnabled);
 
@@ -301,7 +305,10 @@ export function switchAccount(account: StorageState, dropCurrentAccount: boolean
   };
 }
 
-export function updateOtherAccounts(account: StorageState, removeCurrentAccount: boolean = false): Action {
+export function updateOtherAccounts(
+  account: StorageState,
+  removeCurrentAccount: boolean = false
+): (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => Promise<StorageState> {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const state: AppState = getState();
 
