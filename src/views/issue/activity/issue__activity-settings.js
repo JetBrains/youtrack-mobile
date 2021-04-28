@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
@@ -99,7 +100,7 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
     return list.concat(this.sortOrderOption);
   }
 
-  toggleSettingsDialogVisibility = () => {
+  toggleSettingsDialogVisibility: (() => void) = () => {
     const {visible} = this.state;
     this.setState({visible: !visible});
   };
@@ -108,7 +109,7 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
     this.props.onApply(userAppearanceProfile);
   }
 
-  renderSettingsDialog() {
+  renderSettingsDialog(): Node {
     return (
       <ModalPanelBottom
         testID="activitySettingsDialog"
@@ -123,7 +124,7 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
     );
   }
 
-  renderOrderItem() {
+  renderOrderItem(): Node {
     const {userAppearanceProfile, onApply, disabled} = this.props;
     return (
       <View
@@ -147,7 +148,7 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
     );
   }
 
-  renderTypesList() {
+  renderTypesList(): Node {
     const {issueActivityTypes, issueActivityEnabledTypes, disabled} = this.props;
 
     return (
@@ -188,7 +189,7 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
     return this.props.issueActivityEnabledTypes.map((category) => category.name).join(', ');
   }
 
-  render() {
+  render(): Node {
     return (
       <View style={this.props.style}>
         <TouchableOpacity

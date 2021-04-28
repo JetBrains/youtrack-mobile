@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import Api from '../api/api';
 import CustomField from '../custom-field/custom-field';
 import Header from '../header/header';
@@ -146,13 +147,13 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     );
   }
 
-  trackEvent = (message: string) => {
+  trackEvent: ((message: string) => void) = (message: string) => {
     if (this.props.analyticsId) {
       usage.trackEvent(this.props.analyticsId, message);
     }
   }
 
-  saveUpdatedField(field: CustomFieldType, value: null | number | Object | Array<Object>) {
+  saveUpdatedField(field: CustomFieldType, value: null | number | Object | Array<Object>): Promise<boolean> {
     const updateSavingState = (value) => this.isComponentMounted && this.setState({savingField: value});
     this.closeEditor();
     updateSavingState(field);
@@ -165,7 +166,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       .catch(() => updateSavingState(null));
   }
 
-  onSelectProject = () => {
+  onSelectProject: (() => void | Promise<any>) = () => {
     this.trackEvent('Update project: start');
     if (this.state.isEditingProject) {
       return this.closeEditor();
@@ -209,7 +210,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     });
   }
 
-  editDateField(field: CustomFieldType) {
+  editDateField(field: CustomFieldType): void {
     this.trackEvent('Edit date field');
     const withTime = field.projectCustomField.field.fieldType.valueType === DATE_AND_TIME;
     return this.setState({
@@ -248,7 +249,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     });
   }
 
-  editSimpleValueField(field: CustomFieldType, type: string) {
+  editSimpleValueField(field: CustomFieldType, type: string): void {
     this.trackEvent('Edit simple value field');
     const placeholders = {
       integer: '-12 or 34',
@@ -325,7 +326,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     });
   }
 
-  onEditField = (field: CustomFieldType) => {
+  onEditField: ((field: CustomFieldType) => ?Promise<any>) = (field: CustomFieldType) => {
     if (field === this.state.editingField) {
       return this.closeEditor();
     }
@@ -352,7 +353,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     return this.editCustomField(field);
   };
 
-  storeScrollPosition = (event: Object) => {
+  storeScrollPosition: ((event: any) => void) = (event: Object) => {
     const {nativeEvent} = event;
     this.currentScrollX = nativeEvent.contentOffset.x;
   };
@@ -383,7 +384,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     />;
   }
 
-  renderHeader(title: string, uiTheme: UITheme) {
+  renderHeader(title: string, uiTheme: UITheme): Node {
     return (
       <Header
         style={styles.customFieldEditorHeader}
@@ -488,7 +489,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     );
   }
 
-  renderFields() {
+  renderFields(): Node {
     const {hasPermission, fields, issueProject = {name: ''}} = this.props;
     const {savingField, editingField, isEditingProject, isSavingProject} = this.state;
 
@@ -542,7 +543,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     );
   }
 
-  render() {
+  render(): Node {
     const {uiTheme, style} = this.props;
     const {select, datePicker, simpleValue, editingField} = this.state;
 

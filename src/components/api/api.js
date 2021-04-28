@@ -75,7 +75,7 @@ class API extends BaseAPI {
     );
   }
 
-  async getUserFromHub(id: string) {
+  async getUserFromHub(id: string): Promise<any> {
     const queryString = qs.stringify({fields: 'avatar/url'});
     return await this.makeAuthorizedRequest(
       urlJoin(this.auth.config.auth.serverUri, `/api/rest/users/${id}?${queryString}`)
@@ -90,7 +90,7 @@ class API extends BaseAPI {
     return await this.makeAuthorizedRequest(`${this.youTrackProjectUrl}?${queryString}`);
   }
 
-  async getProject(projectId: string) {
+  async getProject(projectId: string): Promise<any> {
     const queryString = qs.stringify({
       fields: issueFields.project.toString(),
     });
@@ -131,7 +131,7 @@ class API extends BaseAPI {
     );
   }
 
-  async getStateMachineEvents(issueId: string, fieldId: string) {
+  async getStateMachineEvents(issueId: string, fieldId: string): Promise<any> {
     const url = `${this.youTrackIssueUrl}/${issueId}/fields/${fieldId}/possibleEvents?fields=id,presentation`;
     return await this.makeAuthorizedRequest(url);
   }

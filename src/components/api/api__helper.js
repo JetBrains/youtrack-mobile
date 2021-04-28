@@ -17,7 +17,7 @@ const API = {
     return fieldHash;
   },
 
-  fillIssuesFieldHash: (issues: Array<IssueOnList> = []) => {
+  fillIssuesFieldHash: (issues: Array<IssueOnList> = []): Array<IssueOnList> => {
     issues.forEach(issue => issue.fieldHash = API.makeFieldHash(issue));
     return issues;
   },
@@ -50,7 +50,7 @@ const API = {
     });
   },
 
-  convertAttachmentRelativeToAbsURLs(attachments: Array<Attachment>, backendUrl: string) {
+  convertAttachmentRelativeToAbsURLs(attachments: Array<Attachment>, backendUrl: string): Array<any> {
     let convertedItems: Array<any> = attachments;
     ['url', 'thumbnailURL'].forEach(
       fieldName => convertedItems = this.convertRelativeUrls(convertedItems, fieldName, backendUrl)
@@ -104,11 +104,11 @@ const API = {
     };
   },
 
-  getIssueId(issue: AnyIssue) {
+  getIssueId(issue: AnyIssue): string {
     return getReadableID(issue);
   },
 
-  patchAllRelativeAvatarUrls(data: Object, backendUrl: string) {
+  patchAllRelativeAvatarUrls(data: Object, backendUrl: string): any {
     //TODO: potentially slow place
     objectWalk(data, (value, propertyName, obj) => {
       if (typeof value === 'string' && value.indexOf('/hub/api/rest/avatar/') === 0) {
@@ -119,7 +119,7 @@ const API = {
     return data;
   },
 
-  stripHtml(commandPreview: string) {
+  stripHtml(commandPreview: string): string {
     return commandPreview.replace(/<\/?[^>]+(>|$)/g, '');
   },
 

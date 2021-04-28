@@ -7,7 +7,7 @@ import {getApi} from '../api/api__instance';
 import type Api from '../api/api';
 import type {IssueFull, IssueOnList} from '../../flow/Issue';
 
-export const loadIssue = async (issueId: string) => {
+export const loadIssue = async (issueId: string): Promise<null> | Promise<any> => {
   const api: Api = getApi();
   log.info(`Updating issue ${issueId}`);
   try {

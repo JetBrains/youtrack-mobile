@@ -345,4 +345,4 @@ const AddSpentTimeForm = (props: Props) => {
   );
 };
 
-export default memo<Props>(AddSpentTimeForm);
+export default (memo<Props>(AddSpentTimeForm): React$AbstractComponent<Props, mixed>);

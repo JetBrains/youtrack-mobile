@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React from 'react';
 
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
@@ -31,7 +32,7 @@ const defaultSkeletonProps: SkeletonProps = {
   borderRadius: SKELETON_DEFAULT_BORDER_RADIUS,
 };
 
-export const Skeleton = (props: SkeletonProps) => {
+export const Skeleton = (props: SkeletonProps): Node => {
   return <SkeletonPlaceholder
     {...skeletonPlaceholderDefaultProps}
   >
@@ -42,7 +43,7 @@ export const Skeleton = (props: SkeletonProps) => {
   </SkeletonPlaceholder>;
 };
 
-export const SkeletonSecondaryLine = (props: SkeletonProps) => {
+export const SkeletonSecondaryLine = (props: SkeletonProps): Node => {
   return <SkeletonPlaceholder.Item
     {...defaultSkeletonProps}
     width={props.width || '100%'}
@@ -51,7 +52,7 @@ export const SkeletonSecondaryLine = (props: SkeletonProps) => {
   />;
 };
 
-export const SkeletonLine = (props: SkeletonProps) => {
+export const SkeletonLine = (props: SkeletonProps): Node => {
   return <SkeletonPlaceholder.Item
     {...defaultSkeletonProps}
     width={'100%'}
@@ -61,7 +62,7 @@ export const SkeletonLine = (props: SkeletonProps) => {
 };
 
 
-export const SkeletonList = (props: SkeletonProps) => {
+export const SkeletonList = (props: SkeletonProps): Node => {
   return <SkeletonPlaceholder
     {...skeletonPlaceholderDefaultProps}
     {...props}
@@ -105,7 +106,7 @@ function skeletonActivityLine(width?: number) {
   });
 }
 
-export const SkeletonIssueContent = () => {
+export const SkeletonIssueContent = (): Node => {
   return <SkeletonPlaceholder
     {...skeletonPlaceholderDefaultProps}
   >
@@ -135,7 +136,7 @@ export const SkeletonIssueContent = () => {
 
   </SkeletonPlaceholder>;
 };
-export const SkeletonIssueCustomFields = () => {
+export const SkeletonIssueCustomFields = (): Node => {
   const props = {
     width: 90,
     height: 36,
@@ -157,7 +158,7 @@ export const SkeletonIssueCustomFields = () => {
     </SkeletonPlaceholder>
   );
 };
-export const SkeletonIssueInfoLine = (props: { lines?: number }) => {
+export const SkeletonIssueInfoLine = (props: { lines?: number }): Node => {
   return (
     <SkeletonPlaceholder {...skeletonPlaceholderDefaultProps}>
       <SkeletonPlaceholder.Item
@@ -209,7 +210,7 @@ function skeletonIssueActivity(marginTop: number = 0, key: string) {
   );
 }
 
-export const SkeletonIssueActivities = (props?: SkeletonProps) => {
+export const SkeletonIssueActivities = (props?: SkeletonProps): Node => {
   return <SkeletonPlaceholder {...skeletonPlaceholderDefaultProps}>
     <SkeletonPlaceholder.Item {...props}>
       {
@@ -252,7 +253,7 @@ function skeletonIssue(key: string) {
   );
 }
 
-export const SkeletonIssues = (props: SkeletonProps) => {
+export const SkeletonIssues = (props: SkeletonProps): Node => {
   return <SkeletonPlaceholder
     {...skeletonPlaceholderDefaultProps}
     {...props}
@@ -286,7 +287,7 @@ function skeletonCard(key: string) {
   );
 }
 
-export const SkeletonAgile = (props: SkeletonProps) => {
+export const SkeletonAgile = (props: SkeletonProps): Node => {
   return <SkeletonPlaceholder
     {...skeletonPlaceholderDefaultProps}
     {...props}
@@ -324,7 +325,7 @@ export const SkeletonAgile = (props: SkeletonProps) => {
   </SkeletonPlaceholder>;
 };
 
-export const SkeletonCreateArticle = () => {
+export const SkeletonCreateArticle = (): Node => {
   return <SkeletonPlaceholder
     {...skeletonPlaceholderDefaultProps}
   >

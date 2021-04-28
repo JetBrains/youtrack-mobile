@@ -69,7 +69,7 @@ async function register(api: Api) {
   }
 }
 
-async function unregister(api: Api) {
+async function unregister(api: Api): Promise<void> {
   PNHelper.storeDeviceToken(null);
   const deviceToken: Token = await getDeviceToken();
 

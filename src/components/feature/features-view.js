@@ -1,4 +1,5 @@
 /* @flow */
+import type {Node} from 'React';
 import React, {Component} from 'react';
 import {View, Text, Switch, ScrollView} from 'react-native';
 
@@ -31,11 +32,11 @@ export default class FeaturesView extends Component<Props, void> {
     });
   }
 
-  persistFeatures = (features: Array<string>) => {
+  persistFeatures: ((features: Array<string>) => void) = (features: Array<string>) => {
     AsyncStorage.setItem(experimentalFeaturesStorageKey, JSON.stringify(features));
   };
 
-  render() {
+  render(): Node {
     const {onHide, features, setFeatures} = this.props;
 
     return (

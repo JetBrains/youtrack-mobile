@@ -2,7 +2,7 @@
 
 import {Alert} from 'react-native';
 
-export const confirmation = async (title: string, actionButtonTitle: string, message?: string) => {
+export const confirmation = async (title: string, actionButtonTitle: string, message?: string): Promise<any> => {
   return new Promise((resolve, reject) => {
     Alert.alert(
       title,

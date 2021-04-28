@@ -54,12 +54,12 @@ class DropZone extends React.Component<PropsWithContext, State> {
     marginLeft: UNIT * 2,
     backgroundColor: EStyleSheet.value('$link'),
   };
-  state = {
+  state: State = {
     placeholderIndex: null,
     active: false,
   };
 
-  reportMeasurements = () => {
+  reportMeasurements: (() => void) = () => {
     if (!this.refs.wrapper) {
       return;
     }
@@ -102,7 +102,7 @@ class DropZone extends React.Component<PropsWithContext, State> {
     this.reportMeasurements();
   }
 
-  onMoveOver = ({x, y}, zone) => {
+  onMoveOver: (({x: number, y: number}, zone: ZoneInfo) => void) = ({x, y}, zone) => {
     if (this.props.disabled) {
       return;
     }
@@ -133,7 +133,7 @@ class DropZone extends React.Component<PropsWithContext, State> {
     }
   };
 
-  onLeave = () => {
+  onLeave: (() => void) = () => {
     if (this.props.disabled) {
       return;
     }
@@ -145,7 +145,7 @@ class DropZone extends React.Component<PropsWithContext, State> {
     }
   };
 
-  onDrop = (data: ?Object) => {
+  onDrop: ((data: ?any) => void) = (data: ?Object) => {
     if (this.props.disabled) {
       return;
     }
@@ -172,7 +172,7 @@ class DropZone extends React.Component<PropsWithContext, State> {
     return withoutMoving;
   }
 
-  render() {
+  render(): React.Node {
     const {style, children} = this.props;
 
     return (
@@ -187,7 +187,7 @@ class DropZone extends React.Component<PropsWithContext, State> {
   }
 }
 
-export default (props: Props) => (
+export default (props: Props): React.Node => (
   <DragContext.Consumer>
     {dragContext => {
       if (!dragContext) {

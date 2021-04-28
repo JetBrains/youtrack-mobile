@@ -19,7 +19,7 @@ const optionText = {
   textTransform: 'capitalize',
 };
 
-export default EStyleSheet.create({
+export default (EStyleSheet.create({
   settings: {
     flex: 1,
     backgroundColor: '$background',
@@ -87,4 +87,4 @@ export default EStyleSheet.create({
     padding: UNIT * 2,
   },
   elevation1: elevation1,
-});
+}): any);

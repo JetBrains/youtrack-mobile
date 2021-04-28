@@ -17,10 +17,10 @@ import type {NotificationCompletion, TokenHandler} from '../../flow/Notification
 import type {StorageState} from '../storage/storage';
 
 export default class PushNotificationsProcessor {
-  static KONNECTOR_URL = appPackage.config.KONNECTOR_URL;
-  static deviceToken = null;
-  static logPrefix = 'PNProcessor';
-  static deviceTokenPromise = null;
+  static KONNECTOR_URL: any = appPackage.config.KONNECTOR_URL;
+  static deviceToken: null | string = null;
+  static logPrefix: string = 'PNProcessor';
+  static deviceTokenPromise: null | Promise<string> = null;
   static registerNotificationOpenListener: ?EmitterSubscription = null;
   static notificationEventEmitter: Object = Notifications.events();
 
@@ -36,7 +36,7 @@ export default class PushNotificationsProcessor {
     return PushNotificationsProcessor.deviceTokenPromise;
   }
 
-  static getIssueId(notification: Object) {
+  static getIssueId(notification: Object): any {
     return notification?.issueId || notification?.payload?.issueId || notification?.data?.issueId;
   }
 
@@ -67,7 +67,7 @@ export default class PushNotificationsProcessor {
     );
   }
 
-  static composeError(error: CustomError) {
+  static composeError(error: CustomError): Error {
     let err: Error = error;
     if ([400, 404, 405].includes(error?.status)) {
       err = new Error(UNSUPPORTED_ERRORS.PUSH_NOTIFICATION_NOT_SUPPORTED);
@@ -88,7 +88,7 @@ export default class PushNotificationsProcessor {
     }
   }
 
-  static async getYouTrackToken(api: Api) {
+  static async getYouTrackToken(api: Api): Promise<string> {
     const logMsgPrefix: string = `${PushNotificationsProcessor.logPrefix}(getYouTrackToken): `;
     try {
       log.info(`${logMsgPrefix}Requesting YouTrack token...`);

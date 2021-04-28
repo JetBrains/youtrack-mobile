@@ -145,7 +145,7 @@ export default class AgileAPI extends ApiBase {
     cellId: string,
     leadingId?: ?string,
     movedId: string
-  ) {
+  ): Promise<any> {
     const queryString = qs.stringify({fields: 'leading(id),moved(id)'});
     const url = `${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}/board/columns/${columnId}/cells/${cellId}/issueOrder?${queryString}`;
 

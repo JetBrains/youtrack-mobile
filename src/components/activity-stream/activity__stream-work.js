@@ -149,4 +149,4 @@ const StreamWork = (props: Props) => {
 
 };
 
-export default React.memo<Props>(StreamWork);
+export default (React.memo<Props>(StreamWork): React$AbstractComponent<Props, mixed>);

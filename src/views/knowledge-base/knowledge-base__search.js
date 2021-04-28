@@ -64,4 +64,4 @@ const KnowledgeBaseSearchPanel = (props: Props) => {
 
 };
 
-export default React.memo<Props>(KnowledgeBaseSearchPanel);
+export default (React.memo<Props>(KnowledgeBaseSearchPanel): React$AbstractComponent<Props, mixed>);

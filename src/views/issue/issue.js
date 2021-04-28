@@ -441,4 +441,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Issue);
+export default (connect(mapStateToProps, mapDispatchToProps)(Issue): any);

@@ -14,7 +14,14 @@ const attachment_ATTACH_CANCEL_ADDING = 'attachment.ATTACH_CANCEL_ADDING';
 const attachment_ATTACH_STOP_ADDING = 'attachment.ATTACH_STOP_ADDING';
 const attachment_ATTACH_TOGGLE_ADD_FILE_DIALOG = 'attachment.ATTACH_TOGGLE_ADD_FILE_DIALOG';
 
-export const attachmentActionMap = {
+export const attachmentActionMap: {
+  ATTACH_CANCEL_ADDING: string,
+  ATTACH_RECEIVE_ALL_ATTACHMENTS: string,
+  ATTACH_REMOVE: string,
+  ATTACH_START_ADDING: string,
+  ATTACH_STOP_ADDING: string,
+  ATTACH_TOGGLE_ADD_FILE_DIALOG: string,
+} = {
   [ATTACH_RECEIVE_ALL_ATTACHMENTS]: attachment_ATTACH_RECEIVE_ALL_ATTACHMENTS,
   [ATTACH_REMOVE]: attachment_ATTACH_REMOVE,
   [ATTACH_START_ADDING]: attachment_ATTACH_START_ADDING,

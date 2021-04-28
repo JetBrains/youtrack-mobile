@@ -52,7 +52,7 @@ export const initialState: State = {
   workTimeSettings: null,
 };
 
-export default createReducer(initialState, {
+export default (createReducer(initialState, {
   [types.RECEIVE_ACTIVITY_PAGE]: (state: State, action: { activityPage: Array<Activity> }): State => {
     const {activityPage} = action;
     return {
@@ -100,7 +100,7 @@ export default createReducer(initialState, {
       activityPage: newActivityPage,
     };
   },
-});
+}): any);
 
 
 function removeCommentFromActivityPage(activityPage: ActivityPage, activityId: string): ActivityPage {

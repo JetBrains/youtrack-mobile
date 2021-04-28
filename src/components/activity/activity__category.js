@@ -51,7 +51,19 @@ export const activityArticleCategory = {
 };
 
 
-export const ActivityCategory = [
+export const ActivityCategory: {
+  ActivityCategories: {
+    IssueComments: Array<string>,
+    IssueHistory: Array<string>,
+    TimeTracking: Array<string>,
+  },
+  CategoryPresentation: {
+    IssueComments: string,
+    IssueHistory: string,
+    TimeTracking: string,
+  },
+  Source: {COMMENT: string, HISTORY: string, WORK_ITEM: string},
+} = [
   ['COMMENT', 'IssueComments', [
     activityCategory.COMMENT,
   ], 'Comments'],
@@ -90,12 +102,12 @@ export const ActivityCategory = [
 });
 
 
-export const isActivityCategory = function(categoryId: string) {
+export const isActivityCategory = function(categoryId: string): ((activity: any) => boolean) {
   return function(activity: Object) {
     return activity ? activity.category.id === categoryId : false;
   };
 };
-export const isActivityCategories = function(categoryIds: Array<string>) {
+export const isActivityCategories = function(categoryIds: Array<string>): ((activity: any) => boolean) {
   return function(activity: Object) {
     return activity ? categoryIds.some((categoryId: string) => categoryId === activity.category.id) : false;
   };

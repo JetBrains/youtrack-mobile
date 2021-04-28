@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React from 'react';
 import {SectionList, Text, View} from 'react-native';
 
@@ -13,7 +14,7 @@ import {UNIT} from '../variables/variables';
 //$FlowFixMe
 export default class SelectSectioned extends Select {
 
-  renderSectionHeader = ({section}: Object) => {
+  renderSectionHeader: ((any) => void | Node) = ({section}: Object) => {
     if (section.title) {
       return (
         <View style={styles.sectionHeader}>

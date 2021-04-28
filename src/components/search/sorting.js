@@ -17,7 +17,7 @@ function doSortBy(
   return 0;
 }
 
-export function sortAlphabetically(item1: Object, item2: Object) {
+export function sortAlphabetically(item1: Object, item2: Object): number {
   const name1: string = getEntityPresentation(item1).toLowerCase();
   const name2: string = getEntityPresentation(item2).toLowerCase();
 
@@ -30,15 +30,15 @@ export function sortAlphabetically(item1: Object, item2: Object) {
   return 0;
 }
 
-export function sortByTimestampReverse(a: Object & { timestamp: number }, b: Object & { timestamp: number }) {
+export function sortByTimestampReverse(a: Object & { timestamp: number }, b: Object & { timestamp: number }): number {
   return doSortBy(a, b, 'timestamp', true);
 }
 
-export function sortByUpdatedReverse(a: Object & { updated: number }, b: Object & { updated: number }) {
+export function sortByUpdatedReverse(a: Object & { updated: number }, b: Object & { updated: number }): number {
   return doSortBy(a, b, 'updated', true);
 }
 
-export function sortByOrdinal(a: Object & { ordinal: number }, b: Object & { ordinal: number }) {
+export function sortByOrdinal(a: Object & { ordinal: number }, b: Object & { ordinal: number }): number {
   return a.ordinal - b.ordinal;
 }
 

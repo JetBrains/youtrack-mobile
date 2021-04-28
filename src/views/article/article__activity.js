@@ -121,4 +121,4 @@ const ArticleActivities = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(ArticleActivities);
+export default (React.memo<Props>(ArticleActivities): React$AbstractComponent<Props, mixed>);

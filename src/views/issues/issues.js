@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import {
   View,
   Text,
@@ -106,7 +107,7 @@ export class Issues extends Component<Props, State> {
     });
   }
 
-  renderCreateIssueButton = (isDisabled: boolean, uiTheme: UITheme) => {
+  renderCreateIssueButton: ((isDisabled: boolean, uiTheme: UITheme) => Node) = (isDisabled: boolean, uiTheme: UITheme) => {
     return (
       <TouchableOpacity
         hitSlop={HIT_SLOP}
@@ -133,7 +134,7 @@ export class Issues extends Component<Props, State> {
     );
   };
 
-  getKey = (item: Object) => {
+  getKey: ((item: any) => string) = (item: Object) => {
     return `${isReactElement(item) ? item.key : item.id}`;
   };
 
@@ -153,11 +154,11 @@ export class Issues extends Component<Props, State> {
     return <View style={styles.separator}/>;
   };
 
-  onEndReached = () => {
+  onEndReached: (() => void) = () => {
     this.props.loadMoreIssues();
   };
 
-  renderContextButton = (uiTheme: UITheme) => {
+  renderContextButton: ((uiTheme: UITheme) => Node) = (uiTheme: UITheme) => {
     const {onOpenContextSelect, isRefreshing, searchContext, isSearchContextPinned} = this.props;
 
     return (
@@ -186,7 +187,7 @@ export class Issues extends Component<Props, State> {
   };
 
 
-  renderContextSelect() {
+  renderContextSelect(): Node {
     const {selectProps} = this.props;
 
     if (selectProps.isOwnSearches) {
@@ -206,13 +207,13 @@ export class Issues extends Component<Props, State> {
     );
   }
 
-  searchPanelRef = (instance: ?QueryAssistPanel) => {
+  searchPanelRef: ((instance: ?QueryAssistPanel) => void) = (instance: ?QueryAssistPanel) => {
     if (instance) {
       this.searchPanelNode = instance;
     }
   };
 
-  onScroll = (nativeEvent: Object) => {
+  onScroll: ((nativeEvent: any) => void) = (nativeEvent: Object) => {
     const newY = nativeEvent.contentOffset.y;
     const isPinned: boolean = newY >= UNIT;
     if (this.props.isSearchContextPinned !== isPinned) {
@@ -232,7 +233,7 @@ export class Issues extends Component<Props, State> {
     });
   }
 
-  onSearchQueryPanelFocus = (clearSearchQuery: boolean = false) => {
+  onSearchQueryPanelFocus: ((clearSearchQuery?: boolean) => void) = (clearSearchQuery: boolean = false) => {
     logEvent({
       message: 'Focus search panel',
       analyticsId: ANALYTICS_ISSUES_PAGE,
@@ -242,7 +243,7 @@ export class Issues extends Component<Props, State> {
   };
 
 
-  renderSearchPanel = () => {
+  renderSearchPanel: (() => Node) = () => {
     const {query, suggestIssuesQuery, queryAssistSuggestions, onQueryUpdate, setIssuesCount} = this.props;
     const _query = this.state.clearSearchQuery ? '' : query;
 
@@ -268,7 +269,7 @@ export class Issues extends Component<Props, State> {
     );
   };
 
-  renderSearchQuery = (uiTheme: UITheme) => {
+  renderSearchQuery: ((uiTheme: UITheme) => Node) = (uiTheme: UITheme) => {
     const {query, issuesCount, openSavedSearchesSelect} = this.props;
 
     return (
@@ -298,7 +299,7 @@ export class Issues extends Component<Props, State> {
     );
   };
 
-  renderIssuesFooter = () => {
+  renderIssuesFooter: (() => null | Node) = () => {
     const {isLoadingMore} = this.props;
     if (isLoadingMore) {
       return <SkeletonIssues/>;
@@ -306,7 +307,7 @@ export class Issues extends Component<Props, State> {
     return null;
   };
 
-  renderIssues(uiTheme: UITheme) {
+  renderIssues(uiTheme: UITheme): Node {
     const {issues, isRefreshing} = this.props;
     const contextButton = this.renderContextButton(uiTheme);
     const searchQuery = this.renderSearchQuery(uiTheme);
@@ -353,7 +354,7 @@ export class Issues extends Component<Props, State> {
     );
   }
 
-  renderError() {
+  renderError(): null | Node {
     const {isRefreshing, loadingError, issues, isInitialized} = this.props;
     if (isRefreshing || !isInitialized) {
       return null;
@@ -378,7 +379,7 @@ export class Issues extends Component<Props, State> {
     return null;
   }
 
-  render() {
+  render(): Node {
     const {isIssuesContextOpen, isRefreshing} = this.props;
     return (
       <ThemeContext.Consumer>
@@ -425,4 +426,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Issues);
+export default (connect(mapStateToProps, mapDispatchToProps)(Issues): any);

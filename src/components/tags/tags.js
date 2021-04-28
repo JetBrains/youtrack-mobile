@@ -1,6 +1,8 @@
 /* @flow */
 
-import {View, TouchableOpacity} from 'react-native';
+import type {Node} from 'React';
+
+import type {ActionSheetOption} from "../action-sheet/action-sheet";import {View, TouchableOpacity} from 'react-native';
 import React, {PureComponent} from 'react';
 
 import ColorField from '../../components/color-field/color-field';
@@ -30,11 +32,11 @@ export default class Tags extends PureComponent<Props, void> {
   static defaultProps: DefaultProps = {
     onTagPress: () => {},
   };
-  static contextTypes = {
+  static contextTypes: any | {actionSheet: typeof Function} = {
     actionSheet: Function,
   };
 
-  getContextActions(tag: Tag) {
+  getContextActions(tag: Tag): Array<{execute?: () => any, title: string}> {
     const actions: Array<{ title: string, execute?: () => any }> = [
       {
         title: `Show all issues tagged with "${tag.name}"...`,
@@ -51,7 +53,7 @@ export default class Tags extends PureComponent<Props, void> {
     return actions;
   }
 
-  getSelectedActions(tag: Tag) {
+  getSelectedActions(tag: Tag): Promise<?ActionSheetOption> {
     return showActions(
       this.getContextActions(tag),
       this.context.actionSheet()
@@ -66,9 +68,9 @@ export default class Tags extends PureComponent<Props, void> {
     }
   }
 
-  isDefaultColorCoding = (tag: Tag) => tag?.color.id === NO_COLOR_CODING_ID ? styles.tagNoColor : null;
+  isDefaultColorCoding: ((tag: Tag) => any | null) = (tag: Tag) => tag?.color.id === NO_COLOR_CODING_ID ? styles.tagNoColor : null;
 
-  render() {
+  render(): null | Node {
     const {tags, multiline, style} = this.props;
 
     if (!tags || tags?.length === 0) {

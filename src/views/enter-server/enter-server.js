@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import {
   ActivityIndicator,
   Image,
@@ -74,7 +75,7 @@ export class EnterServer extends Component<Props, State> {
     log.info('Entering server URL view has been opened');
   }
 
-  getPossibleUrls(enteredUrl: string) {
+  getPossibleUrls(enteredUrl: string): Array<string> {
     if (protocolRegExp.test(enteredUrl)) {
       if (enteredUrl.indexOf('http:') === 0 && enteredUrl.indexOf(CLOUD_DOMAIN) !== -1) {
         enteredUrl = enteredUrl.replace('http:', 'https:');
@@ -127,14 +128,14 @@ export class EnterServer extends Component<Props, State> {
     this.setState({error: errorMessage, connecting: false});
   }
 
-  isValidInput() {
+  isValidInput(): any {
     return throttle(() => {
       const url = (this.state.serverUrl || '').trim();
       return url.length > 0 && !url.match(/@/g);
     }, 500)();
   }
 
-  renderErrorInfoModalContent() {
+  renderErrorInfoModalContent(): Node {
     return (
       <React.Fragment>
         {NETWORK_PROBLEM_TIPS.map((tip: string, index: number) => {
@@ -144,12 +145,12 @@ export class EnterServer extends Component<Props, State> {
     );
   }
 
-  toggleErrorInfoModalVisibility = () => {
+  toggleErrorInfoModalVisibility: (() => void) = () => {
     const {isErrorInfoModalVisible} = this.state;
     this.setState({isErrorInfoModalVisible: !isErrorInfoModalVisible});
   };
 
-  render() {
+  render(): Node {
     const {onShowDebugView, onCancel} = this.props;
     const {error, connecting, serverUrl, isErrorInfoModalVisible} = this.state;
     const isDisabled = connecting || !this.isValidInput();
@@ -294,4 +295,4 @@ const mergeProps = (stateProps, dispatchProps) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(EnterServer);
+export default (connect(mapStateToProps, mapDispatchToProps, mergeProps)(EnterServer): any);

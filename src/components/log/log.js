@@ -13,16 +13,16 @@ deviceLog.init(new InMemoryAdapter(), {
 });
 
 export default {
-  log(...params: Array<any>) {
+  log(...params: Array<any>): any {
     return deviceLog.log(...params);
   },
-  info(...params: Array<any>) {
+  info(...params: Array<any>): any {
     return deviceLog.info(...params);
   },
-  debug(...params: Array<any>) {
+  debug(...params: Array<any>): any {
     return deviceLog.debug(...params);
   },
-  warn(...params: Array<any>) {
+  warn(...params: Array<any>): any {
     return deviceLog.error(...params);
   },
 
@@ -35,7 +35,7 @@ export default {
   },
 };
 
-export async function getLogs() {
+export async function getLogs(): Promise<string> {
   const rows = await deviceLog.store.getRows();
 
   return rows

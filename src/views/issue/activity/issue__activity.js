@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {ScrollView, View} from 'react-native';
 
@@ -45,19 +46,19 @@ type IssueActivityProps = $Shape<IssueActivityState
 }>;
 
 export class IssueActivity extends PureComponent<IssueActivityProps, void> {
-  static contextTypes = {
+  static contextTypes: any | {actionSheet: typeof Function} = {
     actionSheet: Function,
   };
 
-  backendUrl = getApi().config.backendUrl;
-  imageHeaders = getApi().auth.getAuthorizationHeaders();
+  backendUrl: any = getApi().config.backendUrl;
+  imageHeaders: any = getApi().auth.getAuthorizationHeaders();
   props: IssueActivityProps;
 
   componentDidMount() {
     this.loadIssueActivities();
   }
 
-  loadIssueActivities = (doNotReset?: boolean) => {
+  loadIssueActivities: ((doNotReset?: boolean) => void) = (doNotReset?: boolean) => {
     if (isIssueActivitiesAPIEnabled()) {
       this.props.loadActivitiesPage(doNotReset);
     } else {
@@ -65,7 +66,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     }
   };
 
-  renderActivitySettings(disabled: boolean, uiTheme: UITheme) {
+  renderActivitySettings(disabled: boolean, uiTheme: UITheme): Node {
     const {
       issueActivityTypes,
       issueActivityEnabledTypes,
@@ -178,12 +179,12 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     );
   }
 
-  canAddComment() {
+  canAddComment(): any {
     const {issuePermissions, issue} = this.props;
     return issuePermissions.canCommentOn(issue);
   }
 
-  onSubmitComment = (comment: Comment) => {
+  onSubmitComment: ((comment: Comment) => any) = (comment: Comment) => {
     const {addOrEditComment, activityPage, updateOptimisticallyActivityPage} = this.props;
 
     const currentUser: User = this.props.user;
@@ -207,7 +208,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     return addOrEditComment(comment);
   };
 
-  renderEditCommentInput(focus: boolean, uiTheme: UITheme) {
+  renderEditCommentInput(focus: boolean, uiTheme: UITheme): Node {
     const {
       commentText,
       setCommentText,
@@ -255,7 +256,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     </View>;
   }
 
-  renderAddSpentTimePage = () => {
+  renderAddSpentTimePage: (() => any) = () => {
     const {issue, issuePermissions} = this.props;
     return Router.PageModal({
       children: <AddSpentTimeForm
@@ -265,7 +266,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     });
   };
 
-  renderCommentVisibilitySelect() {
+  renderCommentVisibilitySelect(): Node {
     const {selectProps, onCloseSelect} = this.props;
     return (
       <Select
@@ -284,11 +285,11 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     return !this.hasLoadingError() && (!!this.props.activityPage || !!this.props.tmpIssueComments);
   }
 
-  renderRefreshControl = () => {
+  renderRefreshControl: (() => any) = () => {
     return this.props.renderRefreshControl(this.loadIssueActivities);
   };
 
-  render() {
+  render(): Node {
     const {isVisibilitySelectShown, activitiesLoadingError} = this.props;
     const activitiesApiEnabled: boolean = isIssueActivitiesAPIEnabled();
     const hasError: boolean = this.hasLoadingError();
@@ -357,6 +358,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(IssueActivity);
+export default (connect(mapStateToProps, mapDispatchToProps)(IssueActivity): any);
 
 

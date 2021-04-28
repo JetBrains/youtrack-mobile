@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import {View, Text, TouchableWithoutFeedback, TouchableOpacity, Alert} from 'react-native';
 import React, {PureComponent} from 'react';
 
@@ -69,7 +70,7 @@ export default class Accounts extends PureComponent<Props, void> {
     this.props.onChangeAccount(account);
   };
 
-  renderAccount(account: StorageState) {
+  renderAccount(account: StorageState): Node {
     const config: AppConfigFilled = account.config;
     const user = account.currentUser;
 
@@ -99,7 +100,7 @@ export default class Accounts extends PureComponent<Props, void> {
     );
   }
 
-  render() {
+  render(): Node {
     const {openDebugView, onAddAccount, otherAccounts, isChangingAccount, uiTheme} = this.props;
     const storageState = getStorageState();
     const accounts: Array<StorageState> = [].concat(storageState).concat(otherAccounts || [])

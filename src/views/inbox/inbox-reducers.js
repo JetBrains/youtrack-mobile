@@ -25,7 +25,7 @@ const initialState: InboxState = {
   currentUser: null,
 };
 
-export default createReducer(initialState, {
+export default (createReducer(initialState, {
   [types.SET_LOADING](state, {loading}): InboxState {
     return {...state, loading};
   },
@@ -48,4 +48,4 @@ export default createReducer(initialState, {
       error,
     };
   },
-});
+}): any);

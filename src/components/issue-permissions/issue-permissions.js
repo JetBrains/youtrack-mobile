@@ -60,12 +60,12 @@ export default class IssuePermissions {
     return this.getRingId(entity.project);
   }
 
-  hasPermissionFor = (entity: AnyIssue | Article, permissionName: string): boolean => {
+  hasPermissionFor: ((entity: AnyIssue | Article, permissionName: string) => boolean) = (entity: AnyIssue | Article, permissionName: string): boolean => {
     const projectRingId = IssuePermissions.getIssueProjectRingId(entity);
     return !!projectRingId && this.permissionsStore.has(permissionName, projectRingId);
   };
 
-  isCurrentUser = (user: User): boolean => {
+  isCurrentUser: ((user: User) => boolean) = (user: User): boolean => {
     if (!user || !user.ringId || !this.currentUser || !this.currentUser.id) {
       return false;
     }
@@ -73,7 +73,7 @@ export default class IssuePermissions {
     return user.ringId === this.currentUser.id;
   };
 
-  canUpdateGeneralInfo = (issue: ?AnyIssue): boolean => {
+  canUpdateGeneralInfo: ((issue: ?AnyIssue) => boolean) = (issue: ?AnyIssue): boolean => {
     if (!issue) {
       return false;
     }
@@ -112,7 +112,7 @@ export default class IssuePermissions {
     return isSpentTime; // Spent Time field is always disabled to edit – calculating automatically
   };
 
-  canUpdateField = (issue: AnyIssue, field: CustomField): boolean => {
+  canUpdateField: ((issue: AnyIssue, field: CustomField) => boolean) = (issue: AnyIssue, field: CustomField): boolean => {
     if (!issue) {
       return false;
     }
@@ -125,9 +125,13 @@ export default class IssuePermissions {
     return this._canUpdatePrivateField(issue);
   };
 
-  canCommentOn = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_CREATE_COMMENT);
+  canCommentOn: ((issue: AnyIssue) => boolean) = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_CREATE_COMMENT);
 
-  canUpdateComment = (
+  canUpdateComment: ((
+  entity: AnyIssue | Article,
+  comment: IssueComment,
+  canUpdateCommentPermissionName?: string
+) => boolean) = (
     entity: AnyIssue | Article,
     comment: IssueComment,
     canUpdateCommentPermissionName: string = CAN_UPDATE_COMMENT
@@ -141,9 +145,13 @@ export default class IssuePermissions {
     return this.hasPermissionFor(entity, CAN_UPDATE_NOT_OWN_COMMENT);
   };
 
-  canDeleteNotOwnComment = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_DELETE_NOT_OWN_COMMENT);
+  canDeleteNotOwnComment: ((issue: AnyIssue) => boolean) = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_DELETE_NOT_OWN_COMMENT);
 
-  canDeleteComment = (
+  canDeleteComment: ((
+  entity: AnyIssue | Article,
+  comment: IssueComment,
+  canDeleteCommentPermissionName?: string
+) => boolean) = (
     entity: AnyIssue | Article, comment: IssueComment,
     canDeleteCommentPermissionName: string = CAN_DELETE_COMMENT
   ): boolean => {
@@ -156,32 +164,32 @@ export default class IssuePermissions {
     return this.canDeleteNotOwnComment(entity);
   };
 
-  canRestoreComment = (issue: AnyIssue, comment: IssueComment): boolean => {
+  canRestoreComment: ((issue: AnyIssue, comment: IssueComment) => boolean) = (issue: AnyIssue, comment: IssueComment): boolean => {
     return this.canDeleteComment(issue, comment) || this.canUpdateComment(issue, comment);
   };
 
-  canDeleteCommentPermanently = (issue: AnyIssue): boolean => this.canDeleteNotOwnComment(issue);
+  canDeleteCommentPermanently: ((issue: AnyIssue) => boolean) = (issue: AnyIssue): boolean => this.canDeleteNotOwnComment(issue);
 
-  canAddAttachmentTo = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_ADD_ATTACHMENT);
+  canAddAttachmentTo: ((issue: AnyIssue) => boolean) = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_ADD_ATTACHMENT);
 
-  canRemoveAttachment = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_REMOVE_ATTACHMENT);
+  canRemoveAttachment: ((issue: AnyIssue) => boolean) = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_REMOVE_ATTACHMENT);
 
-  canCreateIssueToProject = (project: IssueProject): boolean => {
+  canCreateIssueToProject: ((project: IssueProject) => boolean) = (project: IssueProject): boolean => {
     return this.hasPermissionFor({project: project}, CAN_CREATE_COMMENT);
   };
 
-  canVote = (issue: AnyIssue): boolean => (
+  canVote: ((issue: AnyIssue) => boolean) = (issue: AnyIssue): boolean => (
     !!issue && !!this.currentUser && !this.isCurrentUser(issue?.reporter) && !this.currentUser.guest
   );
 
-  canTag = (issue: AnyIssue): boolean => (
+  canTag: ((issue: AnyIssue) => boolean) = (issue: AnyIssue): boolean => (
     this.hasPermissionFor(issue, PRIVATE_UPDATE_ISSUE) ||
     this.hasPermissionFor(issue, CAN_UPDATE_WATCH)
   );
 
-  canStar = (): boolean => !this.currentUser?.guest;
+  canStar: (() => boolean) = (): boolean => !this.currentUser?.guest;
 
-  canRunCommand = (issue: AnyIssue): boolean => {
+  canRunCommand: ((issue: AnyIssue) => boolean) = (issue: AnyIssue): boolean => {
     const has = (...args) => this.permissionsStore.has(...args);
 
     return this.isCurrentUser(issue.reporter) || hasAnyPermission();
@@ -199,26 +207,26 @@ export default class IssuePermissions {
     }
   };
 
-  canUpdateWork = (entity: AnyIssue, workItem?: WorkItem): boolean => {
+  canUpdateWork: ((entity: AnyIssue, workItem?: WorkItem) => boolean) = (entity: AnyIssue, workItem?: WorkItem): boolean => {
     if (workItem && workItem.author && this.isCurrentUser(workItem.author)) {
       return this.hasPermissionFor(entity, WORK_ITEM_UPDATE);
     }
     return this.hasPermissionFor(entity, WORK_ITEM_UPDATE_NOT_OWN);
   };
 
-  canCreateWorkNotOwn = (entity: AnyIssue): boolean => this.hasPermissionFor(entity, WORK_ITEM_CREATE_NOT_OWN);
+  canCreateWorkNotOwn: ((entity: AnyIssue) => boolean) = (entity: AnyIssue): boolean => this.hasPermissionFor(entity, WORK_ITEM_CREATE_NOT_OWN);
 
-  canCreateWork = (entity: AnyIssue): boolean => (
+  canCreateWork: ((entity: AnyIssue) => boolean) = (entity: AnyIssue): boolean => (
     this.hasPermissionFor(entity, WORK_ITEM_CREATE) ||
     this.canCreateWorkNotOwn(entity)
   );
 
-  canDeleteWork = (entity: AnyIssue, workItem: WorkItem) => this.canUpdateWork(entity, workItem)
+  canDeleteWork: ((entity: AnyIssue, workItem: WorkItem) => boolean) = (entity: AnyIssue, workItem: WorkItem) => this.canUpdateWork(entity, workItem)
 
   /*
    Articles
    */
-  canUpdateArticle = (article: Article): boolean => {
+  canUpdateArticle: ((article: Article) => boolean) = (article: Article): boolean => {
     if (!article) {
       return false;
     }
@@ -228,21 +236,21 @@ export default class IssuePermissions {
     return this.hasPermissionFor(article, UPDATE_ARTICLE);
   };
 
-  articleCanCommentOn = (article: Article): boolean => this.hasPermissionFor(article, CREATE_ARTICLE_COMMENT);
+  articleCanCommentOn: ((article: Article) => boolean) = (article: Article): boolean => this.hasPermissionFor(article, CREATE_ARTICLE_COMMENT);
 
-  articleCanUpdateComment = (article: Article, comment: IssueComment): boolean => {
+  articleCanUpdateComment: ((article: Article, comment: IssueComment) => boolean) = (article: Article, comment: IssueComment): boolean => {
     return this.canUpdateComment(article, comment, UPDATE_ARTICLE_COMMENT);
   };
 
-  articleCanDeleteComment = (article: Article, comment: IssueComment): boolean => {
+  articleCanDeleteComment: ((article: Article, comment: IssueComment) => boolean) = (article: Article, comment: IssueComment): boolean => {
     return this.canDeleteComment(article, comment, DELETE_ARTICLE_COMMENT);
   };
 
-  articleCanCreateArticle = (projectRingId?: string) => (
+  articleCanCreateArticle: ((projectRingId?: string) => any) = (projectRingId?: string) => (
     this.permissionsStore.has(CREATE_ARTICLE, projectRingId)
   )
 
-  articleCanDeleteArticle = (projectRingId?: string) => (
+  articleCanDeleteArticle: ((projectRingId?: string) => any) = (projectRingId?: string) => (
     this.permissionsStore.has(DELETE_ARTICLE, projectRingId)
   )
 }

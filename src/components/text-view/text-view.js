@@ -1,5 +1,6 @@
 // @flow
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {Text} from 'react-native';
 
@@ -51,7 +52,7 @@ export default class TextView extends PureComponent<Props, State> {
     return text.substr(0, this.MAX_TO_SHOW);
   }
 
-  render() {
+  render(): Node {
     return (
       <Text testID="textMoreContent">
         <Text style={this.props.style}>{`${this._getText()}...`}</Text>

@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 
 import DeviceInfo from 'react-native-device-info';
@@ -141,7 +142,7 @@ class ManageThemeProvider extends PureComponent<Props, State> {
 
 }
 
-const ThemeProvider = (props: {children: any, mode: string}) => (
+const ThemeProvider = (props: {children: any, mode: string}): Node => (
   <AppearanceProvider>
     <ManageThemeProvider mode={props.mode}>{props.children}</ManageThemeProvider>
   </AppearanceProvider>

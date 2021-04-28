@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import {TouchableOpacity, View} from 'react-native';
 import React from 'react';
 
@@ -16,7 +17,7 @@ type Props = {
 }
 
 
-export const MenuItem = (props: Props) => {
+export const MenuItem = (props: Props): Node => {
   const {icon, onPress, style, testId} = props;
   return (
     <View

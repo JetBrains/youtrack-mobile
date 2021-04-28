@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {Component} from 'react';
 
 import {connect} from 'react-redux';
@@ -25,11 +26,11 @@ type Props = {
 
 export class UserAgreementView extends Component<Props, void> {
 
-  onLinkPress = (url: string) => {
+  onLinkPress: ((url: string) => void) = (url: string) => {
     Linking.openURL(url);
   };
 
-  render() {
+  render(): null | Node {
     const {show, agreement, onAccept, onDecline} = this.props;
     if (!show || !agreement?.text) {
       return null;
@@ -85,4 +86,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserAgreementView);
+export default (connect(mapStateToProps, mapDispatchToProps)(UserAgreementView): any);

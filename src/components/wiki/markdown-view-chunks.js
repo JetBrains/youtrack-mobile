@@ -128,7 +128,7 @@ const MarkdownViewChunks = (props: Props) => {
 
 };
 
-export default React.memo<Props>(MarkdownViewChunks);
+export default (React.memo<Props>(MarkdownViewChunks): React$AbstractComponent<Props, mixed>);
 
 
 function createChunks(array, size = 10) {

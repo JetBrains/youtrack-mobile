@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React from 'react';
 import {View, Text, WebView, ActivityIndicator, Linking} from 'react-native';
 
@@ -23,7 +24,7 @@ function renderLoading() {
   return <ActivityIndicator style={styles.loadingIndicator} size="large"/>;
 }
 
-export function AttachmentPreview(props: Props) {
+export function AttachmentPreview(props: Props): Node {
   const {url, name, headers} = props;
 
   return (

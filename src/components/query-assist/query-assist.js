@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import {View, TouchableOpacity, TextInput} from 'react-native';
 import React, {Component} from 'react';
 
@@ -48,7 +49,7 @@ export default class QueryAssist extends Component<Props, State> {
     this.state = Object.assign({}, this.initialState);
   }
 
-  onSearch = throttle((query: string, caret: number) => {
+  onSearch: any = throttle((query: string, caret: number) => {
     if (this.lastQueryParams.query === query || this.lastQueryParams.caret === caret) {
       return;
     }
@@ -59,7 +60,7 @@ export default class QueryAssist extends Component<Props, State> {
 
   }, SEARCH_THROTTLE);
 
-  resetState = () => {
+  resetState: (() => void) = () => {
     this.setState(this.initialState);
   };
 
@@ -102,7 +103,7 @@ export default class QueryAssist extends Component<Props, State> {
     this.setState({inputValue: this.props.currentQuery});
   }
 
-  onApplySuggestion = (suggestion: TransformedSuggestion) => {
+  onApplySuggestion: ((suggestion: TransformedSuggestion) => void) = (suggestion: TransformedSuggestion) => {
     const suggestionText = `${suggestion.prefix}${suggestion.option}${suggestion.suffix}`;
     const oldQuery = this.state.inputValue || '';
     const leftPartAndNewQuery = oldQuery.substring(0, suggestion.completionStart) + suggestionText;
@@ -112,13 +113,13 @@ export default class QueryAssist extends Component<Props, State> {
     this.props.onChange(newQuery, leftPartAndNewQuery.length);
   };
 
-  onApplySavedQuery = (savedQuery: SavedQuery) => {
+  onApplySavedQuery: ((savedQuery: SavedQuery) => void) = (savedQuery: SavedQuery) => {
     this.setState({inputValue: savedQuery.query});
     this.blurInput();
     this.props.onApplyQuery(savedQuery.query);
   };
 
-  renderClearIcon() {
+  renderClearIcon(): Node {
     return (
       <TouchableOpacity
         onPress={this.resetState}
@@ -201,7 +202,7 @@ export default class QueryAssist extends Component<Props, State> {
     );
   }
 
-  render() {
+  render(): Node {
     return (
       <ModalView
         visible={true}

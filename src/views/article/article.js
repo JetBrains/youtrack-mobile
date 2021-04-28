@@ -359,4 +359,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Article);
+export default (connect(mapStateToProps, mapDispatchToProps)(Article): any);

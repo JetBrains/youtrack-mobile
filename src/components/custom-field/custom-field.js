@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {Component} from 'react';
 import {TouchableOpacity, View, Text} from 'react-native';
 
@@ -109,7 +110,7 @@ export default class CustomField extends Component<Props, void> {
     return render(value);
   }
 
-  renderAvatar(fieldValue: User) {
+  renderAvatar(fieldValue: User): Node {
     const user: User = ApiHelper.convertRelativeUrls([fieldValue], 'avatarUrl', getHUBUrl())[0];
     return (
       <Avatar
@@ -123,7 +124,7 @@ export default class CustomField extends Component<Props, void> {
     );
   }
 
-  render() {
+  render(): Node {
     const {field, active} = this.props;
     return (
       <TouchableOpacity

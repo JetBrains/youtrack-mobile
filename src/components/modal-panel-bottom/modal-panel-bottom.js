@@ -39,4 +39,4 @@ const ModalPanelBottom = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(ModalPanelBottom);
+export default (React.memo<Props>(ModalPanelBottom): React$AbstractComponent<Props, mixed>);

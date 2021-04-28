@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {View, ActivityIndicator} from 'react-native';
 
@@ -33,7 +34,7 @@ type State = {
 }
 
 export class Image extends PureComponent<Props, State> {
-  closeView = once(function closeView() {
+  closeView: any = once(function closeView() {
     return Router.pop(true);
   });
 
@@ -42,7 +43,7 @@ export class Image extends PureComponent<Props, State> {
     this.setState({currentPage});
   }
 
-  renderImage = (imageProps: Object) => {
+  renderImage: ((imageProps: any) => Node) = (imageProps: Object) => {
     const source = imageProps.source;
     const attach = source && this.props.imageAttachments[this.getCurrentPage(source)];
 
@@ -63,13 +64,13 @@ export class Image extends PureComponent<Props, State> {
     );
   };
 
-  getCurrentPage(current: Attachment) {
+  getCurrentPage(current: Attachment): number {
     return this.props.imageAttachments.findIndex(attach => attach.id === current.id);
   }
 
-  onPageSelected = (currentPage: number) => this.setState({currentPage});
+  onPageSelected: ((currentPage: number) => void) = (currentPage: number) => this.setState({currentPage});
 
-  render() {
+  render(): Node {
     const currentIndex = this.getCurrentPage(this.props.current);
     const createSource = attach => ({
       source: {

@@ -15,17 +15,17 @@ import type {ProjectCustomField} from '../flow/CustomFields';
 import type {StorageState} from '../components/storage/storage';
 
 
-export const AppVersion = appPackage.version.split('-')[0];
+export const AppVersion: any = appPackage.version.split('-')[0];
 
-export const isReactElement = (element: any) => {
+export const isReactElement = (element: any): boolean => {
   return React.isValidElement(element);
 };
 
-export const isIOSPlatform = () => {
+export const isIOSPlatform = (): boolean => {
   return Platform.OS === 'ios';
 };
 
-export const isAndroidPlatform = () => {
+export const isAndroidPlatform = (): boolean => {
   return Platform.OS === 'android';
 };
 
@@ -40,7 +40,7 @@ export const parseUrlQueryString = (url: string): Object => {
   return qs.parse(query_string);
 };
 
-export const detectLanguage = (code: string) => {
+export const detectLanguage = (code: string): string => {
   let language;
 
   switch (true) {
@@ -57,7 +57,7 @@ export const detectLanguage = (code: string) => {
   return language;
 };
 
-export const uuid = () => {
+export const uuid = (): string => {
   let d = new Date().getTime();
   let d2 = 0;
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -73,7 +73,7 @@ export const uuid = () => {
   });
 };
 
-export const guid = () => {
+export const guid = (): string => {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 };
 
@@ -81,7 +81,7 @@ export const removeTrailingSlash = (str: string): string => {
   return str.replace(/\/$/, '');
 };
 
-export const createBtoa = (str: string) => {
+export const createBtoa = (str: string): any => {
   const byteArray = [];
   for (let i = 0; i < str.length; i++) {
     byteArray.push(str.charCodeAt(i));

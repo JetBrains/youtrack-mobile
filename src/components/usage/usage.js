@@ -25,7 +25,7 @@ const usage = {
     isAnalyticsEnabled = statisticsEnabled;
   },
 
-  trackScreenView(screenName: string) {
+  trackScreenView(screenName: string): any | void {
     if (!isAnalyticsEnabled) {
       return;
     }
@@ -34,7 +34,7 @@ const usage = {
     return ga.send(screenView);
   },
 
-  trackEvent(eventName: string, ...params: Array<any>) {
+  trackEvent(eventName: string, ...params: Array<any>): any | void {
     if (!isAnalyticsEnabled) {
       return;
     }
@@ -42,14 +42,14 @@ const usage = {
     return ga.send(gaEvent);
   },
 
-  trackError(error: any, additionalMessage: ?string) {
+  trackError(error: any, additionalMessage: ?string): any | void {
     //We are not allowed to gather error itself because of Privacy Policy
     return usage.trackEvent('exception', JSON.stringify({
       'exDescription': additionalMessage,
     }));
   },
 
-  onGlobalError(error: any, isFatal: boolean) {
+  onGlobalError(error: any, isFatal: boolean): any | void {
     return usage.trackError(error, `Global error happened, isFatal:${isFatal.toString()}`);
   },
 };

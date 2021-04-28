@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React from 'react';
 import {Text, View} from 'react-native';
 
@@ -14,7 +15,7 @@ import {SkeletonIssueInfoLine} from '../skeleton/skeleton';
 type Props = { reporter: User, updater: User, created: number, updated: number, style?: ViewStyleProp };
 
 
-const CreateUpdateInfo = (props: Props) => {
+const CreateUpdateInfo = (props: Props): Node => {
   if (!props.reporter && !props.updater) {
     return <SkeletonIssueInfoLine style={[styles.createUpdateInfoPanel, props.style]} lines={2}/>;
   }

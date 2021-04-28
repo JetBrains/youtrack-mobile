@@ -24,7 +24,7 @@ export const feedbackLogsOptions: Array<FeedbackLogs> = [
   {title: 'Send logs', value: true},
 ];
 
-export const sendFeedback = async (feedbackData: FeedbackData) => {
+export const sendFeedback = async (feedbackData: FeedbackData): Promise<string> => {
   let description: string = `
   ##### ${feedbackData.type.marker}::${feedbackData.type.title}
   ##### email: ${feedbackData?.email || ''}

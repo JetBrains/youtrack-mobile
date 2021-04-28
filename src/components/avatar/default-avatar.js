@@ -1,4 +1,5 @@
 /* @flow */
+import type {Node} from 'React';
 import {Text, View} from 'react-native';
 // $FlowFixMe: cannot typecheck react-native-linear-gradient module because of mistakes there
 import LinearGradient from 'react-native-linear-gradient';
@@ -63,7 +64,7 @@ function hashCode(value) {
 }
 
 export default class DefaultAvatar extends PureComponent<Props, void> {
-  render() {
+  render(): null | Node {
     const {text, size, style} = this.props;
     if (!text) {
       return null;

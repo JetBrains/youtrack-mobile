@@ -7,7 +7,7 @@ import {getActivityAllTypes} from '../../../components/activity/activity-helper'
 import type {ActivityType} from '../../../flow/Activity';
 import type {StorageState} from '../../../components/storage/storage';
 
-export function isIssueActivitiesAPIEnabled() {
+export function isIssueActivitiesAPIEnabled(): any {
   return checkVersion('2018.3');
 }
 

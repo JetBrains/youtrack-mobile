@@ -18,7 +18,7 @@ const shortRelativeFormat = {
   'years': ['y', 'y'],
 };
 
-function getForText(assignee: User | Array<User>) {
+function getForText(assignee: User | Array<User>): string {
   if (Array.isArray(assignee) && assignee.length > 0) {
     return assignee
       .map(it => getForText(it))
@@ -42,12 +42,12 @@ function makeDatePast(date: Date|number) {
   return date;
 }
 
-function formatDate(date: Date|number) {
+function formatDate(date: Date|number): string {
   const dateObj = new Date(date);
   return `${dateObj.toLocaleString(DeviceInfo.getDeviceLocale(), {year: '2-digit', month: 'short', day: '2-digit', hour: '2-digit', minute:'2-digit'})}`;
 }
 
-function ytDate(date: Date | number, noTime: boolean = false) {
+function ytDate(date: Date | number, noTime: boolean = false): string {
   const dateObj = new Date(date);
   //$FlowFixMe
   return `${dateObj.toLocaleString(DeviceInfo.getDeviceLocale(), Object.assign(
@@ -67,19 +67,19 @@ function getPostfix(formattedDate: string) {
   return formattedDate === 'just now' ? '' : ' ago';
 }
 
-function relativeDate(date: Date|number) {
+function relativeDate(date: Date|number): string {
   date = makeDatePast(date);
   const formatted = fromNow(date, {now: 'just now'});
   return `${formatted}${getPostfix(formatted)}`;
 }
 
-function absDate(date: Date|number, localeString: ?string) {
+function absDate(date: Date|number, localeString: ?string): string {
   const utcDate = new Date(date);
   const _locales = localeString ? [localeString] : DeviceInfo.getDeviceLocale();
   return utcDate.toLocaleTimeString(_locales, {day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'});
 }
 
-function shortRelativeDate(date: Date|number) {
+function shortRelativeDate(date: Date|number): string {
   date = makeDatePast(date);
   const formatted = fromNow(date, shortRelativeFormat);
   return `${formatted}${getPostfix(formatted)}`;
@@ -116,7 +116,7 @@ function getReadableID(issue: AnyIssue): string {
   return issue && (issue.idReadable || issue.id) || '';
 }
 
-function getEntityPresentation(entity: Object) {
+function getEntityPresentation(entity: Object): any | string {
   if (!entity) {
     return '';
   }
@@ -124,7 +124,7 @@ function getEntityPresentation(entity: Object) {
   return entity.fullName || entity.localizedName || entity.name || entity.login || entity.presentation || entity.text || '';
 }
 
-function getVisibilityPresentation(entity: Object) {
+function getVisibilityPresentation(entity: Object): null | string {
   if (!entity) {
     return null;
   }

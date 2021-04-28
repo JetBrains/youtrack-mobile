@@ -35,7 +35,7 @@ export const articleInitialState: ArticleState = {
   prevArticleState: null,
 };
 
-const {reducer, actions} = createSlice({
+const {reducer, actions} = (createSlice({
   name: 'article',
   initialState: articleInitialState,
   reducers: {
@@ -72,7 +72,7 @@ const {reducer, actions} = createSlice({
       return state;
     },
   },
-});
+}): any);
 
 
 export const {

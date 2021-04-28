@@ -55,4 +55,4 @@ const StreamLink = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(StreamLink);
+export default (React.memo<Props>(StreamLink): React$AbstractComponent<Props, mixed>);

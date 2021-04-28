@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {ScrollView} from 'react-native';
 import styles from './attachments-row.styles';
@@ -47,7 +48,7 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
     }
   }
 
-  getHeaders = () => {
+  getHeaders: (() => any | void | {Authorization: string, "User-Agent": string}) = () => {
     if (this.props.imageHeaders) {
       return this.props.imageHeaders;
     }
@@ -61,7 +62,7 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
     this.scrollView = node;
   };
 
-  render() {
+  render(): null | Node {
     const {attachments, attachingImage, onOpenAttachment, onRemoveImage, canRemoveAttachment, uiTheme, style} = this.props;
 
     if (!attachments.length) {

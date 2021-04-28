@@ -35,7 +35,7 @@ type ApiGetter = () => Api;
 
 export const getCachedArticleList = (): ArticlesList => getStorageState().articlesList || [];
 
-const loadCachedArticleList = () => async (dispatch: (any) => any) => {
+const loadCachedArticleList = (): ((dispatch: (any) => any) => Promise<void>) => async (dispatch: (any) => any) => {
   const cachedArticlesList: ArticlesList = getCachedArticleList();
   if (cachedArticlesList?.length > 0) {
     dispatch(setList(cachedArticlesList));
@@ -59,12 +59,12 @@ export const getPinnedProjects = async (api: Api): Promise<Array<Folder>> => {
   }
 };
 
-const clearUserLastVisitedArticle = () => async (dispatch: (any) => any) => {
+const clearUserLastVisitedArticle = (): ((dispatch: (any) => any) => Promise<void>) => async (dispatch: (any) => any) => {
   dispatch(resetUserArticlesProfile());
   cacheUserLastVisitedArticle(null);
 };
 
-const loadArticleList = (reset: boolean = true) => async (dispatch: (any) => any) => {
+const loadArticleList = (reset: boolean = true): ((dispatch: (any) => any) => Promise<void>) => async (dispatch: (any) => any) => {
   const query: string | null = getArticlesQuery();
   if (query) {
     dispatch(filterArticles(query));
@@ -133,7 +133,11 @@ const getArticleChildren = (articleId: string): ArticlesList =>
     }
   };
 
-const filterArticles = (query: string | null) =>
+const filterArticles = (query: string | null): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter
+) => Promise<void> | Promise<mixed>) =>
   async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     logEvent({
       message: 'Filter articles',
@@ -164,7 +168,11 @@ const filterArticles = (query: string | null) =>
     dispatch(setList(articlesList));
   };
 
-const loadArticlesDrafts = () => async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+const loadArticlesDrafts = (): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter
+) => Promise<any> | Promise<Array<any>>) => async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
   const api: Api = getApi();
 
   const [error, articlesDrafts] = await until(api.articles.getArticleDrafts());
@@ -177,7 +185,11 @@ const loadArticlesDrafts = () => async (dispatch: (any) => any, getState: () => 
   }
 };
 
-const toggleProjectVisibility = (item: ArticlesListItem) =>
+const toggleProjectVisibility = (item: ArticlesListItem): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter
+) => Promise<void>) =>
   async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {articles, articlesList} = getState().articles;
@@ -252,7 +264,11 @@ const toggleProjectVisibility = (item: ArticlesListItem) =>
     }
   };
 
-const toggleProjectFavorite = (item: ArticlesListItem) =>
+const toggleProjectFavorite = (item: ArticlesListItem): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter
+) => Promise<void>) =>
   async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     logEvent({
       message: 'Toggle project article favorite',
@@ -299,7 +315,11 @@ const updateProjectsFavorites = (
   pinnedProjects: Array<ArticleProject>,
   unpinnedProjects: Array<ArticleProject>,
   hasNoFavorites: boolean
-) =>
+): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter
+) => Promise<void>) =>
   async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     logEvent({
@@ -325,12 +345,12 @@ const updateProjectsFavorites = (
     dispatch(cacheProjects());
   };
 
-const setNoFavoriteProjects = () => async (dispatch: (any) => any) => {
+const setNoFavoriteProjects = (): ((dispatch: (any) => any) => Promise<void>) => async (dispatch: (any) => any) => {
   dispatch(setLoading(false));
   dispatch(setError({noFavoriteProjects: true}));
 };
 
-const showContextActions = (actionSheet: ActionSheet, canCreateArticle: boolean, onShowMoreProjects: Function) =>
+const showContextActions = (actionSheet: ActionSheet, canCreateArticle: boolean, onShowMoreProjects: Function): (() => Promise<void>) =>
   async () => {
     const actions: Array<ActionSheetOption> = [
       {
@@ -354,7 +374,7 @@ const showContextActions = (actionSheet: ActionSheet, canCreateArticle: boolean,
     }
   };
 
-const toggleAllProjects = (collapse: boolean = true) =>
+const toggleAllProjects = (collapse: boolean = true): ((dispatch: (any) => any, getState: () => AppState) => Promise<void>) =>
   async (dispatch: (any) => any, getState: () => AppState) => {
     const {articles, articlesList} = getState().articles;
     logEvent({

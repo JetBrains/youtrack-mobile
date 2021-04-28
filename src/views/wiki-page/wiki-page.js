@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {View, Text, ScrollView} from 'react-native';
 
@@ -44,7 +45,7 @@ type State = {
 };
 
 export default class WikiPage extends PureComponent<Props, State> {
-  state = {
+  state: State = {
     isPinned: false,
   }
 
@@ -64,7 +65,7 @@ export default class WikiPage extends PureComponent<Props, State> {
     }
   }
 
-  onScroll = (nativeEvent: Object) => {
+  onScroll: ((nativeEvent: any) => void) = (nativeEvent: Object) => {
     this.setState({isPinned: nativeEvent.contentOffset.y >= UNIT});
   };
 
@@ -103,7 +104,7 @@ export default class WikiPage extends PureComponent<Props, State> {
     return <LongText style={[styles.plainText, this.props.style]}>{this.props.plainText}</LongText>;
   }
 
-  render() {
+  render(): null | Node {
     const {wikiText, plainText} = this.props;
 
     if (!wikiText && !plainText) {

@@ -26,4 +26,4 @@ const StreamUserInfo = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(StreamUserInfo);
+export default (React.memo<Props>(StreamUserInfo): React$AbstractComponent<Props, mixed>);

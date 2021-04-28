@@ -27,4 +27,4 @@ const StreamTimestamp = (props: Props) => {
 
 };
 
-export default React.memo<Props>(StreamTimestamp);
+export default (React.memo<Props>(StreamTimestamp): React$AbstractComponent<Props, mixed>);

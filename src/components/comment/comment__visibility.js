@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import {Text, View} from 'react-native';
 import React, {PureComponent} from 'react';
 import {IconLock} from '../icon/icon';
@@ -16,7 +17,7 @@ type Props = {
 
 export default class CommentVisibility extends PureComponent<Props, void> {
 
-  render() {
+  render(): null | Node {
     if (this.props.visibility) {
       return (
         <View

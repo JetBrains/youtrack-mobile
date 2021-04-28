@@ -1,6 +1,6 @@
 /* @flow */
 
-import * as types from './board-action-types';
+import type {BoardColumn} from "../../flow/Agile";import * as types from './board-action-types';
 import {findIssueOnBoard} from './board-updaters';
 
 import * as issueUpdater from '../../components/issue-actions/issue-updater';
@@ -94,7 +94,7 @@ export function getAgileUserProfile(): AgileUserProfile | {} {
   };
 }
 
-export function loadAgileWithStatus(agileId: string) {
+export function loadAgileWithStatus(agileId: string): ((dispatch: (any) => any) => Promise<void> | Promise<mixed>) {
   return async (dispatch: (any) => any) => {
     dispatch({type: types.START_LOADING_AGILE});
 
@@ -114,7 +114,7 @@ export function loadAgileWithStatus(agileId: string) {
   };
 }
 
-export function loadBoard(board: Board, query: string) {
+export function loadBoard(board: Board, query: string): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     destroySSE();
     dispatch(updateAgileUserProfileLastVisitedAgile(board.id));
@@ -173,7 +173,23 @@ function receiveAgile(agile: Board) {
   };
 }
 
-export function loadAgile(agileId: string) {
+export function loadAgile(agileId: string): ((
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter
+) => 
+  | Promise<
+    {
+      columns: Array<BoardColumn>,
+      id: string,
+      name: string,
+      orphanRow: AgileBoardRow,
+      sprints: Array<Sprint>,
+      status: {error: Array<string>, valid: boolean},
+      trimmedSwimlanes: Array<AgileBoardRow>,
+    },
+  >
+  | Promise<{status: {errors: Array<string>, valid: boolean}}>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
 
@@ -193,14 +209,22 @@ export async function cacheSprint(sprint: Sprint) {
   return flushStoragePart({agileLastSprint: sprint});
 }
 
-export function suggestAgileQuery(query: string, caret: number) {
+export function suggestAgileQuery(query: string, caret: number): ((
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const suggestions = await getAssistSuggestions(getApi(), query, caret);
     dispatch({type: types.AGILE_SEARCH_SUGGESTS, suggestions});
   };
 }
 
-export function loadSprint(agileId: string, sprintId: string, query: string) {
+export function loadSprint(agileId: string, sprintId: string, query: string): ((
+  dispatch: (any) => any,
+  getState: () => AgilePageState,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => AgilePageState, getApi: ApiGetter) => {
     const api: Api = getApi();
     dispatch(setError(null));
@@ -227,7 +251,11 @@ export function loadSprint(agileId: string, sprintId: string, query: string) {
   };
 }
 
-export function loadSprintIssues(sprint: Sprint) {
+export function loadSprintIssues(sprint: Sprint): ((
+  dispatch: (any) => any,
+  getState: () => AgilePageState,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => AgilePageState, getApi: ApiGetter) => {
     const api: Api = getApi();
     dispatch(startSprintLoad());
@@ -256,7 +284,11 @@ export function loadSprintIssues(sprint: Sprint) {
   };
 }
 
-export function loadAgileProfile() {
+export function loadAgileProfile(): ((
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     let profile;
     try {
@@ -271,7 +303,7 @@ export function loadAgileProfile() {
   };
 }
 
-export function loadDefaultAgileBoard(query: string) {
+export function loadDefaultAgileBoard(query: string): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     dispatch(setError(null));
     dispatch(receiveSprint(getStorageState().agileLastSprint));
@@ -343,7 +375,11 @@ function moveIssue(movedId: string, cellId: string, leadingId: ?string) {
   };
 }
 
-export function fetchMoreSwimlanes(query?: string) {
+export function fetchMoreSwimlanes(query?: string): ((
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const {sprint, noMoreSwimlanes, isLoadingMore} = getState().agile;
     const api: Api = getApi();
@@ -380,7 +416,11 @@ function updateRowCollapsedState(row, newCollapsed: boolean) {
   };
 }
 
-export function rowCollapseToggle(row: AgileBoardRow) {
+export function rowCollapseToggle(row: AgileBoardRow): ((
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const {sprint} = getState().agile;
     const api: Api = getApi();
@@ -414,7 +454,11 @@ function updateColumnCollapsedState(column, newCollapsed: boolean) {
   };
 }
 
-export function columnCollapseToggle(column: AgileColumn) {
+export function columnCollapseToggle(column: AgileColumn): ((
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const {sprint} = getState().agile;
     const api = getApi();
@@ -439,11 +483,11 @@ export function columnCollapseToggle(column: AgileColumn) {
   };
 }
 
-export function closeSelect() {
+export function closeSelect(): {type: any} {
   return {type: types.CLOSE_AGILE_SELECT};
 }
 
-export function openSprintSelect() {
+export function openSprintSelect(): ((dispatch: (any) => any, getState: () => any, getApi: ApiGetter) => void) {
   return (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const {sprint} = getState().agile;
     const api: Api = getApi();
@@ -473,7 +517,7 @@ export function openSprintSelect() {
   };
 }
 
-export function openBoardSelect() {
+export function openBoardSelect(): ((dispatch: (any) => any, getState: () => any, getApi: ApiGetter) => void) {
   return (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {sprint, agile} = getState().agile;
@@ -517,7 +561,7 @@ export function openBoardSelect() {
   };
 }
 
-export function addCardToCell(cellId: string, issue: IssueFull) {
+export function addCardToCell(cellId: string, issue: IssueFull): {cellId: string, issue: IssueFull, type: any} {
   return {
     type: types.ADD_CARD_TO_CELL,
     cellId,
@@ -525,7 +569,7 @@ export function addCardToCell(cellId: string, issue: IssueFull) {
   };
 }
 
-export function reorderSwimlanesOrCells(leadingId: ?string, movedId: string) {
+export function reorderSwimlanesOrCells(leadingId: ?string, movedId: string): {leadingId: ?string, movedId: string, type: any} {
   return {
     type: types.REORDER_SWIMLANES_OR_CELLS,
     leadingId,
@@ -533,7 +577,7 @@ export function reorderSwimlanesOrCells(leadingId: ?string, movedId: string) {
   };
 }
 
-export function addOrUpdateCellOnBoard(issue: IssueOnList, rowId: string, columnId: string) {
+export function addOrUpdateCellOnBoard(issue: IssueOnList, rowId: string, columnId: string): {columnId: string, issue: IssueOnList, rowId: string, type: any} {
   return {
     type: types.ADD_OR_UPDATE_CELL_ON_BOARD,
     issue,
@@ -542,14 +586,14 @@ export function addOrUpdateCellOnBoard(issue: IssueOnList, rowId: string, column
   };
 }
 
-export function updateSwimlane(swimlane: AgileBoardRow) {
+export function updateSwimlane(swimlane: AgileBoardRow): {swimlane: AgileBoardRow, type: any} {
   return {
     type: types.UPDATE_SWIMLANE,
     swimlane,
   };
 }
 
-export function storeCreatingIssueDraft(draftId: string, cellId: string) {
+export function storeCreatingIssueDraft(draftId: string, cellId: string): {cellId: string, draftId: string, type: any} {
   return {
     type: types.STORE_CREATING_ISSUE_DRAFT,
     draftId,
@@ -557,7 +601,11 @@ export function storeCreatingIssueDraft(draftId: string, cellId: string) {
   };
 }
 
-export function createCardForCell(columnId: string, cellId: string) {
+export function createCardForCell(columnId: string, cellId: string): ((
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const {sprint} = getState().agile;
     const api: Api = getApi();
@@ -572,7 +620,11 @@ export function createCardForCell(columnId: string, cellId: string) {
   };
 }
 
-export function subscribeServersideUpdates() {
+export function subscribeServersideUpdates(): ((
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const {sprint} = getState().agile;
     const updateCache = () => cacheSprint(getState().agile.sprint);
@@ -634,7 +686,11 @@ export function subscribeServersideUpdates() {
   };
 }
 
-export function onCardDrop(data: { columnId: string, cellId: string, leadingId: ?string, movedId: string }) {
+export function onCardDrop(data: { columnId: string, cellId: string, leadingId: ?string, movedId: string }): ((
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const {sprint} = getState().agile;
     const api: Api = getApi();
@@ -677,7 +733,7 @@ export function onCardDrop(data: { columnId: string, cellId: string, leadingId: 
   };
 }
 
-export function refreshAgile(agileId: string, sprintId: string, query: string) {
+export function refreshAgile(agileId: string, sprintId: string, query: string): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     log.info('Refresh agile with popup');
     flushStoragePart({agileQuery: query});
@@ -685,14 +741,14 @@ export function refreshAgile(agileId: string, sprintId: string, query: string) {
   };
 }
 
-export function reSubscribeSEE() {
+export function reSubscribeSEE(): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     destroySSE();
     dispatch(subscribeServersideUpdates());
   };
 }
 
-export function storeLastQuery(query: string) {
+export function storeLastQuery(query: string): (() => Promise<void>) {
   return async () => {
     if (!query) {
       return;
@@ -705,7 +761,7 @@ export function storeLastQuery(query: string) {
   };
 }
 
-export function updateIssue(issueId: string, sprint?: SprintFull) {
+export function updateIssue(issueId: string, sprint?: SprintFull): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     const issue: IssueFull = await issueUpdater.loadIssue(issueId);
 

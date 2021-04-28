@@ -55,23 +55,23 @@ function handleIncompatibleYouTrack(response: Object, ytUrl: string) {
   }
 }
 
-export function getBaseUrl(url: string) {
+export function getBaseUrl(url: string): any | string {
   if (!url) {
     return url;
   }
   return UrlParse(url).origin;
 }
 
-function handleRelativeUrl(hubUrl: string | null = null, ytUrl: string) {
+function handleRelativeUrl(hubUrl: string | null = null, ytUrl: string): null | string {
   ytUrl = getBaseUrl(ytUrl);
   return hubUrl && hubUrl[0] && hubUrl[0] === '/' ? ytUrl + hubUrl : hubUrl;
 }
 
-function formatYouTrackURL(url: string) {
+function formatYouTrackURL(url: string): string {
   return url.replace(PROTOCOL_REGEXP, '').replace(YOUTRACK_CONTEXT_REGEXP, '');
 }
 
-async function loadConfig(ytUrl: string) {
+async function loadConfig(ytUrl: string): Promise<any> {
   const url = ytUrl.includes(VERSION_DETECT_FALLBACK_URL) ?
     ytUrl :
     `${ytUrl}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,statisticsEnabled`;

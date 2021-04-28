@@ -14,7 +14,7 @@ const firstActivityChange = (activity: Activity): any => {
   return activity.added;
 };
 
-const getActivityEventTitle = (activity: Activity) => {
+const getActivityEventTitle = (activity: Activity): string => {
   return `${getEventTitle(activity) || ''} `;
 };
 

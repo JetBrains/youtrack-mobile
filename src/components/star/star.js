@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {TouchableOpacity} from 'react-native';
 
@@ -19,12 +20,12 @@ type Props = {
 
 export default class Star extends PureComponent<Props, void> {
 
-  toggle = () => {
+  toggle: (() => void) = () => {
     const {hasStar, onStarToggle} = this.props;
     onStarToggle(!hasStar);
   };
 
-  render() {
+  render(): null | Node {
     const {hasStar, canStar, style, uiTheme, size = 22, disabled = false} = this.props;
 
     if (!canStar) {

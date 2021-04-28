@@ -54,4 +54,4 @@ function MarkdownView(props: Props) {
   );
 }
 
-export default React.memo<Props>(MarkdownView);
+export default (React.memo<Props>(MarkdownView): React$AbstractComponent<Props, mixed>);

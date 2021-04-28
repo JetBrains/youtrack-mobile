@@ -229,5 +229,5 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(Menu);
+export default (connect(mapStateToProps, null)(Menu): any);
 

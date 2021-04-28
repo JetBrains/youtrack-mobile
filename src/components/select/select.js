@@ -1,4 +1,5 @@
 /* @flow */
+import type {Node} from 'React';
 import {Text, View, TouchableOpacity, TextInput, ActivityIndicator, FlatList} from 'react-native';
 import React, {Component} from 'react';
 
@@ -38,7 +39,14 @@ type SelectState = {
 };
 
 export default class Select extends Component<SelectProps, SelectState> {
-  static defaultProps = {
+  static defaultProps: {
+  autoFocus: boolean,
+  getTitle: (item: any) => any,
+  header: () => null,
+  noFilter: boolean,
+  onChangeSelection: (items: Array<any>) => null,
+  placeholder: string,
+} = {
     placeholder: 'Filter item',
     autoFocus: false,
     onChangeSelection: (items: Array<Object>) => null,
@@ -47,7 +55,7 @@ export default class Select extends Component<SelectProps, SelectState> {
     header: () => null,
   };
 
-  static getItemLayout(items: ?Array<Object>, index: number) {
+  static getItemLayout(items: ?Array<Object>, index: number): {index: number, length: number, offset: number} {
     const height = SELECT_ITEM_HEIGHT;
     const offset = (SELECT_ITEM_HEIGHT + SELECT_ITEM_SEPARATOR_HEIGHT) * index;
     return {
@@ -57,7 +65,7 @@ export default class Select extends Component<SelectProps, SelectState> {
     };
   }
 
-  static renderSeparator() {
+  static renderSeparator(): Node {
     return <View style={styles.rowSeparator}/>;
   }
 
@@ -101,7 +109,7 @@ export default class Select extends Component<SelectProps, SelectState> {
     }
   }
 
-  renderEmptyValueItem() {
+  renderEmptyValueItem(): void | Node {
     const {emptyValue} = this.props;
 
     if (!emptyValue) {
@@ -180,7 +188,7 @@ export default class Select extends Component<SelectProps, SelectState> {
     this.props.onChangeSelection(selectedItems, item);
   }
 
-  onClearValue = () => {
+  onClearValue: (() => any) = () => {
     return this.props.onSelect(this.props.multi ? [] : null);
   }
 
@@ -188,7 +196,7 @@ export default class Select extends Component<SelectProps, SelectState> {
     return this.props.onSelect(this.state.selectedItems);
   }
 
-  getItemLayout(items: ?Array<Object>, index: number) {
+  getItemLayout(items: ?Array<Object>, index: number): {index: number, length: any, offset: number} {
     return {
       length: SELECT_ITEM_HEIGHT,
       offset: (SELECT_ITEM_HEIGHT + SELECT_ITEM_SEPARATOR_HEIGHT) * index,
@@ -196,7 +204,7 @@ export default class Select extends Component<SelectProps, SelectState> {
     };
   }
 
-  renderItem = ({item}: Object) => {
+  renderItem: ((any) => Node) = ({item}: Object) => {
     return (
       <SelectItem
         item={item}
@@ -207,7 +215,7 @@ export default class Select extends Component<SelectProps, SelectState> {
     );
   };
 
-  renderItems() {
+  renderItems(): Node {
     return (
       <FlatList
         testID="selectItems"
@@ -229,7 +237,7 @@ export default class Select extends Component<SelectProps, SelectState> {
     );
   }
 
-  render() {
+  render(): Node {
     const {multi, autoFocus, style, placeholder, onCancel, noFilter} = this.props;
 
     return (

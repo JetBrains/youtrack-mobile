@@ -1,6 +1,7 @@
 /* @flow */
 
-import {Clipboard, Share} from 'react-native';
+import type {User} from "../../flow/User";
+import type {IssueLink, IssueComment} from "../../flow/CustomFields";import {Clipboard, Share} from 'react-native';
 
 import * as types from './issue-action-types';
 import ApiHelper from '../../components/api/api__helper';
@@ -29,103 +30,107 @@ import type {Visibility} from '../../flow/Visibility';
 type ApiGetter = () => Api;
 type StateGetter = () => { issueState: IssueState };
 
-export function setIssueId(issueId: string) {
+export function setIssueId(issueId: string): {issueId: string, type: any} {
   return {type: types.SET_ISSUE_ID, issueId};
 }
 
-export function startIssueRefreshing() {
+export function startIssueRefreshing(): {type: any} {
   return {type: types.START_ISSUE_REFRESHING};
 }
 
-export function stopIssueRefreshing() {
+export function stopIssueRefreshing(): {type: any} {
   return {type: types.STOP_ISSUE_REFRESHING};
 }
 
-export function receiveIssue(issue: IssueFull) {
+export function receiveIssue(issue: IssueFull): {issue: IssueFull, type: any} {
   return {type: types.RECEIVE_ISSUE, issue};
 }
 
-export function setIssueFieldValue(field: CustomField, value: FieldValue) {
+export function setIssueFieldValue(field: CustomField, value: FieldValue): {field: CustomField, type: any, value: FieldValue} {
   return {type: types.SET_ISSUE_FIELD_VALUE, field, value};
 }
 
-export function setProject(project: IssueProject) {
+export function setProject(project: IssueProject): {project: IssueProject, type: any} {
   return {type: types.SET_PROJECT, project};
 }
 
-export function startEditingIssue() {
+export function startEditingIssue(): {type: any} {
   return {type: types.START_EDITING_ISSUE};
 }
 
-export function stopEditingIssue() {
+export function stopEditingIssue(): {type: any} {
   return {type: types.STOP_EDITING_ISSUE};
 }
 
-export function setIssueSummaryAndDescription(summary: string, description: string) {
+export function setIssueSummaryAndDescription(summary: string, description: string): {description: string, summary: string, type: any} {
   return {type: types.SET_ISSUE_SUMMARY_AND_DESCRIPTION, summary, description};
 }
 
-export function setIssueSummaryCopy(summary: string) {
+export function setIssueSummaryCopy(summary: string): {summary: string, type: any} {
   return {type: types.SET_ISSUE_SUMMARY_COPY, summary};
 }
 
-export function setIssueDescriptionCopy(description: string) {
+export function setIssueDescriptionCopy(description: string): {description: string, type: any} {
   return {type: types.SET_ISSUE_DESCRIPTION_COPY, description};
 }
 
-export function startSavingEditedIssue() {
+export function startSavingEditedIssue(): {type: any} {
   return {type: types.START_SAVING_EDITED_ISSUE};
 }
 
-export function stopSavingEditedIssue() {
+export function stopSavingEditedIssue(): {type: any} {
   return {type: types.STOP_SAVING_EDITED_ISSUE};
 }
 
-export function setVoted(voted: boolean) {
+export function setVoted(voted: boolean): {type: any, voted: boolean} {
   return {type: types.SET_VOTED, voted};
 }
 
-export function setStarred(starred: boolean) {
+export function setStarred(starred: boolean): {starred: boolean, type: any} {
   return {type: types.SET_STARRED, starred};
 }
 
-export function issueUpdated(issue: IssueFull) {
+export function issueUpdated(issue: IssueFull): {issue: IssueFull, type: any} {
   return {type: types.ISSUE_UPDATED, issue};
 }
 
-export function resetIssueView() {
+export function resetIssueView(): {type: any} {
   return {type: types.RESET_SINGLE_ISSUE};
 }
 
-export function unloadActiveIssueView() {
+export function unloadActiveIssueView(): {type: any} {
   return {type: types.UNLOAD_ACTIVE_ISSUE_VIEW};
 }
 
-export function openCommandDialog(initialCommand: string = '') {
+export function openCommandDialog(initialCommand: string = ''): {initialCommand: string, type: any} {
   return {type: types.OPEN_COMMAND_DIALOG, initialCommand};
 }
 
-export function closeCommandDialog() {
+export function closeCommandDialog(): {type: any} {
   return {type: types.CLOSE_COMMAND_DIALOG};
 }
 
-export function receiveCommandSuggestions(suggestions: CommandSuggestionResponse) {
+export function receiveCommandSuggestions(suggestions: CommandSuggestionResponse): {suggestions: CommandSuggestionResponse, type: any} {
   return {type: types.RECEIVE_COMMAND_SUGGESTIONS, suggestions};
 }
 
-export function startApplyingCommand() {
+export function startApplyingCommand(): {type: any} {
   return {type: types.START_APPLYING_COMMAND};
 }
 
-export function stopApplyingCommand() {
+export function stopApplyingCommand(): {type: any} {
   return {type: types.STOP_APPLYING_COMMAND};
 }
 
-export function receiveIssueVisibility(visibility: Visibility) {
+export function receiveIssueVisibility(visibility: Visibility): {type: any, visibility: Visibility} {
   return {type: types.RECEIVE_ISSUE_VISIBILITY, visibility};
 }
 
-export function loadIssueAttachments() {
+export function loadIssueAttachments(): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().issueState.issueId;
     if (!issueId) {
@@ -144,7 +149,37 @@ export function loadIssueAttachments() {
   };
 }
 
-export function loadIssue() {
+export function loadIssue(): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => 
+  | Promise<void>
+  | Promise<
+    {
+      $type: string,
+      attachments: Array<Attachment>,
+      comments?: Array<IssueComment>,
+      created: number,
+      description: string,
+      fieldHash: any,
+      fields: Array<CustomField>,
+      id: string,
+      idReadable: string,
+      links: Array<IssueLink>,
+      project: IssueProject,
+      reporter: User,
+      resolved: boolean,
+      summary: string,
+      tags: Array<Tag>,
+      updated: number,
+      updater: User,
+      voters: {hasVote: boolean},
+      votes: number,
+      watchers: {hasStar: boolean},
+      wikifiedDescription: string,
+    },
+  >) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().issueState.issueId;
     const api: Api = getApi();
@@ -169,7 +204,11 @@ export function loadIssue() {
   };
 }
 
-export function loadIssueLinks() {
+export function loadIssueLinks(): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().issueState.issueId;
     const api: Api = getApi();
@@ -190,7 +229,7 @@ export function loadIssueLinks() {
   };
 }
 
-export function refreshIssue() {
+export function refreshIssue(): ((dispatch: (any) => any, getState: StateGetter) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter) => {
     dispatch(startIssueRefreshing());
     try {
@@ -207,7 +246,11 @@ export function refreshIssue() {
   };
 }
 
-export function saveIssueSummaryAndDescriptionChange() {
+export function saveIssueSummaryAndDescriptionChange(): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {summaryCopy, descriptionCopy} = getState().issueState;
@@ -233,7 +276,11 @@ export function saveIssueSummaryAndDescriptionChange() {
   };
 }
 
-export function onCheckboxUpdate(checked: boolean, position: number, description: string) {
+export function onCheckboxUpdate(checked: boolean, position: number, description: string): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {issue} = getState().issueState;
@@ -255,7 +302,11 @@ export function onCheckboxUpdate(checked: boolean, position: number, description
   };
 }
 
-export function updateIssueFieldValue(field: CustomField, value: FieldValue) {
+export function updateIssueFieldValue(field: CustomField, value: FieldValue): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (
     dispatch: any => any,
     getState: StateGetter,
@@ -293,7 +344,11 @@ export function updateIssueFieldValue(field: CustomField, value: FieldValue) {
   };
 }
 
-export function updateProject(project: IssueProject) {
+export function updateProject(project: IssueProject): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (
     dispatch: any => any,
     getState: StateGetter,
@@ -317,7 +372,11 @@ export function updateProject(project: IssueProject) {
   };
 }
 
-export function toggleVote(voted: boolean) {
+export function toggleVote(voted: boolean): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (
     dispatch: any => any,
     getState: StateGetter,
@@ -337,7 +396,11 @@ export function toggleVote(voted: boolean) {
   };
 }
 
-export function toggleStar(starred: boolean) {
+export function toggleStar(starred: boolean): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (
     dispatch: any => any,
     getState: StateGetter,
@@ -365,7 +428,11 @@ export function showIssueActions(
   actionSheet: ActionSheet,
   permissions: { canAttach: boolean, canEdit: boolean, canApplyCommand: boolean, canTag: boolean },
   switchToDetailsTab: () => any
-) {
+): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {issue} = getState().issueState;
@@ -449,7 +516,7 @@ export function showIssueActions(
   };
 }
 
-export function openNestedIssueView(params: OpenNestedViewParams) {
+export function openNestedIssueView(params: OpenNestedViewParams): (() => any | void) {
   return () => {
     usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Navigate to linked issue');
     if (!params.issue) {
@@ -463,7 +530,7 @@ export function openNestedIssueView(params: OpenNestedViewParams) {
   };
 }
 
-export function unloadIssueIfExist() {
+export function unloadIssueIfExist(): ((dispatch: (any) => any, getState: StateGetter) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter) => {
     const state = getState().issueState;
     if (state !== initialState) {
@@ -472,13 +539,17 @@ export function unloadIssueIfExist() {
   };
 }
 
-export function openIssueListWithSearch(query: string) {
+export function openIssueListWithSearch(query: string): (() => void) {
   return () => {
     Router.Issues({query});
   };
 }
 
-export function onTagRemove(tagId: string) {
+export function onTagRemove(tagId: string): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issue = getState().issueState.issue;
     const api: Api = getApi();
@@ -496,7 +567,11 @@ export function onTagRemove(tagId: string) {
 }
 
 
-export function loadCommandSuggestions(command: string, caret: number) {
+export function loadCommandSuggestions(command: string, caret: number): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().issueState.issueId;
     const api: Api = getApi();
@@ -511,7 +586,11 @@ export function loadCommandSuggestions(command: string, caret: number) {
   };
 }
 
-export function applyCommand(command: string) {
+export function applyCommand(command: string): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void> | Promise<any>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().issueState.issueId;
 
@@ -538,43 +617,47 @@ export function applyCommand(command: string) {
   };
 }
 
-export function updateUserAppearanceProfile(userAppearanceProfile: UserAppearanceProfile) {
+export function updateUserAppearanceProfile(userAppearanceProfile: UserAppearanceProfile): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     dispatch(receiveUserAppearanceProfile(userAppearanceProfile));
   };
 }
 
-export function uploadAttach(attach: Attachment) {
+export function uploadAttach(attach: Attachment): ((dispatch: (any) => any, getState: StateGetter) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter) => {
     await dispatch(attachmentActions.uploadFile(attach, getState().issueState.issueId));
   };
 }
 
-export function cancelAddAttach(attach: Attachment) {
+export function cancelAddAttach(attach: Attachment): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     await dispatch(attachmentActions.cancelImageAttaching(attach));
   };
 }
 
-export function loadAttachments() {
+export function loadAttachments(): ((dispatch: (any) => any, getState: StateGetter) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter) => {
     dispatch(attachmentActions.loadIssueAttachments(getState().issueState.issueId));
   };
 }
 
-export function toggleVisibleAddAttachDialog(isVisible: boolean) {
+export function toggleVisibleAddAttachDialog(isVisible: boolean): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     dispatch(attachmentActions.toggleAttachFileDialog(isVisible));
   };
 }
 
-export function removeAttachment(attach: Attachment) {
+export function removeAttachment(attach: Attachment): ((dispatch: (any) => any, getState: StateGetter) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter) => {
     await dispatch(attachmentActions.removeAttachment(attach, getState().issueState.issueId));
   };
 }
 
-export function updateIssueVisibility(visibility: Visibility) {
+export function updateIssueVisibility(visibility: Visibility): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueState: IssueFull = getState().issueState;
     const prevVisibility: Visibility = issueState.issue.visibility;
@@ -593,7 +676,7 @@ export function updateIssueVisibility(visibility: Visibility) {
   };
 }
 
-export function onCloseTagsSelect() {
+export function onCloseTagsSelect(): ((dispatch: (any) => any) => void) {
   return (dispatch: (any) => any) => {
 
     dispatch({
@@ -604,7 +687,7 @@ export function onCloseTagsSelect() {
   };
 }
 
-export function onOpenTagsSelect() {
+export function onOpenTagsSelect(): ((dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => void) {
   return (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
     const issue: IssueFull = getState().issueState.issue;

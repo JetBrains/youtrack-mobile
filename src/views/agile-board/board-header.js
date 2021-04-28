@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 
 import {View, Text, TouchableOpacity} from 'react-native';
@@ -31,7 +32,7 @@ export default class BoardHeader extends PureComponent<Props, void> {
     this.node.setNativeProps(...args);
   }
 
-  render() {
+  render(): null | Node {
     const {columns, onCollapseToggle, style} = this.props;
 
     if (!columns || !columns.length) { //YTM-835

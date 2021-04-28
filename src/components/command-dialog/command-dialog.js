@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import {View, TouchableOpacity, Text, TextInput, FlatList, ActivityIndicator} from 'react-native';
 import React, {Component} from 'react';
 
@@ -50,7 +51,7 @@ export default class CommandDialog extends Component<Props, State> {
     caret: 0,
   };
   lastUsedParams: { command: ?string, caret: number } = {command: null, caret: 0};
-  onSearch = throttle((command: string, caret: number) => {
+  onSearch: any = throttle((command: string, caret: number) => {
     if (this.lastUsedParams.command === command && this.lastUsedParams.caret === caret) {
       return;
     }
@@ -69,7 +70,7 @@ export default class CommandDialog extends Component<Props, State> {
     this.onSearch(initialCommand, initialCommand.length);
   }
 
-  onApplySuggestion = (suggestion: CommandSuggestion) => {
+  onApplySuggestion: ((suggestion: CommandSuggestion) => void) = (suggestion: CommandSuggestion) => {
     const suggestionText = `${suggestion.prefix || ''}${suggestion.option}${suggestion.suffix || ''}`;
     const oldQuery = this.state.input || '';
     const newQuery = oldQuery.substring(0, suggestion.completionStart) + suggestionText + oldQuery.substring(suggestion.completionEnd);
@@ -77,7 +78,7 @@ export default class CommandDialog extends Component<Props, State> {
     this.onSearch(newQuery, suggestion.caret);
   };
 
-  onApply = () => {
+  onApply: (() => void) = () => {
     this.props.onApply(this.state.input);
   };
 
@@ -166,7 +167,7 @@ export default class CommandDialog extends Component<Props, State> {
     );
   }
 
-  render() {
+  render(): Node {
     const {isApplying, uiTheme} = this.props;
     const canApply = this.canApplyCommand();
 

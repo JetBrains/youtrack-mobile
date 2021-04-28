@@ -22,7 +22,7 @@ function convertToNumber(semverVersion: string) {
   }, 0);
 }
 
-export const checkVersion = (version?: string) => {
+export const checkVersion = (version?: string): boolean => {
   try {
     const {version: serverVersion} = getApi().config;
 
@@ -36,11 +36,19 @@ export const checkVersion = (version?: string) => {
   }
 };
 
-export const checkDev = () => __DEV__;
+export const checkDev = (): boolean => __DEV__;
 
 export const FEATURE_VERSION = featureList;
 
-const Feature = (props: Props) => {
+const Feature = (props: Props): 
+  | any
+  | null
+  | {
+    +key: React$Key | null,
+    +props: React$ElementProps<any>,
+    +ref: any,
+    +type: any,
+  } => {
   const {fallbackComponent = null, children, featureName, version, devOnly} = props;
   const features: Array<string> = useSelector(state => state.app.features);
 

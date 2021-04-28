@@ -29,7 +29,7 @@ function calculateWidthData(): WidthData {
  * Limits value to desired range
  */
 
-export function clamp(value: number, min: number, max: number) {
+export function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
 }
 
@@ -76,13 +76,13 @@ export function getSnapPoints(columns: Array<BoardColumn>): Array<number> {
     .map(item => item.start);
 }
 
-export function getClosestSnapPoints(x: number, openColumnStarts: Array<number>) {
+export function getClosestSnapPoints(x: number, openColumnStarts: Array<number>): Array<number> {
   const prev = openColumnStarts.filter(it => it < x).pop() || 0;
   const next = openColumnStarts.filter(it => it > x).shift();
   return [prev, next > x ? next : openColumnStarts[openColumnStarts.length - 1]];
 }
 
-export function getSnapToX(scrollEvent: Object, columns: Array<BoardColumn>) {
+export function getSnapToX(scrollEvent: Object, columns: Array<BoardColumn>): number {
   const openColumnStarts = getSnapPoints(columns);
   const x = scrollEvent.nativeEvent.contentOffset.x;
   const [prev, next] = getClosestSnapPoints(x, openColumnStarts);

@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 
 import throttle from 'lodash.throttle';
@@ -27,12 +28,12 @@ const TEXT_UPDATE_DEBOUNCE = 300;
 
 export default class TextEditForm extends PureComponent<Props, void> {
 
-  onDescriptionChange = throttle((text: string) => {
+  onDescriptionChange: any = throttle((text: string) => {
     const {onDescriptionChange} = this.props;
     return onDescriptionChange && onDescriptionChange(text);
   }, TEXT_UPDATE_DEBOUNCE);
 
-  render() {
+  render(): Node {
     const {
       adaptive = false,
       autoFocus = false,

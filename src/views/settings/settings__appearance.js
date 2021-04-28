@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
@@ -15,7 +16,7 @@ import styles from './settings.styles';
 
 import type {Theme} from '../../flow/Theme';
 
-const SettingsAppearance = () => {
+const SettingsAppearance = (): Node => {
 
   const renderThemeCheckbox = (currentTheme: Theme, uiTheme: Object): any => {
     const userThemeMode: ?string = getStorageState().themeMode || '';

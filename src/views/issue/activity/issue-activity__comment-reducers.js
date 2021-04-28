@@ -28,7 +28,7 @@ export const initialState: State = {
   updateUserAppearanceProfile: null,
 };
 
-export default createReducer(initialState, {
+export default (createReducer(initialState, {
   [types.RECEIVE_COMMENTS_ERROR]: (state: State, action: {error: Error}): State => {
     return {...state, commentsLoadingError: action.error};
   },
@@ -79,4 +79,4 @@ export default createReducer(initialState, {
   [types.SET_COMMENT_VISIBILITY]: (state: State, action: Object) => {
     return {...state, editingComment: action.comment};
   },
-});
+}): any);

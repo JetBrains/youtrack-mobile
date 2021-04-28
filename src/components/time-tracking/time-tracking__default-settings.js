@@ -18,24 +18,24 @@ export const DEFAULT_WORK_TIME_SETTINGS = {
 const singleKey = '=1';
 const multipleKey = '=other';
 export const PERIOD_FORMATS = {
-  m: {
+  m: ({
     [singleKey]: 'minute',
     [multipleKey]: 'minutes',
-  },
-  h: {
+  }: {"=1": string, "=other": string}),
+  h: ({
     [singleKey]: 'hour',
     [multipleKey]: 'hours',
-  },
-  d: {
+  }: {"=1": string, "=other": string}),
+  d: ({
     [singleKey]: 'day',
     [multipleKey]: 'days',
-  },
-  w: {
+  }: {"=1": string, "=other": string}),
+  w: ({
     [singleKey]: 'week',
     [multipleKey]: 'weeks',
-  },
+  }: {"=1": string, "=other": string}),
 };
 
-export function getPeriodName(key: string, isPlural: ?boolean) {
+export function getPeriodName(key: string, isPlural: ?boolean): any {
   return PERIOD_FORMATS[key][isPlural ? multipleKey : singleKey];
 }

@@ -288,4 +288,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateIssue);
+export default (connect(mapStateToProps, mapDispatchToProps)(CreateIssue): any);

@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {Dimensions} from 'react-native';
 
@@ -18,7 +19,7 @@ type Props = {
 
 export default class KeyboardSpacerIOS extends PureComponent<Props, void> {
 
-  render() {
+  render(): null | Node {
     if (isIOSPlatform()) {
       const {top = keyboardSpacerTop} = this.props;
       return (

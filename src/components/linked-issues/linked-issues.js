@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import {View, Text, TouchableOpacity} from 'react-native';
 import React, {PureComponent} from 'react';
 
@@ -51,7 +52,7 @@ export default class LinkedIssues extends PureComponent<Props, void> {
     </View>;
   }
 
-  render() {
+  render(): null | Node {
     const {links, style} = this.props;
     const linksWithIssues = links.filter(link => (link.trimmedIssues || []).length > 0);
 

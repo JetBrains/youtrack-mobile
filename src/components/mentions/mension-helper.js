@@ -2,12 +2,12 @@
 
 import type {User} from '../../flow/User';
 
-const getSuggestWord = (text: string, caret: number) => {
+const getSuggestWord = (text: string, caret: number): null | RegExp$matchResult | string => {
   const match = /[\S@]+$/.exec(text.slice(0, caret));
   return match && match[0];
 };
 
-const composeSuggestionText = (user: User, text: string = '', caret: number) => {
+const composeSuggestionText = (user: User, text: string = '', caret: number): void | string => {
   const word: ?string = getSuggestWord(text, caret);
 
   if (word) {

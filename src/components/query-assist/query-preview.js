@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import {Text, View} from 'react-native';
 import React, {PureComponent} from 'react';
 
@@ -19,20 +20,20 @@ type Props = {
 
 
 export default class QueryPreview extends PureComponent<Props, void> {
-  static defaultProps = {
+  static defaultProps: {onClearText: () => void, onFocus: () => void} = {
     onFocus: () => {},
     onClearText: () => {},
   };
 
-  focusAndClear = () => {
+  focusAndClear: (() => void) = () => {
     this.props.onFocus(true);
   }
 
-  focus = () => {
+  focus: (() => void) = () => {
     this.props.onFocus(false);
   }
 
-  render() {
+  render(): Node {
     const {query, style} = this.props;
 
     return (

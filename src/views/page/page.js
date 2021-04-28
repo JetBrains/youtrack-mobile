@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React from 'react';
 import {View} from 'react-native';
 
@@ -9,7 +10,7 @@ type Props = {
   children: any,
 };
 
-export default function (props: Props) {
+export default function (props: Props): Node {
 
   return (
     <View

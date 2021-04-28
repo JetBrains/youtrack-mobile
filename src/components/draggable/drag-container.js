@@ -39,7 +39,7 @@ export type DragContextType = {|
   registerOnDrop: Function
 |}
 
-export const DragContext = React.createContext<?DragContextType>(null);
+export const DragContext: React$Context<?DragContextType> = React.createContext<?DragContextType>(null);
 
 class DragModal extends React.Component<any, void> {
   onRequestClose = () => true;
@@ -76,7 +76,7 @@ class DragContainer extends React.Component<Props, State> {
   _locked: boolean = false;
   _panResponder: Object;
 
-  state = {
+  state: State = {
     location: new Animated.ValueXY(),
     draggingComponent: null,
   };
@@ -111,7 +111,7 @@ class DragContainer extends React.Component<Props, State> {
     };
   }
 
-  updateZone = (details: ZoneInfo) => {
+  updateZone: ((details: ZoneInfo) => void) = (details: ZoneInfo) => {
     const zone = this.dropZones.find(x => x.ref === details.ref);
     if (!zone) {
       this.dropZones.push(details);
@@ -125,7 +125,7 @@ class DragContainer extends React.Component<Props, State> {
     this.dropZones = this.dropZones.filter(z => z.ref !== ref);
   }
 
-  inZone({x, y}: {x: number, y: number}, zone: ZoneInfo) {
+  inZone({x, y}: {x: number, y: number}, zone: ZoneInfo): boolean {
     return (
       zone.x <= x &&
       zone.width + zone.x >= x &&
@@ -134,15 +134,15 @@ class DragContainer extends React.Component<Props, State> {
     );
   }
 
-  registerOnDragStart = (onDragStart: Function) => {
+  registerOnDragStart: ((onDragStart: any) => void) = (onDragStart: Function) => {
     this.reportOnDragStart = onDragStart;
   }
 
-  registerOnDrag = (onDrag: Function) => {
+  registerOnDrag: ((onDrag: any) => void) = (onDrag: Function) => {
     this.reportOnDrag = onDrag;
   };
 
-  registerOnDrop = (onDrop: Function) => {
+  registerOnDrop: ((onDrop: any) => void) = (onDrop: Function) => {
     this.reportOnDrop = onDrop;
   }
 
@@ -243,7 +243,7 @@ class DragContainer extends React.Component<Props, State> {
     });
   }
 
-  onInitiateDrag = (ref: Object, children: any, data: Object) => {
+  onInitiateDrag: ((ref: any, children: any, data: any) => void) = (ref: Object, children: any, data: Object) => {
     this.reportOnDragStart();
 
     ref.measure((x, y, width, height, pageX, pageY) => {
@@ -289,7 +289,7 @@ class DragContainer extends React.Component<Props, State> {
     });
   }
 
-  render() {
+  render(): React.Node {
     return (
       <DragContext.Provider value={this.getDragContext()}>
         <View

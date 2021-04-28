@@ -4,7 +4,7 @@ import IssueFields from './api__issue-fields';
 
 const toField = ApiHelper.toField;
 
-const SPRINT = toField([
+const SPRINT: any = toField([
   'id',
   'name',
   'start',
@@ -19,7 +19,7 @@ const AGILE_SHORT_WITH_SPRINTS = toField([
   },
 ]);
 
-const AGILE_PROFILE = toField([
+const AGILE_PROFILE: any = toField([
   {
     defaultAgile: AGILE_SHORT_WITH_SPRINTS.toString(),
     visitedSprints: [
@@ -60,7 +60,7 @@ const BOARD_ISSUE_BASE_FIELDS = toField([
   'summary',
 ]);
 
-const BOARD_ROW = toField([
+const BOARD_ROW: any = toField([
   'id',
   'name',
   'collapsed',
@@ -111,14 +111,14 @@ const BOARD = toField([
   {trimmedSwimlanes: BOARD_ROW},
 ]);
 
-const BOARD_ON_LIST = toField([
+const BOARD_ON_LIST: any = toField([
   'id',
   'name',
   'favorite',
   {sprints: ['id', 'name']},
 ]);
 
-const SPRINT_WITH_BOARD = toField([
+const SPRINT_WITH_BOARD: any = toField([
   SPRINT,
   {board: BOARD},
   'eventSourceTicket',
@@ -133,7 +133,7 @@ const SPRINT_WITH_BOARD = toField([
   },
 ]);
 
-const SPRINT_LIVE_UPDATE = toField([
+const SPRINT_LIVE_UPDATE: any = toField([
   {swimlane: BOARD_ROW},
   {issue: IssueFields.issuesOnList},
   {removedIssue: 'id'},
@@ -147,7 +147,7 @@ const SPRINT_LIVE_UPDATE = toField([
   },
 ]);
 
-const SPRINT_ISSUES_FIELDS = toField([
+const SPRINT_ISSUES_FIELDS: any = toField([
   'id',
   'resolved',
   {tags: IssueFields.ISSUE_TAGS_FIELDS},

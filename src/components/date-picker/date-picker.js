@@ -42,4 +42,4 @@ const DatePicker = (props: Props) => {
   );
 };
 
-export default memo<Props>(DatePicker);
+export default (memo<Props>(DatePicker): React$AbstractComponent<Props, mixed>);

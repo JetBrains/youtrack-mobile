@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {Component} from 'react';
 import {RefreshControl, SectionList, Text, TouchableOpacity, View, ActivityIndicator} from 'react-native';
 
@@ -58,7 +59,7 @@ const ERROR_MESSAGE_DATA: Object = {
 };
 
 export class KnowledgeBase extends Component<Props, State> {
-  static contextTypes = {
+  static contextTypes: any | {actionSheet: typeof Function} = {
     actionSheet: Function,
   };
 
@@ -101,9 +102,9 @@ export class KnowledgeBase extends Component<Props, State> {
     }
   }
 
-  loadArticlesList = async (reset?: boolean) => this.props.loadArticleList(reset);
+  loadArticlesList: ((reset?: boolean) => Promise<any>) = async (reset?: boolean) => this.props.loadArticleList(reset);
 
-  scrollToProject = (project: ArticleProject) => {
+  scrollToProject: ((project: ArticleProject) => void) = (project: ArticleProject) => {
     const {articlesList} = this.props;
     if (project && articlesList) {
       const index: number = articlesList.findIndex((listItem: ArticlesListItem) => listItem.title.id === project.id);
@@ -117,7 +118,7 @@ export class KnowledgeBase extends Component<Props, State> {
     }
   };
 
-  renderProject = ({section}: ArticlesListItem) => {
+  renderProject: ((ArticlesListItem) => void | Node) = ({section}: ArticlesListItem) => {
     const project: ?ArticleProject = section.title;
     if (project) {
       const {expandingProjectId} = this.props;
@@ -173,7 +174,7 @@ export class KnowledgeBase extends Component<Props, State> {
     }
   };
 
-  renderArticle = ({item}: ArticleNode) => (
+  renderArticle: ((ArticleNode) => Node) = ({item}: ArticleNode) => (
     <ArticleWithChildren
       style={styles.itemArticle}
       article={item.data}
@@ -186,7 +187,7 @@ export class KnowledgeBase extends Component<Props, State> {
     />
   );
 
-  renderSubArticlesPage = async (article: Article) => {
+  renderSubArticlesPage: ((article: Article) => Promise<void>) = async (article: Article) => {
     const childrenData: ArticlesList = await this.props.getArticleChildren(article.id);
     const title = this.renderHeader({
       leftButton: (
@@ -217,7 +218,14 @@ export class KnowledgeBase extends Component<Props, State> {
     Router.Page({children: <>{title}<View style={styles.itemChild}>{tree}</View></>});
   };
 
-  renderHeader = (
+  renderHeader: ((
+  {
+    customTitleComponent?: Node,
+    leftButton?: Node,
+    rightButton?: Node,
+    title: string,
+  }
+) => Node) = (
     {leftButton, title, customTitleComponent, rightButton}: {
       leftButton?: React$Element<any>,
       title: string,
@@ -244,15 +252,15 @@ export class KnowledgeBase extends Component<Props, State> {
     );
   };
 
-  renderSeparator() {
+  renderSeparator(): Node {
     return <View style={styles.separator}>{SelectSectioned.renderSeparator()}</View>;
   }
 
-  onScroll = ({nativeEvent}: Object) => {
+  onScroll: ((any) => void) = ({nativeEvent}: Object) => {
     this.setState({isHeaderPinned: nativeEvent.contentOffset.y >= UNIT});
   };
 
-  renderRefreshControl = () => {
+  renderRefreshControl: (() => Node) = () => {
     return <RefreshControl
       refreshing={this.props.isLoading}
       tintColor={styles.link.color}
@@ -260,15 +268,15 @@ export class KnowledgeBase extends Component<Props, State> {
     />;
   };
 
-  getListItemKey = (item: ArticleNode, index: number) => item?.data?.id || index;
+  getListItemKey: ((item: ArticleNode, index: number) => number | string) = (item: ArticleNode, index: number) => item?.data?.id || index;
 
-  setListRef = (listRef?: Object) => {
+  setListRef: ((listRef?: any) => void) = (listRef?: Object) => {
     if (listRef) {
       this.listRef = listRef;
     }
   };
 
-  renderArticlesList = (articlesList: ArticlesList, hideSearchPanel: boolean = false) => {
+  renderArticlesList: ((articlesList: ArticlesList, hideSearchPanel?: boolean) => Node) = (articlesList: ArticlesList, hideSearchPanel: boolean = false) => {
     const {isLoading} = this.props;
 
     return (
@@ -312,9 +320,9 @@ export class KnowledgeBase extends Component<Props, State> {
     );
   };
 
-  getSearchQuery = (): string | null => knowledgeBaseActions.getArticlesQuery();
+  getSearchQuery: (() => string | null) = (): string | null => knowledgeBaseActions.getArticlesQuery();
 
-  renderSearchPanel = () => (
+  renderSearchPanel: (() => Node) = () => (
     <KnowledgeBaseSearchPanel
       query={this.getSearchQuery()}
       onSearch={(query: string) => {
@@ -323,7 +331,7 @@ export class KnowledgeBase extends Component<Props, State> {
     />
   );
 
-  renderActionsBar = () => {
+  renderActionsBar: (() => Node) = () => {
     const {isLoading, articlesList} = this.props;
     const list: ArticlesList = articlesList || [];
     const isToggleButtonEnabled: boolean = (
@@ -359,11 +367,11 @@ export class KnowledgeBase extends Component<Props, State> {
     );
   };
 
-  closeProjectSelect = () => this.setState({isSelectVisible: false});
+  closeProjectSelect: (() => void) = () => this.setState({isSelectVisible: false});
 
-  openProjectSelect = () => this.setState({isSelectVisible: true});
+  openProjectSelect: (() => void) = () => this.setState({isSelectVisible: true});
 
-  renderProjectSelect = () => {
+  renderProjectSelect: (() => Node) = () => {
     const {updateProjectsFavorites} = this.props;
     const projects: Array<ArticleProject> = getStorageState().projects;
     const prevPinnedProjects: Array<ArticleProject> = projects.filter((it: ArticleProject) => it.pinned);
@@ -414,7 +422,7 @@ export class KnowledgeBase extends Component<Props, State> {
     return <SelectSectioned {...selectProps}/>;
   };
 
-  renderNoFavouriteProjects = () => {
+  renderNoFavouriteProjects: (() => Node) = () => {
     return (
       <View style={styles.noProjects}>
         <IconNoProjectFound style={styles.noProjectsIcon}/>
@@ -434,7 +442,7 @@ export class KnowledgeBase extends Component<Props, State> {
     );
   };
 
-  render() {
+  render(): Node {
     const {isLoading, articlesList, error, showContextActions, issuePermissions} = this.props;
 
     return (
@@ -503,4 +511,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(KnowledgeBase);
+export default (connect(mapStateToProps, mapDispatchToProps)(KnowledgeBase): any);

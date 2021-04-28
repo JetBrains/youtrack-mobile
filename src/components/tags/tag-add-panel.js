@@ -39,5 +39,5 @@ const TagAddPanel = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(TagAddPanel);
+export default (React.memo<Props>(TagAddPanel): React$AbstractComponent<Props, mixed>);
 

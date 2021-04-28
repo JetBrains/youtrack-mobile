@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React from 'react';
 import {View, Text, ActivityIndicator, ScrollView} from 'react-native';
 
@@ -21,7 +22,7 @@ type Props = {
 };
 
 
-export default function Mentions(props: Props) {
+export default function Mentions(props: Props): Node {
   const AVATAR_SIZE: number = 24;
   const {mentions, isLoading, onApply, style} = props;
 

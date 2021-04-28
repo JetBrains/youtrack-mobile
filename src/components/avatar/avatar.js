@@ -1,4 +1,5 @@
 /* @flow */
+import type {Node} from 'React';
 import {Image} from 'react-native';
 import React, {PureComponent} from 'react';
 import DefaultAvatar from './default-avatar';
@@ -16,15 +17,15 @@ type State = {
 }
 
 export default class Avatar extends PureComponent<Props, State> {
-  state = {
+  state: State = {
     renderDefault: false,
   };
 
-  handleImageLoadError = () => {
+  handleImageLoadError: (() => void) = () => {
     this.setState({renderDefault: true});
   };
 
-  render() {
+  render(): Node {
     const {source, userName = 'A', size, style} = this.props;
     const {renderDefault} = this.state;
 

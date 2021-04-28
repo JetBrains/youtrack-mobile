@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React from 'react';
 
 import {Text, Image, Dimensions} from 'react-native';
@@ -58,7 +59,7 @@ function findTargetAttach(src: string = '', attachments: Array<Attachment> = [])
   return targetAttach;
 }
 
-export function renderImage({node, index, attachments, imageHeaders, onImagePress}: RenderImageOptions) {
+export function renderImage({node, index, attachments, imageHeaders, onImagePress}: RenderImageOptions): void | Node {
   const targetAttach: Attachment = findTargetAttach(node?.attribs?.src, attachments);
 
   if (targetAttach?.url && !hasMimeType.svg(targetAttach)) {
@@ -89,7 +90,7 @@ export function renderImage({node, index, attachments, imageHeaders, onImagePres
   }
 }
 
-export function renderTableRow(node: Object, index: number, defaultRenderer: Function) {
+export function renderTableRow(node: Object, index: number, defaultRenderer: Function): Node {
   const isBold = node.parent.name === 'thead';
   return (
     <Text key={index} style={[isBold && {
@@ -103,7 +104,7 @@ export function renderTableRow(node: Object, index: number, defaultRenderer: Fun
   );
 }
 
-export function renderTableCell(node: Object, index: number, defaultRenderer: Function) {
+export function renderTableCell(node: Object, index: number, defaultRenderer: Function): Node {
   return (
     <Text numberOfLines={1} key={index} style={{
       width: 40,
@@ -116,7 +117,7 @@ export function renderTableCell(node: Object, index: number, defaultRenderer: Fu
   );
 }
 
-export function renderTable(node: Object, index: number, defaultRenderer: Function) {
+export function renderTable(node: Object, index: number, defaultRenderer: Function): Node {
   return (
     <Text key={index} style={{backgroundColor: EStyleSheet.value('$boxBackground')}}>
       {defaultRenderer(node.children, node.parent)}

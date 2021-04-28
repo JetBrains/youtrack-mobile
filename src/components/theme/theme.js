@@ -11,7 +11,7 @@ import {THEME_MODE_KEY} from '../storage/storage';
 import type {UITheme} from '../../flow/Theme';
 
 export const DEFAULT_THEME: UITheme = lightTheme;
-export const getSystemThemeMode = () => Appearance.getColorScheme();
+export const getSystemThemeMode = (): any => Appearance.getColorScheme();
 export const themes: Array<UITheme> = [lightTheme, darkTheme];
 
 export const getUITheme = (mode: string): UITheme => {
@@ -32,7 +32,7 @@ export const buildStyles = (mode: string, uiTheme: UITheme) => {
   });
 };
 
-export const getThemeMode = async () => {
+export const getThemeMode = async (): Promise<string> => {
   let mode: string;
   try {
     const storedMode: ?string = JSON.parse(await AsyncStorage.getItem(THEME_MODE_KEY));

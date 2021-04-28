@@ -46,4 +46,4 @@ const ArticleContent = (props: Props) => {
 
 };
 
-export default React.memo<Props>(ArticleContent);
+export default (React.memo<Props>(ArticleContent): React$AbstractComponent<Props, mixed>);

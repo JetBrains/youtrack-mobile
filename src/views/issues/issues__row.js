@@ -1,4 +1,5 @@
 /* @flow */
+import type {Node} from 'React';
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
@@ -37,7 +38,7 @@ export default class IssueRow extends Component<Props, void> {
     });
   }
 
-  renderPriority() {
+  renderPriority(): null | Node {
     const priorityField = getPriotityField(this.props.issue);
     if (!priorityField || !priorityField.value || priorityField.value.length === 0) {
       return null;
@@ -54,7 +55,7 @@ export default class IssueRow extends Component<Props, void> {
     );
   }
 
-  render() {
+  render(): Node {
     const {issue, onTagPress} = this.props;
 
     return (

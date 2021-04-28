@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
@@ -65,7 +66,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
     }
   }
 
-  updateVisibility = (visibility: Visibility | null) => {
+  updateVisibility: ((visibility: Visibility | null) => void) = (visibility: Visibility | null) => {
     this.setState({visibility});
     if (this.props.onSubmit) {
       this.props.onSubmit(visibility);
@@ -74,7 +75,16 @@ export default class VisibilityControl extends PureComponent<Props, State> {
     this.props.onApply(visibility);
   };
 
-  getVisibilityOptions = async () => {
+  getVisibilityOptions: (() =>
+  | Promise<
+    {
+      $type: string,
+      implicitPermittedUsers: Array<User>,
+      permittedGroups: Array<UserGroup>,
+      permittedUsers: Array<User>,
+    },
+  >
+  | Promise<Array<any>>) = async () => {
     try {
       return this.props.getOptions();
     } catch (e) {
@@ -82,7 +92,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
     }
   };
 
-  createSelectItems = (visibility: Visibility): Array<User | UserGroup> => {
+  createSelectItems: ((visibility: Visibility) => Array<User | UserGroup>) = (visibility: Visibility): Array<User | UserGroup> => {
     const visibilityGroups: Array<UserGroup> = (
       visibility.visibilityGroups || visibility.permittedGroups || []
     ).filter((group: UserGroup) => !group.allUsersGroup).sort(sortAlphabetically);
@@ -94,24 +104,24 @@ export default class VisibilityControl extends PureComponent<Props, State> {
     return visibilityGroups.concat(visibilityUsers);
   };
 
-  getVisibilitySelectItems = async () => {
+  getVisibilitySelectItems: (() => Promise<Array<User | UserGroup>>) = async () => {
     const visibility: Visibility = await this.getVisibilityOptions();
     return this.createSelectItems(visibility);
   };
 
-  setSelectVisible = (isVisible: boolean) => {
+  setSelectVisible: ((isVisible: boolean) => void) = (isVisible: boolean) => {
     this.setState({isSelectVisible: isVisible});
   };
 
-  openSelect = () => {
+  openSelect: (() => void) = () => {
     this.setSelectVisible(true);
   };
 
-  closeSelect = () => {
+  closeSelect: (() => void) = () => {
     this.setSelectVisible(false);
   };
 
-  onSelect = (selectedItems: ?Array<User | UserGroup>) => {
+  onSelect: ((selectedItems: ?Array<User | UserGroup>) => void) = (selectedItems: ?Array<User | UserGroup>) => {
     const visibility: Visibility = IssueVisibility.visibility({
       permittedGroups: (selectedItems || []).filter(it => hasType.userGroup(it)),
       permittedUsers: (selectedItems || []).filter(it => hasType.user(it)),
@@ -121,11 +131,11 @@ export default class VisibilityControl extends PureComponent<Props, State> {
     this.closeSelect();
   };
 
-  resetVisibility = () => {
+  resetVisibility: (() => void) = () => {
     this.updateVisibility(null);
   };
 
-  getVisibilitySelectedItems = (): Array<User | UserGroup> => {
+  getVisibilitySelectedItems: (() => Array<User | UserGroup>) = (): Array<User | UserGroup> => {
     const {visibility} = this.state;
     return (
       visibility
@@ -134,9 +144,9 @@ export default class VisibilityControl extends PureComponent<Props, State> {
     );
   };
 
-  getItemTitle = (item: Object) => getEntityPresentation(item);
+  getItemTitle: ((item: any) => any) = (item: Object) => getEntityPresentation(item);
 
-  renderSelect() {
+  renderSelect(): Node {
     return (
       <Select
         multi={true}
@@ -159,7 +169,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
     ].filter(Boolean).join(', ');
   }
 
-  renderVisibilityButton() {
+  renderVisibilityButton(): Node {
     const {onSubmit, visibilityDefaultLabel = ''} = this.props;
     const {visibility} = this.state;
 
@@ -210,7 +220,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
   }
 
 
-  render() {
+  render(): Node {
     return (
       <View testID="visibilityControl">
 

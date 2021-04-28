@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
@@ -65,7 +66,7 @@ function renderCollapsedColumn(cell: BoardCell, columnPositionData: Object, isAl
   }
 }
 
-export default function BoardRow(props: Props) {
+export default function BoardRow(props: Props): null | Node {
   const {
     row,
     style,

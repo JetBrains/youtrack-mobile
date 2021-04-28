@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {Component} from 'react';
 import {View, TextInput} from 'react-native';
 
@@ -28,23 +29,23 @@ type Props = {
 const TEXT_UPDATE_DEBOUNCE = 300;
 
 export default class SummaryDescriptionForm extends Component<Props, void> {
-  trackChange = (message: string) => (
+  trackChange: ((message: string) => any | boolean) = (message: string) => (
     typeof this.props.analyticsId === 'string' && usage.trackEvent(this.props.analyticsId, message)
   );
-  trackSummaryChange = once(() => this.trackChange('Summary updated'));
-  trackDescriptionChange = once(() => this.trackChange('Description updated'));
+  trackSummaryChange: any = once(() => this.trackChange('Summary updated'));
+  trackDescriptionChange: any = once(() => this.trackChange('Description updated'));
 
-  onSummaryChange = throttle((text: string) => {
+  onSummaryChange: any = throttle((text: string) => {
     this.trackSummaryChange();
     return this.props.onSummaryChange(text);
   }, TEXT_UPDATE_DEBOUNCE);
 
-  onDescriptionChange = throttle((text: string) => {
+  onDescriptionChange: any = throttle((text: string) => {
     this.trackDescriptionChange();
     return this.props.onDescriptionChange(text);
   }, TEXT_UPDATE_DEBOUNCE);
 
-  render() {
+  render(): Node {
     const {
       editable,
       summary,

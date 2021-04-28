@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import {View, TouchableOpacity} from 'react-native';
 import React, {PureComponent} from 'react';
 
@@ -20,7 +21,7 @@ export type Props = {
 };
 
 export default class SelectItem extends PureComponent<Props, void> {
-  static defaultProps = {
+  static defaultProps: {isSelected: boolean, onPress: (item: any) => void} = {
     isSelected: false,
     onPress: (item: Object) => {},
   };
@@ -29,7 +30,7 @@ export default class SelectItem extends PureComponent<Props, void> {
     return getEntityPresentation(item);
   }
 
-  renderTitle(item: Object) {
+  renderTitle(item: Object): any | string {
     if (this.props.titleRenderer) {
       return this.props.titleRenderer(item);
     }
@@ -37,12 +38,12 @@ export default class SelectItem extends PureComponent<Props, void> {
     return this.getDefaultTitle(item);
   }
 
-  onSelect = () => {
+  onSelect: (() => void) = () => {
     const {item, onPress} = this.props;
     onPress(item);
   }
 
-  render() {
+  render(): null | Node {
     const {item, isSelected, style} = this.props;
 
     if (!item) {

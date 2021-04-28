@@ -240,4 +240,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(() => ({}), mapDispatchToProps)(ErrorBoundary);
+export default (connect(() => ({}), mapDispatchToProps)(ErrorBoundary): any);

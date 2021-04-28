@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {View, Image, Text, TouchableOpacity, ActivityIndicator} from 'react-native';
 
@@ -34,7 +35,7 @@ export default class Home extends PureComponent<Props, State> {
     usage.trackScreenView('Loading');
   }
 
-  render() {
+  render(): Node {
     const {backendUrl, onChangeBackendUrl, error, message, onRetry} = this.props;
     return <ThemeContext.Consumer>
       {(theme: Theme) => {

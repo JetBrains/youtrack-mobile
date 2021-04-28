@@ -27,4 +27,4 @@ const LongText = (props: Props) => {
   />;
 };
 
-export default React.memo<Props>(LongText);
+export default (React.memo<Props>(LongText): React$AbstractComponent<Props, mixed>);

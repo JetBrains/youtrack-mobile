@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
@@ -63,12 +64,12 @@ export default class Diff extends PureComponent<Props, State> {
     return diffInfo;
   }
 
-  createDiff() {
+  createDiff(): any {
     const {text1, text2} = this.props;
     return DiffMatchWord.diff(text1, text2);
   }
 
-  renderDiff() {
+  renderDiff(): Node {
     return (
       <Text
         style={styles.content}
@@ -89,7 +90,7 @@ export default class Diff extends PureComponent<Props, State> {
     );
   }
 
-  render() {
+  render(): Node {
     const {title} = this.props;
     const {collapsed} = this.state;
 

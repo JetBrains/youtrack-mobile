@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React from 'react';
 import {FlatList, TouchableOpacity} from 'react-native';
 
@@ -22,7 +23,7 @@ type ColumnProps = {
   zoomedIn?: boolean
 }
 
-export default function AgileRowColumn(props: ColumnProps) {
+export default function AgileRowColumn(props: ColumnProps): Node {
   const {cell, uiTheme, zoomedIn} = props;
   const issues: Array<IssueFull> = cell.issues || [];
 

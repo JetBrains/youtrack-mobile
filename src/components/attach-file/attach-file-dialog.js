@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {View, Text, Image, TouchableOpacity, ActivityIndicator} from 'react-native';
 
@@ -70,20 +71,20 @@ export default class AttachFileDialog extends PureComponent<Props, State> {
     }
   }
 
-  toggleAttachingProgress = (isAttaching: boolean) => {
+  toggleAttachingProgress: ((isAttaching: boolean) => void) = (isAttaching: boolean) => {
     if (this._isMounted) {
       this.setState({isAttaching});
     }
   };
 
-  attachFile = () => {
+  attachFile: (() => void) = () => {
     if (this.state.attach) {
       this.toggleAttachingProgress(true);
       this.props.onAttach(this.state.attach, () => this.toggleAttachingProgress(false));
     }
   };
 
-  updateAttachVisibility = (visibility: Visibility | null) => {
+  updateAttachVisibility: ((visibility: Visibility | null) => void) = (visibility: Visibility | null) => {
     this.setState({
       attach: {
         ...this.state.attach,
@@ -92,11 +93,11 @@ export default class AttachFileDialog extends PureComponent<Props, State> {
     });
   };
 
-  onCancel = () => {
+  onCancel: (() => void) = () => {
     !this.state.isAttaching && this.props.onCancel();
   }
 
-  render() {
+  render(): Node {
     const {actions, attach, uiTheme, hideVisibility} = this.props;
     const dimensions: ?ImageDimensions = attach && calculateAspectRatio(attach.dimensions);
     const hasAttach: boolean = !!attach;

@@ -23,7 +23,11 @@ import type {Attachment} from '../../flow/CustomFields';
 
 type ApiGetter = () => Api;
 
-const updateArticleDraft = (articleDraft: Article) => {
+const updateArticleDraft = (articleDraft: Article): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter
+) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
 
@@ -37,7 +41,11 @@ const updateArticleDraft = (articleDraft: Article) => {
   };
 };
 
-const createArticleDraft = (articleId?: string) => {
+const createArticleDraft = (articleId?: string): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter
+) => Promise<void> | Promise<any>) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
 
@@ -57,7 +65,11 @@ const createArticleDraft = (articleId?: string) => {
   };
 };
 
-const publishArticleDraft = (articleDraft: Article) => {
+const publishArticleDraft = (articleDraft: Article): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter
+) => Promise<void> | Promise<any>) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
 
@@ -79,30 +91,34 @@ const publishArticleDraft = (articleDraft: Article) => {
   };
 };
 
-const setDraft = (articleDraft: Article | null) => {
+const setDraft = (articleDraft: Article | null): ((dispatch: (any) => any) => Promise<void>) => {
   return async (dispatch: (any) => any) => {
     dispatch(setArticleDraft(articleDraft));
   };
 };
 
-const showAddAttachDialog = () => {
+const showAddAttachDialog = (): ((dispatch: (any) => any) => Promise<void>) => {
   return async (dispatch: (any) => any) => {
     dispatch(attachmentActions.toggleAttachFileDialog(true));
   };
 };
 
-const cancelAddAttach = (attach: Attachment) => {
+const cancelAddAttach = (attach: Attachment): ((dispatch: (any) => any) => Promise<void>) => {
   return async (dispatch: (any) => any) => {
     await dispatch(attachmentActions.cancelImageAttaching(attach));
   };
 };
-const hideAddAttachDialog = () => {
+const hideAddAttachDialog = (): ((dispatch: (any) => any) => Promise<void>) => {
   return async (dispatch: (any) => any) => {
     dispatch(attachmentActions.toggleAttachFileDialog(false));
   };
 };
 
-const uploadFile = (attach: Attachment) => {
+const uploadFile = (attach: Attachment): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter
+) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const articleDraft: ArticleDraft = getState().articleCreate.articleDraft || {};
@@ -122,7 +138,11 @@ const uploadFile = (attach: Attachment) => {
   };
 };
 
-const loadAttachments = () => {
+const loadAttachments = (): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter
+) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const articleDraft: ArticleDraft = getState().articleCreate.articleDraft || {};
@@ -138,7 +158,11 @@ const loadAttachments = () => {
   };
 };
 
-const deleteDraftAttachment = (attachmentId: string) => {
+const deleteDraftAttachment = (attachmentId: string): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter
+) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const articleDraft: ArticleDraft = getState().articleCreate.articleDraft;
@@ -158,7 +182,7 @@ const deleteDraftAttachment = (attachmentId: string) => {
   };
 };
 
-const deleteDraft = () => {
+const deleteDraft = (): ((dispatch: (any) => any, getState: () => AppState) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState) => {
     const articleDraft: ArticleDraft = getState().articleCreate.articleDraft;
 

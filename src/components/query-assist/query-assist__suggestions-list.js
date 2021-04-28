@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, Platform, SectionList, ActivityIndicator} from 'react-native';
 
@@ -23,13 +24,13 @@ type Props = {
 
 export default class QueryAssistSuggestionsList extends Component<Props, void> {
 
-  onApplySuggestion = (suggestion: TransformedSuggestion | SavedQuery) => {
+  onApplySuggestion: ((suggestion: TransformedSuggestion | SavedQuery) => any) = (suggestion: TransformedSuggestion | SavedQuery) => {
     const isSuggestion = suggestion.caret;
     const {onApplySuggestion, onApplySavedQuery} = this.props;
     return isSuggestion ? onApplySuggestion(suggestion) : onApplySavedQuery(suggestion);
   };
 
-  renderRow = ({item}: TransformedSuggestion | SavedQuery) => {
+  renderRow: ((TransformedSuggestion | SavedQuery) => Node) = ({item}: TransformedSuggestion | SavedQuery) => {
     const isSuggestion = item.caret;
 
     return (
@@ -42,7 +43,7 @@ export default class QueryAssistSuggestionsList extends Component<Props, void> {
     );
   };
 
-  renderSectionHeader = ({section}: Object) => {
+  renderSectionHeader: ((any) => void | Node) = ({section}: Object) => {
     if (section.title) {
       return (
         <View style={styles.sectionHeader}>
@@ -52,7 +53,7 @@ export default class QueryAssistSuggestionsList extends Component<Props, void> {
     }
   };
 
-  render() {
+  render(): Node {
     const {suggestions, style} = this.props;
 
     return (

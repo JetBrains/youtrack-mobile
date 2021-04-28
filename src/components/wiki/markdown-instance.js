@@ -9,4 +9,4 @@ function MarkdownItInstance() {
 }
 
 
-export default new MarkdownItInstance();
+export default (new MarkdownItInstance(): any);

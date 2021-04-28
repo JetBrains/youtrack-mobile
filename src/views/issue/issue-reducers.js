@@ -113,7 +113,7 @@ const attachReducers = {
   },
 };
 
-export default createReducer(initialState, {
+export default (createReducer(initialState, {
   ...attachReducers,
 
   [ON_NAVIGATE_BACK]: (state: State, action: { closingView: { routeName: string, params: { issueId?: string } } }): State => {
@@ -292,4 +292,4 @@ export default createReducer(initialState, {
       ...action,
     };
   },
-});
+}): any);

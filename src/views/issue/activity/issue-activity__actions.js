@@ -1,6 +1,7 @@
 /* @flow */
 
-import * as activityHelper from './issue-activity__helper';
+import type {CustomError} from "../../../flow/Error";
+import type {ActivityType} from "../../../flow/Activity";import * as activityHelper from './issue-activity__helper';
 import * as types from '../issue-action-types';
 import log from '../../../components/log/log';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from '../../../components/analytics/analytics-ids';
@@ -23,19 +24,23 @@ type ApiGetter = () => Api;
 type StateGetter = () => { issueState: SingleIssueState };
 
 
-export function receiveActivityAPIAvailability(activitiesEnabled: boolean) {
+export function receiveActivityAPIAvailability(activitiesEnabled: boolean): {activitiesEnabled: boolean, type: any} {
   return {type: types.RECEIVE_ACTIVITY_API_AVAILABILITY, activitiesEnabled};
 }
 
-export function receiveActivityPage(activityPage: Array<Activity> | null) {
+export function receiveActivityPage(activityPage: Array<Activity> | null): {activityPage: Array<Activity> | null, type: any} {
   return {type: types.RECEIVE_ACTIVITY_PAGE, activityPage};
 }
 
-export function receiveActivityPageError(error: Error) {
+export function receiveActivityPageError(error: Error): {error: Error, type: any} {
   return {type: types.RECEIVE_ACTIVITY_ERROR, error};
 }
 
-export function receiveActivityEnabledTypes() {
+export function receiveActivityEnabledTypes(): {
+  issueActivityEnabledTypes: Array<ActivityType>,
+  issueActivityTypes: Array<ActivityType>,
+  type: any,
+} {
   return {
     type: types.RECEIVE_ACTIVITY_CATEGORIES,
     issueActivityTypes: getActivityAllTypes(),
@@ -43,7 +48,11 @@ export function receiveActivityEnabledTypes() {
   };
 }
 
-export function loadActivitiesPage(doNotReset: boolean = false) {
+export function loadActivitiesPage(doNotReset: boolean = false): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().issueState.issueId;
     const api: Api = getApi();
@@ -71,7 +80,11 @@ export function loadActivitiesPage(doNotReset: boolean = false) {
   };
 }
 
-export function getTimeTracking() {
+export function getTimeTracking(): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<null> | Promise<any>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().issueState.issueId;
     const api: Api = getApi();
@@ -91,7 +104,11 @@ export function getTimeTracking() {
   };
 }
 
-export function updateWorkItemDraft(draft: WorkItem) {
+export function updateWorkItemDraft(draft: WorkItem): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<null> | Promise<any>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
     const issueId = getState().issueState.issueId;
@@ -132,7 +149,11 @@ export function updateWorkItem() {
   });
 }
 
-export function createWorkItem(draft: WorkItem) {
+export function createWorkItem(draft: WorkItem): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<CustomError> | Promise<any>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
     const issueId = getState().issueState.issueId;
@@ -152,7 +173,11 @@ export function createWorkItem(draft: WorkItem) {
   };
 }
 
-export function deleteWorkItemDraft() {
+export function deleteWorkItemDraft(): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
     const issueId = getState().issueState.issueId;
@@ -166,7 +191,11 @@ export function deleteWorkItemDraft() {
   };
 }
 
-export function getWorkItemAuthors() {
+export function getWorkItemAuthors(): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<any> | Promise<Array<any>>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
     const project: Folder = getState().issueState.issue.project;
@@ -192,7 +221,11 @@ export function getWorkItemAuthors() {
   };
 }
 
-export function getWorkItemTypes() {
+export function getWorkItemTypes(): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<any> | Promise<{...}>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
     const projectId: string = getState().issueState.issue.project.id;
@@ -211,7 +244,11 @@ export function getWorkItemTypes() {
   };
 }
 
-export function deleteWorkItem(workItem: WorkItem) {
+export function deleteWorkItem(workItem: WorkItem): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<any>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
     const issueId: string = getState().issueState.issueId;

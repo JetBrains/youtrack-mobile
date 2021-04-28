@@ -18,7 +18,7 @@ export function notifyError(message: string, err: Object): Promise<null> {
   return resolveError(err).then(extracted => showErrorMessage(message, extracted));
 }
 
-export function notify(message: string, error?: Object, duration: number = NOTIFY_DURATION) {
+export function notify(message: string, error?: Object, duration: number = NOTIFY_DURATION): any {
   if (error) {
     log.warn(message, error);
   }

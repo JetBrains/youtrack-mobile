@@ -8,7 +8,7 @@ import type {User} from '../../flow/User';
 
 export default class IssueVisibility {
 
-  static visibility(visibility: Visibility, isLimited: boolean = false) {
+  static visibility(visibility: Visibility, isLimited: boolean = false): Visibility {
     const _visibility: Visibility = Object.assign(
       {
         permittedUsers: [],
@@ -77,7 +77,7 @@ export default class IssueVisibility {
     return [...(visibility.permittedGroups || []), ...(visibility.permittedUsers || [])];
   }
 
-  static getVisibilityPresentation(visibility: Visibility = {}) {
+  static getVisibilityPresentation(visibility: Visibility = {}): string {
     return IssueVisibility.getVisibilityAsArray(visibility)
       .map(it => getEntityPresentation(it))
       .join(', ');

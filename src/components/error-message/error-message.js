@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
@@ -49,7 +50,7 @@ export default class ErrorMessage extends PureComponent<Props, State> {
     });
   }
 
-  render() {
+  render(): null | Node {
     const {errorMessageData} = this.state;
     const {onTryAgain, style, testID} = this.props;
 

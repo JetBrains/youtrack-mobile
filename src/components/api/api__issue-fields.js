@@ -3,7 +3,7 @@ import ApiHelper from './api__helper';
 
 const toField = ApiHelper.toField;
 
-const ISSUE_PROJECT_FIELDS = toField([
+const ISSUE_PROJECT_FIELDS: any = toField([
   '$type',
   'id',
   'name',
@@ -26,14 +26,14 @@ const ISSUE_USER_BASE_FIELDS = toField([
   'id',
   'fullName',
 ]);
-const ISSUE_USER_FIELDS = toField([
+const ISSUE_USER_FIELDS: any = toField([
   ISSUE_USER_BASE_FIELDS,
   'login',
   'ringId',
   'avatarUrl',
 ]);
 
-const BUNDLE_VALUE = toField([
+const BUNDLE_VALUE: any = toField([
   '$type',
   'id',
   'name',
@@ -136,7 +136,7 @@ const ISSUE_FIELD_SHORT_FIELDS = toField([
   },
 ]);
 
-const ISSUE_TAGS_FIELDS = toField([
+const ISSUE_TAGS_FIELDS: any = toField([
   'name',
   'id',
   'query',
@@ -145,7 +145,7 @@ const ISSUE_TAGS_FIELDS = toField([
   },
 ]);
 
-const ISSUE_ATTACHMENTS_FIELDS = toField([
+const ISSUE_ATTACHMENTS_FIELDS: any = toField([
   'id',
   'name',
   'url',
@@ -162,7 +162,7 @@ const USER_GROUP_FIELDS = toField([
   'allUsersGroup',
 ]);
 
-const VISIBILITY_FIELDS = toField([{
+const VISIBILITY_FIELDS: any = toField([{
   visibility: toField([
     '$type',
     {
@@ -177,7 +177,7 @@ const VISIBILITY_FIELDS = toField([{
   ]),
 }]);
 
-const GET_VISIBILITY_FIELDS = toField([
+const GET_VISIBILITY_FIELDS: any = toField([
   '$type',
   {
     visibilityGroups: USER_GROUP_FIELDS,
@@ -186,7 +186,7 @@ const GET_VISIBILITY_FIELDS = toField([
   },
 ]);
 
-const ISSUE_COMMENTS_FIELDS = toField([
+const ISSUE_COMMENTS_FIELDS: any = toField([
   'id',
   'created',
   'deleted',
@@ -197,7 +197,7 @@ const ISSUE_COMMENTS_FIELDS = toField([
   VISIBILITY_FIELDS,
 ]);
 
-const ISSUE_COMMENTS_WITH_ATTACHMENT_FIELDS = toField([
+const ISSUE_COMMENTS_WITH_ATTACHMENT_FIELDS: any = toField([
   'id',
   'created',
   'deleted',
@@ -215,7 +215,7 @@ const ISSUE_COMMENTS_WITH_ATTACHMENT_FIELDS = toField([
   },
 ]);
 
-const ISSUE_COMMENTS_REMOVED = toField([
+const ISSUE_COMMENTS_REMOVED: any = toField([
   'id',
   'created',
   'deleted',
@@ -230,12 +230,12 @@ const ISSUE_BASE_FIELDS = toField([
   'updated',
 ]);
 
-const ISSUE_XSHORT_FIELDS = toField([
+const ISSUE_XSHORT_FIELDS: any = toField([
   ISSUE_BASE_FIELDS,
   {project: ISSUE_PROJECT_FIELDS},
 ]);
 
-const ISSUE_SHORT_FIELDS = toField([
+const ISSUE_SHORT_FIELDS: any = toField([
   ISSUE_XSHORT_FIELDS,
   {reporter: ISSUE_USER_FIELDS},
   {fields: ISSUE_FIELD_SHORT_FIELDS},
@@ -257,7 +257,7 @@ const ISSUE_LINKS_FIELDS = toField([
   },
 ]);
 
-const ISSUE_FOLDER_FIELDS = toField([
+const ISSUE_FOLDER_FIELDS: any = toField([
   'id',
   'name',
   'query',
@@ -279,7 +279,7 @@ const SUGGESTION_FIELDS = toField([
   'suffix',
 ]);
 
-const COMMAND_SUGGESTION_FIELDS = toField([
+const COMMAND_SUGGESTION_FIELDS: any = toField([
   'query',
   'caret',
   {commands: ['description', 'error', 'delete']},
@@ -289,7 +289,7 @@ const COMMAND_SUGGESTION_FIELDS = toField([
 const USER_AGREEMENT_FIELDS = 'endUserAgreement(enabled,text,majorVersion,minorVersion)';
 const USER_CONSENT_FIELDS = 'endUserAgreementConsent(accepted,majorVersion,minorVersion)';
 
-const REACTION = toField([
+const REACTION: any = toField([
   'id',
   'reaction',
   {author: ISSUE_USER_FIELDS},
@@ -301,7 +301,7 @@ const ISSUE_WORK_ITEMS_DURATION_FIELDS = toField([
   'presentation',
 ]);
 
-const ISSUE_WORK_ITEMS_FIELDS = toField([
+const ISSUE_WORK_ITEMS_FIELDS: any = toField([
   'id',
   'text',
   'name',
@@ -328,7 +328,7 @@ const ISSUE_WORK_ITEM_TEMPLATE = toField([
     ]),
   }]);
 
-const ISSUE_TIME_TRACKING_WITH_DRAFT_FIELDS = toField([
+const ISSUE_TIME_TRACKING_WITH_DRAFT_FIELDS: any = toField([
   'enabled',
   {
     draftWorkItem: ISSUE_WORK_ITEMS_FIELDS,
@@ -339,10 +339,10 @@ const ISSUE_TIME_TRACKING_WITH_DRAFT_FIELDS = toField([
 export default {
   attachments: ISSUE_ATTACHMENTS_FIELDS,
   issuesOnList: ISSUE_SHORT_FIELDS,
-  singleIssueLinks: toField({
+  singleIssueLinks: (toField({
     links: ISSUE_LINKS_FIELDS,
-  }),
-  singleIssue: toField([
+  }): any),
+  singleIssue: (toField([
     'id',
     'idReadable',
     'summary',
@@ -362,9 +362,9 @@ export default {
     {tags: ISSUE_TAGS_FIELDS},
     {attachments: ISSUE_ATTACHMENTS_FIELDS},
     VISIBILITY_FIELDS,
-  ]),
+  ]): any),
   projectOnList: ISSUE_PROJECT_FIELDS,
-  project: toField([
+  project: (toField([
     'id',
     'name',
     'shortName',
@@ -373,13 +373,13 @@ export default {
     {createdBy: ISSUE_USER_FIELDS},
     'ringId',
     {fields: PROJECT_CUSTOM_FIELD_FIELDS},
-  ]),
-  bundle: toField([
+  ]): any),
+  bundle: (toField([
     'id',
     'isUpdateable',
     {values: BUNDLE_VALUE},
     {aggregatedUsers: ISSUE_USER_FIELDS},
-  ]),
+  ]): any),
   bundleValues: BUNDLE_VALUE,
   user: ISSUE_USER_FIELDS,
   issueComment: ISSUE_COMMENTS_FIELDS,

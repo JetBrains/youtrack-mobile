@@ -9,7 +9,7 @@ const middlewares = [thunk.withExtraArgument(getApi)];
 
 const createStoreWithMiddleware = applyMiddleware(...middlewares)(createStore);
 
-const store = createStoreWithMiddleware(
+const store: any = createStoreWithMiddleware(
   reducer,
   global.__REDUX_DEVTOOLS_EXTENSION__ && global.__REDUX_DEVTOOLS_EXTENSION__()
 );

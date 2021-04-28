@@ -23,7 +23,7 @@ const attachFileMethod: Object = {
   openPicker: 'openPicker',
 };
 
-export const getAttachmentActions = (prefix: string) => {
+export const getAttachmentActions = (prefix: string): any => {
   const types: Object = createAttachmentTypes(prefix);
 
   const actions: Object = {

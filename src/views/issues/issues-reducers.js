@@ -46,7 +46,7 @@ export const initialState: IssuesState = {
   isSearchContextPinned: false,
 };
 
-export default createReducer(initialState, {
+export default (createReducer(initialState, {
   [LOG_OUT]: (state: IssuesState): IssuesState => {
     return initialState;
   },
@@ -134,4 +134,4 @@ export default createReducer(initialState, {
       isSearchContextPinned: action.isSearchContextPinned,
     };
   },
-});
+}): any);

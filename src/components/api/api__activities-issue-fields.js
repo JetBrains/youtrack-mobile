@@ -11,7 +11,7 @@ const ISSUE_ACTIVITIES_EVENT_BASE = toField([
   'color(id)',
 ]);
 
-const ISSUE_ATTACHMENT_FIELDS = toField([
+const ISSUE_ATTACHMENT_FIELDS: any = toField([
   'id',
   'url',
   'mimeType',
@@ -97,10 +97,10 @@ export {
   ISSUE_ATTACHMENT_FIELDS,
 };
 
-export default toField([
+export default (toField([
   'cursor',
   'till',
   {
     activities: ISSUE_ACTIVITIES_FIELDS,
   },
-]);
+]): any);

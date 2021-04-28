@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
@@ -15,7 +16,7 @@ type Props = {
 
 export default class Popup extends PureComponent<Props, void> {
 
-  render() {
+  render(): Node {
     const {onHide, childrenRenderer} = this.props;
 
     return (

@@ -77,4 +77,4 @@ class ReporterBugsnag {
   }
 }
 
-export default new ReporterBugsnag();
+export default (new ReporterBugsnag(): ReporterBugsnag);

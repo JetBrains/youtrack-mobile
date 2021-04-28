@@ -21,55 +21,55 @@ type ApiGetter = () => Api;
 
 export const CATEGORY_NAME = 'Create issue view';
 
-export function setIssueDraft(issue: IssueFull) {
+export function setIssueDraft(issue: IssueFull): {issue: IssueFull, type: any} {
   return {type: types.SET_ISSUE_DRAFT, issue};
 }
 
-export function resetIssueDraftId() {
+export function resetIssueDraftId(): {type: any} {
   return {type: types.RESET_ISSUE_DRAFT};
 }
 
-export function setPredefinedDraftId(draftId: string) {
+export function setPredefinedDraftId(draftId: string): {draftId: string, type: any} {
   return {type: types.SET_ISSUE_PREDEFINED_DRAFT_ID, draftId};
 }
 
-export function setDraftProjectId(projectId: string) {
+export function setDraftProjectId(projectId: string): {projectId: string, type: any} {
   return {type: types.SET_DRAFT_PROJECT_ID, projectId};
 }
 
-export function setIssueProject(project: Object) {
+export function setIssueProject(project: Object): {project: any, type: any} {
   return {type: types.SET_ISSUE_PROJECT, project};
 }
 
-export function resetIssueCreation() {
+export function resetIssueCreation(): {type: any} {
   return {type: types.RESET_CREATION};
 }
 
-export function clearDraftProject() {
+export function clearDraftProject(): {type: any} {
   return {type: types.CLEAR_DRAFT_PROJECT};
 }
 
-export function setIssueSummary(summary: string) {
+export function setIssueSummary(summary: string): {summary: string, type: any} {
   return {type: types.SET_ISSUE_SUMMARY, summary};
 }
 
-export function setIssueDescription(description: string) {
+export function setIssueDescription(description: string): {description: string, type: any} {
   return {type: types.SET_ISSUE_DESCRIPTION, description};
 }
 
-export function startIssueCreation() {
+export function startIssueCreation(): {type: any} {
   return {type: types.START_ISSUE_CREATION};
 }
 
-export function stopIssueCreation() {
+export function stopIssueCreation(): {type: any} {
   return {type: types.STOP_ISSUE_CREATION};
 }
 
-export function issueCreated(issue: IssueFull, preDefinedDraftId: ?string) {
+export function issueCreated(issue: IssueFull, preDefinedDraftId: ?string): {issue: IssueFull, preDefinedDraftId: ?string, type: any} {
   return {type: types.ISSUE_CREATED, issue, preDefinedDraftId};
 }
 
-export function setIssueFieldValue(field: CustomField, value: FieldValue) {
+export function setIssueFieldValue(field: CustomField, value: FieldValue): {field: CustomField, type: any, value: FieldValue} {
   return {type: types.SET_ISSUE_FIELD_VALUE, field, value};
 }
 
@@ -85,7 +85,7 @@ async function storeIssueDraftId(draftId: string) {
   return await flushStoragePart({draftId});
 }
 
-export function storeDraftAndGoBack() {
+export function storeDraftAndGoBack(): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     await dispatch(updateIssueDraft());
     Router.pop(true);
@@ -94,7 +94,7 @@ export function storeDraftAndGoBack() {
   };
 }
 
-export function loadStoredProject() {
+export function loadStoredProject(): ((dispatch: (any) => any) => Promise<void> | Promise<mixed>) {
   return async (dispatch: (any) => any) => {
     const projectId = getStorageState().projectId;
     if (projectId) {
@@ -105,7 +105,11 @@ export function loadStoredProject() {
   };
 }
 
-export function loadIssueFromDraft(draftId: string) {
+export function loadIssueFromDraft(draftId: string): ((
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
     try {
@@ -121,7 +125,11 @@ export function loadIssueFromDraft(draftId: string) {
   };
 }
 
-export function applyCommandForDraft(command: string) {
+export function applyCommandForDraft(command: string): ((
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const draftId = getState().creation.issue.id;
 
@@ -181,7 +189,7 @@ export function updateIssueDraft(ignoreFields: boolean = false, draftData?: Obje
   };
 }
 
-export function initializeWithDraftOrProject(preDefinedDraftId: ?string) {
+export function initializeWithDraftOrProject(preDefinedDraftId: ?string): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     if (preDefinedDraftId) {
       dispatch(setPredefinedDraftId(preDefinedDraftId));
@@ -224,7 +232,7 @@ export function createIssue() {
   };
 }
 
-export function updateProject(project: Object) {
+export function updateProject(project: Object): ((dispatch: (any) => any, getState: () => any) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object) => {
     dispatch(setIssueProject(project));
 
@@ -235,7 +243,11 @@ export function updateProject(project: Object) {
   };
 }
 
-export function updateFieldValue(field: CustomField, value: FieldValue) {
+export function updateFieldValue(field: CustomField, value: FieldValue): ((
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     dispatch(setIssueFieldValue(field, value));
     usage.trackEvent(CATEGORY_NAME, 'Change field value');
@@ -257,46 +269,50 @@ export function updateFieldValue(field: CustomField, value: FieldValue) {
   };
 }
 
-export function uploadAttach(attach: Attachment) {
+export function uploadAttach(attach: Attachment): ((dispatch: (any) => any, getState: () => any) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object) => {
     const draftId = getState().creation.issue.id;
     await dispatch(attachmentActions.uploadFile(attach, draftId));
   };
 }
 
-export function cancelAddAttach(attach: Attachment) {
+export function cancelAddAttach(attach: Attachment): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     await dispatch(attachmentActions.cancelImageAttaching(attach));
   };
 }
 
-export function loadAttachments() {
+export function loadAttachments(): ((dispatch: (any) => any, getState: () => any) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object) => {
     const draftId = getState().creation.issue.id;
     dispatch(attachmentActions.loadIssueAttachments(draftId));
   };
 }
 
-export function showAddAttachDialog() {
+export function showAddAttachDialog(): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     dispatch(attachmentActions.toggleAttachFileDialog(true));
   };
 }
 
-export function hideAddAttachDialog() {
+export function hideAddAttachDialog(): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     dispatch(attachmentActions.toggleAttachFileDialog(false));
   };
 }
 
-export function removeAttachment(attach: Attachment) {
+export function removeAttachment(attach: Attachment): ((dispatch: (any) => any, getState: () => any) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object) => {
     const draftId = getState().creation.issue.id;
     dispatch(attachmentActions.removeAttachment(attach, draftId));
   };
 }
 
-export function updateVisibility(visibility: Visibility) {
+export function updateVisibility(visibility: Visibility): ((
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const draftIssue = getState().creation.issue;
     const draftIssueCopy = {...draftIssue};

@@ -32,4 +32,4 @@ const IssuesCount = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(IssuesCount);
+export default (React.memo<Props>(IssuesCount): React$AbstractComponent<Props, mixed>);

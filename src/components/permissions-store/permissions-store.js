@@ -15,7 +15,7 @@ class PermissionsStore {
     this.permissionsMap = new Map(permissionsWithProjects.map(it => [it.permission.key, it]));
   }
 
-  has(permissionId: string, projectId?: string) {
+  has(permissionId: string, projectId?: string): boolean {
     const permission: PermissionCacheItem = this.permissionsMap.get(permissionId);
     if (!permission) {
       return false;
@@ -32,11 +32,11 @@ class PermissionsStore {
     return permission.projectIds.length > 0;
   }
 
-  hasEvery(permissionIds: Array<string>, projectId: string) {
+  hasEvery(permissionIds: Array<string>, projectId: string): boolean {
     return (permissionIds || []).every(permissionId => this.has(permissionId, projectId));
   }
 
-  hasSome(permissionIds: Array<string>, projectId: string) {
+  hasSome(permissionIds: Array<string>, projectId: string): boolean {
     return (permissionIds || []).some(permissionId => this.has(permissionId, projectId));
   }
 }

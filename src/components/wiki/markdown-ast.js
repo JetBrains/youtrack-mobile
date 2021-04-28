@@ -30,7 +30,7 @@ const MarkdownAST = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(
+export default (React.memo<Props>(
   MarkdownAST,
   (prevProps: Props, nextProps: Props) => prevProps.ast === nextProps.ast
-);
+): React$AbstractComponent<Props, mixed>);

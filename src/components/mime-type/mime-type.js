@@ -1,6 +1,6 @@
 /* @flow */
 
-export const hasMimeType = function(mimeType: string) {
+export const hasMimeType = function(mimeType: string): ((file: any) => any | boolean) {
   return function(file: Object) {
     return mimeType && file && file.mimeType ? file.mimeType.includes(mimeType) : false;
   };

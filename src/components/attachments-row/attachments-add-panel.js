@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 
@@ -15,7 +16,7 @@ type Props = {
 }
 
 
-const AttachmentAddPanel = (props: Props) => {
+const AttachmentAddPanel = (props: Props): Node => {
   return (
     <View style={styles.attachButtonsContainer}>
       <TouchableOpacity

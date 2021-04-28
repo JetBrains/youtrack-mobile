@@ -30,4 +30,4 @@ const Separator = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(Separator);
+export default (React.memo<Props>(Separator): React$AbstractComponent<Props, mixed>);

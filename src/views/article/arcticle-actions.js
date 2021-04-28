@@ -36,9 +36,9 @@ import type {Attachment, IssueComment} from '../../flow/CustomFields';
 type ApiGetter = () => Api;
 
 
-const clearArticle = () => async (dispatch: (any) => any) => dispatch(setArticle(null));
+const clearArticle = (): ((dispatch: (any) => any) => Promise<any>) => async (dispatch: (any) => any) => dispatch(setArticle(null));
 
-const loadArticleFromCache = (article: Article) => {
+const loadArticleFromCache = (article: Article): ((dispatch: (any) => any) => Promise<void>) => {
   return async (dispatch: (any) => any) => {
     const cachedArticleLastVisited: {
       article?: Article,
@@ -55,7 +55,11 @@ const loadArticleFromCache = (article: Article) => {
   };
 };
 
-const loadArticle = (articleId: string, reset: boolean = true) => {
+const loadArticle = (articleId: string, reset: boolean = true): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter
+) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
 
@@ -80,7 +84,7 @@ const loadArticle = (articleId: string, reset: boolean = true) => {
   };
 };
 
-const loadCachedActivitiesPage = () => {
+const loadCachedActivitiesPage = (): ((dispatch: (any) => any) => Promise<void>) => {
   return async (dispatch: (any) => any) => {
     const cachedArticleLastVisited: {
       article?: Article,
@@ -92,7 +96,11 @@ const loadCachedActivitiesPage = () => {
   };
 };
 
-const loadActivitiesPage = (reset: boolean = true) => {
+const loadActivitiesPage = (reset: boolean = true): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter
+) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {article}: Article = getState().article;
@@ -122,7 +130,11 @@ const showArticleActions = (
   renderBreadCrumbs: Function,
   canStar: boolean,
   hasStar: boolean
-) => {
+): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter
+) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {article} = getState().article;
@@ -261,7 +273,11 @@ export const createArticleDraft = async (
   return articleDraft;
 };
 
-const deleteArticle = (article: Article, onAfterDelete?: () => any) => {
+const deleteArticle = (article: Article, onAfterDelete?: () => any): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter
+) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const isDraft: boolean = hasType.articleDraft(article);
@@ -284,7 +300,7 @@ const deleteArticle = (article: Article, onAfterDelete?: () => any) => {
   };
 };
 
-const setPreviousArticle = () => {
+const setPreviousArticle = (): ((dispatch: (any) => any, getState: () => AppState) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState) => {
     const articleState: ArticleState = getState().article;
     dispatch(setPrevArticle(articleState));
@@ -307,7 +323,7 @@ const createArticleCommentDraft = (commentDraftText: string) => {
   };
 };
 
-const getArticleCommentDraft = () => {
+const getArticleCommentDraft = (): ((dispatch: (any) => any, getState: () => AppState) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState) => {
     const api: Api = getApi();
     const {article}: Article = getState().article;
@@ -319,7 +335,7 @@ const getArticleCommentDraft = () => {
   };
 };
 
-const updateArticleCommentDraft = (commentDraftText: string) => {
+const updateArticleCommentDraft = (commentDraftText: string): ((dispatch: (any) => any, getState: () => AppState) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState) => {
     const api: Api = getApi();
     const {article}: Article = getState().article;
@@ -338,7 +354,7 @@ const updateArticleCommentDraft = (commentDraftText: string) => {
   };
 };
 
-const submitArticleCommentDraft = (commentDraftText: string) => {
+const submitArticleCommentDraft = (commentDraftText: string): ((dispatch: (any) => any, getState: () => AppState) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState) => {
     const api: Api = getApi();
     const {article}: Article = getState().article;
@@ -355,7 +371,7 @@ const submitArticleCommentDraft = (commentDraftText: string) => {
   };
 };
 
-const updateArticleComment = (comment: IssueComment) => {
+const updateArticleComment = (comment: IssueComment): ((dispatch: (any) => any, getState: () => AppState) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState) => {
     const api: Api = getApi();
     const {article}: Article = getState().article;
@@ -370,7 +386,7 @@ const updateArticleComment = (comment: IssueComment) => {
   };
 };
 
-const deleteArticleComment = (commentId: string) => {
+const deleteArticleComment = (commentId: string): ((dispatch: (any) => any, getState: () => AppState) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState) => {
     const api: Api = getApi();
     const {article}: Article = getState().article;
@@ -405,7 +421,11 @@ const showArticleCommentActions = (
   comment: IssueComment,
   activityId: string,
   canDeleteComment: boolean
-) => {
+): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter
+) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {article} = getState().article;
@@ -466,7 +486,11 @@ const showArticleCommentActions = (
   };
 };
 
-const getMentions = (query: string) => {
+const getMentions = (query: string): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter
+) => Promise<null> | Promise<any>) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {article} = getState().article;
@@ -481,7 +505,11 @@ const getMentions = (query: string) => {
   };
 };
 
-const toggleFavorite = () => {
+const toggleFavorite = (): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter
+) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {article} = getState().article;
@@ -497,7 +525,11 @@ const toggleFavorite = () => {
   };
 };
 
-const deleteAttachment = (attachmentId: string) => {
+const deleteAttachment = (attachmentId: string): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter
+) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {article} = getState().article;
@@ -517,7 +549,11 @@ const deleteAttachment = (attachmentId: string) => {
   };
 };
 
-const createSubArticle = (renderBreadCrumbs: Function) => {
+const createSubArticle = (renderBreadCrumbs: Function): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter
+) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {article} = getState().article;

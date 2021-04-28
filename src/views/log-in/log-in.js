@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import {
   Image,
   View,
@@ -79,11 +80,11 @@ export class LogIn extends Component<Props, State> {
     usage.trackScreenView('Login form');
   }
 
-  focusOnPassword = () => {
+  focusOnPassword: (() => void) = () => {
     this.passInputRef.current.focus();
   }
 
-  logInViaCredentials = async () => {
+  logInViaCredentials: (() => Promise<void> | Promise<any>) = async () => {
     const {config, onLogIn} = this.props;
     const {username, password} = this.state;
 
@@ -106,7 +107,7 @@ export class LogIn extends Component<Props, State> {
     this.props.onChangeServerUrl(this.props.config.backendUrl);
   }
 
-  async logInViaHub() {
+  async logInViaHub(): Promise<void> | Promise<any> {
     const {config, onLogIn} = this.props;
 
     try {
@@ -124,7 +125,7 @@ export class LogIn extends Component<Props, State> {
     }
   }
 
-  render() {
+  render(): Node {
     const {onShowDebugView, config} = this.props;
     const {password, username, loggingIn, errorMessage} = this.state;
 
@@ -279,4 +280,4 @@ const mergeProps = (stateProps, dispatchProps) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(LogIn);
+export default (connect(mapStateToProps, mapDispatchToProps, mergeProps)(LogIn): any);

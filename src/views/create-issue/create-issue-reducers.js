@@ -96,7 +96,7 @@ const attachReducers = {
   },
 };
 
-export default createReducer(initialState, {
+export default (createReducer(initialState, {
   ...attachReducers,
 
   [LOG_OUT](state: CreateIssueState, action: {draftId: string}): CreateIssueState {
@@ -174,4 +174,4 @@ export default createReducer(initialState, {
       },
     };
   },
-});
+}): any);

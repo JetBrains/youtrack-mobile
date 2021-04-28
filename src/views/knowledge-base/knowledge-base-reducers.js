@@ -23,7 +23,7 @@ const articlesInitialState: KnowledgeBaseState = {
 };
 
 
-const {reducer, actions} = createSlice({
+const {reducer, actions} = (createSlice({
   name: 'knowledgeBase',
   initialState: articlesInitialState,
   reducers: {
@@ -43,7 +43,7 @@ const {reducer, actions} = createSlice({
       state.articles = action.payload;
     },
   },
-});
+}): any);
 
 export const {setLoading, setError, setList, setArticles, setExpandingProjectId} = actions;
 export default reducer;

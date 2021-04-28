@@ -17,4 +17,4 @@ const Badge = (props: Props) => (
   ]}>{props.text}</Text>
 );
 
-export default React.memo<Props>(Badge);
+export default (React.memo<Props>(Badge): React$AbstractComponent<Props, mixed>);

@@ -82,4 +82,4 @@ const ArticleItemWithChildren = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(ArticleItemWithChildren);
+export default (React.memo<Props>(ArticleItemWithChildren): React$AbstractComponent<Props, mixed>);

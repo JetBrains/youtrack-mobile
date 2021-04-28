@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {Component} from 'react';
 import {StatusBar, Platform} from 'react-native';
 
@@ -24,7 +25,7 @@ import {buildStyles, DEFAULT_THEME, getUITheme, getThemeMode} from './components
 import type {Theme} from './flow/Theme';
 
 export default class AppProvider extends Component<{ }, { mode: string }> {
-  state = {};
+  state: {mode: string} = {};
 
   async UNSAFE_componentWillMount() {
     const themeMode: string = await getThemeMode();
@@ -32,7 +33,7 @@ export default class AppProvider extends Component<{ }, { mode: string }> {
     this.setState({mode: themeMode});
   }
 
-  render() {
+  render(): null | Node {
     if (this.state.mode === undefined) {
       return null;
     }

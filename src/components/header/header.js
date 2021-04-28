@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import {Text, View, TouchableOpacity} from 'react-native';
 import React, {PureComponent} from 'react';
 
@@ -35,20 +36,20 @@ export default class Header extends PureComponent<HeaderProps, void> {
     showShadow: false,
   };
 
-  onBack() {
+  onBack(): any {
     if (this.props.onBack) {
       return this.props.onBack();
     }
     return Router.pop();
   }
 
-  onRightButtonClick = () => {
+  onRightButtonClick: (() => any | void) = () => {
     if (this.props.onRightButtonClick) {
       return this.props.onRightButtonClick();
     }
   }
 
-  render() {
+  render(): Node {
     const {leftButton, children, extraButton, rightButton, style, title, showShadow} = this.props;
 
     return (

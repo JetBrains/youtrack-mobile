@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import {View, Text} from 'react-native';
 import React, {PureComponent} from 'react';
 import Avatar from '../avatar/avatar';
@@ -28,7 +29,7 @@ type Props = {
 
 
 export const cardBottomMargin: number = UNIT * 1.5;
-export const getAgileCardHeight = () => ((getStorageState().agileZoomedIn ?? true) ? 110 : 50) + cardBottomMargin;
+export const getAgileCardHeight = (): number => ((getStorageState().agileZoomedIn ?? true) ? 110 : 50) + cardBottomMargin;
 
 function getEstimation(estimationField: { id: string }, fields: Array<CustomFieldShort> = []) {
   const field = fields.filter(field => field.projectCustomField.field.id === estimationField.id)[0];
@@ -37,7 +38,7 @@ function getEstimation(estimationField: { id: string }, fields: Array<CustomFiel
 
 export default class AgileCard extends PureComponent<Props, void> {
 
-  renderEstimation() {
+  renderEstimation(): void | Node {
     const {issue, estimationField, zoomedIn} = this.props;
 
     if (!!estimationField && zoomedIn) {
@@ -68,7 +69,7 @@ export default class AgileCard extends PureComponent<Props, void> {
     });
   }
 
-  render() {
+  render(): Node {
     const {issue, style, ghost, dragging, zoomedIn} = this.props;
     const priorityField = getPriotityField(issue);
     const priorityFieldValueBackgroundColor = priorityField?.value?.color?.background;

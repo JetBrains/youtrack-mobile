@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
@@ -72,7 +73,7 @@ export type ActivityStreamPropsReaction = {
   onSelectReaction?: (comment: IssueComment, reaction: Reaction) => void
 }
 
-export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsReaction) => {
+export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsReaction): Node => {
   const isMultiValueActivity = (activity: Object) => {
     if (isActivityCategory.customField(activity)) {
       const field = activity.field;

@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React from 'react';
 
 import Router from '../../components/router/router';
@@ -30,7 +31,7 @@ type ArticleBreadCrumbsItemProps = {
   noSeparator?: boolean,
   style?: ViewStyleProp
 };
-export const ArticleBreadCrumbsItem = (props: ArticleBreadCrumbsItemProps) => {
+export const ArticleBreadCrumbsItem = (props: ArticleBreadCrumbsItemProps): Node => {
   const breadcrumbText: string = props.article.name || props.article.summary;
   return (
     <View
@@ -92,4 +93,4 @@ const ArticleBreadCrumbs = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(ArticleBreadCrumbs);
+export default (React.memo<Props>(ArticleBreadCrumbs): React$AbstractComponent<Props, mixed>);

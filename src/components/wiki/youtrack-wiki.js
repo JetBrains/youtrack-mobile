@@ -1,6 +1,6 @@
 /* @flow */
 
-import {Linking, Text} from 'react-native';
+import type {Node as $IMPORTED_TYPE$_Node} from "React";import {Linking, Text} from 'react-native';
 import React, {PureComponent} from 'react';
 import HTMLView from 'react-native-htmlview';
 import toHtml from 'htmlparser-to-html';
@@ -47,7 +47,7 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
   renderer: (tree: Object) => Object;
 
 
-  handleLinkPress = (url: string) => {
+  handleLinkPress: ((url: string) => any | Promise<void>) = (url: string) => {
     const issueId = extractId(url);
 
     if (issueId) {
@@ -61,7 +61,7 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
     return Linking.openURL(url);
   };
 
-  onImagePress = (source: Object) => {
+  onImagePress: ((source: any) => any) = (source: Object) => {
     return Router.Image({
       current: source,
       imageAttachments: this.props.attachments.filter(attach => hasMimeType.previewable(attach)),
@@ -69,7 +69,7 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
     });
   };
 
-  renderShowFullExceptionLink = (node: Node, index: number) => {
+  renderShowFullExceptionLink: ((node: Node, index: number) => $IMPORTED_TYPE$_Node) = (node: Node, index: number) => {
     return (
       <Text
         key={index}
@@ -88,7 +88,13 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
     return (node?.attribs?.class || '').split('language-').pop();
   }
 
-  renderNode = (node: Object, index: number, siblings: Array<any>, parent: Object, defaultRenderer: (any, any) => any) => {
+  renderNode: ((
+  node: any,
+  index: number,
+  siblings: Array<any>,
+  parent: any,
+  defaultRenderer: (any, any) => any
+) => ?(any | $IMPORTED_TYPE$_Node)) = (node: Object, index: number, siblings: Array<any>, parent: Object, defaultRenderer: (any, any) => any) => {
     const {imageHeaders, attachments, renderFullException} = this.props;
     const wikiNodeType = nodeHasType(node);
     const getCode = () => (node.children[0] && node.children[0].name === 'code') ? node.children[0] : node;
@@ -170,7 +176,7 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
     }
   };
 
-  render() {
+  render(): $IMPORTED_TYPE$_Node {
     const {children, style} = this.props;
 
     return (

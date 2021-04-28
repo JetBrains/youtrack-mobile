@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {Component} from 'react';
 import {Dimensions, ScrollView, UIManager} from 'react-native';
 
@@ -199,7 +200,7 @@ class BoardScroller extends Component<Props, State> {
   }
 }
 
-export default (props: Object) => (
+export default (props: Object): Node => (
   <DragContext.Consumer>
     {dragContext => <BoardScroller {...props} dragContext={dragContext}/>}
   </DragContext.Consumer>

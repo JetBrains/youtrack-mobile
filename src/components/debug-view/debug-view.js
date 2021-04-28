@@ -1,4 +1,5 @@
 /* @flow */
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
@@ -17,7 +18,7 @@ type Props = {
 };
 
 export class DebugView extends PureComponent<Props, void> {
-  render() {
+  render(): null | Node {
     const {show, onHide} = this.props;
     if (!show) {
       return null;
@@ -62,4 +63,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DebugView);
+export default (connect(mapStateToProps, mapDispatchToProps)(DebugView): any);

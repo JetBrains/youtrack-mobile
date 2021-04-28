@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {View, Text, Linking} from 'react-native';
 
@@ -15,7 +16,7 @@ type Props = {
 
 
 export default class ErrorMessageInline extends PureComponent<Props, void> {
-  render() {
+  render(): null | Node {
     const {error, tips, showSupportLink} = this.props;
     if (!error) {
       return null;

@@ -327,4 +327,4 @@ const ArticleCreate = (props: Props) => {
 
 };
 
-export default React.memo<ArticleCreateState>(ArticleCreate);
+export default (React.memo<ArticleCreateState>(ArticleCreate): React$AbstractComponent<ArticleCreateState, mixed>);

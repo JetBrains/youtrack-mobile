@@ -1,6 +1,6 @@
 /* @flow */
 
-import React from 'react';
+import type {Node as $IMPORTED_TYPE$_Node} from "React";import React from 'react';
 
 import {Text} from 'react-native';
 
@@ -41,7 +41,7 @@ function onShowFullCode(code: string) {
   });
 }
 
-function renderCode(node: Node, language?: ?string, uiTheme: UITheme) {
+function renderCode(node: Node, language?: ?string, uiTheme: UITheme): $IMPORTED_TYPE$_Node {
   const codeData = getCodeData(node);
   const separator = <Text>{'\n'}</Text>;
   const codeStyle = uiTheme.dark ? darcula : idea;

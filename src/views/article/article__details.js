@@ -176,4 +176,4 @@ const ArticleDetails = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(ArticleDetails);
+export default (React.memo<Props>(ArticleDetails): React$AbstractComponent<Props, mixed>);

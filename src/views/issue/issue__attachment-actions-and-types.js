@@ -5,5 +5,5 @@ import {getAttachmentActions} from '../../components/attachments-row/attachment-
 
 const PREFIX: string = 'issueState';
 
-export const attachmentTypes = createAttachmentTypes(PREFIX);
-export const attachmentActions = getAttachmentActions(PREFIX);
+export const attachmentTypes: {...} = createAttachmentTypes(PREFIX);
+export const attachmentActions: any = getAttachmentActions(PREFIX);

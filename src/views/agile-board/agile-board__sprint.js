@@ -1,6 +1,8 @@
 /* @flow */
 
-import React, {Component} from 'react';
+import type {Node} from 'React';
+
+import type {UIThemeName, UIThemeColors, BarStyle} from "../../flow/Theme";import React, {Component} from 'react';
 
 import AgileCard from '../../components/agile-card/agile-card';
 import BoardRow from '../../components/agile-row/agile-row';
@@ -31,11 +33,25 @@ export default class AgileBoardSprint extends Component<Props, void> {
     );
   }
 
-  getCollapsedColumnIds = () => {
+  getCollapsedColumnIds: (() => Array<string>) = () => {
     return (this.props.sprint?.board?.columns || []).filter(col => col.collapsed).map(col => col.id);
   }
 
-  createCommonRowProps = () => {
+  createCommonRowProps: (() => {
+  collapsedColumnIds: Array<string>,
+  onCollapseToggle: (row: AgileBoardRow) => void,
+  onTapCreateIssue: (columnId: string, cellId: string) => void,
+  onTapIssue: (issue: AnyIssue) => void,
+  renderIssueCard: (issue: AnyIssue) => Node,
+  uiTheme: {
+    androidSummaryFontWeight: string,
+    barStyle: BarStyle,
+    colors: UIThemeColors,
+    dark: boolean,
+    mode: string,
+    name: UIThemeName,
+  },
+}) = () => {
     const {onTapIssue, onTapCreateIssue, onCollapseToggle, uiTheme} = this.props;
 
     return {
@@ -49,7 +65,7 @@ export default class AgileBoardSprint extends Component<Props, void> {
     };
   };
 
-  renderCard = (issue: AnyIssue) => {
+  renderCard: ((issue: AnyIssue) => Node) = (issue: AnyIssue) => {
     const {sprint, zoomedIn, canRunCommand, onTapIssue, uiTheme} = this.props;
     const canDrag = sprint.agile.isUpdatable || canRunCommand(issue);
 
@@ -70,7 +86,7 @@ export default class AgileBoardSprint extends Component<Props, void> {
     );
   };
 
-  renderOrphan = (board: Board) => {
+  renderOrphan: ((board: Board) => Node) = (board: Board) => {
     const {zoomedIn} = this.props;
 
     return (
@@ -85,7 +101,7 @@ export default class AgileBoardSprint extends Component<Props, void> {
     );
   };
 
-  render() {
+  render(): null | Node {
     const {sprint, zoomedIn} = this.props;
     const board: Board = sprint?.board;
 

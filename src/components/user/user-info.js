@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import {View, Text} from 'react-native';
 import React, {PureComponent} from 'react';
 
@@ -21,7 +22,7 @@ type Props = {
 
 export default class UserInfo extends PureComponent<Props, void> {
 
-  render() {
+  render(): Node {
     const {user, style, timestamp, avatar, additionalInfo} = this.props;
     const userName: string = getEntityPresentation(user);
 

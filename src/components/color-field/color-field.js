@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
@@ -28,14 +29,14 @@ export default class ColorField extends PureComponent<Props, void> {
     return defaultColorCoding?.color || color?.foreground;
   }
 
-  getText() {
+  getText(): null | string {
     if (!this.props.text) {
       return null;
     }
     return this.props.fullText ? this.props.text : Array.from(this.props.text)[0];
   }
 
-  render() {
+  render(): null | Node {
     const {color, fullText, style, defaultColorCoding} = this.props;
     if (color && color.id === NO_COLOR_CODING_ID && !fullText) {
       return null;

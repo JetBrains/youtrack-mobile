@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import {View, Text, ActivityIndicator} from 'react-native';
 import React, {PureComponent} from 'react';
 
@@ -52,7 +53,7 @@ type State = {
 export default class IssueCommentInput extends PureComponent<Props, State> {
   isUnmounted: boolean;
   editCommentInput: MultilineInput;
-  debouncedOnChange = throttle((text: string) => (
+  debouncedOnChange: any = throttle((text: string) => (
     this.props.onChangeText && this.props.onChangeText(text)
   ), 300);
 
@@ -84,11 +85,11 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
     this.isUnmounted = true;
   }
 
-  focus = () => {
+  focus: (() => void) = () => {
     this.editCommentInput.focus();
   };
 
-  updateComment = () => {
+  updateComment: (() => void) = () => {
     this.setState({isSaving: true});
     const comment = {
       ...this.props.editingComment,
@@ -112,7 +113,7 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
     });
   };
 
-  suggestionsNeededDetector(text: string, caret: number) {
+  suggestionsNeededDetector(text: string, caret: number): void {
     let word: ?string = getSuggestWord(text, caret);
     if (!word) {
       return this.setState({
@@ -132,7 +133,7 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
     }
   }
 
-  applySuggestion = (user: User) => {
+  applySuggestion: ((user: User) => void) = (user: User) => {
     const newText: ?string = composeSuggestionText(user, this.state?.commentText, this.state.commentCaret);
     if (newText) {
       this.setState({
@@ -143,11 +144,11 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
     }
   };
 
-  toggleVisibility = (showVisibility: boolean) => {
+  toggleVisibility: ((showVisibility: boolean) => void) = (showVisibility: boolean) => {
     this.setState({showVisibility});
   };
 
-  renderUserMentions() {
+  renderUserMentions(): Node {
     const {mentions, suggestionsAreLoading} = this.props;
 
     return (
@@ -162,7 +163,7 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
     );
   }
 
-  renderVisibility() {
+  renderVisibility(): Node {
     const {editingComment, onEditCommentVisibility, isSecured, uiTheme} = this.props;
 
     return (
@@ -187,7 +188,7 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
     );
   }
 
-  renderSendButton() {
+  renderSendButton(): Node {
     const {uiTheme} = this.props;
     const {isSaving, commentText} = this.state;
     const isDisabled: boolean = !(commentText || '').trim() || isSaving;
@@ -211,9 +212,9 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
     );
   }
 
-  setInputRef = (instance: ?MultilineInput) => instance && (this.editCommentInput = instance);
+  setInputRef: ((instance: ?MultilineInput) => ?MultilineInput) = (instance: ?MultilineInput) => instance && (this.editCommentInput = instance);
 
-  render() {
+  render(): Node {
     const {editingComment, onCancel = () => null, uiTheme, onAddSpentTime} = this.props;
     const {isSaving, commentText, commentCaret, showSuggestions} = this.state;
 

@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import React, {Component} from 'react';
 
@@ -75,8 +76,8 @@ type Props = {
 }
 
 export default class IssueDetails extends Component<Props, void> {
-  imageHeaders = getApi().auth.getAuthorizationHeaders();
-  backendUrl = getApi().config.backendUrl;
+  imageHeaders: any = getApi().auth.getAuthorizationHeaders();
+  backendUrl: any = getApi().config.backendUrl;
 
   shouldComponentUpdate(nextProps: Props): boolean {
     if (nextProps.issue !== this.props.issue) {
@@ -91,7 +92,7 @@ export default class IssueDetails extends Component<Props, void> {
     return false;
   }
 
-  renderLinks = (issue: IssueFull) => {
+  renderLinks: ((issue: IssueFull) => void | Node) = (issue: IssueFull) => {
     if (issue.links && issue.links.length) {
       return (
         <AnimatedView
@@ -106,7 +107,7 @@ export default class IssueDetails extends Component<Props, void> {
     }
   };
 
-  renderAttachments(attachments: Array<Attachment> | null, uiTheme: UITheme) {
+  renderAttachments(attachments: Array<Attachment> | null, uiTheme: UITheme): null | Node {
     if (!attachments || !attachments.length) {
       return null;
     }
@@ -135,7 +136,7 @@ export default class IssueDetails extends Component<Props, void> {
     );
   }
 
-  renderIssueVotes(uiTheme: UITheme) {
+  renderIssueVotes(uiTheme: UITheme): Node {
     const {issue, issuePermissions, onVoteToggle} = this.props;
 
     return (
@@ -151,7 +152,7 @@ export default class IssueDetails extends Component<Props, void> {
     );
   }
 
-  renderAdditionalInfo() {
+  renderAdditionalInfo(): null | Node {
     const {issue} = this.props;
 
     if (!issue) {
@@ -179,7 +180,7 @@ export default class IssueDetails extends Component<Props, void> {
     );
   }
 
-  renderIssueVisibility(uiTheme: UITheme) {
+  renderIssueVisibility(uiTheme: UITheme): Node {
     const {issue, onVisibilityChange} = this.props;
 
     if (issue) {
@@ -198,7 +199,7 @@ export default class IssueDetails extends Component<Props, void> {
     return <SkeletonIssueInfoLine/>;
   }
 
-  renderIssueContent(uiTheme: UITheme) {
+  renderIssueContent(uiTheme: UITheme): Node {
     const {issue, openIssueListWithSearch, openNestedIssueView, onTagRemove, onCheckboxUpdate} = this.props;
 
     if (!issue) {
@@ -251,7 +252,7 @@ export default class IssueDetails extends Component<Props, void> {
     );
   }
 
-  renderIssueView(uiTheme: UITheme) {
+  renderIssueView(uiTheme: UITheme): Node {
     const {
       issue,
       editMode,
@@ -302,7 +303,7 @@ export default class IssueDetails extends Component<Props, void> {
     return this.props.issue || this.props.issuePlaceholder;
   }
 
-  getIssuePermissions = (): AnyIssue => {
+  getIssuePermissions: (() => AnyIssue) = (): AnyIssue => {
     const noop = () => false;
     return this.props.issuePermissions || {
       canCreateIssueToProject: noop,
@@ -312,15 +313,15 @@ export default class IssueDetails extends Component<Props, void> {
     };
   };
 
-  canUpdateField = (field: CustomField) => this.getIssuePermissions().canUpdateField(this.getIssue(), field);
+  canUpdateField: ((field: CustomField) => any) = (field: CustomField) => this.getIssuePermissions().canUpdateField(this.getIssue(), field);
 
-  canCreateIssueToProject = (project: IssueProject) => this.getIssuePermissions().canCreateIssueToProject(project);
+  canCreateIssueToProject: ((project: IssueProject) => any) = (project: IssueProject) => this.getIssuePermissions().canCreateIssueToProject(project);
 
-  onFieldUpdate = async (field: CustomField, value: any) => await this.props.updateIssueFieldValue(field, value);
+  onFieldUpdate: ((field: CustomField, value: any) => Promise<any>) = async (field: CustomField, value: any) => await this.props.updateIssueFieldValue(field, value);
 
-  onUpdateProject = async (project: IssueProject) => await this.props.updateProject(project);
+  onUpdateProject: ((project: IssueProject) => Promise<any>) = async (project: IssueProject) => await this.props.updateProject(project);
 
-  renderCustomFieldPanel = (uiTheme: UITheme) => {
+  renderCustomFieldPanel: ((uiTheme: UITheme) => Node) = (uiTheme: UITheme) => {
     const _issue: AnyIssue = this.getIssue();
 
     return <CustomFieldsPanel
@@ -344,7 +345,7 @@ export default class IssueDetails extends Component<Props, void> {
     />;
   };
 
-  render() {
+  render(): Node {
     const {renderRefreshControl, onSwitchToActivity} = this.props;
 
     return (

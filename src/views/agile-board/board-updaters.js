@@ -1,5 +1,5 @@
 /* @flow */
-import log from '../../components/log/log';
+import type {Sprint, BoardColumn} from "../../flow/Agile";import log from '../../components/log/log';
 
 import type {BoardCell, AgileBoardRow, Board, AgileColumn} from '../../flow/Agile';
 import type {IssueOnList, IssueFull} from '../../flow/Issue';
@@ -175,7 +175,41 @@ function reorderCardsInRow(row: AgileBoardRow, leadingId: ?string, movedId: stri
   };
 }
 
-export function reorderEntitiesOnBoard(board: Board, leadingId: ?string, movedId: string) {
+export function reorderEntitiesOnBoard(board: Board, leadingId: ?string, movedId: string): 
+  | {
+    columns: Array<BoardColumn>,
+    id: string,
+    name: string,
+    orphanRow: AgileBoardRow,
+    sprints: Array<Sprint>,
+    status: {error: Array<string>, valid: boolean},
+    trimmedSwimlanes: Array<{id: string}>,
+  }
+  | {
+    columns: Array<BoardColumn>,
+    id: string,
+    name: string,
+    orphanRow: {
+      $type: string,
+      cells: Array<BoardCell>,
+      collapsed: boolean,
+      id: string,
+      issue: ?IssueOnList,
+      name: string,
+    },
+    sprints: Array<Sprint>,
+    status: {error: Array<string>, valid: boolean},
+    trimmedSwimlanes: Array<
+      {
+        $type: string,
+        cells: Array<BoardCell>,
+        collapsed: boolean,
+        id: string,
+        issue: ?IssueOnList,
+        name: string,
+      },
+    >,
+  } {
   const isSwimlane = board.trimmedSwimlanes.some(
     (row: AgileBoardRow) => row.id === movedId
   );
@@ -191,7 +225,17 @@ export function reorderEntitiesOnBoard(board: Board, leadingId: ?string, movedId
   };
 }
 
-export function addOrUpdateCell(board: Board, issue: IssueOnList, rowId: string, columnId: string) {
+export function addOrUpdateCell(board: Board, issue: IssueOnList, rowId: string, columnId: string): 
+  | Board
+  | {
+    columns: Array<BoardColumn>,
+    id: string,
+    name: string,
+    orphanRow: AgileBoardRow,
+    sprints: Array<Sprint>,
+    status: {error: Array<string>, valid: boolean},
+    trimmedSwimlanes: Array<AgileBoardRow>,
+  } {
   board = removeSwimlaneFromBoard(board, issue.id); // Swimlane could be turn into card
 
   const targetRow = [board.orphanRow, ...board.trimmedSwimlanes].filter(row => row.id === rowId)[0];
@@ -223,7 +267,36 @@ export function addOrUpdateCell(board: Board, issue: IssueOnList, rowId: string,
   return addCardToBoard(board, targetCell.id, issue);
 }
 
-export function updateSwimlane(board: Board, swimlane: AgileBoardRow) {
+export function updateSwimlane(board: Board, swimlane: AgileBoardRow): 
+  | {
+    columns: Array<BoardColumn>,
+    id: string,
+    name: string,
+    orphanRow: AgileBoardRow,
+    sprints: Array<Sprint>,
+    status: {error: Array<string>, valid: boolean},
+    trimmedSwimlanes: Array<AgileBoardRow>,
+  }
+  | {
+    columns: Array<BoardColumn>,
+    id: string,
+    name: string,
+    orphanRow: AgileBoardRow,
+    sprints: Array<Sprint>,
+    status: {error: Array<string>, valid: boolean},
+    trimmedSwimlanes: Array<
+      
+        | AgileBoardRow
+        | {
+          $type: string,
+          cells: Array<BoardCell>,
+          collapsed: boolean,
+          id: string,
+          issue: ?IssueOnList,
+          name: string,
+        },
+    >,
+  } {
   const swimlaneToUpdate = board.trimmedSwimlanes.filter(row => row.id === swimlane.id)[0];
 
   if (swimlaneToUpdate) {
@@ -244,7 +317,42 @@ export function updateSwimlane(board: Board, swimlane: AgileBoardRow) {
   }
 }
 
-export function moveIssueOnBoard(board: Board, movedId: string, cellId: string, leadingId: ?string) {
+export function moveIssueOnBoard(board: Board, movedId: string, cellId: string, leadingId: ?string): 
+  | void
+  | {
+    columns: Array<BoardColumn>,
+    id: string,
+    name: string,
+    orphanRow: AgileBoardRow,
+    sprints: Array<Sprint>,
+    status: {error: Array<string>, valid: boolean},
+    trimmedSwimlanes: Array<{id: string}>,
+  }
+  | {
+    columns: Array<BoardColumn>,
+    id: string,
+    name: string,
+    orphanRow: {
+      $type: string,
+      cells: Array<BoardCell>,
+      collapsed: boolean,
+      id: string,
+      issue: ?IssueOnList,
+      name: string,
+    },
+    sprints: Array<Sprint>,
+    status: {error: Array<string>, valid: boolean},
+    trimmedSwimlanes: Array<
+      {
+        $type: string,
+        cells: Array<BoardCell>,
+        collapsed: boolean,
+        id: string,
+        issue: ?IssueOnList,
+        name: string,
+      },
+    >,
+  } {
   const issueOnBoard = findIssueOnBoard(board, movedId);
   if (!issueOnBoard) {
     log.debug('Cannot find moved issue on board');

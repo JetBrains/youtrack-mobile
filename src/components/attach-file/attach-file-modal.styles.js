@@ -4,7 +4,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../variables/variables';
 import {headerTitle, mainText} from '../common-styles/typography';
 
-export default EStyleSheet.create({
+export default (EStyleSheet.create({
   container: {
     paddingBottom: UNIT * 2,
   },
@@ -37,4 +37,4 @@ export default EStyleSheet.create({
   visibilityButton: {
     margin: UNIT * 3,
   },
-});
+}): any);

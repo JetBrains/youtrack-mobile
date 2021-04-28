@@ -14,7 +14,7 @@ export const agileCard = {
   backgroundColor: '$boxBackground',
 };
 
-export default EStyleSheet.create({
+export default (EStyleSheet.create({
   card: agileCard,
   cardColorCoding: {
     flexShrink: 0,
@@ -97,4 +97,4 @@ export default EStyleSheet.create({
   zoomedInText: {
     fontSize: 11,
   },
-});
+}): any);

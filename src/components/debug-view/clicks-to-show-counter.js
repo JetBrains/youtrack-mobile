@@ -16,7 +16,7 @@ function resetCounter() {
   counter = 0;
 }
 
-export default function clicksCounter(actionToPerform: Function, description: string = '') {
+export default function clicksCounter(actionToPerform: Function, description: string = ''): void {
   if (timeoutId) {
     clearTimeout(timeoutId);
   }

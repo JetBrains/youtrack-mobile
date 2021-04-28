@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {View, ActivityIndicator, TouchableOpacity, Text, Linking, Alert} from 'react-native';
 import {SvgUri} from 'react-native-svg';
@@ -51,11 +52,11 @@ export default class Attach extends PureComponent<Props, State> {
     onRemoveImage: () => {},
   };
   _isUnmounted: boolean;
-  handleLoadError = throttle((err) => {
+  handleLoadError: any = throttle((err) => {
     this.props.onImageLoadingError(err);
   }, ERROR_HANDLER_THROTTLE);
 
-  state = {isRemoving: false};
+  state: State = {isRemoving: false};
 
   componentDidMount() {
     this._isUnmounted = false;
@@ -65,7 +66,7 @@ export default class Attach extends PureComponent<Props, State> {
     this._isUnmounted = true;
   }
 
-  showImageAttachment(attach: Attachment) {
+  showImageAttachment(attach: Attachment): any | void | Promise<null> {
     const {imageHeaders, onRemoveImage, attachments = [attach]} = this.props;
 
     this.props.onOpenAttachment('image', attach.id);
@@ -82,7 +83,7 @@ export default class Attach extends PureComponent<Props, State> {
     });
   }
 
-  openAttachmentUrl(name: string, url: string) {
+  openAttachmentUrl(name: string, url: string): void | Promise<null> {
     const ATTACH_EXT_BLACK_LIST = [/\.mp4\?/, /\.m4v\?/];
     const isVideo = ATTACH_EXT_BLACK_LIST.some(reg => reg.test(url));
     this.props.onOpenAttachment('file', name);
@@ -101,7 +102,7 @@ export default class Attach extends PureComponent<Props, State> {
     }
   }
 
-  renderSVG() {
+  renderSVG(): Node {
     return (
       <View
         testID="attachmentSvg"
@@ -115,7 +116,7 @@ export default class Attach extends PureComponent<Props, State> {
     );
   }
 
-  renderImage() {
+  renderImage(): null | Node {
     const {attachingImage, imageHeaders, attach} = this.props;
     const isAttachingImage = attachingImage === attach;
 
@@ -146,7 +147,7 @@ export default class Attach extends PureComponent<Props, State> {
     );
   }
 
-  renderFile() {
+  renderFile(): Node {
     const {attach} = this.props;
 
     return (
@@ -159,7 +160,7 @@ export default class Attach extends PureComponent<Props, State> {
     );
   }
 
-  remove = () => {
+  remove: (() => void) = () => {
     Alert.alert(
       'Delete attachment?',
       'This action deletes the attachment permanently and cannot be undone.',
@@ -182,7 +183,7 @@ export default class Attach extends PureComponent<Props, State> {
     );
   };
 
-  onAttachPress = () => {
+  onAttachPress: (() => void) = () => {
     const {attach} = this.props;
     if (this.isImage() || this.isSVG()) {
       this.showImageAttachment(attach);
@@ -191,15 +192,15 @@ export default class Attach extends PureComponent<Props, State> {
     }
   };
 
-  isImage() {
+  isImage(): any {
     return hasMimeType.image(this.props.attach);
   }
 
-  isSVG() {
+  isSVG(): any {
     return hasMimeType.svg(this.props.attach);
   }
 
-  render() {
+  render(): Node {
     const {attach, canRemoveImage, uiTheme} = this.props;
     const isImage = this.isImage();
     const isSvg = this.isSVG();

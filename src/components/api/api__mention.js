@@ -6,7 +6,7 @@ import ApiHelper from './api__helper';
 
 export default class MentionsAPI extends ApiBase {
 
-  async getMentions(query: string, requestBody: Object, $top: number = 15) {
+  async getMentions(query: string, requestBody: Object, $top: number = 15): Promise<any> {
     const queryString = ApiBase.createFieldsQuery(
       'users(id,login,fullName,avatarUrl)',
       {...{$top}, ...{query}}

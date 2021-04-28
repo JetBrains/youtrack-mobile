@@ -78,8 +78,11 @@ const isActivitiesEqual = (prev, next): boolean => {
   return !!prev && !!next && prev.activities === next.activities;
 };
 
-export const IssueStream = React.memo<ActivityStreamProps & ActivityStreamPropsReaction>(
+export const IssueStream: React$AbstractComponent<
+  ActivityStreamProps & ActivityStreamPropsReaction,
+  mixed,
+> = React.memo<ActivityStreamProps & ActivityStreamPropsReaction>(
   ActivityStream, isActivitiesEqual
 );
-export default React.memo<Props>(IssueActivityStream, isActivitiesEqual);
+export default (React.memo<Props>(IssueActivityStream, isActivitiesEqual): React$AbstractComponent<Props, mixed>);
 

@@ -62,4 +62,4 @@ const ArticleActivityStream = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(ArticleActivityStream);
+export default (React.memo<Props>(ArticleActivityStream): React$AbstractComponent<Props, mixed>);

@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React from 'react';
 import {View} from 'react-native';
 
@@ -8,7 +9,7 @@ import styles from './panel.styles';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 
-export const PanelWithSeparator = (props: { children: any, style?: ViewStyleProp }) => {
+export const PanelWithSeparator = (props: { children: any, style?: ViewStyleProp }): Node => {
   return (
     <>
       <View style={[styles.panelWithSeparator, props.style]}>

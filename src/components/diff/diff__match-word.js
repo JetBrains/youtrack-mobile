@@ -6,7 +6,7 @@ import DiffMatchPatch from 'diff-match-patch';
 
 class DiffMatchWord {
   dmp: DiffMatchPatch;
-  diffPatchType = {
+  diffPatchType: {DIFF_DELETE: any, DIFF_EQUAL: any, DIFF_INSERT: any} = {
     DIFF_INSERT: DiffMatchPatch.DIFF_INSERT,
     DIFF_DELETE: DiffMatchPatch.DIFF_DELETE,
     DIFF_EQUAL: DiffMatchPatch.DIFF_EQUAL,
@@ -17,11 +17,11 @@ class DiffMatchWord {
     this.dmp = new DiffMatchPatch();
   }
 
-  diff(text1: string, text2: string) {
+  diff(text1: string, text2: string): any {
     return this.diffWordMode(text1, text2);
   }
 
-  diffWordMode(text1: string, text2: string) {
+  diffWordMode(text1: string, text2: string): any {
     const a = this.diffWordsToChars(text1, text2);
     const lineText1 = a.chars1;
     const lineText2 = a.chars2;
@@ -33,7 +33,7 @@ class DiffMatchWord {
     return diffs;
   }
 
-  boundaryIndex(str: string, regExp: RegExp, fromIndex: number) {
+  boundaryIndex(str: string, regExp: RegExp, fromIndex: number): number {
     let index = fromIndex;
     while (index < str.length) {
       if (regExp.test(str[index])) {
@@ -44,7 +44,7 @@ class DiffMatchWord {
     return -1;
   }
 
-  encodeWordsToChars(text: string, wordArray: Array<string>, wordHash: Object) {
+  encodeWordsToChars(text: string, wordArray: Array<string>, wordHash: Object): string {
     let chars = '';
     let wordStart = 0;
     let wordEnd = 0;
@@ -76,7 +76,7 @@ class DiffMatchWord {
     return chars;
   }
 
-  diffWordsToChars(text1: string, text2: string) {
+  diffWordsToChars(text1: string, text2: string): {chars1: string, chars2: string, lineArray: Array<string>} {
     // Split two texts into an array of strings. Reduce the texts to a string of
     // hashes where each Unicode character represents one word
     // @see https://github.com/google/diff-match-patch/wiki/Line-or-Word-Diffs
@@ -98,4 +98,4 @@ class DiffMatchWord {
 
 }
 
-export default new DiffMatchWord();
+export default (new DiffMatchWord(): DiffMatchWord);

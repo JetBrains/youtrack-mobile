@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {StyleSheet, View} from 'react-native';
 
@@ -38,7 +39,7 @@ export default class Navigation extends PureComponent<{}, {isMenuShown: boolean}
     };
   }
 
-  render() {
+  render(): Node {
     const onRoute = (currentRoute) => {
       const isMenuShown = (
         currentRoute.routeName !== routeMap.Home &&

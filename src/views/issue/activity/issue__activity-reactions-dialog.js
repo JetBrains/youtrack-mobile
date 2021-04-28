@@ -43,4 +43,4 @@ const ReactionsPanel = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(ReactionsPanel);
+export default (React.memo<Props>(ReactionsPanel): React$AbstractComponent<Props, mixed>);

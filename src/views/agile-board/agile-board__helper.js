@@ -45,11 +45,11 @@ export function getGroupedSprints(sprints: Array<Sprint>): Array<Sprint> {
   );
 }
 
-export function isAllColumnsCollapsed(columns: Array<BoardColumn> = []) {
+export function isAllColumnsCollapsed(columns: Array<BoardColumn> = []): boolean {
   return !columns.some((column: BoardColumn) => !column.collapsed);
 }
 
-export const getSprintAllIssues = (sprint: SprintFull) => {
+export const getSprintAllIssues = (sprint: SprintFull): Array<{id: string}> => {
   const trimmedSwimlanes = sprint.board?.trimmedSwimlanes || [];
   const trimmedSwimlanesCells = trimmedSwimlanes.reduce(
     (cells: Array<Object>, swimlane: Object) => cells.concat(swimlane.cells), []

@@ -40,7 +40,7 @@ export type AppState = {
   issueState: IssueState,
 };
 
-export default combineReducers({
+export default (combineReducers({
   agile,
   app,
   article,
@@ -52,4 +52,4 @@ export default combineReducers({
   issueCommentActivity,
   issueList,
   issueState,
-});
+}): any);

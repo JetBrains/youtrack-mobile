@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {Component} from 'react';
 import {UIManager} from 'react-native';
 
@@ -154,7 +155,7 @@ class YouTrackMobile extends Component<void, void> {
 const AppActionSheetConnected = connectActionSheet<{}>(YouTrackMobile);
 
 class AppContainer extends Component<void, void> {
-  static childContextTypes = {
+  static childContextTypes: any | {actionSheet: typeof Function} = {
     actionSheet: Function,
   };
 
@@ -172,7 +173,7 @@ class AppContainer extends Component<void, void> {
     }
   };
 
-  render() {
+  render(): Node {
     return (
       //$FlowFixMe
       <ActionSheetProvider ref={this.setActionSheetRef} useModal={true}>

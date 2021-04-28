@@ -21,7 +21,7 @@ export default class UserAPI extends ApiBase {
     'shortName',
     'query',
   ];
-  USER_FOLDERS_FIELDS = [
+  USER_FOLDERS_FIELDS: Array<string> = [
     'id',
     '$type',
     'shortName',

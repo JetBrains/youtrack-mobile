@@ -11,7 +11,7 @@ const childArticlesFields: Array<string> = [
   'summary',
 ];
 
-export const articleChildrenAndSubChildren = toField([
+export const articleChildrenAndSubChildren: any = toField([
   {
     childArticles: childArticlesFields.concat({
       childArticles: childArticlesFields,
@@ -19,7 +19,7 @@ export const articleChildrenAndSubChildren = toField([
   },
 ]);
 
-export const articleFields = toField([
+export const articleFields: any = toField([
   '$type',
   'content',
   'created',
@@ -67,7 +67,7 @@ export const articleFields = toField([
   issueFields.VISIBILITY,
 ]);
 
-export const articlesFields = toField([
+export const articlesFields: any = toField([
   'id',
   'idReadable',
   'summary',

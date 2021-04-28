@@ -4,12 +4,12 @@ import {TIME_IDENTIFIERS, DEFAULT_WORK_TIME_SETTINGS, getPeriodName} from './tim
 
 import type {WorkTimeSettings} from '../../flow/Work';
 
-export function getPeriodPresentationFor(minutes: number, workTimeSettings: WorkTimeSettings, fullPeriodPresentation: boolean = false) {
+export function getPeriodPresentationFor(minutes: number, workTimeSettings: WorkTimeSettings, fullPeriodPresentation: boolean = false): string {
   const period = minutesToPeriod(minutes, workTimeSettings || DEFAULT_WORK_TIME_SETTINGS);
   return getPeriodPresentation(period, fullPeriodPresentation);
 }
 
-export function minutesAndHoursFor(duration: Object) {
+export function minutesAndHoursFor(duration: Object): {hours: () => string, minutes: () => string} {
   function totalMinutes(d = {}) {
     return d.value || d.minutes || 0;
   }

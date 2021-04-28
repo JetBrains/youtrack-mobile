@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {Text, View} from 'react-native';
 import log from '../log/log';
@@ -17,14 +18,14 @@ type State = {
 
 
 export default class AttachmentErrorBoundary extends PureComponent<Props, State> {
-  state = { hasError: false };
+  state: State = { hasError: false };
 
   componentDidCatch(error: Error) {
     this.setState({hasError: true});
     log.warn('Could not render attach', error);
   }
 
-  render() {
+  render(): Node {
     if (this.state.hasError) {
       return (
         <View

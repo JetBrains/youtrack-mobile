@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React from 'react';
 import {Text, TouchableOpacity, View, ActivityIndicator} from 'react-native';
 
@@ -24,7 +25,7 @@ export function renderSelector(params: {
   isLoading?: boolean,
   showLoader?: boolean,
   uiTheme: UITheme
-}) {
+}): Node {
 
   return (
     <View style={[

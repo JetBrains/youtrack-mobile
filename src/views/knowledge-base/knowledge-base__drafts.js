@@ -145,4 +145,4 @@ const KnowledgeBaseDrafts = () => {
   );
 };
 
-export default React.memo<any>(KnowledgeBaseDrafts);
+export default (React.memo<any>(KnowledgeBaseDrafts): React$AbstractComponent<any, mixed>);

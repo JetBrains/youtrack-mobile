@@ -146,4 +146,4 @@ function Comment(props: Props) {
   );
 }
 
-export default React.memo<Props>(Comment);
+export default (React.memo<Props>(Comment): React$AbstractComponent<Props, mixed>);

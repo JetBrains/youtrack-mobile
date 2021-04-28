@@ -3,7 +3,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../../components/variables/variables';
 
-export default EStyleSheet.create({
+export default (EStyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '$background',
@@ -36,4 +36,4 @@ export default EStyleSheet.create({
     resizeMode: 'contain',
     opacity: 0.4,
   },
-});
+}): any);

@@ -70,4 +70,4 @@ const ArticleEditComment = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(ArticleEditComment);
+export default (React.memo<Props>(ArticleEditComment): React$AbstractComponent<Props, mixed>);

@@ -51,7 +51,7 @@ export async function sendReport(summary: string, description: string): Promise<
   return parsedResponse.idReadable;
 }
 
-export const getAppAndDeviceData = () => {
+export const getAppAndDeviceData = (): string => {
   let config: AppConfig | Object = {};
   try {
     config = getStorageState().config;
@@ -71,7 +71,7 @@ export const getAppAndDeviceData = () => {
   `;
 };
 
-export const getDeviceLogs = async () => {
+export const getDeviceLogs = async (): Promise<string> => {
   return await getLogs();
 };
 

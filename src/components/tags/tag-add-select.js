@@ -54,4 +54,4 @@ const TagAddSelect = (props: Props) => {
 
   return <Select {...selectProps} />;
 };
-export default React.memo<Props>(TagAddSelect);
+export default (React.memo<Props>(TagAddSelect): React$AbstractComponent<Props, mixed>);

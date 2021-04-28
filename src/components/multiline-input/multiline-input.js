@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {TextInput} from 'react-native';
 
@@ -26,7 +27,12 @@ type State = {
 };
 
 export default class MultilineInput extends PureComponent<Props, State> {
-  static defaultProps = {
+  static defaultProps: {
+  adaptive: boolean,
+  maxInputHeight: number,
+  minInputHeight: number,
+  returnKeyType: string,
+} = {
     adaptive: true,
     maxInputHeight: MAX_DEFAULT_HEIGHT,
     minInputHeight: MIN_DEFAULT_HEIGHT,
@@ -52,7 +58,7 @@ export default class MultilineInput extends PureComponent<Props, State> {
     this.input && this.input.focus();
   }
 
-  onContentSizeChange = (event: Object) => {
+  onContentSizeChange: ((event: any) => void) = (event: Object) => {
     const {maxInputHeight, minInputHeight, adaptive} = this.props;
     if (!adaptive) {
       return;
@@ -73,7 +79,7 @@ export default class MultilineInput extends PureComponent<Props, State> {
     }
   };
 
-  render() {
+  render(): Node {
     const {style, maxInputHeight, minInputHeight, adaptive, ...rest} = this.props;
 
     return (

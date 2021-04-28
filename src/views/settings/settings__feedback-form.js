@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {
   View,
@@ -49,11 +50,16 @@ type State = {
 
 
 export default class SettingsFeedbackForm extends PureComponent<Props, State> {
-  static contextTypes = {
+  static contextTypes: any | {actionSheet: typeof Function} = {
     actionSheet: Function,
   };
 
-  initialState = {
+  initialState: {
+  feedback: Feedback,
+  isFeedbackFormSending: boolean,
+  isLogsSelectorVisible: boolean,
+  isSubjectSelectorVisible: boolean,
+} = {
     isFeedbackFormSending: false,
     isSubjectSelectorVisible: false,
     isLogsSelectorVisible: false,
@@ -65,14 +71,14 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
       description: null,
     },
   };
-  state = this.initialState;
+  state: State = this.initialState;
 
 
-  setSendingProgress = (isSending: boolean = false) => {
+  setSendingProgress: ((isSending?: boolean) => void) = (isSending: boolean = false) => {
     this.setState({isFeedbackFormSending: isSending});
   };
 
-  getContextActions = (isType: boolean): Object => {
+  getContextActions: ((isType: boolean) => any) = (isType: boolean): Object => {
     return (isType ? feedbackTypeOptions : feedbackLogsOptions).map((action: Object) => (
       {
         title: action.title,
@@ -86,16 +92,16 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
     )).concat({title: 'Cancel'});
   };
 
-  renderContextActions = async (isType: boolean) => {
+  renderContextActions: ((isType: boolean) => Promise<void>) = async (isType: boolean) => {
     const selectedAction = await showActions(this.getContextActions(isType), this.context.actionSheet());
     if (selectedAction && selectedAction.execute) {
       selectedAction.execute();
     }
   };
 
-  close = () => Router.pop();
+  close: (() => any) = () => Router.pop();
 
-  onSendFeedback = async () => {
+  onSendFeedback: (() => Promise<void> | Promise<any>) = async () => {
     this.setSendingProgress(true);
     const [error] = await until(sendFeedback(this.state.feedback));
     this.setSendingProgress(false);
@@ -107,7 +113,7 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
     this.close();
   };
 
-  render() {
+  render(): Node {
     const {uiTheme} = this.props;
     const {feedback, isFeedbackFormSending} = this.state;
     const uiThemeColors: UIThemeColors = uiTheme.colors;

@@ -6,4 +6,4 @@ import {getAttachmentActions} from '../../components/attachments-row/attachment-
 const PREFIX: string = 'articleCreate';
 
 export const attachmentTypes: typeof attachmentActionMap = createAttachmentTypes(PREFIX);
-export const attachmentActions = getAttachmentActions(PREFIX);
+export const attachmentActions: any = getAttachmentActions(PREFIX);

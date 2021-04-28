@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {Modal, StyleSheet, View} from 'react-native';
 
@@ -39,7 +40,7 @@ export default class ModalView extends PureComponent<Props, void> {
     animationType: AnimationType.NONE,
   };
 
-  render() {
+  render(): Node {
     const {visible, transparent, animationType, supportedOrientations, onRequestClose, children, style = {}} = this.props;
 
 

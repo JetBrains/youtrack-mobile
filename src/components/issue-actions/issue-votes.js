@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 
@@ -22,12 +23,12 @@ type Props = {
 
 export default class IssueVotes extends PureComponent<Props, void> {
 
-  toggle = () => {
+  toggle: (() => void) = () => {
     const {voted, onVoteToggle} = this.props;
     onVoteToggle(!voted);
   }
 
-  render() {
+  render(): Node {
     const {voted, votes, canVote, uiTheme} = this.props;
 
     return (

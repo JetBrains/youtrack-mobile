@@ -1,5 +1,6 @@
 /* @flow */
 
+import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {Text, Dimensions} from 'react-native';
 
@@ -18,26 +19,26 @@ export type IssueTabbedState = {
 
 
 export default class IssueTabbed extends PureComponent<void, IssueTabbedState> {
-  initialWindowDimensions = Dimensions.get('window');
+  initialWindowDimensions: any = Dimensions.get('window');
   tabRoutes: Array<TabRoute> = ['Details', 'Activity'].map((name: string) => ({key: name, title: name}));
 
-  state = {
+  state: IssueTabbedState = {
     index: 0,
     routes: this.tabRoutes,
     isTransitionInProgress: false,
   };
 
-  renderDetails = (uiTheme: UITheme) => null;
+  renderDetails: ((uiTheme: UITheme) => null) = (uiTheme: UITheme) => null;
 
-  renderActivity = (uiTheme: UITheme) => null;
+  renderActivity: ((uiTheme: UITheme) => null) = (uiTheme: UITheme) => null;
 
-  isTabChangeEnabled = () => true;
+  isTabChangeEnabled: (() => boolean) = () => true;
 
-  switchToDetailsTab = () => this.setState({index: 0});
+  switchToDetailsTab: (() => void) = () => this.setState({index: 0});
 
-  switchToActivityTab = () => this.setState({index: 1});
+  switchToActivityTab: (() => void) = () => this.setState({index: 1});
 
-  renderTabBar(uiTheme: UITheme, editMode: boolean = false) {
+  renderTabBar(uiTheme: UITheme, editMode: boolean = false): ((props: any) => Node) {
     return (props: Object) => {
       const uiThemeColors: UIThemeColors = uiTheme.colors;
       return (
@@ -66,14 +67,14 @@ export default class IssueTabbed extends PureComponent<void, IssueTabbedState> {
     };
   }
 
-  renderScene = (route: TabRoute, uiTheme: UITheme) => {
+  renderScene: ((route: TabRoute, uiTheme: UITheme) => null) = (route: TabRoute, uiTheme: UITheme) => {
     if (route.key === this.tabRoutes[0].key) {
       return this.renderDetails(uiTheme);
     }
     return this.renderActivity(uiTheme);
   };
 
-  renderTabs = (uiTheme: UITheme) => {
+  renderTabs: ((uiTheme: UITheme) => Node) = (uiTheme: UITheme) => {
     return (
       <TabView
         lazy
@@ -91,7 +92,7 @@ export default class IssueTabbed extends PureComponent<void, IssueTabbedState> {
     );
   };
 
-  render() {
+  render(): null {
     return null;
   }
 }

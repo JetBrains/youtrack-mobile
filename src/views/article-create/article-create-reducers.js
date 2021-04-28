@@ -77,7 +77,7 @@ const attachmentReducers = {
   },
 };
 
-const {reducer, actions} = createSlice({
+const {reducer, actions} = (createSlice({
   name: 'articleCreate',
   initialState: articleCreateInitialState,
   reducers: {
@@ -92,7 +92,7 @@ const {reducer, actions} = createSlice({
     },
   },
   extraReducers: attachmentReducers,
-});
+}): any);
 
 
 export const {

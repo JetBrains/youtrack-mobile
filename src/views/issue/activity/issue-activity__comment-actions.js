@@ -45,47 +45,51 @@ type StateGetter = () => {
   issueState: SingleIssueState,
 };
 
-export function receiveComments(comments: Array<IssueComment>) {
+export function receiveComments(comments: Array<IssueComment>): {comments: Array<IssueComment>, type: any} {
   return {type: types.RECEIVE_COMMENTS, comments};
 }
 
-export function startSubmittingComment() {
+export function startSubmittingComment(): {type: any} {
   return {type: types.START_SUBMITTING_COMMENT};
 }
 
-export function startReply(targetLogin: string) {
+export function startReply(targetLogin: string): {comment: string, type: any} {
   return {type: types.START_SUBMITTING_COMMENT, comment: `@${targetLogin} `};
 }
 
-export function setCommentText(comment: string) {
+export function setCommentText(comment: string): {comment: string, type: any} {
   return {type: types.SET_COMMENT_TEXT, comment};
 }
 
-export function stopSubmittingComment() {
+export function stopSubmittingComment(): {type: any} {
   return {type: types.STOP_SUBMITTING_COMMENT};
 }
 
-export function updateComment(comment: IssueComment) {
+export function updateComment(comment: IssueComment): {comment: IssueComment, type: any} {
   return {type: types.RECEIVE_UPDATED_COMMENT, comment};
 }
 
-export function deleteCommentFromList(comment: IssueComment, activityId?: string) {
+export function deleteCommentFromList(comment: IssueComment, activityId?: string): {activityId: void | string, comment: IssueComment, type: any} {
   return {type: types.DELETE_COMMENT, comment, activityId};
 }
 
-export function startLoadingCommentSuggestions() {
+export function startLoadingCommentSuggestions(): {type: any} {
   return {type: types.START_LOADING_COMMENT_SUGGESTIONS};
 }
 
-export function stopLoadingCommentSuggestions() {
+export function stopLoadingCommentSuggestions(): {type: any} {
   return {type: types.STOP_LOADING_COMMENT_SUGGESTIONS};
 }
 
-export function receiveCommentSuggestions(suggestions: Object) {
+export function receiveCommentSuggestions(suggestions: Object): {suggestions: any, type: any} {
   return {type: types.RECEIVE_COMMENT_SUGGESTIONS, suggestions};
 }
 
-export function loadIssueCommentsAsActivityPage() {
+export function loadIssueCommentsAsActivityPage(): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().issueState.issueId;
     const api: Api = getApi();
@@ -104,7 +108,7 @@ export function loadIssueCommentsAsActivityPage() {
   };
 }
 
-export function loadActivity(doNotReset: boolean = false) {
+export function loadActivity(doNotReset: boolean = false): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: any => any) => {
     if (activityHelper.isIssueActivitiesAPIEnabled()) {
       dispatch(loadActivitiesPage(doNotReset));
@@ -114,7 +118,11 @@ export function loadActivity(doNotReset: boolean = false) {
   };
 }
 
-export function addComment(comment: IssueComment) {
+export function addComment(comment: IssueComment): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().issueState.issue.id;
     const activityPage: ?Array<Activity> = getState().issueActivity.activityPage;
@@ -136,21 +144,33 @@ export function addComment(comment: IssueComment) {
 }
 
 
-export function startEditingComment(comment: IssueComment) {
+export function startEditingComment(comment: IssueComment): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     dispatch(setCommentText(comment.text));
     dispatch({type: types.SET_EDITING_COMMENT, comment});
   };
 }
 
-export function stopEditingComment() {
+export function stopEditingComment(): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     dispatch(setCommentText(''));
     dispatch({type: types.CLEAR_EDITING_COMMENT});
   };
 }
 
-export function submitEditedComment(comment: IssueComment) {
+export function submitEditedComment(comment: IssueComment): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().issueState.issueId;
     usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update comment');
@@ -172,7 +192,7 @@ export function submitEditedComment(comment: IssueComment) {
   };
 }
 
-export function addOrEditComment(comment: IssueComment | null) {
+export function addOrEditComment(comment: IssueComment | null): ((dispatch: (any) => any, getState: StateGetter) => Promise<any>) {
   return async (dispatch: (any) => any, getState: StateGetter) => {
     const state = getState();
     const editingComment = state.issueCommentActivity.editingComment;
@@ -206,20 +226,24 @@ function toggleCommentDeleted(comment: IssueComment, deleted: boolean) {
   };
 }
 
-export function deleteComment(comment: IssueComment) {
+export function deleteComment(comment: IssueComment): ((dispatch: (any) => any) => Promise<mixed>) {
   return async (dispatch: (any) => any) => {
     return dispatch(toggleCommentDeleted(comment, true));
   };
 }
 
-export function restoreComment(comment: IssueComment) {
+export function restoreComment(comment: IssueComment): ((dispatch: (any) => any) => Promise<any>) {
   return async (dispatch: (any) => any) => {
     usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Restore comment');
     return dispatch(toggleCommentDeleted(comment, false));
   };
 }
 
-export function deleteCommentPermanently(comment: IssueComment, activityId?: string) {
+export function deleteCommentPermanently(comment: IssueComment, activityId?: string): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().issueState.issueId;
 
@@ -240,7 +264,7 @@ export function deleteCommentPermanently(comment: IssueComment, activityId?: str
 }
 
 
-export function copyCommentUrl(comment: IssueComment) {
+export function copyCommentUrl(comment: IssueComment): ((dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => void) {
   return (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {issue} = getState().issueState;
@@ -259,7 +283,7 @@ export function showIssueCommentActions(
   comment: IssueComment,
   canUpdateComment: boolean,
   canDeleteComment: boolean
-) {
+): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     const actions = [
       {
@@ -303,7 +327,11 @@ export function showIssueCommentActions(
   };
 }
 
-export function loadCommentSuggestions(query: string) {
+export function loadCommentSuggestions(query: string): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
     const issue: IssueFull = getState().issueState.issue;
@@ -320,23 +348,23 @@ export function loadCommentSuggestions(query: string) {
   };
 }
 
-export function receiveCommentVisibilityOptions() {
+export function receiveCommentVisibilityOptions(): {type: any} {
   return {type: types.RECEIVE_VISIBILITY_OPTIONS};
 }
 
-export function onOpenSelect(selectProps: Object, isVisibilitySelectShown: boolean) {
+export function onOpenSelect(selectProps: Object, isVisibilitySelectShown: boolean): {isVisibilitySelectShown: boolean, selectProps: any, type: any} {
   return {type: types.OPEN_ISSUE_SELECT, selectProps, isVisibilitySelectShown};
 }
 
-export function onCloseSelect(isVisibilitySelectShown: boolean) {
+export function onCloseSelect(isVisibilitySelectShown: boolean): {isVisibilitySelectShown: boolean, type: any, undefined: void} {
   return {type: types.CLOSE_ISSUE_SELECT, undefined, isVisibilitySelectShown};
 }
 
-export function updateCommentWithVisibility(comment: IssueComment) {
+export function updateCommentWithVisibility(comment: IssueComment): {comment: IssueComment, type: any} {
   return {type: types.SET_COMMENT_VISIBILITY, comment};
 }
 
-export function onOpenCommentVisibilitySelect(comment: IssueComment) {
+export function onOpenCommentVisibilitySelect(comment: IssueComment): ((dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => void) {
   return (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
     const issueId: IssueFull = getState().issueState.issue.id;
@@ -374,7 +402,11 @@ export function onReactionSelect(
   reaction: Reaction,
   activities: Array<ActivityItem>,
   onReactionUpdate: (activities: Array<ActivityItem>, error?: CustomError) => void
-) {
+): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueApi: IssueAPI = getApi().issue;
     //$FlowFixMe
@@ -438,7 +470,11 @@ export function onReactionSelect(
   };
 }
 
-export function onCheckboxUpdate(checked: boolean, position: number, comment: IssueComment) {
+export function onCheckboxUpdate(checked: boolean, position: number, comment: IssueComment): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {issue} = getState().issueState;

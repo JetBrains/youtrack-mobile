@@ -40,7 +40,7 @@ const initialState: RootState = {
   issuePermissions: issuePermissionsNull,
 };
 
-export default createReducer(initialState, {
+export default (createReducer(initialState, {
   [types.INITIALIZE_AUTH](state: RootState, action: {auth: Auth}) {
     const {auth} = action;
     return {...state, auth};
@@ -144,9 +144,9 @@ export default createReducer(initialState, {
       ...{user: updatedUser},
     };
   },
-});
+}): any);
 
-export function getIsAuthorized(state: RootState) {
+export function getIsAuthorized(state: RootState): boolean {
   return !!state.auth?.currentUser;
 }
 

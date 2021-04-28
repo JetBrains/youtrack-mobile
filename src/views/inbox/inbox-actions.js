@@ -15,27 +15,27 @@ import type {Notification} from '../../flow/Inbox';
 
 type ApiGetter = () => Api;
 
-export function setLoading(loading: boolean) {
+export function setLoading(loading: boolean): {loading: boolean, type: any} {
   return {type: types.SET_LOADING, loading};
 }
 
-export function addItems(items: Array<Object>, hasMore: boolean) {
+export function addItems(items: Array<Object>, hasMore: boolean): {hasMore: boolean, items: Array<any>, type: any} {
   return {type: types.ADD_ITEMS, items, hasMore};
 }
 
-export function resetItems() {
+export function resetItems(): {type: any} {
   return {type: types.RESET_ITEMS};
 }
 
-export function listEndReached() {
+export function listEndReached(): {type: any} {
   return {type: types.LIST_END_REACHED};
 }
 
-export function setError(error: ?Error) {
+export function setError(error: ?Error): {error: ?Error, type: any} {
   return {type: types.ERROR, error};
 }
 
-export function loadInboxCache() {
+export function loadInboxCache(): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     const inboxCache: Array<Notification> | null = getStorageState().inboxCache;
     if (inboxCache) {
@@ -44,7 +44,11 @@ export function loadInboxCache() {
   };
 }
 
-export function loadInbox(skip: number = 0, top: number = 10) {
+export function loadInbox(skip: number = 0, top: number = 10): ((
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter
+) => Promise<void> | Promise<any>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api = getApi();
 

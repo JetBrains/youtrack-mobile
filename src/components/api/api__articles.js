@@ -152,7 +152,7 @@ export default class ArticlesAPI extends ApiBase {
     );
   }
 
-  getVisibilityOptions = async (articleId: string, url?: string): Promise<Article> => {
+  getVisibilityOptions: ((articleId: string, url?: string) => Promise<Article>) = async (articleId: string, url?: string): Promise<Article> => {
     const queryString = ApiBase.createFieldsQuery(
       issueFields.getVisibility.toString(),
       {$visibilityTop: 50, $visibilitySkip: 0},
@@ -164,7 +164,7 @@ export default class ArticlesAPI extends ApiBase {
     );
   };
 
-  getDraftVisibilityOptions = async (articleId: string,): Promise<Article> => (
+  getDraftVisibilityOptions: ((articleId: string) => Promise<Article>) = async (articleId: string,): Promise<Article> => (
     this.getVisibilityOptions(
       articleId, `${this.youTrackApiUrl}/admin/users/me/articleDrafts/${articleId}/visibilityOptions`)
   );
