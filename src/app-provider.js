@@ -23,9 +23,10 @@ import {buildStyles, DEFAULT_THEME, getUITheme, getThemeMode} from './components
 
 
 import type {Theme} from './flow/Theme';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 export default class AppProvider extends Component<{ }, { mode: string }> {
-  state: {mode: string} = {};
+  state: {mode: string};
 
   async UNSAFE_componentWillMount() {
     const themeMode: string = await getThemeMode();
@@ -34,7 +35,7 @@ export default class AppProvider extends Component<{ }, { mode: string }> {
   }
 
   render(): null | Node {
-    if (this.state.mode === undefined) {
+    if (!this?.state?.mode) {
       return null;
     }
 
@@ -45,14 +46,15 @@ export default class AppProvider extends Component<{ }, { mode: string }> {
             ((theme: Theme) => {
               const uiTheme = theme.uiTheme || DEFAULT_THEME;
               const backgroundColor = uiTheme.colors.$background;
+              const style: ViewStyleProp = {
+                flex: 1,
+                backgroundColor: backgroundColor,
+                marginTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight,
+              };
 
               return (
                 <SafeAreaView
-                  style={{
-                    flex: 1,
-                    backgroundColor: backgroundColor,
-                    marginTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight,
-                  }}>
+                  style={style}>
                   <StatusBar
                     backgroundColor={backgroundColor}
                     barStyle={uiTheme.barStyle}
