@@ -52,7 +52,7 @@
     "e2e:ci": "yarn run ios-delete-build && script/ci-e2e-runner.sh",
     "flow-watch": "fswatch -o ./ | xargs -n1 -I{} sh -c 'clear; printf \"\\033[3J\" && flow'",
     "ios__": "./node_modules/react-native-cli/index.js run-ios --simulator='iPhone 6'",
-    "ios-archive": "xcodebuild archive -allowProvisioningUpdates -project ios/YouTrackMobile.xcodeproj -scheme YouTrackMobile[Release] -archivePath ios/build/YouTrackMobile[Release].xcarchive",
+    "ios-archive": "xcodebuild archive -allowProvisioningUpdates -workspace ios/YouTrackMobile.xcworkspace -scheme YouTrackMobile[Release] -archivePath ios/build/YouTrackMobile[Release].xcarchive",
     "ios-archive-no-sign": "export RCT_NO_LAUNCH_PACKAGER=true && yarn run ios-archive -- CODE_SIGN_IDENTITY='' CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED='NO'",
     "ios-build-bundle": "react-native bundle --entry-file=index.js --platform ios --dev false --reset-cache --bundle-output build/main.jsbundle --assets-dest build",
     "ios-iPadAir": "./node_modules/react-native-cli/index.js run-ios --simulator='iPad Air'",
@@ -69,7 +69,7 @@
     "test__": "yarn test-dev-data && jest",
     "test-set-env": "DETOX_DISABLE_POSTINSTALL=true TEAMCITY_VERSION=enablereport",
     "test:watch": "yarn test -- --watchAll",
-    "ios-clean": "xcodebuild clean -project ios/YouTrackMobile.xcodeproj -configuration Release -alltargets",
+    "ios-clean": "xcodebuild clean -workspace ios/YouTrackMobile.xcworkspace -configuration Release -alltargets",
     "ios-delete-build": "rm -rf ios/build/",
     "ios-export-ipa": "xcodebuild -exportArchive -allowProvisioningUpdates -archivePath ios/build/YouTrackMobile[Release].xcarchive -exportPath ios/build -exportOptionsPlist script/export.plist"
   },
