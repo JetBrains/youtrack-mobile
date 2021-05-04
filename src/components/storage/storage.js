@@ -17,7 +17,8 @@ import type {Board, Sprint} from '../../flow/Agile';
 import type {Notification} from '../../flow/Inbox';
 import type {PermissionCacheItem} from '../../flow/Permission';
 
-export const STORAGE_AUTH_PARAMS_KEY: string = 'yt_mobile_auth';
+export const STORAGE_AUTH_PARAMS: string = 'yt_mobile_auth';
+export const STORAGE_AUTH_PARAMS_KEY: string = 'yt_mobile_auth_key';
 const OTHER_ACCOUNTS_KEY = 'YT_OTHER_ACCOUNTS_STORAGE_KEY';
 export const THEME_MODE_KEY = 'YT_THEME_MODE';
 export const MAX_STORED_QUERIES = 5;
@@ -26,7 +27,9 @@ export type StorageState = {|
   articles: ?Array<Article>,
   articlesList: ArticlesList,
   articlesQuery: string | null,
-  articleLastVisited: {article?: Article, activities?: Array<Activity>} | null,
+  articleLastVisited: { article?: Article, activities?: Array<Activity> } | null,
+  authParams: ?AuthParams,
+  authParamsKey: ?string,
   projectId: ?string,
   projects: Array<?string>,
   draftId: ?string,
@@ -58,6 +61,8 @@ const storageKeys: StorageStateKeys = {
   articlesList: 'YT_ARTICLES_LIST',
   articlesQuery: 'YT_ARTICLES_QUERY',
   articleLastVisited: 'YT_ARTICLE_LAST_VISITED',
+  authParams: STORAGE_AUTH_PARAMS,
+  authParamsKey: STORAGE_AUTH_PARAMS_KEY,
   projectId: 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE',
   projects: 'YT_PROJECTS_STORAGE',
   draftId: 'DRAFT_ID_STORAGE_KEY',
@@ -91,6 +96,8 @@ export const initialState: StorageState = Object.freeze({
   articlesList: null,
   articlesQuery: null,
   articleLastVisited: null,
+  authParams: null,
+  authParamsKey: null,
   projectId: null,
   projects: [],
   draftId: null,
@@ -152,15 +159,15 @@ export async function clearCachesAndDrafts(): Promise<StorageState> {
   return populateStorage();
 }
 
-async function moveAuthParamsIntoEncryptedStorage(): Promise<void> {
-  const cachedAuthParams: AuthParams = await AsyncStorage.getItem(STORAGE_AUTH_PARAMS_KEY);
-  if (cachedAuthParams) {
-    await EncryptedStorage.setItem(
-      STORAGE_AUTH_PARAMS_KEY,
-      typeof cachedAuthParams === 'string' ? cachedAuthParams : JSON.stringify(cachedAuthParams)
-    );
-    AsyncStorage.removeItem(STORAGE_AUTH_PARAMS_KEY);
+async function secureAccount(account: StorageState): Promise<boolean> {
+  if (!account.authParamsKey) {
+    const key = `${account.creationTimestamp || ''}`;
+    account.authParamsKey = key;
+    await cacheAuthParamsSecured(account.authParams, key);
+    delete account.authParams;
+    return true;
   }
+  return false;
 }
 
 export async function populateStorage(): Promise<StorageState> {
@@ -189,7 +196,7 @@ export async function populateStorage(): Promise<StorageState> {
     }, initialStateCopy);
 
   cleanAndLogState('Storage populated', storageState);
-  await moveAuthParamsIntoEncryptedStorage();
+  await secureAccount(storageState);
   return storageState;
 }
 
@@ -238,14 +245,39 @@ export async function flushStoragePart(part: Object): Promise<StorageState> {
     });
   } catch (error) {
     newState = new Promise(resolve => resolve(currentState));
-    notify('Your mobile device is running low on available storage space. Some app functionality may be unavailable.', error, 10000);
+    notify(
+      'Your mobile device is running low on available storage space. Some app functionality may be unavailable.',
+      error,
+      10000
+    );
   }
   return newState;
 }
 
+export async function cacheAuthParamsSecured(authParams: ?AuthParams, key: ?string): Promise<void> {
+  if (authParams && key) {
+    await EncryptedStorage.setItem(key, typeof authParams === 'string' ? authParams : JSON.stringify(authParams));
+  }
+}
+
+export async function secureAccounts(otherAccounts: Array<StorageState>): Promise<void> {
+  let isNotMigrated: boolean = false;
+  for (const account of otherAccounts) {
+    const needUpdate = await secureAccount(account);
+    if (needUpdate === true) {
+      isNotMigrated = true;
+    }
+  }
+  if (isNotMigrated) {
+    await storeAccounts(otherAccounts);
+  }
+}
+
 export async function getOtherAccounts(): Promise<Array<StorageState>> {
-  const stored = await AsyncStorage.getItem(OTHER_ACCOUNTS_KEY);
-  return stored ? JSON.parse(stored) : [];
+  const value: string = await AsyncStorage.getItem(OTHER_ACCOUNTS_KEY);
+  const otherAccounts: Array<StorageState> = value ? JSON.parse(value) : [];
+  await secureAccounts(otherAccounts);
+  return otherAccounts;
 }
 
 export async function storeAccounts(accounts: Array<StorageState>) {
@@ -257,12 +289,16 @@ export async function __setStorageState(state: StorageState) {
   storageState = state;
 }
 
-export async function cacheAuthParams(authParams: AuthParams): Promise<AuthParams>  {
-  await EncryptedStorage.setItem(STORAGE_AUTH_PARAMS_KEY, JSON.stringify(authParams));
+export function getAuthParamsKey(): ?string {
+  return getStorageState().authParamsKey;
+}
+
+export async function cacheAuthParams(authParams: AuthParams): Promise<AuthParams> {
+  await EncryptedStorage.setItem(getAuthParamsKey(), JSON.stringify(authParams));
   return authParams;
 }
 
-export async function getCachedAuthParams(): Promise<AuthParams | null>  {
-  const authParams: ?string = await EncryptedStorage.getItem(STORAGE_AUTH_PARAMS_KEY);
+export async function getCachedAuthParams(key: ?string): Promise<AuthParams | null> {
+  const authParams: ?string = await EncryptedStorage.getItem(key || getAuthParamsKey());
   return typeof authParams === 'string' ? JSON.parse(authParams) : null;
 }

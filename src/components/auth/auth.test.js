@@ -4,6 +4,7 @@ import Auth from './auth';
 import sinon from 'sinon';
 
 import * as Storage from '../storage/storage';
+import {__setStorageState} from '../storage/storage';
 
 let configMock;
 let authParamsMock;
@@ -177,6 +178,7 @@ describe('Auth', function () {
     beforeEach(() => {
       authParamsMock = createAuthParamsMock();
       auth = createAuthMock(createConfigMock());
+      __setStorageState({});
     });
 
     describe('cacheAuthParams', () => {

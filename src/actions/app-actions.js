@@ -332,7 +332,7 @@ export function changeAccount(account: StorageState, removeCurrentAccount?: bool
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const state: AppState = getState();
     const config: AppConfigFilled = ((account.config: any): AppConfigFilled);
-    const authParams: ?AuthParams = await getCachedAuthParams();
+    const authParams: ?AuthParams = await getCachedAuthParams(account.authParamsKey);
     if (!authParams) {
       const errorMessage: string = 'Account doesn\'t have valid authorization, cannot switch onto it.';
       notify(errorMessage);

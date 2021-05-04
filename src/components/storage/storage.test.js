@@ -3,7 +3,6 @@ import sinon from 'sinon';
 
 import * as storage from './storage';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import {cacheAuthParams, getCachedAuthParams, STORAGE_AUTH_PARAMS_KEY} from './storage';
 
 let queryMock;
 let sandbox;
@@ -95,20 +94,35 @@ describe('Storage', () => {
 
   });
 
-  describe('Get/Save cached auth parameters', () => {
+  describe('Auth parameters', () => {
     let authParamsMock;
-    beforeEach(() => {
+    let authParamsKeyMock;
+    beforeEach(async () => {
       authParamsMock = {token: 'token'};
+      authParamsKeyMock = '0123';
+
       jest.spyOn(EncryptedStorage, 'setItem');
       jest.spyOn(EncryptedStorage, 'getItem');
+      await storage.__setStorageState({
+        authParams: authParamsMock,
+        authParamsKey: authParamsKeyMock,
+      });
+    });
+
+    describe('Secure accounts', () => {
+      it('should secure current account', async () => {
+        storage.secureAccount = jest.fn();
+        await storage.populateStorage();
+        expect(storage.getStorageState().authParams).toEqual(undefined);
+      });
     });
 
     describe('cacheAuthParams', () => {
       it('should cache encrypted auth params', async () => {
-        const cachedAuthParams = await cacheAuthParams(authParamsMock);
+        const cachedAuthParams = await storage.cacheAuthParams(authParamsMock);
 
         await expect(EncryptedStorage.setItem).toHaveBeenCalledWith(
-          STORAGE_AUTH_PARAMS_KEY,
+          authParamsKeyMock,
           JSON.stringify(authParamsMock)
         );
         await expect(cachedAuthParams).toEqual(authParamsMock);
@@ -119,17 +133,17 @@ describe('Storage', () => {
     describe('getCachedAuthParams', () => {
       it('should return cached auth params object', async () => {
         EncryptedStorage.getItem.mockResolvedValueOnce(JSON.stringify(authParamsMock));
-        const cachedParams = await getCachedAuthParams();
+        const cachedParams = await storage.getCachedAuthParams();
 
-        await expect(EncryptedStorage.getItem).toHaveBeenCalledWith(STORAGE_AUTH_PARAMS_KEY);
+        await expect(EncryptedStorage.getItem).toHaveBeenCalledWith(authParamsKeyMock);
         await expect(cachedParams).toEqual(authParamsMock);
       });
 
       it('should return NULL if no data cached', async () => {
         EncryptedStorage.setItem.mockResolvedValueOnce(undefined);
-        const cachedParams = await getCachedAuthParams();
+        const cachedParams = await storage.getCachedAuthParams();
 
-        await expect(EncryptedStorage.getItem).toHaveBeenCalledWith(STORAGE_AUTH_PARAMS_KEY);
+        await expect(EncryptedStorage.getItem).toHaveBeenCalledWith(authParamsKeyMock);
         await expect(cachedParams).toEqual(null);
       });
     });
