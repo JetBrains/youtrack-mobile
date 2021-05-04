@@ -5,6 +5,7 @@ module.exports = {
     'prettier/prettier': 0,
     'no-trailing-spaces': 0,
     'no-console': 'error',
+    'no-debugger': 'error',
     'constructor-super': 'error',
     'arrow-spacing': 'error',
     'no-const-assign': 'error',
