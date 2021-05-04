@@ -81,6 +81,10 @@ ClearKeychainIfNecessary();
   launchScrenViewController.view.frame = self.window.bounds;
   rootView.loadingView = launchScrenViewController.view;
   
+  [[NSURLCache sharedURLCache] removeAllCachedResponses];
+  [[NSURLCache sharedURLCache] setDiskCapacity:0];
+  [[NSURLCache sharedURLCache] setMemoryCapacity:0];
+  
   return YES;
 }
 
