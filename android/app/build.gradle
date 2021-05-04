@@ -164,6 +164,9 @@ android {
             keyPassword 'android'
         }
     }
+    dexOptions {
+      javaMaxHeapSize "4g"
+    }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
