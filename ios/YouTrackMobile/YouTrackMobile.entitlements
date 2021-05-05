@@ -9,6 +9,8 @@
 		<string>applinks:youtrack.jetbrains.com</string>
 		<string>applinks:*.myjetbrains.com</string>
 	</array>
+	<key>com.apple.developer.default-data-protection</key>
+	<string>NSFileProtectionComplete</string>
 	<key>keychain-access-groups</key>
 	<array>
 		<string>$(AppIdentifierPrefix)I2ZEFAR8TH3.org.jetbrains.youtrack.YouTrackMobile</string>
