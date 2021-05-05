@@ -120,7 +120,7 @@
     "react-native-linear-gradient": "2.4.0",
     "react-native-markdown-display": "^6.1.6",
     "react-native-navigation-bar-color": "^2.0.1",
-    "react-native-notifications": "^3.4.2",
+    "react-native-notifications": "anisimov74/react-native-notifications.git#fd47b17",
     "react-native-pager-view": "^5.1.2",
     "react-native-reanimated": "^2.1.0",
     "react-native-restart": "^0.0.22",
