@@ -11,7 +11,7 @@ import {targetAccountToSwitchTo} from '../../actions/app-actions-helper';
 import {UNSUPPORTED_ERRORS} from '../error/error-messages';
 
 import type Api from '../api/api';
-import type EmitterSubscription from 'react-native/Libraries/vendor/emitter/EmitterSubscription';
+import type EmitterSubscription from 'react-native/Libraries/vendor/emitter/_EmitterSubscription';
 import type {CustomError} from '../../flow/Error';
 import type {NotificationCompletion, TokenHandler} from '../../flow/Notification';
 import type {StorageState} from '../storage/storage';
@@ -47,7 +47,7 @@ export default class PushNotificationsProcessor {
     }
 
     this.registerNotificationOpenListener = this.notificationEventEmitter.registerNotificationOpened(
-      async (notification: Notification, completion: () => void) => {
+      async (notification: typeof Notification, completion: () => void) => {
 
         const issueId: ?string = PushNotificationsProcessor.getIssueId(notification);
         if (!issueId) {
@@ -143,7 +143,7 @@ export default class PushNotificationsProcessor {
     }
   }
 
-  static async init() {
+  static init() {
     let resolveToken: TokenHandler = () => {};
     let rejectToken: TokenHandler = () => {};
 
@@ -153,24 +153,24 @@ export default class PushNotificationsProcessor {
     });
 
     this.notificationEventEmitter.registerRemoteNotificationsRegistered(
-      (event: Registered) => {
+      (event: typeof Registered) => {
         PushNotificationsProcessor.setDeviceToken(event.deviceToken);
         resolveToken(event.deviceToken);
       }
     );
 
     this.notificationEventEmitter.registerRemoteNotificationsRegistrationFailed(
-      (error: RegistrationError) => rejectToken(error)
+      (error: typeof RegistrationError) => rejectToken(error)
     );
 
     this.notificationEventEmitter.registerNotificationReceivedForeground(
-      (notification: Notification, completion: (response: NotificationCompletion) => void) => {
+      (notification: typeof Notification, completion: (response: NotificationCompletion) => void) => {
         completion({alert: false, sound: false, badge: false});
       }
     );
 
     this.notificationEventEmitter.registerNotificationReceivedBackground(
-      (notification: Notification, completion: (response: NotificationCompletion) => void) => {
+      (notification: typeof Notification, completion: (response: NotificationCompletion) => void) => {
         completion({alert: true, sound: true, badge: false});
       }
     );

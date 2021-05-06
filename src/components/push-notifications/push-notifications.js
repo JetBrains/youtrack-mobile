@@ -13,7 +13,7 @@ import type {Token} from '../../flow/Notification';
 const componentLogPrefix: string = 'PNotifications';
 
 
-async function getDeviceToken(): Token {
+async function getDeviceToken(): Promise<Token> {
   let deviceToken: Token = null;
   try {
     deviceToken = await PushNotificationsProcessor.getDeviceToken();
@@ -23,7 +23,7 @@ async function getDeviceToken(): Token {
   return deviceToken;
 }
 
-async function getYouTrackToken(api: Api) {
+async function getYouTrackToken(api: Api): Promise<Token> {
   let youtrackToken: Token = null;
   try {
     youtrackToken = await PushNotificationsProcessor.getYouTrackToken(api);
@@ -33,7 +33,7 @@ async function getYouTrackToken(api: Api) {
   return youtrackToken;
 }
 
-async function doSubscribe(api: Api, youtrackToken: string, deviceToken: string) {
+async function doSubscribe(api: Api, youtrackToken: string, deviceToken: string): Promise<void> {
   try {
     await PushNotificationsProcessor.subscribe(api, deviceToken, youtrackToken);
     showSuccessMessage();
@@ -48,7 +48,7 @@ async function doSubscribe(api: Api, youtrackToken: string, deviceToken: string)
     log.warn(`${componentLogPrefix}: failed to subscribe`, error);
   }
 
-  function showSuccessMessage() {
+  function showSuccessMessage(): void {
     if (!PNHelper.getStoredDeviceToken()) {
       PNHelper.showInfoMessage(
         'You are subscribed to push notifications',
@@ -58,7 +58,7 @@ async function doSubscribe(api: Api, youtrackToken: string, deviceToken: string)
   }
 }
 
-async function register(api: Api) {
+async function register(api: Api): Promise<void> {
   const deviceToken: Token = await getDeviceToken();
 
   if (deviceToken) {
@@ -78,7 +78,7 @@ async function unregister(api: Api): Promise<void> {
   }
 }
 
-async function initialize(api, onSwitchAccount: (account: StorageState, issueId: string) => any) {
+async function initialize(api: Api, onSwitchAccount: (account: StorageState, issueId: string) => any): Promise<void> {
   const deviceToken: Token = await getDeviceToken();
 
   if (PNHelper.isDeviceTokenChanged(deviceToken)) {
