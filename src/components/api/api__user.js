@@ -8,7 +8,7 @@ import type Auth from '../auth/auth';
 import type {IssueComment, Tag} from '../../flow/CustomFields';
 import type {Reaction} from '../../flow/Reaction';
 import type {SavedQuery} from '../../flow/Issue';
-import type {User, UserAppearanceProfile, UserGeneralProfile} from '../../flow/User';
+import type {Folder, User, UserAppearanceProfile, UserGeneralProfile} from '../../flow/User';
 
 
 export default class UserAPI extends ApiBase {
@@ -63,7 +63,7 @@ export default class UserAPI extends ApiBase {
     return user;
   }
 
-  async getUserFolders(folderId: string = '', fields?: Array<string>): Promise<User | Tag | SavedQuery> {
+  async getUserFolders(folderId: string = '', fields?: Array<string>): Promise<Array<Folder>> {
     const queryString = ApiBase.createFieldsQuery(fields || this.USER_FOLDERS_FIELDS);
 
     return await this.makeAuthorizedRequest(`${this.youTrackApiUrl}/userIssueFolders/${folderId}?${queryString}`);

@@ -523,7 +523,11 @@ export function applyAuthorization(authParams: AuthParams): Action {
   };
 }
 
-export function cacheProjects(): Action {
+export function cacheProjects(): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: () => Api
+) => Promise<Array<Folder>>) {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const userFolders: Array<Folder> = await getApi().user.getUserFolders(
       '',
