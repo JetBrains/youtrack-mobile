@@ -30,6 +30,7 @@ import Settings from './views/settings/settings';
 import WikiPage from './views/wiki-page/wiki-page';
 
 import {ActionSheetProvider, connectActionSheet} from '@expo/react-native-action-sheet';
+import {Notifications} from 'react-native-notifications';
 
 import AppProvider from './app-provider';
 
@@ -62,22 +63,12 @@ class YouTrackMobile extends Component<void, void> {
     };
 
     Router.rootRoutes = rootRoutesList;
-
-    YouTrackMobile.initAndroidPushNotification();
-  }
-
-  static async initAndroidPushNotification() {
-    if (isAndroid) {
-      const PushNotificationsProcessor = (await import('./components/push-notifications/push-notifications-processor')).default;
-      PushNotificationsProcessor.init();
-    }
   }
 
   static async getNotificationData() {
     let notificationData: NotificationRouteData = {};
     if (isAndroid) {
-      const ReactNativeNotifications = await import('react-native-notifications');
-      const initialNotification = await ReactNativeNotifications.Notifications.getInitialNotification();
+      const initialNotification = await Notifications.getInitialNotification();
       const notificationPayload = initialNotification?.payload;
       notificationData = {
         issueId: notificationPayload?.issueId,

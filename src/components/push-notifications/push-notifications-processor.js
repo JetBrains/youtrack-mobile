@@ -152,6 +152,8 @@ export default class PushNotificationsProcessor {
       rejectToken = reject;
     });
 
+    Notifications.registerRemoteNotifications();
+
     this.notificationEventEmitter.registerRemoteNotificationsRegistered(
       (event: typeof Registered) => {
         PushNotificationsProcessor.setDeviceToken(event.deviceToken);

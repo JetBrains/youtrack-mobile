@@ -13,6 +13,7 @@ import openByUrlDetector, {isOneOfServers} from '../components/open-url-handler/
 import packageJson from '../../package.json';
 import PermissionsStore from '../components/permissions-store/permissions-store';
 import PushNotifications from '../components/push-notifications/push-notifications';
+import PushNotificationsProcessor from '../components/push-notifications/push-notifications-processor';
 import Router from '../components/router/router';
 import UrlParse from 'url-parse';
 import usage from '../components/usage/usage';
@@ -20,13 +21,13 @@ import {CUSTOM_ERROR_MESSAGE, UNSUPPORTED_ERRORS} from '../components/error/erro
 import {EVERYTHING_CONTEXT} from '../components/search/search-context';
 import {getIsAuthorized} from '../reducers/app-reducer';
 import {
-  initialState,
   clearCachesAndDrafts,
-  populateStorage,
-  getStorageState,
   flushStorage,
   flushStoragePart,
   getOtherAccounts,
+  getStorageState,
+  initialState,
+  populateStorage,
   storeAccounts,
   getStoredAuthParams,
 } from '../components/storage/storage';
@@ -678,6 +679,8 @@ export function subscribeToPushNotifications(): Action {
     if (DeviceInfo.isEmulator()) {
       return;
     }
+
+    PushNotificationsProcessor.init();
 
     const onSwitchAccount = async (account: StorageState, issueId: string) => (
       await dispatch(switchAccount(account, false, issueId))

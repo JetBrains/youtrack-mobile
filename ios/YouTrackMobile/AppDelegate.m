@@ -3,6 +3,7 @@
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
+#import "RNNotifications.h"
 
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
@@ -22,8 +23,6 @@ static void InitializeFlipper(UIApplication *application) {
   [client start];
 }
 #endif
-
-#import "RNNotifications.h"
 
 static void ClearKeychainIfNecessary() {
     // Checks wether or not this is the first time the app is run
@@ -52,7 +51,7 @@ static void ClearKeychainIfNecessary() {
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 ClearKeychainIfNecessary();
-  
+
 #ifdef FB_SONARKIT_ENABLED
   InitializeFlipper(application);
 #endif
@@ -74,17 +73,17 @@ ClearKeychainIfNecessary();
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
-  
+
   UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"LaunchScreen" bundle:[NSBundle mainBundle]];
   UIViewController *launchScrenViewController = [storyboard instantiateInitialViewController];
 
   launchScrenViewController.view.frame = self.window.bounds;
   rootView.loadingView = launchScrenViewController.view;
-  
+
   [[NSURLCache sharedURLCache] removeAllCachedResponses];
   [[NSURLCache sharedURLCache] setDiskCapacity:0];
   [[NSURLCache sharedURLCache] setMemoryCapacity:0];
-  
+
   return YES;
 }
 
