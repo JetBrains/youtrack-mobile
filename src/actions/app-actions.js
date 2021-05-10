@@ -28,7 +28,7 @@ import {
   flushStoragePart,
   getOtherAccounts,
   storeAccounts,
-  getCachedAuthParams,
+  getStoredAuthParams,
 } from '../components/storage/storage';
 import {hasType} from '../components/api/api__resource-types';
 import {isIOSPlatform} from '../util/util';
@@ -239,9 +239,14 @@ function applyAccount(config: AppConfigFilled, auth: Auth, authParams: AuthParam
 
     await storeAccounts(newOtherAccounts);
     dispatch(receiveOtherAccounts(newOtherAccounts));
-    await flushStorage(initialState);
+    const creationTimestamp: number = Date.now();
+    await flushStorage({
+      ...initialState,
+      creationTimestamp: creationTimestamp,
+      authParamsKey: creationTimestamp.toString(),
+    });
 
-    await auth.cacheAuthParams(authParams);
+    await auth.cacheAuthParams(authParams, creationTimestamp.toString());
     await storeConfig(config);
 
     await dispatch(initializeAuth(config));
@@ -265,14 +270,13 @@ export function addAccount(serverUrl: string = ''): Action {
       log.info(`Config loaded for new server (${config.backendUrl}), logging in...`);
 
       const tmpAuthInstance: Auth = new Auth(config); //NB! this temporary instance for Login screen code
-      const authParams: AuthParams = await authorizeOnOneMoreServer(config, function onBack(serverUrl: string) {
+      const authParams: AuthParams = await authorizeOnOneMoreServer(config, function onBack(url: string) {
         log.info('Authorization canceled by user, going back');
-        dispatch(addAccount(serverUrl));
+        dispatch(addAccount(url));
       });
       log.info('Authorized on new server, applying');
 
       await dispatch(applyAccount(config, tmpAuthInstance, authParams));
-      await flushStoragePart({creationTimestamp: Date.now()});
 
       const user: ?User = getStorageState().currentUser;
       const userName: string = user?.name || '';
@@ -332,7 +336,7 @@ export function changeAccount(account: StorageState, removeCurrentAccount?: bool
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const state: AppState = getState();
     const config: AppConfigFilled = ((account.config: any): AppConfigFilled);
-    const authParams: ?AuthParams = await getCachedAuthParams(account.authParamsKey);
+    const authParams: ?AuthParams = await getStoredAuthParams(account.authParamsKey);
     if (!authParams) {
       const errorMessage: string = 'Account doesn\'t have valid authorization, cannot switch onto it.';
       notify(errorMessage);
@@ -345,7 +349,10 @@ export function changeAccount(account: StorageState, removeCurrentAccount?: bool
     try {
       await dispatch(updateOtherAccounts(account, removeCurrentAccount));
 
-      await auth.cacheAuthParams(authParams);
+      await auth.cacheAuthParams(
+        authParams,
+        account.authParamsKey || ((account.creationTimestamp: any): number).toString()
+      );
       await storeConfig(config);
 
       await dispatch(initializeAuth(config));
@@ -509,10 +516,14 @@ function checkUserAgreement(): Action {
 export function applyAuthorization(authParams: AuthParams): Action {
   return async (dispatch: Function, getState: () => AppState) => {
     const auth = getState().app.auth;
+    const creationTimestamp: number = Date.now();
+    await flushStoragePart({
+      creationTimestamp: creationTimestamp,
+      authParamsKey: creationTimestamp.toString(),
+    });
     if (auth && authParams) {
-      await auth.cacheAuthParams(authParams);
+      await auth.cacheAuthParams(authParams, creationTimestamp.toString());
     }
-    await flushStoragePart({creationTimestamp: Date.now()});
 
     await dispatch(checkAuthorization());
     await dispatch(checkUserAgreement());

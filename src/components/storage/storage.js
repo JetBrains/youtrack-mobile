@@ -160,10 +160,9 @@ export async function clearCachesAndDrafts(): Promise<StorageState> {
 }
 
 async function secureAccount(account: StorageState): Promise<boolean> {
-  if (!account.authParamsKey) {
-    const key = `${account.creationTimestamp || ''}`;
-    account.authParamsKey = key;
-    await cacheAuthParamsSecured(account.authParams, key);
+  if (!account.authParamsKey && account.authParams && account.creationTimestamp) {
+    account.authParamsKey = account.creationTimestamp.toString();
+    await cacheAuthParamsSecured(account.authParams, account.authParamsKey);
     delete account.authParams;
     return true;
   }
@@ -289,16 +288,24 @@ export async function __setStorageState(state: StorageState) {
   storageState = state;
 }
 
-export function getAuthParamsKey(): ?string {
-  return getStorageState().authParamsKey;
+export function getAuthParamsKey(): string {
+  const state: StorageState = getStorageState();
+  return ((state.authParamsKey: any): string);
 }
 
-export async function cacheAuthParams(authParams: AuthParams): Promise<AuthParams> {
-  await EncryptedStorage.setItem(getAuthParamsKey(), JSON.stringify(authParams));
+export async function storeAuthParams(authParams: AuthParams, key?: string): Promise<AuthParams> {
+  const authParamsKey: string = key || getAuthParamsKey();
+  if (authParamsKey && authParams) {
+    await EncryptedStorage.setItem(authParamsKey, JSON.stringify(authParams));
+  }
   return authParams;
 }
 
-export async function getCachedAuthParams(key: ?string): Promise<AuthParams | null> {
-  const authParams: ?string = await EncryptedStorage.getItem(key || getAuthParamsKey());
-  return typeof authParams === 'string' ? JSON.parse(authParams) : null;
+export async function getStoredAuthParams(key: ?string): Promise<AuthParams | null> {
+  const authParamsKey: string = key || getAuthParamsKey();
+  if (authParamsKey) {
+    const authParams: ?string = await EncryptedStorage.getItem(authParamsKey);
+    return typeof authParams === 'string' ? JSON.parse(authParams) : null;
+  }
+  return null;
 }

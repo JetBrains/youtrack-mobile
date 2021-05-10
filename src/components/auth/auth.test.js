@@ -178,15 +178,30 @@ describe('Auth', function () {
     beforeEach(() => {
       authParamsMock = createAuthParamsMock();
       auth = createAuthMock(createConfigMock());
-      __setStorageState({});
+      __setStorageState({authParamsKey: '000'});
     });
 
     describe('cacheAuthParams', () => {
       it('should cache encrypted auth params', async () => {
-      jest.spyOn(Storage, 'cacheAuthParams');
+      jest.spyOn(Storage, 'storeAuthParams');
         const cachedAuthParams = await auth.cacheAuthParams(authParamsMock);
 
-        await expect(Storage.cacheAuthParams).toHaveBeenCalledWith(authParamsMock);
+        await expect(Storage.storeAuthParams).toHaveBeenCalledWith(
+          authParamsMock,
+          undefined
+          );
+        await expect(cachedAuthParams).toEqual(authParamsMock);
+      });
+
+      it('should cache encrypted auth params with particular key', async () => {
+      jest.spyOn(Storage, 'storeAuthParams');
+        const keyMock = 'datestamp';
+        const cachedAuthParams = await auth.cacheAuthParams(authParamsMock, keyMock);
+
+        await expect(Storage.storeAuthParams).toHaveBeenCalledWith(
+          authParamsMock,
+          keyMock
+          );
         await expect(cachedAuthParams).toEqual(authParamsMock);
       });
     });
@@ -194,7 +209,7 @@ describe('Auth', function () {
 
     describe('getCachedAuthParams', () => {
       beforeEach(() => {
-        jest.spyOn(Storage, 'getCachedAuthParams');
+        jest.spyOn(Storage, 'getStoredAuthParams');
       });
 
       it('should throw if there is no cached auth parameters', async () =>  {
@@ -207,7 +222,7 @@ describe('Auth', function () {
         jest.spyOn(EncryptedStorage, 'getItem').mockResolvedValueOnce(JSON.stringify(authParamsMock));
         const cachedAuthParams = await auth.getCachedAuthParams();
 
-        await expect(Storage.getCachedAuthParams).toHaveBeenCalled();
+        await expect(Storage.getStoredAuthParams).toHaveBeenCalled();
         await expect(cachedAuthParams).toEqual(authParamsMock);
       });
     });

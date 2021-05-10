@@ -7,7 +7,7 @@ import log from '../log/log';
 import PermissionsStore from '../permissions-store/permissions-store';
 import urlJoin from 'url-join';
 import {createBtoa} from '../../util/util';
-import {cacheAuthParams, getCachedAuthParams, STORAGE_AUTH_PARAMS_KEY} from '../storage/storage';
+import {storeAuthParams, getStoredAuthParams, STORAGE_AUTH_PARAMS_KEY} from '../storage/storage';
 import {USER_AGENT} from '../usage/usage';
 
 import type {AppConfigFilled} from '../../flow/AppConfig';
@@ -213,13 +213,13 @@ export default class AuthTest {
       });
   }
 
-  async cacheAuthParams(authParams: AuthParams): Promise<AuthParams> {
-    await cacheAuthParams(authParams);
+  async cacheAuthParams(authParams: AuthParams, key?: string): Promise<AuthParams> {
+    await storeAuthParams(authParams, key);
     return authParams;
   }
 
   async getCachedAuthParams(): Promise<AuthParams> {
-    const authParams: ?AuthParams = await getCachedAuthParams();
+    const authParams: ?AuthParams = await getStoredAuthParams();
     if (!authParams) {
       throw new Error('No stored auth params found');
     }
