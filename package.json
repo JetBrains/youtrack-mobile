@@ -141,7 +141,7 @@
     "redux-create-reducer": "2.0.1",
     "redux-thunk": "2.3.0",
     "url-join": "4.0.0",
-    "url-parse": "1.4.3",
+    "url-parse": "1.5.0",
     "use-debounce": "^5.2.0"
   },
   "devDependencies": {
