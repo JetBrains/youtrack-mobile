@@ -37,7 +37,13 @@ export default class PushNotificationsProcessor {
   }
 
   static getIssueId(notification: Object): any {
-    return notification?.issueId || notification?.payload?.issueId || notification?.data?.issueId;
+    return (
+      notification?.ytIssueId ||
+      notification?.data?.ytIssueId ||
+      notification?.issueId ||
+      notification?.payload?.issueId ||
+      notification?.data?.issueId
+    );
   }
 
   static subscribeOnNotificationOpen(onSwitchAccount: (account: StorageState, issueId: string) => any) {
@@ -48,7 +54,7 @@ export default class PushNotificationsProcessor {
 
     this.registerNotificationOpenListener = this.notificationEventEmitter.registerNotificationOpened(
       async (notification: typeof Notification, completion: () => void) => {
-
+        log.info(`On notification open:: ${JSON.stringify(notification)}`);
         const issueId: ?string = PushNotificationsProcessor.getIssueId(notification);
         if (!issueId) {
           return;
@@ -167,12 +173,14 @@ export default class PushNotificationsProcessor {
 
     this.notificationEventEmitter.registerNotificationReceivedForeground(
       (notification: typeof Notification, completion: (response: NotificationCompletion) => void) => {
+        log.info(`Notification received in foreground:: ${JSON.stringify(notification)}`);
         completion({alert: false, sound: false, badge: false});
       }
     );
 
     this.notificationEventEmitter.registerNotificationReceivedBackground(
       (notification: typeof Notification, completion: (response: NotificationCompletion) => void) => {
+        log.info(`Notification received in background:: ${JSON.stringify(notification)}`);
         completion({alert: true, sound: true, badge: false});
       }
     );
