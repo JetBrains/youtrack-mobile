@@ -24,10 +24,6 @@ export default class PushNotificationsProcessor {
   static registerNotificationOpenListener: ?EmitterSubscription = null;
   static notificationEventEmitter: Object = Notifications.events();
 
-  static logData(message: string, data: Object) {
-    log.debug(`${message} ${data ? JSON.stringify(data) : 'N/A'}`);
-  }
-
   static setDeviceToken(token: string) {
     PushNotificationsProcessor.deviceToken = token;
   }
