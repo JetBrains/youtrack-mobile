@@ -283,6 +283,20 @@ function getMarkdownRules(
     },
 
     text: textRenderer,
+
+    s: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
+      return isNodeContainsCheckbox(node) ? (
+        <View key={node.key} style={[inheritedStyles, style.textgroup]}>
+          {children}
+        </View>
+      ) : (renderRules.s(
+        node,
+        children,
+        parent,
+        style,
+        inheritedStyles
+      ));
+    },
   };
 }
 
