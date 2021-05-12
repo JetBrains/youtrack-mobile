@@ -78,7 +78,7 @@ const ArticleAddComment = (props: Props) => {
       return updateMentions(null);
     }
 
-    const word: ?string = getSuggestWord(text, text.length);
+    const word: string | null = ((getSuggestWord(commentText, commentText.length): any): string | null);
     if (!word) {
       return updateMentions(null);
     }

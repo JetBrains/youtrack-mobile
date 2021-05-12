@@ -20,6 +20,7 @@ import {visibilityDefaultText} from '../../components/visibility/visibility-stri
 import styles from './issue__comment-input.styles';
 
 import type {IssueComment} from '../../flow/CustomFields';
+import type {Node} from 'react';
 import type {UITheme} from '../../flow/Theme';
 import type {User} from '../../flow/User';
 
@@ -31,7 +32,7 @@ type Props = {
   suggestionsAreLoading: boolean,
   onRequestCommentSuggestions: (query: string) => any,
   mentions: ?{ users: Array<User> },
-  onEditCommentVisibility: (commentId: string) => any,
+  onEditCommentVisibility: (comment: IssueComment) => any,
   isSecured: boolean,
   canAttach: boolean,
   onAddSpentTime: (() => any) | null,
@@ -43,17 +44,19 @@ type Props = {
 type State = {
   isSaving: boolean,
   commentText: string,
+  isLoadingSuggestions: boolean,
   showSuggestions: boolean,
   suggestionsQuery: string,
   commentCaret: number,
-  showVisibility: boolean
+  suggestedUsers: Array<User>,
+  showVisibility: boolean,
 };
 
 
 export default class IssueCommentInput extends PureComponent<Props, State> {
   isUnmounted: boolean;
   editCommentInput: MultilineInput;
-  debouncedOnChange: any = throttle((text: string) => (
+  debouncedOnChange: Function = throttle((text: string) => (
     this.props.onChangeText && this.props.onChangeText(text)
   ), 300);
 
@@ -114,7 +117,7 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
   };
 
   suggestionsNeededDetector(text: string, caret: number): void {
-    let word: ?string = getSuggestWord(text, caret);
+    let word: ?string = ((getSuggestWord(text, caret): any): string | null);
     if (!word) {
       return this.setState({
         showSuggestions: false,
@@ -122,7 +125,7 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
       });
     }
 
-    if (word[0] === '@') {
+    if (word === '@') {
       word = word.slice(1);
       this.setState({
         showSuggestions: true,
