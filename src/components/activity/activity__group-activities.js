@@ -85,7 +85,7 @@ function isTerminated(activity: Object) {
 
 
 function addActivity(group: Object, activity: Object) {
-  if (!group.authorGroup && activity && activity.authorGroup) {
+  if (!group?.authorGroup && activity?.authorGroup) {
     group.authorGroup = activity.authorGroup;
   }
 
