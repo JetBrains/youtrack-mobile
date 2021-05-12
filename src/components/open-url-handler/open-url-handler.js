@@ -5,11 +5,11 @@ import log from '../log/log';
 
 const issueIdReg = /issue(Mobile)?\/([\w-\d]+)/;
 
-export function isOneOfServers(url: string, serverURLs: Array<string>) {
-  return serverURLs.some(serverURL => url.indexOf(serverURL) !== -1);
+export function isOneOfServers(url: string, serverURLs: Array<string>): boolean {
+  return serverURLs.some((serverURL: string) => url.toLowerCase().indexOf(serverURL.toLowerCase()) !== -1);
 }
 
-export function extractId(issueUrl: ?string) {
+export function extractId(issueUrl: ?string): string | null {
   if (issueUrl) {
     const match = decodeURIComponent(issueUrl).match(issueIdReg);
     return match && match[2];
@@ -54,7 +54,7 @@ function parseUrl(url, onIssueIdDetected, onQueryDetected) {
 export default function openByUrlDetector(
   onIssueIdDetected: (url: ?string, issueId: string) => any,
   onQueryDetected: (url: ?string, query: string) => any
-) {
+): Function {
   Linking.getInitialURL().then((url: ?string) => {
     log.debug(`App has been initially started with URL "${url || 'NOPE'}"`);
     if (!url) {
