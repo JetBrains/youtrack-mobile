@@ -341,16 +341,17 @@ const updateArticleCommentDraft = (commentDraftText: string) => {
 const submitArticleCommentDraft = (commentDraftText: string) => {
   return async (dispatch: (any) => any, getState: () => AppState) => {
     const api: Api = getApi();
-    const {article}: Article = getState().article;
-    const articleCommentDraft: IssueComment = getState().article.articleCommentDraft;
-    logEvent({message: 'Submit article draft', analyticsId: ANALYTICS_ARTICLE_PAGE});
-    await dispatch(updateArticleCommentDraft(commentDraftText));
-    const [error] = await until(api.articles.submitCommentDraft(article.id, articleCommentDraft.id));
-    if (error) {
-      notify('Failed to update a comment draft', error);
-    } else {
-      logEvent({message: 'Comment added', analyticsId: ANALYTICS_ARTICLE_PAGE});
-      dispatch(setArticleCommentDraft(null));
+    const {article, articleCommentDraft} = getState().article;
+    if (article && articleCommentDraft) {
+      logEvent({message: 'Submit article draft', analyticsId: ANALYTICS_ARTICLE_PAGE});
+      await dispatch(updateArticleCommentDraft(commentDraftText));
+      const [error] = await until(api.articles.submitCommentDraft(article.id, articleCommentDraft.id));
+      if (error) {
+        notify('Failed to update a comment draft', error);
+      } else {
+        logEvent({message: 'Comment added', analyticsId: ANALYTICS_ARTICLE_PAGE});
+        dispatch(setArticleCommentDraft(null));
+      }
     }
   };
 };
