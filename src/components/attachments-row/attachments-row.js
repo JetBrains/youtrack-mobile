@@ -63,7 +63,15 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
   };
 
   render(): null | Node {
-    const {attachments, attachingImage, onOpenAttachment, onRemoveImage, canRemoveAttachment, uiTheme, style} = this.props;
+    const {
+      attachments = [],
+      attachingImage,
+      onOpenAttachment,
+      onRemoveImage,
+      canRemoveAttachment,
+      uiTheme,
+      style
+    } = this.props;
 
     if (!attachments.length) {
       return null;
