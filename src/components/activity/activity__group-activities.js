@@ -60,7 +60,7 @@ function exceedsIdleTime(prev: number, next: number) {
 
 
 function authorDiffers(item1, item2) {
-  return item1.author && item1.author.id !== item2.author.id;
+  return item1?.author && item2?.author && item1.author.id !== item2.author.id;
 }
 
 
