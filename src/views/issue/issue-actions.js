@@ -629,7 +629,7 @@ export function onOpenTagsSelect() {
         onCancel: () => dispatch(onCloseTagsSelect()),
         onSelect: async (tags: Array<Tag>) => {
           const [error, issueWithTags] = await until(api.issue.addTags(issue.id, tags));
-          dispatch(receiveIssue({...issue, tags: issueWithTags.tags}));
+          dispatch(receiveIssue({...issue, tags: issueWithTags?.tags || []}));
           dispatch(onCloseTagsSelect());
           if (error) {
             dispatch(receiveIssue(issue));
