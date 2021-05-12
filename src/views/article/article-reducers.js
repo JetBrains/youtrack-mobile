@@ -10,11 +10,12 @@ import {routeMap} from '../../app-routes';
 import type {ActivityItem} from '../../flow/Activity';
 import type {Article, ArticlesList} from '../../flow/Article';
 import type {CustomError} from '../../flow/Error';
+import type {IssueComment} from '../../flow/CustomFields';
 
 export type ArticleState = {
   activityPage: Array<ActivityItem> | null,
   article: Article,
-  articleCommentDraft: Comment | null,
+  articleCommentDraft: IssueComment | null,
   articlesList: ArticlesList,
   error: CustomError,
   isLoading: boolean,
