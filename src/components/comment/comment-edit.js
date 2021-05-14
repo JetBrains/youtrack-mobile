@@ -1,33 +1,35 @@
 /* @flow */
 
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 
 import {useDispatch} from 'react-redux';
 
-import Header from '../../components/header/header';
-import Router from '../../components/router/router';
-import TextEditForm from '../../components/form/text-edit-form';
-import {IconCheck, IconClose} from '../../components/icon/icon';
-import {updateArticleComment} from './arcticle-actions';
+import Header from '../header/header';
+import Router from '../router/router';
+import TextEditForm from '../form/text-edit-form';
+import {IconCheck, IconClose} from '../icon/icon';
+import {ThemeContext} from '../theme/theme-context';
 
-import styles from './article.styles';
+import styles from './comment.styles';
 
-import type {UITheme} from '../../flow/Theme';
 import type {IssueComment} from '../../flow/CustomFields';
+import type {Theme} from '../../flow/Theme';
 
 type Props = {
   comment: IssueComment,
-  uiTheme: UITheme
+  onUpdate: (comment: IssueComment) => Function,
 };
 
 
-const ArticleEditComment = (props: Props) => {
-  const {uiTheme, comment} = props;
-
+const CommentEdit = (props: Props) => {
   const dispatch: Function = useDispatch();
+  const theme: Theme = useContext(ThemeContext);
+
   const [commentText, updateCommentText] = useState('');
   const [isSubmitting, updateSubmitting] = useState(false);
+
+  const {comment, onUpdate} = props;
 
   useEffect(() => {
     if (comment) {
@@ -36,25 +38,26 @@ const ArticleEditComment = (props: Props) => {
   }, [comment]);
 
 
-  const linkColor: string = uiTheme.colors.$link;
   return (
-    <View style={styles.container}>
+    <View style={styles.commentEditContainer}>
       <Header
         style={styles.commentEditHeader}
         title="Edit comment"
-        leftButton={<IconClose size={21} color={isSubmitting ? uiTheme.colors.$disabled : linkColor}/>}
+        leftButton={<IconClose size={21} color={isSubmitting ? styles.disabled.color : styles.link.color}/>}
         onBack={() => !isSubmitting && Router.pop(true)}
-        rightButton={isSubmitting
-          ? <ActivityIndicator color={linkColor}/> :
-          <IconCheck size={20} color={linkColor}/>}
+        rightButton={
+          (isSubmitting
+            ? <ActivityIndicator color={styles.link.color}/>
+            : <IconCheck size={20} color={styles.link.color}/>)
+        }
         onRightButtonClick={async () => {
           updateSubmitting(true);
-          await dispatch(updateArticleComment({...comment, text: commentText.trim()}));
+          await dispatch(onUpdate({...comment, text: commentText.trim()}));
           updateSubmitting(false);
           Router.pop();
         }}
       />
-      <View style={styles.commentEditContainer}>
+      <View style={styles.commentEditContent}>
         <TextEditForm
           style={styles.commentEditInput}
           adaptive={false}
@@ -63,11 +66,11 @@ const ArticleEditComment = (props: Props) => {
           multiline={true}
           description={commentText}
           onDescriptionChange={(text: string) => updateCommentText(text)}
-          uiTheme={uiTheme}
+          uiTheme={theme.uiTheme}
         />
       </View>
     </View>
   );
 };
 
-export default React.memo<Props>(ArticleEditComment);
+export default React.memo<Props>(CommentEdit);

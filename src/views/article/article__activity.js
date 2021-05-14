@@ -8,7 +8,7 @@ import {useActionSheet} from '@expo/react-native-action-sheet';
 
 import ArticleActivityStream from './article__activity-stream';
 import ArticleAddComment from './article__add-comment';
-import ArticleEditComment from './article__activity-edit-comment';
+import CommentEdit from '../../components/comment/comment-edit';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import Router from '../../components/router/router';
 import {createActivityModel} from '../../components/activity/activity-helper';
@@ -74,9 +74,9 @@ const ArticleActivities = (props: Props) => {
     onStartEditing: (comment: Comment) => {
       Router.PageModal({
         children: (
-          <ArticleEditComment
+          <CommentEdit
             comment={comment}
-            uiTheme={uiTheme}
+            onUpdate={updateArticleComment}
           />
         )
       });
