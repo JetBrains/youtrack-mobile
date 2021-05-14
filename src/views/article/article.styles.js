@@ -3,7 +3,6 @@ import {Platform} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {elevation1, elevationBottom} from '../../components/common-styles/shadow';
-import {headerMinHeight} from '../../components/header/header.styles';
 import {headerTitleText} from '../../components/common-styles/header';
 import {MAIN_FONT_SIZE, mainText} from '../../components/common-styles/typography';
 import {separator} from '../../components/common-styles/list';
@@ -137,17 +136,6 @@ export default EStyleSheet.create({
   commentSendButtonText: {
     fontSize: MAIN_FONT_SIZE,
     color: '$link',
-  },
-  commentEditHeader: {
-    ...elevation1,
-  },
-  commentEditContainer: {
-    paddingHorizontal: UNIT * 2,
-    paddingBottom: UNIT * 2,
-    marginBottom: headerMinHeight,
-  },
-  commentEditInput: {
-    padding: 0,
   },
 
   breadCrumbs: {
