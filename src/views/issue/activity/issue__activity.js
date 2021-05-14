@@ -34,6 +34,7 @@ import type {Theme, UITheme} from '../../../flow/Theme';
 import type {User, UserAppearanceProfile} from '../../../flow/User';
 import type {YouTrackWiki} from '../../../flow/Wiki';
 import type {WorkItem} from '../../../flow/Work';
+import CommentEdit from '../../../components/comment/comment-edit';
 
 type IssueActivityProps = $Shape<IssueActivityState
   & typeof activityActions
@@ -100,7 +101,6 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       activityPage,
       issue,
       copyCommentUrl, openNestedIssueView, issuePermissions,
-      startEditingComment,
       workTimeSettings,
       showIssueCommentActions,
       startReply,
@@ -135,7 +135,16 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       onDeleteCommentPermanently: deleteCommentPermanently,
       onDeleteComment: deleteComment,
       onRestoreComment: restoreComment,
-      onStartEditing: startEditingComment,
+      onStartEditing: (comment: Comment) => {
+        Router.PageModal({
+          children: (
+            <CommentEdit
+              comment={comment}
+              onUpdate={activityCommentActions.submitEditedComment}
+            />
+          )
+        });
+      },
       onShowCommentActions: (comment: IssueComment) => showIssueCommentActions(
         this.context.actionSheet(),
         comment,
