@@ -395,6 +395,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
 
   render() {
     const {
+      issue,
       issueLoadingError,
       showCommandDialog,
       isAttachFileDialogVisible,
@@ -405,6 +406,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     return (
       <IssueContext.Provider
         value={{
+          issue,
           issuePermissions,
         }}
       >
