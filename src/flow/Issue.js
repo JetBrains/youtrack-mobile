@@ -15,6 +15,7 @@ import IssuePermissions from '../components/issue-permissions/issue-permissions'
 export type IssueContextData = {
   issue: IssueFull,
   issuePermissions: typeof IssuePermissions,
+  dispatcher: () => any,
 }
 
 export type IssueOnList = {

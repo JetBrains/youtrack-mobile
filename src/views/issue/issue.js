@@ -401,6 +401,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       isAttachFileDialogVisible,
       isTagsSelectVisible,
       issuePermissions,
+      dispatcher
     } = this.props;
 
     return (
@@ -408,6 +409,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
         value={{
           issue,
           issuePermissions,
+          dispatcher
         }}
       >
         <ThemeContext.Consumer>
@@ -449,6 +451,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(issueActions, dispatch),
     createAttachActions: () => attachmentActions.createAttachActions(dispatch),
+    dispatcher: dispatch,
   };
 };
 
