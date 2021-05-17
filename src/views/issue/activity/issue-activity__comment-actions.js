@@ -36,6 +36,7 @@ import type {State as IssueActivityState} from './issue-activity__reducers';
 import type {State as IssueCommentActivityState} from './issue-activity__comment-reducers';
 import type {State as SingleIssueState} from '../issue-reducers';
 import type {User} from '../../../flow/User';
+import type {UserGroup} from '../../../flow/UserGroup';
 
 
 type ApiGetter = () => Api;
@@ -159,7 +160,7 @@ export function submitEditedComment(comment: IssueComment) {
     try {
       const updatedComment = await getApi().issue.submitComment(issueId, comment);
       dispatch(stopEditingComment());
-      dispatch(loadActivity());
+      dispatch(loadActivity(true));
       log.info(`Comment ${updatedComment.id} edited. Reloading...`);
       notify('Comment updated');
     } catch (error) {
@@ -336,26 +337,30 @@ export function updateCommentWithVisibility(comment: IssueComment) {
   return {type: types.SET_COMMENT_VISIBILITY, comment};
 }
 
-export function onOpenCommentVisibilitySelect(comment: IssueComment) {
-  return (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+export function getCommentVisibilityOptions() {
+  return (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter): Promise<Array<User | UserGroup>> => {
     const api: Api = getApi();
     const issueId: IssueFull = getState().issueState.issue.id;
-    const selectedItems = [
-      ...(comment?.visibility?.permittedGroups || []),
-      ...(comment?.visibility?.permittedUsers || [])
-    ];
-
     usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Open comment visibility select');
+    return api.issue.getVisibilityOptions(issueId);
+  };
+}
+
+export function onOpenCommentVisibilitySelect(comment: IssueComment) {
+  return (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     dispatch(onOpenSelect({
       show: true,
       placeholder: 'Filter users, groups, and teams',
       dataSource: async () => {
-        const options = await api.issue.getVisibilityOptions(issueId);
+        const options = await dispatch(getCommentVisibilityOptions());
         dispatch(receiveCommentVisibilityOptions());
         return [...(options.visibilityGroups || []), ...(options.visibilityUsers || [])];
       },
 
-      selectedItems: selectedItems,
+      selectedItems: [
+        ...(comment?.visibility?.permittedGroups || []),
+        ...(comment?.visibility?.permittedUsers || [])
+      ],
       getTitle: item => getEntityPresentation(item),
       onSelect: (selectedOption) => {
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Comment visibility update');

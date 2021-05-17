@@ -84,6 +84,7 @@ const IssueActivityStream = (props: Props) => {
             <CommentEdit
               comment={comment}
               onUpdate={(comment: IssueComment) => dispatch(commentActions.submitEditedComment(comment))}
+              visibilityOptionsGetter={() => dispatch(commentActions.getCommentVisibilityOptions())}
             />
           )
         });

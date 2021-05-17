@@ -76,7 +76,7 @@ const ArticleActivities = (props: Props) => {
         children: (
           <CommentEdit
             comment={comment}
-            onUpdate={updateArticleComment}
+            onUpdate={(comment: IssueComment) => dispatch(updateArticleComment(comment))}
           />
         )
       });

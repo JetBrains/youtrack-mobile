@@ -85,18 +85,24 @@ export default EStyleSheet.create({
     ...elevation1
   },
   commentEditContent: {
-    paddingHorizontal: UNIT * 2,
-    paddingBottom: UNIT * 2,
+    padding: UNIT * 2,
     marginBottom: headerMinHeight
   },
   commentEditInput: {
     padding: 0
+  },
+  commentVisibility: {
+    paddingVertical: UNIT,
+    marginVertical: UNIT * 2,
   },
   link: {
     color: '$link'
   },
   disabled: {
     color: '$disabled'
+  },
+  iconAccent: {
+    color: '$iconAccent'
   },
 
 });
