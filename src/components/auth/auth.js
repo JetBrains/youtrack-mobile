@@ -158,7 +158,7 @@ export default class AuthTest {
       });
   }
 
-  getAuthorizationHeaders(authParams: ?AuthParams = this.authParams): { Authorization: string } {
+  getAuthorizationHeaders(authParams: ?AuthParams = this.authParams): { Authorization: string, 'User-Agent': string } {
     if (!authParams) {
       throw new Error('Auth: getAuthorizationHeaders called before authParams initialization');
     }

@@ -8,6 +8,11 @@ import type {
   IssueLink
 } from './CustomFields';
 import type {User} from './User';
+import IssuePermissions from '../components/issue-permissions/issue-permissions';
+
+export type IssueContextData = {
+  issuePermissions: typeof IssuePermissions,
+}
 
 export type IssueOnList = {
   id: string,

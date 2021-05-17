@@ -10,10 +10,12 @@ import {connect} from 'react-redux';
 import * as activityActions from './issue-activity__actions';
 import * as activityCommentActions from './issue-activity__comment-actions';
 import AddSpentTimeForm from './activity__add-spent-time';
+import CommentEdit from '../../../components/comment/comment-edit';
 import ErrorMessage from '../../../components/error-message/error-message';
 import IssueActivitiesSettings from './issue__activity-settings';
 import IssueActivityStream from './issue__activity-stream';
 import IssueCommentInput from '../issue__comment-input';
+import IssuePermissions from '../../../components/issue-permissions/issue-permissions';
 import IssueVisibility from '../../../components/visibility/issue-visibility';
 import KeyboardSpacerIOS from '../../../components/platform/keyboard-spacer.ios';
 import Router from '../../../components/router/router';
@@ -23,18 +25,19 @@ import {convertCommentsToActivityPage, createActivityModel} from '../../../compo
 import {getApi} from '../../../components/api/api__instance';
 import {getEntityPresentation} from '../../../components/issue-formatter/issue-formatter';
 import {isIssueActivitiesAPIEnabled} from './issue-activity__helper';
+import {IssueContext} from '../issue-context';
 import {ThemeContext} from '../../../components/theme/theme-context';
 
 import styles from './issue-activity.styles';
 
 import type {IssueComment} from '../../../flow/CustomFields';
+import type {IssueContextData} from '../../../flow/Issue';
 import type {State as IssueActivityState} from './issue-activity__reducers';
 import type {State as IssueCommentActivityState} from './issue-activity__comment-reducers';
 import type {Theme, UITheme} from '../../../flow/Theme';
 import type {User, UserAppearanceProfile} from '../../../flow/User';
-import type {YouTrackWiki} from '../../../flow/Wiki';
 import type {WorkItem} from '../../../flow/Work';
-import CommentEdit from '../../../components/comment/comment-edit';
+import type {YouTrackWiki} from '../../../flow/Wiki';
 
 type IssueActivityProps = $Shape<IssueActivityState
   & typeof activityActions
@@ -51,8 +54,9 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     actionSheet: PropTypes.func
   };
 
-  backendUrl = getApi().config.backendUrl;
-  imageHeaders = getApi().auth.getAuthorizationHeaders();
+  backendUrl: string = getApi().config.backendUrl;
+  imageHeaders: { Authorization: string, 'User-Agent': string } = getApi().auth.getAuthorizationHeaders();
+  issuePermissions: $Shape<IssuePermissions>;
   props: IssueActivityProps;
 
   componentDidMount() {
@@ -100,7 +104,8 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     const {
       activityPage,
       issue,
-      copyCommentUrl, openNestedIssueView, issuePermissions,
+      copyCommentUrl,
+      openNestedIssueView,
       workTimeSettings,
       showIssueCommentActions,
       startReply,
@@ -120,14 +125,14 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       onIssueIdTap: issueId => openNestedIssueView({issueId}),
     };
 
-    const canUpdateComment = (comment: IssueComment) => issuePermissions.canUpdateComment(issue, comment);
-    const canDeleteComment = (comment: IssueComment) => issuePermissions.canDeleteComment(issue, comment);
+    const canUpdateComment = (comment: IssueComment) => this.issuePermissions.canUpdateComment(issue, comment);
+    const canDeleteComment = (comment: IssueComment) => this.issuePermissions.canDeleteComment(issue, comment);
     const commentActions = {
-      canCommentOn: issuePermissions.canCommentOn(issue),
+      canCommentOn: this.issuePermissions.canCommentOn(issue),
       canUpdateComment: canUpdateComment,
       canDeleteComment: canDeleteComment,
-      canDeleteCommentPermanently: issuePermissions.canDeleteCommentPermanently(issue),
-      canRestoreComment: (comment: IssueComment) => issuePermissions.canRestoreComment(issue, comment),
+      canDeleteCommentPermanently: this.issuePermissions.canDeleteCommentPermanently(issue),
+      canRestoreComment: (comment: IssueComment) => this.issuePermissions.canRestoreComment(issue, comment),
       onReply: (comment: IssueComment) => (
         startReply(comment?.author?.login || getEntityPresentation(comment?.author))
       ),
@@ -151,7 +156,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
         canUpdateComment(comment),
         canDeleteComment(comment)
       ),
-      isAuthor: (comment: IssueComment) => issuePermissions.isCurrentUser(comment?.author)
+      isAuthor: (comment: IssueComment) => this.issuePermissions.isCurrentUser(comment?.author)
     };
     const onWorkUpdate = async (workItem?: WorkItem): Function => {
       if (workItem) {
@@ -309,33 +314,38 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     );
 
     return (
-      <ThemeContext.Consumer>
-        {(theme: Theme) => {
-          return (
-            <View style={styles.activities}>
+      <IssueContext.Consumer>
+        {(issueContext: IssueContextData) => {
+          this.issuePermissions = issueContext.issuePermissions;
+          return <ThemeContext.Consumer>
+            {(theme: Theme) => {
+              return (
+                <View style={styles.activities}>
 
-              {isVisibilitySelectShown && this.renderCommentVisibilitySelect()}
+                  {isVisibilitySelectShown && this.renderCommentVisibilitySelect()}
 
-              <ScrollView
-                refreshControl={this.renderRefreshControl()}
-                keyboardDismissMode="interactive"
-                keyboardShouldPersistTaps="handled"
-                scrollEventThrottle={16}
-              >
+                  <ScrollView
+                    refreshControl={this.renderRefreshControl()}
+                    keyboardDismissMode="interactive"
+                    keyboardShouldPersistTaps="handled"
+                    scrollEventThrottle={16}
+                  >
 
-                {!hasError && this.renderActivitySettings(!isActivitySettingEnabled, theme.uiTheme)}
+                    {!hasError && this.renderActivitySettings(!isActivitySettingEnabled, theme.uiTheme)}
 
-                {hasError && <ErrorMessage error={activitiesLoadingError}/>}
+                    {hasError && <ErrorMessage error={activitiesLoadingError}/>}
 
-                {!hasError && this._renderActivities(theme.uiTheme)}
+                    {!hasError && this._renderActivities(theme.uiTheme)}
 
-              </ScrollView>
+                  </ScrollView>
 
-              {Boolean(this.canAddComment()) && this.renderEditCommentInput(false, theme.uiTheme)}
-            </View>
-          );
+                  {Boolean(this.canAddComment()) && this.renderEditCommentInput(false, theme.uiTheme)}
+                </View>
+              );
+            }}
+          </ThemeContext.Consumer>;
         }}
-      </ThemeContext.Consumer>
+      </IssueContext.Consumer>
     );
   }
 }
