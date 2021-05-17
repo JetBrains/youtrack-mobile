@@ -1,7 +1,6 @@
 /* @flow */
 
 import {createReducer} from 'redux-create-reducer';
-import IssuePermissions from '../../../components/issue-permissions/issue-permissions';
 import * as types from '../issue-action-types';
 
 import type {ActivityItem, Activity} from '../../../flow/Activity';
@@ -22,7 +21,6 @@ export type State = {
   issueActivityEnabledTypes: Array<Object>,
   issueActivityTypes: Array<Object>,
   issueLoadingError: ?Error,
-  issuePermissions: IssuePermissions,
   issuePlaceholder: Object,
   openNestedIssueView: (params: OpenNestedViewParams) => any,
   renderRefreshControl: (() => void) => any,
@@ -31,8 +29,6 @@ export type State = {
   workTimeSettings: ?WorkTimeSettings,
 };
 
-
-function issuePermissionsNULL(): $Shape<IssuePermissions> { return {};}
 
 export const initialState: State = {
   activitiesEnabled: false,
@@ -43,7 +39,6 @@ export const initialState: State = {
   issueActivityEnabledTypes: [],
   issueActivityTypes: [],
   issueLoadingError: null,
-  issuePermissions: issuePermissionsNULL(),
   issuePlaceholder: {},
   openNestedIssueView: () => {},
   renderRefreshControl: () => {},

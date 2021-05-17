@@ -14,7 +14,6 @@ import ErrorMessage from '../../components/error-message/error-message';
 import Header from '../../components/header/header';
 import IssueActivity from './activity/issue__activity';
 import IssueDetails from './issue__details';
-import type {IssueTabbedState} from '../../components/issue-tabbed/issue-tabbed';
 import IssueTabbed from '../../components/issue-tabbed/issue-tabbed';
 import Router from '../../components/router/router';
 import Select from '../../components/select/select';
@@ -25,6 +24,7 @@ import {getApi} from '../../components/api/api__instance';
 import {getReadableID} from '../../components/issue-formatter/issue-formatter';
 import {IconBack, IconCheck, IconClose, IconDrag, IconMoreOptions} from '../../components/icon/icon';
 import {isIOSPlatform} from '../../util/util';
+import {IssueContext} from './issue-context';
 import {Skeleton} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
 
@@ -33,6 +33,7 @@ import styles from './issue.styles';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {AnyIssue} from '../../flow/Issue';
 import type {Attachment, Tag} from '../../flow/CustomFields';
+import type {IssueTabbedState} from '../../components/issue-tabbed/issue-tabbed';
 import type {State as IssueState} from './issue-reducers';
 import type {Theme, UITheme} from '../../flow/Theme';
 
@@ -205,6 +206,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       </Text>
     );
   }
+
   renderStar = (uiTheme: UITheme) => {
     const {issue, toggleStar} = this.props;
     if (this.isIssueLoaded()) {
@@ -397,29 +399,36 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       showCommandDialog,
       isAttachFileDialogVisible,
       isTagsSelectVisible,
+      issuePermissions,
     } = this.props;
 
     return (
-      <ThemeContext.Consumer>
-        {(theme: Theme) => {
-          this.uiTheme = theme.uiTheme;
-          return (
-            <View style={styles.container} testID="issue-view">
-              {this._renderHeader()}
-
-              {issueLoadingError && <View style={styles.error}><ErrorMessage error={issueLoadingError}/></View>}
-
-              {!issueLoadingError && this.renderTabs(this.uiTheme)}
-
-              {this.isIssueLoaded() && showCommandDialog && this._renderCommandDialog()}
-
-              {isAttachFileDialogVisible && this.renderAttachFileDialog()}
-
-              {isTagsSelectVisible && this.renderTagsSelect()}
-            </View>
-          );
+      <IssueContext.Provider
+        value={{
+          issuePermissions,
         }}
-      </ThemeContext.Consumer>
+      >
+        <ThemeContext.Consumer>
+          {(theme: Theme) => {
+            this.uiTheme = theme.uiTheme;
+            return (
+              <View style={styles.container} testID="issue-view">
+                {this._renderHeader()}
+
+                {issueLoadingError && <View style={styles.error}><ErrorMessage error={issueLoadingError}/></View>}
+
+                {!issueLoadingError && this.renderTabs(this.uiTheme)}
+
+                {this.isIssueLoaded() && showCommandDialog && this._renderCommandDialog()}
+
+                {isAttachFileDialogVisible && this.renderAttachFileDialog()}
+
+                {isTagsSelectVisible && this.renderTagsSelect()}
+              </View>
+            );
+          }}
+        </ThemeContext.Consumer>
+      </IssueContext.Provider>
     );
   }
 }
