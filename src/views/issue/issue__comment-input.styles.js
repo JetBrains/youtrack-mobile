@@ -51,9 +51,6 @@ export default EStyleSheet.create({
     marginLeft: -UNIT * 1.5,
     marginRight: -UNIT * 2,
   },
-  commentHeaderContainerEdit: {
-    justifyContent: 'space-between',
-  },
   commentHeaderContainerCreate: {
     paddingTop: UNIT,
     paddingBottom: UNIT * 1.5,
