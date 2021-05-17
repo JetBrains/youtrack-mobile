@@ -193,10 +193,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     );
   }
 
-  canAddComment() {
-    const {issuePermissions, issue} = this.props;
-    return issuePermissions.canCommentOn(issue);
-  }
+  canAddComment = () => this.issuePermissions.canCommentOn(this.props.issue)
 
   onSubmitComment = (comment: Comment) => {
     const {addOrEditComment, activityPage, updateOptimisticallyActivityPage} = this.props;
@@ -231,7 +228,6 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       commentSuggestions,
       editingComment,
       onOpenCommentVisibilitySelect,
-      issuePermissions,
       issue,
       attachOrTakeImage,
       stopSubmittingComment
@@ -239,7 +235,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     const isSecured: boolean = !!editingComment && IssueVisibility.isSecured(editingComment.visibility);
     const canAddWork: boolean = (
       issue?.project?.plugins?.timeTrackingSettings?.enabled &&
-      issuePermissions.canCreateWork(issue)
+      this.issuePermissions.canCreateWork(issue)
     );
 
     return <View>
@@ -257,7 +253,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
         suggestionsAreLoading={suggestionsAreLoading}
         mentions={commentSuggestions}
 
-        canAttach={issuePermissions.canAddAttachmentTo(issue)}
+        canAttach={this.issuePermissions.canAddAttachmentTo(issue)}
         onAttach={() => attachOrTakeImage(this.context.actionSheet())}
 
         onCancel={stopSubmittingComment}
@@ -271,10 +267,10 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
   }
 
   renderAddSpentTimePage = () => {
-    const {issue, issuePermissions} = this.props;
+    const {issue} = this.props;
     return Router.PageModal({
       children: <AddSpentTimeForm
-        canCreateNotOwn={issuePermissions.canCreateWorkNotOwn(issue)}
+        canCreateNotOwn={this.issuePermissions.canCreateWorkNotOwn(issue)}
         onAdd={() => this.loadIssueActivities(true)}
       />
     });
