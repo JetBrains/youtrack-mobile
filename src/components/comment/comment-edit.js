@@ -73,4 +73,4 @@ const CommentEdit = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(CommentEdit): React$AbstractComponent<Props, mixed>);
+export default ((React.memo<Props>(CommentEdit): any): typeof CommentEdit);
