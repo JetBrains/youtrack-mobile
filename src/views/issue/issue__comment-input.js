@@ -13,7 +13,7 @@ import Mentions from '../../components/mentions/mentions';
 import MultilineInput from '../../components/multiline-input/multiline-input';
 import {getSuggestWord, composeSuggestionText} from '../../components/mentions/mension-helper';
 import {HIT_SLOP} from '../../components/common-styles/button';
-import {IconAngleDown, IconArrowUp, IconCheck, IconClose, IconLock} from '../../components/icon/icon';
+import {IconAngleDown, IconArrowUp, IconLock} from '../../components/icon/icon';
 import {commentPlaceholderText} from '../../app-text';
 import {visibilityDefaultText} from '../../components/visibility/visibility-strings';
 
@@ -37,7 +37,6 @@ type Props = {
   canAttach: boolean,
   onAddSpentTime: (() => any) | null,
   onAttach: () => any,
-  onCancel: () => any,
   uiTheme: UITheme
 };
 
@@ -218,7 +217,7 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
   setInputRef: ((instance: ?MultilineInput) => ?MultilineInput) = (instance: ?MultilineInput) => instance && (this.editCommentInput = instance);
 
   render(): Node {
-    const {editingComment, onCancel = () => null, uiTheme, onAddSpentTime} = this.props;
+    const {editingComment, uiTheme, onAddSpentTime} = this.props;
     const {isSaving, commentText, commentCaret, showSuggestions} = this.state;
 
     const isEditComment: boolean = !!editingComment;
@@ -234,25 +233,7 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
           isEditComment ? styles.commentHeaderContainerEdit : null,
         ]}>
 
-          {isEditComment && (
-            <TouchableOpacity
-              hitSlop={HIT_SLOP}
-              onPress={onCancel}
-            >
-              <IconClose size={21} color={uiTheme.colors.$link}/>
-            </TouchableOpacity>
-          )}
-
           {showVisibility && this.renderVisibility()}
-
-          {isEditComment && (
-            <TouchableOpacity
-              hitSlop={HIT_SLOP}
-              onPress={this.updateComment}
-            >
-              <IconCheck size={21} color={uiTheme.colors.$link}/>
-            </TouchableOpacity>
-          )}
 
         </View>
 
