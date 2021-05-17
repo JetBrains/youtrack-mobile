@@ -23,7 +23,6 @@ import {convertCommentsToActivityPage, createActivityModel} from '../../../compo
 import {getApi} from '../../../components/api/api__instance';
 import {isIssueActivitiesAPIEnabled} from './issue-activity__helper';
 import {IssueContext} from '../issue-context';
-import {stopEditingComment} from './issue-activity__comment-actions';
 import {ThemeContext} from '../../../components/theme/theme-context';
 
 import styles from './issue-activity.styles';
@@ -188,7 +187,6 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       onOpenCommentVisibilitySelect,
       issue,
       attachOrTakeImage,
-      stopSubmittingComment
     } = this.props;
     const isSecured: boolean = !!editingComment && IssueVisibility.isSecured(editingComment.visibility);
     const canAddWork: boolean = (
@@ -214,7 +212,6 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
         canAttach={this.issuePermissions.canAddAttachmentTo(issue)}
         onAttach={() => attachOrTakeImage(this.context.actionSheet())}
 
-        onCancel={stopSubmittingComment}
         uiTheme={uiTheme}
 
         onAddSpentTime={canAddWork ? this.renderAddSpentTimePage : null}
@@ -325,7 +322,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(activityActions, dispatch),
     ...bindActionCreators(attachmentActions, dispatch),
-    stopSubmittingComment: () => dispatch(stopEditingComment()),
     updateOptimisticallyActivityPage: (activityPage) => dispatch(activityActions.receiveActivityPage(activityPage))
   };
 };
