@@ -1,23 +1,37 @@
 /* @flow */
 
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 
+import * as commentActions from './issue-activity__comment-actions';
+import CommentEdit from '../../../components/comment/comment-edit';
+import IssuePermissions from '../../../components/issue-permissions/issue-permissions';
 import ReactionsPanel from './issue__activity-reactions-dialog';
+import Router from '../../../components/router/router';
 import usage from '../../../components/usage/usage';
 import {ActivityStream} from '../../../components/activity-stream/activity__stream';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from '../../../components/analytics/analytics-ids';
+import {getEntityPresentation} from '../../../components/issue-formatter/issue-formatter';
+import {IssueContext} from '../issue-context';
 import {SkeletonIssueActivities} from '../../../components/skeleton/skeleton';
 
-import type {ActivityStreamProps, ActivityStreamPropsReaction} from '../../../components/activity-stream/activity__stream';
+import type {
+  ActivityStreamProps,
+  ActivityStreamPropsReaction
+} from '../../../components/activity-stream/activity__stream';
 import type {IssueComment} from '../../../flow/CustomFields';
+import type {IssueContextData, IssueFull} from '../../../flow/Issue';
 import type {Reaction} from '../../../flow/Reaction';
+import type {ActivityStreamCommentActions} from '../../../flow/Activity';
 
 type Props = ActivityStreamProps & {
-  issueId: string
+  issueId: string,
+  actionSheet: Function
 };
 
 
 const IssueActivityStream = (props: Props) => {
+  const issueContext: IssueContextData = useContext(IssueContext);
+
   const [reactionState, setReactionState] = useState({
     isReactionsPanelVisible: false,
     currentComment: null
@@ -39,7 +53,49 @@ const IssueActivityStream = (props: Props) => {
     });
   };
 
-  const hideReactionsPanel = () => setReactionState({isReactionsPanelVisible: false, currentComment: null});
+  const hideReactionsPanel = (): void => setReactionState({isReactionsPanelVisible: false, currentComment: null});
+
+  const createCommentActions = (): ActivityStreamCommentActions => {
+    const issue: IssueFull = issueContext.issue;
+    const issuePermissions: IssuePermissions = issueContext.issuePermissions;
+    const dispatch: Function = issueContext.dispatcher;
+    const canUpdateComment = (comment: IssueComment): boolean => issuePermissions.canUpdateComment(issue, comment);
+    const canDeleteComment = (comment: IssueComment): boolean => issuePermissions.canDeleteComment(issue, comment);
+    return {
+      canCommentOn: issuePermissions.canCommentOn(issue),
+      canUpdateComment: canUpdateComment,
+      canDeleteComment: canDeleteComment,
+      canDeleteCommentPermanently: issuePermissions.canDeleteCommentPermanently(issue),
+      canRestoreComment: (comment: IssueComment) => issuePermissions.canRestoreComment(issue, comment),
+      onReply: (comment: IssueComment) => dispatch(commentActions.startReply(
+        comment?.author?.login ||
+        getEntityPresentation(comment?.author)
+      )),
+      isAuthor: (comment: IssueComment) => issuePermissions.isCurrentUser(comment?.author),
+      onCopyCommentLink: (comment: IssueComment) => dispatch(commentActions.copyCommentUrl(comment)),
+      onDeleteCommentPermanently: (comment: IssueComment, activityId?: string) => dispatch(
+        commentActions.deleteCommentPermanently(comment, activityId)
+      ),
+      onDeleteComment: (comment: IssueComment) => dispatch(commentActions.deleteComment(comment)),
+      onRestoreComment: (comment: IssueComment) => dispatch(commentActions.restoreComment(comment)),
+      onStartEditing: (comment: Comment) => {
+        Router.PageModal({
+          children: (
+            <CommentEdit
+              comment={comment}
+              onUpdate={(comment: IssueComment) => dispatch(commentActions.submitEditedComment(comment))}
+            />
+          )
+        });
+      },
+      onShowCommentActions: (comment: IssueComment) => dispatch(commentActions.showIssueCommentActions(
+        props.actionSheet(),
+        comment,
+        canUpdateComment(comment),
+        canDeleteComment(comment)
+      )),
+    };
+  };
 
   if (!props.activities) {
     return <SkeletonIssueActivities/>;
@@ -48,6 +104,7 @@ const IssueActivityStream = (props: Props) => {
     <>
       <IssueStream
         {...props}
+        commentActions={createCommentActions()}
         activities={activities}
         onReactionPanelOpen={(comment: IssueComment) => {
           setReactionState({

@@ -8,9 +8,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import * as activityActions from './issue-activity__actions';
-import * as activityCommentActions from './issue-activity__comment-actions';
 import AddSpentTimeForm from './activity__add-spent-time';
-import CommentEdit from '../../../components/comment/comment-edit';
 import ErrorMessage from '../../../components/error-message/error-message';
 import IssueActivitiesSettings from './issue__activity-settings';
 import IssueActivityStream from './issue__activity-stream';
@@ -23,9 +21,9 @@ import Select from '../../../components/select/select';
 import {attachmentActions} from '../issue__attachment-actions-and-types';
 import {convertCommentsToActivityPage, createActivityModel} from '../../../components/activity/activity-helper';
 import {getApi} from '../../../components/api/api__instance';
-import {getEntityPresentation} from '../../../components/issue-formatter/issue-formatter';
 import {isIssueActivitiesAPIEnabled} from './issue-activity__helper';
 import {IssueContext} from '../issue-context';
+import {stopEditingComment} from './issue-activity__comment-actions';
 import {ThemeContext} from '../../../components/theme/theme-context';
 
 import styles from './issue-activity.styles';
@@ -42,7 +40,6 @@ import type {YouTrackWiki} from '../../../flow/Wiki';
 type IssueActivityProps = $Shape<IssueActivityState
   & typeof activityActions
   & IssueCommentActivityState
-  & typeof activityCommentActions
   & typeof attachmentActions
   & {
   canAttach: boolean,
@@ -104,14 +101,8 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     const {
       activityPage,
       issue,
-      copyCommentUrl,
       openNestedIssueView,
       workTimeSettings,
-      showIssueCommentActions,
-      startReply,
-      deleteComment,
-      restoreComment,
-      deleteCommentPermanently,
       onReactionSelect,
       user,
       deleteWorkItem,
@@ -125,39 +116,6 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       onIssueIdTap: issueId => openNestedIssueView({issueId}),
     };
 
-    const canUpdateComment = (comment: IssueComment) => this.issuePermissions.canUpdateComment(issue, comment);
-    const canDeleteComment = (comment: IssueComment) => this.issuePermissions.canDeleteComment(issue, comment);
-    const commentActions = {
-      canCommentOn: this.issuePermissions.canCommentOn(issue),
-      canUpdateComment: canUpdateComment,
-      canDeleteComment: canDeleteComment,
-      canDeleteCommentPermanently: this.issuePermissions.canDeleteCommentPermanently(issue),
-      canRestoreComment: (comment: IssueComment) => this.issuePermissions.canRestoreComment(issue, comment),
-      onReply: (comment: IssueComment) => (
-        startReply(comment?.author?.login || getEntityPresentation(comment?.author))
-      ),
-      onCopyCommentLink: copyCommentUrl,
-      onDeleteCommentPermanently: deleteCommentPermanently,
-      onDeleteComment: deleteComment,
-      onRestoreComment: restoreComment,
-      onStartEditing: (comment: Comment) => {
-        Router.PageModal({
-          children: (
-            <CommentEdit
-              comment={comment}
-              onUpdate={activityCommentActions.submitEditedComment}
-            />
-          )
-        });
-      },
-      onShowCommentActions: (comment: IssueComment) => showIssueCommentActions(
-        this.context.actionSheet(),
-        comment,
-        canUpdateComment(comment),
-        canDeleteComment(comment)
-      ),
-      isAuthor: (comment: IssueComment) => this.issuePermissions.isCurrentUser(comment?.author)
-    };
     const onWorkUpdate = async (workItem?: WorkItem): Function => {
       if (workItem) {
         await doUpdateWorkItem(workItem);
@@ -170,7 +128,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
         <IssueActivityStream
           activities={createActivityModel(activityPage, this.getUserAppearanceProfile().naturalCommentsOrder)}
           attachments={issue?.attachments}
-          commentActions={commentActions}
+          actionSheet={this.context.actionSheet}
           issueFields={issue?.fields}
           issueId={issue?.id}
           uiTheme={uiTheme}
@@ -366,9 +324,8 @@ const mapStateToProps = (
 const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(activityActions, dispatch),
-    ...bindActionCreators(activityCommentActions, dispatch),
     ...bindActionCreators(attachmentActions, dispatch),
-    stopSubmittingComment: () => dispatch(activityCommentActions.stopEditingComment()),
+    stopSubmittingComment: () => dispatch(stopEditingComment()),
     updateOptimisticallyActivityPage: (activityPage) => dispatch(activityActions.receiveActivityPage(activityPage))
   };
 };
