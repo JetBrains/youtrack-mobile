@@ -8,6 +8,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import * as activityActions from './issue-activity__actions';
+import * as commentActions from './issue-activity__comment-actions';
 import AddSpentTimeForm from './activity__add-spent-time';
 import ErrorMessage from '../../../components/error-message/error-message';
 import IssueActivitiesSettings from './issue__activity-settings';
@@ -322,6 +323,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(activityActions, dispatch),
     ...bindActionCreators(attachmentActions, dispatch),
+    ...bindActionCreators(commentActions, dispatch),
     updateOptimisticallyActivityPage: (activityPage) => dispatch(activityActions.receiveActivityPage(activityPage))
   };
 };
