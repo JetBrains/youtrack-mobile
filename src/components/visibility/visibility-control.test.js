@@ -10,8 +10,10 @@ describe('<VisibilityControl/>', () => {
   let wrapper;
   let instance;
   let visibilityMock;
+  let counter;
 
   beforeEach(() => {
+    counter = 0;
     visibilityMock = {
       $type: ResourceTypes.VISIBILITY_UNLIMITED
     };
@@ -82,6 +84,18 @@ describe('<VisibilityControl/>', () => {
 
       expect(instance.state.visibility).toEqual(restrictedVisibilityMock);
     });
+
+    it('should invoke `onShow` and `onHide` callback', () => {
+      render();
+      expect(counter).toEqual(0);
+
+      instance.setSelectVisible(true);
+      expect(counter).toEqual(1);
+
+      instance.setSelectVisible(false);
+      expect(counter).toEqual(0);
+    });
+
   });
 
 
@@ -92,6 +106,8 @@ describe('<VisibilityControl/>', () => {
   function doShallow(visibility, onApply = () => {}, onSubmit = () => {}) {
     return shallow(
       <VisibilityControl
+        onShow={() => counter++}
+        onHide={() => counter--}
         visibility={visibility}
         onApply={onApply}
         onSubmit={onSubmit}
