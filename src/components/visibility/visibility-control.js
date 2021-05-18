@@ -24,12 +24,14 @@ import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {UITheme} from '../../flow/Theme';
 
 type Props = {
-  visibility?: Visibility,
-  onApply: (visibility: Visibility) => any,
   getOptions: () => Array<any>,
+  onApply: (visibility: Visibility) => any,
+  onHide?: () => any,
+  onShow?: () => any,
   onSubmit?: ?(visibility: Visibility) => any,
   style: ?ViewStyleProp,
   uiTheme: UITheme,
+  visibility?: Visibility,
   visibilityDefaultLabel?: string
 };
 
@@ -109,7 +111,14 @@ export default class VisibilityControl extends PureComponent<Props, State> {
     return this.createSelectItems(visibility);
   };
 
-  setSelectVisible: ((isVisible: boolean) => void) = (isVisible: boolean) => {
+  setSelectVisible = (isVisible: boolean) => {
+    const noop: () => void = (): void => {};
+    const {onShow = noop, onHide = noop} = this.props;
+    if (isVisible) {
+      onShow();
+    } else {
+      onHide();
+    }
     this.setState({isSelectVisible: isVisible});
   };
 
