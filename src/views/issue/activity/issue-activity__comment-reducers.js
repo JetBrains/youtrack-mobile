@@ -56,4 +56,4 @@ export default (createReducer(initialState, {
       selectProps: null,
     };
   },
-});
+}));
