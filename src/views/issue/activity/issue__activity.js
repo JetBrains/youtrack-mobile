@@ -15,7 +15,6 @@ import IssueActivitiesSettings from './issue__activity-settings';
 import IssueActivityStream from './issue__activity-stream';
 import IssueCommentInput from '../issue__comment-input';
 import IssuePermissions from '../../../components/issue-permissions/issue-permissions';
-import IssueVisibility from '../../../components/visibility/issue-visibility';
 import KeyboardSpacerIOS from '../../../components/platform/keyboard-spacer.ios';
 import Router from '../../../components/router/router';
 import Select from '../../../components/select/select';
@@ -151,7 +150,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     );
   }
 
-  canAddComment = () => this.issuePermissions.canCommentOn(this.props.issue)
+  canAddComment = () => this.issuePermissions.canCommentOn(this.props.issue);
 
   onSubmitComment: ((comment: Comment) => any) = (comment: Comment) => {
     const {addOrEditComment, activityPage, updateOptimisticallyActivityPage} = this.props;
@@ -179,17 +178,15 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
   renderEditCommentInput(focus: boolean, uiTheme: UITheme): Node {
     const {
-      commentText,
-      setCommentText,
       loadCommentSuggestions,
       suggestionsAreLoading,
       commentSuggestions,
       editingComment,
-      onOpenCommentVisibilitySelect,
+      setEditingComment,
+      onGetCommentVisibilityOptions,
       issue,
       attachOrTakeImage,
     } = this.props;
-    const isSecured: boolean = !!editingComment && IssueVisibility.isSecured(editingComment.visibility);
     const canAddWork: boolean = (
       issue?.project?.plugins?.timeTrackingSettings?.enabled &&
       this.issuePermissions.canCreateWork(issue)
@@ -198,23 +195,16 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     return <View>
       <IssueCommentInput
         autoFocus={focus}
-        initialText={commentText}
-        onChangeText={setCommentText}
+        onCommentChange={(comment: IssueComment) => setEditingComment(comment)}
+        getCommentVisibilityOptions={onGetCommentVisibilityOptions}
         onSubmitComment={this.onSubmitComment}
-
         editingComment={editingComment}
-        onEditCommentVisibility={onOpenCommentVisibilitySelect}
-        isSecured={isSecured}
-
         onRequestCommentSuggestions={loadCommentSuggestions}
         suggestionsAreLoading={suggestionsAreLoading}
         mentions={commentSuggestions}
-
         canAttach={this.issuePermissions.canAddAttachmentTo(issue)}
         onAttach={() => attachOrTakeImage(this.context.actionSheet())}
-
         uiTheme={uiTheme}
-
         onAddSpentTime={canAddWork ? this.renderAddSpentTimePage : null}
       />
 
@@ -324,7 +314,8 @@ const mapDispatchToProps = (dispatch) => {
     ...bindActionCreators(activityActions, dispatch),
     ...bindActionCreators(attachmentActions, dispatch),
     ...bindActionCreators(commentActions, dispatch),
-    updateOptimisticallyActivityPage: (activityPage) => dispatch(activityActions.receiveActivityPage(activityPage))
+    updateOptimisticallyActivityPage: (activityPage) => dispatch(activityActions.receiveActivityPage(activityPage)),
+    onGetCommentVisibilityOptions: () => dispatch(commentActions.getCommentVisibilityOptions()),
   };
 };
 

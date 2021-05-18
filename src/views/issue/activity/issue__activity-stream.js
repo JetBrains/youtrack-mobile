@@ -62,16 +62,28 @@ const IssueActivityStream = (props: Props) => {
     const dispatch: Function = issueContext.dispatcher;
     const canUpdateComment = (comment: IssueComment): boolean => issuePermissions.canUpdateComment(issue, comment);
     const canDeleteComment = (comment: IssueComment): boolean => issuePermissions.canDeleteComment(issue, comment);
+    const onEditComment = (comment: Comment): void => {
+      Router.PageModal({
+        children: (
+          <CommentEdit
+            comment={comment}
+            onUpdate={(comment: IssueComment) => dispatch(commentActions.submitEditedComment(comment))}
+            visibilityOptionsGetter={() => dispatch(commentActions.getCommentVisibilityOptions())}
+          />
+        )
+      });
+    };
     return {
       canCommentOn: issuePermissions.canCommentOn(issue),
       canUpdateComment: canUpdateComment,
       canDeleteComment: canDeleteComment,
       canDeleteCommentPermanently: issuePermissions.canDeleteCommentPermanently(issue),
       canRestoreComment: (comment: IssueComment) => issuePermissions.canRestoreComment(issue, comment),
-      onReply: (comment: IssueComment) => dispatch(commentActions.startReply(
-        comment?.author?.login ||
-        getEntityPresentation(comment?.author)
-      )),
+      onReply: (comment: IssueComment) => {
+        dispatch(commentActions.setEditingComment({
+          text: `@${comment?.author?.login || getEntityPresentation(comment?.author)} `,
+        }));
+      },
       isAuthor: (comment: IssueComment) => issuePermissions.isCurrentUser(comment?.author),
       onCopyCommentLink: (comment: IssueComment) => dispatch(commentActions.copyCommentUrl(comment)),
       onDeleteCommentPermanently: (comment: IssueComment, activityId?: string) => dispatch(
@@ -79,21 +91,11 @@ const IssueActivityStream = (props: Props) => {
       ),
       onDeleteComment: (comment: IssueComment) => dispatch(commentActions.deleteComment(comment)),
       onRestoreComment: (comment: IssueComment) => dispatch(commentActions.restoreComment(comment)),
-      onStartEditing: (comment: Comment) => {
-        Router.PageModal({
-          children: (
-            <CommentEdit
-              comment={comment}
-              onUpdate={(comment: IssueComment) => dispatch(commentActions.submitEditedComment(comment))}
-              visibilityOptionsGetter={() => dispatch(commentActions.getCommentVisibilityOptions())}
-            />
-          )
-        });
-      },
+      onStartEditing: onEditComment,
       onShowCommentActions: (comment: IssueComment) => dispatch(commentActions.showIssueCommentActions(
         props.actionSheet(),
         comment,
-        canUpdateComment(comment),
+        canUpdateComment(comment) ? onEditComment : null,
         canDeleteComment(comment)
       )),
     };

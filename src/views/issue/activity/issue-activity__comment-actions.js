@@ -3,7 +3,6 @@
 import {Clipboard} from 'react-native';
 
 import * as activityHelper from './issue-activity__helper';
-import IssueVisibility from '../../../components/visibility/issue-visibility';
 import log from '../../../components/log/log';
 import usage from '../../../components/usage/usage';
 import {ANALYTICS_ISSUE_PAGE} from '../../../components/analytics/analytics-ids';
@@ -46,27 +45,7 @@ type StateGetter = () => {
   issueState: SingleIssueState,
 };
 
-export function receiveComments(comments: Array<IssueComment>): {comments: Array<IssueComment>, type: any} {
-  return {type: types.RECEIVE_COMMENTS, comments};
-}
-
-export function startSubmittingComment(): {type: any} {
-  return {type: types.START_SUBMITTING_COMMENT};
-}
-
-export function startReply(targetLogin: string): {comment: string, type: any} {
-  return {type: types.START_SUBMITTING_COMMENT, comment: `@${targetLogin} `};
-}
-
-export function setCommentText(comment: string): {comment: string, type: any} {
-  return {type: types.SET_COMMENT_TEXT, comment};
-}
-
-export function stopSubmittingComment(): {type: any} {
-  return {type: types.STOP_SUBMITTING_COMMENT};
-}
-
-export function updateComment(comment: IssueComment): {comment: IssueComment, type: any} {
+export function updateComment(comment: IssueComment) {
   return {type: types.RECEIVE_UPDATED_COMMENT, comment};
 }
 
@@ -127,7 +106,6 @@ export function addComment(comment: IssueComment): ((
   return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().issueState.issue.id;
     const activityPage: ?Array<Activity> = getState().issueActivity.activityPage;
-    dispatch(startSubmittingComment());
 
     try {
       await getApi().issue.submitComment(issueId, comment);
@@ -135,78 +113,51 @@ export function addComment(comment: IssueComment): ((
       log.info(`Comment created in issue ${issueId}. Reloading...`);
       dispatch(loadActivity(true));
     } catch (error) {
-      dispatch(setCommentText(comment.text));
       activityPage && dispatch(receiveActivityPage(activityPage.filter(it => !it.tmp)));
       notify('Cannot create comment', error);
-    } finally {
-      dispatch(stopSubmittingComment());
     }
   };
 }
 
 
-export function startEditingComment(comment: IssueComment): ((
-  dispatch: (any) => any,
-  getState: StateGetter,
-  getApi: ApiGetter
-) => Promise<void>) {
+export function setEditingComment(comment: IssueComment) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    dispatch(setCommentText(comment.text));
+
     dispatch({type: types.SET_EDITING_COMMENT, comment});
   };
 }
 
-export function stopEditingComment(): ((
-  dispatch: (any) => any,
-  getState: StateGetter,
-  getApi: ApiGetter
-) => Promise<void>) {
-  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    dispatch(setCommentText(''));
-    dispatch({type: types.CLEAR_EDITING_COMMENT});
-  };
-}
-
-export function submitEditedComment(comment: IssueComment): ((
-  dispatch: (any) => any,
-  getState: StateGetter,
-  getApi: ApiGetter
-) => Promise<void>) {
+export function submitEditedComment(comment: IssueComment) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().issueState.issueId;
     usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update comment');
-    dispatch(startSubmittingComment());
 
     try {
       const updatedComment = await getApi().issue.submitComment(issueId, comment);
-      dispatch(stopEditingComment());
       dispatch(loadActivity(true));
       log.info(`Comment ${updatedComment.id} edited. Reloading...`);
-      notify('Comment updated');
+      notify('Comment posted');
     } catch (error) {
       const errorMessage = 'Comment update failed';
       log.warn(errorMessage, error);
       notify(errorMessage, error);
-    } finally {
-      dispatch(stopSubmittingComment());
     }
   };
 }
 
 export function addOrEditComment(comment: IssueComment | null): ((dispatch: (any) => any, getState: StateGetter) => Promise<any>) {
   return async (dispatch: (any) => any, getState: StateGetter) => {
-    const state = getState();
-    const editingComment = state.issueCommentActivity.editingComment;
+    if (comment) {
+      const state = getState();
+      const editingComment = state.issueCommentActivity.editingComment;
 
-    if (!comment) {
-      dispatch(stopSubmittingComment());
-      return dispatch(stopEditingComment());
-    }
-
-    if (editingComment) {
-      return dispatch(submitEditedComment({...editingComment, ...comment}));
-    } else {
-      return dispatch(addComment(comment));
+      if (editingComment) {
+        dispatch(submitEditedComment({...editingComment, ...comment}));
+        dispatch(setEditingComment(null));
+      } else {
+        dispatch(addComment(comment));
+      }
+      dispatch(setEditingComment(null));
     }
   };
 }
@@ -282,7 +233,7 @@ export function copyCommentUrl(comment: IssueComment): ((dispatch: (any) => any,
 export function showIssueCommentActions(
   actionSheet: Object,
   comment: IssueComment,
-  canUpdateComment: boolean,
+  updateComment: ?(comment: IssueComment) => void,
   canDeleteComment: boolean
 ): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
@@ -295,13 +246,13 @@ export function showIssueCommentActions(
         },
       },
     ];
-    if (canUpdateComment) {
+    if (typeof updateComment === 'function') {
       actions.push({
         title: 'Edit',
         execute: () => {
           usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Edit comment');
-          dispatch(startEditingComment(comment));
-        },
+          updateComment && updateComment(comment);
+        }
       });
     }
     if (canDeleteComment) {
@@ -349,55 +300,12 @@ export function loadCommentSuggestions(query: string): ((
   };
 }
 
-export function receiveCommentVisibilityOptions(): {type: any} {
-  return {type: types.RECEIVE_VISIBILITY_OPTIONS};
-}
-
-export function onOpenSelect(selectProps: Object, isVisibilitySelectShown: boolean): {isVisibilitySelectShown: boolean, selectProps: any, type: any} {
-  return {type: types.OPEN_ISSUE_SELECT, selectProps, isVisibilitySelectShown};
-}
-
-export function onCloseSelect(isVisibilitySelectShown: boolean): {isVisibilitySelectShown: boolean, type: any, undefined: void} {
-  return {type: types.CLOSE_ISSUE_SELECT, undefined, isVisibilitySelectShown};
-}
-
-export function updateCommentWithVisibility(comment: IssueComment): {comment: IssueComment, type: any} {
-  return {type: types.SET_COMMENT_VISIBILITY, comment};
-}
-
 export function getCommentVisibilityOptions() {
   return (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter): Promise<Array<User | UserGroup>> => {
     const api: Api = getApi();
     const issueId: IssueFull = getState().issueState.issue.id;
     usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Open comment visibility select');
     return api.issue.getVisibilityOptions(issueId);
-  };
-}
-
-export function onOpenCommentVisibilitySelect(comment: IssueComment) {
-  return (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    dispatch(onOpenSelect({
-      show: true,
-      placeholder: 'Filter users, groups, and teams',
-      dataSource: async () => {
-        const options = await dispatch(getCommentVisibilityOptions());
-        dispatch(receiveCommentVisibilityOptions());
-        return [...(options.visibilityGroups || []), ...(options.visibilityUsers || [])];
-      },
-
-      selectedItems: [
-        ...(comment?.visibility?.permittedGroups || []),
-        ...(comment?.visibility?.permittedUsers || [])
-      ],
-      getTitle: item => getEntityPresentation(item),
-      onSelect: (selectedOption) => {
-        usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Comment visibility update');
-        comment = comment || {};
-        comment.visibility = IssueVisibility.toggleOption(comment.visibility, selectedOption);
-        dispatch(updateCommentWithVisibility(comment));
-        dispatch(onCloseSelect(false));
-      },
-    }, true));
   };
 }
 
