@@ -61,11 +61,21 @@ describe('Issue view actions', () => {
     fakeApi.issue.submitComment.should.have.been.calledWith(ISSUE_ID, fakeComment);
 
     const dispatched = store.getActions();
-
-    expect(dispatched[0]).toEqual({type: types.START_SUBMITTING_COMMENT});
-    expect(dispatched[1]).toEqual({type: types.STOP_SUBMITTING_COMMENT});
-    expect(dispatched[2]).toEqual({type: types.RECEIVE_ACTIVITY_API_AVAILABILITY, activitiesEnabled: false});
-    expect(dispatched[4]).toEqual({
+    expect(dispatched[0]).toEqual({type: types.RECEIVE_ACTIVITY_API_AVAILABILITY, activitiesEnabled: false});
+    expect(dispatched[1]).toEqual({
+      type: types.RECEIVE_ACTIVITY_CATEGORIES,
+      issueActivityTypes: [
+        { id: 'IssueComments', name: 'Comments' },
+        { id: 'IssueHistory', name: 'History' },
+        { id: 'TimeTracking', name: 'Work' }
+      ],
+      issueActivityEnabledTypes: [
+        { id: 'IssueComments', name: 'Comments' },
+        { id: 'IssueHistory', name: 'History' },
+        { id: 'TimeTracking', name: 'Work' }
+      ]
+    });
+    expect(dispatched[2]).toEqual({
       type: types.RECEIVE_ACTIVITY_PAGE,
       activityPage: convertCommentsToActivityPage([fakeComment])
     });
