@@ -57,6 +57,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
   componentDidMount() {
     this.loadIssueActivities();
+    this.props.getDraftComment();
   }
 
   loadIssueActivities = (doNotReset?: boolean) => {
@@ -153,7 +154,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
   canAddComment = () => this.issuePermissions.canCommentOn(this.props.issue);
 
   onSubmitComment = (comment: Comment) => {
-    const {addOrEditComment, activityPage, updateOptimisticallyActivityPage} = this.props;
+    const {submitDraftComment, activityPage, updateOptimisticallyActivityPage} = this.props;
 
     const currentUser: User = this.props.user;
     const commentActivity = [Object.assign(
@@ -173,7 +174,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     }
     updateOptimisticallyActivityPage(newActivityPage);
 
-    return addOrEditComment(comment);
+    return submitDraftComment(comment);
   };
 
   renderEditCommentInput(focus: boolean, uiTheme: UITheme) {
@@ -182,7 +183,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       suggestionsAreLoading,
       commentSuggestions,
       editingComment,
-      setEditingComment,
+      updateDraftComment,
       onGetCommentVisibilityOptions,
       issue,
       attachOrTakeImage,
@@ -195,7 +196,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     return <View>
       <IssueCommentInput
         autoFocus={focus}
-        onCommentChange={(comment: IssueComment) => setEditingComment(comment)}
+        onCommentChange={(comment: IssueComment) => { updateDraftComment(comment); }}
         getCommentVisibilityOptions={onGetCommentVisibilityOptions}
         onSubmitComment={this.onSubmitComment}
         editingComment={editingComment}
@@ -320,5 +321,3 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(IssueActivity);
-
-

@@ -95,6 +95,46 @@ export default class IssueAPI extends ApiBase {
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/admin/users/me/drafts/${issueId}/fields/${fieldId}?${queryString}`, 'POST', body);
   }
 
+  async getDraftComment(issueId: string): Promise<IssueComment | null> {
+    const queryString = qs.stringify({
+      fields: ApiHelper.toField({draftComment: issueFields.issueCommentBase}).toString()
+    });
+
+    const draftComment: IssueComment | null = await this.makeAuthorizedRequest(
+      `${this.youTrackIssueUrl}/${issueId}?${queryString}`
+    );
+    if (draftComment) {
+      draftComment.attachments = ApiHelper.convertAttachmentRelativeToAbsURLs(
+        draftComment.attachments, this.config.backendUrl
+      );
+    }
+    return draftComment;
+  }
+
+  async updateDraftComment(issueId: string, draftComment: $Shape<IssueComment>): IssueComment {
+    const queryString = qs.stringify({fields: issueFields.issueCommentBase.toString()});
+
+    return this.makeAuthorizedRequest(
+      `${this.youTrackIssueUrl}/${issueId}/draftComment/?${queryString}`,
+      draftComment.id ? 'POST' : 'PUT',
+      draftComment
+    );
+  }
+
+  async submitDraftComment(issueId: string, draftComment: $Shape<IssueComment>): IssueComment {
+    const queryString = qs.stringify({
+      draftId: draftComment.id,
+      fields: issueFields.issueComment.toString()
+    }
+    );
+
+    return this.makeAuthorizedRequest(
+      `${this.youTrackIssueUrl}/${issueId}/comments/?${queryString}`,
+      'POST',
+      {}
+    );
+  }
+
   async submitComment(issueId: string, comment: IssueComment) {
     const queryString = qs.stringify({fields: issueFields.issueComment.toString()});
     const url = `${this.youTrackIssueUrl}/${issueId}/comments/${comment.id || ''}?${queryString}`;

@@ -62,6 +62,7 @@ const IssueActivityStream = (props: Props) => {
     const canUpdateComment = (comment: IssueComment): boolean => issuePermissions.canUpdateComment(issue, comment);
     const canDeleteComment = (comment: IssueComment): boolean => issuePermissions.canDeleteComment(issue, comment);
     const onEditComment = (comment: Comment): void => {
+      usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'Edit comment');
       Router.PageModal({
         children: (
           <CommentEdit
@@ -79,7 +80,9 @@ const IssueActivityStream = (props: Props) => {
       canDeleteCommentPermanently: issuePermissions.canDeleteCommentPermanently(issue),
       canRestoreComment: (comment: IssueComment) => issuePermissions.canRestoreComment(issue, comment),
       onReply: (comment: IssueComment) => {
+        usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'Reply on comment');
         dispatch(commentActions.setEditingComment({
+          reply: true,
           text: `@${comment?.author?.login || getEntityPresentation(comment?.author)} `,
         }));
       },

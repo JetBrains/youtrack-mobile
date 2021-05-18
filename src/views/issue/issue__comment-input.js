@@ -3,7 +3,7 @@
 import React, {PureComponent} from 'react';
 import {View, ActivityIndicator} from 'react-native';
 
-import throttle from 'lodash.throttle';
+import debounce from 'lodash.debounce';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import IconHourGlass from '@jetbrains/icons/hourglass.svg';
@@ -74,33 +74,33 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
 
   UNSAFE_componentWillReceiveProps(nextProps: Props) {
     if (nextProps.editingComment && nextProps.editingComment.text !== this.props?.editingComment?.text) {
-      this.setComment(nextProps.editingComment, true);
+      this.setComment(nextProps.editingComment);
     }
   }
 
-  componentWillUnmount = (): void => {this.isUnmounted = true;};
+  componentWillUnmount = (): void => {
+    this.onChange(null);
+    this.isUnmounted = true;
+  }
 
-  debouncedOnTextChange: Function = throttle((text: string) => (
-    this.doChange({
+  debouncedOnTextChange: Function = debounce((text: string) => (
+    this.onChange({
       ...this.props.editingComment,
       text,
     })
   ), 300);
 
-  doChange = (editingComment: $Shape<IssueComment> | null): void => {
+  onChange = (editingComment: $Shape<IssueComment> | null): void => {
     this.props.onCommentChange && this.props.onCommentChange(editingComment);
   }
 
-  setComment = (editingComment: $Shape<IssueComment> = EMPTY_COMMENT, doNotFlush: boolean = false): void => {
+  setComment = (editingComment: $Shape<IssueComment> = EMPTY_COMMENT): void => {
     this.setState({editingComment});
-    if (!doNotFlush) {
-      this.doChange(editingComment);
-    }
   };
 
-  focus: () => void = () => this.editCommentInput.focus();
+  focus = (): void => {this.editCommentInput.focus();}
 
-  updateComment: () => void = () => {
+  updateComment = (): void => {
     this.setState({isSaving: true});
     this.toggleVisibilityControl(false);
     this.props.onSubmitComment({
@@ -185,6 +185,7 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
           visibility,
         };
         this.setComment(comment);
+        this.onChange(comment);
       }}
       uiTheme={uiTheme}
       getOptions={getCommentVisibilityOptions}
@@ -260,7 +261,7 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
           <View style={styles.commentInputContainer}>
             <MultilineInput
               ref={this.setInputRef}
-              {...{...this.props, autoFocus: hasText}}
+              {...{...this.props, autoFocus: !!editingComment.reply}}
               placeholder={commentPlaceholderText}
               value={editingComment.text}
               editable={!isSaving}
@@ -276,7 +277,7 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
                 this.setComment({
                   ...editingComment,
                   text: text,
-                }, true);
+                });
                 this.suggestionsNeededDetector(text, commentCaret);
                 this.debouncedOnTextChange(text);
               }}

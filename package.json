@@ -86,6 +86,7 @@
     "from-now": "1.0.2",
     "htmlparser-to-html": "0.0.6",
     "jetifier": "^1.6.5",
+    "lodash.debounce": "^4.0.8",
     "lodash.once": "4.1.1",
     "lodash.throttle": "4.1.1",
     "markdown-it-checkbox": "anisimov74/markdown-it-checkbox.git#5f35851",

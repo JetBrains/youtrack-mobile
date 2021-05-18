@@ -186,15 +186,19 @@ const GET_VISIBILITY_FIELDS = toField([
   }
 ]);
 
-const ISSUE_COMMENTS_FIELDS = toField([
+const ISSUE_COMMENTS_BASE_FIELDS = toField([
   'id',
-  'created',
-  'deleted',
   'text',
-  'textPreview',
   'usesMarkdown',
   {author: ISSUE_USER_FIELDS},
   VISIBILITY_FIELDS
+]);
+
+const ISSUE_COMMENTS_FIELDS = toField([
+  ISSUE_COMMENTS_BASE_FIELDS,
+  'created',
+  'deleted',
+  'textPreview',
 ]);
 
 const ISSUE_COMMENTS_WITH_ATTACHMENT_FIELDS = toField([
@@ -382,6 +386,7 @@ export default {
   ]),
   bundleValues: BUNDLE_VALUE,
   user: ISSUE_USER_FIELDS,
+  issueCommentBase: ISSUE_COMMENTS_BASE_FIELDS,
   issueComment: ISSUE_COMMENTS_FIELDS,
   issueFolder: ISSUE_FOLDER_FIELDS,
   commandSuggestionFields: COMMAND_SUGGESTION_FIELDS,

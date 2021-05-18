@@ -5,7 +5,7 @@ import {Clipboard} from 'react-native';
 import * as activityHelper from './issue-activity__helper';
 import log from '../../../components/log/log';
 import usage from '../../../components/usage/usage';
-import {ANALYTICS_ISSUE_PAGE} from '../../../components/analytics/analytics-ids';
+import {ANALYTICS_ISSUE_PAGE, ANALYTICS_ISSUE_STREAM_SECTION} from '../../../components/analytics/analytics-ids';
 import {confirmation} from '../../../components/confirmation/confirmation';
 import {
   loadActivitiesPage,
@@ -15,6 +15,7 @@ import {
 } from './issue-activity__actions';
 import {COMMENT_REACTIONS_SEPARATOR} from '../../../components/reactions/reactions';
 import {getEntityPresentation} from '../../../components/issue-formatter/issue-formatter';
+import {logEvent} from '../../../components/log/log-helper';
 import {notify} from '../../../components/notification/notification';
 import {showActions} from '../../../components/action-sheet/action-sheet';
 import {until} from '../../../util/util';
@@ -111,10 +112,51 @@ export function addComment(comment: IssueComment) {
   };
 }
 
+export function getDraftComment() {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const {issue} = getState().issueState;
+    const [error, response] = await until(getApi().issue.getDraftComment(issue.id));
+    if (!error && response.draftComment) {
+      dispatch(setEditingComment(response.draftComment));
+    }
+  };
+}
+
+export function updateDraftComment(draftComment: IssueComment) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    let comment: $Shape<IssueComment> = draftComment;
+    if (draftComment) {
+      const {issue} = getState().issueState;
+      const [error, draft] = await until(getApi().issue.updateDraftComment(issue.id, draftComment));
+      if (error) {
+        log.warn('Failed to update a comment draft', error);
+      } else {
+        comment = draft;
+      }
+    }
+    dispatch(setEditingComment(comment));
+  };
+}
+
+export function submitDraftComment(draftComment: IssueComment) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const {issue} = getState().issueState;
+
+    await updateDraftComment(draftComment);
+    const [error] = await until(getApi().issue.submitDraftComment(issue.id, draftComment));
+    if (error) {
+      const message: string = 'Failed to post a comment';
+      log.warn(message, error);
+      notify(message, error);
+      logEvent({message, isError: true, analyticsId: ANALYTICS_ISSUE_STREAM_SECTION});
+    } else {
+      dispatch(setEditingComment(null));
+    }
+  };
+}
 
 export function setEditingComment(comment: IssueComment) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-
     dispatch({type: types.SET_EDITING_COMMENT, comment});
   };
 }
@@ -137,23 +179,6 @@ export function submitEditedComment(comment: IssueComment) {
   };
 }
 
-export function addOrEditComment(comment: IssueComment | null) {
-  return async (dispatch: (any) => any, getState: StateGetter) => {
-    if (comment) {
-      const state = getState();
-      const editingComment = state.issueCommentActivity.editingComment;
-
-      if (editingComment) {
-        dispatch(submitEditedComment({...editingComment, ...comment}));
-        dispatch(setEditingComment(null));
-      } else {
-        dispatch(addComment(comment));
-      }
-      dispatch(setEditingComment(null));
-    }
-  };
-}
-
 function toggleCommentDeleted(comment: IssueComment, deleted: boolean) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().issueState.issueId;
@@ -172,6 +197,7 @@ function toggleCommentDeleted(comment: IssueComment, deleted: boolean) {
 
 export function deleteComment(comment: IssueComment) {
   return async (dispatch: (any) => any) => {
+    usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'Delete comment');
     return dispatch(toggleCommentDeleted(comment, true));
   };
 }
@@ -186,7 +212,7 @@ export function restoreComment(comment: IssueComment) {
 export function deleteCommentPermanently(comment: IssueComment, activityId?: string) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().issueState.issueId;
-
+    usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'Delete comment permanently');
     confirmation('Delete comment permanently?', 'Delete')
       .then(async () => {
         try {
