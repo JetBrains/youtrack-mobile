@@ -89,7 +89,7 @@ const ArticleAddComment = (props: Props) => {
       updateSuggestionsLoading(false);
       updateMentions(_mentions);
     }
-  }, [dispatch]);
+  }, [dispatch, commentText]);
 
   const debouncedOnChange = throttle(onChange, 350);
 
