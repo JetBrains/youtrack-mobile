@@ -10,38 +10,11 @@ import type {AppConfig} from '../../flow/AppConfig';
 
 const isIOS: boolean = !isAndroidPlatform();
 
-async function openAuthPage(config: AppConfig) {
-  const url = encodeURI(urlJoin(
-    config.auth.serverUri,
-    '/api/rest/oauth2/auth',
-    '?response_type=code',
-    '&access_type=offline',
-    `&client_id=${config.auth.clientId}`,
-    `&scope=${config.auth.scopes}`,
-    `&redirect_uri=${config.auth.landingUrl}`
-  ));
-
-  const doLinking = () => Linking.openURL(url);
-  if (isIOS) {
-    try {
-      await SafariView.isAvailable();
-    } catch (e) {
-      doLinking();
-    }
-    SafariView.show({url});
-  } else {
-    doLinking();
-  }
-}
+const SCHEME = 'ytoauth';
 
 function authorizeInHub(config: AppConfig): Promise<string> {
   return new Promise(function (resolve) {
-
     function onOpenWithUrl(event) {
-      if (isIOS) {
-        SafariView.dismiss();
-      }
-
       Linking.removeEventListener('url', onOpenWithUrl);
 
       const url = event.url || event;
@@ -51,7 +24,28 @@ function authorizeInHub(config: AppConfig): Promise<string> {
       Linking.removeEventListener('url', onOpenWithUrl);
     }
 
-    Linking.addEventListener('url', onOpenWithUrl);
+    async function openAuthPage(config: AppConfig) {
+      const url = encodeURI(urlJoin(
+        config.auth.serverUri,
+        '/api/rest/oauth2/auth',
+        '?response_type=code',
+        '&access_type=offline',
+        `&client_id=${config.auth.clientId}`,
+        `&scope=${config.auth.scopes}`,
+        `&redirect_uri=${config.auth.landingUrl}`
+      ));
+
+      if (isIOS) {
+        SafariView.requestAuth({url, scheme: SCHEME})
+         .then(url => onOpenWithUrl(url));
+      } else {
+        Linking.openURL(url);
+      }
+    }
+
+    if (!isIOS) {
+      Linking.addEventListener('url', onOpenWithUrl);
+    }
 
     openAuthPage(config);
   });

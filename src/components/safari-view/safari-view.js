@@ -1,32 +1,23 @@
 /* @flow */
 import {NativeModules} from 'react-native';
 
-const YTSafariViewController = NativeModules.YTSafariViewController;
+const SafariWebAuth = NativeModules.SafariWebAuth;
 
 type Options = {
-  url: string
+  url: string,
+  scheme: string
 }
 
 export default {
-  show(options: Options): Promise<null> {
+  requestAuth(options: Options): Promise<string> {
     return new Promise((resolve, reject) => {
-      YTSafariViewController.presentSafari(options.url);
+      SafariWebAuth
+        .requestAuth(options.url, options.scheme, result => {
+          if (result === 'error') {
+            reject();
+          }
+          resolve(result);
+        });
     });
-  },
-
-  dismiss() {
-    YTSafariViewController.dismiss();
-  },
-
-  isAvailable(): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      YTSafariViewController.isAvailable((error) => {
-        if (error) {
-          return reject(error);
-        }
-
-        resolve(true);
-      });
-    });
-  },
+  }
 };
