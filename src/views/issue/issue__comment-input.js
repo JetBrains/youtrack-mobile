@@ -29,7 +29,7 @@ type Props = {
   onSubmitComment: (comment: IssueComment) => any,
   editingComment: ?$Shape<IssueComment>,
   suggestionsAreLoading: boolean,
-  onRequestCommentSuggestions: (query: string) => any,
+  getCommentSuggestions: (query: string) => any,
   mentions: ?{ users: Array<User> },
   getCommentVisibilityOptions: () => Array<User | UserGroup>,
   canAttach: boolean,
@@ -133,7 +133,7 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
         suggestionsQuery: word
       });
 
-      this.props.onRequestCommentSuggestions(word);
+      this.props.getCommentSuggestions(word);
     }
   }
 
@@ -144,7 +144,7 @@ export default class IssueCommentInput extends PureComponent<Props, State> {
       this.setState({
         editingComment: {
           ...editingComment,
-          text: newText,
+          text: `${newText} `,
         },
         showSuggestions: false,
         isVisibilityControlVisible: true
