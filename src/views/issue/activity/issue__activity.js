@@ -57,7 +57,6 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
   componentDidMount() {
     this.loadIssueActivities();
-    this.props.getDraftComment();
   }
 
   loadIssueActivities = (doNotReset?: boolean) => {
@@ -177,7 +176,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     return submitDraftComment(comment);
   };
 
-  renderEditCommentInput(focus: boolean, uiTheme: UITheme) {
+  renderEditCommentInput(uiTheme: UITheme) {
     const {
       loadCommentSuggestions,
       suggestionsAreLoading,
@@ -195,7 +194,6 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
     return <View>
       <IssueCommentInput
-        autoFocus={focus}
         onCommentChange={(comment: IssueComment) => { updateDraftComment(comment); }}
         getCommentVisibilityOptions={onGetCommentVisibilityOptions}
         onSubmitComment={this.onSubmitComment}
@@ -207,6 +205,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
         onAttach={() => attachOrTakeImage(this.context.actionSheet())}
         uiTheme={uiTheme}
         onAddSpentTime={canAddWork ? this.renderAddSpentTimePage : null}
+        draftGetter={this.props.getDraftComment}
       />
 
       <KeyboardSpacerIOS top={98}/>
@@ -282,7 +281,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
                   </ScrollView>
 
-                  {Boolean(this.canAddComment()) && this.renderEditCommentInput(false, theme.uiTheme)}
+                  {Boolean(this.canAddComment()) && this.renderEditCommentInput(theme.uiTheme)}
                 </View>
               );
             }}

@@ -100,15 +100,9 @@ export default class IssueAPI extends ApiBase {
       fields: ApiHelper.toField({draftComment: issueFields.issueCommentBase}).toString()
     });
 
-    const draftComment: IssueComment | null = await this.makeAuthorizedRequest(
+    return this.makeAuthorizedRequest(
       `${this.youTrackIssueUrl}/${issueId}?${queryString}`
     );
-    if (draftComment) {
-      draftComment.attachments = ApiHelper.convertAttachmentRelativeToAbsURLs(
-        draftComment.attachments, this.config.backendUrl
-      );
-    }
-    return draftComment;
   }
 
   async updateDraftComment(issueId: string, draftComment: $Shape<IssueComment>): IssueComment {

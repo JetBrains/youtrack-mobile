@@ -119,22 +119,19 @@ export function getDraftComment() {
     if (!error && response.draftComment) {
       dispatch(setEditingComment(response.draftComment));
     }
+    return response ? response.draftComment : null;
   };
 }
 
 export function updateDraftComment(draftComment: IssueComment) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    let comment: $Shape<IssueComment> = draftComment;
     if (draftComment) {
       const {issue} = getState().issueState;
-      const [error, draft] = await until(getApi().issue.updateDraftComment(issue.id, draftComment));
+      const [error] = await until(getApi().issue.updateDraftComment(issue.id, draftComment));
       if (error) {
         log.warn('Failed to update a comment draft', error);
-      } else {
-        comment = draft;
       }
     }
-    dispatch(setEditingComment(comment));
   };
 }
 
