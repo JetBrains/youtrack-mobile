@@ -119,6 +119,45 @@ export function addComment(comment: IssueComment): ((
   };
 }
 
+export function getDraftComment() {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const {issue} = getState().issueState;
+    const [error, response] = await until(getApi().issue.getDraftComment(issue.id));
+    if (!error && response.draftComment) {
+      dispatch(setEditingComment(response.draftComment));
+    }
+    return response ? response.draftComment : null;
+  };
+}
+
+export function updateDraftComment(draftComment: IssueComment) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    if (draftComment) {
+      const {issue} = getState().issueState;
+      const [error] = await until(getApi().issue.updateDraftComment(issue.id, draftComment));
+      if (error) {
+        log.warn('Failed to update a comment draft', error);
+      }
+    }
+  };
+}
+
+export function submitDraftComment(draftComment: IssueComment) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const {issue} = getState().issueState;
+
+    await updateDraftComment(draftComment);
+    const [error] = await until(getApi().issue.submitDraftComment(issue.id, draftComment));
+    if (error) {
+      const message: string = 'Failed to post a comment';
+      log.warn(message, error);
+      notify(message, error);
+      logEvent({message, isError: true, analyticsId: ANALYTICS_ISSUE_STREAM_SECTION});
+    } else {
+      dispatch(setEditingComment(null));
+    }
+  };
+}
 
 export function setEditingComment(comment: IssueComment) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
