@@ -199,7 +199,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
         getCommentVisibilityOptions={onGetCommentVisibilityOptions}
         onSubmitComment={this.onSubmitComment}
         editingComment={editingComment}
-        onRequestCommentSuggestions={loadCommentSuggestions}
+        getCommentSuggestions={loadCommentSuggestions}
         suggestionsAreLoading={suggestionsAreLoading}
         mentions={commentSuggestions}
         canAttach={this.issuePermissions.canAddAttachmentTo(issue)}
