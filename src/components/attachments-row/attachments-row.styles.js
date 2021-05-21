@@ -10,9 +10,9 @@ export default EStyleSheet.create({
   attachmentImage: {
     marginRight: UNIT,
     borderWidth: 1,
-    borderColor: '$boxBackground',
-    borderRadius: 3,
-    width: 120,
+    borderColor: '$separator',
+    borderRadius: UNIT / 2,
+    width: UNIT * 12,
     height: UNIT * 8,
     overflow: 'hidden'
   },

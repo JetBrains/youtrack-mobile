@@ -3,17 +3,16 @@
 import attachFile from '../attach-file/attach-file';
 import log from '../log/log';
 import usage from '../usage/usage';
-import {IconAttachment, IconCamera} from '../icon/icon';
-import {notify} from '../notification/notification';
-import {showActions} from '../action-sheet/action-sheet';
+import {ANALYTICS_ISSUE_PAGE, ANALYTICS_ISSUE_STREAM_SECTION} from '../analytics/analytics-ids';
 import {createAttachmentTypes} from './attachment-types';
+import {IconAttachment, IconCamera} from '../icon/icon';
+import {logEvent} from '../log/log-helper';
+import {notify} from '../notification/notification';
+import {until} from '../../util/util';
 
-// import * as types from './attachment-types';
 import type Api from '../api/api';
 import type {Attachment} from '../../flow/CustomFields';
 import type {State as IssueState} from '../../views/issue/issue-reducers';
-
-const CATEGORY_NAME = 'Issue';
 
 type ApiGetter = () => Api;
 type StateGetter = () => { issueState: IssueState };
@@ -54,8 +53,8 @@ export const getAttachmentActions = (prefix: string) => {
           const response: Attachment = await api.issue.attachFile(issueId, attach.url, attach.name);
           await api.issue.updateIssueAttachmentVisibility(issueId, response[0].id, attach.visibility);
 
-          log.info(`Image attached to issue ${issueId}`);
-          usage.trackEvent(CATEGORY_NAME, 'Attach image', 'Success');
+          log.info(`File attached to issue ${issueId}`);
+          usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Attach image', 'Success');
 
           dispatch(actions.stopImageAttaching());
           dispatch(actions.toggleAttachFileDialog(false));
@@ -68,11 +67,48 @@ export const getAttachmentActions = (prefix: string) => {
       };
     },
 
+    uploadFileToDraftComment: function (attach: Attachment) {
+      return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
+        logEvent({
+          message: 'Attaching file to a comment',
+          analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+        });
+        const api: Api = getApi();
+        const issueId: string = getState().issueState.issue.id;
+        const [error, attachments] = await until(api.issue.attachFileToDraftComment(issueId, attach.url, attach.name));
+        if (error) {
+          const message: string = 'Failed to attach file to a comment';
+          log.warn(message, error);
+          notify(message, error);
+        } else {
+          dispatch(actions.stopImageAttaching());
+          dispatch(actions.toggleAttachFileDialog(false));
+          return attachments;
+        }
+        return null;
+      };
+    },
+
     removeAttachment: function (attach: Attachment, issueId: string) {
       return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
         const api: Api = getApi();
         try {
           await api.issue.removeAttachment(issueId, attach.id);
+          dispatch(this.doRemoveAttach(attach.id));
+        } catch (error) {
+          const message: string = 'Failed to remove attachment';
+          log.warn(message, error);
+          notify(message, error);
+        }
+      };
+    },
+
+    removeAttachmentFromDraftComment: function (attach: Attachment) {
+      return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
+        const api: Api = getApi();
+        const issueId: string = getState().issueState.issue.id;
+        try {
+          await api.issue.removeFileFromDraftComment(issueId, attach.id);
           dispatch(this.doRemoveAttach(attach.id));
         } catch (error) {
           const message: string = 'Failed to remove attachment';
@@ -101,25 +137,26 @@ export const getAttachmentActions = (prefix: string) => {
         {
           title: 'Choose from library…',
           icon: IconAttachment,
-          execute: () => dispatch(actions.showAttachImageDialog(attachFileMethod.openPicker))
+          execute: () => {
+            logEvent({
+              message: 'Attach file from storage',
+              analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+            });
+            dispatch(actions.showAttachImageDialog(attachFileMethod.openPicker));
+          }
         },
         {
           title: 'Take a picture…',
           icon: IconCamera,
-          execute: () => dispatch(actions.showAttachImageDialog(attachFileMethod.openCamera))
+          execute: () => {
+            logEvent({
+              message: 'Attach file via camera',
+              analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+            });
+            dispatch(actions.showAttachImageDialog(attachFileMethod.openCamera));
+          }
         }
       ];
-    },
-
-    attachOrTakeImage: function (actionSheet: Object) {
-      return async (dispatch: any => any) => {
-        const contextActions = actions.createAttachActions(dispatch).concat({title: 'Cancel'});
-        const selectedAction = await showActions(contextActions, actionSheet);
-
-        if (selectedAction && selectedAction.execute) {
-          selectedAction.execute();
-        }
-      };
     },
 
     loadIssueAttachments: function(issueId: string) {

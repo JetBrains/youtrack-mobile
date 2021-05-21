@@ -1,7 +1,10 @@
 /* @flow */
 
 import {createReducer} from 'redux-create-reducer';
+
 import * as types from '../issue-action-types';
+import {attachmentTypes} from './issue-activity__attachment-actions-and-types';
+import {guid} from '../../../util/util';
 
 import type {ActivityItem, Activity} from '../../../flow/Activity';
 import type {CustomError} from '../../../flow/Error';
@@ -16,6 +19,9 @@ export type State = {
   activitiesEnabled: boolean,
   activitiesLoadingError: ?Error,
   activityPage: ActivityPage,
+  attachingImage: Object | null,
+  removingImageId: string | null,
+  isAttachFileDialogVisible: boolean,
   isSavingEditedIssue: boolean,
   issue: IssueFull,
   issueActivityEnabledTypes: Array<Object>,
@@ -34,6 +40,9 @@ export const initialState: State = {
   activitiesEnabled: false,
   activitiesLoadingError: null,
   activityPage: null,
+  attachingImage: null,
+  removingImageId: null,
+  isAttachFileDialogVisible: false,
   isSavingEditedIssue: false,
   issue: null,
   issueActivityEnabledTypes: [],
@@ -47,7 +56,43 @@ export const initialState: State = {
   workTimeSettings: null,
 };
 
+const attachmentReducers = {
+  [attachmentTypes.ATTACH_START_ADDING](state: State, action: {attachingImage: Object}) {
+    return {
+      ...state,
+      attachingImage: {...action.attachingImage, id: guid()}
+    };
+  },
+  [attachmentTypes.ATTACH_CANCEL_ADDING](state: State, action: {attachingImage: Object}) {
+    return {
+      ...state,
+      attachingImage: null
+    };
+  },
+  [attachmentTypes.ATTACH_REMOVE](state: State, action: { attachmentId: string }) {
+    return {
+      ...state,
+      removingImageId: action.attachmentId,
+    };
+  },
+  [attachmentTypes.ATTACH_STOP_ADDING](state: State) {
+    return {
+      ...state,
+      attachingImage: null
+    };
+  },
+  [attachmentTypes.ATTACH_TOGGLE_ADD_FILE_DIALOG](state: State, action: {isAttachFileDialogVisible: boolean}) {
+    return {
+      ...state,
+      isAttachFileDialogVisible: action.isAttachFileDialogVisible
+    };
+  },
+};
+
+
 export default createReducer(initialState, {
+  ...attachmentReducers,
+
   [types.RECEIVE_ACTIVITY_PAGE]: (state: State, action: { activityPage: Array<Activity> }): State => {
     const {activityPage} = action;
     return {

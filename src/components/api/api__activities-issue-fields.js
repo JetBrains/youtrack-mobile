@@ -11,16 +11,6 @@ const ISSUE_ACTIVITIES_EVENT_BASE = toField([
   'color(id)',
 ]);
 
-const ISSUE_ATTACHMENT_FIELDS = toField([
-  'id',
-  'url',
-  'mimeType',
-  'removed',
-  'thumbnailURL',
-  'imageDimension(width,height)',
-  'imageDimensions(width,height)'
-]);
-
 const ISSUE_PROJECT_FIELDS = toField([
   'shortName'
 ]);
@@ -65,8 +55,7 @@ const ISSUE_ACTIVITIES_FIELDS = toField([
       ISSUE_PROJECT_FIELDS,
 
       ISSUE_ACTIVITIES_EVENT_BASE,
-      IssueFields.ISSUE_COMMENTS_WITH_ATTACHMENT_FIELDS,
-      ISSUE_ATTACHMENT_FIELDS,
+      IssueFields.issueComment,
 
       IssueFields.ISSUE_XSHORT_FIELDS,
 
@@ -93,9 +82,7 @@ const ISSUE_ACTIVITIES_FIELDS = toField([
 ]);
 
 
-export {
-  ISSUE_ATTACHMENT_FIELDS
-};
+export const ISSUE_ATTACHMENT_FIELDS: Object = IssueFields.attachments;
 
 export default toField([
   'cursor',

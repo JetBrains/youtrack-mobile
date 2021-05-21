@@ -59,6 +59,7 @@ export default EStyleSheet.create({
   commentContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingHorizontal: UNIT * 3,
     justifyContent: 'center'
   },
   commentInputContainer: {
@@ -72,8 +73,6 @@ export default EStyleSheet.create({
     flex: 1,
     minHeight: MIN_INPUT_SIZE,
     padding: 0,
-    paddingLeft: UNIT,
-    marginRight: UNIT,
     backgroundColor: '$background',
     ...mainText,
     color: '$text'
@@ -115,13 +114,25 @@ export default EStyleSheet.create({
   },
 
   actionsContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     height: UNIT * 4,
     minWidth: UNIT * 4,
-    marginRight: UNIT,
+    marginRight: UNIT / 4,
   },
-  actionsContainerIcon: {
+  actionsContainerButton: {
+    marginRight: UNIT ,
+    padding: UNIT / 4,
     color: '$iconAccent'
-  }
+  },
+  actionsContainerButtonDisabled: {
+    color: '$disabled'
+  },
+
+  attachmentsContainer: {
+    paddingLeft: 0,
+    marginLeft: -UNIT,
+    marginVertical: UNIT,
+  },
 });

@@ -1,4 +1,5 @@
 /* @flow */
+
 import ApiHelper from './api__helper';
 
 const toField = ApiHelper.toField;
@@ -152,7 +153,8 @@ const ISSUE_ATTACHMENTS_FIELDS = toField([
   'thumbnailURL',
   'mimeType',
   'imageDimension(width,height)',
-  'imageDimensions(width,height)'
+  'imageDimensions(width,height)',
+  {author: ['ringId']}
 ]);
 
 const USER_GROUP_FIELDS = toField([
@@ -198,25 +200,9 @@ const ISSUE_COMMENTS_FIELDS = toField([
   ISSUE_COMMENTS_BASE_FIELDS,
   'created',
   'deleted',
-  'textPreview',
-]);
-
-const ISSUE_COMMENTS_WITH_ATTACHMENT_FIELDS = toField([
-  'id',
-  'created',
-  'deleted',
-  'text',
-  'textPreview',
-  'usesMarkdown',
-  {author: ISSUE_USER_FIELDS},
-  VISIBILITY_FIELDS,
   {
-    attachments: [
-      'url',
-      'mimeType',
-      'imageDimensions(width,height)'
-    ]
-  }
+    attachments: ISSUE_ATTACHMENTS_FIELDS
+  },
 ]);
 
 const ISSUE_COMMENTS_REMOVED = toField([
@@ -386,7 +372,6 @@ export default {
   ]),
   bundleValues: BUNDLE_VALUE,
   user: ISSUE_USER_FIELDS,
-  issueCommentBase: ISSUE_COMMENTS_BASE_FIELDS,
   issueComment: ISSUE_COMMENTS_FIELDS,
   issueFolder: ISSUE_FOLDER_FIELDS,
   commandSuggestionFields: COMMAND_SUGGESTION_FIELDS,
@@ -396,7 +381,6 @@ export default {
 
   ISSUE_USER_FIELDS: ISSUE_USER_FIELDS,
   ISSUE_COMMENTS_FIELDS: ISSUE_COMMENTS_FIELDS,
-  ISSUE_COMMENTS_WITH_ATTACHMENT_FIELDS: ISSUE_COMMENTS_WITH_ATTACHMENT_FIELDS,
   ISSUE_COMMENTS_REMOVED_FIELDS: ISSUE_COMMENTS_REMOVED,
   ISSUE_XSHORT_FIELDS: ISSUE_XSHORT_FIELDS,
 

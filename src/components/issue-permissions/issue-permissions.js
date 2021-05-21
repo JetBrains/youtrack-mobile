@@ -6,7 +6,7 @@ import type {AnyIssue} from '../../flow/Issue';
 import type {Article} from '../../flow/Article';
 import type {PermissionsStore} from '../permissions-store/permissions-store';
 import type {User} from '../../flow/User';
-import type {CustomField, IssueComment, IssueProject} from '../../flow/CustomFields';
+import type {Attachment, CustomField, IssueComment, IssueProject} from '../../flow/CustomFields';
 import type {WorkItem} from '../../flow/Work';
 
 export const CREATE_ISSUE = 'JetBrains.YouTrack.CREATE_ISSUE';
@@ -165,6 +165,13 @@ export default class IssuePermissions {
   canAddAttachmentTo = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_ADD_ATTACHMENT);
 
   canRemoveAttachment = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_REMOVE_ATTACHMENT);
+
+  canDeleteCommentAttachment = (attachment: Attachment, issue: AnyIssue): boolean => {
+    if (attachment?.author && this.isCurrentUser(attachment.author)) {
+      return true;
+    }
+    return this.canRemoveAttachment(issue);
+  };
 
   canCreateIssueToProject = (project: IssueProject): boolean => {
     return this.hasPermissionFor({project: project}, CAN_CREATE_COMMENT);
