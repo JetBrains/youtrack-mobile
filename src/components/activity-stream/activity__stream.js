@@ -39,6 +39,7 @@ import styles from './activity__stream.styles';
 import type {Activity, ActivityChange, ActivityItem, ActivityStreamCommentActions} from '../../flow/Activity';
 import type {Attachment, IssueComment} from '../../flow/CustomFields';
 import type {CustomError} from '../../flow/Error';
+import type {Node} from 'react';
 import type {Reaction} from '../../flow/Reaction';
 import type {UITheme} from '../../flow/Theme';
 import type {User} from '../../flow/User';
@@ -161,27 +162,45 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
     return attachments;
   };
 
+  const renderAttachments = (attachments: Array<AttachmentsRow>, uiTheme: UITheme): Node => {
+    const {
+      commentActions = {
+        canDeleteCommentAttachment: (attachment: Attachment) => false,
+        onDeleteAttachment: (attachment: Attachment) => {}
+      }
+    } = props;
+    const canDeleteAttachment: boolean = !!attachments[0] && commentActions.canDeleteCommentAttachment(attachments[0]);
+
+    return <AttachmentsRow
+      attachments={updateToAbsUrl(attachments)}
+      attachingImage={null}
+      imageHeaders={getApi().auth.getAuthorizationHeaders()}
+      onImageLoadingError={(err: CustomError) => log.warn('onImageLoadingError', err.nativeEvent)}
+      onOpenAttachment={(type: string) => (
+        usage.trackEvent(
+          ANALYTICS_ISSUE_STREAM_SECTION, type === 'image' ? 'Showing image' : 'Open attachment by URL'
+        )
+      )}
+      canRemoveAttachment={canDeleteAttachment}
+      onRemoveImage={(attachment: Attachment) => commentActions.onDeleteAttachment(attachment)}
+      uiTheme={uiTheme}
+    />;
+  };
+
+  const getCommentAttachments = (comment: Activity): Array<Attachment> => {
+    return comment && comment.added && comment.added[0] && comment.added[0].attachments || [];
+  };
+
   const renderAttachmentChange = (activity: Object, uiTheme: UITheme) => {
-    const removed = activity.removed || [];
-    const added = activity.added || [];
-    const addedAndLaterRemoved = added.filter(it => !it.url);
-    const addedAndAvailable = updateToAbsUrl(added.filter(it => it.url));
-    const hasAddedAttachments = addedAndAvailable.length > 0;
+    const removed: Array<any> = activity.removed || [];
+    const added: Array<any> = activity.added || [];
+    const addedAndLaterRemoved: Array<any> = added.filter(it => !it.url);
+    const addedAndAvailable: Array<any> = added.filter(it => it.url);
+    const hasAddedAttachments: boolean = addedAndAvailable.length > 0;
 
     return (
       <View key={activity.id}>
-        {hasAddedAttachments && <AttachmentsRow
-          attachments={addedAndAvailable}
-          attachingImage={null}
-          imageHeaders={getApi().auth.getAuthorizationHeaders()}
-          onImageLoadingError={err => log.warn('onImageLoadingError', err.nativeEvent)}
-          onOpenAttachment={(type) => (
-            usage.trackEvent(
-              ANALYTICS_ISSUE_STREAM_SECTION, type === 'image' ? 'Showing image' : 'Open attachment by URL'
-            )
-          )}
-          uiTheme={uiTheme}
-        />}
+        {hasAddedAttachments && renderAttachments(addedAndAvailable, uiTheme)}
         {addedAndLaterRemoved.length > 0 && addedAndLaterRemoved.map(
           it => <Text style={styles.activityAdded} key={it.id}>{it.name}</Text>
         )}
@@ -405,6 +424,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
             return null;
           }
 
+          const commentAttachments: Array<Attachment> = getCommentAttachments(activityGroup.comment);
           return (
             <View key={activityGroup.timestamp ? `${activityGroup.timestamp}_${index}` : guid()}>
               {index > 0 && !activityGroup.merged && <View style={styles.activitySeparator}/>}
@@ -428,6 +448,13 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
                   )}
 
                   {activityGroup.comment && renderCommentActions(activityGroup)}
+                  {commentAttachments.length > 0 && (
+                    <View
+                      style={styles.activityCommentAttachments}
+                    >
+                      {renderAttachments(commentAttachments, props.uiTheme)}
+                    </View>
+                  )}
                 </View>
 
               </View>
