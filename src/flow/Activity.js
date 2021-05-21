@@ -57,11 +57,13 @@ type CommentAction = (comment: IssueComment) => boolean;
 export type ActivityStreamCommentActions = {
   canCommentOn?: boolean,
   canDeleteComment?: CommentAction,
+  canDeleteCommentAttachment?: (attachment: Attachment) => boolean,
   canDeleteCommentPermanently?: boolean,
   canRestoreComment?: CommentAction,
   canUpdateComment?: CommentAction,
   isAuthor?: CommentAction,
   onCopyCommentLink?: (comment: IssueComment) => Function,
+  onDeleteAttachment?: (attachment: Attachment) => Function,
   onDeleteComment?: (comment: IssueComment) => Function,
   onDeleteCommentPermanently?: (comment: IssueComment, activityId?: string) => Function,
   onReply?: (comment: IssueComment) => any,

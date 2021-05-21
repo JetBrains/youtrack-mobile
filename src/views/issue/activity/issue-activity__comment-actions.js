@@ -122,21 +122,23 @@ export function addComment(comment: IssueComment): ((
 export function getDraftComment() {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const {issue} = getState().issueState;
-    const [error, response] = await until(getApi().issue.getDraftComment(issue.id));
-    if (!error && response.draftComment) {
-      dispatch(setEditingComment(response.draftComment));
+    const [error, draftComment] = await until(getApi().issue.getDraftComment(issue.id));
+    if (!error && draftComment) {
+      dispatch(setEditingComment(draftComment));
     }
-    return response ? response.draftComment : null;
+    return draftComment;
   };
 }
 
-export function updateDraftComment(draftComment: IssueComment) {
+export function updateDraftComment(draftComment: IssueComment, doNotFlush: boolean = false) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     if (draftComment) {
       const {issue} = getState().issueState;
-      const [error] = await until(getApi().issue.updateDraftComment(issue.id, draftComment));
+      const [error, draft] = await until(getApi().issue.updateDraftComment(issue.id, draftComment));
       if (error) {
         log.warn('Failed to update a comment draft', error);
+      } else if (!doNotFlush) {
+        dispatch(setEditingComment(draft));
       }
     }
   };
@@ -146,7 +148,7 @@ export function submitDraftComment(draftComment: IssueComment) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const {issue} = getState().issueState;
 
-    await updateDraftComment(draftComment);
+    await dispatch(updateDraftComment(draftComment, true));
     const [error] = await until(getApi().issue.submitDraftComment(issue.id, draftComment));
     if (error) {
       const message: string = 'Failed to post a comment';

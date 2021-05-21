@@ -1,33 +1,42 @@
 /* @flow */
 
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 
 import debounce from 'lodash.debounce';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {useDispatch, useSelector} from 'react-redux';
 
+import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
+import AttachmentsRow from '../../components/attachments-row/attachments-row';
+import IconAttach from '@jetbrains/icons/attachment.svg';
 import IconHourGlass from '@jetbrains/icons/hourglass.svg';
+import log from '../../components/log/log';
 import Mentions from '../../components/mentions/mentions';
 import MultilineInput from '../../components/multiline-input/multiline-input';
+import usage from '../../components/usage/usage';
 import VisibilityControl from '../../components/visibility/visibility-control';
+import {ANALYTICS_ISSUE_STREAM_SECTION} from '../../components/analytics/analytics-ids';
+import {attachmentActions} from './activity/issue-activity__attachment-actions-and-types';
 import {commentPlaceholderText} from '../../app-text';
 import {composeSuggestionText, getSuggestWord} from '../../components/mentions/mension-helper';
-import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconArrowUp} from '../../components/icon/icon';
+import {ThemeContext} from '../../components/theme/theme-context';
 
 import styles from './issue__comment-input.styles';
 
-import type {IssueComment} from '../../flow/CustomFields';
+import type {Attachment, IssueComment} from '../../flow/CustomFields';
+import type {AppState} from '../../reducers';
 import type {Node} from 'react';
-import type {UITheme} from '../../flow/Theme';
+import type {Theme} from '../../flow/Theme';
 import type {UserGroup} from '../../flow/UserGroup';
 import type {User} from '../../flow/User';
 import type {Visibility} from '../../flow/Visibility';
+import type {CustomError} from '../../flow/Error';
 
-type DraftGetterResponse = { draft: IssueComment | null };
+
 type Props = {
-  draftGetter: () => Promise<DraftGetterResponse>,
-  onCommentChange?: (comment: IssueComment) => any,
+  onCommentChange: (comment: IssueComment) => any,
   onSubmitComment: (comment: IssueComment) => any,
   editingComment: ?$Shape<IssueComment>,
   suggestionsAreLoading: boolean,
@@ -37,7 +46,6 @@ type Props = {
   canAttach: boolean,
   onAddSpentTime: (() => any) | null,
   onAttach: () => any,
-  uiTheme: UITheme,
 };
 
 type State = {
@@ -56,10 +64,11 @@ const EMPTY_COMMENT: $Shape<IssueComment> = {text: '', visibility: null};
 
 
 const IssueCommentInput = (props: Props) => {
-  let editCommentInput: MultilineInput;
-
+  const dispatch = useDispatch();
+  const theme: Theme = useContext(ThemeContext);
   const [state, updateState] = useState({
     isSaving: false,
+    isAttachDialogVisible: false,
     editingComment: EMPTY_COMMENT,
     isLoadingSuggestions: false,
     showSuggestions: false,
@@ -69,6 +78,13 @@ const IssueCommentInput = (props: Props) => {
     isVisibilityControlVisible: false,
     isSelectVisible: false,
   });
+  const attachingImage: ?Attachment = useSelector((appState: AppState) => appState.issueActivity.attachingImage);
+  const isAttachFileDialogVisible: boolean = useSelector((appState: AppState) => (
+    appState.issueActivity.isAttachFileDialogVisible
+  ));
+  const removingImageId: string | null = useSelector((appState: AppState) => appState.issueActivity.removingImageId);
+
+  let editCommentInput: MultilineInput;
 
   const onChange = (editingComment: $Shape<IssueComment> | null): void => {
     props.onCommentChange && props.onCommentChange(editingComment);
@@ -87,18 +103,23 @@ const IssueCommentInput = (props: Props) => {
   ), 300), []);
 
   useEffect(() => {
-    toggleSaving(true);
-    props.draftGetter().then((draft: IssueComment | null) => {
-      if (draft) {
-        changeState({editingComment: draft});
-      }
-    }).finally(() => toggleSaving(false));
-    return () => onChange(null);
-  }, []);
+    if (props.editingComment) {
+      changeState({editingComment: {...state.editingComment, ...props.editingComment}});
+    }
+  }, [props.editingComment]);
 
   useEffect(() => {
-    debouncedChange(state.editingComment);
-  }, [state.editingComment]);
+    if (removingImageId) {
+      const attachments: Array<Attachment> = state.editingComment?.attachments || [];
+      const targetAttachment: Attachment = attachments.find((it: Attachment) => it.id === removingImageId);
+      if (targetAttachment) {
+        debouncedChange({
+          ...props.editingComment,
+          attachments: attachments.filter((it: Attachment) => it.id !== removingImageId)
+        });
+      }
+    }
+  }, [removingImageId]);
 
   const setComment = (editingComment: $Shape<IssueComment> = EMPTY_COMMENT): void => {
     changeState({editingComment});
@@ -110,11 +131,11 @@ const IssueCommentInput = (props: Props) => {
     changeState({isVisibilityControlVisible});
   };
 
-  const updateComment = (): void => {
+  const submitComment = (): void => {
     toggleSaving(true);
     toggleVisibilityControl(false);
     props.onSubmitComment({
-      ...state.editingComment,
+      ...props.editingComment,
       usesMarkdown: true,
     }).then(() => setComment()).finally(() => toggleSaving(false));
   };
@@ -149,7 +170,6 @@ const IssueCommentInput = (props: Props) => {
     }
   };
 
-
   const renderUserMentions = (): Node => {
     return (
       <Mentions
@@ -177,14 +197,14 @@ const IssueCommentInput = (props: Props) => {
         setComment(comment);
         onChange(comment);
       }}
-      uiTheme={props.uiTheme}
+      uiTheme={theme.uiTheme}
       getOptions={props.getCommentVisibilityOptions}
     />;
   };
 
   const renderSendButton = (): Node => {
-    const isDisabled: boolean = !(state.editingComment.text || '').trim() || state.isSaving;
-
+    const {editingComment, isSaving} = state;
+    const isDisabled: boolean = state.isSaving || (!state.editingComment.text && !editingComment.attachments);
     return (
       <TouchableOpacity
         style={[
@@ -192,31 +212,43 @@ const IssueCommentInput = (props: Props) => {
           isDisabled ? styles.commentSendButtonDisabled : null
         ]}
         disabled={isDisabled}
-        onPress={updateComment}>
-        {!state.isSaving && (
+        onPress={submitComment}>
+        {!isSaving && (
           <IconArrowUp
             size={22}
-            color={props.uiTheme.colors.$textButton}
+            color={theme.uiTheme.colors.$textButton}
           />
         )}
-        {state.isSaving && <ActivityIndicator color={props.uiTheme.colors.$background}/>}
+        {isSaving && <ActivityIndicator color={theme.uiTheme.colors.$background}/>}
       </TouchableOpacity>
     );
   };
 
-  const setInputRef: (instance: ?MultilineInput) => ?MultilineInput = (instance: ?MultilineInput) => (
-    instance && (editCommentInput = instance)
-  );
+  const renderAttachFileDialog = () => {
+    return (
+      <AttachFileDialog
+        hideVisibility={true}
+        actions={attachmentActions.createAttachActions(dispatch)}
+        attach={attachingImage}
+        onCancel={() => {
+          dispatch(attachmentActions.cancelImageAttaching());
+          dispatch(attachmentActions.toggleAttachFileDialog(false));
+        }}
+        onAttach={async (file: Attachment, onAttachingFinish: () => any) => {
+          if (!state.editingComment.id) {
+            await props.onCommentChange(state.editingComment);
+          }
+          const attachments: Array<Attachment> = await dispatch(attachmentActions.uploadFileToDraftComment(file)) || [];
+          onAttachingFinish();
+          debouncedChange({...state.editingComment, attachments});
+        }}
+        uiTheme={theme.uiTheme}
+      />
+    );
+  };
 
-  const {uiTheme, onAddSpentTime} = props;
-  const {
-    isSaving,
-    commentCaret,
-    showSuggestions,
-    editingComment,
-    isVisibilityControlVisible,
-    isSelectVisible
-  } = state;
+
+  const {isSaving, commentCaret, showSuggestions, editingComment, isVisibilityControlVisible, isSelectVisible} = state;
   const hasText: boolean = !!editingComment.text;
   const showVisibilityControl: boolean = !showSuggestions && (
     editingComment.visibility ||
@@ -238,37 +270,58 @@ const IssueCommentInput = (props: Props) => {
       </View>
 
       <View style={styles.commentContainer}>
-        {!!onAddSpentTime && <View style={styles.actionsContainer}>
+        {!!props.onAddSpentTime && <View style={styles.actionsContainer}>
           <TouchableOpacity
-            style={styles.actionsContainerIcon}
-            hitSlop={HIT_SLOP}
-            onPress={onAddSpentTime}
+            style={styles.actionsContainerButton}
+            onPress={props.onAddSpentTime}
           >
             <IconHourGlass
-              fill={styles.actionsContainerIcon.color}
+              fill={styles.actionsContainerButton.color}
               width={26}
               height={26}
             />
           </TouchableOpacity>
+          {props.canAttach && (
+            <TouchableOpacity
+              style={styles.actionsContainerButton}
+              disabled={isSaving || showSuggestions}
+              onPress={() => dispatch(attachmentActions.toggleAttachFileDialog(true))}
+            >
+              <IconAttach
+                fill={
+                  isSaving || showSuggestions
+                    ? styles.actionsContainerButtonDisabled.color
+                    : styles.actionsContainerButton.color
+                }
+                width={26}
+                height={26}
+              />
+            </TouchableOpacity>
+          )}
         </View>}
 
         <View style={styles.commentInputContainer}>
           <MultilineInput
-            ref={setInputRef}
             {...{...props, autoFocus: !!editingComment.reply}}
+            ref={(instance: ?MultilineInput) => instance && (editCommentInput = instance)}
             placeholder={commentPlaceholderText}
             value={editingComment.text}
             editable={!isSaving}
             underlineColorAndroid="transparent"
-            keyboardAppearance={uiTheme.name}
-            placeholderTextColor={uiTheme.colors.$icon}
+            keyboardAppearance={theme.uiTheme.name}
+            placeholderTextColor={theme.uiTheme.colors.$icon}
             autoCapitalize="sentences"
             onSelectionChange={(event) => {
               changeState({commentCaret: event.nativeEvent.selection.start});
             }}
             onChangeText={(text) => {
-              setComment({...editingComment, text: text});
+              const updatedDraftComment: $Shape<IssueComment> = {
+                ...editingComment,
+                text: text,
+              };
+              setComment(updatedDraftComment);
               suggestionsNeededDetector(text, commentCaret);
+              debouncedChange(updatedDraftComment);
             }}
             onFocus={() => toggleVisibilityControl(true)}
             onBlur={() => {
@@ -278,9 +331,28 @@ const IssueCommentInput = (props: Props) => {
             style={styles.commentInput}
           />
 
-          {hasText && renderSendButton()}
+          {Boolean(hasText || editingComment?.attachments) && renderSendButton()}
         </View>
       </View>
+
+      {editingComment?.attachments?.length > 0 && (
+        <AttachmentsRow
+          style={styles.attachmentsContainer}
+          attachments={editingComment.attachments}
+          attachingImage={null}
+          onImageLoadingError={(err: CustomError) => log.warn('onImageLoadingError', err.nativeEvent)}
+          onOpenAttachment={() => (
+            usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'Preview comment attachment')
+          )}
+          canRemoveAttachment={true}
+          onRemoveImage={(attachment: Attachment) => dispatch(
+            attachmentActions.removeAttachmentFromDraftComment(attachment)
+          )}
+          uiTheme={theme.uiTheme}
+        />
+      )}
+
+      {isAttachFileDialogVisible && renderAttachFileDialog()}
     </View>
   );
 };

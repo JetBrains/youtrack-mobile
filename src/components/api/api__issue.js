@@ -97,22 +97,34 @@ export default class IssueAPI extends ApiBase {
 
   async getDraftComment(issueId: string): Promise<IssueComment | null> {
     const queryString = qs.stringify({
-      fields: ApiHelper.toField({draftComment: issueFields.issueCommentBase}).toString()
+      fields: ApiHelper.toField({draftComment: issueFields.issueComment}).toString()
     });
 
-    return this.makeAuthorizedRequest(
+    const response: {draftComment: IssueComment} = await this.makeAuthorizedRequest(
       `${this.youTrackIssueUrl}/${issueId}?${queryString}`
     );
+    if (response?.draftComment?.attachments?.length > 0) {
+      response.draftComment.attachments = ApiHelper.convertAttachmentRelativeToAbsURLs(
+        response.draftComment.attachments, this.config.backendUrl
+      );
+    }
+    return response.draftComment;
   }
 
   async updateDraftComment(issueId: string, draftComment: $Shape<IssueComment>): IssueComment {
-    const queryString = qs.stringify({fields: issueFields.issueCommentBase.toString()});
+    const queryString = qs.stringify({fields: issueFields.issueComment.toString()});
 
-    return this.makeAuthorizedRequest(
+    const draft: $Shape<IssueComment> = await this.makeAuthorizedRequest(
       `${this.youTrackIssueUrl}/${issueId}/draftComment/?${queryString}`,
       draftComment.id ? 'POST' : 'PUT',
       draftComment
     );
+    if (draft?.attachments?.length > 0) {
+      draft.attachments = ApiHelper.convertAttachmentRelativeToAbsURLs(
+        draft.attachments, this.config.backendUrl
+      );
+    }
+    return draft;
   }
 
   async submitDraftComment(issueId: string, draftComment: $Shape<IssueComment>): IssueComment {
@@ -197,7 +209,36 @@ export default class IssueAPI extends ApiBase {
     return await response.json();
   }
 
-  async updateIssueAttachmentVisibility(issueId: string, attachmentId: string, visibility: Visibility | null): Promise<any> {
+  async attachFileToDraftComment(issueId: string, fileUri: string, fileName: string): Promise<any> {
+    const url = `${this.youTrackIssueUrl}/${issueId}/draftComment/attachments?fields=id,name,imageDimensions(height,width)`;
+    const formData = new FormData(); //eslint-disable-line no-undef
+    // $FlowFixMe
+    formData.append('photo', {
+      uri: fileUri,
+      name: fileName,
+      type: 'image/binary'
+    });
+    const response = await fetch(
+      url,
+      {
+        method: 'POST',
+        body: formData,
+        headers: this.auth.getAuthorizationHeaders(),
+      }
+    );
+    return await response.json();
+  }
+
+  async removeFileFromDraftComment(issueId: string, attachmentId: string): Promise<XMLHttpRequest> {
+    return this.makeAuthorizedRequest(
+      `${this.youTrackIssueUrl}/${issueId}/draftComment/attachments/${attachmentId}`,
+      'DELETE',
+      null,
+      {parseJson: false}
+    );
+  }
+
+  async updateIssueAttachmentVisibility(issueId: string, attachmentId: string, visibility: Visibility | null) {
     const queryString = qs.stringify({fields: 'id,thumbnailURL,url,visibility($type,permittedGroups($type,id),permittedUsers($type,id))'});
     const body = {visibility};
 

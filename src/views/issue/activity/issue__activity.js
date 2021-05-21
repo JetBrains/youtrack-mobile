@@ -57,6 +57,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
   componentDidMount() {
     this.loadIssueActivities();
+    this.props.getDraftComment();
   }
 
   loadIssueActivities: ((doNotReset?: boolean) => void) = (doNotReset?: boolean) => {
@@ -152,8 +153,8 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
   canAddComment = () => this.issuePermissions.canCommentOn(this.props.issue);
 
-  onSubmitComment: ((comment: Comment) => any) = (comment: Comment) => {
-    const {addOrEditComment, activityPage, updateOptimisticallyActivityPage} = this.props;
+  onSubmitComment: ((comment: Comment) => any) = async (comment: IssueComment) => {
+    const {submitDraftComment, activityPage, updateOptimisticallyActivityPage, loadActivitiesPage} = this.props;
 
     const currentUser: User = this.props.user;
     const commentActivity = [Object.assign(
@@ -173,7 +174,10 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     }
     updateOptimisticallyActivityPage(newActivityPage);
 
-    return addOrEditComment(comment);
+    await submitDraftComment(comment);
+    if (comment?.attachments?.length > 0) {
+      loadActivitiesPage(true);
+    }
   };
 
   renderEditCommentInput(uiTheme: UITheme) {
@@ -185,7 +189,6 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       setEditingComment,
       onGetCommentVisibilityOptions,
       issue,
-      attachOrTakeImage,
     } = this.props;
     const canAddWork: boolean = (
       issue?.project?.plugins?.timeTrackingSettings?.enabled &&
@@ -194,7 +197,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
     return <View>
       <IssueCommentInput
-        onCommentChange={(comment: IssueComment) => { updateDraftComment(comment); }}
+        onCommentChange={(comment: IssueComment) => updateDraftComment(comment)}
         getCommentVisibilityOptions={onGetCommentVisibilityOptions}
         onSubmitComment={this.onSubmitComment}
         editingComment={editingComment}
@@ -202,10 +205,8 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
         suggestionsAreLoading={suggestionsAreLoading}
         mentions={commentSuggestions}
         canAttach={this.issuePermissions.canAddAttachmentTo(issue)}
-        onAttach={() => attachOrTakeImage(this.context.actionSheet())}
         uiTheme={uiTheme}
         onAddSpentTime={canAddWork ? this.renderAddSpentTimePage : null}
-        draftGetter={this.props.getDraftComment}
       />
 
       <KeyboardSpacerIOS top={98}/>

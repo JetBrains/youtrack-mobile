@@ -10,6 +10,7 @@ import Router from '../../../components/router/router';
 import usage from '../../../components/usage/usage';
 import {ActivityStream} from '../../../components/activity-stream/activity__stream';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from '../../../components/analytics/analytics-ids';
+import {attachmentActions} from './issue-activity__attachment-actions-and-types';
 import {getEntityPresentation} from '../../../components/issue-formatter/issue-formatter';
 import {IssueContext} from '../issue-context';
 import {SkeletonIssueActivities} from '../../../components/skeleton/skeleton';
@@ -18,7 +19,7 @@ import type {
   ActivityStreamProps,
   ActivityStreamPropsReaction
 } from '../../../components/activity-stream/activity__stream';
-import type {IssueComment} from '../../../flow/CustomFields';
+import type {Attachment, IssueComment} from '../../../flow/CustomFields';
 import type {IssueContextData, IssueFull} from '../../../flow/Issue';
 import type {Reaction} from '../../../flow/Reaction';
 import type {ActivityStreamCommentActions} from '../../../flow/Activity';
@@ -77,6 +78,9 @@ const IssueActivityStream = (props: Props) => {
       canCommentOn: issuePermissions.canCommentOn(issue),
       canUpdateComment: canUpdateComment,
       canDeleteComment: canDeleteComment,
+      canDeleteCommentAttachment: (attachment: Attachment) => (
+        issuePermissions.canDeleteCommentAttachment(attachment, issue)
+      ),
       canDeleteCommentPermanently: issuePermissions.canDeleteCommentPermanently(issue),
       canRestoreComment: (comment: IssueComment) => issuePermissions.canRestoreComment(issue, comment),
       onReply: (comment: IssueComment) => {
@@ -89,6 +93,10 @@ const IssueActivityStream = (props: Props) => {
       onDeleteCommentPermanently: (comment: IssueComment, activityId?: string) => dispatch(
         commentActions.deleteCommentPermanently(comment, activityId)
       ),
+      onDeleteAttachment: async (attachment: Attachment) => {
+        await dispatch(attachmentActions.removeAttachment(attachment, issue.id));
+        dispatch(commentActions.loadActivity(true));
+      },
       onDeleteComment: (comment: IssueComment) => dispatch(commentActions.deleteComment(comment)),
       onRestoreComment: (comment: IssueComment) => dispatch(commentActions.restoreComment(comment)),
       onStartEditing: onEditComment,
