@@ -24,7 +24,7 @@ import type {UITheme} from '../../flow/Theme';
 type Action = { title: string, execute: () => any, icon?: any };
 
 type Props = {
-  issueId: string,
+  issueId?: string,
   hideVisibility?: boolean,
   actions: Array<Action>,
   attach: Attachment,
@@ -98,7 +98,7 @@ export default class AttachFileDialog extends PureComponent<Props, State> {
   }
 
   render(): Node {
-    const {actions, attach, uiTheme, hideVisibility} = this.props;
+    const {actions, attach, uiTheme, hideVisibility, issueId} = this.props;
     const dimensions: ?ImageDimensions = attach && calculateAspectRatio(attach.dimensions);
     const hasAttach: boolean = !!attach;
 
@@ -139,11 +139,11 @@ export default class AttachFileDialog extends PureComponent<Props, State> {
               </AttachmentErrorBoundary>
             )
             }
-            {!hideVisibility && attach && <VisibilityControl
+            {!hideVisibility && attach && !!issueId && <VisibilityControl
               style={styles.visibilityButton}
               onApply={this.updateAttachVisibility}
               uiTheme={uiTheme}
-              getOptions={() => getApi().issue.getVisibilityOptions(this.props.issueId)}
+              getOptions={() => getApi().issue.getVisibilityOptions(issueId)}
             />}
           </View>
 
