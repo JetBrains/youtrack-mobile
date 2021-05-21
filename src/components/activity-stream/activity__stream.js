@@ -188,10 +188,6 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
     />;
   };
 
-  const getCommentAttachments = (comment: Activity): Array<Attachment> => {
-    return comment && comment.added && comment.added[0] && comment.added[0].attachments || [];
-  };
-
   const renderAttachmentChange = (activity: Object, uiTheme: UITheme) => {
     const removed: Array<any> = activity.removed || [];
     const added: Array<any> = activity.added || [];
@@ -249,8 +245,12 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
     <StreamUserInfo activityGroup={activityGroup} noTimestamp={noTimestamp}/>
   );
 
+  const getCommentFromActivityGroup = (activityGroup: Object): IssueComment | null => (
+    firstActivityChange(activityGroup.comment)
+  );
+
   const renderCommentActions = (activityGroup: Object) => {
-    const comment = firstActivityChange(activityGroup.comment);
+    const comment: IssueComment | null = getCommentFromActivityGroup(activityGroup);
     if (!comment) {
       return null;
     }
@@ -307,8 +307,21 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
     }
   };
 
+  const renderCommentActivityReactions = (activityGroup: Object) => {
+    const comment: IssueComment | null = getCommentFromActivityGroup(activityGroup);
+    if (!comment) {
+      return null;
+    }
+    return <CommentReactions
+      style={styles.commentReactions}
+      comment={comment}
+      currentUser={props.currentUser}
+      onReactionSelect={props.onSelectReaction}
+    />;
+  };
+
   const renderCommentActivity = (activityGroup: Object) => {
-    const comment: ActivityItem = firstActivityChange(activityGroup.comment);
+    const comment: IssueComment | null = getCommentFromActivityGroup(activityGroup);
     if (!comment) {
       return null;
     }
@@ -343,19 +356,20 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
             }
           />
 
+          {(comment?.attachments || []).length > 0 && (
+            <View
+              style={styles.activityCommentAttachments}
+            >
+              {renderAttachments(comment.attachments, props.uiTheme)}
+            </View>
+          )}
+
           {!comment.deleted && IssueVisibility.isSecured(comment.visibility) &&
           <CommentVisibility
             style={styles.activityVisibility}
             visibility={IssueVisibility.getVisibilityPresentation(comment.visibility)}
             color={props.uiTheme.colors.$iconAccent}
           />}
-          {!!props.onSelectReaction && <CommentReactions
-            style={styles.commentReactions}
-            comment={comment}
-            currentUser={props.currentUser}
-            onReactionSelect={props.onSelectReaction}
-          />}
-
         </View>
       </View>
     );
@@ -425,7 +439,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
             return null;
           }
 
-          const commentAttachments: Array<Attachment> = getCommentAttachments(activityGroup.comment);
+          const isCommentActivity: boolean = !!activityGroup.comment;
           return (
             <View key={activityGroup.timestamp ? `${activityGroup.timestamp}_${index}` : guid()}>
               {index > 0 && !activityGroup.merged && <View style={styles.activitySeparator}/>}
@@ -438,7 +452,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
                 {renderUserAvatar(activityGroup, !!activityGroup.comment)}
 
                 <View style={styles.activityItem}>
-                  {activityGroup.comment && renderCommentActivity(activityGroup)}
+                  {isCommentActivity && renderCommentActivity(activityGroup)}
 
                   {activityGroup.work && renderWorkActivity(activityGroup)}
 
@@ -448,14 +462,8 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
                     props.uiTheme
                   )}
 
-                  {activityGroup.comment && renderCommentActions(activityGroup)}
-                  {commentAttachments.length > 0 && (
-                    <View
-                      style={styles.activityCommentAttachments}
-                    >
-                      {renderAttachments(commentAttachments, props.uiTheme)}
-                    </View>
-                  )}
+                  {isCommentActivity && !!props.onSelectReaction && renderCommentActivityReactions(activityGroup)}
+                  {isCommentActivity && renderCommentActions(activityGroup)}
                 </View>
 
               </View>

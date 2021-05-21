@@ -99,7 +99,7 @@ export default EStyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: UNIT * 1.5,
+    marginTop: UNIT * 2,
   },
   activityCommentActionsMain: {
     flexGrow: 1,
@@ -116,8 +116,7 @@ export default EStyleSheet.create({
     marginTop: -UNIT / 1.5,
   },
   activityCommentAttachments: {
-    marginTop: UNIT * 3,
-    marginBottom: UNIT * 2,
+    marginVertical: UNIT,
   },
   link: {
     ...secondaryText,
