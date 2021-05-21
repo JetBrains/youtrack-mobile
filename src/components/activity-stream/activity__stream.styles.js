@@ -115,6 +115,10 @@ export default EStyleSheet.create({
   activityCommentReactions: {
     marginTop: -UNIT / 1.5,
   },
+  activityCommentAttachments: {
+    marginTop: UNIT * 3,
+    marginBottom: UNIT * 2,
+  },
   link: {
     ...secondaryText,
     color: '$link',
