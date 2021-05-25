@@ -115,8 +115,6 @@ const CommentEdit = (props: Props) => {
           />
         )}
 
-        {attachments.length > 0 && renderAttachments()}
-
         <TextEditForm
           style={styles.commentEditInput}
           adaptive={false}
@@ -127,6 +125,9 @@ const CommentEdit = (props: Props) => {
           onDescriptionChange={(text: string) => updateCommentText(text)}
           uiTheme={theme.uiTheme}
         />
+
+        {attachments.length > 0 && renderAttachments()}
+
       </View>
     </View>
   );

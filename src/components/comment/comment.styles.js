@@ -86,14 +86,16 @@ export default EStyleSheet.create({
   },
   commentEditContent: {
     padding: UNIT * 2,
+    paddingTop: UNIT,
     marginBottom: headerMinHeight
   },
   commentEditInput: {
-    padding: 0
+    padding: 0,
+    marginBottom: UNIT * 5,
   },
   commentVisibility: {
     paddingVertical: UNIT,
-    marginVertical: UNIT * 2,
+    marginTop: UNIT,
   },
   commentAttachments: {
     marginBottom: UNIT * 2,
