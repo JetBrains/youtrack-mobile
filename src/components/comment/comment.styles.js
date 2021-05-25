@@ -94,8 +94,9 @@ export default EStyleSheet.create({
     marginBottom: UNIT * 5,
   },
   commentVisibility: {
-    paddingVertical: UNIT,
+    paddingVertical: UNIT / 2,
     marginTop: UNIT,
+    marginBottom: UNIT / 2,
   },
   commentAttachments: {
     marginBottom: UNIT * 2,
