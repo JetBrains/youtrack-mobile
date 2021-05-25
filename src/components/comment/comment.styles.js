@@ -95,6 +95,9 @@ export default EStyleSheet.create({
     paddingVertical: UNIT,
     marginVertical: UNIT * 2,
   },
+  commentAttachments: {
+    marginBottom: UNIT * 2,
+  },
   link: {
     color: '$link'
   },

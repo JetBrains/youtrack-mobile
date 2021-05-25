@@ -163,28 +163,20 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
   };
 
   const renderAttachments = (attachments: Array<AttachmentsRow>, uiTheme: UITheme): Node => {
-    const {
-      commentActions = {
-        canDeleteCommentAttachment: (attachment: Attachment) => false,
-        onDeleteAttachment: (attachment: Attachment) => {}
-      }
-    } = props;
-    const canDeleteAttachment: boolean = !!attachments[0] && commentActions.canDeleteCommentAttachment(attachments[0]);
-
-    return <AttachmentsRow
-      attachments={updateToAbsUrl(attachments)}
-      attachingImage={null}
-      imageHeaders={getApi().auth.getAuthorizationHeaders()}
-      onImageLoadingError={(err: CustomError) => log.warn('onImageLoadingError', err.nativeEvent)}
-      onOpenAttachment={(type: string) => (
-        usage.trackEvent(
-          ANALYTICS_ISSUE_STREAM_SECTION, type === 'image' ? 'Showing image' : 'Open attachment by URL'
-        )
-      )}
-      canRemoveAttachment={canDeleteAttachment}
-      onRemoveImage={(attachment: Attachment) => commentActions.onDeleteAttachment(attachment)}
-      uiTheme={uiTheme}
-    />;
+    return (
+      <AttachmentsRow
+        attachments={updateToAbsUrl(attachments)}
+        attachingImage={null}
+        imageHeaders={getApi().auth.getAuthorizationHeaders()}
+        onImageLoadingError={(err: CustomError) => log.warn('onImageLoadingError', err.nativeEvent)}
+        onOpenAttachment={(type: string) => (
+          usage.trackEvent(
+            ANALYTICS_ISSUE_STREAM_SECTION, type === 'image' ? 'Showing image' : 'Open attachment by URL'
+          )
+        )}
+        uiTheme={uiTheme}
+      />
+    );
   };
 
   const renderAttachmentChange = (activity: Object, uiTheme: UITheme) => {
