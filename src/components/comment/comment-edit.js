@@ -3,22 +3,35 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 
+import {useSelector} from 'react-redux';
+
+import ApiHelper from '../api/api__helper';
+import AttachmentsRow from '../attachments-row/attachments-row';
 import Header from '../header/header';
+import log from '../log/log';
 import Router from '../router/router';
 import TextEditForm from '../form/text-edit-form';
+import usage from '../usage/usage';
 import VisibilityControl from '../visibility/visibility-control';
+import {ANALYTICS_ISSUE_STREAM_SECTION} from '../analytics/analytics-ids';
 import {IconCheck, IconClose} from '../icon/icon';
 import {ThemeContext} from '../theme/theme-context';
 
 import styles from './comment.styles';
 
-import type {IssueComment} from '../../flow/CustomFields';
+import type {AppState} from '../../reducers';
+import type {Attachment, IssueComment} from '../../flow/CustomFields';
+import type {ConfigAuth} from '../../flow/AppConfig';
+import type {CustomError} from '../../flow/Error';
+import type {Node} from 'react';
 import type {Theme} from '../../flow/Theme';
 import type {UserGroup} from '../../flow/UserGroup';
 import type {User} from '../../flow/User';
 
 type Props = {
   comment: IssueComment,
+  canDeleteCommentAttachment?: (attachment: Attachment) => boolean,
+  onDeleteAttachment?: (attachment: Attachment) => Promise<void>,
   onUpdate: (comment: IssueComment) => Function,
   visibilityOptionsGetter?: () => Array<{ visibilityGroups: Array<UserGroup>, visibilityUsers: Array<User> }>,
 };
@@ -26,9 +39,11 @@ type Props = {
 
 const CommentEdit = (props: Props) => {
   const theme: Theme = useContext(ThemeContext);
+  const backendUrl: ?ConfigAuth = useSelector((appState: AppState) => appState.app.auth?.config?.backendUrl);
 
   const {comment, onUpdate, visibilityOptionsGetter} = props;
 
+  const [attachments, updateAttachments] = useState(comment.attachments || []);
   const [commentText, updateCommentText] = useState('');
   const [commentVisibility, updateCommentVisibility] = useState(comment?.visibility || null);
   const [isSubmitting, updateSubmitting] = useState(false);
@@ -36,8 +51,32 @@ const CommentEdit = (props: Props) => {
   useEffect(() => {
     if (comment) {
       updateCommentText(comment.text);
+      updateAttachments(comment.attachments || []);
     }
   }, [comment]);
+
+  const renderAttachments = (): Node => {
+    const canRemoveAttachment: boolean = (
+      typeof props.canDeleteCommentAttachment === 'function' ? props.canDeleteCommentAttachment(attachments[0]) : false
+    );
+    return <AttachmentsRow
+      style={styles.commentAttachments}
+      attachments={backendUrl ? ApiHelper.convertAttachmentRelativeToAbsURLs(attachments, backendUrl) : attachments}
+      attachingImage={null}
+      onImageLoadingError={(err: CustomError) => log.warn('onImageLoadingError', err.nativeEvent)}
+      onOpenAttachment={() => (
+        usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'Edit comment attachment preview')
+      )}
+      canRemoveAttachment={canRemoveAttachment}
+      onRemoveImage={async (attachment: Attachment) => {
+        if (typeof props.onDeleteAttachment === 'function') {
+          await props.onDeleteAttachment(attachment);
+          updateAttachments(attachments.filter((it: Attachment) => it.id !== attachment.id));
+        }
+      }}
+      uiTheme={theme.uiTheme}
+    />;
+  };
 
 
   return (
@@ -75,6 +114,8 @@ const CommentEdit = (props: Props) => {
             getOptions={visibilityOptionsGetter}
           />
         )}
+
+        {attachments.length > 0 && renderAttachments()}
 
         <TextEditForm
           style={styles.commentEditInput}

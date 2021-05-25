@@ -63,12 +63,23 @@ const IssueActivityStream = (props: Props) => {
     const dispatch: Function = issueContext.dispatcher;
     const canUpdateComment = (comment: IssueComment): boolean => issuePermissions.canUpdateComment(issue, comment);
     const canDeleteComment = (comment: IssueComment): boolean => issuePermissions.canDeleteComment(issue, comment);
+    const onDeleteAttachment = async (attachment: Attachment): Promise<void> => {
+      await dispatch(attachmentActions.removeAttachment(attachment, issue.id));
+    };
+    const canDeleteCommentAttachment = (attachment: Attachment) => (
+      issuePermissions.canDeleteCommentAttachment(attachment, issue)
+    );
     const onEditComment = (comment: Comment): void => {
       Router.PageModal({
         children: (
           <CommentEdit
             comment={comment}
-            onUpdate={(comment: IssueComment) => dispatch(commentActions.submitEditedComment(comment))}
+            canDeleteCommentAttachment={canDeleteCommentAttachment}
+            onDeleteAttachment={onDeleteAttachment}
+            onUpdate={async (comment: IssueComment) => {
+              await dispatch(commentActions.submitEditedComment(comment));
+              dispatch(commentActions.loadActivity(true));
+            }}
             visibilityOptionsGetter={() => dispatch(commentActions.getCommentVisibilityOptions())}
           />
         )
@@ -78,9 +89,7 @@ const IssueActivityStream = (props: Props) => {
       canCommentOn: issuePermissions.canCommentOn(issue),
       canUpdateComment: canUpdateComment,
       canDeleteComment: canDeleteComment,
-      canDeleteCommentAttachment: (attachment: Attachment) => (
-        issuePermissions.canDeleteCommentAttachment(attachment, issue)
-      ),
+      canDeleteCommentAttachment: canDeleteCommentAttachment,
       canDeleteCommentPermanently: issuePermissions.canDeleteCommentPermanently(issue),
       canRestoreComment: (comment: IssueComment) => issuePermissions.canRestoreComment(issue, comment),
       onReply: (comment: IssueComment) => {
@@ -93,10 +102,7 @@ const IssueActivityStream = (props: Props) => {
       onDeleteCommentPermanently: (comment: IssueComment, activityId?: string) => dispatch(
         commentActions.deleteCommentPermanently(comment, activityId)
       ),
-      onDeleteAttachment: async (attachment: Attachment) => {
-        await dispatch(attachmentActions.removeAttachment(attachment, issue.id));
-        dispatch(commentActions.loadActivity(true));
-      },
+      onDeleteAttachment: onDeleteAttachment,
       onDeleteComment: (comment: IssueComment) => dispatch(commentActions.deleteComment(comment)),
       onRestoreComment: (comment: IssueComment) => dispatch(commentActions.restoreComment(comment)),
       onStartEditing: onEditComment,
