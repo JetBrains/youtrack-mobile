@@ -18,12 +18,15 @@ import {
   showArticleCommentActions,
   updateArticleComment,
 } from './arcticle-actions';
+import usage from '../../components/usage/usage';
+import {ANALYTICS_ARTICLE_PAGE_STREAM,} from '../../components/analytics/analytics-ids';
+import {attachmentActions} from '../issue/activity/issue-activity__attachment-actions-and-types';
 
 import styles from './article.styles';
 
 import type {ActivityItem, ActivityStreamCommentActions} from '../../flow/Activity';
 import type {Article} from '../../flow/Article';
-import type {IssueComment} from '../../flow/CustomFields';
+import type {Attachment, IssueComment} from '../../flow/CustomFields';
 import type {UITheme} from '../../flow/Theme';
 import type {User, UserAppearanceProfile} from '../../flow/User';
 
@@ -65,32 +68,41 @@ const ArticleActivities = (props: Props) => {
   }, [activityPage, user?.profiles?.appearance]);
 
 
-  const canDeleteComment = (comment: IssueComment): boolean => issuePermissions.articleCanDeleteComment(
-    article, comment
-  );
-  const createCommentActions = (): ActivityStreamCommentActions => ({
-    isAuthor: (comment: IssueComment) => issuePermissions.isCurrentUser(comment.author),
-    canUpdateComment: (comment: IssueComment) => issuePermissions.articleCanUpdateComment(article, comment),
-    onStartEditing: (comment: Comment) => {
-      Router.PageModal({
-        children: (
-          <CommentEdit
-            comment={comment}
-            onUpdate={(comment: IssueComment) => dispatch(updateArticleComment(comment))}
-          />
-        ),
-      });
-    },
-    onShowCommentActions: async (comment: IssueComment, activityId: string) => dispatch(
-      showArticleCommentActions(
-        showActionSheetWithOptions,
-        comment,
-        activityId,
-        canDeleteComment(comment)
-      )
-    ),
-    canDeleteComment: canDeleteComment,
-  });
+  const createCommentActions = (): ActivityStreamCommentActions => {
+    const canDeleteComment = (comment: IssueComment): boolean => (
+      issuePermissions.articleCanDeleteComment(article, comment)
+    );
+    return ({
+      isAuthor: (comment: IssueComment): boolean => issuePermissions.isCurrentUser(comment.author),
+      canUpdateComment: (comment: IssueComment): boolean => issuePermissions.articleCanUpdateComment(article, comment),
+      onStartEditing: (comment: Comment): void => {
+        Router.PageModal({
+          children: (
+            <CommentEdit
+              comment={comment}
+              onUpdate={(comment: IssueComment): Function => dispatch(updateArticleComment(comment))}
+              canDeleteCommentAttachment={(attachment: Attachment): boolean => (
+                issuePermissions.canDeleteCommentAttachment(attachment, article)
+              )}
+              onDeleteAttachment={(attachment: Attachment): Function => {
+                usage.trackEvent(ANALYTICS_ARTICLE_PAGE_STREAM, 'Article edit comment: remove attachment');
+                dispatch(attachmentActions.removeArticleAttachment(attachment));
+              }}
+            />
+          )
+        });
+      },
+      onShowCommentActions: async (comment: IssueComment, activityId: string) => dispatch(
+        showArticleCommentActions(
+          showActionSheetWithOptions,
+          comment,
+          activityId,
+          canDeleteComment(comment)
+        )
+      ),
+      canDeleteComment: canDeleteComment,
+    });
+  };
 
   return (
     <>

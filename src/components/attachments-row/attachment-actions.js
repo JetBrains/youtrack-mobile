@@ -11,16 +11,18 @@ import {notify} from '../notification/notification';
 import {until} from '../../util/util';
 
 import type Api from '../api/api';
+import type {AppState} from '../../reducers';
+import type {Article} from '../../flow/Article';
 import type {Attachment} from '../../flow/CustomFields';
-import type {State as IssueState} from '../../views/issue/issue-reducers';
 
 type ApiGetter = () => Api;
-type StateGetter = () => { issueState: IssueState };
+type StateGetter = () => AppState;
 
 const attachFileMethod: Object = {
   openCamera: 'openCamera',
   openPicker: 'openPicker',
 };
+const notifySuccessAttachmentDeletion: () => void = () => notify('Attachment deleted');
 
 export const getAttachmentActions = (prefix: string): any => {
   const types: Object = createAttachmentTypes(prefix);
@@ -89,16 +91,41 @@ export const getAttachmentActions = (prefix: string): any => {
       };
     },
 
-    removeAttachment: function (attach: Attachment, issueId: string) {
-      return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
+    removeAttachment: function (attach: Attachment, issueId: string): (
+      dispatch: (any) => any,
+      getState: StateGetter,
+      getApi: ApiGetter
+    ) => Promise<void> {
+      return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter): Promise<void> => {
         const api: Api = getApi();
         try {
           await api.issue.removeAttachment(issueId, attach.id);
           dispatch(this.doRemoveAttach(attach.id));
+          notifySuccessAttachmentDeletion();
         } catch (error) {
           const message: string = 'Failed to remove attachment';
           log.warn(message, error);
           notify(message, error);
+        }
+      };
+    },
+
+    removeArticleAttachment: function (attach: Attachment): (
+      dispatch: (any) => any,
+      getState: StateGetter,
+      getApi: ApiGetter
+    ) => Promise<void> {
+      return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter): Promise<void> => {
+        const api: Api = getApi();
+        const article: Article = getState().article.article;
+        const [error] = await until(api.articles.removeAttachment(article.id, attach.id));
+        if (error) {
+          const message: string = 'Failed to remove article attachment';
+          log.warn(message, error);
+          notify(message, error);
+        } else {
+          notifySuccessAttachmentDeletion();
+          dispatch(this.doRemoveAttach(attach.id));
         }
       };
     },
@@ -110,6 +137,7 @@ export const getAttachmentActions = (prefix: string): any => {
         try {
           await api.issue.removeFileFromDraftComment(issueId, attach.id);
           dispatch(this.doRemoveAttach(attach.id));
+          notifySuccessAttachmentDeletion();
         } catch (error) {
           const message: string = 'Failed to remove attachment';
           log.warn(message, error);

@@ -36,6 +36,8 @@ export const WORK_ITEM_CREATE_NOT_OWN = 'JetBrains.YouTrack.CREATE_NOT_OWN_WORK_
 export const WORK_ITEM_UPDATE = 'JetBrains.YouTrack.UPDATE_WORK_ITEM';
 export const WORK_ITEM_UPDATE_NOT_OWN = 'JetBrains.YouTrack.UPDATE_NOT_OWN_WORK_ITEM';
 
+type Entity = AnyIssue | Article;
+
 
 export default class IssuePermissions {
   permissionsStore: PermissionsStore;
@@ -60,7 +62,7 @@ export default class IssuePermissions {
     return this.getRingId(entity.project);
   }
 
-  hasPermissionFor: ((entity: AnyIssue | Article, permissionName: string) => boolean) = (entity: AnyIssue | Article, permissionName: string): boolean => {
+  hasPermissionFor = (entity: Entity, permissionName: string): boolean => {
     const projectRingId = IssuePermissions.getIssueProjectRingId(entity);
     return !!projectRingId && this.permissionsStore.has(permissionName, projectRingId);
   };
@@ -128,11 +130,11 @@ export default class IssuePermissions {
   canCommentOn: ((issue: AnyIssue) => boolean) = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_CREATE_COMMENT);
 
   canUpdateComment: ((
-  entity: AnyIssue | Article,
-  comment: IssueComment,
-  canUpdateCommentPermissionName?: string
-) => boolean) = (
     entity: AnyIssue | Article,
+    comment: IssueComment,
+    canUpdateCommentPermissionName?: string
+  ) => boolean) = (
+    entity: Entity,
     comment: IssueComment,
     canUpdateCommentPermissionName: string = CAN_UPDATE_COMMENT
   ): boolean => {
@@ -148,11 +150,12 @@ export default class IssuePermissions {
   canDeleteNotOwnComment: ((issue: AnyIssue) => boolean) = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_DELETE_NOT_OWN_COMMENT);
 
   canDeleteComment: ((
-  entity: AnyIssue | Article,
-  comment: IssueComment,
-  canDeleteCommentPermissionName?: string
-) => boolean) = (
-    entity: AnyIssue | Article, comment: IssueComment,
+    entity: AnyIssue | Article,
+    comment: IssueComment,
+    canDeleteCommentPermissionName?: string
+  ) => boolean) = (
+    entity: Entity,
+    comment: IssueComment,
     canDeleteCommentPermissionName: string = CAN_DELETE_COMMENT
   ): boolean => {
     if (!entity) {
@@ -172,13 +175,13 @@ export default class IssuePermissions {
 
   canAddAttachmentTo: ((issue: AnyIssue) => boolean) = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_ADD_ATTACHMENT);
 
-  canRemoveAttachment: ((issue: AnyIssue) => boolean) = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_REMOVE_ATTACHMENT);
+  canRemoveAttachment: ((entity: Entity) => boolean) = (entity: Entity): boolean => this.hasPermissionFor(entity, CAN_REMOVE_ATTACHMENT);
 
-  canDeleteCommentAttachment = (attachment: Attachment, issue: AnyIssue): boolean => {
+  canDeleteCommentAttachment = (attachment: Attachment, entity: Entity): boolean => {
     if (attachment?.author && this.isCurrentUser(attachment.author)) {
       return true;
     }
-    return this.canRemoveAttachment(issue);
+    return this.canRemoveAttachment(entity);
   };
 
   canCreateIssueToProject = (project: IssueProject): boolean => {

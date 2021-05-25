@@ -23,6 +23,15 @@ export default class ArticlesAPI extends ApiBase {
     return ApiHelper.convertAttachmentRelativeToAbsURLs(attachments, this.config.backendUrl);
   }
 
+  removeArticleEntity(resourceName: string, articleId: string, entityId: string) {
+    return this.makeAuthorizedRequest(
+      `${this.youTrackApiUrl}/articles/${articleId}/${resourceName}/${entityId}`,
+      'DELETE',
+      null,
+      {parseJson: false}
+    );
+  }
+
   async getArticles(
     query: string | null = null,
     folder?: string,
@@ -272,5 +281,8 @@ export default class ArticlesAPI extends ApiBase {
     return await response.json();
   }
 
+  removeAttachment(articleId: string, attachmentId: string) {
+    return this.removeArticleEntity('attachments', articleId, attachmentId);
+  }
 
 }
