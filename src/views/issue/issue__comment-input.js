@@ -270,35 +270,39 @@ const IssueCommentInput = (props: Props) => {
       </View>
 
       <View style={styles.commentContainer}>
-        {!!props.onAddSpentTime && <View style={styles.actionsContainer}>
-          <TouchableOpacity
-            style={styles.actionsContainerButton}
-            onPress={props.onAddSpentTime}
-          >
-            <IconHourGlass
-              fill={styles.actionsContainerButton.color}
-              width={26}
-              height={26}
-            />
-          </TouchableOpacity>
-          {props.canAttach && (
-            <TouchableOpacity
-              style={styles.actionsContainerButton}
-              disabled={isSaving || showSuggestions}
-              onPress={() => dispatch(attachmentActions.toggleAttachFileDialog(true))}
-            >
-              <IconAttach
-                fill={
-                  isSaving || showSuggestions
-                    ? styles.actionsContainerButtonDisabled.color
-                    : styles.actionsContainerButton.color
-                }
-                width={26}
-                height={26}
-              />
-            </TouchableOpacity>
-          )}
-        </View>}
+        {(!!props.onAddSpentTime || props.canAttach) && (
+          <View style={styles.actionsContainer}>
+            {!!props.onAddSpentTime && (
+              <TouchableOpacity
+                style={styles.actionsContainerButton}
+                onPress={props.onAddSpentTime}
+              >
+                <IconHourGlass
+                  fill={styles.actionsContainerButton.color}
+                  width={26}
+                  height={26}
+                />
+              </TouchableOpacity>
+            )}
+            {props.canAttach && (
+              <TouchableOpacity
+                style={styles.actionsContainerButton}
+                disabled={isSaving || showSuggestions}
+                onPress={() => dispatch(attachmentActions.toggleAttachFileDialog(true))}
+              >
+                <IconAttach
+                  fill={
+                    isSaving || showSuggestions
+                      ? styles.actionsContainerButtonDisabled.color
+                      : styles.actionsContainerButton.color
+                  }
+                  width={26}
+                  height={26}
+                />
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
 
         <View style={styles.commentInputContainer}>
           <MultilineInput
