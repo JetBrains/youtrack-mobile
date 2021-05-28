@@ -243,36 +243,31 @@ const IssueCommentUpdate = (props: Props) => {
   };
 
   const renderAttachments = (): Node | null => {
-    if (state.editingComment?.attachments?.length > 0) {
-      return (
-        <AttachmentsRow
-          attachments={state.editingComment.attachments}
-          attachingImage={null}
-          onImageLoadingError={(err: CustomError) => log.warn('onImageLoadingError', err.nativeEvent)}
-          onOpenAttachment={() => (
-            usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'Preview comment attachment')
-          )}
-          canRemoveAttachment={true}
-          onRemoveImage={async (attachment: Attachment) => {
-            await dispatch(attachmentActions.removeAttachmentFromComment(
-              attachment,
-              props.isEditMode && state.editingComment.id
-            ));
-            const updatedComment: IssueComment = {
-              ...state.editingComment,
-              attachments: state.editingComment.attachments.filter((it: Attachment) => it.id !== attachment.id)
-            };
-            changeState({editingComment: updatedComment});
-            debouncedChange(updatedComment, true);
-          }}
-          uiTheme={theme.uiTheme}
-        />
-      );
-    } else {
-      return null;
-    }
+    return (
+      <AttachmentsRow
+        attachments={state.editingComment.attachments}
+        attachingImage={null}
+        onImageLoadingError={(err: CustomError) => log.warn('onImageLoadingError', err.nativeEvent)}
+        onOpenAttachment={() => (
+          usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'Preview comment attachment')
+        )}
+        canRemoveAttachment={true}
+        onRemoveImage={async (attachment: Attachment) => {
+          await dispatch(attachmentActions.removeAttachmentFromComment(
+            attachment,
+            props.isEditMode && state.editingComment.id
+          ));
+          const updatedComment: IssueComment = {
+            ...state.editingComment,
+            attachments: state.editingComment.attachments.filter((it: Attachment) => it.id !== attachment.id)
+          };
+          changeState({editingComment: updatedComment});
+          debouncedChange(updatedComment, true);
+        }}
+        uiTheme={theme.uiTheme}
+      />
+    );
   };
-
   const renderCommentInput = (autoFocus: boolean, onFocus: Function, onBlur: Function): Node => {
     return (
       <MultilineInput
@@ -372,9 +367,9 @@ const IssueCommentUpdate = (props: Props) => {
           </View>
         </View>
 
-        <View style={styles.attachmentsContainer}>
+        {state.editingComment?.attachments?.length > 0 && <View style={styles.attachmentsContainer}>
           {renderAttachments()}
-        </View>
+        </View>}
       </>
     );
   };
