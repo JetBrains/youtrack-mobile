@@ -188,15 +188,12 @@ const GET_VISIBILITY_FIELDS: any = toField([
   },
 ]);
 
-const ISSUE_COMMENTS_FIELDS: any = toField([
+const ISSUE_COMMENTS_BASE_FIELDS = toField([
   'id',
-  'created',
-  'deleted',
   'text',
-  'textPreview',
   'usesMarkdown',
   {author: ISSUE_USER_FIELDS},
-  VISIBILITY_FIELDS
+  VISIBILITY_FIELDS,
 ]);
 
 const ISSUE_COMMENTS_FIELDS = toField([
@@ -204,7 +201,7 @@ const ISSUE_COMMENTS_FIELDS = toField([
   'created',
   'deleted',
   {
-    attachments: ISSUE_ATTACHMENTS_FIELDS
+    attachments: ISSUE_ATTACHMENTS_FIELDS,
   },
 ]);
 

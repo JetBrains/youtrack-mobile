@@ -90,7 +90,7 @@ const attachmentReducers = {
 };
 
 
-export default createReducer(initialState, {
+export default ((createReducer(initialState, {
   ...attachmentReducers,
 
   [types.RECEIVE_ACTIVITY_PAGE]: (state: State, action: { activityPage: Array<Activity> }): State => {
@@ -140,7 +140,7 @@ export default createReducer(initialState, {
       activityPage: newActivityPage,
     };
   },
-}): any);
+})): any);
 
 
 function removeCommentFromActivityPage(activityPage: ActivityPage, activityId: string): ActivityPage {
