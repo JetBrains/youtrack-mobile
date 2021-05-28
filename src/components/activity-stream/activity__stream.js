@@ -265,7 +265,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
                 disabled={disabled}
                 onPress={() => (
                   isAuthor
-                    ? commentActions && commentActions.onStartEditing && commentActions.onStartEditing(comment)
+                    ? commentActions && commentActions.onStartEditing && commentActions.onStartEditing(comment, props.youtrackWiki.backendUrl)
                     : commentActions && commentActions.onReply && commentActions.onReply(comment)
                 )}>
                 <Text style={styles.link}>
@@ -347,7 +347,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
             }
           />
 
-          {(comment?.attachments || []).length > 0 && (
+          {!comment.deleted && (comment?.attachments || []).length > 0 && (
             <View
               style={styles.activityCommentAttachments}
             >

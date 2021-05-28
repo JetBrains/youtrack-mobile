@@ -12,8 +12,8 @@ import * as commentActions from './issue-activity__comment-actions';
 import AddSpentTimeForm from './activity__add-spent-time';
 import ErrorMessage from '../../../components/error-message/error-message';
 import IssueActivitiesSettings from './issue__activity-settings';
+import IssueActivityCommentAdd from './issue__activity-comment-add';
 import IssueActivityStream from './issue__activity-stream';
-import IssueCommentInput from '../issue__comment-input';
 import IssuePermissions from '../../../components/issue-permissions/issue-permissions';
 import KeyboardSpacerIOS from '../../../components/platform/keyboard-spacer.ios';
 import Router from '../../../components/router/router';
@@ -180,33 +180,19 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     }
   };
 
-  renderEditCommentInput(uiTheme: UITheme) {
-    const {
-      loadCommentSuggestions,
-      suggestionsAreLoading,
-      commentSuggestions,
-      editingComment,
-      updateDraftComment,
-      onGetCommentVisibilityOptions,
-      issue,
-    } = this.props;
+  renderEditCommentInput() {
+    const {editingComment, issue, updateDraftComment} = this.props;
     const canAddWork: boolean = (
       issue?.project?.plugins?.timeTrackingSettings?.enabled &&
       this.issuePermissions.canCreateWork(issue)
     );
 
     return <View>
-      <IssueCommentInput
-        onCommentChange={(comment: IssueComment) => updateDraftComment(comment)}
-        getCommentVisibilityOptions={onGetCommentVisibilityOptions}
-        onSubmitComment={this.onSubmitComment}
-        editingComment={editingComment}
-        getCommentSuggestions={loadCommentSuggestions}
-        suggestionsAreLoading={suggestionsAreLoading}
-        mentions={commentSuggestions}
-        canAttach={this.issuePermissions.canAddAttachmentTo(issue)}
-        uiTheme={uiTheme}
+      <IssueActivityCommentAdd
+        comment={editingComment}
         onAddSpentTime={canAddWork ? this.renderAddSpentTimePage : null}
+        onCommentChange={(comment: IssueComment) => updateDraftComment(comment)}
+        onSubmitComment={this.onSubmitComment}
       />
 
       <KeyboardSpacerIOS top={98}/>
@@ -282,7 +268,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
                   </ScrollView>
 
-                  {Boolean(this.canAddComment()) && this.renderEditCommentInput(theme.uiTheme)}
+                  {Boolean(this.canAddComment()) && this.renderEditCommentInput()}
                 </View>
               );
             }}

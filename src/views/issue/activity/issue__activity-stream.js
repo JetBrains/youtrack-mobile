@@ -3,7 +3,8 @@
 import React, {useContext, useEffect, useState} from 'react';
 
 import * as commentActions from './issue-activity__comment-actions';
-import CommentEdit from '../../../components/comment/comment-edit';
+import ApiHelper from '../../../components/api/api__helper';
+import IssueActivityStreamCommentEdit from './issue-activity__comment-edit';
 import IssuePermissions from '../../../components/issue-permissions/issue-permissions';
 import ReactionsPanel from './issue__activity-reactions-dialog';
 import Router from '../../../components/router/router';
@@ -68,22 +69,26 @@ const IssueActivityStream = (props: Props) => {
     const canDeleteCommentAttachment = (attachment: Attachment) => (
       issuePermissions.canDeleteCommentAttachment(attachment, issue)
     );
-    const onEditComment = (comment: Comment): void => {
+    const onEditComment = (comment: IssueComment, backendUrl?: string): void => {
+      if (comment.attachments && backendUrl) {
+        comment.attachments = ApiHelper.convertAttachmentRelativeToAbsURLs(comment.attachments, backendUrl);
+      }
       usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'Edit comment');
       Router.PageModal({
         children: (
-          <CommentEdit
+          <IssueActivityStreamCommentEdit
+            issueContext={issueContext}
             comment={comment}
-            canDeleteCommentAttachment={canDeleteCommentAttachment}
-            onDeleteAttachment={onDeleteAttachment}
-            onUpdate={async (comment: IssueComment) => {
-              await dispatch(commentActions.submitEditedComment(comment));
-              dispatch(commentActions.loadActivity(true));
-            }}
-            visibilityOptionsGetter={() => dispatch(commentActions.getCommentVisibilityOptions())}
+            onCommentChange={
+              (comment: IssueComment, isAttachmentChange: boolean) => dispatch(
+                commentActions.submitEditedComment(comment, isAttachmentChange)
+              )
+            }
+            onSubmitComment={
+              (comment: IssueComment) => dispatch(commentActions.submitEditedComment(comment, false))
+            }
           />
-        )
-      });
+        )});
     };
     return {
       canCommentOn: issuePermissions.canCommentOn(issue),

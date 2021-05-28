@@ -160,16 +160,18 @@ export function setEditingComment(comment: IssueComment) {
   };
 }
 
-export function submitEditedComment(comment: IssueComment) {
+export function submitEditedComment(comment: IssueComment, isAttachmentChange: boolean) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().issueState.issueId;
     usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update comment');
 
     try {
       const updatedComment = await getApi().issue.submitComment(issueId, comment);
+      log.info(`Comment ${updatedComment.id} updated. Refreshing...`);
+      if (isAttachmentChange) {
+        notify('Comment updated');
+      }
       dispatch(loadActivity(true));
-      log.info(`Comment ${updatedComment.id} edited. Reloading...`);
-      notify('Comment posted');
     } catch (error) {
       const errorMessage = 'Comment update failed';
       log.warn(errorMessage, error);
@@ -293,7 +295,7 @@ export function showIssueCommentActions(
 }
 
 export function loadCommentSuggestions(query: string) {
-  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter): Promise<Array<User>> => {
     const api: Api = getApi();
     const issue: IssueFull = getState().issueState.issue;
     dispatch(startLoadingCommentSuggestions());
@@ -301,8 +303,10 @@ export function loadCommentSuggestions(query: string) {
     try {
       const suggestions = await api.mentions.getMentions(query, {issues: [{id: issue.id}]});
       dispatch(receiveCommentSuggestions(suggestions));
+      return suggestions;
     } catch (error) {
       notify('Failed to load comment suggestions', error);
+      return [];
     } finally {
       dispatch(stopLoadingCommentSuggestions());
     }

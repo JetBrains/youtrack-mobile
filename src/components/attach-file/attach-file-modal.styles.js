@@ -6,7 +6,7 @@ import {headerTitle, mainText} from '../common-styles/typography';
 
 export default EStyleSheet.create({
   container: {
-    paddingBottom: UNIT * 2
+    paddingBottom: UNIT * 4
   },
   content: {
     flex: 1,
@@ -28,7 +28,8 @@ export default EStyleSheet.create({
     margin: UNIT
   },
   buttonIcon: {
-    marginRight: UNIT * 2
+    marginRight: UNIT * 2,
+    color: '$iconAccent',
   },
   buttonText: {
     ...mainText,
@@ -36,5 +37,12 @@ export default EStyleSheet.create({
   },
   visibilityButton: {
     margin: UNIT * 3
-  }
+  },
+  link: {
+    color: '$link',
+  },
+  disabled: {
+    color: '$disabled',
+  },
+
 });
