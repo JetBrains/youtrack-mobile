@@ -5,7 +5,7 @@ import {Clipboard} from 'react-native';
 import * as activityHelper from './issue-activity__helper';
 import log from '../../../components/log/log';
 import usage from '../../../components/usage/usage';
-import {ANALYTICS_ISSUE_PAGE} from '../../../components/analytics/analytics-ids';
+import {ANALYTICS_ISSUE_PAGE, ANALYTICS_ISSUE_STREAM_SECTION} from '../../../components/analytics/analytics-ids';
 import {confirmation} from '../../../components/confirmation/confirmation';
 import {
   loadActivitiesPage,
@@ -15,6 +15,7 @@ import {
 } from './issue-activity__actions';
 import {COMMENT_REACTIONS_SEPARATOR} from '../../../components/reactions/reactions';
 import {getEntityPresentation} from '../../../components/issue-formatter/issue-formatter';
+import {logEvent} from '../../../components/log/log-helper';
 import {notify} from '../../../components/notification/notification';
 import {showActions} from '../../../components/action-sheet/action-sheet';
 import {until} from '../../../util/util';

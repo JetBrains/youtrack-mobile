@@ -95,15 +95,16 @@ const IssueCommentUpdate = (props: Props) => {
     changeState({isSaving});
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedChange = useCallback(debounce((draft: $Shape<IssueComment>, isAttachmentChange: boolean = false) => {
     props.onCommentChange && props.onCommentChange(draft, isAttachmentChange);
-  }, 300), []);
+  }, 300), [props.onCommentChange]);
 
   useEffect(() => {
     if (props.editingComment) {
       changeState({editingComment: {...state.editingComment, ...props.editingComment}});
     }
-  }, [props.editingComment]);
+  }, [props.editingComment, state.editingComment]);
 
   const setComment = (editingComment: $Shape<IssueComment> = EMPTY_COMMENT): void => {
     changeState({editingComment});
