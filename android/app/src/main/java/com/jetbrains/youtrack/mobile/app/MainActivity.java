@@ -1,6 +1,7 @@
 package com.jetbrains.youtrack.mobile.app;
 
 import android.os.Bundle;
+import android.view.View;
 import android.view.WindowManager;
 
 import com.facebook.react.ReactActivity;
@@ -19,6 +20,9 @@ public class MainActivity extends ReactActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    View v = findViewById(android.R.id.content);
+    v.setFilterTouchesWhenObscured(true);
 
     getWindow().setFlags(
       WindowManager.LayoutParams.FLAG_SECURE,
