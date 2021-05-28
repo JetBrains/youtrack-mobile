@@ -209,8 +209,9 @@ export default class IssueAPI extends ApiBase {
     return await response.json();
   }
 
-  async attachFileToDraftComment(issueId: string, fileUri: string, fileName: string): Promise<any> {
-    const url = `${this.youTrackIssueUrl}/${issueId}/draftComment/attachments?fields=id,name,imageDimensions(height,width)`;
+  async attachFileToComment(issueId: string, fileUri: string, fileName: string, commentId?: string): Promise<IssueComment> {
+    const resourcePath: string = commentId ? `comments/${commentId}` : 'draftComment';
+    const url = `${this.youTrackIssueUrl}/${issueId}/${resourcePath}/attachments?fields=id,name,url,thumbnailURL,mimeType,imageDimensions(height,width)`;
     const formData = new FormData(); //eslint-disable-line no-undef
     // $FlowFixMe
     formData.append('photo', {
@@ -226,12 +227,14 @@ export default class IssueAPI extends ApiBase {
         headers: this.auth.getAuthorizationHeaders(),
       }
     );
-    return await response.json();
+    const addedAttachments: Array<Attachment> = await response.json();
+    return ApiHelper.convertAttachmentRelativeToAbsURLs(addedAttachments, this.config.backendUrl);
   }
 
-  async removeFileFromDraftComment(issueId: string, attachmentId: string): Promise<XMLHttpRequest> {
+  async removeFileFromComment(issueId: string, attachmentId: string, commentId?: string): Promise<void> {
+    const resourcePath: string = commentId ? `comments/${commentId}` : 'draftComment';
     return this.makeAuthorizedRequest(
-      `${this.youTrackIssueUrl}/${issueId}/draftComment/attachments/${attachmentId}`,
+      `${this.youTrackIssueUrl}/${issueId}/${resourcePath}/attachments/${attachmentId}`,
       'DELETE',
       null,
       {parseJson: false}

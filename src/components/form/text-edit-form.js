@@ -20,8 +20,9 @@ type Props = {
   placeholderText?: string,
   multiline: boolean,
   onDescriptionChange: ?(text: string) => any,
+  onSelectionChange?: (event: Object) => any,
   style?: ViewStyleProp,
-  uiTheme: UITheme
+  uiTheme: UITheme,
 }
 
 const TEXT_UPDATE_DEBOUNCE = 300;
@@ -62,6 +63,11 @@ export default class TextEditForm extends PureComponent<Props, void> {
         underlineColorAndroid="transparent"
         defaultValue={description}
         onChangeText={this.onDescriptionChange}
+        onSelectionChange={(event: Object) => {
+          if (this.props.onSelectionChange) {
+            this.props.onSelectionChange(event);
+          }
+        }}
       />
     );
   }

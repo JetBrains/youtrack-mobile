@@ -29,7 +29,7 @@ type Props = {
   onHide?: () => any,
   onShow?: () => any,
   onSubmit?: ?(visibility: Visibility) => any,
-  style: ?ViewStyleProp,
+  style?: ViewStyleProp,
   uiTheme: UITheme,
   visibility?: Visibility,
   visibilityDefaultLabel?: string

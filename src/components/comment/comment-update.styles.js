@@ -1,7 +1,9 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {UNIT} from '../../components/variables/variables';
-import {mainText, secondaryText} from '../../components/common-styles/typography';
-import {elevationBottom} from '../../components/common-styles/shadow';
+
+import {elevation1, elevationBottom} from '../common-styles/shadow';
+import {headerMinHeight} from '../header/header.styles';
+import {mainText, secondaryText} from '../common-styles/typography';
+import {UNIT} from '../variables/variables';
 
 const INPUT_BORDER_RADIUS = UNIT;
 const MIN_INPUT_SIZE = UNIT * 4;
@@ -25,6 +27,9 @@ export default EStyleSheet.create({
   },
   link: {
     color: '$link',
+  },
+  disabled: {
+    color: '$disabled'
   },
   suggestionButton: {
     flexDirection: 'row',
@@ -134,5 +139,34 @@ export default EStyleSheet.create({
     paddingLeft: 0,
     marginLeft: -UNIT,
     marginVertical: UNIT,
+  },
+
+  commentEditContainer: {
+    flex: 1,
+  },
+  commentEditHeader: {
+    ...elevation1
+  },
+  commentEditContent: {
+    padding: UNIT * 2,
+    paddingTop: UNIT,
+    marginBottom: headerMinHeight
+  },
+  commentEditInput: {
+    padding: 0,
+    marginBottom: UNIT * 5,
+  },
+  commentEditVisibility: {
+    marginTop: UNIT * 2.5,
+    marginBottom: UNIT,
+  },
+  commentEditAttachments: {
+    marginTop: UNIT * 2,
+    marginBottom: UNIT,
+  },
+  commentEditAttachmentsAttachButton: {
+    marginTop: UNIT * 2,
+    borderBottomWidth: 0.5,
+    borderColor: '$separator',
   },
 });

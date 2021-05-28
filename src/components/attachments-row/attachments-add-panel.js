@@ -4,21 +4,23 @@ import type {Node} from 'React';
 import React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 
-import {View} from 'react-native-animatable';
-
 import {IconPaperClip} from '../icon/icon';
+import {View} from 'react-native-animatable';
 
 import styles from './attachment-add-panel.styles';
 
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+
 type Props = {
   isDisabled?: boolean,
-  showAddAttachDialog: () => any
+  showAddAttachDialog: () => any,
+  style?: ViewStyleProp,
 }
 
 
 const AttachmentAddPanel = (props: Props): Node => {
   return (
-    <View style={styles.attachButtonsContainer}>
+    <View style={[styles.attachButtonsContainer, props.style]}>
       <TouchableOpacity
         testID="createIssueAttachmentButton"
         disabled={props.isDisabled}
@@ -27,7 +29,7 @@ const AttachmentAddPanel = (props: Props): Node => {
       >
         <IconPaperClip
           style={styles.attachButtonIcon}
-          size={18}
+          size={20}
           color={props.isDisabled ? styles.attachButtonTextDisabled.color : styles.attachButtonText.color}
         />
         <Text
@@ -35,7 +37,7 @@ const AttachmentAddPanel = (props: Props): Node => {
             styles.attachButtonText,
             props.isDisabled ? styles.attachButtonTextDisabled : null,
           ]}>
-          Attach image
+          Add attachment
         </Text>
       </TouchableOpacity>
     </View>

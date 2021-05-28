@@ -11,6 +11,7 @@ import {notify} from '../notification/notification';
 import {until} from '../../util/util';
 
 import type Api from '../api/api';
+import type {ActionSheetAction} from '../../flow/Action';
 import type {AppState} from '../../reducers';
 import type {Article} from '../../flow/Article';
 import type {Attachment} from '../../flow/CustomFields';
@@ -24,7 +25,23 @@ const attachFileMethod: Object = {
 };
 const notifySuccessAttachmentDeletion: () => void = () => notify('Attachment deleted');
 
-export const getAttachmentActions = (prefix: string): any => {
+export type AttachmentActions = {
+  toggleAttachFileDialog: Function,
+  startImageAttaching: Function,
+  cancelImageAttaching: Function,
+  doRemoveAttach: Function,
+  stopImageAttaching: Function,
+  uploadFile: Function,
+  uploadFileToComment: Function,
+  removeAttachment: Function,
+  removeArticleAttachment: Function,
+  removeAttachmentFromComment: Function,
+  showAttachImageDialog: Function,
+  createAttachActions: Function,
+  loadIssueAttachments: Function,
+};
+
+export const getAttachmentActions = (prefix: string) => {
   const types: Object = createAttachmentTypes(prefix);
 
   const actions: Object = {
@@ -48,28 +65,33 @@ export const getAttachmentActions = (prefix: string): any => {
       return {type: types.ATTACH_STOP_ADDING};
     },
 
-    uploadFile: function (attach: Attachment, issueId: string) {
+    uploadFile: function (attach: Attachment, issueId?: string) {
       return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
         const api: Api = getApi();
-        try {
-          const response: Attachment = await api.issue.attachFile(issueId, attach.url, attach.name);
-          await api.issue.updateIssueAttachmentVisibility(issueId, response[0].id, attach.visibility);
+        const _issueId: string = issueId || getState().issueState.issue.id;
 
-          log.info(`File attached to issue ${issueId}`);
+        dispatch(actions.startImageAttaching());
+        const [error, addedAttachments] = await until(api.issue.attachFile(_issueId, attach.url, attach.name));
+
+        if (error) {
+          const message: string = 'Failed to attach file';
+          log.warn(message, error);
+          notify(message, error);
+          return [];
+        } else {
+          await api.issue.updateIssueAttachmentVisibility(_issueId, addedAttachments[0].id, attach.visibility);
+
+          log.info(`File attached to issue ${_issueId}`);
           usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Attach image', 'Success');
 
           dispatch(actions.stopImageAttaching());
           dispatch(actions.toggleAttachFileDialog(false));
-
-        } catch (error) {
-          const message: string = 'Failed to attach file';
-          log.warn(message, error);
-          notify(message, error);
+          return addedAttachments;
         }
       };
     },
 
-    uploadFileToDraftComment: function (attach: Attachment) {
+    uploadFileToComment: function (attach: Attachment, commentId?: string) {
       return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
         logEvent({
           message: 'Attaching file to a comment',
@@ -77,17 +99,19 @@ export const getAttachmentActions = (prefix: string): any => {
         });
         const api: Api = getApi();
         const issueId: string = getState().issueState.issue.id;
-        const [error, attachments] = await until(api.issue.attachFileToDraftComment(issueId, attach.url, attach.name));
+        const [error, attachments] = await until(
+          api.issue.attachFileToComment(issueId, attach.url, attach.name, commentId)
+        );
         if (error) {
           const message: string = 'Failed to attach file to a comment';
           log.warn(message, error);
           notify(message, error);
+          return [];
         } else {
           dispatch(actions.stopImageAttaching());
           dispatch(actions.toggleAttachFileDialog(false));
           return attachments;
         }
-        return null;
       };
     },
 
@@ -130,12 +154,12 @@ export const getAttachmentActions = (prefix: string): any => {
       };
     },
 
-    removeAttachmentFromDraftComment: function (attach: Attachment) {
+    removeAttachmentFromComment: function (attach: Attachment, commentId?: string) {
       return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
         const api: Api = getApi();
         const issueId: string = getState().issueState.issue.id;
         try {
-          await api.issue.removeFileFromDraftComment(issueId, attach.id);
+          await api.issue.removeFileFromComment(issueId, attach.id, commentId);
           dispatch(this.doRemoveAttach(attach.id));
           notifySuccessAttachmentDeletion();
         } catch (error) {
@@ -149,6 +173,7 @@ export const getAttachmentActions = (prefix: string): any => {
     showAttachImageDialog: function (method: typeof attachFileMethod) {
       return async (dispatch: any => any) => {
         try {
+          dispatch(actions.startImageAttaching());
           const attachingImage = await attachFile(method);
           if (attachingImage) {
             dispatch(actions.startImageAttaching(attachingImage));
@@ -160,7 +185,7 @@ export const getAttachmentActions = (prefix: string): any => {
       };
     },
 
-    createAttachActions: function (dispatch: (Function) => any): Array<Object> {
+    createAttachActions: function (dispatch: (Function) => any): Array<ActionSheetAction> {
       return [
         {
           title: 'Choose from library…',
