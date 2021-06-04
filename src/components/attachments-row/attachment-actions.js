@@ -8,13 +8,14 @@ import {createAttachmentTypes} from './attachment-types';
 import {IconAttachment, IconCamera} from '../icon/icon';
 import {logEvent} from '../log/log-helper';
 import {notify} from '../notification/notification';
+import {ResourceTypes} from '../api/api__resource-types';
 import {until} from '../../util/util';
 
 import type Api from '../api/api';
 import type {ActionSheetAction} from '../../flow/Action';
 import type {AppState} from '../../reducers';
 import type {Article} from '../../flow/Article';
-import type {Attachment} from '../../flow/CustomFields';
+import type {Attachment, IssueComment} from '../../flow/CustomFields';
 
 type ApiGetter = () => Api;
 type StateGetter = () => AppState;
@@ -61,7 +62,7 @@ export const getAttachmentActions = (prefix: string) => {
       return {type: types.ATTACH_REMOVE, attachmentId};
     },
 
-    stopImageAttaching: function (){
+    stopImageAttaching: function () {
       return {type: types.ATTACH_STOP_ADDING};
     },
 
@@ -91,16 +92,17 @@ export const getAttachmentActions = (prefix: string) => {
       };
     },
 
-    uploadFileToComment: function (attach: Attachment, commentId?: string) {
-      return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
+    uploadFileToComment: function (attach: Attachment, comment: $Shape<IssueComment>) {
+      return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter): Promise<IssueComment> => {
         logEvent({
           message: 'Attaching file to a comment',
           analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
         });
         const api: Api = getApi();
         const issueId: string = getState().issueState.issue.id;
+        const isDraftComment: boolean = comment.$type === ResourceTypes.DRAFT_ISSUE_COMMENT;
         const [error, attachments] = await until(
-          api.issue.attachFileToComment(issueId, attach.url, attach.name, commentId)
+          api.issue.attachFileToComment(issueId, attach.url, attach.name, isDraftComment ? undefined : comment.id)
         );
         if (error) {
           const message: string = 'Failed to attach file to a comment';
@@ -212,7 +214,7 @@ export const getAttachmentActions = (prefix: string) => {
       ];
     },
 
-    loadIssueAttachments: function(issueId: string) {
+    loadIssueAttachments: function (issueId: string) {
       return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
         if (!issueId) {
           return;

@@ -9,11 +9,14 @@ import {Text, View} from 'react-native';
 
 import styles from './modal-panel-bottom.style';
 
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+
 type Props = {
   children?: any,
   onHide: () => void,
   testID?: string,
   title?: string,
+  style?: ViewStyleProp,
 }
 
 
@@ -25,10 +28,11 @@ const ModalPanelBottom = (props: Props) => {
       testID={props}
       style={styles.container}
     >
-      <View style={styles.content}>
+      <View style={[styles.content, props.style]}>
         <Header
-          leftButton={<IconClose size={21} color={styles.link.color}/>}
-          onBack={props.onHide}
+          style={!props.title && {minHeight: 0}}
+          rightButton={<IconClose size={21} color={styles.link.color}/>}
+          onRightButtonClick={props.onHide}
         >
           {props.title ? <Text style={styles.title}>{props.title}</Text> : null}
         </Header>

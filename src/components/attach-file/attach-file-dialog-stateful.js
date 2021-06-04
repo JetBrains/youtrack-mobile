@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {View, Text, Image, TouchableOpacity, ActivityIndicator} from 'react-native';
 
 import attachFile from './attach-file';
@@ -26,10 +26,26 @@ import type {UserGroup} from '../../flow/UserGroup';
 import type {User} from '../../flow/User';
 import type {Visibility} from '../../flow/Visibility';
 
-const attachFileMethod: Object = {
+export const attachFileMethod: Object = {
   openCamera: 'openCamera',
   openPicker: 'openPicker'
 };
+
+export const attachFileActions: Array<ActionSheetAction> = [
+  {
+    id: attachFileMethod.openPicker,
+    title: 'Choose from library…',
+    icon: IconAttachment,
+    execute: () => {}
+  },
+  {
+    id: attachFileMethod.openCamera,
+    title: 'Take a picture…',
+    icon: IconCamera,
+    execute: () => {}
+  }
+];
+
 
 type Props = {
   actions: {
@@ -38,6 +54,7 @@ type Props = {
   },
   getVisibilityOptions: () => Array<User | UserGroup>,
   hideVisibility?: boolean,
+  source?: typeof attachFileMethod,
 };
 
 
@@ -48,6 +65,15 @@ const AttachFileDialogStateful = (props: Props) => {
 
   const [attach, updateAttach] = useState(null);
   const [isAttaching, updateAttaching] = useState(false);
+
+  useEffect(() => {
+    if (props.source) {
+      const action: ?ActionSheetAction = createActions().find((it: ActionSheetAction) => it.id === props.source);
+      if (action && action.execute) {
+        action.execute();
+      }
+    }
+  }, [props.source]);
 
   const showSystemDialog = async (method: typeof attachFileMethod) => {
     try {
@@ -61,30 +87,26 @@ const AttachFileDialogStateful = (props: Props) => {
   };
 
   const createActions = (): Array<ActionSheetAction> => {
-    return [
-      {
-        title: 'Choose from library…',
-        icon: IconAttachment,
-        execute: () => {
+    return attachFileActions.map((action: ActionSheetAction) => {
+      if (action.id === attachFileMethod.openPicker) {
+        action.execute = () => {
           logEvent({
             message: 'Attach file from storage',
             analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
           });
           showSystemDialog(attachFileMethod.openPicker);
-        }
-      },
-      {
-        title: 'Take a picture…',
-        icon: IconCamera,
-        execute: () => {
+        };
+      } else {
+        action.execute = () => {
           logEvent({
             message: 'Attach file via camera',
             analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
           });
           showSystemDialog(attachFileMethod.openCamera);
-        }
+        };
       }
-    ];
+      return action;
+    });
   };
 
   const linkColor: string = styles.link.color;

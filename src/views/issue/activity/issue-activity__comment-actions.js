@@ -133,6 +133,7 @@ export function updateDraftComment(draftComment: IssueComment, doNotFlush: boole
       } else if (!doNotFlush) {
         dispatch(setEditingComment(draft));
       }
+      return error? null : draft;
     }
   };
 }
