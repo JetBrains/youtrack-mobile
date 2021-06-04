@@ -36,12 +36,14 @@ export const attachFileActions: Array<ActionSheetAction> = [
     id: attachFileMethod.openPicker,
     title: 'Choose from library…',
     icon: IconAttachment,
+    iconSize: 22,
     execute: () => {}
   },
   {
     id: attachFileMethod.openCamera,
     title: 'Take a picture…',
     icon: IconCamera,
+    iconSize: 18,
     execute: () => {}
   }
 ];
