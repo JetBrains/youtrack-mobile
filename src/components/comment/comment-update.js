@@ -1,10 +1,9 @@
 /* @flow */
 
 import React, {useCallback, useContext, useEffect, useState} from 'react';
-import {ActivityIndicator, View, Text} from 'react-native';
+import {ActivityIndicator, View, Text, TouchableOpacity} from 'react-native';
 
 import debounce from 'lodash.debounce';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useDispatch} from 'react-redux';
 
 import AttachFileDialogStateful from '../attach-file/attach-file-dialog-stateful';
@@ -259,7 +258,7 @@ const IssueCommentUpdate = (props: Props) => {
         onOpenAttachment={() => (
           usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'Preview comment attachment')
         )}
-        canRemoveAttachment={true}
+        canRemoveAttachment={!state.isSaving && !state.mentionsVisible}
         onRemoveImage={async (attachment: Attachment) => {
           await dispatch(attachmentActions.removeAttachmentFromComment(
             attachment,
