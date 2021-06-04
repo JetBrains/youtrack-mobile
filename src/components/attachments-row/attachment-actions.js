@@ -92,7 +92,7 @@ export const getAttachmentActions = (prefix: string) => {
       };
     },
 
-    uploadFileToComment: function (attach: Attachment, comment: $Shape<IssueComment>) {
+    uploadFileToIssueComment: function (attach: Attachment, comment: $Shape<IssueComment>) {
       return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter): Promise<IssueComment> => {
         logEvent({
           message: 'Attaching file to a comment',

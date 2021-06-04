@@ -46,7 +46,7 @@ type Props = {
   getVisibilityOptions: () => Array<User | UserGroup>,
   isEditMode: boolean,
   onAddSpentTime: (() => any) | null,
-  onAttach: () => any,
+  onAttach: (file: Attachment, comment: IssueComment) => Array<Attachment>,
   onCommentChange: (comment: IssueComment, isAttachmentChange: boolean) => any,
   onSubmitComment: (comment: IssueComment) => any,
 };
@@ -232,7 +232,7 @@ const IssueCommentUpdate = (props: Props) => {
             if (!draftComment.id) {
               draftComment = await props.onCommentChange(state.editingComment, false);
             }
-            const addedAttachments: IssueComment = await dispatch(attachmentActions.uploadFileToComment(
+            const addedAttachments: Array<Attachment> = await dispatch(props.onAttach(
               file,
               state.editingComment,
             ));
