@@ -5,6 +5,7 @@ import React from 'react';
 import * as commentActions from './issue-activity__comment-actions';
 import IssueCommentUpdate from '../../../components/comment/comment-update';
 import IssuePermissions from '../../../components/issue-permissions/issue-permissions';
+import {attachmentActions} from './issue-activity__attachment-actions-and-types';
 import {getApi} from '../../../components/api/api__instance';
 
 import type {IssueComment} from '../../../flow/CustomFields';
@@ -28,7 +29,7 @@ const IssueActivityStreamCommentEdit = (props: Props) => {
   return (
     <IssueCommentUpdate
       isEditMode={true}
-      hi
+      onAttach={attachmentActions.uploadFileToIssueComment}
       onCommentChange={onCommentChange}
       getVisibilityOptions={() => getApi().issue.getVisibilityOptions(issue.id)}
       onSubmitComment={props.onSubmitComment}

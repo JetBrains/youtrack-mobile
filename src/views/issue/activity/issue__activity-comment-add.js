@@ -7,6 +7,7 @@ import {useDispatch} from 'react-redux';
 import * as commentActions from './issue-activity__comment-actions';
 import IssueCommentUpdate from '../../../components/comment/comment-update';
 import IssuePermissions from '../../../components/issue-permissions/issue-permissions';
+import {attachmentActions} from './issue-activity__attachment-actions-and-types';
 import {getApi} from '../../../components/api/api__instance';
 import {IssueContext} from '../issue-context';
 
@@ -36,6 +37,7 @@ const IssueActivityStreamCommentAdd = (props: Props) => {
       getCommentSuggestions={(query: string) => dispatch(commentActions.loadCommentSuggestions(query))}
       canAttach={issuePermissions.canAddAttachmentTo(issue)}
       onAddSpentTime={props.onAddSpentTime}
+      onAttach={attachmentActions.uploadFileToIssueComment}
     />
   );
 };
