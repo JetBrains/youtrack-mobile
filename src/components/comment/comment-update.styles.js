@@ -3,7 +3,6 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {elevation1, elevationBottom} from '../common-styles/shadow';
 import {headerMinHeight} from '../header/header.styles';
 import {mainText, secondaryText} from '../common-styles/typography';
-import {title} from '../common-styles/issue';
 import {UNIT} from '../variables/variables';
 
 const INPUT_BORDER_RADIUS = UNIT;
@@ -137,7 +136,8 @@ export default EStyleSheet.create({
   },
   actionsContainerButtonText: {
     marginLeft: UNIT,
-    ...title,
+    ...mainText,
+    fontWeight: '500',
   },
   floatContext: {
   },
