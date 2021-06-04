@@ -3,6 +3,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {elevation1, elevationBottom} from '../common-styles/shadow';
 import {headerMinHeight} from '../header/header.styles';
 import {mainText, secondaryText} from '../common-styles/typography';
+import {title} from '../common-styles/issue';
 import {UNIT} from '../variables/variables';
 
 const INPUT_BORDER_RADIUS = UNIT;
@@ -64,8 +65,8 @@ export default EStyleSheet.create({
   commentContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: UNIT * 3,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingRight: UNIT / 2,
   },
   commentInputContainer: {
     flexDirection: 'row',
@@ -122,17 +123,29 @@ export default EStyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    height: UNIT * 4,
-    minWidth: UNIT * 4,
-    marginRight: UNIT / 4,
+    marginRight: UNIT,
   },
   actionsContainerButton: {
-    marginRight: UNIT ,
-    padding: UNIT / 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: UNIT / 2,
+    paddingHorizontal: UNIT / 2,
     color: '$iconAccent'
   },
   actionsContainerButtonDisabled: {
     color: '$disabled'
+  },
+  actionsContainerButtonText: {
+    marginLeft: UNIT,
+    ...title,
+  },
+  floatContext: {
+  },
+  floatContextButton: {
+    margin: UNIT,
+  },
+  floatContextButtonText: {
+    paddingLeft: UNIT * 1.5,
   },
 
   attachmentsContainer: {

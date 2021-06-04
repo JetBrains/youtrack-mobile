@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {useCallback, useContext, useEffect, useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {ActivityIndicator, View, Text} from 'react-native';
 
 import debounce from 'lodash.debounce';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -15,6 +15,7 @@ import IconAttach from '@jetbrains/icons/attachment.svg';
 import IconHourGlass from '@jetbrains/icons/hourglass.svg';
 import log from '../log/log';
 import Mentions from '../mentions/mentions';
+import ModalPanelBottom from '../modal-panel-bottom/modal-panel-bottom';
 import MultilineInput from '../multiline-input/multiline-input';
 import Router from '../router/router';
 import usage from '../usage/usage';
@@ -22,7 +23,8 @@ import VisibilityControl from '../visibility/visibility-control';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from '../analytics/analytics-ids';
 import {commentPlaceholderText} from '../../app-text';
 import {composeSuggestionText, getSuggestWord} from '../mentions/mension-helper';
-import {IconArrowUp, IconCheck, IconClose} from '../icon/icon';
+import {getAttachmentActions} from '../attachments-row/attachment-actions';
+import {IconArrowUp, IconCheck, IconClose, IconAdd} from '../icon/icon';
 import {ThemeContext} from '../theme/theme-context';
 
 import styles from './comment-update.styles';
@@ -35,13 +37,12 @@ import type {User} from '../../flow/User';
 import type {Visibility} from '../../flow/Visibility';
 import type {CustomError} from '../../flow/Error';
 import type {AttachmentActions} from '../attachments-row/attachment-actions';
-import {getAttachmentActions} from '../attachments-row/attachment-actions';
 
 type UserMentions = { users: Array<User> };
 
 type Props = {
   canAttach: boolean,
-  editingComment: ?$Shape<IssueComment>,
+  editingComment?: ?$Shape<IssueComment>,
   getCommentSuggestions: (query: string) => Promise<UserMentions>,
   getVisibilityOptions: () => Array<User | UserGroup>,
   isEditMode: boolean,
@@ -55,6 +56,7 @@ type State = {
   commentCaret: number,
   editingComment: $Shape<IssueComment>,
   isAttachFileDialogVisible: boolean,
+  isAttachActionsVisible: boolean,
   isSaving: boolean,
   isVisibilityControlVisible: boolean,
   isVisibilitySelectVisible: boolean,
@@ -76,6 +78,7 @@ const IssueCommentUpdate = (props: Props) => {
     commentCaret: 0,
     editingComment: EMPTY_COMMENT,
     isAttachFileDialogVisible: false,
+    isAttachActionsVisible: false,
     isSaving: false,
     isVisibilitySelectVisible: false,
     isVisibilityControlVisible: false,
@@ -97,8 +100,8 @@ const IssueCommentUpdate = (props: Props) => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedChange = useCallback(debounce((draft: $Shape<IssueComment>, isAttachmentChange: boolean = false) => {
-    props.onCommentChange && props.onCommentChange(draft, isAttachmentChange);
-  }, 300), [props.onCommentChange]);
+    props.onCommentChange(draft, isAttachmentChange);
+  }, 300), []);
 
   useEffect(() => {
     if (props.editingComment) {
@@ -224,15 +227,20 @@ const IssueCommentUpdate = (props: Props) => {
         getVisibilityOptions={props.getVisibilityOptions}
         actions={{
           onAttach: async (file: Attachment, onAttachingFinish: () => any) => {
-            const addedAttachments: Array<Attachment> = await dispatch(attachmentActions.uploadFileToComment(
+            let draftComment: IssueComment = state.editingComment;
+            if (!draftComment.id) {
+              draftComment = await props.onCommentChange(state.editingComment, false);
+            }
+            const addedAttachments: IssueComment = await dispatch(attachmentActions.uploadFileToComment(
               file,
-              props.isEditMode && state.editingComment.id
-            )) || [];
+              state.editingComment,
+            ));
             onAttachingFinish();
             toggleAttachFileDialog(false);
             const updatedComment: IssueComment = {
               ...state.editingComment,
-              attachments: [].concat(state.editingComment.attachments).concat(addedAttachments)
+              ...draftComment,
+              attachments: [].concat(state.editingComment.attachments || []).concat(addedAttachments)
             };
             changeState({editingComment: updatedComment});
             debouncedChange(updatedComment, true);
@@ -269,6 +277,7 @@ const IssueCommentUpdate = (props: Props) => {
       />
     );
   };
+
   const renderCommentInput = (autoFocus: boolean, onFocus: Function, onBlur: Function): Node => {
     return (
       <MultilineInput
@@ -308,6 +317,7 @@ const IssueCommentUpdate = (props: Props) => {
       isVisibilitySelectVisible ||
       isVisibilityControlVisible
     );
+    const hideAttachActionsPanel = () => changeState({isAttachActionsVisible: false});
 
     return (
       <>
@@ -323,35 +333,15 @@ const IssueCommentUpdate = (props: Props) => {
         <View style={styles.commentContainer}>
           {(!!props.onAddSpentTime || props.canAttach) && (
             <View style={styles.actionsContainer}>
-              {!!props.onAddSpentTime && (
-                <TouchableOpacity
-                  style={styles.actionsContainerButton}
-                  onPress={props.onAddSpentTime}
-                >
-                  <IconHourGlass
-                    fill={styles.actionsContainerButton.color}
-                    width={26}
-                    height={26}
-                  />
-                </TouchableOpacity>
-              )}
-              {props.canAttach && (
-                <TouchableOpacity
-                  style={styles.actionsContainerButton}
-                  disabled={isSaving || mentionsVisible}
-                  onPress={() => toggleAttachFileDialog(true)}
-                >
-                  <IconAttach
-                    fill={
-                      isSaving || mentionsVisible
-                        ? styles.actionsContainerButtonDisabled.color
-                        : styles.actionsContainerButton.color
-                    }
-                    width={26}
-                    height={26}
-                  />
-                </TouchableOpacity>
-              )}
+              <TouchableOpacity
+                style={styles.actionsContainerButton}
+                onPress={() => changeState({isAttachActionsVisible: true})}
+              >
+                <IconAdd
+                  color={styles.actionsContainerButton.color}
+                  size={22}
+                />
+              </TouchableOpacity>
             </View>
           )}
 
@@ -371,6 +361,54 @@ const IssueCommentUpdate = (props: Props) => {
         {state.editingComment?.attachments?.length > 0 && <View style={styles.attachmentsContainer}>
           {renderAttachments()}
         </View>}
+
+        {state.isAttachActionsVisible && (
+          <ModalPanelBottom
+            style={styles.floatContext}
+            onHide={hideAttachActionsPanel}
+          >
+            {props.canAttach && (
+              <TouchableOpacity
+                style={[styles.actionsContainerButton, styles.floatContextButton]}
+                disabled={isSaving || mentionsVisible}
+                onPress={() => {
+                  hideAttachActionsPanel();
+                  toggleAttachFileDialog(true);
+                }}
+              >
+                <IconAttach
+                  fill={
+                    isSaving || mentionsVisible
+                      ? styles.actionsContainerButtonDisabled.color
+                      : styles.actionsContainerButton.color
+                  }
+                  width={20}
+                  height={20}
+                />
+                <Text style={[styles.actionsContainerButtonText, styles.floatContextButtonText]}>Attach file</Text>
+              </TouchableOpacity>
+            )
+            }
+            {!!props.onAddSpentTime && (
+              <TouchableOpacity
+                style={[styles.actionsContainerButton, styles.floatContextButton]}
+                onPress={() => {
+                  changeState({isAttachActionsVisible: false});
+                  if (props.onAddSpentTime) {
+                    props.onAddSpentTime();
+                  }
+                }}
+              >
+                <IconHourGlass
+                  fill={styles.actionsContainerButton.color}
+                  width={20}
+                  height={20}
+                />
+                <Text style={[styles.actionsContainerButtonText, styles.floatContextButtonText]}>Add spent time</Text>
+              </TouchableOpacity>
+            )}
+          </ModalPanelBottom>
+        )}
       </>
     );
   };
