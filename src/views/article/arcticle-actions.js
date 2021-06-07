@@ -296,9 +296,9 @@ const getArticleCommentDraft = () => {
     const api: Api = getApi();
     const {article}: Article = getState().article;
 
-    const [error, articleDraftCommentResponse] = await until(api.articles.getCommentDraft(article.id));
-    if (!error && articleDraftCommentResponse.draftComment) {
-      dispatch(setArticleCommentDraft(articleDraftCommentResponse.draftComment));
+    const [error, draftComment] = await until(api.articles.getCommentDraft(article.id));
+    if (!error && draftComment) {
+      dispatch(setArticleCommentDraft(draftComment));
     }
   };
 };

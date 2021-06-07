@@ -182,10 +182,14 @@ export default class ArticlesAPI extends ApiBase {
     const fields: string = ApiBase.createFieldsQuery(
       {draftComment: this.commentFields}
     );
-    return this.makeAuthorizedRequest(
+    const response: IssueComment = await this.makeAuthorizedRequest(
       `${this.youTrackApiUrl}/articles/${articleId}/?${fields}`,
       'GET'
     );
+    if (response?.draftComment?.attachments?.length > 0) {
+      response.draftComment.attachments = this.convertAttachmentsURL(response.draftComment.attachments);
+    }
+    return response.draftComment;
   }
 
   async updateCommentDraft(articleId: string, comment: IssueComment): Promise<Comment> {
@@ -279,6 +283,11 @@ export default class ArticlesAPI extends ApiBase {
 
   removeAttachment(articleId: string, attachmentId: string) {
     return this.removeArticleEntity('attachments', articleId, attachmentId);
+  }
+
+  async removeAttachmentFromComment(articleId: string, attachmentId: string, commentId?: string): Promise<void> {
+    const resourcePath: string = commentId ? `comments/${commentId}` : 'draftComment';
+    return this.removeArticleEntity(`${resourcePath}/attachments`, articleId, attachmentId);
   }
 
   async attachFileToComment(articleId: string, fileUri: string, fileName: string, commentId?: string): Promise<IssueComment> {
