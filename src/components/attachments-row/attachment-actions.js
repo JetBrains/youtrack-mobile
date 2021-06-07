@@ -117,6 +117,31 @@ export const getAttachmentActions = (prefix: string) => {
       };
     },
 
+    uploadFileToArticleComment: function (attach: Attachment, comment: $Shape<IssueComment>) {
+      return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter): Promise<IssueComment> => {
+        logEvent({
+          message: 'Attaching file to a comment',
+          analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+        });
+        const api: Api = getApi();
+        const articleId: string = getState().article.article.id;
+        const isDraftComment: boolean = comment.$type === ResourceTypes.DRAFT_ISSUE_COMMENT;
+        const [error, attachments] = await until(
+          api.articles.attachFileToComment(articleId, attach.url, attach.name, isDraftComment ? undefined : comment.id)
+        );
+        if (error) {
+          const message: string = 'Failed to attach file to a comment';
+          log.warn(message, error);
+          notify(message, error);
+          return [];
+        } else {
+          dispatch(actions.stopImageAttaching());
+          dispatch(actions.toggleAttachFileDialog(false));
+          return attachments;
+        }
+      };
+    },
+
     removeAttachment: function (attach: Attachment, issueId: string): (
       dispatch: (any) => any,
       getState: StateGetter,

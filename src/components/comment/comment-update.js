@@ -105,10 +105,14 @@ const IssueCommentUpdate = (props: Props) => {
   }, 300), []);
 
   useEffect(() => {
-    if (props.editingComment) {
-      changeState({editingComment: {...state.editingComment, ...props.editingComment}});
-    }
-  }, [props.editingComment, state.editingComment]);
+    changeState({
+      editingComment: (
+        props.editingComment
+          ? {...state.editingComment, ...props.editingComment}
+          : EMPTY_COMMENT
+      )
+    });
+  }, [props.editingComment]);
 
   const setComment = (editingComment: $Shape<IssueComment> = EMPTY_COMMENT): void => {
     changeState({editingComment});

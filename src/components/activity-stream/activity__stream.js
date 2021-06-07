@@ -402,7 +402,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
   };
 
   const renderHistoryAndRelatedChanges = (activityGroup: Object, isRelatedChange: boolean, uiTheme: UITheme) => {
-    if (activityGroup.events.length > 0) {
+    if (activityGroup?.events?.length > 0) {
       return (
         <View style={isRelatedChange ? styles.activityRelatedChanges : styles.activityHistoryChanges}>
           {Boolean(!activityGroup.merged && !isRelatedChange) && renderUserInfo(activityGroup)}

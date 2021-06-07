@@ -6,21 +6,16 @@ import {ScrollView} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {useActionSheet} from '@expo/react-native-action-sheet';
 
+import * as articleActions from './arcticle-actions';
 import ArticleActivityStream from './article__activity-stream';
 import ArticleAddComment from './article__add-comment';
 import CommentEdit from '../../components/comment/comment-edit';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import Router from '../../components/router/router';
-import {createActivityModel} from '../../components/activity/activity-helper';
-import {
-  loadActivitiesPage,
-  loadCachedActivitiesPage,
-  showArticleCommentActions,
-  updateArticleComment,
-} from './arcticle-actions';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLE_PAGE_STREAM,} from '../../components/analytics/analytics-ids';
 import {attachmentActions} from '../issue/activity/issue-activity__attachment-actions-and-types';
+import {convertCommentsToActivityPage, createActivityModel} from '../../components/activity/activity-helper';
 
 import styles from './article.styles';
 
@@ -28,7 +23,7 @@ import type {ActivityItem, ActivityStreamCommentActions} from '../../flow/Activi
 import type {Article} from '../../flow/Article';
 import type {Attachment, IssueComment} from '../../flow/CustomFields';
 import type {UITheme} from '../../flow/Theme';
-import type {User, UserAppearanceProfile} from '../../flow/User';
+import type {User} from '../../flow/User';
 
 type Props = {
   article: Article,
@@ -46,14 +41,23 @@ const ArticleActivities = (props: Props) => {
   const {showActionSheetWithOptions} = useActionSheet();
   const [activities, updateActivityModel] = useState(null);
 
+  const currentUser: User = useSelector(store => store.app.user);
   const activityPage: Array<ActivityItem> = useSelector(store => store.article.activityPage);
+  const articleCommentDraft: ?IssueComment = useSelector(store => store.article.articleCommentDraft);
   const user: User = useSelector(store => store.app.user);
-  const loadActivities = useCallback((reset: boolean) => {
+
+  const refreshActivities: Function = (reset?: boolean) => dispatch(articleActions.loadActivitiesPage(reset));
+  const loadActivities: Function = useCallback((reset: boolean) => {
     if (article?.idReadable) {
-      dispatch(loadCachedActivitiesPage());
-      dispatch(loadActivitiesPage(reset));
+      dispatch(articleActions.loadCachedActivitiesPage());
+      refreshActivities(reset);
     }
   }, [dispatch, article?.idReadable]);
+
+  const getSortOrder = (): boolean => !!user?.profiles?.appearance?.naturalCommentsOrder;
+  const doCreateActivityModel = (activitiesPage: Array<ActivityItem>): void => {
+    updateActivityModel(createActivityModel(activitiesPage, getSortOrder()));
+  };
 
   useEffect(() => {
     loadActivities(false);
@@ -61,9 +65,7 @@ const ArticleActivities = (props: Props) => {
 
   useEffect(() => {
     if (activityPage) {
-      const userAppearanceProfile: ?UserAppearanceProfile = user?.profiles?.appearance;
-      const naturalCommentsOrder: boolean = userAppearanceProfile ? userAppearanceProfile.naturalCommentsOrder : true;
-      updateActivityModel(createActivityModel(activityPage, naturalCommentsOrder));
+      doCreateActivityModel(activityPage);
     }
   }, [activityPage, user?.profiles?.appearance]);
 
@@ -80,7 +82,7 @@ const ArticleActivities = (props: Props) => {
           children: (
             <CommentEdit
               comment={comment}
-              onUpdate={(comment: IssueComment): Function => dispatch(updateArticleComment(comment))}
+              onUpdate={(comment: IssueComment): Function => dispatch(articleActions.updateArticleComment(comment))}
               canDeleteCommentAttachment={(attachment: Attachment): boolean => (
                 issuePermissions.canDeleteCommentAttachment(attachment, article)
               )}
@@ -93,7 +95,7 @@ const ArticleActivities = (props: Props) => {
         });
       },
       onShowCommentActions: async (comment: IssueComment, activityId: string) => dispatch(
-        showArticleCommentActions(
+        articleActions.showArticleCommentActions(
           showActionSheetWithOptions,
           comment,
           activityId,
@@ -102,6 +104,21 @@ const ArticleActivities = (props: Props) => {
       ),
       canDeleteComment: canDeleteComment,
     });
+  };
+
+  const updateActivities = (comment: IssueComment): void => {
+    const commentActivity: ActivityItem = [{
+      ...convertCommentsToActivityPage([comment])[0],
+      tmp: true,
+      timestamp: Date.now(),
+      author: currentUser,
+    }];
+
+    doCreateActivityModel(
+      getSortOrder()
+        ? activityPage.concat(commentActivity)
+        : commentActivity.concat(activityPage)
+    );
   };
 
   return (
@@ -118,15 +135,24 @@ const ArticleActivities = (props: Props) => {
           issuePermissions={issuePermissions}
           commentActions={createCommentActions()}
           onCheckboxUpdate={(checked: boolean, position: number, comment: IssueComment) => (
-            dispatch(updateArticleComment(comment))
+            dispatch(articleActions.updateArticleComment(comment))
           )}
         />
       </ScrollView>
       {issuePermissions.articleCanCommentOn(article) && (
         <ArticleAddComment
+          article={article}
+          comment={articleCommentDraft}
+          onCommentChange={(comment: IssueComment): Function => dispatch(
+            articleActions.updateArticleCommentDraft(comment)
+          )}
+          onSubmitComment={async (comment: IssueComment): Function => {
+            updateActivities(comment);
+            await dispatch(articleActions.submitArticleCommentDraft(comment));
+            refreshActivities(false);
+            return Promise.resolve();
+          }}
           issuePermissions={issuePermissions}
-          onAdd={() => loadActivities(false)}
-          uiTheme={uiTheme}
         />
       )}
     </>
