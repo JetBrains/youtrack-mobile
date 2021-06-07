@@ -188,23 +188,19 @@ export default class ArticlesAPI extends ApiBase {
     );
   }
 
-  async doUpdateCommentDraft(articleId: string, commentText: string, method: string): Promise<Comment> {
-    return this.makeAuthorizedRequest(
+  async updateCommentDraft(articleId: string, comment: IssueComment): Promise<Comment> {
+    const draftComment: IssueComment = await this.makeAuthorizedRequest(
       `${this.youTrackApiUrl}/articles/${articleId}/draftComment?${this.articleCommentFieldsQuery}`,
-      method,
+      comment.id ? 'POST' : 'PUT',
       {
-        text: commentText,
+        ...comment,
         usesMarkdown: true
       }
     );
-  }
-
-  async createCommentDraft(articleId: string, commentText: string): Promise<IssueComment> {
-    return this.doUpdateCommentDraft(articleId, commentText, 'PUT');
-  }
-
-  async updateCommentDraft(articleId: string, commentText: string): Promise<IssueComment> {
-    return this.doUpdateCommentDraft(articleId, commentText, 'POST');
+    if (draftComment.attachments?.length > 0) {
+      draftComment.attachments = this.convertAttachmentsURL(draftComment.attachments);
+    }
+    return draftComment;
   }
 
   async submitCommentDraft(articleId: string, articleCommentDraftId: string): Promise<IssueComment> {
@@ -220,7 +216,7 @@ export default class ArticlesAPI extends ApiBase {
       `${this.youTrackApiUrl}/articles/${articleId}/comments/${comment.id}?${this.articleCommentFieldsQuery}`,
       'POST',
       {
-        text: comment.text,
+        ...comment,
         usesMarkdown: true,
         visibility: comment.visibility || null
       }
@@ -284,5 +280,28 @@ export default class ArticlesAPI extends ApiBase {
   removeAttachment(articleId: string, attachmentId: string) {
     return this.removeArticleEntity('attachments', articleId, attachmentId);
   }
+
+  async attachFileToComment(articleId: string, fileUri: string, fileName: string, commentId?: string): Promise<IssueComment> {
+    const resourcePath: string = commentId ? `comments/${commentId}` : 'draftComment';
+    const url = `${this.youTrackApiUrl}/articles/${articleId}/${resourcePath}/attachments?fields=id,name,url,thumbnailURL,mimeType,imageDimensions(height,width)`;
+    const formData = new FormData(); //eslint-disable-line no-undef
+    // $FlowFixMe
+    formData.append('photo', {
+      uri: fileUri,
+      name: fileName,
+      type: 'image/binary'
+    });
+    const response = await fetch(
+      url,
+      {
+        method: 'POST',
+        body: formData,
+        headers: this.auth.getAuthorizationHeaders(),
+      }
+    );
+    const addedAttachments: Array<Attachment> = await response.json();
+    return ApiHelper.convertAttachmentRelativeToAbsURLs(addedAttachments, this.config.backendUrl);
+  }
+
 
 }
