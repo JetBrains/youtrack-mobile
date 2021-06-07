@@ -4,7 +4,7 @@ import attachFile from '../attach-file/attach-file';
 import log from '../log/log';
 import usage from '../usage/usage';
 import {ANALYTICS_ISSUE_PAGE, ANALYTICS_ISSUE_STREAM_SECTION} from '../analytics/analytics-ids';
-import {createAttachmentTypes} from './attachment-types';
+import {attachmentActionMap, createAttachmentTypes} from './attachment-types';
 import {IconAttachment, IconCamera} from '../icon/icon';
 import {logEvent} from '../log/log-helper';
 import {notify} from '../notification/notification';
@@ -44,7 +44,7 @@ export type AttachmentActions = {
 };
 
 export const getAttachmentActions = (prefix: string) => {
-  const types: Object = createAttachmentTypes(prefix);
+  const types: typeof attachmentActionMap = createAttachmentTypes(prefix);
 
   const actions: Object = {
     toggleAttachFileDialog: function (isAttachFileDialogVisible: boolean = false) {
