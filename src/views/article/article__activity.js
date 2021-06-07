@@ -7,14 +7,14 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useActionSheet} from '@expo/react-native-action-sheet';
 
 import * as articleActions from './arcticle-actions';
+import ApiHelper from '../../components/api/api__helper';
 import ArticleActivityStream from './article__activity-stream';
+import ArticleActivityStreamCommentEdit from './article__edit-comment';
 import ArticleAddComment from './article__add-comment';
-import CommentEdit from '../../components/comment/comment-edit';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import Router from '../../components/router/router';
 import usage from '../../components/usage/usage';
-import {ANALYTICS_ARTICLE_PAGE_STREAM,} from '../../components/analytics/analytics-ids';
-import {attachmentActions} from '../issue/activity/issue-activity__attachment-actions-and-types';
+import {ANALYTICS_ARTICLE_PAGE_STREAM} from '../../components/analytics/analytics-ids';
 import {convertCommentsToActivityPage, createActivityModel} from '../../components/activity/activity-helper';
 
 import styles from './article.styles';
@@ -74,26 +74,35 @@ const ArticleActivities = (props: Props) => {
     const canDeleteComment = (comment: IssueComment): boolean => (
       issuePermissions.articleCanDeleteComment(article, comment)
     );
+    const onEditComment = (comment: IssueComment, backendUrl?: string): void => {
+      let attachments: Array<Attachment> = comment.attachments || [];
+      if (comment.attachments && backendUrl) {
+        attachments = ApiHelper.convertAttachmentRelativeToAbsURLs(comment.attachments, backendUrl);
+      }
+      usage.trackEvent(ANALYTICS_ARTICLE_PAGE_STREAM, 'Edit comment');
+      const onCommentChange: (comment: IssueComment) => Function = (comment: IssueComment) => dispatch(
+        articleActions.updateArticleComment(comment)
+      );
+      Router.PageModal({
+        children: (
+          <ArticleActivityStreamCommentEdit
+            article={article}
+            issuePermissions={issuePermissions}
+            comment={{
+              ...comment,
+              attachments,
+            }}
+            onCommentChange={onCommentChange}
+            onSubmitComment={onCommentChange}
+          />
+        )
+      });
+    };
+
     return ({
       isAuthor: (comment: IssueComment): boolean => issuePermissions.isCurrentUser(comment.author),
       canUpdateComment: (comment: IssueComment): boolean => issuePermissions.articleCanUpdateComment(article, comment),
-      onStartEditing: (comment: Comment): void => {
-        Router.PageModal({
-          children: (
-            <CommentEdit
-              comment={comment}
-              onUpdate={(comment: IssueComment): Function => dispatch(articleActions.updateArticleComment(comment))}
-              canDeleteCommentAttachment={(attachment: Attachment): boolean => (
-                issuePermissions.canDeleteCommentAttachment(attachment, article)
-              )}
-              onDeleteAttachment={(attachment: Attachment): Function => {
-                usage.trackEvent(ANALYTICS_ARTICLE_PAGE_STREAM, 'Article edit comment: remove attachment');
-                dispatch(attachmentActions.removeArticleAttachment(attachment));
-              }}
-            />
-          )
-        });
-      },
+      onStartEditing: onEditComment,
       onShowCommentActions: async (comment: IssueComment, activityId: string) => dispatch(
         articleActions.showArticleCommentActions(
           showActionSheetWithOptions,
