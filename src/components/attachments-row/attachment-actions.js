@@ -36,7 +36,8 @@ export type AttachmentActions = {
   uploadFileToComment: Function,
   removeAttachment: Function,
   removeArticleAttachment: Function,
-  removeAttachmentFromComment: Function,
+  removeAttachmentFromIssueComment: Function,
+  removeAttachmentFromArticleComment: Function,
   showAttachImageDialog: Function,
   createAttachActions: Function,
   loadIssueAttachments: Function,
@@ -58,7 +59,7 @@ export const getAttachmentActions = (prefix: string) => {
       return {type: types.ATTACH_CANCEL_ADDING, attachingImage};
     },
 
-    doRemoveAttach: (attachmentId: string) => {
+    doRemoveAttach: function (attachmentId: string) {
       return {type: types.ATTACH_REMOVE, attachmentId};
     },
 
@@ -125,9 +126,14 @@ export const getAttachmentActions = (prefix: string) => {
         });
         const api: Api = getApi();
         const articleId: string = getState().article.article.id;
-        const isDraftComment: boolean = comment.$type === ResourceTypes.DRAFT_ISSUE_COMMENT;
+        const isDraftComment: boolean = comment.$type === ResourceTypes.DRAFT_ARTICLE_COMMENT;
         const [error, attachments] = await until(
-          api.articles.attachFileToComment(articleId, attach.url, attach.name, isDraftComment ? undefined : comment.id)
+          api.articles.attachFileToComment(
+            articleId,
+            attach.url,
+            attach.name,
+            isDraftComment ? undefined : comment.id
+          )
         );
         if (error) {
           const message: string = 'Failed to attach file to a comment';
@@ -151,7 +157,7 @@ export const getAttachmentActions = (prefix: string) => {
         const api: Api = getApi();
         try {
           await api.issue.removeAttachment(issueId, attach.id);
-          dispatch(this.doRemoveAttach(attach.id));
+          dispatch(actions.doRemoveAttach(attach.id));
           notifySuccessAttachmentDeletion();
         } catch (error) {
           const message: string = 'Failed to remove attachment';
@@ -176,24 +182,44 @@ export const getAttachmentActions = (prefix: string) => {
           notify(message, error);
         } else {
           notifySuccessAttachmentDeletion();
-          dispatch(this.doRemoveAttach(attach.id));
+          dispatch(actions.doRemoveAttach(attach.id));
         }
       };
     },
 
-    removeAttachmentFromComment: function (attach: Attachment, commentId?: string) {
+    removeAttachmentFromComment: function (apiResource: Function, attachId: string) {
       return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
-        const api: Api = getApi();
-        const issueId: string = getState().issueState.issue.id;
         try {
-          await api.issue.removeFileFromComment(issueId, attach.id, commentId);
-          dispatch(this.doRemoveAttach(attach.id));
+          await apiResource();
+          dispatch(actions.doRemoveAttach(attachId));
           notifySuccessAttachmentDeletion();
         } catch (error) {
           const message: string = 'Failed to remove attachment';
           log.warn(message, error);
           notify(message, error);
         }
+      };
+    },
+
+    removeAttachmentFromIssueComment: function (attach: Attachment, commentId?: string) {
+      return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
+        const api: Api = getApi();
+        const issueId: string = getState().issueState.issue.id;
+        dispatch(actions.removeAttachmentFromComment(
+          () => api.issue.removeFileFromComment(issueId, attach.id, commentId),
+          attach.id
+        ));
+      };
+    },
+
+    removeAttachmentFromArticleComment: function (attach: Attachment, commentId?: string) {
+      return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
+        const api: Api = getApi();
+        const articleId: string = getState().article.article.id;
+        dispatch(actions.removeAttachmentFromComment(
+          () => api.articles.removeAttachmentFromComment(articleId, attach.id, commentId),
+          attach.id
+        ));
       };
     },
 

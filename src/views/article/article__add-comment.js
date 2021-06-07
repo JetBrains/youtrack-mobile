@@ -1,6 +1,6 @@
 /* @flow */
 
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import {useDispatch} from 'react-redux';
 
@@ -8,7 +8,7 @@ import IssueCommentUpdate from '../../components/comment/comment-update';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import {attachmentActions} from './article__activity__attachment-actions-and-types';
 import {getApi} from '../../components/api/api__instance';
-import {getMentions} from './arcticle-actions';
+import {getArticleCommentDraft, getMentions} from './arcticle-actions';
 
 import type {Article} from '../../flow/Article';
 import type {IssueComment} from '../../flow/CustomFields';
@@ -24,9 +24,15 @@ type Props = {
 
 const ArticleAddComment = (props: Props) => {
   const dispatch = useDispatch();
+  const loadDraftComment = () => dispatch(getArticleCommentDraft());
+
+  useEffect(() => {
+    loadDraftComment();
+  }, []);
 
   return (
     <IssueCommentUpdate
+      isArticle={true}
       onCommentChange={props.onCommentChange}
       getVisibilityOptions={() => getApi().articles.getVisibilityOptions(props.article.id)}
       onSubmitComment={props.onSubmitComment}

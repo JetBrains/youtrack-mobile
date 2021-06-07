@@ -29,7 +29,8 @@ export const ResourceTypes = {
   WORK_ITEM: 'jetbrains.youtrack.timetracking.gaprest.IssueWorkItem',
   DRAFT_WORK_ITEM: 'DraftWorkItem',
 
-  DRAFT_ISSUE_COMMENT: 'DraftIssueComment'
+  DRAFT_ISSUE_COMMENT: 'DraftIssueComment',
+  DRAFT_ARTICLE_COMMENT: 'DraftArticleComment'
 };
 
 type HasMethodName = 'comment' | 'user' | 'userGroup' | 'project' | 'savedSearch' | 'tag' | 'agile';

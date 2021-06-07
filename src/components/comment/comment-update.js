@@ -44,9 +44,10 @@ type Props = {
   editingComment?: ?$Shape<IssueComment>,
   getCommentSuggestions: (query: string) => Promise<UserMentions>,
   getVisibilityOptions: () => Array<User | UserGroup>,
+  isArticle?: boolean,
   isEditMode: boolean,
   onAddSpentTime: (() => any) | null,
-  onAttach: (file: Attachment, comment: IssueComment) => Array<Attachment>,
+  onAttach: (attachment: Attachment, comment: IssueComment) => Array<Attachment>,
   onCommentChange: (comment: IssueComment, isAttachmentChange: boolean) => any,
   onSubmitComment: (comment: IssueComment) => any,
 };
@@ -267,7 +268,12 @@ const IssueCommentUpdate = (props: Props) => {
         )}
         canRemoveAttachment={!state.isSaving && !state.mentionsVisible}
         onRemoveImage={async (attachment: Attachment) => {
-          await dispatch(attachmentActions.removeAttachmentFromComment(
+          const resource: Function = (
+            props.isArticle
+              ? attachmentActions.removeAttachmentFromArticleComment
+              : attachmentActions.removeAttachmentFromIssueComment
+          );
+          await dispatch(resource(
             attachment,
             props.isEditMode && state.editingComment.id
           ));
