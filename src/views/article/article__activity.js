@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {ScrollView} from 'react-native';
 
 import {useDispatch, useSelector} from 'react-redux';
@@ -45,29 +45,32 @@ const ArticleActivities = (props: Props) => {
   const activityPage: Array<ActivityItem> = useSelector(store => store.article.activityPage);
   const articleCommentDraft: ?IssueComment = useSelector(store => store.article.articleCommentDraft);
   const user: User = useSelector(store => store.app.user);
+  const isNaturalSortOrder: boolean = !!user?.profiles?.appearance?.naturalCommentsOrder;
 
-  const refreshActivities: Function = (reset?: boolean) => dispatch(articleActions.loadActivitiesPage(reset));
-  const loadActivities: Function = (reset: boolean) => {
+  const refreshActivities: Function = useCallback(
+    (reset?: boolean) => dispatch(articleActions.loadActivitiesPage(reset)),
+    [dispatch]
+  );
+  const loadActivities: Function = useCallback((reset: boolean) => {
     if (article?.idReadable) {
       dispatch(articleActions.loadCachedActivitiesPage());
       refreshActivities(reset);
     }
-  };
+  }, [article?.idReadable, dispatch, refreshActivities]);
 
-  const getSortOrder = (): boolean => !!user?.profiles?.appearance?.naturalCommentsOrder;
-  const doCreateActivityModel = (activitiesPage: Array<ActivityItem>): void => {
-    updateActivityModel(createActivityModel(activitiesPage, getSortOrder()));
-  };
+  const doCreateActivityModel = useCallback((activitiesPage: Array<ActivityItem>): void => {
+    updateActivityModel(createActivityModel(activitiesPage, isNaturalSortOrder));
+  }, [createActivityModel]);
 
   useEffect(() => {
     loadActivities(false);
-  }, []);
+  }, [loadActivities]);
 
   useEffect(() => {
     if (activityPage) {
       doCreateActivityModel(activityPage);
     }
-  }, [activityPage]);
+  }, [activityPage, doCreateActivityModel, user?.profiles?.appearance]);
 
 
   const createCommentActions = (): ActivityStreamCommentActions => {
@@ -124,9 +127,7 @@ const ArticleActivities = (props: Props) => {
     }];
 
     doCreateActivityModel(
-      getSortOrder()
-        ? activityPage.concat(commentActivity)
-        : commentActivity.concat(activityPage)
+      isNaturalSortOrder ? activityPage.concat(commentActivity) : commentActivity.concat(activityPage)
     );
   };
 
