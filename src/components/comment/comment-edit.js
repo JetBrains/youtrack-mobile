@@ -246,7 +246,10 @@ const IssueCommentEdit = (props: Props) => {
             changeState({editingComment: updatedComment});
             debouncedChange(updatedComment, true);
           },
-          onCancel: () => changeState({isAttachFileDialogVisible: false})
+          onCancel: () => {
+            changeState({isAttachFileDialogVisible: false});
+            debouncedChange(state.editingComment);
+          }
         }}
       />
     );
