@@ -60,7 +60,7 @@ const ArticleActivities = (props: Props) => {
 
   const doCreateActivityModel = useCallback((activitiesPage: Array<ActivityItem>): void => {
     updateActivityModel(createActivityModel(activitiesPage, isNaturalSortOrder));
-  }, [createActivityModel]);
+  }, [createActivityModel, isNaturalSortOrder]);
 
   useEffect(() => {
     loadActivities(false);
