@@ -4,7 +4,7 @@ import React, {useEffect} from 'react';
 
 import {useDispatch} from 'react-redux';
 
-import IssueCommentUpdate from '../../components/comment/comment-update';
+import IssueCommentEdit from '../../components/comment/comment-edit';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import {attachmentActions} from './article__activity__attachment-actions-and-types';
 import {getApi} from '../../components/api/api__instance';
@@ -31,7 +31,7 @@ const ArticleAddComment = (props: Props) => {
   }, []);
 
   return (
-    <IssueCommentUpdate
+    <IssueCommentEdit
       isArticle={true}
       onCommentChange={props.onCommentChange}
       getVisibilityOptions={() => getApi().articles.getVisibilityOptions(props.article.id)}

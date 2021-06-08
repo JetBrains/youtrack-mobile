@@ -70,7 +70,7 @@ type State = {
 const EMPTY_COMMENT: $Shape<IssueComment> = {text: '', visibility: null};
 
 
-const IssueCommentUpdate = (props: Props) => {
+const IssueCommentEdit = (props: Props) => {
   const dispatch = useDispatch();
   const theme: Theme = useContext(ThemeContext);
   const attachmentActions: AttachmentActions = getAttachmentActions('issueCommentInput');
@@ -482,4 +482,4 @@ const IssueCommentUpdate = (props: Props) => {
   );
 };
 
-export default React.memo<any>(IssueCommentUpdate);
+export default React.memo<any>(IssueCommentEdit);

@@ -4,7 +4,7 @@ import React from 'react';
 
 import {useDispatch} from 'react-redux';
 
-import IssueCommentUpdate from '../../components/comment/comment-update';
+import IssueCommentEdit from '../../components/comment/comment-edit';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import {attachmentActions} from './article__activity__attachment-actions-and-types';
 import {getApi} from '../../components/api/api__instance';
@@ -27,7 +27,7 @@ const ArticleActivityStreamCommentEdit = (props: Props) => {
 
   const {onCommentChange = () => {}} = props;
   return (
-    <IssueCommentUpdate
+    <IssueCommentEdit
       isArticle={true}
       isEditMode={true}
       onAttach={attachmentActions.uploadFileToArticleComment}
