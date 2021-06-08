@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 
 import {useDispatch} from 'react-redux';
 
@@ -24,11 +24,11 @@ type Props = {
 
 const ArticleAddComment = (props: Props) => {
   const dispatch = useDispatch();
-  const loadDraftComment = () => dispatch(getArticleCommentDraft());
+  const loadDraftComment = useCallback(() => dispatch(getArticleCommentDraft()), [dispatch]);
 
   useEffect(() => {
     loadDraftComment();
-  }, []);
+  }, [loadDraftComment]);
 
   return (
     <IssueCommentEdit
