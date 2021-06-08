@@ -9,7 +9,7 @@ import issueActivityPageFields, {ISSUE_ATTACHMENT_FIELDS} from './api__activitie
 import issueFields from './api__issue-fields';
 import {activityArticleCategory} from '../activity/activity__category';
 
-import type {Activity} from '../../flow/Activity';
+import type {Activity, ActivityItem} from '../../flow/Activity';
 import type {Article, ArticleDraft} from '../../flow/Article';
 import type {Attachment, IssueComment} from '../../flow/CustomFields';
 
@@ -83,8 +83,9 @@ export default class ArticlesAPI extends ApiBase {
       fields: issueActivityPageFields.toString()
     });
 
-    return this.makeAuthorizedRequest(
+    const activityPage: Array<ActivityItem> = await this.makeAuthorizedRequest(
       `${this.youTrackApiUrl}/articles/${articleId}/activitiesPage?${queryString}${categories}`);
+    return ApiHelper.patchAllRelativeAvatarUrls(activityPage, this.config.backendUrl);
   }
 
   async getArticleDrafts(original?: string): Promise<Article> {

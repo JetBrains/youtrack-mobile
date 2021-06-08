@@ -313,7 +313,7 @@ export default class IssueAPI extends ApiBase {
     });
 
     const response = await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/activitiesPage?${queryString}${categories}`);
-    return response.activities;
+    return ApiHelper.patchAllRelativeAvatarUrls(response.activities, this.config.backendUrl);
   }
 
   removeIssueEntity(resourceName: string, issueId: string, entityId: string) {
