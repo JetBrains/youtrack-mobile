@@ -106,11 +106,7 @@ const IssueCommentEdit = (props: Props) => {
 
   useEffect(() => {
     changeState({
-      editingComment: (
-        props.editingComment
-          ? {...state.editingComment, ...props.editingComment}
-          : EMPTY_COMMENT
-      )
+      editingComment: props.editingComment ? props.editingComment : EMPTY_COMMENT
     });
   }, [props.editingComment]);
 
