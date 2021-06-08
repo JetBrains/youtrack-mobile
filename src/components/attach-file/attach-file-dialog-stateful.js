@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {View, Text, Image, TouchableOpacity, ActivityIndicator} from 'react-native';
 
 import attachFile from './attach-file';
@@ -28,7 +28,7 @@ import type {Visibility} from '../../flow/Visibility';
 
 export const attachFileMethod: Object = {
   openCamera: 'openCamera',
-  openPicker: 'openPicker'
+  openPicker: 'openPicker',
 };
 
 export const attachFileActions: Array<ActionSheetAction> = [
@@ -68,6 +68,29 @@ const AttachFileDialogStateful = (props: Props) => {
   const [attach, updateAttach] = useState(null);
   const [isAttaching, updateAttaching] = useState(false);
 
+  const createActions = useCallback((): Array<ActionSheetAction> => {
+    return attachFileActions.map((action: ActionSheetAction) => {
+      if (action.id === attachFileMethod.openPicker) {
+        action.execute = () => {
+          logEvent({
+            message: 'Attach file from storage',
+            analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
+          });
+          showSystemDialog(attachFileMethod.openPicker);
+        };
+      } else {
+        action.execute = () => {
+          logEvent({
+            message: 'Attach file via camera',
+            analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
+          });
+          showSystemDialog(attachFileMethod.openCamera);
+        };
+      }
+      return action;
+    });
+  }, []);
+
   useEffect(() => {
     if (props.source) {
       const action: ?ActionSheetAction = createActions().find((it: ActionSheetAction) => it.id === props.source);
@@ -75,7 +98,7 @@ const AttachFileDialogStateful = (props: Props) => {
         action.execute();
       }
     }
-  }, [props.source]);
+  }, [createActions, props.source]);
 
   const showSystemDialog = async (method: typeof attachFileMethod) => {
     try {
@@ -86,29 +109,6 @@ const AttachFileDialogStateful = (props: Props) => {
     } catch (err) {
       notify('Can\'t add a file', err);
     }
-  };
-
-  const createActions = (): Array<ActionSheetAction> => {
-    return attachFileActions.map((action: ActionSheetAction) => {
-      if (action.id === attachFileMethod.openPicker) {
-        action.execute = () => {
-          logEvent({
-            message: 'Attach file from storage',
-            analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
-          });
-          showSystemDialog(attachFileMethod.openPicker);
-        };
-      } else {
-        action.execute = () => {
-          logEvent({
-            message: 'Attach file via camera',
-            analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
-          });
-          showSystemDialog(attachFileMethod.openCamera);
-        };
-      }
-      return action;
-    });
   };
 
   const linkColor: string = styles.link.color;
