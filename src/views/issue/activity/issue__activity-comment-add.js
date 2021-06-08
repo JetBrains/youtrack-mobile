@@ -5,7 +5,7 @@ import React, {useContext} from 'react';
 import {useDispatch} from 'react-redux';
 
 import * as commentActions from './issue-activity__comment-actions';
-import IssueCommentUpdate from '../../../components/comment/comment-update';
+import IssueCommentEdit from '../../../components/comment/comment-edit';
 import IssuePermissions from '../../../components/issue-permissions/issue-permissions';
 import {attachmentActions} from './issue-activity__attachment-actions-and-types';
 import {getApi} from '../../../components/api/api__instance';
@@ -29,7 +29,7 @@ const IssueActivityStreamCommentAdd = (props: Props) => {
   const issuePermissions: IssuePermissions = issueContext.issuePermissions;
 
   return (
-    <IssueCommentUpdate
+    <IssueCommentEdit
       onCommentChange={props.onCommentChange}
       getVisibilityOptions={() => getApi().issue.getVisibilityOptions(issue.id)}
       onSubmitComment={props.onSubmitComment}
