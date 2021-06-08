@@ -6,7 +6,7 @@ import {ActivityIndicator, View, Text, TouchableOpacity} from 'react-native';
 import debounce from 'lodash.debounce';
 import {useDispatch} from 'react-redux';
 
-import AttachFileDialogStateful, {attachFileActions} from '../attach-file/attach-file-dialog-stateful';
+import AttachFileDialogStateful from '../attach-file/attach-file-dialog-stateful';
 import AttachmentAddPanel from '../attachments-row/attachments-add-panel';
 import AttachmentsRow from '../attachments-row/attachments-row';
 import Header from '../header/header';
@@ -22,7 +22,7 @@ import {ANALYTICS_ISSUE_STREAM_SECTION} from '../analytics/analytics-ids';
 import {commentPlaceholderText} from '../../app-text';
 import {composeSuggestionText, getSuggestWord} from '../mentions/mension-helper';
 import {getAttachmentActions} from '../attachments-row/attachment-actions';
-import {IconArrowUp, IconCheck, IconClose, IconAdd} from '../icon/icon';
+import {IconArrowUp, IconCheck, IconClose, IconAdd, IconAttachment} from '../icon/icon';
 import {ThemeContext} from '../theme/theme-context';
 
 import styles from './comment-update.styles';
@@ -35,7 +35,6 @@ import type {User} from '../../flow/User';
 import type {Visibility} from '../../flow/Visibility';
 import type {CustomError} from '../../flow/Error';
 import type {AttachmentActions} from '../attachments-row/attachment-actions';
-import type {ActionSheetAction} from '../../flow/Action';
 
 type UserMentions = { users: Array<User> };
 
@@ -378,24 +377,22 @@ const IssueCommentEdit = (props: Props) => {
             style={styles.floatContext}
             onHide={hideAttachActionsPanel}
           >
-            {props.canAttach && attachFileActions.map((action: ActionSheetAction) => {
-              return <TouchableOpacity
-                key={action.title}
+            {props.canAttach && (
+              <TouchableOpacity
                 style={[styles.actionsContainerButton, styles.floatContextButton]}
                 disabled={isSaving || mentionsVisible}
                 onPress={() => {
                   changeState({
-                    attachFileSource: action.id,
                     isAttachActionsVisible: false,
                     isAttachFileDialogVisible: true,
                   });
                 }}
               >
-                <action.icon size={action.iconSize || 22} color={styles.actionsContainerButton.color}/>
+                <IconAttachment size={22} color={styles.actionsContainerButton.color}/>
                 <Text
-                  style={[styles.actionsContainerButtonText, styles.floatContextButtonText]}>{action.title}</Text>
-              </TouchableOpacity>;
-            })}
+                  style={[styles.actionsContainerButtonText, styles.floatContextButtonText]}>Attach image</Text>
+              </TouchableOpacity>
+            )}
             {!!props.onAddSpentTime && (
               <TouchableOpacity
                 style={[styles.actionsContainerButton, styles.floatContextButton]}
