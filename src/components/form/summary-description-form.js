@@ -13,6 +13,7 @@ import usage from '../usage/usage';
 import styles from './summary-description-form.style';
 
 import type {UITheme} from '../../flow/Theme';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   analyticsId?: string,
@@ -24,6 +25,7 @@ type Props = {
   uiTheme: UITheme,
   summaryPlaceholder?: string,
   descriptionPlaceholder?: string,
+  style?: ViewStyleProp,
 }
 
 const TEXT_UPDATE_DEBOUNCE = 300;
