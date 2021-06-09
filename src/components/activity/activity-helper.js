@@ -31,7 +31,7 @@ const getIssueActivityIcon = (activityTypeName: string): React$Component<any> =>
   return activityIconMap[activityTypeName];
 };
 
-function createActivityFromComment(comment: IssueComment): ActivityItem {
+function createActivityFromComment(comment: IssueComment): Activity {
   return {
     $type: 'CommentActivityItem',
     added: [Object.assign({}, comment, {attachments: comment?.attachments || []})],
@@ -47,7 +47,7 @@ function createActivityFromComment(comment: IssueComment): ActivityItem {
   };
 }
 
-const convertCommentsToActivityPage = (comments: Array<IssueComment> = []): Array<ActivityItem> => {
+const convertCommentsToActivityPage = (comments: Array<IssueComment> = []): Array<Activity> => {
   return comments.map((comment: IssueComment) => createActivityFromComment(comment));
 };
 

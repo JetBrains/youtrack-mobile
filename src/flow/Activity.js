@@ -21,17 +21,18 @@ type ActivityWork = EventBase & {
 export type ActivityItem = IssueProject | IssueComment | Attachment | IssueFull | ActivityWork | string | null;
 
 export type Activity = {
-  id: string;
-  category: {id: string},
+  $type?: string,
+  id: string,
+  category: {id: string, $type?: string},
   timestamp: number,
   targetMember: Object,
-  targetSubMember: Object,
-  authorGroup: {
+  targetSubMember?: Object,
+  authorGroup?: {
     icon: string,
     name: string
-  },
+  } | null,
   author: User,
-  target: {id: string, created: number, usesMarkdown: boolean},
+  target: {$type?: string, id: string, created: number, usesMarkdown: boolean},
   field: Object,
   added: ActivityItem | Array<ActivityItem>,
   removed: ActivityItem | Array<ActivityItem>,

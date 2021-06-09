@@ -16,7 +16,7 @@ import type {IssueComment} from '../../flow/CustomFields';
 type Props = {
   article: Article,
   issuePermissions: IssuePermissions,
-  comment: IssueComment,
+  comment: IssueComment | null,
   onCommentChange: (draftComment: IssueComment) => Promise<void>,
   onSubmitComment: (draftComment: IssueComment) => Promise<void>,
 };

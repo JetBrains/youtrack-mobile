@@ -1,6 +1,6 @@
 /* @flow */
 
-import type {IssueFull} from './Issue';
+import type {IssueFull, IssueOnList} from './Issue';
 import type {Reaction} from './Reaction';
 import type {User} from './User';
 import type {Visibility} from './Visibility';
@@ -173,7 +173,8 @@ export type IssueComment = {
   visibility: Visibility,
   reactionOrder?: string,
   reactions?: Array<Reaction>,
-  issue?: IssueFull
+  issue?: IssueFull,
+  attachments?: Array<Attachment>
 }
 
 export type IssueLinkType = {
