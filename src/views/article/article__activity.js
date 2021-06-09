@@ -43,7 +43,7 @@ const ArticleActivities = (props: Props) => {
 
   const currentUser: User = useSelector(store => store.app.user);
   const activityPage: Array<ActivityItem> = useSelector(store => store.article.activityPage);
-  const articleCommentDraft: ?IssueComment = useSelector(store => store.article.articleCommentDraft);
+  const articleCommentDraft: IssueComment | null = useSelector(store => store.article.articleCommentDraft);
   const user: User = useSelector(store => store.app.user);
   const isNaturalSortOrder: boolean = !!user?.profiles?.appearance?.naturalCommentsOrder;
 
@@ -60,7 +60,7 @@ const ArticleActivities = (props: Props) => {
 
   const doCreateActivityModel = useCallback((activitiesPage: Array<ActivityItem>): void => {
     updateActivityModel(createActivityModel(activitiesPage, isNaturalSortOrder));
-  }, [createActivityModel, isNaturalSortOrder]);
+  }, [isNaturalSortOrder]);
 
   useEffect(() => {
     loadActivities(false);
@@ -98,7 +98,7 @@ const ArticleActivities = (props: Props) => {
             onCommentChange={onCommentChange}
             onSubmitComment={onCommentChange}
           />
-        )
+        ),
       });
     };
 
@@ -119,7 +119,7 @@ const ArticleActivities = (props: Props) => {
   };
 
   const updateActivities = (comment: IssueComment): void => {
-    const commentActivity: ActivityItem = [{
+    const commentActivity: Array<Object> = [{
       ...convertCommentsToActivityPage([comment])[0],
       tmp: true,
       timestamp: Date.now(),
@@ -142,7 +142,6 @@ const ArticleActivities = (props: Props) => {
           attachments={article?.attachments}
           uiTheme={uiTheme}
           user={user}
-          issuePermissions={issuePermissions}
           commentActions={createCommentActions()}
           onCheckboxUpdate={(checked: boolean, position: number, comment: IssueComment) => (
             dispatch(articleActions.updateArticleComment(comment))
