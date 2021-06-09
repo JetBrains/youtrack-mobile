@@ -7902,6 +7902,11 @@ react-native-appearance@0.3.4:
     invariant "^2.2.4"
     use-subscription "^1.0.0"
 
+react-native-autogrow-textinput@^5.4.0:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/react-native-autogrow-textinput/-/react-native-autogrow-textinput-5.4.0.tgz#df3d7a549d20e8bf34f493d2eaa1839d3e48a319"
+  integrity sha512-JnAPq0Oc+Q4gbMii+60Mk1Zep2ii3+bNHBffTMjH/vPQtpOH4bbgb+GQS9c+0uX51yuSxfbhIdgI7mvpj2f6ZA==
+
 react-native-calendars@1.5.3:
   version "1.5.3"
   resolved "https://registry.yarnpkg.com/react-native-calendars/-/react-native-calendars-1.5.3.tgz#882937a40045152d97fb20a5159c68783ce26601"

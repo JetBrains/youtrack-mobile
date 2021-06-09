@@ -4,6 +4,7 @@ import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {ActivityIndicator, View, Text, TouchableOpacity} from 'react-native';
 
 import debounce from 'lodash.debounce';
+import {AutoGrowingTextInput} from 'react-native-autogrow-textinput';
 import {useDispatch} from 'react-redux';
 
 import AttachFileDialogStateful from '../attach-file/attach-file-dialog-stateful';
@@ -14,7 +15,6 @@ import IconHourGlass from '@jetbrains/icons/hourglass.svg';
 import log from '../log/log';
 import Mentions from '../mentions/mentions';
 import ModalPanelBottom from '../modal-panel-bottom/modal-panel-bottom';
-import MultilineInput from '../multiline-input/multiline-input';
 import Router from '../router/router';
 import usage from '../usage/usage';
 import VisibilityControl from '../visibility/visibility-control';
@@ -89,7 +89,7 @@ const IssueCommentEdit = (props: Props) => {
     mentionsVisible: false,
   });
 
-  let editCommentInput: MultilineInput;
+  let editCommentInput: typeof AutoGrowingTextInput;
 
   const changeState = (statePart: $Shape<State>): void => {
     updateState((prevState: State) => ({...prevState, ...statePart}));
@@ -289,9 +289,9 @@ const IssueCommentEdit = (props: Props) => {
 
   const renderCommentInput = (autoFocus: boolean, onFocus: Function, onBlur: Function): Node => {
     return (
-      <MultilineInput
+      <AutoGrowingTextInput
         {...{...props, autoFocus}}
-        ref={(instance: ?MultilineInput) => instance && (editCommentInput = instance)}
+        ref={(instance: ?(typeof AutoGrowingTextInput)) => instance && (editCommentInput = instance)}
         placeholder={commentPlaceholderText}
         value={state.editingComment.text}
         editable={!state.isSaving}
@@ -299,6 +299,7 @@ const IssueCommentEdit = (props: Props) => {
         keyboardAppearance={theme.uiTheme.name}
         placeholderTextColor={theme.uiTheme.colors.$icon}
         autoCapitalize="sentences"
+        maxHeight={106}
         onSelectionChange={(event) => {
           changeState({commentCaret: event.nativeEvent.selection.start});
         }}
