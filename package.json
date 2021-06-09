@@ -71,7 +71,8 @@
   },
   "tmp": ".tmp",
   "resolutions": {
-    "uglify-es": "3.1.10"
+    "uglify-es": "3.1.10",
+    "graceful-fs": "4.2.4"
   },
   "dependencies": {
     "@expo/react-native-action-sheet": "3.8.0",
