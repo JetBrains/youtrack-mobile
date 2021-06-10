@@ -8,7 +8,6 @@ import {SvgUri} from 'react-native-svg';
 import {View as AnimatedView} from 'react-native-animatable';
 import ImageProgress from 'react-native-image-progress';
 import Router from '../router/router';
-import safariView from '../safari-view/safari-view';
 import throttle from 'lodash.throttle';
 import {hasMimeType} from '../mime-type/mime-type';
 import {isAndroidPlatform} from '../../util/util';
@@ -85,16 +84,13 @@ export default class Attach extends PureComponent<Props, State> {
     const isVideo = ATTACH_EXT_BLACK_LIST.some(reg => reg.test(url));
     this.props.onOpenAttachment('file', name);
 
-    if (!isAndroid && !isVideo) {
+    if (!isVideo) {
       Router.AttachmentPreview({
         url,
         name,
         headers: this.props.imageHeaders,
       });
     } else {
-      if (!isAndroid) {
-        return safariView.show({url});
-      }
       Linking.openURL(url);
     }
   }

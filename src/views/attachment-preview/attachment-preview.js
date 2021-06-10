@@ -7,9 +7,7 @@ import {View, Text, WebView, ActivityIndicator, Linking} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import Header from '../../components/header/header';
-import safariView from '../../components/safari-view/safari-view';
 import {IconClose} from '../../components/icon/icon';
-import {isAndroidPlatform} from '../../util/util';
 import {UNIT} from '../../components/variables/variables';
 
 type Props = {
@@ -18,7 +16,6 @@ type Props = {
   headers: ?Object
 }
 
-const isAndroid: boolean = isAndroidPlatform();
 
 function renderLoading() {
   return <ActivityIndicator style={styles.loadingIndicator} size="large"/>;
@@ -32,9 +29,7 @@ export function AttachmentPreview(props: Props): Node {
       <Header
         leftButton={<IconClose size={21} color={styles.link.color}/>}
         rightButton={<Text style={styles.link}>Browser</Text>}
-        onRightButtonClick={() => {
-          isAndroid ? Linking.openURL(url) : safariView.show({url});
-        }}
+        onRightButtonClick={() => {Linking.openURL(url);}}
       >
         <Text style={styles.headerText} numberOfLines={1}>{name}</Text>
       </Header>
