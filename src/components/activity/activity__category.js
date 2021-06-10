@@ -41,7 +41,7 @@ export const activityCategory = {
 };
 
 export const activityArticleCategory = {
-  ATTACHMENTS:'ArticleAttachmentsCategory',
+  ATTACHMENTS: 'ArticleAttachmentsCategory',
   COMMENT: 'ArticleCommentsCategory',
   CREATED: 'ArticleCreatedCategory',
   DESCRIPTION: 'ArticleDescriptionCategory',
@@ -62,7 +62,7 @@ export const ActivityCategory: {
     IssueHistory: string,
     TimeTracking: string,
   },
-  Source: {COMMENT: string, HISTORY: string, WORK_ITEM: string},
+  Source: { COMMENT: string, HISTORY: string, WORK_ITEM: string },
 } = [
   ['COMMENT', 'IssueComments', [
     activityCategory.COMMENT,
@@ -84,7 +84,11 @@ export const ActivityCategory: {
   ['WORK_ITEM', 'TimeTracking', [
     activityCategory.WORK_ITEM,
   ], 'Work'],
-].reduce(function(Activity, source) {
+].reduce(function (Activity: {
+  Source: Object,
+  CategoryPresentation: Object,
+  ActivityCategories: Object,
+}, source) {
   const sourceName = source[0];
   const sourceKey = source[1];
   const activityCategories = source[2];
@@ -102,13 +106,14 @@ export const ActivityCategory: {
 });
 
 
-export const isActivityCategory = function(categoryId: string): ((activity: any) => boolean) {
-  return function(activity: Object) {
+export const isActivityCategory = (function (categoryId: string): ((activity: any) => boolean) {
+  return function (activity: Object) {
     return activity ? activity.category.id === categoryId : false;
   };
-};
-export const isActivityCategories = function(categoryIds: Array<string>): ((activity: any) => boolean) {
-  return function(activity: Object) {
+}: any);
+
+export const isActivityCategories = function (categoryIds: Array<string>): ((activity: any) => boolean) {
+  return function (activity: Object) {
     return activity ? categoryIds.some((categoryId: string) => categoryId === activity.category.id) : false;
   };
 };

@@ -81,7 +81,7 @@ const getGroupedActivity = (activityPage: Array<Activity> = []) => {
   });
 };
 
-const createActivityModel = (activityPage: Array<ActivityItem> | null, naturalCommentsOrder: boolean): Array<ActivityItem> | null => {
+const createActivityModel = (activityPage: Array<Activity> | null, naturalCommentsOrder: boolean): Array<ActivityItem> | null => {
   if (!activityPage) {
     return null;
   }
