@@ -72,7 +72,6 @@ export const getAttachmentActions = (prefix: string) => {
         const api: Api = getApi();
         const _issueId: string = issueId || getState().issueState.issue.id;
 
-        dispatch(actions.startImageAttaching());
         const [error, addedAttachments] = await until(api.issue.attachFile(_issueId, attach.url, attach.name));
 
         if (error) {
@@ -226,7 +225,6 @@ export const getAttachmentActions = (prefix: string) => {
     showAttachImageDialog: function (method: typeof attachFileMethod) {
       return async (dispatch: any => any) => {
         try {
-          dispatch(actions.startImageAttaching());
           const attachingImage = await attachFile(method);
           if (attachingImage) {
             dispatch(actions.startImageAttaching(attachingImage));
