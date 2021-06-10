@@ -1,6 +1,6 @@
 /* @flow */
 
-import type {BoardColumn} from "../../flow/Agile";import * as types from './board-action-types';
+import * as types from './board-action-types';
 import {findIssueOnBoard} from './board-updaters';
 
 import * as issueUpdater from '../../components/issue-actions/issue-updater';
@@ -31,6 +31,7 @@ import type {
   SprintFull,
 } from '../../flow/Agile';
 import type {AgilePageState} from './board-reducers';
+import type {BoardColumn} from '../../flow/Agile';
 import type {CustomError} from '../../flow/Error';
 import type {IssueFull, IssueOnList} from '../../flow/Issue';
 
@@ -177,7 +178,7 @@ export function loadAgile(agileId: string): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter
-) => 
+) =>
   | Promise<
     {
       columns: Array<BoardColumn>,

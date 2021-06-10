@@ -18,7 +18,11 @@ import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 type DefaultProps = {
   imageHeaders: ?Object,
   onOpenAttachment: (type: string, name: string) => any,
-  onImageLoadingError: (error: Object) => any
+  onImageLoadingError: (error: Object) => any,
+  attachments: Array<Attachment>,
+  attachingImage: Attachment | null,
+  canRemoveAttachment: boolean,
+  onRemoveImage: (attachment: Attachment) => any,
 };
 
 type Props = DefaultProps & {
@@ -32,9 +36,11 @@ type Props = DefaultProps & {
 
 
 export default class AttachmentsRow extends PureComponent<Props, void> {
-  scrollView: ?ScrollView;
+  scrollView: ?(typeof ScrollView);
 
   static defaultProps: DefaultProps = {
+    attachments: [],
+    attachingImage: null,
     imageHeaders: null,
     canRemoveAttachment: false,
     onOpenAttachment: () => {},
@@ -58,19 +64,15 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
     }
   }
 
-  setScrollRef = (node: ?ScrollView) => {
-    this.scrollView = node;
-  };
-
   render(): null | Node {
     const {
-      attachments = [],
+      attachments,
       attachingImage,
       onOpenAttachment,
       onRemoveImage,
       canRemoveAttachment,
       uiTheme,
-      style
+      style,
     } = this.props;
 
     if (!attachments.length) {
@@ -78,7 +80,9 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
     }
 
     return <ScrollView
-      ref={this.setScrollRef}
+      ref={(node: ?(typeof ScrollView)): void => {
+        this.scrollView = node;
+      }}
       style={[styles.attachesScroll, style]}
       horizontal={true}
     >

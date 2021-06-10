@@ -5,9 +5,8 @@ import {handleRelativeUrl} from '../config/config';
 import {ResourceTypes} from './api__resource-types';
 
 import type Auth from '../auth/auth';
-import type {IssueComment, Tag} from '../../flow/CustomFields';
+import type {IssueComment} from '../../flow/CustomFields';
 import type {Reaction} from '../../flow/Reaction';
-import type {SavedQuery} from '../../flow/Issue';
 import type {Folder, User, UserAppearanceProfile, UserGeneralProfile} from '../../flow/User';
 
 

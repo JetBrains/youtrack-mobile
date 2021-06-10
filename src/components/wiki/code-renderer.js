@@ -1,6 +1,6 @@
 /* @flow */
 
-import type {Node as $IMPORTED_TYPE$_Node} from "React";import React from 'react';
+import React from 'react';
 
 import {Text} from 'react-native';
 
@@ -15,6 +15,8 @@ import {showMoreText} from '../text-view/text-view';
 import {monospaceFontAndroid, monospaceFontIOS, SECONDARY_FONT_SIZE} from '../common-styles/typography';
 
 import styles from './youtrack-wiki.styles';
+
+import type {Node as $IMPORTED_TYPE$_Node} from 'React';
 import type {UITheme} from '../../flow/Theme';
 
 const isAndroid: boolean = isAndroidPlatform();

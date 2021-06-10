@@ -1,9 +1,11 @@
 /* @flow */
-import type {Sprint, BoardColumn} from "../../flow/Agile";import log from '../../components/log/log';
+
+import log from '../../components/log/log';
+import {notify} from '../../components/notification/notification';
 
 import type {BoardCell, AgileBoardRow, Board, AgileColumn} from '../../flow/Agile';
 import type {IssueOnList, IssueFull} from '../../flow/Issue';
-import {notify} from '../../components/notification/notification';
+import type {Sprint, BoardColumn} from '../../flow/Agile';
 
 export function updateRowCollapsedState(
   board: Board,
@@ -175,7 +177,7 @@ function reorderCardsInRow(row: AgileBoardRow, leadingId: ?string, movedId: stri
   };
 }
 
-export function reorderEntitiesOnBoard(board: Board, leadingId: ?string, movedId: string): 
+export function reorderEntitiesOnBoard(board: Board, leadingId: ?string, movedId: string):
   | {
     columns: Array<BoardColumn>,
     id: string,
@@ -225,7 +227,7 @@ export function reorderEntitiesOnBoard(board: Board, leadingId: ?string, movedId
   };
 }
 
-export function addOrUpdateCell(board: Board, issue: IssueOnList, rowId: string, columnId: string): 
+export function addOrUpdateCell(board: Board, issue: IssueOnList, rowId: string, columnId: string):
   | Board
   | {
     columns: Array<BoardColumn>,
@@ -267,7 +269,7 @@ export function addOrUpdateCell(board: Board, issue: IssueOnList, rowId: string,
   return addCardToBoard(board, targetCell.id, issue);
 }
 
-export function updateSwimlane(board: Board, swimlane: AgileBoardRow): 
+export function updateSwimlane(board: Board, swimlane: AgileBoardRow):
   | {
     columns: Array<BoardColumn>,
     id: string,
@@ -285,7 +287,7 @@ export function updateSwimlane(board: Board, swimlane: AgileBoardRow):
     sprints: Array<Sprint>,
     status: {error: Array<string>, valid: boolean},
     trimmedSwimlanes: Array<
-      
+
         | AgileBoardRow
         | {
           $type: string,
@@ -317,7 +319,7 @@ export function updateSwimlane(board: Board, swimlane: AgileBoardRow):
   }
 }
 
-export function moveIssueOnBoard(board: Board, movedId: string, cellId: string, leadingId: ?string): 
+export function moveIssueOnBoard(board: Board, movedId: string, cellId: string, leadingId: ?string):
   | void
   | {
     columns: Array<BoardColumn>,

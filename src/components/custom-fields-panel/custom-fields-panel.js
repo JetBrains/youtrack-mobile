@@ -42,7 +42,8 @@ type Props = {
 
   uiTheme: UITheme,
 
-  analyticsId?: string
+  analyticsId?: string,
+  testID?: string,
 };
 
 type State = {
@@ -544,11 +545,12 @@ export default class CustomFieldsPanel extends Component<Props, State> {
   }
 
   render(): Node {
-    const {uiTheme, style} = this.props;
+    const {uiTheme, style, testID} = this.props;
     const {select, datePicker, simpleValue, editingField} = this.state;
 
     return (
       <View
+        testID={testID}
         style={[styles.container, style]}
       >
 

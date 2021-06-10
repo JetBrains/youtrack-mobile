@@ -1,8 +1,11 @@
 /* @flow */
 
-import type {TransformedSuggestion} from "../../flow/Issue";import {getStorageState} from '../storage/storage';
+import {getStorageState} from '../storage/storage';
 
 import type Api from '../api/api';
+import type {TransformedSuggestion} from '../../flow/Issue';
+
+type Suggestions = Array<{ data: Array<TransformedSuggestion>, title: string | null }>;
 
 export function getCachedUserQueries(): Array<Object> {
   return (getStorageState().lastQueries || []).map(
@@ -13,15 +16,7 @@ export function getCachedUserQueries(): Array<Object> {
     }));
 }
 
-export const getAssistSuggestions = async (api: Api, query: string, caret: number): Promise<
-  
-    | Array<{data: Array<any>, title: null}>
-    | Array<
-      
-        | {data: Array<TransformedSuggestion>, title: null}
-        | {data: Array<any>, title: string},
-    >,
-> => {
+export const getAssistSuggestions = async (api: Api, query: string, caret: number): Promise<Suggestions> => {
   let suggestions = [{title: null, data: []}];
   try {
     const assistSuggestions = await api.getQueryAssistSuggestions(query, caret);

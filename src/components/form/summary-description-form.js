@@ -26,6 +26,7 @@ type Props = {
   summaryPlaceholder?: string,
   descriptionPlaceholder?: string,
   style?: ViewStyleProp,
+  testID?: string,
 }
 
 const TEXT_UPDATE_DEBOUNCE = 300;

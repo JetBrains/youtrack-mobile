@@ -1,7 +1,6 @@
 /* @flow */
 
-import type {User} from "../../flow/User";
-import type {IssueLink, IssueComment} from "../../flow/CustomFields";import {Clipboard, Share} from 'react-native';
+import {Clipboard, Share} from 'react-native';
 
 import * as types from './issue-action-types';
 import ApiHelper from '../../components/api/api__helper';
@@ -24,7 +23,9 @@ import type ActionSheet from '@expo/react-native-action-sheet';
 import type Api from '../../components/api/api';
 import type {Attachment, CustomField, FieldValue, IssueProject, Tag} from '../../flow/CustomFields';
 import type {CommandSuggestionResponse, IssueFull, OpenNestedViewParams} from '../../flow/Issue';
+import type {IssueLink, IssueComment} from '../../flow/CustomFields';
 import type {UserAppearanceProfile} from '../../flow/User';
+import type {User} from '../../flow/User';
 import type {Visibility} from '../../flow/Visibility';
 
 type ApiGetter = () => Api;
@@ -153,7 +154,7 @@ export function loadIssue(): ((
   dispatch: (any) => any,
   getState: StateGetter,
   getApi: ApiGetter
-) => 
+) =>
   | Promise<void>
   | Promise<
     {
@@ -294,7 +295,7 @@ export function onCheckboxUpdate(checked: boolean, position: number, description
       logEvent({
         message,
         isError: true,
-        analyticsId: ANALYTICS_ISSUE_PAGE
+        analyticsId: ANALYTICS_ISSUE_PAGE,
       });
     } else {
       usage.trackEvent(ANALYTICS_ISSUE_PAGE, `Checkbox: ${checked ? 'checked' : 'unchecked'}`);

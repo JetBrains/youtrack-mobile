@@ -1,6 +1,6 @@
 /* @flow */
 
-import type {Node as $IMPORTED_TYPE$_Node} from "React";import {Linking, Text} from 'react-native';
+import {Linking, Text} from 'react-native';
 import React, {PureComponent} from 'react';
 import HTMLView from 'react-native-htmlview';
 import toHtml from 'htmlparser-to-html';
@@ -16,6 +16,7 @@ import {showMoreInlineText} from '../text-view/text-view';
 
 import styles, {htmlViewStyles} from './youtrack-wiki.styles';
 
+import type {Node as Node} from 'React';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {UITheme} from '../../flow/Theme';
 
@@ -43,7 +44,6 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
     imageHeaders: null,
   };
 
-  parser: (rawWiki: string, options: Object) => Object;
   renderer: (tree: Object) => Object;
 
 
@@ -69,7 +69,7 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
     });
   };
 
-  renderShowFullExceptionLink: ((node: Node, index: number) => $IMPORTED_TYPE$_Node) = (node: Node, index: number) => {
+  renderShowFullExceptionLink: ((node: Node, index: number) => Node) = (node: Node, index: number) => {
     return (
       <Text
         key={index}
@@ -94,7 +94,7 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
   siblings: Array<any>,
   parent: any,
   defaultRenderer: (any, any) => any
-) => ?(any | $IMPORTED_TYPE$_Node)) = (node: Object, index: number, siblings: Array<any>, parent: Object, defaultRenderer: (any, any) => any) => {
+) => ?(any | Node)) = (node: Object, index: number, siblings: Array<any>, parent: Object, defaultRenderer: (any, any) => any) => {
     const {imageHeaders, attachments, renderFullException} = this.props;
     const wikiNodeType = nodeHasType(node);
     const getCode = () => (node.children[0] && node.children[0].name === 'code') ? node.children[0] : node;
@@ -176,7 +176,7 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
     }
   };
 
-  render(): $IMPORTED_TYPE$_Node {
+  render(): Node {
     const {children, style} = this.props;
 
     return (

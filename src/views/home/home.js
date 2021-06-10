@@ -2,7 +2,7 @@
 
 import type {Node} from 'React';
 import React, {PureComponent} from 'react';
-import {View, Image, Text, TouchableOpacity, ActivityIndicator} from 'react-native';
+import {View, Image, Text, TouchableOpacity} from 'react-native';
 
 import usage from '../../components/usage/usage';
 import {formatYouTrackURL} from '../../components/config/config';

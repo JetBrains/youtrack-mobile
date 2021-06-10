@@ -199,24 +199,23 @@ class CreateIssue extends Component<Props, State> {
                   uiTheme={uiTheme}
                 />
 
-                <View style={styles.separator}/>
-
                 {hasProject && (
-                  <View
-                    testID="createIssueAttachments"
-                    style={styles.additionalData}
-                  >
-                    <AttachmentsRow
-                      style={{marginBottom: 16}}
-                      testID="createIssueAttachmentRow"
-                      attachments={issue.attachments}
-                      attachingImage={attachingImage}
-                      imageHeaders={getApi().auth.getAuthorizationHeaders()}
-                      canRemoveAttachment={true}
-                      onRemoveImage={removeAttachment}
-                      uiTheme={theme.uiTheme}
-                    />
-                  </View>
+                  <>
+                    <View style={styles.separator}/>
+                    <View
+                      testID="createIssueAttachments"
+                      style={[styles.additionalData, styles.issueAttachments]}
+                    >
+                      <AttachmentsRow
+                        attachments={issue.attachments}
+                        attachingImage={attachingImage}
+                        imageHeaders={getApi().auth.getAuthorizationHeaders()}
+                        canRemoveAttachment={true}
+                        onRemoveImage={removeAttachment}
+                        uiTheme={theme.uiTheme}
+                      />
+                    </View>
+                  </>
                 )}
 
                 {hasProject && (

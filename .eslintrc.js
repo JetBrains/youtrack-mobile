@@ -21,7 +21,7 @@ module.exports = {
     'no-unused-vars': [error, {'vars': 'local', 'args': 'none'}],
     'quotes': [error, 'single', {'allowTemplateLiterals': true}],
     'semi': error,
-    'indent': [error, 2],
+    // 'indent': [error, 2],
     'no-multi-spaces': error,
     'eqeqeq': error,
 

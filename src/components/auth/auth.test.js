@@ -212,7 +212,7 @@ describe('Auth', function () {
         jest.spyOn(Storage, 'getStoredAuthParams');
       });
 
-      it('should throw if there is no cached auth parameters', async () =>  {
+      it('should throw if there is no cached auth parameters', async () => {
         await expect(auth.getCachedAuthParams())
           .rejects
           .toThrow('No stored auth params found');

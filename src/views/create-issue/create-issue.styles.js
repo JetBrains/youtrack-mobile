@@ -22,6 +22,9 @@ export default EStyleSheet.create({
     marginHorizontal: UNIT * 2,
     paddingBottom: UNIT * 5,
   },
+  issueAttachments: {
+    marginBottom: UNIT * 2,
+  },
   creatingIndicator: {
     paddingTop: 4,
     width: 30,

@@ -1,15 +1,15 @@
 /* @flow */
 
-import type {Node} from 'React';
-
-import type {UIThemeName, UIThemeColors, BarStyle} from "../../flow/Theme";import React, {Component} from 'react';
+import React, {Component} from 'react';
 
 import AgileCard from '../../components/agile-card/agile-card';
 import BoardRow from '../../components/agile-row/agile-row';
 import {Draggable} from '../../components/draggable/';
 
-import type {AnyIssue} from '../../flow/Issue';
 import type {AgileBoardRow, Board, SprintFull} from '../../flow/Agile';
+import type {AnyIssue} from '../../flow/Issue';
+import type {Node} from 'React';
+import type {UIThemeName, UIThemeColors, BarStyle} from '../../flow/Theme';
 import type {UITheme} from '../../flow/Theme';
 
 type Props = {

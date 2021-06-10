@@ -39,7 +39,7 @@ export default class MultilineInput extends PureComponent<Props, State> {
     returnKeyType: iOSPlatform ? 'default' : 'none',
   };
 
-  input: TextInput;
+  input: typeof TextInput;
 
   constructor(props: Props) {
     super(props);
@@ -73,14 +73,21 @@ export default class MultilineInput extends PureComponent<Props, State> {
     this.setState({inputHeight: Math.ceil(newHeight)});
   };
 
-  inputRef = (instance: ?TextInput) => {
+  inputRef: (instance: ?(typeof TextInput)) => void = (instance: ?(typeof TextInput)): void => {
     if (instance) {
       this.input = instance;
     }
   };
 
   render(): Node {
-    const {style, maxInputHeight, minInputHeight, adaptive, ...rest} = this.props;
+    const {
+      style,
+      // eslint-disable-next-line no-unused-vars
+      maxInputHeight,
+      // eslint-disable-next-line no-unused-vars
+      minInputHeight,
+      adaptive,
+      ...rest} = this.props;
 
     return (
       <TextInput

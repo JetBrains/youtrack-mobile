@@ -1,7 +1,6 @@
 /* @flow */
 
-import type {CustomError} from "../../../flow/Error";
-import type {ActivityType} from "../../../flow/Activity";import * as activityHelper from './issue-activity__helper';
+import * as activityHelper from './issue-activity__helper';
 import * as types from '../issue-action-types';
 import log from '../../../components/log/log';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from '../../../components/analytics/analytics-ids';
@@ -15,7 +14,8 @@ import {until} from '../../../util/util';
 import {WORK_ITEM_CREATE, WORK_ITEM_UPDATE} from '../../../components/issue-permissions/issue-permissions';
 
 import type Api from '../../../components/api/api';
-import type {Activity} from '../../../flow/Activity';
+import type {Activity, ActivityType} from '../../../flow/Activity';
+import type {CustomError} from '../../../flow/Error';
 import type {Folder, User} from '../../../flow/User';
 import type {State as SingleIssueState} from '../issue-reducers';
 import type {WorkItem} from '../../../flow/Work';
