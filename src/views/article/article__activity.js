@@ -19,7 +19,7 @@ import {convertCommentsToActivityPage, createActivityModel} from '../../componen
 
 import styles from './article.styles';
 
-import type {ActivityItem, ActivityStreamCommentActions} from '../../flow/Activity';
+import type {Activity, ActivityStreamCommentActions} from '../../flow/Activity';
 import type {Article} from '../../flow/Article';
 import type {Attachment, IssueComment} from '../../flow/CustomFields';
 import type {UITheme} from '../../flow/Theme';
@@ -42,7 +42,7 @@ const ArticleActivities = (props: Props) => {
   const [activities, updateActivityModel] = useState(null);
 
   const currentUser: User = useSelector(store => store.app.user);
-  const activityPage: Array<ActivityItem> = useSelector(store => store.article.activityPage);
+  const activityPage: Array<Activity> = useSelector(store => store.article.activityPage);
   const articleCommentDraft: IssueComment | null = useSelector(store => store.article.articleCommentDraft);
   const user: User = useSelector(store => store.app.user);
   const isNaturalSortOrder: boolean = !!user?.profiles?.appearance?.naturalCommentsOrder;
@@ -58,7 +58,7 @@ const ArticleActivities = (props: Props) => {
     }
   }, [article?.idReadable, dispatch, refreshActivities]);
 
-  const doCreateActivityModel = useCallback((activitiesPage: Array<ActivityItem>): void => {
+  const doCreateActivityModel = useCallback((activitiesPage: Array<Activity>): void => {
     updateActivityModel(createActivityModel(activitiesPage, isNaturalSortOrder));
   }, [isNaturalSortOrder]);
 

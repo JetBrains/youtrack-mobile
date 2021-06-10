@@ -8,7 +8,7 @@ import {relativeDate, formatDate, getEntityPresentation} from '../issue-formatte
 import type {IssueProject} from '../../flow/CustomFields';
 import type {WorkTimeSettings} from '../../flow/Work';
 
-type TextValueChangeParams = {
+export type TextValueChangeParams = {
   activity: Object,
   issueFields: ?Array<Object>,
   workTimeSettings: WorkTimeSettings,

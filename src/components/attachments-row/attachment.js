@@ -20,15 +20,12 @@ import styles from './attachments-row.styles';
 import type {Attachment} from '../../flow/CustomFields';
 import type {UITheme} from '../../flow/Theme';
 
-type DefaultProps = {
+type Props = {
   imageHeaders: ?Object,
   onOpenAttachment: (type: string, name: string) => any,
   onImageLoadingError: (error: Object) => any,
   canRemoveImage?: boolean,
   onRemoveImage: (attachment: Attachment) => any,
-};
-
-type Props = DefaultProps & {
   attach: Attachment,
   attachments: Array<Attachment>,
   attachingImage: ?Object,
@@ -44,7 +41,7 @@ const ERROR_HANDLER_THROTTLE = 60 * 1000;
 const isAndroid: boolean = isAndroidPlatform();
 
 export default class Attach extends PureComponent<Props, State> {
-  static defaultProps: DefaultProps = {
+  static defaultProps: $Shape<Props> = {
     imageHeaders: null,
     canRemoveImage: false,
     onOpenAttachment: () => {},
@@ -76,7 +73,7 @@ export default class Attach extends PureComponent<Props, State> {
     }
 
     return Router.Image({
-      imageAttachments: attachments.filter(attach => hasMimeType.previewable(attach)),
+      imageAttachments: attachments.filter((it: Attachment) => hasMimeType.previewable(it)),
       current: attach,
       imageHeaders,
       ...(onRemoveImage ? {onRemoveImage: (currentPage: number) => onRemoveImage(attachments[currentPage])} : {}),

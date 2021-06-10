@@ -9,7 +9,7 @@ export const TIME_IDENTIFIERS = {
 };
 
 export const DEFAULT_WORK_TIME_SETTINGS = {
-  id: 0,
+  id: '0',
   daysAWeek: 5,
   minutesADay: 480,
   workDays: [1, 2, 3, 4, 5],

@@ -15,36 +15,27 @@ import type {Attachment} from '../../flow/CustomFields';
 import type {UITheme} from '../../flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
-type DefaultProps = {
-  imageHeaders: ?Object,
-  onOpenAttachment: (type: string, name: string) => any,
-  onImageLoadingError: (error: Object) => any,
-  attachments: Array<Attachment>,
-  attachingImage: Attachment | null,
-  canRemoveAttachment: boolean,
-  onRemoveImage: (attachment: Attachment) => any,
-};
-
-type Props = DefaultProps & {
-  attachments: Array<Attachment>,
+type Props = {
   attachingImage: ?Object,
+  attachments: Array<Attachment>,
   canRemoveAttachment?: boolean,
+  imageHeaders?: Object,
+  onOpenAttachment: (type: string, name: string) => any,
   onRemoveImage?: (attachment: Attachment) => any,
+  style?: ViewStyleProp,
   uiTheme: UITheme,
-  style?: ViewStyleProp
 }
 
 
 export default class AttachmentsRow extends PureComponent<Props, void> {
   scrollView: ?(typeof ScrollView);
 
-  static defaultProps: DefaultProps = {
+  static defaultProps: $Shape<Props> = {
     attachments: [],
     attachingImage: null,
     imageHeaders: null,
     canRemoveAttachment: false,
     onOpenAttachment: () => {},
-    onImageLoadingError: () => {},
     onRemoveImage: () => {},
   };
 

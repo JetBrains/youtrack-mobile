@@ -23,6 +23,7 @@ export type ActivityItem = IssueProject | IssueComment | Attachment | IssueFull 
 export type Activity = {
   $type?: string,
   id: string,
+  hidden?: boolean,
   category: {id: string, $type?: string},
   timestamp: number,
   targetMember: Object,
@@ -54,6 +55,11 @@ export type ActivityChange = {
   removed: ActivityItem
 };
 
+export type ActivityChangeText = {
+  added: string,
+  removed: string
+};
+
 type CommentAction = (comment: IssueComment) => boolean;
 export type ActivityStreamCommentActions = {
   canCommentOn?: boolean,
@@ -70,5 +76,5 @@ export type ActivityStreamCommentActions = {
   onReply?: (comment: IssueComment) => any,
   onRestoreComment?: (comment: IssueComment) => Function,
   onShowCommentActions?: (comment: IssueComment, activityId: string) => Function,
-  onStartEditing?: (comment: IssueComment) => Function
+  onStartEditing?: (comment: IssueComment, backendUrl?: string) => Function
 }

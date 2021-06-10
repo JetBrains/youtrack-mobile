@@ -14,7 +14,6 @@ import Diff from '../diff/diff';
 import Feature, {FEATURE_VERSION} from '../feature/feature';
 import getEventTitle from '../activity/activity__history-title';
 import IssueVisibility from '../visibility/issue-visibility';
-import log from '../log/log';
 import ReactionAddIcon from '../reactions/new-reaction.svg';
 import StreamLink from './activity__stream-link';
 import StreamTimestamp from './activity__stream-timestamp';
@@ -22,7 +21,7 @@ import StreamUserInfo from './activity__stream-user-info';
 import StreamWork from './activity__stream-work';
 import usage from '../usage/usage';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from '../analytics/analytics-ids';
-import {getApi} from '../api/api__instance';
+import {DEFAULT_WORK_TIME_SETTINGS} from '../time-tracking/time-tracking__default-settings';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import {getTextValueChange} from '../activity/activity__history-value';
 import {firstActivityChange, getActivityEventTitle} from './activity__stream-helper';
@@ -36,11 +35,17 @@ import {UNIT} from '../variables/variables';
 
 import styles from './activity__stream.styles';
 
-import type {Activity, ActivityChange, ActivityItem, ActivityStreamCommentActions} from '../../flow/Activity';
+import type {
+  Activity,
+  ActivityItem,
+  ActivityStreamCommentActions,
+  ActivityChangeText,
+} from '../../flow/Activity';
 import type {Attachment, IssueComment} from '../../flow/CustomFields';
 import type {CustomError} from '../../flow/Error';
 import type {Node} from 'react';
 import type {Reaction} from '../../flow/Reaction';
+import type {TextValueChangeParams} from '../activity/activity__history-value';
 import type {UITheme} from '../../flow/Theme';
 import type {User} from '../../flow/User';
 import type {WorkItem, WorkTimeSettings} from '../../flow/Work';
@@ -62,7 +67,7 @@ export type ActivityStreamProps = {
   ) => any,
   uiTheme: UITheme,
   workTimeSettings: ?WorkTimeSettings,
-  youtrackWiki: $Shape<YouTrackWiki>,
+  youtrackWiki: YouTrackWiki,
   onWorkDelete?: () => any,
   onWorkUpdate?: (workItem?: WorkItem) => void,
   onCheckboxUpdate?: (checked: boolean, position: number, comment: IssueComment) => Function,
@@ -90,11 +95,11 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
     return false;
   };
 
-  const getTextChange = (activity: Activity, issueFields: ?Array<Object>): ActivityChange => {
-    const getParams = (isRemovedValue: boolean) => ({
+  const getTextChange = (activity: Activity, issueFields: ?Array<Object>): ActivityChangeText => {
+    const getParams = (isRemovedValue: boolean): TextValueChangeParams => ({
       activity,
       issueFields: issueFields,
-      workTimeSettings: props.workTimeSettings || {},
+      workTimeSettings: props.workTimeSettings || DEFAULT_WORK_TIME_SETTINGS,
       isRemovedValue: isRemovedValue,
     });
 
@@ -104,7 +109,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
     };
   };
 
-  const renderTextDiff = (activity: Activity, textChange: ActivityChange) => {
+  const renderTextDiff = (activity: Activity, textChange: ActivityChangeText) => {
     return <Diff
       title={getEventTitle(activity, true)}
       text1={textChange.removed}
@@ -112,7 +117,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
     />;
   };
 
-  const renderTextChange = (activity: Activity, textChange: ActivityChange) => {
+  const renderTextChange = (activity: Activity, textChange: ActivityChangeText) => {
     const isMultiValue = isMultiValueActivity(activity);
     return (
       <Text>
@@ -139,8 +144,8 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
   };
 
   const renderTextValueChange = (activity: Activity, issueFields?: Array<Object>) => {
-    const textChange = getTextChange(activity, issueFields);
-    const isTextDiff = (
+    const textChange: ActivityChangeText = getTextChange(activity, issueFields);
+    const isTextDiff: boolean = (
       isActivityCategory.description(activity) ||
       isActivityCategory.summary(activity)
     );
@@ -162,13 +167,11 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
     return attachments;
   };
 
-  const renderAttachments = (attachments: Array<AttachmentsRow>, uiTheme: UITheme): Node => {
+  const renderAttachments = (attachments: Array<Attachment> = [], uiTheme: UITheme): Node => {
     return (
       <AttachmentsRow
         attachments={updateToAbsUrl(attachments)}
         attachingImage={null}
-        imageHeaders={getApi().auth.getAuthorizationHeaders()}
-        onImageLoadingError={(err: CustomError) => log.warn('onImageLoadingError', err.nativeEvent)}
         onOpenAttachment={(type: string) => (
           usage.trackEvent(
             ANALYTICS_ISSUE_STREAM_SECTION, type === 'image' ? 'Showing image' : 'Open attachment by URL'
@@ -288,7 +291,11 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
           {Boolean(commentActions && commentActions.onShowCommentActions) && <TouchableOpacity
             hitSlop={HIT_SLOP}
             disabled={disabled}
-            onPress={() => commentActions && commentActions.onShowCommentActions(comment, activityGroup.comment.id)}>
+            onPress={() => {
+              if (commentActions?.onShowCommentActions) {
+                commentActions.onShowCommentActions(comment, activityGroup.comment.id);
+              }
+            }}>
             {isIOSPlatform()
               ? <IconMoreOptions size={18} color={styles.activityCommentActionsOther.color}/>
               : <IconDrag size={18} color={styles.activityCommentActionsOther.color}/>}
@@ -318,7 +325,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
     }
 
     const allAttachments = updateToAbsUrl(comment.attachments).concat(props.attachments || []);
-    const commentActions: ActivityStreamCommentActions = props.commentActions || {};
+    const commentActions: ?ActivityStreamCommentActions = props.commentActions;
 
     return (
       <View key={comment.id}>
@@ -333,11 +340,11 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
             comment={comment}
             key={comment.id}
             onDeletePermanently={() => {
-              if (commentActions.onDeleteCommentPermanently) {
+              if (commentActions?.onDeleteCommentPermanently) {
                 commentActions.onDeleteCommentPermanently(comment, activityGroup.comment.id);
               }
             }}
-            onRestore={() => { if (commentActions.onRestoreComment) {commentActions.onRestoreComment(comment);} }}
+            onRestore={() => { if (commentActions?.onRestoreComment) {commentActions.onRestoreComment(comment);} }}
             uiTheme={props.uiTheme}
             youtrackWiki={props.youtrackWiki}
             onCheckboxUpdate={
@@ -425,7 +432,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
   return (
     <>
       {props.activities?.length > 0
-        ? props.activities.map((activityGroup, index) => {
+        ? props.activities.map((activityGroup: Activity, index) => {
           if (activityGroup.hidden) {
             return null;
           }
