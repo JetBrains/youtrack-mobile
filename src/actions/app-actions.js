@@ -310,14 +310,14 @@ export function switchAccount(account: StorageState, dropCurrentAccount: boolean
 export function updateOtherAccounts(
   account: StorageState,
   removeCurrentAccount: boolean = false
-): (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => Promise<StorageState> {
+): (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => Promise<Array<StorageState>> {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const state: AppState = getState();
 
     const currentAccount: StorageState = getStorageState();
     log.info(`Changing account: ${currentAccount?.config?.backendUrl || ''} -> ${account?.config?.backendUrl || ''}`);
 
-    const otherAccounts = (state.app.otherAccounts || []).filter(
+    const otherAccounts: Array<StorageState> = (state.app.otherAccounts || []).filter(
       (it: StorageState) => it.creationTimestamp !== account.creationTimestamp
     );
     const prevAccount = removeCurrentAccount ? null : currentAccount;
@@ -488,7 +488,7 @@ export function initializeAuth(config: AppConfigFilled): Action {
 }
 
 function checkUserAgreement(): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): Promise<void> => {
     const api: Api = getApi();
     const auth = getState().app.auth;
     const {currentUser} = auth;
@@ -677,7 +677,7 @@ export function setAccount(notificationRouteData: NotificationRouteData | Object
 }
 
 export function subscribeToPushNotifications(): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): Promise<void> => {
     if (DeviceInfo.isEmulator()) {
       return;
     }
