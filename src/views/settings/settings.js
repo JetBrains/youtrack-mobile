@@ -96,7 +96,6 @@ class Settings extends PureComponent<Props, State> {
                 />}
 
                 <Accounts
-                  testID="settingsAccounts"
                   onAddAccount={onAddAccount}
                   onChangeAccount={onChangeAccount}
                   onClose={() => {}}
