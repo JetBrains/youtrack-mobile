@@ -9,7 +9,7 @@ import {logEvent} from '../log/log-helper';
 export default class ServersideEvents {
   backendUrl: string;
   lastPing: ?Date;
-  eventSource: RNEventSource;
+  eventSource: typeof RNEventSource;
 
   constructor(backendUrl: string) {
     this.backendUrl = backendUrl;

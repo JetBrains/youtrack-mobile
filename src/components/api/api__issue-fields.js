@@ -196,7 +196,7 @@ const ISSUE_COMMENTS_BASE_FIELDS = toField([
   VISIBILITY_FIELDS,
 ]);
 
-const ISSUE_COMMENTS_FIELDS = toField([
+const ISSUE_COMMENTS_FIELDS: any = toField([
   ISSUE_COMMENTS_BASE_FIELDS,
   'created',
   'deleted',

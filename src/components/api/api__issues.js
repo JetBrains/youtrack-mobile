@@ -26,9 +26,12 @@ export default class IssuesAPI extends ApiBase {
 
   async getIssuesCount(query: string | null = null, folder: Folder, unresolvedOnly: boolean = false): Promise<number> {
     const isActualVersion: boolean = checkVersion('2020.1');
-    const fieldName: string = isActualVersion ? 'count' : 'value'; //API version specific
+    type Count = 'count' | 'value';
+    const fieldName: Count = isActualVersion ? 'count' : 'value'; //API version specific
 
-    const response: Response = await (isActualVersion ? this.issuesCount(query, folder, unresolvedOnly) : this.issuesCountLegacy(query));
+    const response: { [fieldName: Count]: number } = await (
+      isActualVersion ? this.issuesCount(query, folder, unresolvedOnly) : this.issuesCountLegacy(query)
+    );
 
     if (response[fieldName] === -1) {
       return new Promise(resolve => setTimeout(resolve, REQUEST_INTERVAL_DELAY))

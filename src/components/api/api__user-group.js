@@ -16,7 +16,7 @@ export default class UserGroupAPI extends ApiBase {
   }
 
 
-  async getAllUserGroups(): Promise<UserGroup> {
+  async getAllUserGroups(): Promise<Array<UserGroup>> {
     const queryString = UserGroupAPI.createFieldsQuery([
       'id',
       'ringId',
