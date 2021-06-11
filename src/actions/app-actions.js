@@ -582,7 +582,7 @@ function subscribeToURL(): Action {
   };
 }
 
-export function initializeApp(config: AppConfigFilled, issueId: ?string): Action {
+export function initializeApp(config: AppConfigFilled, issueId?: string): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): any => {
     Router._getNavigator() && Router.Home({
       backendUrl: config.backendUrl,
@@ -638,12 +638,12 @@ export function connectToNewYoutrack(newURL: string): Action {
   };
 }
 
-export function setAccount(notificationRouteData: NotificationRouteData | Object): Action {
+export function setAccount(notificationRouteData: NotificationRouteData | Object = {}): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const state: StorageState = await populateStorage();
     await dispatch(populateAccounts());
 
-    const notificationBackendUrl: ?string = notificationRouteData.backendUrl;
+    const notificationBackendUrl: ?string = notificationRouteData?.backendUrl;
     if (notificationBackendUrl && state?.config && notificationBackendUrl !== state.config?.backendUrl) {
       const notificationIssueAccount: ?StorageState = await appActionsHelper.targetAccountToSwitchTo(
         notificationBackendUrl
@@ -656,21 +656,23 @@ export function setAccount(notificationRouteData: NotificationRouteData | Object
 
     const targetConfig = getStorageState().config;
     if (targetConfig) {
-      return dispatch(initializeApp(targetConfig, notificationRouteData.issueId));
-    }
-
-    log.info('App is not configured, entering server URL');
-    try {
-      const url = await Linking.getInitialURL();
-      if (!url) {
-
-        return Router.EnterServer({serverUrl: null});
+      dispatch(initializeApp(targetConfig, notificationRouteData?.issueId));
+    } else {
+      log.info('App is not configured, entering server URL');
+      const navigateTo = (serverUrl: string | null) => Router.EnterServer({serverUrl});
+      try {
+        const url = await Linking.getInitialURL();
+        if (!url) {
+          navigateTo(null);
+        } else {
+          const host = UrlParse(url).host;
+          navigateTo(host);
+        }
+      } catch (e) {
+        navigateTo(null);
       }
-      const host = UrlParse(url).host;
-      return Router.EnterServer({serverUrl: host});
-    } catch (e) {
-      Router.EnterServer({serverUrl: null});
     }
+
   };
 }
 

@@ -66,7 +66,7 @@ class YouTrackMobile extends Component<void, void> {
   }
 
   static async getNotificationData() {
-    let notificationData: NotificationRouteData = {};
+    let notificationData: ?NotificationRouteData;
     if (isAndroid) {
       const initialNotification = await Notifications.getInitialNotification();
       const notificationPayload = initialNotification?.payload;
@@ -78,8 +78,8 @@ class YouTrackMobile extends Component<void, void> {
     return notificationData;
   }
 
-  static async init(getNotificationRouteData: () => Promise<NotificationRouteData>) {
-    let notificationRouteData = {};
+  static async init(getNotificationRouteData: () => Promise<?NotificationRouteData>) {
+    let notificationRouteData: ?NotificationRouteData;
     if (getNotificationRouteData) {
       notificationRouteData = await getNotificationRouteData();
     }
@@ -150,15 +150,15 @@ class AppContainer extends Component<void, void> {
     actionSheet: Function,
   };
 
-  actionSheetRef: Ref<ActionSheetProvider>;
+  actionSheetRef: Ref<typeof ActionSheetProvider>;
 
-  getChildContext() {
+  getChildContext(): { actionSheet: () => Ref<any> } {
     return {
       actionSheet: () => this.actionSheetRef,
     };
   }
 
-  setActionSheetRef = (component: Ref<ActionSheetProvider>) => {
+  setActionSheetRef: (component: Ref<empty>) => void = (component: Ref<typeof ActionSheetProvider>) => {
     if (component) {
       this.actionSheetRef = component;
     }
