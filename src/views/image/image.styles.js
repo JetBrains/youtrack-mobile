@@ -36,4 +36,8 @@ export default (EStyleSheet.create({
     resizeMode: 'contain',
     opacity: 0.4,
   },
+  link: {
+    color: '$link',
+  },
+
 }): any);

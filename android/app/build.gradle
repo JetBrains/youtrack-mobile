@@ -205,6 +205,9 @@ dependencies {
     implementation project(':react-native-notifications')
     implementation 'com.google.firebase:firebase-core:16.0.0'
 
+    implementation 'com.facebook.fresco:fresco:2.5.0'
+    implementation 'com.facebook.fresco:animated-gif:2.5.0'
+
 //    implementation project(':react-native-eventsource')
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
