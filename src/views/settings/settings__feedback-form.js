@@ -79,17 +79,20 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
   };
 
   getContextActions: ((isType: boolean) => any) = (isType: boolean): Object => {
-    return (isType ? feedbackTypeOptions : feedbackLogsOptions).map((action: Object) => (
-      {
-        title: action.title,
-        execute: () => this.setState({
-          feedback: {
-            ...this.state.feedback,
-            [isType ? 'type' : 'logs']: action,
-          },
-        }),
-      }
-    )).concat({title: 'Cancel'});
+    return (isType ? feedbackTypeOptions : feedbackLogsOptions).map((action: Object) => {
+      const key: string = isType ? 'type' : 'logs';
+      return (
+        {
+          title: action.title,
+          execute: () => this.setState({
+            feedback: {
+              ...this.state.feedback,
+              [key]: action,
+            },
+          }),
+        }
+      );
+    }).concat({title: 'Cancel'});
   };
 
   renderContextActions: ((isType: boolean) => Promise<void>) = async (isType: boolean) => {
@@ -106,11 +109,12 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
     const [error] = await until(sendFeedback(this.state.feedback));
     this.setSendingProgress(false);
     if (error) {
-      return notify(ERROR_MESSAGE_DATA.DEFAULT.title);
+      notify(ERROR_MESSAGE_DATA.DEFAULT.title);
+    } else {
+      notify('Thank you your feedback!');
+      this.setState(this.initialState);
+      this.close();
     }
-    notify('Thank you your feedback!');
-    this.setState(this.initialState);
-    this.close();
   };
 
   render(): Node {
