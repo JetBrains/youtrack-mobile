@@ -9,19 +9,15 @@ import {removeTrailingSlash} from '../util/util';
 import type {PermissionCacheItem} from '../flow/Permission';
 import type {StorageState} from '../components/storage/storage';
 
-function updateCachedPermissions(permissions: ?Array<PermissionsHelper>): void {
+function updateCachedPermissions(permissions: ?Array<typeof PermissionsHelper>): void {
   flushStoragePart({permissions});
 }
 
-function getCachedPermissions(): ?Array<PermissionCacheItem> {
-  return getStorageState().permissions;
-}
-
-async function loadPermissions(token_type: ?string, access_token: ?string, permissionsCacheUrl: string): Promise<Array<PermissionCacheItem>> {
+async function loadPermissions(token_type: string, access_token: string, permissionsCacheUrl: string): Promise<Array<PermissionCacheItem>> {
   let permissions: Array<PermissionCacheItem> = [];
 
   try {
-    permissions = PermissionsHelper.loadPermissions(
+    permissions = await PermissionsHelper.loadPermissions(
       token_type,
       access_token,
       permissionsCacheUrl
@@ -36,19 +32,21 @@ async function loadPermissions(token_type: ?string, access_token: ?string, permi
   return permissions;
 }
 
-async function targetAccountToSwitchTo(targetBackendUrl: string = '') {
+async function targetAccountToSwitchTo(targetBackendUrl: string = ''): Promise<StorageState | null> {
   if (!targetBackendUrl) {
     return null;
   }
 
-  let targetAccount = null;
+  let targetAccount: StorageState | null = null;
   const storageState: StorageState = getStorageState();
 
   if (targetBackendUrl && removeTrailingSlash(targetBackendUrl) !== removeTrailingSlash(storageState.config?.backendUrl || '')) {
-    const otherAccounts = await getOtherAccounts();
+    const otherAccounts: Array<StorageState> = await getOtherAccounts();
     targetAccount = otherAccounts.find(
-      (account: StorageState) => removeTrailingSlash(account.config?.backendUrl || '') === removeTrailingSlash(targetBackendUrl)
-    );
+      (account: StorageState) => removeTrailingSlash(account.config?.backendUrl || '') === removeTrailingSlash(
+        targetBackendUrl
+      )
+    ) || null;
   }
 
   return targetAccount;
@@ -56,7 +54,6 @@ async function targetAccountToSwitchTo(targetBackendUrl: string = '') {
 
 export {
   updateCachedPermissions,
-  getCachedPermissions,
   loadPermissions,
   targetAccountToSwitchTo,
 };
