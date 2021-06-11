@@ -16,10 +16,14 @@ type Props = {
   activity: Activity
 }
 
+type LinkedIssue = IssueFull & { isRemoved?: boolean };
+
 const StreamLink = (props: Props) => {
-  const linkedIssues = [].concat(props.activity.added).concat(
-    props.activity.removed.map((link: IssueFull) => ({...link, isRemoved: true}))
+  const added: Array<LinkedIssue> = (props.activity.added: any);
+  const removed: Array<LinkedIssue> = (props.activity.removed: any).map(
+    (issue: LinkedIssue) => ({...issue, isRemoved: true})
   );
+  const linkedIssues: Array<LinkedIssue> = [].concat(added).concat(removed);
 
   return (
     <TouchableOpacity key={props.activity.id}>
@@ -27,7 +31,7 @@ const StreamLink = (props: Props) => {
         <Text style={styles.activityLabel}>{getActivityEventTitle(props.activity)}</Text>
       </View>
       {
-        linkedIssues.map((linkedIssue: IssueFull & { isRemoved?: boolean }) => {
+        linkedIssues.map((linkedIssue: LinkedIssue) => {
           const readableIssueId: string = getReadableID(linkedIssue);
           return (
             <Text

@@ -190,5 +190,6 @@ export type IssueLink = {
   id: string,
   direction: 'string',
   linkType: IssueLinkType,
-  trimmedIssues: Array<IssueOnList>
+  trimmedIssues: Array<IssueOnList>,
+  resolved: boolean,
 }
