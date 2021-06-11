@@ -8008,18 +8008,19 @@ react-native-image-crop-picker@0.36.0:
   resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.36.0.tgz#adf5a5677c3ae0e0bdaa18c73d880db2190e3023"
   integrity sha512-1S8+0EZJmUMWMcdo2tTadqIIsJo7aPxPed0P7Cop3DhBqEeYrAWfgdrJq9VoTXI+cIrOOcTAxn4NZPz+DQEn7g==
 
-react-native-image-gallery@Elvenisboy/react-native-image-gallery.git#9282a87:
+react-native-image-gallery@^2.1.5:
   version "2.1.5"
-  resolved "https://codeload.github.com/Elvenisboy/react-native-image-gallery/tar.gz/9282a87c75239eae0650bd4d28528032c9dabab6"
+  resolved "https://registry.yarnpkg.com/react-native-image-gallery/-/react-native-image-gallery-2.1.5.tgz#f524b92ef7284d30ffbbd63f93019e0647e23229"
+  integrity sha512-xC7nuPu4GUH0da6byofQ10LjtqlKj+VaLc0NHBJmeMHVvdvmRvFEO6UOq0Q0m/ePx3OQiPTNwGbf5BSPJEKa0w==
   dependencies:
     prop-types "^15.6.0"
     react-mixin "^3.0.5"
     react-timer-mixin "^0.13.3"
 
-react-native-image-progress@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-image-progress/-/react-native-image-progress-1.0.1.tgz#5ceb4cfefd39d7ebdffab802bc984b5a0fc41021"
-  integrity sha512-wdYyrhrYvkBZanDCuc0F62Chq8n4QfhZN5G9JyHgPkNAourWJJTuz4wt8Kl6XhNiFaBgN5lX/NCMPCCP2Tz5pQ==
+react-native-image-progress@1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-image-progress/-/react-native-image-progress-1.1.1.tgz#95bbe0875c7ebd54286df69cb37b598b94c54eb0"
+  integrity sha512-5rI2UjUo1bJoggU3lZAa+Wv29bm+N322XVR49mxfczfhaOyFdoXMIRgd5x2eXG+RQi9PcLleD6wxVDxGAPPO9Q==
   dependencies:
     prop-types "^15.5.10"
 
