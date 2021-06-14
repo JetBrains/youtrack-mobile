@@ -1,8 +1,8 @@
 const pkg = require('../package.json'); //eslint-disable-line
 
 
-if (hasExceptionReporterToken() || hasAnalyticsId() || hasKonnektorData() || hasBugsnagData()) {
-  throw new Error('`Config` or `Bugsnag Config` or `Google Services` is touched. Revert changes and proceed.');
+if (hasExceptionReporterToken() || hasAnalyticsId() || hasKonnektorData()) {
+  throw new Error('`Config` or `Google Services` is touched. Revert changes and proceed.');
 }
 
 
@@ -16,10 +16,6 @@ function hasAnalyticsId() {
 
 function hasKonnektorData() {
   return isNotEmpty(pkg.config.KONNECTOR_URL);
-}
-
-function hasBugsnagData() {
-  return isNotEmpty(pkg.bugsnag.token);
 }
 
 function isNotEmpty(param) {

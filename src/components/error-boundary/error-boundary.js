@@ -15,7 +15,6 @@ import {flushStoragePart} from '../storage/storage';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import Popup from '../popup/popup';
-import ReporterBugsnag from './reporter-bugsnag';
 
 import {HIT_SLOP} from '../common-styles/button';
 import styles from './error-boundary.styles';
@@ -67,9 +66,9 @@ class ErrorBoundary extends Component<Props, State> {
     try {
       this.setState({isReporting: true});
 
-      if (this.state.isExtendedReportEnabled) {
-        ReporterBugsnag.notify(error);
-      }
+      // if (this.state.isExtendedReportEnabled) {
+      //   ReporterBugsnag.notify(error);
+      // }
 
       const reportedIssueId: ?string = await sendReport(`Render crash report: ${errorData.summary}`, errorData.description);
       if (reportedIssueId) {
