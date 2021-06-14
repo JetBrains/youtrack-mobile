@@ -3,7 +3,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {View, ActivityIndicator} from 'react-native';
 
-import once from 'lodash.once';
 import {SvgFromUri} from 'react-native-svg';
 
 import Gallery from 'react-native-image-gallery';
@@ -37,9 +36,7 @@ const ImagePreview = (props: Props): Node => {
   // eslint-disable-next-line no-unused-vars
   const [index, updateCurrentIndex] = useState(0);
 
-  const closeView: any = once(function closeView() {
-    return Router.pop(true);
-  });
+  const closeView: any = () => Router.pop(true);
 
   const getCurrentIndex: (attachment: Attachment) => number = useCallback((attachment: Attachment): number => (
     props.imageAttachments.findIndex(
