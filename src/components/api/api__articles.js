@@ -23,7 +23,7 @@ export default class ArticlesAPI extends ApiBase {
     return ApiHelper.convertAttachmentRelativeToAbsURLs(attachments, this.config.backendUrl);
   }
 
-  removeArticleEntity(resourceName: string, articleId: string, entityId: string) {
+  removeArticleEntity(resourceName: string, articleId: string, entityId: string): Promise<void> {
     return this.makeAuthorizedRequest(
       `${this.youTrackApiUrl}/articles/${articleId}/${resourceName}/${entityId}`,
       'DELETE',
@@ -68,7 +68,8 @@ export default class ArticlesAPI extends ApiBase {
 
   async updateArticle(articleId: string, data: Object | null = null, fields?: string): Promise<Article> {
     return this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/articles/${articleId}?${fields ? ApiBase.createFieldsQuery([fields]) : this.articleFieldsQuery}`,
+      `${this.youTrackApiUrl}/articles/${articleId}?${fields ? ApiBase.createFieldsQuery(
+        [fields]) : this.articleFieldsQuery}`,
       'POST',
       data
     );
@@ -88,7 +89,7 @@ export default class ArticlesAPI extends ApiBase {
     return ApiHelper.patchAllRelativeAvatarUrls(activityPage, this.config.backendUrl);
   }
 
-  async getArticleDrafts(original?: string): Promise<Article> {
+  async getArticleDrafts(original?: string): Promise<Array<ArticleDraft>> {
     const originalParam: string = `&original=${original || 'null'}`;
     const url: string = `${this.youTrackApiUrl}/admin/users/me/articleDrafts/?${this.articleFieldsQuery}${originalParam}`;
     const articleDrafts: Array<ArticleDraft> = await this.makeAuthorizedRequest(url, 'GET');
@@ -107,6 +108,7 @@ export default class ArticlesAPI extends ApiBase {
         : {project: null, parentArticle: null, summary: '', content: ''})
     );
   }
+
   async createSubArticleDraft(article: Article): Promise<Article> {
     return this.makeAuthorizedRequest(
       `${this.youTrackApiUrl}/admin/users/me/articleDrafts?${this.articleFieldsQuery}`,
@@ -162,7 +164,10 @@ export default class ArticlesAPI extends ApiBase {
     );
   }
 
-  getVisibilityOptions: ((articleId: string, url?: string) => Promise<Article>) = async (articleId: string, url?: string): Promise<Article> => {
+  getVisibilityOptions: ((articleId: string, url?: string) => Promise<Article>) = async (
+    articleId: string,
+    url?: string
+  ): Promise<Article> => {
     const queryString = ApiBase.createFieldsQuery(
       issueFields.getVisibility.toString(),
       {$visibilityTop: 50, $visibilitySkip: 0},
@@ -179,30 +184,30 @@ export default class ArticlesAPI extends ApiBase {
       articleId, `${this.youTrackApiUrl}/admin/users/me/articleDrafts/${articleId}/visibilityOptions`)
   );
 
-  async getCommentDraft(articleId: string): Promise<Comment> {
+  async getCommentDraft(articleId: string): Promise<IssueComment | null> {
     const fields: string = ApiBase.createFieldsQuery(
       {draftComment: this.commentFields}
     );
-    const response: IssueComment = await this.makeAuthorizedRequest(
+    const response: { draftComment: IssueComment | null } = await this.makeAuthorizedRequest(
       `${this.youTrackApiUrl}/articles/${articleId}/?${fields}`,
       'GET'
     );
-    if (response?.draftComment?.attachments?.length > 0) {
+    if (response?.draftComment?.attachments?.length) {
       response.draftComment.attachments = this.convertAttachmentsURL(response.draftComment.attachments);
     }
     return response.draftComment;
   }
 
-  async updateCommentDraft(articleId: string, comment: IssueComment): Promise<Comment> {
+  async updateCommentDraft(articleId: string, comment: IssueComment): Promise<IssueComment | null> {
     const draftComment: IssueComment = await this.makeAuthorizedRequest(
       `${this.youTrackApiUrl}/articles/${articleId}/draftComment?${this.articleCommentFieldsQuery}`,
       comment.id ? 'POST' : 'PUT',
       {
         ...comment,
-        usesMarkdown: true
+        usesMarkdown: true,
       }
     );
-    if (draftComment.attachments?.length > 0) {
+    if (draftComment.attachments) {
       draftComment.attachments = this.convertAttachmentsURL(draftComment.attachments);
     }
     return draftComment;
@@ -262,7 +267,7 @@ export default class ArticlesAPI extends ApiBase {
   async attachFile(articleId: string, fileUri: string, fileName: string): Promise<XMLHttpRequest> {
     const url = `${this.youTrackApiUrl}/admin/users/me/articleDrafts/${articleId}/attachments?fields=id,name`;
     const headers = this.auth.getAuthorizationHeaders();
-    const formData = new FormData(); //eslint-disable-line no-undef
+    const formData = new FormData();
     // $FlowFixMe
     formData.append('photo', {
       uri: fileUri,
@@ -282,7 +287,7 @@ export default class ArticlesAPI extends ApiBase {
     return await response.json();
   }
 
-  removeAttachment(articleId: string, attachmentId: string) {
+  removeAttachment(articleId: string, attachmentId: string): Promise<any> {
     return this.removeArticleEntity('attachments', articleId, attachmentId);
   }
 
@@ -291,15 +296,20 @@ export default class ArticlesAPI extends ApiBase {
     return this.removeArticleEntity(`${resourcePath}/attachments`, articleId, attachmentId);
   }
 
-  async attachFileToComment(articleId: string, fileUri: string, fileName: string, commentId?: string): Promise<IssueComment> {
+  async attachFileToComment(
+    articleId: string,
+    fileUri: string,
+    fileName: string,
+    commentId?: string
+  ): Promise<Array<Attachment>> {
     const resourcePath: string = commentId ? `comments/${commentId}` : 'draftComment';
     const url = `${this.youTrackApiUrl}/articles/${articleId}/${resourcePath}/attachments?fields=id,name,url,thumbnailURL,mimeType,imageDimensions(height,width)`;
-    const formData = new FormData(); //eslint-disable-line no-undef
+    const formData = new FormData();
     // $FlowFixMe
     formData.append('photo', {
       uri: fileUri,
       name: fileName,
-      type: 'image/binary'
+      type: 'image/binary',
     });
     const response = await fetch(
       url,

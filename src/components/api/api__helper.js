@@ -53,7 +53,7 @@ const API = {
   convertAttachmentRelativeToAbsURLs(attachments: Array<Attachment>, backendUrl: string): Array<any> {
     let convertedItems: Array<any> = attachments;
     ['url', 'thumbnailURL'].forEach(
-      fieldName => convertedItems = this.convertRelativeUrls(convertedItems, fieldName, backendUrl)
+      (fieldName: string) => {convertedItems = this.convertRelativeUrls(convertedItems, fieldName, backendUrl);}
     );
     return convertedItems;
   },
