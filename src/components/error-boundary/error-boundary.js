@@ -3,6 +3,8 @@
 import React, {Component} from 'react';
 
 import {View, Text, TouchableOpacity, Linking} from 'react-native';
+
+import Bugsnag from '@bugsnag/react-native';
 import RNRestart from 'react-native-restart';
 
 import usage from '../usage/usage';
@@ -66,9 +68,9 @@ class ErrorBoundary extends Component<Props, State> {
     try {
       this.setState({isReporting: true});
 
-      // if (this.state.isExtendedReportEnabled) {
-      //   ReporterBugsnag.notify(error);
-      // }
+      if (this.state.isExtendedReportEnabled) {
+        Bugsnag.notify(error);
+      }
 
       const reportedIssueId: ?string = await sendReport(`Render crash report: ${errorData.summary}`, errorData.description);
       if (reportedIssueId) {

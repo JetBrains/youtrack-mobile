@@ -68,5 +68,7 @@
           <data android:scheme="http" android:host="*.myjetbrains.com" android:pathPattern="/.*issues"/>
         </intent-filter>
       </activity>
+
+      <meta-data android:name="com.bugsnag.android.API_KEY" android:value="7556455bdf436a79d8bd19eb7cacc0ce" />
     </application>
 </manifest>
