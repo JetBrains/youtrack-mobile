@@ -4,7 +4,7 @@ import type {Node} from 'React';
 import React, {Component} from 'react';
 import {Dimensions, ScrollView, UIManager} from 'react-native';
 
-import throttle from 'lodash.throttle';
+import debounce from 'lodash.debounce';
 import {clamp, getPointShift, getSnapToX, COLUMN_VIEWPORT_WIDTH_FACTOR} from './board-scroller__math';
 import type {DragContextType} from '../draggable/drag-container';
 import {DragContext} from '../draggable/drag-container';
@@ -49,7 +49,7 @@ class BoardScroller extends Component<Props, State> {
     autoScroll: {dx: 0, dy: 0, active: false},
     scrollPositions: {offsetX: 0, maxX: 10000, offsetY: 0, maxY: 10000},
   };
-  reportZonesMeasurements = throttle(() => {
+  reportZonesMeasurements = debounce(() => {
     this.props.dragContext.dropZones.forEach(zone => zone.reportMeasurements());
   }, 100);
 

@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 import {View, TextInput} from 'react-native';
 
 import once from 'lodash.once';
-import throttle from 'lodash.throttle';
+import debounce from 'lodash.debounce';
 
 import TextEditForm from './text-edit-form';
 import usage from '../usage/usage';
@@ -29,7 +29,7 @@ type Props = {
   testID?: string,
 }
 
-const TEXT_UPDATE_DEBOUNCE = 300;
+const DELAY: number = 300;
 
 export default class SummaryDescriptionForm extends Component<Props, void> {
   trackChange: ((message: string) => any | boolean) = (message: string) => (
@@ -38,15 +38,15 @@ export default class SummaryDescriptionForm extends Component<Props, void> {
   trackSummaryChange: any = once(() => this.trackChange('Summary updated'));
   trackDescriptionChange: any = once(() => this.trackChange('Description updated'));
 
-  onSummaryChange: any = throttle((text: string) => {
+  onSummaryChange: any = debounce((text: string) => {
     this.trackSummaryChange();
     return this.props.onSummaryChange(text);
-  }, TEXT_UPDATE_DEBOUNCE);
+  }, DELAY);
 
-  onDescriptionChange: any = throttle((text: string) => {
+  onDescriptionChange: any = debounce((text: string) => {
     this.trackDescriptionChange();
     return this.props.onDescriptionChange(text);
-  }, TEXT_UPDATE_DEBOUNCE);
+  }, DELAY);
 
   render(): Node {
     const {

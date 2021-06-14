@@ -25,7 +25,7 @@ import clicksToShowCounter from '../../components/debug-view/clicks-to-show-coun
 import {resolveErrorMessage} from '../../components/error/error-resolver';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import {connectToNewYoutrack, openDebugView} from '../../actions/app-actions';
-import throttle from 'lodash.throttle';
+import debounce from 'lodash.debounce';
 import {NETWORK_PROBLEM_TIPS} from '../../components/error-message/error-text-messages';
 
 import ErrorMessageInline from '../../components/error-message/error-message-inline';
@@ -129,10 +129,10 @@ export class EnterServer extends Component<Props, State> {
   }
 
   isValidInput(): any {
-    return throttle(() => {
+    return debounce(() => {
       const url = (this.state.serverUrl || '').trim();
       return url.length > 0 && !url.match(/@/g);
-    }, 500)();
+    }, 300)();
   }
 
   renderErrorInfoModalContent(): Node {

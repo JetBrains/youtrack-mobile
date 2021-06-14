@@ -3,7 +3,7 @@
 import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 
-import throttle from 'lodash.throttle';
+import debounce from 'lodash.debounce';
 
 import MultilineInput from '../multiline-input/multiline-input';
 
@@ -25,14 +25,13 @@ type Props = {
   uiTheme: UITheme,
 }
 
-const TEXT_UPDATE_DEBOUNCE = 300;
 
 export default class TextEditForm extends PureComponent<Props, void> {
 
-  onDescriptionChange: any = throttle((text: string) => {
+  onDescriptionChange: any = debounce((text: string) => {
     const {onDescriptionChange} = this.props;
     return onDescriptionChange && onDescriptionChange(text);
-  }, TEXT_UPDATE_DEBOUNCE);
+  }, 300);
 
   render(): Node {
     const {

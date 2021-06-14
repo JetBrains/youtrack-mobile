@@ -4,7 +4,7 @@ import type {Node} from 'React';
 import {View, TouchableOpacity, Text, TextInput, FlatList, ActivityIndicator} from 'react-native';
 import React, {Component} from 'react';
 
-import throttle from 'lodash.throttle';
+import debounce from 'lodash.debounce';
 
 import ApiHelper from '../api/api__helper';
 import KeyboardSpacerIOS from '../platform/keyboard-spacer.ios';
@@ -39,7 +39,6 @@ type DefaultProps = {
   onChange: Function
 }
 
-const SEARCH_THROTTLE = 30;
 
 export default class CommandDialog extends Component<Props, State> {
   static defaultProps: DefaultProps = {
@@ -51,7 +50,7 @@ export default class CommandDialog extends Component<Props, State> {
     caret: 0,
   };
   lastUsedParams: { command: ?string, caret: number } = {command: null, caret: 0};
-  onSearch: any = throttle((command: string, caret: number) => {
+  onSearch: any = debounce((command: string, caret: number) => {
     if (this.lastUsedParams.command === command && this.lastUsedParams.caret === caret) {
       return;
     }
@@ -59,7 +58,7 @@ export default class CommandDialog extends Component<Props, State> {
 
     this.setState({input: command, caret});
     this.props.onChange(command, caret);
-  }, SEARCH_THROTTLE);
+  }, 150);
 
   componentDidMount() {
     const {initialCommand} = this.props;

@@ -8,7 +8,7 @@ import {SvgUri} from 'react-native-svg';
 import {View as AnimatedView} from 'react-native-animatable';
 import ImageProgress from 'react-native-image-progress';
 import Router from '../router/router';
-import throttle from 'lodash.throttle';
+import debounce from 'lodash.debounce';
 import {hasMimeType} from '../mime-type/mime-type';
 import {isAndroidPlatform} from '../../util/util';
 import {IconRemoveFilled} from '../icon/icon';
@@ -35,8 +35,7 @@ type State = {
   isRemoving: boolean
 }
 
-const ANIMATION_DURATION = 700;
-const ERROR_HANDLER_THROTTLE = 60 * 1000;
+const ANIMATION_DURATION: number = 700;
 const isAndroid: boolean = isAndroidPlatform();
 
 export default class Attach extends PureComponent<Props, State> {
@@ -48,9 +47,9 @@ export default class Attach extends PureComponent<Props, State> {
     onRemoveImage: () => {},
   };
   _isUnmounted: boolean;
-  handleLoadError: any = throttle((err) => {
+  handleLoadError: any = debounce((err) => {
     this.props.onImageLoadingError(err);
-  }, ERROR_HANDLER_THROTTLE);
+  }, 60 * 1000);
 
   state: State = {isRemoving: false};
 
