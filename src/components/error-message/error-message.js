@@ -1,44 +1,44 @@
 /* @flow */
 
-import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {DEFAULT_ERROR_MESSAGE} from '../error/error-messages';
 import {ERROR_MESSAGE_DATA} from '../error/error-message-data';
-import {HTTP_STATUS} from '../error/error-http-codes';
-import {IconSearch} from '../icon/icon';
 import {extractErrorMessage, resolveError} from '../error/error-resolver';
+import {IconSearch} from '../icon/icon';
 
 import {styles} from './error-message.style';
 
 import type {CustomError, ErrorMessageData} from '../../flow/Error';
+import type {Node} from 'React';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
-type Props = {
+export type ErrorMessageProps = {
   error?: CustomError,
-  errorMessageData?: ErrorMessageData,
+  errorMessageData?: ErrorMessageData | null,
   onTryAgain?: Function,
   style?: ViewStyleProp,
   testID?: string,
 };
 
 type State = {
-  errorMessageData: ErrorMessageData
+  errorMessageData: ErrorMessageData | null
 }
 
-export default class ErrorMessage extends PureComponent<Props, State> {
-  state: State = {};
+export default class ErrorMessage extends PureComponent<ErrorMessageProps, State> {
+  state: State = {
+    errorMessageData: null,
+  };
 
-  async componentDidMount() {
+  async setError() {
     let errorMessage: ErrorMessageData;
 
     if (this.props.errorMessageData) {
       errorMessage = this.props.errorMessageData;
     } else if (this.props.error) {
-      const error: CustomError = await resolveError(this.props.error);
+      const error: CustomError & {error?: string} = await resolveError(this.props.error);
       errorMessage = {
         title: ERROR_MESSAGE_DATA[error.status || error.error]?.title || error.message || error.error_message || '',
         description: extractErrorMessage(error, true),
@@ -48,6 +48,10 @@ export default class ErrorMessage extends PureComponent<Props, State> {
     this.setState({
       errorMessageData: errorMessage,
     });
+  }
+
+  componentDidMount() {
+    this.setError();
   }
 
   render(): null | Node {
@@ -93,32 +97,4 @@ export default class ErrorMessage extends PureComponent<Props, State> {
       </View>
     );
   }
-}
-
-
-function isForbiddenError(error: CustomError): boolean {
-  return !!error.status && [HTTP_STATUS.UNAUTHORIZED, HTTP_STATUS.FORBIDDEN].includes(error.status);
-}
-
-function isLicenceError(errorTitle: string = ''): boolean {
-  return errorTitle === ERROR_MESSAGE_DATA.LICENSE_ERROR_RESPONSE.title;
-}
-
-function getErrorMessageData(error: CustomError) {
-  const errorMessage = extractErrorMessage(error, true);
-  return {
-    title: error.error || error.error_message || error.message || DEFAULT_ERROR_MESSAGE,
-    description: errorMessage,
-  };
-}
-
-
-export async function getErrorData(error: CustomError): ErrorMessageData {
-  const err = await resolveError(error);
-  const errorMessageData: ErrorMessageData = getErrorMessageData(err);
-
-  if (isForbiddenError(err) && isLicenceError(errorMessageData.title)) {
-    errorMessageData.icon = ERROR_MESSAGE_DATA.LICENSE_ERROR_RESPONSE.icon;
-  }
-  return errorMessageData;
 }
