@@ -274,12 +274,20 @@ const IssueCommentEdit = (props: Props) => {
             attachment,
             props.isEditMode && state.editingComment.id
           ));
+          const attachments: Array<Attachment> = state.editingComment.attachments.filter((it: Attachment) => it.id !== attachment.id);
+          const isDeleted: boolean = !state.editingComment.text && !attachments.length;
           const updatedComment: IssueComment = {
             ...state.editingComment,
-            attachments: state.editingComment.attachments.filter((it: Attachment) => it.id !== attachment.id)
+            attachments,
+            deleted: isDeleted
           };
-          changeState({editingComment: updatedComment});
+          changeState({
+            editingComment: updatedComment
+          });
           debouncedChange(updatedComment, true);
+          if (props.isEditMode && isDeleted) {
+            closeModal();
+          }
         }}
         uiTheme={theme.uiTheme}
       />
@@ -316,6 +324,10 @@ const IssueCommentEdit = (props: Props) => {
         style={styles.commentInput}
       />
     );
+  };
+
+  const closeModal = (): void => {
+    Router.pop(true);
   };
 
   const renderAddNewComment = (): Node => {
@@ -425,7 +437,7 @@ const IssueCommentEdit = (props: Props) => {
           style={styles.commentEditHeader}
           title="Edit comment"
           leftButton={<IconClose size={21} color={isSaving ? styles.disabled.color : styles.link.color}/>}
-          onBack={() => !isSaving && Router.pop(true)}
+          onBack={() => !isSaving && closeModal()}
           rightButton={
             (isSaving
               ? <ActivityIndicator color={styles.link.color}/>
@@ -434,7 +446,7 @@ const IssueCommentEdit = (props: Props) => {
           onRightButtonClick={async () => {
             if (isSubmitEnabled) {
               await submitComment(state.editingComment);
-              Router.pop();
+              closeModal();
             }
           }}
         />

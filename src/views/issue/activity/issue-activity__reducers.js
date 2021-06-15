@@ -6,14 +6,14 @@ import * as types from '../issue-action-types';
 import {attachmentTypes} from './issue-activity__attachment-actions-and-types';
 import {guid} from '../../../util/util';
 
-import type {ActivityItem, Activity} from '../../../flow/Activity';
+import type {Activity} from '../../../flow/Activity';
 import type {CustomError} from '../../../flow/Error';
 import type {IssueComment} from '../../../flow/CustomFields';
 import type {IssueFull, OpenNestedViewParams} from '../../../flow/Issue';
 import type {User, UserAppearanceProfile} from '../../../flow/User';
 import type {WorkTimeSettings} from '../../../flow/Work';
 
-type ActivityPage = Array<ActivityItem> | null;
+type ActivityPage = Array<Activity> | null;
 
 export type State = {
   activitiesEnabled: boolean,
