@@ -13,18 +13,17 @@ import type {Folder} from '../../flow/User';
 const REQUEST_INTERVAL_DELAY: number = 3000;
 
 export default class IssuesAPI extends ApiBase {
-  async getIssues(query: string = '', $top: number, $skip: number = 0): Promise<IssueOnList> {
+  async getIssues(query: string = '', $top: number, $skip: number = 0): Promise<Array<IssueOnList>> {
     const queryString = qs.stringify({
       query, $top, $skip,
       fields: issueFields.issuesOnList.toString(),
     });
 
-    const issues = await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`);
-    ApiHelper.patchAllRelativeAvatarUrls(issues, this.config.backendUrl);
-    return issues;
+    const issues: Array<IssueOnList> = await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`);
+    return ApiHelper.patchAllRelativeAvatarUrls(issues, this.config.backendUrl);
   }
 
-  async getIssuesCount(query: string | null = null, folder: Folder, unresolvedOnly: boolean = false): Promise<number> {
+  async getIssuesCount(query: string | null = null, folder: ?Folder, unresolvedOnly: boolean = false): Promise<number> {
     const isActualVersion: boolean = checkVersion('2020.1');
     type Count = 'count' | 'value';
     const fieldName: Count = isActualVersion ? 'count' : 'value'; //API version specific
@@ -46,7 +45,7 @@ export default class IssuesAPI extends ApiBase {
     return this.makeAuthorizedRequest(url);
   }
 
-  issuesCount(query: string | null = null, folder: Folder, unresolvedOnly: boolean = false): Promise<number> {
+  issuesCount(query: string | null = null, folder: ?Folder, unresolvedOnly: boolean = false): Promise<number> {
     return this.makeAuthorizedRequest(
       `${this.youTrackApiUrl}/issuesGetter/count?fields=count`, //`issuesGetter/count` introduced in 2019.1.51759
       'POST',

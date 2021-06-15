@@ -5,10 +5,10 @@ import objectWalk from 'object-walk';
 import {getReadableID} from '../issue-formatter/issue-formatter';
 
 import type {Attachment} from '../../flow/CustomFields';
-import type {IssueOnList, AnyIssue, ServersideSuggestion, TransformedSuggestion} from '../../flow/Issue';
+import type {AnyIssue, ServersideSuggestion, TransformedSuggestion} from '../../flow/Issue';
 
 const API = {
-  makeFieldHash: (issue: IssueOnList): Object => {
+  makeFieldHash: (issue: AnyIssue): Object => {
     const fieldHash = {};
     (issue.fields || []).forEach(field => {
       const fieldName = field.projectCustomField.field.name;
@@ -17,8 +17,8 @@ const API = {
     return fieldHash;
   },
 
-  fillIssuesFieldHash: (issues: Array<IssueOnList> = []): Array<IssueOnList> => {
-    issues.forEach(issue => issue.fieldHash = API.makeFieldHash(issue));
+  fillIssuesFieldHash: (issues: Array<AnyIssue> = []): Array<AnyIssue> => {
+    issues.forEach((issue: AnyIssue) => {issue.fieldHash = API.makeFieldHash(issue);});
     return issues;
   },
 
