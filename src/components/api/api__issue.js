@@ -232,9 +232,9 @@ export default class IssueAPI extends ApiBase {
   }
 
   async removeFileFromComment(issueId: string, attachmentId: string, commentId?: string): Promise<void> {
-    const resourcePath: string = commentId ? `comments/${commentId}` : 'draftComment';
+    const resourcePath: string = commentId ? '' : 'draftComment/';
     return this.makeAuthorizedRequest(
-      `${this.youTrackIssueUrl}/${issueId}/${resourcePath}/attachments/${attachmentId}`,
+      `${this.youTrackIssueUrl}/${issueId}/${resourcePath}attachments/${attachmentId}`,
       'DELETE',
       null,
       {parseJson: false}
