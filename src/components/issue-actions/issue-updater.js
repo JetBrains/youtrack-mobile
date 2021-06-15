@@ -3,27 +3,25 @@
 import ApiHelper from '../api/api__helper';
 import log from '../log/log';
 import {getApi} from '../api/api__instance';
+import {until} from '../../util/util';
 
 import type Api from '../api/api';
-import type {IssueFull, IssueOnList} from '../../flow/Issue';
+import type {AnyIssue, IssueFull, IssueOnList} from '../../flow/Issue';
 
-export const loadIssue = async (issueId: string): Promise<null> | Promise<any> => {
+export const loadIssue = async (issueId: string): Promise<Array<IssueFull> | null> => {
   const api: Api = getApi();
   log.info(`Updating issue ${issueId}`);
-  try {
-    const issue: Array<IssueOnList> = await api.issue.getIssue(issueId);
-    return ApiHelper.fillIssuesFieldHash([issue])[0];
-  } catch (e) {
+  const [error, issue] = await until(api.issue.getIssue(issueId));
+  if (error) {
     log.info(`Failed to load issue ${issueId}`);
     return null;
+  } else {
+    return (ApiHelper.fillIssuesFieldHash([issue])[0]: any);
   }
 };
 
-export const updateIssueInIssues = (
-  issueToUpdate: IssueOnList,
-  currentIssues: Array<IssueOnList | IssueFull>
-): Array<IssueFull | IssueOnList> => {
-  return (currentIssues || []).reduce((issues: Array<IssueOnList>, issue: IssueOnList) => {
+export const updateIssueInIssues = (issueToUpdate: IssueOnList, currentIssues: Array<AnyIssue>): Array<AnyIssue> => {
+  return (currentIssues || []).reduce((issues: Array<AnyIssue>, issue: AnyIssue) => {
     return issues.concat([issue?.id === issueToUpdate?.id ? issueToUpdate : issue]);
   }, []);
 };
