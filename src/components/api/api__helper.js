@@ -4,14 +4,14 @@ import {handleRelativeUrl} from '../config/config';
 import objectWalk from 'object-walk';
 import {getReadableID} from '../issue-formatter/issue-formatter';
 
-import type {Attachment} from '../../flow/CustomFields';
+import type {Attachment, CustomField} from '../../flow/CustomFields';
 import type {AnyIssue, ServersideSuggestion, TransformedSuggestion} from '../../flow/Issue';
 
 const API = {
   makeFieldHash: (issue: AnyIssue): Object => {
-    const fieldHash = {};
-    (issue.fields || []).forEach(field => {
-      const fieldName = field.projectCustomField.field.name;
+    const fieldHash: $Shape<{ key: string, value: CustomField }> = {};
+    (issue.fields || []).forEach((field: CustomField) => {
+      const fieldName: string = field.projectCustomField.field.name;
       fieldHash[fieldName] = field.value;
     });
     return fieldHash;

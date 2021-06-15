@@ -110,7 +110,7 @@ export function receiveUserAppearanceProfile(userAppearanceProfile?: UserAppeara
   };
 }
 
-export function updateUserGeneralProfile(userGeneralProfile: UserGeneralProfile): Action {
+export function updateUserGeneralProfile(userGeneralProfile: $Shape<UserGeneralProfile>): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     try {
       const updatedUserGeneralProfile: UserGeneralProfile = await getApi().user.updateUserGeneralProfile(

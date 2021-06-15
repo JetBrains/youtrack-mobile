@@ -12,7 +12,7 @@ import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {Article, ArticlesList} from '../../flow/Article';
 import type {AuthParams} from '../../flow/Auth';
 import type {Folder, User} from '../../flow/User';
-import type {IssueOnList} from '../../flow/Issue';
+import type {AnyIssue} from '../../flow/Issue';
 import type {Board, Sprint} from '../../flow/Agile';
 import type {Notification} from '../../flow/Inbox';
 import type {PermissionCacheItem} from '../../flow/Permission';
@@ -39,7 +39,7 @@ export type StorageState = {|
   query: ?string,
   searchContext: ?Folder,
   lastQueries: ?Array<string>,
-  issuesCache: ?Array<IssueOnList>,
+  issuesCache: Array<AnyIssue> | null,
   inboxCache: Array<Notification> | null,
   isRegisteredForPush: boolean,
   deviceToken: ?string,

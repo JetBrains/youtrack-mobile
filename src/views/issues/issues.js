@@ -43,6 +43,7 @@ import styles, {noIssuesFoundIconSize} from './issues.styles';
 
 import type Api from '../../components/api/api';
 import type Auth from '../../components/auth/auth';
+import type {ErrorMessageProps} from '../../components/error-message/error-message';
 import type {IssueOnList} from '../../flow/Issue';
 import type {IssuesState} from './issues-reducers';
 import type {Theme, UITheme} from '../../flow/Theme';
@@ -360,7 +361,7 @@ export class Issues extends Component<Props, State> {
       return null;
     }
 
-    const props = Object.assign(
+    const props: $Shape<ErrorMessageProps> = Object.assign(
       {},
       loadingError
         ? {error: loadingError}

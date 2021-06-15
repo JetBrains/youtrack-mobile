@@ -6,9 +6,9 @@ import {getApi} from '../api/api__instance';
 import {until} from '../../util/util';
 
 import type Api from '../api/api';
-import type {AnyIssue, IssueFull, IssueOnList} from '../../flow/Issue';
+import type {AnyIssue, IssueFull} from '../../flow/Issue';
 
-export const loadIssue = async (issueId: string): Promise<Array<IssueFull> | null> => {
+export const loadIssue = async (issueId: string): Promise<IssueFull | null> => {
   const api: Api = getApi();
   log.info(`Updating issue ${issueId}`);
   const [error, issue] = await until(api.issue.getIssue(issueId));
@@ -20,7 +20,7 @@ export const loadIssue = async (issueId: string): Promise<Array<IssueFull> | nul
   }
 };
 
-export const updateIssueInIssues = (issueToUpdate: IssueOnList, currentIssues: Array<AnyIssue>): Array<AnyIssue> => {
+export const updateIssueInIssues = (issueToUpdate: AnyIssue, currentIssues: Array<AnyIssue>): Array<AnyIssue> => {
   return (currentIssues || []).reduce((issues: Array<AnyIssue>, issue: AnyIssue) => {
     return issues.concat([issue?.id === issueToUpdate?.id ? issueToUpdate : issue]);
   }, []);

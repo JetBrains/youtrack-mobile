@@ -90,13 +90,6 @@ export type ProjectCustomField = {
   defaultValues: Array<BundleValue>
 }
 
-export type ProjectCustomFieldShort = {
-  field: {
-    id: string,
-    name: string
-  }
-}
-
 export type FieldValue = {
   $type: string,
   id: string,
@@ -117,16 +110,6 @@ export type FieldValue = {
   color: ColorField
 }
 
-export type FieldValueShort = {
-  id: string,
-  name: string,
-  ringId: string,
-  avatarUrl: string,
-  login: string,
-  presentation: string,
-  color: ColorField
-}
-
 export type CustomFieldValue = FieldValue | number | string | Array<any>;
 
 export type CustomField = {
@@ -138,12 +121,7 @@ export type CustomField = {
   projectCustomField: ProjectCustomField
 }
 
-export type CustomFieldShort = {
-  id: string,
-  name: string,
-  value: FieldValue,
-  projectCustomField: ProjectCustomFieldShort
-}
+export type CustomFieldShort = $Shape<CustomField>
 
 export type ImageDimensions = {
   width: number,

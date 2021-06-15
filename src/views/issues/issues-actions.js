@@ -11,11 +11,12 @@ import {filterArrayByType} from '../../components/api/api__resource-types';
 import {flushStoragePart, getStorageState, MAX_STORED_QUERIES} from '../../components/storage/storage';
 import {getAssistSuggestions, getCachedUserQueries} from '../../components/query-assist/query-assist-helper';
 import {notifyError} from '../../components/notification/notification';
+import {until} from '../../util/util';
 import {updateUserGeneralProfile} from '../../actions/app-actions';
 
 import type Api from '../../components/api/api';
 import type {Folder} from '../../flow/User';
-import type {IssueFull, IssueOnList, SavedQuery} from '../../flow/Issue';
+import type {AnyIssue, IssueFull, SavedQuery} from '../../flow/Issue';
 import type {IssueProject, Tag} from '../../flow/CustomFields';
 
 const PAGE_SIZE = 10;
@@ -73,8 +74,8 @@ export function storeIssuesQuery(query: string): (() => void) {
   };
 }
 
-export function storeSearchContext(searchContext: Folder) {
-  return async () => await flushStoragePart({searchContext});
+export async function storeSearchContext(searchContext: Folder) {
+  await flushStoragePart({searchContext});
 }
 
 export function listEndReached(): {type: any} {
@@ -97,7 +98,7 @@ export function stopMoreIssuesLoading(): {type: any} {
   return {type: types.STOP_LOADING_MORE};
 }
 
-export function receiveIssues(issues: Array<IssueOnList>): {issues: Array<IssueOnList>, pageSize: number, type: any} {
+export function receiveIssues(issues: Array<AnyIssue>): {issues: Array<AnyIssue>, pageSize: number, type: any} {
   return {type: types.RECEIVE_ISSUES, issues, pageSize: PAGE_SIZE};
 }
 
@@ -119,8 +120,8 @@ function getSearchContext() {
 
 export function getSearchQuery(query: string = ''): (() => string) {
   return () => {
-    const userSearchContext: SavedQuery = getSearchContext();
-    const searchContextQuery = userSearchContext?.query;
+    const userSearchContext: ?Folder = getSearchContext();
+    const searchContextQuery: string = userSearchContext?.query || '';
     return userSearchContext?.query ? `${searchContextQuery} ${query}` : query;
   };
 }
@@ -148,7 +149,7 @@ export function openSavedSearchesSelect(): ((dispatch: (any) => any, getState: (
           const issueFolders: Array<IssueProject | SavedQuery | Tag> = await getApi().getIssueFolders(true);
           folders = [{
             title: null,
-            data: filterArrayByType(issueFolders, 'savedSearch'),
+            data: filterArrayByType((issueFolders: any), 'savedSearch'),
           }, {
             title: 'Recent searches',
             data: folders,
@@ -163,7 +164,7 @@ export function openSavedSearchesSelect(): ((dispatch: (any) => any, getState: (
       onSelect: async (savedQuery: Folder) => {
         try {
           dispatch(closeSelect());
-          dispatch(onQueryUpdate(savedQuery.query));
+          dispatch(onQueryUpdate(savedQuery.query || ''));
           dispatch(refreshIssues());
         } catch (error) {
           log.warn('Failed to change a context', error);
@@ -231,7 +232,7 @@ export function closeSelect(): ((dispatch: (any) => any) => void) {
 }
 
 
-export function cacheIssues(issues: Array<IssueOnList>): (() => void) {
+export function cacheIssues(issues: Array<AnyIssue>): (() => void) {
   return () => {
     flushStoragePart({issuesCache: issues});
   };
@@ -239,9 +240,9 @@ export function cacheIssues(issues: Array<IssueOnList>): (() => void) {
 
 export function readCachedIssues(): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
-    const issues = getStorageState().issuesCache;
+    const issues: Array<AnyIssue>| null = getStorageState().issuesCache;
 
-    if (issues && issues.length) {
+    if (issues?.length) {
       log.debug(`Loaded ${issues.length} cached issues`);
       dispatch(receiveIssues(issues));
     }
@@ -263,11 +264,15 @@ export function loadIssues(query: string): ((
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
     log.info('Loading issues...');
-    dispatch(startIssuesLoading());
 
-    try {
-      let issues: Array<IssueOnList> = await api.issues.getIssues(query, PAGE_SIZE);
-      issues = ApiHelper.fillIssuesFieldHash(issues);
+    dispatch(startIssuesLoading());
+    const [error, listIssues] = await until(api.issues.getIssues(query, PAGE_SIZE));
+    dispatch(stopIssuesLoading());
+
+    if (error) {
+      dispatch(loadingIssuesError(error));
+    } else {
+      const issues: Array<AnyIssue> = ApiHelper.fillIssuesFieldHash(listIssues);
       log.info(`${issues?.length} issues loaded`);
       dispatch(receiveIssues(issues));
       dispatch(cacheIssues(issues));
@@ -275,28 +280,26 @@ export function loadIssues(query: string): ((
         log.info('End reached during initial load');
         dispatch(listEndReached());
       }
-    } catch (e) {
-      dispatch(loadingIssuesError(e));
-    } finally {
-      dispatch(stopIssuesLoading());
     }
   };
 }
 
 export function updateIssue(issueId: string): ((dispatch: (any) => any, getState: () => any) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object) => {
-    const currentIssues: Array<IssueOnList> = getState().issueList.issues;
+    const currentIssues: Array<AnyIssue> = getState().issueList.issues;
 
-    const issueToUpdate: IssueFull = await issueUpdater.loadIssue(issueId);
-    const updatedIssues: Array<IssueFull | IssueOnList> = issueUpdater.updateIssueInIssues(issueToUpdate, currentIssues);
+    const issueToUpdate: IssueFull | null = await issueUpdater.loadIssue(issueId);
+    if (issueToUpdate) {
+      const updatedIssues: Array<AnyIssue> = issueUpdater.updateIssueInIssues(issueToUpdate, currentIssues);
 
-    dispatch(receiveIssues(updatedIssues));
-    dispatch(cacheIssues(updatedIssues));
+      dispatch(receiveIssues(updatedIssues));
+      dispatch(cacheIssues(updatedIssues));
+    }
   };
 }
 
-export function refreshIssues(): ((dispatch: (any) => any, getState: () => any) => Promise<void>) {
-  return async (dispatch: (any) => any, getState: () => Object) => {
+export function refreshIssues(): (dispatch: (any) => any, getState: () => any) => Promise<void> {
+  return async (dispatch: (any) => any, getState: () => Object): Promise<void> => {
     const userQuery: string = getState().issueList.query;
     const searchQuery: string = await dispatch(getSearchQuery(userQuery));
 
@@ -342,7 +345,7 @@ export function loadMoreIssues(): ((
 
     try {
       const searchQuery = dispatch(getSearchQuery(query));
-      let moreIssues: Array<IssueOnList> = await api.issues.getIssues(searchQuery, PAGE_SIZE, newSkip);
+      let moreIssues: Array<AnyIssue> = (await api.issues.getIssues(searchQuery, PAGE_SIZE, newSkip): any);
       log.info(`Loaded ${PAGE_SIZE} more issues.`);
       moreIssues = ApiHelper.fillIssuesFieldHash(moreIssues);
       const updatedIssues = ApiHelper.removeDuplicatesByPropName(issues.concat(moreIssues), 'id');
@@ -360,7 +363,7 @@ export function loadMoreIssues(): ((
   };
 }
 
-export function loadIssuesCount(query: ?string, folder: Folder): ((
+export function loadIssuesCount(query: ?string, folder: ?Folder): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter

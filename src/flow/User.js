@@ -71,7 +71,7 @@ export type UserArticlesProfile = {
 export type UserGeneralProfile = {
   $type: string,
   id: string,
-  searchContext?: Folder,
+  searchContext?: ?Folder,
 }
 
 export type Folder = {
@@ -83,6 +83,6 @@ export type Folder = {
   query: ?string,
   pinned: ?string,
   issuesUrl: ?string,
-  fqFolderId: ?string,
+  fqFolderId?: ?string,
   isUpdatable: ?string
 }
