@@ -20,8 +20,15 @@ import UserGroupAPI from './api__user-group';
 import type Auth from '../auth/auth';
 import type {EndUserAgreement} from '../../flow/AppConfig';
 import type {IssueProject, Tag} from '../../flow/CustomFields';
-import type {TransformedSuggestion, SavedQuery, CommandSuggestionResponse} from '../../flow/Issue';
-import type {User} from '../../flow/User';
+import type {
+  TransformedSuggestion,
+  SavedQuery,
+  CommandSuggestionResponse,
+  TransformedSuggestionLegacy,
+  ServersideSuggestionLegacy,
+} from '../../flow/Issue';
+import type {Folder, User} from '../../flow/User';
+import {ServersideSuggestion} from '../../flow/Issue';
 
 class API extends BaseAPI {
   youTrackProjectUrl: string;
@@ -158,15 +165,28 @@ class API extends BaseAPI {
     });
   }
 
-  //TODO: this is old API usage, move to new one
-  async getQueryAssistSuggestions(query: string, caret: number): Promise<Array<TransformedSuggestion>> {
+  async getQueryAssistSuggestions(query: string, caret: number, folders: Array<Folder> | null = null): Promise<Array<TransformedSuggestion>> {
+    const response: { suggestions: Array<ServersideSuggestion> } = await this.makeAuthorizedRequest(
+      `${this.youTrackApiUrl}/search/assist?fields=caret,query,suggestions(auxiliaryIcon,caret,className,completionEnd,completionStart,description,group,icon,matchingEnd,matchingStart,option,prefix,suffix)`,
+      'POST',
+      {
+        caret,
+        folders,
+        query,
+      }
+    );
+    return ApiHelper.convertQueryAssistSuggestions(response.suggestions);
+  }
+
+  async getQueryAssistSuggestionsLegacy(query: string, caret: number): Promise<Array<TransformedSuggestionLegacy>> {
     const queryString = qs.stringify({
       query,
       caret
     });
-    const result = await this.makeAuthorizedRequest(`${this.youTrackUrl}/rest/search/underlineAndSuggest?${queryString}`);
-
-    return ApiHelper.convertQueryAssistSuggestions(result.suggest.items);
+    const response: { suggest: { items: Array<ServersideSuggestionLegacy> } } = await this.makeAuthorizedRequest(
+      `${this.youTrackUrl}/rest/search/underlineAndSuggest?${queryString}`
+    );
+    return ApiHelper.convertQueryAssistSuggestionsLegacy(response.suggest.items);
   }
 
   async getSavedQueries(): Promise<Array<SavedQuery>> {

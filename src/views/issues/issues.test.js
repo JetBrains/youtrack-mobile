@@ -1,10 +1,10 @@
-import {flushStoragePart, getStorageState, __setStorageState} from '../../components/storage/storage';
-import * as actions from './issues-actions';
-
 import sinon from 'sinon';
 import reducer from './issues-reducers';
 
+import * as actions from './issues-actions';
 import * as types from './issues-action-types';
+import * as Feature from '../../components/feature/feature';
+import {flushStoragePart, getStorageState, __setStorageState} from '../../components/storage/storage';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
 
 let dispatch;
@@ -64,8 +64,47 @@ describe('Issue list actions', () => {
 
   describe('Suggestions', () => {
     const assistSuggestions = [{option: 'for: me'}];
-    beforeEach(async () => {
-      apiMock.getQueryAssistSuggestions = () => new Promise(resolve => resolve(assistSuggestions));
+
+    beforeEach(() => {
+      const queryAssistSuggestionsResourceMock = jest.fn().mockResolvedValueOnce(assistSuggestions);
+      apiMock.getQueryAssistSuggestions = queryAssistSuggestionsResourceMock;
+      apiMock.getQueryAssistSuggestionsLegacy = queryAssistSuggestionsResourceMock;
+    });
+
+    it('should use legacy REST endpoint', async () => {
+      jest.spyOn(Feature, 'checkVersion').mockReturnValueOnce(false);
+
+      await doSuggest(2);
+      expect(apiMock.getQueryAssistSuggestionsLegacy).toHaveBeenCalledWith(
+        stateMock.issueList.query,
+        2
+      );
+    });
+
+    it('should use latest REST endpoint and with the search context', async () => {
+      jest.spyOn(Feature, 'checkVersion').mockReturnValueOnce(true);
+      const searchContextMock = {id: 'searchContext'};
+      __setStorageState({
+        searchContext: searchContextMock
+      });
+
+      await doSuggest(5);
+      expect(apiMock.getQueryAssistSuggestions).toHaveBeenCalledWith(
+        stateMock.issueList.query,
+        5,
+        [searchContextMock]
+      );
+    });
+
+    it('should use latest REST endpoint and without any search context', async () => {
+      jest.spyOn(Feature, 'checkVersion').mockReturnValueOnce(true);
+
+      await doSuggest(5);
+      expect(apiMock.getQueryAssistSuggestions).toHaveBeenCalledWith(
+        stateMock.issueList.query,
+        5,
+        null
+      );
     });
 
     it('should load query assist suggestions', async () => {
@@ -93,8 +132,8 @@ describe('Issue list actions', () => {
       });
     });
 
-    async function doSuggest() {
-      await actions.suggestIssuesQuery(TEST_QUERY, 4)(dispatch, getState, () => apiMock);
+    async function doSuggest(caretPosition: number = 4) {
+      await actions.suggestIssuesQuery(TEST_QUERY, caretPosition)(dispatch, getState, () => apiMock);
     }
   });
 
