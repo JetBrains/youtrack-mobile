@@ -6,7 +6,7 @@ import React, {Component} from 'react';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
 import {IconBack, IconClose} from '../icon/icon';
 import ModalView from '../modal-view/modal-view';
-import throttle from 'lodash.throttle';
+import debounce from 'lodash.debounce';
 import {View as AnimatedView} from 'react-native-animatable';
 import KeyboardSpacerIOS from '../platform/keyboard-spacer.ios';
 
@@ -15,7 +15,7 @@ import styles from './query-assist.styles';
 import type {TransformedSuggestion, SavedQuery} from '../../flow/Issue';
 import {HIT_SLOP} from '../common-styles/button';
 
-const SEARCH_THROTTLE = 30;
+const DELAY = 30;
 const SHOW_LIST_ANIMATION_DURATION = 500;
 
 type Props = {
@@ -48,7 +48,7 @@ export default class QueryAssist extends Component<Props, State> {
     this.state = Object.assign({}, this.initialState);
   }
 
-  onSearch = throttle((query: string, caret: number) => {
+  onSearch = debounce((query: string, caret: number) => {
     if (this.lastQueryParams.query === query || this.lastQueryParams.caret === caret) {
       return;
     }
@@ -57,7 +57,7 @@ export default class QueryAssist extends Component<Props, State> {
     this.setState({inputValue: query, caret});
     this.props.onChange(query, caret);
 
-  }, SEARCH_THROTTLE);
+  }, DELAY);
 
   resetState = () => {
     this.setState(this.initialState);
