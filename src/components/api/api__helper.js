@@ -4,8 +4,14 @@ import {handleRelativeUrl} from '../config/config';
 import objectWalk from 'object-walk';
 import {getReadableID} from '../issue-formatter/issue-formatter';
 
-import type {Attachment, CustomField} from '../../flow/CustomFields';
-import type {AnyIssue, ServersideSuggestion, TransformedSuggestion} from '../../flow/Issue';
+import type {Attachment} from '../../flow/CustomFields';
+import type {
+  IssueOnList,
+  AnyIssue,
+  ServersideSuggestion,
+  TransformedSuggestion,
+  ServersideSuggestionLegacy,
+} from '../../flow/Issue';
 
 const API = {
   makeFieldHash: (issue: AnyIssue): Object => {
@@ -23,7 +29,23 @@ const API = {
   },
 
   convertQueryAssistSuggestions: (suggestions: Array<ServersideSuggestion>): Array<TransformedSuggestion> => {
-    return suggestions.map(suggestion => {
+    return suggestions.map((suggestion: ServersideSuggestion) => {
+      return {
+        prefix: suggestion.prefix || '',
+        option: suggestion.option || '',
+        suffix: suggestion.suffix || '',
+        description: suggestion.description || '',
+        matchingStart: suggestion.matchingStart,
+        matchingEnd: suggestion.matchingEnd,
+        caret: suggestion.caret,
+        completionStart: suggestion.completionStart,
+        completionEnd: suggestion.completionEnd,
+      };
+    });
+  },
+
+  convertQueryAssistSuggestionsLegacy: (suggestions: Array<ServersideSuggestionLegacy>): Array<TransformedSuggestion> => {
+    return suggestions.map((suggestion: ServersideSuggestionLegacy) => {
       return {
         prefix: suggestion.pre || '',
         option: suggestion.o || '',

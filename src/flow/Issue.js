@@ -1,5 +1,7 @@
 /* @flow */
 
+import IssuePermissions from '../components/issue-permissions/issue-permissions';
+
 import type {
   IssueProject,
   CustomFieldShort,
@@ -10,7 +12,7 @@ import type {
   IssueLink,
 } from './CustomFields';
 import type {User} from './User';
-import IssuePermissions from '../components/issue-permissions/issue-permissions';
+import type {UserGroup} from './UserGroup';
 
 export type IssueContextData = {
   issue: IssueFull,
@@ -57,19 +59,6 @@ export type IssueFull = {
 
 export type AnyIssue = IssueOnList | IssueFull;
 
-export type ServersideSuggestion = {
-  o: string,
-  d: string,
-  hd: string,
-  pre: string,
-  suf: string,
-  ms: number,
-  me: number,
-  cp: number,
-  cs: number,
-  ce: number
-};
-
 export type TransformedSuggestion = {
   prefix: string,
   option: string,
@@ -81,6 +70,36 @@ export type TransformedSuggestion = {
   completionStart: number,
   completionEnd: number
 }
+
+export type ServersideSuggestion = {
+  $type?: string,
+  auxiliaryIcon?: string | null,
+  caret: number,
+  className?: string | null,
+  completionEnd: number,
+  completionStart: number,
+  description: string,
+  group?: UserGroup | null,
+  icon?: string | null,
+  matchingEnd: number,
+  matchingStart: number,
+  option: string,
+  prefix: string | null,
+  suffix: string | null,
+};
+
+export type ServersideSuggestionLegacy = {
+  o: string,
+  d: string,
+  hd: string,
+  pre: string,
+  suf: string,
+  ms: number,
+  me: number,
+  cp: number,
+  cs: number,
+  ce: number
+};
 
 export type SuggestedCommand = {
   description: ?string,

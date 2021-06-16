@@ -1,13 +1,21 @@
 /* @flow */
 
+import log from '../log/log';
+import {checkVersion} from '../feature/feature';
 import {getStorageState} from '../storage/storage';
+import {until} from '../../util/util';
 
 import type Api from '../api/api';
+import type {Folder} from '../../flow/User';
 import type {TransformedSuggestion} from '../../flow/Issue';
 
-type Suggestions = Array<{ data: Array<TransformedSuggestion>, title: string | null }>;
+type CachedQueries = {
+  id: string,
+  name: string,
+  query: string,
+};
 
-export function getCachedUserQueries(): Array<Object> {
+export function getCachedUserQueries(): Array<CachedQueries> {
   return (getStorageState().lastQueries || []).map(
     (query: string, index: number) => ({
       id: `lastQueries-${index}`,
@@ -16,24 +24,35 @@ export function getCachedUserQueries(): Array<Object> {
     }));
 }
 
-export const getAssistSuggestions = async (api: Api, query: string, caret: number): Promise<Suggestions> => {
-  let suggestions = [{title: null, data: []}];
-  try {
-    const assistSuggestions = await api.getQueryAssistSuggestions(query, caret);
-    const cachedUserQueries = getCachedUserQueries();
+export const getAssistSuggestions = async (
+  api: Api,
+  query: string,
+  caret: number,
+): Promise<Array<TransformedSuggestion>> => {
+  let suggestions: Array<{ title: string | null, data: Array<TransformedSuggestion> }> = [{title: null, data: []}];
+  const folder: Folder | null = getStorageState().searchContext || null;
+  const promise: Promise<Array<TransformedSuggestion>> = (
+    checkVersion('2020.1')
+      ? api.getQueryAssistSuggestions(query, caret, folder ? [folder] : null)
+      : api.getQueryAssistSuggestionsLegacy(query, caret)
+  );
+  const [error, assistSuggestions] = await until(promise);
+
+  if (error) {
+    log.warn('Failed loading assist suggestions');
+  } else {
     suggestions = [{
       title: null,
       data: assistSuggestions,
     }];
 
+    const cachedUserQueries: Array<CachedQueries> = getCachedUserQueries();
     if (cachedUserQueries.length) {
       suggestions.push({
         title: 'Recent searches',
         data: cachedUserQueries,
       });
     }
-  } catch (e) {
-    //
   }
   return suggestions;
 };
