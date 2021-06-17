@@ -431,9 +431,10 @@ class AgileBoard extends Component<Props, State> {
   renderBoard(uiTheme: UITheme) {
     const {sprint, isLoadingMore, error, agile} = this.props;
     const {zoomedIn} = this.state;
+    const renderAgileSelector = () => <View style={styles.agileNoSprint}>{this.renderAgileSelector(uiTheme)}</View>;
 
     if (agile?.status?.errors?.length || error) {
-      return null;
+      return renderAgileSelector();
     }
 
     if (!sprint) {
@@ -442,7 +443,7 @@ class AgileBoard extends Component<Props, State> {
       }
       return (
         <View>
-          <View style={styles.agileNoSprint}>{this.renderAgileSelector(uiTheme)}</View>
+          {renderAgileSelector()}
           <SkeletonAgile/>
         </View>
       );
