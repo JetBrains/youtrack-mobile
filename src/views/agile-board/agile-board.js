@@ -300,17 +300,13 @@ class AgileBoard extends Component<Props, State> {
     );
   }
 
-  getError(): CustomError | null {
-    return this.props.error;
-  }
-
   getAgileError(): string | null {
     const errors: Array<?string> = this.props.agile?.status?.errors || [];
     return errors.length > 0 ? errors.join('\n') : null;
   }
 
   renderErrors() {
-    const error: CustomError | null = this.getError();
+    const error: CustomError | null = this.props.error;
     const agileErrors: string | null = this.getAgileError();
 
     if (error) {
@@ -318,10 +314,11 @@ class AgileBoard extends Component<Props, State> {
     }
 
     if (agileErrors) {
+      const boardName: string = this.props.agile?.name || '';
       return <ErrorMessage
         style={styles.error}
         errorMessageData={{
-          title: 'Configuration errors',
+          title: `The board ${boardName} has configuration errors`,
           description: agileErrors,
           icon: IconException,
           iconSize: 56,
@@ -432,8 +429,12 @@ class AgileBoard extends Component<Props, State> {
   };
 
   renderBoard(uiTheme: UITheme) {
-    const {sprint, isLoadingMore, error} = this.props;
+    const {sprint, isLoadingMore, error, agile} = this.props;
     const {zoomedIn} = this.state;
+
+    if (agile?.status?.errors?.length || error) {
+      return null;
+    }
 
     if (!sprint) {
       if (error && error.noAgiles) {

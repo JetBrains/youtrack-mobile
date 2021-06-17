@@ -14,7 +14,6 @@ export default EStyleSheet.create({
   },
   error: {
     marginTop: UNIT * 5,
-    marginLeft: -UNIT * 2,
   },
   title: {
     fontSize: 17,
