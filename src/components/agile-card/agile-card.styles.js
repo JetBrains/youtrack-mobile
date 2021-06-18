@@ -62,7 +62,7 @@ export default (EStyleSheet.create({
     borderColor: '$iconAccent',
   },
   draggingZoomedOut: {
-    width: '20%',
+    width: '38%'
   },
   estimation: {
     marginRight: UNIT,
