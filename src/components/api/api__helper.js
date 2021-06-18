@@ -6,7 +6,6 @@ import {getReadableID} from '../issue-formatter/issue-formatter';
 
 import type {Attachment} from '../../flow/CustomFields';
 import type {
-  IssueOnList,
   AnyIssue,
   ServersideSuggestion,
   TransformedSuggestion,
