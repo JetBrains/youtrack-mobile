@@ -1,10 +1,9 @@
 /* @flow */
 
 import React from 'react';
-import {FlatList, TouchableOpacity} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 
 import { DropZone } from '../draggable';
-import {cardBottomMargin, getAgileCardHeight} from '../agile-card/agile-card';
 import {IconAdd} from '../icon/icon';
 
 import styles from './agile-row.styles';
@@ -23,26 +22,8 @@ type ColumnProps = {
 }
 
 export default function AgileRowColumn(props: ColumnProps) {
-  const {cell, uiTheme, zoomedIn} = props;
+  const {cell, uiTheme} = props;
   const issues: Array<IssueFull> = cell.issues || [];
-
-  function renderCard({item}: IssueFull) {
-    return props.renderIssueCard(item);
-  }
-
-  function getId(issue: IssueFull) {
-    return issue.id;
-  }
-
-  function getItemLayout(items: ?Array<IssueFull>, index: number) {
-    const height = getAgileCardHeight();
-    const offset = (height + cardBottomMargin) * index;
-    return {
-      length: height,
-      offset: offset,
-      index
-    };
-  }
 
   return (
     <DropZone
@@ -53,23 +34,14 @@ export default function AgileRowColumn(props: ColumnProps) {
         issueIds: issues.map(issue => issue.id)
       }}
     >
+      {issues.map(props.renderIssueCard)}
 
-      <FlatList
-        scrollEnabled={false}
-        data={issues}
-        keyExtractor={getId}
-        renderItem={renderCard}
-        getItemLayout={getItemLayout}
-        extraData={zoomedIn}
-        ListFooterComponent={
-          <TouchableOpacity
-            onPress={() => props.onTapCreateIssue(cell.column.id, cell.id)}
-            style={styles.addCardButton}
-          >
-            <IconAdd color={uiTheme.colors.$link} size={18}/>
-          </TouchableOpacity>
-        }
-      />
+      <TouchableOpacity
+        onPress={() => props.onTapCreateIssue(cell.column.id, cell.id)}
+        style={styles.addCardButton}
+      >
+        <IconAdd color={uiTheme.colors.$link} size={18}/>
+      </TouchableOpacity>
     </DropZone>
   );
 }
