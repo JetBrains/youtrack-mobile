@@ -1,12 +1,12 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {elevation1, elevationBottom} from '../common-styles/shadow';
-import {headerMinHeight} from '../header/header.styles';
 import {mainText, secondaryText} from '../common-styles/typography';
 import {UNIT} from '../variables/variables';
+import {separatorTopBorder} from '../common-styles/list';
 
 const INPUT_BORDER_RADIUS = UNIT;
-const MIN_INPUT_SIZE = UNIT * 4;
+export const MIN_INPUT_SIZE = UNIT * 4;
 
 export default EStyleSheet.create({
   container: {
@@ -69,14 +69,13 @@ export default EStyleSheet.create({
   },
   commentInputContainer: {
     flexDirection: 'row',
-    padding: 2,
+    padding: UNIT / 4,
     borderRadius: INPUT_BORDER_RADIUS,
     borderWidth: 1,
     borderColor: '$disabled',
   },
   commentInput: {
     flex: 1,
-    minHeight: MIN_INPUT_SIZE,
     padding: 0,
     backgroundColor: '$background',
     ...mainText,
@@ -139,8 +138,6 @@ export default EStyleSheet.create({
     ...mainText,
     fontWeight: '500',
   },
-  floatContext: {
-  },
   floatContextButton: {
     margin: UNIT,
   },
@@ -163,11 +160,11 @@ export default EStyleSheet.create({
   commentEditContent: {
     padding: UNIT * 2,
     paddingTop: UNIT,
-    marginBottom: headerMinHeight
   },
   commentEditInput: {
     padding: 0,
-    marginBottom: UNIT * 5,
+    ...separatorTopBorder,
+    borderColor: '$separator',
   },
   commentEditVisibility: {
     marginTop: UNIT * 2.5,

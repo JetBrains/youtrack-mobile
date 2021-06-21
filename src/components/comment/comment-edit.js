@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {useCallback, useContext, useEffect, useState} from 'react';
-import {ActivityIndicator, View, Text, TouchableOpacity} from 'react-native';
+import {ActivityIndicator, View, Text, TouchableOpacity, TextInput, ScrollView} from 'react-native';
 
 import debounce from 'lodash.debounce';
 import {AutoGrowingTextInput} from 'react-native-autogrow-textinput';
@@ -25,7 +25,7 @@ import {getAttachmentActions} from '../attachments-row/attachment-actions';
 import {IconArrowUp, IconCheck, IconClose, IconAdd, IconAttachment} from '../icon/icon';
 import {ThemeContext} from '../theme/theme-context';
 
-import styles from './comment-update.styles';
+import styles, {MIN_INPUT_SIZE} from './comment-update.styles';
 
 import type {Attachment, IssueComment} from '../../flow/CustomFields';
 import type {Node} from 'react';
@@ -296,10 +296,21 @@ const IssueCommentEdit = (props: Props) => {
   };
 
   const renderCommentInput = (autoFocus: boolean, onFocus: Function, onBlur: Function): Node => {
+    const Component: typeof TextInput | typeof AutoGrowingTextInput = props.isEditMode ? TextInput : AutoGrowingTextInput;
+    const inputProps: Object = !props.isEditMode ? {
+      minHeight: MIN_INPUT_SIZE,
+      maxHeight: 106,
+    } : {};
     return (
-      <AutoGrowingTextInput
-        {...{...props, autoFocus}}
-        ref={(instance: ?(typeof AutoGrowingTextInput)) => instance && (editCommentInput = instance)}
+      <Component
+        {...inputProps}
+        multiline
+        autoFocus={props.isEditMode}
+        ref={(instance: typeof AutoGrowingTextInput) => {
+          if (instance) {
+            editCommentInput = instance;
+          }
+        }}
         placeholder={commentPlaceholderText}
         value={state.editingComment.text}
         editable={!state.isSaving}
@@ -307,7 +318,8 @@ const IssueCommentEdit = (props: Props) => {
         keyboardAppearance={theme.uiTheme.name}
         placeholderTextColor={theme.uiTheme.colors.$icon}
         autoCapitalize="sentences"
-        maxHeight={106}
+        minHeight={MIN_INPUT_SIZE}
+        maxHeight={props.isEditMode ? 200 : 106}
         onSelectionChange={(event) => {
           changeState({commentCaret: event.nativeEvent.selection.start});
         }}
@@ -386,7 +398,6 @@ const IssueCommentEdit = (props: Props) => {
 
         {state.isAttachActionsVisible && (
           <ModalPanelBottom
-            style={styles.floatContext}
             onHide={hideAttachActionsPanel}
           >
             {props.canAttach && (
@@ -452,7 +463,7 @@ const IssueCommentEdit = (props: Props) => {
           }}
         />
 
-        <View style={styles.commentEditContent}>
+        <ScrollView style={styles.commentEditContent}>
           <View style={styles.commentEditVisibility}>
             {renderVisibility()}
           </View>
@@ -476,7 +487,7 @@ const IssueCommentEdit = (props: Props) => {
               showAddAttachDialog={() => toggleAttachFileDialog(true)}
             />
           </View>
-        </View>
+        </ScrollView>
       </View>
     );
   };
