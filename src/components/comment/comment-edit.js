@@ -49,6 +49,7 @@ type Props = {
   onAttach: (attachment: Attachment, comment: IssueComment) => Array<Attachment>,
   onCommentChange: (comment: IssueComment, isAttachmentChange: boolean) => any,
   onSubmitComment: (comment: IssueComment) => any,
+  visibilityLabel?: string,
 };
 
 type State = {
@@ -189,6 +190,7 @@ const IssueCommentEdit = (props: Props) => {
       }}
       uiTheme={theme.uiTheme}
       getOptions={props.getVisibilityOptions}
+      visibilityDefaultLabel={props.visibilityLabel}
     />;
   };
 
