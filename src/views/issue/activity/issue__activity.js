@@ -154,14 +154,15 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
   canAddComment = () => this.issuePermissions.canCommentOn(this.props.issue);
 
   onSubmitComment: ((comment: Comment) => any) = async (comment: IssueComment) => {
-    const {submitDraftComment, activityPage, updateOptimisticallyActivityPage, loadActivitiesPage} = this.props;
+    const {submitDraftComment, activityPage, updateOptimisticallyActivityPage} = this.props;
 
     const currentUser: User = this.props.user;
+    const timestamp: number = Date.now();
     const commentActivity = [Object.assign(
-      convertCommentsToActivityPage([comment])[0],
+      convertCommentsToActivityPage([{...comment, created: timestamp}])[0],
       {
         tmp: true,
-        timestamp: Date.now(),
+        timestamp: timestamp,
         author: currentUser,
       }
     )];
@@ -175,9 +176,6 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     updateOptimisticallyActivityPage(newActivityPage);
 
     await submitDraftComment(comment);
-    if (comment?.attachments?.length > 0) {
-      loadActivitiesPage(true);
-    }
   };
 
   renderEditCommentInput() {

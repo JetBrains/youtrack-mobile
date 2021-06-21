@@ -158,6 +158,7 @@ export function submitDraftComment(draftComment: IssueComment) {
       notify(message, error);
       logEvent({message, isError: true, analyticsId: ANALYTICS_ISSUE_STREAM_SECTION});
     } else {
+      dispatch(loadActivity(true));
       dispatch(setEditingComment(null));
     }
   };
