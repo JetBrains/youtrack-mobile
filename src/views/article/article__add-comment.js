@@ -9,6 +9,7 @@ import IssuePermissions from '../../components/issue-permissions/issue-permissio
 import {attachmentActions} from './article__activity__attachment-actions-and-types';
 import {getApi} from '../../components/api/api__instance';
 import {getArticleCommentDraft, getMentions} from './arcticle-actions';
+import {visibilityArticleDefaultText} from '../../components/visibility/visibility-strings';
 
 import type {Article} from '../../flow/Article';
 import type {IssueComment} from '../../flow/CustomFields';
@@ -40,6 +41,7 @@ const ArticleAddComment = (props: Props) => {
       getCommentSuggestions={(query: string) => dispatch(getMentions(query))}
       canAttach={props.issuePermissions.canAddAttachmentTo(props.article)}
       onAttach={attachmentActions.uploadFileToArticleComment}
+      visibilityLabel={visibilityArticleDefaultText}
     />
   );
 };
