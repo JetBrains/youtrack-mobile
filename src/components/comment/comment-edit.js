@@ -40,6 +40,7 @@ type UserMentions = { users: Array<User> };
 
 type Props = {
   canAttach: boolean,
+  canRemoveAttach: (attachment: Attachment) => boolean,
   editingComment?: ?$Shape<IssueComment>,
   getCommentSuggestions: (query: string) => Promise<UserMentions>,
   getVisibilityOptions: () => Array<User | UserGroup>,
@@ -265,7 +266,7 @@ const IssueCommentEdit = (props: Props) => {
         onOpenAttachment={() => (
           usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'Preview comment attachment')
         )}
-        canRemoveAttachment={!state.isSaving && !state.mentionsVisible}
+        userCanRemoveAttachment={(attachment: Attachment) => !state.isSaving && props.canRemoveAttach(attachment)}
         onRemoveImage={async (attachment: Attachment) => {
           const resource: Function = (
             props.isArticle
@@ -482,11 +483,11 @@ const IssueCommentEdit = (props: Props) => {
           <View style={styles.commentEditAttachments}>
             {renderAttachments()}
 
-            <AttachmentAddPanel
+            {props.canAttach && <AttachmentAddPanel
               style={styles.commentEditAttachmentsAttachButton}
               isDisabled={state.isSaving || state.isAttachFileDialogVisible || state.mentionsLoading}
               showAddAttachDialog={() => toggleAttachFileDialog(true)}
-            />
+            />}
           </View>
         </ScrollView>
       </View>

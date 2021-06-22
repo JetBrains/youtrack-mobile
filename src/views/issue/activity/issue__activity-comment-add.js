@@ -27,6 +27,7 @@ const IssueActivityStreamCommentAdd = (props: Props) => {
   const issueContext: IssueContextData = useContext(IssueContext);
   const issue: IssueFull = issueContext.issue;
   const issuePermissions: IssuePermissions = issueContext.issuePermissions;
+  const canAttach: boolean = issuePermissions.canAddAttachmentTo(issue);
 
   return (
     <IssueCommentEdit
@@ -35,7 +36,8 @@ const IssueActivityStreamCommentAdd = (props: Props) => {
       onSubmitComment={props.onSubmitComment}
       editingComment={props.comment}
       getCommentSuggestions={(query: string) => dispatch(commentActions.loadCommentSuggestions(query))}
-      canAttach={issuePermissions.canAddAttachmentTo(issue)}
+      canAttach={canAttach}
+      canRemoveAttach={() => canAttach}
       onAddSpentTime={props.onAddSpentTime}
       onAttach={attachmentActions.uploadFileToIssueComment}
     />

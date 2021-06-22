@@ -240,6 +240,8 @@ export default class IssuePermissions {
 
   articleCanCommentOn = (article: Article): boolean => this.hasPermissionFor(article, CREATE_ARTICLE_COMMENT);
 
+  articleCanUpdate = (article: Article): boolean => this.hasPermissionFor(article, UPDATE_ARTICLE);
+
   articleCanUpdateComment = (article: Article, comment: IssueComment): boolean => {
     return this.canUpdateComment(article, comment, UPDATE_ARTICLE_COMMENT);
   };
@@ -255,4 +257,8 @@ export default class IssuePermissions {
   articleCanDeleteArticle = (projectRingId?: string) => (
     this.permissionsStore.has(DELETE_ARTICLE, projectRingId)
   )
+
+  articleCanAddAttachment = (article: Article): boolean => this.hasPermissionFor(article, CREATE_ARTICLE_COMMENT);
+
+  articleCanDeleteAttachment = (article: Article): boolean => this.articleCanUpdate(article);
 }

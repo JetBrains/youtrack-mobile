@@ -8,7 +8,7 @@ import IssuePermissions from '../../../components/issue-permissions/issue-permis
 import {attachmentActions} from './issue-activity__attachment-actions-and-types';
 import {getApi} from '../../../components/api/api__instance';
 
-import type {IssueComment} from '../../../flow/CustomFields';
+import type {Attachment, IssueComment} from '../../../flow/CustomFields';
 import type {IssueContextData, IssueFull} from '../../../flow/Issue';
 
 type Props = {
@@ -36,6 +36,7 @@ const IssueActivityStreamCommentEdit = (props: Props) => {
       editingComment={props.comment}
       getCommentSuggestions={(query: string) => dispatch(commentActions.loadCommentSuggestions(query))}
       canAttach={issuePermissions.canAddAttachmentTo(issue)}
+      canRemoveAttach={(attachment: Attachment) => issuePermissions.canDeleteCommentAttachment(attachment, issue)}
       onAddSpentTime={onAddSpentTime}
     />
   );
