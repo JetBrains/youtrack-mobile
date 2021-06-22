@@ -13,6 +13,7 @@ import ArticleActivityStreamCommentEdit from './article__edit-comment';
 import ArticleAddComment from './article__add-comment';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import Router from '../../components/router/router';
+import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLE_PAGE_STREAM} from '../../components/analytics/analytics-ids';
 import {convertCommentsToActivityPage, createActivityModel} from '../../components/activity/activity-helper';
@@ -150,20 +151,23 @@ const ArticleActivities = (props: Props) => {
         />
       </ScrollView>
       {issuePermissions.articleCanCommentOn(article) && (
-        <ArticleAddComment
-          article={article}
-          comment={articleCommentDraft}
-          onCommentChange={(comment: IssueComment): Function => dispatch(
-            articleActions.updateArticleCommentDraft(comment)
-          )}
-          onSubmitComment={async (comment: IssueComment): Function => {
-            updateActivities(comment);
-            await dispatch(articleActions.submitArticleCommentDraft(comment));
-            refreshActivities(false);
-            return Promise.resolve();
-          }}
-          issuePermissions={issuePermissions}
-        />
+        <>
+          <ArticleAddComment
+            article={article}
+            comment={articleCommentDraft}
+            onCommentChange={(comment: IssueComment): Function => dispatch(
+              articleActions.updateArticleCommentDraft(comment)
+            )}
+            onSubmitComment={async (comment: IssueComment): Function => {
+              updateActivities(comment);
+              await dispatch(articleActions.submitArticleCommentDraft(comment));
+              refreshActivities(false);
+              return Promise.resolve();
+            }}
+            issuePermissions={issuePermissions}
+          />
+          <KeyboardSpacerIOS top={98}/>
+        </>
       )}
     </>
   );
