@@ -131,7 +131,7 @@ const IssueCommentEdit = (props: Props) => {
   };
 
   const suggestionsNeededDetector = async (text: string, caret: number): Promise<void> => {
-    let word: ?string = ((getSuggestWord(text, caret): any): string | null);
+    const word: ?string = ((getSuggestWord(text, caret): any): string | null);
     if (!word) {
       return changeState({
         mentionsVisible: false,
@@ -139,14 +139,14 @@ const IssueCommentEdit = (props: Props) => {
       });
     }
 
-    if (word === '@') {
-      word = word.slice(1);
+    if (word[0] === '@') {
+      const mentionsQuery: string = word.slice(1);
       changeState({
         mentionsVisible: true,
-        mentionsQuery: word,
+        mentionsQuery,
         mentionsLoading: true,
       });
-      const mentions: UserMentions = await props.getCommentSuggestions(word);
+      const mentions: UserMentions = await props.getCommentSuggestions(mentionsQuery);
       changeState({mentionsLoading: false, mentions});
     }
   };
@@ -162,17 +162,20 @@ const IssueCommentEdit = (props: Props) => {
     }
   };
 
-  const renderUserMentions = (): Node => {
-    return (
-      <Mentions
-        isLoading={state.mentionsLoading}
-        mentions={state.mentions}
-        onApply={(user: User) => {
-          applySuggestion(user);
-          setTimeout(focus, 150);
-        }}
-      />
-    );
+  const renderUserMentions = (): ?Node => {
+    if (state.mentionsVisible) {
+      return (
+        <Mentions
+          style={props.isEditMode && styles.mentions}
+          isLoading={state.mentionsLoading}
+          mentions={state.mentions}
+          onApply={(user: User) => {
+            applySuggestion(user);
+            setTimeout(focus, 150);
+          }}
+        />
+      );
+    }
   };
 
   const renderVisibility = (): Node => {
@@ -448,28 +451,30 @@ const IssueCommentEdit = (props: Props) => {
     const isSubmitEnabled: boolean = editingComment.text || state.editingComment?.attachments?.length > 0;
     return (
       <View style={styles.commentEditContainer}>
-        <Header
-          style={styles.commentEditHeader}
-          title="Edit comment"
-          leftButton={<IconClose size={21} color={isSaving ? styles.disabled.color : styles.link.color}/>}
-          onBack={() => !isSaving && closeModal()}
-          rightButton={
-            (isSaving
-              ? <ActivityIndicator color={styles.link.color}/>
-              : <IconCheck size={20} color={isSubmitEnabled ? styles.link.color : styles.disabled.color}/>)
-          }
-          onRightButtonClick={async () => {
-            if (isSubmitEnabled) {
-              await submitComment(state.editingComment);
-              closeModal();
+        {!state.mentionsVisible && (
+          <Header
+            style={styles.commentEditHeader}
+            title="Edit comment"
+            leftButton={<IconClose size={21} color={isSaving ? styles.disabled.color : styles.link.color}/>}
+            onBack={() => !isSaving && closeModal()}
+            rightButton={
+              (isSaving
+                ? <ActivityIndicator color={styles.link.color}/>
+                : <IconCheck size={20} color={isSubmitEnabled ? styles.link.color : styles.disabled.color}/>)
             }
-          }}
-        />
+            onRightButtonClick={async () => {
+              if (isSubmitEnabled) {
+                await submitComment(state.editingComment);
+                closeModal();
+              }
+            }}
+          />
+        )}
 
         <ScrollView style={styles.commentEditContent}>
-          <View style={styles.commentEditVisibility}>
+          {!state.mentionsVisible && <View style={styles.commentEditVisibility}>
             {renderVisibility()}
-          </View>
+          </View>}
 
           <View style={styles.commentEditInput}>
             {renderCommentInput(
@@ -481,7 +486,7 @@ const IssueCommentEdit = (props: Props) => {
             )}
           </View>
 
-          <View style={styles.commentEditAttachments}>
+          {!state.mentionsVisible && <View style={styles.commentEditAttachments}>
             {renderAttachments()}
 
             {props.canAttach && <AttachmentAddPanel
@@ -489,7 +494,7 @@ const IssueCommentEdit = (props: Props) => {
               isDisabled={state.isSaving || state.isAttachFileDialogVisible || state.mentionsLoading}
               showAddAttachDialog={() => toggleAttachFileDialog(true)}
             />}
-          </View>
+          </View>}
         </ScrollView>
       </View>
     );
@@ -497,7 +502,7 @@ const IssueCommentEdit = (props: Props) => {
 
   return (
     <View style={props.isEditMode ? styles.commentEditContainer : styles.container}>
-      {state.mentionsVisible && renderUserMentions()}
+      {renderUserMentions()}
       {props.isEditMode ? renderEditComment() : renderAddNewComment()}
 
       {state.isAttachFileDialogVisible && renderAttachFileDialog()}

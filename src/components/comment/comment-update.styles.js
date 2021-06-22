@@ -179,4 +179,12 @@ export default EStyleSheet.create({
     borderBottomWidth: 0.5,
     borderColor: '$separator',
   },
+  mentions: {
+    marginHorizontal: UNIT * 2,
+    marginBottom: -UNIT,
+    maxHeight: '50%',
+    borderColor: '$disabled',
+    borderWidth: 0.5,
+    borderBottomWidth: 0,
+  },
 });
