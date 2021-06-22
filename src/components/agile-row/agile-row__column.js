@@ -22,7 +22,7 @@ type ColumnProps = {
   zoomedIn?: boolean
 }
 
-export default function AgileRowColumn(props: ColumnProps) {
+export default function AgileRowColumn(props: ColumnProps): Node {
   const {cell, uiTheme} = props;
   const issues: Array<IssueFull> = cell.issues || [];
 
