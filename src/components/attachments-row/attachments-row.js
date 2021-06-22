@@ -20,7 +20,7 @@ type Props = {
   attachments: Array<Attachment>,
   canRemoveAttachment?: boolean,
   imageHeaders?: Object,
-  onOpenAttachment: (type: string, name: string) => any,
+  userCanRemoveAttachment?: (attachment: Attachment) => any,
   onRemoveImage?: (attachment: Attachment) => any,
   style?: ViewStyleProp,
   uiTheme: UITheme,
@@ -62,6 +62,7 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
       onOpenAttachment,
       onRemoveImage,
       canRemoveAttachment,
+      userCanRemoveAttachment,
       uiTheme,
       style,
     } = this.props;
@@ -90,6 +91,7 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
               imageHeaders={this.getHeaders()}
               onOpenAttachment={onOpenAttachment}
               canRemoveImage={canRemoveAttachment}
+              userCanRemoveImage={userCanRemoveAttachment}
               onRemoveImage={onRemoveImage}
               uiTheme={uiTheme}
             />

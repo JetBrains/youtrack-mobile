@@ -11,7 +11,7 @@ import {getApi} from '../../components/api/api__instance';
 import {getMentions} from './arcticle-actions';
 
 import type {Article} from '../../flow/Article';
-import type {IssueComment} from '../../flow/CustomFields';
+import type {Attachment, IssueComment} from '../../flow/CustomFields';
 
 type Props = {
   article: Article,
@@ -25,18 +25,19 @@ type Props = {
 const ArticleActivityStreamCommentEdit = (props: Props) => {
   const dispatch: Function = useDispatch();
 
-  const {onCommentChange = () => {}} = props;
+  const {article, issuePermissions, onCommentChange = () => {}} = props;
   return (
     <IssueCommentEdit
       isArticle={true}
       isEditMode={true}
       onAttach={attachmentActions.uploadFileToArticleComment}
       onCommentChange={onCommentChange}
-      getVisibilityOptions={() => getApi().articles.getVisibilityOptions(props.article.id)}
+      getVisibilityOptions={() => getApi().articles.getVisibilityOptions(article.id)}
       onSubmitComment={props.onSubmitComment}
       editingComment={props.comment}
       getCommentSuggestions={(query: string) => dispatch(getMentions(query))}
-      canAttach={props.issuePermissions.canAddAttachmentTo(props.article)}
+      canAttach={issuePermissions.articleCanAddAttachment(article)}
+      canRemoveAttach={(attachment: Attachment) => issuePermissions.articleCanDeleteAttachment(article)}
     />
   );
 };

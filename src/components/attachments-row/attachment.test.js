@@ -78,6 +78,20 @@ describe('<Attachment/>', () => {
     });
   });
 
+  describe('Remove attachment permission', () => {
+    it('should use props fn check if attachment can be removed', async () => {
+      render(attachmentMock, null, () => true);
+
+      expect(instance.canRemove(attachmentMock)).toEqual(true);
+    });
+
+    it('should fallback to props param to check if attachment can be removed', async () => {
+      render(attachmentMock, true);
+
+      expect(instance.canRemove(attachmentMock)).toEqual(true);
+    });
+  });
+
 
   describe('openAttachmentUrl', () => {
     it('should show image attachment', async () => {
@@ -105,8 +119,8 @@ describe('<Attachment/>', () => {
     }, canRemoveImage);
   }
 
-  function render(attachment: Attachment, canRemoveImage: boolean) {
-    wrapper = doShallow(Object.assign({}, attachmentMock, attachment), canRemoveImage);
+  function render(attachment: Attachment, canRemoveImage, userCanRemoveImage) {
+    wrapper = doShallow(Object.assign({}, attachmentMock, attachment), canRemoveImage, userCanRemoveImage);
     instance = wrapper.instance();
   }
 
@@ -114,12 +128,13 @@ describe('<Attachment/>', () => {
     return wrapper && wrapper.find({testID: testId});
   }
 
-  function doShallow(attachment: Attachment, canRemoveImage: boolean = false) {
+  function doShallow(attachment: Attachment, canRemoveImage, userCanRemoveImage) {
     return shallow(
       <Attachment
         attach={attachment}
         canRemoveImage={canRemoveImage}
         uiTheme={DEFAULT_THEME}
+        userCanRemoveImage={userCanRemoveImage}
       />
     );
   }

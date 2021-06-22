@@ -24,6 +24,7 @@ type Props = {
   onOpenAttachment: (type: string, name: string) => any,
   onImageLoadingError: (error: Object) => any,
   canRemoveImage?: boolean,
+  userCanRemoveImage?: (attachment: Attachment) => boolean,
   onRemoveImage: (attachment: Attachment) => any,
   attach: Attachment,
   attachments: Array<Attachment>,
@@ -192,8 +193,15 @@ export default class Attach extends PureComponent<Props, State> {
     return hasMimeType.svg(this.props.attach);
   }
 
-  render(): Node {
-    const {attach, canRemoveImage, uiTheme} = this.props;
+  canRemove(): boolean {
+    if (this.props.userCanRemoveImage) {
+      return this.props.userCanRemoveImage(this.props.attach);
+    }
+    return !!this.props.canRemoveImage;
+  }
+
+  render() {
+    const {attach, uiTheme} = this.props;
     const isImage = this.isImage();
     const isSvg = this.isSVG();
 
@@ -213,7 +221,7 @@ export default class Attach extends PureComponent<Props, State> {
         </TouchableOpacity>
 
         {this.state.isRemoving && <ActivityIndicator style={styles.removeButton} color={uiTheme.colors.$link}/>}
-        {!this.state.isRemoving && canRemoveImage && (
+        {!this.state.isRemoving && this.canRemove() && (
           <TouchableOpacity
             style={styles.removeButton}
             hitSlop={HIT_SLOP}

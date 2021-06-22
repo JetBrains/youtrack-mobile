@@ -31,6 +31,7 @@ const ArticleAddComment = (props: Props) => {
     loadDraftComment();
   }, [loadDraftComment]);
 
+  const canAttach: boolean = props.issuePermissions.articleCanAddAttachment(props.article);
   return (
     <IssueCommentEdit
       isArticle={true}
@@ -39,7 +40,8 @@ const ArticleAddComment = (props: Props) => {
       onSubmitComment={props.onSubmitComment}
       editingComment={props.comment}
       getCommentSuggestions={(query: string) => dispatch(getMentions(query))}
-      canAttach={props.issuePermissions.canAddAttachmentTo(props.article)}
+      canAttach={canAttach}
+      canRemoveAttach={() => canAttach}
       onAttach={attachmentActions.uploadFileToArticleComment}
       visibilityLabel={visibilityArticleDefaultText}
     />

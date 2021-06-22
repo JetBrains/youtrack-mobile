@@ -6,6 +6,8 @@ import IssuePermissions, {
   PRIVATE_UPDATE_ISSUE,
   CAN_UPDATE_NOT_OWN_COMMENT,
   UPDATE_ARTICLE_COMMENT,
+  CREATE_ARTICLE_COMMENT,
+  UPDATE_ARTICLE,
 } from './issue-permissions';
 import sinon from 'sinon';
 
@@ -333,12 +335,39 @@ describe('IssuePermissions', function () {
         issuePermissions.articleCanUpdateComment(issueMock, commentMock)
       ).toEqual(true);
     });
-
-    function mockPermissionsHas(permission, value) {
-      permissionsMock.has.withArgs(permission).returns(value);
-    }
   });
 
+  describe('Article attachment', () => {
+    it('should allow to add an attachment', () => {
+      mockPermissionsHas(CREATE_ARTICLE_COMMENT, true);
+
+      expect(issuePermissions.articleCanAddAttachment(issueMock)).toEqual(true);
+    });
+
+    it('should not allow to add an attachment', () => {
+      mockPermissionsHas(CREATE_ARTICLE_COMMENT, false);
+
+      expect(issuePermissions.articleCanAddAttachment(issueMock)).toEqual(false);
+    });
+
+    it('should allow to delete an attachment', () => {
+      mockPermissionsHas(UPDATE_ARTICLE, true);
+
+      expect(issuePermissions.articleCanDeleteAttachment(issueMock)).toEqual(true);
+    });
+
+    it('should not allow to delete an attachment', () => {
+      mockPermissionsHas(UPDATE_ARTICLE, false);
+
+      expect(issuePermissions.articleCanDeleteAttachment(issueMock)).toEqual(false);
+    });
+
+  });
+
+
+  function mockPermissionsHas(permission, value) {
+    permissionsMock.has.withArgs(permission).returns(value);
+  }
 
   function createInstance(permissions, user) {
     return new IssuePermissions(permissions, user);
