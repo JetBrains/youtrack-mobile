@@ -35,6 +35,7 @@ import type {Theme, UITheme} from '../../../flow/Theme';
 import type {User, UserAppearanceProfile} from '../../../flow/User';
 import type {WorkItem} from '../../../flow/Work';
 import type {YouTrackWiki} from '../../../flow/Wiki';
+import type {Activity} from '../../../flow/Activity';
 
 type IssueActivityProps = $Shape<IssueActivityState
   & typeof activityActions
@@ -158,23 +159,18 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
     const currentUser: User = this.props.user;
     const timestamp: number = Date.now();
-    const commentActivity = [Object.assign(
+    const commentActivity = Object.assign(
       convertCommentsToActivityPage([{...comment, created: timestamp}])[0],
       {
         tmp: true,
         timestamp: timestamp,
         author: currentUser,
       }
-    )];
+    );
 
-    let newActivityPage = [].concat(activityPage);
-    if (currentUser?.profiles?.appearance?.naturalCommentsOrder) {
-      newActivityPage = newActivityPage.concat(commentActivity);
-    } else {
-      newActivityPage = commentActivity.concat(activityPage);
-    }
+    const newActivityPage: Array<Activity> = (activityPage || []).slice();
+    newActivityPage.unshift(commentActivity);
     updateOptimisticallyActivityPage(newActivityPage);
-
     await submitDraftComment(comment);
   };
 
