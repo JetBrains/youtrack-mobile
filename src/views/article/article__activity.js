@@ -13,7 +13,7 @@ import ArticleActivityStreamCommentEdit from './article__edit-comment';
 import ArticleAddComment from './article__add-comment';
 import IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import Router from '../../components/router/router';
-import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer';
+import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLE_PAGE_STREAM} from '../../components/analytics/analytics-ids';
 import {convertCommentsToActivityPage, createActivityModel} from '../../components/activity/activity-helper';
