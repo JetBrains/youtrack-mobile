@@ -1,7 +1,5 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {elevation1} from '../common-styles/shadow';
-import {headerMinHeight} from '../header/header.styles';
 import {mainText, secondaryText} from '../common-styles/typography';
 import {UNIT} from '../variables/variables';
 
@@ -77,22 +75,6 @@ export default EStyleSheet.create({
     textTransform: 'capitalize'
   },
 
-  commentEditContainer: {
-    flex: 1,
-    backgroundColor: '$background'
-  },
-  commentEditHeader: {
-    ...elevation1
-  },
-  commentEditContent: {
-    padding: UNIT * 2,
-    paddingTop: UNIT,
-    marginBottom: headerMinHeight
-  },
-  commentEditInput: {
-    padding: 0,
-    marginBottom: UNIT * 5,
-  },
   commentVisibility: {
     paddingVertical: UNIT / 2,
     marginTop: UNIT,

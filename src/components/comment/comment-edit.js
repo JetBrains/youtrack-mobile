@@ -1,8 +1,10 @@
 /* @flow */
 
 import React, {useCallback, useContext, useEffect, useState} from 'react';
-import {ActivityIndicator, View, Text, TouchableOpacity, TextInput, ScrollView} from 'react-native';
+import {ActivityIndicator, View, Text, TouchableOpacity, TextInput} from 'react-native';
 
+import InputScrollView from 'react-native-input-scroll-view';
+import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
 import throttle from 'lodash.throttle';
 import {AutoGrowingTextInput} from 'react-native-autogrow-textinput';
 import {useDispatch} from 'react-redux';
@@ -305,11 +307,10 @@ const IssueCommentEdit = (props: Props) => {
     const inputProps: Object = !props.isEditMode ? {
       minHeight: MIN_INPUT_SIZE,
       maxHeight: 106,
-    } : {};
+    } : {multiline: true};
     return (
       <Component
         {...inputProps}
-        multiline
         autoFocus={props.isEditMode}
         ref={(instance: typeof AutoGrowingTextInput) => {
           if (instance) {
@@ -323,8 +324,6 @@ const IssueCommentEdit = (props: Props) => {
         keyboardAppearance={theme.uiTheme.name}
         placeholderTextColor={theme.uiTheme.colors.$icon}
         autoCapitalize="sentences"
-        minHeight={MIN_INPUT_SIZE}
-        maxHeight={props.isEditMode ? 200 : 106}
         onSelectionChange={(event) => {
           changeState({commentCaret: event.nativeEvent.selection.start});
         }}
@@ -470,31 +469,38 @@ const IssueCommentEdit = (props: Props) => {
           />
         )}
 
-        <ScrollView style={styles.commentEditContent}>
-          {!state.mentionsVisible && <View style={styles.commentEditVisibility}>
-            {renderVisibility()}
-          </View>}
+        <InputScrollView
+          topOffset={styles.commentEditContentTopOffset.marginTop}
+          multilineInputStyle={styles.mainText}
+        >
+          <View style={styles.commentEditContent}>
+            {!state.mentionsVisible && <View style={styles.commentEditVisibility}>
+              {renderVisibility()}
+            </View>}
 
-          <View style={styles.commentEditInput}>
-            {renderCommentInput(
-              true,
-              () => {},
-              () => {
-                changeState({mentionsVisible: false});
-              }
-            )}
+            <View style={styles.commentEditInput}>
+              {renderCommentInput(
+                true,
+                () => {},
+                () => {
+                  changeState({mentionsVisible: false});
+                }
+              )}
+            </View>
+
+            {!state.mentionsVisible && <View style={styles.commentEditAttachments}>
+              {renderAttachments()}
+
+              {props.canAttach && <AttachmentAddPanel
+                style={styles.commentEditAttachmentsAttachButton}
+                isDisabled={state.isSaving || state.isAttachFileDialogVisible || state.mentionsLoading}
+                showAddAttachDialog={() => toggleAttachFileDialog(true)}
+              />}
+            </View>}
+
+            <KeyboardSpacerIOS />
           </View>
-
-          {!state.mentionsVisible && <View style={styles.commentEditAttachments}>
-            {renderAttachments()}
-
-            {props.canAttach && <AttachmentAddPanel
-              style={styles.commentEditAttachmentsAttachButton}
-              isDisabled={state.isSaving || state.isAttachFileDialogVisible || state.mentionsLoading}
-              showAddAttachDialog={() => toggleAttachFileDialog(true)}
-            />}
-          </View>}
-        </ScrollView>
+        </InputScrollView>
       </View>
     );
   };
