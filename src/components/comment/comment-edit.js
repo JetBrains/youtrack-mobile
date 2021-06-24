@@ -3,7 +3,7 @@
 import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {ActivityIndicator, View, Text, TouchableOpacity, TextInput, ScrollView} from 'react-native';
 
-import debounce from 'lodash.debounce';
+import throttle from 'lodash.throttle';
 import {AutoGrowingTextInput} from 'react-native-autogrow-textinput';
 import {useDispatch} from 'react-redux';
 
@@ -102,7 +102,7 @@ const IssueCommentEdit = (props: Props) => {
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debouncedChange = useCallback(debounce((draft: $Shape<IssueComment>, isAttachmentChange: boolean = false) => {
+  const debouncedChange = useCallback(throttle((draft: $Shape<IssueComment>, isAttachmentChange: boolean = false) => {
     props.onCommentChange(draft, isAttachmentChange);
   }, 300), []);
 
