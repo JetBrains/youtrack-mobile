@@ -116,10 +116,10 @@ export function getDraftComment() {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const {issue} = getState().issueState;
     const [error, draftComment] = await until(getApi().issue.getDraftComment(issue.id));
-    if (!error && draftComment) {
-      dispatch(setEditingComment(draftComment));
+    dispatch(setEditingComment(draftComment));
+    if (error) {
+      log.warn('Failed to receive issue comment draft', error);
     }
-    return draftComment;
   };
 }
 
@@ -150,8 +150,8 @@ export function submitDraftComment(draftComment: IssueComment) {
       notify(message, error);
       logEvent({message, isError: true, analyticsId: ANALYTICS_ISSUE_STREAM_SECTION});
     } else {
-      dispatch(loadActivity(true));
       dispatch(setEditingComment(null));
+      dispatch(loadActivity(true));
     }
   };
 }
