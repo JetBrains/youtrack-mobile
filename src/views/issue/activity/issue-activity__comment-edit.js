@@ -28,7 +28,7 @@ const IssueActivityStreamCommentEdit = (props: Props) => {
   const {onCommentChange = () => {}, onAddSpentTime = null} = props;
   return (
     <IssueCommentEdit
-      isEditMode={true}
+      focus={true}
       onAttach={attachmentActions.uploadFileToIssueComment}
       onCommentChange={onCommentChange}
       getVisibilityOptions={() => getApi().issue.getVisibilityOptions(issue.id)}

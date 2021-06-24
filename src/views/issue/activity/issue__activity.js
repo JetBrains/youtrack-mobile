@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {PureComponent} from 'react';
-import {ScrollView, View} from 'react-native';
+import {ScrollView, TouchableOpacity, View} from 'react-native';
 
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
@@ -14,6 +14,7 @@ import ErrorMessage from '../../../components/error-message/error-message';
 import IssueActivitiesSettings from './issue__activity-settings';
 import IssueActivityCommentAdd from './issue__activity-comment-add';
 import IssueActivityStream from './issue__activity-stream';
+import IssueActivityStreamCommentEdit from './issue-activity__comment-edit';
 import IssuePermissions from '../../../components/issue-permissions/issue-permissions';
 import KeyboardSpacerIOS from '../../../components/platform/keyboard-spacer.ios';
 import Router from '../../../components/router/router';
@@ -21,6 +22,7 @@ import Select from '../../../components/select/select';
 import {attachmentActions} from '../issue__attachment-actions-and-types';
 import {convertCommentsToActivityPage, createActivityModel} from '../../../components/activity/activity-helper';
 import {getApi} from '../../../components/api/api__instance';
+import {IconClose} from '../../../components/icon/icon';
 import {isIssueActivitiesAPIEnabled} from './issue-activity__helper';
 import {IssueContext} from '../issue-context';
 import {ThemeContext} from '../../../components/theme/theme-context';
@@ -55,6 +57,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
   imageHeaders: { Authorization: string, 'User-Agent': string } = getApi().auth.getAuthorizationHeaders();
   issuePermissions: $Shape<IssuePermissions>;
   props: IssueActivityProps;
+  issueContext: IssueContextData;
 
   componentDidMount() {
     this.loadIssueActivities();
@@ -175,6 +178,34 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
   };
 
   renderEditCommentInput() {
+    const {editingComment, submitEditedComment, setEditingComment} = this.props;
+    return <>
+      <View style={styles.editCommentPanel}>
+        <IssueActivityStreamCommentEdit
+          issueContext={this.issueContext}
+          comment={editingComment}
+          onCommentChange={
+            (comment: IssueComment, isAttachmentChange: boolean) => {
+              isAttachmentChange && submitEditedComment(comment, isAttachmentChange);
+            }
+          }
+          onSubmitComment={
+            (comment: IssueComment) => submitEditedComment(comment, false)
+          }
+        />
+        <TouchableOpacity
+          style={styles.editCommentCloseButton}
+          onPress={() => setEditingComment(null)}
+        >
+          <IconClose size={21} color={styles.link.color}/>
+        </TouchableOpacity>
+        <KeyboardSpacerIOS top={98}/>
+      </View>
+
+    </>;
+  }
+
+  renderAddCommentInput() {
     const {editingComment, issue, updateDraftComment} = this.props;
     const canAddWork: boolean = (
       issue?.project?.plugins?.timeTrackingSettings?.enabled &&
@@ -227,7 +258,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
   };
 
   render() {
-    const {isVisibilitySelectShown, activitiesLoadingError} = this.props;
+    const {isVisibilitySelectShown, activitiesLoadingError, editingComment} = this.props;
     const activitiesApiEnabled: boolean = isIssueActivitiesAPIEnabled();
     const hasError: boolean = this.hasLoadingError();
     const activityLoaded: boolean = this.isActivityLoaded();
@@ -239,6 +270,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     return (
       <IssueContext.Consumer>
         {(issueContext: IssueContextData) => {
+          this.issueContext = issueContext;
           this.issuePermissions = issueContext.issuePermissions;
           return <ThemeContext.Consumer>
             {(theme: Theme) => {
@@ -262,7 +294,8 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
                   </ScrollView>
 
-                  {Boolean(this.canAddComment()) && this.renderEditCommentInput()}
+                  {Boolean(this.canAddComment()) && !editingComment?.isEdit && this.renderAddCommentInput()}
+                  {editingComment?.isEdit && this.renderEditCommentInput()}
                 </View>
               );
             }}

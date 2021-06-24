@@ -24,6 +24,7 @@ import {ANALYTICS_ISSUE_STREAM_SECTION} from '../analytics/analytics-ids';
 import {commentPlaceholderText} from '../../app-text';
 import {composeSuggestionText, getSuggestWord} from '../mentions/mension-helper';
 import {getAttachmentActions} from '../attachments-row/attachment-actions';
+import {hasType} from '../api/api__resource-types';
 import {IconArrowUp, IconCheck, IconClose, IconAdd, IconAttachment} from '../icon/icon';
 import {ThemeContext} from '../theme/theme-context';
 
@@ -44,6 +45,7 @@ type Props = {
   canAttach: boolean,
   canRemoveAttach: (attachment: Attachment) => boolean,
   editingComment?: ?$Shape<IssueComment>,
+  focus?: boolean,
   getCommentSuggestions: (query: string) => Promise<UserMentions>,
   getVisibilityOptions: () => Array<User | UserGroup>,
   isArticle?: boolean,
@@ -280,7 +282,7 @@ const IssueCommentEdit = (props: Props) => {
           );
           await dispatch(resource(
             attachment,
-            props.isEditMode && state.editingComment.id
+            hasType.commentDraft(state.editingComment) ? undefined : state.editingComment.id
           ));
           const attachments: Array<Attachment> = state.editingComment.attachments.filter((it: Attachment) => it.id !== attachment.id);
           const isDeleted: boolean = !state.editingComment.text && !attachments.length;
@@ -311,7 +313,7 @@ const IssueCommentEdit = (props: Props) => {
     return (
       <Component
         {...inputProps}
-        autoFocus={props.isEditMode}
+        autoFocus={autoFocus || props.isEditMode}
         ref={(instance: typeof AutoGrowingTextInput) => {
           if (instance) {
             editCommentInput = instance;
@@ -385,7 +387,7 @@ const IssueCommentEdit = (props: Props) => {
 
           <View style={styles.commentInputContainer}>
             {renderCommentInput(
-              !!editingComment.reply,
+              props.focus || !!editingComment.reply,
               () => toggleVisibilityControl(true),
               () => {
                 changeState({mentionsVisible: false});

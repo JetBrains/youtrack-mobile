@@ -4,10 +4,8 @@ import React, {useContext, useEffect, useState} from 'react';
 
 import * as commentActions from './issue-activity__comment-actions';
 import ApiHelper from '../../../components/api/api__helper';
-import IssueActivityStreamCommentEdit from './issue-activity__comment-edit';
 import IssuePermissions from '../../../components/issue-permissions/issue-permissions';
 import ReactionsPanel from './issue__activity-reactions-dialog';
-import Router from '../../../components/router/router';
 import usage from '../../../components/usage/usage';
 import {ActivityStream} from '../../../components/activity-stream/activity__stream';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from '../../../components/analytics/analytics-ids';
@@ -74,21 +72,10 @@ const IssueActivityStream = (props: Props) => {
         comment.attachments = ApiHelper.convertAttachmentRelativeToAbsURLs(comment.attachments, backendUrl);
       }
       usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'Edit comment');
-      Router.PageModal({
-        children: (
-          <IssueActivityStreamCommentEdit
-            issueContext={issueContext}
-            comment={comment}
-            onCommentChange={
-              (comment: IssueComment, isAttachmentChange: boolean) => dispatch(
-                commentActions.submitEditedComment(comment, isAttachmentChange)
-              )
-            }
-            onSubmitComment={
-              (comment: IssueComment) => dispatch(commentActions.submitEditedComment(comment, false))
-            }
-          />
-        )});
+      dispatch(commentActions.setEditingComment({
+        ...comment,
+        isEdit: true,
+      }));
     };
     return {
       canCommentOn: issuePermissions.canCommentOn(issue),

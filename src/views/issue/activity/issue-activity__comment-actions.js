@@ -173,6 +173,9 @@ export function submitEditedComment(comment: IssueComment, isAttachmentChange: b
       if (isAttachmentChange) {
         notify('Comment updated');
       }
+      if (!isAttachmentChange) {
+        dispatch(setEditingComment(null));
+      }
       dispatch(loadActivity(true));
     } catch (error) {
       const errorMessage = 'Comment update failed';
