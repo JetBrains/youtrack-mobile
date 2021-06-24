@@ -81,6 +81,7 @@ export default EStyleSheet.create({
     ...mainText,
     color: '$text',
   },
+  mainText: mainText,
   commentSendButton: {
     width: MIN_INPUT_SIZE,
     height: MIN_INPUT_SIZE,
@@ -156,6 +157,9 @@ export default EStyleSheet.create({
   },
   commentEditHeader: {
     ...elevation1
+  },
+  commentEditContentTopOffset: {
+    marginTop: UNIT * 9,
   },
   commentEditContent: {
     padding: UNIT * 2,
