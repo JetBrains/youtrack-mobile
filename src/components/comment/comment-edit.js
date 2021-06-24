@@ -25,7 +25,7 @@ import {getAttachmentActions} from '../attachments-row/attachment-actions';
 import {IconArrowUp, IconCheck, IconClose, IconAdd, IconAttachment} from '../icon/icon';
 import {ThemeContext} from '../theme/theme-context';
 
-import styles, {MIN_INPUT_SIZE} from './comment-update.styles';
+import styles, {MIN_INPUT_SIZE} from './comment-edit.styles';
 
 import type {Attachment, IssueComment} from '../../flow/CustomFields';
 import type {Node} from 'react';
