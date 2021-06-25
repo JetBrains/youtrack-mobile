@@ -262,17 +262,31 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
       return (
         <View style={styles.activityCommentActions}>
           <View style={styles.activityCommentActionsMain}>
-            {(canUpdate || canComment) && (
+            {canComment && !isAuthor && (
               <TouchableOpacity
                 hitSlop={HIT_SLOP}
                 disabled={disabled}
-                onPress={() => (
-                  isAuthor
-                    ? commentActions && commentActions.onStartEditing && commentActions.onStartEditing(comment, props.youtrackWiki.backendUrl)
-                    : commentActions && commentActions.onReply && commentActions.onReply(comment)
-                )}>
+                onPress={() => {
+                  if (commentActions && commentActions.onReply) {
+                    commentActions.onReply(comment);
+                  }
+                }}>
                 <Text style={styles.link}>
-                  {isAuthor ? 'Edit' : 'Reply'}
+                  Reply
+                </Text>
+              </TouchableOpacity>
+            )}
+            {canUpdate && isAuthor && (
+              <TouchableOpacity
+                hitSlop={HIT_SLOP}
+                disabled={disabled}
+                onPress={() => {
+                  if (commentActions && commentActions.onStartEditing) {
+                    commentActions.onStartEditing(comment, props.youtrackWiki.backendUrl);
+                  }
+                }}>
+                <Text style={styles.link}>
+                  Edit
                 </Text>
               </TouchableOpacity>
             )}
