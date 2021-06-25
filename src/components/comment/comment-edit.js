@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {useCallback, useContext, useEffect, useState} from 'react';
-import {ActivityIndicator, View, Text, TouchableOpacity, TextInput} from 'react-native';
+import {ActivityIndicator, View, Text, TouchableOpacity, TextInput, Dimensions} from 'react-native';
 
 import InputScrollView from 'react-native-input-scroll-view';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
@@ -170,7 +170,7 @@ const IssueCommentEdit = (props: Props) => {
     if (state.mentionsVisible) {
       return (
         <Mentions
-          style={props.isEditMode && styles.mentions}
+          style={[{maxHeight: Dimensions.get('window').height / 4.5} ,props.isEditMode && styles.mentions]}
           isLoading={state.mentionsLoading}
           mentions={state.mentions}
           onApply={(user: User) => {
