@@ -180,27 +180,25 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
   renderEditCommentInput() {
     const {editingComment, submitEditedComment, setEditingComment} = this.props;
     return <>
-      <View style={styles.editCommentPanel}>
-        <IssueActivityStreamCommentEdit
-          issueContext={this.issueContext}
-          comment={editingComment}
-          onCommentChange={
-            (comment: IssueComment, isAttachmentChange: boolean) => {
-              isAttachmentChange && submitEditedComment(comment, isAttachmentChange);
-            }
+      <IssueActivityStreamCommentEdit
+        issueContext={this.issueContext}
+        comment={editingComment}
+        onCommentChange={
+          (comment: IssueComment, isAttachmentChange: boolean) => {
+            isAttachmentChange && submitEditedComment(comment, isAttachmentChange);
           }
-          onSubmitComment={
-            (comment: IssueComment) => submitEditedComment(comment, false)
-          }
-        />
-        <TouchableOpacity
+        }
+        onSubmitComment={
+          (comment: IssueComment) => submitEditedComment(comment, false)
+        }
+        header={<TouchableOpacity
           style={styles.editCommentCloseButton}
           onPress={() => setEditingComment(null)}
         >
           <IconClose size={21} color={styles.link.color}/>
-        </TouchableOpacity>
-        <KeyboardSpacerIOS top={98}/>
-      </View>
+        </TouchableOpacity>}
+      />
+      <KeyboardSpacerIOS top={98}/>
 
     </>;
   }

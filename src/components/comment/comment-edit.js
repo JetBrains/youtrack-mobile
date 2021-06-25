@@ -55,6 +55,7 @@ type Props = {
   onCommentChange: (comment: IssueComment, isAttachmentChange: boolean) => any,
   onSubmitComment: (comment: IssueComment) => any,
   visibilityLabel?: string,
+  header?: React$Element<any>,
 };
 
 type State = {
@@ -361,6 +362,7 @@ const IssueCommentEdit = (props: Props) => {
 
     return (
       <>
+        {props.header}
         <View style={[
           styles.commentHeaderContainer,
           showVisibilityControl ? styles.commentHeaderContainerCreate : null,

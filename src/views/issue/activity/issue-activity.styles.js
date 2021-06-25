@@ -71,17 +71,13 @@ export default EStyleSheet.create({
   reactionButton: {
     paddingHorizontal: UNIT / 2
   },
-  editCommentPanel: {
-    position: 'relative',
-  },
   editCommentCloseButton: {
-    position: 'absolute',
-    marginTop: UNIT,
+    marginLeft: -UNIT * 2 - 3,
+    marginBottom: -UNIT * 2,
     alignItems: 'center',
     justifyContent: 'center',
-    left: UNIT * 1.2,
-    width: UNIT * 3,
-    height: UNIT * 3,
+    width: UNIT * 4,
+    height: UNIT * 4,
   },
   link: {
     color: '$link',
