@@ -3,6 +3,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {elevation1, elevationBottom} from '../common-styles/shadow';
 import {mainText, secondaryText} from '../common-styles/typography';
 import {UNIT} from '../variables/variables';
+import {Platform} from 'react-native';
 import {separatorTopBorder} from '../common-styles/list';
 
 const INPUT_BORDER_RADIUS = UNIT;
@@ -13,7 +14,13 @@ export default EStyleSheet.create({
     maxHeight: '100%',
     paddingVertical: UNIT,
     paddingHorizontal: UNIT * 3,
-    ...elevationBottom
+    ...elevationBottom,
+    ...Platform.select({
+      android: {
+        borderTopWidth: 0.5,
+        borderTopColor: '$separator',
+      }
+    }),
   },
 
   suggestionsContainer: {
@@ -144,6 +151,7 @@ export default EStyleSheet.create({
   },
   floatContextButtonText: {
     paddingLeft: UNIT * 1.5,
+    color: '$text',
   },
 
   attachmentsContainer: {
