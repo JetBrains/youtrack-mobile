@@ -61,8 +61,10 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
   componentDidMount() {
     this.loadIssueActivities();
-    this.props.getDraftComment();
+    this.loadDraftComment();
   }
+
+  loadDraftComment = () => this.props.getDraftComment();
 
   loadIssueActivities: ((doNotReset?: boolean) => void) = (doNotReset?: boolean) => {
     if (isIssueActivitiesAPIEnabled()) {
@@ -189,11 +191,17 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
           }
         }
         onSubmitComment={
-          (comment: IssueComment) => submitEditedComment(comment, false)
+          async (comment: IssueComment) => {
+            await submitEditedComment(comment, false);
+            this.loadDraftComment();
+          }
         }
         header={<TouchableOpacity
           style={styles.editCommentCloseButton}
-          onPress={() => setEditingComment(null)}
+          onPress={async () => {
+            await setEditingComment(null);
+            this.loadDraftComment();
+          }}
         >
           <IconClose size={21} color={styles.link.color}/>
         </TouchableOpacity>}
