@@ -17,6 +17,7 @@ type Props = {
   onAddSpentTime?: () => void,
   onCommentChange?: (comment: IssueComment, isAttachmentChange: boolean) => Promise<void> | void,
   onSubmitComment: (comment: IssueComment) => Promise<void>,
+  header?: React$Element<any>,
 };
 
 
@@ -38,6 +39,7 @@ const IssueActivityStreamCommentEdit = (props: Props) => {
       canAttach={issuePermissions.canAddAttachmentTo(issue)}
       canRemoveAttach={(attachment: Attachment) => issuePermissions.canDeleteCommentAttachment(attachment, issue)}
       onAddSpentTime={onAddSpentTime}
+      header={props.header}
     />
   );
 };
