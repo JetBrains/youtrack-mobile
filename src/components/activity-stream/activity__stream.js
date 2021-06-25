@@ -279,7 +279,7 @@ export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsR
                 disabled={disabled}
                 onPress={() => {
                   if (commentActions && commentActions.onStartEditing) {
-                    commentActions.onStartEditing(comment, props.youtrackWiki.backendUrl);
+                    commentActions.onStartEditing(comment);
                   }
                 }}>
                 <Text style={styles.link}>

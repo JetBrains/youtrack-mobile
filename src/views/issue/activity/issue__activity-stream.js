@@ -2,6 +2,8 @@
 
 import React, {useContext, useEffect, useState} from 'react';
 
+import {useSelector} from 'react-redux';
+
 import * as commentActions from './issue-activity__comment-actions';
 import ApiHelper from '../../../components/api/api__helper';
 import IssuePermissions from '../../../components/issue-permissions/issue-permissions';
@@ -18,10 +20,11 @@ import type {
   ActivityStreamProps,
   ActivityStreamPropsReaction
 } from '../../../components/activity-stream/activity__stream';
+import type {ActivityStreamCommentActions} from '../../../flow/Activity';
+import type {AppState} from '../../../reducers';
 import type {Attachment, IssueComment} from '../../../flow/CustomFields';
 import type {IssueContextData, IssueFull} from '../../../flow/Issue';
 import type {Reaction} from '../../../flow/Reaction';
-import type {ActivityStreamCommentActions} from '../../../flow/Activity';
 
 type Props = ActivityStreamProps & {
   issueId: string,
@@ -30,6 +33,7 @@ type Props = ActivityStreamProps & {
 
 
 const IssueActivityStream = (props: Props) => {
+  const configBackendUrl: string = useSelector((appState: AppState) => appState.app.auth?.config?.backendUrl || '');
   const issueContext: IssueContextData = useContext(IssueContext);
 
   const [reactionState, setReactionState] = useState({
@@ -67,9 +71,9 @@ const IssueActivityStream = (props: Props) => {
     const canDeleteCommentAttachment = (attachment: Attachment) => (
       issuePermissions.canDeleteCommentAttachment(attachment, issue)
     );
-    const onEditComment = (comment: IssueComment, backendUrl?: string): void => {
-      if (comment.attachments && backendUrl) {
-        comment.attachments = ApiHelper.convertAttachmentRelativeToAbsURLs(comment.attachments, backendUrl);
+    const onEditComment = (comment: IssueComment): void => {
+      if (comment.attachments && configBackendUrl) {
+        comment.attachments = ApiHelper.convertAttachmentRelativeToAbsURLs(comment.attachments, configBackendUrl);
       }
       usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'Edit comment');
       dispatch(commentActions.setEditingComment({
