@@ -204,7 +204,7 @@ export const getAttachmentActions = (prefix: string) => {
       return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
         const api: Api = getApi();
         const issueId: string = getState().issueState.issue.id;
-        dispatch(actions.removeAttachmentFromComment(
+        await dispatch(actions.removeAttachmentFromComment(
           () => api.issue.removeFileFromComment(issueId, attach.id, commentId),
           attach.id
         ));
@@ -215,7 +215,7 @@ export const getAttachmentActions = (prefix: string) => {
       return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
         const api: Api = getApi();
         const articleId: string = getState().article.article.id;
-        dispatch(actions.removeAttachmentFromComment(
+        await dispatch(actions.removeAttachmentFromComment(
           () => api.articles.removeAttachmentFromComment(articleId, attach.id, commentId),
           attach.id
         ));

@@ -192,6 +192,9 @@ export default EStyleSheet.create({
     borderColor: '$separator',
   },
   mentions: {
+    marginLeft: UNIT * 2,
+  },
+  mentionsEdit: {
     marginHorizontal: UNIT * 2,
     marginBottom: -UNIT,
     maxHeight: '50%',
