@@ -20,7 +20,7 @@ import {convertCommentsToActivityPage, createActivityModel} from '../../componen
 
 import styles from './article.styles';
 
-import type {ActivityItem, ActivityStreamCommentActions} from '../../flow/Activity';
+import type {Activity, ActivityStreamCommentActions} from '../../flow/Activity';
 import type {AppState} from '../../reducers';
 import type {Article} from '../../flow/Article';
 import type {Attachment, IssueComment} from '../../flow/CustomFields';

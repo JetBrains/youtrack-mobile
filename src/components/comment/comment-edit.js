@@ -108,13 +108,17 @@ const IssueCommentEdit = (props: Props) => {
     changeState({isSaving});
   };
 
-  const getCurrentComment = (data: $Shape<IssueComment> = {}): IssueComment => ({
+  const getCurrentComment = (data: $Shape<IssueComment> = {}): $Shape<IssueComment> => ({
     ...props.editingComment,
     ...state.editingComment,
     text: state.editingCommentText,
     ...data,
     usesMarkdown: true,
   });
+
+  const setComment = useCallback((editingComment: $Shape<IssueComment> = EMPTY_COMMENT): void => {
+    changeState({editingComment});
+  }, []);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const delayedChange = useCallback(debounce((draft: $Shape<IssueComment>, isAttachmentChange: boolean = false) => {
@@ -123,7 +127,7 @@ const IssueCommentEdit = (props: Props) => {
 
   useEffect(() => {
     return () => setComment();
-  }, []);
+  }, [setComment]);
 
   useEffect(() => {
     if (props.editingComment === null || (!state.editingComment.id && props.editingComment?.id)) {
@@ -134,14 +138,10 @@ const IssueCommentEdit = (props: Props) => {
     }
     if (props.editingComment?.text && !state.editingCommentText) {
       changeState({
-        editingCommentText: props.editingComment?.text
+        editingCommentText: props.editingComment?.text,
       });
     }
-  }, [props.editingComment]);
-
-  const setComment = (editingComment: $Shape<IssueComment> = EMPTY_COMMENT): void => {
-    changeState({editingComment});
-  };
+  }, [props.editingComment, state.editingComment.id, state.editingCommentText]);
 
   const focus = (): void => {editCommentInput.focus();};
 
@@ -221,7 +221,7 @@ const IssueCommentEdit = (props: Props) => {
     const toggleSelectVisibility = (isVisibilitySelectVisible: boolean) => changeState({isVisibilitySelectVisible});
     return <VisibilityControl
       onShow={() => toggleSelectVisibility(true)}
-      onHidde={() => toggleSelectVisibility(false)}
+      onHide={() => toggleSelectVisibility(false)}
       visibility={state.editingComment.visibility}
       onSubmit={(visibility: Visibility) => {
         const comment: $Shape<IssueComment> = getCurrentComment({visibility});
