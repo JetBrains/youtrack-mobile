@@ -20,7 +20,8 @@ import {convertCommentsToActivityPage, createActivityModel} from '../../componen
 
 import styles from './article.styles';
 
-import type {Activity, ActivityStreamCommentActions} from '../../flow/Activity';
+import type {ActivityItem, ActivityStreamCommentActions} from '../../flow/Activity';
+import type {AppState} from '../../reducers';
 import type {Article} from '../../flow/Article';
 import type {Attachment, IssueComment} from '../../flow/CustomFields';
 import type {UITheme} from '../../flow/Theme';
@@ -47,6 +48,8 @@ const ArticleActivities = (props: Props) => {
   const articleCommentDraft: IssueComment | null = useSelector(store => store.article.articleCommentDraft);
   const user: User = useSelector(store => store.app.user);
   const isNaturalSortOrder: boolean = !!user?.profiles?.appearance?.naturalCommentsOrder;
+
+  const configBackendUrl: string = useSelector((appState: AppState) => appState.app.auth?.config?.backendUrl || '');
 
   const refreshActivities: Function = useCallback(
     (reset?: boolean) => dispatch(articleActions.loadActivitiesPage(reset)),
@@ -78,10 +81,10 @@ const ArticleActivities = (props: Props) => {
     const canDeleteComment = (comment: IssueComment): boolean => (
       issuePermissions.articleCanDeleteComment(article, comment)
     );
-    const onEditComment = (comment: IssueComment, backendUrl?: string): void => {
+    const onEditComment = (comment: IssueComment): void => {
       let attachments: Array<Attachment> = comment.attachments || [];
-      if (comment.attachments && backendUrl) {
-        attachments = ApiHelper.convertAttachmentRelativeToAbsURLs(comment.attachments, backendUrl);
+      if (comment.attachments && configBackendUrl) {
+        attachments = ApiHelper.convertAttachmentRelativeToAbsURLs(comment.attachments, configBackendUrl);
       }
       usage.trackEvent(ANALYTICS_ARTICLE_PAGE_STREAM, 'Edit comment');
       const onCommentChange: (comment: IssueComment) => Function = (comment: IssueComment) => dispatch(
