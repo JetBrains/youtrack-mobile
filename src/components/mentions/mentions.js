@@ -30,7 +30,7 @@ export default function Mentions(props: Props): Node {
     <ScrollView
       style={style}
       contentContainerStyle={styles.suggestionsContainer}
-      keyboardShouldPersistTaps="handled"
+      keyboardShouldPersistTaps="always"
     >
 
       <>
