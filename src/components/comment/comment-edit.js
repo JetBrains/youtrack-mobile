@@ -5,7 +5,7 @@ import {ActivityIndicator, View, Text, TouchableOpacity, TextInput, Dimensions} 
 
 import InputScrollView from 'react-native-input-scroll-view';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
-import throttle from 'lodash.throttle';
+import debounce from 'lodash.debounce';
 import {AutoGrowingTextInput} from 'react-native-autogrow-textinput';
 import {useDispatch} from 'react-redux';
 
@@ -62,6 +62,7 @@ type State = {
   attachFileSource: string | null,
   commentCaret: number,
   editingComment: $Shape<IssueComment>,
+  editingCommentText: string,
   isAttachFileDialogVisible: boolean,
   isAttachActionsVisible: boolean,
   isSaving: boolean,
@@ -85,6 +86,7 @@ const IssueCommentEdit = (props: Props) => {
     attachFileSource: null,
     commentCaret: 0,
     editingComment: EMPTY_COMMENT,
+    editingCommentText: EMPTY_COMMENT.text,
     isAttachFileDialogVisible: false,
     isAttachActionsVisible: false,
     isSaving: false,
@@ -106,13 +108,14 @@ const IssueCommentEdit = (props: Props) => {
     changeState({isSaving});
   };
 
-  const debouncedChange = useCallback(throttle((draft: $Shape<IssueComment>, isAttachmentChange: boolean = false) => {
+  const debouncedChange = useCallback(debounce((draft: $Shape<IssueComment>, isAttachmentChange: boolean = false) => {
     props.onCommentChange(draft, isAttachmentChange);
   }, 300), []);
 
   useEffect(() => {
     changeState({
-      editingComment: props.editingComment ? props.editingComment : EMPTY_COMMENT
+      editingComment: props.editingComment ? props.editingComment : EMPTY_COMMENT,
+      editingCommentText: state.editingCommentText || props.editingComment?.text || EMPTY_COMMENT
     });
   }, [props.editingComment]);
 
@@ -158,11 +161,18 @@ const IssueCommentEdit = (props: Props) => {
   const applySuggestion = (user: User) => {
     const newText: ?string = composeSuggestionText(user, state.editingComment.text, state.commentCaret);
     if (newText) {
+      const updatedText: string = `${newText} `;
+      const updatedComment: IssueComment = {
+        ...state.editingComment,
+        text: updatedText
+      };
       changeState({
-        editingComment: {...state.editingComment, text: `${newText} `},
+        editingComment: updatedComment,
+        editingCommentText: updatedText,
         mentionsVisible: false,
         isVisibilityControlVisible: true,
       });
+      debouncedChange(updatedComment);
     }
   };
 
@@ -170,7 +180,7 @@ const IssueCommentEdit = (props: Props) => {
     if (state.mentionsVisible) {
       return (
         <Mentions
-          style={[{maxHeight: Dimensions.get('window').height / 4.5} ,props.isEditMode && styles.mentions]}
+          style={[{maxHeight: Dimensions.get('window').height / 4.7}, props.isEditMode && styles.mentions]}
           isLoading={state.mentionsLoading}
           mentions={state.mentions}
           onApply={(user: User) => {
@@ -192,6 +202,7 @@ const IssueCommentEdit = (props: Props) => {
         const comment: $Shape<IssueComment> = {
           ...state.editingComment,
           visibility,
+          text: state.editingCommentText,
         };
         setComment(comment);
         !props.isEditMode && debouncedChange(comment);
@@ -218,6 +229,7 @@ const IssueCommentEdit = (props: Props) => {
         disabled={isDisabled}
         onPress={() => submitComment({
           ...state.editingComment,
+          text: state.editingCommentText,
           usesMarkdown: true,
         })}>
         {!isSaving && (
@@ -251,6 +263,7 @@ const IssueCommentEdit = (props: Props) => {
             const updatedComment: IssueComment = {
               ...state.editingComment,
               ...draftComment,
+              text: state.editingCommentText,
               attachments: [].concat(state.editingComment.attachments || []).concat(addedAttachments)
             };
             changeState({editingComment: updatedComment});
@@ -295,6 +308,10 @@ const IssueCommentEdit = (props: Props) => {
           changeState({
             editingComment: updatedComment
           });
+          setComment({
+            ...updatedComment,
+            text: state.editingCommentText,
+          });
           debouncedChange(updatedComment, true);
           if (props.isEditMode && isDeleted) {
             closeModal();
@@ -333,7 +350,7 @@ const IssueCommentEdit = (props: Props) => {
         onChangeText={(text) => {
           const updatedDraftComment: $Shape<IssueComment> = {
             ...state.editingComment,
-            text: text,
+            text,
           };
           setComment(updatedDraftComment);
           suggestionsNeededDetector(text, state.commentCaret);
