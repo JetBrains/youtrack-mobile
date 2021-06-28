@@ -220,7 +220,7 @@ const IssueCommentEdit = (props: Props) => {
     const toggleSelectVisibility = (isVisibilitySelectVisible: boolean) => changeState({isVisibilitySelectVisible});
     return <VisibilityControl
       onShow={() => toggleSelectVisibility(true)}
-      onHidde={() => toggleSelectVisibility(false)}
+      onHide={() => toggleSelectVisibility(false)}
       visibility={state.editingComment.visibility}
       onSubmit={(visibility: Visibility) => {
         const comment: $Shape<IssueComment> = getCurrentComment({visibility});
