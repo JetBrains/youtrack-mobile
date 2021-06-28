@@ -64,6 +64,10 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     this.loadDraftComment();
   }
 
+  componentWillUnmount() {
+    this.props.setEditingComment(null);
+  }
+
   loadDraftComment = () => this.props.getDraftComment();
 
   loadIssueActivities = (doNotReset?: boolean) => {

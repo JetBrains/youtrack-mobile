@@ -72,8 +72,9 @@ export default EStyleSheet.create({
     paddingHorizontal: UNIT / 2
   },
   editCommentCloseButton: {
-    marginLeft: -UNIT * 2 - 3,
-    marginBottom: -UNIT * 2,
+    position: 'absolute',
+    zIndex: 1,
+    left: UNIT / 1.5,
     alignItems: 'center',
     justifyContent: 'center',
     width: UNIT * 4,
