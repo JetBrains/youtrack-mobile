@@ -29,7 +29,7 @@ export default function Mentions(props: Props) {
     <ScrollView
       style={style}
       contentContainerStyle={styles.suggestionsContainer}
-      keyboardShouldPersistTaps="handled"
+      keyboardShouldPersistTaps="always"
     >
 
       <>
