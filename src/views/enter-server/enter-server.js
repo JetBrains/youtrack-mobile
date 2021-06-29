@@ -25,7 +25,6 @@ import clicksToShowCounter from '../../components/debug-view/clicks-to-show-coun
 import {resolveErrorMessage} from '../../components/error/error-resolver';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import {connectToNewYoutrack, openDebugView} from '../../actions/app-actions';
-import debounce from 'lodash.debounce';
 import {NETWORK_PROBLEM_TIPS} from '../../components/error-message/error-text-messages';
 
 import ErrorMessageInline from '../../components/error-message/error-message-inline';
@@ -129,10 +128,8 @@ export class EnterServer extends Component<Props, State> {
   }
 
   isValidInput(): any {
-    return debounce(() => {
-      const url = (this.state.serverUrl || '').trim();
-      return url.length > 0 && !url.match(/@/g);
-    }, 300)();
+    const url = (this.state.serverUrl || '').trim();
+    return url.length > 0 && !url.match(/@/g);
   }
 
   renderErrorInfoModalContent(): Node {
@@ -225,8 +222,6 @@ export class EnterServer extends Component<Props, State> {
                     >
                       <View style={styles.errorContainer}>
                         <ErrorMessageInline
-                          style={styles.errorText}
-                          testID="enterServerError"
                           error={error}
                         />
 
