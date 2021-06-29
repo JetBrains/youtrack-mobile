@@ -74,8 +74,8 @@ export function storeIssuesQuery(query: string): (() => void) {
   };
 }
 
-export async function storeSearchContext(searchContext: Folder) {
-  await flushStoragePart({searchContext});
+export function storeSearchContext(searchContext: Folder): () => Promise<void> {
+  return async () => {await flushStoragePart({searchContext});};
 }
 
 export function listEndReached(): {type: any} {
