@@ -91,7 +91,8 @@ const IssueActivityStream = (props: Props) => {
       canRestoreComment: (comment: IssueComment) => issuePermissions.canRestoreComment(issue, comment),
       onReply: (comment: IssueComment) => {
         dispatch(commentActions.setEditingComment({
-          text: `@${comment?.author?.login || getEntityPresentation(comment?.author)} `,
+          reply: true,
+          text: `> ${comment.text ? `${comment.text}\n\n` : ''}@${comment?.author?.login || getEntityPresentation(comment?.author)} `,
         }));
       },
       isAuthor: (comment: IssueComment) => issuePermissions.isCurrentUser(comment?.author),
