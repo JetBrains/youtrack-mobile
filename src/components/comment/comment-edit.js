@@ -125,7 +125,11 @@ const IssueCommentEdit = (props: Props) => {
   }, []);
 
   useEffect(() => {
-    if (props.editingComment === null || (!state.editingComment.id && props.editingComment?.id)) {
+    if (
+      props.editingComment === null ||
+      (!state.editingComment.id && props.editingComment?.id) ||
+      props.editingComment?.reply === true
+    ) {
       changeState({
         editingComment: props.editingComment === null ? EMPTY_COMMENT : props.editingComment,
         editingCommentText: state.editingCommentText || props.editingComment?.text || EMPTY_COMMENT.text,
