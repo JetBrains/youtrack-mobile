@@ -36,7 +36,6 @@ import type {Theme} from '../../flow/Theme';
 import type {UserGroup} from '../../flow/UserGroup';
 import type {User} from '../../flow/User';
 import type {Visibility} from '../../flow/Visibility';
-import type {CustomError} from '../../flow/Error';
 import type {AttachmentActions} from '../attachments-row/attachment-actions';
 
 type UserMentions = { users: Array<User> };
