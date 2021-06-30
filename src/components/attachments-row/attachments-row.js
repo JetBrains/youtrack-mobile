@@ -19,6 +19,8 @@ type Props = {
   attachingImage: ?Object,
   attachments: Array<Attachment>,
   canRemoveAttachment?: boolean,
+  onOpenAttachment: (type: string, name: string) => any,
+  onImageLoadingError: (error: any) => any,
   imageHeaders?: Object,
   userCanRemoveAttachment?: (attachment: Attachment) => any,
   onRemoveImage?: (attachment: Attachment) => any,
@@ -28,7 +30,7 @@ type Props = {
 
 
 export default class AttachmentsRow extends PureComponent<Props, void> {
-  scrollView: ?(typeof ScrollView);
+  scrollView: any;
 
   static defaultProps: $Shape<Props> = {
     attachments: [],
@@ -72,7 +74,7 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
     }
 
     return <ScrollView
-      ref={(node: ?(typeof ScrollView)): void => {
+      ref={(node: any): void => {
         this.scrollView = node;
       }}
       style={[styles.attachesScroll, style]}

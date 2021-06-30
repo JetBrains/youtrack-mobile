@@ -299,7 +299,7 @@ const IssueCommentEdit = (props: Props) => {
       <AttachmentsRow
         attachments={state.editingComment.attachments}
         attachingImage={null}
-        onImageLoadingError={(err: CustomError) => log.warn('onImageLoadingError', err.nativeEvent)}
+        onImageLoadingError={(err: any) => log.warn('onImageLoadingError', err.nativeEvent)}
         onOpenAttachment={() => (
           usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'Preview comment attachment')
         )}
@@ -314,15 +314,15 @@ const IssueCommentEdit = (props: Props) => {
             attachment,
             hasType.commentDraft(state.editingComment) ? undefined : state.editingComment.id
           ));
-          const attachments: Array<Attachment> = state.editingComment.attachments.filter(
+          const attachments: Array<Attachment> = (state.editingComment.attachments || []).filter(
             (it: Attachment) => it.id !== attachment.id
           );
           const isDeleted: boolean = !state.editingComment.text && !attachments.length;
           const updatedComment: IssueComment = getCurrentComment({
             attachments,
-            deleted: isDeleted
+            deleted: isDeleted,
           });
-          setComment(isDeleted ? undefined: updatedComment);
+          setComment(isDeleted ? undefined : updatedComment);
           delayedChange(updatedComment, true);
           if (props.isEditMode) {
             closeModal();
