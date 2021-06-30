@@ -67,7 +67,7 @@ server() {
       -Djetbrains.youtrack.baseUrl=$(server 'host:port')
       "
 
-    java $ytServerArgs -jar "$(server 'jar')" "$(server 'port')" &
+    java $ytServerArgs -jar "$(server 'jar')" "$(server 'port')/youtrack" &
 
     # Save pid on java process
     server 'pid' $!
