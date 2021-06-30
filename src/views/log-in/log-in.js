@@ -95,7 +95,7 @@ export class LogIn extends Component<Props, State> {
       Keystore.setInternetCredentials(config.auth.serverUri, username, password).catch(noop);
       usage.trackEvent(CATEGORY_NAME, 'Login via credentials', 'Success');
 
-      return onLogIn(authParams);
+      onLogIn(authParams);
     } catch (err) {
       usage.trackEvent(CATEGORY_NAME, 'Login via credentials', 'Error');
       const errorMessage = err.error_description || err.message;
@@ -117,7 +117,7 @@ export class LogIn extends Component<Props, State> {
       const authParams = await Auth.obtainTokenByOAuthCode(code, config);
       usage.trackEvent(CATEGORY_NAME, 'Login via browser', 'Success');
 
-      return onLogIn(authParams);
+      onLogIn(authParams);
     } catch (err) {
       usage.trackEvent(CATEGORY_NAME, 'Login via browser', 'Error');
       const errorMessage = await resolveErrorMessage(err);
@@ -178,7 +178,7 @@ export class LogIn extends Component<Props, State> {
                     underlineColorAndroid="transparent"
                     onSubmitEditing={() => this.focusOnPassword()}
                     value={username}
-                    onChangeText={(username) => this.setState({username})}
+                    onChangeText={(username: string) => this.setState({username})}
                   />
                   <TextInput
                     ref={this.passInputRef}
@@ -194,7 +194,7 @@ export class LogIn extends Component<Props, State> {
                       this.logInViaCredentials();
                     }}
                     secureTextEntry={true}
-                    onChangeText={(password) => this.setState({password})}/>
+                    onChangeText={(password: string) => this.setState({password})}/>
 
                   <TouchableOpacity
                     style={[
