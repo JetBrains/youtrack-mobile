@@ -92,7 +92,7 @@ const IssueActivityStream = (props: Props) => {
         usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'Reply on comment');
         dispatch(commentActions.setEditingComment({
           reply: true,
-          text: `@${comment?.author?.login || getEntityPresentation(comment?.author)} `,
+          text: `> ${comment.text ? `${comment.text}\n\n` : ''}@${comment?.author?.login || getEntityPresentation(comment?.author)} `,
         }));
       },
       isAuthor: (comment: IssueComment) => issuePermissions.isCurrentUser(comment?.author),
