@@ -21,40 +21,42 @@ export type IssueContextData = {
 }
 
 export type IssueOnList = {
+  $type?: string,
+  created: number,
+  fieldHash: { key: string, value: Object },
+  fields: Array<CustomFieldShort>,
   id: string,
   idReadable: string,
-  summary: string,
-  resolved: boolean,
   project: IssueProject,
   reporter: User,
-  created: number,
+  resolved: number | null,
+  summary: string,
+  tags: Array<Tag>,
   updated: number,
-  fields: Array<CustomFieldShort>,
-  fieldHash: any
 }
 
 export type IssueFull = {
-  $type: string,
+  $type?: string,
+  attachments?: Array<Attachment>,
+  comments?: Array<IssueComment>,
+  created: number,
+  description: string,
+  fieldHash?: any,
+  fields: Array<CustomField>,
   id: string,
   idReadable: string,
-  summary: string,
-  description: string,
-  resolved: boolean,
-  created: number,
-  updated: number,
-  votes: number,
-  wikifiedDescription: string,
-  watchers: { hasStar: boolean },
-  voters: { hasVote: boolean },
+  links: Array<IssueLink>,
   project: IssueProject,
   reporter: User,
-  updater: User,
-  fields: Array<CustomField>,
+  resolved: boolean,
+  summary: string,
   tags: Array<Tag>,
-  attachments: Array<Attachment>,
-  comments?: Array<IssueComment>,
-  links: Array<IssueLink>,
-  fieldHash: any
+  updated: number,
+  updater: User,
+  voters: { hasVote: boolean },
+  votes: number,
+  watchers: { hasStar: boolean },
+  wikifiedDescription: string,
 };
 
 export type AnyIssue = IssueOnList | IssueFull;

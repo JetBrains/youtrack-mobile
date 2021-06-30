@@ -1,16 +1,18 @@
 /* @flow */
+
 import {createReducer} from 'redux-create-reducer';
-import * as types from './issues-action-types';
-import {LOG_OUT} from '../../actions/action-types';
 import {ISSUE_CREATED} from '../create-issue/create-issue-action-types';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
-import type {IssueOnList, IssueFull, TransformedSuggestions} from '../../flow/Issue';
+import {LOG_OUT} from '../../actions/action-types';
+
+import * as types from './issues-action-types';
 import type {Folder} from '../../flow/User';
+import type {IssueOnList, TransformedSuggestion} from '../../flow/Issue';
 
 export type IssuesState = {
   query: string,
   skip: number,
-  queryAssistSuggestions: Array<TransformedSuggestions>,
+  queryAssistSuggestions: Array<TransformedSuggestion>,
 
   isLoadingMore: boolean,
   isListEndReached: boolean,
@@ -50,7 +52,7 @@ export default (createReducer(initialState, {
   [LOG_OUT]: (state: IssuesState): IssuesState => {
     return initialState;
   },
-  [ISSUE_CREATED]: (state: IssuesState, action: {issue: IssueFull}): IssuesState => {
+  [ISSUE_CREATED]: (state: IssuesState, action: {issue: IssueOnList}): IssuesState => {
     return {...state, issues: [action.issue, ...state.issues]};
   },
   [types.SET_ISSUES_QUERY]: (state: IssuesState, action: Object) => {
@@ -101,16 +103,17 @@ export default (createReducer(initialState, {
   [types.RESET_ISSUES_COUNT]: (state: IssuesState, action: {count: number}) => {
     return {...state, issuesCount: null};
   },
-  [ISSUE_UPDATED]: (state: IssuesState, action: {issue: IssueFull}) => {
-    const sourceIssue = action.issue;
+  [ISSUE_UPDATED]: (state: IssuesState, action: {issue: IssueOnList}) => {
+    const sourceIssue: IssueOnList = action.issue;
     function updateIssue(issue: IssueOnList): IssueOnList {
-      return Object.keys(issue).
-        reduce((updated, key) => {
+      return Object.keys(issue).reduce((updated: IssueOnList, key: string) => {
           return {...updated, [key]: sourceIssue[key]};
         }, {});
     }
 
-    const issues = state.issues.map(issue => issue.id === sourceIssue?.id ? updateIssue(issue) : issue);
+    const issues: Array<IssueOnList> = state.issues.map(
+      (issue: IssueOnList) => issue.id === sourceIssue?.id ? updateIssue(issue) : issue
+    );
 
     return {...state, issues};
   },
