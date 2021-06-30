@@ -17,6 +17,8 @@ import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLE_PAGE_STREAM} from '../../components/analytics/analytics-ids';
 import {convertCommentsToActivityPage, createActivityModel} from '../../components/activity/activity-helper';
+import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
+import {setArticleCommentDraft,} from './article-reducers';
 
 import styles from './article.styles';
 
@@ -119,6 +121,14 @@ const ArticleActivities = (props: Props) => {
         )
       ),
       canDeleteComment: canDeleteComment,
+      canCommentOn: issuePermissions.articleCanCommentOn(article),
+      onReply: (comment: IssueComment) => {
+        usage.trackEvent(ANALYTICS_ARTICLE_PAGE_STREAM, 'Reply on comment');
+        dispatch(setArticleCommentDraft({
+          reply: true,
+          text: `> ${comment.text ? `${comment.text}\n\n` : ''}@${comment?.author?.login || getEntityPresentation(comment?.author)} `,
+        }));
+      },
     });
   };
 
