@@ -31,7 +31,7 @@ type Props = {
   onSubmit?: ?(visibility: Visibility) => any,
   style?: ViewStyleProp,
   uiTheme: UITheme,
-  visibility?: Visibility,
+  visibility: Visibility | null,
   visibilityDefaultLabel?: string
 };
 

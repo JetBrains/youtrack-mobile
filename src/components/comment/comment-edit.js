@@ -382,7 +382,7 @@ const IssueCommentEdit = (props: Props) => {
     const {isSaving, mentionsVisible, editingComment, isVisibilityControlVisible, isVisibilitySelectVisible} = state;
     const hasText: boolean = !!editingComment.text;
     const showVisibilityControl: boolean = !mentionsVisible && (
-      editingComment.visibility ||
+      !!editingComment.visibility ||
       isVisibilitySelectVisible ||
       isVisibilityControlVisible
     );

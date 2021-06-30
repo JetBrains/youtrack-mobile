@@ -148,7 +148,7 @@ export type IssueComment = {
   text: string,
   usesMarkdown: boolean,
   author: User,
-  visibility: Visibility,
+  visibility: Visibility | null,
   reactionOrder?: string,
   reactions?: Array<Reaction>,
   issue?: IssueFull,
