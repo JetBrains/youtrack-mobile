@@ -2,10 +2,13 @@
 
 import {getThemeMode, getUITheme} from '../theme/theme';
 
-import type {ActionSheetProvider, ActionSheetOptions} from '@expo/react-native-action-sheet';
+import {ActionSheetProvider} from '@expo/react-native-action-sheet';
+
+import type {ActionSheetOptions} from '@expo/react-native-action-sheet';
 import type {UIThemeColors} from '../../flow/Theme';
 
 export type ActionSheetOption = { title: string, execute?: Function }
+// $FlowFixMe: any-typed ActionSheetOptions
 export type ShowActionSheetWithOptions = (options: ActionSheetOptions, callback: (i: number) => void) => void;
 
 async function doShowActions(
@@ -56,7 +59,7 @@ async function doShowActions(
 
 export function showActions(
   options: Array<ActionSheetOption>,
-  actionSheetInstance: ActionSheetProvider,
+  actionSheetInstance: typeof ActionSheetProvider,
   title?: string | null,
   message?: string | null
 ): Promise<?ActionSheetOption> {
