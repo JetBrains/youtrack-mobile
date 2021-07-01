@@ -122,26 +122,30 @@ export function addComment(comment: IssueComment): ((
 
 export function getDraftComment() {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const {issue} = getState().issueState;
-    const [error, draftComment] = await until(getApi().issue.getDraftComment(issue.id));
-    dispatch(setEditingComment(draftComment));
-    if (error) {
-      log.warn('Failed to receive issue comment draft', error);
+    const issueState: SingleIssueState = getState().issueState;
+    const {issue} = issueState;
+    if (issue && issue.id) {
+      try {
+        const draftComment: IssueComment = await until(getApi().issue.getDraftComment(issue.id));
+        dispatch(setEditingComment(draftComment));
+      } catch (error) {
+        log.warn('Failed to receive issue comment draft', error);
+      }
     }
   };
 }
 
 export function updateDraftComment(draftComment: IssueComment, doNotFlush: boolean = false) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    if (draftComment) {
-      const {issue} = getState().issueState;
+    const {issue} = getState().issueState;
+    if (draftComment && issue) {
       const [error, draft] = await until(getApi().issue.updateDraftComment(issue.id, draftComment));
       if (error) {
         log.warn('Failed to update a comment draft', error);
       } else if (!doNotFlush) {
         dispatch(setEditingComment(draft));
       }
-      return error? null : draft;
+      return error ? null : draft;
     }
   };
 }
@@ -150,16 +154,18 @@ export function submitDraftComment(draftComment: IssueComment) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const {issue} = getState().issueState;
 
-    await dispatch(updateDraftComment(draftComment, true));
-    const [error] = await until(getApi().issue.submitDraftComment(issue.id, draftComment));
-    if (error) {
-      const message: string = 'Failed to post a comment';
-      log.warn(message, error);
-      notify(message, error);
-      logEvent({message, isError: true, analyticsId: ANALYTICS_ISSUE_STREAM_SECTION});
-    } else {
-      dispatch(setEditingComment(null));
-      dispatch(loadActivity(true));
+    if (draftComment && issue) {
+      await dispatch(updateDraftComment(draftComment, true));
+      const [error] = await until(getApi().issue.submitDraftComment(issue.id, draftComment));
+      if (error) {
+        const message: string = 'Failed to post a comment';
+        log.warn(message, error);
+        notify(message, error);
+        logEvent({message, isError: true, analyticsId: ANALYTICS_ISSUE_STREAM_SECTION});
+      } else {
+        dispatch(setEditingComment(null));
+        dispatch(loadActivity(true));
+      }
     }
   };
 }
@@ -173,11 +179,11 @@ export function setEditingComment(comment: IssueComment) {
 
 export function submitEditedComment(comment: IssueComment, isAttachmentChange: boolean) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issueId = getState().issueState.issueId;
+    const issue: IssueFull = getState().issueState.issue;
     usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update comment');
 
     try {
-      const updatedComment = await getApi().issue.submitComment(issueId, comment);
+      const updatedComment = await getApi().issue.submitComment(issue.id, comment);
       log.info(`Comment ${updatedComment.id} updated. Refreshing...`);
       if (isAttachmentChange) {
         notify('Comment updated');
