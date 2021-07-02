@@ -1,6 +1,6 @@
 {
   "setupFilesAfterEnv": ["./setup"],
-  "testEnvironment": "./environment",
+  "testEnvironment": "./environment.js",
   "testRunner": "jest-circus/runner",
   "testTimeout": 12000,
   "testRegex": "\\.e2e\\.js$",
