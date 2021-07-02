@@ -118,7 +118,7 @@ export function getDraftComment() {
     const {issue} = issueState;
     if (issue && issue.id) {
       try {
-        const draftComment: IssueComment = await until(getApi().issue.getDraftComment(issue.id));
+        const draftComment: IssueComment = await getApi().issue.getDraftComment(issue.id);
         dispatch(setEditingComment(draftComment));
       } catch (error) {
         log.warn('Failed to receive issue comment draft', error);
