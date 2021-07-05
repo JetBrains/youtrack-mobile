@@ -2,25 +2,9 @@
 
 import ImagePicker from 'react-native-image-crop-picker';
 
-const FILE_NAME_REGEXP = /(?=\w+\.\w{3,4}$).+/ig;
+import type {Attachment, NormalizedAttachment} from '../../flow/Attachment';
 
-type Attachment = {
-  filename?: string,
-  path: string,
-  mime: string,
-  width: number,
-  height: number,
-}
-
-type NormalizedAttachment = {
-  url: string,
-  name: string,
-  mimeType: string,
-  dimensions: {
-    width: number,
-    height: number,
-  },
-}
+const FILE_NAME_REGEXP: RegExp = /(?=\w+\.\w{3,4}$).+/ig;
 
 function extractFileNameFromPath(path: string): string {
   const [fileName] = path.match(FILE_NAME_REGEXP) || [];
