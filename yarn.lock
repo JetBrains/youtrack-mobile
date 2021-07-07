@@ -2872,15 +2872,6 @@ buffer-from@^1.0.0:
   resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.1.1.tgz#32713bc028f75c02fdb710d7c7bcec1f2c6070ef"
   integrity sha512-MQcXEUbCKtEo7bhqEs6560Hyd4XaovZlO/k9V3hjVUF/zwW7KBVdSK4gIt/bzwS9MbR5qob+F5jusZsb0YQK2A==
 
-bugsnag-react-native@^2.23.10:
-  version "2.23.10"
-  resolved "https://registry.yarnpkg.com/bugsnag-react-native/-/bugsnag-react-native-2.23.10.tgz#f2156f15182d1e81d076386e9bff5b02a2db5153"
-  integrity sha512-Z47+dSitce8CpJa7rpDMP06tm3045LtIwaJ/nYtKFk+SnbL4qdPad8j4JCC65XL2P/wSOxHfMGYw1lPA4j+lWA==
-  dependencies:
-    iserror "^0.0.2"
-    promise "^7"
-    prop-types "^15.6.0"
-
 bunyan-debug-stream@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/bunyan-debug-stream/-/bunyan-debug-stream-1.1.1.tgz#4740a00b7d5c2d9d1b714925ab0802516040813e"
@@ -7866,7 +7857,7 @@ promise-polyfill@^6.0.1:
   resolved "https://registry.yarnpkg.com/promise-polyfill/-/promise-polyfill-6.1.0.tgz#dfa96943ea9c121fca4de9b5868cb39d3472e057"
   integrity sha1-36lpQ+qcEh/KTem1hoyznTRy4Fc=
 
-promise@^7, promise@^7.1.1:
+promise@^7.1.1:
   version "7.3.1"
   resolved "https://registry.yarnpkg.com/promise/-/promise-7.3.1.tgz#064b72602b18f90f29192b8b1bc418ffd1ebd3bf"
   integrity sha512-nolQXZ/4L+bP/UGlkfaIujX9BKxGwmQ9OT4mOt5yvy8iK1h3wqTEJCijzGANTCCl9nWjY41juyAn2K3Q1hLLTg==

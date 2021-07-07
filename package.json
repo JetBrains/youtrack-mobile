@@ -73,7 +73,6 @@
     "@react-native-community/netinfo": "^6.0.0",
     "@reduxjs/toolkit": "^1.4.0",
     "base64-js": "1.5.1",
-    "bugsnag-react-native": "^2.23.10",
     "diff-match-patch": "^1.0.5",
     "entities": "^1.1.1",
     "from-now": "1.0.2",
