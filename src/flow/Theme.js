@@ -8,7 +8,7 @@ export type Theme = {
 
 export type BarStyle = 'light-content' | 'dark-content';
 
-export type UIThemeColors = {|
+type UIThemeCommonColors = {|
   $background: string,
   $boxBackground: string,
 
@@ -31,6 +31,24 @@ export type UIThemeColors = {|
 
   $separator: string
 |};
+
+export type UIThemeColorsPaletteColors = {|
+  $greyBackground: string,
+  $greyColor: string,
+  $redBackground: string,
+  $redColor: string,
+  $yellowBackground: string,
+  $yellowColor: string,
+  $greenBackground: string,
+  $greenColor: string,
+  $blueBackground: string,
+  $blueColor: string,
+|};
+
+export type UIThemeColors = {
+  ...$Exact<UIThemeCommonColors>,
+  ...$Exact<UIThemeColorsPaletteColors>,
+};
 
 export type UIThemeName = 'light' | 'dark';
 

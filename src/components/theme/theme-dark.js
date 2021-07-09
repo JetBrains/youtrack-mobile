@@ -1,5 +1,7 @@
 /* @flow */
 
+import {themeColorsPalette} from './theme-common';
+
 import type {UITheme} from '../../flow/Theme';
 
 const dark: UITheme = {
@@ -31,6 +33,8 @@ const dark: UITheme = {
     $navigation: '#696969',
 
     $separator: 'rgba(210, 254, 254, 0.15)',
+
+    ...themeColorsPalette,
   },
 };
 
