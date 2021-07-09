@@ -18,3 +18,5 @@ export const ANALYTICS_ISSUE_STREAM_SECTION = 'Issue Stream';
 export const ANALYTICS_ISSUES_PAGE = 'Issue List';
 
 export const ANALYTICS_NOTIFICATIONS_PAGE = 'inbox view';
+
+export const ANALYTICS_PREVIEW_PAGE = 'Preview file view';

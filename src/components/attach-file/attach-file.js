@@ -13,7 +13,7 @@ function extractFileNameFromPath(path: string): string {
 
 async function pickPhoto(method: string): Promise<NormalizedAttachment> {
   const image: Attachment = await ImagePicker[method]({
-    mediaType: 'photo',
+    mediaType: 'any',
   });
 
   const filePath: string = image.path || '';

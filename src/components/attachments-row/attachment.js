@@ -1,23 +1,25 @@
 /* @flow */
 
-import type {Node} from 'React';
 import React, {PureComponent} from 'react';
-import {View, ActivityIndicator, TouchableOpacity, Text, Linking, Alert} from 'react-native';
+import {View, ActivityIndicator, TouchableOpacity, Text, Alert} from 'react-native';
+
+import debounce from 'lodash.debounce';
+import ImageProgress from 'react-native-image-progress';
 import {SvgUri} from 'react-native-svg';
 
-import {View as AnimatedView} from 'react-native-animatable';
-import ImageProgress from 'react-native-image-progress';
 import Router from '../router/router';
-import debounce from 'lodash.debounce';
 import {hasMimeType} from '../mime-type/mime-type';
-import {isAndroidPlatform} from '../../util/util';
-import {IconRemoveFilled} from '../icon/icon';
-
 import {HIT_SLOP} from '../common-styles/button';
+import {IconRemoveFilled} from '../icon/icon';
+import {isAndroidPlatform} from '../../util/util';
+import {View as AnimatedView} from 'react-native-animatable';
+
 import styles from './attachments-row.styles';
 
 import type {Attachment} from '../../flow/CustomFields';
+import type {Node} from 'React';
 import type {UITheme} from '../../flow/Theme';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   imageHeaders: ?Object,
@@ -80,31 +82,46 @@ export default class Attach extends PureComponent<Props, State> {
   }
 
   openAttachmentUrl(name: string, url: string): void | Promise<null> {
-    const ATTACH_EXT_BLACK_LIST = [/\.mp4\?/, /\.m4v\?/];
-    const isVideo = ATTACH_EXT_BLACK_LIST.some(reg => reg.test(url));
     this.props.onOpenAttachment('file', name);
-
-    if (!isVideo) {
-      Router.AttachmentPreview({
-        url,
-        name,
-        headers: this.props.imageHeaders,
-      });
-    } else {
-      Linking.openURL(url);
-    }
+    Router.AttachmentPreview({
+      url,
+      name,
+      headers: this.props.imageHeaders,
+    });
   }
 
   renderSVG(): Node {
     return (
       <View
         testID="attachmentSvg"
-        style={styles.attachmentImage}>
+        style={styles.attachmentImage}
+      >
         <SvgUri
           width="100%"
           height="100%"
           uri={this.props.attach.thumbnailURL}
         />
+      </View>
+    );
+  }
+
+  renderThumb(fileTypeStyle: ViewStyleProp = null): Node {
+    const {attach} = this.props;
+    return (
+      <View
+        style={[styles.attachmentImage, fileTypeStyle]}
+      >
+        <View style={styles.attachmentType}>
+          <View style={styles.attachmentText}>
+            <Text numberOfLines={1} style={styles.attachmentText}>
+              {attach.name.split('.').pop() || attach.name}
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.attachmentName}>
+          <Text numberOfLines={2} style={styles.attachmentFileText}>{attach.name}</Text>
+        </View>
       </View>
     );
   }
@@ -148,7 +165,7 @@ export default class Attach extends PureComponent<Props, State> {
         testID="attachmentFile"
         style={[styles.attachmentImage, styles.attachmentFile]}
       >
-        <Text style={styles.attachmentName}>{attach.name}</Text>
+        <Text style={styles.attachmentFileText}>{attach.name}</Text>
       </View>
     );
   }
@@ -177,20 +194,30 @@ export default class Attach extends PureComponent<Props, State> {
   };
 
   onAttachPress: (() => void) = () => {
-    const {attach} = this.props;
-    if (this.isImage() || this.isSVG()) {
+    const {imageHeaders, attach, onRemoveImage} = this.props;
+    if (this.isVideo()) {
+      Router.Image({
+        current: attach,
+        imageHeaders,
+        onRemoveImage: () => onRemoveImage(attach),
+      });
+    } else if (this.isImage() || this.isSVG()) {
       this.showImageAttachment(attach);
     } else {
       this.openAttachmentUrl(attach.name, attach.url);
     }
   };
 
-  isImage(): any {
+  isImage(): boolean {
     return hasMimeType.image(this.props.attach);
   }
 
-  isSVG(): any {
+  isSVG(): boolean {
     return hasMimeType.svg(this.props.attach);
+  }
+
+  isVideo(): boolean {
+    return hasMimeType.video(this.props.attach);
   }
 
   canRemove(): boolean {
@@ -200,10 +227,19 @@ export default class Attach extends PureComponent<Props, State> {
     return !!this.props.canRemoveImage;
   }
 
-  render() {
+  renderAttach(): Node {
+    if (this.isVideo()) {
+      return this.renderThumb(styles.attachmentVideo);
+    } else if (this.isSVG()) {
+      return this.renderSVG();
+    } else if (this.isImage()) {
+      return this.renderImage();
+    }
+    return this.renderFile();
+  }
+
+  render(): Node {
     const {attach, uiTheme} = this.props;
-    const isImage = this.isImage();
-    const isSvg = this.isSVG();
 
     return (
       <View
@@ -214,10 +250,7 @@ export default class Attach extends PureComponent<Props, State> {
           testID="attachment"
           onPress={this.onAttachPress}
         >
-          {isSvg && this.renderSVG()}
-          {Boolean(isImage && !isSvg) && this.renderImage()}
-          {Boolean(!isImage && !isSvg) && this.renderFile()}
-
+          {this.renderAttach()}
         </TouchableOpacity>
 
         {this.state.isRemoving && <ActivityIndicator style={styles.removeButton} color={uiTheme.colors.$link}/>}

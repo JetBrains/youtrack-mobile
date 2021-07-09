@@ -1,6 +1,9 @@
 /* @flow */
 
 import EStyleSheet from 'react-native-extended-stylesheet';
+
+import {headerMinHeight} from '../../components/header/header.styles';
+import {title} from '../../components/common-styles/issue';
 import {UNIT} from '../../components/variables/variables';
 
 export default (EStyleSheet.create({
@@ -39,5 +42,24 @@ export default (EStyleSheet.create({
   link: {
     color: '$link',
   },
-
+  video: {
+    backgroundColor: 'transparent',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    width: '100%',
+    height: '100%',
+  },
+  error: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: -headerMinHeight * 2,
+  },
+  errorTitle: {
+    marginBottom: UNIT * 1.5,
+    ...title,
+    color: '$text',
+  },
 }): any);

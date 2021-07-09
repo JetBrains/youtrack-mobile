@@ -21,8 +21,32 @@ export default EStyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  attachmentFileText: {
+    fontSize: 10,
+    color: '$text',
+  },
+  attachmentVideo: {
+    backgroundColor: '$blueBackground',
+  },
+  attachmentType: {
+    position: 'absolute',
+    top: UNIT,
+    left: UNIT,
+  },
+  attachmentText: {
+    borderRadius: 3,
+    paddingVertical: 1,
+    paddingHorizontal: UNIT / 4,
+    backgroundColor: '$blueColor',
+    textTransform: 'uppercase',
+    color: '$textButton',
+    fontSize: 12,
+    fontWeight: '500',
+  },
   attachmentName: {
-    color: '$icon',
+    flexGrow: 1,
+    padding: UNIT,
+    justifyContent: 'flex-end',
   },
   imageActivityIndicator: {
     backgroundColor: '$mask',
