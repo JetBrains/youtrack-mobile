@@ -19,7 +19,7 @@ import {IconNoProjectFound} from '../../components/icon/icon-no-found';
 import {isAndroidPlatform} from '../../util/util';
 import {notify} from '../../components/notification/notification';
 
-import styles from './image.styles';
+import styles from './preview-file.styles';
 
 import type {Attachment} from '../../flow/CustomFields';
 import type {Node} from 'React';

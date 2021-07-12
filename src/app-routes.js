@@ -16,7 +16,7 @@ export const routeMap = {
   Page: 'Page',
   PageModal: 'PageModal',
   Settings: 'Settings',
-  Image: 'Image',
+  PreviewFile: 'PreviewFile',
   Issue: 'Issue',
   Issue2: 'Issue2',
   WikiPage: 'WikiPage',

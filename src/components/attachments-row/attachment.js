@@ -73,7 +73,7 @@ export default class Attach extends PureComponent<Props, State> {
       return this.openAttachmentUrl(attach.name, attach.url);
     }
 
-    return Router.Image({
+    return Router.PreviewFile({
       imageAttachments: attachments.filter((it: Attachment) => hasMimeType.previewable(it)),
       current: attach,
       imageHeaders,
@@ -196,7 +196,7 @@ export default class Attach extends PureComponent<Props, State> {
   onAttachPress: (() => void) = () => {
     const {imageHeaders, attach, onRemoveImage} = this.props;
     if (this.isVideo()) {
-      Router.Image({
+      Router.PreviewFile({
         current: attach,
         imageHeaders,
         onRemoveImage: () => onRemoveImage(attach),

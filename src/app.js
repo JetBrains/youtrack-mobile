@@ -19,7 +19,7 @@ import AttachmentPreview from './views/attachment-preview/attachment-preview';
 import CreateIssue from './views/create-issue/create-issue';
 import EnterServer from './views/enter-server/enter-server';
 import Home from './views/home/home';
-import Image from './views/image/image';
+import PreviewFile from './views/preview-file/preview-file';
 import Inbox from './views/inbox/inbox';
 import Issue from './views/issue/issue';
 import Issues from './views/issues/issues';
@@ -122,7 +122,7 @@ class YouTrackMobile extends Component<void, void> {
     Router.registerRoute({name: routeMap.ArticleCreate, component: ArticleCreate, modal: true});
     Router.registerRoute({name: routeMap.AttachmentPreview, component: AttachmentPreview, modal: true});
     Router.registerRoute({name: routeMap.CreateIssue, component: CreateIssue, modal: true});
-    Router.registerRoute({name: routeMap.Image, component: Image, modal: true});
+    Router.registerRoute({name: routeMap.PreviewFile, component: PreviewFile, modal: true});
     Router.registerRoute({name: routeMap.Inbox, component: Inbox, type: 'reset'});
     Router.registerRoute({name: routeMap.Issue, component: Issue});
     Router.registerRoute({name: routeMap.KnowledgeBase, component: KnowledgeBase, type: 'reset'});

@@ -62,7 +62,7 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
   };
 
   onImagePress: ((source: any) => any) = (source: Object) => {
-    return Router.Image({
+    return Router.PreviewFile({
       current: source,
       imageAttachments: this.props.attachments.filter(attach => hasMimeType.previewable(attach)),
       imageHeaders: this.props.imageHeaders,
