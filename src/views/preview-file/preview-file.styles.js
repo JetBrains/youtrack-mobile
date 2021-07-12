@@ -14,6 +14,7 @@ export default (EStyleSheet.create({
 
   loader: {
     position: 'absolute',
+    backgroundColor: 'transparent',
     top: 0,
     left: 0,
     right: 0,

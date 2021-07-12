@@ -9,7 +9,6 @@ import {SvgFromUri} from 'react-native-svg';
 
 import Header from '../../components/header/header';
 import ImageProgress from 'react-native-image-progress';
-import log from '../../components/log/log';
 import Router from '../../components/router/router';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_PREVIEW_PAGE} from '../../components/analytics/analytics-ids';
@@ -17,6 +16,7 @@ import {hasMimeType} from '../../components/mime-type/mime-type';
 import {IconClose} from '../../components/icon/icon';
 import {IconNoProjectFound} from '../../components/icon/icon-no-found';
 import {isAndroidPlatform} from '../../util/util';
+import {logEvent} from '../../components/log/log-helper';
 import {notify} from '../../components/notification/notification';
 
 import styles from './preview-file.styles';
@@ -54,6 +54,7 @@ const ImagePreview = (props: Props): Node => {
   // eslint-disable-next-line no-unused-vars
   const [index, updateCurrentIndex] = useState(0);
   const [error, updateError] = useState(null);
+  const [isLoading, updateIsLoading] = useState(false);
 
   const closeView = (): void => {Router.pop(true);};
 
@@ -62,14 +63,18 @@ const ImagePreview = (props: Props): Node => {
       (it: Attachment) => it.id === attachment.id) || 0
   ), [props.imageAttachments]);
 
-  const reset = (): void => {updateError(null);};
-
   useEffect(() => {
-    reset();
+    updateError(null);
+    updateIsLoading(false);
+
     if (props.imageAttachments) {
       updateCurrentIndex(getCurrentIndex(props.current));
     }
   }, [getCurrentIndex, props]);
+
+  const renderLoader = (): React$Element<ActivityIndicator> => (
+    <ActivityIndicator color={styles.loader.color} style={styles.loader}/>
+  );
 
   const renderImage: ((imageProps: any) => Node) = (imageProps: { source: Attachment }) => {
     const attach: Attachment = imageProps.source && props.imageAttachments[getCurrentIndex(imageProps.source)];
@@ -80,7 +85,7 @@ const ImagePreview = (props: Props): Node => {
         uri={attach.url}
       />)
       : (<ImageProgress
-        renderIndicator={() => <ActivityIndicator color={styles.loader.color} style={styles.loader}/>}
+        renderIndicator={renderLoader}
         onError={() => notify(ERROR_MESSAGE)}
         {...imageProps}
       />);
@@ -102,20 +107,17 @@ const ImagePreview = (props: Props): Node => {
       controls={true}
       fullscreen={false}
       headers={props.imageHeaders}
-      onLoadStart={() => {
-        log.info('Start loading a video', props.current.name);
-      }}
-      onReadyForDisplay={() => {
-        reset();
-        log.info('Start playing a video', props.current.name);
-      }}
+      onLoad={() => updateIsLoading(false)}
+      onLoadStart={() => updateIsLoading(true)}
+      onReadyForDisplay={() => updateIsLoading(false)}
       onError={(onError: VideoError) => {
-        reset();
-        const errorMessage: string = (
+        updateIsLoading(false);
+        const message: string = (
           onError?.error?.localizedFailureReason || onError?.error?.localizedDescription || ERROR_MESSAGE
         );
-        updateError(errorMessage);
-        log.warn(errorMessage);
+        updateError(message);
+        logEvent({message, isError: true});
+        notify(message);
       }}
       paused={!isAndroid}
       rate={0.0}
@@ -162,6 +164,8 @@ const ImagePreview = (props: Props): Node => {
       {isImageAttach() && renderImageGallery()}
 
       {!isImageAttach() && renderVideo()}
+
+      {isLoading && renderLoader()}
 
       {!!error && (
         <View style={[styles.container, styles.error]}>
