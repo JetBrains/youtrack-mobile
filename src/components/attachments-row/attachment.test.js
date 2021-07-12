@@ -22,8 +22,8 @@ describe('<Attachment/>', () => {
   });
 
 
-  describe('Render image', () => {
-    it('should render image', () => {
+  describe('Render thumb', () => {
+    it('should render IMAGE thumb', () => {
       renderImage();
 
       expect(findByTestId('attachmentImage')).toHaveLength(1);
@@ -32,31 +32,34 @@ describe('<Attachment/>', () => {
       expect(findByTestId('attachmentRemove')).toHaveLength(0);
     });
 
-    it('should render remove image button', () => {
-      renderImage(true);
-      expect(findByTestId('attachmentRemove')).toHaveLength(1);
-    });
-  });
-
-
-  describe('Render SVG', () => {
-    it('should render SVG', () => {
+    it('should render SVG thumb', () => {
       renderWithMimeType('image/svg+xml');
 
       expect(findByTestId('attachmentImage')).toHaveLength(0);
       expect(findByTestId('attachmentSvg')).toHaveLength(1);
       expect(findByTestId('attachmentFile')).toHaveLength(0);
     });
-  });
 
-
-  describe('Render file', () => {
-    it('should render file', () => {
-      renderFile();
+    it('should render FILE thumb', () => {
+      renderStream();
 
       expect(findByTestId('attachmentImage')).toHaveLength(0);
       expect(findByTestId('attachmentSvg')).toHaveLength(0);
       expect(findByTestId('attachmentFile')).toHaveLength(1);
+    });
+
+    it('should render VIDEO attachment thumb', () => {
+      renderVideo();
+
+      expect(findByTestId('attachmentImage')).toHaveLength(0);
+      expect(findByTestId('attachmentSvg')).toHaveLength(0);
+      expect(findByTestId('attachmentFile')).toHaveLength(0);
+      expect(findByTestId('attachmentVideo')).toHaveLength(1);
+    });
+
+    it('should render remove image button', () => {
+      renderImage(true);
+      expect(findByTestId('attachmentRemove')).toHaveLength(1);
     });
   });
 
@@ -95,7 +98,7 @@ describe('<Attachment/>', () => {
 
   describe('openAttachmentUrl', () => {
     it('should show image attachment', async () => {
-      renderFile();
+      renderStream();
       instance.openAttachmentUrl = jest.fn();
       instance.forceUpdate();
 
@@ -109,7 +112,11 @@ describe('<Attachment/>', () => {
     renderWithMimeType('image/png', canRemoveImage);
   }
 
-  function renderFile(canRemoveImage) {
+  function renderVideo(canRemoveImage) {
+    renderWithMimeType('video/avi', canRemoveImage);
+  }
+
+  function renderStream(canRemoveImage) {
     renderWithMimeType('application/stream', canRemoveImage);
   }
 

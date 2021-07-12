@@ -8,6 +8,7 @@ import ImageProgress from 'react-native-image-progress';
 import {SvgUri} from 'react-native-svg';
 
 import Router from '../router/router';
+import {attachmentCategories} from './attachment-helper';
 import {hasMimeType} from '../mime-type/mime-type';
 import {HIT_SLOP} from '../common-styles/button';
 import {IconRemoveFilled} from '../icon/icon';
@@ -48,6 +49,14 @@ export default class Attach extends PureComponent<Props, State> {
     onOpenAttachment: () => {},
     onImageLoadingError: () => {},
     onRemoveImage: () => {},
+  };
+
+  thumbStyleMap: { key: string, value: ViewStyleProp} = {
+    'default': styles.attachmentDefault,
+    'sheet': styles.attachmentSheet,
+    'sketch': styles.attachmentSketch,
+    'text': styles.attachmentDoc,
+    'video': styles.attachmentVideo,
   };
   _isUnmounted: boolean;
   handleLoadError: any = debounce((err) => {
@@ -94,7 +103,7 @@ export default class Attach extends PureComponent<Props, State> {
     return (
       <View
         testID="attachmentSvg"
-        style={styles.attachmentImage}
+        style={styles.attachmentThumbContainer}
       >
         <SvgUri
           width="100%"
@@ -105,14 +114,15 @@ export default class Attach extends PureComponent<Props, State> {
     );
   }
 
-  renderThumb(fileTypeStyle: ViewStyleProp = null): Node {
+  renderThumb(fileTypeStyle: ViewStyleProp = {}, testId: string = 'attachmentFile'): Node {
     const {attach} = this.props;
     return (
       <View
-        style={[styles.attachmentImage, fileTypeStyle]}
+        testID={testId}
+        style={[styles.attachmentThumbContainer, fileTypeStyle]}
       >
-        <View style={styles.attachmentType}>
-          <View style={styles.attachmentText}>
+        <View style={styles.attachmentTypeContainer}>
+          <View style={[styles.attachmentType, {backgroundColor: fileTypeStyle.color}]}>
             <Text numberOfLines={1} style={styles.attachmentText}>
               {attach.name.split('.').pop() || attach.name}
             </Text>
@@ -147,7 +157,7 @@ export default class Attach extends PureComponent<Props, State> {
         easing="ease-out-quart"
       >
         <ImageProgress
-          style={styles.attachmentImage}
+          style={styles.attachmentThumbContainer}
           renderIndicator={() => <ActivityIndicator/>}
           source={source}
           onError={this.handleLoadError}
@@ -159,15 +169,17 @@ export default class Attach extends PureComponent<Props, State> {
 
   renderFile(): Node {
     const {attach} = this.props;
+    const fileExt: ?string = attach.name.split('.').pop();
+    let thumbStyle: ViewStyleProp = this.thumbStyleMap.default;
 
-    return (
-      <View
-        testID="attachmentFile"
-        style={[styles.attachmentImage, styles.attachmentFile]}
-      >
-        <Text style={styles.attachmentFileText}>{attach.name}</Text>
-      </View>
-    );
+    for (const key in attachmentCategories) {
+      const isCategory: boolean = attachmentCategories[key].split(' ').some((it: string) => it === fileExt);
+      if (isCategory) {
+        thumbStyle = this.thumbStyleMap[key];
+        break;
+      }
+    }
+    return this.renderThumb(thumbStyle);
   }
 
   remove: (() => void) = () => {
@@ -229,7 +241,7 @@ export default class Attach extends PureComponent<Props, State> {
 
   renderAttach(): Node {
     if (this.isVideo()) {
-      return this.renderThumb(styles.attachmentVideo);
+      return this.renderThumb(styles.attachmentVideo, 'attachmentVideo');
     } else if (this.isSVG()) {
       return this.renderSVG();
     } else if (this.isImage()) {

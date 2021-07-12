@@ -4,7 +4,7 @@ import attachFile from '../attach-file/attach-file';
 import log from '../log/log';
 import usage from '../usage/usage';
 import {ANALYTICS_ISSUE_PAGE, ANALYTICS_ISSUE_STREAM_SECTION} from '../analytics/analytics-ids';
-import {attachmentActionMap, createAttachmentTypes} from './attachment-types';
+import {attachmentActionMap, createAttachmentTypes} from './attachment-helper';
 import {IconAttachment, IconCamera} from '../icon/icon';
 import {logEvent} from '../log/log-helper';
 import {notify} from '../notification/notification';

@@ -1,6 +1,6 @@
 /* @flow */
 
-import {createAttachmentTypes} from '../../../components/attachments-row/attachment-types';
+import {createAttachmentTypes} from '../../../components/attachments-row/attachment-helper';
 import {getAttachmentActions} from '../../../components/attachments-row/attachment-actions';
 
 const PREFIX: string = 'issueActivity';

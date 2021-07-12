@@ -7,7 +7,7 @@ export default EStyleSheet.create({
     marginLeft: -UNIT * 2,
     marginRight: -UNIT * 2,
   },
-  attachmentImage: {
+  attachmentThumbContainer: {
     marginRight: UNIT,
     borderWidth: 1,
     borderColor: '$separator',
@@ -25,19 +25,18 @@ export default EStyleSheet.create({
     fontSize: 10,
     color: '$text',
   },
-  attachmentVideo: {
-    backgroundColor: '$blueBackground',
-  },
-  attachmentType: {
+  attachmentTypeContainer: {
     position: 'absolute',
     top: UNIT,
     left: UNIT,
   },
-  attachmentText: {
+  attachmentType: {
     borderRadius: 3,
     paddingVertical: 1,
-    paddingHorizontal: UNIT / 4,
-    backgroundColor: '$blueColor',
+    paddingHorizontal: UNIT / 2,
+    backgroundColor: '$icon',
+  },
+  attachmentText: {
     textTransform: 'uppercase',
     color: '$textButton',
     fontSize: 12,
@@ -64,5 +63,31 @@ export default EStyleSheet.create({
   },
   removingAttach: {
     opacity: 0.3,
+  },
+
+  attachmentDefault: {
+    color: '$greyColor',
+    backgroundColor: '$greyBackground',
+    borderColor: 'transparent',
+  },
+  attachmentDoc: {
+    color: '$redColor',
+    backgroundColor: '$redBackground',
+    borderColor: 'transparent',
+  },
+  attachmentSheet: {
+    color: '$greenColor',
+    backgroundColor: '$greenBackground',
+    borderColor: 'transparent',
+  },
+  attachmentSketch: {
+    color: '$yellowColor',
+    backgroundColor: '$yellowBackground',
+    borderColor: 'transparent',
+  },
+  attachmentVideo: {
+    color: '$blueColor',
+    backgroundColor: '$blueBackground',
+    borderColor: 'transparent',
   },
 });
