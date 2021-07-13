@@ -50,7 +50,8 @@ type AdditionalProps = {
   hideAddAttachDialog: () => any,
   createAttachActions: () => any,
   removeAttachment: (attach: Attachment) => any,
-  isTagsSelectVisible: boolean
+  isTagsSelectVisible: boolean,
+  navigateToActivity: boolean,
 };
 
 type IssueProps = IssueState & typeof issueActions & AdditionalProps;
@@ -71,6 +72,10 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     await this.props.unloadIssueIfExist();
     await this.props.setIssueId(this.props.issueId);
     this.loadIssue();
+
+    if (this.props.navigateToActivity) {
+      this.switchToActivityTab();
+    }
   }
 
   componentDidUpdate(prevProps: $Shape<IssueProps>): void {
@@ -437,13 +442,14 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   }
 }
 
-const mapStateToProps = (state: { app: Object, issueState: IssueState }, ownProps): IssueState => {
+const mapStateToProps = (state: { app: Object, issueState: IssueState }, ownProps): IssueState & AdditionalProps => {
   return {
     issuePermissions: state.app.issuePermissions,
     ...state.issueState,
     issuePlaceholder: ownProps.issuePlaceholder,
     issueId: ownProps.issueId,
     user: state.app.user,
+    navigateToActivity: ownProps.navigateToActivity,
   };
 };
 

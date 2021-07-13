@@ -84,7 +84,7 @@ class Inbox extends Component<Props, State> {
     this.props.loadInbox();
   };
 
-  goToIssue(issue: IssueOnList) {
+  goToIssue(issue: IssueOnList, navigateToActivity: boolean = false) {
     usage.trackEvent(ANALYTICS_NOTIFICATIONS_PAGE, 'Navigate to issue');
     if (!issue?.id) {
       return;
@@ -99,6 +99,7 @@ class Inbox extends Component<Props, State> {
         created: issue?.created,
       },
       issueId: issue.id,
+      navigateToActivity,
     });
   }
 
@@ -244,6 +245,10 @@ class Inbox extends Component<Props, State> {
         );
       })
     );
+  }
+
+  isSummaryOrDescriptionChange(event: ChangeEvent): boolean {
+    return event && (event.category === Category.SUMMARY || event.category === Category.DESCRIPTION);
   }
 
   renderEventItem(event: ChangeEvent) {
@@ -420,12 +425,12 @@ class Inbox extends Component<Props, State> {
     }
   }
 
-  renderIssue(issue: IssueOnList) {
+  renderIssue(issue: IssueOnList, navigateToActivity: boolean) {
     const readableID: string = getReadableID(issue);
     return (
       <TouchableOpacity
         style={styles.notificationIssue}
-        onPress={() => this.goToIssue(issue)}
+        onPress={() => this.goToIssue(issue, navigateToActivity)}
       >
         <Text>
           {!!readableID && (
@@ -471,7 +476,7 @@ class Inbox extends Component<Props, State> {
         />
 
         <View style={styles.notificationContent}>
-          {this.renderIssue(issue)}
+          {this.renderIssue(issue, true)}
           <View style={styles.notificationChange}>
             <Text style={styles.secondaryText}>{comment.text}</Text>
             <CommentReactions
@@ -503,7 +508,7 @@ class Inbox extends Component<Props, State> {
         <UserInfo style={styles.userInfo} user={sender} timestamp={change?.endTimestamp}/>
 
         <View style={styles.notificationContent}>
-          {this.renderIssue(issue)}
+          {this.renderIssue(issue, !this.isSummaryOrDescriptionChange(events[0]))}
           {events.length > 0 && (
             <View style={styles.notificationChange}>
               {this.renderEvents(events)}
