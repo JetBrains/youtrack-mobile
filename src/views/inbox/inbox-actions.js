@@ -1,7 +1,7 @@
 /* @flow */
+
 import * as types from './inbox-action-types';
 import log from '../../components/log/log';
-
 import usage from '../../components/usage/usage';
 import {ANALYTICS_NOTIFICATIONS_PAGE} from '../../components/analytics/analytics-ids';
 import {checkVersion} from '../../components/feature/feature';
@@ -31,24 +31,24 @@ export function listEndReached(): {type: any} {
   return {type: types.LIST_END_REACHED};
 }
 
-export function setError(error: ?Error): {error: ?Error, type: any} {
+export function setError(error: ?CustomError): {error: ?CustomError, type: any} {
   return {type: types.ERROR, error};
 }
 
-export function loadInboxCache(): ((dispatch: (any) => any) => Promise<void>) {
+const loadInboxCache = (): ((dispatch: (any) => any) => Promise<void>) => {
   return async (dispatch: (any) => any) => {
     const inboxCache: Array<Notification> | null = getStorageState().inboxCache;
     if (inboxCache) {
       dispatch(addItems(inboxCache, false));
     }
   };
-}
+};
 
-export function loadInbox(skip: number = 0, top: number = 10): ((
+const loadInbox = (skip: number = 0, top: number = 10): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter
-) => Promise<void> | Promise<any>) {
+) => Promise<void> | Promise<any>) => {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api = getApi();
 
@@ -100,4 +100,9 @@ export function loadInbox(skip: number = 0, top: number = 10): ((
 
     dispatch(setLoading(false));
   };
-}
+};
+
+export {
+  loadInbox,
+  loadInboxCache,
+};

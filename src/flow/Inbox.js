@@ -2,11 +2,18 @@
 
 import type {User} from './User';
 
+type ChangeCategory = 'COMMENT' | 'CUSTOM_FIELD' | 'SPRINT' | 'SUMMARY' | 'DESCRIPTION';
+
 export type ChangeValue = {
   id?: string,
+  summary?: string,
+  resolved?: boolean,
   name: string,
   entityId: string,
-  type: string
+  type: string,
+  value?: string,
+  typeName?: string,
+  category?: ChangeCategory,
 }
 
 export type Notification = {
@@ -21,10 +28,10 @@ export type Notification = {
 export type ChangeEvent = {
   multiValue: boolean,
   entityId: string,
-  category?: 'COMMENT' | 'CUSTOM_FIELD' | 'SPRINT' | 'SUMMARY' | 'DESCRIPTION',
-  name: String,
+  category: ChangeCategory,
+  name: string,
   addedValues: Array<ChangeValue>,
-  removedValues: Array<ChangeValue>
+  removedValues: Array<ChangeValue>,
 };
 
 export type Reason = {
@@ -67,7 +74,8 @@ export type Metadata = {
   issue?: Issue,
   change: IssueChange,
   subject: ?string,
-  body: ?string,
+  body?: string,
   header: string,
-  reason: ?ReasonCollection
+  reason: ?ReasonCollection,
+  text: string,
 };

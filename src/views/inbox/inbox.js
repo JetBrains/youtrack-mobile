@@ -35,7 +35,7 @@ import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {InboxState} from './inbox-reducers';
 import type {IssueComment} from '../../flow/CustomFields';
 import type {IssueOnList} from '../../flow/Issue';
-import type {Notification, Metadata, ChangeValue, ChangeEvent, Issue, IssueChange, Reason} from '../../flow/Inbox';
+import type {Notification, Metadata, ChangeValue, ChangeEvent, Issue, Reason} from '../../flow/Inbox';
 import type {Reaction} from '../../flow/Reaction';
 import type {Theme} from '../../flow/Theme';
 import type {User} from '../../flow/User';
@@ -65,7 +65,7 @@ class Inbox extends Component<Props, State> {
     savedSearchReasons: '',
     workflow: 'Workflow',
   };
-  config: AppConfigFilled;
+  config: ?AppConfigFilled;
   theme: Theme;
 
   constructor(props) {
@@ -80,7 +80,9 @@ class Inbox extends Component<Props, State> {
     this.refresh();
   }
 
-  refresh = () => this.props.loadInbox();
+  refresh = () => {
+    this.props.loadInbox();
+  };
 
   goToIssue(issue: Issue) {
     usage.trackEvent(ANALYTICS_NOTIFICATIONS_PAGE, 'Navigate to issue');
@@ -127,7 +129,7 @@ class Inbox extends Component<Props, State> {
     return change.category === Category.CREATED;
   }
 
-  getChangeValue(change): string {
+  getChangeValue(change: ChangeValue): string {
     if (change?.typeName === 'date and time') {
       return change.value ? ytDate(parseInt(change.value, 10)) : change.name;
     }
@@ -136,7 +138,7 @@ class Inbox extends Component<Props, State> {
       return change.value ? ytDate(parseInt(change.value, 10), true) : change.name;
     }
 
-    if (change.category === Category.LINKS) {
+    if (change.category === Category.LINKS && change.id) {
       return change.id;
     }
 
@@ -210,7 +212,7 @@ class Inbox extends Component<Props, State> {
     );
   }
 
-  renderTextDiff(event: IssueChange, title: ?string) {
+  renderTextDiff(event: ChangeEvent, title: ?string) {
     return (
       <Diff
         title={title || 'Details'}
@@ -221,12 +223,12 @@ class Inbox extends Component<Props, State> {
   }
 
   renderLinks(event: ChangeEvent) {
-    const issues = [].concat(event.addedValues).concat(event.removedValues);
+    const issues: Array<ChangeValue> = [].concat(event.addedValues).concat(event.removedValues);
 
     return (
-      issues.map((issue: IssueOnList, index: number) => {
+      issues.map((issue: ChangeValue, index: number) => {
         return (
-          <TouchableOpacity key={`${event?.entityId}_${issue.id}_${index}`}>
+          <TouchableOpacity key={`${event?.entityId}_${issue?.id || ''}_${index}`}>
             <Text onPress={() => {
               usage.trackEvent(ANALYTICS_NOTIFICATIONS_PAGE, 'Navigate to linked issue');
               Router.Issue({issueId: issue.id});
@@ -235,7 +237,7 @@ class Inbox extends Component<Props, State> {
                 <Text style={[styles.link, issue.resolved ? styles.resolved : null]}>
                   {issue.id}
                 </Text>
-                {` ${issue.summary}`}
+                {` ${issue?.summary || ''}`}
               </Text>
             </Text>
           </TouchableOpacity>
@@ -245,8 +247,8 @@ class Inbox extends Component<Props, State> {
   }
 
   renderEventItem(event: ChangeEvent) {
-    const textChangeEventName = (event: ChangeEvent) => `${event.name} changed`;
-    const renderEventName = (event: ChangeEvent) => <Text style={styles.textSecondary}>{event.name}: </Text>;
+    const textChangeEventName = (e: ChangeEvent) => `${e.name} changed`;
+    const renderEventName = (e: ChangeEvent) => <Text style={styles.textSecondary}>{e.name}: </Text>;
 
     if (!this.hasAddedValues(event) && !this.hasRemovedValues(event) || event.category === Category.WORK) {
       return null;
@@ -311,11 +313,11 @@ class Inbox extends Component<Props, State> {
   }
 
   isIssueDigestChange(metadata: Metadata): boolean {
-    return metadata && metadata.change;
+    return !!metadata?.change;
   }
 
   isWorkflowNotification(metadata: Metadata): boolean {
-    return !this.isIssueDigestChange(metadata) && (metadata.body || metadata.text || metadata.subject);
+    return !this.isIssueDigestChange(metadata) && Boolean(metadata.body || metadata.text || metadata.subject);
   }
 
   renderWorkflowNotification(text: string) {
