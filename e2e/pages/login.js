@@ -1,4 +1,4 @@
-const SERVER_URL = 'http://127.0.0.1:8088';
+const SERVER_URL = 'http://127.0.0.1:8088/youtrack';
 const DEFAULT_LOGIN = 'root';
 const DEFAULT_PASS = 'root';
 

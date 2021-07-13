@@ -104,7 +104,7 @@ server() {
       sleep 5
     done
 
-    echo "ℹ️ Info(Server): YouTrack has started on $serverHost"
+    echo "ℹ️ Info(Server): YouTrack has started on $serverHost/youtrack"
     ;;
   "stop")
     if [ ! "$(netstat -- -ltnp | grep $ytShutdownPort)" ]; then
