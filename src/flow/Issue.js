@@ -20,19 +20,9 @@ export type IssueContextData = {
   dispatcher: () => any,
 }
 
-export type IssueOnList = {
-  $type?: string,
-  created: number,
+export type IssueOnList = $Shape<IssueFull> & {
   fieldHash: { key: string, value: Object },
   fields: Array<CustomFieldShort>,
-  id: string,
-  idReadable: string,
-  project: IssueProject,
-  reporter: User,
-  resolved: number | null,
-  summary: string,
-  tags: Array<Tag>,
-  updated: number,
 }
 
 export type IssueFull = {

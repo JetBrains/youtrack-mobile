@@ -1,13 +1,14 @@
 /* @flow */
 
 import type {User} from './User';
+import type {IssueOnList} from './Issue';
 
 type ChangeCategory = 'COMMENT' | 'CUSTOM_FIELD' | 'SPRINT' | 'SUMMARY' | 'DESCRIPTION';
 
 export type ChangeValue = {
   id?: string,
   summary?: string,
-  resolved?: boolean,
+  resolved?: number,
   name: string,
   entityId: string,
   type: string,
@@ -36,14 +37,11 @@ export type ChangeEvent = {
 
 export type Reason = {
   type: string,
-  name?: string
+  name: string
 };
 
-export type ReasonCollection = {
-  mentionReasons: Array<Reason>,
-  tagReasons: Array<Reason>,
-  savedSearchReasons: Array<Reason>
-};
+export type ReasonDataType = 'mentionReasons' | 'tagReasons' | 'savedSearchReasons';
+export type ReasonData = { [ReasonDataType]: Array<Reason> };
 
 export type Issue = {
   created: number,
@@ -53,7 +51,7 @@ export type Issue = {
     shortName: string,
     name: string
   },
-  resolved: ?boolean,
+  resolved: number | null,
   starred: ?boolean,
   votes: number,
   summary: string,
@@ -71,11 +69,11 @@ export type Metadata = {
   type: string,
   initialNotification: boolean,
   onlyViaDuplicate: boolean,
-  issue?: Issue,
+  issue?: IssueOnList,
   change: IssueChange,
-  subject: ?string,
+  subject?: string,
   body?: string,
   header: string,
-  reason: ?ReasonCollection,
+  reason: ?ReasonData,
   text: string,
 };

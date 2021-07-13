@@ -12,7 +12,12 @@ import {UNIT} from '../variables/variables';
 type SkeletonProps = {
   width?: number,
   height?: number,
-  borderRadius?: number
+  borderRadius?: number,
+  marginTop?: number,
+  marginRight?: number,
+  marginBottom?: number,
+  marginLeft?: number,
+  key?: string,
 }
 
 export const SKELETON_WIDTH: number = 100;
@@ -73,7 +78,7 @@ export const SkeletonList = (props: SkeletonProps): Node => {
       marginRight={UNIT * 2}
     >
       {Array(6).fill(0).map(((marginTop: number, index) => SkeletonLine(
-        {key: index, height: SKELETON_HEIGHT * 1.5, marginTop: UNIT * 2.5})))}
+        {key: `${index}`, height: SKELETON_HEIGHT * 1.5, marginTop: UNIT * 2.5})))}
     </SkeletonPlaceholder.Item>
   </SkeletonPlaceholder>;
 };

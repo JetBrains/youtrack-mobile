@@ -151,7 +151,7 @@ export type IssueComment = {
   visibility: Visibility | null,
   reactionOrder?: string,
   reactions?: Array<Reaction>,
-  issue?: IssueFull,
+  issue?: $Shape<IssueFull>,
   attachments?: Array<Attachment>
 }
 

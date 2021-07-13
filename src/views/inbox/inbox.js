@@ -20,10 +20,10 @@ import YoutrackWiki from '../../components/wiki/youtrack-wiki';
 import {ANALYTICS_NOTIFICATIONS_PAGE} from '../../components/analytics/analytics-ids';
 import {getReadableID, ytDate} from '../../components/issue-formatter/issue-formatter';
 import {getStorageState} from '../../components/storage/storage';
-import {isReactElement} from '../../util/util';
 import {handleRelativeUrl} from '../../components/config/config';
 import {hasType} from '../../components/api/api__resource-types';
 import {IconNothingFound} from '../../components/icon/icon-no-found';
+import {isReactElement} from '../../util/util';
 import {LoadMoreList} from '../../components/progress/load-more-list';
 import {SkeletonIssueActivities} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
@@ -35,7 +35,7 @@ import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {InboxState} from './inbox-reducers';
 import type {IssueComment} from '../../flow/CustomFields';
 import type {IssueOnList} from '../../flow/Issue';
-import type {Notification, Metadata, ChangeValue, ChangeEvent, Issue, Reason} from '../../flow/Inbox';
+import type {Notification, Metadata, ChangeValue, ChangeEvent, Reason, ReasonDataType} from '../../flow/Inbox';
 import type {Reaction} from '../../flow/Reaction';
 import type {Theme} from '../../flow/Theme';
 import type {User} from '../../flow/User';
@@ -84,7 +84,7 @@ class Inbox extends Component<Props, State> {
     this.props.loadInbox();
   };
 
-  goToIssue(issue: Issue) {
+  goToIssue(issue: IssueOnList) {
     usage.trackEvent(ANALYTICS_NOTIFICATIONS_PAGE, 'Navigate to issue');
     if (!issue?.id) {
       return;
@@ -322,7 +322,7 @@ class Inbox extends Component<Props, State> {
 
   renderWorkflowNotification(text: string) {
     const title: string = Inbox.notificationReasons.workflow;
-    const workflowMetadata: Metadata = {
+    const workflowMetadata: $Shape<Metadata> = {
       reason: {
         [title]: [{title}],
       },
@@ -334,7 +334,7 @@ class Inbox extends Component<Props, State> {
 
         <View style={[styles.notificationContent, styles.notificationContentWorkflow]}>
           <YoutrackWiki
-            backendUrl={this.config.backendUrl}
+            backendUrl={this.config?.backendUrl}
             onIssueIdTap={(issueId) => Router.Issue({issueId})}
             uiTheme={this.theme.uiTheme}
           >
@@ -355,13 +355,13 @@ class Inbox extends Component<Props, State> {
       text = `${metadata.subject || ''}\n${metadata.text || ''}`;
       text = text.trim().length ? text.replace(/\s+/g, ' ') : PARSE_ERROR_NOTIFICATION;
     } else {
-      text = metadata.body || metadata.text || metadata.subject;
+      text = metadata.body || metadata.text || metadata.subject || '';
     }
 
     return text || PARSE_ERROR_NOTIFICATION;
   }
 
-  renderItem = ({item}: Notification | Object & { key: string }) => {
+  renderItem = ({item}: Object) => {
     if (isReactElement(item)) {
       return item;
     }
@@ -380,7 +380,7 @@ class Inbox extends Component<Props, State> {
     return renderer;
   };
 
-  createAvatarUrl(sender: User = {}): string | null {
+  createAvatarUrl(sender: $Shape<User> = {}): string | null {
     if (!sender.avatarUrl || !this.config || !this.config.backendUrl) {
       return null;
     }
@@ -388,8 +388,8 @@ class Inbox extends Component<Props, State> {
   }
 
   renderNotificationReason(metadata: Metadata) {
-    const reasons: Array<Reason> = Object.keys(metadata.reason || []).reduce(
-      (list: Array<Reason>, key: string) => {
+    const reasons: Array<{ title: string, value: string }> = Object.keys(metadata.reason || {}).reduce(
+      (list: Array<Reason>, key: ReasonDataType) => {
         const names: Array<string> = (metadata.reason[key] || []).map((it: Reason) => it.name);
         if (names.length) {
           return list.concat(
@@ -406,7 +406,7 @@ class Inbox extends Component<Props, State> {
 
     if (reasons?.length > 0) {
       const reasonsPresentation: string = reasons.map(
-        (it: Reason) => it.title.trim() + it.value.trim()
+        (it: { title: string, value: string, }) => it.title.trim() + it.value.trim()
       ).filter(Boolean).join(', ');
 
       if (reasonsPresentation.length > 0) {
@@ -435,7 +435,7 @@ class Inbox extends Component<Props, State> {
             ]}>{readableID}</Text>
           )}
           {!!issue.summary && (
-            <Text numberOfLines={2} style={[styles.notificationIssueInfo, issue.resolved && styles.secondaryText]}>
+            <Text numberOfLines={2} style={[styles.notificationIssueInfo, issue.resolved != null && styles.secondaryText]}>
               {` ${issue.summary}`}
             </Text>
           )}
@@ -453,7 +453,7 @@ class Inbox extends Component<Props, State> {
     timestamp: number
   }) => {
     const {added, comment, timestamp, reaction} = reactionData;
-    const issue: IssueOnList = comment.issue;
+    const issue: IssueOnList = ((comment.issue: any): IssueOnList);
 
     return (
       <View style={styles.notification}>
@@ -465,7 +465,7 @@ class Inbox extends Component<Props, State> {
             </View>
           }
           additionalInfo={`\n${reactionData.added ? 'added a reaction' : 'removed a reaction'}`}
-          style={{...styles.userInfo, marginBottom: 16}}
+          style={[styles.userInfo, styles.userInfoReaction]}
           timestamp={timestamp}
           user={reaction.author}
         />
@@ -485,7 +485,7 @@ class Inbox extends Component<Props, State> {
   };
 
 
-  renderIssueChange(metadata: Metadata, sender: User = {}) {
+  renderIssueChange(metadata: Metadata, sender: $Shape<User> = {}) {
     const {issue, change} = metadata;
 
     if (!issue) {
@@ -601,9 +601,7 @@ class Inbox extends Component<Props, State> {
                 data={data}
                 refreshControl={this.renderRefreshControl()}
                 refreshing={loading}
-                keyExtractor={(item: Object & { key: string } | Notification, index: number) => {
-                  return `${(item.key || item.id)}-${index}`;
-                }}
+                keyExtractor={(item: Object | Notification, index: number) => `${(item.key || item.id)}-${index}`}
                 renderItem={this.renderItem}
                 onEndReached={this.onLoadMore}
                 onEndReachedThreshold={0.1}

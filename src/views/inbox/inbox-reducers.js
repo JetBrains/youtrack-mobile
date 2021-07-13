@@ -13,7 +13,7 @@ export type InboxState = {
   hasMore: boolean,
   error: CustomError | null,
   theme: ?Theme,
-  currentUser: User
+  currentUser: ?User
 };
 
 const initialState: InboxState = {

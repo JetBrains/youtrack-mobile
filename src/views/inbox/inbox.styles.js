@@ -72,6 +72,9 @@ export default EStyleSheet.create({
     marginTop: UNIT,
     paddingTop: UNIT * 1.5,
   },
+  userInfoReaction: {
+    marginBottom: UNIT * 2,
+  },
   textPrimary: {
     ...font,
     color: '$icon',
