@@ -43,7 +43,7 @@ export default (EStyleSheet.create({
   link: {
     color: '$link',
   },
-  video: {
+  fullScreen: {
     backgroundColor: 'transparent',
     position: 'absolute',
     top: 0,

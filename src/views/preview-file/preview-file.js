@@ -17,7 +17,6 @@ import {IconClose} from '../../components/icon/icon';
 import {IconNoProjectFound} from '../../components/icon/icon-no-found';
 import {isAndroidPlatform} from '../../util/util';
 import {logEvent} from '../../components/log/log-helper';
-import {notify} from '../../components/notification/notification';
 
 import styles from './preview-file.styles';
 
@@ -51,7 +50,6 @@ type VideoError = {
   }
 };
 const ImagePreview = (props: Props): Node => {
-  // eslint-disable-next-line no-unused-vars
   const [index, updateCurrentIndex] = useState(0);
   const [error, updateError] = useState(null);
   const [isLoading, updateIsLoading] = useState(false);
@@ -72,11 +70,16 @@ const ImagePreview = (props: Props): Node => {
     }
   }, [getCurrentIndex, props]);
 
-  const renderLoader = (): React$Element<ActivityIndicator> => (
+  const renderLoader = (): React$Element<typeof ActivityIndicator> => (
     <ActivityIndicator color={styles.loader.color} style={styles.loader}/>
   );
 
-  const renderImage: ((imageProps: any) => Node) = (imageProps: { source: Attachment }) => {
+  const renderImage: ((imageProps: any) => Node) = (imageProps: { source: Attachment }): Node | null => {
+    usage.trackEvent(ANALYTICS_PREVIEW_PAGE, 'Open image');
+    if (error) {
+      return renderError();
+    }
+
     const attach: Attachment = imageProps.source && props.imageAttachments[getCurrentIndex(imageProps.source)];
     return hasMimeType.svg(attach)
       ? (<SvgFromUri
@@ -86,7 +89,7 @@ const ImagePreview = (props: Props): Node => {
       />)
       : (<ImageProgress
         renderIndicator={renderLoader}
-        onError={() => notify(ERROR_MESSAGE)}
+        renderError={renderError}
         {...imageProps}
       />);
 
@@ -117,20 +120,26 @@ const ImagePreview = (props: Props): Node => {
         );
         updateError(message);
         logEvent({message, isError: true});
-        notify(message);
       }}
       paused={!isAndroid}
       rate={0.0}
       resizeMode="contain"
       source={{uri: props.current.url}}
-      style={styles.video}
+      style={styles.fullScreen}
     />;
   };
 
   const isImageAttach = (): boolean => !!props.imageAttachments?.length;
 
-  const renderImageGallery = (): React$Element<typeof Gallery> => {
-    usage.trackEvent(ANALYTICS_PREVIEW_PAGE, 'Open image');
+  const renderError = (): Node => (
+    <View style={[styles.container, styles.error]}>
+      <IconNoProjectFound/>
+      <Text style={styles.errorTitle}>{error || ERROR_MESSAGE}</Text>
+      {renderOpenButton()}
+    </View>
+  );
+
+  const renderImageGallery = (): null | React$Element<typeof Gallery> => {
     return (
       <Gallery
         images={props.imageAttachments.map(createSource)}
@@ -167,13 +176,7 @@ const ImagePreview = (props: Props): Node => {
 
       {isLoading && renderLoader()}
 
-      {!!error && (
-        <View style={[styles.container, styles.error]}>
-          <IconNoProjectFound/>
-          <Text style={styles.errorTitle}>{error}</Text>
-          {renderOpenButton()}
-        </View>
-      )}
+      {!!error && renderError()}
     </View>
   );
 };

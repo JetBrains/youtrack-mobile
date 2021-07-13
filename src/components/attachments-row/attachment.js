@@ -18,9 +18,12 @@ import {View as AnimatedView} from 'react-native-animatable';
 import styles from './attachments-row.styles';
 
 import type {Attachment} from '../../flow/CustomFields';
+import type {FileCategoryKey} from './attachment-helper';
 import type {Node} from 'React';
 import type {UITheme} from '../../flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+
+type StyleMap = { [FileCategoryKey]: ViewStyleProp };
 
 type Props = {
   imageHeaders: ?Object,
@@ -51,12 +54,12 @@ export default class Attach extends PureComponent<Props, State> {
     onRemoveImage: () => {},
   };
 
-  thumbStyleMap: { key: string, value: ViewStyleProp} = {
-    'default': styles.attachmentDefault,
-    'sheet': styles.attachmentSheet,
-    'sketch': styles.attachmentSketch,
-    'text': styles.attachmentDoc,
-    'video': styles.attachmentVideo,
+  thumbStyleMap: StyleMap = {
+    default: styles.attachmentDefault,
+    sheet: styles.attachmentSheet,
+    sketch: styles.attachmentSketch,
+    text: styles.attachmentDoc,
+    video: styles.attachmentVideo,
   };
   _isUnmounted: boolean;
   handleLoadError: any = debounce((err) => {
@@ -114,7 +117,7 @@ export default class Attach extends PureComponent<Props, State> {
     );
   }
 
-  renderThumb(fileTypeStyle: ViewStyleProp = {}, testId: string = 'attachmentFile'): Node {
+  renderThumb(fileTypeStyle: ViewStyleProp & Object = {}, testId: string = 'attachmentFile'): Node {
     const {attach} = this.props;
     return (
       <View
@@ -122,7 +125,7 @@ export default class Attach extends PureComponent<Props, State> {
         style={[styles.attachmentThumbContainer, fileTypeStyle]}
       >
         <View style={styles.attachmentTypeContainer}>
-          <View style={[styles.attachmentType, {backgroundColor: fileTypeStyle.color}]}>
+          <View style={[styles.attachmentType, {backgroundColor: fileTypeStyle?.color}]}>
             <Text numberOfLines={1} style={styles.attachmentText}>
               {attach.name.split('.').pop() || attach.name}
             </Text>
@@ -173,9 +176,9 @@ export default class Attach extends PureComponent<Props, State> {
     let thumbStyle: ViewStyleProp = this.thumbStyleMap.default;
 
     for (const key in attachmentCategories) {
-      const isCategory: boolean = attachmentCategories[key].split(' ').some((it: string) => it === fileExt);
+      const isCategory: boolean = attachmentCategories[(key: any)].split(' ').some((it: string) => it === fileExt);
       if (isCategory) {
-        thumbStyle = this.thumbStyleMap[key];
+        thumbStyle = this.thumbStyleMap[(key: any)];
         break;
       }
     }
