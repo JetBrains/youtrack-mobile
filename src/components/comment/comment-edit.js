@@ -452,7 +452,7 @@ const IssueCommentEdit = (props: Props) => {
               >
                 <IconAttachment size={22} color={styles.actionsContainerButton.color}/>
                 <Text
-                  style={[styles.actionsContainerButtonText, styles.floatContextButtonText]}>Attach image</Text>
+                  style={[styles.actionsContainerButtonText, styles.floatContextButtonText]}>Attach file</Text>
               </TouchableOpacity>
             )}
             {!!props.onAddSpentTime && (

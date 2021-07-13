@@ -140,7 +140,7 @@ const AttachFileDialogStateful = (props: Props) => {
             });
           }
         }}>
-        <Text style={styles.title}>Attach image</Text>
+        <Text style={styles.title}>Attach file</Text>
       </Header>
 
       <View style={styles.content}>

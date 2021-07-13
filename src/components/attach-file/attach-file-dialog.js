@@ -118,7 +118,7 @@ export default class AttachFileDialog extends PureComponent<Props, State> {
               <IconCheck size={20} color={hasAttach ? uiTheme.colors.$link : uiTheme.colors.$disabled}/>
           )}
           onRightButtonClick={this.attachFile}>
-          <Text style={styles.title}>Attach image</Text>
+          <Text style={styles.title}>Attach file</Text>
         </Header>
 
         <View style={styles.content}>

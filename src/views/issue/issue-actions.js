@@ -483,7 +483,7 @@ export function showIssueActions(
 
     if (permissions.canAttach) {
       actions.push({
-        title: 'Attach image',
+        title: 'Attach file',
         execute: () => {
           switchToDetailsTab();
           dispatch(attachmentActions.toggleAttachFileDialog(true));
