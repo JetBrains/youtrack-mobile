@@ -2,16 +2,15 @@
 
 import {createReducer} from 'redux-create-reducer';
 
-import {LOG_OUT} from '../../actions/action-types';
 import * as types from './create-issue-action-types';
 import {attachmentTypes} from './create-issue__attachment-actions-and-types';
+import {LOG_OUT} from '../../actions/action-types';
 
-import type {CustomField, FieldValue} from '../../flow/CustomFields';
+import type {Attachment, CustomField, FieldValue, IssueProject} from '../../flow/CustomFields';
 import type {IssueFull} from '../../flow/Issue';
-import type {State} from '../issue/issue-reducers';
 
-const notSelectedProject = {
-  id: null,
+const notSelectedProject: $Shape<IssueProject> = {
+  id: '',
   name: 'Not selected',
 };
 
@@ -19,7 +18,7 @@ export type CreateIssueState = {
   processing: boolean,
   attachingImage: ?Object,
   predefinedDraftId: ?string,
-  issue: IssueFull,
+  issue: $Shape<IssueFull>,
   isAttachFileDialogVisible: boolean
 };
 
@@ -39,7 +38,6 @@ const initialState: CreateIssueState = {
 };
 
 const attachReducers = {
-  //$FlowFixMe
   [attachmentTypes.ATTACH_START_ADDING](state: CreateIssueState, action: {attachingImage: Object}): CreateIssueState {
     const {attachingImage} = action;
     return {
@@ -51,7 +49,6 @@ const attachReducers = {
       attachingImage,
     };
   },
-  //$FlowFixMe
   [attachmentTypes.ATTACH_CANCEL_ADDING](state: CreateIssueState, action: {attachingImage: Object}): CreateIssueState {
     const {attachingImage} = action;
     return {
@@ -63,8 +60,7 @@ const attachReducers = {
       attachingImage: null,
     };
   },
-  //$FlowFixMe
-  [attachmentTypes.ATTACH_REMOVE](state: CreateIssueState, action: {attachmentId: string}): State {
+  [attachmentTypes.ATTACH_REMOVE](state: CreateIssueState, action: {attachmentId: string}): CreateIssueState {
     return {
       ...state,
       issue: {
@@ -73,19 +69,16 @@ const attachReducers = {
       },
     };
   },
-  //$FlowFixMe
   [attachmentTypes.ATTACH_STOP_ADDING](state: CreateIssueState): CreateIssueState {
     return {...state, attachingImage: null};
   },
-  //$FlowFixMe
-  [attachmentTypes.ATTACH_TOGGLE_ADD_FILE_DIALOG](state: CreateIssueState, action: {isAttachFileDialogVisible: boolean}): State {
+  [attachmentTypes.ATTACH_TOGGLE_ADD_FILE_DIALOG](state: CreateIssueState, action: {isAttachFileDialogVisible: boolean}): CreateIssueState {
     return {
       ...state,
       isAttachFileDialogVisible: action.isAttachFileDialogVisible,
     };
   },
-  //$FlowFixMe
-  [attachmentTypes.ATTACH_RECEIVE_ALL_ATTACHMENTS](state: CreateIssueState, action: {attachments: boolean}): State {
+  [attachmentTypes.ATTACH_RECEIVE_ALL_ATTACHMENTS](state: CreateIssueState, action: {attachments: Array<Attachment>}): CreateIssueState {
     return {
       ...state,
       issue: {

@@ -27,7 +27,7 @@ export type IssueOnList = $Shape<IssueFull> & {
 
 export type IssueFull = {
   $type?: string,
-  attachments?: Array<Attachment>,
+  attachments: Array<Attachment>,
   comments?: Array<IssueComment>,
   created: number,
   description: string,
