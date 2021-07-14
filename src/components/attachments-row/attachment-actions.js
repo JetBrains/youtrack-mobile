@@ -9,6 +9,7 @@ import {IconAttachment, IconCamera} from '../icon/icon';
 import {logEvent} from '../log/log-helper';
 import {notify} from '../notification/notification';
 import {ResourceTypes} from '../api/api__resource-types';
+import {sendReport} from '../error/error-reporter';
 import {until} from '../../util/util';
 
 import type Api from '../api/api';
@@ -80,8 +81,20 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
           notify(message, error);
           return [];
         } else {
-          await api.issue.updateIssueAttachmentVisibility(_issueId, addedAttachments[0].id, attach.visibility);
-
+          try {
+            await api.issue.updateIssueAttachmentVisibility(_issueId, addedAttachments[0].id, attach.visibility || null);
+          } catch (err) {
+            const msg: string = `Failed to update issue attachment visibility after uploading a file`;
+            log.warn(msg);
+            sendReport(
+              msg,
+              `
+              \`\`\`
+              ${err}
+              \`\`\`
+              `
+            );
+          }
           log.info(`File attached to issue ${_issueId}`);
           usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Attach image', 'Success');
 
