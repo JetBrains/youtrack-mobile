@@ -136,7 +136,7 @@ export type Attachment = {
   mimeType: string,
   imageDimensions: ?ImageDimensions,
   thumbnailURL: string,
-  visibility?: Visibility
+  visibility?: Visibility | null,
 }
 
 export type IssueComment = {

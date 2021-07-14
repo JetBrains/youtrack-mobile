@@ -241,7 +241,7 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
-  async updateIssueAttachmentVisibility(issueId: string, attachmentId: string, visibility: Visibility | null) {
+  async updateIssueAttachmentVisibility(issueId: string, attachmentId: string, visibility: ?Visibility): Promise<Attachment> {
     const queryString = qs.stringify({fields: 'id,thumbnailURL,url,visibility($type,permittedGroups($type,id),permittedUsers($type,id))'});
     const body = {visibility};
 

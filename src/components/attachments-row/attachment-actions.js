@@ -93,10 +93,10 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
     },
 
     uploadFileToIssueComment: function (attach: Attachment, comment: $Shape<IssueComment>) {
-      return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter): Promise<IssueComment> => {
+      return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter): Promise<Array<Attachment>> => {
         logEvent({
           message: 'Attaching file to a comment',
-          analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+          analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
         });
         const api: Api = getApi();
         const issueId: string = getState().issueState.issue.id;
@@ -118,10 +118,10 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
     },
 
     uploadFileToArticleComment: function (attach: Attachment, comment: $Shape<IssueComment>) {
-      return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter): Promise<IssueComment> => {
+      return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter): Promise<Array<Attachment>> => {
         logEvent({
           message: 'Attaching file to a comment',
-          analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+          analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
         });
         const api: Api = getApi();
         const articleId: string = getState().article.article.id;
@@ -244,10 +244,10 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
           execute: () => {
             logEvent({
               message: 'Attach file from storage',
-              analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+              analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
             });
             dispatch(actions.showAttachImageDialog(attachFileMethod.openPicker));
-          }
+          },
         },
         {
           title: 'Take a picture…',
@@ -255,11 +255,11 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
           execute: () => {
             logEvent({
               message: 'Attach file via camera',
-              analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+              analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
             });
             dispatch(actions.showAttachImageDialog(attachFileMethod.openCamera));
-          }
-        }
+          },
+        },
       ];
     },
 
