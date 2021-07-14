@@ -14,6 +14,7 @@ import ErrorMessage from '../../components/error-message/error-message';
 import log from '../../components/log/log';
 import ReactionIcon from '../../components/reactions/reaction-icon';
 import Router from '../../components/router/router';
+import StreamWork from '../../components/activity-stream/activity__stream-work';
 import usage from '../../components/usage/usage';
 import UserInfo from '../../components/user/user-info';
 import YoutrackWiki from '../../components/wiki/youtrack-wiki';
@@ -31,6 +32,7 @@ import {UNIT} from '../../components/variables/variables';
 
 import styles from './inbox.styles';
 
+import type {Activity} from '../../flow/Activity';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {InboxState} from './inbox-reducers';
 import type {IssueComment} from '../../flow/CustomFields';
@@ -255,11 +257,27 @@ class Inbox extends Component<Props, State> {
     const textChangeEventName = (e: ChangeEvent) => `${e.name} changed`;
     const renderEventName = (e: ChangeEvent) => <Text style={styles.textSecondary}>{e.name}: </Text>;
 
-    if (!this.hasAddedValues(event) && !this.hasRemovedValues(event) || event.category === Category.WORK) {
+    if (!this.hasAddedValues(event) && !this.hasRemovedValues(event)) {
       return null;
     }
 
     switch (true) {
+    case event.category === Category.WORK:
+      const work: ChangeValue = event.addedValues[0];
+      const activityGroup: $Shape<Activity> = {
+        work: {
+          added: [{
+            date: work.date,
+            duration: {presentation: work.duration},
+            text: work.description,
+            type: {name: work.workType},
+          }],
+        },
+      };
+      return <StreamWork
+        activityGroup={(activityGroup: any)}
+      />;
+
     case event.category === Category.COMMENT: //TODO(xi-eye): filter out text update events
       return (
         <View style={styles.change}>

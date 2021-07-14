@@ -15,6 +15,10 @@ export type ChangeValue = {
   value?: string,
   typeName?: string,
   category?: ChangeCategory,
+  description?: string,
+  workType?: string,
+  date?: number,
+  duration?: string,
 }
 
 export type Notification = {

@@ -50,7 +50,9 @@ const StreamWork = (props: Props) => {
   const workPermissions: WorkPermissions = canChangeWork(work);
   return (
     <View>
-      {!props.activityGroup.merged && <StreamUserInfo activityGroup={props.activityGroup}/>}
+      {!props.activityGroup.merged && props.activityGroup.author && (
+        <StreamUserInfo activityGroup={props.activityGroup}/>
+      )}
 
       <View style={styles.activityChange}>
 
@@ -62,7 +64,7 @@ const StreamWork = (props: Props) => {
             <Text style={styles.activityWorkTime}>{getDurationPresentation(work.duration)}</Text>
             {work.type && <Text style={styles.secondaryTextColor}>{`, ${work.type.name}`}</Text>}
           </Text>
-          {(workPermissions.canUpdate || workPermissions.canDelete) && (
+          {work.id && (workPermissions.canUpdate || workPermissions.canDelete) && (
             <TouchableOpacity
               hitSlop={HIT_SLOP}
               style={styles.activityWorkEditIcon}
@@ -74,7 +76,7 @@ const StreamWork = (props: Props) => {
         </View>
 
         {!!work.text && (
-          <View style={styles.activityWorkComment}>
+          <View style={work.id && styles.activityWorkComment}>
             <MarkdownView
               onCheckboxUpdate={(checked: boolean, position: number, workItemText: string): void => {
                 if (props.onUpdate) {
