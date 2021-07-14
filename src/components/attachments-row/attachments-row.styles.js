@@ -43,6 +43,7 @@ export default EStyleSheet.create({
     fontWeight: '500',
   },
   attachmentName: {
+    width: '100%',
     flexGrow: 1,
     padding: UNIT,
     justifyContent: 'flex-end',
@@ -85,7 +86,7 @@ export default EStyleSheet.create({
     backgroundColor: '$yellowBackground',
     borderColor: 'transparent',
   },
-  attachmentVideo: {
+  attachmentMedia: {
     color: '$blueColor',
     backgroundColor: '$blueBackground',
     borderColor: 'transparent',

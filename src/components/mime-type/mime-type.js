@@ -13,5 +13,6 @@ hasMimeType.image = (file) => !hasMimeType.svg(file) && hasMimeType('image/')(fi
 hasMimeType.pdf = hasMimeType('application/pdf');
 
 hasMimeType.video = hasMimeType('video/');
+hasMimeType.audio = hasMimeType('audio/');
 
 hasMimeType.previewable = (file) => hasMimeType.image(file) || hasMimeType.svg(file);

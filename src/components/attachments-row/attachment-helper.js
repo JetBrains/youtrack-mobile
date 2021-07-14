@@ -39,7 +39,7 @@ export const createAttachmentTypes = function (prefix: string): typeof attachmen
   return attachmentTypes;
 };
 
-export type FileCategoryKey = 'default'| 'sheet'| 'sketch'| 'text'| 'video';
+export type FileCategoryKey = 'default'| 'sheet'| 'sketch'| 'text'| 'video'| 'audio';
 
 // Source https://github.com/dyne/file-extension-list/blob/master/pub/categories.json
 export const attachmentCategories: { [FileCategoryKey]: string } = {
@@ -48,4 +48,5 @@ export const attachmentCategories: { [FileCategoryKey]: string } = {
   sketch: 'ai eps ps svg dwg dxf gpx kml kmz webp',
   text: 'doc docx ebook log md msg odt org pages pdf rtf rst tex txt wpd wps',
   video: '3g2 3gp aaf asf avchd avi drc flv m2v m4p m4v mkv mng mov mp2 mp4 mpe mpeg mpg mpv mxf nsv ogg ogv ogm qt rm rmvb roq srt svi vob webm wmv yuv',
+  audio: 'aac aiff ape au flac gsm it m3u m4a mid mod mp3 mpa pls ra s3m sid wav wma xm',
 };

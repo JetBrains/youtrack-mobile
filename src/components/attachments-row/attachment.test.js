@@ -54,7 +54,7 @@ describe('<Attachment/>', () => {
       expect(findByTestId('attachmentImage')).toHaveLength(0);
       expect(findByTestId('attachmentSvg')).toHaveLength(0);
       expect(findByTestId('attachmentFile')).toHaveLength(0);
-      expect(findByTestId('attachmentVideo')).toHaveLength(1);
+      expect(findByTestId('attachmentMedia')).toHaveLength(1);
     });
 
     it('should render remove image button', () => {

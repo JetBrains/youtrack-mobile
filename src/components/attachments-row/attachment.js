@@ -59,7 +59,8 @@ export default class Attach extends PureComponent<Props, State> {
     sheet: styles.attachmentSheet,
     sketch: styles.attachmentSketch,
     text: styles.attachmentDoc,
-    video: styles.attachmentVideo,
+    video: styles.attachmentMedia,
+    audio: styles.attachmentMedia,
   };
   _isUnmounted: boolean;
   handleLoadError: any = debounce((err) => {
@@ -160,11 +161,16 @@ export default class Attach extends PureComponent<Props, State> {
         easing="ease-out-quart"
       >
         <ImageProgress
-          style={styles.attachmentThumbContainer}
+          style={[styles.attachmentThumbContainer, this.thumbStyleMap.default]}
           renderIndicator={() => <ActivityIndicator/>}
           source={source}
           onError={this.handleLoadError}
-        />
+          renderError={() => (
+            <View style={styles.attachmentName}>
+              <Text numberOfLines={2} style={styles.attachmentFileText}>{attach.name}</Text>
+            </View>
+          )}
+         />
         {isAttachingImage && <ActivityIndicator size="large" style={styles.imageActivityIndicator}/>}
       </AnimatedView>
     );
@@ -210,7 +216,7 @@ export default class Attach extends PureComponent<Props, State> {
 
   onAttachPress: (() => void) = () => {
     const {imageHeaders, attach, onRemoveImage} = this.props;
-    if (this.isVideo()) {
+    if (this.isMedia()) {
       Router.PreviewFile({
         current: attach,
         imageHeaders,
@@ -231,8 +237,8 @@ export default class Attach extends PureComponent<Props, State> {
     return hasMimeType.svg(this.props.attach);
   }
 
-  isVideo(): boolean {
-    return hasMimeType.video(this.props.attach);
+  isMedia(): boolean {
+    return hasMimeType.video(this.props.attach) || hasMimeType.audio(this.props.attach);
   }
 
   canRemove(): boolean {
@@ -243,8 +249,8 @@ export default class Attach extends PureComponent<Props, State> {
   }
 
   renderAttach(): Node {
-    if (this.isVideo()) {
-      return this.renderThumb(styles.attachmentVideo, 'attachmentVideo');
+    if (this.isMedia()) {
+      return this.renderThumb(styles.attachmentMedia, 'attachmentMedia');
     } else if (this.isSVG()) {
       return this.renderSVG();
     } else if (this.isImage()) {
