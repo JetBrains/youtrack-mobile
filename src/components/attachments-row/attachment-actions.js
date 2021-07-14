@@ -43,7 +43,7 @@ export type AttachmentActions = {
   loadIssueAttachments: Function,
 };
 
-export const getAttachmentActions = (prefix: string) => {
+export const getAttachmentActions = (prefix: string): AttachmentActions => {
   const types: typeof attachmentActionMap = createAttachmentTypes(prefix);
 
   const actions: Object = {
