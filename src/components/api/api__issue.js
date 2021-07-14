@@ -1,10 +1,11 @@
 /* @flow */
-import qs from 'qs';
+
 import ApiBase from './api__base';
-import issueFields from './api__issue-fields';
 import ApiHelper from './api__helper';
-import {handleRelativeUrl} from '../config/config';
 import issueActivityPageFields, {ISSUE_ATTACHMENT_FIELDS} from './api__activities-issue-fields';
+import issueFields from './api__issue-fields';
+import qs from 'qs';
+import {handleRelativeUrl} from '../config/config';
 
 import type Auth from '../auth/auth';
 import type {Activity} from '../../flow/Activity';
@@ -69,7 +70,7 @@ export default class IssueAPI extends ApiBase {
     return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`, 'POST', {});
   }
 
-  async loadIssueDraft(draftId: string): IssueFull {
+  async loadIssueDraft(draftId: string): Promise<IssueFull> {
     const queryString = qs.stringify({fields: issueFields.singleIssue.toString()});
     const issue = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/admin/users/me/drafts/${draftId}?${queryString}`);
     issue.attachments = ApiHelper.convertAttachmentRelativeToAbsURLs(issue.attachments, this.config.backendUrl);
@@ -81,7 +82,7 @@ export default class IssueAPI extends ApiBase {
    * @param issue
    * @returns {Promise}
    */
-  async updateIssueDraft(issue: IssueFull): IssueFull {
+  async updateIssueDraft(issue: IssueFull): Promise<IssueFull> {
     const queryString = qs.stringify({fields: issueFields.singleIssue.toString()});
 
     const updatedIssue = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/admin/users/me/drafts/${issue.id || ''}?${queryString}`, 'POST', issue);
@@ -97,21 +98,22 @@ export default class IssueAPI extends ApiBase {
 
   async getDraftComment(issueId: string): Promise<IssueComment | null> {
     const queryString = qs.stringify({
-      fields: ApiHelper.toField({draftComment: issueFields.issueComment}).toString()
+      fields: ApiHelper.toField({draftComment: issueFields.issueComment}).toString(),
     });
 
     const response: {draftComment: IssueComment} = await this.makeAuthorizedRequest(
       `${this.youTrackIssueUrl}/${issueId}?${queryString}`
     );
-    if (response?.draftComment?.attachments?.length > 0) {
+    if ((response?.draftComment?.attachments || []).length > 0) {
       response.draftComment.attachments = ApiHelper.convertAttachmentRelativeToAbsURLs(
-        response.draftComment.attachments, this.config.backendUrl
+        response.draftComment.attachments || [],
+        this.config.backendUrl
       );
     }
     return response.draftComment;
   }
 
-  async updateDraftComment(issueId: string, draftComment: $Shape<IssueComment>): IssueComment {
+  async updateDraftComment(issueId: string, draftComment: $Shape<IssueComment>): Promise<IssueComment> {
     const queryString = qs.stringify({fields: issueFields.issueComment.toString()});
 
     const draft: $Shape<IssueComment> = await this.makeAuthorizedRequest(
@@ -119,18 +121,19 @@ export default class IssueAPI extends ApiBase {
       draftComment.id ? 'POST' : 'PUT',
       draftComment
     );
-    if (draft?.attachments?.length > 0) {
+    if ((draft?.attachments || []).length > 0) {
       draft.attachments = ApiHelper.convertAttachmentRelativeToAbsURLs(
-        draft.attachments, this.config.backendUrl
+        draft.attachments || [],
+        this.config.backendUrl
       );
     }
     return draft;
   }
 
-  async submitDraftComment(issueId: string, draftComment: $Shape<IssueComment>): IssueComment {
+  async submitDraftComment(issueId: string, draftComment: $Shape<IssueComment>): Promise<IssueComment> {
     const queryString = qs.stringify({
       draftId: draftComment.id,
-      fields: issueFields.issueComment.toString()
+      fields: issueFields.issueComment.toString(),
     }
     );
 
@@ -141,7 +144,7 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
-  async submitComment(issueId: string, comment: IssueComment) {
+  async submitComment(issueId: string, comment: IssueComment): Promise<IssueComment> {
     const queryString = qs.stringify({fields: issueFields.issueComment.toString()});
     const url = `${this.youTrackIssueUrl}/${issueId}/comments/${comment.id || ''}?${queryString}`;
 
@@ -209,15 +212,15 @@ export default class IssueAPI extends ApiBase {
     return await response.json();
   }
 
-  async attachFileToComment(issueId: string, fileUri: string, fileName: string, commentId?: string): Promise<IssueComment> {
+  async attachFileToComment(issueId: string, fileUri: string, fileName: string, commentId?: string): Promise<Array<Attachment>> {
     const resourcePath: string = commentId ? `comments/${commentId}` : 'draftComment';
     const url = `${this.youTrackIssueUrl}/${issueId}/${resourcePath}/attachments?fields=id,name,url,thumbnailURL,mimeType,imageDimensions(height,width)`;
-    const formData = new FormData(); //eslint-disable-line no-undef
+    const formData = new FormData();
     // $FlowFixMe
     formData.append('photo', {
       uri: fileUri,
       name: fileName,
-      type: 'image/binary'
+      type: 'image/binary',
     });
     const response = await fetch(
       url,
@@ -228,7 +231,10 @@ export default class IssueAPI extends ApiBase {
       }
     );
     const addedAttachments: Array<Attachment> = await response.json();
-    return ApiHelper.convertAttachmentRelativeToAbsURLs(addedAttachments, this.config.backendUrl);
+    return ApiHelper.convertAttachmentRelativeToAbsURLs(
+      addedAttachments,
+      this.config.backendUrl
+    );
   }
 
   async removeFileFromComment(issueId: string, attachmentId: string, commentId?: string): Promise<void> {
@@ -358,7 +364,7 @@ export default class IssueAPI extends ApiBase {
 
   async createWorkItem(issueId: string, draft: WorkItem): Promise<any> {
     return this.makeAuthorizedRequest(
-      `${this.youTrackIssueUrl}/${issueId}/timeTracking/workItems/${draft.$type ? draft.id : ''}?${ApiBase.createFieldsQuery(
+      `${this.youTrackIssueUrl}/${issueId}/timeTracking/workItems/${draft.$type ? (draft.id: any) : ''}?${ApiBase.createFieldsQuery(
         issueFields.workItems,
         draft.$type ? null : {draftId: draft.id}
       )}`,

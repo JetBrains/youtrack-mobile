@@ -4,7 +4,7 @@ import {handleRelativeUrl} from '../config/config';
 import objectWalk from 'object-walk';
 import {getReadableID} from '../issue-formatter/issue-formatter';
 
-import type {Attachment} from '../../flow/CustomFields';
+import type {Attachment, CustomField} from '../../flow/CustomFields';
 import type {
   AnyIssue,
   ServersideSuggestion,
@@ -71,8 +71,8 @@ const API = {
     });
   },
 
-  convertAttachmentRelativeToAbsURLs(attachments: Array<Attachment>, backendUrl: string): Array<any> {
-    let convertedItems: Array<any> = attachments;
+  convertAttachmentRelativeToAbsURLs(attachments: Array<Attachment>, backendUrl: string): Array<Attachment> {
+    let convertedItems: Array<Attachment> = attachments;
     ['url', 'thumbnailURL'].forEach(
       (fieldName: string) => {convertedItems = this.convertRelativeUrls(convertedItems, fieldName, backendUrl);}
     );
