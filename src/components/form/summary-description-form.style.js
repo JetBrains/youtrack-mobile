@@ -30,4 +30,7 @@ export default EStyleSheet.create({
     marginRight: -UNIT * 2,
     backgroundColor: '$separator',
   },
+  placeholder: {
+    color: '$icon',
+  },
 });

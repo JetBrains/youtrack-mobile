@@ -70,7 +70,7 @@ export default class SummaryDescriptionForm extends Component<Props, void> {
           editable={editable}
           autoFocus
           placeholder={summaryPlaceholder}
-          placeholderTextColor={uiTheme.colors.$icon}
+          placeholderTextColor={styles.placeholder.color}
           underlineColorAndroid="transparent"
           keyboardAppearance={uiTheme.name}
           returnKeyType="next"
