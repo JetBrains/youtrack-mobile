@@ -289,7 +289,6 @@ const ArticleCreate = (props: Props) => {
               editable={!!articleDraft}
               onSummaryChange={(summary: string) => updateDraft({summary})}
               onDescriptionChange={(content: string) => updateDraft({content})}
-              uiTheme={theme.uiTheme}
               summaryPlaceholder="Title"
               descriptionPlaceholder="Article content"
             />

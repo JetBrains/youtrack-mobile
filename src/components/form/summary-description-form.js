@@ -1,6 +1,5 @@
 /* @flow */
 
-import type {Node} from 'React';
 import React, {Component} from 'react';
 import {View, TextInput} from 'react-native';
 
@@ -9,10 +8,12 @@ import debounce from 'lodash.debounce';
 
 import TextEditForm from './text-edit-form';
 import usage from '../usage/usage';
+import {ThemeContext} from '../theme/theme-context';
 
 import styles from './summary-description-form.style';
 
-import type {UITheme} from '../../flow/Theme';
+import type {Node} from 'React';
+import type {Theme} from '../../flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
@@ -22,7 +23,6 @@ type Props = {
   description: string,
   onSummaryChange: (summary: string) => any,
   onDescriptionChange: (description: string) => any,
-  uiTheme: UITheme,
   summaryPlaceholder?: string,
   descriptionPlaceholder?: string,
   style?: ViewStyleProp,
@@ -53,7 +53,6 @@ export default class SummaryDescriptionForm extends Component<Props, void> {
       editable,
       summary,
       description,
-      uiTheme,
       summaryPlaceholder = 'Summary',
       descriptionPlaceholder = 'Description',
       onSummaryChange, //eslint-disable-line no-unused-vars
@@ -63,33 +62,39 @@ export default class SummaryDescriptionForm extends Component<Props, void> {
     } = this.props;
 
     return (
-      <View {...rest}>
-        <TextInput
-          style={styles.summary}
-          multiline={true}
-          editable={editable}
-          autoFocus
-          placeholder={summaryPlaceholder}
-          placeholderTextColor={styles.placeholder.color}
-          underlineColorAndroid="transparent"
-          keyboardAppearance={uiTheme.name}
-          returnKeyType="next"
-          autoCapitalize="sentences"
-          defaultValue={summary}
-          onChangeText={this.onSummaryChange}
-        />
+      <ThemeContext.Consumer>
+        {(theme: Theme) => {
+          return (
+            <View {...rest}>
+              <TextInput
+                style={styles.summary}
+                multiline={true}
+                editable={editable}
+                autoFocus
+                placeholder={summaryPlaceholder}
+                placeholderTextColor={styles.placeholder.color}
+                underlineColorAndroid="transparent"
+                keyboardAppearance={theme.uiTheme?.name || 'dark'}
+                returnKeyType="next"
+                autoCapitalize="sentences"
+                defaultValue={summary}
+                onChangeText={this.onSummaryChange}
+              />
 
-        <View style={styles.separator}/>
+              <View style={styles.separator}/>
 
-        <TextEditForm
-          editable={editable}
-          description={description}
-          placeholderText={descriptionPlaceholder}
-          multiline={true}
-          onDescriptionChange={this.onDescriptionChange}
-          uiTheme={uiTheme}
-        />
-      </View>
+              <TextEditForm
+                editable={editable}
+                description={description}
+                placeholderText={descriptionPlaceholder}
+                multiline={true}
+                onDescriptionChange={this.onDescriptionChange}
+                uiTheme={theme.uiTheme}
+              />
+            </View>
+          );
+        }}
+      </ThemeContext.Consumer>
     );
   }
 }

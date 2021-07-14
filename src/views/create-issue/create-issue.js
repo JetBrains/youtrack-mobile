@@ -46,6 +46,7 @@ type State = {
 };
 
 class CreateIssue extends Component<Props, State> {
+  uiTheme: UITheme;
   state = {showAddTagSelect: false};
 
   constructor(props) {
@@ -70,7 +71,7 @@ class CreateIssue extends Component<Props, State> {
     hideAddAttachDialog();
   };
 
-  renderAttachFileDialog(uiTheme: UITheme) {
+  renderAttachFileDialog() {
     const {issue, getAttachActions, attachingImage} = this.props;
 
     if (!issue || !issue.id) {
@@ -84,7 +85,7 @@ class CreateIssue extends Component<Props, State> {
         attach={attachingImage}
         onCancel={this.cancelAddAttach}
         onAttach={this.onAddAttachment}
-        uiTheme={uiTheme}
+        uiTheme={this.uiTheme}
       />
     );
   }
@@ -97,7 +98,7 @@ class CreateIssue extends Component<Props, State> {
 
   onUpdateProject = async (project: IssueProject) => await this.props.updateProject(project);
 
-  renderCustomFieldPanel(uiTheme: UITheme) {
+  renderCustomFieldPanel() {
     const {issue} = this.props;
 
     return <CustomFieldsPanel
@@ -118,18 +119,18 @@ class CreateIssue extends Component<Props, State> {
       onUpdate={this.onFieldUpdate}
       onUpdateProject={this.onUpdateProject}
 
-      uiTheme={uiTheme}
+      uiTheme={this.uiTheme}
     />;
   }
 
-  renderIssueVisibility(uiTheme: UITheme) {
+  renderIssueVisibility() {
     const {issue, updateVisibility} = this.props;
     return (
       <View style={styles.visibility}>
         <VisibilityControl
           visibility={issue.visibility}
           onSubmit={updateVisibility}
-          uiTheme={uiTheme}
+          uiTheme={this.uiTheme}
           getOptions={() => getApi().issue.getVisibilityOptions(issue.id)}
         />
       </View>
@@ -157,8 +158,8 @@ class CreateIssue extends Component<Props, State> {
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
-          const uiTheme: UITheme = theme.uiTheme;
-          const uiThemeColors: UIThemeColors = uiTheme.colors;
+          this.uiTheme = theme.uiTheme;
+          const uiThemeColors: UIThemeColors = this.uiTheme.colors;
           const hasProject: boolean = !!issue?.project?.id;
 
           const rightButton = (
@@ -179,9 +180,9 @@ class CreateIssue extends Component<Props, State> {
                 rightButton={rightButton}
                 onRightButtonClick={() => canCreateIssue && createIssue()}/>
 
-              {this.renderCustomFieldPanel(uiTheme)}
+              {this.renderCustomFieldPanel()}
 
-              {hasProject && this.renderIssueVisibility(uiTheme)}
+              {hasProject && this.renderIssueVisibility()}
 
               <ScrollView
                 keyboardShouldPersistTaps="handled"
@@ -196,7 +197,6 @@ class CreateIssue extends Component<Props, State> {
                   editable={!processing}
                   onSummaryChange={setIssueSummary}
                   onDescriptionChange={setIssueDescription}
-                  uiTheme={uiTheme}
                 />
 
                 {hasProject && (
@@ -212,7 +212,7 @@ class CreateIssue extends Component<Props, State> {
                         imageHeaders={getApi().auth.getAuthorizationHeaders()}
                         canRemoveAttachment={true}
                         onRemoveImage={removeAttachment}
-                        uiTheme={theme.uiTheme}
+                        uiTheme={this.uiTheme}
                       />
                     </View>
                   </>
@@ -262,7 +262,7 @@ class CreateIssue extends Component<Props, State> {
 
               <KeyboardSpacerIOS/>
 
-              {isAttachFileDialogVisible && this.renderAttachFileDialog(uiTheme)}
+              {isAttachFileDialogVisible && this.renderAttachFileDialog()}
             </View>
           );
         }}

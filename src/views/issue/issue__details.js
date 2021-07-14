@@ -278,7 +278,6 @@ export default class IssueDetails extends Component<Props, void> {
           description={descriptionCopy}
           onSummaryChange={this.props.setIssueSummaryCopy}
           onDescriptionChange={this.props.setIssueDescriptionCopy}
-          uiTheme={uiTheme}
         />}
 
         {!editMode && this.renderIssueContent(uiTheme)}
