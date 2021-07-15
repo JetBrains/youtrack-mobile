@@ -37,7 +37,7 @@ import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {InboxState} from './inbox-reducers';
 import type {IssueComment} from '../../flow/CustomFields';
 import type {IssueOnList} from '../../flow/Issue';
-import type {Notification, Metadata, ChangeValue, ChangeEvent, Reason, ReasonDataType} from '../../flow/Inbox';
+import type {Notification, Metadata, ChangeValue, ChangeEvent} from '../../flow/Inbox';
 import type {Reaction} from '../../flow/Reaction';
 import type {Theme} from '../../flow/Theme';
 import type {User} from '../../flow/User';
@@ -345,12 +345,6 @@ class Inbox extends Component<Props, State> {
 
   renderWorkflowNotification(text: string) {
     const title: string = Inbox.notificationReasons.workflow;
-    const workflowMetadata: $Shape<Metadata> = {
-      reason: {
-        [title]: [{title}],
-      },
-    };
-
     return (
       <View style={styles.notification}>
         <View><Text style={[styles.textPrimary, styles.notificationIssueInfo]}>{`${title}:`}</Text></View>
@@ -364,8 +358,6 @@ class Inbox extends Component<Props, State> {
             {text}
           </YoutrackWiki>
         </View>
-
-        {this.renderNotificationReason(workflowMetadata)}
       </View>
     );
   }
@@ -408,39 +400,6 @@ class Inbox extends Component<Props, State> {
       return null;
     }
     return handleRelativeUrl(sender.avatarUrl, this.config.backendUrl);
-  }
-
-  renderNotificationReason(metadata: Metadata) {
-    const reasons: Array<{ title: string, value: string }> = Object.keys(metadata.reason || {}).reduce(
-      (list: Array<Reason>, key: ReasonDataType) => {
-        const names: Array<string> = (metadata.reason[key] || []).map((it: Reason) => it.name);
-        if (names.length) {
-          return list.concat(
-            {
-              title: Inbox.notificationReasons[key] ? `${Inbox.notificationReasons[key]} ` : '',
-              value: [...new Set(names)].join(', '),
-            }
-          );
-        }
-        return list;
-      },
-      []
-    );
-
-    if (reasons?.length > 0) {
-      const reasonsPresentation: string = reasons.map(
-        (it: { title: string, value: string, }) => it.title.trim() + it.value.trim()
-      ).filter(Boolean).join(', ');
-
-      if (reasonsPresentation.length > 0) {
-        return <View>
-          <Text style={styles.reason}>
-            {reasonsPresentation}
-          </Text>
-        </View>;
-      }
-      return null;
-    }
   }
 
   renderIssue(issue: IssueOnList, navigateToActivity: boolean) {
@@ -532,8 +491,6 @@ class Inbox extends Component<Props, State> {
               {this.renderEvents(events)}
             </View>
           )}
-
-          {this.renderNotificationReason(metadata)}
         </View>
       </View>
     );

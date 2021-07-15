@@ -57,7 +57,7 @@ export default EStyleSheet.create({
   notificationChange: {
     marginTop: UNIT * 2,
     marginRight: -UNIT,
-    marginBottom: UNIT * 2.5,
+    marginBottom: UNIT,
     padding: UNIT * 1.5,
     paddingRight: UNIT * 2,
     borderRadius: UNIT,
