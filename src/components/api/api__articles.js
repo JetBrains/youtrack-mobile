@@ -300,7 +300,8 @@ export default class ArticlesAPI extends ApiBase {
     articleId: string,
     fileUri: string,
     fileName: string,
-    commentId?: string
+    commentId?: string,
+    mimeType: string,
   ): Promise<Array<Attachment>> {
     const resourcePath: string = commentId ? `comments/${commentId}` : 'draftComment';
     const url = `${this.youTrackApiUrl}/articles/${articleId}/${resourcePath}/attachments?fields=id,name,url,thumbnailURL,mimeType,imageDimensions(height,width)`;
@@ -309,7 +310,7 @@ export default class ArticlesAPI extends ApiBase {
     formData.append('photo', {
       uri: fileUri,
       name: fileName,
-      type: 'image/binary',
+      type: mimeType,
     });
     const response = await fetch(
       url,

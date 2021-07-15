@@ -73,7 +73,7 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
         const api: Api = getApi();
         const _issueId: string = issueId || getState().issueState.issue.id;
 
-        const [error, addedAttachments] = await until(api.issue.attachFile(_issueId, attach.url, attach.name));
+        const [error, addedAttachments] = await until(api.issue.attachFile(_issueId, attach.url, attach.name, attach.mimeType));
 
         if (error) {
           const message: string = 'Failed to attach file';
@@ -115,7 +115,7 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
         const issueId: string = getState().issueState.issue.id;
         const isDraftComment: boolean = comment.$type === ResourceTypes.DRAFT_ISSUE_COMMENT;
         const [error, attachments] = await until(
-          api.issue.attachFileToComment(issueId, attach.url, attach.name, isDraftComment ? undefined : comment.id)
+          api.issue.attachFileToComment(issueId, attach.url, attach.name, isDraftComment ? undefined : comment.id, attach.mimeType)
         );
         if (error) {
           const message: string = 'Failed to attach file to a comment';
@@ -144,7 +144,8 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
             articleId,
             attach.url,
             attach.name,
-            isDraftComment ? undefined : comment.id
+            isDraftComment ? undefined : comment.id,
+            attach.mimeType
           )
         );
         if (error) {

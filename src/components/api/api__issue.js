@@ -189,7 +189,7 @@ export default class IssueAPI extends ApiBase {
     return ApiHelper.convertAttachmentRelativeToAbsURLs(attachments, this.config.backendUrl);
   }
 
-  async attachFile(issueId: string, fileUri: string, fileName: string): Promise<XMLHttpRequest> {
+  async attachFile(issueId: string, fileUri: string, fileName: string, mimeType: string): Promise<XMLHttpRequest> {
     const url = `${this.youTrackIssueUrl}/${issueId}/attachments?fields=id,name`;
     const headers = this.auth.getAuthorizationHeaders();
     const formData = new FormData(); //eslint-disable-line no-undef
@@ -197,7 +197,7 @@ export default class IssueAPI extends ApiBase {
     formData.append('photo', {
       uri: fileUri,
       name: fileName,
-      type: 'image/binary',
+      type: mimeType,
     });
 
     const response = await fetch(
@@ -212,7 +212,7 @@ export default class IssueAPI extends ApiBase {
     return await response.json();
   }
 
-  async attachFileToComment(issueId: string, fileUri: string, fileName: string, commentId?: string): Promise<Array<Attachment>> {
+  async attachFileToComment(issueId: string, fileUri: string, fileName: string, commentId?: string, mimeType: string): Promise<Array<Attachment>> {
     const resourcePath: string = commentId ? `comments/${commentId}` : 'draftComment';
     const url = `${this.youTrackIssueUrl}/${issueId}/${resourcePath}/attachments?fields=id,name,url,thumbnailURL,mimeType,imageDimensions(height,width)`;
     const formData = new FormData();
@@ -220,7 +220,7 @@ export default class IssueAPI extends ApiBase {
     formData.append('photo', {
       uri: fileUri,
       name: fileName,
-      type: 'image/binary',
+      type: mimeType,
     });
     const response = await fetch(
       url,
