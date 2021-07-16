@@ -112,7 +112,7 @@ export default class IssueDetails extends Component<Props, void> {
       return null;
     }
 
-    const {onRemoveAttachment, issue, issuePermissions} = this.props;
+    const {onRemoveAttachment, issue, issuePermissions, editMode} = this.props;
 
     return (
       <View style={styles.attachments}>
@@ -124,7 +124,7 @@ export default class IssueDetails extends Component<Props, void> {
             log.warn('onImageLoadingError', err.nativeEvent);
             this.props.refreshIssue();
           }}
-          canRemoveAttachment={issuePermissions.canRemoveAttachment(issue)}
+          canRemoveAttachment={editMode && issuePermissions.canRemoveAttachment(issue)}
           onRemoveImage={onRemoveAttachment}
           onOpenAttachment={(type) => usage.trackEvent(
             this.props.analyticCategory,
