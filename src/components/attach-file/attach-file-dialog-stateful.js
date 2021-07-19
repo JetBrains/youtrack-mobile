@@ -9,8 +9,11 @@ import calculateAspectRatio from '../aspect-ratio/aspect-ratio';
 import Header from '../header/header';
 import ModalView from '../modal-view/modal-view';
 import usage from '../usage/usage';
+import Video from 'react-native-video';
 import VisibilityControl from '../visibility/visibility-control';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from '../analytics/analytics-ids';
+import {getApi} from '../api/api__instance';
+import {hasMimeType} from '../mime-type/mime-type';
 import {HIT_SLOP} from '../common-styles/button';
 import {IconAttachment, IconCamera, IconCheck, IconClose} from '../icon/icon';
 import {logEvent} from '../log/log-helper';
@@ -21,6 +24,7 @@ import styles from './attach-file-modal.styles';
 
 import type {ActionSheetAction} from '../../flow/Action';
 import type {Attachment, ImageDimensions} from '../../flow/CustomFields';
+import type {NormalizedAttachment} from '../../flow/Attachment';
 import type {Theme} from '../../flow/Theme';
 import type {UserGroup} from '../../flow/UserGroup';
 import type {User} from '../../flow/User';
@@ -37,15 +41,15 @@ export const attachFileActions: Array<ActionSheetAction> = [
     title: 'Choose from library…',
     icon: IconAttachment,
     iconSize: 22,
-    execute: () => {}
+    execute: () => {},
   },
   {
     id: attachFileMethod.openCamera,
     title: 'Take a picture…',
     icon: IconCamera,
     iconSize: 18,
-    execute: () => {}
-  }
+    execute: () => {},
+  },
 ];
 
 
@@ -60,7 +64,7 @@ type Props = {
 };
 
 
-const AttachFileDialogStateful = (props: Props) => {
+const AttachFileDialogStateful = (props: Props): React$Element<typeof ModalView> => {
   usage.trackScreenView('Attach file modal');
 
   const theme: Theme = useContext(ThemeContext);
@@ -102,35 +106,75 @@ const AttachFileDialogStateful = (props: Props) => {
 
   const showSystemDialog = async (method: typeof attachFileMethod) => {
     try {
-      const attachedImage: ?Attachment = await attachFile(method);
-      if (attachedImage) {
-        updateAttach(attachedImage);
+      const attachedFile: ?NormalizedAttachment = await attachFile(method);
+      if (attachedFile) {
+        updateAttach((attachedFile: any));
       }
     } catch (err) {
       notify('Can\'t add a file', err);
     }
   };
 
-  const linkColor: string = styles.link.color;
-  const disabledColor: string = styles.disabled.color;
-  const dimensions: ?ImageDimensions = attach && calculateAspectRatio(attach.dimensions);
-  const hasAttach: boolean = !!attach;
+  const renderMedia: (attach: NormalizedAttachment) => any = (): React$Element<typeof Video> => {
+    return (
+      <Video
+        style={styles.imagePreview}
+        controls={true}
+        fullscreen={false}
+        headers={getApi().auth.getAuthorizationHeaders()}
+        paused={false}
+        rate={0.0}
+        resizeMode="contain"
+        source={{uri: attach?.url}}
+      />
+    );
+  };
+
+  const renderImage: (
+    attach: NormalizedAttachment
+  ) => React$Element<any> = (): React$Element<typeof Image> => {
+    const dimensions: ?ImageDimensions = attach && calculateAspectRatio(attach.dimensions);
+    return (
+      <Image
+        style={styles.imagePreview}
+        resizeMode="contain"
+        source={{
+          isStatic: true,
+          uri: attach?.url,
+          width: dimensions?.width,
+          height: dimensions?.height,
+        }}
+      />
+    );
+  };
+
+  const renderPreview: (attach: NormalizedAttachment) => React$Element<any> = (): React$Element<any> => {
+    const isMediaMimeType: boolean = hasMimeType.audio(attach) || hasMimeType.video(attach);
+    if (attach?.url) {
+      if (isMediaMimeType) {
+        return renderMedia(attach);
+      } else if (hasMimeType.image(attach)) {
+        return renderImage(attach);
+      }
+    }
+    return <View style={styles.imagePreview}/>;
+  };
+
   return (
     <ModalView
       animationType="slide"
-      testID="attachFileModal"
       style={styles.container}
     >
       <Header
         leftButton={
-          <IconClose size={21} color={isAttaching ? disabledColor : linkColor}/>
+          <IconClose size={21} color={isAttaching ? styles.disabled.color : styles.link.color}/>
         }
         onBack={() => {
           !isAttaching && props.actions.onCancel();
         }}
         rightButton={(
           isAttaching ? <ActivityIndicator color={styles.link.color}/> :
-            <IconCheck size={20} color={hasAttach ? styles.link.color : styles.disabled.color}/>
+            <IconCheck size={20} color={attach ? styles.link.color : styles.disabled.color}/>
         )}
         onRightButtonClick={() => {
           if (attach) {
@@ -140,36 +184,29 @@ const AttachFileDialogStateful = (props: Props) => {
             });
           }
         }}>
-        <Text style={styles.title}>Attach file</Text>
+        <Text style={styles.title}>{attach ? attach.name : 'Attach file'}</Text>
       </Header>
 
       <View style={styles.content}>
+        {attach && !props.hideVisibility && props.getVisibilityOptions && (
+          <VisibilityControl
+            style={styles.visibilityButton}
+            onApply={(visibility: Visibility | null) => {
+              updateAttach({
+                ...attach,
+                visibility,
+              });
+            }}
+            uiTheme={theme.uiTheme}
+            getOptions={props.getVisibilityOptions}
+          />
+        )}
         <View style={styles.image}>
           {attach && <AttachmentErrorBoundary
             attachName={attach.name}
           >
-            <Image
-              source={{
-                isStatic: true,
-                uri: attach.url,
-                width: dimensions?.width,
-                height: dimensions?.height,
-              }}
-            />
+            <>{renderPreview(attach)}</>
           </AttachmentErrorBoundary>}
-          {attach && !props.hideVisibility && props.getVisibilityOptions && (
-            <VisibilityControl
-              style={styles.visibilityButton}
-              onApply={(visibility: Visibility | null) => {
-                updateAttach({
-                  ...attach,
-                  visibility
-                });
-              }}
-              uiTheme={theme.uiTheme}
-              getOptions={props.getVisibilityOptions}
-            />
-          )}
         </View>
 
         {!attach && <View>
@@ -193,4 +230,4 @@ const AttachFileDialogStateful = (props: Props) => {
   );
 };
 
-export default AttachFileDialogStateful;
+export default (React.memo<Props>(AttachFileDialogStateful): React$AbstractComponent<Props, mixed>);

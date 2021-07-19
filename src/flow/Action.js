@@ -1,8 +1,10 @@
 /* @flow */
 
 export type ActionSheetAction = {
-  title: string,
   execute: () => any,
-  icon?: any
+  id: string,
+  icon?: any,
+  iconSize?: number,
+  title: string,
 };
 

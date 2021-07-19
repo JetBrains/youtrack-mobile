@@ -1,12 +1,13 @@
 /* @flow */
 
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {UNIT} from '../variables/variables';
-import {headerTitle, mainText} from '../common-styles/typography';
 
-export default EStyleSheet.create({
+import {headerTitle, mainText} from '../common-styles/typography';
+import {UNIT} from '../variables/variables';
+
+export default (EStyleSheet.create({
   container: {
-    paddingBottom: UNIT * 4
+    paddingBottom: UNIT * 4,
   },
   content: {
     flex: 1,
@@ -16,6 +17,11 @@ export default EStyleSheet.create({
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  imagePreview: {
+    width: '100%',
+    flexGrow: 1,
+    backgroundColor: '$greyBackground',
   },
   title: {
     ...headerTitle,
@@ -36,7 +42,7 @@ export default EStyleSheet.create({
     color: '$text',
   },
   visibilityButton: {
-    margin: UNIT * 3
+    margin: UNIT * 3,
   },
   link: {
     color: '$link',
@@ -45,4 +51,4 @@ export default EStyleSheet.create({
     color: '$disabled',
   },
 
-});
+}): any);
