@@ -91,6 +91,10 @@ const ImagePreview = (props: Props): Node => {
         renderIndicator={renderLoader}
         renderError={renderError}
         {...imageProps}
+        imageStyle={[styles.preview, attach.imageDimensions ? {
+          width: attach.imageDimensions.width,
+          height: attach.imageDimensions.height,
+        } : {}]}
       />);
 
   };
@@ -158,7 +162,7 @@ const ImagePreview = (props: Props): Node => {
       <TouchableOpacity
         onPress={() => Linking.openURL(attach.url)}
       >
-        <Text style={styles.link}>{attach.name}</Text>
+        <Text style={styles.link} numberOfLines={2}>{attach.name}</Text>
       </TouchableOpacity>
     );
   };
@@ -167,7 +171,7 @@ const ImagePreview = (props: Props): Node => {
     <View style={styles.container}>
       <Header
         leftButton={<IconClose size={21} color={styles.link.color}/>}
-        extraButton={!error ? renderOpenButton() : null}
+        extraButton={!error ? <View style={styles.headerFileName}>{renderOpenButton()}</View> : null}
         onBack={closeView}
       />
       {isImageAttach() && renderImageGallery()}
