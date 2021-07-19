@@ -15,7 +15,7 @@ export type TimeTrackingFieldInfo = {
 };
 
 export type IssueProject = {
-  $type: string,
+  $type?: string,
   id: string,
   name: string,
   shortName: string,

@@ -3,7 +3,7 @@
 import type {Attachment, IssueProject} from './CustomFields';
 import type {IssueOnList} from './Issue';
 import type {User} from './User';
-import IssueVisibility from '../components/visibility/issue-visibility';
+import type {Visibility} from './Visibility';
 
 export type Article = {
   $type: string,
@@ -20,15 +20,15 @@ export type Article = {
   mentionedUsers: User,
   ordinal: number,
   parentArticle: Article,
-  project: IssueProject,
+  project: ArticleProject | null,
   reporter: User,
   summary: string,
   updated: number,
   updatedBy: User,
-  visibility: IssueVisibility
+  visibility: Visibility | null,
 }
 
-export type ArticleDraft = Article & {}
+export type ArticleDraft = $Shape<Article>;
 
 export type ArticleNode = {
   children: Array<Article>,

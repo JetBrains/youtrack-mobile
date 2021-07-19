@@ -8,20 +8,22 @@ import {notify} from '../notification/notification';
 import {routeMap} from '../../app-routes';
 
 import type {Activity} from '../../flow/Activity';
+import type {AnyIssue} from '../../flow/Issue';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {Article, ArticlesList} from '../../flow/Article';
+import type {ArticleProject} from '../../flow/Article';
 import type {AuthParams} from '../../flow/Auth';
-import type {Folder, User} from '../../flow/User';
-import type {AnyIssue} from '../../flow/Issue';
 import type {Board, Sprint} from '../../flow/Agile';
+import type {Folder, User} from '../../flow/User';
+import type {IssueProject} from '../../flow/CustomFields';
 import type {Notification} from '../../flow/Inbox';
 import type {PermissionCacheItem} from '../../flow/Permission';
 
+const OTHER_ACCOUNTS_KEY = 'YT_OTHER_ACCOUNTS_STORAGE_KEY';
+export const MAX_STORED_QUERIES = 5;
 export const STORAGE_AUTH_PARAMS: string = 'yt_mobile_auth';
 export const STORAGE_AUTH_PARAMS_KEY: string = 'yt_mobile_auth_key';
-const OTHER_ACCOUNTS_KEY = 'YT_OTHER_ACCOUNTS_STORAGE_KEY';
 export const THEME_MODE_KEY = 'YT_THEME_MODE';
-export const MAX_STORED_QUERIES = 5;
 
 export type StorageState = {|
   articles: ?Array<Article>,
@@ -31,7 +33,7 @@ export type StorageState = {|
   authParams: ?AuthParams,
   authParamsKey: ?string,
   projectId: ?string,
-  projects: Array<?string>,
+  projects: Array<IssueProject | ArticleProject>,
   draftId: ?string,
   currentUser: ?User,
   creationTimestamp: ?number,

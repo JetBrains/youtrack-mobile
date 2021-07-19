@@ -38,7 +38,6 @@ import type {CustomError} from '../../flow/Error';
 import type {Theme, UIThemeColors} from '../../flow/Theme';
 import type {Visibility} from '../../flow/Visibility';
 
-type ArticleDraftData = $Shape<Article>;
 
 type Props = {
   articleDraft?: Article,
@@ -48,7 +47,7 @@ type Props = {
 }
 
 const ArticleCreate = (props: Props) => {
-  const articleDraftDataInitial: ArticleDraftData = Object.freeze({
+  const articleDraftDataInitial = Object.freeze({
     summary: '',
     content: '',
     project: {id: null, name: 'Select project'},
@@ -77,13 +76,13 @@ const ArticleCreate = (props: Props) => {
   useEffect(() => {
     if (props.articleDraft) {
       dispatch(articleCreateActions.setDraft(props.articleDraft));
-      updateArticleDraftData({
-        attachments: props.articleDraft.attachments,
+      updateArticleDraftData(({
+        attachments: props.articleDraft?.attachments,
         summary: props.articleDraft?.summary || articleDraftDataInitial.summary,
         content: props.articleDraft?.content || articleDraftDataInitial.content,
         project: props.articleDraft?.project || articleDraftDataInitial.project,
-        visibility: props.articleDraft.visibility,
-      });
+        visibility: props.articleDraft?.visibility,
+      }: any));
     } else {
       createArticleDraft();
     }
@@ -91,7 +90,7 @@ const ArticleCreate = (props: Props) => {
   }, [dispatch, createArticleDraft]);
 
   const doUpdate = async (articleDraft: ArticleDraft): Function => {
-    let draft: ArticleDraft = articleDraft;
+    let draft: $Shape<ArticleDraft> = articleDraft;
     if (props.originalArticleId && !draft.id) {
       const createdArticleDraft: ArticleDraft = await createArticleDraft(props.originalArticleId);
       draft = {...createdArticleDraft, ...articleDraft};
@@ -100,8 +99,8 @@ const ArticleCreate = (props: Props) => {
   };
   const debouncedUpdate = useDebouncedCallback(doUpdate, 350);
 
-  const updateDraft = (data: $Shape<ArticleDraftData>) => {
-    updateArticleDraftData({...articleDraftData, ...data});
+  const updateDraft = (data: Object) => {
+    updateArticleDraftData(({...articleDraftData, ...data}: any));
     debouncedUpdate.callback({...articleDraft, ...data});
   };
 
@@ -110,7 +109,6 @@ const ArticleCreate = (props: Props) => {
       const selectedItems = [];
       const hideSelect = () => updateProjectSelectVisibility(false);
       const selectProps = {
-        show: true,
         multi: false,
         selectedItems: selectedItems,
         emptyValue: null,
@@ -138,7 +136,7 @@ const ArticleCreate = (props: Props) => {
   const closeCreateArticleScreen = () => !isProcessing && Router.pop(true);
 
   const renderHeader = () => {
-    const draft: ArticleDraft = {...articleDraft, ...articleDraftData};
+    const draft: ArticleDraft = ({...articleDraft, ...articleDraftData}: any);
     const isSubmitDisabled: boolean = (
       !draft.id ||
       isProcessing ||
@@ -153,7 +151,7 @@ const ArticleCreate = (props: Props) => {
         leftButton={<IconClose size={21} color={isProcessing ? uiThemeColors.$disabled : linkColor}/>}
         onBack={() => {
           if (draft.id) {
-            if (!draft.project.id) {
+            if (!draft.project?.id) {
               draft.project = null;
             }
             doUpdate(draft);
