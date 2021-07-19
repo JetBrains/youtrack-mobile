@@ -7,7 +7,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import * as issueActions from './issue-actions';
-import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
+import AttachFileDialogStateful from '../../components/attach-file/attach-file-dialog-stateful';
 import ColorField from '../../components/color-field/color-field';
 import CommandDialog from '../../components/command-dialog/command-dialog';
 import ErrorMessage from '../../components/error-message/error-message';
@@ -31,11 +31,12 @@ import {ThemeContext} from '../../components/theme/theme-context';
 import styles from './issue.styles';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
-import type {AnyIssue} from '../../flow/Issue';
+import type {AnyIssue, IssueFull} from '../../flow/Issue';
 import type {Attachment, Tag} from '../../flow/CustomFields';
 import type {IssueTabbedState} from '../../components/issue-tabbed/issue-tabbed';
 import type {State as IssueState} from './issue-reducers';
 import type {Theme, UITheme} from '../../flow/Theme';
+import type {User} from '../../flow/User';
 
 const CATEGORY_NAME = 'Issue';
 
@@ -347,19 +348,22 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     />;
   }
 
-  renderAttachFileDialog() {
-    const {attachingImage, createAttachActions} = this.props;
-    return (
-      <AttachFileDialog
-        issueId={this.props?.issue?.id}
-        attach={attachingImage}
-        actions={createAttachActions()}
-        onCancel={this.cancelAddAttach}
-        onAttach={this.addAttachment}
-        uiTheme={this.uiTheme}
-      />
-    );
-  }
+  renderAttachFileDialog = (): React$Element<typeof AttachFileDialogStateful> => (
+    <AttachFileDialogStateful
+      hideVisibility={false}
+      getVisibilityOptions={() => getApi().issue.getVisibilityOptions(this.props.issueId)}
+      actions={{
+        onAttach: async (file: Attachment, onAttachingFinish: () => any) => {
+          await this.addAttachment(file, onAttachingFinish);
+          this.setState({isAttachFileDialogVisible: false});
+        },
+        onCancel: () => {
+          this.cancelAddAttach();
+          this.setState({isAttachFileDialogVisible: false});
+        },
+      }}
+    />
+  );
 
   cancelAddAttach = () => {
     const {cancelAddAttach, toggleVisibleAddAttachDialog, attachingImage} = this.props;
@@ -406,7 +410,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       isAttachFileDialogVisible,
       isTagsSelectVisible,
       issuePermissions,
-      dispatcher
+      dispatcher,
     } = this.props;
 
     return (
@@ -414,7 +418,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
         value={{
           issue,
           issuePermissions,
-          dispatcher
+          dispatcher,
         }}
       >
         <ThemeContext.Consumer>
@@ -442,15 +446,23 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   }
 }
 
-const mapStateToProps = (state: { app: Object, issueState: IssueState }, ownProps): IssueState & AdditionalProps => {
-  return {
+type OwnProps = {
+  issuePermissions: IssuePermissions,
+  issuePlaceholder: $Shape<IssueFull>,
+  issueId: string,
+  user: User,
+  navigateToActivity: ?boolean
+};
+
+const mapStateToProps = (state: { app: Object, issueState: IssueState }, ownProps: OwnProps): IssueState & OwnProps => {
+  return ({
     issuePermissions: state.app.issuePermissions,
     ...state.issueState,
     issuePlaceholder: ownProps.issuePlaceholder,
     issueId: ownProps.issueId,
     user: state.app.user,
     navigateToActivity: ownProps.navigateToActivity,
-  };
+  }: $Shape<IssueState & OwnProps>);
 };
 
 const mapDispatchToProps = (dispatch) => {
