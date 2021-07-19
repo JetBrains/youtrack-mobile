@@ -239,12 +239,15 @@ const getUnpublishedArticleDraft = async (api: Api, article: Article): Promise<A
     if (articleDrafts && articleDrafts[0]) {
       articleDraft = articleDrafts[0];
     } else {
+      const [err, draft] = await until(api.articles.createArticleDraft(article.id));
+      logEvent({message: `Failed to create article draft`, isError: true});
       articleDraft = {
         attachments: article.attachments,
         summary: article.summary,
         content: article.content,
         project: article.project,
         visibility: article.visibility,
+        ...(err ? {} : draft),
       };
     }
   }

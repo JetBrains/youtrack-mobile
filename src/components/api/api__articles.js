@@ -99,14 +99,18 @@ export default class ArticlesAPI extends ApiBase {
     });
   }
 
-  async createArticleDraft(articleId?: string): Promise<Article> {
-    return this.makeAuthorizedRequest(
+  async createArticleDraft(articleId?: string): Promise<ArticleDraft> {
+    const draft: ArticleDraft = await this.makeAuthorizedRequest(
       `${this.youTrackApiUrl}/admin/users/me/articleDrafts?${this.articleFieldsQuery}`,
       'POST',
       (articleId
         ? {originalArticle: {id: articleId}}
         : {project: null, parentArticle: null, summary: '', content: ''})
     );
+    return {
+      ...draft,
+      attachments: this.convertAttachmentsURL(draft.attachments),
+    };
   }
 
   async createSubArticleDraft(article: Article): Promise<Article> {
