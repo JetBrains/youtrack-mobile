@@ -20,8 +20,8 @@ export default (EStyleSheet.create({
   },
   imagePreview: {
     width: '100%',
+    minHeight: 50,
     flexGrow: 1,
-    backgroundColor: '$greyBackground',
   },
   title: {
     ...headerTitle,

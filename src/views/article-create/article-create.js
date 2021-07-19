@@ -7,7 +7,7 @@ import {useDebouncedCallback} from 'use-debounce';
 import {useDispatch, useSelector} from 'react-redux';
 
 import * as articleCreateActions from './arcticle-create-actions';
-import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
+import AttachFileDialogStateful from '../../components/attach-file/attach-file-dialog-stateful';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import AttachmentAddPanel from '../../components/attachments-row/attachments-add-panel';
 import Badge from '../../components/badge/badge';
@@ -19,7 +19,6 @@ import Separator from '../../components/separator/separator';
 import SummaryDescriptionForm from '../../components/form/summary-description-form';
 import VisibilityControl from '../../components/visibility/visibility-control';
 import {ANALYTICS_ARTICLE_CREATE_PAGE} from '../../components/analytics/analytics-ids';
-import {attachmentActions} from './article-create__attachment-actions-and-types';
 import {getApi} from '../../components/api/api__instance';
 import {getStorageState} from '../../components/storage/storage';
 import {IconAngleDown, IconCheck, IconClose} from '../../components/icon/icon';
@@ -40,7 +39,7 @@ import type {Visibility} from '../../flow/Visibility';
 
 
 type Props = {
-  articleDraft?: Article,
+  articleDraft?: Article | null,
   isNew?: boolean,
   originalArticleId?: string,
   breadCrumbs?: React$Element<any> | null
@@ -186,23 +185,24 @@ const ArticleCreate = (props: Props) => {
     dispatch(articleCreateActions.loadAttachments());
   };
 
-  const renderAttachFileDialog = () => {
+  const renderAttachFileDialog = (): React$Element<typeof AttachFileDialogStateful> | null => {
     if (!articleDraft) {
       return null;
     }
 
     return (
-      <AttachFileDialog
+      <AttachFileDialogStateful
         hideVisibility={true}
-        issueId={articleDraft.id}
-        actions={attachmentActions.createAttachActions(dispatch)}
-        attach={attachingImage}
-        onCancel={() => {
-          dispatch(articleCreateActions.cancelAddAttach(attachingImage));
-          dispatch(articleCreateActions.hideAddAttachDialog());
+        getVisibilityOptions={() => getApi().articles.getVisibilityOptions(articleDraft.id)}
+        actions={{
+          onAttach: async (file: Attachment, onAttachingFinish: () => any) => {
+            onAddAttachment(file, onAttachingFinish);
+          },
+          onCancel: () => {
+            dispatch(articleCreateActions.cancelAddAttach(attachingImage));
+            dispatch(articleCreateActions.hideAddAttachDialog());
+          },
         }}
-        onAttach={onAddAttachment}
-        uiTheme={theme.uiTheme}
       />
     );
   };

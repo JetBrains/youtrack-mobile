@@ -3,16 +3,16 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import {attachmentTypes} from './article-create__attachment-actions-and-types';
+import {guid} from '../../util/util';
 
 import type {Article, ArticleDraft} from '../../flow/Article';
-import type {CustomError} from '../../flow/Error';
 import type {Attachment} from '../../flow/CustomFields';
-import {guid} from '../../util/util';
+import type {CustomError} from '../../flow/Error';
 
 export type ArticleCreateState = {
   articleDraft: ArticleDraft | null,
   breadCrumbs: React$Element<any> | null,
-  error: CustomError,
+  error: CustomError | null,
   isProcessing: boolean,
   isAttachFileDialogVisible: boolean,
   attachingImage: Attachment | null,
@@ -69,7 +69,7 @@ const attachmentReducers = {
   [attachmentTypes.ATTACH_TOGGLE_ADD_FILE_DIALOG](state: ArticleCreateState, action: {isAttachFileDialogVisible: boolean}) {
     state.isAttachFileDialogVisible = action.isAttachFileDialogVisible;
   },
-  [attachmentTypes.ATTACH_RECEIVE_ALL_ATTACHMENTS](state: ArticleCreateState, action: {attachments: boolean}) {
+  [attachmentTypes.ATTACH_RECEIVE_ALL_ATTACHMENTS](state: ArticleCreateState, action: {attachments: Array<Attachment>}) {
     state.articleDraft = {
       ...state.articleDraft,
       attachments: action.attachments,
