@@ -18,7 +18,7 @@ export default (EStyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  imagePreview: {
+  filePreview: {
     width: '100%',
     minHeight: 50,
     flexGrow: 1,
@@ -42,7 +42,8 @@ export default (EStyleSheet.create({
     color: '$text',
   },
   visibilityButton: {
-    margin: UNIT * 3,
+    marginVertical: UNIT,
+    marginLeft: UNIT * 8,
   },
   link: {
     color: '$link',

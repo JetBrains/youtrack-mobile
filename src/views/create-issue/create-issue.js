@@ -7,7 +7,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import * as createIssueActions from './create-issue-actions';
-import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
+import AttachFileDialogStateful from '../../components/attach-file/attach-file-dialog-stateful';
 import AttachmentAddPanel from '../../components/attachments-row/attachments-add-panel';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
@@ -36,7 +36,6 @@ import styles from './create-issue.styles';
 type AdditionalProps = {
   issuePermissions: IssuePermissions,
   predefinedDraftId: ?string,
-  getAttachActions: () => any,
 };
 
 type Props = CreateIssueState & typeof createIssueActions & typeof attachmentActions & AdditionalProps;
@@ -71,24 +70,23 @@ class CreateIssue extends Component<Props, State> {
     hideAddAttachDialog();
   };
 
-  renderAttachFileDialog() {
-    const {issue, getAttachActions, attachingImage} = this.props;
+  renderAttachFileDialog = (): React$Element<typeof AttachFileDialogStateful> | null => {
+    const {issue} = this.props;
 
     if (!issue || !issue.id) {
       return null;
     }
 
     return (
-      <AttachFileDialog
-        issueId={issue.id}
-        actions={getAttachActions()}
-        attach={attachingImage}
-        onCancel={this.cancelAddAttach}
-        onAttach={this.onAddAttachment}
-        uiTheme={this.uiTheme}
+      <AttachFileDialogStateful
+        getVisibilityOptions={() => getApi().issue.getVisibilityOptions(issue.id)}
+        actions={{
+          onAttach: this.onAddAttachment,
+          onCancel: this.cancelAddAttach,
+        }}
       />
     );
-  }
+  };
 
   canUpdateField = (field: CustomField) => this.props.issuePermissions.canUpdateField(this.props.issue, field);
 
@@ -282,7 +280,6 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(createIssueActions, dispatch),
-    getAttachActions: () => attachmentActions.createAttachActions(dispatch),
     onAddTags: (tags: Array<Tag>) => dispatch(createIssueActions.updateIssueDraft(true, {tags})),
   };
 };

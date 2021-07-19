@@ -118,7 +118,7 @@ const AttachFileDialogStateful = (props: Props): React$Element<typeof ModalView>
   const renderMedia: (attach: NormalizedAttachment) => any = (): React$Element<typeof Video> => {
     return (
       <Video
-        style={styles.imagePreview}
+        style={styles.filePreview}
         controls={true}
         fullscreen={false}
         headers={getApi().auth.getAuthorizationHeaders()}
@@ -136,7 +136,6 @@ const AttachFileDialogStateful = (props: Props): React$Element<typeof ModalView>
     const dimensions: ?ImageDimensions = attach && calculateAspectRatio(attach.dimensions);
     return (
       <Image
-        style={styles.imagePreview}
         resizeMode="contain"
         source={{
           isStatic: true,
@@ -157,7 +156,7 @@ const AttachFileDialogStateful = (props: Props): React$Element<typeof ModalView>
         return renderImage(attach);
       }
     }
-    return <View style={styles.imagePreview}/>;
+    return <View style={styles.filePreview}/>;
   };
 
   return (
@@ -184,7 +183,7 @@ const AttachFileDialogStateful = (props: Props): React$Element<typeof ModalView>
             });
           }
         }}>
-        <Text style={styles.title}>{attach ? attach.name : 'Attach file'}</Text>
+        <Text style={styles.title}>{attach?.name || 'Attach file'}</Text>
       </Header>
 
       <View style={styles.content}>
